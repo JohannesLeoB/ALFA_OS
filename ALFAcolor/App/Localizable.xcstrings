@@ -1184,7 +1184,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Stück %@ im Raum „%@“ liegt auf der Ebene „%@“, die es dort nicht gibt."
+            "value" : "Das Stück %@ im Raum „%@“ liegt auf der Ebene „%@“, die es dort nicht gibt. Es wurde nichts gespeichert."
           }
         }
       }
