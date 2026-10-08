@@ -19,7 +19,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (59)
+## Briefe (60)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -32,6 +32,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-107](briefe/B-107.md) | E1 | Wächter: Git-Hooks und GitHub-Prüfung | — | erledigt, geprüft 2026-10-08 (Chef: waechter_test 65 OK, pruefen.sh 0 errors, eigener Gegentest commit-msg sperrt) |
 | [B-108a](briefe/B-108a.md) | E1 | Umbenennen in ALFAcolor | B-107 | erledigt, geprüft 2026-10-08 (Chef: pruefen.sh 0 errors, grep leer, signierter Build mit com.johannesleoberger.alfacolor) |
 | [B-108b](briefe/B-108b.md) | E1 | Code auf Englisch, Texte in den String-Katalog | B-108a | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors 0 warnings, Schalter streng, Gegentest deutscher Kommentar sperrt); Abnahme der Texte am Bild offen |
+| [B-109](briefe/B-109.md) | E1 | Vertrag einbauen und Textfehler aus der Design-Antwort | B-108b | vergeben an Sonnet-Agent (im Repo), 2026-10-09 |
 | [B-201](briefe/B-201.md) | E2 | BoardModel: Zustand, Befehle, Rückgängig | B-104 | offen |
 | [B-202](briefe/B-202.md) | E2 | Einrast-Engine | B-201 | offen |
 | [B-203](briefe/B-203.md) | E2 | Leinwand-View: Zoom, Verschieben, Sichtbarkeit | B-201 | offen |
@@ -78,7 +79,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-903](briefe/B-903.md) | E9 | Barrierefreiheit | B-902 | offen |
 | [B-904](briefe/B-904.md) | E9 | Leistung und Speicher | B-209 | offen |
 | [B-905](briefe/B-905.md) | E9 | Auslieferung | B-901 | offen |
-| [D-001](briefe/D-001.md) | E1 | Gegenlieferung lesen und Ansichten zeichnen (Claude Design) | — | vergeben an Konto B (Claude Design), 2026-10-08 |
+| [D-001](briefe/D-001.md) | E1 | Gegenlieferung lesen und Ansichten zeichnen (Claude Design) | — | Lieferung 2026-10-09_0100 da: Vertrag liest fehlerfrei; Zeichnung (Mockup-Paket) fehlt noch |
 | [D-002](briefe/D-002.md) | E2 | Gestaltungsvertrag der App (Claude Design) | D-001 | offen |
 | [D-003](briefe/D-003.md) | E5 | Startbausteine und Musterbogen (Claude Design) | D-002 | offen |
 | [P-001](briefe/P-001.md) | alle | Prüfplan je Gate (Konto C) | — | offen |
