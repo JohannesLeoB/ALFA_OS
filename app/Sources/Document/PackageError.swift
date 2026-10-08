@@ -1,74 +1,84 @@
 import Foundation
 import ALFAcolorCore
 
-/// Fehler beim Lesen oder Schreiben eines Pakets. Die Meldungen sind für Johannes gedacht und sagen, was zu tun ist.
+/// Errors when reading or writing a package. The messages are for the user and say what to do.
 public enum PackageError: Error, Equatable, Sendable {
-    /// Gelesen wurde eine einzelne Datei statt eines Ordners.
+    /// A single file was read instead of a folder.
     case notAPackage
     case missingFile(path: String)
     case corruptFile(path: String, reason: String)
-    /// Das Paket stammt aus einer neueren Fassung als diese App kennt.
+    /// The package comes from a newer version than this app knows.
     case unknownFormatVersion(Int)
-    /// Zwischen zwei Versionen fehlt der Migrationsschritt.
+    /// The migration step between two versions is missing.
     case missingMigration(from: Int, to: Int)
-    /// Eine ID oder ein Name taugt nicht als Dateiname (leer, zu lang).
+    /// An ID or name does not work as a file name (empty, too long).
     case invalidIdentifier(String)
-    /// Zwei Räume, Ebenen, Tokensätze heißen gleich, oder nur in Groß- und Kleinschreibung verschieden.
+    /// Two spaces, layers or token sets have the same name, or differ only in case.
     case duplicateIdentifier(kind: String, id: String)
-    /// Ein Stück verweist auf eine Ebene, die es im Raum nicht gibt.
+    /// An item refers to a layer that does not exist in the space.
     case itemWithoutLayer(item: String, layer: String, space: String)
-    /// Ein mitgeführter Pfad ist unzulässig oder kollidiert mit einer Datei, die das Paket selbst schreibt.
+    /// A carried path is not allowed or collides with a file that the package writes itself.
     case invalidPath(String)
-    /// Ein Token lässt sich im DTCG-Baum nicht ablegen (leerer Pfad, "$"-Name, Blatt und Gruppe am selben Ort).
+    /// A token cannot be placed in the DTCG tree (empty path, "$" name, leaf and group at the same place).
     case invalidToken(String)
     case writeFailed(reason: String)
-    /// Das Paket lässt sich nicht öffnen (nicht vorhanden, keine Berechtigung).
+    /// The package cannot be opened (missing, no permission).
     case unreadable(reason: String)
 }
 
 extension PackageError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .notAPackage: "Das ist kein ALFAcolor-Paket (ein Ordner mit der Endung .alfacolor), sondern eine einzelne Datei."
-        case .missingFile(let p): "Im Paket fehlt die Datei \(p)."
-        case .corruptFile(let p, let r): "Die Datei \(p) im Paket ist beschädigt: \(r)"
-        case .unknownFormatVersion(let v): "Dieses Dokument hat die Formatversion \(v). Diese App kennt höchstens \(Migration.currentVersion). Bitte die App aktualisieren; das Dokument wurde nicht verändert."
-        case .missingMigration(let a, let b): "Für die Umstellung von Version \(a) auf \(b) gibt es keinen Migrationsschritt."
-        case .invalidIdentifier(let s): "„\(s)“ lässt sich nicht als Dateiname im Paket verwenden."
-        case .duplicateIdentifier(let k, let id): "\(k) „\(id)“ kommt doppelt vor (auch Groß-/Kleinschreibung zählt hier als gleich)."
-        case .itemWithoutLayer(let i, let l, let s): "Das Stück \(i) im Raum „\(s)“ liegt auf der Ebene „\(l)“, die es dort nicht gibt."
-        case .invalidPath(let p): "Der Pfad „\(p)“ ist im Paket nicht erlaubt oder wird vom Paket selbst belegt."
-        case .invalidToken(let t): "Das Token „\(t)“ lässt sich nicht als DTCG ablegen."
-        case .writeFailed(let r): "Das Dokument konnte nicht geschrieben werden: \(r)"
-        case .unreadable(let r): "Das Dokument konnte nicht gelesen werden: \(r)"
+        case .notAPackage: String(localized: "package.error.notAPackage")
+        case .missingFile(let p): String(localized: "package.error.missingFile \(p)")
+        case .corruptFile(let p, let r): String(localized: "package.error.corruptFile \(p) \(r)")
+        case .unknownFormatVersion(let v): String(localized: "package.error.unknownFormatVersion \(v) \(Migration.currentVersion)")
+        case .missingMigration(let a, let b): String(localized: "package.error.missingMigration \(a) \(b)")
+        case .invalidIdentifier(let s): String(localized: "package.error.invalidIdentifier \(s)")
+        case .duplicateIdentifier(let k, let id): String(localized: "package.error.duplicateIdentifier \(Self.kindName(k)) \(id)")
+        case .itemWithoutLayer(let i, let l, let s): String(localized: "package.error.itemWithoutLayer \(i) \(s) \(l)")
+        case .invalidPath(let p): String(localized: "package.error.invalidPath \(p)")
+        case .invalidToken(let t): String(localized: "package.error.invalidToken \(t)")
+        case .writeFailed(let r): String(localized: "package.error.writeFailed \(r)")
+        case .unreadable(let r): String(localized: "package.error.unreadable \(r)")
+        }
+    }
+
+    /// The display name of an identifier kind. Unknown kinds are shown as they are.
+    private static func kindName(_ kind: String) -> String {
+        switch kind {
+        case "space": String(localized: "package.kind.space")
+        case "layer": String(localized: "package.kind.layer")
+        case "tokenSet": String(localized: "package.kind.tokenSet")
+        default: kind
         }
     }
 }
 
-/// Was das Lesen auffällt, ohne dass es das Öffnen verhindert.
+/// What reading notices without preventing the open.
 public struct ReadReport: Equatable, Sendable {
     public struct MissingAsset: Equatable, Sendable {
         public var assetID: String
         public var itemID: ItemID
         public var spaceID: String
     }
-    /// Formatversion, wie sie auf der Platte stand (vor einer Migration).
+    /// Format version as it was on disk (before a migration).
     public var formatVersionOnDisk: Int = 0
-    /// Gesetzt, wenn beim Lesen migriert wurde: die Ausgangsversion.
+    /// Set when reading migrated: the starting version.
     public var migratedFrom: Int?
     public var writtenByAppVersion: String?
-    /// Bilder, auf die ein Stück verweist, deren Datei im Paket fehlt.
+    /// Images that an item refers to and whose file is missing from the package.
     public var missingAssets: [MissingAsset] = []
-    /// Nur mit `ReadOptions.verifyAssetHashes`: Dateien, deren Inhalt nicht zu ihrem Hash-Namen passt.
+    /// Only with `ReadOptions.verifyAssetHashes`: files whose content does not match their hash name.
     public var corruptAssets: [String] = []
-    /// Dateien in `assets/`, die kein Stück benutzt. Sie bleiben im Paket.
+    /// Files in `assets/` that no item uses. They stay in the package.
     public var unreferencedAssets: [String] = []
     public var warnings: [String] = []
     public var isClean: Bool { missingAssets.isEmpty && corruptAssets.isEmpty && warnings.isEmpty }
 }
 
 public struct ReadOptions: Sendable {
-    /// Hash jeder Asset-Datei nachrechnen. Kostet Zeit je nach Bildmenge, darum aus.
+    /// Recompute the hash of every asset file. This costs time depending on the number of images, so it is off by default.
     public var verifyAssetHashes: Bool
     public init(verifyAssetHashes: Bool = false) { self.verifyAssetHashes = verifyAssetHashes }
 }

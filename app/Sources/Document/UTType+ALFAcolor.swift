@@ -1,8 +1,8 @@
 import UniformTypeIdentifiers
 
 public extension UTType {
-    /// Dokumenttyp "ALFAcolor-Dokument": ein Ordnerpaket mit der Endung .alfacolor, erbt von com.apple.package.
-    /// Die Konstante allein macht ihn dem System nicht bekannt. Dazu braucht die App einen Export in der Info.plist
-    /// (UTExportedTypeDeclarations) und einen Dokumenttyp (CFBundleDocumentTypes); das legt der Chef an, siehe Brief B-104.
+    /// Document type "ALFAcolor Document": a folder package with the extension .alfacolor. It conforms to com.apple.package.
+    /// The constant alone does not make the type known to the system. The app also needs an export in Info.plist
+    /// (UTExportedTypeDeclarations) and a document type (CFBundleDocumentTypes). Both are declared in `ALFAcolor/project.yml`.
     static let alfacolor = UTType(exportedAs: DocumentPackage.typeIdentifier, conformingTo: .package)
 }

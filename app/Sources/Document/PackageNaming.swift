@@ -1,8 +1,8 @@
 import Foundation
 
-/// Dateinamen im Paket. IDs und Namen sind frei; auf der Platte stehen nur ASCII-Buchstaben, Ziffern, "-" und "_".
-/// Alles andere wird als %XX (UTF-8-Bytes, große Hex-Ziffern) geschrieben. Das ist umkehrbar und sicher:
-/// kein "/", kein "..", keine Unicode-Normalisierungsfalle. Die echte ID steht immer auch in der JSON-Datei.
+/// File names in the package. IDs and names are free. On disk there are only ASCII letters, digits, "-" and "_".
+/// Everything else is written as %XX (UTF-8 bytes, upper-case hex digits). This is reversible and safe:
+/// no "/", no "..", no Unicode normalization trap. The real ID is always also in the JSON file.
 enum PackageNaming {
     static let maxLength = 200
 
@@ -19,7 +19,7 @@ enum PackageNaming {
         return out
     }
 
-    /// Umkehrung. Zeichen ohne "%" bleiben, wie sie sind (von Hand angelegte Ordner).
+    /// The reverse. Characters without "%" stay as they are (folders made by hand).
     static func decode(_ name: String) -> String {
         let b = Array(name.utf8)
         var bytes: [UInt8] = []
@@ -32,8 +32,8 @@ enum PackageNaming {
         return String(validating: bytes, as: UTF8.self) ?? name
     }
 
-    /// Prüft eine Liste von IDs auf Doppelte und gibt ID -> Dateiname zurück. Als doppelt gilt, was in Swift gleich ist
-    /// (auch é als ein Zeichen oder als e plus Akzent) oder auf der Platte denselben Namen ergäbe (Groß-/Kleinschreibung, APFS).
+    /// Checks a list of IDs for duplicates and returns ID to file name. A duplicate is what is equal in Swift
+    /// (also é as one character or as e plus accent) or would give the same name on disk (case, APFS).
     static func requireDistinct(_ ids: [String], kind: String) throws -> [String: String] {
         var seen = Set<String>()
         var lowered = Set<String>()
@@ -58,7 +58,7 @@ enum PackageNaming {
         }
     }
 
-    /// Pfade, die das Paket mitführt, müssen relativ und ohne Tricks sein.
+    /// Paths that the package carries must be relative and free of tricks.
     static func isSafe(path: String) -> Bool {
         guard !path.isEmpty, !path.hasPrefix("/"), !path.contains("\0") else { return false }
         return path.split(separator: "/", omittingEmptySubsequences: false).allSatisfy { !$0.isEmpty && $0 != "." && $0 != ".." && $0.utf8.count <= 255 }

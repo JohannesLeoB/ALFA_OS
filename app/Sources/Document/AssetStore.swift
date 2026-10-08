@@ -1,8 +1,8 @@
 import Foundation
 import CryptoKit
 
-/// Die Binärdateien eines Dokuments (Bilder), einmal je Inhalt. Die ID ist der SHA-256 des Inhalts
-/// in Kleinbuchstaben-Hex; dieselbe ID steht in `Content.image(assetID:)` und im Dateinamen `assets/<id>.<ext>`.
+/// The binary files of a document (images), one per content. The ID is the SHA-256 of the content
+/// in lower-case hex. The same ID is in `Content.image(assetID:)` and in the file name `assets/<id>.<ext>`.
 public struct AssetStore: Equatable, Sendable {
     public struct Entry: Equatable, Sendable {
         public let fileExtension: String
@@ -12,8 +12,8 @@ public struct AssetStore: Equatable, Sendable {
     public private(set) var entries: [String: Entry] = [:]
     public init() {}
 
-    /// Legt Bytes ab und gibt die ID zurück. Dieselben Bytes ergeben dieselbe ID und liegen nur einmal da;
-    /// die Endung des ersten Ablegens bleibt.
+    /// Stores bytes and returns the ID. The same bytes give the same ID and are stored once.
+    /// The extension of the first store stays.
     @discardableResult
     public mutating func add(_ data: Data, fileExtension: String) -> String {
         let id = Self.hash(of: data)
@@ -26,7 +26,7 @@ public struct AssetStore: Equatable, Sendable {
     public var count: Int { entries.count }
     public mutating func remove(_ id: String) { entries[id] = nil }
 
-    /// SHA-256 als 64 Zeichen Hex, klein.
+    /// SHA-256 as 64 lower-case hex characters.
     public static func hash(of data: Data) -> String {
         let digits = Array("0123456789abcdef".utf8)
         var out = [UInt8](); out.reserveCapacity(64)
@@ -34,7 +34,7 @@ public struct AssetStore: Equatable, Sendable {
         return String(decoding: out, as: UTF8.self)
     }
 
-    /// Endung klein, ohne Punkt, nur a-z0-9, höchstens 16 Zeichen; sonst "bin".
+    /// Lower-case extension without dot, only a-z0-9, at most 16 characters. Otherwise "bin".
     public static func cleanExtension(_ ext: String) -> String {
         let e = ext.lowercased().drop(while: { $0 == "." })
         return isValidExtension(String(e)) ? String(e) : "bin"
@@ -46,7 +46,7 @@ public struct AssetStore: Equatable, Sendable {
         id.utf8.count == 64 && id.utf8.allSatisfy { ($0 >= 97 && $0 <= 102) || ($0 >= 48 && $0 <= 57) }
     }
 
-    /// Für den Leser: Eintrag ohne Nachrechnen des Hashs übernehmen.
+    /// For the reader: take an entry without recomputing the hash.
     mutating func insertLoaded(id: String, fileExtension: String, data: Data) {
         entries[id] = Entry(fileExtension: fileExtension, data: data)
     }

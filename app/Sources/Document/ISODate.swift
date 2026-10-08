@@ -1,8 +1,8 @@
 import Foundation
 
-/// Zeiten im Paket: UTC, ISO 8601, auf Millisekunden gerundet ("2026-10-08T12:34:56.789Z").
-/// Eigene Umrechnung statt Formatierer: schnell, ohne Zustand und stabil beim zweiten Schreiben
-/// (Datum -> Text -> Datum -> Text ergibt denselben Text).
+/// Times in the package: UTC, ISO 8601, rounded to milliseconds ("2026-10-08T12:34:56.789Z").
+/// Own conversion instead of a formatter: fast, stateless and stable on a second write
+/// (date to text to date to text gives the same text).
 enum ISODate {
     private static let minMs: Int64 = -62_135_596_800_000   // 0001-01-01T00:00:00Z
     private static let maxMs: Int64 = 253_402_300_799_999   // 9999-12-31T23:59:59.999Z
@@ -19,7 +19,7 @@ enum ISODate {
         return "\(pad(y, 4))-\(pad(m, 2))-\(pad(d, 2))T\(pad(h, 2)):\(pad(mi, 2)):\(pad(s, 2)).\(pad(f, 3))Z"
     }
 
-    /// Liest "YYYY-MM-DDTHH:MM:SS", optional mit Bruchteil, dann "Z" oder "+HH:MM" / "-HH:MM".
+    /// Reads "YYYY-MM-DDTHH:MM:SS", optionally with a fraction, then "Z" or "+HH:MM" / "-HH:MM".
     static func date(from text: String) -> Date? {
         let b = Array(text.utf8)
         var i = 0
@@ -73,7 +73,7 @@ enum ISODate {
         default: 31
         }
     }
-    // Tage seit 1970-01-01 <-> Kalenderdatum (Algorithmus von Howard Hinnant, proleptisch gregorianisch).
+    // Days since 1970-01-01 and calendar date (algorithm by Howard Hinnant, proleptic Gregorian).
     private static func civil(fromDays days: Int64) -> (Int64, Int64, Int64) {
         let z = days + 719_468
         let era = (z >= 0 ? z : z - 146_096) / 146_097
@@ -95,14 +95,14 @@ enum ISODate {
     }
 }
 
-/// Encoder und Decoder des Pakets: JSON, UTF-8, Schlüssel sortiert, Einrückung 2, Zeiten wie oben.
+/// Encoder and decoder of the package: JSON, UTF-8, sorted keys, indent 2, times as above.
 enum PackageJSON {
     static func encoder() -> JSONEncoder {
         let e = JSONEncoder()
         e.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
         e.dateEncodingStrategy = .custom { date, encoder in
             guard let s = ISODate.string(from: date) else {
-                throw EncodingError.invalidValue(date, .init(codingPath: encoder.codingPath, debugDescription: "Datum außerhalb von Jahr 1 bis 9999"))
+                throw EncodingError.invalidValue(date, .init(codingPath: encoder.codingPath, debugDescription: String(localized: "package.reason.dateOutOfRange")))
             }
             var c = encoder.singleValueContainer()
             try c.encode(s)
@@ -115,13 +115,13 @@ enum PackageJSON {
             let c = try decoder.singleValueContainer()
             let s = try c.decode(String.self)
             guard let date = ISODate.date(from: s) else {
-                throw DecodingError.dataCorruptedError(in: c, debugDescription: "Kein ISO-8601-Datum: \(s)")
+                throw DecodingError.dataCorruptedError(in: c, debugDescription: String(localized: "package.reason.notISODate \(s)"))
             }
             return date
         }
         return d
     }
-    /// Text mit LF am Ende, wie Editoren und Git es erwarten.
+    /// Text with a final LF, as editors and Git expect it.
     static func data<T: Encodable>(_ value: T) throws -> Data {
         var data = try encoder().encode(value)
         data.append(0x0A)

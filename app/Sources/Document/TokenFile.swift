@@ -2,17 +2,17 @@ import Foundation
 import ALFAcolorCore
 import Tokens
 
-/// tokens/<satz>.tokens.json: ein Tokensatz als DTCG-Baum (Design Tokens Format Module 2025.10).
+/// tokens/<set>.tokens.json: a token set as a DTCG tree (Design Tokens Format Module 2025.10).
 ///
-/// Verlustfrei in beide Richtungen:
-/// - Werte stehen mit voller Genauigkeit da (anders als `TokenExport.dtcg`, das Farben auf 4 Stellen rundet).
-/// - Herkunft (`Token.source`) und Reihenfolge stehen in `$extensions` unter unserem Namen; fremde Werkzeuge ignorieren das.
-/// - Alles, was `TokenSet` nicht abbilden kann (andere Typen, Aliase, Gruppen-`$type`, fremde `$extensions`,
-///   unbekannte Schlüssel), bleibt als Rest-Baum erhalten und wird beim Schreiben wieder eingemischt.
+/// Lossless in both directions:
+/// - Values keep full precision (unlike `TokenExport.dtcg`, which rounds colors to 4 digits).
+/// - Source (`Token.source`) and order are in `$extensions` under our name. Other tools ignore that.
+/// - Everything `TokenSet` cannot represent (other types, aliases, group `$type`, foreign `$extensions`,
+///   unknown keys) stays as a remainder tree and is merged back on write.
 enum TokenFile {
     static let namespace = "com.johannesleoberger.alfacolor"
 
-    // MARK: Schreiben
+    // MARK: Write
 
     static func data(for set: TokenSet, extras: [String: JSONValue]) throws -> Data {
         var root: [String: JSONValue] = [:]
@@ -61,7 +61,7 @@ enum TokenFile {
         switch node[head] {
         case nil: child = [:]
         case .object(let o)?:
-            guard o["$value"] == nil else { throw PackageError.invalidToken(label) }   // Blatt und Gruppe am selben Ort
+            guard o["$value"] == nil else { throw PackageError.invalidToken(label) }   // Leaf and group at the same place
             child = o
         default: throw PackageError.invalidToken(label)
         }
@@ -73,11 +73,11 @@ enum TokenFile {
     private static func sortedOrder(of tokens: [Token]) -> [[String]] { tokens.map(\.path).sorted(by: pathLess) }
     private static func pathLess(_ a: [String], _ b: [String]) -> Bool { a.lexicographicallyPrecedes(b) }
 
-    // MARK: Lesen
+    // MARK: Read
 
     static func parse(_ data: Data, name: String, path: String) throws -> (set: TokenSet, extras: [String: JSONValue]) {
         guard case .object(let root)? = try? PackageJSON.decoder().decode(JSONValue.self, from: data) else {
-            throw PackageError.corruptFile(path: path, reason: "kein JSON-Objekt")
+            throw PackageError.corruptFile(path: path, reason: String(localized: "package.reason.notJSONObject"))
         }
         var tokens: [Token] = []
         var extras: [String: JSONValue] = [:]
@@ -126,7 +126,7 @@ enum TokenFile {
         }
     }
 
-    /// Baut ein Blatt, wenn Typ und Wert verstanden werden. Was übrig bleibt (andere `$`-Schlüssel, fremde Erweiterungen), geht in `extras`.
+    /// Builds a leaf if type and value are understood. What is left (other `$` keys, foreign extensions) goes to `extras`.
     private static func token(from node: [String: JSONValue], path: [String], extras: inout [String: JSONValue]) -> Token? {
         guard !path.isEmpty, let type = node["$type"]?.stringValue, let raw = node["$value"], let value = parseValue(type: type, raw) else { return nil }
         var rest = node
@@ -136,7 +136,7 @@ enum TokenFile {
             if case .object(var ours)? = ext[namespace] {
                 if let s = ours.removeValue(forKey: "source"), let d = try? PackageJSON.encoder().encode(s) {
                     source = try? PackageJSON.decoder().decode(Source.self, from: d)
-                    if source == nil { ours["source"] = s }   // nicht lesbar: nicht verlieren
+                    if source == nil { ours["source"] = s }   // not readable: do not lose it
                 }
                 ext[namespace] = ours.isEmpty ? nil : .object(ours)
             }
@@ -182,7 +182,7 @@ enum TokenFile {
         }
     }
 
-    /// Legt `value` an `path` im Rest-Baum ab und mischt mit Vorhandenem.
+    /// Stores `value` at `path` in the remainder tree and merges with what is there.
     private static func store(_ value: JSONValue, at path: [String], in tree: inout [String: JSONValue]) {
         var wrapped = value
         for key in path.reversed() { wrapped = .object([key: wrapped]) }

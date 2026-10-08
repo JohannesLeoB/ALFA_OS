@@ -1,7 +1,7 @@
 import Foundation
 
-/// Beliebiger JSON-Wert. Trägt Felder, die diese Version nicht kennt, unverändert durch Lesen und Schreiben
-/// (Vorwärtskompatibilität: ein neueres Programm darf Felder ergänzen, ein älteres verliert sie nicht).
+/// Any JSON value. Carries fields this version does not know through reading and writing unchanged
+/// (forward compatibility: a newer program may add fields, an older one does not lose them).
 public enum JSONValue: Hashable, Sendable {
     case null
     case bool(Bool)
@@ -11,7 +11,7 @@ public enum JSONValue: Hashable, Sendable {
     case array([JSONValue])
     case object([String: JSONValue])
 
-    /// Zahl als Double, egal ob ganz oder gebrochen.
+    /// Number as Double, whether integer or fractional.
     public var number: Double? {
         switch self { case .int(let i): Double(i); case .double(let d): d; default: nil }
     }
@@ -30,7 +30,7 @@ extension JSONValue: Codable {
         else if let s = try? c.decode(String.self) { self = .string(s) }
         else if let a = try? c.decode([JSONValue].self) { self = .array(a) }
         else if let o = try? c.decode([String: JSONValue].self) { self = .object(o) }
-        else { throw DecodingError.dataCorruptedError(in: c, debugDescription: "Kein gültiger JSON-Wert") }
+        else { throw DecodingError.dataCorruptedError(in: c, debugDescription: String(localized: "package.reason.invalidJSONValue")) }
     }
     public func encode(to encoder: Encoder) throws {
         var c = encoder.singleValueContainer()
@@ -47,7 +47,7 @@ extension JSONValue: Codable {
 }
 
 extension JSONValue {
-    /// Tief mischen: Objekte werden Schlüssel für Schlüssel vereinigt, bei allem anderen gewinnt `other`.
+    /// Deep merge: objects are joined key by key, for everything else `other` wins.
     func merged(with other: JSONValue) -> JSONValue {
         guard case .object(let a) = self, case .object(let b) = other else { return other }
         var out = a
@@ -56,7 +56,7 @@ extension JSONValue {
     }
 }
 
-/// Schlüssel, der nicht vorher bekannt sein muss.
+/// A key that need not be known in advance.
 struct DynamicKey: CodingKey {
     var stringValue: String
     var intValue: Int? { nil }
@@ -65,7 +65,7 @@ struct DynamicKey: CodingKey {
     init?(intValue: Int) { nil }
 }
 
-/// Unbekannte Felder eines JSON-Objekts herausziehen und wieder zurückschreiben.
+/// Extracts the unknown fields of a JSON object and writes them back.
 enum Extras {
     static func decode(from decoder: Decoder, known: Set<String>) throws -> [String: JSONValue] {
         let c = try decoder.container(keyedBy: DynamicKey.self)
@@ -75,7 +75,7 @@ enum Extras {
         }
         return out
     }
-    /// Schreibt in denselben Schlüsselbehälter wie die bekannten Felder. Bekannte Felder gewinnen immer.
+    /// Writes into the same keyed container as the known fields. Known fields always win.
     static func encode(_ extras: [String: JSONValue], known: Set<String>, to encoder: Encoder) throws {
         let pending = extras.filter { !known.contains($0.key) }
         guard !pending.isEmpty else { return }

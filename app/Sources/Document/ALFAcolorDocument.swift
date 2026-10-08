@@ -2,27 +2,27 @@ import Foundation
 import ALFAcolorCore
 import Tokens
 
-/// Ein Dokument im Speicher: das Brett mit Räumen, Ebenen und Stücken, die Bilder, die Tokensätze
-/// und alles, was dieses Programm nicht versteht, aber nicht verlieren darf.
+/// A document in memory: the board with spaces, layers and items, the images, the token sets,
+/// and everything this version does not understand but must not lose.
 ///
-/// Auf der Platte ist es ein Ordnerpaket, siehe `DocumentPackage`.
+/// On disk it is a folder package. See `DocumentPackage`.
 public struct ALFAcolorDocument: Equatable, Sendable {
     public var board: Board
     public var assets: AssetStore
     public var tokenSets: [TokenSet]
-    /// Dateien im Paket, die das Paket selbst nicht verwaltet: `history/`, `inbox/`, Neues aus späteren Fassungen.
-    /// Pfad (relativ, mit "/") -> Bytes. Sie werden unverändert wieder geschrieben.
+    /// Files in the package that the package does not manage itself: `history/`, `inbox/`, additions from later versions.
+    /// Relative path (with "/") to bytes. They are written back unchanged.
     public var carriedFiles: PackageFiles = [:]
-    /// Felder, die diese Fassung nicht kennt (Manifest, Raum, Ebene, Stück, Tokendatei).
+    /// Fields this version does not know (manifest, space, layer, item, token file).
     var preserved = PreservedFields()
 
-    public init(board: Board = Board(title: "Unbenannt"), assets: AssetStore = AssetStore(), tokenSets: [TokenSet] = []) {
+    public init(board: Board = Board(title: String(localized: "document.untitled")), assets: AssetStore = AssetStore(), tokenSets: [TokenSet] = []) {
         self.board = board
         self.assets = assets
         self.tokenSets = tokenSets
     }
 
-    /// Bilder, auf die ein Stück verweist und die im Dokument fehlen.
+    /// Images that an item refers to and that are missing from the document.
     public func missingAssets() -> [ReadReport.MissingAsset] {
         var out: [ReadReport.MissingAsset] = []
         for space in board.spaces {
@@ -41,19 +41,19 @@ struct LayerKey: Hashable, Sendable {
     var layer: String
 }
 
-/// Unbekannte JSON-Felder je Datei. Der Schlüssel ist die ID, nicht der Pfad: Umbenennen und Verschieben ändern nichts.
+/// Unknown JSON fields per file. The key is the ID, not the path, so renaming and moving change nothing.
 struct PreservedFields: Equatable, Sendable {
     var manifest: [String: JSONValue] = [:]
     var spaces: [String: [String: JSONValue]] = [:]
     var layers: [LayerKey: [String: JSONValue]] = [:]
     var items: [ItemID: [String: JSONValue]] = [:]
-    /// Tokensatz (Name) -> der Teil der DTCG-Datei, den die App nicht in `TokenSet` abbilden kann.
+    /// Token set name to the part of the DTCG file that `TokenSet` cannot represent.
     var tokenFiles: [String: [String: JSONValue]] = [:]
 }
 
-// MARK: - Dateiinhalte
+// MARK: - File contents
 
-/// Ein Stück samt seinen unbekannten Feldern. Bekannte Felder schreibt `Item`, die übrigen `extras`.
+/// An item with its unknown fields. `Item` writes the known fields, `extras` the rest.
 struct ItemEnvelope: Codable {
     var item: Item
     var extras: [String: JSONValue]
@@ -76,9 +76,9 @@ struct ManifestFile: Codable {
     var formatVersion: Int
     var lastWrittenByAppVersion: String?
     var title: String
-    /// Reihenfolge der Räume (Reiter).
+    /// Order of the spaces (tabs).
     var spaces: [String]
-    /// Reihenfolge der Tokensätze.
+    /// Order of the token sets.
     var tokenSets: [String]
     var extras: [String: JSONValue] = [:]
 
@@ -109,15 +109,15 @@ struct ManifestFile: Codable {
     }
 }
 
-/// spaces/<raum>/space.json
+/// spaces/<space>/space.json
 struct SpaceFile: Codable {
     var schema: Int
     var id: String
     var name: String
-    /// Ebenen-IDs von unten nach oben.
+    /// Layer IDs from bottom to top.
     var layers: [String]
-    /// Nur wenn die Stücke des Raums nicht nach Ebenen geordnet im Speicher liegen: je Stück die Position seiner Ebene in `layers`.
-    /// So bleibt die Reihenfolge von `Space.items` erhalten, ohne dass die Ebenendateien davon wissen.
+    /// Set only when the items of a space are not ordered by layer in memory. For each item, the position of its layer in `layers`.
+    /// This keeps the order of `Space.items` without the layer files knowing about it.
     var layerSequence: [Int]?
     var extras: [String: JSONValue] = [:]
 
@@ -147,7 +147,7 @@ struct SpaceFile: Codable {
     }
 }
 
-/// spaces/<raum>/layers/<ebene>.json
+/// spaces/<space>/layers/<layer>.json
 struct LayerFile: Codable {
     var schema: Int
     var id: String

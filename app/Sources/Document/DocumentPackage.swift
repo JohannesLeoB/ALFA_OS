@@ -2,33 +2,33 @@ import Foundation
 import ALFAcolorCore
 import Tokens
 
-/// Der Weg zwischen `ALFAcolorDocument` und dem Ordnerpaket `.alfacolor`.
+/// The way between `ALFAcolorDocument` and the folder package `.alfacolor`.
 ///
-/// Aufbau eines Pakets:
+/// Layout of a package:
 /// ```
 /// Name.alfacolor/
-///   manifest.json                          Formatversion, App-Version, Titel, Reihenfolge der Räume und Tokensätze
-///   spaces/<raum>/space.json               Raum: Name, Ebenen-Reihenfolge
-///   spaces/<raum>/layers/<ebene>.json      Ebene samt ihren Stücken (eine Ebene je Datei, das senkt Konflikte)
-///   assets/<sha256>.<ext>                  Bilder, einmal je Inhalt
-///   tokens/<satz>.tokens.json              Tokensatz als DTCG
-///   history/  inbox/                       gehören späteren Briefen; Inhalt wird unverändert mitgeführt
+///   manifest.json                          format version, app version, title, order of spaces and token sets
+///   spaces/<space>/space.json              space: name, layer order
+///   spaces/<space>/layers/<layer>.json     layer with its items (one layer per file, which lowers conflicts)
+///   assets/<sha256>.<ext>                  images, one per content
+///   tokens/<set>.tokens.json               token set as DTCG
+///   history/  inbox/                       reserved for later features; content is carried unchanged
 /// ```
-/// `<raum>`, `<ebene>`, `<satz>` sind die IDs bzw. Namen, falls nötig als %XX geschrieben (siehe `PackageNaming`).
+/// `<space>`, `<layer>`, `<set>` are the IDs or names, written as %XX where needed (see `PackageNaming`).
 public enum DocumentPackage {
     public static let typeIdentifier = "com.johannesleoberger.alfacolor"
     public static let fileExtension = "alfacolor"
 
-    // MARK: Schreiben
+    // MARK: Write
 
-    /// Das Paket als Ordner-FileWrapper, bereit für `ReferenceFileDocument` und für `write(_:to:)`.
-    /// Alles wird im Speicher gebaut und geprüft, bevor etwas auf die Platte kommt: ein Fehler lässt ein vorhandenes Paket unberührt.
+    /// The package as a folder FileWrapper, ready for `ReferenceFileDocument` and for `write(_:to:)`.
+    /// Everything is built and checked in memory before anything reaches the disk, so an error leaves an existing package untouched.
     public static func fileWrapper(for document: ALFAcolorDocument, appVersion: String) throws -> FileWrapper {
         try makeWrapper(from: files(for: document, appVersion: appVersion))
     }
 
-    /// Schreibt atomar: erst in eine Temp-Datei neben dem Ziel, dann wird das alte Paket ersetzt.
-    /// Das Koordinieren mit anderen Prozessen (NSFileCoordinator) gehört in die Fenster-Anbindung.
+    /// Writes atomically: first to a temporary file next to the target, then the old package is replaced.
+    /// Coordination with other processes (NSFileCoordinator) belongs to the window integration.
     public static func write(_ document: ALFAcolorDocument, to url: URL, appVersion: String) throws {
         let wrapper = try fileWrapper(for: document, appVersion: appVersion)
         do {
@@ -46,10 +46,10 @@ public enum DocumentPackage {
         let version = Migration.currentVersion
         let spaces = doc.board.spaces
 
-        let spaceDirs = try PackageNaming.requireDistinct(spaces.map(\.id), kind: "Raum")
+        let spaceDirs = try PackageNaming.requireDistinct(spaces.map(\.id), kind: "space")
         for space in spaces {
             let dir = "spaces/\(spaceDirs[space.id]!)"
-            let layerNames = try PackageNaming.requireDistinct(space.layers.map(\.id), kind: "Ebene")
+            let layerNames = try PackageNaming.requireDistinct(space.layers.map(\.id), kind: "layer")
             let layerIndex = Dictionary(uniqueKeysWithValues: space.layers.enumerated().map { ($1.id, $0) })
 
             var grouped: [String: [ItemEnvelope]] = [:]
@@ -79,7 +79,7 @@ public enum DocumentPackage {
             try put("assets/\(id).\(entry.fileExtension)", entry.data)
         }
 
-        let tokenNames = try PackageNaming.requireDistinct(doc.tokenSets.map(\.name), kind: "Tokensatz")
+        let tokenNames = try PackageNaming.requireDistinct(doc.tokenSets.map(\.name), kind: "tokenSet")
         for set in doc.tokenSets {
             let path = "tokens/\(tokenNames[set.name]!).tokens.json"
             do {
@@ -106,7 +106,7 @@ public enum DocumentPackage {
         }
     }
 
-    /// Ordner mit allen Dateien; die Ordner des Aufbaus gibt es auch, wenn sie leer sind.
+    /// A folder with all files. The folders of the layout exist even when they are empty.
     static func makeWrapper(from files: PackageFiles) throws -> FileWrapper {
         final class Node {
             var dirs: [String: Node] = [:]
@@ -118,7 +118,7 @@ public enum DocumentPackage {
             let parts = path.split(separator: "/").map(String.init)
             var node = root
             for dir in parts.dropLast() {
-                guard node.files[dir] == nil else { throw PackageError.invalidPath(path) }   // Datei und Ordner mit demselben Namen
+                guard node.files[dir] == nil else { throw PackageError.invalidPath(path) }   // file and folder with the same name
                 if node.dirs[dir] == nil { node.dirs[dir] = Node() }
                 node = node.dirs[dir]!
             }
@@ -135,13 +135,13 @@ public enum DocumentPackage {
             }
             for (n, child) in node.dirs { children[n] = build(child, name: n) }
             let dir = FileWrapper(directoryWithFileWrappers: children)
-            if let name { dir.preferredFilename = name }   // nil wirft eine NSException
+            if let name { dir.preferredFilename = name }   // nil throws an NSException
             return dir
         }
         return build(root, name: nil)
     }
 
-    // MARK: Lesen
+    // MARK: Read
 
     public static func read(from url: URL, options: ReadOptions = ReadOptions(), migration: Migration = .standard) throws -> DocumentReadResult {
         let wrapper: FileWrapper
@@ -157,12 +157,12 @@ public enum DocumentPackage {
         var files = PackageFiles()
         try flatten(wrapper, prefix: "", into: &files, warnings: &report.warnings)
 
-        // 1. Version prüfen, nötigenfalls migrieren
+        // 1. Check the version, migrate if needed
         guard let manifestData = files["manifest.json"] else { throw PackageError.missingFile(path: "manifest.json") }
         struct VersionProbe: Decodable { var formatVersion: Int }
         let onDisk = try decode(VersionProbe.self, from: manifestData, path: "manifest.json").formatVersion
         report.formatVersionOnDisk = onDisk
-        guard onDisk >= 1 else { throw PackageError.corruptFile(path: "manifest.json", reason: "Formatversion \(onDisk) ist ungültig") }
+        guard onDisk >= 1 else { throw PackageError.corruptFile(path: "manifest.json", reason: String(localized: "package.reason.invalidFormatVersion \(onDisk)")) }
         guard onDisk <= migration.currentVersion else { throw PackageError.unknownFormatVersion(onDisk) }
         if onDisk < migration.currentVersion {
             files = try migration.migrate(files, from: onDisk, to: migration.currentVersion)
@@ -175,7 +175,7 @@ public enum DocumentPackage {
         var preserved = PreservedFields()
         preserved.manifest = manifest.extras
 
-        // 2. Räume und Ebenen
+        // 2. Spaces and layers
         let paths = files.keys.sorted()
         var layerPathsByDir: [String: [String]] = [:]
         for path in paths {
@@ -190,7 +190,7 @@ public enum DocumentPackage {
             let file = try decode(SpaceFile.self, from: files[path]!, path: path)
             try requireKnown(schema: file.schema, migration: migration)
             guard seenSpaces.insert(file.id).inserted else {
-                report.warnings.append("Raum „\(file.id)“ steht in \(path) ein zweites Mal; die Datei bleibt unangetastet liegen und wird nicht geöffnet.")
+                report.warnings.append(String(localized: "package.warning.duplicateSpace \(file.id) \(path)"))
                 continue
             }
             claimed.insert(path)
@@ -200,7 +200,7 @@ public enum DocumentPackage {
         var orderedSpaces: [(dir: String, file: SpaceFile)] = []
         for id in manifest.spaces {
             if let s = byID[id] { orderedSpaces.append(s) }
-            else { report.warnings.append("Das Manifest nennt den Raum „\(id)“, aber seine space.json fehlt.") }
+            else { report.warnings.append(String(localized: "package.warning.missingSpaceFile \(id)")) }
         }
         let listed = Set(orderedSpaces.map(\.file.id))
         orderedSpaces += spaceFiles.filter { !listed.contains($0.file.id) }.sorted { $0.dir < $1.dir }
@@ -217,7 +217,7 @@ public enum DocumentPackage {
                 let file = try decode(LayerFile.self, from: files[path]!, path: path)
                 try requireKnown(schema: file.schema, migration: migration)
                 guard layerFiles[file.id] == nil else {
-                    report.warnings.append("Ebene „\(file.id)“ im Raum „\(spaceFile.id)“ steht in \(path) ein zweites Mal; die Datei bleibt unangetastet liegen.")
+                    report.warnings.append(String(localized: "package.warning.duplicateLayer \(file.id) \(spaceFile.id) \(path)"))
                     continue
                 }
                 claimed.insert(path)
@@ -227,7 +227,7 @@ public enum DocumentPackage {
             var layerOrder: [String] = []
             for id in spaceFile.layers {
                 if layerFiles[id] != nil, !layerOrder.contains(id) { layerOrder.append(id) }
-                else if layerFiles[id] == nil { report.warnings.append("Raum „\(spaceFile.id)“ nennt die Ebene „\(id)“, aber ihre Datei fehlt.") }
+                else if layerFiles[id] == nil { report.warnings.append(String(localized: "package.warning.missingLayerFile \(spaceFile.id) \(id)")) }
             }
             let listedLayers = Set(layerOrder)
             layerOrder += layerPaths.filter { !listedLayers.contains($0.id) }.map(\.id)
@@ -245,15 +245,15 @@ public enum DocumentPackage {
                 }
             }
             let items = interleave(itemsByLayer, order: layerOrder, written: spaceFile.layers, sequence: spaceFile.layerSequence) {
-                report.warnings.append("Raum „\(spaceFile.id)“: \($0)")
+                report.warnings.append(String(localized: "package.warning.inSpace \(spaceFile.id) \($0)"))
             }
             spaces.append(Space(id: spaceFile.id, name: spaceFile.name, layers: layers, items: items))
         }
         if !duplicateItems.isEmpty {
-            report.warnings.append("Stück-IDs kommen mehrfach vor: \(duplicateItems.map(\.raw).sorted().joined(separator: ", "))")
+            report.warnings.append(String(localized: "package.warning.duplicateItems \(duplicateItems.map(\.raw).sorted().joined(separator: ", "))"))
         }
 
-        // 3. Bilder
+        // 3. Images
         var assets = AssetStore()
         for path in paths {
             let parts = path.split(separator: "/", omittingEmptySubsequences: false)
@@ -267,7 +267,7 @@ public enum DocumentPackage {
             report.corruptAssets = assets.ids.filter { AssetStore.hash(of: assets[$0]!.data) != $0 }
         }
 
-        // 4. Tokensätze
+        // 4. Token sets
         let suffix = ".tokens.json"
         var tokenSets: [String: TokenSet] = [:]
         for path in paths {
@@ -283,11 +283,11 @@ public enum DocumentPackage {
         var orderedSets: [TokenSet] = []
         for name in manifest.tokenSets {
             if let s = tokenSets.removeValue(forKey: name) { orderedSets.append(s) }
-            else if !orderedSets.contains(where: { $0.name == name }) { report.warnings.append("Das Manifest nennt den Tokensatz „\(name)“, aber seine Datei fehlt.") }
+            else if !orderedSets.contains(where: { $0.name == name }) { report.warnings.append(String(localized: "package.warning.missingTokenFile \(name)")) }
         }
         orderedSets += tokenSets.values.sorted { $0.name < $1.name }
 
-        // 5. Alles andere mitführen
+        // 5. Carry everything else
         var doc = ALFAcolorDocument(board: Board(title: manifest.title, spaces: spaces), assets: assets, tokenSets: orderedSets)
         doc.board.format = migration.currentVersion
         doc.preserved = preserved
@@ -301,7 +301,7 @@ public enum DocumentPackage {
         return DocumentReadResult(document: doc, report: report)
     }
 
-    /// Stellt die Reihenfolge von `Space.items` wieder her. Ohne (oder bei stimmigen Angaben fehlerhaftem) `sequence`: nach Ebenen geordnet.
+    /// Restores the order of `Space.items`. Without `sequence`, or with an inconsistent one, the items are ordered by layer.
     private static func interleave(_ itemsByLayer: [String: [Item]], order: [String], written: [String], sequence: [Int]?, warn: (String) -> Void) -> [Item] {
         let canonical = order.flatMap { itemsByLayer[$0] ?? [] }
         guard let sequence else { return canonical }
@@ -313,7 +313,7 @@ public enum DocumentPackage {
         }
         valid = valid && order.allSatisfy { counts[$0, default: 0] == itemsByLayer[$0]?.count ?? 0 }
         guard valid else {
-            warn("Die Stückreihenfolge (layerSequence) passt nicht zu den Ebenendateien; die Stücke liegen nach Ebenen geordnet.")
+            warn(String(localized: "package.warning.layerSequenceMismatch"))
             return canonical
         }
         var cursor: [String: Int] = [:]
@@ -334,11 +334,11 @@ public enum DocumentPackage {
             if child.isDirectory {
                 try flatten(child, prefix: path, into: &files, warnings: &warnings)
             } else if child.isRegularFile {
-                if name == ".DS_Store" { continue }   // Finder-Müll, kein Inhalt
-                guard let data = child.regularFileContents else { throw PackageError.corruptFile(path: path, reason: "Datei nicht lesbar") }
+                if name == ".DS_Store" { continue }   // Finder clutter, not content
+                guard let data = child.regularFileContents else { throw PackageError.corruptFile(path: path, reason: String(localized: "package.reason.unreadableFile")) }
                 files[path] = data
             } else {
-                warnings.append("Verknüpfung \(path) wurde übersprungen.")
+                warnings.append(String(localized: "package.warning.skippedLink \(path)"))
             }
         }
     }
@@ -356,18 +356,18 @@ public enum DocumentPackage {
     private static func describe(_ e: DecodingError) -> String {
         func at(_ c: DecodingError.Context) -> String {
             let p = c.codingPath.map { $0.stringValue }.joined(separator: ".")
-            return p.isEmpty ? "" : " bei \(p)"
+            return p.isEmpty ? "" : String(localized: "package.reason.atPath \(p)")
         }
         switch e {
-        case .keyNotFound(let k, let c): return "Feld „\(k.stringValue)“ fehlt\(at(c))"
+        case .keyNotFound(let k, let c): return String(localized: "package.reason.missingField \(k.stringValue)") + at(c)
         case .typeMismatch(_, let c), .valueNotFound(_, let c), .dataCorrupted(let c): return "\(c.debugDescription)\(at(c))"
-        @unknown default: return "unlesbar"
+        @unknown default: return String(localized: "package.reason.unreadable")
         }
     }
     private static func describe(_ e: EncodingError) -> String {
         switch e {
         case .invalidValue(_, let c): c.debugDescription
-        @unknown default: "nicht schreibbar"
+        @unknown default: String(localized: "package.reason.notWritable")
         }
     }
 }
