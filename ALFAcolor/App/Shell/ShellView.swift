@@ -1,10 +1,10 @@
 import SwiftUI
 import AppTheme
 
-/// Hauptfenster (B-102): Seitenleiste, Leinwand, Inspektor, Werkzeugleiste, Statusleiste.
-/// Glas für Seitenleiste, Inspektor und Werkzeugleiste zeichnet das System; hier steht kein eigener Hintergrund dafür.
+/// Main window: sidebar, canvas, inspector, toolbar, status bar.
+/// The system draws the glass for sidebar, inspector and toolbar. There is no own background for it here.
 struct ShellView: View {
-    /// Mindestgröße des Hauptfensters, konzept/05-OBERFLAECHE.txt Abschnitt 2.3.
+    /// Minimum size of the main window, konzept/05-OBERFLAECHE.txt section 2.3.
     static let minimumSize = CGSize(width: 1000, height: 640)
 
     @State private var shell = ShellState()

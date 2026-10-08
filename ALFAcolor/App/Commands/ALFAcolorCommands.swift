@@ -1,59 +1,59 @@
 import SwiftUI
 import ALFAcolorCore
 
-/// Alle Menüs der App (B-106). Die Einträge stehen in `Tastenkarte` (ALFAcolorCore).
-/// Systemmenüs bleiben System: nur die eigenen Einträge werden angehängt oder ersetzen den Platz von `Neues Dokument`.
+/// All menus of the app. The entries are in `ShortcutTable` (ALFAcolorCore).
+/// System menus stay with the system. Only the app's own entries are added, or they replace the place of `New Document`.
 struct ALFAcolorCommands: Commands {
     var body: some Commands {
         ShellCommands()
-        AblageCommands()
-        BearbeitenCommands()
-        ObjektCommands()
-        FensterCommands()
-        HilfeCommands()
+        FileCommands()
+        EditCommands()
+        ObjectCommands()
+        WindowCommands()
+        HelpCommands()
     }
 }
 
-struct AblageCommands: Commands {
+struct FileCommands: Commands {
     var body: some Commands {
         CommandGroup(replacing: .newItem) {
-            MenuePosten(menue: .ablage, funktionen: MenueFunktionen())
+            MenuEntries(menu: .file, functions: MenuFunctions())
         }
     }
 }
 
-struct BearbeitenCommands: Commands {
+struct EditCommands: Commands {
     var body: some Commands {
         CommandGroup(after: .pasteboard) {
-            MenuePosten(menue: .bearbeiten, funktionen: MenueFunktionen())
+            MenuEntries(menu: .edit, functions: MenuFunctions())
         }
     }
 }
 
-struct ObjektCommands: Commands {
+struct ObjectCommands: Commands {
     var body: some Commands {
-        CommandMenu("Objekt") {
-            MenuePosten(menue: .objekt, funktionen: MenueFunktionen())
+        CommandMenu("menu.object") {
+            MenuEntries(menu: .object, functions: MenuFunctions())
         }
     }
 }
 
-struct FensterCommands: Commands {
+struct WindowCommands: Commands {
     var body: some Commands {
         CommandGroup(after: .windowArrangement) {
-            MenuePosten(menue: .fenster, funktionen: MenueFunktionen())
+            MenuEntries(menu: .window, functions: MenuFunctions())
         }
     }
 }
 
-struct HilfeCommands: Commands {
+struct HelpCommands: Commands {
     @Environment(\.openWindow) private var openWindow
 
     var body: some Commands {
         CommandGroup(after: .help) {
-            MenuePosten(
-                menue: .hilfe,
-                funktionen: MenueFunktionen(zeigeTastenkarte: { openWindow(id: TastenkarteView.fensterID) })
+            MenuEntries(
+                menu: .help,
+                functions: MenuFunctions(showShortcutTable: { openWindow(id: ShortcutTableView.windowID) })
             )
         }
     }

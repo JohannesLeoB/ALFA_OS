@@ -1,43 +1,43 @@
 import SwiftUI
 
-/// Werkzeugleiste (B-102). Alle Knöpfe sind Platzhalter ohne Wirkung, bis ihre Briefe sie belegen.
-/// Gruppen: links Raum-Reiter, Mitte Hinzufügen bis Token-Werkstatt, rechts Teilen, Ausgabe, Inspektor.
+/// Toolbar. All buttons are placeholders without effect.
+/// Groups: space tabs on the left, add to token workshop in the middle, share, export and inspector on the right.
 struct ShellToolbar: ToolbarContent {
     @Bindable var shell: ShellState
 
     var body: some ToolbarContent {
         ToolbarItemGroup(placement: .navigation) {
-            Picker("Raum", selection: $shell.selectedRoom) {
+            Picker("toolbar.space", selection: $shell.selectedRoom) {
                 ForEach(PlaceholderRoom.allCases) { room in
-                    Text(room.rawValue).tag(room)
+                    Text(LocalizedStringKey(room.rawValue)).tag(room)
                 }
             }
             .pickerStyle(.segmented)
-            .help("Raum wechseln")
-            Button {} label: { Label("Neuer Raum", systemImage: "plus") }
-                .help("Neuer Raum")
+            .help("toolbar.switchSpace.help")
+            Button {} label: { Label("toolbar.newSpace", systemImage: "plus") }
+                .help("toolbar.newSpace")
         }
 
         ToolbarItemGroup(placement: .principal) {
-            Button {} label: { Label("Hinzufügen", systemImage: "plus.square.on.square") }
-                .help("Hinzufügen")
-            Button {} label: { Label("Importieren", systemImage: "square.and.arrow.down") }
-                .help("Importieren")
-            Button {} label: { Label("Labor", systemImage: "testtube.2") }
-                .help("Labor")
-            Button {} label: { Label("Token-Werkstatt", systemImage: "swatchpalette") }
-                .help("Token-Werkstatt")
+            Button {} label: { Label("toolbar.add", systemImage: "plus.square.on.square") }
+                .help("toolbar.add")
+            Button {} label: { Label("toolbar.import", systemImage: "square.and.arrow.down") }
+                .help("toolbar.import")
+            Button {} label: { Label("toolbar.lab", systemImage: "testtube.2") }
+                .help("toolbar.lab")
+            Button {} label: { Label("toolbar.tokenWorkshop", systemImage: "swatchpalette") }
+                .help("toolbar.tokenWorkshop")
         }
 
         ToolbarItemGroup(placement: .primaryAction) {
-            Button {} label: { Label("Teilen", systemImage: "square.and.arrow.up") }
-                .help("Teilen")
-            Button {} label: { Label("Ausgabe", systemImage: "arrow.up.doc") }
-                .help("Ausgabe")
+            Button {} label: { Label("toolbar.share", systemImage: "square.and.arrow.up") }
+                .help("toolbar.share")
+            Button {} label: { Label("toolbar.export", systemImage: "arrow.up.doc") }
+                .help("toolbar.export")
             Button { shell.toggleInspector() } label: {
-                Label("Inspektor", systemImage: "sidebar.trailing")
+                Label("inspector.title", systemImage: "sidebar.trailing")
             }
-            .help("Inspektor ein- oder ausblenden (⌥⌘0)")
+            .help("toolbar.toggleInspector.help")
         }
     }
 }

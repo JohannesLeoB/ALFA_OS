@@ -1,8 +1,8 @@
 import SwiftUI
 import AppTheme
 
-/// Leinwandfläche (B-102): leer, mit Hinweis. Zeichnen der Stücke: B-203. Die Fläche ist Inhalt, kein Glas.
-/// Tab schaltet alle Panels, aber nur, solange die Leinwand den Fokus hat.
+/// Canvas area: empty, with a hint. The area is content, not glass.
+/// Tab toggles all panels, but only while the canvas has focus.
 struct CanvasView: View {
     var shell: ShellState
 
@@ -12,9 +12,9 @@ struct CanvasView: View {
 
     var body: some View {
         VStack(spacing: theme.space(.s2)) {
-            Text("Leinwand")
+            Text("canvas.title")
                 .font(theme.text(.caption).font)
-            Text("Zieh etwas hierher oder drücke ⌘V")
+            Text("canvas.hint")
                 .font(theme.text(.body).font)
         }
         .foregroundStyle(theme.color(.textMuted, scheme))
@@ -32,6 +32,6 @@ struct CanvasView: View {
         }
         .onAppear { hasFocus = true }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Leinwand, leer")
+        .accessibilityLabel("canvas.accessibility")
     }
 }

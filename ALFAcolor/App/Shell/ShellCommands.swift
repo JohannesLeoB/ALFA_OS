@@ -1,15 +1,15 @@
 import SwiftUI
 import ALFAcolorCore
 
-/// Menü Darstellung (B-102, B-106). Die Einträge stehen in `Tastenkarte`. Die vier Schalter aus B-102
-/// (⌥⌘1 Seitenleiste, ⌥⌘0 Inspektor, Alle Panels, Statusleiste) wirken unverändert.
-/// Tab (alle Panels) ist kein Menükürzel, weil es nur bei Fokus auf der Leinwand gilt (siehe CanvasView).
+/// View menu. The entries are in `ShortcutTable`. The four switches (⌥⌘1 sidebar, ⌥⌘0 inspector,
+/// all panels, status bar) work unchanged.
+/// Tab (all panels) is not a menu shortcut, because it applies only with focus on the canvas (see CanvasView).
 struct ShellCommands: Commands {
     @FocusedValue(\.shell) private var shell
 
     var body: some Commands {
         CommandGroup(after: .sidebar) {
-            MenuePosten(menue: .darstellung, funktionen: MenueFunktionen(shell: shell))
+            MenuEntries(menu: .view, functions: MenuFunctions(shell: shell))
         }
     }
 }

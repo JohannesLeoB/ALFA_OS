@@ -1,18 +1,18 @@
 import SwiftUI
 import AppTheme
 
-/// Inspektor (B-102): Platzhalter für „keine Auswahl“. Echter Inhalt: B-208.
+/// Inspector: placeholder for "no selection".
 struct InspectorView: View {
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
 
     var body: some View {
         VStack(alignment: .leading, spacing: theme.space(.s2)) {
-            Text("Inspektor")
+            Text("inspector.title")
                 .font(theme.text(.heading).font)
-            Text("Keine Auswahl")
+            Text("inspector.noSelection")
                 .font(theme.text(.body).font)
-            Text("Die Eigenschaften des Raums oder der Auswahl erscheinen hier.")
+            Text("inspector.hint")
                 .font(theme.text(.caption).font)
                 .foregroundStyle(theme.color(.textMuted, scheme))
             Spacer(minLength: 0)
@@ -20,6 +20,6 @@ struct InspectorView: View {
         .padding(theme.space(.s4))
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("Inspektor")
+        .accessibilityLabel("inspector.title")
     }
 }

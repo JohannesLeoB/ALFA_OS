@@ -3,10 +3,10 @@ import AppTheme
 
 @main
 struct ALFAcolorApp: App {
-    /// Startgröße des Hauptfensters, konzept/05-OBERFLAECHE.txt Abschnitt 2.3.
+    /// Start size of the main window, konzept/05-OBERFLAECHE.txt section 2.3.
     private static let defaultSize = CGSize(width: 1280, height: 800)
 
-    /// Der Vertrag aus dem App-Paket, falls der Bau ihn mitgibt; sonst gilt der Platzhalter (Chef, B-102).
+    /// The contract from the app bundle, if the build provides it. Otherwise the placeholder applies.
     private let theme: Theme = {
         guard let url = Theme.contractFile(), let contract = try? Theme.load(from: url) else { return .placeholder }
         return contract
@@ -19,21 +19,21 @@ struct ALFAcolorApp: App {
         }
         .defaultSize(width: Self.defaultSize.width, height: Self.defaultSize.height)
         .defaultWindowPlacement { _, context in
-            // Wunsch: Mitte der sichtbaren Fläche des Hauptbildschirms, Größe nie über die sichtbare Fläche hinaus.
-            // Beobachtet (macOS 26.6): Die Lage setzt das System selbst; ein hier angegebener Punkt änderte sie nicht.
-            let sichtbar = context.defaultDisplay.visibleRect
-            let breite = min(Self.defaultSize.width, sichtbar.width)
-            let hoehe = min(Self.defaultSize.height, sichtbar.height)
+            // Intent: center of the visible area of the main display, size never beyond the visible area.
+            // Observed (macOS 26.6): the system sets the position itself. A point given here did not change it.
+            let visible = context.defaultDisplay.visibleRect
+            let width = min(Self.defaultSize.width, visible.width)
+            let height = min(Self.defaultSize.height, visible.height)
             return WindowPlacement(
-                CGPoint(x: sichtbar.midX - breite / 2, y: sichtbar.midY - hoehe / 2),
-                size: CGSize(width: breite, height: hoehe)
+                CGPoint(x: visible.midX - width / 2, y: visible.midY - height / 2),
+                size: CGSize(width: width, height: height)
             )
         }
         .commands { ALFAcolorCommands() }
 
-        // Tastenkarte (B-106): Übersicht aller Kürzel, geöffnet über Hilfe ▸ Tastenkarte.
-        Window("Tastenkarte", id: TastenkarteView.fensterID) {
-            TastenkarteView()
+        // Shortcut table: overview of all shortcuts, opened through Help > Shortcut Table.
+        Window("window.shortcutTable", id: ShortcutTableView.windowID) {
+            ShortcutTableView()
                 .environment(\.theme, theme)
         }
         .defaultSize(width: 460, height: 640)

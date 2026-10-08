@@ -1,15 +1,15 @@
 import SwiftUI
 
-/// Zustand der Fensterschale (B-102): welche Bereiche sichtbar sind.
-/// Gehört zu einem Fenster; Menübefehle erreichen ihn über `focusedSceneValue`.
+/// State of the window shell: which areas are visible.
+/// It belongs to one window. Menu commands reach it through `focusedSceneValue`.
 @MainActor
 @Observable
 final class ShellState {
-    /// Seitenleiste: `.all` zeigt sie, `.detailOnly` blendet sie aus. Die Systemtaste der Werkzeugleiste schreibt hier mit.
+    /// Sidebar: `.all` shows it, `.detailOnly` hides it. The system key of the toolbar writes here too.
     var columnVisibility: NavigationSplitViewVisibility = .all
     var inspectorVisible = true
     var statusBarVisible = true
-    /// Platzhalter für die Raum-Reiter (echte Räume: B-206).
+    /// Placeholder for the space tabs.
     var selectedRoom: PlaceholderRoom = .mail
 
     var sidebarVisible: Bool {
@@ -21,7 +21,7 @@ final class ShellState {
     func toggleInspector() { inspectorVisible.toggle() }
     func toggleStatusBar() { statusBarVisible.toggle() }
 
-    /// Tab auf der Leinwand: ist irgendein Panel offen, schließen sich beide, sonst öffnen sich beide.
+    /// Tab on the canvas: if any panel is open, both close. Otherwise both open.
     func togglePanels() {
         let anyVisible = sidebarVisible || inspectorVisible
         sidebarVisible = !anyVisible
@@ -29,10 +29,10 @@ final class ShellState {
     }
 }
 
-/// Statische Raum-Reiter, bis B-206 echte Räume liefert.
+/// Static space tabs. The raw value is the key of the tab title in the string catalog.
 enum PlaceholderRoom: String, CaseIterable, Identifiable {
-    case mail = "Mail"
-    case farben = "Farben"
+    case mail = "room.mail"
+    case colors = "room.colors"
     var id: Self { self }
 }
 

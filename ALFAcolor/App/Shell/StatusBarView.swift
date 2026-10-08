@@ -1,7 +1,7 @@
 import SwiftUI
 import AppTheme
 
-/// Statusleiste unten (B-102). Nur Angaben, keine Schalter. Alle Werte sind Platzhalter, bis B-203 und B-201 sie liefern.
+/// Status bar at the bottom. Information only, no switches. All values are placeholders.
 struct StatusBarView: View {
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
@@ -10,12 +10,12 @@ struct StatusBarView: View {
         VStack(spacing: 0) {
             Divider()
             HStack(spacing: theme.space(.s5)) {
-                field("Zoom", "100 %")
-                field("Raster", "8")
-                field("Einheit", "pt")
-                field("Auswahl", "keine")
+                field("status.zoom", "status.zoom.value")
+                field("status.grid", "status.grid.value")
+                field("status.unit", "status.unit.value")
+                field("status.selection", "status.selection.value")
                 Spacer(minLength: 0)
-                field("Speicherstand", "Gesichert")
+                field("status.saveState", "status.saveState.value")
             }
             .font(theme.text(.caption).font)
             .foregroundStyle(theme.color(.textMuted, scheme))
@@ -24,10 +24,10 @@ struct StatusBarView: View {
         }
         .background(theme.color(.surface, scheme))
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("Statusleiste")
+        .accessibilityLabel("status.title")
     }
 
-    private func field(_ name: String, _ value: String) -> some View {
+    private func field(_ name: LocalizedStringKey, _ value: LocalizedStringKey) -> some View {
         HStack(spacing: theme.space(.s1)) {
             Text(name)
             Text(value).foregroundStyle(theme.color(.text, scheme))

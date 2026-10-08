@@ -1,261 +1,263 @@
-// Tastenkarte (B-106): Menübefehle, Kürzel und Vorlagen als reine Daten.
-// Ohne SwiftUI, damit `swift test` die Tabelle prüfen kann. Die Menüs in
-// ALFAcolor/App/Commands/ übersetzen die Einträge in Bedienung.
-// Quellen: konzept/05-OBERFLAECHE.txt Abschnitt 4 (Menüs) und 5 (Werkzeuge);
-// konzept/02-NUTZER.txt Abschnitt 6 (Kollisionen mit macOS);
-// konzept/09-VISION-AUSFUEHRLICH.md Abschnitt 4 (Werkzeugtasten).
+// Shortcut table: menu commands, key shortcuts and presets as plain data.
+// No SwiftUI, so that `swift test` can check the table. The menus in ALFAcolor/App/Commands/
+// turn the entries into UI. All titles are keys of the string catalog (Localizable.xcstrings).
+// Sources: konzept/05-OBERFLAECHE.txt sections 4 (menus) and 5 (tools);
+// konzept/02-NUTZER.txt section 6 (collisions with macOS);
+// konzept/09-VISION-AUSFUEHRLICH.md section 4 (tool keys).
 
-/// Ein Menü der Menüleiste. `werkzeug` steht nur in der Tastenkarte; das Werkzeugmenü baut B-305.
-public enum Menue: String, CaseIterable, Hashable, Sendable {
-    case ablage, bearbeiten, objekt, darstellung, fenster, hilfe, werkzeug
+/// A menu of the menu bar. `tool` is only in the shortcut table. The tool menu itself is built later.
+public enum AppMenu: String, CaseIterable, Hashable, Sendable {
+    case file, edit, object, view, window, help, tool
 
-    public var titel: String {
+    /// Key of the menu title in the string catalog.
+    public var titleKey: String {
         switch self {
-        case .ablage: "Ablage"
-        case .bearbeiten: "Bearbeiten"
-        case .objekt: "Objekt"
-        case .darstellung: "Darstellung"
-        case .fenster: "Fenster"
-        case .hilfe: "Hilfe"
-        case .werkzeug: "Werkzeug"
+        case .file: "menu.file"
+        case .edit: "menu.edit"
+        case .object: "menu.object"
+        case .view: "menu.view"
+        case .window: "menu.window"
+        case .help: "menu.help"
+        case .tool: "menu.tool"
         }
     }
 }
 
-/// Modifikatortasten. Die Anzeige folgt der macOS-Reihenfolge ⌃⌥⇧⌘.
-public struct Modifikatoren: OptionSet, Hashable, Sendable {
+/// Modifier keys. The display follows the macOS order ⌃⌥⇧⌘.
+public struct KeyModifiers: OptionSet, Hashable, Sendable {
     public let rawValue: Int
     public init(rawValue: Int) { self.rawValue = rawValue }
 
-    public static let control = Modifikatoren(rawValue: 1 << 0)
-    public static let option = Modifikatoren(rawValue: 1 << 1)
-    public static let umschalt = Modifikatoren(rawValue: 1 << 2)
-    public static let befehl = Modifikatoren(rawValue: 1 << 3)
+    public static let control = KeyModifiers(rawValue: 1 << 0)
+    public static let option = KeyModifiers(rawValue: 1 << 1)
+    public static let shift = KeyModifiers(rawValue: 1 << 2)
+    public static let command = KeyModifiers(rawValue: 1 << 3)
 }
 
-/// Ein Tastenkürzel: Modifikatoren und eine Taste. Buchstaben werden in Großschrift gespeichert.
-public struct Kuerzel: Hashable, Sendable {
-    public let modifikatoren: Modifikatoren
-    public let taste: String
+/// A key shortcut: modifiers and one key. Letters are stored in upper case.
+public struct Shortcut: Hashable, Sendable {
+    public let modifiers: KeyModifiers
+    public let key: String
 
-    public init(_ modifikatoren: Modifikatoren, _ taste: String) {
-        self.modifikatoren = modifikatoren
-        self.taste = taste.uppercased()
+    public init(_ modifiers: KeyModifiers, _ key: String) {
+        self.modifiers = modifiers
+        self.key = key.uppercased()
     }
 
-    /// Anzeige wie im Menü, zum Beispiel "⌥⌘1" oder "⇧⌘]".
-    public var anzeige: String {
+    /// Display as in the menu, for example "⌥⌘1" or "⇧⌘]".
+    public var display: String {
         var text = ""
-        if modifikatoren.contains(.control) { text += "⌃" }
-        if modifikatoren.contains(.option) { text += "⌥" }
-        if modifikatoren.contains(.umschalt) { text += "⇧" }
-        if modifikatoren.contains(.befehl) { text += "⌘" }
-        return text + taste
+        if modifiers.contains(.control) { text += "⌃" }
+        if modifiers.contains(.option) { text += "⌥" }
+        if modifiers.contains(.shift) { text += "⇧" }
+        if modifiers.contains(.command) { text += "⌘" }
+        return text + key
     }
 }
 
-/// Woher die Taste stammt: macOS-Standard, InDesign (Erinnerung, nicht geprüft) oder ein Vorschlag von ALFAcolor.
-public enum Vorlage: String, Hashable, Sendable {
-    case macOS, inDesign, vorschlag
+/// Where the key comes from: a macOS default, InDesign (from memory, not checked) or a proposal of ALFAcolor.
+public enum Preset: String, Hashable, Sendable {
+    case macOS, inDesign, proposal
 
-    public var titel: String {
+    /// Key of the preset name in the string catalog.
+    public var titleKey: String {
         switch self {
-        case .macOS: "macOS"
-        case .inDesign: "InDesign"
-        case .vorschlag: "Vorschlag"
+        case .macOS: "preset.macOS"
+        case .inDesign: "preset.inDesign"
+        case .proposal: "preset.proposal"
         }
     }
 }
 
-/// `immer`: das Kürzel gilt überall. `nurLeinwand`: nur bei Fokus auf der Leinwand und ohne Textfeld (B-305 bindet die Tasten).
-public enum Geltung: String, Hashable, Sendable {
-    case immer, nurLeinwand
+/// `always`: the shortcut applies everywhere. `canvasOnly`: only with focus on the canvas and without a text field.
+public enum Scope: String, Hashable, Sendable {
+    case always, canvasOnly
 }
 
-/// `eigen`: ALFAcolor legt den Eintrag an. `system`: macOS oder SwiftUI liefert ihn; er steht nur in der Tastenkarte.
-public enum Herkunft: String, Hashable, Sendable {
-    case eigen, system
+/// `app`: ALFAcolor creates the entry. `system`: macOS or SwiftUI provides it, and it is only in the shortcut table.
+public enum Origin: String, Hashable, Sendable {
+    case app, system
 }
 
-/// Ein Menübefehl mit Kürzel. `id` ist eindeutig und dient dazu, die Funktion zuzuordnen.
-public struct Befehl: Identifiable, Hashable, Sendable {
+/// A menu command with its shortcut. `id` is unique and is used to match the function.
+public struct MenuCommand: Identifiable, Hashable, Sendable {
     public let id: String
-    public let menue: Menue
-    public let titel: String
-    public let kuerzel: Kuerzel?
-    public let vorlage: Vorlage
-    public let geltung: Geltung
-    public let herkunft: Herkunft
-    /// Untermenü, zu dem der Eintrag gehört (z. B. "Ausrichten"); nil für Einträge direkt im Menü.
-    public let untermenue: String?
-    /// Trennlinie vor dem Eintrag.
-    public let trennerDavor: Bool
+    public let menu: AppMenu
+    public let shortcut: Shortcut?
+    public let preset: Preset
+    public let scope: Scope
+    public let origin: Origin
+    /// Key of the submenu title that the entry belongs to (for example "submenu.align"). nil for entries directly in the menu.
+    public let submenuKey: String?
+    /// A separator line before the entry.
+    public let separatorBefore: Bool
+
+    /// Key of the command title in the string catalog.
+    public var titleKey: String { "command." + id }
 }
 
-/// Ein Glied eines Menüs in Anzeigereihenfolge.
-public enum Posten: Identifiable, Sendable {
-    case trenner(Int)
-    case eintrag(Befehl)
-    case untermenue(titel: String, eintraege: [Befehl])
+/// A member of a menu, in display order.
+public enum MenuEntry: Identifiable, Sendable {
+    case separator(Int)
+    case command(MenuCommand)
+    case submenu(titleKey: String, commands: [MenuCommand])
 
     public var id: String {
         switch self {
-        case .trenner(let n): "trenner-\(n)"
-        case .eintrag(let befehl): befehl.id
-        case .untermenue(let titel, _): "untermenue-\(titel)"
+        case .separator(let n): "separator-\(n)"
+        case .command(let command): command.id
+        case .submenu(let titleKey, _): "submenu-\(titleKey)"
         }
     }
 }
 
-/// Die Tabelle aller Befehle: Befehl → Taste → Vorlage. Eine Quelle für Menüs und Tastenkarte.
-public enum Tastenkarte {
-    public static let befehle: [Befehl] = ablage + bearbeiten + darstellung + objekt + fenster + hilfe + werkzeug
+/// The table of all commands: command to key to preset. One source for menus and shortcut table.
+public enum ShortcutTable {
+    public static let commands: [MenuCommand] = file + edit + view + object + window + help + tool
 
-    /// Die Glieder eines Menüs. Ohne `herkunft` alle Einträge, sonst nur die mit dieser Herkunft.
-    /// Trennlinien stehen nie am Anfang; Einträge mit gleichem `untermenue` fasst die Liste zusammen.
-    public static func posten(_ menue: Menue, herkunft: Herkunft? = nil) -> [Posten] {
-        var ergebnis: [Posten] = []
-        for befehl in befehle where befehl.menue == menue && (herkunft == nil || befehl.herkunft == herkunft) {
-            if befehl.trennerDavor && !ergebnis.isEmpty {
-                ergebnis.append(.trenner(ergebnis.count))
+    /// The members of a menu. Without `origin`, all entries. Otherwise only those with this origin.
+    /// Separators are never first. Entries with the same `submenuKey` are joined into one submenu.
+    public static func entries(_ menu: AppMenu, origin: Origin? = nil) -> [MenuEntry] {
+        var result: [MenuEntry] = []
+        for command in commands where command.menu == menu && (origin == nil || command.origin == origin) {
+            if command.separatorBefore && !result.isEmpty {
+                result.append(.separator(result.count))
             }
-            if let titel = befehl.untermenue {
-                if case .untermenue(let offen, let eintraege)? = ergebnis.last, offen == titel {
-                    ergebnis[ergebnis.count - 1] = .untermenue(titel: offen, eintraege: eintraege + [befehl])
+            if let titleKey = command.submenuKey {
+                if case .submenu(let openKey, let members)? = result.last, openKey == titleKey {
+                    result[result.count - 1] = .submenu(titleKey: openKey, commands: members + [command])
                 } else {
-                    ergebnis.append(.untermenue(titel: titel, eintraege: [befehl]))
+                    result.append(.submenu(titleKey: titleKey, commands: [command]))
                 }
             } else {
-                ergebnis.append(.eintrag(befehl))
+                result.append(.command(command))
             }
         }
-        return ergebnis
+        return result
     }
 
-    static let ablage: [Befehl] = [
-        befehl("ablage.neu", .ablage, "Neues Dokument", "N", [.befehl], vorlage: .macOS),
-        befehl("ablage.oeffnen", .ablage, "Öffnen…", "O", [.befehl], vorlage: .macOS),
-        befehl("ablage.zuletzt", .ablage, "Zuletzt geöffnet"),
-        befehl("ablage.schliessen", .ablage, "Schließen", "W", [.befehl], vorlage: .macOS, herkunft: .system, trenner: true),
-        befehl("ablage.sichern", .ablage, "Sichern", "S", [.befehl], vorlage: .macOS, trenner: true),
-        befehl("ablage.duplizieren", .ablage, "Duplizieren", "S", [.befehl, .umschalt], vorlage: .macOS),
-        befehl("ablage.umbenennen", .ablage, "Umbenennen…"),
-        befehl("ablage.verschieben", .ablage, "Verschieben nach…"),
-        befehl("ablage.ausgeben", .ablage, "Ausgeben…", "E", [.befehl, .umschalt], trenner: true),
-        befehl("ablage.zuruecksetzen", .ablage, "Auf Version zurücksetzen"),
-        befehl("ablage.seite", .ablage, "Seite einrichten…", "P", [.befehl, .umschalt], vorlage: .macOS, trenner: true),
-        befehl("ablage.drucken", .ablage, "Drucken…", "P", [.befehl], vorlage: .macOS),
+    static let file: [MenuCommand] = [
+        command("file.new", .file, "N", [.command], preset: .macOS),
+        command("file.open", .file, "O", [.command], preset: .macOS),
+        command("file.recent", .file),
+        command("file.close", .file, "W", [.command], preset: .macOS, origin: .system, separator: true),
+        command("file.save", .file, "S", [.command], preset: .macOS, separator: true),
+        command("file.duplicate", .file, "S", [.command, .shift], preset: .macOS),
+        command("file.rename", .file),
+        command("file.move", .file),
+        command("file.export", .file, "E", [.command, .shift], separator: true),
+        command("file.revert", .file),
+        command("file.pageSetup", .file, "P", [.command, .shift], preset: .macOS, separator: true),
+        command("file.print", .file, "P", [.command], preset: .macOS),
     ]
 
-    static let bearbeiten: [Befehl] = [
-        befehl("bearbeiten.rueckgaengig", .bearbeiten, "Rückgängig", "Z", [.befehl], vorlage: .macOS, herkunft: .system),
-        befehl("bearbeiten.wiederholen", .bearbeiten, "Wiederholen", "Z", [.befehl, .umschalt], vorlage: .macOS, herkunft: .system),
-        befehl("bearbeiten.ausschneiden", .bearbeiten, "Ausschneiden", "X", [.befehl], vorlage: .macOS, herkunft: .system, trenner: true),
-        befehl("bearbeiten.kopieren", .bearbeiten, "Kopieren", "C", [.befehl], vorlage: .macOS, herkunft: .system),
-        befehl("bearbeiten.einsetzen", .bearbeiten, "Einsetzen", "V", [.befehl], vorlage: .macOS, herkunft: .system),
-        befehl("bearbeiten.einsetzenStil", .bearbeiten, "Einsetzen und Stil anpassen", "V", [.option, .umschalt, .befehl], vorlage: .macOS),
-        befehl("bearbeiten.stilEinsetzen", .bearbeiten, "Stil einsetzen", "V", [.option, .befehl], vorlage: .macOS),
-        befehl("bearbeiten.loeschen", .bearbeiten, "Löschen", "⌫", [], vorlage: .macOS, geltung: .nurLeinwand),
-        befehl("bearbeiten.alleAuswaehlen", .bearbeiten, "Alles auswählen", "A", [.befehl], vorlage: .macOS, herkunft: .system, trenner: true),
-        befehl("bearbeiten.auswahlAufheben", .bearbeiten, "Auswahl aufheben", "A", [.befehl, .umschalt], vorlage: .macOS),
-        befehl("bearbeiten.suchen", .bearbeiten, "Suchen…", "F", [.befehl], vorlage: .macOS, trenner: true),
+    static let edit: [MenuCommand] = [
+        command("edit.undo", .edit, "Z", [.command], preset: .macOS, origin: .system),
+        command("edit.redo", .edit, "Z", [.command, .shift], preset: .macOS, origin: .system),
+        command("edit.cut", .edit, "X", [.command], preset: .macOS, origin: .system, separator: true),
+        command("edit.copy", .edit, "C", [.command], preset: .macOS, origin: .system),
+        command("edit.paste", .edit, "V", [.command], preset: .macOS, origin: .system),
+        command("edit.pasteMatchStyle", .edit, "V", [.option, .shift, .command], preset: .macOS),
+        command("edit.pasteStyle", .edit, "V", [.option, .command], preset: .macOS),
+        command("edit.delete", .edit, "⌫", [], preset: .macOS, scope: .canvasOnly),
+        command("edit.selectAll", .edit, "A", [.command], preset: .macOS, origin: .system, separator: true),
+        command("edit.deselect", .edit, "A", [.command, .shift], preset: .macOS),
+        command("edit.find", .edit, "F", [.command], preset: .macOS, separator: true),
     ]
 
-    static let darstellung: [Befehl] = [
-        befehl("darstellung.seitenleiste", .darstellung, "Seitenleiste ein/aus", "1", [.option, .befehl]),
-        befehl("darstellung.inspektor", .darstellung, "Inspektor ein/aus", "0", [.option, .befehl]),
-        befehl("darstellung.alle", .darstellung, "Alle Panels ein/aus", trenner: true),
-        befehl("darstellung.statusleiste", .darstellung, "Statusleiste ein/aus"),
-        befehl("darstellung.werkzeugleiste", .darstellung, "Werkzeugleiste ein/aus", "T", [.option, .befehl], vorlage: .macOS, herkunft: .system, trenner: true),
-        befehl("darstellung.werkzeugOptionen", .darstellung, "Werkzeugoptionen ein/aus"),
-        befehl("darstellung.zoomEin", .darstellung, "Vergrößern", "=", [.befehl], trenner: true),
-        befehl("darstellung.zoomAus", .darstellung, "Verkleinern", "-", [.befehl]),
-        befehl("darstellung.originalgroesse", .darstellung, "Originalgröße", "0", [.befehl]),
-        befehl("darstellung.auswahlEinpassen", .darstellung, "Auswahl einpassen", "9", [.befehl]),
-        befehl("darstellung.alleEinpassen", .darstellung, "Alles einpassen", "1", [.befehl]),
-        befehl("darstellung.raster", .darstellung, "Raster ein/aus", "R", [.option, .befehl], trenner: true),
-        befehl("darstellung.hilfslinien", .darstellung, "Hilfslinien ein/aus", "L", [.option, .befehl]),
-        befehl("darstellung.einrasten", .darstellung, "Am Raster einrasten", "R", [.befehl, .umschalt]),
-        befehl("darstellung.vollbild", .darstellung, "Vollbild aktivieren", "F", [.control, .befehl], vorlage: .macOS, herkunft: .system, trenner: true),
+    static let view: [MenuCommand] = [
+        command("view.sidebar", .view, "1", [.option, .command]),
+        command("view.inspector", .view, "0", [.option, .command]),
+        command("view.allPanels", .view, separator: true),
+        command("view.statusBar", .view),
+        command("view.toolbar", .view, "T", [.option, .command], preset: .macOS, origin: .system, separator: true),
+        command("view.toolOptions", .view),
+        command("view.zoomIn", .view, "=", [.command], separator: true),
+        command("view.zoomOut", .view, "-", [.command]),
+        command("view.actualSize", .view, "0", [.command]),
+        command("view.fitSelection", .view, "9", [.command]),
+        command("view.fitAll", .view, "1", [.command]),
+        command("view.grid", .view, "R", [.option, .command], separator: true),
+        command("view.guides", .view, "L", [.option, .command]),
+        command("view.snapToGrid", .view, "R", [.command, .shift]),
+        command("view.fullScreen", .view, "F", [.control, .command], preset: .macOS, origin: .system, separator: true),
     ]
 
-    static let objekt: [Befehl] = [
-        befehl("objekt.gruppieren", .objekt, "Gruppieren", "G", [.befehl]),
-        befehl("objekt.gruppierungAufheben", .objekt, "Gruppierung aufheben", "G", [.befehl, .umschalt]),
-        befehl("objekt.duplizieren", .objekt, "Duplizieren", "D", [.befehl], vorlage: .inDesign),
-        befehl("objekt.nachVorne", .objekt, "Nach vorne", "]", [.befehl, .umschalt], unter: "Anordnen", trenner: true),
-        befehl("objekt.nachHinten", .objekt, "Nach hinten", "[", [.befehl, .umschalt], unter: "Anordnen"),
-        befehl("objekt.ganzNachVorne", .objekt, "Ganz nach vorne", "]", [.option, .befehl, .umschalt], unter: "Anordnen"),
-        befehl("objekt.links", .objekt, "Links", unter: "Ausrichten", trenner: true),
-        befehl("objekt.hMitte", .objekt, "Horizontal zentriert", unter: "Ausrichten"),
-        befehl("objekt.rechts", .objekt, "Rechts", unter: "Ausrichten"),
-        befehl("objekt.oben", .objekt, "Oben", unter: "Ausrichten"),
-        befehl("objekt.vMitte", .objekt, "Vertikal zentriert", unter: "Ausrichten"),
-        befehl("objekt.unten", .objekt, "Unten", unter: "Ausrichten"),
-        befehl("objekt.reihe", .objekt, "Reihe", unter: "Verteilen", trenner: true),
-        befehl("objekt.verteilRaster", .objekt, "Raster", unter: "Verteilen"),
-        befehl("objekt.haufen", .objekt, "Haufen", unter: "Verteilen"),
-        befehl("objekt.gleicheGroesse", .objekt, "Gleiche Größe", trenner: true),
-        befehl("objekt.anRaster", .objekt, "An Raster ausrichten"),
-        befehl("objekt.inRahmen", .objekt, "In Rahmen einpassen…"),
+    static let object: [MenuCommand] = [
+        command("object.group", .object, "G", [.command]),
+        command("object.ungroup", .object, "G", [.command, .shift]),
+        command("object.duplicate", .object, "D", [.command], preset: .inDesign),
+        command("object.bringForward", .object, "]", [.command, .shift], submenu: "submenu.arrange", separator: true),
+        command("object.sendBackward", .object, "[", [.command, .shift], submenu: "submenu.arrange"),
+        command("object.bringToFront", .object, "]", [.option, .command, .shift], submenu: "submenu.arrange"),
+        command("object.alignLeft", .object, submenu: "submenu.align", separator: true),
+        command("object.alignHCenter", .object, submenu: "submenu.align"),
+        command("object.alignRight", .object, submenu: "submenu.align"),
+        command("object.alignTop", .object, submenu: "submenu.align"),
+        command("object.alignVCenter", .object, submenu: "submenu.align"),
+        command("object.alignBottom", .object, submenu: "submenu.align"),
+        command("object.distributeRow", .object, submenu: "submenu.distribute", separator: true),
+        command("object.distributeGrid", .object, submenu: "submenu.distribute"),
+        command("object.distributePile", .object, submenu: "submenu.distribute"),
+        command("object.sameSize", .object, separator: true),
+        command("object.alignToGrid", .object),
+        command("object.fitToFrame", .object),
     ]
 
-    static let fenster: [Befehl] = [
-        befehl("fenster.minimieren", .fenster, "Minimieren", "M", [.befehl], vorlage: .macOS, herkunft: .system),
-        befehl("fenster.alleMinimieren", .fenster, "Alle minimieren", "M", [.option, .befehl], vorlage: .macOS, herkunft: .system),
-        befehl("fenster.zoomen", .fenster, "Zoomen", herkunft: .system),
-        befehl("fenster.werkzeuge", .fenster, "Werkzeuge ein/aus", "P", [.option, .befehl], trenner: true),
-        befehl("fenster.ebenen", .fenster, "Ebenen ein/aus"),
-        befehl("fenster.sammlung", .fenster, "Sammlung ein/aus"),
-        befehl("fenster.allesNachVorne", .fenster, "Alle nach vorne bringen", herkunft: .system, trenner: true),
-        befehl("fenster.vorheriges", .fenster, "Vorheriges Fenster", "`", [.befehl], vorlage: .macOS, herkunft: .system),
-        befehl("fenster.naechstes", .fenster, "Nächstes Fenster", "`", [.befehl, .umschalt], vorlage: .macOS, herkunft: .system),
+    static let window: [MenuCommand] = [
+        command("window.minimize", .window, "M", [.command], preset: .macOS, origin: .system),
+        command("window.minimizeAll", .window, "M", [.option, .command], preset: .macOS, origin: .system),
+        command("window.zoom", .window, origin: .system),
+        command("window.tools", .window, "P", [.option, .command], separator: true),
+        command("window.layers", .window),
+        command("window.collection", .window),
+        command("window.bringAllToFront", .window, origin: .system, separator: true),
+        command("window.previous", .window, "`", [.command], preset: .macOS, origin: .system),
+        command("window.next", .window, "`", [.command, .shift], preset: .macOS, origin: .system),
     ]
 
-    static let hilfe: [Befehl] = [
-        befehl("hilfe.hilfe", .hilfe, "ALFAcolor-Hilfe", "?", [.befehl]),
-        befehl("hilfe.tastenkarte", .hilfe, "Tastenkarte", trenner: true),
+    static let help: [MenuCommand] = [
+        command("help.help", .help, "?", [.command]),
+        command("help.shortcutTable", .help, separator: true),
     ]
 
-    /// Einzeltasten der Werkzeuge (09-VISION Abschnitt 4). Ohne Befehlstaste, daher nur auf der Leinwand.
-    static let werkzeug: [Befehl] = [
-        befehl("werkzeug.auswahl", .werkzeug, "Auswahl", "V", vorlage: .inDesign, geltung: .nurLeinwand),
-        befehl("werkzeug.direkt", .werkzeug, "Direktauswahl", "A", vorlage: .inDesign, geltung: .nurLeinwand),
-        befehl("werkzeug.rahmen", .werkzeug, "Rahmen", "F", geltung: .nurLeinwand),
-        befehl("werkzeug.form", .werkzeug, "Form", "U", geltung: .nurLeinwand),
-        befehl("werkzeug.text", .werkzeug, "Text", "T", geltung: .nurLeinwand),
-        befehl("werkzeug.hand", .werkzeug, "Hand", "H", vorlage: .inDesign, geltung: .nurLeinwand),
-        befehl("werkzeug.zoom", .werkzeug, "Zoom", "Z", vorlage: .inDesign, geltung: .nurLeinwand),
-        befehl("werkzeug.pipette", .werkzeug, "Pipette", "I", geltung: .nurLeinwand),
-        befehl("werkzeug.messen", .werkzeug, "Messen", "M", geltung: .nurLeinwand),
-        befehl("werkzeug.stift", .werkzeug, "Stift", "P", geltung: .nurLeinwand),
-        befehl("werkzeug.kommentar", .werkzeug, "Kommentar", "C", geltung: .nurLeinwand),
-        befehl("werkzeug.labor", .werkzeug, "Labor", "L", geltung: .nurLeinwand),
+    /// Single keys of the tools (09-VISION section 4). Without the command key, so only on the canvas.
+    static let tool: [MenuCommand] = [
+        command("tool.select", .tool, "V", preset: .inDesign, scope: .canvasOnly),
+        command("tool.directSelect", .tool, "A", preset: .inDesign, scope: .canvasOnly),
+        command("tool.frame", .tool, "F", scope: .canvasOnly),
+        command("tool.shape", .tool, "U", scope: .canvasOnly),
+        command("tool.text", .tool, "T", scope: .canvasOnly),
+        command("tool.hand", .tool, "H", preset: .inDesign, scope: .canvasOnly),
+        command("tool.zoom", .tool, "Z", preset: .inDesign, scope: .canvasOnly),
+        command("tool.eyedropper", .tool, "I", scope: .canvasOnly),
+        command("tool.measure", .tool, "M", scope: .canvasOnly),
+        command("tool.pen", .tool, "P", scope: .canvasOnly),
+        command("tool.comment", .tool, "C", scope: .canvasOnly),
+        command("tool.lab", .tool, "L", scope: .canvasOnly),
     ]
 
-    /// Kurzform für die Tabelle. Ohne `taste` gibt es kein Kürzel.
-    private static func befehl(
+    /// Short form for the table. Without `key`, there is no shortcut.
+    private static func command(
         _ id: String,
-        _ menue: Menue,
-        _ titel: String,
-        _ taste: String? = nil,
-        _ modifikatoren: Modifikatoren = [],
-        vorlage: Vorlage = .vorschlag,
-        geltung: Geltung = .immer,
-        herkunft: Herkunft = .eigen,
-        unter: String? = nil,
-        trenner: Bool = false
-    ) -> Befehl {
-        Befehl(
+        _ menu: AppMenu,
+        _ key: String? = nil,
+        _ modifiers: KeyModifiers = [],
+        preset: Preset = .proposal,
+        scope: Scope = .always,
+        origin: Origin = .app,
+        submenu: String? = nil,
+        separator: Bool = false
+    ) -> MenuCommand {
+        MenuCommand(
             id: id,
-            menue: menue,
-            titel: titel,
-            kuerzel: taste.map { Kuerzel(modifikatoren, $0) },
-            vorlage: vorlage,
-            geltung: geltung,
-            herkunft: herkunft,
-            untermenue: unter,
-            trennerDavor: trenner
+            menu: menu,
+            shortcut: key.map { Shortcut(modifiers, $0) },
+            preset: preset,
+            scope: scope,
+            origin: origin,
+            submenuKey: submenu,
+            separatorBefore: separator
         )
     }
 }
