@@ -3,18 +3,21 @@
 | Etappe | Stand | Freigabe (Johannes, Datum, Wortlaut) | Gate |
 |---|---|---|---|
 | E0 Fundament | erledigt | 2026-10-08 „DAHIN“ | G0 erfüllt: 12 Tests grün |
-| E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 vergeben | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen |
+| E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 wartet auf Bild-Abnahme | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen |
 | E2 bis E9 | geplant | | |
 
 ## Chef-Aufgaben vor E2 (aus den Übergaben von E1)
 
-1. `Setzkasten/project.yml`: UTType `com.johannesleoberger.setzkasten` exportieren (erbt von `com.apple.package`) und als Dokumenttyp eintragen; danach `UTType.setzkasten.conforms(to: .package)` prüfen (Vorschlag in `plan/briefe/B-104.md`).
+1. `Setzkasten/project.yml`: UTType exportieren (nach Aufgabe 6: `com.johannesleoberger.alfacolor`) (erbt von `com.apple.package`) und als Dokumenttyp eintragen; danach `UTType.setzkasten.conforms(to: .package)` prüfen (Vorschlag in `plan/briefe/B-104.md`).
 2. `project.yml`: `gestaltung/vertrag/tokens.json` und `tokens.dunkel.json` als Ressourcen ins App-Paket (aus B-103), sobald der Vertrag da ist; dann lädt `SetzkastenApp` beide über `Theme(vertrag:dunkel:quelle:)` (Wunsch aus B-102).
 3. Kern vor E2: `ItemID` mit eigenem `Codable` als einfache Zeichenkette statt `{"raw": …}`; `Board` um `documentID` und `createdAt` ergänzen (OFFENE-FRAGEN 26, 27). Danach B-104-Tests und Beispielpaket neu erzeugen.
 4. Zwei DTCG-Leser zusammenlegen (Tokens.DTCGImport und Document/TokenFile), spätestens in B-506.
 5. Große Bilder: Assets beim Öffnen nur bei Bedarf laden und beim Sichern nur Geänderte schreiben, bevor B-201 Autosave baut.
+6. Umbenennen in **ALFAcolor** (Johannes 2026-10-08, OFFENE-FRAGEN Nr. 1, 5a): App-Name, Bundle-ID `com.johannesleoberger.alfacolor`, Dokumenttyp, Ziel- und Modulnamen, Texte. Copyright-Domain bei Johannes erfragen.
+7. Palettensystem in den Seitenspalten (Nr. 30) und Status-Cluster unten links (Nr. 29): Briefe schreiben, sobald die Zeichnung aus D-001 da ist.
+8. Import, Export, Übergabe-Pakete und Umwandlungen im Dokumentformat vorsehen (Nr. 26–28).
 
-Vor E1 offen: konzept/OFFENE-FRAGEN.md Nr. 1, 4 und 5 (Name, Vertrieb, Takt; Nr. 2 und 3 sind entschieden bzw. per Vorschlag gesetzt).
+Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Offen: Copyright-Domain.
 
 ## Briefe (56)
 
@@ -25,7 +28,7 @@ Vor E1 offen: konzept/OFFENE-FRAGEN.md Nr. 1, 4 und 5 (Name, Vertrieb, Takt; Nr.
 | [B-103](briefe/B-103.md) | E1 | AppTheme und Vertragsleser | — | erledigt, geprüft 2026-10-08 (Chef: 55 Tests grün, Pfade und Importe sauber) |
 | [B-104](briefe/B-104.md) | E1 | Dokumentpaket .setzkasten | — | erledigt, geprüft 2026-10-08 (Chef: 119 Tests grün, Gesamtprüfung 0 Fehler) |
 | [B-105](briefe/B-105.md) | E1 | Prüfskript und Nahtregeln | — | erledigt, geprüft 2026-10-08 (Chef: Lauf grün, Gegentest rot) |
-| [B-106](briefe/B-106.md) | E1 | Menüleiste und Tastenkarte | B-102 | vergeben an Haiku-Agent (Arbeitsklon), 2026-10-08 |
+| [B-106](briefe/B-106.md) | E1 | Menüleiste und Tastenkarte | B-102 | Maschine geprüft 2026-10-08 (Chef: pruefen.sh 0 Fehler, 122 Tests, Kürzel-Test grün); Abnahme am Bild durch Johannes offen |
 | [B-201](briefe/B-201.md) | E2 | BoardModel: Zustand, Befehle, Rückgängig | B-104 | offen |
 | [B-202](briefe/B-202.md) | E2 | Einrast-Engine | B-201 | offen |
 | [B-203](briefe/B-203.md) | E2 | Leinwand-View: Zoom, Verschieben, Sichtbarkeit | B-201 | offen |
