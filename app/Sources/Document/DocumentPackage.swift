@@ -23,25 +23,114 @@ public enum DocumentPackage {
 
     /// The package as a folder FileWrapper, ready for `ReferenceFileDocument` and for `write(_:to:)`.
     /// Everything is built and checked in memory before anything reaches the disk, so an error leaves an existing package untouched.
-    public static func fileWrapper(for document: ALFAcolorDocument, appVersion: String) throws -> FileWrapper {
-        try makeWrapper(from: files(for: document, appVersion: appVersion))
+    /// With `existing` (the wrapper of the last save), image files that are already in it are taken over as they are.
+    public static func fileWrapper(for document: ALFAcolorDocument, appVersion: String, existing: FileWrapper? = nil) throws -> FileWrapper {
+        let plan = try plan(for: document, appVersion: appVersion)
+        let known = existing?.fileWrappers?["assets"]?.fileWrappers ?? [:]
+        var files = plan.files
+        var reused: [String: FileWrapper] = [:]
+        for image in plan.images {
+            let name = String(image.path.dropFirst("assets/".count))
+            if let old = known[name], old.isRegularFile, let entry = document.assets[image.id],
+               isUnchanged(entry, existingSize: (old.fileAttributes[FileAttributeKey.size.rawValue] as? NSNumber)?.intValue) {
+                reused[image.path] = old
+            } else {
+                files[image.path] = try document.assets[image.id]!.data()
+            }
+        }
+        return try makeWrapper(from: files, reusing: reused)
     }
 
-    /// Writes atomically: first to a temporary file next to the target, then the old package is replaced.
+    /// What `write` did with the image files.
+    public struct WriteReport: Equatable, Sendable {
+        /// Image files written from bytes. These are new or changed.
+        public var assetsWritten = 0
+        /// Image files that were already in the package and were linked, not written again.
+        public var assetsReused = 0
+    }
+
+    /// Writes the package in one step: first into a temporary folder on the same volume, then the old package is replaced.
+    /// Image files that the existing package already has are linked into the new one, so they are not written again.
     /// Coordination with other processes (NSFileCoordinator) belongs to the window integration.
-    public static func write(_ document: ALFAcolorDocument, to url: URL, appVersion: String) throws {
-        let wrapper = try fileWrapper(for: document, appVersion: appVersion)
+    @discardableResult
+    public static func write(_ document: ALFAcolorDocument, to url: URL, appVersion: String) throws -> WriteReport {
+        let plan = try plan(for: document, appVersion: appVersion)
+        var report = WriteReport()
+        let fm = FileManager.default
+        var isFolder: ObjCBool = false
+        let exists = fm.fileExists(atPath: url.path, isDirectory: &isFolder)
+        let hasPackage = exists && isFolder.boolValue
         do {
-            try wrapper.write(to: url, options: [.atomic], originalContentsURL: nil)
+            let temp = try fm.url(for: .itemReplacementDirectory, in: .userDomainMask,
+                                  appropriateFor: exists ? url : url.deletingLastPathComponent(), create: true)
+            defer { try? fm.removeItem(at: temp) }
+            let staged = temp.appending(path: url.lastPathComponent, directoryHint: .isDirectory)
+            for name in ["spaces", "assets", "tokens", "history", "inbox"] {
+                try fm.createDirectory(at: staged.appending(path: name, directoryHint: .isDirectory), withIntermediateDirectories: true)
+            }
+            for (path, data) in plan.files {
+                let target = staged.appending(path: path)
+                try fm.createDirectory(at: target.deletingLastPathComponent(), withIntermediateDirectories: true)
+                try data.write(to: target)
+            }
+            for image in plan.images {
+                let target = staged.appending(path: image.path)
+                let entry = document.assets[image.id]!
+                let old = url.appending(path: image.path)
+                if hasPackage, let size = fileSize(old), isUnchanged(entry, existingSize: size), (try? fm.linkItem(at: old, to: target)) != nil {
+                    report.assetsReused += 1
+                } else {
+                    try entry.data().write(to: target)
+                    report.assetsWritten += 1
+                }
+            }
+            if exists {
+                _ = try fm.replaceItemAt(url, withItemAt: staged)
+            } else {
+                try fm.moveItem(at: staged, to: url)
+            }
+        } catch let error as PackageError {
+            throw error
         } catch {
             throw PackageError.writeFailed(reason: error.localizedDescription)
         }
+        return report
     }
 
-    static func files(for doc: ALFAcolorDocument, appVersion: String) throws -> PackageFiles {
+    /// An image file with the same hash name is the same file. When the bytes are in memory and the size of the
+    /// existing file is known, the size must also match.
+    private static func isUnchanged(_ entry: AssetStore.Entry, existingSize: Int?) -> Bool {
+        guard let existingSize, entry.isLoaded, let data = try? entry.data() else { return true }
+        return data.count == existingSize
+    }
+
+    private static func fileSize(_ url: URL) -> Int? {
+        (try? FileManager.default.attributesOfItem(atPath: url.path)[.size] as? Int) ?? nil
+    }
+
+    /// All files of a package except the image files, and the image paths. Checks names and collisions.
+    struct WritePlan {
         var files = PackageFiles()
+        var images: [(path: String, id: String)] = []
+    }
+
+    /// All files with their bytes. Reads image bytes that are not in memory.
+    static func files(for doc: ALFAcolorDocument, appVersion: String) throws -> PackageFiles {
+        let plan = try plan(for: doc, appVersion: appVersion)
+        var files = plan.files
+        for image in plan.images { files[image.path] = try doc.assets[image.id]!.data() }
+        return files
+    }
+
+    static func plan(for doc: ALFAcolorDocument, appVersion: String) throws -> WritePlan {
+        var plan = WritePlan()
+        var claimed = Set<String>()
+        func claim(_ path: String) throws {
+            guard claimed.insert(path).inserted else { throw PackageError.invalidPath(path) }
+        }
         func put(_ path: String, _ data: Data) throws {
-            guard files.updateValue(data, forKey: path) == nil else { throw PackageError.invalidPath(path) }
+            try claim(path)
+            plan.files[path] = data
         }
         let version = Migration.currentVersion
         let spaces = doc.board.spaces
@@ -75,8 +164,10 @@ public enum DocumentPackage {
             }
         }
 
-        for (id, entry) in doc.assets.entries {
-            try put("assets/\(id).\(entry.fileExtension)", try entry.data())
+        for (id, entry) in doc.assets.entries.sorted(by: { $0.key < $1.key }) {
+            let path = "assets/\(id).\(entry.fileExtension)"
+            try claim(path)
+            plan.images.append((path, id))
         }
 
         let tokenNames = try PackageNaming.requireDistinct(doc.tokenSets.map(\.name), kind: "tokenSet")
@@ -97,7 +188,7 @@ public enum DocumentPackage {
             guard PackageNaming.isSafe(path: path) else { throw PackageError.invalidPath(path) }
             try put(path, data)
         }
-        return files
+        return plan
     }
 
     private static func encode<T: Encodable>(_ value: T, path: String) throws -> Data {
@@ -107,22 +198,33 @@ public enum DocumentPackage {
     }
 
     /// A folder with all files. The folders of the layout exist even when they are empty.
-    static func makeWrapper(from files: PackageFiles) throws -> FileWrapper {
+    /// `reusing` maps paths to wrappers that are put in as they are, in addition to `files`.
+    static func makeWrapper(from files: PackageFiles, reusing: [String: FileWrapper] = [:]) throws -> FileWrapper {
         final class Node {
             var dirs: [String: Node] = [:]
             var files: [String: Data] = [:]
+            var wrappers: [String: FileWrapper] = [:]
         }
         let root = Node()
         for name in ["spaces", "assets", "tokens", "history", "inbox"] { root.dirs[name] = Node() }
+        for (path, wrapper) in reusing {
+            let parts = path.split(separator: "/").map(String.init)
+            var node = root
+            for dir in parts.dropLast() {
+                if node.dirs[dir] == nil { node.dirs[dir] = Node() }
+                node = node.dirs[dir]!
+            }
+            guard let leaf = parts.last, node.wrappers.updateValue(wrapper, forKey: leaf) == nil else { throw PackageError.invalidPath(path) }
+        }
         for (path, data) in files {
             let parts = path.split(separator: "/").map(String.init)
             var node = root
             for dir in parts.dropLast() {
-                guard node.files[dir] == nil else { throw PackageError.invalidPath(path) }   // file and folder with the same name
+                guard node.files[dir] == nil, node.wrappers[dir] == nil else { throw PackageError.invalidPath(path) }   // file and folder with the same name
                 if node.dirs[dir] == nil { node.dirs[dir] = Node() }
                 node = node.dirs[dir]!
             }
-            guard let leaf = parts.last, node.dirs[leaf] == nil, node.files.updateValue(data, forKey: leaf) == nil else {
+            guard let leaf = parts.last, node.dirs[leaf] == nil, node.wrappers[leaf] == nil, node.files.updateValue(data, forKey: leaf) == nil else {
                 throw PackageError.invalidPath(path)
             }
         }
@@ -133,6 +235,7 @@ public enum DocumentPackage {
                 w.preferredFilename = n
                 children[n] = w
             }
+            for (n, wrapper) in node.wrappers { children[n] = wrapper }
             for (n, child) in node.dirs { children[n] = build(child, name: n) }
             let dir = FileWrapper(directoryWithFileWrappers: children)
             if let name { dir.preferredFilename = name }   // nil throws an NSException
