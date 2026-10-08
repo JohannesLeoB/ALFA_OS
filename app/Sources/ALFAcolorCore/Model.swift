@@ -41,10 +41,19 @@ public enum Content: Codable, Hashable, Sendable {
     case group(title: String)
 }
 
+/// The identity of an item. In JSON it is a plain string.
 public struct ItemID: Codable, Hashable, Sendable, CustomStringConvertible {
     public let raw: String
     public init(_ raw: String = UUID().uuidString) { self.raw = raw }
     public var description: String { raw }
+
+    public init(from decoder: Decoder) throws {
+        raw = try decoder.singleValueContainer().decode(String.self)
+    }
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(raw)
+    }
 }
 
 /// An item on the canvas.
@@ -88,9 +97,19 @@ public struct Space: Identifiable, Codable, Hashable, Sendable {
 
 /// The document. On disk it is a folder package. See `DocumentPackage` in the Document module.
 public struct Board: Codable, Hashable, Sendable {
-    public static let formatVersion = 1
+    public static let formatVersion = 2
     public var format = Board.formatVersion
+    /// Stays the same for the life of the document, across saves, copies of the file and sync.
+    public var documentID: UUID
+    /// When the document was made. The file keeps whole milliseconds.
+    public var createdAt: Date
     public var title: String
     public var spaces: [Space]
-    public init(title: String, spaces: [Space] = [Space(id: "start", name: "Start")]) { self.title = title; self.spaces = spaces }
+    public init(title: String, spaces: [Space] = [Space(id: "start", name: "Start")], documentID: UUID = UUID(), createdAt: Date = Board.currentTime()) {
+        self.title = title; self.spaces = spaces; self.documentID = documentID; self.createdAt = createdAt
+    }
+    /// Now, rounded down to whole milliseconds, so that a time written to a file and read back is equal.
+    public static func currentTime() -> Date {
+        Date(timeIntervalSince1970: (Date.now.timeIntervalSince1970 * 1000).rounded(.down) / 1000)
+    }
 }

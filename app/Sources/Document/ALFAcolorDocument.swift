@@ -75,6 +75,8 @@ struct ItemEnvelope: Codable {
 struct ManifestFile: Codable {
     var formatVersion: Int
     var lastWrittenByAppVersion: String?
+    var documentID: UUID
+    var createdAt: Date
     var title: String
     /// Order of the spaces (tabs).
     var spaces: [String]
@@ -82,17 +84,21 @@ struct ManifestFile: Codable {
     var tokenSets: [String]
     var extras: [String: JSONValue] = [:]
 
-    enum K: String, CodingKey, CaseIterable { case formatVersion, lastWrittenByAppVersion, title, spaces, tokenSets }
+    enum K: String, CodingKey, CaseIterable { case formatVersion, lastWrittenByAppVersion, documentID, createdAt, title, spaces, tokenSets }
     static let known = Set(K.allCases.map(\.rawValue))
 
-    init(formatVersion: Int, lastWrittenByAppVersion: String?, title: String, spaces: [String], tokenSets: [String], extras: [String: JSONValue]) {
-        self.formatVersion = formatVersion; self.lastWrittenByAppVersion = lastWrittenByAppVersion; self.title = title
+    init(formatVersion: Int, lastWrittenByAppVersion: String?, documentID: UUID, createdAt: Date, title: String,
+         spaces: [String], tokenSets: [String], extras: [String: JSONValue]) {
+        self.formatVersion = formatVersion; self.lastWrittenByAppVersion = lastWrittenByAppVersion
+        self.documentID = documentID; self.createdAt = createdAt; self.title = title
         self.spaces = spaces; self.tokenSets = tokenSets; self.extras = extras
     }
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: K.self)
         formatVersion = try c.decode(Int.self, forKey: .formatVersion)
         lastWrittenByAppVersion = try c.decodeIfPresent(String.self, forKey: .lastWrittenByAppVersion)
+        documentID = try c.decode(UUID.self, forKey: .documentID)
+        createdAt = try c.decode(Date.self, forKey: .createdAt)
         title = try c.decode(String.self, forKey: .title)
         spaces = try c.decodeIfPresent([String].self, forKey: .spaces) ?? []
         tokenSets = try c.decodeIfPresent([String].self, forKey: .tokenSets) ?? []
@@ -102,6 +108,8 @@ struct ManifestFile: Codable {
         var c = encoder.container(keyedBy: K.self)
         try c.encode(formatVersion, forKey: .formatVersion)
         try c.encodeIfPresent(lastWrittenByAppVersion, forKey: .lastWrittenByAppVersion)
+        try c.encode(documentID, forKey: .documentID)
+        try c.encode(createdAt, forKey: .createdAt)
         try c.encode(title, forKey: .title)
         try c.encode(spaces, forKey: .spaces)
         try c.encode(tokenSets, forKey: .tokenSets)

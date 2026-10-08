@@ -7,7 +7,7 @@ import Tokens
 /// Layout of a package:
 /// ```
 /// Name.alfacolor/
-///   manifest.json                          format version, app version, title, order of spaces and token sets
+///   manifest.json                          format version, app version, document ID, creation time, title, order of spaces and token sets
 ///   spaces/<space>/space.json              space: name, layer order
 ///   spaces/<space>/layers/<layer>.json     layer with its items (one layer per file, which lowers conflicts)
 ///   assets/<sha256>.<ext>                  images, one per content
@@ -180,8 +180,9 @@ public enum DocumentPackage {
             }
         }
 
-        let manifest = ManifestFile(formatVersion: version, lastWrittenByAppVersion: appVersion, title: doc.board.title,
-                                    spaces: spaces.map(\.id), tokenSets: doc.tokenSets.map(\.name), extras: doc.preserved.manifest)
+        let manifest = ManifestFile(formatVersion: version, lastWrittenByAppVersion: appVersion, documentID: doc.board.documentID,
+                                    createdAt: doc.board.createdAt, title: doc.board.title, spaces: spaces.map(\.id),
+                                    tokenSets: doc.tokenSets.map(\.name), extras: doc.preserved.manifest)
         try put("manifest.json", try encode(manifest, path: "manifest.json"))
 
         for (path, data) in doc.carriedFiles {
@@ -403,7 +404,8 @@ public enum DocumentPackage {
         orderedSets += tokenSets.values.sorted { $0.name < $1.name }
 
         // 5. Carry everything else
-        var doc = ALFAcolorDocument(board: Board(title: manifest.title, spaces: spaces), assets: assets, tokenSets: orderedSets)
+        var doc = ALFAcolorDocument(board: Board(title: manifest.title, spaces: spaces, documentID: manifest.documentID, createdAt: manifest.createdAt),
+                                    assets: assets, tokenSets: orderedSets)
         doc.board.format = migration.currentVersion
         doc.preserved = preserved
         for (path, data) in files where !claimed.contains(path) { doc.carriedFiles[path] = data }
