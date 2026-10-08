@@ -3,7 +3,7 @@
 | Etappe | Stand | Freigabe (Johannes, Datum, Wortlaut) | Gate |
 |---|---|---|---|
 | E0 Fundament | erledigt | 2026-10-08 „DAHIN“ | G0 erfüllt: 12 Tests grün |
-| E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 wartet auf Bild-Abnahme; B-107, B-108a, B-108b offen | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen |
+| E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 wartet auf Bild-Abnahme; B-107 erledigt; B-108a vergeben; B-108b offen | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen |
 | E2 bis E9 | geplant | | |
 
 ## Chef-Aufgaben vor E2 (aus den Übergaben von E1)
@@ -29,8 +29,8 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-104](briefe/B-104.md) | E1 | Dokumentpaket .setzkasten | — | erledigt, geprüft 2026-10-08 (Chef: 119 Tests grün, Gesamtprüfung 0 Fehler) |
 | [B-105](briefe/B-105.md) | E1 | Prüfskript und Nahtregeln | — | erledigt, geprüft 2026-10-08 (Chef: Lauf grün, Gegentest rot) |
 | [B-106](briefe/B-106.md) | E1 | Menüleiste und Tastenkarte | B-102 | Maschine geprüft 2026-10-08 (Chef: pruefen.sh 0 Fehler, 122 Tests, Kürzel-Test grün); Abnahme am Bild durch Johannes offen |
-| [B-107](briefe/B-107.md) | E1 | Wächter: Git-Hooks und GitHub-Prüfung | — | vergeben an Sonnet-Agent (im Repo), 2026-10-08 |
-| [B-108a](briefe/B-108a.md) | E1 | Umbenennen in ALFAcolor | B-107 | offen |
+| [B-107](briefe/B-107.md) | E1 | Wächter: Git-Hooks und GitHub-Prüfung | — | erledigt, geprüft 2026-10-08 (Chef: waechter_test 65 OK, pruefen.sh 0 errors, eigener Gegentest commit-msg sperrt) |
+| [B-108a](briefe/B-108a.md) | E1 | Umbenennen in ALFAcolor | B-107 | vergeben an Sonnet-Agent (im Repo), 2026-10-08 |
 | [B-108b](briefe/B-108b.md) | E1 | Code auf Englisch, Texte in den String-Katalog | B-108a | offen |
 | [B-201](briefe/B-201.md) | E2 | BoardModel: Zustand, Befehle, Rückgängig | B-104 | offen |
 | [B-202](briefe/B-202.md) | E2 | Einrast-Engine | B-201 | offen |
