@@ -76,7 +76,7 @@ public enum DocumentPackage {
         }
 
         for (id, entry) in doc.assets.entries {
-            try put("assets/\(id).\(entry.fileExtension)", entry.data)
+            try put("assets/\(id).\(entry.fileExtension)", try entry.data())
         }
 
         let tokenNames = try PackageNaming.requireDistinct(doc.tokenSets.map(\.name), kind: "tokenSet")
@@ -143,19 +143,27 @@ public enum DocumentPackage {
 
     // MARK: Read
 
+    /// Opens a package from disk. The image files are not read until `AssetStore.Entry.data()` asks for them.
     public static func read(from url: URL, options: ReadOptions = ReadOptions(), migration: Migration = .standard) throws -> DocumentReadResult {
         let wrapper: FileWrapper
         do { wrapper = try FileWrapper(url: url, options: []) } catch {
             throw PackageError.unreadable(reason: "\(url.lastPathComponent): \(error.localizedDescription)")
         }
-        return try read(from: wrapper, options: options, migration: migration)
+        return try open(wrapper, origin: url, options: options, migration: migration)
     }
 
+    /// Opens a package from a file wrapper. The image files are read through the wrapper when asked for.
     public static func read(from wrapper: FileWrapper, options: ReadOptions = ReadOptions(), migration: Migration = .standard) throws -> DocumentReadResult {
+        try open(wrapper, origin: nil, options: options, migration: migration)
+    }
+
+    /// Migration steps see every file except those directly in `assets/`. Image files do not change in a migration.
+    private static func open(_ wrapper: FileWrapper, origin: URL?, options: ReadOptions, migration: Migration) throws -> DocumentReadResult {
         guard wrapper.isDirectory else { throw PackageError.notAPackage }
         var report = ReadReport()
         var files = PackageFiles()
-        try flatten(wrapper, prefix: "", into: &files, warnings: &report.warnings)
+        var imageSources: [String: AssetStore.Source] = [:]
+        try flatten(wrapper, prefix: "", into: &files, warnings: &report.warnings, deferred: &imageSources, origin: origin, defersAssets: true)
 
         // 1. Check the version, migrate if needed
         guard let manifestData = files["manifest.json"] else { throw PackageError.missingFile(path: "manifest.json") }
@@ -255,16 +263,20 @@ public enum DocumentPackage {
 
         // 3. Images
         var assets = AssetStore()
-        for path in paths {
-            let parts = path.split(separator: "/", omittingEmptySubsequences: false)
-            guard parts.count == 2, parts[0] == "assets", let dot = parts[1].lastIndex(of: ".") else { continue }
-            let id = String(parts[1][..<dot]), ext = String(parts[1][parts[1].index(after: dot)...])
-            guard AssetStore.isValidID(id), AssetStore.isValidExtension(ext), assets[id] == nil else { continue }
-            claimed.insert(path)
-            assets.insertLoaded(id: id, fileExtension: ext, data: files[path]!)
+        for (path, source) in imageSources.sorted(by: { $0.key < $1.key }) {
+            let name = path.dropFirst("assets/".count)
+            if let dot = name.lastIndex(of: ".") {
+                let id = String(name[..<dot]), ext = String(name[name.index(after: dot)...])
+                if AssetStore.isValidID(id), AssetStore.isValidExtension(ext), assets[id] == nil {
+                    claimed.insert(path)
+                    assets.insert(id: id, fileExtension: ext, source: source)
+                    continue
+                }
+            }
+            files[path] = try source.load()   // not an image of this format: carried unchanged
         }
         if options.verifyAssetHashes {
-            report.corruptAssets = assets.ids.filter { AssetStore.hash(of: assets[$0]!.data) != $0 }
+            report.corruptAssets = assets.ids.filter { id in (try? assets[id]!.data()).map { AssetStore.hash(of: $0) != id } ?? true }
         }
 
         // 4. Token sets
@@ -328,13 +340,26 @@ public enum DocumentPackage {
         return out
     }
 
+    /// All files with their bytes.
     static func flatten(_ wrapper: FileWrapper, prefix: String, into files: inout PackageFiles, warnings: inout [String]) throws {
+        var none: [String: AssetStore.Source] = [:]
+        try flatten(wrapper, prefix: prefix, into: &files, warnings: &warnings, deferred: &none, origin: nil, defersAssets: false)
+    }
+
+    /// With `defersAssets`, files directly in `assets/` go to `deferred` as a source and are not read.
+    /// `origin` is the package folder on disk, if there is one.
+    static func flatten(_ wrapper: FileWrapper, prefix: String, into files: inout PackageFiles, warnings: inout [String],
+                        deferred: inout [String: AssetStore.Source], origin: URL?, defersAssets: Bool) throws {
         for (name, child) in (wrapper.fileWrappers ?? [:]).sorted(by: { $0.key < $1.key }) {
             let path = prefix.isEmpty ? name : prefix + "/" + name
             if child.isDirectory {
-                try flatten(child, prefix: path, into: &files, warnings: &warnings)
+                try flatten(child, prefix: path, into: &files, warnings: &warnings, deferred: &deferred, origin: origin, defersAssets: defersAssets)
             } else if child.isRegularFile {
                 if name == ".DS_Store" { continue }   // Finder clutter, not content
+                if defersAssets, prefix == "assets" {
+                    deferred[path] = origin.map { .file($0.appending(path: path)) } ?? .wrapper(AssetStore.WrapperBox(child))
+                    continue
+                }
                 guard let data = child.regularFileContents else { throw PackageError.corruptFile(path: path, reason: String(localized: "package.reason.unreadableFile")) }
                 files[path] = data
             } else {
