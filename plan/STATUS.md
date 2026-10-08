@@ -12,7 +12,7 @@ Vor E1 offen: konzept/OFFENE-FRAGEN.md Nr. 1, 4 und 5 (Name, Vertrieb, Takt; Nr.
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
-| [B-101](briefe/B-101.md) | E1 | Xcode-Projekt mit XcodeGen | — | vergeben an Haiku-Agent, Klon ~/ALLFARB-bau/B-101, 2026-10-08 |
+| [B-101](briefe/B-101.md) | E1 | Xcode-Projekt mit XcodeGen | — | erledigt, geprüft 2026-10-08 (Chef: BUILD SUCCEEDED nachgebaut, Team 28Z2KHMANG, Hardened Runtime) |
 | [B-102](briefe/B-102.md) | E1 | Fensterschale mit allen Bereichen | B-101 | offen |
 | [B-103](briefe/B-103.md) | E1 | AppTheme und Vertragsleser | — | erledigt, geprüft 2026-10-08 (Chef: 55 Tests grün, Pfade und Importe sauber) |
 | [B-104](briefe/B-104.md) | E1 | Dokumentpaket .setzkasten | — | vergeben an Sonnet-Agent, Klon ~/ALLFARB-bau/B-104, 2026-10-08 |
