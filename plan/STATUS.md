@@ -16,7 +16,7 @@ Vor E1 offen: konzept/OFFENE-FRAGEN.md Nr. 1, 4 und 5 (Name, Vertrieb, Takt; Nr.
 | [B-102](briefe/B-102.md) | E1 | Fensterschale mit allen Bereichen | B-101 | offen |
 | [B-103](briefe/B-103.md) | E1 | AppTheme und Vertragsleser | — | vergeben an Haiku-Agent, Klon ~/ALLFARB-bau/B-103, 2026-10-08 |
 | [B-104](briefe/B-104.md) | E1 | Dokumentpaket .setzkasten | — | vergeben an Sonnet-Agent, Klon ~/ALLFARB-bau/B-104, 2026-10-08 |
-| [B-105](briefe/B-105.md) | E1 | Prüfskript und Nahtregeln | — | vergeben an Haiku-Agent, Klon ~/ALLFARB-bau/B-105, 2026-10-08 |
+| [B-105](briefe/B-105.md) | E1 | Prüfskript und Nahtregeln | — | erledigt, geprüft 2026-10-08 (Chef: Lauf grün, Gegentest rot) |
 | [B-106](briefe/B-106.md) | E1 | Menüleiste und Tastenkarte | B-102 | offen |
 | [B-201](briefe/B-201.md) | E2 | BoardModel: Zustand, Befehle, Rückgängig | B-104 | offen |
 | [B-202](briefe/B-202.md) | E2 | Einrast-Engine | B-201 | offen |
