@@ -114,6 +114,7 @@ SEAM_RULES = {
     "ColorLab": {"mode": "only", "frameworks": {"CoreGraphics"}, "packages": {"Tokens"}},
     "AppTheme": {"mode": "except", "frameworks": {"AppKit"}},   # SwiftUI and WebKit allowed
     "Renderers": {"mode": "except", "frameworks": {"AppKit"}},  # SwiftUI and WebKit allowed
+    "BoardModel": {"mode": "only", "frameworks": {"Observation"}, "packages": {"ALFAcolorCore", "Geometry", "Document", "Tokens"}},
 }
 DEFAULT_RULE = {"mode": "except", "frameworks": {"SwiftUI", "AppKit"}}
 # Fixed colour values: these folders under app/Sources are exempt. Tests are always exempt.

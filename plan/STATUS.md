@@ -4,7 +4,7 @@
 |---|---|---|---|
 | E0 Fundament | erledigt | 2026-10-08 „DAHIN“ | G0 erfüllt: 12 Tests grün |
 | E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 wartet auf Bild-Abnahme; B-107 erledigt; B-108a erledigt; B-108b erledigt | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen (Bild-Abnahme durch Johannes und P-001 stehen aus; E2 läuft auf sein Wort) |
-| E2 Leinwand | läuft: B-110 erledigt; B-201 vergeben; dann B-203, B-202, B-205, B-204, B-206, B-207, B-208, B-209 nacheinander | 2026-10-09 „Weiter bauen. Ich starte die App später. Tools und funktionstiefe einbauen. App funktional machen. Go. Workers sonnet oder Haiku.“ | G2 offen |
+| E2 Leinwand | läuft: B-110, B-201 erledigt; B-203 vergeben; dann B-202, B-205, B-204, B-206, B-207, B-208, B-209 nacheinander | 2026-10-09 „Weiter bauen. Ich starte die App später. Tools und funktionstiefe einbauen. App funktional machen. Go. Workers sonnet oder Haiku.“ | G2 offen |
 | E3 bis E9 | geplant | | |
 
 ## Chef-Aufgaben vor E2 (aus den Übergaben von E1)
@@ -35,9 +35,9 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-108b](briefe/B-108b.md) | E1 | Code auf Englisch, Texte in den String-Katalog | B-108a | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors 0 warnings, Schalter streng, Gegentest deutscher Kommentar sperrt); Abnahme der Texte am Bild offen |
 | [B-109](briefe/B-109.md) | E1 | Vertrag einbauen und Textfehler aus der Design-Antwort | B-108b | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 143 Tests, Vertrag im Paket; Ressourcenpfad vom Chef auf die zwei Dateien genau gesetzt); Farben am Bild offen |
 | [B-110](briefe/B-110.md) | E2 | Dokumentformat vor E2 | B-104, B-108b | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 180 Tests) |
-| [B-201](briefe/B-201.md) | E2 | BoardModel: Zustand, Befehle, Rückgängig | B-104 | vergeben an Sonnet-Agent (im Repo), 2026-10-09 |
+| [B-201](briefe/B-201.md) | E2 | BoardModel: Zustand, Befehle, Rückgängig | B-104 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 249 Tests; Nahtregel BoardModel ergänzt) |
 | [B-202](briefe/B-202.md) | E2 | Einrast-Engine | B-201 | offen |
-| [B-203](briefe/B-203.md) | E2 | Leinwand-View: Zoom, Verschieben, Sichtbarkeit | B-201 | offen |
+| [B-203](briefe/B-203.md) | E2 | Leinwand-View: Zoom, Verschieben, Sichtbarkeit | B-201 | vergeben an Sonnet-Agent (im Repo), 2026-10-09 |
 | [B-204](briefe/B-204.md) | E2 | Auswahl, Lasso, Griffe, Tastatur | B-202, B-203 | offen |
 | [B-205](briefe/B-205.md) | E2 | Stückarten zeichnen | B-203 | offen |
 | [B-206](briefe/B-206.md) | E2 | Räume als Reiter und Ebenen | B-201, B-102 | offen |
