@@ -1,0 +1,4 @@
+#!/bin/sh
+# Check the staged files against the repository rules (R1 to R6).
+ROOT=$(git rev-parse --show-toplevel) || exit 1
+exec python3 "$ROOT/scripts/waechter.py" commit

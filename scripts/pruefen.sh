@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# pruefen.sh · Setzkasten (Brief B-105)
+# pruefen.sh: full check of the repository.
 #
-# Prüft, was eine Maschine prüfen kann: Build, Tests, Nahtregeln, Lizenzen.
-# Aufruf aus dem Repo-Wurzelordner:   bash scripts/pruefen.sh
+# Runs the guard, the guard tests, build, tests, seam rules and licenses.
+# Call from anywhere inside the repo:   bash scripts/pruefen.sh
 #
-# Rückgabe 0: kein FEHLER (ÜBERSPRUNGEN zählt nicht als Fehler).
-# Rückgabe 1: mindestens ein FEHLER.
+# Exit 0: no ERROR (SKIPPED and WARNING do not count as errors).
+# Exit 1: at least one ERROR.
 #
-# Schreibt nur in app/.build (SwiftPM), in Setzkasten/*.xcodeproj (XcodeGen, in .gitignore)
-# und in einen temporären Ordner, der am Ende gelöscht wird. Der Xcode-Build läuft im Temporärordner.
-# Die Nahtregeln stehen als Tabelle REGELN im Python-Teil unten.
-# Annahme: das Xcode-Schema heißt wie das Ziel, "Setzkasten" (B-101).
+# Writes only to app/.build (SwiftPM), to Setzkasten/*.xcodeproj (XcodeGen, ignored by git)
+# and to a temporary folder that is removed at the end. The Xcode build runs in the temporary folder.
+# The seam rules are the table SEAM_RULES in the Python part below.
+# Assumption: the Xcode scheme has the name of the target, "Setzkasten".
 set -u
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)" || exit 2
@@ -18,172 +18,196 @@ cd "$ROOT" || exit 2
 
 TMP="$(mktemp -d "${TMPDIR:-/tmp}/pruefen.XXXXXX")" || exit 2
 trap 'rm -rf "$TMP"' EXIT
-ERG="$TMP/ergebnisse.tsv"
-: > "$ERG"
+RESULTS="$TMP/results.tsv"
+: > "$RESULTS"
 
-zeile() { printf '%s\t%s\t%s\n' "$1" "$2" "$3" >> "$ERG"; }
-auszug() { echo "--- Log-Auszug: $1 ---"; tail -n 30 "$2"; echo "--- Ende Auszug ---"; }
-erste_fehlerzeile() { grep -m1 'error:' "$1" | cut -c1-200; }
+row() { printf '%s\t%s\t%s\n' "$1" "$2" "$3" >> "$RESULTS"; }
+excerpt() { echo "--- log excerpt: $1 ---"; tail -n 30 "$2"; echo "--- end of excerpt ---"; }
+first_error() { grep -m1 'error:' "$1" | cut -c1-200; }
 
-echo "pruefen.sh · Repo: $ROOT · Kopf: $(git rev-parse --short HEAD 2>/dev/null)"
+echo "pruefen.sh · repo: $ROOT · head: $(git rev-parse --short HEAD 2>/dev/null)"
 echo
 
-# 1. Swift-Paket app/: bauen und testen
-if [ -f app/Package.swift ]; then
-  if (cd app && swift build) > "$TMP/build.log" 2>&1; then
-    zeile "swift build" "OK" "app/"
-  else
-    zeile "swift build" "FEHLER" "app/ · $(erste_fehlerzeile "$TMP/build.log")"
-    auszug "swift build" "$TMP/build.log"
-  fi
-  if (cd app && swift test) > "$TMP/test.log" 2>&1; then
-    zeile "swift test" "OK" "app/ · $(grep -E 'Test run with|Executed [0-9]+ test' "$TMP/test.log" | tail -n 1 | sed 's/^[^A-Za-z]*//')"
-  else
-    zeile "swift test" "FEHLER" "app/ · $(erste_fehlerzeile "$TMP/test.log")"
-    auszug "swift test" "$TMP/test.log"
-  fi
+# 1. Guard: branch, sprawl, language, meta, tokens, drift (tree mode)
+if python3 scripts/waechter.py baum --all > "$TMP/guard.log" 2>&1; then
+  SUMMARY="$(tail -n 1 "$TMP/guard.log")"
+  row "guard: tree" "OK" "$SUMMARY"
 else
-  zeile "swift build" "FEHLER" "app/Package.swift fehlt"
+  row "guard: tree" "ERROR" "$(grep -m1 -E '^R[0-9] ' "$TMP/guard.log")"
+  excerpt "guard" "$TMP/guard.log"
+fi
+SUMMARY="$(tail -n 1 "$TMP/guard.log")"
+LANG_WARNINGS="$(echo "$SUMMARY" | sed -n 's/.* R3=\([0-9]*\) R4=\([0-9]*\).*/R3: \1, R4: \2/p')"
+LANG_TOTAL="$(echo "$SUMMARY" | sed -n 's/.* R3=\([0-9]*\) R4=\([0-9]*\).*/\1 \2/p' | awk '{print $1 + $2}')"
+if [ -n "${LANG_TOTAL:-}" ] && [ "$LANG_TOTAL" -gt 0 ]; then
+  row "guard: language and meta" "WARNING" "$LANG_TOTAL warnings ($LANG_WARNINGS), not blocking while STRENG_SPRACHE_META is False"
+else
+  row "guard: language and meta" "OK" "no warnings"
 fi
 
-# 2. Xcode-Ziel: nur wenn Setzkasten/ existiert (B-101), sonst überspringen
+# 2. Guard tests
+if python3 scripts/waechter_test.py > "$TMP/guard-test.log" 2>&1; then
+  row "guard: tests" "OK" "scripts/waechter_test.py · $(grep -E '^Ran ' "$TMP/guard-test.log" | tail -n 1)"
+else
+  row "guard: tests" "ERROR" "scripts/waechter_test.py · $(grep -m1 -E '^(FAIL|ERROR):' "$TMP/guard-test.log")"
+  excerpt "guard tests" "$TMP/guard-test.log"
+fi
+
+# 3. Swift package app/: build and test
+if [ -f app/Package.swift ]; then
+  if (cd app && swift build) > "$TMP/build.log" 2>&1; then
+    row "swift build" "OK" "app/"
+  else
+    row "swift build" "ERROR" "app/ · $(first_error "$TMP/build.log")"
+    excerpt "swift build" "$TMP/build.log"
+  fi
+  if (cd app && swift test) > "$TMP/test.log" 2>&1; then
+    row "swift test" "OK" "app/ · $(grep -E 'Test run with|Executed [0-9]+ test' "$TMP/test.log" | tail -n 1 | sed 's/^[^A-Za-z]*//')"
+  else
+    row "swift test" "ERROR" "app/ · $(first_error "$TMP/test.log")"
+    excerpt "swift test" "$TMP/test.log"
+  fi
+else
+  row "swift build" "ERROR" "app/Package.swift is missing"
+fi
+
+# 4. Xcode target: only when Setzkasten/ exists, otherwise skipped
 if [ -f Setzkasten/project.yml ]; then
   XG="$(command -v xcodegen 2>/dev/null)"
   [ -n "$XG" ] || XG=/opt/homebrew/bin/xcodegen
   if [ -x "$XG" ] && (cd Setzkasten && "$XG" generate) > "$TMP/xcodegen.log" 2>&1; then
-    zeile "xcodegen generate" "OK" "Setzkasten/project.yml"
+    row "xcodegen generate" "OK" "Setzkasten/project.yml"
   else
-    zeile "xcodegen generate" "FEHLER" "Setzkasten/project.yml (xcodegen fehlt oder schlug fehl)"
-    auszug "xcodegen generate" "$TMP/xcodegen.log"
+    row "xcodegen generate" "ERROR" "Setzkasten/project.yml (xcodegen is missing or failed)"
+    excerpt "xcodegen generate" "$TMP/xcodegen.log"
   fi
   PROJ="$(find Setzkasten -maxdepth 1 -name '*.xcodeproj' | head -n 1)"
   if [ -n "$PROJ" ] && xcodebuild -project "$PROJ" -scheme Setzkasten -derivedDataPath "$TMP/dd" CODE_SIGNING_ALLOWED=NO build > "$TMP/xcodebuild.log" 2>&1; then
-    zeile "xcodebuild build" "OK" "$PROJ · Schema Setzkasten"
+    row "xcodebuild build" "OK" "$PROJ · scheme Setzkasten"
   else
-    zeile "xcodebuild build" "FEHLER" "${PROJ:-kein .xcodeproj} · $(erste_fehlerzeile "$TMP/xcodebuild.log")"
-    auszug "xcodebuild build" "$TMP/xcodebuild.log"
+    row "xcodebuild build" "ERROR" "${PROJ:-no .xcodeproj} · $(first_error "$TMP/xcodebuild.log")"
+    excerpt "xcodebuild build" "$TMP/xcodebuild.log"
   fi
 else
-  zeile "xcodegen generate" "ÜBERSPRUNGEN" "Setzkasten/project.yml fehlt, Xcode-Ziel noch nicht angelegt (B-101)"
-  zeile "xcodebuild build" "ÜBERSPRUNGEN" "Setzkasten/ fehlt, kein Xcode-Ziel zu bauen (B-101)"
+  row "xcodegen generate" "SKIPPED" "Setzkasten/project.yml is missing, no Xcode target yet"
+  row "xcodebuild build" "SKIPPED" "Setzkasten/ is missing, no Xcode target to build"
 fi
 
-# 3. Nahtregeln und Lizenzen (python3, Regeln im Python-Teil)
-python3 - "$ROOT" "$ERG" <<'PY'
+# 5. Seam rules and licenses (python3, rules in the Python part)
+python3 - "$ROOT" "$RESULTS" <<'PY'
 import json
 import os
 import re
 import sys
 
-ROOT, ERG = sys.argv[1], sys.argv[2]
+ROOT, RESULTS = sys.argv[1], sys.argv[2]
 os.chdir(ROOT)
 
 # ---------------------------------------------------------------------------
-# REGELN · Nahtregeln je Modul (plan/CODEBASE.md, Abschnitt Naht-Regeln). Hier ergänzen.
-#   modus "nur":    erlaubt sind Foundation, die Apple-Frameworks in "frameworks"
-#                   und die Paketmodule in "pakete". Alles andere ist ein Befund.
-#   modus "ausser": verboten sind nur die Apple-Frameworks in "frameworks".
-#                   Paketmodule sind frei (der Compiler prüft die Abhängigkeiten).
-# Module ohne Eintrag gelten wie STANDARD (verboten: SwiftUI, AppKit).
-# Auslegung von "nur Foundation": Foundation plus die in app/Package.swift
-# deklarierten Paketmodule. Sonst wäre der heutige Code (Geometry und Tokens
-# importieren SetzkastenCore, ColorLab importiert Tokens) ein Befund.
-# Entscheidung offen, siehe Übergabe in plan/briefe/B-105.md.
+# SEAM_RULES: import rules per module (plan/CODEBASE.md, section on seam rules). Add rules here.
+#   mode "only":   allowed are Foundation, the Apple frameworks in "frameworks"
+#                  and the package modules in "packages". Everything else is a finding.
+#   mode "except": forbidden are only the Apple frameworks in "frameworks".
+#                  Package modules are free (the compiler checks the dependencies).
+# Modules without an entry follow DEFAULT_RULE (forbidden: SwiftUI, AppKit).
+# Reading of "only Foundation": Foundation plus the package modules declared
+# in app/Package.swift. Otherwise today's code would be a finding (Geometry and Tokens
+# import SetzkastenCore, ColorLab imports Tokens).
 # ---------------------------------------------------------------------------
-IMMER_ERLAUBT = {"Foundation", "Swift", "_Concurrency"}
-REGELN = {
-    "SetzkastenCore": {"modus": "nur", "frameworks": set(), "pakete": set()},
-    "Geometry": {"modus": "nur", "frameworks": set(), "pakete": {"SetzkastenCore"}},
-    "Tokens": {"modus": "nur", "frameworks": set(), "pakete": {"SetzkastenCore"}},
-    "ColorLab": {"modus": "nur", "frameworks": {"CoreGraphics"}, "pakete": {"Tokens"}},
-    "AppTheme": {"modus": "ausser", "frameworks": {"AppKit"}},   # SwiftUI und WebKit erlaubt
-    "Renderers": {"modus": "ausser", "frameworks": {"AppKit"}},  # SwiftUI und WebKit erlaubt
+ALWAYS_ALLOWED = {"Foundation", "Swift", "_Concurrency"}
+SEAM_RULES = {
+    "SetzkastenCore": {"mode": "only", "frameworks": set(), "packages": set()},
+    "Geometry": {"mode": "only", "frameworks": set(), "packages": {"SetzkastenCore"}},
+    "Tokens": {"mode": "only", "frameworks": set(), "packages": {"SetzkastenCore"}},
+    "ColorLab": {"mode": "only", "frameworks": {"CoreGraphics"}, "packages": {"Tokens"}},
+    "AppTheme": {"mode": "except", "frameworks": {"AppKit"}},   # SwiftUI and WebKit allowed
+    "Renderers": {"mode": "except", "frameworks": {"AppKit"}},  # SwiftUI and WebKit allowed
 }
-STANDARD = {"modus": "ausser", "frameworks": {"SwiftUI", "AppKit"}}
-# Feste Farbwerte: diese Ordner unter app/Sources sind ausgenommen (Vorgabe B-105). Tests sind immer ausgenommen.
-FARBE_FREI = {"AppTheme", "Tokens", "ColorLab"}
-MAX_ZEILEN = 800
+DEFAULT_RULE = {"mode": "except", "frameworks": {"SwiftUI", "AppKit"}}
+# Fixed colour values: these folders under app/Sources are exempt. Tests are always exempt.
+COLOR_FREE = {"AppTheme", "Tokens", "ColorLab"}
+MAX_LINES = 800
 
-SWIFT_WURZELN = ["app", "Setzkasten"]
-TEST_ORDNER = re.compile(r"(Tests?|UITests)$")
+SWIFT_ROOTS = ["app", "Setzkasten"]
+TEST_DIR = re.compile(r"(Tests?|UITests)$")
 IMPORT = re.compile(
     r"^[ \t]*(?:@\w+[ \t]+)*import[ \t]+(?:(?:struct|class|enum|protocol|typealias|func|var|let)[ \t]+)?([A-Za-z_]\w*)",
     re.M,
 )
 PRINT = re.compile(r"(?<![\w.])print\s*\(")
-FARBAUFRUF = re.compile(
+COLOR_CALL = re.compile(
     r"(?<![\w.])(?:Color|NSColor|UIColor|CGColor)\s*\(\s*(?:\.\w+\s*,\s*)?"
     r"(?:red|green|blue|hue|white|gray|hex|srgbRed|calibratedRed|deviceRed|displayP3Red)\s*:"
     r"|(?<![\w.])Color\s*\(\s*\.(?:sRGB|displayP3|sRGBLinear|extendedSRGB)\s*,"
     r"|#colorLiteral\s*\("
 )
 HEX = re.compile(r"#[0-9A-Fa-f]{6}(?:[0-9A-Fa-f]{2})?(?![0-9A-Fa-f\w])")
-LIZENZ = "scripts/lizenzen.txt"
+LICENSES = "scripts/lizenzen.txt"
 
 
-def dateien(wurzeln, nur_swift=True):
-    for wurzel in wurzeln:
-        if not os.path.isdir(wurzel):
+def files_under(roots, swift_only=True):
+    for root in roots:
+        if not os.path.isdir(root):
             continue
-        for dp, dn, fn in os.walk(wurzel):
-            dn[:] = [d for d in dn if not d.startswith(".") and d != "DerivedData"]
-            for f in sorted(fn):
-                if (f.endswith(".swift") if nur_swift else f == "Package.resolved"):
-                    yield os.path.join(dp, f)
+        for dirpath, dirnames, filenames in os.walk(root):
+            dirnames[:] = [d for d in dirnames if not d.startswith(".") and d != "DerivedData"]
+            for name in sorted(filenames):
+                if (name.endswith(".swift") if swift_only else name == "Package.resolved"):
+                    yield os.path.join(dirpath, name)
 
 
-def ist_test(pfad):
-    return any(TEST_ORDNER.search(teil) for teil in pfad.split("/")[:-1])
+def is_test(path):
+    return any(TEST_DIR.search(part) for part in path.split("/")[:-1])
 
 
-def ohne(text, leeren):
-    """Entfernt Kommentare; leeren=True leert zusätzlich den Inhalt von Strings. Positionen und Zeilen bleiben."""
-    def leer(s):
+def strip(text, blank_strings):
+    """Remove comments; with blank_strings also blank the string contents. Positions and lines stay."""
+    def blank_out(s):
         return "".join("\n" if c == "\n" else " " for c in s)
     out, i, n = [], 0, len(text)
     while i < n:
         if text.startswith("//", i):
             j = text.find("\n", i)
             j = n if j < 0 else j
-            out.append(leer(text[i:j]))
+            out.append(blank_out(text[i:j]))
             i = j
         elif text.startswith("/*", i):
-            j, tiefe = i + 2, 1
-            while j < n and tiefe:
+            j, depth = i + 2, 1
+            while j < n and depth:
                 if text.startswith("/*", j):
-                    tiefe, j = tiefe + 1, j + 2
+                    depth, j = depth + 1, j + 2
                 elif text.startswith("*/", j):
-                    tiefe, j = tiefe - 1, j + 2
+                    depth, j = depth - 1, j + 2
                 else:
                     j += 1
-            out.append(leer(text[i:j]))
+            out.append(blank_out(text[i:j]))
             i = j
         elif text.startswith('"', i):
-            q = '"""' if text.startswith('"""', i) else '"'
-            j = i + len(q)
-            while j < n and not text.startswith(q, j):
+            quote = '"""' if text.startswith('"""', i) else '"'
+            j = i + len(quote)
+            while j < n and not text.startswith(quote, j):
                 if text[j] == "\\":
                     j += 2
-                elif q == '"' and text[j] == "\n":
+                elif quote == '"' and text[j] == "\n":
                     break
                 else:
                     j += 1
             j = min(j, n)
-            ende = j + len(q) if text.startswith(q, j) else j
-            inhalt = text[i + len(q):j]
-            out.append(text[i:i + len(q)] + (leer(inhalt) if leeren else inhalt) + text[j:ende])
-            i = ende
+            end = j + len(quote) if text.startswith(quote, j) else j
+            inner = text[i + len(quote):j]
+            out.append(text[i:i + len(quote)] + (blank_out(inner) if blank_strings else inner) + text[j:end])
+            i = end
         else:
             out.append(text[i])
             i += 1
     return "".join(out)
 
 
-def zeilen_nr(text, pos):
+def line_of(text, pos):
     return text.count("\n", 0, pos) + 1
 
 
-def paketmodule():
+def package_modules():
     text = open("app/Package.swift", encoding="utf-8").read() if os.path.isfile("app/Package.swift") else ""
     return set(re.findall(r'\.(?:target|testTarget|executableTarget|systemLibrary)\(\s*name:\s*"([^"]+)"', text))
 
@@ -191,131 +215,132 @@ def paketmodule():
 rows = []
 
 
-def abschliessen(name, funde, ok):
-    if funde:
-        rows.extend((name, "FEHLER", f) for f in funde)
+def finish(name, findings, ok_text):
+    if findings:
+        rows.extend((name, "ERROR", f) for f in findings)
     else:
-        rows.append((name, "OK", ok))
+        rows.append((name, "OK", ok_text))
 
 
-alle = list(dateien(SWIFT_WURZELN))
-texte = {p: open(p, encoding="utf-8", errors="replace").read() for p in alle}
-TARGETS = paketmodule()
+swift_files = list(files_under(SWIFT_ROOTS))
+sources = {p: open(p, encoding="utf-8", errors="replace").read() for p in swift_files}
+TARGETS = package_modules()
 
-# Nahtregel: Importe je Modul (nur app/Sources, ohne Tests)
-funde, geprueft = [], 0
-for pfad in alle:
-    teile = pfad.split("/")
-    if teile[0] != "app" or len(teile) < 4 or teile[1] != "Sources" or ist_test(pfad):
+# Seam rule: imports per module (app/Sources only, no tests)
+findings, checked = [], 0
+for path in swift_files:
+    parts = path.split("/")
+    if parts[0] != "app" or len(parts) < 4 or parts[1] != "Sources" or is_test(path):
         continue
-    geprueft += 1
-    modul = teile[2]
-    regel = REGELN.get(modul, STANDARD)
-    code = ohne(texte[pfad], leeren=True)
+    checked += 1
+    module = parts[2]
+    rule = SEAM_RULES.get(module, DEFAULT_RULE)
+    code = strip(sources[path], blank_strings=True)
     for m in IMPORT.finditer(code):
-        imp, nr = m.group(1), zeilen_nr(code, m.start(1))
-        if imp in IMMER_ERLAUBT:
-            grund = None
-        elif imp in TARGETS:
-            grund = (f"Paketmodul {imp} in {modul} nicht deklariert"
-                     if regel["modus"] == "nur" and imp not in regel["pakete"] else None)
-        elif regel["modus"] == "nur":
-            erlaubt = ", ".join(["Foundation"] + sorted(regel["frameworks"]))
-            grund = f"{imp} in {modul} nicht erlaubt (erlaubt: {erlaubt})" if imp not in regel["frameworks"] else None
+        name, number = m.group(1), line_of(code, m.start(1))
+        if name in ALWAYS_ALLOWED:
+            reason = None
+        elif name in TARGETS:
+            reason = (f"package module {name} is not declared for {module}"
+                      if rule["mode"] == "only" and name not in rule["packages"] else None)
+        elif rule["mode"] == "only":
+            allowed = ", ".join(["Foundation"] + sorted(rule["frameworks"]))
+            reason = f"{name} is not allowed in {module} (allowed: {allowed})" if name not in rule["frameworks"] else None
         else:
-            grund = f"{imp} in {modul} verboten" if imp in regel["frameworks"] else None
-        if grund:
-            funde.append(f"{pfad}:{nr} · import {imp} · {grund}")
-abschliessen("Naht: Importe", funde, f"{geprueft} Dateien in app/Sources geprüft")
+            reason = f"{name} is forbidden in {module}" if name in rule["frameworks"] else None
+        if reason:
+            findings.append(f"{path}:{number} · import {name} · {reason}")
+finish("seams: imports", findings, f"{checked} files in app/Sources checked")
 
-# Nahtregel: feste Farbwerte (ohne AppTheme, Tokens, ColorLab und Tests)
-funde, geprueft = [], 0
-for pfad in alle:
-    teile = pfad.split("/")
-    if ist_test(pfad) or (len(teile) > 2 and teile[0] == "app" and teile[1] == "Sources" and teile[2] in FARBE_FREI):
+# Seam rule: fixed colour values (not in AppTheme, Tokens, ColorLab and tests)
+findings, checked = [], 0
+for path in swift_files:
+    parts = path.split("/")
+    if is_test(path) or (len(parts) > 2 and parts[0] == "app" and parts[1] == "Sources" and parts[2] in COLOR_FREE):
         continue
-    geprueft += 1
-    text = texte[pfad]
-    ohne_str = ohne(text, leeren=True)
-    for m in FARBAUFRUF.finditer(ohne_str):
-        funde.append(f"{pfad}:{zeilen_nr(ohne_str, m.start())} · {m.group(0).strip()} · fester Farbwert außerhalb AppTheme")
-    mit_str = ohne(text, leeren=False)
-    for m in HEX.finditer(mit_str):
-        funde.append(f"{pfad}:{zeilen_nr(mit_str, m.start())} · {m.group(0)} · fester Hex-Farbwert außerhalb AppTheme")
-abschliessen("Naht: Farbwerte", funde, f"{geprueft} Dateien geprüft (AppTheme, Tokens, ColorLab, Tests ausgenommen)")
+    checked += 1
+    text = sources[path]
+    blanked = strip(text, blank_strings=True)
+    for m in COLOR_CALL.finditer(blanked):
+        findings.append(f"{path}:{line_of(blanked, m.start())} · {m.group(0).strip()} · fixed colour value outside AppTheme")
+    kept = strip(text, blank_strings=False)
+    for m in HEX.finditer(kept):
+        findings.append(f"{path}:{line_of(kept, m.start())} · {m.group(0)} · fixed hex colour outside AppTheme")
+finish("seams: colour values", findings, f"{checked} files checked (AppTheme, Tokens, ColorLab, tests exempt)")
 
-# Nahtregel: kein print( im Code (alle Swift-Dateien in app/ und Setzkasten/)
-funde = []
-for pfad in alle:
-    code = ohne(texte[pfad], leeren=True)
+# Seam rule: no print( in code (all Swift files in app/ and Setzkasten/)
+findings = []
+for path in swift_files:
+    code = strip(sources[path], blank_strings=True)
     for m in PRINT.finditer(code):
-        funde.append(f"{pfad}:{zeilen_nr(code, m.start())} · print( · Logausgabe gehört nicht in den Code")
-abschliessen("Naht: print(", funde, f"{len(alle)} Swift-Dateien ohne print(")
+        findings.append(f"{path}:{line_of(code, m.start())} · print( · log output does not belong in the code")
+finish("seams: print(", findings, f"{len(swift_files)} Swift files without print(")
 
-# Nahtregel: Dateien über 800 Zeilen
-funde = []
-for pfad in alle:
-    n = len(texte[pfad].splitlines())
-    if n > MAX_ZEILEN:
-        funde.append(f"{pfad} · {n} Zeilen (Grenze {MAX_ZEILEN})")
-if alle:
-    gross = max(alle, key=lambda p: len(texte[p].splitlines()))
-    gross_ok = f"größte: {gross} mit {len(texte[gross].splitlines())} Zeilen (Grenze {MAX_ZEILEN})"
+# Seam rule: files over 800 lines
+findings = []
+for path in swift_files:
+    count = len(sources[path].splitlines())
+    if count > MAX_LINES:
+        findings.append(f"{path} · {count} lines (limit {MAX_LINES})")
+if swift_files:
+    biggest = max(swift_files, key=lambda p: len(sources[p].splitlines()))
+    biggest_ok = f"largest: {biggest} with {len(sources[biggest].splitlines())} lines (limit {MAX_LINES})"
 else:
-    gross_ok = "keine Swift-Dateien gefunden"
-abschliessen("Naht: Dateilänge", funde, gross_ok)
+    biggest_ok = "no Swift files found"
+finish("seams: file length", findings, biggest_ok)
 
-# Lizenzen: jeder Pin aus einem Package.resolved braucht eine Zeile mit Lizenz in scripts/lizenzen.txt
-funde, eintraege, namen = [], {}, []
-if not os.path.isfile(LIZENZ):
-    funde.append(f"{LIZENZ} fehlt")
+# Licenses: every pin from a Package.resolved needs a line with a license in scripts/lizenzen.txt
+findings, entries, names = [], {}, []
+if not os.path.isfile(LICENSES):
+    findings.append(f"{LICENSES} is missing")
 else:
-    for zeile_txt in open(LIZENZ, encoding="utf-8"):
-        s = zeile_txt.strip()
-        if s and not s.startswith("#"):
-            spalten = [x.strip() for x in s.split("|")]
-            eintraege[spalten[0].lower()] = spalten
-for pfad in dateien(SWIFT_WURZELN, nur_swift=False):
+    for raw in open(LICENSES, encoding="utf-8"):
+        stripped = raw.strip()
+        if stripped and not stripped.startswith("#"):
+            columns = [x.strip() for x in stripped.split("|")]
+            entries[columns[0].lower()] = columns
+for path in files_under(SWIFT_ROOTS, swift_only=False):
     try:
-        daten = json.load(open(pfad, encoding="utf-8"))
-        gefunden = [p.get("identity") or p.get("package") or p.get("location", "?") for p in daten.get("pins", [])]
-        gefunden += [p.get("package") or p.get("repositoryURL", "?").rstrip("/").rsplit("/", 1)[-1].removesuffix(".git")
-                     for p in daten.get("object", {}).get("pins", [])]
+        data = json.load(open(path, encoding="utf-8"))
+        found = [p.get("identity") or p.get("package") or p.get("location", "?") for p in data.get("pins", [])]
+        found += [p.get("package") or p.get("repositoryURL", "?").rstrip("/").rsplit("/", 1)[-1].removesuffix(".git")
+                  for p in data.get("object", {}).get("pins", [])]
     except (OSError, ValueError) as e:
-        funde.append(f"{pfad} nicht lesbar ({e})")
+        findings.append(f"{path} is not readable ({e})")
         continue
-    for name in gefunden:
-        namen.append(name)
-        spalten = eintraege.get(name.lower(), [])
-        lizenz = spalten[1] if len(spalten) > 1 else ""
-        if not lizenz or re.search(r"\?|TODO|unbekannt", lizenz, re.I):
-            funde.append(f"{pfad} · {name} ohne geprüfte Lizenz in {LIZENZ}")
-if namen:
-    lizenz_ok = f"{len(namen)} Abhängigkeit(en) mit Lizenz in {LIZENZ}"
+    for name in found:
+        names.append(name)
+        columns = entries.get(name.lower(), [])
+        license_name = columns[1] if len(columns) > 1 else ""
+        if not license_name or re.search(r"\?|unknown|pending", license_name, re.I):
+            findings.append(f"{path} · {name} has no checked license in {LICENSES}")
+if names:
+    license_ok = f"{len(names)} dependencies with a license in {LICENSES}"
 else:
-    lizenz_ok = f"keine fremden Abhängigkeiten (kein Package.resolved mit Pins), {LIZENZ} vorhanden"
-abschliessen("Lizenzen", funde, lizenz_ok)
+    license_ok = f"no third-party dependencies (no Package.resolved with pins), {LICENSES} present"
+finish("licenses", findings, license_ok)
 
-# Ausgabe: Tabelle (Bash-Zeilen zuerst, dann diese)
-bash_zeilen = []
-with open(ERG, encoding="utf-8") as f:
-    for z in f:
-        z = z.rstrip("\n")
-        if z:
-            bash_zeilen.append(tuple(z.split("\t", 2)))
-alle_zeilen = bash_zeilen + rows
-kopf = ("Prüfung", "Ergebnis", "Fundstelle")
-b1 = max(len(r[0]) for r in [kopf] + alle_zeilen)
-b2 = max(len(r[1]) for r in [kopf] + alle_zeilen)
-print(f"{kopf[0]:<{b1}}  {kopf[1]:<{b2}}  {kopf[2]}")
-print("-" * (b1 + b2 + 4 + 60))
-for r in alle_zeilen:
-    print(f"{r[0]:<{b1}}  {r[1]:<{b2}}  {r[2]}")
-fehler = sum(1 for r in alle_zeilen if r[1] == "FEHLER")
-uebersprungen = sum(1 for r in alle_zeilen if r[1] == "ÜBERSPRUNGEN")
+# Output: table (shell rows first, then these)
+shell_rows = []
+with open(RESULTS, encoding="utf-8") as handle:
+    for line in handle:
+        line = line.rstrip("\n")
+        if line:
+            shell_rows.append(tuple(line.split("\t", 2)))
+all_rows = shell_rows + rows
+head = ("Check", "Result", "Where")
+w1 = max(len(r[0]) for r in [head] + all_rows)
+w2 = max(len(r[1]) for r in [head] + all_rows)
+print(f"{head[0]:<{w1}}  {head[1]:<{w2}}  {head[2]}")
+print("-" * (w1 + w2 + 4 + 60))
+for r in all_rows:
+    print(f"{r[0]:<{w1}}  {r[1]:<{w2}}  {r[2]}")
+errors = sum(1 for r in all_rows if r[1] == "ERROR")
+skipped = sum(1 for r in all_rows if r[1] == "SKIPPED")
+warnings = sum(1 for r in all_rows if r[1] == "WARNING")
 print()
-print(f"Ergebnis: {fehler} Fehler, {uebersprungen} übersprungen.")
-sys.exit(1 if fehler else 0)
+print(f"Result: {errors} errors, {skipped} skipped, {warnings} warnings.")
+sys.exit(1 if errors else 0)
 PY
 RC=$?
 exit "$RC"
