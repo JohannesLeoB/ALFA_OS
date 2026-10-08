@@ -27,7 +27,21 @@ public struct Device: Codable, Hashable, Sendable, Identifiable {
         self.id = id; self.name = name; self.width = width; self.height = height; self.scales = scales
     }
     public func pixels(at scale: Double) -> (w: Double, h: Double) { (width * scale, height * scale) }
-    public var rotated: Device { var d = self; d.id += "-landscape"; d.name += ".rotated"; (d.width, d.height) = (height, width); return d }
+    /// The device turned by 90 degrees. The id ends in `-landscape` or `-portrait` to match the new
+    /// orientation. Turning a rotated device back gives the original id and name.
+    public var rotated: Device {
+        var d = self
+        (d.width, d.height) = (height, width)
+        let suffixes = ["-landscape", "-portrait"]
+        if let suffix = suffixes.first(where: { id.hasSuffix($0) }) {
+            d.id = String(id.dropLast(suffix.count))
+        } else {
+            d.id += d.width >= d.height ? "-landscape" : "-portrait"
+        }
+        let nameSuffix = ".rotated"
+        d.name = name.hasSuffix(nameSuffix) ? String(name.dropLast(nameSuffix.count)) : name + nameSuffix
+        return d
+    }
 
     /// Start list. Source: common default resolutions. Check each line against the Apple docs before release.
     public static let presets: [Device] = [

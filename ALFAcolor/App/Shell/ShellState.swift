@@ -21,8 +21,8 @@ final class ShellState {
     func toggleInspector() { inspectorVisible.toggle() }
     func toggleStatusBar() { statusBarVisible.toggle() }
 
-    /// Tab on the canvas: if any panel is open, both close. Otherwise both open.
-    func togglePanels() {
+    /// Tab on the canvas: if any palette is open, both close. Otherwise both open.
+    func togglePalettes() {
         let anyVisible = sidebarVisible || inspectorVisible
         sidebarVisible = !anyVisible
         inspectorVisible = !anyVisible

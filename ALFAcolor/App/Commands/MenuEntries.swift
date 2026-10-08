@@ -14,7 +14,7 @@ struct MenuFunctions {
         switch command.id {
         case "view.sidebar": return with { $0.toggleSidebar() }
         case "view.inspector": return with { $0.toggleInspector() }
-        case "view.allPanels": return with { $0.togglePanels() }
+        case "view.allPalettes": return with { $0.togglePalettes() }
         case "view.statusBar": return with { $0.toggleStatusBar() }
         case "help.shortcutTable": return showShortcutTable
         default: return nil

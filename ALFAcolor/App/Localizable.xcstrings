@@ -650,13 +650,13 @@
         }
       }
     },
-    "command.view.allPanels" : {
+    "command.view.allPalettes" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alle Panels ein/aus"
+            "value" : "Alle Paletten ein/aus"
           }
         }
       }
@@ -931,7 +931,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iPad 11 Zoll quer quer"
+            "value" : "iPad 11 Zoll hoch"
           }
         }
       }
@@ -975,7 +975,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mac-Fenster quer"
+            "value" : "Mac-Fenster hoch"
           }
         }
       }
@@ -997,7 +997,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "MacBook Pro 14 Zoll (Standard) quer"
+            "value" : "MacBook Pro 14 Zoll (Standard) hoch"
           }
         }
       }
@@ -1283,7 +1283,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tokensatz"
+            "value" : "Token-Satz"
           }
         }
       }
@@ -1481,7 +1481,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das Manifest nennt den Tokensatz „%@“, aber seine Datei fehlt."
+            "value" : "Das Manifest nennt den Token-Satz „%@“, aber seine Datei fehlt."
           }
         }
       }

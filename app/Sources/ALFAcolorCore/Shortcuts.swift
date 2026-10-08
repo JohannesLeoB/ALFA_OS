@@ -168,7 +168,7 @@ public enum ShortcutTable {
     static let view: [MenuCommand] = [
         command("view.sidebar", .view, "1", [.option, .command]),
         command("view.inspector", .view, "0", [.option, .command]),
-        command("view.allPanels", .view, separator: true),
+        command("view.allPalettes", .view, separator: true),
         command("view.statusBar", .view),
         command("view.toolbar", .view, "T", [.option, .command], preset: .macOS, origin: .system, separator: true),
         command("view.toolOptions", .view),

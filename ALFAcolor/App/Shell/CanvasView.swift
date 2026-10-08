@@ -2,7 +2,7 @@ import SwiftUI
 import AppTheme
 
 /// Canvas area: empty, with a hint. The area is content, not glass.
-/// Tab toggles all panels, but only while the canvas has focus.
+/// Tab toggles all palettes, but only while the canvas has focus.
 struct CanvasView: View {
     var shell: ShellState
 
@@ -27,7 +27,7 @@ struct CanvasView: View {
         .focused($hasFocus)
         .onKeyPress(.tab) {
             guard hasFocus else { return .ignored }
-            shell.togglePanels()
+            shell.togglePalettes()
             return .handled
         }
         .onAppear { hasFocus = true }
