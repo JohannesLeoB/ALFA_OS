@@ -1,0 +1,3 @@
+Auszug aus integrations.sh (https://github.com/UsefulSoftwareCo/integrations), Stand des ZIP vom 2026-10-08, Lizenz MIT (Datei LICENSE, Copyright 2026 Rhys Sullivan).
+Johannes hat das ZIP am 2026-10-08 geliefert. Übernommen sind nur die Einträge, die Setzkasten braucht: Pinterest, Raindrop (Lesezeichen), Google Fonts (webfonts.googleapis.com), Figma, GitHub, Anthropic, Claude, Apple, Notion.
+Jeder Eintrag nennt die Schnittstellen eines Dienstes (MCP, REST/OpenAPI, GraphQL, CLI) und die nötige Anmeldung. Das ganze Verzeichnis (3311 Domains, 238 MB) liegt nicht im Repo; es kann in Phase 5 als Katalog "Anbindungen" in die App kommen, mit dieser Lizenz.

@@ -1,0 +1,166 @@
+import Foundation
+import SetzkastenCore
+
+/// Farbe in sRGB, Kanäle 0...1.
+public struct RGB: Codable, Hashable, Sendable {
+    public var r: Double, g: Double, b: Double, a: Double = 1
+    public init(r: Double, g: Double, b: Double, a: Double = 1) { self.r = r; self.g = g; self.b = b; self.a = a }
+    public init?(hex: String) {
+        var s = hex.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: "#", with: "")
+        if s.count == 3 { s = s.map { "\($0)\($0)" }.joined() }
+        guard s.count == 6 || s.count == 8, let v = UInt64(s, radix: 16) else { return nil }
+        let full = s.count == 6 ? (v << 8) | 0xFF : v
+        r = Double((full >> 24) & 0xFF) / 255; g = Double((full >> 16) & 0xFF) / 255
+        b = Double((full >> 8) & 0xFF) / 255; a = Double(full & 0xFF) / 255
+    }
+    public var hex: String {
+        func h(_ x: Double) -> String { String(format: "%02X", Int((min(max(x, 0), 1) * 255).rounded())) }
+        return "#" + h(r) + h(g) + h(b) + (a < 1 ? h(a) : "")
+    }
+}
+
+/// Token-Arten nach dem Design Tokens Format Module 2025.10 der W3C Community Group (DTCG; Community-Bericht, kein W3C-Standard).
+public enum TokenValue: Codable, Hashable, Sendable {
+    case color(RGB)
+    case dimension(Double, unit: String)      // "px" oder "rem"
+    case number(Double)
+    case duration(Double)                     // Millisekunden
+    case fontFamily([String])
+    case fontWeight(Int)
+    case cubicBezier(Double, Double, Double, Double)
+    public var dtcgType: String {
+        switch self {
+        case .color: "color"; case .dimension: "dimension"; case .number: "number"; case .duration: "duration"
+        case .fontFamily: "fontFamily"; case .fontWeight: "fontWeight"; case .cubicBezier: "cubicBezier"
+        }
+    }
+}
+
+/// Ein Token. path = Gruppen und Name, z. B. ["color", "accent"].
+public struct Token: Codable, Hashable, Sendable, Identifiable {
+    public var path: [String]
+    public var value: TokenValue
+    public var description: String?
+    public var source: Source?
+    public var id: String { path.joined(separator: ".") }
+    public init(_ path: [String], _ value: TokenValue, description: String? = nil, source: Source? = nil) {
+        self.path = path; self.value = value; self.description = description; self.source = source
+    }
+}
+
+public struct TokenSet: Codable, Hashable, Sendable {
+    public var name: String
+    public var tokens: [Token]
+    public init(name: String, tokens: [Token]) { self.name = name; self.tokens = tokens }
+}
+
+// MARK: - Ausgabe
+
+public enum TokenExport {
+    /// DTCG-JSON. Form der Werte nach dem Stand der Spezifikation 2025.10 (Objekte für color, dimension, duration).
+    /// Quelle: https://www.designtokens.org/TR/2025.10/format/ und /color/. Ältere Werkzeuge erwarten Zeichenketten wie "16px".
+    public static func dtcg(_ set: TokenSet) throws -> String {
+        var root: [String: Any] = [:]
+        for t in set.tokens {
+            var leaf: [String: Any] = ["$type": t.value.dtcgType, "$value": dtcgValue(t.value)]
+            if let d = t.description { leaf["$description"] = d }
+            insert(&root, path: t.path, leaf: leaf)
+        }
+        let data = try JSONSerialization.data(withJSONObject: root, options: [.prettyPrinted, .sortedKeys])
+        return String(decoding: data, as: UTF8.self)
+    }
+    static func dtcgValue(_ v: TokenValue) -> Any {
+        switch v {
+        case .color(let c):
+            return ["colorSpace": "srgb", "components": [round4(c.r), round4(c.g), round4(c.b)], "alpha": round4(c.a), "hex": String(c.hex.prefix(7))]
+        case .dimension(let x, let unit): return ["value": x, "unit": unit]
+        case .number(let x): return x
+        case .duration(let ms): return ["value": ms, "unit": "ms"]
+        case .fontFamily(let f): return f
+        case .fontWeight(let w): return w
+        case .cubicBezier(let a, let b, let c, let d): return [a, b, c, d]
+        }
+    }
+    static func round4(_ x: Double) -> Double { (x * 10000).rounded() / 10000 }
+    static func insert(_ node: inout [String: Any], path: [String], leaf: [String: Any]) {
+        guard let head = path.first else { return }
+        if path.count == 1 { node[head] = leaf; return }
+        var child = node[head] as? [String: Any] ?? [:]
+        insert(&child, path: Array(path.dropFirst()), leaf: leaf)
+        node[head] = child
+    }
+
+    /// CSS-Variablen auf :root. Name: Pfad mit Bindestrich.
+    public static func css(_ set: TokenSet) -> String {
+        let lines = set.tokens.map { "  --\($0.path.joined(separator: "-")): \(cssValue($0.value));" }
+        return ":root {\n" + lines.joined(separator: "\n") + "\n}\n"
+    }
+    static func cssValue(_ v: TokenValue) -> String {
+        switch v {
+        case .color(let c): c.hex
+        case .dimension(let x, let unit): fmt(x) + unit
+        case .number(let x): fmt(x)
+        case .duration(let ms): fmt(ms) + "ms"
+        case .fontFamily(let f): f.map { $0.contains(" ") ? "\"\($0)\"" : $0 }.joined(separator: ", ")
+        case .fontWeight(let w): String(w)
+        case .cubicBezier(let a, let b, let c, let d): "cubic-bezier(\(fmt(a)), \(fmt(b)), \(fmt(c)), \(fmt(d)))"
+        }
+    }
+
+    /// SwiftUI-Quelltext: ein enum mit statischen Werten. Dimensionen in Punkten (px = pt bei @1x).
+    public static func swiftUI(_ set: TokenSet, typeName: String = "Tokens") -> String {
+        var out = "import SwiftUI\n\n/// Erzeugt von Setzkasten aus dem Satz \"\(set.name)\". Nicht von Hand ändern.\npublic enum \(typeName) {\n"
+        for t in set.tokens {
+            let name = camel(t.path)
+            switch t.value {
+            case .color(let c): out += "    public static let \(name) = Color(.sRGB, red: \(fmt(c.r, 4)), green: \(fmt(c.g, 4)), blue: \(fmt(c.b, 4)), opacity: \(fmt(c.a, 4)))\n"
+            case .dimension(let x, let unit): out += "    public static let \(name): CGFloat = \(fmt(unit == "rem" ? x * 16 : x))\n"
+            case .number(let x): out += "    public static let \(name): Double = \(fmt(x))\n"
+            case .duration(let ms): out += "    public static let \(name): Double = \(fmt(ms / 1000, 3)) // Sekunden\n"
+            case .fontFamily(let f): out += "    public static let \(name) = \"\(f.first ?? "")\"\n"
+            case .fontWeight(let w): out += "    public static let \(name) = Font.Weight.\(weightName(w))\n"
+            case .cubicBezier(let a, let b, let c, let d): out += "    public static let \(name) = UnitCurve.bezier(startControlPoint: UnitPoint(x: \(fmt(a)), y: \(fmt(b))), endControlPoint: UnitPoint(x: \(fmt(c)), y: \(fmt(d))))\n"
+            }
+        }
+        return out + "}\n"
+    }
+    static func weightName(_ w: Int) -> String {
+        switch w { case ..<150: "ultraLight"; case ..<250: "thin"; case ..<350: "light"; case ..<450: "regular"; case ..<550: "medium"; case ..<650: "semibold"; case ..<750: "bold"; case ..<850: "heavy"; default: "black" }
+    }
+    static func camel(_ path: [String]) -> String {
+        let parts = path.flatMap { $0.split(whereSeparator: { !$0.isLetter && !$0.isNumber }).map(String.init) }
+        guard let first = parts.first else { return "token" }
+        let name = first.lowercased() + parts.dropFirst().map { $0.prefix(1).uppercased() + $0.dropFirst() }.joined()
+        return name.first?.isNumber == true ? "t" + name : name
+    }
+    static func fmt(_ x: Double, _ digits: Int = 2) -> String {
+        if x == x.rounded() { return String(Int(x)) }
+        var s = String(format: "%.\(digits)f", x)
+        while s.hasSuffix("0") { s.removeLast() }
+        if s.hasSuffix(".") { s.removeLast() }
+        return s
+    }
+}
+
+// MARK: - Erzeugen und Vereinheitlichen
+
+public enum TokenTools {
+    /// Größenreihe für Schrift: Basis mal Faktor hoch Stufe, gerundet auf ganze Punkte.
+    /// Beispiel: base 16, ratio 1.25, steps -2...4.
+    public static func typeScale(base: Double, ratio: Double, steps: ClosedRange<Int>) -> [Int: Double] {
+        var out: [Int: Double] = [:]
+        for s in steps { out[s] = (base * pow(ratio, Double(s))).rounded() }
+        return out
+    }
+    /// Abstandsreihe auf einem Raster, z. B. step 4: 4, 8, 12, 16, 24, 32, 48, 64.
+    public static func spacingScale(step: Double, multipliers: [Double] = [1, 2, 3, 4, 6, 8, 12, 16]) -> [Double] {
+        multipliers.map { $0 * step }
+    }
+    /// Vereinheitlichen: gesammelte Maße auf das nächste Rastermaß ziehen und zusammenfassen.
+    /// Ergebnis: Zielwert -> welche Rohwerte dorthin gezogen wurden. So bleibt jede Änderung sichtbar.
+    public static func unifyDimensions(_ raw: [Double], step: Double) -> [Double: [Double]] {
+        var out: [Double: [Double]] = [:]
+        for v in raw { out[(v / step).rounded() * step, default: []].append(v) }
+        return out
+    }
+}

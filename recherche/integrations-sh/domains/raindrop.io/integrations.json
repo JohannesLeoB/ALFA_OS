@@ -1,0 +1,22 @@
+{
+  "description": "Raindrop.io is a bookmark manager for saving, organizing, and searching links and web content. It also provides AI-agent access to a user's bookmark library through an MCP server.",
+  "discoveredAt": "2026-07-29T13:03:01.245Z",
+  "domain": "raindrop.io",
+  "summary": "Raindrop.io exposes a REST API at `https://api.raindrop.io/rest/v1` and an MCP server at `https://api.raindrop.io/rest/v2/ai/mcp`; both use bearer access tokens, and the MCP server also supports interactive OAuth in compatible MCP clients.",
+  "surfaces": [
+    {
+      "authStatus": "required",
+      "name": "Raindrop.io REST API v1",
+      "slug": "raindrop-io-rest-api-v1",
+      "type": "http",
+      "url": "https://api.raindrop.io/rest/v1"
+    },
+    {
+      "authStatus": "required",
+      "name": "Raindrop.io MCP server",
+      "slug": "raindrop-io-mcp-server",
+      "type": "mcp",
+      "url": "https://api.raindrop.io/rest/v2/ai/mcp"
+    }
+  ]
+}

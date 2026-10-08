@@ -1,0 +1,37 @@
+{
+  "description": "Figma is a collaborative design and product-development platform for interface design, prototyping, whiteboarding, and developer handoff. It also provides organization user-provisioning via SCIM and AI-agent access to design context through its MCP server.",
+  "discoveredAt": "2026-08-19T04:19:50.710Z",
+  "domain": "figma.com",
+  "summary": "Figma exposes a REST API at api.figma.com with OpenAPI, a separate tenant-scoped SCIM API on www.figma.com, and MCP servers for hosted and desktop use.",
+  "surfaces": [
+    {
+      "authStatus": "required",
+      "name": "Figma REST API",
+      "slug": "figma-rest-api",
+      "spec": "https://raw.githubusercontent.com/figma/rest-api-spec/main/openapi/openapi.yaml",
+      "type": "http",
+      "url": "https://api.figma.com"
+    },
+    {
+      "authStatus": "required",
+      "name": "Figma SCIM API",
+      "slug": "figma-scim-api",
+      "type": "http",
+      "url": "https://www.figma.com/scim/v2/:tenantid"
+    },
+    {
+      "authStatus": "required",
+      "name": "Figma MCP Server",
+      "slug": "figma-mcp-server",
+      "type": "mcp",
+      "url": "https://mcp.figma.com/mcp"
+    },
+    {
+      "authStatus": "required",
+      "name": "Figma Desktop MCP Server",
+      "slug": "figma-desktop-mcp-server",
+      "type": "mcp",
+      "url": "http://127.0.0.1:3845/mcp"
+    }
+  ]
+}
