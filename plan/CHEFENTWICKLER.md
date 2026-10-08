@@ -15,21 +15,20 @@ Die einzige Arbeitskopie ist `~/Developer/ALLFARBEN` (seit 2026-10-08, Johannes)
 
 3. Wähle die Briefe der Etappe, deren „Hängt ab von“ erledigt ist und deren „Besitzt“-Pfade sich nicht überschneiden.
 4. Für jeden gewählten Brief: Starte einen Unteragenten mit dem Text „Lies plan/briefe/B-xxx.md und arbeite ihn ab. Ändere nur die Pfade unter Besitzt.“, oder trage den Brief in `plan/STATUS.md` als „vergeben an <Konto/Sitzung>, Datum“ ein.
-   Höchstens drei Bauagenten gleichzeitig.
+   Höchstens ein Bauagent für Code gleichzeitig (Abschnitt unten).
 5. Gemeinsame Dateien (`app/Package.swift`, `Setzkasten/project.yml`, `plan/STATUS.md`) änderst nur du, nach den „Wünschen an den Chef“ in den Briefen.
 
-## Parallel bauen mit Arbeitsklonen
+## Ein Bauagent zur Zeit, direkt im Repo
 
-Mehrere Bauagenten arbeiten nie in derselben Arbeitskopie, weil halbfertiger Code des einen sonst den Bau des anderen bricht. Jeder bekommt einen eigenen Klon, nur Zweig `main`, ohne Push:
+Johannes, 2026-10-08: „Auf jeden fall KEINE separaten Bau-Ordner, verstreute neben plätze. LOKAL NUR in ALLFARBEN, github maximal 1 Branch.“
+Und: „NUR EIN LOKALES REPO, keine ordner-offramps. … nichts wandert aus, wächst irgendwo, wird krankhaft gesichtergesichergesichjert gebackupt etc. Es gibt EINEN Code, eine CHANCE.“
 
-```bash
-git clone -q ~/Developer/ALLFARBEN ~/Developer/ALLFARBEN-bau/B-xxx   # Klon vom lokalen Haupt-Repo
-# Bauagent arbeitet und committet in ~/Developer/ALLFARBEN-bau/B-xxx auf main
-cd ~/Developer/ALLFARBEN && git pull --rebase ~/Developer/ALLFARBEN-bau/B-xxx main   # Chef holt nach der Prüfung
-rm -rf ~/Developer/ALLFARBEN-bau/B-xxx          # Klon weg, wenn geholt
-```
+- Keine Sicherungskopien, keine Ablagen außerhalb des Repos, keine zweiten Fassungen. Alte Dateien in `ausgang/` löscht, wer die neue erzeugt.
 
-Getrennte Pfade machen das Holen konfliktfrei. Gemeinsame Dateien legt der Chef vorher an (Ziele in `Package.swift` mit Gerüstdatei), damit kein Agent sie ändern muss.
+- Lokal gibt es nur `~/Developer/ALLFARBEN`. Keine Klone, keine Worktrees, keine Ordner daneben. Ausgehende ZIPs und Bauergebnisse liegen in `ausgang/` (ignoriert).
+- Es baut immer nur ein Agent Code, direkt in `~/Developer/ALLFARBEN` auf `main`. Er committet nur seine Pfade (`git add <Pfade>`), kein Push.
+- Solange er läuft, baut der Chef nicht und ändert keine Code-Dateien; Plan-Dateien außerhalb des Briefs darf er ändern.
+- Tempo kommt aus den drei Konten: Code (A), Gestaltung (B) und Prüfung (C) arbeiten gleichzeitig.
 
 ## Prüfen
 
