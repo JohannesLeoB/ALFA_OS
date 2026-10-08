@@ -18,10 +18,10 @@ struct SidebarView: View {
             }
             Section("Token-Satz") {
                 Label("Noch keiner", systemImage: "swatchpalette")
-                    .foregroundStyle(theme.color(.textLeise, scheme))
+                    .foregroundStyle(theme.color(.textMuted, scheme))
             }
         }
-        .font(theme.text(.fliesstext).font)
+        .font(theme.text(.body).font)
         .listStyle(.sidebar)
         .accessibilityLabel("Seitenleiste")
     }

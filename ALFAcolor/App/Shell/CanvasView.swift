@@ -13,13 +13,13 @@ struct CanvasView: View {
     var body: some View {
         VStack(spacing: theme.space(.s2)) {
             Text("Leinwand")
-                .font(theme.text(.beschriftung).font)
+                .font(theme.text(.caption).font)
             Text("Zieh etwas hierher oder drücke ⌘V")
-                .font(theme.text(.fliesstext).font)
+                .font(theme.text(.body).font)
         }
-        .foregroundStyle(theme.color(.textLeise, scheme))
+        .foregroundStyle(theme.color(.textMuted, scheme))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(theme.color(.grund, scheme).ignoresSafeArea(edges: .top))
+        .background(theme.color(.background, scheme).ignoresSafeArea(edges: .top))
         .contentShape(Rectangle())
         .onTapGesture { hasFocus = true }
         .focusable()

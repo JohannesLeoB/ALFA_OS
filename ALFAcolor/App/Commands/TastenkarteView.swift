@@ -16,7 +16,7 @@ struct TastenkarteView: View {
                 ForEach(Menue.allCases, id: \.self) { menue in
                     VStack(alignment: .leading, spacing: theme.space(.s2)) {
                         Text(menue.titel)
-                            .font(theme.text(.kopf).font)
+                            .font(theme.text(.heading).font)
                             .foregroundStyle(theme.color(.text, scheme))
                         ForEach(Tastenkarte.befehle.filter { $0.menue == menue }) { befehl in
                             zeile(befehl)
@@ -27,7 +27,7 @@ struct TastenkarteView: View {
             .padding(theme.space(.s5))
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .background(theme.color(.grund, scheme))
+        .background(theme.color(.background, scheme))
         .frame(minWidth: 420, minHeight: 480)
     }
 
@@ -37,13 +37,13 @@ struct TastenkarteView: View {
                 .foregroundStyle(theme.color(.text, scheme))
             if befehl.geltung == .nurLeinwand {
                 Text("nur Leinwand")
-                    .foregroundStyle(theme.color(.textLeise, scheme))
+                    .foregroundStyle(theme.color(.textMuted, scheme))
             }
             Spacer(minLength: theme.space(.s2))
             Text(befehl.kuerzel?.anzeige ?? "")
-                .foregroundStyle(theme.color(.textLeise, scheme))
+                .foregroundStyle(theme.color(.textMuted, scheme))
         }
-        .font(theme.text(.fliesstext).font)
+        .font(theme.text(.body).font)
         .accessibilityElement(children: .combine)
     }
 }

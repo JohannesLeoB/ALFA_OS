@@ -9,12 +9,12 @@ struct InspectorView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: theme.space(.s2)) {
             Text("Inspektor")
-                .font(theme.text(.kopf).font)
+                .font(theme.text(.heading).font)
             Text("Keine Auswahl")
-                .font(theme.text(.fliesstext).font)
+                .font(theme.text(.body).font)
             Text("Die Eigenschaften des Raums oder der Auswahl erscheinen hier.")
-                .font(theme.text(.beschriftung).font)
-                .foregroundStyle(theme.color(.textLeise, scheme))
+                .font(theme.text(.caption).font)
+                .foregroundStyle(theme.color(.textMuted, scheme))
             Spacer(minLength: 0)
         }
         .padding(theme.space(.s4))

@@ -17,12 +17,12 @@ struct StatusBarView: View {
                 Spacer(minLength: 0)
                 field("Speicherstand", "Gesichert")
             }
-            .font(theme.text(.beschriftung).font)
-            .foregroundStyle(theme.color(.textLeise, scheme))
+            .font(theme.text(.caption).font)
+            .foregroundStyle(theme.color(.textMuted, scheme))
             .padding(.horizontal, theme.space(.s4))
             .padding(.vertical, theme.space(.s2))
         }
-        .background(theme.color(.flaeche, scheme))
+        .background(theme.color(.surface, scheme))
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Statusleiste")
     }

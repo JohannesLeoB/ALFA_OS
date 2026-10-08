@@ -8,8 +8,8 @@ struct ALFAcolorApp: App {
 
     /// Der Vertrag aus dem App-Paket, falls der Bau ihn mitgibt; sonst gilt der Platzhalter (Chef, B-102).
     private let theme: Theme = {
-        guard let url = Theme.vertragsdatei(), let vertrag = try? Theme.laden(aus: url) else { return .platzhalter }
-        return vertrag
+        guard let url = Theme.contractFile(), let contract = try? Theme.load(from: url) else { return .placeholder }
+        return contract
     }()
 
     var body: some Scene {
