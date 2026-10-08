@@ -3,7 +3,7 @@
 | Etappe | Stand | Freigabe (Johannes, Datum, Wortlaut) | Gate |
 |---|---|---|---|
 | E0 Fundament | erledigt | 2026-10-08 „DAHIN“ | G0 erfüllt: 12 Tests grün |
-| E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 offen | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen |
+| E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 vergeben | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen |
 | E2 bis E9 | geplant | | |
 
 ## Chef-Aufgaben vor E2 (aus den Übergaben von E1)
@@ -25,7 +25,7 @@ Vor E1 offen: konzept/OFFENE-FRAGEN.md Nr. 1, 4 und 5 (Name, Vertrieb, Takt; Nr.
 | [B-103](briefe/B-103.md) | E1 | AppTheme und Vertragsleser | — | erledigt, geprüft 2026-10-08 (Chef: 55 Tests grün, Pfade und Importe sauber) |
 | [B-104](briefe/B-104.md) | E1 | Dokumentpaket .setzkasten | — | erledigt, geprüft 2026-10-08 (Chef: 119 Tests grün, Gesamtprüfung 0 Fehler) |
 | [B-105](briefe/B-105.md) | E1 | Prüfskript und Nahtregeln | — | erledigt, geprüft 2026-10-08 (Chef: Lauf grün, Gegentest rot) |
-| [B-106](briefe/B-106.md) | E1 | Menüleiste und Tastenkarte | B-102 | offen |
+| [B-106](briefe/B-106.md) | E1 | Menüleiste und Tastenkarte | B-102 | vergeben an Haiku-Agent (Arbeitsklon), 2026-10-08 |
 | [B-201](briefe/B-201.md) | E2 | BoardModel: Zustand, Befehle, Rückgängig | B-104 | offen |
 | [B-202](briefe/B-202.md) | E2 | Einrast-Engine | B-201 | offen |
 | [B-203](briefe/B-203.md) | E2 | Leinwand-View: Zoom, Verschieben, Sichtbarkeit | B-201 | offen |
