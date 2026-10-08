@@ -29,6 +29,13 @@ struct SetzkastenApp: App {
                 size: CGSize(width: breite, height: hoehe)
             )
         }
-        .commands { ShellCommands() }
+        .commands { SetzkastenCommands() }
+
+        // Tastenkarte (B-106): Übersicht aller Kürzel, geöffnet über Hilfe ▸ Tastenkarte.
+        Window("Tastenkarte", id: TastenkarteView.fensterID) {
+            TastenkarteView()
+                .environment(\.theme, theme)
+        }
+        .defaultSize(width: 460, height: 640)
     }
 }

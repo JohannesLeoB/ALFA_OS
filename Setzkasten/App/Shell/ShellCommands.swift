@@ -1,23 +1,15 @@
 import SwiftUI
+import SetzkastenCore
 
-/// Tasten für die Fensterschale (B-102) als Menüeinträge unter „Darstellung“.
-/// Die volle Menüleiste und die Tastenkarte baut B-106; dort wandern diese Einträge hin.
+/// Menü Darstellung (B-102, B-106). Die Einträge stehen in `Tastenkarte`. Die vier Schalter aus B-102
+/// (⌥⌘1 Seitenleiste, ⌥⌘0 Inspektor, Alle Panels, Statusleiste) wirken unverändert.
 /// Tab (alle Panels) ist kein Menükürzel, weil es nur bei Fokus auf der Leinwand gilt (siehe CanvasView).
 struct ShellCommands: Commands {
     @FocusedValue(\.shell) private var shell
 
     var body: some Commands {
         CommandGroup(after: .sidebar) {
-            Button("Seitenleiste ein/aus") { shell?.toggleSidebar() }
-                .keyboardShortcut("1", modifiers: [.option, .command])
-                .disabled(shell == nil)
-            Button("Inspektor ein/aus") { shell?.toggleInspector() }
-                .keyboardShortcut("0", modifiers: [.option, .command])
-                .disabled(shell == nil)
-            Button("Alle Panels ein/aus") { shell?.togglePanels() }
-                .disabled(shell == nil)
-            Button("Statusleiste ein/aus") { shell?.toggleStatusBar() }
-                .disabled(shell == nil)
+            MenuePosten(menue: .darstellung, funktionen: MenueFunktionen(shell: shell))
         }
     }
 }
