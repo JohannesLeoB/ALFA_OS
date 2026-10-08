@@ -21,7 +21,7 @@ Vor E1 offen: konzept/OFFENE-FRAGEN.md Nr. 1, 4 und 5 (Name, Vertrieb, Takt; Nr.
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
 | [B-101](briefe/B-101.md) | E1 | Xcode-Projekt mit XcodeGen | — | erledigt, geprüft 2026-10-08 (Chef: BUILD SUCCEEDED nachgebaut, Team 28Z2KHMANG, Hardened Runtime) |
-| [B-102](briefe/B-102.md) | E1 | Fensterschale mit allen Bereichen | B-101 | offen |
+| [B-102](briefe/B-102.md) | E1 | Fensterschale mit allen Bereichen | B-101 | vergeben an Sonnet-Agent (Arbeitsklon), 2026-10-08 |
 | [B-103](briefe/B-103.md) | E1 | AppTheme und Vertragsleser | — | erledigt, geprüft 2026-10-08 (Chef: 55 Tests grün, Pfade und Importe sauber) |
 | [B-104](briefe/B-104.md) | E1 | Dokumentpaket .setzkasten | — | erledigt, geprüft 2026-10-08 (Chef: 119 Tests grün, Gesamtprüfung 0 Fehler) |
 | [B-105](briefe/B-105.md) | E1 | Prüfskript und Nahtregeln | — | erledigt, geprüft 2026-10-08 (Chef: Lauf grün, Gegentest rot) |
