@@ -1,5 +1,5 @@
 import Foundation
-import SetzkastenCore
+import ALFAcolorCore
 import Tokens
 
 /// tokens/<satz>.tokens.json: ein Tokensatz als DTCG-Baum (Design Tokens Format Module 2025.10).
@@ -10,7 +10,7 @@ import Tokens
 /// - Alles, was `TokenSet` nicht abbilden kann (andere Typen, Aliase, Gruppen-`$type`, fremde `$extensions`,
 ///   unbekannte Schlüssel), bleibt als Rest-Baum erhalten und wird beim Schreiben wieder eingemischt.
 enum TokenFile {
-    static let namespace = "com.johannesleoberger.setzkasten"
+    static let namespace = "com.johannesleoberger.alfacolor"
 
     // MARK: Schreiben
 

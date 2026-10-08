@@ -2,7 +2,7 @@ import SwiftUI
 import AppTheme
 
 @main
-struct SetzkastenApp: App {
+struct ALFAcolorApp: App {
     /// Startgröße des Hauptfensters, konzept/05-OBERFLAECHE.txt Abschnitt 2.3.
     private static let defaultSize = CGSize(width: 1280, height: 800)
 
@@ -29,7 +29,7 @@ struct SetzkastenApp: App {
                 size: CGSize(width: breite, height: hoehe)
             )
         }
-        .commands { SetzkastenCommands() }
+        .commands { ALFAcolorCommands() }
 
         // Tastenkarte (B-106): Übersicht aller Kürzel, geöffnet über Hilfe ▸ Tastenkarte.
         Window("Tastenkarte", id: TastenkarteView.fensterID) {

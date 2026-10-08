@@ -1,5 +1,5 @@
 import SwiftUI
-import SetzkastenCore
+import ALFAcolorCore
 
 /// Menü Darstellung (B-102, B-106). Die Einträge stehen in `Tastenkarte`. Die vier Schalter aus B-102
 /// (⌥⌘1 Seitenleiste, ⌥⌘0 Inspektor, Alle Panels, Statusleiste) wirken unverändert.

@@ -16,7 +16,7 @@ Die einzige Arbeitskopie ist `~/Developer/ALLFARBEN` (seit 2026-10-08, Johannes)
 3. Wähle die Briefe der Etappe, deren „Hängt ab von“ erledigt ist und deren „Besitzt“-Pfade sich nicht überschneiden.
 4. Für jeden gewählten Brief: Starte einen Unteragenten mit dem Text „Lies plan/briefe/B-xxx.md und arbeite ihn ab. Ändere nur die Pfade unter Besitzt.“, oder trage den Brief in `plan/STATUS.md` als „vergeben an <Konto/Sitzung>, Datum“ ein.
    Höchstens ein Bauagent für Code gleichzeitig (Abschnitt unten).
-5. Gemeinsame Dateien (`app/Package.swift`, `Setzkasten/project.yml`, `plan/STATUS.md`) änderst nur du, nach den „Wünschen an den Chef“ in den Briefen.
+5. Gemeinsame Dateien (`app/Package.swift`, `ALFAcolor/project.yml`, `plan/STATUS.md`) änderst nur du, nach den „Wünschen an den Chef“ in den Briefen.
 
 ## Ein Bauagent zur Zeit, direkt im Repo
 

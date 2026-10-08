@@ -7,10 +7,10 @@
 # Exit 0: no ERROR (SKIPPED and WARNING do not count as errors).
 # Exit 1: at least one ERROR.
 #
-# Writes only to app/.build (SwiftPM), to Setzkasten/*.xcodeproj (XcodeGen, ignored by git)
+# Writes only to app/.build (SwiftPM), to ALFAcolor/*.xcodeproj (XcodeGen, ignored by git)
 # and to a temporary folder that is removed at the end. The Xcode build runs in the temporary folder.
 # The seam rules are the table SEAM_RULES in the Python part below.
-# Assumption: the Xcode scheme has the name of the target, "Setzkasten".
+# Assumption: the Xcode scheme has the name of the target, "ALFAcolor".
 set -u
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)" || exit 2
@@ -71,26 +71,26 @@ else
   row "swift build" "ERROR" "app/Package.swift is missing"
 fi
 
-# 4. Xcode target: only when Setzkasten/ exists, otherwise skipped
-if [ -f Setzkasten/project.yml ]; then
+# 4. Xcode target: only when ALFAcolor/ exists, otherwise skipped
+if [ -f ALFAcolor/project.yml ]; then
   XG="$(command -v xcodegen 2>/dev/null)"
   [ -n "$XG" ] || XG=/opt/homebrew/bin/xcodegen
-  if [ -x "$XG" ] && (cd Setzkasten && "$XG" generate) > "$TMP/xcodegen.log" 2>&1; then
-    row "xcodegen generate" "OK" "Setzkasten/project.yml"
+  if [ -x "$XG" ] && (cd ALFAcolor && "$XG" generate) > "$TMP/xcodegen.log" 2>&1; then
+    row "xcodegen generate" "OK" "ALFAcolor/project.yml"
   else
-    row "xcodegen generate" "ERROR" "Setzkasten/project.yml (xcodegen is missing or failed)"
+    row "xcodegen generate" "ERROR" "ALFAcolor/project.yml (xcodegen is missing or failed)"
     excerpt "xcodegen generate" "$TMP/xcodegen.log"
   fi
-  PROJ="$(find Setzkasten -maxdepth 1 -name '*.xcodeproj' | head -n 1)"
-  if [ -n "$PROJ" ] && xcodebuild -project "$PROJ" -scheme Setzkasten -derivedDataPath "$TMP/dd" CODE_SIGNING_ALLOWED=NO build > "$TMP/xcodebuild.log" 2>&1; then
-    row "xcodebuild build" "OK" "$PROJ · scheme Setzkasten"
+  PROJ="$(find ALFAcolor -maxdepth 1 -name '*.xcodeproj' | head -n 1)"
+  if [ -n "$PROJ" ] && xcodebuild -project "$PROJ" -scheme ALFAcolor -derivedDataPath "$TMP/dd" CODE_SIGNING_ALLOWED=NO build > "$TMP/xcodebuild.log" 2>&1; then
+    row "xcodebuild build" "OK" "$PROJ · scheme ALFAcolor"
   else
     row "xcodebuild build" "ERROR" "${PROJ:-no .xcodeproj} · $(first_error "$TMP/xcodebuild.log")"
     excerpt "xcodebuild build" "$TMP/xcodebuild.log"
   fi
 else
-  row "xcodegen generate" "SKIPPED" "Setzkasten/project.yml is missing, no Xcode target yet"
-  row "xcodebuild build" "SKIPPED" "Setzkasten/ is missing, no Xcode target to build"
+  row "xcodegen generate" "SKIPPED" "ALFAcolor/project.yml is missing, no Xcode target yet"
+  row "xcodebuild build" "SKIPPED" "ALFAcolor/ is missing, no Xcode target to build"
 fi
 
 # 5. Seam rules and licenses (python3, rules in the Python part)
@@ -112,13 +112,13 @@ os.chdir(ROOT)
 # Modules without an entry follow DEFAULT_RULE (forbidden: SwiftUI, AppKit).
 # Reading of "only Foundation": Foundation plus the package modules declared
 # in app/Package.swift. Otherwise today's code would be a finding (Geometry and Tokens
-# import SetzkastenCore, ColorLab imports Tokens).
+# import ALFAcolorCore, ColorLab imports Tokens).
 # ---------------------------------------------------------------------------
 ALWAYS_ALLOWED = {"Foundation", "Swift", "_Concurrency"}
 SEAM_RULES = {
-    "SetzkastenCore": {"mode": "only", "frameworks": set(), "packages": set()},
-    "Geometry": {"mode": "only", "frameworks": set(), "packages": {"SetzkastenCore"}},
-    "Tokens": {"mode": "only", "frameworks": set(), "packages": {"SetzkastenCore"}},
+    "ALFAcolorCore": {"mode": "only", "frameworks": set(), "packages": set()},
+    "Geometry": {"mode": "only", "frameworks": set(), "packages": {"ALFAcolorCore"}},
+    "Tokens": {"mode": "only", "frameworks": set(), "packages": {"ALFAcolorCore"}},
     "ColorLab": {"mode": "only", "frameworks": {"CoreGraphics"}, "packages": {"Tokens"}},
     "AppTheme": {"mode": "except", "frameworks": {"AppKit"}},   # SwiftUI and WebKit allowed
     "Renderers": {"mode": "except", "frameworks": {"AppKit"}},  # SwiftUI and WebKit allowed
@@ -128,7 +128,7 @@ DEFAULT_RULE = {"mode": "except", "frameworks": {"SwiftUI", "AppKit"}}
 COLOR_FREE = {"AppTheme", "Tokens", "ColorLab"}
 MAX_LINES = 800
 
-SWIFT_ROOTS = ["app", "Setzkasten"]
+SWIFT_ROOTS = ["app", "ALFAcolor"]
 TEST_DIR = re.compile(r"(Tests?|UITests)$")
 IMPORT = re.compile(
     r"^[ \t]*(?:@\w+[ \t]+)*import[ \t]+(?:(?:struct|class|enum|protocol|typealias|func|var|let)[ \t]+)?([A-Za-z_]\w*)",
@@ -268,7 +268,7 @@ for path in swift_files:
         findings.append(f"{path}:{line_of(kept, m.start())} · {m.group(0)} · fixed hex colour outside AppTheme")
 finish("seams: colour values", findings, f"{checked} files checked (AppTheme, Tokens, ColorLab, tests exempt)")
 
-# Seam rule: no print( in code (all Swift files in app/ and Setzkasten/)
+# Seam rule: no print( in code (all Swift files in app/ and ALFAcolor/)
 findings = []
 for path in swift_files:
     code = strip(sources[path], blank_strings=True)

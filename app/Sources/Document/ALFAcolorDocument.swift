@@ -1,12 +1,12 @@
 import Foundation
-import SetzkastenCore
+import ALFAcolorCore
 import Tokens
 
 /// Ein Dokument im Speicher: das Brett mit Räumen, Ebenen und Stücken, die Bilder, die Tokensätze
 /// und alles, was dieses Programm nicht versteht, aber nicht verlieren darf.
 ///
 /// Auf der Platte ist es ein Ordnerpaket, siehe `DocumentPackage`.
-public struct SetzkastenDocument: Equatable, Sendable {
+public struct ALFAcolorDocument: Equatable, Sendable {
     public var board: Board
     public var assets: AssetStore
     public var tokenSets: [TokenSet]

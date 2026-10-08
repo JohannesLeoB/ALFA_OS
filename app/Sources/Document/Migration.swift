@@ -1,5 +1,5 @@
 import Foundation
-import SetzkastenCore
+import ALFAcolorCore
 
 /// Alle Dateien eines Pakets außer dem Manifest-Rahmen als Pfad -> Bytes. Pfade relativ, mit "/" getrennt.
 public typealias PackageFiles = [String: Data]

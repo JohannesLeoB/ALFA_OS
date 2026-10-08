@@ -1,12 +1,12 @@
 import Foundation
-import SetzkastenCore
+import ALFAcolorCore
 import Tokens
 
-/// Der Weg zwischen `SetzkastenDocument` und dem Ordnerpaket `.setzkasten`.
+/// Der Weg zwischen `ALFAcolorDocument` und dem Ordnerpaket `.alfacolor`.
 ///
 /// Aufbau eines Pakets:
 /// ```
-/// Name.setzkasten/
+/// Name.alfacolor/
 ///   manifest.json                          Formatversion, App-Version, Titel, Reihenfolge der Räume und Tokensätze
 ///   spaces/<raum>/space.json               Raum: Name, Ebenen-Reihenfolge
 ///   spaces/<raum>/layers/<ebene>.json      Ebene samt ihren Stücken (eine Ebene je Datei, das senkt Konflikte)
@@ -16,20 +16,20 @@ import Tokens
 /// ```
 /// `<raum>`, `<ebene>`, `<satz>` sind die IDs bzw. Namen, falls nötig als %XX geschrieben (siehe `PackageNaming`).
 public enum DocumentPackage {
-    public static let typeIdentifier = "com.johannesleoberger.setzkasten"
-    public static let fileExtension = "setzkasten"
+    public static let typeIdentifier = "com.johannesleoberger.alfacolor"
+    public static let fileExtension = "alfacolor"
 
     // MARK: Schreiben
 
     /// Das Paket als Ordner-FileWrapper, bereit für `ReferenceFileDocument` und für `write(_:to:)`.
     /// Alles wird im Speicher gebaut und geprüft, bevor etwas auf die Platte kommt: ein Fehler lässt ein vorhandenes Paket unberührt.
-    public static func fileWrapper(for document: SetzkastenDocument, appVersion: String) throws -> FileWrapper {
+    public static func fileWrapper(for document: ALFAcolorDocument, appVersion: String) throws -> FileWrapper {
         try makeWrapper(from: files(for: document, appVersion: appVersion))
     }
 
     /// Schreibt atomar: erst in eine Temp-Datei neben dem Ziel, dann wird das alte Paket ersetzt.
     /// Das Koordinieren mit anderen Prozessen (NSFileCoordinator) gehört in die Fenster-Anbindung.
-    public static func write(_ document: SetzkastenDocument, to url: URL, appVersion: String) throws {
+    public static func write(_ document: ALFAcolorDocument, to url: URL, appVersion: String) throws {
         let wrapper = try fileWrapper(for: document, appVersion: appVersion)
         do {
             try wrapper.write(to: url, options: [.atomic], originalContentsURL: nil)
@@ -38,7 +38,7 @@ public enum DocumentPackage {
         }
     }
 
-    static func files(for doc: SetzkastenDocument, appVersion: String) throws -> PackageFiles {
+    static func files(for doc: ALFAcolorDocument, appVersion: String) throws -> PackageFiles {
         var files = PackageFiles()
         func put(_ path: String, _ data: Data) throws {
             guard files.updateValue(data, forKey: path) == nil else { throw PackageError.invalidPath(path) }
@@ -288,7 +288,7 @@ public enum DocumentPackage {
         orderedSets += tokenSets.values.sorted { $0.name < $1.name }
 
         // 5. Alles andere mitführen
-        var doc = SetzkastenDocument(board: Board(title: manifest.title, spaces: spaces), assets: assets, tokenSets: orderedSets)
+        var doc = ALFAcolorDocument(board: Board(title: manifest.title, spaces: spaces), assets: assets, tokenSets: orderedSets)
         doc.board.format = migration.currentVersion
         doc.preserved = preserved
         for (path, data) in files where !claimed.contains(path) { doc.carriedFiles[path] = data }

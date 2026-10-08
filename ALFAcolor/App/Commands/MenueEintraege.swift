@@ -1,5 +1,5 @@
 import SwiftUI
-import SetzkastenCore
+import ALFAcolorCore
 
 /// Was ein Menüeintrag beim Auslösen tut.
 typealias Aktion = @MainActor () -> Void

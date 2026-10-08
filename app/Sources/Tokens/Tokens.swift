@@ -1,5 +1,5 @@
 import Foundation
-import SetzkastenCore
+import ALFAcolorCore
 
 /// Farbe in sRGB, Kanäle 0...1.
 public struct RGB: Codable, Hashable, Sendable {
@@ -109,7 +109,7 @@ public enum TokenExport {
 
     /// SwiftUI-Quelltext: ein enum mit statischen Werten. Dimensionen in Punkten (px = pt bei @1x).
     public static func swiftUI(_ set: TokenSet, typeName: String = "Tokens") -> String {
-        var out = "import SwiftUI\n\n/// Erzeugt von Setzkasten aus dem Satz \"\(set.name)\". Nicht von Hand ändern.\npublic enum \(typeName) {\n"
+        var out = "import SwiftUI\n\n/// Erzeugt von ALFAcolor aus dem Satz \"\(set.name)\". Nicht von Hand ändern.\npublic enum \(typeName) {\n"
         for t in set.tokens {
             let name = camel(t.path)
             switch t.value {

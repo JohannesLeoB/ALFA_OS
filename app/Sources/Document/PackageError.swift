@@ -1,5 +1,5 @@
 import Foundation
-import SetzkastenCore
+import ALFAcolorCore
 
 /// Fehler beim Lesen oder Schreiben eines Pakets. Die Meldungen sind für Johannes gedacht und sagen, was zu tun ist.
 public enum PackageError: Error, Equatable, Sendable {
@@ -29,7 +29,7 @@ public enum PackageError: Error, Equatable, Sendable {
 extension PackageError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .notAPackage: "Das ist kein Setzkasten-Paket (ein Ordner mit der Endung .setzkasten), sondern eine einzelne Datei."
+        case .notAPackage: "Das ist kein ALFAcolor-Paket (ein Ordner mit der Endung .alfacolor), sondern eine einzelne Datei."
         case .missingFile(let p): "Im Paket fehlt die Datei \(p)."
         case .corruptFile(let p, let r): "Die Datei \(p) im Paket ist beschädigt: \(r)"
         case .unknownFormatVersion(let v): "Dieses Dokument hat die Formatversion \(v). Diese App kennt höchstens \(Migration.currentVersion). Bitte die App aktualisieren; das Dokument wurde nicht verändert."
@@ -74,6 +74,6 @@ public struct ReadOptions: Sendable {
 }
 
 public struct DocumentReadResult: Sendable {
-    public var document: SetzkastenDocument
+    public var document: ALFAcolorDocument
     public var report: ReadReport
 }

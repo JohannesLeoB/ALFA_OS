@@ -1,6 +1,6 @@
 // Tastenkarte (B-106): Menübefehle, Kürzel und Vorlagen als reine Daten.
 // Ohne SwiftUI, damit `swift test` die Tabelle prüfen kann. Die Menüs in
-// Setzkasten/App/Commands/ übersetzen die Einträge in Bedienung.
+// ALFAcolor/App/Commands/ übersetzen die Einträge in Bedienung.
 // Quellen: konzept/05-OBERFLAECHE.txt Abschnitt 4 (Menüs) und 5 (Werkzeuge);
 // konzept/02-NUTZER.txt Abschnitt 6 (Kollisionen mit macOS);
 // konzept/09-VISION-AUSFUEHRLICH.md Abschnitt 4 (Werkzeugtasten).
@@ -54,7 +54,7 @@ public struct Kuerzel: Hashable, Sendable {
     }
 }
 
-/// Woher die Taste stammt: macOS-Standard, InDesign (Erinnerung, nicht geprüft) oder ein Vorschlag von Setzkasten.
+/// Woher die Taste stammt: macOS-Standard, InDesign (Erinnerung, nicht geprüft) oder ein Vorschlag von ALFAcolor.
 public enum Vorlage: String, Hashable, Sendable {
     case macOS, inDesign, vorschlag
 
@@ -72,7 +72,7 @@ public enum Geltung: String, Hashable, Sendable {
     case immer, nurLeinwand
 }
 
-/// `eigen`: Setzkasten legt den Eintrag an. `system`: macOS oder SwiftUI liefert ihn; er steht nur in der Tastenkarte.
+/// `eigen`: ALFAcolor legt den Eintrag an. `system`: macOS oder SwiftUI liefert ihn; er steht nur in der Tastenkarte.
 public enum Herkunft: String, Hashable, Sendable {
     case eigen, system
 }
@@ -213,7 +213,7 @@ public enum Tastenkarte {
     ]
 
     static let hilfe: [Befehl] = [
-        befehl("hilfe.hilfe", .hilfe, "Setzkasten-Hilfe", "?", [.befehl]),
+        befehl("hilfe.hilfe", .hilfe, "ALFAcolor-Hilfe", "?", [.befehl]),
         befehl("hilfe.tastenkarte", .hilfe, "Tastenkarte", trenner: true),
     ]
 

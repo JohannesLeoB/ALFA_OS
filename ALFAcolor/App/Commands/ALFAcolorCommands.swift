@@ -1,9 +1,9 @@
 import SwiftUI
-import SetzkastenCore
+import ALFAcolorCore
 
-/// Alle Menüs der App (B-106). Die Einträge stehen in `Tastenkarte` (SetzkastenCore).
+/// Alle Menüs der App (B-106). Die Einträge stehen in `Tastenkarte` (ALFAcolorCore).
 /// Systemmenüs bleiben System: nur die eigenen Einträge werden angehängt oder ersetzen den Platz von `Neues Dokument`.
-struct SetzkastenCommands: Commands {
+struct ALFAcolorCommands: Commands {
     var body: some Commands {
         ShellCommands()
         AblageCommands()

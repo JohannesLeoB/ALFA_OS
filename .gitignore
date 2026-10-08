@@ -3,7 +3,7 @@
 DerivedData/
 *.xcuserstate
 .DS_Store
-Setzkasten/*.xcodeproj/
+ALFAcolor/*.xcodeproj/
 .build-*/
 
 # Ausgehende ZIPs an die anderen Konten; Johannes trägt sie

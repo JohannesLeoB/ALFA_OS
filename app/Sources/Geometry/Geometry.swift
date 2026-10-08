@@ -1,5 +1,5 @@
 import Foundation
-import SetzkastenCore
+import ALFAcolorCore
 
 /// Maßeinheiten. Grundeinheit ist der Punkt (pt, 1/72 Zoll), wie in Apple-Layouts und InDesign.
 public enum Unit: String, Codable, Sendable, CaseIterable {

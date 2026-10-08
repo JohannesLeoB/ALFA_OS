@@ -1,8 +1,8 @@
 import SwiftUI
 import AppTheme
-import SetzkastenCore
+import ALFAcolorCore
 
-/// Tastenkarte (B-106): alle Befehle mit Kürzel, nach Menü geordnet. Liest die Tabelle aus SetzkastenCore.
+/// Tastenkarte (B-106): alle Befehle mit Kürzel, nach Menü geordnet. Liest die Tabelle aus ALFAcolorCore.
 /// Öffnet über Hilfe ▸ Tastenkarte. Werte kommen aus dem Theme, keine festen Farben.
 struct TastenkarteView: View {
     static let fensterID = "tastenkarte"
