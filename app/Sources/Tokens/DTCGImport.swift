@@ -1,195 +1,195 @@
 import Foundation
 
-/// Fehler beim Lesen eines DTCG-Vertrags. `pfad` nennt die Stelle im JSON, z. B. `color.akzent.$value.components[1]`.
+/// An error while reading a DTCG contract. `path` names the place in the JSON, for example `color.akzent.$value.components[1]`.
 public struct DTCGImportError: Error, Equatable, Sendable, CustomStringConvertible {
-    public let pfad: String
-    public let meldung: String
-    public init(pfad: String, meldung: String) { self.pfad = pfad; self.meldung = meldung }
-    public var description: String { "\(pfad): \(meldung)" }
+    public let path: String
+    public let message: String
+    public init(path: String, message: String) { self.path = path; self.message = message }
+    public var description: String { "\(path): \(message)" }
 }
 
-/// Liest einen DTCG-Vertrag in einen TokenSet. Umfang: Format 2025.10 mit Gruppen, $type-Vererbung,
-/// Aliasen `{gruppe.token}`, Farbe als sRGB-Objekt, Maßen, Dauern, Kurven, Schrift und Zahlen.
-/// Quelle: https://www.designtokens.org/TR/2025.10/format/ und /color/.
-/// Werte werden aus den Komponenten gelesen; ein `hex` wird nur geprüft, nicht verwendet.
+/// Reads a DTCG contract into a TokenSet. Scope: format 2025.10 with groups, `$type` inheritance,
+/// aliases `{group.token}`, color as an sRGB object, dimensions, durations, curves, fonts and numbers.
+/// Source: https://www.designtokens.org/TR/2025.10/format/ and /color/.
+/// Values are read from the components. A `hex` is only checked, not used.
 public enum DTCGImport {
     public static func tokens(from data: Data, name: String) throws -> TokenSet {
-        let wurzel: Any
+        let root: Any
         do {
-            wurzel = try JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed])
+            root = try JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed])
         } catch {
-            throw DTCGImportError(pfad: "(Datei)", meldung: "kein gültiges JSON: \(error.localizedDescription)")
+            throw DTCGImportError(path: "(file)", message: "not valid JSON: \(error.localizedDescription)")
         }
-        guard let objekt = wurzel as? [String: Any] else {
-            throw DTCGImportError(pfad: "(Wurzel)", meldung: "die oberste Ebene muss ein Objekt sein")
+        guard let object = root as? [String: Any] else {
+            throw DTCGImportError(path: "(root)", message: "the top level must be an object")
         }
-        var blaetter: [Blatt] = []
-        try sammeln(objekt, pfad: [], erbtTyp: nil, into: &blaetter)
-        let nachId = Dictionary(blaetter.map { ($0.id, $0) }, uniquingKeysWith: { erster, _ in erster })
-        let tokens = try blaetter
-            .sorted { $0.pfad.lexicographicallyPrecedes($1.pfad) }
-            .map { blatt -> Token in
-                let (_, wert) = try aufloesen(blatt.id, nachId, kette: [])
-                return Token(blatt.pfad, wert, description: blatt.beschreibung)
+        var leaves: [Leaf] = []
+        try collect(object, path: [], inheritedType: nil, into: &leaves)
+        let byID = Dictionary(leaves.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        let tokens = try leaves
+            .sorted { $0.path.lexicographicallyPrecedes($1.path) }
+            .map { leaf -> Token in
+                let (_, value) = try resolve(leaf.id, byID, chain: [])
+                return Token(leaf.path, value, description: leaf.description)
             }
         return TokenSet(name: name, tokens: tokens)
     }
 
-    // MARK: - Einsammeln der Tokens
+    // MARK: - Collecting the tokens
 
-    /// Ein Token vor der Auflösung der Aliase.
-    private struct Blatt {
-        let pfad: [String]
-        let typ: String?
-        let wert: Any
-        let beschreibung: String?
-        let stelle: String
-        var id: String { pfad.joined(separator: ".") }
+    /// A token before the aliases are resolved.
+    private struct Leaf {
+        let path: [String]
+        let type: String?
+        let value: Any
+        let description: String?
+        let location: String
+        var id: String { path.joined(separator: ".") }
     }
 
-    private static func sammeln(_ knoten: [String: Any], pfad: [String], erbtTyp: String?, into blaetter: inout [Blatt]) throws {
-        let stelle = pfad.joined(separator: ".")
-        let gruppenTyp = try typ(knoten, stelle) ?? erbtTyp
-        for name in knoten.keys.sorted() {
+    private static func collect(_ node: [String: Any], path: [String], inheritedType: String?, into leaves: inout [Leaf]) throws {
+        let location = path.joined(separator: ".")
+        let groupType = try declaredType(node, location) ?? inheritedType
+        for name in node.keys.sorted() {
             if name.hasPrefix("$") {
-                // Metadaten ($type, $description, $deprecated, $extensions) sind erlaubt. $ref wird nicht gelesen,
-                // und ein Objekt mit $-Namen wäre ein Token, das sonst still verloren ginge.
+                // Metadata ($type, $description, $deprecated, $extensions) is allowed. $ref is not read,
+                // and an object with a $ name would be a token that is otherwise lost silently.
                 if name == "$ref" {
-                    throw fehler(anhaengen(stelle, name), "$ref wird nicht gelesen; Aliase schreibt man als {gruppe.token}")
+                    throw failure(append(location, name), "$ref is not read; write aliases as {group.token}")
                 }
-                if knoten[name] is [String: Any], name != "$extensions" {
-                    throw fehler(anhaengen(stelle, name), "Name darf nicht mit $ beginnen")
+                if node[name] is [String: Any], name != "$extensions" {
+                    throw failure(append(location, name), "a name must not begin with $")
                 }
                 continue
             }
-            let kindPfad = pfad + [name]
-            let kindStelle = kindPfad.joined(separator: ".")
-            try pruefeName(name, kindStelle)
-            guard let kind = knoten[name] as? [String: Any] else {
-                throw fehler(kindStelle, "Gruppe oder Token muss ein Objekt sein")
+            let childPath = path + [name]
+            let childLocation = childPath.joined(separator: ".")
+            try validateName(name, childLocation)
+            guard let child = node[name] as? [String: Any] else {
+                throw failure(childLocation, "a group or token must be an object")
             }
-            if let wert = kind["$value"] {
-                if kind["$ref"] != nil {
-                    throw fehler(anhaengen(kindStelle, "$ref"), "$ref wird nicht gelesen; Aliase schreibt man als {gruppe.token}")
+            if let value = child["$value"] {
+                if child["$ref"] != nil {
+                    throw failure(append(childLocation, "$ref"), "$ref is not read; write aliases as {group.token}")
                 }
-                if let unter = kind.keys.sorted().first(where: { !$0.hasPrefix("$") }) {
-                    throw fehler("\(kindStelle).\(unter)", "ein Token darf keine Untergruppe haben")
+                if let sub = child.keys.sorted().first(where: { !$0.hasPrefix("$") }) {
+                    throw failure("\(childLocation).\(sub)", "a token must not have a subgroup")
                 }
-                let eigenerTyp = try typ(kind, kindStelle)
-                blaetter.append(Blatt(pfad: kindPfad,
-                                      typ: eigenerTyp ?? gruppenTyp,
-                                      wert: wert,
-                                      beschreibung: try beschreibung(kind, kindStelle),
-                                      stelle: kindStelle))
+                let ownType = try declaredType(child, childLocation)
+                leaves.append(Leaf(path: childPath,
+                                   type: ownType ?? groupType,
+                                   value: value,
+                                   description: try descriptionText(child, childLocation),
+                                   location: childLocation))
             } else {
-                try sammeln(kind, pfad: kindPfad, erbtTyp: gruppenTyp, into: &blaetter)
+                try collect(child, path: childPath, inheritedType: groupType, into: &leaves)
             }
         }
     }
 
-    /// DTCG: Namen dürfen nicht leer sein, nicht mit $ beginnen und keine Punkte oder geschweiften Klammern enthalten.
-    private static func pruefeName(_ name: String, _ stelle: String) throws {
+    /// DTCG: names must not be empty, must not begin with $ and must not contain dots or curly braces.
+    private static func validateName(_ name: String, _ location: String) throws {
         if name.isEmpty || name.contains(where: { ".{}".contains($0) }) {
-            throw fehler(stelle, "Name darf nicht leer sein und keine Punkte oder geschweiften Klammern enthalten")
+            throw failure(location, "a name must not be empty and must not contain dots or curly braces")
         }
     }
 
-    private static func typ(_ knoten: [String: Any], _ stelle: String) throws -> String? {
-        guard let roh = knoten["$type"] else { return nil }
-        guard let text = roh as? String else { throw fehler(anhaengen(stelle, "$type"), "$type muss eine Zeichenkette sein") }
+    private static func declaredType(_ node: [String: Any], _ location: String) throws -> String? {
+        guard let raw = node["$type"] else { return nil }
+        guard let text = raw as? String else { throw failure(append(location, "$type"), "$type must be a string") }
         return text
     }
 
-    private static func beschreibung(_ knoten: [String: Any], _ stelle: String) throws -> String? {
-        guard let roh = knoten["$description"] else { return nil }
-        guard let text = roh as? String else { throw fehler(anhaengen(stelle, "$description"), "$description muss eine Zeichenkette sein") }
+    private static func descriptionText(_ node: [String: Any], _ location: String) throws -> String? {
+        guard let raw = node["$description"] else { return nil }
+        guard let text = raw as? String else { throw failure(append(location, "$description"), "$description must be a string") }
         return text
     }
 
-    // MARK: - Auflösen der Aliase
+    // MARK: - Resolving the aliases
 
-    private static func aufloesen(_ id: String, _ nachId: [String: Blatt], kette: [String]) throws -> (typ: String, wert: TokenValue) {
-        guard let blatt = nachId[id] else { throw fehler(id, "Token nicht gefunden") }
-        if let ziel = aliasZiel(blatt.wert) {
-            let weg = kette + [id]
-            if weg.contains(ziel) {
-                throw fehler(blatt.stelle + ".$value", "Alias-Schleife: " + (weg + [ziel]).joined(separator: " -> "))
+    private static func resolve(_ id: String, _ byID: [String: Leaf], chain: [String]) throws -> (type: String, value: TokenValue) {
+        guard let leaf = byID[id] else { throw failure(id, "token not found") }
+        if let target = aliasTarget(leaf.value) {
+            let route = chain + [id]
+            if route.contains(target) {
+                throw failure(leaf.location + ".$value", "alias loop: " + (route + [target]).joined(separator: " -> "))
             }
-            guard nachId[ziel] != nil else {
-                throw fehler(blatt.stelle + ".$value", "Alias {\(ziel)} zeigt auf keinen Token")
+            guard byID[target] != nil else {
+                throw failure(leaf.location + ".$value", "alias {\(target)} points to no token")
             }
-            let (zielTyp, zielWert) = try aufloesen(ziel, nachId, kette: weg)
-            if let eigener = blatt.typ, eigener != zielTyp {
-                throw fehler(anhaengen(blatt.stelle, "$type"), "Typ \(eigener) passt nicht zu {\(ziel)} (\(zielTyp))")
+            let (targetType, targetValue) = try resolve(target, byID, chain: route)
+            if let own = leaf.type, own != targetType {
+                throw failure(append(leaf.location, "$type"), "type \(own) does not match {\(target)} (\(targetType))")
             }
-            return (blatt.typ ?? zielTyp, zielWert)
+            return (leaf.type ?? targetType, targetValue)
         }
-        guard let typ = blatt.typ else {
-            throw fehler(blatt.stelle, "kein $type: weder am Token noch an einer übergeordneten Gruppe")
+        guard let type = leaf.type else {
+            throw failure(leaf.location, "no $type: neither on the token nor on a parent group")
         }
-        return (typ, try wert(blatt.wert, typ: typ, stelle: blatt.stelle + ".$value"))
+        return (type, try value(leaf.value, type: type, location: leaf.location + ".$value"))
     }
 
-    /// `"{gruppe.token}"` ergibt `gruppe.token`; sonst nil.
-    private static func aliasZiel(_ wert: Any) -> String? {
-        guard let text = wert as? String, text.count > 2, text.hasPrefix("{"), text.hasSuffix("}") else { return nil }
+    /// `"{group.token}"` gives `group.token`. Otherwise nil.
+    private static func aliasTarget(_ value: Any) -> String? {
+        guard let text = value as? String, text.count > 2, text.hasPrefix("{"), text.hasSuffix("}") else { return nil }
         return String(text.dropFirst().dropLast())
     }
 
-    // MARK: - Werte nach Typ
+    // MARK: - Values by type
 
-    private static func wert(_ roh: Any, typ: String, stelle: String) throws -> TokenValue {
-        switch typ {
+    private static func value(_ raw: Any, type: String, location: String) throws -> TokenValue {
+        switch type {
         case "color":
-            return try farbe(roh, stelle)
+            return try color(raw, location)
         case "dimension":
-            let (x, einheit) = try masse(roh, stelle, einheiten: ["px", "rem"])
-            return .dimension(x, unit: einheit)
+            let (x, unit) = try dimension(raw, location, units: ["px", "rem"])
+            return .dimension(x, unit: unit)
         case "duration":
-            let (x, einheit) = try masse(roh, stelle, einheiten: ["ms", "s"])
-            return .duration(einheit == "s" ? x * 1000 : x)
+            let (x, unit) = try dimension(raw, location, units: ["ms", "s"])
+            return .duration(unit == "s" ? x * 1000 : x)
         case "number":
-            return .number(try zahl(roh, stelle))
+            return .number(try number(raw, location))
         case "fontFamily":
-            if let name = roh as? String { return .fontFamily([name]) }
-            if let liste = roh as? [Any], !liste.isEmpty {
-                var namen: [String] = []
-                for (i, eintrag) in liste.enumerated() {
-                    guard let name = eintrag as? String else {
-                        throw fehler("\(stelle)[\(i)]", "Schriftname muss eine Zeichenkette sein")
+            if let name = raw as? String { return .fontFamily([name]) }
+            if let list = raw as? [Any], !list.isEmpty {
+                var names: [String] = []
+                for (i, entry) in list.enumerated() {
+                    guard let name = entry as? String else {
+                        throw failure("\(location)[\(i)]", "font name must be a string")
                     }
-                    namen.append(name)
+                    names.append(name)
                 }
-                return .fontFamily(namen)
+                return .fontFamily(names)
             }
-            throw fehler(stelle, "fontFamily ist ein Name oder eine Liste von Namen")
+            throw failure(location, "fontFamily is a name or a list of names")
         case "fontWeight":
-            if let name = roh as? String {
-                guard let gewicht = gewichtsNamen[name] else {
-                    throw fehler(stelle, "unbekannter Gewichtsname \"\(name)\" (erlaubt sind Kleinbuchstaben wie bold oder semi-bold)")
+            if let name = raw as? String {
+                guard let weight = weightNames[name] else {
+                    throw failure(location, "unknown weight name \"\(name)\" (lower-case names such as bold or semi-bold are allowed)")
                 }
-                return .fontWeight(gewicht)
+                return .fontWeight(weight)
             }
-            let x = try zahl(roh, stelle, 1...1000)
-            guard x == x.rounded() else { throw fehler(stelle, "Gewicht muss eine ganze Zahl sein") }
+            let x = try number(raw, location, 1...1000)
+            guard x == x.rounded() else { throw failure(location, "weight must be an integer") }
             return .fontWeight(Int(x))
         case "cubicBezier":
-            guard let teile = roh as? [Any], teile.count == 4 else {
-                throw fehler(stelle, "cubicBezier ist eine Liste aus vier Zahlen")
+            guard let parts = raw as? [Any], parts.count == 4 else {
+                throw failure(location, "cubicBezier is a list of four numbers")
             }
             var p: [Double] = []
-            for (i, teil) in teile.enumerated() { p.append(try zahl(teil, "\(stelle)[\(i)]")) }
+            for (i, part) in parts.enumerated() { p.append(try number(part, "\(location)[\(i)]")) }
             for i in [0, 2] where !(0...1).contains(p[i]) {
-                throw fehler("\(stelle)[\(i)]", "x-Wert muss zwischen 0 und 1 liegen")
+                throw failure("\(location)[\(i)]", "x value must be between 0 and 1")
             }
             return .cubicBezier(p[0], p[1], p[2], p[3])
         default:
-            throw fehler(stelle, "unbekannter $type \"\(typ)\"")
+            throw failure(location, "unknown $type \"\(type)\"")
         }
     }
 
-    /// Gewichtsnamen nach DTCG 2025.10 (Groß- und Kleinschreibung zählt).
-    private static let gewichtsNamen: [String: Int] = [
+    /// Weight names according to DTCG 2025.10 (case matters).
+    private static let weightNames: [String: Int] = [
         "thin": 100, "hairline": 100,
         "extra-light": 200, "ultra-light": 200,
         "light": 300,
@@ -202,64 +202,64 @@ public enum DTCGImport {
         "extra-black": 950, "ultra-black": 950,
     ]
 
-    private static func farbe(_ roh: Any, _ stelle: String) throws -> TokenValue {
-        guard let o = roh as? [String: Any] else {
-            throw fehler(stelle, "Farbe muss ein Objekt mit colorSpace und components sein")
+    private static func color(_ raw: Any, _ location: String) throws -> TokenValue {
+        guard let o = raw as? [String: Any] else {
+            throw failure(location, "color must be an object with colorSpace and components")
         }
-        guard let raum = o["colorSpace"] as? String else {
-            throw fehler(stelle + ".colorSpace", "colorSpace fehlt oder ist keine Zeichenkette")
+        guard let space = o["colorSpace"] as? String else {
+            throw failure(location + ".colorSpace", "colorSpace is missing or not a string")
         }
-        guard raum == "srgb" else {
-            throw fehler(stelle + ".colorSpace", "nur \"srgb\" wird gelesen, gefunden: \"\(raum)\"")
+        guard space == "srgb" else {
+            throw failure(location + ".colorSpace", "only \"srgb\" is read, found: \"\(space)\"")
         }
-        guard let teile = o["components"] as? [Any], teile.count == 3 else {
-            throw fehler(stelle + ".components", "components muss eine Liste aus drei Zahlen sein")
+        guard let parts = o["components"] as? [Any], parts.count == 3 else {
+            throw failure(location + ".components", "components must be a list of three numbers")
         }
-        var kanaele: [Double] = []
-        for (i, teil) in teile.enumerated() {
-            kanaele.append(try zahl(teil, "\(stelle).components[\(i)]", 0...1))
+        var channels: [Double] = []
+        for (i, part) in parts.enumerated() {
+            channels.append(try number(part, "\(location).components[\(i)]", 0...1))
         }
         var alpha = 1.0
-        if o["alpha"] != nil { alpha = try zahl(o["alpha"], stelle + ".alpha", 0...1) }
+        if o["alpha"] != nil { alpha = try number(o["alpha"], location + ".alpha", 0...1) }
         if o["hex"] != nil {
             guard let hex = o["hex"] as? String, RGB(hex: hex) != nil else {
-                throw fehler(stelle + ".hex", "hex ist keine gültige Farbe")
+                throw failure(location + ".hex", "hex is not a valid color")
             }
         }
-        return .color(RGB(r: kanaele[0], g: kanaele[1], b: kanaele[2], a: alpha))
+        return .color(RGB(r: channels[0], g: channels[1], b: channels[2], a: alpha))
     }
 
-    private static func masse(_ roh: Any, _ stelle: String, einheiten: [String]) throws -> (Double, String) {
-        guard let o = roh as? [String: Any] else {
-            throw fehler(stelle, "Maß muss ein Objekt mit value und unit sein")
+    private static func dimension(_ raw: Any, _ location: String, units: [String]) throws -> (Double, String) {
+        guard let o = raw as? [String: Any] else {
+            throw failure(location, "dimension must be an object with value and unit")
         }
-        let x = try zahl(o["value"], stelle + ".value")
-        guard let einheit = o["unit"] as? String, einheiten.contains(einheit) else {
-            throw fehler(stelle + ".unit", "unit muss \(einheiten.joined(separator: " oder ")) sein")
+        let x = try number(o["value"], location + ".value")
+        guard let unit = o["unit"] as? String, units.contains(unit) else {
+            throw failure(location + ".unit", "unit must be \(units.joined(separator: " or "))")
         }
-        return (x, einheit)
+        return (x, unit)
     }
 
-    /// Eine Zahl, kein Wahrheitswert. Optional mit Bereich.
-    private static func zahl(_ roh: Any?, _ stelle: String, _ bereich: ClosedRange<Double>? = nil) throws -> Double {
-        guard let roh else { throw fehler(stelle, "fehlt") }
-        guard let n = roh as? NSNumber, CFGetTypeID(n) != CFBooleanGetTypeID() else {
-            throw fehler(stelle, "Zahl erwartet")
+    /// A number, not a boolean. Optionally within a range.
+    private static func number(_ raw: Any?, _ location: String, _ range: ClosedRange<Double>? = nil) throws -> Double {
+        guard let raw else { throw failure(location, "missing") }
+        guard let n = raw as? NSNumber, CFGetTypeID(n) != CFBooleanGetTypeID() else {
+            throw failure(location, "number expected")
         }
         let x = n.doubleValue
-        if let bereich, !bereich.contains(x) {
-            throw fehler(stelle, "\(x) liegt nicht zwischen \(bereich.lowerBound) und \(bereich.upperBound)")
+        if let range, !range.contains(x) {
+            throw failure(location, "\(x) is not between \(range.lowerBound) and \(range.upperBound)")
         }
         return x
     }
 
-    // MARK: - Hilfen
+    // MARK: - Helpers
 
-    private static func fehler(_ pfad: String, _ meldung: String) -> DTCGImportError {
-        DTCGImportError(pfad: pfad.isEmpty ? "(Wurzel)" : pfad, meldung: meldung)
+    private static func failure(_ path: String, _ message: String) -> DTCGImportError {
+        DTCGImportError(path: path.isEmpty ? "(root)" : path, message: message)
     }
 
-    private static func anhaengen(_ stelle: String, _ teil: String) -> String {
-        stelle.isEmpty ? teil : "\(stelle).\(teil)"
+    private static func append(_ location: String, _ part: String) -> String {
+        location.isEmpty ? part : "\(location).\(part)"
     }
 }
