@@ -36,14 +36,6 @@ else
   row "guard: tree" "ERROR" "$(grep -m1 -E '^R[0-9] ' "$TMP/guard.log")"
   excerpt "guard" "$TMP/guard.log"
 fi
-SUMMARY="$(tail -n 1 "$TMP/guard.log")"
-LANG_WARNINGS="$(echo "$SUMMARY" | sed -n 's/.* R3=\([0-9]*\) R4=\([0-9]*\).*/R3: \1, R4: \2/p')"
-LANG_TOTAL="$(echo "$SUMMARY" | sed -n 's/.* R3=\([0-9]*\) R4=\([0-9]*\).*/\1 \2/p' | awk '{print $1 + $2}')"
-if [ -n "${LANG_TOTAL:-}" ] && [ "$LANG_TOTAL" -gt 0 ]; then
-  row "guard: language and meta" "WARNING" "$LANG_TOTAL warnings ($LANG_WARNINGS), not blocking while STRENG_SPRACHE_META is False"
-else
-  row "guard: language and meta" "OK" "no warnings"
-fi
 
 # 2. Guard tests
 if python3 scripts/waechter_test.py > "$TMP/guard-test.log" 2>&1; then
