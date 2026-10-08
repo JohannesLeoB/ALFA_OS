@@ -5,3 +5,6 @@ DerivedData/
 .DS_Store
 Setzkasten/*.xcodeproj/
 .build-*/
+
+# Ausgehende ZIPs an die anderen Konten; Johannes trägt sie
+ausgang/

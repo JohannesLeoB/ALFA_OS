@@ -72,7 +72,7 @@ Vor E1 offen: konzept/OFFENE-FRAGEN.md Nr. 1, 4 und 5 (Name, Vertrieb, Takt; Nr.
 | [B-903](briefe/B-903.md) | E9 | Barrierefreiheit | B-902 | offen |
 | [B-904](briefe/B-904.md) | E9 | Leistung und Speicher | B-209 | offen |
 | [B-905](briefe/B-905.md) | E9 | Auslieferung | B-901 | offen |
-| [D-001](briefe/D-001.md) | E1 | Gegenlieferung lesen und Ansichten zeichnen (Claude Design) | — | offen |
+| [D-001](briefe/D-001.md) | E1 | Gegenlieferung lesen und Ansichten zeichnen (Claude Design) | — | vergeben an Konto B (Claude Design), 2026-10-08 |
 | [D-002](briefe/D-002.md) | E2 | Gestaltungsvertrag der App (Claude Design) | D-001 | offen |
 | [D-003](briefe/D-003.md) | E5 | Startbausteine und Musterbogen (Claude Design) | D-002 | offen |
 | [P-001](briefe/P-001.md) | alle | Prüfplan je Gate (Konto C) | — | offen |
