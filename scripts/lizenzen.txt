@@ -1,0 +1,13 @@
+# Lizenzen · Setzkasten · von Hand geprüft am 2026-10-08 (Brief B-105)
+#
+# Stand: keine fremden Abhängigkeiten. app/Package.swift bindet kein Paket von außen ein,
+# und es gibt kein Package.resolved mit Pins. Foundation, CoreGraphics, SwiftUI, AppKit und
+# WebKit sind Apple-Systemframeworks und brauchen keinen Eintrag.
+#
+# Format für jede fremde Abhängigkeit, eine Zeile je Paket, Trennzeichen |:
+#   Paket-Identität | Lizenz (SPDX) | Quelle (URL) | geprüft am JJJJ-MM-TT
+# scripts/pruefen.sh verlangt für jeden Pin aus einem Package.resolved eine solche Zeile mit Lizenz.
+#
+# Fremdes Material im Repo, das nicht im Produkt steckt (Bauregel 4: Quelle und Lizenz bleiben):
+#   recherche/integrations-sh/ · MIT · Copyright 2026 Rhys Sullivan · Quelle: https://github.com/UsefulSoftwareCo/integrations
+#   (Auszug, Herkunft in recherche/integrations-sh/HERKUNFT.txt, Lizenztext in recherche/integrations-sh/LICENSE)
