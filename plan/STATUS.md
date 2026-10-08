@@ -14,7 +14,7 @@ Vor E1 offen: konzept/OFFENE-FRAGEN.md Nr. 1, 4 und 5 (Name, Vertrieb, Takt; Nr.
 |---|---|---|---|---|
 | [B-101](briefe/B-101.md) | E1 | Xcode-Projekt mit XcodeGen | — | vergeben an Haiku-Agent, Klon ~/ALLFARB-bau/B-101, 2026-10-08 |
 | [B-102](briefe/B-102.md) | E1 | Fensterschale mit allen Bereichen | B-101 | offen |
-| [B-103](briefe/B-103.md) | E1 | AppTheme und Vertragsleser | — | vergeben an Haiku-Agent, Klon ~/ALLFARB-bau/B-103, 2026-10-08 |
+| [B-103](briefe/B-103.md) | E1 | AppTheme und Vertragsleser | — | erledigt, geprüft 2026-10-08 (Chef: 55 Tests grün, Pfade und Importe sauber) |
 | [B-104](briefe/B-104.md) | E1 | Dokumentpaket .setzkasten | — | vergeben an Sonnet-Agent, Klon ~/ALLFARB-bau/B-104, 2026-10-08 |
 | [B-105](briefe/B-105.md) | E1 | Prüfskript und Nahtregeln | — | erledigt, geprüft 2026-10-08 (Chef: Lauf grün, Gegentest rot) |
 | [B-106](briefe/B-106.md) | E1 | Menüleiste und Tastenkarte | B-102 | offen |
