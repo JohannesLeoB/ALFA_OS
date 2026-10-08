@@ -1,6 +1,6 @@
 // swift-tools-version: 6.0
-// ALFAcolor: Kern der macOS-App als Swift-Paket.
-// Jedes Ziel ist ohne Oberfläche testbar. Die App (SwiftUI) kommt als eigenes Ziel dazu.
+// ALFAcolor: core of the macOS app as a Swift package.
+// Every target can be tested without a UI. The app (SwiftUI) is its own target in ALFAcolor/project.yml.
 import PackageDescription
 
 let package = Package(
@@ -14,7 +14,6 @@ let package = Package(
         .target(name: "Geometry", dependencies: ["ALFAcolorCore"]),
         .target(name: "Tokens", dependencies: ["ALFAcolorCore"]),
         .target(name: "ColorLab", dependencies: ["Tokens"]),
-        // E1: Gerüst vom Chef angelegt; Inhalt bauen B-103 (AppTheme) und B-104 (Document).
         .target(name: "AppTheme", dependencies: ["Tokens"]),
         .target(name: "Document", dependencies: ["ALFAcolorCore", "Tokens"]),
         .testTarget(name: "ALFAcolorCoreTests", dependencies: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab"]),
