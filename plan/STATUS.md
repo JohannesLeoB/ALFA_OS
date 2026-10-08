@@ -3,7 +3,7 @@
 | Etappe | Stand | Freigabe (Johannes, Datum, Wortlaut) | Gate |
 |---|---|---|---|
 | E0 Fundament | erledigt | 2026-10-08 „DAHIN“ | G0 erfüllt: 12 Tests grün |
-| E1 Gerüst | wartet auf Freigabe | | G1 offen |
+| E1 Gerüst | läuft | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen |
 | E2 bis E9 | geplant | | |
 
 Vor E1 offen: konzept/OFFENE-FRAGEN.md Nr. 1, 4 und 5 (Name, Vertrieb, Takt; Nr. 2 und 3 sind entschieden bzw. per Vorschlag gesetzt).
@@ -12,11 +12,11 @@ Vor E1 offen: konzept/OFFENE-FRAGEN.md Nr. 1, 4 und 5 (Name, Vertrieb, Takt; Nr.
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
-| [B-101](briefe/B-101.md) | E1 | Xcode-Projekt mit XcodeGen | — | offen |
+| [B-101](briefe/B-101.md) | E1 | Xcode-Projekt mit XcodeGen | — | vergeben an Haiku-Agent, Klon ~/ALLFARB-bau/B-101, 2026-10-08 |
 | [B-102](briefe/B-102.md) | E1 | Fensterschale mit allen Bereichen | B-101 | offen |
-| [B-103](briefe/B-103.md) | E1 | AppTheme und Vertragsleser | — | offen |
-| [B-104](briefe/B-104.md) | E1 | Dokumentpaket .setzkasten | — | offen |
-| [B-105](briefe/B-105.md) | E1 | Prüfskript und Nahtregeln | — | offen |
+| [B-103](briefe/B-103.md) | E1 | AppTheme und Vertragsleser | — | vergeben an Haiku-Agent, Klon ~/ALLFARB-bau/B-103, 2026-10-08 |
+| [B-104](briefe/B-104.md) | E1 | Dokumentpaket .setzkasten | — | vergeben an Sonnet-Agent, Klon ~/ALLFARB-bau/B-104, 2026-10-08 |
+| [B-105](briefe/B-105.md) | E1 | Prüfskript und Nahtregeln | — | vergeben an Haiku-Agent, Klon ~/ALLFARB-bau/B-105, 2026-10-08 |
 | [B-106](briefe/B-106.md) | E1 | Menüleiste und Tastenkarte | B-102 | offen |
 | [B-201](briefe/B-201.md) | E2 | BoardModel: Zustand, Befehle, Rückgängig | B-104 | offen |
 | [B-202](briefe/B-202.md) | E2 | Einrast-Engine | B-201 | offen |

@@ -15,6 +15,19 @@ Du bist der Chefentwickler von Setzkasten. Du baust selten selbst; du verteilst,
    Höchstens drei Bauagenten gleichzeitig.
 5. Gemeinsame Dateien (`app/Package.swift`, `Setzkasten/project.yml`, `plan/STATUS.md`) änderst nur du, nach den „Wünschen an den Chef“ in den Briefen.
 
+## Parallel bauen mit Arbeitsklonen
+
+Mehrere Bauagenten arbeiten nie in derselben Arbeitskopie, weil halbfertiger Code des einen sonst den Bau des anderen bricht. Jeder bekommt einen eigenen Klon, nur Zweig `main`, ohne Push:
+
+```bash
+git clone -q ~/ALLFARB ~/ALLFARB-bau/B-xxx      # Klon vom lokalen Haupt-Repo
+# Bauagent arbeitet und committet in ~/ALLFARB-bau/B-xxx auf main
+cd ~/ALLFARB && git pull --rebase ~/ALLFARB-bau/B-xxx main   # Chef holt nach der Prüfung
+rm -rf ~/ALLFARB-bau/B-xxx                       # Klon weg, wenn geholt
+```
+
+Getrennte Pfade machen das Holen konfliktfrei. Gemeinsame Dateien legt der Chef vorher an (Ziele in `Package.swift` mit Gerüstdatei), damit kein Agent sie ändern muss.
+
 ## Prüfen
 
 6. Für jeden zurückgemeldeten Brief:
