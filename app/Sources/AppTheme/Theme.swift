@@ -12,6 +12,8 @@ public enum ColorToken: String, CaseIterable, Sendable {
     case border = "rahmen"
     case text
     case textMuted = "textLeise"
+    /// Snapping, measures and distances.
+    case coral = "koralle"
 }
 
 /// Spacing token. Path: `space.<name>`. Values in points.
@@ -216,9 +218,32 @@ public extension Theme {
         try load(contract: Data(contentsOf: url), source: url.lastPathComponent)
     }
 
-    /// The contract file in the app bundle, if the build copied it. nil means the placeholder applies.
+    /// Reads the light contract and the dark contract from two files. A missing or invalid light file gives
+    /// the placeholder. A missing or invalid dark file gives the placeholder colors in dark mode only.
+    static func load(light: URL?, dark: URL?) -> Theme {
+        guard let light, let lightSet = tokenSet(at: light) else { return .placeholder }
+        return Theme(contract: lightSet, dark: dark.flatMap(tokenSet(at:)), source: light.lastPathComponent)
+    }
+
+    /// The contract from the app bundle: `tokens.json` for light and `tokens.dunkel.json` for dark.
+    /// Without a valid light file the placeholder applies.
+    static func bundled(in bundle: Bundle = .main) -> Theme {
+        load(light: contractFile(in: bundle), dark: darkContractFile(in: bundle))
+    }
+
+    /// The light contract file in the app bundle, if the build copied it. nil means the placeholder applies.
     static func contractFile(in bundle: Bundle = .main) -> URL? {
         bundle.url(forResource: "tokens", withExtension: "json")
+    }
+
+    /// The dark contract file in the app bundle, if the build copied it.
+    static func darkContractFile(in bundle: Bundle = .main) -> URL? {
+        bundle.url(forResource: "tokens.dunkel", withExtension: "json")
+    }
+
+    private static func tokenSet(at url: URL) -> TokenSet? {
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return try? DTCGImport.tokens(from: data, name: url.lastPathComponent)
     }
 }
 

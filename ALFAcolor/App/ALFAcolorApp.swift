@@ -6,11 +6,8 @@ struct ALFAcolorApp: App {
     /// Start size of the main window, konzept/05-OBERFLAECHE.txt section 2.3.
     private static let defaultSize = CGSize(width: 1280, height: 800)
 
-    /// The contract from the app bundle, if the build provides it. Otherwise the placeholder applies.
-    private let theme: Theme = {
-        guard let url = Theme.contractFile(), let contract = try? Theme.load(from: url) else { return .placeholder }
-        return contract
-    }()
+    /// The contract from the app bundle (light and dark). Without a valid file the placeholder applies.
+    private let theme = Theme.bundled()
 
     var body: some Scene {
         WindowGroup {

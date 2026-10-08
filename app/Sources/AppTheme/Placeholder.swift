@@ -14,6 +14,7 @@ public enum Placeholder {
         Token(["color", "rahmen"], color("#D1D1D6")),
         Token(["color", "text"], color("#1C1C1E")),
         Token(["color", "textLeise"], color("#6E6E73")),
+        Token(["color", "koralle"], color("#FF00FF")),
         Token(["space", "s1"], .dimension(4, unit: "px")),
         Token(["space", "s2"], .dimension(8, unit: "px")),
         Token(["space", "s3"], .dimension(12, unit: "px")),
@@ -43,6 +44,7 @@ public enum Placeholder {
         Token(["color", "rahmen"], color("#3A3A3C")),
         Token(["color", "text"], color("#F2F2F7")),
         Token(["color", "textLeise"], color("#98989D")),
+        Token(["color", "koralle"], color("#FF00FF")),
     ])
 
     /// Invalid hex values fall back to magenta, so that they stand out.
