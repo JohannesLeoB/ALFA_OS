@@ -36,7 +36,7 @@ Getrennte Pfade machen das Holen konfliktfrei. Gemeinsame Dateien legt der Chef 
 6. Für jeden zurückgemeldeten Brief:
    - Lies den Diff (`git log`, `git diff`).
    - Führe jeden Befehl unter „Fertig wenn“ selbst aus.
-   - Vergleiche Bildschirmfotos mit der Abnahme.
+   - Bildschirmfotos macht nur Johannes. Weder Chef noch Agenten starten die App, fotografieren den Bildschirm oder greifen in Fenster ein (Johannes, 2026-10-08: „kein screenuse/computeruse oder ansichtsfenster eingriffe“). Punkte, die ein Bild brauchen, bleiben „offen: Abnahme am Bild durch Johannes“.
    Fertig, wenn jeder Punkt „Fertig wenn“ einen eigenen Beleg von dir hat. Fehlt einer: Brief zurück an den Agenten, mit dem fehlenden Punkt.
 7. Setze den Status im Briefkopf und in `plan/STATUS.md` auf „erledigt, geprüft <Datum>“.
 
