@@ -3,7 +3,7 @@
 | Etappe | Stand | Freigabe (Johannes, Datum, Wortlaut) | Gate |
 |---|---|---|---|
 | E0 Fundament | erledigt | 2026-10-08 „DAHIN“ | G0 erfüllt: 12 Tests grün |
-| E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 wartet auf Bild-Abnahme; B-106 offen | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen |
+| E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 offen | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen |
 | E2 bis E9 | geplant | | |
 
 ## Chef-Aufgaben vor E2 (aus den Übergaben von E1)
@@ -21,7 +21,7 @@ Vor E1 offen: konzept/OFFENE-FRAGEN.md Nr. 1, 4 und 5 (Name, Vertrieb, Takt; Nr.
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
 | [B-101](briefe/B-101.md) | E1 | Xcode-Projekt mit XcodeGen | — | erledigt, geprüft 2026-10-08 (Chef: BUILD SUCCEEDED nachgebaut, Team 28Z2KHMANG, Hardened Runtime) |
-| [B-102](briefe/B-102.md) | E1 | Fensterschale mit allen Bereichen | B-101 | Maschine geprüft 2026-10-08 (Chef: pruefen.sh 0 Fehler, 119 Tests, BUILD ok, grep leer); Abnahme am Bild durch Johannes offen |
+| [B-102](briefe/B-102.md) | E1 | Fensterschale mit allen Bereichen | B-101 | erledigt, geprüft 2026-10-08 (Chef: pruefen.sh 0 Fehler; Johannes am Bild: hell/dunkel, Tasten „gehen alle!“) |
 | [B-103](briefe/B-103.md) | E1 | AppTheme und Vertragsleser | — | erledigt, geprüft 2026-10-08 (Chef: 55 Tests grün, Pfade und Importe sauber) |
 | [B-104](briefe/B-104.md) | E1 | Dokumentpaket .setzkasten | — | erledigt, geprüft 2026-10-08 (Chef: 119 Tests grün, Gesamtprüfung 0 Fehler) |
 | [B-105](briefe/B-105.md) | E1 | Prüfskript und Nahtregeln | — | erledigt, geprüft 2026-10-08 (Chef: Lauf grün, Gegentest rot) |
