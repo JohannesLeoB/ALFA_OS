@@ -9,7 +9,7 @@
 ## Chef-Aufgaben vor E2 (aus den Übergaben von E1)
 
 1. Dokumenttyp: übernommen in B-108a.
-2. `project.yml`: `gestaltung/vertrag/tokens.json` und `tokens.dunkel.json` als Ressourcen ins App-Paket (aus B-103), sobald der Vertrag da ist; dann lädt `SetzkastenApp` beide über `Theme(vertrag:dunkel:quelle:)` (Wunsch aus B-102).
+2. Vertrag als Ressource: erledigt in B-109.
 3. Kern vor E2: `ItemID` mit eigenem `Codable` als einfache Zeichenkette statt `{"raw": …}`; `Board` um `documentID` und `createdAt` ergänzen (OFFENE-FRAGEN 26, 27). Danach B-104-Tests und Beispielpaket neu erzeugen.
 4. Zwei DTCG-Leser zusammenlegen (Tokens.DTCGImport und Document/TokenFile), spätestens in B-506.
 5. Große Bilder: Assets beim Öffnen nur bei Bedarf laden und beim Sichern nur Geänderte schreiben, bevor B-201 Autosave baut.
@@ -32,7 +32,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-107](briefe/B-107.md) | E1 | Wächter: Git-Hooks und GitHub-Prüfung | — | erledigt, geprüft 2026-10-08 (Chef: waechter_test 65 OK, pruefen.sh 0 errors, eigener Gegentest commit-msg sperrt) |
 | [B-108a](briefe/B-108a.md) | E1 | Umbenennen in ALFAcolor | B-107 | erledigt, geprüft 2026-10-08 (Chef: pruefen.sh 0 errors, grep leer, signierter Build mit com.johannesleoberger.alfacolor) |
 | [B-108b](briefe/B-108b.md) | E1 | Code auf Englisch, Texte in den String-Katalog | B-108a | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors 0 warnings, Schalter streng, Gegentest deutscher Kommentar sperrt); Abnahme der Texte am Bild offen |
-| [B-109](briefe/B-109.md) | E1 | Vertrag einbauen und Textfehler aus der Design-Antwort | B-108b | vergeben an Sonnet-Agent (im Repo), 2026-10-09 |
+| [B-109](briefe/B-109.md) | E1 | Vertrag einbauen und Textfehler aus der Design-Antwort | B-108b | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 143 Tests, Vertrag im Paket; Ressourcenpfad vom Chef auf die zwei Dateien genau gesetzt); Farben am Bild offen |
 | [B-201](briefe/B-201.md) | E2 | BoardModel: Zustand, Befehle, Rückgängig | B-104 | offen |
 | [B-202](briefe/B-202.md) | E2 | Einrast-Engine | B-201 | offen |
 | [B-203](briefe/B-203.md) | E2 | Leinwand-View: Zoom, Verschieben, Sichtbarkeit | B-201 | offen |

@@ -83,6 +83,7 @@ class Words:
         self.token_exempt = set(get("token-exempt"))
         self.fillers = set(get("fillers"))
         self.stems = set(get("stems"))
+        self.contract_names = set(get("contract-names"))
         self.meta_words = set(get("meta-words"))
         self.meta_patterns = [re.compile(p) for p in get("meta-patterns")]
         self.verbs = set(get("verbs"))
@@ -380,6 +381,8 @@ def german_names(words, line):
     for ident in IDENT.findall(line):
         for part in NAME_PARTS.findall(ident):
             low = part.lower()
+            if low in words.contract_names:
+                continue
             hit = low in words.stems or any(len(s) >= 8 and low.startswith(s) for s in words.stems)
             if hit and ident not in found:
                 found.append(ident)
