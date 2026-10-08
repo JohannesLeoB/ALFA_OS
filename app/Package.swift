@@ -19,6 +19,6 @@ let package = Package(
         .target(name: "Document", dependencies: ["SetzkastenCore", "Tokens"]),
         .testTarget(name: "SetzkastenTests", dependencies: ["SetzkastenCore", "Geometry", "Tokens", "ColorLab"]),
         .testTarget(name: "AppThemeTests", dependencies: ["AppTheme", "Tokens"]),
-        .testTarget(name: "DocumentTests", dependencies: ["Document", "SetzkastenCore", "Tokens"])
+        .testTarget(name: "DocumentTests", dependencies: ["Document", "SetzkastenCore", "Tokens"], exclude: ["Fixtures"])
     ]
 )
