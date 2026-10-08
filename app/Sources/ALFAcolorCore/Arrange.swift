@@ -1,7 +1,7 @@
 import Foundation
 
-/// Anordnen einer Auswahl. Reine Funktionen: Eingang Elemente, Ausgang neue Rechtecke.
-/// Die Oberfläche wendet das Ergebnis an und legt einen Rückgängig-Schritt an.
+/// Arranging a selection. Pure functions: items in, new rectangles out.
+/// The UI applies the result and records an undo step.
 public enum Arrangement: String, Sendable, CaseIterable {
     case alignLeft, alignTop, alignCenter, row, grid, pile, sameSize
 }
@@ -48,11 +48,11 @@ public func arrange(_ items: [Item], _ how: Arrangement, reference: ItemID? = ni
     return out
 }
 
-/// Kinder eines Rahmens oder einer Gruppe: alle Elemente, deren Mitte darin liegt.
+/// Children of a frame or group: all items whose center lies inside.
 public func children(of container: Item, in items: [Item]) -> [Item] {
     items.filter { item in
         guard item.id != container.id else { return false }
-        if case .group = item.content { return false }          // Gruppen wandern nie in andere Container
+        if case .group = item.content { return false }          // Groups never move into other containers
         let c = item.rect.center
         return container.rect.contains(x: c.x, y: c.y)
     }

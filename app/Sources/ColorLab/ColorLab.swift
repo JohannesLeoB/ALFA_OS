@@ -2,23 +2,24 @@ import Foundation
 import CoreGraphics
 import Tokens
 
-/// Farbe im CIE-Lab-Raum (D65). Abstände in Lab entsprechen grob dem, was das Auge sieht.
+/// Color in CIE Lab space (D65). Distances in Lab roughly match what the eye sees.
 public struct Lab: Hashable, Sendable { public var l: Double, a: Double, b: Double }
 
 public enum ColorMath {
     static func lin(_ c: Double) -> Double { c <= 0.04045 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4) }
     static func gam(_ c: Double) -> Double { c <= 0.0031308 ? 12.92 * c : 1.055 * pow(c, 1 / 2.4) - 0.055 }
 
-    /// Relative Leuchtdichte nach WCAG 2.x.
+    /// Relative luminance according to WCAG 2.x.
     public static func luminance(_ c: RGB) -> Double { 0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b) }
-    /// Kontrastverhältnis nach WCAG 2.x: (L1 + 0.05) / (L2 + 0.05). Schwarz auf Weiß = 21.
+    /// Contrast ratio according to WCAG 2.x: (L1 + 0.05) / (L2 + 0.05). Black on white is 21.
     public static func contrast(_ x: RGB, _ y: RGB) -> Double {
         let a = luminance(x), b = luminance(y); return (max(a, b) + 0.05) / (min(a, b) + 0.05)
     }
-    /// WCAG-Stufe für normalen Text: AAA ab 7, AA ab 4.5. Für großen Text gilt AA ab 3.
+    /// WCAG level for normal text: AAA from 7, AA from 4.5. For large text, AA applies from 3.
+    /// Below that, the result is the localized text for "insufficient".
     public static func wcagLevel(_ ratio: Double, largeText: Bool = false) -> String {
-        if largeText { return ratio >= 4.5 ? "AAA" : ratio >= 3 ? "AA" : "nicht ausreichend" }
-        return ratio >= 7 ? "AAA" : ratio >= 4.5 ? "AA" : "nicht ausreichend"
+        if largeText { return ratio >= 4.5 ? "AAA" : ratio >= 3 ? "AA" : String(localized: "contrast.level.insufficient") }
+        return ratio >= 7 ? "AAA" : ratio >= 4.5 ? "AA" : String(localized: "contrast.level.insufficient")
     }
 
     public static func lab(_ c: RGB) -> Lab {
@@ -39,24 +40,24 @@ public enum ColorMath {
         func c(_ v: Double) -> Double { min(max(gam(v), 0), 1) }
         return RGB(r: c(r), g: c(g), b: c(b))
     }
-    /// Farbabstand ΔE (CIE76). Unter etwa 2,3 sieht man kaum einen Unterschied.
+    /// Color difference ΔE (CIE76). Below about 2.3, the difference is hardly visible.
     public static func deltaE(_ p: Lab, _ q: Lab) -> Double {
         ((p.l - q.l) * (p.l - q.l) + (p.a - q.a) * (p.a - q.a) + (p.b - q.b) * (p.b - q.b)).squareRoot()
     }
 }
 
-/// Eine gefundene Farbe mit Anteil an der Bildfläche.
+/// A found color with its share of the image area.
 public struct Swatch: Hashable, Sendable { public var color: RGB; public var share: Double }
 
 public enum Palette {
-    /// Farben aus einem Bild ziehen: Bild verkleinern, Pixel in Lab, k-Means mit fester Startwahl.
-    /// Gleiches Bild ergibt immer die gleiche Palette. Sortiert nach Anteil.
+    /// Extracts colors from an image: shrink the image, convert pixels to Lab, k-means with a fixed start choice.
+    /// The same image always gives the same palette. Sorted by share.
     public static func extract(from image: CGImage, count k: Int = 6, sample: Int = 64) -> [Swatch] {
         let pixels = rgbPixels(image, side: sample)
         return kMeans(pixels.map(ColorMath.lab), k: k)
     }
 
-    /// Pixel eines Bilds, auf side x side verkleinert, als sRGB. Transparente Pixel fallen weg.
+    /// Pixels of an image, scaled down to side x side, as sRGB. Transparent pixels are dropped.
     public static func rgbPixels(_ image: CGImage, side: Int) -> [RGB] {
         let w = side, h = side, bpr = w * 4
         var data = [UInt8](repeating: 0, count: h * bpr)
@@ -73,14 +74,14 @@ public enum Palette {
         return out
     }
 
-    /// k-Means in Lab. Start: erste Mitte = häufigster Bereich (Mittelwert), weitere = jeweils weitester Punkt.
+    /// k-means in Lab. Start: the first center is the first point, then each further center is the farthest point.
     public static func kMeans(_ pts: [Lab], k: Int, iterations: Int = 12) -> [Swatch] {
         guard !pts.isEmpty, k > 0 else { return [] }
         var centers: [Lab] = [pts[0]]
         while centers.count < min(k, pts.count) {
             var best = pts[0], bestD = -1.0
             for p in pts { let d = centers.map { ColorMath.deltaE(p, $0) }.min()!; if d > bestD { bestD = d; best = p } }
-            if bestD < 1 { break }      // alles schon abgedeckt
+            if bestD < 1 { break }      // everything is already covered
             centers.append(best)
         }
         var assign = [Int](repeating: 0, count: pts.count)
@@ -102,7 +103,7 @@ public enum Palette {
             .sorted { $0.share > $1.share }
     }
 
-    /// Ähnliche Farben zusammenfassen (ΔE unter Schwelle). Ergebnis behält die Farbe mit dem größten Anteil.
+    /// Merges similar colors (ΔE below the threshold). The result keeps the color with the largest share.
     public static func unify(_ swatches: [Swatch], threshold: Double = 6) -> [Swatch] {
         var out: [Swatch] = []
         for s in swatches.sorted(by: { $0.share > $1.share }) {
@@ -113,10 +114,10 @@ public enum Palette {
         return out
     }
 
-    /// Vorschlag für Tokens aus einer Palette: color.palette.1 ... n.
+    /// Suggested tokens from a palette: color.palette.1 ... n.
     public static func tokens(from swatches: [Swatch], group: String = "palette") -> [Token] {
         swatches.enumerated().map { i, s in
-            Token(["color", group, String(i + 1)], .color(s.color), description: String(format: "Anteil %.0f %%", s.share * 100))
+            Token(["color", group, String(i + 1)], .color(s.color), description: String(format: String(localized: "palette.share.format"), s.share * 100))
         }
     }
 }

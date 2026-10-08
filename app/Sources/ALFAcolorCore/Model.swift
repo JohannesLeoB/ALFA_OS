@@ -1,6 +1,6 @@
 import Foundation
 
-/// Ein Rechteck in Punkten (pt). Ursprung oben links, wie in SwiftUI.
+/// A rectangle in points (pt). The origin is at the top left, as in SwiftUI.
 public struct Rect: Codable, Hashable, Sendable {
     public var x: Double, y: Double, w: Double, h: Double
     public init(x: Double, y: Double, w: Double, h: Double) { self.x = x; self.y = y; self.w = w; self.h = h }
@@ -11,12 +11,12 @@ public struct Rect: Codable, Hashable, Sendable {
     public func intersects(_ o: Rect) -> Bool { x < o.maxX && maxX > o.x && y < o.maxY && maxY > o.y }
 }
 
-/// Sprachen, die eine Code-Karte tragen kann. Neue Sprachen kommen über einen Renderer dazu.
+/// Languages that a code card can carry. New languages come in through a renderer.
 public enum CodeLanguage: String, Codable, Sendable, CaseIterable {
     case html, css, javascript, react, tailwind, swiftui, compose, flutter, java, other
 }
 
-/// Woher ein Stück kommt. Pflicht für alles Fremde: Herkunft und Lizenz bleiben am Stück.
+/// Where an item comes from. Required for everything foreign: source and license stay with the item.
 public struct Source: Codable, Hashable, Sendable {
     public var url: URL?
     public var file: String?
@@ -28,16 +28,16 @@ public struct Source: Codable, Hashable, Sendable {
     }
 }
 
-/// Der Inhalt eines Elements. Ein Element hat genau eine Art.
+/// The content of an item. An item has exactly one kind.
 public enum Content: Codable, Hashable, Sendable {
     case code(language: CodeLanguage, files: [String: String], previewWidth: Double?)
     case image(assetID: String, crop: Rect?)
     case note(text: String)
     case swatch(hex: String, name: String?)
     case link(url: URL, note: String?)
-    /// Ein Rahmen: Ansichtsfläche in Gerätegröße mit optionalem Raster.
+    /// A frame: a view area at device size with an optional grid.
     case frame(deviceID: String?, gridID: String?)
-    /// Eine Gruppe mit Titel (Zone). Ihre Kinder liegen geometrisch in ihr.
+    /// A group with a title (zone). Its children lie geometrically inside it.
     case group(title: String)
 }
 
@@ -47,7 +47,7 @@ public struct ItemID: Codable, Hashable, Sendable, CustomStringConvertible {
     public var description: String { raw }
 }
 
-/// Ein Element auf der Leinwand.
+/// An item on the canvas.
 public struct Item: Identifiable, Codable, Hashable, Sendable {
     public var id: ItemID
     public var title: String
@@ -75,7 +75,7 @@ public struct Layer: Identifiable, Codable, Hashable, Sendable {
     public init(id: String, name: String) { self.id = id; self.name = name }
 }
 
-/// Ein Themenraum (Tab). Er hat eigene Ebenen und Elemente.
+/// A topic space (tab). It has its own layers and items.
 public struct Space: Identifiable, Codable, Hashable, Sendable {
     public var id: String
     public var name: String
@@ -86,7 +86,7 @@ public struct Space: Identifiable, Codable, Hashable, Sendable {
     }
 }
 
-/// Das Dokument. Auf der Platte ein Paket: Ordner mit manifest.json, items/, assets/.
+/// The document. On disk it is a folder package. See `DocumentPackage` in the Document module.
 public struct Board: Codable, Hashable, Sendable {
     public static let formatVersion = 1
     public var format = Board.formatVersion
