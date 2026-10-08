@@ -21,7 +21,7 @@ import subprocess
 import sys
 
 # While False, R3 (language) and R4 (meta) report warnings and do not block.
-STRENG_SPRACHE_META = False
+STRENG_SPRACHE_META = True
 
 MAX_BYTES = 2 * 1024 * 1024
 MAX_LINES = 800
