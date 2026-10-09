@@ -18,21 +18,21 @@ struct CanvasItemsLayer: View {
         Signpost.interval("Canvas frame") {
             let view = controller.viewport
             let assets = controller.store.document.assets
-            let skipped = interaction.hiddenFromBase
             return ZStack(alignment: .topLeading) {
                 if let space = controller.store.activeSpace {
-                    ForEach(controller.drawnItems.filter { !skipped.contains($0.id) }) { item in
+                    // A lifted item keeps its place in the stack: it is drawn from the preview where the base item stands.
+                    let preview = interaction.previewItems
+                    let previewByID = Dictionary(preview.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
+                    let base = controller.drawnItems
+                    let baseIDs = Set(base.map(\.id))
+                    let ordered = base.map { previewByID[$0.id] ?? $0 } + preview.filter { !baseIDs.contains($0.id) }
+                    ForEach(ordered) { item in
+                        let lifted = previewByID[item.id] != nil
                         ItemView(presentation: ItemPresentation.make(for: item, in: space, assets: assets),
-                                 assets: assets, thumbnails: thumbnails, zoom: view.zoom,
-                                 onScreen: Visibility.isOnScreen(item.rect, viewport: view, canvas: controller.size))
+                                 assets: assets, thumbnails: thumbnails, zoom: view.zoom, edit: editing(item),
+                                 onScreen: lifted || Visibility.isOnScreen(item.rect, viewport: view, canvas: controller.size))
                             .offset(x: item.rect.x, y: item.rect.y)
-                            .allowsHitTesting(Self.hasControls(item))
-                    }
-                    ForEach(interaction.previewItems) { item in
-                        ItemView(presentation: ItemPresentation.make(for: item, in: space, assets: assets),
-                                 assets: assets, thumbnails: thumbnails, zoom: view.zoom, edit: editing(item))
-                            .offset(x: item.rect.x, y: item.rect.y)
-                            .allowsHitTesting(interaction.editing?.itemID == item.id)
+                            .allowsHitTesting(interaction.editing?.itemID == item.id || (!lifted && Self.hasControls(item)))
                     }
                     if let fanID = interaction.fanItem, let item = controller.store.item(fanID) {
                         SwatchFanAnchor(interaction: interaction, item: item)
