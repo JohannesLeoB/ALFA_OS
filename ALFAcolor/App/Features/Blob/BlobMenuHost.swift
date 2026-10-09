@@ -16,6 +16,8 @@ struct BlobMenuHost: View {
     @Namespace private var glass
     /// Center of the single blob while a drag moves it. nil while it rests in its place.
     @State private var dragCenter: CGPoint?
+    /// Palette that was open before the last change. It gives the direction of a palette switch.
+    @State private var previousPalette: BlobPalette?
 
     var body: some View {
         GeometryReader { proxy in
@@ -29,8 +31,16 @@ struct BlobMenuHost: View {
                                            edge: menu.edge, anchor: anchor)
             let card = BlobGeometry.card(size: metrics.card, anchor: anchor, edge: menu.edge, container: size,
                                          margin: metrics.margin, gap: metrics.gap)
+            let band = CGRect(x: anchor.minX - metrics.margin, y: anchor.maxY,
+                              width: anchor.width + 2 * metrics.margin,
+                              height: metrics.blob.height + metrics.margin)
             GlassEffectContainer(spacing: metrics.gap) {
                 ZStack(alignment: .topLeading) {
+                    if menu.open == nil && menu.pin == nil && dragCenter == nil {
+                        ProgressiveBlurEdge()
+                            .frame(width: band.width, height: band.height)
+                            .position(x: band.midX, y: band.midY)
+                    }
                     if menu.open != nil {
                         Color.clear
                             .contentShape(Rectangle())
@@ -41,13 +51,14 @@ struct BlobMenuHost: View {
                         ForEach(BlobPalette.allCases, id: \.self) { palette in
                             let frame = slots[palette.index]
                             blob(palette, id: "bar.\(palette.rawValue)") { change { $0.select(palette) } }
+                                .borderTrailPass(on: menu.open == palette, radius: .infinity)
                                 .position(x: frame.midX, y: frame.midY)
                         }
                     } else if menu.open == nil {
                         homeBlob(anchor: anchor, size: size, metrics: metrics)
                     }
                     if let open = menu.open {
-                        BlobCard(palette: open, menu: menu, store: store,
+                        BlobCard(palette: open, direction: direction(to: open), menu: menu, store: store,
                                  onSelect: { next in change { $0.select(next) } },
                                  onLayout: { change { $0.toggleLayout() } },
                                  onPin: { edge in change { $0.pin(to: edge) } },
@@ -117,10 +128,17 @@ struct BlobMenuHost: View {
             }
     }
 
+    /// Direction of a palette switch: the card slides forward when the new palette lies after the previous one.
+    private func direction(to palette: BlobPalette) -> PanelDirection {
+        guard let previousPalette else { return .still }
+        return PanelDirection(from: previousPalette.index, to: palette.index)
+    }
+
     /// Applies a change of the menu with the motion that the change runs.
     private func change(_ update: (inout BlobMenu) -> Void) {
         var next = shell.blob
         update(&next)
+        previousPalette = shell.blob.open
         withAnimation(animation(for: BlobMotion.transition(from: shell.blob, to: next))) {
             shell.blob = next
         }

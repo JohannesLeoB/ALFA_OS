@@ -7,6 +7,8 @@ import Motion
 /// In the single-blob layout the header switches between the palettes; in the row the row does that.
 struct BlobCard: View {
     let palette: BlobPalette
+    /// Which way the content slides when the palette changes.
+    let direction: PanelDirection
     let menu: BlobMenu
     var store: BoardStore
     var onSelect: (BlobPalette) -> Void
@@ -22,7 +24,10 @@ struct BlobCard: View {
         VStack(alignment: .leading, spacing: theme.space(.s2)) {
             header
             BlobPaletteContent(palette: palette, store: store)
+                .id(palette)
+                .transition(.panel(direction, distance: theme.space(.s4)))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .clipped()
             footer
         }
         .padding(theme.space(.s3))

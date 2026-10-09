@@ -28,3 +28,9 @@
 #   framer-motion 11.12.0 · MIT · Autor laut package.json: Matt Perry · Quelle: https://github.com/framer/motion/
 #   (Wird zur Laufzeit von cdn.jsdelivr.net geladen, nicht in den Quellen enthalten; die Bewegung der Bausteine läuft darüber.)
 #   Die Icons in runtime/shims.tsx sind eigene Strichzeichnungen, keine Fremdgrafik.
+
+# Fremdes Material, das in der Form übernommen ist (Brief B-214), ohne Farben und ohne Code aus der Quelle:
+#   Ablauf und Bewegung von sliding-number, border-trail, progressive-blur, transition-panel, image-comparison und spotlight
+#   (app/Sources/Motion/, ALFAcolor/App/Features/Motion/, ALFAcolor/App/Features/Blob/, ALFAcolor/App/Shell/StatusBarView.swift)
+#   motion-primitives · MIT · Copyright (c) 2024 ibelick · Quelle: https://github.com/ibelick/motion-primitives
+#   Nativ in SwiftUI nachgebaut; die Farben der Quelle sind nicht übernommen, alle Werte kommen aus dem Theme.

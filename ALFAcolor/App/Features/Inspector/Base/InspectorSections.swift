@@ -39,7 +39,9 @@ struct PositionSection: View {
             PositionField(store: store, field: .width, titleKey: "inspector.width", shared: view.width, unit: unit)
             PositionField(store: store, field: .height, titleKey: "inspector.height", shared: view.height, unit: unit)
             if let ratio = view.ratio {
-                LabeledContent("inspector.ratio", value: ratio.text)
+                LabeledContent(LocalizedStringKey("inspector.ratio")) {
+                    RollingText(text: ratio.text)
+                }
                 LabeledContent("inspector.ratio.nearest") {
                     Text(LocalizedStringKey(ratio.nearest.nameKey))
                 }

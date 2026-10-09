@@ -34,7 +34,8 @@ struct ShellView: View {
                     .overlay { if shell.blobMode { BlobMenuHost(shell: shell, store: canvas.store) } }
                     .overlay { if let lab = shell.openLabModel { LabView(model: lab, onClose: { shell.closeLab() }) } }
                 if shell.statusBarVisible {
-                    StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError)
+                    StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError,
+                                  zoomPercent: canvas.zoomPercent, selectionCount: canvas.store.selectedItems.count)
                 }
             }
             .inspector(isPresented: $shell.inspectorVisible) {
