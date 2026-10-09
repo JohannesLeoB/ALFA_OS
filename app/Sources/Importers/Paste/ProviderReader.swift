@@ -20,6 +20,11 @@ public enum ProviderReader {
            let url = await fileURL(from: provider) {
             return .file(url)
         }
+        // SVG is markup: it becomes text, not a bitmap the system cannot decode.
+        if let type = provider.registeredTypeIdentifiers.compactMap({ UTType($0) }).first(where: { $0.conforms(to: .svg) }),
+           let data = await data(from: provider, type: type), let text = String(data: data, encoding: .utf8) {
+            return .text(text)
+        }
         if let type = provider.registeredTypeIdentifiers.compactMap({ UTType($0) }).first(where: { $0.conforms(to: .image) }),
            let data = await data(from: provider, type: type) {
             return .image(data, fileExtension: type.preferredFilenameExtension ?? "png", name: provider.suggestedName)

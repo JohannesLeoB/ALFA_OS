@@ -31,7 +31,7 @@ struct ImageBody: View {
             if let loaded {
                 picture(of: loaded)
             } else if unreadable {
-                PlaceholderBody(titleKey: "item.unreadable", symbol: "exclamationmark.triangle", offersSearch: true, detail: detail, zoom: zoom)
+                PlaceholderBody(titleKey: "item.unreadable", symbol: "exclamationmark.triangle", offersSearch: false, detail: detail, zoom: zoom)
             } else if detail == .full {
                 Image(systemName: "photo")
                     .font(theme.text(.heading).font)
