@@ -28,8 +28,23 @@ enum AnthropicErrors {
             }
             return .rateLimited(retryAfter: retryAfter(in: http))
         default:
+            if isWebSearchDisabled(body) {
+                return .webSearchDisabled
+            }
             return .badRequest(message(in: body, status: status, key: key))
         }
+    }
+
+    /// The refusal of a request that asks for web search while the console has it turned off. The platform sends it
+    /// as an invalid request whose text names web search and "not enabled".
+    static func isWebSearchDisabled(_ body: Data) -> Bool {
+        guard let decoded = try? JSONDecoder().decode(WireErrorBody.self, from: body),
+              let inner = decoded.error,
+              inner.type == "invalid_request_error",
+              let text = inner.message?.lowercased() else {
+            return false
+        }
+        return text.contains("web search") && text.contains("not enabled")
     }
 
     /// The text of the error body, with the key removed and cut to the limit.
@@ -53,6 +68,7 @@ private struct WireErrorBody: Decodable {
     let error: Inner?
 
     struct Inner: Decodable {
+        let type: String?
         let message: String?
     }
 }

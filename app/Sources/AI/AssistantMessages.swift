@@ -37,6 +37,8 @@ public enum AssistantMessages {
             return AssistantNotice(textKey: "ki.notice.consoleLimit", action: .openConsole)
         case .badRequest, .toolConfiguration:
             return AssistantNotice(textKey: "ki.notice.badRequest", action: .none)
+        case .webSearchDisabled:
+            return AssistantNotice(textKey: "ki.notice.badRequest", action: .openConsole)
         case .noKey:
             return AssistantNotice(textKey: "ki.notice.noKey", action: .openSettings)
         case .invalidKey:

@@ -28,6 +28,8 @@ public enum AIError: Error, Sendable, Equatable {
     case unusableAnswer(String)
     /// A tool setting breaks a rule. The request is not sent.
     case toolConfiguration(String)
+    /// The request asks for web search, and the console has turned web search off for the organization (400).
+    case webSearchDisabled
 }
 
 extension AIError: CustomStringConvertible {
@@ -59,6 +61,8 @@ extension AIError: CustomStringConvertible {
             "The answer has no usable result: \(reason)"
         case let .toolConfiguration(reason):
             "A tool setting breaks a rule: \(reason)"
+        case .webSearchDisabled:
+            "Web search is turned off for this organization in the console."
         }
     }
 }
