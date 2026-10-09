@@ -333,9 +333,13 @@ public final class CanvasInteraction {
         snap.isOn = on
     }
 
-    func targets(excluding ids: Set<ItemID>) -> SnapTargets {
-        SnapTargets(gridStep: snap.gridStep, rects: visibleItems.filter { !ids.contains($0.id) }.map(\.rect),
-                    spacing: snap.snapsToSpacing ? spacingStops : [])
+    /// The targets of a drag or resize. `rect` is the box that the moving items cover at the start: the column
+    /// lines of frames count only when that box lies inside the frame.
+    func targets(excluding ids: Set<ItemID>, around rect: Rect?) -> SnapTargets {
+        let others = visibleItems.filter { !ids.contains($0.id) }
+        return SnapTargets(gridStep: snap.gridStep, rects: others.map(\.rect),
+                           frameLines: FrameGrid.snapLines(around: rect, in: others),
+                           spacing: snap.snapsToSpacing ? spacingStops : [])
     }
 
     /// Snaps a rectangle unless snapping is off or the Command key suspends it.

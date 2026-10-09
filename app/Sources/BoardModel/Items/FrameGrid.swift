@@ -20,6 +20,18 @@ public enum FrameGrid {
         return [.setContent(item.id, .frame(deviceID: deviceID, gridID: gridID, scale: scale, grid: grid))]
     }
 
+    /// The column and baseline lines of the frames that hold the rectangle completely. Frames without a grid,
+    /// and frames that do not hold it, give no lines. `items` are the items that can be targets.
+    public static func snapLines(around rect: Rect?, in items: [Item]) -> [SnapGuide] {
+        guard let rect, rect.isFinite else { return [] }
+        return items.flatMap { item -> [SnapGuide] in
+            guard case .frame(_, _, _, let grid?) = item.content, isValid(grid, in: item.rect) else { return [] }
+            let frame = item.rect
+            let holds = frame.x <= rect.x && rect.maxX <= frame.maxX && frame.y <= rect.y && rect.maxY <= frame.maxY
+            return holds ? SnapTargets.frameLines(in: frame, grid: grid) : []
+        }
+    }
+
     /// Removes the grid of a frame. Empty when the item is no frame or has no grid.
     public static func remove(from item: Item) -> [Command] {
         guard case .frame(let deviceID, let gridID, let scale, let current) = item.content, current != nil else { return [] }

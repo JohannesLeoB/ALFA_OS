@@ -17,7 +17,7 @@ extension CanvasInteraction {
         let copies = modifiers.contains(.option)
         let moving = Set(items.map(\.id))
         drag = Drag(ids: ids, items: items, duplicates: copies ? items.map(copy(of:)) : [], bounds: bounds, startBoard: start,
-                    targets: targets(excluding: copies ? [] : moving))
+                    targets: targets(excluding: copies ? [] : moving, around: bounds))
         lifted = copies ? [] : moving
         liftedItems = copies ? drag!.duplicates : items
         phase = .moving
@@ -77,7 +77,7 @@ extension CanvasInteraction {
         let items = editableSelection.filter { $0.rect.isFinite }
         guard let box = ResizeMath.bounds(of: items.map(\.rect)) else { return false }
         scale = Scale(handle: handle, box: box, items: items, startBoard: point,
-                      targets: targets(excluding: Set(items.map(\.id))), result: box)
+                      targets: targets(excluding: Set(items.map(\.id)), around: box), result: box)
         lifted = Set(items.map(\.id))
         liftedItems = items
         resizeBox = box
