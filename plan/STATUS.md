@@ -22,6 +22,6 @@ Quelle der Angaben: Briefköpfe in `plan/briefe/`, `git log` bis 2026-10-09 23:4
 ## Offen bei Johannes
 - D-007 Phase 1 liefern lassen und als ZIP zurückgeben.
 - Cloud-Paket 2 (`ausgang/cloud-attrappen_2026-10-10.zip`) starten, mit den drei Korpus-ZIPs.
-- Sollbreiten Seitenleiste 200/240/320 und Inspektor 260/300/380 bestätigen (B-821).
+- Seitenleiste und Inspektor: gleiche Zustände (ausgeblendet, nur Symbole, schmal, normal, breit), Arbeitswerte 240/300/380; Design (D-008) darf verfeinern.
 - Gamut-Auslegung (Anzeige P3), Offline-Bündelgröße (Babel 2,3 MB, Tailwind 282 KB), GSAP/p5-Lizenzfrage, Cloud-Paket 2 „Attrappen und Korpus-Fabrik“.
 - Abnahme am Bild für alles seit 0.2.2.
