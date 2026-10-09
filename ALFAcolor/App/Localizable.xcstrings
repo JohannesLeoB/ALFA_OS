@@ -7768,17 +7768,6 @@
         }
       }
     },
-    "settings.claude.monthlyLimitUSD" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Monatsgrenze in US-Dollar"
-          }
-        }
-      }
-    },
     "settings.doc.defaultFolder" : {
       "extractionState" : "manual",
       "localizations" : {
