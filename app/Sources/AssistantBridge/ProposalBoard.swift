@@ -51,6 +51,10 @@ public enum ProposalBoard {
                 return try insert(item, size: (480, 320), on: store)
             case let .codeVersion(item, language, files):
                 return try addCodeVersion(item, language: language, files: files, on: store)
+            case let .delete(items, scope):
+                return try delete(items, scope: scope, on: store)
+            case let .move(items, dx, dy):
+                return try move(items, dx: dx, dy: dy, on: store)
             case let .swatches(swatches):
                 return try addSwatches(swatches, on: store)
             case let .tokenNames(names):
@@ -96,6 +100,39 @@ public enum ProposalBoard {
             }
         }
         return changed ? .applied : .failed("nothing changed")
+    }
+
+    /// Removes the items as one board change. The scope decides where to look: the active room, or every room.
+    /// An item that is not found in the scope refuses the whole change, and nothing is removed.
+    private static func delete(_ items: [String], scope: ChangeScope, on store: BoardStore) throws -> ApplyOutcome {
+        let ids = items.map { ItemID($0) }
+        let spaces = try rooms(holding: ids, scope: scope, on: store)
+        let changed = try store.changeBoard(nameKey: "undo.delete") { board in
+            for spaceID in spaces {
+                guard let s = board.spaces.firstIndex(where: { $0.id == spaceID }) else { continue }
+                let present = Set(ids.filter { id in board.spaces[s].items.contains { $0.id == id } })
+                _ = try Command.delete(present).apply(to: &board, spaceID: spaceID)
+            }
+        }
+        return changed ? .applied : .failed("nothing changed")
+    }
+
+    /// Moves the items of the active room by a distance. A move has no scope of its own: it reaches the active room only.
+    private static func move(_ items: [String], dx: Double, dy: Double, on store: BoardStore) throws -> ApplyOutcome {
+        let ids = items.map { ItemID($0) }
+        _ = try rooms(holding: ids, scope: .room, on: store)
+        return try store.perform(.move(Set(ids), dx: dx, dy: dy)) ? .applied : .failed("nothing changed")
+    }
+
+    /// The rooms that the scope reaches, after checking that every item is in them.
+    /// An item that exists only in another room is refused as not in the current room; an item that exists nowhere is unknown.
+    private static func rooms(holding ids: [ItemID], scope: ChangeScope, on store: BoardStore) throws -> [String] {
+        let reached = scope == .room ? (store.activeSpace.map { [$0] } ?? []) : store.board.spaces
+        for id in ids where !reached.contains(where: { space in space.items.contains { $0.id == id } }) {
+            let elsewhere = store.board.spaces.contains { space in space.items.contains { $0.id == id } }
+            throw elsewhere ? BridgeError.notInRoom : BridgeError.unknownItem
+        }
+        return reached.map(\.id)
     }
 
     /// Adds the colour fields as one token change. An unnamed field gets the lowest free name "Color n".
@@ -163,10 +200,14 @@ public enum ProposalBoard {
 /// A refusal of the bridge itself, before any command runs.
 enum BridgeError: Error, Equatable {
     case itemLocked
+    case notInRoom
+    case unknownItem
 
     var reason: String {
         switch self {
         case .itemLocked: "the item is locked"
+        case .notInRoom: "the item is not in the current room"
+        case .unknownItem: "the item does not exist"
         }
     }
 }
