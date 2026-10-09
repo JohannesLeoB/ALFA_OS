@@ -30,12 +30,13 @@ struct ShellView: View {
             VStack(spacing: 0) {
                 CanvasSurface(controller: canvas, interaction: interaction, importer: importer,
                               onTogglePalettes: { shell.togglePalettes() })
+                    .overlay { ContextBarHost(canvas: canvas) }
                 if shell.statusBarVisible {
                     StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError)
                 }
             }
             .inspector(isPresented: $shell.inspectorVisible) {
-                InspectorView()
+                InspectorView(canvas: canvas, interaction: interaction)
             }
         }
         .toolbar { ShellToolbar(shell: shell) }
