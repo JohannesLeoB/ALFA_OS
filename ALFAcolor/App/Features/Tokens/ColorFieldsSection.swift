@@ -136,7 +136,7 @@ struct ColorFieldsSection: View {
         let new = renameText
         renaming = nil
         guard new.trimmingCharacters(in: .whitespacesAndNewlines) != old else { return }
-        if (try? store.changeTokenSets(nameKey: "undo.color.rename", { try ColorFields.rename(old, to: new, in: &$0) })) == true {
+        if (try? store.renameColorField(old, to: new)) == true {
             selected = new.trimmingCharacters(in: .whitespacesAndNewlines)
         }
     }
