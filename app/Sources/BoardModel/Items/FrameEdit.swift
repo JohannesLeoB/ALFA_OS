@@ -27,24 +27,24 @@ public enum FrameEdit {
     /// Changes the device of a frame. The frame takes the size of the device in its current orientation.
     /// The items inside keep their place on the board. Empty when nothing changes.
     public static func setDevice(_ item: Item, to device: Device) -> [Command] {
-        guard case .frame(let current, let grid, let scale) = item.content else { return [] }
+        guard case .frame(let current, let gridID, let scale, let grid) = item.content else { return [] }
         let landscape = item.rect.w >= item.rect.h
         let target = (device.width >= device.height) == landscape ? device : device.rotated
         guard current != target.id else { return [] }
         return [
             .resize([item.id: Rect(x: item.rect.x, y: item.rect.y, w: target.width, h: target.height)]),
-            .setContent(item.id, .frame(deviceID: target.id, gridID: grid, scale: scale)),
+            .setContent(item.id, .frame(deviceID: target.id, gridID: gridID, scale: scale, grid: grid)),
         ]
     }
 
     /// Turns a frame by 90 degrees: width and height swap, the top left corner stays. The items inside keep
     /// their place relative to the corner. Empty for an unknown item.
     public static func rotate(_ item: Item) -> [Command] {
-        guard case .frame(let deviceID, let grid, let scale) = item.content else { return [] }
+        guard case .frame(let deviceID, let gridID, let scale, let grid) = item.content else { return [] }
         let turned = deviceID.map { Device.resolve($0)?.rotated.id ?? $0 }
         return [
             .resize([item.id: Rect(x: item.rect.x, y: item.rect.y, w: item.rect.h, h: item.rect.w)]),
-            .setContent(item.id, .frame(deviceID: turned, gridID: grid, scale: scale)),
+            .setContent(item.id, .frame(deviceID: turned, gridID: gridID, scale: scale, grid: grid)),
         ]
     }
 
@@ -57,9 +57,9 @@ public enum FrameEdit {
 
     /// Sets the pixel scale. The size in points does not change. Empty when the scale is already set.
     public static func setScale(_ item: Item, to scale: Double) -> [Command] {
-        guard case .frame(let deviceID, let grid, let current) = item.content,
+        guard case .frame(let deviceID, let gridID, let current, let grid) = item.content,
               FrameScale.effective(deviceID: deviceID, scale: current) != scale else { return [] }
-        return [.setContent(item.id, .frame(deviceID: deviceID, gridID: grid, scale: scale))]
+        return [.setContent(item.id, .frame(deviceID: deviceID, gridID: gridID, scale: scale, grid: grid))]
     }
 }
 

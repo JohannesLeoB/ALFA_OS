@@ -55,6 +55,23 @@ public struct ShapeStyle: Codable, Hashable, Sendable {
     }
 }
 
+/// Column grid of a frame, as in InDesign: columns, gutter, margins and a baseline grid.
+/// It lives in the core because a frame stores it. The math is in `Geometry`.
+public struct ColumnGrid: Codable, Hashable, Sendable {
+    public var columns: Int
+    public var gutter: Double
+    public var marginLeft: Double, marginRight: Double, marginTop: Double, marginBottom: Double
+    /// Distance between baselines. 0 turns the baseline grid off.
+    public var baseline: Double
+    /// Distance of the first baseline below the top margin.
+    public var baselineStart: Double
+    public init(columns: Int, gutter: Double, margin: Double, baseline: Double = 0, baselineStart: Double = 0) {
+        self.columns = max(1, columns); self.gutter = gutter
+        marginLeft = margin; marginRight = margin; marginTop = margin; marginBottom = margin
+        self.baseline = baseline; self.baselineStart = baselineStart
+    }
+}
+
 /// The content of an item. An item has exactly one kind.
 public enum Content: Codable, Hashable, Sendable {
     case code(language: CodeLanguage, files: [String: String], previewWidth: Double?)
@@ -65,7 +82,8 @@ public enum Content: Codable, Hashable, Sendable {
     case link(url: URL, note: String?)
     /// A frame: a view area at device size with an optional grid. `deviceID` may end in `-landscape` or `-portrait`.
     /// `scale` is the pixels per point of the frame (1 to 3). nil uses the first scale of the device.
-    case frame(deviceID: String?, gridID: String?, scale: Double? = nil)
+    /// `grid` is the column grid of the frame, nil for none. `gridID` names a grid template.
+    case frame(deviceID: String?, gridID: String?, scale: Double? = nil, grid: ColumnGrid? = nil)
     /// A group with a title (zone). Its children lie geometrically inside it.
     case group(title: String)
     /// A drawn shape: rectangle, capsule, ellipse or line.

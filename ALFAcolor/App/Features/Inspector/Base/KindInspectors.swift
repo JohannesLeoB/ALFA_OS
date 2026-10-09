@@ -47,7 +47,7 @@ struct FrameSection: View {
 
     var body: some View {
         let displays = items.compactMap { item -> FrameDisplay? in
-            guard case .frame(let deviceID, _, let scale) = item.content else { return nil }
+            guard case .frame(let deviceID, _, let scale, _) = item.content else { return nil }
             return FrameDisplay.make(deviceID: deviceID, scale: scale, rect: item.rect)
         }
         let devices = SharedValue(displays.compactMap(\.presetID))

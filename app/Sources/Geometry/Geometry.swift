@@ -48,16 +48,8 @@ public struct Device: Codable, Hashable, Sendable, Identifiable {
 
 }
 
-/// Column grid as in InDesign: columns, gutter, margins. Plus a baseline grid.
-public struct ColumnGrid: Codable, Hashable, Sendable {
-    public var columns: Int
-    public var gutter: Double
-    public var marginLeft: Double, marginRight: Double, marginTop: Double, marginBottom: Double
-    public var baseline: Double        // 0 = off
-    public init(columns: Int, gutter: Double, margin: Double, baseline: Double = 0) {
-        self.columns = max(1, columns); self.gutter = gutter
-        marginLeft = margin; marginRight = margin; marginTop = margin; marginBottom = margin; self.baseline = baseline
-    }
+/// The geometry of a column grid. The type itself is in the core, see `ColumnGrid`.
+public extension ColumnGrid {
     /// The columns as rectangles inside a frame.
     public func columnRects(in frame: Rect) -> [Rect] {
         let inner = frame.w - marginLeft - marginRight
@@ -71,10 +63,10 @@ public struct ColumnGrid: Codable, Hashable, Sendable {
         let r = columnRects(in: frame); let k = min(max(n, 1), r.count)
         return r[k - 1].maxX - r[0].x
     }
-    /// Y positions of the baselines in the frame.
+    /// Y positions of the baselines in the frame, from the start of the baseline grid to the bottom margin.
     public func baselines(in frame: Rect) -> [Double] {
         guard baseline > 0 else { return [] }
-        return Array(stride(from: frame.y + marginTop, through: frame.maxY - marginBottom, by: baseline))
+        return Array(stride(from: frame.y + marginTop + baselineStart, through: frame.maxY - marginBottom, by: baseline))
     }
 }
 

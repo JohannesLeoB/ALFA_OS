@@ -4501,6 +4501,28 @@
         }
       }
     },
+    "undo.frame.grid" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raster setzen"
+          }
+        }
+      }
+    },
+    "undo.frame.gridRemove" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raster entfernen"
+          }
+        }
+      }
+    },
     "undo.frame.rotate" : {
       "extractionState" : "manual",
       "localizations" : {

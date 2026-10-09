@@ -34,7 +34,7 @@ extension Command {
     public static var allNameKeys: [String] {
         ["undo.insert", "undo.delete", "undo.move", "undo.resize", "undo.group", "undo.ungroup",
          "undo.lock", "undo.unlock", "undo.hide", "undo.show", "undo.layer", "undo.batch", "undo.setContent", "undo.setFill", "undo.duplicate",
-         "undo.frame.device", "undo.frame.rotate", "undo.frame.scale"]
+         "undo.frame.device", "undo.frame.grid", "undo.frame.gridRemove", "undo.frame.rotate", "undo.frame.scale"]
             + StackMove.allCases.map { "undo.reorder.\($0.rawValue)" }
             + Arrangement.allCases.map { "undo.arrange.\($0.rawValue)" }
     }
