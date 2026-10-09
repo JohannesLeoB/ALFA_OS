@@ -7,7 +7,7 @@ let package = Package(
     name: "ALFAcolor",
     platforms: [.macOS(.v15)],
     products: [
-        .library(name: "ALFAcolorKit", targets: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab", "AppTheme", "Document", "BoardModel", "Thumbnails", "Importers", "Renderers", "Motion", "Exporters", "Performance", "Library"])
+        .library(name: "ALFAcolorKit", targets: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab", "AppTheme", "Document", "BoardModel", "Thumbnails", "Importers", "Renderers", "Motion", "Exporters", "Performance", "Library", "AI"])
     ],
     targets: [
         .target(name: "ALFAcolorCore"),
@@ -23,6 +23,7 @@ let package = Package(
         .target(name: "Renderers", dependencies: ["ALFAcolorCore"]),
         .target(name: "Exporters", dependencies: ["ALFAcolorCore", "Document", "BoardModel", "Tokens", "Geometry"]),
         .target(name: "Library", dependencies: ["ALFAcolorCore", "Document", "Geometry", "ColorLab", "Tokens"]),
+        .target(name: "AI", dependencies: ["ALFAcolorCore", "Tokens"]),
         .target(name: "Performance", dependencies: ["ALFAcolorCore", "Document", "BoardModel", "Geometry"]),
         .testTarget(name: "ALFAcolorCoreTests", dependencies: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab"]),
         .testTarget(name: "AppThemeTests", dependencies: ["AppTheme", "Tokens"]),
@@ -34,6 +35,7 @@ let package = Package(
         .testTarget(name: "ExportersTests", dependencies: ["Exporters", "Importers", "ALFAcolorCore", "Document", "BoardModel", "Tokens", "Geometry"]),
         .testTarget(name: "PerformanceTests", dependencies: ["Performance", "ALFAcolorCore", "Document", "BoardModel", "Geometry"]),
         .testTarget(name: "LibraryTests", dependencies: ["Library", "ALFAcolorCore", "Document", "Geometry", "ColorLab", "Tokens"]),
+        .testTarget(name: "AITests", dependencies: ["AI", "ALFAcolorCore", "Tokens"]),
         .testTarget(name: "MotionTests", dependencies: ["Motion"])
     ]
 )
