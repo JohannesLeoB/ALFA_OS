@@ -119,16 +119,18 @@ struct ManifestFile: Codable {
     var spaces: [String]
     /// Order of the token sets.
     var tokenSets: [String]
+    /// Library folders. Added in a later version of the format; a file without them has none.
+    var folders: [Folder] = []
     var extras: [String: JSONValue] = [:]
 
-    enum K: String, CodingKey, CaseIterable { case formatVersion, lastWrittenByAppVersion, documentID, createdAt, title, spaces, tokenSets }
+    enum K: String, CodingKey, CaseIterable { case formatVersion, lastWrittenByAppVersion, documentID, createdAt, title, spaces, tokenSets, folders }
     static let known = Set(K.allCases.map(\.rawValue))
 
     init(formatVersion: Int, lastWrittenByAppVersion: String?, documentID: UUID, createdAt: Date, title: String,
-         spaces: [String], tokenSets: [String], extras: [String: JSONValue]) {
+         spaces: [String], tokenSets: [String], folders: [Folder] = [], extras: [String: JSONValue]) {
         self.formatVersion = formatVersion; self.lastWrittenByAppVersion = lastWrittenByAppVersion
         self.documentID = documentID; self.createdAt = createdAt; self.title = title
-        self.spaces = spaces; self.tokenSets = tokenSets; self.extras = extras
+        self.spaces = spaces; self.tokenSets = tokenSets; self.folders = folders; self.extras = extras
     }
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: K.self)
@@ -139,6 +141,7 @@ struct ManifestFile: Codable {
         title = try c.decode(String.self, forKey: .title)
         spaces = try c.decodeIfPresent([String].self, forKey: .spaces) ?? []
         tokenSets = try c.decodeIfPresent([String].self, forKey: .tokenSets) ?? []
+        folders = try c.decodeIfPresent([Folder].self, forKey: .folders) ?? []
         extras = try Extras.decode(from: decoder, known: Self.known)
     }
     func encode(to encoder: Encoder) throws {
@@ -150,6 +153,7 @@ struct ManifestFile: Codable {
         try c.encode(title, forKey: .title)
         try c.encode(spaces, forKey: .spaces)
         try c.encode(tokenSets, forKey: .tokenSets)
+        if !folders.isEmpty { try c.encode(folders, forKey: .folders) }
         try Extras.encode(extras, known: Self.known, to: encoder)
     }
 }

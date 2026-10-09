@@ -157,6 +157,8 @@ public struct Board: Codable, Hashable, Sendable {
     public var createdAt: Date
     public var title: String
     public var spaces: [Space]
+    /// Library folders, in the order of the list. They span all spaces.
+    public var folders: [Folder] = []
     public init(title: String, spaces: [Space] = [Space(id: "start", name: "Start")], documentID: UUID = UUID(), createdAt: Date = Board.currentTime()) {
         self.title = title; self.spaces = spaces; self.documentID = documentID; self.createdAt = createdAt
     }

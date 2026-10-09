@@ -188,7 +188,7 @@ public enum DocumentPackage {
         if let active = doc.activeSpaceID { manifestExtras[ActiveSpace.key] = .string(active) }
         let manifest = ManifestFile(formatVersion: version, lastWrittenByAppVersion: appVersion, documentID: doc.board.documentID,
                                     createdAt: doc.board.createdAt, title: doc.board.title, spaces: spaces.map(\.id),
-                                    tokenSets: doc.tokenSets.map(\.name), extras: manifestExtras)
+                                    tokenSets: doc.tokenSets.map(\.name), folders: doc.board.folders, extras: manifestExtras)
         try put("manifest.json", try encode(manifest, path: "manifest.json"))
 
         for (path, data) in doc.carriedFiles {
@@ -416,6 +416,7 @@ public enum DocumentPackage {
         var doc = ALFAcolorDocument(board: Board(title: manifest.title, spaces: spaces, documentID: manifest.documentID, createdAt: manifest.createdAt),
                                     assets: assets, tokenSets: orderedSets)
         doc.board.format = migration.currentVersion
+        doc.board.folders = manifest.folders
         doc.preserved = preserved
         doc.spaceViews = spaceViews
         doc.activeSpaceID = manifest.extras[ActiveSpace.key]?.stringValue
