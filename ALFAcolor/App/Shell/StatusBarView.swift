@@ -17,6 +17,8 @@ struct StatusBarView: View {
     let selectionCount: Int
     /// The grid step in points. Zero means the grid is off.
     let gridStep: Double
+    /// The unit that the inspector shows. Its symbol is read from the catalog.
+    var unit: LengthUnit = .point
     /// A short notice: a catalog key, for example after a lab action, or a warning text from reading. nil shows nothing.
     var notice: String?
 
@@ -26,7 +28,7 @@ struct StatusBarView: View {
             HStack(spacing: theme.space(.s5)) {
                 field("status.zoom") { RollingText(text: "\(zoomPercent) %", style: .caption) }
                 field("status.grid", gridText)
-                field("status.unit", LocalizedStringKey(LengthUnit.point.symbolKey))
+                field("status.unit", LocalizedStringKey(unit.symbolKey))
                 field("status.selection") {
                     if selectionCount > 0 {
                         RollingText(text: "\(selectionCount)", style: .caption)
