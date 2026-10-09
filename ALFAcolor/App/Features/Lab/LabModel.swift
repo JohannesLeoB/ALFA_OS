@@ -216,6 +216,8 @@ final class LabModel {
             seen = LabModel.boardDraft(item, in: store) ?? saved
             seenVersions = store.document.versions.versions(of: item)
             message = .saved
+        } catch VersionError.tooLarge {
+            message = .tooLarge
         } catch {
             message = .notSaved
         }

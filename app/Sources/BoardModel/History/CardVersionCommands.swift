@@ -87,11 +87,12 @@ extension BoardStore {
     public func saveLabCode(of item: ItemID, language: CodeLanguage, files: [String: String], width: Double?, at date: Date = Date()) throws -> Bool {
         let card = try codeCard(item)
         try ensureUnlocked(card)
-        let before = try version(of: card, reason: .lab, at: date)
-        let after = CardVersion(date: date, reason: .lab, language: language, files: files)
+        // Only a code change keeps the code before. A too large code before blocks a code change, not a width change.
+        let codeChanges = card.language != language || card.files != files
+        let before = codeChanges ? try version(of: card, reason: .lab, at: date) : nil
         return try changeVersions(nameKey: "undo.setContent") { board, versions in
             try setCode(of: card, to: language, files: files, width: width, in: &board)
-            if !before.hasSameCode(as: after) {
+            if let before {
                 versions.append(before, to: item)
             }
         }
