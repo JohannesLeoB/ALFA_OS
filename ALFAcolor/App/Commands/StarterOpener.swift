@@ -6,9 +6,13 @@ import Importers
 /// The copy goes into the folder "starter" in the Application Support folder of the app.
 @MainActor
 enum StarterOpener {
-    static func open() {
+    /// The name of the example document in the bundle, without the extension.
+    static let exampleName = "Example"
+
+    /// Opens a copy of the bundled document `bundleName`. The starter document is the default.
+    static func open(_ bundleName: String = StarterDuplicate.bundleName) {
         do {
-            guard let source = Bundle.main.url(forResource: StarterDuplicate.bundleName, withExtension: DocumentPackage.fileExtension) else {
+            guard let source = Bundle.main.url(forResource: bundleName, withExtension: DocumentPackage.fileExtension) else {
                 let alert = NSAlert()
                 alert.alertStyle = .warning
                 alert.messageText = String(localized: "starter.missing")

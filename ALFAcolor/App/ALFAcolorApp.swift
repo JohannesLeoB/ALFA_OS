@@ -34,6 +34,15 @@ struct ALFAcolorApp: App {
             SetupCommands()
         }
 
+        // Start window: shown when the app starts without a document; it closes when a document window comes forward.
+        Window("start.window.title", id: StartWindowView.windowID) {
+            StartWindowView()
+                .environment(\.theme, theme)
+        }
+        .defaultLaunchBehavior(.presented)
+        .windowResizability(.contentSize)
+        .restorationBehavior(.disabled)
+
         // Shortcut table: overview of all shortcuts, opened through Help > Shortcut Table.
         Window("window.shortcutTable", id: ShortcutTableView.windowID) {
             ShortcutTableView()
