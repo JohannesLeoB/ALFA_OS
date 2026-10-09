@@ -30,6 +30,9 @@ public final class BoardStore {
     @ObservationIgnored public var onViewChange: (() -> Void)?
     /// Called before the active space changes, while the space being left is still active.
     @ObservationIgnored public var onWillSwitchSpace: (() -> Void)?
+    /// A value typed into an inspector field that is not applied yet. It is applied before the active space changes,
+    /// so that it reaches the items of the space being left.
+    @ObservationIgnored public var pendingDraft: (() -> Void)?
 
     @ObservationIgnored public private(set) var undoManager: UndoManager
 
@@ -119,6 +122,9 @@ public final class BoardStore {
     private func switchSpace(to id: String) throws -> Bool {
         guard document.board.spaces.contains(where: { $0.id == id }) else { throw CommandError.unknownSpace(id) }
         guard id != activeSpaceID else { return false }
+        let draft = pendingDraft
+        pendingDraft = nil
+        draft?()
         onWillSwitchSpace?()
         activeSpaceID = id
         selection = []
@@ -133,6 +139,8 @@ public final class BoardStore {
     /// Returns false when nothing changed.
     @discardableResult
     public func changeBoard(nameKey: String, _ change: (inout Board) throws -> Void) throws -> Bool {
+        // Ends a text edit or a drag first: its text must land in the room it was typed in, before a room can vanish.
+        onWillSwitchSpace?()
         var trial = document.board
         try change(&trial)
         guard trial != document.board else { return false }

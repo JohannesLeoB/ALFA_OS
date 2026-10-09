@@ -91,6 +91,8 @@ struct PositionField: View {
         .onChange(of: unit) { sync() }
         .onChange(of: draft) { invalid = false }
         .onChange(of: focused) { _, isFocused in
+            // While the field has focus, a room change applies the draft first (see BoardStore.pendingDraft).
+            store.pendingDraft = isFocused ? { commit() } : nil
             if !isFocused { commit() }
         }
     }
