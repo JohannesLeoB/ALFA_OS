@@ -52,6 +52,40 @@ enum Neighbours {
         }
     }
 
+    /// The gaps from a rectangle to the edges of the frame that holds it: left, right, up and down, where the gap is above zero.
+    /// Each gap runs through the middle of the rectangle. `stops` must be sorted by value.
+    static func frameGaps(of rect: Rect, in frame: Rect, stops: [SpacingStop]) -> [SnapDistance] {
+        guard rect.isFinite, frame.isFinite, encloses(frame, rect) else { return [] }
+        let midX = rect.x + rect.w / 2, midY = rect.y + rect.h / 2
+        var found: [SnapDistance] = []
+        func add(_ measure: Measure) {
+            found.append(SnapDistance(measure: measure, nearest: nearestStop(to: measure.value, in: stops)))
+        }
+        if rect.x > frame.x {
+            add(Measure(fromX: frame.x, fromY: midY, toX: rect.x, toY: midY, value: rect.x - frame.x))
+        }
+        if rect.maxX < frame.maxX {
+            add(Measure(fromX: rect.maxX, fromY: midY, toX: frame.maxX, toY: midY, value: frame.maxX - rect.maxX))
+        }
+        if rect.y > frame.y {
+            add(Measure(fromX: midX, fromY: frame.y, toX: midX, toY: rect.y, value: rect.y - frame.y))
+        }
+        if rect.maxY < frame.maxY {
+            add(Measure(fromX: midX, fromY: rect.maxY, toX: midX, toY: frame.maxY, value: frame.maxY - rect.maxY))
+        }
+        return found
+    }
+
+    /// The smallest of the frames that holds the rectangle completely. nil when no frame holds it.
+    static func frame(holding rect: Rect, among frames: [Rect]) -> Rect? {
+        frames.filter { $0.isFinite && encloses($0, rect) }.min { $0.w * $0.h < $1.w * $1.h }
+    }
+
+    /// True when `outer` contains all of `inner`, edges included.
+    private static func encloses(_ outer: Rect, _ inner: Rect) -> Bool {
+        outer.x <= inner.x && inner.maxX <= outer.maxX && outer.y <= inner.y && inner.maxY <= outer.maxY
+    }
+
     private static func keepSmaller(_ slot: inout Gap?, _ value: Double, _ other: Rect) {
         if let current = slot, current.value <= value { return }
         slot = Gap(value: value, other: other)

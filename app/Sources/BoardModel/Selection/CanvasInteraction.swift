@@ -366,7 +366,15 @@ public final class CanvasInteraction {
             return
         }
         let stops = spacingStops.filter { $0.value.isFinite && $0.value >= 0 }.sorted { $0.value < $1.value }
-        let list = Neighbours.distances(of: rect, among: others, stops: stops)
+        var list = Neighbours.distances(of: rect, among: others, stops: stops)
+        // A box inside a frame also shows its gaps to the frame edges. The selected frames do not count.
+        let frames = visibleItems.compactMap { item -> Rect? in
+            guard case .frame = item.content, !store.selection.contains(item.id) else { return nil }
+            return item.rect
+        }
+        if let frame = Neighbours.frame(holding: rect, among: frames) {
+            list += Neighbours.frameGaps(of: rect, in: frame, stops: stops)
+        }
         controller.measures = list.map(\.measure)
         distanceLabels = list.map(DistanceLabel.init)
     }
