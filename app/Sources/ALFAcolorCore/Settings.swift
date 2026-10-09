@@ -57,7 +57,7 @@ public enum Setting: String, CaseIterable, Sendable {
         case (.unitDefault, .text(let text)):
             return UnitChoice(rawValue: text) != nil
         case (.gridStep, .number(let step)):
-            return step.isFinite && step >= 0 && step <= 200
+            return step.isFinite && step >= 1 && step <= 200
         case (.keysPreset, .text(let text)):
             return KeysPreset(rawValue: text) != nil
         case (.playerMaxLive, .number(let count)):

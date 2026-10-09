@@ -17,7 +17,10 @@ final class ShellState {
     /// State of the blob menu. Only the views of the menu change it.
     var blob = BlobMenu()
     /// Unit of the position fields: the inspector and the blob menu share it. It stays when either one is hidden.
-    var lengthUnit: LengthUnit = .point
+    /// The start value comes from the settings; a change is saved there.
+    var lengthUnit: LengthUnit = AppSettings.shared.lengthUnit {
+        didSet { if oldValue != lengthUnit { AppSettings.shared.save(lengthUnit: lengthUnit) } }
+    }
     /// The rulers along the top and left edge of the canvas.
     var rulersVisible = true
     /// The guides of the frames: shown or hidden, and locked against pulling and editing with the pointer.

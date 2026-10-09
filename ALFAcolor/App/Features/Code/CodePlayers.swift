@@ -2,13 +2,14 @@ import Dispatch
 import Foundation
 import Renderers
 
-/// The live pages of the app, in all windows. One page runs at a time: a page that starts stops the one before it.
+/// The live pages of the app, in all windows. At most `player.maxLive` pages run at once: a page that starts beyond the limit stops the oldest one.
 /// Under memory pressure every live page stops. One instance for the app keeps that limit true across windows.
 @MainActor
 final class CodePlayers {
     static let shared = CodePlayers()
 
-    private let pool = PlayerPool<UUID>(limit: 1)
+    /// The number of live pages comes from the settings at the start of the app.
+    private let pool = PlayerPool<UUID>(limit: AppSettings.shared.playerLimit)
     private let pressure: DispatchSourceMemoryPressure
 
     private init() {

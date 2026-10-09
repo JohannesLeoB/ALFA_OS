@@ -34,9 +34,12 @@ public final class CanvasInteraction {
     /// The size of a handle on the screen, in points.
     public var handleSize = 0.0
     /// The snapping of drags and resizes. `isOn` turns snapping off, `gridStep` turns the grid on (0 is off).
-    public var snap = SnapSettings()
-    /// The step of the grid, in board points. It matches the dots the canvas draws.
-    public static let gridStep = 8.0
+    /// Every change is reported to `onSnapChange`, so the app can keep the choice.
+    public var snap = SnapSettings() { didSet { onSnapChange?(snap) } }
+    /// Called after every change of `snap`.
+    public var onSnapChange: ((SnapSettings) -> Void)?
+    /// The step of the grid, in board points, while the grid is shown. It matches the dots the canvas draws.
+    public var gridStep = 8.0
     /// The spacing tokens. They name the gaps that the Option key shows. Snapping to them is `SnapSettings.snapsToSpacing`.
     public var spacingStops: [SpacingStop] = [] { didSet { refreshDistances() } }
     /// True while the Option key is held. The gaps to the neighbours show then.
@@ -379,11 +382,13 @@ public final class CanvasInteraction {
 
     /// Shows the grid and makes drags snap to it, or hides the grid and stops the grid snapping.
     public func setGridShown(_ shown: Bool) {
-        snap.gridStep = shown ? Self.gridStep : 0
+        snap.gridStep = shown ? gridStep : 0
     }
 
-    /// The dots the canvas draws: none while the grid is off.
-    public var shownGridDots: GridDots { gridShown ? controller.gridDots : .empty }
+    /// The dots the canvas draws: none while the grid is off. They use the same step as the snapping.
+    public var shownGridDots: GridDots {
+        gridShown ? GridDots.make(viewport: controller.viewport, canvas: controller.size, baseStep: gridStep) : .empty
+    }
 
     /// True when drags and resizes snap at all (to the grid, the edges and the spacing).
     public var snapsAtAll: Bool { snap.isOn }

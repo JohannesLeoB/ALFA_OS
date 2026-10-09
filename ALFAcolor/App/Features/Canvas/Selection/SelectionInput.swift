@@ -120,6 +120,13 @@ struct SelectionInput: ViewModifier {
         interaction.bandHeight = theme.space(.s6)
         interaction.handleSize = theme.space(.s2)
         interaction.reloadSpacingStops()
+        // The saved choices of the settings. The spacing switch is saved again on every change.
+        let settings = AppSettings.shared.store
+        interaction.gridStep = AppSettings.shared.gridStep
+        interaction.snap.snapsToSpacing = settings.flag(.snapToSpacingTokens)
+        interaction.onSnapChange = { snap in
+            AppSettings.shared.store.set(.flag(snap.snapsToSpacing), for: .snapToSpacingTokens)
+        }
     }
 
     private func replaceImage(of id: ItemID, from url: URL) {
