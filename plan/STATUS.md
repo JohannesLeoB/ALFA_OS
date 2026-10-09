@@ -15,7 +15,7 @@
 4. Zwei DTCG-Leser zusammenlegen (Tokens.DTCGImport und Document/TokenFile), spätestens in B-506.
 5. Große Bilder: übernommen in B-110.
 6. Umbenennen in **ALFAcolor**: übernommen in B-108a (Name, Bundle-ID, Dokumenttyp, Copyright) und B-108b (Code englisch, String-Katalog).
-10. Kanon nach dem Bauen: Vertrag aus dem Design-System ALFAcolor erzeugen (Johannes 2026-10-09: „Ja, ALFAcolor ist Kanon“), Swift-Token, Namen nach Glossar, Nähte zwischen den Ansichtsbereichen. Drei Audits vom 2026-10-09 liegen vor (Tokens, Namen, Nähte). Erst nach den Funktionen.
+10. Kanon nach dem Bauen: Vertrag aus dem Design-System ALFAcolor erzeugen (Johannes 2026-10-09: „Ja, ALFAcolor ist Kanon“), Swift-Token, Namen nach Glossar, Nähte zwischen den Ansichtsbereichen. Drei Audits vom 2026-10-09 liegen vor (Tokens, Namen, Nähte). Dazu aus dem Moodboard vom 2026-10-09: Linienraster fein 8 und grob 64 statt Punktraster; Zonen mit Vollfarbe und Haarlinie oben in Schriftfarbe; Code-Karten ruhen außerhalb des Bildausschnitts; Syntaxfarben als eigene Tokens. Erst nach den Funktionen.
 7. Palettensystem in den Seitenspalten (Nr. 30) und Status-Cluster unten links (Nr. 29): Briefe schreiben, sobald die Zeichnung aus D-001 da ist.
 8. Import, Export, Übergabe-Pakete und Umwandlungen im Dokumentformat vorsehen (Nr. 26–28).
 
