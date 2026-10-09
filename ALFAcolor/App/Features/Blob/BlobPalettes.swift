@@ -46,12 +46,13 @@ extension BlobEdge {
 struct BlobPaletteContent: View {
     let palette: BlobPalette
     var store: BoardStore
+    /// The picks are kept by the menu, so they survive a switch of the palette.
+    @Binding var unit: LengthUnit
+    @Binding var swatch: Int?
+    @Binding var token: Int?
 
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
-    @State private var unit: LengthUnit = .point
-    @State private var swatch: Int?
-    @State private var token: Int?
 
     var body: some View {
         switch palette {

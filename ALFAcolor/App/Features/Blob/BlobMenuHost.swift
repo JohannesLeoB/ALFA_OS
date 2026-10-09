@@ -18,6 +18,10 @@ struct BlobMenuHost: View {
     @State private var dragCenter: CGPoint?
     /// Palette that was open before the last change. It gives the direction of a palette switch.
     @State private var previousPalette: BlobPalette?
+    /// Picks of the palettes. They live here, not in the palette views, so they survive a switch of the palette.
+    @State private var unit: LengthUnit = .point
+    @State private var swatch: Int?
+    @State private var token: Int?
 
     var body: some View {
         GeometryReader { proxy in
@@ -59,6 +63,7 @@ struct BlobMenuHost: View {
                     }
                     if let open = menu.open {
                         BlobCard(palette: open, direction: direction(to: open), menu: menu, store: store,
+                                 unit: $unit, swatch: $swatch, token: $token,
                                  onSelect: { next in change { $0.select(next) } },
                                  onLayout: { change { $0.toggleLayout() } },
                                  onPin: { edge in change { $0.pin(to: edge) } },

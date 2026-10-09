@@ -11,6 +11,9 @@ struct BlobCard: View {
     let direction: PanelDirection
     let menu: BlobMenu
     var store: BoardStore
+    @Binding var unit: LengthUnit
+    @Binding var swatch: Int?
+    @Binding var token: Int?
     var onSelect: (BlobPalette) -> Void
     var onLayout: () -> Void
     var onPin: (BlobEdge) -> Void
@@ -23,8 +26,7 @@ struct BlobCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: theme.space(.s2)) {
             header
-            BlobPaletteContent(palette: palette, store: store)
-                .id(palette)
+            BlobPaletteContent(palette: palette, store: store, unit: $unit, swatch: $swatch, token: $token)
                 .transition(.panel(direction, distance: theme.space(.s4)))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 .clipped()
