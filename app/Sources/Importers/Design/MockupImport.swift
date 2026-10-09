@@ -32,6 +32,8 @@ public struct MockupDelivery: Equatable, Sendable {
         public let layer: String?
         public let content: Content
         public let source: Source
+        /// The notes of the piece, in the order of the package. Empty when the package has none.
+        public var notes: [ItemNote] = []
     }
 
     public let title: String
@@ -175,10 +177,43 @@ public enum MockupImport {
                             license: raw["license"] as? String,
                             via: via.flatMap { $0.isEmpty ? nil : $0 } ?? defaultVia,
                             importedAt: now)
+        let pieceNotes = readNotes(raw["notes"], id: id, now: now, warnings: &warnings)
         return MockupDelivery.Piece(
             id: id, title: raw["title"] as? String ?? id, frame: raw["frame"] as? String,
             x: x, y: y, width: width, height: height,
-            layer: raw["layer"] as? String, content: content, source: source)
+            layer: raw["layer"] as? String, content: content, source: source, notes: pieceNotes)
+    }
+
+    /// An ISO 8601 time, with or without fractions of a second.
+    private static func parseTime(_ text: String) -> Date? {
+        (try? Date.ISO8601FormatStyle().parse(text)) ?? (try? Date.ISO8601FormatStyle(includingFractionalSeconds: true).parse(text))
+    }
+
+    /// The notes of one entry. At most `ItemNote.maxPerItem` are read, and a text is cut to `ItemNote.maxTextLength`
+    /// characters; both cuts are named in a warning. Empty texts are left out. A note without a date gets the import time.
+    /// An author other than "assistant" is the user. An anchor is cut to the unit square by `NoteAnchor`.
+    private static func readNotes(_ raw: Any?, id: String, now: Date, warnings: inout [String]) -> [ItemNote] {
+        let entries = raw as? [[String: Any]] ?? []
+        if entries.count > ItemNote.maxPerItem {
+            warnings.append("\(id): \(entries.count - ItemNote.maxPerItem) notes are not read: over \(ItemNote.maxPerItem) notes")
+        }
+        var out: [ItemNote] = []
+        for entry in entries.prefix(ItemNote.maxPerItem) {
+            let text = entry["text"] as? String ?? ""
+            guard !text.isEmpty else { continue }
+            if text.count > ItemNote.maxTextLength {
+                warnings.append("\(id): a note text is cut to \(ItemNote.maxTextLength) characters")
+            }
+            let date = (entry["createdAt"] as? String).flatMap(parseTime) ?? now
+            var anchor: NoteAnchor?
+            if let place = entry["anchor"] as? [String: Any], let x = finite(place["x"]), let y = finite(place["y"]) {
+                anchor = NoteAnchor(x: x, y: y)
+            }
+            out.append(ItemNote(text: String(text.prefix(ItemNote.maxTextLength)),
+                                author: entry["author"] as? String == "assistant" ? .assistant : .user,
+                                createdAt: date, resolved: entry["resolved"] as? Bool ?? false, anchor: anchor))
+        }
+        return out
     }
 
     /// The bytes of other files that the code cards of a package may still carry, and how many files were left out.

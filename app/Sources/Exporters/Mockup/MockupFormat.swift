@@ -82,6 +82,7 @@ public struct MockupFormat: ExchangeFormat {
       free is true when its licence is free, false otherwise. Warnings say "license missing" (no licence) or
       "license not free" (a licence that does not allow free use). Use the code only as the licence allows.
     - tokens.json: the tokens that the items use, as DTCG, grouped by token set.
+    - Notes on an item are in its entry as notes (text, author, anchor, resolved, createdAt). Anchor is a place from 0 to 1 on the item.
 
     For the design and code agents: a frame is a screen or view of that size in points.
     Build from the contract only. Use the code files as a behavior reference, not as values.

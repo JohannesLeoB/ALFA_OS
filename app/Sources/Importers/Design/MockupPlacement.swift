@@ -30,10 +30,12 @@ public enum MockupPlacement {
         for (index, piece) in delivery.pieces.enumerated() {
             let originX = piece.frame.flatMap { frameOrigin[$0] } ?? sheetX
             let content = try boardContent(piece.content, in: store)
-            items.append(Item(title: piece.title, content: content,
-                              rect: Rect(x: originX + piece.x, y: piece.y, w: piece.width, h: piece.height),
-                              z: index + 1, layerID: layer(piece.layer, in: space, fallback: layerID),
-                              source: piece.source))
+            var item = Item(title: piece.title, content: content,
+                            rect: Rect(x: originX + piece.x, y: piece.y, w: piece.width, h: piece.height),
+                            z: index + 1, layerID: layer(piece.layer, in: space, fallback: layerID),
+                            source: piece.source)
+            item.notes = piece.notes
+            items.append(item)
         }
         return try store.perform(.batch([.insert(items)], nameKey: undoKey))
     }

@@ -22,6 +22,16 @@ struct MockupEntries {
         try tokens.json()
     }
 
+    /// The notes of an item as the manifest writes them. Dates are ISO 8601 in UTC, to the second, as `created` is.
+    static func noteEntries(_ notes: [ItemNote]) -> [MockupManifest.Entry.Note] {
+        notes.map { note in
+            MockupManifest.Entry.Note(
+                text: note.text, author: note.author.rawValue, createdAt: note.createdAt.formatted(.iso8601),
+                resolved: note.resolved,
+                anchor: note.anchor.map { MockupManifest.Entry.Note.Anchor(x: $0.x, y: $0.y) })
+        }
+    }
+
     mutating func add(_ placed: MockupPlan.Placed) {
         let item = placed.item
         let box = plan.position(of: placed)
@@ -29,6 +39,7 @@ struct MockupEntries {
             id: item.id.raw, type: "", title: item.title, frame: placed.frame?.id.raw,
             x: box.x, y: box.y, width: box.w, height: box.h, z: item.z)
         entry.layer = item.layerID
+        if !item.notes.isEmpty { entry.notes = Self.noteEntries(item.notes) }
 
         switch item.content {
         case .code(let language, let sources, let previewWidth):

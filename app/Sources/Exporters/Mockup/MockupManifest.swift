@@ -43,10 +43,26 @@ struct MockupManifest: Codable, Equatable {
         /// True when the licence is free. Set for a code card with a source; false means a warning is in `warnings`.
         var free: Bool? = nil
         var via: String? = nil
+        /// The notes of the item. Nil when it has none, so the field is not written.
+        var notes: [Note]? = nil
+
+        /// One note of an entry: its text, author ("user" or "assistant"), date, done flag, and the anchor when it has one.
+        struct Note: Codable, Equatable {
+            var text: String
+            var author: String
+            var createdAt: String
+            var resolved: Bool
+            var anchor: Anchor?
+
+            struct Anchor: Codable, Equatable {
+                var x: Double
+                var y: Double
+            }
+        }
 
         enum CodingKeys: String, CodingKey {
             case id, type, title, frame, x, y, width, height, z, layer, mode, file, tokens, text, previewWidth
-            case color, fill, stroke, url, license, free, via
+            case color, fill, stroke, url, license, free, via, notes
         }
 
         func encode(to encoder: Encoder) throws {
@@ -73,6 +89,7 @@ struct MockupManifest: Codable, Equatable {
             try c.encodeIfPresent(license, forKey: .license)
             try c.encodeIfPresent(free, forKey: .free)
             try c.encodeIfPresent(via, forKey: .via)
+            try c.encodeIfPresent(notes, forKey: .notes)
         }
     }
 }
