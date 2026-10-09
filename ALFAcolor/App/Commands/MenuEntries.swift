@@ -21,6 +21,9 @@ struct MenuFunctions {
         case "view.allPalettes": return with { $0.togglePalettes() }
         case "view.statusBar": return with { $0.toggleStatusBar() }
         case "view.blobMode": return with { $0.toggleBlobMode() }
+        case "view.rulers": return with { $0.rulersVisible.toggle() }
+        case "view.guides": return with { $0.guidesVisible.toggle() }
+        case "view.guidesLocked": return with { $0.guidesLocked.toggle() }
         case "view.gridShown": return withInteraction { $0.setGridShown(!$0.gridShown) }
         case "view.snapsAtAll": return withInteraction { $0.setSnapsAtAll(!$0.snapsAtAll) }
         case "view.zoomIn": return withCanvas { $0.perform(.zoomIn) }
