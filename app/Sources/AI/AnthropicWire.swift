@@ -18,9 +18,25 @@ enum AnthropicWire {
             maxTokens: request.maxTokens,
             system: request.system,
             messages: messages,
-            temperature: request.temperature
+            temperature: request.temperature,
+            cacheControl: cacheControl(for: request.cache)
         )
         return try encoder.encode(wire)
+    }
+
+    /// The top-level cache field. Absent when the cache is off; the time to live is sent only for one hour.
+    static func cacheControl(for policy: AICachePolicy) -> WireCacheControl? {
+        switch policy {
+        case .off:
+            return nil
+        case let .automatic(ttl):
+            switch ttl {
+            case .fiveMinutes:
+                return WireCacheControl(type: "ephemeral", ttl: nil)
+            case .oneHour:
+                return WireCacheControl(type: "ephemeral", ttl: "1h")
+            }
+        }
     }
 
     /// Reads the text of an answer. Blocks other than text (for example thinking or tool use) are skipped.
@@ -30,6 +46,7 @@ enum AnthropicWire {
         guard let wire = try? decoder.decode(WireResponse.self, from: data) else {
             throw AIError.decoding
         }
+        let breakdown = try? JSONDecoder().decode(WireCacheBreakdown.self, from: data)
         let text = wire.content
             .filter { $0.type == "text" }
             .compactMap(\.text)
@@ -38,7 +55,9 @@ enum AnthropicWire {
             inputTokens: wire.usage?.inputTokens ?? 0,
             outputTokens: wire.usage?.outputTokens ?? 0,
             cacheReadTokens: wire.usage?.cacheReadInputTokens ?? 0,
-            cacheWriteTokens: wire.usage?.cacheCreationInputTokens ?? 0
+            cacheWriteTokens: wire.usage?.cacheCreationInputTokens ?? 0,
+            cacheWrite5mTokens: breakdown?.usage?.cacheCreation?.ephemeral5m ?? 0,
+            cacheWrite1hTokens: breakdown?.usage?.cacheCreation?.ephemeral1h ?? 0
         )
         return AIResponse(
             text: text,
@@ -56,6 +75,13 @@ private struct WireRequest: Encodable {
     let system: String
     let messages: [WireMessage]
     let temperature: Double?
+    let cacheControl: WireCacheControl?
+}
+
+/// The top-level `cache_control` field. `ttl` is absent for the five-minute default.
+struct WireCacheControl: Encodable, Equatable {
+    let type: String
+    let ttl: String?
 }
 
 private struct WireMessage: Encodable {
@@ -115,4 +141,29 @@ private struct WireUsage: Decodable {
     let outputTokens: Int?
     let cacheCreationInputTokens: Int?
     let cacheReadInputTokens: Int?
+}
+
+/// The cache writes of one call, split by time to live.
+/// The cache writes of one answer, split by time to live. It is read by a decoder without key conversion,
+/// so that the snake case keys of the answer match exactly.
+private struct WireCacheBreakdown: Decodable {
+    let usage: Usage?
+
+    struct Usage: Decodable {
+        let cacheCreation: Buckets?
+
+        enum CodingKeys: String, CodingKey {
+            case cacheCreation = "cache_creation"
+        }
+    }
+
+    struct Buckets: Decodable {
+        let ephemeral5m: Int?
+        let ephemeral1h: Int?
+
+        enum CodingKeys: String, CodingKey {
+            case ephemeral5m = "ephemeral_5m_input_tokens"
+            case ephemeral1h = "ephemeral_1h_input_tokens"
+        }
+    }
 }
