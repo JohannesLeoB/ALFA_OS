@@ -153,7 +153,9 @@ public enum DocumentPackage {
             }
             let ordered = sequence == sequence.sorted()
 
+            // The view comes only from the current state: an older view of a removed space with the same ID is dropped.
             var spaceExtras = doc.preserved.spaces[space.id] ?? [:]
+            spaceExtras[SpaceView.key] = nil
             if let view = doc.spaceViews[space.id] { spaceExtras[SpaceView.key] = view.json }
             let spaceFile = SpaceFile(schema: version, id: space.id, name: space.name, layers: space.layers.map(\.id),
                                       layerSequence: ordered ? nil : sequence, extras: spaceExtras)
