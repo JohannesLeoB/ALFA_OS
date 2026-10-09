@@ -65,13 +65,14 @@ public enum FrameEdit {
 
 extension BoardStore {
     /// Adds a frame of the preset with this ID, centered on the point, and selects it. One undo step.
-    /// The frame goes on the layer, or on the first layer of the space when the layer is unknown.
-    /// Returns false for an unknown preset or without an active space.
+    /// The frame goes on the layer when that layer can take it (visible and not locked), else on the first layer that can.
+    /// Returns false for an unknown preset, without an active space, or when no layer can take the frame.
     @discardableResult
     public func addFrame(deviceID: String, centerX: Double, centerY: Double, layerID: String? = nil) throws -> Bool {
-        guard let device = Device.preset(deviceID), let space = activeSpace, let first = space.layers.first?.id else { return false }
-        let layer = layerID.flatMap { id in space.layers.contains { $0.id == id } ? id : nil } ?? first
-        return try perform(FrameEdit.insert(device, centerX: centerX, centerY: centerY, layerID: layer))
+        guard let device = Device.preset(deviceID), let space = activeSpace else { return false }
+        let usable: (Layer) -> Bool = { !$0.locked && $0.visible }
+        guard let layer = space.layers.first(where: { $0.id == layerID && usable($0) }) ?? space.layers.first(where: usable) else { return false }
+        return try perform(FrameEdit.insert(device, centerX: centerX, centerY: centerY, layerID: layer.id))
     }
 
     /// Changes the device of the selected frames to the preset with this ID. One undo step.

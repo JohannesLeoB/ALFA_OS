@@ -13,7 +13,7 @@ public enum FileKind: Equatable, Sendable {
         "swift": .swiftui, "html": .html, "htm": .html, "css": .css, "js": .javascript, "mjs": .javascript,
         "jsx": .react, "tsx": .react, "kt": .compose, "dart": .flutter, "java": .java,
         // Source code the system does not know as code, and SVG, which is markup and not a bitmap.
-        "ts": .other, "vue": .other, "rs": .other, "py": .other, "go": .other, "svg": .other
+        "ts": .other, "mts": .other, "cts": .other, "vue": .other, "rs": .other, "py": .other, "go": .other, "svg": .other
     ]
     private static let textExtensions: Set<String> = ["txt", "text", "md", "markdown"]
 

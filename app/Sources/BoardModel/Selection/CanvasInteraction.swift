@@ -166,12 +166,6 @@ public final class CanvasInteraction {
         return space.items.filter { !$0.hidden && !hiddenLayers.contains($0.layerID) && $0.rect.isFinite }
     }
 
-    /// The real items that the base layer leaves out: the items of the preview and the item whose text is edited.
-    public var hiddenFromBase: Set<ItemID> {
-        guard let editing else { return lifted }
-        return lifted.union([editing.itemID])
-    }
-
     /// The items of the preview layer, drawn above the base layer: the items of a drag, and the item whose text is edited.
     public var previewItems: [Item] {
         guard let editing, !liftedItems.contains(where: { $0.id == editing.itemID }), let item = store.item(editing.itemID) else { return liftedItems }
