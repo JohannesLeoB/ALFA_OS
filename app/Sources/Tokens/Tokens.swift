@@ -19,6 +19,21 @@ public struct RGB: Codable, Hashable, Sendable {
     }
 }
 
+/// A text style: the composite token type `typography`.
+/// Source: Design Tokens Format Module 2025.10, section 9.8 (https://www.designtokens.org/TR/2025.10/format/#typography).
+/// The five properties are all required. Font size and letter spacing are in px. The line height is a multiplier of the font size.
+public struct Typography: Codable, Hashable, Sendable {
+    public var fontFamily: [String]
+    public var fontSize: Double
+    public var fontWeight: Int
+    public var letterSpacing: Double
+    public var lineHeight: Double
+    public init(fontFamily: [String], fontSize: Double, fontWeight: Int, letterSpacing: Double, lineHeight: Double) {
+        self.fontFamily = fontFamily; self.fontSize = fontSize; self.fontWeight = fontWeight
+        self.letterSpacing = letterSpacing; self.lineHeight = lineHeight
+    }
+}
+
 /// Token kinds according to the Design Tokens Format Module 2025.10 of the W3C Community Group (DTCG; community report, not a W3C standard).
 public enum TokenValue: Codable, Hashable, Sendable {
     case color(RGB)
@@ -28,10 +43,12 @@ public enum TokenValue: Codable, Hashable, Sendable {
     case fontFamily([String])
     case fontWeight(Int)
     case cubicBezier(Double, Double, Double, Double)
+    case typography(Typography)
     public var dtcgType: String {
         switch self {
         case .color: "color"; case .dimension: "dimension"; case .number: "number"; case .duration: "duration"
         case .fontFamily: "fontFamily"; case .fontWeight: "fontWeight"; case .cubicBezier: "cubicBezier"
+        case .typography: "typography"
         }
     }
 }
@@ -79,6 +96,10 @@ public enum TokenExport {
         case .fontFamily(let f): return f
         case .fontWeight(let w): return w
         case .cubicBezier(let a, let b, let c, let d): return [a, b, c, d]
+        case .typography(let t):
+            return ["fontFamily": t.fontFamily, "fontSize": ["value": t.fontSize, "unit": "px"],
+                    "fontWeight": t.fontWeight, "letterSpacing": ["value": t.letterSpacing, "unit": "px"],
+                    "lineHeight": t.lineHeight]
         }
     }
     static func round4(_ x: Double) -> Double { (x * 10000).rounded() / 10000 }
@@ -91,8 +112,17 @@ public enum TokenExport {
     }
 
     /// CSS variables on :root. Name: the path joined with hyphens.
+    /// A typography token gives one variable per property: `--<name>-font-family`, `-font-size`, `-font-weight`, `-letter-spacing`, `-line-height`.
     public static func css(_ set: TokenSet) -> String {
-        let lines = set.tokens.map { "  --\($0.path.joined(separator: "-")): \(cssValue($0.value));" }
+        let lines = set.tokens.flatMap { token -> [String] in
+            let name = token.path.joined(separator: "-")
+            guard case .typography(let t) = token.value else { return ["  --\(name): \(cssValue(token.value));"] }
+            return ["  --\(name)-font-family: \(cssValue(.fontFamily(t.fontFamily)));",
+                    "  --\(name)-font-size: \(fmt(t.fontSize))px;",
+                    "  --\(name)-font-weight: \(t.fontWeight);",
+                    "  --\(name)-letter-spacing: \(fmt(t.letterSpacing))px;",
+                    "  --\(name)-line-height: \(fmt(t.lineHeight));"]
+        }
         return ":root {\n" + lines.joined(separator: "\n") + "\n}\n"
     }
     static func cssValue(_ v: TokenValue) -> String {
@@ -104,6 +134,7 @@ public enum TokenExport {
         case .fontFamily(let f): f.map { $0.contains(" ") ? "\"\($0)\"" : $0 }.joined(separator: ", ")
         case .fontWeight(let w): String(w)
         case .cubicBezier(let a, let b, let c, let d): "cubic-bezier(\(fmt(a)), \(fmt(b)), \(fmt(c)), \(fmt(d)))"
+        case .typography(let t): cssValue(.fontFamily(t.fontFamily))
         }
     }
 
@@ -120,6 +151,7 @@ public enum TokenExport {
             case .fontFamily(let f): out += "    public static let \(name) = \"\(f.first ?? "")\"\n"
             case .fontWeight(let w): out += "    public static let \(name) = Font.Weight.\(weightName(w))\n"
             case .cubicBezier(let a, let b, let c, let d): out += "    public static let \(name) = UnitCurve.bezier(startControlPoint: UnitPoint(x: \(fmt(a)), y: \(fmt(b))), endControlPoint: UnitPoint(x: \(fmt(c)), y: \(fmt(d))))\n"
+            case .typography: out += "    // \(name): typography is not exported to SwiftUI yet\n"
             }
         }
         return out + "}\n"

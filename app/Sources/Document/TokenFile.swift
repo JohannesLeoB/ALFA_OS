@@ -47,6 +47,12 @@ enum TokenFile {
         case .fontFamily(let f): .array(f.map(JSONValue.string))
         case .fontWeight(let w): .int(w)
         case .cubicBezier(let a, let b, let c, let d): .array([.double(a), .double(b), .double(c), .double(d)])
+        case .typography(let t):
+            .object(["fontFamily": .array(t.fontFamily.map(JSONValue.string)),
+                     "fontSize": .object(["value": .double(t.fontSize), "unit": .string("px")]),
+                     "fontWeight": .int(t.fontWeight),
+                     "letterSpacing": .object(["value": .double(t.letterSpacing), "unit": .string("px")]),
+                     "lineHeight": .double(t.lineHeight)])
         }
     }
 
@@ -178,8 +184,22 @@ enum TokenFile {
         case "cubicBezier":
             guard let a = raw.arrayValue?.compactMap(\.number), a.count == 4, raw.arrayValue?.count == 4 else { return nil }
             return .cubicBezier(a[0], a[1], a[2], a[3])
+        case "typography":
+            // Source: Design Tokens Format Module 2025.10, section 9.8. Anything else stays in the remainder tree.
+            guard case .object(let o) = raw,
+                  let family = o["fontFamily"], case .fontFamily(let names)? = parseValue(type: "fontFamily", family),
+                  let weight = o["fontWeight"], case .fontWeight(let w)? = parseValue(type: "fontWeight", weight),
+                  let size = o["fontSize"].flatMap(pixels), let spacing = o["letterSpacing"].flatMap(pixels),
+                  let height = o["lineHeight"]?.number else { return nil }
+            return .typography(Typography(fontFamily: names, fontSize: size, fontWeight: w, letterSpacing: spacing, lineHeight: height))
         default: return nil
         }
+    }
+
+    /// A dimension object in px, for example {"value": 16, "unit": "px"}. Other units are not read here.
+    private static func pixels(_ raw: JSONValue) -> Double? {
+        guard case .object(let o) = raw, o["unit"]?.stringValue == "px" else { return nil }
+        return o["value"]?.number
     }
 
     /// Stores `value` at `path` in the remainder tree and merges with what is there.

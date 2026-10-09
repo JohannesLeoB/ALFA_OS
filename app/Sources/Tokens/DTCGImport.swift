@@ -173,6 +173,8 @@ public enum DTCGImport {
             let x = try number(raw, location, 1...1000)
             guard x == x.rounded() else { throw failure(location, "weight must be an integer") }
             return .fontWeight(Int(x))
+        case "typography":
+            return try typography(raw, location)
         case "cubicBezier":
             guard let parts = raw as? [Any], parts.count == 4 else {
                 throw failure(location, "cubicBezier is a list of four numbers")
@@ -201,6 +203,31 @@ public enum DTCGImport {
         "black": 900, "heavy": 900,
         "extra-black": 950, "ultra-black": 950,
     ]
+
+    /// Composite type typography (2025.10, section 9.8): five required properties, font size and letter spacing in px only.
+    /// References inside the object are not read; they are refused with their place in the JSON.
+    private static func typography(_ raw: Any, _ location: String) throws -> TokenValue {
+        guard let o = raw as? [String: Any] else {
+            throw failure(location, "typography must be an object with fontFamily, fontSize, fontWeight, letterSpacing and lineHeight")
+        }
+        for key in ["fontFamily", "fontWeight"] {
+            if let text = o[key] as? String, aliasTarget(text) != nil {
+                throw failure("\(location).\(key)", "references inside typography are not read; write the value itself")
+            }
+        }
+        guard let family = o["fontFamily"] else { throw failure("\(location).fontFamily", "missing") }
+        guard case .fontFamily(let names) = try value(family, type: "fontFamily", location: "\(location).fontFamily") else {
+            throw failure("\(location).fontFamily", "fontFamily is a name or a list of names")
+        }
+        guard let weight = o["fontWeight"] else { throw failure("\(location).fontWeight", "missing") }
+        guard case .fontWeight(let w) = try value(weight, type: "fontWeight", location: "\(location).fontWeight") else {
+            throw failure("\(location).fontWeight", "fontWeight must be a number or a weight name")
+        }
+        let (size, _) = try dimension(o["fontSize"] ?? NSNull(), "\(location).fontSize", units: ["px"])
+        let (spacing, _) = try dimension(o["letterSpacing"] ?? NSNull(), "\(location).letterSpacing", units: ["px"])
+        let height = try number(o["lineHeight"], "\(location).lineHeight")
+        return .typography(Typography(fontFamily: names, fontSize: size, fontWeight: w, letterSpacing: spacing, lineHeight: height))
+    }
 
     private static func color(_ raw: Any, _ location: String) throws -> TokenValue {
         guard let o = raw as? [String: Any] else {
