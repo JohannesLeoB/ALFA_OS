@@ -2,6 +2,7 @@ import Foundation
 import Observation
 import ALFAcolorCore
 import Document
+import Tokens
 
 /// The state of the canvas: the document, the active space, the selection and the view of each space.
 /// All changes to the document go through `perform(_:)` and can be undone.
@@ -162,6 +163,33 @@ public final class BoardStore {
         if !inHistory { undoManager.beginUndoGrouping() }
         undoManager.registerUndo(withTarget: self) { store in
             MainActor.assumeIsolated { store.swapBoard(to: previous, nameKey: nameKey) }
+        }
+        undoManager.setActionName(Command.localized(nameKey))
+        if !inHistory { undoManager.endUndoGrouping() }
+    }
+
+    // MARK: Token sets
+
+    /// Changes the token sets of the document, for example the colour fields. The change runs on a copy:
+    /// when it throws, nothing changes. It is one undo step, named by `nameKey`. Returns false when nothing changed.
+    @discardableResult
+    public func changeTokenSets(nameKey: String, _ change: (inout [TokenSet]) throws -> Void) throws -> Bool {
+        var trial = document.tokenSets
+        try change(&trial)
+        guard trial != document.tokenSets else { return false }
+        swapTokenSets(to: trial, nameKey: nameKey)
+        return true
+    }
+
+    /// Puts other token sets in place. Undo and redo use it too, and each time the inverse is registered.
+    private func swapTokenSets(to target: [TokenSet], nameKey: String) {
+        let previous = document.tokenSets
+        document.tokenSets = target
+        didChangeDocument()
+        let inHistory = undoManager.isUndoing || undoManager.isRedoing
+        if !inHistory { undoManager.beginUndoGrouping() }
+        undoManager.registerUndo(withTarget: self) { store in
+            MainActor.assumeIsolated { store.swapTokenSets(to: previous, nameKey: nameKey) }
         }
         undoManager.setActionName(Command.localized(nameKey))
         if !inHistory { undoManager.endUndoGrouping() }
