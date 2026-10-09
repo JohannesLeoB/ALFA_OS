@@ -37,7 +37,7 @@ struct SpaceTabBar: View {
         let active = space.id == store.activeSpaceID
         return Button { actions.select(space.id) } label: {
             Text(space.name)
-                .font(theme.text(.body).font)
+                .themeText(theme.text(.body))
                 .lineLimit(1)
                 .truncationMode(.tail)
                 .frame(maxWidth: maxTabWidth)

@@ -104,7 +104,7 @@ struct BlobPaletteContent: View {
                     .buttonStyle(.plain)
                 }
             }
-            .font(theme.text(.body).font)
+            .themeText(theme.text(.body))
             .padding(theme.space(.s3))
         }
     }
@@ -146,7 +146,7 @@ struct BlobPaletteContent: View {
 
     private func notice(_ key: LocalizedStringKey) -> some View {
         Text(key)
-            .font(theme.text(.caption).font)
+            .themeText(theme.text(.caption))
             .foregroundStyle(theme.color(.textMuted, scheme))
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity, maxHeight: .infinity)

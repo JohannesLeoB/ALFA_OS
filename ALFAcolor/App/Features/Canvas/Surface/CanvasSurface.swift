@@ -89,9 +89,9 @@ struct CanvasSurface: View {
     private var emptyHint: some View {
         VStack(spacing: theme.space(.s2)) {
             Text("canvas.title")
-                .font(theme.text(.caption).font)
+                .themeText(theme.text(.caption))
             Text("canvas.hint")
-                .font(theme.text(.body).font)
+                .themeText(theme.text(.body))
         }
         .foregroundStyle(theme.color(.textMuted, scheme))
         .frame(maxWidth: .infinity, maxHeight: .infinity)

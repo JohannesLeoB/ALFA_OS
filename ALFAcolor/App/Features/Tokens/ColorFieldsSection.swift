@@ -68,7 +68,7 @@ struct ColorFieldsSection: View {
                 row(field)
             }
             Text("tokens.colorspace.hint")
-                .font(theme.text(.caption).font)
+                .themeText(theme.text(.caption))
                 .foregroundStyle(theme.color(.textMuted, scheme))
         }
     }
@@ -92,7 +92,7 @@ struct ColorFieldsSection: View {
             }
             Spacer(minLength: 0)
             Text(verbatim: field.color.hex)
-                .font(theme.text(.caption).font.monospaced())
+                .themeText(theme.text(.caption))
                 .foregroundStyle(theme.color(.textMuted, scheme))
         }
         .fontWeight(selected == field.name ? .semibold : .regular)

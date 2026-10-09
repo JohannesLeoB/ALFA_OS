@@ -90,7 +90,7 @@ struct BlobMenuHost: View {
     private func blob(_ palette: BlobPalette, id: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: palette.symbol)
-                .font(theme.text(.body).font)
+                .themeText(theme.text(.body))
                 .frame(width: theme.space(.s6), height: theme.space(.s6))
         }
         .buttonStyle(.plain)

@@ -70,7 +70,7 @@ struct FrameView: View {
                 Text("frame.template")
             }
         }
-        .font(theme.text(.caption).font)
+        .themeText(theme.text(.caption))
         .lineLimit(1)
         .fixedSize()
         .foregroundStyle(theme.color(.textMuted, scheme))

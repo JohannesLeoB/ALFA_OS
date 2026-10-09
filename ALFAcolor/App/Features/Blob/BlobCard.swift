@@ -53,7 +53,7 @@ struct BlobCard: View {
             }
         } else {
             Text(LocalizedStringKey(palette.titleKey))
-                .font(theme.text(.heading).font)
+                .themeText(theme.text(.heading))
         }
     }
 
@@ -72,7 +72,7 @@ struct BlobCard: View {
             .help("blob.close")
         }
         .buttonStyle(.plain)
-        .font(theme.text(.caption).font)
+        .themeText(theme.text(.caption))
     }
 }
 

@@ -35,7 +35,7 @@ struct ContextBarView: View {
                 }
             }
         }
-        .font(theme.text(.caption).font)
+        .themeText(theme.text(.caption))
         .padding(.horizontal, theme.space(.s3))
         .padding(.vertical, theme.space(.s1))
         // One row high: the bar takes its ideal size, never the height that the placement offers it.

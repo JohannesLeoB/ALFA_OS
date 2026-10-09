@@ -158,7 +158,7 @@ struct LabGuidesView: View {
         VStack(alignment: .leading, spacing: theme.space(.s1)) {
             sample()
             title
-                .font(theme.text(.caption).font)
+                .themeText(theme.text(.caption))
                 .foregroundStyle(theme.color(.coral, scheme))
         }
     }

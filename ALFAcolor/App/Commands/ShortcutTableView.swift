@@ -16,7 +16,7 @@ struct ShortcutTableView: View {
                 ForEach(AppMenu.allCases, id: \.self) { menu in
                     VStack(alignment: .leading, spacing: theme.space(.s2)) {
                         Text(LocalizedStringKey(menu.titleKey))
-                            .font(theme.text(.heading).font)
+                            .themeText(theme.text(.heading))
                             .foregroundStyle(theme.color(.text, scheme))
                         ForEach(ShortcutTable.commands.filter { $0.menu == menu }) { command in
                             row(command)
@@ -25,11 +25,11 @@ struct ShortcutTableView: View {
                 }
                 VStack(alignment: .leading, spacing: theme.space(.s2)) {
                     Text("menu.canvasKeys")
-                        .font(theme.text(.heading).font)
+                        .themeText(theme.text(.heading))
                         .foregroundStyle(theme.color(.text, scheme))
                     ForEach(Self.canvasKeys, id: \.self) { key in
                         Text(LocalizedStringKey(key))
-                            .font(theme.text(.body).font)
+                            .themeText(theme.text(.body))
                             .foregroundStyle(theme.color(.text, scheme))
                     }
                 }
@@ -62,7 +62,7 @@ struct ShortcutTableView: View {
             Text(command.shortcut?.display ?? "")
                 .foregroundStyle(theme.color(.textMuted, scheme))
         }
-        .font(theme.text(.body).font)
+        .themeText(theme.text(.body))
         .accessibilityElement(children: .combine)
     }
 }

@@ -19,7 +19,7 @@ struct NoteBody: View {
                     Text(verbatim: content.text).foregroundStyle(theme.color(.text, scheme))
                 }
             }
-            .font(theme.text(.body).font)
+            .themeText(theme.text(.body))
             .padding(theme.space(.s3))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
@@ -38,19 +38,19 @@ struct LinkBody: View {
         if detail == .full {
             VStack(alignment: .leading, spacing: theme.space(.s1)) {
                 Text(verbatim: content.domain)
-                    .font(theme.text(.body).font)
+                    .themeText(theme.text(.body))
                     .foregroundStyle(theme.color(.text, scheme))
                     .lineLimit(1)
                 if !content.path.isEmpty {
                     Text(verbatim: content.path)
-                        .font(theme.text(.caption).font)
+                        .themeText(theme.text(.caption))
                         .foregroundStyle(theme.color(.textMuted, scheme))
                         .lineLimit(2)
                 }
                 Spacer(minLength: 0)
                 if let note = content.note {
                     Text(verbatim: note)
-                        .font(theme.text(.body).font)
+                        .themeText(theme.text(.body))
                         .foregroundStyle(theme.color(.text, scheme))
                 }
             }
@@ -77,7 +77,7 @@ struct TextBody: View {
                     Text(verbatim: content.text).foregroundStyle(theme.color(.text, scheme))
                 }
             }
-            .font(theme.text(content.role.token).font)
+            .themeText(theme.text(content.role.token))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .clipped()
         }
@@ -106,7 +106,7 @@ struct KindBody: View {
     var body: some View {
         if detail == .full {
             Text(LocalizedStringKey(kindKey))
-                .font(theme.text(.caption).font)
+                .themeText(theme.text(.caption))
                 .foregroundStyle(theme.color(.textMuted, scheme))
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }

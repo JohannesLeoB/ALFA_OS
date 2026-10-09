@@ -28,7 +28,7 @@ struct TextStylesSheet: View {
         VStack(alignment: .leading, spacing: theme.space(.s4)) {
             HStack {
                 Text("type.title")
-                    .font(theme.text(.heading).font)
+                    .themeText(theme.text(.heading))
                 Spacer()
                 Button("type.close") { dismiss() }
                     .keyboardShortcut(.cancelAction)

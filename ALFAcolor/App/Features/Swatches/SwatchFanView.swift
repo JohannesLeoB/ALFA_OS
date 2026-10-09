@@ -85,7 +85,7 @@ struct SwatchFanView: View {
     /// The hex code at the tip of the blade. It turns with the blade and shows only while the fan is open.
     private func codeLabel(_ index: Int, gap: Double, stage: FanStage) -> some View {
         Text(colors[index].hex)
-            .font(theme.text(.caption).font)
+            .themeText(theme.text(.caption))
             .foregroundStyle(theme.color(.textMuted, scheme))
             .fixedSize()
             .alignmentGuide(.top) { dimensions in dimensions[.bottom] + CGFloat(gap) }

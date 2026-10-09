@@ -20,7 +20,7 @@ struct CodeSourceView: View {
             }
             if !state.canPlay {
                 Text(LocalizedStringKey("code.notRunning"))
-                    .font(theme.text(.caption).font)
+                    .themeText(theme.text(.caption))
                     .foregroundStyle(theme.color(.textMuted, scheme))
             }
             ScrollView([.vertical, .horizontal]) {
@@ -29,7 +29,7 @@ struct CodeSourceView: View {
             }
             if source.isCut {
                 Text(LocalizedStringKey("code.truncated"))
-                    .font(theme.text(.caption).font)
+                    .themeText(theme.text(.caption))
                     .foregroundStyle(theme.color(.textMuted, scheme))
             }
         }

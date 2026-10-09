@@ -14,11 +14,11 @@ struct LabControlsView: View {
         let controls = model.session.controls
         VStack(alignment: .leading, spacing: theme.space(.s2)) {
             Text(LocalizedStringKey("lab.controls"))
-                .font(theme.text(.caption).font)
+                .themeText(theme.text(.caption))
                 .foregroundStyle(theme.color(.textMuted, scheme))
             if controls.isEmpty {
                 Text(LocalizedStringKey("lab.controls.empty"))
-                    .font(theme.text(.caption).font)
+                    .themeText(theme.text(.caption))
                     .foregroundStyle(theme.color(.textMuted, scheme))
             } else {
                 ScrollView(.horizontal) {
@@ -47,7 +47,7 @@ struct LabControlRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: theme.space(.s1)) {
             Text(verbatim: control.name)
-                .font(theme.text(.caption).font.monospaced())
+                .themeText(theme.text(.caption))
                 .foregroundStyle(theme.color(.textMuted, scheme))
             if let range = control.range {
                 Slider(value: numberBinding, in: range, step: control.step)
@@ -57,7 +57,7 @@ struct LabControlRow: View {
                 }
             }
             Text(verbatim: control.value.css)
-                .font(theme.text(.caption).font.monospaced())
+                .themeText(theme.text(.caption))
                 .foregroundStyle(theme.color(.text, scheme))
         }
         .frame(width: 200)

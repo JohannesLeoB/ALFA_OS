@@ -167,13 +167,13 @@ struct CodePlayer: View {
         } else if model.failure != nil {
             VStack(spacing: theme.space(.s2)) {
                 Text(LocalizedStringKey("code.failed"))
-                    .font(theme.text(.caption).font)
+                    .themeText(theme.text(.caption))
                     .foregroundStyle(theme.color(.coral, scheme))
                 Button {
                     Task { await model.play() }
                 } label: {
                     Text(LocalizedStringKey("code.retry"))
-                        .font(theme.text(.caption).font)
+                        .themeText(theme.text(.caption))
                         .foregroundStyle(theme.color(.text, scheme))
                         .padding(theme.space(.s2))
                         .background(theme.color(.surface, scheme))
@@ -193,7 +193,7 @@ struct CodePlayer: View {
 
     private func icon(_ name: String) -> some View {
         Image(systemName: name)
-            .font(theme.text(.heading).font)
+            .themeText(theme.text(.heading))
             .foregroundStyle(theme.color(.text, scheme))
             .padding(theme.space(.s2))
             .background(theme.color(.surface, scheme))

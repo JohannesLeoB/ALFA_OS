@@ -45,7 +45,7 @@ struct PictureColorsSheet: View {
     var body: some View {
         VStack(alignment: .leading, spacing: theme.space(.s4)) {
             Text("picture.colors.title")
-                .font(theme.text(.heading).font)
+                .themeText(theme.text(.heading))
             if let found {
                 if found.isEmpty {
                     Text("picture.colors.none")
@@ -79,10 +79,10 @@ struct PictureColorsSheet: View {
                 .fill(Color(swatch.color))
                 .frame(width: 16, height: 16)
             Text(verbatim: swatch.color.hex)
-                .font(theme.text(.caption).font.monospaced())
+                .themeText(theme.text(.caption))
             Spacer(minLength: 0)
             Text(verbatim: String(format: "%.0f %%", swatch.share * 100))
-                .font(theme.text(.caption).font)
+                .themeText(theme.text(.caption))
                 .foregroundStyle(theme.color(.textMuted, scheme))
         }
     }

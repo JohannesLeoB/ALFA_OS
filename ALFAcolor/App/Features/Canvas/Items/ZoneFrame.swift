@@ -37,14 +37,14 @@ struct ZoneFrame: View {
                 Spacer(minLength: 0)
                 if case .group(let group) = presentation.body {
                     Text("item.group.count \(group.childCount)")
-                        .font(theme.text(.caption).font)
+                        .themeText(theme.text(.caption))
                         .lineLimit(1)
                         .fixedSize()
                         .foregroundStyle(theme.color(.textMuted, scheme))
                 }
                 if presentation.locked {
                     Image(systemName: "lock.fill")
-                        .font(theme.text(.caption).font)
+                        .themeText(theme.text(.caption))
                         .foregroundStyle(theme.color(.textMuted, scheme))
                         .accessibilityLabel("item.locked")
                 }
@@ -65,7 +65,7 @@ struct ZoneFrame: View {
                 Text(verbatim: presentation.title)
             }
         }
-        .font(theme.text(.heading).font)
+        .themeText(theme.text(.zone))
         .lineLimit(1)
         .foregroundStyle(Color(ZoneTint.ink(on: tint)))
     }

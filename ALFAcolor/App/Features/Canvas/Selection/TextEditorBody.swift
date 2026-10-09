@@ -23,7 +23,7 @@ struct TextEditorBody: View {
 
     var body: some View {
         TextEditor(text: $text)
-            .font(theme.text(role.token).font)
+            .themeText(theme.text(role.token))
             .foregroundStyle(theme.color(.text, scheme))
             .scrollContentBackground(.hidden)
             .scrollDisabled(true)

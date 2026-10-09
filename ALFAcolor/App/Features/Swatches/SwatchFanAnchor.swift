@@ -36,7 +36,7 @@ struct SwatchFanAnchor: View {
                     .frame(width: side, height: side)
                     if !interaction.canPaintSelection {
                         Text(LocalizedStringKey("fan.noColour"))
-                            .font(theme.text(.caption).font)
+                            .themeText(theme.text(.caption))
                             .foregroundStyle(theme.color(.textMuted, scheme))
                     }
                 }

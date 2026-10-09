@@ -41,7 +41,7 @@ struct SidebarView: View {
             ItemList(store: store)
             ColorFieldsSection(store: store)
         }
-        .font(theme.text(.body).font)
+        .themeText(theme.text(.body))
         .listStyle(.sidebar)
         .accessibilityLabel("sidebar.title")
     }

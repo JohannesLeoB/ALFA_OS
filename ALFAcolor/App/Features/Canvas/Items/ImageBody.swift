@@ -34,7 +34,7 @@ struct ImageBody: View {
                 PlaceholderBody(titleKey: "item.unreadable", symbol: "exclamationmark.triangle", offersSearch: true, detail: detail, zoom: zoom)
             } else if detail == .full {
                 Image(systemName: "photo")
-                    .font(theme.text(.heading).font)
+                    .themeText(theme.text(.heading))
                     .foregroundStyle(theme.color(.textMuted, scheme))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
@@ -102,13 +102,13 @@ struct PlaceholderBody: View {
         VStack(spacing: theme.space(.s1)) {
             if detail == .full {
                 Image(systemName: symbol)
-                    .font(theme.text(.heading).font)
+                    .themeText(theme.text(.heading))
                 Text(titleKey)
-                    .font(theme.text(.body).font)
+                    .themeText(theme.text(.body))
                     .foregroundStyle(theme.color(.text, scheme))
                 if offersSearch {
                     Text("item.missingFile.action")
-                        .font(theme.text(.caption).font)
+                        .themeText(theme.text(.caption))
                         .foregroundStyle(theme.color(.accent, scheme))
                 }
             }

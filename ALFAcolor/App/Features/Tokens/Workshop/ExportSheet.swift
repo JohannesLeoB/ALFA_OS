@@ -28,7 +28,7 @@ struct ExportSheet: View {
         VStack(alignment: .leading, spacing: theme.space(.s4)) {
             HStack {
                 Text("workshop.title")
-                    .font(theme.text(.heading).font)
+                    .themeText(theme.text(.heading))
                 Spacer()
                 Button("command.file.close") { dismiss() }
                     .keyboardShortcut(.cancelAction)
@@ -45,7 +45,7 @@ struct ExportSheet: View {
                 .pickerStyle(.segmented)
                 ScrollView([.vertical, .horizontal]) {
                     Text(verbatim: preview)
-                        .font(theme.text(.caption).font.monospaced())
+                        .themeText(theme.text(.caption))
                         .textSelection(.enabled)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }

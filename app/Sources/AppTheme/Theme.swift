@@ -79,6 +79,9 @@ public struct TextStyle: Sendable, Equatable {
     /// Letter spacing in points, for `Text.tracking`.
     public var trackingPoints: CGFloat { tracking * size }
 
+    /// Extra space between two lines in points, for `lineSpacing`: the line height factor minus one, times the size.
+    public var lineSpacingPoints: CGFloat { max(0, (lineHeight - 1) * size) }
+
     public var font: Font {
         let fontWeight = Theme.fontWeight(weight)
         let name = families.first ?? "System"

@@ -44,7 +44,7 @@ struct StatusBarView: View {
                 field("status.saveState", saveStateText)
                     .help(saveError?.localizedDescription ?? "")
             }
-            .font(theme.text(.caption).font)
+            .themeText(theme.text(.caption))
             .foregroundStyle(theme.color(.textMuted, scheme))
             .padding(.horizontal, theme.space(.s4))
             .padding(.vertical, theme.space(.s2))

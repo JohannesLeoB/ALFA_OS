@@ -81,7 +81,7 @@ struct ItemHeader: View {
                 }
             }
         }
-        .font(theme.text(.caption).font)
+        .themeText(theme.text(.caption))
         .padding(.horizontal, theme.space(.s3))
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .background(theme.color(.surface, scheme))

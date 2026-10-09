@@ -31,7 +31,7 @@ struct ContrastSheet: View {
         VStack(alignment: .leading, spacing: theme.space(.s4)) {
             HStack {
                 Text("contrast.title")
-                    .font(theme.text(.heading).font)
+                    .themeText(theme.text(.heading))
                 Spacer()
                 Toggle("contrast.large", isOn: $largeText)
                 Button("contrast.close") { dismiss() }
@@ -42,7 +42,7 @@ struct ContrastSheet: View {
                     .foregroundStyle(theme.color(.textMuted, scheme))
             } else {
                 Text("contrast.hint")
-                    .font(theme.text(.caption).font)
+                    .themeText(theme.text(.caption))
                     .foregroundStyle(theme.color(.textMuted, scheme))
                 ScrollView([.horizontal, .vertical]) {
                     matrix(fields)
@@ -62,7 +62,7 @@ struct ContrastSheet: View {
                 Color.clear.frame(width: 96, height: 16)
                 ForEach(fields) { ground in
                     Text(verbatim: ground.name)
-                        .font(theme.text(.caption).font)
+                        .themeText(theme.text(.caption))
                         .lineLimit(1)
                         .frame(width: 72)
                 }
@@ -70,7 +70,7 @@ struct ContrastSheet: View {
             ForEach(fields.indices, id: \.self) { row in
                 GridRow {
                     Text(verbatim: fields[row].name)
-                        .font(theme.text(.caption).font)
+                        .themeText(theme.text(.caption))
                         .lineLimit(1)
                         .frame(width: 96, alignment: .leading)
                     ForEach(fields.indices, id: \.self) { column in
@@ -88,11 +88,11 @@ struct ContrastSheet: View {
         } label: {
             VStack(spacing: theme.space(.s1)) {
                 Text(verbatim: "Aa")
-                    .font(theme.text(.heading).font)
+                    .themeText(theme.text(.heading))
                 Text(verbatim: String(format: "%.2f : 1", result.ratio))
-                    .font(theme.text(.caption).font.monospaced())
+                    .themeText(theme.text(.caption))
                 Text(LocalizedStringKey(levelKey(result.level)))
-                    .font(theme.text(.caption).font)
+                    .themeText(theme.text(.caption))
             }
             .foregroundStyle(Color(text.color))
             .frame(width: 72, height: 64)
@@ -119,9 +119,9 @@ struct ContrastSheet: View {
                         .frame(width: 16, height: 16)
                     Text("contrast.suggestion")
                     Text(verbatim: suggested.hex)
-                        .font(theme.text(.caption).font.monospaced())
+                        .themeText(theme.text(.caption))
                     Text(verbatim: String(format: "%.2f : 1", after.ratio))
-                        .font(theme.text(.caption).font.monospaced())
+                        .themeText(theme.text(.caption))
                         .foregroundStyle(theme.color(.textMuted, scheme))
                     Spacer(minLength: 0)
                     Button("contrast.apply") { apply(text.name, suggested) }

@@ -33,7 +33,7 @@ struct ToolPalette: View {
             shell.pick(tool, in: interaction, canvas: canvas)
         } label: {
             Image(systemName: tool.symbol)
-                .font(theme.text(.body).font)
+                .themeText(theme.text(.body))
                 .foregroundStyle(tool.isWired ? tint : theme.color(.textMuted, scheme))
                 .frame(width: theme.space(.s6), height: theme.space(.s6))
                 .contentShape(.rect)

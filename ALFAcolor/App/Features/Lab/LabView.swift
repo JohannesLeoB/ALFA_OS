@@ -34,7 +34,7 @@ struct LabView: View {
     private var header: some View {
         HStack(spacing: theme.space(.s3)) {
             Text(LocalizedStringKey("lab.title"))
-                .font(theme.text(.heading).font)
+                .themeText(theme.text(.heading))
             artPicker
             widthPicker
             Spacer()
@@ -84,7 +84,7 @@ struct LabView: View {
                     if !text.isEmpty { model.paste(text) }
                 }
                 Text(LocalizedStringKey("lab.paste.hint"))
-                    .font(theme.text(.caption).font)
+                    .themeText(theme.text(.caption))
                     .foregroundStyle(theme.color(.textMuted, scheme))
             }
         }
@@ -118,7 +118,7 @@ struct LabView: View {
                 .keyboardShortcut(.return, modifiers: .command)
                 .disabled(model.session.draft.files.isEmpty)
         }
-        .font(theme.text(.caption).font)
+        .themeText(theme.text(.caption))
         .padding(theme.space(.s3))
     }
 
