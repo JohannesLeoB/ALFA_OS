@@ -16,6 +16,17 @@ public enum VersionError: Error, Equatable, Sendable {
     case locked
 }
 
+extension VersionError {
+    /// The catalog key of the notice that tells why a change was refused.
+    public var noticeKey: String {
+        switch self {
+        case .locked: "version.notice.locked"
+        case .tooLarge: "version.notice.tooLarge"
+        case .unknownItem, .notCode, .unknownVersion: "version.notice.failed"
+        }
+    }
+}
+
 /// The version commands of a code card. Each one is one undo step.
 /// Versions are part of the document: they are saved with it, and a board change does not remove them.
 /// The current code of a card is not a version. Before the code changes, the code before it is kept.

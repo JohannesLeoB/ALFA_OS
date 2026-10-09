@@ -42,6 +42,11 @@ final class CodeStills {
         }
     }
 
+    /// The still of the card at `width` when the cache holds one. It never takes a new still.
+    func cachedStill(for card: CodeCard, width: Double) -> CGImage? {
+        cache.image(for: StillKey.make(card: card, width: width))
+    }
+
     /// Drops the stills in memory when the system is short of memory. The files stay.
     func clearMemory() {
         cache.clearMemory()

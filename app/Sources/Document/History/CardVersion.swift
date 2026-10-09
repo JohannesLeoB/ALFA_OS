@@ -10,6 +10,14 @@ public struct CardVersion: Equatable, Sendable {
         case lab
         /// The user kept a version by hand, or restored one, so the code before it is kept.
         case manual
+
+        /// The catalog key of the name of the reason.
+        public var nameKey: String {
+            switch self {
+            case .lab: "version.reason.lab"
+            case .manual: "version.reason.manual"
+            }
+        }
     }
 
     public var date: Date
