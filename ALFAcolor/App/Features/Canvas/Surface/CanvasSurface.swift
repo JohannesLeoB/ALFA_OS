@@ -38,7 +38,6 @@ struct CanvasSurface: View {
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
             .clipped()
-            .ignoresSafeArea(edges: .top)
             .onGeometryChange(for: CGSize.self, of: \.size) { size in
                 controller.resize(to: CanvasSize(width: size.width, height: size.height))
             }
@@ -46,12 +45,13 @@ struct CanvasSurface: View {
             .onTapGesture { hasFocus = true }
             .simultaneousGesture(grab)
             .simultaneousGesture(pinch)
-            .selectionInput(interaction, isFocused: hasFocus, panning: spaceDown)
-            .modifier(LabKey(isFocused: hasFocus))
             .pointerStyle(pointer)
+            // Key handlers must sit after `focusable`: a handler inside it is not on the focus path and never runs.
             .focusable()
             .focusEffectDisabled()
             .focused($hasFocus)
+            .selectionInput(interaction, isFocused: hasFocus, panning: spaceDown)
+            .modifier(LabKey(isFocused: hasFocus))
             .onKeyPress(.tab) {
                 guard hasFocus else { return .ignored }
                 onTogglePalettes()
@@ -73,6 +73,8 @@ struct CanvasSurface: View {
             .modifier(ImportTargets(controller: controller, importer: importer))
             .accessibilityElement(children: .contain)
             .accessibilityLabel("canvas.accessibility")
+            // Last, so the canvas covers the top safe area and its pointer space starts at the window edge.
+            .ignoresSafeArea(edges: .top)
         }
     }
 
