@@ -2,8 +2,8 @@ import SwiftUI
 import AppTheme
 import BoardModel
 
-/// The frame of a group: a band with the title and the number of items over an open area.
-/// The area is not filled, so the items inside and below show through. The corners are square. A zone is flat and casts no shadow.
+/// The frame of a group: the zone is filled with its full colour, and a band with the title lies on top.
+/// The corners are square. A zone is flat and casts no shadow.
 struct ZoneFrame: View {
     let presentation: ItemPresentation
     let detail: DetailLevel
@@ -17,10 +17,17 @@ struct ZoneFrame: View {
         let band = CardLayout.band(size: presentation.size, headerHeight: theme.space(.s6))
         let hairline = Hairline.width(zoom: zoom, scale: displayScale)
         ZStack(alignment: .topLeading) {
+            Rectangle().fill(theme.color(tint, scheme))
             Rectangle().strokeBorder(theme.color(.border, scheme), lineWidth: hairline)
             bandView(hairline: hairline)
                 .frame(width: band.w, height: band.h)
         }
+    }
+
+    /// The zone colour of the group. A group without a colour name has the paper colour.
+    private var tint: ColorToken {
+        guard case .group(let group) = presentation.body else { return .zonePaper }
+        return ZoneTint.token(named: group.tint)
     }
 
     private func bandView(hairline: CGFloat) -> some View {
@@ -45,7 +52,6 @@ struct ZoneFrame: View {
         }
         .padding(.horizontal, theme.space(.s3))
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .background(theme.color(.surface, scheme))
         .overlay {
             Rectangle().strokeBorder(theme.color(.border, scheme), lineWidth: hairline)
         }
@@ -61,6 +67,6 @@ struct ZoneFrame: View {
         }
         .font(theme.text(.heading).font)
         .lineLimit(1)
-        .foregroundStyle(theme.color(.text, scheme))
+        .foregroundStyle(Color(ZoneTint.ink(on: tint)))
     }
 }

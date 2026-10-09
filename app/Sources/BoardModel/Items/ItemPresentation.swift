@@ -128,6 +128,8 @@ public struct TextContent: Equatable, Sendable {
 
 public struct GroupContent: Equatable, Sendable {
     public var title: String
+    /// Name of the zone colour token, for example `zone-papier`.
+    public var tint: String
     /// Items whose center lies inside the group.
     public var childCount: Int
 }
@@ -162,9 +164,9 @@ extension ItemPresentation {
             body = .shape(ShapeGeometry.content(kind: kind, style: style, size: item.rect))
         case .text(let text, let style):
             body = .text(TextContent(text: text, role: TextRole(styleName: style)))
-        case .group(let title):
+        case .group(let title, let tint):
             let inside = ALFAcolorCore.children(of: item, in: space.items).count
-            body = .group(GroupContent(title: title, childCount: inside))
+            body = .group(GroupContent(title: title, tint: tint ?? GroupTint.standard, childCount: inside))
         case .code(let language, let files, let previewWidth):
             body = .code(CodeContent(language: language, files: files, previewWidth: previewWidth))
         case .frame(let deviceID, _, let scale, let grid, _):
@@ -177,7 +179,7 @@ extension ItemPresentation {
 
     /// The header text: the title of the item. A group shows the title of the group. Without a title, the address of a link.
     static func title(of item: Item) -> String {
-        if case .group(let title) = item.content, !title.isEmpty { return title }
+        if case .group(let title, _) = item.content, !title.isEmpty { return title }
         if !item.title.isEmpty { return item.title }
         if case .link(let url, _) = item.content { return LinkDisplay.domain(of: url) }
         return ""

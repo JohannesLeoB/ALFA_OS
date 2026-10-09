@@ -86,7 +86,8 @@ public enum Content: Codable, Hashable, Sendable {
     /// `guides` are the guides of the frame, nil for none.
     case frame(deviceID: String?, gridID: String?, scale: Double? = nil, grid: ColumnGrid? = nil, guides: [Guide]? = nil)
     /// A group with a title (zone). Its children lie geometrically inside it.
-    case group(title: String)
+    /// `tint` names a zone colour token (`zone-*`); nil means the standard zone colour. Files without the field read as nil.
+    case group(title: String, tint: String? = nil)
     /// A drawn shape: rectangle, capsule, ellipse or line.
     case shape(kind: ShapeKind, style: ShapeStyle)
     /// Free text on the canvas. `style` names a text style: "heading", "body" or "caption". Another name reads as "body".

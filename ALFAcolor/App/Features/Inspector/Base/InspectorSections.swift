@@ -225,3 +225,43 @@ extension ItemKind {
         }
     }
 }
+
+/// The zone colour of the selected groups: one of the seven zone colours, picked with the mouse.
+struct ZoneSection: View {
+    var store: BoardStore
+    var items: [Item]
+
+    @Environment(\.theme) private var theme
+    @Environment(\.colorScheme) private var scheme
+
+    /// Names of the zone colours for screen readers, by token name.
+    private static let names: [String: String] = [
+        "zone-stein": "zone.color.stone", "zone-pflaume": "zone.color.plum", "zone-nacht": "zone.color.night",
+        "zone-aprikose": "zone.color.apricot", "zone-rose": "zone.color.rose", "zone-papier": "zone.color.paper",
+        "zone-schwarz": "zone.color.black",
+    ]
+
+    var body: some View {
+        let tints = SharedValue(items.compactMap { item -> String? in
+            guard case .group(_, let tint) = item.content else { return nil }
+            return ZoneTint.token(named: tint).rawValue
+        })
+        Section("item.kind.group") {
+            HStack(spacing: theme.space(.s2)) {
+                ForEach(ZoneTint.all, id: \.self) { zone in
+                    let chosen = tints.value == zone.rawValue
+                    Button {
+                        _ = try? store.perform(groupTint: zone.rawValue)
+                    } label: {
+                        Rectangle()
+                            .fill(theme.color(zone, scheme))
+                            .overlay(Rectangle().strokeBorder(theme.color(chosen ? .coral : .border, scheme), lineWidth: chosen ? 2 : 1))
+                            .frame(width: theme.space(.s5), height: theme.space(.s5))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(LocalizedStringKey(Self.names[zone.rawValue] ?? "zone.color.paper"))
+                }
+            }
+        }
+    }
+}
