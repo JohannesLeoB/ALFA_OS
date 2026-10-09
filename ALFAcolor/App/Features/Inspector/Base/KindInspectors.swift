@@ -96,6 +96,7 @@ struct FrameSection: View {
                     .foregroundStyle(.secondary)
             }
             FrameGridSection(store: store, items: items)
+            GuideSection(store: store, items: items)
         }
     }
 }

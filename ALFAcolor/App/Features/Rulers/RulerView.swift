@@ -18,11 +18,33 @@ struct RulerView: View {
     var viewport: Viewport
     /// Canvas position of the first point of the ruler, along its axis.
     var lead: Double
+    /// Canvas position of the ruler's edge across its axis: the top of a horizontal ruler, the left of a vertical one.
+    var cross: Double
     /// Called with the unit that the right click picks.
     var onPickUnit: (LengthUnit) -> Void
+    /// Called while a guide is pulled out of the ruler, with the pointer in canvas points, and again when it is let go.
+    /// nil turns the pulling off.
+    var onPull: ((CGPoint, Bool) -> Void)?
 
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
+
+    /// Pulling a guide: a drag that starts on the strip. Its position is the pointer in canvas points.
+    private var pull: some Gesture {
+        DragGesture(minimumDistance: 4, coordinateSpace: .local)
+            .onChanged { value in
+                onPull?(canvasPoint(value.location), false)
+            }
+            .onEnded { value in
+                onPull?(canvasPoint(value.location), true)
+            }
+    }
+
+    private func canvasPoint(_ location: CGPoint) -> CGPoint {
+        along == .horizontal
+            ? CGPoint(x: lead + location.x, y: cross + location.y)
+            : CGPoint(x: cross + location.x, y: lead + location.y)
+    }
 
     var body: some View {
         let edge = theme.color(.border, scheme)
@@ -72,6 +94,7 @@ struct RulerView: View {
             context.stroke(border, with: .color(edge), lineWidth: SelectionStyle.lineWidth)
         }
         .background(theme.color(.surface, scheme))
+        .gesture(pull)
         .contextMenu {
             ForEach(LengthUnit.allCases, id: \.self) { unit in
                 Button {

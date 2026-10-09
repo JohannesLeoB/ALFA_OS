@@ -20,6 +20,9 @@ final class ShellState {
     var lengthUnit: LengthUnit = .point
     /// The rulers along the top and left edge of the canvas.
     var rulersVisible = true
+    /// The guides of the frames: shown or hidden, and locked against pulling and editing with the pointer.
+    var guidesVisible = true
+    var guidesLocked = false
     /// The frame that the rulers measured from last. It is the fallback when no frame holds the selection.
     var rulerFrame: ItemID?
     /// Room whose name is being changed, and the name in the field. The tab row and the room menu set them.

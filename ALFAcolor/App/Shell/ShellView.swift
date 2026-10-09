@@ -47,12 +47,10 @@ struct ShellView: View {
                 }
             }
             .onGeometryChange(for: CGPoint.self, of: { $0.frame(in: .global).origin }) { columnOrigin = $0 }
-            // Rulers on top of the canvas, not in it: they stay below the toolbar and take clicks on their strips only.
+            // Rulers and guides on top of the canvas, not in it: they stay below the toolbar and take clicks on their strips only.
             .overlay(alignment: .topLeading) {
-                if shell.rulersVisible {
-                    RulersOverlay(canvas: canvas, shell: shell,
-                                  lead: CGPoint(x: columnOrigin.x - canvasOrigin.x, y: columnOrigin.y - canvasOrigin.y))
-                }
+                RulersOverlay(canvas: canvas, shell: shell,
+                              lead: CGPoint(x: columnOrigin.x - canvasOrigin.x, y: columnOrigin.y - canvasOrigin.y))
             }
             // On the stack, not on the canvas: the canvas ignores the top safe area, so its overlays
             // would reach under the toolbar, where they cannot be clicked. The lab and the blob menu sit here.
