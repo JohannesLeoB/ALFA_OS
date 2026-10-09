@@ -21,10 +21,13 @@ public struct Device: Codable, Hashable, Sendable, Identifiable {
     public var width: Double          // points
     public var height: Double         // points
     public var scales: [Double]       // pixels per point, for example [2]
+    /// True when the size is not confirmed by Apple's own page. See `Devices.swift`.
+    public var isTemplate: Bool
     public var safeArea: (top: Double, left: Double, bottom: Double, right: Double) { (safeTop, safeLeft, safeBottom, safeRight) }
     public var safeTop = 0.0, safeLeft = 0.0, safeBottom = 0.0, safeRight = 0.0
-    public init(id: String, name: String, width: Double, height: Double, scales: [Double]) {
+    public init(id: String, name: String, width: Double, height: Double, scales: [Double], template: Bool = false) {
         self.id = id; self.name = name; self.width = width; self.height = height; self.scales = scales
+        isTemplate = template
     }
     public func pixels(at scale: Double) -> (w: Double, h: Double) { (width * scale, height * scale) }
     /// The device turned by 90 degrees. The id ends in `-landscape` or `-portrait` to match the new
@@ -43,13 +46,6 @@ public struct Device: Codable, Hashable, Sendable, Identifiable {
         return d
     }
 
-    /// Start list. Source: common default resolutions. Check each line against the Apple docs before release.
-    public static let presets: [Device] = [
-        Device(id: "mbp14", name: "device.mbp14", width: 1512, height: 982, scales: [2]),
-        Device(id: "mac-window", name: "device.macWindow", width: 1280, height: 800, scales: [2]),
-        Device(id: "ipad-11", name: "device.ipad11", width: 1180, height: 820, scales: [2]),
-        Device(id: "iphone", name: "device.iphone", width: 393, height: 852, scales: [3])
-    ]
 }
 
 /// Column grid as in InDesign: columns, gutter, margins. Plus a baseline grid.
