@@ -24,8 +24,6 @@ public enum AIError: Error, Sendable, Equatable {
     case cancelled
     /// An image breaks a rule (size, format, pixel size) or may not be sent.
     case imageRejected(String)
-    /// The monthly limit of the app would be exceeded. Nothing was sent.
-    case limitStop(spent: Decimal, limit: Decimal)
     /// The answer came, but no result could be read from it.
     case unusableAnswer(String)
 }
@@ -55,8 +53,6 @@ extension AIError: CustomStringConvertible {
             "The call was cancelled."
         case let .imageRejected(reason):
             "Image rejected: \(reason)"
-        case let .limitStop(spent, limit):
-            "Monthly limit of the app reached: \(spent) of \(limit) EUR spent."
         case let .unusableAnswer(reason):
             "The answer has no usable result: \(reason)"
         }
