@@ -134,7 +134,8 @@ public enum ComposeExport {
     /// The colour as an ARGB literal: alpha, red, green, blue, two hex digits each.
     private static func argb(_ c: RGB) -> String {
         [c.a, c.r, c.g, c.b].map { channel in
-            String(format: "%02X", Int(min(max((channel * 255).rounded(), 0), 255)))
+            let value = channel.isNaN ? 0 : min(max((channel * 255).rounded(), 0), 255)
+            return String(format: "%02X", Int(value))
         }.joined()
     }
 

@@ -14,7 +14,10 @@ public struct RGB: Codable, Hashable, Sendable {
         b = Double((full >> 8) & 0xFF) / 255; a = Double(full & 0xFF) / 255
     }
     public var hex: String {
-        func h(_ x: Double) -> String { String(format: "%02X", Int((min(max(x, 0), 1) * 255).rounded())) }
+        func h(_ x: Double) -> String {
+            let clamped = x.isNaN ? 0 : min(max(x, 0), 1)
+            return String(format: "%02X", Int((clamped * 255).rounded()))
+        }
         return "#" + h(r) + h(g) + h(b) + (a < 1 ? h(a) : "")
     }
 }
@@ -200,7 +203,7 @@ public enum TokenExport {
         return name.first?.isNumber == true ? "t" + name : name
     }
     static func fmt(_ x: Double, _ digits: Int = 2) -> String {
-        if x == x.rounded() { return String(Int(x)) }
+        if x.isFinite, abs(x) < 1e15, x == x.rounded() { return String(Int(x)) }
         var s = String(format: "%.\(digits)f", x)
         while s.hasSuffix("0") { s.removeLast() }
         if s.hasSuffix(".") { s.removeLast() }
