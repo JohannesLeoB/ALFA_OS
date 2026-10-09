@@ -68,7 +68,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-231](briefe/B-231.md) | E2 | Fehlerbrief 2: Dokument, Menüs, Inspektor | B-229 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-232](briefe/B-232.md) | E2 | Fehlerbrief 2: Überzüge, Bildlauf, Raum löschen beim Tippen | B-227 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 958 Tests, App-Bau grün); Abnahme am Bild offen (Beschriftung über dem Rahmen, Schatten, Menü Hinzufügen, Inspektor); Fragen: Kinder beim Drehen mitdrehen oder liegen lassen? Vorlage-Maße (MacBook Air, iPhone Pro, Mac-Fenster) bestätigen |
-| [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | offen |
+| [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
 | [B-304](briefe/B-304.md) | E3 | Abstände zeigen und Messen | B-202, B-303 | offen |
 | [B-305](briefe/B-305.md) | E3 | Werkzeugpalette und Werkzeugoptionen | B-204 | offen |
