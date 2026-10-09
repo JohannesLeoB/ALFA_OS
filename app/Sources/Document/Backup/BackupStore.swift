@@ -21,6 +21,22 @@ public enum BackupError: Error, Equatable, Sendable {
     case clockOutOfRange
     /// The target of a restore already exists; nothing is overwritten.
     case targetExists
+    /// Only backups of documents that are no longer known may be deleted this way.
+    case documentIsKnown
+}
+
+/// A backup folder whose document is not known any more.
+public struct OrphanedBackups: Equatable, Sendable {
+    public let documentID: UUID
+    public let url: URL
+    /// Number of backups in the folder.
+    public let count: Int
+
+    public init(documentID: UUID, url: URL, count: Int) {
+        self.documentID = documentID
+        self.url = url
+        self.count = count
+    }
 }
 
 /// One backup of a document: a full copy of its package folder, named by the time it was taken.
@@ -78,7 +94,43 @@ public struct BackupStore {
             try? FileManager.default.removeItem(at: partial)
             throw error
         }
+        try thin(documentID)
         return .created(BackupRecord(url: target, documentID: documentID, date: date))
+    }
+
+    /// Copies a backup to a new place. An existing item at `target` is never replaced.
+    public func restore(_ record: BackupRecord, to target: URL) throws {
+        guard !FileManager.default.fileExists(atPath: target.path) else { throw BackupError.targetExists }
+        try FileManager.default.copyItem(at: record.url, to: target)
+    }
+
+    /// Document folders in the backup root whose document is not in `knownDocuments`. Nothing is deleted.
+    public func orphanedBackups(knownDocuments: Set<UUID>) throws -> [OrphanedBackups] {
+        guard isDirectory(root) else { throw BackupError.rootMissing }
+        let items = try FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)
+        return try items.compactMap { url -> OrphanedBackups? in
+            guard isDirectory(url), let id = UUID(uuidString: url.lastPathComponent), !knownDocuments.contains(id) else {
+                return nil
+            }
+            return OrphanedBackups(documentID: id, url: url, count: try backups(for: id).count)
+        }.sorted { $0.url.lastPathComponent < $1.url.lastPathComponent }
+    }
+
+    /// Deletes all backups of a document that is no longer known. Only called on request, never automatically.
+    public func deleteOrphanedBackups(_ documentID: UUID, knownDocuments: Set<UUID>) throws {
+        guard !knownDocuments.contains(documentID) else { throw BackupError.documentIsKnown }
+        let folder = documentFolder(documentID)
+        guard isDirectory(folder) else { return }
+        try FileManager.default.removeItem(at: folder)
+    }
+
+    /// Removes the backups that `BackupThinning` names for this document.
+    private func thin(_ documentID: UUID) throws {
+        let records = try backups(for: documentID)
+        let entries = records.map { BackupEntry(id: $0.url.lastPathComponent, date: $0.date) }
+        for name in BackupThinning.removals(entries) {
+            try FileManager.default.removeItem(at: documentFolder(documentID).appending(path: name, directoryHint: .isDirectory))
+        }
     }
 
     /// The backups of one document, newest first. Empty when there is no folder for it.
