@@ -167,9 +167,9 @@ extension ItemPresentation {
             body = .group(GroupContent(title: title, childCount: inside))
         case .code(let language, let files, let previewWidth):
             body = .code(CodeContent(language: language, files: files, previewWidth: previewWidth))
-        case .frame(let deviceID, _, let scale, _):
+        case .frame(let deviceID, _, let scale, let grid):
             body = .other(kind: .frame)
-            frame = FrameDisplay.make(deviceID: deviceID, scale: scale, rect: item.rect)
+            frame = FrameDisplay.make(deviceID: deviceID, scale: scale, rect: item.rect, grid: grid)
         }
         return ItemPresentation(id: item.id, size: CanvasSize(width: item.rect.w, height: item.rect.h),
                                 title: Self.title(of: item), locked: item.locked, problem: problem, body: body, frame: frame)

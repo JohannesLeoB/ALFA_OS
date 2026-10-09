@@ -17,13 +17,15 @@ public struct FrameDisplay: Equatable, Sendable {
     public var scale: Int
     /// True for a device that Apple's own page does not confirm.
     public var isTemplate: Bool
+    /// The lines of the column grid, nil without a grid.
+    public var gridLines: FrameGridLines? = nil
 
     public var isLandscape: Bool { widthPoints >= heightPoints }
     /// The size in pixels at the scale of the frame.
     public var widthPixels: Int { widthPoints * scale }
     public var heightPixels: Int { heightPoints * scale }
 
-    public static func make(deviceID: String?, scale: Double?, rect: Rect) -> FrameDisplay {
+    public static func make(deviceID: String?, scale: Double?, rect: Rect, grid: ColumnGrid? = nil) -> FrameDisplay {
         let device = deviceID.flatMap(Device.resolve)
         return FrameDisplay(
             deviceID: deviceID,
@@ -32,7 +34,8 @@ public struct FrameDisplay: Equatable, Sendable {
             widthPoints: Int(rect.w.rounded()),
             heightPoints: Int(rect.h.rounded()),
             scale: Int(FrameScale.effective(deviceID: deviceID, scale: scale).rounded()),
-            isTemplate: device?.isTemplate ?? false)
+            isTemplate: device?.isTemplate ?? false,
+            gridLines: grid.flatMap { FrameGridLines.make($0, width: rect.w, height: rect.h) })
     }
 }
 

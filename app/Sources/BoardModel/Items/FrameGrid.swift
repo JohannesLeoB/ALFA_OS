@@ -56,3 +56,27 @@ extension BoardStore {
         return try perform(.batch(commands, nameKey: "undo.frame.gridRemove"))
     }
 }
+
+/// The lines of a column grid in the frame's own coordinates (origin at the top left), for drawing.
+public struct FrameGridLines: Equatable, Sendable {
+    /// The columns as rectangles.
+    public var columns: [Rect]
+    /// The baselines as y positions.
+    public var baselines: [Double]
+    /// The area inside the margins.
+    public var inner: Rect
+
+    /// The lines of a grid in a frame of this size. nil when the grid does not fit the frame or would
+    /// give more lines than `SnapTargets.lineLimit`.
+    public static func make(_ grid: ColumnGrid, width: Double, height: Double) -> FrameGridLines? {
+        let local = Rect(x: 0, y: 0, w: width, h: height)
+        guard FrameGrid.isValid(grid, in: local), grid.columns <= SnapTargets.lineLimit,
+              grid.baseline == 0 || height / grid.baseline <= Double(SnapTargets.lineLimit) else { return nil }
+        return FrameGridLines(
+            columns: grid.columnRects(in: local),
+            baselines: grid.baselines(in: local),
+            inner: Rect(x: grid.marginLeft, y: grid.marginTop,
+                        w: width - grid.marginLeft - grid.marginRight,
+                        h: height - grid.marginTop - grid.marginBottom))
+    }
+}

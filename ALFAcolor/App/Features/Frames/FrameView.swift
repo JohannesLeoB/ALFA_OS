@@ -19,6 +19,9 @@ struct FrameView: View {
         ZStack(alignment: .topLeading) {
             Rectangle().fill(theme.color(.surface, scheme))
             Rectangle().strokeBorder(theme.color(.border, scheme), lineWidth: hairline)
+            if detail == .full, let lines = frame.gridLines {
+                gridCanvas(lines, hairline: hairline)
+            }
         }
         .modifier(Lift(detail: detail))
         .overlay(alignment: .topLeading) {
@@ -26,6 +29,35 @@ struct FrameView: View {
                 label.alignmentGuide(.top) { dimensions in dimensions[.bottom] + theme.space(.s2) }
             }
         }
+    }
+
+    /// Opacity of the column fill and of the baselines. The colors come from the theme.
+    private static let columnOpacity = 0.10
+    private static let baselineOpacity = 0.12
+
+    /// The grid on the sheet: columns as a light fill, baselines as hairlines, margins dashed. The canvas takes
+    /// no input, so clicks reach the items and the sheet below it.
+    private func gridCanvas(_ lines: FrameGridLines, hairline: CGFloat) -> some View {
+        let columnColor = theme.color(.coral, scheme).opacity(Self.columnOpacity)
+        let baselineColor = theme.color(.accent, scheme).opacity(Self.baselineOpacity)
+        let marginColor = theme.color(.border, scheme)
+        let dash = [theme.space(.s1), theme.space(.s1)]
+        let inner = lines.inner
+        return Canvas { context, size in
+            for column in lines.columns {
+                context.fill(Path(CGRect(x: column.x, y: column.y, width: column.w, height: column.h)), with: .color(columnColor))
+            }
+            var rules = Path()
+            for y in lines.baselines {
+                rules.move(to: CGPoint(x: 0, y: y))
+                rules.addLine(to: CGPoint(x: size.width, y: y))
+            }
+            context.stroke(rules, with: .color(baselineColor), lineWidth: hairline)
+            let margins = Path(CGRect(x: inner.x, y: inner.y, width: inner.w, height: inner.h))
+            context.stroke(margins, with: .color(marginColor), style: StrokeStyle(lineWidth: hairline, dash: dash))
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 
     /// The name, the size in points, the size in pixels at the scale, and a note for a template size.
