@@ -45,7 +45,7 @@ public enum Tool: String, CaseIterable, Hashable, Sendable {
     public var isWired: Bool { Self.wired.contains(self) }
 
     /// The tools that work. `lab` is an action: it opens the lab and the active tool stays as it was.
-    public static let wired: Set<Tool> = [.select, .frame, .shape, .text, .hand, .zoom, .measure, .lab]
+    public static let wired: Set<Tool> = [.select, .frame, .shape, .text, .hand, .zoom, .measure, .comment, .lab]
 
     /// The single key of the tool from the shortcut table. nil when the table has none.
     public var key: String? {

@@ -220,7 +220,7 @@ public enum ShortcutTable {
     /// Tools whose key is in the table but whose tool does not work yet. The shortcut table marks them.
     /// The working tools (`Tool.wired` in BoardModel) are not in this list.
     public static let withoutEffect: Set<String> = [
-        "tool.directSelect", "tool.eyedropper", "tool.pen", "tool.comment",
+        "tool.directSelect", "tool.eyedropper", "tool.pen",
     ]
 
     /// Single keys of the tools (09-VISION section 4). Without the command key, so only on the canvas.

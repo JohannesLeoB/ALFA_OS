@@ -16,14 +16,26 @@ struct ItemView: View {
     var edit: TextEditing?
     /// False while the item lies outside the visible part of the canvas. A code card then rests as an image.
     var onScreen = true
+    /// The canvas interaction. It holds the draft of the comment tool, which the item shows at its press point.
+    var interaction: CanvasInteraction?
 
     var body: some View {
         let detail = DetailLevel.level(for: presentation.size, zoom: zoom)
         frame(detail: detail)
             .frame(width: presentation.size.width, height: presentation.size.height, alignment: .topLeading)
+            .overlay(alignment: .topLeading) { draftField }
             .accessibilityElement(children: isCode ? .contain : .ignore)
             .accessibilityLabel(label)
             .accessibilityValue(value)
+    }
+
+    /// The field of the comment tool, when its draft is on this item. It sits at the anchor of the draft.
+    @ViewBuilder
+    private var draftField: some View {
+        if let interaction, let draft = interaction.noteDraft, draft.itemID == presentation.id {
+            NoteDraftField(interaction: interaction)
+                .offset(x: draft.anchor.x * presentation.size.width, y: draft.anchor.y * presentation.size.height)
+        }
     }
 
     /// A code card has controls of its own, so VoiceOver reaches them inside the item.

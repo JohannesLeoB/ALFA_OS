@@ -57,9 +57,13 @@ public final class CanvasInteraction {
             measureLine = nil
             drawStart = nil
             lasso = nil
+            noteDraft = nil
             refreshDistances()
         }
     }
+    /// The note that the comment tool is writing: its item and the place on it. The view types the text.
+    /// It is closed by `finishNoteDraft`, `cancelNoteDraft`, or a change of the tool.
+    public internal(set) var noteDraft: NoteDraft?
     /// True while the measuring tool is on. A press and a drag then measure a line instead of selecting.
     public var measuring: Bool {
         get { tools.active == .measure }
@@ -270,6 +274,9 @@ public final class CanvasInteraction {
             return
         case .text:
             textPress(at: point)
+            return
+        case .comment:
+            commentPress(at: point)
             return
         default:
             break

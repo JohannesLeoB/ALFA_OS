@@ -6113,7 +6113,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notiz an einen Punkt heften. Noch nicht gebaut."
+            "value" : "Klick auf ein Stück heftet eine Notiz an die Stelle."
           }
         }
       }
@@ -8336,6 +8336,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Notiz löschen"
+          }
+        }
+      }
+    },
+    "note.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz …"
+          }
+        }
+      }
+    },
+    "note.done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        }
+      }
+    },
+    "note.tooMany" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Stück hat schon 100 Notizen. Eine löschen, dann noch einmal versuchen."
+          }
+        }
+      }
+    },
+    "note.text" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz"
           }
         }
       }
