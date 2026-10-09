@@ -14,6 +14,8 @@ struct InspectorPanel: View {
     var body: some View {
         let items = store.selectedItems
         Form {
+            // The options of the active tool come first; the selection tool shows none.
+            ToolOptionsSection(interaction: interaction, unit: $unit)
             if items.isEmpty {
                 RoomSection(store: store, snap: snap, interaction: interaction)
             } else {
