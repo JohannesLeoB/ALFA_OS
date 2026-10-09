@@ -6,19 +6,47 @@ import Tokens
 
 /// Color token of the UI. Path in the contract: `color.<raw value>`.
 public enum ColorToken: String, CaseIterable, Sendable {
+    /// Accent of the app. In the contract an alias of `koralle`.
     case accent = "akzent"
+    /// Canvas and window ground: white in light mode, black in dark mode.
     case background = "grund"
+    /// Resting card, image ground and hover.
     case surface = "flaeche"
+    /// Content of cards and fields.
+    case surfaceContent = "blatt"
+    /// Lines on glass: separators, field edges, card edges at rest.
     case border = "rahmen"
     case text
     case textMuted = "textLeise"
-    /// Snapping, measures and distances.
+    /// The one signal colour: focus, snapping, lasso, confirm.
     case coral = "koralle"
+    case glass = "glas"
+    case glassDense = "glas-dicht"
+    case glassEdge = "glas-kante"
+    /// Grip at the lower right corner of a card.
+    case fold = "falz"
+    case lasso
+    case zoneStone = "zone-stein"
+    case zonePlum = "zone-pflaume"
+    case zoneNight = "zone-nacht"
+    case zoneApricot = "zone-aprikose"
+    case zoneRose = "zone-rose"
+    case zonePaper = "zone-papier"
+    case zoneBlack = "zone-schwarz"
+    case synKeyword = "syn-schluessel"
+    case synString = "syn-zeichenkette"
+    case synComment = "syn-kommentar"
+    case synType = "syn-typ"
+    case synNumber = "syn-zahl"
+    case synTag = "syn-tag"
+
+    /// The colours a blade of the swatch fan paints: the interface colours.
+    public static let paintable: [ColorToken] = [.accent, .background, .surface, .border, .text, .textMuted, .coral]
 }
 
 /// Spacing token. Path: `space.<name>`. Values in points.
 public enum SpaceToken: String, CaseIterable, Sendable {
-    case s1, s2, s3, s4, s5, s6, s8
+    case s1, s2, s3, s4, s5, s6, s7, s8
 }
 
 /// Radius token. Path: `radius.<name>`. Values in points.
@@ -26,43 +54,41 @@ public enum RadiusToken: String, CaseIterable, Sendable {
     case s, m, l
 }
 
-/// Text style. Path: `text.<raw value>.familie`, `.groesse`, `.gewicht`.
+/// Text style. Path: `text.<raw value>.familie`, `.groesse`, `.gewicht`, `.zeilenhoehe`, `.laufweite`.
 public enum TextToken: String, CaseIterable, Sendable {
-    case heading = "kopf"
-    case body = "fliesstext"
-    case caption = "beschriftung"
+    case zone, title = "titel", section = "abschnitt", heading = "kopf", lead
+    case reading = "lesen", body = "fliesstext", control = "bedienung", caption = "beschriftung", code = "quelltext"
 }
 
-/// A resolved text style. The font "System" selects the system font.
+/// A resolved text style. The family "System" selects the system font, "System Display" and "System Text"
+/// the system font too, and "Mono" the monospaced system font.
 public struct TextStyle: Sendable, Equatable {
     public var families: [String]
     public var size: CGFloat
     public var weight: Int
+    /// Line height as a factor of the size. Unitless.
+    public var lineHeight: CGFloat
+    /// Letter spacing in em.
+    public var tracking: CGFloat
 
-    public init(families: [String], size: CGFloat, weight: Int) {
+    public init(families: [String], size: CGFloat, weight: Int, lineHeight: CGFloat = 1.5, tracking: CGFloat = 0) {
         self.families = families; self.size = size; self.weight = weight
+        self.lineHeight = lineHeight; self.tracking = tracking
     }
+
+    /// Letter spacing in points, for `Text.tracking`.
+    public var trackingPoints: CGFloat { tracking * size }
 
     public var font: Font {
-        let fontWeight = TextStyle.fontWeight(weight)
-        if let name = families.first, name != "System" {
-            return Font.custom(name, size: size).weight(fontWeight)
+        let fontWeight = Theme.fontWeight(weight)
+        let name = families.first ?? "System"
+        if name == "Mono" {
+            return Font.system(size: size, weight: fontWeight, design: .monospaced)
         }
-        return Font.system(size: size, weight: fontWeight)
-    }
-
-    static func fontWeight(_ w: Int) -> Font.Weight {
-        switch w {
-        case ..<150: .ultraLight
-        case ..<250: .thin
-        case ..<350: .light
-        case ..<450: .regular
-        case ..<550: .medium
-        case ..<650: .semibold
-        case ..<750: .bold
-        case ..<850: .heavy
-        default: .black
+        if name.hasPrefix("System") {
+            return Font.system(size: size, weight: fontWeight)
         }
+        return Font.custom(name, size: size).weight(fontWeight)
     }
 }
 
@@ -83,50 +109,61 @@ public struct Theme: Sendable, Equatable {
     private let radii: [RadiusToken: CGFloat]
     private let texts: [TextToken: TextStyle]
 
-    /// Placeholders only. Without a contract, this set applies.
-    public static let placeholder = Theme(contract: Placeholder.light, dark: Placeholder.dark, source: "Placeholder")
+    /// Placeholders only. Without a contract, this set applies. It holds colours only.
+    public static let placeholder = Theme(contract: Placeholder.light, dark: Placeholder.dark, source: "Placeholder",
+                                          reportMissing: false)
 
-    /// `light` delivers all values. `dark` is optional and replaces only the colors in dark mode.
+    /// `light` delivers all values. `dark` is optional. A dark contract names only the values that differ in dark mode;
+    /// every other value keeps its light value. Without a dark contract, the placeholder colours apply in dark mode.
     public init(contract light: TokenSet, dark: TokenSet? = nil, source: String) {
+        self.init(contract: light, dark: dark, source: source, reportMissing: true)
+    }
+
+    init(contract light: TokenSet, dark: TokenSet?, source: String, reportMissing: Bool) {
         var missing: [String] = []
         let lightIndex = Theme.index(light)
-        let darkIndex = dark.map(Theme.index) ?? [:]
+        let darkIndex = dark.map { Theme.index($0).merging(lightIndex) { fromDark, _ in fromDark } } ?? [:]
         let placeholderLight = Theme.index(Placeholder.light)
         let placeholderDark = Theme.index(Placeholder.dark)
-        let darkReport: String? = dark == nil ? nil : "dark: "
+        let lightReport: String? = reportMissing ? "" : nil
+        let darkReport: String? = reportMissing && dark != nil ? "dark: " : nil
 
         var lightColors: [ColorToken: RGB] = [:]
         var darkColors: [ColorToken: RGB] = [:]
         for c in ColorToken.allCases {
             let path = "color.\(c.rawValue)"
-            lightColors[c] = Theme.value(path, from: lightIndex, fallback: placeholderLight, report: "", &missing,
-                                         read: Theme.readColor, last: RGB(r: 0, g: 0, b: 0))
+            lightColors[c] = Theme.value(path, from: lightIndex, fallback: placeholderLight, report: lightReport, &missing,
+                                         read: Theme.readColor, last: Theme.magenta)
             darkColors[c] = Theme.value(path, from: darkIndex, fallback: placeholderDark, report: darkReport, &missing,
-                                        read: Theme.readColor, last: RGB(r: 0, g: 0, b: 0))
+                                        read: Theme.readColor, last: Theme.magenta)
         }
 
         var spacing: [SpaceToken: CGFloat] = [:]
         for s in SpaceToken.allCases {
-            spacing[s] = Theme.value("space.\(s.rawValue)", from: lightIndex, fallback: placeholderLight, report: "", &missing,
-                                     read: Theme.readPoints, last: 0)
+            spacing[s] = Theme.value("space.\(s.rawValue)", from: lightIndex, fallback: placeholderLight,
+                                     report: lightReport, &missing, read: Theme.readPoints, last: 0)
         }
 
         var radii: [RadiusToken: CGFloat] = [:]
         for r in RadiusToken.allCases {
-            radii[r] = Theme.value("radius.\(r.rawValue)", from: lightIndex, fallback: placeholderLight, report: "", &missing,
-                                   read: Theme.readPoints, last: 0)
+            radii[r] = Theme.value("radius.\(r.rawValue)", from: lightIndex, fallback: placeholderLight,
+                                   report: lightReport, &missing, read: Theme.readPoints, last: 0)
         }
 
         var texts: [TextToken: TextStyle] = [:]
         for t in TextToken.allCases {
             let path = "text.\(t.rawValue)"
-            let family = Theme.value(path + ".familie", from: lightIndex, fallback: placeholderLight, report: "", &missing,
-                                     read: Theme.readFamily, last: ["System"])
-            let size = Theme.value(path + ".groesse", from: lightIndex, fallback: placeholderLight, report: "", &missing,
-                                   read: Theme.readPoints, last: 13)
-            let weight = Theme.value(path + ".gewicht", from: lightIndex, fallback: placeholderLight, report: "", &missing,
-                                     read: Theme.readWeight, last: 400)
-            texts[t] = TextStyle(families: family, size: size, weight: weight)
+            let family = Theme.value(path + ".familie", from: lightIndex, fallback: placeholderLight,
+                                     report: lightReport, &missing, read: Theme.readFamily, last: ["System"])
+            let size = Theme.value(path + ".groesse", from: lightIndex, fallback: placeholderLight,
+                                   report: lightReport, &missing, read: Theme.readPoints, last: 13)
+            let weight = Theme.value(path + ".gewicht", from: lightIndex, fallback: placeholderLight,
+                                     report: lightReport, &missing, read: Theme.readWeight, last: 400)
+            let line = Theme.value(path + ".zeilenhoehe", from: lightIndex, fallback: placeholderLight,
+                                   report: nil, &missing, read: Theme.readNumber, last: 1.5)
+            let tracking = Theme.value(path + ".laufweite", from: lightIndex, fallback: placeholderLight,
+                                       report: nil, &missing, read: Theme.readNumber, last: 0)
+            texts[t] = TextStyle(families: family, size: size, weight: weight, lineHeight: line, tracking: tracking)
         }
 
         self.source = source
@@ -140,7 +177,7 @@ public struct Theme: Sendable, Equatable {
     // MARK: - Access
 
     public func rgb(_ color: ColorToken, _ mode: Mode) -> RGB {
-        colors[mode]?[color] ?? RGB(r: 0, g: 0, b: 0)
+        colors[mode]?[color] ?? Theme.magenta
     }
 
     /// Color for SwiftUI. The mode comes from the ColorScheme of the environment.
@@ -156,13 +193,32 @@ public struct Theme: Sendable, Equatable {
         texts[t] ?? TextStyle(families: ["System"], size: 13, weight: 400)
     }
 
+    /// The SwiftUI weight for a numeric weight of the contract, following the DTCG names:
+    /// 100 thin, 200 extra-light (ultraLight), 300 light, 400 regular, 500 medium, 600 semi-bold, 700 bold, 800 extra-bold, 900 black.
+    public static func fontWeight(_ w: Int) -> Font.Weight {
+        switch w {
+        case ..<150: .thin
+        case ..<250: .ultraLight
+        case ..<350: .light
+        case ..<450: .regular
+        case ..<550: .medium
+        case ..<650: .semibold
+        case ..<750: .bold
+        case ..<850: .heavy
+        default: .black
+        }
+    }
+
     // MARK: - Resolving
+
+    /// Colour of a token that neither the contract nor the placeholder names. Visible on purpose.
+    private static let magenta = RGB(r: 1, g: 0, b: 1)
 
     private static func index(_ set: TokenSet) -> [String: TokenValue] {
         Dictionary(set.tokens.map { ($0.id, $0.value) }, uniquingKeysWith: { first, _ in first })
     }
 
-    /// Value from the contract, otherwise from the placeholder. If it is missing or has the wrong type,
+    /// Value from the contract, otherwise from the placeholder, otherwise `last`. If it is missing or has the wrong type,
     /// it is noted in `missing`, provided that `report` is set.
     private static func value<T>(_ path: String,
                                  from contract: [String: TokenValue],
@@ -190,6 +246,11 @@ public struct Theme: Sendable, Equatable {
     private static func readPoints(_ v: TokenValue) -> CGFloat? {
         guard case .dimension(let x, let unit) = v else { return nil }
         return CGFloat(unit == "rem" ? x * 16 : x)
+    }
+
+    private static func readNumber(_ v: TokenValue) -> CGFloat? {
+        if case .number(let x) = v { return CGFloat(x) }
+        return nil
     }
 
     private static func readFamily(_ v: TokenValue) -> [String]? {

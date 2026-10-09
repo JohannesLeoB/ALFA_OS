@@ -132,7 +132,7 @@ struct BlobPaletteContent: View {
         } else if !store.canPaintSelection {
             notice("fan.noColour")
         } else {
-            fan(ColorToken.allCases.map { theme.rgb($0, Theme.Mode(scheme)) }, selection: $token)
+            fan(ColorToken.paintable.map { theme.rgb($0, Theme.Mode(scheme)) }, selection: $token)
         }
     }
 
