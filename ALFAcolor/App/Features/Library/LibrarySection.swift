@@ -29,6 +29,8 @@ struct LibrarySection: View {
     @State private var rows: [ItemRef: Row] = [:]
     @State private var scope: Scope = .all
     @State private var query = ""
+    /// Only items that may be used freely: own work or a free licence.
+    @State private var freeOnly = false
     @State private var renaming: Folder?
     @State private var renameText = ""
 
@@ -40,6 +42,7 @@ struct LibrarySection: View {
                 scopeRow(.all, title: "sidebar.allItems", symbol: "square.grid.2x2")
                 scopeRow(.images, title: "sidebar.images", symbol: "photo")
                 scopeRow(.links, title: "sidebar.links", symbol: "link")
+                Toggle("library.freeOnly", isOn: $freeOnly)
             } header: {
                 Text("sidebar.collection")
             }
@@ -97,16 +100,17 @@ struct LibrarySection: View {
     }
 
     private func refs(in scope: Scope, query: String) -> [ItemRef] {
+        let free: Bool? = freeOnly ? true : nil
         switch scope {
         case .all:
-            return index.search(text: query)
+            return index.search(LibraryFilter(text: query, freeLicenseOnly: free))
         case .images:
-            return index.search(LibraryFilter(text: query, kinds: [.image]))
+            return index.search(LibraryFilter(text: query, kinds: [.image], freeLicenseOnly: free))
         case .links:
-            return index.search(LibraryFilter(text: query, kinds: [.link]))
+            return index.search(LibraryFilter(text: query, kinds: [.link], freeLicenseOnly: free))
         case .folder(let id):
             guard let folder = store.board.folders.first(where: { $0.id == id }) else { return [] }
-            let matching = Set(index.search(text: query))
+            let matching = Set(index.search(LibraryFilter(text: query, freeLicenseOnly: free)))
             return index.items(in: folder).filter { matching.contains($0) }
         }
     }
@@ -207,12 +211,13 @@ struct LibrarySection: View {
 
     /// Saves the current search and scope as a smart folder. From a folder scope only the search text is saved.
     private func addSmartFolder() {
+        let free: Bool? = freeOnly ? true : nil
         let filter: LibraryFilter
         switch scope {
-        case .all: filter = LibraryFilter(text: query)
-        case .images: filter = LibraryFilter(text: query, kinds: [.image])
-        case .links: filter = LibraryFilter(text: query, kinds: [.link])
-        case .folder: filter = LibraryFilter(text: query)
+        case .all: filter = LibraryFilter(text: query, freeLicenseOnly: free)
+        case .images: filter = LibraryFilter(text: query, kinds: [.image], freeLicenseOnly: free)
+        case .links: filter = LibraryFilter(text: query, kinds: [.link], freeLicenseOnly: free)
+        case .folder: filter = LibraryFilter(text: query, freeLicenseOnly: free)
         }
         addFolder(FolderRule.smart(filter), nameKey: "library.folder.defaultSmart")
     }

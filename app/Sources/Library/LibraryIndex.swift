@@ -15,6 +15,8 @@ public struct LibraryIndex: Sendable {
         let via: String?
         let hosts: Set<String>
         let license: String?
+        /// True when the item may be used freely (see `License.isFreeItem`).
+        let free: Bool
         let importedAt: Date?
         let colors: [Lab]
 
@@ -26,6 +28,7 @@ public struct LibraryIndex: Sendable {
             via = item.source.map { LibraryIndex.normalize($0.via) }
             hosts = Set(LibraryIndex.hosts(of: item).map(LibraryIndex.normalize))
             license = item.source?.license.map(LibraryIndex.normalize)
+            free = License.isFreeItem(item.source)
             importedAt = item.source?.importedAt
             colors = LibraryIndex.colors(of: item)
         }
@@ -74,6 +77,7 @@ public struct LibraryIndex: Sendable {
             if let via, record.via != via { return nil }
             if let host, !record.hosts.contains(host) { return nil }
             if let license, !(record.license?.contains(license) ?? false) { return nil }
+            if filter.freeLicenseOnly == true, !record.free { return nil }
             if filter.importedFrom != nil || filter.importedUntil != nil {
                 guard let date = record.importedAt else { return nil }
                 if let from = filter.importedFrom, date < from { return nil }

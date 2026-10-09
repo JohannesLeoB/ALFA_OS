@@ -33,9 +33,13 @@ public struct LibraryFilter: Codable, Hashable, Sendable {
     public var importedUntil: Date?
     /// Part of the licence text of the source, without case. Items without a source do not match.
     public var license: String?
+    /// True: only items that may be used freely (own work, or a free licence; see `License`). Nil and false do not restrict.
+    /// Optional, so that folders saved before this condition still read.
+    public var freeLicenseOnly: Bool?
 
     public init(text: String = "", kinds: Set<ItemKind> = [], tags: Set<String> = [], via: String? = nil, host: String? = nil,
-                color: ColorNear? = nil, importedFrom: Date? = nil, importedUntil: Date? = nil, license: String? = nil) {
+                color: ColorNear? = nil, importedFrom: Date? = nil, importedUntil: Date? = nil, license: String? = nil,
+                freeLicenseOnly: Bool? = nil) {
         self.text = text
         self.kinds = kinds
         self.tags = tags
@@ -45,6 +49,7 @@ public struct LibraryFilter: Codable, Hashable, Sendable {
         self.importedFrom = importedFrom
         self.importedUntil = importedUntil
         self.license = license
+        self.freeLicenseOnly = freeLicenseOnly
     }
 
     /// True when no condition is set: every item matches.
