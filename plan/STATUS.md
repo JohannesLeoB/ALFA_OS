@@ -113,9 +113,10 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-807](briefe/B-807.md) | E8 | Notizen an Stücken und Stellen (Kommentare) | B-305, B-703 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, App-Bau grün); Abnahme am Bild offen |
 | [B-809](briefe/B-809.md) | E8 | Anbindung, Teil 2: Streaming, Prompt-Caching, Werkzeuge der Plattform (Websuche, Abruf) | B-801, B-806 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, App-Bau grün); Abnahme am Bild offen |
 | [B-810](briefe/B-810.md) | E8 | Orte und App-Ordner: Projektordner, Arbeitsordner, Speicher, Quellen, Ziele | B-901, B-104 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, App-Bau grün); Rest: Teil a; Git und Sicherungsregeln offen |
+| [B-813](briefe/B-813.md) | E8 | Orte, Nachtrag: Rollen, Reiter, kaputte Ortsdatei, Umzug der Dateien | B-810 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-811](briefe/B-811.md) | E8 | Übergabe-Pakete und Weg zu den Claude-Apps (Code, Design, Cloud, macOS, Browser) | B-809, B-810 | offen (wartet auf Recherche und Entscheidungen) |
-| [B-812](briefe/B-812.md) | E8 | Sicherung (Intervall 15–120 min) und Absturz-Autosave | B-810, B-104 | offen (wartet auf B-810; Regeln festgelegt: Crash-Autosave eine Datei, Sicherungen max. 3 mit Ausdünnen) |
-| [B-808](briefe/B-808.md) | E8 | Chat in der App: Kontext senden, Vorschläge zurück (Werkzeuge) | B-801, B-806, B-807 | offen (wartet auf B-801, B-806, B-807) |
+| [B-812](briefe/B-812.md) | E8 | Sicherung (Intervall 15–120 min) und Absturz-Autosave | B-810, B-104 | Paket-Teil vergeben an Haiku-Agent (im Repo), 2026-10-09 ( Regeln festgelegt: Crash-Autosave eine Datei, Sicherungen max. 3 mit Ausdünnen) |
+| [B-808](briefe/B-808.md) | E8 | Chat in der App: Kontext senden, Vorschläge zurück (Werkzeuge) | B-801, B-806, B-807 | Teil a vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-901](briefe/B-901.md) | E9 | Einstellungen und Setups | B-106 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-902](briefe/B-902.md) | E9 | Erster Start und leere Zustände | B-901 | erledigt, geprüft 2026-10-09 (Chef: Gesamtlauf nach B-703 und B-405); Schritte 1 bis 3 und Teil von 4 gebaut (Zustandslogik, Beispiel, Startfenster, Leinwand und Token-Satz); offen: leere Zustände im Inspektor, in der Sammlung, bei der Suche und im Labor als Ansicht; ob SwiftUI beim Start ohne Dokument zusätzlich ein neues anlegt, am Bild prüfen |
 | [B-903](briefe/B-903.md) | E9 | Barrierefreiheit | B-902 | offen |
