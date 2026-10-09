@@ -3,13 +3,13 @@ public struct DeadlineExceeded: Error, Equatable {
     public init() {}
 }
 
-/// Gives the result of the first of the two to end: the work, or the time. A work that does not end keeps running in
-/// the background, so the owner of the page must drop the page as well.
+/// Gives the result of the first of the two to end: the work, or the time. When the time ends first, the work is
+/// cancelled. A cancelled work that cannot stop by itself, such as a script that loops, must be released by its owner.
 @MainActor
 public func withDeadline<T: Sendable>(seconds: Double, _ work: @escaping @MainActor () async throws -> T) async throws -> T {
     try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<T, any Error>) in
         let latch = ResultLatch(continuation)
-        Task { @MainActor in
+        let worker = Task { @MainActor in
             do {
                 latch.finish(.success(try await work()))
             } catch {
@@ -18,7 +18,9 @@ public func withDeadline<T: Sendable>(seconds: Double, _ work: @escaping @MainAc
         }
         Task { @MainActor in
             try? await Task.sleep(for: .seconds(seconds))
-            latch.finish(.failure(DeadlineExceeded()))
+            if latch.finish(.failure(DeadlineExceeded())) {
+                worker.cancel()
+            }
         }
     }
 }
@@ -32,9 +34,12 @@ private final class ResultLatch<T: Sendable> {
         self.continuation = continuation
     }
 
-    func finish(_ result: Result<T, any Error>) {
-        guard let continuation else { return }
+    /// Returns true when this result was the one that resumed the continuation.
+    @discardableResult
+    func finish(_ result: Result<T, any Error>) -> Bool {
+        guard let continuation else { return false }
         self.continuation = nil
         continuation.resume(with: result)
+        return true
     }
 }

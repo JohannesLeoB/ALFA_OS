@@ -10,10 +10,10 @@ public final class JobQueue {
     }
 
     /// Waits for a free place, runs the job, and frees the place again.
-    public func run<T>(_ job: @MainActor () async -> T) async -> T {
+    public func run<T>(_ job: @MainActor () async throws -> T) async rethrows -> T {
         await acquire()
         defer { release() }
-        return await job()
+        return try await job()
     }
 
     private func acquire() async {

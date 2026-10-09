@@ -94,18 +94,25 @@ final class CodeCardModel {
     }
 
     /// Makes the still image of the current content, unless the image already shows it.
-    /// A failed still is asked again later, a few times.
+    /// A still that failed because of the network is asked again later, a few times.
     func refreshStill() async {
         guard let source = stillRequest, source != stillSource,
               let renderer = CodeRenderers.renderer(for: source) else { return }
-        let image = await stills.still(for: CodeRenderers.card(source), width: CodeCardLayout.pageWidth(previewWidth: source.previewWidth), renderer: renderer)
-        guard stillRequest == source else { return }
-        still = image
-        if image == nil {
-            scheduleRetry()
-        } else {
+        let width = CodeCardLayout.pageWidth(previewWidth: source.previewWidth)
+        do {
+            let image = try await stills.still(for: CodeRenderers.card(source), width: width, renderer: renderer)
+            guard stillRequest == source else { return }
+            still = image
             stillSource = source
             retries = 0
+        } catch CardRendererError.network {
+            // Only a network failure is asked again. A script that fails or never ends would fail again.
+            guard stillRequest == source else { return }
+            still = nil
+            scheduleRetry()
+        } catch {
+            guard stillRequest == source else { return }
+            still = nil
         }
     }
 

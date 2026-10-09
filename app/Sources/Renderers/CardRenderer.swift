@@ -20,8 +20,8 @@ public protocol CardRenderer {
     func canRender(_ card: CodeCard) -> Bool
     /// A running form of the card. Throws when the card has no running form.
     func makeLive(_ card: CodeCard) async throws -> LiveCard
-    /// A still image of the card at `width` points. Nil when the card cannot be drawn.
-    func snapshot(_ card: CodeCard, width: Double) async -> CGImage?
+    /// A still image of the card at `width` points. Throws when the card cannot be drawn.
+    func snapshot(_ card: CodeCard, width: Double) async throws -> CGImage
 }
 
 public enum CardRendererError: Error, Equatable {
@@ -31,6 +31,10 @@ public enum CardRendererError: Error, Equatable {
     case ruleListFailed(String)
     /// A React card did not draw its component in time. Its scripts may not have loaded.
     case notDrawn
+    /// The card did not load, draw or export in time. Its page was released.
+    case timedOut
+    /// The page could not be loaded because of the network. Only this error is asked again.
+    case network(String)
 }
 
 /// Renderers in the order they were registered. The first one that takes a card serves it.

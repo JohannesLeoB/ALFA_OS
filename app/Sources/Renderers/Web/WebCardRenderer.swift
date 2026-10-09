@@ -32,13 +32,17 @@ public final class LiveCard {
 public final class WebCardRenderer: CardRenderer {
     static let languages: Set<CodeLanguage> = [.html, .css, .javascript, .tailwind, .react]
     /// Longest time for a still: loading, drawing and export.
-    static let stillLimit = 20.0
+    public static let defaultStillLimit = 20.0
     /// Longest wait for a React card to draw its component.
     static let drawLimit = 5.0
 
     private let stills: any StillHost
-    public init(stills: any StillHost = OffscreenStillHost()) {
+    private let stillLimit: Double
+
+    /// `stillLimit` is the longest time for one still, in seconds.
+    public init(stills: any StillHost = OffscreenStillHost(), stillLimit: Double = WebCardRenderer.defaultStillLimit) {
         self.stills = stills
+        self.stillLimit = stillLimit
     }
 
     public func canRender(_ card: CodeCard) -> Bool {
@@ -58,26 +62,41 @@ public final class WebCardRenderer: CardRenderer {
         return live
     }
 
-    /// A still image of the card at `width` points. Nil when the page does not load, draw or export in time.
-    public func snapshot(_ card: CodeCard, width: Double) async -> CGImage? {
+    /// A still image of the card at `width` points. Throws `timedOut` when the page does not load, draw or export in
+    /// time, `network` when the page could not be reached, and the other renderer errors when the card fails.
+    public func snapshot(_ card: CodeCard, width: Double) async throws -> CGImage {
+        let slot = PageSlot()
+        let data: Data
         do {
-            let data = try await withDeadline(seconds: Self.stillLimit) {
-                let page = try await self.stillPage(card)
+            data = try await withDeadline(seconds: stillLimit) {
+                let page = try await self.stillPage(card, slot: slot)
                 return try await self.stills.export(page, width: width)
             }
-            guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
-            return CGImageSourceCreateImageAtIndex(source, 0, nil)
+        } catch is DeadlineExceeded {
+            slot.release()
+            throw CardRendererError.timedOut
         } catch {
-            return nil
+            slot.release()
+            if (error as NSError).domain == NSURLErrorDomain {
+                throw CardRendererError.network(error.localizedDescription)
+            }
+            throw error
         }
+        slot.release()
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
+              let image = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
+            throw CardRendererError.notDrawn
+        }
+        return image
     }
 
     /// A page of the card with its scripts run, ready for a still. Throws when a React card does not draw in time.
-    public func stillPage(_ card: CodeCard) async throws -> WebPage {
+    func stillPage(_ card: CodeCard, slot: PageSlot) async throws -> WebPage {
         guard let html = WebDocument.html(for: card) else { throw CardRendererError.noLiveForm }
         var configuration = try await Self.configuration()
         configuration.defaultNavigationPreferences.allowsContentJavaScript = true
         let page = WebPage(configuration: configuration, navigationDecider: HostGuard())
+        slot.page = page
         for try await event in page.load(html: html, baseURL: WebHostRule.cardOrigin) {
             if event == .finished { break }
         }
@@ -128,6 +147,19 @@ public final class WebCardRenderer: CardRenderer {
                 }
             }
         }
+    }
+}
+
+/// Holds the page of a still while it is taken, so that a page that does not end can be stopped and released.
+@available(macOS 26.0, *)
+@MainActor
+final class PageSlot {
+    var page: WebPage?
+
+    /// Stops loading and drops the page. A script that is still running stops with its page.
+    func release() {
+        page?.stopLoading()
+        page = nil
     }
 }
 

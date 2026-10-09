@@ -13,24 +13,33 @@ final class CodeStills {
     private let cache: StillCache
     private let queue = JobQueue(limit: CodeStills.concurrentLimit)
     /// Stills being taken, by key, so that a second request waits for the first.
-    private var running: [String: Task<CGImage?, Never>] = [:]
+    private var running: [String: Task<CGImage, any Error>] = [:]
+    /// Failures other than network failures, by key, for this session.
+    private var failed: [String: any Error] = [:]
 
     init(folder: URL?) {
         cache = StillCache(folder: folder)
     }
 
-    /// The still of the card at `width`, from the cache or taken now. Nil when the card cannot be drawn.
-    func still(for card: CodeCard, width: Double, renderer: any CardRenderer) async -> CGImage? {
+    /// The still of the card at `width`, from the cache or taken now. Throws when the card cannot be drawn.
+    /// A failure other than a network failure is kept, so the same content does not start a page again.
+    func still(for card: CodeCard, width: Double, renderer: any CardRenderer) async throws -> CGImage {
         let key = StillKey.make(card: card, width: width)
         if let image = cache.image(for: key) { return image }
-        if let task = running[key] { return await task.value }
+        if let error = failed[key] { throw error }
+        if let task = running[key] { return try await task.value }
         let queue = queue
-        let task = Task { await queue.run { await renderer.snapshot(card, width: width) } }
+        let task = Task { try await queue.run { try await renderer.snapshot(card, width: width) } }
         running[key] = task
-        let image = await task.value
-        running[key] = nil
-        if let image { cache.store(image, for: key) }
-        return image
+        defer { running[key] = nil }
+        do {
+            let image = try await task.value
+            cache.store(image, for: key)
+            return image
+        } catch {
+            if case CardRendererError.network = error {} else { failed[key] = error }
+            throw error
+        }
     }
 
     /// Drops the stills in memory when the system is short of memory. The files stay.
