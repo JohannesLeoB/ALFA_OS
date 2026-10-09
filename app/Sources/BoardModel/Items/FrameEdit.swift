@@ -94,14 +94,6 @@ extension BoardStore {
         return try perform(.batch(commands, nameKey: "undo.frame.device"))
     }
 
-    /// Turns the selected frames. One undo step. Returns false when no frame is selected.
-    @discardableResult
-    public func performFrameRotation() throws -> Bool {
-        let commands = selectedItems.flatMap { FrameEdit.rotate($0) }
-        guard !commands.isEmpty else { return false }
-        return try perform(.batch(commands, nameKey: "undo.frame.rotate"))
-    }
-
     /// Sets the orientation of the selected frames. Frames in the wanted orientation stay. One undo step.
     @discardableResult
     public func perform(frameLandscape landscape: Bool) throws -> Bool {
