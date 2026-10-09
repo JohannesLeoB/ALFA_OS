@@ -17,7 +17,7 @@ public enum WebDocument {
 
     /// Shows an uncaught error in the card and posts it to the error channel.
     static let errorScript = #"""
-    <script>addEventListener("error",function(e){var m=String(e.message||e.error);try{window.webkit.messageHandlers.\#(errorChannel).postMessage(m)}catch(x){}var d=document.createElement("pre");d.style.cssText="margin:0;padding:8px;font:12px/1.4 monospace;white-space:pre-wrap;color:inherit;border-bottom:1px solid currentColor";d.textContent=m;(document.body||document.documentElement).appendChild(d)})</script>
+    <script>addEventListener("error",function(e){var m=String(e.message||e.error);if(e.lineno){m+=" ("+e.lineno+":"+e.colno+")"}try{window.webkit.messageHandlers.\#(errorChannel).postMessage(m)}catch(x){}var d=document.createElement("pre");d.style.cssText="margin:0;padding:8px;font:12px/1.4 monospace;white-space:pre-wrap;color:inherit;border-bottom:1px solid currentColor";d.textContent=m;(document.body||document.documentElement).appendChild(d)})</script>
     """#
 
     /// The HTML of a card, or nil when the language is not a web language.
@@ -74,7 +74,8 @@ public enum WebDocument {
             ?? "document.body.textContent='No component found: add export default or a capitalised function.';"
         let styles = named(files, ".css").map { "<style>\(escapeScript($0))</style>" }.joined()
         let scripts = reactScripts.map { #"<script src="\#($0)"></script>"# }.joined()
-        let body = "const {useState,useEffect,useRef,useMemo,useCallback,Fragment}=React;\n" + escapeScript(code) + "\n" + render
+        // No line break after the destructuring, so that the source lines keep their numbers for error positions.
+        let body = "const {useState,useEffect,useRef,useMemo,useCallback,Fragment}=React;" + escapeScript(code) + "\n" + render
         let mount: String
         if files.keys.contains(where: { $0.lowercased().hasSuffix(".ts") || $0.lowercased().hasSuffix(".tsx") }) {
             mount = #"<div id="root"></div><script type="text/plain" id="card">"# + body + "</script>" + typedRunner
@@ -137,15 +138,20 @@ public enum WebDocument {
     static let typedRunner = #"""
     <script>(function () {
       var root = document.getElementById('root');
+      var out;
       try {
-        var out = Babel.transform(document.getElementById('card').textContent,
-          { presets: ['typescript', 'react'], filename: 'card.tsx' }).code;
-        (0, eval)(out);
+        out = Babel.transform(document.getElementById('card').textContent,
+          { presets: ['typescript', 'react'], filename: 'card.tsx', retainLines: true }).code;
       } catch (e) {
         var text = String((e && e.message) || e);
         root.textContent = text;
         try { window.webkit.messageHandlers.\#(errorChannel).postMessage(text); } catch (x) {}
+        return;
       }
+      // A script element with a source name: an error while it runs reports card.tsx with its line and column.
+      var s = document.createElement('script');
+      s.textContent = out + '\n//# sourceURL=card.tsx';
+      document.body.appendChild(s);
     })();
     </script>
     """#
