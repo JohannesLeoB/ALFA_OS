@@ -37,5 +37,11 @@ struct ALFAcolorApp: App {
                 .environment(\.theme, theme)
         }
         .defaultSize(width: 460, height: 640)
+
+        // Settings window, opened by the app menu (Settings...). Its tabs keep the saved values.
+        Settings {
+            SettingsView()
+                .environment(\.theme, theme)
+        }
     }
 }
