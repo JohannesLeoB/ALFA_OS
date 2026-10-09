@@ -375,17 +375,6 @@
         }
       }
     },
-    "command.edit.delete" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Löschen"
-          }
-        }
-      }
-    },
     "command.edit.deselect" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -397,17 +386,6 @@
         }
       }
     },
-    "command.edit.find" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Suchen…"
-          }
-        }
-      }
-    },
     "command.edit.paste" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -415,28 +393,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einsetzen"
-          }
-        }
-      }
-    },
-    "command.edit.pasteMatchStyle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einsetzen und Stil anpassen"
-          }
-        }
-      }
-    },
-    "command.edit.pasteStyle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stil einsetzen"
           }
         }
       }
@@ -540,28 +496,6 @@
         }
       }
     },
-    "command.file.pageSetup" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seite einrichten…"
-          }
-        }
-      }
-    },
-    "command.file.print" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Drucken…"
-          }
-        }
-      }
-    },
     "command.file.recent" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -602,17 +536,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sichern"
-          }
-        }
-      }
-    },
-    "command.help.help" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ALFAcolor-Hilfe"
           }
         }
       }
@@ -778,17 +701,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Duplizieren"
-          }
-        }
-      }
-    },
-    "command.object.fitToFrame" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In Rahmen einpassen…"
           }
         }
       }
@@ -1035,28 +947,6 @@
         }
       }
     },
-    "command.view.grid" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Raster ein/aus"
-          }
-        }
-      }
-    },
-    "command.view.guides" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hilfslinien ein/aus"
-          }
-        }
-      }
-    },
     "command.view.inspector" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1079,17 +969,6 @@
         }
       }
     },
-    "command.view.snapToGrid" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Am Raster einrasten"
-          }
-        }
-      }
-    },
     "command.view.statusBar" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1097,17 +976,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Statusleiste ein/aus"
-          }
-        }
-      }
-    },
-    "command.view.toolOptions" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Werkzeugoptionen ein/aus"
           }
         }
       }
@@ -1156,28 +1024,6 @@
         }
       }
     },
-    "command.window.collection" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sammlung ein/aus"
-          }
-        }
-      }
-    },
-    "command.window.layers" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ebenen ein/aus"
-          }
-        }
-      }
-    },
     "command.window.minimize" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1218,17 +1064,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vorheriges Fenster"
-          }
-        }
-      }
-    },
-    "command.window.tools" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Werkzeuge ein/aus"
           }
         }
       }
@@ -3258,17 +3093,6 @@
         }
       }
     },
-    "toolbar.share" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Teilen"
-          }
-        }
-      }
-    },
     "toolbar.toggleInspector.help" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4068,6 +3892,237 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keine CSS-Variablen gefunden. Eine Variable schreibt man so: --name: wert."
+          }
+        }
+      }
+    },
+    "package.warning.missingAssets %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Bilder fehlen im Paket"
+          }
+        }
+      }
+    },
+    "status.saveState.new" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neu, nicht gesichert"
+          }
+        }
+      }
+    },
+    "undo.arrange.alignRight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechts ausrichten"
+          }
+        }
+      }
+    },
+    "undo.arrange.alignBottom" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unten ausrichten"
+          }
+        }
+      }
+    },
+    "undo.arrange.alignMiddle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vertikal zentriert ausrichten"
+          }
+        }
+      }
+    },
+    "undo.arrange.snapToGrid" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An Raster ausrichten"
+          }
+        }
+      }
+    },
+    "context.ungroup" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gruppierung lösen"
+          }
+        }
+      }
+    },
+    "context.toFront" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ganz nach vorne"
+          }
+        }
+      }
+    },
+    "context.forward" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach vorne"
+          }
+        }
+      }
+    },
+    "context.backward" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach hinten"
+          }
+        }
+      }
+    },
+    "toolbar.tokenWorkshop.later" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch nicht gebaut"
+          }
+        }
+      }
+    },
+    "export.panel.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mockup-Paket sichern"
+          }
+        }
+      }
+    },
+    "export.failed.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Ausgabe ist fehlgeschlagen"
+          }
+        }
+      }
+    },
+    "exchange.mockup.name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mockup-Paket"
+          }
+        }
+      }
+    },
+    "shortcuts.noEffect" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "noch ohne Wirkung"
+          }
+        }
+      }
+    },
+    "shortcuts.key.arrows" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pfeile: Auswahl verschieben, mit ⇧ weiter"
+          }
+        }
+      }
+    },
+    "shortcuts.key.space" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leertaste mit Ziehen: Ansicht verschieben"
+          }
+        }
+      }
+    },
+    "shortcuts.key.tab" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tab: Seitenspalten ein- und ausblenden"
+          }
+        }
+      }
+    },
+    "shortcuts.key.escape" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esc: Blob-Palette schließen, sonst Auswahl aufheben"
+          }
+        }
+      }
+    },
+    "shortcuts.key.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entf: Auswahl löschen"
+          }
+        }
+      }
+    },
+    "menu.canvasKeys" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf der Leinwand"
           }
         }
       }

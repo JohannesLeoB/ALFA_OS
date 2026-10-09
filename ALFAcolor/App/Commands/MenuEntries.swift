@@ -26,9 +26,25 @@ struct MenuFunctions {
         case "view.actualSize": return withCanvas { $0.perform(.actualSize) }
         case "view.fitAll": return withCanvas { $0.perform(.fitAll) }
         case "view.fitSelection": return withCanvas { $0.perform(.fitSelection) }
-        case "edit.delete": return withInteraction { $0.deleteSelection() }
         case "edit.deselect": return withInteraction { $0.deselect() }
         case "object.duplicate": return withInteraction { $0.duplicateSelection() }
+        case "object.group": return withInteraction { $0.groupSelection(title: String(localized: "item.kind.group")) }
+        case "object.ungroup": return withInteraction { $0.ungroupSelection() }
+        case "object.bringForward": return withInteraction { $0.stackSelection(.forward) }
+        case "object.sendBackward": return withInteraction { $0.stackSelection(.backward) }
+        case "object.bringToFront": return withInteraction { $0.stackSelection(.toFront) }
+        case "object.alignLeft": return arrange(.alignLeft)
+        case "object.alignHCenter": return arrange(.alignCenter)
+        case "object.alignRight": return arrange(.alignRight)
+        case "object.alignTop": return arrange(.alignTop)
+        case "object.alignVCenter": return arrange(.alignMiddle)
+        case "object.alignBottom": return arrange(.alignBottom)
+        case "object.distributeRow": return arrange(.row)
+        case "object.distributeGrid": return arrange(.grid)
+        case "object.distributePile": return arrange(.pile)
+        case "object.sameSize": return arrange(.sameSize)
+        case "object.alignToGrid": return arrange(.snapToGrid)
+        case "file.export": return withStore { MockupExport.run(store: $0) }
         case "help.openStarter": return openStarter
         case "help.shortcutTable": return showShortcutTable
         default: return nil
@@ -40,6 +56,19 @@ struct MenuFunctions {
     private func with(_ perform: @escaping @MainActor (ShellState) -> Void) -> MenuAction? {
         guard let shell else { return nil }
         return { perform(shell) }
+    }
+
+    /// Runs one arrangement on the selection of the window.
+    @MainActor
+    private func arrange(_ how: Arrangement) -> MenuAction? {
+        withInteraction { $0.arrangeSelection(how) }
+    }
+
+    /// Passes the store of the window on. Without a window, the entry stays dimmed.
+    @MainActor
+    private func withStore(_ perform: @escaping @MainActor (BoardStore) -> Void) -> MenuAction? {
+        guard let store = interaction?.store else { return nil }
+        return { perform(store) }
     }
 
     /// Connects a command to the selection of the window. Without a window, the entry stays dimmed.
@@ -66,7 +95,7 @@ struct MenuEntries: View {
     var hiding: Set<String> = []
 
     var body: some View {
-        ForEach(ShortcutTable.entries(menu, origin: .app).filter { !isHidden($0) }) { entry in
+        ForEach(visibleEntries) { entry in
             switch entry {
             case .separator:
                 Divider()
@@ -86,6 +115,22 @@ struct MenuEntries: View {
 extension MenuEntries {
     private func isHidden(_ entry: MenuEntry) -> Bool {
         if case .command(let command) = entry { return hiding.contains(command.id) }
+        return false
+    }
+
+    /// The entries that stay. A separator never starts or ends the menu and never doubles, even after entries were hidden.
+    private var visibleEntries: [MenuEntry] {
+        var result: [MenuEntry] = []
+        for entry in ShortcutTable.entries(menu, origin: .app) where !isHidden(entry) {
+            if case .separator = entry, result.last.map(Self.isSeparator) ?? true { continue }
+            result.append(entry)
+        }
+        if let last = result.last, Self.isSeparator(last) { result.removeLast() }
+        return result
+    }
+
+    private static func isSeparator(_ entry: MenuEntry) -> Bool {
+        if case .separator = entry { return true }
         return false
     }
 }
@@ -111,6 +156,8 @@ struct CommandItem: View {
 /// Translates the key from the table into the SwiftUI form. Letters are lower case, as SwiftUI expects them.
 func keyEquivalent(for text: String) -> KeyEquivalent? {
     if text == "⌫" { return .delete }
+    if text == "↑" { return .upArrow }
+    if text == "↓" { return .downArrow }
     guard text.count == 1, let character = text.lowercased().first else { return nil }
     return KeyEquivalent(character)
 }

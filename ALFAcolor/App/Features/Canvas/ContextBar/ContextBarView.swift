@@ -14,12 +14,14 @@ struct ContextBarView: View {
     private static let groups: [[ContextAction]] = [
         [.alignLeft, .alignTop, .alignCenter],
         [.row, .grid, .pile, .sameSize],
-        [.group, .lock],
+        [.group, .ungroup],
+        [.toFront, .forward, .backward],
+        [.lock],
     ]
 
     var body: some View {
         let items = store.selectedItems
-        let actions = ContextBar.actions(count: items.count)
+        let actions = ContextBar.actions(count: items.count, hasGroup: ContextBar.hasGroup(items))
         let allLocked = !items.isEmpty && items.allSatisfy(\.locked)
         HStack(spacing: theme.space(.s2)) {
             caption(for: items)

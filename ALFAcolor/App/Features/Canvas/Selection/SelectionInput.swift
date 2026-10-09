@@ -21,6 +21,7 @@ struct SelectionInput: ViewModifier {
     @State private var ignoresPress = false
     @State private var searchTarget: ItemID?
     @State private var showsFilePanel = false
+    @FocusedValue(\.shell) private var shell
 
     func body(content: Content) -> some View {
         content
@@ -57,8 +58,14 @@ struct SelectionInput: ViewModifier {
             }
             .onKeyPress(.escape) {
                 guard isFocused else { return .ignored }
+                // An open blob palette closes first; the selection stays.
+                if shell?.closeBlobPalette() == true { return .handled }
                 return interaction.escape() ? .handled : .ignored
             }
+            // The menu entries Delete, Copy and Cut act on the canvas when it has the focus.
+            .onDeleteCommand { _ = interaction.deleteSelection() }
+            .onCopyCommand { interaction.copySelection().map { [NSItemProvider(object: $0 as NSString)] } ?? [] }
+            .onCutCommand { interaction.cutSelection().map { [NSItemProvider(object: $0 as NSString)] } ?? [] }
             .onKeyPress(characters: CharacterSet(charactersIn: "a")) { press in
                 guard isFocused, press.modifiers == .command else { return .ignored }
                 interaction.selectAll()

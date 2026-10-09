@@ -3,7 +3,16 @@ import Foundation
 /// Arranging a selection. Pure functions: items in, new rectangles out.
 /// The UI applies the result and records an undo step.
 public enum Arrangement: String, Sendable, CaseIterable {
-    case alignLeft, alignTop, alignCenter, row, grid, pile, sameSize
+    /// Aligns the left edges, the right edges, the horizontal centers.
+    case alignLeft, alignRight, alignCenter
+    /// Aligns the top edges, the bottom edges, the vertical centers.
+    case alignTop, alignBottom, alignMiddle
+    /// Spreads the items in a row, a grid or a pile.
+    case row, grid, pile
+    /// Gives every item the size of the reference item.
+    case sameSize
+    /// Moves every item's corner onto the nearest grid point, one item or more.
+    case snapToGrid
 }
 
 public struct ArrangeOptions: Sendable {
@@ -15,19 +24,28 @@ public struct ArrangeOptions: Sendable {
 
 public func arrange(_ items: [Item], _ how: Arrangement, reference: ItemID? = nil, options: ArrangeOptions = .init()) -> [ItemID: Rect] {
     let movable = items.filter { !$0.locked }
-    guard movable.count >= 2 else { return [:] }
+    guard movable.count >= 2 || (how == .snapToGrid && !movable.isEmpty) else { return [:] }
     func snap(_ v: Double) -> Double { options.snap > 0 ? (v / options.snap).rounded() * options.snap : v }
     let minX = movable.map(\.rect.x).min()!, minY = movable.map(\.rect.y).min()!
-    let maxX = movable.map(\.rect.maxX).max()!
+    let maxX = movable.map(\.rect.maxX).max()!, maxY = movable.map(\.rect.maxY).max()!
     var out: [ItemID: Rect] = [:]
     switch how {
     case .alignLeft:
         for i in movable { var r = i.rect; r.x = minX; out[i.id] = r }
+    case .alignRight:
+        for i in movable { var r = i.rect; r.x = maxX - r.w; out[i.id] = r }
     case .alignTop:
         for i in movable { var r = i.rect; r.y = minY; out[i.id] = r }
+    case .alignBottom:
+        for i in movable { var r = i.rect; r.y = maxY - r.h; out[i.id] = r }
     case .alignCenter:
         let cx = (minX + maxX) / 2
         for i in movable { var r = i.rect; r.x = snap(cx - r.w / 2); out[i.id] = r }
+    case .alignMiddle:
+        let cy = (minY + maxY) / 2
+        for i in movable { var r = i.rect; r.y = snap(cy - r.h / 2); out[i.id] = r }
+    case .snapToGrid:
+        for i in movable { var r = i.rect; r.x = snap(r.x); r.y = snap(r.y); out[i.id] = r }
     case .row:
         var x = minX
         for i in movable.sorted(by: { $0.rect.x < $1.rect.x }) { var r = i.rect; r.x = x; r.y = minY; out[i.id] = r; x += r.w + options.gap }

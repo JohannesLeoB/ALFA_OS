@@ -23,6 +23,16 @@ struct ShortcutTableView: View {
                         }
                     }
                 }
+                VStack(alignment: .leading, spacing: theme.space(.s2)) {
+                    Text("menu.canvasKeys")
+                        .font(theme.text(.heading).font)
+                        .foregroundStyle(theme.color(.text, scheme))
+                    ForEach(Self.canvasKeys, id: \.self) { key in
+                        Text(LocalizedStringKey(key))
+                            .font(theme.text(.body).font)
+                            .foregroundStyle(theme.color(.text, scheme))
+                    }
+                }
             }
             .padding(theme.space(.s5))
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -31,12 +41,21 @@ struct ShortcutTableView: View {
         .frame(minWidth: 420, minHeight: 480)
     }
 
+    /// Keys that work on the canvas without a menu entry.
+    private static let canvasKeys = [
+        "shortcuts.key.arrows", "shortcuts.key.space", "shortcuts.key.tab", "shortcuts.key.escape", "shortcuts.key.delete",
+    ]
+
     private func row(_ command: MenuCommand) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: theme.space(.s3)) {
             Text(LocalizedStringKey(command.titleKey))
                 .foregroundStyle(theme.color(.text, scheme))
             if command.scope == .canvasOnly {
                 Text("shortcuts.canvasOnly")
+                    .foregroundStyle(theme.color(.textMuted, scheme))
+            }
+            if ShortcutTable.withoutEffect.contains(command.id) {
+                Text("shortcuts.noEffect")
                     .foregroundStyle(theme.color(.textMuted, scheme))
             }
             Spacer(minLength: theme.space(.s2))

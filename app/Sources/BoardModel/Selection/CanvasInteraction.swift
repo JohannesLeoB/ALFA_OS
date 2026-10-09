@@ -62,8 +62,13 @@ public final class CanvasInteraction {
     public internal(set) var fanItem: ItemID?
     /// The image item whose file the user wants to find. The view opens the file panel and answers with `replaceImage`.
     public var fileSearchRequest: ItemID?
+    /// Counts the requests to choose files for import. The canvas presents the chooser on each change.
+    public internal(set) var importRequest = 0
     /// The error of the last command that failed, nil after a command that worked.
     public internal(set) var lastError: (any Error)?
+    /// The pieces of the last copy or cut in this window, and the mark that the system pasteboard carries for them.
+    public internal(set) var clipboard: [Item] = []
+    public internal(set) var clipboardMark = ""
 
     // MARK: Gesture state
 

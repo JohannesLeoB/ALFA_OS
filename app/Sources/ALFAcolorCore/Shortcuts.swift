@@ -147,8 +147,6 @@ public enum ShortcutTable {
         command("file.move", .file),
         command("file.export", .file, "E", [.command, .shift], separator: true),
         command("file.revert", .file),
-        command("file.pageSetup", .file, "P", [.command, .shift], preset: .macOS, separator: true),
-        command("file.print", .file, "P", [.command], preset: .macOS),
     ]
 
     static let edit: [MenuCommand] = [
@@ -157,12 +155,8 @@ public enum ShortcutTable {
         command("edit.cut", .edit, "X", [.command], preset: .macOS, origin: .system, separator: true),
         command("edit.copy", .edit, "C", [.command], preset: .macOS, origin: .system),
         command("edit.paste", .edit, "V", [.command], preset: .macOS, origin: .system),
-        command("edit.pasteMatchStyle", .edit, "V", [.option, .shift, .command], preset: .macOS),
-        command("edit.pasteStyle", .edit, "V", [.option, .command], preset: .macOS),
-        command("edit.delete", .edit, "⌫", [], preset: .macOS, scope: .canvasOnly),
         command("edit.selectAll", .edit, "A", [.command], preset: .macOS, origin: .system, separator: true),
         command("edit.deselect", .edit, "A", [.command, .shift], preset: .macOS),
-        command("edit.find", .edit, "F", [.command], preset: .macOS, separator: true),
     ]
 
     static let view: [MenuCommand] = [
@@ -172,15 +166,11 @@ public enum ShortcutTable {
         command("view.statusBar", .view),
         command("view.blobMode", .view),
         command("view.toolbar", .view, "T", [.option, .command], preset: .macOS, origin: .system, separator: true),
-        command("view.toolOptions", .view),
-        command("view.zoomIn", .view, "=", [.command], separator: true),
+        command("view.zoomIn", .view, "+", [.command], separator: true),
         command("view.zoomOut", .view, "-", [.command]),
         command("view.actualSize", .view, "1", [.command]),
         command("view.fitSelection", .view, "9", [.command]),
         command("view.fitAll", .view, "0", [.command]),
-        command("view.grid", .view, "R", [.option, .command], separator: true),
-        command("view.guides", .view, "L", [.option, .command]),
-        command("view.snapToGrid", .view, "R", [.command, .shift]),
         command("view.fullScreen", .view, "F", [.control, .command], preset: .macOS, origin: .system, separator: true),
     ]
 
@@ -188,9 +178,9 @@ public enum ShortcutTable {
         command("object.group", .object, "G", [.command]),
         command("object.ungroup", .object, "G", [.command, .shift]),
         command("object.duplicate", .object, "D", [.command], preset: .inDesign),
-        command("object.bringForward", .object, "]", [.command, .shift], submenu: "submenu.arrange", separator: true),
-        command("object.sendBackward", .object, "[", [.command, .shift], submenu: "submenu.arrange"),
-        command("object.bringToFront", .object, "]", [.option, .command, .shift], submenu: "submenu.arrange"),
+        command("object.bringForward", .object, "↑", [.command, .shift], submenu: "submenu.arrange", separator: true),
+        command("object.sendBackward", .object, "↓", [.command, .shift], submenu: "submenu.arrange"),
+        command("object.bringToFront", .object, "↑", [.option, .command, .shift], submenu: "submenu.arrange"),
         command("object.alignLeft", .object, submenu: "submenu.align", separator: true),
         command("object.alignHCenter", .object, submenu: "submenu.align"),
         command("object.alignRight", .object, submenu: "submenu.align"),
@@ -202,25 +192,27 @@ public enum ShortcutTable {
         command("object.distributePile", .object, submenu: "submenu.distribute"),
         command("object.sameSize", .object, separator: true),
         command("object.alignToGrid", .object),
-        command("object.fitToFrame", .object),
     ]
 
     static let window: [MenuCommand] = [
         command("window.minimize", .window, "M", [.command], preset: .macOS, origin: .system),
         command("window.minimizeAll", .window, "M", [.option, .command], preset: .macOS, origin: .system),
         command("window.zoom", .window, origin: .system),
-        command("window.tools", .window, "P", [.option, .command], separator: true),
-        command("window.layers", .window),
-        command("window.collection", .window),
         command("window.bringAllToFront", .window, origin: .system, separator: true),
         command("window.previous", .window, "`", [.command], preset: .macOS, origin: .system),
         command("window.next", .window, "`", [.command, .shift], preset: .macOS, origin: .system),
     ]
 
     static let help: [MenuCommand] = [
-        command("help.help", .help, "?", [.command]),
         command("help.openStarter", .help),
         command("help.shortcutTable", .help, separator: true),
+    ]
+
+    /// Tools whose key is in the table but whose tool does not exist yet. The shortcut table marks them.
+    /// The lab key (L) works, so it is not in this list.
+    public static let withoutEffect: Set<String> = [
+        "tool.select", "tool.directSelect", "tool.frame", "tool.shape", "tool.text", "tool.hand", "tool.zoom",
+        "tool.eyedropper", "tool.measure", "tool.pen", "tool.comment",
     ]
 
     /// Single keys of the tools (09-VISION section 4). Without the command key, so only on the canvas.
