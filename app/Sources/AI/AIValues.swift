@@ -9,6 +9,8 @@ public struct AIRequest: Sendable, Equatable {
     public var temperature: Double?
     /// The prompt cache of the platform. Automatic by default; the platform keeps the cache.
     public var cache: AICachePolicy
+    /// The tools that the model may use. Empty by default; the tool choice is left to the platform.
+    public var tools: [AITool]
 
     public init(
         model: String,
@@ -16,7 +18,8 @@ public struct AIRequest: Sendable, Equatable {
         messages: [AIMessage],
         maxTokens: Int,
         temperature: Double? = nil,
-        cache: AICachePolicy = .automatic(ttl: .fiveMinutes)
+        cache: AICachePolicy = .automatic(ttl: .fiveMinutes),
+        tools: [AITool] = []
     ) {
         self.model = model
         self.system = system
@@ -24,6 +27,7 @@ public struct AIRequest: Sendable, Equatable {
         self.maxTokens = maxTokens
         self.temperature = temperature
         self.cache = cache
+        self.tools = tools
     }
 }
 

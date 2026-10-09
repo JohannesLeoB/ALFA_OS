@@ -35,7 +35,7 @@ public enum AssistantMessages {
             return AssistantNotice(textKey: "ki.notice.consoleLimit", action: .openConsole)
         case let .badRequest(message) where isCreditsMessage(message):
             return AssistantNotice(textKey: "ki.notice.consoleLimit", action: .openConsole)
-        case .badRequest:
+        case .badRequest, .toolConfiguration:
             return AssistantNotice(textKey: "ki.notice.badRequest", action: .none)
         case .noKey:
             return AssistantNotice(textKey: "ki.notice.noKey", action: .openSettings)

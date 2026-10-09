@@ -23,6 +23,7 @@ enum AnthropicWire {
             messages: messages,
             temperature: request.temperature,
             cacheControl: cacheControl(for: request.cache),
+            tools: request.tools.isEmpty ? nil : try AIToolWire.tools(request.tools),
             stream: stream ? true : nil
         )
         return try encoder.encode(wire)
@@ -119,6 +120,7 @@ private struct WireRequest: Encodable {
     let messages: [WireMessage]
     let temperature: Double?
     let cacheControl: WireCacheControl?
+    let tools: [JSONValue]?
     let stream: Bool?
 }
 

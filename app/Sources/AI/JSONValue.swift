@@ -36,7 +36,12 @@ public enum JSONValue: Sendable, Equatable, Codable {
         case let .bool(value):
             try container.encode(value)
         case let .number(value):
-            try container.encode(value)
+            // A whole number is written without a fraction, because the platform rejects "5.0" for counts.
+            if let whole = Int(exactly: value) {
+                try container.encode(whole)
+            } else {
+                try container.encode(value)
+            }
         case let .string(value):
             try container.encode(value)
         case let .array(value):

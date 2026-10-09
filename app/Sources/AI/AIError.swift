@@ -26,6 +26,8 @@ public enum AIError: Error, Sendable, Equatable {
     case imageRejected(String)
     /// The answer came, but no result could be read from it.
     case unusableAnswer(String)
+    /// A tool setting breaks a rule. The request is not sent.
+    case toolConfiguration(String)
 }
 
 extension AIError: CustomStringConvertible {
@@ -55,6 +57,8 @@ extension AIError: CustomStringConvertible {
             "Image rejected: \(reason)"
         case let .unusableAnswer(reason):
             "The answer has no usable result: \(reason)"
+        case let .toolConfiguration(reason):
+            "A tool setting breaks a rule: \(reason)"
         }
     }
 }
