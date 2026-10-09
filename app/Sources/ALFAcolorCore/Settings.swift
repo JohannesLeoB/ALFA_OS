@@ -5,7 +5,7 @@ import Foundation
 public enum Setting: String, CaseIterable, Sendable {
     case defaultFolder = "settings.doc.defaultFolder"
     case startBehavior = "settings.start.behavior"
-    case claudeMonthlyLimitEUR = "settings.claude.monthlyLimitEUR"
+    case claudeMonthlyLimitUSD = "settings.claude.monthlyLimitUSD"
     case claudeAPIKey = "settings.claude.apiKey"
     case figmaToken = "settings.figma.token"
     case githubToken = "settings.github.token"
@@ -31,7 +31,7 @@ public enum Setting: String, CaseIterable, Sendable {
         switch self {
         case .defaultFolder: .text("Documents/ALFAcolor")
         case .startBehavior: .text(StartBehavior.window.rawValue)
-        case .claudeMonthlyLimitEUR: .number(20)
+        case .claudeMonthlyLimitUSD: .number(20)
         case .claudeAPIKey, .figmaToken, .githubToken, .pinterestOAuth: nil
         case .iCloudSync: .flag(false)
         case .unitDefault: .text(UnitChoice.point.rawValue)
@@ -50,7 +50,7 @@ public enum Setting: String, CaseIterable, Sendable {
             return !path.isEmpty
         case (.startBehavior, .text(let text)):
             return StartBehavior(rawValue: text) != nil
-        case (.claudeMonthlyLimitEUR, .number(let amount)):
+        case (.claudeMonthlyLimitUSD, .number(let amount)):
             return amount.isFinite && amount >= 0
         case (.iCloudSync, .flag), (.snapToSpacingTokens, .flag):
             return true

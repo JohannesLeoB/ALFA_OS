@@ -7768,13 +7768,13 @@
         }
       }
     },
-    "settings.claude.monthlyLimitEUR" : {
+    "settings.claude.monthlyLimitUSD" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Monatsgrenze in Euro"
+            "value" : "Monatsgrenze in US-Dollar"
           }
         }
       }
