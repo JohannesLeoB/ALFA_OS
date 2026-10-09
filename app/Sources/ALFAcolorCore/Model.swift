@@ -50,8 +50,14 @@ public struct ShapeStyle: Codable, Hashable, Sendable {
     public var strokeWidth: Double
     /// Corner radius in points. Only a rectangle has corners.
     public var cornerRadius: Double
-    public init(fill: String? = nil, stroke: String? = nil, strokeWidth: Double = 1, cornerRadius: Double = 0) {
+    /// Name of the colour field that the fill follows. `fill` keeps the last known value for when the field is gone.
+    public var fillToken: String?
+    /// Name of the colour field that the stroke follows. `stroke` keeps the last known value.
+    public var strokeToken: String?
+    public init(fill: String? = nil, stroke: String? = nil, strokeWidth: Double = 1, cornerRadius: Double = 0,
+                fillToken: String? = nil, strokeToken: String? = nil) {
         self.fill = fill; self.stroke = stroke; self.strokeWidth = strokeWidth; self.cornerRadius = cornerRadius
+        self.fillToken = fillToken; self.strokeToken = strokeToken
     }
 }
 
@@ -119,6 +125,8 @@ public struct Item: Identifiable, Codable, Hashable, Sendable {
     public var layerID: String
     public var locked: Bool = false
     public var hidden: Bool = false
+    /// Name of the colour field that a swatch follows. Its hex keeps the last known value. Only swatches use it.
+    public var colorToken: String?
     public var tags: [String] = []
     public var source: Source?
     public init(id: ItemID = ItemID(), title: String, content: Content, rect: Rect, z: Int = 0, layerID: String = "standard", source: Source? = nil) {

@@ -28,7 +28,7 @@ struct CanvasItemsLayer: View {
                     let ordered = base.map { previewByID[$0.id] ?? $0 } + preview.filter { !baseIDs.contains($0.id) }
                     ForEach(ordered) { item in
                         let lifted = previewByID[item.id] != nil
-                        ItemView(presentation: ItemPresentation.make(for: item, in: space, assets: assets),
+                        ItemView(presentation: ItemPresentation.make(for: item, in: space, assets: assets, tokens: controller.store.document.tokenSets),
                                  assets: assets, thumbnails: thumbnails, zoom: view.zoom, edit: editing(item),
                                  onScreen: lifted || Visibility.isOnScreen(item.rect, viewport: view, canvas: controller.size))
                             .offset(x: item.rect.x, y: item.rect.y)

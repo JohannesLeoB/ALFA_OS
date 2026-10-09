@@ -144,7 +144,8 @@ public struct CodeContent: Equatable, Hashable, Sendable {
 
 extension ItemPresentation {
     /// The data to draw `item`. `space` is the space that holds it, `assets` the images of the document.
-    public static func make(for item: Item, in space: Space, assets: AssetStore) -> ItemPresentation {
+    /// `tokens` are the token sets of the document; bound colours are read from them.
+    public static func make(for item: Item, in space: Space, assets: AssetStore, tokens: [TokenSet] = []) -> ItemPresentation {
         var problem: ItemProblem?
         var frame: FrameDisplay?
         let body: Body
@@ -157,11 +158,14 @@ extension ItemPresentation {
         case .link(let url, let note):
             body = .link(LinkDisplay.content(url: url, note: note))
         case .swatch(let hex, let name):
-            let color = RGB(hex: hex)
+            let color = ColorBinding.resolve(hex: hex, token: item.colorToken, in: tokens).color
             if color == nil { problem = .invalidColor }
             body = .swatch(SwatchContent(color: color, hex: color.map(Self.opaqueHex) ?? hex, name: name))
         case .shape(let kind, let style):
-            body = .shape(ShapeGeometry.content(kind: kind, style: style, size: item.rect))
+            var drawn = style
+            drawn.fill = ColorBinding.resolve(hex: style.fill, token: style.fillToken, in: tokens).color?.hex
+            drawn.stroke = ColorBinding.resolve(hex: style.stroke, token: style.strokeToken, in: tokens).color?.hex
+            body = .shape(ShapeGeometry.content(kind: kind, style: drawn, size: item.rect))
         case .text(let text, let style):
             body = .text(TextContent(text: text, role: TextRole(styleName: style)))
         case .group(let title, let tint):
