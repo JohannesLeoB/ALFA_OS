@@ -35,3 +35,14 @@ public struct FrameDisplay: Equatable, Sendable {
             isTemplate: device?.isTemplate ?? false)
     }
 }
+
+/// A preset that a frame can take, for the device choice of the inspector.
+public struct DeviceChoice: Identifiable, Sendable {
+    /// The ID of the preset without orientation.
+    public var id: String
+    /// The key of the name in the string catalog.
+    public var nameKey: String
+
+    /// The presets in the order of the device list.
+    public static let all: [DeviceChoice] = Device.presets.map { DeviceChoice(id: $0.id, nameKey: $0.name) }
+}

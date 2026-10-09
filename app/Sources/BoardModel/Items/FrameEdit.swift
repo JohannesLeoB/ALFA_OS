@@ -48,6 +48,13 @@ public enum FrameEdit {
         ]
     }
 
+    /// Turns a frame when it is not in the wanted orientation. Empty when it already is.
+    public static func orient(_ item: Item, landscape: Bool) -> [Command] {
+        let isLandscape = item.rect.w >= item.rect.h
+        guard isLandscape != landscape else { return [] }
+        return rotate(item)
+    }
+
     /// Sets the pixel scale. The size in points does not change. Empty when the scale is already set.
     public static func setScale(_ item: Item, to scale: Double) -> [Command] {
         guard case .frame(let deviceID, let grid, let current) = item.content,
@@ -57,6 +64,13 @@ public enum FrameEdit {
 }
 
 extension BoardStore {
+    /// Changes the device of the selected frames to the preset with this ID. One undo step.
+    @discardableResult
+    public func perform(frameDeviceID id: String) throws -> Bool {
+        guard let device = Device.preset(id) else { return false }
+        return try perform(frameDevice: device)
+    }
+
     /// Changes the device of the selected frames. One undo step. Returns false when no frame changes.
     @discardableResult
     public func perform(frameDevice device: Device) throws -> Bool {
@@ -69,6 +83,14 @@ extension BoardStore {
     @discardableResult
     public func performFrameRotation() throws -> Bool {
         let commands = selectedItems.flatMap { FrameEdit.rotate($0) }
+        guard !commands.isEmpty else { return false }
+        return try perform(.batch(commands, nameKey: "undo.frame.rotate"))
+    }
+
+    /// Sets the orientation of the selected frames. Frames in the wanted orientation stay. One undo step.
+    @discardableResult
+    public func perform(frameLandscape landscape: Bool) throws -> Bool {
+        let commands = selectedItems.flatMap { FrameEdit.orient($0, landscape: landscape) }
         guard !commands.isEmpty else { return false }
         return try perform(.batch(commands, nameKey: "undo.frame.rotate"))
     }

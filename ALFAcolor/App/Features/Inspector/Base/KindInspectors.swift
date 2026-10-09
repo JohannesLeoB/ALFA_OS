@@ -7,6 +7,7 @@ import BoardModel
 enum KindInspectors {
     private static let sections: [ItemKind: (BoardStore, [Item]) -> AnyView] = [
         .image: { store, items in AnyView(ImageFitSection(store: store, items: items)) },
+        .frame: { store, items in AnyView(FrameSection(store: store, items: items)) },
     ]
 
     static func section(for kind: ItemKind, store: BoardStore, items: [Item]) -> AnyView? {
@@ -35,6 +36,64 @@ struct ImageFitSection: View {
                 Text("inspector.fit.fill").tag(ImageFit?.some(.fill))
             }
             .pickerStyle(.segmented)
+        }
+    }
+}
+
+/// The device, the orientation and the scale of the selected frames. A single frame also shows its pixel size.
+struct FrameSection: View {
+    var store: BoardStore
+    var items: [Item]
+
+    var body: some View {
+        let displays = items.compactMap { item -> FrameDisplay? in
+            guard case .frame(let deviceID, _, let scale) = item.content else { return nil }
+            return FrameDisplay.make(deviceID: deviceID, scale: scale, rect: item.rect)
+        }
+        let devices = SharedValue(displays.compactMap(\.presetID))
+        let orientation = SharedValue(displays.map(\.isLandscape))
+        let scales = SharedValue(displays.map(\.scale))
+        Section("item.kind.frame") {
+            Picker("inspector.frame.device", selection: Binding<String?>(
+                get: { devices.value },
+                set: { id in
+                    if let id { _ = try? store.perform(frameDeviceID: id) }
+                })) {
+                if devices == .mixed { Text("inspector.mixed").tag(String?.none) }
+                ForEach(DeviceChoice.all) { choice in
+                    Text(LocalizedStringKey(choice.nameKey)).tag(String?.some(choice.id))
+                }
+            }
+            Picker("inspector.frame.orientation", selection: Binding<Bool?>(
+                get: { orientation.value },
+                set: { landscape in
+                    if let landscape { _ = try? store.perform(frameLandscape: landscape) }
+                })) {
+                if orientation == .mixed { Text("inspector.mixed").tag(Bool?.none) }
+                Text("inspector.frame.landscape").tag(Bool?.some(true))
+                Text("inspector.frame.portrait").tag(Bool?.some(false))
+            }
+            .pickerStyle(.segmented)
+            Picker("inspector.frame.scale", selection: Binding<Int?>(
+                get: { scales.value },
+                set: { value in
+                    if let value { _ = try? store.perform(frameScale: Double(value)) }
+                })) {
+                if scales == .mixed { Text("inspector.mixed").tag(Int?.none) }
+                ForEach(FrameScale.options.map { Int($0) }, id: \.self) { option in
+                    Text(verbatim: "@\(option)x").tag(Int?.some(option))
+                }
+            }
+            .pickerStyle(.segmented)
+            if displays.count == 1, let frame = displays.first {
+                LabeledContent("inspector.frame.pixels") {
+                    Text("frame.size.px \(frame.widthPixels) \(frame.heightPixels) \(frame.scale)")
+                }
+            }
+            if displays.contains(where: \.isTemplate) {
+                Text("frame.template")
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 }
