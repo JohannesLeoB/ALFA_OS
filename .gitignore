@@ -8,3 +8,6 @@ ALFAcolor/*.xcodeproj/
 
 # Ausgehende ZIPs an die anderen Konten; Johannes trägt sie
 ausgang/
+
+# Gebaute, notarisierte Apps und DMGs (groß, nicht ins Git)
+dist/
