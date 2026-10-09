@@ -19,7 +19,7 @@ struct ShellView: View {
             VStack(spacing: 0) {
                 CanvasSurface(controller: canvas, onTogglePalettes: { shell.togglePalettes() })
                 if shell.statusBarVisible {
-                    StatusBarView()
+                    StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError)
                 }
             }
             .inspector(isPresented: $shell.inspectorVisible) {
