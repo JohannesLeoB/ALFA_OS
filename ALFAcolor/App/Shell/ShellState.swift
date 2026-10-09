@@ -18,6 +18,10 @@ final class ShellState {
     var blob = BlobMenu()
     /// Unit of the position fields: the inspector and the blob menu share it. It stays when either one is hidden.
     var lengthUnit: LengthUnit = .point
+    /// The rulers along the top and left edge of the canvas.
+    var rulersVisible = true
+    /// The frame that the rulers measured from last. It is the fallback when no frame holds the selection.
+    var rulerFrame: ItemID?
     /// Room whose name is being changed, and the name in the field. The tab row and the room menu set them.
     var renamingRoom: String?
     var roomDraft = ""

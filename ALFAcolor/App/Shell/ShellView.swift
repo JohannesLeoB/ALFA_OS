@@ -17,6 +17,8 @@ struct ShellView: View {
     @State private var importer: ImportCoordinator
     /// Where the canvas starts in window coordinates (the top edge, under the toolbar too). Views on top of the canvas measure their area against it.
     @State private var canvasOrigin = CGPoint.zero
+    /// Where the canvas column starts in window coordinates. The rulers sit here, below the toolbar.
+    @State private var columnOrigin = CGPoint.zero
     /// The first thing that reading the document noticed, shown in the status bar.
     private let readNotice: String?
 
@@ -42,6 +44,14 @@ struct ShellView: View {
                                   zoomPercent: canvas.zoomPercent, selectionCount: canvas.store.selectedItems.count,
                                   gridStep: interaction.snap.gridStep, unit: shell.lengthUnit,
                                   notice: shell.labNotice ?? shell.roomNotice ?? readNotice)
+                }
+            }
+            .onGeometryChange(for: CGPoint.self, of: { $0.frame(in: .global).origin }) { columnOrigin = $0 }
+            // Rulers on top of the canvas, not in it: they stay below the toolbar and take clicks on their strips only.
+            .overlay(alignment: .topLeading) {
+                if shell.rulersVisible {
+                    RulersOverlay(canvas: canvas, shell: shell,
+                                  lead: CGPoint(x: columnOrigin.x - canvasOrigin.x, y: columnOrigin.y - canvasOrigin.y))
                 }
             }
             // On the stack, not on the canvas: the canvas ignores the top safe area, so its overlays
