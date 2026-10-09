@@ -9,6 +9,8 @@ public enum ColorFields {
     public static let setName = "colors"
     /// The first part of the path of a colour field.
     static let group = "color"
+    /// The colour of a new field. A neutral grey, to be changed at once.
+    public static let defaultColor = RGB(r: 0.5, g: 0.5, b: 0.5)
 
     /// Why a colour field was refused.
     public enum Failure: Error, Equatable, Sendable {

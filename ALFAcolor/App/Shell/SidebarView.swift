@@ -4,7 +4,7 @@ import ALFAcolorCore
 import BoardModel
 
 /// Sidebar: the collection placeholders, the rooms from the seventh room on, the layers of the room
-/// and the token set placeholder. The placeholders are dimmed and say they have no effect yet.
+/// and the colour fields of the token set. The collection placeholders are dimmed and say they have no effect yet.
 struct SidebarView: View {
     var store: BoardStore
     var shell: ShellState
@@ -46,12 +46,7 @@ struct SidebarView: View {
                 .help("layer.new")
             }
             ItemList(store: store)
-            Section("sidebar.tokenSet") {
-                Label("sidebar.noTokenSet", systemImage: "swatchpalette")
-                    .foregroundStyle(theme.color(.textMuted, scheme))
-            }
-            .disabled(true)
-            .help("sidebar.comingSoon")
+            ColorFieldsSection(store: store)
         }
         .font(theme.text(.body).font)
         .listStyle(.sidebar)
