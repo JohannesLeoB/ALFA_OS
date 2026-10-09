@@ -19,6 +19,8 @@ public struct ALFAcolorDocument: Equatable, Sendable {
     public var spaceViews: [String: SpaceView] = [:]
     /// The space that was open when the file was saved.
     public var activeSpaceID: String?
+    /// The earlier states of code cards. They are written to `history/` and read back from there.
+    public var versions = CardVersions()
 
     public init(board: Board = Board(title: String(localized: "document.untitled")), assets: AssetStore = AssetStore(), tokenSets: [TokenSet] = []) {
         self.board = board

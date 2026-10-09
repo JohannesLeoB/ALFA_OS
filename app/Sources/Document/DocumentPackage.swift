@@ -191,6 +191,14 @@ public enum DocumentPackage {
                                     tokenSets: doc.tokenSets.map(\.name), folders: doc.board.folders, extras: manifestExtras)
         try put("manifest.json", try encode(manifest, path: "manifest.json"))
 
+        // Versions of cards that are on the board. Versions of removed cards are not written.
+        let cards = Set(spaces.flatMap(\.items).map(\.id))
+        let kept = doc.versions.restricted(to: cards)
+        let cardNames = try PackageNaming.requireDistinct(kept.itemsWithVersions.map(\.raw), kind: "item")
+        for (raw, name) in cardNames.sorted(by: { $0.key < $1.key }) {
+            try put("history/\(name).jsonl", try CardVersionFile.data(for: kept.versions(of: ItemID(raw))))
+        }
+
         for (path, data) in doc.carriedFiles {
             guard PackageNaming.isSafe(path: path) else { throw PackageError.invalidPath(path) }
             try put(path, data)
@@ -412,7 +420,23 @@ public enum DocumentPackage {
         }
         orderedSets += tokenSets.values.sorted { $0.name < $1.name }
 
-        // 5. Carry everything else
+        // 5. Versions of code cards. A file without `history/` has none; a version of a card that is not there is dropped.
+        var versions = CardVersions()
+        var skippedVersions = 0
+        for path in paths {
+            let parts = path.split(separator: "/", omittingEmptySubsequences: false)
+            guard parts.count == 2, parts[0] == "history", parts[1].hasSuffix(".jsonl") else { continue }
+            claimed.insert(path)
+            let item = ItemID(PackageNaming.decode(String(parts[1].dropLast(".jsonl".count))))
+            guard seenItems.contains(item) else { continue }
+            let read = CardVersionFile.read(files[path]!)
+            skippedVersions += read.skipped + versions.load(read.versions, for: item)
+        }
+        if skippedVersions > 0 {
+            report.warnings.append(String(localized: "package.warning.skippedVersions \(skippedVersions)"))
+        }
+
+        // 6. Carry everything else
         var doc = ALFAcolorDocument(board: Board(title: manifest.title, spaces: spaces, documentID: manifest.documentID, createdAt: manifest.createdAt),
                                     assets: assets, tokenSets: orderedSets)
         doc.board.format = migration.currentVersion
@@ -420,6 +444,7 @@ public enum DocumentPackage {
         doc.preserved = preserved
         doc.spaceViews = spaceViews
         doc.activeSpaceID = manifest.extras[ActiveSpace.key]?.stringValue
+        doc.versions = versions
         for (path, data) in files where !claimed.contains(path) { doc.carriedFiles[path] = data }
 
         report.missingAssets = doc.missingAssets()
