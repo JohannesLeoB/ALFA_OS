@@ -43,7 +43,7 @@ struct ShellView: View {
                     StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError,
                                   zoomPercent: canvas.zoomPercent, selectionCount: canvas.store.selectedItems.count,
                                   gridStep: interaction.snap.gridStep, unit: shell.lengthUnit,
-                                  notice: shell.labNotice ?? shell.roomNotice ?? readNotice)
+                                  notice: shell.labNotice ?? shell.roomNotice ?? shell.toolNotice ?? readNotice)
                 }
             }
             .onGeometryChange(for: CGPoint.self, of: { $0.frame(in: .global).origin }) { columnOrigin = $0 }
@@ -51,6 +51,10 @@ struct ShellView: View {
             .overlay(alignment: .topLeading) {
                 RulersOverlay(canvas: canvas, shell: shell,
                               lead: CGPoint(x: columnOrigin.x - canvasOrigin.x, y: columnOrigin.y - canvasOrigin.y))
+            }
+            // The palette floats over the canvas, on level 3. Its empty rest takes no clicks, so the canvas gets them.
+            .overlay(alignment: .leading) {
+                ToolPalette(shell: shell, interaction: interaction, canvas: canvas)
             }
             // On the stack, not on the canvas: the canvas ignores the top safe area, so its overlays
             // would reach under the toolbar, where they cannot be clicked. The lab and the blob menu sit here.

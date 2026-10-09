@@ -5710,6 +5710,347 @@
           }
         }
       }
+    },
+    "tool.select" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswahl"
+          }
+        }
+      }
+    },
+    "tool.select.help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stücke wählen, ziehen und skalieren"
+          }
+        }
+      }
+    },
+    "tool.directSelect" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Direktauswahl"
+          }
+        }
+      }
+    },
+    "tool.directSelect.help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Gruppen und Bausteine hinein wählen. Noch nicht gebaut."
+          }
+        }
+      }
+    },
+    "tool.frame" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rahmen"
+          }
+        }
+      }
+    },
+    "tool.frame.help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rahmen aufziehen. Es gilt das Standardgerät im Inspektor."
+          }
+        }
+      }
+    },
+    "tool.shape" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Form"
+          }
+        }
+      }
+    },
+    "tool.shape.help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechteck, Kapsel, Ellipse oder Linie aufziehen"
+          }
+        }
+      }
+    },
+    "tool.text" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text"
+          }
+        }
+      }
+    },
+    "tool.text.help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klick setzt eine Textzeile"
+          }
+        }
+      }
+    },
+    "tool.hand" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hand"
+          }
+        }
+      }
+    },
+    "tool.hand.help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leinwand verschieben"
+          }
+        }
+      }
+    },
+    "tool.zoom" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoom"
+          }
+        }
+      }
+    },
+    "tool.zoom.help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klick vergrößert, ⌥-Klick verkleinert"
+          }
+        }
+      }
+    },
+    "tool.eyedropper" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pipette"
+          }
+        }
+      }
+    },
+    "tool.eyedropper.help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbe aufnehmen. Noch nicht gebaut, folgt mit der Farbprobe."
+          }
+        }
+      }
+    },
+    "tool.measure" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Messen"
+          }
+        }
+      }
+    },
+    "tool.measure.help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abstand zwischen zwei Punkten messen"
+          }
+        }
+      }
+    },
+    "tool.comment" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kommentar"
+          }
+        }
+      }
+    },
+    "tool.comment.help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz an einen Punkt heften. Noch nicht gebaut."
+          }
+        }
+      }
+    },
+    "tool.lab" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Labor"
+          }
+        }
+      }
+    },
+    "tool.lab.help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Labor der Code-Karte öffnen"
+          }
+        }
+      }
+    },
+    "tool.option.shape" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Form"
+          }
+        }
+      }
+    },
+    "tool.option.shape.rectangle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechteck"
+          }
+        }
+      }
+    },
+    "tool.option.shape.capsule" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kapsel"
+          }
+        }
+      }
+    },
+    "tool.option.shape.ellipse" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ellipse"
+          }
+        }
+      }
+    },
+    "tool.option.shape.line" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linie"
+          }
+        }
+      }
+    },
+    "tool.option.textStyle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Textstil"
+          }
+        }
+      }
+    },
+    "tool.option.text.heading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überschrift"
+          }
+        }
+      }
+    },
+    "tool.option.text.body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fließtext"
+          }
+        }
+      }
+    },
+    "tool.option.text.caption" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beschriftung"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

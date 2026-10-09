@@ -12,6 +12,8 @@ public enum InteractionPhase: Equatable, Sendable {
     case lasso
     /// The press belongs to something else (the text editor, or items that cannot change). Nothing follows from it.
     case blocked
+    /// A frame or a shape is drawn: the rectangle from the press to the pointer shows as the lasso.
+    case drawing
 }
 
 /// Select, move, resize and duplicate items with the pointer and the keyboard.
@@ -43,8 +45,21 @@ public final class CanvasInteraction {
     public func reloadSpacingStops() {
         spacingStops = SpacingTokens.stops(in: store.document.tokenSets)
     }
+    /// The active tool and the tool options. A change of the tool ends a measured line and the gaps shown for the old tool.
+    public var tools = ToolState() {
+        didSet {
+            guard oldValue.active != tools.active else { return }
+            measureLine = nil
+            drawStart = nil
+            lasso = nil
+            refreshDistances()
+        }
+    }
     /// True while the measuring tool is on. A press and a drag then measure a line instead of selecting.
-    public var measuring = false { didSet { if oldValue != measuring { measureLine = nil; refreshDistances() } } }
+    public var measuring: Bool {
+        get { tools.active == .measure }
+        set { if newValue { tools.choose(.measure) } else { tools.leave() } }
+    }
     /// The line of the measuring tool, in board points. Its value is the length. nil when nothing is measured.
     public internal(set) var measureLine: Measure?
     /// True while the gaps of the selection show, without the Option key. Set by the switch in the room inspector.
@@ -128,6 +143,8 @@ public final class CanvasInteraction {
     @ObservationIgnored var drag: Drag?
     @ObservationIgnored var scale: Scale?
     @ObservationIgnored var lassoStart: LassoStart?
+    /// The corner where a frame or a shape is drawn, in board points.
+    @ObservationIgnored var drawStart: (x: Double, y: Double)?
     @ObservationIgnored var lastGuides: [SnapGuide] = []
 
     /// The pointer must move this far before an item moves, in screen points.
@@ -197,7 +214,7 @@ public final class CanvasInteraction {
     public var handleBox: Rect? {
         guard editing == nil, handleSize > 0 else { return nil }
         switch phase {
-        case .moving, .lasso, .blocked: return nil
+        case .moving, .lasso, .blocked, .drawing: return nil
         case .resizing: return resizeBox
         case .idle, .pressed: return ResizeMath.bounds(of: editableSelection.map(\.rect))
         }
@@ -224,9 +241,18 @@ public final class CanvasInteraction {
 
     /// The pointer went down at a point of the canvas.
     public func pointerDown(atCanvasX x: Double, y: Double, modifiers: PointerModifiers = []) {
-        if measuring {
+        switch tools.active {
+        case .measure:
             measureDown(atBoard: board(fromCanvasX: x, y: y), modifiers: modifiers)
             return
+        case .zoom:
+            zoomPress(canvasX: x, y: y, out: modifiers.contains(.option))
+            return
+        case .hand:
+            // The view pans with the drag. A press selects nothing.
+            return
+        default:
+            break
         }
         resetGesture()
         let point = board(fromCanvasX: x, y: y)
@@ -236,6 +262,16 @@ public final class CanvasInteraction {
                 return
             }
             commitEdit()
+        }
+        switch tools.active {
+        case .frame, .shape:
+            drawPress(at: point)
+            return
+        case .text:
+            textPress(at: point)
+            return
+        default:
+            break
         }
         if let handle = handle(atCanvasX: x, y: y), beginResize(handle, at: point) { return }
         let hit = HitTest.item(atX: point.x, y: point.y, among: controller.drawnItems, zoom: zoom, bandHeight: bandHeight)
@@ -277,6 +313,8 @@ public final class CanvasInteraction {
             updateResize(to: point, modifiers: modifiers)
         case .lasso:
             updateLasso(to: point)
+        case .drawing:
+            drawDrag(to: point)
         case .idle, .blocked:
             break
         }
@@ -295,6 +333,7 @@ public final class CanvasInteraction {
             }
         case .moving: commitMove()
         case .resizing: commitResize()
+        case .drawing: drawEnd(to: board(fromCanvasX: x, y: y))
         case .lasso, .idle, .blocked: break
         }
         resetGesture()
@@ -314,6 +353,7 @@ public final class CanvasInteraction {
         drag = nil
         scale = nil
         lassoStart = nil
+        drawStart = nil
         lasso = nil
         lifted = []
         liftedItems = []
@@ -408,7 +448,7 @@ public final class CanvasInteraction {
         case .resizing:
             guard let scale else { return }
             showDistances(of: scale.result, among: scale.targets.rects)
-        case .lasso, .blocked:
+        case .lasso, .blocked, .drawing:
             showDistances(of: nil, among: [])
         case .idle, .pressed:
             let selected = store.selectedItems.filter { $0.rect.isFinite }

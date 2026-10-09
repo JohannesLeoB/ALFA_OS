@@ -44,6 +44,23 @@ final class ShellState {
     /// The open lab, shown over the canvas.
     var openLabModel: LabModel? { labOpen.flatMap { labs[$0] } }
 
+    /// Help text of a tool that does not work yet, as a catalog key. The status bar shows it until the next choice.
+    var toolNotice: String?
+
+    /// A choice from the palette or a key. The lab opens; a tool that does not work yet shows its help text.
+    /// The active tool itself lives in the canvas model (`CanvasInteraction.tools`), next to the presses it changes.
+    func pick(_ tool: Tool, in interaction: CanvasInteraction, canvas: CanvasController?) {
+        if tool == .lab {
+            if let canvas { openLab(in: canvas) }
+            return
+        }
+        if interaction.tools.choose(tool) {
+            toolNotice = nil
+        } else {
+            toolNotice = tool.helpKey
+        }
+    }
+
     /// Opens the lab of a code card. A draft is built anew when the card changed on the board since the lab last saw it.
     /// Returns false, with a notice, for an item that is not web code on the board.
     @discardableResult

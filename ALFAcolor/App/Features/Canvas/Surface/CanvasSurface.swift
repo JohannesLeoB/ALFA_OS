@@ -56,8 +56,9 @@ struct CanvasSurface: View {
             .focusable()
             .focusEffectDisabled()
             .focused($hasFocus)
-            .selectionInput(interaction, isFocused: hasFocus, panning: spaceDown)
+            .selectionInput(interaction, isFocused: hasFocus, panning: spaceDown || interaction.tools.active == .hand)
             .modifier(LabKey(isFocused: hasFocus))
+            .modifier(ToolKeys(isFocused: hasFocus))
             .onKeyPress(.tab) {
                 guard hasFocus else { return .ignored }
                 onTogglePalettes()
@@ -98,15 +99,16 @@ struct CanvasSurface: View {
     }
 
     private var pointer: PointerStyle? {
-        if spaceDown { return panStart == nil ? .grabIdle : .grabActive }
-        return interaction.hoveredHandle.map { .frameResize(position: $0.resizePosition) }
+        if spaceDown || interaction.tools.active == .hand { return panStart == nil ? .grabIdle : .grabActive }
+        if let handle = interaction.hoveredHandle { return .frameResize(position: handle.resizePosition) }
+        return interaction.tools.active.pointer.style
     }
 
     /// Space plus drag moves the view. The view at the start of the drag is the base, so the move does not drift.
     private var grab: some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
-                guard spaceDown else { return }
+                guard spaceDown || interaction.tools.active == .hand else { return }
                 let start = panStart ?? controller.viewport
                 panStart = start
                 controller.setViewport(start.panned(byCanvasX: value.translation.width, y: value.translation.height))

@@ -57,8 +57,9 @@ extension CanvasInteraction {
     /// Returns true when it did something.
     @discardableResult
     public func escape() -> Bool {
-        if measuring {
-            measuring = false
+        // A tool other than the selection ends first, which also removes a measured line.
+        if tools.leave() {
+            cancelGesture()
             return true
         }
         if editing != nil {
