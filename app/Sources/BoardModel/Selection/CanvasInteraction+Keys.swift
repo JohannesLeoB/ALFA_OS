@@ -53,17 +53,18 @@ extension CanvasInteraction {
         return changed
     }
 
-    /// The Escape key. It ends a text edit, or stops a drag, or else clears the selection.
+    /// The Escape key. It ends a text edit and keeps its text, then leaves a tool, stops a drag, or else clears the selection.
     /// Returns true when it did something.
     @discardableResult
     public func escape() -> Bool {
-        // A tool other than the selection ends first, which also removes a measured line.
-        if tools.leave() {
-            cancelGesture()
-            return true
-        }
+        // An open text edit ends first, so its text is kept before the tool is left.
         if editing != nil {
             commitEdit()
+            return true
+        }
+        // A tool other than the selection ends next, which also removes a measured line.
+        if tools.leave() {
+            cancelGesture()
             return true
         }
         if phase != .idle {
