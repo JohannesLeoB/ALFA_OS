@@ -33,6 +33,7 @@ struct CanvasSurface: View {
                 CanvasItemsLayer(controller: controller, interaction: interaction)
                 SelectionLayer(interaction: interaction)
                 CanvasAidsLayer(controller: controller, interaction: interaction)
+                MeasureLayer(controller: controller, interaction: interaction)
                 if controller.isEmpty {
                     emptyHint
                 }

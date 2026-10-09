@@ -43,6 +43,10 @@ public final class CanvasInteraction {
     public func reloadSpacingStops() {
         spacingStops = SpacingTokens.stops(in: store.document.tokenSets)
     }
+    /// True while the measuring tool is on. A press and a drag then measure a line instead of selecting.
+    public var measuring = false { didSet { if oldValue != measuring { measureLine = nil; refreshDistances() } } }
+    /// The line of the measuring tool, in board points. Its value is the length. nil when nothing is measured.
+    public internal(set) var measureLine: Measure?
     /// True while the gaps of the selection show, without the Option key. Set by the switch in the room inspector.
     public var showsDistances = false { didSet { if oldValue != showsDistances { refreshDistances() } } }
     /// The IDs of new items (copies). A test can set its own.
@@ -220,6 +224,10 @@ public final class CanvasInteraction {
 
     /// The pointer went down at a point of the canvas.
     public func pointerDown(atCanvasX x: Double, y: Double, modifiers: PointerModifiers = []) {
+        if measuring {
+            measureDown(atBoard: board(fromCanvasX: x, y: y), modifiers: modifiers)
+            return
+        }
         resetGesture()
         let point = board(fromCanvasX: x, y: y)
         if let editing {
@@ -253,6 +261,10 @@ public final class CanvasInteraction {
 
     /// The pointer moved with the button down.
     public func pointerDragged(toCanvasX x: Double, y: Double, modifiers: PointerModifiers = []) {
+        if measuring {
+            measureDrag(toBoard: board(fromCanvasX: x, y: y), modifiers: modifiers)
+            return
+        }
         let point = board(fromCanvasX: x, y: y)
         switch phase {
         case .pressed:
@@ -272,6 +284,8 @@ public final class CanvasInteraction {
 
     /// The pointer went up.
     public func pointerUp(atCanvasX x: Double, y: Double, modifiers: PointerModifiers = []) {
+        // The measured line stays on the canvas after the release.
+        if measuring { return }
         switch phase {
         case .pressed:
             switch press?.release {
@@ -366,7 +380,7 @@ public final class CanvasInteraction {
 
     /// Shows the gaps from a rectangle to its neighbours while the Option key is held, and clears them otherwise.
     func showDistances(of rect: Rect?, among others: [Rect]) {
-        guard optionHeld || showsDistances, let rect else {
+        guard !measuring, optionHeld || showsDistances, let rect else {
             if !controller.measures.isEmpty { controller.measures = [] }
             if !distanceLabels.isEmpty { distanceLabels = [] }
             return

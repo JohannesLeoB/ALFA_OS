@@ -57,6 +57,10 @@ extension CanvasInteraction {
     /// Returns true when it did something.
     @discardableResult
     public func escape() -> Bool {
+        if measuring {
+            measuring = false
+            return true
+        }
         if editing != nil {
             commitEdit()
             return true
