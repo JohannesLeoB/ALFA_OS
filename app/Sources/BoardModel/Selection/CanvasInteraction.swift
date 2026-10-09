@@ -42,6 +42,8 @@ public final class CanvasInteraction {
     public var gridStep = 8.0
     /// The guides of the frames take part in snapping only while they are shown. The window sets it.
     public var guidesShown = true
+    /// The marks of the notes show on the canvas while this is true. The menu View > Notes toggles it.
+    public var notesShown = true
     /// The spacing tokens. They name the gaps that the Option key shows. Snapping to them is `SnapSettings.snapsToSpacing`.
     public var spacingStops: [SpacingStop] = [] { didSet { refreshDistances() } }
     /// True while the Option key is held. The gaps to the neighbours show then.

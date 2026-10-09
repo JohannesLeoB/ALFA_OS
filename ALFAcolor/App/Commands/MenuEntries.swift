@@ -22,6 +22,7 @@ struct MenuFunctions {
         case "view.statusBar": return with { $0.toggleStatusBar() }
         case "view.blobMode": return with { $0.toggleBlobMode() }
         case "view.rulers": return with { $0.rulersVisible.toggle() }
+        case "view.notes": return withInteraction { $0.notesShown.toggle() }
         case "view.guides": return with { $0.guidesVisible.toggle() }
         case "view.guidesLocked": return with { $0.guidesLocked.toggle() }
         case "view.gridShown": return withInteraction { $0.setGridShown(!$0.gridShown) }

@@ -31,9 +31,10 @@ struct CanvasItemsLayer: View {
                         ItemView(presentation: ItemPresentation.make(for: item, in: space, assets: assets, tokens: controller.store.document.tokenSets),
                                  assets: assets, thumbnails: thumbnails, zoom: view.zoom, edit: editing(item),
                                  onScreen: lifted || Visibility.isOnScreen(item.rect, viewport: view, canvas: controller.size),
-                                 interaction: interaction)
+                                 interaction: interaction, notes: item.notes)
                             .offset(x: item.rect.x, y: item.rect.y)
-                            .allowsHitTesting(interaction.editing?.itemID == item.id || interaction.noteDraft?.itemID == item.id || (!lifted && Self.hasControls(item)))
+                            .allowsHitTesting(interaction.editing?.itemID == item.id || interaction.noteDraft?.itemID == item.id
+                                              || (!lifted && (Self.hasControls(item) || (interaction.notesShown && !item.notes.isEmpty))))
                     }
                     if let fanID = interaction.fanItem, let item = controller.store.item(fanID) {
                         SwatchFanAnchor(interaction: interaction, item: item)

@@ -18,15 +18,26 @@ struct ItemView: View {
     var onScreen = true
     /// The canvas interaction. It holds the draft of the comment tool, which the item shows at its press point.
     var interaction: CanvasInteraction?
+    /// The notes of the item. Their marks show on the item while the notes are shown.
+    var notes: [ItemNote] = []
 
     var body: some View {
         let detail = DetailLevel.level(for: presentation.size, zoom: zoom)
         frame(detail: detail)
             .frame(width: presentation.size.width, height: presentation.size.height, alignment: .topLeading)
+            .overlay(alignment: .topLeading) { noteMarks }
             .overlay(alignment: .topLeading) { draftField }
             .accessibilityElement(children: isCode ? .contain : .ignore)
             .accessibilityLabel(label)
             .accessibilityValue(value)
+    }
+
+    /// The marks of the notes, when the notes are shown and the item has some.
+    @ViewBuilder
+    private var noteMarks: some View {
+        if let interaction, interaction.notesShown, !notes.isEmpty {
+            NoteMarkers(itemID: presentation.id, size: presentation.size, notes: notes, store: interaction.store)
+        }
     }
 
     /// The field of the comment tool, when its draft is on this item. It sits at the anchor of the draft.
