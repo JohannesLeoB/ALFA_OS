@@ -1,6 +1,6 @@
 import Foundation
-import ImageIO
 import ALFAcolorCore
+import Document
 
 /// A text edit in progress: the item, its content before and the text typed so far.
 public struct TextEdit: Equatable, Sendable {
@@ -88,8 +88,7 @@ extension CanvasInteraction {
     /// True when the image has no bytes in the document, or the bytes are no picture that ImageIO can read.
     private func needsFile(_ assetID: String) -> Bool {
         guard let entry = store.document.assets[assetID], let data = try? entry.data() else { return true }
-        guard let source = CGImageSourceCreateWithData(data as CFData, nil), CGImageSourceGetCount(source) > 0 else { return true }
-        return CGImageSourceCopyPropertiesAtIndex(source, 0, nil) == nil
+        return !PictureCheck.isPicture(data)
     }
 
     /// Puts the file the user found in place of the missing image: the bytes enter the document and the item points at them.
