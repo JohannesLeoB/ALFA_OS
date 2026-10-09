@@ -10,7 +10,7 @@ import Renderers
 final class LabModel {
     /// The result of the last commit, or the reason why it did not run.
     enum Message: Equatable {
-        case empty, notSaved, locked, unchanged, saved
+        case empty, notSaved, locked, unchanged, saved, rebuilt
 
         var key: String {
             switch self {
@@ -19,13 +19,14 @@ final class LabModel {
             case .locked: "lab.problem.locked"
             case .unchanged: "lab.problem.unchanged"
             case .saved: "lab.saved"
+            case .rebuilt: "lab.rebuilt"
             }
         }
 
         /// True for a result that the user must act on. Saved and unchanged are not problems.
         var isProblem: Bool {
             switch self {
-            case .empty, .notSaved, .locked: true
+            case .empty, .notSaved, .locked, .rebuilt: true
             case .unchanged, .saved: false
             }
         }
@@ -156,6 +157,15 @@ final class LabModel {
         guard !isLocked, let board = LabModel.boardCard(item, in: store),
               let boardDraft = LabDraft(card: board.card, previewWidth: board.width) else {
             message = .locked
+            return
+        }
+        // The card changed on the board since the lab last saw it, for example after an undo.
+        // The old draft must not be written back, so the lab takes the card again.
+        if boardDraft != seen {
+            session.reset(to: boardDraft)
+            seen = boardDraft
+            message = .rebuilt
+            restart()
             return
         }
         let saved = session.commit(over: boardDraft)

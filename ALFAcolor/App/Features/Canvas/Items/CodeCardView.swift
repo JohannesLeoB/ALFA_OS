@@ -74,7 +74,8 @@ struct CodeCardView: View {
 
     /// Opens the lab of this card in the window that shows it.
     private func openLab() {
-        guard hasLab, let shell, let store = canvas?.store else { return }
+        // The header button and the double click both call this. A lab that is open for the card is not opened again.
+        guard hasLab, let shell, let store = canvas?.store, shell.labOpen != presentation.id else { return }
         shell.openLab(for: presentation.id, store: store)
     }
 }

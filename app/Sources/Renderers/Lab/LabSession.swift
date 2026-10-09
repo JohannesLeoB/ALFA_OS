@@ -67,6 +67,13 @@ public struct LabSession: Equatable, Sendable {
         edit(joined, in: destination)
     }
 
+    /// Takes the draft and the controls of the card again, for a card that changed on the board. The view options stay.
+    public mutating func reset(to board: LabDraft) {
+        draft = board
+        tab = LabSession.firstTab(of: board)
+        controls = LabControls.read(board)
+    }
+
     /// Writes the changed control values into the code and saves the result as the newest version of the card.
     /// `board` is the draft of the card as it is on the board. A board version that the lab has not seen is kept first.
     /// The controls then start again from the saved values.
