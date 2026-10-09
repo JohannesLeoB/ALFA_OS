@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (72)
+## Briefe (74)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -56,6 +56,8 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-219](briefe/B-219.md) | E2 | Blob-Menü bedienbar, Palettenwechsel, Maus zuerst | B-218, B-206 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors außer einem Lauf mit flackerndem Thumbnail-Test, danach 852 Tests grün, App-Bau grün); Abnahme am Bild offen (Blob bedienbar? Palettenwechsel gleitet? Raum-Menü); offen: Blob unten angeheftet liegt über der Statusleiste, ContextBar hat dasselbe Overlay-Problem, Kapsel unten Mitte nicht sicher zugeordnet |
 | [B-220](briefe/B-220.md) | E7 | Mockup-Paket: Quelle und Lizenz bei Code-Karten; Thumbnail-Test stabil | B-704 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 854 Tests, 5 Zusatzläufe ThumbnailTests stabil, App-Bau grün); Abnahme am Bild offen (preview.html); Ursache des Testfehlers aus dem Code abgeleitet (NSCache), nicht reproduziert: beobachten |
 | [B-221](briefe/B-221.md) | E2 | Kontextleiste, Blob-Modus am Bild | B-219 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 859 Tests, App-Bau grün; Klick-Ursache per Gegenversuch belegt: Kind-true überstimmt Eltern-false nicht); Abnahme am Bild offen; offen: Außenklick bei offenem Blob-Feld schließt und fängt Leinwandklicks, ContextBar bei Auswahl ganz oben unter der Werkzeugleiste, Blob unten über der Statusleiste, BlurRamp ohne Ansicht |
+| [B-222](briefe/B-222.md) | E2 | Fehlerbrief: Code-Karte bedienbar, Labor | B-221 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-223](briefe/B-223.md) | E2 | Fehlerbrief: Vorschaubild, Cache, Player-Pool (zieht B-402 vor) | B-221 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | offen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | offen |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
