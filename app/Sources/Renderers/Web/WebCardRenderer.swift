@@ -31,9 +31,15 @@ public final class LiveCard {
 @MainActor
 public final class WebCardRenderer: CardRenderer {
     static let languages: Set<CodeLanguage> = [.html, .css, .javascript, .tailwind, .react]
-    static let ruleListIdentifier = "card-hosts-1"
+    /// Longest time for a still: loading, drawing and export.
+    static let stillLimit = 20.0
+    /// Longest wait for a React card to draw its component.
+    static let drawLimit = 5.0
 
-    public init() {}
+    private let stills: any StillHost
+    public init(stills: any StillHost = OffscreenStillHost()) {
+        self.stills = stills
+    }
 
     public func canRender(_ card: CodeCard) -> Bool {
         Self.languages.contains(card.language)
@@ -48,21 +54,17 @@ public final class WebCardRenderer: CardRenderer {
         let page = WebPage(configuration: configuration, navigationDecider: HostGuard())
         let live = LiveCard(page: page)
         channel.owner = live
-        page.load(html: html)
+        page.load(html: html, baseURL: WebHostRule.cardOrigin)
         return live
     }
 
-    /// A still image of the card, taken when the page has loaded. Scripts run, but a React card may not be rendered yet.
+    /// A still image of the card at `width` points. Nil when the page does not load, draw or export in time.
     public func snapshot(_ card: CodeCard, width: Double) async -> CGImage? {
-        guard let html = WebDocument.html(for: card),
-              var configuration = try? await Self.configuration() else { return nil }
-        configuration.defaultNavigationPreferences.allowsContentJavaScript = true
-        let page = WebPage(configuration: configuration, navigationDecider: HostGuard())
         do {
-            for try await event in page.load(html: html) {
-                if event == .finished { break }
+            let data = try await withDeadline(seconds: Self.stillLimit) {
+                let page = try await self.stillPage(card)
+                return try await self.stills.export(page, width: width)
             }
-            let data = try await page.exported(as: .image(snapshotWidth: width))
             guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
             return CGImageSourceCreateImageAtIndex(source, 0, nil)
         } catch {
@@ -70,18 +72,53 @@ public final class WebCardRenderer: CardRenderer {
         }
     }
 
-    /// A configuration without storage on disk, with the network rules installed.
+    /// A page of the card with its scripts run, ready for a still. Throws when a React card does not draw in time.
+    public func stillPage(_ card: CodeCard) async throws -> WebPage {
+        guard let html = WebDocument.html(for: card) else { throw CardRendererError.noLiveForm }
+        var configuration = try await Self.configuration()
+        configuration.defaultNavigationPreferences.allowsContentJavaScript = true
+        let page = WebPage(configuration: configuration, navigationDecider: HostGuard())
+        for try await event in page.load(html: html, baseURL: WebHostRule.cardOrigin) {
+            if event == .finished { break }
+        }
+        if card.language == .react {
+            try await waitForDrawing(page)
+        }
+        return page
+    }
+
+    /// Polls a React page until the component is on it, or until the page shows an error.
+    private func waitForDrawing(_ page: WebPage) async throws {
+        for _ in 0..<Int(Self.drawLimit * 10) {
+            let drawn = try? await page.callJavaScript(WebDocument.drawnCheck)
+            if drawn as? Bool == true { return }
+            try await Task.sleep(for: .milliseconds(100))
+        }
+        throw CardRendererError.notDrawn
+    }
+
+    /// A configuration without storage on disk, with the shared network rules installed.
     static func configuration() async throws -> WebPage.Configuration {
         var configuration = WebPage.Configuration()
         configuration.websiteDataStore = .nonPersistent()
-        configuration.userContentController.add(try await compiledRules())
+        configuration.userContentController.add(try await sharedRules())
         return configuration
+    }
+
+    /// The compiled network rules. Every page shares them.
+    private static var rules: WKContentRuleList?
+
+    static func sharedRules() async throws -> WKContentRuleList {
+        if let rules { return rules }
+        let list = try await compiledRules()
+        rules = list
+        return list
     }
 
     static func compiledRules() async throws -> WKContentRuleList {
         try await withCheckedThrowingContinuation { continuation in
             WKContentRuleListStore.default().compileContentRuleList(
-                forIdentifier: ruleListIdentifier,
+                forIdentifier: WebHostRule.identifier,
                 encodedContentRuleList: WebHostRule.contentRules
             ) { list, error in
                 if let list {
@@ -99,7 +136,7 @@ public final class WebCardRenderer: CardRenderer {
 @MainActor
 struct HostGuard: WebPage.NavigationDeciding {
     mutating func decidePolicy(for action: WebPage.NavigationAction, preferences: inout WebPage.NavigationPreferences) async -> WKNavigationActionPolicy {
-        guard let url = action.request.url, WebHostRule.allows(url) else { return .cancel }
+        guard let url = action.request.url, WebHostRule.allowsNavigation(url) else { return .cancel }
         return .allow
     }
 }

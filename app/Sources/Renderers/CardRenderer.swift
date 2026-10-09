@@ -29,6 +29,8 @@ public enum CardRendererError: Error, Equatable {
     case noLiveForm
     /// WebKit did not compile the network rules. The message comes from WebKit.
     case ruleListFailed(String)
+    /// A React card did not draw its component in time. Its scripts may not have loaded.
+    case notDrawn
 }
 
 /// Renderers in the order they were registered. The first one that takes a card serves it.

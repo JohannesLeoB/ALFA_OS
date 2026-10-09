@@ -91,6 +91,9 @@ public enum WebDocument {
             .replacing(/^\s*["']use client["'];?\s*$/.anchorsMatchLineEndings(), with: "")
     }
 
+    /// A script that tells whether a React page has drawn: React is loaded and the root has content, or the page shows an error.
+    static let drawnCheck = #"var r=document.getElementById('root');return !!(window.React&&window.ReactDOM&&((r&&r.childNodes.length)||document.querySelector('pre')));"#
+
     /// Keeps user code from closing the script or style element it sits in.
     static func escapeScript(_ code: String) -> String {
         code.replacing(/<\/(script|style)/.ignoresCase()) { "<\\/" + $0.output.1 }
