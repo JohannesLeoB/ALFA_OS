@@ -38,6 +38,8 @@ struct ItemView: View {
         case .card:
             if case .code(let content) = presentation.body {
                 CodeCardView(presentation: presentation, content: content, detail: detail, zoom: zoom, onScreen: onScreen)
+            } else if let frame = presentation.frame {
+                FrameView(frame: frame, detail: detail, zoom: zoom)
             } else {
                 CardFrame(presentation: presentation, detail: detail, zoom: zoom, trailing: trailing) { size in
                     CardBody(presentation: presentation, size: size, detail: detail, zoom: zoom, assets: assets, thumbnails: thumbnails, edit: edit)

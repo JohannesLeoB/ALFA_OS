@@ -41,8 +41,16 @@ extension Device {
     public static func resolve(_ id: String) -> Device? {
         let suffixes = ["-landscape", "-portrait"]
         guard let suffix = suffixes.first(where: { id.hasSuffix($0) }) else { return preset(id) }
-        guard let base = preset(String(id.dropLast(suffix.count))) else { return nil }
+        guard let base = preset(baseID(of: id)) else { return nil }
         let wantsLandscape = suffix == "-landscape"
         return (base.width >= base.height) == wantsLandscape ? base : base.rotated
+    }
+
+    /// The ID without its orientation suffix, for example "mbp14" for "mbp14-portrait".
+    public static func baseID(of id: String) -> String {
+        for suffix in ["-landscape", "-portrait"] where id.hasSuffix(suffix) {
+            return String(id.dropLast(suffix.count))
+        }
+        return id
     }
 }

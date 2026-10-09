@@ -39,6 +39,8 @@ public struct ItemPresentation: Equatable, Sendable {
     public var locked: Bool
     public var problem: ItemProblem?
     public var body: Body
+    /// The device and the sizes of a frame. nil for every other kind.
+    public var frame: FrameDisplay? = nil
 
     public enum Body: Equatable, Sendable {
         case image(ImageContent)
@@ -142,6 +144,7 @@ extension ItemPresentation {
     /// The data to draw `item`. `space` is the space that holds it, `assets` the images of the document.
     public static func make(for item: Item, in space: Space, assets: AssetStore) -> ItemPresentation {
         var problem: ItemProblem?
+        var frame: FrameDisplay?
         let body: Body
         switch item.content {
         case .image(let assetID, let crop, let fit):
@@ -164,11 +167,12 @@ extension ItemPresentation {
             body = .group(GroupContent(title: title, childCount: inside))
         case .code(let language, let files, let previewWidth):
             body = .code(CodeContent(language: language, files: files, previewWidth: previewWidth))
-        case .frame:
+        case .frame(let deviceID, _, let scale):
             body = .other(kind: .frame)
+            frame = FrameDisplay.make(deviceID: deviceID, scale: scale, rect: item.rect)
         }
         return ItemPresentation(id: item.id, size: CanvasSize(width: item.rect.w, height: item.rect.h),
-                                title: Self.title(of: item), locked: item.locked, problem: problem, body: body)
+                                title: Self.title(of: item), locked: item.locked, problem: problem, body: body, frame: frame)
     }
 
     /// The header text: the title of the item. A group shows the title of the group. Without a title, the address of a link.
