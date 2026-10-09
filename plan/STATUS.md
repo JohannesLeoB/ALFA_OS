@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (77)
+## Briefe (79)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -61,6 +61,8 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-224](briefe/B-224.md) | E2 | Fehlerbrief: Dokument und Speicherstand | B-221 | offen (geschrieben 2026-10-09) |
 | [B-225](briefe/B-225.md) | E2 | Fehlerbrief: Menüs, Werkzeugleiste, Ausgabe | B-222 | offen (geschrieben 2026-10-09) |
 | [B-226](briefe/B-226.md) | E2 | Fehlerbrief: Räume, Ebenen, Inspektor, Texte | B-221 | offen (geschrieben 2026-10-09) |
+| [B-227](briefe/B-227.md) | E2 | Fehlerbrief: Zeigerkoordinaten, Tasten, Scrollen (hoch) | B-221 | offen (geschrieben 2026-10-09; nächster freier Platz) |
+| [B-228](briefe/B-228.md) | E2 | Fehlerbrief: ausgeblendete Stücke, Raster-Einrasten, Import | B-227 | offen (geschrieben 2026-10-09) |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | offen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | offen |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
