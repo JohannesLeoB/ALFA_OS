@@ -4,6 +4,7 @@ Quelle der Angaben: Briefköpfe in `plan/briefe/`, `git log` bis 2026-10-09 23:4
 
 ## Stand
 - Version 1.0.0 (6) notarisiert in `dist/` (nicht im Git). `pruefen.sh` 0 errors (Chef, 2026-10-10 00:10, nach B-821, B-823, B-824).
+- **Im Programm wirkt noch nicht (Version 1.0.0):** Sicherung, Absturzkopie, Rückgängig nach Neustart, Chat-Speicher, Assistent mit Brett, Lesezeichen- und Gist-Import. Die Pakete sind getestet, die App ruft sie nicht auf (Cloud-Review 2026-10-09, von mir nachgeprüft 2026-10-10).
 - Abgenommen: B-821 (Layout-Prüfstand, 11 Tests, 4 bekannte Fehler: Token-Satz-Knöpfe der Seitenleiste brechen bei 200/240/320 und in der Fensterspalte), B-823 (Aufräumen), B-824 (Modul `app/Sources/CodePlayer`).
 - Konto B (Design): D-007 (System, Phase 1) läuft, D-008 (Ansichten als HTML-Entwürfe) folgt im selben Projekt. Konto C und Codex ruhen.
 - Gates entfallen. Branches: nur `main`; Zweige `knoten/*` folgen nach dem Umzug.
