@@ -369,9 +369,15 @@ public enum DocumentPackage {
                 layers.append(file.layer)
                 if !file.extras.isEmpty { preserved.layers[LayerKey(space: spaceFile.id, layer: id)] = file.extras }
                 itemsByLayer[id] = file.items.map { env in
-                    if !env.extras.isEmpty { preserved.items[env.item.id] = env.extras }
-                    if !seenItems.insert(env.item.id).inserted { duplicateItems.insert(env.item.id) }
-                    return env.item
+                    var item = env.item
+                    if !seenItems.insert(item.id).inserted {
+                        // Keep the first item under its ID; the later one gets a new ID so that nothing is lost.
+                        duplicateItems.insert(item.id)
+                        item.id = ItemID()
+                        seenItems.insert(item.id)
+                    }
+                    if !env.extras.isEmpty { preserved.items[item.id] = env.extras }
+                    return item
                 }
             }
             let items = interleave(itemsByLayer, order: layerOrder, written: spaceFile.layers, sequence: spaceFile.layerSequence) {
