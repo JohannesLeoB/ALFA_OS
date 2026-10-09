@@ -74,6 +74,7 @@ struct StepScope {
         case .reorder(let ids, let how): try reorder(ids, how, into: &out)
         case .setContent(let id, let content): try setContent(id, content, into: &out)
         case .setFill(let ids, let hex): try setFill(ids, hex: hex, into: &out)
+        case .setSource(let id, let source): try setSource(id, source, into: &out)
         case .group(let ids, let title, let groupID): try group(ids, title: title, groupID: groupID, into: &out)
         case .ungroup(let ids): try ungroup(ids, into: &out)
         case .setLocked(let ids, let value):
@@ -202,6 +203,13 @@ struct StepScope {
         let target = try item(id)
         guard isEditable(target), target.content != content, let index = position[id] else { return }
         out.items[index].content = content
+        out.touched.insert(id)
+    }
+
+    private func setSource(_ id: ItemID, _ source: Source?, into out: inout StepResult) throws {
+        let target = try item(id)
+        guard isEditable(target), target.source != source, let index = position[id] else { return }
+        out.items[index].source = source
         out.touched.insert(id)
     }
 
