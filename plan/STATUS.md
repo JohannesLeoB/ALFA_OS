@@ -105,12 +105,12 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-704](briefe/B-704.md) | E7 | Mockup-Paket ausgeben | B-602 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 845 Tests, App-Bau grün); preview.html am Bild offen; Fragen: Bild mit Herkunft ohne Lizenz = eigen? fremder Code im Paket? |
 | [B-705](briefe/B-705.md) | E7 | Vertrag-ZIP und Mockup-Paket einlesen | B-103, B-704 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-706](briefe/B-706.md) | E7 | PDF-Bogen | B-704 | erledigt, geprüft 2026-10-09 (Chef: Paket-Tests grün laut Agent; Gesamtlauf nach B-705); Abnahme am Bild offen (PDF öffnen, Layout, Maßlinien, Legende, Ausgabe-Dialog); Maßlinien der Stückabstände laufen durch die Stückmitte |
-| [B-801](briefe/B-801.md) | E8 | Claude in der App, Teil a: Anbindung im Paket (Plattform-Schlüssel, Kosten, Vorschläge) | B-404, B-405 | zur Prüfung (Agent: pruefen.sh 0 errors, 88 AI-Tests; Chef-Lauf steht aus; Teil b = B-806, Chat = B-808) |
+| [B-801](briefe/B-801.md) | E8 | Claude in der App, Teil a: Anbindung im Paket (Plattform-Schlüssel, Kosten, Vorschläge) | B-404, B-405 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, App-Bau grün); Agent: Agent: pruefen.sh 0 errors, 88 AI-Tests; Chef-Lauf steht aus; Teil b = B-806, Chat = B-808 |
 | [B-802](briefe/B-802.md) | E8 | iCloud Drive für Dokumente | B-104 | offen |
 | [B-803](briefe/B-803.md) | E8 | Ordner-Spiegel | B-603 | offen |
 | [B-804](briefe/B-804.md) | E8 | Swift-Vorschau, Versuch mit Messung | B-401 | offen |
-| [B-806](briefe/B-806.md) | E8 | Claude in der App, Teil b: Schlüssel, Verbrauch, Labor-Leiste, Token-Namen | B-801 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
-| [B-807](briefe/B-807.md) | E8 | Notizen an Stücken und Stellen (Kommentare) | B-305, B-703 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-806](briefe/B-806.md) | E8 | Claude in der App, Teil b: Schlüssel, Verbrauch, Labor-Leiste, Token-Namen | B-801 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, App-Bau grün); Abnahme am Bild offen |
+| [B-807](briefe/B-807.md) | E8 | Notizen an Stücken und Stellen (Kommentare) | B-305, B-703 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, App-Bau grün); Abnahme am Bild offen |
 | [B-808](briefe/B-808.md) | E8 | Chat in der App: Kontext senden, Vorschläge zurück (Werkzeuge) | B-801, B-806, B-807 | offen (wartet auf B-801, B-806, B-807) |
 | [B-901](briefe/B-901.md) | E9 | Einstellungen und Setups | B-106 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-902](briefe/B-902.md) | E9 | Erster Start und leere Zustände | B-901 | erledigt, geprüft 2026-10-09 (Chef: Gesamtlauf nach B-703 und B-405); Schritte 1 bis 3 und Teil von 4 gebaut (Zustandslogik, Beispiel, Startfenster, Leinwand und Token-Satz); offen: leere Zustände im Inspektor, in der Sammlung, bei der Suche und im Labor als Ansicht; ob SwiftUI beim Start ohne Dokument zusätzlich ein neues anlegt, am Bild prüfen |
