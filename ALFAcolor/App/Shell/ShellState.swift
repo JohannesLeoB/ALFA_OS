@@ -89,8 +89,17 @@ final class ShellState {
         inspectorVisible = !blobMode
     }
 
+    /// Escape in blob mode: closes the open palette and returns true. False when no palette is open.
+    func closeBlobPalette() -> Bool {
+        guard blobMode, blob.open != nil else { return false }
+        blob.close()
+        return true
+    }
+
     /// Tab on the canvas: if any palette is open, both close. Otherwise both open.
+    /// In blob mode the blob menu replaces the palettes, so Tab does nothing there.
     func togglePalettes() {
+        guard !blobMode else { return }
         let anyVisible = sidebarVisible || inspectorVisible
         sidebarVisible = !anyVisible
         inspectorVisible = !anyVisible

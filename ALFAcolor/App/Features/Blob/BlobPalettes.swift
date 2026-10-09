@@ -89,7 +89,7 @@ struct BlobPaletteContent: View {
     private var alignment: some View {
         let count = store.selectedItems.count
         let allLocked = count > 0 && store.selectedItems.allSatisfy(\.locked)
-        let actions = ContextBar.actions(count: count)
+        let actions = ContextBar.actions(count: count, hasGroup: ContextBar.hasGroup(store.selectedItems))
         if actions.isEmpty {
             notice("blob.noSelection")
         } else {
@@ -115,6 +115,8 @@ struct BlobPaletteContent: View {
         let colors = store.swatchColors
         if store.selectedItems.isEmpty {
             notice("blob.noSelection")
+        } else if !store.canPaintSelection {
+            notice("fan.noColour")
         } else if colors.isEmpty {
             notice("blob.swatches.empty")
         } else {
@@ -127,6 +129,8 @@ struct BlobPaletteContent: View {
     private var tokens: some View {
         if store.selectedItems.isEmpty {
             notice("blob.noSelection")
+        } else if !store.canPaintSelection {
+            notice("fan.noColour")
         } else {
             fan(ColorToken.allCases.map { theme.rgb($0, Theme.Mode(scheme)) }, selection: $token)
         }
