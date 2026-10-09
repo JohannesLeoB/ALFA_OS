@@ -104,6 +104,29 @@ public struct BackupStore {
         try FileManager.default.copyItem(at: record.url, to: target)
     }
 
+    /// Reads the backup as a document. A backup that cannot be read is `.unreadable`; nothing is changed.
+    public func state(of record: BackupRecord) -> BackupState {
+        do {
+            _ = try DocumentPackage.read(from: record.url)
+            return .readable
+        } catch {
+            return .unreadable
+        }
+    }
+
+    /// Moves an unreadable backup into the folder `unreadable` of its document. An existing item there is never replaced.
+    /// Returns the new place. Nothing is deleted.
+    @discardableResult
+    public func setAside(_ record: BackupRecord) throws -> URL {
+        guard isDirectory(record.url) else { throw BackupError.sourceMissing }
+        let folder = documentFolder(record.documentID).appending(path: "unreadable", directoryHint: .isDirectory)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let target = folder.appending(path: record.url.lastPathComponent, directoryHint: .isDirectory)
+        guard !FileManager.default.fileExists(atPath: target.path) else { throw BackupError.targetExists }
+        try FileManager.default.moveItem(at: record.url, to: target)
+        return target
+    }
+
     /// Document folders in the backup root whose document is not in `knownDocuments`. Nothing is deleted.
     public func orphanedBackups(knownDocuments: Set<UUID>) throws -> [OrphanedBackups] {
         guard isDirectory(root) else { throw BackupError.rootMissing }
