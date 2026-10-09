@@ -44,10 +44,7 @@ public enum StorageLocation {
         switch choice {
         case .keepTarget:
             return target
-        case .replace:
-            _ = try fileManager.replaceItemAt(target, withItemAt: conflict.oldURL)
-            return target
-        case .setAside:
+        case .replace, .setAside:
             try fileManager.moveItem(at: target, to: asideURL(for: target, date: date, fileManager: fileManager))
             try fileManager.moveItem(at: conflict.oldURL, to: target)
             return target
@@ -106,7 +103,7 @@ public struct StorageConflict: Equatable, Sendable {
 public enum StorageChoice: Equatable, Sendable {
     /// The file in the app folder stays and is used. The old file does not move and stays where it is.
     case keepTarget
-    /// The old file takes the place of the file in the app folder, which is removed.
+    /// The file in the app folder is set aside under a time stamp name first, then the old file moves in under its own name.
     case replace
     /// The file in the app folder gets a time stamp name. The old file moves in under its own name.
     case setAside
