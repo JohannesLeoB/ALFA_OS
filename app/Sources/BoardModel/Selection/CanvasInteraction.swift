@@ -338,6 +338,7 @@ public final class CanvasInteraction {
     func targets(excluding ids: Set<ItemID>, around rect: Rect?) -> SnapTargets {
         let others = visibleItems.filter { !ids.contains($0.id) }
         return SnapTargets(gridStep: snap.gridStep, rects: others.map(\.rect),
+                           guides: FrameGuides.snapLines(around: rect, in: others),
                            frameLines: FrameGrid.snapLines(around: rect, in: others),
                            spacing: snap.snapsToSpacing ? spacingStops : [])
     }
