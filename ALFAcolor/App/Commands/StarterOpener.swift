@@ -1,4 +1,5 @@
 import AppKit
+import ALFAcolorCore
 import Document
 import Importers
 
@@ -19,8 +20,9 @@ enum StarterOpener {
                 alert.runModal()
                 return
             }
-            let folder = try FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let oldFolder = try FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
                 .appending(path: "starter", directoryHint: .isDirectory)
+            let folder = try AppStorage.location(oldURL: oldFolder, subfolder: .prototypes)
             // The copy made by an earlier call is opened again, so that each call does not add one more.
             let earlier = folder.appending(path: source.lastPathComponent)
             let copy = FileManager.default.fileExists(atPath: earlier.path) ? earlier : try StarterDuplicate.copy(of: source, into: folder)

@@ -22,6 +22,7 @@ final class PlaceStore {
     /// True when the file exists but cannot be read. Nothing is written then, so the file is not overwritten.
     private(set) var fileIsUnreadable = false
     private let fileURL: URL
+    private var appFolderScopeOpen = false
 
     init(fileURL: URL = PlaceStore.defaultFileURL) {
         self.fileURL = fileURL
@@ -65,6 +66,16 @@ final class PlaceStore {
         let scoped = place.bookmark != nil && url.startAccessingSecurityScopedResource()
         defer { if scoped { url.stopAccessingSecurityScopedResource() } }
         return try work(url)
+    }
+
+    /// The app folder as a folder URL, nil when none is chosen or it is not reachable now (then nothing is written there).
+    /// The security scope of the app folder stays open for the rest of the run, since the app keeps files there.
+    func appFolderURL() -> URL? {
+        guard let folder = appFolder, case .reachable(let url) = access(to: folder) else { return nil }
+        if folder.bookmark != nil, !appFolderScopeOpen {
+            appFolderScopeOpen = url.startAccessingSecurityScopedResource()
+        }
+        return url
     }
 
     /// Adds a folder the user chose. The kind is detected; the user may change it later.
