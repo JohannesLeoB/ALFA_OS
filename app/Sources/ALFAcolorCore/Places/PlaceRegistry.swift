@@ -16,28 +16,33 @@ public struct PlaceRegistry: Codable, Equatable, Sendable {
     public static let maxNameLength = 120
 
     public private(set) var places: [Place]
+    /// The place that is the app folder, nil when none is chosen yet.
+    public private(set) var appFolderID: UUID?
     /// Top-level fields that this version does not know. They are written back unchanged.
     public var extra: [String: PlaceJSON]
 
     public init() {
         places = []
+        appFolderID = nil
         extra = [:]
     }
 
     private enum CodingKeys: String, CodingKey {
-        case places
+        case places, appFolder
     }
 
     public init(from decoder: Decoder) throws {
         let known = try decoder.container(keyedBy: CodingKeys.self)
         places = Self.mergingDuplicates(try known.decode([Place].self, forKey: .places))
-        extra = try UnknownFields.read(from: decoder, skipping: ["places"])
+        appFolderID = try known.decodeIfPresent(UUID.self, forKey: .appFolder)
+        extra = try UnknownFields.read(from: decoder, skipping: ["places", "appFolder"])
     }
 
     public func encode(to encoder: Encoder) throws {
         var known = encoder.container(keyedBy: CodingKeys.self)
         try known.encode(places, forKey: .places)
-        try UnknownFields.write(extra, to: encoder, skipping: ["places"])
+        try known.encodeIfPresent(appFolderID, forKey: .appFolder)
+        try UnknownFields.write(extra, to: encoder, skipping: ["places", "appFolder"])
     }
 
     /// The place with this id, nil when there is none.
@@ -64,10 +69,18 @@ public struct PlaceRegistry: Codable, Equatable, Sendable {
         return place
     }
 
-    /// Removes a place from the list. The folder on the disk is not touched.
+    /// Removes a place from the list. The folder on the disk is not touched. Removing the app folder clears the choice.
     public mutating func remove(_ id: UUID) throws {
         let index = try indexOf(id)
         places.remove(at: index)
+        if appFolderID == id { appFolderID = nil }
+    }
+
+    /// Makes a place the app folder. It gets the roles of storage and source library, which the app folder always has.
+    public mutating func chooseAppFolder(_ id: UUID) throws {
+        let index = try indexOf(id)
+        places[index].roles.formUnion([.storage, .sourceLibrary])
+        appFolderID = id
     }
 
     /// Replaces the roles of a place. An empty set is refused.
