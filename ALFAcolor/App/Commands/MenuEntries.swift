@@ -48,9 +48,11 @@ struct MenuFunctions {
 struct MenuEntries: View {
     let menu: AppMenu
     let functions: MenuFunctions
+    /// Commands the document scene already provides. They keep their place in the shortcut table and have no entry here.
+    var hiding: Set<String> = []
 
     var body: some View {
-        ForEach(ShortcutTable.entries(menu, origin: .app)) { entry in
+        ForEach(ShortcutTable.entries(menu, origin: .app).filter { !isHidden($0) }) { entry in
             switch entry {
             case .separator:
                 Divider()
@@ -64,6 +66,13 @@ struct MenuEntries: View {
                 }
             }
         }
+    }
+}
+
+extension MenuEntries {
+    private func isHidden(_ entry: MenuEntry) -> Bool {
+        if case .command(let command) = entry { return hiding.contains(command.id) }
+        return false
     }
 }
 

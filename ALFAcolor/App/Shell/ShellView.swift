@@ -1,7 +1,6 @@
 import SwiftUI
 import AppTheme
 import BoardModel
-import Document
 
 /// Main window: sidebar, canvas, inspector, toolbar, status bar.
 /// The system draws the glass for sidebar, inspector and toolbar. There is no own background for it here.
@@ -9,8 +8,14 @@ struct ShellView: View {
     /// Minimum size of the main window, konzept/05-OBERFLAECHE.txt section 2.3.
     static let minimumSize = CGSize(width: 1000, height: 640)
 
+    @Environment(\.undoManager) private var undoManager
     @State private var shell = ShellState()
-    @State private var canvas = CanvasController(store: BoardStore(document: ALFAcolorDocument()))
+    @State private var canvas: CanvasController
+
+    /// The window shows the document of `session`. The undo history belongs to this window.
+    init(session: DocumentSession) {
+        _canvas = State(initialValue: CanvasController(store: session.store))
+    }
 
     var body: some View {
         NavigationSplitView(columnVisibility: $shell.columnVisibility) {
@@ -30,5 +35,8 @@ struct ShellView: View {
         .focusedSceneValue(\.shell, shell)
         .focusedSceneValue(\.canvas, canvas)
         .frame(minWidth: Self.minimumSize.width, minHeight: Self.minimumSize.height)
+        .onChange(of: undoManager.map(ObjectIdentifier.init), initial: true) {
+            if let undoManager { canvas.store.useUndoManager(undoManager) }
+        }
     }
 }

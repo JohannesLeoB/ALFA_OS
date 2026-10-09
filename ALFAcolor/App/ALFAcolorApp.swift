@@ -10,8 +10,9 @@ struct ALFAcolorApp: App {
     private let theme = Theme.bundled()
 
     var body: some Scene {
-        WindowGroup {
-            ShellView()
+        // One window per document. The system provides New, Open, Open Recent, Save, Duplicate and Revert.
+        DocumentGroup(newDocument: { BoardFile() }) { configuration in
+            ShellView(session: configuration.document.session)
                 .environment(\.theme, theme)
         }
         .defaultSize(width: Self.defaultSize.width, height: Self.defaultSize.height)

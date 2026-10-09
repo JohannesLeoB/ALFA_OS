@@ -14,10 +14,17 @@ struct ALFAcolorCommands: Commands {
     }
 }
 
+/// File menu. The document scene provides New, Open, Open Recent, Save, Duplicate (Save As with the Option key),
+/// Rename, Move To and Revert To with the keys of the shortcut table. Only the entries it does not provide are added here.
 struct FileCommands: Commands {
+    /// The commands of the shortcut table that the document scene provides.
+    static let providedByDocumentScene: Set<String> = [
+        "file.new", "file.open", "file.recent", "file.save", "file.duplicate", "file.rename", "file.move", "file.revert"
+    ]
+
     var body: some Commands {
-        CommandGroup(replacing: .newItem) {
-            MenuEntries(menu: .file, functions: MenuFunctions())
+        CommandGroup(after: .importExport) {
+            MenuEntries(menu: .file, functions: MenuFunctions(), hiding: Self.providedByDocumentScene)
         }
     }
 }
