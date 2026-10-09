@@ -120,7 +120,7 @@ public enum TokenExport {
     /// A typography token gives one variable per property: `--<name>-font-family`, `-font-size`, `-font-weight`, `-letter-spacing`, `-line-height`.
     public static func css(_ set: TokenSet) -> String {
         let lines = set.tokens.flatMap { token -> [String] in
-            let name = token.path.joined(separator: "-")
+            let name = cssName(token.path)
             guard case .typography(let t) = token.value else { return ["  --\(name): \(cssValue(token.value));"] }
             return ["  --\(name)-font-family: \(cssValue(.fontFamily(t.fontFamily)));",
                     "  --\(name)-font-size: \(fmt(t.fontSize))px;",
@@ -129,6 +129,10 @@ public enum TokenExport {
                     "  --\(name)-line-height: \(fmt(t.lineHeight));"]
         }
         return ":root {\n" + lines.joined(separator: "\n") + "\n}\n"
+    }
+    /// The path joined with hyphens. Every character that is no letter, digit, hyphen or underscore becomes a hyphen.
+    static func cssName(_ path: [String]) -> String {
+        String(path.joined(separator: "-").map { $0.isLetter || $0.isNumber || $0 == "-" || $0 == "_" ? $0 : "-" })
     }
     static func cssValue(_ v: TokenValue) -> String {
         switch v {
