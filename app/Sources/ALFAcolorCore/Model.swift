@@ -28,6 +28,25 @@ public struct Source: Codable, Hashable, Sendable {
     }
 }
 
+/// The outline of a shape. An ellipse in a square is a circle. A line runs from the top left to the bottom right
+/// corner of its rectangle.
+public enum ShapeKind: String, Codable, Sendable, CaseIterable {
+    case rectangle, capsule, ellipse, line
+}
+
+/// How a shape is painted. Colors are hex strings, as in `Content.swatch`; nil means none.
+public struct ShapeStyle: Codable, Hashable, Sendable {
+    public var fill: String?
+    public var stroke: String?
+    /// Width of the stroke in points.
+    public var strokeWidth: Double
+    /// Corner radius in points. Only a rectangle has corners.
+    public var cornerRadius: Double
+    public init(fill: String? = nil, stroke: String? = nil, strokeWidth: Double = 1, cornerRadius: Double = 0) {
+        self.fill = fill; self.stroke = stroke; self.strokeWidth = strokeWidth; self.cornerRadius = cornerRadius
+    }
+}
+
 /// The content of an item. An item has exactly one kind.
 public enum Content: Codable, Hashable, Sendable {
     case code(language: CodeLanguage, files: [String: String], previewWidth: Double?)
@@ -39,6 +58,10 @@ public enum Content: Codable, Hashable, Sendable {
     case frame(deviceID: String?, gridID: String?)
     /// A group with a title (zone). Its children lie geometrically inside it.
     case group(title: String)
+    /// A drawn shape: rectangle, capsule, ellipse or line.
+    case shape(kind: ShapeKind, style: ShapeStyle)
+    /// Free text on the canvas. `style` names a text style: "heading", "body" or "caption". Another name reads as "body".
+    case text(text: String, style: String)
 }
 
 /// The identity of an item. In JSON it is a plain string.
