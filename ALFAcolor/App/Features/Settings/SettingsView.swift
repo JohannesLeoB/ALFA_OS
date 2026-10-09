@@ -12,6 +12,8 @@ struct SettingsView: View {
         TabView {
             GeneralSettings()
                 .tabItem { Label("settings.tab.general", systemImage: "gearshape") }
+            PlacesSettings()
+                .tabItem { Label("settings.tab.places", systemImage: "folder") }
             AccountSettings()
                 .tabItem { Label("settings.tab.accounts", systemImage: "person.crop.circle") }
             SyncSettings()
