@@ -21,7 +21,6 @@ enum AnthropicWire {
             maxTokens: request.maxTokens,
             system: request.system,
             messages: messages,
-            temperature: request.temperature,
             cacheControl: cacheControl(for: request.cache),
             tools: request.tools.isEmpty ? nil : try AIToolWire.tools(request.tools),
             stream: stream ? true : nil,
@@ -135,7 +134,6 @@ private struct WireRequest: Encodable {
     let maxTokens: Int
     let system: String
     let messages: [WireMessage]
-    let temperature: Double?
     let cacheControl: WireCacheControl?
     let tools: [JSONValue]?
     let stream: Bool?
