@@ -44,7 +44,11 @@ public struct DeliveryReview: Equatable, Sendable {
             darkChanges = contract.dark.map { TokenDiff.changes(from: tokenSets.first { $0.name == ContractSets.darkName }, to: $0) } ?? []
             frames = 0
             pieces = 0
-            warnings = contract.warnings
+            var notes = contract.warnings
+            if contract.dark == nil, tokenSets.contains(where: { $0.name == ContractSets.darkName }) {
+                notes.append("the contract has no dark file: the dark set of the document stays")
+            }
+            warnings = notes
         case .mockup(let mockup):
             changes = []
             darkChanges = []

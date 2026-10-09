@@ -39,8 +39,8 @@ public enum TokenDiff {
 
 /// Puts a contract into the document as one undo step.
 public enum ContractApply {
-    /// Each set replaces the set with the same name, or is added. A dark set that the contract does not
-    /// have is removed, so no old dark values stay behind. Returns false when nothing changes.
+    /// Each set replaces the set with the same name, or is added. A contract without a dark file leaves
+    /// the dark set of the document as it is; the review tells the user. Returns false when nothing changes.
     @MainActor
     public static func apply(_ contract: ContractSets, to store: BoardStore) throws -> Bool {
         try store.changeTokenSets(nameKey: "undo.contract.import") { current in
@@ -50,9 +50,6 @@ public enum ContractApply {
                 } else {
                     current.append(set)
                 }
-            }
-            if contract.dark == nil {
-                current.removeAll { $0.name == ContractSets.darkName }
             }
         }
     }
