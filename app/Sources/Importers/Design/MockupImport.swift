@@ -167,11 +167,12 @@ public enum MockupImport {
     /// The other files of a card: they sit in the same folder as the entry file. Their names are the keys.
     /// Files that do not fit the limits are left out and counted in the budget, in name order.
     private static func siblings(of path: String, in files: [String: Data], main: Data, budget: inout SiblingBudget) -> [String: String] {
-        let folder = (path as NSString).deletingLastPathComponent + "/"
+        let parent = (path as NSString).deletingLastPathComponent
+        let folder = parent.isEmpty ? "" : parent + "/"
         var result: [String: String] = [:]
         result[(path as NSString).lastPathComponent] = String(decoding: main, as: UTF8.self)
         var cardLeft = siblingBytesPerCard
-        for other in files.keys.sorted() where other.hasPrefix(folder) && other != path {
+        for other in files.keys.sorted() where other.hasPrefix(folder) && other != path && other != "manifest.json" {
             let name = String(other.dropFirst(folder.count))
             guard !name.contains("/"), let bytes = files[other] else { continue }
             guard bytes.count <= codeBytesPerFile, bytes.count <= cardLeft, bytes.count <= budget.packageLeft else {
