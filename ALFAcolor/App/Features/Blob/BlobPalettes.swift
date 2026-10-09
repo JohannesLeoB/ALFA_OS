@@ -75,20 +75,21 @@ struct BlobPaletteContent: View {
         }
     }
 
-    /// The arrangements that the context bar offers for the selection. They need two items.
+    /// The actions that the context bar offers for the selection: arrangements, grouping and locking.
     @ViewBuilder
     private var alignment: some View {
         let count = store.selectedItems.count
-        let actions = ContextBar.actions(count: count).filter { $0.arrangement != nil }
+        let allLocked = count > 0 && store.selectedItems.allSatisfy(\.locked)
+        let actions = ContextBar.actions(count: count)
         if actions.isEmpty {
-            notice("blob.align.needsTwo")
+            notice("blob.noSelection")
         } else {
             VStack(alignment: .leading, spacing: theme.space(.s2)) {
                 ForEach(actions, id: \.self) { action in
                     Button {
                         _ = try? store.perform(action, groupTitle: String(localized: "item.kind.group"))
                     } label: {
-                        Text(LocalizedStringKey(action.labelKey(allLocked: false)))
+                        Text(LocalizedStringKey(action.labelKey(allLocked: allLocked)))
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .buttonStyle(.plain)
@@ -99,25 +100,35 @@ struct BlobPaletteContent: View {
         }
     }
 
-    /// The colors of the swatches on the canvas. A tap on a blade selects it.
+    /// The colors of the swatches on the canvas. A blade paints the selection.
     @ViewBuilder
     private var swatches: some View {
         let colors = store.swatchColors
-        if colors.isEmpty {
+        if store.selectedItems.isEmpty {
+            notice("blob.noSelection")
+        } else if colors.isEmpty {
             notice("blob.swatches.empty")
         } else {
             fan(colors, selection: $swatch)
         }
     }
 
-    /// The color tokens of the theme, in the mode of the window.
+    /// The color tokens of the theme, in the mode of the window. A blade paints the selection.
+    @ViewBuilder
     private var tokens: some View {
-        fan(ColorToken.allCases.map { theme.rgb($0, Theme.Mode(scheme)) }, selection: $token)
+        if store.selectedItems.isEmpty {
+            notice("blob.noSelection")
+        } else {
+            fan(ColorToken.allCases.map { theme.rgb($0, Theme.Mode(scheme)) }, selection: $token)
+        }
     }
 
+    /// A fan whose blades paint the selection, one undo step each.
     private func fan(_ colors: [RGB], selection: Binding<Int?>) -> some View {
-        SwatchFanView(colors: colors, selection: selection)
-            .padding(theme.space(.s3))
+        SwatchFanView(colors: colors, selection: selection) { index in
+            _ = try? store.perform(.setFill(store.selection, hex: colors[index].hex))
+        }
+        .padding(theme.space(.s3))
     }
 
     private func notice(_ key: LocalizedStringKey) -> some View {

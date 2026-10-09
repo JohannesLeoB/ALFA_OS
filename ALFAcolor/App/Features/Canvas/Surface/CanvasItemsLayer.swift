@@ -6,7 +6,7 @@ import Thumbnails
 /// The items near the visible part, in board points, under one transform for zoom and pan.
 /// Only the items from `CanvasController.drawnItems` get a view. What each kind looks like is in `Features/Canvas/Items`.
 /// Items that a drag moves or resizes, copies of a drag, and the item whose text is edited are drawn from the preview
-/// of the interaction, above the others. The layer takes no input, except the text field of an edit.
+/// of the interaction, above the others. The layer takes no input, except the text field of an edit and the colour fan.
 struct CanvasItemsLayer: View {
     var controller: CanvasController
     var interaction: CanvasInteraction
@@ -30,6 +30,11 @@ struct CanvasItemsLayer: View {
                              assets: assets, thumbnails: thumbnails, zoom: view.zoom, edit: editing(item))
                         .offset(x: item.rect.x, y: item.rect.y)
                         .allowsHitTesting(interaction.editing?.itemID == item.id)
+                }
+                if let fanID = interaction.fanItem, let item = controller.store.item(fanID) {
+                    SwatchFanAnchor(interaction: interaction, item: item)
+                        .id(fanID)
+                        .offset(x: item.rect.x, y: item.rect.y)
                 }
             }
         }

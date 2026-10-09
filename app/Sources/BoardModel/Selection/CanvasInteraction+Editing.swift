@@ -28,8 +28,8 @@ public struct TextEdit: Equatable, Sendable {
 
 /// Editing text in place, and the actions a double click starts.
 extension CanvasInteraction {
-    /// A double click at a point of the canvas. On a note or a text it starts editing; on an image without a file
-    /// it asks for the file; elsewhere it does nothing.
+    /// A double click at a point of the canvas. On a note or a text it starts editing; on a swatch it opens the colour fan;
+    /// on an image without a file it asks for the file; elsewhere it does nothing.
     public func doubleClick(atCanvasX x: Double, y: Double) {
         let point = board(fromCanvasX: x, y: y)
         if let editing, let rect = store.item(editing.itemID)?.rect, rect.contains(x: point.x, y: point.y) { return }
@@ -39,6 +39,8 @@ extension CanvasInteraction {
         case .note, .text:
             store.select([hit])
             beginEditing(hit)
+        case .swatch:
+            openFan(hit)
         case .image(let assetID, _, _) where store.document.assets[assetID] == nil:
             store.select([hit])
             fileSearchRequest = hit

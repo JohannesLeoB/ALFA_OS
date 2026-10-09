@@ -9,6 +9,10 @@ import Tokens
 struct SwatchFanView: View {
     let colors: [RGB]
     @Binding var selection: Int?
+    /// Opens the fan at once, with the opening movement, instead of waiting for a tap.
+    var startsOpen = false
+    /// Called with the index of a blade when a tap selects it.
+    var onPick: (Int) -> Void = { _ in }
 
     @State private var stage: FanStage = .shut
     @State private var playing: Task<Void, Never>?
@@ -48,6 +52,7 @@ struct SwatchFanView: View {
             .accessibilityLabel(Text("Color fan"))
             .accessibilityAction { toggle() }
         }
+        .onAppear { if startsOpen { toggle() } }
         .onDisappear { playing?.cancel() }
     }
 
@@ -108,6 +113,7 @@ struct SwatchFanView: View {
             toggle()
         case (.open, .blade(let index)):
             selection = index
+            onPick(index)
         default:
             break
         }

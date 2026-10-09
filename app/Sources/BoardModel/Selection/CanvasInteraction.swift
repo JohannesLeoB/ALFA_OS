@@ -58,6 +58,8 @@ public final class CanvasInteraction {
     public internal(set) var hoveredHandle: ResizeHandle?
     /// The text edit in progress, if any.
     public internal(set) var editing: TextEdit?
+    /// The swatch whose colour fan is open, if any. The view shows the fan over that item.
+    public internal(set) var fanItem: ItemID?
     /// The image item whose file the user wants to find. The view opens the file panel and answers with `replaceImage`.
     public var fileSearchRequest: ItemID?
     /// The error of the last command that failed, nil after a command that worked.
