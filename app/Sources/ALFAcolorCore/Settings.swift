@@ -6,6 +6,11 @@ public enum Setting: String, CaseIterable, Sendable {
     case defaultFolder = "settings.doc.defaultFolder"
     case startBehavior = "settings.start.behavior"
     case claudeAPIKey = "settings.claude.apiKey"
+    case claudeModelCodeVariant = "settings.claude.model.codeVariant"
+    case claudeModelHTMLForCSS = "settings.claude.model.htmlForCSS"
+    case claudeModelCodeFromScreenshot = "settings.claude.model.codeFromScreenshot"
+    case claudeModelTokenNames = "settings.claude.model.tokenNames"
+    case claudeModelExplain = "settings.claude.model.explain"
     case figmaToken = "settings.figma.token"
     case githubToken = "settings.github.token"
     case pinterestOAuth = "settings.pinterest.oauth"
@@ -30,6 +35,7 @@ public enum Setting: String, CaseIterable, Sendable {
         switch self {
         case .defaultFolder: .text("Documents/ALFAcolor")
         case .startBehavior: .text(StartBehavior.window.rawValue)
+        case .claudeModelCodeVariant, .claudeModelHTMLForCSS, .claudeModelCodeFromScreenshot, .claudeModelTokenNames, .claudeModelExplain: .text("")
         case .claudeAPIKey, .figmaToken, .githubToken, .pinterestOAuth: nil
         case .iCloudSync: .flag(false)
         case .unitDefault: .text(UnitChoice.point.rawValue)
@@ -48,6 +54,8 @@ public enum Setting: String, CaseIterable, Sendable {
             return !path.isEmpty
         case (.startBehavior, .text(let text)):
             return StartBehavior(rawValue: text) != nil
+        case (.claudeModelCodeVariant, .text), (.claudeModelHTMLForCSS, .text), (.claudeModelCodeFromScreenshot, .text), (.claudeModelTokenNames, .text), (.claudeModelExplain, .text):
+            return true
         case (.iCloudSync, .flag), (.snapToSpacingTokens, .flag):
             return true
         case (.unitDefault, .text(let text)):

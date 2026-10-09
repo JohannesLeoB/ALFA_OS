@@ -8647,6 +8647,61 @@
           }
         }
       }
+    },
+    "settings.claude.model.codeVariant" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Variante"
+          }
+        }
+      }
+    },
+    "settings.claude.model.htmlForCSS" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTML zu CSS"
+          }
+        }
+      }
+    },
+    "settings.claude.model.codeFromScreenshot" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bild zu Code"
+          }
+        }
+      }
+    },
+    "settings.claude.model.tokenNames" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Token-Namen"
+          }
+        }
+      }
+    },
+    "settings.claude.model.explain" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erklärung"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
