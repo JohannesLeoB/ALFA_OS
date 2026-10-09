@@ -25,6 +25,7 @@ struct LabView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             LabControlsView(model: model)
+            LabHintsView(model: model)
             footer
         }
         .background(theme.color(.background, scheme))
