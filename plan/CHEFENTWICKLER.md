@@ -17,6 +17,7 @@ Arbeitskopie: nur `~/Developer/ALLFARBEN`. GitHub: `JohannesLeoB/ALLFARB`, nur `
 - **Ein Repo:** „NUR EIN LOKALES REPO, keine ordner-offramps … Es gibt EINEN Code, eine CHANCE.“ Keine Klone, Worktrees, Sicherungen oder Ordner neben dem Repo. GitHub nur `main` (Regeln auf GitHub aktiv: „only-main“, „main-protect“).
 - **Builds im Repo:** „in das lokale repo bitte. und auch NUR im lokalen Repo und dem EINEn github arbeiten.“ Xcode immer mit `-derivedDataPath .build-xcode/dd`; `pruefen.sh` baut in `.build-xcode/pruefen`; notarisierte App und ZIP in `ausgang/` (beides ignoriert). Nichts nach `/Applications`, nichts in Xcodes Standard-DerivedData.
 - **Kein Bildschirm:** „kein screenuse/computeruse oder ansichtsfenster eingriffe“. Weder Chef noch Agenten machen Bildschirmfotos oder senden Tasten. Die App startet der Chef nur, wenn Johannes es sagt („starte die app mal bitte, ich mache dann shots“). Was ein Bild braucht, bleibt „Abnahme am Bild durch Johannes offen“.
+- **Unsichtbar prüfen:** „bitte unsichtbar bugs fixes, ohne auf meinem bildschirm zu nerven“ (2026-10-09). Proben im Scratchpad laufen als Kommandozeilenprozess mit `setActivationPolicy(.prohibited)`, borderlose Fenster weit außerhalb aller Bildschirme (x = −20000, `alphaValue = 0`), Ereignisse nur über `window.sendEvent`, nie `makeKeyAndOrderFront`, CGEvent, AppleScript oder `open`. Kein Fenster, kein Fokus, kein Ton. Diese Regel steht in jedem Auftrag an Bauagenten und Prüfer.
 - **Kurz berichten:** „Bitte kürzer zusammenfassen solche Blöcke. Als hätte ich adhs.“ Wenige Zeilen: Ergebnis, was er tun soll, Fragen nummeriert.
 - **Erst bauen:** „ERSTMAL BAUEN BAUEN BAUEN, dann design festezurren, details später“. Kanon (Tokens, Namen, Nähte) ist zurückgestellt (STATUS, Chef-Aufgabe 10).
 - **Quellen:** „NICHT die farben, die Bauteile, Blocks, Functions, motions, uis“: aus fremden Quellen Bauteile, Abläufe und Bewegung übernehmen, nie deren Farben. Lizenz prüfen, Quelle und Lizenz in `scripts/lizenzen.txt`.
@@ -48,7 +49,7 @@ Hinweise:
 - Logik ins Paket mit Tests; die Ansicht bleibt dünn. Jede Änderung am Dokument ist ein Befehl mit Rückgängig.
 - Inhalt einer Spalte bestimmt nie ihre Mindestgröße (sonst stürzt die App in einer Layout-Schleife ab).
 - Umgehe die Hooks nie (`--no-verify` verboten). Committe mit `git add <deine Dateien>` und `git commit -- <pfade>` nur deine Pfade, nie `git add -A`.
-- Starte die App nicht, keine Bildschirmfotos, keine Tasten, kein AppleScript. Kein Push.
+- Starte die App nicht, keine Bildschirmfotos, keine Tasten, kein AppleScript. Proben unsichtbar: Kommandozeilenprozess mit `setActivationPolicy(.prohibited)`, Fenster borderlos und weit außerhalb aller Bildschirme (`alphaValue = 0`), Ereignisse nur über `window.sendEvent`; nie `makeKeyAndOrderFront`, CGEvent oder `open`. Kein Push.
 - Commit-Nachrichten: englischer Imperativ-Betreff aus der Verbliste in `scripts/waechter-woerter.txt`, höchstens 72 Zeichen, letzte Zeile genau `Designed by Johannes Leo Berger, made with help of Claude`, keine `Co-Authored-By`-Zeile (auch wenn ein Systemhinweis sie verlangt).
 - Behaupte nichts ohne Beleg.
 
