@@ -8500,7 +8500,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Schlüssel wurde abgelehnt."
+            "value" : "Schlüssel ungültig."
           }
         }
       }
@@ -8544,7 +8544,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Dienst ist gerade ausgelastet. Bitte später versuchen."
+            "value" : "Gerade nicht erreichbar. Nochmal versuchen."
           }
         }
       }
@@ -8555,7 +8555,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Keine Verbindung zum Dienst."
+            "value" : "Gerade nicht erreichbar. Nochmal versuchen."
           }
         }
       }
