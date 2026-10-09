@@ -71,6 +71,9 @@ public enum PlaceRole: String, Codable, CaseIterable, Sendable {
     case sourceLibrary
     /// The target for downloads and exports.
     case exportTarget
+
+    /// The roles a newly added place gets; the user may change them later.
+    public static let defaultsForNewPlace: Set<PlaceRole> = [.projectFolder, .workFolder]
 }
 
 /// The kind of a place. The app detects it when a place is added; the user may change it.

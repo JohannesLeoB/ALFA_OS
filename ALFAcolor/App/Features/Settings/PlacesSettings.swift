@@ -118,7 +118,7 @@ struct PlacesSettings: View {
 
     private func addPlace() {
         guard let folder = chooseFolder() else { return }
-        perform { try store.addFolder(folder, roles: [.workFolder]) }
+        perform { try store.addFolder(folder, roles: PlaceRole.defaultsForNewPlace) }
     }
 
     private func chooseAgain(_ place: Place) {
