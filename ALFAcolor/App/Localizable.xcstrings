@@ -9340,6 +9340,94 @@
           }
         }
       }
+    },
+    "storage.conflict.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im App-Ordner liegt schon eine Datei gleichen Namens"
+          }
+        }
+      }
+    },
+    "storage.conflict.info" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nichts wird still überschrieben. Altdatei behalten: die Datei im App-Ordner bleibt und wird genutzt. Ersetzen: die Datei vom alten Ort ersetzt die Datei im App-Ordner. Beiseite legen: die Datei im App-Ordner bekommt einen Zeitstempel. Umbenennen: die Datei vom alten Ort zieht unter dem Namen im Feld ein."
+          }
+        }
+      }
+    },
+    "storage.conflict.keep" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altdatei behalten"
+          }
+        }
+      }
+    },
+    "storage.conflict.replace" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ersetzen"
+          }
+        }
+      }
+    },
+    "storage.conflict.setAside" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beiseite legen"
+          }
+        }
+      }
+    },
+    "storage.conflict.rename" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umbenennen"
+          }
+        }
+      }
+    },
+    "storage.conflict.nameTaken" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unter diesem Namen liegt schon eine Datei im App-Ordner. Bitte einen anderen Namen wählen."
+          }
+        }
+      }
+    },
+    "storage.conflict.invalidName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Name ist leer oder enthält einen Schrägstrich. Bitte einen anderen Namen wählen."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
