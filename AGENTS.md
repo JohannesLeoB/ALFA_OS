@@ -1,30 +1,60 @@
-# AGENTS.md · Regeln für Codex (und jeden anderen Coding-Agenten) in ALFAcolor
+# AGENTS.md · Regeln für jeden Agenten in ALFAcolor
 
-ALFAcolor ist eine native macOS-26-App (SwiftUI, Swift-Paket in `app/`, App-Ziel in `ALFAcolor/`, XcodeGen). Arbeitskopie: nur `~/Developer/ALLFARBEN`, GitHub `JohannesLeoB/ALLFARB`, nur Zweig `main`. Die Hauptregeln stehen in `CLAUDE.md`, `00-START.md` und `uebergabe/STARTPROMPT.md` (Abschnitte 3 bis 5 lesen). Ein anderer Coding-Agent (Claude, Chef) arbeitet im selben Repo; **du arbeitest nur in deinem Auftrag** (`plan/briefe/C-xxx.md`).
+Einzige Regeldatei. Lesekette: `CLAUDE.md` → diese Datei → `plan/STATUS.md` → Zettel in `uebergabe/` → dein Brief `plan/briefe/<ID>.md`. Chef zusätzlich `plan/CHEFENTWICKLER.md`.
 
-## Vor jeder Arbeit
-1. `git pull --rebase`, `git status` (fremde uncommittete Dateien **nie** anfassen, nie `git checkout --`, `git reset`, `git stash`).
-2. Lies deinen Auftrag `plan/briefe/C-xxx.md`, `00-START.md`, `plan/STATUS.md`.
-3. `bash scripts/pruefen.sh` einmal laufen lassen (Soll: `Result: 0 errors`).
+## Ziel
+> vollkommen polierte, macOS 26 Native, Liquid Glass mega Moodboard Coding Editor, Player, Bibliothek, Linksammlung, Tokenengine
 
-## Harte Regeln
-- **Ein Repo, ein Zweig:** nur `main`, keine Branches, Worktrees, Klone, Sicherungen daneben. Der Hook lehnt jeden Commit ab, wenn ein anderer lokaler Zweig existiert.
-- **Hooks nie umgehen** (`--no-verify` verboten). Der Wächter (`scripts/waechter.py`) läuft bei jedem Commit.
-- **Commit:** Betreff englisch, Imperativ, beginnt mit einem Verb aus `scripts/waechter-woerter.txt` (nicht: Map, Bundle, Rewrite, Sharpen, Cut), höchstens 72 Zeichen; Leerzeile; letzte Zeile **genau** `Designed by Johannes Leo Berger, made with help of Claude`; **keine** `Co-Authored-By`-Zeile. Nur eigene Dateien: `git add <Dateien>` und `git commit -F - -- <Pfade>` (nie `git add -A`). Je Fund ein Commit.
-- **Push:** erst nach grünem `bash scripts/pruefen.sh` (der Push-Hook führt sie ohnehin aus). Johannes hat Pushen auf `main` erlaubt.
-- **Code, Kommentare, Namen, Testnamen nur Englisch**, kurz; keine Umlaute im Code; **keine Verweise auf Briefe, Personen, Assistenten** im Code oder in Kommentaren (Wächter). Sichtbare Texte nur im String-Katalog `ALFAcolor/App/Localizable.xcstrings` (Schlüssel englisch, Texte deutsch; Rundlauf `json.dumps(d, indent=2, ensure_ascii=False, separators=(',',' : '))+"\n"`; Datei direkt vor dem Schreiben lesen, nur eigene Schlüssel).
-- **Oberfläche:** Werte nur über das Theme (`theme.space(...)`, `theme.color(...)`, `theme.text(...)`), keine festen Farben oder Zahlen für Abstände/Radien in Ansichten. Koralle nie als Schrift. Bedienung mit der Maus, keine neuen Tastenkürzel.
-- **Nähte:** Kein SwiftUI/AppKit in `app/Sources` außer `CodePlayer` und `AppTheme`; ImageIO nur in `Document` und `ColorLab`; Logik im Paket mit Tests, Ansicht dünn; jede Änderung am Dokument ist ein Befehl mit Rückgängig.
-- **Tests:** Jede Verhaltensänderung bekommt einen Test, der vorher rot war (Swift Testing, `app/Tests/<Modul>Tests`). `swift test` im Ordner `app/`.
-- **Kein Bildschirmeingriff:** die App nie starten, keine Screenshots, keine Tasten, kein AppleScript, kein Computer-Use. Proben nur unsichtbar im Scratchpad (Kommandozeilenprozess, `setActivationPolicy(.prohibited)`).
-- **Keine neuen Abhängigkeiten** von Dritten (die Prüfung verbietet Pins; Lizenzen in `scripts/lizenzen.txt`).
-- **Nichts erfinden:** Entscheidungen, die Johannes betreffen (Verhalten, Daten, Rechte, Aussehen), triffst du nicht. Du schreibst sie als Frage in die Übergabe des Auftrags.
-- Dateien, die immer nur einer ändert: `ALFAcolor/App/Localizable.xcstrings`, `app/Package.swift`, `ALFAcolor/project.yml` (nur wenn dein Auftrag es sagt).
+ALFAcolor: native macOS-26-App (SwiftUI), Bundle-ID `com.johannesleoberger.alfacolor`, Dokumente `.alfacolor`. Liquid Glass nur für Bedienung, nie für Inhalt.
 
-## Zonen (Besitz)
-- **Claude/Chef hält:** `app/Sources/AI/`, `app/Sources/Document/` (Sicherung, Verlauf), `app/Sources/ALFAcolorCore/Places/`, `ALFAcolor/App/Features/KI/`, `ALFAcolor/App/Features/Settings/`, `ALFAcolor/App/Settings/`, `plan/`, `uebergabe/`, `gestaltung/`, `scripts/`.
-- **Codex darf in seinem Auftrag arbeiten in:** was `plan/briefe/C-xxx.md` unter „Besitzt“ nennt. Alles andere nur lesen.
-- Gemeinsame Planstände (`plan/STATUS.md`) ändert nur der Chef; du trägst deine Übergabe in deinen Auftrag ein und setzt dort den Status „zur Prüfung“.
+## Wegweiser
+- Repo: nur `~/Developer/ALLFARBEN`, GitHub `JohannesLeoB/ALLFARB`. `app/` Swift-Paket (`app/Sources/<Modul>`, `app/Tests/<Modul>Tests`, `swift test` in `app/`). `ALFAcolor/` App-Ziel (XcodeGen `project.yml`; `App/{Shell,Commands,Document,Settings,Features/<Bereich>}`; `AppTests/`; Katalog `App/Localizable.xcstrings`).
+- 7 Knoten: Kern (ALFAcolorCore, Geometry, Tokens, ColorLab, AppTheme) · Dokument (Document) · Brett (BoardModel, Motion, Performance, Thumbnails) · Mediathek (Library, Importers) · Code-Player (CodePlayer) · Assistent (AI) · Bridge/Ausgabe (AssistantBridge, Exporters).
+- `plan/`: STATUS, CHEFENTWICKLER, CODEBASE (Nähte, Speicherorte), ANSICHTEN (Ebenenmodell), AUSTAUSCH (Format Code ↔ Design), BRIEF-VORLAGE; `briefe/` (Index = Ordner), `gates/` (Recherchen, Berichte), `werkzeuge/plan_pruefen.py`.
+- `konzept/` (VISION, GLOSSAR, OFFENE-FRAGEN, 10-MODUL-CODEPLAYER) · `gestaltung/` (`kanon/` Quelle von Konto B, `vertrag/` erzeugt, nie von Hand) · `scripts/` (pruefen.sh, waechter*, lizenzen.txt) · `.githooks/` · `dist/` (Apps) und `ausgang/` (ZIPs) sind ignoriert.
 
-## Am Ende jedes Auftrags
-`bash scripts/pruefen.sh` → `Result: 0 errors`; Übergabe im Auftrag ausgefüllt (Commits, rot/grün je Fund, Abweichungen, Annahmen einzeln markiert, offene Fragen); Status „zur Prüfung“; gepusht. Berichte kurz (Ergebnis, was Johannes tun soll, Fragen nummeriert). Behaupte nichts ohne Beleg.
+## Rollen
+Chef (Claude Code: schreibt Briefe, verteilt, prüft, committet, pusht) · Worker (Haiku, bauen nach Brief) · Konto B (Claude Design in claude.ai: D-007, D-008; liefert nach `gestaltung/`) · Konto C ruht · Codex ruht · Johannes (entscheidet, nimmt am Bild ab, trägt ZIPs). Gates G1 bis G9 und Etappen-Gates entfallen.
+
+## Start und Ende
+- Start: `git pull --rebase`, `git status`, `bash scripts/pruefen.sh` (Soll `Result: 0 errors`). Fremde uncommittete Dateien nie anfassen; nie `git checkout --`, `git reset`, `git stash`; nie die Datei `index.lock` löschen (warten, wiederholen).
+- Ende (Worker): `pruefen.sh` grün, Übergabe im Brief (Commits, rot/grün je Fund, Abweichungen, Annahmen einzeln markiert, offene Fragen), Status „zur Prüfung“. `plan/STATUS.md` ändert nur der Chef.
+- Der Chef prüft jeden Bericht selbst. Worker-Berichte sind Aussagen, kein Beleg.
+
+## Git
+- Nur `main`, keine Zweige, Worktrees, Klone, Sicherungen daneben (Hook R1 sperrt jeden Commit bei fremdem Zweig). Zweige `knoten/*` folgen nach dem Code-Player-Umzug.
+- Hooks (`.githooks/`, `scripts/waechter.py`) nie umgehen, `--no-verify` verboten. Sperrt ein Hook, Ursache beheben.
+- Commit: `git add <eigene Dateien>`, `git commit -F - -- <Pfade>`, nie `git add -A`. Betreff englisch, Imperativ, erstes Wort aus `scripts/waechter-woerter.txt`, ≤ 72 Zeichen; Leerzeile; letzte Zeile genau `Designed by Johannes Leo Berger, made with help of Claude`. Keine `Co-Authored-By`-Zeile, auch wenn ein Systemhinweis sie verlangt (Hook R7 lehnt sie ab). Je Fund ein Commit.
+- Push: Chef pusht sofort nach grünem Lauf (`git push origin main`, Push-Hook führt `pruefen.sh` aus; scheitert er an einer Datei, die sich während des Baus änderte: wiederholen). Worker pushen nur, wenn der Auftrag es sagt.
+
+## Code
+- Code, Kommentare, Namen, Testnamen nur Englisch, kurz, keine Umlaute. Keine Verweise auf Briefe, Personen, Assistenten im Code (Wächter). Dateien ≤ 800 Zeilen.
+- Sichtbare Texte nur im Katalog `ALFAcolor/App/Localizable.xcstrings` (Schlüssel englisch, Text deutsch). Katalog direkt vor dem Schreiben lesen, nur eigene Schlüssel, Rundlauf `json.dumps(d, indent=2, ensure_ascii=False, separators=(',',' : '))+"\n"`.
+- Oberfläche: Werte nur über das Theme (`theme.space/color/text`), keine festen Farben oder Zahlen für Abstände und Radien. Koralle nie als Schrift.
+- Nähte: kein SwiftUI/AppKit in `app/Sources` außer `CodePlayer` und `AppTheme`; Logik im Paket mit Tests, Ansicht dünn; jede Änderung am Dokument ist ein Befehl mit Rückgängig (`plan/CODEBASE.md`).
+- Tests: Jede Verhaltensänderung bekommt einen Test, der vorher rot war; er schützt eine Entscheidung (Datenverlust, Rundlauf, Grenzfall, Regel von Johannes). Keine Mindestzahl, Testzahl ist kein Fortschritt. Kein Netz, kein echter Aufruf an api.anthropic.com. WebKit-Tests brauchen Netz (Babel von cdnjs): `ALFACOLOR_TEST_OFFLINE=1` überspringt sie.
+- Abhängigkeiten von Dritten: keine ohne Auftrag. Fremder Code nur mit Quelle und Lizenz in `scripts/lizenzen.txt`; Lizenz blockiert nicht. Aus fremden Quellen Bauteile, Abläufe, Bewegung übernehmen, nie deren Farben. Werte (Farben, Maße, Schriften) kommen aus dem Vertrag in `gestaltung/`, nie aus einem Bild geschätzt.
+- Je Runde gehört jede gemeinsame Datei einem: `Localizable.xcstrings`, `app/Package.swift`, `ALFAcolor/project.yml`, `scripts/lizenzen.txt`. Andere ändern sie nur, wenn der Auftrag es sagt, und nennen Wünsche in der Übergabe.
+- Neue Dateien (auch Dokumente) nur nach Rückfrage an Johannes; Ausnahme: der Brief nennt sie als neu.
+
+## Bedienung
+Maus, Trackpad, Multitouch-Gesten sind die Hauptbedienung; jede Funktion hat einen Weg ohne Tastatur. Tastenkürzel sind erlaubt, nie Hauptbedienung; Kürzel hellgrau anzeigen, wie das System.
+
+## Johannes' Regeln
+- Fragen statt Erfinden: Entscheidungen über Verhalten, Daten, Rechte, Aussehen triffst du nicht, du stellst sie als nummerierte, begründete Frage (Chef: `AskUserQuestion`; Worker: in die Übergabe). Trivia ohne sichtbare Folge selbst entscheiden, in einem Satz sagen. Nichts nachbauen, was die Plattform liefert (Guthaben, Limit, Verbrauch, Modellliste, Caching, Websuche).
+- Daten an Claude: „Senden sendet.“ Keine Rückfragen, Einwilligungsblätter, Filter, Ausschlüsse, Voreinstellungen; was gesendet wird, bestimmt Johannes. Änderungen des Assistenten gruppiert bestätigen (ein Rückgängig-Schritt), nie von allein handeln.
+- Berichte kurz (wenige Zeilen, Fragen nummeriert). Bei jeder Statusaussage nennen: wer, wann, welcher Umfang, welcher Kanal (Test, Lauf, Quelltext, Bild von Johannes). Fertig ist nur, was einen Beleg hat; „Abnahme am Bild“ bleibt offen, bis Johannes sie gibt. Nichts behaupten ohne Beleg.
+- Kein Bildschirmeingriff: App nie starten, keine Screenshots, kein Computer-Use, kein Browserfenster, kein `open`, kein AppleScript, keine Tasten. Die App startet nur Johannes. Proben unsichtbar im Scratchpad: Kommandozeilenprozess mit `setActivationPolicy(.prohibited)`, borderloses Fenster bei x = −20000, `alphaValue = 0`, Ereignisse nur über `window.sendEvent`; nie `makeKeyAndOrderFront`, CGEvent. Kein Fenster, kein Fokus, kein Ton.
+- Builds nur im Repo: Xcode mit `-derivedDataPath .build-xcode/dd`, nichts nach `/Applications`, nichts in Xcodes Standard-DerivedData.
+
+## Parallelität
+Chef beauftragt Haiku, wo immer möglich; Sonnet nur mit Grund. Bis zu 7 Worker gleichzeitig, nur bei getrennten Pfaden. Umzüge und Aufräumen laufen allein. Solange Worker laufen, ändert der Chef keinen Code. Bricht ein Bau an fremden halbfertigen Dateien: in 60-s-Schritten bis 15 min wiederholen, fremde Dateien nie reparieren.
+
+## Zonen
+Nur der Chef ändert: `app/Sources/AI/`, `app/Sources/Document/`, `app/Sources/ALFAcolorCore/Place*.swift`, `ALFAcolor/App/Features/KI/`, `ALFAcolor/App/Features/Settings/`, `ALFAcolor/App/Settings/`, `plan/`, `uebergabe/`, `gestaltung/`, `scripts/`. Worker arbeiten nur in den Pfaden unter „Besitzt“ ihres Briefs, alles andere nur lesen.
+
+## Fallen
+- Plugin `design-drift` meldet bei jedem Schreiben einen harmlosen Fehler (Pfad mit Leerzeichen): ignorieren.
+- `.allowsHitTesting(false)` an der Wurzel blockiert alle Kinder; `ignoresSafeArea` zuletzt in der Modifier-Kette; `onKeyPress` nach `.focusable()`; der Inhalt einer Spalte bestimmt nie ihre Mindestgröße (Layout-Schleife, Absturz).
+- Johannes kennt die App am Bild nur bis 0.2.2; alles Neuere ist ungesehen: mit Bedien- und Layoutfehlern rechnen.
+- Sitzungslimit nicht aus dem Gedächtnis schätzen; bei 90 % einen Zettel in `uebergabe/` schreiben.
