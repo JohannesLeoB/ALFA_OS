@@ -1,5 +1,6 @@
 import SwiftUI
 import ALFAcolorCore
+import BoardModel
 
 /// What a menu entry does when triggered.
 typealias MenuAction = @MainActor () -> Void
@@ -7,6 +8,7 @@ typealias MenuAction = @MainActor () -> Void
 /// The functions behind the menu entries. A command without an entry here stays visible and dimmed.
 struct MenuFunctions {
     var shell: ShellState?
+    var canvas: CanvasController?
     var showShortcutTable: MenuAction?
 
     @MainActor
@@ -16,6 +18,11 @@ struct MenuFunctions {
         case "view.inspector": return with { $0.toggleInspector() }
         case "view.allPalettes": return with { $0.togglePalettes() }
         case "view.statusBar": return with { $0.toggleStatusBar() }
+        case "view.zoomIn": return withCanvas { $0.perform(.zoomIn) }
+        case "view.zoomOut": return withCanvas { $0.perform(.zoomOut) }
+        case "view.actualSize": return withCanvas { $0.perform(.actualSize) }
+        case "view.fitAll": return withCanvas { $0.perform(.fitAll) }
+        case "view.fitSelection": return withCanvas { $0.perform(.fitSelection) }
         case "help.shortcutTable": return showShortcutTable
         default: return nil
         }
@@ -26,6 +33,13 @@ struct MenuFunctions {
     private func with(_ perform: @escaping @MainActor (ShellState) -> Void) -> MenuAction? {
         guard let shell else { return nil }
         return { perform(shell) }
+    }
+
+    /// Connects a command to the canvas of the window. Without a window, the entry stays dimmed.
+    @MainActor
+    private func withCanvas(_ perform: @escaping @MainActor (CanvasController) -> Void) -> MenuAction? {
+        guard let canvas else { return nil }
+        return { perform(canvas) }
     }
 }
 
