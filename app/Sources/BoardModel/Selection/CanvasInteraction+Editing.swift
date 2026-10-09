@@ -39,7 +39,7 @@ extension CanvasInteraction {
         case .note, .text:
             store.select([hit])
             beginEditing(hit)
-        case .image(let assetID, _) where store.document.assets[assetID] == nil:
+        case .image(let assetID, _, _) where store.document.assets[assetID] == nil:
             store.select([hit])
             fileSearchRequest = hit
         default:
@@ -80,8 +80,8 @@ extension CanvasInteraction {
     @discardableResult
     public func replaceImage(of id: ItemID, with data: Data, fileExtension: String) -> Bool {
         fileSearchRequest = nil
-        guard let item = store.item(id), isEditable(item), case .image(_, let crop) = item.content else { return false }
+        guard let item = store.item(id), isEditable(item), case .image(_, let crop, let fit) = item.content else { return false }
         let assetID = store.addAsset(data, fileExtension: fileExtension)
-        return run(.setContent(id, .image(assetID: assetID, crop: crop)))
+        return run(.setContent(id, .image(assetID: assetID, crop: crop, fit: fit)))
     }
 }

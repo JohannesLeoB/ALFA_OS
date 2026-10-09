@@ -1,16 +1,11 @@
 import Foundation
 import ALFAcolorCore
 
-/// How an image sits in its area.
-public enum ImageFit: Equatable, Sendable {
-    /// All of the image is visible. Space may be left over on two sides.
-    case fit
-    /// The image covers the area. Parts of it may be cut off.
-    case fill
-}
-
 /// The maths of an image in a card: which part shows, and where it is drawn.
 public enum ImageLayout {
+    /// How an image sits in its area: the chosen fit, or without a choice the rule "no crop: fit, crop: fill".
+    public static func fit(_ chosen: ImageFit?, crop: Rect?) -> ImageFit { chosen ?? (crop == nil ? .fit : .fill) }
+
     /// The crop of an image item as a region of 0 to 1 on both axes. nil for no crop, for a crop that is
     /// not a number or has no area, and for a crop that covers the whole image. Parts outside the image are cut off.
     public static func region(crop: Rect?) -> Rect? {

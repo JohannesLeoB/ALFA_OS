@@ -27,7 +27,7 @@ public struct ALFAcolorDocument: Equatable, Sendable {
         var out: [ReadReport.MissingAsset] = []
         for space in board.spaces {
             for item in space.items {
-                if case .image(let assetID, _) = item.content, assets[assetID] == nil {
+                if case .image(let assetID, _, _) = item.content, assets[assetID] == nil {
                     out.append(.init(assetID: assetID, itemID: item.id, spaceID: space.id))
                 }
             }

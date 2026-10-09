@@ -28,6 +28,14 @@ public struct Source: Codable, Hashable, Sendable {
     }
 }
 
+/// How an image sits in its area.
+public enum ImageFit: String, Codable, Equatable, Sendable {
+    /// All of the image is visible. Space may be left over on two sides.
+    case fit
+    /// The image covers the area. Parts of it may be cut off.
+    case fill
+}
+
 /// The outline of a shape. An ellipse in a square is a circle. A line runs from the top left to the bottom right
 /// corner of its rectangle.
 public enum ShapeKind: String, Codable, Sendable, CaseIterable {
@@ -50,7 +58,8 @@ public struct ShapeStyle: Codable, Hashable, Sendable {
 /// The content of an item. An item has exactly one kind.
 public enum Content: Codable, Hashable, Sendable {
     case code(language: CodeLanguage, files: [String: String], previewWidth: Double?)
-    case image(assetID: String, crop: Rect?)
+    /// An image. `fit` is nil for the rule "no crop: fit, crop: fill"; the inspector sets it per image.
+    case image(assetID: String, crop: Rect?, fit: ImageFit? = nil)
     case note(text: String)
     case swatch(hex: String, name: String?)
     case link(url: URL, note: String?)

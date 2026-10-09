@@ -134,9 +134,9 @@ extension ItemPresentation {
         var problem: ItemProblem?
         let body: Body
         switch item.content {
-        case .image(let assetID, let crop):
+        case .image(let assetID, let crop, let fit):
             if assets[assetID] == nil { problem = .missingFile }
-            body = .image(ImageContent(assetID: assetID, region: ImageLayout.region(crop: crop), fit: crop == nil ? .fit : .fill))
+            body = .image(ImageContent(assetID: assetID, region: ImageLayout.region(crop: crop), fit: ImageLayout.fit(fit, crop: crop)))
         case .note(let text):
             body = .note(NoteContent(text: text))
         case .link(let url, let note):

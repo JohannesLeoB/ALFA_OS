@@ -413,7 +413,7 @@ public enum DocumentPackage {
 
         report.missingAssets = doc.missingAssets()
         let used = Set(spaces.flatMap(\.items).compactMap { item -> String? in
-            if case .image(let id, _) = item.content { id } else { nil }
+            if case .image(let id, _, _) = item.content { id } else { nil }
         })
         report.unreferencedAssets = assets.ids.filter { !used.contains($0) }
         return DocumentReadResult(document: doc, report: report)

@@ -145,8 +145,7 @@ public struct Theme: Sendable, Equatable {
 
     /// Color for SwiftUI. The mode comes from the ColorScheme of the environment.
     public func color(_ color: ColorToken, _ scheme: ColorScheme) -> Color {
-        let c = rgb(color, Mode(scheme))
-        return Color(.sRGB, red: c.r, green: c.g, blue: c.b, opacity: c.a)
+        Color(rgb(color, Mode(scheme)))
     }
 
     public func space(_ s: SpaceToken) -> CGFloat { spacing[s] ?? 0 }
@@ -250,4 +249,11 @@ public extension Theme {
 public extension EnvironmentValues {
     /// The values of the UI. Default: the placeholder.
     @Entry var theme: Theme = .placeholder
+}
+
+public extension Color {
+    /// The one converter from an RGB value (a token or a value of an item) to a color. Features use it and build no colors themselves.
+    init(_ rgb: RGB) {
+        self.init(.sRGB, red: rgb.r, green: rgb.g, blue: rgb.b, opacity: rgb.a)
+    }
 }
