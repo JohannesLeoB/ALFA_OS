@@ -159,7 +159,7 @@ struct LabGuidesView: View {
             sample()
             title
                 .themeText(theme.text(.caption))
-                .foregroundStyle(theme.color(.coral, scheme))
+                .foregroundStyle(theme.color(.textMuted, scheme))
         }
     }
 }

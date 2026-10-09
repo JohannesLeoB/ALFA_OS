@@ -108,7 +108,8 @@ struct LabView: View {
         HStack(spacing: theme.space(.s3)) {
             if let message = model.message {
                 Text(LocalizedStringKey(message.key))
-                    .foregroundStyle(message.isProblem ? theme.color(.coral, scheme) : theme.color(.textMuted, scheme))
+                    .foregroundStyle(message.isProblem ? theme.color(.text, scheme) : theme.color(.textMuted, scheme))
+                    .signalRule(message.isProblem)
             } else {
                 Text(LocalizedStringKey("lab.hint.commit"))
                     .foregroundStyle(theme.color(.textMuted, scheme))

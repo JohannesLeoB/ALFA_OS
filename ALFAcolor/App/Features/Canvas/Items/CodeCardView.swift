@@ -168,7 +168,8 @@ struct CodePlayer: View {
             VStack(spacing: theme.space(.s2)) {
                 Text(LocalizedStringKey("code.failed"))
                     .themeText(theme.text(.caption))
-                    .foregroundStyle(theme.color(.coral, scheme))
+                    .foregroundStyle(theme.color(.text, scheme))
+                    .signalRule(true)
                 Button {
                     Task { await model.play() }
                 } label: {

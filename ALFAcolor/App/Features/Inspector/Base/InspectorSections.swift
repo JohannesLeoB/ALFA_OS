@@ -77,7 +77,8 @@ struct PositionField: View {
         LabeledContent(LocalizedStringKey(titleKey)) {
             TextField("", text: $draft, prompt: shared == .mixed ? Text("inspector.mixed") : nil)
                 .multilineTextAlignment(.trailing)
-                .foregroundStyle(invalid || blocked ? theme.color(.coral, scheme) : theme.color(.text, scheme))
+                .foregroundStyle(theme.color(.text, scheme))
+                .signalRule(invalid || blocked)
                 .focused($focused)
                 .onSubmit(commit)
                 .help(invalid ? "inspector.invalid" : blocked ? "inspector.field.blocked" : "")

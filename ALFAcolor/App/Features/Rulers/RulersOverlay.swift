@@ -101,7 +101,7 @@ struct RulersOverlay: View {
             if let drop {
                 Text(verbatim: shell.lengthUnit.text(points: drop.guide.position, scale: scale(of: drop.frame)))
                     .themeText(theme.text(.caption))
-                    .foregroundStyle(coral)
+                    .foregroundStyle(theme.color(.text, scheme))
                     .position(x: pointer.x - lead.x + thickness, y: pointer.y - lead.y - thickness)
             }
         }

@@ -38,7 +38,8 @@ struct StatusBarView: View {
                 }
                 if let notice {
                     Text(LocalizedStringKey(notice))
-                        .foregroundStyle(theme.color(.coral, scheme))
+                        .foregroundStyle(theme.color(.text, scheme))
+                        .signalRule(true)
                 }
                 Spacer(minLength: 0)
                 field("status.saveState", saveStateText)
