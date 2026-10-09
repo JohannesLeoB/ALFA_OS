@@ -43,6 +43,25 @@ extension BoardStore {
         return renamed || moved
     }
 
+    /// Changes the colour of a field. Bound items store the new colour as their last known value, in the same undo step.
+    @discardableResult
+    public func setColorField(_ name: String, to color: RGB) throws -> Bool {
+        let manager = undoManager
+        manager.beginUndoGrouping()
+        defer { manager.endUndoGrouping() }
+        let changed = try changeTokenSets(nameKey: "undo.color.value") { try ColorFields.setColor(name, to: color, in: &$0) }
+        let moved = try changeBoard(nameKey: "undo.color.value") { board in
+            for space in board.spaces.indices {
+                for index in board.spaces[space].items.indices {
+                    if let next = ColorBinding.refreshed(board.spaces[space].items[index], field: name, color: color) {
+                        board.spaces[space].items[index] = next
+                    }
+                }
+            }
+        }
+        return changed || moved
+    }
+
     /// Changes the items with these IDs in the active room. Locked items and items on locked layers are skipped.
     private func changeActiveItems(_ ids: Set<ItemID>, nameKey: String, _ change: (Item) -> Item?) throws -> Bool {
         guard let spaceID = activeSpaceID else { return false }

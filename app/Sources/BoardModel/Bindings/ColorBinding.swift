@@ -119,6 +119,23 @@ public enum ColorBinding {
         return out == item ? nil : out
     }
 
+    /// The item with its bound slots to the field `name` stored at the new colour. nil when nothing is bound to it.
+    static func refreshed(_ item: Item, field name: String, color: RGB) -> Item? {
+        var out = item
+        let hex = color.hex
+        switch item.content {
+        case .shape(let kind, var style):
+            if style.fillToken == name { style.fill = hex }
+            if style.strokeToken == name { style.stroke = hex }
+            out.content = .shape(kind: kind, style: style)
+        case .swatch(_, let label):
+            if item.colorToken == name { out.content = .swatch(hex: hex, name: label) }
+        default:
+            break
+        }
+        return out == item ? nil : out
+    }
+
     /// True when the item has a binding to the field `name` in any slot.
     static func isBound(_ item: Item, to name: String) -> Bool {
         if item.colorToken == name { return true }

@@ -144,7 +144,7 @@ struct ColorFieldsSection: View {
 
     private func commitValue(_ name: String) {
         guard let color = Self.rgb(from: draft) else { return }
-        try? store.changeTokenSets(nameKey: "undo.color.value") { try ColorFields.setColor(name, to: color, in: &$0) }
+        try? store.setColorField(name, to: color)
     }
 
     private func remove(_ name: String) {
