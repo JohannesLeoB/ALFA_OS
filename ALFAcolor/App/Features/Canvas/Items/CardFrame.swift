@@ -9,6 +9,8 @@ struct CardFrame<Content: View>: View {
     let detail: DetailLevel
     let zoom: Double
     var trailing: String?
+    /// A control at the end of the header, for kinds that have one (the switch of a code card).
+    var accessory: AnyView?
     @ViewBuilder var content: (CanvasSize) -> Content
 
     @Environment(\.theme) private var theme
@@ -25,7 +27,7 @@ struct CardFrame<Content: View>: View {
                 .clipped()
                 .offset(x: regions.body.x, y: regions.body.y)
             if let header = regions.header {
-                ItemHeader(presentation: presentation, trailing: trailing, showsText: detail == .full, hairline: hairline)
+                ItemHeader(presentation: presentation, trailing: trailing, accessory: accessory, showsText: detail == .full, hairline: hairline)
                     .frame(width: header.w, height: header.h)
                     .offset(x: header.x, y: header.y)
             }
@@ -51,6 +53,7 @@ struct Lift: ViewModifier {
 struct ItemHeader: View {
     let presentation: ItemPresentation
     var trailing: String?
+    var accessory: AnyView?
     let showsText: Bool
     let hairline: CGFloat
 
@@ -62,6 +65,9 @@ struct ItemHeader: View {
             if showsText {
                 title
                 Spacer(minLength: 0)
+                if let accessory {
+                    accessory
+                }
                 if let trailing {
                     Text(verbatim: trailing)
                         .lineLimit(1)

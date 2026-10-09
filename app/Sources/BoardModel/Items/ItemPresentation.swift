@@ -48,11 +48,12 @@ public struct ItemPresentation: Equatable, Sendable {
         case shape(ShapeContent)
         case text(TextContent)
         case group(GroupContent)
-        /// A kind that another part draws (code card, frame). Until then it shows a card with its kind.
+        case code(CodeContent)
+        /// A kind that another part draws. Until then it shows a card with its kind.
         case other(kind: OtherKind)
     }
 
-    public enum OtherKind: String, Equatable, Sendable { case code, frame }
+    public enum OtherKind: String, Equatable, Sendable { case frame }
 
     /// The key in the string catalog of the name of the kind, for example "item.kind.note".
     public var kindKey: String {
@@ -64,13 +65,14 @@ public struct ItemPresentation: Equatable, Sendable {
         case .shape: "item.kind.shape"
         case .text: "item.kind.text"
         case .group: "item.kind.group"
+        case .code: "item.kind.code"
         case .other(let kind): "item.kind.\(kind.rawValue)"
         }
     }
 
     public var chrome: ItemChrome {
         switch body {
-        case .image, .note, .link, .swatch, .other: .card
+        case .image, .note, .link, .swatch, .code, .other: .card
         case .group: .zone
         case .shape, .text: .bare
         }
@@ -128,6 +130,14 @@ public struct GroupContent: Equatable, Sendable {
     public var childCount: Int
 }
 
+public struct CodeContent: Equatable, Hashable, Sendable {
+    public var language: CodeLanguage
+    /// The files by name, for example "index.html" or "style.css".
+    public var files: [String: String]
+    /// The width of the page in points. nil and 0 use the default width.
+    public var previewWidth: Double?
+}
+
 extension ItemPresentation {
     /// The data to draw `item`. `space` is the space that holds it, `assets` the images of the document.
     public static func make(for item: Item, in space: Space, assets: AssetStore) -> ItemPresentation {
@@ -152,8 +162,8 @@ extension ItemPresentation {
         case .group(let title):
             let inside = ALFAcolorCore.children(of: item, in: space.items).count
             body = .group(GroupContent(title: title, childCount: inside))
-        case .code:
-            body = .other(kind: .code)
+        case .code(let language, let files, let previewWidth):
+            body = .code(CodeContent(language: language, files: files, previewWidth: previewWidth))
         case .frame:
             body = .other(kind: .frame)
         }

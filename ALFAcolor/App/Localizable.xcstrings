@@ -34,6 +34,105 @@
         }
       }
     },
+    "code.file" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datei"
+          }
+        }
+      }
+    },
+    "code.notRunning" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Läuft hier nicht. Bild daneben legen."
+          }
+        }
+      }
+    },
+    "code.play" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abspielen"
+          }
+        }
+      }
+    },
+    "code.stop" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anhalten"
+          }
+        }
+      }
+    },
+    "code.truncated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "… gekürzt"
+          }
+        }
+      }
+    },
+    "code.view" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ansicht"
+          }
+        }
+      }
+    },
+    "code.view.both" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beides"
+          }
+        }
+      }
+    },
+    "code.view.player" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Player"
+          }
+        }
+      }
+    },
+    "code.view.source" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelltext"
+          }
+        }
+      }
+    },
     "command.edit.copy" : {
       "extractionState" : "manual",
       "localizations" : {

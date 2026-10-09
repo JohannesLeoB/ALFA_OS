@@ -19,17 +19,27 @@ struct ItemView: View {
         let detail = DetailLevel.level(for: presentation.size, zoom: zoom)
         frame(detail: detail)
             .frame(width: presentation.size.width, height: presentation.size.height, alignment: .topLeading)
-            .accessibilityElement(children: .ignore)
+            .accessibilityElement(children: isCode ? .contain : .ignore)
             .accessibilityLabel(label)
             .accessibilityValue(value)
+    }
+
+    /// A code card has controls of its own, so VoiceOver reaches them inside the item.
+    private var isCode: Bool {
+        if case .code = presentation.body { return true }
+        return false
     }
 
     @ViewBuilder
     private func frame(detail: DetailLevel) -> some View {
         switch presentation.chrome {
         case .card:
-            CardFrame(presentation: presentation, detail: detail, zoom: zoom, trailing: trailing) { size in
-                CardBody(presentation: presentation, size: size, detail: detail, zoom: zoom, assets: assets, thumbnails: thumbnails, edit: edit)
+            if case .code(let content) = presentation.body {
+                CodeCardView(presentation: presentation, content: content, detail: detail, zoom: zoom)
+            } else {
+                CardFrame(presentation: presentation, detail: detail, zoom: zoom, trailing: trailing) { size in
+                    CardBody(presentation: presentation, size: size, detail: detail, zoom: zoom, assets: assets, thumbnails: thumbnails, edit: edit)
+                }
             }
         case .zone:
             ZoneFrame(presentation: presentation, detail: detail, zoom: zoom)
@@ -95,7 +105,7 @@ private struct CardBody: View {
             SwatchBody(content: swatch)
         case .other:
             KindBody(kindKey: presentation.kindKey, detail: detail)
-        case .shape, .text, .group:
+        case .shape, .text, .group, .code:
             EmptyView()
         }
     }
