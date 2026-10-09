@@ -4324,6 +4324,336 @@
           }
         }
       }
+    },
+    "device.mbp16" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacBook Pro 16 Zoll (Standard)"
+          }
+        }
+      }
+    },
+    "device.mbp16.rotated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacBook Pro 16 Zoll (Standard) hoch"
+          }
+        }
+      }
+    },
+    "device.mba13" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacBook Air 13 Zoll (Standard)"
+          }
+        }
+      }
+    },
+    "device.mba13.rotated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacBook Air 13 Zoll (Standard) hoch"
+          }
+        }
+      }
+    },
+    "device.mba15" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacBook Air 15 Zoll (Standard)"
+          }
+        }
+      }
+    },
+    "device.mba15.rotated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacBook Air 15 Zoll (Standard) hoch"
+          }
+        }
+      }
+    },
+    "device.ipadAir13" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPad Air 13 Zoll quer"
+          }
+        }
+      }
+    },
+    "device.ipadAir13.rotated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPad Air 13 Zoll hoch"
+          }
+        }
+      }
+    },
+    "device.iphone16Pro" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone 16 Pro (6,3 Zoll)"
+          }
+        }
+      }
+    },
+    "device.iphone16Pro.rotated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone 16 Pro (6,3 Zoll) quer"
+          }
+        }
+      }
+    },
+    "device.iphone16ProMax" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone 16 Pro Max (6,9 Zoll)"
+          }
+        }
+      }
+    },
+    "device.iphone16ProMax.rotated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone 16 Pro Max (6,9 Zoll) quer"
+          }
+        }
+      }
+    },
+    "device.watch42" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch 42 mm"
+          }
+        }
+      }
+    },
+    "device.watch42.rotated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch 42 mm quer"
+          }
+        }
+      }
+    },
+    "device.watch46" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch 46 mm"
+          }
+        }
+      }
+    },
+    "device.watch46.rotated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch 46 mm quer"
+          }
+        }
+      }
+    },
+    "undo.frame.device" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerät wechseln"
+          }
+        }
+      }
+    },
+    "undo.frame.rotate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drehen"
+          }
+        }
+      }
+    },
+    "undo.frame.scale" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skalierung"
+          }
+        }
+      }
+    },
+    "inspector.frame.device" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerät"
+          }
+        }
+      }
+    },
+    "inspector.frame.orientation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lage"
+          }
+        }
+      }
+    },
+    "inspector.frame.landscape" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quer"
+          }
+        }
+      }
+    },
+    "inspector.frame.portrait" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoch"
+          }
+        }
+      }
+    },
+    "inspector.frame.scale" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skalierung"
+          }
+        }
+      }
+    },
+    "inspector.frame.pixels" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pixelmaß"
+          }
+        }
+      }
+    },
+    "toolbar.add.files" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien…"
+          }
+        }
+      }
+    },
+    "toolbar.add.frame" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rahmen"
+          }
+        }
+      }
+    },
+    "frame.size.pt %lld %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld × %2$lld pt"
+          }
+        }
+      }
+    },
+    "frame.size.px %lld %lld %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld × %2$lld px bei @%3$lldx"
+          }
+        }
+      }
+    },
+    "frame.template" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorlage: Maß nicht von Apple bestätigt"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
