@@ -87,7 +87,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-504](briefe/B-504.md) | E5 | Textstile und Schriftreihe | B-208 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1095 Tests, App-Bau grün); Abnahme am Bild offen (Blatt Textstile, Schriftwahl, Lizenz, Probe hell und dunkel, Reihe); Fragen: CSS-Namen --type-<stufe>-<eigenschaft> statt --font-body ok? Theme.text liest typography noch nicht; SwiftUI-Ausgabe in B-506; Umbenennen eines Stils fehlt |
 | [B-505](briefe/B-505.md) | E5 | Bausteine mit Varianten | B-205, B-507 | offen |
 | [B-506](briefe/B-506.md) | E5 | Token-Werkstatt und Ausgabe | B-502, B-504 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1180 Tests, App-Bau grün); Abnahme am Bild offen (Ausgabe-Blatt, Formate, Vorschau, Speichern); Tabelle, Vereinheitlichen und Namensvorschläge nur im Paket, Ansicht fehlt (Folgebrief); Tailwind nur hell |
-| [B-507](briefe/B-507.md) | E5 | Token-Bindung | B-201 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-507](briefe/B-507.md) | E5 | Token-Bindung | B-201 | erledigt, geprüft 2026-10-09 (Chef: Gesamtlauf nach B-703 und B-405); Abnahme am Bild offen (Kettensymbol, Lösen, Umbenennen zieht Verweise mit); Farbkarten-Verweis steht als Item.colorToken, nicht in Content.swatch |
 | [B-601](briefe/B-601.md) | E6 | Bibliothek, Ordner, Suche | B-201 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1180 Tests, App-Bau grün); Abnahme am Bild offen (Sammlung, Suche, Ordner, Ziehen auf Leinwand); Ziehen auf Ordner nur per Menü; gelöschtes Stück bleibt in festen Ordnern (wird übersprungen) |
 | [B-602](briefe/B-602.md) | E6 | Herkunft und Lizenz | B-601 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-603](briefe/B-603.md) | E6 | Screenshot-Sortierer | B-601 | offen |
@@ -104,7 +104,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-803](briefe/B-803.md) | E8 | Ordner-Spiegel | B-603 | offen |
 | [B-804](briefe/B-804.md) | E8 | Swift-Vorschau, Versuch mit Messung | B-401 | offen |
 | [B-901](briefe/B-901.md) | E9 | Einstellungen und Setups | B-106 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
-| [B-902](briefe/B-902.md) | E9 | Erster Start und leere Zustände | B-901 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-902](briefe/B-902.md) | E9 | Erster Start und leere Zustände | B-901 | erledigt, geprüft 2026-10-09 (Chef: Gesamtlauf nach B-703 und B-405); Schritte 1 bis 3 und Teil von 4 gebaut (Zustandslogik, Beispiel, Startfenster, Leinwand und Token-Satz); offen: leere Zustände im Inspektor, in der Sammlung, bei der Suche und im Labor als Ansicht; ob SwiftUI beim Start ohne Dokument zusätzlich ein neues anlegt, am Bild prüfen |
 | [B-903](briefe/B-903.md) | E9 | Barrierefreiheit | B-902 | offen |
 | [B-904](briefe/B-904.md) | E9 | Leistung und Speicher | B-209 | offen |
 | [B-905](briefe/B-905.md) | E9 | Auslieferung | B-901 | offen |
