@@ -36,6 +36,9 @@ public final class BoardStore {
     @ObservationIgnored public var pendingDraft: (() -> Void)?
 
     @ObservationIgnored public private(set) var undoManager: UndoManager
+    /// The newest undo steps as edits, oldest first. Only the steps after the newest change that is not an edit
+    /// (a room, a token set, a version) are kept: an edit can only be undone on the state it was made on.
+    @ObservationIgnored private var history = UndoJournal<Edit>()
 
     /// Without `undoManager` the store makes its own, which closes one undo step per command.
     /// A manager from the window keeps its own grouping rules, so one command is one step only when
@@ -159,6 +162,7 @@ public final class BoardStore {
         let ids = Set(target.spaces.map(\.id))
         viewports = viewports.filter { ids.contains($0.key) }
         didChangeDocument()
+        forgetHistoryOfNonEdit()
         let inHistory = undoManager.isUndoing || undoManager.isRedoing
         if !inHistory { undoManager.beginUndoGrouping() }
         undoManager.registerUndo(withTarget: self) { store in
@@ -186,6 +190,7 @@ public final class BoardStore {
         let previous = document.tokenSets
         document.tokenSets = target
         didChangeDocument()
+        forgetHistoryOfNonEdit()
         let inHistory = undoManager.isUndoing || undoManager.isRedoing
         if !inHistory { undoManager.beginUndoGrouping() }
         undoManager.registerUndo(withTarget: self) { store in
@@ -222,6 +227,7 @@ public final class BoardStore {
         let ids = Set(target.spaces.map(\.id))
         viewports = viewports.filter { ids.contains($0.key) }
         didChangeDocument()
+        forgetHistoryOfNonEdit()
         let inHistory = undoManager.isUndoing || undoManager.isRedoing
         if !inHistory { undoManager.beginUndoGrouping() }
         undoManager.registerUndo(withTarget: self) { store in
@@ -238,6 +244,33 @@ public final class BoardStore {
     public func useUndoManager(_ manager: UndoManager) {
         guard manager !== undoManager else { return }
         undoManager = manager
+        history.removeAll()
+    }
+
+    /// The newest undo steps as edits, oldest first, at most `UndoJournal.capacity`. Undo and redo keep it in step.
+    /// Steps that were made before the manager was set, or before the newest change that is not an edit, are not in it.
+    public func exportHistory() -> UndoJournal<Edit> { history }
+
+    /// Puts saved steps back on the undo stack, so that undo reverts them. The document must be in the state in which
+    /// the newest step ended. Returns false and changes nothing when the store already has undo steps or a step
+    /// refers to a space that is not in the document. An empty journal is restored trivially.
+    @discardableResult
+    public func restoreHistory(_ journal: UndoJournal<Edit>) -> Bool {
+        if journal.steps.isEmpty { return true }
+        guard !undoManager.canUndo else { return false }
+        let spaceIDs = Set(document.board.spaces.map(\.id))
+        guard journal.steps.allSatisfy({ spaceIDs.contains($0.change.spaceID) }) else { return false }
+        history.removeAll()
+        for step in journal.steps {
+            register(step.change, name: step.name.isEmpty ? nil : step.name, at: step.at)
+        }
+        return true
+    }
+
+    /// A change that is not an edit cannot be undone from a saved edit: the steps before it are dropped.
+    /// Undo of such a change needs no drop, because the steps above it were dropped already.
+    private func forgetHistoryOfNonEdit() {
+        if !undoManager.isUndoing { history.removeAll() }
     }
 
     public var canUndo: Bool { undoManager.canUndo }
@@ -253,9 +286,12 @@ public final class BoardStore {
         undoManager.redo()
     }
 
-    private func register(_ edit: Edit, name: String?) {
+    /// Puts an edit on the undo stack. Undo and redo register on the other stack, so only a step on the undo stack
+    /// is recorded: a new change, or a redo.
+    private func register(_ edit: Edit, name: String?, at date: Date = Date()) {
         let inHistory = undoManager.isUndoing || undoManager.isRedoing
         if !inHistory { undoManager.beginUndoGrouping() }
+        if !undoManager.isUndoing { history.record(name: name ?? "", at: date, change: edit) }
         undoManager.registerUndo(withTarget: self) { store in
             MainActor.assumeIsolated { store.revert(edit, name: name) }
         }
@@ -265,6 +301,8 @@ public final class BoardStore {
 
     /// Takes back an edit. The undo manager calls it for undo and for redo; the inverse edit is registered each time.
     private func revert(_ edit: Edit, name: String?) {
+        // Undo takes the newest step off the undo stack. Redo puts it back through `register`.
+        if undoManager.isUndoing, history.steps.last?.change == edit { history.removeNewest() }
         let inverse = edit.reversed
         var trial = document.board
         guard inverse.apply(to: &trial) else { return }
