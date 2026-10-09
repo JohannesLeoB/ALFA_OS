@@ -5,10 +5,13 @@ import BoardModel
 public enum ImportError: LocalizedError, Equatable, Sendable {
     /// Every layer of the space is locked.
     case noEditableLayer
+    /// No layer is left that is unlocked and visible. Pieces would be selected and not seen.
+    case noVisibleLayer
 
     public var errorDescription: String? {
         switch self {
         case .noEditableLayer: String(localized: "import.error.noEditableLayer")
+        case .noVisibleLayer: String(localized: "import.error.noVisibleLayer")
         }
     }
 }
@@ -20,14 +23,15 @@ public struct BoardImporter {
 
     public init(store: BoardStore) { self.store = store }
 
-    /// Adds the pieces to the active space, around a point of the board, on top of the first layer that is not locked.
+    /// Adds the pieces to the active space, around a point of the board, on top of the first layer that is neither locked nor hidden.
     /// Image bytes go into the document. They are no undo step by themselves and stay in the document when the paste is undone.
     /// The new items are selected. Returns their IDs.
     @discardableResult
     public func insert(_ pieces: [Piece], centerX: Double, centerY: Double, headerHeight: Double, nameKey: String) throws -> [ItemID] {
         guard !pieces.isEmpty else { return [] }
         guard let space = store.activeSpace else { throw CommandError.noActiveSpace }
-        guard let layer = space.layers.first(where: { !$0.locked }) else { throw ImportError.noEditableLayer }
+        guard space.layers.contains(where: { !$0.locked }) else { throw ImportError.noEditableLayer }
+        guard let layer = space.layers.first(where: { !$0.locked && $0.visible }) else { throw ImportError.noVisibleLayer }
 
         let rects = PieceLayout(headerHeight: headerHeight).rects(for: pieces, centerX: centerX, centerY: centerY)
         var top = space.items.filter { $0.layerID == layer.id }.map(\.z).max() ?? -1
