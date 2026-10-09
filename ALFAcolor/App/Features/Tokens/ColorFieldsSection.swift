@@ -47,6 +47,7 @@ struct ColorFieldsSection: View {
                 .sheet(isPresented: $contrastShown) {
                     ContrastSheet(store: store)
                 }
+                TextStylesButton(store: store)
                 Button(action: add) {
                     Label("tokens.add", systemImage: "plus")
                 }
