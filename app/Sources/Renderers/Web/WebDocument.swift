@@ -63,21 +63,13 @@ public enum WebDocument {
     /// (see `typedRunner`). Babel needs a file name to run the TypeScript preset.
     static func react(_ files: [String: String]) -> String {
         let source = files.keys.sorted().filter { !$0.lowercased().hasSuffix(".css") }.compactMap { files[$0] }
-        var code = stripModules(source.joined(separator: "\n"))
-        var name: String?
-        if let match = code.firstMatch(of: /export\s+default\s+function\s+([A-Z][A-Za-z0-9_]*)/) {
-            name = String(match.output.1)
-        }
+        let joined = source.joined(separator: "\n")
+        let name = componentName(in: stripModules(joined))
+        var code = stripModules(joined)
         code = code.replacing(/export\s+default\s+function/, with: "function")
         code = code.replacing(/^[ \t]*export[ \t]*\{[^}]*\}[ \t]*;?[ \t]*$/.anchorsMatchLineEndings(), with: "")
         code = code.replacing(/export\s+(const|function|class|let|var|type|interface|enum)/) { String($0.output.1) }
-        if name == nil, let match = code.firstMatch(of: /export\s+default\s+([A-Z][A-Za-z0-9_]*)/) {
-            name = String(match.output.1)
-        }
         code = code.replacing(/export\s+default\s+[A-Z][A-Za-z0-9_]*\s*;?/, with: "")
-        if name == nil, let match = code.firstMatch(of: /(?:function|const)\s+([A-Z][A-Za-z0-9_]*)/) {
-            name = String(match.output.1)
-        }
         let render = name.map { "ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(\($0)));" }
             ?? "document.body.textContent='No component found: add export default or a capitalised function.';"
         let styles = named(files, ".css").map { "<style>\(escapeScript($0))</style>" }.joined()
@@ -91,6 +83,44 @@ public enum WebDocument {
         }
         return "<!doctype html><html><head>" + basis + errorScript + #"<script src="\#(tailwindScript)"></script>"# + scripts + styles
             + "</head><body>" + mount + "</body></html>"
+    }
+
+    /// The component that the page draws. In order: the default export, a named export whose body is JSX, and the
+    /// last function or constant whose body is JSX. A constant in capitals (`SHAPES`, `W`) is never the component.
+    static func componentName(in source: String) -> String? {
+        if let match = source.firstMatch(of: /export\s+default\s+(?:function\s+)?([A-Z][A-Za-z0-9_]*)/) {
+            return String(match.output.1)
+        }
+        let found = declarations(in: source)
+        if let named = found.first(where: { $0.exported && $0.isComponent }) {
+            return named.name
+        }
+        return found.last(where: { $0.isComponent })?.name
+    }
+
+    /// A top-level function or constant with its body: the text up to the next top-level declaration.
+    struct Declaration {
+        let name: String
+        let exported: Bool
+        let isConstant: Bool
+        let body: String
+
+        /// True for a capitalised function, or a constant that is not in capitals, whose body returns JSX.
+        var isComponent: Bool {
+            guard let first = name.first, first.isUppercase else { return false }
+            if isConstant && !name.contains(where: \.isLowercase) { return false }
+            return body.contains(/return\s*\(?\s*<[A-Za-z]|=>\s*\(?\s*<[A-Za-z]|React\.createElement\s*\(/)
+        }
+    }
+
+    /// The top-level functions and constants of the source, in source order.
+    static func declarations(in source: String) -> [Declaration] {
+        let starts = source.matches(of: /(?m)^(export[ \t]+)?(const|function)[ \t]+([A-Za-z_][A-Za-z0-9_]*)/)
+        return starts.enumerated().map { index, match in
+            let end = index + 1 < starts.count ? starts[index + 1].range.lowerBound : source.endIndex
+            return Declaration(name: String(match.output.3), exported: match.output.1 != nil,
+                               isConstant: match.output.2 == "const", body: String(source[match.range.upperBound..<end]))
+        }
     }
 
     /// Compiles a TypeScript card with Babel's own call and runs the result. The page's `text/babel` path
