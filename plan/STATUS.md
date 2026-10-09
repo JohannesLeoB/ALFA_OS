@@ -43,7 +43,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-205](briefe/B-205.md) | E2 | Stückarten zeichnen | B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 407 Tests); Notiz-Bearbeitung nach B-204 verschoben; Abnahme am Bild offen |
 | [B-206](briefe/B-206.md) | E2 | Räume als Reiter und Ebenen | B-201, B-102 | offen |
 | [B-207](briefe/B-207.md) | E2 | Einfügen und Hineinziehen | B-201, B-104 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 569 Tests; Sichern an neuem Ort behoben); Abnahme am Bild offen |
-| [B-208](briefe/B-208.md) | E2 | Kontextleiste und Inspektor-Grundgerüst | B-204 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-208](briefe/B-208.md) | E2 | Kontextleiste und Inspektor-Grundgerüst | B-204 | zur Prüfung, 2026-10-09 (Bauagent Haiku 5.5: pruefen.sh 0 errors, 22 neue Tests); Abnahme am Bild offen |
 | [B-209](briefe/B-209.md) | E2 | Leistungsprobe Leinwand | B-203 | offen |
 | [B-211](briefe/B-211.md) | E2 | Dokument in der App: Neu, Öffnen, Sichern | B-110, B-201, B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 359 Tests; DocumentGroup); Abnahme am Bild offen (⌘N, ⌘O, ⌘S, Speicherstand) |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | offen |
