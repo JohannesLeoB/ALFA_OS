@@ -65,7 +65,9 @@ struct FrameView: View {
         VStack(alignment: .leading, spacing: 0) {
             Text(LocalizedStringKey(frame.nameKey ?? "item.kind.frame"))
             Text("frame.size.pt \(frame.widthPoints) \(frame.heightPoints)")
-            Text("frame.size.px \(frame.widthPixels) \(frame.heightPixels) \(frame.scale)")
+            if frame.showsPixels {
+                Text("frame.size.px \(frame.widthPixels) \(frame.heightPixels) \(frame.scale)")
+            }
             if frame.isTemplate {
                 Text("frame.template")
             }

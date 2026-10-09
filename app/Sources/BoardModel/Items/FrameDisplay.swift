@@ -19,6 +19,9 @@ public struct FrameDisplay: Equatable, Sendable {
     public var isTemplate: Bool
     /// The lines of the column grid, nil without a grid.
     public var gridLines: FrameGridLines? = nil
+    /// True when the frame shows its size in pixels: it has a device, or a scale of its own. A free frame without
+    /// a scale shows points only, so that no pixel scale is invented for it.
+    public var showsPixels: Bool = true
 
     public var isLandscape: Bool { widthPoints >= heightPoints }
     /// The size in pixels at the scale of the frame.
@@ -42,7 +45,8 @@ public struct FrameDisplay: Equatable, Sendable {
             heightPoints: clampedLength(rect.h).clampedInt,
             scale: FrameScale.effective(deviceID: deviceID, scale: scale).clampedInt,
             isTemplate: device?.isTemplate ?? false,
-            gridLines: grid.flatMap { FrameGridLines.make($0, width: rect.w, height: rect.h) })
+            gridLines: grid.flatMap { FrameGridLines.make($0, width: rect.w, height: rect.h) },
+            showsPixels: deviceID != nil || scale != nil)
     }
 }
 

@@ -38,7 +38,8 @@ extension CanvasInteraction {
         let item: Item
         switch tools.active {
         case .frame:
-            item = Item(title: "", content: .frame(deviceID: tools.options.frameDeviceID, gridID: nil), rect: box, layerID: layer)
+            let device = FrameEdit.drawnDevice(chosen: tools.options.frameDeviceID, rect: box)
+            item = Item(title: "", content: .frame(deviceID: device, gridID: nil), rect: box, layerID: layer)
         case .shape:
             let style = ShapeStyle(fill: ShapeFill.standard(in: store.document.tokenSets)?.hex)
             item = Item(title: "", content: .shape(kind: tools.options.shapeKind, style: style), rect: box, layerID: layer)

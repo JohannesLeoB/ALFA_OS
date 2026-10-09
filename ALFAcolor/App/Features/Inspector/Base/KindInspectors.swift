@@ -89,7 +89,7 @@ struct FrameSection: View {
                 }
             }
             .pickerStyle(.segmented)
-            if displays.count == 1, let frame = displays.first {
+            if displays.count == 1, let frame = displays.first, frame.showsPixels {
                 LabeledContent("inspector.frame.pixels") {
                     Text("frame.size.px \(frame.widthPixels) \(frame.heightPixels) \(frame.scale)")
                 }

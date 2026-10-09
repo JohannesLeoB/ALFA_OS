@@ -24,6 +24,16 @@ public enum FrameEdit {
         return .insert([item])
     }
 
+    /// The device that a frame drawn with the frame tool takes: the chosen device in the orientation of the drawn
+    /// frame, when the drawn size is the size of that device in whole points. Any other size gives nil: a free frame.
+    public static func drawnDevice(chosen id: String, rect: Rect) -> String? {
+        guard let device = Device.preset(id) else { return nil }
+        let landscape = rect.w >= rect.h
+        let oriented = (device.width >= device.height) == landscape ? device : device.rotated
+        let fits = rect.w.rounded() == oriented.width && rect.h.rounded() == oriented.height
+        return fits ? oriented.id : nil
+    }
+
     /// Changes the device of a frame. The frame takes the size of the device in its current orientation.
     /// The items inside keep their place on the board. Empty when nothing changes.
     public static func setDevice(_ item: Item, to device: Device) -> [Command] {
