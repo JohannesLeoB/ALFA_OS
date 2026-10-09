@@ -113,7 +113,7 @@ public final class BoardStore {
     }
 
     /// Stores the bytes of an image file in the document and returns the asset ID (the hash of the bytes).
-    /// It is no undo step. The file is saved with the document even when nothing refers to it yet.
+    /// It is no undo step. The file stays in memory, so that an undo finds it; it is saved only while an item refers to it.
     /// A command that refers to the ID, for example `setContent`, is the change.
     @discardableResult
     public func addAsset(_ data: Data, fileExtension: String) -> String {
