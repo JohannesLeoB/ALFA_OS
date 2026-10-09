@@ -92,7 +92,8 @@ public struct LibraryIndex: Sendable {
 
     // MARK: Reading the item
 
-    /// The text the search looks at: the title, the note or text, the link address and its note, and the code.
+    /// The text the search looks at: the title, the note or text, the link address and its note, the code,
+    /// and the texts of the notes on the item.
     static func searchText(of item: Item) -> String {
         var parts = [item.title]
         switch item.content {
@@ -108,6 +109,7 @@ public struct LibraryIndex: Sendable {
         case .image, .shape, .frame, .group:
             break
         }
+        parts += item.notes.map(\.text)
         return parts.joined(separator: "\n")
     }
 
