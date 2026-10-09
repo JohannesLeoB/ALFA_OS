@@ -23,4 +23,15 @@ extension CanvasInteraction {
     public func paintSelection(hex: String) -> Bool {
         run(.setFill(store.selection, hex: hex))
     }
+
+    /// True when the selection has an item that a colour can change. Items without a colour, and locked items, do not count.
+    public var canPaintSelection: Bool {
+        store.selectedItems.contains { item in
+            guard isEditable(item) else { return false }
+            switch item.content {
+            case .shape, .swatch: return true
+            default: return false
+            }
+        }
+    }
 }

@@ -8,9 +8,18 @@ import Importers
 enum StarterOpener {
     static func open() {
         do {
-            guard let source = Bundle.main.url(forResource: StarterDuplicate.bundleName, withExtension: DocumentPackage.fileExtension) else { return }
-            let support = try FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let copy = try StarterDuplicate.copy(of: source, into: support.appending(path: "starter", directoryHint: .isDirectory))
+            guard let source = Bundle.main.url(forResource: StarterDuplicate.bundleName, withExtension: DocumentPackage.fileExtension) else {
+                let alert = NSAlert()
+                alert.alertStyle = .warning
+                alert.messageText = String(localized: "starter.missing")
+                alert.runModal()
+                return
+            }
+            let folder = try FileManager.default.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+                .appending(path: "starter", directoryHint: .isDirectory)
+            // The copy made by an earlier call is opened again, so that each call does not add one more.
+            let earlier = folder.appending(path: source.lastPathComponent)
+            let copy = FileManager.default.fileExists(atPath: earlier.path) ? earlier : try StarterDuplicate.copy(of: source, into: folder)
             NSDocumentController.shared.openDocument(withContentsOf: copy, display: true) { _, _, error in
                 if let error { NSApplication.shared.presentError(error) }
             }

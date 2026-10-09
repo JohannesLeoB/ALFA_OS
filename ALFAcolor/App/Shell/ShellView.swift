@@ -34,7 +34,8 @@ struct ShellView: View {
                     .overlay { if let lab = shell.openLabModel { LabView(model: lab, onClose: { shell.closeLab() }) } }
                 if shell.statusBarVisible {
                     StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError,
-                                  zoomPercent: canvas.zoomPercent, selectionCount: canvas.store.selectedItems.count)
+                                  zoomPercent: canvas.zoomPercent, selectionCount: canvas.store.selectedItems.count,
+                                  notice: shell.labNotice)
                 }
             }
             // On the stack, not on the canvas: the canvas ignores the top safe area, so its overlays

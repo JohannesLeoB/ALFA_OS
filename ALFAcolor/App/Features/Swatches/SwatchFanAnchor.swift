@@ -14,6 +14,7 @@ struct SwatchFanAnchor: View {
     @State private var picked: Int?
 
     @Environment(\.theme) private var theme
+    @Environment(\.colorScheme) private var scheme
 
     init(interaction: CanvasInteraction, item: Item) {
         self.interaction = interaction
@@ -28,12 +29,28 @@ struct SwatchFanAnchor: View {
             .frame(width: CGFloat(item.rect.w), height: CGFloat(item.rect.h))
             .allowsHitTesting(false)
             .popover(isPresented: presented, arrowEdge: .trailing) {
-                SwatchFanView(colors: colors, selection: $picked, startsOpen: true) { index in
-                    _ = interaction.paintSelection(hex: colors[index].hex)
+                VStack(spacing: theme.space(.s2)) {
+                    SwatchFanView(colors: colors, selection: pickedBlade, startsOpen: true) { index in
+                        _ = interaction.paintSelection(hex: colors[index].hex)
+                    }
+                    .frame(width: side, height: side)
+                    if !interaction.canPaintSelection {
+                        Text(LocalizedStringKey("fan.noColour"))
+                            .font(theme.text(.caption).font)
+                            .foregroundStyle(theme.color(.textMuted, scheme))
+                    }
                 }
-                .frame(width: side, height: side)
                 .padding(theme.space(.s3))
             }
+    }
+
+    /// The blade that is marked. A blade marks only when the selection can take a colour.
+    private var pickedBlade: Binding<Int?> {
+        Binding(get: { picked },
+                set: { index in
+                    guard index == nil || interaction.canPaintSelection else { return }
+                    picked = index
+                })
     }
 
     /// The popover is shown while the interaction has this item's fan open. Dismissing it closes the fan.

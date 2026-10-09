@@ -15,6 +15,8 @@ struct StatusBarView: View {
     let zoomPercent: Int
     /// Number of selected items. Zero shows the word for none.
     let selectionCount: Int
+    /// A short notice as a catalog key, for example after a lab action. nil shows nothing.
+    var notice: String?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -29,6 +31,10 @@ struct StatusBarView: View {
                     } else {
                         Text("status.selection.value")
                     }
+                }
+                if let notice {
+                    Text(LocalizedStringKey(notice))
+                        .foregroundStyle(theme.color(.coral, scheme))
                 }
                 Spacer(minLength: 0)
                 field("status.saveState", saveStateText)
