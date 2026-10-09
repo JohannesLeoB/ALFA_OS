@@ -206,8 +206,16 @@ public final class BoardStore {
 
     public var canUndo: Bool { undoManager.canUndo }
     public var canRedo: Bool { undoManager.canRedo }
-    public func undo() { undoManager.undo() }
-    public func redo() { undoManager.redo() }
+    /// Ends a text edit or a drag first, so that a room removed by the step cannot take the edit with it.
+    public func undo() {
+        onWillSwitchSpace?()
+        undoManager.undo()
+    }
+
+    public func redo() {
+        onWillSwitchSpace?()
+        undoManager.redo()
+    }
 
     private func register(_ edit: Edit, name: String?) {
         let inHistory = undoManager.isUndoing || undoManager.isRedoing
