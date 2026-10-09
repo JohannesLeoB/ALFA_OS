@@ -131,8 +131,10 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-905](briefe/B-905.md) | E9 | Auslieferung | B-901 | offen |
 | [D-001](briefe/D-001.md) | E1 | Gegenlieferung lesen und Ansichten zeichnen (Claude Design) | — | Lieferung 2026-10-09_0100 da: Vertrag liest fehlerfrei; Zeichnung (Mockup-Paket) fehlt noch |
 | [D-002](briefe/D-002.md) | E2 | Gestaltungsvertrag der App (Claude Design) | D-001 | offen |
-| [D-004](briefe/D-004.md) | E2 | Kanon-Ergänzungen zeichnen und festlegen (Claude Design) | D-001, B-240, B-241 | Paket fertig: `ausgang/vertrag_2026-10-09_2230_code.zip` (46 Aufträge: Werte A1–A9, Bausteine B1–B22, Zustände, Linienraster, Token-Werkstatt, Anhänge); wartet auf Johannes (zu Konto B tragen) |
-| [D-005](briefe/D-005.md) | E8 | Design-Spec Assistent: Chat, Vorschläge, Notizen, Einstellungen KI (Claude Design) | D-004 | Spec fertig: `gestaltung/spec/ASSISTENT-IN-DER-APP.md`, im selben Paket `ausgang/vertrag_2026-10-09_2230_code.zip`; wartet auf Johannes (zu Konto B tragen) |
-| [D-006](briefe/D-006.md) | E2 | Design-Nachtrag: Palettensystem, Seitenleiste, Inspektor, Blätter, Einstellungen, Schriften (Claude Design) | D-004, D-005 | Paket fertig: `ausgang/vertrag_2026-10-09_2230_code.zip` (enthält D-004, D-005, D-006, Analyse und Recherche); wartet auf Johannes (zu Konto B tragen) |
+| [D-004](briefe/D-004.md) | E2 | Ersetzt durch D-007 (gestaltung/briefing-system/) | — | ersetzt |
+| [D-005](briefe/D-005.md) | E8 | Ersetzt durch D-008 (gestaltung/briefing-ansichten/) | — | ersetzt |
+| [D-006](briefe/D-006.md) | E2 | Ersetzt durch D-008 | — | ersetzt |
+| D-007 | E2 | Design-System-Artifact neu: Farbwelten, Zuordnung, Bausteine (`gestaltung/briefing-system/BRIEFING.md`) | — | Briefing fertig; wartet auf Johannes (Konto B starten) |
+| D-008 | E2 | Design-Session Ansichten und Bögen (`gestaltung/briefing-ansichten/BRIEFING.md`) | D-007 | Briefing fertig; Paket (ZIP) schnürt der Chef nach Freigabe |
 | [D-003](briefe/D-003.md) | E5 | Startbausteine und Musterbogen (Claude Design) | D-002 | offen |
 | [P-001](briefe/P-001.md) | alle | Prüfplan je Gate (Konto C) | — | offen |
