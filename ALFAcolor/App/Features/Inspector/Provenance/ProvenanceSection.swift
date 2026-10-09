@@ -39,7 +39,8 @@ struct ProvenanceSection: View {
                 .onSubmit(apply)
             if invalid {
                 Text("provenance.url.invalid")
-                    .foregroundStyle(theme.color(.coral, scheme))
+                    .foregroundStyle(theme.color(.text, scheme))
+                    .signalRule(true)
             }
             if let source = sources.value, let date = source?.importedAt {
                 LabeledContent("provenance.date") {

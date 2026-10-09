@@ -32,7 +32,8 @@ struct VersionsSection: View {
                 }
                 if let notice {
                     Text(LocalizedStringKey(notice))
-                        .foregroundStyle(theme.color(.coral, scheme))
+                        .foregroundStyle(theme.color(.text, scheme))
+                        .signalRule(true)
                 }
             }
         }
