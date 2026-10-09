@@ -10,7 +10,8 @@ extension Command {
         case .move: "undo.move"
         case .resize: "undo.resize"
         case .reorder(_, let how): "undo.reorder.\(how.rawValue)"
-        case .setContent: "undo.setContent"
+        // The catalog has no name of its own for a colour change, so it uses the name of a content change.
+        case .setContent, .setFill: "undo.setContent"
         case .group: "undo.group"
         case .ungroup: "undo.ungroup"
         case .setLocked(_, let value): value ? "undo.lock" : "undo.unlock"

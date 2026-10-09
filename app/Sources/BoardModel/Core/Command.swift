@@ -32,6 +32,9 @@ public enum Command: Sendable {
     /// Replaces the content of one item, for example the text of a note or the image of a placeholder.
     /// The rectangle, the layer and the place in the stack stay.
     case setContent(ItemID, Content)
+    /// Sets the colour of shapes and swatches. A shape takes the fill, or the stroke when it is a line.
+    /// A swatch takes the colour and loses its name. Other items keep what they have.
+    case setFill(Set<ItemID>, hex: String)
     case setLocked(Set<ItemID>, Bool)
     case setHidden(Set<ItemID>, Bool)
     /// Moves items to another layer of the same space.
