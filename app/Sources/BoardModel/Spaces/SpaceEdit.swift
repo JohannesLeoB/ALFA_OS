@@ -7,7 +7,9 @@ public enum SpaceError: Error, Equatable, Sendable {
     case unknownLayer(String)
     case duplicateSpace(String)
     case duplicateItem(ItemID)
+    case duplicateLayer(String)
     case lastSpace
+    case lastLayer
     case emptyName
     case invalidPosition
 }
@@ -22,6 +24,58 @@ extension Board {
             let candidate = number == 1 ? base : "\(base)-\(number)"
             if !spaces.contains(where: { $0.id == candidate }) { return candidate }
             number += 1
+        }
+    }
+
+    /// The first name of the form `template` (for example "Raum %lld") that no room has, counting from 2.
+    /// The first room keeps its own name, so the numbers start at 2.
+    public func freeSpaceName(template: String) -> String {
+        var number = 2
+        while true {
+            let candidate = String(format: template, number)
+            if !spaces.contains(where: { $0.name == candidate }) { return candidate }
+            number += 1
+        }
+    }
+
+    /// A layer ID that no layer of the room uses yet: `base`, then `base-2` and so on.
+    public func freeLayerID(base: String = "layer", in spaceID: String) -> String {
+        let used = Set(spaces.first { $0.id == spaceID }?.layers.map(\.id) ?? [])
+        var number = 1
+        while true {
+            let candidate = number == 1 ? base : "\(base)-\(number)"
+            if !used.contains(candidate) { return candidate }
+            number += 1
+        }
+    }
+
+    /// Adds a layer on top of the stack of a room. The name is trimmed; an empty name or a used ID is refused.
+    @discardableResult
+    public mutating func addLayer(id: String, name: String, in spaceID: String) throws -> Layer {
+        let name = try Self.cleanName(name)
+        let space = try spaceIndex(spaceID)
+        guard !spaces[space].layers.contains(where: { $0.id == id }) else { throw SpaceError.duplicateLayer(id) }
+        let layer = Layer(id: id, name: name)
+        spaces[space].layers.append(layer)
+        return layer
+    }
+
+    /// Gives a layer another name. The name is trimmed; an empty name is refused.
+    public mutating func renameLayer(_ layer: String, to name: String, in spaceID: String) throws {
+        let name = try Self.cleanName(name)
+        let (space, index) = try layerIndex(layer, in: spaceID)
+        spaces[space].layers[index].name = name
+    }
+
+    /// Removes a layer. Its items move to the layer below it, or to the first layer left.
+    /// The last layer of a room cannot be removed.
+    public mutating func removeLayer(_ layer: String, in spaceID: String) throws {
+        let (space, index) = try layerIndex(layer, in: spaceID)
+        guard spaces[space].layers.count > 1 else { throw SpaceError.lastLayer }
+        spaces[space].layers.remove(at: index)
+        let fallback = index > 0 ? spaces[space].layers[index - 1].id : spaces[space].layers[0].id
+        for item in spaces[space].items.indices where spaces[space].items[item].layerID == layer {
+            spaces[space].items[item].layerID = fallback
         }
     }
 

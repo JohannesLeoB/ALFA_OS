@@ -2587,17 +2587,6 @@
         }
       }
     },
-    "room.defaultName" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Raum"
-          }
-        }
-      }
-    },
     "room.sidebarHint" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2703,7 +2692,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Stücke des Raums gehen mit ihm weg. ⌘Z holt sie zurück."
+            "value" : "Die Stücke des Raums gehen mit ihm weg. Bearbeiten > Rückgängig holt sie zurück."
           }
         }
       }
@@ -4123,6 +4112,138 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Auf der Leinwand"
+          }
+        }
+      }
+    },
+    "room.numbered" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raum %lld"
+          }
+        }
+      }
+    },
+    "room.rename.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Name ist leer. Der alte Name bleibt."
+          }
+        }
+      }
+    },
+    "room.open" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnen"
+          }
+        }
+      }
+    },
+    "layer.new" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Ebene"
+          }
+        }
+      }
+    },
+    "layer.numbered" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene %lld"
+          }
+        }
+      }
+    },
+    "layer.name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name der Ebene"
+          }
+        }
+      }
+    },
+    "layer.rename" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umbenennen…"
+          }
+        }
+      }
+    },
+    "layer.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene löschen"
+          }
+        }
+      }
+    },
+    "undo.layer.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene anlegen"
+          }
+        }
+      }
+    },
+    "undo.layer.rename" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene umbenennen"
+          }
+        }
+      }
+    },
+    "undo.layer.remove" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene löschen"
+          }
+        }
+      }
+    },
+    "sidebar.comingSoon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch ohne Wirkung"
           }
         }
       }

@@ -21,6 +21,10 @@ final class ShellState {
     /// Room whose name is being changed, and the name in the field. The tab row and the room menu set them.
     var renamingRoom: String?
     var roomDraft = ""
+    /// A short message about the last room action, as a catalog key. nil when there is none.
+    var roomNotice: String?
+    /// The layer that the layer list marks as active. It is chosen by a click and is not part of the document.
+    var activeLayer: String?
     /// Room that waits for the close confirmation, because it has content.
     var closingRoom: String?
     /// The labs of the code cards opened in this window. A lab keeps its draft when it closes.

@@ -31,7 +31,7 @@ struct ShellView: View {
 
     var body: some View {
         NavigationSplitView(columnVisibility: $shell.columnVisibility) {
-            SidebarView(store: canvas.store)
+            SidebarView(store: canvas.store, shell: shell)
         } detail: {
             VStack(spacing: 0) {
                 CanvasSurface(controller: canvas, interaction: interaction, importer: importer,
@@ -41,7 +41,7 @@ struct ShellView: View {
                 if shell.statusBarVisible {
                     StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError,
                                   zoomPercent: canvas.zoomPercent, selectionCount: canvas.store.selectedItems.count,
-                                  notice: shell.labNotice ?? readNotice)
+                                  notice: shell.labNotice ?? shell.roomNotice ?? readNotice)
                 }
             }
             // On the stack, not on the canvas: the canvas ignores the top safe area, so its overlays
@@ -66,6 +66,7 @@ struct ShellView: View {
             }
         }
         .toolbar { ShellToolbar(shell: shell, store: canvas.store) }
+        .modifier(RoomDialogs(shell: shell, store: canvas.store))
         .focusedSceneValue(\.shell, shell)
         .focusedSceneValue(\.canvas, canvas)
         .focusedSceneValue(\.interaction, interaction)
