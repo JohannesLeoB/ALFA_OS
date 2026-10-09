@@ -10,4 +10,11 @@ extension BoardStore {
     public func unifyTokens(_ clusters: [UnifyCluster]) throws -> Bool {
         try changeTokenSets(nameKey: "undo.workshop.unify") { TokenUnify.apply(clusters, to: &$0) }
     }
+
+    /// Accepts one name suggestion: the token gets the proposed path. One undo step.
+    /// Throws when the path is taken, and then nothing changes.
+    @discardableResult
+    public func acceptName(_ suggestion: WorkshopNames.Suggestion) throws -> Bool {
+        try changeTokenSets(nameKey: "undo.workshop.name") { try WorkshopNames.accept(suggestion, in: &$0) }
+    }
 }
