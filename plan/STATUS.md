@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (74)
+## Briefe (77)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -58,6 +58,9 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-221](briefe/B-221.md) | E2 | Kontextleiste, Blob-Modus am Bild | B-219 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 859 Tests, App-Bau grün; Klick-Ursache per Gegenversuch belegt: Kind-true überstimmt Eltern-false nicht); Abnahme am Bild offen; offen: Außenklick bei offenem Blob-Feld schließt und fängt Leinwandklicks, ContextBar bei Auswahl ganz oben unter der Werkzeugleiste, Blob unten über der Statusleiste, BlurRamp ohne Ansicht |
 | [B-222](briefe/B-222.md) | E2 | Fehlerbrief: Code-Karte bedienbar, Labor | B-221 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-223](briefe/B-223.md) | E2 | Fehlerbrief: Vorschaubild, Cache, Player-Pool (zieht B-402 vor) | B-221 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-224](briefe/B-224.md) | E2 | Fehlerbrief: Dokument und Speicherstand | B-221 | offen (geschrieben 2026-10-09) |
+| [B-225](briefe/B-225.md) | E2 | Fehlerbrief: Menüs, Werkzeugleiste, Ausgabe | B-222 | offen (geschrieben 2026-10-09) |
+| [B-226](briefe/B-226.md) | E2 | Fehlerbrief: Räume, Ebenen, Inspektor, Texte | B-221 | offen (geschrieben 2026-10-09) |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | offen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | offen |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
