@@ -31,13 +31,15 @@ struct ShellView: View {
                 CanvasSurface(controller: canvas, interaction: interaction, importer: importer,
                               onTogglePalettes: { shell.togglePalettes() }, labClosings: shell.labClosings)
                     .overlay { ContextBarHost(canvas: canvas) }
-                    .overlay { if shell.blobMode { BlobMenuHost(shell: shell, store: canvas.store) } }
                     .overlay { if let lab = shell.openLabModel { LabView(model: lab, onClose: { shell.closeLab() }) } }
                 if shell.statusBarVisible {
                     StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError,
                                   zoomPercent: canvas.zoomPercent, selectionCount: canvas.store.selectedItems.count)
                 }
             }
+            // On the stack, not on the canvas: the canvas ignores the top safe area, so its overlays
+            // would reach under the toolbar, where the blob menu cannot be clicked.
+            .overlay { if shell.blobMode { BlobMenuHost(shell: shell, store: canvas.store) } }
             // Content never sets the minimum size of a split column; a changing minimum loops the window layout.
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
             .inspector(isPresented: $shell.inspectorVisible) {

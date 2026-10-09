@@ -16,12 +16,17 @@ struct BlobMenuHost: View {
     @Namespace private var glass
     /// Center of the single blob while a drag moves it. nil while it rests in its place.
     @State private var dragCenter: CGPoint?
-    /// Palette that was open before the last change. It gives the direction of a palette switch.
-    @State private var previousPalette: BlobPalette?
-    /// Picks of the palettes. They live here, not in the palette views, so they survive a switch of the palette.
-    @State private var unit: LengthUnit = .point
-    @State private var swatch: Int?
-    @State private var token: Int?
+
+    /// The picks of the palettes live in the model, so they survive a switch of the palette and the blob mode.
+    private var unit: Binding<LengthUnit> {
+        Binding(get: { shell.blobUnit }, set: { shell.blobUnit = $0 })
+    }
+    private var swatch: Binding<Int?> {
+        Binding(get: { shell.blob.swatch }, set: { shell.blob.pickSwatch($0) })
+    }
+    private var token: Binding<Int?> {
+        Binding(get: { shell.blob.token }, set: { shell.blob.pickToken($0) })
+    }
 
     var body: some View {
         GeometryReader { proxy in
@@ -63,7 +68,7 @@ struct BlobMenuHost: View {
                     }
                     if let open = menu.open {
                         BlobCard(palette: open, direction: direction(to: open), menu: menu, store: store,
-                                 unit: $unit, swatch: $swatch, token: $token,
+                                 unit: unit, swatch: swatch, token: token,
                                  onSelect: { next in change { $0.select(next) } },
                                  onLayout: { change { $0.toggleLayout() } },
                                  onPin: { edge in change { $0.pin(to: edge) } },
@@ -135,15 +140,14 @@ struct BlobMenuHost: View {
 
     /// Direction of a palette switch: the card slides forward when the new palette lies after the previous one.
     private func direction(to palette: BlobPalette) -> PanelDirection {
-        guard let previousPalette else { return .still }
-        return PanelDirection(from: previousPalette.index, to: palette.index)
+        guard let previous = shell.blob.previous else { return .still }
+        return PanelDirection(from: previous.index, to: palette.index)
     }
 
     /// Applies a change of the menu with the motion that the change runs.
     private func change(_ update: (inout BlobMenu) -> Void) {
         var next = shell.blob
         update(&next)
-        previousPalette = shell.blob.open
         withAnimation(animation(for: BlobMotion.transition(from: shell.blob, to: next))) {
             shell.blob = next
         }

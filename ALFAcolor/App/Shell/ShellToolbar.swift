@@ -9,7 +9,7 @@ struct ShellToolbar: ToolbarContent {
 
     var body: some ToolbarContent {
         ToolbarItemGroup(placement: .navigation) {
-            SpaceTabBar(store: store)
+            SpaceTabBar(shell: shell, store: store)
         }
 
         ToolbarItemGroup(placement: .principal) {

@@ -26,8 +26,8 @@ struct BlobCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: theme.space(.s2)) {
             header
-            BlobPaletteContent(palette: palette, store: store, unit: $unit, swatch: $swatch, token: $token)
-                .transition(.panel(direction, distance: theme.space(.s4)))
+            BlobPaletteContent(palette: palette, direction: direction, store: store,
+                               unit: $unit, swatch: $swatch, token: $token)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 .clipped()
             footer

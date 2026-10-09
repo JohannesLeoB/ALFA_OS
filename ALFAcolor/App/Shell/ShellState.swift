@@ -16,8 +16,13 @@ final class ShellState {
     private(set) var blobMode = false
     /// State of the blob menu. Only the views of the menu change it.
     var blob = BlobMenu()
-    /// Placeholder for the space tabs.
-    var selectedRoom: PlaceholderRoom = .mail
+    /// Unit of the position fields in the blob menu. It stays when the palette or the blob mode changes.
+    var blobUnit: LengthUnit = .point
+    /// Room whose name is being changed, and the name in the field. The tab row and the room menu set them.
+    var renamingRoom: String?
+    var roomDraft = ""
+    /// Room that waits for the close confirmation, because it has content.
+    var closingRoom: String?
     /// The labs of the code cards opened in this window. A lab keeps its draft when it closes.
     private(set) var labs: [ItemID: LabModel] = [:]
     /// The card whose lab is open, if any.
@@ -74,13 +79,6 @@ final class ShellState {
         sidebarVisible = !anyVisible
         inspectorVisible = !anyVisible
     }
-}
-
-/// Static space tabs. The raw value is the key of the tab title in the string catalog.
-enum PlaceholderRoom: String, CaseIterable, Identifiable {
-    case mail = "room.mail"
-    case colors = "room.colors"
-    var id: Self { self }
 }
 
 extension FocusedValues {

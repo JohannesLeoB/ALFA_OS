@@ -2,6 +2,7 @@ import SwiftUI
 import AppTheme
 import BoardModel
 import Importers
+import Performance
 
 /// The canvas: grid, items and aids, with zoom and pan. The area is content, not glass.
 /// The math is in `CanvasController`; this view reports the size and passes gestures on.
@@ -23,54 +24,56 @@ struct CanvasSurface: View {
     @State private var pinchStart: Viewport?
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            theme.color(.background, scheme)
-            CanvasGridLayer(controller: controller)
-            CanvasItemsLayer(controller: controller, interaction: interaction)
-            SelectionLayer(interaction: interaction)
-            CanvasAidsLayer(controller: controller, interaction: interaction)
-            if controller.isEmpty {
-                emptyHint
+        Signpost.interval("Canvas frame") {
+            ZStack(alignment: .topLeading) {
+                theme.color(.background, scheme)
+                CanvasGridLayer(controller: controller)
+                CanvasItemsLayer(controller: controller, interaction: interaction)
+                SelectionLayer(interaction: interaction)
+                CanvasAidsLayer(controller: controller, interaction: interaction)
+                if controller.isEmpty {
+                    emptyHint
+                }
+                ScrollCatcher { controller.scroll($0) }
             }
-            ScrollCatcher { controller.scroll($0) }
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+            .clipped()
+            .ignoresSafeArea(edges: .top)
+            .onGeometryChange(for: CGSize.self, of: \.size) { size in
+                controller.resize(to: CanvasSize(width: size.width, height: size.height))
+            }
+            .contentShape(Rectangle())
+            .onTapGesture { hasFocus = true }
+            .simultaneousGesture(grab)
+            .simultaneousGesture(pinch)
+            .selectionInput(interaction, isFocused: hasFocus, panning: spaceDown)
+            .modifier(LabKey(isFocused: hasFocus))
+            .pointerStyle(pointer)
+            .focusable()
+            .focusEffectDisabled()
+            .focused($hasFocus)
+            .onKeyPress(.tab) {
+                guard hasFocus else { return .ignored }
+                onTogglePalettes()
+                return .handled
+            }
+            .onKeyPress(.space, phases: [.down, .up]) { press in
+                guard hasFocus else { return .ignored }
+                spaceDown = press.phase == .down
+                return .handled
+            }
+            .onChange(of: hasFocus) { _, focused in
+                if !focused { spaceDown = false }
+            }
+            .onChange(of: interaction.editing == nil) { _, ended in
+                if ended { hasFocus = true }
+            }
+            .onChange(of: labClosings) { hasFocus = true }
+            .onAppear { hasFocus = true }
+            .modifier(ImportTargets(controller: controller, importer: importer))
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("canvas.accessibility")
         }
-        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-        .clipped()
-        .ignoresSafeArea(edges: .top)
-        .onGeometryChange(for: CGSize.self, of: \.size) { size in
-            controller.resize(to: CanvasSize(width: size.width, height: size.height))
-        }
-        .contentShape(Rectangle())
-        .onTapGesture { hasFocus = true }
-        .simultaneousGesture(grab)
-        .simultaneousGesture(pinch)
-        .selectionInput(interaction, isFocused: hasFocus, panning: spaceDown)
-        .modifier(LabKey(isFocused: hasFocus))
-        .pointerStyle(pointer)
-        .focusable()
-        .focusEffectDisabled()
-        .focused($hasFocus)
-        .onKeyPress(.tab) {
-            guard hasFocus else { return .ignored }
-            onTogglePalettes()
-            return .handled
-        }
-        .onKeyPress(.space, phases: [.down, .up]) { press in
-            guard hasFocus else { return .ignored }
-            spaceDown = press.phase == .down
-            return .handled
-        }
-        .onChange(of: hasFocus) { _, focused in
-            if !focused { spaceDown = false }
-        }
-        .onChange(of: interaction.editing == nil) { _, ended in
-            if ended { hasFocus = true }
-        }
-        .onChange(of: labClosings) { hasFocus = true }
-        .onAppear { hasFocus = true }
-        .modifier(ImportTargets(controller: controller, importer: importer))
-        .accessibilityElement(children: .contain)
-        .accessibilityLabel("canvas.accessibility")
     }
 
     private var emptyHint: some View {

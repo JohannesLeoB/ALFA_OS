@@ -2081,6 +2081,17 @@
         }
       }
     },
+    "menu.room" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raum"
+          }
+        }
+      }
+    },
     "menu.tool" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2814,28 +2825,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Auswahl hierher verschieben"
-          }
-        }
-      }
-    },
-    "room.colors" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Farben"
-          }
-        }
-      }
-    },
-    "room.mail" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mail"
           }
         }
       }

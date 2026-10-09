@@ -10,6 +10,7 @@ struct ALFAcolorCommands: Commands {
         FileCommands()
         EditCommands()
         ObjectCommands()
+        RoomCommands()
         WindowCommands()
         HelpCommands()
     }

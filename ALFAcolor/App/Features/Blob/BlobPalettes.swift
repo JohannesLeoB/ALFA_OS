@@ -45,6 +45,8 @@ extension BlobEdge {
 /// context bar, so the blob menu adds no commands of its own.
 struct BlobPaletteContent: View {
     let palette: BlobPalette
+    /// Which way the content slides when the palette changes.
+    let direction: PanelDirection
     var store: BoardStore
     /// The picks are kept by the menu, so they survive a switch of the palette.
     @Binding var unit: LengthUnit
@@ -54,13 +56,19 @@ struct BlobPaletteContent: View {
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
 
+    /// The slide of a palette. It sits on each branch, because a switch of the palette changes the branch, not this view.
+    private var slide: AnyTransition { .panel(direction, distance: theme.space(.s4)) }
+
+    @ViewBuilder
     var body: some View {
         switch palette {
         case .transform: selectionForm { PositionSection(store: store, items: store.selectedItems, unit: $unit) }
+            .transition(slide)
         case .layers: selectionForm { LayerSection(store: store, items: store.selectedItems) }
-        case .align: alignment
-        case .swatches: swatches
-        case .tokens: tokens
+            .transition(slide)
+        case .align: alignment.transition(slide)
+        case .swatches: swatches.transition(slide)
+        case .tokens: tokens.transition(slide)
         }
     }
 
