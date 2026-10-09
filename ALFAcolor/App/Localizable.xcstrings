@@ -8493,6 +8493,160 @@
           }
         }
       }
+    },
+    "ki.notice.consoleLimit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guthaben oder Limit der Console erreicht."
+          }
+        }
+      }
+    },
+    "ki.notice.badRequest" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Console hat die Anfrage abgelehnt."
+          }
+        }
+      }
+    },
+    "ki.notice.invalidKey" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Schlüssel wurde abgelehnt."
+          }
+        }
+      }
+    },
+    "ki.notice.noKey" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Schlüssel gespeichert."
+          }
+        }
+      }
+    },
+    "ki.notice.forbidden" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Console erlaubt diesen Vorgang mit dem Schlüssel nicht."
+          }
+        }
+      }
+    },
+    "ki.notice.rateLimited" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu viele Anfragen. Bitte gleich noch einmal versuchen."
+          }
+        }
+      }
+    },
+    "ki.notice.overloaded" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Dienst ist gerade ausgelastet. Bitte später versuchen."
+          }
+        }
+      }
+    },
+    "ki.notice.network" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Verbindung zum Dienst."
+          }
+        }
+      }
+    },
+    "ki.notice.decoding" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Antwort konnte nicht gelesen werden."
+          }
+        }
+      }
+    },
+    "ki.notice.cancelled" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgebrochen."
+          }
+        }
+      }
+    },
+    "ki.notice.imageRejected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Bild kann nicht gesendet werden."
+          }
+        }
+      }
+    },
+    "ki.notice.unusable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Antwort enthält kein Ergebnis."
+          }
+        }
+      }
+    },
+    "ki.button.openConsole" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Console öffnen"
+          }
+        }
+      }
+    },
+    "ki.button.openSettings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen öffnen"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
