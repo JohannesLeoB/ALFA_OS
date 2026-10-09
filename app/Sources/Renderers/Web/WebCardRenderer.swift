@@ -32,7 +32,7 @@ public final class LiveCard {
 public final class WebCardRenderer: CardRenderer {
     static let languages: Set<CodeLanguage> = [.html, .css, .javascript, .tailwind, .react]
     /// Longest time for a still: loading, drawing and export.
-    public static let defaultStillLimit = 20.0
+    public nonisolated static let defaultStillLimit = 20.0
     /// Longest wait for a React card to draw its component.
     static let drawLimit = 5.0
 
