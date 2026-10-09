@@ -56,6 +56,11 @@ public enum MockupImport {
     static let codeBytesPerFile = 4 << 20
     static let siblingBytesPerCard = 16 << 20
     static let siblingBytesPerPackage = 64 << 20
+    /// Counts and lengths. A package with more frames is refused; more items are read up to the count,
+    /// and a piece beyond the length in points (or its position) is left out with a warning.
+    static let maxFrames = 1_000
+    static let maxItems = 10_000
+    static let maxLength = 100_000.0
 
     /// Reads the package. `now` is the time of the import, used for the source of each piece.
     public static func read(_ contents: ZipContents, now: Date = .now) throws -> MockupDelivery {
@@ -68,12 +73,17 @@ public enum MockupImport {
 
         var warnings = contents.problems.map { "\($0.path): \($0.reason)" }
         let title = root["title"] as? String ?? ""
-        let frames = try (root["frames"] as? [[String: Any]] ?? []).map { try frame($0) }
+        let rawFrames = root["frames"] as? [[String: Any]] ?? []
+        guard rawFrames.count <= maxFrames else { throw MockupImportError.badManifest("more than \(maxFrames) frames") }
+        let frames = try rawFrames.map { try frame($0) }
         let rawItems = root["items"] as? [[String: Any]] ?? []
+        if rawItems.count > maxItems {
+            warnings.append("\(rawItems.count - maxItems) items are not read: over \(maxItems) items")
+        }
 
         var pieces: [MockupDelivery.Piece] = []
         var budget = SiblingBudget()
-        for raw in rawItems {
+        for raw in rawItems.prefix(maxItems) {
             let id = raw["id"] as? String ?? "(no id)"
             guard let type = raw["type"] as? String else {
                 warnings.append("\(id): no type, skipped")
@@ -101,11 +111,20 @@ public enum MockupImport {
         let width = try number(raw["width"], "frame \(id) width")
         let height = try number(raw["height"], "frame \(id) height")
         guard width > 0, height > 0 else { throw MockupImportError.badManifest("frame \(id) has no size") }
+        guard width <= maxLength, height <= maxLength else { throw MockupImportError.badManifest("frame \(id) size is out of range") }
         return MockupDelivery.Frame(id: id, title: raw["title"] as? String ?? id, width: width, height: height)
     }
 
     private static func piece(_ raw: [String: Any], id: String, type: String, files: [String: Data], now: Date,
                               budget: inout SiblingBudget, warnings: inout [String]) throws -> MockupDelivery.Piece? {
+        let x = try number(raw["x"], "\(id) x")
+        let y = try number(raw["y"], "\(id) y")
+        let width = try number(raw["width"], "\(id) width")
+        let height = try number(raw["height"], "\(id) height")
+        guard abs(x) <= maxLength, abs(y) <= maxLength, width <= maxLength, height <= maxLength else {
+            warnings.append("\(id): position or size is out of range, skipped")
+            return nil
+        }
         let content: MockupDelivery.Piece.Content
         switch type {
         case "code":
@@ -153,8 +172,7 @@ public enum MockupImport {
                             importedAt: now)
         return MockupDelivery.Piece(
             id: id, title: raw["title"] as? String ?? id, frame: raw["frame"] as? String,
-            x: try number(raw["x"], "\(id) x"), y: try number(raw["y"], "\(id) y"),
-            width: try number(raw["width"], "\(id) width"), height: try number(raw["height"], "\(id) height"),
+            x: x, y: y, width: width, height: height,
             layer: raw["layer"] as? String, content: content, source: source)
     }
 
