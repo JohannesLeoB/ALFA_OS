@@ -43,7 +43,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-204](briefe/B-204.md) | E2 | Auswahl, Lasso, Griffe, Tastatur | B-202, B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 528 Tests); Abnahme am Bild offen |
 | [B-205](briefe/B-205.md) | E2 | Stückarten zeichnen | B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 407 Tests); Notiz-Bearbeitung nach B-204 verschoben; Abnahme am Bild offen |
 | [B-206](briefe/B-206.md) | E2 | Räume als Reiter und Ebenen | B-201, B-102 | offen |
-| [B-207](briefe/B-207.md) | E2 | Einfügen und Hineinziehen | B-201, B-104 | zu einem Drittel gebaut (unversioniert); Weiterbau an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-207](briefe/B-207.md) | E2 | Einfügen und Hineinziehen | B-201, B-104 | zur Prüfung, 2026-10-09 (Commits 402967d bis 1d83623; 569 Tests, pruefen.sh 0 errors); Abnahme am Bild offen |
 | [B-208](briefe/B-208.md) | E2 | Kontextleiste und Inspektor-Grundgerüst | B-204 | offen |
 | [B-209](briefe/B-209.md) | E2 | Leistungsprobe Leinwand | B-203 | offen |
 | [B-211](briefe/B-211.md) | E2 | Dokument in der App: Neu, Öffnen, Sichern | B-110, B-201, B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 359 Tests; DocumentGroup); Abnahme am Bild offen (⌘N, ⌘O, ⌘S, Speicherstand) |
