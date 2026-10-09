@@ -23,6 +23,7 @@ Die einzige Arbeitskopie ist `~/Developer/ALLFARBEN` (seit 2026-10-08, Johannes)
 Johannes, 2026-10-08: „Auf jeden fall KEINE separaten Bau-Ordner, verstreute neben plätze. LOKAL NUR in ALLFARBEN, github maximal 1 Branch.“
 Und: „NUR EIN LOKALES REPO, keine ordner-offramps. … nichts wandert aus, wächst irgendwo, wird krankhaft gesichtergesichergesichjert gebackupt etc. Es gibt EINEN Code, eine CHANCE.“
 
+- Johannes, 2026-10-09: „in das lokale repo bitte. und auch NUR im lokalen Repo und dem EINEn github arbeiten.“ Builds landen im Repo: Xcode immer mit `-derivedDataPath .build-xcode/dd` (ignoriert), `pruefen.sh` in `.build-xcode/pruefen`; die notarisierte App und ihr ZIP in `ausgang/`. Nichts nach `/Applications` oder in Xcodes Standard-DerivedData.
 - Keine Sicherungskopien, keine Ablagen außerhalb des Repos, keine zweiten Fassungen. Alte Dateien in `ausgang/` löscht, wer die neue erzeugt.
 
 - Lokal gibt es nur `~/Developer/ALLFARBEN`. Keine Klone, keine Worktrees, keine Ordner daneben. Ausgehende ZIPs und Bauergebnisse liegen in `ausgang/` (ignoriert).

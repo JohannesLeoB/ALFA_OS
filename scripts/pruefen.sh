@@ -74,7 +74,7 @@ if [ -f ALFAcolor/project.yml ]; then
     excerpt "xcodegen generate" "$TMP/xcodegen.log"
   fi
   PROJ="$(find ALFAcolor -maxdepth 1 -name '*.xcodeproj' | head -n 1)"
-  if [ -n "$PROJ" ] && xcodebuild -project "$PROJ" -scheme ALFAcolor -derivedDataPath "$TMP/dd" CODE_SIGNING_ALLOWED=NO build > "$TMP/xcodebuild.log" 2>&1; then
+  if [ -n "$PROJ" ] && xcodebuild -project "$PROJ" -scheme ALFAcolor -derivedDataPath "$ROOT/.build-xcode/pruefen" CODE_SIGNING_ALLOWED=NO build > "$TMP/xcodebuild.log" 2>&1; then
     row "xcodebuild build" "OK" "$PROJ · scheme ALFAcolor"
   else
     row "xcodebuild build" "ERROR" "${PROJ:-no .xcodeproj} · $(first_error "$TMP/xcodebuild.log")"
