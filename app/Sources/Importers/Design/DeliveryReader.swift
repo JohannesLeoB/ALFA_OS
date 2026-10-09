@@ -11,9 +11,14 @@ public enum Delivery: Equatable, Sendable {
 public enum DeliveryError: Error, Equatable, Sendable {
     /// Neither MANIFEST.json (contract) nor manifest.json (mockup package) is in the archive.
     case unknownKind
+    /// The file is larger than the limit; it is refused before it is read.
+    case tooLarge
 }
 
 public enum DeliveryReader {
+    /// The largest file that is read as a delivery.
+    public static let fileBytes = 512 << 20
+
     public static func read(_ data: Data, now: Date = .now) throws -> Delivery {
         let contents = try ZipReader.read(data)
         let names = Set(contents.files.map(\.path))
@@ -24,6 +29,13 @@ public enum DeliveryReader {
             return .mockup(try MockupImport.read(contents, now: now))
         }
         throw DeliveryError.unknownKind
+    }
+
+    /// Reads a delivery from a file. The size is checked first, so a huge file is never loaded.
+    public static func read(fileAt url: URL, now: Date = .now, limit: Int = fileBytes) throws -> Delivery {
+        let size = try url.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
+        guard size <= limit else { throw DeliveryError.tooLarge }
+        return try read(try Data(contentsOf: url), now: now)
     }
 }
 

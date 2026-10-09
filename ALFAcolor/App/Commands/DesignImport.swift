@@ -20,7 +20,7 @@ enum DesignImport {
         panel.begin { response in
             guard response == .OK, let url = panel.url else { return }
             do {
-                let delivery = try DeliveryReader.read(try Data(contentsOf: url), now: .now)
+                let delivery = try DeliveryReader.read(fileAt: url, now: .now)
                 DeliverySheet.present(delivery, store: store, in: NSApp.keyWindow)
             } catch {
                 DeliverySheet.report(error)
