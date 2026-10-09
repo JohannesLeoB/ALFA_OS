@@ -35,20 +35,48 @@ public enum LabPropsReader {
         let chars = Array(source)
         guard let close = Source.closing(chars, at: open) else { return source }
         let inside = String(chars[(open + 1)..<close])
-        let pattern = "(?<![A-Za-z0-9_$.])\\b\(prop.name)\\s*=\\s*(-?\\d+(?:\\.\\d+)?|true|false|\"[^\"\\n]*\"|'[^'\\n]*')"
+        let pattern = "(?<![A-Za-z0-9_$.])\\b\(prop.name)\\s*=\\s*(-?\\d+(?:\\.\\d+)?|true|false|" + quotedPattern + ")"
         guard let expression = try? NSRegularExpression(pattern: pattern),
               let match = expression.firstMatch(in: inside, range: NSRange(inside.startIndex..., in: inside)),
               let literal = Range(match.range(at: 1), in: inside) else { return source }
         let start = open + 1 + inside.distance(from: inside.startIndex, to: literal.lowerBound)
         let end = open + 1 + inside.distance(from: inside.startIndex, to: literal.upperBound)
-        let quote = chars[start] == "'" ? "'" : "\""
+        let quote: Character = chars[start] == "'" ? "'" : "\""
         let replacement: String
         switch prop.value {
         case .number(let number): replacement = LabNumber.text(number)
         case .flag(let flag): replacement = flag ? "true" : "false"
-        case .text(let text): replacement = quote + text + quote
+        case .text(let text): replacement = quoted(text, mark: quote)
         }
         return String(chars[0..<start]) + replacement + String(chars[end...])
+    }
+
+    /// A quoted literal, double or single, with escapes: the inside may hold escaped quotes and backslashes.
+    static let quotedPattern = #""(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'"#
+
+    /// A quoted literal of a text, with the escapes that the source needs. `Source.quotedText` reads it back.
+    /// A `</` becomes `<\/`, so a script tag in the text cannot close the element that holds the code.
+    static func quoted(_ text: String, mark: Character) -> String {
+        var out = String(mark)
+        let chars = Array(text)
+        for (index, char) in chars.enumerated() {
+            switch char {
+            case "\\": out += "\\\\"
+            case "\n": out += "\\n"
+            case "\r": out += "\\r"
+            case "\t": out += "\\t"
+            case "/" where index > 0 && chars[index - 1] == "<": out += "\\/"
+            case "\u{2028}", "\u{2029}": out += String(format: "\\u%04X", char.unicodeScalars.first!.value)
+            case mark: out += "\\" + String(char)
+            default:
+                if char.unicodeScalars.count == 1, let scalar = char.unicodeScalars.first, scalar.value < 0x20 {
+                    out += String(format: "\\u%04X", scalar.value)
+                } else {
+                    out.append(char)
+                }
+            }
+        }
+        return out + String(mark)
     }
 
     // MARK: - Properties
@@ -283,10 +311,17 @@ enum Source {
         var current = ""
         var depth = 0
         var quote: Character?
+        var escaped = false
         for char in text {
             if let mark = quote {
                 current.append(char)
-                if char == mark { quote = nil }
+                if escaped {
+                    escaped = false
+                } else if char == "\\" {
+                    escaped = true
+                } else if char == mark {
+                    quote = nil
+                }
                 continue
             }
             if char == "\"" || char == "'" || char == "`" {
@@ -330,9 +365,49 @@ enum Source {
         if value == "true" { return .flag(true) }
         if value == "false" { return .flag(false) }
         if let number = Double(value), value.wholeMatch(of: /-?\d+(?:\.\d+)?/) != nil { return .number(number) }
-        if let match = value.wholeMatch(of: /"([^"\\]*)"|'([^'\\]*)'/) {
-            return .text(String(match.output.1 ?? match.output.2 ?? ""))
-        }
+        if let text = quotedText(value) { return .text(text) }
         return nil
+    }
+
+    /// The text of one quoted literal with its escapes read as JavaScript reads them. nil when `value` is not one literal.
+    static func quotedText(_ value: String) -> String? {
+        guard let mark = value.first, mark == "\"" || mark == "'", value.count >= 2, value.last == mark else { return nil }
+        let inner = Array(value.dropFirst().dropLast())
+        var out = ""
+        var index = 0
+        while index < inner.count {
+            let char = inner[index]
+            index += 1
+            if char == mark { return nil }
+            guard char == "\\" else { out.append(char); continue }
+            guard index < inner.count else { return nil }
+            let escape = inner[index]
+            index += 1
+            switch escape {
+            case "n": out.append("\n")
+            case "r": out.append("\r")
+            case "t": out.append("\t")
+            case "b": out.append("\u{8}")
+            case "f": out.append("\u{C}")
+            case "v": out.append("\u{B}")
+            case "0": out.append("\u{0}")
+            case "x", "u":
+                let digits: String
+                if escape == "u", index < inner.count, inner[index] == "{" {
+                    guard let close = inner[index...].firstIndex(of: "}") else { return nil }
+                    digits = String(inner[(index + 1)..<close])
+                    index = close + 1
+                } else {
+                    let count = escape == "x" ? 2 : 4
+                    guard index + count <= inner.count else { return nil }
+                    digits = String(inner[index..<(index + count)])
+                    index += count
+                }
+                guard let code = UInt32(digits, radix: 16), let scalar = Unicode.Scalar(code) else { return nil }
+                out.append(Character(scalar))
+            default: out.append(escape)
+            }
+        }
+        return out
     }
 }
