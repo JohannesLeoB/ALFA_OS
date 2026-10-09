@@ -80,11 +80,7 @@ private struct SyncSettings: View {
 
 private struct AISettings: View {
     var body: some View {
-        Form {
-            LaterRow(title: "settings.ai.model", note: "settings.later.account")
-            LaterRow(title: "settings.ai.neverSend", note: "settings.later.sync")
-        }
-        .formStyle(.grouped)
+        AISettingsForm()
     }
 }
 
