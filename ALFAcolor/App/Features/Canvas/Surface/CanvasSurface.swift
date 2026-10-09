@@ -77,6 +77,7 @@ struct CanvasSurface: View {
             .onChange(of: labClosings) { hasFocus = true }
             .onAppear { hasFocus = true }
             .modifier(ImportTargets(controller: controller, importer: importer, interaction: interaction))
+            .modifier(LibraryDropTarget(controller: controller, interaction: interaction))
             .accessibilityElement(children: .contain)
             .accessibilityLabel("canvas.accessibility")
             // Last, so the canvas covers the top safe area and its pointer space starts at the window edge.

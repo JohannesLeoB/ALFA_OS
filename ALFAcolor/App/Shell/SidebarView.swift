@@ -16,14 +16,7 @@ struct SidebarView: View {
 
     var body: some View {
         List {
-            Section("sidebar.collection") {
-                Label("sidebar.allItems", systemImage: "square.grid.2x2")
-                Label("sidebar.images", systemImage: "photo")
-                Label("sidebar.links", systemImage: "link")
-            }
-            .foregroundStyle(theme.color(.textMuted, scheme))
-            .disabled(true)
-            .help("sidebar.comingSoon")
+            LibrarySection(store: store)
             if store.board.spaces.count > SpaceTabBar.maxTabs {
                 Section("sidebar.rooms") {
                     ForEach(store.board.spaces) { space in

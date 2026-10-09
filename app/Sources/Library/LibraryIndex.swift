@@ -20,7 +20,7 @@ public struct LibraryIndex: Sendable {
 
         init(space: Space, item: Item) {
             ref = ItemRef(spaceID: space.id, itemID: item.id)
-            kind = ItemKind(content: item.content)
+            kind = ItemKind(item.content)
             text = LibraryIndex.bytes(LibraryIndex.searchText(of: item))
             tags = Set(item.tags.map(LibraryIndex.normalize))
             via = item.source.map { LibraryIndex.normalize($0.via) }
