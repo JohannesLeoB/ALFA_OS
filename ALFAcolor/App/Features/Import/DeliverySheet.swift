@@ -33,8 +33,27 @@ enum DeliverySheet {
     static func report(_ error: any Error) {
         let alert = NSAlert()
         alert.messageText = String(localized: "delivery.failed.title")
-        alert.informativeText = error.localizedDescription
+        alert.informativeText = message(for: error)
         alert.runModal()
+    }
+
+    /// The catalog text for a problem of a delivery. Other errors show their own description.
+    static func message(for error: any Error) -> String {
+        switch DeliveryProblem(error) {
+        case .notZip: String(localized: "delivery.error.notZip")
+        case .archiveTooLarge: String(localized: "delivery.error.archiveTooLarge")
+        case .tooManyEntries: String(localized: "delivery.error.tooManyEntries")
+        case .damagedArchive: String(localized: "delivery.error.damagedArchive")
+        case .unsafeName(let name): String(format: String(localized: "delivery.error.unsafeName"), name)
+        case .duplicateName(let name): String(format: String(localized: "delivery.error.duplicateName"), name)
+        case .fileTooLarge: String(localized: "delivery.error.fileTooLarge")
+        case .unknownKind: String(localized: "delivery.error.unknownKind")
+        case .badManifest: String(localized: "delivery.error.badManifest")
+        case .missingFile(let path): String(format: String(localized: "delivery.error.missingFile"), path)
+        case .checksumMismatch(let path): String(format: String(localized: "delivery.error.checksumMismatch"), path)
+        case .badTokens: String(localized: "delivery.error.badTokens")
+        case .other: error.localizedDescription
+        }
     }
 
     private static func kindText(_ delivery: Delivery) -> String {

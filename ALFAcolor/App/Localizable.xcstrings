@@ -6954,6 +6954,138 @@
         }
       }
     },
+    "delivery.error.archiveTooLarge" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Archiv ist zu groß: höchstens 64 MB je Datei und 256 MB insgesamt. Es wird nichts übernommen."
+          }
+        }
+      }
+    },
+    "delivery.error.badManifest" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Manifest der Lieferung ist ungültig. Es wird nichts übernommen."
+          }
+        }
+      }
+    },
+    "delivery.error.badTokens" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Werte im Vertrag sind ungültig. Es wird nichts übernommen."
+          }
+        }
+      }
+    },
+    "delivery.error.checksumMismatch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Prüfsumme von %@ stimmt nicht. Es wird nichts übernommen."
+          }
+        }
+      }
+    },
+    "delivery.error.damagedArchive" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Archiv ist beschädigt oder nutzt ein Verfahren, das ALFAcolor nicht liest. Es wird nichts übernommen."
+          }
+        }
+      }
+    },
+    "delivery.error.duplicateName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Archiv enthält den Namen „%@“ zweimal. Es wird nichts übernommen."
+          }
+        }
+      }
+    },
+    "delivery.error.fileTooLarge" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Datei ist größer als 512 MB und wird nicht gelesen."
+          }
+        }
+      }
+    },
+    "delivery.error.missingFile" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Datei aus dem Manifest fehlt: %@. Es wird nichts übernommen."
+          }
+        }
+      }
+    },
+    "delivery.error.notZip" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Datei ist kein ZIP-Archiv. Es wird nichts übernommen."
+          }
+        }
+      }
+    },
+    "delivery.error.tooManyEntries" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Archiv enthält zu viele Dateien (höchstens 4096). Es wird nichts übernommen."
+          }
+        }
+      }
+    },
+    "delivery.error.unknownKind" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Datei ist weder ein Vertrag noch ein Mockup-Paket."
+          }
+        }
+      }
+    },
+    "delivery.error.unsafeName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Archiv enthält den unsicheren Namen „%@“. Es wird nichts übernommen."
+          }
+        }
+      }
+    },
     "delivery.failed.title" : {
       "extractionState" : "manual",
       "localizations" : {
