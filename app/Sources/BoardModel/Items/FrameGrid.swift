@@ -4,6 +4,9 @@ import Geometry
 
 /// Column grids of frames: set, change and remove. Each command is one undo step.
 public enum FrameGrid {
+    /// The grid that a frame gets when the grid is switched on: 12 columns, gutter 24, margins 24.
+    public static let standard = ColumnGrid(columns: 12, gutter: 24, margin: 24)
+
     /// True when a grid fits a frame of this size: at least one column, no negative gutter, margins,
     /// or baseline values, and margins that leave room for the columns and the lines.
     public static func isValid(_ grid: ColumnGrid, in rect: Rect) -> Bool {

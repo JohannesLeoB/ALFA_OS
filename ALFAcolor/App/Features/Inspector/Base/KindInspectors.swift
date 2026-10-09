@@ -94,6 +94,7 @@ struct FrameSection: View {
                 Text("frame.template")
                     .foregroundStyle(.secondary)
             }
+            FrameGridSection(store: store, items: items)
         }
     }
 }

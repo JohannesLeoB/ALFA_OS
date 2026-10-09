@@ -4545,6 +4545,127 @@
         }
       }
     },
+    "inspector.frame.grid" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raster"
+          }
+        }
+      }
+    },
+    "inspector.frame.columns" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spalten"
+          }
+        }
+      }
+    },
+    "inspector.frame.gutter" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Steg"
+          }
+        }
+      }
+    },
+    "inspector.frame.margin" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rand"
+          }
+        }
+      }
+    },
+    "inspector.frame.margin.separate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ränder einzeln"
+          }
+        }
+      }
+    },
+    "inspector.frame.margin.top" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rand oben"
+          }
+        }
+      }
+    },
+    "inspector.frame.margin.bottom" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rand unten"
+          }
+        }
+      }
+    },
+    "inspector.frame.margin.left" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rand links"
+          }
+        }
+      }
+    },
+    "inspector.frame.margin.right" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rand rechts"
+          }
+        }
+      }
+    },
+    "inspector.frame.baseline" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grundlinie"
+          }
+        }
+      }
+    },
+    "inspector.frame.baselineStart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grundlinie Start"
+          }
+        }
+      }
+    },
     "inspector.frame.device" : {
       "extractionState" : "manual",
       "localizations" : {
