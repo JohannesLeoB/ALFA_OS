@@ -7,7 +7,7 @@ let package = Package(
     name: "ALFAcolor",
     platforms: [.macOS(.v15)],
     products: [
-        .library(name: "ALFAcolorKit", targets: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab", "AppTheme", "Document", "BoardModel", "Thumbnails", "Importers", "Renderers", "Motion"])
+        .library(name: "ALFAcolorKit", targets: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab", "AppTheme", "Document", "BoardModel", "Thumbnails", "Importers", "Renderers", "Motion", "Exporters", "Performance"])
     ],
     targets: [
         .target(name: "ALFAcolorCore"),
@@ -21,6 +21,8 @@ let package = Package(
         .target(name: "Thumbnails", dependencies: ["Document"]),
         .target(name: "Importers", dependencies: ["ALFAcolorCore", "Document", "BoardModel"]),
         .target(name: "Renderers", dependencies: ["ALFAcolorCore"]),
+        .target(name: "Exporters", dependencies: ["ALFAcolorCore", "Document", "BoardModel", "Tokens", "Geometry"]),
+        .target(name: "Performance", dependencies: ["ALFAcolorCore", "Document", "BoardModel", "Geometry"]),
         .testTarget(name: "ALFAcolorCoreTests", dependencies: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab"]),
         .testTarget(name: "AppThemeTests", dependencies: ["AppTheme", "Tokens"]),
         .testTarget(name: "DocumentTests", dependencies: ["Document", "ALFAcolorCore", "Tokens"], exclude: ["Fixtures"]),
@@ -28,6 +30,8 @@ let package = Package(
         .testTarget(name: "ThumbnailsTests", dependencies: ["Thumbnails", "Document"]),
         .testTarget(name: "ImportersTests", dependencies: ["Importers", "ALFAcolorCore", "Document", "BoardModel", "Renderers"]),
         .testTarget(name: "RenderersTests", dependencies: ["Renderers", "ALFAcolorCore"]),
+        .testTarget(name: "ExportersTests", dependencies: ["Exporters", "ALFAcolorCore", "Document", "BoardModel", "Tokens", "Geometry"]),
+        .testTarget(name: "PerformanceTests", dependencies: ["Performance", "ALFAcolorCore", "Document", "BoardModel", "Geometry"]),
         .testTarget(name: "MotionTests", dependencies: ["Motion"])
     ]
 )

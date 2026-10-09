@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (69)
+## Briefe (70)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -45,7 +45,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-218](briefe/B-218.md) | E2 | Absturz beim Sichern und Nachträge | B-211, B-217 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 822 Tests, App-Bau grün); Abnahme am Bild offen (Sichern nach Änderung, Labor ⌘Z, Fokus, Blob-Picks, Code-Karten); Gleitübergang Blob-Palette entfällt (Frage an Johannes) |
 | [B-207](briefe/B-207.md) | E2 | Einfügen und Hineinziehen | B-201, B-104 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 569 Tests; Sichern an neuem Ort behoben); Abnahme am Bild offen |
 | [B-208](briefe/B-208.md) | E2 | Kontextleiste und Inspektor-Grundgerüst | B-204 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 615 Tests); Abnahme am Bild offen |
-| [B-209](briefe/B-209.md) | E2 | Leistungsprobe Leinwand | B-203 | offen |
+| [B-209](briefe/B-209.md) | E2 | Leistungsprobe Leinwand | B-203 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-211](briefe/B-211.md) | E2 | Dokument in der App: Neu, Öffnen, Sichern | B-110, B-201, B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 359 Tests; DocumentGroup); Abnahme am Bild offen (⌘N, ⌘O, ⌘S, Speicherstand) |
 | [B-212](briefe/B-212.md) | E2 | Blob-Menü | B-208 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 712 Tests, App-Bau grün); Abnahme am Bild offen; Nachträge in B-216 |
 | [B-213](briefe/B-213.md) | E2 | Fächer für Farbfelder | B-205 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 662 Tests; Nahtregel Motion ergänzt); noch nicht eingehängt (B-212); Tempo entscheidet Johannes am Bild |
@@ -53,6 +53,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-215](briefe/B-215.md) | E2 | Startbibliothek: Bausteine als Code-Karten | B-403 | erledigt (Bewegung, 33 Karten laden live), geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 712 Tests); Blocks fehlen (Abhängigkeiten), Öffnen-Befehl in B-216 |
 | [B-216](briefe/B-216.md) | E2 | Nachträge: Fächer wählt Farbe, Bausteine öffnen | B-212, B-215 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 771 Tests); Katalogtexte in B-217 |
 | [B-217](briefe/B-217.md) | E2 | Labor anschließen und offene Texte | B-404, B-216 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 800 Tests); Labor bei ⌘Z der neuen Karte offen (Nachtrag) |
+| [B-219](briefe/B-219.md) | E2 | Blob-Menü bedienbar, Palettenwechsel, Maus zuerst | B-218, B-206 | offen (geschrieben 2026-10-09) |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | offen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | offen |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
@@ -78,7 +79,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-701](briefe/B-701.md) | E7 | Verbindungen und Vorspielen | B-301 | offen |
 | [B-702](briefe/B-702.md) | E7 | Vergleich nebeneinander | B-203 | offen |
 | [B-703](briefe/B-703.md) | E7 | Versionen von Karten | B-404 | offen |
-| [B-704](briefe/B-704.md) | E7 | Mockup-Paket ausgeben | B-602 | offen |
+| [B-704](briefe/B-704.md) | E7 | Mockup-Paket ausgeben | B-602 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-705](briefe/B-705.md) | E7 | Vertrag-ZIP und Mockup-Paket einlesen | B-103, B-704 | offen |
 | [B-706](briefe/B-706.md) | E7 | PDF-Bogen | B-704 | offen |
 | [B-801](briefe/B-801.md) | E8 | Claude-Anbindung | B-404 | offen |
