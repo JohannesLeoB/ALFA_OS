@@ -80,6 +80,13 @@ if [ -f ALFAcolor/project.yml ]; then
     row "xcodebuild build" "ERROR" "${PROJ:-no .xcodeproj} · $(first_error "$TMP/xcodebuild.log")"
     excerpt "xcodebuild build" "$TMP/xcodebuild.log"
   fi
+  # App tests (no test host: the app is not launched, nothing is shown or played)
+  if [ -n "$PROJ" ] && xcodebuild -project "$PROJ" -scheme ALFAcolorAppTests -destination 'platform=macOS' -derivedDataPath "$ROOT/.build-xcode/pruefen" CODE_SIGNING_ALLOWED=NO test > "$TMP/xctest.log" 2>&1; then
+    row "xcodebuild test" "OK" "$PROJ · scheme ALFAcolorAppTests · $(grep -E 'Test run with' "$TMP/xctest.log" | tail -n 1 | sed 's/^[^A-Za-z]*//')"
+  else
+    row "xcodebuild test" "ERROR" "${PROJ:-no .xcodeproj} · $(grep -m1 -E 'error:|recorded an issue' "$TMP/xctest.log" | cut -c1-200)"
+    excerpt "xcodebuild test" "$TMP/xctest.log"
+  fi
 else
   row "xcodegen generate" "SKIPPED" "ALFAcolor/project.yml is missing, no Xcode target yet"
   row "xcodebuild build" "SKIPPED" "ALFAcolor/ is missing, no Xcode target to build"
