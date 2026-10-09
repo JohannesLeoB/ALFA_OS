@@ -26,7 +26,7 @@ let package = Package(
         .testTarget(name: "DocumentTests", dependencies: ["Document", "ALFAcolorCore", "Tokens"], exclude: ["Fixtures"]),
         .testTarget(name: "BoardModelTests", dependencies: ["BoardModel", "ALFAcolorCore", "Document", "Geometry"]),
         .testTarget(name: "ThumbnailsTests", dependencies: ["Thumbnails", "Document"]),
-        .testTarget(name: "ImportersTests", dependencies: ["Importers", "ALFAcolorCore", "Document", "BoardModel"]),
+        .testTarget(name: "ImportersTests", dependencies: ["Importers", "ALFAcolorCore", "Document", "BoardModel", "Renderers"]),
         .testTarget(name: "RenderersTests", dependencies: ["Renderers", "ALFAcolorCore"]),
         .testTarget(name: "MotionTests", dependencies: ["Motion"])
     ]

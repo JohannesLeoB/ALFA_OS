@@ -17,3 +17,14 @@
 #   Interactive Fan Deck · MIT · Copyright (c) 2026 Eduard Wieandt · Quelle: https://eduardwieandt.com/playground/fan-deck
 #   (Repository: https://github.com/wieandteduard/interactive-fan-deck · Lizenztext: LICENSE im Quellpaket)
 #   Papiertextur (ambientCG Paper001, CC0) ist nicht übernommen; sie wartet auf Johannes' Wort.
+
+# Fremdes Material, das als Bausteine in der Startbibliothek liegt (Brief B-215), Stand 2026-10-09.
+# Die Quelltexte liegen als Ressource unter ALFAcolor/App/Resources/Starter/source, der Bau erzeugt daraus
+# das Beispiel-Dokument ALFAcolor/App/Resources/Starter/Bausteine.alfacolor. Nur Bauteile, Abläufe und Bewegung,
+# keine Farben aus der Quelle in der App-Oberfläche. Jede Karte trägt Herkunft und MIT-Text im Stück.
+#   motion-primitives · MIT · Copyright (c) 2024 ibelick · Quelle: https://github.com/ibelick/motion-primitives
+#   (Lizenztext: LICENCE.md des Quellpakets; die Datei endet dort mit einer Zeile „app/page.tsx“, die nicht zur Lizenz gehört und nicht übernommen ist.)
+#   Übernommen: components/core/*.tsx (33 Bauteile), Demos aus app/docs/*, hooks/useClickOutside.tsx, hooks/usePreventScroll.tsx.
+#   framer-motion 11.12.0 · MIT · Autor laut package.json: Matt Perry · Quelle: https://github.com/framer/motion/
+#   (Wird zur Laufzeit von cdn.jsdelivr.net geladen, nicht in den Quellen enthalten; die Bewegung der Bausteine läuft darüber.)
+#   Die Icons in runtime/shims.tsx sind eigene Strichzeichnungen, keine Fremdgrafik.
