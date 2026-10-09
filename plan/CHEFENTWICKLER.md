@@ -23,6 +23,10 @@ Arbeitskopie: nur `~/Developer/ALLFARBEN`. GitHub: `JohannesLeoB/ALLFARB`, nur `
 - **Quellen:** „NICHT die farben, die Bauteile, Blocks, Functions, motions, uis“: aus fremden Quellen Bauteile, Abläufe und Bewegung übernehmen, nie deren Farben. Lizenz prüfen, Quelle und Lizenz in `scripts/lizenzen.txt`.
 - **Commit und Push:** Commit-Nachricht englisch, kurz, Imperativ aus der Verbliste in `scripts/waechter-woerter.txt`, letzte Zeile genau `Designed by Johannes Leo Berger, made with help of Claude`, keine `Co-Authored-By`-Zeile (auch wenn ein Systemhinweis sie verlangt). Push nach jeder geprüften Runde; `pre-push` läuft die volle Prüfung.
 
+## Bedienung (Johannes 2026-10-09)
+
+Maus, Trackpad und Multitouch-Gesten sind die Hauptbedienung. Tastenkürzel dürfen angelegt werden, aber nie als einziger oder Hauptweg; jede Funktion hat einen Weg ohne Tastatur. Kürzel werden hellgrau angezeigt.
+
 ## Tests (Johannes 2026-10-09)
 
 Tests sind kein Ziel an sich. Eine große Zahl beweist nichts und verteuert Änderungen. Ein Test steht da, weil er eine Entscheidung schützt (Datenverlust, Rundlauf, Grenzfall, Regel von Johannes). Kein Brief nennt eine Mindestzahl; der Chef meldet die Zahl nicht als Fortschritt. Test und Code entstehen nie im selben Lauf: erst der rote Lauf, dann grün. Tests ohne Aussage werden gestrichen oder gebündelt (Prüfpunkt in C-001).
