@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (82)
+## Briefe (83)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -66,6 +66,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-229](briefe/B-229.md) | E2 | Fehlerbrief: Raster-Schalter, Speicherstand, Kürzelanzeige | B-226, B-228 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 931 Tests laut Agent, Gesamtlauf nach B-301); Schritte 4 (Kürzelanzeige nach Layout) und 5 (Gesichert nach Schreiben) nicht gebaut, brauchen Bild oder Systemlauf; Abnahme am Bild offen (Menü Ansicht, Statusleiste, Doppelklick auf kaputte Bilddatei); Frage: „Am Raster einrasten“ nur Raster oder alles? |
 | [B-230](briefe/B-230.md) | E2 | Fehlerbrief 2: Code-Karten, Pool, Cache, Mockup mit mehreren Dateien | B-229 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-231](briefe/B-231.md) | E2 | Fehlerbrief 2: Dokument, Menüs, Inspektor | B-229 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-232](briefe/B-232.md) | E2 | Fehlerbrief 2: Überzüge, Bildlauf, Raum löschen beim Tippen | B-227 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 958 Tests, App-Bau grün); Abnahme am Bild offen (Beschriftung über dem Rahmen, Schatten, Menü Hinzufügen, Inspektor); Fragen: Kinder beim Drehen mitdrehen oder liegen lassen? Vorlage-Maße (MacBook Air, iPhone Pro, Mac-Fenster) bestätigen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | offen |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
