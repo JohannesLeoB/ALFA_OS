@@ -12,6 +12,8 @@ struct ToolPalette: View {
 
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
+    /// The system colour sampler of the eyedropper. It is started by a click on the tool and shows nothing else.
+    @State private var sampler = NSColorSampler()
 
     var body: some View {
         GlassEffectContainer(spacing: theme.space(.s1)) {
@@ -26,16 +28,29 @@ struct ToolPalette: View {
         .padding(.leading, theme.space(.s6))
     }
 
+    /// Samples a colour on the screen and adds it as a colour field of the document. Cancelling changes nothing.
+    private func startSampler() {
+        let store = interaction.store
+        sampler.show { picked in
+            Task { @MainActor in
+                guard let picked, let color = ColorFieldsSection.rgb(from: Color(nsColor: picked)) else { return }
+                let name = ColorFields.freeName(base: String(localized: "tokens.newName"), in: store.document.tokenSets)
+                try? store.changeTokenSets(nameKey: "undo.color.add") { try ColorFields.add(name: name, color: color, to: &$0) }
+            }
+        }
+    }
+
     private func button(_ tool: Tool) -> some View {
         let active = interaction.tools.active == tool
         // Active: filled with the text colour and the symbol in the content colour, as the contract's control rule says.
         let ink: Color = active ? theme.color(.surfaceContent, scheme) : theme.color(.text, scheme)
+        let usable = tool.isWired || tool == .eyedropper
         return Button {
-            shell.pick(tool, in: interaction, canvas: canvas)
+            if tool == .eyedropper { startSampler() } else { shell.pick(tool, in: interaction, canvas: canvas) }
         } label: {
             Image(systemName: tool.symbol)
                 .themeText(theme.text(.body))
-                .foregroundStyle(tool.isWired ? ink : theme.color(.textMuted, scheme))
+                .foregroundStyle(usable ? ink : theme.color(.textMuted, scheme))
                 .frame(width: theme.space(.s6), height: theme.space(.s6))
                 .contentShape(.capsule)
         }
