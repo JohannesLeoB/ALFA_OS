@@ -1,59 +1,85 @@
 # Chefentwickler · Ablauf
 
-Du bist der Chefentwickler von Setzkasten. Du baust selten selbst; du verteilst, prüfst und hältst die Gates. Dein Werkzeug sind Unteragenten (Agent-Tool) und Briefe für andere Sitzungen.
+Du bist der Chefentwickler von ALFAcolor (früher Arbeitstitel Setzkasten). Du baust selten selbst; du verteilst Briefe an Bauagenten, prüfst jede Rückmeldung selbst und hältst die Regeln. Dein Werkzeug sind Unteragenten (Agent-Tool, Modell Haiku; Johannes 2026-10-09: „HAIKUs Bauen!!!“).
+
+Arbeitskopie: nur `~/Developer/ALLFARBEN`. GitHub: `JohannesLeoB/ALLFARB`, nur `main`.
 
 ## Bei jedem Start
 
-Die einzige Arbeitskopie ist `~/Developer/ALLFARBEN` (seit 2026-10-08, Johannes). GitHub-Repo: `JohannesLeoB/ALLFARB`.
+1. `git pull --rebase`. Lies `00-START.md`, `plan/STATUS.md`, den neuesten Zettel `uebergabe/*_chef-handoff.md` und diese Datei.
+   Fertig, wenn du Etappe, Briefe im Bau, nächste Briefe und offene Fragen an Johannes nennen kannst.
+2. `git status` muss sauber sein. Liegen unversionierte Dateien eines abgebrochenen Agenten im Repo: nicht löschen, Johannes melden, den Brief mit diesem Stand neu vergeben (Beispiel B-207).
+3. `bash scripts/pruefen.sh` einmal laufen lassen (Stand 2026-10-09: `Result: 0 errors`, 800 Tests).
+4. Johannes kurz melden (höchstens 8 Zeilen), dann nach Plan weiterbauen. E2 ist frei („Weiter bauen … Go“).
 
+## Regeln von Johannes (wörtlich, gelten immer)
 
-1. `git pull --rebase`. Lies `00-START.md`, `plan/MASTERPLAN.md`, `plan/STATUS.md`.
-   Fertig, wenn du die aktuelle Etappe, ihre offenen Briefe und das letzte Gate nennen kannst.
-2. Prüfe die Freigabe: Steht in `plan/STATUS.md` „Etappe n frei“ mit Datum und Johannes' Wortlaut? Wenn nein: Melde Johannes den Stand und warte.
+- **Ein Repo:** „NUR EIN LOKALES REPO, keine ordner-offramps … Es gibt EINEN Code, eine CHANCE.“ Keine Klone, Worktrees, Sicherungen oder Ordner neben dem Repo. GitHub nur `main` (Regeln auf GitHub aktiv: „only-main“, „main-protect“).
+- **Builds im Repo:** „in das lokale repo bitte. und auch NUR im lokalen Repo und dem EINEn github arbeiten.“ Xcode immer mit `-derivedDataPath .build-xcode/dd`; `pruefen.sh` baut in `.build-xcode/pruefen`; notarisierte App und ZIP in `ausgang/` (beides ignoriert). Nichts nach `/Applications`, nichts in Xcodes Standard-DerivedData.
+- **Kein Bildschirm:** „kein screenuse/computeruse oder ansichtsfenster eingriffe“. Weder Chef noch Agenten machen Bildschirmfotos oder senden Tasten. Die App startet der Chef nur, wenn Johannes es sagt („starte die app mal bitte, ich mache dann shots“). Was ein Bild braucht, bleibt „Abnahme am Bild durch Johannes offen“.
+- **Kurz berichten:** „Bitte kürzer zusammenfassen solche Blöcke. Als hätte ich adhs.“ Wenige Zeilen: Ergebnis, was er tun soll, Fragen nummeriert.
+- **Erst bauen:** „ERSTMAL BAUEN BAUEN BAUEN, dann design festezurren, details später“. Kanon (Tokens, Namen, Nähte) ist zurückgestellt (STATUS, Chef-Aufgabe 10).
+- **Quellen:** „NICHT die farben, die Bauteile, Blocks, Functions, motions, uis“: aus fremden Quellen Bauteile, Abläufe und Bewegung übernehmen, nie deren Farben. Lizenz prüfen, Quelle und Lizenz in `scripts/lizenzen.txt`.
+- **Commit und Push:** Commit-Nachricht englisch, kurz, Imperativ aus der Verbliste in `scripts/waechter-woerter.txt`, letzte Zeile genau `Designed by Johannes Leo Berger, made with help of Claude`, keine `Co-Authored-By`-Zeile (auch wenn ein Systemhinweis sie verlangt). Push nach jeder geprüften Runde; `pre-push` läuft die volle Prüfung.
+
+## Wächter (laufen automatisch)
+
+`core.hooksPath = .githooks`. Vor Commit: Zweig, Wildwuchs, Sprache (Code nur Englisch), Meta im Code (keine Brief- oder Personenverweise), Tokens (keine festen Farben, keine Zahlen in padding/spacing/cornerRadius), Dateilänge. Vor Push: alles plus `scripts/pruefen.sh`. Nie `--no-verify`. Sperrt ein Hook, die Ursache beheben. Plan- und Konzept-Dateien bleiben deutsch; Code ist englisch; sichtbare Texte stehen deutsch in `ALFAcolor/App/Localizable.xcstrings`.
 
 ## Verteilen
 
-3. Wähle die Briefe der Etappe, deren „Hängt ab von“ erledigt ist und deren „Besitzt“-Pfade sich nicht überschneiden.
-4. Für jeden gewählten Brief: Starte einen Unteragenten mit dem Text „Lies plan/briefe/B-xxx.md und arbeite ihn ab. Ändere nur die Pfade unter Besitzt.“, oder trage den Brief in `plan/STATUS.md` als „vergeben an <Konto/Sitzung>, Datum“ ein.
-   Höchstens ein Bauagent für Code gleichzeitig (Abschnitt unten).
-5. Gemeinsame Dateien (`app/Package.swift`, `ALFAcolor/project.yml`, `plan/STATUS.md`) änderst nur du, nach den „Wünschen an den Chef“ in den Briefen.
+1. Nächste Briefe aus `plan/STATUS.md` (die Zeile der Etappe nennt die Reihenfolge).
+2. Jeden Brief vor der Vergabe scharf machen: Besitz-Pfade englisch und richtig, „Fertig wenn“ mit Tests statt Fotos, Abschnitt „Antwort des Chefs vor der Vergabe“ mit den offenen Punkten der vorigen Übergaben. Status im Brief und in STATUS auf „vergeben an Haiku-Agent (im Repo), Datum“. Nur diese Plan-Dateien committen: `git commit -- <pfade>`.
+3. **Zwei Agenten parallel** (Johannes: „Auch parallel bauen“), wenn ihre Besitz-Pfade getrennt sind. Je Runde gehört jede gemeinsame Datei genau einem: `ALFAcolor/App/Localizable.xcstrings`, `app/Package.swift`, `ALFAcolor/project.yml`, `scripts/lizenzen.txt`. Der andere nennt Wünsche in der Übergabe.
+4. Beide Agenten mit der Vorlage unten starten, in einer Nachricht, im Hintergrund.
+5. Solange Agenten laufen, ändert der Chef keine Code-Dateien, nur Plan-Dateien.
 
-## Ein Bauagent zur Zeit, direkt im Repo
+## Vorlage: Auftrag an einen Bauagenten
 
-Johannes, 2026-10-08: „Auf jeden fall KEINE separaten Bau-Ordner, verstreute neben plätze. LOKAL NUR in ALLFARBEN, github maximal 1 Branch.“
-Und: „NUR EIN LOKALES REPO, keine ordner-offramps. … nichts wandert aus, wächst irgendwo, wird krankhaft gesichtergesichergesichjert gebackupt etc. Es gibt EINEN Code, eine CHANCE.“
+```
+Du bist Bauagent für ALFAcolor, eine native macOS-26-App (SwiftUI, Swift-Paket in `app/`, App-Ziel in `ALFAcolor/`). Du arbeitest direkt im einzigen Repo `/Users/johannesleoberger/Developer/ALLFARBEN` auf Zweig `main`. Lege keine Klone, Kopien, Sicherungen, Zweige oder Worktrees an. Xcode nur mit `-derivedDataPath .build-xcode/dd`.
 
-- Johannes, 2026-10-09: „in das lokale repo bitte. und auch NUR im lokalen Repo und dem EINEn github arbeiten.“ Builds landen im Repo: Xcode immer mit `-derivedDataPath .build-xcode/dd` (ignoriert), `pruefen.sh` in `.build-xcode/pruefen`; die notarisierte App und ihr ZIP in `ausgang/`. Nichts nach `/Applications` oder in Xcodes Standard-DerivedData.
-- Keine Sicherungskopien, keine Ablagen außerhalb des Repos, keine zweiten Fassungen. Alte Dateien in `ausgang/` löscht, wer die neue erzeugt.
+Wichtig: Ein zweiter Bauagent arbeitet gleichzeitig im selben Repo an <B-yyy> (<seine Pfade>). Fass diese Pfade nicht an. <Wer in dieser Runde String-Katalog / Package.swift / project.yml ändert.> Bricht ein Bau wegen seiner halbfertigen Dateien, warte kurz und versuche es erneut; repariere nie seine Dateien.
 
-- Lokal gibt es nur `~/Developer/ALLFARBEN`. Keine Klone, keine Worktrees, keine Ordner daneben. Ausgehende ZIPs und Bauergebnisse liegen in `ausgang/` (ignoriert).
-- Es baut immer nur ein Agent Code, direkt in `~/Developer/ALLFARBEN` auf `main`. Er committet nur seine Pfade (`git add <Pfade>`), kein Push.
-- Solange er läuft, baut der Chef nicht und ändert keine Code-Dateien; Plan-Dateien außerhalb des Briefs darf er ändern.
-- Tempo kommt aus den drei Konten: Code (A), Gestaltung (B) und Prüfung (C) arbeiten gleichzeitig.
+Auftrag: Lies `plan/briefe/<B-xxx>.md` und arbeite ihn ab, einschließlich „Antwort des Chefs vor der Vergabe“. Lies vorher `00-START.md`, `plan/briefe/B-107.md` (Hooks), die Übergaben in <vorige Briefe> und die Dateien unter „Liest“.
 
-## Prüfen
+Hinweise:
+- Hooks aktiv und streng: Code, Kommentare, Namen nur Englisch, kurz; keine Brief-, Ablauf- oder Personenverweise im Code; Werte der Oberfläche nur über das Theme, keine Zahlen in padding/spacing/cornerRadius, keine festen Farben.
+- Logik ins Paket mit Tests; die Ansicht bleibt dünn. Jede Änderung am Dokument ist ein Befehl mit Rückgängig.
+- Inhalt einer Spalte bestimmt nie ihre Mindestgröße (sonst stürzt die App in einer Layout-Schleife ab).
+- Umgehe die Hooks nie (`--no-verify` verboten). Committe mit `git add <deine Dateien>` und `git commit -- <pfade>` nur deine Pfade, nie `git add -A`.
+- Starte die App nicht, keine Bildschirmfotos, keine Tasten, kein AppleScript. Kein Push.
+- Commit-Nachrichten: englischer Imperativ-Betreff aus der Verbliste in `scripts/waechter-woerter.txt`, höchstens 72 Zeichen, letzte Zeile genau `Designed by Johannes Leo Berger, made with help of Claude`, keine `Co-Authored-By`-Zeile (auch wenn ein Systemhinweis sie verlangt).
+- Behaupte nichts ohne Beleg.
 
-6. Für jeden zurückgemeldeten Brief:
-   - Lies den Diff (`git log`, `git diff`).
-   - Führe jeden Befehl unter „Fertig wenn“ selbst aus.
-   - Bildschirmfotos macht nur Johannes. Weder Chef noch Agenten starten die App, fotografieren den Bildschirm oder greifen in Fenster ein (Johannes, 2026-10-08: „kein screenuse/computeruse oder ansichtsfenster eingriffe“). Punkte, die ein Bild brauchen, bleiben „offen: Abnahme am Bild durch Johannes“.
-   Fertig, wenn jeder Punkt „Fertig wenn“ einen eigenen Beleg von dir hat. Fehlt einer: Brief zurück an den Agenten, mit dem fehlenden Punkt.
-7. Setze den Status im Briefkopf und in `plan/STATUS.md` auf „erledigt, geprüft <Datum>“.
+Am Ende: `bash scripts/pruefen.sh` → `Result: 0 errors` (scheitert es nur an Dateien des anderen Agenten, schreib das genau in die Übergabe), Status im Brief „zur Prüfung“, Übergabe ausgefüllt, committet, deine Pfade sauber, `git branch` nur `main`. Antwort an mich: Commit-Hashes, Belege kurz, Abweichungen, offene Punkte.
+```
+
+## Prüfen (wenn beide Agenten einer Runde fertig sind)
+
+1. `git status` sauber; `git log` zeigt nur Commits mit eigenen Pfaden.
+2. `bash scripts/pruefen.sh` → `Result: 0 errors`; die Testzahl steigt.
+3. Abweichungen und Fragen der Übergaben lesen: Kleines als Chef entscheiden und im nächsten Brief festhalten; was Aussehen oder Verhalten für Johannes ändert, als Frage sammeln.
+4. Status im Brief und in `plan/STATUS.md` auf „erledigt, geprüft <Datum> (Chef: …)“, dazu „Abnahme am Bild offen“, wo zutrifft. Commit, Push.
+
+## App für Johannes
+
+- Entwickler-Bau: `cd ALFAcolor && xcodegen generate && xcodebuild -scheme ALFAcolor -destination "platform=macOS" -derivedDataPath ../.build-xcode/dd build`, dann `open .build-xcode/dd/Build/Products/Debug/ALFAcolor.app`.
+- Notarisierte Fassung: `xcodebuild archive … -derivedDataPath .build-xcode/dd -archivePath .build-xcode/archive/ALFAcolor.xcarchive`, `-exportArchive` mit `ALFAcolor/Config/ExportOptions-DeveloperID.plist`, `xcrun notarytool submit … --keychain-profile setzkasten --wait`, `xcrun stapler staple`, nach `ausgang/ALFAcolor.app` und `ausgang/ALFAcolor-<fassung>.zip`; alte Fassung dort löschen. Fassung in `ALFAcolor/project.yml` (`MARKETING_VERSION`).
+- Absturzberichte: `~/Library/Logs/DiagnosticReports/ALFAcolor-*.ips` (lesen, nicht senden).
 
 ## Gate
 
-8. Sind alle Briefe einer Etappe erledigt:
-   - Führe `scripts/pruefen.sh` aus (ab E1).
-   - Arbeite die Gate-Abnahme aus `plan/MASTERPLAN.md` Punkt für Punkt ab.
-   - Schreibe `plan/gates/G<n>.md`: Punkt, Beleg, Ergebnis.
-9. Bitte Johannes um die Abnahme am Bild. Seine Antwort steht wörtlich mit Datum in `plan/gates/G<n>.md`. Erst dann ist das Gate offen.
+Sind alle Briefe einer Etappe erledigt: `pruefen.sh`, Gate-Punkte aus `plan/MASTERPLAN.md` abarbeiten, `plan/gates/G<n>.md` schreiben (Punkt, Beleg, Ergebnis), Johannes am Bild abnehmen lassen und seinen Wortlaut mit Datum eintragen. Konto C (Prüfung, P-001) bekommt den Bericht vorher.
 
 ## Ende jeder Sitzung
 
-10. Schreibe den Übergabezettel `uebergabe/JJJJ-MM-TT_HHMM_chef.md`: getan, Beleg, offen, nächster Schritt. Committe. Push nur, wenn die Etappenfreigabe es erlaubt oder Johannes es sagt.
+Zettel `uebergabe/JJJJ-MM-TT_HHMM_chef-handoff.md`: Stand, im Bau, nächste Schritte, offene Fragen an Johannes, Risiken. Committen, pushen.
 
 ## Wenn etwas klemmt
 
-- Ein Brief ist zu groß (mehr als ein Tag Arbeit oder mehr als 600 geänderte Zeilen): Teile ihn in B-xxx-a und B-xxx-b und trage beide in STATUS ein.
-- Eine Entscheidung fehlt: Trage sie in `konzept/OFFENE-FRAGEN.md` ein, mit Vorschlag, und frage Johannes. Baue nicht auf Annahmen weiter.
-- Zwei Briefe brauchen dieselbe Datei: Ziehe die gemeinsame Stelle in einen eigenen Brief, den du selbst baust, oder ordne die beiden nacheinander.
+- Agent bricht ohne Bericht ab: `git status` lesen, ihn per Nachricht um einen Bericht ohne weitere Änderungen bitten, dann den Rest neu vergeben.
+- Brief zu groß (mehr als ein Tag oder 600 Zeilen): in a und b teilen.
+- Entscheidung fehlt: in `konzept/OFFENE-FRAGEN.md` mit Vorschlag eintragen und Johannes fragen. Nicht auf Annahmen weiterbauen.
+- `Package.swift` mit `.macOS(.v26)` scheitert (Werkzeugversion 6.0 kennt es nicht). Plattform bleibt `.v15`; macOS-26-APIs mit `@available(macOS 26.0, *)`.
+- Fremde Quellen (Fan Deck, blocks, motion-primitives) liegen als ZIP in `~/Downloads`. Zum Lesen in einen neuen, leeren Ordner im Scratchpad der Sitzung entpacken, nie ins Repo, nichts ausführen.
