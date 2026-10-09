@@ -13,6 +13,10 @@ Quelle der Angaben: Briefköpfe in `plan/briefe/`, `git log` bis 2026-10-09 23:4
 - B-822: Labor-Vorschau, React-Karten über den TypeScript-Pfad; Commits `d90fac5`, `4159136`; nicht geprüft.
 
 ## Nächste Schritte
+0. Abnahme Johannes 2026-10-10 (Bilder der 1.0.0), Vorrang vor allem anderen:
+   - Linke Spalte: Werkzeuge in Symbolgruppen mit Hover-Hinweis; Bausteinsammlung (Farbpaletten wie in Photoshop, Rahmen, Maße, Einrasten, Knöpfe, Pillen, Schalter, Standardelemente). Token-Satz-Knöpfe brechen in Silben.
+   - Rechte Spalte (Inspektor) bricht: Werte rechts abgeschnitten, Beschriftungen links abgeschnitten. Unbenutzbar.
+   - Code-Player: zu kompliziert. Ziel: alles einfügen, automatisch erkennen, kurze Fragen, dann spielbare Karte; auf der Leinwand ablegbar und eigenständig; Claude-API liest, versteht, baut nach, bearbeitet. Heute: "No component found", "Keine CSS-Variablen gefunden".
 1. Reparaturbrief aus den 4 bekannten Fehlern von B-821 (Sollbreiten klären, siehe Offen); B-822 prüfen; Nachtrag `.jsx`-Karten, mehrzeilige Importe in `stripModules`, `useReducer`/`useContext`/`forwardRef`.
 3. Spezifikation Code-Player aus `plan/gates/codeplayer-1..5` und `konzept/10-MODUL-CODEPLAYER.md` schreiben (M1 bis M5), offene Punkte mit Johannes klären.
 4. Anschlüsse: Sicherung/Journal (B-812), Reiter KI mit Stufen (B-814b), Chat (B-808b, wartet auf Design D-008).
