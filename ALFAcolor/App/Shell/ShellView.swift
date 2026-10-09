@@ -1,5 +1,6 @@
 import SwiftUI
 import AppTheme
+import ALFAcolorCore
 import BoardModel
 import Importers
 
@@ -14,6 +15,10 @@ struct ShellView: View {
     @State private var canvas: CanvasController
     @State private var interaction: CanvasInteraction
     @State private var importer: ImportCoordinator
+    /// Where the canvas starts in window coordinates. Views on top of the canvas measure their area against it.
+    @State private var canvasOrigin = CGPoint.zero
+    /// The first thing that reading the document noticed, shown in the status bar.
+    private let readNotice: String?
 
     /// The window shows the document of `session`. The undo history belongs to this window.
     init(session: DocumentSession) {
@@ -21,6 +26,7 @@ struct ShellView: View {
         _canvas = State(initialValue: controller)
         _interaction = State(initialValue: CanvasInteraction(controller: controller))
         _importer = State(initialValue: ImportCoordinator(store: session.store))
+        readNotice = session.readReport?.statusNotice
     }
 
     var body: some View {
@@ -31,16 +37,27 @@ struct ShellView: View {
                 CanvasSurface(controller: canvas, interaction: interaction, importer: importer,
                               onTogglePalettes: { shell.togglePalettes() }, labClosings: shell.labClosings)
                     .overlay { ContextBarHost(canvas: canvas) }
-                    .overlay { if let lab = shell.openLabModel { LabView(model: lab, onClose: { shell.closeLab() }) } }
+                    .onGeometryChange(for: CGPoint.self, of: { $0.frame(in: .global).origin }) { canvasOrigin = $0 }
                 if shell.statusBarVisible {
                     StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError,
                                   zoomPercent: canvas.zoomPercent, selectionCount: canvas.store.selectedItems.count,
-                                  notice: shell.labNotice)
+                                  notice: shell.labNotice ?? readNotice)
                 }
             }
             // On the stack, not on the canvas: the canvas ignores the top safe area, so its overlays
-            // would reach under the toolbar, where the blob menu cannot be clicked.
-            .overlay { if shell.blobMode { BlobMenuHost(shell: shell, store: canvas.store) } }
+            // would reach under the toolbar, where they cannot be clicked. The lab and the blob menu sit here.
+            .overlay {
+                if let lab = shell.openLabModel {
+                    LabView(model: lab, onClose: { shell.closeLab() })
+                        .keepsCanvasScroll("lab", canvas, origin: canvasOrigin)
+                }
+            }
+            .overlay {
+                if shell.blobMode {
+                    BlobMenuHost(shell: shell, store: canvas.store)
+                        .keepsCanvasScroll("blob", canvas, origin: canvasOrigin)
+                }
+            }
             // Content never sets the minimum size of a split column; a changing minimum loops the window layout.
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
             .inspector(isPresented: $shell.inspectorVisible) {
@@ -59,5 +76,31 @@ struct ShellView: View {
         .onChange(of: canvas.store.revision) {
             shell.closeLabIfCardGone(in: canvas.store)
         }
+    }
+}
+
+extension View {
+    /// Keeps the canvas below from taking the scroll wheel while this view is shown. The area is in canvas points.
+    func keepsCanvasScroll(_ name: String, _ canvas: CanvasController, origin: CGPoint) -> some View {
+        modifier(CanvasScrollKeep(name: name, canvas: canvas, origin: origin))
+    }
+}
+
+private struct CanvasScrollKeep: ViewModifier {
+    let name: String
+    let canvas: CanvasController
+    let origin: CGPoint
+
+    // `Self.Content` is the modifier's input: a bare `Content` means the model type of ALFAcolorCore here.
+    func body(content: Self.Content) -> some View {
+        content
+            .onGeometryChange(for: Rect.self, of: { proxy in
+                let frame = proxy.frame(in: .global)
+                return Rect(x: Double(frame.minX - origin.x), y: Double(frame.minY - origin.y),
+                            w: Double(frame.width), h: Double(frame.height))
+            }) { area in
+                canvas.setScrollKeep(name, area)
+            }
+            .onDisappear { canvas.setScrollKeep(name, nil) }
     }
 }

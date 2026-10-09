@@ -3,7 +3,7 @@ import AppTheme
 import BoardModel
 
 /// Status bar at the bottom. Information only, no switches.
-/// The save state, the zoom and the selection count are real values. The grid and the unit are placeholders.
+/// The save state, the zoom, the selection count and the notice are real values. Grid and unit are in the inspector only.
 struct StatusBarView: View {
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
@@ -15,7 +15,7 @@ struct StatusBarView: View {
     let zoomPercent: Int
     /// Number of selected items. Zero shows the word for none.
     let selectionCount: Int
-    /// A short notice as a catalog key, for example after a lab action. nil shows nothing.
+    /// A short notice: a catalog key, for example after a lab action, or a warning text from reading. nil shows nothing.
     var notice: String?
 
     var body: some View {
@@ -23,8 +23,6 @@ struct StatusBarView: View {
             Divider()
             HStack(spacing: theme.space(.s5)) {
                 field("status.zoom") { RollingText(text: "\(zoomPercent) %", style: .caption) }
-                field("status.grid", "status.grid.value")
-                field("status.unit", "status.unit.value")
                 field("status.selection") {
                     if selectionCount > 0 {
                         RollingText(text: "\(selectionCount)", style: .caption)
@@ -54,6 +52,7 @@ struct StatusBarView: View {
         switch saveState {
         case .saved: "status.saveState.saved"
         case .modified: "status.saveState.modified"
+        case .new: "status.saveState.new"
         case .failed: "status.saveState.failed"
         }
     }

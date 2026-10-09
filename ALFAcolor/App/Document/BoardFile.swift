@@ -10,18 +10,21 @@ import Document
 /// Reading and creating work on any thread: they only hold the parsed value. The session with its store
 /// is made on first use on the main actor, when the window asks for it. Its last state is kept in a box
 /// that any thread can read, because the system takes the snapshot for a save on a background queue.
-final class BoardFile: @preconcurrency ReferenceFileDocument, @unchecked Sendable {
+final class BoardFile: ReferenceFileDocument, @unchecked Sendable {
     static var readableContentTypes: [UTType] { [.alfacolor] }
 
     private let opened: ALFAcolorDocument
     private let report: ReadReport?
+    /// False for a new document: it is not in a file yet.
+    private let isSaved: Bool
     private let latest: SnapshotBox
 
-    @MainActor private(set) lazy var session = DocumentSession(document: opened, report: report, box: latest)
+    @MainActor private(set) lazy var session = DocumentSession(document: opened, report: report, box: latest, isSaved: isSaved)
 
     init() {
         opened = ALFAcolorDocument()
         report = nil
+        isSaved = false
         latest = SnapshotBox(DocumentSession.Snapshot(document: opened, revision: 0))
     }
 
@@ -29,6 +32,7 @@ final class BoardFile: @preconcurrency ReferenceFileDocument, @unchecked Sendabl
         let result = try DocumentPackage.read(from: configuration.file)
         opened = result.document
         report = result.report
+        isSaved = true
         latest = SnapshotBox(DocumentSession.Snapshot(document: opened, revision: 0))
     }
 
