@@ -3,7 +3,6 @@ import Security
 
 /// Keeps secrets in the keychain, one generic password per account. The service is the bundle ID of the app,
 /// unless a test gives another one.
-/// No caller yet: the account connection will be the first one to read and write secrets here.
 struct KeychainStore {
     /// The service of the app. Only the app itself writes to it.
     static let appService = Bundle.main.bundleIdentifier ?? "com.johannesleoberger.alfacolor"
