@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (83)
+## Briefe (84)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -67,9 +67,10 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-230](briefe/B-230.md) | E2 | Fehlerbrief 2: Code-Karten, Pool, Cache, Mockup mit mehreren Dateien | B-229 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1007 Tests, App-Bau grün); Abnahme am Bild offen (Vorschaubild animierter Karten, Doppelklick Labor, Labor nach ⌘Z); Entscheidung: Endlosschleife im Karten-Skript, WebKit-Prozess lässt sich mit der öffentlichen WebPage-API nicht beenden (Vorschlag: hinnehmen); Test endlessScriptTimesOut lässt Dauerlast zurück (B-233); Inline-Werte live in der Vorschau offen |
 | [B-231](briefe/B-231.md) | E2 | Fehlerbrief 2: Dokument, Menüs, Inspektor | B-229 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1007 Tests, App-Bau grün); offen: „Gesichert“ erst nach Schreiben (Fund 10), Symbol bleibt Platzhalter; kein Werkzeug-Menü (Entscheidung Chef) |
 | [B-232](briefe/B-232.md) | E2 | Fehlerbrief 2: Überzüge, Bildlauf, Raum löschen beim Tippen | B-227 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1007 Tests, App-Bau grün); Klick-Beleg fehlt (unsichtbare Fenster), Fund 12 Rückgängig eines Raums während der Texteingabe offen |
+| [B-233](briefe/B-233.md) | E2 | Fehlerbrief 3: Testlast, Raum rückgängig beim Tippen | B-230 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 958 Tests, App-Bau grün); Abnahme am Bild offen (Beschriftung über dem Rahmen, Schatten, Menü Hinzufügen, Inspektor); Fragen: Kinder beim Drehen mitdrehen oder liegen lassen? Vorlage-Maße (MacBook Air, iPhone Pro, Mac-Fenster) bestätigen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1007 Tests, App-Bau grün); Abnahme am Bild offen (Spalten, Grundlinien, Ränder, Einrasten, Inspektor, Vorlage); Fragen: Grundlinienfarbe (Vertrag hat kein Blau, nimmt Akzent), Stück verlässt Rahmen behält Ziele bis Loslassen, Vorlage als Kopie oder Verweis, Meldung bei unlesbarer Vorlagendatei |
-| [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
+| [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-304](briefe/B-304.md) | E3 | Abstände zeigen und Messen | B-202, B-303 | offen |
 | [B-305](briefe/B-305.md) | E3 | Werkzeugpalette und Werkzeugoptionen | B-204 | offen |
 | [B-401](briefe/B-401.md) | E4 | Renderer-Protokoll und Web-Renderer | B-205 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 615 Tests; WebPage macOS 26, JavaScript auch beim Vorschaubild an); Abnahme am Bild offen |
@@ -78,7 +79,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-404](briefe/B-404.md) | E4 | Labor | B-403 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 771 Tests; Regler live ohne Neuladen belegt); Anschluss an Taste L und Karte in B-217; Verlauf vorerst im Speicher |
 | [B-405](briefe/B-405.md) | E4 | Hinweise im Labor | B-404 | offen |
 | [B-501](briefe/B-501.md) | E5 | Farbfelder und Pipette | B-208 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1007 Tests, App-Bau grün); Abnahme am Bild offen (Pipette aus Safari, Liste, Kontextmenü, Farbwähler); ungültiger Name beim Umbenennen wird still verworfen |
-| [B-502](briefe/B-502.md) | E5 | Farben aus Bild | B-501 | offen |
+| [B-502](briefe/B-502.md) | E5 | Farben aus Bild | B-501 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-503](briefe/B-503.md) | E5 | Kontrastmatrix | B-501 | offen |
 | [B-504](briefe/B-504.md) | E5 | Textstile und Schriftreihe | B-208 | offen |
 | [B-505](briefe/B-505.md) | E5 | Bausteine mit Varianten | B-205, B-507 | offen |
