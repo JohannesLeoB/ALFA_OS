@@ -7833,6 +7833,61 @@
           }
         }
       }
+    },
+    "lab.hint.styleOnly" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es gibt nur Stil, aber kein HTML"
+          }
+        }
+      }
+    },
+    "lab.hint.noComponent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es fehlt eine Komponente"
+          }
+        }
+      }
+    },
+    "lab.hint.insertScript" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Script-Zeile einfügen"
+          }
+        }
+      }
+    },
+    "lab.hint.blockedHost %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lädt hier nicht: %@ ist gesperrt"
+          }
+        }
+      }
+    },
+    "lab.hint.library %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es fehlt die Script-Zeile für %@"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
