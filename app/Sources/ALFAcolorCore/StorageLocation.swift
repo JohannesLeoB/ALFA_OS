@@ -45,8 +45,15 @@ public enum StorageLocation {
         case .keepTarget:
             return target
         case .replace, .setAside:
-            try fileManager.moveItem(at: target, to: asideURL(for: target, date: date, fileManager: fileManager))
-            try fileManager.moveItem(at: conflict.oldURL, to: target)
+            let aside = asideURL(for: target, date: date, fileManager: fileManager)
+            try fileManager.moveItem(at: target, to: aside)
+            do {
+                try fileManager.moveItem(at: conflict.oldURL, to: target)
+            } catch {
+                // Put the file of the app folder back, so that it is not left under a time stamp name.
+                try? fileManager.moveItem(at: aside, to: target)
+                throw error
+            }
             return target
         case .rename(let name):
             let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
