@@ -45,6 +45,7 @@ struct SidebarView: View {
                 .buttonStyle(.borderless)
                 .help("layer.new")
             }
+            ItemList(store: store)
             Section("sidebar.tokenSet") {
                 Label("sidebar.noTokenSet", systemImage: "swatchpalette")
                     .foregroundStyle(theme.color(.textMuted, scheme))

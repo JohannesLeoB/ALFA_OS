@@ -66,6 +66,8 @@ struct PositionField: View {
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
     @State private var draft = ""
+    /// The text the field showed when it was last synced. A draft that differs from it was typed by the user.
+    @State private var synced = ""
     @State private var invalid = false
     @FocusState private var focused: Bool
 
@@ -78,9 +80,15 @@ struct PositionField: View {
                 .onSubmit(commit)
                 .help(invalid ? "inspector.invalid" : "")
         }
-        .onChange(of: shared, initial: true) { draft = text; invalid = false }
-        .onChange(of: selection) { draft = text; invalid = false }
-        .onChange(of: unit) { draft = text; invalid = false }
+        .onChange(of: shared, initial: true) { if draft == synced { sync() } }
+        .onChange(of: selection) { old, _ in
+            // A draft typed before the selection changed is applied to the items it was typed for.
+            if draft != synced, let points = unit.points(from: draft) {
+                _ = try? store.perform(field, to: points, on: old)
+            }
+            sync()
+        }
+        .onChange(of: unit) { sync() }
         .onChange(of: draft) { invalid = false }
         .onChange(of: focused) { _, isFocused in
             if !isFocused { commit() }
@@ -89,6 +97,13 @@ struct PositionField: View {
 
     /// The shared value in the unit, or nothing when the items differ.
     private var text: String { shared.value.map { unit.text(points: $0) } ?? "" }
+
+    /// Shows the shared value again and drops the draft.
+    private func sync() {
+        synced = text
+        draft = text
+        invalid = false
+    }
 
     /// Sets the field from the draft, but only when the draft was edited: leaving an unchanged field must not
     /// round the value. A draft that is not a number is kept and marked.
@@ -99,8 +114,7 @@ struct PositionField: View {
             return
         }
         _ = try? store.perform(field, to: points)
-        draft = text
-        invalid = false
+        sync()
     }
 }
 
