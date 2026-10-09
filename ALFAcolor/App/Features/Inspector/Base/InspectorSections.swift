@@ -201,6 +201,10 @@ struct RoomSection: View {
                 get: { interaction.showsDistances },
                 set: { interaction.showsDistances = $0 }
             ))
+            Toggle("inspector.room.snapSpacing", isOn: Binding(
+                get: { interaction.snap.snapsToSpacing },
+                set: { interaction.snap.snapsToSpacing = $0 }
+            ))
         }
     }
 }
