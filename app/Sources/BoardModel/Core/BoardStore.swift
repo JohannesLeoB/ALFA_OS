@@ -75,6 +75,14 @@ public final class BoardStore {
         return true
     }
 
+    /// Stores the bytes of an image file in the document and returns the asset ID (the hash of the bytes).
+    /// It is no undo step. The file is saved with the document even when nothing refers to it yet.
+    /// A command that refers to the ID, for example `setContent`, is the change.
+    @discardableResult
+    public func addAsset(_ data: Data, fileExtension: String) -> String {
+        document.assets.add(data, fileExtension: fileExtension)
+    }
+
     private func switchSpace(to id: String) throws -> Bool {
         guard document.board.spaces.contains(where: { $0.id == id }) else { throw CommandError.unknownSpace(id) }
         guard id != activeSpaceID else { return false }

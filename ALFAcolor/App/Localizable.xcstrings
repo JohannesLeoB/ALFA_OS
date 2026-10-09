@@ -2268,6 +2268,17 @@
         }
       }
     },
+    "undo.duplicate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplizieren"
+          }
+        }
+      }
+    },
     "undo.group" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2385,6 +2396,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Größe ändern"
+          }
+        }
+      }
+    },
+    "undo.setContent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inhalt ändern"
           }
         }
       }

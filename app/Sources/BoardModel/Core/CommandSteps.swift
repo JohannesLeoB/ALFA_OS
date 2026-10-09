@@ -72,6 +72,7 @@ struct StepScope {
         case .move(let ids, let dx, let dy): try move(ids, dx: dx, dy: dy, into: &out)
         case .resize(let rects): try resize(rects, into: &out)
         case .reorder(let ids, let how): try reorder(ids, how, into: &out)
+        case .setContent(let id, let content): try setContent(id, content, into: &out)
         case .group(let ids, let title, let groupID): try group(ids, title: title, groupID: groupID, into: &out)
         case .ungroup(let ids): try ungroup(ids, into: &out)
         case .setLocked(let ids, let value):
@@ -194,6 +195,13 @@ struct StepScope {
         out.items.removeAll { doomed.contains($0.id) }
         out.touched = doomed
         out.selection = freed.subtracting(doomed)
+    }
+
+    private func setContent(_ id: ItemID, _ content: Content, into out: inout StepResult) throws {
+        let target = try item(id)
+        guard isEditable(target), target.content != content, let index = position[id] else { return }
+        out.items[index].content = content
+        out.touched.insert(id)
     }
 
     private func setFlag(_ ids: Set<ItemID>, into out: inout StepResult, change: (inout Item) -> Bool) throws {

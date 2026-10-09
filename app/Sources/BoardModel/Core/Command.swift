@@ -29,6 +29,9 @@ public enum Command: Sendable {
     case group(Set<ItemID>, title: String, groupID: ItemID)
     /// Removes groups. Their items stay and are selected.
     case ungroup(Set<ItemID>)
+    /// Replaces the content of one item, for example the text of a note or the image of a placeholder.
+    /// The rectangle, the layer and the place in the stack stay.
+    case setContent(ItemID, Content)
     case setLocked(Set<ItemID>, Bool)
     case setHidden(Set<ItemID>, Bool)
     /// Moves items to another layer of the same space.
