@@ -7,6 +7,12 @@ public enum InspectorField: String, CaseIterable, Sendable {
 
 /// The command for a field. One field is one command, so one entry is one undo step.
 public enum InspectorEdit {
+    /// The items that a field change can move or resize: not locked, and not on a locked layer.
+    /// The commands skip the others, so the values of the fields must come from these items only.
+    public static func movable(_ items: [Item], lockedLayers: Set<String>) -> [Item] {
+        items.filter { !$0.locked && !lockedLayers.contains($0.layerID) }
+    }
+
     /// The command that sets a field of the selection to `points`. X and Y move the selection box, so all items
     /// move together and the items inside a frame or group come along. Width and height give every item that size.
     /// Nil when nothing would change, or when a size is not above zero.

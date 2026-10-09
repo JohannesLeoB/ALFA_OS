@@ -19,7 +19,7 @@ struct BlobMenuHost: View {
 
     /// The picks of the palettes live in the model, so they survive a switch of the palette and the blob mode.
     private var unit: Binding<LengthUnit> {
-        Binding(get: { shell.blobUnit }, set: { shell.blobUnit = $0 })
+        Binding(get: { shell.lengthUnit }, set: { shell.lengthUnit = $0 })
     }
     private var swatch: Binding<Int?> {
         Binding(get: { shell.blob.swatch }, set: { shell.blob.pickSwatch($0) })

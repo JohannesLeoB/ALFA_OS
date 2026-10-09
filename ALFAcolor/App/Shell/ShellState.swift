@@ -16,8 +16,8 @@ final class ShellState {
     private(set) var blobMode = false
     /// State of the blob menu. Only the views of the menu change it.
     var blob = BlobMenu()
-    /// Unit of the position fields in the blob menu. It stays when the palette or the blob mode changes.
-    var blobUnit: LengthUnit = .point
+    /// Unit of the position fields: the inspector and the blob menu share it. It stays when either one is hidden.
+    var lengthUnit: LengthUnit = .point
     /// Room whose name is being changed, and the name in the field. The tab row and the room menu set them.
     var renamingRoom: String?
     var roomDraft = ""

@@ -61,7 +61,7 @@ struct ShellView: View {
             // Content never sets the minimum size of a split column; a changing minimum loops the window layout.
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
             .inspector(isPresented: $shell.inspectorVisible) {
-                InspectorView(canvas: canvas, interaction: interaction)
+                InspectorView(canvas: canvas, interaction: interaction, shell: shell)
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
             }
         }

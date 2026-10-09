@@ -1426,7 +1426,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld Elemente"
+            "value" : "%lld Stücke"
           }
         }
       }
@@ -1475,17 +1475,6 @@
         }
       }
     },
-    "inspector.hint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die Eigenschaften des Raums oder der Auswahl erscheinen hier."
-          }
-        }
-      }
-    },
     "inspector.layer" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1515,17 +1504,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "gemischt"
-          }
-        }
-      }
-    },
-    "inspector.noSelection" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keine Auswahl"
           }
         }
       }
@@ -2917,17 +2895,6 @@
         }
       }
     },
-    "status.saveState.value" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gesichert"
-          }
-        }
-      }
-    },
     "status.selection" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2990,17 +2957,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zoom"
-          }
-        }
-      }
-    },
-    "status.zoom.value" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "100 %"
           }
         }
       }
@@ -4244,6 +4200,61 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Noch ohne Wirkung"
+          }
+        }
+      }
+    },
+    "inspector.visible.shown" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sichtbar"
+          }
+        }
+      }
+    },
+    "inspector.visible.hidden" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgeblendet"
+          }
+        }
+      }
+    },
+    "inspector.locked.yes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesperrt"
+          }
+        }
+      }
+    },
+    "inspector.locked.no" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frei"
+          }
+        }
+      }
+    },
+    "inspector.invalid" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Zahl. Erlaubt sind 12,5, 12.5 und Angaben wie 10 mm."
           }
         }
       }

@@ -5,8 +5,9 @@ import BoardModel
 struct InspectorView: View {
     var canvas: CanvasController
     var interaction: CanvasInteraction
+    @Bindable var shell: ShellState
 
     var body: some View {
-        InspectorPanel(store: canvas.store, snap: interaction.snap)
+        InspectorPanel(store: canvas.store, snap: interaction.snap, unit: $shell.lengthUnit)
     }
 }

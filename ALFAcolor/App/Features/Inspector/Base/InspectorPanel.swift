@@ -7,8 +7,8 @@ import BoardModel
 struct InspectorPanel: View {
     var store: BoardStore
     var snap: SnapSettings
-
-    @State private var unit: LengthUnit = .point
+    /// Unit of the position fields. It lives in the window state, so it stays when the inspector is hidden.
+    @Binding var unit: LengthUnit
 
     var body: some View {
         let items = store.selectedItems

@@ -26,12 +26,13 @@ struct ImageFitSection: View {
         }
         let shared = SharedValue(fits)
         Section("item.kind.image") {
-            Picker("inspector.fit", selection: Binding(
-                get: { shared.value ?? .fit },
-                set: { fit in _ = try? store.perform(imageFit: fit) }
+            Picker("inspector.fit", selection: Binding<ImageFit?>(
+                get: { shared.value },
+                set: { fit in if let fit { _ = try? store.perform(imageFit: fit) } }
             )) {
-                Text("inspector.fit.fit").tag(ImageFit.fit)
-                Text("inspector.fit.fill").tag(ImageFit.fill)
+                if shared == .mixed { Text("inspector.mixed").tag(ImageFit?.none) }
+                Text("inspector.fit.fit").tag(ImageFit?.some(.fit))
+                Text("inspector.fit.fill").tag(ImageFit?.some(.fill))
             }
             .pickerStyle(.segmented)
         }
