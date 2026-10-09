@@ -45,18 +45,31 @@ public actor AssistantChat {
 
     /// - Parameters:
     ///   - platformTools: the tools that the platform runs itself, such as web search. They go after the client tools.
+    ///   - messages: the messages of an earlier conversation, read from the saved chat. They go before the next message.
     public init(
         client: any AIClient,
         model: String,
         document: DocumentSnapshot,
         design: any DesignSource,
-        platformTools: [AITool] = []
+        platformTools: [AITool] = [],
+        messages: [AIMessage] = []
     ) {
         self.client = client
         self.model = model
         self.document = document
         self.design = design
         self.tools = AssistantTools.definitions + platformTools
+        self.messages = messages
+    }
+
+    /// The messages that a saved chat keeps: all of them between turns, and only the finished turns while one runs or waits.
+    public var savedMessages: [AIMessage] {
+        switch phase {
+        case .streaming, .awaitingDecision:
+            return Array(messages.prefix(turnStart))
+        case .idle, .failed, .cancelled:
+            return messages
+        }
     }
 
     /// The IDs of the document as they are now. The app calls it after each change of the document.
