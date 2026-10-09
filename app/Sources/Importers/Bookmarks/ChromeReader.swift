@@ -58,11 +58,12 @@ enum ChromeReader {
 
     private static func link(from item: [String: Any]) -> BookmarkLink? {
         guard let text = item["url"] as? String, let url = BookmarkText.webURL(text) else { return nil }
-        return BookmarkLink(title: BookmarkText.tidy(item["name"] as? String ?? ""), url: url, added: added(item["date_added"]))
+        return BookmarkLink(title: BookmarkText.linkTitle(item["name"] as? String ?? "", url: url), url: url,
+                            added: added(item["date_added"]))
     }
 
     private static func name(of item: [String: Any]) -> String? {
-        let text = BookmarkText.tidy(item["name"] as? String ?? "")
+        let text = BookmarkText.clip(item["name"] as? String ?? "")
         return text.isEmpty ? nil : text
     }
 
@@ -75,6 +76,6 @@ enum ChromeReader {
             microseconds = (value as? String).flatMap { Double($0) }
         }
         guard let microseconds, microseconds.isFinite else { return nil }
-        return Date(timeIntervalSince1970: microseconds / 1_000_000 - epochOffset)
+        return BookmarkText.date(unixSeconds: microseconds / 1_000_000 - epochOffset)
     }
 }

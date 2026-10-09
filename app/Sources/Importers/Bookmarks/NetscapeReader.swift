@@ -134,12 +134,12 @@ struct NetscapeReader {
     /// Ends the text that is being read, if any: a folder name becomes the pending name, a link becomes a link.
     private mutating func finishCapture() {
         guard let current = capture else { return }
-        let text = BookmarkText.tidy(captured)
+        let text = captured
         capture = nil
         captured = ""
         switch current {
         case .folderName:
-            pendingName = text
+            pendingName = BookmarkText.clip(text)
         case .link(let href, let added):
             guard !stack[stack.count - 1].dropped else { return }
             guard let href, let url = BookmarkText.webURL(href) else {
@@ -151,7 +151,8 @@ struct NetscapeReader {
                 return
             }
             budget.links += 1
-            let link = BookmarkLink(title: text, url: url, added: BookmarkText.date(unixSeconds: added))
+            let link = BookmarkLink(title: BookmarkText.linkTitle(text, url: url), url: url,
+                                    added: BookmarkText.date(unixSeconds: added))
             stack[stack.count - 1].folder.links.append(link)
         }
     }
