@@ -49,6 +49,21 @@ public enum FrameGuides {
         return replace([], on: item)
     }
 
+    /// The guides after a quarter turn of a frame of `width` by `height`, in the order given. A clockwise turn
+    /// maps a vertical guide at x to a horizontal one at y = x, and a horizontal guide at y to a vertical one at
+    /// x = height - y. A counterclockwise turn maps a horizontal guide at y to a vertical one at x = y, and a
+    /// vertical guide at x to a horizontal one at y = width - x. Both keep every valid guide valid.
+    public static func turned(_ guides: [Guide], width: Double, height: Double, clockwise: Bool) -> [Guide] {
+        guides.map { guide in
+            switch (guide.axis, clockwise) {
+            case (.vertical, true): Guide(axis: .horizontal, position: guide.position)
+            case (.horizontal, true): Guide(axis: .vertical, position: height - guide.position)
+            case (.vertical, false): Guide(axis: .horizontal, position: width - guide.position)
+            case (.horizontal, false): Guide(axis: .vertical, position: guide.position)
+            }
+        }
+    }
+
     /// The lines of the guides of the frames that hold the rectangle completely, on the board.
     /// `items` are the items that can be targets. Frames that do not hold the rectangle give no lines.
     public static func snapLines(around rect: Rect?, in items: [Item]) -> [SnapGuide] {

@@ -38,21 +38,25 @@ public enum FrameEdit {
     }
 
     /// Turns a frame by 90 degrees: width and height swap, the top left corner stays. The items inside keep
-    /// their place relative to the corner. Empty for an unknown item.
-    public static func rotate(_ item: Item) -> [Command] {
+    /// their place relative to the corner, and the guides turn with the frame. Clockwise by default.
+    /// Empty for an unknown item.
+    public static func rotate(_ item: Item, clockwise: Bool = true) -> [Command] {
         guard case .frame(let deviceID, let gridID, let scale, let grid, let guides) = item.content else { return [] }
         let turned = deviceID.map { Device.resolve($0)?.rotated.id ?? $0 }
+        let turnedGuides = FrameGuides.turned(guides ?? [], width: item.rect.w, height: item.rect.h, clockwise: clockwise)
         return [
             .resize([item.id: Rect(x: item.rect.x, y: item.rect.y, w: item.rect.h, h: item.rect.w)]),
-            .setContent(item.id, .frame(deviceID: turned, gridID: gridID, scale: scale, grid: grid, guides: guides)),
+            .setContent(item.id, .frame(deviceID: turned, gridID: gridID, scale: scale, grid: grid,
+                                        guides: turnedGuides.isEmpty ? nil : turnedGuides)),
         ]
     }
 
-    /// Turns a frame when it is not in the wanted orientation. Empty when it already is.
+    /// Turns a frame when it is not in the wanted orientation. Empty when it already is. A turn to portrait is
+    /// clockwise, and a turn back to landscape is counterclockwise, so two turns give the original guides.
     public static func orient(_ item: Item, landscape: Bool) -> [Command] {
         let isLandscape = item.rect.w >= item.rect.h
         guard isLandscape != landscape else { return [] }
-        return rotate(item)
+        return rotate(item, clockwise: isLandscape)
     }
 
     /// Sets the pixel scale. The size in points does not change. Empty when the scale is already set.
