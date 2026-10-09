@@ -37,6 +37,14 @@ public enum ProposalBoard {
                 return try insert(item, size: (480, 320), on: store)
             case let .codeVersion(item, language, files):
                 return try addCodeVersion(item, language: language, files: files, on: store)
+            case let .swatches(swatches):
+                return try addSwatches(swatches, on: store)
+            case let .tokenNames(names):
+                return try nameTokens(names, on: store)
+            case .designTokens:
+                return .failed("the design contract is not part of the document")
+            case .download:
+                return .failed("downloads are not connected yet")
             case let .link(url, title):
                 guard let address = URL(string: url) else { return .failed("the address is not valid") }
                 let item = Item(title: title, content: .link(url: address, note: nil), rect: Rect(x: 0, y: 0, w: 240, h: 80),
@@ -71,6 +79,28 @@ public enum ProposalBoard {
             guard !board.spaces[s].items[i].locked, !layerLocked else { throw BridgeError.itemLocked }
             for tag in tags where !board.spaces[s].items[i].tags.contains(tag) {
                 board.spaces[s].items[i].tags.append(tag)
+            }
+        }
+        return changed ? .applied : .failed("nothing changed")
+    }
+
+    /// Adds the colour fields as one token change. An unnamed field gets the lowest free name "Color n".
+    private static func addSwatches(_ swatches: [Swatch], on store: BoardStore) throws -> ApplyOutcome {
+        let changed = try store.changeTokenSets(nameKey: "undo.color.add") { sets in
+            for swatch in swatches {
+                let color = try ColorFields.color(hex: swatch.hex)
+                let name = swatch.name ?? ColorFields.freeName(base: "Color", in: sets)
+                _ = try ColorFields.add(name: name, color: color, to: &sets)
+            }
+        }
+        return changed ? .applied : .failed("nothing changed")
+    }
+
+    /// Gives colour fields their new names as one token change.
+    private static func nameTokens(_ names: [TokenName], on store: BoardStore) throws -> ApplyOutcome {
+        let changed = try store.changeTokenSets(nameKey: "undo.color.rename") { sets in
+            for entry in names {
+                try ColorFields.rename(entry.id, to: entry.name, in: &sets)
             }
         }
         return changed ? .applied : .failed("nothing changed")
