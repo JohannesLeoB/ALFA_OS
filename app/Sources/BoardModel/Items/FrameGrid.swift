@@ -7,12 +7,13 @@ public enum FrameGrid {
     /// The grid that a frame gets when the grid is switched on: 12 columns, gutter 24, margins 24.
     public static let standard = ColumnGrid(columns: 12, gutter: 24, margin: 24)
 
-    /// True when a grid fits a frame of this size: at least one column, no negative gutter, margins,
-    /// or baseline values, and margins that leave room for the columns and the lines.
+    /// True when a grid fits a frame of this size: at least one column and at most `SnapTargets.lineLimit`, no negative
+    /// gutter, margins, or baseline values, no value beyond the length limit, and margins that leave room for the columns and the lines.
     public static func isValid(_ grid: ColumnGrid, in rect: Rect) -> Bool {
         let values = [grid.gutter, grid.marginLeft, grid.marginRight, grid.marginTop, grid.marginBottom,
                       grid.baseline, grid.baselineStart]
-        guard rect.isFinite, grid.columns >= 1, values.allSatisfy({ $0.isFinite && $0 >= 0 }) else { return false }
+        guard rect.isFinite, grid.columns >= 1, grid.columns <= SnapTargets.lineLimit,
+              values.allSatisfy({ $0.isFinite && $0 >= 0 && $0 <= NumberLimit.length }) else { return false }
         return grid.marginLeft + grid.marginRight < rect.w && grid.marginTop + grid.marginBottom < rect.h
     }
 

@@ -27,7 +27,7 @@ struct FrameGridSection: View {
             .onAppear(perform: reload)
         if grids.contains(where: { $0 != nil }) {
             GridNumberField(titleKey: "inspector.frame.columns", shared: shared(grids) { Double($0.columns) }) { value in
-                apply { $0.columns = max(1, Int(value.rounded())) }
+                apply { $0.columns = max(1, value.clampedInt) }
             }
             GridNumberField(titleKey: "inspector.frame.gutter", shared: shared(grids) { $0.gutter }) { value in
                 apply { $0.gutter = value }
@@ -85,7 +85,7 @@ struct FrameGridSection: View {
     private func saveTemplate() {
         guard let grid = grids.compactMap({ $0 }).first, let url = try? GridTemplateFile.url() else { return }
         let columns = grid.columns
-        let gutter = Int(grid.gutter.rounded())
+        let gutter = grid.gutter.clampedInt
         let name = String(localized: "grid.template.name \(columns) \(gutter)")
         try? GridTemplates.add(GridTemplate(name: name, grid: grid), to: url)
         reload()
