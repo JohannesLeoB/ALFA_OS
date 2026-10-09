@@ -120,7 +120,13 @@ public struct AnthropicClient: AIClient {
         guard let wire = try? JSONDecoder().decode(ModelsWire.self, from: data) else {
             throw AIError.decoding
         }
-        let models = wire.data.map { AIModelInfo(id: $0.id, displayName: $0.displayName ?? $0.id) }
+        let models = wire.data.map {
+            AIModelInfo(
+                id: $0.id,
+                displayName: $0.displayName ?? $0.id,
+                webSearchSupported: $0.capabilities?.serverTools?.webSearch?.supported
+            )
+        }
         return ModelPage(models: models, hasMore: wire.hasMore ?? false, lastID: wire.lastID)
     }
 
@@ -276,10 +282,13 @@ extension HTTPURLResponse {
 public struct AIModelInfo: Sendable, Equatable {
     public let id: String
     public let displayName: String
+    /// Whether the model accepts the web search tool, as the platform states it. Nil when the platform does not say.
+    public let webSearchSupported: Bool?
 
-    public init(id: String, displayName: String) {
+    public init(id: String, displayName: String, webSearchSupported: Bool? = nil) {
         self.id = id
         self.displayName = displayName
+        self.webSearchSupported = webSearchSupported
     }
 }
 
@@ -298,10 +307,32 @@ private struct ModelsWire: Decodable {
     struct Entry: Decodable {
         let id: String
         let displayName: String?
+        let capabilities: Capabilities?
 
         enum CodingKeys: String, CodingKey {
             case id
             case displayName = "display_name"
+            case capabilities
         }
+    }
+
+    struct Capabilities: Decodable {
+        let serverTools: ServerTools?
+
+        enum CodingKeys: String, CodingKey {
+            case serverTools = "server_tools"
+        }
+    }
+
+    struct ServerTools: Decodable {
+        let webSearch: Support?
+
+        enum CodingKeys: String, CodingKey {
+            case webSearch = "web_search"
+        }
+    }
+
+    struct Support: Decodable {
+        let supported: Bool?
     }
 }
