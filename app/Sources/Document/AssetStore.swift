@@ -10,16 +10,11 @@ public struct AssetStore: Equatable, Sendable {
     /// Where the bytes of an entry are.
     enum Source: Sendable {
         case memory(Data)
-        case file(URL)
         case wrapper(WrapperBox)
 
         func load() throws -> Data {
             switch self {
             case .memory(let data): return data
-            case .file(let url):
-                do { return try Data(contentsOf: url) } catch {
-                    throw PackageError.unreadable(reason: "\(url.lastPathComponent): \(error.localizedDescription)")
-                }
             case .wrapper(let box): return try box.contents()
             }
         }

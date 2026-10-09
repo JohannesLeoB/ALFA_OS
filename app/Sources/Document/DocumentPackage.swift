@@ -253,21 +253,22 @@ public enum DocumentPackage {
         do { wrapper = try FileWrapper(url: url, options: []) } catch {
             throw PackageError.unreadable(reason: "\(url.lastPathComponent): \(error.localizedDescription)")
         }
-        return try open(wrapper, origin: url, options: options, migration: migration)
+        // Read through the wrapper like the window does. A lazy read from the URL would fail after the package was moved.
+        return try open(wrapper, options: options, migration: migration)
     }
 
     /// Opens a package from a file wrapper. The image files are read through the wrapper when asked for.
     public static func read(from wrapper: FileWrapper, options: ReadOptions = ReadOptions(), migration: Migration = .standard) throws -> DocumentReadResult {
-        try open(wrapper, origin: nil, options: options, migration: migration)
+        try open(wrapper, options: options, migration: migration)
     }
 
     /// Migration steps see every file except those directly in `assets/`. Image files do not change in a migration.
-    private static func open(_ wrapper: FileWrapper, origin: URL?, options: ReadOptions, migration: Migration) throws -> DocumentReadResult {
+    private static func open(_ wrapper: FileWrapper, options: ReadOptions, migration: Migration) throws -> DocumentReadResult {
         guard wrapper.isDirectory else { throw PackageError.notAPackage }
         var report = ReadReport()
         var files = PackageFiles()
         var imageSources: [String: AssetStore.Source] = [:]
-        try flatten(wrapper, prefix: "", into: &files, warnings: &report.warnings, deferred: &imageSources, origin: origin, defersAssets: true)
+        try flatten(wrapper, prefix: "", into: &files, warnings: &report.warnings, deferred: &imageSources, defersAssets: true)
 
         // 1. Check the version, migrate if needed
         guard let manifestData = files["manifest.json"] else { throw PackageError.missingFile(path: "manifest.json") }
@@ -448,21 +449,20 @@ public enum DocumentPackage {
     /// All files with their bytes.
     static func flatten(_ wrapper: FileWrapper, prefix: String, into files: inout PackageFiles, warnings: inout [String]) throws {
         var none: [String: AssetStore.Source] = [:]
-        try flatten(wrapper, prefix: prefix, into: &files, warnings: &warnings, deferred: &none, origin: nil, defersAssets: false)
+        try flatten(wrapper, prefix: prefix, into: &files, warnings: &warnings, deferred: &none, defersAssets: false)
     }
 
     /// With `defersAssets`, files directly in `assets/` go to `deferred` as a source and are not read.
-    /// `origin` is the package folder on disk, if there is one.
     static func flatten(_ wrapper: FileWrapper, prefix: String, into files: inout PackageFiles, warnings: inout [String],
-                        deferred: inout [String: AssetStore.Source], origin: URL?, defersAssets: Bool) throws {
+                        deferred: inout [String: AssetStore.Source], defersAssets: Bool) throws {
         for (name, child) in (wrapper.fileWrappers ?? [:]).sorted(by: { $0.key < $1.key }) {
             let path = prefix.isEmpty ? name : prefix + "/" + name
             if child.isDirectory {
-                try flatten(child, prefix: path, into: &files, warnings: &warnings, deferred: &deferred, origin: origin, defersAssets: defersAssets)
+                try flatten(child, prefix: path, into: &files, warnings: &warnings, deferred: &deferred, defersAssets: defersAssets)
             } else if child.isRegularFile {
                 if name == ".DS_Store" { continue }   // Finder clutter, not content
                 if defersAssets, prefix == "assets" {
-                    deferred[path] = origin.map { .file($0.appending(path: path)) } ?? .wrapper(AssetStore.WrapperBox(child))
+                    deferred[path] = .wrapper(AssetStore.WrapperBox(child))
                     continue
                 }
                 guard let data = child.regularFileContents else { throw PackageError.corruptFile(path: path, reason: String(localized: "package.reason.unreadableFile")) }
