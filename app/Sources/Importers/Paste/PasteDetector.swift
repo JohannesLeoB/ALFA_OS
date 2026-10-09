@@ -75,9 +75,12 @@ public enum PasteDetector {
         .code(CodeSnippet(language: language, fileName: fileName, text: text))
     }
 
-    /// Markup: a doctype or a comment, or at least two tags. One tag in a sentence is a note.
+    /// Markup: a doctype or a comment, or at least two tags that are not all inline tags. One tag in a sentence is a note.
+    /// A sentence with bold text, `<b>x</b>`, has two matches of one tag, and only inline tags: a note.
     private static func isMarkup(_ text: String) -> Bool {
-        matches(Signs.doctypeOrComment, text) || count(Signs.html, text) >= 2
+        if matches(Signs.doctypeOrComment, text) { return true }
+        let tags = count(Signs.html, text)
+        return tags >= 2 && count(Signs.inline, text) < tags
     }
 
     /// Script code: a function, a class, a module statement, or a use of the browser objects.
@@ -111,6 +114,9 @@ public enum PasteDetector {
         static let doctypeOrComment = #"(?i)<!doctype\s+html|<!--"#
 
         static let html = #"(?i)<!doctype\s+html|<!--|</?(html|head|body|div|span|p|a|ul|ol|li|h[1-6]|img|button|input|form|section|nav|header|footer|main|article|aside|style|script|svg|table|thead|tbody|tr|td|th|label|select|option|textarea|canvas|video|audio|link|meta|title|br|hr|i|b|em|strong|pre|code|small|figure|figcaption|picture|source|iframe|dialog|details|summary)(\s+[\w:@.\-]+(\s*=\s*("[^"]*"|'[^']*'|[^\s"'<>=`]+))?)*\s*/?>"#
+
+        /// Tags of text formatting. Several of them in a sentence are still a note.
+        static let inline = #"(?i)</?(b|i|em|strong|small|code|span|a|br|u|s|mark|sub|sup|kbd|abbr)(\s+[\w:@.\-]+(\s*=\s*("[^"]*"|'[^']*'|[^\s"'<>=`]+))?)*\s*/?>"#
 
         static let tailwind = #"class="[^"]*\b(flex|grid|p[xy]?-\d|m[xy]?-\d|text-(xs|sm|base|lg|xl)|bg-|rounded|w-\d|h-\d)"#
 
