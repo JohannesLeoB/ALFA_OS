@@ -17,8 +17,10 @@ struct SheetPiece: Equatable, Sendable {
     let text: String?
     /// Language of a code card. nil otherwise.
     let language: CodeLanguage?
-    /// Bytes of an image. nil for other kinds.
+    /// Bytes of an image. nil for other kinds, and for a foreign image: that one is only a link.
     let imageData: Data?
+    /// Link and licence of a foreign image, as text for the sheet. nil for other pieces.
+    let origin: String?
 }
 
 /// One colour of the legend: its hex value and the name of the token or swatch that has it.
@@ -90,6 +92,7 @@ enum SheetPages {
         var text: String?
         var language: CodeLanguage?
         var imageData: Data?
+        var origin: String?
         switch item.content {
         case .swatch(let hex, let name):
             fill = hex
@@ -101,12 +104,27 @@ enum SheetPages {
         case .code(let lang, _, _):
             language = lang
         case .image(let assetID, _, _):
-            imageData = try? document.assets[assetID]?.data()
+            // Own images are drawn. A foreign image stays out of the sheet and shows its link and licence.
+            if License.isOwn(item.source) {
+                imageData = try? document.assets[assetID]?.data()
+            } else {
+                origin = Self.origin(of: item.source)
+            }
         case .link, .frame, .group:
             break
         }
         return SheetPiece(kind: ItemKind(item.content), title: item.title, rect: plan.position(of: placed),
-                          fill: fill, swatchName: swatchName, text: text, language: language, imageData: imageData)
+                          fill: fill, swatchName: swatchName, text: text, language: language, imageData: imageData,
+                          origin: origin)
+    }
+
+    /// The link and the licence of a source, joined by " · ". Nil when the source has neither.
+    static func origin(of source: Source?) -> String? {
+        let parts = [source?.url?.absoluteString, source?.license].compactMap { value -> String? in
+            guard let value, !value.isEmpty else { return nil }
+            return value
+        }
+        return parts.isEmpty ? nil : parts.joined(separator: " · ")
     }
 
     /// The colours of the pieces, once each. A colour named by a token shows the token's name; else the swatch name.

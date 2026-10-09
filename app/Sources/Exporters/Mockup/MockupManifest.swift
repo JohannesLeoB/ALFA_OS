@@ -40,11 +40,13 @@ struct MockupManifest: Codable, Equatable {
         var stroke: String? = nil
         var url: String? = nil
         var license: String? = nil
+        /// True when the licence is free. Set for a code card with a source; false means a warning is in `warnings`.
+        var free: Bool? = nil
         var via: String? = nil
 
         enum CodingKeys: String, CodingKey {
             case id, type, title, frame, x, y, width, height, z, layer, mode, file, tokens, text, previewWidth
-            case color, fill, stroke, url, license, via
+            case color, fill, stroke, url, license, free, via
         }
 
         func encode(to encoder: Encoder) throws {
@@ -69,6 +71,7 @@ struct MockupManifest: Codable, Equatable {
             try c.encodeIfPresent(stroke, forKey: .stroke)
             try c.encodeIfPresent(url, forKey: .url)
             try c.encodeIfPresent(license, forKey: .license)
+            try c.encodeIfPresent(free, forKey: .free)
             try c.encodeIfPresent(via, forKey: .via)
         }
     }

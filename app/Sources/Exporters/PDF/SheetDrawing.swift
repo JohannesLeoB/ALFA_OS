@@ -94,6 +94,10 @@ enum SheetDrawing {
                 canvas.fill(box, SheetCanvas.grey(Grey.placeholder))
                 canvas.text(labels.image, x: box.x + box.w / 2, baseline: box.y + box.h / 2 + 3, size: 8,
                             colour: SheetCanvas.grey(Grey.muted), align: .centre, maxWidth: box.w)
+                if let origin = piece.origin {
+                    canvas.text(origin, x: box.x + box.w / 2, baseline: box.y + box.h / 2 + 15, size: 6,
+                                colour: SheetCanvas.grey(Grey.muted), align: .centre, maxWidth: box.w)
+                }
             }
         case .code:
             canvas.fill(box, SheetCanvas.grey(Grey.piece))

@@ -78,7 +78,9 @@ public struct MockupFormat: ExchangeFormat {
     - code/: one file per code card. Extra files of a card sit in code/<card>/.
     - images/: own images, named by content hash. Foreign images are not in the package;
       manifest.json gives their link and license.
-    - Source and license of each item are in manifest.json (url, license, via). A code card without a license is marked in warnings.
+    - Source and license of each item are in manifest.json (url, license, via). A code card keeps its code in the package;
+      free is true when its licence is free, false otherwise. Warnings say "license missing" (no licence) or
+      "license not free" (a licence that does not allow free use). Use the code only as the licence allows.
     - tokens.json: the tokens that the items use, as DTCG, grouped by token set.
 
     For the design and code agents: a frame is a screen or view of that size in points.

@@ -50,8 +50,14 @@ struct MockupEntries {
             entry.previewWidth = previewWidth
             entry.tokens = tokens.use(in: names.compactMap { sources[$0] }.joined(separator: "\n"))
             Self.origin(of: item.source, into: &entry)
-            if let source = item.source, source.license?.isEmpty ?? true {
-                warnings.append("\(item.id.raw): license missing")
+            if let source = item.source {
+                // A foreign card stays in the package. Its licence decides whether it is free to use.
+                entry.free = License.isFree(source.license)
+                if source.license?.isEmpty ?? true {
+                    warnings.append("\(item.id.raw): license missing")
+                } else if entry.free == false {
+                    warnings.append("\(item.id.raw): license not free")
+                }
             }
 
         case .image(let assetID, _, _):
@@ -149,8 +155,7 @@ struct MockupEntries {
     /// Own images go into the package: an item without a source, or one marked as own.
     /// Any other image is only a link with its license.
     static func isOwn(_ source: Source?) -> Bool {
-        guard let source else { return true }
-        return source.via.lowercased() == "eigen" || source.license?.lowercased() == "eigen"
+        License.isOwn(source)
     }
 
     /// Copies the link, license and origin of a source. An item without a source keeps these fields empty.
