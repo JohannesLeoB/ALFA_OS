@@ -40,20 +40,26 @@ public final class ImportCoordinator {
         await handle(sources, entry: entry, centerX: centerX, centerY: centerY)
     }
 
-    /// The user agreed to take the large files.
-    public func confirmLarge() async {
-        guard let question else { return }
+    /// The user agreed to take the large files. The question is taken at once, so that a dismissed alert cannot undo the answer.
+    /// The import runs in the returned task.
+    @discardableResult
+    public func confirmLarge() -> Task<Void, Never>? {
+        guard let question else { return nil }
         self.question = nil
-        await handle(question.files.map { .file($0.url) }, entry: question.entry,
-                     centerX: question.centerX, centerY: question.centerY, allowLarge: Set(question.files.map(\.url)))
+        let files = question.files.map { $0.url }
+        return Task {
+            await handle(files.map { .file($0) }, entry: question.entry,
+                         centerX: question.centerX, centerY: question.centerY, allowLarge: Set(files))
+        }
     }
 
     public func declineLarge() { question = nil }
 
-    public func acknowledge() {
-        skipped = []
-        failure = nil
-    }
+    /// The user has read which files were not taken.
+    public func acknowledge() { skipped = [] }
+
+    /// The user has read the error of the last insert.
+    public func dismissFailure() { failure = nil }
 
     private func place(_ outcome: ImportOutcome, entry: ImportEntry, centerX: Double, centerY: Double) {
         skipped += outcome.skipped

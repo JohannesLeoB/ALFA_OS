@@ -1,6 +1,7 @@
 import SwiftUI
 import AppTheme
 import BoardModel
+import Importers
 
 /// The canvas: grid, items and aids, with zoom and pan. The area is content, not glass.
 /// The math is in `CanvasController`; this view reports the size and passes gestures on.
@@ -9,6 +10,7 @@ import BoardModel
 struct CanvasSurface: View {
     var controller: CanvasController
     var interaction: CanvasInteraction
+    var importer: ImportCoordinator
     var onTogglePalettes: @MainActor () -> Void
 
     @Environment(\.theme) private var theme
@@ -61,6 +63,7 @@ struct CanvasSurface: View {
             if ended { hasFocus = true }
         }
         .onAppear { hasFocus = true }
+        .modifier(ImportTargets(controller: controller, importer: importer))
         .accessibilityElement(children: .contain)
         .accessibilityLabel("canvas.accessibility")
     }

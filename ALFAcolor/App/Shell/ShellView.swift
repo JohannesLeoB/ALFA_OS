@@ -1,6 +1,7 @@
 import SwiftUI
 import AppTheme
 import BoardModel
+import Importers
 
 /// Main window: sidebar, canvas, inspector, toolbar, status bar.
 /// The system draws the glass for sidebar, inspector and toolbar. There is no own background for it here.
@@ -12,12 +13,14 @@ struct ShellView: View {
     @State private var shell = ShellState()
     @State private var canvas: CanvasController
     @State private var interaction: CanvasInteraction
+    @State private var importer: ImportCoordinator
 
     /// The window shows the document of `session`. The undo history belongs to this window.
     init(session: DocumentSession) {
         let controller = CanvasController(store: session.store)
         _canvas = State(initialValue: controller)
         _interaction = State(initialValue: CanvasInteraction(controller: controller))
+        _importer = State(initialValue: ImportCoordinator(store: session.store))
     }
 
     var body: some View {
@@ -25,7 +28,8 @@ struct ShellView: View {
             SidebarView()
         } detail: {
             VStack(spacing: 0) {
-                CanvasSurface(controller: canvas, interaction: interaction, onTogglePalettes: { shell.togglePalettes() })
+                CanvasSurface(controller: canvas, interaction: interaction, importer: importer,
+                              onTogglePalettes: { shell.togglePalettes() })
                 if shell.statusBarVisible {
                     StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError)
                 }
