@@ -77,7 +77,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-403](briefe/B-403.md) | E4 | Code-Karte und Quelltextansicht | B-401 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 662 Tests); Abnahme am Bild offen; ruhen außerhalb des Bildes später (B-209) |
 | [B-404](briefe/B-404.md) | E4 | Labor | B-403 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 771 Tests; Regler live ohne Neuladen belegt); Anschluss an Taste L und Karte in B-217; Verlauf vorerst im Speicher |
 | [B-405](briefe/B-405.md) | E4 | Hinweise im Labor | B-404 | offen |
-| [B-501](briefe/B-501.md) | E5 | Farbfelder und Pipette | B-208 | offen |
+| [B-501](briefe/B-501.md) | E5 | Farbfelder und Pipette | B-208 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-502](briefe/B-502.md) | E5 | Farben aus Bild | B-501 | offen |
 | [B-503](briefe/B-503.md) | E5 | Kontrastmatrix | B-501 | offen |
 | [B-504](briefe/B-504.md) | E5 | Textstile und Schriftreihe | B-208 | offen |
