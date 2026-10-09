@@ -52,6 +52,8 @@ struct MenuFunctions {
         case "object.sameSize": return arrange(.sameSize)
         case "object.alignToGrid": return arrange(.snapToGrid)
         case "file.export": return withStore { MockupExport.run(store: $0) }
+        case "file.designImport": return withStore { DesignImport.run(store: $0) }
+        case "file.contractExport": return withStore { DesignImport.exportContract(store: $0) }
         case "tool.lab":
             guard let shell, let canvas else { return nil }
             return { shell.openLab(in: canvas) }

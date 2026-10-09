@@ -146,6 +146,8 @@ public enum ShortcutTable {
         command("file.rename", .file),
         command("file.move", .file),
         command("file.export", .file, "E", [.command, .shift], separator: true),
+        command("file.designImport", .file),
+        command("file.contractExport", .file),
         command("file.revert", .file),
     ]
 
