@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (79)
+## Briefe (80)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -62,7 +62,8 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-225](briefe/B-225.md) | E2 | Fehlerbrief: Menüs, Werkzeugleiste, Ausgabe | B-222 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 900 Tests, App-Bau grün); Abnahme am Bild offen (Menüs, Werkzeugleiste, Dateiwahl, Ausgabe, Esc/Tab im Blob, Kopieren); Fragen: Teilen wieder? ⌘+ und ⇧⌘↑/↓ so? Anzeige der Kürzel nach Layout fehlt (shell 13 Rest) |
 | [B-226](briefe/B-226.md) | E2 | Fehlerbrief: Räume, Ebenen, Inspektor, Texte | B-221 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-227](briefe/B-227.md) | E2 | Fehlerbrief: Zeigerkoordinaten, Tasten, Scrollen (hoch) | B-221 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 887 Tests, App-Bau grün); Klick-Beleg fehlt (unsichtbare Fenster nehmen keine Mausereignisse), ⌘A offen, Labor-Überzug unter der Werkzeugleiste prüfen; Fund 5 Rest (Labor, Blob melden ihre Fläche: ShellView, an B-224), Fund 13 (CanvasItemsLayer: an B-228) |
-| [B-228](briefe/B-228.md) | E2 | Fehlerbrief: ausgeblendete Stücke, Raster-Einrasten, Import | B-227 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-228](briefe/B-228.md) | E2 | Fehlerbrief: ausgeblendete Stücke, Raster-Einrasten, Import | B-227 | erledigt, geprüft 2026-10-09 (Chef: Paket-Tests grün; Katalogschlüssel trägt B-226 ein; Gesamtlauf folgt nach B-226); Rest: Menü Raster/Einrasten, Doppelklick auf unlesbares Bild, LabEntry sichtbar, Menüs (alles B-229); #fff nicht mehr Farbe: Frage an Johannes |
+| [B-229](briefe/B-229.md) | E2 | Fehlerbrief: Raster-Schalter, Speicherstand, Kürzelanzeige | B-226, B-228 | offen (geschrieben 2026-10-09) |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | offen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | offen |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
