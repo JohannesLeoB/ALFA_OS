@@ -8,6 +8,10 @@ public struct AnthropicClient: AIClient {
     public static let defaultBaseURL = URL(string: "https://api.anthropic.com/")!
     /// Seconds before one request gives up.
     public static let requestTimeout: TimeInterval = 120
+    /// The waits before the first and the second retry. A retry happens at most twice.
+    public static let overloadWaits: [TimeInterval] = [2, 4]
+    /// The longest wait that the API may ask for before a retry. A longer one ends the call.
+    public static let maxRateLimitWait: TimeInterval = 30
 
     private let transport: any HTTPTransport
     private let keyProvider: @Sendable () throws -> String?
@@ -32,6 +36,22 @@ public struct AnthropicClient: AIClient {
 
     public func complete(_ request: AIRequest) async throws -> AIResponse {
         let key = try readKey()
+        var retries = 0
+        while true {
+            do {
+                return try await send(request, key: key)
+            } catch let error as AIError {
+                guard retries < Self.overloadWaits.count,
+                      let wait = Self.retryWait(after: error, attempt: retries) else {
+                    throw error
+                }
+                retries += 1
+                try await sleeper(wait)
+            }
+        }
+    }
+
+    private func send(_ request: AIRequest, key: String) async throws -> AIResponse {
         let urlRequest = try makeURLRequest(for: request, key: key)
 
         let data: Data
@@ -47,9 +67,22 @@ public struct AnthropicClient: AIClient {
         }
 
         guard (200..<300).contains(http.statusCode) else {
-            throw AIError.network("HTTP status \(http.statusCode)")
+            throw AnthropicErrors.error(for: http, body: data, key: key)
         }
         return try AnthropicWire.response(from: data, requestID: http.headerValue("request-id"))
+    }
+
+    /// The wait before a retry, or nil when the error is not retried. Only short rate limits and busy answers (529) are.
+    static func retryWait(after error: AIError, attempt: Int) -> TimeInterval? {
+        switch error {
+        case let .rateLimited(retryAfter):
+            guard let wait = retryAfter, wait >= 0, wait <= maxRateLimitWait else { return nil }
+            return wait
+        case .overloaded(status: 529):
+            return overloadWaits[attempt]
+        default:
+            return nil
+        }
     }
 
     /// The key of the user. A missing, blank or unreadable key stops the call before anything is sent.
