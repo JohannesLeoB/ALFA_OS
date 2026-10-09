@@ -69,9 +69,23 @@ public final class BoardStore {
 
     public func item(_ id: ItemID) -> Item? { activeSpace?.items.first { $0.id == id } }
 
+    /// The selected items that can be seen. A hidden item never counts as selected.
     public var selectedItems: [Item] {
         guard let space = activeSpace else { return [] }
-        return space.items.filter { selection.contains($0.id) }
+        let seen = Self.visibleIDs(in: space)
+        return space.items.filter { selection.contains($0.id) && seen.contains($0.id) }
+    }
+
+    /// The IDs of the items that can be seen: not hidden, and not on a hidden layer.
+    static func visibleIDs(in space: Space) -> Set<ItemID> {
+        let hiddenLayers = Set(space.layers.filter { !$0.visible }.map(\.id))
+        return Set(space.items.filter { !$0.hidden && !hiddenLayers.contains($0.layerID) }.map(\.id))
+    }
+
+    /// The selection without the items that cannot be seen in the active space.
+    private func visibleSelection(_ ids: Set<ItemID>) -> Set<ItemID> {
+        guard let space = activeSpace else { return [] }
+        return ids.intersection(Self.visibleIDs(in: space))
     }
 
     // MARK: Commands
@@ -85,7 +99,7 @@ public final class BoardStore {
         var trial = document.board
         guard let edit = try command.apply(to: &trial, spaceID: spaceID, selection: selection) else { return false }
         document.board = trial
-        selection = edit.selectionAfter
+        selection = visibleSelection(edit.selectionAfter)
         didChangeDocument()
         register(edit, name: command.undoName)
         return true
@@ -131,7 +145,7 @@ public final class BoardStore {
         let previous = document.board
         document.board = target
         if !target.spaces.contains(where: { $0.id == activeSpaceID }) { activeSpaceID = target.spaces.first?.id }
-        selection = selection.intersection(Set(activeSpace?.items.map(\.id) ?? []))
+        selection = visibleSelection(selection)
         // A removed space takes its view with it; a new space with the same ID starts at zoom 1.
         let ids = Set(target.spaces.map(\.id))
         viewports = viewports.filter { ids.contains($0.key) }
@@ -177,7 +191,7 @@ public final class BoardStore {
         document.board = trial
         activeSpaceID = inverse.spaceID
         let existing = Set(trial.spaces.first { $0.id == inverse.spaceID }?.items.map(\.id) ?? [])
-        selection = inverse.selectionAfter.intersection(existing)
+        selection = visibleSelection(inverse.selectionAfter.intersection(existing))
         didChangeDocument()
         register(inverse, name: name)
     }
@@ -185,9 +199,9 @@ public final class BoardStore {
     // MARK: Selection
 
     /// Selects the items with these IDs. IDs that are not in the active space are dropped.
+    /// Items that cannot be seen (hidden, or on a hidden layer) are dropped as well.
     public func select(_ ids: Set<ItemID>) {
-        let existing = Set(activeSpace?.items.map(\.id) ?? [])
-        selection = ids.intersection(existing)
+        selection = visibleSelection(ids)
     }
 
     public func toggleSelection(_ id: ItemID) {
