@@ -7,4 +7,9 @@ public enum BookmarkParser {
     public static func netscape(_ html: String) -> BookmarkTree {
         NetscapeReader.read(html)
     }
+
+    /// The Bookmarks file of Chrome (JSON, in the profile folder). Throws `BookmarkError.notReadable` for data that is not JSON.
+    public static func chrome(_ data: Data) throws -> BookmarkTree {
+        try ChromeReader.read(data)
+    }
 }
