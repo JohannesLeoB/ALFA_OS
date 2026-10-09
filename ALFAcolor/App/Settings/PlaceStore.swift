@@ -25,17 +25,26 @@ final class PlaceStore {
 
     init(fileURL: URL = PlaceStore.defaultFileURL) {
         self.fileURL = fileURL
-        if FileManager.default.fileExists(atPath: fileURL.path) {
-            if let data = try? Data(contentsOf: fileURL), let read = try? JSONDecoder().decode(PlaceRegistry.self, from: data) {
-                registry = read
-            } else {
-                registry = PlaceRegistry()
-                fileIsUnreadable = true
-            }
-        } else {
+        switch PlaceFile.load(from: fileURL) {
+        case .missing:
             registry = PlaceRegistry()
+        case .readable(let read):
+            registry = read
+        case .unreadable:
+            registry = PlaceRegistry()
+            fileIsUnreadable = true
         }
     }
+
+    /// Sets the unreadable file aside, next to itself, and starts with an empty list. Nothing is overwritten.
+    func setUnreadableFileAside() throws {
+        try PlaceFile.setAside(fileURL, date: .now)
+        registry = PlaceRegistry()
+        fileIsUnreadable = false
+    }
+
+    /// The file that keeps the places, for showing it in the Finder.
+    var registerFileURL: URL { fileURL }
 
     var places: [Place] { registry.places }
 

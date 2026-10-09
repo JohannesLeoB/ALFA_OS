@@ -9,6 +9,7 @@ struct PlacesSettings: View {
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
     @State private var message: LocalizedStringKey?
+    @State private var showsUnreadableChoice = false
 
     private var store: PlaceStore { PlaceStore.shared }
 
@@ -35,6 +36,15 @@ struct PlacesSettings: View {
             }
         }
         .formStyle(.grouped)
+        .onAppear { showsUnreadableChoice = store.fileIsUnreadable }
+        .onChange(of: store.fileIsUnreadable) { _, unreadable in showsUnreadableChoice = unreadable }
+        .confirmationDialog("places.unreadable.title", isPresented: $showsUnreadableChoice, titleVisibility: .visible) {
+            Button("places.unreadable.setAside") { perform { try store.setUnreadableFileAside() } }
+            Button("places.unreadable.show") { NSWorkspace.shared.activateFileViewerSelecting([store.registerFileURL]) }
+            Button("places.unreadable.cancel", role: .cancel) {}
+        } message: {
+            Text("places.error.unreadable")
+        }
     }
 
     // MARK: Places
