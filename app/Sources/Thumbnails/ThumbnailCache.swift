@@ -7,22 +7,28 @@ import Document
 /// One copy is made per image and step. A request for a copy that is already there, or being made, makes no new one.
 /// A larger copy that is in memory answers a request for a smaller one.
 public actor ThumbnailCache {
-    private final class Box {
+    private struct Copy {
         let thumbnail: Thumbnail
-        init(_ thumbnail: Thumbnail) { self.thumbnail = thumbnail }
+        let cost: Int
+        let assetID: String
+        let step: Int
+        var lastUsed: Int
     }
 
-    private let memory = NSCache<NSString, Box>()
+    private var copies: [String: Copy] = [:]
     private var running: [String: Task<Thumbnail, any Error>] = [:]
-    /// Steps that were made for an image. A step may have been dropped from memory since.
+    /// Steps of the copies held in memory, per image.
     private var made: [String: Set<Int>] = [:]
+    private let byteLimit: Int
+    private var bytesHeld = 0
+    private var clock = 0
 
     /// How many images were decoded. For tests.
     public private(set) var decodeCount = 0
 
-    /// `byteLimit` caps the memory of the copies. The system may drop copies earlier.
+    /// `byteLimit` caps the memory of the copies. The least recently used copy is dropped first.
     public init(byteLimit: Int = 256 * 1024 * 1024) {
-        memory.totalCostLimit = byteLimit
+        self.byteLimit = byteLimit
     }
 
     /// A copy of the image with a longer side of `edge` pixels, or the original size when that is smaller.
@@ -36,22 +42,46 @@ public actor ThumbnailCache {
         decodeCount += 1
         defer { running[key] = nil }
         let result = try await task.value
-        memory.setObject(Box(result), forKey: key as NSString, cost: result.image.bytesPerRow * result.image.height)
-        made[assetID, default: []].insert(wanted)
+        store(result, assetID: assetID, step: wanted)
         return result
     }
 
     /// The copy in memory with the smallest step that is at least `step`.
     private func held(_ assetID: String, atLeast step: Int) -> Thumbnail? {
         for candidate in (made[assetID] ?? []).sorted() where candidate >= step {
-            if let box = memory.object(forKey: Self.key(assetID, candidate) as NSString) { return box.thumbnail }
+            let key = Self.key(assetID, candidate)
+            guard var copy = copies[key] else { continue }
+            clock += 1
+            copy.lastUsed = clock
+            copies[key] = copy
+            return copy.thumbnail
         }
         return nil
     }
 
+    private func store(_ thumbnail: Thumbnail, assetID: String, step: Int) {
+        let cost = thumbnail.image.bytesPerRow * thumbnail.image.height
+        clock += 1
+        remove(Self.key(assetID, step))
+        copies[Self.key(assetID, step)] = Copy(thumbnail: thumbnail, cost: cost, assetID: assetID, step: step, lastUsed: clock)
+        bytesHeld += cost
+        made[assetID, default: []].insert(step)
+        while bytesHeld > byteLimit, copies.count > 1,
+              let oldest = copies.min(by: { $0.value.lastUsed < $1.value.lastUsed }) {
+            remove(oldest.key)
+        }
+    }
+
+    private func remove(_ key: String) {
+        guard let copy = copies.removeValue(forKey: key) else { return }
+        bytesHeld -= copy.cost
+        made[copy.assetID]?.remove(copy.step)
+        if made[copy.assetID]?.isEmpty == true { made[copy.assetID] = nil }
+    }
+
     /// Forgets the copies of one image, for example after it was replaced.
     public func forget(assetID: String) {
-        for step in made[assetID] ?? [] { memory.removeObject(forKey: Self.key(assetID, step) as NSString) }
+        for step in made[assetID] ?? [] { remove(Self.key(assetID, step)) }
         made[assetID] = nil
     }
 
