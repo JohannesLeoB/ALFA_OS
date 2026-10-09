@@ -4,14 +4,14 @@ import BoardModel
 
 /// The dots of the background grid. They stay one device pixel group wide at every zoom.
 struct CanvasGridLayer: View {
-    var controller: CanvasController
+    /// The dots to draw. Empty while the grid is off.
+    var dots: GridDots
 
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
     @Environment(\.displayScale) private var displayScale
 
     var body: some View {
-        let dots = controller.gridDots
         let side = 2 / displayScale
         let color = theme.color(.border, scheme)
         Canvas { context, _ in

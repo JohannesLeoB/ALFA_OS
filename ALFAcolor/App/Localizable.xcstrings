@@ -969,6 +969,28 @@
         }
       }
     },
+    "command.view.gridShown" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raster ein/aus"
+          }
+        }
+      }
+    },
+    "command.view.snapsAtAll" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Am Raster einrasten ein/aus"
+          }
+        }
+      }
+    },
     "command.view.statusBar" : {
       "extractionState" : "manual",
       "localizations" : {

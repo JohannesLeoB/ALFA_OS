@@ -41,6 +41,7 @@ struct ShellView: View {
                 if shell.statusBarVisible {
                     StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError,
                                   zoomPercent: canvas.zoomPercent, selectionCount: canvas.store.selectedItems.count,
+                                  gridStep: interaction.snap.gridStep,
                                   notice: shell.labNotice ?? shell.roomNotice ?? readNotice)
                 }
             }

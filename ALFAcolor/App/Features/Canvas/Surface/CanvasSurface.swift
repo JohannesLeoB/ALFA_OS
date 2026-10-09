@@ -27,7 +27,7 @@ struct CanvasSurface: View {
         Signpost.interval("Canvas frame") {
             ZStack(alignment: .topLeading) {
                 theme.color(.background, scheme)
-                CanvasGridLayer(controller: controller)
+                CanvasGridLayer(dots: interaction.shownGridDots)
                 CanvasItemsLayer(controller: controller, interaction: interaction)
                 SelectionLayer(interaction: interaction)
                 CanvasAidsLayer(controller: controller, interaction: interaction)

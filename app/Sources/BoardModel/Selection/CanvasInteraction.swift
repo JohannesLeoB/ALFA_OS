@@ -328,6 +328,9 @@ public final class CanvasInteraction {
         snap.gridStep = shown ? Self.gridStep : 0
     }
 
+    /// The dots the canvas draws: none while the grid is off.
+    public var shownGridDots: GridDots { gridShown ? controller.gridDots : .empty }
+
     /// True when drags and resizes snap at all (to the grid, the edges and the spacing).
     public var snapsAtAll: Bool { snap.isOn }
 

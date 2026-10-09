@@ -3,7 +3,7 @@ import AppTheme
 import BoardModel
 
 /// Status bar at the bottom. Information only, no switches.
-/// The save state, the zoom, the selection count and the notice are real values. Grid and unit are in the inspector only.
+/// The save state, zoom, grid, unit, selection count and notice are real values, read from the same sources as the inspector.
 struct StatusBarView: View {
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
@@ -15,6 +15,8 @@ struct StatusBarView: View {
     let zoomPercent: Int
     /// Number of selected items. Zero shows the word for none.
     let selectionCount: Int
+    /// The grid step in points. Zero means the grid is off.
+    let gridStep: Double
     /// A short notice: a catalog key, for example after a lab action, or a warning text from reading. nil shows nothing.
     var notice: String?
 
@@ -23,6 +25,8 @@ struct StatusBarView: View {
             Divider()
             HStack(spacing: theme.space(.s5)) {
                 field("status.zoom") { RollingText(text: "\(zoomPercent) %", style: .caption) }
+                field("status.grid", gridText)
+                field("status.unit", LocalizedStringKey(LengthUnit.point.symbolKey))
                 field("status.selection") {
                     if selectionCount > 0 {
                         RollingText(text: "\(selectionCount)", style: .caption)
@@ -46,6 +50,11 @@ struct StatusBarView: View {
         .background(theme.color(.surface, scheme))
         .accessibilityElement(children: .contain)
         .accessibilityLabel("status.title")
+    }
+
+    /// The grid step in points, or "off". The inspector reads the same value.
+    private var gridText: LocalizedStringKey {
+        gridStep > 0 ? LocalizedStringKey(LengthUnit.point.text(points: gridStep)) : "inspector.room.gridOff"
     }
 
     private var saveStateText: LocalizedStringKey {
