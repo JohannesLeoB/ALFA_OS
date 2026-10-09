@@ -144,7 +144,7 @@ public struct LabDraft: Equatable, Sendable {
         switch tab {
         case .html: "index.html"
         case .css: "style.css"
-        case .script: art == .react ? "component.jsx" : "script.js"
+        case .script: art == .react ? "component.tsx" : "script.js"
         }
     }
 }
