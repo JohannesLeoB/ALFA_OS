@@ -63,8 +63,9 @@ public enum Content: Codable, Hashable, Sendable {
     case note(text: String)
     case swatch(hex: String, name: String?)
     case link(url: URL, note: String?)
-    /// A frame: a view area at device size with an optional grid.
-    case frame(deviceID: String?, gridID: String?)
+    /// A frame: a view area at device size with an optional grid. `deviceID` may end in `-landscape` or `-portrait`.
+    /// `scale` is the pixels per point of the frame (1 to 3). nil uses the first scale of the device.
+    case frame(deviceID: String?, gridID: String?, scale: Double? = nil)
     /// A group with a title (zone). Its children lie geometrically inside it.
     case group(title: String)
     /// A drawn shape: rectangle, capsule, ellipse or line.
