@@ -195,6 +195,42 @@ public final class BoardStore {
         if !inHistory { undoManager.endUndoGrouping() }
     }
 
+    // MARK: Versions
+
+    /// Changes the board and the versions of code cards as one undo step, named by `nameKey`.
+    /// A board change alone leaves the versions as they are, and a version change alone leaves the board as it is.
+    /// The change runs on copies: when it throws, nothing changes. Returns false when nothing changed.
+    @discardableResult
+    public func changeVersions(nameKey: String, _ change: (inout Board, inout CardVersions) throws -> Void) throws -> Bool {
+        onWillSwitchSpace?()
+        var board = document.board
+        var versions = document.versions
+        try change(&board, &versions)
+        guard board != document.board || versions != document.versions else { return false }
+        swapVersionState(board: board, versions: versions, nameKey: nameKey)
+        return true
+    }
+
+    /// Puts another board and other versions in place. Undo and redo use it too, and each time the inverse is registered.
+    private func swapVersionState(board target: Board, versions: CardVersions, nameKey: String) {
+        let previousBoard = document.board
+        let previousVersions = document.versions
+        document.board = target
+        document.versions = versions
+        if !target.spaces.contains(where: { $0.id == activeSpaceID }) { activeSpaceID = target.spaces.first?.id }
+        selection = visibleSelection(selection)
+        let ids = Set(target.spaces.map(\.id))
+        viewports = viewports.filter { ids.contains($0.key) }
+        didChangeDocument()
+        let inHistory = undoManager.isUndoing || undoManager.isRedoing
+        if !inHistory { undoManager.beginUndoGrouping() }
+        undoManager.registerUndo(withTarget: self) { store in
+            MainActor.assumeIsolated { store.swapVersionState(board: previousBoard, versions: previousVersions, nameKey: nameKey) }
+        }
+        undoManager.setActionName(Command.localized(nameKey))
+        if !inHistory { undoManager.endUndoGrouping() }
+    }
+
     // MARK: Undo
 
     /// Uses the undo manager of the window from now on. Steps in the previous manager stay there and no longer reach this store.
@@ -302,6 +338,6 @@ public final class BoardStore {
     }
 
     private static func sameContent(_ a: ALFAcolorDocument, _ b: ALFAcolorDocument) -> Bool {
-        a.board == b.board && a.tokenSets == b.tokenSets && Set(a.assets.ids) == Set(b.assets.ids)
+        a.board == b.board && a.tokenSets == b.tokenSets && a.versions == b.versions && Set(a.assets.ids) == Set(b.assets.ids)
     }
 }

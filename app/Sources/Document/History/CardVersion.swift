@@ -18,7 +18,8 @@ public struct CardVersion: Equatable, Sendable {
     public var files: [String: String]
 
     public init(date: Date, reason: Reason, language: CodeLanguage, files: [String: String]) {
-        self.date = date
+        // The package keeps milliseconds, so the date is rounded the same way here. Then a saved version reads back equal.
+        self.date = Date(timeIntervalSince1970: (date.timeIntervalSince1970 * 1000).rounded() / 1000)
         self.reason = reason
         self.language = language
         self.files = files
