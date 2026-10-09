@@ -4,7 +4,7 @@
 |---|---|---|---|
 | E0 Fundament | erledigt | 2026-10-08 „DAHIN“ | G0 erfüllt: 12 Tests grün |
 | E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 wartet auf Bild-Abnahme; B-107 erledigt; B-108a erledigt; B-108b erledigt | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen (Bild-Abnahme durch Johannes und P-001 stehen aus; E2 läuft auf sein Wort) |
-| E2 Leinwand | läuft: B-110, B-201, B-203, B-202, B-211, B-205, B-204, B-207, B-208 erledigt; B-401 (E4) erledigt; B-403, B-213 erledigt; B-212 und B-215 im Bau (parallel); dann B-214, B-206, B-403, B-404, B-704, B-209 (Johannes 2026-10-09: „ERSTMAL BAUEN BAUEN BAUEN“, „HAIKUs Bauen!!!“) | 2026-10-09 „Weiter bauen. Ich starte die App später. Tools und funktionstiefe einbauen. App funktional machen. Go. Workers sonnet oder Haiku.“ | G2 offen |
+| E2 Leinwand | läuft: B-110, B-201, B-203, B-202, B-211, B-205, B-204, B-207, B-208 erledigt; B-401 (E4) erledigt; B-403, B-213, B-212, B-215 erledigt; B-404 und B-216 im Bau (parallel); dann B-214, B-206, B-403, B-404, B-704, B-209 (Johannes 2026-10-09: „ERSTMAL BAUEN BAUEN BAUEN“, „HAIKUs Bauen!!!“) | 2026-10-09 „Weiter bauen. Ich starte die App später. Tools und funktionstiefe einbauen. App funktional machen. Go. Workers sonnet oder Haiku.“ | G2 offen |
 | E3 bis E9 | geplant | | |
 
 ## Chef-Aufgaben vor E2 (aus den Übergaben von E1)
@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (66)
+## Briefe (67)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -46,10 +46,11 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-208](briefe/B-208.md) | E2 | Kontextleiste und Inspektor-Grundgerüst | B-204 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 615 Tests); Abnahme am Bild offen |
 | [B-209](briefe/B-209.md) | E2 | Leistungsprobe Leinwand | B-203 | offen |
 | [B-211](briefe/B-211.md) | E2 | Dokument in der App: Neu, Öffnen, Sichern | B-110, B-201, B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 359 Tests; DocumentGroup); Abnahme am Bild offen (⌘N, ⌘O, ⌘S, Speicherstand) |
-| [B-212](briefe/B-212.md) | E2 | Blob-Menü | B-208 | vergeben an Haiku-Agent (im Repo, parallel zu B-215), 2026-10-09 |
+| [B-212](briefe/B-212.md) | E2 | Blob-Menü | B-208 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 712 Tests, App-Bau grün); Abnahme am Bild offen; Nachträge in B-216 |
 | [B-213](briefe/B-213.md) | E2 | Fächer für Farbfelder | B-205 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 662 Tests; Nahtregel Motion ergänzt); noch nicht eingehängt (B-212); Tempo entscheidet Johannes am Bild |
 | [B-214](briefe/B-214.md) | E2 | Bewegung und Wirkung nativ | B-212 | offen |
-| [B-215](briefe/B-215.md) | E2 | Startbibliothek: Bausteine als Code-Karten | B-403 | vergeben an Haiku-Agent (im Repo, parallel zu B-212), 2026-10-09 |
+| [B-215](briefe/B-215.md) | E2 | Startbibliothek: Bausteine als Code-Karten | B-403 | erledigt (Bewegung, 33 Karten laden live), geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 712 Tests); Blocks fehlen (Abhängigkeiten), Öffnen-Befehl in B-216 |
+| [B-216](briefe/B-216.md) | E2 | Nachträge: Fächer wählt Farbe, Bausteine öffnen | B-212, B-215 | vergeben an Haiku-Agent (im Repo, parallel zu B-404), 2026-10-09 |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | offen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | offen |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
@@ -58,7 +59,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-401](briefe/B-401.md) | E4 | Renderer-Protokoll und Web-Renderer | B-205 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 615 Tests; WebPage macOS 26, JavaScript auch beim Vorschaubild an); Abnahme am Bild offen |
 | [B-402](briefe/B-402.md) | E4 | Player-Verwaltung und Vorschaubilder | B-401 | offen |
 | [B-403](briefe/B-403.md) | E4 | Code-Karte und Quelltextansicht | B-401 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 662 Tests); Abnahme am Bild offen; ruhen außerhalb des Bildes später (B-209) |
-| [B-404](briefe/B-404.md) | E4 | Labor | B-403 | offen |
+| [B-404](briefe/B-404.md) | E4 | Labor | B-403 | vergeben an Haiku-Agent (im Repo, parallel zu B-216), 2026-10-09 |
 | [B-405](briefe/B-405.md) | E4 | Hinweise im Labor | B-404 | offen |
 | [B-501](briefe/B-501.md) | E5 | Farbfelder und Pipette | B-208 | offen |
 | [B-502](briefe/B-502.md) | E5 | Farben aus Bild | B-501 | offen |
