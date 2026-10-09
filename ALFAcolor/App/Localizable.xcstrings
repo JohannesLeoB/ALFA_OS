@@ -232,6 +232,17 @@
         }
       }
     },
+    "code.lab" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Labor öffnen"
+          }
+        }
+      }
+    },
     "code.notRunning" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -580,6 +591,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ALFAcolor-Hilfe"
+          }
+        }
+      }
+    },
+    "command.help.openStarter" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bausteine öffnen"
           }
         }
       }
@@ -3276,6 +3298,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Inhalt ändern"
+          }
+        }
+      }
+    },
+    "undo.setFill" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbe ändern"
           }
         }
       }

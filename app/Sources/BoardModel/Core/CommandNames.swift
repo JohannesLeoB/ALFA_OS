@@ -10,8 +10,8 @@ extension Command {
         case .move: "undo.move"
         case .resize: "undo.resize"
         case .reorder(_, let how): "undo.reorder.\(how.rawValue)"
-        // The catalog has no name of its own for a colour change, so it uses the name of a content change.
-        case .setContent, .setFill: "undo.setContent"
+        case .setContent: "undo.setContent"
+        case .setFill: "undo.setFill"
         case .group: "undo.group"
         case .ungroup: "undo.ungroup"
         case .setLocked(_, let value): value ? "undo.lock" : "undo.unlock"
@@ -33,7 +33,7 @@ extension Command {
     /// All keys that a command can use by itself. The string catalog must have all of them.
     public static var allNameKeys: [String] {
         ["undo.insert", "undo.delete", "undo.move", "undo.resize", "undo.group", "undo.ungroup",
-         "undo.lock", "undo.unlock", "undo.hide", "undo.show", "undo.layer", "undo.batch", "undo.setContent", "undo.duplicate"]
+         "undo.lock", "undo.unlock", "undo.hide", "undo.show", "undo.layer", "undo.batch", "undo.setContent", "undo.setFill", "undo.duplicate"]
             + StackMove.allCases.map { "undo.reorder.\($0.rawValue)" }
             + Arrangement.allCases.map { "undo.arrange.\($0.rawValue)" }
     }
