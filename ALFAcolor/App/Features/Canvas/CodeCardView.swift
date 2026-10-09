@@ -1,6 +1,6 @@
 import AppTheme
 import BoardModel
-import Renderers
+import CodePlayer
 import SwiftUI
 
 /// A code card on the canvas: the card frame with the switch in its header, and a body that shows the player,

@@ -1,5 +1,5 @@
 import AppTheme
-import Renderers
+import CodePlayer
 import SwiftUI
 
 /// The hints of the lab: one line for each thing the draft lacks, with a button for the fix where there is one.

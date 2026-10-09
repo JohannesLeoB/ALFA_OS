@@ -2,7 +2,7 @@ import BoardModel
 import ALFAcolorCore
 import Document
 import Observation
-import Renderers
+import CodePlayer
 
 /// The lab of one code card: its session, its running page, and the link to the card on the board.
 /// The model lives as long as the window, so the draft stays when the lab closes.

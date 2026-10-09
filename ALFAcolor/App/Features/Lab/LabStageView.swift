@@ -1,5 +1,5 @@
 import AppTheme
-import Renderers
+import CodePlayer
 import SwiftUI
 
 /// The running page of the lab with its toolbar. The page is shown at the chosen width and zoom, with the guides over it.

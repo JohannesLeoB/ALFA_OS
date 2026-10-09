@@ -1,4 +1,4 @@
-import Renderers
+import CodePlayer
 import SwiftUI
 
 /// The switch in the header of a code card: player, source or both.

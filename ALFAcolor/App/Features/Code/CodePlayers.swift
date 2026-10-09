@@ -1,6 +1,6 @@
 import Dispatch
 import Foundation
-import Renderers
+import CodePlayer
 
 /// The live pages of the app, in all windows. At most `player.maxLive` pages run at once: a page that starts beyond the limit stops the oldest one.
 /// Under memory pressure every live page stops. One instance for the app keeps that limit true across windows.

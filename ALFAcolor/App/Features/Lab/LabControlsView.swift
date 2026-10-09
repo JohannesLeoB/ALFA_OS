@@ -1,7 +1,7 @@
 import AppTheme
 import SwiftUI
 import Tokens
-import Renderers
+import CodePlayer
 
 /// The controls of the CSS variables of the code: a slider for each number, a colour well for each colour.
 struct LabControlsView: View {

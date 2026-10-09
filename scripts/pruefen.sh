@@ -120,7 +120,7 @@ SEAM_RULES = {
     "Tokens": {"mode": "only", "frameworks": set(), "packages": {"ALFAcolorCore"}},
     "ColorLab": {"mode": "only", "frameworks": {"CoreGraphics"}, "packages": {"Tokens"}},
     "AppTheme": {"mode": "except", "frameworks": {"AppKit"}},   # SwiftUI and WebKit allowed
-    "Renderers": {"mode": "except", "frameworks": {"AppKit"}},  # SwiftUI and WebKit allowed
+    "CodePlayer": {"mode": "except", "frameworks": {"AppKit"}},  # SwiftUI and WebKit allowed
     "Motion": {"mode": "only", "frameworks": {"CoreGraphics"}, "packages": set()},
     "BoardModel": {"mode": "only", "frameworks": {"Observation"}, "packages": {"ALFAcolorCore", "Geometry", "Document", "Tokens"}},
 }

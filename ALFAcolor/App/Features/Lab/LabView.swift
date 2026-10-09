@@ -1,6 +1,6 @@
 import AppKit
 import AppTheme
-import Renderers
+import CodePlayer
 import SwiftUI
 import Geometry
 

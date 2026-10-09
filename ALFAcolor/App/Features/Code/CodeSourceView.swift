@@ -1,5 +1,5 @@
 import AppTheme
-import Renderers
+import CodePlayer
 import SwiftUI
 
 /// The source of a card: the file that is chosen, highlighted, with a menu when the card has more files.

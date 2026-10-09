@@ -1,5 +1,5 @@
 import BoardModel
-import Renderers
+import CodePlayer
 
 /// The renderers of the canvas. A code card goes to the first renderer that takes it.
 @MainActor

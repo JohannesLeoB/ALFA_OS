@@ -7,7 +7,7 @@ let package = Package(
     name: "ALFAcolor",
     platforms: [.macOS(.v15)],
     products: [
-        .library(name: "ALFAcolorKit", targets: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab", "AppTheme", "Document", "BoardModel", "Thumbnails", "Importers", "Renderers", "Motion", "Exporters", "Performance", "Library", "AI", "AssistantBridge"])
+        .library(name: "ALFAcolorKit", targets: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab", "AppTheme", "Document", "BoardModel", "Thumbnails", "Importers", "CodePlayer", "Motion", "Exporters", "Performance", "Library", "AI", "AssistantBridge"])
     ],
     targets: [
         .target(name: "ALFAcolorCore"),
@@ -20,7 +20,7 @@ let package = Package(
         .target(name: "BoardModel", dependencies: ["ALFAcolorCore", "Geometry", "Document"]),
         .target(name: "Thumbnails", dependencies: ["Document"]),
         .target(name: "Importers", dependencies: ["ALFAcolorCore", "Document", "BoardModel", "Tokens"]),
-        .target(name: "Renderers", dependencies: ["ALFAcolorCore"]),
+        .target(name: "CodePlayer", dependencies: ["ALFAcolorCore"]),
         .target(name: "Exporters", dependencies: ["ALFAcolorCore", "Document", "BoardModel", "Tokens", "Geometry"]),
         .target(name: "Library", dependencies: ["ALFAcolorCore", "Document", "Geometry", "ColorLab", "Tokens"]),
         .target(name: "AI", dependencies: ["ALFAcolorCore", "Tokens"]),
@@ -31,8 +31,8 @@ let package = Package(
         .testTarget(name: "DocumentTests", dependencies: ["Document", "ALFAcolorCore", "Tokens"], exclude: ["Fixtures"]),
         .testTarget(name: "BoardModelTests", dependencies: ["BoardModel", "ALFAcolorCore", "Document", "Geometry"]),
         .testTarget(name: "ThumbnailsTests", dependencies: ["Thumbnails", "Document"]),
-        .testTarget(name: "ImportersTests", dependencies: ["Importers", "ALFAcolorCore", "Document", "BoardModel", "Renderers", "Tokens"]),
-        .testTarget(name: "RenderersTests", dependencies: ["Renderers", "ALFAcolorCore"]),
+        .testTarget(name: "ImportersTests", dependencies: ["Importers", "ALFAcolorCore", "Document", "BoardModel", "CodePlayer", "Tokens"]),
+        .testTarget(name: "CodePlayerTests", dependencies: ["CodePlayer", "ALFAcolorCore"]),
         .testTarget(name: "ExportersTests", dependencies: ["Exporters", "Importers", "ALFAcolorCore", "Document", "BoardModel", "Tokens", "Geometry"]),
         .testTarget(name: "PerformanceTests", dependencies: ["Performance", "ALFAcolorCore", "Document", "BoardModel", "Geometry"]),
         .testTarget(name: "LibraryTests", dependencies: ["Library", "ALFAcolorCore", "Document", "Geometry", "ColorLab", "Tokens"]),

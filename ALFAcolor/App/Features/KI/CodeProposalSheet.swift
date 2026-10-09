@@ -1,6 +1,6 @@
 import SwiftUI
 import AppTheme
-import Renderers
+import CodePlayer
 
 /// The result of a code task: the files of the card before and after the proposal. Nothing is applied until the sheet says so.
 struct CodeProposal: Identifiable, Equatable {

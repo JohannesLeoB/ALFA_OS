@@ -2,7 +2,7 @@ import BoardModel
 import CoreGraphics
 import Foundation
 import Observation
-import Renderers
+import CodePlayer
 
 /// One code card on the canvas: its state, its live page while it plays, and its still image while it rests.
 /// The page and the image belong to the window, not to the document.

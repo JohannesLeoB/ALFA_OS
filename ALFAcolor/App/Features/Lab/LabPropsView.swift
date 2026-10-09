@@ -1,5 +1,5 @@
 import AppTheme
-import Renderers
+import CodePlayer
 import SwiftUI
 
 /// One property of the component as a control: a slider for a number, segments for a choice, a field for a text

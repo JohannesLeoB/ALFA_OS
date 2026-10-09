@@ -1,5 +1,5 @@
 import AppTheme
-import Renderers
+import CodePlayer
 import SwiftUI
 
 /// The colors of the syntax kinds, from the syntax tokens of the design contract.

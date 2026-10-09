@@ -1,5 +1,5 @@
 import AppKit
-import Renderers
+import CodePlayer
 import SwiftUI
 import WebKit
 

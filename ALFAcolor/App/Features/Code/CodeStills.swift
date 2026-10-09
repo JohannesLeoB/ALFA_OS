@@ -1,6 +1,6 @@
 import CoreGraphics
 import Foundation
-import Renderers
+import CodePlayer
 
 /// The still images of code cards. A still is taken once for each content and width, then read from the cache.
 /// At most `concurrentLimit` stills are taken at once; the others wait in line.

@@ -1,7 +1,7 @@
 import SwiftUI
 import AppTheme
 import AI
-import Renderers
+import CodePlayer
 
 /// The assistant row under the lab's controls: an instruction with the variant button, the HTML button when the
 /// draft has only styles, and a stop button while a call runs. A result opens as a proposal; nothing changes before that.

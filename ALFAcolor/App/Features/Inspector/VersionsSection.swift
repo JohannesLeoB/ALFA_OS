@@ -3,7 +3,7 @@ import AppTheme
 import ALFAcolorCore
 import BoardModel
 import Document
-import Renderers
+import CodePlayer
 
 /// The versions of a code card: its earlier code, newest first. A version can be kept, restored or deleted.
 /// Each change is one undo step; a change that is refused shows why, and changes nothing.
