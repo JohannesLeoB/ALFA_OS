@@ -15,7 +15,7 @@ struct ShellView: View {
     @State private var canvas: CanvasController
     @State private var interaction: CanvasInteraction
     @State private var importer: ImportCoordinator
-    /// Where the canvas starts in window coordinates. Views on top of the canvas measure their area against it.
+    /// Where the canvas starts in window coordinates (the top edge, under the toolbar too). Views on top of the canvas measure their area against it.
     @State private var canvasOrigin = CGPoint.zero
     /// The first thing that reading the document noticed, shown in the status bar.
     private let readNotice: String?
@@ -35,9 +35,8 @@ struct ShellView: View {
         } detail: {
             VStack(spacing: 0) {
                 CanvasSurface(controller: canvas, interaction: interaction, importer: importer,
-                              onTogglePalettes: { shell.togglePalettes() }, labClosings: shell.labClosings)
-                    .overlay { ContextBarHost(canvas: canvas) }
-                    .onGeometryChange(for: CGPoint.self, of: { $0.frame(in: .global).origin }) { canvasOrigin = $0 }
+                              onTogglePalettes: { shell.togglePalettes() }, labClosings: shell.labClosings,
+                              origin: $canvasOrigin)
                 if shell.statusBarVisible {
                     StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError,
                                   zoomPercent: canvas.zoomPercent, selectionCount: canvas.store.selectedItems.count,

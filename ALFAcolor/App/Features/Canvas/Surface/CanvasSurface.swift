@@ -15,6 +15,8 @@ struct CanvasSurface: View {
     var onTogglePalettes: @MainActor () -> Void
     /// Changes each time a lab closes; the canvas then takes the keyboard focus back.
     var labClosings = 0
+    /// The window point where the canvas starts. The canvas covers the top safe area, so this is the top edge of the window content.
+    @Binding var origin: CGPoint
 
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
@@ -34,9 +36,12 @@ struct CanvasSurface: View {
                 if controller.isEmpty {
                     emptyHint
                 }
+                // Inside the canvas, so its positions are canvas points like the selection frames.
+                ContextBarHost(canvas: controller)
                 ScrollCatcher(keeps: { controller.keepsScroll(atX: $0.x, y: $0.y) }) { controller.scroll($0) }
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+            .onGeometryChange(for: CGPoint.self, of: { $0.frame(in: .global).origin }) { origin = $0 }
             .clipped()
             .onGeometryChange(for: CGSize.self, of: \.size) { size in
                 controller.resize(to: CanvasSize(width: size.width, height: size.height))
