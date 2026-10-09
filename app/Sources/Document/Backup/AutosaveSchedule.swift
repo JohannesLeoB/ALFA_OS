@@ -3,11 +3,11 @@ import Foundation
 /// When the crash copy of a document is due. Pure: the caller passes the times, so tests set the clock.
 ///
 /// Rules: a write is due 30 seconds after the last change. While changes keep coming, a write is due
-/// 60 seconds after the first pending change, so the copy never falls far behind. Two writes are at least
+/// 10 minutes after the first pending change, so the copy never falls far behind. Two writes are at least
 /// 60 seconds apart.
 public struct AutosaveSchedule: Equatable, Sendable {
     public static let quietPeriod: TimeInterval = 30
-    public static let maximumAge: TimeInterval = 60
+    public static let maximumAge: TimeInterval = 600
     public static let spacing: TimeInterval = 60
 
     /// The most recent change since the last write or clean save.
