@@ -23,10 +23,11 @@ struct FileCommands: Commands {
     static let providedByDocumentScene: Set<String> = [
         "file.new", "file.open", "file.recent", "file.save", "file.duplicate", "file.rename", "file.move", "file.revert"
     ]
+    @FocusedValue(\.interaction) private var interaction
 
     var body: some Commands {
         CommandGroup(after: .importExport) {
-            MenuEntries(menu: .file, functions: MenuFunctions(), hiding: Self.providedByDocumentScene)
+            MenuEntries(menu: .file, functions: MenuFunctions(interaction: interaction), hiding: Self.providedByDocumentScene)
         }
     }
 }

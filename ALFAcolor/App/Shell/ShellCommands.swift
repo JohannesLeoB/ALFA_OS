@@ -7,10 +7,11 @@ import ALFAcolorCore
 struct ShellCommands: Commands {
     @FocusedValue(\.shell) private var shell
     @FocusedValue(\.canvas) private var canvas
+    @FocusedValue(\.interaction) private var interaction
 
     var body: some Commands {
         CommandGroup(after: .sidebar) {
-            MenuEntries(menu: .view, functions: MenuFunctions(shell: shell, canvas: canvas))
+            MenuEntries(menu: .view, functions: MenuFunctions(shell: shell, canvas: canvas, interaction: interaction))
         }
     }
 }
