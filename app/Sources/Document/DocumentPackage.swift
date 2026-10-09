@@ -188,7 +188,8 @@ public enum DocumentPackage {
         if let active = doc.activeSpaceID { manifestExtras[ActiveSpace.key] = .string(active) }
         let manifest = ManifestFile(formatVersion: version, lastWrittenByAppVersion: appVersion, documentID: doc.board.documentID,
                                     createdAt: doc.board.createdAt, title: doc.board.title, spaces: spaces.map(\.id),
-                                    tokenSets: doc.tokenSets.map(\.name), folders: doc.board.folders, extras: manifestExtras)
+                                    tokenSets: doc.tokenSets.map(\.name), folders: doc.board.folders,
+                                    chatStorage: doc.chatStorage == .local ? ChatStorage.local.rawValue : nil, extras: manifestExtras)
         try put("manifest.json", try encode(manifest, path: "manifest.json"))
 
         // Versions of cards that are on the board. Versions of removed cards are not written.
@@ -441,6 +442,7 @@ public enum DocumentPackage {
                                     assets: assets, tokenSets: orderedSets)
         doc.board.format = migration.currentVersion
         doc.board.folders = manifest.folders
+        doc.chatStorage = ChatStorage(rawValue: manifest.chatStorage ?? "") ?? .document
         doc.preserved = preserved
         doc.spaceViews = spaceViews
         doc.activeSpaceID = manifest.extras[ActiveSpace.key]?.stringValue

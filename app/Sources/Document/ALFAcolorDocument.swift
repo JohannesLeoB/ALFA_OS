@@ -21,6 +21,8 @@ public struct ALFAcolorDocument: Equatable, Sendable {
     public var activeSpaceID: String?
     /// The earlier states of code cards. They are written to `history/` and read back from there.
     public var versions = CardVersions()
+    /// Where the chat of the document is kept. The manifest names the place only when it is not the package.
+    public var chatStorage: ChatStorage = .document
 
     public init(board: Board = Board(title: String(localized: "document.untitled")), assets: AssetStore = AssetStore(), tokenSets: [TokenSet] = []) {
         self.board = board
@@ -123,16 +125,18 @@ struct ManifestFile: Codable {
     var tokenSets: [String]
     /// Library folders. Added in a later version of the format; a file without them has none.
     var folders: [Folder] = []
+    /// Where the chat is kept when it is not in the package ("local"). Absent means the package.
+    var chatStorage: String? = nil
     var extras: [String: JSONValue] = [:]
 
-    enum K: String, CodingKey, CaseIterable { case formatVersion, lastWrittenByAppVersion, documentID, createdAt, title, spaces, tokenSets, folders }
+    enum K: String, CodingKey, CaseIterable { case formatVersion, lastWrittenByAppVersion, documentID, createdAt, title, spaces, tokenSets, folders, chatStorage }
     static let known = Set(K.allCases.map(\.rawValue))
 
     init(formatVersion: Int, lastWrittenByAppVersion: String?, documentID: UUID, createdAt: Date, title: String,
-         spaces: [String], tokenSets: [String], folders: [Folder] = [], extras: [String: JSONValue]) {
+         spaces: [String], tokenSets: [String], folders: [Folder] = [], chatStorage: String? = nil, extras: [String: JSONValue]) {
         self.formatVersion = formatVersion; self.lastWrittenByAppVersion = lastWrittenByAppVersion
         self.documentID = documentID; self.createdAt = createdAt; self.title = title
-        self.spaces = spaces; self.tokenSets = tokenSets; self.folders = folders; self.extras = extras
+        self.spaces = spaces; self.tokenSets = tokenSets; self.folders = folders; self.chatStorage = chatStorage; self.extras = extras
     }
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: K.self)
@@ -144,6 +148,7 @@ struct ManifestFile: Codable {
         spaces = try c.decodeIfPresent([String].self, forKey: .spaces) ?? []
         tokenSets = try c.decodeIfPresent([String].self, forKey: .tokenSets) ?? []
         folders = try c.decodeIfPresent([Folder].self, forKey: .folders) ?? []
+        chatStorage = try c.decodeIfPresent(String.self, forKey: .chatStorage)
         extras = try Extras.decode(from: decoder, known: Self.known)
     }
     func encode(to encoder: Encoder) throws {
@@ -156,6 +161,7 @@ struct ManifestFile: Codable {
         try c.encode(spaces, forKey: .spaces)
         try c.encode(tokenSets, forKey: .tokenSets)
         if !folders.isEmpty { try c.encode(folders, forKey: .folders) }
+        try c.encodeIfPresent(chatStorage, forKey: .chatStorage)
         try Extras.encode(extras, known: Self.known, to: encoder)
     }
 }
