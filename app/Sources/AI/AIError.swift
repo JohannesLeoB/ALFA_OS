@@ -30,6 +30,8 @@ public enum AIError: Error, Sendable, Equatable {
     case toolConfiguration(String)
     /// The request asks for web search, and the console has turned web search off for the organization (400).
     case webSearchDisabled
+    /// The request is larger than the API takes (32 MB). Carries the size in bytes that was built.
+    case contextTooLarge(bytes: Int)
 }
 
 extension AIError: CustomStringConvertible {
@@ -63,6 +65,8 @@ extension AIError: CustomStringConvertible {
             "A tool setting breaks a rule: \(reason)"
         case .webSearchDisabled:
             "Web search is turned off for this organization in the console."
+        case let .contextTooLarge(bytes):
+            "The request is too large: \(bytes) bytes."
         }
     }
 }
