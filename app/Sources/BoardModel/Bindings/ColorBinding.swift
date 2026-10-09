@@ -26,6 +26,40 @@ public enum ColorBinding {
         case fill, stroke, swatch
     }
 
+    /// True when the item has this slot: a fill or stroke for shapes, the colour for swatches.
+    public static func hasSlot(_ item: Item, slot: Slot) -> Bool {
+        switch (item.content, slot) {
+        case (.shape, .fill), (.shape, .stroke), (.swatch, .swatch): true
+        default: false
+        }
+    }
+
+    /// The name of the field the slot follows, nil when it is not bound or the item has no such slot.
+    public static func token(of item: Item, slot: Slot) -> String? {
+        switch (item.content, slot) {
+        case (.shape(_, let style), .fill): style.fillToken
+        case (.shape(_, let style), .stroke): style.strokeToken
+        case (.swatch, .swatch): item.colorToken
+        default: nil
+        }
+    }
+
+    /// The stored hex of the slot, nil when the item has no such slot.
+    public static func stored(of item: Item, slot: Slot) -> String? {
+        switch (item.content, slot) {
+        case (.shape(_, let style), .fill): style.fill
+        case (.shape(_, let style), .stroke): style.stroke
+        case (.swatch(let hex, _), .swatch): hex
+        default: nil
+        }
+    }
+
+    /// True when the slot is bound to a field that does not exist (any more).
+    public static func isMissing(_ item: Item, slot: Slot, in sets: [TokenSet]) -> Bool {
+        guard let name = token(of: item, slot: slot) else { return false }
+        return !ColorFields.fields(in: sets).contains { $0.name == name }
+    }
+
     /// The item with `slot` bound to the field `name` and the stored value set to the colour of the field.
     /// nil when the slot does not exist on the item.
     static func bound(_ item: Item, slot: Slot, name: String, color: RGB) -> Item? {

@@ -1,6 +1,83 @@
 {
   "sourceLanguage" : "de",
   "strings" : {
+    "binding.chain" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbfeld verknüpfen"
+          }
+        }
+      }
+    },
+    "binding.color" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbe"
+          }
+        }
+      }
+    },
+    "binding.fill" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Füllung"
+          }
+        }
+      }
+    },
+    "binding.missing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbfeld fehlt, es gilt der letzte Wert"
+          }
+        }
+      }
+    },
+    "binding.release" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verknüpfung lösen"
+          }
+        }
+      }
+    },
+    "binding.section" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbfelder"
+          }
+        }
+      }
+    },
+    "binding.stroke" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontur"
+          }
+        }
+      }
+    },
     "canvas.accessibility" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3155,6 +3232,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mehrere Änderungen"
+          }
+        }
+      }
+    },
+    "undo.binding.bind" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbfeld verknüpfen"
+          }
+        }
+      }
+    },
+    "undo.binding.release" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verknüpfung lösen"
           }
         }
       }

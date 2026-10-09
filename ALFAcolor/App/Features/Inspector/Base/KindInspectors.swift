@@ -9,6 +9,8 @@ enum KindInspectors {
         .image: { store, items in AnyView(ImageFitSection(store: store, items: items)) },
         .frame: { store, items in AnyView(FrameSection(store: store, items: items)) },
         .group: { store, items in AnyView(ZoneSection(store: store, items: items)) },
+        .shape: { store, items in AnyView(ColorBindingSection(store: store, items: items, slots: [(.fill, "binding.fill"), (.stroke, "binding.stroke")])) },
+        .swatch: { store, items in AnyView(ColorBindingSection(store: store, items: items, slots: [(.swatch, "binding.color")])) },
     ]
 
     static func section(for kind: ItemKind, store: BoardStore, items: [Item]) -> AnyView? {
