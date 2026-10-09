@@ -4,7 +4,7 @@
 |---|---|---|---|
 | E0 Fundament | erledigt | 2026-10-08 „DAHIN“ | G0 erfüllt: 12 Tests grün |
 | E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 wartet auf Bild-Abnahme; B-107 erledigt; B-108a erledigt; B-108b erledigt | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen (Bild-Abnahme durch Johannes und P-001 stehen aus; E2 läuft auf sein Wort) |
-| E2 Leinwand | läuft: B-110, B-201, B-203, B-202, B-211, B-205, B-204 erledigt; B-207 vergeben; dann B-206, B-207, B-208, B-209 | 2026-10-09 „Weiter bauen. Ich starte die App später. Tools und funktionstiefe einbauen. App funktional machen. Go. Workers sonnet oder Haiku.“ | G2 offen |
+| E2 Leinwand | läuft: B-110, B-201, B-203, B-202, B-211, B-205, B-204 erledigt; B-207 vergeben; dann B-208, B-206, B-209 | 2026-10-09 „Weiter bauen. Ich starte die App später. Tools und funktionstiefe einbauen. App funktional machen. Go. Workers sonnet oder Haiku.“ | G2 offen |
 | E3 bis E9 | geplant | | |
 
 ## Chef-Aufgaben vor E2 (aus den Übergaben von E1)
