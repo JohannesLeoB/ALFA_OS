@@ -100,17 +100,6 @@
         }
       }
     },
-    "blob.align.needsTwo" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mindestens zwei Stücke wählen"
-          }
-        }
-      }
-    },
     "blob.close" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4321,17 +4310,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ebene löschen"
-          }
-        }
-      }
-    },
-    "sidebar.comingSoon" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Noch ohne Wirkung"
           }
         }
       }
