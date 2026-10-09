@@ -221,6 +221,17 @@
         }
       }
     },
+    "code.failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Seite startet nicht."
+          }
+        }
+      }
+    },
     "code.file" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -261,6 +272,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abspielen"
+          }
+        }
+      }
+    },
+    "code.retry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut versuchen"
           }
         }
       }
@@ -1453,6 +1475,17 @@
         }
       }
     },
+    "fan.noColour" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Auswahl hat keine Farbe."
+          }
+        }
+      }
+    },
     "import.dismiss" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2022,6 +2055,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Datei nicht lesbar"
+          }
+        }
+      }
+    },
+    "lab.notWeb" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Karte ist kein Web-Code. Das Labor zeigt HTML, CSS, JavaScript, Tailwind und React."
+          }
+        }
+      }
+    },
+    "lab.problem.locked" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Karte ist gesperrt. Entsperren, dann ablegen."
+          }
+        }
+      }
+    },
+    "lab.problem.unchanged" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Karte hat keine Änderung zum Ablegen."
+          }
+        }
+      }
+    },
+    "lab.saved" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgelegt. Die Karte hat eine neue Version."
           }
         }
       }
@@ -2935,6 +3012,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Token-Satz"
+          }
+        }
+      }
+    },
+    "starter.missing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Vorlage „Bausteine“ fehlt in der App."
           }
         }
       }

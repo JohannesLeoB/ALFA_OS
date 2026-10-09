@@ -13,7 +13,8 @@ struct CodeCardView: View {
     /// False while the card lies outside the visible part. A live page then rests as its image.
     let onScreen: Bool
 
-    @State private var model: CodeCardModel
+    /// Made when the card first appears, and kept by SwiftUI after that, so a new layout does not build it again.
+    @State private var model: CodeCardModel?
 
     @Environment(\.theme) private var theme
     @FocusedValue(\.shell) private var shell
@@ -25,25 +26,35 @@ struct CodeCardView: View {
         self.detail = detail
         self.zoom = zoom
         self.onScreen = onScreen
-        _model = State(initialValue: CodeCardModel(content: content))
     }
 
     var body: some View {
         CardFrame(presentation: presentation, detail: detail, zoom: zoom, accessory: headerControls) { _ in
-            CodeCardBody(model: model, detail: detail, zoom: zoom)
+            if let model {
+                CodeCardBody(model: model, detail: detail, zoom: zoom)
+            }
+        }
+        .onAppear {
+            if model == nil { model = CodeCardModel(content: content, players: shell?.players ?? .shared) }
         }
         .onChange(of: content) { _, new in
-            model.update(new)
+            model?.update(new)
         }
         .onChange(of: onScreen) { _, shown in
-            if !shown { model.rest() }
+            if !shown { model?.rest() }
         }
+        // Zooming out to a smaller level stops the running page, as for a card out of view.
+        .onChange(of: detail) { _, level in
+            if level != .full { model?.rest() }
+        }
+        // A double click opens the lab, on the header and on the still image. A live page takes its own clicks.
+        .onTapGesture(count: 2, perform: openLab)
     }
 
     /// The header controls: the switch between player and source for a card that can run, then the button for the lab.
     private var headerControls: AnyView {
         AnyView(HStack(spacing: theme.space(.s2)) {
-            if model.state.canPlay {
+            if let model, model.state.canPlay {
                 CodeViewPicker(model: model)
             }
             Button(action: openLab) {
@@ -51,14 +62,19 @@ struct CodeCardView: View {
                     .labelStyle(.iconOnly)
             }
             .buttonStyle(.plain)
-            .help(LocalizedStringKey("code.lab"))
-            .disabled(shell == nil || canvas == nil)
+            .help(LocalizedStringKey(hasLab ? "code.lab" : "lab.notWeb"))
+            .disabled(shell == nil || canvas == nil || !hasLab)
         })
+    }
+
+    /// True for a card that the lab can open: web code.
+    private var hasLab: Bool {
+        LabDraft(card: CodeCard(language: content.language, files: content.files), previewWidth: content.previewWidth) != nil
     }
 
     /// Opens the lab of this card in the window that shows it.
     private func openLab() {
-        guard let shell, let store = canvas?.store else { return }
+        guard hasLab, let shell, let store = canvas?.store else { return }
         shell.openLab(for: presentation.id, store: store)
     }
 }
@@ -139,15 +155,7 @@ struct CodePlayer: View {
 
     @ViewBuilder
     private var control: some View {
-        if model.live == nil {
-            Button {
-                Task { await model.play() }
-            } label: {
-                icon("play.fill")
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(LocalizedStringKey("code.play"))
-        } else {
+        if model.live != nil {
             Button {
                 model.rest()
             } label: {
@@ -155,6 +163,30 @@ struct CodePlayer: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel(LocalizedStringKey("code.stop"))
+        } else if model.failure != nil {
+            VStack(spacing: theme.space(.s2)) {
+                Text(LocalizedStringKey("code.failed"))
+                    .font(theme.text(.caption).font)
+                    .foregroundStyle(theme.color(.coral, scheme))
+                Button {
+                    Task { await model.play() }
+                } label: {
+                    Text(LocalizedStringKey("code.retry"))
+                        .font(theme.text(.caption).font)
+                        .foregroundStyle(theme.color(.text, scheme))
+                        .padding(theme.space(.s2))
+                        .background(theme.color(.surface, scheme))
+                }
+                .buttonStyle(.plain)
+            }
+        } else {
+            Button {
+                Task { await model.play() }
+            } label: {
+                icon("play.fill")
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(LocalizedStringKey("code.play"))
         }
     }
 

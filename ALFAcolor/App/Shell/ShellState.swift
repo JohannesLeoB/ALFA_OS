@@ -27,18 +27,29 @@ final class ShellState {
     private(set) var labs: [ItemID: LabModel] = [:]
     /// The card whose lab is open, if any.
     private(set) var labOpen: ItemID?
+    /// The live code pages of this window. One runs at a time, in this window.
+    let players = CodePlayers()
+    /// A short message about the last lab action, as a catalog key. nil when there is none.
+    private(set) var labNotice: String?
 
     /// The open lab, shown over the canvas.
     var openLabModel: LabModel? { labOpen.flatMap { labs[$0] } }
 
-    /// Opens the lab of a code card. Nothing happens for an item that is not web code on the board.
-    func openLab(for item: ItemID, store: BoardStore) {
-        if labs[item] == nil {
+    /// Opens the lab of a code card. A draft is built anew when the card changed on the board since the lab last saw it.
+    /// Returns false, with a notice, for an item that is not web code on the board.
+    @discardableResult
+    func openLab(for item: ItemID, store: BoardStore) -> Bool {
+        if labs[item]?.isCurrent(in: store) != true {
             labs[item] = LabModel(item: item, store: store)
         }
-        guard let lab = labs[item] else { return }
+        guard let lab = labs[item] else {
+            labNotice = "lab.notWeb"
+            return false
+        }
+        labNotice = nil
         labOpen = item
         Task { await lab.reloadPage() }
+        return true
     }
 
     /// Counts the closed labs. The canvas takes the keyboard focus back when this changes.
@@ -51,8 +62,13 @@ final class ShellState {
         labClosings += 1
     }
 
-    /// Closes the open lab when its card is gone, for example after an undo took the card back.
+    /// Drops the labs of cards that are gone, and closes the open lab when its card is gone,
+    /// for example after an undo took the card back.
     func closeLabIfCardGone(in store: BoardStore) {
+        for card in Array(labs.keys) where !store.isCodeCard(card) {
+            labs[card]?.stopPage()
+            labs[card] = nil
+        }
         guard let card = labOpen, !store.isCodeCard(card) else { return }
         closeLab()
     }

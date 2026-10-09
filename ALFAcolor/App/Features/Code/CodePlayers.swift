@@ -11,7 +11,7 @@ final class CodePlayers {
     private let pool = PlayerPool<UUID>(limit: 1)
     private let pressure: DispatchSourceMemoryPressure
 
-    private init() {
+    init() {
         pressure = DispatchSource.makeMemoryPressureSource(eventMask: [.warning, .critical], queue: .main)
         pressure.setEventHandler {
             MainActor.assumeIsolated {

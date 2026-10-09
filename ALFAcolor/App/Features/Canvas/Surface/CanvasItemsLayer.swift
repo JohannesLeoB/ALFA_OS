@@ -26,7 +26,7 @@ struct CanvasItemsLayer: View {
                                  assets: assets, thumbnails: thumbnails, zoom: view.zoom,
                                  onScreen: Visibility.isOnScreen(item.rect, viewport: view, canvas: controller.size))
                             .offset(x: item.rect.x, y: item.rect.y)
-                            .allowsHitTesting(false)
+                            .allowsHitTesting(Self.hasControls(item))
                     }
                     ForEach(interaction.previewItems) { item in
                         ItemView(presentation: ItemPresentation.make(for: item, in: space, assets: assets),
@@ -44,7 +44,23 @@ struct CanvasItemsLayer: View {
             .frame(width: controller.size.width, height: controller.size.height, alignment: .topLeading)
             .scaleEffect(view.zoom, anchor: .topLeading)
             .offset(x: -view.offsetX * view.zoom, y: -view.offsetY * view.zoom)
+            .onChange(of: fanGone) { _, gone in
+                if gone { interaction.closeFan() }
+            }
         }
+    }
+
+    /// The fan is open over an item that is gone, for example after a delete. It closes, so that an undo does not reopen it.
+    private var fanGone: Bool {
+        guard let id = interaction.fanItem else { return false }
+        return controller.store.item(id) == nil
+    }
+
+    /// A code card has controls of its own, which take clicks. Other items stay out of the hit test,
+    /// so that the canvas takes their clicks and drags.
+    private static func hasControls(_ item: Item) -> Bool {
+        if case .code = item.content { return true }
+        return false
     }
 
     /// The text field for the item being edited, nil for any other.
