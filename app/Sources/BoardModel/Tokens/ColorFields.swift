@@ -148,7 +148,8 @@ public enum ColorFields {
     static func checkedName(_ raw: String, in sets: [TokenSet], ignoring old: String?) throws -> String {
         let name = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty else { throw Failure.emptyName }
-        let forbidden = name.hasPrefix("$") || name.contains(".") || name.contains("/") || name.contains(where: { $0.isNewline })
+        // The same rule as the DTCG import: a name with a dot or a brace cannot be read back.
+        let forbidden = name.hasPrefix("$") || name.contains(where: { ".{}/".contains($0) || $0.isNewline })
         guard !forbidden else { throw Failure.invalidName(name) }
         let others = fields(in: sets).map(\.name).filter { $0 != old }
         guard !others.contains(name) else { throw Failure.duplicateName(name) }
