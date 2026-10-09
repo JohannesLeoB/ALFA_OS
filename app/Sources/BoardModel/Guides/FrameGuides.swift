@@ -66,8 +66,9 @@ public enum FrameGuides {
 
     /// The lines of the guides of the frames that hold the rectangle completely, on the board.
     /// `items` are the items that can be targets. Frames that do not hold the rectangle give no lines.
-    public static func snapLines(around rect: Rect?, in items: [Item]) -> [SnapGuide] {
-        guard let rect, rect.isFinite else { return [] }
+    /// Hidden guides (`guidesShown` false) give no lines, so nothing snaps to them.
+    public static func snapLines(around rect: Rect?, in items: [Item], guidesShown: Bool) -> [SnapGuide] {
+        guard guidesShown, let rect, rect.isFinite else { return [] }
         return items.flatMap { item -> [SnapGuide] in
             let frame = item.rect
             let holds = frame.x <= rect.x && rect.maxX <= frame.maxX && frame.y <= rect.y && rect.maxY <= frame.maxY

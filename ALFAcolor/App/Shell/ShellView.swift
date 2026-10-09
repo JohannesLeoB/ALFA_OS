@@ -89,6 +89,9 @@ struct ShellView: View {
         .onChange(of: canvas.store.revision) {
             shell.closeLabIfCardGone(in: canvas.store)
         }
+        .onChange(of: shell.guidesVisible, initial: true) {
+            interaction.guidesShown = shell.guidesVisible
+        }
     }
 }
 
