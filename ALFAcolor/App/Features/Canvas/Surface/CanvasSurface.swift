@@ -34,7 +34,7 @@ struct CanvasSurface: View {
                 if controller.isEmpty {
                     emptyHint
                 }
-                ScrollCatcher { controller.scroll($0) }
+                ScrollCatcher(keeps: { controller.keepsScroll(atX: $0.x, y: $0.y) }) { controller.scroll($0) }
             }
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
             .clipped()

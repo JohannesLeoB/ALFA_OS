@@ -21,10 +21,14 @@ struct ContextBarHost: View {
                                                         barHeight: Double(barSize.height),
                                                         containerWidth: Double(proxy.size.width),
                                                         gap: Double(theme.space(.s2)))
+                let area = Rect(x: center.x - Double(barSize.width) / 2, y: center.y - Double(barSize.height) / 2,
+                                w: Double(barSize.width), h: Double(barSize.height))
                 ContextBarView(store: canvas.store)
                     .onGeometryChange(for: CGSize.self, of: \.size) { barSize = $0 }
                     .position(x: center.x, y: center.y)
+                    .onChange(of: area, initial: true) { canvas.setScrollKeep("contextBar", area) }
             }
+            .onDisappear { canvas.setScrollKeep("contextBar", nil) }
         }
     }
 }

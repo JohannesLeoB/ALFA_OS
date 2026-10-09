@@ -72,4 +72,19 @@ public final class CanvasController {
     public func setViewport(_ viewport: Viewport) { store.setViewport(viewport) }
 
     public func scroll(_ input: ScrollInput) { store.setViewport(viewport.scrolled(by: input)) }
+
+    // MARK: Areas on top
+
+    /// Areas of the canvas that are covered by a view which needs the scroll wheel, in canvas points, by name.
+    /// A view sets its area while it is shown and sets nil when it goes.
+    @ObservationIgnored private var scrollKeeps: [String: Rect] = [:]
+
+    public func setScrollKeep(_ name: String, _ area: Rect?) {
+        scrollKeeps[name] = area
+    }
+
+    /// True when a covering view under this point must get the scroll wheel, not the canvas.
+    public func keepsScroll(atX x: Double, y: Double) -> Bool {
+        scrollKeeps.values.contains { $0.contains(x: x, y: y) }
+    }
 }

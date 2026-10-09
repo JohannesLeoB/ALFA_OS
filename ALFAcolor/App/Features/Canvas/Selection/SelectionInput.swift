@@ -17,6 +17,8 @@ struct SelectionInput: ViewModifier {
 
     @Environment(\.theme) private var theme
     @State private var pressed = false
+    /// True from a press that began while panning or without focus, until its release. Such a drag never selects.
+    @State private var ignoresPress = false
     @State private var searchTarget: ItemID?
     @State private var showsFilePanel = false
 
@@ -65,6 +67,13 @@ struct SelectionInput: ViewModifier {
             .onCommand(#selector(NSResponder.selectAll(_:))) { interaction.selectAll() }
             .onAppear(perform: configure)
             .onChange(of: theme) { configure() }
+            .onChange(of: isFocused) { _, focused in
+                guard !focused else { return }
+                // Focus left in the middle of a drag: stop the action, and let the release end it quietly.
+                pressed = false
+                ignoresPress = true
+                interaction.cancelGesture()
+            }
             .onChange(of: interaction.fileSearchRequest) { _, request in
                 guard let request else { return }
                 searchTarget = request
@@ -82,7 +91,8 @@ struct SelectionInput: ViewModifier {
     private var drag: some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
-                guard !panning else { return }
+                if panning { ignoresPress = true }
+                guard !panning, !ignoresPress else { return }
                 if !pressed {
                     pressed = true
                     interaction.pointerDown(atCanvasX: value.startLocation.x, y: value.startLocation.y, modifiers: Self.modifiers())
@@ -90,6 +100,7 @@ struct SelectionInput: ViewModifier {
                 interaction.pointerDragged(toCanvasX: value.location.x, y: value.location.y, modifiers: Self.modifiers())
             }
             .onEnded { value in
+                ignoresPress = false
                 guard pressed else { return }
                 pressed = false
                 interaction.pointerUp(atCanvasX: value.location.x, y: value.location.y, modifiers: Self.modifiers())

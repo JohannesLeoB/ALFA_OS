@@ -3,18 +3,22 @@ import AppKit
 import BoardModel
 
 /// Catches scroll events over its area and reports them with the pointer position in canvas points.
-/// It takes no clicks: the view under it keeps all other input. The scroll goes to the canvas
-/// and no further, so a scroll over the canvas never moves another view.
+/// It takes no clicks: the view under it keeps all other input. A scroll over the canvas goes to the canvas,
+/// except where `keeps` says a view on top needs it.
 struct ScrollCatcher: NSViewRepresentable {
+    /// True when a view on top of the canvas at this point must get the scroll.
+    var keeps: (CGPoint) -> Bool
     var onScroll: (ScrollInput) -> Void
 
     func makeNSView(context: Context) -> CatcherView {
         let view = CatcherView()
+        view.keeps = keeps
         view.onScroll = onScroll
         return view
     }
 
     func updateNSView(_ view: CatcherView, context: Context) {
+        view.keeps = keeps
         view.onScroll = onScroll
     }
 
@@ -23,6 +27,7 @@ struct ScrollCatcher: NSViewRepresentable {
     }
 
     final class CatcherView: NSView {
+        var keeps: ((CGPoint) -> Bool)?
         var onScroll: ((ScrollInput) -> Void)?
         private var monitor: Any?
 
@@ -58,7 +63,7 @@ struct ScrollCatcher: NSViewRepresentable {
         private func handle(_ event: NSEvent) -> Bool {
             guard event.window === window, window?.attachedSheet == nil else { return false }
             let point = convert(event.locationInWindow, from: nil)
-            guard bounds.contains(point) else { return false }
+            guard bounds.contains(point), keeps?(point) != true else { return false }
             onScroll?(ScrollInput(deltaX: event.scrollingDeltaX, deltaY: event.scrollingDeltaY,
                                   isPrecise: event.hasPreciseScrollingDeltas,
                                   zooms: event.modifierFlags.contains(.command),
