@@ -47,3 +47,16 @@ public struct BookmarkTree: Equatable, Sendable {
         self.truncated = truncated
     }
 }
+
+/// Limits of a bookmark file. A folder nested deeper than `maxDepth` levels and links beyond `maxLinks` are left out.
+enum BookmarkLimit {
+    static let maxDepth = 32
+    static let maxLinks = 20_000
+}
+
+/// What a reader has taken so far, and what it left out.
+struct BookmarkBudget {
+    var links = 0
+    var skipped = 0
+    var truncated = false
+}

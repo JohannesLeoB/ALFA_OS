@@ -11,34 +11,47 @@ enum ChromeReader {
         }
         let roots = top["roots"] as? [String: Any] ?? [:]
         var tree = BookmarkTree()
+        var budget = BookmarkBudget()
         for (key, fallback) in [("bookmark_bar", "Bookmarks bar"), ("other", "Other bookmarks"), ("synced", "Mobile bookmarks")] {
             guard let node = roots[key] as? [String: Any] else { continue }
             var folder = BookmarkFolder(name: name(of: node) ?? fallback)
-            fill(&folder, from: node, skipped: &tree.skipped)
+            fill(&folder, from: node, level: 1, budget: &budget)
             tree.root.folders.append(folder)
         }
+        tree.skipped = budget.skipped
+        tree.truncated = budget.truncated
         return tree
     }
 
-    private static func fill(_ folder: inout BookmarkFolder, from node: [String: Any], skipped: inout Int) {
+    /// Adds the children of `node` to `folder`. `level` is the level of `folder`: the roots are level 1.
+    private static func fill(_ folder: inout BookmarkFolder, from node: [String: Any], level: Int, budget: inout BookmarkBudget) {
         for child in node["children"] as? [Any] ?? [] {
             guard let item = child as? [String: Any] else {
-                skipped += 1
+                budget.skipped += 1
                 continue
             }
             switch item["type"] as? String {
             case "folder":
+                guard level < BookmarkLimit.maxDepth else {
+                    budget.truncated = true
+                    continue
+                }
                 var sub = BookmarkFolder(name: name(of: item) ?? "")
-                fill(&sub, from: item, skipped: &skipped)
+                fill(&sub, from: item, level: level + 1, budget: &budget)
                 folder.folders.append(sub)
             case "url":
-                if let link = link(from: item) {
-                    folder.links.append(link)
-                } else {
-                    skipped += 1
+                guard let link = link(from: item) else {
+                    budget.skipped += 1
+                    continue
                 }
+                guard budget.links < BookmarkLimit.maxLinks else {
+                    budget.truncated = true
+                    continue
+                }
+                budget.links += 1
+                folder.links.append(link)
             default:
-                skipped += 1
+                budget.skipped += 1
             }
         }
     }

@@ -7,6 +7,10 @@ struct NetscapeReader {
         var folder: BookmarkFolder
         /// True for a list that belongs to a named folder. An unnamed list hands its contents to the folder above.
         var named: Bool
+        /// The number of named folders from the top down to this list.
+        var depth: Int
+        /// True inside a folder cut at the depth limit. Its contents are read past and left out.
+        var dropped: Bool
     }
 
     private enum Capture {
@@ -14,11 +18,11 @@ struct NetscapeReader {
         case link(url: String?, added: String?)
     }
 
-    private var stack: [Frame] = [Frame(folder: BookmarkFolder(name: ""), named: false)]
+    private var stack: [Frame] = [Frame(folder: BookmarkFolder(name: ""), named: false, depth: 0, dropped: false)]
     private var pendingName: String?
     private var capture: Capture?
     private var captured = ""
-    private var skipped = 0
+    private var budget = BookmarkBudget()
 
     static func read(_ html: String) -> BookmarkTree {
         var reader = NetscapeReader()
@@ -27,7 +31,7 @@ struct NetscapeReader {
         while reader.stack.count > 1 {
             reader.closeList()
         }
-        return BookmarkTree(root: reader.stack[0].folder, skipped: reader.skipped)
+        return BookmarkTree(root: reader.stack[0].folder, skipped: reader.budget.skipped, truncated: reader.budget.truncated)
     }
 
     // MARK: - Scanning
@@ -103,12 +107,21 @@ struct NetscapeReader {
     private mutating func openList() {
         let name = pendingName
         pendingName = nil
-        stack.append(Frame(folder: BookmarkFolder(name: name ?? ""), named: name != nil))
+        let parentDepth = stack[stack.count - 1].depth
+        let parentDropped = stack[stack.count - 1].dropped
+        if name != nil, parentDropped || parentDepth + 1 > BookmarkLimit.maxDepth {
+            if !parentDropped { budget.truncated = true }
+            stack.append(Frame(folder: BookmarkFolder(name: ""), named: name != nil, depth: parentDepth, dropped: true))
+            return
+        }
+        let depth = name == nil ? parentDepth : parentDepth + 1
+        stack.append(Frame(folder: BookmarkFolder(name: name ?? ""), named: name != nil, depth: depth, dropped: parentDropped))
     }
 
     private mutating func closeList() {
         guard stack.count > 1 else { return }
         let frame = stack.removeLast()
+        guard !frame.dropped else { return }
         let last = stack.count - 1
         if frame.named {
             stack[last].folder.folders.append(frame.folder)
@@ -128,10 +141,16 @@ struct NetscapeReader {
         case .folderName:
             pendingName = text
         case .link(let href, let added):
+            guard !stack[stack.count - 1].dropped else { return }
             guard let href, let url = BookmarkText.webURL(href) else {
-                skipped += 1
+                budget.skipped += 1
                 return
             }
+            guard budget.links < BookmarkLimit.maxLinks else {
+                budget.truncated = true
+                return
+            }
+            budget.links += 1
             let link = BookmarkLink(title: text, url: url, added: BookmarkText.date(unixSeconds: added))
             stack[stack.count - 1].folder.links.append(link)
         }
