@@ -23,7 +23,7 @@ struct FrameView: View {
                 gridCanvas(lines, hairline: hairline)
             }
         }
-        .modifier(Lift(detail: detail))
+        .modifier(Lift(detail: detail, token: .frame))
         .overlay(alignment: .topLeading) {
             if detail == .full {
                 label.alignmentGuide(.top) { dimensions in dimensions[.bottom] + theme.space(.s2) }

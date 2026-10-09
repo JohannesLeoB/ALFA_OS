@@ -60,6 +60,24 @@ public enum TextToken: String, CaseIterable, Sendable {
     case reading = "lesen", body = "fliesstext", control = "bedienung", caption = "beschriftung", code = "quelltext"
 }
 
+/// Shadow token of the contract. Path: `shadow.<raw value>.aussen` (or `.innen` for glass).
+public enum ShadowToken: String, CaseIterable, Sendable {
+    case card = "schatten-karte", frame = "schatten-rahmen", glass = "schatten-glas"
+
+    /// The group of the contract that holds the parts of the shadow.
+    var side: String { self == .glass ? "innen" : "aussen" }
+}
+
+/// A resolved shadow: offset, blur in points, and colour. Zero blur and a clear colour mean no shadow.
+public struct ShadowSpec: Sendable, Equatable {
+    public var x: CGFloat
+    public var y: CGFloat
+    public var blur: CGFloat
+    public var color: RGB
+
+    public static let none = ShadowSpec(x: 0, y: 0, blur: 0, color: RGB(r: 0, g: 0, b: 0, a: 0))
+}
+
 /// A resolved text style. The family "System" selects the system font, "System Display" and "System Text"
 /// the system font too, and "Mono" the monospaced system font.
 public struct TextStyle: Sendable, Equatable {
@@ -111,6 +129,7 @@ public struct Theme: Sendable, Equatable {
     private let spacing: [SpaceToken: CGFloat]
     private let radii: [RadiusToken: CGFloat]
     private let texts: [TextToken: TextStyle]
+    private let shadows: [Mode: [ShadowToken: ShadowSpec]]
 
     /// Placeholders only. Without a contract, this set applies. It holds colours only.
     public static let placeholder = Theme(contract: Placeholder.light, dark: Placeholder.dark, source: "Placeholder",
@@ -169,12 +188,30 @@ public struct Theme: Sendable, Equatable {
             texts[t] = TextStyle(families: family, size: size, weight: weight, lineHeight: line, tracking: tracking)
         }
 
+        var shadowsLight: [ShadowToken: ShadowSpec] = [:]
+        var shadowsDark: [ShadowToken: ShadowSpec] = [:]
+        for s in ShadowToken.allCases {
+            let base = "shadow.\(s.rawValue).\(s.side)"
+            func spec(_ index: [String: TokenValue], _ fallback: [String: TokenValue], _ report: String?) -> ShadowSpec {
+                var none: [String] = []
+                let x = Theme.value(base + ".versatzX", from: index, fallback: fallback, report: nil, &none, read: Theme.readPoints, last: 0)
+                let y = Theme.value(base + ".versatzY", from: index, fallback: fallback, report: nil, &none, read: Theme.readPoints, last: 0)
+                let blur = Theme.value(base + ".unschaerfe", from: index, fallback: fallback, report: nil, &none, read: Theme.readPoints, last: 0)
+                let color = Theme.value(base + ".farbe", from: index, fallback: fallback, report: nil, &none, read: Theme.readColor,
+                                        last: ShadowSpec.none.color)
+                return ShadowSpec(x: x, y: y, blur: blur, color: color)
+            }
+            shadowsLight[s] = spec(lightIndex, placeholderLight, lightReport)
+            shadowsDark[s] = spec(darkIndex, placeholderDark, darkReport)
+        }
+
         self.source = source
         self.missing = missing
         self.colors = [.light: lightColors, .dark: darkColors]
         self.spacing = spacing
         self.radii = radii
         self.texts = texts
+        self.shadows = [.light: shadowsLight, .dark: shadowsDark]
     }
 
     // MARK: - Access
@@ -191,6 +228,11 @@ public struct Theme: Sendable, Equatable {
     public func space(_ s: SpaceToken) -> CGFloat { spacing[s] ?? 0 }
 
     public func radius(_ r: RadiusToken) -> CGFloat { radii[r] ?? 0 }
+
+    /// The shadow of the contract for the mode. Without a value it is `ShadowSpec.none`.
+    public func shadow(_ s: ShadowToken, _ scheme: ColorScheme) -> ShadowSpec {
+        shadows[Mode(scheme)]?[s] ?? ShadowSpec.none
+    }
 
     public func text(_ t: TextToken) -> TextStyle {
         texts[t] ?? TextStyle(families: ["System"], size: 13, weight: 400)

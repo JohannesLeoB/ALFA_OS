@@ -33,19 +33,22 @@ struct CardFrame<Content: View>: View {
             }
             Rectangle().strokeBorder(theme.color(.border, scheme), lineWidth: hairline)
         }
-        .modifier(Lift(detail: detail))
+        .modifier(Lift(detail: detail, token: .card))
     }
 }
 
-/// The shadow under cards and zones. It is the shadow of the system, with the blur and the offset taken from the spacing
-/// of the theme. Small items cast none.
+/// The shadow under a card or a device frame, from the contract. Small items cast none.
 struct Lift: ViewModifier {
     let detail: DetailLevel
-    @Environment(\.theme) private var theme
+    let token: ShadowToken
 
+    @ViewBuilder
     func body(content: Content) -> some View {
-        let full = detail == .full
-        content.shadow(radius: full ? theme.space(.s4) : 0, y: full ? theme.space(.s2) : 0)
+        if detail == .full {
+            content.themeShadow(token)
+        } else {
+            content
+        }
     }
 }
 
