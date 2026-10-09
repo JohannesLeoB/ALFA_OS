@@ -21,6 +21,24 @@ public enum LabHints {
         return found
     }
 
+    /// The draft with the fix of a hint. A hint without a fix leaves the draft as it is.
+    /// The line goes before the first script tag of the markup, else at the end of its head, else at the start.
+    public static func apply(_ hint: LabHint, to draft: LabDraft) -> LabDraft {
+        guard let line = hint.fix else { return draft }
+        var result = draft
+        result.html = insert(line + "\n", into: draft.html)
+        return result
+    }
+
+    static func insert(_ text: String, into html: String) -> String {
+        let index = html.range(of: "<script", options: .caseInsensitive)?.lowerBound
+            ?? html.range(of: "</head>", options: .caseInsensitive)?.lowerBound
+            ?? html.startIndex
+        var result = html
+        result.insert(contentsOf: text, at: index)
+        return result
+    }
+
     /// Styles and no markup, no script. A React draft has no markup tab, so it never counts as styles only.
     static func isStyleOnly(_ draft: LabDraft) -> Bool {
         guard draft.art != .react else { return false }
