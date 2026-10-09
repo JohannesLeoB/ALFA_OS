@@ -31,7 +31,8 @@ Arbeitskopie: nur `~/Developer/ALLFARBEN`. GitHub: `JohannesLeoB/ALLFARB`, nur `
 
 1. Nächste Briefe aus `plan/STATUS.md` (die Zeile der Etappe nennt die Reihenfolge).
 2. Jeden Brief vor der Vergabe scharf machen: Besitz-Pfade englisch und richtig, „Fertig wenn“ mit Tests statt Fotos, Abschnitt „Antwort des Chefs vor der Vergabe“ mit den offenen Punkten der vorigen Übergaben. Status im Brief und in STATUS auf „vergeben an Haiku-Agent (im Repo), Datum“. Nur diese Plan-Dateien committen: `git commit -- <pfade>`.
-3. **Zwei Agenten parallel** (Johannes: „Auch parallel bauen“), wenn ihre Besitz-Pfade getrennt sind. Je Runde gehört jede gemeinsame Datei genau einem: `ALFAcolor/App/Localizable.xcstrings`, `app/Package.swift`, `ALFAcolor/project.yml`, `scripts/lizenzen.txt`. Der andere nennt Wünsche in der Übergabe.
+3. **Bis zu sieben Haiku-Agenten parallel** (Johannes 2026-10-09: „du darfst ab jetzt bis zu 7 Haiku worker beauftragen“), wenn ihre Besitz-Pfade getrennt sind. (Früher: zwei.)
+3a. **Zwei Agenten parallel** (Johannes: „Auch parallel bauen“), wenn ihre Besitz-Pfade getrennt sind. Je Runde gehört jede gemeinsame Datei genau einem: `ALFAcolor/App/Localizable.xcstrings`, `app/Package.swift`, `ALFAcolor/project.yml`, `scripts/lizenzen.txt`. Der andere nennt Wünsche in der Übergabe.
 4. Beide Agenten mit der Vorlage unten starten, in einer Nachricht, im Hintergrund.
 5. Solange Agenten laufen, ändert der Chef keine Code-Dateien, nur Plan-Dateien.
 

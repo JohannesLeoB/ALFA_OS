@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (89)
+## Briefe (90)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -73,6 +73,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-242](briefe/B-242.md) | E4 | TSX in Code-Karten und Regler für Props | B-404 | erledigt, geprüft 2026-10-09 (Chef: Gesamtlauf nach B-507 und B-902); Abnahme am Bild offen (Heat-map-Bauteil einfügen, Regler Shape/Colors/Heat/Area/Softness, ⌘↵ ablegen); mehrere Komponenten in einer Karte: nur die gewählte rendert |
 | [B-243](briefe/B-243.md) | E2 | Fehlerbrief 3: Tests mit Netzabhängigkeit stabil | B-242 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors laut Agent, Stand c99d62c, 10 volle Läufe ohne Babel-Fehler); Restrisiko: antwortet cdnjs bei der Probe, lädt aber über 20 s nicht, bleibt der Test rot (echter Netzfehler); Offline-Umgebung ALFACOLOR_TEST_OFFLINE=1 |
 | [B-244](briefe/B-244.md) | E2 | Hotfix: Farbbindung, Props mit Anführungszeichen, Labor-Entwurf, Version über 512 KB | B-703 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-245](briefe/B-245.md) | E3 | Hotfix: Abstürze bei riesigen Zahlen, Esc in der Texteingabe | B-303 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 958 Tests, App-Bau grün); Abnahme am Bild offen (Beschriftung über dem Rahmen, Schatten, Menü Hinzufügen, Inspektor); Fragen: Kinder beim Drehen mitdrehen oder liegen lassen? Vorlage-Maße (MacBook Air, iPhone Pro, Mac-Fenster) bestätigen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1007 Tests, App-Bau grün); Abnahme am Bild offen (Spalten, Grundlinien, Ränder, Einrasten, Inspektor, Vorlage); Fragen: Grundlinienfarbe (Vertrag hat kein Blau, nimmt Akzent), Stück verlässt Rahmen behält Ziele bis Loslassen, Vorlage als Kopie oder Verweis, Meldung bei unlesbarer Vorlagendatei |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1037 Tests, App-Bau grün); Abnahme am Bild offen (Lage der Lineale unter der Titelleiste, Ziehen aus dem Lineal, Doppelklick, Liste im Inspektor, Menü Ansicht); Fragen: Einrasten an ausgeblendeten Hilfslinien? Rechtsklick-Menü oder Klick-Umschalten der Einheit? Zeiger an das Paket melden (Ursprung folgt Rahmen unter Zeiger)? Zahlenfelder der Hilfslinien in Lineal-Einheit? |
