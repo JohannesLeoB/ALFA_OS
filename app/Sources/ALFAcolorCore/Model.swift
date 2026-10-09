@@ -129,11 +129,100 @@ public struct Item: Identifiable, Codable, Hashable, Sendable {
     public var colorToken: String?
     public var tags: [String] = []
     public var source: Source?
+    /// Notes pinned to the item or to a place on it. A file without the field reads as no notes.
+    public var notes: [ItemNote] = []
     public init(id: ItemID = ItemID(), title: String, content: Content, rect: Rect, z: Int = 0, layerID: String = "standard", source: Source? = nil) {
         self.id = id; self.title = title; self.content = content; self.rect = rect; self.z = z; self.layerID = layerID; self.source = source
     }
     public var isContainer: Bool {
         switch content { case .frame, .group: true; default: false }
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, title, content, rect, z, layerID, locked, hidden, colorToken, tags, source, notes
+    }
+
+    /// Writes the fields as the synthesized encoder did. `notes` is written only when there are notes, so files
+    /// without notes stay as they were.
+    public func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(id, forKey: .id)
+        try c.encode(title, forKey: .title)
+        try c.encode(content, forKey: .content)
+        try c.encode(rect, forKey: .rect)
+        try c.encode(z, forKey: .z)
+        try c.encode(layerID, forKey: .layerID)
+        try c.encode(locked, forKey: .locked)
+        try c.encode(hidden, forKey: .hidden)
+        try c.encodeIfPresent(colorToken, forKey: .colorToken)
+        try c.encode(tags, forKey: .tags)
+        try c.encodeIfPresent(source, forKey: .source)
+        if !notes.isEmpty { try c.encode(notes, forKey: .notes) }
+    }
+
+    /// Reads the fields as the synthesized decoder did, except `notes`, which may be missing in older files.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(ItemID.self, forKey: .id)
+        title = try c.decode(String.self, forKey: .title)
+        content = try c.decode(Content.self, forKey: .content)
+        rect = try c.decode(Rect.self, forKey: .rect)
+        z = try c.decode(Int.self, forKey: .z)
+        layerID = try c.decode(String.self, forKey: .layerID)
+        locked = try c.decode(Bool.self, forKey: .locked)
+        hidden = try c.decode(Bool.self, forKey: .hidden)
+        colorToken = try c.decodeIfPresent(String.self, forKey: .colorToken)
+        tags = try c.decode([String].self, forKey: .tags)
+        source = try c.decodeIfPresent(Source.self, forKey: .source)
+        notes = try c.decodeIfPresent([ItemNote].self, forKey: .notes) ?? []
+    }
+}
+
+/// Who wrote a note. The assistant's notes show its name in the app; the user's notes show "you".
+public enum NoteAuthor: String, Codable, Equatable, Sendable, CaseIterable {
+    case user, assistant
+}
+
+/// The place of a note on its item: a point in fractions of the item's rectangle, from 0 to 1, origin at the top left.
+/// A value outside 0 to 1 is cut to it when the anchor is made or read. NaN becomes 0.
+public struct NoteAnchor: Codable, Hashable, Sendable {
+    public var x: Double
+    public var y: Double
+
+    public init(x: Double, y: Double) {
+        self.x = Self.cut(x)
+        self.y = Self.cut(y)
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(x: try c.decode(Double.self, forKey: .x), y: try c.decode(Double.self, forKey: .y))
+    }
+
+    static func cut(_ value: Double) -> Double {
+        value.isNaN ? 0 : min(1, max(0, value))
+    }
+}
+
+/// A note on an item. It is pinned to the item as a whole (`anchor` nil) or to a place on it.
+/// The text is cut to `maxTextLength` characters and an item keeps at most `maxPerItem` notes when a file is read.
+public struct ItemNote: Codable, Hashable, Sendable, Identifiable {
+    /// Most notes that one item keeps. Notes beyond this are dropped when a file is read.
+    public static let maxPerItem = 100
+    /// Most characters of one note text. A longer text is cut when a file is read.
+    public static let maxTextLength = 4000
+
+    public var id: UUID
+    public var text: String
+    public var author: NoteAuthor
+    public var createdAt: Date
+    /// A resolved note stays on the item, shown as done.
+    public var resolved: Bool
+    /// The place on the item. nil means the item as a whole.
+    public var anchor: NoteAnchor?
+
+    public init(id: UUID = UUID(), text: String, author: NoteAuthor, createdAt: Date, resolved: Bool = false, anchor: NoteAnchor? = nil) {
+        self.id = id; self.text = text; self.author = author; self.createdAt = createdAt; self.resolved = resolved; self.anchor = anchor
     }
 }
 

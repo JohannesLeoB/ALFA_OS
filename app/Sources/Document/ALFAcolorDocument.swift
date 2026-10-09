@@ -97,7 +97,7 @@ struct ItemEnvelope: Codable {
     var item: Item
     var extras: [String: JSONValue]
 
-    static let knownKeys: Set<String> = ["id", "title", "content", "rect", "z", "layerID", "locked", "hidden", "colorToken", "tags", "source"]
+    static let knownKeys: Set<String> = ["id", "title", "content", "rect", "z", "layerID", "locked", "hidden", "colorToken", "tags", "source", "notes"]
 
     init(_ item: Item, extras: [String: JSONValue] = [:]) { self.item = item; self.extras = extras }
     init(from decoder: Decoder) throws {

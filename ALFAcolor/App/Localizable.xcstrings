@@ -8273,6 +8273,17 @@
           }
         }
       }
+    },
+    "package.warning.limitedNotes %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Notizen am Stück %@ lagen über den Grenzen und wurden gekürzt."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
