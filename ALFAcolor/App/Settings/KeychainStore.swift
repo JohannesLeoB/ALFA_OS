@@ -22,7 +22,9 @@ struct KeychainStore {
     /// Writes a secret, replacing the one that is there.
     func write(_ secret: String, account: String) throws {
         guard let data = secret.data(using: .utf8) else { throw Failure.encoding }
-        try delete(account: account)
+        let update = SecItemUpdate(baseQuery(account: account) as CFDictionary, [kSecValueData as String: data] as CFDictionary)
+        if update == errSecSuccess { return }
+        guard update == errSecItemNotFound else { throw Failure.status(update) }
         var query = baseQuery(account: account)
         query[kSecValueData as String] = data
         let status = SecItemAdd(query as CFDictionary, nil)
