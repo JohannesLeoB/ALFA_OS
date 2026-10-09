@@ -117,10 +117,15 @@ public enum MockupImport {
 
     private static func piece(_ raw: [String: Any], id: String, type: String, files: [String: Data], now: Date,
                               budget: inout SiblingBudget, warnings: inout [String]) throws -> MockupDelivery.Piece? {
-        let x = try number(raw["x"], "\(id) x")
-        let y = try number(raw["y"], "\(id) y")
-        let width = try number(raw["width"], "\(id) width")
-        let height = try number(raw["height"], "\(id) height")
+        guard let x = finite(raw["x"]), let y = finite(raw["y"]),
+              let width = finite(raw["width"]), let height = finite(raw["height"]) else {
+            warnings.append("\(id): position or size is not a number, skipped")
+            return nil
+        }
+        guard width > 0, height > 0 else {
+            warnings.append("\(id): size is not valid, skipped")
+            return nil
+        }
         guard abs(x) <= maxLength, abs(y) <= maxLength, width <= maxLength, height <= maxLength else {
             warnings.append("\(id): position or size is out of range, skipped")
             return nil
@@ -205,11 +210,15 @@ public enum MockupImport {
     }
 
     private static func number(_ raw: Any?, _ what: String) throws -> Double {
-        guard let value = raw as? Double, value.isFinite else {
-            if let whole = raw as? Int { return Double(whole) }
-            throw MockupImportError.badManifest("\(what) is not a number")
-        }
+        guard let value = finite(raw) else { throw MockupImportError.badManifest("\(what) is not a number") }
         return value
+    }
+
+    /// A finite number from the manifest, or nil for anything else (including NaN and infinity).
+    private static func finite(_ raw: Any?) -> Double? {
+        if let value = raw as? Double { return value.isFinite ? value : nil }
+        if let whole = raw as? Int { return Double(whole) }
+        return nil
     }
 
     private static func isHexColor(_ text: String) -> Bool {
