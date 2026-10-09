@@ -14,6 +14,11 @@ public final class DocumentSession {
         public let document: ALFAcolorDocument
         /// `BoardStore.revision` at the moment of the snapshot.
         public let revision: Int
+
+        public init(document: ALFAcolorDocument, revision: Int) {
+            self.document = document
+            self.revision = revision
+        }
     }
 
     public let store: BoardStore
@@ -31,9 +36,16 @@ public final class DocumentSession {
         self.init(document: result.document, report: result.report)
     }
 
-    public init(document: ALFAcolorDocument, report: ReadReport?) {
+    /// With `box`, every change of the store also lands in the box, so the system can read the last state off the main actor.
+    public init(document: ALFAcolorDocument, report: ReadReport?, box: SnapshotBox? = nil) {
         store = BoardStore(document: document)
         readReport = report
+        if let box {
+            box.store(snapshot())
+            store.onChange = { document, revision in
+                box.store(Snapshot(document: document, revision: revision))
+            }
+        }
     }
 
     public func snapshot() -> Snapshot {
@@ -53,5 +65,24 @@ public final class DocumentSession {
 
     public func didFailSaving(_ error: any Error) {
         store.markSaveFailed(error)
+    }
+}
+
+/// The last snapshot of a document, readable from any thread. The session writes it on every change.
+/// The system saves on a background queue while the main thread waits, so a save must not jump to the main actor.
+public final class SnapshotBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private var latest: DocumentSession.Snapshot
+
+    public init(_ initial: DocumentSession.Snapshot) {
+        latest = initial
+    }
+
+    public func store(_ snapshot: DocumentSession.Snapshot) {
+        lock.withLock { latest = snapshot }
+    }
+
+    public func read() -> DocumentSession.Snapshot {
+        lock.withLock { latest }
     }
 }

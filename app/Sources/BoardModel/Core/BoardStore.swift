@@ -21,6 +21,9 @@ public final class BoardStore {
     /// The error of the last save, nil after a successful save.
     public private(set) var lastSaveError: (any Error)?
 
+    /// Called with the document and its revision after every change of the document (on the main actor).
+    @ObservationIgnored public var onChange: ((ALFAcolorDocument, Int) -> Void)?
+
     @ObservationIgnored public private(set) var undoManager: UndoManager
     @ObservationIgnored private let autosave: Autosave?
     @ObservationIgnored private var scheduledSave: Task<Void, Never>?
@@ -80,7 +83,9 @@ public final class BoardStore {
     /// A command that refers to the ID, for example `setContent`, is the change.
     @discardableResult
     public func addAsset(_ data: Data, fileExtension: String) -> String {
-        document.assets.add(data, fileExtension: fileExtension)
+        let id = document.assets.add(data, fileExtension: fileExtension)
+        onChange?(document, revision)
+        return id
     }
 
     private func switchSpace(to id: String) throws -> Bool {
@@ -207,6 +212,7 @@ public final class BoardStore {
     private func didChangeDocument() {
         revision += 1
         hasUnsavedChanges = true
+        onChange?(document, revision)
         scheduleSave()
     }
 
