@@ -63,7 +63,7 @@ struct SwatchFanView: View {
         let width = CGFloat(fan.bladeWidth)
         let length = CGFloat(fan.bladeLength)
         let pivot = fan.pivot(for: stage, in: size)
-        let shape = RoundedRectangle(cornerRadius: CGFloat(fan.cornerRadius))
+        let shape = RoundedRectangle(cornerRadius: theme.radius(.m))
         let isSelected = selection == index
         let shade = fan.contactShade(at: stage)
 

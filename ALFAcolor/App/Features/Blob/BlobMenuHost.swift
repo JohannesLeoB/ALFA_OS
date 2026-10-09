@@ -66,7 +66,7 @@ struct BlobMenuHost: View {
                                  onUnpin: { change { $0.unpin() } },
                                  onClose: { change { $0.close() } })
                             .frame(width: metrics.card.width, height: metrics.card.height)
-                            .modifier(BlobGlass(shape: RoundedRectangle(cornerRadius: theme.radius(.l))))
+                            .modifier(BlobGlass(shape: RoundedRectangle(cornerRadius: theme.radius(.m))))
                             .glassEffectID(menu.layout == .blob ? "home" : "card", in: glass)
                             .position(x: card.midX, y: card.midY)
                     }
@@ -162,7 +162,7 @@ struct BlobMetrics {
         blob = CGSize(width: diameter, height: diameter)
         gap = theme.space(.s2)
         margin = theme.space(.s4)
-        card = CGSize(width: theme.space(.s8) * 6, height: theme.space(.s8) * 8)
+        card = CGSize(width: theme.space(.s7) * 6, height: theme.space(.s7) * 8)
     }
 }
 

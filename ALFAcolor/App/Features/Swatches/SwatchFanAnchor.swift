@@ -60,7 +60,7 @@ struct SwatchFanAnchor: View {
     }
 
     /// The fan is four times the large spacing token on each side.
-    private var side: CGFloat { theme.space(.s8) * 4 }
+    private var side: CGFloat { theme.space(.s7) * 4 }
 
     /// The blade that shows the current colour of the swatch, if it is one of the colours of the fan.
     private static func index(of item: Item, in colors: [RGB]) -> Int? {

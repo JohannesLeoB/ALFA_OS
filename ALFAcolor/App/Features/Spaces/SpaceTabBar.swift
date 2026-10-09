@@ -59,7 +59,7 @@ struct SpaceTabBar: View {
 
     /// The widest a tab label may grow: four of the largest space steps. A long name is cut at the end,
     /// so the tabs and the buttons after them keep their places.
-    private var maxTabWidth: CGFloat { theme.space(.s8) * 4 }
+    private var maxTabWidth: CGFloat { theme.space(.s7) * 4 }
 
     private var roomMenu: some View {
         Menu {
