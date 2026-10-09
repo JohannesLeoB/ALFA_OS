@@ -38,6 +38,7 @@ public enum ZipError: Error, Equatable, Sendable {
     case notAZip
     case corruptDirectory(String)
     case unsafePath(String)
+    case duplicateName(String)
     case tooLarge(String)
     case tooManyEntries
     case unsupported(String)
@@ -61,6 +62,7 @@ public enum ZipReader {
 
         var files: [ZipFile] = []
         var problems: [ZipProblem] = []
+        var names = Set<String>()
         var total = 0
         var position = directoryOffset
         for _ in 0..<count {
@@ -88,6 +90,8 @@ public enum ZipReader {
             }
             try validate(name)
             if name.hasSuffix("/") { continue }
+            // Swift compares strings by canonical equivalence, so composed and decomposed names clash too.
+            guard names.insert(name).inserted else { throw ZipError.duplicateName(name) }
             guard flags & 1 == 0 else {
                 problems.append(ZipProblem(path: name, reason: "encrypted files are not read"))
                 continue
