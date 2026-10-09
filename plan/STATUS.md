@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (70)
+## Briefe (71)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -54,6 +54,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-216](briefe/B-216.md) | E2 | Nachträge: Fächer wählt Farbe, Bausteine öffnen | B-212, B-215 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 771 Tests); Katalogtexte in B-217 |
 | [B-217](briefe/B-217.md) | E2 | Labor anschließen und offene Texte | B-404, B-216 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 800 Tests); Labor bei ⌘Z der neuen Karte offen (Nachtrag) |
 | [B-219](briefe/B-219.md) | E2 | Blob-Menü bedienbar, Palettenwechsel, Maus zuerst | B-218, B-206 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-220](briefe/B-220.md) | E7 | Mockup-Paket: Quelle und Lizenz bei Code-Karten | B-704 | offen (geschrieben 2026-10-09) |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | offen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | offen |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
