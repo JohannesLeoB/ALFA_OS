@@ -28,6 +28,7 @@ struct InspectorPanel: View {
                 }
                 VersionsSection(store: store, items: items)
                 ProvenanceSection(store: store, items: items)
+                NotesSection(store: store, items: items)
             }
         }
         .formStyle(.grouped)

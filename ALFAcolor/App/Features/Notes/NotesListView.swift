@@ -3,11 +3,12 @@ import AppTheme
 import ALFAcolorCore
 import BoardModel
 
-/// The notes of one item: each with its author, its date, a done mark, and buttons to edit and delete it, and a field
-/// that adds a note. It serves the popover of a mark and the inspector section. Every change is one undo step.
+/// The notes of the items: with one item, each note with its author, its date, a done mark, and buttons to edit and
+/// delete it. With several items the list is not shown, and the field adds one note to each of them, as one step.
+/// It serves the popover of a mark and the inspector section. Every change is one undo step.
 struct NotesListView: View {
     let store: BoardStore
-    let itemID: ItemID
+    let itemIDs: [ItemID]
 
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
@@ -16,17 +17,29 @@ struct NotesListView: View {
     @State private var editingID: UUID?
     @State private var editText = ""
 
-    private var notes: [ItemNote] { store.item(itemID)?.notes ?? [] }
+    /// The one item whose notes are listed. nil when there are several, or none.
+    private var single: ItemID? { itemIDs.count == 1 ? itemIDs[0] : nil }
+
+    private var notes: [ItemNote] {
+        guard let single else { return [] }
+        return store.item(single)?.notes ?? []
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: theme.space(.s2)) {
-            if notes.isEmpty {
-                Text(LocalizedStringKey("note.empty"))
-                    .themeText(theme.text(.control))
+            if let single {
+                if notes.isEmpty {
+                    Text(LocalizedStringKey("note.empty"))
+                        .themeText(theme.text(.control))
+                        .foregroundStyle(theme.color(.textMuted, scheme))
+                }
+                ForEach(notes) { note in
+                    row(note, on: single)
+                }
+            } else if itemIDs.count > 1 {
+                Text(LocalizedStringKey("note.multi"))
+                    .themeText(theme.text(.caption))
                     .foregroundStyle(theme.color(.textMuted, scheme))
-            }
-            ForEach(notes) { note in
-                row(note)
             }
             HStack(spacing: theme.space(.s1)) {
                 TextField(String(localized: "note.placeholder"), text: $newText)
@@ -36,7 +49,7 @@ struct NotesListView: View {
                 Button(String(localized: "note.add"), action: add)
                     .buttonStyle(.plain)
                     .themeText(theme.text(.control))
-                    .disabled(newText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .disabled(newText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || itemIDs.isEmpty)
             }
             if refused {
                 Text(LocalizedStringKey("note.tooMany"))
@@ -49,13 +62,13 @@ struct NotesListView: View {
         .foregroundStyle(theme.color(.text, scheme))
     }
 
-    private func row(_ note: ItemNote) -> some View {
+    private func row(_ note: ItemNote, on itemID: ItemID) -> some View {
         VStack(alignment: .leading, spacing: theme.space(.s1)) {
             if editingID == note.id {
                 TextField("", text: $editText)
                     .textFieldStyle(.plain)
                     .themeText(theme.text(.control))
-                    .onSubmit { commitEdit(note) }
+                    .onSubmit { commitEdit(note, on: itemID) }
                     .onExitCommand { editingID = nil }
             } else {
                 Text(note.text)
@@ -68,7 +81,7 @@ struct NotesListView: View {
                 Text(note.createdAt, style: .date)
                 Spacer(minLength: 0)
                 Button {
-                    try? store.perform(noteResolve: note.id, resolved: !note.resolved, on: itemID)
+                    _ = try? store.perform(noteResolve: note.id, resolved: !note.resolved, on: itemID)
                 } label: {
                     Image(systemName: note.resolved ? "checkmark.circle.fill" : "circle")
                 }
@@ -81,7 +94,7 @@ struct NotesListView: View {
                 }
                 .help(String(localized: "note.edit"))
                 Button {
-                    try? store.perform(noteDelete: note.id, on: itemID)
+                    _ = try? store.perform(noteDelete: note.id, on: itemID)
                 } label: {
                     Image(systemName: "trash")
                 }
@@ -93,12 +106,11 @@ struct NotesListView: View {
         }
     }
 
-    /// Adds the typed note to the item. A refused note keeps its text.
+    /// Adds the typed note to each item. A refused note keeps its text.
     private func add() {
-        let text = newText
-        let note = ItemNote(text: text, author: .user, createdAt: .now)
+        let note = ItemNote(text: newText, author: .user, createdAt: .now)
         do {
-            guard try store.perform(noteAdd: note, to: [itemID]) else { return }
+            guard try store.perform(noteAdd: note, to: itemIDs) else { return }
             newText = ""
             refused = false
         } catch {
@@ -107,7 +119,7 @@ struct NotesListView: View {
     }
 
     /// Ends the edit of a note. An empty text is refused and the old text stays.
-    private func commitEdit(_ note: ItemNote) {
+    private func commitEdit(_ note: ItemNote, on itemID: ItemID) {
         _ = try? store.perform(noteEdit: note.id, text: editText, on: itemID)
         editingID = nil
     }

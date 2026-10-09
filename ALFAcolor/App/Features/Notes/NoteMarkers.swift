@@ -50,7 +50,7 @@ private struct NoteMark: View {
         .buttonStyle(.plain)
         .help(String(localized: "note.marker.help"))
         .popover(isPresented: $showing, arrowEdge: .bottom) {
-            NotesListView(store: store, itemID: itemID)
+            NotesListView(store: store, itemIDs: [itemID])
         }
         .position(x: point.x, y: point.y)
     }
