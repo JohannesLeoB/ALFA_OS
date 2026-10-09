@@ -4984,6 +4984,105 @@
           }
         }
       }
+    },
+    "inspector.picture.colors" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farben ziehen"
+          }
+        }
+      }
+    },
+    "picture.colors.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farben ziehen"
+          }
+        }
+      }
+    },
+    "picture.colors.threshold" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ähnliche Töne zusammenfassen (ΔE)"
+          }
+        }
+      }
+    },
+    "picture.colors.apply" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Farbfelder übernehmen"
+          }
+        }
+      }
+    },
+    "picture.colors.cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        }
+      }
+    },
+    "picture.colors.base" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildfarbe"
+          }
+        }
+      }
+    },
+    "picture.colors.loading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farben werden gezogen …"
+          }
+        }
+      }
+    },
+    "picture.colors.none" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Farben gefunden"
+          }
+        }
+      }
+    },
+    "undo.picture.colors" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildfarben übernehmen"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

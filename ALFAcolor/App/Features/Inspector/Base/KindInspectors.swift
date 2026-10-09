@@ -36,6 +36,7 @@ struct ImageFitSection: View {
                 Text("inspector.fit.fill").tag(ImageFit?.some(.fill))
             }
             .pickerStyle(.segmented)
+            PictureColorsButton(store: store, items: items)
         }
     }
 }
