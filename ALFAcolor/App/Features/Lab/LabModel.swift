@@ -8,14 +8,25 @@ import Renderers
 @MainActor
 @Observable
 final class LabModel {
-    /// What stopped the last change of the card.
-    enum Problem: Equatable {
-        case empty, notSaved
+    /// The result of the last commit, or the reason why it did not run.
+    enum Message: Equatable {
+        case empty, notSaved, locked, unchanged, saved
 
         var key: String {
             switch self {
             case .empty: "lab.problem.empty"
             case .notSaved: "lab.problem.notSaved"
+            case .locked: "lab.problem.locked"
+            case .unchanged: "lab.problem.unchanged"
+            case .saved: "lab.saved"
+            }
+        }
+
+        /// True for a result that the user must act on. Saved and unchanged are not problems.
+        var isProblem: Bool {
+            switch self {
+            case .empty, .notSaved, .locked: true
+            case .unchanged, .saved: false
             }
         }
     }
@@ -23,23 +34,37 @@ final class LabModel {
     let item: ItemID
     @ObservationIgnored private let store: BoardStore
     @ObservationIgnored private var pending: Task<Void, Never>?
+    /// The card as the lab last saw it on the board. A board that differs from it has changed since.
+    @ObservationIgnored private var seen: LabDraft
     private(set) var session: LabSession
     /// The running page. nil while the page is not built.
     private(set) var live: LiveCard?
-    private(set) var problem: Problem?
+    private(set) var message: Message?
 
     /// The lab of a card that is web code on the board. nil for any other item.
     init?(item: ItemID, store: BoardStore) {
         guard let draft = LabModel.boardDraft(item, in: store) else { return nil }
         self.item = item
         self.store = store
+        self.seen = draft
         session = LabSession(draft: draft)
     }
 
     /// The card's draft as it is on the board. nil when the item is gone or is not web code.
     static func boardDraft(_ id: ItemID, in store: BoardStore) -> LabDraft? {
+        guard let board = boardCard(id, in: store) else { return nil }
+        return LabDraft(card: board.card, previewWidth: board.width)
+    }
+
+    /// The files, the language and the width of the card as it is on the board.
+    static func boardCard(_ id: ItemID, in store: BoardStore) -> (card: CodeCard, width: Double?)? {
         guard let item = store.item(id), case .code(let language, let files, let width) = item.content else { return nil }
-        return LabDraft(card: CodeCard(language: language, files: files), previewWidth: width)
+        return (CodeCard(language: language, files: files), width)
+    }
+
+    /// False when the card changed on the board since the lab last saw it, for example after an undo.
+    func isCurrent(in store: BoardStore) -> Bool {
+        LabModel.boardDraft(item, in: store) == seen
     }
 
     // MARK: - Page
@@ -66,6 +91,7 @@ final class LabModel {
 
     /// A text change rebuilds the page after a short pause, so typing does not start a page per key.
     func edit(_ text: String, in tab: LabDraft.Tab) {
+        message = nil
         session.edit(text, in: tab)
         scheduleReload()
     }
@@ -120,23 +146,41 @@ final class LabModel {
     }
 
     /// Writes the control values into the code and makes the result the card's newest version on the board.
+    /// The card keeps its file names and language, and a card that is locked is not changed.
     func commit() {
-        problem = nil
+        message = nil
         guard !session.draft.files.isEmpty else {
-            problem = .empty
+            message = .empty
             return
         }
-        let board = LabModel.boardDraft(item, in: store) ?? session.draft
-        let saved = session.commit(over: board)
+        guard !isLocked, let board = LabModel.boardCard(item, in: store),
+              let boardDraft = LabDraft(card: board.card, previewWidth: board.width) else {
+            message = .locked
+            return
+        }
+        let saved = session.commit(over: boardDraft)
+        let card = saved.card(over: board.card)
+        guard card != board.card || saved.width != boardDraft.width else {
+            message = .unchanged
+            return
+        }
         do {
-            let command = Command.setContent(item, .code(language: saved.language, files: saved.files, previewWidth: saved.width))
+            let command = Command.setContent(item, .code(language: card.language, files: card.files, previewWidth: saved.width))
             guard try store.perform(command) else {
-                problem = .notSaved
+                message = .notSaved
                 return
             }
+            seen = LabModel.boardDraft(item, in: store) ?? saved
+            message = .saved
         } catch {
-            problem = .notSaved
+            message = .notSaved
         }
+    }
+
+    /// The card is locked when the item or its layer is locked.
+    private var isLocked: Bool {
+        guard let card = store.item(item), let space = store.activeSpace else { return true }
+        return card.locked || space.layers.contains { $0.id == card.layerID && $0.locked }
     }
 
     private func scheduleReload() {

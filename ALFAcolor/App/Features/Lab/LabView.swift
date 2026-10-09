@@ -1,3 +1,4 @@
+import AppKit
 import AppTheme
 import Renderers
 import SwiftUI
@@ -10,8 +11,6 @@ struct LabView: View {
 
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
-    /// The editor takes the keyboard when the lab opens, so the keys of the canvas do not act under the lab.
-    @FocusState private var editorHasFocus: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -30,7 +29,6 @@ struct LabView: View {
         }
         .background(theme.color(.background, scheme))
         .onExitCommand(perform: onClose)
-        .onAppear { editorHasFocus = true }
     }
 
     private var header: some View {
@@ -74,12 +72,11 @@ struct LabView: View {
     private var editor: some View {
         VStack(alignment: .leading, spacing: theme.space(.s2)) {
             tabPicker
-            TextEditor(text: Binding(
+            LabTextEditor(text: Binding(
                 get: { model.session.draft.text(model.session.tab) },
                 set: { model.edit($0, in: model.session.tab) }
-            ))
-            .font(theme.text(.body).font.monospaced())
-            .focused($editorHasFocus)
+            ), font: NSFont.monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular),
+                colour: NSColor(theme.color(.text, scheme)), onCancel: onClose)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             HStack(spacing: theme.space(.s2)) {
                 PasteButton(payloadType: String.self) { strings in
@@ -109,9 +106,9 @@ struct LabView: View {
 
     private var footer: some View {
         HStack(spacing: theme.space(.s3)) {
-            if let problem = model.problem {
-                Text(LocalizedStringKey(problem.key))
-                    .foregroundStyle(theme.color(.coral, scheme))
+            if let message = model.message {
+                Text(LocalizedStringKey(message.key))
+                    .foregroundStyle(message.isProblem ? theme.color(.coral, scheme) : theme.color(.textMuted, scheme))
             } else {
                 Text(LocalizedStringKey("lab.hint.commit"))
                     .foregroundStyle(theme.color(.textMuted, scheme))

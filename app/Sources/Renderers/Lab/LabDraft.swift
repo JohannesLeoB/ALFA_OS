@@ -31,23 +31,13 @@ public struct LabDraft: Equatable, Sendable {
     /// The draft of a web card. nil for a card that is not web code, such as SwiftUI.
     /// A card with several files of one kind shows them joined in one tab.
     public init?(card: CodeCard, previewWidth: Double?) {
-        let art: Art
-        switch card.language {
-        case .html, .css, .javascript: art = .html
-        case .tailwind: art = .tailwind
-        case .react: art = .react
-        case .swiftui, .compose, .flutter, .java, .other: return nil
-        }
-        let names = card.files.keys.sorted()
-        let isStyle = { (name: String) in name.lowercased().hasSuffix(".css") }
-        let markupName: String? = art == .react ? nil
-            : names.contains("index.html") ? "index.html"
-            : names.first { $0.lowercased().hasSuffix(".html") }
+        guard let art = Self.art(of: card.language) else { return nil }
+        let files = Self.tabFiles(of: card) ?? [:]
         self.art = art
-        self.width = previewWidth ?? CodeCardLayout.defaultPageWidth
-        html = markupName.flatMap { card.files[$0] } ?? ""
-        css = names.filter(isStyle).compactMap { card.files[$0] }.joined(separator: "\n")
-        script = names.filter { $0 != markupName && !isStyle($0) }.compactMap { card.files[$0] }.joined(separator: "\n")
+        width = previewWidth ?? CodeCardLayout.defaultPageWidth
+        html = Self.joined(files[.html] ?? [], in: card)
+        css = Self.joined(files[.css] ?? [], in: card)
+        script = Self.joined(files[.script] ?? [], in: card)
     }
 
     /// The tabs of the art. React has no markup tab.
@@ -92,6 +82,62 @@ public struct LabDraft: Equatable, Sendable {
     /// The card that the draft makes, ready for the renderers.
     public var card: CodeCard {
         CodeCard(language: language, files: files)
+    }
+
+    /// The card that the draft makes on top of `board`, the card as it is on the board.
+    /// The file names and the language of the board stay while the art stays. A tab whose text did not change keeps its files.
+    /// A tab whose text changed is written into its first file, and its other files are removed.
+    public func card(over board: CodeCard) -> CodeCard {
+        let boardTabs = Self.tabFiles(of: board) ?? [:]
+        // A card that is not web code has no tabs, so the draft brings its own files.
+        var files = Self.tabFiles(of: board) == nil ? [:] : board.files
+        for tab in Tab.allCases {
+            let names = boardTabs[tab] ?? []
+            let shown = tabs.contains(tab) ? text(tab) : ""
+            if !names.isEmpty, Self.joined(names, in: board) == shown { continue }
+            for name in names { files[name] = nil }
+            if !shown.isEmpty { files[names.first ?? fileName(for: tab)] = shown }
+        }
+        let keepsLanguage = Self.art(of: board.language) == art
+        return CodeCard(language: keepsLanguage ? board.language : language, files: files)
+    }
+
+    /// The art of a web language. nil for a language that the lab does not show.
+    static func art(of language: CodeLanguage) -> Art? {
+        switch language {
+        case .html, .css, .javascript: .html
+        case .tailwind: .tailwind
+        case .react: .react
+        case .swiftui, .compose, .flutter, .java, .other: nil
+        }
+    }
+
+    /// The file names of a web card by tab, in the order that the draft joins them. nil for a card that is not web code.
+    static func tabFiles(of card: CodeCard) -> [Tab: [String]]? {
+        guard let art = art(of: card.language) else { return nil }
+        let names = card.files.keys.sorted()
+        let markup: String? = art == .react ? nil
+            : names.contains("index.html") ? "index.html"
+            : names.first { $0.lowercased().hasSuffix(".html") }
+        var result: [Tab: [String]] = [:]
+        for name in names {
+            if name == markup {
+                result[.html, default: []].append(name)
+            } else if isStyle(name) {
+                result[.css, default: []].append(name)
+            } else {
+                result[.script, default: []].append(name)
+            }
+        }
+        return result
+    }
+
+    private static func isStyle(_ name: String) -> Bool {
+        name.lowercased().hasSuffix(".css")
+    }
+
+    private static func joined(_ names: [String], in card: CodeCard) -> String {
+        names.compactMap { card.files[$0] }.joined(separator: "\n")
     }
 
     private func fileName(for tab: Tab) -> String {

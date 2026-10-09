@@ -19,11 +19,12 @@ public enum LabPreview {
         return insertInHead(scheme + tweaks, into: html)
     }
 
-    /// The style of the controls. Each variable is set on the root element and on every element, marked important,
-    /// so that the code's own declarations give way to it.
+    /// The style of the changed controls. Each changed variable is set on the root element and on every element, marked
+    /// important, so that the code's own declarations give way to it. Unchanged variables keep the code's values.
     public static func tweakCSS(_ controls: [LabControl]) -> String {
-        guard !controls.isEmpty else { return "" }
-        let declarations = controls.map { "\($0.name):\($0.value.css) !important" }.joined(separator: ";")
+        let changed = controls.filter(\.isChanged)
+        guard !changed.isEmpty else { return "" }
+        let declarations = changed.map { "\($0.name):\($0.value.css) !important" }.joined(separator: ";")
         return ":root,*{\(declarations)}"
     }
 
@@ -41,7 +42,8 @@ public enum LabPreview {
         let page = WebPage(configuration: configuration, navigationDecider: HostGuard())
         let live = LiveCard(page: page)
         channel.owner = live
-        page.load(html: document)
+        // The card origin gives the page the storage that a card has, such as localStorage.
+        page.load(html: document, baseURL: WebHostRule.cardOrigin)
         return live
     }
 

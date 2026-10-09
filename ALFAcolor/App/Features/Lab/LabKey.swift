@@ -14,6 +14,7 @@ struct LabKey: ViewModifier {
         content.onKeyPress(characters: CharacterSet(charactersIn: "l")) { press in
             guard isFocused, press.modifiers.isEmpty, let shell, let canvas, shell.openLabModel == nil else { return .ignored }
             guard let card = try? LabEntry.card(in: canvas) else { return .ignored }
+            // A card that is not web code gets the notice of the status bar instead.
             shell.openLab(for: card, store: canvas.store)
             return .handled
         }
