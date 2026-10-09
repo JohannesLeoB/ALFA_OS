@@ -1,4 +1,5 @@
 import ALFAcolorCore
+import Geometry
 
 /// A field of the inspector that changes the items.
 public enum InspectorField: String, CaseIterable, Sendable {
@@ -15,15 +16,17 @@ public enum InspectorEdit {
 
     /// The command that sets a field of the selection to `points`. X and Y move the selection box, so all items
     /// move together and the items inside a frame or group come along. Width and height give every item that size.
-    /// Nil when nothing would change, or when a size is not above zero.
+    /// Nil when nothing would change, when a size is not above zero, or when a value is beyond the number limits.
     public static func command(_ field: InspectorField, to points: Double, items: [Item]) -> Command? {
         guard points.isFinite, !items.isEmpty else { return nil }
         let ids = Set(items.map(\.id))
         switch field {
         case .x:
+            guard abs(points) <= NumberLimit.coordinate else { return nil }
             let delta = points - items.map(\.rect.x).min()!
             return delta == 0 ? nil : .move(ids, dx: delta, dy: 0)
         case .y:
+            guard abs(points) <= NumberLimit.coordinate else { return nil }
             let delta = points - items.map(\.rect.y).min()!
             return delta == 0 ? nil : .move(ids, dx: 0, dy: delta)
         case .width:
@@ -34,7 +37,7 @@ public enum InspectorEdit {
     }
 
     private static func resize(_ items: [Item], to points: Double, _ change: (Rect) -> Rect?) -> Command? {
-        guard points > 0 else { return nil }
+        guard points > 0, points <= NumberLimit.length else { return nil }
         var rects: [ItemID: Rect] = [:]
         for item in items {
             if let rect = change(item.rect) { rects[item.id] = rect }

@@ -22,8 +22,15 @@ public struct FrameDisplay: Equatable, Sendable {
 
     public var isLandscape: Bool { widthPoints >= heightPoints }
     /// The size in pixels at the scale of the frame.
-    public var widthPixels: Int { widthPoints * scale }
-    public var heightPixels: Int { heightPoints * scale }
+    public var widthPixels: Int { Self.pixels(widthPoints, scale) }
+    public var heightPixels: Int { Self.pixels(heightPoints, scale) }
+
+    /// Points times scale. A product beyond the Int range stays at the range limit instead of trapping.
+    private static func pixels(_ points: Int, _ scale: Int) -> Int {
+        let (product, overflow) = points.multipliedReportingOverflow(by: scale)
+        guard overflow else { return product }
+        return (points < 0) == (scale < 0) ? Int.max : Int.min
+    }
 
     public static func make(deviceID: String?, scale: Double?, rect: Rect, grid: ColumnGrid? = nil) -> FrameDisplay {
         let device = deviceID.flatMap(Device.resolve)
@@ -31,9 +38,9 @@ public struct FrameDisplay: Equatable, Sendable {
             deviceID: deviceID,
             nameKey: device?.name,
             presetID: deviceID.map(Device.baseID(of:)),
-            widthPoints: Int(rect.w.rounded()),
-            heightPoints: Int(rect.h.rounded()),
-            scale: Int(FrameScale.effective(deviceID: deviceID, scale: scale).rounded()),
+            widthPoints: clampedLength(rect.w).clampedInt,
+            heightPoints: clampedLength(rect.h).clampedInt,
+            scale: FrameScale.effective(deviceID: deviceID, scale: scale).clampedInt,
             isTemplate: device?.isTemplate ?? false,
             gridLines: grid.flatMap { FrameGridLines.make($0, width: rect.w, height: rect.h) })
     }
