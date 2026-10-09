@@ -88,7 +88,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-506](briefe/B-506.md) | E5 | Token-Werkstatt und Ausgabe | B-502, B-504 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1180 Tests, App-Bau grün); Abnahme am Bild offen (Ausgabe-Blatt, Formate, Vorschau, Speichern); Tabelle, Vereinheitlichen und Namensvorschläge nur im Paket, Ansicht fehlt (Folgebrief); Tailwind nur hell |
 | [B-507](briefe/B-507.md) | E5 | Token-Bindung | B-201 | offen |
 | [B-601](briefe/B-601.md) | E6 | Bibliothek, Ordner, Suche | B-201 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1180 Tests, App-Bau grün); Abnahme am Bild offen (Sammlung, Suche, Ordner, Ziehen auf Leinwand); Ziehen auf Ordner nur per Menü; gelöschtes Stück bleibt in festen Ordnern (wird übersprungen) |
-| [B-602](briefe/B-602.md) | E6 | Herkunft und Lizenz | B-601 | offen |
+| [B-602](briefe/B-602.md) | E6 | Herkunft und Lizenz | B-601 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-603](briefe/B-603.md) | E6 | Screenshot-Sortierer | B-601 | offen |
 | [B-604](briefe/B-604.md) | E6 | Lesezeichen, Gists, Link-Vorschau | B-207 | offen |
 | [B-605](briefe/B-605.md) | E6 | Teilen-Erweiterung | B-603 | offen |
@@ -102,7 +102,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-802](briefe/B-802.md) | E8 | iCloud Drive für Dokumente | B-104 | offen |
 | [B-803](briefe/B-803.md) | E8 | Ordner-Spiegel | B-603 | offen |
 | [B-804](briefe/B-804.md) | E8 | Swift-Vorschau, Versuch mit Messung | B-401 | offen |
-| [B-901](briefe/B-901.md) | E9 | Einstellungen und Setups | B-106 | offen |
+| [B-901](briefe/B-901.md) | E9 | Einstellungen und Setups | B-106 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-902](briefe/B-902.md) | E9 | Erster Start und leere Zustände | B-901 | offen |
 | [B-903](briefe/B-903.md) | E9 | Barrierefreiheit | B-902 | offen |
 | [B-904](briefe/B-904.md) | E9 | Leistung und Speicher | B-209 | offen |
