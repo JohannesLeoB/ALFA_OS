@@ -111,8 +111,8 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-804](briefe/B-804.md) | E8 | Swift-Vorschau, Versuch mit Messung | B-401 | offen |
 | [B-806](briefe/B-806.md) | E8 | Claude in der App, Teil b: Schlüssel, Verbrauch, Labor-Leiste, Token-Namen | B-801 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, App-Bau grün); Abnahme am Bild offen |
 | [B-807](briefe/B-807.md) | E8 | Notizen an Stücken und Stellen (Kommentare) | B-305, B-703 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, App-Bau grün); Abnahme am Bild offen |
-| [B-809](briefe/B-809.md) | E8 | Anbindung, Teil 2: Streaming, Prompt-Caching, Werkzeuge der Plattform (Websuche, Abruf) | B-801, B-806 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
-| [B-810](briefe/B-810.md) | E8 | Orte und App-Ordner: Projektordner, Arbeitsordner, Speicher, Quellen, Ziele | B-901, B-104 | vergeben an Haiku-Agent (im Repo), 2026-10-09 (Teil a; Git und Sicherungsregeln offen) |
+| [B-809](briefe/B-809.md) | E8 | Anbindung, Teil 2: Streaming, Prompt-Caching, Werkzeuge der Plattform (Websuche, Abruf) | B-801, B-806 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, App-Bau grün); Abnahme am Bild offen |
+| [B-810](briefe/B-810.md) | E8 | Orte und App-Ordner: Projektordner, Arbeitsordner, Speicher, Quellen, Ziele | B-901, B-104 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, App-Bau grün); Rest: Teil a; Git und Sicherungsregeln offen |
 | [B-811](briefe/B-811.md) | E8 | Übergabe-Pakete und Weg zu den Claude-Apps (Code, Design, Cloud, macOS, Browser) | B-809, B-810 | offen (wartet auf Recherche und Entscheidungen) |
 | [B-812](briefe/B-812.md) | E8 | Sicherung (Intervall 15–120 min) und Absturz-Autosave | B-810, B-104 | offen (wartet auf B-810; Regeln festgelegt: Crash-Autosave eine Datei, Sicherungen max. 3 mit Ausdünnen) |
 | [B-808](briefe/B-808.md) | E8 | Chat in der App: Kontext senden, Vorschläge zurück (Werkzeuge) | B-801, B-806, B-807 | offen (wartet auf B-801, B-806, B-807) |
