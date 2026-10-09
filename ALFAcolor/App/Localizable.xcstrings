@@ -5083,6 +5083,182 @@
           }
         }
       }
+    },
+    "command.view.rulers" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lineale ein/aus"
+          }
+        }
+      }
+    },
+    "command.view.guides" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfslinien ein/aus"
+          }
+        }
+      }
+    },
+    "command.view.guidesLocked" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfslinien sperren"
+          }
+        }
+      }
+    },
+    "undo.guide.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfslinie setzen"
+          }
+        }
+      }
+    },
+    "undo.guide.move" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfslinie verschieben"
+          }
+        }
+      }
+    },
+    "undo.guide.remove" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfslinie löschen"
+          }
+        }
+      }
+    },
+    "undo.guide.removeAll" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfslinien löschen"
+          }
+        }
+      }
+    },
+    "inspector.frame.guides" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfslinien"
+          }
+        }
+      }
+    },
+    "inspector.frame.guides.none" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Hilfslinien"
+          }
+        }
+      }
+    },
+    "inspector.frame.guides.removeAll" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Hilfslinien löschen"
+          }
+        }
+      }
+    },
+    "guide.horizontal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waagerecht"
+          }
+        }
+      }
+    },
+    "guide.vertical" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senkrecht"
+          }
+        }
+      }
+    },
+    "guide.remove" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfslinie löschen"
+          }
+        }
+      }
+    },
+    "unit.pixel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "px"
+          }
+        }
+      }
+    },
+    "ruler.horizontal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lineal oben"
+          }
+        }
+      }
+    },
+    "ruler.vertical" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lineal links"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
