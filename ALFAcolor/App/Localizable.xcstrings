@@ -1013,6 +1013,105 @@
         }
       }
     },
+    "import.dismiss" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "import.error.noEditableLayer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Ebenen sind gesperrt. Entsperre eine Ebene, dann kannst du einfügen."
+          }
+        }
+      }
+    },
+    "import.error.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einfügen nicht möglich"
+          }
+        }
+      }
+    },
+    "import.large.cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        }
+      }
+    },
+    "import.large.confirm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übernehmen"
+          }
+        }
+      }
+    },
+    "import.large.message %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Datei(en) sind größer als 20 MB. Das Übernehmen kann eine Weile dauern."
+          }
+        }
+      }
+    },
+    "import.large.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Große Dateien übernehmen?"
+          }
+        }
+      }
+    },
+    "import.skipped.message %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Datei(en) wurden nicht übernommen: unbekannter Typ, Ordner oder nicht lesbar."
+          }
+        }
+      }
+    },
+    "import.skipped.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht übernommen"
+          }
+        }
+      }
+    },
     "inspector.hint" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2279,6 +2378,17 @@
         }
       }
     },
+    "undo.drop" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hineinziehen"
+          }
+        }
+      }
+    },
     "undo.duplicate" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2352,6 +2462,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verschieben"
+          }
+        }
+      }
+    },
+    "undo.paste" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einfügen"
           }
         }
       }
