@@ -219,6 +219,7 @@ public enum ShortcutTable {
 
     static let help: [MenuCommand] = [
         command("help.help", .help, "?", [.command]),
+        command("help.openStarter", .help),
         command("help.shortcutTable", .help, separator: true),
     ]
 

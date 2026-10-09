@@ -65,7 +65,10 @@ struct HelpCommands: Commands {
         CommandGroup(after: .help) {
             MenuEntries(
                 menu: .help,
-                functions: MenuFunctions(showShortcutTable: { openWindow(id: ShortcutTableView.windowID) })
+                functions: MenuFunctions(
+                    showShortcutTable: { openWindow(id: ShortcutTableView.windowID) },
+                    openStarter: { StarterOpener.open() }
+                )
             )
         }
     }

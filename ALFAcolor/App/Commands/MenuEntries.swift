@@ -11,6 +11,7 @@ struct MenuFunctions {
     var canvas: CanvasController?
     var interaction: CanvasInteraction?
     var showShortcutTable: MenuAction?
+    var openStarter: MenuAction?
 
     @MainActor
     func action(for command: MenuCommand) -> MenuAction? {
@@ -28,6 +29,7 @@ struct MenuFunctions {
         case "edit.delete": return withInteraction { $0.deleteSelection() }
         case "edit.deselect": return withInteraction { $0.deselect() }
         case "object.duplicate": return withInteraction { $0.duplicateSelection() }
+        case "help.openStarter": return openStarter
         case "help.shortcutTable": return showShortcutTable
         default: return nil
         }
