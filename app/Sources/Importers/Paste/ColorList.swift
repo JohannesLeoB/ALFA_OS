@@ -46,15 +46,36 @@ enum ColorList {
         var digits: Int
     }
 
-    /// A token that is a color: 3, 4, 6 or 8 hex digits, with "#". Without "#", 6 or 8 digits with at least one number.
+    /// A single rgb() or rgba() color, as CSS writes it. An alpha below one adds the alpha byte.
+    static func rgb(_ text: String) -> ColorEntry? {
+        let pattern = #"^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*([\d.]+)\s*)?\)$"#
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]),
+              let match = regex.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)) else { return nil }
+        func part(_ index: Int) -> String? { Range(match.range(at: index), in: text).map { String(text[$0]) } }
+        let channels = (1...3).compactMap { part($0).flatMap { Int($0) } }
+        guard channels.count == 3, channels.allSatisfy({ $0 <= 255 }) else { return nil }
+        var hex = channels.map(hexByte).joined()
+        if let alphaText = part(4) {
+            guard let alpha = Double(alphaText), (0...1).contains(alpha) else { return nil }
+            hex += hexByte(Int((alpha * 255).rounded()))
+        }
+        return ColorEntry(hex: "#" + hex)
+    }
+
+    private static func hexByte(_ value: Int) -> String {
+        let digits = String(value, radix: 16, uppercase: true)
+        return digits.count < 2 ? "0" + digits : digits
+    }
+
+    /// A token that is a color: 6 or 8 hex digits, with "#". Short forms ("#fff") are no color on their own.
+    /// Without "#", 6 or 8 digits with a letter and a digit: "123456" is a number, "decade" a word.
     private static func color(in token: String) -> Parsed? {
         let hadHash = token.hasPrefix("#")
         let body = hadHash ? String(token.dropFirst()) : token
-        guard [3, 4, 6, 8].contains(body.count), body.allSatisfy(\.isHexDigit), body.allSatisfy(\.isASCII) else { return nil }
+        guard [6, 8].contains(body.count), body.allSatisfy(\.isHexDigit), body.allSatisfy(\.isASCII) else { return nil }
         if !hadHash {
-            guard body.count >= 6, body.contains(where: \.isNumber) else { return nil }
+            guard body.contains(where: \.isNumber), body.contains(where: \.isLetter) else { return nil }
         }
-        let full = body.count <= 4 ? body.map { "\($0)\($0)" }.joined() : body
-        return Parsed(hex: "#" + full.uppercased(), hadHash: hadHash, digits: body.count)
+        return Parsed(hex: "#" + body.uppercased(), hadHash: hadHash, digits: body.count)
     }
 }
