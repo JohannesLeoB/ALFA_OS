@@ -1,4 +1,5 @@
 import SwiftUI
+import Motion
 
 /// State of the window shell: which areas are visible.
 /// It belongs to one window. Menu commands reach it through `focusedSceneValue`.
@@ -9,6 +10,10 @@ final class ShellState {
     var columnVisibility: NavigationSplitViewVisibility = .all
     var inspectorVisible = true
     var statusBarVisible = true
+    /// Blob mode: the blob menu replaces the sidebars. The sidebars and the inspector are hidden while it is on.
+    private(set) var blobMode = false
+    /// State of the blob menu. Only the views of the menu change it.
+    var blob = BlobMenu()
     /// Placeholder for the space tabs.
     var selectedRoom: PlaceholderRoom = .mail
 
@@ -20,6 +25,13 @@ final class ShellState {
     func toggleSidebar() { sidebarVisible.toggle() }
     func toggleInspector() { inspectorVisible.toggle() }
     func toggleStatusBar() { statusBarVisible.toggle() }
+
+    /// Switches between the sidebars and the blob menu. Leaving the blob mode shows the sidebars again.
+    func toggleBlobMode() {
+        blobMode.toggle()
+        sidebarVisible = !blobMode
+        inspectorVisible = !blobMode
+    }
 
     /// Tab on the canvas: if any palette is open, both close. Otherwise both open.
     func togglePalettes() {

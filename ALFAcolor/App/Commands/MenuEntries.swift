@@ -19,6 +19,7 @@ struct MenuFunctions {
         case "view.inspector": return with { $0.toggleInspector() }
         case "view.allPalettes": return with { $0.togglePalettes() }
         case "view.statusBar": return with { $0.toggleStatusBar() }
+        case "view.blobMode": return with { $0.toggleBlobMode() }
         case "view.zoomIn": return withCanvas { $0.perform(.zoomIn) }
         case "view.zoomOut": return withCanvas { $0.perform(.zoomOut) }
         case "view.actualSize": return withCanvas { $0.perform(.actualSize) }

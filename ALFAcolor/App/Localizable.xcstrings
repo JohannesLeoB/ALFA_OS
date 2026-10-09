@@ -12,6 +12,193 @@
         }
       }
     },
+    "Color fan" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbfächer"
+          }
+        }
+      }
+    },
+    "blob.align.needsTwo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mindestens zwei Stücke wählen"
+          }
+        }
+      }
+    },
+    "blob.close" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen"
+          }
+        }
+      }
+    },
+    "blob.edge.bottom" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An die untere Kante"
+          }
+        }
+      }
+    },
+    "blob.edge.leading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An die linke Kante"
+          }
+        }
+      }
+    },
+    "blob.edge.top" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An die obere Kante"
+          }
+        }
+      }
+    },
+    "blob.edge.trailing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An die rechte Kante"
+          }
+        }
+      }
+    },
+    "blob.layout.toggle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leiste ein/aus"
+          }
+        }
+      }
+    },
+    "blob.noSelection" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nichts gewählt"
+          }
+        }
+      }
+    },
+    "blob.palette.align" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausrichten"
+          }
+        }
+      }
+    },
+    "blob.palette.layers" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebenen"
+          }
+        }
+      }
+    },
+    "blob.palette.swatches" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbfelder"
+          }
+        }
+      }
+    },
+    "blob.palette.tokens" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tokens"
+          }
+        }
+      }
+    },
+    "blob.palette.transform" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transformieren"
+          }
+        }
+      }
+    },
+    "blob.pin" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anheften"
+          }
+        }
+      }
+    },
+    "blob.swatches.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Farbfelder auf der Leinwand"
+          }
+        }
+      }
+    },
+    "blob.unpin" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von der Kante lösen"
+          }
+        }
+      }
+    },
     "canvas.hint" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -756,6 +943,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle Paletten ein/aus"
+          }
+        }
+      }
+    },
+    "command.view.blobMode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blob-Modus ein/aus"
           }
         }
       }

@@ -31,6 +31,7 @@ struct ShellView: View {
                 CanvasSurface(controller: canvas, interaction: interaction, importer: importer,
                               onTogglePalettes: { shell.togglePalettes() })
                     .overlay { ContextBarHost(canvas: canvas) }
+                    .overlay { if shell.blobMode { BlobMenuHost(shell: shell, store: canvas.store) } }
                 if shell.statusBarVisible {
                     StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError)
                 }
