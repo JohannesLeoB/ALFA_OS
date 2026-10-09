@@ -4,7 +4,7 @@
 |---|---|---|---|
 | E0 Fundament | erledigt | 2026-10-08 „DAHIN“ | G0 erfüllt: 12 Tests grün |
 | E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 wartet auf Bild-Abnahme; B-107 erledigt; B-108a erledigt; B-108b erledigt | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen (Bild-Abnahme durch Johannes und P-001 stehen aus; E2 läuft auf sein Wort) |
-| E2 Leinwand | läuft: B-110, B-201, B-203, B-202, B-211, B-205, B-204, B-207 erledigt; B-208 und B-401 im Bau (parallel); dann B-206, B-403, B-404, B-704, B-209 (Johannes 2026-10-09: „ERSTMAL BAUEN BAUEN BAUEN“, „HAIKUs Bauen!!!“) | 2026-10-09 „Weiter bauen. Ich starte die App später. Tools und funktionstiefe einbauen. App funktional machen. Go. Workers sonnet oder Haiku.“ | G2 offen |
+| E2 Leinwand | läuft: B-110, B-201, B-203, B-202, B-211, B-205, B-204, B-207, B-208 erledigt; B-401 (E4) erledigt; dann B-206, B-403, B-404, B-704, B-209 (Johannes 2026-10-09: „ERSTMAL BAUEN BAUEN BAUEN“, „HAIKUs Bauen!!!“) | 2026-10-09 „Weiter bauen. Ich starte die App später. Tools und funktionstiefe einbauen. App funktional machen. Go. Workers sonnet oder Haiku.“ | G2 offen |
 | E3 bis E9 | geplant | | |
 
 ## Chef-Aufgaben vor E2 (aus den Übergaben von E1)
@@ -43,7 +43,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-205](briefe/B-205.md) | E2 | Stückarten zeichnen | B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 407 Tests); Notiz-Bearbeitung nach B-204 verschoben; Abnahme am Bild offen |
 | [B-206](briefe/B-206.md) | E2 | Räume als Reiter und Ebenen | B-201, B-102 | offen |
 | [B-207](briefe/B-207.md) | E2 | Einfügen und Hineinziehen | B-201, B-104 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 569 Tests; Sichern an neuem Ort behoben); Abnahme am Bild offen |
-| [B-208](briefe/B-208.md) | E2 | Kontextleiste und Inspektor-Grundgerüst | B-204 | zur Prüfung, 2026-10-09 (Bauagent Haiku 5.5: pruefen.sh 0 errors, 22 neue Tests); Abnahme am Bild offen |
+| [B-208](briefe/B-208.md) | E2 | Kontextleiste und Inspektor-Grundgerüst | B-204 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 615 Tests); Abnahme am Bild offen |
 | [B-209](briefe/B-209.md) | E2 | Leistungsprobe Leinwand | B-203 | offen |
 | [B-211](briefe/B-211.md) | E2 | Dokument in der App: Neu, Öffnen, Sichern | B-110, B-201, B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 359 Tests; DocumentGroup); Abnahme am Bild offen (⌘N, ⌘O, ⌘S, Speicherstand) |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | offen |
@@ -51,7 +51,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
 | [B-304](briefe/B-304.md) | E3 | Abstände zeigen und Messen | B-202, B-303 | offen |
 | [B-305](briefe/B-305.md) | E3 | Werkzeugpalette und Werkzeugoptionen | B-204 | offen |
-| [B-401](briefe/B-401.md) | E4 | Renderer-Protokoll und Web-Renderer | B-205 | vergeben an Haiku-Agent (im Repo, parallel zu B-208), 2026-10-09 |
+| [B-401](briefe/B-401.md) | E4 | Renderer-Protokoll und Web-Renderer | B-205 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 615 Tests; WebPage macOS 26, JavaScript auch beim Vorschaubild an); Abnahme am Bild offen |
 | [B-402](briefe/B-402.md) | E4 | Player-Verwaltung und Vorschaubilder | B-401 | offen |
 | [B-403](briefe/B-403.md) | E4 | Code-Karte und Quelltextansicht | B-401 | offen |
 | [B-404](briefe/B-404.md) | E4 | Labor | B-403 | offen |
