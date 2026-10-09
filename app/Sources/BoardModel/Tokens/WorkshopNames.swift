@@ -1,4 +1,5 @@
 import Foundation
+import Geometry
 import Tokens
 
 /// Name suggestions for tokens: color.<n> from the lightest colour, space.<n> for pixel values that are
@@ -42,7 +43,7 @@ public enum WorkshopNames {
 
         for index in set.tokens.indices where set.tokens[index].path.first != "radius" {
             guard let x = pixels(set.tokens[index].value), x > 0, x.truncatingRemainder(dividingBy: 4) == 0 else { continue }
-            proposals.append((index, ["space", "\(Int(x / 4))"]))
+            proposals.append((index, ["space", "\((x / 4).clampedInt)"]))
         }
 
         for index in set.tokens.indices {
