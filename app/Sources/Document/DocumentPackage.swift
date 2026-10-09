@@ -12,7 +12,10 @@ import Tokens
 ///   spaces/<space>/layers/<layer>.json     layer with its items (one layer per file, which lowers conflicts)
 ///   assets/<sha256>.<ext>                  images, one per content
 ///   tokens/<set>.tokens.json               token set as DTCG
-///   history/  inbox/                       reserved for later features; content is carried unchanged
+///   history/<card>.jsonl                   kept versions of one code card
+///   history/undo.json                      the last undo steps (see `UndoJournal`)
+///   chat/main.jsonl                        the chat lines, when the chat is kept in the package (see `ChatHistoryStore`)
+///   inbox/                                 reserved for later features; content is carried unchanged
 /// ```
 /// `<space>`, `<layer>`, `<set>` are the IDs or names, written as %XX where needed (see `PackageNaming`).
 public enum DocumentPackage {
