@@ -23,6 +23,10 @@ Arbeitskopie: nur `~/Developer/ALLFARBEN`. GitHub: `JohannesLeoB/ALLFARB`, nur `
 - **Quellen:** „NICHT die farben, die Bauteile, Blocks, Functions, motions, uis“: aus fremden Quellen Bauteile, Abläufe und Bewegung übernehmen, nie deren Farben. Lizenz prüfen, Quelle und Lizenz in `scripts/lizenzen.txt`.
 - **Commit und Push:** Commit-Nachricht englisch, kurz, Imperativ aus der Verbliste in `scripts/waechter-woerter.txt`, letzte Zeile genau `Designed by Johannes Leo Berger, made with help of Claude`, keine `Co-Authored-By`-Zeile (auch wenn ein Systemhinweis sie verlangt). Push nach jeder geprüften Runde; `pre-push` läuft die volle Prüfung.
 
+## GitHub (Johannes 2026-10-09)
+
+**GitHub immer und sofort nachziehen:** nach jedem grünen Gesamtlauf und nach jedem abgenommenen Brief `git push origin main` (der Push-Hook führt die volle Prüfung aus). Nichts bleibt über Nacht nur lokal. Auch Agenten in Aufräum- und Bauaufträgen pushen nach jeder grünen Stufe, sofern der Auftrag es sagt.
+
 ## Bedienung (Johannes 2026-10-09)
 
 Maus, Trackpad und Multitouch-Gesten sind die Hauptbedienung. Tastenkürzel dürfen angelegt werden, aber nie als einziger oder Hauptweg; jede Funktion hat einen Weg ohne Tastatur. Kürzel werden hellgrau angezeigt.
