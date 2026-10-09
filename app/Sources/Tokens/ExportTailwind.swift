@@ -116,11 +116,16 @@ struct KebabNames {
         return candidate
     }
 
+    /// German umlauts folded to ASCII, as in the names of the design tokens.
+    private static let folds: [Character: String] = ["\u{E4}": "a", "\u{F6}": "o", "\u{FC}": "u", "\u{DF}": "ss"]
+
     /// Lower-case ASCII letters and digits, with single hyphens between runs of anything else. Never empty.
     static func clean(_ text: String) -> String {
         var out = ""
         for character in text.lowercased() {
-            if character.isASCII && (character.isLetter || character.isNumber) {
+            if let folded = folds[character] {
+                out += folded
+            } else if character.isASCII && (character.isLetter || character.isNumber) {
                 out.append(character)
             } else if out.last != "-" {
                 out.append("-")
