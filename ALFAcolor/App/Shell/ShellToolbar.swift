@@ -14,7 +14,7 @@ struct ShellToolbar: ToolbarContent {
         }
 
         ToolbarItemGroup(placement: .principal) {
-            ChooseFilesButton(titleKey: "toolbar.add", symbol: "plus.square.on.square")
+            AddMenu(store: store, shell: shell)
             ChooseFilesButton(titleKey: "toolbar.import", symbol: "square.and.arrow.down")
             LabButton()
             Button {} label: { Label("toolbar.tokenWorkshop", systemImage: "swatchpalette") }
@@ -43,6 +43,36 @@ private struct ChooseFilesButton: View {
         Button { interaction?.requestFileImport() } label: { Label(titleKey, systemImage: symbol) }
             .help(titleKey)
             .disabled(interaction == nil)
+    }
+}
+
+/// The add menu: the file chooser, and a frame of each device. A new frame is centered on the visible part of the canvas.
+private struct AddMenu: View {
+    let store: BoardStore
+    var shell: ShellState
+
+    @FocusedValue(\.interaction) private var interaction
+    @FocusedValue(\.canvas) private var canvas
+
+    var body: some View {
+        Menu {
+            Button("toolbar.add.files") { interaction?.requestFileImport() }
+            Menu("toolbar.add.frame") {
+                ForEach(DeviceChoice.all) { choice in
+                    Button(LocalizedStringKey(choice.nameKey)) { addFrame(choice.id) }
+                }
+            }
+        } label: {
+            Label("toolbar.add", systemImage: "plus.square.on.square")
+        }
+        .help("toolbar.add")
+        .disabled(canvas == nil)
+    }
+
+    private func addFrame(_ deviceID: String) {
+        guard let canvas else { return }
+        let center = canvas.viewport.visibleRect(in: canvas.size).center
+        _ = try? store.addFrame(deviceID: deviceID, centerX: center.x, centerY: center.y, layerID: shell.activeLayer)
     }
 }
 
