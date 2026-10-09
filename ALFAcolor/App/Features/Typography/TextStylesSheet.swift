@@ -35,14 +35,14 @@ struct TextStylesSheet: View {
             }
             HStack(alignment: .top, spacing: theme.space(.s4)) {
                 styleList
-                    .frame(width: 200)
+                    .frame(width: theme.grid(25))
                 Divider()
                 editor
             }
             rampRow
         }
         .padding(theme.space(.s6))
-        .frame(minWidth: 680, minHeight: 480)
+        .frame(minWidth: theme.grid(85), minHeight: theme.grid(60))
         .onAppear {
             selected = styles.first?.name
             load(selected)
@@ -143,9 +143,9 @@ struct TextStylesSheet: View {
     private var rampRow: some View {
         HStack(spacing: theme.space(.s3)) {
             TextField("type.base", value: $base, format: .number)
-                .frame(width: 96)
+                .frame(width: theme.grid(12))
             TextField("type.factor", value: $factor, format: .number)
-                .frame(width: 96)
+                .frame(width: theme.grid(12))
             Button("type.makeRamp") { try? store.makeTypeRamp(TypeRampSpec(base: base, factor: factor)) }
             Button("type.recalculate") { try? store.recalculateTypeRamp(base: base, factor: factor) }
             Spacer()

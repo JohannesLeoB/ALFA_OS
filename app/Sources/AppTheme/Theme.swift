@@ -227,6 +227,9 @@ public struct Theme: Sendable, Equatable {
 
     public func space(_ s: SpaceToken) -> CGFloat { spacing[s] ?? 0 }
 
+    /// A size of a building block: a number of basic steps (s2), so that sizes stay on the 8-point grid.
+    public func grid(_ steps: Int) -> CGFloat { space(.s2) * CGFloat(steps) }
+
     public func radius(_ r: RadiusToken) -> CGFloat { radii[r] ?? 0 }
 
     /// The shadow of the contract for the mode. Without a value it is `ShadowSpec.none`.

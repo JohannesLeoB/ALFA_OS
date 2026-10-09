@@ -77,7 +77,7 @@ struct PictureColorsSheet: View {
         HStack(spacing: theme.space(.s2)) {
             Rectangle()
                 .fill(Color(swatch.color))
-                .frame(width: 16, height: 16)
+                .frame(width: theme.space(.s4), height: theme.space(.s4))
             Text(verbatim: swatch.color.hex)
                 .themeText(theme.text(.caption))
             Spacer(minLength: 0)

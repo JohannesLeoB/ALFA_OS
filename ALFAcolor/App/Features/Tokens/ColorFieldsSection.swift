@@ -88,7 +88,7 @@ struct ColorFieldsSection: View {
         HStack(spacing: 0) {
             Rectangle()
                 .fill(Color(field.color))
-                .frame(width: 16, height: 16)
+                .frame(width: theme.space(.s4), height: theme.space(.s4))
             if renaming == field.name {
                 TextField("tokens.menu.rename", text: $renameText)
                     .textFieldStyle(.plain)

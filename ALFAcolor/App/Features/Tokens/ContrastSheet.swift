@@ -59,12 +59,12 @@ struct ContrastSheet: View {
         let grid = ContrastMatrix.grid(texts: fields.map(\.color), grounds: fields.map(\.color), largeText: largeText)
         return Grid(horizontalSpacing: theme.space(.s1), verticalSpacing: theme.space(.s1)) {
             GridRow {
-                Color.clear.frame(width: 96, height: 16)
+                Color.clear.frame(width: theme.grid(12), height: theme.space(.s4))
                 ForEach(fields) { ground in
                     Text(verbatim: ground.name)
                         .themeText(theme.text(.caption))
                         .lineLimit(1)
-                        .frame(width: 72)
+                        .frame(width: theme.grid(9))
                 }
             }
             ForEach(fields.indices, id: \.self) { row in
@@ -72,7 +72,7 @@ struct ContrastSheet: View {
                     Text(verbatim: fields[row].name)
                         .themeText(theme.text(.caption))
                         .lineLimit(1)
-                        .frame(width: 96, alignment: .leading)
+                        .frame(width: theme.grid(12), alignment: .leading)
                     ForEach(fields.indices, id: \.self) { column in
                         cell(text: fields[row], ground: fields[column], result: grid[row][column])
                     }
@@ -95,7 +95,7 @@ struct ContrastSheet: View {
                     .themeText(theme.text(.caption))
             }
             .foregroundStyle(Color(text.color))
-            .frame(width: 72, height: 64)
+            .frame(width: theme.grid(9), height: theme.grid(8))
             .background(Color(ground.color))
             .overlay(Rectangle().stroke(isPicked ? theme.color(.accent, scheme) : theme.color(.border, scheme), lineWidth: isPicked ? 2 : 1))
         }
@@ -116,7 +116,7 @@ struct ContrastSheet: View {
                 HStack(spacing: theme.space(.s2)) {
                     Rectangle()
                         .fill(Color(suggested))
-                        .frame(width: 16, height: 16)
+                        .frame(width: theme.space(.s4), height: theme.space(.s4))
                     Text("contrast.suggestion")
                     Text(verbatim: suggested.hex)
                         .themeText(theme.text(.caption))
