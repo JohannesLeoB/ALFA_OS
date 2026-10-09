@@ -31,12 +31,16 @@ struct MockupEntries {
 
         switch item.content {
         case .code(let language, let sources, let previewWidth):
-            let names = sources.keys.sorted()
+            let names = Self.orderedNames(sources.keys)
             let stem = Self.safeName(item.id.raw)
-            let path = "code/\(stem).\(Self.extensionFor(language))"
-            files[path] = Data((names.first.flatMap { sources[$0] } ?? "").utf8)
+            // The entry file is the one named index.html, else the first HTML file, else the first file.
+            let main = names.first ?? ""
+            let mainExtension = (main as NSString).pathExtension
+            let path = unique("code/\(stem).\(mainExtension.isEmpty ? Self.extensionFor(language) : Self.fileName(mainExtension))")
+            files[path] = Data((sources[main] ?? "").utf8)
             for name in names.dropFirst() {
-                files["code/\(stem)/\(Self.safeName(name))"] = Data((sources[name] ?? "").utf8)
+                let extra = unique("code/\(stem)/\(Self.fileName(name))")
+                files[extra] = Data((sources[name] ?? "").utf8)
             }
             entry.type = "code"
             entry.mode = language.rawValue
@@ -94,6 +98,50 @@ struct MockupEntries {
             return
         }
         entries.append(entry)
+    }
+
+    /// A path that no file has taken yet. A name that is taken is kept apart with a number, and the clash is reported.
+    private mutating func unique(_ path: String) -> String {
+        guard files[path] != nil else { return path }
+        var number = 2
+        while true {
+            let (stem, ext) = Self.splitExtension(path)
+            let candidate = ext.isEmpty ? "\(stem)-\(number)" : "\(stem)-\(number).\(ext)"
+            if files[candidate] == nil {
+                warnings.append("\(path): name taken, saved as \(candidate)")
+                return candidate
+            }
+            number += 1
+        }
+    }
+
+    /// The file names of a card with the entry file first: index.html, else the first HTML file, else the first name.
+    static func orderedNames<S: Sequence>(_ names: S) -> [String] where S.Element == String {
+        let sorted = names.sorted()
+        let entry = sorted.first { $0 == "index.html" }
+            ?? sorted.first { ["html", "htm"].contains(($0 as NSString).pathExtension.lowercased()) }
+            ?? sorted.first
+        guard let entry else { return [] }
+        return [entry] + sorted.filter { $0 != entry }
+    }
+
+    static func splitExtension(_ path: String) -> (stem: String, ext: String) {
+        let ns = path as NSString
+        let ext = ns.pathExtension
+        guard !ext.isEmpty else { return (path, "") }
+        return (String(path.dropLast(ext.count + 1)), ext)
+    }
+
+    /// A name for a file or a folder in the package. Lower case. Letters of any script, digits, "-", "_" and "." survive;
+    /// other characters become "-". A dot never starts the name, so the extension stays with the name.
+    static func fileName(_ raw: String) -> String {
+        var out = ""
+        for character in raw.lowercased() {
+            let keep = character.isLetter || character.isNumber || character == "-" || character == "_" || character == "."
+            out.append(keep ? character : "-")
+        }
+        while out.hasPrefix(".") { out.removeFirst() }
+        return out.isEmpty ? "item" : out
     }
 
     /// Own images go into the package: an item without a source, or one marked as own.

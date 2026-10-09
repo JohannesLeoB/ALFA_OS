@@ -22,7 +22,7 @@ struct ZipWriter: Sendable {
         entries.append((name: name, data: data))
     }
 
-    /// The archive bytes. `modified` sets the time of every entry (UTC, DOS format, years from 1980).
+    /// The archive bytes. `modified` sets the time of every entry (local time, DOS format, years from 1980).
     func archive(modified: Date) throws -> Data {
         guard entries.count <= 0xFFFF else { throw Failure.tooLarge }
         let stamp = Self.dosStamp(modified)
@@ -94,7 +94,7 @@ struct ZipWriter: Sendable {
 
     static func dosStamp(_ date: Date) -> (time: UInt16, date: UInt16) {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "UTC") ?? .gmt
+        calendar.timeZone = .current
         let parts = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         let year = min(2107, max(1980, parts.year ?? 1980))
         let time = (parts.hour ?? 0) << 11 | (parts.minute ?? 0) << 5 | (parts.second ?? 0) / 2

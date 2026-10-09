@@ -9,6 +9,8 @@ struct MockupPlan {
     struct Placed {
         let item: Item
         let frame: Item?
+        /// Shifts an item on the free sheet, so that the items of different spaces lie side by side.
+        var offset: (x: Double, y: Double) = (0, 0)
     }
 
     /// Frames in the package, in document order.
@@ -18,28 +20,57 @@ struct MockupPlan {
     /// Top left corner of the free sheet. Items without a frame are measured from here.
     private(set) var sheetOrigin: (x: Double, y: Double) = (0, 0)
 
+    /// Space between the free items of two spaces on the sheet, in points.
+    private static let sheetGap = 32.0
+
     init(document: ALFAcolorDocument, scope: ExchangeScope) throws {
         var frames: [Item] = []
-        var placed: [Placed] = []
+        var groups: [[Placed]] = []
         for space in document.board.spaces {
             let (pieces, picked) = Self.choose(scope, in: space)
             let spaceFrames = space.items.filter { Self.isVisible($0, in: space) && Self.isFrame($0) }
-            let assigned = pieces.map { Placed(item: $0, frame: Self.topFrame(containing: $0, in: spaceFrames)) }
+            // Canvas order: layer by layer, and by z inside a layer.
+            let rank = { (item: Item) in space.layers.firstIndex { $0.id == item.layerID } ?? 0 }
+            let ordered = pieces.sorted { (rank($0), $0.z) < (rank($1), $1.z) }
+            let assigned = ordered.map { Placed(item: $0, frame: Self.topFrame(containing: $0, in: spaceFrames)) }
             let wanted = Set(assigned.compactMap { $0.frame?.id }).union(picked.map(\.id))
             frames += spaceFrames.filter { wanted.contains($0.id) }
-            placed += assigned
+            groups.append(assigned)
         }
-        guard !placed.isEmpty || !frames.isEmpty else { throw MockupError.nothingToExport }
+        guard groups.contains(where: { !$0.isEmpty }) || !frames.isEmpty else { throw MockupError.nothingToExport }
         self.frames = frames
-        self.placed = placed
-        self.sheetOrigin = Self.origin(frames: frames, placed: placed)
+        let origin = Self.sheetOrigin(of: groups.flatMap { $0 }.filter { $0.frame == nil }.map(\.item.rect))
+        self.sheetOrigin = origin
+        self.placed = Self.sideBySide(groups, origin: origin.x)
     }
 
     /// The position of a placed item in points: relative to its frame, or to the free sheet.
     func position(of placed: Placed) -> Rect {
-        let x0 = placed.frame?.rect.x ?? sheetOrigin.x
-        let y0 = placed.frame?.rect.y ?? sheetOrigin.y
-        return Rect(x: placed.item.rect.x - x0, y: placed.item.rect.y - y0, w: placed.item.rect.w, h: placed.item.rect.h)
+        let rect = placed.item.rect
+        guard let frame = placed.frame else {
+            return Rect(x: rect.x + placed.offset.x - sheetOrigin.x, y: rect.y + placed.offset.y - sheetOrigin.y, w: rect.w, h: rect.h)
+        }
+        return Rect(x: rect.x - frame.rect.x, y: rect.y - frame.rect.y, w: rect.w, h: rect.h)
+    }
+
+    /// Puts the free items of each space in a row, so that they do not lie on each other.
+    private static func sideBySide(_ groups: [[Placed]], origin: Double) -> [Placed] {
+        var cursor = origin
+        var out: [Placed] = []
+        for group in groups {
+            let free = group.filter { $0.frame == nil }
+            if let left = free.map(\.item.rect.x).min(), let right = free.map(\.item.rect.maxX).max() {
+                let shift = cursor - left
+                out += group.map { placed in
+                    guard placed.frame == nil else { return placed }
+                    return Placed(item: placed.item, frame: nil, offset: (shift, 0))
+                }
+                cursor += right - left + sheetGap
+            } else {
+                out += group
+            }
+        }
+        return out
     }
 
     /// The items and frames that the scope picks from one space.
@@ -89,8 +120,8 @@ struct MockupPlan {
         return box.contains(x: centre.x, y: centre.y)
     }
 
-    private static func origin(frames: [Item], placed: [Placed]) -> (x: Double, y: Double) {
-        let rects = frames.map(\.rect) + placed.filter { $0.frame == nil }.map(\.item.rect)
-        return (rects.map(\.x).min() ?? 0, rects.map(\.y).min() ?? 0)
+    /// The top left corner of the free items. The frames do not count: they are not on the sheet.
+    private static func sheetOrigin(of rects: [Rect]) -> (x: Double, y: Double) {
+        (rects.map(\.x).min() ?? 0, rects.map(\.y).min() ?? 0)
     }
 }

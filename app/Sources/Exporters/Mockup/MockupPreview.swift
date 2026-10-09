@@ -21,6 +21,7 @@ enum MockupPreview {
         .item pre{margin:0;padding:12px;font:12px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap;height:100%;box-sizing:border-box;overflow:auto;background:whitesmoke}
         .item .text{margin:0;padding:12px;white-space:pre-wrap;height:100%;box-sizing:border-box}
         .item .shape{width:100%;height:100%;box-sizing:border-box}
+        .item .card-head{height:32px;padding:0 12px;line-height:32px;font:12px -apple-system,system-ui,sans-serif;color:gray;white-space:nowrap;overflow:hidden;background:white}
         </style>
         </head>
         <body>
@@ -59,8 +60,9 @@ enum MockupPreview {
                                 items: [MockupManifest.Entry], files: [String: Data]) -> String {
         var out = "<h2>\(escape(caption)) · \(width) x \(height)</h2>\n"
         out += "<div class=\"sheet\" style=\"width:\(width)px;height:\(height)px\">\n"
-        for entry in items.sorted(by: { $0.z < $1.z }) {
-            out += "<div class=\"item\" style=\"left:\(entry.x)px;top:\(entry.y)px;width:\(entry.width)px;height:\(entry.height)px;z-index:\(entry.z)\">"
+        // The items come in canvas order (layer, then z), so their place in the list is their stacking order.
+        for (index, entry) in items.enumerated() {
+            out += "<div class=\"item\" style=\"left:\(entry.x)px;top:\(entry.y)px;width:\(entry.width)px;height:\(entry.height)px;z-index:\(index)\">"
             out += body(of: entry, files: files)
             out += "</div>\n"
         }
@@ -101,13 +103,17 @@ enum MockupPreview {
         }
     }
 
-    /// A card with a page of HTML, drawn at its design width and scaled to the item.
+    /// Height of the header band of a code card on the canvas, in points. The page starts below it.
+    static let cardHeader = 32.0
+
+    /// A card with a page of HTML, drawn at its design width and scaled to the item, below the header band.
     private static func card(_ code: String, _ entry: MockupManifest.Entry) -> String {
         let design = entry.previewWidth.flatMap { $0 > 0 ? $0 : nil } ?? entry.width
         let scale = entry.width > 0 && design > 0 ? entry.width / design : 1
-        let height = (entry.height / scale).rounded(.up)
-        return "<iframe sandbox=\"allow-scripts\" srcdoc=\"\(escape(code))\" "
-            + "style=\"width:\(design)px;height:\(height)px;transform:scale(\(scale))\"></iframe>"
+        let height = (max(0, entry.height - cardHeader) / scale).rounded(.up)
+        return "<div class=\"card-head\" style=\"height:\(cardHeader)px\">\(escape(entry.title))</div>"
+            + "<iframe sandbox=\"allow-scripts\" srcdoc=\"\(escape(code))\" "
+            + "style=\"position:absolute;left:0;top:\(cardHeader)px;width:\(design)px;height:\(height)px;transform:scale(\(scale))\"></iframe>"
     }
 
     private static func pre(_ text: String) -> String {

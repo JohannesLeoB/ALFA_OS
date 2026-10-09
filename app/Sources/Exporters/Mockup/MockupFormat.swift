@@ -13,7 +13,7 @@ public enum MockupError: Error, Equatable, Sendable {
 /// Foreign images are not copied. The manifest keeps their link and license.
 public struct MockupFormat: ExchangeFormat {
     public let id = "mockup"
-    public let name = "Mockup package"
+    public let name = String(localized: "exchange.mockup.name")
     public let contentTypes: [UTType] = [.zip]
     public let capabilities: ExchangeCapabilities = .write
     /// Time of the package. It goes into the manifest, the ZIP entries and the file name.
@@ -56,7 +56,15 @@ public struct MockupFormat: ExchangeFormat {
     /// mockup_<frame>_<date>.zip for one frame, mockup_sheet_<date>.zip otherwise.
     func fileName(for plan: MockupPlan) -> String {
         let label = plan.frames.count == 1 ? plan.frames[0].title : "sheet"
-        return "mockup_\(MockupEntries.safeName(label))_\(String(created.formatted(.iso8601).prefix(10))).zip"
+        return "mockup_\(MockupEntries.fileName(label))_\(localDay(created)).zip"
+    }
+
+    /// The day of a time in the time zone of the Mac, as yyyy-mm-dd.
+    func localDay(_ date: Date) -> String {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = .current
+        let parts = calendar.dateComponents([.year, .month, .day], from: date)
+        return String(format: "%04d-%02d-%02d", parts.year ?? 1970, parts.month ?? 1, parts.day ?? 1)
     }
 
     static let readme = """
