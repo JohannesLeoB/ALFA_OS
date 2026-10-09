@@ -35,7 +35,7 @@ struct CodeCardView: View {
             }
         }
         .onAppear {
-            if model == nil { model = CodeCardModel(content: content, players: shell?.players ?? .shared) }
+            if model == nil { model = CodeCardModel(content: content) }
         }
         .onChange(of: content) { _, new in
             model?.update(new)

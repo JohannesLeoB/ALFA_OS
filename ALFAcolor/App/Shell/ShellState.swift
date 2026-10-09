@@ -31,8 +31,6 @@ final class ShellState {
     private(set) var labs: [ItemID: LabModel] = [:]
     /// The card whose lab is open, if any.
     private(set) var labOpen: ItemID?
-    /// The live code pages of this window. One runs at a time, in this window.
-    let players = CodePlayers()
     /// A short message about the last lab action, as a catalog key. nil when there is none.
     private(set) var labNotice: String?
 

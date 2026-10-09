@@ -2,8 +2,8 @@ import Dispatch
 import Foundation
 import Renderers
 
-/// The live pages of the app. One page runs at a time: a page that starts stops the one before it.
-/// Under memory pressure every live page stops.
+/// The live pages of the app, in all windows. One page runs at a time: a page that starts stops the one before it.
+/// Under memory pressure every live page stops. One instance for the app keeps that limit true across windows.
 @MainActor
 final class CodePlayers {
     static let shared = CodePlayers()
@@ -11,7 +11,7 @@ final class CodePlayers {
     private let pool = PlayerPool<UUID>(limit: 1)
     private let pressure: DispatchSourceMemoryPressure
 
-    init() {
+    private init() {
         pressure = DispatchSource.makeMemoryPressureSource(eventMask: [.warning, .critical], queue: .main)
         pressure.setEventHandler {
             MainActor.assumeIsolated {
