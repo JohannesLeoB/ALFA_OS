@@ -28,19 +28,20 @@ struct ToolPalette: View {
 
     private func button(_ tool: Tool) -> some View {
         let active = interaction.tools.active == tool
-        let tint: Color = active ? theme.color(.accent, scheme) : theme.color(.text, scheme)
+        // Active: filled with the text colour and the symbol in the content colour, as the contract's control rule says.
+        let ink: Color = active ? theme.color(.surfaceContent, scheme) : theme.color(.text, scheme)
         return Button {
             shell.pick(tool, in: interaction, canvas: canvas)
         } label: {
             Image(systemName: tool.symbol)
                 .themeText(theme.text(.body))
-                .foregroundStyle(tool.isWired ? tint : theme.color(.textMuted, scheme))
+                .foregroundStyle(tool.isWired ? ink : theme.color(.textMuted, scheme))
                 .frame(width: theme.space(.s6), height: theme.space(.s6))
-                .contentShape(.rect)
+                .contentShape(.capsule)
         }
         .buttonStyle(.plain)
         .background {
-            if active { Circle().fill(theme.color(.accent, scheme).opacity(0.18)) }
+            if active { Capsule().fill(theme.color(.text, scheme)) }
         }
         .help(Text(LocalizedStringKey(tool.nameKey)) + Text(verbatim: tool.key.map { "  \($0)" } ?? ""))
         .accessibilityLabel(Text(LocalizedStringKey(tool.nameKey)))
