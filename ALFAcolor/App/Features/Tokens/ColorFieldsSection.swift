@@ -48,6 +48,7 @@ struct ColorFieldsSection: View {
                     ContrastSheet(store: store)
                 }
                 TextStylesButton(store: store)
+                WorkshopExportButton(store: store)
                 Button(action: add) {
                     Label("tokens.add", systemImage: "plus")
                 }
