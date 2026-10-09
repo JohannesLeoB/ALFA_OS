@@ -124,7 +124,10 @@ public struct AnthropicClient: AIClient {
             AIModelInfo(
                 id: $0.id,
                 displayName: $0.displayName ?? $0.id,
-                webSearchSupported: $0.capabilities?.serverTools?.webSearch?.supported
+                webSearchSupported: $0.capabilities?.serverTools?.webSearch?.supported,
+                line: $0.line,
+                maxTokens: $0.maxTokens,
+                disabledThinkingSupported: $0.capabilities?.thinking?.types?.disabled?.supported
             )
         }
         return ModelPage(models: models, hasMore: wire.hasMore ?? false, lastID: wire.lastID)
@@ -284,11 +287,27 @@ public struct AIModelInfo: Sendable, Equatable {
     public let displayName: String
     /// Whether the model accepts the web search tool, as the platform states it. Nil when the platform does not say.
     public let webSearchSupported: Bool?
+    /// The family of the model as the platform names it, such as "haiku". Nil when the platform does not say.
+    public let line: String?
+    /// The most tokens that one answer of the model may take. Nil when the platform does not say.
+    public let maxTokens: Int?
+    /// Whether the model takes thinking turned off. Nil when the platform does not say.
+    public let disabledThinkingSupported: Bool?
 
-    public init(id: String, displayName: String, webSearchSupported: Bool? = nil) {
+    public init(
+        id: String,
+        displayName: String,
+        webSearchSupported: Bool? = nil,
+        line: String? = nil,
+        maxTokens: Int? = nil,
+        disabledThinkingSupported: Bool? = nil
+    ) {
         self.id = id
         self.displayName = displayName
         self.webSearchSupported = webSearchSupported
+        self.line = line
+        self.maxTokens = maxTokens
+        self.disabledThinkingSupported = disabledThinkingSupported
     }
 }
 
@@ -307,21 +326,35 @@ private struct ModelsWire: Decodable {
     struct Entry: Decodable {
         let id: String
         let displayName: String?
+        let line: String?
+        let maxTokens: Int?
         let capabilities: Capabilities?
 
         enum CodingKeys: String, CodingKey {
             case id
             case displayName = "display_name"
+            case line
+            case maxTokens = "max_tokens"
             case capabilities
         }
     }
 
     struct Capabilities: Decodable {
         let serverTools: ServerTools?
+        let thinking: Thinking?
 
         enum CodingKeys: String, CodingKey {
             case serverTools = "server_tools"
+            case thinking
         }
+    }
+
+    struct Thinking: Decodable {
+        let types: Types?
+    }
+
+    struct Types: Decodable {
+        let disabled: Support?
     }
 
     struct ServerTools: Decodable {
