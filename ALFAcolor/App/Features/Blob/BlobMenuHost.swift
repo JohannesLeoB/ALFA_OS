@@ -40,20 +40,11 @@ struct BlobMenuHost: View {
                                            edge: menu.edge, anchor: anchor)
             let card = BlobGeometry.card(size: metrics.card, anchor: anchor, edge: menu.edge, container: size,
                                          margin: metrics.margin, gap: metrics.gap)
-            let band = CGRect(x: anchor.minX - metrics.margin, y: anchor.maxY,
-                              width: anchor.width + 2 * metrics.margin,
-                              height: metrics.blob.height + metrics.margin)
             GlassEffectContainer(spacing: metrics.gap) {
                 ZStack(alignment: .topLeading) {
-                    if menu.open == nil && menu.pin == nil && dragCenter == nil {
-                        ProgressiveBlurEdge()
-                            .frame(width: band.width, height: band.height)
-                            .position(x: band.midX, y: band.midY)
-                    }
                     if menu.open != nil {
                         Color.clear
                             .contentShape(Rectangle())
-                            .allowsHitTesting(true)
                             .onTapGesture { change { $0.close() } }
                     }
                     if menu.layout == .bar {
@@ -77,14 +68,12 @@ struct BlobMenuHost: View {
                             .frame(width: metrics.card.width, height: metrics.card.height)
                             .modifier(BlobGlass(shape: RoundedRectangle(cornerRadius: theme.radius(.l))))
                             .glassEffectID(menu.layout == .blob ? "home" : "card", in: glass)
-                            .allowsHitTesting(true)
                             .position(x: card.midX, y: card.midY)
                     }
                 }
                 .frame(width: size.width, height: size.height, alignment: .topLeading)
             }
         }
-        .allowsHitTesting(false)
     }
 
     // MARK: - Parts
@@ -93,7 +82,6 @@ struct BlobMenuHost: View {
     private func homeBlob(anchor: CGRect, size: CGSize, metrics: BlobMetrics) -> some View {
         let center = dragCenter ?? CGPoint(x: anchor.midX, y: anchor.midY)
         return blob(shell.blob.last, id: "home") { change { $0.tapBlob() } }
-            .allowsHitTesting(true)
             .simultaneousGesture(drag(from: anchor, in: size, threshold: metrics.gap))
             .position(center)
     }
@@ -108,7 +96,6 @@ struct BlobMenuHost: View {
         .buttonStyle(.plain)
         .modifier(BlobGlass(shape: Circle()))
         .glassEffectID(id, in: glass)
-        .allowsHitTesting(true)
         .accessibilityLabel(LocalizedStringKey(palette.titleKey))
         .contextMenu {
             Button(LocalizedStringKey("blob.layout.toggle")) { change { $0.toggleLayout() } }

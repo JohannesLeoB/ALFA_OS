@@ -26,7 +26,7 @@ struct ContextBarView: View {
             ForEach(Array(Self.groups.enumerated()), id: \.offset) { index, group in
                 let shown = group.filter { actions.contains($0) }
                 if !shown.isEmpty {
-                    if index > 0 { Divider() }
+                    if index > 0 { Divider().frame(height: theme.space(.s4)) }
                     ForEach(shown, id: \.self) { action in
                         entry(action, allLocked: allLocked)
                     }
@@ -36,6 +36,8 @@ struct ContextBarView: View {
         .font(theme.text(.caption).font)
         .padding(.horizontal, theme.space(.s3))
         .padding(.vertical, theme.space(.s1))
+        // One row high: the bar takes its ideal size, never the height that the placement offers it.
+        .fixedSize()
         .glassEffect(.regular, in: .capsule)
     }
 

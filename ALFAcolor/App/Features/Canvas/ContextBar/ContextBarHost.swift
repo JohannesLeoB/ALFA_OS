@@ -12,35 +12,19 @@ struct ContextBarHost: View {
     @State private var barSize: CGSize = .zero
 
     var body: some View {
-        if let box = Self.box(of: canvas.selectionFrames) {
+        if let box = ContextBarPlacement.box(of: canvas.selectionFrames) {
+            // The frame covers the canvas. Its empty parts pass clicks through to the canvas,
+            // and only the bar and its entries take them.
             GeometryReader { proxy in
-                let center = center(of: box, container: proxy.size)
+                let center = ContextBarPlacement.center(of: box,
+                                                        barWidth: Double(barSize.width),
+                                                        barHeight: Double(barSize.height),
+                                                        containerWidth: Double(proxy.size.width),
+                                                        gap: Double(theme.space(.s2)))
                 ContextBarView(store: canvas.store)
                     .onGeometryChange(for: CGSize.self, of: \.size) { barSize = $0 }
-                    .allowsHitTesting(true)
                     .position(x: center.x, y: center.y)
             }
-            // The frame covers the canvas; only the bar takes pointer input, so the canvas keeps its gestures.
-            .allowsHitTesting(false)
         }
-    }
-
-    /// The center of the bar on the canvas, from the box of the selection and the measured size of the bar.
-    private func center(of box: Rect, container: CGSize) -> CGPoint {
-        let gap = theme.space(.s2)
-        var top = box.y - gap - barSize.height
-        if top < 0 { top = box.maxY + gap }
-        let left = min(max(box.center.x - barSize.width / 2, 0), max(container.width - barSize.width, 0))
-        return CGPoint(x: left + barSize.width / 2, y: top + barSize.height / 2)
-    }
-
-    /// The box around all selected frames, in canvas points. Nil when nothing is selected.
-    private static func box(of frames: [Rect]) -> Rect? {
-        guard let first = frames.first else { return nil }
-        let minX = frames.reduce(first.x) { min($0, $1.x) }
-        let minY = frames.reduce(first.y) { min($0, $1.y) }
-        let maxX = frames.reduce(first.maxX) { max($0, $1.maxX) }
-        let maxY = frames.reduce(first.maxY) { max($0, $1.maxY) }
-        return Rect(x: minX, y: minY, w: maxX - minX, h: maxY - minY)
     }
 }
