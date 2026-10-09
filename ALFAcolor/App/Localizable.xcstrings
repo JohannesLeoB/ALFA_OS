@@ -4710,6 +4710,160 @@
         }
       }
     },
+    "lab.rebuilt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Entwurf wurde aus der Karte neu aufgebaut. Bitte prüfen und erneut ablegen."
+          }
+        }
+      }
+    },
+    "undo.color.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbfeld anlegen"
+          }
+        }
+      }
+    },
+    "undo.color.rename" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbfeld umbenennen"
+          }
+        }
+      }
+    },
+    "undo.color.value" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbe ändern"
+          }
+        }
+      }
+    },
+    "undo.color.remove" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbfeld löschen"
+          }
+        }
+      }
+    },
+    "tokens.pipette" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pipette"
+          }
+        }
+      }
+    },
+    "tokens.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbfeld anlegen"
+          }
+        }
+      }
+    },
+    "tokens.newName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbe"
+          }
+        }
+      }
+    },
+    "tokens.colorspace.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display P3 wird nach sRGB umgerechnet"
+          }
+        }
+      }
+    },
+    "tokens.menu.value" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wert ändern"
+          }
+        }
+      }
+    },
+    "tokens.menu.rename" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umbenennen"
+          }
+        }
+      }
+    },
+    "tokens.menu.apply" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf Auswahl anwenden"
+          }
+        }
+      }
+    },
+    "tokens.menu.whereUsed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wo benutzt"
+          }
+        }
+      }
+    },
+    "tokens.menu.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
+          }
+        }
+      }
+    },
     "inspector.frame.device" : {
       "extractionState" : "manual",
       "localizations" : {
