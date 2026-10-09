@@ -43,6 +43,10 @@ struct MockupEntries {
             entry.file = path
             entry.previewWidth = previewWidth
             entry.tokens = tokens.use(in: names.compactMap { sources[$0] }.joined(separator: "\n"))
+            Self.origin(of: item.source, into: &entry)
+            if let source = item.source, source.license?.isEmpty ?? true {
+                warnings.append("\(item.id.raw): license missing")
+            }
 
         case .image(let assetID, _, _):
             entry.type = "image"
@@ -56,9 +60,7 @@ struct MockupEntries {
                     warnings.append("\(item.id.raw): image bytes are missing")
                 }
             } else {
-                entry.url = source?.url?.absoluteString
-                entry.license = source?.license
-                entry.via = source?.via
+                Self.origin(of: source, into: &entry)
             }
 
         case .note(let text):
@@ -99,6 +101,14 @@ struct MockupEntries {
     static func isOwn(_ source: Source?) -> Bool {
         guard let source else { return true }
         return source.via.lowercased() == "eigen" || source.license?.lowercased() == "eigen"
+    }
+
+    /// Copies the link, license and origin of a source. An item without a source keeps these fields empty.
+    static func origin(of source: Source?, into entry: inout MockupManifest.Entry) {
+        guard let source else { return }
+        entry.url = source.url?.absoluteString
+        entry.license = source.license
+        entry.via = source.via.isEmpty ? nil : source.via
     }
 
     static func extensionFor(_ language: CodeLanguage) -> String {
