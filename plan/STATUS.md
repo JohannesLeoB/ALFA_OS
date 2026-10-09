@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (92)
+## Briefe (93)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -69,7 +69,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-232](briefe/B-232.md) | E2 | Fehlerbrief 2: Überzüge, Bildlauf, Raum löschen beim Tippen | B-227 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1007 Tests, App-Bau grün); Klick-Beleg fehlt (unsichtbare Fenster), Fund 12 Rückgängig eines Raums während der Texteingabe offen |
 | [B-233](briefe/B-233.md) | E2 | Fehlerbrief 3: Testlast, Raum rückgängig beim Tippen | B-230 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1037 Tests, App-Bau grün); Schritt 3 (Inline-Werte der Labor-Vorschau) nicht gebaut; Dauerlast-Test ersetzt durch langsame Karte mit Zeitlimit 1 ms |
 | [B-240](briefe/B-240.md) | E2 | Kanon umsetzen: Vertrag, Theme, Aussehen (Koralle, Reihe bis 64) | B-305, B-506, B-601 | erledigt, geprüft 2026-10-09 (Chef: Paket-Tests grün laut Agent; Gesamtlauf nach B-705); Abnahme am Bild offen (Weiß/Schwarz, Koralle, eckige Karten, Symbol); nicht umgesetzt: blatt, zone-*, Zeilenhöhe/Laufweite in Ansichten, Palette als Pille, Schatten (B-241); Koralle als Schrift an 5 Stellen (B-241) |
-| [B-241](briefe/B-241.md) | E2 | Kanon, zweiter Teil: Blatt, Zonen, Schrift, Koralle nur als Linie, Pille, Schatten, Pipette | B-240 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-241](briefe/B-241.md) | E2 | Kanon, zweiter Teil: Blatt, Zonen, Schrift, Koralle nur als Linie, Pille, Schatten, Pipette | B-240 | zur Prüfung (Agent: Übergabe 2026-10-09, Schritte 1 bis 8; Chef-Lauf pruefen.sh steht aus); offen: Zonentitel 64 pt in 32-pt-Kopf (D-004-K3), Schatten-Näherung, Abnahme am Bild |
 | [B-242](briefe/B-242.md) | E4 | TSX in Code-Karten und Regler für Props | B-404 | erledigt, geprüft 2026-10-09 (Chef: Gesamtlauf nach B-507 und B-902); Abnahme am Bild offen (Heat-map-Bauteil einfügen, Regler Shape/Colors/Heat/Area/Softness, ⌘↵ ablegen); mehrere Komponenten in einer Karte: nur die gewählte rendert |
 | [B-243](briefe/B-243.md) | E2 | Fehlerbrief 3: Tests mit Netzabhängigkeit stabil | B-242 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors laut Agent, Stand c99d62c, 10 volle Läufe ohne Babel-Fehler); Restrisiko: antwortet cdnjs bei der Probe, lädt aber über 20 s nicht, bleibt der Test rot (echter Netzfehler); Offline-Umgebung ALFACOLOR_TEST_OFFLINE=1 |
 | [B-244](briefe/B-244.md) | E2 | Hotfix: Farbbindung, Props mit Anführungszeichen, Labor-Entwurf, Version über 512 KB | B-703 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
@@ -115,5 +115,6 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-905](briefe/B-905.md) | E9 | Auslieferung | B-901 | offen |
 | [D-001](briefe/D-001.md) | E1 | Gegenlieferung lesen und Ansichten zeichnen (Claude Design) | — | Lieferung 2026-10-09_0100 da: Vertrag liest fehlerfrei; Zeichnung (Mockup-Paket) fehlt noch |
 | [D-002](briefe/D-002.md) | E2 | Gestaltungsvertrag der App (Claude Design) | D-001 | offen |
+| [D-004](briefe/D-004.md) | E2 | Kanon-Ergänzungen zeichnen und festlegen (Claude Design) | D-001, B-240, B-241 | Paket fertig: `ausgang/vertrag_2026-10-09_1620_code.zip` (46 Aufträge: Werte A1–A9, Bausteine B1–B22, Zustände, Linienraster, Token-Werkstatt, Anhänge); wartet auf Johannes (zu Konto B tragen) |
 | [D-003](briefe/D-003.md) | E5 | Startbausteine und Musterbogen (Claude Design) | D-002 | offen |
 | [P-001](briefe/P-001.md) | alle | Prüfplan je Gate (Konto C) | — | offen |
