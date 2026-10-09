@@ -21,7 +21,7 @@ public final class BoardStore {
     /// The error of the last save, nil after a successful save.
     public private(set) var lastSaveError: (any Error)?
 
-    @ObservationIgnored public let undoManager: UndoManager
+    @ObservationIgnored public private(set) var undoManager: UndoManager
     @ObservationIgnored private let autosave: Autosave?
     @ObservationIgnored private var scheduledSave: Task<Void, Never>?
     @ObservationIgnored private var runningSave: Task<Void, any Error>?
@@ -85,6 +85,13 @@ public final class BoardStore {
 
     // MARK: Undo
 
+    /// Uses the undo manager of the window from now on. Steps in the previous manager stay there and no longer reach this store.
+    /// Call it before the first change; the window brings its manager when it appears.
+    public func useUndoManager(_ manager: UndoManager) {
+        guard manager !== undoManager else { return }
+        undoManager = manager
+    }
+
     public var canUndo: Bool { undoManager.canUndo }
     public var canRedo: Bool { undoManager.canRedo }
     public func undo() { undoManager.undo() }
@@ -141,6 +148,24 @@ public final class BoardStore {
 
     // MARK: Saving
 
+    /// Where the document stands against the last save.
+    public var saveState: SaveState {
+        if lastSaveError != nil { return .failed }
+        return hasUnsavedChanges ? .modified : .saved
+    }
+
+    /// A save of the state at `revision` finished. Later changes keep the document marked as changed.
+    /// For saves that the store does not run itself (the system saves the window's document).
+    public func markSaved(revision savedRevision: Int) {
+        lastSaveError = nil
+        if revision == savedRevision { hasUnsavedChanges = false }
+    }
+
+    /// A save failed. The error stays visible until a later save works.
+    public func markSaveFailed(_ error: any Error) {
+        lastSaveError = error
+    }
+
     private func didChangeDocument() {
         revision += 1
         hasUnsavedChanges = true
@@ -173,10 +198,9 @@ public final class BoardStore {
         runningSave = task
         do {
             try await task.value
-            lastSaveError = nil
-            if revision == savedRevision { hasUnsavedChanges = false }
+            markSaved(revision: savedRevision)
         } catch {
-            lastSaveError = error
+            markSaveFailed(error)
             throw error
         }
     }
