@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (86)
+## Briefe (87)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -70,6 +70,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-233](briefe/B-233.md) | E2 | Fehlerbrief 3: Testlast, Raum rückgängig beim Tippen | B-230 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1037 Tests, App-Bau grün); Schritt 3 (Inline-Werte der Labor-Vorschau) nicht gebaut; Dauerlast-Test ersetzt durch langsame Karte mit Zeitlimit 1 ms |
 | [B-240](briefe/B-240.md) | E2 | Kanon umsetzen: Vertrag, Theme, Aussehen (Koralle, Reihe bis 64) | B-305, B-506, B-601 | erledigt, geprüft 2026-10-09 (Chef: Paket-Tests grün laut Agent; Gesamtlauf nach B-705); Abnahme am Bild offen (Weiß/Schwarz, Koralle, eckige Karten, Symbol); nicht umgesetzt: blatt, zone-*, Zeilenhöhe/Laufweite in Ansichten, Palette als Pille, Schatten (B-241); Koralle als Schrift an 5 Stellen (B-241) |
 | [B-241](briefe/B-241.md) | E2 | Kanon, zweiter Teil: Blatt, Zonen, Schrift, Koralle nur als Linie, Pille, Schatten, Pipette | B-240 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-242](briefe/B-242.md) | E4 | TSX in Code-Karten und Regler für Props | B-404 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 958 Tests, App-Bau grün); Abnahme am Bild offen (Beschriftung über dem Rahmen, Schatten, Menü Hinzufügen, Inspektor); Fragen: Kinder beim Drehen mitdrehen oder liegen lassen? Vorlage-Maße (MacBook Air, iPhone Pro, Mac-Fenster) bestätigen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1007 Tests, App-Bau grün); Abnahme am Bild offen (Spalten, Grundlinien, Ränder, Einrasten, Inspektor, Vorlage); Fragen: Grundlinienfarbe (Vertrag hat kein Blau, nimmt Akzent), Stück verlässt Rahmen behält Ziele bis Loslassen, Vorlage als Kopie oder Verweis, Meldung bei unlesbarer Vorlagendatei |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1037 Tests, App-Bau grün); Abnahme am Bild offen (Lage der Lineale unter der Titelleiste, Ziehen aus dem Lineal, Doppelklick, Liste im Inspektor, Menü Ansicht); Fragen: Einrasten an ausgeblendeten Hilfslinien? Rechtsklick-Menü oder Klick-Umschalten der Einheit? Zeiger an das Paket melden (Ursprung folgt Rahmen unter Zeiger)? Zahlenfelder der Hilfslinien in Lineal-Einheit? |
