@@ -31,11 +31,8 @@ struct KeychainStore {
 
     /// Reads a secret. nil when there is none.
     func read(account: String) throws -> String? {
-        var query = baseQuery(account: account)
-        query[kSecReturnData as String] = true
-        query[kSecMatchLimitOne as String] = kSecMatchLimitOne
         var result: AnyObject?
-        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        let status = SecItemCopyMatching(readQuery(account: account) as CFDictionary, &result)
         if status == errSecItemNotFound { return nil }
         guard status == errSecSuccess, let data = result as? Data,
               let secret = String(data: data, encoding: .utf8) else { throw Failure.status(status) }
@@ -46,6 +43,13 @@ struct KeychainStore {
     func delete(account: String) throws {
         let status = SecItemDelete(baseQuery(account: account) as CFDictionary)
         guard status == errSecSuccess || status == errSecItemNotFound else { throw Failure.status(status) }
+    }
+
+    func readQuery(account: String) -> [String: Any] {
+        var query = baseQuery(account: account)
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+        return query
     }
 
     private func baseQuery(account: String) -> [String: Any] {
