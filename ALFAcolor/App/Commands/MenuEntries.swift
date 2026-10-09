@@ -9,6 +9,7 @@ typealias MenuAction = @MainActor () -> Void
 struct MenuFunctions {
     var shell: ShellState?
     var canvas: CanvasController?
+    var interaction: CanvasInteraction?
     var showShortcutTable: MenuAction?
 
     @MainActor
@@ -23,6 +24,9 @@ struct MenuFunctions {
         case "view.actualSize": return withCanvas { $0.perform(.actualSize) }
         case "view.fitAll": return withCanvas { $0.perform(.fitAll) }
         case "view.fitSelection": return withCanvas { $0.perform(.fitSelection) }
+        case "edit.delete": return withInteraction { $0.deleteSelection() }
+        case "edit.deselect": return withInteraction { $0.deselect() }
+        case "object.duplicate": return withInteraction { $0.duplicateSelection() }
         case "help.shortcutTable": return showShortcutTable
         default: return nil
         }
@@ -33,6 +37,13 @@ struct MenuFunctions {
     private func with(_ perform: @escaping @MainActor (ShellState) -> Void) -> MenuAction? {
         guard let shell else { return nil }
         return { perform(shell) }
+    }
+
+    /// Connects a command to the selection of the window. Without a window, the entry stays dimmed.
+    @MainActor
+    private func withInteraction(_ perform: @escaping @MainActor (CanvasInteraction) -> Void) -> MenuAction? {
+        guard let interaction else { return nil }
+        return { perform(interaction) }
     }
 
     /// Connects a command to the canvas of the window. Without a window, the entry stays dimmed.

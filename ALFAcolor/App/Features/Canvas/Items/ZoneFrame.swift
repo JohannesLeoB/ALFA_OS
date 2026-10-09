@@ -3,7 +3,7 @@ import AppTheme
 import BoardModel
 
 /// The frame of a group: a band with the title and the number of items over an open area.
-/// The area is not filled, so the items inside and below show through. The corners are square.
+/// The area is not filled, so the items inside and below show through. The corners are square. A zone is flat and casts no shadow.
 struct ZoneFrame: View {
     let presentation: ItemPresentation
     let detail: DetailLevel
@@ -21,7 +21,6 @@ struct ZoneFrame: View {
             bandView(hairline: hairline)
                 .frame(width: band.w, height: band.h)
         }
-        .modifier(Lift(detail: detail))
     }
 
     private func bandView(hairline: CGFloat) -> some View {

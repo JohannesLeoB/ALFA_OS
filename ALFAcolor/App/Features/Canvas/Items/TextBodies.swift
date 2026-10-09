@@ -77,14 +77,17 @@ struct TextBody: View {
                     Text(verbatim: content.text).foregroundStyle(theme.color(.text, scheme))
                 }
             }
-            .font(theme.text(token).font)
+            .font(theme.text(content.role.token).font)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .clipped()
         }
     }
+}
 
-    private var token: TextToken {
-        switch content.role {
+extension TextRole {
+    /// The text style of the theme for this role.
+    var token: TextToken {
+        switch self {
         case .heading: .heading
         case .body: .body
         case .caption: .caption

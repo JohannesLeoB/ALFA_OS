@@ -1245,6 +1245,17 @@
         }
       }
     },
+    "measure.nearest %@ %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, nächster %2$@"
+          }
+        }
+      }
+    },
     "menu.edit" : {
       "extractionState" : "manual",
       "localizations" : {

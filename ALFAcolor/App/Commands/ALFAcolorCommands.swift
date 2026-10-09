@@ -1,5 +1,6 @@
 import SwiftUI
 import ALFAcolorCore
+import BoardModel
 
 /// All menus of the app. The entries are in `ShortcutTable` (ALFAcolorCore).
 /// System menus stay with the system. Only the app's own entries are added, or they replace the place of `New Document`.
@@ -30,17 +31,21 @@ struct FileCommands: Commands {
 }
 
 struct EditCommands: Commands {
+    @FocusedValue(\.interaction) private var interaction
+
     var body: some Commands {
         CommandGroup(after: .pasteboard) {
-            MenuEntries(menu: .edit, functions: MenuFunctions())
+            MenuEntries(menu: .edit, functions: MenuFunctions(interaction: interaction))
         }
     }
 }
 
 struct ObjectCommands: Commands {
+    @FocusedValue(\.interaction) private var interaction
+
     var body: some Commands {
         CommandMenu("menu.object") {
-            MenuEntries(menu: .object, functions: MenuFunctions())
+            MenuEntries(menu: .object, functions: MenuFunctions(interaction: interaction))
         }
     }
 }

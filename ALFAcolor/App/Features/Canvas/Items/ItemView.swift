@@ -12,6 +12,8 @@ struct ItemView: View {
     let assets: AssetStore
     let thumbnails: ThumbnailCache
     let zoom: Double
+    /// The text of a note or text item that is being edited. nil shows the text as it is.
+    var edit: TextEditing?
 
     var body: some View {
         let detail = DetailLevel.level(for: presentation.size, zoom: zoom)
@@ -27,12 +29,12 @@ struct ItemView: View {
         switch presentation.chrome {
         case .card:
             CardFrame(presentation: presentation, detail: detail, zoom: zoom, trailing: trailing) { size in
-                CardBody(presentation: presentation, size: size, detail: detail, zoom: zoom, assets: assets, thumbnails: thumbnails)
+                CardBody(presentation: presentation, size: size, detail: detail, zoom: zoom, assets: assets, thumbnails: thumbnails, edit: edit)
             }
         case .zone:
             ZoneFrame(presentation: presentation, detail: detail, zoom: zoom)
         case .bare:
-            BareBody(presentation: presentation, detail: detail)
+            BareBody(presentation: presentation, detail: detail, edit: edit)
         }
     }
 
@@ -65,6 +67,7 @@ private struct CardBody: View {
     let zoom: Double
     let assets: AssetStore
     let thumbnails: ThumbnailCache
+    let edit: TextEditing?
 
     var body: some View {
         switch presentation.problem {
@@ -81,7 +84,11 @@ private struct CardBody: View {
             ImageBody(content: image, entry: assets[image.assetID], size: size, zoom: zoom, detail: detail, thumbnails: thumbnails)
                 .id(image.assetID)
         case .note(let note):
-            NoteBody(content: note, detail: detail)
+            if let edit {
+                TextEditorBody(text: edit.text, role: .body, padded: true, interaction: edit.interaction)
+            } else {
+                NoteBody(content: note, detail: detail)
+            }
         case .link(let link):
             LinkBody(content: link, detail: detail)
         case .swatch(let swatch):
@@ -98,11 +105,17 @@ private struct CardBody: View {
 private struct BareBody: View {
     let presentation: ItemPresentation
     let detail: DetailLevel
+    let edit: TextEditing?
 
     var body: some View {
         switch presentation.body {
         case .shape(let shape): ShapeBody(content: shape, size: presentation.size)
-        case .text(let text): TextBody(content: text, detail: detail)
+        case .text(let text):
+            if let edit {
+                TextEditorBody(text: edit.text, role: text.role, padded: false, interaction: edit.interaction)
+            } else {
+                TextBody(content: text, detail: detail)
+            }
         default: EmptyView()
         }
     }

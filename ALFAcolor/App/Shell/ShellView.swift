@@ -11,10 +11,13 @@ struct ShellView: View {
     @Environment(\.undoManager) private var undoManager
     @State private var shell = ShellState()
     @State private var canvas: CanvasController
+    @State private var interaction: CanvasInteraction
 
     /// The window shows the document of `session`. The undo history belongs to this window.
     init(session: DocumentSession) {
-        _canvas = State(initialValue: CanvasController(store: session.store))
+        let controller = CanvasController(store: session.store)
+        _canvas = State(initialValue: controller)
+        _interaction = State(initialValue: CanvasInteraction(controller: controller))
     }
 
     var body: some View {
@@ -22,7 +25,7 @@ struct ShellView: View {
             SidebarView()
         } detail: {
             VStack(spacing: 0) {
-                CanvasSurface(controller: canvas, onTogglePalettes: { shell.togglePalettes() })
+                CanvasSurface(controller: canvas, interaction: interaction, onTogglePalettes: { shell.togglePalettes() })
                 if shell.statusBarVisible {
                     StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError)
                 }
@@ -34,6 +37,7 @@ struct ShellView: View {
         .toolbar { ShellToolbar(shell: shell) }
         .focusedSceneValue(\.shell, shell)
         .focusedSceneValue(\.canvas, canvas)
+        .focusedSceneValue(\.interaction, interaction)
         .frame(minWidth: Self.minimumSize.width, minHeight: Self.minimumSize.height)
         .onChange(of: undoManager.map(ObjectIdentifier.init), initial: true) {
             if let undoManager { canvas.store.useUndoManager(undoManager) }
