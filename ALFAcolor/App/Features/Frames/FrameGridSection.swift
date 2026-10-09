@@ -1,6 +1,7 @@
 import SwiftUI
 import ALFAcolorCore
 import BoardModel
+import Geometry
 
 /// The column grid of the selected frames: on or off, columns, gutter, margins and baselines.
 /// A value that the frames do not share shows "mixed". A change sets the whole grid, taken from the

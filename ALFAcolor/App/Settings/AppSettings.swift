@@ -1,6 +1,7 @@
 import Foundation
 import ALFAcolorCore
 import BoardModel
+import Geometry
 
 /// The settings of the app, kept in UserDefaults. One instance for the whole app.
 /// Values read here at start apply after a restart; values written here apply at once where a view reads them.
@@ -23,7 +24,7 @@ final class AppSettings {
     var gridStep: Double { store.number(.gridStep) }
 
     /// How many live code pages run at once, read at the start of the app.
-    var playerLimit: Int { Int(store.number(.playerMaxLive)) }
+    var playerLimit: Int { store.number(.playerMaxLive).clampedInt }
 }
 
 extension LengthUnit {

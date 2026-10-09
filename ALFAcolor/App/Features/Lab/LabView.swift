@@ -2,6 +2,7 @@ import AppKit
 import AppTheme
 import Renderers
 import SwiftUI
+import Geometry
 
 /// The lab over the canvas: the code of a card on the left, its running page on the right, and its controls below.
 /// Escape or the close button hides it. The draft stays in the model.
@@ -141,6 +142,6 @@ struct LabView: View {
     }
 
     private func widthTitle(_ width: Double) -> Text {
-        width == 0 ? Text(LocalizedStringKey("lab.width.fill")) : Text(verbatim: "\(Int(width))")
+        width == 0 ? Text(LocalizedStringKey("lab.width.fill")) : Text(verbatim: "\(width.clampedInt)")
     }
 }

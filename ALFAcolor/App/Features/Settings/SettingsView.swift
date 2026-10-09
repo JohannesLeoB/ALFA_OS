@@ -2,6 +2,7 @@ import SwiftUI
 import ALFAcolorCore
 import AppTheme
 import BoardModel
+import Geometry
 
 /// The settings window: one tab per area. Tabs whose function is not built yet are dimmed and say when they follow.
 struct SettingsView: View {
@@ -104,7 +105,7 @@ private struct UnitSettings: View {
                 AppSettings.shared.save(lengthUnit: LengthUnit(new))
             }
             Stepper(value: $gridStep, in: 1...200, step: 1) {
-                LabeledContent("settings.units.gridStep") { Text(verbatim: "\(Int(gridStep))") }
+                LabeledContent("settings.units.gridStep") { Text(verbatim: "\(gridStep.clampedInt)") }
             }
             .onChange(of: gridStep) { _, new in
                 store.set(.number(new), for: .gridStep)
@@ -136,7 +137,7 @@ private struct KeySettings: View {
 /// The advanced settings. Player count is read at the start; the cache limit is not built yet.
 private struct AdvancedSettings: View {
     private let store = AppSettings.shared.store
-    @State private var players = Int(AppSettings.shared.store.number(.playerMaxLive))
+    @State private var players = AppSettings.shared.store.number(.playerMaxLive).clampedInt
 
     var body: some View {
         Form {
