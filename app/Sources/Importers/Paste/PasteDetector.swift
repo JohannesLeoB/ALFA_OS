@@ -39,7 +39,9 @@ public enum PasteDetector {
         if let colors = ColorList.parse(trimmed) { return .colors(colors) }
         let head = String(trimmed.prefix(headLength))
         if matches(Signs.swiftUI, head) { return code(.swiftui, "View.swift", trimmed) }
-        if matches(Signs.react, head) || matches(Signs.jsxTag, head) { return code(.react, "App.jsx", trimmed) }
+        if matches(Signs.react, head) || matches(Signs.jsxTag, head) {
+            return code(.react, isTypeScript(head) ? "App.tsx" : "App.jsx", trimmed)
+        }
         if matches(Signs.typeScript, head) { return code(.other, "script.ts", trimmed) }
         if CSSShape.isStyleSheet(trimmed) { return code(.css, "style.css", trimmed) }
         let hasMarkup = isMarkup(head)
@@ -73,6 +75,11 @@ public enum PasteDetector {
 
     private static func code(_ language: CodeLanguage, _ fileName: String, _ text: String) -> Detected {
         .code(CodeSnippet(language: language, fileName: fileName, text: text))
+    }
+
+    /// TypeScript: a type or interface declaration, a typed parameter, or a typed constant.
+    private static func isTypeScript(_ text: String) -> Bool {
+        matches(Signs.typeDeclaration, text) || matches(Signs.typedParameter, text) || matches(Signs.typeScript, text)
     }
 
     /// Markup: a doctype or a comment, or at least two tags that are not all inline tags. One tag in a sentence is a note.
@@ -110,6 +117,12 @@ public enum PasteDetector {
 
         /// A typed declaration (`const a: A = …`) or an interface: TypeScript.
         static let typeScript = #"(?m)\b(const|let|var)\s+[\w$]+\s*:\s*[\w$<>\[\]|.]+\s*=|^\s*interface\s+\w+\s*\{"#
+
+        /// A type or an interface declared at the start of a line.
+        static let typeDeclaration = #"(?m)^\s*(export\s+)?(type|interface)\s+[A-Za-z_]\w*\s*(=|\{|<)"#
+
+        /// A parameter with a type name, as in `({ heat = 60 }: Props)` or `(props: Props)`.
+        static let typedParameter = #"\(\s*(\{[^{}]*\}|\w+)\s*:\s*[A-Z][A-Za-z0-9_.<>\[\]]*\s*\)"#
 
         static let doctypeOrComment = #"(?i)<!doctype\s+html|<!--"#
 
