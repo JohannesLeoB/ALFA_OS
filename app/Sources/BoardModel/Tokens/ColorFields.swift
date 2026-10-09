@@ -1,4 +1,5 @@
 import Foundation
+import ALFAcolorCore
 import Tokens
 
 /// Colour fields: named colours that live in the token set `colors`.
@@ -30,6 +31,17 @@ public enum ColorFields {
         public init(name: String, color: RGB) {
             self.name = name
             self.color = color
+        }
+    }
+
+    /// A colour taken from a picture, with its share of the picture (0 to 1).
+    public struct PictureShare: Equatable, Sendable {
+        public var color: RGB
+        public var share: Double
+
+        public init(color: RGB, share: Double) {
+            self.color = color
+            self.share = share
         }
     }
 
@@ -72,15 +84,29 @@ public enum ColorFields {
 
     /// Adds a field. Creates the token set when it is missing. Returns the name as it was stored (trimmed).
     @discardableResult
-    public static func add(name raw: String, color: RGB, to sets: inout [TokenSet]) throws -> String {
+    public static func add(name raw: String, color: RGB, description: String? = nil, source: Source? = nil, to sets: inout [TokenSet]) throws -> String {
         let name = try checkedName(raw, in: sets, ignoring: nil)
-        let token = Token([group, name], .color(opaque(color)))
+        let token = Token([group, name], .color(opaque(color)), description: description, source: source)
         if let index = sets.firstIndex(where: { $0.name == setName }) {
             sets[index].tokens.append(token)
         } else {
             sets.append(TokenSet(name: setName, tokens: [token]))
         }
         return name
+    }
+
+    /// Adds one field per colour taken from a picture, named "base 1", "base 2" … with the lowest free numbers.
+    /// Each field keeps its origin: the source is the picture (`via` "image", `file` the asset ID) and the share is its description.
+    /// Returns the names in order. Throws at the first refused name; the caller passes a copy, so nothing changes then.
+    @discardableResult
+    public static func addPictureColors(_ colors: [PictureShare], base: String, assetID: String, importedAt: Date, to sets: inout [TokenSet]) throws -> [String] {
+        var names: [String] = []
+        for picked in colors {
+            let name = freeName(base: base, in: sets)
+            let source = Source(file: assetID, via: "image", importedAt: importedAt)
+            names.append(try add(name: name, color: picked.color, description: percent(picked.share), source: source, to: &sets))
+        }
+        return names
     }
 
     /// Gives a field another name. The new name must be free; the same name is no change.
@@ -105,6 +131,9 @@ public enum ColorFields {
     // MARK: Helpers
 
     static func opaque(_ color: RGB) -> RGB { RGB(r: color.r, g: color.g, b: color.b) }
+
+    /// A share as a whole percentage text, for example "23 %".
+    static func percent(_ share: Double) -> String { "\(Int((share * 100).rounded())) %" }
 
     /// The position of a field: the index of its token set and of the token.
     private static func locate(_ name: String, in sets: [TokenSet]) throws -> (set: Int, token: Int) {
