@@ -29,7 +29,10 @@ struct ALFAcolorApp: App {
                 size: CGSize(width: width, height: height)
             )
         }
-        .commands { ALFAcolorCommands() }
+        .commands {
+            ALFAcolorCommands()
+            SetupCommands()
+        }
 
         // Shortcut table: overview of all shortcuts, opened through Help > Shortcut Table.
         Window("window.shortcutTable", id: ShortcutTableView.windowID) {

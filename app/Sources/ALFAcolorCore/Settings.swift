@@ -90,7 +90,7 @@ public enum StartBehavior: String, CaseIterable, Sendable {
 }
 
 /// The unit of the position fields. The raw values are the names the settings file uses.
-public enum UnitChoice: String, CaseIterable, Sendable {
+public enum UnitChoice: String, CaseIterable, Codable, Sendable {
     case point = "pt"
     case pixel = "px"
     case millimetre = "mm"
