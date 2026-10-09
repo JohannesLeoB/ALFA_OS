@@ -24,9 +24,26 @@ enum AnthropicWire {
             temperature: request.temperature,
             cacheControl: cacheControl(for: request.cache),
             tools: request.tools.isEmpty ? nil : try AIToolWire.tools(request.tools),
-            stream: stream ? true : nil
+            stream: stream ? true : nil,
+            thinking: request.thinking.map { .object(["type": .string($0.wireName)]) },
+            outputConfig: outputConfig(effort: request.effort, format: request.format)
         )
         return try encoder.encode(wire)
+    }
+
+    /// The effort and the answer format in one field. Absent when neither is set.
+    static func outputConfig(effort: AIEffort?, format: AIOutputFormat?) -> JSONValue? {
+        var object: [String: JSONValue] = [:]
+        if let effort {
+            object["effort"] = .string(effort.rawValue)
+        }
+        if let format {
+            switch format {
+            case let .jsonSchema(schema):
+                object["format"] = .object(["type": .string("json_schema"), "schema": schema])
+            }
+        }
+        return object.isEmpty ? nil : .object(object)
     }
 
     /// The top-level cache field. Absent when the cache is off; the time to live is sent only for one hour.
@@ -122,6 +139,8 @@ private struct WireRequest: Encodable {
     let cacheControl: WireCacheControl?
     let tools: [JSONValue]?
     let stream: Bool?
+    let thinking: JSONValue?
+    let outputConfig: JSONValue?
 }
 
 /// The top-level `cache_control` field. `ttl` is absent for the five-minute default.

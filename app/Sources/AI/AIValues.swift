@@ -11,6 +11,12 @@ public struct AIRequest: Sendable, Equatable {
     public var cache: AICachePolicy
     /// The tools that the model may use. Empty by default; the tool choice is left to the platform.
     public var tools: [AITool]
+    /// How much work the model spends on the answer. Nil leaves the platform default of the model.
+    public var effort: AIEffort?
+    /// How the model thinks before it answers. Nil leaves the platform default of the model.
+    public var thinking: AIThinking?
+    /// The shape of the answer. Nil leaves the answer as free text.
+    public var format: AIOutputFormat?
 
     public init(
         model: String,
@@ -19,7 +25,10 @@ public struct AIRequest: Sendable, Equatable {
         maxTokens: Int,
         temperature: Double? = nil,
         cache: AICachePolicy = .automatic(ttl: .fiveMinutes),
-        tools: [AITool] = []
+        tools: [AITool] = [],
+        effort: AIEffort? = nil,
+        thinking: AIThinking? = nil,
+        format: AIOutputFormat? = nil
     ) {
         self.model = model
         self.system = system
@@ -28,7 +37,44 @@ public struct AIRequest: Sendable, Equatable {
         self.temperature = temperature
         self.cache = cache
         self.tools = tools
+        self.effort = effort
+        self.thinking = thinking
+        self.format = format
     }
+}
+
+/// The effort of the model. The values are the names of the platform; a model knows only some of them.
+public enum AIEffort: String, Sendable, Equatable, CaseIterable {
+    case low
+    case medium
+    case high
+    case xhigh
+    case max
+}
+
+/// How the model thinks before it answers.
+public enum AIThinking: Sendable, Equatable {
+    /// The model decides how long it thinks.
+    case adaptive
+    /// Thinking is off. Only Haiku and Sonnet take it.
+    case disabled
+    /// Thinking before the first answer and between tool calls. Only Sonnet takes it.
+    case betweenTools
+
+    /// The name of the type in the request.
+    var wireName: String {
+        switch self {
+        case .adaptive: "adaptive"
+        case .disabled: "disabled"
+        case .betweenTools: "between_tools"
+        }
+    }
+}
+
+/// The shape of the answer that the platform must keep.
+public enum AIOutputFormat: Sendable, Equatable {
+    /// The answer follows this JSON schema.
+    case jsonSchema(JSONValue)
 }
 
 /// Whether the platform caches the prompt of a request.
