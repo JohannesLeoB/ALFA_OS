@@ -31,7 +31,7 @@ let package = Package(
         .testTarget(name: "ThumbnailsTests", dependencies: ["Thumbnails", "Document"]),
         .testTarget(name: "ImportersTests", dependencies: ["Importers", "ALFAcolorCore", "Document", "BoardModel", "Renderers", "Tokens"]),
         .testTarget(name: "RenderersTests", dependencies: ["Renderers", "ALFAcolorCore"]),
-        .testTarget(name: "ExportersTests", dependencies: ["Exporters", "ALFAcolorCore", "Document", "BoardModel", "Tokens", "Geometry"]),
+        .testTarget(name: "ExportersTests", dependencies: ["Exporters", "Importers", "ALFAcolorCore", "Document", "BoardModel", "Tokens", "Geometry"]),
         .testTarget(name: "PerformanceTests", dependencies: ["Performance", "ALFAcolorCore", "Document", "BoardModel", "Geometry"]),
         .testTarget(name: "LibraryTests", dependencies: ["Library", "ALFAcolorCore", "Document", "Geometry", "ColorLab", "Tokens"]),
         .testTarget(name: "MotionTests", dependencies: ["Motion"])
