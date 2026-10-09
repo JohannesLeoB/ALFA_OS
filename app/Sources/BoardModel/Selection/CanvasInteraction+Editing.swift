@@ -72,6 +72,13 @@ extension CanvasInteraction {
         run(.setContent(session.itemID, session.content))
     }
 
+    /// Ends what is in progress in the space being left: the text edit keeps its text there, a drag stops, the fan closes.
+    func prepareSpaceChange() {
+        commitEdit()
+        closeFan()
+        cancelGesture()
+    }
+
     /// Ends the edit and drops the typed text.
     public func cancelEdit() {
         editing = nil

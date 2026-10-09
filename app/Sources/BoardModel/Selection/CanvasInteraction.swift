@@ -115,7 +115,10 @@ public final class CanvasInteraction {
     /// The pointer must move this far before an item moves, in screen points.
     public static let dragThreshold = 3.0
 
-    public init(controller: CanvasController) { self.controller = controller }
+    public init(controller: CanvasController) {
+        self.controller = controller
+        controller.store.onWillSwitchSpace = { [weak self] in self?.prepareSpaceChange() }
+    }
 
     // MARK: Reading
 

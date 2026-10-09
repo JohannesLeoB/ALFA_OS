@@ -23,6 +23,8 @@ public final class BoardStore {
 
     /// Called with the document and its revision after every change of the document (on the main actor).
     @ObservationIgnored public var onChange: ((ALFAcolorDocument, Int) -> Void)?
+    /// Called before the active space changes, while the space being left is still active.
+    @ObservationIgnored public var onWillSwitchSpace: (() -> Void)?
 
     @ObservationIgnored public private(set) var undoManager: UndoManager
     @ObservationIgnored private let autosave: Autosave?
@@ -91,6 +93,7 @@ public final class BoardStore {
     private func switchSpace(to id: String) throws -> Bool {
         guard document.board.spaces.contains(where: { $0.id == id }) else { throw CommandError.unknownSpace(id) }
         guard id != activeSpaceID else { return false }
+        onWillSwitchSpace?()
         activeSpaceID = id
         selection = []
         return true
