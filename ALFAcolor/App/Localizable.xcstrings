@@ -4666,6 +4666,50 @@
         }
       }
     },
+    "inspector.frame.template" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorlage"
+          }
+        }
+      }
+    },
+    "inspector.frame.template.save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Vorlage sichern"
+          }
+        }
+      }
+    },
+    "inspector.frame.template.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorlage löschen"
+          }
+        }
+      }
+    },
+    "grid.template.name %lld %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Spalten · Steg %lld"
+          }
+        }
+      }
+    },
     "inspector.frame.device" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -10,6 +10,7 @@ struct FrameGridSection: View {
     var items: [Item]
 
     @State private var separateMargins = false
+    @State private var templates: [GridTemplate] = []
 
     var body: some View {
         let grids = self.grids
@@ -23,6 +24,7 @@ struct FrameGridSection: View {
                     _ = try? store.performFrameGridRemoval()
                 }
             }))
+            .onAppear(perform: reload)
         if grids.contains(where: { $0 != nil }) {
             GridNumberField(titleKey: "inspector.frame.columns", shared: shared(grids) { Double($0.columns) }) { value in
                 apply { $0.columns = max(1, Int(value.rounded())) }
@@ -58,7 +60,46 @@ struct FrameGridSection: View {
             GridNumberField(titleKey: "inspector.frame.baselineStart", shared: shared(grids) { $0.baselineStart }) { value in
                 apply { $0.baselineStart = max(0, value) }
             }
+            Menu("inspector.frame.template") {
+                Button("inspector.frame.template.save", action: saveTemplate)
+                if !templates.isEmpty {
+                    Divider()
+                    ForEach(templates) { template in
+                        Button(template.name) { applyTemplate(template) }
+                    }
+                    Menu("inspector.frame.template.delete") {
+                        ForEach(templates) { template in
+                            Button(template.name) { deleteTemplate(template) }
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    private func reload() {
+        templates = (try? GridTemplates.load(from: GridTemplateFile.url())) ?? []
+    }
+
+    /// Saves the grid of the first frame that has one. The name gives its columns and gutter.
+    private func saveTemplate() {
+        guard let grid = grids.compactMap({ $0 }).first, let url = try? GridTemplateFile.url() else { return }
+        let columns = grid.columns
+        let gutter = Int(grid.gutter.rounded())
+        let name = String(localized: "grid.template.name \(columns) \(gutter)")
+        try? GridTemplates.add(GridTemplate(name: name, grid: grid), to: url)
+        reload()
+    }
+
+    /// Sets the grid of the template on every selected frame. One undo step.
+    private func applyTemplate(_ template: GridTemplate) {
+        _ = try? store.perform(frameGrid: template.grid)
+    }
+
+    private func deleteTemplate(_ template: GridTemplate) {
+        guard let url = try? GridTemplateFile.url() else { return }
+        try? GridTemplates.remove(id: template.id, from: url)
+        reload()
     }
 
     /// The grid of each selected frame, nil for a frame without a grid.

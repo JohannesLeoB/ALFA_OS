@@ -83,3 +83,40 @@ public struct FrameGridLines: Equatable, Sendable {
                         h: height - grid.marginTop - grid.marginBottom))
     }
 }
+
+/// A saved column grid with a name. Templates live in a file of the app, not in a document.
+public struct GridTemplate: Codable, Hashable, Sendable, Identifiable {
+    public var id: String
+    public var name: String
+    public var grid: ColumnGrid
+
+    public init(id: String = UUID().uuidString, name: String, grid: ColumnGrid) {
+        self.id = id
+        self.name = name
+        self.grid = grid
+    }
+}
+
+/// Reads and writes the grid templates as one JSON file. Every change reads the file first, so a file
+/// that cannot be read is never overwritten.
+public enum GridTemplates {
+    /// The templates in the file. An empty list when there is no file.
+    public static func load(from url: URL) throws -> [GridTemplate] {
+        guard FileManager.default.fileExists(atPath: url.path) else { return [] }
+        return try JSONDecoder().decode([GridTemplate].self, from: Data(contentsOf: url))
+    }
+
+    /// Adds a template after the ones in the file.
+    public static func add(_ template: GridTemplate, to url: URL) throws {
+        try write(try load(from: url) + [template], to: url)
+    }
+
+    /// Removes the template with this ID. Writes the file unchanged when there is none.
+    public static func remove(id: String, from url: URL) throws {
+        try write(try load(from: url).filter { $0.id != id }, to: url)
+    }
+
+    private static func write(_ templates: [GridTemplate], to url: URL) throws {
+        try JSONEncoder().encode(templates).write(to: url, options: .atomic)
+    }
+}
