@@ -7888,6 +7888,160 @@
           }
         }
       }
+    },
+    "undo.version.keep" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version anlegen"
+          }
+        }
+      }
+    },
+    "undo.version.restore" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version wiederherstellen"
+          }
+        }
+      }
+    },
+    "undo.version.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version löschen"
+          }
+        }
+      }
+    },
+    "inspector.versions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versionen"
+          }
+        }
+      }
+    },
+    "version.keep" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version anlegen"
+          }
+        }
+      }
+    },
+    "version.restore" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Version wiederherstellen"
+          }
+        }
+      }
+    },
+    "version.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
+          }
+        }
+      }
+    },
+    "version.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Versionen."
+          }
+        }
+      }
+    },
+    "version.reason.lab" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ablage im Labor"
+          }
+        }
+      }
+    },
+    "version.reason.manual" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von Hand"
+          }
+        }
+      }
+    },
+    "version.notice.locked" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Karte ist gesperrt. Entsperren, dann noch einmal versuchen."
+          }
+        }
+      }
+    },
+    "version.notice.tooLarge" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Code ist zu groß für eine Version."
+          }
+        }
+      }
+    },
+    "version.notice.failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Version konnte nicht geändert werden."
+          }
+        }
+      }
+    },
+    "package.warning.skippedVersions %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Versionen nicht geladen (defekt, zu groß oder über dem Limit)."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
