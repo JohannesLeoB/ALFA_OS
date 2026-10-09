@@ -12,6 +12,8 @@ struct CanvasSurface: View {
     var interaction: CanvasInteraction
     var importer: ImportCoordinator
     var onTogglePalettes: @MainActor () -> Void
+    /// Changes each time a lab closes; the canvas then takes the keyboard focus back.
+    var labClosings = 0
 
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
@@ -64,6 +66,7 @@ struct CanvasSurface: View {
         .onChange(of: interaction.editing == nil) { _, ended in
             if ended { hasFocus = true }
         }
+        .onChange(of: labClosings) { hasFocus = true }
         .onAppear { hasFocus = true }
         .modifier(ImportTargets(controller: controller, importer: importer))
         .accessibilityElement(children: .contain)

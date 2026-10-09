@@ -29,7 +29,7 @@ struct ShellView: View {
         } detail: {
             VStack(spacing: 0) {
                 CanvasSurface(controller: canvas, interaction: interaction, importer: importer,
-                              onTogglePalettes: { shell.togglePalettes() })
+                              onTogglePalettes: { shell.togglePalettes() }, labClosings: shell.labClosings)
                     .overlay { ContextBarHost(canvas: canvas) }
                     .overlay { if shell.blobMode { BlobMenuHost(shell: shell, store: canvas.store) } }
                     .overlay { if let lab = shell.openLabModel { LabView(model: lab, onClose: { shell.closeLab() }) } }
@@ -52,6 +52,9 @@ struct ShellView: View {
         .frame(minWidth: Self.minimumSize.width, minHeight: Self.minimumSize.height)
         .onChange(of: undoManager.map(ObjectIdentifier.init), initial: true) {
             if let undoManager { canvas.store.useUndoManager(undoManager) }
+        }
+        .onChange(of: canvas.store.revision) {
+            shell.closeLabIfCardGone(in: canvas.store)
         }
     }
 }

@@ -36,10 +36,20 @@ final class ShellState {
         Task { await lab.reloadPage() }
     }
 
+    /// Counts the closed labs. The canvas takes the keyboard focus back when this changes.
+    private(set) var labClosings = 0
+
     /// Closes the open lab. Its draft stays for the next time.
     func closeLab() {
         openLabModel?.stopPage()
         labOpen = nil
+        labClosings += 1
+    }
+
+    /// Closes the open lab when its card is gone, for example after an undo took the card back.
+    func closeLabIfCardGone(in store: BoardStore) {
+        guard let card = labOpen, !store.isCodeCard(card) else { return }
+        closeLab()
     }
 
     var sidebarVisible: Bool {
