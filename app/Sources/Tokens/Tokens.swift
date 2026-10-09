@@ -59,9 +59,11 @@ public struct Token: Codable, Hashable, Sendable, Identifiable {
     public var value: TokenValue
     public var description: String?
     public var source: Source?
+    /// Set for the steps of a type ramp (see `TypeRamp`); nil for every other token.
+    public var ramp: RampMark?
     public var id: String { path.joined(separator: ".") }
-    public init(_ path: [String], _ value: TokenValue, description: String? = nil, source: Source? = nil) {
-        self.path = path; self.value = value; self.description = description; self.source = source
+    public init(_ path: [String], _ value: TokenValue, description: String? = nil, source: Source? = nil, ramp: RampMark? = nil) {
+        self.path = path; self.value = value; self.description = description; self.source = source; self.ramp = ramp
     }
 }
 

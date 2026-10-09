@@ -30,10 +30,14 @@ enum TokenFile {
     private static func leaf(for token: Token) throws -> [String: JSONValue] {
         var node: [String: JSONValue] = ["$type": .string(token.value.dtcgType), "$value": value(token.value)]
         if let d = token.description { node["$description"] = .string(d) }
+        var ours: [String: JSONValue] = [:]
         if let source = token.source {
-            let sourceJSON = try PackageJSON.decoder().decode(JSONValue.self, from: PackageJSON.encoder().encode(source))
-            node["$extensions"] = .object([namespace: .object(["source": sourceJSON])])
+            ours["source"] = try PackageJSON.decoder().decode(JSONValue.self, from: PackageJSON.encoder().encode(source))
         }
+        if let ramp = token.ramp {
+            ours["ramp"] = try PackageJSON.decoder().decode(JSONValue.self, from: PackageJSON.encoder().encode(ramp))
+        }
+        if !ours.isEmpty { node["$extensions"] = .object([namespace: .object(ours)]) }
         return node
     }
 
@@ -138,18 +142,23 @@ enum TokenFile {
         var rest = node
         for key in ["$type", "$value", "$description"] { rest[key] = nil }
         var source: Source?
+        var ramp: RampMark?
         if case .object(var ext)? = rest["$extensions"] {
             if case .object(var ours)? = ext[namespace] {
                 if let s = ours.removeValue(forKey: "source"), let d = try? PackageJSON.encoder().encode(s) {
                     source = try? PackageJSON.decoder().decode(Source.self, from: d)
                     if source == nil { ours["source"] = s }   // not readable: do not lose it
                 }
+                if let r = ours.removeValue(forKey: "ramp"), let d = try? PackageJSON.encoder().encode(r) {
+                    ramp = try? PackageJSON.decoder().decode(RampMark.self, from: d)
+                    if ramp == nil { ours["ramp"] = r }       // not readable: do not lose it
+                }
                 ext[namespace] = ours.isEmpty ? nil : .object(ours)
             }
             rest["$extensions"] = ext.isEmpty ? nil : .object(ext)
         }
         if !rest.isEmpty { store(.object(rest), at: path, in: &extras) }
-        return Token(path, value, description: node["$description"]?.stringValue, source: source)
+        return Token(path, value, description: node["$description"]?.stringValue, source: source, ramp: ramp)
     }
 
     private static func parseValue(type: String, _ raw: JSONValue) -> TokenValue? {
