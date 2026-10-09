@@ -28,6 +28,8 @@ struct MockupManifest: Codable, Equatable {
         var width: Double
         var height: Double
         var z: Int
+        /// The layer of the item. The entries are in canvas order: by layer rank, then by z.
+        var layer: String? = nil
         var mode: String? = nil
         var file: String? = nil
         var tokens: [String] = []
@@ -41,7 +43,7 @@ struct MockupManifest: Codable, Equatable {
         var via: String? = nil
 
         enum CodingKeys: String, CodingKey {
-            case id, type, title, frame, x, y, width, height, z, mode, file, tokens, text, previewWidth
+            case id, type, title, frame, x, y, width, height, z, layer, mode, file, tokens, text, previewWidth
             case color, fill, stroke, url, license, via
         }
 
@@ -56,6 +58,7 @@ struct MockupManifest: Codable, Equatable {
             try c.encode(width, forKey: .width)
             try c.encode(height, forKey: .height)
             try c.encode(z, forKey: .z)
+            try c.encodeIfPresent(layer, forKey: .layer)
             try c.encodeIfPresent(mode, forKey: .mode)
             try c.encodeIfPresent(file, forKey: .file)
             try c.encode(tokens, forKey: .tokens)

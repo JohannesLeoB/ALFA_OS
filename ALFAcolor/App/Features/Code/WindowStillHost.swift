@@ -8,8 +8,9 @@ import WebKit
 @available(macOS 26.0, *)
 @MainActor
 struct WindowStillHost: StillHost {
-    /// Time for layout and for the first frames to draw.
-    static let settle = Duration.milliseconds(300)
+    /// Time for layout and for the first frames to draw. Animations that run per frame need this long to show their
+    /// text: at 300 ms a probe still held 60 % of the ink it had at 1.5 s, and 3 s added nothing.
+    static let settle = Duration.milliseconds(1500)
     /// Jumps CSS and Web Animations to their end, so that the still shows the finished state.
     static let finishAnimations = "document.getAnimations().forEach(function(a){try{a.finish()}catch(e){}})"
 

@@ -28,6 +28,7 @@ struct MockupEntries {
         var entry = MockupManifest.Entry(
             id: item.id.raw, type: "", title: item.title, frame: placed.frame?.id.raw,
             x: box.x, y: box.y, width: box.w, height: box.h, z: item.z)
+        entry.layer = item.layerID
 
         switch item.content {
         case .code(let language, let sources, let previewWidth):
