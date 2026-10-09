@@ -4,7 +4,7 @@
 |---|---|---|---|
 | E0 Fundament | erledigt | 2026-10-08 „DAHIN“ | G0 erfüllt: 12 Tests grün |
 | E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 wartet auf Bild-Abnahme; B-107 erledigt; B-108a erledigt; B-108b erledigt | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen (Bild-Abnahme durch Johannes und P-001 stehen aus; E2 läuft auf sein Wort) |
-| E2 Leinwand | läuft: B-110, B-201, B-203, B-202, B-211, B-205, B-204, B-207, B-208 erledigt; B-401 (E4) erledigt; B-403, B-213, B-212, B-215, B-404, B-216 erledigt; B-214 und B-217 im Bau (parallel); dann B-206, B-403, B-404, B-704, B-209 (Johannes 2026-10-09: „ERSTMAL BAUEN BAUEN BAUEN“, „HAIKUs Bauen!!!“) | 2026-10-09 „Weiter bauen. Ich starte die App später. Tools und funktionstiefe einbauen. App funktional machen. Go. Workers sonnet oder Haiku.“ | G2 offen |
+| E2 Leinwand | läuft: B-110, B-201, B-203, B-202, B-211, B-205, B-204, B-207, B-208 erledigt; B-401 (E4) erledigt; B-403, B-213, B-212, B-215, B-404, B-216, B-214, B-217 erledigt; jetzt Bild-Abnahme durch Johannes; dann B-206, B-403, B-404, B-704, B-209 (Johannes 2026-10-09: „ERSTMAL BAUEN BAUEN BAUEN“, „HAIKUs Bauen!!!“) | 2026-10-09 „Weiter bauen. Ich starte die App später. Tools und funktionstiefe einbauen. App funktional machen. Go. Workers sonnet oder Haiku.“ | G2 offen |
 | E3 bis E9 | geplant | | |
 
 ## Chef-Aufgaben vor E2 (aus den Übergaben von E1)
@@ -48,10 +48,10 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-211](briefe/B-211.md) | E2 | Dokument in der App: Neu, Öffnen, Sichern | B-110, B-201, B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 359 Tests; DocumentGroup); Abnahme am Bild offen (⌘N, ⌘O, ⌘S, Speicherstand) |
 | [B-212](briefe/B-212.md) | E2 | Blob-Menü | B-208 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 712 Tests, App-Bau grün); Abnahme am Bild offen; Nachträge in B-216 |
 | [B-213](briefe/B-213.md) | E2 | Fächer für Farbfelder | B-205 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 662 Tests; Nahtregel Motion ergänzt); noch nicht eingehängt (B-212); Tempo entscheidet Johannes am Bild |
-| [B-214](briefe/B-214.md) | E2 | Bewegung und Wirkung nativ | B-212 | vergeben an Haiku-Agent (im Repo, parallel zu B-217), 2026-10-09 |
+| [B-214](briefe/B-214.md) | E2 | Bewegung und Wirkung nativ | B-212 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 800 Tests, 3 Zusatzläufe stabil); Abnahme am Bild offen |
 | [B-215](briefe/B-215.md) | E2 | Startbibliothek: Bausteine als Code-Karten | B-403 | erledigt (Bewegung, 33 Karten laden live), geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 712 Tests); Blocks fehlen (Abhängigkeiten), Öffnen-Befehl in B-216 |
 | [B-216](briefe/B-216.md) | E2 | Nachträge: Fächer wählt Farbe, Bausteine öffnen | B-212, B-215 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 771 Tests); Katalogtexte in B-217 |
-| [B-217](briefe/B-217.md) | E2 | Labor anschließen und offene Texte | B-404, B-216 | vergeben an Haiku-Agent (im Repo, parallel zu B-214), 2026-10-09 |
+| [B-217](briefe/B-217.md) | E2 | Labor anschließen und offene Texte | B-404, B-216 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 800 Tests); Labor bei ⌘Z der neuen Karte offen (Nachtrag) |
 | [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | offen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | offen |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
