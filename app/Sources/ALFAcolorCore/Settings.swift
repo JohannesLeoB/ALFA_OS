@@ -3,20 +3,20 @@ import Foundation
 /// Every setting of the app. The raw value is the key that the store writes.
 /// Secrets (`storage == .keychain`) never reach the store; they live in the keychain.
 public enum Setting: String, CaseIterable, Sendable {
-    case defaultFolder = "doc.defaultFolder"
-    case startBehavior = "start.behavior"
-    case claudeMonthlyLimitEUR = "claude.monthlyLimitEUR"
-    case claudeAPIKey = "claude.apiKey"
-    case figmaToken = "figma.token"
-    case githubToken = "github.token"
-    case pinterestOAuth = "pinterest.oauth"
-    case iCloudSync = "sync.iCloud"
-    case unitDefault = "unit.default"
-    case gridStep = "canvas.gridStep"
-    case snapToSpacingTokens = "snap.toSpacingTokens"
-    case keysPreset = "keys.preset"
-    case playerMaxLive = "player.maxLive"
-    case cacheMaxMB = "cache.maxMB"
+    case defaultFolder = "settings.doc.defaultFolder"
+    case startBehavior = "settings.start.behavior"
+    case claudeMonthlyLimitEUR = "settings.claude.monthlyLimitEUR"
+    case claudeAPIKey = "settings.claude.apiKey"
+    case figmaToken = "settings.figma.token"
+    case githubToken = "settings.github.token"
+    case pinterestOAuth = "settings.pinterest.oauth"
+    case iCloudSync = "settings.sync.iCloud"
+    case unitDefault = "settings.unit.default"
+    case gridStep = "settings.canvas.gridStep"
+    case snapToSpacingTokens = "settings.snap.toSpacingTokens"
+    case keysPreset = "settings.keys.preset"
+    case playerMaxLive = "settings.player.maxLive"
+    case cacheMaxMB = "settings.cache.maxMB"
 
     /// Where the value is kept.
     public var storage: SettingStorage {
