@@ -69,16 +69,18 @@ struct PositionField: View {
     /// The text the field showed when it was last synced. A draft that differs from it was typed by the user.
     @State private var synced = ""
     @State private var invalid = false
+    /// True when the value is a number, but the items keep their size or place (for example a locked item).
+    @State private var blocked = false
     @FocusState private var focused: Bool
 
     var body: some View {
         LabeledContent(LocalizedStringKey(titleKey)) {
             TextField("", text: $draft, prompt: shared == .mixed ? Text("inspector.mixed") : nil)
                 .multilineTextAlignment(.trailing)
-                .foregroundStyle(invalid ? theme.color(.coral, scheme) : theme.color(.text, scheme))
+                .foregroundStyle(invalid || blocked ? theme.color(.coral, scheme) : theme.color(.text, scheme))
                 .focused($focused)
                 .onSubmit(commit)
-                .help(invalid ? "inspector.invalid" : "")
+                .help(invalid ? "inspector.invalid" : blocked ? "inspector.field.blocked" : "")
         }
         .onChange(of: shared, initial: true) { if draft == synced { sync() } }
         .onChange(of: selection) { old, _ in
@@ -89,7 +91,7 @@ struct PositionField: View {
             sync()
         }
         .onChange(of: unit) { sync() }
-        .onChange(of: draft) { invalid = false }
+        .onChange(of: draft) { invalid = false; blocked = false }
         .onChange(of: focused) { _, isFocused in
             // While the field has focus, a room change applies the draft first (see BoardStore.pendingDraft).
             store.pendingDraft = isFocused ? { commit() } : nil
@@ -115,7 +117,12 @@ struct PositionField: View {
             invalid = true
             return
         }
-        _ = try? store.perform(field, to: points)
+        let changed = (try? store.perform(field, to: points)) ?? false
+        // A number that the items refuse to take stays in the field, marked, instead of vanishing.
+        if !changed, shared.value != points {
+            blocked = true
+            return
+        }
         sync()
     }
 }

@@ -2873,17 +2873,6 @@
         }
       }
     },
-    "status.grid.value" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "8"
-          }
-        }
-      }
-    },
     "status.saveState" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2968,17 +2957,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einheit"
-          }
-        }
-      }
-    },
-    "status.unit.value" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "pt"
           }
         }
       }
@@ -4288,6 +4266,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keine Zahl. Erlaubt sind 12,5, 12.5 und Angaben wie 10 mm."
+          }
+        }
+      }
+    },
+    "inspector.field.blocked" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Sperre lässt diesen Wert nicht zu. Gesperrte Stücke bleiben an ihrem Platz."
           }
         }
       }
