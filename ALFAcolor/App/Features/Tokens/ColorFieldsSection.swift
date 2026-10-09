@@ -19,6 +19,7 @@ struct ColorFieldsSection: View {
     @State private var valueEdit: ValueEdit?
     @State private var draft = Color(ColorFields.defaultColor)
     @State private var sampler = NSColorSampler()
+    @State private var contrastShown = false
 
     /// The field whose colour the picker changes. The colour is written when the picker closes, one undo step.
     private struct ValueEdit: Identifiable {
@@ -38,6 +39,14 @@ struct ColorFieldsSection: View {
                 .buttonStyle(.borderless)
                 .help("tokens.pipette")
                 Spacer()
+                Button { contrastShown = true } label: {
+                    Label("contrast.open", systemImage: "square.grid.3x3")
+                }
+                .buttonStyle(.borderless)
+                .help("contrast.open")
+                .sheet(isPresented: $contrastShown) {
+                    ContrastSheet(store: store)
+                }
                 Button(action: add) {
                     Label("tokens.add", systemImage: "plus")
                 }
