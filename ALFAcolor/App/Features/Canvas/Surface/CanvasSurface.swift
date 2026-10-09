@@ -92,10 +92,12 @@ struct CanvasSurface: View {
                 .themeText(theme.text(.caption))
             Text("canvas.hint")
                 .themeText(theme.text(.body))
+            // The one next step of the empty canvas: open the example document.
+            Button("empty.canvas.button") { StarterOpener.open(StarterOpener.exampleName) }
+                .controlSize(.large)
         }
         .foregroundStyle(theme.color(.textMuted, scheme))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .allowsHitTesting(false)
     }
 
     private var pointer: PointerStyle? {

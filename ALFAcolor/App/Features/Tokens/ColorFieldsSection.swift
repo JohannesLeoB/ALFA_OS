@@ -63,6 +63,8 @@ struct ColorFieldsSection: View {
             if fields.isEmpty {
                 Label("sidebar.noTokenSet", systemImage: "swatchpalette")
                     .foregroundStyle(theme.color(.textMuted, scheme))
+                // The one next step of an empty token set.
+                Button("empty.tokens.button") { add() }
             }
             ForEach(fields) { field in
                 row(field)
