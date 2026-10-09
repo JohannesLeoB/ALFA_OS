@@ -77,6 +77,15 @@ public struct ReadReport: Equatable, Sendable {
     public var isClean: Bool { missingAssets.isEmpty && corruptAssets.isEmpty && warnings.isEmpty }
 }
 
+extension ReadReport {
+    /// The notice for the status bar: the first warning, else the count of missing images. nil when there is nothing to say.
+    public var statusNotice: String? {
+        if let warning = warnings.first { return warning }
+        if !missingAssets.isEmpty { return String(localized: "package.warning.missingAssets \(missingAssets.count)") }
+        return nil
+    }
+}
+
 public struct ReadOptions: Sendable {
     /// Recompute the hash of every asset file. This costs time depending on the number of images, so it is off by default.
     public var verifyAssetHashes: Bool

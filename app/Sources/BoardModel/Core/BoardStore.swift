@@ -12,31 +12,33 @@ public final class BoardStore {
     public private(set) var document: ALFAcolorDocument
     public private(set) var activeSpaceID: String?
     public private(set) var selection: Set<ItemID> = []
-    /// The view of each space by space ID. Not part of the document and not undone.
+    /// The view of each space by space ID. Not part of the document and not undone; the file keeps it on save.
     public private(set) var viewports: [String: Viewport] = [:]
     /// Counts every change of the document, including undo and redo.
     public private(set) var revision = 0
-    /// True from a change until the next successful save of the state that had that change.
-    public private(set) var hasUnsavedChanges = false
+    /// Where the document stands against the file. Updated on every change and save.
+    public private(set) var saveState: SaveState = .saved
     /// The error of the last save, nil after a successful save.
     public private(set) var lastSaveError: (any Error)?
 
+    /// The document as the file holds it. nil for a new document that was never saved.
+    @ObservationIgnored private var savedDocument: ALFAcolorDocument?
+
     /// Called with the document and its revision after every change of the document (on the main actor).
     @ObservationIgnored public var onChange: ((ALFAcolorDocument, Int) -> Void)?
+    /// Called when a view or the active space changes. Such a change is not a change of the document.
+    @ObservationIgnored public var onViewChange: (() -> Void)?
     /// Called before the active space changes, while the space being left is still active.
     @ObservationIgnored public var onWillSwitchSpace: (() -> Void)?
 
     @ObservationIgnored public private(set) var undoManager: UndoManager
-    @ObservationIgnored private let autosave: Autosave?
-    @ObservationIgnored private var scheduledSave: Task<Void, Never>?
-    @ObservationIgnored private var runningSave: Task<Void, any Error>?
 
     /// Without `undoManager` the store makes its own, which closes one undo step per command.
     /// A manager from the window keeps its own grouping rules, so one command is one step only when
     /// every command runs in its own pass of the event loop.
-    public init(document: ALFAcolorDocument, undoManager: UndoManager? = nil, autosave: Autosave? = nil) {
+    /// `isSaved` is false for a new document. The views and the active space come from the file.
+    public init(document: ALFAcolorDocument, undoManager: UndoManager? = nil, isSaved: Bool = true) {
         self.document = document
-        self.autosave = autosave
         if let undoManager {
             self.undoManager = undoManager
         } else {
@@ -44,7 +46,16 @@ public final class BoardStore {
             own.groupsByEvent = false
             self.undoManager = own
         }
-        activeSpaceID = document.board.spaces.first?.id
+        let spaceIDs = Set(document.board.spaces.map(\.id))
+        viewports = document.spaceViews.filter { spaceIDs.contains($0.key) && $0.value.isValid }
+            .mapValues { Viewport(zoom: $0.zoom, offsetX: $0.offsetX, offsetY: $0.offsetY) }
+        if let saved = document.activeSpaceID, spaceIDs.contains(saved) {
+            activeSpaceID = saved
+        } else {
+            activeSpaceID = document.board.spaces.first?.id
+        }
+        savedDocument = isSaved ? document : nil
+        refreshSaveState()
     }
 
     // MARK: Reading
@@ -87,6 +98,7 @@ public final class BoardStore {
     public func addAsset(_ data: Data, fileExtension: String) -> String {
         let id = document.assets.add(data, fileExtension: fileExtension)
         onChange?(document, revision)
+        refreshSaveState()
         return id
     }
 
@@ -96,6 +108,7 @@ public final class BoardStore {
         onWillSwitchSpace?()
         activeSpaceID = id
         selection = []
+        onViewChange?()
         return true
     }
 
@@ -119,6 +132,9 @@ public final class BoardStore {
         document.board = target
         if !target.spaces.contains(where: { $0.id == activeSpaceID }) { activeSpaceID = target.spaces.first?.id }
         selection = selection.intersection(Set(activeSpace?.items.map(\.id) ?? []))
+        // A removed space takes its view with it; a new space with the same ID starts at zoom 1.
+        let ids = Set(target.spaces.map(\.id))
+        viewports = viewports.filter { ids.contains($0.key) }
         didChangeDocument()
         let inHistory = undoManager.isUndoing || undoManager.isRedoing
         if !inHistory { undoManager.beginUndoGrouping() }
@@ -190,65 +206,44 @@ public final class BoardStore {
     public func setViewport(_ viewport: Viewport, for spaceID: String? = nil) {
         guard viewport.isValid, let id = spaceID ?? activeSpaceID, document.board.spaces.contains(where: { $0.id == id }) else { return }
         viewports[id] = viewport
+        onViewChange?()
     }
 
     // MARK: Saving
 
-    /// Where the document stands against the last save.
-    public var saveState: SaveState {
-        if lastSaveError != nil { return .failed }
-        return hasUnsavedChanges ? .modified : .saved
-    }
-
-    /// A save of the state at `revision` finished. Later changes keep the document marked as changed.
-    /// For saves that the store does not run itself (the system saves the window's document).
-    public func markSaved(revision savedRevision: Int) {
+    /// The document was written to the file (the state `document` as it is now). Clears the save error.
+    /// Called by the window after it has built the package; the store runs no save of its own.
+    public func markSaved(_ saved: ALFAcolorDocument) {
         lastSaveError = nil
-        if revision == savedRevision { hasUnsavedChanges = false }
+        savedDocument = saved
+        refreshSaveState()
     }
 
     /// A save failed. The error stays visible until a later save works.
     public func markSaveFailed(_ error: any Error) {
         lastSaveError = error
+        refreshSaveState()
     }
 
     private func didChangeDocument() {
         revision += 1
-        hasUnsavedChanges = true
         onChange?(document, revision)
-        scheduleSave()
+        refreshSaveState()
     }
 
-    private func scheduleSave() {
-        guard let autosave else { return }
-        scheduledSave?.cancel()
-        scheduledSave = Task { [weak self] in
-            do { try await autosave.sleep(autosave.delay) } catch { return }
-            guard !Task.isCancelled else { return }
-            try? await self?.saveNow()
+    /// Works out the state from the saved document. The board, the token sets and the image IDs decide;
+    /// the views and the active space are not part of the document and never mark it as changed.
+    private func refreshSaveState() {
+        if lastSaveError != nil {
+            saveState = .failed
+        } else if let savedDocument {
+            saveState = Self.sameContent(savedDocument, document) ? .saved : .modified
+        } else {
+            saveState = .new
         }
     }
 
-    /// Saves the document now and drops a save that was waiting for the quiet time. Throws the error of the writer.
-    /// Saves run one after the other. Without an `Autosave` it does nothing.
-    public func saveNow() async throws {
-        guard let autosave else { return }
-        scheduledSave?.cancel()
-        scheduledSave = nil
-        let previous = runningSave
-        let snapshot = document
-        let savedRevision = revision
-        let task = Task<Void, any Error> {
-            _ = await previous?.result
-            try await autosave.save(snapshot)
-        }
-        runningSave = task
-        do {
-            try await task.value
-            markSaved(revision: savedRevision)
-        } catch {
-            markSaveFailed(error)
-            throw error
-        }
+    private static func sameContent(_ a: ALFAcolorDocument, _ b: ALFAcolorDocument) -> Bool {
+        a.board == b.board && a.tokenSets == b.tokenSets && Set(a.assets.ids) == Set(b.assets.ids)
     }
 }

@@ -153,8 +153,10 @@ public enum DocumentPackage {
             }
             let ordered = sequence == sequence.sorted()
 
+            var spaceExtras = doc.preserved.spaces[space.id] ?? [:]
+            if let view = doc.spaceViews[space.id] { spaceExtras[SpaceView.key] = view.json }
             let spaceFile = SpaceFile(schema: version, id: space.id, name: space.name, layers: space.layers.map(\.id),
-                                      layerSequence: ordered ? nil : sequence, extras: doc.preserved.spaces[space.id] ?? [:])
+                                      layerSequence: ordered ? nil : sequence, extras: spaceExtras)
             try put("\(dir)/space.json", try encode(spaceFile, path: "\(dir)/space.json"))
             for layer in space.layers {
                 let path = "\(dir)/layers/\(layerNames[layer.id]!).json"
@@ -180,9 +182,11 @@ public enum DocumentPackage {
             }
         }
 
+        var manifestExtras = doc.preserved.manifest
+        if let active = doc.activeSpaceID { manifestExtras[ActiveSpace.key] = .string(active) }
         let manifest = ManifestFile(formatVersion: version, lastWrittenByAppVersion: appVersion, documentID: doc.board.documentID,
                                     createdAt: doc.board.createdAt, title: doc.board.title, spaces: spaces.map(\.id),
-                                    tokenSets: doc.tokenSets.map(\.name), extras: doc.preserved.manifest)
+                                    tokenSets: doc.tokenSets.map(\.name), extras: manifestExtras)
         try put("manifest.json", try encode(manifest, path: "manifest.json"))
 
         for (path, data) in doc.carriedFiles {
@@ -321,8 +325,10 @@ public enum DocumentPackage {
         var spaces: [Space] = []
         var seenItems = Set<ItemID>()
         var duplicateItems = Set<ItemID>()
+        var spaceViews: [String: SpaceView] = [:]
         for (dir, spaceFile) in orderedSpaces {
             preserved.spaces[spaceFile.id] = spaceFile.extras.isEmpty ? nil : spaceFile.extras
+            if let view = SpaceView(json: spaceFile.extras[SpaceView.key]) { spaceViews[spaceFile.id] = view }
 
             var layerFiles: [String: LayerFile] = [:]
             var layerPaths: [(path: String, id: String)] = []
@@ -409,6 +415,8 @@ public enum DocumentPackage {
                                     assets: assets, tokenSets: orderedSets)
         doc.board.format = migration.currentVersion
         doc.preserved = preserved
+        doc.spaceViews = spaceViews
+        doc.activeSpaceID = manifest.extras[ActiveSpace.key]?.stringValue
         for (path, data) in files where !claimed.contains(path) { doc.carriedFiles[path] = data }
 
         report.missingAssets = doc.missingAssets()

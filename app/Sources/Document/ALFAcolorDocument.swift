@@ -15,6 +15,10 @@ public struct ALFAcolorDocument: Equatable, Sendable {
     public var carriedFiles: PackageFiles = [:]
     /// Fields this version does not know (manifest, space, layer, item, token file).
     var preserved = PreservedFields()
+    /// The view of each space as the file holds it. Read from the file; the window writes the current views on save.
+    public var spaceViews: [String: SpaceView] = [:]
+    /// The space that was open when the file was saved.
+    public var activeSpaceID: String?
 
     public init(board: Board = Board(title: String(localized: "document.untitled")), assets: AssetStore = AssetStore(), tokenSets: [TokenSet] = []) {
         self.board = board
@@ -34,6 +38,39 @@ public struct ALFAcolorDocument: Equatable, Sendable {
         }
         return out
     }
+}
+
+/// The view of one space as the file keeps it: zoom and offset. The field is an unknown field of the space file,
+/// so an older version keeps it too.
+public struct SpaceView: Equatable, Sendable {
+    /// Key of the field in the space file.
+    static let key = "view"
+
+    public var zoom: Double
+    public var offsetX: Double
+    public var offsetY: Double
+
+    public init(zoom: Double, offsetX: Double, offsetY: Double) {
+        self.zoom = zoom; self.offsetX = offsetX; self.offsetY = offsetY
+    }
+
+    /// A zoom above zero and finite offsets. Other values are dropped on read.
+    public var isValid: Bool { zoom.isFinite && zoom > 0 && offsetX.isFinite && offsetY.isFinite }
+
+    init?(json: JSONValue?) {
+        guard let object = json?.objectValue, let zoom = object["zoom"]?.number,
+              let x = object["x"]?.number, let y = object["y"]?.number else { return nil }
+        self.init(zoom: zoom, offsetX: x, offsetY: y)
+    }
+
+    var json: JSONValue {
+        .object(["zoom": .double(zoom), "x": .double(offsetX), "y": .double(offsetY)])
+    }
+}
+
+/// The key of the active space in the manifest.
+enum ActiveSpace {
+    static let key = "activeSpace"
 }
 
 struct LayerKey: Hashable, Sendable {

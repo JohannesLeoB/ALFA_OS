@@ -4,6 +4,8 @@ public enum SaveState: Equatable, Sendable {
     case saved
     /// There are changes that are not in the file yet.
     case modified
+    /// The document has never been saved.
+    case new
     /// The last save failed.
     case failed
 }
