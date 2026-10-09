@@ -15,6 +15,11 @@ extension BoardStore {
         _ = try changeTokenSets(nameKey: "undo.type.change") { try TypographyStyles.change(name, to: style, in: &$0) }
     }
 
+    /// Sets the licence text of a text style.
+    public func setTextStyleLicense(_ name: String, to text: String) throws {
+        _ = try changeTokenSets(nameKey: "undo.type.license") { try TypographyStyles.setLicense(name, to: text, in: &$0) }
+    }
+
     /// Removes a text style.
     public func removeTextStyle(_ name: String) throws {
         _ = try changeTokenSets(nameKey: "undo.type.remove") { try TypographyStyles.remove(name, from: &$0) }

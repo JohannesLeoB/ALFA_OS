@@ -8,7 +8,7 @@ public enum TypographyStyles {
     /// The token set that holds the text styles.
     public static let setName = TypeRamp.setName
     /// The first part of the path of a text style.
-    static let group = TypeRamp.group
+    public static let group = TypeRamp.group
 
     /// Why a text style or the ramp was refused.
     public enum Failure: Error, Equatable, Sendable {
@@ -71,6 +71,13 @@ public enum TypographyStyles {
         }
         token.value = .typography(style)
         sets[set].tokens[index] = token
+    }
+
+    /// Sets the licence text of a text style, kept as the token description. Empty text removes it.
+    public static func setLicense(_ name: String, to text: String, in sets: inout [TokenSet]) throws {
+        let (set, index) = try locate(name, in: sets)
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        sets[set].tokens[index].description = trimmed.isEmpty ? nil : trimmed
     }
 
     /// Removes a text style. The other styles keep their order.
