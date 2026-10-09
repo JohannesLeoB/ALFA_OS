@@ -53,7 +53,12 @@ public struct AnthropicClient: AIClient {
 
     private func send(_ request: AIRequest, key: String) async throws -> AIResponse {
         let urlRequest = try makeURLRequest(for: request, key: key)
+        let (data, http) = try await perform(urlRequest, key: key)
+        return try AnthropicWire.response(from: data, requestID: http.headerValue("request-id"))
+    }
 
+    /// Sends one request and returns the answer when its status is a success. Every failure is mapped to `AIError`.
+    private func perform(_ urlRequest: URLRequest, key: String) async throws -> (Data, HTTPURLResponse) {
         let data: Data
         let http: HTTPURLResponse
         do {
@@ -69,7 +74,54 @@ public struct AnthropicClient: AIClient {
         guard (200..<300).contains(http.statusCode) else {
             throw AnthropicErrors.error(for: http, body: data, key: key)
         }
-        return try AnthropicWire.response(from: data, requestID: http.headerValue("request-id"))
+        return (data, http)
+    }
+
+    /// The models that the key may use, all pages in order. The same headers as the messages call; no body.
+    /// Without a key nothing is sent.
+    public func listModels() async throws -> [AIModelInfo] {
+        let key = try readKey()
+        var models: [AIModelInfo] = []
+        var after: String?
+        for _ in 0..<Self.maxModelPages {
+            let page = try await modelPage(after: after, key: key)
+            models += page.models
+            guard page.hasMore, let last = page.lastID, !last.isEmpty else { break }
+            after = last
+        }
+        return models
+    }
+
+    /// The most pages of models that one listing reads.
+    static let maxModelPages = 10
+
+    private struct ModelPage {
+        let models: [AIModelInfo]
+        let hasMore: Bool
+        let lastID: String?
+    }
+
+    private func modelPage(after: String?, key: String) async throws -> ModelPage {
+        guard var components = URLComponents(url: baseURL.appendingPathComponent("v1/models"), resolvingAgainstBaseURL: false) else {
+            throw AIError.network("the address of the models list is not valid")
+        }
+        if let after {
+            components.queryItems = [URLQueryItem(name: "after_id", value: after)]
+        }
+        guard let url = components.url else {
+            throw AIError.network("the address of the models list is not valid")
+        }
+        var http = URLRequest(url: url)
+        http.httpMethod = "GET"
+        http.timeoutInterval = Self.requestTimeout
+        http.setValue(key, forHTTPHeaderField: "x-api-key")
+        http.setValue(Self.apiVersion, forHTTPHeaderField: "anthropic-version")
+        let (data, _) = try await perform(http, key: key)
+        guard let wire = try? JSONDecoder().decode(ModelsWire.self, from: data) else {
+            throw AIError.decoding
+        }
+        let models = wire.data.map { AIModelInfo(id: $0.id, displayName: $0.displayName ?? $0.id) }
+        return ModelPage(models: models, hasMore: wire.hasMore ?? false, lastID: wire.lastID)
     }
 
     /// The wait before a retry, or nil when the error is not retried. Only short rate limits and busy answers (529) are.
@@ -126,5 +178,39 @@ extension HTTPURLResponse {
             }
         }
         return nil
+    }
+}
+
+/// One model of the platform: its name for the API and the name for the people who read it.
+public struct AIModelInfo: Sendable, Equatable {
+    public let id: String
+    public let displayName: String
+
+    public init(id: String, displayName: String) {
+        self.id = id
+        self.displayName = displayName
+    }
+}
+
+/// The answer of the models listing, one page.
+private struct ModelsWire: Decodable {
+    let data: [Entry]
+    let hasMore: Bool?
+    let lastID: String?
+
+    enum CodingKeys: String, CodingKey {
+        case data
+        case hasMore = "has_more"
+        case lastID = "last_id"
+    }
+
+    struct Entry: Decodable {
+        let id: String
+        let displayName: String?
+
+        enum CodingKeys: String, CodingKey {
+            case id
+            case displayName = "display_name"
+        }
     }
 }
