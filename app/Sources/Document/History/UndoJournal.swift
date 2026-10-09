@@ -1,28 +1,28 @@
 import Foundation
-import ALFAcolorCore
 
 /// The last undo steps of a document, kept in the package as `history/undo.json`.
 ///
-/// Each step holds the board as it was before the change, so that undo can go back to it after a crash or a restart.
-/// At most `capacity` steps are kept, the newest ones; a file that is larger than `maximumBytes` is not read.
+/// Each step holds the change that undoes it, as the caller defines it (for example an edit of the board).
+/// The journal does not look inside a change. At most `capacity` steps are kept, the newest ones;
+/// a file that is larger than `maximumBytes` is not read.
 /// The journal travels with the document as a carried file: the package code needs no knowledge of it.
-public struct UndoJournal: Equatable, Sendable {
+public struct UndoJournal<Change: Codable & Equatable & Sendable>: Equatable, Sendable {
     /// The most steps that are kept.
-    public static let capacity = 20
+    public static var capacity: Int { 20 }
     /// A journal file above this size is not read at all.
-    public static let maximumBytes = 8 * 1024 * 1024
+    public static var maximumBytes: Int { 64 * 1024 * 1024 }
     /// The path inside the package.
-    public static let path = "history/undo.json"
-    static let formatVersion = 1
+    public static var path: String { "history/undo.json" }
+    static var formatVersion: Int { 2 }
 
-    /// One undo step: its name, when it was made, and the board before it.
+    /// One undo step: its name, when it was made, and the change that undoes it.
     public struct Step: Codable, Equatable, Sendable {
         public var name: String
         public var at: Date
-        public var board: Board
+        public var change: Change
 
-        public init(name: String, at: Date, board: Board) {
-            self.name = name; self.at = at; self.board = board
+        public init(name: String, at: Date, change: Change) {
+            self.name = name; self.at = at; self.change = change
         }
     }
 
@@ -32,6 +32,8 @@ public struct UndoJournal: Equatable, Sendable {
         case unreadable
         /// The file is larger than `maximumBytes`.
         case tooLarge
+        /// The file is a journal of an older format that stored whole boards. Its steps cannot be replayed and are not read.
+        case oldFormat
     }
 
     /// The result of reading a journal file.
@@ -50,11 +52,21 @@ public struct UndoJournal: Equatable, Sendable {
     }
 
     /// Adds a step after the others. The oldest step falls out when there are more than `capacity`.
-    public mutating func record(name: String, at date: Date, before board: Board) {
-        steps.append(Step(name: name, at: date, board: board))
+    public mutating func record(name: String, at date: Date, change: Change) {
+        steps.append(Step(name: name, at: date, change: change))
         if steps.count > Self.capacity {
             steps.removeFirst(steps.count - Self.capacity)
         }
+    }
+
+    /// Removes the newest step, for example when it was undone. Nothing happens when the journal is empty.
+    public mutating func removeNewest() {
+        if !steps.isEmpty { steps.removeLast() }
+    }
+
+    /// Removes all steps.
+    public mutating func removeAll() {
+        steps.removeAll()
     }
 
     // MARK: File
@@ -69,7 +81,13 @@ public struct UndoJournal: Equatable, Sendable {
         guard data.count <= maximumBytes else {
             return ReadResult(journal: UndoJournal(), skipped: 0, problem: .tooLarge)
         }
-        guard let file = try? PackageJSON.decoder().decode(LossyFile.self, from: data), file.version == formatVersion else {
+        guard let file = try? PackageJSON.decoder().decode(LossyFile.self, from: data), let version = file.version else {
+            return ReadResult(journal: UndoJournal(), skipped: 0, problem: .unreadable)
+        }
+        if version == 1 {
+            return ReadResult(journal: UndoJournal(), skipped: 0, problem: .oldFormat)
+        }
+        guard version == formatVersion else {
             return ReadResult(journal: UndoJournal(), skipped: 0, problem: .unreadable)
         }
         let decoded = file.steps.compactMap(\.step)
