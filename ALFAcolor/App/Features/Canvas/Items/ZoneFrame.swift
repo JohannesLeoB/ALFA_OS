@@ -2,8 +2,9 @@ import SwiftUI
 import AppTheme
 import BoardModel
 
-/// The frame of a group: the zone is filled with its full colour, and a band with the title lies on top.
-/// The corners are square. A zone is flat and casts no shadow.
+/// The frame of a group: the zone is filled with its full colour. The title stands large at the top left, inside
+/// the zone, and the header band keeps the count and the lock. The title only shows; it takes no clicks, so the
+/// items inside the zone stay reachable. The corners are square. A zone is flat and casts no shadow.
 struct ZoneFrame: View {
     let presentation: ItemPresentation
     let detail: DetailLevel
@@ -21,7 +22,14 @@ struct ZoneFrame: View {
             Rectangle().strokeBorder(theme.color(.border, scheme), lineWidth: hairline)
             bandView(hairline: hairline)
                 .frame(width: band.w, height: band.h)
+            if detail == .full {
+                title
+                    .padding(theme.space(.s6))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .allowsHitTesting(false)
+            }
         }
+        .clipped()
     }
 
     /// The zone colour of the group. A group without a colour name has the paper colour.
@@ -33,7 +41,6 @@ struct ZoneFrame: View {
     private func bandView(hairline: CGFloat) -> some View {
         HStack(spacing: theme.space(.s2)) {
             if detail == .full {
-                title
                 Spacer(minLength: 0)
                 if case .group(let group) = presentation.body {
                     Text("item.group.count \(group.childCount)")
@@ -57,6 +64,7 @@ struct ZoneFrame: View {
         }
     }
 
+    /// The title in the zone style. It shrinks to fit the width of the zone and never takes clicks.
     private var title: some View {
         Group {
             if presentation.title.isEmpty {
@@ -67,6 +75,7 @@ struct ZoneFrame: View {
         }
         .themeText(theme.text(.zone))
         .lineLimit(1)
+        .minimumScaleFactor(0.25)
         .foregroundStyle(Color(ZoneTint.ink(on: tint)))
     }
 }
