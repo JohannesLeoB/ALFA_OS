@@ -65,7 +65,7 @@ struct RulersOverlay: View {
                 pulled = nil
                 let board = canvas.viewport.boardPoint(canvasX: pointer.x, canvasY: pointer.y)
                 guard let drop = FrameGuides.drop(axis: axis, at: board.x, board.y,
-                                                  in: canvas.store.activeSpace?.items ?? []) else { return }
+                                                  in: canvas.store.activeSpace) else { return }
                 _ = try? canvas.store.perform(guideAdd: drop.guide, frame: drop.frame)
             } else {
                 pulled = (axis, pointer)
@@ -83,7 +83,7 @@ struct RulersOverlay: View {
     private func pullLine(_ axis: GuideAxis, at pointer: CGPoint, thickness: CGFloat) -> some View {
         let viewport = canvas.viewport
         let board = viewport.boardPoint(canvasX: pointer.x, canvasY: pointer.y)
-        let drop = FrameGuides.drop(axis: axis, at: board.x, board.y, in: canvas.store.activeSpace?.items ?? [])
+        let drop = FrameGuides.drop(axis: axis, at: board.x, board.y, in: canvas.store.activeSpace)
         let coral = theme.color(.coral, scheme)
         return ZStack(alignment: .topLeading) {
             Canvas { context, size in

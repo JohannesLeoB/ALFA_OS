@@ -83,10 +83,12 @@ public enum FrameGuides {
         }
     }
 
-    /// Where a guide dropped at a point of the board goes: the topmost frame that holds the point, and the
+    /// Where a guide dropped at a point of the board goes: the topmost visible frame that holds the point, and the
     /// guide in that frame. nil when no frame holds the point; a guide is never made without a frame.
-    public static func drop(axis: GuideAxis, at x: Double, _ y: Double, in items: [Item]) -> GuideDrop? {
+    /// Frames on a hidden layer or hidden themselves take no guide.
+    public static func drop(axis: GuideAxis, at x: Double, _ y: Double, in space: Space?) -> GuideDrop? {
         guard x.isFinite, y.isFinite else { return nil }
+        let items = space?.visibleItems ?? []
         let holding = items.enumerated().filter { _, item in
             if case .frame = item.content { return item.rect.isFinite && item.rect.contains(x: x, y: y) }
             return false

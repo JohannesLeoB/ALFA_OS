@@ -190,11 +190,7 @@ public final class CanvasInteraction {
     }
 
     /// The items that can be seen: not hidden, and not on a hidden layer.
-    var visibleItems: [Item] {
-        guard let space else { return [] }
-        let hiddenLayers = Set(space.layers.filter { !$0.visible }.map(\.id))
-        return space.items.filter { !$0.hidden && !hiddenLayers.contains($0.layerID) && $0.rect.isFinite }
-    }
+    var visibleItems: [Item] { space?.visibleItems ?? [] }
 
     /// The items of the preview layer, drawn above the base layer: the items of a drag, and the item whose text is edited.
     public var previewItems: [Item] {
@@ -481,4 +477,13 @@ public final class CanvasInteraction {
 
 extension Rect {
     func translated(dx: Double, dy: Double) -> Rect { Rect(x: x + dx, y: y + dy, w: w, h: h) }
+}
+
+extension Space {
+    /// The items that can be seen: not hidden, not on a hidden layer, and with a finite rectangle.
+    /// The selection, the snapping, the guides and the drops all use this one rule.
+    public var visibleItems: [Item] {
+        let hiddenLayers = Set(layers.filter { !$0.visible }.map(\.id))
+        return items.filter { !$0.hidden && !hiddenLayers.contains($0.layerID) && $0.rect.isFinite }
+    }
 }

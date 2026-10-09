@@ -67,7 +67,7 @@ struct GuidesLayer: View {
         let viewport = canvas.viewport
         let reach = theme.space(.s2)
         var result: [Placed] = []
-        for item in canvas.store.activeSpace?.items ?? [] where !item.hidden {
+        for item in canvas.store.activeSpace?.visibleItems ?? [] {
             guard case .frame = item.content else { continue }
             let left = (item.rect.x - viewport.offsetX) * viewport.zoom - lead.x
             let right = (item.rect.maxX - viewport.offsetX) * viewport.zoom - lead.x
