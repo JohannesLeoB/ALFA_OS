@@ -59,6 +59,8 @@ public enum WebDocument {
     }
 
     /// A React card: the component is compiled by Babel in the page. Imports and module markers are dropped.
+    /// A card with a `.ts` or `.tsx` file is compiled with the TypeScript and React presets as `card.tsx`
+    /// (see `typedRunner`). Babel needs a file name to run the TypeScript preset.
     static func react(_ files: [String: String]) -> String {
         let source = files.keys.sorted().filter { !$0.lowercased().hasSuffix(".css") }.compactMap { files[$0] }
         var code = stripModules(source.joined(separator: "\n"))
@@ -67,7 +69,8 @@ public enum WebDocument {
             name = String(match.output.1)
         }
         code = code.replacing(/export\s+default\s+function/, with: "function")
-        code = code.replacing(/export\s+(const|function|class)/) { String($0.output.1) }
+        code = code.replacing(/^[ \t]*export[ \t]*\{[^}]*\}[ \t]*;?[ \t]*$/.anchorsMatchLineEndings(), with: "")
+        code = code.replacing(/export\s+(const|function|class|let|var|type|interface|enum)/) { String($0.output.1) }
         if name == nil, let match = code.firstMatch(of: /export\s+default\s+([A-Z][A-Za-z0-9_]*)/) {
             name = String(match.output.1)
         }
@@ -79,11 +82,35 @@ public enum WebDocument {
             ?? "document.body.textContent='No component found: add export default or a capitalised function.';"
         let styles = named(files, ".css").map { "<style>\(escapeScript($0))</style>" }.joined()
         let scripts = reactScripts.map { #"<script src="\#($0)"></script>"# }.joined()
+        let body = "const {useState,useEffect,useRef,useMemo,useCallback,Fragment}=React;\n" + escapeScript(code) + "\n" + render
+        let mount: String
+        if files.keys.contains(where: { $0.lowercased().hasSuffix(".ts") || $0.lowercased().hasSuffix(".tsx") }) {
+            mount = #"<div id="root"></div><script type="text/plain" id="card">"# + body + "</script>" + typedRunner
+        } else {
+            mount = #"<div id="root"></div><script type="text/babel" data-presets="react">"# + body + "</script>"
+        }
         return "<!doctype html><html><head>" + basis + errorScript + #"<script src="\#(tailwindScript)"></script>"# + scripts + styles
-            + #"</head><body><div id="root"></div><script type="text/babel" data-presets="react">"#
-            + "const {useState,useEffect,useRef,useMemo,useCallback,Fragment}=React;\n"
-            + escapeScript(code) + "\n" + render + "</script></body></html>"
+            + "</head><body>" + mount + "</body></html>"
     }
+
+    /// Compiles a TypeScript card with Babel's own call and runs the result. The page's `text/babel` path
+    /// fails on `as const` in this setup, so the call is explicit. Its errors reach the card and the
+    /// error channel with their message.
+    static let typedRunner = #"""
+    <script>(function () {
+      var root = document.getElementById('root');
+      try {
+        var out = Babel.transform(document.getElementById('card').textContent,
+          { presets: ['typescript', 'react'], filename: 'card.tsx' }).code;
+        (0, eval)(out);
+      } catch (e) {
+        var text = String((e && e.message) || e);
+        root.textContent = text;
+        try { window.webkit.messageHandlers.\#(errorChannel).postMessage(text); } catch (x) {}
+      }
+    })();
+    </script>
+    """#
 
     /// Removes import lines and "use client" markers. The page has React as a global.
     static func stripModules(_ code: String) -> String {
