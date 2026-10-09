@@ -26,6 +26,7 @@ struct InspectorPanel: View {
                    let section = KindInspectors.section(for: kind, store: store, items: items) {
                     section
                 }
+                ProvenanceSection(store: store, items: items)
             }
         }
         .formStyle(.grouped)
