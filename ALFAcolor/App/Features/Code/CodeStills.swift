@@ -34,7 +34,7 @@ final class CodeStills {
         defer { running[key] = nil }
         do {
             let image = try await task.value
-            cache.store(image, for: key)
+            await cache.store(image, for: key)
             return image
         } catch {
             if case CardRendererError.network = error {} else { failed[key] = error }
