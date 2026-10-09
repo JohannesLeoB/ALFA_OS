@@ -28,6 +28,20 @@ public enum ProposalBoard {
                 }
             case let .tags(item, tags):
                 return try addTags(tags, to: item, on: store)
+            case let .noteCard(text):
+                let item = Item(title: String(text.prefix(40)), content: .note(text: text), rect: Rect(x: 0, y: 0, w: 240, h: 160))
+                return try insert(item, size: (240, 160), on: store)
+            case let .codeCard(title, language, files):
+                guard let lang = CodeLanguage(rawValue: language) else { return .failed("unknown code language") }
+                let item = Item(title: title, content: .code(language: lang, files: files, previewWidth: nil), rect: Rect(x: 0, y: 0, w: 480, h: 320))
+                return try insert(item, size: (480, 320), on: store)
+            case let .codeVersion(item, language, files):
+                return try addCodeVersion(item, language: language, files: files, on: store)
+            case let .link(url, title):
+                guard let address = URL(string: url) else { return .failed("the address is not valid") }
+                let item = Item(title: title, content: .link(url: address, note: nil), rect: Rect(x: 0, y: 0, w: 240, h: 80),
+                                source: Source(url: address, via: "assistant"))
+                return try insert(item, size: (240, 80), on: store)
             default:
                 return .failed("not translated yet")
             }
@@ -62,6 +76,34 @@ public enum ProposalBoard {
         return changed ? .applied : .failed("nothing changed")
     }
 
+    /// Puts a new item to the right of the room, on the top of the stack, on the first unlocked layer.
+    private static func insert(_ item: Item, size: (w: Double, h: Double), on store: BoardStore) throws -> ApplyOutcome {
+        guard let space = store.activeSpace else { throw CommandError.noActiveSpace }
+        let right = space.items.map { $0.rect.maxX }.max() ?? 0
+        let top = space.items.map(\.z).max() ?? 0
+        let layerID = space.layers.first { !$0.locked }?.id ?? space.layers.first?.id ?? "standard"
+        var placed = item
+        placed.rect = Rect(x: right + 48, y: 0, w: size.w, h: size.h)
+        placed.z = top + 1
+        placed.layerID = layerID
+        return try store.perform(.insert([placed])) ? .applied : .failed("nothing changed")
+    }
+
+    /// Keeps the code the card has now as a version, then sets the new code. The preview width stays.
+    private static func addCodeVersion(_ item: String, language: String, files: [String: String], on store: BoardStore) throws -> ApplyOutcome {
+        guard let lang = CodeLanguage(rawValue: language) else { return .failed("unknown code language") }
+        let id = ItemID(item)
+        guard let space = store.activeSpace, let card = space.items.first(where: { $0.id == id }) else {
+            throw CommandError.unknownItem(id)
+        }
+        let layerLocked = space.layers.first { $0.id == card.layerID }?.locked ?? false
+        guard !card.locked, !layerLocked else { throw BridgeError.itemLocked }
+        guard case let .code(_, _, width) = card.content else { throw VersionError.notCode(id) }
+        _ = try store.keepVersion(of: id)
+        let changed = try store.perform(.setContent(id, .code(language: lang, files: files, previewWidth: width)))
+        return changed ? .applied : .failed("nothing changed")
+    }
+
     // MARK: Reasons
 
     /// The reason that is shown when a change is not applied.
@@ -69,6 +111,7 @@ public enum ProposalBoard {
         if let error = error as? BridgeError { return error.reason }
         if let error = error as? CommandError, case .unknownItem = error { return "the item is not in the current room" }
         if let error = error as? NoteError, error == .tooManyNotes { return "the item has too many notes" }
+        if let error = error as? VersionError, case .notCode = error { return "the item is not a code card" }
         return String(describing: error)
     }
 }
