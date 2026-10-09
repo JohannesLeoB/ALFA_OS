@@ -11,7 +11,7 @@ import Renderers
 final class LabModel {
     /// The result of the last commit, or the reason why it did not run.
     enum Message: Equatable {
-        case empty, notSaved, locked, unchanged, saved, rebuilt
+        case empty, notSaved, locked, unchanged, saved, rebuilt, tooLarge
 
         var key: String {
             switch self {
@@ -21,13 +21,14 @@ final class LabModel {
             case .unchanged: "lab.problem.unchanged"
             case .saved: "lab.saved"
             case .rebuilt: "lab.rebuilt"
+            case .tooLarge: "lab.problem.tooLarge"
             }
         }
 
         /// True for a result that the user must act on. Saved and unchanged are not problems.
         var isProblem: Bool {
             switch self {
-            case .empty, .notSaved, .locked, .rebuilt: true
+            case .empty, .notSaved, .locked, .rebuilt, .tooLarge: true
             case .unchanged, .saved: false
             }
         }
@@ -178,7 +179,22 @@ final class LabModel {
         }
         // The card changed on the board since the lab last saw it, for example after an undo.
         // The old draft must not be written back, so the lab takes the card again.
+        // A draft with unsaved text is kept as a version first, so the rebuild loses nothing.
         if boardDraft != seen {
+            let pending = LabWriteBack.applyProps(session.props, to: LabWriteBack.apply(session.controls, to: session.draft))
+            if pending != seen {
+                let draftCard = pending.card(over: board.card)
+                do {
+                    try store.keepDraftVersion(of: item, language: draftCard.language, files: draftCard.files)
+                } catch VersionError.tooLarge {
+                    message = .tooLarge
+                    return
+                } catch {
+                    message = .notSaved
+                    return
+                }
+                seenVersions = store.document.versions.versions(of: item)
+            }
             session.reset(to: boardDraft)
             seen = boardDraft
             message = .rebuilt

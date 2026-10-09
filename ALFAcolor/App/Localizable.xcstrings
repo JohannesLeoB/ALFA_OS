@@ -3808,6 +3808,17 @@
         }
       }
     },
+    "lab.problem.tooLarge" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Code ist zu groß für eine Version. Nichts wurde geändert."
+          }
+        }
+      }
+    },
     "lab.problem.notSaved" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -7984,6 +7995,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Noch keine Versionen."
+          }
+        }
+      }
+    },
+    "version.reason.draft" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwurf vor Neuaufbau"
           }
         }
       }

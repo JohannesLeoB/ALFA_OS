@@ -10,12 +10,15 @@ public struct CardVersion: Equatable, Sendable {
         case lab
         /// The user kept a version by hand, or restored one, so the code before it is kept.
         case manual
+        /// The lab held a draft that was not saved yet when the card changed, so the draft is kept before the lab rebuilds.
+        case draft
 
         /// The catalog key of the name of the reason.
         public var nameKey: String {
             switch self {
             case .lab: "version.reason.lab"
             case .manual: "version.reason.manual"
+            case .draft: "version.reason.draft"
             }
         }
     }

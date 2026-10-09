@@ -41,6 +41,19 @@ extension BoardStore {
         }
     }
 
+    /// Keeps a lab draft that the card is about to replace, as a version of reason draft. Returns false and changes
+    /// nothing when the draft has the card's own code. A draft larger than one version is refused, so the lab keeps it.
+    @discardableResult
+    public func keepDraftVersion(of item: ItemID, language: CodeLanguage, files: [String: String], at date: Date = Date()) throws -> Bool {
+        let card = try codeCard(item)
+        guard card.language != language || card.files != files else { return false }
+        let draft = CardVersion(date: date, reason: .draft, language: language, files: files)
+        guard CardVersions.accepts(draft) else { throw VersionError.tooLarge }
+        return try changeVersions(nameKey: "undo.version.keep") { _, versions in
+            versions.append(draft, to: item)
+        }
+    }
+
     /// Restores a version: the card gets its code, and the code it had before is kept as a version first.
     /// Returns false when the version already is the current code. A locked card is refused.
     @discardableResult
