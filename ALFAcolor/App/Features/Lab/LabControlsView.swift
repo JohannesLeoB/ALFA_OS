@@ -12,11 +12,12 @@ struct LabControlsView: View {
 
     var body: some View {
         let controls = model.session.controls
+        let props = model.session.props
         VStack(alignment: .leading, spacing: theme.space(.s2)) {
             Text(LocalizedStringKey("lab.controls"))
                 .themeText(theme.text(.caption))
                 .foregroundStyle(theme.color(.textMuted, scheme))
-            if controls.isEmpty {
+            if controls.isEmpty && props.isEmpty {
                 Text(LocalizedStringKey("lab.controls.empty"))
                     .themeText(theme.text(.caption))
                     .foregroundStyle(theme.color(.textMuted, scheme))
@@ -25,6 +26,9 @@ struct LabControlsView: View {
                     HStack(alignment: .top, spacing: theme.space(.s4)) {
                         ForEach(controls) { control in
                             LabControlRow(control: control, model: model)
+                        }
+                        ForEach(props) { prop in
+                            LabPropRow(prop: prop, model: model)
                         }
                     }
                     .padding(theme.space(.s2))
