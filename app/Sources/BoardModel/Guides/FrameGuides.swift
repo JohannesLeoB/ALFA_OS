@@ -68,12 +68,31 @@ public enum FrameGuides {
         }
     }
 
+    /// Where a guide dropped at a point of the board goes: the topmost frame that holds the point, and the
+    /// guide in that frame. nil when no frame holds the point; a guide is never made without a frame.
+    public static func drop(axis: GuideAxis, at x: Double, _ y: Double, in items: [Item]) -> GuideDrop? {
+        guard x.isFinite, y.isFinite else { return nil }
+        let holding = items.enumerated().filter { _, item in
+            if case .frame = item.content { return item.rect.isFinite && item.rect.contains(x: x, y: y) }
+            return false
+        }
+        guard let top = holding.max(by: { ($0.element.z, $0.offset) < ($1.element.z, $1.offset) })?.element else { return nil }
+        let position = axis == .horizontal ? y - top.rect.y : x - top.rect.x
+        return GuideDrop(frame: top.id, guide: Guide(axis: axis, position: position))
+    }
+
     /// The command that sets the guides of a frame. An empty list is stored as nil, the same as no guides.
     private static func replace(_ list: [Guide], on item: Item) -> [Command] {
         guard case .frame(let deviceID, let gridID, let scale, let grid, _) = item.content else { return [] }
         let stored = list.isEmpty ? nil : list
         return [.setContent(item.id, .frame(deviceID: deviceID, gridID: gridID, scale: scale, grid: grid, guides: stored))]
     }
+}
+
+/// A guide that is dropped on a frame: the frame and the guide in its own coordinates.
+public struct GuideDrop: Equatable, Sendable {
+    public var frame: ItemID
+    public var guide: Guide
 }
 
 extension BoardStore {
