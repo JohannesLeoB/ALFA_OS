@@ -72,7 +72,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1007 Tests, App-Bau grün); Abnahme am Bild offen (Spalten, Grundlinien, Ränder, Einrasten, Inspektor, Vorlage); Fragen: Grundlinienfarbe (Vertrag hat kein Blau, nimmt Akzent), Stück verlässt Rahmen behält Ziele bis Loslassen, Vorlage als Kopie oder Verweis, Meldung bei unlesbarer Vorlagendatei |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1037 Tests, App-Bau grün); Abnahme am Bild offen (Lage der Lineale unter der Titelleiste, Ziehen aus dem Lineal, Doppelklick, Liste im Inspektor, Menü Ansicht); Fragen: Einrasten an ausgeblendeten Hilfslinien? Rechtsklick-Menü oder Klick-Umschalten der Einheit? Zeiger an das Paket melden (Ursprung folgt Rahmen unter Zeiger)? Zahlenfelder der Hilfslinien in Lineal-Einheit? |
 | [B-304](briefe/B-304.md) | E3 | Abstände zeigen und Messen | B-202, B-303 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1095 Tests, App-Bau grün); Abnahme am Bild offen (Abstandslinien, Messen-Layer, Menü Ansicht); Messen-Knopf in der Werkzeugleiste fehlt bis B-305; Schalter nur im Speicher bis B-901; Winkel 0 bis 360 Grad gegen den Uhrzeigersinn |
-| [B-305](briefe/B-305.md) | E3 | Werkzeugpalette und Werkzeugoptionen | B-204 | offen |
+| [B-305](briefe/B-305.md) | E3 | Werkzeugpalette und Werkzeugoptionen | B-204 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-401](briefe/B-401.md) | E4 | Renderer-Protokoll und Web-Renderer | B-205 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 615 Tests; WebPage macOS 26, JavaScript auch beim Vorschaubild an); Abnahme am Bild offen |
 | [B-402](briefe/B-402.md) | E4 | Player-Verwaltung und Vorschaubilder | B-401 | offen |
 | [B-403](briefe/B-403.md) | E4 | Code-Karte und Quelltextansicht | B-401 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 662 Tests); Abnahme am Bild offen; ruhen außerhalb des Bildes später (B-209) |
@@ -83,9 +83,9 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-503](briefe/B-503.md) | E5 | Kontrastmatrix | B-501 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1095 Tests, App-Bau grün); Abnahme am Bild offen (Knopf Kontrast prüfen, Blatt, Zelle, Übernehmen, Rückgängig); bei gesättigten Farben senkt der Vorschlag die Sättigung statt der Helligkeit |
 | [B-504](briefe/B-504.md) | E5 | Textstile und Schriftreihe | B-208 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 1095 Tests, App-Bau grün); Abnahme am Bild offen (Blatt Textstile, Schriftwahl, Lizenz, Probe hell und dunkel, Reihe); Fragen: CSS-Namen --type-<stufe>-<eigenschaft> statt --font-body ok? Theme.text liest typography noch nicht; SwiftUI-Ausgabe in B-506; Umbenennen eines Stils fehlt |
 | [B-505](briefe/B-505.md) | E5 | Bausteine mit Varianten | B-205, B-507 | offen |
-| [B-506](briefe/B-506.md) | E5 | Token-Werkstatt und Ausgabe | B-502, B-504 | offen |
+| [B-506](briefe/B-506.md) | E5 | Token-Werkstatt und Ausgabe | B-502, B-504 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-507](briefe/B-507.md) | E5 | Token-Bindung | B-201 | offen |
-| [B-601](briefe/B-601.md) | E6 | Bibliothek, Ordner, Suche | B-201 | offen |
+| [B-601](briefe/B-601.md) | E6 | Bibliothek, Ordner, Suche | B-201 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-602](briefe/B-602.md) | E6 | Herkunft und Lizenz | B-601 | offen |
 | [B-603](briefe/B-603.md) | E6 | Screenshot-Sortierer | B-601 | offen |
 | [B-604](briefe/B-604.md) | E6 | Lesezeichen, Gists, Link-Vorschau | B-207 | offen |
