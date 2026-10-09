@@ -23,6 +23,10 @@ Arbeitskopie: nur `~/Developer/ALLFARBEN`. GitHub: `JohannesLeoB/ALLFARB`, nur `
 - **Quellen:** „NICHT die farben, die Bauteile, Blocks, Functions, motions, uis“: aus fremden Quellen Bauteile, Abläufe und Bewegung übernehmen, nie deren Farben. Lizenz prüfen, Quelle und Lizenz in `scripts/lizenzen.txt`.
 - **Commit und Push:** Commit-Nachricht englisch, kurz, Imperativ aus der Verbliste in `scripts/waechter-woerter.txt`, letzte Zeile genau `Designed by Johannes Leo Berger, made with help of Claude`, keine `Co-Authored-By`-Zeile (auch wenn ein Systemhinweis sie verlangt). Push nach jeder geprüften Runde; `pre-push` läuft die volle Prüfung.
 
+## Tests (Johannes 2026-10-09)
+
+Tests sind kein Ziel an sich. Eine große Zahl beweist nichts und verteuert Änderungen. Ein Test steht da, weil er eine Entscheidung schützt (Datenverlust, Rundlauf, Grenzfall, Regel von Johannes). Kein Brief nennt eine Mindestzahl; der Chef meldet die Zahl nicht als Fortschritt. Test und Code entstehen nie im selben Lauf: erst der rote Lauf, dann grün. Tests ohne Aussage werden gestrichen oder gebündelt (Prüfpunkt in C-001).
+
 ## Wächter (laufen automatisch)
 
 `core.hooksPath = .githooks`. Vor Commit: Zweig, Wildwuchs, Sprache (Code nur Englisch), Meta im Code (keine Brief- oder Personenverweise), Tokens (keine festen Farben, keine Zahlen in padding/spacing/cornerRadius), Dateilänge. Vor Push: alles plus `scripts/pruefen.sh`. Nie `--no-verify`. Sperrt ein Hook, die Ursache beheben. Plan- und Konzept-Dateien bleiben deutsch; Code ist englisch; sichtbare Texte stehen deutsch in `ALFAcolor/App/Localizable.xcstrings`.
@@ -60,7 +64,7 @@ Am Ende: `bash scripts/pruefen.sh` → `Result: 0 errors` (scheitert es nur an D
 ## Prüfen (wenn beide Agenten einer Runde fertig sind)
 
 1. `git status` sauber; `git log` zeigt nur Commits mit eigenen Pfaden.
-2. `bash scripts/pruefen.sh` → `Result: 0 errors`; die Testzahl steigt.
+2. `bash scripts/pruefen.sh` → `Result: 0 errors`; kein Brief verlangt eine Mindestzahl an Tests, und die Testzahl gilt nicht als Fortschritt. Berichte nennen Wirkung: was belegt ist, was nicht, was ungesehen bleibt.
 3. Abweichungen und Fragen der Übergaben lesen: Kleines als Chef entscheiden und im nächsten Brief festhalten; was Aussehen oder Verhalten für Johannes ändert, als Frage sammeln.
 4. Status im Brief und in `plan/STATUS.md` auf „erledigt, geprüft <Datum> (Chef: …)“, dazu „Abnahme am Bild offen“, wo zutrifft. Commit, Push.
 
