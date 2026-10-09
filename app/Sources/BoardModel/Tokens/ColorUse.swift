@@ -11,6 +11,12 @@ public enum ColorUse {
         return Set(space.items.filter { uses($0.content, target) }.map(\.id))
     }
 
+    /// The items of the space that follow the colour field `name`: a bound fill, stroke or swatch.
+    public static func items(boundTo name: String, in space: Space?) -> Set<ItemID> {
+        guard let space else { return [] }
+        return Set(space.items.filter { ColorBinding.isBound($0, to: name) }.map(\.id))
+    }
+
     static func uses(_ content: Content, _ key: String) -> Bool {
         switch content {
         case .swatch(let hex, _):

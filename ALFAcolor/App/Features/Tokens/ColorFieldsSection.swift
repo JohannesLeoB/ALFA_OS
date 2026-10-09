@@ -112,7 +112,8 @@ struct ColorFieldsSection: View {
         Button("tokens.menu.apply") { apply(field) }
             .disabled(store.selection.isEmpty)
         Button("tokens.menu.whereUsed") {
-            store.select(ColorUse.items(using: field.color, in: store.activeSpace))
+            store.select(ColorUse.items(using: field.color, in: store.activeSpace)
+                .union(ColorUse.items(boundTo: field.name, in: store.activeSpace)))
         }
         Divider()
         Button("tokens.menu.delete", role: .destructive) { remove(field.name) }
