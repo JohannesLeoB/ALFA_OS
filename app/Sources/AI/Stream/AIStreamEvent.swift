@@ -10,7 +10,7 @@ public enum AIStreamEvent: Sendable, Equatable {
     /// A block that arrives whole when it starts, such as the result of a web search.
     case rawBlock(index: Int, block: JSONValue)
     case blockStop(index: Int)
-    case messageDelta(stopReason: String?, usage: AIUsage?)
+    case messageDelta(stopReason: AIStopReason?, usage: AIUsage?)
     case messageStop
     /// The stream reported an error. It ends the stream.
     case error(AIError)
@@ -44,7 +44,8 @@ enum AIStreamDecoder {
             return .blockStop(index: index)
         case "message_delta":
             let usageValue = json["usage"].map { usage($0) }
-            return .messageDelta(stopReason: json["delta"]?["stop_reason"]?.string, usage: usageValue)
+            let reason = json["delta"]?["stop_reason"]?.string.map(AIStopReason.init(wire:))
+            return .messageDelta(stopReason: reason, usage: usageValue)
         case "message_stop":
             return .messageStop
         case "error":

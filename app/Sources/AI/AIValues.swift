@@ -59,10 +59,89 @@ public struct AIMessage: Sendable, Equatable {
     }
 }
 
-/// One part of a message: text or an image.
+/// One part of a message. Blocks of an answer are kept as they came, so that they can go back unchanged.
 public enum AIBlock: Sendable, Equatable {
+    /// Text that the app sends.
     case text(String)
+    /// An image that the app sends.
     case image(AIImage)
+    /// A call of a tool by the model. The app answers it with `toolResult`.
+    case toolUse(id: String, name: String, input: JSONValue)
+    /// The answer of the app to a call of a tool.
+    case toolResult(toolUseID: String, content: String, isError: Bool)
+    /// A tool that the platform ran itself, such as the web search.
+    case serverToolUse(id: String, name: String, input: JSONValue)
+    /// The result of a web search. Its content goes back exactly as the platform sent it.
+    case webSearchToolResult(toolUseID: String, content: JSONValue)
+    /// Any other block as the platform wrote it, for example text with citations or thinking.
+    case raw(JSONValue)
+}
+
+extension AIBlock {
+    /// The block of an answer, read from its JSON. Only the kinds that the app acts on get their own case.
+    init(wire json: JSONValue) {
+        switch json["type"]?.string {
+        case "tool_use"?:
+            if let id = json["id"]?.string, let name = json["name"]?.string, let input = json["input"] {
+                self = .toolUse(id: id, name: name, input: input)
+            } else {
+                self = .raw(json)
+            }
+        case "server_tool_use"?:
+            if let id = json["id"]?.string, let name = json["name"]?.string, let input = json["input"] {
+                self = .serverToolUse(id: id, name: name, input: input)
+            } else {
+                self = .raw(json)
+            }
+        case "web_search_tool_result"?:
+            self = .webSearchToolResult(toolUseID: json["tool_use_id"]?.string ?? "", content: json["content"] ?? .null)
+        default:
+            self = .raw(json)
+        }
+    }
+}
+
+/// Why the platform stopped its answer.
+public enum AIStopReason: Sendable, Equatable {
+    case endTurn
+    case maxTokens
+    case toolUse
+    /// The platform paused a long turn. The answer goes back unchanged, and the platform continues it.
+    case pauseTurn
+    case refusal
+    /// A reason that this version does not know. The text is kept.
+    case unknown(String)
+
+    init(wire text: String) {
+        switch text {
+        case "end_turn": self = .endTurn
+        case "max_tokens": self = .maxTokens
+        case "tool_use": self = .toolUse
+        case "pause_turn": self = .pauseTurn
+        case "refusal": self = .refusal
+        default: self = .unknown(text)
+        }
+    }
+}
+
+/// A source that the answer cites: where it is, its title, and the passage that was cited.
+public struct AICitation: Sendable, Equatable {
+    public let url: String
+    public let title: String
+    public let citedText: String
+
+    public init(url: String, title: String, citedText: String) {
+        self.url = url
+        self.title = title
+        self.citedText = citedText
+    }
+
+    /// A citation as the platform writes it inside a text block.
+    init(wire json: JSONValue) {
+        url = json["url"]?.string ?? ""
+        title = json["title"]?.string ?? json["document_title"]?.string ?? ""
+        citedText = json["cited_text"]?.string ?? ""
+    }
 }
 
 /// The image formats that the API takes.
@@ -88,20 +167,56 @@ public struct AIImage: Sendable, Equatable {
     }
 }
 
-/// The answer of the API, reduced to what the app uses.
+/// The answer of the API. Its blocks are kept as they came, so that they can go back unchanged in the next request.
 public struct AIResponse: Sendable, Equatable {
-    public var text: String
-    public var stopReason: String?
+    public var blocks: [AIBlock]
+    public var stopReason: AIStopReason?
     public var usage: AIUsage
     public var model: String
     public var requestID: String?
 
-    public init(text: String, stopReason: String?, usage: AIUsage, model: String, requestID: String?) {
-        self.text = text
+    public init(blocks: [AIBlock], stopReason: AIStopReason?, usage: AIUsage, model: String, requestID: String?) {
+        self.blocks = blocks
         self.stopReason = stopReason
         self.usage = usage
         self.model = model
         self.requestID = requestID
+    }
+
+    /// An answer with plain text only, as the tests build it.
+    public init(text: String, stopReason: AIStopReason?, usage: AIUsage, model: String, requestID: String?) {
+        let blocks: [AIBlock] = text.isEmpty
+            ? []
+            : [.raw(.object(["type": .string("text"), "text": .string(text)]))]
+        self.init(blocks: blocks, stopReason: stopReason, usage: usage, model: model, requestID: requestID)
+    }
+
+    /// The text of the answer: the text blocks, in order.
+    public var text: String {
+        blocks.compactMap { block -> String? in
+            guard case let .raw(json) = block, json["type"]?.string == "text" else { return nil }
+            return json["text"]?.string
+        }
+        .joined()
+    }
+
+    /// The calls of tools, in the order of the answer.
+    public var toolCalls: [AIToolCall] {
+        blocks.compactMap { block -> AIToolCall? in
+            guard case let .toolUse(id, name, input) = block else { return nil }
+            return AIToolCall(id: id, name: name, input: input)
+        }
+    }
+
+    /// The sources that the text blocks cite, in the order of the answer.
+    public var citations: [AICitation] {
+        blocks.flatMap { block -> [AICitation] in
+            guard case let .raw(json) = block, json["type"]?.string == "text",
+                  case let .array(items)? = json["citations"] else {
+                return []
+            }
+            return items.map { AICitation(wire: $0) }
+        }
     }
 }
 

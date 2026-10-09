@@ -11,7 +11,10 @@ enum AnthropicWire {
             for case let .image(image) in message.blocks {
                 try AIImageRules.check(image)
             }
-            messages.append(WireMessage(message))
+            messages.append(WireMessage(
+                role: message.role.rawValue,
+                content: try message.blocks.map(wireValue(for:))
+            ))
         }
         let wire = WireRequest(
             model: request.model,
@@ -40,18 +43,57 @@ enum AnthropicWire {
         }
     }
 
-    /// Reads the text of an answer. Blocks other than text (for example thinking or tool use) are skipped.
+    /// The JSON of one block of a message. Blocks of an answer go back in their own form.
+    static func wireValue(for block: AIBlock) throws -> JSONValue {
+        switch block {
+        case let .text(text):
+            return .object(["type": .string("text"), "text": .string(text)])
+        case let .image(image):
+            return .object([
+                "type": .string("image"),
+                "source": .object([
+                    "type": .string("base64"),
+                    "media_type": .string(image.mediaType.rawValue),
+                    "data": .string(image.data.base64EncodedString()),
+                ]),
+            ])
+        case let .toolUse(id, name, input):
+            return .object(["type": .string("tool_use"), "id": .string(id), "name": .string(name), "input": input])
+        case let .toolResult(toolUseID, content, isError):
+            var object: [String: JSONValue] = [
+                "type": .string("tool_result"),
+                "tool_use_id": .string(toolUseID),
+                "content": .string(content),
+            ]
+            if isError {
+                object["is_error"] = .bool(true)
+            }
+            return .object(object)
+        case let .serverToolUse(id, name, input):
+            return .object(["type": .string("server_tool_use"), "id": .string(id), "name": .string(name), "input": input])
+        case let .webSearchToolResult(toolUseID, content):
+            return .object([
+                "type": .string("web_search_tool_result"),
+                "tool_use_id": .string(toolUseID),
+                "content": content,
+            ])
+        case let .raw(json):
+            return json
+        }
+    }
+
+    /// Reads an answer: its blocks as they came, the stop reason and the token counts.
     static func response(from data: Data, requestID: String?) throws -> AIResponse {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         guard let wire = try? decoder.decode(WireResponse.self, from: data) else {
             throw AIError.decoding
         }
+        // The blocks are read without key conversion, so that their keys stay as the platform wrote them.
+        guard let content = try? JSONDecoder().decode(WireContent.self, from: data) else {
+            throw AIError.decoding
+        }
         let breakdown = try? JSONDecoder().decode(WireCacheBreakdown.self, from: data)
-        let text = wire.content
-            .filter { $0.type == "text" }
-            .compactMap(\.text)
-            .joined()
         let usage = AIUsage(
             inputTokens: wire.usage?.inputTokens ?? 0,
             outputTokens: wire.usage?.outputTokens ?? 0,
@@ -61,8 +103,8 @@ enum AnthropicWire {
             cacheWrite1hTokens: breakdown?.usage?.cacheCreation?.ephemeral1h ?? 0
         )
         return AIResponse(
-            text: text,
-            stopReason: wire.stopReason,
+            blocks: content.content.map(AIBlock.init(wire:)),
+            stopReason: wire.stopReason.map(AIStopReason.init(wire:)),
             usage: usage,
             model: wire.model ?? "",
             requestID: requestID ?? wire.id
@@ -88,54 +130,19 @@ struct WireCacheControl: Encodable, Equatable {
 
 private struct WireMessage: Encodable {
     let role: String
-    let content: [WireBlock]
-
-    init(_ message: AIMessage) {
-        role = message.role.rawValue
-        content = message.blocks.map(WireBlock.init)
-    }
-}
-
-private struct WireBlock: Encodable {
-    let type: String
-    let text: String?
-    let source: WireSource?
-
-    init(_ block: AIBlock) {
-        switch block {
-        case let .text(text):
-            type = "text"
-            self.text = text
-            source = nil
-        case let .image(image):
-            type = "image"
-            text = nil
-            source = WireSource(
-                type: "base64",
-                mediaType: image.mediaType.rawValue,
-                data: image.data.base64EncodedString()
-            )
-        }
-    }
-}
-
-private struct WireSource: Encodable {
-    let type: String
-    let mediaType: String
-    let data: String
+    let content: [JSONValue]
 }
 
 private struct WireResponse: Decodable {
     let id: String?
     let model: String?
-    let content: [WireContent]
     let stopReason: String?
     let usage: WireUsage?
 }
 
+/// The blocks of an answer, as they came.
 private struct WireContent: Decodable {
-    let type: String?
-    let text: String?
+    let content: [JSONValue]
 }
 
 private struct WireUsage: Decodable {
@@ -145,7 +152,6 @@ private struct WireUsage: Decodable {
     let cacheReadInputTokens: Int?
 }
 
-/// The cache writes of one call, split by time to live.
 /// The cache writes of one answer, split by time to live. It is read by a decoder without key conversion,
 /// so that the snake case keys of the answer match exactly.
 private struct WireCacheBreakdown: Decodable {

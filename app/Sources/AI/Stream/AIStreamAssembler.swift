@@ -16,7 +16,7 @@ public struct AIStreamAssembler: Sendable {
     private var id = ""
     private var model = ""
     private var usage = AIUsage()
-    private var stopReason: String?
+    private var stopReason: AIStopReason?
 
     public init() {}
 
@@ -69,25 +69,13 @@ public struct AIStreamAssembler: Sendable {
 
     /// The tool calls that are complete, in the order of the answer.
     public var toolCalls: [AIToolCall] {
-        blocks.compactMap { block in
-            guard block["type"]?.string == "tool_use",
-                  let id = block["id"]?.string,
-                  let name = block["name"]?.string,
-                  let input = block["input"] else {
-                return nil
-            }
-            return AIToolCall(id: id, name: name, input: input)
-        }
+        response.toolCalls
     }
 
     /// The answer as far as it has come. Text of an open block is included; an open tool call is not.
     public var response: AIResponse {
-        let text = blocks
-            .filter { $0["type"]?.string == "text" }
-            .compactMap { $0["text"]?.string }
-            .joined()
-        return AIResponse(
-            text: text,
+        AIResponse(
+            blocks: blocks.map(AIBlock.init(wire:)),
             stopReason: stopReason,
             usage: usage,
             model: model,
