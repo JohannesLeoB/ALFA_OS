@@ -114,6 +114,7 @@ SEAM_RULES = {
     "ColorLab": {"mode": "only", "frameworks": {"CoreGraphics"}, "packages": {"Tokens"}},
     "AppTheme": {"mode": "except", "frameworks": {"AppKit"}},   # SwiftUI and WebKit allowed
     "Renderers": {"mode": "except", "frameworks": {"AppKit"}},  # SwiftUI and WebKit allowed
+    "Motion": {"mode": "only", "frameworks": {"CoreGraphics"}, "packages": set()},
     "BoardModel": {"mode": "only", "frameworks": {"Observation"}, "packages": {"ALFAcolorCore", "Geometry", "Document", "Tokens"}},
 }
 DEFAULT_RULE = {"mode": "except", "frameworks": {"SwiftUI", "AppKit"}}
