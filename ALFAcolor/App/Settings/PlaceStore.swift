@@ -105,6 +105,12 @@ final class PlaceStore {
         try save()
     }
 
+    /// Moves places in the list, as a list drop reports it. The file is written at once.
+    func reorder(from source: IndexSet, to destination: Int) throws {
+        registry.reorder(from: source, to: destination)
+        try save()
+    }
+
     func setKind(_ kind: PlaceKind, for place: Place) throws {
         try registry.setKind(kind, for: place.id)
         try save()

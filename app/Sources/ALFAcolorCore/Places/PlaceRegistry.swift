@@ -108,6 +108,16 @@ public struct PlaceRegistry: Codable, Equatable, Sendable {
         places.insert(place, at: position)
     }
 
+    /// Moves the places at the source positions to the destination, in the way a list drop reports it:
+    /// the destination is a position in the list before the move. The other places keep their order.
+    public mutating func reorder(from source: IndexSet, to destination: Int) {
+        let moved = source.compactMap { places.indices.contains($0) ? places[$0] : nil }
+        let before = source.filter { $0 < destination }.count
+        var rest = places.indices.filter { !source.contains($0) }.map { places[$0] }
+        rest.insert(contentsOf: moved, at: min(max(destination - before, 0), rest.count))
+        places = rest
+    }
+
     /// Gives a place a new location, for example after the user chose the folder again. The id and roles stay.
     public mutating func relocate(_ id: UUID, path: String, bookmark: Data?) throws {
         let index = try indexOf(id)

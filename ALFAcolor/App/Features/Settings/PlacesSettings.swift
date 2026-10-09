@@ -24,6 +24,7 @@ struct PlacesSettings: View {
                 ForEach(store.places) { place in
                     placeRow(place)
                 }
+                .onMove { source, destination in perform { try store.reorder(from: source, to: destination) } }
                 Button("places.add") { addPlace() }
             }
             Section("places.appFolder.title") {
@@ -42,7 +43,7 @@ struct PlacesSettings: View {
         let access = store.access(to: place)
         return VStack(alignment: .leading, spacing: theme.space(.s2)) {
             HStack {
-                Text(verbatim: place.name).themeText(theme.text(.control))
+                PlaceNameField(place: place) { name in perform { try store.rename(place, to: name) } }
                 Spacer()
                 Text(LocalizedStringKey(stateKey(access)))
                     .themeText(theme.text(.caption))

@@ -9285,6 +9285,17 @@
           }
         }
       }
+    },
+    "places.name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
