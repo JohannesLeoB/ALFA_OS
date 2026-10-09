@@ -18,6 +18,14 @@ public enum LabWriteBack {
         return result
     }
 
+    /// The draft with the changed property values written as the new defaults of its component. Only React drafts have props.
+    public static func applyProps(_ props: [LabProp], to draft: LabDraft) -> LabDraft {
+        guard draft.art == .react else { return draft }
+        var result = draft
+        result.script = LabPropsReader.write(props, to: draft.script)
+        return result
+    }
+
     /// Replaces the value of the first declaration of `name` in `text`. nil when there is none.
     /// A name that only ends another name does not match.
     static func replaceFirst(_ name: String, with value: String, in text: String) -> String? {

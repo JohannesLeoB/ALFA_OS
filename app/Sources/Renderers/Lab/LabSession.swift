@@ -89,11 +89,12 @@ public struct LabSession: Equatable, Sendable {
     /// The controls then start again from the saved values.
     @discardableResult
     public mutating func commit(over board: LabDraft) -> LabDraft {
-        let saved = LabWriteBack.apply(controls, to: draft)
+        let saved = LabWriteBack.applyProps(props, to: LabWriteBack.apply(controls, to: draft))
         versions.save(board)
         versions.save(saved)
         draft = saved
         controls = LabControls.read(saved)
+        props = LabSession.readProps(saved)
         return saved
     }
 

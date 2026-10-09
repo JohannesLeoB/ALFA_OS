@@ -20,6 +20,37 @@ public enum LabPropsReader {
         return result
     }
 
+    /// The source with the changed values written as the new defaults of their properties. Only the literal of each
+    /// default changes; the rest of the code stays as it is. A property that the component does not destructure stays.
+    public static func write(_ props: [LabProp], to source: String) -> String {
+        props.filter(\.isChanged).reduce(source) { text, prop in
+            replaceDefault(of: prop, in: text)
+        }
+    }
+
+    /// Replaces the literal of the default of one property in the parameter list of the component.
+    static func replaceDefault(of prop: LabProp, in source: String) -> String {
+        guard let component = WebDocument.componentName(in: source),
+              let open = Parameters.openParenthesis(of: component, in: source) else { return source }
+        let chars = Array(source)
+        guard let close = Source.closing(chars, at: open) else { return source }
+        let inside = String(chars[(open + 1)..<close])
+        let pattern = "(?<![A-Za-z0-9_$.])\\b\(prop.name)\\s*=\\s*(-?\\d+(?:\\.\\d+)?|true|false|\"[^\"\\n]*\"|'[^'\\n]*')"
+        guard let expression = try? NSRegularExpression(pattern: pattern),
+              let match = expression.firstMatch(in: inside, range: NSRange(inside.startIndex..., in: inside)),
+              let literal = Range(match.range(at: 1), in: inside) else { return source }
+        let start = open + 1 + inside.distance(from: inside.startIndex, to: literal.lowerBound)
+        let end = open + 1 + inside.distance(from: inside.startIndex, to: literal.upperBound)
+        let quote = chars[start] == "'" ? "'" : "\""
+        let replacement: String
+        switch prop.value {
+        case .number(let number): replacement = LabNumber.text(number)
+        case .flag(let flag): replacement = flag ? "true" : "false"
+        case .text(let text): replacement = quote + text + quote
+        }
+        return String(chars[0..<start]) + replacement + String(chars[end...])
+    }
+
     // MARK: - Properties
 
     /// One property with its default and its declared type. nil when it has no default that the lab can read.
