@@ -71,6 +71,7 @@ struct ColorFieldsSection: View {
             ForEach(fields) { field in
                 row(field)
             }
+            SuggestNamesButton(store: store)
             if let notice {
                 Text(LocalizedStringKey(notice))
                     .themeText(theme.text(.caption))

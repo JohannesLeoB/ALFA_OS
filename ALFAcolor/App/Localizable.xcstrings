@@ -8922,6 +8922,50 @@
           }
         }
       }
+    },
+    "ki.names.suggest" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Namen vorschlagen"
+          }
+        }
+      }
+    },
+    "ki.names.none" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine unbenannten Farben."
+          }
+        }
+      }
+    },
+    "ki.names.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorschlag für die Namen"
+          }
+        }
+      }
+    },
+    "ki.names.accept" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annehmen"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
