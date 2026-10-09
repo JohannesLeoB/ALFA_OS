@@ -170,6 +170,7 @@ public enum ShortcutTable {
         command("view.inspector", .view, "0", [.option, .command]),
         command("view.allPalettes", .view, separator: true),
         command("view.statusBar", .view),
+        command("view.blobMode", .view),
         command("view.toolbar", .view, "T", [.option, .command], preset: .macOS, origin: .system, separator: true),
         command("view.toolOptions", .view),
         command("view.zoomIn", .view, "=", [.command], separator: true),
