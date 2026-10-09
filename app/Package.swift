@@ -7,7 +7,7 @@ let package = Package(
     name: "ALFAcolor",
     platforms: [.macOS(.v15)],
     products: [
-        .library(name: "ALFAcolorKit", targets: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab", "AppTheme", "Document", "BoardModel", "Thumbnails", "Importers"])
+        .library(name: "ALFAcolorKit", targets: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab", "AppTheme", "Document", "BoardModel", "Thumbnails", "Importers", "Renderers"])
     ],
     targets: [
         .target(name: "ALFAcolorCore"),
@@ -19,11 +19,13 @@ let package = Package(
         .target(name: "BoardModel", dependencies: ["ALFAcolorCore", "Geometry", "Document"]),
         .target(name: "Thumbnails", dependencies: ["Document"]),
         .target(name: "Importers", dependencies: ["ALFAcolorCore", "Document", "BoardModel"]),
+        .target(name: "Renderers", dependencies: ["ALFAcolorCore"]),
         .testTarget(name: "ALFAcolorCoreTests", dependencies: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab"]),
         .testTarget(name: "AppThemeTests", dependencies: ["AppTheme", "Tokens"]),
         .testTarget(name: "DocumentTests", dependencies: ["Document", "ALFAcolorCore", "Tokens"], exclude: ["Fixtures"]),
         .testTarget(name: "BoardModelTests", dependencies: ["BoardModel", "ALFAcolorCore", "Document", "Geometry"]),
         .testTarget(name: "ThumbnailsTests", dependencies: ["Thumbnails", "Document"]),
-        .testTarget(name: "ImportersTests", dependencies: ["Importers", "ALFAcolorCore", "Document", "BoardModel"])
+        .testTarget(name: "ImportersTests", dependencies: ["Importers", "ALFAcolorCore", "Document", "BoardModel"]),
+        .testTarget(name: "RenderersTests", dependencies: ["Renderers", "ALFAcolorCore"])
     ]
 )
