@@ -2246,6 +2246,61 @@
         }
       }
     },
+    "layer.show" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene einblenden"
+          }
+        }
+      }
+    },
+    "layer.hide" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene ausblenden"
+          }
+        }
+      }
+    },
+    "layer.lock" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene sperren"
+          }
+        }
+      }
+    },
+    "layer.unlock" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene entsperren"
+          }
+        }
+      }
+    },
+    "layer.moveSelection" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswahl auf diese Ebene legen"
+          }
+        }
+      }
+    },
     "package.kind.layer" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2598,6 +2653,171 @@
         }
       }
     },
+    "room.new" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neuer Raum"
+          }
+        }
+      }
+    },
+    "room.defaultName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raum"
+          }
+        }
+      }
+    },
+    "room.sidebarHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ab sieben Räumen stehen sie in der Seitenleiste."
+          }
+        }
+      }
+    },
+    "room.rename" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umbenennen…"
+          }
+        }
+      }
+    },
+    "room.rename.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raum umbenennen"
+          }
+        }
+      }
+    },
+    "room.rename.confirm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umbenennen"
+          }
+        }
+      }
+    },
+    "room.name" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
+    },
+    "room.cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        }
+      }
+    },
+    "room.close" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raum schließen…"
+          }
+        }
+      }
+    },
+    "room.close.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raum schließen?"
+          }
+        }
+      }
+    },
+    "room.close.action" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen"
+          }
+        }
+      }
+    },
+    "room.close.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Stücke des Raums gehen mit ihm weg. ⌘Z holt sie zurück."
+          }
+        }
+      }
+    },
+    "room.moveLeft" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach links"
+          }
+        }
+      }
+    },
+    "room.moveRight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach rechts"
+          }
+        }
+      }
+    },
+    "room.moveSelection" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswahl hierher verschieben"
+          }
+        }
+      }
+    },
     "room.colors" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2664,17 +2884,6 @@
         }
       }
     },
-    "sidebar.layer1" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ebene 1"
-          }
-        }
-      }
-    },
     "sidebar.layers" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2704,6 +2913,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Noch keiner"
+          }
+        }
+      }
+    },
+    "sidebar.rooms" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Räume"
           }
         }
       }
@@ -2961,17 +3181,6 @@
         }
       }
     },
-    "toolbar.newSpace" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Neuer Raum"
-          }
-        }
-      }
-    },
     "toolbar.share" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2979,28 +3188,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Teilen"
-          }
-        }
-      }
-    },
-    "toolbar.space" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Raum"
-          }
-        }
-      }
-    },
-    "toolbar.switchSpace.help" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Raum wechseln"
           }
         }
       }
@@ -3188,6 +3375,94 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einfügen"
+          }
+        }
+      }
+    },
+    "undo.space.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raum anlegen"
+          }
+        }
+      }
+    },
+    "undo.space.rename" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raum umbenennen"
+          }
+        }
+      }
+    },
+    "undo.space.move" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raum verschieben"
+          }
+        }
+      }
+    },
+    "undo.space.remove" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raum schließen"
+          }
+        }
+      }
+    },
+    "undo.space.moveItems" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stücke in anderen Raum verschieben"
+          }
+        }
+      }
+    },
+    "undo.layer.visible" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene ein- oder ausblenden"
+          }
+        }
+      }
+    },
+    "undo.layer.locked" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene sperren oder entsperren"
+          }
+        }
+      }
+    },
+    "undo.layer.move" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebene verschieben"
           }
         }
       }

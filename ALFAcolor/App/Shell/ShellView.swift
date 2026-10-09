@@ -25,7 +25,7 @@ struct ShellView: View {
 
     var body: some View {
         NavigationSplitView(columnVisibility: $shell.columnVisibility) {
-            SidebarView()
+            SidebarView(store: canvas.store)
         } detail: {
             VStack(spacing: 0) {
                 CanvasSurface(controller: canvas, interaction: interaction, importer: importer,
@@ -45,7 +45,7 @@ struct ShellView: View {
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
             }
         }
-        .toolbar { ShellToolbar(shell: shell) }
+        .toolbar { ShellToolbar(shell: shell, store: canvas.store) }
         .focusedSceneValue(\.shell, shell)
         .focusedSceneValue(\.canvas, canvas)
         .focusedSceneValue(\.interaction, interaction)

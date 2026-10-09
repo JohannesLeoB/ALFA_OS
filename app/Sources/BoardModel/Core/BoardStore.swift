@@ -91,6 +91,36 @@ public final class BoardStore {
         return true
     }
 
+    // MARK: Board changes (rooms, layers)
+
+    /// Changes the board as a whole, for example rooms, layers or items moved between rooms.
+    /// The change runs on a copy: when it throws, nothing changes. It is one undo step, named by `nameKey`.
+    /// Returns false when nothing changed.
+    @discardableResult
+    public func changeBoard(nameKey: String, _ change: (inout Board) throws -> Void) throws -> Bool {
+        var trial = document.board
+        try change(&trial)
+        guard trial != document.board else { return false }
+        swapBoard(to: trial, nameKey: nameKey)
+        return true
+    }
+
+    /// Puts another board in place. The active room stays if it still exists, else the first room is active.
+    private func swapBoard(to target: Board, nameKey: String) {
+        let previous = document.board
+        document.board = target
+        if !target.spaces.contains(where: { $0.id == activeSpaceID }) { activeSpaceID = target.spaces.first?.id }
+        selection = selection.intersection(Set(activeSpace?.items.map(\.id) ?? []))
+        didChangeDocument()
+        let inHistory = undoManager.isUndoing || undoManager.isRedoing
+        if !inHistory { undoManager.beginUndoGrouping() }
+        undoManager.registerUndo(withTarget: self) { store in
+            MainActor.assumeIsolated { store.swapBoard(to: previous, nameKey: nameKey) }
+        }
+        undoManager.setActionName(Command.localized(nameKey))
+        if !inHistory { undoManager.endUndoGrouping() }
+    }
+
     // MARK: Undo
 
     /// Uses the undo manager of the window from now on. Steps in the previous manager stay there and no longer reach this store.

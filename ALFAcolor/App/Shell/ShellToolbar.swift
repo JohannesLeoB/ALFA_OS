@@ -1,21 +1,15 @@
 import SwiftUI
+import BoardModel
 
-/// Toolbar. All buttons are placeholders without effect.
-/// Groups: space tabs on the left, add to token workshop in the middle, share, export and inspector on the right.
+/// Toolbar. Most buttons are placeholders without effect.
+/// Groups: room tabs on the left, add to token workshop in the middle, share, export and inspector on the right.
 struct ShellToolbar: ToolbarContent {
     @Bindable var shell: ShellState
+    var store: BoardStore
 
     var body: some ToolbarContent {
         ToolbarItemGroup(placement: .navigation) {
-            Picker("toolbar.space", selection: $shell.selectedRoom) {
-                ForEach(PlaceholderRoom.allCases) { room in
-                    Text(LocalizedStringKey(room.rawValue)).tag(room)
-                }
-            }
-            .pickerStyle(.segmented)
-            .help("toolbar.switchSpace.help")
-            Button {} label: { Label("toolbar.newSpace", systemImage: "plus") }
-                .help("toolbar.newSpace")
+            SpaceTabBar(store: store)
         }
 
         ToolbarItemGroup(placement: .principal) {
