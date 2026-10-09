@@ -1,5 +1,6 @@
 import Foundation
 import ALFAcolorCore
+import Geometry
 
 /// One tick of a ruler: where it lies on the board, its value in the unit of the ruler, and whether it is a major tick.
 public struct RulerTick: Equatable, Sendable {
@@ -48,11 +49,16 @@ public struct RulerScale: Equatable, Sendable {
     /// The ticks between two distances from the origin, in points. The ticks are sorted from `start` to `end`;
     /// a reversed range gives no ticks. More than `tickLimit` ticks give none.
     public func ticks(from start: Double, to end: Double) -> [RulerTick] {
+        guard start.isFinite, end.isFinite else { return [] }
         let low = unit.value(points: min(start, end), scale: scale)
         let high = unit.value(points: max(start, end), scale: scale)
-        guard low.isFinite, high.isFinite, minor > 0, (high - low) / minor <= Double(Self.tickLimit) else { return [] }
-        let first = Int((low / minor).rounded(.down))
-        let last = Int((high / minor).rounded(.up))
+        guard low.isFinite, high.isFinite, minor > 0 else { return [] }
+        let firstIndex = (low / minor).rounded(.down)
+        let lastIndex = (high / minor).rounded(.up)
+        // An index beyond the integer limit is not counted: the ruler draws nothing there, and nothing traps.
+        guard abs(firstIndex) <= NumberLimit.integer, abs(lastIndex) <= NumberLimit.integer,
+              lastIndex - firstIndex <= Double(Self.tickLimit) else { return [] }
+        let first = firstIndex.clampedInt, last = lastIndex.clampedInt
         guard first <= last else { return [] }
         return (first...last).map { index in
             let value = Double(index) * minor
