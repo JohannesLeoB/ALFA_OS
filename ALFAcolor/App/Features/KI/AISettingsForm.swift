@@ -8,9 +8,6 @@ struct AISettingsForm: View {
     @Environment(\.openURL) private var openURL
 
     private let settings = AppSettings.shared.store
-    /// The console address. Nil only if the text is not a valid address.
-    private static let consoleURL = URL(string: "https://platform.claude.com/")
-
     @State private var keyText = ""
     @State private var hasKey = AssistantStore.shared.hasKey
     @State private var checking = false
@@ -121,7 +118,7 @@ struct AISettingsForm: View {
     }
 
     private func openConsole() {
-        if let url = Self.consoleURL {
+        if let url = AssistantStore.consoleURL {
             openURL(url)
         }
     }

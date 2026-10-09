@@ -26,6 +26,7 @@ struct LabView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             LabControlsView(model: model)
+            LabAssistantBar(model: model)
             LabHintsView(model: model)
             footer
         }

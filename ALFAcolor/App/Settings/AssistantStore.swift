@@ -11,6 +11,9 @@ private let assistantKeyAccount = "claude.apiKey"
 final class AssistantStore {
     static let shared = AssistantStore()
 
+    /// The console of the platform, where credits and limits are managed.
+    static let consoleURL = URL(string: "https://platform.claude.com/")
+
     private let settings = AppSettings.shared.store
     private let keychain = KeychainStore()
 
