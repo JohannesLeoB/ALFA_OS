@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (80)
+## Briefe (82)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -64,7 +64,9 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-227](briefe/B-227.md) | E2 | Fehlerbrief: Zeigerkoordinaten, Tasten, Scrollen (hoch) | B-221 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 887 Tests, App-Bau grün); Klick-Beleg fehlt (unsichtbare Fenster nehmen keine Mausereignisse), ⌘A offen, Labor-Überzug unter der Werkzeugleiste prüfen; Fund 5 Rest (Labor, Blob melden ihre Fläche: ShellView, an B-224), Fund 13 (CanvasItemsLayer: an B-228) |
 | [B-228](briefe/B-228.md) | E2 | Fehlerbrief: ausgeblendete Stücke, Raster-Einrasten, Import | B-227 | erledigt, geprüft 2026-10-09 (Chef: Paket-Tests grün; Katalogschlüssel trägt B-226 ein; Gesamtlauf folgt nach B-226); Rest: Menü Raster/Einrasten, Doppelklick auf unlesbares Bild, LabEntry sichtbar, Menüs (alles B-229); #fff nicht mehr Farbe: Frage an Johannes |
 | [B-229](briefe/B-229.md) | E2 | Fehlerbrief: Raster-Schalter, Speicherstand, Kürzelanzeige | B-226, B-228 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 931 Tests laut Agent, Gesamtlauf nach B-301); Schritte 4 (Kürzelanzeige nach Layout) und 5 (Gesichert nach Schreiben) nicht gebaut, brauchen Bild oder Systemlauf; Abnahme am Bild offen (Menü Ansicht, Statusleiste, Doppelklick auf kaputte Bilddatei); Frage: „Am Raster einrasten“ nur Raster oder alles? |
-| [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-230](briefe/B-230.md) | E2 | Fehlerbrief 2: Code-Karten, Pool, Cache, Mockup mit mehreren Dateien | B-229 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-231](briefe/B-231.md) | E2 | Fehlerbrief 2: Dokument, Menüs, Inspektor | B-229 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-301](briefe/B-301.md) | E3 | Rahmen und Geräte | B-205, B-208 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 958 Tests, App-Bau grün); Abnahme am Bild offen (Beschriftung über dem Rahmen, Schatten, Menü Hinzufügen, Inspektor); Fragen: Kinder beim Drehen mitdrehen oder liegen lassen? Vorlage-Maße (MacBook Air, iPhone Pro, Mac-Fenster) bestätigen |
 | [B-302](briefe/B-302.md) | E3 | Spaltenraster und Grundlinien | B-301 | offen |
 | [B-303](briefe/B-303.md) | E3 | Lineale und Hilfslinien | B-203 | offen |
 | [B-304](briefe/B-304.md) | E3 | Abstände zeigen und Messen | B-202, B-303 | offen |
