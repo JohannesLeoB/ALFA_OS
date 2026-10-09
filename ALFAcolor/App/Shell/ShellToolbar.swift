@@ -53,8 +53,8 @@ private struct LabButton: View {
 
     var body: some View {
         Button {
-            guard let shell, let canvas, let card = try? LabEntry.card(in: canvas) else { return }
-            shell.openLab(for: card, store: canvas.store)
+            guard let shell, let canvas else { return }
+            shell.openLab(in: canvas)
         } label: {
             Label("toolbar.lab", systemImage: "testtube.2")
         }

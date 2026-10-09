@@ -56,6 +56,17 @@ final class ShellState {
         return true
     }
 
+    /// Opens the lab of the selected code card, or of a new card on the canvas. A card that cannot be made shows its notice.
+    func openLab(in canvas: CanvasController) {
+        do {
+            openLab(for: try LabEntry.card(in: canvas), store: canvas.store)
+        } catch let error as LabEntryError {
+            labNotice = error.noticeKey
+        } catch {
+            labNotice = "lab.noCard"
+        }
+    }
+
     /// Counts the closed labs. The canvas takes the keyboard focus back when this changes.
     private(set) var labClosings = 0
 

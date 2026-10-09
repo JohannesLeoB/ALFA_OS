@@ -1872,6 +1872,17 @@
         }
       }
     },
+    "lab.noCard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Labor kann hier keine Karte anlegen."
+          }
+        }
+      }
+    },
     "lab.notWeb" : {
       "extractionState" : "manual",
       "localizations" : {
