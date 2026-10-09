@@ -5,9 +5,6 @@ import Foundation
 ///
 /// Nothing changes the document here. A change waits as a proposal group until the user accepts or discards it.
 public actor AssistantChat {
-    /// The most rounds of tool calls that one message may cause.
-    public static let maxToolRounds = 8
-
     public private(set) var phase: ChatPhase = .idle
     /// What the view shows, in order.
     public private(set) var entries: [ChatEntry] = []
@@ -15,7 +12,10 @@ public actor AssistantChat {
     public private(set) var messages: [AIMessage] = []
 
     private let client: any AIClient
-    private let model: String
+    /// The model and settings of the chat: the settings of the code task of the stage.
+    private let plan: TaskPlan
+    /// The most rounds of tool calls that one message may cause.
+    private let toolRounds: Int
     private let design: any DesignSource
     private var document: DocumentSnapshot
     private var tools: [AITool]
@@ -44,18 +44,22 @@ public actor AssistantChat {
     }
 
     /// - Parameters:
+    ///   - plan: the model and settings of the chat, such as the code task of the stage.
+    ///   - toolRounds: the most rounds of tool calls that one message may cause.
     ///   - platformTools: the tools that the platform runs itself, such as web search. They go after the client tools.
     ///   - messages: the messages of an earlier conversation, read from the saved chat. They go before the next message.
     public init(
         client: any AIClient,
-        model: String,
+        plan: TaskPlan,
+        toolRounds: Int,
         document: DocumentSnapshot,
         design: any DesignSource,
         platformTools: [AITool] = [],
         messages: [AIMessage] = []
     ) {
         self.client = client
-        self.model = model
+        self.plan = plan
+        self.toolRounds = toolRounds
         self.document = document
         self.design = design
         self.tools = AssistantTools.definitions + platformTools
@@ -124,7 +128,7 @@ public actor AssistantChat {
         rounds = 0
         continuingPause = false
         do {
-            let request = try ContextBuilder.request(for: input, model: model, tools: tools, history: messages)
+            let request = try ContextBuilder.request(for: input, plan: plan, tools: tools, history: messages)
             system = request.system
             if let last = request.messages.last {
                 messages.append(last)
@@ -146,13 +150,7 @@ public actor AssistantChat {
             phase = .streaming
             let response: AIResponse
             do {
-                let request = AIRequest(
-                    model: model,
-                    system: system,
-                    messages: messages,
-                    maxTokens: ContextBuilder.maxTokens,
-                    tools: tools
-                )
+                let request = try ContextBuilder.request(plan: plan, system: system, messages: messages, tools: tools)
                 response = try await stream(request)
             } catch let error as AIError {
                 stop(error)
@@ -165,7 +163,7 @@ public actor AssistantChat {
             append(response.blocks)
             switch response.stopReason {
             case .toolUse?:
-                guard rounds < Self.maxToolRounds else {
+                guard rounds < toolRounds else {
                     stop(.unusableAnswer("too many rounds of tool calls"))
                     return
                 }

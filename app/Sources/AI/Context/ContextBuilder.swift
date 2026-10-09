@@ -5,8 +5,6 @@ import Foundation
 public enum ContextBuilder {
     /// The largest request that the API takes, in bytes of text and base64 images.
     public static let maxRequestBytes = 32 * 1024 * 1024
-    /// The longest answer that one request asks for.
-    public static let maxTokens = 4096
 
     /// The instruction of the assistant. It is the first part of the system text, which stays the same between messages.
     static let baseInstruction = """
@@ -18,16 +16,29 @@ public enum ContextBuilder {
     /// The request for one message. The history comes before the new message, unchanged.
     public static func request(
         for input: ContextInput,
-        model: String,
+        plan: TaskPlan,
         tools: [AITool],
         history: [AIMessage]
     ) throws -> AIRequest {
-        let request = AIRequest(
-            model: model,
+        try request(
+            plan: plan,
             system: systemText(directory: input.directory),
             messages: history + [try message(for: input)],
-            maxTokens: maxTokens,
             tools: tools
+        )
+    }
+
+    /// A request with the model and settings of the plan. The size of the request is checked.
+    public static func request(plan: TaskPlan, system: String, messages: [AIMessage], tools: [AITool]) throws -> AIRequest {
+        let request = AIRequest(
+            model: plan.model,
+            system: system,
+            messages: messages,
+            maxTokens: plan.maxTokens,
+            cache: plan.cache,
+            tools: tools,
+            effort: plan.effort,
+            thinking: plan.thinking
         )
         try checkSize(request)
         return request
