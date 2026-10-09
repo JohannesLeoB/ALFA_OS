@@ -3,7 +3,15 @@ import CoreGraphics
 import Tokens
 
 /// Color in CIE Lab space (D65). Distances in Lab roughly match what the eye sees.
-public struct Lab: Hashable, Sendable { public var l: Double, a: Double, b: Double }
+public struct Lab: Hashable, Sendable {
+    public var l: Double, a: Double, b: Double
+
+    public init(l: Double, a: Double, b: Double) {
+        self.l = l
+        self.a = a
+        self.b = b
+    }
+}
 
 public enum ColorMath {
     static func lin(_ c: Double) -> Double { c <= 0.04045 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4) }
