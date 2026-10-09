@@ -210,6 +210,10 @@ class R3Language(GuardCase):
         self.repo.stage(self.path, 'let file = "vertrag/tokens.dunkel.json"\n')
         self.assertPasses(self.repo.guard("commit", strict=True))
 
+    def test_r3_passes_exchange_field_name(self):
+        self.repo.stage(self.path, 'let key = "von"\n')
+        self.assertPasses(self.repo.guard("commit", strict=True))
+
     def test_r3_passes_english_code(self):
         self.repo.stage(self.path, "// Return the width of the frame.\nlet frameWidth = 1\n")
         self.assertPasses(self.repo.guard("commit", strict=True))

@@ -371,6 +371,8 @@ def german_words(words, line):
     found = []
     for token in LETTERS.findall(line):
         if token == token.lower() or (token[0].isupper() and token[1:] == token[1:].lower()):
+            if token.lower() in words.contract_names:
+                continue
             if token.lower() in words.fillers and token.lower() not in found:
                 found.append(token.lower())
     return found
