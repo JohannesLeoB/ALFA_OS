@@ -1,8 +1,5 @@
 /// The fixed system texts and limits of the tasks. They are in English, as the model reads them best.
 enum AITaskPrompts {
-    static let codeMaxTokens = 8192
-    static let shortMaxTokens = 1024
-
     /// The rules that every task shares.
     static let commonRules = """
         Do not write keys, tokens or passwords. \

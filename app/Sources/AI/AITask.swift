@@ -45,49 +45,93 @@ public enum AITask: Sendable, Equatable {
         }
     }
 
-    /// The request for this task with the given model.
+    /// The request for this task with the given model and the settings of the stage Normal.
     public func request(model: String) -> AIRequest {
+        var plan = AssistantPlan.stage(.normal).task(kind)
+        plan.model = model
+        return request(plan: plan)
+    }
+
+    /// The request for this task with the settings of its plan: model, effort, thinking, answer length and format.
+    public func request(plan: TaskPlan) -> AIRequest {
         switch self {
         case let .codeVariant(language, files, instruction):
             return AIRequest(
-                model: model,
+                model: plan.model,
                 system: AITaskPrompts.codeSystem,
                 messages: [AIMessage(role: .user, blocks: [.text(Self.variantText(language, files, instruction))])],
-                maxTokens: AITaskPrompts.codeMaxTokens
+                maxTokens: plan.maxTokens,
+                cache: plan.cache,
+                effort: plan.effort,
+                thinking: plan.thinking
             )
         case let .htmlForCSS(css):
             return AIRequest(
-                model: model,
+                model: plan.model,
                 system: AITaskPrompts.htmlSystem,
                 messages: [AIMessage(role: .user, blocks: [.text("CSS:\n" + css)])],
-                maxTokens: AITaskPrompts.codeMaxTokens
+                maxTokens: plan.maxTokens,
+                cache: plan.cache,
+                effort: plan.effort,
+                thinking: plan.thinking
             )
         case let .codeFromScreenshot(image, hint):
             return AIRequest(
-                model: model,
+                model: plan.model,
                 system: AITaskPrompts.codeSystem,
                 messages: [AIMessage(role: .user, blocks: [
                     .text("Build this as HTML and CSS. Hint: " + hint),
                     .image(image),
                 ])],
-                maxTokens: AITaskPrompts.codeMaxTokens
+                maxTokens: plan.maxTokens,
+                cache: plan.cache,
+                effort: plan.effort,
+                thinking: plan.thinking
             )
         case let .tokenNames(tokens, scheme):
             return AIRequest(
-                model: model,
+                model: plan.model,
                 system: AITaskPrompts.namesSystem,
                 messages: [AIMessage(role: .user, blocks: [.text(Self.namesText(tokens, scheme))])],
-                maxTokens: AITaskPrompts.shortMaxTokens
+                maxTokens: plan.maxTokens,
+                cache: plan.cache,
+                effort: plan.effort,
+                thinking: plan.thinking,
+                format: plan.structuredOutput ? .jsonSchema(Self.namesSchema) : nil
             )
         case let .explain(code):
             return AIRequest(
-                model: model,
+                model: plan.model,
                 system: AITaskPrompts.explainSystem,
                 messages: [AIMessage(role: .user, blocks: [.text(code)])],
-                maxTokens: AITaskPrompts.shortMaxTokens
+                maxTokens: plan.maxTokens,
+                cache: plan.cache,
+                effort: plan.effort,
+                thinking: plan.thinking
             )
         }
     }
+
+    /// The shape of the names answer: an object with a list of id and name pairs.
+    static let namesSchema: JSONValue = .object([
+        "type": .string("object"),
+        "properties": .object([
+            "names": .object([
+                "type": .string("array"),
+                "items": .object([
+                    "type": .string("object"),
+                    "properties": .object([
+                        "id": .object(["type": .string("string")]),
+                        "name": .object(["type": .string("string")]),
+                    ]),
+                    "required": .array([.string("id"), .string("name")]),
+                    "additionalProperties": .bool(false),
+                ]),
+            ]),
+        ]),
+        "required": .array([.string("names")]),
+        "additionalProperties": .bool(false),
+    ])
 
     /// Reads the answer of this task. A broken answer throws `AIError.unusableAnswer`.
     public func parse(_ response: AIResponse) throws -> AIProposal {
