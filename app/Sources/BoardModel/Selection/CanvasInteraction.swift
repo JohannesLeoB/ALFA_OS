@@ -39,6 +39,10 @@ public final class CanvasInteraction {
     public var spacingStops: [SpacingStop] = [] { didSet { refreshDistances() } }
     /// True while the Option key is held. The gaps to the neighbours show then.
     public var optionHeld = false { didSet { if oldValue != optionHeld { refreshDistances() } } }
+    /// Reads the spacing stops from the token sets of the document.
+    public func reloadSpacingStops() {
+        spacingStops = SpacingTokens.stops(in: store.document.tokenSets)
+    }
     /// The IDs of new items (copies). A test can set its own.
     @ObservationIgnored public var makeID: () -> ItemID = { ItemID() }
 

@@ -39,6 +39,7 @@ struct SelectionInput: ViewModifier {
             .onModifierKeysChanged(mask: .option, initial: true) { _, keys in
                 interaction.optionHeld = keys.contains(.option)
             }
+            .onChange(of: interaction.store.document.tokenSets) { interaction.reloadSpacingStops() }
             .onChange(of: interaction.snapTick) {
                 NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now)
             }
@@ -118,7 +119,7 @@ struct SelectionInput: ViewModifier {
     private func configure() {
         interaction.bandHeight = theme.space(.s6)
         interaction.handleSize = theme.space(.s2)
-        interaction.spacingStops = SpaceToken.allCases.map { SpacingStop(name: "space.\($0.rawValue)", value: theme.space($0)) }
+        interaction.reloadSpacingStops()
     }
 
     private func replaceImage(of id: ItemID, from url: URL) {
