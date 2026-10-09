@@ -1,4 +1,5 @@
 import Foundation
+import ImageIO
 import ALFAcolorCore
 
 /// A text edit in progress: the item, its content before and the text typed so far.
@@ -29,7 +30,7 @@ public struct TextEdit: Equatable, Sendable {
 /// Editing text in place, and the actions a double click starts.
 extension CanvasInteraction {
     /// A double click at a point of the canvas. On a note or a text it starts editing; on a swatch it opens the colour fan;
-    /// on an image without a file it asks for the file; elsewhere it does nothing.
+    /// on an image without a readable file it asks for the file; elsewhere it does nothing.
     public func doubleClick(atCanvasX x: Double, y: Double) {
         let point = board(fromCanvasX: x, y: y)
         if let editing, let rect = store.item(editing.itemID)?.rect, rect.contains(x: point.x, y: point.y) { return }
@@ -41,7 +42,7 @@ extension CanvasInteraction {
             beginEditing(hit)
         case .swatch:
             openFan(hit)
-        case .image(let assetID, _, _) where store.document.assets[assetID] == nil:
+        case .image(let assetID, _, _) where needsFile(assetID):
             store.select([hit])
             fileSearchRequest = hit
         default:
@@ -82,6 +83,13 @@ extension CanvasInteraction {
     /// Ends the edit and drops the typed text.
     public func cancelEdit() {
         editing = nil
+    }
+
+    /// True when the image has no bytes in the document, or the bytes are no picture that ImageIO can read.
+    private func needsFile(_ assetID: String) -> Bool {
+        guard let entry = store.document.assets[assetID], let data = try? entry.data() else { return true }
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil), CGImageSourceGetCount(source) > 0 else { return true }
+        return CGImageSourceCopyPropertiesAtIndex(source, 0, nil) == nil
     }
 
     /// Puts the file the user found in place of the missing image: the bytes enter the document and the item points at them.
