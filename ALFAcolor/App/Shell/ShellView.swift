@@ -32,6 +32,7 @@ struct ShellView: View {
                               onTogglePalettes: { shell.togglePalettes() })
                     .overlay { ContextBarHost(canvas: canvas) }
                     .overlay { if shell.blobMode { BlobMenuHost(shell: shell, store: canvas.store) } }
+                    .overlay { if let lab = shell.openLabModel { LabView(model: lab, onClose: { shell.closeLab() }) } }
                 if shell.statusBarVisible {
                     StatusBarView(saveState: canvas.store.saveState, saveError: canvas.store.lastSaveError)
                 }

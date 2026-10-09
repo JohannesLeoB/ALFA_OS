@@ -1,4 +1,6 @@
 import SwiftUI
+import ALFAcolorCore
+import BoardModel
 import Motion
 
 /// State of the window shell: which areas are visible.
@@ -16,6 +18,29 @@ final class ShellState {
     var blob = BlobMenu()
     /// Placeholder for the space tabs.
     var selectedRoom: PlaceholderRoom = .mail
+    /// The labs of the code cards opened in this window. A lab keeps its draft when it closes.
+    private(set) var labs: [ItemID: LabModel] = [:]
+    /// The card whose lab is open, if any.
+    private(set) var labOpen: ItemID?
+
+    /// The open lab, shown over the canvas.
+    var openLabModel: LabModel? { labOpen.flatMap { labs[$0] } }
+
+    /// Opens the lab of a code card. Nothing happens for an item that is not web code on the board.
+    func openLab(for item: ItemID, store: BoardStore) {
+        if labs[item] == nil {
+            labs[item] = LabModel(item: item, store: store)
+        }
+        guard let lab = labs[item] else { return }
+        labOpen = item
+        Task { await lab.reloadPage() }
+    }
+
+    /// Closes the open lab. Its draft stays for the next time.
+    func closeLab() {
+        openLabModel?.stopPage()
+        labOpen = nil
+    }
 
     var sidebarVisible: Bool {
         get { columnVisibility != .detailOnly }
