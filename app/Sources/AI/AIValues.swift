@@ -105,6 +105,19 @@ public struct AIResponse: Sendable, Equatable {
     }
 }
 
+/// A call of a tool by the model. The id must come back with the result of the tool.
+public struct AIToolCall: Sendable, Equatable {
+    public let id: String
+    public let name: String
+    public let input: JSONValue
+
+    public init(id: String, name: String, input: JSONValue) {
+        self.id = id
+        self.name = name
+        self.input = input
+    }
+}
+
 /// The tokens of one call, as the API counts them.
 public struct AIUsage: Sendable, Equatable {
     public var inputTokens: Int

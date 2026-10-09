@@ -151,15 +151,106 @@ public struct AnthropicClient: AIClient {
         return key
     }
 
-    private func makeURLRequest(for request: AIRequest, key: String) throws -> URLRequest {
+    /// The answer as it is written. The key is read before anything is sent; errors end the stream.
+    /// A stream is not retried: the events already read would be sent twice.
+    public func stream(_ request: AIRequest) -> AsyncThrowingStream<AIStreamEvent, Error> {
+        AsyncThrowingStream { continuation in
+            let task = Task {
+                await self.run(request, into: continuation)
+            }
+            continuation.onTermination = { _ in task.cancel() }
+        }
+    }
+
+    private func run(_ request: AIRequest, into continuation: AsyncThrowingStream<AIStreamEvent, Error>.Continuation) async {
+        var key = ""
+        do {
+            key = try readKey()
+            let urlRequest = try makeURLRequest(for: request, key: key, stream: true)
+            let lines = try await openStream(urlRequest, key: key)
+            var reader = SSEReader()
+            for try await line in lines {
+                guard try deliver(reader.feed(line), key: key, to: continuation) else { return }
+            }
+            guard try deliver(reader.finish(), key: key, to: continuation) else { return }
+            try Task.checkCancellation()
+            continuation.finish()
+        } catch is CancellationError {
+            continuation.finish(throwing: AIError.cancelled)
+        } catch let error as AIError {
+            continuation.finish(throwing: Self.redacted(error, key: key))
+        } catch {
+            continuation.finish(throwing: AIError.network(Self.redact(String(describing: error), key: key)))
+        }
+    }
+
+    /// Yields the events of the frames. Returns false after an error event, which ends the stream.
+    private func deliver(
+        _ frames: [SSEFrame],
+        key: String,
+        to continuation: AsyncThrowingStream<AIStreamEvent, Error>.Continuation
+    ) throws -> Bool {
+        for frame in frames {
+            guard let event = AIStreamDecoder.event(from: frame) else { continue }
+            if case let .error(error) = event {
+                continuation.yield(.error(Self.redacted(error, key: key)))
+                continuation.finish()
+                return false
+            }
+            continuation.yield(event)
+        }
+        return true
+    }
+
+    /// Opens the stream. A failed status becomes the same error as on a plain call.
+    private func openStream(_ urlRequest: URLRequest, key: String) async throws -> AsyncThrowingStream<String, Error> {
+        do {
+            return try await transport.stream(urlRequest)
+        } catch let failure as HTTPStatusError {
+            guard let http = HTTPURLResponse(
+                url: urlRequest.url ?? baseURL,
+                statusCode: failure.status,
+                httpVersion: nil,
+                headerFields: failure.headers
+            ) else {
+                throw AIError.network("HTTP status \(failure.status)")
+            }
+            throw AnthropicErrors.error(for: http, body: failure.body, key: key)
+        } catch is CancellationError {
+            throw AIError.cancelled
+        } catch let error as URLError where error.code == .cancelled {
+            throw AIError.cancelled
+        } catch let error as AIError {
+            throw error
+        } catch {
+            throw AIError.network(Self.redact(String(describing: error), key: key))
+        }
+    }
+
+    private func makeURLRequest(for request: AIRequest, key: String, stream: Bool = false) throws -> URLRequest {
         var http = URLRequest(url: baseURL.appendingPathComponent("v1/messages"))
         http.httpMethod = "POST"
         http.timeoutInterval = Self.requestTimeout
         http.setValue(key, forHTTPHeaderField: "x-api-key")
         http.setValue(Self.apiVersion, forHTTPHeaderField: "anthropic-version")
         http.setValue("application/json", forHTTPHeaderField: "content-type")
-        http.httpBody = try AnthropicWire.body(for: request)
+        http.httpBody = try AnthropicWire.body(for: request, stream: stream)
         return http
+    }
+
+    /// The error with the key removed from its text.
+    static func redacted(_ error: AIError, key: String) -> AIError {
+        guard !key.isEmpty else { return error }
+        switch error {
+        case let .badRequest(message):
+            return .badRequest(redact(message, key: key))
+        case let .network(message):
+            return .network(redact(message, key: key))
+        case let .unusableAnswer(message):
+            return .unusableAnswer(redact(message, key: key))
+        default:
+            return error
+        }
     }
 
     /// Removes the key from a text that may come from a transport error.

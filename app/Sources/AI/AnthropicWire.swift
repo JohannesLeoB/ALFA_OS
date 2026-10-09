@@ -2,7 +2,7 @@ import Foundation
 
 /// The JSON of the Messages API: the body of a request and the reading of an answer.
 enum AnthropicWire {
-    static func body(for request: AIRequest) throws -> Data {
+    static func body(for request: AIRequest, stream: Bool = false) throws -> Data {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         encoder.outputFormatting = [.sortedKeys]
@@ -19,7 +19,8 @@ enum AnthropicWire {
             system: request.system,
             messages: messages,
             temperature: request.temperature,
-            cacheControl: cacheControl(for: request.cache)
+            cacheControl: cacheControl(for: request.cache),
+            stream: stream ? true : nil
         )
         return try encoder.encode(wire)
     }
@@ -76,6 +77,7 @@ private struct WireRequest: Encodable {
     let messages: [WireMessage]
     let temperature: Double?
     let cacheControl: WireCacheControl?
+    let stream: Bool?
 }
 
 /// The top-level `cache_control` field. `ttl` is absent for the five-minute default.
