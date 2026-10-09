@@ -6,7 +6,7 @@ import Renderers
 enum CodeRenderers {
     static let registry: CardRendererRegistry = {
         let registry = CardRendererRegistry()
-        registry.register(WebCardRenderer())
+        registry.register(WebCardRenderer(stills: WindowStillHost()))
         return registry
     }()
 
