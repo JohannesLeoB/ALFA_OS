@@ -21,7 +21,7 @@ struct CardFrame<Content: View>: View {
         let regions = CardLayout.regions(size: presentation.size, headerHeight: theme.space(.s6))
         let hairline = Hairline.width(zoom: zoom, scale: displayScale)
         ZStack(alignment: .topLeading) {
-            Rectangle().fill(theme.color(.surface, scheme))
+            Rectangle().fill(theme.color(.surfaceContent, scheme))
             content(CanvasSize(width: regions.body.w, height: regions.body.h))
                 .frame(width: regions.body.w, height: regions.body.h, alignment: .topLeading)
                 .clipped()

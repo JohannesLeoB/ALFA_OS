@@ -150,7 +150,7 @@ struct CodePlayer: View {
                 .frame(width: size.width, alignment: .topLeading)
                 .frame(width: size.width, height: size.height, alignment: .topLeading)
         } else {
-            Rectangle().fill(theme.color(.surface, scheme))
+            Rectangle().fill(theme.color(.surfaceContent, scheme))
         }
     }
 
