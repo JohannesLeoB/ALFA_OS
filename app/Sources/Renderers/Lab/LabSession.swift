@@ -14,12 +14,13 @@ public struct LabSession: Equatable, Sendable {
     public var showsGuides = false
     public var isDark = false
 
-    public init(draft: LabDraft) {
+    /// `older` are the versions the card already has, oldest first. The lab starts with them.
+    public init(draft: LabDraft, older: [LabDraft] = []) {
         self.draft = draft
         self.tab = LabSession.firstTab(of: draft)
         self.controls = LabControls.read(draft)
         self.props = LabSession.readProps(draft)
-        self.versions = VersionLog(current: draft)
+        self.versions = VersionLog(current: draft, older: older)
     }
 
     /// Shows another tab of the draft's art.

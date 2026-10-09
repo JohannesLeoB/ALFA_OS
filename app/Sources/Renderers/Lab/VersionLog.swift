@@ -9,6 +9,12 @@ public struct VersionLog<Version: Equatable & Sendable>: Equatable, Sendable {
         self.current = current
     }
 
+    /// A log with versions that are already kept, oldest first, for example those of a document.
+    public init(current: Version, older: [Version]) {
+        self.current = current
+        self.older = older
+    }
+
     /// Makes `next` the current version and moves the old one to `older`.
     /// Nothing changes and false is returned when `next` equals the current version.
     @discardableResult

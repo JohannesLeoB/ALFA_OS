@@ -1,5 +1,6 @@
 import BoardModel
 import ALFAcolorCore
+import Document
 import Observation
 import Renderers
 
@@ -37,6 +38,8 @@ final class LabModel {
     @ObservationIgnored private var pending: Task<Void, Never>?
     /// The card as the lab last saw it on the board. A board that differs from it has changed since.
     @ObservationIgnored private var seen: LabDraft
+    /// The versions of the card as the lab last saw them. Versions that change on the document reopen the lab.
+    @ObservationIgnored private var seenVersions: [CardVersion]
     private(set) var session: LabSession
     /// The running page. nil while the page is not built.
     private(set) var live: LiveCard?
@@ -48,7 +51,15 @@ final class LabModel {
         self.item = item
         self.store = store
         self.seen = draft
-        session = LabSession(draft: draft)
+        self.seenVersions = store.document.versions.versions(of: item)
+        session = LabSession(draft: draft, older: LabModel.history(of: item, in: store))
+    }
+
+    /// The earlier versions of the card as lab drafts, oldest first. They come from the document.
+    static func history(of id: ItemID, in store: BoardStore) -> [LabDraft] {
+        store.document.versions.versions(of: id).compactMap { version in
+            LabDraft(card: CodeCard(language: version.language, files: version.files), previewWidth: nil)
+        }
     }
 
     /// The card's draft as it is on the board. nil when the item is gone or is not web code.
@@ -65,7 +76,7 @@ final class LabModel {
 
     /// False when the card changed on the board since the lab last saw it, for example after an undo.
     func isCurrent(in store: BoardStore) -> Bool {
-        LabModel.boardDraft(item, in: store) == seen
+        LabModel.boardDraft(item, in: store) == seen && store.document.versions.versions(of: item) == seenVersions
     }
 
     // MARK: - Page
@@ -181,12 +192,13 @@ final class LabModel {
             return
         }
         do {
-            let command = Command.setContent(item, .code(language: card.language, files: card.files, previewWidth: saved.width))
-            guard try store.perform(command) else {
+            // The lab saves the code and keeps the code before it as a version, in one undo step.
+            guard try store.saveLabCode(of: item, language: card.language, files: card.files, width: saved.width) else {
                 message = .notSaved
                 return
             }
             seen = LabModel.boardDraft(item, in: store) ?? saved
+            seenVersions = store.document.versions.versions(of: item)
             message = .saved
         } catch {
             message = .notSaved
