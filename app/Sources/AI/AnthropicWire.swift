@@ -6,11 +6,18 @@ enum AnthropicWire {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         encoder.outputFormatting = [.sortedKeys]
+        var messages: [WireMessage] = []
+        for message in request.messages {
+            for case let .image(image) in message.blocks {
+                try AIImageRules.check(image)
+            }
+            messages.append(WireMessage(message))
+        }
         let wire = WireRequest(
             model: request.model,
             maxTokens: request.maxTokens,
             system: request.system,
-            messages: request.messages.map(WireMessage.init),
+            messages: messages,
             temperature: request.temperature
         )
         return try encoder.encode(wire)
