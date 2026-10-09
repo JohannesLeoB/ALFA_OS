@@ -10,6 +10,8 @@ struct CodeCardView: View {
     let content: CodeContent
     let detail: DetailLevel
     let zoom: Double
+    /// False while the card lies outside the visible part. A live page then rests as its image.
+    let onScreen: Bool
 
     @State private var model: CodeCardModel
 
@@ -17,11 +19,12 @@ struct CodeCardView: View {
     @FocusedValue(\.shell) private var shell
     @FocusedValue(\.canvas) private var canvas
 
-    init(presentation: ItemPresentation, content: CodeContent, detail: DetailLevel, zoom: Double) {
+    init(presentation: ItemPresentation, content: CodeContent, detail: DetailLevel, zoom: Double, onScreen: Bool) {
         self.presentation = presentation
         self.content = content
         self.detail = detail
         self.zoom = zoom
+        self.onScreen = onScreen
         _model = State(initialValue: CodeCardModel(content: content))
     }
 
@@ -31,6 +34,9 @@ struct CodeCardView: View {
         }
         .onChange(of: content) { _, new in
             model.update(new)
+        }
+        .onChange(of: onScreen) { _, shown in
+            if !shown { model.rest() }
         }
     }
 

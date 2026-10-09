@@ -26,6 +26,13 @@ public enum Visibility {
         return found.map(\.item)
     }
 
+    /// True when a rectangle of the board touches the visible part of the canvas. No margin: a card that
+    /// only lies in the ring around the view is not on screen.
+    public static func isOnScreen(_ rect: Rect, viewport: Viewport, canvas size: CanvasSize) -> Bool {
+        guard viewport.isValid, size.isUsable, rect.isFinite else { return false }
+        return viewport.visibleRect(in: size).intersects(rect)
+    }
+
     /// The box around the items with these IDs that can be seen (not hidden, layer not hidden).
     /// nil for no IDs or no visible item. `ids` nil takes all items of the space.
     public static func bounds(in space: Space, of ids: Set<ItemID>? = nil) -> Rect? {

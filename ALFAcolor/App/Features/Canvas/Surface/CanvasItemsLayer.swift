@@ -21,7 +21,8 @@ struct CanvasItemsLayer: View {
             if let space = controller.store.activeSpace {
                 ForEach(controller.drawnItems.filter { !skipped.contains($0.id) }) { item in
                     ItemView(presentation: ItemPresentation.make(for: item, in: space, assets: assets),
-                             assets: assets, thumbnails: thumbnails, zoom: view.zoom)
+                             assets: assets, thumbnails: thumbnails, zoom: view.zoom,
+                             onScreen: Visibility.isOnScreen(item.rect, viewport: view, canvas: controller.size))
                         .offset(x: item.rect.x, y: item.rect.y)
                         .allowsHitTesting(false)
                 }

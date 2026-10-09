@@ -14,6 +14,8 @@ struct ItemView: View {
     let zoom: Double
     /// The text of a note or text item that is being edited. nil shows the text as it is.
     var edit: TextEditing?
+    /// False while the item lies outside the visible part of the canvas. A code card then rests as an image.
+    var onScreen = true
 
     var body: some View {
         let detail = DetailLevel.level(for: presentation.size, zoom: zoom)
@@ -35,7 +37,7 @@ struct ItemView: View {
         switch presentation.chrome {
         case .card:
             if case .code(let content) = presentation.body {
-                CodeCardView(presentation: presentation, content: content, detail: detail, zoom: zoom)
+                CodeCardView(presentation: presentation, content: content, detail: detail, zoom: zoom, onScreen: onScreen)
             } else {
                 CardFrame(presentation: presentation, detail: detail, zoom: zoom, trailing: trailing) { size in
                     CardBody(presentation: presentation, size: size, detail: detail, zoom: zoom, assets: assets, thumbnails: thumbnails, edit: edit)
