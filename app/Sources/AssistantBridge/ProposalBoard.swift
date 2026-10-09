@@ -7,9 +7,23 @@ import BoardModel
 @MainActor
 public enum ProposalBoard {
     /// Applies the changes in order and returns one outcome per change, in the same order.
-    /// A change that fails does not stop the others.
+    /// A change that fails does not stop the others. All changes of the call are one undo step: the
+    /// store's own steps nest in one undo group, so a single undo takes back every change of the call.
     public static func apply(_ changes: [ProposedChange], to store: BoardStore) -> [ApplyOutcome] {
-        changes.map { translate($0, on: store) }
+        guard !changes.isEmpty else { return [] }
+        let manager = store.undoManager
+        let revision = store.revision
+        // A unique name marks the group when nothing changed: a group that stays empty is taken back again.
+        let marker = UUID().uuidString
+        manager.beginUndoGrouping()
+        let outcomes = changes.map { translate($0, on: store) }
+        let changed = store.revision != revision
+        manager.setActionName(changed ? (Command.batch([]).undoName ?? "") : marker)
+        manager.endUndoGrouping()
+        if !changed, manager.undoActionName == marker {
+            manager.undo()
+        }
+        return outcomes
     }
 
     static func translate(_ change: ProposedChange, on store: BoardStore) -> ApplyOutcome {
