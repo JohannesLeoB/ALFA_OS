@@ -18,9 +18,9 @@ public enum FrameGrid {
 
     /// Sets the grid of a frame. Empty when the item is no frame, the grid does not fit, or it is already set.
     public static func set(_ grid: ColumnGrid, on item: Item) -> [Command] {
-        guard case .frame(let deviceID, let gridID, let scale, let current) = item.content,
+        guard case .frame(let deviceID, let gridID, let scale, let current, let guides) = item.content,
               isValid(grid, in: item.rect), current != grid else { return [] }
-        return [.setContent(item.id, .frame(deviceID: deviceID, gridID: gridID, scale: scale, grid: grid))]
+        return [.setContent(item.id, .frame(deviceID: deviceID, gridID: gridID, scale: scale, grid: grid, guides: guides))]
     }
 
     /// The column and baseline lines of the frames that hold the rectangle completely. Frames without a grid,
@@ -28,7 +28,7 @@ public enum FrameGrid {
     public static func snapLines(around rect: Rect?, in items: [Item]) -> [SnapGuide] {
         guard let rect, rect.isFinite else { return [] }
         return items.flatMap { item -> [SnapGuide] in
-            guard case .frame(_, _, _, let grid?) = item.content, isValid(grid, in: item.rect) else { return [] }
+            guard case .frame(_, _, _, let grid?, _) = item.content, isValid(grid, in: item.rect) else { return [] }
             let frame = item.rect
             let holds = frame.x <= rect.x && rect.maxX <= frame.maxX && frame.y <= rect.y && rect.maxY <= frame.maxY
             return holds ? SnapTargets.frameLines(in: frame, grid: grid) : []
@@ -37,8 +37,8 @@ public enum FrameGrid {
 
     /// Removes the grid of a frame. Empty when the item is no frame or has no grid.
     public static func remove(from item: Item) -> [Command] {
-        guard case .frame(let deviceID, let gridID, let scale, let current) = item.content, current != nil else { return [] }
-        return [.setContent(item.id, .frame(deviceID: deviceID, gridID: gridID, scale: scale, grid: nil))]
+        guard case .frame(let deviceID, let gridID, let scale, let current, let guides) = item.content, current != nil else { return [] }
+        return [.setContent(item.id, .frame(deviceID: deviceID, gridID: gridID, scale: scale, grid: nil, guides: guides))]
     }
 }
 

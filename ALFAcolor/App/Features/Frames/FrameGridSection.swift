@@ -105,7 +105,7 @@ struct FrameGridSection: View {
     /// The grid of each selected frame, nil for a frame without a grid.
     private var grids: [ColumnGrid?] {
         items.map { item -> ColumnGrid? in
-            guard case .frame(_, _, _, let grid) = item.content else { return nil }
+            guard case .frame(_, _, _, let grid, _) = item.content else { return nil }
             return grid
         }
     }

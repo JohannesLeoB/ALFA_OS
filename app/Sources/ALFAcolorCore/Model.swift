@@ -83,7 +83,8 @@ public enum Content: Codable, Hashable, Sendable {
     /// A frame: a view area at device size with an optional grid. `deviceID` may end in `-landscape` or `-portrait`.
     /// `scale` is the pixels per point of the frame (1 to 3). nil uses the first scale of the device.
     /// `grid` is the column grid of the frame, nil for none. `gridID` names a grid template.
-    case frame(deviceID: String?, gridID: String?, scale: Double? = nil, grid: ColumnGrid? = nil)
+    /// `guides` are the guides of the frame, nil for none.
+    case frame(deviceID: String?, gridID: String?, scale: Double? = nil, grid: ColumnGrid? = nil, guides: [Guide]? = nil)
     /// A group with a title (zone). Its children lie geometrically inside it.
     case group(title: String)
     /// A drawn shape: rectangle, capsule, ellipse or line.

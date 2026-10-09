@@ -167,7 +167,7 @@ extension ItemPresentation {
             body = .group(GroupContent(title: title, childCount: inside))
         case .code(let language, let files, let previewWidth):
             body = .code(CodeContent(language: language, files: files, previewWidth: previewWidth))
-        case .frame(let deviceID, _, let scale, let grid):
+        case .frame(let deviceID, _, let scale, let grid, _):
             body = .other(kind: .frame)
             frame = FrameDisplay.make(deviceID: deviceID, scale: scale, rect: item.rect, grid: grid)
         }
