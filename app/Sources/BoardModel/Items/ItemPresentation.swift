@@ -54,6 +54,20 @@ public struct ItemPresentation: Equatable, Sendable {
 
     public enum OtherKind: String, Equatable, Sendable { case code, frame }
 
+    /// The key in the string catalog of the name of the kind, for example "item.kind.note".
+    public var kindKey: String {
+        switch body {
+        case .image: "item.kind.image"
+        case .note: "item.kind.note"
+        case .link: "item.kind.link"
+        case .swatch: "item.kind.swatch"
+        case .shape: "item.kind.shape"
+        case .text: "item.kind.text"
+        case .group: "item.kind.group"
+        case .other(let kind): "item.kind.\(kind.rawValue)"
+        }
+    }
+
     public var chrome: ItemChrome {
         switch body {
         case .image, .note, .link, .swatch, .other: .card

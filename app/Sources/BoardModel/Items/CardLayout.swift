@@ -39,3 +39,12 @@ public enum DetailLevel: Equatable, Sendable {
         return max(size.width, size.height) * zoom < reducedBelow ? .reduced : .full
     }
 }
+
+public enum Hairline {
+    /// The width in board points of a line that is one device pixel wide on the screen.
+    /// `zoom` is the zoom of the canvas, `scale` the device pixels per screen point.
+    public static func width(zoom: Double, scale: Double) -> Double {
+        guard zoom.isFinite, zoom > 0, scale.isFinite, scale > 0 else { return 0 }
+        return 1 / (zoom * scale)
+    }
+}
