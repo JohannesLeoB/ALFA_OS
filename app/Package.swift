@@ -7,10 +7,11 @@ let package = Package(
     name: "ALFAcolor",
     platforms: [.macOS(.v15)],
     products: [
-        .library(name: "ALFAcolorKit", targets: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab", "AppTheme", "Document", "BoardModel", "Thumbnails", "Importers", "Renderers"])
+        .library(name: "ALFAcolorKit", targets: ["ALFAcolorCore", "Geometry", "Tokens", "ColorLab", "AppTheme", "Document", "BoardModel", "Thumbnails", "Importers", "Renderers", "Motion"])
     ],
     targets: [
         .target(name: "ALFAcolorCore"),
+        .target(name: "Motion"),
         .target(name: "Geometry", dependencies: ["ALFAcolorCore"]),
         .target(name: "Tokens", dependencies: ["ALFAcolorCore"]),
         .target(name: "ColorLab", dependencies: ["Tokens"]),
@@ -26,6 +27,7 @@ let package = Package(
         .testTarget(name: "BoardModelTests", dependencies: ["BoardModel", "ALFAcolorCore", "Document", "Geometry"]),
         .testTarget(name: "ThumbnailsTests", dependencies: ["Thumbnails", "Document"]),
         .testTarget(name: "ImportersTests", dependencies: ["Importers", "ALFAcolorCore", "Document", "BoardModel"]),
-        .testTarget(name: "RenderersTests", dependencies: ["Renderers", "ALFAcolorCore"])
+        .testTarget(name: "RenderersTests", dependencies: ["Renderers", "ALFAcolorCore"]),
+        .testTarget(name: "MotionTests", dependencies: ["Motion"])
     ]
 )
