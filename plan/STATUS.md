@@ -96,7 +96,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-605](briefe/B-605.md) | E6 | Teilen-Erweiterung | B-603 | offen |
 | [B-701](briefe/B-701.md) | E7 | Verbindungen und Vorspielen | B-301 | offen |
 | [B-702](briefe/B-702.md) | E7 | Vergleich nebeneinander | B-203 | offen |
-| [B-703](briefe/B-703.md) | E7 | Versionen von Karten | B-404 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-703](briefe/B-703.md) | E7 | Versionen von Karten | B-404 | erledigt, geprüft 2026-10-09 (Chef: Gesamtlauf nach B-243); Abnahme am Bild offen (Abschnitt Versionen, Wiederherstellen mit Rückgängig, Ablegen im Labor); Versionen gelöschter Karten werden beim Sichern nicht geschrieben; Breite der Karte gehört nicht zur Version |
 | [B-704](briefe/B-704.md) | E7 | Mockup-Paket ausgeben | B-602 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 845 Tests, App-Bau grün); preview.html am Bild offen; Fragen: Bild mit Herkunft ohne Lizenz = eigen? fremder Code im Paket? |
 | [B-705](briefe/B-705.md) | E7 | Vertrag-ZIP und Mockup-Paket einlesen | B-103, B-704 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-706](briefe/B-706.md) | E7 | PDF-Bogen | B-704 | erledigt, geprüft 2026-10-09 (Chef: Paket-Tests grün laut Agent; Gesamtlauf nach B-705); Abnahme am Bild offen (PDF öffnen, Layout, Maßlinien, Legende, Ausgabe-Dialog); Maßlinien der Stückabstände laufen durch die Stückmitte |
