@@ -5,6 +5,8 @@ public struct LabSession: Equatable, Sendable {
     /// The tab that the editor shows.
     public private(set) var tab: LabDraft.Tab
     public private(set) var controls: [LabControl]
+    /// The properties of the component of a React card. Empty for other cards.
+    public private(set) var props: [LabProp]
     /// The versions of the card. The current one is the last saved draft.
     public private(set) var versions: VersionLog<LabDraft>
     public var zoom: LabZoom = .fit
@@ -16,6 +18,7 @@ public struct LabSession: Equatable, Sendable {
         self.draft = draft
         self.tab = LabSession.firstTab(of: draft)
         self.controls = LabControls.read(draft)
+        self.props = LabSession.readProps(draft)
         self.versions = VersionLog(current: draft)
     }
 
@@ -57,6 +60,12 @@ public struct LabSession: Equatable, Sendable {
         controls[index].setColour(hex)
     }
 
+    /// Sets a property. Nothing changes for an unknown name or a value of another kind.
+    public mutating func setProp(_ value: LabProp.Value, for name: String) {
+        guard let index = props.firstIndex(where: { $0.name == name }) else { return }
+        props[index].set(value)
+    }
+
     /// Routes pasted text. Style sheets and scripts go to their tab, which then opens. Other text goes to the open tab.
     public mutating func paste(_ text: String) {
         let routed = draft.art == .react ? nil : LabPaste.target(for: text)
@@ -72,6 +81,7 @@ public struct LabSession: Equatable, Sendable {
         draft = board
         tab = LabSession.firstTab(of: board)
         controls = LabControls.read(board)
+        props = LabSession.readProps(board)
     }
 
     /// Writes the changed control values into the code and saves the result as the newest version of the card.
@@ -93,6 +103,19 @@ public struct LabSession: Equatable, Sendable {
             guard let previous = earlier.first(where: { $0.name == fresh.name }) else { return fresh }
             return fresh.carrying(previous)
         }
+        let earlierProps = props
+        props = LabSession.readProps(draft).map { fresh in
+            guard let previous = earlierProps.first(where: { $0.name == fresh.name }), previous.initial == fresh.initial,
+                  previous.kind == fresh.kind else { return fresh }
+            var copy = fresh
+            copy.set(previous.value)
+            return copy
+        }
+    }
+
+    /// The properties of a React draft: the parameters of its component in the script tab.
+    static func readProps(_ draft: LabDraft) -> [LabProp] {
+        draft.art == .react ? LabPropsReader.read(draft.script) : []
     }
 
     private static func firstTab(of draft: LabDraft) -> LabDraft.Tab {

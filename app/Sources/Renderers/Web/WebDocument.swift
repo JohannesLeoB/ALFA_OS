@@ -70,7 +70,7 @@ public enum WebDocument {
         code = code.replacing(/^[ \t]*export[ \t]*\{[^}]*\}[ \t]*;?[ \t]*$/.anchorsMatchLineEndings(), with: "")
         code = code.replacing(/export\s+(const|function|class|let|var|type|interface|enum)/) { String($0.output.1) }
         code = code.replacing(/export\s+default\s+[A-Z][A-Za-z0-9_]*\s*;?/, with: "")
-        let render = name.map { "ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(\($0)));" }
+        let render = name.map { mountCode($0) }
             ?? "document.body.textContent='No component found: add export default or a capitalised function.';"
         let styles = named(files, ".css").map { "<style>\(escapeScript($0))</style>" }.joined()
         let scripts = reactScripts.map { #"<script src="\#($0)"></script>"# }.joined()
@@ -121,6 +121,14 @@ public enum WebDocument {
             return Declaration(name: String(match.output.3), exported: match.output.1 != nil,
                                isConstant: match.output.2 == "const", body: String(source[match.range.upperBound..<end]))
         }
+    }
+
+    /// Draws the component in a root that keeps its props: `window.__setProps(object)` draws it again with new props
+    /// and no reload. The first drawing takes `window.__initialProps`, which a lab page may set before the card runs.
+    static func mountCode(_ component: String) -> String {
+        "window.__root=ReactDOM.createRoot(document.getElementById('root'));"
+            + "window.__setProps=function(p){window.__root.render(React.createElement(\(component),p||{}))};"
+            + "window.__setProps(window.__initialProps||{});"
     }
 
     /// Compiles a TypeScript card with Babel's own call and runs the result. The page's `text/babel` path

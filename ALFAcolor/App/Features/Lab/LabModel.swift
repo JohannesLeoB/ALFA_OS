@@ -73,7 +73,7 @@ final class LabModel {
     /// Builds the page from the session, replacing a running one.
     func reloadPage() async {
         live = nil
-        guard let document = LabPreview.document(for: session.draft, controls: session.controls, dark: session.isDark) else { return }
+        guard let document = LabPreview.document(for: session.draft, controls: session.controls, props: session.props, dark: session.isDark) else { return }
         live = try? await LabPreview.makeLive(document)
     }
 
@@ -120,6 +120,12 @@ final class LabModel {
     func setColour(_ hex: String, for name: String) {
         session.setColour(hex, for: name)
         takeControlsOver()
+    }
+
+    /// A property control goes into the running page without a reload.
+    func setProp(_ value: LabProp.Value, for name: String) {
+        session.setProp(value, for: name)
+        takePropsOver()
     }
 
     func toggleDark() {
@@ -206,5 +212,11 @@ final class LabModel {
         guard let live else { return }
         let controls = session.controls
         Task { await LabPreview.apply(controls, to: live) }
+    }
+
+    private func takePropsOver() {
+        guard let live else { return }
+        let props = session.props
+        Task { await LabPreview.applyProps(props, to: live) }
     }
 }

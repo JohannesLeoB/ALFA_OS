@@ -12,12 +12,39 @@ public enum LabPreview {
     static let applyScript = "var style = document.getElementById('lab-tweaks'); if (style) { style.textContent = css; }"
 
     /// The document of the draft with the controls and the colour scheme. nil when the draft is not web code.
-    public static func document(for draft: LabDraft, controls: [LabControl], dark: Bool) -> String? {
+    public static func document(for draft: LabDraft, controls: [LabControl], props: [LabProp] = [], dark: Bool) -> String? {
         guard let html = WebDocument.html(for: draft.card) else { return nil }
         let scheme = "<style>html{color-scheme:\(dark ? "dark" : "light")}</style>"
         let tweaks = "<style id=\"\(tweakID)\">\(WebDocument.escapeScript(tweakCSS(controls)))</style>"
-        return insertInHead(scheme + tweaks, into: html)
+        var head = scheme + tweaks
+        if !props.isEmpty {
+            // The component draws with these values from the start, as the page takes them before it draws.
+            head += "<script>window.__initialProps=\(WebDocument.escapeScript(propsJSON(props)));</script>"
+        }
+        return insertInHead(head, into: html)
     }
+
+    /// The values of the properties as a JSON object, by name.
+    public static func propsJSON(_ props: [LabProp]) -> String {
+        var values: [String: Any] = [:]
+        for prop in props {
+            switch prop.value {
+            case .number(let number): values[prop.name] = number
+            case .text(let text): values[prop.name] = text
+            case .flag(let flag): values[prop.name] = flag
+            }
+        }
+        let data = (try? JSONSerialization.data(withJSONObject: values, options: [.sortedKeys])) ?? Data("{}".utf8)
+        return String(decoding: data, as: UTF8.self)
+    }
+
+    /// Takes the property values over in the running page: the component draws again with them, without a reload.
+    public static func applyProps(_ props: [LabProp], to live: LiveCard) async {
+        _ = try? await live.page.callJavaScript(applyPropsScript, arguments: ["json": propsJSON(props)])
+    }
+
+    /// Hands the JSON object to the component of the page. Nothing happens for a page without a component.
+    static let applyPropsScript = "if (window.__setProps) { window.__setProps(JSON.parse(json)); }"
 
     /// The style of the changed controls. Each changed variable is set on the root element and on every element, marked
     /// important, so that the code's own declarations give way to it. Unchanged variables keep the code's values.
