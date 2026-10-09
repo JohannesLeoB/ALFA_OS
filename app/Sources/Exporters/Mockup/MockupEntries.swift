@@ -33,10 +33,11 @@ struct MockupEntries {
         case .code(let language, let sources, let previewWidth):
             let names = Self.orderedNames(sources.keys)
             let stem = Self.safeName(item.id.raw)
+            // All files of the card share one folder, so that links between them still work.
             // The entry file is the one named index.html, else the first HTML file, else the first file.
             let main = names.first ?? ""
-            let mainExtension = (main as NSString).pathExtension
-            let path = unique("code/\(stem).\(mainExtension.isEmpty ? Self.extensionFor(language) : Self.fileName(mainExtension))")
+            let mainName = main.isEmpty ? "\(stem).\(Self.extensionFor(language))" : Self.fileName(main)
+            let path = unique("code/\(stem)/\(mainName)")
             files[path] = Data((sources[main] ?? "").utf8)
             for name in names.dropFirst() {
                 let extra = unique("code/\(stem)/\(Self.fileName(name))")

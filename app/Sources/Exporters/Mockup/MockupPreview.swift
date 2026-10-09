@@ -76,7 +76,7 @@ enum MockupPreview {
             guard let mode = entry.mode, mode == "html" || mode == "tailwind" else {
                 return pre(entry.title + "\n\n" + code)
             }
-            return card(code, entry)
+            return card(page(code, file: entry.file, files: files), entry)
         case "image":
             if let file = entry.file {
                 return "<img src=\"\(escape(file))\" alt=\"\(escape(entry.title))\">"
@@ -114,6 +114,34 @@ enum MockupPreview {
         return "<div class=\"card-head\" style=\"height:\(cardHeader)px\">\(escape(entry.title))</div>"
             + "<iframe sandbox=\"allow-scripts\" srcdoc=\"\(escape(code))\" "
             + "style=\"position:absolute;left:0;top:\(cardHeader)px;width:\(design)px;height:\(height)px;transform:scale(\(scale))\"></iframe>"
+    }
+
+    /// The page of a card with the other files of its folder put in place: a linked style sheet or script becomes inline.
+    /// Other files, such as images, are not embedded.
+    static func page(_ code: String, file: String?, files: [String: Data]) -> String {
+        guard let file, let slash = file.lastIndex(of: "/") else { return code }
+        let folder = String(file[...slash])
+        var page = code
+        for (path, bytes) in files.sorted(by: { $0.key < $1.key }) where path != file && path.hasPrefix(folder) {
+            let name = String(path.dropFirst(folder.count))
+            guard !name.contains("/") else { continue }
+            let text = String(decoding: bytes, as: UTF8.self)
+            let linked = NSRegularExpression.escapedPattern(for: name)
+            if name.lowercased().hasSuffix(".css") {
+                page = replace(page, pattern: "<link[^>]*href=[\"']\(linked)[\"'][^>]*>", with: "<style>\n\(text)\n</style>")
+            } else if name.lowercased().hasSuffix(".js") {
+                let inline = text.replacingOccurrences(of: "</script", with: "<\\/script")
+                page = replace(page, pattern: "<script[^>]*src=[\"']\(linked)[\"'][^>]*>\\s*</script>", with: "<script>\n\(inline)\n</script>")
+            }
+        }
+        return page
+    }
+
+    private static func replace(_ text: String, pattern: String, with replacement: String) -> String {
+        guard let expression = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) else { return text }
+        let range = NSRange(text.startIndex..., in: text)
+        return expression.stringByReplacingMatches(in: text, range: range,
+                                                   withTemplate: NSRegularExpression.escapedTemplate(for: replacement))
     }
 
     private static func pre(_ text: String) -> String {
