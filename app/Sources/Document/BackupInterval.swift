@@ -10,7 +10,7 @@ public enum BackupInterval: Int, CaseIterable, Sendable {
     case minutes120 = 120
 
     /// Used when no interval is stored.
-    public static let standard: BackupInterval = .minutes30
+    public static let standard: BackupInterval = .minutes60
 
     public var minutes: Int { rawValue }
 
