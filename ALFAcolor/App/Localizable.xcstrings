@@ -8284,6 +8284,61 @@
           }
         }
       }
+    },
+    "undo.note.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz hinzufügen"
+          }
+        }
+      }
+    },
+    "undo.note.edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz ändern"
+          }
+        }
+      }
+    },
+    "undo.note.resolve" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz erledigen"
+          }
+        }
+      }
+    },
+    "undo.note.reopen" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz wieder öffnen"
+          }
+        }
+      }
+    },
+    "undo.note.delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz löschen"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
