@@ -43,6 +43,8 @@ public final class CanvasInteraction {
     public func reloadSpacingStops() {
         spacingStops = SpacingTokens.stops(in: store.document.tokenSets)
     }
+    /// True while the gaps of the selection show, without the Option key. Set by the switch in the room inspector.
+    public var showsDistances = false { didSet { if oldValue != showsDistances { refreshDistances() } } }
     /// The IDs of new items (copies). A test can set its own.
     @ObservationIgnored public var makeID: () -> ItemID = { ItemID() }
 
@@ -364,7 +366,7 @@ public final class CanvasInteraction {
 
     /// Shows the gaps from a rectangle to its neighbours while the Option key is held, and clears them otherwise.
     func showDistances(of rect: Rect?, among others: [Rect]) {
-        guard optionHeld, let rect else {
+        guard optionHeld || showsDistances, let rect else {
             if !controller.measures.isEmpty { controller.measures = [] }
             if !distanceLabels.isEmpty { distanceLabels = [] }
             return

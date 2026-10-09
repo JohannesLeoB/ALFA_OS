@@ -7,6 +7,7 @@ import BoardModel
 struct InspectorPanel: View {
     var store: BoardStore
     var snap: SnapSettings
+    var interaction: CanvasInteraction
     /// Unit of the position fields. It lives in the window state, so it stays when the inspector is hidden.
     @Binding var unit: LengthUnit
 
@@ -14,7 +15,7 @@ struct InspectorPanel: View {
         let items = store.selectedItems
         Form {
             if items.isEmpty {
-                RoomSection(store: store, snap: snap)
+                RoomSection(store: store, snap: snap, interaction: interaction)
             } else {
                 HeaderSection(items: items)
                 PositionSection(store: store, items: items, unit: $unit)

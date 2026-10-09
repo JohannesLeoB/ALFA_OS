@@ -166,6 +166,7 @@ public enum ShortcutTable {
         command("view.statusBar", .view),
         command("view.gridShown", .view),
         command("view.snapsAtAll", .view),
+        command("view.distances", .view),
         command("view.rulers", .view),
         command("view.guides", .view),
         command("view.guidesLocked", .view),

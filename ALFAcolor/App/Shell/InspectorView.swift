@@ -8,6 +8,6 @@ struct InspectorView: View {
     @Bindable var shell: ShellState
 
     var body: some View {
-        InspectorPanel(store: canvas.store, snap: interaction.snap, unit: $shell.lengthUnit)
+        InspectorPanel(store: canvas.store, snap: interaction.snap, interaction: interaction, unit: $shell.lengthUnit)
     }
 }

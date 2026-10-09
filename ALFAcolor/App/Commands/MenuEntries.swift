@@ -26,6 +26,7 @@ struct MenuFunctions {
         case "view.guidesLocked": return with { $0.guidesLocked.toggle() }
         case "view.gridShown": return withInteraction { $0.setGridShown(!$0.gridShown) }
         case "view.snapsAtAll": return withInteraction { $0.setSnapsAtAll(!$0.snapsAtAll) }
+        case "view.distances": return withInteraction { $0.showsDistances.toggle() }
         case "view.zoomIn": return withCanvas { $0.perform(.zoomIn) }
         case "view.zoomOut": return withCanvas { $0.perform(.zoomOut) }
         case "view.actualSize": return withCanvas { $0.perform(.actualSize) }

@@ -176,6 +176,7 @@ struct LayerSection: View {
 struct RoomSection: View {
     var store: BoardStore
     var snap: SnapSettings
+    var interaction: CanvasInteraction
 
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
@@ -196,6 +197,10 @@ struct RoomSection: View {
                     Text("inspector.room.gridOff")
                 }
             }
+            Toggle("inspector.room.distances", isOn: Binding(
+                get: { interaction.showsDistances },
+                set: { interaction.showsDistances = $0 }
+            ))
         }
     }
 }
