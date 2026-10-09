@@ -2,7 +2,7 @@ import Foundation
 import ALFAcolorCore
 
 /// An item and its position in the item list of a space.
-public struct IndexedItem: Hashable, Sendable {
+public struct IndexedItem: Hashable, Codable, Sendable {
     public var index: Int
     public var item: Item
     public init(index: Int, item: Item) { self.index = index; self.item = item }
@@ -11,7 +11,7 @@ public struct IndexedItem: Hashable, Sendable {
 /// The change of a set of items: how they were before and how they are after.
 /// An item that is only in `before` was removed. An item that is only in `after` was added.
 /// All other items of the space keep their order.
-public struct ItemDelta: Hashable, Sendable {
+public struct ItemDelta: Hashable, Codable, Sendable {
     /// Sorted by index, indexes are positions in the list before the change.
     public var before: [IndexedItem]
     /// Sorted by index, indexes are positions in the list after the change.
@@ -54,7 +54,7 @@ public struct ItemDelta: Hashable, Sendable {
 
 /// What a command did to a space: the record that undoes it, and that applies it again.
 /// An edit is a value. `reversed` is the inverse command.
-public struct Edit: Hashable, Sendable {
+public struct Edit: Hashable, Codable, Sendable {
     public var spaceID: String
     /// The changes in the order in which they were made. A batch has more than one.
     public var steps: [ItemDelta]
