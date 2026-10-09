@@ -42,6 +42,7 @@ struct CanvasSurface: View {
         .simultaneousGesture(grab)
         .simultaneousGesture(pinch)
         .selectionInput(interaction, isFocused: hasFocus, panning: spaceDown)
+        .modifier(LabKey(isFocused: hasFocus))
         .pointerStyle(pointer)
         .focusable()
         .focusEffectDisabled()

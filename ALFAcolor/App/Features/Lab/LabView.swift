@@ -10,6 +10,8 @@ struct LabView: View {
 
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
+    /// The editor takes the keyboard when the lab opens, so the keys of the canvas do not act under the lab.
+    @FocusState private var editorHasFocus: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -28,6 +30,7 @@ struct LabView: View {
         }
         .background(theme.color(.background, scheme))
         .onExitCommand(perform: onClose)
+        .onAppear { editorHasFocus = true }
     }
 
     private var header: some View {
@@ -37,7 +40,9 @@ struct LabView: View {
             artPicker
             widthPicker
             Spacer()
+            // Escape closes the lab also while the editor has the focus.
             Button(LocalizedStringKey("lab.close"), action: onClose)
+                .keyboardShortcut(.cancelAction)
         }
         .padding(theme.space(.s3))
     }
@@ -74,6 +79,7 @@ struct LabView: View {
                 set: { model.edit($0, in: model.session.tab) }
             ))
             .font(theme.text(.body).font.monospaced())
+            .focused($editorHasFocus)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             HStack(spacing: theme.space(.s2)) {
                 PasteButton(payloadType: String.self) { strings in

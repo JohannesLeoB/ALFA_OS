@@ -13,6 +13,10 @@ struct CodeCardView: View {
 
     @State private var model: CodeCardModel
 
+    @Environment(\.theme) private var theme
+    @FocusedValue(\.shell) private var shell
+    @FocusedValue(\.canvas) private var canvas
+
     init(presentation: ItemPresentation, content: CodeContent, detail: DetailLevel, zoom: Double) {
         self.presentation = presentation
         self.content = content
@@ -22,7 +26,7 @@ struct CodeCardView: View {
     }
 
     var body: some View {
-        CardFrame(presentation: presentation, detail: detail, zoom: zoom, accessory: switchControl) { _ in
+        CardFrame(presentation: presentation, detail: detail, zoom: zoom, accessory: headerControls) { _ in
             CodeCardBody(model: model, detail: detail, zoom: zoom)
         }
         .onChange(of: content) { _, new in
@@ -30,9 +34,26 @@ struct CodeCardView: View {
         }
     }
 
-    /// The switch between player, source and both. Only a card that can run has a player to switch to.
-    private var switchControl: AnyView? {
-        model.state.canPlay ? AnyView(CodeViewPicker(model: model)) : nil
+    /// The header controls: the switch between player and source for a card that can run, then the button for the lab.
+    private var headerControls: AnyView {
+        AnyView(HStack(spacing: theme.space(.s2)) {
+            if model.state.canPlay {
+                CodeViewPicker(model: model)
+            }
+            Button(action: openLab) {
+                Label(LocalizedStringKey("code.lab"), systemImage: "flask")
+                    .labelStyle(.iconOnly)
+            }
+            .buttonStyle(.plain)
+            .help(LocalizedStringKey("code.lab"))
+            .disabled(shell == nil || canvas == nil)
+        })
+    }
+
+    /// Opens the lab of this card in the window that shows it.
+    private func openLab() {
+        guard let shell, let store = canvas?.store else { return }
+        shell.openLab(for: presentation.id, store: store)
     }
 }
 
