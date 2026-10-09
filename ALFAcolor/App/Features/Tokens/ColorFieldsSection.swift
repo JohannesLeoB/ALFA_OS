@@ -20,6 +20,8 @@ struct ColorFieldsSection: View {
     @State private var draft = Color(ColorFields.defaultColor)
     @State private var sampler = NSColorSampler()
     @State private var contrastShown = false
+    /// The catalog key of the reason for the last refused change. nil after a change that worked.
+    @State private var notice: String?
 
     /// The field whose colour the picker changes. The colour is written when the picker closes, one undo step.
     private struct ValueEdit: Identifiable {
@@ -68,6 +70,11 @@ struct ColorFieldsSection: View {
             }
             ForEach(fields) { field in
                 row(field)
+            }
+            if let notice {
+                Text(LocalizedStringKey(notice))
+                    .themeText(theme.text(.caption))
+                    .foregroundStyle(theme.color(.text, scheme))
             }
             Text("tokens.colorspace.hint")
                 .themeText(theme.text(.caption))
@@ -125,7 +132,7 @@ struct ColorFieldsSection: View {
 
     private func add() {
         let name = ColorFields.freeName(base: String(localized: "tokens.newName"), in: sets)
-        if (try? store.changeTokenSets(nameKey: "undo.color.add", { try ColorFields.add(name: name, color: ColorFields.defaultColor, to: &$0) })) == true {
+        if attempt({ try store.changeTokenSets(nameKey: "undo.color.add") { try ColorFields.add(name: name, color: ColorFields.defaultColor, to: &$0) } }) == true {
             selected = name
         }
     }
@@ -139,23 +146,23 @@ struct ColorFieldsSection: View {
         let new = renameText
         renaming = nil
         guard new.trimmingCharacters(in: .whitespacesAndNewlines) != old else { return }
-        if (try? store.renameColorField(old, to: new)) == true {
+        if attempt({ try store.renameColorField(old, to: new) }) == true {
             selected = new.trimmingCharacters(in: .whitespacesAndNewlines)
         }
     }
 
     private func commitValue(_ name: String) {
         guard let color = Self.rgb(from: draft) else { return }
-        try? store.setColorField(name, to: color)
+        attempt { try store.setColorField(name, to: color) }
     }
 
     private func remove(_ name: String) {
         if selected == name { selected = nil }
-        try? store.changeTokenSets(nameKey: "undo.color.remove") { try ColorFields.remove(name, from: &$0) }
+        attempt { try store.changeTokenSets(nameKey: "undo.color.remove") { try ColorFields.remove(name, from: &$0) } }
     }
 
     private func apply(_ field: ColorFields.Field) {
-        try? store.perform(.setFill(store.selection, hex: field.color.hex))
+        attempt { try store.perform(.setFill(store.selection, hex: field.color.hex)) }
     }
 
     /// Opens the system pipette. A colour taken from any place on the screen becomes a new field; cancel changes nothing.
@@ -164,9 +171,24 @@ struct ColorFieldsSection: View {
             Task { @MainActor in
                 guard let picked, let color = Self.rgb(from: Color(nsColor: picked)) else { return }
                 let name = ColorFields.freeName(base: String(localized: "tokens.newName"), in: store.document.tokenSets)
-                try? store.changeTokenSets(nameKey: "undo.color.add") { try ColorFields.add(name: name, color: color, to: &$0) }
+                attempt { try store.changeTokenSets(nameKey: "undo.color.add") { try ColorFields.add(name: name, color: color, to: &$0) } }
             }
         }
+    }
+
+    /// Runs one change. A refused change shows its reason; a change that worked clears it. nil when it was refused.
+    @discardableResult
+    private func attempt<Value>(_ change: () throws -> Value) -> Value? {
+        do {
+            let value = try change()
+            notice = nil
+            return value
+        } catch let error as ColorFields.Failure {
+            notice = error.noticeKey
+        } catch {
+            notice = "tokens.notice.failed"
+        }
+        return nil
     }
 
     /// The colour in sRGB, rounded to 8-bit steps. nil when the colour has no sRGB form.

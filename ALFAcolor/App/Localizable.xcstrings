@@ -1772,6 +1772,72 @@
         }
       }
     },
+    "tokens.notice.duplicateName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diesen Namen gibt es schon."
+          }
+        }
+      }
+    },
+    "tokens.notice.emptyName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Name darf nicht leer sein."
+          }
+        }
+      }
+    },
+    "tokens.notice.failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Änderung konnte nicht gemacht werden."
+          }
+        }
+      }
+    },
+    "tokens.notice.invalidHex" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Farbe ist kein gültiger Hex-Wert."
+          }
+        }
+      }
+    },
+    "tokens.notice.invalidName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieser Name ist nicht gültig."
+          }
+        }
+      }
+    },
+    "tokens.notice.unknownField" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Feld gibt es nicht mehr."
+          }
+        }
+      }
+    },
     "item.group.count %lld" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4981,6 +5047,72 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Löschen"
+          }
+        }
+      }
+    },
+    "tokens.notice.emptyName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Name fehlt."
+          }
+        }
+      }
+    },
+    "tokens.notice.invalidName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Name darf keine Punkte, geschweiften Klammern oder Schrägstriche enthalten und nicht mit $ beginnen."
+          }
+        }
+      }
+    },
+    "tokens.notice.duplicateName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es gibt schon ein Farbfeld mit diesem Namen."
+          }
+        }
+      }
+    },
+    "tokens.notice.invalidHex" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Farbe ist keine gültige Hex-Angabe."
+          }
+        }
+      }
+    },
+    "tokens.notice.unknownField" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Farbfeld gibt es nicht mehr."
+          }
+        }
+      }
+    },
+    "tokens.notice.failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Änderung wurde abgelehnt."
           }
         }
       }

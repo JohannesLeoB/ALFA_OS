@@ -20,6 +20,17 @@ public enum ColorFields {
         case duplicateName(String)
         case invalidHex(String)
         case unknownField(String)
+
+        /// The catalog key of the notice that tells the user why the change was refused.
+        public var noticeKey: String {
+            switch self {
+            case .emptyName: "tokens.notice.emptyName"
+            case .invalidName: "tokens.notice.invalidName"
+            case .duplicateName: "tokens.notice.duplicateName"
+            case .invalidHex: "tokens.notice.invalidHex"
+            case .unknownField: "tokens.notice.unknownField"
+            }
+        }
     }
 
     /// A colour field: its name and its colour. A field has no alpha.
