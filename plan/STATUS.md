@@ -21,7 +21,7 @@
 
 Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr. 4 per Vorschlag gesetzt. Nr. 32–35 (Sprache, Wächter) ebenfalls.
 
-## Briefe (68)
+## Briefe (69)
 
 | Brief | Etappe | Titel | Hängt ab von | Status |
 |---|---|---|---|---|
@@ -41,7 +41,8 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-203](briefe/B-203.md) | E2 | Leinwand-View: Zoom, Verschieben, Sichtbarkeit | B-201 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 301 Tests); Bedienung am Bild offen; Zoomtasten vom Chef auf InDesign gestellt (⌘0 einpassen, ⌘1 100 %) |
 | [B-204](briefe/B-204.md) | E2 | Auswahl, Lasso, Griffe, Tastatur | B-202, B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 528 Tests); Abnahme am Bild offen |
 | [B-205](briefe/B-205.md) | E2 | Stückarten zeichnen | B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 407 Tests); Notiz-Bearbeitung nach B-204 verschoben; Abnahme am Bild offen |
-| [B-206](briefe/B-206.md) | E2 | Räume als Reiter und Ebenen | B-201, B-102 | offen |
+| [B-206](briefe/B-206.md) | E2 | Räume als Reiter und Ebenen | B-201, B-102 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
+| [B-218](briefe/B-218.md) | E2 | Absturz beim Sichern und Nachträge | B-211, B-217 | vergeben an Haiku-Agent (im Repo), 2026-10-09 |
 | [B-207](briefe/B-207.md) | E2 | Einfügen und Hineinziehen | B-201, B-104 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 569 Tests; Sichern an neuem Ort behoben); Abnahme am Bild offen |
 | [B-208](briefe/B-208.md) | E2 | Kontextleiste und Inspektor-Grundgerüst | B-204 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 615 Tests); Abnahme am Bild offen |
 | [B-209](briefe/B-209.md) | E2 | Leistungsprobe Leinwand | B-203 | offen |
