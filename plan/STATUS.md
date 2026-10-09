@@ -134,7 +134,7 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [D-004](briefe/D-004.md) | E2 | Ersetzt durch D-007 (gestaltung/briefing-system/) | — | ersetzt |
 | [D-005](briefe/D-005.md) | E8 | Ersetzt durch D-008 (gestaltung/briefing-ansichten/) | — | ersetzt |
 | [D-006](briefe/D-006.md) | E2 | Ersetzt durch D-008 | — | ersetzt |
-| D-007 | E2 | Design-System-Artifact neu: Farbwelten, Zuordnung, Bausteine (`gestaltung/briefing-system/BRIEFING.md`) | — | Briefing fertig; wartet auf Johannes (Konto B starten) |
-| D-008 | E2 | Design-Session Ansichten und Bögen (`gestaltung/briefing-ansichten/BRIEFING.md`) | D-007 | Briefing fertig; Paket (ZIP) schnürt der Chef nach Freigabe |
+| D-007 | E2 | Design-System-Artifact neu: Farbwelten, Zuordnung, Bausteine (`gestaltung/briefing-system/BRIEFING.md`) | — | Phase 1 des einen Design-Projekts; Briefing fertig; wartet auf ZIP und Start durch Johannes |
+| D-008 | E2 | Design-Session Ansichten und Bögen (`gestaltung/briefing-ansichten/BRIEFING.md`) | D-007 | Phase 2 desselben Projekts; Briefing fertig |
 | [D-003](briefe/D-003.md) | E5 | Startbausteine und Musterbogen (Claude Design) | D-002 | offen |
 | [P-001](briefe/P-001.md) | alle | Prüfplan je Gate (Konto C) | — | offen |
