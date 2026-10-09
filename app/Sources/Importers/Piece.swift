@@ -44,6 +44,8 @@ public struct SkippedFile: Equatable, Sendable {
         case unsupportedType
         /// The file could not be read.
         case unreadable
+        /// The file is above the hard limit, which no confirmation lifts.
+        case tooLarge
     }
 
     public var url: URL

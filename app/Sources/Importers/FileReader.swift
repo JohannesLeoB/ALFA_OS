@@ -5,6 +5,8 @@ import ALFAcolorCore
 enum FileReader {
     /// Files above this size ask first.
     static let confirmAbove = 20 * 1024 * 1024
+    /// Files above this size are never taken, also after the user agreed.
+    static let hardLimit = 256 * 1024 * 1024
 
     enum Result: Equatable, Sendable {
         case piece(Piece)
@@ -25,9 +27,12 @@ enum FileReader {
         guard values.isDirectory != true, let kind = FileKind.kind(forExtension: url.pathExtension) else {
             return .skipped(SkippedFile(url: url, reason: .unsupportedType))
         }
-        let bytes = values.fileSize ?? 0
+        guard let bytes = byteCount(of: url, known: values.fileSize) else {
+            return .skipped(SkippedFile(url: url, reason: .unreadable))
+        }
+        if bytes > hardLimit { return .skipped(SkippedFile(url: url, reason: .tooLarge)) }
         if bytes > confirmAbove, !allowLarge.contains(url) { return .large(LargeFile(url: url, bytes: bytes)) }
-        guard let data = try? Data(contentsOf: url) else { return .skipped(SkippedFile(url: url, reason: .unreadable)) }
+        guard let data = try? Data(contentsOf: url, options: .mappedIfSafe) else { return .skipped(SkippedFile(url: url, reason: .unreadable)) }
 
         let name = url.deletingPathExtension().lastPathComponent
         let ext = url.pathExtension.lowercased()
@@ -44,6 +49,15 @@ enum FileReader {
             guard let text = decode(data) else { return .skipped(SkippedFile(url: url, reason: .unsupportedType)) }
             return .piece(Piece(title: name, body: .content(.note(text: text)), tags: [ext], source: source))
         }
+    }
+
+    /// The size of a file: the size the system reports, or, when it reports none, the size measured by reading to the end.
+    /// Nil when the file cannot be measured.
+    static func byteCount(of url: URL, known: Int?) -> Int? {
+        if let known { return known }
+        guard let handle = try? FileHandle(forReadingFrom: url), let end = try? handle.seekToEnd() else { return nil }
+        try? handle.close()
+        return Int(clamping: end)
     }
 
     /// The text of a file as UTF-8, or as Latin-1 when it is no UTF-8. Bytes with a zero are no text.
