@@ -2510,6 +2510,17 @@
         }
       }
     },
+    "package.warning.limitedRect %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lage oder Maß des Stücks %@ lag außerhalb der Zahlengrenze und wurde begrenzt."
+          }
+        }
+      }
+    },
     "package.warning.missingLayerFile %@ %@" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -75,6 +75,8 @@ public struct ReadReport: Equatable, Sendable {
     public var unreferencedAssets: [String] = []
     public var warnings: [String] = []
     public var isClean: Bool { missingAssets.isEmpty && corruptAssets.isEmpty && warnings.isEmpty }
+
+    public init() {}
 }
 
 extension ReadReport {

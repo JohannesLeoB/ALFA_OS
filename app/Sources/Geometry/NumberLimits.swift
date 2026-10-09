@@ -1,4 +1,5 @@
 import Foundation
+import ALFAcolorCore
 
 /// Limits for numbers that come from input or from a file. A conversion from Double to Int traps for a value
 /// beyond the Int range, and a size far beyond the board cannot be drawn, so both are cut at these values.
@@ -30,4 +31,11 @@ public func clampedLength(_ value: Double) -> Double {
 public func clampedCoordinate(_ value: Double) -> Double {
     guard !value.isNaN else { return 0 }
     return Swift.min(Swift.max(value, -NumberLimit.coordinate), NumberLimit.coordinate)
+}
+
+public extension Rect {
+    /// The rectangle with its position and size cut to the number limits. A rectangle inside them is unchanged.
+    var limited: Rect {
+        Rect(x: clampedCoordinate(x), y: clampedCoordinate(y), w: clampedLength(w), h: clampedLength(h))
+    }
 }

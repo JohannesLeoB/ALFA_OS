@@ -47,8 +47,12 @@ public final class DocumentSession {
     /// With `box`, every change lands in the box, so the system can read the last state off the main actor.
     /// `isSaved` is false for a document that is not in a file yet.
     public init(document: ALFAcolorDocument, report: ReadReport?, box: SnapshotBox? = nil, isSaved: Bool = true) {
-        store = BoardStore(document: document, isSaved: isSaved)
-        readReport = report
+        // Values beyond the number limits are cut here, and each cut item is named in the read report.
+        let limits = ReadLimits.limited(document)
+        store = BoardStore(document: limits.document, isSaved: isSaved)
+        var merged = report ?? ReadReport()
+        merged.warnings += limits.warnings
+        readReport = limits.warnings.isEmpty ? report : merged
         self.box = box
         box?.store(snapshot())
         store.onChange = { [weak self] _, _ in self?.publish() }
