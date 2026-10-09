@@ -4,7 +4,7 @@
 |---|---|---|---|
 | E0 Fundament | erledigt | 2026-10-08 „DAHIN“ | G0 erfüllt: 12 Tests grün |
 | E1 Gerüst | läuft: B-101, B-103, B-104, B-105 erledigt; B-102 erledigt; B-106 wartet auf Bild-Abnahme; B-107 erledigt; B-108a erledigt; B-108b erledigt | 2026-10-08 „Go. Einmal vorher rundumcheck, dann mit haikus oder sonnet Auftrag bauen lassen.“ | G1 offen (Bild-Abnahme durch Johannes und P-001 stehen aus; E2 läuft auf sein Wort) |
-| E2 Leinwand | läuft: B-110, B-201, B-203, B-202, B-211, B-205 erledigt; B-204 vergeben; dann B-206, B-207, B-208, B-209 | 2026-10-09 „Weiter bauen. Ich starte die App später. Tools und funktionstiefe einbauen. App funktional machen. Go. Workers sonnet oder Haiku.“ | G2 offen |
+| E2 Leinwand | läuft: B-110, B-201, B-203, B-202, B-211, B-205, B-204 erledigt; B-207 vergeben; dann B-206, B-207, B-208, B-209 | 2026-10-09 „Weiter bauen. Ich starte die App später. Tools und funktionstiefe einbauen. App funktional machen. Go. Workers sonnet oder Haiku.“ | G2 offen |
 | E3 bis E9 | geplant | | |
 
 ## Chef-Aufgaben vor E2 (aus den Übergaben von E1)
@@ -39,10 +39,10 @@ Offene Fragen: Nr. 1, 5, 5a, 26–31 von Johannes am 2026-10-08 beantwortet; Nr.
 | [B-201](briefe/B-201.md) | E2 | BoardModel: Zustand, Befehle, Rückgängig | B-104 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 249 Tests; Nahtregel BoardModel ergänzt) |
 | [B-202](briefe/B-202.md) | E2 | Einrast-Engine | B-201 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 343 Tests, Leistungstest 2 ms grün); Abstands-Einrasten standardmäßig aus (ANSICHTEN snap.toSpacingTokens) |
 | [B-203](briefe/B-203.md) | E2 | Leinwand-View: Zoom, Verschieben, Sichtbarkeit | B-201 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 301 Tests); Bedienung am Bild offen; Zoomtasten vom Chef auf InDesign gestellt (⌘0 einpassen, ⌘1 100 %) |
-| [B-204](briefe/B-204.md) | E2 | Auswahl, Lasso, Griffe, Tastatur | B-202, B-203 | vergeben an Sonnet-Agent (im Repo), 2026-10-09 |
+| [B-204](briefe/B-204.md) | E2 | Auswahl, Lasso, Griffe, Tastatur | B-202, B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 528 Tests); Abnahme am Bild offen |
 | [B-205](briefe/B-205.md) | E2 | Stückarten zeichnen | B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 407 Tests); Notiz-Bearbeitung nach B-204 verschoben; Abnahme am Bild offen |
 | [B-206](briefe/B-206.md) | E2 | Räume als Reiter und Ebenen | B-201, B-102 | offen |
-| [B-207](briefe/B-207.md) | E2 | Einfügen und Hineinziehen | B-201, B-104 | offen |
+| [B-207](briefe/B-207.md) | E2 | Einfügen und Hineinziehen | B-201, B-104 | vergeben an Sonnet-Agent (im Repo), 2026-10-09 |
 | [B-208](briefe/B-208.md) | E2 | Kontextleiste und Inspektor-Grundgerüst | B-204 | offen |
 | [B-209](briefe/B-209.md) | E2 | Leistungsprobe Leinwand | B-203 | offen |
 | [B-211](briefe/B-211.md) | E2 | Dokument in der App: Neu, Öffnen, Sichern | B-110, B-201, B-203 | erledigt, geprüft 2026-10-09 (Chef: pruefen.sh 0 errors, 359 Tests; DocumentGroup); Abnahme am Bild offen (⌘N, ⌘O, ⌘S, Speicherstand) |
