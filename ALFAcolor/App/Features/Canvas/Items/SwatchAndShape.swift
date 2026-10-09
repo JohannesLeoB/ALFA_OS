@@ -34,7 +34,7 @@ struct ShapeBody: View {
     @ViewBuilder
     private func painted<S: InsettableShape>(_ shape: S) -> some View {
         ZStack {
-            if let fill = content.fill { shape.fill(Color(fill)) }
+            shape.fill(content.fill.map { Color($0) } ?? theme.color(.text, scheme))
             if let stroke = content.stroke, content.strokeWidth > 0 {
                 shape.strokeBorder(Color(stroke), lineWidth: content.strokeWidth)
             }

@@ -40,7 +40,7 @@ extension CanvasInteraction {
         case .frame:
             item = Item(title: "", content: .frame(deviceID: tools.options.frameDeviceID, gridID: nil), rect: box, layerID: layer)
         case .shape:
-            let style = ShapeStyle(fill: store.swatchColors.first?.hex)
+            let style = ShapeStyle(fill: ShapeFill.standard(in: store.document.tokenSets)?.hex)
             item = Item(title: "", content: .shape(kind: tools.options.shapeKind, style: style), rect: box, layerID: layer)
         default:
             return false
