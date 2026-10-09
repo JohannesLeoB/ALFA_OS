@@ -38,8 +38,11 @@ struct ShellView: View {
                                   zoomPercent: canvas.zoomPercent, selectionCount: canvas.store.selectedItems.count)
                 }
             }
+            // Content never sets the minimum size of a split column; a changing minimum loops the window layout.
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
             .inspector(isPresented: $shell.inspectorVisible) {
                 InspectorView(canvas: canvas, interaction: interaction)
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
             }
         }
         .toolbar { ShellToolbar(shell: shell) }

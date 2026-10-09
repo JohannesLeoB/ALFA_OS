@@ -32,6 +32,7 @@ struct CanvasSurface: View {
             }
             ScrollCatcher { controller.scroll($0) }
         }
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
         .clipped()
         .ignoresSafeArea(edges: .top)
         .onGeometryChange(for: CGSize.self, of: \.size) { size in
