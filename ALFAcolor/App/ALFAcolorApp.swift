@@ -13,7 +13,7 @@ struct ALFAcolorApp: App {
         // One window per document. The system provides New, Open, Open Recent, Save, Duplicate and Revert.
         DocumentGroup(newDocument: { BoardFile() }) { configuration in
             // Revert and versions give the window a new session. The id makes the view and its state follow it.
-            ShellView(session: configuration.document.session)
+            ShellView(session: configuration.document.session, fileURL: configuration.fileURL)
                 .id(configuration.document.session.id)
                 .environment(\.theme, theme)
         }

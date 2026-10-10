@@ -38,6 +38,9 @@ public final class DocumentSession {
     private let box: SnapshotBox?
     /// The undo steps that the package held when it was opened. They wait for the window's undo manager.
     private var savedHistory: UndoJournal<Edit>?
+    /// The package folder of the file, once the document is saved. The journal is written into it after each change.
+    private var packageURL: URL?
+    private let journalWriter = JournalWriter()
 
     /// A new, empty document. It has never been saved.
     public convenience init() {
@@ -63,7 +66,7 @@ public final class DocumentSession {
         let saved = UndoJournal<Edit>.load(from: limits.document)
         if saved.problem == nil, !saved.journal.steps.isEmpty { savedHistory = saved.journal }
         box?.store(snapshot())
-        store.onChange = { [weak self] _, _ in self?.publish() }
+        store.onChange = { [weak self] _, _ in self?.publishChange() }
         store.onViewChange = { [weak self] in self?.publish() }
     }
 
@@ -87,6 +90,24 @@ public final class DocumentSession {
 
     private func publish() {
         box?.store(snapshot())
+    }
+
+    /// Publishes the state and, for a document that is in a file, writes its undo journal into the package.
+    private func publishChange() {
+        let state = snapshot()
+        box?.store(state)
+        if let packageURL { journalWriter.submit(state, to: packageURL) }
+    }
+
+    /// Tells the session where the package is (nil for a document that is not saved). From then on every change
+    /// of the document writes the undo journal into the package in the background. Nothing is written by this call.
+    public func attachPackage(_ url: URL?) {
+        packageURL = url
+    }
+
+    /// Waits until the journal of the last change is on disk. Call it when the window closes and when the app quits.
+    public func flushJournal() {
+        journalWriter.flush()
     }
 
     /// Builds the package. With `existing` (the file as it is on disk), images that are in it already are taken over.
@@ -132,5 +153,39 @@ public final class SnapshotBox: @unchecked Sendable {
 
     public func read() -> DocumentSession.Snapshot {
         lock.withLock { latest }
+    }
+}
+
+/// Writes the undo journal of the newest snapshot into the package, on a background queue.
+/// A change that comes while a write is waiting replaces the waiting snapshot, so only the newest one is written.
+/// A failed write is dropped: the next change writes the whole journal again, and a save carries it as well.
+final class JournalWriter: @unchecked Sendable {
+    private let queue = DispatchQueue(label: "alfacolor.undo-journal", qos: .utility)
+    private let lock = NSLock()
+    private var waiting: (snapshot: DocumentSession.Snapshot, package: URL)?
+
+    func submit(_ snapshot: DocumentSession.Snapshot, to package: URL) {
+        let needsRun = lock.withLock { () -> Bool in
+            let idle = waiting == nil
+            waiting = (snapshot, package)
+            return idle
+        }
+        if needsRun { queue.async { self.writeWaiting() } }
+    }
+
+    /// Returns when everything submitted before the call is on disk.
+    func flush() {
+        queue.sync { writeWaiting() }
+    }
+
+    private func writeWaiting() {
+        let job = lock.withLock { () -> (snapshot: DocumentSession.Snapshot, package: URL)? in
+            defer { waiting = nil }
+            return waiting
+        }
+        guard let job else { return }
+        var journal = job.snapshot.history
+        journal.digest = job.snapshot.document.boardDigest
+        try? journal.write(toPackage: job.package)
     }
 }

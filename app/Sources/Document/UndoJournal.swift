@@ -108,6 +108,23 @@ public struct UndoJournal<Change: Codable & Equatable & Sendable>: Equatable, Se
         }
     }
 
+    /// Writes the journal into a package folder that is on disk, as one atomic file replace. An empty journal removes the file.
+    /// Throws when the folder is not there: a package that was never saved gets no file.
+    public func write(toPackage package: URL) throws {
+        let fm = FileManager.default
+        var isFolder: ObjCBool = false
+        guard fm.fileExists(atPath: package.path, isDirectory: &isFolder), isFolder.boolValue else {
+            throw CocoaError(.fileNoSuchFile)
+        }
+        let file = package.appending(path: Self.path)
+        if steps.isEmpty {
+            if fm.fileExists(atPath: file.path) { try fm.removeItem(at: file) }
+            return
+        }
+        try fm.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try Self.data(for: self).write(to: file, options: .atomic)
+    }
+
     /// The journal of a document. A document without the file has an empty journal and no problem.
     public static func load(from document: ALFAcolorDocument) -> ReadResult {
         guard let data = document.carriedFiles[path] else {

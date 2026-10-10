@@ -22,15 +22,18 @@ struct ShellView: View {
     /// The first thing that reading the document noticed, shown in the status bar.
     private let readNotice: String?
     private let session: DocumentSession
+    /// The package folder of the file. nil while the document is not saved.
+    private let fileURL: URL?
 
     /// The window shows the document of `session`. The undo history belongs to this window.
-    init(session: DocumentSession) {
+    init(session: DocumentSession, fileURL: URL? = nil) {
         let controller = CanvasController(store: session.store)
         _canvas = State(initialValue: controller)
         _interaction = State(initialValue: CanvasInteraction(controller: controller))
         _importer = State(initialValue: ImportCoordinator(store: session.store))
         readNotice = session.readReport?.statusNotice
         self.session = session
+        self.fileURL = fileURL
     }
 
     var body: some View {
@@ -89,6 +92,13 @@ struct ShellView: View {
             guard let undoManager else { return }
             canvas.store.useUndoManager(undoManager)
             session.restoreSavedHistory()
+        }
+        .onChange(of: fileURL, initial: true) {
+            session.attachPackage(fileURL)
+        }
+        .onDisappear { session.flushJournal() }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)) { _ in
+            session.flushJournal()
         }
         .onChange(of: canvas.store.revision) {
             shell.closeLabIfCardGone(in: canvas.store)
