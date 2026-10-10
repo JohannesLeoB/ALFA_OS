@@ -12,7 +12,7 @@ Stand 2026-10-10 23:55. Quellen: git, Johannes' Antworten (`plan/FRAGEN.md`, Abs
 - Schablone der Hülle, schwarz-weiß und bedienbar: Artifact `4iWtw8Hepr9gR9koZ5nYSG`, zur Abnahme.
 - Ticker: GitHub Issues in `JohannesLeoB/ALFA_OS` (seit 10.10.); laufende Aufträge und Johannes' Wort stehen dort.
 - Mail (#3): 155 Funktionen vom 03.10. am ALPHA-Code e69b5f5 geprüft: 114 vorhanden, 30 geändert, 11 fehlen; 50 weitere im Code, die in der Liste fehlen. Tabellen im Issue.
-- Ernte (#6): Linie von mykilOS-V2 (16.06.) bis heute, Runde 1 (26 Repos) und Runde 2 (Weg vom Entwurf zum Code, Enden) im Issue; Rohdaten im Scratchpad der Sitzung ALFA · 01.
+- Ernte (#6): Linie von mykilOS-V2 (16.06.) bis heute, Runde 1 (26 Repos) und Runde 2 (Weg vom Entwurf zum Code, Enden) im Issue; Rohdaten in `plan/ernte/` (Stückgut, Stand 10.10.; Artifact-Zeilen in `artifacts/`, Mail-Tabellen in `mail/`).
 - `plan/ENTSCHEIDUNGEN.md`: Arbeitsunterlage, Johannes' Wortlaut nach Thema, von ihm ungeprüft.
 
 ## Nächste Schritte
