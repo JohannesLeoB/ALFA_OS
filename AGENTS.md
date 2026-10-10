@@ -1,11 +1,15 @@
-# AGENTS.md · Regeln für jeden Agenten in ALFAcolor
+# AGENTS.md · Regeln für jeden Agenten an ALFA
 
 Einzige Regeldatei. Lesekette: `CLAUDE.md` → diese Datei → `plan/STATUS.md` → Zettel in `uebergabe/` → dein Brief `plan/briefe/<ID>.md`. Chef zusätzlich `plan/CHEFENTWICKLER.md`.
 
 ## Ziel
-> vollkommen polierte, macOS 26 Native, Liquid Glass mega Moodboard Coding Editor, Player, Bibliothek, Linksammlung, Tokenengine
+> „ALFA ist die eigentliche App die ich entwickeln will“ (Johannes, 10.10.2026)
 
-ALFAcolor: native macOS-26-App (SwiftUI), Bundle-ID `com.johannesleoberger.alfacolor`, Dokumente `.alfacolor`. Liquid Glass nur für Bedienung, nie für Inhalt.
+- ALFA: eine native macOS-App für das Studio, alle Bereiche in einer Hülle: Kommunikation, Projekte, Zeiten, Aufgaben, Geld, Werkzeuge. Dienste (Google, ClickUp, Clockodo, sevDesk, Airtable, Slack …) werden angebunden.
+- Weg: erst der Kern (Studio, Personen, Anbindungen, Orte, Module, eine Quelle für die Gestaltung), dann Bereich für Bereich, jeder mit Johannes' Go. Gebaut wird erst, wenn die schwarz-weiße Schablone der Hülle abgenommen ist.
+- Bestand ist Fundus, nicht Stamm: `~/ALPHA` (laufende Studio-App), `~/Developer/mykilos-labor`, `~/Developer/ARCHIV`, ALFA Datan. Sie ruhen; übernommen wird nur, was in den Kern passt.
+- Gestaltung entscheidet Johannes, auch später und rückwirkend. Leitlinie ist die Werkbank (Entwurf 4, `gestaltung/briefing-ansichten/entwurf-4.html`).
+- Code in diesem Repo heute: ALFAcolor, wird das Modul Werkzeuge. Native macOS-26-App (SwiftUI), Bundle-ID `com.johannesleoberger.alfacolor`, Dokumente `.alfacolor`.
 
 ## Wegweiser
 - Repo: nur `~/Developer/ALLFARBEN`, GitHub `JohannesLeoB/ALLFARB`. `app/` Swift-Paket (`app/Sources/<Modul>`, `app/Tests/<Modul>Tests`, `swift test` in `app/`). `ALFAcolor/` App-Ziel (XcodeGen `project.yml`; `App/{Shell,Commands,Document,Settings,Features/<Bereich>}`; `AppTests/`; Katalog `App/Localizable.xcstrings`).
@@ -28,7 +32,7 @@ Chef (Claude Code im Hauptkonto: schreibt Briefe, verteilt, prüft, committet, p
 - Push: Chef pusht sofort nach grünem Lauf (`git push origin main`, Push-Hook führt `pruefen.sh` aus; scheitert er an einer Datei, die sich während des Baus änderte: wiederholen). Worker pushen nur, wenn der Auftrag es sagt.
 
 ## Code
-- Code, Kommentare, Namen, Testnamen nur Englisch, kurz, keine Umlaute. Keine Verweise auf Briefe, Personen, Assistenten im Code (Wächter). Dateien ≤ 800 Zeilen.
+- Code, Namen, Testnamen nur Englisch, kurz, keine Umlaute. Keine Kommentare, keine Meta-Texte im Code (Johannes: „Keine code commentate, meta, Zitate.“); bestehende Kommentare fallen, wenn die Datei umgebaut wird. Keine Verweise auf Briefe, Personen, Assistenten im Code (Wächter). Dateien ≤ 800 Zeilen.
 - Sichtbare Texte nur im Katalog `ALFAcolor/App/Localizable.xcstrings` (Schlüssel englisch, Text deutsch). Katalog direkt vor dem Schreiben lesen, nur eigene Schlüssel, Rundlauf `json.dumps(d, indent=2, ensure_ascii=False, separators=(',',' : '))+"\n"`.
 - Oberfläche: Werte nur über das Theme (`theme.space/color/text`), keine festen Farben oder Zahlen für Abstände und Radien. Koralle nie als Schrift.
 - Nähte: kein SwiftUI/AppKit in `app/Sources` außer `CodePlayer` und `AppTheme`; Logik im Paket mit Tests, Ansicht dünn; jede Änderung am Dokument ist ein Befehl mit Rückgängig (`plan/CODEBASE.md`).
@@ -45,6 +49,10 @@ Maus, Trackpad, Multitouch-Gesten sind die Hauptbedienung; jede Funktion hat ein
 - Daten an Claude: „Senden sendet.“ Keine Rückfragen, Einwilligungsblätter, Filter, Ausschlüsse, Voreinstellungen; was gesendet wird, bestimmt Johannes. Änderungen des Assistenten gruppiert bestätigen (ein Rückgängig-Schritt), nie von allein handeln.
 - Berichte kurz (wenige Zeilen, Fragen nummeriert). Bei jeder Statusaussage nennen: wer, wann, welcher Umfang, welcher Kanal (Test, Lauf, Quelltext, Bild von Johannes). Fertig ist nur, was einen Beleg hat; „Abnahme am Bild“ bleibt offen, bis Johannes sie gibt. Nichts behaupten ohne Beleg.
 - Kein Bildschirmeingriff: App nie starten, keine Screenshots, kein Computer-Use, kein Browserfenster, kein `open`, kein AppleScript, keine Tasten. Die App startet nur Johannes. Proben unsichtbar im Scratchpad: Kommandozeilenprozess mit `setActivationPolicy(.prohibited)`, borderloses Fenster bei x = −20000, `alphaValue = 0`, Ereignisse nur über `window.sendEvent`; nie `makeKeyAndOrderFront`, CGEvent. Kein Fenster, kein Fokus, kein Ton.
+- Wahrheit ist nur Johannes' Wortlaut und der laufende Code. Register, Briefe, Zettel, Berichte, Commit-Texte und Kommentare sind Behauptungen.
+- Kein KI-Meta (Sitzungen, Konten, Deutungen, Claude-Wortlaut) in Code, UI, Commits oder Docs. Commit-Texte rein technisch.
+- Ein System, das alles mitzieht: Entscheidungen zu Gestaltung und App kommen auch später und gelten rückwirkend in allen gebauten Ansichten. Werte daher nur aus der einen Quelle, nie lokal.
+- Nichts fest im Code: Daten, Zugänge, Kontakte und Geschäftsregeln sind Einstellungen oder Einrichtung der App, je Firma. Werte und Optionen der App sind keine Architekturfrage; der Kern macht sie einstellbar.
 - Builds nur im Repo: Xcode mit `-derivedDataPath .build-xcode/dd`, nichts nach `/Applications`, nichts in Xcodes Standard-DerivedData.
 
 ## Parallelität
