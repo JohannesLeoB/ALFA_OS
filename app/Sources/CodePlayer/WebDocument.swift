@@ -156,10 +156,15 @@ public enum WebDocument {
     </script>
     """#
 
-    /// Removes import lines and "use client" markers. The page has React as a global.
+    /// Removes import statements, also over several lines, and "use client" markers. The page has React as a global.
+    /// Each removed line leaves an empty line, so the lines of the rest keep their numbers.
     static func stripModules(_ code: String) -> String {
-        code.replacing(/^\s*import[^\n]*\n/.anchorsMatchLineEndings(), with: "")
-            .replacing(/^\s*["']use client["'];?\s*$/.anchorsMatchLineEndings(), with: "")
+        // An import statement: the word `import`, a clause without quotes or semicolons, and the quoted source.
+        // `import(` and `import.meta` are no statements, and a name such as `importantCall` is no keyword.
+        let withoutImports = code.replacing(/(?m)^[ \t]*import\b(?![ \t]*[.(])[^"';]*?["'][^"'\n]*["'][ \t]*;?/) {
+            String(repeating: "\n", count: $0.output.filter { $0 == "\n" }.count)
+        }
+        return withoutImports.replacing(/^\s*["']use client["'];?\s*$/.anchorsMatchLineEndings(), with: "")
     }
 
     /// A script that tells whether a React page has drawn: React is loaded and the root has content, or the page shows an error.
