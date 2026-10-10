@@ -9494,6 +9494,61 @@
           }
         }
       }
+    },
+    "lab.doubt.fewSigns" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Art ist nicht sicher, denn nur wenige Anzeichen sprechen dafür."
+          }
+        }
+      }
+    },
+    "lab.doubt.mixedKinds" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markup, Stil und Skript stehen hier durcheinander."
+          }
+        }
+      }
+    },
+    "lab.doubt.missingImports" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Code lädt Module, die hier fehlen."
+          }
+        }
+      }
+    },
+    "lab.doubt.serverCode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das sieht nach Servercode aus, der im Fenster nicht läuft."
+          }
+        }
+      }
+    },
+    "lab.doubt.notTokens" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese JSON-Daten haben keine Schlüssel einer Token-Datei."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

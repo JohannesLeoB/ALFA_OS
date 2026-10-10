@@ -1,3 +1,5 @@
+import Importers
+
 /// The lab for one code card: the draft, its controls, the view options and the versions of the card.
 /// It keeps its state while the lab is closed, so the draft is there when the lab opens again.
 public struct LabSession: Equatable, Sendable {
@@ -15,6 +17,9 @@ public struct LabSession: Equatable, Sendable {
     public var isDark = false
     /// True once the user picked the art. The lab then never changes it by itself.
     public private(set) var artIsChosen = false
+    private var readDoubt: Doubt?
+    /// The first doubt of the last paste or opening, for one calm line. nil when the reading is sure or the code does not run.
+    public var doubt: Doubt? { blocked == nil ? readDoubt : nil }
 
     /// `older` are the versions the card already has, oldest first. The lab starts with them.
     public init(draft: LabDraft, older: [LabDraft] = []) {
@@ -107,7 +112,10 @@ public struct LabSession: Equatable, Sendable {
     /// Picks the art that the code asks for, unless the user picked one. A piece such as a style sheet keeps the art.
     /// React code that sits in the markup tab moves to the script tab. On opening, only a plain page can change.
     private mutating func chooseArt(for text: String, onOpen: Bool) {
-        guard !artIsChosen, let art = LabReading(text).art, art != draft.art else { return }
+        let reading = LabReading(text)
+        // On opening, the tabs of a page are read together, so loose markup next to its own tabs is no doubt.
+        readDoubt = reading.classification.doubts.first { !onOpen || $0 != .mixedKinds }
+        guard !artIsChosen, let art = reading.art, art != draft.art else { return }
         if onOpen && (draft.art != .html || art == .html) { return }
         if art == .react {
             // Markup that is already in the draft would vanish from the React art, so a paste leaves the art then.

@@ -1,5 +1,6 @@
 import AppTheme
 import CodePlayer
+import Importers
 import SwiftUI
 
 /// The running page of the lab with its toolbar. The page is shown at the chosen width and zoom, with the guides over it.
@@ -14,6 +15,11 @@ struct LabStageView: View {
             toolbar
             GeometryReader { proxy in
                 stage(in: proxy.size)
+            }
+            if let doubt = model.session.doubt {
+                Text(LocalizedStringKey(doubtKey(doubt)))
+                    .themeText(theme.text(.caption))
+                    .foregroundStyle(theme.color(.textMuted, scheme))
             }
         }
         .padding(theme.space(.s3))
@@ -46,6 +52,10 @@ struct LabStageView: View {
         .frame(width: size.width, height: size.height, alignment: .topLeading)
         .clipped()
         .background(theme.color(.surface, scheme))
+    }
+
+    private func doubtKey(_ doubt: Doubt) -> String {
+        "lab.doubt." + doubt.rawValue
     }
 
     private func blockedKey(_ blocked: LabBlock) -> String {
