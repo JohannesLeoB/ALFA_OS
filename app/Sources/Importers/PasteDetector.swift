@@ -69,6 +69,8 @@ public enum CodeKind: Equatable, Sendable {
 public enum Doubt: String, Equatable, Sendable {
     /// Only a weak sign decided the kind.
     case fewSigns
+    /// Markup with loose style rules or script statements next to it, outside any tag that holds them.
+    case mixedKinds
 }
 
 public enum Certainty: Equatable, Sendable {
@@ -173,9 +175,17 @@ public enum PasteDetector {
             result.usesTailwind = tailwind
             if matches(Signs.styleTag, head) { result.embedded.append(.css) }
             if matches(Signs.scriptTag, head) { result.embedded.append(.script) }
+            if hasLooseCode(head) { result.doubts.append(.mixedKinds) }
             return result
         }
         return CodeClassification(kind: .notCode)
+    }
+
+    /// True when the text outside of tags, style elements and script elements holds a style rule or script code.
+    private static func hasLooseCode(_ markup: String) -> Bool {
+        var loose = markup.replacingOccurrences(of: Signs.holder, with: "", options: .regularExpression)
+        loose = loose.replacingOccurrences(of: Signs.anyTag, with: "", options: .regularExpression)
+        return matches(Signs.looseRule, loose) || matches(Signs.script, loose)
     }
 
     /// Markup whose root is an svg element, with an optional xml line, comments and doctype in front.
@@ -276,6 +286,12 @@ public enum PasteDetector {
 
         /// The directives of Tailwind in a style sheet.
         static let tailwindDirective = #"(?m)^\s*@(import\s+["']tailwindcss|tailwind\s|theme\b|apply\b|utility\b|custom-variant\b|source\b)"#
+
+        /// A style or script element with its content, and a comment.
+        static let holder = #"(?is)<(style|script)\b.*?</\1\s*>|<!--.*?-->"#
+        static let anyTag = #"(?s)<[^>]*>"#
+        /// A style rule on its own: a selector, then a block with at least one declaration.
+        static let looseRule = #"(?m)^\s*[.#\w][^{}\n]*\{[^{}]*:[^{}]*\}"#
 
         static let styleTag = #"(?i)<style\b"#
         static let scriptTag = #"(?i)<script\b"#
