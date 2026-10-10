@@ -48,7 +48,7 @@ Maus, Trackpad, Multitouch-Gesten sind die Hauptbedienung; jede Funktion hat ein
 - Builds nur im Repo: Xcode mit `-derivedDataPath .build-xcode/dd`, nichts nach `/Applications`, nichts in Xcodes Standard-DerivedData.
 
 ## Parallelität
-Chef beauftragt Haiku, wo immer möglich; Sonnet nur mit Grund. Bis zu 7 Worker gleichzeitig, nur bei getrennten Pfaden. Umzüge und Aufräumen laufen allein. Solange Worker laufen, ändert der Chef keinen Code. Bricht ein Bau an fremden halbfertigen Dateien: in 60-s-Schritten bis 15 min wiederholen, fremde Dateien nie reparieren.
+Chef beauftragt Haiku oder Sonnet (Sonnet bei Urteil, Spike, Umzug). Höchstens 5 Worker gleichzeitig, nur bei getrennten Pfaden. Umzüge und Aufräumen laufen allein. Solange Worker laufen, ändert der Chef keinen Code. Bricht ein Bau an fremden halbfertigen Dateien: in 60-s-Schritten bis 15 min wiederholen, fremde Dateien nie reparieren.
 
 ## Zonen
 Nur der Chef ändert: `app/Sources/AI/`, `app/Sources/Document/`, `app/Sources/ALFAcolorCore/Place*.swift`, `ALFAcolor/App/Features/KI/`, `ALFAcolor/App/Features/Settings/`, `ALFAcolor/App/Settings/`, `plan/`, `uebergabe/`, `gestaltung/`, `scripts/`. Worker arbeiten nur in den Pfaden unter „Besitzt“ ihres Briefs, alles andere nur lesen.
