@@ -18,6 +18,13 @@ public struct LabSession: Equatable, Sendable {
     /// True once the user picked the art. The lab then never changes it by itself.
     public private(set) var artIsChosen = false
     private var readDoubt: Doubt?
+    /// True when the code has styles but no variable to tweak. Code without styles has no such lack.
+    public var lacksVariables: Bool {
+        guard controls.isEmpty, props.isEmpty else { return false }
+        let hasStyles = !LabHints.isBlank(draft.css)
+            || [draft.html, draft.script].contains { $0.range(of: "<style", options: .caseInsensitive) != nil }
+        return hasStyles
+    }
     /// The first doubt of the last paste or opening, for one calm line. nil when the reading is sure or the code does not run.
     public var doubt: Doubt? { blocked == nil ? readDoubt : nil }
 

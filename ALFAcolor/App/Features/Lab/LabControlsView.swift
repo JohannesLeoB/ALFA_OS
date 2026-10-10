@@ -14,13 +14,17 @@ struct LabControlsView: View {
         let controls = model.session.controls
         let props = model.session.props
         VStack(alignment: .leading, spacing: theme.space(.s2)) {
-            Text(LocalizedStringKey("lab.controls"))
-                .themeText(theme.text(.caption))
-                .foregroundStyle(theme.color(.textMuted, scheme))
-            if controls.isEmpty && props.isEmpty {
-                Text(LocalizedStringKey("lab.controls.empty"))
+            if !controls.isEmpty || !props.isEmpty || model.session.lacksVariables {
+                Text(LocalizedStringKey("lab.controls"))
                     .themeText(theme.text(.caption))
                     .foregroundStyle(theme.color(.textMuted, scheme))
+            }
+            if controls.isEmpty && props.isEmpty {
+                if model.session.lacksVariables {
+                    Text(LocalizedStringKey("lab.controls.empty"))
+                        .themeText(theme.text(.caption))
+                        .foregroundStyle(theme.color(.textMuted, scheme))
+                }
             } else {
                 ScrollView(.horizontal) {
                     HStack(alignment: .top, spacing: theme.space(.s4)) {
