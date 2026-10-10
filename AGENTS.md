@@ -7,7 +7,7 @@ Einzige Regeldatei. Lesekette: `CLAUDE.md` → diese Datei → `plan/STATUS.md` 
 
 - ALFA: eine native macOS-App für das Studio, alle Bereiche in einer Hülle: Kommunikation, Projekte, Zeiten, Aufgaben, Geld, Werkzeuge. Dienste (Google, ClickUp, Clockodo, sevDesk, Airtable, Slack …) werden angebunden.
 - Weg: erst der Kern (Studio, Personen, Anbindungen, Orte, Module, eine Quelle für die Gestaltung), dann Bereich für Bereich, jeder mit Johannes' Go. Gebaut wird erst, wenn die schwarz-weiße Schablone der Hülle abgenommen ist.
-- Bestand ist Fundus, nicht Stamm: `~/ALPHA` (laufende Studio-App), `~/Developer/mykilos-labor`, `~/Developer/ARCHIV`, ALFA Datan. Sie ruhen; übernommen wird nur, was in den Kern passt.
+- Bestand ist Fundus, nicht Stamm: `~/ALPHA` (laufende Studio-App), `~/Developer/mykilos-labor`, `~/Developer/ARCHIV`, ALFA Datan. Sie ruhen; übernommen wird nur, was in den Kern passt. Nie lesen, nie verwenden (Johannes, 10.10.2026): die Zweige `daniel/*` und das Repo `mykilos-diverses`.
 - Gestaltung entscheidet Johannes, auch später und rückwirkend. Leitlinie ist die Werkbank (Entwurf 4, `gestaltung/briefing-ansichten/entwurf-4.html`).
 - Code in diesem Repo heute: ALFAcolor, wird das Modul Werkzeuge. Native macOS-26-App (SwiftUI), Bundle-ID `com.johannesleoberger.alfacolor`, Dokumente `.alfacolor`.
 
