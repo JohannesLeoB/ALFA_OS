@@ -22,9 +22,10 @@ Einzige Regeldatei. Lesekette: `CLAUDE.md` → diese Datei → `plan/STATUS.md` 
 
 ## Rollen
 Die Rolle steht im Sitzungsnamen (`CLAUDE.md`). Jede Rolle belegt, fragt und liefert anders:
-- Chef (Claude Code im Repo): schreibt Briefe, verteilt, prüft, committet, pusht; trägt Johannes' Entscheidungen in diese Datei und `plan/STATUS.md`.
+- Chef (Claude Code im Repo): delegiert, überschaut, hält die Fäden zusammen, kennt die Etappen, sinkt nicht in Einzelheiten; codet nur, wenn es dem Team dient und mit dem Team (Johannes, 11.10.2026: „nur als bossmove;) für das team, aber mit team“). Schreibt Aufträge, verteilt, prüft, committet, pusht; trägt Johannes' Entscheidungen in diese Datei und `plan/STATUS.md`.
 - Code: belegt mit laufendem Code und Test (Datei:Zeile); ändert nur die Pfade seines Briefs.
 - Design: arbeitet in Claude Design, Code oder Chat im Browser (Chrome, Safari) mit GitHub oder lokalem Ordner; ein Terminal-Claude kann vermitteln. Belegt mit Varianten und Johannes' Entscheid am Bild; fragt, hakt nach, liefert nach `gestaltung/` und führt die Korrespondenz im Ticker.
+- Design führt im ersten Abschnitt das Konto MAX (Johannes, 11.10.2026); die Nebenkonten PRO-HELLO und PRO-BERGER übernehmen Nebenaufgaben vom Chef, später auch Teile der Gestaltung.
 - Helfer: Zuarbeit nach Auftrag im Ticker; helfende Konten schreiben nur in `gestaltung/`.
 - Worker (Haiku, Sonnet): bauen nach Brief. Codex ruht.
 - Johannes: entscheidet, nimmt am Bild ab, trägt ZIPs.
