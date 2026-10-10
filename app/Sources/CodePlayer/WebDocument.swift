@@ -70,7 +70,7 @@ public enum WebDocument {
         code = code.replacing(/^[ \t]*export[ \t]*\{[^}]*\}[ \t]*;?[ \t]*$/.anchorsMatchLineEndings(), with: "")
         code = code.replacing(/export\s+(const|function|class|let|var|type|interface|enum)/) { String($0.output.1) }
         let render = name.map { mountCode($0) }
-            ?? "document.body.textContent='No component found: add export default or a capitalised function.';"
+            ?? "document.getElementById('root').textContent=" + javaScriptString(String(localized: "card.react.noComponent")) + ";"
         let styles = named(files, ".css").map { "<style>\(escapeScript($0))</style>" }.joined()
         let scripts = reactScripts.map { #"<script src="\#($0)"></script>"# }.joined()
         // No line break after the destructuring, so that the source lines keep their numbers for error positions.
@@ -217,6 +217,12 @@ public enum WebDocument {
 
     /// A script that tells whether a React page has drawn: React is loaded and the root has content, or the page shows an error.
     static let drawnCheck = #"var r=document.getElementById('root');return !!(window.React&&window.ReactDOM&&((r&&r.childNodes.length)||document.querySelector('pre')));"#
+
+    /// A text as a double-quoted JavaScript string.
+    static func javaScriptString(_ text: String) -> String {
+        let escaped = text.replacing("\\", with: "\\\\").replacing("\"", with: "\\\"").replacing("\n", with: "\\n")
+        return "\"" + escapeScript(escaped) + "\""
+    }
 
     /// Keeps user code from closing the script or style element it sits in.
     static func escapeScript(_ code: String) -> String {

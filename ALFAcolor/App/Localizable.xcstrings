@@ -8021,6 +8021,17 @@
         }
       }
     },
+    "card.react.noComponent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Komponente gefunden. Es fehlt ein export default oder eine Funktion mit großem Anfangsbuchstaben, die JSX zurückgibt."
+          }
+        }
+      }
+    },
     "lab.hint.insertScript" : {
       "extractionState" : "manual",
       "localizations" : {
