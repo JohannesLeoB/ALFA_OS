@@ -34,15 +34,17 @@ struct ColorFieldsSection: View {
 
     var body: some View {
         Section("sidebar.tokenSet") {
-            HStack {
+            // The five buttons of the set are symbols; the name is the hint under the pointer.
+            HStack(spacing: theme.space(.s2)) {
                 Button(action: pick) {
                     Label("tokens.pipette", systemImage: "eyedropper")
+                        .labelStyle(.iconOnly)
                 }
                 .buttonStyle(.borderless)
                 .help("tokens.pipette")
-                Spacer()
                 Button { contrastShown = true } label: {
                     Label("contrast.open", systemImage: "square.grid.3x3")
+                        .labelStyle(.iconOnly)
                 }
                 .buttonStyle(.borderless)
                 .help("contrast.open")
@@ -53,9 +55,11 @@ struct ColorFieldsSection: View {
                 WorkshopExportButton(store: store)
                 Button(action: add) {
                     Label("tokens.add", systemImage: "plus")
+                        .labelStyle(.iconOnly)
                 }
                 .buttonStyle(.borderless)
                 .help("tokens.add")
+                Spacer(minLength: 0)
             }
             .popover(item: $valueEdit) { edit in
                 ColorPicker("tokens.menu.value", selection: $draft, supportsOpacity: false)
@@ -67,6 +71,7 @@ struct ColorFieldsSection: View {
                     .foregroundStyle(theme.color(.textMuted, scheme))
                 // The one next step of an empty token set.
                 Button("empty.tokens.button") { add() }
+                    .lineLimit(1)
             }
             ForEach(fields) { field in
                 row(field)

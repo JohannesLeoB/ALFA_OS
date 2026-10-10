@@ -34,6 +34,7 @@ struct SidebarView: View {
                 }
                 Button(action: addLayer) {
                     Label("layer.new", systemImage: "plus")
+                        .lineLimit(1)
                 }
                 .buttonStyle(.borderless)
                 .help("layer.new")

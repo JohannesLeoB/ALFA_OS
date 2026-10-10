@@ -10,6 +10,7 @@ struct WorkshopExportButton: View {
     var body: some View {
         Button { shown = true } label: {
             Label("command.file.export", systemImage: "square.and.arrow.up")
+                .labelStyle(.iconOnly)
         }
         .buttonStyle(.borderless)
         .help("command.file.export")

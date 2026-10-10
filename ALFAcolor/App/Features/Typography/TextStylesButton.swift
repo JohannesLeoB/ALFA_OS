@@ -10,6 +10,7 @@ struct TextStylesButton: View {
     var body: some View {
         Button { shown = true } label: {
             Label("type.open", systemImage: "textformat")
+                .labelStyle(.iconOnly)
         }
         .buttonStyle(.borderless)
         .help("type.open")

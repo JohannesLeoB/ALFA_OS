@@ -43,6 +43,7 @@ struct LibrarySection: View {
                 scopeRow(.images, title: "sidebar.images", symbol: "photo")
                 scopeRow(.links, title: "sidebar.links", symbol: "link")
                 Toggle("library.freeOnly", isOn: $freeOnly)
+                    .lineLimit(1)
             } header: {
                 Text("sidebar.collection")
             }
@@ -52,10 +53,12 @@ struct LibrarySection: View {
                 }
                 Button(action: addFixedFolder) {
                     Label("library.folder.newFixed", systemImage: "folder.badge.plus")
+                        .lineLimit(1)
                 }
                 .buttonStyle(.borderless)
                 Button(action: addSmartFolder) {
                     Label("library.folder.newSmart", systemImage: "line.3.horizontal.decrease.circle")
+                        .lineLimit(1)
                 }
                 .buttonStyle(.borderless)
             } header: {
@@ -133,6 +136,7 @@ struct LibrarySection: View {
         Button { scope = value } label: {
             HStack {
                 Label(title, systemImage: symbol)
+                    .lineLimit(1)
                 Spacer()
                 Text(count(value).formatted())
                     .foregroundStyle(theme.color(.textMuted, scheme))
@@ -148,7 +152,7 @@ struct LibrarySection: View {
         return Button { scope = value } label: {
             HStack {
                 Label {
-                    Text(folder.name).lineLimit(1)
+                    Text(folder.name).lineLimit(1).truncationMode(.tail)
                 } icon: {
                     Image(systemName: isSmart ? "line.3.horizontal.decrease.circle" : "folder")
                 }
