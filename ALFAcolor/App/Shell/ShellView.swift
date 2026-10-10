@@ -9,6 +9,10 @@ import Importers
 struct ShellView: View {
     /// Minimum size of the main window, konzept/05-OBERFLAECHE.txt section 2.3.
     static let minimumSize = CGSize(width: 1000, height: 640)
+    /// Widths of the side columns in points: minimum, ideal, maximum (konzept/05-OBERFLAECHE.txt section 2.2).
+    /// Without them the system lets a column shrink until its content is cut off.
+    static let sidebarWidth: (min: CGFloat, ideal: CGFloat, max: CGFloat) = (200, 240, 320)
+    static let inspectorWidth: (min: CGFloat, ideal: CGFloat, max: CGFloat) = (260, 300, 380)
 
     @Environment(\.undoManager) private var undoManager
     @State private var shell = ShellState()
@@ -39,6 +43,7 @@ struct ShellView: View {
     var body: some View {
         NavigationSplitView(columnVisibility: $shell.columnVisibility) {
             SidebarView(store: canvas.store, shell: shell)
+                .navigationSplitViewColumnWidth(min: Self.sidebarWidth.min, ideal: Self.sidebarWidth.ideal, max: Self.sidebarWidth.max)
         } detail: {
             VStack(spacing: 0) {
                 CanvasSurface(controller: canvas, interaction: interaction, importer: importer,
@@ -80,6 +85,7 @@ struct ShellView: View {
             .inspector(isPresented: $shell.inspectorVisible) {
                 InspectorView(canvas: canvas, interaction: interaction, shell: shell)
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
+                    .inspectorColumnWidth(min: Self.inspectorWidth.min, ideal: Self.inspectorWidth.ideal, max: Self.inspectorWidth.max)
             }
         }
         .toolbar { ShellToolbar(shell: shell, store: canvas.store) }
