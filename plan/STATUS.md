@@ -1,6 +1,6 @@
 # Status
 
-Stand 2026-10-10 23:30. Quellen: git, Johannes' Antworten (`plan/FRAGEN.md`, Abschnitt Antworten), Lesung der Fundus-Ordner durch Agenten am 10.10. (Aussagen, Stichproben vom Chef am Code geprüft). Ziel und Weg: `AGENTS.md`, Abschnitt Ziel.
+Stand 2026-10-10 22:00. Quellen: git, Johannes' Antworten (`plan/FRAGEN.md`, Abschnitt Antworten), Lesung der Fundus-Ordner durch Agenten am 10.10. (Aussagen, Stichproben vom Chef am Code geprüft). Ziel und Weg: `AGENTS.md`, Abschnitt Ziel.
 
 ## Stand
 - Code hier: ALFAcolor 1.0.2 (8), notarisiert in `dist/`, Abnahme am Bild offen. Im Programm wirkt das Journal (Rückgängig nach Neustart) und die Erkennung im Code-Player. Nur im Paket, ohne Oberfläche: Sicherung, Absturzkopie, Chat, Befehlsbrücke, Stufen, Lesezeichen- und Gist-Import. Kommentare im Code widersprechen der Regel „keine Kommentare“.
@@ -10,6 +10,7 @@ Stand 2026-10-10 23:30. Quellen: git, Johannes' Antworten (`plan/FRAGEN.md`, Abs
   - ALFA Datan 1.0 (Preislisten → Airtable): eigene App, später Modul.
 - Gestaltung: Leitlinie Werkbank (Entwurf 4), Artifact `PCkGckib5pyeWbEEAHusCF`, Kopie `gestaltung/briefing-ansichten/entwurf-4.html`. CI-Quelle ALFA Interface MASTER 1010, Artifact `G8xFQLN6yeLLRohRwZoGyi`; die Kopie `gestaltung/alfa-interface/` ist unvollständig (17 von rund 30 Bauteil-Ordnern).
 - Schablone der Hülle, schwarz-weiß und bedienbar: Artifact `4iWtw8Hepr9gR9koZ5nYSG`, zur Abnahme.
+- Ticker: GitHub Issues in `JohannesLeoB/ALLFARB` (seit 10.10.); laufende Aufträge und Johannes' Wort stehen dort.
 - `plan/ENTSCHEIDUNGEN.md`: Arbeitsunterlage, Johannes' Wortlaut nach Thema, von ihm ungeprüft.
 
 ## Nächste Schritte

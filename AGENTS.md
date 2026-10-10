@@ -1,6 +1,6 @@
 # AGENTS.md · Regeln für jeden Agenten an ALFA
 
-Einzige Regeldatei. Lesekette: `CLAUDE.md` → diese Datei → `plan/STATUS.md` → Zettel in `uebergabe/` → dein Brief `plan/briefe/<ID>.md`. Chef zusätzlich `plan/CHEFENTWICKLER.md`.
+Einzige Regeldatei. Lesekette: `CLAUDE.md` → diese Datei → `plan/STATUS.md` → Zettel in `uebergabe/` → offene Issues im Ticker → dein Brief `plan/briefe/<ID>.md`. Chef zusätzlich `plan/CHEFENTWICKLER.md`.
 
 ## Ziel
 > „ALFA ist die eigentliche App die ich entwickeln will“ (Johannes, 10.10.2026)
@@ -18,10 +18,23 @@ Einzige Regeldatei. Lesekette: `CLAUDE.md` → diese Datei → `plan/STATUS.md` 
 - `konzept/` (VISION, GLOSSAR, OFFENE-FRAGEN, 10-MODUL-CODEPLAYER) · `gestaltung/` (`kanon/` Quelle von Konto B, `vertrag/` erzeugt, nie von Hand) · `scripts/` (pruefen.sh, waechter*, lizenzen.txt) · `.githooks/` · `dist/` (Apps) und `ausgang/` (ZIPs) sind ignoriert.
 
 ## Rollen
-Chef (Claude Code im Hauptkonto: schreibt Briefe, verteilt, prüft, committet, pusht; erste Sitzung beginnt mit der Fragerunde aus `plan/FRAGEN.md`) · Helfende Konten (zwei weitere Konten von Johannes: Zuarbeit und Design-Exploration) · Worker (Haiku, bauen nach Brief) · Konto B (Claude Design in claude.ai: D-009; liefert nach `gestaltung/`) · Konto C ruht · Codex ruht · Johannes (entscheidet, nimmt am Bild ab, trägt ZIPs). Gates G1 bis G9 und Etappen-Gates entfallen.
+Die Rolle steht im Sitzungsnamen (`CLAUDE.md`). Jede Rolle belegt, fragt und liefert anders:
+- Chef (Claude Code im Repo): schreibt Briefe, verteilt, prüft, committet, pusht; trägt Johannes' Entscheidungen in diese Datei und `plan/STATUS.md`.
+- Code: belegt mit laufendem Code und Test (Datei:Zeile); ändert nur die Pfade seines Briefs.
+- Design: arbeitet in Claude Design, Code oder Chat im Browser (Chrome, Safari) mit GitHub oder lokalem Ordner; ein Terminal-Claude kann vermitteln. Belegt mit Varianten und Johannes' Entscheid am Bild; fragt, hakt nach, liefert nach `gestaltung/` und führt die Korrespondenz im Ticker.
+- Helfer: Zuarbeit nach Auftrag im Ticker; helfende Konten schreiben nur in `gestaltung/`.
+- Worker (Haiku, Sonnet): bauen nach Brief. Codex ruht.
+- Johannes: entscheidet, nimmt am Bild ab, trägt ZIPs.
+Gates G1 bis G9 und Etappen-Gates entfallen.
+
+## Ticker und Johannes' Wort
+- Ticker: GitHub Issues in `JohannesLeoB/ALLFARB`. Ein Issue je Auftrag: was, warum, wer (Sitzungsname), womit (Dateien, Artifacts, Commits), Stand mit Datum und Commit. Labels: `läuft`, `wartet auf Johannes`, `Nebenschauplatz`, `Stückgut` (Fundus, noch nicht veredelt). Geschlossen heißt vorbei.
+- Jede Sitzung liest beim Start und vor jedem Schritt die offenen Issues (`gh issue list -R JohannesLeoB/ALLFARB`) und schreibt bei Beginn und Ende eines Auftrags einen Kommentar. Jeder Kommentar beginnt mit Sitzungsname und Uhrzeit.
+- Johannes spricht immer nur in einer Sitzung. Diese schreibt sein Wort sofort wörtlich als Kommentar ins passende Issue und markiert Entscheidungen mit „Entscheidung“. Der Chef trägt sie in diese Datei oder `plan/STATUS.md` ein; das neueste Wort gilt, Älteres wird als überholt markiert. Wortlaut bis 10.10.2026: `plan/FRAGEN.md`.
+- Sitzungen, Konten und Deutungen stehen nur im Ticker, nie in Code, Commits oder Docs.
 
 ## Start und Ende
-- Start: `git pull --rebase`, `git status`, `bash scripts/pruefen.sh` (Soll `Result: 0 errors`). Fremde uncommittete Dateien nie anfassen; nie `git checkout --`, `git reset`, `git stash`; nie die Datei `index.lock` löschen (warten, wiederholen).
+- Start: `git pull --rebase`, `git status`, offene Issues lesen, `bash scripts/pruefen.sh` (Soll `Result: 0 errors`). Fremde uncommittete Dateien nie anfassen; nie `git checkout --`, `git reset`, `git stash`; nie die Datei `index.lock` löschen (warten, wiederholen).
 - Ende (Worker): `pruefen.sh` grün, Übergabe im Brief (Commits, rot/grün je Fund, Abweichungen, Annahmen einzeln markiert, offene Fragen), Status „zur Prüfung“. `plan/STATUS.md` ändert nur der Chef.
 - Der Chef prüft jeden Bericht selbst. Worker-Berichte sind Aussagen, kein Beleg.
 
@@ -55,7 +68,7 @@ Maus, Trackpad, Multitouch-Gesten sind die Hauptbedienung; jede Funktion hat ein
 - Nichts fest im Code: Daten, Zugänge, Kontakte und Geschäftsregeln sind Einstellungen oder Einrichtung der App, je Firma. Werte und Optionen der App sind keine Architekturfrage; der Kern macht sie einstellbar.
 - Bestand ist eine Goldgrube, kein Gold: erst vorhandene Erfassungen nutzen (Inventuren, Karten, Register, Artifacts, Briefe; je mit Datum und Code-Stand), dann nur das Gebrauchte am heutigen Code oder an Johannes' Wortlaut prüfen, veredeln, zusammenführen. Nichts neu suchen oder neu erfinden, was schon erfasst ist (Johannes: „nicht immer neu suchen und neu erfinden“).
 - Verstehen ist Aufgabe der Agenten: Richtung, Ziele, Bereiche, Stand und Schritte stehen hier und in `plan/STATUS.md`. Keine Abhak-Listen und keine Artifacts nur zum Festhalten für Johannes.
-- Regeln und Stand stehen nur im Repo (diese Datei, `plan/STATUS.md`), nie nur im Gedächtnis einer Sitzung.
+- Regeln und Stand stehen nur im Repo (diese Datei, `plan/STATUS.md`), laufende Aufträge im Ticker, nie nur im Gedächtnis einer Sitzung. Erinnerungen jedes Kontos sind keine Quelle; die lokalen Gedächtnisse zeigen seit 10.10.2026 nur hierher.
 - Builds nur im Repo: Xcode mit `-derivedDataPath .build-xcode/dd`, nichts nach `/Applications`, nichts in Xcodes Standard-DerivedData.
 
 ## Parallelität
