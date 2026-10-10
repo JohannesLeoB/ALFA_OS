@@ -107,8 +107,8 @@ public final class BoardStore {
         guard let edit = try command.apply(to: &trial, spaceID: spaceID, selection: selection) else { return false }
         document.board = trial
         selection = visibleSelection(edit.selectionAfter)
-        didChangeDocument()
         register(edit, name: command.undoName)
+        didChangeDocument()
         return true
     }
 
@@ -161,8 +161,8 @@ public final class BoardStore {
         // A removed space takes its view with it; a new space with the same ID starts at zoom 1.
         let ids = Set(target.spaces.map(\.id))
         viewports = viewports.filter { ids.contains($0.key) }
-        didChangeDocument()
         forgetHistoryOfNonEdit()
+        didChangeDocument()
         let inHistory = undoManager.isUndoing || undoManager.isRedoing
         if !inHistory { undoManager.beginUndoGrouping() }
         undoManager.registerUndo(withTarget: self) { store in
@@ -189,8 +189,8 @@ public final class BoardStore {
     private func swapTokenSets(to target: [TokenSet], nameKey: String) {
         let previous = document.tokenSets
         document.tokenSets = target
-        didChangeDocument()
         forgetHistoryOfNonEdit()
+        didChangeDocument()
         let inHistory = undoManager.isUndoing || undoManager.isRedoing
         if !inHistory { undoManager.beginUndoGrouping() }
         undoManager.registerUndo(withTarget: self) { store in
@@ -226,8 +226,8 @@ public final class BoardStore {
         selection = visibleSelection(selection)
         let ids = Set(target.spaces.map(\.id))
         viewports = viewports.filter { ids.contains($0.key) }
-        didChangeDocument()
         forgetHistoryOfNonEdit()
+        didChangeDocument()
         let inHistory = undoManager.isUndoing || undoManager.isRedoing
         if !inHistory { undoManager.beginUndoGrouping() }
         undoManager.registerUndo(withTarget: self) { store in
@@ -312,8 +312,8 @@ public final class BoardStore {
         activeSpaceID = inverse.spaceID
         let existing = Set(trial.spaces.first { $0.id == inverse.spaceID }?.items.map(\.id) ?? [])
         selection = visibleSelection(inverse.selectionAfter.intersection(existing))
-        didChangeDocument()
         register(inverse, name: name)
+        didChangeDocument()
     }
 
     // MARK: Selection
