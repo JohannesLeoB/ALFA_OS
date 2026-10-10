@@ -35,7 +35,9 @@ struct ColorFieldsSection: View {
     var body: some View {
         Section("sidebar.tokenSet") {
             // The five buttons of the set are symbols; the name is the hint under the pointer.
-            HStack(spacing: theme.space(.s2)) {
+            // They sit in an even grid that starts a new line when the column is narrow, so none leaves the row.
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: theme.space(.s6)), spacing: theme.space(.s2), alignment: .leading)],
+                      alignment: .leading, spacing: theme.space(.s2)) {
                 Button(action: pick) {
                     Label("tokens.pipette", systemImage: "eyedropper")
                         .labelStyle(.iconOnly)
@@ -59,7 +61,6 @@ struct ColorFieldsSection: View {
                 }
                 .buttonStyle(.borderless)
                 .help("tokens.add")
-                Spacer(minLength: 0)
             }
             .popover(item: $valueEdit) { edit in
                 ColorPicker("tokens.menu.value", selection: $draft, supportsOpacity: false)
