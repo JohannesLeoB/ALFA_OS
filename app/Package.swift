@@ -20,7 +20,7 @@ let package = Package(
         .target(name: "BoardModel", dependencies: ["ALFAcolorCore", "Geometry", "Document"]),
         .target(name: "Thumbnails", dependencies: ["Document"]),
         .target(name: "Importers", dependencies: ["ALFAcolorCore", "Document", "BoardModel", "Tokens"]),
-        .target(name: "CodePlayer", dependencies: ["ALFAcolorCore"]),
+        .target(name: "CodePlayer", dependencies: ["ALFAcolorCore", "Importers"]),
         .target(name: "Exporters", dependencies: ["ALFAcolorCore", "Document", "BoardModel", "Tokens", "Geometry"]),
         .target(name: "Library", dependencies: ["ALFAcolorCore", "Document", "Geometry", "ColorLab", "Tokens"]),
         .target(name: "AI", dependencies: ["ALFAcolorCore", "Tokens"]),

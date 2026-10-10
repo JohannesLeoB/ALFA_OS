@@ -13,6 +13,8 @@ public struct LabSession: Equatable, Sendable {
     public var showsGrid = false
     public var showsGuides = false
     public var isDark = false
+    /// True once the user picked the art. The lab then never changes it by itself.
+    public private(set) var artIsChosen = false
 
     /// `older` are the versions the card already has, oldest first. The lab starts with them.
     public init(draft: LabDraft, older: [LabDraft] = []) {
@@ -21,6 +23,7 @@ public struct LabSession: Equatable, Sendable {
         self.controls = LabControls.read(draft)
         self.props = LabSession.readProps(draft)
         self.versions = VersionLog(current: draft, older: older)
+        chooseArt(for: [draft.html, draft.script].filter { !LabHints.isBlank($0) }.joined(separator: "\n"), onOpen: true)
     }
 
     /// Shows another tab of the draft's art.
@@ -38,6 +41,7 @@ public struct LabSession: Equatable, Sendable {
 
     /// Changes the art. Tabs that the new art lacks are left, and the editor shows the first tab of the art.
     public mutating func setArt(_ art: LabDraft.Art) {
+        artIsChosen = true
         guard art != draft.art else { return }
         draft.art = art
         if !draft.tabs.contains(tab) { tab = LabSession.firstTab(of: draft) }
@@ -69,6 +73,7 @@ public struct LabSession: Equatable, Sendable {
 
     /// Routes pasted text. Style sheets and scripts go to their tab, which then opens. Other text goes to the open tab.
     public mutating func paste(_ text: String) {
+        chooseArt(for: text, onOpen: false)
         let routed = draft.art == .react ? nil : LabPaste.target(for: text)
         let destination = routed.flatMap { draft.tabs.contains($0) ? $0 : nil } ?? tab
         let existing = draft.text(destination)
@@ -97,6 +102,26 @@ public struct LabSession: Equatable, Sendable {
         controls = LabControls.read(saved)
         props = LabSession.readProps(saved)
         return saved
+    }
+
+    /// Picks the art that the code asks for, unless the user picked one. A piece such as a style sheet keeps the art.
+    /// React code that sits in the markup tab moves to the script tab. On opening, only a plain page can change.
+    private mutating func chooseArt(for text: String, onOpen: Bool) {
+        guard !artIsChosen, let art = LabReading(text).art, art != draft.art else { return }
+        if onOpen && (draft.art != .html || art == .html) { return }
+        if art == .react {
+            // Markup that is already in the draft would vanish from the React art, so a paste leaves the art then.
+            if !onOpen && !LabHints.isBlank(draft.html) { return }
+            if LabHints.isBlank(draft.script) {
+                draft.script = draft.html
+                draft.html = ""
+            }
+        }
+        draft.art = art
+        tab = LabSession.firstTab(of: draft)
+        controls = LabControls.read(draft)
+        props = LabSession.readProps(draft)
+        versions = VersionLog(current: draft, older: versions.older)
     }
 
     private mutating func refreshControls() {
