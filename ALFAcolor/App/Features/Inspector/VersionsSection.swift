@@ -70,7 +70,7 @@ struct VersionsSection: View {
 }
 
 /// One version of the list: its time, its reason, a still image when the cache holds one, and its two actions.
-private struct VersionRowView: View {
+struct VersionRowView: View {
     var card: VersionsSection.CardHead
     var row: VersionListing.Row
     var still: CGImage?
@@ -96,10 +96,15 @@ private struct VersionRowView: View {
                 Text(LocalizedStringKey(row.reason.nameKey))
                     .foregroundStyle(theme.color(.textMuted, scheme))
             }
-            HStack {
+            // Below each other: side by side the two labels ask for more than a narrow column offers.
+            VStack(alignment: .leading, spacing: theme.space(.s1)) {
                 Button("version.restore") { attempt(restore) }
-                Spacer()
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .help("version.restore")
                 Button("version.delete", role: .destructive) { attempt(delete) }
+                    .lineLimit(1)
+                    .help("version.delete")
             }
             .buttonStyle(.borderless)
         }
