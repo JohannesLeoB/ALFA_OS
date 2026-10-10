@@ -46,9 +46,13 @@ public struct UndoJournal<Change: Codable & Equatable & Sendable>: Equatable, Se
 
     /// The steps, oldest first.
     public private(set) var steps: [Step]
+    /// The fingerprint of the board in the state in which the newest step ended (`ALFAcolorDocument.boardDigest`).
+    /// Set by the writer. A journal without it cannot be checked against a board.
+    public var digest: String?
 
-    public init(steps: [Step] = []) {
+    public init(steps: [Step] = [], digest: String? = nil) {
         self.steps = Array(steps.suffix(Self.capacity))
+        self.digest = digest
     }
 
     /// Adds a step after the others. The oldest step falls out when there are more than `capacity`.
@@ -73,7 +77,7 @@ public struct UndoJournal<Change: Codable & Equatable & Sendable>: Equatable, Se
 
     /// The file bytes: a JSON object with the format version and the steps, oldest first.
     static func data(for journal: UndoJournal) throws -> Data {
-        try PackageJSON.data(File(version: formatVersion, steps: journal.steps))
+        try PackageJSON.data(File(version: formatVersion, steps: journal.steps, digest: journal.digest))
     }
 
     /// Reads the file bytes. A step that cannot be read is counted and left out; the rest is kept.
@@ -92,7 +96,7 @@ public struct UndoJournal<Change: Codable & Equatable & Sendable>: Equatable, Se
         }
         let decoded = file.steps.compactMap(\.step)
         let skipped = file.steps.count - decoded.count
-        return ReadResult(journal: UndoJournal(steps: decoded), skipped: skipped, problem: nil)
+        return ReadResult(journal: UndoJournal(steps: decoded, digest: file.digest), skipped: skipped, problem: nil)
     }
 
     /// Puts the journal into the document as a carried file. An empty journal removes the file.
@@ -115,6 +119,7 @@ public struct UndoJournal<Change: Codable & Equatable & Sendable>: Equatable, Se
     private struct File: Codable {
         var version: Int
         var steps: [Step]
+        var digest: String?
     }
 
     /// A step that is read leniently: a broken one becomes nil instead of failing the whole file.
@@ -129,13 +134,15 @@ public struct UndoJournal<Change: Codable & Equatable & Sendable>: Equatable, Se
     private struct LossyFile: Decodable {
         let version: Int?
         let steps: [LossyStep]
+        let digest: String?
 
-        enum CodingKeys: String, CodingKey { case version, steps }
+        enum CodingKeys: String, CodingKey { case version, steps, digest }
 
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             version = try container.decodeIfPresent(Int.self, forKey: .version)
             steps = try container.decode([LossyStep].self, forKey: .steps)
+            digest = try? container.decodeIfPresent(String.self, forKey: .digest)
         }
     }
 }

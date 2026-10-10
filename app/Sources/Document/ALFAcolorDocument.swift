@@ -247,3 +247,13 @@ struct LayerFile: Codable {
         return l
     }
 }
+
+extension ALFAcolorDocument {
+    /// A fingerprint of the board: the SHA-256 of its canonical JSON. Equal boards give equal fingerprints.
+    /// The undo journal carries it, so that a journal is only used on the board it was written for.
+    public var boardDigest: String {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
+        return AssetStore.hash(of: (try? encoder.encode(board)) ?? Data())
+    }
+}

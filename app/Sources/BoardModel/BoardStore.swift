@@ -252,14 +252,16 @@ public final class BoardStore {
     public func exportHistory() -> UndoJournal<Edit> { history }
 
     /// Puts saved steps back on the undo stack, so that undo reverts them. The document must be in the state in which
-    /// the newest step ended. Returns false and changes nothing when the store already has undo steps or a step
-    /// refers to a space that is not in the document. An empty journal is restored trivially.
+    /// the newest step ended: the journal carries the fingerprint of that board and it must match. Returns false and
+    /// changes nothing when the store already has undo steps, a step refers to a space that is not in the document,
+    /// or the fingerprint is missing or differs. An empty journal is restored trivially.
     @discardableResult
     public func restoreHistory(_ journal: UndoJournal<Edit>) -> Bool {
         if journal.steps.isEmpty { return true }
         guard !undoManager.canUndo else { return false }
         let spaceIDs = Set(document.board.spaces.map(\.id))
         guard journal.steps.allSatisfy({ spaceIDs.contains($0.change.spaceID) }) else { return false }
+        guard journal.digest == document.boardDigest else { return false }
         history.removeAll()
         for step in journal.steps {
             register(step.change, name: step.name.isEmpty ? nil : step.name, at: step.at)
