@@ -66,10 +66,9 @@ public enum WebDocument {
         let joined = source.joined(separator: "\n")
         let name = componentName(in: stripModules(joined))
         var code = stripModules(joined)
-        code = code.replacing(/export\s+default\s+function/, with: "function")
+        code = dropDefaultExport(code)
         code = code.replacing(/^[ \t]*export[ \t]*\{[^}]*\}[ \t]*;?[ \t]*$/.anchorsMatchLineEndings(), with: "")
         code = code.replacing(/export\s+(const|function|class|let|var|type|interface|enum)/) { String($0.output.1) }
-        code = code.replacing(/export\s+default\s+[A-Z][A-Za-z0-9_]*\s*;?/, with: "")
         let render = name.map { mountCode($0) }
             ?? "document.body.textContent='No component found: add export default or a capitalised function.';"
         let styles = named(files, ".css").map { "<style>\(escapeScript($0))</style>" }.joined()
@@ -100,17 +99,57 @@ public enum WebDocument {
         return code.range(of: pattern, options: .regularExpression) != nil
     }
 
+    /// The name that an anonymous default export gets, so that the page can draw it.
+    static let defaultName = "CardDefault"
+
     /// The component that the page draws. In order: the default export, a named export whose body is JSX, and the
-    /// last function or constant whose body is JSX. A constant in capitals (`SHAPES`, `W`) is never the component.
+    /// last function, class or constant whose body is JSX. A constant in capitals (`SHAPES`, `W`) is never the component.
     static func componentName(in source: String) -> String? {
-        if let match = source.firstMatch(of: /export\s+default\s+(?:function\s+)?([A-Z][A-Za-z0-9_]*)/) {
-            return String(match.output.1)
+        if let name = defaultExportName(in: source) {
+            return name
         }
         let found = declarations(in: source)
         if let named = found.first(where: { $0.exported && $0.isComponent }) {
             return named.name
         }
         return found.last(where: { $0.isComponent })?.name
+    }
+
+    /// The name of the default export: the name of its function or class, the name that it points to, or
+    /// `defaultName` when it is anonymous or an expression such as `memo(...)`. nil without a default export.
+    static func defaultExportName(in source: String) -> String? {
+        guard let marker = source.firstMatch(of: /export\s+default\s+/) else { return nil }
+        let rest = source[marker.range.upperBound...]
+        if let match = rest.prefixMatch(of: /(?:async\s+)?function\b\s*\*?\s*([A-Za-z_$][A-Za-z0-9_$]*)/) {
+            return String(match.output.1)
+        }
+        if let match = rest.prefixMatch(of: /class\s+(?!extends\b)([A-Za-z_$][A-Za-z0-9_$]*)/) {
+            return String(match.output.1)
+        }
+        if let match = rest.prefixMatch(of: /(?m)([A-Za-z_$][A-Za-z0-9_$]*)(?=[ \t]*;?[ \t]*$)/) {
+            return String(match.output.1)
+        }
+        return defaultName
+    }
+
+    /// The code without its default export marker. A named function or class and a name that is only exported keep
+    /// their name. An anonymous function or class gets `defaultName`. Any other expression is assigned to it.
+    static func dropDefaultExport(_ code: String) -> String {
+        guard let marker = code.firstMatch(of: /export\s+default\s+/) else { return code }
+        let head = code[..<marker.range.lowerBound]
+        let rest = code[marker.range.upperBound...]
+        if let match = rest.prefixMatch(of: /((?:async\s+)?function\b)(\s*\*?\s*)([A-Za-z_$][A-Za-z0-9_$]*)?/) {
+            if match.output.3 != nil { return String(head + rest) }
+            return String(head) + match.output.1 + " " + defaultName + rest[match.range.upperBound...]
+        }
+        if rest.prefixMatch(of: /class\s+(?!extends\b)[A-Za-z_$][A-Za-z0-9_$]*/) != nil { return String(head + rest) }
+        if let match = rest.prefixMatch(of: /class\b/) {
+            return String(head) + "class " + defaultName + rest[match.range.upperBound...]
+        }
+        if let match = rest.prefixMatch(of: /(?m)[A-Za-z_$][A-Za-z0-9_$]*[ \t]*;?(?=[ \t]*$)/) {
+            return String(head + rest[match.range.upperBound...])
+        }
+        return String(head) + "const " + defaultName + " = " + rest
     }
 
     /// A top-level function or constant with its body: the text up to the next top-level declaration.
@@ -120,17 +159,17 @@ public enum WebDocument {
         let isConstant: Bool
         let body: String
 
-        /// True for a capitalised function, or a constant that is not in capitals, whose body returns JSX.
+        /// True for a capitalised function or class, or a constant that is not in capitals, whose body returns JSX.
         var isComponent: Bool {
             guard let first = name.first, first.isUppercase else { return false }
             if isConstant && !name.contains(where: \.isLowercase) { return false }
-            return body.contains(/return\s*\(?\s*<[A-Za-z]|=>\s*\(?\s*<[A-Za-z]|React\.createElement\s*\(/)
+            return body.contains(/(?:return|=>)[^;{}]*?<[A-Za-z>]|createElement\s*\(/)
         }
     }
 
     /// The top-level functions and constants of the source, in source order.
     static func declarations(in source: String) -> [Declaration] {
-        let starts = source.matches(of: /(?m)^(export[ \t]+)?(const|function)[ \t]+([A-Za-z_][A-Za-z0-9_]*)/)
+        let starts = source.matches(of: /(?m)^(export[ \t]+)?(const|function|class)[ \t]+([A-Za-z_][A-Za-z0-9_]*)/)
         return starts.enumerated().map { index, match in
             let end = index + 1 < starts.count ? starts[index + 1].range.lowerBound : source.endIndex
             return Declaration(name: String(match.output.3), exported: match.output.1 != nil,
