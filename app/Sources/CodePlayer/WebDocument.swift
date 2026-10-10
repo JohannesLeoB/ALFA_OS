@@ -75,7 +75,8 @@ public enum WebDocument {
         let styles = named(files, ".css").map { "<style>\(escapeScript($0))</style>" }.joined()
         let scripts = reactScripts.map { #"<script src="\#($0)"></script>"# }.joined()
         // No line break after the destructuring, so that the source lines keep their numbers for error positions.
-        let body = "const {useState,useEffect,useRef,useMemo,useCallback,Fragment}=React;" + escapeScript(code) + "\n" + render
+        let provided = reactNames.filter { !declares($0, in: code) }.joined(separator: ",")
+        let body = (provided.isEmpty ? "" : "const {\(provided)}=React;") + escapeScript(code) + "\n" + render
         let mount: String
         if files.keys.contains(where: { $0.lowercased().hasSuffix(".ts") || $0.lowercased().hasSuffix(".tsx") }) {
             mount = #"<div id="root"></div><script type="text/plain" id="card">"# + body + "</script>" + typedRunner
@@ -84,6 +85,19 @@ public enum WebDocument {
         }
         return "<!doctype html><html><head>" + basis + errorScript + #"<script src="\#(tailwindScript)"></script>"# + scripts + styles
             + "</head><body>" + mount + "</body></html>"
+    }
+
+    /// The names of React that a card may use without an import. The page gives the ones that the code does not declare.
+    static let reactNames = [
+        "useState", "useEffect", "useRef", "useMemo", "useCallback", "useReducer", "useContext", "useLayoutEffect",
+        "useId", "useTransition", "useDeferredValue", "useImperativeHandle", "useSyncExternalStore",
+        "forwardRef", "memo", "createContext", "createElement", "cloneElement", "Children", "Fragment", "Suspense", "lazy",
+    ]
+
+    /// True when the code declares the name itself: a variable, function or class, or a destructuring.
+    static func declares(_ name: String, in code: String) -> Bool {
+        let pattern = "\\b(?:(?:const|let|var|function|class)\\s+\(name)\\b|(?:const|let|var)\\s*\\{[^}]*\\b\(name)\\b[^}]*\\})"
+        return code.range(of: pattern, options: .regularExpression) != nil
     }
 
     /// The component that the page draws. In order: the default export, a named export whose body is JSX, and the
