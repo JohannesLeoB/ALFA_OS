@@ -59,8 +59,8 @@ public enum WebDocument {
     }
 
     /// A React card: the component is compiled by Babel in the page. Imports and module markers are dropped.
-    /// A card with a `.ts` or `.tsx` file is compiled with the TypeScript and React presets as `card.tsx`
-    /// (see `typedRunner`). Babel needs a file name to run the TypeScript preset.
+    /// Every React card, whatever its file ending, is compiled with the TypeScript and React presets as `card.tsx`
+    /// (see `typedRunner`), so TypeScript syntax in a `.jsx` file runs as well. Babel needs a file name for the preset.
     static func react(_ files: [String: String]) -> String {
         let source = files.keys.sorted().filter { !$0.lowercased().hasSuffix(".css") }.compactMap { files[$0] }
         let joined = source.joined(separator: "\n")
@@ -76,12 +76,7 @@ public enum WebDocument {
         // No line break after the destructuring, so that the source lines keep their numbers for error positions.
         let provided = reactNames.filter { !declares($0, in: code) }.joined(separator: ",")
         let body = (provided.isEmpty ? "" : "const {\(provided)}=React;") + escapeScript(code) + "\n" + render
-        let mount: String
-        if files.keys.contains(where: { $0.lowercased().hasSuffix(".ts") || $0.lowercased().hasSuffix(".tsx") }) {
-            mount = #"<div id="root"></div><script type="text/plain" id="card">"# + body + "</script>" + typedRunner
-        } else {
-            mount = #"<div id="root"></div><script type="text/babel" data-presets="react">"# + body + "</script>"
-        }
+        let mount = #"<div id="root"></div><script type="text/plain" id="card">"# + body + "</script>" + typedRunner
         return "<!doctype html><html><head>" + basis + errorScript + #"<script src="\#(tailwindScript)"></script>"# + scripts + styles
             + "</head><body>" + mount + "</body></html>"
     }
