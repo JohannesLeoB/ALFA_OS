@@ -2,14 +2,14 @@
 <!doctype html>
 <html>
 <head><meta charset="utf-8"><title>Vorschau</title>
-<style>html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans)}</style>
+<style>html,body{margin:0;background:var(--color-background-window);color:var(--color-text-primary);font-family:var(--font-sans)}</style>
 </head>
 <body>
-<div id="root" style="display:flex;gap:var(--space-xLarge);flex-wrap:wrap;padding:var(--space-xxLarge);color:var(--ink)"></div>
+<div id="root" style="display:flex;gap:var(--space-xl);flex-wrap:wrap;padding:var(--space-xxl);color:var(--color-text-primary)"></div>
 <script>
 var A = window.ALFA, h = React.createElement;
 ReactDOM.createRoot(document.getElementById("root")).render(h(React.Fragment, null, A.Symbol.names.map(function (n) {
-  return h("div", { key: n, title: n, style: { display: "grid", justifyItems: "center", gap: "var(--space-small)", width: 56 } }, h(A.Symbol, { name: n, size: 18 }), h("span", { className: "caption", style: { color: "var(--ink-3)" } }, n)); })));
+  return h("div", { key: n, title: n, style: { display: "grid", justifyItems: "center", gap: "var(--space-s)", width: 56 } }, h(A.Symbol, { name: n, size: 18 }), h("span", { className: "caption", style: { color: "var(--color-text-tertiary)" } }, n)); })));
 </script>
 </body>
 </html>

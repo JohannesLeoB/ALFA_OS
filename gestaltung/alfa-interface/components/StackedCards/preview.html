@@ -2,13 +2,13 @@
 <!doctype html>
 <html>
 <head><meta charset="utf-8"><title>Vorschau</title>
-<style>html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans)}</style>
+<style>html,body{margin:0;background:var(--color-background-window);color:var(--color-text-primary);font-family:var(--font-sans)}</style>
 </head>
 <body>
-<div id="root" style="padding:var(--space-xxLarge)"></div>
+<div id="root" style="padding:var(--space-xxl)"></div>
 <script>
 var A = window.ALFA, h = React.createElement;
-function Demo() { return h(A.StackedCards,{items:[{title:"01 Anfrage",note:"Scrollen, die Karten stapeln sich",mood:"coral"},{title:"02 Aufmaß",mood:"apricot"},{title:"03 Angebot",mood:"rose"},{title:"04 Fertigung",mood:"umber"},{title:"05 Montage",mood:"petrol"}]}); }
+function Demo() { return h(A.StackedCards,{items:[{title:"01 Anfrage",note:"Scrollen, die Karten stapeln sich",color:"red-400"},{title:"02 Aufmaß",color:"orange-400"},{title:"03 Angebot",color:"red-200"},{title:"04 Fertigung",color:"red-800"},{title:"05 Montage",color:"cyan-900"}]}); }
 ReactDOM.createRoot(document.getElementById("root")).render(h(Demo));
 </script>
 </body>

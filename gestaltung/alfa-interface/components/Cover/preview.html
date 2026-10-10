@@ -3,14 +3,14 @@
 <html>
 <head><meta charset="utf-8"><title>ALFA Interface</title>
 <style>
-html,body{margin:0;background:var(--ground)}
-.c{position:relative;width:960px;height:288px;background:var(--ground);overflow:hidden}
-.n{position:absolute;left:var(--space-xxxLarge);bottom:var(--space-xxxLarge);max-width:440px}
-.n b{display:block;font:500 72px/.95 var(--font-display);letter-spacing:-1.5px;color:var(--ink)}
-.n span{display:block;margin-top:var(--space-medium);font:400 13px/1.4 var(--font-sans);color:var(--ink-3)}
+html,body{margin:0;background:var(--color-background-window)}
+.c{position:relative;width:960px;height:288px;background:var(--color-background-window);overflow:hidden}
+.n{position:absolute;left:var(--space-xxxl);bottom:var(--space-xxxl);max-width:440px}
+.n b{display:block;font:500 72px/.95 var(--font-display);letter-spacing:-1.5px;color:var(--color-text-primary)}
+.n span{display:block;margin-top:var(--space-m);font:400 13px/1.4 var(--font-sans);color:var(--color-text-tertiary)}
 svg{position:absolute;left:0;top:0}
-.s50{fill:var(--stein-50)}.s200{fill:var(--stein-200)}.s400{fill:var(--stein-400)}.s700{fill:var(--stein-700)}.s900{fill:var(--stein-900)}.pan{fill:var(--panel)}
-.dot{fill:var(--stein-300)}.ring{fill:none;stroke:var(--blob-ink);stroke-width:1}.bl{fill:var(--blob)}
+.s50{fill:var(--palette-gray-50)}.s200{fill:var(--palette-gray-200)}.s400{fill:var(--palette-gray-400)}.s700{fill:var(--palette-gray-700)}.s900{fill:var(--palette-gray-900)}.pan{fill:var(--color-background-container)}
+.dot{fill:var(--palette-gray-300)}.ring{fill:none;stroke:var(--component-blob-foreground);stroke-width:1}.bl{fill:var(--component-blob-background)}
 </style></head>
 <body>
 <div class="c">
@@ -31,8 +31,8 @@ svg{position:absolute;left:0;top:0}
 <rect class="s700" x="792" y="64" width="168" height="200" rx="16"/>
 <rect class="bl" x="504" y="12" width="124" height="36" rx="18"/>
 <circle class="ring" cx="526" cy="30" r="13"/>
-<!-- Stimmungsreihe: fünf mood-Töne im Schritt space-xxLarge (24) -->
-<circle cx="504" cy="277" r="8" fill="var(--mood-rose)"/><circle cx="528" cy="277" r="8" fill="var(--mood-apricot)"/><circle cx="552" cy="277" r="8" fill="var(--mood-coral)"/><circle cx="576" cy="277" r="8" fill="var(--mood-umber)"/><circle cx="600" cy="277" r="8" fill="var(--mood-petrol)"/>
+<!-- Stimmungsreihe: fünf palette-Töne im Schritt space-xxLarge (24) -->
+<circle cx="504" cy="277" r="8" fill="var(--palette-red-200)"/><circle cx="528" cy="277" r="8" fill="var(--palette-orange-400)"/><circle cx="552" cy="277" r="8" fill="var(--palette-red-400)"/><circle cx="576" cy="277" r="8" fill="var(--palette-red-800)"/><circle cx="600" cy="277" r="8" fill="var(--palette-cyan-900)"/>
 </svg>
 <div class="n"><b>ALFA<br>Interface</b><span>Drei Bahnen, ein Blob, Weiß als Grund, Haarlinien, eine Stimmung für Ausdruck.</span></div>
 </div>

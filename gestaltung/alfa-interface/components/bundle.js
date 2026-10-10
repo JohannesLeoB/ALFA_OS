@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"ALFA","components":[{"name":"Shell"},{"name":"Lane"},{"name":"LaneHandle"},{"name":"Blob"},{"name":"StoneMenu"},{"name":"MessageRow"},{"name":"SyncButton"},{"name":"PersonMark"},{"name":"TextButton"},{"name":"SymbolButton"},{"name":"Chip"},{"name":"SearchField"},{"name":"Symbol"},{"name":"ArcBars"},{"name":"PillStack"},{"name":"Tooltip"},{"name":"DotSphere"},{"name":"GlowButton"},{"name":"AgentPill"},{"name":"NumberRoll"},{"name":"SpotlightGrid"},{"name":"StackedCards"},{"name":"KanbanBoard"},{"name":"CardTower"},{"name":"ReadingPane"},{"name":"HubTile"},{"name":"EditBogen"},{"name":"BlobMenu"},{"name":"AssistantCard"},{"name":"ThinkingOrb"}]} */
+/* @ds-bundle: {"format":4,"namespace":"ALFA","components":[{"name":"Shell"},{"name":"Lane"},{"name":"LaneHandle"},{"name":"Blob"},{"name":"TileMenu"},{"name":"MessageRow"},{"name":"SyncButton"},{"name":"PersonMark"},{"name":"TextButton"},{"name":"SymbolButton"},{"name":"Chip"},{"name":"SearchField"},{"name":"Symbol"},{"name":"ArcBars"},{"name":"PillStack"},{"name":"Tooltip"},{"name":"DotSphere"},{"name":"GlowButton"},{"name":"AgentPill"},{"name":"NumberRoll"},{"name":"SpotlightGrid"},{"name":"StackedCards"},{"name":"KanbanBoard"},{"name":"CardTower"},{"name":"ReadingPane"},{"name":"HubTile"},{"name":"EditSheet"},{"name":"BlobMenu"},{"name":"AssistantCard"},{"name":"ThinkingOrb"}]} */
 (function () {
   "use strict";
   var R = window.React;
@@ -135,7 +135,7 @@
       var foldable = i !== 1, isFolded = foldable && widths[i === 0 ? 0 : 1] <= folded;
       return h(Lane, { key: "l" + i, title: l.title, count: l.count, actions: l.actions, dot: l.dot, folded: isFolded, onUnfold: unfold(i === 0 ? 0 : 1) }, l.content);
     }
-    var cols = widths[0] + "px var(--handle-width) minmax(0,1fr) var(--handle-width) " + widths[1] + "px";
+    var cols = widths[0] + "px var(--component-lane-handle-width) minmax(0,1fr) var(--component-lane-handle-width) " + widths[1] + "px";
     return h("div", { className: cx("ai-root", "ai-shell", p.className), style: p.style },
       h("div", { className: "ai-blobbar", role: "toolbar", "aria-label": "Fensterleiste" }, p.blob || null, p.trailing || null),
       h("div", { className: cx("ai-lanes", dragging >= 0 && "ai-dragging"), style: { gridTemplateColumns: cols } },
@@ -220,8 +220,8 @@
     }
     var width = open ? menuW : rest + (awake - rest) * wake;
     var left = side === "leading" ? margin : null, right = side === "trailing" ? margin : null;
-    var style = { left: left != null ? left : "auto", right: right != null ? "var(--blob-trailing-inset, 0px)" : "auto", transform: drag != null ? "translateX(" + drag + "px)" : "none", transition: drag != null || still() ? "none" : "left var(--time-lane-snap) var(--curve-standard), right var(--time-lane-snap) var(--curve-standard)" };
-    var pillStyle = { width: width + "px", height: open ? "auto" : null, minHeight: open ? "var(--blob-height)" : null };
+    var style = { left: left != null ? left : "auto", right: right != null ? "var(--blob-trailing-inset, 0px)" : "auto", transform: drag != null ? "translateX(" + drag + "px)" : "none", transition: drag != null || still() ? "none" : "left var(--motion-duration-snap) var(--motion-curve-standard), right var(--motion-duration-snap) var(--motion-curve-standard)" };
+    var pillStyle = { width: width + "px", height: open ? "auto" : null, minHeight: open ? "var(--component-blob-height)" : null };
     var flagOut = wake > 0.3 && !open;
     var current = p.area || areas[0];
     return h("div", { ref: host, className: cx("ai-root", "ai-blob-host", p.className) },
@@ -251,30 +251,30 @@
             })) : null)));
   }
 
-  /* ---------- StoneMenu ---------- */
+  /* ---------- TileMenu ---------- */
   var CORNERS = [
-    "var(--radius-container) var(--radius-alert) var(--radius-lane) var(--radius-alert)",
-    "var(--radius-alert) var(--radius-lane) var(--radius-alert) var(--radius-container)",
-    "var(--radius-lane) var(--radius-container) var(--radius-alert) var(--radius-lane)"
+    "var(--radius-container) var(--radius-dialog) var(--component-lane-radius) var(--radius-dialog)",
+    "var(--radius-dialog) var(--component-lane-radius) var(--radius-dialog) var(--radius-container)",
+    "var(--component-lane-radius) var(--radius-container) var(--radius-dialog) var(--component-lane-radius)"
   ];
-  function Stone(p) {
+  function Tile(p) {
     var hv = useState(false), hover = hv[0], setHover = hv[1];
     var pr = useState(false), press = pr[0], setPress = pr[1];
     var up = hover || p.open;
     var state = press ? "pressed" : p.open ? "open" : hover ? "hover" : "rest";
-    return h("div", { ref: p.setRef, className: cx("ai-stone", up && "ai-up"), "data-state": state, style: { borderRadius: CORNERS[p.index % 3] },
+    return h("div", { ref: p.setRef, className: cx("ai-tile", up && "ai-up"), "data-state": state, style: { borderRadius: CORNERS[p.index % 3] },
       role: "button", tabIndex: 0, "aria-expanded": up, "aria-label": p.item.name + ", " + p.item.count,
       onPointerEnter: function () { setHover(true); }, onPointerLeave: function () { setHover(false); setPress(false); },
       onPointerDown: function () { setPress(true); }, onPointerUp: function () { setPress(false); p.onToggle(p.index); },
       onKeyDown: function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); p.onToggle(p.index); } } },
-      h("div", { className: "ai-stone-name" }, p.item.name),
-      h("div", { className: "ai-stone-count" }, p.item.count),
-      h("span", { className: "ai-stone-ear", "aria-hidden": "true" }),
-      h("nav", { className: "ai-stone-note", "aria-hidden": !up }, (p.item.links || []).map(function (l) {
+      h("div", { className: "ai-tile-name" }, p.item.name),
+      h("div", { className: "ai-tile-count" }, p.item.count),
+      h("span", { className: "ai-tile-ear", "aria-hidden": "true" }),
+      h("nav", { className: "ai-tile-note", "aria-hidden": !up }, (p.item.links || []).map(function (l) {
         return h("button", { key: l, type: "button", tabIndex: up ? 0 : -1, onPointerUp: function (e) { e.stopPropagation(); }, onClick: function (e) { e.stopPropagation(); if (p.onPick) p.onPick(p.item.name, l); } }, l);
       })));
   }
-  function StoneMenu(p) {
+  function TileMenu(p) {
     var items = p.items || [];
     var field = useRef(null), refs = useRef([]);
     var o = useState(null), open = o[0], setOpen = o[1];
@@ -303,8 +303,8 @@
       raf = requestAnimationFrame(step);
       return function () { cancelAnimationFrame(raf); f.removeEventListener("pointermove", mv); f.removeEventListener("pointerleave", lv); };
     }, [items.length]);
-    return h("div", { ref: field, className: cx("ai-root", "ai-stones", p.className) }, items.map(function (it, i) {
-      return h(Stone, { key: it.name, item: it, index: i, open: open === i, setRef: function (el) { refs.current[i] = el; }, onToggle: function (j) { setOpen(open === j ? null : j); }, onPick: p.onPick });
+    return h("div", { ref: field, className: cx("ai-root", "ai-tiles", p.className) }, items.map(function (it, i) {
+      return h(Tile, { key: it.name, item: it, index: i, open: open === i, setRef: function (el) { refs.current[i] = el; }, onToggle: function (j) { setOpen(open === j ? null : j); }, onPick: p.onPick });
     }));
   }
 
@@ -319,13 +319,14 @@
       h("span", { className: "ai-row-preview" }, p.preview));
   }
 
-  /* ---------- Stimmung: Farbwahl für Ausdrucksflächen ---------- */
-  var MOOD = {
-    coral: ["mood-coral", "on-mood-bright"], apricot: ["mood-apricot", "on-mood-bright"], rose: ["mood-rose", "on-mood-bright"],
-    umber: ["mood-umber", "on-mood-deep"],
-    petrol: ["mood-petrol", "on-mood-deep"], black: ["mood-black", "on-mood-deep"]
+  /* ---------- Ausdrucksfarben: Wahl aus palette-* für Ausdrucksflächen ---------- */
+  var EXPRESSION = {
+    "red-200": ["palette-red-200", "color-text-on-expression-light"], "red-400": ["palette-red-400", "color-text-on-expression-light"],
+    "red-500": ["palette-red-500", "color-text-on-expression-dark"], "red-700": ["palette-red-700", "color-text-on-expression-dark"],
+    "red-800": ["palette-red-800", "color-text-on-expression-dark"], "orange-400": ["palette-orange-400", "color-text-on-expression-light"],
+    "cyan-900": ["palette-cyan-900", "color-text-on-expression-dark"], "gray-950": ["palette-gray-950", "color-text-on-expression-dark"]
   };
-  function moodStyle(name) { var m = MOOD[name] || MOOD.coral; return { background: "var(--" + m[0] + ")", color: "var(--" + m[1] + ")" }; }
+  function colorStyle(name) { var m = EXPRESSION[name] || EXPRESSION["red-400"]; return { background: "var(--" + m[0] + ")", color: "var(--" + m[1] + ")" }; }
 
   /* ---------- ArcBars ---------- */
   function ArcBars(p) {
@@ -334,10 +335,10 @@
     var cols = { gridTemplateColumns: "repeat(" + Math.max(1, data.length) + ", minmax(0, 1fr))" };
     var summary = data.map(function (d) { return d.label + ": " + d.value; }).join(", ");
     return h("figure", { className: cx("ai-root", "ai-arcs", p.className) },
-      p.title ? h("figcaption", { className: "ai-arcs-head" }, h("span", { className: "readingTitle" }, p.title), p.caption ? h("span", { className: "caption ai-arcs-cap" }, p.caption) : null) : null,
+      p.title ? h("figcaption", { className: "ai-arcs-head" }, h("span", { className: "reading-title" }, p.title), p.caption ? h("span", { className: "caption ai-arcs-cap" }, p.caption) : null) : null,
       h("div", { className: "ai-arcs-bars", style: cols, role: "img", "aria-label": summary },
         data.map(function (d) { return h("i", { key: d.label, style: { height: Math.max(2, d.value / max * 100) + "%" } }); })),
-      h("div", { className: "ai-arcs-nums monoDetail", style: cols, "aria-hidden": "true" },
+      h("div", { className: "ai-arcs-nums mono-detail", style: cols, "aria-hidden": "true" },
         data.map(function (d) { return h("span", { key: d.label }, d.label); })));
   }
 
@@ -345,7 +346,7 @@
   function PillStack(p) {
     return h("div", { className: cx("ai-root", "ai-pills", p.className), role: "list" },
       (p.items || []).map(function (it) {
-        return h("div", { key: it.label, role: "listitem", className: "ai-pill monoDetail", style: moodStyle(it.mood) }, it.label);
+        return h("div", { key: it.label, role: "listitem", className: "ai-pill mono-detail", style: colorStyle(it.color) }, it.label);
       }));
   }
 
@@ -388,7 +389,7 @@
   function GlowButton(p) {
     var rest = omit(p, ["children", "className"]);
     return h("button", Object.assign({ type: "button" }, rest, { className: cx("ai-root", "ai-glow", p.className) }),
-      h("span", { className: "ai-glow-in textButton" }, p.children));
+      h("span", { className: "ai-glow-in text-button" }, p.children));
   }
 
   /* ---------- AgentPill ---------- */
@@ -448,8 +449,8 @@
     }, [items.length]);
     return h("div", { className: cx("ai-root", "ai-stack", p.className) },
       items.map(function (it, i) {
-        return h("div", { key: it.title, ref: function (el) { refs.current[i] = el; }, className: "ai-stack-card", style: Object.assign({ "--i": i }, moodStyle(it.mood)) },
-          (function () { var m = /^(\d+)\s+(.*)$/.exec(it.title); return m ? h("span", { className: "ai-stack-title" }, h("span", { className: "ai-stack-num" }, m[1]), h("span", { className: "areaTitle" }, m[2])) : h("span", { className: "areaTitle" }, it.title); })(), it.note ? h("span", { className: "monoDetail ai-stack-note" }, it.note) : null);
+        return h("div", { key: it.title, ref: function (el) { refs.current[i] = el; }, className: "ai-stack-card", style: Object.assign({ "--i": i }, colorStyle(it.color)) },
+          (function () { var m = /^(\d+)\s+(.*)$/.exec(it.title); return m ? h("span", { className: "ai-stack-title" }, h("span", { className: "ai-stack-num" }, m[1]), h("span", { className: "area-title" }, m[2])) : h("span", { className: "area-title" }, it.title); })(), it.note ? h("span", { className: "mono-detail ai-stack-note" }, it.note) : null);
       }));
   }
 
@@ -496,7 +497,7 @@
       cols.map(function (col) {
         return h("section", { key: col.id, className: cx("ai-kcol", over === col.id && "ai-over"), "aria-label": col.title,
           onDragOver: function (e) { e.preventDefault(); setOver(col.id); }, onDragLeave: function () { setOver(null); }, onDrop: function (e) { onDrop(e, col); } },
-          h("h3", { className: "ai-kcol-title name" }, col.title, h("span", { className: "monoDetail ai-kcol-count" }, col.cards.length)),
+          h("h3", { className: "ai-kcol-title name" }, col.title, h("span", { className: "mono-detail ai-kcol-count" }, col.cards.length)),
           col.cards.map(function (card, idx) {
             return h("div", { key: card.id, "data-card": card.id, tabIndex: 0, draggable: true, className: cx("ai-kcard callout", drag === card.id && "ai-drag"),
               onDragStart: function (e) { setDrag(card.id); e.dataTransfer.setData("text/plain", card.id); }, onDragEnd: function () { setDrag(null); setOver(null); },
@@ -508,9 +509,9 @@
   /* ---------- ReadingPane ---------- */
   function ReadingPane(p) {
     return h("article", { className: cx("ai-root", "ai-reading", p.className) },
-      h("header", { className: "ai-reading-head" }, h("h2", { className: "readingTitle ai-reading-subject" }, p.subject), p.tag ? h("span", { className: "caption ai-reading-tag" }, p.tag) : null),
+      h("header", { className: "ai-reading-head" }, h("h2", { className: "reading-title ai-reading-subject" }, p.subject), p.tag ? h("span", { className: "caption ai-reading-tag" }, p.tag) : null),
       h("div", { className: "ai-reading-from" },
-        h("span", { className: "ai-reading-mark cardMark", "aria-hidden": "true" }, initials(p.from)),
+        h("span", { className: "ai-reading-mark card-mark", "aria-hidden": "true" }, initials(p.from)),
         h("div", null, h("div", { className: "name" }, p.from), p.meta ? h("div", { className: "caption ai-reading-meta" }, p.meta) : null)),
       h("div", { className: "ai-reading-body body" }, p.children),
       p.actions && p.actions.length ? h("div", { className: "ai-reading-actions" }, p.actions.map(function (a, i) {
@@ -529,8 +530,8 @@
       p.subtitle ? h("span", { className: "callout ai-tile-sub" }, p.subtitle) : null);
   }
 
-  /* ---------- EditBogen: drei Bahnen ohne Kopf ---------- */
-  function EditBogen(p) {
+  /* ---------- EditSheet: drei Bahnen ohne Kopf ---------- */
+  function EditSheet(p) {
     var lanes = p.lanes || [];
     var rest = px("lane-resting", 300), folded = px("lane-collapsed", 56), at = px("lane-collapse-at", 120), maxW = px("lane-leading-max", 420);
     var w = useState([lanes[0] && lanes[0].width || rest, lanes[2] && lanes[2].width || rest]), widths = w[0], setWidths = w[1];
@@ -570,15 +571,15 @@
     function lane(i) {
       var l = lanes[i]; if (!l) return h("div", { key: "l" + i });
       var big = maxed === i;
-      var ctl = h("span", { key: "ctl", className: "ai-eb-ctl" },
+      var ctl = h("span", { key: "ctl", className: "ai-es-ctl" },
         openCount() > 1 ? h(SymbolButton, { symbol: "minus", size: "small", label: l.title + " falten", onClick: function () { fold(i); } }) : null,
         h(SymbolButton, { symbol: big ? "shrink" : "expand", size: "small", label: big ? "Zurück" : l.title + " groß", onClick: function () { setMaxed(big ? -1 : i); } }));
       return h(Lane, { key: "l" + i, title: l.title, count: l.count, dot: l.dot, folded: isFolded(i), onUnfold: function () { unfold(i); },
         actions: [l.actions ? h(R.Fragment, { key: "a" }, l.actions) : null, ctl] }, l.content);
     }
-    var cols = col(0) + " var(--handle-width) " + col(1) + " var(--handle-width) " + col(2);
-    return h("div", { className: cx("ai-root", "ai-editbogen", p.className), style: p.style },
-      h("div", { className: cx("ai-eb-lanes", dragging >= 0 && "ai-dragging"), style: { gridTemplateColumns: cols } },
+    var cols = col(0) + " var(--component-lane-handle-width) " + col(1) + " var(--component-lane-handle-width) " + col(2);
+    return h("div", { className: cx("ai-root", "ai-edit-sheet", p.className), style: p.style },
+      h("div", { className: cx("ai-es-lanes", dragging >= 0 && "ai-dragging"), style: { gridTemplateColumns: cols } },
         lane(0), handle(0), lane(1), handle(1), lane(2)),
       p.blob || null);
   }
@@ -750,7 +751,7 @@
     });
   }
   function readScope(node) {
-    var scope = (node && node.closest && node.closest(".ai-editbogen")) || document.body;
+    var scope = (node && node.closest && node.closest(".ai-edit-sheet")) || document.body;
     var lanes = Array.prototype.map.call(scope.querySelectorAll(".ai-lane"), function (l) {
       return { title: l.getAttribute("aria-label") || "", folded: l.classList.contains("ai-folded"), text: String(l.innerText || "").replace(/\n{3,}/g, "\n\n").trim().slice(0, 4000) };
     });
@@ -1039,8 +1040,8 @@
   }
 
   window.ALFA = Object.assign(window.ALFA || {}, {
-    CardTower: CardTower, EditBogen: EditBogen, BlobMenu: BlobMenu, AssistantCard: AssistantCard, ThinkingOrb: ThinkingOrb,
-    Shell: Shell, Lane: Lane, LaneHandle: LaneHandle, Blob: Blob, StoneMenu: StoneMenu, MessageRow: MessageRow,
+    CardTower: CardTower, EditSheet: EditSheet, BlobMenu: BlobMenu, AssistantCard: AssistantCard, ThinkingOrb: ThinkingOrb,
+    Shell: Shell, Lane: Lane, LaneHandle: LaneHandle, Blob: Blob, TileMenu: TileMenu, MessageRow: MessageRow,
     SyncButton: SyncButton, PersonMark: PersonMark, TextButton: TextButton, SymbolButton: SymbolButton, Chip: Chip, SearchField: SearchField, Symbol: Symbol,
     ArcBars: ArcBars, PillStack: PillStack, Tooltip: Tooltip, DotSphere: DotSphere, GlowButton: GlowButton, AgentPill: AgentPill, NumberRoll: NumberRoll, SpotlightGrid: SpotlightGrid, StackedCards: StackedCards, KanbanBoard: KanbanBoard, ReadingPane: ReadingPane, HubTile: HubTile
   });

@@ -2,13 +2,13 @@
 <!doctype html>
 <html>
 <head><meta charset="utf-8"><title>Vorschau</title>
-<style>html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans)}</style>
+<style>html,body{margin:0;background:var(--color-background-window);color:var(--color-text-primary);font-family:var(--font-sans)}</style>
 </head>
 <body>
-<div id="root" style="padding:var(--space-xxLarge)"></div>
+<div id="root" style="padding:var(--space-xxl)"></div>
 <script>
 var A = window.ALFA, h = React.createElement;
-function Demo() { return h(A.PillStack,{items:[{label:"Petrol",mood:"petrol"},{label:"Umbra",mood:"umber"},{label:"Aprikose",mood:"apricot"},{label:"Rose",mood:"rose"}]}); }
+function Demo() { return h(A.PillStack,{items:[{label:"Petrol",color:"cyan-900"},{label:"Umbra",color:"red-800"},{label:"Aprikose",color:"orange-400"},{label:"Rose",color:"red-200"}]}); }
 ReactDOM.createRoot(document.getElementById("root")).render(h(Demo));
 </script>
 </body>

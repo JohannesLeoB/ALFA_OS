@@ -1,6 +1,4 @@
-ALFA Interface MASTER 1010: CI aller ALFA-Apps (Entscheidung Johannes, 2026-10-10).
-Quelle: claude.ai Artifact https://claude.ai/artifact/G8xFQLN6yeLLRohRwZoGyi (Typ Design System), Besitzer: Konto hello@johannesleoberger.com.
-Stand der Kopie: 2026-10-11, Fassung 1791640246-78c2 des Artifacts. Dateien unverändert aus dessen Ordner project/: README.md, Beschreibungen.md, tokens.json, tokens.css, design-system.json, assets/ (nur README; Bilder liegen im Asset-Speicher des Artifacts), components/ (bundle.js, bundle.css, index.d.ts, README und Vorschau je Bauteil, 33 Bauteile).
-Das Artifact bleibt die Quelle. Diese Kopie nie von Hand ändern, nur neu ziehen.
-Regeln zuerst hier nachlesen (README.md, components/*/README.md, bundle.css, bundle.js), nichts dazuerfinden.
-Noch nicht im Artifact: „Mail dicht als Vollbild“ (Design vom 08.10.), Bildvergleich, Eye tracker, Schemas der Akte, SwiftUI-Fassungen.
+ALFA Interface: die eine Fassung der Gestaltungsquelle (Entscheidung Johannes, 11.10.2026: „eine Fassung draus machen“).
+Gebaut am 2026-10-11 aus dem Design System MASTER 1010 (https://claude.ai/artifact/G8xFQLN6yeLLRohRwZoGyi, Fassung 1791640246-78c2 vom 10.10. 15:50) mit zwei Rohwerten aus ALFA Interface (https://claude.ai/artifact/VzXhbq7EHSfxgxZTW5a2wr, Fassung 1791597587-2467 vom 10.10. 03:59): palette-red-500, palette-red-700. Beide Artifacts bleiben unverändert.
+Namen nach der Liste in Issue #4 (Palette, Rolle, Bauteil; keine Material- oder Bildwörter). Bauteile: StoneMenu heißt TileMenu, EditBogen EditSheet, EntwurfBogen DraftSheet, Bogen Sheet. Agent-Pille, Glow, Kugel und Balken lesen color-expression-*.
+tokens.css ist aus tokens.json erzeugt. Diese Fassung ist die Quelle; ins Design-System-Artifact geht sie nur auf Johannes' Wort.

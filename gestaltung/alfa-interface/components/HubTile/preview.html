@@ -2,13 +2,13 @@
 <!doctype html>
 <html>
 <head><meta charset="utf-8"><title>Vorschau</title>
-<style>html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans)}</style>
+<style>html,body{margin:0;background:var(--color-background-window);color:var(--color-text-primary);font-family:var(--font-sans)}</style>
 </head>
 <body>
-<div id="root" style="padding:var(--space-xxLarge)"></div>
+<div id="root" style="padding:var(--space-xxl)"></div>
 <script>
 var A = window.ALFA, h = React.createElement;
-function Demo() { return h("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:"var(--space-large)"}},h(A.HubTile,{eyebrow:"Mail",title:"Mailkonten",subtitle:"3 Konten, IMAP und SMTP",status:"ok"}),h(A.HubTile,{eyebrow:"API",title:"Schnittstellen",subtitle:"2 aktive Verbindungen",status:"ok"}),h(A.HubTile,{eyebrow:"Ablage",title:"Speicher",subtitle:"Zugriff prüfen",status:"error"})); }
+function Demo() { return h("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:"var(--space-l)"}},h(A.HubTile,{eyebrow:"Mail",title:"Mailkonten",subtitle:"3 Konten, IMAP und SMTP",status:"ok"}),h(A.HubTile,{eyebrow:"API",title:"Schnittstellen",subtitle:"2 aktive Verbindungen",status:"ok"}),h(A.HubTile,{eyebrow:"Ablage",title:"Speicher",subtitle:"Zugriff prüfen",status:"error"})); }
 ReactDOM.createRoot(document.getElementById("root")).render(h(Demo));
 </script>
 </body>

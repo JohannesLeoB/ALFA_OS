@@ -8,9 +8,9 @@ export interface LaneHandleProps { value?: number; label?: string; onStart?: () 
 export declare function LaneHandle(props: LaneHandleProps): React.ReactElement;
 export interface BlobProps { areas?: string[]; area?: string; onSelect?: (area: string) => void; onAssistant?: () => void; notice?: boolean; noticeArea?: string; side?: 'leading' | 'trailing'; onDock?: (side: 'leading' | 'trailing') => void }
 export declare function Blob(props: BlobProps): React.ReactElement;
-export interface StoneItem { name: string; count?: number | string; links?: string[] }
-export interface StoneMenuProps { items: StoneItem[]; onPick?: (name: string, link: string) => void; mass?: number; stiffness?: number; damping?: number }
-export declare function StoneMenu(props: StoneMenuProps): React.ReactElement;
+export interface TileItem { name: string; count?: number | string; links?: string[] }
+export interface TileMenuProps { items: TileItem[]; onPick?: (name: string, link: string) => void; mass?: number; stiffness?: number; damping?: number }
+export declare function TileMenu(props: TileMenuProps): React.ReactElement;
 export interface MessageRowProps { from: string; date?: string; subject?: string; preview?: string; unread?: boolean; attachments?: boolean; selected?: boolean; onClick?: () => void }
 export declare function MessageRow(props: MessageRowProps): React.ReactElement;
 export interface SyncButtonProps { state?: 'fresh' | 'aged' | 'syncing' | 'error'; onClick?: () => void; label?: string }
@@ -27,10 +27,10 @@ export interface SearchFieldProps { value?: string; defaultValue?: string; onCha
 export declare function SearchField(props: SearchFieldProps): React.ReactElement;
 export interface SymbolProps { name: 'search' | 'sync' | 'compose' | 'archive' | 'trash' | 'reply' | 'more' | 'close' | 'star' | 'inbox' | 'attach' | 'chevron' | 'check' | 'sidebar' | 'minus' | 'expand' | 'shrink' | 'link' | 'send' | 'eye' | 'plus'; size?: number }
 export declare function Symbol(props: SymbolProps): React.ReactElement;
-export type MoodName = 'coral' | 'apricot' | 'rose' | 'umber' | 'petrol' | 'black';
+export type ExpressionColor = 'red-200' | 'red-400' | 'red-500' | 'red-700' | 'red-800' | 'orange-400' | 'cyan-900' | 'gray-950';
 export interface ArcBarsProps { data: { label: string; value: number }[]; title?: string; caption?: string; className?: string }
 export declare function ArcBars(props: ArcBarsProps): React.ReactElement;
-export interface PillStackProps { items: { label: string; mood?: MoodName }[]; className?: string }
+export interface PillStackProps { items: { label: string; color?: ExpressionColor }[]; className?: string }
 export declare function PillStack(props: PillStackProps): React.ReactElement;
 export interface TooltipProps { title?: string; tone?: 'light' | 'dark'; tail?: boolean; children?: React.ReactNode; className?: string }
 export declare function Tooltip(props: TooltipProps): React.ReactElement;
@@ -44,7 +44,7 @@ export interface NumberRollProps { value: number; digits?: number; size?: number
 export declare function NumberRoll(props: NumberRollProps): React.ReactElement;
 export interface SpotlightGridProps { items?: React.ReactNode[]; count?: number; columns?: number; className?: string }
 export declare function SpotlightGrid(props: SpotlightGridProps): React.ReactElement;
-export interface StackedCardsProps { items: { title: string; note?: string; mood?: MoodName }[]; className?: string }
+export interface StackedCardsProps { items: { title: string; note?: string; color?: ExpressionColor }[]; className?: string }
 export declare function StackedCards(props: StackedCardsProps): React.ReactElement;
 export interface KanbanColumn { id: string; title: string; cards: { id: string; text: string }[] }
 export interface KanbanBoardProps { columns: KanbanColumn[]; onChange?: (columns: KanbanColumn[]) => void; className?: string }
@@ -53,9 +53,9 @@ export interface ReadingPaneProps { subject: string; from: string; meta?: string
 export declare function ReadingPane(props: ReadingPaneProps): React.ReactElement;
 export interface HubTileProps { eyebrow: string; title: string; subtitle?: string; status?: 'ok' | 'error'; statusLabel?: string; onClick?: () => void; className?: string }
 export declare function HubTile(props: HubTileProps): React.ReactElement;
-export interface EditBogenLane { title: string; count?: number | string; actions?: React.ReactNode; content?: React.ReactNode; dot?: boolean; width?: number; min?: number; max?: number }
-export interface EditBogenProps { lanes: [EditBogenLane, EditBogenLane, EditBogenLane]; blob?: React.ReactNode; className?: string; style?: React.CSSProperties }
-export declare function EditBogen(props: EditBogenProps): React.ReactElement;
+export interface EditSheetLane { title: string; count?: number | string; actions?: React.ReactNode; content?: React.ReactNode; dot?: boolean; width?: number; min?: number; max?: number }
+export interface EditSheetProps { lanes: [EditSheetLane, EditSheetLane, EditSheetLane]; blob?: React.ReactNode; className?: string; style?: React.CSSProperties }
+export declare function EditSheet(props: EditSheetProps): React.ReactElement;
 export interface BlobMenuItem { name: string; count?: number | string; links?: string[] }
 export interface BlobDock { edge: 'left' | 'right' | 'top' | 'bottom'; at: number }
 export interface BlobMenuProps { items: BlobMenuItem[]; current?: string; onSelect?: (name: string, link?: string) => void; assistant?: React.ReactElement; onAssistant?: () => void; notice?: boolean; dock?: BlobDock; onDock?: (dock: BlobDock) => void; className?: string }
@@ -66,4 +66,4 @@ export interface AssistantCardProps { onSend?: (text: string, attachments: Assis
 export declare function AssistantCard(props: AssistantCardProps): React.ReactElement;
 export interface ThinkingOrbProps { size?: number; thinking?: boolean; label?: string; className?: string }
 export declare function ThinkingOrb(props: ThinkingOrbProps): React.ReactElement;
-declare global { interface Window { ALFA: { Shell: typeof Shell; Lane: typeof Lane; LaneHandle: typeof LaneHandle; Blob: typeof Blob; StoneMenu: typeof StoneMenu; MessageRow: typeof MessageRow; SyncButton: typeof SyncButton; PersonMark: typeof PersonMark; TextButton: typeof TextButton; SymbolButton: typeof SymbolButton; Chip: typeof Chip; SearchField: typeof SearchField; Symbol: typeof Symbol; ArcBars: typeof ArcBars; PillStack: typeof PillStack; Tooltip: typeof Tooltip; DotSphere: typeof DotSphere; GlowButton: typeof GlowButton; AgentPill: typeof AgentPill; NumberRoll: typeof NumberRoll; SpotlightGrid: typeof SpotlightGrid; StackedCards: typeof StackedCards; KanbanBoard: typeof KanbanBoard; ReadingPane: typeof ReadingPane; HubTile: typeof HubTile; EditBogen: typeof EditBogen; BlobMenu: typeof BlobMenu; AssistantCard: typeof AssistantCard; ThinkingOrb: typeof ThinkingOrb } } }
+declare global { interface Window { ALFA: { Shell: typeof Shell; Lane: typeof Lane; LaneHandle: typeof LaneHandle; Blob: typeof Blob; TileMenu: typeof TileMenu; MessageRow: typeof MessageRow; SyncButton: typeof SyncButton; PersonMark: typeof PersonMark; TextButton: typeof TextButton; SymbolButton: typeof SymbolButton; Chip: typeof Chip; SearchField: typeof SearchField; Symbol: typeof Symbol; ArcBars: typeof ArcBars; PillStack: typeof PillStack; Tooltip: typeof Tooltip; DotSphere: typeof DotSphere; GlowButton: typeof GlowButton; AgentPill: typeof AgentPill; NumberRoll: typeof NumberRoll; SpotlightGrid: typeof SpotlightGrid; StackedCards: typeof StackedCards; KanbanBoard: typeof KanbanBoard; ReadingPane: typeof ReadingPane; HubTile: typeof HubTile; EditSheet: typeof EditSheet; BlobMenu: typeof BlobMenu; AssistantCard: typeof AssistantCard; ThinkingOrb: typeof ThinkingOrb } } }
