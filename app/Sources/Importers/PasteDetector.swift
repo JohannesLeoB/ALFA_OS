@@ -24,8 +24,34 @@ public enum Detected: Equatable, Sendable {
     case note(String)
 }
 
+/// A language that does not run in the page. Code in it needs a translation before a card can play it.
+public enum ForeignLanguage: String, Equatable, Sendable, CaseIterable {
+    case swift, kotlin, java, dart, python
+
+    /// The language that a card of this code gets.
+    public var codeLanguage: CodeLanguage {
+        switch self {
+        case .swift: .swiftui
+        case .kotlin: .compose
+        case .java: .java
+        case .dart: .flutter
+        case .python: .other
+        }
+    }
+
+    public var fileName: String {
+        switch self {
+        case .swift: "View.swift"
+        case .kotlin: "Screen.kt"
+        case .java: "Main.java"
+        case .dart: "main.dart"
+        case .python: "script.py"
+        }
+    }
+}
+
 /// Decides what a text is. The order matters, the first match wins:
-/// a single address, a list of colors, SwiftUI, React, style sheet, script, HTML, and last a note.
+/// a single address, a list of colors, SwiftUI and the other foreign languages, React, style sheet, script, HTML, and last a note.
 /// It is a pure function of the text.
 public enum PasteDetector {
     /// Only the start of a long text is searched for signs. The style sheet check reads all of it.
@@ -39,6 +65,7 @@ public enum PasteDetector {
         if let colors = ColorList.parse(trimmed) { return .colors(colors) }
         let head = String(trimmed.prefix(headLength))
         if matches(Signs.swiftUI, head) { return code(.swiftui, "View.swift", trimmed) }
+        if let language = foreignLanguage(head) { return code(language.codeLanguage, language.fileName, trimmed) }
         if matches(Signs.react, head) || matches(Signs.jsxTag, head) {
             return code(.react, isTypeScript(head) ? "App.tsx" : "App.jsx", trimmed)
         }
@@ -50,6 +77,16 @@ public enum PasteDetector {
             return code(matches(Signs.tailwind, head) ? .tailwind : .html, "index.html", trimmed)
         }
         return .note(trimmed)
+    }
+
+    /// The foreign language of a text, other than Swift, when it shows a sign of it that no script has.
+    /// Dart goes first, because its imports look like script imports and its classes like Java's.
+    static func foreignLanguage(_ text: String) -> ForeignLanguage? {
+        if matches(Signs.dart, text) { return .dart }
+        if matches(Signs.kotlin, text) { return .kotlin }
+        if matches(Signs.java, text) { return .java }
+        if matches(Signs.python, text) { return .python }
+        return nil
     }
 
     /// A single address with a scheme of http or https, and no other text.
@@ -109,6 +146,14 @@ public enum PasteDetector {
 
     private enum Signs {
         static let swiftUI = #"(?m)^\s*import\s+(SwiftUI|Foundation|AppKit|UIKit|SwiftData|Observation)\b|^\s*@main\b|\bstruct\s+\w+\s*:\s*(View|App|Scene)\b|\bvar\s+body\s*:\s*some\s+(View|Scene)"#
+
+        static let dart = #"(?m)^\s*import\s+['"](package|dart):|^\s*void\s+main\s*\(|\bextends\s+(StatelessWidget|StatefulWidget|State<)|\bWidget\s+build\s*\(\s*BuildContext"#
+
+        static let kotlin = #"(?m)@Composable\b|^\s*package\s+[\w.]+\s*$|^\s*import\s+(androidx|kotlinx?|android)\.[\w.*]+\s*$|^\s*((private|public|internal|override|suspend|inline|open)\s+)*fun\s+(<[^>]*>\s*)?[\w.]+\s*\(|^\s*(data|sealed|enum|open)\s+class\s+\w+|^\s*object\s+\w+\s*(:|\{)|\bcompanion\s+object\b"#
+
+        static let java = #"(?m)^\s*package\s+[\w.]+;|^\s*import\s+(static\s+)?(java|javax|android|androidx|org|com)\.[\w.*]+;|\bSystem\.(out|err)\.print|^\s*(public|private|protected)\s+(static\s+)?(final\s+)?(abstract\s+)?(class|interface|enum|record)\s+\w+|\bpublic\s+static\s+void\s+main\b|^\s*@Override\b"#
+
+        static let python = #"(?m)^\s*def\s+\w+\s*\([^)]*\)\s*(->\s*[^:\n]+)?:\s*(#.*)?$|^\s*class\s+\w+(\([^)]*\))?:\s*$|^\s*from\s+[\w.]+\s+import\s+[\w*(]|^\s*if\s+__name__\s*==|^\s*import\s+[\w.]+(\s+as\s+\w+)?(\s*,\s*[\w.]+(\s+as\s+\w+)?)*\s*$"#
 
         static let react = #"(?m)\bclassName=|^\s*export\s+default\b|\bfrom\s+['"]react['"]|\buse(State|Effect|Ref|Memo|Callback)\s*\(|\breturn\s*\(\s*<"#
 
