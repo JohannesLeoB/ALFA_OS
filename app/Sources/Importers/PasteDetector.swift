@@ -75,6 +75,8 @@ public enum Doubt: String, Equatable, Sendable {
     case missingImports
     /// Code for a server or a build step: a server action, a server module of Next.js or a module of Node.
     case serverCode
+    /// JSON without the keys of a token file, so it may be plain data.
+    case notTokens
 }
 
 public enum Certainty: Equatable, Sendable {
@@ -149,7 +151,11 @@ public enum PasteDetector {
             result.usesTailwind = matches(Signs.tailwind, head)
             return result
         }
-        if isJSON(trimmed) { return CodeClassification(kind: .json) }
+        if isJSON(trimmed) {
+            var result = CodeClassification(kind: .json)
+            if !matches(Signs.tokenKey, head) { result.doubts = [.notTokens] }
+            return result
+        }
         if matches(Signs.react, head) || matches(Signs.jsxTag, head) {
             var result = CodeClassification(kind: .react)
             result.typed = isTypeScript(head)
@@ -311,6 +317,9 @@ public enum PasteDetector {
 
         /// A server action, a server module of Next.js, or a module of Node, imported or required.
         static let serverCode = #"(?m)^\s*['"]use server['"]|\bfrom\s*['"](next/(server|headers|cookies)|node:[\w/]+|fs|fs/promises|path|child_process)['"]|\brequire\(\s*['"](node:[\w/]+|fs|path|child_process)['"]"#
+
+        /// A key of a token file: `$value` and `$type` of the design token format, or `value` of Style Dictionary.
+        static let tokenKey = #""(\$value|\$type|value)"\s*:"#
 
         static let styleTag = #"(?i)<style\b"#
         static let scriptTag = #"(?i)<script\b"#
