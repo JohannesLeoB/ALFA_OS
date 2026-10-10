@@ -71,6 +71,8 @@ public enum Doubt: String, Equatable, Sendable {
     case fewSigns
     /// Markup with loose style rules or script statements next to it, outside any tag that holds them.
     case mixedKinds
+    /// Imports of modules that the pasted code does not hold: an alias such as `@/lib/utils` or a relative path.
+    case missingImports
 }
 
 public enum Certainty: Equatable, Sendable {
@@ -151,11 +153,13 @@ public enum PasteDetector {
             result.typed = isTypeScript(head)
             result.usesTailwind = matches(Signs.tailwindClassName, head)
             if !matches(Signs.reactStrong, head) && !matches(Signs.jsxTag, head) { result.doubts = [.fewSigns] }
+            addModuleDoubts(to: &result, head)
             return result
         }
         if matches(Signs.typeScript, head) {
             var result = CodeClassification(kind: .script)
             result.typed = true
+            addModuleDoubts(to: &result, head)
             return result
         }
         if CSSShape.isStyleSheet(trimmed) {
@@ -167,6 +171,7 @@ public enum PasteDetector {
         if !hasMarkup, isScript(head) {
             var result = CodeClassification(kind: .script)
             if !matches(Signs.script, head) { result.doubts = [.fewSigns] }
+            addModuleDoubts(to: &result, head)
             return result
         }
         if hasMarkup {
@@ -179,6 +184,11 @@ public enum PasteDetector {
             return result
         }
         return CodeClassification(kind: .notCode)
+    }
+
+    /// The doubts of module code: what it imports and cannot get from the pasted text.
+    private static func addModuleDoubts(to result: inout CodeClassification, _ head: String) {
+        if matches(Signs.localImport, head) { result.doubts.append(.missingImports) }
     }
 
     /// True when the text outside of tags, style elements and script elements holds a style rule or script code.
@@ -292,6 +302,9 @@ public enum PasteDetector {
         static let anyTag = #"(?s)<[^>]*>"#
         /// A style rule on its own: a selector, then a block with at least one declaration.
         static let looseRule = #"(?m)^\s*[.#\w][^{}\n]*\{[^{}]*:[^{}]*\}"#
+
+        /// An import or a require of an alias (`@/`, `~/`) or of a relative path, on one line or on the line of `from`.
+        static let localImport = #"(?m)\bfrom\s*['"](@/|~/|\.{1,2}/)|^\s*import\s*['"](@/|~/|\.{1,2}/)|\brequire\(\s*['"]\.{1,2}/"#
 
         static let styleTag = #"(?i)<style\b"#
         static let scriptTag = #"(?i)<script\b"#
