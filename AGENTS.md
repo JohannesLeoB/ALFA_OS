@@ -14,7 +14,7 @@ ALFAcolor: native macOS-26-App (SwiftUI), Bundle-ID `com.johannesleoberger.alfac
 - `konzept/` (VISION, GLOSSAR, OFFENE-FRAGEN, 10-MODUL-CODEPLAYER) · `gestaltung/` (`kanon/` Quelle von Konto B, `vertrag/` erzeugt, nie von Hand) · `scripts/` (pruefen.sh, waechter*, lizenzen.txt) · `.githooks/` · `dist/` (Apps) und `ausgang/` (ZIPs) sind ignoriert.
 
 ## Rollen
-Chef (Claude Code: schreibt Briefe, verteilt, prüft, committet, pusht) · Worker (Haiku, bauen nach Brief) · Konto B (Claude Design in claude.ai: D-007, D-008; liefert nach `gestaltung/`) · Konto C ruht · Codex ruht · Johannes (entscheidet, nimmt am Bild ab, trägt ZIPs). Gates G1 bis G9 und Etappen-Gates entfallen.
+Chef (Claude Code: schreibt Briefe, verteilt, prüft, committet, pusht) · Worker (Haiku, bauen nach Brief) · Konto B (Claude Design in claude.ai: D-009; liefert nach `gestaltung/`) · Konto C ruht · Codex ruht · Johannes (entscheidet, nimmt am Bild ab, trägt ZIPs). Gates G1 bis G9 und Etappen-Gates entfallen.
 
 ## Start und Ende
 - Start: `git pull --rebase`, `git status`, `bash scripts/pruefen.sh` (Soll `Result: 0 errors`). Fremde uncommittete Dateien nie anfassen; nie `git checkout --`, `git reset`, `git stash`; nie die Datei `index.lock` löschen (warten, wiederholen).
