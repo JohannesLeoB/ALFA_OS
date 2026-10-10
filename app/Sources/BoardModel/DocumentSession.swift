@@ -16,12 +16,16 @@ public final class DocumentSession {
         /// The view of each space and the active space. The package keeps them, the document does not change for them.
         public let views: [String: SpaceView]
         public let activeSpaceID: String?
+        /// The undo steps at the moment of the snapshot. The package keeps them.
+        public let history: UndoJournal<Edit>
 
-        public init(document: ALFAcolorDocument, revision: Int, views: [String: SpaceView] = [:], activeSpaceID: String? = nil) {
+        public init(document: ALFAcolorDocument, revision: Int, views: [String: SpaceView] = [:], activeSpaceID: String? = nil,
+                    history: UndoJournal<Edit> = UndoJournal()) {
             self.document = document
             self.revision = revision
             self.views = views
             self.activeSpaceID = activeSpaceID
+            self.history = history
         }
     }
 
@@ -32,6 +36,8 @@ public final class DocumentSession {
     public let readReport: ReadReport?
     /// Receives the snapshot after every change of the document or the view. Nil in tests.
     private let box: SnapshotBox?
+    /// The undo steps that the package held when it was opened. They wait for the window's undo manager.
+    private var savedHistory: UndoJournal<Edit>?
 
     /// A new, empty document. It has never been saved.
     public convenience init() {
@@ -54,6 +60,8 @@ public final class DocumentSession {
         merged.warnings += limits.warnings
         readReport = limits.warnings.isEmpty ? report : merged
         self.box = box
+        let saved = UndoJournal<Edit>.load(from: limits.document)
+        if saved.problem == nil, !saved.journal.steps.isEmpty { savedHistory = saved.journal }
         box?.store(snapshot())
         store.onChange = { [weak self] _, _ in self?.publish() }
         store.onViewChange = { [weak self] in self?.publish() }
@@ -62,7 +70,19 @@ public final class DocumentSession {
     public func snapshot() -> Snapshot {
         Snapshot(document: store.document, revision: store.revision,
                  views: store.viewports.mapValues { SpaceView(zoom: $0.zoom, offsetX: $0.offsetX, offsetY: $0.offsetY) },
-                 activeSpaceID: store.activeSpaceID)
+                 activeSpaceID: store.activeSpaceID, history: store.exportHistory())
+    }
+
+    /// Puts the undo steps of the opened package back on the undo stack of the store, once.
+    /// Call it after the window has given its undo manager to the store. Returns false when the package held no steps,
+    /// or when they do not fit the board: then the steps are dropped and the document opens without undo history.
+    @discardableResult
+    public func restoreSavedHistory() -> Bool {
+        guard let journal = savedHistory else { return false }
+        savedHistory = nil
+        guard store.restoreHistory(journal) else { return false }
+        publish()
+        return true
     }
 
     private func publish() {
@@ -80,6 +100,9 @@ public final class DocumentSession {
             if case .image(let id, _, _) = item.content { id } else { nil }
         })
         for id in document.assets.ids where !used.contains(id) { document.assets.remove(id) }
+        var history = snapshot.history
+        history.digest = document.boardDigest
+        try history.store(in: &document)
         return try DocumentPackage.fileWrapper(for: document, appVersion: appVersion, existing: existing)
     }
 

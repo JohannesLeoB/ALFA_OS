@@ -21,6 +21,7 @@ struct ShellView: View {
     @State private var columnOrigin = CGPoint.zero
     /// The first thing that reading the document noticed, shown in the status bar.
     private let readNotice: String?
+    private let session: DocumentSession
 
     /// The window shows the document of `session`. The undo history belongs to this window.
     init(session: DocumentSession) {
@@ -29,6 +30,7 @@ struct ShellView: View {
         _interaction = State(initialValue: CanvasInteraction(controller: controller))
         _importer = State(initialValue: ImportCoordinator(store: session.store))
         readNotice = session.readReport?.statusNotice
+        self.session = session
     }
 
     var body: some View {
@@ -84,7 +86,9 @@ struct ShellView: View {
         .focusedSceneValue(\.interaction, interaction)
         .frame(minWidth: Self.minimumSize.width, minHeight: Self.minimumSize.height)
         .onChange(of: undoManager.map(ObjectIdentifier.init), initial: true) {
-            if let undoManager { canvas.store.useUndoManager(undoManager) }
+            guard let undoManager else { return }
+            canvas.store.useUndoManager(undoManager)
+            session.restoreSavedHistory()
         }
         .onChange(of: canvas.store.revision) {
             shell.closeLabIfCardGone(in: canvas.store)
