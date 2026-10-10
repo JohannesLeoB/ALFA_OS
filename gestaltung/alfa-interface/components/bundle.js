@@ -118,7 +118,7 @@
   /* ---------- Shell ---------- */
   function Shell(p) {
     var lanes = p.lanes || [];
-    var rest = px("lane-resting", 300), folded = px("lane-collapsed", 56), at = px("lane-collapse-at", 120), max = px("lane-leading-max", 420);
+    var rest = px("component-lane-resting-width", 300), folded = px("component-lane-collapsed-width", 56), at = px("component-lane-collapse-threshold", 120), max = px("component-lane-leading-max-width", 420);
     var w = useState([lanes[0] && lanes[0].width || rest, lanes[2] && lanes[2].width || rest]), widths = w[0], setWidths = w[1];
     var d = useState(-1), dragging = d[0], setDragging = d[1];
     var base = useRef([0, 0]);
@@ -158,7 +158,7 @@
     var s5 = useState(null), drag = s5[0], setDrag = s5[1];
     var s6 = useState(""), query = s6[0], setQuery = s6[1];
     var s7 = useState(0), hot = s7[0], setHot = s7[1];
-    var rest = px("lane-collapsed", 56), awake = px("blob-awake", 124), menuW = px("menu-width", 216), margin = 0;
+    var rest = px("component-lane-collapsed-width", 56), awake = px("component-blob-awake-width", 124), menuW = px("component-menu-width", 216), margin = 0;
     var pointer = useRef({ x: -1e4, y: -1e4 });
     var dragInfo = useRef(null), dragged = useRef(false);
 
@@ -533,7 +533,7 @@
   /* ---------- EditSheet: drei Bahnen ohne Kopf ---------- */
   function EditSheet(p) {
     var lanes = p.lanes || [];
-    var rest = px("lane-resting", 300), folded = px("lane-collapsed", 56), at = px("lane-collapse-at", 120), maxW = px("lane-leading-max", 420);
+    var rest = px("component-lane-resting-width", 300), folded = px("component-lane-collapsed-width", 56), at = px("component-lane-collapse-threshold", 120), maxW = px("component-lane-leading-max-width", 420);
     var w = useState([lanes[0] && lanes[0].width || rest, lanes[2] && lanes[2].width || rest]), widths = w[0], setWidths = w[1];
     var mf = useState(false), midFolded = mf[0], setMidFolded = mf[1];
     var mx = useState(-1), maxed = mx[0], setMaxed = mx[1];
@@ -596,7 +596,7 @@
     var s5 = useState(-1), hot = s5[0], setHot = s5[1];
     var s6 = useState({ w: 0, h: 0 }), box = s6[0], setBox = s6[1];
     var clickT = useRef(0), hoverT = useRef(0), moved = useRef(false), flip = useRef(null);
-    var inset = px("space-xSmall", 4), bw = px("lane-collapsed", 56), bh = px("blob-height", 36), gap = px("space-small", 8);
+    var inset = px("space-xs", 4), bw = px("component-lane-collapsed-width", 56), bh = px("component-blob-height", 36), gap = px("space-s", 8);
     var current = p.current || (items[0] && items[0].name) || "";
 
     useEffect(function () {
@@ -620,7 +620,7 @@
     useEffect(function () {
       var parent = host.current && host.current.parentElement; if (!parent || drag || !box.w) return;
       var c = [];
-      if (xy[1] < px("lane-header", 44) + inset) { if (xy[0] < bw + inset * 2) c.push("tl"); if (xy[0] > box.w - bw * 2 - inset) c.push("tr"); }
+      if (xy[1] < px("component-lane-header-height", 44) + inset) { if (xy[0] < bw + inset * 2) c.push("tl"); if (xy[0] > box.w - bw * 2 - inset) c.push("tr"); }
       parent.setAttribute("data-blob-corner", c.join(" "));
     });
     R.useLayoutEffect(function () {
@@ -628,7 +628,7 @@
       if (!f || !el.current || still() || !el.current.animate) return;
       var r = el.current.getBoundingClientRect(), dx = f[0] - r.left, dy = f[1] - r.top;
       if (Math.abs(dx) + Math.abs(dy) < 1) return;
-      el.current.animate([{ transform: "translate(" + dx + "px," + dy + "px)" }, { transform: "none" }], { duration: px("time-lane-snap", 260) * 1.6, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" });
+      el.current.animate([{ transform: "translate(" + dx + "px," + dy + "px)" }, { transform: "none" }], { duration: px("motion-duration-snap", 260) * 1.6, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" });
     }, [dock]);
     useEffect(function () {
       if (!open && !talk) return;
