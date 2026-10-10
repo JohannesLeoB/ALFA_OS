@@ -14,7 +14,7 @@ Du verteilst Briefe an Haiku-Worker, prüfst jede Rückmeldung selbst und hälts
 
 ## Vorlage: Auftrag an einen Worker
 ```
-Du bist Bauagent für ALFAcolor. Arbeite im Repo /Users/johannesleoberger/Developer/ALLFARBEN auf main. Lies AGENTS.md (alle Regeln gelten) und plan/briefe/<B-xxx>.md, dann arbeite den Brief ab.
+Du bist Bauagent für ALFA_OS. Arbeite im Repo /Users/johannesleoberger/Developer/ALFA_OS auf main. Lies AGENTS.md (alle Regeln gelten) und plan/briefe/<B-xxx>.md, dann arbeite den Brief ab.
 Parallel arbeiten <andere Briefe> an <deren Pfaden>: nicht anfassen. Gemeinsame Dateien (Katalog, Package.swift, project.yml, lizenzen.txt) in dieser Runde: <Besitzer>.
 Nur eigene Pfade committen. <Kein Push. | Push nach grünem Lauf.> Kein Browserfenster, App nie starten.
 Am Ende: pruefen.sh, Übergabe im Brief, Status „zur Prüfung“. Antwort kurz: Commits, Belege, Abweichungen, offene Punkte.

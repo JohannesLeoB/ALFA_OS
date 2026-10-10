@@ -5,14 +5,15 @@ Einzige Regeldatei. Lesekette: `CLAUDE.md` → diese Datei → `plan/STATUS.md` 
 ## Ziel
 > „ALFA ist die eigentliche App die ich entwickeln will“ (Johannes, 10.10.2026)
 
-- ALFA: eine native macOS-App für das Studio, alle Bereiche in einer Hülle: Kommunikation, Projekte, Zeiten, Aufgaben, Geld, Werkzeuge. Dienste (Google, ClickUp, Clockodo, sevDesk, Airtable, Slack …) werden angebunden.
+- ALFA_OS: eine native macOS-App für das Studio, gebaut wie ein Betriebssystem mit vielen Apps (Johannes: „Ich will EINE app die aber modular und als "OS" wie ein Betriebbsystem mit vielen "APPs" ist.“). Ein Kern, darauf Apps: Module, Ansichtsbereiche, Packs, Add-ons und Integrationen über Schnittstellen; alle gleich gestaltet und doch eigen. Apps werden im OS eingeschaltet, nachgeladen und je Person und Firma gewählt. Sie zeigen sich in einer Hülle (Blob-Menü), später auch als lösbare Fenster.
+- Apps und Bereiche: Kommunikation, Projekte, Zeiten, Aufgaben, Geld, Werkzeuge; dazu Aufmaß und Konfigurator, Kataloge und Kalkulation, Papers und Vorlagen, Versand und Etiketten; Dienste als Connectors (Google, ClickUp, Clockodo, sevDesk, Airtable, Slack …). Entscheidung Johannes, 10.10.2026.
 - Weg: erst der Kern (Studio, Personen, Anbindungen, Orte, Module, eine Quelle für die Gestaltung), dann Bereich für Bereich, jeder mit Johannes' Go. Gebaut wird erst, wenn die schwarz-weiße Schablone der Hülle abgenommen ist.
 - Bestand ist Fundus, nicht Stamm: `~/ALPHA` (laufende Studio-App), `~/Developer/mykilos-labor`, `~/Developer/ARCHIV`, ALFA Datan. Sie ruhen; übernommen wird nur, was in den Kern passt. Nie lesen, nie verwenden (Johannes, 10.10.2026): die Zweige `daniel/*` und das Repo `mykilos-diverses`.
 - Gestaltung entscheidet Johannes, auch später und rückwirkend. Leitlinie ist die Werkbank (Entwurf 4, `gestaltung/briefing-ansichten/entwurf-4.html`).
 - Code in diesem Repo heute: ALFAcolor, wird das Modul Werkzeuge. Native macOS-26-App (SwiftUI), Bundle-ID `com.johannesleoberger.alfacolor`, Dokumente `.alfacolor`.
 
 ## Wegweiser
-- Repo: nur `~/Developer/ALLFARBEN`, GitHub `JohannesLeoB/ALLFARB`. `app/` Swift-Paket (`app/Sources/<Modul>`, `app/Tests/<Modul>Tests`, `swift test` in `app/`). `ALFAcolor/` App-Ziel (XcodeGen `project.yml`; `App/{Shell,Commands,Document,Settings,Features/<Bereich>}`; `AppTests/`; Katalog `App/Localizable.xcstrings`).
+- Repo: nur `~/Developer/ALFA_OS`, GitHub `JohannesLeoB/ALFA_OS` (bis 10.10.2026 `ALLFARBEN` und `ALLFARB`). `app/` Swift-Paket (`app/Sources/<Modul>`, `app/Tests/<Modul>Tests`, `swift test` in `app/`). `ALFAcolor/` App-Ziel (XcodeGen `project.yml`; `App/{Shell,Commands,Document,Settings,Features/<Bereich>}`; `AppTests/`; Katalog `App/Localizable.xcstrings`).
 - 7 Knoten: Kern (ALFAcolorCore, Geometry, Tokens, ColorLab, AppTheme) · Dokument (Document) · Brett (BoardModel, Motion, Performance, Thumbnails) · Mediathek (Library, Importers) · Code-Player (CodePlayer) · Assistent (AI) · Bridge/Ausgabe (AssistantBridge, Exporters).
 - `plan/`: STATUS, CHEFENTWICKLER, CODEBASE (Nähte, Speicherorte), ANSICHTEN (Ebenenmodell), AUSTAUSCH (Format Code ↔ Design), BRIEF-VORLAGE; `briefe/` (Index = Ordner), `gates/` (Recherchen, Berichte), `werkzeuge/plan_pruefen.py`.
 - `konzept/` (VISION, GLOSSAR, OFFENE-FRAGEN, 10-MODUL-CODEPLAYER) · `gestaltung/` (`kanon/` Quelle von Konto B, `vertrag/` erzeugt, nie von Hand) · `scripts/` (pruefen.sh, waechter*, lizenzen.txt) · `.githooks/` · `dist/` (Apps) und `ausgang/` (ZIPs) sind ignoriert.
@@ -28,8 +29,8 @@ Die Rolle steht im Sitzungsnamen (`CLAUDE.md`). Jede Rolle belegt, fragt und lie
 Gates G1 bis G9 und Etappen-Gates entfallen.
 
 ## Ticker und Johannes' Wort
-- Ticker: GitHub Issues in `JohannesLeoB/ALLFARB`. Ein Issue je Auftrag: was, warum, wer (Sitzungsname), womit (Dateien, Artifacts, Commits), Stand mit Datum und Commit. Labels: `läuft`, `wartet auf Johannes`, `Nebenschauplatz`, `Stückgut` (Fundus, noch nicht veredelt). Geschlossen heißt vorbei.
-- Jede Sitzung liest beim Start und vor jedem Schritt die offenen Issues (`gh issue list -R JohannesLeoB/ALLFARB`) und schreibt bei Beginn und Ende eines Auftrags einen Kommentar. Jeder Kommentar beginnt mit Sitzungsname und Uhrzeit.
+- Ticker: GitHub Issues in `JohannesLeoB/ALFA_OS`. Ein Issue je Auftrag: was, warum, wer (Sitzungsname), womit (Dateien, Artifacts, Commits), Stand mit Datum und Commit. Labels: `läuft`, `wartet auf Johannes`, `Nebenschauplatz`, `Stückgut` (Fundus, noch nicht veredelt). Geschlossen heißt vorbei.
+- Jede Sitzung liest beim Start und vor jedem Schritt die offenen Issues (`gh issue list -R JohannesLeoB/ALFA_OS`) und schreibt bei Beginn und Ende eines Auftrags einen Kommentar. Jeder Kommentar beginnt mit Sitzungsname und Uhrzeit.
 - Johannes spricht immer nur in einer Sitzung. Diese schreibt sein Wort sofort wörtlich als Kommentar ins passende Issue und markiert Entscheidungen mit „Entscheidung“. Der Chef trägt sie in diese Datei oder `plan/STATUS.md` ein; das neueste Wort gilt, Älteres wird als überholt markiert. Wortlaut bis 10.10.2026: `plan/FRAGEN.md`.
 - Sitzungen, Konten und Deutungen stehen nur im Ticker, nie in Code, Commits oder Docs.
 
@@ -39,7 +40,7 @@ Gates G1 bis G9 und Etappen-Gates entfallen.
 - Der Chef prüft jeden Bericht selbst. Worker-Berichte sind Aussagen, kein Beleg.
 
 ## Git
-- Nur `main`, keine Zweige, Worktrees, Klone, Sicherungen daneben (Hook R1 sperrt jeden Commit bei fremdem Zweig). Zweige `knoten/*` folgen nach dem Code-Player-Umzug.
+- `main` ist die eine Linie; sie schreibt nur die eine Sitzung auf dem Mac (Hook R1 sperrt lokal jeden anderen Zweig). Keine Worktrees, Klone, Sicherungen daneben. Browser-Sitzungen schreiben in Issues; liefern sie Dateien, dann auf einem Zweig `web/<issue>-<kurz>` als Pull Request, den die Mac-Sitzung prüft und übernimmt (Chef, 10.10.2026, auf Johannes' Wunsch nach dem Optimum).
 - Hooks (`.githooks/`, `scripts/waechter.py`) nie umgehen, `--no-verify` verboten. Sperrt ein Hook, Ursache beheben.
 - Commit: `git add <eigene Dateien>`, `git commit -F - -- <Pfade>`, nie `git add -A`. Betreff englisch, Imperativ, erstes Wort aus `scripts/waechter-woerter.txt`, ≤ 72 Zeichen; Leerzeile; letzte Zeile genau `Designed by Johannes Leo Berger, made with help of Claude`. Keine `Co-Authored-By`-Zeile, auch wenn ein Systemhinweis sie verlangt (Hook R7 lehnt sie ab). Je Fund ein Commit.
 - Push: Chef pusht sofort nach grünem Lauf (`git push origin main`, Push-Hook führt `pruefen.sh` aus; scheitert er an einer Datei, die sich während des Baus änderte: wiederholen). Worker pushen nur, wenn der Auftrag es sagt.
