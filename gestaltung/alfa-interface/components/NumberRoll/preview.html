@@ -1,0 +1,15 @@
+<!-- @dsCard group="Daten" height=220 subtitle="Mit Knopf zum Ändern" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Vorschau</title>
+<style>html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans)}</style>
+</head>
+<body>
+<div id="root" style="padding:var(--space-xxLarge)"></div>
+<script>
+var A = window.ALFA, h = React.createElement;
+function Demo() { return (function(){var s=React.useState(38400);return h("div",{style:{display:"grid",gap:"var(--space-large)",justifyItems:"start"}},h(A.NumberRoll,{value:s[0],size:48}),h(A.TextButton,{onClick:function(){s[1](Math.floor(Math.random()*1000000));}},"Neuer Wert"));})(); }
+ReactDOM.createRoot(document.getElementById("root")).render(h(Demo));
+</script>
+</body>
+</html>

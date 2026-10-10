@@ -1,0 +1,15 @@
+<!-- @dsCard group="Bedienung" height=96 subtitle="Mulde, gewählt, ohne Fläche, klein" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Vorschau</title>
+<style>html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans)}</style>
+</head>
+<body>
+<div id="root" style="display:flex;gap:var(--space-small);align-items:center;flex-wrap:wrap;padding:var(--space-xxLarge)"></div>
+<script>
+var A = window.ALFA, h = React.createElement;
+ReactDOM.createRoot(document.getElementById("root")).render(h(React.Fragment, null,
+  h(A.TextButton, null, "Weiterleiten"), h(A.TextButton, { variant: "selected" }, "Senden"), h(A.TextButton, { variant: "plain" }, "Verwerfen"), h(A.TextButton, { size: "small" }, "Mehr laden"), h(A.TextButton, { disabled: true }, "Senden")));
+</script>
+</body>
+</html>

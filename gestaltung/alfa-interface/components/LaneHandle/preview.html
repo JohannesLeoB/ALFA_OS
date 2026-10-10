@@ -1,0 +1,16 @@
+<!-- @dsCard group="Schale" height=180 subtitle="Ruhe, überfahren, ziehen mit Wert" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Vorschau</title>
+<style>html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans)}</style>
+</head>
+<body>
+<div id="root" style="display:flex;gap:var(--space-xxLarge);align-items:stretch;height:180px;padding:var(--space-large);box-sizing:border-box"></div>
+<script>
+var A = window.ALFA, h = React.createElement;
+function Demo() { var s = React.useState(300), b = React.useRef(300);
+  return h(A.LaneHandle, { value: s[0], onStart: function () { b.current = s[0]; }, onDrag: function (dx) { s[1](Math.max(56, Math.min(420, b.current + dx))); }, onStep: function (d) { s[1](Math.max(56, Math.min(420, s[0] + d))); }, onReset: function () { s[1](300); } }); }
+ReactDOM.createRoot(document.getElementById("root")).render(h(Demo));
+</script>
+</body>
+</html>

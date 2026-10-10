@@ -1,0 +1,14 @@
+<!-- @dsCard group="Schale" height=80 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Vorschau</title>
+<style>html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans)}</style>
+</head>
+<body>
+<div id="root" style="display:flex;gap:var(--space-medium);align-items:center;padding:var(--space-xxLarge)"></div>
+<script>
+var A = window.ALFA, h = React.createElement;
+ReactDOM.createRoot(document.getElementById("root")).render(h(React.Fragment, null, h(A.PersonMark, { initials: "JB", name: "Johannes Berger" }), h(A.PersonMark, { initials: "LH", name: "Lena Hansen" })));
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!-- @dsCard group="Schale" height=300 subtitle="Bahn offen und gefaltet" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Vorschau</title>
+<style>html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans)}</style>
+</head>
+<body>
+<div id="root" style="display:grid;grid-template-columns:320px var(--lane-collapsed);gap:var(--handle-width);padding:var(--space-large);height:300px;box-sizing:border-box"></div>
+<script>
+var A = window.ALFA, h = React.createElement;
+var MAILS = [
+  { from: "Lena Hansen", date: "14:32", subject: "Angebot Küche Hansen, zweite Fassung", preview: "Anbei die überarbeitete Fassung mit den neuen Fronten in Eiche geölt und der verlängerten Arbeitsplatte.", unread: true, attachments: true },
+  { from: "Tischlerei Brandt", date: "11:05", subject: "Liefertermin Korpusse KW 43", preview: "Die Korpusse für das Projekt Elbchaussee können wir am Dienstag liefern, Anlieferung ab 8 Uhr." },
+  { from: "Mara Ostrowski", date: "Gestern", subject: "Fotos Baustelle Winterhude", preview: "Hier die Bilder von heute. Die Nische links ist 4 cm schmaler als im Aufmaß.", attachments: true },
+  { from: "Jonas Keller", date: "Mo", subject: "Rückfrage Griffleisten", preview: "Sollen die Griffleisten durchlaufen oder an der Spülmaschine unterbrochen werden?" }
+];
+ReactDOM.createRoot(document.getElementById("root")).render(h(React.Fragment, null,
+  h(A.Lane, { title: "Eingang", count: 12, actions: h(A.SymbolButton, { symbol: "compose", label: "Neue Nachricht" }) }, MAILS.slice(0, 2).map(function (m, i) { return h(A.MessageRow, Object.assign({ key: i }, m)); })),
+  h(A.Lane, { title: "Postfach", folded: true, dot: true })));
+</script>
+</body>
+</html>

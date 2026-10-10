@@ -1,0 +1,15 @@
+<!-- @dsCard group="Ikonografie" height=120 subtitle="Linienzeichen als Stellvertreter für SF Symbols" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Vorschau</title>
+<style>html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans)}</style>
+</head>
+<body>
+<div id="root" style="display:flex;gap:var(--space-xLarge);flex-wrap:wrap;padding:var(--space-xxLarge);color:var(--ink)"></div>
+<script>
+var A = window.ALFA, h = React.createElement;
+ReactDOM.createRoot(document.getElementById("root")).render(h(React.Fragment, null, A.Symbol.names.map(function (n) {
+  return h("div", { key: n, title: n, style: { display: "grid", justifyItems: "center", gap: "var(--space-small)", width: 56 } }, h(A.Symbol, { name: n, size: 18 }), h("span", { className: "caption", style: { color: "var(--ink-3)" } }, n)); })));
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+/* ALFA Interface — generated from tokens.json */
+:root, [data-theme="light"] {
+  --ground: #f6f4f1;
+  --panel: #ffffff;
+  --well: #efebe3;
+  --content: #ffffff;
+  --content-well: #efebe3;
+  --inverted: #28251f;
+  --selected: #28251f;
+  --dimming: rgba(40, 37, 31, 0.2);
+  --glass-well: rgba(40, 37, 31, 0.06);
+  --ink: #28251f;
+  --ink-2: #585246;
+  --ink-3: #726b5d;
+  --ink-placeholder: #726b5d;
+  --ink-mark: #8f8777;
+  --on-inverted: #ffffff;
+  --on-selected: #ffffff;
+  --line: #e4ded2;
+  --line-divider: #ccc5b7;
+  --line-content: #efebe3;
+  --handle: #8f8777;
+  --handle-active: #28251f;
+  --accent: #726b5d;
+  --blob: #28251f;
+  --blob-ink: #ffffff;
+  --focus: #726b5d;
+  --destructive: #b3412e;
+  --stein-50: #f6f4f1;
+  --stein-100: #efebe3;
+  --stein-200: #e4ded2;
+  --stein-300: #ccc5b7;
+  --stein-400: #ada596;
+  --stein-500: #8f8777;
+  --stein-600: #726b5d;
+  --stein-700: #585246;
+  --stein-800: #3e3a31;
+  --stein-900: #28251f;
+  --stein-950: #171510;
+  --shadow-resting: 0px 1px 2px 0px rgba(0,0,0,0.07), 0px 6px 18px 0px rgba(0,0,0,0.07);
+  --shadow-floating: 0px 10px 22px 0px rgba(0,0,0,0.22), inset 0px 1px 0px 0px rgba(255,255,255,0.12);
+  --shadow-well: inset 0px 1px 2px 0px rgba(0,0,0,0.08);
+  --shadow-glass-well: inset 0px 0px 0px 0.5px rgba(0,0,0,0.08);
+}
+[data-theme="dark"] {
+  --ground: #171510;
+  --panel: #28251f;
+  --well: #3e3a31;
+  --content: #28251f;
+  --content-well: #3e3a31;
+  --inverted: #efebe3;
+  --selected: #f6f4f1;
+  --dimming: rgba(0, 0, 0, 0.45);
+  --glass-well: rgba(246, 244, 241, 0.10);
+  --ink: #f6f4f1;
+  --ink-2: #e4ded2;
+  --ink-3: #ada596;
+  --ink-placeholder: #ada596;
+  --ink-mark: #8f8777;
+  --on-inverted: #171510;
+  --on-selected: #171510;
+  --line: #3e3a31;
+  --line-divider: #585246;
+  --line-content: #3e3a31;
+  --handle: #726b5d;
+  --handle-active: #f6f4f1;
+  --accent: #ccc5b7;
+  --blob: #efebe3;
+  --blob-ink: #171510;
+  --focus: #ada596;
+  --destructive: #e08a74;
+  --stein-50: #f6f4f1;
+  --stein-100: #efebe3;
+  --stein-200: #e4ded2;
+  --stein-300: #ccc5b7;
+  --stein-400: #ada596;
+  --stein-500: #8f8777;
+  --stein-600: #726b5d;
+  --stein-700: #585246;
+  --stein-800: #3e3a31;
+  --stein-900: #28251f;
+  --stein-950: #171510;
+  --shadow-resting: 0px 0px 0px 0.5px rgba(255,255,255,0.08), 0px 1px 2px 0px rgba(0,0,0,0.5), 0px 8px 24px 0px rgba(0,0,0,0.45), inset 0px 1px 0px 0px rgba(255,255,255,0.06);
+  --shadow-floating: 0px 10px 22px 0px rgba(0,0,0,0.5), inset 0px 1px 0px 0px rgba(255,255,255,0.14), inset 0px 0px 0px 1px rgba(255,255,255,0.08);
+  --shadow-well: inset 0px 1px 2px 0px rgba(0,0,0,0.08);
+  --shadow-glass-well: inset 0px 1px 0px 0px rgba(255,255,255,0.16);
+}
+:root {
+  --space-xxSmall: 2px;
+  --space-xSmall: 4px;
+  --space-small: 8px;
+  --space-medium: 12px;
+  --space-large: 16px;
+  --space-xLarge: 20px;
+  --space-xxLarge: 24px;
+  --space-xxxLarge: 48px;
+  --radius-capsule: 999px;
+  --radius-alert: 24px;
+  --radius-container: 20px;
+  --radius-lane: 16px;
+  --radius-headerButton: 12px;
+  --radius-cardContent: 12px;
+  --radius-row: 8px;
+  --radius-menuRow: 8px;
+  --radius-checkbox: 4px;
+  --radius-handle: 2px;
+  --lane-header: 44px;
+  --lane-collapsed: 56px;
+  --lane-resting: 300px;
+  --lane-leading-max: 420px;
+  --lane-collapse-at: 120px;
+  --handle-width: 12px;
+  --handle-thickness: 4px;
+  --handle-length: 64px;
+  --handle-length-active: 96px;
+  --blob-bar: 60px;
+  --blob-height: 36px;
+  --blob-awake: 124px;
+  --window-margin: 16px;
+  --region-spacing: 12px;
+  --control-mini: 20px;
+  --control-small: 24px;
+  --control-regular: 28px;
+  --control-large: 36px;
+  --control-xl: 40px;
+  --menu-width: 216px;
+  --menu-row: 24px;
+  --menu-padding: 4px;
+  --field-height: 36px;
+  --field-compact: 28px;
+  --chip-height: 28px;
+  --chip-in-row: 24px;
+  --dot: 8px;
+  --reading-measure: 460px;
+  --section-header: 32px;
+  --reference-window: 1408px;
+  --time-grab: 150ms;
+  --time-dismiss: 160ms;
+  --time-compact: 200ms;
+  --time-disclose: 240ms;
+  --time-lane-snap: 260ms;
+  --time-stack: 320ms;
+  --time-blink: 140ms;
+  --time-sync-spin: 1000ms;
+  --curve-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --stroke-separator: 1px;
+  --stroke-ring: 1.5px;
+  --stroke-selection: 2px;
+  --opacity-quiet: 0.6;
+  --opacity-hairline: 0.12;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", system-ui, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, Menlo, monospace;
+}
+.areaTitle { font-family: var(--font-display); font-size: 24px; line-height: 1; font-weight: 500; letter-spacing: -0.5px; }
+.readingTitle { font-family: var(--font-display); font-size: 16px; line-height: 1.25; font-weight: 500; letter-spacing: -0.2px; }
+.body { font-family: var(--font-sans); font-size: 12px; line-height: 1.6667; font-weight: 400; letter-spacing: 0px; }
+.callout { font-family: var(--font-sans); font-size: 12px; line-height: 1.3333; font-weight: 400; letter-spacing: 0px; }
+.name { font-family: var(--font-sans); font-size: 12px; line-height: 1.3333; font-weight: 500; letter-spacing: 0px; }
+.listPreview { font-family: var(--font-sans); font-size: 12px; line-height: 1.3333; font-weight: 300; letter-spacing: 0px; }
+.caption { font-family: var(--font-sans); font-size: 12px; line-height: 1.3333; font-weight: 400; letter-spacing: 0px; }
+.monoDetail { font-family: var(--font-mono); font-size: 12px; line-height: 1; font-weight: 400; letter-spacing: 0px; }
+.textButton { font-family: var(--font-mono); font-size: 12px; line-height: 1; font-weight: 500; letter-spacing: 1px; }
+.cardMark { font-family: var(--font-mono); font-size: 12px; line-height: 1; font-weight: 500; letter-spacing: 0px; }
+.mark { font-family: var(--font-mono); font-size: 8px; line-height: 1; font-weight: 500; letter-spacing: 0px; }

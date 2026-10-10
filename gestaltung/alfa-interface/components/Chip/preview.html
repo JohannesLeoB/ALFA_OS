@@ -1,0 +1,17 @@
+<!-- @dsCard group="Bedienung" height=96 subtitle="Filter, gewählt, mit Entfernen" -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Vorschau</title>
+<style>html,body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-sans)}</style>
+</head>
+<body>
+<div id="root" style="display:flex;gap:var(--space-small);align-items:center;flex-wrap:wrap;padding:var(--space-xxLarge)"></div>
+<script>
+var A = window.ALFA, h = React.createElement;
+function Demo() { var s = React.useState("Alle"), r = React.useState(true);
+  return h(React.Fragment, null, ["Alle", "Ungelesen", "Mit Anhang"].map(function (c) { return h(A.Chip, { key: c, selected: s[0] === c, onClick: function () { s[1](c); } }, c); }),
+    r[0] ? h(A.Chip, { onRemove: function () { r[1](false); } }, "lena@hansen.de") : null); }
+ReactDOM.createRoot(document.getElementById("root")).render(h(Demo));
+</script>
+</body>
+</html>
