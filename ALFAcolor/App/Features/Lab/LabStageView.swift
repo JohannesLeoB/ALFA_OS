@@ -24,7 +24,13 @@ struct LabStageView: View {
         let pageWidth = LabStage.pageWidth(width: model.session.draft.width, zoom: zoom, frameWidth: size.width)
         let scale = max(LabStage.scale(zoom: zoom, pageWidth: pageWidth, frameWidth: size.width), 0.01)
         return ZStack(alignment: .topLeading) {
-            if let live = model.live {
+            if let blocked = model.session.blocked {
+                Text(LocalizedStringKey(blockedKey(blocked)))
+                    .themeText(theme.text(.body))
+                    .foregroundStyle(theme.color(.textMuted, scheme))
+                    .padding(theme.space(.s4))
+                    .frame(width: size.width, height: size.height, alignment: .center)
+            } else if let live = model.live {
                 CodeLiveView(card: live)
                     .frame(width: pageWidth, height: size.height / scale, alignment: .topLeading)
                     .scaleEffect(scale, anchor: .topLeading)
@@ -40,6 +46,10 @@ struct LabStageView: View {
         .frame(width: size.width, height: size.height, alignment: .topLeading)
         .clipped()
         .background(theme.color(.surface, scheme))
+    }
+
+    private func blockedKey(_ blocked: LabBlock) -> String {
+        "lab.blocked." + blocked.rawValue
     }
 
     private var toolbar: some View {

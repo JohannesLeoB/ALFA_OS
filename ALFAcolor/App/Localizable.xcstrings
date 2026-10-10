@@ -9417,6 +9417,83 @@
           }
         }
       }
+    },
+    "lab.blocked.swift" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ist Swift-Code. Er läuft hier nicht. Übersetzung ist möglich."
+          }
+        }
+      }
+    },
+    "lab.blocked.kotlin" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ist Kotlin-Code. Er läuft hier nicht. Übersetzung ist möglich."
+          }
+        }
+      }
+    },
+    "lab.blocked.java" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ist Java-Code. Er läuft hier nicht. Übersetzung ist möglich."
+          }
+        }
+      }
+    },
+    "lab.blocked.dart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ist Dart-Code. Er läuft hier nicht. Übersetzung ist möglich."
+          }
+        }
+      }
+    },
+    "lab.blocked.python" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ist Python-Code. Er läuft hier nicht. Übersetzung ist möglich."
+          }
+        }
+      }
+    },
+    "lab.blocked.json" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das sind JSON-Daten. Sie laufen hier nicht."
+          }
+        }
+      }
+    },
+    "lab.blocked.note" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das ist Text, kein Code. Er läuft hier nicht."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

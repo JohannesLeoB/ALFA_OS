@@ -39,3 +39,8 @@ public struct LabReading: Equatable, Sendable {
         }
     }
 }
+
+/// Code that the page cannot play: a language that needs a translation first, data, or a note.
+public enum LabBlock: String, Equatable, Sendable {
+    case swift, kotlin, java, dart, python, json, note
+}

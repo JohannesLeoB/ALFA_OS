@@ -124,6 +124,26 @@ public struct LabSession: Equatable, Sendable {
         versions = VersionLog(current: draft, older: versions.older)
     }
 
+    /// Why the page cannot play the code. nil when it can.
+    /// Only a draft with one filled tab is read, so that pieces of a page are never taken for a note.
+    public var blocked: LabBlock? {
+        let filled = draft.tabs.map { draft.text($0) }.filter { !LabHints.isBlank($0) }
+        guard filled.count == 1, let text = filled.first else { return nil }
+        switch LabReading(text).classification.kind {
+        case .foreign(let language):
+            switch language {
+            case .swift: return .swift
+            case .kotlin: return .kotlin
+            case .java: return .java
+            case .dart: return .dart
+            case .python: return .python
+            }
+        case .json: return .json
+        case .notCode: return .note
+        case .html, .css, .tailwind, .react, .script, .svg: return nil
+        }
+    }
+
     private mutating func refreshControls() {
         let earlier = controls
         controls = LabControls.read(draft).map { fresh in

@@ -85,6 +85,8 @@ final class LabModel {
     /// Builds the page from the session, replacing a running one.
     func reloadPage() async {
         live = nil
+        // Code that does not run never becomes a page, so its source cannot show as text.
+        guard session.blocked == nil else { return }
         guard let document = LabPreview.document(for: session.draft, controls: session.controls, props: session.props, dark: session.isDark) else { return }
         live = try? await LabPreview.makeLive(document)
     }
