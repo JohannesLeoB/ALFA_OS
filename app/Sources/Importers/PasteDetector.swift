@@ -73,6 +73,8 @@ public enum Doubt: String, Equatable, Sendable {
     case mixedKinds
     /// Imports of modules that the pasted code does not hold: an alias such as `@/lib/utils` or a relative path.
     case missingImports
+    /// Code for a server or a build step: a server action, a server module of Next.js or a module of Node.
+    case serverCode
 }
 
 public enum Certainty: Equatable, Sendable {
@@ -189,6 +191,7 @@ public enum PasteDetector {
     /// The doubts of module code: what it imports and cannot get from the pasted text.
     private static func addModuleDoubts(to result: inout CodeClassification, _ head: String) {
         if matches(Signs.localImport, head) { result.doubts.append(.missingImports) }
+        if matches(Signs.serverCode, head) { result.doubts.append(.serverCode) }
     }
 
     /// True when the text outside of tags, style elements and script elements holds a style rule or script code.
@@ -305,6 +308,9 @@ public enum PasteDetector {
 
         /// An import or a require of an alias (`@/`, `~/`) or of a relative path, on one line or on the line of `from`.
         static let localImport = #"(?m)\bfrom\s*['"](@/|~/|\.{1,2}/)|^\s*import\s*['"](@/|~/|\.{1,2}/)|\brequire\(\s*['"]\.{1,2}/"#
+
+        /// A server action, a server module of Next.js, or a module of Node, imported or required.
+        static let serverCode = #"(?m)^\s*['"]use server['"]|\bfrom\s*['"](next/(server|headers|cookies)|node:[\w/]+|fs|fs/promises|path|child_process)['"]|\brequire\(\s*['"](node:[\w/]+|fs|path|child_process)['"]"#
 
         static let styleTag = #"(?i)<style\b"#
         static let scriptTag = #"(?i)<script\b"#
