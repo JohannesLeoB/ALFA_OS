@@ -1,0 +1,6 @@
+ALFA Interface MASTER 1010: CI aller ALFA-Apps (Entscheidung Johannes, 2026-10-10).
+Quelle: claude.ai Artifact https://claude.ai/artifact/G8xFQLN6yeLLRohRwZoGyi (Typ Design System), Besitzer: Konto hello@johannesleoberger.com.
+Stand der Kopie: 2026-10-10. Dateien unverändert aus dem Projekt des Artifacts: README.md, tokens.json, design-system.json, Messprotokoll.md, assets/, components/ (bundle.js, bundle.css, index.d.ts, README und Vorschau je Bauteil).
+Das Artifact bleibt die Quelle. Diese Kopie nie von Hand ändern, nur neu ziehen.
+Regeln zuerst hier nachlesen (README.md, components/*/README.md, bundle.css, bundle.js), nichts dazuerfinden.
+Noch nicht im Artifact: „Mail dicht als Vollbild“ (Design vom 08.10.), Bildvergleich, Eye tracker, Schemas der Akte, SwiftUI-Fassungen.

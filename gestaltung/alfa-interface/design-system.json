@@ -1,0 +1,116 @@
+{
+ "v": 3,
+ "layout": "files",
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-10-09T01:45:54Z"
+ },
+ "title": "ALFA Interface",
+ "namespace": "ALFA",
+ "libraries": [
+  {
+   "name": "react",
+   "version": "18"
+  },
+  {
+   "name": "react-dom",
+   "version": "18"
+  }
+ ],
+ "sections": {},
+ "groups": [
+  "Moods",
+  "Layout"
+ ],
+ "assetGroups": {
+  "Moods": {
+   "name": "Moods",
+   "tile": "l",
+   "order": [
+    "paper-stone-coral-black.png",
+    "glasplatten-blau-schwarz.png",
+    "business-growth-boegen.jpg",
+    "riffelglas-teal-koralle.jpg",
+    "sonnenuntergang-pillen.jpg",
+    "tooltip-hell-dunkel.png"
+   ],
+   "files": {
+    "paper-stone-coral-black.png": {
+     "name": "paper-stone-coral-black.png",
+     "blob": "dde0b4e6d91de8d3c6b46099ee830bdb",
+     "size": 165962,
+     "type": "image/png"
+    },
+    "glasplatten-blau-schwarz.png": {
+     "name": "glasplatten-blau-schwarz.png",
+     "blob": "c3b7b4f15f894da8b23fc364c8b0246c",
+     "size": 452258,
+     "type": "image/png"
+    },
+    "business-growth-boegen.jpg": {
+     "name": "business-growth-boegen.jpg",
+     "blob": "8f496f4d19f3d2207fe55fa5555eb77d",
+     "size": 27728,
+     "type": "image/jpeg"
+    },
+    "riffelglas-teal-koralle.jpg": {
+     "name": "riffelglas-teal-koralle.jpg",
+     "blob": "7e00e71a37dec6f6b93462f697330eda",
+     "size": 121576,
+     "type": "image/jpeg"
+    },
+    "sonnenuntergang-pillen.jpg": {
+     "name": "sonnenuntergang-pillen.jpg",
+     "blob": "8561da8b2cc808ca508af6f01e5b758c",
+     "size": 25761,
+     "type": "image/jpeg"
+    },
+    "tooltip-hell-dunkel.png": {
+     "name": "tooltip-hell-dunkel.png",
+     "blob": "fed083bd14486637b52969f32b61df8d",
+     "size": 208448,
+     "type": "image/png"
+    }
+   }
+  },
+  "Layout": {
+   "name": "Layout",
+   "tile": "l",
+   "order": [
+    "layout-idee-1.png",
+    "layout-idee-2.png",
+    "layout-idee-3.png"
+   ],
+   "files": {
+    "layout-idee-1.png": {
+     "name": "layout-idee-1.png",
+     "blob": "20eb036a15f1b93243a5e1c1963333d7",
+     "size": 78364,
+     "type": "image/png"
+    },
+    "layout-idee-2.png": {
+     "name": "layout-idee-2.png",
+     "blob": "2810ff10fd1f89cc2b99d927cf735bb5",
+     "size": 59475,
+     "type": "image/png"
+    },
+    "layout-idee-3.png": {
+     "name": "layout-idee-3.png",
+     "blob": "66802ce1f03fbb8532fdb8e7a76f6fb9",
+     "size": 61119,
+     "type": "image/png"
+    }
+   }
+  }
+ },
+ "blobs": {},
+ "docs": {
+  "sections": []
+ },
+ "lastChange": {
+  "by": "Johannes Leo Berger",
+  "at": "2026-10-10T02:00:00Z",
+  "via": "Claude (Cowork)",
+  "note": "Schrift und Bedienteile verfeinert: Instrument Serif für Titel, Geist für Text, Haarlinien-Knöpfe, Chips und Felder, weichere Radien."
+ }
+}
