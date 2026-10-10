@@ -9,6 +9,8 @@ import BoardModel
 struct NotesListView: View {
     let store: BoardStore
     let itemIDs: [ItemID]
+    /// A fixed width for a popover. Without it the list takes the width of its column, as in the inspector.
+    var width: CGFloat?
 
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var scheme
@@ -57,8 +59,9 @@ struct NotesListView: View {
                     .foregroundStyle(theme.color(.textMuted, scheme))
             }
         }
-        .padding(theme.space(.s3))
-        .frame(width: theme.grid(40), alignment: .leading)
+        .padding(width == nil ? 0 : theme.space(.s3))
+        .frame(width: width, alignment: .leading)
+        .frame(maxWidth: width == nil ? .infinity : nil, alignment: .leading)
         .foregroundStyle(theme.color(.text, scheme))
     }
 
