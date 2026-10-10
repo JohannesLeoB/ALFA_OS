@@ -53,6 +53,9 @@ Maus, Trackpad, Multitouch-Gesten sind die Hauptbedienung; jede Funktion hat ein
 - Kein KI-Meta (Sitzungen, Konten, Deutungen, Claude-Wortlaut) in Code, UI, Commits oder Docs. Commit-Texte rein technisch.
 - Ein System, das alles mitzieht: Entscheidungen zu Gestaltung und App kommen auch später und gelten rückwirkend in allen gebauten Ansichten. Werte daher nur aus der einen Quelle, nie lokal.
 - Nichts fest im Code: Daten, Zugänge, Kontakte und Geschäftsregeln sind Einstellungen oder Einrichtung der App, je Firma. Werte und Optionen der App sind keine Architekturfrage; der Kern macht sie einstellbar.
+- Bestand ist eine Goldgrube, kein Gold: erst vorhandene Erfassungen nutzen (Inventuren, Karten, Register, Artifacts, Briefe; je mit Datum und Code-Stand), dann nur das Gebrauchte am heutigen Code oder an Johannes' Wortlaut prüfen, veredeln, zusammenführen. Nichts neu suchen oder neu erfinden, was schon erfasst ist (Johannes: „nicht immer neu suchen und neu erfinden“).
+- Verstehen ist Aufgabe der Agenten: Richtung, Ziele, Bereiche, Stand und Schritte stehen hier und in `plan/STATUS.md`. Keine Abhak-Listen und keine Artifacts nur zum Festhalten für Johannes.
+- Regeln und Stand stehen nur im Repo (diese Datei, `plan/STATUS.md`), nie nur im Gedächtnis einer Sitzung.
 - Builds nur im Repo: Xcode mit `-derivedDataPath .build-xcode/dd`, nichts nach `/Applications`, nichts in Xcodes Standard-DerivedData.
 
 ## Parallelität
