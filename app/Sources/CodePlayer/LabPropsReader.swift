@@ -191,12 +191,41 @@ public enum LabPropsReader {
         }
 
         /// The index of the parenthesis that opens the parameter list of a function or an arrow constant.
+        /// The anonymous default export has no name in the source; its parameter list follows `export default`.
         static func openParenthesis(of component: String, in source: String) -> Int? {
+            if component == WebDocument.defaultName, let marker = source.firstMatch(of: /export\s+default\s+/),
+               let open = parameterList(in: Array(source), at: source.distance(from: source.startIndex, to: marker.range.upperBound)) {
+                return open
+            }
             let pattern = "(?:function\\s+\(component)\\s*|\\b\(component)\\s*=\\s*(?:async\\s*)?)\\("
             guard let expression = try? NSRegularExpression(pattern: pattern),
                   let match = expression.firstMatch(in: source, range: NSRange(source.startIndex..., in: source)) else { return nil }
             guard let range = Range(match.range, in: source) else { return nil }
             return source.distance(from: source.startIndex, to: range.upperBound) - 1
+        }
+
+        /// The index of the parenthesis that opens the parameters of the function or arrow that starts at `start`:
+        /// `function (`, `async function name (` or `async (...) =>`. nil for any other expression.
+        static func parameterList(in chars: [Character], at start: Int) -> Int? {
+            func skipBlanks(_ index: Int) -> Int {
+                var next = index
+                while next < chars.count, chars[next].isWhitespace { next += 1 }
+                return next
+            }
+            func word(_ index: Int) -> String {
+                String(chars[index...].prefix { $0.isLetter || $0.isNumber || $0 == "_" || $0 == "$" })
+            }
+            var index = skipBlanks(start)
+            if word(index) == "async" { index = skipBlanks(index + 5) }
+            if word(index) == "function" {
+                index = skipBlanks(index + 8)
+                if index < chars.count, chars[index] == "*" { index = skipBlanks(index + 1) }
+                index = skipBlanks(index + word(index).count)
+                return index < chars.count && chars[index] == "(" ? index : nil
+            }
+            guard index < chars.count, chars[index] == "(", let close = Source.closing(chars, at: index) else { return nil }
+            let after = String(chars[(close + 1)...].prefix(200))
+            return after.prefixMatch(of: /\s*(?::[^=]*)?=>/) != nil ? index : nil
         }
 
         static func entry(_ text: String) -> Entry? {
