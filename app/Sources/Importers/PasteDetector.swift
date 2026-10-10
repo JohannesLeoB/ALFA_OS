@@ -50,6 +50,54 @@ public enum ForeignLanguage: String, Equatable, Sendable, CaseIterable {
     }
 }
 
+/// What the code of a text is. Only the kinds that run in a card are playable.
+public enum CodeKind: Equatable, Sendable {
+    case html, css, tailwind, react, script, svg, json
+    /// Code in a language that the page does not run. It needs a translation first.
+    case foreign(ForeignLanguage)
+    case notCode
+
+    public var isPlayable: Bool {
+        switch self {
+        case .html, .css, .tailwind, .react, .script, .svg: true
+        case .json, .foreign, .notCode: false
+        }
+    }
+}
+
+/// What makes a classification unsure. Each one can become a question later; no more than `maxDoubts` are kept.
+public enum Doubt: String, Equatable, Sendable {
+    /// Only a weak sign decided the kind.
+    case fewSigns
+}
+
+public enum Certainty: Equatable, Sendable {
+    case sure, unsure
+}
+
+/// The kind of a pasted code with how sure the reading is, and what is unsure.
+public struct CodeClassification: Equatable, Sendable {
+    public static let maxDoubts = 3
+
+    public var kind: CodeKind
+    /// TypeScript syntax in a script or a React component.
+    public var typed = false
+    /// Utility classes of Tailwind in markup, in a React component, or directives in a style sheet.
+    public var usesTailwind = false
+    /// The kinds that markup carries in its own tags: a style sheet, a script.
+    public var embedded: [CodeKind] = []
+    public var doubts: [Doubt] = []
+
+    public init(kind: CodeKind) { self.kind = kind }
+
+    public var certainty: Certainty { doubts.isEmpty ? .sure : .unsure }
+    public var isPlayable: Bool { kind.isPlayable }
+    public var needsTranslation: Bool {
+        if case .foreign = kind { return true }
+        return false
+    }
+}
+
 /// Decides what a text is. The order matters, the first match wins:
 /// a single address, a list of colors, SwiftUI and the other foreign languages, React, style sheet, script, HTML, and last a note.
 /// It is a pure function of the text.
@@ -63,20 +111,85 @@ public enum PasteDetector {
         if let link = link(in: trimmed) { return link }
         if let color = ColorList.rgb(trimmed) { return .colors([color]) }
         if let colors = ColorList.parse(trimmed) { return .colors(colors) }
+        let report = classifyCode(trimmed)
+        switch report.kind {
+        case .foreign(let language): return code(language.codeLanguage, language.fileName, trimmed)
+        case .react: return code(.react, report.typed ? "App.tsx" : "App.jsx", trimmed)
+        case .script: return report.typed ? code(.other, "script.ts", trimmed) : code(.javascript, "script.js", trimmed)
+        case .css: return code(.css, "style.css", trimmed)
+        case .tailwind: return code(.tailwind, "index.html", trimmed)
+        case .html: return code(.html, "index.html", trimmed)
+        case .svg: return code(report.usesTailwind ? .tailwind : .html, "index.html", trimmed)
+        case .json, .notCode: return .note(trimmed)
+        }
+    }
+
+    /// The kind of the code in a text, how sure it is, and what is unsure. It is a pure function of the text.
+    public static func classify(_ text: String) -> CodeClassification {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, link(in: trimmed) == nil, ColorList.rgb(trimmed) == nil, ColorList.parse(trimmed) == nil else {
+            return CodeClassification(kind: .notCode)
+        }
+        return classifyCode(trimmed)
+    }
+
+    /// The classification of a text that is neither empty, nor an address, nor a list of colors.
+    private static func classifyCode(_ trimmed: String) -> CodeClassification {
         let head = String(trimmed.prefix(headLength))
-        if matches(Signs.swiftUI, head) { return code(.swiftui, "View.swift", trimmed) }
-        if let language = foreignLanguage(head) { return code(language.codeLanguage, language.fileName, trimmed) }
+        if matches(Signs.swiftUI, head) { return CodeClassification(kind: .foreign(.swift)) }
+        if let language = foreignLanguage(head) { return CodeClassification(kind: .foreign(language)) }
+        if isSVG(trimmed) {
+            var result = CodeClassification(kind: .svg)
+            result.usesTailwind = matches(Signs.tailwind, head)
+            return result
+        }
+        if isJSON(trimmed) { return CodeClassification(kind: .json) }
         if matches(Signs.react, head) || matches(Signs.jsxTag, head) {
-            return code(.react, isTypeScript(head) ? "App.tsx" : "App.jsx", trimmed)
+            var result = CodeClassification(kind: .react)
+            result.typed = isTypeScript(head)
+            result.usesTailwind = matches(Signs.tailwindClassName, head)
+            if !matches(Signs.reactStrong, head) && !matches(Signs.jsxTag, head) { result.doubts = [.fewSigns] }
+            return result
         }
-        if matches(Signs.typeScript, head) { return code(.other, "script.ts", trimmed) }
-        if CSSShape.isStyleSheet(trimmed) { return code(.css, "style.css", trimmed) }
+        if matches(Signs.typeScript, head) {
+            var result = CodeClassification(kind: .script)
+            result.typed = true
+            return result
+        }
+        if CSSShape.isStyleSheet(trimmed) {
+            var result = CodeClassification(kind: .css)
+            result.usesTailwind = matches(Signs.tailwindDirective, head)
+            return result
+        }
         let hasMarkup = isMarkup(head)
-        if !hasMarkup, isScript(head) { return code(.javascript, "script.js", trimmed) }
-        if hasMarkup {
-            return code(matches(Signs.tailwind, head) ? .tailwind : .html, "index.html", trimmed)
+        if !hasMarkup, isScript(head) {
+            var result = CodeClassification(kind: .script)
+            if !matches(Signs.script, head) { result.doubts = [.fewSigns] }
+            return result
         }
-        return .note(trimmed)
+        if hasMarkup {
+            let tailwind = matches(Signs.tailwind, head)
+            var result = CodeClassification(kind: tailwind ? .tailwind : .html)
+            result.usesTailwind = tailwind
+            if matches(Signs.styleTag, head) { result.embedded.append(.css) }
+            if matches(Signs.scriptTag, head) { result.embedded.append(.script) }
+            return result
+        }
+        return CodeClassification(kind: .notCode)
+    }
+
+    /// Markup whose root is an svg element, with an optional xml line, comments and doctype in front.
+    static func isSVG(_ text: String) -> Bool {
+        text.lowercased().hasSuffix("</svg>") && matches(Signs.svgStart, String(text.prefix(headLength)))
+    }
+
+    /// A JSON object or array that is not empty.
+    static func isJSON(_ text: String) -> Bool {
+        guard let first = text.first, first == "{" || first == "[",
+              let value = try? JSONSerialization.jsonObject(with: Data(text.utf8)) else { return false }
+        if let object = value as? [String: Any] { return !object.isEmpty }
+        if let array = value as? [Any] { return !array.isEmpty }
+        return false
     }
 
     /// The foreign language of a text, other than Swift, when it shows a sign of it that no script has.
@@ -154,6 +267,19 @@ public enum PasteDetector {
         static let java = #"(?m)^\s*package\s+[\w.]+;|^\s*import\s+(static\s+)?(java|javax|android|androidx|org|com)\.[\w.*]+;|\bSystem\.(out|err)\.print|^\s*(public|private|protected)\s+(static\s+)?(final\s+)?(abstract\s+)?(class|interface|enum|record)\s+\w+|\bpublic\s+static\s+void\s+main\b|^\s*@Override\b"#
 
         static let python = #"(?m)^\s*def\s+\w+\s*\([^)]*\)\s*(->\s*[^:\n]+)?:\s*(#.*)?$|^\s*class\s+\w+(\([^)]*\))?:\s*$|^\s*from\s+[\w.]+\s+import\s+[\w*(]|^\s*if\s+__name__\s*==|^\s*import\s+[\w.]+(\s+as\s+\w+)?(\s*,\s*[\w.]+(\s+as\s+\w+)?)*\s*$"#
+
+        /// Signs that only React code has. `export default` alone is not one of them.
+        static let reactStrong = #"\bclassName=|\bfrom\s+['"]react['"]|\buse(State|Effect|Ref|Memo|Callback)\s*\(|\breturn\s*\(?\s*<[A-Za-z>]"#
+
+        /// Utility classes in a `className`, also inside a call such as `cn("flex p-4")`.
+        static let tailwindClassName = #"class(Name)?\s*=\s*\{?\s*(\w+\()?\s*["'`][^"'`]*\b(flex|grid|[pm][xytblr]?-\d|text-(xs|sm|base|lg|\d?xl)|bg-|rounded|[wh]-\d|items-|justify-|gap-\d|space-[xy]-|font-(medium|semibold|bold)|absolute|relative)"#
+
+        /// The directives of Tailwind in a style sheet.
+        static let tailwindDirective = #"(?m)^\s*@(import\s+["']tailwindcss|tailwind\s|theme\b|apply\b|utility\b|custom-variant\b|source\b)"#
+
+        static let styleTag = #"(?i)<style\b"#
+        static let scriptTag = #"(?i)<script\b"#
+        static let svgStart = #"(?is)^\s*(<\?xml[^>]*\?>\s*)?(<!--.*?-->\s*)*(<!doctype\s+svg[^>]*>\s*)?<svg\b"#
 
         static let react = #"(?m)\bclassName=|^\s*export\s+default\b|\bfrom\s+['"]react['"]|\buse(State|Effect|Ref|Memo|Callback)\s*\(|\breturn\s*\(\s*<"#
 
