@@ -190,23 +190,37 @@ public enum LabPropsReader {
             types = Parameters.types(after: Array(inside[(end + 1)...]), in: source)
         }
 
-        /// The index of the parenthesis that opens the parameter list of a function or an arrow constant.
-        /// The anonymous default export has no name in the source; its parameter list follows `export default`.
-        static func openParenthesis(of component: String, in source: String) -> Int? {
+        /// The index of the parenthesis that opens the parameter list of a function or an arrow constant, also one
+        /// inside `memo(...)` or `forwardRef(...)`. The anonymous default export has no name in the source; its
+        /// parameter list follows `export default`. `depth` stops a name that points back at itself.
+        static func openParenthesis(of component: String, in source: String, depth: Int = 0) -> Int? {
+            guard depth < 4 else { return nil }
+            let chars = Array(source)
             if component == WebDocument.defaultName, let marker = source.firstMatch(of: /export\s+default\s+/),
-               let open = parameterList(in: Array(source), at: source.distance(from: source.startIndex, to: marker.range.upperBound)) {
+               let open = parameterList(in: chars, at: source.distance(from: source.startIndex, to: marker.range.upperBound),
+                                        source: source, depth: depth) {
                 return open
             }
-            let pattern = "(?:function\\s+\(component)\\s*|\\b\(component)\\s*=\\s*(?:async\\s*)?)\\("
-            guard let expression = try? NSRegularExpression(pattern: pattern),
-                  let match = expression.firstMatch(in: source, range: NSRange(source.startIndex..., in: source)) else { return nil }
-            guard let range = Range(match.range, in: source) else { return nil }
-            return source.distance(from: source.startIndex, to: range.upperBound) - 1
+            if let end = ends(of: "function\\s+\(component)\\s*\\(", in: source).first { return end - 1 }
+            // A constant, with a type after its name: `const Box: FC<Props> = `.
+            for end in ends(of: "\\b\(component)\\s*(?::[^=\\n]*)?=(?![=>])\\s*", in: source) {
+                if let open = parameterList(in: chars, at: end, source: source, depth: depth) { return open }
+            }
+            return nil
+        }
+
+        /// The offsets where the matches of a pattern end.
+        static func ends(of pattern: String, in source: String) -> [Int] {
+            guard let expression = try? NSRegularExpression(pattern: pattern) else { return [] }
+            return expression.matches(in: source, range: NSRange(source.startIndex..., in: source)).compactMap { match in
+                Range(match.range, in: source).map { source.distance(from: source.startIndex, to: $0.upperBound) }
+            }
         }
 
         /// The index of the parenthesis that opens the parameters of the function or arrow that starts at `start`:
-        /// `function (`, `async function name (` or `async (...) =>`. nil for any other expression.
-        static func parameterList(in chars: [Character], at start: Int) -> Int? {
+        /// `function (`, `async function name (` or `async (...) =>`. `memo(` and `forwardRef(` around one are
+        /// passed through, also when they hold the name of a component. nil for any other expression.
+        static func parameterList(in chars: [Character], at start: Int, source: String, depth: Int) -> Int? {
             func skipBlanks(_ index: Int) -> Int {
                 var next = index
                 while next < chars.count, chars[next].isWhitespace { next += 1 }
@@ -216,6 +230,7 @@ public enum LabPropsReader {
                 String(chars[index...].prefix { $0.isLetter || $0.isNumber || $0 == "_" || $0 == "$" })
             }
             var index = skipBlanks(start)
+            guard index < chars.count else { return nil }
             if word(index) == "async" { index = skipBlanks(index + 5) }
             if word(index) == "function" {
                 index = skipBlanks(index + 8)
@@ -223,9 +238,19 @@ public enum LabPropsReader {
                 index = skipBlanks(index + word(index).count)
                 return index < chars.count && chars[index] == "(" ? index : nil
             }
-            guard index < chars.count, chars[index] == "(", let close = Source.closing(chars, at: index) else { return nil }
-            let after = String(chars[(close + 1)...].prefix(200))
-            return after.prefixMatch(of: /\s*(?::[^=]*)?=>/) != nil ? index : nil
+            if index < chars.count, chars[index] == "(", let close = Source.closing(chars, at: index) {
+                let after = String(chars[(close + 1)...].prefix(200))
+                return after.prefixMatch(of: /\s*(?::[^=]*)?=>/) != nil ? index : nil
+            }
+            let text = String(chars[index...].prefix(80))
+            guard let wrapper = text.prefixMatch(of: /(?:React\.)?(?:memo|forwardRef)\s*(?:<[^()]*?>)?\s*\(/) else { return nil }
+            let inner = skipBlanks(index + text.distance(from: text.startIndex, to: wrapper.range.upperBound))
+            let name = word(inner)
+            let after = skipBlanks(inner + name.count)
+            if !name.isEmpty, after < chars.count, chars[after] == ")" || chars[after] == "," {
+                return openParenthesis(of: name, in: source, depth: depth + 1)
+            }
+            return parameterList(in: chars, at: inner, source: source, depth: depth + 1)
         }
 
         static func entry(_ text: String) -> Entry? {
