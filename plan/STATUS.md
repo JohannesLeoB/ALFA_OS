@@ -1,6 +1,6 @@
 # Status
 
-Stand 2026-10-11 05:30, Chef. Ziel und Weg: `AGENTS.md`. Laufende Aufträge und Johannes' Wort: Issues.
+Stand 2026-10-11 nachmittags, Chef. Ziel und Weg: `AGENTS.md`. Laufende Aufträge und Johannes' Wort: Issues.
 
 ## Stand
 - ALFA_OS-Code: noch keiner. Im Repo liegt nur ALFAcolor (wird Modul Werkzeuge, ruht).
@@ -12,9 +12,10 @@ Stand 2026-10-11 05:30, Chef. Ziel und Weg: `AGENTS.md`. Laufende Aufträge und 
 - Einzugsplan Einstellungen und Mail aus ALPHA: #17.
 
 ## Nächste Schritte
-1. #16: eigenes App-Ziel ALFA_OS, kleiner Kern, Erzeuger tokens.json → Swift, Hülle schwarz-weiß nach Schablone; Bau in `dist/`, Deckungsprobe.
-2. #11 geschrumpft auf den Erzeuger; Umbau von ALFAcolor später als eigenes Ticket.
-3. #17: Einstellungen, dann Mail, Einheit für Einheit.
+Zwei Bahnen (Realitätscheck 11.10. nachmittags):
+1. Design-Werkstatt: erste Design-Sitzung in claude.ai (Konto MAX) mit Startauftrag `plan/werkzeuge/uebergabe/START-DESIGN.md`; erste Arbeit mit Johannes: die Hülle durchgehen, Werte in der Arbeitswelt entscheiden, Bauvorlage `ansicht-huelle` (#18).
+2. Bau ohne Gestaltung: Einzug Einstellungen aus ALPHA, Einheit für Einheit (#17).
+Die Hülle (#16, App 0.1.1) bleibt, bis Design die Bauvorlage liefert.
 
 ## Offen bei Johannes
 - Abnahme am Bild für jeden Bau in `dist/`.

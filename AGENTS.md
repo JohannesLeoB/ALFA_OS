@@ -17,7 +17,7 @@ Einzige Regeldatei. Lesekette: `CLAUDE.md` → diese Datei → `plan/STATUS.md` 
 ## Wegweiser
 - Repo: nur `~/Developer/ALFA_OS`, GitHub `JohannesLeoB/ALFA_OS` (bis 10.10.2026 `ALLFARBEN` und `ALLFARB`). `app/` Swift-Paket (`app/Sources/<Modul>`, `app/Tests/<Modul>Tests`, `swift test` in `app/`). `ALFAcolor/` App-Ziel (XcodeGen `project.yml`; `App/{Shell,Commands,Document,Settings,Features/<Bereich>}`; `AppTests/`; Katalog `App/Localizable.xcstrings`).
 - 7 Knoten: Kern (ALFAcolorCore, Geometry, Tokens, ColorLab, AppTheme) · Dokument (Document) · Brett (BoardModel, Motion, Performance, Thumbnails) · Mediathek (Library, Importers) · Code-Player (CodePlayer) · Assistent (AI) · Bridge/Ausgabe (AssistantBridge, Exporters).
-- `plan/`: STATUS, KERN, CHEFENTWICKLER, CODEBASE (Nähte, Speicherorte), AUSTAUSCH (Vertrag-ZIP von ALFAcolor), FRAGEN und `protokoll/` (Johannes' Wortlaut bis 10.10.), `ernte/mail/` (Mail-Funktionsliste), `gates/` (Recherchen), `werkzeuge/plan_pruefen.py`.
+- `plan/`: STATUS, KERN, CHEFENTWICKLER, CODEBASE (Nähte, Speicherorte), AUSTAUSCH (Vertrag-ZIP von ALFAcolor), FRAGEN und `protokoll/` (Johannes' Wortlaut bis 10.10.), `ernte/mail/` (Mail-Funktionsliste), `gates/` (Recherchen), `werkzeuge/` (Arbeitsskripte, Übergabe an Design, Messwerkzeuge der Hülle).
 - `konzept/` (nur noch ALFAcolor: Nutzer, Oberfläche, Vision, Code-Player). Alles vor dem Aufräumen vom 11.10.2026 (Briefe, Ernte, Gates, Entscheidungen) steht im Commit `c10c3b4` (`git show c10c3b4:<pfad>`) · `gestaltung/` (`kanon/` Quelle von Konto B, `vertrag/` erzeugt, nie von Hand) · `scripts/` (pruefen.sh, waechter*, lizenzen.txt) · `.githooks/` · `dist/` (Apps) und `ausgang/` (ZIPs) sind ignoriert.
 
 ## Rollen
