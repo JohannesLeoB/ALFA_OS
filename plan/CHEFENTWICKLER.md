@@ -1,28 +1,28 @@
 # Chefentwickler · Ablauf
 
-Du verteilst Briefe an Haiku-Worker, prüfst jede Rückmeldung selbst und hältst `AGENTS.md`. Du baust selten selbst.
+Du verteilst Aufträge (Issues) an Worker, prüfst jede Rückmeldung selbst und hältst `AGENTS.md`. Du baust selten selbst.
 ## Start
 1. `git pull --rebase`; lies `AGENTS.md`, `plan/STATUS.md`, den Zettel in `uebergabe/`. `git status` sauber; Dateien eines abgebrochenen Agenten nie löschen, Johannes melden, Brief neu vergeben.
 2. `bash scripts/pruefen.sh` → `Result: 0 errors`.
 3. Johannes melden (≤ 8 Zeilen): Stand, laufende Worker, nächste Schritte, Fragen. Dann nach Plan weiterbauen.
 
 ## Verteilen
-1. Brief aus `plan/briefe/` wählen oder nach `plan/BRIEF-VORLAGE.md` schreiben: Ziel, Besitz-Pfade (englisch, genau), Liest, Schritte mit prüfbarem „Fertig wenn“, Nicht Teil, Übergabe. Offene Punkte vorher mit Johannes klären.
-2. Status im Brief „vergeben, Datum“ setzen, committen (`git commit -F - -- <Pfade>`).
+1. Auftrag als Issue schreiben: Ziel, Besitz-Pfade (englisch, genau), Liest, Schritte mit prüfbarem „Fertig wenn“, Nicht Teil, Übergabe. Offene Punkte vorher mit Johannes klären.
+2. Beginn als Kommentar im Issue.
 3. Worker: `Agent`, `subagent_type: general-purpose`, `model: haiku`, `run_in_background: true`; bis zu 7 bei getrennten Pfaden, in einer Nachricht. Umzüge und Aufräumen allein. Enge Aufträge: eine Frage, feste Dateiliste, Aufrufgrenze, „berichte erst am Ende“, kein Browserfenster.
 4. Meldet ein Worker „zwischengeliefert“: per `SendMessage` anstoßen, selbst `swift test --filter <Modul>` laufen lassen. Worker einer früheren Sitzung sind nicht erreichbar: warten, bis er committet hat, Stand selbst prüfen.
 
 ## Vorlage: Auftrag an einen Worker
 ```
-Du bist Bauagent für ALFA_OS. Arbeite im Repo /Users/johannesleoberger/Developer/ALFA_OS auf main. Lies AGENTS.md (alle Regeln gelten) und plan/briefe/<B-xxx>.md, dann arbeite den Brief ab.
+Du bist Bauagent für ALFA_OS. Arbeite im Repo /Users/johannesleoberger/Developer/ALFA_OS auf main. Lies AGENTS.md (alle Regeln gelten) und Issue #<Nx>.md, dann arbeite den Brief ab.
 Parallel arbeiten <andere Briefe> an <deren Pfaden>: nicht anfassen. Gemeinsame Dateien (Katalog, Package.swift, project.yml, lizenzen.txt) in dieser Runde: <Besitzer>.
 Nur eigene Pfade committen. <Kein Push. | Push nach grünem Lauf.> Kein Browserfenster, App nie starten.
-Am Ende: pruefen.sh, Übergabe im Brief, Status „zur Prüfung“. Antwort kurz: Commits, Belege, Abweichungen, offene Punkte.
+Am Ende: pruefen.sh, Übergabe als Kommentar im Issue. Antwort kurz: Commits, Belege, Abweichungen, offene Punkte.
 ```
 
 ## Prüfen
-1. `git status` sauber, `git log` nur eigene Pfade; Übergabe im Brief lesen; `bash scripts/pruefen.sh` selbst laufen lassen. Kleines selbst entscheiden und im nächsten Brief festhalten; was Aussehen oder Verhalten ändert, als Frage an Johannes sammeln.
-2. Status im Brief auf „erledigt, geprüft <Datum> (Chef: …)“, „Abnahme am Bild offen“, wo es zutrifft. Commit, sofort `git push origin main`.
+1. `git status` sauber, `git log` nur eigene Pfade; Übergabe im Issue lesen; `bash scripts/pruefen.sh` selbst laufen lassen. Kleines selbst entscheiden und im nächsten Brief festhalten; was Aussehen oder Verhalten ändert, als Frage an Johannes sammeln.
+2. Ende als Kommentar im Issue „geprüft <Datum> (Chef: …)“, „Abnahme am Bild offen“, wo es zutrifft. Commit, sofort `git push origin main`.
 
 ## App für Johannes
 - Erst wenn `pruefen.sh` grün ist und kein Worker läuft. Entwickler-Bau: `cd ALFAcolor && xcodegen generate && xcodebuild -scheme ALFAcolor -destination "platform=macOS" -derivedDataPath ../.build-xcode/dd build`.
@@ -35,6 +35,6 @@ Genau ein Zettel in `uebergabe/` (≤ 40 Zeilen, `JJJJ-MM-TT_HHMM_chef-handoff.m
 
 ## Wenn etwas klemmt
 - Worker bricht ohne Bericht ab: `git status` lesen, per Nachricht um Bericht ohne weitere Änderungen bitten, Rest neu vergeben.
-- Brief zu groß (> ein Tag oder 600 Zeilen): in a und b teilen. Entscheidung fehlt: `konzept/OFFENE-FRAGEN.md` mit Vorschlag, Johannes fragen; nicht auf Annahmen bauen.
+- Brief zu groß (> ein Tag oder 600 Zeilen): in a und b teilen. Entscheidung fehlt: Johannes fragen; nicht auf Annahmen bauen.
 - `Package.swift` mit `.macOS(.v26)` scheitert: Plattform bleibt `.v15`, macOS-26-APIs mit `@available(macOS 26.0, *)`.
 - Fremde ZIPs (`~/Downloads`): in einen neuen leeren Ordner im Scratchpad entpacken, nie ins Repo, nichts ausführen.

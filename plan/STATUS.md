@@ -1,28 +1,20 @@
 # Status
 
-Stand 2026-10-10 23:55. Quellen: git, Johannes' Antworten (`plan/FRAGEN.md`, Abschnitt Antworten), Lesung der Fundus-Ordner durch Agenten am 10.10. (Aussagen, Stichproben vom Chef am Code geprüft). Ziel und Weg: `AGENTS.md`, Abschnitt Ziel.
+Stand 2026-10-11 05:30, Chef. Ziel und Weg: `AGENTS.md`. Laufende Aufträge und Johannes' Wort: Issues.
 
 ## Stand
-- Code hier: ALFAcolor 1.0.2 (8), notarisiert in `dist/`, Abnahme am Bild offen. Im Programm wirkt das Journal (Rückgängig nach Neustart) und die Erkennung im Code-Player. Nur im Paket, ohne Oberfläche: Sicherung, Absturzkopie, Chat, Befehlsbrücke, Stufen, Lesezeichen- und Gist-Import. Kommentare im Code widersprechen der Regel „keine Kommentare“.
-- Fundus, gelesen, nicht verändert:
-  - `~/ALPHA`: Build 451 (06.10.). Erreichbar nur Mail und Einstellungen (`Sources/MykilosApp/ALPHAApp.swift:172`), 15 Bereiche im `Altbestand/` (rund 56.000 Zeilen). Anbindungen im Code: Google, ClickUp, Clockodo, sevDesk, Airtable, Claude, DHL, IMAP/SMTP. Kein Kern im Sinne von ALFA: `AppState` hält alles, keine Firma als Objekt, eine Person je Mac, kein Steckbrief für Bereiche. Design-Vertrag dort: `Design/TOKENBOGEN.json` 2.3.6.
-  - `~/Developer/mykilos-labor`: Vorgänger von ALPHA (65 % gleiche Pfade). `~/Developer/ARCHIV`: ältere Generationen.
-  - ALFA Datan 1.0 (Preislisten → Airtable): eigene App, später Modul.
-- Gestaltung: Leitlinie Werkbank (Entwurf 4), Artifact `PCkGckib5pyeWbEEAHusCF`, Kopie `gestaltung/briefing-ansichten/entwurf-4.html`. CI-Quelle ALFA Interface MASTER 1010, Artifact `G8xFQLN6yeLLRohRwZoGyi`; die Kopie `gestaltung/alfa-interface/` ist unvollständig (17 von rund 30 Bauteil-Ordnern).
-- Schablone der Hülle, schwarz-weiß und bedienbar: Artifact `4iWtw8Hepr9gR9koZ5nYSG`, zur Abnahme.
-- Ticker: GitHub Issues in `JohannesLeoB/ALFA_OS` (seit 10.10.); laufende Aufträge und Johannes' Wort stehen dort.
-- Mail (#3): 155 Funktionen vom 03.10. am ALPHA-Code e69b5f5 geprüft: 114 vorhanden, 30 geändert, 11 fehlen; 50 weitere im Code, die in der Liste fehlen. Tabellen im Issue.
-- Ernte (#6): Linie von mykilOS-V2 (16.06.) bis heute, Runde 1 (26 Repos) und Runde 2 (Weg vom Entwurf zum Code, Enden) im Issue; Rohdaten in `plan/ernte/` (Stückgut, Stand 10.10.; Artifact-Zeilen in `artifacts/`, Mail-Tabellen in `mail/`).
-- `plan/ENTSCHEIDUNGEN.md`: Arbeitsunterlage, Johannes' Wortlaut nach Thema, von ihm ungeprüft.
+- ALFA_OS-Code: noch keiner. Im Repo liegt nur ALFAcolor (wird Modul Werkzeuge, ruht).
+- Schablone der Hülle: abgenommen (#1, 11.10.). Maßbild 1512 × 982 pt: `gestaltung/entwuerfe/schablone-mbp14/`.
+- Gestaltungsquelle: Arbeitswelt „ALFA Interface“ (Konto MAX), gezogen nach `gestaltung/alfa-interface/` mit `STAND.json`. MASTER 1010 ist Stückgut.
+- Werkzeug (#10): fertig (c10c3b4). Material-Ordner ohne Hürde, Regeln mit Herkunft (`python3 scripts/waechter.py rules`), Duldungen, Stau (`status`), Push baut nur bei Code voll, `scripts/setup-hooks.sh`.
+- Aufgeräumt 11.10.: Briefe, Ernte, alte Gates, ENTSCHEIDUNGEN und Teile von `konzept/` sind entfernt; alles liegt im Commit `c10c3b4`.
+- Recherchen: `plan/gates/reports/` (Umbau mit Ampeln und Schablonen; Artefakte der ganzen App), `plan/gates/recherche-swiftui-1zu1.md`.
+- Einzugsplan Einstellungen und Mail aus ALPHA: #17.
 
 ## Nächste Schritte
-1. ALFA_OS einrichten (#7): PODIUM-Issue anheften, Übergabe-Vorlage und Herkunftsregister (Rollen Linie, Parallelmodul, Satellit, Fundus) aus `~/Developer/SlopSLACK/werkbank-entwurf/` übernehmen; Board braucht `gh auth refresh -s project` durch Johannes.
-2. Designweg (#4, #6): `/design-sync` mit Johannes ausprobieren; danach Vorschlag aus Runde 2 entscheiden lassen.
-3. Kern-Steckbrief (#2) als Plan ohne Code: OS-Kern, Apps mit braucht und bietet, Einschalten, Nachladen, je Person und Firma, Connectors.
-4. Schablone (#1): Rückmeldung von Johannes einarbeiten.
-5. `plan/ENTSCHEIDUNGEN.md` auf das beim Bau Gebrauchte kürzen.
+1. #16: eigenes App-Ziel ALFA_OS, kleiner Kern, Erzeuger tokens.json → Swift, Hülle schwarz-weiß nach Schablone; Bau in `dist/`, Deckungsprobe.
+2. #11 geschrumpft auf den Erzeuger; Umbau von ALFAcolor später als eigenes Ticket.
+3. #17: Einstellungen, dann Mail, Einheit für Einheit.
 
 ## Offen bei Johannes
-- Abnahme der Schablone. Erster Bereich nach dem Kern.
-- Abnahme am Bild für 1.0.2.
-- Die ALFAcolor-Schritte vor dem 10.10. stehen in `git log -- plan/STATUS.md`; sie ruhen, bis ALFAcolor als Modul Werkzeuge an der Reihe ist.
+- Abnahme am Bild für jeden Bau in `dist/`.

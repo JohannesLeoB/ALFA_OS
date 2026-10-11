@@ -1,6 +1,6 @@
 # AGENTS.md · Regeln für jeden Agenten an ALFA
 
-Einzige Regeldatei. Lesekette: `CLAUDE.md` → diese Datei → `plan/STATUS.md` → Zettel in `uebergabe/` → offene Issues im Ticker → dein Brief `plan/briefe/<ID>.md`. Chef zusätzlich `plan/CHEFENTWICKLER.md`.
+Einzige Regeldatei. Lesekette: `CLAUDE.md` → diese Datei → `plan/STATUS.md` → Zettel in `uebergabe/` → offene Issues im Ticker (dein Auftrag ist ein Issue). Chef zusätzlich `plan/CHEFENTWICKLER.md`.
 
 ## Ziel
 > „ALFA ist die eigentliche App die ich entwickeln will“ (Johannes, 10.10.2026)
@@ -17,17 +17,17 @@ Einzige Regeldatei. Lesekette: `CLAUDE.md` → diese Datei → `plan/STATUS.md` 
 ## Wegweiser
 - Repo: nur `~/Developer/ALFA_OS`, GitHub `JohannesLeoB/ALFA_OS` (bis 10.10.2026 `ALLFARBEN` und `ALLFARB`). `app/` Swift-Paket (`app/Sources/<Modul>`, `app/Tests/<Modul>Tests`, `swift test` in `app/`). `ALFAcolor/` App-Ziel (XcodeGen `project.yml`; `App/{Shell,Commands,Document,Settings,Features/<Bereich>}`; `AppTests/`; Katalog `App/Localizable.xcstrings`).
 - 7 Knoten: Kern (ALFAcolorCore, Geometry, Tokens, ColorLab, AppTheme) · Dokument (Document) · Brett (BoardModel, Motion, Performance, Thumbnails) · Mediathek (Library, Importers) · Code-Player (CodePlayer) · Assistent (AI) · Bridge/Ausgabe (AssistantBridge, Exporters).
-- `plan/`: STATUS, CHEFENTWICKLER, CODEBASE (Nähte, Speicherorte), ANSICHTEN (Ebenenmodell), AUSTAUSCH (Format Code ↔ Design), BRIEF-VORLAGE; `briefe/` (Index = Ordner), `gates/` (Recherchen, Berichte), `werkzeuge/plan_pruefen.py`.
-- `konzept/` (VISION, GLOSSAR, OFFENE-FRAGEN, 10-MODUL-CODEPLAYER) · `gestaltung/` (`kanon/` Quelle von Konto B, `vertrag/` erzeugt, nie von Hand) · `scripts/` (pruefen.sh, waechter*, lizenzen.txt) · `.githooks/` · `dist/` (Apps) und `ausgang/` (ZIPs) sind ignoriert.
+- `plan/`: STATUS, KERN, CHEFENTWICKLER, CODEBASE (Nähte, Speicherorte), AUSTAUSCH (Vertrag-ZIP von ALFAcolor), FRAGEN und `protokoll/` (Johannes' Wortlaut bis 10.10.), `ernte/mail/` (Mail-Funktionsliste), `gates/` (Recherchen), `werkzeuge/plan_pruefen.py`.
+- `konzept/` (nur noch ALFAcolor: Nutzer, Oberfläche, Vision, Code-Player). Alles vor dem Aufräumen vom 11.10.2026 (Briefe, Ernte, Gates, Entscheidungen) steht im Commit `c10c3b4` (`git show c10c3b4:<pfad>`) · `gestaltung/` (`kanon/` Quelle von Konto B, `vertrag/` erzeugt, nie von Hand) · `scripts/` (pruefen.sh, waechter*, lizenzen.txt) · `.githooks/` · `dist/` (Apps) und `ausgang/` (ZIPs) sind ignoriert.
 
 ## Rollen
 Die Rolle steht im Sitzungsnamen (`CLAUDE.md`). Jede Rolle belegt, fragt und liefert anders:
 - Chef (Claude Code im Repo): delegiert, überschaut, hält die Fäden zusammen, kennt die Etappen, sinkt nicht in Einzelheiten; codet nur, wenn es dem Team dient und mit dem Team (Johannes, 11.10.2026: „nur als bossmove;) für das team, aber mit team“). Schreibt Aufträge, verteilt, prüft, committet, pusht; trägt Johannes' Entscheidungen in diese Datei und `plan/STATUS.md`.
-- Code: belegt mit laufendem Code und Test (Datei:Zeile); ändert nur die Pfade seines Briefs.
+- Code: belegt mit laufendem Code und Test (Datei:Zeile); ändert nur die Pfade seines Auftrags im Issue.
 - Design: arbeitet in Claude Design, Code oder Chat im Browser (Chrome, Safari) mit GitHub oder lokalem Ordner; ein Terminal-Claude kann vermitteln. Belegt mit Varianten und Johannes' Entscheid am Bild; fragt, hakt nach, liefert nach `gestaltung/` und führt die Korrespondenz im Ticker.
 - Design führt im ersten Abschnitt das Konto MAX (Johannes, 11.10.2026); die Nebenkonten PRO-HELLO und PRO-BERGER übernehmen Nebenaufgaben vom Chef, später auch Teile der Gestaltung.
 - Helfer: Zuarbeit nach Auftrag im Ticker; helfende Konten schreiben nur in `gestaltung/`.
-- Worker (Haiku, Sonnet): bauen nach Brief. Codex ruht.
+- Worker (Haiku, Sonnet): bauen nach Auftrag im Issue. Codex ruht.
 - Johannes: entscheidet, nimmt am Bild ab, trägt ZIPs.
 Gates G1 bis G9 und Etappen-Gates entfallen.
 
@@ -39,7 +39,7 @@ Gates G1 bis G9 und Etappen-Gates entfallen.
 
 ## Start und Ende
 - Start: `git pull --rebase`, `git status`, offene Issues lesen, `bash scripts/pruefen.sh` (Soll `Result: 0 errors`). Fremde uncommittete Dateien nie anfassen; nie `git checkout --`, `git reset`, `git stash`; nie die Datei `index.lock` löschen (warten, wiederholen).
-- Ende (Worker): `pruefen.sh` grün, Übergabe im Brief (Commits, rot/grün je Fund, Abweichungen, Annahmen einzeln markiert, offene Fragen), Status „zur Prüfung“. `plan/STATUS.md` ändert nur der Chef.
+- Ende (Worker): `pruefen.sh` grün, Übergabe als Kommentar im Issue (Commits, rot/grün je Fund, Abweichungen, Annahmen einzeln markiert, offene Fragen), Status „zur Prüfung“. `plan/STATUS.md` ändert nur der Chef.
 - Der Chef prüft jeden Bericht selbst. Worker-Berichte sind Aussagen, kein Beleg.
 
 ## Git
@@ -56,7 +56,7 @@ Gates G1 bis G9 und Etappen-Gates entfallen.
 - Tests: Jede Verhaltensänderung bekommt einen Test, der vorher rot war; er schützt eine Entscheidung (Datenverlust, Rundlauf, Grenzfall, Regel von Johannes). Keine Mindestzahl, Testzahl ist kein Fortschritt. Kein Netz, kein echter Aufruf an api.anthropic.com. WebKit-Tests brauchen Netz (Babel von cdnjs): `ALFACOLOR_TEST_OFFLINE=1` überspringt sie.
 - Abhängigkeiten von Dritten: keine ohne Auftrag. Fremder Code nur mit Quelle und Lizenz in `scripts/lizenzen.txt`; Lizenz blockiert nicht. Aus fremden Quellen Bauteile, Abläufe, Bewegung übernehmen, nie deren Farben. Werte (Farben, Maße, Schriften) kommen aus dem Vertrag in `gestaltung/`, nie aus einem Bild geschätzt.
 - Je Runde gehört jede gemeinsame Datei einem: `Localizable.xcstrings`, `app/Package.swift`, `ALFAcolor/project.yml`, `scripts/lizenzen.txt`. Andere ändern sie nur, wenn der Auftrag es sagt, und nennen Wünsche in der Übergabe.
-- Neue Dateien (auch Dokumente) nur nach Rückfrage an Johannes; Ausnahme: der Brief nennt sie als neu.
+- Neue Dateien (auch Dokumente) nur nach Rückfrage an Johannes; Ausnahme: der Auftrag nennt sie als neu; Material-Ordner (`plan/ernte`, `plan/werkzeuge`, `plan/gates`, `gestaltung/entwuerfe`) ohne Rückfrage, mit Herkunftszeile.
 
 ## Bedienung
 Maus, Trackpad, Multitouch-Gesten sind die Hauptbedienung; jede Funktion hat einen Weg ohne Tastatur. Tastenkürzel sind erlaubt, nie Hauptbedienung; Kürzel hellgrau anzeigen, wie das System.
