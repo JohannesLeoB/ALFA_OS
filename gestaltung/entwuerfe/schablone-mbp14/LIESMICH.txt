@@ -1,0 +1,20 @@
+ALFA Schablone · MacBook Pro 14" · 1512 x 982 pt (Standard-Aufloesung, nativ 3024 x 1964 px)
+Stand 10.10.2026 · Bereich Mail · Wireframe, Weiss
+
+Zwei Varianten: Menue-zu (Blob geschlossen), Menue-offen (Blob-Menue aufgeklappt).
+Je Variante:
+  schablone@2x.png    3024 x 1964 px, genau @2x des Displays
+  schablone.svg       1512 x 982, Ebenen als Gruppen (id = Ebenenname)
+  ebenen/NN-Name.svg  eine Ebene je Datei, gleiches Koordinatensystem
+  ebenen/NN-Name@2x.png  eine Ebene je Datei, transparent, 3024 x 1964
+
+Ebenen von unten nach oben: Grund, Bahnen, Griffe, Bloecke, Herkunft, Streifen-oben, Blob, Blob-Menue, Assistent
+(Assistent ist in beiden Varianten leer: Karte war zu.)
+
+InDesign: SVG wird dort als eine Grafik platziert, Ebenen bleiben nicht erhalten.
+Fuer getrennte Ebenen die ebenen/-Dateien (PNG oder SVG) deckungsgleich auf je eine InDesign-Ebene platzieren (Position 0/0).
+Illustrator, Affinity, Figma und Inkscape lesen schablone.svg mit den Ebenen.
+
+Schrift: Geist war im Build nicht erreichbar, die Texte sind in Inter gesetzt (Mono: DejaVu Sans Mono). Schriften in InDesign/Illustrator auf Geist tauschen.
+Schatten sind als weichgezeichnete Flaechen enthalten.
+ALFA-Schablone-Vollbild.html: bewegliche Version, Vollbild-Knopf oder Anker #vollbild.
