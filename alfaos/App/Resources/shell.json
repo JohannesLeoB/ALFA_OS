@@ -1,0 +1,11 @@
+{
+  "lane-min": 240,
+  "lane-max": 380,
+  "center-min": 480,
+  "blob-width": 56,
+  "blob-throw": 0.12,
+  "shadow-blur-factor": 0.45,
+  "assistant-width": 360,
+  "window-min-width": 960,
+  "window-min-height": 600
+}

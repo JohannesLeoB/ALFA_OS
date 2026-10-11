@@ -114,6 +114,38 @@ else
   row "xcodebuild build" "SKIPPED" "ALFAcolor/ is missing, no Xcode target to build"
 fi
 
+# 4b. ALFA_OS: Kit package tests, Xcode project, app build, unit tests (the app is never launched)
+if [ -f alfaos/Kit/Package.swift ]; then
+  if (cd alfaos/Kit && swift test) > "$TMP/kit.log" 2>&1; then
+    row "alfaos kit: swift test" "OK" "alfaos/Kit/ · $(grep -E 'Executed [0-9]+ tests' "$TMP/kit.log" | tail -n 1 | sed 's/^[^A-Za-z]*//')"
+  else
+    row "alfaos kit: swift test" "ERROR" "alfaos/Kit/ · $(first_error "$TMP/kit.log")"
+    excerpt "alfaos kit: swift test" "$TMP/kit.log"
+  fi
+  XG="$(command -v xcodegen 2>/dev/null)"
+  [ -n "$XG" ] || XG=/opt/homebrew/bin/xcodegen
+  if [ -x "$XG" ] && (cd alfaos && "$XG" generate) > "$TMP/xcodegen-os.log" 2>&1; then
+    row "alfaos xcodegen generate" "OK" "alfaos/project.yml"
+  else
+    row "alfaos xcodegen generate" "ERROR" "alfaos/project.yml (xcodegen is missing or failed)"
+    excerpt "alfaos xcodegen generate" "$TMP/xcodegen-os.log"
+  fi
+  if xcodebuild -project alfaos/ALFA_OS.xcodeproj -scheme ALFA_OS -derivedDataPath "$ROOT/.build-xcode/pruefen-alfaos" CODE_SIGNING_ALLOWED=NO build > "$TMP/xcodebuild-os.log" 2>&1; then
+    row "alfaos xcodebuild build" "OK" "alfaos/ALFA_OS.xcodeproj · scheme ALFA_OS"
+  else
+    row "alfaos xcodebuild build" "ERROR" "alfaos/ALFA_OS.xcodeproj · $(first_error "$TMP/xcodebuild-os.log")"
+    excerpt "alfaos xcodebuild build" "$TMP/xcodebuild-os.log"
+  fi
+  if xcodebuild -project alfaos/ALFA_OS.xcodeproj -scheme ALFA_OSTests -destination 'platform=macOS' -derivedDataPath "$ROOT/.build-xcode/pruefen-alfaos" CODE_SIGNING_ALLOWED=NO test > "$TMP/xctest-os.log" 2>&1; then
+    row "alfaos xcodebuild test" "OK" "scheme ALFA_OSTests · $(grep -E 'Executed [0-9]+ tests' "$TMP/xctest-os.log" | tail -n 1 | sed 's/^[^A-Za-z]*//')"
+  else
+    row "alfaos xcodebuild test" "ERROR" "scheme ALFA_OSTests · $(grep -m1 -E 'error:|recorded an issue' "$TMP/xctest-os.log" | cut -c1-200)"
+    excerpt "alfaos xcodebuild test" "$TMP/xctest-os.log"
+  fi
+else
+  row "alfaos kit: swift test" "SKIPPED" "alfaos/Kit/Package.swift is missing"
+fi
+
 # 5. Seam rules and licenses (python3, rules in the Python part)
 python3 - "$ROOT" "$RESULTS" <<'PY'
 import json
@@ -151,7 +183,7 @@ DEFAULT_RULE = {"mode": "except", "frameworks": {"SwiftUI", "AppKit"}}
 COLOR_FREE = {"AppTheme", "Tokens", "ColorLab"}
 MAX_LINES = 800
 
-SWIFT_ROOTS = ["app", "ALFAcolor"]
+SWIFT_ROOTS = ["app", "ALFAcolor", "alfaos"]
 TEST_DIR = re.compile(r"(Tests?|UITests)$")
 IMPORT = re.compile(
     r"^[ \t]*(?:@\w+[ \t]+)*import[ \t]+(?:(?:struct|class|enum|protocol|typealias|func|var|let)[ \t]+)?([A-Za-z_]\w*)",
