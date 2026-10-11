@@ -2,7 +2,6 @@ import Foundation
 
 public struct ShellMetrics: Sendable, Decodable, Equatable {
     public let laneMin: Double
-    public let laneMax: Double
     public let centerMin: Double
     public let blobWidth: Double
     public let blobThrow: Double
@@ -16,7 +15,6 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case laneMin = "lane-min"
-        case laneMax = "lane-max"
         case centerMin = "center-min"
         case blobWidth = "blob-width"
         case blobThrow = "blob-throw"
@@ -27,9 +25,8 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
         case measures
     }
 
-    public init(laneMin: Double, laneMax: Double, centerMin: Double, blobWidth: Double, blobThrow: Double, shadowBlurFactor: Double, assistantWidth: Double, windowMinWidth: Double, windowMinHeight: Double, measures: [String: Double] = [:]) {
+    public init(laneMin: Double, centerMin: Double, blobWidth: Double, blobThrow: Double, shadowBlurFactor: Double, assistantWidth: Double, windowMinWidth: Double, windowMinHeight: Double, measures: [String: Double] = [:]) {
         self.laneMin = laneMin
-        self.laneMax = laneMax
         self.centerMin = centerMin
         self.blobWidth = blobWidth
         self.blobThrow = blobThrow
@@ -75,7 +72,7 @@ public struct ShellGeometry: Sendable, Equatable {
         laneFolded = theme.length(.componentLaneCollapsedWidth)
         foldAt = theme.length(.componentLaneCollapseThreshold)
         laneMin = metrics.laneMin
-        laneMax = metrics.laneMax
+        laneMax = theme.length(.componentLaneLeadingMaxWidth)
         centerMin = metrics.centerMin
         blobWidth = metrics.blobWidth
         blobAwakeWidth = theme.length(.componentBlobAwakeWidth)

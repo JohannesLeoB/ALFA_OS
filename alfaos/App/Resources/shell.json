@@ -1,6 +1,5 @@
 {
   "lane-min": 240,
-  "lane-max": 380,
   "center-min": 480,
   "blob-width": 56,
   "blob-throw": 0.12,
