@@ -11,6 +11,7 @@ let package = Package(
     targets: [
         .target(name: "ShellCore"),
         .target(name: "StudioCore"),
-        .testTarget(name: "ShellCoreTests", dependencies: ["ShellCore"])
+        .testTarget(name: "ShellCoreTests", dependencies: ["ShellCore"]),
+        .testTarget(name: "StudioCoreTests", dependencies: ["StudioCore"])
     ]
 )
