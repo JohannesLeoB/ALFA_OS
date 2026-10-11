@@ -75,7 +75,9 @@ final class HullProbeTests: XCTestCase {
     func testAssistantAndDarkRender() throws {
         let assistant = try render(name: "huelle-assistant", menuOpen: false, assistantOpen: true)
         let dark = try render(name: "huelle-dark", menuOpen: false, dark: true)
+        let darkOpen = try render(name: "huelle-dark-open", menuOpen: true, dark: true)
         XCTAssertGreaterThan(inkCount(assistant), 0)
         XCTAssertGreaterThan(inkCount(dark), 0)
+        XCTAssertGreaterThan(inkCount(darkOpen), 0)
     }
 }
