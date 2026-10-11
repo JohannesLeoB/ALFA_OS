@@ -38,6 +38,14 @@ h3{font-size:15px;font-weight:500;margin:0 0 6px}
 button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--ink-3);outline-offset:2px}
 .stage{width:100%;position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--well)}
 .screen{position:absolute;left:0;top:0;transform-origin:0 0;background:var(--ground);overflow:hidden;user-select:none;-webkit-user-select:none}
+body.full{padding:0;overflow:hidden}
+body.full .wrap{max-width:none;gap:0}
+body.full .wrap>header,body.full .controls,body.full .status,body.full .legend,body.full .wrap>section,body.full .core{display:none}
+body.full .wrap>div:has(>.stage){display:block}
+body.full .stage{position:fixed;inset:0;z-index:100;border:0;border-radius:0;overflow:auto;height:auto!important;background:var(--well)}
+.fx{display:none;position:fixed;right:10px;bottom:10px;z-index:120;font:12px var(--mono);background:var(--menu);color:var(--on-menu);border:0;border-radius:999px;padding:6px 12px;cursor:pointer;opacity:.55}
+.fx:hover{opacity:1}
+body.full .fx{display:block}
 .status{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--mono);font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
 .status b{color:var(--ink);font-weight:500}
 
@@ -211,10 +219,12 @@ table.dev tr:last-child td{border-bottom:0}
     <div class="seg"><span class="eyebrow">Hinweis</span><div class="opts" id="notice"></div></div>
     <div class="seg"><span class="eyebrow">Herkunft</span><div class="opts" id="srcs"></div></div>
     <button class="btn" id="reset" type="button">Zurücksetzen</button>
+    <button class="btn" id="full" type="button">Vollbild 1:1</button>
   </div>
 
   <div>
     <div class="stage" id="stage"><div class="screen" id="screen"></div></div>
+    <button class="fx" id="fx" type="button">Vollbild verlassen · Esc</button>
   </div>
   <div class="status" id="status"></div>
 
@@ -445,8 +455,13 @@ function render(){
  drawBlob();drawMenu();drawAssist();fit();status(lay,a);
 }
 function status(lay,a){const w=wOf(a.id);document.getElementById("status").innerHTML=`<span>Bereich <b>${a.g} · ${a.n}</b></span><span>Fenster <b>${W()} × ${H()} pt</b></span><span>Bahnen <b>${lay.L} · ${lay.C} · ${lay.R} pt</b></span><span>${lay.auto.length?"automatisch: <b>"+lay.auto.join(", ")+"</b>":(w.max?"groß: <b>"+({L:"links",C:"Mitte",R:"rechts"})[w.max]+"</b>":"Breiten je Bereich gemerkt")}</span>`}
-function scale(){return Math.min(1,stage.clientWidth/W())}
-function fit(){const s=scale();scr.style.transform=`scale(${s})`;stage.style.height=(H()*s)+"px"}
+const isFull=()=>document.body.classList.contains('full');
+function scale(){return isFull()?1:Math.min(1,stage.clientWidth/W())}
+function fit(){const s=scale();scr.style.transform=`scale(${s})`;if(isFull())stage.style.height='';else stage.style.height=(H()*s)+"px"}
+function setFull(on){document.body.classList.toggle('full',on);if(on){st.size=0;save();controls();try{document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{})}catch(e){}}else{try{document.fullscreenElement&&document.exitFullscreen()}catch(e){}}render()}
+document.getElementById('full').onclick=()=>setFull(true);document.getElementById('fx').onclick=()=>setFull(false);
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&isFull())setFull(false)});
+if(location.hash==='#vollbild'){document.body.classList.add('full');st.size=0}
 window.addEventListener("resize",fit);
 
 /* blob */
@@ -522,8 +537,9 @@ function drawAssist(){
 }
 function go(id){st.area=id;st.menu=false;st.assist=false;query="";save();render()}
 document.addEventListener("pointerdown",e=>{if((st.menu||st.assist)&&!e.target.closest(".menu,.blob,.assist")){st.menu=false;st.assist=false;drawMenu();drawAssist()}});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&(st.menu||st.assist)){st.menu=false;st.assist=false;drawMenu();drawAssist()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(st.menu||st.assist){st.menu=false;st.assist=false;drawMenu();drawAssist()}else if(isFull())setFull(false)}});
 controls();render();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fit);
 })();
 </script>
+

@@ -1,0 +1,31 @@
+{
+  "hinweis": "Stand jeder Gestaltungsquelle in GitHub. Das Artifact ist das Original; die Datei hier ist byte-gleich mit dessen Inhalt (ohne das Seitengerüst der Plattform) zum genannten Zeitpunkt.",
+  "arbeitswelt": {
+    "titel": "ALFA Interface",
+    "url": "https://claude.ai/artifact/VzXhbq7EHSfxgxZTW5a2wr",
+    "konto": "MAX",
+    "version": "1791677583-e9f8",
+    "ordner": "gestaltung/alfa-interface/",
+    "einzelheiten": "gestaltung/alfa-interface/STAND.json",
+    "geprueft": "2026-10-11T16:55+02:00"
+  },
+  "werkbank": {
+    "titel": "ALFAcolor Werkbank, Entwurf 4",
+    "url": "https://claude.ai/artifact/PCkGckib5pyeWbEEAHusCF",
+    "konto": "Nebenkonto, an MAX geteilt",
+    "version": "1791644673-ec92",
+    "datei": "gestaltung/briefing-ansichten/entwurf-4.html",
+    "sha256": "6168697ca02fe154f73b8e6c25f9c127c4cb82429b67948966720a79480f3abf",
+    "geprueft": "2026-10-11T16:55+02:00"
+  },
+  "schablone": {
+    "titel": "ALFA Schablone",
+    "url": "https://claude.ai/artifact/4iWtw8Hepr9gR9koZ5nYSG",
+    "konto": "MAX",
+    "version": "1791675664-c1ee",
+    "datei": "gestaltung/entwuerfe/schablone.html",
+    "sha256": "6088881037f9d42138c69167723665ce808f89923c63847d8ec1b07aac3fb766",
+    "geprueft": "2026-10-11T16:55+02:00",
+    "anmerkung": "Zeilennummern der Werteinventur vom 11.10. beziehen sich auf die Fassung davor (ohne Vollbild 1:1, 15 Zeilen kürzer)."
+  }
+}
