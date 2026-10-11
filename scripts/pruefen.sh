@@ -53,6 +53,20 @@ else
   done
 fi
 
+# 2b. Token generator: tests and check mode
+if python3 scripts/tokens_generate_test.py > "$TMP/tokens_test.log" 2>&1; then
+  row "tokens: generator tests" "OK" "scripts/tokens_generate_test.py · $(grep -E '^Ran ' "$TMP/tokens_test.log" | tail -n 1)"
+else
+  row "tokens: generator tests" "ERROR" "scripts/tokens_generate_test.py · $(grep -m1 -E '^(FAIL|ERROR):' "$TMP/tokens_test.log")"
+  excerpt "tokens: generator tests" "$TMP/tokens_test.log"
+fi
+if python3 scripts/tokens_generate.py --check > "$TMP/tokens_check.log" 2>&1; then
+  row "tokens: check" "OK" "outputs match gestaltung/alfa-interface/tokens.json"
+else
+  row "tokens: check" "ERROR" "$(grep -m1 -E 'stale|cannot' "$TMP/tokens_check.log")"
+  excerpt "tokens: check" "$TMP/tokens_check.log"
+fi
+
 # 3. Swift package app/: build and test
 if [ -f app/Package.swift ]; then
   if (cd app && swift build) > "$TMP/build.log" 2>&1; then
