@@ -1,4 +1,4 @@
-// tokens.json version 1 sha256 8ea2bc798d8cb5696182b8ce91e8960e3f149c2dfd7c8e5dc4ac58d0e8e8b9c9
+// tokens.json version 1 sha256 f229f62487e7f145a82670eba3c94f92d6959488835a3d4d7dc0f67a39a4d941
 
 public extension ThemeKey {
     static let colorBackgroundWindow = ThemeKey("color-background-window")

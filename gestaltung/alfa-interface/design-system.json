@@ -96,9 +96,9 @@
   ],
   "lastChange": {
     "by": "Johannes Leo Berger",
-    "at": "2026-10-11T00:06:41Z",
-    "via": "Claude Code (ALFA · 01 · MAX · Chef)",
-    "note": "Eine Fassung aus MASTER 1010 mit systematischen Namen (Repo ALFA_OS gestaltung/alfa-interface, 018690f). StoneMenu heißt TileMenu; neu EditSheet, DraftSheet, Sheet, BlobMenu, CardTower, AssistantCard, ThinkingOrb. Arbeitswelt ab 11.10.2026; MASTER 1010 ist Stückgut."
+    "at": "2026-10-11T15:15:00Z",
+    "via": "claude.ai Design",
+    "note": "component-lane-leading-max-width 420px → 380px (Seitenbahn, links wie rechts), angeglichen an Werkbank, Schablone und App."
   },
   "layout": "files",
   "libraries": [
@@ -115,5 +115,5 @@
   ],
   "namespace": "ALFA",
   "sections": {},
-  "title": "ALFA Interface · Stand 2026-10-11 02:06"
+  "title": "ALFA Interface · Stand 2026-10-11 17:15"
 }

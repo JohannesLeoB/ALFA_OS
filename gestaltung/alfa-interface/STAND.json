@@ -1,8 +1,8 @@
 {
   "url": "https://claude.ai/artifact/VzXhbq7EHSfxgxZTW5a2wr",
-  "version": "1791677583-e9f8",
+  "version": "1791731861-d49d",
   "konto": "MAX",
-  "gezogen": "2026-10-11T02:14+02:00",
+  "gezogen": "2026-10-11T17:19+02:00",
   "hinweis": "tokens.css im Artifact ist veraltet, bis die Seite sie aus tokens.json neu erzeugt; im Repo gilt die erzeugte Datei.",
   "sha256": {
     "Beschreibungen.md": "f84f692c84d04f75bcdb7597bb43169185676ce46d1e70a1daf1e575740581f1",
@@ -77,8 +77,8 @@
     "components/bundle.css": "bceb9ba0446ea723ad3ba5881b50e3d3773e967cf4d8e28e2725127c4d6f3468",
     "components/bundle.js": "d369b63abe327cf784ab06ec431b68f738dafc449ae0c1ffa9a7822c60a1ac03",
     "components/index.d.ts": "d70429a121ce469fc29e908a3f9069ba6e5df88abdbb0de95d3f9a7c18f6d1d0",
-    "design-system.json": "bb4dedf60f20a2e4ca3f9a4e9a5a45985c5198731a7dc5ffb86a54d823b6adc3",
+    "design-system.json": "77055166d02af0f544ca55ed785995412bd0c2440a238080471560633ec9c3c1",
     "tokens.css": "237be7527f821fa45fb0530bf657652c929b0bb982f0280b4e2b42854f38ca91",
-    "tokens.json": "8ea2bc798d8cb5696182b8ce91e8960e3f149c2dfd7c8e5dc4ac58d0e8e8b9c9"
+    "tokens.json": "f229f62487e7f145a82670eba3c94f92d6959488835a3d4d7dc0f67a39a4d941"
   }
 }
