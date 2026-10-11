@@ -1,6 +1,6 @@
 {
-  "hinweis": "Stand der Saat je Gestaltungsquelle: Fassung und Datum des letzten Zugs.",
-  "arbeitswelt": {
+  "hinweis": "Stand der Saat: Fassung und Datum des letzten Zugs je Artifact.",
+  "alfa-interface": {
     "titel": "ALFA Interface",
     "url": "https://claude.ai/artifact/VzXhbq7EHSfxgxZTW5a2wr",
     "konto": "MAX",
@@ -23,7 +23,6 @@
     "konto": "MAX",
     "version": "1791675664-c1ee",
     "datei": "gestaltung/entwuerfe/schablone.html",
-    "geprueft": "2026-10-11T16:55+02:00",
-    "anmerkung": "Zeilennummern der Werteinventur vom 11.10. beziehen sich auf die Fassung davor (ohne Vollbild 1:1, 15 Zeilen kürzer)."
+    "geprueft": "2026-10-11T16:55+02:00"
   }
 }
