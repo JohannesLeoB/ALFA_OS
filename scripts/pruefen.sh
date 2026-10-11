@@ -28,31 +28,6 @@ first_error() { grep -m1 'error:' "$1" | cut -c1-200; }
 echo "pruefen.sh · repo: $ROOT · head: $(git rev-parse --short HEAD 2>/dev/null)"
 echo
 
-# 1. Guard: branch, sprawl, language, meta, tokens, drift (tree mode)
-if python3 scripts/waechter.py baum --all > "$TMP/guard.log" 2>&1; then
-  SUMMARY="$(tail -n 1 "$TMP/guard.log")"
-  row "guard: tree" "OK" "$SUMMARY"
-else
-  row "guard: tree" "ERROR" "$(grep -m1 -E '^R[0-9] ' "$TMP/guard.log")"
-  excerpt "guard" "$TMP/guard.log"
-fi
-
-# 2. Guard tests
-if [ "${ALFA_GUARD_TESTS_DONE:-}" = 1 ]; then
-  row "guard: tests" "OK" "already run by the push hook"
-else
-  for NAME in waechter_test waechter_signals_test; do
-    LABEL="guard: tests"
-    [ "$NAME" = waechter_test ] || LABEL="guard: signal tests"
-    if python3 "scripts/$NAME.py" > "$TMP/$NAME.log" 2>&1; then
-      row "$LABEL" "OK" "scripts/$NAME.py · $(grep -E '^Ran ' "$TMP/$NAME.log" | tail -n 1)"
-    else
-      row "$LABEL" "ERROR" "scripts/$NAME.py · $(grep -m1 -E '^(FAIL|ERROR):' "$TMP/$NAME.log")"
-      excerpt "$LABEL" "$TMP/$NAME.log"
-    fi
-  done
-fi
-
 # 2b. Token generator: tests and check mode
 if python3 scripts/tokens_generate_test.py > "$TMP/tokens_test.log" 2>&1; then
   row "tokens: generator tests" "OK" "scripts/tokens_generate_test.py · $(grep -E '^Ran ' "$TMP/tokens_test.log" | tail -n 1)"

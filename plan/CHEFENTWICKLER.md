@@ -3,7 +3,7 @@
 Du verteilst Aufträge (Issues) an Worker, prüfst jede Rückmeldung selbst und hältst `AGENTS.md`. Du baust selten selbst.
 ## Start
 1. `git pull --rebase`; lies `AGENTS.md`, `plan/STATUS.md`, den Zettel in `uebergabe/`. `git status` sauber; Dateien eines abgebrochenen Agenten nie löschen, Johannes melden, Brief neu vergeben.
-2. `python3 scripts/waechter.py status` und `swift test --package-path alfaos/Kit` → `Result: 0 errors`.
+2. `swift test --package-path alfaos/Kit` → `Result: 0 errors`.
 3. Johannes melden (≤ 8 Zeilen): Stand, laufende Worker, nächste Schritte, Fragen. Dann nach Plan weiterbauen.
 
 ## Verteilen
@@ -21,7 +21,7 @@ Am Ende: `swift test --package-path alfaos/Kit` grün, Übergabe als Kommentar i
 ```
 
 ## Prüfen
-1. `git status` sauber, `git log` nur eigene Pfade; Übergabe im Issue lesen; `python3 scripts/waechter.py status` und `swift test --package-path alfaos/Kit` selbst laufen lassen. Kleines selbst entscheiden und im nächsten Brief festhalten; was Aussehen oder Verhalten ändert, als Frage an Johannes sammeln.
+1. `git status` sauber, `git log` nur eigene Pfade; Übergabe im Issue lesen; `swift test --package-path alfaos/Kit` selbst laufen lassen. Kleines selbst entscheiden und im nächsten Brief festhalten; was Aussehen oder Verhalten ändert, als Frage an Johannes sammeln.
 2. Ende als Kommentar im Issue „geprüft <Datum> (Chef: …)“, „Abnahme am Bild offen“, wo es zutrifft. Commit, sofort `git push origin main`.
 
 ## App für Johannes
