@@ -10,6 +10,9 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
     public let assistantWidth: Double
     public let windowMinWidth: Double
     public let windowMinHeight: Double
+    public let measures: [String: Double]
+
+    public func measure(_ name: String) -> Double { measures[name] ?? 0 }
 
     enum CodingKeys: String, CodingKey {
         case laneMin = "lane-min"
@@ -21,9 +24,10 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
         case assistantWidth = "assistant-width"
         case windowMinWidth = "window-min-width"
         case windowMinHeight = "window-min-height"
+        case measures
     }
 
-    public init(laneMin: Double, laneMax: Double, centerMin: Double, blobWidth: Double, blobThrow: Double, shadowBlurFactor: Double, assistantWidth: Double, windowMinWidth: Double, windowMinHeight: Double) {
+    public init(laneMin: Double, laneMax: Double, centerMin: Double, blobWidth: Double, blobThrow: Double, shadowBlurFactor: Double, assistantWidth: Double, windowMinWidth: Double, windowMinHeight: Double, measures: [String: Double] = [:]) {
         self.laneMin = laneMin
         self.laneMax = laneMax
         self.centerMin = centerMin
@@ -33,6 +37,7 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
         self.assistantWidth = assistantWidth
         self.windowMinWidth = windowMinWidth
         self.windowMinHeight = windowMinHeight
+        self.measures = measures
     }
 
     public init(data: Data) throws {

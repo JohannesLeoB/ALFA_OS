@@ -34,7 +34,7 @@ struct BlobView: View {
         .foregroundStyle(theme.color(.componentBlobForeground))
         .background(Capsule().fill(theme.color(.componentBlobBackground)))
         .clipShape(Capsule())
-        .themeShadow(theme, .shadowFloating, radius: radius)
+        .themeShadow(theme, .shadowFloating, shape: Capsule())
         .offset(x: anchorX, y: y)
         .animation(held ? nil : theme.animation(.motionDurationChange), value: width)
         .animation(held ? nil : theme.animation(.motionDurationSnap), value: model.blob)
@@ -52,8 +52,8 @@ struct BlobView: View {
     private var face: some View {
         let size = theme.length(.sizeControlM)
         return ZStack {
-            Circle().strokeBorder(theme.color(.componentBlobForeground), lineWidth: theme.length(.strokeRing))
-            HStack(spacing: theme.length(.spaceXs)) {
+            Circle().strokeBorder(theme.color(.componentBlobForeground), lineWidth: theme.length(.strokeHairline))
+            HStack(spacing: theme.measure("face-eye-gap")) {
                 eye
                 eye
             }
@@ -64,7 +64,7 @@ struct BlobView: View {
     private var eye: some View {
         Capsule()
             .fill(theme.color(.componentBlobForeground))
-            .frame(width: theme.length(.strokeRing) * 2, height: theme.length(.componentIndicatorSize))
+            .frame(width: theme.measure("face-eye-width"), height: theme.measure("face-eye-height"))
     }
 
     private var drag: some Gesture {
@@ -99,22 +99,22 @@ struct PersonPillView: View {
     var body: some View {
         let height = theme.length(.componentBlobHeight)
         HStack(spacing: theme.length(.spaceXs)) {
-            circle { Image(systemName: "arrow.triangle.2.circlepath").font(theme.font(.mark)) }
-            circle { theme.text("person.initials").font(theme.font(.mark)) }
+            circle(.strokeRing) { Image(systemName: "arrow.triangle.2.circlepath").font(theme.font(.mark)) }
+            circle(.strokeHairline) { theme.text("person.initials").font(theme.font(.mark)) }
         }
         .padding(.horizontal, theme.length(.spaceXs))
         .frame(height: height)
         .foregroundStyle(theme.color(.componentBlobForeground))
         .background(Capsule().fill(theme.color(.componentBlobBackground)))
-        .themeShadow(theme, .shadowFloating, radius: height / 2)
+        .themeShadow(theme, .shadowFloating, shape: Capsule())
         .accessibilityElement(children: .contain)
         .accessibilityLabel(theme.text("pill.label"))
     }
 
-    private func circle<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
+    private func circle<Content: View>(_ stroke: ThemeKey, @ViewBuilder _ content: () -> Content) -> some View {
         let size = theme.length(.sizeControlM)
         return content()
             .frame(width: size, height: size)
-            .overlay(Circle().strokeBorder(theme.color(.paletteGray400), lineWidth: theme.length(.strokeRing)))
+            .overlay(Circle().strokeBorder(theme.color(.paletteGray400), lineWidth: theme.length(stroke)))
     }
 }

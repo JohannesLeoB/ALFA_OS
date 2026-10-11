@@ -23,6 +23,10 @@ struct Theme {
         CGFloat(tokens.length(key))
     }
 
+    func measure(_ name: String) -> CGFloat {
+        CGFloat(metrics.measure(name))
+    }
+
     func font(_ key: TextKey) -> Font {
         guard let style = tokens.textStyle(key) else { return Font.body }
         let weight = Self.weight(style.weight)
@@ -70,17 +74,18 @@ struct Theme {
     }
 }
 
-struct ThemeShadow: ViewModifier {
+struct ThemeShadow<S: InsettableShape>: ViewModifier {
     let theme: Theme
     let key: ThemeKey
-    let shape: RoundedRectangle
+    let shape: S
 
     func body(content: Content) -> some View {
         let layers = theme.shadows(key).filter { !$0.inset }
         return layers.reduce(AnyView(content)) { view, layer in
             if layer.isContour {
-                return AnyView(view.overlay(
-                    shape.inset(by: -CGFloat(layer.spread)).stroke(theme.color(layer.color), lineWidth: CGFloat(layer.spread))
+                let width = CGFloat(layer.spread)
+                return AnyView(view.background(
+                    shape.fill(theme.color(layer.color)).padding(-width)
                 ))
             }
             return AnyView(view.shadow(
@@ -94,7 +99,7 @@ struct ThemeShadow: ViewModifier {
 }
 
 extension View {
-    func themeShadow(_ theme: Theme, _ key: ThemeKey, radius: CGFloat) -> some View {
-        modifier(ThemeShadow(theme: theme, key: key, shape: RoundedRectangle(cornerRadius: radius)))
+    func themeShadow<S: InsettableShape>(_ theme: Theme, _ key: ThemeKey, shape: S) -> some View {
+        modifier(ThemeShadow(theme: theme, key: key, shape: shape))
     }
 }

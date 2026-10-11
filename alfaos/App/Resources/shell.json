@@ -4,8 +4,19 @@
   "center-min": 480,
   "blob-width": 56,
   "blob-throw": 0.12,
-  "shadow-blur-factor": 0.45,
+  "shadow-blur-factor": 0.5,
   "assistant-width": 360,
   "window-min-width": 960,
-  "window-min-height": 600
+  "window-min-height": 600,
+  "measures": {
+    "lane-header-padding-end": 10,
+    "lane-header-button": 26,
+    "menu-field-padding": 10,
+    "menu-group-padding": 10,
+    "menu-row-padding-start": 18,
+    "menu-row-padding-end": 10,
+    "face-eye-width": 3,
+    "face-eye-height": 7,
+    "face-eye-gap": 5
+  }
 }

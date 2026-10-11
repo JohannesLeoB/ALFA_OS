@@ -33,7 +33,7 @@ struct LaneView: View {
     }
 
     private var header: some View {
-        HStack(spacing: theme.length(.spaceXs)) {
+        HStack(spacing: theme.length(.spaceS)) {
             if !folded {
                 theme.text(titleKey)
                     .font(theme.font(.name))
@@ -54,7 +54,7 @@ struct LaneView: View {
             }
         }
         .padding(.leading, folded ? 0 : theme.length(.spaceL))
-        .padding(.trailing, folded ? 0 : theme.length(.spaceM))
+        .padding(.trailing, folded ? 0 : theme.measure("lane-header-padding-end"))
         .frame(maxWidth: .infinity)
         .frame(height: theme.length(.componentLaneHeaderHeight))
     }
@@ -64,7 +64,7 @@ struct LaneView: View {
             Image(systemName: symbol)
                 .font(theme.font(.textButton))
                 .foregroundStyle(theme.color(.colorTextTertiary))
-                .frame(width: theme.length(.sizeControlS), height: theme.length(.sizeControlS))
+                .frame(width: theme.measure("lane-header-button"), height: theme.measure("lane-header-button"))
                 .contentShape(Circle())
         }
         .buttonStyle(.plain)

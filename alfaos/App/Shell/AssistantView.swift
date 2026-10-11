@@ -40,7 +40,7 @@ struct AssistantView: View {
         .background(theme.color(.colorBackgroundContainer))
         .clipShape(RoundedRectangle(cornerRadius: radius))
         .overlay(RoundedRectangle(cornerRadius: radius).strokeBorder(theme.color(.colorLineDivider), lineWidth: theme.length(.strokeHairline)))
-        .themeShadow(theme, .shadowFloating, radius: radius)
+        .themeShadow(theme, .shadowFloating, shape: RoundedRectangle(cornerRadius: radius))
         .accessibilityElement(children: .contain)
         .accessibilityLabel(theme.text("assistant.title"))
     }

@@ -28,7 +28,7 @@ struct BlobMenuView: View {
         .background(background)
         .foregroundStyle(foreground)
         .clipShape(RevealShape(progress: open ? 1 : 0, fromTop: !upward, radius: radius))
-        .themeShadow(theme, .shadowFloating, radius: radius)
+        .themeShadow(theme, .shadowFloating, shape: RoundedRectangle(cornerRadius: radius))
         .opacity(open ? 1 : 0)
         .allowsHitTesting(open)
         .animation(theme.animation(.motionDurationStack), value: open)
@@ -49,12 +49,12 @@ struct BlobMenuView: View {
 
     private var listHeight: CGFloat {
         let count = rows.reduce(0) { $0 + 1 + (model.isGroupOpen($1.group) ? $1.apps.count : 0) }
-        return CGFloat(count) * theme.length(.componentMenuRowHeight)
+        return CGFloat(count) * theme.length(.componentMenuRowHeight) + CGFloat(rows.count) * theme.length(.spaceXxs)
     }
 
     private var chrome: CGFloat {
         theme.length(.componentMenuPadding) * 2
-            + theme.length(.componentFieldCompactHeight) + theme.length(.spaceXs)
+            + theme.length(.componentFieldCompactHeight) + theme.length(.spaceXs) + theme.length(.spaceXxs)
             + theme.length(.strokeHairline) + theme.length(.spaceXs) * 2 + theme.length(.componentMenuRowHeight)
     }
 
@@ -76,10 +76,11 @@ struct BlobMenuView: View {
                 .focused($searchFocused)
                 .accessibilityLabel(theme.text("menu.search.label"))
         }
-        .padding(.horizontal, theme.length(.spaceM))
+        .padding(.horizontal, theme.measure("menu-field-padding"))
         .frame(height: theme.length(.componentFieldCompactHeight))
         .overlay(Capsule().strokeBorder(line, lineWidth: theme.length(.strokeHairline)))
-        .padding(.horizontal, theme.length(.strokeHairline))
+        .padding(.horizontal, theme.length(.spaceXxs))
+        .padding(.top, theme.length(.spaceXxs))
         .padding(.bottom, theme.length(.spaceXs))
     }
 
@@ -93,11 +94,12 @@ struct BlobMenuView: View {
             .font(theme.font(.caption))
             .tracking(theme.tracking(.caption))
             .foregroundStyle(muted)
-            .padding(.horizontal, theme.length(.spaceM))
+            .padding(.horizontal, theme.measure("menu-group-padding"))
             .frame(height: theme.length(.componentMenuRowHeight))
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .padding(.top, theme.length(.spaceXxs))
     }
 
     private func appRow(_ entry: AppEntry) -> some View {
@@ -105,7 +107,7 @@ struct BlobMenuView: View {
         return MenuRow(theme: theme, current: current, hover: line, foreground: foreground, background: background) {
             model.select(entry.id)
         } content: {
-            HStack {
+            HStack(spacing: theme.length(.spaceS)) {
                 theme.text(entry.titleKey)
                 Spacer(minLength: 0)
             }
@@ -119,7 +121,7 @@ struct BlobMenuView: View {
             MenuRow(theme: theme, current: false, hover: line, foreground: foreground, background: background) {
                 model.toggleAssistant()
             } content: {
-                HStack {
+                HStack(spacing: theme.length(.spaceS)) {
                     theme.text("menu.assistant")
                     Spacer(minLength: 0)
                     theme.text("menu.assistant.hint")
@@ -148,8 +150,8 @@ struct MenuRow<Content: View>: View {
             content()
                 .font(theme.font(.callout))
                 .foregroundStyle(current ? background : foreground)
-                .padding(.leading, theme.length(.spaceL))
-                .padding(.trailing, theme.length(.spaceM))
+                .padding(.leading, theme.measure("menu-row-padding-start"))
+                .padding(.trailing, theme.measure("menu-row-padding-end"))
                 .frame(height: theme.length(.componentMenuRowHeight))
                 .background(
                     RoundedRectangle(cornerRadius: theme.length(.componentMenuRowRadius))

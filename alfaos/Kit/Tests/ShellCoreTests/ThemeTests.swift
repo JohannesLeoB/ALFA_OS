@@ -65,4 +65,13 @@ final class ThemeTests: XCTestCase {
             XCTAssertEqual(theme.color(ThemeKey(name), .light), RGB.missing, name)
         }
     }
+
+    func testShellMeasuresComeFromTheDataFile() throws {
+        let metrics = try Fixture.metrics()
+        XCTAssertEqual(metrics.shadowBlurFactor, 0.5)
+        for name in ["lane-header-padding-end", "lane-header-button", "menu-field-padding", "menu-group-padding", "menu-row-padding-start", "menu-row-padding-end", "face-eye-width", "face-eye-height", "face-eye-gap"] {
+            XCTAssertGreaterThan(metrics.measure(name), 0, name)
+        }
+        XCTAssertEqual(metrics.measure("unknown"), 0)
+    }
 }
