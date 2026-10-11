@@ -5,6 +5,7 @@ Every case runs in a temporary git repository below the system temp folder.
 German sample text is taken from the word lists, never typed here.
 Run: python3 scripts/waechter_test.py
 """
+import datetime
 import importlib.util
 import os
 import re
@@ -13,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
@@ -59,8 +61,8 @@ class TempRepo:
         self.git("commit", "-q", "--no-verify", "-m", GOOD_MESSAGE)
         self.base = self.git("rev-parse", "HEAD").stdout.strip()
 
-    def git(self, *args, check=True):
-        proc = subprocess.run(["git", *args], cwd=self.dir, env=self.env, capture_output=True, text=True)
+    def git(self, *args, check=True, data=None):
+        proc = subprocess.run(["git", *args], cwd=self.dir, env=self.env, capture_output=True, text=True, input=data)
         if check and proc.returncode != 0:
             raise AssertionError("git %s failed: %s" % (" ".join(args), proc.stderr))
         return proc
@@ -407,6 +409,7 @@ class HookCase(unittest.TestCase):
         shutil.copytree(os.path.join(REPO, ".githooks"), os.path.join(self.repo.dir, ".githooks"))
         for name in ("waechter.py", "waechter-woerter.txt"):
             shutil.copy2(os.path.join(HERE, name), os.path.join(self.repo.dir, "scripts", name))
+        stub_test_files(self.repo, "import sys\nsys.exit(0)\n")
         self.repo.git("config", "core.hooksPath", ".githooks")
         self.repo.make_remote()
 
@@ -442,10 +445,296 @@ class HookCase(unittest.TestCase):
         self.assertIn("R1", proc.stdout + proc.stderr)
 
     def test_hook_pre_push_runs_the_full_check(self):
+        commit_file(self.repo, "app/Sources/Core/Sample.swift", "let value = 1\n")
         self.stub_check(1)
         self.assertNotEqual(self.repo.git("push", "-q", "origin", "main", check=False).returncode, 0)
         self.stub_check(0)
         self.assertEqual(self.repo.git("push", "-q", "origin", "main", check=False).returncode, 0)
+
+
+ISSUE, WHEN, WHO = "#10", "2026-10-11", "Ch" + "ef"
+WHO_VALUES = ("Jo" + "hannes", WHO)
+OLD_CLASSES = ("GuardCase", "R1Branch", "R2Sprawl", "R3Language", "R4Meta", "R5Tokens", "R6Drift", "R7Message",
+               "Segments", "HookCase")
+TOOLS_DIR = "plan/werk" + "zeuge"
+MATERIAL_DIRS = ("plan/ernte", TOOLS_DIR, "gestaltung/entwuerfe", "plan/gates")
+MATERIAL = " ".join(MATERIAL_DIRS)
+NEW_VERBS = ("Rebuild", "Import", "Draft", "Generate", "Publish", "Migrate")
+BAD_MESSAGE = "Added the harvest notes\n\n" + TRAILER + "\n"
+GERMAN_SCRIPT = "# %s %s\n%s_value = 1\n# %s\n" % (FILLER, FILLER, STEM, UMLAUT)
+
+
+def legit(criterion, where, threshold="none"):
+    def mark(test):
+        test.legit = dict(criterion=criterion, where=where, threshold=threshold, issue=ISSUE, when=WHEN, who=WHO)
+        return test
+    return mark
+
+
+def copy_tools(repo, hooks=False):
+    shutil.copytree(HERE, os.path.join(repo.dir, "scripts"), dirs_exist_ok=True,
+                    ignore=shutil.ignore_patterns("__pycache__", "*_test.py"))
+    if hooks:
+        shutil.copytree(os.path.join(REPO, ".githooks"), os.path.join(repo.dir, ".githooks"))
+
+
+def stub_test_files(repo, code):
+    for name in os.listdir(HERE):
+        if name.endswith("_test.py"):
+            repo.write("scripts/" + name, code)
+
+
+def message_file(repo, text):
+    path = os.path.join(repo.dir, "MSG")
+    Path(path).write_text(text, encoding="utf-8")
+    return path
+
+
+def commit_file(repo, path, content, message=GOOD_MESSAGE):
+    repo.stage(path, content)
+    repo.git("commit", "-q", "--no-verify", "-m", message)
+    return repo.git("rev-parse", "HEAD").stdout.strip()
+
+
+def nested_repo(repo, folder):
+    inner = os.path.join(repo.dir, folder, "inner")
+    os.makedirs(inner)
+    for args in (("init", "-q", "-b", "main"), ("-c", "user.name=T", "-c", "user.email=t@example.com", "commit", "-q",
+                                                "--allow-empty", "-m", "x")):
+        subprocess.run(["git", *args], cwd=inner, env=repo.env, check=True, capture_output=True)
+    repo.git("add", folder + "/inner")
+
+
+class MaterialTrack(GuardCase):
+    @legit("A German script of any length passes in material folders and is rejected in scripts", MATERIAL, "800 lines")
+    def test_tools_folder_takes_a_long_german_script_and_scripts_folder_rejects_it(self):
+        script = GERMAN_SCRIPT + "".join("v%d = %d\n" % (i, i) for i in range(801))
+        for index, folder in enumerate(MATERIAL_DIRS):
+            self.repo.stage("%s/tool%d.py" % (folder, index), "# %d\n" % index + script)
+        self.assertPasses(self.repo.guard("commit", strict=True))
+        other = TempRepo(self)
+        other.stage("scripts/tool.py", script)
+        self.assertBlocks(other.guard("commit", strict=True), "R3")
+
+    @legit("Material folders keep size, nested git, duplicate and blocked-name checks by whole word", MATERIAL, "2 MB")
+    def test_material_folders_keep_the_hygiene_checks_and_allow_longer_names(self):
+        for index, folder in enumerate(MATERIAL_DIRS):
+            self.repo.stage(folder + "/big.bin", bytes([index]) + b"a" * (2 * 1024 * 1024))
+            self.repo.stage(folder + "/a.md", "same%d\n" % index)
+            self.repo.stage(folder + "/b.md", "same%d\n" % index)
+            self.repo.stage(folder + "/notes_old.md", "old%d\n" % index)
+            nested_repo(self.repo, folder)
+        rc, out = self.repo.guard("commit")
+        self.assertEqual(rc, 1, out)
+        for folder in MATERIAL_DIRS:
+            for what in ("/big.bin", "/b.md", "/notes_old.md", "/inner"):
+                with self.subTest(folder=folder, path=what):
+                    self.assertRegex(out, r"(?m)^R2 %s: " % re.escape(folder + what))
+        other = TempRepo(self)
+        for index, folder in enumerate(MATERIAL_DIRS):
+            other.stage(folder + "/copywriting-notes.md", "x%d\n" % index)
+        self.assertPasses(other.guard("commit"))
+
+
+class R2Words(GuardCase):
+    @legit("The name block matches whole words only", "all folders", "whole word")
+    def test_r2_blocks_whole_words_and_allows_longer_names(self):
+        blocked = ("plan/notes_old.md", "plan/notes_alt.md", "plan/copy.md", "plan/kopie.md", "plan/notes copy.md",
+                   "plan/x.bak", "plan/x.orig", "plan/x.tmp", "plan/draft~")
+        for number, path in enumerate(blocked):
+            self.repo.stage(path, "x%d\n" % number)
+        rc, out = self.repo.guard("commit")
+        self.assertEqual(rc, 1, out)
+        for path in blocked:
+            with self.subTest(blocked=path):
+                self.assertRegex(out, r"(?m)^R2 %s: blocked file name" % re.escape(path))
+        other = TempRepo(self)
+        other.stage("app/Sources/Core/Copyable.swift", "struct Copyable {}\n")
+        other.stage("plan/copywriting-notes.md", "notes\n")
+        self.assertPasses(other.guard("commit"))
+
+
+class R7Extended(GuardCase):
+    def msg(self, text):
+        return self.repo.guard("msg", message_file(self.repo, text))
+
+    @legit("The verb list holds the common verbs", "commit subject", "6 added verbs")
+    def test_r7_accepts_the_extended_verbs(self):
+        for verb in NEW_VERBS:
+            with self.subTest(verb=verb):
+                self.assertPasses(self.msg("%s the harvest index\n\n%s\n" % (verb, TRAILER)))
+
+    @legit("A rejected subject names the allowed verbs", "commit subject", "every listed verb")
+    def test_r7_rejection_lists_the_allowed_verbs(self):
+        rc, out = self.msg(BAD_MESSAGE)
+        self.assertEqual(rc, 1, out)
+        missing = [v for v in sorted(WORDS.verbs | set(NEW_VERBS)) if not re.search(r"\b%s\b" % v, out)]
+        self.assertEqual(missing, [], out)
+
+    @legit("A bad verb only warns when the commit touches material folders only", MATERIAL, "exit 0 against exit 1")
+    def test_r7_warns_only_for_commits_that_touch_material_folders_only(self):
+        cases = ((["plan/ernte/data.md"], 0), ([TOOLS_DIR + "/tool.py", "plan/gates/note.md"], 0),
+                 (["plan/ernte/data.md", "scripts/sample.py"], 1), (["scripts/sample.py"], 1), (["plan/notes.md"], 1))
+        for staged, expected in cases:
+            with self.subTest(staged=staged):
+                repo = TempRepo(self)
+                for number, path in enumerate(staged):
+                    repo.stage(path, "value%d = 1\n" % number)
+                rc, out = repo.guard("msg", message_file(repo, BAD_MESSAGE))
+                self.assertEqual(rc, expected, out)
+                self.assertRegex(out, r"(?m)^%sR7 " % ("warn " if expected == 0 else ""))
+
+    @legit("The push check treats material-only commits with a bad verb as warnings", MATERIAL, "exit 0 against exit 1")
+    def test_r7_push_warns_only_for_material_only_commits(self):
+        material = commit_file(self.repo, "plan/ernte/data.md", "x\n", BAD_MESSAGE)
+        code = commit_file(self.repo, "scripts/sample.py", "value = 1\n", BAD_MESSAGE)
+        rc, out = self.repo.guard("push", self.repo.base, material, "refs/heads/main")
+        self.assertEqual(rc, 0, out)
+        self.assertIn("warn R7", out)
+        self.assertBlocks(self.repo.guard("push", material, code, "refs/heads/main"), "R7")
+
+
+class HookCommits(unittest.TestCase):
+    @legit("The commit hooks let a material-only commit through with a warning and reject a code commit with the verbs",
+           MATERIAL + " scripts", "exit 0 against exit 1")
+    def test_hook_commit_with_a_bad_verb_depends_on_the_touched_folders(self):
+        repo = TempRepo(self)
+        copy_tools(repo, hooks=True)
+        repo.git("config", "core.hooksPath", ".githooks")
+        for path, content in (("plan/ernte/data.md", "x\n"), ("scripts/sample.py", "value = 1\n")):
+            repo.stage(path, content)
+            proc = repo.git("commit", "-q", "-F", "-", "--", path, check=False, data=BAD_MESSAGE)
+            out = proc.stdout + proc.stderr
+            if path.startswith("plan/"):
+                self.assertEqual(proc.returncode, 0, out)
+                self.assertIn("warn R7", out)
+            else:
+                self.assertNotEqual(proc.returncode, 0, out)
+                for verb in NEW_VERBS:
+                    self.assertRegex(out, r"\b%s\b" % verb)
+
+
+class PrePush(unittest.TestCase):
+    CHECK = '#!/bin/sh\necho "offline=$ALFACOLOR_TEST_OFFLINE" >> "$STUB_FULL_MARK"\n'
+    TESTS = ("import os\nimport unittest\nopen(os.environ['STUB_TESTS_MARK'], 'a').write(os.path.basename(__file__) + '\\n')\n"
+             "class Stub(unittest.TestCase):\n    def test_stub(self):\n        pass\n")
+
+    def setUp(self):
+        self.repo = TempRepo(self)
+        self.repo.env.pop("ALFACOLOR_TEST_OFFLINE", None)
+        self.marks = {name: os.path.join(self.repo.tmp.name, name + ".txt") for name in ("full", "tests")}
+        self.repo.env["STUB_FULL_MARK"] = self.marks["full"]
+        self.repo.env["STUB_TESTS_MARK"] = self.marks["tests"]
+        copy_tools(self.repo, hooks=True)
+        self.repo.write("scripts/pruefen.sh", self.CHECK)
+        os.chmod(os.path.join(self.repo.dir, "scripts", "pruefen.sh"), 0o755)
+        stub_test_files(self.repo, self.TESTS)
+        self.repo.make_remote()
+        self.repo.git("add", "scripts/pruefen.sh")
+        self.repo.git("commit", "-q", "--no-verify", "-m", GOOD_MESSAGE)
+        self.repo.git("push", "-q", "--no-verify", "origin", "main")
+        self.repo.git("config", "core.hooksPath", ".githooks")
+        self.count = 0
+
+    def push(self, *paths):
+        for mark in self.marks.values():
+            Path(mark).unlink(missing_ok=True)
+        for path in paths:
+            self.count += 1
+            content = self.CHECK + ":\n" if path == "scripts/pruefen.sh" else "let value%d = %d\n" % (self.count, self.count)
+            commit_file(self.repo, path, content, "Add a file\n\n" + TRAILER)
+        proc = self.repo.git("push", "-q", "origin", "main", check=False)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+
+    def marked(self, name):
+        path = Path(self.marks[name])
+        return path.read_text().split() if path.exists() else []
+
+    @legit("A push with text changes only does not start the full check", "plan konzept plan/ernte", "no full check")
+    def test_text_only_push_skips_the_full_check(self):
+        for path in ("plan/note.md", "konzept/idea.md", "plan/ernte/data.tsv"):
+            with self.subTest(path=path):
+                self.push(path)
+                self.assertEqual(self.marked("full"), [])
+
+    @legit("A push touching app, package or the check script runs the full check offline", "app ALFAcolor pruefen.sh",
+           "ALFACOLOR_TEST_OFFLINE=1")
+    def test_code_push_runs_the_full_check_with_the_offline_variable(self):
+        cases = (("app/Sources/Core/Sample.swift",), ("ALFAcolor/App/Sample.swift",), ("app/Package.swift",),
+                 ("scripts/pruefen.sh",), ("plan/note.md", "app/Sources/Core/Other.swift"))
+        for paths in cases:
+            with self.subTest(paths=paths):
+                self.push(*paths)
+                self.assertEqual(self.marked("full"), ["offline=1"])
+
+    @legit("Every push runs the guard tests", "all pushes", "once per push")
+    def test_every_push_runs_the_guard_tests(self):
+        for path in ("plan/note.md", "app/Sources/Core/Sample.swift"):
+            with self.subTest(path=path):
+                self.push(path)
+                self.assertEqual(self.marked("tests").count("waechter_test.py"), 1)
+
+
+class SetupHooks(unittest.TestCase):
+    def setUp(self):
+        self.repo = TempRepo(self)
+        copy_tools(self.repo, hooks=True)
+        self.repo.git("add", "-A")
+        self.repo.git("commit", "-q", "--no-verify", "-m", GOOD_MESSAGE)
+        self.clone = os.path.join(self.repo.tmp.name, "clone")
+        subprocess.run(["git", "clone", "-q", self.repo.dir, self.clone], env=self.repo.env, check=True)
+        for key, value in (("user.name", "Test"), ("user.email", "test@example.com"), ("commit.gpgsign", "false")):
+            self.run_in("git", "config", key, value)
+
+    def run_in(self, *command, cwd=None):
+        return subprocess.run(command, cwd=cwd or self.clone, env=self.repo.env, capture_output=True, text=True)
+
+    def hooks_path(self):
+        return self.run_in("git", "config", "--get", "core.hooksPath")
+
+    @legit("A fresh clone has active hooks after the setup script", "scripts/setup-hooks.sh", "core.hooksPath")
+    def test_setup_script_activates_the_hooks_of_a_fresh_clone(self):
+        self.assertNotEqual(self.hooks_path().returncode, 0)
+        done = self.run_in("bash", "scripts/setup-hooks.sh")
+        self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+        self.assertEqual(self.hooks_path().stdout.strip(), ".githooks")
+        Path(self.clone, "plan", "new.md").write_text("x\n")
+        self.run_in("git", "add", "plan/new.md")
+        proc = self.run_in("git", "commit", "-q", "-m", "added a file")
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("R7", proc.stdout + proc.stderr)
+
+    @legit("The setup script works from a subfolder and when run twice", "scripts/setup-hooks.sh", "exit 0")
+    def test_setup_script_runs_from_a_subfolder_and_twice(self):
+        for _ in range(2):
+            done = self.run_in("bash", "../scripts/setup-hooks.sh", cwd=os.path.join(self.clone, "plan"))
+            self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+        self.assertEqual(self.hooks_path().stdout.strip(), ".githooks")
+
+
+def new_classes(module, namespace):
+    return [cls for name, cls in sorted(namespace.items()) if isinstance(cls, type)
+            and issubclass(cls, unittest.TestCase) and cls.__module__ == module and name not in OLD_CLASSES]
+
+
+def assert_legit(case, classes):
+    for cls in classes:
+        for name in unittest.TestLoader().getTestCaseNames(cls):
+            with case.subTest(test="%s.%s" % (cls.__name__, name)):
+                data = getattr(getattr(cls, name), "legit", None)
+                case.assertIsInstance(data, dict)
+                case.assertTrue(all(data.get(key) for key in ("criterion", "where", "threshold", "issue", "when", "who")), data)
+                case.assertRegex(data["issue"], r"#\d+")
+                datetime.date.fromisoformat(data["when"])
+                case.assertIn(data["who"], WHO_VALUES)
+
+
+class Legitimation(unittest.TestCase):
+    @legit("Every test method of the new classes carries its legitimation as data", "new test classes", "all fields set")
+    def test_every_new_test_carries_its_legitimation(self):
+        classes = new_classes(__name__, globals())
+        self.assertIn(MaterialTrack, classes)
+        assert_legit(self, classes)
 
 
 if __name__ == "__main__":
