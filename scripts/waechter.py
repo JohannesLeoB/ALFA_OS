@@ -9,18 +9,22 @@ Modes:
   baum              whole working tree (scripts/pruefen.sh)
   ci                tree of HEAD, remote branches and the commits since
                     WAECHTER_FROM (GitHub Action)
+  rules             every rule with reason, who, when, origin, scope and threshold,
+                    then the tolerations with their state
+  status            commits waiting for a push and the findings that hold them back
 
 Exit code 0: nothing blocks. Exit code 1: at least one error.
-Word and path lists live in scripts/waechter-woerter.txt.
+Word, rule and toleration lists live in scripts/waechter-woerter.txt.
 """
 import bisect
+import datetime
+import fnmatch
 import hashlib
 import os
 import re
 import subprocess
 import sys
 
-# While False, R3 (language) and R4 (meta) report warnings and do not block.
 STRENG_SPRACHE_META = True
 
 MAX_BYTES = 2 * 1024 * 1024
@@ -29,9 +33,16 @@ MAX_SENTENCE_WORDS = 20
 MAX_SUBJECT = 72
 MAIN_REF = "refs/heads/main"
 WARN_SAMPLES = 3
+RULE_FIELDS = 7
+STATUS_HINT = ("green when the findings above are fixed; a toleration line with end date and issue "
+               "turns a path rule yellow until that date")
 
 CODE_EXT = (".swift", ".py", ".sh", ".yml")
-BLOCKED_NAME = re.compile(r"(\.bak$|\.orig$|~$|\.tmp$|copy|kopie|_alt|_old)", re.I)
+NAME_WORDS = re.compile(r"[^\W_]+")
+RULE_ID = re.compile(r"R\d+")
+ISSUE = re.compile(r"#\d+")
+DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
+REFS = re.compile(r"Refs #\d+|Refs: none \S.*")
 UMLAUT = re.compile("[\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df]")
 LETTERS = re.compile(r"[^\W\d_]+")
 IDENT = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
@@ -59,9 +70,26 @@ ROOT = "."
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
-# --------------------------------------------------------------------------
-# Words file
-# --------------------------------------------------------------------------
+class Toleration:
+    def __init__(self, line, rules):
+        fields = [field.strip() for field in line.split("|", 4)]
+        self.line = line
+        self.glob = self.rule = self.date = self.issue = self.reason = ""
+        self.end = None
+        if len(fields) == 5:
+            self.glob, self.rule, self.date, self.issue, self.reason = fields
+            if DATE.fullmatch(self.date):
+                try:
+                    self.end = datetime.date.fromisoformat(self.date)
+                except ValueError:
+                    pass
+        self.valid = bool(
+            self.end and self.glob and self.rule in rules and ISSUE.fullmatch(self.issue) and self.reason)
+
+    def days_left(self, today):
+        return (self.end - today).days
+
+
 class Words:
     def __init__(self, path):
         sections, current = {}, None
@@ -72,7 +100,7 @@ class Words:
                     continue
                 if line.startswith("[") and line.endswith("]"):
                     current = line[1:-1]
-                    sections[current] = []
+                    sections.setdefault(current, [])
                 elif current is not None:
                     sections[current].append(line)
         get = lambda name: sections.get(name, [])
@@ -81,6 +109,10 @@ class Words:
         self.code_dirs = tuple(get("code-dirs"))
         self.token_dirs = tuple(get("token-dirs"))
         self.token_exempt = set(get("token-exempt"))
+        self.material_dirs = tuple(get("material"))
+        self.blocked_words = set(get("blocked-words"))
+        self.blocked_tails = set(get("blocked-trailing-words"))
+        self.blocked_suffixes = tuple(get("blocked-suffixes"))
         self.fillers = set(get("fillers"))
         self.stems = set(get("stems"))
         self.contract_names = set(get("contract-names"))
@@ -89,24 +121,55 @@ class Words:
         self.verbs = set(get("verbs"))
         trailer = get("trailer")
         self.trailer = trailer[0] if trailer else ""
+        self.rules = {}
+        for line in get("rules"):
+            fields = [field.strip() for field in line.split("|")]
+            if len(fields) == RULE_FIELDS and RULE_ID.fullmatch(fields[0]):
+                self.rules[fields[0]] = fields
+        self.tolerations = [Toleration(line, self.rules) for line in get("tolerations")]
 
 
-# --------------------------------------------------------------------------
-# Findings
-# --------------------------------------------------------------------------
+def days(count):
+    return "%d day%s" % (count, "" if count == 1 else "s")
+
+
 class Report:
-    def __init__(self, strict):
-        self.strict = strict
-        self.items = []  # (severity, rule, where, text)
+    def __init__(self, strict, words):
+        self.strict, self.words = strict, words
+        self.today = datetime.date.today()
+        self.items = []
+
+    def check_tolerations(self):
+        for toleration in self.words.tolerations:
+            if not toleration.valid:
+                self.add("toleration", "waechter-woerter.txt",
+                         "invalid toleration line '%s', expected: glob | rule | YYYY-MM-DD | #issue | reason"
+                         % toleration.line)
+
+    def tolerate(self, rule, where, text):
+        path = re.sub(r":\d+$", "", where)
+        hits = [t for t in self.words.tolerations
+                if t.valid and t.rule == rule and fnmatch.fnmatchcase(path, t.glob)]
+        running = [t for t in hits if t.end >= self.today]
+        if running:
+            best = max(running, key=lambda t: t.end)
+            return "%s (tolerated until %s, %s left, %s)" % (
+                text, best.date, days(best.days_left(self.today)), best.issue), True
+        if hits:
+            best = max(hits, key=lambda t: t.end)
+            return "%s (toleration expired on %s, %s)" % (text, best.date, best.issue), False
+        return text, False
 
     def add(self, rule, where, text, warn=False):
         soft = warn or (rule in ("R3", "R4") and not self.strict)
+        if not soft:
+            text, soft = self.tolerate(rule, where, text)
         self.items.append(("warn" if soft else "error", rule, where, text))
 
     def count(self, severity, rule=None):
         return sum(1 for s, r, _, _ in self.items if s == severity and (rule is None or r == rule))
 
-    def print_out(self, show_all):
+    def print_out(self, show_all, tail=()):
         shown = {}
         for severity, rule, where, text in self.items:
             if severity == "warn":
@@ -119,13 +182,18 @@ class Report:
         for rule, total in sorted(shown.items()):
             if not show_all and total > WARN_SAMPLES:
                 print("warn %s ... %d more warnings (run with --all to list them)" % (rule, total - WARN_SAMPLES))
+        fired = {rule for _, rule, _, _ in self.items if rule in self.words.rules}
+        for rule in sorted(fired, key=lambda r: int(r[1:])):
+            _, reason, who, when, origin, _, threshold = self.words.rules[rule]
+            print("  %s: %s" % (rule, reason))
+            print("      set by %s on %s; origin: %s; limit: %s" % (who, when, origin, threshold))
+        if self.count("error"):
+            for line in tail:
+                print(line)
         print("waechter: errors=%d warnings=%d R3=%d R4=%d" % (
             self.count("error"), self.count("warn"), self.count("warn", "R3"), self.count("warn", "R4")))
 
 
-# --------------------------------------------------------------------------
-# Git access
-# --------------------------------------------------------------------------
 def git(*args, data=None):
     return subprocess.run(["git", *args], cwd=ROOT, input=data, capture_output=True)
 
@@ -205,9 +273,6 @@ def work_entries():
     return entries
 
 
-# --------------------------------------------------------------------------
-# Swift segments: code, comment, string
-# --------------------------------------------------------------------------
 def _scan(text, i, in_interp):
     n, out, depth, start = len(text), [], 0, i
     while i < n:
@@ -294,9 +359,6 @@ class Lines:
         return bisect.bisect_right(self.starts, pos) + 1
 
 
-# --------------------------------------------------------------------------
-# Rules
-# --------------------------------------------------------------------------
 def check_local_branches(report):
     head = git_text("symbolic-ref", "-q", "HEAD")
     if head != MAIN_REF:
@@ -330,6 +392,18 @@ def check_push_ref(report, old, new, ref):
         report.add("R1", ref or "push", "not a fast-forward, old remote tip is not an ancestor")
 
 
+def in_material(words, path):
+    return path.startswith(words.material_dirs)
+
+
+def blocked_name(words, part):
+    low = part.lower()
+    pieces = NAME_WORDS.findall(low)
+    return (part == ".DS_Store" or low.endswith(words.blocked_suffixes)
+            or any(piece in words.blocked_words for piece in pieces)
+            or any(piece in words.blocked_tails for piece in pieces[1:]))
+
+
 def check_files(report, words, entries, focus, new_paths):
     for entry in entries:
         if focus is not None and entry.path not in focus:
@@ -338,7 +412,7 @@ def check_files(report, words, entries, focus, new_paths):
         if entry.mode == "160000" or ".git" in parts:
             report.add("R2", entry.path, "nested git repository")
         for part in parts:
-            if part == ".DS_Store" or BLOCKED_NAME.search(part):
+            if blocked_name(words, part):
                 report.add("R2", entry.path, "blocked file name '%s'" % part)
                 break
         if entry.size > MAX_BYTES:
@@ -484,6 +558,8 @@ def check_content(report, words, entries, focus):
     for entry in entries:
         if focus is not None and entry.path not in focus:
             continue
+        if in_material(words, entry.path):
+            continue
         if not is_code_file(words, entry.path) and not entry.path.endswith(CODE_EXT):
             continue
         if entry.mode == "160000" or entry.size > MAX_BYTES:
@@ -502,7 +578,7 @@ def check_content(report, words, entries, focus):
         check_drift(report, entry.path, text, segments, in_token_dir)
 
 
-def check_message(report, words, text, label):
+def check_message(report, words, text, label, files=()):
     lines = [l.rstrip() for l in text.splitlines() if not l.startswith("#")]
     while lines and not lines[-1].strip():
         lines.pop()
@@ -517,10 +593,15 @@ def check_message(report, words, text, label):
     if subject.endswith("."):
         report.add("R7", label, "subject ends with a period")
     if (subject.split() or [""])[0] not in words.verbs:
-        report.add("R7", label, "subject must start with an imperative verb from the list")
+        material_only = bool(files) and all(in_material(words, path) for path in files)
+        report.add("R7", label, "subject must start with an imperative verb: %s" % ", ".join(sorted(words.verbs)),
+                   warn=material_only)
     if lines[-1] != words.trailer:
         report.add("R7", label, "last line must be exactly the trailer line")
     body_lines = lines[1:-1] if lines[-1] == words.trailer else lines[1:]
+    code_files = [path for path in files if path.endswith(CODE_EXT) and not in_material(words, path)]
+    if code_files and not any(REFS.fullmatch(line.strip()) for line in body_lines):
+        report.add("R7", label, "code commit without a body line 'Refs #<N>' (or 'Refs: none <reason>')", warn=True)
     for line in lines:
         if re.match(r"(?i)co-authored-by:", line.strip()):
             report.add("R7", label, "Co-Authored-By line is not allowed")
@@ -550,16 +631,65 @@ def check_message(report, words, text, label):
                     count, MAX_SENTENCE_WORDS, sentence[:30]))
 
 
+def changed_paths(*args):
+    out = git(*args).stdout.decode("utf-8", errors="replace")
+    return [path for path in out.split("\0") if path]
+
+
+def staged(*flags):
+    return changed_paths("diff", "--cached", "--name-only", "-z", "--no-renames", *flags)
+
+
 def check_commits(report, words, revs):
     proc = git("rev-list", "--reverse", *revs)
     for sha in proc.stdout.decode().split():
         body = git("log", "-1", "--format=%B", sha).stdout.decode("utf-8", errors="replace")
-        check_message(report, words, body, sha[:7])
+        files = changed_paths("diff-tree", "--no-commit-id", "--name-only", "-r", "-z", "--no-renames", "--root", sha)
+        check_message(report, words, body, sha[:7], files)
 
 
-# --------------------------------------------------------------------------
-# Modes
-# --------------------------------------------------------------------------
+def check_push(report, words, old, new, ref):
+    check_local_branches(report)
+    check_push_ref(report, old, new, ref)
+    if not is_zero(new):
+        entries = tree_entries(new)
+        check_files(report, words, entries, None, None)
+        check_content(report, words, entries, None)
+        if is_zero(old):
+            check_commits(report, words, [new, "--not", "--remotes"])
+        else:
+            check_commits(report, words, ["%s..%s" % (old, new)])
+
+
+def show_status(report, words):
+    head = git_text("rev-parse", "--verify", "-q", "HEAD")
+    upstream = (git_text("rev-parse", "--verify", "-q", "@{upstream}")
+                or git_text("rev-parse", "--verify", "-q", "origin/main"))
+    if upstream and head:
+        waiting = git_text("log", "--reverse", "--format=%h %s", "%s..HEAD" % upstream).splitlines()
+        print("waiting commits: %d" % len(waiting))
+        for line in waiting:
+            print("  " + line)
+    else:
+        print("waiting commits: unknown, no upstream branch")
+    if head:
+        check_push(report, words, upstream or "0" * 40, head, MAIN_REF)
+
+
+def print_rules(words):
+    today = datetime.date.today()
+    for fields in sorted(words.rules.values(), key=lambda f: int(f[0][1:])):
+        print(" | ".join(fields))
+    for item in words.tolerations:
+        if not item.valid:
+            print("toleration invalid | %s" % item.line)
+            continue
+        left = item.days_left(today)
+        state = "running, %s left" % days(left) if left >= 0 else "expired %s ago" % days(-left)
+        print("toleration %s | %s | %s | %s | %s | %s" % (item.glob, item.rule, item.date, item.issue, state, item.reason))
+    return 0
+
+
 def run(argv):
     global ROOT
     args = [a for a in argv if a != "--all"]
@@ -567,21 +697,22 @@ def run(argv):
     if not args:
         print(__doc__)
         return 2
+    words = Words(os.path.join(HERE, "waechter-woerter.txt"))
+    mode = args[0]
+    if mode == "rules":
+        return print_rules(words)
     top = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True)
     if top.returncode != 0:
         print("waechter: not inside a git repository")
-        return 2
+        return 1 if mode == "status" else 2
     ROOT = top.stdout.decode().strip()
-    words = Words(os.path.join(HERE, "waechter-woerter.txt"))
-    report = Report(STRENG_SPRACHE_META or os.environ.get("WAECHTER_STRICT") == "1")
-    mode = args[0]
+    report = Report(STRENG_SPRACHE_META or os.environ.get("WAECHTER_STRICT") == "1", words)
+    if mode != "msg":
+        report.check_tolerations()
 
     if mode == "commit":
         check_local_branches(report)
-        names = lambda *flags: set(
-            p for p in git("diff", "--cached", "--name-only", "-z", "--no-renames", *flags)
-            .stdout.decode("utf-8", errors="replace").split("\0") if p)
-        changed, added = names("--diff-filter=ACM"), names("--diff-filter=A")
+        changed, added = set(staged("--diff-filter=ACM")), set(staged("--diff-filter=A"))
         entries = index_entries()
         check_files(report, words, entries, changed, added)
         check_content(report, words, entries, changed)
@@ -590,22 +721,12 @@ def run(argv):
             print("waechter: msg needs a file")
             return 2
         with open(args[1], encoding="utf-8", errors="replace") as handle:
-            check_message(report, words, handle.read(), "message")
+            check_message(report, words, handle.read(), "message", staged())
     elif mode == "push":
         if len(args) < 3:
             print("waechter: push needs <old> <new>")
             return 2
-        old, new, ref = args[1], args[2], (args[3] if len(args) > 3 else None)
-        check_local_branches(report)
-        check_push_ref(report, old, new, ref)
-        if not is_zero(new):
-            entries = tree_entries(new)
-            check_files(report, words, entries, None, None)
-            check_content(report, words, entries, None)
-            if is_zero(old):
-                check_commits(report, words, [new, "--not", "--remotes"])
-            else:
-                check_commits(report, words, ["%s..%s" % (old, new)])
+        check_push(report, words, args[1], args[2], args[3] if len(args) > 3 else None)
     elif mode == "baum":
         check_local_branches(report)
         entries = work_entries()
@@ -621,11 +742,13 @@ def run(argv):
             check_commits(report, words, ["%s..HEAD" % base])
         else:
             check_commits(report, words, ["-1", "HEAD"])
+    elif mode == "status":
+        show_status(report, words)
     else:
         print("waechter: unknown mode %s" % mode)
         return 2
 
-    report.print_out(show_all)
+    report.print_out(show_all, (STATUS_HINT,) if mode == "status" else ())
     return 1 if report.count("error") else 0
 
 

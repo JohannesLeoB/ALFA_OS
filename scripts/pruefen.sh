@@ -38,11 +38,19 @@ else
 fi
 
 # 2. Guard tests
-if python3 scripts/waechter_test.py > "$TMP/guard-test.log" 2>&1; then
-  row "guard: tests" "OK" "scripts/waechter_test.py · $(grep -E '^Ran ' "$TMP/guard-test.log" | tail -n 1)"
+if [ "${ALFA_GUARD_TESTS_DONE:-}" = 1 ]; then
+  row "guard: tests" "OK" "already run by the push hook"
 else
-  row "guard: tests" "ERROR" "scripts/waechter_test.py · $(grep -m1 -E '^(FAIL|ERROR):' "$TMP/guard-test.log")"
-  excerpt "guard tests" "$TMP/guard-test.log"
+  for NAME in waechter_test waechter_signals_test; do
+    LABEL="guard: tests"
+    [ "$NAME" = waechter_test ] || LABEL="guard: signal tests"
+    if python3 "scripts/$NAME.py" > "$TMP/$NAME.log" 2>&1; then
+      row "$LABEL" "OK" "scripts/$NAME.py · $(grep -E '^Ran ' "$TMP/$NAME.log" | tail -n 1)"
+    else
+      row "$LABEL" "ERROR" "scripts/$NAME.py · $(grep -m1 -E '^(FAIL|ERROR):' "$TMP/$NAME.log")"
+      excerpt "$LABEL" "$TMP/$NAME.log"
+    fi
+  done
 fi
 
 # 3. Swift package app/: build and test

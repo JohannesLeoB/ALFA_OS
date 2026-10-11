@@ -1,11 +1,20 @@
 #!/bin/sh
-# Check every pushed ref (R1 to R7), then run the full check (R8).
 ROOT=$(git rev-parse --show-toplevel) || exit 1
+cd "$ROOT" || exit 1
 seen=0
+full=0
 while read -r local_ref local_sha remote_ref remote_sha; do
   seen=1
-  python3 "$ROOT/scripts/waechter.py" push "$remote_sha" "$local_sha" "$remote_ref" || exit 1
+  python3 scripts/waechter.py push "$remote_sha" "$local_sha" "$remote_ref" || exit 1
+  changed=$(git diff --name-only "$remote_sha" "$local_sha" 2>/dev/null) || changed="app/"
+  if printf '%s\n' "$changed" | grep -q -E '^(app/|ALFAcolor/|scripts/pruefen\.sh$)'; then
+    full=1
+  fi
 done
 [ "$seen" = 1 ] || exit 0
-cd "$ROOT" || exit 1
-exec bash scripts/pruefen.sh
+python3 scripts/waechter_test.py || exit 1
+python3 scripts/waechter_signals_test.py || exit 1
+if [ "$full" = 1 ]; then
+  ALFA_GUARD_TESTS_DONE=1 ALFACOLOR_TEST_OFFLINE=1 bash scripts/pruefen.sh || exit 1
+fi
+exit 0
