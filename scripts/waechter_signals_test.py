@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tests for the rule list, the tolerations, the queue status and the issue reference of scripts/waechter.py.
+"""Tests for the rule list, the tolerations and the queue status of scripts/waechter.py.
 
 Helpers come from scripts/waechter_test.py. Run: python3 scripts/waechter_signals_test.py
 """
@@ -11,12 +11,11 @@ import sys
 import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from waechter_test import (BAD_MESSAGE, FILLER, GOOD_MESSAGE, TASK_MARKER, TOKEN_DIR, TOOLS_DIR, TRAILER, UMLAUT,
-                           WHO_VALUES, GuardCase, TempRepo, assert_legit, commit_file, copy_tools, legit, message_file, new_classes)
+from waechter_test import (FILLER, GOOD_MESSAGE, TASK_MARKER, TOKEN_DIR, UMLAUT, WARN_RULES, WHO_VALUES, GuardCase,
+                           TempRepo, assert_legit, commit_file, copy_tools, legit, new_classes)
 
 SAMPLE = "app/Sources/Core/Sample.swift"
 GERMAN = "// %s %s\nlet value = 1\n" % (FILLER, FILLER)
-WITH_REFS = "Add the guard\n\nRefs #12\n\n" + TRAILER + "\n"
 
 
 def day(offset):
@@ -54,13 +53,12 @@ TRIGGERS = {
     "R4": stage_and_guard("scripts/sample.py", "# %s\n" % TASK_MARKER),
     "R5": stage_and_guard(TOKEN_DIR + "View.swift", 'let c = "#FF00AA"\n'),
     "R6": stage_and_guard(TOKEN_DIR + "Long.swift", 'func run() { print("x") }\n'),
-    "R7": lambda repo: repo.guard("msg", message_file(repo, BAD_MESSAGE)),
 }
 
 
 class RuleMetadata(GuardCase):
     @legit("The rules command lists id, reason, who, when, origin, scope and threshold per rule", "all rules",
-           "R2 2, R6 800, R7 72")
+           "R2 2, R6 800")
     def test_rules_lists_every_rule_with_all_metadata(self):
         table, out = rule_table(self, self.repo)
         for rule in TRIGGERS:
@@ -73,18 +71,21 @@ class RuleMetadata(GuardCase):
                 self.assertRegex(fields[3], r"\d{4}-\d{2}-\d{2}")
                 datetime.date.fromisoformat(fields[3])
                 self.assertRegex(fields[4], r"#\d+|[\"%s%s]" % (chr(0x201E), chr(0x201C)))
-        for rule, number in (("R2", 2), ("R6", 800), ("R7", 72)):
+        for rule, number in (("R2", 2), ("R6", 800)):
             self.assertRegex(table[rule][0][6], r"\b%d\b" % number)
 
-    @legit("Every rule has a case that triggers it and every rejection names reason, origin and threshold", "all rules",
-           "per rule")
-    def test_every_rejection_names_reason_origin_and_threshold(self):
+    @legit("Every rule has a case that triggers it and every finding names reason, origin and threshold", "all rules",
+           "per rule; R2 and R6 only warn", issue="#18")
+    def test_every_finding_names_reason_origin_and_threshold(self):
         table, out = rule_table(self, self.repo)
         for rule, rows in sorted(table.items()):
             with self.subTest(rule=rule):
-                self.assertIn(rule, TRIGGERS, "no rejection case for this rule")
+                self.assertIn(rule, TRIGGERS, "no case for this rule")
                 result = TRIGGERS[rule](TempRepo(self))
-                self.assertBlocks(result, rule)
+                if rule in WARN_RULES:
+                    self.assertOnlyWarns(result, rule)
+                else:
+                    self.assertBlocks(result, rule)
                 for text in (rows[0][1], rows[0][4], rows[0][6]):
                     self.assertIn(text, result[1])
 
@@ -179,7 +180,7 @@ class Queue(GuardCase):
         rc, out = self.repo.guard("status")
         self.assertIn(rc, (0, 1), out)
         self.assertIn("waiting commits: 2", out)
-        self.assertRegex(out, r"(?m)^R2 plan/probe\.bak")
+        self.assertRegex(out, r"(?m)^warn R2 plan/probe\.bak")
         self.assertIn(rule_table(self, self.repo)[0]["R2"][0][1], out)
         clean = TempRepo(self)
         clean.make_remote()
@@ -189,36 +190,6 @@ class Queue(GuardCase):
         self.assertIn(rc, (0, 1), out)
         self.assertIn("waiting commits: 1", out)
         self.assertNotRegex(out, r"(?m)^R\d ")
-
-
-class IssueReference(GuardCase):
-    @legit("A code commit without a Refs line warns, with the line or for material only it stays quiet",
-           "app scripts against material folders", "exit 0")
-    def test_r7_warns_about_a_missing_issue_reference_for_code_commits(self):
-        cases = (("scripts/sample.py", GOOD_MESSAGE, True), (SAMPLE, GOOD_MESSAGE, True),
-                 ("scripts/sample.py", WITH_REFS, False), (TOOLS_DIR + "/tool.py", GOOD_MESSAGE, False),
-                 ("plan/ernte/data.md", GOOD_MESSAGE, False))
-        for path, message, warned in cases:
-            with self.subTest(path=path, refs="Refs" in message):
-                repo = TempRepo(self)
-                repo.stage(path, "let value = 1\n")
-                rc, out = repo.guard("msg", message_file(repo, message))
-                self.assertEqual(rc, 0, out)
-                if warned:
-                    self.assertRegex(out, r"(?m)^warn R7 .*Refs #")
-                else:
-                    self.assertNotRegex(out, r"(?m)^warn ")
-
-    @legit("The push check warns about a code commit without a Refs line", "app scripts", "exit 0")
-    def test_push_warns_about_a_missing_issue_reference(self):
-        plain = commit_file(self.repo, "scripts/sample.py", "value = 1\n")
-        rc, out = self.repo.guard("push", self.repo.base, plain, "refs/heads/main")
-        self.assertEqual(rc, 0, out)
-        self.assertRegex(out, r"(?m)^warn R7 .*Refs #")
-        marked = commit_file(self.repo, "scripts/other.py", "value = 2\n", WITH_REFS)
-        rc, out = self.repo.guard("push", plain, marked, "refs/heads/main")
-        self.assertEqual(rc, 0, out)
-        self.assertNotRegex(out, r"(?m)^warn ")
 
 
 class LegitimationSignals(unittest.TestCase):

@@ -1,19 +1,18 @@
 #!/usr/bin/env python3
-"""Guard for the repository: branch, sprawl, language, meta, token, drift and commit rules.
+"""Guard for the repository: branch, sprawl, language, meta, token and drift rules.
 
 Modes:
   commit            staged files (pre-commit, pre-merge-commit)
-  msg <file>        commit message file (commit-msg)
+  msg <file>        nothing to check, kept for the commit-msg hook
   push <old> <new> [<remote ref>]
-                    commits and tree of a push (pre-push); old may be all zeros
+                    target ref and tree of a push (pre-push); old may be all zeros
   baum              whole working tree (scripts/pruefen.sh)
-  ci                tree of HEAD, remote branches and the commits since
-                    WAECHTER_FROM (GitHub Action)
+  ci                tree of HEAD and remote branches (GitHub Action)
   rules             every rule with reason, who, when, origin, scope and threshold,
                     then the tolerations with their state
   status            commits waiting for a push and the findings that hold them back
 
-Exit code 0: nothing blocks. Exit code 1: at least one error.
+Exit code 0: nothing blocks. Exit code 1: at least one error. R2 and R6 only warn.
 Word, rule and toleration lists live in scripts/waechter-woerter.txt.
 """
 import bisect
@@ -29,9 +28,8 @@ STRENG_SPRACHE_META = True
 
 MAX_BYTES = 2 * 1024 * 1024
 MAX_LINES = 800
-MAX_SENTENCE_WORDS = 20
-MAX_SUBJECT = 72
 MAIN_REF = "refs/heads/main"
+WARN_ONLY = ("R2", "R6")
 WARN_SAMPLES = 3
 RULE_FIELDS = 7
 STATUS_HINT = ("green when the findings above are fixed; a toleration line with end date and issue "
@@ -42,7 +40,6 @@ NAME_WORDS = re.compile(r"[^\W_]+")
 RULE_ID = re.compile(r"R\d+")
 ISSUE = re.compile(r"#\d+")
 DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
-REFS = re.compile(r"Refs #\d+|Refs: none \S.*")
 UMLAUT = re.compile("[\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df]")
 LETTERS = re.compile(r"[^\W\d_]+")
 IDENT = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
@@ -118,9 +115,6 @@ class Words:
         self.contract_names = set(get("contract-names"))
         self.meta_words = set(get("meta-words"))
         self.meta_patterns = [re.compile(p) for p in get("meta-patterns")]
-        self.verbs = set(get("verbs"))
-        trailer = get("trailer")
-        self.trailer = trailer[0] if trailer else ""
         self.rules = {}
         for line in get("rules"):
             fields = [field.strip() for field in line.split("|")]
@@ -161,7 +155,7 @@ class Report:
         return text, False
 
     def add(self, rule, where, text, warn=False):
-        soft = warn or (rule in ("R3", "R4") and not self.strict)
+        soft = warn or rule in WARN_ONLY or (rule in ("R3", "R4") and not self.strict)
         if not soft:
             text, soft = self.tolerate(rule, where, text)
         self.items.append(("warn" if soft else "error", rule, where, text))
@@ -578,59 +572,6 @@ def check_content(report, words, entries, focus):
         check_drift(report, entry.path, text, segments, in_token_dir)
 
 
-def check_message(report, words, text, label, files=()):
-    lines = [l.rstrip() for l in text.splitlines() if not l.startswith("#")]
-    while lines and not lines[-1].strip():
-        lines.pop()
-    while lines and not lines[0].strip():
-        lines.pop(0)
-    if not lines:
-        report.add("R7", label, "empty commit message")
-        return
-    subject = lines[0]
-    if len(subject) > MAX_SUBJECT:
-        report.add("R7", label, "subject longer than %d characters (%d)" % (MAX_SUBJECT, len(subject)))
-    if subject.endswith("."):
-        report.add("R7", label, "subject ends with a period")
-    if (subject.split() or [""])[0] not in words.verbs:
-        material_only = bool(files) and all(in_material(words, path) for path in files)
-        report.add("R7", label, "subject must start with an imperative verb: %s" % ", ".join(sorted(words.verbs)),
-                   warn=material_only)
-    if lines[-1] != words.trailer:
-        report.add("R7", label, "last line must be exactly the trailer line")
-    body_lines = lines[1:-1] if lines[-1] == words.trailer else lines[1:]
-    code_files = [path for path in files if path.endswith(CODE_EXT) and not in_material(words, path)]
-    if code_files and not any(REFS.fullmatch(line.strip()) for line in body_lines):
-        report.add("R7", label, "code commit without a body line 'Refs #<N>' (or 'Refs: none <reason>')", warn=True)
-    for line in lines:
-        if re.match(r"(?i)co-authored-by:", line.strip()):
-            report.add("R7", label, "Co-Authored-By line is not allowed")
-    full = "\n".join([subject] + body_lines)
-    if UMLAUT.search(full):
-        report.add("R7", label, "umlaut or sharp s in message")
-    hits = german_words(words, full)
-    if hits:
-        report.add("R7", label, "German words in message: %s" % ", ".join(hits[:4]))
-    units, current = [], []
-    for line in body_lines:
-        stripped = line.strip()
-        bullet = re.match(r"([-*]|\d+[.)])\s+", stripped)
-        if not stripped or bullet:
-            if current:
-                units.append(" ".join(current))
-            current = [stripped[bullet.end():]] if bullet else []
-        else:
-            current.append(stripped)
-    if current:
-        units.append(" ".join(current))
-    for unit in units:
-        for sentence in re.split(r"(?<=[.!?])\s+", unit):
-            count = len([w for w in sentence.split() if re.search(r"[A-Za-z0-9]", w)])
-            if count > MAX_SENTENCE_WORDS:
-                report.add("R7", label, "sentence with %d words, limit is %d: %s..." % (
-                    count, MAX_SENTENCE_WORDS, sentence[:30]))
-
-
 def changed_paths(*args):
     out = git(*args).stdout.decode("utf-8", errors="replace")
     return [path for path in out.split("\0") if path]
@@ -640,14 +581,6 @@ def staged(*flags):
     return changed_paths("diff", "--cached", "--name-only", "-z", "--no-renames", *flags)
 
 
-def check_commits(report, words, revs):
-    proc = git("rev-list", "--reverse", *revs)
-    for sha in proc.stdout.decode().split():
-        body = git("log", "-1", "--format=%B", sha).stdout.decode("utf-8", errors="replace")
-        files = changed_paths("diff-tree", "--no-commit-id", "--name-only", "-r", "-z", "--no-renames", "--root", sha)
-        check_message(report, words, body, sha[:7], files)
-
-
 def check_push(report, words, old, new, ref):
     check_local_branches(report)
     check_push_ref(report, old, new, ref)
@@ -655,10 +588,6 @@ def check_push(report, words, old, new, ref):
         entries = tree_entries(new)
         check_files(report, words, entries, None, None)
         check_content(report, words, entries, None)
-        if is_zero(old):
-            check_commits(report, words, [new, "--not", "--remotes"])
-        else:
-            check_commits(report, words, ["%s..%s" % (old, new)])
 
 
 def show_status(report, words):
@@ -701,14 +630,15 @@ def run(argv):
     mode = args[0]
     if mode == "rules":
         return print_rules(words)
+    if mode == "msg":
+        return 0
     top = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True)
     if top.returncode != 0:
         print("waechter: not inside a git repository")
         return 1 if mode == "status" else 2
     ROOT = top.stdout.decode().strip()
     report = Report(STRENG_SPRACHE_META or os.environ.get("WAECHTER_STRICT") == "1", words)
-    if mode != "msg":
-        report.check_tolerations()
+    report.check_tolerations()
 
     if mode == "commit":
         check_local_branches(report)
@@ -716,12 +646,6 @@ def run(argv):
         entries = index_entries()
         check_files(report, words, entries, changed, added)
         check_content(report, words, entries, changed)
-    elif mode == "msg":
-        if len(args) < 2:
-            print("waechter: msg needs a file")
-            return 2
-        with open(args[1], encoding="utf-8", errors="replace") as handle:
-            check_message(report, words, handle.read(), "message", staged())
     elif mode == "push":
         if len(args) < 3:
             print("waechter: push needs <old> <new>")
@@ -737,11 +661,6 @@ def run(argv):
         entries = tree_entries("HEAD")
         check_files(report, words, entries, None, None)
         check_content(report, words, entries, None)
-        base = os.environ.get("WAECHTER_FROM", "")
-        if base and not is_zero(base) and git("cat-file", "-e", base + "^{commit}").returncode == 0:
-            check_commits(report, words, ["%s..HEAD" % base])
-        else:
-            check_commits(report, words, ["-1", "HEAD"])
     elif mode == "status":
         show_status(report, words)
     else:

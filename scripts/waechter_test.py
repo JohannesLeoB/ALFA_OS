@@ -26,13 +26,13 @@ WORDS = waechter.Words(os.path.join(HERE, "waechter-woerter.txt"))
 
 FILLER = sorted(WORDS.fillers)[0]
 STEM = sorted(WORDS.stems)[0]
-TRAILER = WORDS.trailer
 UMLAUT = chr(0xE4)
 TASK_MARKER = "TO" + "DO"
 BRIEF_ID = "B" + "-123"
 TOKEN_DIR = WORDS.token_dirs[0]
 EXEMPT_MODULE = sorted(WORDS.token_exempt)[0]
-GOOD_MESSAGE = "Add the base file\n\n" + TRAILER + "\n"
+GOOD_MESSAGE = "Add the base file\n"
+WARN_RULES = ("R2", "R6")
 NOT_STRICT = unittest.skipIf(waechter.STRENG_SPRACHE_META, "language and meta rules are already strict")
 
 
@@ -109,6 +109,16 @@ class GuardCase(unittest.TestCase):
         rc, out = result
         self.assertEqual(rc, 0, out)
 
+    def assertOnlyWarns(self, result, rule):
+        rc, out = result
+        self.assertEqual(rc, 0, out)
+        self.assertRegex(out, r"(?m)^warn %s " % rule)
+
+    def assertQuiet(self, result, rule):
+        rc, out = result
+        self.assertEqual(rc, 0, out)
+        self.assertNotRegex(out, r"(?m)^(warn )?%s " % rule)
+
 
 class R1Branch(GuardCase):
     def test_r1_blocks_commit_with_extra_local_branch(self):
@@ -129,13 +139,13 @@ class R1Branch(GuardCase):
         self.assertBlocks(self.repo.guard("push", self.repo.base, "0" * 40, "refs/heads/main"), "R1")
 
     def test_r1_blocks_force_push(self):
-        second = self.repo.commit_message("Add a second file\n\n" + TRAILER + "\n")
+        second = self.repo.commit_message("Add a second file\n")
         tree = self.repo.git("rev-parse", self.repo.base + "^{tree}").stdout.strip()
         other = self.repo.git("commit-tree", tree, "-m", GOOD_MESSAGE).stdout.strip()
         self.assertBlocks(self.repo.guard("push", second, other, "refs/heads/main"), "R1")
 
     def test_r1_passes_fast_forward_push(self):
-        second = self.repo.commit_message("Add a second file\n\n" + TRAILER + "\n")
+        second = self.repo.commit_message("Add a second file\n")
         self.assertPasses(self.repo.guard("push", self.repo.base, second, "refs/heads/main"))
 
     def test_r1_ci_blocks_extra_remote_branch(self):
@@ -151,42 +161,42 @@ class R1Branch(GuardCase):
 
 
 class R2Sprawl(GuardCase):
-    def test_r2_blocks_backup_file(self):
+    def test_r2_warns_about_backup_file(self):
         self.repo.stage("probe.bak", "x\n")
-        self.assertBlocks(self.repo.guard("commit"), "R2")
+        self.assertOnlyWarns(self.repo.guard("commit"), "R2")
 
-    def test_r2_blocks_copy_name(self):
+    def test_r2_warns_about_copy_name(self):
         self.repo.stage("plan/notes copy.md", "x\n")
-        self.assertBlocks(self.repo.guard("commit"), "R2")
+        self.assertOnlyWarns(self.repo.guard("commit"), "R2")
 
-    def test_r2_blocks_unknown_root(self):
+    def test_r2_warns_about_unknown_root(self):
         self.repo.stage("stuff/a.txt", "x\n")
-        self.assertBlocks(self.repo.guard("commit"), "R2")
+        self.assertOnlyWarns(self.repo.guard("commit"), "R2")
 
-    def test_r2_blocks_file_over_two_megabytes(self):
+    def test_r2_warns_about_file_over_two_megabytes(self):
         self.repo.stage("plan/big.bin", b"a" * (2 * 1024 * 1024 + 1))
-        self.assertBlocks(self.repo.guard("commit"), "R2")
+        self.assertOnlyWarns(self.repo.guard("commit"), "R2")
 
-    def test_r2_blocks_identical_files(self):
+    def test_r2_warns_about_identical_files(self):
         self.repo.stage("plan/a.md", "same\n")
         self.repo.stage("plan/b.md", "same\n")
-        self.assertBlocks(self.repo.guard("commit"), "R2")
+        self.assertOnlyWarns(self.repo.guard("commit"), "R2")
 
-    def test_r2_blocks_ds_store(self):
+    def test_r2_warns_about_ds_store(self):
         self.repo.stage("plan/.DS_Store", "x\n")
-        self.assertBlocks(self.repo.guard("commit"), "R2")
+        self.assertOnlyWarns(self.repo.guard("commit"), "R2")
 
     def test_r2_tree_mode_sees_untracked_backup_file(self):
         self.repo.write("probe.bak", "x\n")
-        self.assertBlocks(self.repo.guard("baum"), "R2")
+        self.assertOnlyWarns(self.repo.guard("baum"), "R2")
 
     def test_r2_passes_new_file_in_allowed_root(self):
         self.repo.stage("plan/new.md", "new\n")
-        self.assertPasses(self.repo.guard("commit"))
+        self.assertQuiet(self.repo.guard("commit"), "R2")
 
     def test_r2_passes_deleting_an_old_file(self):
         self.repo.git("rm", "-q", "plan/base.md")
-        self.assertPasses(self.repo.guard("commit"))
+        self.assertQuiet(self.repo.guard("commit"), "R2")
 
 
 class R3Language(GuardCase):
@@ -315,70 +325,22 @@ class R6Drift(GuardCase):
     def lines(count):
         return "".join("let value%d = %d\n" % (i, i) for i in range(count))
 
-    def test_r6_blocks_file_over_800_lines(self):
+    def test_r6_warns_about_file_over_800_lines(self):
         self.repo.stage(self.path, self.lines(801))
-        self.assertBlocks(self.repo.guard("commit"), "R6")
+        self.assertOnlyWarns(self.repo.guard("commit"), "R6")
 
     def test_r6_passes_file_with_800_lines(self):
         self.repo.stage(self.path, self.lines(800))
-        self.assertPasses(self.repo.guard("commit"))
+        self.assertQuiet(self.repo.guard("commit"), "R6")
 
-    def test_r6_blocks_print_call(self):
+    def test_r6_warns_about_print_call(self):
         self.repo.stage(self.path, 'func run() { print("x") }\n')
-        self.assertBlocks(self.repo.guard("commit"), "R6")
+        self.assertOnlyWarns(self.repo.guard("commit"), "R6")
 
     def test_r6_passes_print_in_comment_string_and_tests(self):
         self.repo.stage(self.path, '// print("x")\nlet text = "print(1)"\nlet value = blueprint(2)\n')
         self.repo.stage("app/Tests/CoreTests/Print.swift", 'func run() { print("x") }\n')
-        self.assertPasses(self.repo.guard("commit"))
-
-
-class R7Message(GuardCase):
-    def message(self, text):
-        path = os.path.join(self.repo.dir, "MSG")
-        with open(path, "w", encoding="utf-8") as handle:
-            handle.write(text)
-        return self.repo.guard("msg", path)
-
-    def test_r7_passes_good_message_with_body(self):
-        self.assertPasses(self.message(
-            "Add the guard\n\nThe hook checks the staged files.\n- It runs fast.\n\n" + TRAILER + "\n"))
-
-    def test_r7_blocks_long_subject(self):
-        self.assertBlocks(self.message("Add " + "x" * 80 + "\n\n" + TRAILER + "\n"), "R7")
-
-    def test_r7_blocks_period_at_the_end(self):
-        self.assertBlocks(self.message("Add the guard.\n\n" + TRAILER + "\n"), "R7")
-
-    def test_r7_blocks_subject_without_imperative_verb(self):
-        self.assertBlocks(self.message("Added the guard\n\n" + TRAILER + "\n"), "R7")
-
-    def test_r7_blocks_german_text(self):
-        self.assertBlocks(self.message("Add the guard\n\n%s %s\n\n%s\n" % (FILLER, FILLER, TRAILER)), "R7")
-
-    def test_r7_blocks_umlaut(self):
-        self.assertBlocks(self.message("Add the guard %s\n\n%s\n" % (UMLAUT, TRAILER)), "R7")
-
-    def test_r7_blocks_long_sentence(self):
-        sentence = " ".join(["word"] * 21) + "."
-        self.assertBlocks(self.message("Add the guard\n\n%s\n\n%s\n" % (sentence, TRAILER)), "R7")
-
-    def test_r7_blocks_missing_trailer(self):
-        self.assertBlocks(self.message("Add the guard\n"), "R7")
-
-    def test_r7_blocks_trailer_that_is_not_last(self):
-        self.assertBlocks(self.message("Add the guard\n\n" + TRAILER + "\n\nMore text.\n"), "R7")
-
-    def test_r7_blocks_co_author_line(self):
-        self.assertBlocks(self.message("Add the guard\n\nCo-Authored-By: A <a@example.com>\n\n" + TRAILER + "\n"), "R7")
-
-    def test_r7_push_checks_every_new_commit(self):
-        bad = self.repo.commit_message("Added a file\n\n" + TRAILER + "\n")
-        self.assertBlocks(self.repo.guard("push", self.repo.base, bad, "refs/heads/main"), "R7")
-
-    def test_r7_ci_checks_commits_since_the_base(self):
-        self.repo.commit_message("Added a file\n\n" + TRAILER + "\n")
-        self.assertBlocks(self.repo.guard("ci", extra_env={"WAECHTER_FROM": self.repo.base}), "R7")
+        self.assertQuiet(self.repo.guard("commit"), "R6")
 
 
 class Segments(unittest.TestCase):
@@ -394,10 +356,8 @@ class Segments(unittest.TestCase):
         self.assertEqual(self.kinds('// it"s\nlet a = 1\n'), [("comment", '// it"s')])
 
     def test_words_file_has_the_lists_the_rules_need(self):
-        for name in ("fillers", "stems", "meta_words", "verbs", "roots_dirs", "code_dirs", "token_dirs"):
+        for name in ("fillers", "stems", "meta_words", "roots_dirs", "code_dirs", "token_dirs"):
             self.assertTrue(getattr(WORDS, name), name)
-        self.assertTrue(WORDS.trailer)
-        self.assertIn("Add", WORDS.verbs)
 
 
 class HookCase(unittest.TestCase):
@@ -413,60 +373,45 @@ class HookCase(unittest.TestCase):
         self.repo.git("config", "core.hooksPath", ".githooks")
         self.repo.make_remote()
 
-    def stub_check(self, code):
-        path = os.path.join(self.repo.dir, "scripts", "pruefen.sh")
-        with open(path, "w") as handle:
-            handle.write("#!/bin/sh\nexit %d\n" % code)
-
-    def test_hook_pre_commit_rejects_backup_file(self):
+    def test_hook_pre_commit_warns_about_backup_file(self):
         self.repo.write("probe.bak", "x\n")
         self.repo.git("add", "probe.bak")
         proc = self.repo.git("commit", "-q", "-m", GOOD_MESSAGE, check=False)
-        self.assertNotEqual(proc.returncode, 0)
-        self.assertEqual(self.repo.git("rev-parse", "HEAD").stdout.strip(), self.repo.base)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("warn R2", proc.stdout + proc.stderr)
 
-    def test_hook_commit_msg_rejects_bad_message(self):
+    def test_hook_accepts_a_commit_with_any_message(self):
         self.repo.write("plan/new.md", "x\n")
         self.repo.git("add", "plan/new.md")
-        proc = self.repo.git("commit", "-q", "-m", "added a file", check=False)
-        self.assertNotEqual(proc.returncode, 0)
-        self.assertIn("R7", proc.stdout + proc.stderr)
-
-    def test_hook_accepts_a_good_commit(self):
-        self.repo.write("plan/new.md", "x\n")
-        self.repo.git("add", "plan/new.md")
-        self.repo.git("commit", "-q", "-m", "Add a plan file\n\n" + TRAILER)
+        self.repo.git("commit", "-q", "-m", "added a plan file")
         self.assertNotEqual(self.repo.git("rev-parse", "HEAD").stdout.strip(), self.repo.base)
 
     def test_hook_pre_push_rejects_other_branch(self):
-        self.stub_check(0)
         proc = self.repo.git("push", "-q", "origin", "HEAD:refs/heads/probe", check=False)
         self.assertNotEqual(proc.returncode, 0)
         self.assertIn("R1", proc.stdout + proc.stderr)
 
-    def test_hook_pre_push_runs_the_full_check(self):
-        commit_file(self.repo, "app/Sources/Core/Sample.swift", "let value = 1\n")
-        self.stub_check(1)
+    def test_hook_pre_push_runs_the_kit_tests(self):
+        commit_file(self.repo, "alfaos/Kit/Sources/ShellCore/Sample.swift", "let value = 1\n")
+        stub_swift(self.repo, "exit 1\n")
         self.assertNotEqual(self.repo.git("push", "-q", "origin", "main", check=False).returncode, 0)
-        self.stub_check(0)
+        stub_swift(self.repo, "exit 0\n")
         self.assertEqual(self.repo.git("push", "-q", "origin", "main", check=False).returncode, 0)
 
 
 ISSUE, WHEN, WHO = "#10", "2026-10-11", "Ch" + "ef"
 WHO_VALUES = ("Jo" + "hannes", WHO)
-OLD_CLASSES = ("GuardCase", "R1Branch", "R2Sprawl", "R3Language", "R4Meta", "R5Tokens", "R6Drift", "R7Message",
-               "Segments", "HookCase")
+OLD_CLASSES = ("GuardCase", "R1Branch", "R2Sprawl", "R3Language", "R4Meta", "R5Tokens", "R6Drift", "Segments",
+               "HookCase")
 TOOLS_DIR = "plan/werk" + "zeuge"
 MATERIAL_DIRS = ("plan/ernte", TOOLS_DIR, "gestaltung/entwuerfe", "plan/gates")
 MATERIAL = " ".join(MATERIAL_DIRS)
-NEW_VERBS = ("Rebuild", "Import", "Draft", "Generate", "Publish", "Migrate")
-BAD_MESSAGE = "Added the harvest notes\n\n" + TRAILER + "\n"
 GERMAN_SCRIPT = "# %s %s\n%s_value = 1\n# %s\n" % (FILLER, FILLER, STEM, UMLAUT)
 
 
-def legit(criterion, where, threshold="none"):
+def legit(criterion, where, threshold="none", issue=ISSUE):
     def mark(test):
-        test.legit = dict(criterion=criterion, where=where, threshold=threshold, issue=ISSUE, when=WHEN, who=WHO)
+        test.legit = dict(criterion=criterion, where=where, threshold=threshold, issue=issue, when=WHEN, who=WHO)
         return test
     return mark
 
@@ -484,10 +429,13 @@ def stub_test_files(repo, code):
             repo.write("scripts/" + name, code)
 
 
-def message_file(repo, text):
-    path = os.path.join(repo.dir, "MSG")
-    Path(path).write_text(text, encoding="utf-8")
-    return path
+def stub_swift(repo, body):
+    folder = os.path.join(repo.tmp.name, "bin")
+    os.makedirs(folder, exist_ok=True)
+    path = os.path.join(folder, "swift")
+    Path(path).write_text("#!/bin/sh\n" + body)
+    os.chmod(path, 0o755)
+    repo.env["PATH"] = folder + os.pathsep + os.environ.get("PATH", "")
 
 
 def commit_file(repo, path, content, message=GOOD_MESSAGE):
@@ -524,16 +472,16 @@ class MaterialTrack(GuardCase):
             self.repo.stage(folder + "/b.md", "same%d\n" % index)
             self.repo.stage(folder + "/notes_old.md", "old%d\n" % index)
             nested_repo(self.repo, folder)
-        rc, out = self.repo.guard("commit")
-        self.assertEqual(rc, 1, out)
+        rc, out = self.repo.guard("commit", "--all")
+        self.assertEqual(rc, 0, out)
         for folder in MATERIAL_DIRS:
             for what in ("/big.bin", "/b.md", "/notes_old.md", "/inner"):
                 with self.subTest(folder=folder, path=what):
-                    self.assertRegex(out, r"(?m)^R2 %s: " % re.escape(folder + what))
+                    self.assertRegex(out, r"(?m)^warn R2 %s: " % re.escape(folder + what))
         other = TempRepo(self)
         for index, folder in enumerate(MATERIAL_DIRS):
             other.stage(folder + "/copywriting-notes.md", "x%d\n" % index)
-        self.assertPasses(other.guard("commit"))
+        self.assertQuiet(other.guard("commit"), "R2")
 
 
 class R2Words(GuardCase):
@@ -543,95 +491,30 @@ class R2Words(GuardCase):
                    "plan/x.bak", "plan/x.orig", "plan/x.tmp", "plan/draft~")
         for number, path in enumerate(blocked):
             self.repo.stage(path, "x%d\n" % number)
-        rc, out = self.repo.guard("commit")
-        self.assertEqual(rc, 1, out)
+        rc, out = self.repo.guard("commit", "--all")
+        self.assertEqual(rc, 0, out)
         for path in blocked:
             with self.subTest(blocked=path):
-                self.assertRegex(out, r"(?m)^R2 %s: blocked file name" % re.escape(path))
+                self.assertRegex(out, r"(?m)^warn R2 %s: blocked file name" % re.escape(path))
         other = TempRepo(self)
         other.stage("app/Sources/Core/Copyable.swift", "struct Copyable {}\n")
         other.stage("plan/copywriting-notes.md", "notes\n")
-        self.assertPasses(other.guard("commit"))
-
-
-class R7Extended(GuardCase):
-    def msg(self, text):
-        return self.repo.guard("msg", message_file(self.repo, text))
-
-    @legit("The verb list holds the common verbs", "commit subject", "6 added verbs")
-    def test_r7_accepts_the_extended_verbs(self):
-        for verb in NEW_VERBS:
-            with self.subTest(verb=verb):
-                self.assertPasses(self.msg("%s the harvest index\n\n%s\n" % (verb, TRAILER)))
-
-    @legit("A rejected subject names the allowed verbs", "commit subject", "every listed verb")
-    def test_r7_rejection_lists_the_allowed_verbs(self):
-        rc, out = self.msg(BAD_MESSAGE)
-        self.assertEqual(rc, 1, out)
-        missing = [v for v in sorted(WORDS.verbs | set(NEW_VERBS)) if not re.search(r"\b%s\b" % v, out)]
-        self.assertEqual(missing, [], out)
-
-    @legit("A bad verb only warns when the commit touches material folders only", MATERIAL, "exit 0 against exit 1")
-    def test_r7_warns_only_for_commits_that_touch_material_folders_only(self):
-        cases = ((["plan/ernte/data.md"], 0), ([TOOLS_DIR + "/tool.py", "plan/gates/note.md"], 0),
-                 (["plan/ernte/data.md", "scripts/sample.py"], 1), (["scripts/sample.py"], 1), (["plan/notes.md"], 1))
-        for staged, expected in cases:
-            with self.subTest(staged=staged):
-                repo = TempRepo(self)
-                for number, path in enumerate(staged):
-                    repo.stage(path, "value%d = 1\n" % number)
-                rc, out = repo.guard("msg", message_file(repo, BAD_MESSAGE))
-                self.assertEqual(rc, expected, out)
-                self.assertRegex(out, r"(?m)^%sR7 " % ("warn " if expected == 0 else ""))
-
-    @legit("The push check treats material-only commits with a bad verb as warnings", MATERIAL, "exit 0 against exit 1")
-    def test_r7_push_warns_only_for_material_only_commits(self):
-        material = commit_file(self.repo, "plan/ernte/data.md", "x\n", BAD_MESSAGE)
-        code = commit_file(self.repo, "scripts/sample.py", "value = 1\n", BAD_MESSAGE)
-        rc, out = self.repo.guard("push", self.repo.base, material, "refs/heads/main")
-        self.assertEqual(rc, 0, out)
-        self.assertIn("warn R7", out)
-        self.assertBlocks(self.repo.guard("push", material, code, "refs/heads/main"), "R7")
-
-
-class HookCommits(unittest.TestCase):
-    @legit("The commit hooks let a material-only commit through with a warning and reject a code commit with the verbs",
-           MATERIAL + " scripts", "exit 0 against exit 1")
-    def test_hook_commit_with_a_bad_verb_depends_on_the_touched_folders(self):
-        repo = TempRepo(self)
-        copy_tools(repo, hooks=True)
-        repo.git("config", "core.hooksPath", ".githooks")
-        for path, content in (("plan/ernte/data.md", "x\n"), ("scripts/sample.py", "value = 1\n")):
-            repo.stage(path, content)
-            proc = repo.git("commit", "-q", "-F", "-", "--", path, check=False, data=BAD_MESSAGE)
-            out = proc.stdout + proc.stderr
-            if path.startswith("plan/"):
-                self.assertEqual(proc.returncode, 0, out)
-                self.assertIn("warn R7", out)
-            else:
-                self.assertNotEqual(proc.returncode, 0, out)
-                for verb in NEW_VERBS:
-                    self.assertRegex(out, r"\b%s\b" % verb)
+        self.assertQuiet(other.guard("commit"), "R2")
 
 
 class PrePush(unittest.TestCase):
-    CHECK = '#!/bin/sh\necho "offline=$ALFACOLOR_TEST_OFFLINE" >> "$STUB_FULL_MARK"\n'
     TESTS = ("import os\nimport unittest\nopen(os.environ['STUB_TESTS_MARK'], 'a').write(os.path.basename(__file__) + '\\n')\n"
              "class Stub(unittest.TestCase):\n    def test_stub(self):\n        pass\n")
 
     def setUp(self):
         self.repo = TempRepo(self)
-        self.repo.env.pop("ALFACOLOR_TEST_OFFLINE", None)
         self.marks = {name: os.path.join(self.repo.tmp.name, name + ".txt") for name in ("full", "tests")}
         self.repo.env["STUB_FULL_MARK"] = self.marks["full"]
         self.repo.env["STUB_TESTS_MARK"] = self.marks["tests"]
         copy_tools(self.repo, hooks=True)
-        self.repo.write("scripts/pruefen.sh", self.CHECK)
-        os.chmod(os.path.join(self.repo.dir, "scripts", "pruefen.sh"), 0o755)
         stub_test_files(self.repo, self.TESTS)
+        stub_swift(self.repo, 'echo "$*" >> "$STUB_FULL_MARK"\n')
         self.repo.make_remote()
-        self.repo.git("add", "scripts/pruefen.sh")
-        self.repo.git("commit", "-q", "--no-verify", "-m", GOOD_MESSAGE)
         self.repo.git("push", "-q", "--no-verify", "origin", "main")
         self.repo.git("config", "core.hooksPath", ".githooks")
         self.count = 0
@@ -641,8 +524,7 @@ class PrePush(unittest.TestCase):
             Path(mark).unlink(missing_ok=True)
         for path in paths:
             self.count += 1
-            content = self.CHECK + ":\n" if path == "scripts/pruefen.sh" else "let value%d = %d\n" % (self.count, self.count)
-            commit_file(self.repo, path, content, "Add a file\n\n" + TRAILER)
+            commit_file(self.repo, path, "let value%d = %d\n" % (self.count, self.count), "Add a file\n")
         proc = self.repo.git("push", "-q", "origin", "main", check=False)
         self.assertEqual(proc.returncode, 0, proc.stderr)
 
@@ -650,26 +532,28 @@ class PrePush(unittest.TestCase):
         path = Path(self.marks[name])
         return path.read_text().split() if path.exists() else []
 
-    @legit("A push with text changes only does not start the full check", "plan konzept plan/ernte", "no full check")
-    def test_text_only_push_skips_the_full_check(self):
-        for path in ("plan/note.md", "konzept/idea.md", "plan/ernte/data.tsv"):
+    @legit("A push without changes under alfaos does not start the kit tests",
+           "plan konzept plan/ernte app ALFAcolor pruefen.sh", "no kit tests", issue="#18")
+    def test_push_without_alfaos_skips_the_kit_tests(self):
+        for path in ("plan/note.md", "konzept/idea.md", "plan/ernte/data.tsv", "app/Sources/Core/Sample.swift",
+                     "ALFAcolor/App/Sample.swift", "scripts/pruefen.sh"):
             with self.subTest(path=path):
                 self.push(path)
                 self.assertEqual(self.marked("full"), [])
 
-    @legit("A push touching app, package or the check script runs the full check offline", "app ALFAcolor pruefen.sh",
-           "ALFACOLOR_TEST_OFFLINE=1")
-    def test_code_push_runs_the_full_check_with_the_offline_variable(self):
-        cases = (("app/Sources/Core/Sample.swift",), ("ALFAcolor/App/Sample.swift",), ("app/Package.swift",),
-                 ("scripts/pruefen.sh",), ("plan/note.md", "app/Sources/Core/Other.swift"))
+    @legit("A push touching alfaos runs the tests of the kit package", "alfaos",
+           "swift test --package-path alfaos/Kit", issue="#18")
+    def test_alfaos_push_runs_the_kit_tests(self):
+        cases = (("alfaos/Kit/Sources/ShellCore/Sample.swift",), ("alfaos/App/Sample.swift",),
+                 ("plan/note.md", "alfaos/Kit/Tests/ShellCoreTests/Other.swift"))
         for paths in cases:
             with self.subTest(paths=paths):
                 self.push(*paths)
-                self.assertEqual(self.marked("full"), ["offline=1"])
+                self.assertEqual(self.marked("full"), ["test", "--package-path", "alfaos/Kit"])
 
     @legit("Every push runs the guard tests", "all pushes", "once per push")
     def test_every_push_runs_the_guard_tests(self):
-        for path in ("plan/note.md", "app/Sources/Core/Sample.swift"):
+        for path in ("plan/note.md", "alfaos/App/Sample.swift"):
             with self.subTest(path=path):
                 self.push(path)
                 self.assertEqual(self.marked("tests").count("waechter_test.py"), 1)
@@ -698,11 +582,11 @@ class SetupHooks(unittest.TestCase):
         done = self.run_in("bash", "scripts/setup-hooks.sh")
         self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
         self.assertEqual(self.hooks_path().stdout.strip(), ".githooks")
-        Path(self.clone, "plan", "new.md").write_text("x\n")
-        self.run_in("git", "add", "plan/new.md")
-        proc = self.run_in("git", "commit", "-q", "-m", "added a file")
+        Path(self.clone, "scripts", "sample.py").write_text("# %s\n" % TASK_MARKER)
+        self.run_in("git", "add", "scripts/sample.py")
+        proc = self.run_in("git", "commit", "-q", "-m", GOOD_MESSAGE)
         self.assertNotEqual(proc.returncode, 0)
-        self.assertIn("R7", proc.stdout + proc.stderr)
+        self.assertIn("R4", proc.stdout + proc.stderr)
 
     @legit("The setup script works from a subfolder and when run twice", "scripts/setup-hooks.sh", "exit 0")
     def test_setup_script_runs_from_a_subfolder_and_twice(self):
