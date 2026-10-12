@@ -72,28 +72,6 @@ public struct CostItem: Equatable, Sendable {
     }
 }
 
-public enum LockScope: Hashable, Codable, Sendable {
-    case company
-    case person(Person.ID)
-
-    var key: String {
-        switch self {
-        case .company: "company"
-        case .person(let id): "person:" + id
-        }
-    }
-
-    init?(key: String) {
-        if key == "company" {
-            self = .company
-        } else if key.hasPrefix("person:") {
-            self = .person(String(key.dropFirst("person:".count)))
-        } else {
-            return nil
-        }
-    }
-}
-
 public struct Person: Identifiable, Equatable, Codable, Sendable {
     public typealias ID = String
     public var id: ID
@@ -235,7 +213,6 @@ public struct Inlet: Identifiable, Equatable, Codable, Sendable {
 
 public enum HubError: Error, Equatable, Sendable {
     case noInlet(DataKind)
-    case locked(Inlet.ID)
     case provider(Hint)
     case notConnected(Inlet.ID)
     case capabilityMissing(Inlet.ID, Capability)

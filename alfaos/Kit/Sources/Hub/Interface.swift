@@ -33,8 +33,6 @@ public protocol HubRules: AnyObject {
     func cost(_ inlet: Inlet.ID, _ period: Period) -> Cost
     func limit(_ capability: Capability) -> Int
     func setLimit(_ capability: Capability, _ value: Int)
-    func isLocked(_ provider: Provider.ID, scope: LockScope) -> Bool
-    func setLocked(_ provider: Provider.ID, scope: LockScope, _ locked: Bool)
     var queue: [SyncJob] { get }
 }
 
