@@ -1,0 +1,64 @@
+{
+  "$extensions" : {
+    "com.johannesleoberger.alfacolor" : {
+      "order" : [
+        [
+          "color",
+          "accent"
+        ],
+        [
+          "space",
+          "4"
+        ],
+        [
+          "font",
+          "body"
+        ]
+      ]
+    }
+  },
+  "color" : {
+    "accent" : {
+      "$description" : "Accent color",
+      "$extensions" : {
+        "com.johannesleoberger.alfacolor" : {
+          "source" : {
+            "importedAt" : "2026-10-08T09:30:00.250Z",
+            "license" : "CC0",
+            "url" : "https://example.com/page",
+            "via" : "paste"
+          }
+        }
+      },
+      "$type" : "color",
+      "$value" : {
+        "alpha" : 1,
+        "colorSpace" : "srgb",
+        "components" : [
+          0.039,
+          0.518,
+          1
+        ],
+        "hex" : "#0A84FF"
+      }
+    }
+  },
+  "font" : {
+    "body" : {
+      "$type" : "fontFamily",
+      "$value" : [
+        "SF Pro Text",
+        "Helvetica Neue"
+      ]
+    }
+  },
+  "space" : {
+    "4" : {
+      "$type" : "dimension",
+      "$value" : {
+        "unit" : "px",
+        "value" : 16
+      }
+    }
+  }
+}

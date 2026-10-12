@@ -1,0 +1,60 @@
+{
+  "id": "standard",
+  "items": [
+    {
+      "content": {
+        "note": {
+          "text": "Hallo Mara,\nanbei die Farben und das Raster für die Startseite. Sag mir, ob das Grau zu hell ist."
+        }
+      },
+      "hidden": false,
+      "id": "example-note-draft",
+      "layerID": "standard",
+      "locked": false,
+      "rect": {
+        "h": 180,
+        "w": 360,
+        "x": 40,
+        "y": 40
+      },
+      "tags": [],
+      "title": "Entwurf",
+      "z": 1
+    },
+    {
+      "content": {
+        "frame": {
+          "deviceID": "mbp14-landscape",
+          "grid": {
+            "baseline": 0,
+            "baselineStart": 0,
+            "columns": 12,
+            "gutter": 16,
+            "marginBottom": 40,
+            "marginLeft": 40,
+            "marginRight": 40,
+            "marginTop": 40
+          },
+          "gridID": null
+        }
+      },
+      "hidden": false,
+      "id": "example-frame-laptop",
+      "layerID": "standard",
+      "locked": false,
+      "rect": {
+        "h": 982,
+        "w": 1512,
+        "x": 440,
+        "y": 40
+      },
+      "tags": [],
+      "title": "MacBook Pro 14",
+      "z": 0
+    }
+  ],
+  "locked": false,
+  "name": "Standard",
+  "schema": 2,
+  "visible": true
+}

@@ -1,0 +1,1215 @@
+Herkunft: Bericht eines Haiku-Arbeiters vom 2026-10-08, Auftrag recherche/BRIEF.txt (Rohbericht aus dem Repo entfernt, Historie in Git), gestützt auf Apple HIG (abgerufen als JSON von developer.apple.com). Von Claude (Opus 5.5) gesichtet: Empfehlungen und Quellen geprüft, Inhalte nicht Zeile für Zeile.
+Widerspruch zu 09-VISION: Räume als Reiter (Vision) oder Seitenleiste (dieser Bericht, HIG). Entscheidung: OFFENE-FRAGEN Nr. 2.
+
+SETZKASTEN · RECHERCHE 05 · OBERFLÄCHE DER MACOS-APP
+Stand: 8. Oktober 2026 · Ziel: macOS 26, Swift 6, SwiftUI, Xcode 26
+Thema: Fensteraufbau, Bildschirme, Menüleiste, Werkzeuge, Material, Barrierefreiheit.
+
+================================================================
+0 LESEHILFE
+================================================================
+
+[Q-Kürzel] verweist auf die Quellenliste in Abschnitt 1. Die Seiten der Apple-HIG wurden über die Datendatei gelesen, die hinter jeder Seite liegt. Die Webansicht war leer. Jede HIG-Aussage trägt ein Kürzel.
+
+Vorschlag = Entwurf dieser Recherche. Das ist keine Apple-Vorgabe. Die Zahlen für Breiten und Höhen sind Vorschläge, wenn nicht anders vermerkt.
+
+[nicht geprüft] = Die Aussage ist nicht gegen eine Primärquelle bestätigt. Sie stammt aus Suchauszügen oder Sekundärquellen oder aus Vorwissen.
+
+Zahlen mit Quelle stammen von der jeweiligen Seite. Zahlen ohne Quelle sind Vorschläge.
+
+Die Liste "OFFENE FRAGEN" steht am Ende.
+
+================================================================
+1 QUELLEN
+================================================================
+
+1.1 HIG-Seiten (Basis: https://developer.apple.com/design/human-interface-guidelines/)
+Kürzel = Slug der Seite. Änderungsdatum laut Seite in Klammern.
+
+[Sidebars] .../sidebars (8.6.2026)
+[Split views] .../split-views (9.6.2025)
+[Toolbars] .../toolbars (16.12.2025)
+[Windows] .../windows
+[Panels] .../panels
+[Materials] .../materials (Liquid Glass, 9.9.2025)
+[Layout] .../layout (9.9.2026)
+[The menu bar] .../the-menu-bar
+[Menus] .../menus (8.6.2026)
+[Keyboards] .../keyboards
+[Settings] .../settings
+[Tab views] .../tab-views
+[Color] .../color
+[Dark Mode] .../dark-mode
+[Typography] .../typography
+[Accessibility] .../accessibility
+[VoiceOver] .../voiceover
+[Drag and drop] .../drag-and-drop
+[Sheets] .../sheets
+[Popovers] .../popovers
+[Alerts] .../alerts
+[Modality] .../modality
+[Buttons] .../buttons
+[Toggles] .../toggles
+[Color wells] .../color-wells
+[Sliders] .../sliders
+[Steppers] .../steppers
+[Pop-up buttons] .../pop-up-buttons
+[Segmented controls] .../segmented-controls
+[Lists and tables] .../lists-and-tables
+[Outline views] .../outline-views
+[Search fields] .../search-fields
+[Token fields] .../token-fields
+[Undo and redo] .../undo-and-redo
+[Focus and selection] .../focus-and-selection
+[Going full screen] .../going-full-screen
+[File management] .../file-management
+[Pointing devices] .../pointing-devices
+[Gestures] .../gestures
+[Writing] .../writing
+[Labels] .../labels
+[Boxes] .../boxes
+[Progress indicators] .../progress-indicators
+[Image views] .../image-views
+[Image wells] .../image-wells
+[Entering data] .../entering-data
+[Designing for macOS] .../designing-for-macos
+[Launching] .../launching
+[Scroll views] .../scroll-views
+[Path controls] .../path-controls
+[Pull-down buttons] .../pull-down-buttons
+
+1.2 Apple-Entwicklerdokumentation (Basis: https://developer.apple.com/documentation/)
+[API: inspector(isPresented:content:)] swiftui/view/inspector(ispresented:content:)
+[API: inspectorColumnWidth] swiftui/view/inspectorcolumnwidth(min:ideal:max:)
+[API: NavigationSplitView] swiftui/navigationsplitview
+[API: navigationSplitViewColumnWidth] swiftui/view/navigationsplitviewcolumnwidth(min:ideal:max:)
+[API: toolbar(content:)] swiftui/view/toolbar(content:)
+[API: toolbar(removing:)] swiftui/view/toolbar(removing:)
+[API: ToolbarSpacer] swiftui/toolbarspacer
+[API: ToolbarItem] swiftui/toolbaritem
+[API: glassEffect] swiftui/view/glasseffect(_:in:)
+[API: GlassEffectContainer] swiftui/glasseffectcontainer
+[API: Glass] swiftui/glass
+[API: backgroundExtensionEffect] swiftui/view/backgroundextensioneffect()
+[API: primitiveButtonStyle glass] swiftui/primitivebuttonstyle/glass
+[API: scrollEdgeEffectStyle] swiftui/view/scrolledgeeffectstyle(_:for:)
+[API: Adopting Liquid Glass] technologyoverviews/adopting-liquid-glass
+[API: Settings scene] swiftui/settings
+[API: Window scene] swiftui/window
+[API: DocumentGroup] swiftui/documentgroup
+[API: Commands] swiftui/commands
+[API: CommandMenu] swiftui/commandmenu
+[API: keyboardShortcut] swiftui/view/keyboardshortcut(_:modifiers:)
+[API: Picker] swiftui/picker
+[API: MenuPickerStyle] swiftui/menupickerstyle
+[API: SegmentedPickerStyle] swiftui/segmentedpickerstyle
+[API: Slider] swiftui/slider
+[API: Stepper] swiftui/stepper
+[API: Toggle] swiftui/toggle
+[API: CheckboxToggleStyle] swiftui/checkboxtogglestyle
+[API: TextField] swiftui/textfield
+[API: SecureField] swiftui/securefield
+[API: TextEditor] swiftui/texteditor
+[API: ColorPicker] swiftui/colorpicker
+[API: Table] swiftui/table
+[API: List] swiftui/list
+[API: SidebarListStyle] swiftui/sidebarliststyle
+[API: OutlineGroup] swiftui/outlinegroup
+[API: DisclosureGroup] swiftui/disclosuregroup
+[API: LabeledContent] swiftui/labeledcontent
+[API: Form] swiftui/form
+[API: FormStyle] swiftui/formstyle
+[API: GroupedFormStyle] swiftui/groupedformstyle
+[API: Canvas] swiftui/canvas
+[API: TabView] swiftui/tabview
+[API: HSplitView] swiftui/hsplitview
+[API: ControlSize] swiftui/controlsize
+[API: ButtonStyle] swiftui/buttonstyle
+[API: Button] swiftui/button
+[API: LazyVGrid] swiftui/lazyvgrid
+[API: ProgressView] swiftui/progressview
+[API: searchable] swiftui/view/searchable(text:placement:prompt:)
+[API: draggable] swiftui/view/draggable(_:)
+[API: dropDestination] swiftui/view/dropdestination(for:action:istargeted:)
+[API: fileImporter] swiftui/view/fileimporter(ispresented:allowedcontenttypes:allowsmultipleselection:oncompletion:)
+[API: fileExporter] swiftui/view/fileexporter(ispresented:document:contenttype:defaultfilename:oncompletion:oncancellation:)
+[API: popover] swiftui/view/popover(ispresented:attachmentanchor:arrowedge:content:)
+[API: sheet] swiftui/view/sheet(ispresented:ondismiss:content:)
+[API: accessibilityReduceMotion] swiftui/environmentvalues/accessibilityreducemotion
+[API: colorSchemeContrast] swiftui/environmentvalues/colorschemecontrast
+[API: MagnifyGesture] swiftui/magnifygesture
+[API: OpenWindowAction] swiftui/openwindowaction
+[API: FocusState] swiftui/focusstate
+[API: WebView (WebKit)] webkit/webview-swift.struct
+[API: WebPage] webkit/webpage
+[API: WebPage.NavigationPreferences] webkit/webpage/navigationpreferences
+[API: WebPage.Configuration] webkit/webpage/configuration
+[API: Keychain Services] security/keychain-services
+[API: App Sandbox] security/app-sandbox
+[API: Security-scoped Bookmarks] foundation/nsurl/bookmarkcreationoptions/withsecurityscope
+[API: File System Events] coreservices/file_system_events
+[API: CloudKit] cloudkit
+[API: ASWebAuthenticationSession] authenticationservices/aswebauthenticationsession
+
+1.3 Externe Quellen
+[EXT Adobe] https://helpx.adobe.com/indesign/desktop/get-started/settings-and-preferences/keyboard-shortcuts.html
+  Die Seite war beim Abruf gesperrt (HTTP 403). Belegt sind nur Suchauszüge für V, A, H, Z und die Leertaste.
+[EXT Apple Support, Datenschutz] https://support.apple.com/guide/mac-help/change-privacy-security-settings-on-mac-mchl211c911f/mac
+  Suchauszug. Vollzugriff auf die Festplatte, Safari-Daten genannt.
+[EXT Pinterest, Set-up-App] https://developers.pinterest.com/docs/getting-started/set-up-app/
+  Suchauszug. Geschäftskonto, OAuth-Ablauf, exakte Redirect-URIs.
+[EXT Pinterest, OAuth-Token] https://developers.pinterest.com/docs/api/v5/oauth-token/
+  Suchauszug. Token-Erneuerung, continuous_refresh.
+[EXT Safari-Lesezeichen, Pfad] https://www.sir-apfelot.de/wo-finde-ich-am-mac-die-datei-fuer-die-safari-lesezeichen-28662/
+  Sekundärquelle. Kein Apple-Dokument.
+[EXT Chrome-Lesezeichen, Pfad] https://ubergizmo.com/how-to/find-google-chrome-bookmarks-computer/amp
+  Sekundärquelle. Kein Google-Dokument.
+
+================================================================
+2 FENSTERAUFBAU
+================================================================
+
+2.1 Gesamtbild (Vorschlag)
+
+  +-----------------------------------------------------------------------+
+  | Titelleiste (System) | Werkzeugleiste (oben, Bedienebene)             |
+  +--------------+------------------------------------------+-------------+
+  | Seitenleiste | Leinwand (Inhalt)                        | Inspektor   |
+  | Themenräume  |                                          | (rechts,    |
+  | Sammlung     |   [Werkzeugpalette = Panel, schwebt]     |  Auswahl-   |
+  | Ebenen       |                                          |  Felder)    |
+  |              |   [Werkzeugoptionen = Leiste oben am     |             |
+  |              |    Leinwandrand, nur bei aktivem Werkz.] |             |
+  +--------------+------------------------------------------+-------------+
+  | Untere Leiste: nur Status (siehe 8, Punkt 1)                          |
+  +-----------------------------------------------------------------------+
+
+Der Aufbau folgt der Teilung aus [Split views] und [Sidebars]. Die Seitenleiste steht links. Der Inspektor steht meist am Ende der Teilung [Windows, Abschnitt macOS, untere Leiste].
+
+2.2 Bereiche
+
+Jeder Bereich hat fünf Angaben: Breite, Inhalt, ein- und ausklappen, Tastenkürzel, Material.
+
+(A) WERKZEUGLEISTE (oben, im Fenster-Kopf)
+- Breite: Volle Fensterbreite. Die Höhe legt das System fest. Apple nennt dafür keinen Zahlenwert [Toolbars].
+- Inhalt, von links nach rechts:
+  * Leading: Seitenleiste ein/aus (vom System, bei NavigationSplitView) [API: NavigationSplitView]. Dokumentmenü mit Titel. Der Titel bleibt unter 15 Zeichen [Toolbars, Titles].
+  * Mitte: Zoom (Picker, Stil Menü) [API: Picker, MenuPickerStyle]. Maßeinheit (Picker, Stil Menü). Raster ein/aus (Button mit Zustand). Siehe Abschnitt 8, Punkt 1.
+  * Trailing: Suchfeld (searchable) [API: searchable]. Inspektor ein/aus (Button). Ausgeben (Button mit Stil prominent, einzige primäre Aktion) [Toolbars: nur eine primäre Aktion, am Ende].
+- Gruppen: höchstens drei Gruppen [Toolbars].
+- Jeder Werkzeugleistenpunkt steht auch im Menü [Toolbars, macOS].
+- Ein-/ausklappen: Darstellung > Werkzeugleiste ein/aus (Option+Cmd+T) [Keyboards, Standard-Tabelle; Menus/The menu bar].
+- Tastenkürzel: Suchfeld springen: Option+Cmd+F [Keyboards, Standard-Tabelle]. Rückgängig/Wiederholen: Cmd+Z / Shift+Cmd+Z [Undo and redo, macOS].
+- Material: Liquid Glass (Bedienebene) [Materials].
+
+(B) SEITENLEISTE (links)
+- Breite (Vorschlag): Minimum 200, Ideal 240, Maximum 320 Punkte. Zuständige API: navigationSplitViewColumnWidth(min:ideal:max:) [API]. Apple nennt keine Zahl für Seitenleisten [Sidebars]. Das Beispiel in der API-Dokumentation nutzt 150 Punkte, das ist kein Maß [API].
+- Inhalt, von oben nach unten:
+  1. Abschnitt "Themenräume" (Liste der Tabs/Räume).
+  2. Abschnitt "Sammlung" (Kurzliste der Kategorien mit Anzahl; Klick filtert).
+  3. Abschnitt "Ebenen" (Musterseiten und Ebenen, bis zwei Ebenen).
+- Hierarchie: höchstens zwei Ebenen in der Seitenleiste [Sidebars, Best Practices]. Tiefere Hierarchien gehören in eine Teilung mit Inhaltsliste [Sidebars; Split views].
+- Liste: List mit Seitenleisten-Stil (SidebarListStyle) [API: SidebarListStyle]. Gruppen: DisclosureGroup [API] mit Ein-/Ausklapp-Pfeil [Sidebars: Disclosure-Steuerung für viel Inhalt].
+- Ein-/ausklappen: Darstellung > Seitenleiste ein/aus. Apple empfiehlt diesen Eintrag im Menü Darstellung [Sidebars; The menu bar: Show/Hide Sidebar].
+- Tastenkürzel (Vorschlag): Option+Cmd+S. Kein Apple-Standard, keine Kollision in [Keyboards, Standard-Tabelle].
+- Material: Liquid Glass, Variante regular. Die regular-Variante gilt für Seitenleisten mit viel Text [Materials].
+- Wichtig: Keine kritischen Aktionen am unteren Rand der Seitenleiste [Sidebars, macOS].
+
+(C) LEINWAND (Mitte)
+- Breite: Rest der Fensterbreite.
+- Inhalt: Blöcke, Raster, Hilfslinien, Auswahlrahmen (siehe 3b).
+- Material: Standardmaterial, kein Liquid Glass. Liquid Glass gehört nicht in die Inhaltsebene [Materials, Abschnitt Liquid Glass].
+- Hintergrund: Die Fläche füllt den Bereich bis zu den Rändern. Unter der Werkzeugleiste sorgt der Scroll-Edge-Effekt für Lesbarkeit statt einer Füllfarbe [Layout; API: scrollEdgeEffectStyle].
+- Ein-/ausklappen: Vollbild über Darstellung > Vollbild aktivieren/beenden (Ctrl+Cmd+F) [Keyboards, Standard-Tabelle]. Im Vollbild darf die Werkzeugleiste ausgeblendet werden. Die Rückkehr muss verlässlich sein, etwa durch Bewegen des Zeigers an den oberen Rand [Toolbars; Going full screen].
+- Tastenkürzel: Hand H (Verschieben), Zoom Z, Alles auswählen Cmd+A [Keyboards]. Die Werkzeugtasten stehen in Abschnitt 5.
+- Zoom: Pinch-Geste auf dem Trackpad, Doppelklick zoomt [Gestures, Tabelle: Zoom und Doppeltipp auf macOS].
+
+(D) INSPEKTOR (rechts)
+- Breite (Vorschlag): Minimum 260, Ideal 300, Maximum 380 Punkte. Die API setzt die Breite über inspectorColumnWidth(min:ideal:max:) [API: inspectorColumnWidth]. Das Beispiel der API nutzt 225 Punkte; das ist kein Maß.
+- Inhalt: Felder je Auswahltyp (siehe 3c). Der Inhalt passt sich der Auswahl an [Panels: ein Inspektor zeigt Details der Auswahl und aktualisiert sich bei Wechsel].
+- Technik: inspector(isPresented:content:) [API: inspector(isPresented:content:)], macOS 14.0 und neuer.
+- Ein-/ausklappen: Option+Cmd+I (Darstellung > Inspektor ein/aus). Die Standard-Tabelle nennt Option+Cmd+I für "display an inspector window" [Keyboards]. Die Zuordnung auf Ein/Aus ist ein Vorschlag.
+- Material: Liquid Glass. Der Inspektor liegt in der Bedienebene. Apple beschreibt Teilungen mit Inspektor als Standardaufbau [Adopting Liquid Glass: split views for sidebar layouts with an inspector panel].
+
+(E) WERKZEUGPALETTE (schwebendes Panel über der Leinwand)
+- Breite (Vorschlag): 52 Punkte. Eine Spalte mit Schaltflächen von 28 x 28 Punkten. Abstand 12 Punkte. Die Werte sind der Standard-Schaltflächengröße (28 x 28) und dem Mindestabstand um Schaltflächen mit Rahmen (12 Punkte) entnommen [Accessibility, Abschnitt Mobilität; Accessibility, Tabelle Steuerelementgröße].
+- Form: Panel. Ein Panel liefert Werkzeuge für Inhalte im Hauptfenster [The menu bar, Fenster-Menü: Panels liefern Werkzeuge]. Das Panel hat eine Titelleiste mit kurzem Substantiv, zum Beispiel "Werkzeuge" [Panels].
+- Inhalt: zehn Werkzeuge, von oben nach unten: Auswahl, Direktauswahl, Rahmen, Text, Hand, Zoom, Pipette, Messen, Raster, Kommentar (siehe Abschnitt 5).
+- Ein-/ausklappen: Fenster > Werkzeuge ein/aus. Ein Panel verschwindet, wenn die App inaktiv ist, und kommt bei Aktivierung zurück [Panels: Panels bei Aktivierung nach vorn, bei Inaktivität ausblenden].
+- Tastenkürzel (Vorschlag): Option+Cmd+P für ein/aus. Das Kürzel ist kein Apple-Standard.
+- Material: Liquid Glass, Variante regular. Bei Schweben über Bildern: clear, mit Abdunkelung 35 % bei hellem Hintergrund [Materials: clear nur über visuell reichem Hintergrund; Abdunkelung 35 %].
+- Schaltflächen im Panel: Stil Liquid Glass (buttonStyle glass) [API: primitiveButtonStyle glass] oder ein Standardstil.
+
+(F) UNTERE LEISTE (Status)
+- Breite: Volle Fensterbreite. Höhe (Vorschlag): 28 Punkte.
+- Inhalt (Vorschlag), von links nach rechts: Anzahl der Auswahl ("3 ausgewählt"). Position des Zeigers in Punkten. Speicherstand ("Gesichert" oder "Ungesichert"). Name des aktiven Werkzeugs.
+- Regel von Apple: Die untere Leiste trägt nur kleine Angaben, die sich auf Inhalt oder Auswahl beziehen. Kritische Aktionen gehören nicht hierher [Windows, Abschnitt macOS: Finder-Statusleiste als Beispiel].
+- Keine Schalter, Kontrollkästchen oder Optionsfelder in der Statusleiste [Toggles, macOS: Nicht in Werkzeugleiste oder Statusleiste].
+- Ein-/ausklappen: Darstellung > Untere Leiste ein/aus (Vorschlag, kein Kürzel).
+- Material: Standardmaterial, dezent.
+
+(G) WERKZEUGOPTIONEN (Leiste über der Leinwand, nur bei aktivem Werkzeug)
+- Breite: Volle Breite der Leinwand. Höhe (Vorschlag): 36 Punkte.
+- Inhalt: Optionen des aktiven Werkzeugs (siehe 3n).
+- Technik (Vorschlag): Als Teil der Werkzeugleiste über toolbar(content:) mit wechselndem Inhalt [API: toolbar(content:)]. Alternativ eine Leiste direkt unter der Werkzeugleiste.
+- Apple schlägt kontextuelle Leisten vor, wenn die App in einen modalen Zustand wechselt. Die Stelle steht im visionOS-Abschnitt von [Toolbars]. Die Übertragung auf macOS ist ein Vorschlag.
+- Ein-/ausklappen: Darstellung > Werkzeugoptionen ein/aus (Vorschlag, kein Kürzel).
+
+2.3 Fenstergrößen und Fenstertypen
+
+- Startgröße (Vorschlag): 1280 x 800 Punkte. Maß aus dem Brief, Mac-Fenster-Vorgabe des Prototyps.
+- Mindestgröße (Vorschlag): 1000 x 640 Punkte.
+- Begründung: Apple empfiehlt, für jedes Fenster eine Mindest- und eine Höchstgröße zu setzen, damit Elemente sich nicht überlagern [Windows, Abschnitt visionOS; der Grundsatz gilt sinngemäß für macOS].
+- Hauptfenster: Hier liegt die Leinwand mit Seitenleiste und Inspektor. Es ist das Hauptfenster der App. Es ist das Schlüsselfenster, solange kein Panel den Eingabefokus hat [Windows, macOS-Fensterzustände].
+- Hilfsfenster: Labor, Token-Werkstatt, Rahmen-Editor (wenn kein Panel). Ein Hilfsfenster dient einer einzigen Aufgabe, lässt keine Navigation in andere Bereiche zu und hat eine Schließen-Schaltfläche [Windows, Abschnitt Fenstertypen].
+- Einstellungsfenster: eigene Szene, Befehl Cmd+, [Settings; Keyboards].
+- Panels: Werkzeuge, Ebenen (wenn nicht Seitenleiste), Sammlung (wenn schwebend), Inspektor (wenn als Panel). Panels haben keine Minimieren-Schaltfläche [Panels].
+
+Alle Fenster verwenden die Standardbausteine von Apple. Eigene Fensterrahmen oder Titelleisten sind nicht vorgesehen [Windows: custom window UI vermeiden].
+
+================================================================
+3 BILDSCHIRME UND PANELS (a bis n)
+================================================================
+
+Jeder Bildschirm hat die Angaben: Zweck, Form, Inhalt von oben nach unten, Bedienelemente mit SwiftUI-Typ, Zustände und Prüfpunkt.
+
+--------------------------------------------------------------
+(a) STARTFENSTER UND DOKUMENTWAHL
+--------------------------------------------------------------
+Zweck: Beim Start ein Dokument öffnen, neu anlegen oder die letzte Sitzung fortsetzen.
+
+Form: Standardfenster (Window-Szene) mit Titel "Start" [API: Window]. Der Fenstertitel trägt nicht den App-Namen [Toolbars, Titles].
+Alternative: Dokumentszene mit Öffnen-Dialog des Systems [API: DocumentGroup]. Diese Wahl ist offen (siehe Abschnitt 9).
+
+Regeln:
+- Beim Start erscheint kein Alarm [Alerts: beim Start keinen Alarm zeigen].
+- Der Wiederherstellungsablauf stellt Fenster in dem Zustand wieder her, in dem sie geschlossen wurden [Launching].
+- macOS hat keinen Startbildschirm [Launching: Launch screens entfallen auf macOS].
+
+Inhalt von oben nach unten:
+1. Kopf: Titel "Start" in der Titelleiste. Darunter Schaltflächen.
+2. Schaltfläche "Neues Dokument" (primäre Aktion, Rolle primary, Standardbelegung Return) [Buttons: Primary-Rolle, Return].
+3. Schaltfläche "Öffnen…" (mit Ellipse, weil ein Dialog folgt) [Menus: Ellipse bei Dialog; Buttons].
+4. Liste "Zuletzt geöffnet": Name, Datum, Vorschau-Bild. Sortierung: zuletzt zuerst [The menu bar, File: Open Recent]. Dateinamen statt Pfade [The menu bar].
+5. Vorlagen (Vorschlag): Auswahl eines Gerätes für ein neues Dokument (Mac 1512 x 982, Mac-Fenster 1280 x 800, iPad 1180 x 820, iPhone 393 x 852).
+6. Fußzeile (Vorschlag): Schaltfläche "Ordner verbinden…" (Spiegel, siehe (k)).
+
+Bedienelemente (SwiftUI):
+- Button mit borderedProminent für "Neues Dokument" [API: ButtonStyle].
+- Button für "Öffnen…".
+- List mit Auswahl (List(selection:)) für die Liste "Zuletzt geöffnet" [API: List]. Doppelklick öffnet.
+- Picker mit Stil Menü für die Vorlagen [API: Picker, MenuPickerStyle].
+- Toggle mit Stil Kontrollkästchen: "Beim Start diese Ansicht zeigen" [API: Toggle, CheckboxToggleStyle]. Kontrollkästchen im Fensterkörper sind erlaubt [Toggles, macOS].
+
+Zustände:
+- Leer: Keine Liste, nur die Schaltflächen und ein Hinweistext.
+- Gefüllt: Liste mit Dokumenten.
+- Fehlende Datei: Die Zeile erscheint grau und trägt den Hinweis "Nicht gefunden". Kein Alarm [Alerts].
+
+Prüfen: App startet ohne Alarm. Cmd+N legt ein Dokument an [Keyboards]. Die Liste zeigt Namen, nicht Pfade [The menu bar].
+
+--------------------------------------------------------------
+(b) LEINWAND MIT AUSWAHL
+--------------------------------------------------------------
+Zweck: Hauptarbeitsfläche. Blöcke anordnen, auswählen, verschieben, ausrichten.
+
+Form: Inhaltsbereich im Hauptfenster, zwischen Seitenleiste und Inspektor (siehe 2.2 C).
+
+Inhalt von unten nach oben (Ebenenreihenfolge):
+1. Hintergrund in Standardmaterial.
+2. Raster (Standard 8 Punkte, Wert aus dem Brief) und Grundlinienraster, nach Einstellung sichtbar.
+3. Blöcke: Code-Karte (Live-Vorschau in WebView), Bild (mit Zuschnitt), Notiz (Text), Skizze (Zeichnung), Farbliste, Link, Zone (Gruppe mit Titel), Rahmen (Gerät), Raster-Block.
+4. Hilfslinien (beim Ziehen eingeblendet, an Kanten und Mitten).
+5. Auswahlrahmen in Akzentfarbe mit acht Griffen. Auswahl-Rechteck (Lasso) beim Ziehen im leeren Bereich.
+
+Bedienelemente und Technik:
+- Die Leinwand ist ein Container mit Blöcken als SwiftUI-Views. Zeichnungen (Skizze, Raster, Hilfslinien) nutzen Canvas [API: Canvas].
+- Zoom per Pinch: MagnifyGesture (macOS 14) [API: MagnifyGesture]. Zoom per Tastatur siehe 5.
+- Ziehen aus der Sammlung auf die Leinwand: draggable an der Quelle, dropDestination auf der Leinwand [API: draggable, dropDestination].
+- Jeder Block ist ein eigenes Barrierefreiheits-Element mit Bezeichnung [VoiceOver: alternative Bezeichnungen für alle Bedienelemente].
+
+Auswahl (Vorschlag mit Quelle für Tastenregeln):
+- Klick: Auswahl. Shift+Klick: Auswahl erweitern. Lasso: Rechteck um Blöcke.
+- Ziehen eines Blocks: verschieben. Option+Ziehen: duplizieren [Pointing devices: Option beim Ziehen dupliziert, gleiches Ergebnis wie Touch].
+- Griffe: Größe ändern. Shift beim Ziehen hält das Seitenverhältnis [Keyboards, Custom keyboard shortcuts: Shift beim Größenändern].
+- Pfeiltasten verschieben um die kleinste Einheit [Keyboards, Custom keyboard shortcuts].
+- Escape bricht den laufenden Vorgang ab [Keyboards, Standard-Tabelle: Esc].
+- Cmd+A: alles auswählen. Shift+Cmd+A: Auswahl aufheben [Keyboards].
+
+Zustände:
+- Leer: Hinweis "Elemente aus der Sammlung hierher ziehen" (Vorschlag).
+- Ein Block gewählt: Auswahlrahmen, Inspektor zeigt den Typ.
+- Mehrfachauswahl: Auswahlrahmen um alle; Inspektor zeigt "3 Elemente" und gemeinsame Felder.
+- Ziehen: Ziehbild ab etwa drei Punkten, halbtransparent [Drag and drop: Ziehbild ab ca. drei Punkten, halbtransparent]. Ziel wird hervorgehoben, nur wenn es das Element annimmt [Drag and drop: Ziel nur markieren, wenn es annimmt].
+- Gesperrt: Kein Auswahlrahmen, kein Griff, kein Ziehen.
+- Zu groß für den Rahmen: Hinweis am Block (Vorschlag).
+
+Prüfen: Auswahl sichtbar. Escape bricht ab. Cmd+Z macht das Verschieben rückgängig [Undo and redo].
+
+--------------------------------------------------------------
+(c) INSPEKTOR JE ELEMENTTYP
+--------------------------------------------------------------
+Zweck: Felder für das gewählte Element. Der Inhalt wechselt mit dem Typ.
+
+Form: Inspektor rechts (2.2 D). Schaltfläche in der Werkzeugleiste zum Ein- und Ausklappen.
+
+Gemeinsamer Kopf (alle Typen), von oben nach unten:
+1. Kopf: Symbol des Typs (SF Symbol) und Typname. SF Symbols passen sich dem Erscheinungsbild an [Dark Mode: SF Symbols].
+2. Name: TextField [API: TextField].
+3. Position und Größe: Felder in Punkten, je TextField mit Stepper [API: Stepper]. Eine Einheit steht im Feldnamen.
+4. Rahmen zuordnen: Picker mit Stil Menü [API: Picker].
+5. Ebene: Picker mit Stil Menü.
+6. Sichtbar und gesperrt: Toggle mit Stil Kontrollkästchen [API: Toggle].
+7. Tags: Token-Feld. Das SwiftUI-Typ fehlt. Umsetzung über NSTokenField per NSViewRepresentable [Token fields, Dev-Doku: NSTokenField] [nicht geprüft: Verfügbarkeit eines SwiftUI-Typs].
+8. Notiz: TextEditor [API: TextEditor].
+
+Typspezifisch:
+
+Code-Karte
+- Sprache: Picker mit Stil Menü. Werte: HTML, CSS, JavaScript, Tailwind, React/JSX, Swift (nur Quelltext), Kotlin, Flutter/Dart, Java, weitere.
+- Dateien: List, Zeile je Datei (HTML, CSS, JS). Zeile zeigt Name und Länge.
+- Vorschau: Toggle "Live-Vorschau" (Kontrollkästchen). Bei Ein: WebView im Block [API: WebView (WebKit)].
+- Schaltfläche "Im Labor öffnen" (Button) [API: Button].
+- Swift-Karte: keine Vorschau. Hinweis "Nur Quelltext" (Text).
+
+Bild
+- Zuschnitt: Überlagerung mit Griffen (eigene Zeichnung über Canvas). Seitenverhältnis: Picker mit Stil Menü (Frei, 1:1, 4:3, 16:9, Gerät).
+- Schaltfläche "Zuschnitt anwenden" (Button). Schaltfläche "Zurücksetzen".
+- Alt-Text: TextField. Pflichtfeld für VoiceOver, wenn das Bild Inhalt trägt [VoiceOver: aussagekräftige Bilder beschreiben, Dekoration ausschließen].
+- Quelle: Text (nur lesen).
+- Bildfeld-Typ: editierbares Bild mit Ziehen, Kopieren, Einfügen und Entf zum Leeren [Image views, macOS: Image well]. Umsetzung als NSImageView [Image wells, Dev-Doku].
+
+Rahmen (Gerät)
+- Gerät: Picker mit Stil Menü (Mac 1512 x 982; Mac-Fenster 1280 x 800; iPad 1180 x 820; iPhone 393 x 852; Eigene).
+- Ausrichtung: Picker mit Stil Segmente (Hochformat, Querformat) [API: SegmentedPickerStyle]. Segmente sind für wenige Werte geeignet [Segmented controls].
+- Breite, Höhe: TextField mit Stepper.
+- Sichere Bereiche: Toggle (Kontrollkästchen) und Anzeige.
+- Schaltfläche "Raster bearbeiten…" öffnet (f).
+
+Raster
+- Spalten: Stepper. Steg: TextField mit Stepper. Ränder oben, unten, links, rechts: vier TextField.
+- Grundlinienraster: Stepper (Vorschlag: 8 Punkte).
+- Anzeige auf der Leinwand: Toggle (Kontrollkästchen).
+- Form-Stil: Form mit gruppiertem Stil [API: Form, GroupedFormStyle].
+
+Token
+- Name: TextField. Typ: Picker mit Stil Menü (Farbe, Schrift, Abstand, Radius, Verhältnis, Bewegung).
+- Wert: ColorPicker für Farbe [API: ColorPicker]. Stepper für Abstand und Radius [API: Stepper]. Slider für Verhältnis mit Stufen [API: Slider].
+- Stufe: Picker. Verwendet in: Liste, nur lesen.
+- Als Variable: Toggle.
+
+Gruppe (Zone)
+- Titel: TextField. Farbe: ColorPicker. Gesperrt: Toggle.
+- Elemente: Liste, nur lesen, mit Anzahl (LabeledContent) [API: LabeledContent].
+- Schaltflächen: "Auflösen" (Button, Rolle normal), "An Raster ausrichten" (Button).
+
+Zustände:
+- Keine Auswahl: Hinweis "Keine Auswahl".
+- Ein Element: alle Felder des Typs.
+- Mehrere Elemente: gemeinsame Felder. Unterschiedliche Werte zeigen "Gemischt" im Feld (Vorschlag).
+- Gesperrt: Felder deaktiviert, Hinweis "Gesperrt".
+
+Prüfen: Jedes Feld hat eine VoiceOver-Bezeichnung [VoiceOver]. Tab springt zum nächsten Feld [Focus and selection].
+
+--------------------------------------------------------------
+(d) EBENEN-PANEL
+--------------------------------------------------------------
+Zweck: Reihenfolge, Sichtbarkeit und Sperre der Elemente. Musterseiten für wiederkehrende Elemente.
+
+Form (Vorschlag): Abschnitt "Ebenen" in der Seitenleiste, zwei Ebenen. Für tiefe Gruppen ein eigenes Panel "Ebenen". Apple empfiehlt für tiefe Hierarchien eine Teilung mit Inhaltsliste statt einer tiefen Seitenleiste [Sidebars].
+
+Inhalt von oben nach unten:
+1. Kopf "Musterseiten" (Vorschlag: Musterseite A, B … als Zeilen). Musterseiten fassen Elemente zusammen, die auf mehreren Seiten erscheinen.
+2. Kopf "Ebenen".
+3. Ebenenzeile: Name, Schaltfläche Sichtbar (Auge-Symbol), Schaltfläche Gesperrt (Schloss-Symbol), Anzahl der Elemente.
+4. Elemente unter jeder Ebene, ein- und ausklappbar.
+5. Einfügemarke beim Umordnen (Drag and Drop).
+
+Bedienelemente (SwiftUI):
+- List mit Auswahl [API: List] und Gliederung über OutlineGroup oder DisclosureGroup [API: OutlineGroup, DisclosureGroup]. Apple nennt für hierarchische Daten die Gliederungsansicht [Outline views, Lists and tables: Gliederungsansicht statt Tabelle].
+- Sichtbar und Gesperrt: Toggle mit Symbol als Bezeichnung. Zusätzlich Text als Bezeichnung für VoiceOver [Accessibility: mehr als Farbe; VoiceOver].
+- Umbenennen per Doppelklick: TextField.
+- Umordnen: Ziehen mit draggable und dropDestination [API].
+- Kontextmenü: Umbenennen, Duplizieren, Nach vorne, Nach hinten, Sperren, Löschen.
+
+Zustände:
+- Ebene sichtbar und offen. Ebene ausgeblendet: Zeile gedämpft, Auge durchgestrichen.
+- Ebene gesperrt: Schloss gefüllt, Elemente nicht auswählbar.
+- Umordnen: Einfügemarke zwischen Zeilen.
+- Gruppe eingeklappt: Option-Klick auf den Pfeil klappt alle Untergruppen auf [Outline views: Option-Klick].
+
+Prüfen: Sichtbarkeit im Panel stimmt mit der Leinwand überein. Bei Umordnen ändert sich die Reihenfolge auf der Leinwand.
+
+--------------------------------------------------------------
+(e) SAMMLUNG UND BIBLIOTHEK MIT FILTERN
+--------------------------------------------------------------
+Zweck: Alle gesammelten Stücke durchsuchen, filtern und auf die Leinwand ziehen.
+
+Form (Vorschlag): Schwebendes Panel "Sammlung", in der Größe veränderbar. In der Seitenleiste steht eine Kurzliste mit Kategorien und Anzahl. Ein Klick in der Kurzliste setzt den Filter im Panel.
+
+Inhalt von oben nach unten:
+1. Suchfeld mit Platzhalter "Suche in der Sammlung". Die Suche läuft beim Tippen [Search fields: Suche beim Tippen starten; Platzhalter nutzen]. Das Suchfeld liegt in der Werkzeugleiste oder im Panel-Kopf.
+2. Filterleiste (Scope): Alle, Code, Bild, Notiz, Farbe, Schrift, Link, Skizze, Zone [Search fields: Scope-Leiste für Kategorien]. Umsetzung als Picker mit Stil Segmente, wenn die Anzahl klein bleibt [Segmented controls]. Bei mehr als sechs Kategorien ein Menü (Vorschlag in Anlehnung an [Tab views: ab sechs Einträgen ein Menü]).
+3. Quelle-Filter: Pinterest, Lesezeichen, Ordner, Upload, Screenshot. Umsetzung als Menü oder Schaltflächen mit Zustand (Vorschlag).
+4. Sortierung: Picker mit Stil Menü (Zuletzt, Name, Typ, Quelle).
+5. Ansicht: Picker mit Stil Segmente (Raster, Liste).
+6. Ergebnisse: Ansicht Raster aus Vorschaubildern (LazyVGrid [API: LazyVGrid]) oder Liste als Table mit sortierbaren Spalten [API: Table; Lists and tables: Spaltenkopf zum Sortieren, Spalten veränderbar].
+
+Bedienelemente (SwiftUI):
+- searchable(text:placement:prompt:) [API: searchable].
+- Picker (Segmente, Menü), Toggle für Quelle.
+- LazyVGrid oder Table. Auswahl mehrerer Einträge mit Shift und Cmd.
+
+Zustände:
+- Leer: "Die Sammlung ist leer" mit Schaltfläche "Importieren…" (Button, öffnet (k)).
+- Keine Treffer: "Keine Treffer für …" (Text).
+- Filter aktiv: Zähler im Filter, Schaltfläche "Filter zurücksetzen".
+- Lädt (Import): Fortschrittsanzeige. Spinner, wenn die Dauer unbekannt ist [Progress indicators: Spinner für Hintergrundarbeit].
+- Ziehen auf die Leinwand: Ziehbild halbtransparent [Drag and drop].
+
+Prüfen: Suche findet nach Name und Tags. Escape leert das Suchfeld (Vorschlag, kein Apple-Beleg [nicht geprüft]).
+
+--------------------------------------------------------------
+(f) RAHMEN- UND RASTER-EDITOR
+--------------------------------------------------------------
+Zweck: Gerät, Auflösung, Ausrichtung, Spalten, Steg, Ränder, Grundlinienraster, sichere Bereiche und Verhältnisse für eine Rahmen-Vorlage festlegen.
+
+Form (Vorschlag): Schwebendes Panel "Raster". Apple empfiehlt ein Panel statt eines Bogens, wenn der Nutzer wiederholt Eingaben macht und das Ergebnis sofort sehen soll [Sheets: Panel statt Bogen bei wiederholter Eingabe und Sicht auf das Ergebnis]. Die Leinwand zeigt die Änderung live.
+
+Inhalt von oben nach unten:
+1. Gerät: Picker mit Stil Menü (Mac 1512 x 982; Mac-Fenster 1280 x 800; iPad 1180 x 820; iPhone 393 x 852; Eigene).
+2. Breite und Höhe in Punkten: TextField je mit Stepper.
+3. Ausrichtung: Picker mit Stil Segmente (Hoch, Quer). Schaltfläche "Drehen" (Button).
+4. Auflösung: LabeledContent, nur lesen (Vorschlag: Punkte mal Skalierung).
+5. Spalten: Stepper. Steg: TextField mit Stepper.
+6. Ränder: vier TextField in einem Raster (oben, unten, links, rechts).
+7. Grundlinienraster: Stepper (Vorschlag: 8 Punkte).
+8. Sichere Bereiche: Toggle (Kontrollkästchen) mit Anzeige im Vorschaubild.
+9. Verhältnisse: Picker mit Stil Menü (1:1, 4:3, 16:9, 16:10, Eigene). Eigene Eingabe mit TextField.
+10. Vorschau: Canvas mit Rahmen, Raster und Rändern [API: Canvas].
+11. Fußzeile: Button "Als Vorlage speichern" (primär), Button "Zurücksetzen".
+
+Bedienelemente: Form mit gruppiertem Stil [API: Form, GroupedFormStyle]. Kontrollkästchen im Formular, Schalter als kleine Variante in Zeilen [Toggles, macOS: kleiner Schalter in gruppierten Formularen]. Stepper, TextField, Picker, Canvas.
+
+Zustände:
+- Unverändert: Vorlage gespeichert.
+- Geändert: Hinweis "Nicht gespeichert".
+- Ungültig: Zahl außerhalb des Bereichs. Feld rot umrandet, Text darunter (Vorschlag).
+- Vorschau aus: Nur Zahlen.
+
+Prüfen: Auflösung = Breite x Skalierung (Vorschlag). Ränder lassen Spalten zu. Die Leinwand zeigt die Änderung.
+
+--------------------------------------------------------------
+(g) MOCKUP-MODUS (Ansicht zusammenstellen, Zustände, Varianten, Vergleich)
+--------------------------------------------------------------
+Zweck: Einen Ansichtsbereich aus den Elementen der App zusammensetzen. Zustände und Varianten festhalten. Zwei Varianten vergleichen.
+
+Form (Vorschlag): Eigenes Fenster, das mit der Leinwand verknüpft ist. Begründung: Eine eigenständige Aufgabe passt in ein eigenes Fenster [Sheets, macOS: eigenständige Aufgabe im eigenen Fenster]. Ein Umschalter im selben Bereich wäre Ansichtswechsel. Dafür nennt Apple Reiter oder ein eigenes Fenster [Segmented controls: Reiter statt Segmente für Ansichtswechsel].
+
+Inhalt von oben nach unten:
+1. Kopf: Name des Mockups, Picker mit Stil Menü für das Gerät (Rahmen aus (f)).
+2. Rahmenfläche: Gerät mit Raster und sicheren Bereichen. Elemente werden hierher gezogen.
+3. Zustandsleiste: Picker mit Stil Segmente oder Menü für den Zustand (Standard, Aktiv, Leer, Fehler, Laden) (Vorschlag).
+4. Varianten: List mit Varianten. Schaltflächen "Variante hinzufügen" und "Duplizieren" (Button).
+5. Vergleich: Schaltfläche "Vergleichen…" öffnet zwei Rahmen nebeneinander.
+6. Ebenen der Ansicht: List (wie in (d)).
+7. Fußzeile: Button "Mockup-Paket …" (führt zu (l)).
+
+Bedienelemente:
+- Canvas für die Rahmenfläche. dropDestination für Elemente aus der Sammlung [API: dropDestination].
+- Picker (Menü, Segmente), List, Button.
+- Vergleich: HSplitView mit zwei Rahmen. Der Trenner ist die dünne Linie von einem Punkt [API: HSplitView; Split views, macOS: dünner Trenner, ein Punkt].
+
+Zustände:
+- Leer: Hinweis "Elemente aus der Sammlung auf den Rahmen ziehen".
+- Ein Zustand gewählt: Elemente zeigen den Zustand.
+- Variante: Kopie mit eigenem Namen.
+- Vergleich: zwei Rahmen. Mindestbreite je Rahmen (Vorschlag).
+- Element zu groß: Markierung am Rand des Rahmens (Vorschlag).
+
+Prüfen: Ziehen eines Elements aus der Sammlung setzt es in den Rahmen. Ein Element außerhalb der Liste wird abgewiesen (Vorschlag).
+
+--------------------------------------------------------------
+(h) LABOR (Code einfügen, Reiter je Sprache, Live-Vorschau, Regler, Vergleichselemente)
+--------------------------------------------------------------
+Zweck: Code einfügen, live sehen, CSS-Variablen als Regler ändern, Vergleichselemente zeigen, Ergebnis als Karte ablegen.
+
+Form (Vorschlag): Hilfsfenster [Windows: Hilfsfenster für eine Aufgabe, mit Schließen-Schaltfläche].
+
+Inhalt von oben nach unten:
+1. Werkzeugleiste des Fensters: Button "Einfügen" (Zwischenablage), Button "Als Karte ablegen", Button "Varianten bauen" (Claude), Picker mit Stil Menü für das Vorschaugerät.
+2. Reiter: HTML, CSS, JavaScript. Maximal sechs Reiter [Tab views: höchstens sechs Reiter].
+3. Editor: Text im Reiter. TextEditor für Text [API: TextEditor]. Farbige Syntax braucht eine AppKit-Textansicht [nicht geprüft].
+4. Vorschau: WebView mit Live-Anzeige [API: WebView (WebKit)].
+5. Regler-Spalte: je CSS-Variable ein Regler mit Beschriftung und Wert.
+   - Zahl: Slider [API: Slider] mit Stufen und Min/Max-Beschriftung [Sliders, macOS: Stufenmarkierungen, Min/Max beschriften].
+   - Farbe: ColorPicker [API: ColorPicker].
+   - Länge (px, rem): TextField mit Stepper.
+   - Beschriftung: Satzanfang groß, Doppelpunkt am Ende [Sliders: Beschriftung mit Doppelpunkt].
+6. Optionen: Toggle "8er-Raster einblenden", Toggle "Vergleichselemente einblenden" (Kontrollkästchen).
+7. Vergleich: Picker mit Stil Menü "Vergleich mit" (Vorlage, Vorgängerfassung).
+8. Fehleranzeige: Textzeile unter dem Editor.
+
+Bedienelemente: TabView (Reiter), TextEditor, WebView, Slider, ColorPicker, Stepper, TextField, Toggle, Picker, Button.
+
+Technik und Sicherheit (Vorschlag mit Quelle):
+- WebPage-Einstellungen: JavaScript im Seiteninhalt an- und abschaltbar (allowsContentJavaScript) [API: WebPage.NavigationPreferences].
+- Externe Quellen einschränken (loadsSubresources) [API: WebPage.Configuration]. Die Wirkung auf CDN-Skripte ist nicht geprüft [nicht geprüft].
+- Die Vorschau erhält keinen Zugriff auf die Dateien der App. Das ist Vorschlag und braucht Prüfung.
+
+Zustände:
+- Leer: Reiter leer, Vorschau zeigt Hinweis.
+- Fehler: Zeile unter dem Editor mit Fehlerort (Vorschlag).
+- Lädt: Fortschrittsanzeige bei "Varianten bauen" [Progress indicators].
+- Variable nicht gefunden: Regler ausgegraut, Hinweis.
+
+Prüfen: Ein Regler ändert die Vorschau sofort. Die Vorschau läuft ohne Zugriff auf andere Dateien der App.
+
+--------------------------------------------------------------
+(i) TOKEN-WERKSTATT (Farben aus Bild, Größenreihe, Buttons, Benennen, Vereinheitlichen)
+--------------------------------------------------------------
+Zweck: Tokens aus Bildern und Werten ziehen, Größenreihen festlegen, Buttons in Stufen zeigen, benennen und Dubletten vereinheitlichen.
+
+Form (Vorschlag): Hilfsfenster. Die Ausgabe läuft über (l).
+
+Inhalt von oben nach unten:
+1. Kopf: Name des Token-Satzes. Picker mit Stil Menü für den Typ.
+2. Abschnitt "Farben aus Bild": Bildvorschau, Schaltfläche "Aus Bild ziehen" (Button), Stepper "Anzahl" (Vorschlag: 6 bis 12), Liste der Farben (ColorPicker je Farbe). Das Pipetten-Werkzeug (I) setzt Farben einzeln.
+3. Abschnitt "Größenreihe": Stepper "Basis in Punkten", Picker mit Stil Menü "Verhältnis" (Vorschlag: 1,125; 1,2; 1,25; 1,333; 1,5). Vorschau-Liste der Stufen.
+4. Abschnitt "Buttons in Größenstufen": Vorschau-Buttons in fünf Stufen. Stufen: mini, small, regular, large, extraLarge [API: ControlSize]. Stil: bordered und borderedProminent [API: ButtonStyle].
+5. Abschnitt "Benennen": TextField "Name", Picker mit Stil Menü "Schema", Button "Namen übernehmen".
+6. Abschnitt "Vereinheitlichen": Table mit Dubletten (Name, Wert, Anzahl), Button "Vereinheitlichen…" öffnet einen Bestätigungsbogen [Sheets].
+7. Fußzeile: Button "Ausgeben…" (Weg zu (l)).
+
+Bedienelemente: ColorPicker, Stepper, Slider (optional), Picker, TextField, Table [API: Table], Button, ControlSize.
+
+Regeln:
+- Ein Button unter 20 x 20 Punkten ist zu klein. Die Standardgröße ist 28 x 28 [Accessibility, Tabelle Steuerelementgröße].
+- Eine Schaltfläche mit Farbe höchstens eine oder zwei pro Ansicht [Buttons, Style: höchstens ein bis zwei Prominente].
+
+Zustände:
+- Bild ohne Farben: Hinweis.
+- Extraktion läuft: Fortschrittsanzeige [Progress indicators].
+- Dubletten gefunden: Tabelle zeigt sie.
+- Bestätigung zum Vereinheitlichen: Bogen mit Abbrechen und Fertig [Sheets: Fertig immer mit Abbrechen].
+
+Prüfen: Die Größenreihe folgt dem Verhältnis. Alle fünf Stufen der Buttons sind sichtbar.
+
+--------------------------------------------------------------
+(j) SCREENSHOT-SORTIERER
+--------------------------------------------------------------
+Zweck: Screenshots in Stapel ordnen, benennen, mit Tags versehen und in die Sammlung übernehmen.
+
+Form (Vorschlag): Fenster-Bereich, aufgerufen aus dem Menü Import.
+
+Inhalt von oben nach unten:
+1. Kopf: Pfad des Ordners als Pfadleiste (NSPathControl) [Path controls, Dev-Doku].
+2. Werkzeugleiste: Picker mit Stil Menü "Sortierung" (Datum, Name, Größe). Button "In Sammlung übernehmen" (primär).
+3. Raster der Screenshots: LazyVGrid [API: LazyVGrid] mit Mehrfachauswahl (Shift, Cmd).
+4. Stapel-Liste links: List, je Stapel ein Eintrag. Ziehen eines Screenshots auf einen Stapel verschiebt ihn [API: draggable, dropDestination].
+5. Vorschau rechts: Bild groß. Quick-Look-Vorschau ist Teil der Dateiverwaltung [File management: Quick Look-Vorschau]. Die SwiftUI-Umsetzung ist [nicht geprüft].
+6. Tags: Token-Feld (NSTokenField) [Token fields].
+
+Bedienelemente: LazyVGrid, List, Picker, Button, TextField, Token-Feld (AppKit).
+
+Zustände:
+- Leer: Hinweis "Keine Screenshots im Ordner".
+- Auswahl mehrerer: Zähler in der Werkzeugleiste.
+- Import läuft: Fortschrittsanzeige.
+- Doppelter Screenshot: Markierung (Vorschlag).
+
+Prüfen: Ziehen auf einen Stapel verschiebt. Rückgängig macht das Verschieben [Undo and redo].
+
+--------------------------------------------------------------
+(k) IMPORT-DIALOGE (Pinterest, Lesezeichen, Ordner)
+--------------------------------------------------------------
+Zweck: Quelle wählen, Auswahl prüfen, importieren.
+
+Form: Bogen (Sheet), modal, je Quelle einer. Apple nennt den Bogen für eine Aufgabe, die vor dem Zurückkehren abgeschlossen wird [Sheets]. Nur ein Bogen zur Zeit [Sheets: nur ein Bogen gleichzeitig]. Der Bogen hat eine feste Standardgröße (Vorschlag) und ist in der Größe veränderbar [Sheets, macOS].
+
+Gemeinsamer Fuß: Button "Abbrechen" (Cancel, Escape), Button "Importieren" (primär, Return) [Buttons: Rollen; Sheets: Abbrechen zusammen mit Fertig].
+
+3k-1 Pinterest
+- Zustand "Nicht verbunden": Text und Button "Mit Pinterest verbinden".
+- Anmeldung: ASWebAuthenticationSession öffnet die Anmeldeseite [API: ASWebAuthenticationSession]. Der Ablauf ist OAuth 2.0 mit Autorisierungscode [EXT Pinterest, OAuth-Token].
+- Voraussetzungen laut Pinterest: Geschäftskonto. Die Redirect-URI muss genau übereinstimmen [EXT Pinterest, Set-up-App].
+- Zustand "Verbunden": List der Boards mit Kontrollkästchen (Toggle) je Board [Toggles: Kontrollkästchen in Listen].
+- Schaltfläche "Trennen" (Button, Rolle normal).
+- Scope-Namen (zum Beispiel pins:read, boards:read) [nicht geprüft: offizielle Liste nicht erreicht].
+
+3k-2 Lesezeichen (Safari, Chrome)
+- Quelle: Picker mit Stil Menü (Safari, Chrome, Datei).
+- Baum: OutlineGroup mit Kontrollkästchen je Ordner [API: OutlineGroup, Toggle].
+- Hinweis: Safari-Lesezeichen liegen in ~/Library/Safari/Bookmarks.plist [EXT Safari-Lesezeichen, Pfad: Sekundärquelle, nicht geprüft]. Nach dem Apple-Suchauszug fallen Safari-Daten unter den Vollzugriff auf die Festplatte (Full Disk Access) [EXT Apple Support, Datenschutz].
+- Chrome: ~/Library/Application Support/Google/Chrome/Default/Bookmarks [EXT Chrome-Lesezeichen, Pfad: Sekundärquelle, nicht geprüft].
+- Schaltfläche "Systemeinstellungen öffnen" (Button).
+
+3k-3 Ordner
+- Auswahl über fileImporter mit Mehrfachauswahl [API: fileImporter].
+- Toggle "Unterordner einbeziehen" (Kontrollkästchen).
+- Toggle "Ordner beobachten" (Spiegel, siehe (m) Sync). Der Zugriff bleibt über ein sicherheitsbezogenes Lesezeichen erhalten [API: Security-scoped Bookmarks]. Änderungen erkennt die App über File System Events [API: File System Events].
+
+Zustände (alle drei):
+- Nicht verbunden / Leer: Button aktiv, Importieren aus.
+- Verbunden / Ausgewählt: Importieren aktiv, Zähler der Auswahl.
+- Lädt: Fortschrittsanzeige [Progress indicators].
+- Fehler: Text im Bogen, kein Alarm [Alerts: Fehler in einen Hinweis im Kontext, Alarm nur für unumkehrbare Aktionen].
+
+Prüfen: Abbrechen importiert nichts. Importieren ist ohne Auswahl deaktiviert.
+
+--------------------------------------------------------------
+(l) AUSGABE-DIALOG
+--------------------------------------------------------------
+Zweck: Tokens und Mockup-Pakete ausgeben: Design-Tokens nach W3C DTCG, CSS-Variablen, Tailwind, SwiftUI, Compose, Mockup-Paket für Entwickler und für KI-Sitzungen.
+
+Form: Bogen (Sheet) mit Dateispeicherung [API: fileExporter]. Ein Format in einem Menü im Speicherbogen, wenn mehrere Formate angeboten werden [The menu bar, File: Format als Menü im Sichern-Bogen].
+
+Inhalt von oben nach unten:
+1. Format: Picker mit Stil Menü: Design-Tokens (DTCG, JSON), CSS-Variablen, Tailwind, SwiftUI, Jetpack Compose, Mockup-Paket (ZIP mit manifest.json), Mockup-Paket für KI-Sitzung.
+   [nicht geprüft: Einzelheiten des DTCG-Formats; der Brief nennt ihn als Standard].
+2. Inhalt: Toggle-Liste (Kontrollkästchen): Tokens, Bilder, Code-Dateien, Vorschau (preview.html), Positionen in Punkten (manifest.json).
+3. Vorschau: Text mit Anzahl der Dateien und der Größe (LabeledContent).
+4. Ziel: Picker mit Stil Menü (Datei, Ordner).
+5. Fuß: Button "Abbrechen" (Cancel), Button "Ausgeben" (primär, Return) [Buttons: Rollen].
+
+Zustände:
+- Bereit.
+- Fehler: fehlende Tokens oder Bild nicht gefunden. Hinweis im Bogen.
+- Läuft: Fortschrittsanzeige.
+- Fertig: Hinweis mit Ort (Vorschlag).
+
+Prüfen: Nur gewählte Inhalte landen im Paket. Die Positionen sind in Punkten (Brief).
+
+--------------------------------------------------------------
+(m) EINSTELLUNGSFENSTER (Reiter)
+--------------------------------------------------------------
+Zweck: Allgemeine Einstellungen. Selten geänderte Optionen.
+
+Form: Einstellungsszene, Befehl Cmd+, [API: Settings; Keyboards]. Apple empfiehlt eine Werkzeugleiste mit Schaltflächen für die Bereiche (Reiter), die nicht veränderbar ist und den aktiven Bereich anzeigt [Settings, macOS]. Der Fenstertitel nennt den Bereich. Die Schaltflächen für Minimieren und Maximieren sind abgeschaltet. Der zuletzt geöffnete Bereich öffnet sich wieder [Settings, macOS].
+Eine Einstellungsschaltfläche in der Hauptwerkzeugleiste gibt es nicht [Settings, macOS: Einstellungsschaltfläche in Werkzeugleiste vermeiden].
+Menü: Setzkasten > Einstellungen… [Menus / The menu bar: Settings im App-Menü].
+
+Reiter (in dieser Reihenfolge): Allgemein, Konten und Schlüssel, Sync und Spiegel, Einheiten und Raster, Werkzeuge, KI, Tastatur, Erweitert.
+
+Bereich Allgemein:
+- Toggle: Startfenster beim Start zeigen (Kontrollkästchen).
+- Picker mit Stil Menü: Schriftgröße der Bedienoberfläche (Standard, Groß, Sehr groß). Begründung: macOS unterstützt Dynamic Type nicht. Eine eigene Stufe ist nötig [Typography, macOS; Accessibility: Vergrößerung ideal um 200 Prozent].
+- Toggle: Dokumente beim Beenden sichern (Vorschlag).
+- Hinweis: Das Erscheinungsbild folgt der Systemeinstellung [Dark Mode: keine eigene Umschaltung].
+
+Bereich Konten und Schlüssel:
+- Pinterest: Label "Verbunden / Nicht verbunden", Button "Verbinden" oder "Trennen" [EXT Pinterest].
+- Claude-Plattform-Schlüssel: SecureField [API: SecureField]. Schlüssel im Schlüsselbund speichern [API: Keychain Services: kleine Datenmengen sicher ablegen].
+- Buttons: "Prüfen" (Button), "Entfernen" (Button, Rolle destructive).
+- Lesezeichen-Zugriff: Text mit Hinweis auf den Vollzugriff und einem Button "Systemeinstellungen öffnen".
+
+Bereich Sync und Spiegel:
+- Toggle: iCloud-Sync (Kontrollkästchen). Standard: aus (Vorschlag). iCloud speichert strukturierte Daten für mehrere Geräte [API: CloudKit].
+- Liste der Spiegel-Ordner: List mit Entfernen-Schaltfläche je Zeile (Button, Rolle normal).
+- Toggle: Änderungen sofort übernehmen (Vorschlag: Beobachtung über File System Events [API: File System Events]).
+- Label: letzter Abgleich mit Zeitangabe.
+- Button: "Jetzt abgleichen".
+
+Bereich Einheiten und Raster:
+- Picker mit Stil Menü: Maßeinheit (Punkt, Pixel, Millimeter) (Vorschlag).
+- Stepper: Rasterweite (Standard 8 Punkte).
+- Stepper: Grundlinienraster (Standard 8 Punkte, Vorschlag).
+- Toggle: Einrasten am Raster. Toggle: Hilfslinien anzeigen.
+
+Bereich Werkzeuge:
+- Standardwerte je Werkzeug. Die Einzelheiten stehen in (n). Hier nur die Liste mit Verweis.
+- Picker je Werkzeug, Button "Auf Standard zurücksetzen" (Rolle normal).
+
+Bereich KI:
+- Toggle: KI-Vorschläge (Vorschlag: aus).
+- Picker mit Stil Menü: Modell (Liste aus der Schnittstelle [nicht geprüft]).
+- Label: Verbrauch (Text, wenn die Schnittstelle Zahlen liefert [nicht geprüft]).
+
+Bereich Tastatur:
+- Table mit Spalten Befehl und Kürzel [API: Table]. Kürzel-Konflikte mit Standardbefehlen zeigt eine Warnung (Vorschlag).
+- Aufzeichnen eines Kürzels: eigene Ansicht [nicht geprüft: SwiftUI-Typ].
+- Button "Auf Standard zurücksetzen".
+
+Bereich Erweitert:
+- Toggle: Diagnosedaten senden (Vorschlag: aus).
+- Pfadleiste für den Datenordner (NSPathControl) [Path controls].
+- Button "Zwischenspeicher leeren" (Rolle destructive) mit Bestätigung.
+- Button "Auf Werkseinstellungen zurücksetzen" (Rolle destructive) mit Bestätigung.
+
+Regeln für destruktive Aktionen: Ein Alarm mit Abbrechen und einer destruktiven Schaltfläche. Ein Alarm nur für selten ausgeführte, nicht rückgängig zu machende Aktionen [Alerts: nicht bei jedem Löschen]. Der Zwischenspeicher ist nicht unumkehrbar, aber löscht Daten. Vorschlag: Bestätigung.
+
+Zustände:
+- Bereich gewählt: Reiter markiert.
+- Wert geändert: sofort gespeichert (Vorschlag, wie in macOS-Einstellungen üblich [nicht geprüft]).
+- Schlüssel ungültig: Hinweis im Feld.
+
+Prüfen: Cmd+, öffnet die Einstellungen. Der zuletzt geöffnete Bereich öffnet sich wieder. Die Hauptwerkzeugleiste enthält keine Einstellungsschaltfläche.
+
+--------------------------------------------------------------
+(n) WERKZEUGEINSTELLUNGEN JE WERKZEUG
+--------------------------------------------------------------
+Zweck: Optionen gehören zum aktiven Werkzeug. Sie erscheinen dort, wo das Werkzeug arbeitet.
+
+Form (Vorschlag): Werkzeugoptionen-Leiste (2.2 G). Ohne Auswahl und ohne Werkzeug erscheint der Abschnitt "Werkzeug" im Inspektor.
+
+Pro Werkzeug, mit Taste (Abschnitt 5):
+- Auswahl (V): Einrasten (Toggle), Raster anzeigen (Toggle), Schritt der Pfeiltasten (Stepper, Vorschlag 1 und 10 Punkte).
+- Direktauswahl (A): Punkte anzeigen (Toggle), Gruppenkinder wählen (Toggle).
+- Rahmen (F): Gerät (Picker), Ausrichtung (Picker mit Segmenten), Seitenverhältnis beim Ziehen (Toggle).
+- Text (T): Schrift (Picker), Größe (Stepper), Gewicht (Picker: Regular, Medium, Semibold, Bold). Leichte Schnitte nicht anbieten [Typography: leichte Schnitte vermeiden]. Ausrichtung (Picker mit Segmenten).
+- Hand (H): keine Optionen. Hinweis: Leertaste schaltet vorübergehend um (Vorschlag).
+- Zoom (Z): Schritt (Picker mit Menü: 25, 50, 100, 200, 400 Prozent) (Vorschlag).
+- Pipette (I): Probe (Picker: 1 x 1, 3 x 3, 5 x 5 Pixel) (Vorschlag). Quelle (Picker: Leinwand, Bild). Button "In Farbliste übernehmen".
+- Messen (K): Einheit (Picker mit Menü). Anzeige (Picker: Abstand, Winkel).
+- Raster (R): Spalten (Stepper), Steg (TextField mit Stepper), Ränder (vier TextField), Grundlinie (Stepper).
+- Kommentar (N): Farbe (ColorPicker), Autorname (TextField), Sichtbar (Toggle).
+
+Gemeinsame Regeln:
+- Ein Werkzeugwechsel zeigt nur die Optionen dieses Werkzeugs.
+- Button "Als Standard speichern" (Vorschlag).
+- Escape wechselt zurück zum Auswahl-Werkzeug (Vorschlag).
+
+Zustände:
+- Werkzeug aktiv, Optionen unverändert.
+- Optionen geändert: Hinweis "Nicht als Standard gespeichert" (Vorschlag).
+
+Prüfen: Die Optionen ändern sich mit dem Werkzeug. Der Standardwert bleibt beim nächsten Start erhalten.
+
+================================================================
+4 MENÜLEISTE (vollständig)
+================================================================
+
+Regeln aus der Apple-Vorgabe:
+- Standardmenüs in dieser Reihenfolge: App-Menü, Ablage, Bearbeiten, Format, Darstellung, eigene Menüs, Fenster, Hilfe [The menu bar, Anatomie].
+- Die Menüs zeigen alle Befehle. Nicht anwendbare Befehle werden deaktiviert, nicht ausgeblendet [The menu bar; Menus].
+- Ein Eintrag mit Ellipse (…) braucht weitere Eingaben [Menus, Labels].
+- Titel in Groß-/Kleinschreibung mit Substantiven oder Verben. Keine Artikel [Menus: Artikel entfernen; Writing: Verben für Aktionen].
+- Jeder Werkzeugleistenpunkt steht auch im Menü [Toolbars, macOS].
+- Eigene Menüs stehen zwischen Darstellung und Fenster [The menu bar, App-specific menus].
+- Die deutschen Menütitel (Ablage, Bearbeiten, Darstellung, Fenster, Hilfe, Einstellungen…) sind nicht gegen die deutsche Systemlokalisierung geprüft [nicht geprüft].
+
+Hinweis zu Kürzeln: "Standard" bedeutet HIG-Standard-Tabelle [Keyboards]. "Vorschlag" bedeutet neue Festlegung. Konflikte stehen in Abschnitt 8.
+
+4.1 SETZKASTEN (App-Menü)
+- Über Setzkasten (kein Kürzel). Apple: Name höchstens 16 Zeichen, keine Versionsnummer, Trennlinie danach [The menu bar, App menu]. Name: "Setzkasten" (10 Zeichen).
+- ---
+- Einstellungen… (Cmd+,) [Settings; Keyboards].
+- ---
+- Dienste ▸ (System, macOS) [The menu bar, App menu].
+- ---
+- Setzkasten ausblenden (Cmd+H) [Keyboards].
+- Andere ausblenden (Option+Cmd+H) [Keyboards].
+- Alle einblenden (kein Kürzel) [The menu bar].
+- ---
+- Setzkasten beenden (Cmd+Q) [Keyboards]. Option ändert auf "Beenden und Fenster behalten" [The menu bar: Option-Verhalten].
+
+4.2 ABLAGE
+- Neues Dokument (Cmd+N) [Keyboards].
+- Öffnen… (Cmd+O) [Keyboards; Ellipse].
+- Zuletzt geöffnet ▸ (Liste der Dokumente, neueste zuerst, Dateinamen ohne Pfad; Liste leeren) [The menu bar, File: Open Recent].
+- ---
+- Schließen (Cmd+W). Option ändert auf "Alle schließen" (Option+Cmd+W) [The menu bar, File; Keyboards: Option-Cmd-W schließt alle Fenster der App].
+- ---
+- Sichern (Cmd+S) [Keyboards].
+- Duplizieren (Shift+Cmd+S). Option ändert auf "Sichern unter…" [The menu bar, File; Keyboards].
+- Umbenennen… (kein Kürzel) [The menu bar, File].
+- Verschieben nach… (kein Kürzel) [The menu bar, File].
+- ---
+- Ausgeben… (Shift+Cmd+E, Vorschlag). Apple empfiehlt "Exportieren unter" nur für Formate, die die App sonst nicht bearbeitet [The menu bar, File: Export As].
+- Auf Version zurücksetzen ▸ (Vorschlag, wenn Autosicherung aktiv) [The menu bar, File: Revert To].
+- ---
+- Seite einrichten… (Shift+Cmd+P) [Keyboards].
+- Drucken… (Cmd+P) [Keyboards].
+
+4.3 BEARBEITEN
+- Rückgängig <Aktion> (Cmd+Z). Der Titel nennt die Aktion, zum Beispiel "Rückgängig: Verschieben" [The menu bar, Edit; Undo and redo].
+- Wiederholen <Aktion> (Shift+Cmd+Z) [Keyboards].
+- ---
+- Ausschneiden (Cmd+X). Kopieren (Cmd+C). Einsetzen (Cmd+V) [Keyboards].
+- Einsetzen und Stil anpassen (Option+Shift+Cmd+V) [Keyboards].
+- Stil einsetzen (Option+Cmd+V) [Keyboards: Stil eines Objekts auf die Auswahl anwenden].
+- Löschen (Delete-Taste). Apple nennt "Löschen", nicht "Leeren" oder "Entfernen" [The menu bar, Edit: Delete].
+- ---
+- Alles auswählen (Cmd+A). Auswahl aufheben (Shift+Cmd+A) [Keyboards].
+- ---
+- Suchen ▸: Suchen… (Cmd+F). Nächsten suchen (Cmd+G). Vorherigen suchen (Shift+Cmd+G). Auswahl für Suche verwenden (Cmd+E). Zur Auswahl springen (Cmd+J) [Keyboards; The menu bar, Edit: Find].
+- Rechtschreibung und Grammatik ▸: Rechtschreibung einblenden (Cmd+:). Falsch geschriebene Wörter suchen (Cmd+;) [Keyboards: Cmd+; findet Fehler; Cmd+: zeigt das Fenster].
+- Ersetzungen ▸ (System) [The menu bar, Edit: Substitutions].
+- Transformationen ▸ (Großschreibung, Kleinschreibung) [The menu bar, Edit].
+- Sprache ▸ (System).
+- Diktat beginnen (System) [The menu bar, Edit: Start Dictation].
+- Emoji und Symbole (Ctrl+Cmd+Leertaste) [Keyboards: Control-Command-Space].
+
+4.4 FORMAT (nur für Textfelder der Akte)
+Die Apple-Vorgabe erlaubt, dieses Menü zu streichen, wenn die App keinen formatierten Text bearbeitet [The menu bar, Format]. Die Akte ist formatierter Text. Deshalb ist das Menü vorhanden.
+- Schrift ▸:
+  * Fett (Cmd+B) [Keyboards].
+  * Kursiv (Cmd+I) [Keyboards].
+  * Unterstrichen (Cmd+U) [Keyboards].
+  * ---
+  * Vergrößern (Shift+Cmd+=) [Keyboards: Größe der Auswahl erhöhen].
+  * Verkleinern (Cmd+-) [Keyboards: Größe der Auswahl verringern].
+  * ---
+  * Schriften einblenden (Cmd+T) [Keyboards].
+  * Farben einblenden (Shift+Cmd+C) [Keyboards].
+  * Stil kopieren (Option+Cmd+C) [Keyboards].
+- Text ▸:
+  * Linksbündig (Cmd+[) [Keyboards].
+  * Zentriert (Cmd+|) [Keyboards].
+  * Rechtsbündig (Cmd+]) [Keyboards].
+- Hinweis: Cmd+I ist in der Standard-Tabelle auch "Info-Fenster" [Keyboards]. Die App nutzt Cmd+I nur für Kursiv im Textfeld. Siehe 8.
+
+4.5 DARSTELLUNG
+Apple-Vorgabe: Jeder Ein-/Aus-Eintrag hat einen Titel, der den aktuellen Zustand zeigt: "Werkzeugleiste ausblenden" oder "Werkzeugleiste einblenden" [The menu bar, View; Menus: umschaltbare Titel].
+- Werkzeugleiste einblenden / ausblenden (Option+Cmd+T) [Keyboards; The menu bar, View].
+- Werkzeugleiste anpassen… [The menu bar, View].
+- Seitenleiste einblenden / ausblenden (Option+Cmd+S, Vorschlag) [The menu bar, View: Show/Hide Sidebar].
+- Inspektor einblenden / ausblenden (Option+Cmd+I) [Keyboards: Option-Cmd-I für Inspektorfenster].
+- Werkzeugoptionen einblenden / ausblenden (Vorschlag, kein Kürzel).
+- Untere Leiste einblenden / ausblenden (Vorschlag, kein Kürzel).
+- ---
+- Zoom: Vergrößern (Cmd+=) (Vorschlag, siehe 8). Verkleinern (Cmd+-) (Vorschlag, siehe 8). Originalgröße (Cmd+0) (Vorschlag). Auswahl einpassen (Cmd+9) (Vorschlag). Alles einpassen (Cmd+1) (Vorschlag).
+- Raster einblenden (Option+Cmd+R) (Vorschlag). Hilfslinien einblenden (Option+Cmd+L) (Vorschlag). Einrasten am Raster (Shift+Cmd+R) (Vorschlag).
+- ---
+- Vollbild aktivieren (Ctrl+Cmd+F). Beim aktiven Vollbild: Vollbild beenden (Ctrl+Cmd+F) [Keyboards; The menu bar, View: Enter/Exit Full Screen].
+
+4.6 OBJEKT (eigenes Menü, allgemeinste Befehle zuerst)
+- Gruppieren (Cmd+G, Vorschlag). Konflikt mit Standard "Nächsten suchen" (siehe 8).
+- Gruppierung aufheben (Shift+Cmd+G, Vorschlag). Konflikt mit "Vorherigen suchen" (siehe 8).
+- Duplizieren (Cmd+D, Vorschlag). Option+Ziehen dupliziert [Pointing devices].
+- ---
+- Anordnen ▸: Nach vorne (Shift+Cmd+]), Nach hinten (Shift+Cmd+[), Ganz nach vorne (Option+Shift+Cmd+]) — Vorschlag, Kürzel nicht geprüft.
+- Ausrichten ▸: Links, Horizontal zentriert, Rechts, Oben, Vertikal zentriert, Unten (Vorschlag, ohne Kürzel).
+- Verteilen ▸: Reihe, Raster, Haufen (Vorschlag, ohne Kürzel).
+- Gleiche Größe (Vorschlag, ohne Kürzel).
+- An Raster ausrichten (Vorschlag, ohne Kürzel).
+- In Rahmen einpassen… (Vorschlag, ohne Kürzel).
+- Die Ausrichte- und Verteil-Befehle stehen im Menü, weil Ziehen mit der Maus allein nicht alle Nutzer erreicht. Apple nennt Menübefehle als Ersatz für Ziehen [Drag and drop: Alternativen zu Ziehen als Menübefehl].
+
+4.7 WERKZEUG (eigenes Menü, Werkzeuge aus Abschnitt 5)
+- Auswahl (V). Direktauswahl (A). Rahmen (F). Text (T). Hand (H). Zoom (Z). Pipette (I). Messen (K). Raster (R, Vorschlag). Kommentar (N, Vorschlag).
+- Die Einträge zeigen die aktive Auswahl mit Haken [Menus: Haken für aktiven Zustand].
+
+4.8 RAHMEN (eigenes Menü)
+- Gerät ▸: Mac 1512 x 982; Mac-Fenster 1280 x 800; iPad 1180 x 820; iPhone 393 x 852; Eigenes… (Ellipse).
+- Ausrichtung ▸: Hochformat; Querformat.
+- Sichere Bereiche anzeigen (Vorschlag).
+- Raster bearbeiten… (Ellipse, öffnet (f)).
+
+4.9 MOCKUP (eigenes Menü)
+- Neuer Zustand… (Ellipse).
+- Neue Variante.
+- Duplizieren (Vorschlag).
+- Vergleichen… (Ellipse).
+- Mockup-Paket ausgeben… (Ellipse, Weg zu (l)).
+
+4.10 LABOR (eigenes Menü)
+- Code einfügen (Shift+Cmd+L, Vorschlag).
+- Regler aus Variablen erstellen.
+- Vergleichselemente einblenden (Vorschlag).
+- Als Karte ablegen (Vorschlag).
+- Varianten bauen… (Ellipse, Claude).
+
+4.11 TOKEN (eigenes Menü)
+- Farben aus Bild ziehen… (Ellipse).
+- Größenreihe anlegen… (Ellipse).
+- Buttons in Größenstufen zeigen (Vorschlag).
+- Vereinheitlichen… (Ellipse).
+- Ausgeben… (Weg zu (l)).
+
+4.12 IMPORT (eigenes Menü)
+- Pinterest verbinden… (Ellipse).
+- Lesezeichen importieren… (Ellipse).
+- Ordner importieren… (Ellipse).
+- Screenshots sortieren… (Ellipse).
+
+4.13 FENSTER
+- Minimieren (Cmd+M) [Keyboards].
+- Alle minimieren (Option+Cmd+M) [Keyboards].
+- Zoomen (kein Kürzel) [The menu bar, Window].
+- ---
+- Werkzeuge einblenden / ausblenden (Option+Cmd+P, Vorschlag).
+- Ebenen einblenden / ausblenden (Vorschlag).
+- Sammlung einblenden / ausblenden (Vorschlag).
+- Raster einblenden / ausblenden (Vorschlag, siehe 4.5). Apple: Panels nennen, nicht "Panel" [Panels: Titel ohne Wort Panel].
+- Inspektor einblenden / ausblenden (Option+Cmd+I) (Verweis).
+- ---
+- Alle nach vorne bringen (kein Kürzel). Option ändert auf "Anordnen" [The menu bar, Window].
+- Offene Fenster als alphabetische Liste (keine Panels) [The menu bar, Window; Panels].
+- Vorheriges Fenster (Cmd+`) und nächstes Fenster (Shift+Cmd+`) über die Standardbefehle [Keyboards: Grave accent].
+
+4.14 HILFE
+- Setzkasten-Hilfe (Cmd+?) [Keyboards: Cmd+? öffnet das Hilfemenü; The menu bar, Help].
+- Tastaturkürzel anzeigen (Vorschlag).
+- ---
+- Rückmeldung an Apple senden (kein Kürzel). Apple-Vorgabe: "Feedback an Apple" [The menu bar, Help]. Die deutsche Benennung ist nicht geprüft.
+- Zusätzliche Einträge: nur mit Trennlinie und wenigen Einträgen [The menu bar, Help].
+
+4.15 Dynamische Einträge
+- Option-Umschaltung nur bei wenigen Einträgen (Schließen, Duplizieren, Beenden, Alle nach vorne). Apple: nur einzelne Zusatztaste, nicht mehr [The menu bar, Dynamic menu items]. Jeder dynamische Eintrag muss zusätzlich über einen anderen Weg erreichbar sein [The menu bar: dynamische Einträge nicht als einziger Weg].
+
+================================================================
+5 WERKZEUGE (Werkzeugpalette)
+================================================================
+
+5.1 Vorbild und Lage der Tasten
+- Die Werkzeugliste folgt InDesign. Aus dem Adobe-Hilfeartikel sind belegt (Suchauszug, Seite selbst gesperrt):
+  * Auswahl: V (auch Esc) [EXT Adobe].
+  * Direktauswahl: A [EXT Adobe].
+  * Hand: H. Halten der Leertaste schaltet vorübergehend auf Hand, wenn keine Einfügemarke aktiv ist [EXT Adobe].
+  * Zoom: Z [EXT Adobe].
+- Aus Drittquellen (Spickzettel, nicht gegen Adobe geprüft) [nicht geprüft]:
+  * Rahmen (Rechteck): F. Text: T. Pipette: I. Messen: K.
+- Kommentar (Notiz): Taste nicht geprüft [nicht geprüft].
+- Raster: InDesign hat kein Raster-Werkzeug mit eigener Taste nach dem Stand dieser Recherche. Die Taste R ist ein Vorschlag [nicht geprüft].
+- Einzeltasten sind bei Apple als Spieltasten beschrieben. Apps nutzen Befehlstasten mit Cmd, Shift, Option. Einzeltasten brauchen eine klare Regel: nur bei Fokus auf der Leinwand und nur, wenn kein Textfeld aktiv ist [Keyboards: Key bindings in Spielen; Konflikt in 8]. Die Regel ist ein Vorschlag.
+
+5.2 Werkzeuge (von oben nach unten im Panel)
+
+1. AUSWAHL (V, Esc bricht ab)
+- Funktion: Blöcke wählen, verschieben, Größe ändern.
+- Klick, Shift+Klick, Lasso. Ziehen verschiebt. Option+Ziehen dupliziert [Pointing devices]. Shift beim Größenändern hält das Verhältnis [Keyboards]. Pfeiltasten verschieben in kleinster Einheit [Keyboards].
+- Optionen: siehe 3n.
+
+2. DIREKTAUSWAHL (A)
+- Funktion: Einzelne Punkte oder Ecken einer Skizze oder eines Rahmens. Kinder einer Zone wählen.
+- Optionen: siehe 3n.
+
+3. RAHMEN (F)
+- Funktion: Rahmen (Gerät oder Bildrahmen) aufziehen.
+- Optionen: Gerät, Ausrichtung, Verhältnis beim Ziehen.
+
+4. TEXT (T)
+- Funktion: Notiz-Block mit Text anlegen. Klick setzt den Textpunkt. Ziehen legt die Breite fest (Vorschlag).
+- Optionen: Schrift, Größe, Gewicht, Ausrichtung.
+
+5. HAND (H, Leertaste temporär)
+- Funktion: Ansicht verschieben.
+- Keine Optionen.
+
+6. ZOOM (Z)
+- Funktion: Klick vergrößert. Option-Klick verkleinert (Vorschlag, nicht geprüft). Ziehen eines Rechtecks zoomt auf den Bereich (Vorschlag).
+- Optionen: Schritt.
+
+7. PIPETTE (I)
+- Funktion: Farbe aus Bild oder Leinwand entnehmen. Ergebnis in die Farbliste oder in einen Token.
+- Optionen: Probe, Quelle, Übernahme.
+- Entnahme vom Bildschirm außerhalb der App: [nicht geprüft].
+
+8. MESSEN (K)
+- Funktion: Abstand zwischen zwei Punkten auf der Leinwand in gewählter Einheit anzeigen.
+- Optionen: Einheit, Anzeige.
+
+9. RASTER (R, Vorschlag)
+- Funktion: Ein Raster auf die Auswahl legen (Spalten, Steg, Ränder, Grundlinie).
+- Optionen: siehe 3n.
+
+10. KOMMENTAR (N, Vorschlag)
+- Funktion: Notiz an einer Stelle der Leinwand setzen. Kommentare haben Autor und Zeit (Vorschlag).
+- Optionen: Farbe, Autor, Sichtbarkeit.
+
+5.3 Gemeinsame Regeln für alle Werkzeuge
+- Das aktive Werkzeug ist im Panel markiert. Das aktive Werkzeug ist als Schaltfläche mit Zustand markiert [Buttons].
+- Jedes Werkzeug steht auch im Menü Werkzeug [Toolbars, macOS: jeder Werkzeugleistenpunkt auch im Menü].
+- Tastenkürzel gelten nur, wenn kein Textfeld den Fokus hat.
+- Eine Werkzeugschaltfläche ist 28 x 28 Punkte. Der Abstand beträgt 12 Punkte [Accessibility].
+
+================================================================
+6 MATERIAL UND GESTALT
+================================================================
+
+6.1 Was Apple zu Liquid Glass in macOS 26 schreibt
+- Liquid Glass bildet eine eigene funktionale Ebene für Bedienelemente und Navigation. Die Ebene liegt über dem Inhalt [Materials, Abschnitt Liquid Glass].
+- Liquid Glass gehört nicht in die Inhaltsebene. Für Hintergründe der Inhaltsebene gilt das Standardmaterial. Ausnahme: transiente Bedienelemente wie Schieber und Schalter erhalten bei Berührung die Glas-Darstellung [Materials].
+- Liquid Glass sparsam einsetzen. Zu viel Glas lenkt vom Inhalt ab [Materials; Adopting Liquid Glass].
+- Die regular-Variante ist der Standard. Sie passt für Seitenleisten, Warnungen und Popover mit viel Text [Materials].
+- Die clear-Variante ist für Bedienelemente über visuell reichen Hintergründen gedacht, etwa über Fotos. Bei hellem Hintergrund kann eine Abdunklung mit 35 % Deckkraft nötig sein [Materials].
+- Farbe auf Liquid Glass sparsam. Die primäre Aktion erhält Farbe im Hintergrund, nicht im Symbol [Color, Liquid Glass color].
+- Benutzerdefinierte Hintergründe auf Bedienelementen reduzieren. Der Scroll-Edge-Effekt ersetzt Füllungen unter Leisten [Adopting Liquid Glass; Layout].
+- Mehrere Glaselemente in einem Container zusammenfassen (GlassEffectContainer) [API: GlassEffectContainer; Adopting Liquid Glass: Leistung].
+- Die Standard-Bausteine übernehmen die Gestaltung automatisch. Eigene Glaselemente nur, wenn nötig [Materials; Adopting Liquid Glass].
+- Hintergrundfortsetzung unter Seitenleiste und Inspektor: backgroundExtensionEffect [API: backgroundExtensionEffect; Layout: Hintergrund unter Seitenleiste und Inspektor fortsetzen].
+
+6.2 Umsetzung in Setzkasten (Vorschlag)
+- Bedienebene (Liquid Glass): Werkzeugleiste, Seitenleiste, Inspektor, Werkzeugpalette, Werkzeugoptionen, Suchfeld.
+- Inhaltsebene (Standardmaterial): Leinwand, Blöcke, Raster, Hilfslinien, Vorschau-Inhalte, Karten, Bilder.
+- Keine Glaseffekte in Blöcken oder auf der Leinwand. Ein Block mit Glas wäre Inhalt in der Bedienebene, und Apple nennt das verwirrend [Materials].
+- Leisten ohne Füllfarbe. Der Scroll-Edge-Effekt trennt Leiste und Inhalt [Layout].
+- Mit Hintergrundfortsetzung arbeitet die Leinwand auch unter der Seitenleiste.
+
+6.3 Schrift
+- macOS nutzt die Systemschrift SF Pro [Typography, macOS].
+- Code-Anzeige: SF Mono ist laut Apple eine Variante der SF-Familie [Typography, Using system fonts: SF Mono].
+- Standardgröße für Text in macOS: 13 Punkte. Mindestgröße: 10 Punkte [Typography, Accessibility].
+- Dynamic Type gibt es auf macOS nicht. Schriftgröße der Oberfläche ist eine eigene Einstellung (siehe 3m) [Typography, macOS].
+- Leichte Schnitte (Ultralight, Thin, Light) vermeiden. Regular, Medium, Semibold, Bold nutzen [Typography].
+- Wenige Schriftschnitte. Hierarchie über Gewicht, Größe und Farbe [Typography: Hierarchie, wenige Typen].
+- Textfarben über Systemfarben (Labelfarben). Feste Farbwerte vermeiden [Color: nicht hart codieren].
+
+6.4 Weißraum und Abstand
+- Apple nennt keine Zahl für Außenabstände der Fensterkante [Layout].
+- Abstand um Bedienelemente mit Rahmen: 12 Punkte. Um Elemente ohne Rahmen: 24 Punkte [Accessibility, Abschnitt Mobilität].
+- Mindestgröße für Schaltflächen 20 x 20 Punkte; Standardgröße 28 x 28 Punkte [Accessibility].
+- Ausrichtung und Einrückung zeigen Hierarchie [Layout: Ausrichtung und Einrückung].
+- Gruppen trennen über Abstand, Container oder Linien [Layout].
+- Inhalt steht oben links. Kritische Bedienelemente nicht am unteren Fensterrand [Layout, macOS].
+- Keine Inhalte hinter der Kamera-Aussparung am oberen Rand [Layout, macOS].
+
+6.5 Hell und Dunkel
+- Apple rät davon ab, eine eigene Erscheinungsbild-Umschaltung in der App anzubieten. Die App folgt der Systemeinstellung [Dark Mode, Best Practices].
+- Auto-Modus des Systems berücksichtigen. Die App läuft in beiden Modi [Dark Mode].
+- Systemfarben nutzen. Eigene Farben brauchen Helligkeitsvarianten und eine Variante für erhöhten Kontrast [Color, Best practices].
+- Kontrast: mindestens 4,5 zu 1 bei Text bis 17 Punkte; 3 zu 1 bei 18 Punkten oder fett; für eigene Farben 7 zu 1 bei kleinem Text [Accessibility, Vision; Dark Mode, Best Practices].
+- Bilder mit weißem Hintergrund im Dunkelmodus leicht abdunkeln [Dark Mode, Icons and images].
+- Am Mac kann der Schreibtisch-Farbton auf die Fensterfläche wirken (Graphit als Akzentfarbe) [Dark Mode, macOS: Desktop tinting]. Eigene Hintergründe mit leichter Transparenz nur im neutralen Zustand.
+- Die Leinwand ist Inhalt. Ihre Hintergrundfarbe ist eine Inhaltsentscheidung. Ob sie frei wählbar ist, steht in Abschnitt 9.
+
+6.6 Icons und Symbole
+- SF Symbols für Bedienelemente, passt sich an Schrift und Erscheinungsbild an [Dark Mode; Labels; Sidebars: SF Symbols].
+- Eigene Symbole als Custom Symbols statt Bilddateien [Sidebars].
+- Standardsymbole für Aktionen wie Kopieren, Teilen, Löschen (Apple-Liste) [Menus, Icons].
+- Symbole ohne Rahmen in Werkzeugleisten [Toolbars: Systemsymbole ohne Rahmen].
+
+================================================================
+7 BARRIEREFREIHEIT
+================================================================
+
+7.1 VoiceOver
+- Jedes wichtige Bedienelement trägt eine Bezeichnung. Eigene Elemente (Blöcke, Karten, Regler) brauchen eigene Bezeichnungen [VoiceOver: alternative Bezeichnungen].
+- Bilder: Bedeutung beschreiben, Dekoration ausblenden [VoiceOver: Dekoration ausschließen].
+- Diagramme und Schieber: knappe Beschreibung und Werte [VoiceOver: Infografiken; Charts].
+- Überschriften und Abschnitte: Seitenleiste mit Abschnittsüberschriften, Panels mit Titeln [VoiceOver: Titel und Überschriften].
+- Die Reihenfolge folgt dem Lesen von oben nach unten und von links nach rechts [VoiceOver: Reihenfolge].
+- Inhaltsänderungen melden: Auswahl gewechselt, Export fertig, Import fertig [VoiceOver: sichtbare Änderungen melden].
+- Der VoiceOver-Rotor soll Abschnitte, Blöcke und Ebenen anbieten [VoiceOver: Rotor; API: AccessibilityRotorEntry].
+- Die Leinwand: jeder Block als eigenes Element mit Typ, Name und Zustand (Beispiel: "Code-Karte, HTML, drei Dateien, Vorschau an"). Vorschlag für Inhalt der Bezeichnung.
+- Ebenen: Zeile mit Name, Sichtbarkeit und Sperre als Text [Accessibility: mehr als Farbe].
+
+7.2 Tastatursteuerung
+- Volle Tastatursteuerung über die Funktion Vollständige Tastatursteuerung (Full Keyboard Access) von macOS [Keyboards; Focus and selection].
+- Apple: Bei Vollständiger Tastatursteuerung braucht jedes Element Fokus. Für Schaltflächen und Schieber reicht der Systemfokus [Focus and selection, macOS].
+- Für Inhalte (Listen, Textfelder, Suchfelder) eigener Fokus. Fokusring bei Textfeldern, Markierung bei Listen [Focus and selection].
+- Tastaturalternativen zum Ziehen: Pfeiltasten bewegen Blöcke [Keyboards]. Menübefehle für Ausrichten und Verteilen [Drag and drop].
+- Systemtasten nicht überschreiben [Accessibility, Speech: Systemtasten nicht überschreiben].
+- Fokusbereiche (Seitenleiste, Leinwand, Inspektor) müssen über Systemtasten erreichbar sein: Ctrl+F6 nächstes Panel, Ctrl+Shift+F6 vorheriges Panel, Ctrl+F5 Werkzeugleiste [Keyboards, Standard-Tabelle].
+- Fokus nicht ohne Eingabe wechseln [Focus and selection].
+
+7.3 Kontrast
+- Text bis 17 Punkte: 4,5 zu 1. 18 Punkte oder fett: 3 zu 1 [Accessibility, Vision].
+- Eigene Farben: 7 zu 1 bei kleinem Text [Dark Mode].
+- Erhöhter Kontrast: Systemfarben nutzen, die dafür Varianten haben. Eigene Farben brauchen eine Variante für erhöhten Kontrast [Color; Accessibility].
+- Farbe nicht als einziger Hinweis: Symbol, Text oder Form ergänzen [Accessibility; Color: Inklusive Farbe].
+- Farbtöne für Token und Diagramme: Nutzer kann die Farben wählen [Accessibility: Farbschemata anpassbar].
+- Die Umschaltung "Erhöhter Kontrast" wird über colorSchemeContrast gelesen [API: colorSchemeContrast].
+- Transparenz verringern: Dark-Mode-Tests mit reduzierter Transparenz [Dark Mode, Best practices].
+
+7.4 Reduzierte Bewegung
+- Bei aktivem "Bewegung reduzieren": Zoom, Skalieren und periphere Bewegungen reduzieren. Wiederholte Animationen abschalten [Accessibility, Cognitive].
+- Feder-Animationen straffen, keine Tiefenbewegung, Übergänge mit Überblendung statt Schieben [Accessibility, Cognitive].
+- Lesen mit accessibilityReduceMotion [API: accessibilityReduceMotion].
+- Liquid Glass passt sich an die Systemeinstellungen für Transparenz und Bewegung an [Materials; Adopting Liquid Glass].
+
+7.5 Trefferflächen und Abstände
+- Mindestgröße 20 x 20 Punkte. Standardgröße 28 x 28 Punkte [Accessibility].
+- Abstand: 12 Punkte um Schaltflächen mit Rahmen, 24 Punkte um Elemente ohne Rahmen [Accessibility].
+- Ebenen-Schaltflächen (Sichtbar, Gesperrt) mindestens 20 x 20 Punkte.
+
+7.6 Textgröße
+- Apple wünscht sich die Vergrößerung auf mindestens 200 Prozent, wenn möglich [Accessibility, Vision]. Auf macOS gibt es Dynamic Type nicht. Die App braucht daher eine eigene Stufe (siehe 3m).
+
+7.7 Weitere
+- Zeitgesteuerte Meldungen vermeiden. Nutzer entscheidet, wann ein Dialog schließt [Accessibility, Cognitive: Zeitgesteuerte Elemente vermeiden].
+- Video und Audio: keine automatische Wiedergabe ohne Steuerung (für die Vorschau der Code-Karte gilt das bei Medien) [Accessibility, Cognitive].
+
+================================================================
+8 KONFLIKTE MIT HIG UND MIT DEM BRIEF
+================================================================
+
+Diese Punkte passen nicht ohne Entscheidung zusammen. Jeder Punkt nennt den Vorschlag.
+
+1. Zoom, Maßeinheit und Raster-Schalter in der unteren Leiste.
+   Brief: Untere Leiste mit Zoom, Raster, Maßeinheit und Status.
+   HIG: Keine kritischen Bedienelemente am unteren Fensterrand, weil Nutzer Fenster nach unten verschieben [Layout, macOS]. Keine Schalter in der Statusleiste [Toggles, macOS]. Die untere Leiste trägt nur kleine Angaben [Windows].
+   Vorschlag: Zoom und Maßeinheit als Menüs in der Werkzeugleiste. Raster als Schaltfläche in der Werkzeugleiste. Die untere Leiste zeigt nur Status.
+
+2. Einzeltasten für Werkzeuge.
+   Brief: Werkzeugpalette wie InDesign.
+   HIG: Einzeltasten sind Spieltasten, App-Kürzel nutzen Befehlstasten [Keyboards].
+   Vorschlag: Einzeltasten nur bei Fokus auf der Leinwand und ohne Textfeld. Jedes Werkzeug zusätzlich im Menü mit Befehlstaste (Option+Cmd+Ziffer) oder ohne Kürzel. Nur die Taste ist verhandelbar.
+
+3. Belegte Standardkürzel.
+   Gruppieren Cmd+G: Standard ist "Nächsten suchen" [Keyboards].
+   Gruppierung aufheben Shift+Cmd+G: Standard ist "Vorherigen suchen" [Keyboards].
+   Zoom verkleinern Cmd+-: Standard ist "Auswahl verkleinern" [Keyboards].
+   Hilfslinien Cmd+;: Standard ist "Rechtschreibfehler suchen" [Keyboards].
+   Inspektor über Cmd+I: Standard ist "Info-Fenster" [Keyboards]. Die Tabelle nennt Option+Cmd+I für Inspektor.
+   Vorschlag: Im Textfeld gilt der Standard. In der Leinwand gelten die Vorschläge. Konflikte stehen in der Tastaturliste der Einstellungen (3m). Apple empfiehlt, Standardkürzel nur umzubelegen, wenn die Aktion im eigenen Ablauf keinen Sinn ergibt [Keyboards, Standard keyboard shortcuts].
+
+4. Ebenen in der Seitenleiste.
+   Brief: Ebenen in der linken Seitenleiste.
+   HIG: Seitenleiste höchstens zwei Ebenen [Sidebars].
+   Vorschlag: Seitenleiste zeigt Ebenen bis zu zwei Ebenen. Tiefe Gruppen im Panel "Ebenen".
+
+5. Startfenster.
+   Brief: Startfenster und Dokumentwahl.
+   HIG: Keine eigene Fensteroberfläche; Standardbausteine nutzen [Windows: custom window UI vermeiden]. Keine Warnung beim Start [Alerts].
+   Vorschlag: Standardfenster mit Liste und zwei Schaltflächen. Das System-Dokumentfenster bleibt als Alternative offen (Abschnitt 9).
+
+6. Tabs für Themenräume.
+   Brief: Tabs für Themen und Inhalte.
+   HIG: Reiter (TabView) nur für eng verwandte Bereiche, höchstens sechs; Ansichtswechsel über Reiter, nicht über Segmente [Tab views; Segmented controls]. Navigation in der Seitenleiste ist der HIG-Weg für Hauptbereiche [Sidebars].
+   Vorschlag: Themenräume als Seitenleiste-Abschnitt. Eine Frage an Johannes (Abschnitt 9).
+
+7. Mockup-Modus als Ansichtswechsel.
+   HIG: Ansichtswechsel über Reiter oder eigenes Fenster [Segmented controls; Modality].
+   Vorschlag: Eigenes Fenster. Begründung: Eigenständige Aufgabe [Modality].
+
+8. Hell und Dunkel.
+   Brief: Hell und Dunkel.
+   HIG: Keine eigene Erscheinungsbild-Umschaltung in der App [Dark Mode].
+   Vorschlag: Systemfolge. Die Leinwand-Farbe bleibt Inhalt und ist eine offene Entscheidung (Abschnitt 9).
+
+9. Schriftgröße auf macOS.
+   Brief: nicht genannt.
+   HIG: Dynamic Type gibt es auf macOS nicht. Vergrößerung um 200 Prozent ist das Ideal [Typography; Accessibility].
+   Vorschlag: Eigene Stufe in den Einstellungen.
+
+10. Einstellungsschaltfläche in der Werkzeugleiste.
+    HIG: Einstellungen im App-Menü, nicht in der Werkzeugleiste [Settings, macOS].
+    Vorschlag: Nur über Cmd+, und das App-Menü.
+
+11. Export als "Exportieren unter".
+    HIG: Der Befehl "Exportieren unter…" ist für seltene Formate gedacht. Der zentrale Ausgabeweg heißt anders [The menu bar, File].
+    Vorschlag: "Ausgeben…" (Shift+Cmd+E).
+
+12. Labor-Vorschau mit Netzzugriff.
+    Brief: Live-Vorschau in einem abgeschirmten iframe.
+    Apple: Vorschau über WebView mit den Einstellungen von WebPage [API: WebView; WebPage.NavigationPreferences].
+    Offen: Ob CDN-Skripte (React, Tailwind) geladen werden dürfen (Abschnitt 9).
+
+13. Panel, Bogen und Fenster.
+    HIG: Panels sind für Werkzeuge und Inspektoren, nicht für eigenständige Aufgaben. Eine Aufgabe mit Abschluss gehört in einen Bogen oder ein Fenster [Panels; Sheets].
+    Vorschlag: Import und Ausgabe als Bogen. Raster als Panel. Labor und Token-Werkstatt als Hilfsfenster.
+
+================================================================
+9 OFFENE FRAGEN AN JOHANNES
+================================================================
+
+Frage 1: Zoom, Maßeinheit und Raster-Schalter liegen in der Werkzeugleiste oder in der unteren Leiste?
+Vorschlag: Werkzeugleiste. Die untere Leiste zeigt nur den Status. Apple nennt die untere Leiste für kritische Bedienelemente ungeeignet [Layout, macOS; Windows].
+
+Frage 2: Werkzeuge mit Einzeltasten (V, A, F, T, H, Z, I, K, R, N) oder mit Befehlstasten?
+Vorschlag: Einzeltasten nur bei Fokus auf der Leinwand und ohne aktives Textfeld. Gruppieren auf Cmd+G nur in der Leinwand. In Textfeldern gilt der Apple-Standard. Die Tasten F, T, I, K sind nicht gegen Adobe geprüft.
+
+Frage 3: Sind die Themenräume Einträge in der Seitenleiste oder Reiter im Fensterkörper?
+Vorschlag: Seitenleiste. Apple empfiehlt Reiter nur für eng verwandte Bereiche, höchstens sechs [Tab views]. Die Seitenleiste ist der Navigationsweg für Hauptbereiche [Sidebars].
+
+Frage 4: Soll die App eine eigene Erscheinungsbild-Umschaltung haben, und soll die Schriftgröße eigenständig steuerbar sein?
+Vorschlag: Nein zur eigenen Erscheinungsbild-Umschaltung. Die App folgt dem System [Dark Mode]. Eigene Stufe für die Schriftgröße, Stufen Standard, Groß, Sehr groß. Die Leinwand-Hintergrundfarbe bleibt frei wählbar, weil sie Inhalt ist (Abschnitt 6.5).
+
+Frage 5: Darf die Labor-Vorschau externe Skripte laden (CDN für React, Tailwind) oder nur lokale Dateien?
+Vorschlag: Nur lokale Dateien in der Standardeinstellung. Externe Quellen erst nach ausdrücklicher Freigabe je Dokument. Technisch über WebPage: JavaScript-Schalter und Ladeschalter für Teilressourcen [API: WebPage.NavigationPreferences; WebPage.Configuration]. Die Wirkung dieser Schalter ist nicht getestet [nicht geprüft].
+
+================================================================
+ENDE DER DATEI
+================================================================

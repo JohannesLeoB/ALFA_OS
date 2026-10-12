@@ -25,10 +25,10 @@ Am Ende: `swift test --package-path alfaos/Kit` grün, Übergabe als Kommentar i
 2. Ende als Kommentar im Issue „geprüft <Datum> (Chef: …)“, „Abnahme am Bild offen“, wo es zutrifft. Commit, sofort `git push origin main`.
 
 ## App für Johannes
-- Erst wenn `swift test --package-path alfaos/Kit` grün ist und kein Worker läuft. Entwickler-Bau: `cd ALFAcolor && xcodegen generate && xcodebuild -scheme ALFAcolor -destination "platform=macOS" -derivedDataPath ../.build-xcode/dd build`.
-- Notarisierte Fassung: `xcodebuild archive … -derivedDataPath .build-xcode/dd -archivePath .build-xcode/archive/ALFAcolor.xcarchive`, `-exportArchive` mit `ALFAcolor/Config/ExportOptions-DeveloperID.plist`, `xcrun notarytool submit … --keychain-profile setzkasten --wait`, `xcrun stapler staple`, nach `dist/ALFAcolor.app` und `dist/ALFAcolor-<fassung>.zip`; alte Fassung dort löschen. `dist/` ist ignoriert. Fassung in `ALFAcolor/project.yml` (`MARKETING_VERSION`, `CURRENT_PROJECT_VERSION`) erhöhen.
-- Alle 10 Builds eine DMG (`CURRENT_PROJECT_VERSION` durch 10 teilbar: 10, 20, …): `hdiutil create` aus der notarisierten App, DMG notarisieren und heften, nach `dist/ALFAcolor-<fassung>.dmg`.
-- Absturzberichte: `~/Library/Logs/DiagnosticReports/ALFAcolor-*.ips` (lesen, nicht senden).
+- Erst wenn `bash scripts/pruefen.sh` grün ist und kein Worker läuft. Entwickler-Bau: `cd alfaos && xcodegen generate && xcodebuild -project ALFA_OS.xcodeproj -scheme ALFA_OS -destination "platform=macOS" -derivedDataPath ../.build-xcode/dd build`.
+- Notarisierte Fassung: `xcodebuild archive -configuration Release -destination 'generic/platform=macOS' -derivedDataPath .build-xcode/dd -archivePath .build-xcode/archive/ALFA_OS.xcarchive`, `-exportArchive` mit `alfaos/Config/ExportOptions-DeveloperID.plist`, `xcrun notarytool submit … --keychain-profile setzkasten --wait`, `xcrun stapler staple`, nach `dist/ALFA_OS.app` und `dist/ALFA_OS-<fassung>.zip`; alte Fassung aus `dist/` nehmen. `dist/` ist ignoriert. Fassung in `alfaos/project.yml` (`MARKETING_VERSION`, `CURRENT_PROJECT_VERSION`) erhöhen. Johannes bekommt die Meldung, dass der Bau liegt, und was er in zwei Sätzen anschaut.
+- Alle 10 Builds eine DMG (`CURRENT_PROJECT_VERSION` durch 10 teilbar: 10, 20, …): `hdiutil create` aus der notarisierten App, DMG notarisieren und heften, nach `dist/ALFA_OS-<fassung>.dmg`.
+- Absturzberichte: `~/Library/Logs/DiagnosticReports/ALFA_OS-*.ips` (lesen, nicht senden).
 
 ## Ende der Sitzung
 Genau ein Zettel in `uebergabe/` (≤ 40 Zeilen, `JJJJ-MM-TT_HHMM_chef-handoff.md`, den alten ersetzen): Stand, nächste Schritte, offen bei Johannes, Lehren. Committen, pushen.

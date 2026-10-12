@@ -1,0 +1,5 @@
+Design-System ALFAcolor (Kanon) als Artifact in Konto B:
+https://claude.ai/artifact/TiTd6BKtUA1cHqmXM4GKQp
+Fassung 2 (2026-10-09): tokens.json, README.md und project/ERGAENZUNGEN.md mit den Lücken A1-A9, den Bausteinen B1-B22 und den Zuständen C.
+Die Dateien liegen als Kopie in diesem Ordner (tokens.json, README.md, ERGAENZUNGEN.md, QUELLE.txt). Das Artifact ist die Quelle; wer es in Claude Design öffnet, sieht dieselben Dateien.
+Das Moodboard (Quelle der Werte) liegt unter lesen/referenz/browser-prototyp/moodboard.html.

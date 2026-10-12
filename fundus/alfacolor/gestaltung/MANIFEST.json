@@ -1,0 +1,23 @@
+{
+  "format": "setzkasten-vertrag/1",
+  "von": "design",
+  "datum": "2026-10-09_0100",
+  "bezug": "vertrag_2026-10-09_0040_code",
+  "dateien": [
+    {
+      "pfad": "briefe/antwort-D-001.json",
+      "sha256": "695c1cb43362f3b708c61e441fa572ab963790baf7bc1ee5a1995d3c5160e039",
+      "fassung": "2026-10-09_0100"
+    },
+    {
+      "pfad": "vertrag/tokens.json",
+      "sha256": "28241a820750b06dd724d56d097e33935a7f45925d77ed0367a8837587c40172",
+      "fassung": "kanon-1791548941-589d"
+    },
+    {
+      "pfad": "vertrag/tokens.dunkel.json",
+      "sha256": "7638bf7515de07b2d340fbb4023e7c2c546967a62d4c7e67e7fded546c3d5209",
+      "fassung": "kanon-1791548941-589d"
+    }
+  ]
+}

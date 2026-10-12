@@ -1,0 +1,231 @@
+{
+  "color": {
+    "grund": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0431,
+          0.0431,
+          0.0431
+        ],
+        "alpha": 1,
+        "hex": "#0B0B0B"
+      }
+    },
+    "blatt": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0784,
+          0.0784,
+          0.0784
+        ],
+        "alpha": 1,
+        "hex": "#141414"
+      }
+    },
+    "flaeche": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.1098,
+          0.1098,
+          0.1098
+        ],
+        "alpha": 1,
+        "hex": "#1C1C1C"
+      }
+    },
+    "text": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      }
+    },
+    "textLeise": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6588,
+          0.6588,
+          0.6353
+        ],
+        "alpha": 1,
+        "hex": "#A8A8A2"
+      }
+    },
+    "rahmen": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "alpha": 0.2784,
+        "hex": "#FFFFFF47"
+      }
+    },
+    "glas": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.1098,
+          0.1098,
+          0.1098
+        ],
+        "alpha": 0.549,
+        "hex": "#1C1C1C8C"
+      }
+    },
+    "glas-dicht": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0784,
+          0.0784,
+          0.0784
+        ],
+        "alpha": 0.8196,
+        "hex": "#141414D1"
+      }
+    },
+    "glas-kante": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "alpha": 0.1608,
+        "hex": "#FFFFFF29"
+      }
+    },
+    "falz": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "alpha": 0.1804,
+        "hex": "#FFFFFF2E"
+      }
+    },
+    "syn-schluessel": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7882,
+          0.6275,
+          1.0
+        ],
+        "alpha": 1,
+        "hex": "#C9A0FF"
+      }
+    },
+    "syn-zeichenkette": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5608,
+          0.8392,
+          0.6471
+        ],
+        "alpha": 1,
+        "hex": "#8FD6A5"
+      }
+    },
+    "syn-kommentar": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.4863,
+          0.4824,
+          0.4588
+        ],
+        "alpha": 1,
+        "hex": "#7C7B75"
+      }
+    },
+    "syn-typ": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.4863,
+          0.7686,
+          0.9333
+        ],
+        "alpha": 1,
+        "hex": "#7CC4EE"
+      }
+    },
+    "syn-zahl": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8902,
+          0.6941,
+          0.4392
+        ],
+        "alpha": 1,
+        "hex": "#E3B170"
+      }
+    },
+    "syn-tag": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9412,
+          0.6275,
+          0.5647
+        ],
+        "alpha": 1,
+        "hex": "#F0A090"
+      }
+    }
+  },
+  "shadow": {
+    "schatten-glas": {
+      "innen": {
+        "farbe": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "alpha": 0.1608,
+            "hex": "#FFFFFF29"
+          }
+        }
+      }
+    }
+  }
+}

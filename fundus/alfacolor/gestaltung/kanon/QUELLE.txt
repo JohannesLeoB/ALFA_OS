@@ -1,0 +1,4 @@
+Kanon ALFAcolor (Design-System), Stand 2026-10-09.
+Quelle: claude.ai Artifact https://claude.ai/artifact/TiTd6BKtUA1cHqmXM4GKQp (Typ Design System, Fassung 1791548941-589d), Dateien project/tokens.json und project/README.md, hier unverändert abgelegt.
+Johannes 2026-10-09: „Kanon umsetzen, Koralle, Reihe wie vorgeschlagen“: Akzent ist Koralle; Abstandsreihe s7 = 48, s8 = 64.
+Der Vertrag für die App (gestaltung/vertrag/) wird aus tokens.json erzeugt (scripts/vertrag_aus_kanon.py, B-240); nicht von Hand ändern.

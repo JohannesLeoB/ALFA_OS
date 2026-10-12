@@ -1,0 +1,8 @@
+{
+  "id": "mail",
+  "layers": [
+    "standard"
+  ],
+  "name": "Mail",
+  "schema": 2
+}

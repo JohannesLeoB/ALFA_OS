@@ -1,0 +1,33 @@
+{
+  "id": "standard",
+  "items": [
+    {
+      "content": {
+        "code": {
+          "files": {
+            "index.html": "<!doctype html>\n<html lang=\"de\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<style>\nbody{margin:0;display:grid;place-items:center;min-height:100vh;background:#F2E8D5;font-family:system-ui,sans-serif}\nbutton{padding:12px 20px;border:0;border-radius:12px;background:#1F6F5C;color:#F2E8D5;font-size:16px;transition:transform .2s ease}\nbutton:hover{transform:translateY(-2px)}\n</style>\n</head>\n<body>\n<button>Weiter</button>\n</body>\n</html>\n"
+          },
+          "language": "html",
+          "previewWidth": null
+        }
+      },
+      "hidden": false,
+      "id": "example-code-card",
+      "layerID": "standard",
+      "locked": false,
+      "rect": {
+        "h": 280,
+        "w": 420,
+        "x": 40,
+        "y": 40
+      },
+      "tags": [],
+      "title": "Schaltfläche",
+      "z": 0
+    }
+  ],
+  "locked": false,
+  "name": "Standard",
+  "schema": 2,
+  "visible": true
+}

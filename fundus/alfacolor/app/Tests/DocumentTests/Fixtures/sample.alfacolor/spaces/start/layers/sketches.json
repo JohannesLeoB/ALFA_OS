@@ -1,0 +1,36 @@
+{
+  "id" : "sketches",
+  "items" : [
+    {
+      "content" : {
+        "code" : {
+          "files" : {
+            "index.html" : "<button>OK</button>",
+            "style.css" : "button { padding: 8px 16px; }"
+          },
+          "language" : "html",
+          "previewWidth" : 320
+        }
+      },
+      "hidden" : false,
+      "id" : "code-1",
+      "layerID" : "sketches",
+      "locked" : false,
+      "rect" : {
+        "h" : 200,
+        "w" : 320,
+        "x" : 640,
+        "y" : 0
+      },
+      "tags" : [
+
+      ],
+      "title" : "Button",
+      "z" : 5
+    }
+  ],
+  "locked" : false,
+  "name" : "Sketches",
+  "schema" : 2,
+  "visible" : true
+}
