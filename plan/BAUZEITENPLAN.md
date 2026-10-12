@@ -1,4 +1,4 @@
-Stand: 2026-10-12 19:22 · ALFA·01·Chef
+Stand: 2026-10-12 19:30 · ALFA·01·Chef
 Spalten: So 12.10. abends | Mo 13.10. früh | vormittag | nachmittag | Di 14.10.
 Zustand: geplant | läuft | erledigt | wartet auf Johannes | wartet auf Design
 Immer erlaubt: plan/BAUZEITENPLAN.md, plan/STATUS.md, uebergabe/*
@@ -7,7 +7,7 @@ Immer erlaubt: plan/BAUZEITENPLAN.md, plan/STATUS.md, uebergabe/*
 |---|---|---|---|---|---|---|---|---|---|
 | S0 | Sauberer Stand: Fundus ohne Kennungen, Mail-Tests | Vorab | 1 | .gitignore, alfaos/Config/company.example.json, fundus/alpha/* | erledigt | git grep app/tbl/fld/viw+14 auf HEAD: 0; swift test fundus/alpha: 34 grün | 549345b, https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6128056599 | 2026-10-12 18:10 | ALFA·01·Chef |
 | A0 | Bauzeitenplan und drei Grün je Commit | Stufe A Fundament | 1 | plan/BAUZEITENPLAN.md, scripts/pruefen.sh, scripts/plan_render.py, .githooks/pre-push, AGENTS.md | erledigt | pruefen.sh auf HEAD grün; Probe-Commit außerhalb seiner Zeile rot; Seite aus dieser Datei erzeugt | ca5594f, https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6128744887 | 2026-10-12 19:20 | ALFA·01·Chef |
-| A1 | Schlüsselbund ein Namensraum | Stufe A Fundament | 1-2 | fundus/alpha/Sources/MykilosKit/AppKennung.swift, fundus/alpha/Sources/MykilosServices/Google/*, fundus/alpha/Sources/MykilosServices/Keychain/*, fundus/alpha/Tests/MailTests/*, alfaos/Kit/* | wartet auf Johannes | grep de.mykilos, SecAccessCreate, SecACLSetContents, Migrator: 0; 34 Tests grün; Johannes: anmelden, neu starten, angemeldet, kein Dialog | ed53e91, https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6128666688 | 2026-10-12 18:19 | ALFA·01·Chef |
+| A1 | Schlüsselbund ein Namensraum | Stufe A Fundament | 1-2 | fundus/alpha/Sources/MykilosKit/AppKennung.swift, fundus/alpha/Sources/MykilosServices/Google/*, fundus/alpha/Sources/MykilosServices/Keychain/*, fundus/alpha/Tests/MailTests/*, alfaos/Kit/* | erledigt | grep de.mykilos, SecAccessCreate, SecACLSetContents, Migrator: 0; 34 Tests grün; Johannes: anmelden, neu starten, angemeldet, kein Dialog | ed53e91, https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6128749270 | 2026-10-12 18:53 | ALFA·03·Fable |
 | A2 | Hub-Paket: Schnittstelle, fünf Ports, acht Tests | Stufe A Fundament | 1-2 | alfaos/Kit/Sources/Hub/*, alfaos/Kit/Tests/HubTests/*, alfaos/Kit/Package.swift | geplant | acht Hub-Tests grün ohne Netz und Schlüsselbund; import MykilosServices nur in Sources/Hub/Providers | https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6127493517 | | |
 | A3 | Anbieter Google (Anmeldung, Probe, Mail-Transport) | Stufe A Fundament | 2 | alfaos/Kit/Sources/Hub/Providers/Google/* | geplant | Hub-Test Google liefert MailTransport nach grüner Probe, Stub-Netz; Probe rot → failed | https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6127493517 | | |
 | A4 | Anbieter IMAP/SMTP (App-Passwort, Probe, sieben Vorlagen) | Stufe A Fundament | 2 | alfaos/Kit/Sources/Hub/Providers/IMAP/* | geplant | Probe gegen Netzmitschnitt grün/rot; Vorlage GMX füllt Server und Ports | https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6127493517 | | |
@@ -25,7 +25,7 @@ Immer erlaubt: plan/BAUZEITENPLAN.md, plan/STATUS.md, uebergabe/*
 | G2 | Einstellungs-Fläche | Design | 5 | - | geplant | Johannes sagt „so“ zur Fläche | https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6126656084 | | |
 | G3 | Code baut die Fläche über das Mail-Modul; Johannes vergleicht | Design | 5 | alfaos/App/Mail/* | wartet auf Design | App gegen Fläche, Johannes' Auge | https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6126656084 | | |
 | M1 | Fundus sauber verbucht | Meilenstein | 1 | - | erledigt | S0 erledigt | 549345b | 2026-10-12 18:10 | ALFA·01·Chef |
-| M2 | Schlüsselbund abgenommen | Meilenstein | 2 | - | wartet auf Johannes | Google anmelden, neu starten, kein Dialog | https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6128666688 | | |
+| M2 | Schlüsselbund abgenommen | Meilenstein | 2 | - | erledigt | Google anmelden, neu starten, kein Dialog | ed53e91, https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6128749270 | 2026-10-12 18:53 | ALFA·03·Fable |
 | M3 | Hub trägt (acht Tests) | Meilenstein | 2 | - | geplant | A2 erledigt | https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6127493517 | | |
 | M4 | Echte Mails aller Konten roh sichtbar | Meilenstein | 2 | - | geplant | B2 erledigt | https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6127493517 | | |
 | M5 | Kontenliste mit Probe, Takt, Kosten | Meilenstein | 3 | - | geplant | C1 und C3 erledigt | https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6127493517 | | |
