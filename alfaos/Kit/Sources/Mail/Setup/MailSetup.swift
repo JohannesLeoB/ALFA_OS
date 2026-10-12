@@ -25,11 +25,7 @@ public enum MailSetup {
         cadences: [Capability: Duration] = MailSetup.defaultCadences,
         clock: @escaping @Sendable () -> Date = { Date() }
     ) throws -> Assembly {
-        var providers: [any Provider] = []
-        if let config = try? GoogleClientConfig.load(from: directory) {
-            providers.append(GoogleProvider(config: config, openBrowser: openBrowser))
-        }
-        providers.append(IMAPProvider())
+        let providers = ProviderCatalog.standard(directory: directory, openBrowser: openBrowser)
         return try assemble(person: person, company: company, providers: providers, database: database,
                             keychain: keychain, cadence: cadence, cost: cost, cadences: cadences, clock: clock)
     }
