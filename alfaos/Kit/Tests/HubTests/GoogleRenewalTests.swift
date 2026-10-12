@@ -42,7 +42,7 @@ final class GoogleRenewalTests: XCTestCase {
         }
         let keychain = FakeKeychain()
         let provider = GoogleProvider(
-            config: GoogleClientConfig(clientID: "id", clientSecret: "secret"),
+            config: GoogleClientConfig(clientID: "id", clientSecret: "secret"), openBrowser: { _ in false },
             session: GoogleStubNet.session(),
             signIn: GivenSignIn(grant: grant),
             clock: { clock.with { $0 } }

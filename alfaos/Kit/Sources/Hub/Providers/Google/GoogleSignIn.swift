@@ -1,8 +1,5 @@
 import Foundation
 import MykilosServices
-#if canImport(AppKit)
-import AppKit
-#endif
 
 public struct GoogleSignIn: SignInPort {
     let config: GoogleClientConfig
@@ -16,7 +13,7 @@ public struct GoogleSignIn: SignInPort {
         config: GoogleClientConfig,
         session: URLSession = .shared,
         scopes: [GoogleOAuthScope] = GoogleOAuthScope.standardScopes,
-        openBrowser: @escaping @Sendable (URL) async -> Bool = GoogleSignIn.systemBrowser,
+        openBrowser: @escaping @Sendable (URL) async -> Bool,
         makeServer: @escaping @Sendable () -> GoogleOAuthLoopbackRedirectServer = { GoogleOAuthLoopbackRedirectServer() },
         clock: @escaping @Sendable () -> Date = { Date() }
     ) {
@@ -26,14 +23,6 @@ public struct GoogleSignIn: SignInPort {
         self.openBrowser = openBrowser
         self.makeServer = makeServer
         self.clock = clock
-    }
-
-    public static let systemBrowser: @Sendable (URL) async -> Bool = { url in
-        #if canImport(AppKit)
-        await MainActor.run { NSWorkspace.shared.open(url) }
-        #else
-        false
-        #endif
     }
 
     public func signIn(_ inlet: Inlet, input: [Field.ID: String]) async throws -> Grant {

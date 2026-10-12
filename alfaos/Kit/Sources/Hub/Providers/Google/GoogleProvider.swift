@@ -12,12 +12,13 @@ public struct GoogleProvider: Provider {
     private let session: URLSession
     private let clock: @Sendable () -> Date
 
-    public init(config: GoogleClientConfig, session: URLSession = .shared,
-                signIn: (any SignInPort)? = nil, clock: @escaping @Sendable () -> Date = { Date() }) {
+    public init(config: GoogleClientConfig, openBrowser: @escaping @Sendable (URL) async -> Bool,
+                session: URLSession = .shared, signIn: (any SignInPort)? = nil,
+                clock: @escaping @Sendable () -> Date = { Date() }) {
         self.config = config
         self.session = session
         self.clock = clock
-        self.signIn = signIn ?? GoogleSignIn(config: config, session: session, clock: clock)
+        self.signIn = signIn ?? GoogleSignIn(config: config, session: session, openBrowser: openBrowser, clock: clock)
         self.probe = GoogleProbe(config: config, session: session, clock: clock)
     }
 

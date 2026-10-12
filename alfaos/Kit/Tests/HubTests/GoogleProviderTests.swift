@@ -25,7 +25,7 @@ final class GoogleProviderTests: XCTestCase {
 
     func rig(keychain: FakeKeychain) throws -> Hub {
         let provider = GoogleProvider(
-            config: GoogleClientConfig(clientID: "id", clientSecret: "secret"),
+            config: GoogleClientConfig(clientID: "id", clientSecret: "secret"), openBrowser: { _ in false },
             session: GoogleStubNet.session(),
             signIn: GivenSignIn(grant: Self.grant)
         )
