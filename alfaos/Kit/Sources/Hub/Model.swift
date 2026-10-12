@@ -308,3 +308,15 @@ public struct WriteContext {
         try core.resolve(port, for: inlet)
     }
 }
+
+extension SetupError {
+    public var hint: Hint {
+        switch self {
+        case .cancelled: Hint(text: "mail.error.cancelled")
+        case .probeFailed(let hint): hint
+        case .limitReached(_, let max): Hint(text: "mail.error.limit", detail: String(max))
+        case .duplicate: Hint(text: "mail.error.duplicate")
+        case .keychain(let status): Hint(text: "mail.error.keychain", detail: String(status))
+        }
+    }
+}
