@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "AlfaKit",
-    platforms: [.macOS("26.0")],
+    platforms: [.macOS("26.0"), .iOS("26.0")],
     products: [
         .library(name: "ShellCore", targets: ["ShellCore"]),
         .library(name: "Hub", targets: ["Hub"]),
