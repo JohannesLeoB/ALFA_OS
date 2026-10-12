@@ -1,0 +1,242 @@
+import Foundation
+import MykilosKit
+
+public struct IMAPSMTPMailTransport: MailTransport {
+    public typealias AccessTokenSource = @Sendable () async throws -> String
+
+    public let account: MailAccount
+    private let accessToken: AccessTokenSource?
+
+    public init(account: MailAccount, accessToken: AccessTokenSource? = nil) {
+        self.account = account
+        if let accessToken {
+            self.accessToken = accessToken
+        } else if account.provider == .gmail {
+            let provider = GoogleAccessTokenProvider()
+            self.accessToken = { try await provider.validAccessToken() }
+        } else {
+            self.accessToken = nil
+        }
+    }
+
+    public func listFolders() async throws -> [MailFolder] {
+        try await withIncoming { session in
+            try await session.listFolders().filter(\.isSelectable).map {
+                MailFolder(id: $0.path, name: $0.displayName, role: $0.role)
+            }
+        }
+    }
+
+    public func listMessages(folderID: String, query: String?, pageToken: String?, maxResults: Int) async throws -> MailMessagePage {
+        let limit = max(1, maxResults)
+        return try await withIncoming { session in
+            let folders = try await session.listFolders()
+            guard folders.contains(where: { $0.path == folderID && $0.isSelectable }) else {
+                throw MailTransportError.folderNotFound(folderID)
+            }
+            let selection = try await session.select(folderID, readOnly: true)
+            var criteria: [IMAPArgument] = []
+            if let pageToken, let before = Int(pageToken) {
+                guard before > 1 else { return MailMessagePage(messages: []) }
+                criteria.append(.raw("UID 1:\(before - 1)"))
+            }
+            let text = query?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            if text.isEmpty {
+                if criteria.isEmpty { criteria.append(.raw("ALL")) }
+            } else {
+                if text.unicodeScalars.contains(where: { $0.value > 126 }) {
+                    criteria.insert(contentsOf: [.raw("CHARSET"), .raw("UTF-8")], at: 0)
+                }
+                criteria += [.raw("TEXT"), .string(text)]
+            }
+            let found = try await session.searchUIDs(criteria)
+            let pageUIDs = Array(found.suffix(limit))
+            let more = found.count > pageUIDs.count
+            let items = ["UID", "FLAGS", "INTERNALDATE", "RFC822.SIZE", "ENVELOPE", "BODYSTRUCTURE", "BODY.PEEK[HEADER.FIELDS (REFERENCES)]"]
+            let fetched = try await session.fetch(uids: pageUIDs, items: items)
+            let messages = fetched.reversed().compactMap { entry -> MailMessageSummary? in
+                guard let uid = entry.uid else { return nil }
+                return Self.summary(entry, uid: uid, folder: folderID, uidValidity: selection.uidValidity)
+            }
+            return MailMessagePage(messages: messages, nextPageToken: more ? pageUIDs.first.map(String.init) : nil)
+        }
+    }
+
+    public func fetchBody(messageID: String) async throws -> MailMessageBody {
+        let reference = try IMAPMessageReference.decode(messageID)
+        return try await withIncoming { session in
+            let selection = try await session.select(reference.folder, readOnly: true)
+            guard selection.uidValidity == reference.uidValidity else { throw MailTransportError.messageNotFound(messageID) }
+            guard let fetched = try await session.fetch(uids: [reference.uid], items: ["UID", "BODYSTRUCTURE"]).first,
+                  let structure = fetched.structure else {
+                throw MailTransportError.messageNotFound(messageID)
+            }
+            var body = MailMessageBody()
+            if let part = structure.firstPlainText {
+                body.text = try await Self.decodedText(part, session: session, uid: reference.uid)
+            }
+            if let part = structure.firstHTML {
+                body.html = try await Self.decodedText(part, session: session, uid: reference.uid)
+            }
+            var budget = Self.inlineImageBudget
+            for part in structure.inlineImages {
+                guard let contentID = part.contentID, contentID.isEmpty == false,
+                      part.size <= budget, part.size <= Self.inlineImageLimit else { continue }
+                let raw = try await session.fetchSection(uid: reference.uid, section: part.section)
+                let decoded = MailMIME.decodeTransfer(raw, encoding: part.encoding)
+                budget -= decoded.count
+                body.inlineImages[contentID] = "data:\(part.mimeType);base64,\(decoded.base64EncodedString())"
+            }
+            return body
+        }
+    }
+
+    public func fetchAttachment(messageID: String, section: String) async throws -> Data {
+        let reference = try IMAPMessageReference.decode(messageID)
+        return try await withIncoming { session in
+            let selection = try await session.select(reference.folder, readOnly: true)
+            guard selection.uidValidity == reference.uidValidity else { throw MailTransportError.messageNotFound(messageID) }
+            guard let fetched = try await session.fetch(uids: [reference.uid], items: ["UID", "BODYSTRUCTURE"]).first,
+                  let part = fetched.structure?.leaves.first(where: { $0.section == section }) else {
+                throw MailTransportError.messageNotFound(messageID)
+            }
+            let raw = try await session.fetchSection(uid: reference.uid, section: section)
+            return MailMIME.decodeTransfer(raw, encoding: part.encoding)
+        }
+    }
+
+    public func send(_ draft: EmailDraft) async throws {
+        let outgoing = try MailMessageBuilder.build(draft, account: account)
+        guard account.outgoing.isComplete else { throw MailTransportError.accountIncomplete("outgoing") }
+        let credential = try await credential(for: account.outgoing)
+        let session = try await SMTPSession.open(settings: account.outgoing)
+        do {
+            try await session.authenticate(credential)
+            try await session.send(from: outgoing.sender, recipients: outgoing.recipients, message: outgoing.data)
+        } catch {
+            await session.close()
+            throw error
+        }
+        await session.quit()
+    }
+
+    public func setFlags(messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws {
+        let reference = try IMAPMessageReference.decode(messageID)
+        let moveToTrash = add.contains(.deleted)
+        let adding = Self.flagNames(add.subtracting([.deleted]))
+        let removing = Self.flagNames(remove)
+        guard moveToTrash || adding.isEmpty == false || removing.isEmpty == false else { return }
+        try await withIncoming { session in
+            let selection = try await session.select(reference.folder, readOnly: false)
+            guard selection.uidValidity == reference.uidValidity else { throw MailTransportError.messageNotFound(messageID) }
+            try await session.store(uid: reference.uid, flags: adding, adding: true)
+            try await session.store(uid: reference.uid, flags: removing, adding: false)
+            if moveToTrash { try await Self.discard(reference, session: session) }
+        }
+    }
+
+    private static func discard(_ reference: IMAPMessageReference, session: IMAPSession) async throws {
+        let folders = try await session.listFolders()
+        guard let trash = folders.first(where: { $0.role == .trash && $0.isSelectable }),
+              trash.path != reference.folder else {
+            try await session.store(uid: reference.uid, flags: ["\\Deleted"], adding: true)
+            return
+        }
+        if await session.has("MOVE") {
+            try await session.move(uid: reference.uid, to: trash.path)
+        } else if await session.has("UIDPLUS") {
+            try await session.copy(uid: reference.uid, to: trash.path)
+            try await session.store(uid: reference.uid, flags: ["\\Deleted"], adding: true)
+            try await session.expunge(uid: reference.uid)
+        } else {
+            try await session.copy(uid: reference.uid, to: trash.path)
+            try await session.store(uid: reference.uid, flags: ["\\Deleted"], adding: true)
+        }
+    }
+
+    private static let inlineImageLimit = 2_097_152
+    private static let inlineImageBudget = 8_388_608
+
+    private static func decodedText(_ part: IMAPBodyPart, session: IMAPSession, uid: Int) async throws -> String {
+        let raw = try await session.fetchSection(uid: uid, section: part.section)
+        return MailMIME.string(from: MailMIME.decodeTransfer(raw, encoding: part.encoding), charset: part.charset)
+    }
+
+    private static func flagNames(_ flags: Set<MailFlag>) -> [String] {
+        flags.sorted { $0.rawValue < $1.rawValue }.map {
+            switch $0 {
+            case .seen: "\\Seen"
+            case .flagged: "\\Flagged"
+            case .answered: "\\Answered"
+            case .draft: "\\Draft"
+            case .deleted: "\\Deleted"
+            }
+        }
+    }
+
+    private static func summary(_ entry: IMAPFetched, uid: Int, folder: String, uidValidity: Int) -> MailMessageSummary {
+        let envelope = entry.envelope
+        var flags: Set<MailFlag> = []
+        for name in entry.flags {
+            switch name {
+            case "\\seen": flags.insert(.seen)
+            case "\\flagged": flags.insert(.flagged)
+            case "\\answered": flags.insert(.answered)
+            case "\\draft": flags.insert(.draft)
+            case "\\deleted": flags.insert(.deleted)
+            default: break
+            }
+        }
+        let id = IMAPMessageReference(folder: folder, uidValidity: uidValidity, uid: uid).encoded
+        let references = entry.sections["HEADER.FIELDS (REFERENCES)"].map(MailMIME.parseHeaders)?
+            .first { $0.name.lowercased() == "references" }?.value
+            .split(separator: " ").first.map(String.init)
+        let thread = references ?? envelope?.inReplyTo ?? envelope?.messageID ?? id
+        let sender = envelope?.from.first ?? envelope?.sender.first
+        return MailMessageSummary(
+            id: id, threadID: thread, subject: envelope?.subject ?? "", from: sender?.display ?? "",
+            fromRaw: (envelope?.from ?? []).map(\.raw).joined(separator: ", "),
+            toRaw: (envelope?.to ?? []).map(\.raw).joined(separator: ", "),
+            ccRaw: (envelope?.cc ?? []).map(\.raw).joined(separator: ", "),
+            snippet: "",
+            receivedAt: entry.internalDate ?? envelope?.date.flatMap(MailMIME.parseMessageDate),
+            flags: flags, folderIDs: [folder], attachmentCount: entry.structure?.attachments.count ?? 0)
+    }
+
+    private func withIncoming<T: Sendable>(_ body: @Sendable (IMAPSession) async throws -> T) async throws -> T {
+        guard account.incoming.isComplete else { throw MailTransportError.accountIncomplete("incoming") }
+        let credential = try await credential(for: account.incoming)
+        let session = try await IMAPSession.open(settings: account.incoming)
+        do {
+            try await session.authenticate(credential)
+            let value = try await body(session)
+            await session.logout()
+            return value
+        } catch {
+            await session.close()
+            throw error
+        }
+    }
+
+    private func credential(for settings: MailServerSettings) async throws -> MailCredential {
+        let user = settings.username.isEmpty ? account.address : settings.username
+        switch account.authentication {
+        case .password:
+            let store = ServiceCredentialStore(.mail, fields: [CredentialField(account.id)])
+            guard let secret = try store.load()?[account.id], secret.isEmpty == false else {
+                throw MailTransportError.credentialsMissing
+            }
+            return .password(user: user, secret: secret)
+        case .oauth:
+            guard let accessToken else { throw MailTransportError.oauthUnavailable(account.provider) }
+            let token: String
+            do {
+                token = try await accessToken()
+            } catch {
+                throw MailTransportError.oauthUnavailable(account.provider)
+            }
+            guard token.isEmpty == false else { throw MailTransportError.oauthUnavailable(account.provider) }
+            return .oauth(user: user, token: token)
+        }
+    }
+}
