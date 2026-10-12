@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # pruefen.sh: the three greens from plan/BAUZEITENPLAN.md.
-#   1. the test suites exit 0
+#   1. the test suites exit 0 and the Kit builds for iOS
 #   2. every row of the plan carries a source line
 #   3. every commit touches only files listed in its row
 # Usage: bash scripts/pruefen.sh [<rev-range>]   (default: HEAD only)
@@ -24,6 +24,15 @@ for pkg in fundus/alpha alfaos/Kit; do
     RC=1
   fi
 done
+
+iolog="$TMP/ios.log"
+if (cd alfaos/Kit && xcodebuild -scheme AlfaKit-Package -destination 'generic/platform=iOS' -derivedDataPath "$ROOT/.build-xcode/ios" build) > "$iolog" 2>&1; then
+  echo "GREEN build     alfaos/Kit · iOS"
+else
+  echo "RED   build     alfaos/Kit · iOS"
+  grep -E 'error:' "$iolog" | sort -u | head -n 20
+  RC=1
+fi
 
 python3 -I - "$RANGE" <<'PY' || RC=1
 import fnmatch
