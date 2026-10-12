@@ -252,9 +252,12 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             try? await provider.signIn.signOut(inlet)
             throw .probeFailed(rejection)
         }
-        if records.contains(where: { $0.provider == offer.provider && $0.account == result.account }) {
-            try? await provider.signIn.signOut(inlet)
-            throw .duplicate
+        if let existing = records.first(where: { $0.provider == offer.provider && $0.account == result.account }) {
+            guard existing.state.canRenew else {
+                try? await provider.signIn.signOut(inlet)
+                throw .duplicate
+            }
+            return try renew(existing, with: grant)
         }
         do {
             try checkLimits(offer)
@@ -285,6 +288,26 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             config.cadence.plan(inlet.id, capability, cadence(inlet.id, capability))
         }
         return inlet
+    }
+
+    private func renew(_ existing: Inlet, with grant: Grant) throws(SetupError) -> Inlet {
+        do {
+            for (name, value) in grant.values.sorted(by: { $0.key < $1.key }) {
+                try config.keychain.put(value, at: KeySlot(inlet: existing.id, name: name))
+            }
+            var inlet = existing
+            inlet.state = .connected(probed: config.clock())
+            try store.save(inlet, slots: grant.values.keys.sorted())
+            grants[inlet.id] = grant
+            update(inlet.id, persist: false) { $0 = inlet }
+            for capability in inlet.capabilities {
+                config.cadence.plan(inlet.id, capability, cadence(inlet.id, capability))
+            }
+            return inlet
+        } catch {
+            if case KeychainError.status(let status) = error { throw .keychain(status) }
+            throw .keychain(-1)
+        }
     }
 
     func probe(_ inletID: Inlet.ID) async throws(SetupError) -> ProbeResult {
