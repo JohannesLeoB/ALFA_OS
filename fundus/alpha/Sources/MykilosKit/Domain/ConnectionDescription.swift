@@ -122,7 +122,6 @@ public struct ConnectionDescription: Identifiable, Equatable, Sendable {
     public let fields: [ConnectionField]
     public let extras: [ConnectionExtra]
     public let notes: [ConnectionText]
-    public let checksWithProvider: Bool
     public let isPrivate: Bool
     public let privateMark: ConnectionText?
     public let usage: ConnectionText?
@@ -131,7 +130,7 @@ public struct ConnectionDescription: Identifiable, Equatable, Sendable {
     public let syncWay: ConnectionSyncWay
 
     public init(id: String, roles: [ConnectionRole], title: ConnectionText, heading: ConnectionText? = nil, fields: [ConnectionField],
-                extras: [ConnectionExtra] = [], notes: [ConnectionText] = [], checksWithProvider: Bool, isPrivate: Bool = false,
+                extras: [ConnectionExtra] = [], notes: [ConnectionText] = [], isPrivate: Bool = false,
                 privateMark: ConnectionText? = nil, usage: ConnectionText? = nil,
                 directions: [ConnectionRole: ConnectionDirection] = [:], access: ConnectionAccess = .none,
                 syncWay: ConnectionSyncWay = .manualOnly) {
@@ -142,7 +141,6 @@ public struct ConnectionDescription: Identifiable, Equatable, Sendable {
         self.fields = fields
         self.extras = extras
         self.notes = notes
-        self.checksWithProvider = checksWithProvider
         self.isPrivate = isPrivate
         self.privateMark = privateMark
         self.usage = usage
