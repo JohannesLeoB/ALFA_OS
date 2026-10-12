@@ -33,7 +33,6 @@ struct ALFA_OSApp: App {
                 Text("error.resources")
             }
         }
-        .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentMinSize)
     }
 }
@@ -59,14 +58,9 @@ struct WindowConfigurator: NSViewRepresentable {
         let view = NSView()
         DispatchQueue.main.async { [weak view] in
             guard let window = view?.window else { return }
-            window.titlebarAppearsTransparent = true
             window.titleVisibility = .hidden
-            window.styleMask.insert(.fullSizeContentView)
             window.isMovableByWindowBackground = false
             window.contentMinSize = minimum
-            for button in [NSWindow.ButtonType.closeButton, .miniaturizeButton, .zoomButton] {
-                window.standardWindowButton(button)?.isHidden = true
-            }
         }
         return view
     }
