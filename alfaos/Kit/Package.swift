@@ -5,13 +5,10 @@ let package = Package(
     name: "AlfaKit",
     platforms: [.macOS(.v15)],
     products: [
-        .library(name: "ShellCore", targets: ["ShellCore"]),
-        .library(name: "StudioCore", targets: ["StudioCore"])
+        .library(name: "ShellCore", targets: ["ShellCore"])
     ],
     targets: [
         .target(name: "ShellCore"),
-        .target(name: "StudioCore"),
-        .testTarget(name: "ShellCoreTests", dependencies: ["ShellCore"]),
-        .testTarget(name: "StudioCoreTests", dependencies: ["StudioCore"])
+        .testTarget(name: "ShellCoreTests", dependencies: ["ShellCore"])
     ]
 )
