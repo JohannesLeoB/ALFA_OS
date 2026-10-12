@@ -1276,7 +1276,7 @@
       }
     },
     "text.common.cancel" : {
-      "comment" : "freigegeben",
+      "comment" : "alpha",
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -1288,7 +1288,7 @@
       }
     },
     "text.settings.action.addAccount" : {
-      "comment" : "freigegeben",
+      "comment" : "alpha",
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -1300,7 +1300,7 @@
       }
     },
     "text.settings.action.check" : {
-      "comment" : "freigegeben",
+      "comment" : "alpha",
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -1312,7 +1312,7 @@
       }
     },
     "text.settings.action.remove" : {
-      "comment" : "freigegeben",
+      "comment" : "alpha",
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -1324,7 +1324,7 @@
       }
     },
     "text.settings.action.signInAgain" : {
-      "comment" : "freigegeben",
+      "comment" : "alpha",
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -1336,7 +1336,7 @@
       }
     },
     "text.settings.connection.connected" : {
-      "comment" : "freigegeben",
+      "comment" : "alpha",
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -1348,7 +1348,7 @@
       }
     },
     "text.settings.connection.error" : {
-      "comment" : "freigegeben",
+      "comment" : "alpha",
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -1360,7 +1360,7 @@
       }
     },
     "text.settings.connection.notConnected" : {
-      "comment" : "freigegeben",
+      "comment" : "alpha",
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -1383,7 +1383,7 @@
       }
     },
     "text.settings.row.mail.accounts" : {
-      "comment" : "freigegeben",
+      "comment" : "alpha",
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
