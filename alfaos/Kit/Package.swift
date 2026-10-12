@@ -6,7 +6,8 @@ let package = Package(
     platforms: [.macOS("26.0")],
     products: [
         .library(name: "ShellCore", targets: ["ShellCore"]),
-        .library(name: "Hub", targets: ["Hub"])
+        .library(name: "Hub", targets: ["Hub"]),
+        .library(name: "Mail", targets: ["Mail"])
     ],
     dependencies: [
         .package(path: "../../fundus/alpha"),
@@ -21,10 +22,28 @@ let package = Package(
                 .product(name: "GRDB", package: "GRDB.swift")
             ]
         ),
+        .target(
+            name: "Mail",
+            dependencies: [
+                "Hub",
+                .product(name: "MykilosServices", package: "alpha"),
+                .product(name: "MykilosKit", package: "alpha"),
+                .product(name: "GRDB", package: "GRDB.swift")
+            ]
+        ),
         .testTarget(name: "ShellCoreTests", dependencies: ["ShellCore"]),
         .testTarget(
             name: "HubTests",
             dependencies: [
+                "Hub",
+                .product(name: "MykilosServices", package: "alpha"),
+                .product(name: "MykilosKit", package: "alpha")
+            ]
+        ),
+        .testTarget(
+            name: "MailTests",
+            dependencies: [
+                "Mail",
                 "Hub",
                 .product(name: "MykilosServices", package: "alpha"),
                 .product(name: "MykilosKit", package: "alpha")
