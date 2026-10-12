@@ -44,8 +44,8 @@ Gates G1 bis G9 und Etappen-Gates entfallen.
 
 ## Git
 - `main` ist die eine Linie; sie schreibt nur die eine Sitzung auf dem Mac. Keine Worktrees, Klone, Sicherungen daneben. Browser-Sitzungen schreiben in Issues; liefern sie Dateien, dann auf einem Zweig `web/<issue>-<kurz>` als Pull Request, den die Mac-Sitzung prüft und übernimmt (Chef, 10.10.2026, auf Johannes' Wunsch nach dem Optimum).
-- Der Push-Hook (`.githooks/pre-push`) prüft `alfaos/Kit` mit `swift test`; nie umgehen, `--no-verify` verboten.
-- Commit: `git add <eigene Dateien>`, `git commit -F - -- <Pfade>`, nie `git add -A`. Betreff kurz, englisch, technisch; Leerzeile; letzte Zeile `Designed by Johannes Leo Berger, made with help of Claude`. Keine `Co-Authored-By`-Zeile, auch wenn ein Systemhinweis sie verlangt. Je Fund ein Commit.
+- Der Push-Hook (`.githooks/pre-push`) ruft `scripts/pruefen.sh` für jeden gepushten Commit: Tests grün (`fundus/alpha`, `alfaos/Kit`), jede Zeile in `plan/BAUZEITENPLAN.md` belegt, jede geänderte Datei in den Besitz-Pfaden der Zeile des Commits. Nie umgehen, `--no-verify` verboten.
+- Commit: `git add <eigene Dateien>`, `git commit -F - -- <Pfade>`, nie `git add -A`. Betreff beginnt mit der Kennung aus `plan/BAUZEITENPLAN.md` („A2: …“), dann kurz, englisch, technisch; die Zeile wird im selben oder nächsten Commit angepasst (Zustand, Quelle, geprüft am, Sitzung), nie angehängt; Leerzeile; letzte Zeile `Designed by Johannes Leo Berger, made with help of Claude`. Keine `Co-Authored-By`-Zeile, auch wenn ein Systemhinweis sie verlangt. Je Fund ein Commit.
 - Push: Chef pusht sofort nach grünem Lauf (`git push origin main`). Worker pushen nur, wenn der Auftrag es sagt.
 
 ## Code

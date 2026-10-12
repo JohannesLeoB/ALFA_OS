@@ -1,11 +1,11 @@
 #!/bin/sh
+# Every pushed commit must pass the three greens of scripts/pruefen.sh.
 ROOT=$(git rev-parse --show-toplevel) || exit 1
 cd "$ROOT" || exit 1
-app=0
+zero=0000000000000000000000000000000000000000
 while read -r local_ref local_sha remote_ref remote_sha; do
-  changed=$(git diff --name-only "$remote_sha" "$local_sha" 2>/dev/null) || changed="alfaos/"
-  printf '%s\n' "$changed" | grep -q '^alfaos/' && app=1
+  [ "$local_sha" = "$zero" ] && continue
+  if [ "$remote_sha" = "$zero" ]; then range="$local_sha^!"; else range="$remote_sha..$local_sha"; fi
+  bash scripts/pruefen.sh "$range" || exit 1
 done
-[ "$app" = 1 ] || exit 0
-swift test --package-path alfaos/Kit >/tmp/alfa-prepush.log 2>&1 || { tail -n 40 /tmp/alfa-prepush.log; exit 1; }
-echo "alfaos/Kit: swift test ok"
+exit 0
