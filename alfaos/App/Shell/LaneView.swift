@@ -84,6 +84,8 @@ struct LaneView: View {
                 .padding(.top, theme.length(.spaceXl))
                 .frame(maxHeight: .infinity, alignment: .top)
                 .frame(maxWidth: .infinity)
+        } else if model.currentID == "mail" {
+            MailLaneView(lane: lane)
         } else {
             Color.clear.frame(maxHeight: .infinity)
         }

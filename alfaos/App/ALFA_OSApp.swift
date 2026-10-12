@@ -6,6 +6,7 @@ import SwiftUI
 struct ALFA_OSApp: App {
     private let resources: ShellResources?
     @State private var model: ShellModel?
+    @State private var mail = MailHost()
     private let store = ShellStore()
 
     init() {
@@ -28,9 +29,10 @@ struct ALFA_OSApp: App {
         WindowGroup {
             if let resources, let model {
                 ShellView(resources: resources, bundle: .main, model: model)
+                    .environment(\.mailHost, mail)
                     .background(WindowConfigurator(minimum: CGSize(width: resources.geometry.windowMin.width, height: resources.geometry.windowMin.height)))
             } else {
-                Text("error.resources")
+                Text(LocalizedStringKey("error.resources"))
             }
         }
         .windowResizability(.contentMinSize)

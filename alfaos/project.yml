@@ -12,8 +12,8 @@ settings:
     DEVELOPMENT_TEAM: 28Z2KHMANG
     CODE_SIGN_STYLE: Automatic
     ENABLE_HARDENED_RUNTIME: YES
-    MARKETING_VERSION: "0.1.5"
-    CURRENT_PROJECT_VERSION: "5"
+    MARKETING_VERSION: "0.1.6"
+    CURRENT_PROJECT_VERSION: "6"
 
 packages:
   AlfaKit:
@@ -34,6 +34,10 @@ targets:
     dependencies:
       - package: AlfaKit
         product: ShellCore
+      - package: AlfaKit
+        product: Hub
+      - package: AlfaKit
+        product: Mail
     info:
       path: Config/Info.plist
       properties:
@@ -49,6 +53,7 @@ targets:
       properties:
         com.apple.security.app-sandbox: true
         com.apple.security.network.client: true
+        com.apple.security.network.server: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.johannesleoberger.alfaos
@@ -73,6 +78,10 @@ targets:
     dependencies:
       - package: AlfaKit
         product: ShellCore
+      - package: AlfaKit
+        product: Hub
+      - package: AlfaKit
+        product: Mail
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
