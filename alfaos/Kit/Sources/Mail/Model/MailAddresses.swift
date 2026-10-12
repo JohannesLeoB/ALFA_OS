@@ -35,7 +35,47 @@ enum MailAddresses {
 
 public enum MailText {
     public static func plain(_ html: String) -> String {
-        html.replacingOccurrences(of: "(?is)<(script|style)[^>]*>.*?</\\1>", with: "", options: .regularExpression)
+        let stripped = html
+            .replacingOccurrences(of: "(?is)<(script|style)[^>]*>.*?</\\1>", with: "", options: .regularExpression)
             .replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
+        return decodeEntities(stripped)
+    }
+
+    static let namedEntities: [String: String] = [
+        "amp": "&", "lt": "<", "gt": ">", "quot": "\"", "apos": "'", "nbsp": "\u{00A0}",
+        "auml": "ä", "ouml": "ö", "uuml": "ü", "Auml": "Ä", "Ouml": "Ö", "Uuml": "Ü", "szlig": "ß",
+        "euro": "€", "ndash": "–", "mdash": "—", "hellip": "…", "laquo": "«", "raquo": "»",
+        "bdquo": "„", "ldquo": "“", "rdquo": "”", "lsquo": "‘", "rsquo": "’", "copy": "©", "reg": "®"
+    ]
+
+    static func decodeEntities(_ text: String) -> String {
+        guard text.contains("&") else { return text }
+        var result = ""
+        var rest = Substring(text)
+        while let amp = rest.firstIndex(of: "&") {
+            result += rest[..<amp]
+            let after = rest[rest.index(after: amp)...]
+            if let semi = after.firstIndex(of: ";"), after.distance(from: after.startIndex, to: semi) <= 10 {
+                let name = String(after[..<semi])
+                if let value = entity(name) {
+                    result += value
+                    rest = after[after.index(after: semi)...]
+                    continue
+                }
+            }
+            result += "&"
+            rest = after
+        }
+        return result + rest
+    }
+
+    static func entity(_ name: String) -> String? {
+        if name.hasPrefix("#x") || name.hasPrefix("#X") {
+            return UInt32(name.dropFirst(2), radix: 16).flatMap(Unicode.Scalar.init).map { String(Character($0)) }
+        }
+        if name.hasPrefix("#") {
+            return UInt32(name.dropFirst()).flatMap(Unicode.Scalar.init).map { String(Character($0)) }
+        }
+        return namedEntities[name]
     }
 }
