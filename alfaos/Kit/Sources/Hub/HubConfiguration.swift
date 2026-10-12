@@ -16,7 +16,7 @@ public struct CompanySetup: Sendable {
     }
 
     public static var standardRights: [Role: Set<Right>] {
-        [.admin: Right.all, .team: Right.all.subtracting([.manageInlets])]
+        [.admin: Right.all, .team: [.read(.mail), .sendMail]]
     }
 }
 

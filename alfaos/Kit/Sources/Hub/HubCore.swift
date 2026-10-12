@@ -132,6 +132,10 @@ final class HubCore: HubAccess, HubSetup, HubRules {
     }
 
     func port<P>(_ port: P.Type, for inletID: Inlet.ID) throws(HubError) -> P {
+        try resolve(port, for: inletID, checkingRead: true)
+    }
+
+    func resolve<P>(_ port: P.Type, for inletID: Inlet.ID, checkingRead: Bool) throws(HubError) -> P {
         guard let inlet = inlets.first(where: { $0.id == inletID }), inlet.state.isConnected else {
             throw .notConnected(inletID)
         }
@@ -141,7 +145,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         guard inlet.capabilities.contains(spec.capability) else {
             throw .capabilityMissing(inletID, spec.capability)
         }
-        guard may(config.person.id, .read(spec.capability)) else { throw .noRight(.read(spec.capability)) }
+        if checkingRead, !may(config.person.id, .read(spec.capability)) { throw .noRight(.read(spec.capability)) }
         guard let provider = providers[inlet.provider] else { throw .notConnected(inletID) }
         guard let grant = grant(for: inlet) else {
             update(inletID, persist: false) { $0.state = .keychainUnreadable }
@@ -174,7 +178,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             throw .blocked(.approvalRequired(order.right))
         }
         do {
-            try await order.run(self, order.inlet)
+            try await order.run(WriteContext(core: self), order.inlet)
         } catch let error as HubError {
             throw error
         } catch {

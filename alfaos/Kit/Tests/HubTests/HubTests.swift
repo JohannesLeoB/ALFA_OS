@@ -127,6 +127,18 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(rig.provider.mail.sent.count, 1)
     }
 
+    func testSendRightWorksWithoutReadRight() async throws {
+        let company = CompanySetup(offers: [Self.mailOffer], rights: [.admin: Right.all, .team: [.sendMail]])
+        let rig = try rig(company: company)
+        let inlet = try await connect(rig, "a@x")
+        rig.hub.rules.setRole(rig.person.id, .team)
+        try await rig.hub.access.write(.sendMail(inlet: inlet.id, draft: EmailDraft(to: "z@x", subject: "s", body: "b")))
+        XCTAssertEqual(rig.provider.mail.sent.count, 1)
+        XCTAssertThrowsError(try rig.hub.access.port(MailTransport.self, for: inlet.id)) {
+            XCTAssertEqual($0 as? HubError, .noRight(.read(.mail)))
+        }
+    }
+
     func testRemoveKeepsTheKeysOfTheOtherInlet() async throws {
         let rig = try rig()
         let a = try await connect(rig, "a@x")

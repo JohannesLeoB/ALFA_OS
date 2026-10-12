@@ -336,12 +336,21 @@ public struct SyncOutcome: Sendable {
 public struct WriteOrder: Sendable {
     public let inlet: Inlet.ID
     public let right: Right
-    public let run: @MainActor @Sendable (any HubAccess, Inlet.ID) async throws -> Void
+    public let run: @MainActor @Sendable (WriteContext, Inlet.ID) async throws -> Void
 
     public init(inlet: Inlet.ID, right: Right,
-                run: @escaping @MainActor @Sendable (any HubAccess, Inlet.ID) async throws -> Void) {
+                run: @escaping @MainActor @Sendable (WriteContext, Inlet.ID) async throws -> Void) {
         self.inlet = inlet
         self.right = right
         self.run = run
+    }
+}
+
+@MainActor
+public struct WriteContext {
+    let core: HubCore
+
+    public func port<P>(_ port: P.Type, for inlet: Inlet.ID) throws(HubError) -> P {
+        try core.resolve(port, for: inlet, checkingRead: false)
     }
 }
