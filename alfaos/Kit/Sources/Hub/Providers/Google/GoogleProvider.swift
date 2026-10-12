@@ -21,12 +21,13 @@ public struct GoogleProvider: Provider {
         self.probe = GoogleProbe(config: config, session: session, clock: clock)
     }
 
-    public func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant) throws -> P {
+    public func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P {
         guard ObjectIdentifier(port) == ObjectIdentifier((any MailTransport).self), inlet.capabilities.contains(.mail) else {
             throw HubError.capabilityMissing(inlet.id, Self.capability(of: port) ?? .mail)
         }
         let tokens = GoogleGrantTokenProvider(state: try GoogleTokenState(grant: grant), config: config,
-                                              refresher: GoogleTokenRefreshService(session: session), clock: clock)
+                                              refresher: GoogleTokenRefreshService(session: session), clock: clock,
+                                              renewal: renewal)
         let client = GoogleGmailClient(tokenProvider: tokens, session: session)
         guard let made = GmailMailTransport(client: client) as? P else {
             throw HubError.capabilityMissing(inlet.id, .mail)

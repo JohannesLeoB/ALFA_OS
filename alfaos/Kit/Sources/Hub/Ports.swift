@@ -28,6 +28,21 @@ public struct Grant: Sendable {
     }
 }
 
+public struct GrantRenewal: Sendable {
+    let onRenewed: @Sendable (Grant) -> Void
+    let onFailed: @Sendable (any Error) -> Void
+
+    public init(renewed: @escaping @Sendable (Grant) -> Void, failed: @escaping @Sendable (any Error) -> Void) {
+        onRenewed = renewed
+        onFailed = failed
+    }
+
+    public static let ignoring = GrantRenewal(renewed: { _ in }, failed: { _ in })
+
+    public func renewed(_ grant: Grant) { onRenewed(grant) }
+    public func failed(_ error: any Error) { onFailed(error) }
+}
+
 public struct ProbeResult: Equatable, Sendable {
     public var account: String
     public var rejection: Hint?
@@ -82,7 +97,7 @@ public protocol Provider: Sendable {
     var presets: [Preset] { get }
     var signIn: any SignInPort { get }
     var probe: any ProbePort { get }
-    func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant) throws -> P
+    func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P
 }
 
 public struct CostMeter: Sendable {
@@ -106,8 +121,8 @@ public struct CostMeter: Sendable {
 
 public struct PortSpec: Sendable {
     public let capability: Capability
-    let make: @Sendable (any Provider, Inlet, Grant, CostMeter) throws -> Any
-    let run: @Sendable (any Provider, Inlet, Grant, CostMeter) async throws -> SyncOutcome
+    let make: @Sendable (any Provider, Inlet, Grant, CostMeter, GrantRenewal) throws -> Any
+    let run: @Sendable (any Provider, Inlet, Grant, CostMeter, GrantRenewal) async throws -> SyncOutcome
 }
 
 public struct PortCatalog: Sendable {
@@ -121,13 +136,13 @@ public struct PortCatalog: Sendable {
         wrap: @escaping @Sendable (P, CostMeter) -> P = { port, _ in port },
         sync: (@Sendable (P, Inlet.ID) async throws -> SyncOutcome)? = nil
     ) {
-        let make: @Sendable (any Provider, Inlet, Grant, CostMeter) throws -> Any = { provider, inlet, grant, meter in
-            wrap(try provider.adapter(P.self, for: inlet, grant), meter)
+        let make: @Sendable (any Provider, Inlet, Grant, CostMeter, GrantRenewal) throws -> Any = { provider, inlet, grant, meter, renewal in
+            wrap(try provider.adapter(P.self, for: inlet, grant, renewal: renewal), meter)
         }
-        let run: @Sendable (any Provider, Inlet, Grant, CostMeter) async throws -> SyncOutcome = {
-            provider, inlet, grant, meter in
+        let run: @Sendable (any Provider, Inlet, Grant, CostMeter, GrantRenewal) async throws -> SyncOutcome = {
+            provider, inlet, grant, meter, renewal in
             guard let sync else { return SyncOutcome() }
-            return try await sync(wrap(try provider.adapter(P.self, for: inlet, grant), meter), inlet.id)
+            return try await sync(wrap(try provider.adapter(P.self, for: inlet, grant, renewal: renewal), meter), inlet.id)
         }
         specs[ObjectIdentifier(type)] = PortSpec(capability: capability, make: make, run: run)
     }

@@ -55,7 +55,7 @@ extension PortCatalog {
 
 extension WriteOrder {
     public static func sendMail(inlet: Inlet.ID, draft: EmailDraft) -> WriteOrder {
-        WriteOrder(inlet: inlet, right: .sendMail) { access, inlet in
+        WriteOrder(inlet: inlet) { access, inlet in
             let transport = try access.port((any MailTransport).self, for: inlet)
             try await transport.send(draft)
         }

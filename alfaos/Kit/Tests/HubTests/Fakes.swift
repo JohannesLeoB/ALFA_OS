@@ -177,7 +177,7 @@ final class FakeProvider: Provider, @unchecked Sendable {
     var signedOut: [Inlet.ID] { signedOutList.with { $0 } }
     func setAccepting(_ value: Bool) { accepting.with { $0 = value } }
 
-    func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant) throws -> P {
+    func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P {
         let made: Any
         switch ObjectIdentifier(port) {
         case ObjectIdentifier((any MailTransport).self): made = mail as any MailTransport

@@ -109,33 +109,46 @@ final class HubTests: XCTestCase {
         guard case .connected = rig.hub.setup.inlets[0].state else { return XCTFail("state") }
     }
 
-    func testTeamWithoutSendRightCannotSend() async throws {
-        let team = Right.all.subtracting([.sendMail, .manageInlets])
-        let company = CompanySetup(offers: [Self.mailOffer], rights: [.admin: Right.all, .team: team])
-        let rig = try rig(company: company)
+    func testCompanyLockBlocksTheServiceAndUnlockRestoresIt() async throws {
+        let rig = try rig()
         let inlet = try await connect(rig, "a@x")
-        rig.hub.rules.setRole(rig.person.id, .team)
+        let draft = EmailDraft(to: "z@x", subject: "s", body: "b")
+        rig.hub.rules.setLocked("fake", scope: .company, true)
+        XCTAssertTrue(rig.hub.rules.isLocked("fake", scope: .company))
+        XCTAssertEqual(rig.hub.setup.inlets.map(\.state), [.locked])
+        XCTAssertEqual(rig.hub.access.inlets(for: .mail), [])
+        XCTAssertThrowsError(try rig.hub.access.port(MailTransport.self, for: inlet.id)) {
+            XCTAssertEqual($0 as? HubError, .locked(inlet.id))
+        }
         do {
-            try await rig.hub.access.write(.sendMail(inlet: inlet.id, draft: EmailDraft(to: "z@x", subject: "s", body: "b")))
+            try await rig.hub.access.write(.sendMail(inlet: inlet.id, draft: draft))
             XCTFail("write must throw")
         } catch {
-            XCTAssertEqual(error, .noRight(.sendMail))
+            XCTAssertEqual(error, .locked(inlet.id))
         }
+        await rig.cadence.trigger(inlet.id, .mail)
         XCTAssertEqual(rig.provider.mail.sent.count, 0)
-        rig.hub.rules.setRole(rig.person.id, .admin)
-        try await rig.hub.access.write(.sendMail(inlet: inlet.id, draft: EmailDraft(to: "z@x", subject: "s", body: "b")))
+        XCTAssertEqual(rig.provider.mail.listFoldersCalls, 0)
+        rig.hub.rules.setLocked("fake", scope: .company, false)
+        guard case .connected = rig.hub.setup.inlets[0].state else { return XCTFail("state") }
+        _ = try rig.hub.access.port(MailTransport.self, for: inlet.id)
+        try await rig.hub.access.write(.sendMail(inlet: inlet.id, draft: draft))
         XCTAssertEqual(rig.provider.mail.sent.count, 1)
     }
 
-    func testSendRightWorksWithoutReadRight() async throws {
-        let company = CompanySetup(offers: [Self.mailOffer], rights: [.admin: Right.all, .team: [.sendMail]])
-        let rig = try rig(company: company)
+    func testLockForAnotherPersonLeavesThisPersonFree() async throws {
+        let rig = try rig()
         let inlet = try await connect(rig, "a@x")
-        rig.hub.rules.setRole(rig.person.id, .team)
+        rig.hub.rules.setLocked("fake", scope: .person("other"), true)
+        XCTAssertTrue(rig.hub.rules.isLocked("fake", scope: .person("other")))
+        XCTAssertFalse(rig.hub.rules.isLocked("fake", scope: .person(rig.person.id)))
+        guard case .connected = rig.hub.setup.inlets[0].state else { return XCTFail("state") }
+        _ = try rig.hub.access.port(MailTransport.self, for: inlet.id)
         try await rig.hub.access.write(.sendMail(inlet: inlet.id, draft: EmailDraft(to: "z@x", subject: "s", body: "b")))
         XCTAssertEqual(rig.provider.mail.sent.count, 1)
+        rig.hub.rules.setLocked("fake", scope: .person(rig.person.id), true)
         XCTAssertThrowsError(try rig.hub.access.port(MailTransport.self, for: inlet.id)) {
-            XCTAssertEqual($0 as? HubError, .noRight(.read(.mail)))
+            XCTAssertEqual($0 as? HubError, .locked(inlet.id))
         }
     }
 

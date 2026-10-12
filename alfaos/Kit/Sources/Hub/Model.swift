@@ -72,40 +72,26 @@ public struct CostItem: Equatable, Sendable {
     }
 }
 
-public struct Right: RawRepresentable, Hashable, Codable, Sendable {
-    public var rawValue: String
+public enum LockScope: Hashable, Codable, Sendable {
+    case company
+    case person(Person.ID)
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-
-    public static func read(_ capability: Capability) -> Right { Right(rawValue: "read.\(capability.rawValue)") }
-    public static func write(_ capability: Capability) -> Right { Right(rawValue: "write.\(capability.rawValue)") }
-    public static let sendMail = Right(rawValue: "mail.send")
-    public static let manageInlets = Right(rawValue: "inlets.manage")
-
-    public static var all: Set<Right> {
-        var set: Set<Right> = [.sendMail, .manageInlets]
-        for capability in Capability.allCases {
-            set.insert(.read(capability))
-            set.insert(.write(capability))
+    var key: String {
+        switch self {
+        case .company: "company"
+        case .person(let id): "person:" + id
         }
-        return set
     }
-}
 
-public struct Role: RawRepresentable, Hashable, Codable, Sendable {
-    public var rawValue: String
-
-    public init(rawValue: String) { self.rawValue = rawValue }
-
-    public static let admin = Role(rawValue: "admin")
-    public static let team = Role(rawValue: "team")
-}
-
-public enum LockRule: String, Codable, Sendable {
-    case open
-    case approval
-    case fourEyes
-    case blocked
+    init?(key: String) {
+        if key == "company" {
+            self = .company
+        } else if key.hasPrefix("person:") {
+            self = .person(String(key.dropFirst("person:".count)))
+        } else {
+            return nil
+        }
+    }
 }
 
 public struct Person: Identifiable, Equatable, Codable, Sendable {
@@ -215,6 +201,7 @@ public enum InletState: Equatable, Codable, Sendable {
     case failed(Hint)
     case keychainUnreadable
     case orphaned
+    case locked
 
     public var isConnected: Bool {
         switch self {
@@ -246,15 +233,9 @@ public struct Inlet: Identifiable, Equatable, Codable, Sendable {
     }
 }
 
-public enum Reason: Equatable, Sendable {
-    case locked(Right)
-    case approvalRequired(Right)
-}
-
 public enum HubError: Error, Equatable, Sendable {
     case noInlet(DataKind)
-    case noRight(Right)
-    case blocked(Reason)
+    case locked(Inlet.ID)
     case provider(Hint)
     case notConnected(Inlet.ID)
     case capabilityMissing(Inlet.ID, Capability)
@@ -272,7 +253,6 @@ public enum HubEvent: Equatable, Sendable {
     case inletChanged(Inlet.ID)
     case syncFinished(Capability, Inlet.ID)
     case newItems(DataKind)
-    case approvalPending(Inlet.ID, Right)
 }
 
 public struct SyncJob: Equatable, Sendable {
@@ -335,13 +315,10 @@ public struct SyncOutcome: Sendable {
 
 public struct WriteOrder: Sendable {
     public let inlet: Inlet.ID
-    public let right: Right
     public let run: @MainActor @Sendable (WriteContext, Inlet.ID) async throws -> Void
 
-    public init(inlet: Inlet.ID, right: Right,
-                run: @escaping @MainActor @Sendable (WriteContext, Inlet.ID) async throws -> Void) {
+    public init(inlet: Inlet.ID, run: @escaping @MainActor @Sendable (WriteContext, Inlet.ID) async throws -> Void) {
         self.inlet = inlet
-        self.right = right
         self.run = run
     }
 }
@@ -351,6 +328,6 @@ public struct WriteContext {
     let core: HubCore
 
     public func port<P>(_ port: P.Type, for inlet: Inlet.ID) throws(HubError) -> P {
-        try core.resolve(port, for: inlet, checkingRead: false)
+        try core.resolve(port, for: inlet)
     }
 }

@@ -45,23 +45,39 @@ final class GoogleGrantTokenProvider: GoogleAccessTokenProviding, @unchecked Sen
     private let config: GoogleClientConfig
     private let refresher: any GoogleTokenRefreshing
     private let clock: @Sendable () -> Date
+    private let renewal: GrantRenewal
 
     init(state: GoogleTokenState, config: GoogleClientConfig, refresher: any GoogleTokenRefreshing,
-         clock: @escaping @Sendable () -> Date) {
+         clock: @escaping @Sendable () -> Date, renewal: GrantRenewal = .ignoring) {
         self.state = state
         self.config = config
         self.refresher = refresher
         self.clock = clock
+        self.renewal = renewal
     }
 
     func validAccessToken() async throws -> String {
         let current = lock.withLock { state }
         if current.expiresAt.timeIntervalSince(clock()) > 60 { return current.accessToken }
-        guard let refreshToken = current.refreshToken else { throw GoogleProviderError.refreshUnavailable }
-        let response = try await refresher.refresh(refreshToken: refreshToken, clientID: config.clientID,
-                                                   clientSecret: config.clientSecret)
-        let renewed = GoogleTokenState(response: response, previousRefresh: refreshToken, now: clock())
-        lock.withLock { state = renewed }
-        return renewed.accessToken
+        do {
+            guard let refreshToken = current.refreshToken else { throw GoogleProviderError.refreshUnavailable }
+            let response = try await refresher.refresh(refreshToken: refreshToken, clientID: config.clientID,
+                                                       clientSecret: config.clientSecret)
+            let renewed = GoogleTokenState(response: response, previousRefresh: refreshToken, now: clock())
+            lock.withLock { state = renewed }
+            renewal.renewed(renewed.grant)
+            return renewed.accessToken
+        } catch {
+            if Self.isRejection(error) { renewal.failed(error) }
+            throw error
+        }
+    }
+
+    static func isRejection(_ error: Error) -> Bool {
+        switch error {
+        case GoogleOAuthError.httpError(let code): code == 400 || code == 401
+        case GoogleProviderError.refreshUnavailable: true
+        default: false
+        }
     }
 }

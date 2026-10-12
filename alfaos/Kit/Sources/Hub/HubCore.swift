@@ -3,7 +3,7 @@ import Observation
 
 @MainActor @Observable
 final class HubCore: HubAccess, HubSetup, HubRules {
-    private(set) var inlets: [Inlet] = []
+    private(set) var records: [Inlet] = []
     private(set) var queue: [SyncJob] = []
 
     @ObservationIgnored private let config: HubConfiguration
@@ -18,21 +18,20 @@ final class HubCore: HubAccess, HubSetup, HubRules {
     @ObservationIgnored private var cadences: [String: Cadence] = [:]
     @ObservationIgnored private var truths: [DataKind: Inlet.ID] = [:]
     @ObservationIgnored private var limits: [Capability: Int]
-    @ObservationIgnored private var roles: [Person.ID: Role] = [:]
-    @ObservationIgnored private var locks: [String: LockRule] = [:]
+    @ObservationIgnored private var locks: [String: Bool] = [:]
 
     init(_ config: HubConfiguration) throws {
         self.config = config
         self.store = try Store(config.database)
         self.limits = config.company.limits
         for provider in config.providers { providers[provider.id] = provider }
-        inlets = try store.loadInlets()
+        records = try store.loadInlets()
         try loadSettings()
         config.cadence.attach { [weak self] inlet, capability in
             guard let self else { return SyncReport(inlet: inlet, capability: capability, result: .skipped) }
             return await self.runSync(inlet, capability)
         }
-        for inlet in inlets where inlet.state.isConnected {
+        for inlet in records where inlet.state.isConnected {
             for capability in inlet.capabilities {
                 config.cadence.plan(inlet.id, capability, cadence(inlet.id, capability))
             }
@@ -50,10 +49,11 @@ final class HubCore: HubAccess, HubSetup, HubRules {
                 if let kind = DataKind(rawValue: parts[1]) { truths[kind] = try decoder.decode(String.self, from: data) }
             case "limit" where parts.count == 2:
                 if let capability = Capability(rawValue: parts[1]) { limits[capability] = try decoder.decode(Int.self, from: data) }
-            case "role" where parts.count == 2:
-                roles[parts[1]] = try decoder.decode(Role.self, from: data)
-            case "lock" where parts.count == 3:
-                locks[parts[1] + "|" + parts[2]] = try decoder.decode(LockRule.self, from: data)
+            case "lock" where parts.count >= 3:
+                let scope = parts[2...].joined(separator: "|")
+                if LockScope(key: scope) != nil, let value = try? decoder.decode(Bool.self, from: data) {
+                    locks[parts[1] + "|" + scope] = value
+                }
             default:
                 break
             }
@@ -74,9 +74,9 @@ final class HubCore: HubAccess, HubSetup, HubRules {
     }
 
     private func update(_ id: Inlet.ID, persist: Bool, _ change: (inout Inlet) -> Void) {
-        guard let index = inlets.firstIndex(where: { $0.id == id }) else { return }
-        change(&inlets[index])
-        if persist { try? store.save(inlets[index]) }
+        guard let index = records.firstIndex(where: { $0.id == id }) else { return }
+        change(&records[index])
+        if persist { try? store.save(records[index]) }
         emit(.inletChanged(id))
     }
 
@@ -102,7 +102,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
 
     private func refresh(_ kind: DataKind) async {
         guard let capability = kind.capability else { return }
-        let targets = inlets.filter { $0.state.isConnected && $0.capabilities.contains(capability) }
+        let targets = records.filter { $0.state.isConnected && !isLocked($0) && $0.capabilities.contains(capability) }
         guard !targets.isEmpty else { return }
         let kindFeeds = feeds[kind] ?? []
         kindFeeds.forEach { $0.begin() }
@@ -110,8 +110,21 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         kindFeeds.forEach { $0.end() }
     }
 
+    var inlets: [Inlet] {
+        records.map { record in
+            guard isLocked(record) else { return record }
+            var shown = record
+            shown.state = .locked
+            return shown
+        }
+    }
+
+    private func isLocked(_ inlet: Inlet) -> Bool {
+        isLocked(inlet.provider, scope: .company) || isLocked(inlet.provider, scope: .person(config.person.id))
+    }
+
     func inlets(for capability: Capability) -> [Inlet] {
-        inlets.filter { $0.state.isConnected && $0.capabilities.contains(capability) }
+        records.filter { $0.state.isConnected && !isLocked($0) && $0.capabilities.contains(capability) }
     }
 
     private func grant(for inlet: Inlet) -> Grant? {
@@ -132,27 +145,26 @@ final class HubCore: HubAccess, HubSetup, HubRules {
     }
 
     func port<P>(_ port: P.Type, for inletID: Inlet.ID) throws(HubError) -> P {
-        try resolve(port, for: inletID, checkingRead: true)
+        try resolve(port, for: inletID)
     }
 
-    func resolve<P>(_ port: P.Type, for inletID: Inlet.ID, checkingRead: Bool) throws(HubError) -> P {
-        guard let inlet = inlets.first(where: { $0.id == inletID }), inlet.state.isConnected else {
-            throw .notConnected(inletID)
-        }
+    func resolve<P>(_ port: P.Type, for inletID: Inlet.ID) throws(HubError) -> P {
+        guard let inlet = records.first(where: { $0.id == inletID }) else { throw .notConnected(inletID) }
+        if isLocked(inlet) { throw .locked(inletID) }
+        guard inlet.state.isConnected else { throw .notConnected(inletID) }
         guard let spec = config.catalog.spec(for: port) else {
             throw .provider(Hint(text: "hint.port.unknown", detail: String(describing: port)))
         }
         guard inlet.capabilities.contains(spec.capability) else {
             throw .capabilityMissing(inletID, spec.capability)
         }
-        if checkingRead, !may(config.person.id, .read(spec.capability)) { throw .noRight(.read(spec.capability)) }
         guard let provider = providers[inlet.provider] else { throw .notConnected(inletID) }
         guard let grant = grant(for: inlet) else {
             update(inletID, persist: false) { $0.state = .keychainUnreadable }
             throw .notConnected(inletID)
         }
         do {
-            guard let made = try spec.make(provider, inlet, grant, meter(inletID, spec.capability)) as? P else {
+            guard let made = try spec.make(provider, inlet, grant, meter(inletID, spec.capability), renewal(inletID)) as? P else {
                 throw HubError.capabilityMissing(inletID, spec.capability)
             }
             return made
@@ -164,19 +176,9 @@ final class HubCore: HubAccess, HubSetup, HubRules {
     }
 
     func write(_ order: WriteOrder) async throws(HubError) {
-        guard let inlet = inlets.first(where: { $0.id == order.inlet }), inlet.state.isConnected else {
-            throw .notConnected(order.inlet)
-        }
-        guard may(config.person.id, order.right) else { throw .noRight(order.right) }
-        switch locks[order.inlet + "|" + order.right.rawValue] ?? .open {
-        case .open:
-            break
-        case .blocked:
-            throw .blocked(.locked(order.right))
-        case .approval, .fourEyes:
-            emit(.approvalPending(order.inlet, order.right))
-            throw .blocked(.approvalRequired(order.right))
-        }
+        guard let inlet = records.first(where: { $0.id == order.inlet }) else { throw .notConnected(order.inlet) }
+        if isLocked(inlet) { throw .locked(order.inlet) }
+        guard inlet.state.isConnected else { throw .notConnected(order.inlet) }
         do {
             try await order.run(WriteContext(core: self), order.inlet)
         } catch let error as HubError {
@@ -188,7 +190,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
 
     func runSync(_ inletID: Inlet.ID, _ capability: Capability) async -> SyncReport {
         let key = inletID + "|" + capability.rawValue
-        guard let inlet = inlets.first(where: { $0.id == inletID }), inlet.state.isConnected,
+        guard let inlet = records.first(where: { $0.id == inletID }), inlet.state.isConnected, !isLocked(inlet),
               inlet.capabilities.contains(capability), !running.contains(key),
               let provider = providers[inlet.provider], let spec = config.catalog.spec(for: capability),
               let grant = grant(for: inlet) else {
@@ -204,9 +206,9 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             queue.removeAll { $0 == job }
         }
         do {
-            let outcome = try await spec.run(provider, inlet, grant, meter(inletID, capability))
+            let outcome = try await spec.run(provider, inlet, grant, meter(inletID, capability), renewal(inletID))
             let now = config.clock()
-            if inlets.contains(where: { $0.id == inletID }) {
+            if records.contains(where: { $0.id == inletID }) {
                 for (kind, records) in outcome.deliveries {
                     delivered[kind, default: [:]][inletID] = (records, now)
                     for feed in feeds[kind] ?? [] { feed.apply(inlet: inletID, records: records, at: now) }
@@ -217,7 +219,11 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             emit(.syncFinished(capability, inletID))
             return SyncReport(inlet: inletID, capability: capability, result: .finished(items: outcome.count))
         } catch {
-            let failure = hint(error, fixIn: .inlet(inletID))
+            var failure = hint(error, fixIn: .inlet(inletID))
+            if case .failed(let current) = records.first(where: { $0.id == inletID })?.state,
+               current.text == Self.expiredText {
+                failure = current
+            }
             for kind in DataKind.allCases where kind.capability == capability {
                 for feed in feeds[kind] ?? [] { feed.disturb(failure) }
             }
@@ -232,7 +238,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
     private func checkLimits(_ offer: Offer) throws(SetupError) {
         for capability in offer.capabilities {
             let maximum = limit(capability)
-            let used = inlets.filter { $0.owner == offer.owner && $0.capabilities.contains(capability) }.count
+            let used = records.filter { $0.owner == offer.owner && $0.capabilities.contains(capability) }.count
             if used >= maximum { throw .limitReached(capability, max: maximum) }
         }
     }
@@ -265,7 +271,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             try? await provider.signIn.signOut(inlet)
             throw .probeFailed(rejection)
         }
-        if inlets.contains(where: { $0.provider == offer.provider && $0.account == result.account }) {
+        if records.contains(where: { $0.provider == offer.provider && $0.account == result.account }) {
             try? await provider.signIn.signOut(inlet)
             throw .duplicate
         }
@@ -292,7 +298,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             throw .keychain(-1)
         }
         grants[inlet.id] = grant
-        inlets.append(inlet)
+        records.append(inlet)
         emit(.inletChanged(inlet.id))
         for capability in inlet.capabilities {
             config.cadence.plan(inlet.id, capability, cadence(inlet.id, capability))
@@ -301,7 +307,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
     }
 
     func probe(_ inletID: Inlet.ID) async throws(SetupError) -> ProbeResult {
-        guard let inlet = inlets.first(where: { $0.id == inletID }), let provider = providers[inlet.provider] else {
+        guard let inlet = records.first(where: { $0.id == inletID }), let provider = providers[inlet.provider] else {
             throw .probeFailed(Hint(text: "hint.inlet.unknown", detail: inletID))
         }
         guard let grant = grant(for: inlet) else {
@@ -328,23 +334,21 @@ final class HubCore: HubAccess, HubSetup, HubRules {
     }
 
     func remove(_ inletID: Inlet.ID) async throws {
-        guard let inlet = inlets.first(where: { $0.id == inletID }) else { return }
+        guard let inlet = records.first(where: { $0.id == inletID }) else { return }
         for capability in inlet.capabilities { config.cadence.plan(inletID, capability, .off) }
         let names = try store.slots(of: inletID)
         for name in names { try config.keychain.delete(KeySlot(inlet: inletID, name: name)) }
         if let provider = providers[inlet.provider] { try? await provider.signIn.signOut(inlet) }
         try store.delete(inletID)
         try store.deleteSettings(withPrefix: "cadence|\(inletID)|")
-        try store.deleteSettings(withPrefix: "lock|\(inletID)|")
         cadences = cadences.filter { !$0.key.hasPrefix(inletID + "|") }
-        locks = locks.filter { !$0.key.hasPrefix(inletID + "|") }
         for (kind, truth) in truths where truth == inletID {
             truths[kind] = nil
             try store.deleteSettings(withPrefix: "truth|\(kind.rawValue)")
         }
         grants[inletID] = nil
         for kind in delivered.keys { delivered[kind]?[inletID] = nil }
-        inlets.removeAll { $0.id == inletID }
+        records.removeAll { $0.id == inletID }
         for list in feeds.values { list.forEach { $0.drop(inlet: inletID) } }
         emit(.inletChanged(inletID))
     }
@@ -357,7 +361,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         let key = inlet + "|" + capability.rawValue
         cadences[key] = value
         persist("cadence|" + key, value)
-        if inlets.first(where: { $0.id == inlet })?.state.isConnected == true {
+        if records.first(where: { $0.id == inlet })?.state.isConnected == true {
             config.cadence.plan(inlet, capability, value)
         }
     }
@@ -378,19 +382,54 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         persist("limit|" + capability.rawValue, value)
     }
 
-    func may(_ person: Person.ID, _ right: Right) -> Bool {
-        let role = roles[person] ?? config.company.defaultRole
-        return config.company.rights[role]?.contains(right) ?? false
+    func isLocked(_ provider: Provider.ID, scope: LockScope) -> Bool {
+        locks[provider + "|" + scope.key] ?? false
     }
 
-    func setRole(_ person: Person.ID, _ role: Role) {
-        roles[person] = role
-        persist("role|" + person, role)
+    func setLocked(_ provider: Provider.ID, scope: LockScope, _ locked: Bool) {
+        let key = provider + "|" + scope.key
+        locks[key] = locked
+        persist("lock|" + key, locked)
+        let affected: Bool
+        switch scope {
+        case .company: affected = true
+        case .person(let id): affected = id == config.person.id
+        }
+        guard affected else { return }
+        for inlet in records where inlet.provider == provider { emit(.inletChanged(inlet.id)) }
     }
 
-    func lock(_ inlet: Inlet.ID, _ right: Right, _ rule: LockRule) {
-        let key = inlet + "|" + right.rawValue
-        locks[key] = rule
-        persist("lock|" + key, rule)
+    static let expiredText = "hint.signin.expired"
+
+    private func renewal(_ inletID: Inlet.ID) -> GrantRenewal {
+        GrantRenewal(
+            renewed: { [weak self] grant in
+                Task { @MainActor in self?.adopt(grant, for: inletID) }
+            },
+            failed: { [weak self] _ in
+                Task { @MainActor in self?.expire(inletID) }
+            }
+        )
+    }
+
+    private func adopt(_ grant: Grant, for inletID: Inlet.ID) {
+        guard let inlet = records.first(where: { $0.id == inletID }) else { return }
+        grants[inletID] = grant
+        do {
+            for (name, value) in grant.values.sorted(by: { $0.key < $1.key }) {
+                try config.keychain.put(value, at: KeySlot(inlet: inletID, name: name))
+            }
+            try store.save(inlet, slots: grant.values.keys.sorted())
+            emit(.inletChanged(inletID))
+        } catch {
+            let failure = Hint(text: "hint.keychain.unwritable", detail: String(describing: error), fixIn: .inlet(inletID))
+            update(inletID, persist: true) { $0.state = .failed(failure) }
+        }
+    }
+
+    private func expire(_ inletID: Inlet.ID) {
+        guard records.contains(where: { $0.id == inletID }) else { return }
+        let failure = Hint(text: Self.expiredText, fixIn: .inlet(inletID))
+        update(inletID, persist: true) { $0.state = .failed(failure) }
     }
 }

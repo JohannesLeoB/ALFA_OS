@@ -3,20 +3,11 @@ import GRDB
 
 public struct CompanySetup: Sendable {
     public var offers: [Offer]
-    public var rights: [Role: Set<Right>]
     public var limits: [Capability: Int]
-    public var defaultRole: Role
 
-    public init(offers: [Offer] = [], rights: [Role: Set<Right>]? = nil, limits: [Capability: Int] = [.mail: 3],
-                defaultRole: Role = .team) {
+    public init(offers: [Offer] = [], limits: [Capability: Int] = [.mail: 3]) {
         self.offers = offers
-        self.rights = rights ?? CompanySetup.standardRights
         self.limits = limits
-        self.defaultRole = defaultRole
-    }
-
-    public static var standardRights: [Role: Set<Right>] {
-        [.admin: Right.all, .team: [.read(.mail), .sendMail]]
     }
 }
 
