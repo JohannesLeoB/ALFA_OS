@@ -173,7 +173,8 @@ public struct KeychainMetadataLister: StoredKeyLister {
             kSecReturnAttributes: true,
 
             kSecReturnData: false,
-            kSecUseAuthenticationUI: kSecUseAuthenticationUISkip
+            kSecUseAuthenticationUI: kSecUseAuthenticationUISkip,
+            kSecUseDataProtectionKeychain: true
         ]
         var result: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &result)

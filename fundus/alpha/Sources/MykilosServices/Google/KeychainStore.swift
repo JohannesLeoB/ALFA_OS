@@ -19,20 +19,14 @@ public struct KeychainStore: Sendable {
         let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: service,
-            kSecAttrAccount: account
+            kSecAttrAccount: account,
+            kSecUseDataProtectionKeychain: true
         ]
 
-        var addAttributes: [CFString: Any] = [kSecValueData: data]
-        #if os(macOS)
-        let allowAllAccess = Self.makeAllowAllApplicationsAccess()
-        if let allowAllAccess {
-            addAttributes[kSecAttrAccess] = allowAllAccess
-        } else {
-            addAttributes[kSecAttrAccessible] = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-        }
-        #else
-        addAttributes[kSecAttrAccessible] = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-        #endif
+        let addAttributes: [CFString: Any] = [
+            kSecValueData: data,
+            kSecAttrAccessible: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+        ]
         let addQuery = query.merging(addAttributes) { _, new in new }
 
         let addStatus = SecItemAdd(addQuery as CFDictionary, nil)
@@ -57,7 +51,8 @@ public struct KeychainStore: Sendable {
             kSecAttrAccount: account,
             kSecReturnData: true,
             kSecMatchLimit: kSecMatchLimitOne,
-            kSecUseAuthenticationUI: kSecUseAuthenticationUISkip
+            kSecUseAuthenticationUI: kSecUseAuthenticationUISkip,
+            kSecUseDataProtectionKeychain: true
         ]
         var item: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &item)
@@ -73,25 +68,12 @@ public struct KeychainStore: Sendable {
         let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: service,
-            kSecAttrAccount: account
+            kSecAttrAccount: account,
+            kSecUseDataProtectionKeychain: true
         ]
         let status = SecItemDelete(query as CFDictionary)
         guard status == errSecSuccess || status == errSecItemNotFound else {
             throw KeychainStoreError.deleteFailed(status)
         }
     }
-
-    #if os(macOS)
-    private static func makeAllowAllApplicationsAccess() -> SecAccess? {
-        var access: SecAccess?
-        let status = SecAccessCreate("\(AppKennung.name) credentials" as CFString, nil, &access)
-        guard status == errSecSuccess, let access else { return nil }
-        if let aclList = SecAccessCopyMatchingACLList(access, kSecACLAuthorizationDecrypt) as? [SecACL] {
-            for acl in aclList {
-                SecACLSetContents(acl, nil, "" as CFString, SecKeychainPromptSelector())
-            }
-        }
-        return access
-    }
-    #endif
 }

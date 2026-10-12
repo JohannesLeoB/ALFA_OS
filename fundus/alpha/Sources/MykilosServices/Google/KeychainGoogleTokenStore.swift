@@ -53,8 +53,7 @@ public struct KeychainGoogleTokenStore: GoogleTokenStoring {
     }
 
     public func load() throws -> GoogleTokens? {
-        guard let json = try PerUserKeychainMigrator.loadWithMigration(
-                keychain: keychain, base: Self.base, userID: userID, account: Self.tokensAccount) else { return nil }
+        guard let json = try keychain.load(service: service, account: Self.tokensAccount) else { return nil }
         return try decoder.decode(GoogleTokens.self, from: Data(json.utf8))
     }
 
@@ -68,8 +67,7 @@ public struct KeychainGoogleTokenStore: GoogleTokenStoring {
     }
 
     public func loadClientID() throws -> String? {
-        try PerUserKeychainMigrator.loadWithMigration(
-            keychain: keychain, base: Self.base, userID: userID, account: Self.clientIDAccount)
+        try keychain.load(service: service, account: Self.clientIDAccount)
     }
 
     public func storeClientSecret(_ clientSecret: String) throws {
@@ -77,8 +75,7 @@ public struct KeychainGoogleTokenStore: GoogleTokenStoring {
     }
 
     public func loadClientSecret() throws -> String? {
-        try PerUserKeychainMigrator.loadWithMigration(
-            keychain: keychain, base: Self.base, userID: userID, account: Self.clientSecretAccount)
+        try keychain.load(service: service, account: Self.clientSecretAccount)
     }
 
     public func storeUserInfo(_ userInfo: GoogleUserInfo) throws {
@@ -88,8 +85,7 @@ public struct KeychainGoogleTokenStore: GoogleTokenStoring {
     }
 
     public func loadUserInfo() throws -> GoogleUserInfo? {
-        guard let json = try PerUserKeychainMigrator.loadWithMigration(
-                keychain: keychain, base: Self.base, userID: userID, account: Self.userInfoAccount) else { return nil }
+        guard let json = try keychain.load(service: service, account: Self.userInfoAccount) else { return nil }
         return try JSONDecoder().decode(GoogleUserInfo.self, from: Data(json.utf8))
     }
 }

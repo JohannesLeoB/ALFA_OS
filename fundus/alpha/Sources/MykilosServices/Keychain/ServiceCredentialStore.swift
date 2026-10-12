@@ -45,11 +45,9 @@ public struct ServiceCredentialStore: Sendable {
         for field in fields {
             let value: String?
             if field.isRequired {
-                value = try PerUserKeychainMigrator.loadWithMigration(
-                    keychain: keychain, base: base, userID: userID, account: field.account)
+                value = try keychain.load(service: service, account: field.account)
             } else {
-                value = try? PerUserKeychainMigrator.loadWithMigration(
-                    keychain: keychain, base: base, userID: userID, account: field.account)
+                value = try? keychain.load(service: service, account: field.account)
             }
             if let value, value.isEmpty == false {
                 found[field.account] = value
