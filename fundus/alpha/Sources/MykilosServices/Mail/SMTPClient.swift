@@ -58,9 +58,9 @@ actor SMTPSession {
         self.reader = reader
     }
 
-    static func open(settings: MailServerSettings) async throws -> SMTPSession {
+    static func open(settings: MailServerSettings, opener: MailStreamOpener = MailStreams.open) async throws -> SMTPSession {
         let port = settings.port ?? (settings.security == .ssl ? 465 : (settings.security == .starttls ? 587 : 25))
-        let stream = try await MailStreams.open(host: settings.host, port: port, security: settings.security)
+        let stream = try await opener(settings.host, port, settings.security)
         let session = SMTPSession(reader: MailReader(stream: stream))
         do {
             try await session.handshake(security: settings.security)

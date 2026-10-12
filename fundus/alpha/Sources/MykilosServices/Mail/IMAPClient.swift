@@ -38,9 +38,9 @@ actor IMAPSession {
         self.reader = reader
     }
 
-    static func open(settings: MailServerSettings) async throws -> IMAPSession {
+    static func open(settings: MailServerSettings, opener: MailStreamOpener = MailStreams.open) async throws -> IMAPSession {
         let port = settings.port ?? (settings.security == .ssl ? 993 : 143)
-        let stream = try await MailStreams.open(host: settings.host, port: port, security: settings.security)
+        let stream = try await opener(settings.host, port, settings.security)
         let session = IMAPSession(reader: MailReader(stream: stream))
         do {
             try await session.handshake(security: settings.security)

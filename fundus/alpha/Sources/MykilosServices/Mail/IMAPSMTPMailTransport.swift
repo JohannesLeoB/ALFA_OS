@@ -5,10 +5,14 @@ public struct IMAPSMTPMailTransport: MailTransport {
     public typealias AccessTokenSource = @Sendable () async throws -> String
 
     public let account: MailAccount
-    private let accessToken: AccessTokenSource?
+    public typealias PasswordSource = @Sendable () async throws -> String
 
-    public init(account: MailAccount, accessToken: AccessTokenSource? = nil) {
+    private let accessToken: AccessTokenSource?
+    private let password: PasswordSource?
+
+    public init(account: MailAccount, accessToken: AccessTokenSource? = nil, password: PasswordSource? = nil) {
         self.account = account
+        self.password = password
         if let accessToken {
             self.accessToken = accessToken
         } else if account.provider == .gmail {
@@ -222,6 +226,11 @@ public struct IMAPSMTPMailTransport: MailTransport {
         let user = settings.username.isEmpty ? account.address : settings.username
         switch account.authentication {
         case .password:
+            if let password {
+                let secret = try await password()
+                guard secret.isEmpty == false else { throw MailTransportError.credentialsMissing }
+                return .password(user: user, secret: secret)
+            }
             let store = ServiceCredentialStore(.mail, fields: [CredentialField(account.id)])
             guard let secret = try store.load()?[account.id], secret.isEmpty == false else {
                 throw MailTransportError.credentialsMissing

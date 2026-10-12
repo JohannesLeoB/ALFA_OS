@@ -9,6 +9,8 @@ protocol MailByteStream: Sendable {
     func close()
 }
 
+typealias MailStreamOpener = @Sendable (String, Int, MailSecurity) async throws -> any MailByteStream
+
 enum MailStreams {
     static let timeout: TimeInterval = 60
 

@@ -139,8 +139,8 @@ public enum MailProviderPresets {
             authentication: .oauth),
         MailProviderPreset(
             kind: .ionos, title: .verbatim("Ionos"),
-            incoming: MailServerTemplate(host: "", port: 993, security: .ssl),
-            outgoing: MailServerTemplate(host: "", port: 587, security: .starttls),
+            incoming: MailServerTemplate(host: "imap.ionos.de", port: 993, security: .ssl),
+            outgoing: MailServerTemplate(host: "smtp.ionos.de", port: 465, security: .ssl),
             authentication: .password),
         MailProviderPreset(
             kind: .gmx, title: .verbatim("GMX"),
