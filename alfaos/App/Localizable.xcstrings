@@ -1,37 +1,6 @@
 {
   "sourceLanguage" : "de",
   "strings" : {
-    "mail.signin" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anmelden"
-          }
-        }
-      },
-      "comment" : "roh"
-    },
-    "group.communication" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kommunikation"
-          }
-        }
-      }
-    },
-    "group.core" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kern"
-          }
-        }
-      }
-    },
     "app.mail" : {
       "localizations" : {
         "de" : {
@@ -42,22 +11,22 @@
         }
       }
     },
-    "app.mail.lane.leading" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Postfächer"
-          }
-        }
-      }
-    },
     "app.mail.lane.center" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eingang"
+          }
+        }
+      }
+    },
+    "app.mail.lane.leading" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postfächer"
           }
         }
       }
@@ -82,17 +51,18 @@
         }
       }
     },
-    "app.settings.lane.leading" : {
+    "app.settings.lane.center" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kern"
+            "value" : "Konten"
           }
         }
-      }
+      },
+      "comment" : "roh"
     },
-    "app.settings.lane.center" : {
+    "app.settings.lane.leading" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -100,157 +70,19 @@
             "value" : "Einstellungen"
           }
         }
-      }
+      },
+      "comment" : "roh"
     },
     "app.settings.lane.trailing" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Offenes"
+            "value" : "Hinzufügen"
           }
         }
-      }
-    },
-    "lane.fold" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Falten"
-          }
-        }
-      }
-    },
-    "lane.unfold" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aufklappen"
-          }
-        }
-      }
-    },
-    "lane.maximize" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Groß"
-          }
-        }
-      }
-    },
-    "lane.restore" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zurück"
-          }
-        }
-      }
-    },
-    "lane.handle" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Breite der Bahn"
-          }
-        }
-      }
-    },
-    "blob.label" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Blob: Klick öffnet das Menü, Doppelklick den Assistenten"
-          }
-        }
-      }
-    },
-    "pill.label" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abgleich und Person"
-          }
-        }
-      }
-    },
-    "person.initials" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "JB"
-          }
-        }
-      }
-    },
-    "menu.label" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Blob-Menü"
-          }
-        }
-      }
-    },
-    "menu.search" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Finden …"
-          }
-        }
-      }
-    },
-    "menu.search.label" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bereich finden"
-          }
-        }
-      }
-    },
-    "menu.assistant" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Assistent"
-          }
-        }
-      }
-    },
-    "menu.assistant.hint" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Doppelklick"
-          }
-        }
-      }
-    },
-    "assistant.title" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Assistent"
-          }
-        }
-      }
+      },
+      "comment" : "roh"
     },
     "assistant.close" : {
       "localizations" : {
@@ -258,16 +90,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schließen"
-          }
-        }
-      }
-    },
-    "assistant.empty" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Noch ohne Funktion."
           }
         }
       }
@@ -282,386 +104,43 @@
         }
       }
     },
+    "assistant.state" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht verbunden"
+          }
+        }
+      }
+    },
+    "assistant.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assistent"
+          }
+        }
+      }
+    },
+    "blob.label" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blob: Klick öffnet das Menü, Doppelklick den Assistenten"
+          }
+        }
+      }
+    },
     "error.resources" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Gestaltungswerte fehlen im Bau."
-          }
-        }
-      }
-    },
-    "mail.cancel" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abbrechen"
-          }
-        }
-      }
-    },
-    "mail.account.add" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konto hinzufügen"
-          }
-        }
-      }
-    },
-    "mail.accounts.none" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kein Konto"
-          }
-        }
-      }
-    },
-    "mail.loadMore" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mehr laden"
-          }
-        }
-      }
-    },
-    "mail.state.loading" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lädt"
-          }
-        }
-      }
-    },
-    "mail.state.failed" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fehler"
-          }
-        }
-      }
-    },
-    "mail.state.created" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nicht verbunden"
-          }
-        }
-      }
-    },
-    "mail.state.signedIn" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Angemeldet"
-          }
-        }
-      }
-    },
-    "mail.state.connected" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbunden"
-          }
-        }
-      }
-    },
-    "mail.state.keychain" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schlüsselbund"
-          }
-        }
-      }
-    },
-    "mail.state.orphaned" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verwaist"
-          }
-        }
-      }
-    },
-    "mail.state.locked" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gesperrt"
-          }
-        }
-      }
-    },
-    "mail.role.inbox" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eingang"
-          }
-        }
-      }
-    },
-    "mail.role.sent" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gesendet"
-          }
-        }
-      }
-    },
-    "mail.role.drafts" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entwürfe"
-          }
-        }
-      }
-    },
-    "mail.role.trash" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Papierkorb"
-          }
-        }
-      }
-    },
-    "mail.role.spam" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Spam"
-          }
-        }
-      }
-    },
-    "mail.role.starred" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Markiert"
-          }
-        }
-      }
-    },
-    "mail.role.all" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alle"
-          }
-        }
-      }
-    },
-    "mail.list.empty" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leer"
-          }
-        }
-      }
-    },
-    "mail.list.emptySearch" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leer"
-          }
-        }
-      }
-    },
-    "mail.list.loading" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lädt"
-          }
-        }
-      }
-    },
-    "mail.list.loadingMore" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lädt"
-          }
-        }
-      }
-    },
-    "mail.list.noFilterMatch" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leer"
-          }
-        }
-      }
-    },
-    "mail.list.failed" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fehler"
-          }
-        }
-      }
-    },
-    "mail.list.notConnected" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nicht verbunden"
-          }
-        }
-      }
-    },
-    "mail.list.signInExpired" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anmeldung abgelaufen"
-          }
-        }
-      }
-    },
-    "mail.list.offline" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Offline"
-          }
-        }
-      }
-    },
-    "mail.row.unread" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ungelesen"
-          }
-        }
-      }
-    },
-    "mail.card.bodyLoading" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lädt"
-          }
-        }
-      }
-    },
-    "mail.card.conversation" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konversation"
-          }
-        }
-      }
-    },
-    "mail.card.draftNotice" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entwurf"
-          }
-        }
-      }
-    },
-    "offer.google" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Google"
-          }
-        }
-      }
-    },
-    "text.settings.provider.other" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Andere"
           }
         }
       }
@@ -743,17 +222,6 @@
         }
       }
     },
-    "field.imap.username" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Benutzername"
-          }
-        }
-      }
-    },
     "field.imap.password" : {
       "comment" : "roh",
       "localizations" : {
@@ -765,73 +233,159 @@
         }
       }
     },
-    "mail.error.cancelled" : {
+    "field.imap.username" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abgebrochen"
+            "value" : "Benutzername"
           }
         }
       }
     },
-    "mail.error.limit" : {
+    "group.communication" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kommunikation"
+          }
+        }
+      }
+    },
+    "group.core" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kern"
+          }
+        }
+      }
+    },
+    "hint.google.grant" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Limit erreicht"
+            "value" : "Anmeldung fehlgeschlagen"
           }
         }
       }
     },
-    "mail.error.duplicate" : {
+    "hint.google.labels" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Doppelt"
+            "value" : "Ordner unlesbar"
           }
         }
       }
     },
-    "mail.error.keychain" : {
+    "hint.google.token" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schlüsselbund"
+            "value" : "Token Fehler"
           }
         }
       }
     },
-    "mail.hint.offline" : {
+    "hint.google.userinfo" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Offline"
+            "value" : "Konto unlesbar"
           }
         }
       }
     },
-    "mail.hint.signIn" : {
+    "hint.imap.connection.closed" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anmeldung nötig"
+            "value" : "Verbindung beendet"
           }
         }
       }
     },
-    "mail.hint.rejected" : {
+    "hint.imap.connection.failed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Verbindung"
+          }
+        }
+      }
+    },
+    "hint.imap.connection.timeout" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeitüberschreitung"
+          }
+        }
+      }
+    },
+    "hint.imap.failed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler"
+          }
+        }
+      }
+    },
+    "hint.imap.fields.invalid" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angaben ungültig"
+          }
+        }
+      }
+    },
+    "hint.imap.login.rejected" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login abgelehnt"
+          }
+        }
+      }
+    },
+    "hint.imap.malformed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antwort ungültig"
+          }
+        }
+      }
+    },
+    "hint.imap.refused" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
@@ -842,90 +396,24 @@
         }
       }
     },
-    "mail.hint.failed" : {
+    "hint.imap.tls" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fehler"
+            "value" : "TLS fehlt"
           }
         }
       }
     },
-    "hint.signin.expired" : {
+    "hint.imap.unsupported" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anmeldung abgelaufen"
-          }
-        }
-      }
-    },
-    "hint.mail.notConnected" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nicht verbunden"
-          }
-        }
-      }
-    },
-    "hint.mail.noInlet" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kein Konto"
-          }
-        }
-      }
-    },
-    "hint.mail.capabilityMissing" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Funktion fehlt"
-          }
-        }
-      }
-    },
-    "hint.provider.failed" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fehler"
-          }
-        }
-      }
-    },
-    "hint.provider.unknown" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unbekannt"
-          }
-        }
-      }
-    },
-    "hint.port.unknown" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unbekannt"
+            "value" : "Nicht unterstützt"
           }
         }
       }
@@ -963,62 +451,51 @@
         }
       }
     },
-    "hint.google.grant" : {
+    "hint.mail.capabilityMissing" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anmeldung fehlgeschlagen"
+            "value" : "Funktion fehlt"
           }
         }
       }
     },
-    "hint.google.token" : {
+    "hint.mail.noInlet" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Token Fehler"
+            "value" : "Kein Konto"
           }
         }
       }
     },
-    "hint.google.userinfo" : {
+    "hint.mail.notConnected" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Konto unlesbar"
+            "value" : "Nicht verbunden"
           }
         }
       }
     },
-    "hint.google.labels" : {
+    "hint.port.unknown" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ordner unlesbar"
+            "value" : "Unbekannt"
           }
         }
       }
     },
-    "hint.imap.fields.invalid" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Angaben ungültig"
-          }
-        }
-      }
-    },
-    "hint.imap.failed" : {
+    "hint.provider.failed" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
@@ -1029,134 +506,35 @@
         }
       }
     },
-    "hint.imap.refused" : {
+    "hint.provider.unknown" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abgelehnt"
+            "value" : "Unbekannt"
           }
         }
       }
     },
-    "hint.imap.connection.failed" : {
+    "hint.signin.expired" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Keine Verbindung"
+            "value" : "Anmeldung abgelaufen"
           }
         }
       }
     },
-    "hint.imap.connection.closed" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbindung beendet"
-          }
-        }
-      }
-    },
-    "hint.imap.connection.timeout" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zeitüberschreitung"
-          }
-        }
-      }
-    },
-    "hint.imap.tls" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "TLS fehlt"
-          }
-        }
-      }
-    },
-    "hint.imap.unsupported" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nicht unterstützt"
-          }
-        }
-      }
-    },
-    "hint.imap.malformed" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Antwort ungültig"
-          }
-        }
-      }
-    },
-    "hint.imap.login.rejected" : {
+    "hint.smtp.auth.rejected" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Login abgelehnt"
-          }
-        }
-      }
-    },
-    "hint.smtp.fields.invalid" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Angaben ungültig"
-          }
-        }
-      }
-    },
-    "hint.smtp.failed" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fehler"
-          }
-        }
-      }
-    },
-    "hint.smtp.refused" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abgelehnt"
-          }
-        }
-      }
-    },
-    "hint.smtp.connection.failed" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keine Verbindung"
           }
         }
       }
@@ -1172,6 +550,17 @@
         }
       }
     },
+    "hint.smtp.connection.failed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Verbindung"
+          }
+        }
+      }
+    },
     "hint.smtp.connection.timeout" : {
       "comment" : "roh",
       "localizations" : {
@@ -1179,6 +568,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zeitüberschreitung"
+          }
+        }
+      }
+    },
+    "hint.smtp.failed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler"
+          }
+        }
+      }
+    },
+    "hint.smtp.fields.invalid" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angaben ungültig"
+          }
+        }
+      }
+    },
+    "hint.smtp.malformed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antwort ungültig"
+          }
+        }
+      }
+    },
+    "hint.smtp.refused" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgelehnt"
           }
         }
       }
@@ -1205,24 +638,758 @@
         }
       }
     },
-    "hint.smtp.malformed" : {
+    "inlet.state.connecting" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Antwort ungültig"
+            "value" : "Prüft"
           }
         }
       }
     },
-    "hint.smtp.auth.rejected" : {
+    "inlet.state.keychain" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Login abgelehnt"
+            "value" : "Schlüsselbund"
+          }
+        }
+      }
+    },
+    "inlet.state.locked" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesperrt"
+          }
+        }
+      }
+    },
+    "inlet.state.orphaned" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwaist"
+          }
+        }
+      }
+    },
+    "inlet.state.signedIn" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angemeldet"
+          }
+        }
+      }
+    },
+    "inlet.state.working" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gleicht ab"
+          }
+        }
+      }
+    },
+    "lane.fold" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falten"
+          }
+        }
+      }
+    },
+    "lane.handle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breite der Bahn"
+          }
+        }
+      }
+    },
+    "lane.maximize" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groß"
+          }
+        }
+      }
+    },
+    "lane.restore" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurück"
+          }
+        }
+      }
+    },
+    "lane.unfold" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufklappen"
+          }
+        }
+      }
+    },
+    "mail.accounts.none" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Konto"
+          }
+        }
+      }
+    },
+    "mail.card.bodyLoading" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lädt"
+          }
+        }
+      }
+    },
+    "mail.card.conversation" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konversation"
+          }
+        }
+      }
+    },
+    "mail.card.draftNotice" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwurf"
+          }
+        }
+      }
+    },
+    "mail.error.cancelled" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgebrochen"
+          }
+        }
+      }
+    },
+    "mail.error.duplicate" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doppelt"
+          }
+        }
+      }
+    },
+    "mail.error.keychain" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüsselbund"
+          }
+        }
+      }
+    },
+    "mail.error.limit" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limit erreicht"
+          }
+        }
+      }
+    },
+    "mail.hint.failed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler"
+          }
+        }
+      }
+    },
+    "mail.hint.offline" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline"
+          }
+        }
+      }
+    },
+    "mail.hint.rejected" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgelehnt"
+          }
+        }
+      }
+    },
+    "mail.hint.signIn" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anmeldung nötig"
+          }
+        }
+      }
+    },
+    "mail.list.empty" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leer"
+          }
+        }
+      }
+    },
+    "mail.list.emptySearch" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leer"
+          }
+        }
+      }
+    },
+    "mail.list.failed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler"
+          }
+        }
+      }
+    },
+    "mail.list.loading" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lädt"
+          }
+        }
+      }
+    },
+    "mail.list.loadingMore" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lädt"
+          }
+        }
+      }
+    },
+    "mail.list.noFilterMatch" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leer"
+          }
+        }
+      }
+    },
+    "mail.list.notConnected" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht verbunden"
+          }
+        }
+      }
+    },
+    "mail.list.offline" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline"
+          }
+        }
+      }
+    },
+    "mail.list.signInExpired" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anmeldung abgelaufen"
+          }
+        }
+      }
+    },
+    "mail.loadMore" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr laden"
+          }
+        }
+      }
+    },
+    "mail.role.all" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle"
+          }
+        }
+      }
+    },
+    "mail.role.drafts" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwürfe"
+          }
+        }
+      }
+    },
+    "mail.role.inbox" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eingang"
+          }
+        }
+      }
+    },
+    "mail.role.sent" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesendet"
+          }
+        }
+      }
+    },
+    "mail.role.spam" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spam"
+          }
+        }
+      }
+    },
+    "mail.role.starred" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markiert"
+          }
+        }
+      }
+    },
+    "mail.role.trash" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Papierkorb"
+          }
+        }
+      }
+    },
+    "mail.row.unread" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ungelesen"
+          }
+        }
+      }
+    },
+    "mail.state.connected" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbunden"
+          }
+        }
+      }
+    },
+    "mail.state.created" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht verbunden"
+          }
+        }
+      }
+    },
+    "mail.state.failed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler"
+          }
+        }
+      }
+    },
+    "mail.state.keychain" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüsselbund"
+          }
+        }
+      }
+    },
+    "mail.state.loading" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lädt"
+          }
+        }
+      }
+    },
+    "mail.state.locked" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesperrt"
+          }
+        }
+      }
+    },
+    "mail.state.orphaned" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwaist"
+          }
+        }
+      }
+    },
+    "mail.state.signedIn" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angemeldet"
+          }
+        }
+      }
+    },
+    "menu.assistant" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assistent"
+          }
+        }
+      }
+    },
+    "menu.assistant.hint" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doppelklick"
+          }
+        }
+      }
+    },
+    "menu.label" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blob-Menü"
+          }
+        }
+      }
+    },
+    "menu.search" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finden …"
+          }
+        }
+      }
+    },
+    "menu.search.label" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereich finden"
+          }
+        }
+      }
+    },
+    "offer.google" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google"
+          }
+        }
+      }
+    },
+    "person.initials" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JB"
+          }
+        }
+      }
+    },
+    "pill.label" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgleich und Person"
+          }
+        }
+      }
+    },
+    "settings.inlets.none" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Konto"
+          }
+        }
+      }
+    },
+    "settings.signin" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anmelden"
+          }
+        }
+      }
+    },
+    "text.common.cancel" : {
+      "comment" : "freigegeben",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        }
+      }
+    },
+    "text.settings.action.addAccount" : {
+      "comment" : "freigegeben",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konto hinzufügen"
+          }
+        }
+      }
+    },
+    "text.settings.action.check" : {
+      "comment" : "freigegeben",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prüfen"
+          }
+        }
+      }
+    },
+    "text.settings.action.remove" : {
+      "comment" : "freigegeben",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen"
+          }
+        }
+      }
+    },
+    "text.settings.action.signInAgain" : {
+      "comment" : "freigegeben",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neu anmelden"
+          }
+        }
+      }
+    },
+    "text.settings.connection.connected" : {
+      "comment" : "freigegeben",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbunden"
+          }
+        }
+      }
+    },
+    "text.settings.connection.error" : {
+      "comment" : "freigegeben",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler"
+          }
+        }
+      }
+    },
+    "text.settings.connection.notConnected" : {
+      "comment" : "freigegeben",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht verbunden"
+          }
+        }
+      }
+    },
+    "text.settings.provider.other" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Andere"
+          }
+        }
+      }
+    },
+    "text.settings.row.mail.accounts" : {
+      "comment" : "freigegeben",
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konten"
           }
         }
       }

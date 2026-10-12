@@ -3,48 +3,41 @@ import Mail
 import SwiftUI
 
 struct MailAccountsPane: View {
-    @Bindable var host: MailHost
     let model: MailModel
-    let offers: [Offer]
 
     var body: some View {
-        if host.adding {
-            MailAddPane(host: host, offers: offers)
-        } else {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    if model.accounts.isEmpty { word("mail.accounts.none") }
-                    ForEach(model.accounts) { account in
-                        Button { Task { await model.selectAccount(account.id) } } label: {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    word(account.title)
-                                    if !account.account.isEmpty { Text(verbatim: account.account) }
-                                    stateWords(account.state)
-                                }
-                                Spacer()
-                                Text(verbatim: String(model.unread[account.id] ?? 0))
+        ScrollView {
+            VStack(alignment: .leading) {
+                if model.accounts.isEmpty { word("mail.accounts.none") }
+                ForEach(model.accounts) { account in
+                    Button { Task { await model.selectAccount(account.id) } } label: {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                word(account.title)
+                                if !account.account.isEmpty { Text(verbatim: account.account) }
+                                stateWords(account.state)
                             }
-                            .fontWeight(account.id == model.selectedInlet ? .bold : .regular)
+                            Spacer()
+                            Text(verbatim: String(model.unread[account.id] ?? 0))
                         }
-                        .buttonStyle(.plain)
+                        .fontWeight(account.id == model.selectedInlet ? .bold : .regular)
                     }
-                    ForEach(model.sortedFolders) { folder in
-                        Button { Task { await model.selectFolder(folder.id) } } label: {
-                            if folder.role.rawValue == "other" {
-                                Text(verbatim: folder.name)
-                            } else {
-                                word("mail.role." + folder.role.rawValue)
-                            }
-                        }
-                        .buttonStyle(.plain)
-                        .fontWeight(folder.id == model.selectedFolder ? .bold : .regular)
-                    }
-                    Button { host.adding = true } label: { word("mail.account.add") }
+                    .buttonStyle(.plain)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
+                ForEach(model.sortedFolders) { folder in
+                    Button { Task { await model.selectFolder(folder.id) } } label: {
+                        if folder.role.rawValue == "other" {
+                            Text(verbatim: folder.name)
+                        } else {
+                            word("mail.role." + folder.role.rawValue)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .fontWeight(folder.id == model.selectedFolder ? .bold : .regular)
+                }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
         }
     }
 
@@ -60,53 +53,6 @@ struct MailAccountsPane: View {
         case .orphaned: word("mail.state.orphaned")
         case .locked: word("mail.state.locked")
         }
-    }
-}
-
-struct MailAddPane: View {
-    @Bindable var host: MailHost
-    let offers: [Offer]
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                if let offer = host.form {
-                    form(offer)
-                } else {
-                    ForEach(offers) { offer in
-                        Button { Task { await host.choose(offer) } } label: { word(offer.title) }
-                    }
-                }
-                if host.busy { word("mail.state.loading") }
-                if let failure = host.failure { hintWords(failure) }
-                Button { host.close() } label: { word("mail.cancel") }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-        }
-    }
-
-    @ViewBuilder
-    private func form(_ offer: Offer) -> some View {
-        let fields: [Field] = switch offer.way {
-        case .form(let fields), .key(let fields): fields
-        case .signIn: []
-        }
-        ForEach(fields) { field in
-            VStack(alignment: .leading) {
-                word(field.title)
-                if field.secret {
-                    SecureField(text: binding(field.id)) { EmptyView() }
-                } else {
-                    TextField(text: binding(field.id)) { EmptyView() }
-                }
-            }
-        }
-        Button { Task { await host.add(offer, input: .fields(host.values)) } } label: { word("mail.signin") }
-    }
-
-    private func binding(_ id: String) -> Binding<String> {
-        Binding(get: { host.values[id] ?? "" }, set: { host.values[id] = $0 })
     }
 }
 

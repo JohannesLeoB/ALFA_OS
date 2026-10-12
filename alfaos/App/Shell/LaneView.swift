@@ -86,6 +86,8 @@ struct LaneView: View {
                 .frame(maxWidth: .infinity)
         } else if model.currentID == "mail" {
             MailLaneView(lane: lane)
+        } else if model.currentID == "settings" {
+            SettingsLaneView(lane: lane)
         } else {
             Color.clear.frame(maxHeight: .infinity)
         }

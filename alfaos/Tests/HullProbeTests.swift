@@ -16,7 +16,7 @@ final class HullProbeTests: XCTestCase {
         return url
     }
 
-    private func render(name: String, menuOpen: Bool, assistantOpen: Bool = false, dark: Bool = false, mailHost: MailHost? = nil) throws -> NSBitmapImageRep {
+    private func render(name: String, menuOpen: Bool, assistantOpen: Bool = false, dark: Bool = false, appHost: AppHost? = nil) throws -> NSBitmapImageRep {
         NSApplication.shared.setActivationPolicy(.prohibited)
         let resources = try resources()
         let screen = Size(width: 1512, height: 982)
@@ -28,7 +28,7 @@ final class HullProbeTests: XCTestCase {
         window.alphaValue = 0
         window.isReleasedWhenClosed = false
         window.appearance = NSAppearance(named: dark ? .darkAqua : .aqua)
-        let host = NSHostingView(rootView: ShellView(resources: resources, bundle: Bundle(for: HullProbeTests.self), model: model).environment(\.mailInboxLive, false).environment(\.mailHost, mailHost))
+        let host = NSHostingView(rootView: ShellView(resources: resources, bundle: Bundle(for: HullProbeTests.self), model: model).environment(\.hostLive, false).environment(\.appHost, appHost))
         host.frame = NSRect(origin: .zero, size: frame.size)
         window.contentView = host
         host.layoutSubtreeIfNeeded()
@@ -81,9 +81,9 @@ final class HullProbeTests: XCTestCase {
         XCTAssertGreaterThan(inkCount(darkOpen), 0)
     }
 
-    func testMailStaysIdleWhenNotLive() throws {
-        let host = MailHost()
-        _ = try render(name: "huelle-mail-idle", menuOpen: false, mailHost: host)
+    func testHubStaysIdleWhenNotLive() throws {
+        let host = AppHost()
+        _ = try render(name: "huelle-mail-idle", menuOpen: false, appHost: host)
         XCTAssertTrue(host.isIdle)
     }
 }

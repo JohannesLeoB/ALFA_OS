@@ -23,7 +23,7 @@ struct AssistantView: View {
                 .buttonStyle(.plain)
                 .accessibilityLabel(theme.text("assistant.close"))
             }
-            theme.text("assistant.empty")
+            theme.text("assistant.state")
                 .font(theme.font(.callout))
                 .foregroundStyle(theme.color(.colorTextSecondary))
                 .frame(maxWidth: .infinity, minHeight: theme.length(.layoutReadingMaxWidth) / 3, alignment: .topLeading)
