@@ -12,3 +12,5 @@ ausgang/
 # Gebaute, notarisierte Apps und DMGs (groß, nicht ins Git)
 dist/
 alfaos/*.xcodeproj/
+
+company.json
