@@ -29,6 +29,13 @@ enum MailAddresses {
     }
 
     static func plainText(_ html: String) -> String {
-        html.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
+        MailText.plain(html)
+    }
+}
+
+public enum MailText {
+    public static func plain(_ html: String) -> String {
+        html.replacingOccurrences(of: "(?is)<(script|style)[^>]*>.*?</\\1>", with: "", options: .regularExpression)
+            .replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
     }
 }
