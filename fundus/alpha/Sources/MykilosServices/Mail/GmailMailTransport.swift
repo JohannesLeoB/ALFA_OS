@@ -8,8 +8,21 @@ public struct GmailMailTransport: MailTransport {
         self.client = client
     }
 
+    static let allMail = "ALL"
+
+    static let systemFolders: [MailFolder] = [
+        MailFolder(id: GmailSystemLabel.inbox, name: GmailSystemLabel.inbox, role: .inbox),
+        MailFolder(id: GmailSystemLabel.starred, name: GmailSystemLabel.starred, role: .starred),
+        MailFolder(id: GmailSystemLabel.sent, name: GmailSystemLabel.sent, role: .sent),
+        MailFolder(id: GmailSystemLabel.draft, name: GmailSystemLabel.draft, role: .drafts),
+        MailFolder(id: allMail, name: allMail, role: .all),
+        MailFolder(id: GmailSystemLabel.spam, name: GmailSystemLabel.spam, role: .spam),
+        MailFolder(id: GmailSystemLabel.trash, name: GmailSystemLabel.trash, role: .trash),
+    ]
+
     public func listFolders() async throws -> [MailFolder] {
-        try await client.listLabels().map { MailFolder(id: $0.id, name: $0.name, role: Self.role(of: $0.id)) }
+        let labels = try await client.listLabels().map { MailFolder(id: $0.id, name: $0.name, role: .other) }
+        return Self.systemFolders + labels
     }
 
     public func listMessages(folderID: String, query: String?, pageToken: String?, maxResults: Int) async throws -> MailMessagePage {
@@ -42,6 +55,7 @@ public struct GmailMailTransport: MailTransport {
     }
 
     private func labelQuery(_ folderID: String) async throws -> String {
+        if folderID == Self.allMail { return "" }
         if GmailSystemLabel.all.contains(folderID) { return "label:\(folderID)" }
         let labels = try await client.listLabels()
         guard let label = labels.first(where: { $0.id == folderID }) else { throw MailTransportError.folderNotFound(folderID) }
@@ -57,17 +71,6 @@ public struct GmailMailTransport: MailTransport {
             if adding { labelsToAdd.append(GmailSystemLabel.starred) } else { labelsToRemove.append(GmailSystemLabel.starred) }
         case .answered, .draft, .deleted:
             break
-        }
-    }
-
-    private static func role(of labelID: String) -> MailFolderRole {
-        switch labelID {
-        case GmailSystemLabel.inbox: .inbox
-        case GmailSystemLabel.sent: .sent
-        case GmailSystemLabel.draft: .drafts
-        case GmailSystemLabel.trash: .trash
-        case GmailSystemLabel.spam: .spam
-        default: .other
         }
     }
 

@@ -7,6 +7,8 @@ public enum MailFolderRole: String, Sendable, CaseIterable {
     case drafts
     case trash
     case spam
+    case starred
+    case all
     case other
 }
 

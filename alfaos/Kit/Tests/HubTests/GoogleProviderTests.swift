@@ -55,8 +55,9 @@ final class GoogleProviderTests: XCTestCase {
         XCTAssertEqual(inlet.account, "a@example.test")
         let transport = try hub.access.port(MailTransport.self, for: inlet.id)
         let folders = try await transport.listFolders()
-        XCTAssertEqual(folders.map(\.id), ["Label_2", "Label_1"])
-        XCTAssertEqual(folders.map(\.name), ["Archiv", "Kunden"])
+        XCTAssertEqual(folders.first?.role, .inbox)
+        XCTAssertEqual(folders.filter { $0.role == .other }.map(\.id), ["Label_2", "Label_1"])
+        XCTAssertEqual(folders.filter { $0.role == .other }.map(\.name), ["Archiv", "Kunden"])
         XCTAssertThrowsError(try hub.access.port(CalendarPort.self, for: inlet.id)) {
             XCTAssertEqual($0 as? HubError, .capabilityMissing(inlet.id, .calendar))
         }
