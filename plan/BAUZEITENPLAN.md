@@ -1,4 +1,4 @@
-Stand: 2026-10-12 19:05 · ALFA·01·Chef
+Stand: 2026-10-12 19:22 · ALFA·01·Chef
 Spalten: So 12.10. abends | Mo 13.10. früh | vormittag | nachmittag | Di 14.10.
 Zustand: geplant | läuft | erledigt | wartet auf Johannes | wartet auf Design
 Immer erlaubt: plan/BAUZEITENPLAN.md, plan/STATUS.md, uebergabe/*
@@ -6,7 +6,7 @@ Immer erlaubt: plan/BAUZEITENPLAN.md, plan/STATUS.md, uebergabe/*
 | Kennung | Paket | Gruppe | Fenster | Besitz | Zustand | Fertig wenn | Quelle | geprüft am | Sitzung |
 |---|---|---|---|---|---|---|---|---|---|
 | S0 | Sauberer Stand: Fundus ohne Kennungen, Mail-Tests | Vorab | 1 | .gitignore, alfaos/Config/company.example.json, fundus/alpha/* | erledigt | git grep app/tbl/fld/viw+14 auf HEAD: 0; swift test fundus/alpha: 34 grün | 549345b, https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6128056599 | 2026-10-12 18:10 | ALFA·01·Chef |
-| A0 | Bauzeitenplan und drei Grün je Commit | Stufe A Fundament | 1 | plan/BAUZEITENPLAN.md, scripts/pruefen.sh, scripts/plan_render.py, .githooks/pre-push, AGENTS.md | läuft | pruefen.sh auf HEAD grün; Probe-Commit außerhalb seiner Zeile rot; Seite aus dieser Datei erzeugt | https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6128684571 | 2026-10-12 19:05 | ALFA·01·Chef |
+| A0 | Bauzeitenplan und drei Grün je Commit | Stufe A Fundament | 1 | plan/BAUZEITENPLAN.md, scripts/pruefen.sh, scripts/plan_render.py, .githooks/pre-push, AGENTS.md | erledigt | pruefen.sh auf HEAD grün; Probe-Commit außerhalb seiner Zeile rot; Seite aus dieser Datei erzeugt | ca5594f, https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6128744887 | 2026-10-12 19:20 | ALFA·01·Chef |
 | A1 | Schlüsselbund ein Namensraum | Stufe A Fundament | 1-2 | fundus/alpha/Sources/MykilosKit/AppKennung.swift, fundus/alpha/Sources/MykilosServices/Google/*, fundus/alpha/Sources/MykilosServices/Keychain/*, fundus/alpha/Tests/MailTests/*, alfaos/Kit/* | wartet auf Johannes | grep de.mykilos, SecAccessCreate, SecACLSetContents, Migrator: 0; 34 Tests grün; Johannes: anmelden, neu starten, angemeldet, kein Dialog | ed53e91, https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6128666688 | 2026-10-12 18:19 | ALFA·01·Chef |
 | A2 | Hub-Paket: Schnittstelle, fünf Ports, acht Tests | Stufe A Fundament | 1-2 | alfaos/Kit/Sources/Hub/*, alfaos/Kit/Tests/HubTests/*, alfaos/Kit/Package.swift | geplant | acht Hub-Tests grün ohne Netz und Schlüsselbund; import MykilosServices nur in Sources/Hub/Providers | https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6127493517 | | |
 | A3 | Anbieter Google (Anmeldung, Probe, Mail-Transport) | Stufe A Fundament | 2 | alfaos/Kit/Sources/Hub/Providers/Google/* | geplant | Hub-Test Google liefert MailTransport nach grüner Probe, Stub-Netz; Probe rot → failed | https://github.com/JohannesLeoB/ALFA_OS/issues/17#issuecomment-6127493517 | | |
