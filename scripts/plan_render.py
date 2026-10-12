@@ -7,6 +7,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PLAN = os.path.join(ROOT, "plan", "BAUZEITENPLAN.md")
+LAGE = os.path.join(ROOT, "plan", "LAGE.md")
 OUT = os.path.join(ROOT, "ausgang", "bauzeitenplan.html")
 
 CLASS = {"erledigt": "s-done", "läuft": "s-run", "geplant": "s-plan",
@@ -18,9 +19,9 @@ CSS = """
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f141a;--panel:#171f28;--fg:#e3e8ee;--muted:#98a4b2;--line:#2c3744;--done:#43b88d;--run:#6aa3ee;--plan:#8e9cae;--john:#e2a444;--design:#e46b92;--on-solid:#0d1812;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#0f141a;--panel:#171f28;--fg:#e3e8ee;--muted:#98a4b2;--line:#2c3744;--done:#43b88d;--run:#6aa3ee;--plan:#8e9cae;--john:#e2a444;--design:#e46b92;--on-solid:#0d1812;color-scheme:dark}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
+html,body{min-height:100%}
 body{background:var(--bg);color:var(--fg);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:clamp(10.5px,.74vw,13px);line-height:1.25;font-variant-numeric:tabular-nums;overflow-x:hidden}
-.page{height:100%;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto auto;gap:8px;padding:10px 16px;padding-inline:max(16px,1vw)}
+.page{min-height:100%;display:grid;grid-template-rows:auto auto minmax(70vh,1fr) auto auto auto;gap:8px;padding:10px 16px;padding-inline:max(16px,1vw)}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:6px}
 h1{font-size:1.9em;line-height:1.1;font-weight:600}
 h2{font-size:.78em;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600;margin-bottom:6px}
@@ -81,6 +82,14 @@ h2{font-size:.78em;text-transform:uppercase;letter-spacing:.07em;color:var(--mut
 .chain .mk.s-run{background:repeating-linear-gradient(135deg,var(--run) 0 3px,var(--panel) 3px 6px)}
 .box ul{margin-left:1.1em}
 .foot{font-size:.85em;color:var(--muted);padding:2px 0}
+.lage{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:8px}
+.lage .card{padding:8px 10px;overflow-x:auto}
+.lage ul{margin-left:1.1em}
+.lage li{margin-bottom:3px}
+.lage p{margin-bottom:4px}
+.lage table{border-collapse:collapse;width:100%;font-size:inherit}
+.lage th,.lage td{border-bottom:1px solid var(--line);padding:2px 6px 2px 0;text-align:left;vertical-align:top}
+.lage th{font-weight:600;color:var(--muted)}
 @media (max-width:1099px){
 html,body{height:auto}
 .page{height:auto;grid-template-rows:none}
@@ -91,7 +100,8 @@ html,body{height:auto}
 .chain{grid-template-columns:minmax(0,1fr);gap:10px}
 .chain li{padding-top:0;padding-left:22px}
 .chain li::before{left:6px;right:auto;top:0;bottom:-10px;width:2px;height:auto}
-.gantt{--lab:130px}
+.gantt{--lab:130px;height:auto}
+.gb,.grp{flex:none!important}
 .bar{font-size:.7em}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -133,7 +143,48 @@ def german(stamp):
     return f"{m.group(3)}.{m.group(2)}.{m.group(1)}" + (f" {m.group(4)}" if m.group(4) else "")
 
 
-def render(head, rows):
+def inline(text):
+    return re.sub(r"`([^`]+)`", r"<code>\1</code>", e(text))
+
+
+def lage(text):
+    sections, current = [], None
+    for line in text.splitlines():
+        if line.startswith("## "):
+            current = [line[3:].strip(), []]
+            sections.append(current)
+        elif current is not None and line.strip():
+            current[1].append(line)
+    out = ['<section class="lage">']
+    for title, lines in sections:
+        out.append(f'<div class="card"><h2>{e(title)}</h2>')
+        table, items = [], []
+        def flush():
+            if items:
+                out.append("<ul>" + "".join(f"<li>{inline(i)}</li>" for i in items) + "</ul>")
+                items.clear()
+            if table:
+                cells = [[c.strip() for c in r.strip().strip("|").split("|")] for r in table if not r.startswith("|---")]
+                out.append("<table><tr>" + "".join(f"<th>{inline(c)}</th>" for c in cells[0]) + "</tr>" + "".join(
+                    "<tr>" + "".join(f"<td>{inline(c)}</td>" for c in r) + "</tr>" for r in cells[1:]) + "</table>")
+                table.clear()
+        for line in lines:
+            if line.startswith("|"):
+                if items: flush()
+                table.append(line)
+            elif line.startswith("- "):
+                if table: flush()
+                items.append(line[2:])
+            else:
+                flush()
+                out.append(f"<p>{inline(line)}</p>")
+        flush()
+        out.append("</div>")
+    out.append("</section>")
+    return "".join(out)
+
+
+def render(head, rows, situation=""):
     stand = head.get("Stand", "")
     stand_time, _, stand_session = stand.partition("·")
     columns = [c.strip() for c in head.get("Spalten", "").split("|")]
@@ -198,13 +249,16 @@ def render(head, rows):
     out.append('<aside class="box card" style="padding:8px 10px"><h2>Was Johannes als Nächstes tut</h2><ul>' + "".join(
         f'<li>{e(r["name"])}: {e(r["done_when"].split(";")[-1].strip())}</li>' for r in waiting)
         + "<li>Mit Design die Mail-Fläche bis „so“ bringen.</li></ul></aside></section>")
-    out.append(f'<footer class="foot">Quelle: plan/BAUZEITENPLAN.md · {e(stand)}</footer></div>')
+    if situation:
+        out.append(lage(situation))
+    out.append(f'<footer class="foot">Quelle: plan/BAUZEITENPLAN.md, plan/LAGE.md · {e(stand)}</footer></div>')
     return "\n".join(out) + "\n"
 
 
 def main():
     head, rows = parse(open(PLAN, encoding="utf-8").read())
-    page = render(head, rows)
+    situation = open(LAGE, encoding="utf-8").read() if os.path.exists(LAGE) else ""
+    page = render(head, rows, situation)
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as handle:
         handle.write(page)
