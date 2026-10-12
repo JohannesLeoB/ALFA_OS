@@ -15,6 +15,7 @@ Du verteilst Aufträge (Issues) an Worker, prüfst jede Rückmeldung selbst und 
 ## Vorlage: Auftrag an einen Worker
 ```
 Du bist Bauagent für ALFA_OS. Arbeite im Repo /Users/johannesleoberger/Developer/ALFA_OS auf main. Lies AGENTS.md (alle Regeln gelten) und Issue #<Nx>.md, dann arbeite den Brief ab.
+Bevor du baust: zehn Sätze zum Bestand deines Pakets, antworte je wahr oder falsch mit Datei:Zeile. <zehn Sätze aus 02-IST und den Lesungen>. Unter acht richtig, oder eine Antwort begründet aus dem Plan statt aus dem Code: erst die Dateien der Besitz-Pfade und des Fundus lesen, dann bauen.
 Parallel arbeiten <andere Briefe> an <deren Pfaden>: nicht anfassen. Gemeinsame Dateien (Katalog, Package.swift, project.yml, lizenzen.txt) in dieser Runde: <Besitzer>.
 Nur eigene Pfade committen. <Kein Push. | Push nach grünem Lauf.> Kein Browserfenster, App nie starten.
 Am Ende: `swift test --package-path alfaos/Kit` grün, Übergabe als Kommentar im Issue. Antwort kurz: Commits, Belege, Abweichungen, offene Punkte.
