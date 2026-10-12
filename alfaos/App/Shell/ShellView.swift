@@ -45,7 +45,7 @@ struct ShellView: View {
             model.closeMenu()
             model.closeAssistant()
         }
-        .ignoresSafeArea()
+        .ignoresSafeArea(edges: [.horizontal, .bottom])
     }
 
     private func blobTop(_ theme: Theme) -> CGFloat {
