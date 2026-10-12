@@ -19,14 +19,10 @@ public struct KeychainStore: Sendable {
         let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: service,
-            kSecAttrAccount: account,
-            kSecUseDataProtectionKeychain: true
+            kSecAttrAccount: account
         ]
 
-        let addAttributes: [CFString: Any] = [
-            kSecValueData: data,
-            kSecAttrAccessible: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-        ]
+        let addAttributes: [CFString: Any] = [kSecValueData: data]
         let addQuery = query.merging(addAttributes) { _, new in new }
 
         let addStatus = SecItemAdd(addQuery as CFDictionary, nil)
@@ -51,8 +47,7 @@ public struct KeychainStore: Sendable {
             kSecAttrAccount: account,
             kSecReturnData: true,
             kSecMatchLimit: kSecMatchLimitOne,
-            kSecUseAuthenticationUI: kSecUseAuthenticationUISkip,
-            kSecUseDataProtectionKeychain: true
+            kSecUseAuthenticationUI: kSecUseAuthenticationUISkip
         ]
         var item: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &item)
@@ -68,8 +63,7 @@ public struct KeychainStore: Sendable {
         let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: service,
-            kSecAttrAccount: account,
-            kSecUseDataProtectionKeychain: true
+            kSecAttrAccount: account
         ]
         let status = SecItemDelete(query as CFDictionary)
         guard status == errSecSuccess || status == errSecItemNotFound else {
