@@ -72,7 +72,7 @@ for number, cells in rows(text):
     if len(cells) != 10:
         red.append(f"{where} · {len(cells)} columns, expected 10")
         continue
-    key, _, _, _, _, state, _, source, checked, session = cells
+    key, _, _, _, paths, state, _, source, checked, session = cells
     if key in seen:
         red.append(f"{where} · {key} appears twice")
     seen.add(key)
@@ -87,8 +87,10 @@ for number, cells in rows(text):
                 red.append(f"{where} · {key} · commit {token} does not exist")
         elif not (ISSUE.match(token) or COMMAND.match(token)):
             red.append(f"{where} · {key} · source „{token}“ is no commit, issue link or `command` date")
-    if state == "erledigt" and not any(HASH.match(t) and is_commit(t) for t in tokens):
+    if state == "erledigt" and paths != "-" and not any(HASH.match(t) and is_commit(t) for t in tokens):
         red.append(f"{where} · {key} · erledigt without an existing commit")
+    if state == "erledigt" and paths == "-" and not tokens:
+        red.append(f"{where} · {key} · erledigt without a source")
     if state in {"läuft", "erledigt"}:
         if not STAMP.match(checked):
             red.append(f"{where} · {key} · {state} without „geprüft am“ (JJJJ-MM-TT HH:MM)")
