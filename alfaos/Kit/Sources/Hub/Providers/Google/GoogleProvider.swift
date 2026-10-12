@@ -36,6 +36,8 @@ public struct GoogleProvider: Provider {
         return made
     }
 
+    public func classify(_ error: any Error) -> Classification { GoogleFailure.classify(error) }
+
     private static func capability(of port: Any.Type) -> Capability? {
         switch port {
         case is (any CalendarPort).Type: .calendar

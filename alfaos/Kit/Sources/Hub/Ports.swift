@@ -98,6 +98,11 @@ public protocol Provider: Sendable {
     var signIn: any SignInPort { get }
     var probe: any ProbePort { get }
     func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P
+    func classify(_ error: any Error) -> Classification
+}
+
+extension Provider {
+    public func classify(_ error: any Error) -> Classification { Classification.generic(error) }
 }
 
 public struct CostMeter: Sendable {

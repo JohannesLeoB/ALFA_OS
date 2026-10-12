@@ -70,7 +70,13 @@ public final class MailModel {
         }
     }
 
-    public var canLoadMore: Bool { nextPageToken != nil && phase == .settled }
+    public var canLoadMore: Bool {
+        guard nextPageToken != nil else { return false }
+        switch phase {
+        case .settled, .offline: return true
+        default: return false
+        }
+    }
 
     public var listState: MailListState {
         guard let account = selectedAccount else { return .notConnected(nil) }
@@ -127,7 +133,15 @@ public final class MailModel {
     public func refreshAccounts() {
         accounts = engine.accounts
         if let selectedInlet, !accounts.contains(where: { $0.id == selectedInlet }) {
+            generation += 1
             self.selectedInlet = accounts.first?.id
+            selectedFolder = nil
+            selectedMessage = nil
+            query = ""
+            summaries = []
+            nextPageToken = nil
+            phase = .settled
+            loadFoldersFromEngine()
         }
     }
 
@@ -218,6 +232,7 @@ public final class MailModel {
         guard let folder = selectedFolder else { return }
         generation += 1
         let mine = generation
+        nextPageToken = nil
         if query.isEmpty { summaries = engine.messages(inlet, folder: folder) }
         phase = .loading
         await fetch(inlet: inlet, folder: folder, query: query.isEmpty ? nil : query, token: nil,
@@ -274,8 +289,10 @@ public final class MailModel {
     public func handle(_ event: MailEngineEvent) async {
         switch event {
         case .accountsChanged:
+            let before = selectedInlet
             refreshAccounts()
             refreshCounts()
+            if selectedInlet != before, selectedInlet != nil { await loadSelection() }
         case .foldersChanged(let inlet):
             if inlet == selectedInlet { loadFoldersFromEngine() }
         case .messagesChanged(let inlet, let folder):

@@ -42,14 +42,16 @@ public struct GoogleProbe: ProbePort {
     }
 
     static func hint(_ text: String, _ error: Error) -> Hint {
-        Hint(text: text, detail: detail(of: error))
+        let classification = GoogleFailure.classify(error)
+        return Hint(text: text, detail: detail(of: error), kind: classification.kind, original: classification.original)
     }
 
     static func detail(of error: Error) -> String {
+        let classification = GoogleFailure.classify(error)
         switch error {
-        case GoogleOAuthError.httpError(let code), GoogleGmailError.httpError(let code),
-             GoogleProviderError.http(let code):
-            return "HTTP \(code)"
+        case GoogleOAuthError.api, GoogleGmailError.api, GoogleOAuthError.httpError, GoogleGmailError.httpError,
+             GoogleProviderError.http:
+            return classification.detail ?? "HTTP \(classification.original.status ?? 0)"
         case GoogleGmailError.notConnected, GoogleOAuthError.notConnected:
             return "HTTP 401"
         default:

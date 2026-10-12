@@ -1,6 +1,5 @@
 import Foundation
 import Hub
-import enum MykilosServices.MailTransportError
 
 enum MailFailure {
     case transient(Hint)
@@ -17,30 +16,23 @@ enum MailFailure {
         return false
     }
 
-    static func classify(_ error: Error, inlet: Inlet.ID) -> MailFailure {
-        let detail = String(describing: error)
-        if error is URLError {
-            return .transient(Hint(text: MailHintKey.offline, detail: detail))
-        }
-        guard let transport = error as? MailTransportError else {
-            return .rejected(Hint(text: MailHintKey.failed, detail: detail))
-        }
-        switch transport {
-        case .connectionFailed, .connectionClosed, .timeout, .tlsUnavailable:
-            return .transient(Hint(text: MailHintKey.offline, detail: detail))
-        case .smtpRejected(let code, _) where (400..<500).contains(code):
-            return .transient(Hint(text: MailHintKey.offline, detail: detail))
-        case .credentialsMissing, .authenticationRejected, .oauthUnavailable, .unsupportedAuthentication, .accountIncomplete:
-            return .rejected(Hint(text: MailHintKey.signIn, detail: detail, fixIn: .inlet(inlet)))
-        case .recipientRejected, .invalidRecipient, .noRecipients, .smtpRejected, .serverRejected:
-            return .rejected(Hint(text: MailHintKey.rejected, detail: detail))
-        default:
-            return .rejected(Hint(text: MailHintKey.failed, detail: detail))
+    @MainActor
+    static func classify(_ error: Error, inlet: Inlet.ID, hub: any HubAccess) -> MailFailure {
+        let classification = hub.classify(error, inlet: inlet)
+        switch classification.kind {
+        case .transient:
+            return .transient(Hint(text: MailHintKey.offline, classification: classification))
+        case .signIn:
+            return .rejected(Hint(text: MailHintKey.signIn, classification: classification, fixIn: .inlet(inlet)))
+        case .rejected:
+            let text = classification.original.provider == "unknown" ? MailHintKey.failed : MailHintKey.rejected
+            return .rejected(Hint(text: text, classification: classification))
         }
     }
 
-    static func hubError(_ error: Error, inlet: Inlet.ID) -> HubError {
+    @MainActor
+    static func hubError(_ error: Error, inlet: Inlet.ID, hub: any HubAccess) -> HubError {
         if let hub = error as? HubError { return hub }
-        return .provider(classify(error, inlet: inlet).hint)
+        return .provider(classify(error, inlet: inlet, hub: hub).hint)
     }
 }

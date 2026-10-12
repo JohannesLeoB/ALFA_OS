@@ -31,7 +31,7 @@ public struct GoogleTokenRefreshService: GoogleTokenRefreshing {
 
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleOAuthError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleOAuthError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleOAuthError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
 
         do {
             return try JSONDecoder().decode(GoogleOAuthTokenExchangeResponse.self, from: data)

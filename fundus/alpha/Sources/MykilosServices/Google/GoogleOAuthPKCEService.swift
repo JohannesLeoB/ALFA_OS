@@ -83,7 +83,7 @@ public struct GoogleOAuthPKCEService: Sendable {
             throw GoogleOAuthError.invalidResponse
         }
         guard (200...299).contains(http.statusCode) else {
-            throw GoogleOAuthError.httpError(http.statusCode)
+            throw GoogleOAuthError.api(GoogleAPIFault(status: http.statusCode, data: data))
         }
         do {
             return try JSONDecoder().decode(GoogleOAuthTokenExchangeResponse.self, from: data)

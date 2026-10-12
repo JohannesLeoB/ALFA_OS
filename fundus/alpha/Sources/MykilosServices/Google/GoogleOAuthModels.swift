@@ -57,6 +57,7 @@ public enum GoogleOAuthError: Error, Sendable, Equatable {
     case invalidEndpoint
     case invalidResponse
     case httpError(Int)
+    case api(GoogleAPIFault)
     case decodingFailed
     case redirectStateMismatch
     case missingClientID

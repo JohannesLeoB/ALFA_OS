@@ -75,8 +75,8 @@ final class GoogleGrantTokenProvider: GoogleAccessTokenProviding, @unchecked Sen
 
     static func isRejection(_ error: Error) -> Bool {
         switch error {
-        case GoogleOAuthError.httpError(let code): code == 400 || code == 401
-        case GoogleProviderError.refreshUnavailable: true
+        case is GoogleOAuthError, GoogleProviderError.refreshUnavailable:
+            GoogleFailure.classify(error).kind == .signIn
         default: false
         }
     }

@@ -51,6 +51,11 @@ actor IMAPSession {
         return session
     }
 
+    static func verbatim(_ status: IMAPStatus, _ code: IMAPResponseCode?, _ text: String) -> String {
+        guard let code else { return "\(status.rawValue) \(text)" }
+        return "\(status.rawValue) [\(code.name)] \(text)"
+    }
+
     private func handshake(security: MailSecurity) async throws {
         let greeting = try await nextResponse()
         guard case .status(let status, let code, let text) = greeting else {
@@ -59,7 +64,7 @@ actor IMAPSession {
         switch status {
         case .ok: break
         case .preauth: authenticated = true
-        case .no, .bad, .bye: throw MailTransportError.serverRejected(text)
+        case .no, .bad, .bye: throw MailTransportError.serverRejected(Self.verbatim(status, code, text))
         }
         if let code, code.name == "CAPABILITY" {
             capabilities = Self.capabilitySet(code.values)
@@ -254,7 +259,7 @@ actor IMAPSession {
             switch response {
             case .tagged(let receivedTag, let status, let code, let text):
                 guard receivedTag == tag else { continue }
-                guard status == .ok else { throw MailTransportError.serverRejected("\(status.rawValue) \(text)") }
+                guard status == .ok else { throw MailTransportError.serverRejected(Self.verbatim(status, code, text)) }
                 return IMAPCommandResult(untagged: untagged, code: code, text: text, continuations: continuations)
             case .continuation(let text):
                 continuations.append(text)
@@ -275,8 +280,8 @@ actor IMAPSession {
             switch response {
             case .continuation:
                 return
-            case .tagged(let receivedTag, let status, _, let text):
-                if receivedTag == tag { throw MailTransportError.serverRejected("\(status.rawValue) \(text)") }
+            case .tagged(let receivedTag, let status, let code, let text):
+                if receivedTag == tag { throw MailTransportError.serverRejected(Self.verbatim(status, code, text)) }
             case .status(let status, _, let text):
                 if status == .bye { throw MailTransportError.serverRejected("BYE \(text)") }
                 untagged.append(response)

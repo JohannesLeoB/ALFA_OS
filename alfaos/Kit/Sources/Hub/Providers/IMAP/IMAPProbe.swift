@@ -20,7 +20,7 @@ struct IMAPProbe: ProbePort {
                 text: "hint.imap.fields.invalid", detail: String(describing: error), fixIn: .inlet(inlet.id)))
         }
         do {
-            try await run(connection.account(id: inlet.id, displayName: inlet.title), connection.password)
+            try await run(connection.account(id: inlet.id), connection.password)
             return ProbeResult(account: connection.address)
         } catch let error as MailProbeError {
             return ProbeResult(account: connection.address, rejection: Self.hint(error, inlet: inlet.id))

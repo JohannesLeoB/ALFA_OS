@@ -11,6 +11,7 @@ package enum IMAPSetupError: Error, Equatable, Sendable {
 
 package enum IMAPField {
     package static let address = "address"
+    package static let name = "name"
     package static let username = "username"
     package static let password = "password"
     package static let incomingHost = "incomingHost"
@@ -23,6 +24,7 @@ package enum IMAPField {
 
 package struct IMAPConnection: Equatable, Sendable {
     package var address: String
+    package var name: String
     package var username: String
     package var password: String
     package var incoming: MailServerSettings
@@ -39,6 +41,7 @@ package struct IMAPConnection: Equatable, Sendable {
         guard !password.isEmpty else { throw .missing(IMAPField.password) }
         let username = text(IMAPField.username).isEmpty ? address : text(IMAPField.username)
         self.address = address
+        self.name = String(text(IMAPField.name).unicodeScalars.filter { !$0.properties.generalCategory.isControl }.map(Character.init))
         self.username = username
         self.password = password
         incoming = try Self.endpoint(
@@ -78,7 +81,7 @@ package struct IMAPConnection: Equatable, Sendable {
     }
 
     package var values: [String: String] {
-        [
+        var result = [
             IMAPField.address: address,
             IMAPField.username: username,
             IMAPField.password: password,
@@ -89,10 +92,16 @@ package struct IMAPConnection: Equatable, Sendable {
             IMAPField.outgoingPort: String(outgoing.port ?? 0),
             IMAPField.outgoingSecurity: outgoing.security.rawValue
         ]
+        if !name.isEmpty { result[IMAPField.name] = name }
+        return result
     }
 
-    package func account(id: String, displayName: String) -> MailAccount {
-        MailAccount(id: id, displayName: displayName, address: address, provider: .generic,
+    package func account(id: String) -> MailAccount {
+        MailAccount(id: id, displayName: name, address: address, provider: .generic,
                     incoming: incoming, outgoing: outgoing)
     }
+}
+
+private extension Unicode.GeneralCategory {
+    var isControl: Bool { self == .control || self == .lineSeparator || self == .paragraphSeparator }
 }

@@ -168,11 +168,13 @@ final class FakeProvider: Provider, @unchecked Sendable {
     let signIn: any SignInPort
     let probe: any ProbePort
 
-    init(capabilities: Set<Capability>) {
+    init(capabilities: Set<Capability>, signIn: (any SignInPort)? = nil) {
         self.capabilities = capabilities
-        signIn = FakeSignIn(signedOut: signedOutList)
+        self.signIn = signIn ?? FakeSignIn(signedOut: signedOutList)
         probe = FakeProbe(accepting: accepting)
     }
+
+    func classify(_ error: any Error) -> Classification { IMAPProvider().classify(error) }
 
     var signedOut: [Inlet.ID] { signedOutList.with { $0 } }
     func setAccepting(_ value: Bool) { accepting.with { $0 = value } }

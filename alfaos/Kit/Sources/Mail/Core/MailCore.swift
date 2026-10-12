@@ -78,7 +78,7 @@ public final class MailCore: MailEngine {
             let folders = try await transport.listFolders()
             try mirror.replaceFolders(inlet, folders)
         } catch {
-            throw MailFailure.hubError(error, inlet: inlet)
+            throw MailFailure.hubError(error, inlet: inlet, hub: hub)
         }
         emit(.foldersChanged(inlet))
     }
@@ -89,7 +89,7 @@ public final class MailCore: MailEngine {
         do {
             page = try await transport.listMessages(folderID: folder, query: query, pageToken: pageToken, maxResults: Self.pageSize)
         } catch {
-            throw MailFailure.hubError(error, inlet: inlet)
+            throw MailFailure.hubError(error, inlet: inlet, hub: hub)
         }
         guard query == nil else { return page }
         let known = mirror.messageIDs(inlet, folder: folder)
@@ -101,7 +101,7 @@ public final class MailCore: MailEngine {
                 try mirror.appendMessages(inlet, folder: folder, page.messages, at: now())
             }
         } catch {
-            throw MailFailure.hubError(error, inlet: inlet)
+            throw MailFailure.hubError(error, inlet: inlet, hub: hub)
         }
         emit(.messagesChanged(inlet, folder: folder))
         if pageToken == nil, hadSync, folder == mirror.inboxID(inlet) {
@@ -116,7 +116,7 @@ public final class MailCore: MailEngine {
         do {
             return try await transport.fetchBody(messageID: messageID)
         } catch {
-            throw MailFailure.hubError(error, inlet: inlet)
+            throw MailFailure.hubError(error, inlet: inlet, hub: hub)
         }
     }
 
@@ -126,7 +126,7 @@ public final class MailCore: MailEngine {
             try await transport.setFlags(messageID: messageID, add: add, remove: remove)
             try mirror.apply(inlet, messageID: messageID, add: add, remove: remove)
         } catch {
-            throw MailFailure.hubError(error, inlet: inlet)
+            throw MailFailure.hubError(error, inlet: inlet, hub: hub)
         }
         emit(.messagesChanged(inlet, folder: mirror.inboxID(inlet) ?? ""))
     }
@@ -171,7 +171,7 @@ public final class MailCore: MailEngine {
             try await transport.send(item.draft)
             return .sent
         } catch {
-            switch MailFailure.classify(error, inlet: item.inlet) {
+            switch MailFailure.classify(error, inlet: item.inlet, hub: hub) {
             case .transient(let hint): return .transient(hint)
             case .rejected(let hint): return .rejected(hint)
             }

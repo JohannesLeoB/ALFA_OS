@@ -116,4 +116,8 @@ final class PresetSetup: HubSetup {
     func remove(_ inlet: Inlet.ID) async throws {
         try await base.remove(inlet)
     }
+
+    func health(of inlet: Inlet.ID) -> InletHealth { base.health(of: inlet) }
+
+    func report(for inlet: Inlet.ID) -> [ReportEntry] { base.report(for: inlet) }
 }

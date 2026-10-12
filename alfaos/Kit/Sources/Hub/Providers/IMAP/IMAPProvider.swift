@@ -22,6 +22,7 @@ public struct IMAPProvider: Provider {
 
     public var form: [Field] {
         [
+            Field(id: IMAPField.name, title: "field.imap.name"),
             Field(id: IMAPField.address, title: "field.imap.address"),
             Field(id: IMAPField.incomingHost, title: "field.imap.incomingHost"),
             Field(id: IMAPField.incomingPort, title: "field.imap.incomingPort"),
@@ -68,6 +69,8 @@ public struct IMAPProvider: Provider {
         }
     }
 
+    public func classify(_ error: any Error) -> Classification { IMAPFailure.classify(error) }
+
     public func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P {
         guard ObjectIdentifier(port) == ObjectIdentifier((any MailTransport).self) else {
             throw HubError.capabilityMissing(inlet.id, inlet.capabilities.first ?? .mail)
@@ -75,7 +78,7 @@ public struct IMAPProvider: Provider {
         let connection = try IMAPConnection(values: grant.values)
         let password = connection.password
         let transport: any MailTransport = IMAPSMTPMailTransport(
-            account: connection.account(id: inlet.id, displayName: inlet.title),
+            account: connection.account(id: inlet.id),
             accessToken: { throw MailTransportError.oauthUnavailable(.generic) },
             password: { password })
         guard let typed = transport as? P else {

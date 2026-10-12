@@ -51,34 +51,25 @@ final class Repro5Tests: XCTestCase {
         database: DatabaseQueue? = nil,
         providers: [any Provider]? = nil,
         offers: [Offer]? = nil,
+        deadlines: HubDeadlines = .standard,
         run: @escaping IMAPProbeRun = { _, _ in }
     ) throws -> Hub {
         let configuration = HubConfiguration(
             person: Person(id: "p1", name: "P"),
             company: CompanySetup(offers: offers ?? [Self.offer], limits: limits),
             providers: providers ?? [IMAPProvider(probeRun: run)], keychain: keychain, cadence: cadence,
-            cost: FakeCost(), catalog: .withMail, database: try database ?? DatabaseQueue())
+            cost: FakeCost(), catalog: .withMail, database: try database ?? DatabaseQueue(),
+            deadlines: deadlines)
         return try Hub.make(configuration)
     }
 
-    func testBug51AddHasNoDeadlineWhenTheProbeNeverReturns() async throws {
-        let stuck = try makeHub(run: { _, _ in try await Task.sleep(for: .seconds(3600)) })
-        let outcome = Locked<String?>(nil)
-        let task = Task { @MainActor in
-            do {
-                _ = try await stuck.setup.add(Self.offer, input: .fields(values()))
-                outcome.with { $0 = "returned" }
-            } catch {
-                outcome.with { $0 = String(describing: error) }
-            }
-        }
-        try await Task.sleep(for: .seconds(2))
-        XCTExpectFailure("BUG-5-1: add has no deadline; a probe that never returns keeps add pending, no inlet, no state, no error") {
-            XCTAssertNotNil(outcome.with { $0 })
-        }
+    func testBug51AddEndsWithTheProbeTimeoutWhenTheProbeNeverReturns() async throws {
+        let stuck = try makeHub(deadlines: HubDeadlines(signIn: .seconds(5), probe: .milliseconds(300)),
+                                run: { _, _ in try await Task.sleep(for: .seconds(3600)) })
+        let error = await attempt(stuck, "jo@gmx.example")
+        guard case .probeFailed(let hint)? = error else { return XCTFail("error \(String(describing: error))") }
+        XCTAssertEqual(hint.text, "hint.probe.timeout")
         XCTAssertEqual(stuck.setup.inlets, [])
-        task.cancel()
-        await task.value
     }
 
     func testBug52CancelDuringTheProbeIsReportedAsProbeFailed() async throws {
@@ -94,11 +85,7 @@ final class Repro5Tests: XCTestCase {
         try await Task.sleep(for: .milliseconds(300))
         task.cancel()
         let error = await task.value
-        XCTExpectFailure("BUG-5-2: a cancelled probe surfaces as probeFailed(hint.provider.failed), not as cancelled") {
-            XCTAssertEqual(error, .cancelled)
-        }
-        guard case .probeFailed(let hint)? = error else { return XCTFail("error \(String(describing: error))") }
-        XCTAssertEqual(hint.text, "hint.provider.failed")
+        XCTAssertEqual(error, .cancelled)
     }
 
     func testBug53ProbeOfAnExistingInletStaysConnectingAndACancelMarksItFailed() async throws {

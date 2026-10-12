@@ -54,7 +54,7 @@ final class MailProbeTests: XCTestCase {
             XCTFail("probe must throw")
         } catch {
             XCTAssertEqual(error as? MailProbeError,
-                           MailProbeError(step: .incoming, reason: .authenticationRejected("NO " + fx("tagged.no.text"))))
+                           MailProbeError(step: .incoming, reason: .authenticationRejected("NO [AUTHENTICATIONFAILED] " + fx("tagged.no.text"))))
         }
         XCTAssertEqual(net.endpoints.count, 1)
         XCTAssertTrue(incoming.closed)

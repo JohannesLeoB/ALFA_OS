@@ -39,7 +39,7 @@ public actor MailSyncService {
                 store.upsert(neue, account: account)
                 store.setHistoryId(delta.historyId ?? profile.historyId, account: account)
                 return .inkrementell(neu: neue.count, geloescht: delta.deleted.count)
-            } catch GoogleGmailError.httpError(let code) where code == 404 {
+            } catch let error as GoogleGmailError where error.statusCode == 404 {
             } catch {
                 return .error(String(describing: error))
             }

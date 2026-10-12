@@ -9,17 +9,15 @@ import XCTest
 
 @MainActor
 final class Repro4CoreTests: XCTestCase {
-    func testGmailHttpErrorsAreNotClassified() {
-        let unauthorized = MailFailure.classify(GoogleGmailError.httpError(401), inlet: "i")
-        let tooMany = MailFailure.classify(GoogleGmailError.httpError(429), inlet: "i")
-        let unavailable = MailFailure.classify(GoogleGmailError.httpError(503), inlet: "i")
-        XCTAssertEqual(unauthorized.hint.text, MailHintKey.failed)
-        XCTAssertEqual(unauthorized.hint.detail, "httpError(401)")
-        XCTExpectFailure("BUG-4-01: GoogleGmailError is not a MailTransportError, so 401, 429 and 503 all become a permanent failed hint with the raw text httpError(n)") {
-            XCTAssertEqual(unauthorized.hint.text, MailHintKey.signIn)
-            XCTAssertTrue(tooMany.isTransient)
-            XCTAssertTrue(unavailable.isTransient)
-        }
+    func testGmailHttpErrorsAreClassified() {
+        let hub = Repro4Hub()
+        let unauthorized = MailFailure.classify(GoogleGmailError.httpError(401), inlet: "i", hub: hub)
+        let tooMany = MailFailure.classify(GoogleGmailError.httpError(429), inlet: "i", hub: hub)
+        let unavailable = MailFailure.classify(GoogleGmailError.httpError(503), inlet: "i", hub: hub)
+        XCTAssertEqual(unauthorized.hint.text, MailHintKey.signIn)
+        XCTAssertTrue(tooMany.isTransient)
+        XCTAssertEqual(tooMany.hint.code, "gmail.429")
+        XCTAssertTrue(unavailable.isTransient)
     }
 
     func testGmailHttpErrorOnSendFailsTheOutboxItemForGood() async throws {
@@ -32,10 +30,8 @@ final class Repro4CoreTests: XCTestCase {
         transport.sendError = nil
         await core.retryOutbox()
         let sent = transport.sent.count
-        XCTExpectFailure("BUG-4-01: a temporary Gmail error on send marks the outbox item failed, retryOutbox never sends it") {
-            XCTAssertEqual(state, .waiting)
-            XCTAssertEqual(sent, 1)
-        }
+        XCTAssertEqual(state, .waiting)
+        XCTAssertEqual(sent, 1)
     }
 
     func testInboxUnreadCountFallsWhenASyncReplacesTheLoadedPages() async throws {

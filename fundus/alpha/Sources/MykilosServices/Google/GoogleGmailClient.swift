@@ -164,6 +164,7 @@ public enum GoogleGmailError: Error, Sendable, Equatable {
     case notConnected
     case invalidResponse
     case httpError(Int)
+    case api(GoogleAPIFault)
     case decodingFailed
 }
 
@@ -171,7 +172,16 @@ extension GoogleGmailError {
     public var needsPermission: Bool {
         switch self {
         case .notConnected, .httpError(401), .httpError(403): true
+        case .api(let fault): fault.status == 401 || fault.status == 403
         default: false
+        }
+    }
+
+    public var statusCode: Int? {
+        switch self {
+        case .httpError(let code): code
+        case .api(let fault): fault.status
+        default: nil
         }
     }
 }
@@ -264,11 +274,14 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
     private let baseURL = "https://gmail.googleapis.com/gmail/v1/users/me/messages"
     private let draftsURL = "https://gmail.googleapis.com/gmail/v1/users/me/drafts"
     private let labelsURL = "https://gmail.googleapis.com/gmail/v1/users/me/labels"
+    private let policy: GmailRequestPolicy
 
     public init(
         tokenProvider: GoogleAccessTokenProviding = GoogleAccessTokenProvider(),
-        session: URLSession = .shared
+        session: URLSession = .shared,
+        policy: GmailRequestPolicy = .standard
     ) {
+        self.policy = policy
         self.tokenProvider = tokenProvider
         self.session = session
     }
@@ -291,39 +304,52 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
 
         let (listData, listResponse) = try await session.data(for: listRequest)
         guard let listHTTP = listResponse as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(listHTTP.statusCode) else { throw GoogleGmailError.httpError(listHTTP.statusCode) }
+        guard (200...299).contains(listHTTP.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: listHTTP.statusCode, data: listData)) }
 
         let listPage = try Self.parseListPage(from: listData)
         let messageIDs = listPage.ids
         guard !messageIDs.isEmpty else { return GmailPage(messages: [], nextPageToken: nil, resultSizeEstimate: listPage.estimate) }
 
-        let indexedMessages: [(Int, GoogleGmailMessage)] = try await withThrowingTaskGroup(
-            of: (Int, GoogleGmailMessage?).self
-        ) { group in
-            for (index, id) in messageIDs.enumerated() {
-                group.addTask {
-                    guard let detailURL = Self.buildDetailURL(messageID: id, baseURL: self.baseURL) else {
-                        return (index, nil)
-                    }
-                    var detailRequest = URLRequest(url: detailURL)
-                    detailRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-                    guard let (detailData, detailResponse) = try? await self.session.data(for: detailRequest),
-                          let detailHTTP = detailResponse as? HTTPURLResponse,
-                          (200...299).contains(detailHTTP.statusCode) else {
-                        return (index, nil)
-                    }
-                    return (index, try? Self.parseMessage(from: detailData))
-                }
-            }
-            var results: [(Int, GoogleGmailMessage)] = []
-            for try await (index, message) in group {
-                if let message { results.append((index, message)) }
-            }
-            return results
-        }
+        let indexedMessages = try await fetchDetails(messageIDs, accessToken: accessToken)
         return GmailPage(messages: indexedMessages.sorted { $0.0 < $1.0 }.map(\.1),
                          nextPageToken: listPage.nextPageToken,
                          resultSizeEstimate: listPage.estimate)
+    }
+
+    private func fetchDetails(_ ids: [String], accessToken: String) async throws -> [(Int, GoogleGmailMessage)] {
+        try await withThrowingTaskGroup(of: (Int, GoogleGmailMessage).self) { group in
+            var results: [(Int, GoogleGmailMessage)] = []
+            var next = 0
+            func launch() {
+                let index = next
+                next += 1
+                group.addTask { (index, try await self.fetchDetail(ids[index], accessToken: accessToken)) }
+            }
+            while next < ids.count, next < policy.maxConcurrentDetails { launch() }
+            while let finished = try await group.next() {
+                results.append(finished)
+                if next < ids.count { launch() }
+            }
+            return results
+        }
+    }
+
+    private func fetchDetail(_ id: String, accessToken: String) async throws -> GoogleGmailMessage {
+        guard let url = Self.buildDetailURL(messageID: id, baseURL: baseURL) else {
+            throw GoogleGmailError.invalidResponse
+        }
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        var attempt = 1
+        while true {
+            let (data, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
+            if (200...299).contains(http.statusCode) { return try Self.parseMessage(from: data) }
+            let fault = GoogleAPIFault(status: http.statusCode, data: data)
+            guard fault.isRetryable, attempt < policy.maxAttempts else { throw GoogleGmailError.api(fault) }
+            try await Task.sleep(for: policy.delay(afterAttempt: attempt))
+            attempt += 1
+        }
     }
 
     public func fetchMailBody(messageID: String) async throws -> GmailMailBody {
@@ -337,7 +363,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
         return Self.parseMailBody(from: data)
     }
 
@@ -352,7 +378,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
         return try Self.parseMessage(from: data)
     }
 
@@ -377,7 +403,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
             request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
             let (data, response) = try await session.data(for: request)
             guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-            guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+            guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
             guard let decoded = try? JSONDecoder().decode(GmailHistoryResponse.self, from: data) else {
                 throw GoogleGmailError.decodingFailed
             }
@@ -408,7 +434,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
         struct P: Decodable { var emailAddress: String; var messagesTotal: Int?; var historyId: String? }
         guard let p = try? JSONDecoder().decode(P.self, from: data) else { throw GoogleGmailError.decodingFailed }
         return GmailProfile(emailAddress: p.emailAddress, messagesTotal: p.messagesTotal ?? 0, historyId: p.historyId ?? "")
@@ -451,7 +477,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
         return Self.parseBody(from: data)
     }
 
@@ -466,7 +492,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
 
         struct AttachmentBody: Decodable { var data: String? }
         guard let body = try? JSONDecoder().decode(AttachmentBody.self, from: data),
@@ -496,7 +522,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
 
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
         let decoded = try? JSONDecoder().decode(GmailDraftResponse.self, from: data)
         return decoded?.id ?? ""
     }
@@ -515,9 +541,9 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = payload
 
-        let (_, response) = try await session.data(for: request)
+        let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
     }
 
     public func getDraft(id: String) async throws -> EmailDraft {
@@ -531,7 +557,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
         guard let parsed = Self.parseDraftContent(from: data) else { throw GoogleGmailError.decodingFailed }
 
         var attachments: [DraftAttachment] = []
@@ -560,7 +586,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.httpBody = payload
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
         let decoded = try? JSONDecoder().decode(GmailDraftResponse.self, from: data)
         return decoded?.id ?? id
     }
@@ -578,9 +604,9 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = payload
-        let (_, response) = try await session.data(for: request)
+        let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
     }
 
     public func deleteDraft(id: String) async throws {
@@ -593,9 +619,9 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        let (_, response) = try await session.data(for: request)
+        let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
     }
 
     public func listDraftIDMap() async throws -> [String: String] {
@@ -609,7 +635,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
         return Self.parseDraftIDMap(from: data)
     }
 
@@ -626,9 +652,9 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try JSONSerialization.data(withJSONObject: Self.buildModifyBody(add: add, remove: remove))
 
-        let (_, response) = try await session.data(for: request)
+        let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
     }
 
     public func trashMessage(messageID: String) async throws {
@@ -642,9 +668,9 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.httpMethod = "POST"
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
 
-        let (_, response) = try await session.data(for: request)
+        let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
     }
 
     public func listLabels() async throws -> [GmailLabel] {
@@ -656,7 +682,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else { throw GoogleGmailError.invalidResponse }
-        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.httpError(http.statusCode) }
+        guard (200...299).contains(http.statusCode) else { throw GoogleGmailError.api(GoogleAPIFault(status: http.statusCode, data: data)) }
         return Self.parseLabels(from: data)
     }
 

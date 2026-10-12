@@ -25,9 +25,7 @@ final class Repro3IMAPTests: XCTestCase {
         let transport = try hub.access.port((any MailTransport).self, for: inlet.id)
         let name = (transport as? IMAPSMTPMailTransport)?.account.displayName
         XCTAssertNotNil(name)
-        XCTExpectFailure("BUG-3-22: IMAPProvider.adapter passes inlet.title (the offer title) as MailAccount.displayName; MailMessageBuilder writes it into the From header") {
-            XCTAssertNotEqual(name, "GMX")
-        }
+        XCTAssertNotEqual(name, "GMX")
     }
 
     func testBug23PresetCountDiffersFromTheSevenTheReportsName() {

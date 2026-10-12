@@ -17,10 +17,8 @@ final class Repro3StateTests: XCTestCase {
         await rig.cadence.trigger(inlet.id, .mail)
         let stock = rig.hub.access.stock(.mailboxes, as: MailboxRecord.self)
         let state = rig.hub.setup.inlets[0].state
-        XCTExpectFailure("BUG-3-1: one transient sync error persists failed; later timer syncs are skipped until a manual probe") {
-            XCTAssertTrue(state.isConnected, "state after the next tick: \(state)")
-            XCTAssertEqual(stock.items.map(\.name), ["Inbox"])
-        }
+        XCTAssertTrue(state.isConnected, "state after the next tick: \(state)")
+        XCTAssertEqual(stock.items.map(\.name), ["Inbox"])
     }
 
     func testBug2SecondCapabilityLeavesInletStuckOnWorking() async throws {
@@ -103,7 +101,7 @@ final class Repro3StateTests: XCTestCase {
         let rig = try Repro3Rig.make()
         let inlet = try await rig.connect("a@x")
         rig.hub.rules.setCadence(inlet.id, .mail, .every(.seconds(300)))
-        rig.provider.mail.setFailure(.connectionFailed("offline"))
+        rig.provider.mail.setFailure(.serverRejected("NO denied"))
         await rig.cadence.trigger(inlet.id, .mail)
         rig.provider.mail.setFailure(nil)
         let again = try Repro3Rig.make(database: rig.database, provider: rig.provider, keychain: rig.keychain)

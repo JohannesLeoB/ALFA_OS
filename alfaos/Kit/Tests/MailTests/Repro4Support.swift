@@ -157,6 +157,10 @@ final class Repro4Hub: HubAccess {
 
     func write(_ order: WriteOrder) async throws(HubError) {}
 
+    func classify(_ error: any Error, inlet: Inlet.ID) -> Classification { mailTestClassify(error) }
+
+    func health(of inlet: Inlet.ID) -> InletHealth { .online }
+
     func add(_ id: Inlet.ID) -> ScriptTransport {
         let transport = ScriptTransport()
         transports[id] = transport

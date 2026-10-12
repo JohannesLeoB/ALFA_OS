@@ -5,6 +5,7 @@ import Observation
 final class HubCore: HubAccess, HubSetup, HubRules {
     private(set) var records: [Inlet] = []
     private(set) var queue: [SyncJob] = []
+    private(set) var reports: [Inlet.ID: [ReportEntry]] = [:]
 
     @ObservationIgnored private let config: HubConfiguration
     @ObservationIgnored private let store: Store
@@ -25,6 +26,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         self.limits = config.company.limits
         for provider in config.providers { providers[provider.id] = provider }
         records = try store.loadInlets()
+        reports = try store.loadReports()
         try loadSettings()
         config.cadence.attach { [weak self] inlet, capability in
             guard let self else { return SyncReport(inlet: inlet, capability: capability, result: .skipped) }
@@ -63,8 +65,67 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         for continuation in listeners.values { continuation.yield(event) }
     }
 
-    private func hint(_ error: Error, fixIn: SettingsTarget? = nil) -> Hint {
-        Hint(text: "hint.provider.failed", detail: String(describing: error), fixIn: fixIn)
+    static let transientText = "hint.provider.transient"
+    static let failedText = "hint.provider.failed"
+    static let timeoutText = "hint.probe.timeout"
+    static let signInTimeoutText = "hint.signin.timeout"
+
+    private func hint(_ classification: Classification, fixIn: SettingsTarget? = nil) -> Hint {
+        let text: String
+        switch classification.kind {
+        case .transient: text = Self.transientText
+        case .signIn: text = Self.expiredText
+        case .rejected: text = Self.failedText
+        }
+        return Hint(text: text, classification: classification, fixIn: fixIn)
+    }
+
+    func classify(_ error: any Error, inlet: Inlet.ID) -> Classification {
+        guard let record = records.first(where: { $0.id == inlet }), let provider = providers[record.provider] else {
+            return Classification.generic(error)
+        }
+        return provider.classify(error)
+    }
+
+    private func log(_ inlet: Inlet.ID, _ event: ReportEvent, capability: Capability? = nil, ok: Bool,
+                     kind: FailureKind? = nil, hint: String? = nil, original: Original? = nil) {
+        let latest = reports[inlet]?.first { $0.event == event && $0.capability == capability }
+        if ok, latest?.ok == true { return }
+        let entry = ReportEntry(inlet: inlet, event: event, capability: capability, at: config.clock(), ok: ok,
+                                kind: kind, hint: hint, original: original)
+        try? store.append(entry, limit: config.reportLimit)
+        reports[inlet, default: []].insert(entry, at: 0)
+        if let count = reports[inlet]?.count, count > config.reportLimit {
+            reports[inlet]?.removeLast(count - config.reportLimit)
+        }
+    }
+
+    private func logFailure(_ inlet: Inlet.ID, _ event: ReportEvent, capability: Capability? = nil, _ hint: Hint) {
+        log(inlet, event, capability: capability, ok: false, kind: hint.kind ?? .rejected, hint: hint.text,
+            original: hint.original ?? hint.detail.map { Original(provider: "unknown", text: $0) })
+    }
+
+    func report(for inlet: Inlet.ID) -> [ReportEntry] { reports[inlet] ?? [] }
+
+    func health(of inlet: Inlet.ID) -> InletHealth {
+        guard let record = records.first(where: { $0.id == inlet }) else { return .failed }
+        switch record.state {
+        case .failed, .keychainUnreadable, .orphaned: return .failed
+        case .created, .signedIn, .connecting, .locked: return .limited
+        case .connected, .working: break
+        }
+        var seen: Set<String> = []
+        var result = InletHealth.online
+        for entry in reports[inlet] ?? [] {
+            let key = entry.event.rawValue + "|" + (entry.capability?.rawValue ?? "")
+            guard seen.insert(key).inserted, !entry.ok else { continue }
+            if entry.kind == .transient {
+                if result == .online { result = .limited }
+            } else {
+                return .failed
+            }
+        }
+        return result
     }
 
     private func update(_ id: Inlet.ID, persist: Bool, _ change: (inout Inlet) -> Void) {
@@ -153,7 +214,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         } catch let error as HubError {
             throw error
         } catch {
-            throw .provider(hint(error))
+            throw .provider(hint(classify(error, inlet: inletID)))
         }
     }
 
@@ -165,7 +226,9 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         } catch let error as HubError {
             throw error
         } catch {
-            throw .provider(hint(error))
+            let failure = hint(classify(error, inlet: order.inlet))
+            logFailure(order.inlet, .write, failure)
+            throw .provider(failure)
         }
     }
 
@@ -197,10 +260,12 @@ final class HubCore: HubAccess, HubSetup, HubRules {
                 }
                 update(inletID, persist: false) { $0.state = previous }
             }
+            log(inletID, .sync, capability: capability, ok: true)
             emit(.syncFinished(capability, inletID))
             return SyncReport(inlet: inletID, capability: capability, result: .finished(items: outcome.count))
         } catch {
-            var failure = hint(error, fixIn: .inlet(inletID))
+            let classification = classify(error, inlet: inletID)
+            var failure = hint(classification, fixIn: .inlet(inletID))
             if case .failed(let current) = records.first(where: { $0.id == inletID })?.state,
                current.text == Self.expiredText {
                 failure = current
@@ -208,7 +273,13 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             for kind in DataKind.allCases where kind.capability == capability {
                 for feed in feeds[kind] ?? [] { feed.disturb(failure) }
             }
-            update(inletID, persist: true) { $0.state = .failed(failure) }
+            logFailure(inletID, .sync, capability: capability, failure)
+            switch classification.kind {
+            case .transient:
+                update(inletID, persist: false) { if $0.state == .working { $0.state = previous } }
+            case .signIn, .rejected:
+                update(inletID, persist: true) { $0.state = .failed(failure) }
+            }
             emit(.syncFinished(capability, inletID))
             return SyncReport(inlet: inletID, capability: capability, result: .failed(failure))
         }
@@ -232,21 +303,34 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         var inlet = Inlet(id: offer.provider + "-" + UUID().uuidString, provider: offer.provider,
                           capabilities: offer.capabilities, owner: offer.owner, title: offer.title)
         let grant: Grant
+        let candidate = inlet
+        let values = input.values
         do {
-            grant = try await provider.signIn.signIn(inlet, input: input.values)
+            grant = try await Deadline.run(config.deadlines.signIn) {
+                try await provider.signIn.signIn(candidate, input: values)
+            }
         } catch is CancellationError {
             throw .cancelled
+        } catch is DeadlineExpired {
+            throw .probeFailed(Hint(text: Self.signInTimeoutText))
         } catch {
-            throw .probeFailed(hint(error))
+            throw .probeFailed(hint(provider.classify(error)))
         }
         inlet.state = .signedIn
         inlet.state = .connecting
+        let probing = inlet
         let result: ProbeResult
         do {
-            result = try await provider.probe.probe(inlet, grant)
+            result = try await Deadline.run(config.deadlines.probe) { try await provider.probe.probe(probing, grant) }
+        } catch is CancellationError {
+            try? await provider.signIn.signOut(inlet)
+            throw .cancelled
+        } catch is DeadlineExpired {
+            try? await provider.signIn.signOut(inlet)
+            throw .probeFailed(Hint(text: Self.timeoutText))
         } catch {
             try? await provider.signIn.signOut(inlet)
-            throw .probeFailed(hint(error))
+            throw .probeFailed(hint(provider.classify(error)))
         }
         if let rejection = result.rejection {
             try? await provider.signIn.signOut(inlet)
@@ -283,6 +367,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         }
         grants[inlet.id] = grant
         records.append(inlet)
+        log(inlet.id, .probe, ok: true)
         emit(.inletChanged(inlet.id))
         for capability in inlet.capabilities {
             config.cadence.plan(inlet.id, capability, cadence(inlet.id, capability))
@@ -318,21 +403,37 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             update(inletID, persist: false) { $0.state = .keychainUnreadable }
             throw .probeFailed(Hint(text: "hint.keychain.unreadable", fixIn: .inlet(inletID)))
         }
+        let previous = inlet.state
         update(inletID, persist: false) { $0.state = .connecting }
         do {
-            let result = try await provider.probe.probe(inlet, grant)
+            let limit = config.deadlines.probe
+            let result = try await Deadline.run(limit) { try await provider.probe.probe(inlet, grant) }
             if let rejection = result.rejection {
+                logFailure(inletID, .probe, rejection)
                 update(inletID, persist: true) { $0.state = .failed(rejection) }
                 throw SetupError.probeFailed(rejection)
             }
             let now = config.clock()
+            log(inletID, .probe, ok: true)
             update(inletID, persist: true) { $0.state = .connected(probed: now) }
             return result
         } catch let error as SetupError {
             throw error
-        } catch {
-            let failure = hint(error, fixIn: .inlet(inletID))
+        } catch is DeadlineExpired {
+            let failure = Hint(text: Self.timeoutText, fixIn: .inlet(inletID))
+            logFailure(inletID, .probe, failure)
             update(inletID, persist: true) { $0.state = .failed(failure) }
+            throw .probeFailed(failure)
+        } catch {
+            let classification = classify(error, inlet: inletID)
+            let failure = hint(classification, fixIn: .inlet(inletID))
+            logFailure(inletID, .probe, failure)
+            if classification.kind == .transient {
+                update(inletID, persist: false) { $0.state = previous }
+            } else {
+                update(inletID, persist: true) { $0.state = .failed(failure) }
+            }
+            if error is CancellationError { throw .cancelled }
             throw .probeFailed(failure)
         }
     }
@@ -351,6 +452,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             try store.deleteSettings(withPrefix: "truth|\(kind.rawValue)")
         }
         grants[inletID] = nil
+        reports[inletID] = nil
         for kind in delivered.keys { delivered[kind]?[inletID] = nil }
         records.removeAll { $0.id == inletID }
         for list in feeds.values { list.forEach { $0.drop(inlet: inletID) } }
@@ -393,8 +495,8 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             renewed: { [weak self] grant in
                 Task { @MainActor in self?.adopt(grant, for: inletID) }
             },
-            failed: { [weak self] _ in
-                Task { @MainActor in self?.expire(inletID) }
+            failed: { [weak self] error in
+                Task { @MainActor in self?.expire(inletID, error) }
             }
         )
     }
@@ -407,6 +509,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
                 try config.keychain.put(value, at: KeySlot(inlet: inletID, name: name))
             }
             try store.save(inlet, slots: grant.values.keys.sorted())
+            log(inletID, .renewal, ok: true)
             emit(.inletChanged(inletID))
         } catch {
             let failure = Hint(text: "hint.keychain.unwritable", detail: String(describing: error), fixIn: .inlet(inletID))
@@ -414,9 +517,11 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         }
     }
 
-    private func expire(_ inletID: Inlet.ID) {
+    private func expire(_ inletID: Inlet.ID, _ error: any Error) {
         guard records.contains(where: { $0.id == inletID }) else { return }
-        let failure = Hint(text: Self.expiredText, fixIn: .inlet(inletID))
+        let failure = hint(Classification(kind: .signIn, original: classify(error, inlet: inletID).original),
+                           fixIn: .inlet(inletID))
+        logFailure(inletID, .renewal, failure)
         update(inletID, persist: true) { $0.state = .failed(failure) }
     }
 }

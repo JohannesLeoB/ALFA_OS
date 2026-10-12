@@ -11,6 +11,18 @@ public struct CompanySetup: Sendable {
     }
 }
 
+public struct HubDeadlines: Equatable, Sendable {
+    public var signIn: Duration
+    public var probe: Duration
+
+    public init(signIn: Duration = .seconds(300), probe: Duration = .seconds(60)) {
+        self.signIn = signIn
+        self.probe = probe
+    }
+
+    public static let standard = HubDeadlines()
+}
+
 public struct HubConfiguration {
     public var person: Person
     public var company: CompanySetup
@@ -21,10 +33,13 @@ public struct HubConfiguration {
     public var catalog: PortCatalog
     public var database: DatabaseQueue
     public var clock: @Sendable () -> Date
+    public var deadlines: HubDeadlines
+    public var reportLimit: Int
 
     public init(person: Person, company: CompanySetup, providers: [any Provider], keychain: any KeychainPort,
                 cadence: any CadencePort, cost: any CostPort, catalog: PortCatalog = .standard,
-                database: DatabaseQueue, clock: @escaping @Sendable () -> Date = { Date() }) {
+                database: DatabaseQueue, clock: @escaping @Sendable () -> Date = { Date() },
+                deadlines: HubDeadlines = .standard, reportLimit: Int = 100) {
         self.person = person
         self.company = company
         self.providers = providers
@@ -33,6 +48,8 @@ public struct HubConfiguration {
         self.cost = cost
         self.catalog = catalog
         self.database = database
+        self.deadlines = deadlines
+        self.reportLimit = max(1, reportLimit)
         self.clock = clock
     }
 }

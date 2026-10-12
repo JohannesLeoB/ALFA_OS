@@ -11,6 +11,11 @@ struct Store {
             try db.execute(sql: """
                 CREATE TABLE IF NOT EXISTS key_slot (inlet TEXT NOT NULL, name TEXT NOT NULL, PRIMARY KEY (inlet, name))
                 """)
+            try db.execute(sql: """
+                CREATE TABLE IF NOT EXISTS inlet_report (
+                    seq INTEGER PRIMARY KEY AUTOINCREMENT, inlet TEXT NOT NULL, at REAL NOT NULL, json BLOB NOT NULL)
+                """)
+            try db.execute(sql: "CREATE INDEX IF NOT EXISTS inlet_report_inlet ON inlet_report (inlet, seq)")
             try db.execute(sql: "CREATE TABLE IF NOT EXISTS setting (key TEXT PRIMARY KEY, value BLOB NOT NULL)")
         }
     }
@@ -38,6 +43,31 @@ struct Store {
         }
     }
 
+    func loadReports() throws -> [Inlet.ID: [ReportEntry]] {
+        try db.read { db in
+            var result: [Inlet.ID: [ReportEntry]] = [:]
+            for row in try Row.fetchAll(db, sql: "SELECT json FROM inlet_report ORDER BY seq DESC") {
+                let data: Data = row["json"]
+                if let entry = try? JSONDecoder().decode(ReportEntry.self, from: data) {
+                    result[entry.inlet, default: []].append(entry)
+                }
+            }
+            return result
+        }
+    }
+
+    func append(_ entry: ReportEntry, limit: Int) throws {
+        let data = try JSONEncoder().encode(entry)
+        try db.write { db in
+            try db.execute(sql: "INSERT INTO inlet_report (inlet, at, json) VALUES (?, ?, ?)",
+                           arguments: [entry.inlet, entry.at.timeIntervalSince1970, data])
+            try db.execute(sql: """
+                DELETE FROM inlet_report WHERE inlet = ? AND seq NOT IN
+                (SELECT seq FROM inlet_report WHERE inlet = ? ORDER BY seq DESC LIMIT ?)
+                """, arguments: [entry.inlet, entry.inlet, limit])
+        }
+    }
+
     func slots(of inlet: Inlet.ID) throws -> [String] {
         try db.read { db in
             try String.fetchAll(db, sql: "SELECT name FROM key_slot WHERE inlet = ? ORDER BY name", arguments: [inlet])
@@ -46,6 +76,7 @@ struct Store {
 
     func delete(_ inlet: Inlet.ID) throws {
         try db.write { db in
+            try db.execute(sql: "DELETE FROM inlet_report WHERE inlet = ?", arguments: [inlet])
             try db.execute(sql: "DELETE FROM key_slot WHERE inlet = ?", arguments: [inlet])
             try db.execute(sql: "DELETE FROM inlet WHERE id = ?", arguments: [inlet])
         }

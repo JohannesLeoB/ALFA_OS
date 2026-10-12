@@ -2,6 +2,7 @@ import class GRDB.DatabaseQueue
 import Hub
 @testable import Mail
 import enum MykilosServices.GoogleGmailError
+import struct MykilosServices.GoogleAPIFault
 import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessagePage
 import XCTest
@@ -30,9 +31,7 @@ final class Repro4PagingTests: XCTestCase {
         engine.pageCalls = []
         await model.loadMore()
         let calls = engine.pageCalls
-        XCTExpectFailure("BUG-4-03: after the selected account is removed, loadMore asks account b with the page token of account a") {
-            XCTAssertFalse(calls.contains { $0.hasSuffix("|token-of-a") }, "calls \(calls)")
-        }
+        XCTAssertFalse(calls.contains { $0.hasSuffix("|token-of-a") }, "calls \(calls)")
     }
 
     func testRemovingTheOnlyAccountStillListsItsRows() async {
@@ -47,11 +46,9 @@ final class Repro4PagingTests: XCTestCase {
         let rows = model.rows.map(\.id)
         let listState = model.listState
         XCTAssertEqual(listState, .notConnected(nil))
-        XCTExpectFailure("BUG-4-04: after the last account is removed the model keeps its rows, folders and page token") {
-            XCTAssertEqual(rows, [])
-            XCTAssertNil(model.nextPageToken)
-            XCTAssertTrue(model.folders.isEmpty)
-        }
+        XCTAssertEqual(rows, [])
+        XCTAssertNil(model.nextPageToken)
+        XCTAssertTrue(model.folders.isEmpty)
     }
 
     func testLoadMoreOfTheOldAccountLandsInTheNewAccountWhileItsFoldersLoad() async {
@@ -92,7 +89,7 @@ final class Repro4PagingTests: XCTestCase {
         transport.folders = repro4Inbox
         transport.setPage(nil, MailMessagePage(messages: [message("1")], nextPageToken: "t1"))
         transport.setPage("t1", MailMessagePage(messages: [message("9")]))
-        transport.failList(call: 2, GoogleGmailError.httpError(403))
+        transport.failList(call: 2, GoogleGmailError.api(GoogleAPIFault(status: 403, reason: "rateLimitExceeded")))
         let model = MailModel(engine: try MailCore(hub: hub, database: DatabaseQueue()))
         await model.start()
         XCTAssertTrue(model.canLoadMore)
@@ -101,12 +98,9 @@ final class Repro4PagingTests: XCTestCase {
         let stateAfterFailure = model.listState
         await model.loadMore()
         let ids = model.summaries.map(\.id)
-        guard case .failed(let hint) = stateAfterFailure else { return XCTFail("state \(stateAfterFailure)") }
-        XCTAssertEqual(hint.detail, "httpError(403)")
-        XCTExpectFailure("BUG-4-02: after one failed loadMore canLoadMore is false and a second loadMore does nothing, so page two cannot be retried") {
-            XCTAssertTrue(afterFailure)
-            XCTAssertEqual(ids, ["1", "9"])
-        }
+        guard case .offline = stateAfterFailure else { return XCTFail("state \(stateAfterFailure)") }
+        XCTAssertTrue(afterFailure)
+        XCTAssertEqual(ids, ["1", "9"])
     }
 
     func testRowsRemovedOnTheServerStayInTheListAfterASync() async throws {

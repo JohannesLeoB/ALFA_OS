@@ -132,9 +132,7 @@ final class Repro5MailTests: XCTestCase {
         engine.accounts = [fakeAccount("b")]
         model.refreshAccounts()
         XCTAssertEqual(model.selectedInlet, "b")
-        XCTExpectFailure("BUG-5-18: after the selected account is removed refreshAccounts moves the selection but keeps its folders, folder and list") {
-            XCTAssertEqual(model.folders.map(\.id), ["INBOX-B"])
-            XCTAssertTrue(model.summaries.isEmpty)
-        }
+        XCTAssertEqual(model.folders.map(\.id), ["INBOX-B"])
+        XCTAssertTrue(model.summaries.isEmpty)
     }
 }

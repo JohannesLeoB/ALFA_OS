@@ -1,6 +1,7 @@
 import Foundation
 import GRDB
 @testable import Hub
+import enum MykilosServices.GoogleGmailError
 import protocol MykilosServices.GoogleTokenRefreshing
 import struct MykilosServices.GoogleOAuthTokenExchangeResponse
 import protocol MykilosServices.MailTransport
@@ -27,9 +28,7 @@ final class Repro3GoogleTests: XCTestCase {
         let rig = try await repro3GoogleRig(token: { (503, Data()) })
         await rig.cadence.trigger(rig.inlet.id, .mail)
         let state = rig.hub.setup.inlets[0].state
-        XCTExpectFailure("BUG-3-14: the report states that a 503 leaves the inlet connected; that holds for port() only, runSync maps any error to failed") {
-            guard case .connected = state else { return XCTFail("state \(state)") }
-        }
+        guard case .connected = state else { return XCTFail("state \(state)") }
     }
 
     func testBug15TokenFailureIsMaskedAsNotConnected() async throws {
@@ -79,9 +78,11 @@ final class Repro3GoogleTests: XCTestCase {
             return nil
         }, expire: false)
         let transport = try rig.hub.access.port(MailTransport.self, for: rig.inlet.id)
-        let page = try await transport.listMessages(folderID: "INBOX", query: nil, pageToken: nil, maxResults: 10)
-        XCTExpectFailure("BUG-3-18: a detail request that fails is dropped with try?; the page claims success with fewer messages") {
+        do {
+            let page = try await transport.listMessages(folderID: "INBOX", query: nil, pageToken: nil, maxResults: 10)
             XCTAssertEqual(page.messages.map(\.id), ["m1", "m2"])
+        } catch GoogleGmailError.api(let fault) {
+            XCTAssertEqual(fault.status, 500)
         }
     }
 

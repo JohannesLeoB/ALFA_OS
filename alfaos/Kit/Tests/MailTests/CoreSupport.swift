@@ -9,6 +9,7 @@ import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessageBody
 import struct MykilosServices.MailMessagePage
 import struct MykilosServices.MailMessageSummary
+import enum MykilosServices.GoogleGmailError
 import enum MykilosServices.MailTransportError
 
 final class TransportDouble: MailTransport, @unchecked Sendable {
@@ -49,6 +50,14 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     func setFlags(messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws {}
 }
 
+func mailTestClassify(_ error: Error) -> Classification {
+    if error is GoogleGmailError {
+        return GoogleProvider(config: GoogleClientConfig(clientID: "id", clientSecret: ""),
+                              openBrowser: { _ in false }).classify(error)
+    }
+    return IMAPProvider().classify(error)
+}
+
 @MainActor
 final class HubDouble: HubAccess {
     var mailInlets: [Inlet] = []
@@ -79,6 +88,10 @@ final class HubDouble: HubAccess {
     }
 
     func write(_ order: WriteOrder) async throws(HubError) {}
+
+    func classify(_ error: any Error, inlet: Inlet.ID) -> Classification { mailTestClassify(error) }
+
+    func health(of inlet: Inlet.ID) -> InletHealth { .online }
 
     func add(_ id: Inlet.ID, connected: Bool = true) -> TransportDouble {
         let transport = TransportDouble()

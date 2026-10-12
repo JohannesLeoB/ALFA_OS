@@ -81,9 +81,7 @@ final class Repro4GmailTests: XCTestCase {
         let page = try await transport().listMessages(folderID: "INBOX", query: nil, pageToken: nil, maxResults: 50)
         XCTAssertEqual(page.messages.count, 50)
         let peak = Repro4Stub.lock.withLock { Repro4Stub.peak }
-        XCTExpectFailure("BUG-4-21: GoogleGmailClient.listMessages starts all detail requests of a page at once with no limit, 50 requests of format full in one burst") {
-            XCTAssertLessThan(peak, 50)
-        }
+        XCTAssertLessThan(peak, 50)
     }
 
     func testAFailedDetailRequestDropsTheRowWithoutAnError() async throws {
@@ -96,9 +94,7 @@ final class Repro4GmailTests: XCTestCase {
         } catch {
             count = -1
         }
-        XCTExpectFailure("BUG-4-22: a failed detail request (403, 429) is swallowed, the page comes back with fewer rows and a next token, the missing mails are never shown") {
-            XCTAssertTrue(count == 5 || count == -1, "count \(count)")
-        }
+        XCTAssertTrue(count == 5 || count == -1, "count \(count)")
     }
 
     func testEveryPageOfALabelFolderListsTheLabelsAgain() async throws {

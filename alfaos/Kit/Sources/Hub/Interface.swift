@@ -6,6 +6,8 @@ public protocol HubAccess: AnyObject {
     func port<P>(_ port: P.Type, for inlet: Inlet.ID) throws(HubError) -> P
     func inlets(for capability: Capability) -> [Inlet]
     func write(_ order: WriteOrder) async throws(HubError)
+    func classify(_ error: any Error, inlet: Inlet.ID) -> Classification
+    func health(of inlet: Inlet.ID) -> InletHealth
     var events: AsyncStream<HubEvent> { get }
 }
 
@@ -16,6 +18,8 @@ public protocol HubSetup: AnyObject {
     func add(_ offer: Offer, input: Input) async throws(SetupError) -> Inlet
     func probe(_ inlet: Inlet.ID) async throws(SetupError) -> ProbeResult
     func remove(_ inlet: Inlet.ID) async throws
+    func health(of inlet: Inlet.ID) -> InletHealth
+    func report(for inlet: Inlet.ID) -> [ReportEntry]
 }
 
 extension HubSetup {
