@@ -79,11 +79,11 @@ public final class GoogleOAuthLoopbackRedirectServer: @unchecked Sendable {
             guard let data,
                   let request = String(data: data, encoding: .utf8),
                   let url = self.redirectURL(from: request, port: port) else {
-                self.sendResponse("Google-Login konnte nicht gelesen werden.", status: "400 Bad Request", on: connection)
+                self.sendResponse("\(AppKennung.name) · Google-Anmeldung nicht lesbar", status: "400 Bad Request", on: connection)
                 return
             }
             self.sendResponse(
-                "Google-Login wurde an ALPHA übergeben. Dieses Fenster kann geschlossen werden.",
+                "\(AppKennung.name) · Google-Anmeldung übernommen",
                 status: "200 OK",
                 on: connection
             )
