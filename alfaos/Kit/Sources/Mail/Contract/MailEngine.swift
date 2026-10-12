@@ -60,3 +60,10 @@ public protocol MailEngine: AnyObject {
     func unreadCount(_ inlet: Inlet.ID) -> Int
     var events: AsyncStream<MailEngineEvent> { get }
 }
+
+public enum MailHintKey {
+    public static let offline = "mail.hint.offline"
+    public static let signIn = "mail.hint.signIn"
+    public static let rejected = "mail.hint.rejected"
+    public static let failed = "mail.hint.failed"
+}
