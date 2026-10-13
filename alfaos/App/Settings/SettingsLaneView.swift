@@ -60,7 +60,7 @@ struct SettingsGroupsPane: View {
 struct SettingsInletsPane: View {
     let host: AppHost
     let setup: any HubSetup
-    @State private var armed: Inlet.ID?
+    @State private var removal = TwoStep<Inlet.ID>()
 
     var body: some View {
         ScrollView {
@@ -71,6 +71,10 @@ struct SettingsInletsPane: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
         }
+    }
+
+    private func remove(_ id: Inlet.ID) {
+        if removal.press(id) { Task { await host.remove(id) } }
     }
 
     private func row(_ inlet: Inlet) -> some View {
@@ -87,11 +91,11 @@ struct SettingsInletsPane: View {
                 if inlet.state.canRenew {
                     Button { Task { await host.renew(inlet.id) } } label: { word("text.settings.action.signInAgain") }
                 }
-                if armed == inlet.id {
-                    Button { armed = nil; Task { await host.remove(inlet.id) } } label: { word("text.settings.action.removeConfirm") }
-                    Button { armed = nil } label: { word("text.common.cancel") }
+                if removal.armed == inlet.id {
+                    Button { remove(inlet.id) } label: { word("text.settings.action.removeConfirm") }
+                    Button { removal.cancel() } label: { word("text.common.cancel") }
                 } else {
-                    Button { armed = inlet.id } label: { word("text.settings.action.remove") }
+                    Button { remove(inlet.id) } label: { word("text.settings.action.remove") }
                 }
             }
         }
