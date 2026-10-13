@@ -3,7 +3,7 @@ import Hub
 @testable import Mail
 import XCTest
 
-final class Repro4CatalogTests: XCTestCase {
+final class CatalogTests: XCTestCase {
     private func catalogKeys() throws -> Set<String> {
         let url = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()

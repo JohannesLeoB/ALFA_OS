@@ -2,6 +2,7 @@ import GRDB
 import Hub
 @testable import Mail
 import struct MykilosKit.EmailDraft
+import enum MykilosServices.GoogleGmailError
 import enum MykilosServices.MailFlag
 import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessagePage
@@ -69,6 +70,16 @@ final class CoreTests: XCTestCase {
         await core.retryOutbox()
         XCTAssertEqual(one.sent.count, 1)
         XCTAssertTrue(core.outbox.isEmpty)
+
+        // Ein Gmail-HTTP-Fehler 503 beim Senden ist vorübergehend: der Posten wartet und geht beim nächsten Versuch hinaus.
+        let (gmailCore, _, gmail, _) = try make()
+        gmail.sendError = GoogleGmailError.httpError(503)
+        _ = await gmailCore.send("one", draft())
+        let stateAfter503 = gmailCore.outbox.first?.state
+        gmail.sendError = nil
+        await gmailCore.retryOutbox()
+        XCTAssertEqual(stateAfter503, .waiting)
+        XCTAssertEqual(gmail.sent.count, 1)
     }
 
     func testOutboxSurvivesAReopenedDatabase() async throws {
@@ -81,6 +92,16 @@ final class CoreTests: XCTestCase {
         let second = try MailCore(hub: hub, database: database)
         XCTAssertEqual(second.outbox.count, 1)
         XCTAssertEqual(second.outbox.first?.draft, draft())
+
+        let html = EmailDraft(to: "z@example.test", subject: "s", body: "plain", bodyHTML: "<b>formatted</b>")
+        let htmlDatabase = try DatabaseQueue()
+        let htmlFirst = try MailCore(hub: hub, database: htmlDatabase)
+        _ = await htmlFirst.send("one", html)
+        XCTAssertEqual(htmlFirst.outbox.first?.draft.bodyHTML, "<b>formatted</b>")
+        let restored = try MailCore(hub: hub, database: htmlDatabase).outbox.first?.draft.bodyHTML
+        XCTExpectFailure("BUG-4-25: EmailDraft encodes without bodyHTML, so a queued formatted mail is sent as plain text after a restart") {
+            XCTAssertEqual(restored, "<b>formatted</b>")
+        }
     }
 
     func testRejectionStaysFailedAndIsNotRetried() async throws {
@@ -108,6 +129,19 @@ final class CoreTests: XCTestCase {
         XCTAssertEqual(core.unreadCount("two"), 1)
         try await core.setFlags("one", messageID: "1", add: [.seen], remove: [])
         XCTAssertEqual(core.unreadCount("one"), 1)
+
+        let (pagedCore, _, paged, _) = try make()
+        paged.setTokenPage(nil, MailMessagePage(messages: (1...5).map { message("p1-\($0)") }, nextPageToken: "t"))
+        paged.setTokenPage("t", MailMessagePage(messages: (1...5).map { message("p2-\($0)") }))
+        try await pagedCore.refreshFolders("one")
+        _ = try await pagedCore.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
+        _ = try await pagedCore.loadPage("one", folder: "INBOX", query: nil, pageToken: "t")
+        XCTAssertEqual(pagedCore.unreadCount("one"), 10)
+        _ = try await pagedCore.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
+        let after = pagedCore.unreadCount("one")
+        XCTExpectFailure("BUG-4-07: unreadCount counts only the mirrored rows, so it drops from 10 to 5 when a sync replaces the mirror, although no mail was read") {
+            XCTAssertEqual(after, 10)
+        }
     }
 
     func testSyncFinishedBringsNewMailAndRetriesOutbox() async throws {
@@ -146,5 +180,118 @@ final class CoreTests: XCTestCase {
         let failed = await eventually { seen.contains { if case .syncFailed("one", _) = $0 { true } else { false } } }
         XCTAssertTrue(failed)
         XCTAssertEqual(core.messages("one", folder: "INBOX").map(\.id), ["1"])
+    }
+
+    func testGmailHttpErrorsAreClassified() {
+        let hub = HubDouble()
+        let unauthorized = MailFailure.classify(GoogleGmailError.httpError(401), inlet: "i", hub: hub)
+        let tooMany = MailFailure.classify(GoogleGmailError.httpError(429), inlet: "i", hub: hub)
+        let unavailable = MailFailure.classify(GoogleGmailError.httpError(503), inlet: "i", hub: hub)
+        XCTAssertEqual(unauthorized.hint.text, MailHintKey.signIn)
+        XCTAssertTrue(tooMany.isTransient)
+        XCTAssertEqual(tooMany.hint.code, "gmail.429")
+        XCTAssertTrue(unavailable.isTransient)
+    }
+
+    func testSendAgainAfterARejectionLeavesTheFailedItemInTheOutbox() async throws {
+        let hub = HubDouble()
+        let transport = hub.add("one")
+        transport.folders = scriptedInbox
+        let core = try MailCore(hub: hub, database: DatabaseQueue())
+        let model = MailModel(engine: core)
+        await model.start()
+        let id = try XCTUnwrap(model.compose(to: "z@example.test"))
+        model.edit(id) { $0.subject = "s" }
+        transport.sendError = MailTransportError.recipientRejected("z@example.test", 550, "no such user")
+        await model.send(id)
+        guard case .sendFailed(let hint) = model.draft(id)?.state else { return XCTFail("state \(String(describing: model.draft(id)?.state))") }
+        XCTAssertEqual(hint.text, MailHintKey.rejected)
+        transport.sendError = nil
+        await model.send(id)
+        XCTAssertEqual(model.draft(id)?.state, .sent)
+        XCTAssertEqual(transport.sent.count, 1)
+        let leftover = core.outbox.count
+        XCTExpectFailure("BUG-4-08: the failed outbox item stays after the same draft was sent again, and no engine function removes it") {
+            XCTAssertEqual(leftover, 0)
+        }
+    }
+
+    func testDiscardingAQueuedDraftDoesNotCancelItsOutboxItem() async throws {
+        let hub = HubDouble()
+        let transport = hub.add("one")
+        transport.folders = scriptedInbox
+        let core = try MailCore(hub: hub, database: DatabaseQueue())
+        let model = MailModel(engine: core)
+        await model.start()
+        let id = try XCTUnwrap(model.compose(to: "z@example.test"))
+        model.edit(id) { $0.subject = "s" }
+        transport.sendError = MailTransportError.timeout
+        await model.send(id)
+        XCTAssertEqual(model.draft(id)?.state, .queuedInOutbox)
+        model.discard(id)
+        transport.sendError = nil
+        await core.retryOutbox()
+        let delivered = transport.sent.count
+        XCTExpectFailure("BUG-4-09: discard removes the card, the mail is still sent by the next retry") {
+            XCTAssertEqual(delivered, 0)
+        }
+    }
+
+    func testOutboxItemOfARemovedAccountWaitsForever() async throws {
+        let hub = HubDouble()
+        let transport = hub.add("one")
+        transport.folders = scriptedInbox
+        transport.setTokenPage(nil, MailMessagePage(messages: [message("1")]))
+        transport.sendError = MailTransportError.timeout
+        let core = try MailCore(hub: hub, database: DatabaseQueue())
+        try await core.refreshFolders("one")
+        _ = try await core.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
+        _ = await core.send("one", draft())
+        hub.remove("one")
+        await core.retryOutbox()
+        await core.retryOutbox()
+        let item = core.outbox.first
+        let rows = core.messages("one", folder: "INBOX").count
+        XCTAssertEqual(item?.state, .waiting)
+        XCTExpectFailure("BUG-4-10: after the account is removed its outbox item stays waiting and is counted up on every retry, and its mirrored mail stays in the database") {
+            XCTAssertNotEqual(item?.state, .waiting)
+        }
+        XCTExpectFailure("BUG-4-10: after the account is removed its outbox item stays waiting and is counted up on every retry, and its mirrored mail stays in the database") {
+            XCTAssertEqual(rows, 0)
+        }
+    }
+
+    func testRejectedSignInIsShownAsAFailureNotAsExpiredSignIn() async throws {
+        let hub = HubDouble()
+        let transport = hub.add("one")
+        transport.listError = MailTransportError.authenticationRejected("bad password")
+        let core = try MailCore(hub: hub, database: DatabaseQueue())
+        let model = MailModel(engine: core)
+        await model.start()
+        let state = model.listState
+        guard case .failed(let hint) = state else { return XCTFail("state \(state)") }
+        XCTAssertEqual(hint.text, MailHintKey.signIn)
+        XCTExpectFailure("BUG-4-11: a rejected sign-in gives the hint mail.hint.signIn, the model only knows hint.signin.expired, so signInExpired is only reached through the inlet state") {
+            XCTAssertEqual(state, .signInExpired("one"))
+        }
+    }
+
+    /// BUG-4-12 und BUG-4-13: Die lokale Suche geht ungeschützt in LIKE (`_` als Platzhalter, Umlaute nur ASCII-gefaltet).
+    func testLocalSearchMatchesTheTextAsTyped() async throws {
+        let hub = HubDouble()
+        let transport = hub.add("one")
+        transport.folders = scriptedInbox
+        transport.setPage("INBOX", MailMessagePage(messages: [message("1", subject: "abc"), message("2", subject: "Ärger im Büro")]))
+        let core = try MailCore(hub: hub, database: DatabaseQueue())
+        try await core.refreshFolders("one")
+        _ = try await core.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
+        let underscoreHits = core.searchLocal("one", query: "a_c").map(\.id)
+        XCTExpectFailure("BUG-4-12: the query goes into LIKE unescaped, so _ matches any character") {
+            XCTAssertEqual(underscoreHits, [])
+        }
+        let umlautHits = core.searchLocal("one", query: "ärger").map(\.id)
+        XCTExpectFailure("BUG-4-13: SQLite LIKE folds case for ASCII only, so a lowercase umlaut does not find the capital one") {
+            XCTAssertEqual(umlautHits, ["2"])
+        }
     }
 }

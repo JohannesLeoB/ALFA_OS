@@ -61,5 +61,16 @@ final class RenewTests: XCTestCase {
             XCTAssertEqual(error as? SetupError, .duplicate)
         }
         XCTAssertEqual(rig.hub.setup.inlets.count, 1)
+
+        let caseRig = try self.rig(capabilities: [.mail])
+        _ = try await connect(caseRig, "A@x")
+        var second: Inlet?
+        do { second = try await connect(caseRig, "a@x") } catch {}
+        XCTExpectFailure("BUG-3-11: duplicate check compares account strings exactly and ignores the owner") {
+            XCTAssertNil(second)
+        }
+        XCTExpectFailure("BUG-3-11: duplicate check compares account strings exactly and ignores the owner") {
+            XCTAssertEqual(caseRig.hub.setup.inlets.count, 1)
+        }
     }
 }

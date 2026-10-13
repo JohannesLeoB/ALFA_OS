@@ -2,6 +2,9 @@ import Foundation
 import GRDB
 import Hub
 @testable import Mail
+import enum MykilosServices.MailFolderRole
+import struct MykilosServices.MailFolder
+import struct MykilosServices.MailMessageSummary
 import XCTest
 
 private final class SetupKeychain: KeychainPort, @unchecked Sendable {
@@ -40,8 +43,24 @@ private struct SetupSignIn: SignInPort {
     func signOut(_ inlet: Inlet) async throws {}
 }
 
+private final class SetupFlag: @unchecked Sendable {
+    private let lock = NSLock()
+    private var current: Bool
+
+    init(_ value: Bool) { current = value }
+
+    var value: Bool {
+        get { lock.withLock { current } }
+        set { lock.withLock { current = newValue } }
+    }
+}
+
 private struct SetupProbe: ProbePort {
-    func probe(_ inlet: Inlet, _ grant: Grant) async throws -> ProbeResult { ProbeResult(account: inlet.id) }
+    let accepting: SetupFlag
+
+    func probe(_ inlet: Inlet, _ grant: Grant) async throws -> ProbeResult {
+        accepting.value ? ProbeResult(account: "a@x.test") : ProbeResult(account: "a@x.test", rejection: Hint(text: "hint.setup"))
+    }
 }
 
 private struct SetupProvider: Provider {
@@ -50,7 +69,9 @@ private struct SetupProvider: Provider {
     let form: [Field] = []
     let presets: [Preset] = []
     let signIn: any SignInPort = SetupSignIn()
-    let probe: any ProbePort = SetupProbe()
+    let probe: any ProbePort
+
+    init(accepting: SetupFlag = SetupFlag(true)) { probe = SetupProbe(accepting: accepting) }
 
     func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P {
         throw HubError.capabilityMissing(inlet.id, .mail)
@@ -80,23 +101,35 @@ final class SetupTests: XCTestCase {
         )
     }
 
-    func testWithoutGoogleConfigurationOnlyImapIsOffered() throws {
-        let offers = try assembly(withGoogle: false).hub.setup.offers
-        XCTAssertFalse(offers.isEmpty)
-        XCTAssertEqual(Set(offers.map(\.provider)), ["imap"])
-        for offer in offers {
+    private func assembled(accepting: SetupFlag, database: DatabaseQueue) throws -> MailSetup.Assembly {
+        try MailSetup.assemble(
+            person: person, company: CompanySetup(), providers: [SetupProvider(accepting: accepting)],
+            database: database, keychain: SetupKeychain(), cadence: SetupCadence(), cost: SetupCost(),
+            cadences: MailSetup.defaultCadences, clock: { Date() })
+    }
+
+    private func rows(_ database: DatabaseQueue, _ inlet: Inlet.ID) throws -> Int {
+        try database.read { db in
+            try Int.fetchOne(db, sql: "SELECT (SELECT COUNT(*) FROM mail_message WHERE inlet = ?) + (SELECT COUNT(*) FROM mail_folder WHERE inlet = ?)",
+                             arguments: [inlet, inlet]) ?? 0
+        }
+    }
+
+    func testOffersDependOnTheGoogleConfiguration() throws {
+        let imapOnly = try assembly(withGoogle: false).hub.setup.offers
+        XCTAssertFalse(imapOnly.isEmpty)
+        XCTAssertEqual(Set(imapOnly.map(\.provider)), ["imap"])
+        for offer in imapOnly {
             guard case .form(let fields) = offer.way else { return XCTFail("way \(offer.way)") }
             XCTAssertFalse(fields.isEmpty)
             XCTAssertEqual(offer.capabilities, [.mail])
             XCTAssertEqual(offer.owner, .person("p1"))
         }
-        XCTAssertTrue(offers.allSatisfy { $0.preset != nil })
-    }
+        XCTAssertTrue(imapOnly.allSatisfy { $0.preset != nil })
 
-    func testWithGoogleConfigurationGoogleAndImapAreOffered() throws {
-        let offers = try assembly(withGoogle: true).hub.setup.offers
-        XCTAssertEqual(Set(offers.map(\.provider)), ["google", "imap"])
-        let google = offers.filter { $0.provider == "google" }
+        let withGoogle = try assembly(withGoogle: true).hub.setup.offers
+        XCTAssertEqual(Set(withGoogle.map(\.provider)), ["google", "imap"])
+        let google = withGoogle.filter { $0.provider == "google" }
         XCTAssertEqual(google.count, 1)
         XCTAssertEqual(google.first?.way, .signIn)
     }
@@ -108,7 +141,7 @@ final class SetupTests: XCTestCase {
         XCTAssertEqual(result.model.accounts, [])
     }
 
-    func testNewMailInletGetsTheInboxCadence() async throws {
+    func testCadenceOfANewInletComesFromTheConfiguration() async throws {
         let cadence = SetupCadence()
         let result = try MailSetup.assemble(
             person: person, company: CompanySetup(), providers: [SetupProvider()],
@@ -120,16 +153,47 @@ final class SetupTests: XCTestCase {
         let inlet = try await result.hub.setup.add(offer)
         XCTAssertEqual(cadence.planned(inlet.id, .mail), .every(.seconds(300)))
         XCTAssertEqual(result.hub.rules.cadence(inlet.id, .mail), .every(.seconds(300)))
-    }
 
-    func testCadenceIntervalComesFromTheConfiguration() async throws {
-        let cadence = SetupCadence()
-        let result = try MailSetup.assemble(
+        let configuredCadence = SetupCadence()
+        let configured = try MailSetup.assemble(
             person: person, company: CompanySetup(), providers: [SetupProvider()],
-            database: try HubDatabase.inMemory(), keychain: SetupKeychain(), cadence: cadence, cost: SetupCost(),
+            database: try HubDatabase.inMemory(), keychain: SetupKeychain(), cadence: configuredCadence, cost: SetupCost(),
             cadences: [.mail: .seconds(60)], clock: { Date() }
         )
+        let configuredInlet = try await configured.hub.setup.add(try XCTUnwrap(configured.hub.setup.offers.first))
+        XCTAssertEqual(configuredCadence.planned(configuredInlet.id, .mail), .every(.seconds(60)))
+    }
+
+    func testRenewalKeepsTheCadenceTheUserSet() async throws {
+        let accepting = SetupFlag(true)
+        let result = try assembled(accepting: accepting, database: try HubDatabase.inMemory())
+        let offer = try XCTUnwrap(result.hub.setup.offers.first)
+        let inlet = try await result.hub.setup.add(offer)
+        XCTAssertEqual(result.hub.rules.cadence(inlet.id, .mail), .every(.seconds(300)))
+        result.hub.rules.setCadence(inlet.id, .mail, .every(.seconds(60)))
+        accepting.value = false
+        _ = try? await result.hub.setup.probe(inlet.id)
+        XCTAssertTrue(result.hub.setup.inlets[0].state.canRenew)
+        accepting.value = true
+        let renewed = try await result.hub.setup.add(offer)
+        XCTAssertEqual(renewed.id, inlet.id)
+        XCTExpectFailure("BUG-5-16: PresetSetup.add sets the default cadence again after every add including a renewal, the cadence the user set is lost") {
+            XCTAssertEqual(result.hub.rules.cadence(inlet.id, .mail), .every(.seconds(60)))
+        }
+    }
+
+    func testRemovedAccountTakesItsMirroredMailWithIt() async throws {
+        let database = try HubDatabase.inMemory()
+        let result = try assembled(accepting: SetupFlag(true), database: database)
         let inlet = try await result.hub.setup.add(try XCTUnwrap(result.hub.setup.offers.first))
-        XCTAssertEqual(cadence.planned(inlet.id, .mail), .every(.seconds(60)))
+        let mirror = try MailMirror(database)
+        try mirror.replaceFolders(inlet.id, [MailFolder(id: "INBOX", name: "Inbox", role: .inbox)])
+        try mirror.replaceMessages(inlet.id, folder: "INBOX", [MailMessageSummary(id: "m1", subject: "s", from: "a")], at: Date())
+        try await result.hub.setup.remove(inlet.id)
+        let left = try rows(database, inlet.id)
+        XCTAssertEqual(left, 2)
+        XCTExpectFailure("BUG-5-17: remove deletes keychain items and the inlet but never the mirrored folders, messages or outbox of the account") {
+            XCTAssertEqual(left, 0)
+        }
     }
 }

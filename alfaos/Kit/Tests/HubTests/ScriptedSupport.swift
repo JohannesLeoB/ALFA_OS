@@ -60,23 +60,10 @@ struct RenewingTransport: MailTransport {
     func setFlags(messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws {}
 }
 
-final class FlakyKeychain: KeychainPort, @unchecked Sendable {
-    let base = FakeKeychain()
-    let failDelete = Locked<Set<String>>([])
-
-    func put(_ value: String, at slot: KeySlot) throws { try base.put(value, at: slot) }
-    func get(_ slot: KeySlot) throws -> String? { try base.get(slot) }
-
-    func delete(_ slot: KeySlot) throws {
-        if failDelete.with({ $0.contains(slot.name) }) { throw KeychainError.status(-25244) }
-        try base.delete(slot)
-    }
-}
-
 struct CalendarDown: Error {}
 
 @MainActor
-struct Repro3Rig {
+struct ScriptedRig {
     let hub: Hub
     let provider: FakeProvider
     let keychain: FakeKeychain
@@ -88,9 +75,9 @@ struct Repro3Rig {
     static let bothOffer = Offer(id: "fake.both", provider: "fake", title: "Both", capabilities: [.mail, .calendar],
                                  owner: .person("p1"), way: .signIn)
 
-    static func make(capabilities: Set<Capability> = [.mail], offer: Offer = Repro3Rig.mailOffer,
+    static func make(capabilities: Set<Capability> = [.mail], offer: Offer = ScriptedRig.mailOffer,
                      catalog: PortCatalog = .withMail, database: DatabaseQueue? = nil,
-                     provider: FakeProvider? = nil, keychain: FakeKeychain? = nil) throws -> Repro3Rig {
+                     provider: FakeProvider? = nil, keychain: FakeKeychain? = nil) throws -> ScriptedRig {
         let provider = provider ?? FakeProvider(capabilities: capabilities)
         let keychain = keychain ?? FakeKeychain()
         let cadence = HandCadence()
@@ -99,16 +86,16 @@ struct Repro3Rig {
             person: Person(id: "p1", name: "P"), company: CompanySetup(offers: [offer]), providers: [provider],
             keychain: keychain, cadence: cadence, cost: FakeCost(), catalog: catalog, database: database
         ))
-        return Repro3Rig(hub: hub, provider: provider, keychain: keychain, cadence: cadence, database: database)
+        return ScriptedRig(hub: hub, provider: provider, keychain: keychain, cadence: cadence, database: database)
     }
 
-    func connect(_ address: String, offer: Offer = Repro3Rig.mailOffer) async throws(SetupError) -> Inlet {
+    func connect(_ address: String, offer: Offer = ScriptedRig.mailOffer) async throws(SetupError) -> Inlet {
         try await hub.setup.add(offer, input: .fields(["address": address]))
     }
 }
 
 @MainActor
-func repro3Hub(providers: [any Provider], offer: Offer, keychain: any KeychainPort, cadence: any CadencePort,
+func scriptedHub(providers: [any Provider], offer: Offer, keychain: any KeychainPort, cadence: any CadencePort,
                database: DatabaseQueue, catalog: PortCatalog = .withMail) throws -> Hub {
     try Hub.make(HubConfiguration(
         person: Person(id: "p1", name: "P"), company: CompanySetup(offers: [offer]), providers: providers,
@@ -134,7 +121,7 @@ struct GoogleRig {
     let clock: Locked<Date>
 }
 
-private struct RepGivenSignIn: SignInPort {
+struct GivenSignIn: SignInPort {
     let grant: Grant
 
     func signIn(_ inlet: Inlet, input: [Field.ID: String]) async throws -> Grant { grant }
@@ -143,7 +130,7 @@ private struct RepGivenSignIn: SignInPort {
 }
 
 @MainActor
-func repro3GoogleRig(token: @escaping @Sendable () -> (Int, Data),
+func scriptedGoogleRig(token: @escaping @Sendable () -> (Int, Data),
                      other: @escaping @Sendable (String) -> (Int, Data)? = { _ in nil },
                      expire: Bool = true) async throws -> GoogleRig {
     let clock = Locked(Date())
@@ -165,7 +152,7 @@ func repro3GoogleRig(token: @escaping @Sendable () -> (Int, Data),
     let cadence = HandCadence()
     let provider = GoogleProvider(
         config: GoogleClientConfig(clientID: "id", clientSecret: "secret"), openBrowser: { _ in false },
-        session: GoogleStubNet.session(), signIn: RepGivenSignIn(grant: grant), clock: { clock.with { $0 } }
+        session: GoogleStubNet.session(), signIn: GivenSignIn(grant: grant), clock: { clock.with { $0 } }
     )
     let hub = try Hub.make(HubConfiguration(
         person: Person(id: "p1", name: "P"), company: CompanySetup(offers: [offer]), providers: [provider],

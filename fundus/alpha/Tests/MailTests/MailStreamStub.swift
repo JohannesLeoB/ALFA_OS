@@ -1,21 +1,36 @@
 import Foundation
+import XCTest
 @testable import MykilosServices
 import MykilosKit
 
 enum MailWireFixture {
+    /// Lädt Fixtures/MailWire.txt. Fehlt die Datei, scheitert der Test laut (kein stilles "").
     static let values: [String: String] = {
         let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .appendingPathComponent("Fixtures").appendingPathComponent("MailWire.txt")
-        let text = (try? String(contentsOf: path, encoding: .utf8)) ?? ""
+        guard let text = try? String(contentsOf: path, encoding: .utf8) else {
+            XCTFail("Fixture-Datei fehlt oder ist nicht lesbar: \(path.path)")
+            return [:]
+        }
         var result: [String: String] = [:]
         for line in text.split(separator: "\n") {
             guard let range = line.range(of: " = ") else { continue }
-            result[String(line[line.startIndex..<range.lowerBound])] = String(line[range.upperBound...])
+            let value = line[range.upperBound...]
+                .replacingOccurrences(of: "<CRLF>", with: "\r\n")
+                .replacingOccurrences(of: "<LF>", with: "\n")
+            result[String(line[line.startIndex..<range.lowerBound])] = value
         }
         return result
     }()
 
-    static func line(_ key: String) -> String { values[key] ?? "" }
+    /// Liefert den Wert zum Schlüssel; ein fehlender Schlüssel lässt den Test scheitern.
+    static func line(_ key: String, file: StaticString = #filePath, line lineNumber: UInt = #line) -> String {
+        guard let value = values[key] else {
+            XCTFail("Fixture-Schlüssel fehlt: \(key)", file: file, line: lineNumber)
+            return ""
+        }
+        return value
+    }
 
     static func retag(_ key: String, to tag: String) -> String {
         let words = line(key).split(separator: " ", maxSplits: 1).map(String.init)

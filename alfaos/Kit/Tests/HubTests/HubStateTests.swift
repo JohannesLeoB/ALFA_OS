@@ -6,9 +6,9 @@ import protocol MykilosServices.MailTransport
 import XCTest
 
 @MainActor
-final class Repro3StateTests: XCTestCase {
+final class HubStateTests: XCTestCase {
     func testBug1SyncErrorTurnsInletFailedAndStopsAutoSync() async throws {
-        let rig = try Repro3Rig.make()
+        let rig = try ScriptedRig.make()
         let inlet = try await rig.connect("a@x")
         rig.hub.rules.setCadence(inlet.id, .mail, .every(.seconds(300)))
         rig.provider.mail.setFailure(.connectionFailed("offline"))
@@ -29,8 +29,8 @@ final class Repro3StateTests: XCTestCase {
             await calendarGate.wait()
             return SyncOutcome()
         })
-        let rig = try Repro3Rig.make(capabilities: [.mail, .calendar], offer: Repro3Rig.bothOffer, catalog: catalog)
-        let inlet = try await rig.connect("a@x", offer: Repro3Rig.bothOffer)
+        let rig = try ScriptedRig.make(capabilities: [.mail, .calendar], offer: ScriptedRig.bothOffer, catalog: catalog)
+        let inlet = try await rig.connect("a@x", offer: ScriptedRig.bothOffer)
         rig.provider.mail.setGate(mailGate)
         let mail = Task { @MainActor in await rig.cadence.trigger(inlet.id, .mail) }
         _ = await eventually { rig.provider.mail.listFoldersCalls == 1 }
@@ -51,8 +51,8 @@ final class Repro3StateTests: XCTestCase {
         let mailGate = Gate()
         var catalog = PortCatalog.withMail
         catalog.register(CalendarPort.self, capability: .calendar, sync: { _, _ in throw CalendarDown() })
-        let rig = try Repro3Rig.make(capabilities: [.mail, .calendar], offer: Repro3Rig.bothOffer, catalog: catalog)
-        let inlet = try await rig.connect("a@x", offer: Repro3Rig.bothOffer)
+        let rig = try ScriptedRig.make(capabilities: [.mail, .calendar], offer: ScriptedRig.bothOffer, catalog: catalog)
+        let inlet = try await rig.connect("a@x", offer: ScriptedRig.bothOffer)
         rig.provider.mail.setGate(mailGate)
         let mail = Task { @MainActor in await rig.cadence.trigger(inlet.id, .mail) }
         _ = await eventually { rig.provider.mail.listFoldersCalls == 1 }
@@ -77,7 +77,7 @@ final class Repro3StateTests: XCTestCase {
             probe: AcceptingProbe(account: "r@x"),
             make: { _, _, renewal in RenewingTransport(renewal: renewal, gate: gate) })
         let cadence = HandCadence()
-        let hub = try repro3Hub(providers: [provider], offer: offer, keychain: keychain, cadence: cadence,
+        let hub = try scriptedHub(providers: [provider], offer: offer, keychain: keychain, cadence: cadence,
                                 database: database)
         let inlet = try await hub.setup.add(offer)
         let slot = KeySlot(inlet: inlet.id, name: "token")
@@ -88,23 +88,25 @@ final class Repro3StateTests: XCTestCase {
         let persisted = try JSONDecoder().decode(Inlet.self, from: try XCTUnwrap(row))
         await gate.release()
         await sync.value
-        let restarted = try repro3Hub(providers: [provider], offer: offer, keychain: keychain,
+        let restarted = try scriptedHub(providers: [provider], offer: offer, keychain: keychain,
                                       cadence: HandCadence(), database: database)
         let reloaded = restarted.setup.inlets[0].state
         XCTExpectFailure("BUG-3-4: adopt saves the inlet while its state is .working; after a restart the probe date is gone") {
             XCTAssertNotEqual(persisted.state, .working)
+        }
+        XCTExpectFailure("BUG-3-4: adopt saves the inlet while its state is .working; after a restart the probe date is gone") {
             XCTAssertNotNil(reloaded.probed, "reloaded state \(reloaded)")
         }
     }
 
     func testBug5ReprobeOfFailedInletAfterRestartDoesNotPlanTheCadenceAgain() async throws {
-        let rig = try Repro3Rig.make()
+        let rig = try ScriptedRig.make()
         let inlet = try await rig.connect("a@x")
         rig.hub.rules.setCadence(inlet.id, .mail, .every(.seconds(300)))
         rig.provider.mail.setFailure(.serverRejected("NO denied"))
         await rig.cadence.trigger(inlet.id, .mail)
         rig.provider.mail.setFailure(nil)
-        let again = try Repro3Rig.make(database: rig.database, provider: rig.provider, keychain: rig.keychain)
+        let again = try ScriptedRig.make(database: rig.database, provider: rig.provider, keychain: rig.keychain)
         XCTAssertNil(again.cadence.planned(inlet.id, .mail))
         _ = try await again.hub.setup.probe(inlet.id)
         XCTAssertTrue(again.hub.setup.inlets[0].state.isConnected)
@@ -114,9 +116,9 @@ final class Repro3StateTests: XCTestCase {
     }
 
     func testBug6SyncWithUnreadableKeychainIsSkippedSilentlyWhileInletStaysConnected() async throws {
-        let rig = try Repro3Rig.make()
+        let rig = try ScriptedRig.make()
         let inlet = try await rig.connect("a@x")
-        let again = try Repro3Rig.make(database: rig.database, provider: rig.provider, keychain: FakeKeychain())
+        let again = try ScriptedRig.make(database: rig.database, provider: rig.provider, keychain: FakeKeychain())
         await again.cadence.trigger(inlet.id, .mail)
         let state = again.hub.setup.inlets[0].state
         XCTExpectFailure("BUG-3-6: runSync returns .skipped for a missing grant; the state stays connected, only port() flips it to keychainUnreadable") {
@@ -125,7 +127,7 @@ final class Repro3StateTests: XCTestCase {
     }
 
     func testBug7ConcurrentRefreshLeavesStockOnLoading() async throws {
-        let rig = try Repro3Rig.make()
+        let rig = try ScriptedRig.make()
         _ = try await rig.connect("a@x")
         let stock = rig.hub.access.stock(.messages, as: MailboxRecord.self)
         let gate = Gate()
@@ -140,34 +142,8 @@ final class Repro3StateTests: XCTestCase {
         }
     }
 
-    func testBug8RemoveIsNotAtomicWhenAKeychainDeleteFails() async throws {
-        let keychain = FlakyKeychain()
-        let offer = Offer(id: "s.mail", provider: "slots", title: "S", capabilities: [.mail],
-                          owner: .person("p1"), way: .signIn)
-        let provider = ScriptedProvider(
-            id: "slots", capabilities: [.mail], signIn: SlotsSignIn(values: ["a": "1", "b": "2"]),
-            probe: AcceptingProbe(account: "acc@x"), make: { _, _, _ in MailTransportFake() })
-        let cadence = HandCadence()
-        let hub = try repro3Hub(providers: [provider], offer: offer, keychain: keychain, cadence: cadence,
-                                database: try DatabaseQueue())
-        let inlet = try await hub.setup.add(offer)
-        keychain.failDelete.with { $0 = ["b"] }
-        do {
-            try await hub.setup.remove(inlet.id)
-            XCTFail("remove must throw")
-        } catch {
-        }
-        let listed = hub.setup.inlets.contains { $0.id == inlet.id }
-        let slotA = try keychain.base.get(KeySlot(inlet: inlet.id, name: "a"))
-        let planned = cadence.planned(inlet.id, .mail)
-        XCTExpectFailure("BUG-3-8: remove deletes slot a, fails on slot b and leaves the inlet listed without its key and with the timer off") {
-            XCTAssertTrue(!listed || slotA != nil, "inlet listed=\(listed), slot a present=\(slotA != nil)")
-            XCTAssertNotEqual(planned, .off)
-        }
-    }
-
     func testBug9SettingWriteErrorIsSwallowed() async throws {
-        let rig = try Repro3Rig.make()
+        let rig = try ScriptedRig.make()
         let inlet = try await rig.connect("a@x")
         try await rig.database.write {
             try $0.execute(sql: "CREATE TRIGGER no_setting BEFORE INSERT ON setting BEGIN SELECT RAISE(ABORT, 'disk full'); END")
@@ -176,16 +152,20 @@ final class Repro3StateTests: XCTestCase {
         rig.hub.rules.setLimit(.mail, 9)
         rig.hub.rules.setTruth(.mailboxes, inlet.id)
         XCTAssertEqual(rig.hub.rules.cadence(inlet.id, .mail), .every(.seconds(60)))
-        let again = try Repro3Rig.make(database: rig.database, provider: rig.provider, keychain: rig.keychain)
+        let again = try ScriptedRig.make(database: rig.database, provider: rig.provider, keychain: rig.keychain)
         XCTExpectFailure("BUG-3-9: persist() uses try?; memory and disk diverge without any report") {
             XCTAssertEqual(again.hub.rules.cadence(inlet.id, .mail), .every(.seconds(60)))
+        }
+        XCTExpectFailure("BUG-3-9: persist() uses try?; memory and disk diverge without any report") {
             XCTAssertEqual(again.hub.rules.limit(.mail), 9)
+        }
+        XCTExpectFailure("BUG-3-9: persist() uses try?; memory and disk diverge without any report") {
             XCTAssertEqual(again.hub.rules.truth(.mailboxes), inlet.id)
         }
     }
 
     func testBug10DatabaseFailureInAddIsReportedAsKeychainError() async throws {
-        let rig = try Repro3Rig.make()
+        let rig = try ScriptedRig.make()
         try await rig.database.write {
             try $0.execute(sql: "CREATE TRIGGER no_inlet BEFORE INSERT ON inlet BEGIN SELECT RAISE(ABORT, 'disk full'); END")
         }
@@ -199,45 +179,6 @@ final class Repro3StateTests: XCTestCase {
         XCTAssertTrue(rig.keychain.slots.isEmpty)
         XCTExpectFailure("BUG-3-10: store.save errors are mapped to SetupError.keychain(-1)") {
             XCTAssertNotEqual(observed, SetupError.keychain(-1))
-        }
-    }
-
-    func testBug11DuplicateAccountIsCaseSensitive() async throws {
-        let rig = try Repro3Rig.make()
-        _ = try await rig.connect("A@x")
-        var second: Inlet?
-        do throws(SetupError) {
-            second = try await rig.connect("a@x")
-        } catch {
-        }
-        XCTExpectFailure("BUG-3-11: duplicate check compares account strings exactly and ignores the owner") {
-            XCTAssertNil(second)
-            XCTAssertEqual(rig.hub.setup.inlets.count, 1)
-        }
-    }
-
-    func testBug12CorruptSettingRowPreventsTheHubFromStarting() async throws {
-        let rig = try Repro3Rig.make()
-        try await rig.database.write {
-            try $0.execute(sql: "INSERT INTO setting (key, value) VALUES ('cadence|x|mail', ?)",
-                           arguments: [Data("garbage".utf8)])
-        }
-        let again = try? Repro3Rig.make(database: rig.database, provider: rig.provider, keychain: rig.keychain)
-        XCTExpectFailure("BUG-3-12: loadSettings throws on one undecodable row and Hub.make fails as a whole") {
-            XCTAssertNotNil(again)
-        }
-    }
-
-    func testBug13TruthSettingHasNoEffectOnTheStock() async throws {
-        let rig = try Repro3Rig.make()
-        let a = try await rig.connect("a@x")
-        _ = try await rig.connect("b@x")
-        rig.hub.rules.setTruth(.mailboxes, a.id)
-        let stock = rig.hub.access.stock(.mailboxes, as: MailboxRecord.self)
-        await stock.refresh()
-        let owners = Set(stock.items.map(\.inlet))
-        XCTExpectFailure("BUG-3-13: truth(kind) is stored and never read; the stock merges every inlet (assumption: truth selects the inlet)") {
-            XCTAssertEqual(owners, [a.id])
         }
     }
 }

@@ -90,7 +90,7 @@ final class FailureTests: XCTestCase {
     }
 
     func testHealthFollowsTheDocumentedCases() async throws {
-        let rig = try Repro3Rig.make()
+        let rig = try ScriptedRig.make()
         let inlet = try await rig.connect("a@x")
         XCTAssertEqual(rig.hub.setup.health(of: inlet.id), .online)
         rig.provider.mail.setFailure(.serverRejected("NO [UNAVAILABLE] Maintenance"))
@@ -112,11 +112,11 @@ final class FailureTests: XCTestCase {
     func testReportKeepsTheOriginalAcrossARestart() async throws {
         let database = try DatabaseQueue()
         let keychain = FakeKeychain()
-        let rig = try Repro3Rig.make(database: database, keychain: keychain)
+        let rig = try ScriptedRig.make(database: database, keychain: keychain)
         let inlet = try await rig.connect("a@x")
         rig.provider.mail.setFailure(.smtpRejected(451, "4.3.0 Try again later"))
         await rig.cadence.trigger(inlet.id, .mail)
-        let again = try Repro3Rig.make(database: database, provider: rig.provider, keychain: keychain)
+        let again = try ScriptedRig.make(database: database, provider: rig.provider, keychain: keychain)
         let entry = try XCTUnwrap(again.hub.setup.report(for: inlet.id).first)
         XCTAssertEqual(entry.event, .sync)
         XCTAssertEqual(entry.capability, .mail)
@@ -134,10 +134,10 @@ final class FailureTests: XCTestCase {
         let provider = FakeProvider(capabilities: [.mail])
         let cadence = HandCadence()
         let hub = try Hub.make(HubConfiguration(
-            person: Person(id: "p1", name: "P"), company: CompanySetup(offers: [Repro3Rig.mailOffer]),
+            person: Person(id: "p1", name: "P"), company: CompanySetup(offers: [ScriptedRig.mailOffer]),
             providers: [provider], keychain: FakeKeychain(), cadence: cadence, cost: FakeCost(), catalog: .withMail,
             database: try DatabaseQueue(), reportLimit: 3))
-        let inlet = try await hub.setup.add(Repro3Rig.mailOffer, input: .fields(["address": "a@x"]))
+        let inlet = try await hub.setup.add(ScriptedRig.mailOffer, input: .fields(["address": "a@x"]))
         for number in 1...5 {
             provider.mail.setFailure(.smtpRejected(450, "4.2.0 Attempt \(number)"))
             await cadence.trigger(inlet.id, .mail)
@@ -151,13 +151,13 @@ final class FailureTests: XCTestCase {
         let stuck = StuckSignIn()
         let provider = FakeProvider(capabilities: [.mail], signIn: stuck)
         let hub = try Hub.make(HubConfiguration(
-            person: Person(id: "p1", name: "P"), company: CompanySetup(offers: [Repro3Rig.mailOffer]),
+            person: Person(id: "p1", name: "P"), company: CompanySetup(offers: [ScriptedRig.mailOffer]),
             providers: [provider], keychain: FakeKeychain(), cadence: HandCadence(), cost: FakeCost(),
             catalog: .withMail, database: try DatabaseQueue(),
             deadlines: HubDeadlines(signIn: .milliseconds(200), probe: .seconds(5))))
         let outcome = try await within(.seconds(3)) { () -> SetupError? in
             do throws(SetupError) {
-                _ = try await hub.setup.add(Repro3Rig.mailOffer, input: .none)
+                _ = try await hub.setup.add(ScriptedRig.mailOffer, input: .none)
                 return nil
             } catch {
                 return error

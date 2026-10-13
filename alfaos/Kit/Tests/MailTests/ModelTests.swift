@@ -1,5 +1,5 @@
 import Hub
-import Mail
+@testable import Mail
 import struct MykilosKit.EmailDraft
 import struct MykilosKit.MailSignatureContact
 import enum MykilosServices.MailFolderRole
@@ -179,6 +179,21 @@ final class ModelTests: XCTestCase {
         await model.setStarred("m1", true)
         XCTAssertEqual(model.actionFailure(for: "m1"), Hint(text: "hint.f"))
         XCTAssertEqual(model.rows.first?.starred, false)
+
+        let failing = ModelFakeEngine()
+        let failingModel = makeModel(failing)
+        failing.pages[nil] = MailMessagePage(messages: [fakeMessage("m1")])
+        failing.bodyError = .provider(Hint(text: MailHintKey.offline))
+        await failingModel.start()
+        await failingModel.open("m1")
+        let failure = failingModel.actionFailure(for: "m1")
+        let calls = failing.flagCalls.count
+        XCTExpectFailure("BUG-4-16: open marks the mail read although its body could not be loaded, and the successful flag call then erases the body failure hint") {
+            XCTAssertEqual(calls, 0)
+        }
+        XCTExpectFailure("BUG-4-16: open marks the mail read although its body could not be loaded, and the successful flag call then erases the body failure hint") {
+            XCTAssertNotNil(failure)
+        }
     }
 
     func testReplyAllBuildsDraft() async {
@@ -192,6 +207,9 @@ final class ModelTests: XCTestCase {
         XCTAssertEqual(draft.to, "Anna Berg <anna@x.test>")
         XCTAssertEqual(draft.cc, "bob@x.test, carl@x.test")
         XCTAssertEqual(draft.inReplyTo, "m1")
+        XCTExpectFailure("BUG-4-14: inReplyTo is the provider id of the message, MailMessageSummary carries no Message-ID header, so In-Reply-To in the sent mail is not a valid message id") {
+            XCTAssertTrue(draft.inReplyTo?.contains("@") == true, "reference \(String(describing: draft.inReplyTo))")
+        }
         XCTAssertEqual(draft.threadID, "th")
         XCTAssertTrue(draft.body.contains("> text of m1"))
         let forward = await model.forward("m1")!
@@ -211,9 +229,28 @@ final class ModelTests: XCTestCase {
         let engine = ModelFakeEngine()
         let model = makeModel(engine)
         engine.pages[nil] = MailMessagePage(messages: [
-            fakeMessage("m1", flags: [.flagged], attachments: 1, thread: "t"), fakeMessage("m2", thread: "t")])
+            fakeMessage("m1", flags: [.flagged], attachments: 1, thread: "t"), fakeMessage("m2", thread: "t"),
+            fakeMessage("m3", flags: [.seen])])
         await model.start()
         XCTAssertEqual(model.rows[0].states, [.unread, .starred, .hasAttachments, .threadCount(2)])
         XCTAssertEqual(model.rows[1].states, [.unread, .threadCount(2)])
+        XCTAssertTrue(model.rows[0].unread)
+        XCTAssertEqual(model.rows[0].states.first?.key, "mail.row.unread")
+        XCTAssertEqual(model.rows[2].states, [])
+        XCTAssertFalse(model.rows[2].selected)
+        await model.open("m3")
+        XCTAssertTrue(model.rows[2].selected)
+        XCTAssertEqual(model.rows[2].states, [.selected])
+        XCTAssertFalse(model.rows[0].selected)
+    }
+
+    func testSelectFolderChangesTheSelectionAndKeepsTheRole() async {
+        let engine = ModelFakeEngine()
+        let model = makeModel(engine)
+        engine.pages[nil] = MailMessagePage(messages: [fakeMessage("m1")])
+        await model.start()
+        await model.selectFolder("SENT")
+        XCTAssertEqual(model.selectedFolder, "SENT")
+        XCTAssertEqual(model.sortedFolders.first { $0.id == model.selectedFolder }?.role, .sent)
     }
 }

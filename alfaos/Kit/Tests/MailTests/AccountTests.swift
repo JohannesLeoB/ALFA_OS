@@ -8,14 +8,14 @@ import struct MykilosServices.MailMessagePage
 import XCTest
 
 @MainActor
-final class Repro4PagingTests: XCTestCase {
-    private func engineWithTwoAccounts() -> Repro4Engine {
-        let engine = Repro4Engine()
+final class AccountTests: XCTestCase {
+    private func engineWithTwoAccounts() -> ScriptedEngine {
+        let engine = ScriptedEngine()
         engine.accounts = [fakeAccount("a"), fakeAccount("b")]
-        engine.folderList = ["a": repro4Inbox, "b": repro4Inbox]
-        engine.pages[Repro4Engine.key("a", "INBOX", nil)] =
+        engine.folderList = ["a": scriptedInbox, "b": scriptedInbox]
+        engine.pages[ScriptedEngine.key("a", "INBOX", nil)] =
             MailMessagePage(messages: [fakeMessage("a1")], nextPageToken: "token-of-a")
-        engine.pages[Repro4Engine.key("b", "INBOX", nil)] = MailMessagePage(messages: [fakeMessage("b1")])
+        engine.pages[ScriptedEngine.key("b", "INBOX", nil)] = MailMessagePage(messages: [fakeMessage("b1")])
         return engine
     }
 
@@ -54,12 +54,12 @@ final class Repro4PagingTests: XCTestCase {
     func testLoadMoreOfTheOldAccountLandsInTheNewAccountWhileItsFoldersLoad() async {
         let engine = engineWithTwoAccounts()
         engine.folderList["b"] = []
-        engine.pendingFolders["b"] = repro4Inbox
-        engine.pages[Repro4Engine.key("a", "INBOX", "token-of-a")] =
+        engine.pendingFolders["b"] = scriptedInbox
+        engine.pages[ScriptedEngine.key("a", "INBOX", "token-of-a")] =
             MailMessagePage(messages: [fakeMessage("a2")], nextPageToken: "token-of-a-2")
-        let moreGate = Repro4Gate()
-        engine.pageGates[Repro4Engine.key("a", "INBOX", "token-of-a")] = moreGate
-        let folderGate = Repro4Gate()
+        let moreGate = ScriptedGate()
+        engine.pageGates[ScriptedEngine.key("a", "INBOX", "token-of-a")] = moreGate
+        let folderGate = ScriptedGate()
         engine.folderGates["b"] = folderGate
         let model = MailModel(engine: engine)
         await model.start()
@@ -79,16 +79,18 @@ final class Repro4PagingTests: XCTestCase {
         XCTAssertEqual(inlet, "b")
         XCTExpectFailure("BUG-4-05: a loadMore of account a that finishes while account b fetches its folders is accepted into b's list and token, because the generation is only raised after the folders arrive") {
             XCTAssertEqual(rows, [])
+        }
+        XCTExpectFailure("BUG-4-05: a loadMore of account a that finishes while account b fetches its folders is accepted into b's list and token, because the generation is only raised after the folders arrive") {
             XCTAssertNil(token)
         }
     }
 
     func testOneRejectedLoadMoreEndsPagingUntilTheFolderIsSelectedAgain() async throws {
-        let hub = Repro4Hub()
+        let hub = HubDouble()
         let transport = hub.add("two")
-        transport.folders = repro4Inbox
-        transport.setPage(nil, MailMessagePage(messages: [message("1")], nextPageToken: "t1"))
-        transport.setPage("t1", MailMessagePage(messages: [message("9")]))
+        transport.folders = scriptedInbox
+        transport.setTokenPage(nil, MailMessagePage(messages: [message("1")], nextPageToken: "t1"))
+        transport.setTokenPage("t1", MailMessagePage(messages: [message("9")]))
         transport.failList(call: 2, GoogleGmailError.api(GoogleAPIFault(status: 403, reason: "rateLimitExceeded")))
         let model = MailModel(engine: try MailCore(hub: hub, database: DatabaseQueue()))
         await model.start()
@@ -104,15 +106,15 @@ final class Repro4PagingTests: XCTestCase {
     }
 
     func testRowsRemovedOnTheServerStayInTheListAfterASync() async throws {
-        let hub = Repro4Hub()
+        let hub = HubDouble()
         let transport = hub.add("one")
-        transport.folders = repro4Inbox
-        transport.setPage(nil, MailMessagePage(messages: [message("1"), message("2")]))
+        transport.folders = scriptedInbox
+        transport.setTokenPage(nil, MailMessagePage(messages: [message("1"), message("2")]))
         let core = try MailCore(hub: hub, database: DatabaseQueue())
         let model = MailModel(engine: core)
         await model.start()
         XCTAssertEqual(model.summaries.map(\.id), ["1", "2"])
-        transport.setPage(nil, MailMessagePage(messages: [message("2")]))
+        transport.setTokenPage(nil, MailMessagePage(messages: [message("2")]))
         hub.push(.syncFinished(.mail, "one"))
         let mirrored = await eventually { core.messages("one", folder: "INBOX").map(\.id) == ["2"] }
         XCTAssertTrue(mirrored)
@@ -121,5 +123,36 @@ final class Repro4PagingTests: XCTestCase {
         XCTExpectFailure("BUG-4-06: mergeMirror never removes rows, so a mail that left the mirror stays in the list") {
             XCTAssertEqual(ids, ["2"])
         }
+    }
+
+    func testAccountAddedLaterIsNotSelectedWhenNothingIsSelected() async {
+        let engine = ScriptedEngine()
+        let model = MailModel(engine: engine)
+        await model.start()
+        XCTAssertNil(model.selectedInlet)
+        engine.accounts = [fakeAccount("a")]
+        engine.folderList["a"] = scriptedInbox
+        await model.handle(.accountsChanged)
+        XCTAssertEqual(model.accounts.map(\.id), ["a"])
+        XCTExpectFailure("BUG-4-26: refreshAccounts only repairs a selection that vanished, an account that appears while nothing is selected stays unselected and its list never loads") {
+            XCTAssertEqual(model.selectedInlet, "a")
+        }
+    }
+
+    func testBug518RemovedSelectedAccountKeepsTheOldFoldersAndList() async {
+        let engine = ModelFakeEngine()
+        engine.accounts = [fakeAccount("a"), fakeAccount("b")]
+        engine.folderList["a"] = [MailFolder(id: "INBOX-A", name: "Inbox", role: .inbox)]
+        engine.folderList["b"] = [MailFolder(id: "INBOX-B", name: "Inbox", role: .inbox)]
+        engine.pages[nil] = MailMessagePage(messages: [fakeMessage("m1")])
+        let model = MailModel(engine: engine)
+        await model.start()
+        XCTAssertEqual(model.selectedInlet, "a")
+        XCTAssertEqual(model.summaries.map(\.id), ["m1"])
+        engine.accounts = [fakeAccount("b")]
+        model.refreshAccounts()
+        XCTAssertEqual(model.selectedInlet, "b")
+        XCTAssertEqual(model.folders.map(\.id), ["INBOX-B"])
+        XCTAssertTrue(model.summaries.isEmpty)
     }
 }

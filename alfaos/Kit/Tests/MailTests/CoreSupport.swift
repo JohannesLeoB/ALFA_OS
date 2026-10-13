@@ -16,18 +16,27 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     private let lock = NSLock()
     private var _folders: [MailFolder] = []
     private var _pages: [String: MailMessagePage] = [:]
+    private var _tokenPages: [String: MailMessagePage] = [:]
+    private var _failures: [Int: Error] = [:]
     private var _sendError: Error?
     private var _listError: Error?
     private var _sent: [EmailDraft] = []
     private var _sendCalls = 0
+    private var _listCalls = 0
 
     var folders: [MailFolder] { get { lock.withLock { _folders } } set { lock.withLock { _folders = newValue } } }
     var sendError: Error? { get { lock.withLock { _sendError } } set { lock.withLock { _sendError = newValue } } }
     var listError: Error? { get { lock.withLock { _listError } } set { lock.withLock { _listError = newValue } } }
     var sent: [EmailDraft] { lock.withLock { _sent } }
     var sendCalls: Int { lock.withLock { _sendCalls } }
+    var listCalls: Int { lock.withLock { _listCalls } }
 
+    /// Seite je Ordner (gilt für jede Seitenmarke).
     func setPage(_ folder: String, _ page: MailMessagePage) { lock.withLock { _pages[folder] = page } }
+    /// Seite je Seitenmarke (nil = erste Seite).
+    func setTokenPage(_ token: String?, _ page: MailMessagePage) { lock.withLock { _tokenPages[token ?? "-"] = page } }
+    /// Der n-te Aufruf von listMessages wirft.
+    func failList(call: Int, _ error: Error) { lock.withLock { _failures[call] = error } }
 
     func listFolders() async throws -> [MailFolder] {
         if let error = listError { throw error }
@@ -36,7 +45,12 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
 
     func listMessages(folderID: String, query: String?, pageToken: String?, maxResults: Int) async throws -> MailMessagePage {
         if let error = listError { throw error }
-        return lock.withLock { _pages[folderID] } ?? MailMessagePage(messages: [])
+        let (failure, page) = lock.withLock { () -> (Error?, MailMessagePage?) in
+            _listCalls += 1
+            return (_failures[_listCalls], _pages[folderID] ?? _tokenPages[pageToken ?? "-"])
+        }
+        if let failure { throw failure }
+        return page ?? MailMessagePage(messages: [])
     }
 
     func fetchBody(messageID: String) async throws -> MailMessageBody { MailMessageBody(text: "body") }
@@ -99,6 +113,11 @@ final class HubDouble: HubAccess {
         mailInlets.append(Inlet(id: id, provider: "test", capabilities: [.mail], owner: .person("p"), title: id,
                                 state: connected ? .connected(probed: Date()) : .failed(Hint(text: "x"))))
         return transport
+    }
+
+    func remove(_ id: Inlet.ID) {
+        mailInlets.removeAll { $0.id == id }
+        transports[id] = nil
     }
 }
 

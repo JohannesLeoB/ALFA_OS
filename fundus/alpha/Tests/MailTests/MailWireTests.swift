@@ -2,26 +2,9 @@ import XCTest
 @testable import MykilosServices
 import MykilosKit
 
-private enum Fixture {
-    static let values: [String: String] = {
-        let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
-            .appendingPathComponent("Fixtures").appendingPathComponent("MailWire.txt")
-        let text = (try? String(contentsOf: path, encoding: .utf8)) ?? ""
-        var result: [String: String] = [:]
-        for line in text.split(separator: "\n") {
-            guard let range = line.range(of: " = ") else { continue }
-            let value = line[range.upperBound...]
-                .replacingOccurrences(of: "<CRLF>", with: "\r\n")
-                .replacingOccurrences(of: "<LF>", with: "\n")
-            result[String(line[line.startIndex..<range.lowerBound])] = value
-        }
-        return result
-    }()
-}
-
 final class MailWireTests: XCTestCase {
-    private func fx(_ key: String) -> String {
-        Fixture.values[key] ?? ""
+    private func fx(_ key: String, file: StaticString = #filePath, line: UInt = #line) -> String {
+        MailWireFixture.line(key, file: file, line: line)
     }
 
     private func parse(_ text: String) throws -> IMAPResponse {
@@ -33,11 +16,6 @@ final class MailWireTests: XCTestCase {
             throw MailTransportError.malformedResponse(key)
         }
         return fetched
-    }
-
-    func testFixturesLoad() {
-        XCTAssertFalse(fx("tagged.ok").isEmpty)
-        XCTAssertFalse(fx("utf7.decoded").isEmpty)
     }
 
     func testTaggedAndStatusResponses() throws {
@@ -198,7 +176,7 @@ final class MailWireTests: XCTestCase {
 
     func testSMTPReplyParsing() throws {
         XCTAssertEqual(try SMTPReply.assemble([fx("smtp.ok")]), SMTPReply(code: 250, lines: ["OK"]))
-        let multi = try SMTPReply.assemble(["smtp.multi.1", "smtp.multi.2", "smtp.multi.3", "smtp.multi.4"].map(fx))
+        let multi = try SMTPReply.assemble(["smtp.multi.1", "smtp.multi.2", "smtp.multi.3", "smtp.multi.4"].map { fx($0) })
         XCTAssertEqual(multi.code, 250)
         XCTAssertEqual(multi.lines.count, 4)
         XCTAssertEqual(try SMTPReply.parseLine(fx("smtp.greeting")).isLast, true)

@@ -1,6 +1,7 @@
 import Foundation
 import GRDB
 import Hub
+import struct MykilosServices.IMAPSMTPMailTransport
 import protocol MykilosServices.MailTransport
 import enum MykilosServices.MailTransportError
 import struct MykilosServices.MailProbeError
@@ -167,5 +168,30 @@ final class IMAPProviderTests: XCTestCase {
         }
         XCTAssertEqual(hub.setup.inlets, [])
         XCTAssertTrue(keychain.slots.isEmpty)
+    }
+
+    /// Der Absendername kommt aus dem Formularwert "name", nicht aus dem Angebotstitel ("GMX") und nie leer.
+    func testSenderNameOfTheTransportIsTheFormValue() async throws {
+        var values = Self.gmx
+        values["name"] = "Jo Berger"
+        var catalog = PortCatalog.standard
+        catalog.register((any MailTransport).self, capability: .mail)
+        let hub = try Hub.make(HubConfiguration(
+            person: Person(id: "p1", name: "P"), company: CompanySetup(offers: [Self.offer]),
+            providers: [IMAPProvider(probeRun: { _, _ in })], keychain: FakeKeychain(), cadence: HandCadence(),
+            cost: FakeCost(), catalog: catalog, database: try DatabaseQueue()))
+        let inlet = try await hub.setup.add(Self.offer, input: .fields(values))
+        let transport = try hub.access.port((any MailTransport).self, for: inlet.id)
+        let name = (transport as? IMAPSMTPMailTransport)?.account.displayName
+        XCTAssertEqual(name, "Jo Berger")
+    }
+
+    func testAddressWithInnerSpaceIsRejected() {
+        var input = Self.gmx
+        input["address"] = "jo @gmx.example"
+        let rejected = (try? IMAPConnection(values: input)) == nil
+        XCTExpectFailure("BUG-3-24: IMAPConnection only checks for an @ that is not first or last") {
+            XCTAssertTrue(rejected)
+        }
     }
 }

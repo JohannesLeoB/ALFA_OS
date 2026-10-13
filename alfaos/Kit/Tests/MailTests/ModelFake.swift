@@ -17,6 +17,7 @@ final class ModelFakeEngine: MailEngine {
     var searchHits: [MailMessageSummary] = []
     var bodies: [String: MailMessageBody] = [:]
     var pageError: HubError?
+    var bodyError: HubError?
     var flagError: HubError?
     var sendOutcome: SendOutcome = .sent
     var sentDrafts: [EmailDraft] = []
@@ -47,7 +48,8 @@ final class ModelFakeEngine: MailEngine {
     func searchLocal(_ inlet: Inlet.ID, query: String) -> [MailMessageSummary] { searchHits }
 
     func body(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> MailMessageBody {
-        bodies[messageID] ?? MailMessageBody(text: "text of " + messageID)
+        if let bodyError { throw bodyError }
+        return bodies[messageID] ?? MailMessageBody(text: "text of " + messageID)
     }
 
     func setFlags(_ inlet: Inlet.ID, messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>)
