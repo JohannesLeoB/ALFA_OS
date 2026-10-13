@@ -5,39 +5,50 @@ import SwiftUI
 struct MailAccountsPane: View {
     let model: MailModel
 
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                if model.accounts.isEmpty { word("mail.accounts.none") }
-                ForEach(model.accounts) { account in
-                    Button { Task { await model.selectAccount(account.id) } } label: {
-                        HStack {
-                            VStack(alignment: .leading) {
-                                word(account.title)
-                                if !account.account.isEmpty { Text(verbatim: account.account) }
-                                stateWords(account.state)
-                            }
-                            Spacer()
-                            Text(verbatim: String(model.unread[account.id] ?? 0))
-                        }
-                        .fontWeight(account.id == model.selectedInlet ? .bold : .regular)
-                    }
-                    .buttonStyle(.plain)
+    private enum Pick: Hashable {
+        case account(Inlet.ID)
+        case folder(String)
+    }
+
+    private var pick: Binding<Pick?> {
+        Binding(
+            get: { model.selectedFolder.map(Pick.folder) ?? model.selectedInlet.map(Pick.account) },
+            set: { pick in
+                switch pick {
+                case .account(let id): Task { await model.selectAccount(id) }
+                case .folder(let id): Task { await model.selectFolder(id) }
+                case nil: break
                 }
-                ForEach(model.sortedFolders) { folder in
-                    Button { Task { await model.selectFolder(folder.id) } } label: {
-                        if folder.role.rawValue == "other" {
-                            Text(verbatim: folder.name)
-                        } else {
-                            word("mail.role." + folder.role.rawValue)
-                        }
+            })
+    }
+
+    var body: some View {
+        List(selection: pick) {
+            if model.accounts.isEmpty { word("mail.accounts.none") }
+            ForEach(model.accounts) { account in
+                HStack {
+                    VStack(alignment: .leading) {
+                        word(account.title)
+                        if !account.account.isEmpty { Text(verbatim: account.account) }
+                        stateWords(account.state)
                     }
-                    .buttonStyle(.plain)
-                    .fontWeight(folder.id == model.selectedFolder ? .bold : .regular)
+                    Spacer()
+                    Text(verbatim: String(model.unread[account.id] ?? 0))
+                }
+                .tag(Pick.account(account.id))
+                if account.id == model.selectedInlet {
+                    ForEach(model.sortedFolders) { folder in
+                        Group {
+                            if folder.role.rawValue == "other" {
+                                Text(verbatim: folder.name)
+                            } else {
+                                word("mail.role." + folder.role.rawValue)
+                            }
+                        }
+                        .tag(Pick.folder(folder.id))
+                    }
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
         }
     }
 
@@ -63,8 +74,8 @@ struct MailListPane: View {
         VStack(alignment: .leading) {
             if let key = model.listState.key { word(key) }
             if case .failed(let hint) = model.listState { hintWords(hint) }
-            List(model.rows) { row in
-                Button { Task { await model.open(row.id) } } label: {
+            List(selection: message) {
+                ForEach(model.rows) { row in
                     VStack(alignment: .leading) {
                         HStack {
                             Text(verbatim: row.summary.from)
@@ -77,15 +88,19 @@ struct MailListPane: View {
                             if row.states.contains(.unread) { word(MailRowState.unread.key) }
                         }
                     }
-                    .fontWeight(row.states.contains(.unread) ? .bold : .regular)
-                    .underline(row.selected)
+                    .tag(row.id)
                 }
-                .buttonStyle(.plain)
-            }
-            if model.canLoadMore {
-                Button { Task { await model.loadMore() } } label: { word("mail.loadMore") }
+                if model.canLoadMore {
+                    Button { Task { await model.loadMore() } } label: { word("mail.loadMore") }
+                }
             }
         }
+    }
+
+    private var message: Binding<String?> {
+        Binding(
+            get: { model.selectedMessage },
+            set: { id in if let id { Task { await model.open(id) } } })
     }
 }
 
@@ -96,7 +111,7 @@ struct MailReadingPane: View {
         if let card = model.cards.first(where: { $0.id == model.selectedMessage }) {
             ScrollView {
                 VStack(alignment: .leading) {
-                    Text(verbatim: card.summary.subject).font(.headline)
+                    Text(verbatim: card.summary.subject)
                     Text(verbatim: card.summary.from)
                     if let hint = model.actionFailure(for: card.id) { hintWords(hint) }
                     content(card.content)

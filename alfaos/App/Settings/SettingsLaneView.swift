@@ -50,7 +50,7 @@ private struct SettingsLaneContent: View {
 struct SettingsGroupsPane: View {
     var body: some View {
         VStack(alignment: .leading) {
-            word("text.settings.row.mail.accounts").fontWeight(.bold)
+            word("text.settings.row.mail.accounts")
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
@@ -80,7 +80,7 @@ struct SettingsInletsPane: View {
     private func row(_ inlet: Inlet) -> some View {
         VStack(alignment: .leading) {
             HStack {
-                word(inlet.title).fontWeight(.bold)
+                word(inlet.title)
                 if !inlet.account.isEmpty { Text(verbatim: inlet.account) }
             }
             word(inlet.state.key)
@@ -110,7 +110,7 @@ struct SettingsAddPane: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                word("text.settings.action.addAccount").fontWeight(.bold)
+                word("text.settings.action.addAccount")
                 if let offer = host.form {
                     form(offer)
                 } else {
