@@ -35,8 +35,6 @@ final class Repro4CatalogTests: XCTestCase {
         let catalog = try catalogKeys()
         let missing = Set(keys).subtracting(catalog).sorted()
         XCTAssertGreaterThan(keys.count, 25)
-        XCTExpectFailure("BUG-4-24: the module names a text key for every state, the catalog lacks the keys of the draft, row and card states") {
-            XCTAssertEqual(missing, [])
-        }
+        XCTAssertEqual(missing, [], "BUG-4-24")
     }
 }
