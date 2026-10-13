@@ -6,6 +6,7 @@ import enum MykilosServices.GoogleGmailError
 import enum MykilosServices.MailFlag
 import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessagePage
+import struct MykilosServices.MailMessageSummary
 import enum MykilosServices.MailTransportError
 import XCTest
 
@@ -288,5 +289,32 @@ final class CoreTests: XCTestCase {
         XCTExpectFailure("BUG-4-13: SQLite LIKE folds case for ASCII only, so a lowercase umlaut does not find the capital one") {
             XCTAssertEqual(umlautHits, ["2"])
         }
+    }
+
+    func testAMailSentFromTheOutboxIsGoneAfterAReopen() async throws {
+        let hub = HubDouble()
+        let one = hub.add("one")
+        one.sendError = MailTransportError.timeout
+        let database = try DatabaseQueue()
+        let first = try MailCore(hub: hub, database: database)
+        _ = await first.send("one", draft())
+        XCTAssertEqual(first.outbox.count, 1)
+        one.sendError = nil
+        await first.retryOutbox()
+        XCTAssertEqual(one.sent.count, 1)
+        XCTAssertTrue(first.outbox.isEmpty)
+        let second = try MailCore(hub: hub, database: database)
+        XCTAssertTrue(second.outbox.isEmpty)
+    }
+
+    func testLocalSearchListsTheNewestHitsFirst() async throws {
+        let (core, _, one, _) = try make()
+        let day: TimeInterval = 86_400
+        let old = MailMessageSummary(id: "old", subject: "hit", from: "a", receivedAt: Date(timeIntervalSince1970: day))
+        let new = MailMessageSummary(id: "new", subject: "hit", from: "a", receivedAt: Date(timeIntervalSince1970: 3 * day))
+        let middle = MailMessageSummary(id: "middle", subject: "hit", from: "a", receivedAt: Date(timeIntervalSince1970: 2 * day))
+        one.setPage("INBOX", MailMessagePage(messages: [old, new, middle]))
+        _ = try await core.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
+        XCTAssertEqual(core.searchLocal("one", query: "hit").map(\.id), ["new", "middle", "old"])
     }
 }

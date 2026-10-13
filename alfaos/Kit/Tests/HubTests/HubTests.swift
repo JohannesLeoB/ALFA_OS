@@ -119,4 +119,12 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(rig.hub.setup.inlets.map(\.id), [b.id])
         _ = try rig.hub.access.port(MailTransport.self, for: b.id)
     }
+
+    func testRemoveTurnsTheCadenceOfTheInletOff() async throws {
+        let rig = try rig(capabilities: [.mail])
+        let a = try await connect(rig, "a@x")
+        XCTAssertNotEqual(rig.cadence.planned(a.id, .mail), .off)
+        try await rig.hub.setup.remove(a.id)
+        XCTAssertEqual(rig.cadence.planned(a.id, .mail), .off)
+    }
 }

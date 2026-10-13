@@ -236,4 +236,12 @@ final class ModelTests: XCTestCase {
             XCTAssertEqual(shell.laneState("mail").leading, 260)
         }
     }
+
+    func testMaximizingAMaximizedLaneTakesTheMaximizeBack() throws {
+        let g = try Fixture.geometry()
+        let state = LaneState(rest: g.laneRest)
+        let once = LaneLayout.toggleMaximize(lane: .center, state: state)
+        XCTAssertEqual(once.maximized, .center)
+        XCTAssertNil(LaneLayout.toggleMaximize(lane: .center, state: once).maximized)
+    }
 }

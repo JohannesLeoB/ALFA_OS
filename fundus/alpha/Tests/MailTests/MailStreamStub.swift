@@ -113,3 +113,94 @@ final class ScriptedMailNetwork: @unchecked Sendable {
         }
     }
 }
+
+final class LoopbackIMAPServer: @unchecked Sendable {
+    private let listener: Int32
+    private let uids: [Int]
+    let port: Int
+
+    init(uids: [Int]) throws {
+        self.uids = uids
+        let fd = socket(AF_INET, SOCK_STREAM, 0)
+        var reuse: Int32 = 1
+        setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &reuse, socklen_t(MemoryLayout<Int32>.size))
+        var address = sockaddr_in()
+        address.sin_family = sa_family_t(AF_INET)
+        address.sin_addr.s_addr = inet_addr("127.0.0.1")
+        address.sin_port = 0
+        let bound = withUnsafePointer(to: &address) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { bind(fd, $0, socklen_t(MemoryLayout<sockaddr_in>.size)) }
+        }
+        guard bound == 0, listen(fd, 1) == 0 else { throw MailTransportError.connectionFailed("loopback") }
+        var assigned = sockaddr_in()
+        var length = socklen_t(MemoryLayout<sockaddr_in>.size)
+        _ = withUnsafeMutablePointer(to: &assigned) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { getsockname(fd, $0, &length) }
+        }
+        listener = fd
+        port = Int(UInt16(bigEndian: assigned.sin_port))
+        let thread = Thread { [self] in serve() }
+        thread.start()
+    }
+
+    func stop() { close(listener) }
+
+    private func serve() {
+        let client = accept(listener, nil, nil)
+        guard client >= 0 else { return }
+        defer { close(client) }
+        write(client, "* OK [CAPABILITY IMAP4rev1] ready\r\n")
+        var buffer = Data()
+        var chunk = [UInt8](repeating: 0, count: 4096)
+        while true {
+            let count = read(client, &chunk, chunk.count)
+            if count <= 0 { return }
+            buffer.append(chunk, count: count)
+            while let end = buffer.range(of: Data("\r\n".utf8)) {
+                let line = String(decoding: buffer[buffer.startIndex..<end.lowerBound], as: UTF8.self)
+                buffer.removeSubrange(buffer.startIndex..<end.upperBound)
+                if reply(to: line, on: client) == false { return }
+            }
+        }
+    }
+
+    private func reply(to line: String, on client: Int32) -> Bool {
+        let words = line.split(separator: " ").map(String.init)
+        guard words.count >= 2 else { return true }
+        let tag = words[0]
+        switch words[1].uppercased() {
+        case "CAPABILITY":
+            write(client, "* CAPABILITY IMAP4rev1\r\n\(tag) OK done\r\n")
+        case "LOGIN":
+            write(client, "\(tag) OK logged in\r\n")
+        case "LIST":
+            write(client, "* LIST (\\HasNoChildren) \"/\" INBOX\r\n\(tag) OK done\r\n")
+        case "EXAMINE", "SELECT":
+            write(client, "* \(uids.count) EXISTS\r\n* OK [UIDVALIDITY 7] ok\r\n\(tag) OK done\r\n")
+        case "UID" where words.count > 2 && words[2].uppercased() == "SEARCH":
+            write(client, "* SEARCH \(uids.map(String.init).joined(separator: " "))\r\n\(tag) OK done\r\n")
+        case "UID" where words.count > 3 && words[2].uppercased() == "FETCH":
+            var out = ""
+            for (index, uid) in words[3].split(separator: ",").compactMap({ Int($0) }).enumerated() {
+                out += "* \(index + 1) FETCH (UID \(uid) FLAGS ())\r\n"
+            }
+            write(client, out + "\(tag) OK done\r\n")
+        case "LOGOUT":
+            write(client, "* BYE bye\r\n\(tag) OK done\r\n")
+            return false
+        default:
+            write(client, "\(tag) BAD unknown\r\n")
+        }
+        return true
+    }
+
+    private func write(_ client: Int32, _ text: String) {
+        let bytes = Array(text.utf8)
+        var sent = 0
+        while sent < bytes.count {
+            let count = send(client, Array(bytes[sent...]), bytes.count - sent, 0)
+            if count <= 0 { return }
+            sent += count
+        }
+    }
+}

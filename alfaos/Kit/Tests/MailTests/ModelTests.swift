@@ -252,4 +252,15 @@ final class ModelTests: XCTestCase {
         XCTAssertEqual(model.selectedFolder, "SENT")
         XCTAssertEqual(model.sortedFolders.first { $0.id == model.selectedFolder }?.role, .sent)
     }
+
+    func testADraftWithOnlyBccCountsAsHavingARecipient() async {
+        let engine = ModelFakeEngine()
+        let model = makeModel(engine)
+        await model.start()
+        let id = model.compose(to: "z@x.test")!
+        model.edit(id) { $0.subject = "s"; $0.to = nil; $0.cc = nil; $0.bcc = "hidden@x.test" }
+        await model.send(id)
+        XCTAssertNotEqual(model.draft(id)?.state, .sendBlocked(.noRecipient))
+        XCTAssertEqual(engine.sentDrafts.map(\.bcc), ["hidden@x.test"])
+    }
 }

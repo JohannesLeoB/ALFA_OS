@@ -267,4 +267,16 @@ final class MailWireTests: XCTestCase {
             XCTAssertEqual(error as? MailTransportError, .accountIncomplete("incoming"))
         }
     }
+
+    func testAnIMAPPageHoldsTheNewestUIDsAndTheTokenPointsAtTheOldestOfThem() async throws {
+        let server = try LoopbackIMAPServer(uids: [1, 2, 3, 4, 5])
+        defer { server.stop() }
+        var account = MailProviderPresets.preset(for: .generic).account(id: "g", displayName: "", address: "x@example.test")
+        account.incoming = MailServerSettings(host: "127.0.0.1", port: server.port, security: .none, authentication: .password, username: "x")
+        let transport = IMAPSMTPMailTransport(account: account, password: { "secret" })
+        let page = try await transport.listMessages(folderID: "INBOX", query: nil, pageToken: nil, maxResults: 2)
+        let uids = try page.messages.map { try IMAPMessageReference.decode($0.id).uid }
+        XCTAssertEqual(uids, [5, 4])
+        XCTAssertEqual(page.nextPageToken, "4")
+    }
 }

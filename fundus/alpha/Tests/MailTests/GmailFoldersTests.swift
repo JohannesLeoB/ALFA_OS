@@ -51,6 +51,37 @@ private final class LabelCountingStub: URLProtocol {
     }
 }
 
+private final class ModifyCapturingStub: URLProtocol {
+    nonisolated(unsafe) static var bodies: [Data] = []
+    private static let lock = NSLock()
+
+    static func reset() { lock.withLock { bodies = [] } }
+    static var captured: [Data] { lock.withLock { bodies } }
+
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override func stopLoading() {}
+
+    override func startLoading() {
+        var body = request.httpBody ?? Data()
+        if let stream = request.httpBodyStream {
+            stream.open()
+            var buffer = [UInt8](repeating: 0, count: 4096)
+            while stream.hasBytesAvailable {
+                let count = stream.read(&buffer, maxLength: buffer.count)
+                if count <= 0 { break }
+                body.append(buffer, count: count)
+            }
+            stream.close()
+        }
+        Self.lock.withLock { Self.bodies.append(body) }
+        let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocol(self, didLoad: Data("{}".utf8))
+        client?.urlProtocolDidFinishLoading(self)
+    }
+}
+
 final class GmailFoldersTests: XCTestCase {
     func testSystemFoldersCarryRolesAndUserLabelsFollow() async throws {
         LabelsStub.body = Data(#"""
@@ -84,5 +115,21 @@ final class GmailFoldersTests: XCTestCase {
         XCTExpectFailure("BUG-4-23: GmailMailTransport.labelQuery fetches the label list on every page of a label folder (2 calls for 2 pages, one would do)") {
             XCTAssertLessThanOrEqual(calls, 1)
         }
+    }
+
+    func testMarkingReadRemovesTheUnreadLabelAndMarkingUnreadAddsIt() async throws {
+        ModifyCapturingStub.reset()
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [ModifyCapturingStub.self]
+        let client = GoogleGmailClient(tokenProvider: FixedToken(), session: URLSession(configuration: configuration))
+        let transport = GmailMailTransport(client: client)
+        try await transport.setFlags(messageID: "m1", add: [.seen], remove: [])
+        try await transport.setFlags(messageID: "m1", add: [], remove: [.seen])
+        let bodies = try ModifyCapturingStub.captured.map { try XCTUnwrap(JSONSerialization.jsonObject(with: $0) as? [String: [String]]) }
+        XCTAssertEqual(bodies.count, 2)
+        XCTAssertEqual(bodies[0]["removeLabelIds"], ["UNREAD"])
+        XCTAssertNil(bodies[0]["addLabelIds"])
+        XCTAssertEqual(bodies[1]["addLabelIds"], ["UNREAD"])
+        XCTAssertNil(bodies[1]["removeLabelIds"])
     }
 }
