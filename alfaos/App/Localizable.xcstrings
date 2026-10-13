@@ -2,6 +2,7 @@
   "sourceLanguage" : "de",
   "strings" : {
     "app.mail" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12,6 +13,7 @@
       }
     },
     "app.mail.lane.center" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -22,6 +24,7 @@
       }
     },
     "app.mail.lane.leading" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -32,6 +35,7 @@
       }
     },
     "app.mail.lane.trailing" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -42,6 +46,7 @@
       }
     },
     "app.settings" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -85,6 +90,7 @@
       "comment" : "roh"
     },
     "assistant.close" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -95,6 +101,7 @@
       }
     },
     "assistant.field" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -116,6 +123,7 @@
       }
     },
     "assistant.title" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -126,6 +134,7 @@
       }
     },
     "blob.label" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -136,6 +145,7 @@
       }
     },
     "error.resources" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -185,6 +195,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "IMAP-Sicherheit"
+          }
+        }
+      }
+    },
+    "field.imap.name" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "imap.name"
           }
         }
       }
@@ -245,6 +266,7 @@
       }
     },
     "group.communication" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -255,6 +277,7 @@
       }
     },
     "group.core" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -495,6 +518,17 @@
         }
       }
     },
+    "hint.probe.timeout" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "probe.timeout"
+          }
+        }
+      }
+    },
     "hint.provider.failed" : {
       "comment" : "roh",
       "localizations" : {
@@ -502,6 +536,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fehler"
+          }
+        }
+      }
+    },
+    "hint.provider.transient" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "provider.transient"
           }
         }
       }
@@ -524,6 +569,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anmeldung abgelaufen"
+          }
+        }
+      }
+    },
+    "hint.signin.timeout" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "signin.timeout"
           }
         }
       }
@@ -705,6 +761,7 @@
       }
     },
     "lane.fold" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -715,6 +772,7 @@
       }
     },
     "lane.handle" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -725,6 +783,7 @@
       }
     },
     "lane.maximize" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -735,6 +794,7 @@
       }
     },
     "lane.restore" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -745,6 +805,7 @@
       }
     },
     "lane.unfold" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -761,6 +822,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kein Konto"
+          }
+        }
+      }
+    },
+    "mail.card.actionFailed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "card.actionFailed"
           }
         }
       }
@@ -794,6 +866,160 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entwurf"
+          }
+        }
+      }
+    },
+    "mail.card.quoteCollapsed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "card.quoteCollapsed"
+          }
+        }
+      }
+    },
+    "mail.card.recipientsExpanded" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "card.recipientsExpanded"
+          }
+        }
+      }
+    },
+    "mail.card.remoteImagesBlocked" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "card.remoteImagesBlocked"
+          }
+        }
+      }
+    },
+    "mail.card.signatureCollapsed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "card.signatureCollapsed"
+          }
+        }
+      }
+    },
+    "mail.draft.edited" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "draft.edited"
+          }
+        }
+      }
+    },
+    "mail.draft.idle" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "draft.idle"
+          }
+        }
+      }
+    },
+    "mail.draft.queuedInOutbox" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "draft.queuedInOutbox"
+          }
+        }
+      }
+    },
+    "mail.draft.saved" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "draft.saved"
+          }
+        }
+      }
+    },
+    "mail.draft.saving" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "draft.saving"
+          }
+        }
+      }
+    },
+    "mail.draft.sendBlocked.noRecipient" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "draft.sendBlocked.noRecipient"
+          }
+        }
+      }
+    },
+    "mail.draft.sendBlocked.noSubject" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "draft.sendBlocked.noSubject"
+          }
+        }
+      }
+    },
+    "mail.draft.sendFailed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "draft.sendFailed"
+          }
+        }
+      }
+    },
+    "mail.draft.sending" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "draft.sending"
+          }
+        }
+      }
+    },
+    "mail.draft.sent" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "draft.sent"
           }
         }
       }
@@ -1073,6 +1299,50 @@
         }
       }
     },
+    "mail.row.hasAttachments" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "row.hasAttachments"
+          }
+        }
+      }
+    },
+    "mail.row.selected" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "row.selected"
+          }
+        }
+      }
+    },
+    "mail.row.starred" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "row.starred"
+          }
+        }
+      }
+    },
+    "mail.row.threadCount" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "row.threadCount"
+          }
+        }
+      }
+    },
     "mail.row.unread" : {
       "comment" : "roh",
       "localizations" : {
@@ -1173,6 +1443,7 @@
       }
     },
     "menu.assistant" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1183,6 +1454,7 @@
       }
     },
     "menu.assistant.hint" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1193,6 +1465,7 @@
       }
     },
     "menu.label" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1203,6 +1476,7 @@
       }
     },
     "menu.search" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1213,6 +1487,7 @@
       }
     },
     "menu.search.label" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1234,6 +1509,7 @@
       }
     },
     "person.initials" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1244,6 +1520,7 @@
       }
     },
     "pill.label" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
