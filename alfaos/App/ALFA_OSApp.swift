@@ -61,6 +61,8 @@ struct WindowConfigurator: NSViewRepresentable {
         DispatchQueue.main.async { [weak view] in
             guard let window = view?.window else { return }
             window.titleVisibility = .hidden
+            window.titlebarAppearsTransparent = false
+            window.styleMask.remove(.fullSizeContentView)
             window.isMovableByWindowBackground = false
             window.contentMinSize = minimum
         }
