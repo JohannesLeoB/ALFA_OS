@@ -21,11 +21,11 @@ enum MailFailure {
         let classification = hub.classify(error, inlet: inlet)
         switch classification.kind {
         case .transient:
-            return .transient(Hint(text: MailHintKey.offline, classification: classification))
+            return .transient(Hint(text: MailTextKey.offline.rawValue, classification: classification))
         case .signIn:
-            return .rejected(Hint(text: MailHintKey.signIn, classification: classification, fixIn: .inlet(inlet)))
+            return .rejected(Hint(text: Hint.signInExpiredText, classification: classification, fixIn: .inlet(inlet)))
         case .rejected:
-            let text = classification.original.provider == "unknown" ? MailHintKey.failed : MailHintKey.rejected
+            let text = classification.original.provider == "unknown" ? MailTextKey.failed.rawValue : MailTextKey.rejected.rawValue
             return .rejected(Hint(text: text, classification: classification))
         }
     }

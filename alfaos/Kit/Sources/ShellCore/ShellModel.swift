@@ -99,7 +99,7 @@ public final class ShellModel {
     public func setHovering(_ value: Bool) { hovering = value }
 
     public func isGroupOpen(_ group: AppGroup) -> Bool {
-        !query.isEmpty || openGroups.contains(group.id) || current?.group == group.id
+        !query.isEmpty || openGroups.contains(group.id) || group.contains(currentID)
     }
 
     public func toggleGroup(_ group: AppGroup) {

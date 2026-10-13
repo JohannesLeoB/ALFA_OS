@@ -152,7 +152,7 @@ struct MailMirror: Sendable {
             var state = OutboxState.waiting
             if (row["state"] as String) == "failed" {
                 let hint = (row["hint"] as Data?).flatMap { try? JSONDecoder().decode(Hint.self, from: $0) }
-                state = .failed(hint ?? Hint(text: MailHintKey.failed))
+                state = .failed(hint ?? Hint(text: MailTextKey.failed.rawValue))
             }
             return OutboxItem(id: id, inlet: row["inlet"], draft: draft, state: state, attempts: row["attempts"])
         }

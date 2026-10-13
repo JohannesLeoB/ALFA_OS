@@ -76,7 +76,7 @@ struct BlobMenuView: View {
                 .focused($searchFocused)
                 .accessibilityLabel(theme.text("menu.search.label"))
         }
-        .padding(.horizontal, theme.measure("menu-field-padding"))
+        .padding(.horizontal, theme.measure(.menuFieldPadding))
         .frame(height: theme.length(.componentFieldCompactHeight))
         .overlay(Capsule().strokeBorder(line, lineWidth: theme.length(.strokeHairline)))
         .padding(.horizontal, theme.length(.spaceXxs))
@@ -94,7 +94,7 @@ struct BlobMenuView: View {
             .font(theme.font(.caption))
             .tracking(theme.tracking(.caption))
             .foregroundStyle(muted)
-            .padding(.horizontal, theme.measure("menu-group-padding"))
+            .padding(.horizontal, theme.measure(.menuGroupPadding))
             .frame(height: theme.length(.componentMenuRowHeight))
             .contentShape(Rectangle())
         }
@@ -145,8 +145,8 @@ struct MenuRow<Content: View>: View {
             content()
                 .font(theme.font(.callout))
                 .foregroundStyle(current ? background : foreground)
-                .padding(.leading, theme.measure("menu-row-padding-start"))
-                .padding(.trailing, theme.measure("menu-row-padding-end"))
+                .padding(.leading, theme.measure(.menuRowPaddingStart))
+                .padding(.trailing, theme.measure(.menuRowPaddingEnd))
                 .frame(height: theme.length(.componentMenuRowHeight))
                 .background(
                     RoundedRectangle(cornerRadius: theme.length(.componentMenuRowRadius))

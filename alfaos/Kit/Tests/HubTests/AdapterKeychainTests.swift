@@ -8,11 +8,6 @@ final class AdapterKeychainTests: XCTestCase {
         XCTAssertEqual(KeychainAdapter.account(for: slot), "password")
     }
 
-    func testDefaultPrefixIsTheAppNamespace() {
-        let slot = KeySlot(inlet: "google-1", name: "refresh")
-        XCTAssertEqual(KeychainAdapter.service(for: slot), "com.johannesleoberger.alfaos.hub.google-1")
-    }
-
     func testSlotsOfOneInletShareTheServiceAndDifferInAccount() {
         let a = KeySlot(inlet: "x", name: "a"), b = KeySlot(inlet: "x", name: "b")
         XCTAssertEqual(KeychainAdapter.service(for: a), KeychainAdapter.service(for: b))

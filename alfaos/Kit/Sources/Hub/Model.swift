@@ -94,6 +94,8 @@ public enum SettingsTarget: Equatable, Codable, Sendable {
 }
 
 public struct Hint: Equatable, Codable, Sendable {
+    public static let signInExpiredText = "hint.signin.expired"
+
     public let text: String
     public let detail: String?
     public let fixIn: SettingsTarget?

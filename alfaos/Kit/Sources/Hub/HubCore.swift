@@ -74,7 +74,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         let text: String
         switch classification.kind {
         case .transient: text = Self.transientText
-        case .signIn: text = Self.expiredText
+        case .signIn: text = Hint.signInExpiredText
         case .rejected: text = Self.failedText
         }
         return Hint(text: text, classification: classification, fixIn: fixIn)
@@ -267,7 +267,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             let classification = classify(error, inlet: inletID)
             var failure = hint(classification, fixIn: .inlet(inletID))
             if case .failed(let current) = records.first(where: { $0.id == inletID })?.state,
-               current.text == Self.expiredText {
+               current.text == Hint.signInExpiredText {
                 failure = current
             }
             for kind in DataKind.allCases where kind.capability == capability {
@@ -487,8 +487,6 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         limits[capability] = value
         persist("limit|" + capability.rawValue, value)
     }
-
-    static let expiredText = "hint.signin.expired"
 
     private func renewal(_ inletID: Inlet.ID) -> GrantRenewal {
         GrantRenewal(

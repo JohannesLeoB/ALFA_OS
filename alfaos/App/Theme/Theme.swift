@@ -23,8 +23,8 @@ struct Theme {
         CGFloat(tokens.length(key))
     }
 
-    func measure(_ name: String) -> CGFloat {
-        CGFloat(metrics.measure(name))
+    func measure(_ key: ShellMeasure) -> CGFloat {
+        CGFloat(metrics.measure(key))
     }
 
     func font(_ key: TextKey) -> Font {

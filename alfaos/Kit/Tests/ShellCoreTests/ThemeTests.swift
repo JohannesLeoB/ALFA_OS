@@ -69,9 +69,16 @@ final class ThemeTests: XCTestCase {
     func testShellMeasuresComeFromTheDataFile() throws {
         let metrics = try Fixture.metrics()
         XCTAssertEqual(metrics.shadowBlurFactor, 0.5)
-        for name in ["lane-header-padding-end", "lane-header-button", "menu-field-padding", "menu-group-padding", "menu-row-padding-start", "menu-row-padding-end", "face-eye-width", "face-eye-height", "face-eye-gap"] {
-            XCTAssertGreaterThan(metrics.measure(name), 0, name)
+        for key in ShellMeasure.allCases {
+            XCTAssertGreaterThan(metrics.measure(key), 0, key.rawValue)
         }
-        XCTAssertEqual(metrics.measure("unknown"), 0)
+    }
+
+    func testMissingMeasureFailsLoading() throws {
+        let json = """
+        {"lane-min":1,"center-min":1,"blob-width":1,"blob-throw":1,"shadow-blur-factor":1,"assistant-width":1,
+        "window-min-width":1,"window-min-height":1,"measures":{"face-eye-gap":5}}
+        """
+        XCTAssertThrowsError(try ShellMetrics(data: Data(json.utf8)))
     }
 }

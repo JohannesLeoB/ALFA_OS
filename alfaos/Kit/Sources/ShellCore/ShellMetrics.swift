@@ -1,5 +1,17 @@
 import Foundation
 
+public enum ShellMeasure: String, CaseIterable, Sendable {
+    case laneHeaderPaddingEnd = "lane-header-padding-end"
+    case laneHeaderButton = "lane-header-button"
+    case menuFieldPadding = "menu-field-padding"
+    case menuGroupPadding = "menu-group-padding"
+    case menuRowPaddingStart = "menu-row-padding-start"
+    case menuRowPaddingEnd = "menu-row-padding-end"
+    case faceEyeWidth = "face-eye-width"
+    case faceEyeHeight = "face-eye-height"
+    case faceEyeGap = "face-eye-gap"
+}
+
 public struct ShellMetrics: Sendable, Decodable, Equatable {
     public let laneMin: Double
     public let centerMin: Double
@@ -9,9 +21,9 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
     public let assistantWidth: Double
     public let windowMinWidth: Double
     public let windowMinHeight: Double
-    public let measures: [String: Double]
+    private let measures: [ShellMeasure: Double]
 
-    public func measure(_ name: String) -> Double { measures[name] ?? 0 }
+    public func measure(_ key: ShellMeasure) -> Double { measures[key, default: 0] }
 
     enum CodingKeys: String, CodingKey {
         case laneMin = "lane-min"
@@ -25,21 +37,41 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
         case measures
     }
 
-    public init(laneMin: Double, centerMin: Double, blobWidth: Double, blobThrow: Double, shadowBlurFactor: Double, assistantWidth: Double, windowMinWidth: Double, windowMinHeight: Double, measures: [String: Double] = [:]) {
-        self.laneMin = laneMin
-        self.centerMin = centerMin
-        self.blobWidth = blobWidth
-        self.blobThrow = blobThrow
-        self.shadowBlurFactor = shadowBlurFactor
-        self.assistantWidth = assistantWidth
-        self.windowMinWidth = windowMinWidth
-        self.windowMinHeight = windowMinHeight
-        self.measures = measures
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        laneMin = try container.decode(Double.self, forKey: .laneMin)
+        centerMin = try container.decode(Double.self, forKey: .centerMin)
+        blobWidth = try container.decode(Double.self, forKey: .blobWidth)
+        blobThrow = try container.decode(Double.self, forKey: .blobThrow)
+        shadowBlurFactor = try container.decode(Double.self, forKey: .shadowBlurFactor)
+        assistantWidth = try container.decode(Double.self, forKey: .assistantWidth)
+        windowMinWidth = try container.decode(Double.self, forKey: .windowMinWidth)
+        windowMinHeight = try container.decode(Double.self, forKey: .windowMinHeight)
+        let raw = try container.decode([String: Double].self, forKey: .measures)
+        var values: [ShellMeasure: Double] = [:]
+        for key in ShellMeasure.allCases {
+            guard let value = raw[key.rawValue] else {
+                throw DecodingError.keyNotFound(
+                    DynamicKey(key.rawValue),
+                    DecodingError.Context(codingPath: container.codingPath + [CodingKeys.measures], debugDescription: key.rawValue))
+            }
+            values[key] = value
+        }
+        measures = values
     }
 
     public init(data: Data) throws {
         self = try JSONDecoder().decode(ShellMetrics.self, from: data)
     }
+}
+
+private struct DynamicKey: CodingKey {
+    let stringValue: String
+    let intValue: Int? = nil
+
+    init(_ value: String) { stringValue = value }
+    init?(stringValue: String) { self.stringValue = stringValue }
+    init?(intValue: Int) { return nil }
 }
 
 public struct ShellGeometry: Sendable, Equatable {

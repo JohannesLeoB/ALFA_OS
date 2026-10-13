@@ -199,7 +199,7 @@ final class ModelTests: XCTestCase {
     /// BUG-1-9: Die Gruppe des aktuellen Bereichs lässt sich nicht zuklappen (isGroupOpen: `|| current?.group == group.id`).
     func testGroupOfCurrentAreaCanBeCollapsed() throws {
         let shell = try model()
-        let group = try XCTUnwrap(shell.directory.groups.first { $0.id == shell.current?.group })
+        let group = try XCTUnwrap(shell.directory.groups.first { $0.contains(shell.currentID) })
         XCTAssertTrue(shell.isGroupOpen(group))
         shell.toggleGroup(group)
         XCTExpectFailure("BUG-1-9: Klick auf den Kopf der Gruppe „Kommunikation“ (minus) bei Mail ändert nichts") {
@@ -234,19 +234,6 @@ final class ModelTests: XCTestCase {
         }
         XCTExpectFailure("BUG-1-11: Blob springt an den Ursprung, Mail-Breite 260 und offene Gruppe „Kern“ sind weg, weil nur der Bereich unbekannt ist") {
             XCTAssertEqual(shell.laneState("mail").leading, 260)
-        }
-    }
-
-    /// BUG-1-12: Ein Bereich, dessen Gruppe in apps.json fehlt, ist wählbar (select), steht aber in keiner Menüzeile.
-    func testAppWithUnknownGroupIsReachableInTheMenu() throws {
-        let lanes = AppLanes(leadingKey: "l", centerKey: "c", trailingKey: "t")
-        let directory = AppDirectory(
-            groups: [AppGroup(id: "a", titleKey: "group.a")],
-            apps: [AppEntry(id: "x", group: "missing", titleKey: "app.x", symbol: "s", lanes: lanes)]
-        )
-        let listed = directory.rows(matching: "", title: { $0 }).flatMap(\.apps).map(\.id)
-        XCTExpectFailure("BUG-1-12: rows() lässt den Bereich „x“ stillschweigend weg; keine Prüfung beim Laden") {
-            XCTAssertEqual(listed, ["x"])
         }
     }
 }

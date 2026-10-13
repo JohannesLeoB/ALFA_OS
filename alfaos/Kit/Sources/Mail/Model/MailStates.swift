@@ -44,9 +44,9 @@ public struct MailRow: Identifiable, Equatable, Sendable {
     public let selected: Bool
     public let threadCount: Int
 
-    public var unread: Bool { !summary.flags.contains(.seen) }
-    public var starred: Bool { summary.flags.contains(.flagged) }
-    public var hasAttachments: Bool { summary.attachmentCount > 0 }
+    private var unread: Bool { !summary.flags.contains(.seen) }
+    private var starred: Bool { summary.flags.contains(.flagged) }
+    private var hasAttachments: Bool { summary.attachmentCount > 0 }
 
     public var states: [MailRowState] {
         var result: [MailRowState] = []

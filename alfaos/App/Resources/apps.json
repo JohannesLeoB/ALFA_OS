@@ -2,34 +2,34 @@
   "groups": [
     {
       "id": "communication",
-      "titleKey": "group.communication"
+      "titleKey": "group.communication",
+      "apps": [
+        {
+          "id": "mail",
+          "titleKey": "app.mail",
+          "symbol": "envelope",
+          "lanes": {
+            "leadingKey": "app.mail.lane.leading",
+            "centerKey": "app.mail.lane.center"
+          }
+        }
+      ]
     },
     {
       "id": "core",
-      "titleKey": "group.core"
-    }
-  ],
-  "apps": [
-    {
-      "id": "mail",
-      "group": "communication",
-      "titleKey": "app.mail",
-      "symbol": "envelope",
-      "lanes": {
-        "leadingKey": "app.mail.lane.leading",
-        "centerKey": "app.mail.lane.center"
-      }
-    },
-    {
-      "id": "settings",
-      "group": "core",
-      "titleKey": "app.settings",
-      "symbol": "gearshape",
-      "lanes": {
-        "leadingKey": "app.settings.lane.leading",
-        "centerKey": "app.settings.lane.center",
-        "trailingKey": "app.settings.lane.trailing"
-      }
+      "titleKey": "group.core",
+      "apps": [
+        {
+          "id": "settings",
+          "titleKey": "app.settings",
+          "symbol": "gearshape",
+          "lanes": {
+            "leadingKey": "app.settings.lane.leading",
+            "centerKey": "app.settings.lane.center",
+            "trailingKey": "app.settings.lane.trailing"
+          }
+        }
+      ]
     }
   ]
 }

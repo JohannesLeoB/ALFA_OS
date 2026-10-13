@@ -56,7 +56,7 @@ struct LaneView: View {
             }
         }
         .padding(.leading, folded ? 0 : theme.length(.spaceL))
-        .padding(.trailing, folded ? 0 : theme.measure("lane-header-padding-end"))
+        .padding(.trailing, folded ? 0 : theme.measure(.laneHeaderPaddingEnd))
         .frame(maxWidth: .infinity)
         .frame(height: theme.length(.componentLaneHeaderHeight))
     }
@@ -66,7 +66,7 @@ struct LaneView: View {
             Image(systemName: symbol)
                 .font(theme.font(.textButton))
                 .foregroundStyle(theme.color(.colorTextTertiary))
-                .frame(width: theme.measure("lane-header-button"), height: theme.measure("lane-header-button"))
+                .frame(width: theme.measure(.laneHeaderButton), height: theme.measure(.laneHeaderButton))
                 .contentShape(Circle())
         }
         .buttonStyle(.plain)

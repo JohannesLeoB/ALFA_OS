@@ -48,7 +48,7 @@ struct MailAccountsPane: View {
         case .signedIn: word("mail.state.signedIn")
         case .connecting: word("mail.state.loading")
         case .connected, .working: word("mail.state.connected")
-        case .failed(let hint): word(hint.text == MailKey.signInExpiredHint ? "mail.list.signInExpired" : "mail.state.failed")
+        case .failed(let hint): word(hint.text == Hint.signInExpiredText ? "mail.list.signInExpired" : "mail.state.failed")
         case .keychainUnreadable: word("mail.state.keychain")
         case .orphaned: word("mail.state.orphaned")
         case .locked: word("mail.state.locked")
@@ -74,10 +74,10 @@ struct MailListPane: View {
                         HStack {
                             Text(verbatim: row.summary.subject)
                             Spacer()
-                            if row.unread { word(row.states.first?.key ?? "mail.row.unread") }
+                            if row.states.contains(.unread) { word(MailRowState.unread.key) }
                         }
                     }
-                    .fontWeight(row.unread ? .bold : .regular)
+                    .fontWeight(row.states.contains(.unread) ? .bold : .regular)
                     .underline(row.selected)
                 }
                 .buttonStyle(.plain)

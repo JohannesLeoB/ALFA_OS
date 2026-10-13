@@ -187,7 +187,7 @@ final class CoreTests: XCTestCase {
         let unauthorized = MailFailure.classify(GoogleGmailError.httpError(401), inlet: "i", hub: hub)
         let tooMany = MailFailure.classify(GoogleGmailError.httpError(429), inlet: "i", hub: hub)
         let unavailable = MailFailure.classify(GoogleGmailError.httpError(503), inlet: "i", hub: hub)
-        XCTAssertEqual(unauthorized.hint.text, MailHintKey.signIn)
+        XCTAssertEqual(unauthorized.hint.text, Hint.signInExpiredText)
         XCTAssertTrue(tooMany.isTransient)
         XCTAssertEqual(tooMany.hint.code, "gmail.429")
         XCTAssertTrue(unavailable.isTransient)
@@ -205,7 +205,7 @@ final class CoreTests: XCTestCase {
         transport.sendError = MailTransportError.recipientRejected("z@example.test", 550, "no such user")
         await model.send(id)
         guard case .sendFailed(let hint) = model.draft(id)?.state else { return XCTFail("state \(String(describing: model.draft(id)?.state))") }
-        XCTAssertEqual(hint.text, MailHintKey.rejected)
+        XCTAssertEqual(hint.text, MailTextKey.rejected.rawValue)
         transport.sendError = nil
         await model.send(id)
         XCTAssertEqual(model.draft(id)?.state, .sent)
@@ -261,19 +261,14 @@ final class CoreTests: XCTestCase {
         }
     }
 
-    func testRejectedSignInIsShownAsAFailureNotAsExpiredSignIn() async throws {
+    func testRejectedSignInIsShownAsExpiredSignIn() async throws {
         let hub = HubDouble()
         let transport = hub.add("one")
         transport.listError = MailTransportError.authenticationRejected("bad password")
         let core = try MailCore(hub: hub, database: DatabaseQueue())
         let model = MailModel(engine: core)
         await model.start()
-        let state = model.listState
-        guard case .failed(let hint) = state else { return XCTFail("state \(state)") }
-        XCTAssertEqual(hint.text, MailHintKey.signIn)
-        XCTExpectFailure("BUG-4-11: a rejected sign-in gives the hint mail.hint.signIn, the model only knows hint.signin.expired, so signInExpired is only reached through the inlet state") {
-            XCTAssertEqual(state, .signInExpired("one"))
-        }
+        XCTAssertEqual(model.listState, .signInExpired("one"))
     }
 
     /// BUG-4-12 und BUG-4-13: Die lokale Suche geht ungeschützt in LIKE (`_` als Platzhalter, Umlaute nur ASCII-gefaltet).

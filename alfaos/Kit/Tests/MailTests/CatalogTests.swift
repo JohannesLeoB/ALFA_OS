@@ -15,26 +15,13 @@ final class CatalogTests: XCTestCase {
     }
 
     func testEveryStateOfTheMailModuleHasATextInTheCatalog() throws {
-        let draftStates: [MailDraftState] = [
-            .idle, .edited, .saving, .saved(Date()), .sending, .sent, .sendBlocked(.noSubject), .sendBlocked(.noRecipient),
-            .sendFailed(Hint(text: "x")), .queuedInOutbox
-        ]
-        let listStates: [MailListState] = [
-            .empty(folder: "f"), .emptySearch(query: "q", folder: "f"), .loading, .loadingMore, .noFilterMatch,
-            .failed(Hint(text: "x")), .notConnected(nil), .signInExpired("i"), .offline(lastSync: nil)
-        ]
-        let rowStates: [MailRowState] = [.unread, .starred, .selected, .hasAttachments, .threadCount(2)]
-        let cardContents: [MailCardContent] = [.bodyLoading, .conversation(2), .draftNotice]
-        var keys: [String] = draftStates.map(\.key)
-        keys += listStates.compactMap(\.key)
-        keys += rowStates.map(\.key)
-        keys += cardContents.compactMap(\.key)
-        keys += [ReadingCard.remoteImagesBlockedKey, ReadingCard.quoteCollapsedKey, ReadingCard.signatureCollapsedKey,
-                 ReadingCard.recipientsExpandedKey, ReadingCard.actionFailedKey]
-        keys += [MailHintKey.offline, MailHintKey.signIn, MailHintKey.rejected, MailHintKey.failed]
-        let catalog = try catalogKeys()
-        let missing = Set(keys).subtracting(catalog).sorted()
-        XCTAssertGreaterThan(keys.count, 25)
+        var keys: [String] = MailDraftState.Kind.allCases.map(\.key)
+        keys += MailListState.Kind.allCases.compactMap(\.key)
+        keys += MailRowState.Kind.allCases.map(\.key)
+        keys += MailCardContent.Kind.allCases.compactMap(\.key)
+        keys += MailTextKey.allCases.map(\.rawValue)
+        keys.append(Hint.signInExpiredText)
+        let missing = Set(keys).subtracting(try catalogKeys()).sorted()
         XCTAssertEqual(missing, [], "BUG-4-24")
     }
 }

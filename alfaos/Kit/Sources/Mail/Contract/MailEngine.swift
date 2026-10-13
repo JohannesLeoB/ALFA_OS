@@ -17,16 +17,29 @@ public struct OutboxItem: Identifiable, Equatable, Sendable {
     public let id: UUID
     public let inlet: Inlet.ID
     public let draft: EmailDraft
-    public var state: OutboxState
-    public var attempts: Int
+    public private(set) var state: OutboxState
+    public private(set) var attempts: Int
 
-    public init(id: UUID = UUID(), inlet: Inlet.ID, draft: EmailDraft, state: OutboxState = .waiting, attempts: Int = 0) {
+    public init(inlet: Inlet.ID, draft: EmailDraft) {
+        self.init(id: UUID(), inlet: inlet, draft: draft, state: .waiting, attempts: 0)
+    }
+
+    init(id: UUID, inlet: Inlet.ID, draft: EmailDraft, state: OutboxState, attempts: Int) {
         self.id = id
         self.inlet = inlet
         self.draft = draft
         self.state = state
         self.attempts = attempts
     }
+
+    mutating func startSending() {
+        state = .sending
+        attempts += 1
+    }
+
+    mutating func wait() { state = .waiting }
+
+    mutating func fail(_ hint: Hint) { state = .failed(hint) }
 }
 
 public enum SendOutcome: Equatable, Sendable {
@@ -59,11 +72,4 @@ public protocol MailEngine: AnyObject {
     func retryOutbox() async
     func unreadCount(_ inlet: Inlet.ID) -> Int
     var events: AsyncStream<MailEngineEvent> { get }
-}
-
-public enum MailHintKey {
-    public static let offline = "mail.hint.offline"
-    public static let signIn = "mail.hint.signIn"
-    public static let rejected = "mail.hint.rejected"
-    public static let failed = "mail.hint.failed"
 }

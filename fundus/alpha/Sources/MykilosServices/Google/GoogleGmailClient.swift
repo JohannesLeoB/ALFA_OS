@@ -48,7 +48,7 @@ public struct GmailMailBody: Equatable, Sendable {
         self.html = html
         self.inlineImages = inlineImages
     }
-    public var bestText: String { text ?? html.map(GoogleGmailClient.stripHTML) ?? "" }
+    public var bestText: String { text ?? html.map(HTMLText.plain) ?? "" }
 }
 
 public struct GmailHistoryDelta: Equatable, Sendable {
@@ -855,7 +855,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
                 fromRaw: fromRawValue,
                 toRaw: toRawValue,
                 ccRaw: ccRawValue,
-                snippet: Self.decodeEntities(r.snippet ?? ""),
+                snippet: HTMLText.decodeEntities(r.snippet ?? ""),
                 receivedAt: dateStr.flatMap { parseEmailDate($0) },
                 labels: r.labelIds ?? [],
                 attachments: extractAttachments(from: r.payload?.parts ?? [])
@@ -878,7 +878,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
     static func parseBody(from data: Data) -> String {
         guard let resource = try? JSONDecoder().decode(GmailMessageResource.self, from: data) else { return "" }
         if let plain = firstPart(resource.payload, mime: "text/plain") { return plain }
-        if let html = firstPart(resource.payload, mime: "text/html") { return stripHTML(html) }
+        if let html = firstPart(resource.payload, mime: "text/html") { return HTMLText.plain(html) }
         return resource.snippet ?? ""
     }
 
@@ -927,47 +927,6 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         while s.count % 4 != 0 { s += "=" }
         guard let bytes = Data(base64Encoded: s) else { return nil }
         return String(data: bytes, encoding: .utf8)
-    }
-
-    static func stripHTML(_ html: String) -> String {
-        var roh = html
-        for tag in ["style", "script", "head", "title"] {
-            roh = roh.replacingOccurrences(
-                of: "<\(tag)\\b[^>]*>[\\s\\S]*?</\(tag)\\s*>",
-                with: " ", options: [.regularExpression, .caseInsensitive])
-        }
-        roh = roh.replacingOccurrences(of: "<!--[\\s\\S]*?-->", with: " ", options: .regularExpression)
-        roh = roh.replacingOccurrences(of: "<br\\s*/?>", with: "\n",
-                                       options: [.regularExpression, .caseInsensitive])
-        roh = roh.replacingOccurrences(of: "</(p|div|tr|li|h[1-6])\\s*>", with: "\n",
-                                       options: [.regularExpression, .caseInsensitive])
-        let out = decodeEntities(roh.replacingOccurrences(of: "<[^>]+>", with: " ", options: .regularExpression))
-        return out.replacingOccurrences(of: "[ \\t]+", with: " ", options: .regularExpression)
-            .replacingOccurrences(of: "[ \\t]*\n[ \\t]*", with: "\n", options: .regularExpression)
-            .replacingOccurrences(of: "\n{3,}", with: "\n\n", options: .regularExpression)
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-
-    static func decodeEntities(_ text: String) -> String {
-        var out = text
-            .replacingOccurrences(of: "&nbsp;", with: " ")
-            .replacingOccurrences(of: "&lt;", with: "<")
-            .replacingOccurrences(of: "&gt;", with: ">")
-            .replacingOccurrences(of: "&quot;", with: "\"")
-            .replacingOccurrences(of: "&#39;", with: "'")
-            .replacingOccurrences(of: "&apos;", with: "'")
-        if let regex = try? NSRegularExpression(pattern: "&#(x?)([0-9A-Fa-f]+);") {
-            let matches = regex.matches(in: out, range: NSRange(out.startIndex..., in: out)).reversed()
-            for match in matches {
-                guard let whole = Range(match.range, in: out),
-                      let hexFlag = Range(match.range(at: 1), in: out),
-                      let digits = Range(match.range(at: 2), in: out) else { continue }
-                let radix = out[hexFlag].isEmpty ? 10 : 16
-                guard let value = UInt32(out[digits], radix: radix), let scalar = Unicode.Scalar(value) else { continue }
-                out.replaceSubrange(whole, with: String(Character(scalar)))
-            }
-        }
-        return out.replacingOccurrences(of: "&amp;", with: "&")
     }
 
     static func buildListURL(query: String, maxResults: Int, pageToken: String? = nil, baseURL: String) -> URL? {
@@ -1040,7 +999,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         }
         let body: String = {
             if let plain = firstPart(message.payload, mime: "text/plain") { return plain }
-            if let html = firstPart(message.payload, mime: "text/html") { return stripHTML(html) }
+            if let html = firstPart(message.payload, mime: "text/html") { return HTMLText.plain(html) }
             return message.snippet ?? ""
         }()
         let refs = extractAttachments(from: message.payload?.parts ?? []).map {
@@ -1091,7 +1050,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
             fromRaw: fromRawValue,
             toRaw: toRawValue,
             ccRaw: ccRawValue,
-            snippet: Self.decodeEntities(resource.snippet ?? ""),
+            snippet: HTMLText.decodeEntities(resource.snippet ?? ""),
             receivedAt: dateString.flatMap { parseEmailDate($0) } ?? internalDate(resource.internalDate),
             labels: resource.labelIds ?? [],
             attachments: attachments,

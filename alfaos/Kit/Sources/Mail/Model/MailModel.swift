@@ -82,7 +82,7 @@ public final class MailModel {
         guard let account = selectedAccount else { return .notConnected(nil) }
         switch account.state {
         case .failed(let hint):
-            return hint.text == MailKey.signInExpiredHint ? .signInExpired(account.id) : .failed(hint)
+            return hint.text == Hint.signInExpiredText ? .signInExpired(account.id) : .failed(hint)
         case .connected, .working:
             break
         case .connecting, .signedIn:
@@ -94,7 +94,7 @@ public final class MailModel {
         case .loading: if summaries.isEmpty { return .loading }
         case .loadingMore: return .loadingMore
         case .failed(let hint):
-            return hint.text == MailKey.signInExpiredHint ? .signInExpired(account.id) : .failed(hint)
+            return hint.text == Hint.signInExpiredText ? .signInExpired(account.id) : .failed(hint)
         case .notConnected: return .notConnected(account.id)
         case .offline(let date): return .offline(lastSync: date)
         case .settled: break
@@ -204,7 +204,7 @@ public final class MailModel {
         let hint = Self.hint(error)
         if case .notConnected = error {
             phase = .notConnected
-        } else if hint.text == MailKey.offlineHint {
+        } else if hint.text == MailTextKey.offline.rawValue {
             phase = .offline(engine.lastSync(inlet, folder: folder))
         } else {
             phase = .failed(hint)
@@ -309,7 +309,7 @@ public final class MailModel {
             reconcileDrafts()
         case .syncFailed(let inlet, let hint):
             guard inlet == selectedInlet, phase == .settled else { return }
-            if hint.text == MailKey.offlineHint, let folder = selectedFolder {
+            if hint.text == MailTextKey.offline.rawValue, let folder = selectedFolder {
                 phase = .offline(engine.lastSync(inlet, folder: folder))
             } else {
                 phase = .failed(hint)
@@ -330,9 +330,9 @@ public final class MailModel {
     static func hint(_ error: HubError) -> Hint {
         switch error {
         case .provider(let hint): hint
-        case .notConnected(let id): Hint(text: MailKey.notConnectedHint, detail: id)
-        case .noInlet: Hint(text: MailKey.noInletHint)
-        case .capabilityMissing(let id, _): Hint(text: MailKey.capabilityMissingHint, detail: id)
+        case .notConnected(let id): Hint(text: MailTextKey.notConnected.rawValue, detail: id)
+        case .noInlet: Hint(text: MailTextKey.noInlet.rawValue)
+        case .capabilityMissing(let id, _): Hint(text: MailTextKey.capabilityMissing.rawValue, detail: id)
         }
     }
 

@@ -141,8 +141,8 @@ public final class MailCore: MailEngine {
             return .queued(item.id)
         case .rejected(let hint):
             var failed = item
-            failed.state = .failed(hint)
-            failed.attempts = 1
+            failed.startSending()
+            failed.fail(hint)
             store(failed)
             return .queued(item.id)
         }
@@ -165,7 +165,7 @@ public final class MailCore: MailEngine {
         do {
             transport = try self.transport(item.inlet)
         } catch {
-            return .transient(Hint(text: MailHintKey.offline, detail: String(describing: error)))
+            return .transient(Hint(text: MailTextKey.offline.rawValue, detail: String(describing: error)))
         }
         do {
             try await transport.send(item.draft)
@@ -180,8 +180,7 @@ public final class MailCore: MailEngine {
 
     private func retry(_ id: OutboxItem.ID) async {
         guard let index = items.firstIndex(where: { $0.id == id }), items[index].state == .waiting else { return }
-        items[index].state = .sending
-        items[index].attempts += 1
+        items[index].startSending()
         let item = items[index]
         emit(.outboxChanged)
         let result = await deliver(item)
@@ -191,10 +190,10 @@ public final class MailCore: MailEngine {
             items.remove(at: current)
             try? mirror.remove(id)
         case .transient:
-            items[current].state = .waiting
+            items[current].wait()
             try? mirror.save(items[current])
         case .rejected(let hint):
-            items[current].state = .failed(hint)
+            items[current].fail(hint)
             try? mirror.save(items[current])
         }
         emit(.outboxChanged)
@@ -232,7 +231,7 @@ public final class MailCore: MailEngine {
             if case .provider(let value) = error {
                 hint = value
             } else {
-                hint = Hint(text: MailHintKey.offline, detail: String(describing: error), fixIn: .inlet(inlet))
+                hint = Hint(text: MailTextKey.offline.rawValue, detail: String(describing: error), fixIn: .inlet(inlet))
             }
             emit(.syncFailed(inlet, hint))
             return
