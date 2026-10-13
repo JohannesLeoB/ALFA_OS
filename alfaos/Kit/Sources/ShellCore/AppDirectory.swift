@@ -6,9 +6,9 @@ public struct AppGroup: Sendable, Decodable, Equatable {
 }
 
 public struct AppLanes: Sendable, Decodable, Equatable {
-    public let leadingKey: String
-    public let centerKey: String
-    public let trailingKey: String
+    public let leadingKey: String?
+    public let centerKey: String?
+    public let trailingKey: String?
 }
 
 public struct AppEntry: Sendable, Decodable, Equatable {

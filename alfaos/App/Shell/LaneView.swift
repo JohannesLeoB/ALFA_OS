@@ -34,12 +34,14 @@ struct LaneView: View {
 
     private var header: some View {
         HStack(spacing: theme.length(.spaceS)) {
-            if !folded {
+            if !folded, !titleKey.isEmpty {
                 theme.text(titleKey)
                     .font(theme.font(.name))
                     .tracking(theme.tracking(.name))
                     .foregroundStyle(theme.color(.colorTextPrimary))
                     .lineLimit(1)
+            }
+            if !folded {
                 Spacer(minLength: 0)
             }
             if lane != .center {
@@ -74,16 +76,7 @@ struct LaneView: View {
     @ViewBuilder
     private var content: some View {
         if folded {
-            theme.text(titleKey)
-                .font(theme.font(.callout))
-                .foregroundStyle(theme.color(.colorTextSecondary))
-                .lineLimit(1)
-                .fixedSize()
-                .rotationEffect(.degrees(-90))
-                .frame(width: theme.length(.sizeControlM))
-                .padding(.top, theme.length(.spaceXl))
-                .frame(maxHeight: .infinity, alignment: .top)
-                .frame(maxWidth: .infinity)
+            Color.clear.frame(maxHeight: .infinity)
         } else if model.currentID == "mail" {
             MailLaneView(lane: lane)
         } else if model.currentID == "settings" {

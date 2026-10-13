@@ -17,8 +17,7 @@
       "symbol": "envelope",
       "lanes": {
         "leadingKey": "app.mail.lane.leading",
-        "centerKey": "app.mail.lane.center",
-        "trailingKey": "app.mail.lane.trailing"
+        "centerKey": "app.mail.lane.center"
       }
     },
     {
