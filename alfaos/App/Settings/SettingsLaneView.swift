@@ -60,6 +60,7 @@ struct SettingsGroupsPane: View {
 struct SettingsInletsPane: View {
     let host: AppHost
     let setup: any HubSetup
+    @State private var armed: Inlet.ID?
 
     var body: some View {
         ScrollView {
@@ -86,7 +87,12 @@ struct SettingsInletsPane: View {
                 if inlet.state.canRenew {
                     Button { Task { await host.renew(inlet.id) } } label: { word("text.settings.action.signInAgain") }
                 }
-                Button { Task { await host.remove(inlet.id) } } label: { word("text.settings.action.remove") }
+                if armed == inlet.id {
+                    Button { armed = nil; Task { await host.remove(inlet.id) } } label: { word("text.settings.action.removeConfirm") }
+                    Button { armed = nil } label: { word("text.common.cancel") }
+                } else {
+                    Button { armed = inlet.id } label: { word("text.settings.action.remove") }
+                }
             }
         }
         .padding(.bottom)
