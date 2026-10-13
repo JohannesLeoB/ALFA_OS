@@ -9,6 +9,23 @@ import struct MykilosServices.MailMessageBody
 import enum MykilosServices.MailFlag
 import enum MykilosServices.MailTransportError
 
+struct TestTimedOut: Error {}
+
+@MainActor
+func within<T: Sendable>(_ limit: Duration, _ work: @escaping @MainActor () async throws -> T) async throws -> T {
+    let task = Task { @MainActor in try await work() }
+    let expired = Locked(false)
+    let watchdog = Task {
+        try await Task.sleep(for: limit)
+        expired.with { $0 = true }
+        task.cancel()
+    }
+    defer { watchdog.cancel() }
+    let result = await task.result
+    if expired.with({ $0 }) { throw TestTimedOut() }
+    return try result.get()
+}
+
 final class Locked<Value>: @unchecked Sendable {
     private let lock = NSLock()
     private var value: Value

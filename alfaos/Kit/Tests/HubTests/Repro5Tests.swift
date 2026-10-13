@@ -66,7 +66,7 @@ final class Repro5Tests: XCTestCase {
     func testBug51AddEndsWithTheProbeTimeoutWhenTheProbeNeverReturns() async throws {
         let stuck = try makeHub(deadlines: HubDeadlines(signIn: .seconds(5), probe: .milliseconds(300)),
                                 run: { _, _ in try await Task.sleep(for: .seconds(3600)) })
-        let error = await attempt(stuck, "jo@gmx.example")
+        let error = try await within(.seconds(3)) { await self.attempt(stuck, "jo@gmx.example") }
         guard case .probeFailed(let hint)? = error else { return XCTFail("error \(String(describing: error))") }
         XCTAssertEqual(hint.text, "hint.probe.timeout")
         XCTAssertEqual(stuck.setup.inlets, [])

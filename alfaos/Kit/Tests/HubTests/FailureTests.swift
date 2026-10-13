@@ -155,12 +155,16 @@ final class FailureTests: XCTestCase {
             providers: [provider], keychain: FakeKeychain(), cadence: HandCadence(), cost: FakeCost(),
             catalog: .withMail, database: try DatabaseQueue(),
             deadlines: HubDeadlines(signIn: .milliseconds(200), probe: .seconds(5))))
-        do {
-            _ = try await hub.setup.add(Repro3Rig.mailOffer, input: .none)
-            XCTFail("add must throw")
-        } catch SetupError.probeFailed(let hint) {
-            XCTAssertEqual(hint.text, "hint.signin.timeout")
+        let outcome = try await within(.seconds(3)) { () -> SetupError? in
+            do throws(SetupError) {
+                _ = try await hub.setup.add(Repro3Rig.mailOffer, input: .none)
+                return nil
+            } catch {
+                return error
+            }
         }
+        guard case .probeFailed(let hint)? = outcome else { return XCTFail("add must fail, got \(String(describing: outcome))") }
+        XCTAssertEqual(hint.text, "hint.signin.timeout")
         XCTAssertEqual(hub.setup.inlets, [])
     }
 }
