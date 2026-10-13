@@ -128,7 +128,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Blob: Klick öffnet das Menü, Doppelklick den Assistenten"
+            "value" : "Blob"
           }
         }
       }
@@ -1442,17 +1442,6 @@
         }
       }
     },
-    "menu.assistant.hint" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Doppelklick"
-          }
-        }
-      }
-    },
     "menu.label" : {
       "comment" : "roh",
       "localizations" : {
@@ -1585,6 +1574,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entfernen"
+          }
+        }
+      }
+    },
+    "text.settings.action.removeConfirm" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "removeConfirm"
           }
         }
       }

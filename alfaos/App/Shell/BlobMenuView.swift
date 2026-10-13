@@ -124,11 +124,6 @@ struct BlobMenuView: View {
                 HStack(spacing: theme.length(.spaceS)) {
                     theme.text("menu.assistant")
                     Spacer(minLength: 0)
-                    theme.text("menu.assistant.hint")
-                        .textCase(.uppercase)
-                        .font(theme.font(.mark))
-                        .tracking(theme.tracking(.mark))
-                        .foregroundStyle(muted)
                 }
             }
         }
