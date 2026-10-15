@@ -118,8 +118,8 @@
   --radius-container: 24px;
   --component-lane-radius: 20px;
   --component-lane-header-button-radius: 12px;
-  --radius-card: 14px;
-  --radius-row: 10px;
+  --radius-card: 12px;
+  --radius-row: 12px;
   --component-menu-row-radius: 8px;
   --component-checkbox-radius: 4px;
   --component-lane-handle-radius: 2px;
@@ -127,13 +127,13 @@
   --component-lane-folded-width: 56px;
   --component-lane-resting-width: 300px;
   --component-lane-leading-max-width: 380px;
-  --component-lane-fold-threshold: 120px;
+  --component-lane-fold-threshold: 112px;
   --component-lane-handle-width: 12px;
   --component-lane-handle-thickness: 4px;
   --component-lane-handle-length: 64px;
   --component-lane-handle-length-active: 96px;
   --component-blob-bar-height: 60px;
-  --component-blob-height: 36px;
+  --component-blob-height: 40px;
   --component-blob-awake-width: 124px;
   --component-lane-edge: 16px;
   --component-lane-gap: 12px;
@@ -158,7 +158,7 @@
   --motion-duration-change: 200ms;
   --motion-duration-disclose: 240ms;
   --motion-duration-snap: 260ms;
-  --motion-duration-stack: 320ms;
+  --motion-duration-stack: 520ms;
   --component-blob-blink-duration: 140ms;
   --component-sync-button-spin-duration: 1000ms;
   --motion-curve-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
