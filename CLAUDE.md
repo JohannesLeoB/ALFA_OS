@@ -1,5 +1,1 @@
-- **Gilt:** für jede Sitzung an ALFA, jedes Konto; es zählt nur GitHub `JohannesLeoB/ALFA_OS`, lokal `~/Developer/ALFA_OS`. Lies `AGENTS.md`, `plan/STATUS.md`; der Chef danach `plan/CHEFENTWICKLER.md`.
-- **Sitzungsname:** `ALFA · <Nr> · <Konto> · <Rolle> · <JJJJ-MM-TT>`; Konto MAX, PRO-HELLO, PRO-BERGER; Rolle Boss, Chef, Helfer, Design; Nr = höchste in der Seitenleiste plus eins.
-- **Johannes' Wort** nur wörtlich aus `ausgang/quellen/johannes-wortlaut.md` (erzeugt von `korpus.py`). Keine Issues, keine Deutung als „Entscheidung“. Erinnerungen, Chats, Artifacts sind Stückgut, keine Regel.
-- **Docs:** höchstens 10 im Repo, jedes mit Lesestempel; 24 h ungelesen = zur Löschung vorgelegt. Schreiben nur nach vollständigem Lesen, Prüfung jedes Vermerks an Quelle mit Zeile und Johannes' Klick im Dialog (Grund und Nutzen genannt).
-- **Ausgaben:** kurz, nur Ergebnis mit Beleg (Datei:Zeile); kein „steht jetzt in …“, kein Angebot am Ende, nichts als fertig oder geprüft ohne Beleg. **Ordner:** keine Worktrees, Branches, Klone oder Nebenordner, lokal oder sonstwo; nur `main` in `~/Developer/ALFA_OS`.
+@AGENTS.md

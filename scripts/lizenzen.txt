@@ -6,7 +6,6 @@
 #
 # Format für jede fremde Abhängigkeit, eine Zeile je Paket, Trennzeichen |:
 #   Paket-Identität | Lizenz (SPDX) | Quelle (URL) | geprüft am JJJJ-MM-TT
-# scripts/pruefen.sh verlangt für jeden Pin aus einem Package.resolved eine solche Zeile mit Lizenz.
 #
 # Fremdes Material im Repo, das nicht im Produkt steckt (Bauregel 4: Quelle und Lizenz bleiben):
 #   recherche/integrations-sh/ · MIT · Copyright 2026 Rhys Sullivan · Quelle: https://github.com/UsefulSoftwareCo/integrations
