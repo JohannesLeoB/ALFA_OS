@@ -113,6 +113,10 @@ struct MailReadingPane: View {
                 VStack(alignment: .leading) {
                     Text(verbatim: card.summary.subject)
                     Text(verbatim: card.summary.from)
+                    HStack {
+                        Button { Task { await model.archive(card.id) } } label: { word("mail.action.archive") }
+                        Button { Task { await model.trash(card.id) } } label: { word("mail.action.trash") }
+                    }
                     if let hint = model.actionFailure(for: card.id) { hintWords(hint) }
                     content(card.content)
                 }

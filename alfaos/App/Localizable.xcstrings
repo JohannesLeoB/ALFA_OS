@@ -815,6 +815,28 @@
         }
       }
     },
+    "mail.action.archive" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archivieren"
+          }
+        }
+      }
+    },
+    "mail.action.trash" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In den Papierkorb"
+          }
+        }
+      }
+    },
     "mail.card.actionFailed" : {
       "comment" : "roh",
       "localizations" : {
