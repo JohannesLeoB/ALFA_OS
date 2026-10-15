@@ -6,6 +6,8 @@ import protocol MykilosServices.MailTransport
 import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessagePage
 import struct MykilosServices.MailMessageBody
+import struct MykilosServices.MailMessageSummary
+import struct MykilosServices.MailStoredDraft
 import enum MykilosServices.MailFlag
 import enum MykilosServices.MailTransportError
 
@@ -62,12 +64,14 @@ final class MailTransportFake: MailTransport, @unchecked Sendable {
         var listFoldersCalls = 0
         var sent: [EmailDraft] = []
         var gate: Gate?
+        var calls: [String] = []
     }
 
     private let state = Locked(State())
 
     var listFoldersCalls: Int { state.with { $0.listFoldersCalls } }
     var sent: [EmailDraft] { state.with { $0.sent } }
+    var calls: [String] { state.with { $0.calls } }
     func setFailure(_ error: MailTransportError?) { state.with { $0.failure = error } }
     func setGate(_ gate: Gate?) { state.with { $0.gate = gate } }
 
@@ -99,6 +103,42 @@ final class MailTransportFake: MailTransport, @unchecked Sendable {
     func setFlags(messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws {
         if let failure = state.with({ $0.failure }) { throw failure }
     }
+
+    private func record(_ call: String) throws {
+        let failure = state.with { s -> MailTransportError? in
+            s.calls.append(call)
+            return s.failure
+        }
+        if let failure { throw failure }
+    }
+
+    func archive(messageID: String) async throws { try record("archive:" + messageID) }
+    func move(messageID: String, toFolderID: String) async throws { try record("move:" + messageID + ">" + toFolderID) }
+    func trash(messageID: String) async throws { try record("trash:" + messageID) }
+    func markSpam(messageID: String) async throws { try record("spam:" + messageID) }
+
+    func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data {
+        try record("attachment:" + messageID + "/" + attachmentID)
+        return Data("12345".utf8)
+    }
+
+    func fetchThread(messageID: String, threadID: String) async throws -> [MailMessageSummary] {
+        try record("thread:" + threadID)
+        return []
+    }
+
+    func saveDraft(_ draft: EmailDraft, replacing draftID: String?) async throws -> String {
+        try record("saveDraft")
+        return "d1"
+    }
+
+    func fetchDraft(messageID: String) async throws -> MailStoredDraft {
+        try record("fetchDraft:" + messageID)
+        return MailStoredDraft(id: "d1", draft: EmailDraft(subject: "s", body: "b"))
+    }
+
+    func deleteDraft(id: String) async throws { try record("deleteDraft:" + id) }
+    func sendDraft(id: String) async throws { try record("sendDraft:" + id) }
 }
 
 struct FakeCalendar: CalendarPort {}

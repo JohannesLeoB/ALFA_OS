@@ -9,13 +9,13 @@ struct MailOutgoingMessage: Equatable, Sendable {
 
 enum MailMessageBuilder {
     static func build(_ draft: EmailDraft, account: MailAccount, messageID: String = UUID().uuidString.lowercased(),
-                      date: Date = Date()) throws -> MailOutgoingMessage {
+                      date: Date = Date(), asDraft: Bool = false) throws -> MailOutgoingMessage {
         let sender = try senderMailbox(account)
         let to = try mailboxes(draft.to)
         let cc = try mailboxes(draft.cc)
         let bcc = try mailboxes(draft.bcc)
         let recipients = (to + cc + bcc).map(\.address)
-        guard recipients.isEmpty == false else { throw MailTransportError.noRecipients }
+        guard recipients.isEmpty == false || asDraft else { throw MailTransportError.noRecipients }
 
         let domain = sender.address.split(separator: "@").last.map(String.init) ?? "localhost"
         let boundaryBase = messageID.replacingOccurrences(of: "-", with: "")
@@ -24,6 +24,7 @@ enum MailMessageBuilder {
         lines.append("From: \(render(sender))")
         if to.isEmpty == false { lines.append("To: \(to.map(render).joined(separator: ", "))") }
         if cc.isEmpty == false { lines.append("Cc: \(cc.map(render).joined(separator: ", "))") }
+        if asDraft, bcc.isEmpty == false { lines.append("Bcc: \(bcc.map(render).joined(separator: ", "))") }
         lines.append("Subject: \(encodeHeader(clean(draft.subject)))")
         lines.append("Message-ID: <\(messageID)@\(domain)>")
         if let reference = draft.inReplyTo?.trimmingCharacters(in: .whitespacesAndNewlines), reference.isEmpty == false {

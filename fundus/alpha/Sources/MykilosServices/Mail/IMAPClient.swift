@@ -9,6 +9,7 @@ enum MailCredential: Sendable {
 enum IMAPArgument: Sendable {
     case raw(String)
     case string(String)
+    case literal(Data)
 }
 
 struct IMAPCommandResult: Sendable {
@@ -200,6 +201,11 @@ actor IMAPSession {
         _ = try await run([.raw("UID"), .raw("MOVE"), .raw(String(uid)), .string(IMAPModifiedUTF7.encode(path))])
     }
 
+    func append(to path: String, flags: [String], message: Data) async throws -> IMAPCommandResult {
+        try await run([.raw("APPEND"), .string(IMAPModifiedUTF7.encode(path)),
+                       .raw("(" + flags.joined(separator: " ") + ")"), .literal(message)])
+    }
+
     func expunge(uid: Int) async throws {
         _ = try await run([.raw("UID"), .raw("EXPUNGE"), .raw(String(uid))])
     }
@@ -239,6 +245,12 @@ actor IMAPSession {
             switch argument {
             case .raw(let text):
                 line.append(Data(text.utf8))
+            case .literal(let payload):
+                line.append(Data("{\(payload.count)}".utf8))
+                line.append(contentsOf: [13, 10])
+                try await reader.write(line)
+                try await awaitContinuation(tag: tag, untagged: &untagged)
+                line = payload
             case .string(let text):
                 if let quoted = Self.quote(text) {
                     line.append(Data(quoted.utf8))

@@ -233,6 +233,7 @@ struct IMAPListEntry: Equatable, Sendable {
         if attributes.contains("\\drafts") { return .drafts }
         if attributes.contains("\\trash") { return .trash }
         if attributes.contains("\\junk") { return .spam }
+        if attributes.contains("\\archive") { return .archive }
         switch displayName.lowercased().filter({ $0.isWhitespace == false }) {
         case "sent", "sentitems", "sentmessages", "sentmail", "gesendet", "gesendeteelemente", "gesendeteobjekte":
             return .sent
@@ -242,6 +243,8 @@ struct IMAPListEntry: Equatable, Sendable {
             return .trash
         case "spam", "junk", "junke-mail", "junk-e-mail", "bulkmail":
             return .spam
+        case "archive", "archives", "archiv":
+            return .archive
         default:
             return .other
         }

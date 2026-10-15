@@ -9,6 +9,7 @@ public struct GmailMailTransport: MailTransport {
     }
 
     static let allMail = "ALL"
+    static let threadLimit = 20
 
     static let systemFolders: [MailFolder] = [
         MailFolder(id: GmailSystemLabel.inbox, name: GmailSystemLabel.inbox, role: .inbox),
@@ -34,7 +35,67 @@ public struct GmailMailTransport: MailTransport {
 
     public func fetchBody(messageID: String) async throws -> MailMessageBody {
         let body = try await client.fetchMailBody(messageID: messageID)
-        return MailMessageBody(text: body.text, html: body.html, inlineImages: body.inlineImages)
+        let attachments = body.attachments.map {
+            MailAttachmentInfo(id: $0.attachmentID, filename: $0.filename, mimeType: $0.mimeType, sizeBytes: $0.sizeBytes)
+        }
+        return MailMessageBody(text: body.text, html: body.html, inlineImages: body.inlineImages, attachments: attachments)
+    }
+
+    public func archive(messageID: String) async throws {
+        try await client.modifyLabels(messageID: messageID, add: [], remove: [GmailSystemLabel.inbox])
+    }
+
+    public func move(messageID: String, toFolderID: String) async throws {
+        switch toFolderID {
+        case GmailSystemLabel.trash:
+            try await client.trashMessage(messageID: messageID)
+        case GmailSystemLabel.spam:
+            try await client.markSpam(messageID: messageID)
+        case Self.allMail:
+            try await archive(messageID: messageID)
+        case GmailSystemLabel.inbox:
+            try await client.modifyLabels(messageID: messageID, add: [GmailSystemLabel.inbox], remove: [])
+        case GmailSystemLabel.starred, GmailSystemLabel.sent, GmailSystemLabel.draft:
+            throw MailTransportError.folderNotFound(toFolderID)
+        default:
+            try await client.modifyLabels(messageID: messageID, add: [toFolderID], remove: [GmailSystemLabel.inbox])
+        }
+    }
+
+    public func trash(messageID: String) async throws {
+        try await client.trashMessage(messageID: messageID)
+    }
+
+    public func markSpam(messageID: String) async throws {
+        try await client.markSpam(messageID: messageID)
+    }
+
+    public func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data {
+        try await client.downloadAttachment(messageID: messageID, attachmentID: attachmentID)
+    }
+
+    public func fetchThread(messageID: String, threadID: String) async throws -> [MailMessageSummary] {
+        let messages = try await client.fetchThread(threadID: threadID, maxMessages: Self.threadLimit)
+        return messages.map(Self.summary)
+    }
+
+    public func saveDraft(_ draft: EmailDraft, replacing draftID: String?) async throws -> String {
+        if let draftID { return try await client.updateDraft(id: draftID, draft: draft) }
+        return try await client.createDraft(draft)
+    }
+
+    public func fetchDraft(messageID: String) async throws -> MailStoredDraft {
+        let map = try await client.listDraftIDMap()
+        guard let draftID = map[messageID] else { throw MailTransportError.messageNotFound(messageID) }
+        return MailStoredDraft(id: draftID, draft: try await client.getDraft(id: draftID))
+    }
+
+    public func deleteDraft(id: String) async throws {
+        try await client.deleteDraft(id: id)
+    }
+
+    public func sendDraft(id: String) async throws {
+        try await client.sendDraft(id: id)
     }
 
     public func send(_ draft: EmailDraft) async throws {
@@ -43,7 +104,7 @@ public struct GmailMailTransport: MailTransport {
 
     public func setFlags(messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws {
         if add.contains(.deleted) {
-            try await client.trashMessage(messageID: messageID)
+            try await trash(messageID: messageID)
             return
         }
         var labelsToAdd: [String] = []

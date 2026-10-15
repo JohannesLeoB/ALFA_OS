@@ -47,6 +47,7 @@ extension MailModel {
             let body = try await engine.body(inlet, messageID: id)
             guard let now = cards.firstIndex(where: { $0.id == id }) else { return }
             cards[now].content = content(for: body, fallback: cards[now].summary.snippet)
+            cards[now].attachments = body.attachments
         } catch {
             actionFailures[id] = Self.hint(error)
             guard let now = cards.firstIndex(where: { $0.id == id }) else { return }

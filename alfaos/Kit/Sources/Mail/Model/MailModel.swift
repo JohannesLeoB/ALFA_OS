@@ -43,8 +43,11 @@ public final class MailModel {
     let commandContinuation: AsyncStream<MailCommand>.Continuation
     public let commands: AsyncStream<MailCommand>
 
-    public init(engine: any MailEngine) {
+    let clock: @Sendable () -> Date
+
+    public init(engine: any MailEngine, clock: @escaping @Sendable () -> Date = { Date() }) {
         self.engine = engine
+        self.clock = clock
         let (stream, continuation) = AsyncStream<MailCommand>.makeStream()
         commands = stream
         commandContinuation = continuation
@@ -343,9 +346,10 @@ public final class MailModel {
         case .sent: 2
         case .drafts: 3
         case .all: 4
-        case .spam: 5
-        case .trash: 6
-        case .other: 7
+        case .archive: 5
+        case .spam: 6
+        case .trash: 7
+        case .other: 8
         }
     }
 }

@@ -1,5 +1,6 @@
 import Foundation
 import Hub
+import struct MykilosServices.MailAttachmentInfo
 import enum MykilosServices.MailFlag
 import struct MykilosServices.MailMessageSummary
 
@@ -76,6 +77,8 @@ public struct ReadingCard: Identifiable, Equatable, Sendable {
     public var quoteCollapsed = true
     public var signatureCollapsed = true
     public var recipientsExpanded = false
+    public var attachments: [MailAttachmentInfo] = []
+    public var conversation: [MailMessageSummary] = []
 
     public var remoteImagesBlocked: Bool {
         if case .html = content { return !remoteImagesAllowed }

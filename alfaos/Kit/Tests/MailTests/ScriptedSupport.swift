@@ -8,6 +8,7 @@ import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessageBody
 import struct MykilosServices.MailMessagePage
 import struct MykilosServices.MailMessageSummary
+import struct MykilosServices.MailStoredDraft
 
 @MainActor
 final class ScriptedGate {
@@ -82,6 +83,18 @@ final class ScriptedEngine: MailEngine {
         flagCalls.append(messageID + "+" + add.map(\.rawValue).sorted().joined(separator: ","))
     }
 
+    func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {}
+    func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError) {}
+    func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {}
+    func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {}
+    func attachment(_ inlet: Inlet.ID, messageID: String, attachmentID: String) async throws(HubError) -> Data { Data() }
+    func thread(_ inlet: Inlet.ID, messageID: String, threadID: String) async throws(HubError) -> [MailMessageSummary] { [] }
+    func saveDraft(_ inlet: Inlet.ID, _ draft: EmailDraft, replacing draftID: String?) async throws(HubError) -> String { "" }
+    func loadDraft(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> MailStoredDraft {
+        MailStoredDraft(id: "", draft: EmailDraft(subject: "", body: ""))
+    }
+    func deleteDraft(_ inlet: Inlet.ID, draftID: String) async throws(HubError) {}
+    func sendDraft(_ inlet: Inlet.ID, draftID: String, _ draft: EmailDraft) async -> SendOutcome { .sent }
     func send(_ inlet: Inlet.ID, _ draft: EmailDraft) async -> SendOutcome { .sent }
     func retryOutbox() async {}
     func unreadCount(_ inlet: Inlet.ID) -> Int { 0 }

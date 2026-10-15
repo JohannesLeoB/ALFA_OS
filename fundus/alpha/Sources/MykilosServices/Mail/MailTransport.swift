@@ -7,6 +7,7 @@ public enum MailFolderRole: String, Sendable, CaseIterable {
     case drafts
     case trash
     case spam
+    case archive
     case starred
     case all
     case other
@@ -74,15 +75,42 @@ public struct MailMessagePage: Equatable, Sendable {
     }
 }
 
+public struct MailAttachmentInfo: Equatable, Sendable {
+    public var id: String
+    public var filename: String
+    public var mimeType: String
+    public var sizeBytes: Int
+
+    public init(id: String, filename: String, mimeType: String, sizeBytes: Int) {
+        self.id = id
+        self.filename = filename
+        self.mimeType = mimeType
+        self.sizeBytes = sizeBytes
+    }
+}
+
+public struct MailStoredDraft: Equatable, Sendable {
+    public var id: String
+    public var draft: EmailDraft
+
+    public init(id: String, draft: EmailDraft) {
+        self.id = id
+        self.draft = draft
+    }
+}
+
 public struct MailMessageBody: Equatable, Sendable {
     public var text: String?
     public var html: String?
     public var inlineImages: [String: String]
+    public var attachments: [MailAttachmentInfo]
 
-    public init(text: String? = nil, html: String? = nil, inlineImages: [String: String] = [:]) {
+    public init(text: String? = nil, html: String? = nil, inlineImages: [String: String] = [:],
+                attachments: [MailAttachmentInfo] = []) {
         self.text = text
         self.html = html
         self.inlineImages = inlineImages
+        self.attachments = attachments
     }
 }
 
@@ -118,6 +146,26 @@ public protocol MailTransport: Sendable {
     func send(_ draft: EmailDraft) async throws
 
     func setFlags(messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws
+
+    func archive(messageID: String) async throws
+
+    func move(messageID: String, toFolderID: String) async throws
+
+    func trash(messageID: String) async throws
+
+    func markSpam(messageID: String) async throws
+
+    func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data
+
+    func fetchThread(messageID: String, threadID: String) async throws -> [MailMessageSummary]
+
+    func saveDraft(_ draft: EmailDraft, replacing draftID: String?) async throws -> String
+
+    func fetchDraft(messageID: String) async throws -> MailStoredDraft
+
+    func deleteDraft(id: String) async throws
+
+    func sendDraft(id: String) async throws
 }
 
 public enum MailTransports {

@@ -5,6 +5,7 @@ import struct MykilosKit.EmailDraft
 import protocol MykilosServices.MailTransport
 import enum MykilosServices.MailFlag
 import struct MykilosServices.MailFolder
+import struct MykilosServices.MailStoredDraft
 import struct MykilosServices.MailMessageBody
 import struct MykilosServices.MailMessagePage
 import struct MykilosServices.MailMessageSummary
@@ -131,8 +132,81 @@ public final class MailCore: MailEngine {
         emit(.messagesChanged(inlet, folder: mirror.inboxID(inlet) ?? ""))
     }
 
+    public func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {
+        let inbox = mirror.inboxID(inlet)
+        let touched = try await perform(inlet) { transport in
+            try await transport.archive(messageID: messageID)
+            return try self.mirror.remove(inlet, messageID: messageID, folder: inbox ?? "")
+        }
+        announce(inlet, touched)
+    }
+
+    public func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError) {
+        let touched = try await perform(inlet) { transport in
+            try await transport.move(messageID: messageID, toFolderID: toFolder)
+            return try self.mirror.remove(inlet, messageID: messageID, folder: nil)
+        }
+        announce(inlet, touched)
+    }
+
+    public func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {
+        let touched = try await perform(inlet) { transport in
+            try await transport.trash(messageID: messageID)
+            return try self.mirror.remove(inlet, messageID: messageID, folder: nil)
+        }
+        announce(inlet, touched)
+    }
+
+    public func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {
+        let touched = try await perform(inlet) { transport in
+            try await transport.markSpam(messageID: messageID)
+            return try self.mirror.remove(inlet, messageID: messageID, folder: nil)
+        }
+        announce(inlet, touched)
+    }
+
+    public func attachment(_ inlet: Inlet.ID, messageID: String, attachmentID: String) async throws(HubError) -> Data {
+        try await perform(inlet) { try await $0.fetchAttachment(messageID: messageID, attachmentID: attachmentID) }
+    }
+
+    public func thread(_ inlet: Inlet.ID, messageID: String, threadID: String) async throws(HubError) -> [MailMessageSummary] {
+        try await perform(inlet) { try await $0.fetchThread(messageID: messageID, threadID: threadID) }
+    }
+
+    public func saveDraft(_ inlet: Inlet.ID, _ draft: EmailDraft, replacing draftID: String?) async throws(HubError) -> String {
+        try await perform(inlet) { try await $0.saveDraft(draft, replacing: draftID) }
+    }
+
+    public func loadDraft(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> MailStoredDraft {
+        try await perform(inlet) { try await $0.fetchDraft(messageID: messageID) }
+    }
+
+    public func deleteDraft(_ inlet: Inlet.ID, draftID: String) async throws(HubError) {
+        try await perform(inlet) { try await $0.deleteDraft(id: draftID) }
+    }
+
     public func send(_ inlet: Inlet.ID, _ draft: EmailDraft) async -> SendOutcome {
-        let item = OutboxItem(inlet: inlet, draft: draft)
+        await submit(OutboxItem(inlet: inlet, draft: draft))
+    }
+
+    public func sendDraft(_ inlet: Inlet.ID, draftID: String, _ draft: EmailDraft) async -> SendOutcome {
+        await submit(OutboxItem(inlet: inlet, draft: draft, draftID: draftID))
+    }
+
+    private func perform<T>(_ inlet: Inlet.ID, _ work: (any MailTransport) async throws -> T) async throws(HubError) -> T {
+        let transport = try transport(inlet)
+        do {
+            return try await work(transport)
+        } catch {
+            throw MailFailure.hubError(error, inlet: inlet, hub: hub)
+        }
+    }
+
+    private func announce(_ inlet: Inlet.ID, _ folders: [String]) {
+        for folder in folders { emit(.messagesChanged(inlet, folder: folder)) }
+    }
+
+    private func submit(_ item: OutboxItem) async -> SendOutcome {
         switch await deliver(item) {
         case .sent:
             return .sent
@@ -168,7 +242,12 @@ public final class MailCore: MailEngine {
             return .transient(Hint(text: MailTextKey.offline.rawValue, detail: String(describing: error)))
         }
         do {
-            try await transport.send(item.draft)
+            if let draftID = item.draftID {
+                let current = try await transport.saveDraft(item.draft, replacing: draftID)
+                try await transport.sendDraft(id: current)
+            } else {
+                try await transport.send(item.draft)
+            }
             return .sent
         } catch {
             switch MailFailure.classify(error, inlet: item.inlet, hub: hub) {

@@ -6,6 +6,7 @@ import struct MykilosKit.EmailDraft
 import protocol MykilosServices.MailTransport
 import enum MykilosServices.MailFlag
 import struct MykilosServices.MailFolder
+import struct MykilosServices.MailStoredDraft
 import struct MykilosServices.MailMessageBody
 import struct MykilosServices.MailMessagePage
 import struct MykilosServices.MailMessageSummary
@@ -62,6 +63,61 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     }
 
     func setFlags(messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws {}
+
+    private var _calls: [String] = []
+    private var _actionError: Error?
+    private var _attachment = Data()
+    private var _thread: [MailMessageSummary] = []
+    private var _stored: MailStoredDraft?
+    private var _savedID = "draft-1"
+
+    var calls: [String] { lock.withLock { _calls } }
+    var actionError: Error? { get { lock.withLock { _actionError } } set { lock.withLock { _actionError = newValue } } }
+    var attachment: Data { get { lock.withLock { _attachment } } set { lock.withLock { _attachment = newValue } } }
+    var thread: [MailMessageSummary] { get { lock.withLock { _thread } } set { lock.withLock { _thread = newValue } } }
+    var stored: MailStoredDraft? { get { lock.withLock { _stored } } set { lock.withLock { _stored = newValue } } }
+    var savedID: String { get { lock.withLock { _savedID } } set { lock.withLock { _savedID = newValue } } }
+
+    private func record(_ call: String) throws {
+        let error = lock.withLock { () -> Error? in
+            _calls.append(call)
+            return _actionError
+        }
+        if let error { throw error }
+    }
+
+    func archive(messageID: String) async throws { try record("archive:" + messageID) }
+    func move(messageID: String, toFolderID: String) async throws { try record("move:" + messageID + ">" + toFolderID) }
+    func trash(messageID: String) async throws { try record("trash:" + messageID) }
+    func markSpam(messageID: String) async throws { try record("spam:" + messageID) }
+
+    func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data {
+        try record("attachment:" + messageID + "/" + attachmentID)
+        return attachment
+    }
+
+    func fetchThread(messageID: String, threadID: String) async throws -> [MailMessageSummary] {
+        try record("thread:" + messageID + "/" + threadID)
+        return thread
+    }
+
+    func saveDraft(_ draft: EmailDraft, replacing draftID: String?) async throws -> String {
+        try record("saveDraft:" + (draftID ?? "-") + ":" + draft.subject)
+        return savedID
+    }
+
+    func fetchDraft(messageID: String) async throws -> MailStoredDraft {
+        try record("fetchDraft:" + messageID)
+        guard let stored else { throw MailTransportError.messageNotFound(messageID) }
+        return stored
+    }
+
+    func deleteDraft(id: String) async throws { try record("deleteDraft:" + id) }
+
+    func sendDraft(id: String) async throws {
+        try record("sendDraft:" + id)
+        lock.withLock { _sendCalls += 1 }
+    }
 }
 
 func mailTestClassify(_ error: Error) -> Classification {

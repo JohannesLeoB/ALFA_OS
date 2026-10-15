@@ -43,10 +43,13 @@ public struct GmailMailBody: Equatable, Sendable {
     public var text: String?
     public var html: String?
     public var inlineImages: [String: String]
-    public init(text: String? = nil, html: String? = nil, inlineImages: [String: String] = [:]) {
+    public var attachments: [GmailAttachment]
+    public init(text: String? = nil, html: String? = nil, inlineImages: [String: String] = [:],
+                attachments: [GmailAttachment] = []) {
         self.text = text
         self.html = html
         self.inlineImages = inlineImages
+        self.attachments = attachments
     }
     public var bestText: String { text ?? html.map(HTMLText.plain) ?? "" }
 }
@@ -888,10 +891,11 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         let html = firstPart(resource.payload, mime: "text/html")
         var inline: [String: String] = [:]
         collectInlineImages(resource.payload?.parts ?? [], into: &inline)
+        let attachments = extractAttachments(from: resource.payload?.parts ?? [])
         if plain == nil, html == nil {
-            return GmailMailBody(text: resource.snippet, html: nil, inlineImages: inline)
+            return GmailMailBody(text: resource.snippet, html: nil, inlineImages: inline, attachments: attachments)
         }
-        return GmailMailBody(text: plain, html: html, inlineImages: inline)
+        return GmailMailBody(text: plain, html: html, inlineImages: inline, attachments: attachments)
     }
 
     private static func collectInlineImages(_ parts: [GmailPart], into map: inout [String: String]) {

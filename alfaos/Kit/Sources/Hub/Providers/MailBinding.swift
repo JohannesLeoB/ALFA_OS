@@ -32,6 +32,58 @@ struct CountingMailTransport: MailTransport {
         meter.record()
         try await base.setFlags(messageID: messageID, add: add, remove: remove)
     }
+
+    func archive(messageID: String) async throws {
+        meter.record()
+        try await base.archive(messageID: messageID)
+    }
+
+    func move(messageID: String, toFolderID: String) async throws {
+        meter.record()
+        try await base.move(messageID: messageID, toFolderID: toFolderID)
+    }
+
+    func trash(messageID: String) async throws {
+        meter.record()
+        try await base.trash(messageID: messageID)
+    }
+
+    func markSpam(messageID: String) async throws {
+        meter.record()
+        try await base.markSpam(messageID: messageID)
+    }
+
+    func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data {
+        meter.record()
+        let data = try await base.fetchAttachment(messageID: messageID, attachmentID: attachmentID)
+        meter.record(calls: 0, bytes: data.count)
+        return data
+    }
+
+    func fetchThread(messageID: String, threadID: String) async throws -> [MailMessageSummary] {
+        meter.record()
+        return try await base.fetchThread(messageID: messageID, threadID: threadID)
+    }
+
+    func saveDraft(_ draft: EmailDraft, replacing draftID: String?) async throws -> String {
+        meter.record()
+        return try await base.saveDraft(draft, replacing: draftID)
+    }
+
+    func fetchDraft(messageID: String) async throws -> MailStoredDraft {
+        meter.record()
+        return try await base.fetchDraft(messageID: messageID)
+    }
+
+    func deleteDraft(id: String) async throws {
+        meter.record()
+        try await base.deleteDraft(id: id)
+    }
+
+    func sendDraft(id: String) async throws {
+        meter.record()
+        try await base.sendDraft(id: id)
+    }
 }
 
 extension PortCatalog {

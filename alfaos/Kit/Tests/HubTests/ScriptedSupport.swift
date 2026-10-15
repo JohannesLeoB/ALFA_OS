@@ -6,6 +6,8 @@ import protocol MykilosServices.MailTransport
 import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessagePage
 import struct MykilosServices.MailMessageBody
+import struct MykilosServices.MailMessageSummary
+import struct MykilosServices.MailStoredDraft
 import enum MykilosServices.MailFlag
 import XCTest
 
@@ -58,6 +60,16 @@ struct RenewingTransport: MailTransport {
     func fetchBody(messageID: String) async throws -> MailMessageBody { MailMessageBody(text: "") }
     func send(_ draft: EmailDraft) async throws {}
     func setFlags(messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws {}
+    func archive(messageID: String) async throws {}
+    func move(messageID: String, toFolderID: String) async throws {}
+    func trash(messageID: String) async throws {}
+    func markSpam(messageID: String) async throws {}
+    func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data { Data() }
+    func fetchThread(messageID: String, threadID: String) async throws -> [MailMessageSummary] { [] }
+    func saveDraft(_ draft: EmailDraft, replacing draftID: String?) async throws -> String { "" }
+    func fetchDraft(messageID: String) async throws -> MailStoredDraft { MailStoredDraft(id: "", draft: EmailDraft(subject: "", body: "")) }
+    func deleteDraft(id: String) async throws {}
+    func sendDraft(id: String) async throws {}
 }
 
 struct CalendarDown: Error {}

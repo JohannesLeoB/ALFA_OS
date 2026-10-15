@@ -2,6 +2,7 @@ import Foundation
 import Hub
 import struct MykilosKit.EmailDraft
 import struct MykilosServices.MailMessageSummary
+import struct MykilosServices.MailStoredDraft
 
 public struct MailDraftCard: Identifiable, Equatable, Sendable {
     public let id: UUID
@@ -9,6 +10,8 @@ public struct MailDraftCard: Identifiable, Equatable, Sendable {
     public var draft: EmailDraft
     public var state: MailDraftState
     public var outboxID: OutboxItem.ID?
+    public var remoteID: String?
+    public var saveFailure: Hint?
 }
 
 extension MailModel {
@@ -61,6 +64,58 @@ extension MailModel {
         drafts.removeAll { $0.id == id }
     }
 
+    public func save(_ id: UUID) async {
+        guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
+        switch drafts[index].state {
+        case .saving, .sending, .sent, .queuedInOutbox: return
+        default: break
+        }
+        drafts[index].state = .saving
+        drafts[index].saveFailure = nil
+        let card = drafts[index]
+        do {
+            let remoteID = try await engine.saveDraft(card.inlet, card.draft, replacing: card.remoteID)
+            guard let now = drafts.firstIndex(where: { $0.id == id }) else { return }
+            drafts[now].remoteID = remoteID
+            if drafts[now].state == .saving { drafts[now].state = .saved(clock()) }
+        } catch {
+            guard let now = drafts.firstIndex(where: { $0.id == id }) else { return }
+            drafts[now].saveFailure = Self.hint(error)
+            drafts[now].state = .edited
+        }
+    }
+
+    public func deleteDraft(_ id: UUID) async {
+        guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
+        if let remoteID = drafts[index].remoteID {
+            do {
+                try await engine.deleteDraft(drafts[index].inlet, draftID: remoteID)
+            } catch {
+                guard let now = drafts.firstIndex(where: { $0.id == id }) else { return }
+                drafts[now].saveFailure = Self.hint(error)
+                return
+            }
+        }
+        drafts.removeAll { $0.id == id }
+    }
+
+    @discardableResult
+    public func editDraft(_ messageID: String) async -> UUID? {
+        guard let inlet = cardInlet(messageID) ?? selectedInlet else { return nil }
+        let stored: MailStoredDraft
+        do {
+            stored = try await engine.loadDraft(inlet, messageID: messageID)
+        } catch {
+            actionFailures[messageID] = Self.hint(error)
+            return nil
+        }
+        actionFailures[messageID] = nil
+        if let open = drafts.first(where: { $0.inlet == inlet && $0.remoteID == stored.id }) { return open.id }
+        let id = add(inlet: inlet, stored.draft)
+        if let index = drafts.firstIndex(where: { $0.id == id }) { drafts[index].remoteID = stored.id }
+        return id
+    }
+
     public func send(_ id: UUID) async {
         guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
         let card = drafts[index]
@@ -78,7 +133,12 @@ extension MailModel {
             return
         }
         drafts[index].state = .sending
-        let outcome = await engine.send(card.inlet, card.draft)
+        let outcome: SendOutcome
+        if let remoteID = card.remoteID {
+            outcome = await engine.sendDraft(card.inlet, draftID: remoteID, card.draft)
+        } else {
+            outcome = await engine.send(card.inlet, card.draft)
+        }
         outbox = engine.outbox
         guard let now = drafts.firstIndex(where: { $0.id == id }) else { return }
         switch outcome {
@@ -106,7 +166,8 @@ extension MailModel {
     }
 
     func add(inlet: Inlet.ID, _ draft: EmailDraft) -> UUID {
-        let card = MailDraftCard(id: UUID(), inlet: inlet, draft: draft, state: .idle, outboxID: nil)
+        let card = MailDraftCard(id: UUID(), inlet: inlet, draft: draft, state: .idle, outboxID: nil, remoteID: nil,
+                              saveFailure: nil)
         drafts.append(card)
         return card.id
     }

@@ -3,6 +3,7 @@ import Hub
 import struct MykilosKit.EmailDraft
 import enum MykilosServices.MailFlag
 import struct MykilosServices.MailFolder
+import struct MykilosServices.MailStoredDraft
 import struct MykilosServices.MailMessageBody
 import struct MykilosServices.MailMessagePage
 import struct MykilosServices.MailMessageSummary
@@ -17,17 +18,19 @@ public struct OutboxItem: Identifiable, Equatable, Sendable {
     public let id: UUID
     public let inlet: Inlet.ID
     public let draft: EmailDraft
+    public let draftID: String?
     public private(set) var state: OutboxState
     public private(set) var attempts: Int
 
-    public init(inlet: Inlet.ID, draft: EmailDraft) {
-        self.init(id: UUID(), inlet: inlet, draft: draft, state: .waiting, attempts: 0)
+    public init(inlet: Inlet.ID, draft: EmailDraft, draftID: String? = nil) {
+        self.init(id: UUID(), inlet: inlet, draft: draft, draftID: draftID, state: .waiting, attempts: 0)
     }
 
-    init(id: UUID, inlet: Inlet.ID, draft: EmailDraft, state: OutboxState, attempts: Int) {
+    init(id: UUID, inlet: Inlet.ID, draft: EmailDraft, draftID: String?, state: OutboxState, attempts: Int) {
         self.id = id
         self.inlet = inlet
         self.draft = draft
+        self.draftID = draftID
         self.state = state
         self.attempts = attempts
     }
@@ -67,7 +70,17 @@ public protocol MailEngine: AnyObject {
     func searchLocal(_ inlet: Inlet.ID, query: String) -> [MailMessageSummary]
     func body(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> MailMessageBody
     func setFlags(_ inlet: Inlet.ID, messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws(HubError)
+    func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError)
+    func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError)
+    func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError)
+    func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubError)
+    func attachment(_ inlet: Inlet.ID, messageID: String, attachmentID: String) async throws(HubError) -> Data
+    func thread(_ inlet: Inlet.ID, messageID: String, threadID: String) async throws(HubError) -> [MailMessageSummary]
+    func saveDraft(_ inlet: Inlet.ID, _ draft: EmailDraft, replacing draftID: String?) async throws(HubError) -> String
+    func loadDraft(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> MailStoredDraft
+    func deleteDraft(_ inlet: Inlet.ID, draftID: String) async throws(HubError)
     func send(_ inlet: Inlet.ID, _ draft: EmailDraft) async -> SendOutcome
+    func sendDraft(_ inlet: Inlet.ID, draftID: String, _ draft: EmailDraft) async -> SendOutcome
     var outbox: [OutboxItem] { get }
     func retryOutbox() async
     func unreadCount(_ inlet: Inlet.ID) -> Int

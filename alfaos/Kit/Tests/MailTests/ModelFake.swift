@@ -7,6 +7,7 @@ import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessageBody
 import struct MykilosServices.MailMessagePage
 import struct MykilosServices.MailMessageSummary
+import struct MykilosServices.MailStoredDraft
 
 @MainActor
 final class ModelFakeEngine: MailEngine {
@@ -24,6 +25,16 @@ final class ModelFakeEngine: MailEngine {
     var flagCalls: [(String, Set<MailFlag>, Set<MailFlag>)] = []
     var unread: [Inlet.ID: Int] = [:]
     var outbox: [OutboxItem] = []
+    var actionError: HubError?
+    var actionCalls: [String] = []
+    var attachmentData = Data()
+    var threadMessages: [MailMessageSummary] = []
+    var savedDraftID = "remote-1"
+    var storedDraft: MailStoredDraft?
+    var savedDrafts: [(draft: EmailDraft, replacing: String?)] = []
+    var sentFromDraft: [(id: String, draft: EmailDraft)] = []
+    var saveGate: CheckedContinuation<Void, Never>?
+    var holdSave = false
     var gate: CheckedContinuation<Void, Never>?
     var holdPages = false
     let events: AsyncStream<MailEngineEvent>
@@ -63,12 +74,55 @@ final class ModelFakeEngine: MailEngine {
         return sendOutcome
     }
 
+    private func act(_ call: String) throws(HubError) {
+        actionCalls.append(call)
+        if let actionError { throw actionError }
+    }
+
+    func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError) { try act("archive:" + messageID) }
+    func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError) {
+        try act("move:" + messageID + ">" + toFolder)
+    }
+    func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError) { try act("trash:" + messageID) }
+    func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubError) { try act("spam:" + messageID) }
+
+    func attachment(_ inlet: Inlet.ID, messageID: String, attachmentID: String) async throws(HubError) -> Data {
+        try act("attachment:" + messageID + "/" + attachmentID)
+        return attachmentData
+    }
+
+    func thread(_ inlet: Inlet.ID, messageID: String, threadID: String) async throws(HubError) -> [MailMessageSummary] {
+        try act("thread:" + messageID + "/" + threadID)
+        return threadMessages
+    }
+
+    func saveDraft(_ inlet: Inlet.ID, _ draft: EmailDraft, replacing draftID: String?) async throws(HubError) -> String {
+        if holdSave { await withCheckedContinuation { saveGate = $0 } }
+        try act("saveDraft")
+        savedDrafts.append((draft, draftID))
+        return savedDraftID
+    }
+
+    func loadDraft(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> MailStoredDraft {
+        try act("loadDraft:" + messageID)
+        return storedDraft ?? MailStoredDraft(id: "remote-9", draft: EmailDraft(subject: "stored", body: "text"))
+    }
+
+    func deleteDraft(_ inlet: Inlet.ID, draftID: String) async throws(HubError) { try act("deleteDraft:" + draftID) }
+
+    func sendDraft(_ inlet: Inlet.ID, draftID: String, _ draft: EmailDraft) async -> SendOutcome {
+        sentFromDraft.append((draftID, draft))
+        return sendOutcome
+    }
+
     func retryOutbox() async {}
     func unreadCount(_ inlet: Inlet.ID) -> Int { unread[inlet] ?? 0 }
 
     func release() {
         gate?.resume()
         gate = nil
+        saveGate?.resume()
+        saveGate = nil
     }
 }
 

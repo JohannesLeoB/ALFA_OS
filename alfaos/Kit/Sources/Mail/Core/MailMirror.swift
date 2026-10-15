@@ -33,8 +33,12 @@ struct MailMirror: Sendable {
             try db.execute(sql: """
                 CREATE TABLE IF NOT EXISTS mail_outbox (
                     id TEXT PRIMARY KEY, inlet TEXT NOT NULL, draft BLOB NOT NULL, state TEXT NOT NULL,
-                    hint BLOB, attempts INTEGER NOT NULL, position INTEGER NOT NULL)
+                    hint BLOB, attempts INTEGER NOT NULL, position INTEGER NOT NULL, draftID TEXT)
                 """)
+            let columns = try String.fetchAll(db, sql: "SELECT name FROM pragma_table_info('mail_outbox')")
+            if !columns.contains("draftID") {
+                try db.execute(sql: "ALTER TABLE mail_outbox ADD COLUMN draftID TEXT")
+            }
         }
     }
 
@@ -112,6 +116,21 @@ struct MailMirror: Sendable {
         }
     }
 
+    @discardableResult
+    func remove(_ inlet: Inlet.ID, messageID: String, folder: String?) throws -> [String] {
+        try db.write { db in
+            var sql = "SELECT folder FROM mail_message WHERE inlet = ? AND id = ?"
+            var arguments: StatementArguments = [inlet, messageID]
+            if let folder {
+                sql += " AND folder = ?"
+                arguments += [folder]
+            }
+            let folders = try String.fetchAll(db, sql: sql, arguments: arguments)
+            try db.execute(sql: sql.replacingOccurrences(of: "SELECT folder", with: "DELETE"), arguments: arguments)
+            return folders
+        }
+    }
+
     func lastSync(_ inlet: Inlet.ID, folder: String) -> Date? {
         let value = try? db.read { db in
             try Double.fetchOne(db, sql: "SELECT at FROM mail_sync WHERE inlet = ? AND folder = ?", arguments: [inlet, folder])
@@ -154,7 +173,8 @@ struct MailMirror: Sendable {
                 let hint = (row["hint"] as Data?).flatMap { try? JSONDecoder().decode(Hint.self, from: $0) }
                 state = .failed(hint ?? Hint(text: MailTextKey.failed.rawValue))
             }
-            return OutboxItem(id: id, inlet: row["inlet"], draft: draft, state: state, attempts: row["attempts"])
+            return OutboxItem(id: id, inlet: row["inlet"], draft: draft, draftID: row["draftID"], state: state,
+                              attempts: row["attempts"])
         }
     }
 
@@ -169,8 +189,8 @@ struct MailMirror: Sendable {
         try db.write { db in
             let position = try Int.fetchOne(db, sql: "SELECT position FROM mail_outbox WHERE id = ?", arguments: [item.id.uuidString])
                 ?? ((try Int.fetchOne(db, sql: "SELECT MAX(position) FROM mail_outbox") ?? -1) + 1)
-            try db.execute(sql: "INSERT OR REPLACE INTO mail_outbox (id, inlet, draft, state, hint, attempts, position) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                           arguments: [item.id.uuidString, item.inlet, draft, name, hint, item.attempts, position])
+            try db.execute(sql: "INSERT OR REPLACE INTO mail_outbox (id, inlet, draft, state, hint, attempts, position, draftID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                           arguments: [item.id.uuidString, item.inlet, draft, name, hint, item.attempts, position, item.draftID])
         }
     }
 
