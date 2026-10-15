@@ -1,4 +1,4 @@
-// tokens.json version 1 sha256 f229f62487e7f145a82670eba3c94f92d6959488835a3d4d7dc0f67a39a4d941
+// tokens.json version 1 sha256 2674f890f855100e8cddd7b6fc1410c83436c31d0cd84c265fffb0957a5e13d0
 
 public extension ThemeKey {
     static let colorBackgroundWindow = ThemeKey("color-background-window")
@@ -74,10 +74,10 @@ public extension ThemeKey {
     static let componentCheckboxRadius = ThemeKey("component-checkbox-radius")
     static let componentLaneHandleRadius = ThemeKey("component-lane-handle-radius")
     static let componentLaneHeaderHeight = ThemeKey("component-lane-header-height")
-    static let componentLaneCollapsedWidth = ThemeKey("component-lane-collapsed-width")
+    static let componentLaneFoldedWidth = ThemeKey("component-lane-folded-width")
     static let componentLaneRestingWidth = ThemeKey("component-lane-resting-width")
     static let componentLaneLeadingMaxWidth = ThemeKey("component-lane-leading-max-width")
-    static let componentLaneCollapseThreshold = ThemeKey("component-lane-collapse-threshold")
+    static let componentLaneFoldThreshold = ThemeKey("component-lane-fold-threshold")
     static let componentLaneHandleWidth = ThemeKey("component-lane-handle-width")
     static let componentLaneHandleThickness = ThemeKey("component-lane-handle-thickness")
     static let componentLaneHandleLength = ThemeKey("component-lane-handle-length")
@@ -85,8 +85,8 @@ public extension ThemeKey {
     static let componentBlobBarHeight = ThemeKey("component-blob-bar-height")
     static let componentBlobHeight = ThemeKey("component-blob-height")
     static let componentBlobAwakeWidth = ThemeKey("component-blob-awake-width")
-    static let layoutWindowMargin = ThemeKey("layout-window-margin")
-    static let layoutRegionGap = ThemeKey("layout-region-gap")
+    static let componentLaneEdge = ThemeKey("component-lane-edge")
+    static let componentLaneGap = ThemeKey("component-lane-gap")
     static let sizeControlXs = ThemeKey("size-control-xs")
     static let sizeControlS = ThemeKey("size-control-s")
     static let sizeControlM = ThemeKey("size-control-m")
@@ -197,10 +197,10 @@ public extension ThemeKey {
         componentCheckboxRadius,
         componentLaneHandleRadius,
         componentLaneHeaderHeight,
-        componentLaneCollapsedWidth,
+        componentLaneFoldedWidth,
         componentLaneRestingWidth,
         componentLaneLeadingMaxWidth,
-        componentLaneCollapseThreshold,
+        componentLaneFoldThreshold,
         componentLaneHandleWidth,
         componentLaneHandleThickness,
         componentLaneHandleLength,
@@ -208,8 +208,8 @@ public extension ThemeKey {
         componentBlobBarHeight,
         componentBlobHeight,
         componentBlobAwakeWidth,
-        layoutWindowMargin,
-        layoutRegionGap,
+        componentLaneEdge,
+        componentLaneGap,
         sizeControlXs,
         sizeControlS,
         sizeControlM,

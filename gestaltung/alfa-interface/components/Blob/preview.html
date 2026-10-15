@@ -5,7 +5,7 @@
 <style>html,body{margin:0;background:var(--color-background-window);color:var(--color-text-primary);font-family:var(--font-sans)}</style>
 </head>
 <body>
-<div id="root" style="position:relative;height:320px;padding:0 var(--layout-window-margin)"><div style="position:relative;height:var(--component-blob-bar-height)" id="bar"></div><p class="caption" style="color:var(--color-text-tertiary);margin:var(--space-xxl) 0 0;max-width:520px">Zeiger nähern: der Blob wacht auf und zeigt den Bereich. Fahne klicken: Menü mit allen Bereichen. Ziehen: dockt an die linke oder rechte Wand.</p></div>
+<div id="root" style="position:relative;height:320px;padding:0 var(--component-lane-edge)"><div style="position:relative;height:var(--component-blob-bar-height)" id="bar"></div><p class="caption" style="color:var(--color-text-tertiary);margin:var(--space-xxl) 0 0;max-width:520px">Zeiger nähern: der Blob wacht auf und zeigt den Bereich. Fahne klicken: Menü mit allen Bereichen. Ziehen: dockt an die linke oder rechte Wand.</p></div>
 <script>
 var A = window.ALFA, h = React.createElement;
 ReactDOM.createRoot(document.getElementById("bar")).render(h(A.Blob, { areas: ["Mail", "Einstellungen"], area: "Mail", notice: true, noticeArea: "Mail" }));

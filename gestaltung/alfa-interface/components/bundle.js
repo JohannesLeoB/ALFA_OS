@@ -118,7 +118,7 @@
   /* ---------- Shell ---------- */
   function Shell(p) {
     var lanes = p.lanes || [];
-    var rest = px("component-lane-resting-width", 300), folded = px("component-lane-collapsed-width", 56), at = px("component-lane-collapse-threshold", 120), max = px("component-lane-leading-max-width", 420);
+    var rest = px("component-lane-resting-width", 300), folded = px("component-lane-folded-width", 56), at = px("component-lane-fold-threshold", 120), max = px("component-lane-leading-max-width", 420);
     var w = useState([lanes[0] && lanes[0].width || rest, lanes[2] && lanes[2].width || rest]), widths = w[0], setWidths = w[1];
     var d = useState(-1), dragging = d[0], setDragging = d[1];
     var base = useRef([0, 0]);
@@ -158,7 +158,7 @@
     var s5 = useState(null), drag = s5[0], setDrag = s5[1];
     var s6 = useState(""), query = s6[0], setQuery = s6[1];
     var s7 = useState(0), hot = s7[0], setHot = s7[1];
-    var rest = px("component-lane-collapsed-width", 56), awake = px("component-blob-awake-width", 124), menuW = px("component-menu-width", 216), margin = 0;
+    var rest = px("component-lane-folded-width", 56), awake = px("component-blob-awake-width", 124), menuW = px("component-menu-width", 216), margin = 0;
     var pointer = useRef({ x: -1e4, y: -1e4 });
     var dragInfo = useRef(null), dragged = useRef(false);
 
@@ -533,7 +533,7 @@
   /* ---------- EditSheet: drei Bahnen ohne Kopf ---------- */
   function EditSheet(p) {
     var lanes = p.lanes || [];
-    var rest = px("component-lane-resting-width", 300), folded = px("component-lane-collapsed-width", 56), at = px("component-lane-collapse-threshold", 120), maxW = px("component-lane-leading-max-width", 420);
+    var rest = px("component-lane-resting-width", 300), folded = px("component-lane-folded-width", 56), at = px("component-lane-fold-threshold", 120), maxW = px("component-lane-leading-max-width", 420);
     var w = useState([lanes[0] && lanes[0].width || rest, lanes[2] && lanes[2].width || rest]), widths = w[0], setWidths = w[1];
     var mf = useState(false), midFolded = mf[0], setMidFolded = mf[1];
     var mx = useState(-1), maxed = mx[0], setMaxed = mx[1];
@@ -596,7 +596,7 @@
     var s5 = useState(-1), hot = s5[0], setHot = s5[1];
     var s6 = useState({ w: 0, h: 0 }), box = s6[0], setBox = s6[1];
     var clickT = useRef(0), hoverT = useRef(0), moved = useRef(false), flip = useRef(null);
-    var inset = px("space-xs", 4), bw = px("component-lane-collapsed-width", 56), bh = px("component-blob-height", 36), gap = px("space-s", 8);
+    var inset = px("space-xs", 4), bw = px("component-lane-folded-width", 56), bh = px("component-blob-height", 36), gap = px("space-s", 8);
     var current = p.current || (items[0] && items[0].name) || "";
 
     useEffect(function () {

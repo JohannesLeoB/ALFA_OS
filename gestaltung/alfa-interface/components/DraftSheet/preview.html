@@ -6,7 +6,7 @@
 /* Nur Maße. Keine Farb-Tokens, keine Schrift-Tokens: Farbe kommt aus currentColor, Schrift ist die des Browsers. */
 html,body{margin:0;background:Canvas;color:CanvasText}
 *{box-sizing:border-box}
-.sheet{width:1280px;height:720px;padding:var(--layout-window-margin);display:grid;grid-template-columns:74px var(--component-lane-handle-width) minmax(0,1fr) var(--component-lane-handle-width) minmax(0,1.4fr);position:relative;overflow:hidden}
+.sheet{width:1280px;height:720px;padding:var(--component-lane-edge);display:grid;grid-template-columns:74px var(--component-lane-handle-width) minmax(0,1fr) var(--component-lane-handle-width) minmax(0,1.4fr);position:relative;overflow:hidden}
 .lane{border-radius:var(--component-lane-radius);box-shadow:0 0 0 1px color-mix(in srgb,currentColor 18%,transparent);min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 .grip{align-self:center;justify-self:center;width:var(--component-lane-handle-thickness);height:var(--component-lane-handle-length);border-radius:var(--component-lane-handle-radius);background:color-mix(in srgb,currentColor 35%,transparent)}
 .hd{height:var(--component-lane-header-height);flex:none;display:flex;align-items:center;gap:var(--space-s);padding:0 var(--space-m) 0 var(--space-l);border-bottom:1px solid color-mix(in srgb,currentColor 14%,transparent)}
@@ -20,7 +20,7 @@ html,body{margin:0;background:Canvas;color:CanvasText}
 .chip.on{background:CanvasText}
 /* Leiste */
 .rail{align-items:center;padding-top:var(--space-l);gap:var(--space-s)}
-.blob{position:relative;width:var(--component-lane-collapsed-width);height:var(--component-blob-height);margin-bottom:var(--space-l);border-radius:var(--radius-full);background:CanvasText;display:flex;align-items:center;justify-content:center}
+.blob{position:relative;width:var(--component-lane-folded-width);height:var(--component-blob-height);margin-bottom:var(--space-l);border-radius:var(--radius-full);background:CanvasText;display:flex;align-items:center;justify-content:center}
 .blob i{width:var(--size-control-m);height:var(--size-control-m);border-radius:var(--radius-full);border:1px solid Canvas;display:flex;gap:7px;align-items:center;justify-content:center}
 .blob i::before,.blob i::after{content:"";width:3.5px;height:7px;border-radius:var(--radius-full);background:Canvas}
 .rail .dot{width:var(--size-control-xl);height:var(--size-control-xl);background:transparent;border:1px solid color-mix(in srgb,currentColor 25%,transparent)}
@@ -44,7 +44,7 @@ html,body{margin:0;background:Canvas;color:CanvasText}
 .sign .bar.s:first-child{margin-top:0}
 .foot{display:flex;align-items:center;gap:var(--space-xs);padding:var(--space-s) var(--space-m);border-top:1px solid color-mix(in srgb,currentColor 14%,transparent)}
 .send{width:96px;height:var(--size-control-m);border-radius:var(--radius-full);background:CanvasText}
-.note{position:absolute;right:var(--layout-window-margin);bottom:4px;font-size:9px;opacity:.5}
+.note{position:absolute;right:var(--component-lane-edge);bottom:4px;font-size:9px;opacity:.5}
 </style></head>
 <body>
 <div class="sheet">

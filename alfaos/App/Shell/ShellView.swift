@@ -54,13 +54,13 @@ struct ShellView: View {
 
     private func pillX(_ width: CGFloat, _ theme: Theme) -> CGFloat {
         let pill = theme.length(.spaceXs) * 3 + theme.length(.sizeControlM) * 2
-        return width - theme.length(.layoutWindowMargin) - theme.length(.spaceS) - pill
+        return width - theme.length(.componentLaneEdge) - theme.length(.spaceS) - pill
     }
 
     private func assistantOrigin(_ theme: Theme) -> CGPoint {
         let menu = model.blob.menuOrigin(window: model.window, geometry: theme.geometry)
         let width = CGFloat(theme.geometry.assistantWidth)
-        let margin = theme.length(.layoutWindowMargin)
+        let margin = theme.length(.componentLaneEdge)
         let x = min(CGFloat(model.window.width) - margin - width, max(margin, CGFloat(menu.origin.x)))
         let y = menu.opensDownward ? CGFloat(menu.origin.y) : max(margin, CGFloat(menu.origin.y) - theme.length(.layoutReadingMaxWidth) / 2)
         return CGPoint(x: x, y: y)

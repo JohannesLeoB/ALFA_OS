@@ -67,7 +67,7 @@
 @keyframes ai-hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-4px) scaleY(1.04)}70%{transform:translateY(0) scaleY(.96)}}
 
 /* Shell: BlobBar und drei Bahnen */
-.ai-shell{--blob-trailing-inset:calc(var(--size-control-m) * 2 + var(--space-m) * 2);position:relative;display:grid;grid-template-rows:var(--component-blob-bar-height) minmax(0,1fr);row-gap:var(--layout-region-gap);height:100%;min-height:0;padding:0 var(--layout-window-margin) var(--layout-window-margin);background:var(--color-background-window)}
+.ai-shell{--blob-trailing-inset:calc(var(--size-control-m) * 2 + var(--space-m) * 2);position:relative;display:grid;grid-template-rows:var(--component-blob-bar-height) minmax(0,1fr);row-gap:var(--component-lane-gap);height:100%;min-height:0;padding:0 var(--component-lane-edge) var(--component-lane-edge);background:var(--color-background-window)}
 .ai-blobbar{position:relative;display:flex;align-items:center;justify-content:flex-end;gap:var(--space-m);min-width:0}
 .ai-lanes{display:grid;min-height:0;min-width:0;transition:grid-template-columns var(--motion-duration-snap) var(--motion-curve-standard)}
 .ai-lanes.ai-dragging{transition:none}
@@ -243,20 +243,20 @@
 .ai-tile-dot{display:inline-block;width:var(--component-indicator-size);height:var(--component-indicator-size);border-radius:var(--radius-full);background:currentColor}
 
 /* ===== EditSheet: drei Bahnen, kein Kopf ===== */
-.ai-edit-sheet{position:relative;height:100%;min-height:0;padding:var(--layout-window-margin);background:var(--color-background-window)}
+.ai-edit-sheet{position:relative;height:100%;min-height:0;padding:var(--component-lane-edge);background:var(--color-background-window)}
 .ai-es-lanes{display:grid;height:100%;min-height:0;min-width:0;transition:grid-template-columns var(--motion-duration-snap) var(--motion-curve-standard)}
 .ai-es-lanes.ai-dragging{transition:none}
 .ai-es-ctl{display:inline-flex;gap:var(--space-xxs);margin-left:var(--space-s)}
 .ai-es-ctl .ai-sbtn{color:var(--color-text-tertiary)}
 .ai-es-ctl .ai-sbtn:hover{color:var(--color-text-primary)}
-.ai-edit-sheet[data-blob-corner~="tl"] .ai-es-lanes>.ai-lane:first-child .ai-lane-head{padding-left:calc(var(--component-lane-collapsed-width) + var(--space-l))}
-.ai-edit-sheet[data-blob-corner~="tr"] .ai-es-lanes>.ai-lane:last-child .ai-lane-head{padding-right:calc(var(--component-lane-collapsed-width) + var(--space-l))}
+.ai-edit-sheet[data-blob-corner~="tl"] .ai-es-lanes>.ai-lane:first-child .ai-lane-head{padding-left:calc(var(--component-lane-folded-width) + var(--space-l))}
+.ai-edit-sheet[data-blob-corner~="tr"] .ai-es-lanes>.ai-lane:last-child .ai-lane-head{padding-right:calc(var(--component-lane-folded-width) + var(--space-l))}
 
 /* ===== BlobMenu: schwebender Blob, Walzenmenü ===== */
 .ai-bm-layer{position:absolute;inset:0;pointer-events:none;z-index:60}
 .ai-bm{position:absolute;pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none}
 .ai-bm.ai-dragging{cursor:grabbing}
-.ai-bm-pill{display:flex;flex-direction:column;width:var(--component-lane-collapsed-width);min-height:var(--component-blob-height);border-radius:var(--radius-full);background:var(--component-blob-background);color:var(--component-blob-foreground);box-shadow:var(--shadow-floating);overflow:visible;transition:width var(--motion-duration-disclose) var(--motion-curve-standard),border-radius var(--motion-duration-disclose) var(--motion-curve-standard);cursor:grab}
+.ai-bm-pill{display:flex;flex-direction:column;width:var(--component-lane-folded-width);min-height:var(--component-blob-height);border-radius:var(--radius-full);background:var(--component-blob-background);color:var(--component-blob-foreground);box-shadow:var(--shadow-floating);overflow:visible;transition:width var(--motion-duration-disclose) var(--motion-curve-standard),border-radius var(--motion-duration-disclose) var(--motion-curve-standard);cursor:grab}
 .ai-bm.ai-up .ai-bm-pill{flex-direction:column-reverse}
 .ai-bm.ai-open .ai-bm-pill{width:var(--component-menu-width);border-radius:var(--radius-card);cursor:default}
 .ai-bm.ai-dragging .ai-bm-pill{box-shadow:var(--shadow-floating);transform:scale(1.04)}

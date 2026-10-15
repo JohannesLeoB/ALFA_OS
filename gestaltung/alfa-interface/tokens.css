@@ -124,10 +124,10 @@
   --component-checkbox-radius: 4px;
   --component-lane-handle-radius: 2px;
   --component-lane-header-height: 44px;
-  --component-lane-collapsed-width: 56px;
+  --component-lane-folded-width: 56px;
   --component-lane-resting-width: 300px;
   --component-lane-leading-max-width: 380px;
-  --component-lane-collapse-threshold: 120px;
+  --component-lane-fold-threshold: 120px;
   --component-lane-handle-width: 12px;
   --component-lane-handle-thickness: 4px;
   --component-lane-handle-length: 64px;
@@ -135,8 +135,8 @@
   --component-blob-bar-height: 60px;
   --component-blob-height: 36px;
   --component-blob-awake-width: 124px;
-  --layout-window-margin: 16px;
-  --layout-region-gap: 12px;
+  --component-lane-edge: 16px;
+  --component-lane-gap: 12px;
   --size-control-xs: 20px;
   --size-control-s: 24px;
   --size-control-m: 28px;

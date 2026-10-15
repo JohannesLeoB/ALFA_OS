@@ -96,13 +96,13 @@ public struct ShellGeometry: Sendable, Equatable {
     public let windowMin: Size
 
     public init(theme: TokenTheme, metrics: ShellMetrics) {
-        margin = theme.length(.layoutWindowMargin)
-        gap = theme.length(.layoutRegionGap)
+        margin = theme.length(.componentLaneEdge)
+        gap = theme.length(.componentLaneGap)
         strip = theme.length(.componentBlobBarHeight)
         laneHeader = theme.length(.componentLaneHeaderHeight)
         laneRest = theme.length(.componentLaneRestingWidth)
-        laneFolded = theme.length(.componentLaneCollapsedWidth)
-        foldAt = theme.length(.componentLaneCollapseThreshold)
+        laneFolded = theme.length(.componentLaneFoldedWidth)
+        foldAt = theme.length(.componentLaneFoldThreshold)
         laneMin = metrics.laneMin
         laneMax = theme.length(.componentLaneLeadingMaxWidth)
         centerMin = metrics.centerMin
