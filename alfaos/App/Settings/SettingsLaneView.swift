@@ -113,10 +113,10 @@ struct SettingsSystemPane: View {
     var body: some View {
         VStack(alignment: .leading) {
             line(.version, version)
-            line(.tokenDelivery, TokenStamp.delivery)
-            line(.tokenDeliveredAt, TokenStamp.deliveredAt)
-            line(.tokenAdoptedAt, TokenStamp.adoptedAt)
-            line(.tokenState, TokenStamp.state)
+            line(.tokenDelivery, DesignStamp.delivery)
+            line(.tokenDeliveredAt, DesignStamp.deliveredAt)
+            line(.tokenAdoptedAt, DesignStamp.adoptedAt)
+            line(.tokenState, DesignStamp.state)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding()

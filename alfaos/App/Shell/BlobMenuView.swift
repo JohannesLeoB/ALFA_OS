@@ -13,7 +13,7 @@ struct BlobMenuView: View {
     private var line: Color { theme.pick(light: .paletteGray800, dark: .paletteGray300) }
 
     var body: some View {
-        let radius = theme.length(.radiusCard)
+        let radius = CGFloat(Design.Radius.contextMenu)
         let open = model.menuOpen
         let upward = !model.blob.menuOrigin(window: model.window, geometry: theme.geometry).opensDownward
         VStack(spacing: 0) {
@@ -149,7 +149,7 @@ struct MenuRow<Content: View>: View {
                 .padding(.trailing, theme.measure(.menuRowPaddingEnd))
                 .frame(height: theme.length(.componentMenuRowHeight))
                 .background(
-                    RoundedRectangle(cornerRadius: theme.length(.componentMenuRowRadius))
+                    RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row))
                         .fill(current ? foreground : (hovering ? hover : Color.clear))
                 )
                 .contentShape(Rectangle())
