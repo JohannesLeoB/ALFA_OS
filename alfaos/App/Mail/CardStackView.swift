@@ -90,15 +90,18 @@ private struct StackCard: View {
         }
         .clipShape(shape)
         .background {
-            if let layer = seamLayer {
-                shape.fill(paint(layer.color)).offset(y: CGFloat(layer.y))
+            ZStack {
+                if let layer = castLayer {
+                    shape.inset(by: CGFloat(-layer.spread))
+                        .fill(paint(layer.color))
+                        .blur(radius: CGFloat(layer.blur / 2))
+                        .offset(x: CGFloat(layer.x), y: CGFloat(layer.y))
+                }
+                if let layer = seamLayer {
+                    shape.fill(paint(layer.color)).offset(y: CGFloat(layer.y))
+                }
             }
         }
-        .shadow(
-            color: castLayer.map { paint($0.color) } ?? .clear,
-            radius: CGFloat((castLayer?.blur ?? 0) / 2),
-            x: 0,
-            y: CGFloat(castLayer?.y ?? 0))
         .contentShape(shape)
         .onTapGesture { if !front { Task { await model.open(card.id) } } }
     }
