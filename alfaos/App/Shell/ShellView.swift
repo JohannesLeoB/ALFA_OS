@@ -82,7 +82,7 @@ struct ShellView: View {
                     .offset(x: CGFloat(item.2), y: CGFloat(g.strip))
             }
         }
-        .animation(isDragging ? nil : theme.animation(Design.Duration.lane), value: widths)
+        .animation(isDragging ? nil : theme.spring(Design.Duration.lane), value: widths)
     }
 
     private var isDragging: Bool { dragCenter != nil }
@@ -97,7 +97,7 @@ struct ShellView: View {
             HandleView(theme: theme, model: model, lane: .leading, height: height).offset(x: CGFloat(leftX), y: CGFloat(g.strip))
             HandleView(theme: theme, model: model, lane: .trailing, height: height).offset(x: CGFloat(rightX), y: CGFloat(g.strip))
         }
-        .animation(theme.animation(Design.Duration.lane), value: widths)
+        .animation(theme.spring(Design.Duration.lane), value: widths)
     }
 
     @ViewBuilder

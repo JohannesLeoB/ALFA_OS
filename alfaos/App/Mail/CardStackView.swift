@@ -1,3 +1,4 @@
+import AppKit
 import Mail
 import ShellCore
 import SwiftUI
@@ -21,7 +22,7 @@ struct CardStackView: View {
             }
             .frame(width: proxy.size.width, height: proxy.size.height, alignment: .top)
             .animation(
-                Animation.timingCurve(Design.Easing.stack.x1, Design.Easing.stack.y1, Design.Easing.stack.x2, Design.Easing.stack.y2, duration: Design.Duration.stack),
+                NSWorkspace.shared.accessibilityDisplayShouldReduceMotion ? .linear(duration: 0.001) : .spring(duration: Design.Duration.stack, bounce: 0.1),
                 value: order.map(\.id))
         }
     }

@@ -23,7 +23,7 @@ struct HandleView: View {
         .contentShape(Rectangle())
         .pointerStyle(.columnResize)
         .onHover { hovering = $0 }
-        .animation(theme.animation(Design.Duration.hover), value: active)
+        .animation(theme.spring(Design.Duration.hover), value: active)
         .gesture(
             DragGesture(minimumDistance: 0, coordinateSpace: .global)
                 .onChanged { value in

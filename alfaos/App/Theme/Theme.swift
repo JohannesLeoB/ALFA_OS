@@ -45,6 +45,10 @@ struct Theme {
         CGFloat(tokens.textStyle(key)?.tracking ?? 0)
     }
 
+    func spring(_ seconds: Double, bounce: Double = 0) -> Animation {
+        NSWorkspace.shared.accessibilityDisplayShouldReduceMotion ? .linear(duration: 0.001) : .spring(duration: seconds, bounce: bounce)
+    }
+
     func animation(_ seconds: Double, _ curve: CubicBezier = Design.Easing.standard) -> Animation {
         Animation.timingCurve(curve.x1, curve.y1, curve.x2, curve.y2, duration: seconds)
     }

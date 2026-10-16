@@ -32,7 +32,7 @@ struct BlobMenuView: View {
         .themeShadow(theme, layers: theme.designShadow(\.floating), shape: RoundedRectangle(cornerRadius: radius))
         .opacity(open ? 1 : 0)
         .allowsHitTesting(open)
-        .animation(theme.animation(Design.Duration.stack, Design.Easing.stack), value: open)
+        .animation(theme.spring(Design.Duration.stack), value: open)
         .accessibilityElement(children: .contain)
         .accessibilityLabel(theme.text("menu.label"))
     }
