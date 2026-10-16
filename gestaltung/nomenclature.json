@@ -1,0 +1,347 @@
+{
+ "purpose": "Eine gemeinsam geführte Nomenklatur. Code und Design schreiben hier dieselben Namen auf; Johannes entscheidet darüber nicht.",
+ "rules": [
+  "Namen im Code: englisch, kurz, lowerCamelCase, ohne Umlaute.",
+  "Sichtbare Texte nur über Katalogschlüssel in alfaos/App/Localizable.xcstrings.",
+  "Design nennt in Entwürfen dieselben englischen Namen (data-part, Zustände, Tokens); die deutsche Bezeichnung steht nur im Feld word oder design.",
+  "status code: Name steht im Code; proposed: Code schlägt vor, Design bestätigt oder ändert; confirmed: beide einig.",
+  "Jede Änderung eines Namens ändert beide Seiten im selben Schritt."
+ ],
+ "entries": [
+  {
+   "code": "created",
+   "design": "notConnected",
+   "status": "proposed",
+   "word": "mail.state.created",
+   "note": "Entwurf „nicht verbunden“; Zuordnung von Code vorgeschlagen"
+  },
+  {
+   "code": "signedIn",
+   "design": "stored",
+   "status": "proposed",
+   "word": "mail.state.signedIn",
+   "note": "Entwurf „gespeichert“; README nennt signedIn geraten"
+  },
+  {
+   "code": "connecting",
+   "design": "connecting",
+   "status": "code",
+   "word": "mail.state.loading"
+  },
+  {
+   "code": "connected",
+   "design": "connected",
+   "status": "code",
+   "word": "mail.state.connected"
+  },
+  {
+   "code": "working",
+   "design": "working",
+   "status": "code",
+   "word": "mail.state.connected"
+  },
+  {
+   "code": "failed",
+   "design": "failed",
+   "status": "code",
+   "word": "mail.state.failed"
+  },
+  {
+   "code": "keychainUnreadable",
+   "design": "unreadable",
+   "status": "proposed",
+   "word": "mail.state.keychain"
+  },
+  {
+   "code": "orphaned",
+   "design": "orphaned",
+   "status": "code",
+   "word": "mail.state.orphaned"
+  },
+  {
+   "code": "locked",
+   "design": "",
+   "status": "code",
+   "word": "mail.state.locked",
+   "note": "im Entwurf nicht gezeigt"
+  },
+  {
+   "code": "appearance",
+   "design": "darstellung",
+   "status": "code",
+   "word": "settings.section.appearance"
+  },
+  {
+   "code": "integrations",
+   "design": "integrationen",
+   "status": "code",
+   "word": "settings.section.integrations"
+  },
+  {
+   "code": "system",
+   "design": "system",
+   "status": "code",
+   "word": "settings.section.system"
+  },
+  {
+   "code": "identity",
+   "design": "identitaet",
+   "status": "proposed"
+  },
+  {
+   "code": "accounts",
+   "design": "konten",
+   "status": "proposed"
+  },
+  {
+   "code": "mail",
+   "design": "mail",
+   "status": "proposed"
+  },
+  {
+   "code": "company",
+   "design": "firma",
+   "status": "proposed"
+  },
+  {
+   "code": "folders",
+   "design": "ordner",
+   "status": "proposed"
+  },
+  {
+   "code": "templates",
+   "design": "vorlagen",
+   "status": "proposed"
+  },
+  {
+   "code": "keys",
+   "design": "schluessel",
+   "status": "proposed"
+  },
+  {
+   "code": "privacy",
+   "design": "datenschutz",
+   "status": "proposed"
+  },
+  {
+   "code": "imprint",
+   "design": "impressum",
+   "status": "proposed"
+  },
+  {
+   "code": "signature",
+   "design": "signatur",
+   "status": "proposed"
+  },
+  {
+   "code": "contacts",
+   "design": "kontakte",
+   "status": "proposed"
+  },
+  {
+   "code": "lock",
+   "design": "sperre",
+   "status": "proposed"
+  },
+  {
+   "code": "notices",
+   "design": "mitteilungen",
+   "status": "proposed"
+  },
+  {
+   "code": "shortcuts",
+   "design": "kuerzel",
+   "status": "proposed"
+  },
+  {
+   "code": "setup",
+   "design": "einrichtung",
+   "status": "proposed"
+  },
+  {
+   "code": "diagnostics",
+   "design": "diagnose",
+   "status": "proposed"
+  },
+  {
+   "code": "backups",
+   "design": "backups",
+   "status": "proposed"
+  },
+  {
+   "code": "journal",
+   "design": "tagebuch",
+   "status": "proposed"
+  },
+  {
+   "code": "workshop",
+   "design": "werkstatt",
+   "status": "proposed"
+  },
+  {
+   "code": "empty",
+   "design": "empty",
+   "status": "code",
+   "note": "im Entwurf teils nicht gezeigt (loadingMore, noFilterMatch, signInExpired)"
+  },
+  {
+   "code": "emptySearch",
+   "design": "emptySearch",
+   "status": "code",
+   "note": "im Entwurf teils nicht gezeigt (loadingMore, noFilterMatch, signInExpired)"
+  },
+  {
+   "code": "loading",
+   "design": "loading",
+   "status": "code",
+   "note": "im Entwurf teils nicht gezeigt (loadingMore, noFilterMatch, signInExpired)"
+  },
+  {
+   "code": "loadingMore",
+   "design": "loadingMore",
+   "status": "code",
+   "note": "im Entwurf teils nicht gezeigt (loadingMore, noFilterMatch, signInExpired)"
+  },
+  {
+   "code": "loaded",
+   "design": "loaded",
+   "status": "code",
+   "note": "im Entwurf teils nicht gezeigt (loadingMore, noFilterMatch, signInExpired)"
+  },
+  {
+   "code": "noFilterMatch",
+   "design": "noFilterMatch",
+   "status": "code",
+   "note": "im Entwurf teils nicht gezeigt (loadingMore, noFilterMatch, signInExpired)"
+  },
+  {
+   "code": "failed",
+   "design": "failed",
+   "status": "code",
+   "note": "im Entwurf teils nicht gezeigt (loadingMore, noFilterMatch, signInExpired)"
+  },
+  {
+   "code": "notConnected",
+   "design": "notConnected",
+   "status": "code",
+   "note": "im Entwurf teils nicht gezeigt (loadingMore, noFilterMatch, signInExpired)"
+  },
+  {
+   "code": "signInExpired",
+   "design": "signInExpired",
+   "status": "code",
+   "note": "im Entwurf teils nicht gezeigt (loadingMore, noFilterMatch, signInExpired)"
+  },
+  {
+   "code": "offline",
+   "design": "offline",
+   "status": "code",
+   "note": "im Entwurf teils nicht gezeigt (loadingMore, noFilterMatch, signInExpired)"
+  },
+  {
+   "code": "idle",
+   "design": "idle",
+   "status": "code"
+  },
+  {
+   "code": "edited",
+   "design": "edited",
+   "status": "code"
+  },
+  {
+   "code": "saving",
+   "design": "saving",
+   "status": "code"
+  },
+  {
+   "code": "saved",
+   "design": "saved",
+   "status": "code"
+  },
+  {
+   "code": "sending",
+   "design": "sending",
+   "status": "code"
+  },
+  {
+   "code": "sent",
+   "design": "sent",
+   "status": "code"
+  },
+  {
+   "code": "sendBlocked",
+   "design": "sendBlocked",
+   "status": "code"
+  },
+  {
+   "code": "sendFailed",
+   "design": "sendFailed",
+   "status": "code"
+  },
+  {
+   "code": "queuedInOutbox",
+   "design": "queuedInOutbox",
+   "status": "code"
+  },
+  {
+   "code": "google",
+   "design": "google",
+   "status": "proposed",
+   "note": "Anbieter im Hub: nur google und imap"
+  },
+  {
+   "code": "accounts",
+   "design": "mailkonten",
+   "status": "proposed",
+   "note": "Anbieter im Hub: nur google und imap"
+  },
+  {
+   "code": "clickup",
+   "design": "clickup",
+   "status": "proposed",
+   "note": "Anbieter im Hub: nur google und imap"
+  },
+  {
+   "code": "clockodo",
+   "design": "clockodo",
+   "status": "proposed",
+   "note": "Anbieter im Hub: nur google und imap"
+  },
+  {
+   "code": "claude",
+   "design": "claude",
+   "status": "proposed",
+   "note": "Anbieter im Hub: nur google und imap"
+  },
+  {
+   "code": "airtable",
+   "design": "airtable",
+   "status": "proposed",
+   "note": "Anbieter im Hub: nur google und imap"
+  },
+  {
+   "code": "sevdesk",
+   "design": "sevdesk",
+   "status": "proposed",
+   "note": "Anbieter im Hub: nur google und imap"
+  },
+  {
+   "code": "dhlTracking",
+   "design": "dhl",
+   "status": "proposed",
+   "note": "Anbieter im Hub: nur google und imap"
+  },
+  {
+   "code": "dhlShipping",
+   "design": "dhlversand",
+   "status": "proposed",
+   "note": "Anbieter im Hub: nur google und imap"
+  },
+  {
+   "code": "happa",
+   "design": "happa",
+   "status": "proposed",
+   "note": "Anbieter im Hub: nur google und imap"
+  }
+ ]
+}
