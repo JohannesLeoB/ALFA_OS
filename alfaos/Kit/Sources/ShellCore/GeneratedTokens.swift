@@ -1,4 +1,4 @@
-// tokens.json version 1 sha256 254e284cb340d0c73331f1e95041e26486b3cc9ac86efc7edf0e587ccb99c020
+// tokens.json version 1 sha256 1a966613143ad91e5d173d084cb6b0abe37961482e45bb26858c3e9a7b2873fd
 
 public extension ThemeKey {
     static let colorBackgroundWindow = ThemeKey("color-background-window")
@@ -274,4 +274,11 @@ public extension TextKey {
         cardMark,
         mark,
     ]
+}
+
+public enum TokenStamp {
+    public static let delivery = "Arbeitswelt ALFA Interface Zugang (13).zip, sha256 6c3a927e1b5bae51eee3f12e03fb196c1ddd35ce5ed59fb16eec67d7904d3e4f"
+    public static let deliveredAt = "2026-10-16T02:05"
+    public static let adoptedAt = "2026-10-16T02:21"
+    public static let state = "Hülle: fünf Werte der Lieferung übernommen (b716f71). Einstellungen: Darstellung, Integrationen, System gebaut. Offen: 29 mehrdeutige und 47 unzugeordnete Tokens."
 }

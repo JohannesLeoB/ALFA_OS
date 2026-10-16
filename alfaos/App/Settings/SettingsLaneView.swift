@@ -28,6 +28,15 @@ private struct SettingsLaneContent: View {
     }
 
     @ViewBuilder
+    private func center(_ setup: any HubSetup) -> some View {
+        switch host.section {
+        case .integrations: SettingsInletsPane(host: host, setup: setup)
+        case .appearance: SettingsAppearancePane()
+        case .system: SettingsSystemPane()
+        }
+    }
+
+    @ViewBuilder
     private var content: some View {
         switch host.phase {
         case .idle:
@@ -39,21 +48,96 @@ private struct SettingsLaneContent: View {
             }
         case .ready(let assembly):
             switch lane {
-            case .leading: SettingsGroupsPane()
-            case .center: SettingsInletsPane(host: host, setup: assembly.hub.setup)
-            case .trailing: SettingsAddPane(host: host, offers: assembly.hub.setup.offers)
+            case .leading: SettingsGroupsPane(host: host)
+            case .center: center(assembly.hub.setup)
+            case .trailing:
+                if host.section == .integrations {
+                    SettingsAddPane(host: host, offers: assembly.hub.setup.offers)
+                } else {
+                    Color.clear
+                }
             }
         }
     }
 }
 
 struct SettingsGroupsPane: View {
+    @Bindable var host: AppHost
+
+    private var pick: Binding<SettingsSection?> {
+        Binding(
+            get: { host.section },
+            set: { section in if let section { host.section = section } })
+    }
+
+    var body: some View {
+        List(selection: pick) {
+            ForEach(SettingsGroup.allCases, id: \.self) { group in
+                Section {
+                    ForEach(SettingsSection.allCases.filter { $0.group == group }) { section in
+                        word(section.key).tag(section)
+                    }
+                } header: {
+                    word(group.key)
+                }
+            }
+        }
+    }
+}
+
+struct SettingsAppearancePane: View {
+    @AppStorage("appearance") private var choice = AppearanceChoice.system.rawValue
+
     var body: some View {
         VStack(alignment: .leading) {
-            word("text.settings.row.mail.accounts")
+            ForEach(AppearanceChoice.allCases, id: \.self) { option in
+                Button { choice = option.rawValue } label: {
+                    HStack {
+                        word(option.key)
+                        if choice == option.rawValue { Image(systemName: "checkmark") }
+                    }
+                }
+                .buttonStyle(.plain)
+            }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding()
+    }
+}
+
+struct SettingsSystemPane: View {
+    private var version: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+    }
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            line(.version, version)
+            line(.tokenDelivery, TokenStamp.delivery)
+            line(.tokenDeliveredAt, TokenStamp.deliveredAt)
+            line(.tokenAdoptedAt, TokenStamp.adoptedAt)
+            line(.tokenState, TokenStamp.state)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding()
+    }
+
+    private func line(_ label: SettingsLabel, _ value: String) -> some View {
+        VStack(alignment: .leading) {
+            word(label.key)
+            Text(verbatim: value)
+        }
+        .padding(.bottom)
+    }
+}
+
+extension AppearanceChoice {
+    var scheme: ColorScheme? {
+        switch self {
+        case .system: nil
+        case .light: .light
+        case .dark: .dark
+        }
     }
 }
 

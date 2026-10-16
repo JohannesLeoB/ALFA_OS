@@ -2,6 +2,7 @@ import AppKit
 import Hub
 import Mail
 import Observation
+import ShellCore
 import SwiftUI
 
 @MainActor
@@ -17,6 +18,7 @@ final class AppHost {
     private(set) var busy = false
     private(set) var failure: Hint?
     var form: Offer?
+    var section: SettingsSection = .integrations
     var values: [String: String] = [:]
 
     var isIdle: Bool {

@@ -104,11 +104,45 @@ def swift_block(type_name, names):
     return "\n".join(lines)
 
 
+STAMP_FIELDS = ("delivery", "deliveredAt", "adoptedAt", "state")
+
+
+def content_hash(source):
+    meta = dict(source.get("meta", {}))
+    meta.pop("stamp", None)
+    body = dict(source, meta=meta)
+    text = json.dumps(body, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def stamp_of(source):
+    stamp = source.get("meta", {}).get("stamp")
+    if not isinstance(stamp, dict):
+        raise ValueError("meta.stamp is missing in tokens.json")
+    for field in STAMP_FIELDS + ("content",):
+        if not isinstance(stamp.get(field), str) or not stamp[field].strip():
+            raise ValueError("meta.stamp.%s is missing in tokens.json" % field)
+    expected = content_hash(source)
+    if stamp["content"] != expected:
+        raise ValueError(
+            "the token sheet changed since its stamp: set meta.stamp.content to %s and renew adoptedAt and state" % expected)
+    return stamp
+
+
+def swift_stamp(stamp):
+    lines = ["public enum TokenStamp {"]
+    for field in STAMP_FIELDS:
+        lines.append("%spublic static let %s = %s" % (INDENT, field, json.dumps(stamp[field], ensure_ascii=False)))
+    lines.append("}")
+    return "\n".join(lines)
+
+
 def swift_output(source, source_bytes, web_bytes):
     names = unique(VARIABLE.findall(web_bytes.decode("utf-8")))
     styles = unique(s["name"] for g in source["type"]["groups"] for s in g["styles"])
     head = "// tokens.json version %s sha256 %s" % (source["version"], hashlib.sha256(source_bytes).hexdigest())
-    text = head + "\n\n" + swift_block("ThemeKey", names) + "\n\n" + swift_block("TextKey", styles) + "\n"
+    text = head + "\n\n" + swift_block("ThemeKey", names) + "\n\n" + swift_block("TextKey", styles)
+    text += "\n\n" + swift_stamp(stamp_of(source)) + "\n"
     return text.encode("utf-8")
 
 

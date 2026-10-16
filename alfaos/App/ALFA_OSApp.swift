@@ -7,6 +7,7 @@ struct ALFA_OSApp: App {
     private let resources: ShellResources?
     @State private var model: ShellModel?
     @State private var host = AppHost()
+    @AppStorage("appearance") private var appearance = AppearanceChoice.system.rawValue
     private let store = ShellStore()
 
     init() {
@@ -30,6 +31,7 @@ struct ALFA_OSApp: App {
             if let resources, let model {
                 ShellView(resources: resources, bundle: .main, model: model)
                     .environment(\.appHost, host)
+                    .preferredColorScheme(AppearanceChoice(rawValue: appearance)?.scheme)
                     .background(WindowConfigurator(minimum: CGSize(width: resources.geometry.windowMin.width, height: resources.geometry.windowMin.height)))
             } else {
                 Text(LocalizedStringKey("error.resources"))
