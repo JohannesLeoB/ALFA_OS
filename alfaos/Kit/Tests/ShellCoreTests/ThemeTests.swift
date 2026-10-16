@@ -10,25 +10,18 @@ final class ThemeTests: XCTestCase {
         XCTAssertEqual(Set(ThemeKey.all).count, ThemeKey.all.count)
     }
 
-    func testAliasFollowsTheMode() throws {
-        let theme = try Fixture.theme()
-        XCTAssertEqual(theme.color(.colorBackgroundContent, .light), theme.color(.colorBackgroundContainer, .light))
-        XCTAssertEqual(theme.color(.colorBackgroundSelected, .dark), theme.color(.colorTextPrimary, .dark))
-        XCTAssertNotEqual(theme.color(.colorTextPrimary, .light), theme.color(.colorTextPrimary, .dark))
-    }
-
     func testRemovedTokenIsMagentaAndListed() throws {
         let data = try Fixture.data("gestaltung/alfa-interface/tokens.json")
         var root = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
         var color = try XCTUnwrap(root["color"] as? [String: Any])
         var tokens = try XCTUnwrap(color["tokens"] as? [[String: Any]])
-        tokens.removeAll { ($0["name"] as? String) == "color-line-separator" }
+        tokens.removeAll { ($0["name"] as? String) == "color-background-container" }
         color["tokens"] = tokens
         root["color"] = color
         let theme = try TokenTheme(data: JSONSerialization.data(withJSONObject: root))
-        XCTAssertEqual(theme.color(.colorLineSeparator, .light), RGB.missing)
-        XCTAssertEqual(theme.color(.colorLineSeparator, .dark), RGB.missing)
-        XCTAssertEqual(theme.missing, [.colorLineSeparator])
+        XCTAssertEqual(theme.color(.colorBackgroundContainer, .light), RGB.missing)
+        XCTAssertEqual(theme.color(.colorBackgroundContainer, .dark), RGB.missing)
+        XCTAssertEqual(theme.missing, [.colorBackgroundContainer])
     }
 
     func testValuesParse() throws {
@@ -36,7 +29,6 @@ final class ThemeTests: XCTestCase {
         XCTAssertEqual(theme.length(.componentLaneRestingWidth), 280)
         XCTAssertEqual(theme.duration(.motionDurationChange), 0.2, accuracy: 1e-9)
         XCTAssertEqual(theme.curve(.motionCurveStandard), CubicBezier(x1: 0.2, y1: 0.8, x2: 0.2, y2: 1))
-        XCTAssertEqual(theme.color(.colorBackgroundOverlay, .light), RGB(0, 0, 0, 0.2))
         let style = try XCTUnwrap(theme.textStyle(.name))
         XCTAssertEqual(style.size, 13)
         XCTAssertEqual(style.weight, 500)
@@ -49,8 +41,6 @@ final class ThemeTests: XCTestCase {
         XCTAssertEqual(floating.count, 2)
         XCTAssertTrue(floating[0].isContour)
         XCTAssertEqual(floating[1].blur, 24)
-        XCTAssertEqual(theme.shadow(.shadowInset, .light), [])
-        XCTAssertTrue(theme.shadow(.shadowInsetHover, .light)[0].inset)
         XCTAssertEqual(theme.shadow("shadow-unknown", .light).first?.color, RGB.missing)
     }
 

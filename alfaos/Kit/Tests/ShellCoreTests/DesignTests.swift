@@ -14,7 +14,6 @@ final class DesignTests: XCTestCase {
             (Design.Size.edge, .componentLaneEdge),
             (Design.Size.gutter, .componentLaneGap),
             (Design.Radius.lane, .componentLaneRadius),
-            (Design.Radius.row, .radiusRow),
         ]
         for (value, key) in pairs {
             XCTAssertEqual(value, theme.length(key), key.rawValue)

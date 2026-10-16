@@ -7,10 +7,11 @@ struct BlobMenuView: View {
     let available: CGFloat
     @FocusState private var searchFocused: Bool
 
-    private var background: Color { theme.color(.componentBlobBackground) }
-    private var foreground: Color { theme.color(.componentBlobForeground) }
-    private var muted: Color { theme.pick(light: .paletteGray400, dark: .paletteGray600) }
-    private var line: Color { theme.pick(light: .paletteGray800, dark: .paletteGray300) }
+    private var background: Color { theme.design(\.inverse) }
+    private var foreground: Color { theme.design(\.onInverse) }
+    private var muted: Color { theme.design(\.handle) }
+    private var line: Color { theme.design(\.inverseLine) }
+    private var hot: Color { theme.design(\.inverseHot) }
 
     var body: some View {
         let radius = CGFloat(Design.Radius.contextMenu)
@@ -104,7 +105,7 @@ struct BlobMenuView: View {
 
     private func appRow(_ entry: AppEntry) -> some View {
         let current = entry.id == model.currentID
-        return MenuRow(theme: theme, current: current, hover: line, foreground: foreground, background: background) {
+        return MenuRow(theme: theme, current: current, hover: hot, foreground: foreground, background: background) {
             model.select(entry.id)
         } content: {
             HStack(spacing: theme.length(.spaceS)) {
@@ -118,7 +119,7 @@ struct BlobMenuView: View {
         VStack(spacing: 0) {
             Rectangle().fill(line).frame(height: theme.length(.strokeHairline))
                 .padding(.vertical, theme.length(.spaceXs))
-            MenuRow(theme: theme, current: false, hover: line, foreground: foreground, background: background) {
+            MenuRow(theme: theme, current: false, hover: hot, foreground: foreground, background: background) {
                 model.toggleAssistant()
             } content: {
                 HStack(spacing: theme.length(.spaceS)) {

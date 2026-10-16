@@ -1,0 +1,575 @@
+{
+ "note": "Quarantäne: Tokens des alten Bogens, die kein Code mehr nutzt und die im Entwurf keine Rolle haben oder durch Design.* ersetzt sind. Nicht erzeugt. Design entscheidet je Name: Rolle oder weg.",
+ "removed": [
+  {
+   "family": "color",
+   "name": "color-background-window",
+   "value": {
+    "light": "#ffffff",
+    "dark": "#0d0d0d"
+   },
+   "usage": "Fensterboden: Weiß. Bahnen stehen darauf mit einer Haarlinie, nicht mit Schatten."
+  },
+  {
+   "family": "color",
+   "name": "color-background-control",
+   "value": {
+    "light": "#f5f5f5",
+    "dark": "#1f1f1f"
+   },
+   "usage": "Mulde für Knöpfe, Chips und Felder auf color-background-container."
+  },
+  {
+   "family": "color",
+   "name": "color-background-content",
+   "value": "{color-background-container}",
+   "usage": "Fremder Inhalt, etwa eine Mail, und Listen."
+  },
+  {
+   "family": "color",
+   "name": "color-background-content-control",
+   "value": "{color-background-control}",
+   "usage": "Mulde auf color-background-content, etwa Absenderkreis."
+  },
+  {
+   "family": "color",
+   "name": "color-background-inverted",
+   "value": {
+    "light": "#171717",
+    "dark": "#f5f5f5"
+   },
+   "usage": "Umgekehrte Fläche für kurze Hinweise, etwa den Griff-Wert beim Ziehen. Text: color-text-on-inverted."
+  },
+  {
+   "family": "color",
+   "name": "color-background-selected",
+   "value": "{color-text-primary}",
+   "usage": "Gewählte Zeile, gewählter Chip, gewählter Knopf. Text darauf: color-text-on-selected."
+  },
+  {
+   "family": "color",
+   "name": "color-background-overlay",
+   "value": {
+    "light": "rgba(0, 0, 0, 0.2)",
+    "dark": "rgba(0, 0, 0, 0.5)"
+   },
+   "usage": "Abdunklung hinter Blättern und Dialogen."
+  },
+  {
+   "family": "color",
+   "name": "color-background-control-hover",
+   "value": {
+    "light": "rgba(0, 0, 0, 0.05)",
+    "dark": "rgba(255, 255, 255, 0.08)"
+   },
+   "usage": "Hover-Mulde ohne eigene Fläche."
+  },
+  {
+   "family": "color",
+   "name": "color-text-primary",
+   "value": {
+    "light": "#171717",
+    "dark": "#fafafa"
+   },
+   "usage": "Haupttext auf color-background-window, color-background-container, color-background-control und color-background-content (13,9:1 hell auf color-background-window, 13,9:1 dunkel auf color-background-container)."
+  },
+  {
+   "family": "color",
+   "name": "color-text-secondary",
+   "value": {
+    "light": "#4d4d4d",
+    "dark": "#d9d9d9"
+   },
+   "usage": "Zweiter Text: Vorschau, Erklärungen, auf color-background-window, color-background-container und color-background-control."
+  },
+  {
+   "family": "color",
+   "name": "color-text-tertiary",
+   "value": {
+    "light": "#6b6b6b",
+    "dark": "#a3a3a3"
+   },
+   "usage": "Dritter Text: Datum, Zähler, Beschriftung auf color-background-window und color-background-container (4,8:1 und 5,3:1 hell). Auf color-background-control hell nur 4,4:1: dort color-text-secondary."
+  },
+  {
+   "family": "color",
+   "name": "color-text-placeholder",
+   "value": "{color-text-tertiary}",
+   "usage": "Platzhalter in Feldern."
+  },
+  {
+   "family": "color",
+   "name": "color-symbol-muted",
+   "value": {
+    "light": "#8a8a8a",
+    "dark": "#8a8a8a"
+   },
+   "usage": "Marken und Zeichen in gefalteten Bahnen, 3:1 für Zeichen, nicht für Fließtext."
+  },
+  {
+   "family": "color",
+   "name": "color-text-on-inverted",
+   "value": {
+    "light": "#ffffff",
+    "dark": "#0d0d0d"
+   },
+   "usage": "Text auf color-background-inverted."
+  },
+  {
+   "family": "color",
+   "name": "color-text-on-selected",
+   "value": {
+    "light": "#ffffff",
+    "dark": "#0d0d0d"
+   },
+   "usage": "Text auf color-background-selected."
+  },
+  {
+   "family": "color",
+   "name": "color-line-separator",
+   "value": {
+    "light": "#e8e8e8",
+    "dark": "#2a2a2a"
+   },
+   "usage": "Trennlinie unter Bahnköpfen und zwischen Gruppen, 1 px; auch Hover auf color-background-control."
+  },
+  {
+   "family": "color",
+   "name": "color-line-divider",
+   "value": {
+    "light": "#d9d9d9",
+    "dark": "#3a3a3a"
+   },
+   "usage": "Haarlinie der Bedienteile: Umriss von Knöpfen, Chips und Feldern, 1 px."
+  },
+  {
+   "family": "color",
+   "name": "color-line-content",
+   "value": "{color-background-control}",
+   "usage": "Trennlinie zwischen Nachrichtenzeilen."
+  },
+  {
+   "family": "color",
+   "name": "color-control-handle",
+   "value": {
+    "light": "#a3a3a3",
+    "dark": "#6b6b6b"
+   },
+   "usage": "Griff zwischen zwei Bahnen in Ruhe, mindestens 3:1 auf color-background-window."
+  },
+  {
+   "family": "color",
+   "name": "color-control-handle-active",
+   "value": "{color-text-primary}",
+   "usage": "Griff beim Überfahren und Ziehen."
+  },
+  {
+   "family": "color",
+   "name": "color-indicator-accent",
+   "value": {
+    "light": "#171717",
+    "dark": "#fafafa"
+   },
+   "usage": "Einzige Betonung: Ungelesen-Punkt, aktiver Zähler. Dieselbe Tinte wie color-text-primary, kein Fremdton."
+  },
+  {
+   "family": "color",
+   "name": "component-blob-background",
+   "value": "{color-background-inverted}",
+   "usage": "Pille des Blob; darauf component-blob-foreground."
+  },
+  {
+   "family": "color",
+   "name": "component-blob-foreground",
+   "value": "{color-text-on-inverted}",
+   "usage": "Ring, Augen, Fahne und Menü auf component-blob-background."
+  },
+  {
+   "family": "color",
+   "name": "color-focus-ring",
+   "value": {
+    "light": "#6b6b6b",
+    "dark": "#a3a3a3"
+   },
+   "usage": "Fokusring 2 px mit 2 px Abstand an jedem bedienbaren Teil, mindestens 3:1 auf color-background-window, color-background-container und color-background-control."
+  },
+  {
+   "family": "color",
+   "name": "color-status-destructive",
+   "value": {
+    "light": "#b3412e",
+    "dark": "#e08a74"
+   },
+   "usage": "Nur Löschen und Fehler, klein, immer mit Wort oder Zeichen. Gedeckter Ziegel statt Signalrot."
+  },
+  {
+   "family": "color",
+   "name": "palette-gray-50",
+   "value": {
+    "light": "#ffffff",
+    "dark": "#ffffff"
+   },
+   "usage": "Neutrale Leiter, hellste Stufe: Weiß."
+  },
+  {
+   "family": "color",
+   "name": "palette-gray-100",
+   "value": {
+    "light": "#f5f5f5",
+    "dark": "#f5f5f5"
+   },
+   "usage": "Neutrale Leiter."
+  },
+  {
+   "family": "color",
+   "name": "palette-gray-200",
+   "value": {
+    "light": "#ebebeb",
+    "dark": "#ebebeb"
+   },
+   "usage": "Neutrale Leiter."
+  },
+  {
+   "family": "color",
+   "name": "palette-gray-300",
+   "value": {
+    "light": "#d9d9d9",
+    "dark": "#d9d9d9"
+   },
+   "usage": "Neutrale Leiter."
+  },
+  {
+   "family": "color",
+   "name": "palette-gray-500",
+   "value": {
+    "light": "#8a8a8a",
+    "dark": "#8a8a8a"
+   },
+   "usage": "Neutrale Leiter."
+  },
+  {
+   "family": "color",
+   "name": "palette-gray-600",
+   "value": {
+    "light": "#6b6b6b",
+    "dark": "#6b6b6b"
+   },
+   "usage": "Neutrale Leiter."
+  },
+  {
+   "family": "color",
+   "name": "palette-gray-700",
+   "value": {
+    "light": "#4d4d4d",
+    "dark": "#4d4d4d"
+   },
+   "usage": "Neutrale Leiter."
+  },
+  {
+   "family": "color",
+   "name": "palette-gray-800",
+   "value": {
+    "light": "#2e2e2e",
+    "dark": "#2e2e2e"
+   },
+   "usage": "Neutrale Leiter."
+  },
+  {
+   "family": "color",
+   "name": "palette-gray-900",
+   "value": {
+    "light": "#171717",
+    "dark": "#171717"
+   },
+   "usage": "Neutrale Leiter."
+  },
+  {
+   "family": "color",
+   "name": "palette-gray-950",
+   "value": {
+    "light": "#0d0d0d",
+    "dark": "#0d0d0d"
+   },
+   "usage": "Neutrale Leiter."
+  },
+  {
+   "family": "color",
+   "name": "palette-red-400",
+   "value": "#f95c4b",
+   "usage": "Stimmung: Koralle, Leitfarbe der Ausdrucksflächen (Balken, Glow, Agent-Pille). Nie für Text, Linien oder Bedienflächen. Text darauf: color-text-on-expression-light."
+  },
+  {
+   "family": "color",
+   "name": "palette-red-500",
+   "value": "#ae445a",
+   "usage": "Rohwert, Rotfamilie Stufe 500 (aus der Fassung vom 10.10. 03:59)."
+  },
+  {
+   "family": "color",
+   "name": "palette-red-700",
+   "value": "#7b2d3b",
+   "usage": "Rohwert, Rotfamilie Stufe 700 (aus der Fassung vom 10.10. 03:59)."
+  },
+  {
+   "family": "color",
+   "name": "palette-orange-400",
+   "value": "#f39f5a",
+   "usage": "Stimmung: Aprikose, zweite Stufe. Text darauf: color-text-on-expression-light."
+  },
+  {
+   "family": "color",
+   "name": "palette-red-200",
+   "value": "#e8bcb9",
+   "usage": "Stimmung: Rose, hellste Stufe. Text darauf: color-text-on-expression-light."
+  },
+  {
+   "family": "color",
+   "name": "palette-red-800",
+   "value": "#4d2a2e",
+   "usage": "Stimmung: Umbra. Text darauf: color-text-on-expression-dark."
+  },
+  {
+   "family": "color",
+   "name": "palette-cyan-900",
+   "value": "#1d2b30",
+   "usage": "Stimmung: Petrol, tiefste Farbstufe. Text darauf: color-text-on-expression-dark."
+  },
+  {
+   "family": "color",
+   "name": "color-expression-background",
+   "value": "{palette-gray-950}",
+   "usage": "Grund der Ausdrucksflächen (Agent-Pille, Kugel). Text darauf: color-text-on-expression-dark."
+  },
+  {
+   "family": "color",
+   "name": "color-text-on-expression-light",
+   "value": "{palette-gray-950}",
+   "usage": "Text auf palette-red-400, palette-orange-400 und palette-red-200."
+  },
+  {
+   "family": "color",
+   "name": "color-text-on-expression-dark",
+   "value": "{palette-gray-50}",
+   "usage": "Text auf palette-red-800, palette-cyan-900 und color-expression-background."
+  },
+  {
+   "family": "color",
+   "name": "color-expression-primary",
+   "value": "{palette-red-400}",
+   "usage": "Erste Farbe der Ausdrucksflächen: Balken, Agent-Pille, Glow-Rand. Einstellbar über die Palette."
+  },
+  {
+   "family": "color",
+   "name": "color-expression-secondary",
+   "value": "{palette-orange-400}",
+   "usage": "Zweite Farbe der Ausdrucksflächen."
+  },
+  {
+   "family": "color",
+   "name": "color-expression-tertiary",
+   "value": "{palette-red-200}",
+   "usage": "Dritte Farbe der Ausdrucksflächen."
+  },
+  {
+   "family": "spacing",
+   "name": "space-xl",
+   "value": "20px",
+   "usage": "Abstand von Gruppen in einer Bahn."
+  },
+  {
+   "family": "spacing",
+   "name": "space-xxl",
+   "value": "24px",
+   "usage": "Weißraum über Abschnitten."
+  },
+  {
+   "family": "spacing",
+   "name": "space-xxxl",
+   "value": "48px",
+   "usage": "Großer Weißraum, etwa vor einem leeren Zustand."
+  },
+  {
+   "family": "radius",
+   "name": "radius-full",
+   "value": "999px",
+   "usage": "Pillen: Blob in Ruhe, Knöpfe, Chips, Felder."
+  },
+  {
+   "family": "radius",
+   "name": "radius-dialog",
+   "value": "28px",
+   "usage": "Bestätigungen."
+  },
+  {
+   "family": "radius",
+   "name": "radius-container",
+   "value": "24px",
+   "usage": "Große Behälter, etwa Blätter."
+  },
+  {
+   "family": "radius",
+   "name": "component-lane-header-button-radius",
+   "value": "12px",
+   "usage": "Eckige Knöpfe im Bahnkopf."
+  },
+  {
+   "family": "radius",
+   "name": "radius-card",
+   "value": "12px",
+   "usage": "Karten, offenes Blob-Menü."
+  },
+  {
+   "family": "radius",
+   "name": "radius-row",
+   "value": "12px",
+   "usage": "Zeilen, Anhänge."
+  },
+  {
+   "family": "radius",
+   "name": "component-menu-row-radius",
+   "value": "8px",
+   "usage": "Zeile im Menü."
+  },
+  {
+   "family": "radius",
+   "name": "component-checkbox-radius",
+   "value": "4px",
+   "usage": "Kästchen."
+  },
+  {
+   "family": "shadow",
+   "name": "shadow-raised",
+   "value": {
+    "light": "0px 0px 0px 1px #e8e8e8",
+    "dark": "0px 0px 0px 1px #2a2a2a"
+   },
+   "usage": "Bahnen und Karten in Ruhe: eine Haarlinie, kein Schatten."
+  },
+  {
+   "family": "shadow",
+   "name": "shadow-inset",
+   "value": {
+    "light": "none",
+    "dark": "none"
+   },
+   "usage": "Mulden sind flach: Grau auf Weiß, ohne Schatten."
+  },
+  {
+   "family": "shadow",
+   "name": "shadow-inset-hover",
+   "value": {
+    "light": "inset 0px 0px 0px 1px #e8e8e8",
+    "dark": "inset 0px 0px 0px 1px #2a2a2a"
+   },
+   "usage": "Mulden auf color-background-control-hover."
+  },
+  {
+   "family": "layout",
+   "name": "size-control-xs",
+   "value": "20px",
+   "usage": "Kleinste Bedienhöhe."
+  },
+  {
+   "family": "layout",
+   "name": "size-control-l",
+   "value": "36px",
+   "usage": "Große Knöpfe, Absenderkreis."
+  },
+  {
+   "family": "layout",
+   "name": "size-control-xl",
+   "value": "40px",
+   "usage": "Größte Bedienhöhe."
+  },
+  {
+   "family": "layout",
+   "name": "component-chip-height",
+   "value": "28px",
+   "usage": "Chip allein."
+  },
+  {
+   "family": "layout",
+   "name": "component-chip-row-height",
+   "value": "24px",
+   "usage": "Chip in einer Zeile."
+  },
+  {
+   "family": "layout",
+   "name": "component-indicator-size",
+   "value": "8px",
+   "usage": "Ungelesen-Punkt, Zähler-Punkt."
+  },
+  {
+   "family": "layout",
+   "name": "component-section-header-height",
+   "value": "32px",
+   "usage": "Höhe eines Abschnittkopfs in Listen."
+  },
+  {
+   "family": "layout",
+   "name": "layout-reference-width",
+   "value": "1408px",
+   "usage": "Bezugsbreite des Fensters für alle Maße."
+  },
+  {
+   "family": "timing",
+   "name": "motion-duration-press",
+   "value": "150ms",
+   "usage": "Drücken, Griff fassen."
+  },
+  {
+   "family": "timing",
+   "name": "motion-duration-dismiss",
+   "value": "160ms",
+   "usage": "Schließen."
+  },
+  {
+   "family": "timing",
+   "name": "motion-duration-disclose",
+   "value": "240ms",
+   "usage": "Aufklappen."
+  },
+  {
+   "family": "timing",
+   "name": "component-blob-blink-duration",
+   "value": "140ms",
+   "usage": "Blinzeln des Blob."
+  },
+  {
+   "family": "timing",
+   "name": "component-sync-button-spin-duration",
+   "value": "1000ms",
+   "usage": "Eine Umdrehung beim Abgleich."
+  },
+  {
+   "family": "timing",
+   "name": "component-number-roll-duration",
+   "value": "800ms",
+   "usage": "Zahlenrolle: eine Ziffer rollt auf ihren neuen Wert."
+  },
+  {
+   "family": "timing",
+   "name": "component-agent-pill-loop-duration",
+   "value": "3200ms",
+   "usage": "Eine Schleife der Agent-Pille und des Glow-Knopfs (dort als Umdrehung)."
+  },
+  {
+   "family": "stroke",
+   "name": "stroke-focus",
+   "value": "2px",
+   "usage": "Fokus und Auswahl."
+  },
+  {
+   "family": "opacity",
+   "name": "opacity-muted",
+   "value": "0.6",
+   "usage": "Ruhige Bedienteile, etwa Fahne halb wach."
+  },
+  {
+   "family": "opacity",
+   "name": "opacity-hairline",
+   "value": "0.12",
+   "usage": "Haarlinien auf Glas."
+  }
+ ]
+}

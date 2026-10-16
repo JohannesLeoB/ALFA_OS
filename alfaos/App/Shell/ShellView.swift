@@ -16,7 +16,7 @@ struct ShellView: View {
         let theme = theme
         GeometryReader { proxy in
             ZStack(alignment: .topLeading) {
-                theme.color(.colorBackgroundWindow)
+                theme.design(\.ground)
                 lanes(theme)
                 handles(theme)
                 PersonPillView(theme: theme)

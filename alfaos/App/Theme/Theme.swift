@@ -15,6 +15,10 @@ struct Theme {
         return Color(nsColor: NSColor(colorSpace: .sRGB, components: &parts, count: parts.count))
     }
 
+    func design(_ key: KeyPath<DesignColors, RGB>) -> Color {
+        DesignStyle(dark: mode == .dark).color(key)
+    }
+
     func pick(light: ThemeKey, dark: ThemeKey) -> Color {
         color(mode == .light ? light : dark)
     }

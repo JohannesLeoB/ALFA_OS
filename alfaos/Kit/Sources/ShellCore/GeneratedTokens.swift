@@ -1,77 +1,15 @@
-// tokens.json version 1 sha256 ab264ed510805a5b27dfc8b97570525915e3c610829ed4747b3904723ebc75e6
+// tokens.json version 1 sha256 cbf6897891cdbf69dee89c2f99b9e8236cec6e3728875fd85045326dc9d21500
 
 public extension ThemeKey {
-    static let colorBackgroundWindow = ThemeKey("color-background-window")
     static let colorBackgroundContainer = ThemeKey("color-background-container")
-    static let colorBackgroundControl = ThemeKey("color-background-control")
-    static let colorBackgroundContent = ThemeKey("color-background-content")
-    static let colorBackgroundContentControl = ThemeKey("color-background-content-control")
-    static let colorBackgroundInverted = ThemeKey("color-background-inverted")
-    static let colorBackgroundSelected = ThemeKey("color-background-selected")
-    static let colorBackgroundOverlay = ThemeKey("color-background-overlay")
-    static let colorBackgroundControlHover = ThemeKey("color-background-control-hover")
-    static let colorTextPrimary = ThemeKey("color-text-primary")
-    static let colorTextSecondary = ThemeKey("color-text-secondary")
-    static let colorTextTertiary = ThemeKey("color-text-tertiary")
-    static let colorTextPlaceholder = ThemeKey("color-text-placeholder")
-    static let colorSymbolMuted = ThemeKey("color-symbol-muted")
-    static let colorTextOnInverted = ThemeKey("color-text-on-inverted")
-    static let colorTextOnSelected = ThemeKey("color-text-on-selected")
-    static let colorLineSeparator = ThemeKey("color-line-separator")
-    static let colorLineDivider = ThemeKey("color-line-divider")
-    static let colorLineContent = ThemeKey("color-line-content")
-    static let colorControlHandle = ThemeKey("color-control-handle")
-    static let colorControlHandleActive = ThemeKey("color-control-handle-active")
-    static let colorIndicatorAccent = ThemeKey("color-indicator-accent")
-    static let componentBlobBackground = ThemeKey("component-blob-background")
-    static let componentBlobForeground = ThemeKey("component-blob-foreground")
-    static let colorFocusRing = ThemeKey("color-focus-ring")
-    static let colorStatusDestructive = ThemeKey("color-status-destructive")
-    static let paletteGray50 = ThemeKey("palette-gray-50")
-    static let paletteGray100 = ThemeKey("palette-gray-100")
-    static let paletteGray200 = ThemeKey("palette-gray-200")
-    static let paletteGray300 = ThemeKey("palette-gray-300")
     static let paletteGray400 = ThemeKey("palette-gray-400")
-    static let paletteGray500 = ThemeKey("palette-gray-500")
-    static let paletteGray600 = ThemeKey("palette-gray-600")
-    static let paletteGray700 = ThemeKey("palette-gray-700")
-    static let paletteGray800 = ThemeKey("palette-gray-800")
-    static let paletteGray900 = ThemeKey("palette-gray-900")
-    static let paletteGray950 = ThemeKey("palette-gray-950")
-    static let paletteRed400 = ThemeKey("palette-red-400")
-    static let paletteRed500 = ThemeKey("palette-red-500")
-    static let paletteRed700 = ThemeKey("palette-red-700")
-    static let paletteOrange400 = ThemeKey("palette-orange-400")
-    static let paletteRed200 = ThemeKey("palette-red-200")
-    static let paletteRed800 = ThemeKey("palette-red-800")
-    static let paletteCyan900 = ThemeKey("palette-cyan-900")
-    static let colorExpressionBackground = ThemeKey("color-expression-background")
-    static let colorTextOnExpressionLight = ThemeKey("color-text-on-expression-light")
-    static let colorTextOnExpressionDark = ThemeKey("color-text-on-expression-dark")
-    static let colorExpressionPrimary = ThemeKey("color-expression-primary")
-    static let colorExpressionSecondary = ThemeKey("color-expression-secondary")
-    static let colorExpressionTertiary = ThemeKey("color-expression-tertiary")
-    static let shadowRaised = ThemeKey("shadow-raised")
     static let shadowFloating = ThemeKey("shadow-floating")
-    static let shadowInset = ThemeKey("shadow-inset")
-    static let shadowInsetHover = ThemeKey("shadow-inset-hover")
     static let spaceXxs = ThemeKey("space-xxs")
     static let spaceXs = ThemeKey("space-xs")
     static let spaceS = ThemeKey("space-s")
     static let spaceM = ThemeKey("space-m")
     static let spaceL = ThemeKey("space-l")
-    static let spaceXl = ThemeKey("space-xl")
-    static let spaceXxl = ThemeKey("space-xxl")
-    static let spaceXxxl = ThemeKey("space-xxxl")
-    static let radiusFull = ThemeKey("radius-full")
-    static let radiusDialog = ThemeKey("radius-dialog")
-    static let radiusContainer = ThemeKey("radius-container")
     static let componentLaneRadius = ThemeKey("component-lane-radius")
-    static let componentLaneHeaderButtonRadius = ThemeKey("component-lane-header-button-radius")
-    static let radiusCard = ThemeKey("radius-card")
-    static let radiusRow = ThemeKey("radius-row")
-    static let componentMenuRowRadius = ThemeKey("component-menu-row-radius")
-    static let componentCheckboxRadius = ThemeKey("component-checkbox-radius")
     static let componentLaneHandleRadius = ThemeKey("component-lane-handle-radius")
     static let componentLaneHeaderHeight = ThemeKey("component-lane-header-height")
     static let componentLaneFoldedWidth = ThemeKey("component-lane-folded-width")
@@ -87,114 +25,34 @@ public extension ThemeKey {
     static let componentBlobAwakeWidth = ThemeKey("component-blob-awake-width")
     static let componentLaneEdge = ThemeKey("component-lane-edge")
     static let componentLaneGap = ThemeKey("component-lane-gap")
-    static let sizeControlXs = ThemeKey("size-control-xs")
     static let sizeControlS = ThemeKey("size-control-s")
     static let sizeControlM = ThemeKey("size-control-m")
-    static let sizeControlL = ThemeKey("size-control-l")
-    static let sizeControlXl = ThemeKey("size-control-xl")
     static let componentMenuWidth = ThemeKey("component-menu-width")
     static let componentMenuRowHeight = ThemeKey("component-menu-row-height")
     static let componentMenuPadding = ThemeKey("component-menu-padding")
     static let componentFieldHeight = ThemeKey("component-field-height")
     static let componentFieldCompactHeight = ThemeKey("component-field-compact-height")
-    static let componentChipHeight = ThemeKey("component-chip-height")
-    static let componentChipRowHeight = ThemeKey("component-chip-row-height")
-    static let componentIndicatorSize = ThemeKey("component-indicator-size")
     static let layoutReadingMaxWidth = ThemeKey("layout-reading-max-width")
-    static let componentSectionHeaderHeight = ThemeKey("component-section-header-height")
-    static let layoutReferenceWidth = ThemeKey("layout-reference-width")
-    static let motionDurationPress = ThemeKey("motion-duration-press")
-    static let motionDurationDismiss = ThemeKey("motion-duration-dismiss")
     static let motionDurationChange = ThemeKey("motion-duration-change")
-    static let motionDurationDisclose = ThemeKey("motion-duration-disclose")
     static let motionDurationSnap = ThemeKey("motion-duration-snap")
     static let motionDurationStack = ThemeKey("motion-duration-stack")
-    static let componentBlobBlinkDuration = ThemeKey("component-blob-blink-duration")
-    static let componentSyncButtonSpinDuration = ThemeKey("component-sync-button-spin-duration")
     static let motionCurveStandard = ThemeKey("motion-curve-standard")
-    static let componentNumberRollDuration = ThemeKey("component-number-roll-duration")
-    static let componentAgentPillLoopDuration = ThemeKey("component-agent-pill-loop-duration")
     static let strokeHairline = ThemeKey("stroke-hairline")
     static let strokeRing = ThemeKey("stroke-ring")
-    static let strokeFocus = ThemeKey("stroke-focus")
-    static let opacityMuted = ThemeKey("opacity-muted")
-    static let opacityHairline = ThemeKey("opacity-hairline")
     static let fontSans = ThemeKey("font-sans")
     static let fontDisplay = ThemeKey("font-display")
     static let fontMono = ThemeKey("font-mono")
 
     static let all: [ThemeKey] = [
-        colorBackgroundWindow,
         colorBackgroundContainer,
-        colorBackgroundControl,
-        colorBackgroundContent,
-        colorBackgroundContentControl,
-        colorBackgroundInverted,
-        colorBackgroundSelected,
-        colorBackgroundOverlay,
-        colorBackgroundControlHover,
-        colorTextPrimary,
-        colorTextSecondary,
-        colorTextTertiary,
-        colorTextPlaceholder,
-        colorSymbolMuted,
-        colorTextOnInverted,
-        colorTextOnSelected,
-        colorLineSeparator,
-        colorLineDivider,
-        colorLineContent,
-        colorControlHandle,
-        colorControlHandleActive,
-        colorIndicatorAccent,
-        componentBlobBackground,
-        componentBlobForeground,
-        colorFocusRing,
-        colorStatusDestructive,
-        paletteGray50,
-        paletteGray100,
-        paletteGray200,
-        paletteGray300,
         paletteGray400,
-        paletteGray500,
-        paletteGray600,
-        paletteGray700,
-        paletteGray800,
-        paletteGray900,
-        paletteGray950,
-        paletteRed400,
-        paletteRed500,
-        paletteRed700,
-        paletteOrange400,
-        paletteRed200,
-        paletteRed800,
-        paletteCyan900,
-        colorExpressionBackground,
-        colorTextOnExpressionLight,
-        colorTextOnExpressionDark,
-        colorExpressionPrimary,
-        colorExpressionSecondary,
-        colorExpressionTertiary,
-        shadowRaised,
         shadowFloating,
-        shadowInset,
-        shadowInsetHover,
         spaceXxs,
         spaceXs,
         spaceS,
         spaceM,
         spaceL,
-        spaceXl,
-        spaceXxl,
-        spaceXxxl,
-        radiusFull,
-        radiusDialog,
-        radiusContainer,
         componentLaneRadius,
-        componentLaneHeaderButtonRadius,
-        radiusCard,
-        radiusRow,
-        componentMenuRowRadius,
-        componentCheckboxRadius,
         componentLaneHandleRadius,
         componentLaneHeaderHeight,
         componentLaneFoldedWidth,
@@ -210,38 +68,20 @@ public extension ThemeKey {
         componentBlobAwakeWidth,
         componentLaneEdge,
         componentLaneGap,
-        sizeControlXs,
         sizeControlS,
         sizeControlM,
-        sizeControlL,
-        sizeControlXl,
         componentMenuWidth,
         componentMenuRowHeight,
         componentMenuPadding,
         componentFieldHeight,
         componentFieldCompactHeight,
-        componentChipHeight,
-        componentChipRowHeight,
-        componentIndicatorSize,
         layoutReadingMaxWidth,
-        componentSectionHeaderHeight,
-        layoutReferenceWidth,
-        motionDurationPress,
-        motionDurationDismiss,
         motionDurationChange,
-        motionDurationDisclose,
         motionDurationSnap,
         motionDurationStack,
-        componentBlobBlinkDuration,
-        componentSyncButtonSpinDuration,
         motionCurveStandard,
-        componentNumberRollDuration,
-        componentAgentPillLoopDuration,
         strokeHairline,
         strokeRing,
-        strokeFocus,
-        opacityMuted,
-        opacityHairline,
         fontSans,
         fontDisplay,
         fontMono,
@@ -279,6 +119,6 @@ public extension TextKey {
 public enum TokenStamp {
     public static let delivery = "Arbeitswelt ALFA Interface Zugang (13).zip, sha256 6c3a927e1b5bae51eee3f12e03fb196c1ddd35ce5ed59fb16eec67d7904d3e4f"
     public static let deliveredAt = "2026-10-16T02:05"
-    public static let adoptedAt = "2026-10-16T12:34"
-    public static let state = "Hülle: Werte der Lieferung 13 übernommen (b716f71, Ruhebreite 280). Einstellungen: Darstellung, Integrationen, System gebaut. Offen: 29 mehrdeutige und 47 unzugeordnete Tokens, Antworten von Design zur Liste."
+    public static let adoptedAt = "2026-10-16T14:27"
+    public static let state = "Hülle: Ruhebreite 280. 80 ungenutzte Tokens in die Quarantäne (quarantine.json). Verbleibend sind die Tokens, die der Code noch liest; die Werte der Ansichten kommen aus design.json."
 }

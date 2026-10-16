@@ -16,7 +16,7 @@ struct LaneView: View {
         VStack(spacing: 0) {
             header
             Rectangle()
-                .fill(theme.color(.colorLineSeparator))
+                .fill(theme.design(\.line))
                 .frame(height: theme.length(.strokeHairline))
                 .opacity(folded ? 0 : 1)
             content
@@ -26,7 +26,7 @@ struct LaneView: View {
         .clipShape(RoundedRectangle(cornerRadius: radius))
         .overlay(
             RoundedRectangle(cornerRadius: radius)
-                .strokeBorder(theme.color(.colorLineSeparator), lineWidth: theme.length(.strokeHairline))
+                .strokeBorder(theme.design(\.line), lineWidth: theme.length(.strokeHairline))
         )
         .environment(\.design, DesignStyle(dark: theme.mode == .dark))
         .accessibilityElement(children: .contain)
@@ -39,7 +39,7 @@ struct LaneView: View {
                 theme.text(titleKey)
                     .font(theme.font(.name))
                     .tracking(theme.tracking(.name))
-                    .foregroundStyle(theme.color(.colorTextPrimary))
+                    .foregroundStyle(theme.design(\.ink))
                     .lineLimit(1)
             }
             if !folded {
@@ -66,7 +66,7 @@ struct LaneView: View {
         Button(action: action) {
             Image(systemName: symbol)
                 .font(theme.font(.textButton))
-                .foregroundStyle(theme.color(.colorTextTertiary))
+                .foregroundStyle(theme.design(\.inkTertiary))
                 .frame(width: theme.measure(.laneHeaderButton), height: theme.measure(.laneHeaderButton))
                 .contentShape(Circle())
         }

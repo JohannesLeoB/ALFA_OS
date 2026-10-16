@@ -16,7 +16,7 @@ struct HandleView: View {
         let length = theme.length(active ? .componentLaneHandleLengthActive : .componentLaneHandleLength)
         ZStack {
             RoundedRectangle(cornerRadius: theme.length(.componentLaneHandleRadius))
-                .fill(theme.color(active ? .colorControlHandleActive : .colorControlHandle))
+                .fill(theme.design(active ? \.ink : \.handle))
                 .frame(width: theme.length(.componentLaneHandleThickness), height: length)
         }
         .frame(width: theme.length(.componentLaneHandleWidth), height: height)

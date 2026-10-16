@@ -31,8 +31,8 @@ struct BlobView: View {
         }
         .padding(.horizontal, theme.length(.spaceXs))
         .frame(width: width, height: height, alignment: .leading)
-        .foregroundStyle(theme.color(.componentBlobForeground))
-        .background(Capsule().fill(theme.color(.componentBlobBackground)))
+        .foregroundStyle(theme.design(\.onInverse))
+        .background(Capsule().fill(theme.design(\.inverse)))
         .clipShape(Capsule())
         .themeShadow(theme, .shadowFloating, shape: Capsule())
         .offset(x: anchorX, y: y)
@@ -52,7 +52,7 @@ struct BlobView: View {
     private var face: some View {
         let size = theme.length(.sizeControlM)
         return ZStack {
-            Circle().strokeBorder(theme.color(.componentBlobForeground), lineWidth: theme.length(.strokeHairline))
+            Circle().strokeBorder(theme.design(\.onInverse), lineWidth: theme.length(.strokeHairline))
             HStack(spacing: theme.measure(.faceEyeGap)) {
                 eye
                 eye
@@ -63,7 +63,7 @@ struct BlobView: View {
 
     private var eye: some View {
         Capsule()
-            .fill(theme.color(.componentBlobForeground))
+            .fill(theme.design(\.onInverse))
             .frame(width: theme.measure(.faceEyeWidth), height: theme.measure(.faceEyeHeight))
     }
 
@@ -104,8 +104,8 @@ struct PersonPillView: View {
         }
         .padding(.horizontal, theme.length(.spaceXs))
         .frame(height: height)
-        .foregroundStyle(theme.color(.componentBlobForeground))
-        .background(Capsule().fill(theme.color(.componentBlobBackground)))
+        .foregroundStyle(theme.design(\.onInverse))
+        .background(Capsule().fill(theme.design(\.inverse)))
         .themeShadow(theme, .shadowFloating, shape: Capsule())
         .accessibilityElement(children: .contain)
         .accessibilityLabel(theme.text("pill.label"))
