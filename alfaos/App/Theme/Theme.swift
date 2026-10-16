@@ -45,9 +45,17 @@ struct Theme {
         CGFloat(tokens.textStyle(key)?.tracking ?? 0)
     }
 
+    func animation(_ seconds: Double, _ curve: CubicBezier = Design.Easing.standard) -> Animation {
+        Animation.timingCurve(curve.x1, curve.y1, curve.x2, curve.y2, duration: seconds)
+    }
+
     func animation(_ duration: ThemeKey) -> Animation {
         let curve = tokens.curve(.motionCurveStandard)
         return Animation.timingCurve(curve.x1, curve.y1, curve.x2, curve.y2, duration: tokens.duration(duration))
+    }
+
+    func designShadow(_ key: KeyPath<DesignShadows, [ShadowLayer]>) -> [ShadowLayer] {
+        (mode == .dark ? DesignShadows.dark : DesignShadows.light)[keyPath: key]
     }
 
     func shadows(_ key: ThemeKey) -> [ShadowLayer] {
@@ -80,11 +88,11 @@ struct Theme {
 
 struct ThemeShadow<S: InsettableShape>: ViewModifier {
     let theme: Theme
-    let key: ThemeKey
+    let layers: [ShadowLayer]
     let shape: S
 
     func body(content: Content) -> some View {
-        let layers = theme.shadows(key).filter { !$0.inset }
+        let layers = layers.filter { !$0.inset }
         return layers.reduce(AnyView(content)) { view, layer in
             if layer.isContour {
                 let width = CGFloat(layer.spread)
@@ -104,6 +112,10 @@ struct ThemeShadow<S: InsettableShape>: ViewModifier {
 
 extension View {
     func themeShadow<S: InsettableShape>(_ theme: Theme, _ key: ThemeKey, shape: S) -> some View {
-        modifier(ThemeShadow(theme: theme, key: key, shape: shape))
+        modifier(ThemeShadow(theme: theme, layers: theme.shadows(key), shape: shape))
+    }
+
+    func themeShadow<S: InsettableShape>(_ theme: Theme, layers: [ShadowLayer], shape: S) -> some View {
+        modifier(ThemeShadow(theme: theme, layers: layers, shape: shape))
     }
 }

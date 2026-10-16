@@ -47,7 +47,7 @@ public struct BlobPlacement: Sendable, Codable, Equatable {
     }
 
     public func origin(window: Size, geometry g: ShellGeometry) -> Point {
-        let stripTop = (g.strip - g.blobHeight) / 2
+        let stripTop = g.blobTop
         func clamp(_ value: Double, _ low: Double, _ high: Double) -> Double { min(high, max(low, value)) }
         switch edge {
         case .top:

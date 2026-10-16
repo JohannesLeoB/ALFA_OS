@@ -84,7 +84,7 @@ final class BlobTests: XCTestCase {
     func testHomeSitsInTheStripAtTheMargin() throws {
         let g = try Fixture.geometry()
         let origin = BlobPlacement.home(geometry: g).origin(window: Fixture.screen, geometry: g)
-        XCTAssertEqual(origin, Point(x: 16, y: 10))
+        XCTAssertEqual(origin, Point(x: 16, y: 16))
     }
 
     func testThrowSettlesAtTheNearestEdge() throws {
@@ -99,7 +99,7 @@ final class BlobTests: XCTestCase {
         let g = try Fixture.geometry()
         let top = BlobPlacement.home(geometry: g).menuOrigin(window: Fixture.screen, geometry: g)
         XCTAssertTrue(top.opensDownward)
-        XCTAssertEqual(top.origin, Point(x: 16, y: 58))
+        XCTAssertEqual(top.origin, Point(x: 16, y: 64))
         let bottom = BlobPlacement(edge: .bottom, offset: 16).menuOrigin(window: Fixture.screen, geometry: g)
         XCTAssertFalse(bottom.opensDownward)
     }

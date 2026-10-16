@@ -1,9 +1,8 @@
-// tokens.json version 1 sha256 cbf6897891cdbf69dee89c2f99b9e8236cec6e3728875fd85045326dc9d21500
+// tokens.json version 1 sha256 e5fd457c03612d23cd8f854ff61b78069f7f448583139639919cc0feae1c82b6
 
 public extension ThemeKey {
     static let colorBackgroundContainer = ThemeKey("color-background-container")
     static let paletteGray400 = ThemeKey("palette-gray-400")
-    static let shadowFloating = ThemeKey("shadow-floating")
     static let spaceXxs = ThemeKey("space-xxs")
     static let spaceXs = ThemeKey("space-xs")
     static let spaceS = ThemeKey("space-s")
@@ -12,19 +11,13 @@ public extension ThemeKey {
     static let componentLaneRadius = ThemeKey("component-lane-radius")
     static let componentLaneHandleRadius = ThemeKey("component-lane-handle-radius")
     static let componentLaneHeaderHeight = ThemeKey("component-lane-header-height")
-    static let componentLaneFoldedWidth = ThemeKey("component-lane-folded-width")
-    static let componentLaneRestingWidth = ThemeKey("component-lane-resting-width")
     static let componentLaneLeadingMaxWidth = ThemeKey("component-lane-leading-max-width")
-    static let componentLaneFoldThreshold = ThemeKey("component-lane-fold-threshold")
     static let componentLaneHandleWidth = ThemeKey("component-lane-handle-width")
     static let componentLaneHandleThickness = ThemeKey("component-lane-handle-thickness")
     static let componentLaneHandleLength = ThemeKey("component-lane-handle-length")
     static let componentLaneHandleLengthActive = ThemeKey("component-lane-handle-length-active")
-    static let componentBlobBarHeight = ThemeKey("component-blob-bar-height")
     static let componentBlobHeight = ThemeKey("component-blob-height")
-    static let componentBlobAwakeWidth = ThemeKey("component-blob-awake-width")
     static let componentLaneEdge = ThemeKey("component-lane-edge")
-    static let componentLaneGap = ThemeKey("component-lane-gap")
     static let sizeControlS = ThemeKey("size-control-s")
     static let sizeControlM = ThemeKey("size-control-m")
     static let componentMenuWidth = ThemeKey("component-menu-width")
@@ -33,9 +26,6 @@ public extension ThemeKey {
     static let componentFieldHeight = ThemeKey("component-field-height")
     static let componentFieldCompactHeight = ThemeKey("component-field-compact-height")
     static let layoutReadingMaxWidth = ThemeKey("layout-reading-max-width")
-    static let motionDurationChange = ThemeKey("motion-duration-change")
-    static let motionDurationSnap = ThemeKey("motion-duration-snap")
-    static let motionDurationStack = ThemeKey("motion-duration-stack")
     static let motionCurveStandard = ThemeKey("motion-curve-standard")
     static let strokeHairline = ThemeKey("stroke-hairline")
     static let strokeRing = ThemeKey("stroke-ring")
@@ -46,7 +36,6 @@ public extension ThemeKey {
     static let all: [ThemeKey] = [
         colorBackgroundContainer,
         paletteGray400,
-        shadowFloating,
         spaceXxs,
         spaceXs,
         spaceS,
@@ -55,19 +44,13 @@ public extension ThemeKey {
         componentLaneRadius,
         componentLaneHandleRadius,
         componentLaneHeaderHeight,
-        componentLaneFoldedWidth,
-        componentLaneRestingWidth,
         componentLaneLeadingMaxWidth,
-        componentLaneFoldThreshold,
         componentLaneHandleWidth,
         componentLaneHandleThickness,
         componentLaneHandleLength,
         componentLaneHandleLengthActive,
-        componentBlobBarHeight,
         componentBlobHeight,
-        componentBlobAwakeWidth,
         componentLaneEdge,
-        componentLaneGap,
         sizeControlS,
         sizeControlM,
         componentMenuWidth,
@@ -76,9 +59,6 @@ public extension ThemeKey {
         componentFieldHeight,
         componentFieldCompactHeight,
         layoutReadingMaxWidth,
-        motionDurationChange,
-        motionDurationSnap,
-        motionDurationStack,
         motionCurveStandard,
         strokeHairline,
         strokeRing,
@@ -119,6 +99,6 @@ public extension TextKey {
 public enum TokenStamp {
     public static let delivery = "Arbeitswelt ALFA Interface Zugang (13).zip, sha256 6c3a927e1b5bae51eee3f12e03fb196c1ddd35ce5ed59fb16eec67d7904d3e4f"
     public static let deliveredAt = "2026-10-16T02:05"
-    public static let adoptedAt = "2026-10-16T14:27"
-    public static let state = "Hülle: Ruhebreite 280. 80 ungenutzte Tokens in die Quarantäne (quarantine.json). Verbleibend sind die Tokens, die der Code noch liest; die Werte der Ansichten kommen aus design.json."
+    public static let adoptedAt = "2026-10-16T16:31"
+    public static let state = "Hülle (Maße, Rand, Fuge, Kopf, Ruhe, Falten, Blob), Bewegungen der Hülle, Schatten und alle Farben der Hülle lesen Design.*. 90 ungenutzte Tokens in der Quarantäne (quarantine.json). Offen: Akkordeon aus alfa-shell.js, Lack, Glas, Kartenstapel, Schrift Geist."
 }

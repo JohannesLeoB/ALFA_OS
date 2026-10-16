@@ -29,10 +29,10 @@ struct BlobMenuView: View {
         .background(background)
         .foregroundStyle(foreground)
         .clipShape(RevealShape(progress: open ? 1 : 0, fromTop: !upward, radius: radius))
-        .themeShadow(theme, .shadowFloating, shape: RoundedRectangle(cornerRadius: radius))
+        .themeShadow(theme, layers: theme.designShadow(\.floating), shape: RoundedRectangle(cornerRadius: radius))
         .opacity(open ? 1 : 0)
         .allowsHitTesting(open)
-        .animation(theme.animation(.motionDurationStack), value: open)
+        .animation(theme.animation(Design.Duration.stack, Design.Easing.stack), value: open)
         .accessibilityElement(children: .contain)
         .accessibilityLabel(theme.text("menu.label"))
     }

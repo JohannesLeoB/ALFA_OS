@@ -2,12 +2,10 @@
 :root, [data-theme="light"] {
   --color-background-container: #ffffff;
   --palette-gray-400: #a3a3a3;
-  --shadow-floating: 0px 0px 0px 1px rgba(0,0,0,0.08), 0px 8px 24px 0px rgba(0,0,0,0.10);
 }
 [data-theme="dark"] {
   --color-background-container: #141414;
   --palette-gray-400: #a3a3a3;
-  --shadow-floating: 0px 0px 0px 1px rgba(255,255,255,0.10), 0px 8px 24px 0px rgba(0,0,0,0.5);
 }
 :root {
   --space-xxs: 2px;
@@ -18,19 +16,13 @@
   --component-lane-radius: 20px;
   --component-lane-handle-radius: 2px;
   --component-lane-header-height: 44px;
-  --component-lane-folded-width: 56px;
-  --component-lane-resting-width: 280px;
   --component-lane-leading-max-width: 380px;
-  --component-lane-fold-threshold: 112px;
   --component-lane-handle-width: 12px;
   --component-lane-handle-thickness: 4px;
   --component-lane-handle-length: 64px;
   --component-lane-handle-length-active: 96px;
-  --component-blob-bar-height: 60px;
   --component-blob-height: 40px;
-  --component-blob-awake-width: 124px;
   --component-lane-edge: 16px;
-  --component-lane-gap: 12px;
   --size-control-s: 24px;
   --size-control-m: 28px;
   --component-menu-width: 216px;
@@ -39,9 +31,6 @@
   --component-field-height: 36px;
   --component-field-compact-height: 28px;
   --layout-reading-max-width: 460px;
-  --motion-duration-change: 200ms;
-  --motion-duration-snap: 260ms;
-  --motion-duration-stack: 520ms;
   --motion-curve-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
   --stroke-hairline: 1px;
   --stroke-ring: 1.5px;

@@ -78,6 +78,7 @@ public struct ShellGeometry: Sendable, Equatable {
     public let margin: Double
     public let gap: Double
     public let strip: Double
+    public let blobTop: Double
     public let laneHeader: Double
     public let laneRest: Double
     public let laneFolded: Double
@@ -96,19 +97,20 @@ public struct ShellGeometry: Sendable, Equatable {
     public let windowMin: Size
 
     public init(theme: TokenTheme, metrics: ShellMetrics) {
-        margin = theme.length(.componentLaneEdge)
-        gap = theme.length(.componentLaneGap)
-        strip = theme.length(.componentBlobBarHeight)
-        laneHeader = theme.length(.componentLaneHeaderHeight)
-        laneRest = theme.length(.componentLaneRestingWidth)
-        laneFolded = theme.length(.componentLaneFoldedWidth)
-        foldAt = theme.length(.componentLaneFoldThreshold)
+        margin = Design.Size.edge
+        gap = Design.Size.gutter
+        blobTop = Design.Size.edge
+        strip = Design.Size.edge + Design.Size.blobHeight + Design.Size.gutter
+        laneHeader = Design.Size.headerHeight
+        laneRest = Design.Size.laneRestWidth
+        laneFolded = Design.Size.foldedWidth
+        foldAt = Design.Size.foldThreshold
         laneMin = metrics.laneMin
         laneMax = theme.length(.componentLaneLeadingMaxWidth)
         centerMin = metrics.centerMin
-        blobWidth = metrics.blobWidth
-        blobAwakeWidth = theme.length(.componentBlobAwakeWidth)
-        blobHeight = theme.length(.componentBlobHeight)
+        blobWidth = Design.Size.blobWidth
+        blobAwakeWidth = Design.Size.blobAwakeWidth
+        blobHeight = Design.Size.blobHeight
         blobThrow = metrics.blobThrow
         menuWidth = theme.length(.componentMenuWidth)
         menuGap = theme.length(.spaceS)

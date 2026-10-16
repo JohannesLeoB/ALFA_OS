@@ -26,22 +26,12 @@ final class ThemeTests: XCTestCase {
 
     func testValuesParse() throws {
         let theme = try Fixture.theme()
-        XCTAssertEqual(theme.length(.componentLaneRestingWidth), 280)
-        XCTAssertEqual(theme.duration(.motionDurationChange), 0.2, accuracy: 1e-9)
+        XCTAssertEqual(theme.length(.componentLaneEdge), 16)
         XCTAssertEqual(theme.curve(.motionCurveStandard), CubicBezier(x1: 0.2, y1: 0.8, x2: 0.2, y2: 1))
         let style = try XCTUnwrap(theme.textStyle(.name))
         XCTAssertEqual(style.size, 13)
         XCTAssertEqual(style.weight, 500)
         XCTAssertEqual(style.tracking, 0.065, accuracy: 1e-9)
-    }
-
-    func testShadowLayersAndContour() throws {
-        let theme = try Fixture.theme()
-        let floating = theme.shadow(.shadowFloating, .light)
-        XCTAssertEqual(floating.count, 2)
-        XCTAssertTrue(floating[0].isContour)
-        XCTAssertEqual(floating[1].blur, 24)
-        XCTAssertEqual(theme.shadow("shadow-unknown", .light).first?.color, RGB.missing)
     }
 
     func testBrokenAliasesAreMagenta() throws {

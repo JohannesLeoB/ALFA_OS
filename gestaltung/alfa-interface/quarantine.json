@@ -570,6 +570,69 @@
    "name": "opacity-hairline",
    "value": "0.12",
    "usage": "Haarlinien auf Glas."
+  },
+  {
+   "family": "shadow",
+   "name": "shadow-floating",
+   "value": {
+    "light": "0px 0px 0px 1px rgba(0,0,0,0.08), 0px 8px 24px 0px rgba(0,0,0,0.10)",
+    "dark": "0px 0px 0px 1px rgba(255,255,255,0.10), 0px 8px 24px 0px rgba(0,0,0,0.5)"
+   },
+   "usage": "Blob, Menüs, Assistentenkarte: Haarlinie und ein leiser Schatten."
+  },
+  {
+   "family": "layout",
+   "name": "component-lane-folded-width",
+   "value": "56px",
+   "usage": "Breite einer gefalteten Bahn und des ruhenden Blob."
+  },
+  {
+   "family": "layout",
+   "name": "component-lane-resting-width",
+   "value": "280px",
+   "usage": "Ruhebreite einer Seitenbahn."
+  },
+  {
+   "family": "layout",
+   "name": "component-lane-fold-threshold",
+   "value": "112px",
+   "usage": "Unter dieser Breite faltet die Bahn auf component-lane-folded-width."
+  },
+  {
+   "family": "layout",
+   "name": "component-blob-bar-height",
+   "value": "60px",
+   "usage": "Höhe der BlobBar über den Bahnen."
+  },
+  {
+   "family": "layout",
+   "name": "component-blob-awake-width",
+   "value": "124px",
+   "usage": "Breite des wachen Blob mit Fahne."
+  },
+  {
+   "family": "layout",
+   "name": "component-lane-gap",
+   "value": "12px",
+   "usage": "Abstand zwischen BlobBar und Bahnen."
+  },
+  {
+   "family": "timing",
+   "name": "motion-duration-change",
+   "value": "200ms",
+   "usage": "Kleine Umstellungen."
+  },
+  {
+   "family": "timing",
+   "name": "motion-duration-snap",
+   "value": "260ms",
+   "usage": "Bahn rastet ein, Blob dockt an."
+  },
+  {
+   "family": "timing",
+   "name": "motion-duration-stack",
+   "value": "520ms",
+   "usage": "Kartenstapel."
   }
  ]
 }

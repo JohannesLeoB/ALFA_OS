@@ -49,7 +49,7 @@ struct ShellView: View {
     }
 
     private func blobTop(_ theme: Theme) -> CGFloat {
-        (theme.length(.componentBlobBarHeight) - theme.length(.componentBlobHeight)) / 2
+        CGFloat(theme.geometry.blobTop)
     }
 
     private func pillX(_ width: CGFloat, _ theme: Theme) -> CGFloat {
@@ -82,7 +82,7 @@ struct ShellView: View {
                     .offset(x: CGFloat(item.2), y: CGFloat(g.strip))
             }
         }
-        .animation(isDragging ? nil : theme.animation(.motionDurationChange), value: widths)
+        .animation(isDragging ? nil : theme.animation(Design.Duration.lane), value: widths)
     }
 
     private var isDragging: Bool { dragCenter != nil }
@@ -97,7 +97,7 @@ struct ShellView: View {
             HandleView(theme: theme, model: model, lane: .leading, height: height).offset(x: CGFloat(leftX), y: CGFloat(g.strip))
             HandleView(theme: theme, model: model, lane: .trailing, height: height).offset(x: CGFloat(rightX), y: CGFloat(g.strip))
         }
-        .animation(theme.animation(.motionDurationChange), value: widths)
+        .animation(theme.animation(Design.Duration.lane), value: widths)
     }
 
     @ViewBuilder

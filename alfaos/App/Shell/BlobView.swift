@@ -34,10 +34,10 @@ struct BlobView: View {
         .foregroundStyle(theme.design(\.onInverse))
         .background(Capsule().fill(theme.design(\.inverse)))
         .clipShape(Capsule())
-        .themeShadow(theme, .shadowFloating, shape: Capsule())
+        .themeShadow(theme, layers: theme.designShadow(\.floating), shape: Capsule())
         .offset(x: anchorX, y: y)
-        .animation(held ? nil : theme.animation(.motionDurationChange), value: width)
-        .animation(held ? nil : theme.animation(.motionDurationSnap), value: model.blob)
+        .animation(held ? nil : theme.animation(Design.Duration.blobWidth), value: width)
+        .animation(held ? nil : theme.animation(Design.Duration.blobFlight, Design.Easing.blobFlight), value: model.blob)
         .onHover { model.setHovering($0) }
         .gesture(drag)
         .simultaneousGesture(
@@ -106,7 +106,7 @@ struct PersonPillView: View {
         .frame(height: height)
         .foregroundStyle(theme.design(\.onInverse))
         .background(Capsule().fill(theme.design(\.inverse)))
-        .themeShadow(theme, .shadowFloating, shape: Capsule())
+        .themeShadow(theme, layers: theme.designShadow(\.floating), shape: Capsule())
         .accessibilityElement(children: .contain)
         .accessibilityLabel(theme.text("pill.label"))
     }
