@@ -212,9 +212,23 @@ public extension Design {
     static let stackDark: [DesignStackStep] = [DesignStackStep(surface: RGB(0.1216, 0.1216, 0.1216, 1.0), ink: RGB(0.9804, 0.9804, 0.9804, 1.0)), DesignStackStep(surface: RGB(0.1804, 0.1804, 0.1804, 1.0), ink: RGB(0.9804, 0.9804, 0.9804, 1.0)), DesignStackStep(surface: RGB(0.2275, 0.2275, 0.2275, 1.0), ink: RGB(0.9804, 0.9804, 0.9804, 1.0)), DesignStackStep(surface: RGB(0.302, 0.302, 0.302, 1.0), ink: RGB(0.9804, 0.9804, 0.9804, 1.0)), DesignStackStep(surface: RGB(0.4196, 0.4196, 0.4196, 1.0), ink: RGB(0.9804, 0.9804, 0.9804, 1.0))]
 }
 
+public enum DesignSurface {
+    public static let topGlossFrontLight: [ShadowLayer] = [ShadowLayer(inset: true, x: 0.0, y: 1.0, blur: 0.0, spread: 0.0, color: RGB(1.0, 1.0, 1.0, 1.0))]
+    public static let topGlossFrontDark: [ShadowLayer] = [ShadowLayer(inset: true, x: 0.0, y: 1.0, blur: 0.0, spread: 0.0, color: RGB(1.0, 1.0, 1.0, 0.14))]
+    public static let topGlossBackLightCard: [ShadowLayer] = [ShadowLayer(inset: true, x: 0.0, y: 1.0, blur: 0.0, spread: 0.0, color: RGB(1.0, 1.0, 1.0, 0.9))]
+    public static let topGlossBackDarkCard: [ShadowLayer] = [ShadowLayer(inset: true, x: 0.0, y: 1.0, blur: 0.0, spread: 0.0, color: RGB(1.0, 1.0, 1.0, 0.22))]
+    public static let topSeamFrontLight: [ShadowLayer] = [ShadowLayer(inset: false, x: 0.0, y: -1.0, blur: 0.0, spread: 0.0, color: RGB(0.0, 0.0, 0.0, 0.14))]
+    public static let topSeamBackLight: [ShadowLayer] = [ShadowLayer(inset: false, x: 0.0, y: -1.0, blur: 0.0, spread: 0.0, color: RGB(0.0, 0.0, 0.0, 0.2))]
+    public static let topSeamDark: [ShadowLayer] = [ShadowLayer(inset: false, x: 0.0, y: -1.0, blur: 0.0, spread: 0.0, color: RGB(0.0, 0.0, 0.0, 0.7))]
+    public static let castShadowLight: [ShadowLayer] = [ShadowLayer(inset: false, x: 0.0, y: -8.0, blur: 16.0, spread: -12.0, color: RGB(0.0, 0.0, 0.0, 0.16))]
+    public static let castShadowDark: [ShadowLayer] = [ShadowLayer(inset: false, x: 0.0, y: -8.0, blur: 16.0, spread: -12.0, color: RGB(0.0, 0.0, 0.0, 0.55))]
+    public static let glassLight: [ShadowLayer] = [ShadowLayer(inset: true, x: 0.0, y: 0.0, blur: 0.0, spread: 1.0, color: RGB(1.0, 1.0, 1.0, 0.7)), ShadowLayer(inset: true, x: 0.0, y: 1.0, blur: 0.0, spread: 0.0, color: RGB(1.0, 1.0, 1.0, 0.9)), ShadowLayer(inset: false, x: 0.0, y: -8.0, blur: 24.0, spread: -14.0, color: RGB(0.0, 0.0, 0.0, 0.22)), ShadowLayer(inset: false, x: 0.0, y: 0.0, blur: 0.0, spread: 1.0, color: RGB(0.0, 0.0, 0.0, 0.04))]
+    public static let glassDark: [ShadowLayer] = [ShadowLayer(inset: true, x: 0.0, y: 0.0, blur: 0.0, spread: 1.0, color: RGB(1.0, 1.0, 1.0, 0.12)), ShadowLayer(inset: true, x: 0.0, y: 1.0, blur: 0.0, spread: 0.0, color: RGB(1.0, 1.0, 1.0, 0.18)), ShadowLayer(inset: false, x: 0.0, y: -8.0, blur: 24.0, spread: -14.0, color: RGB(0.0, 0.0, 0.0, 0.6)), ShadowLayer(inset: false, x: 0.0, y: 0.0, blur: 0.0, spread: 1.0, color: RGB(0.0, 0.0, 0.0, 0.35))]
+}
+
 public enum DesignStamp {
     public static let delivery = "Arbeitswelt ALFA Interface Zugang (13).zip, sha256 6c3a927e1b5bae51eee3f12e03fb196c1ddd35ce5ed59fb16eec67d7904d3e4f, Datei TOKENBOGEN.json"
     public static let deliveredAt = "2026-10-16T02:05"
-    public static let adoptedAt = "2026-10-16T16:42"
-    public static let state = "Gelesen von der App: Hülle (Maße, Ruhe 280, Falten ab 112, Blob), Akkordeon aus alfa-shell.js (layout, grow; Mitte faltet mit), Bewegungen der Hülle, Schatten floating, alle Farben der Hülle, Zeilen, Abstände, Radien und Schriftgrößen der Ansichten. Offen: Mindestmaße der Bahnen (224, 280, 280 aus alfa-shell.js, nicht bestätigt), Lack, Glas, Kartenstapel, Schrift Geist, Symbole."
+    public static let adoptedAt = "2026-10-16T18:11"
+    public static let state = "Gelesen von der App: Hülle, Akkordeon (alfa-shell.js), Bewegungen, Schatten, Farben, Zeilen, Abstände, Radien, Schriftgrößen; Kartenstapel der Mail-Leseansicht mit Lack (Stufen, Kopf, Naht, Wurfschatten, Tiefe 8 und 44). Offen: Glas, flach, Karten-Kopf und -Fuß, Fächern, Symbole, Schrift Geist, Mindestmaße der Bahnen (nicht bestätigt)."
 }

@@ -108,33 +108,10 @@ struct MailReadingPane: View {
     let model: MailModel
 
     var body: some View {
-        if let card = model.cards.first(where: { $0.id == model.selectedMessage }) {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    Text(verbatim: card.summary.subject)
-                    Text(verbatim: card.summary.from)
-                    HStack {
-                        Button { Task { await model.archive(card.id) } } label: { word("mail.action.archive") }
-                        Button { Task { await model.trash(card.id) } } label: { word("mail.action.trash") }
-                    }
-                    if let hint = model.actionFailure(for: card.id) { hintWords(hint) }
-                    content(card.content)
-                }
-                .textSelection(.enabled)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
-            }
-        } else {
+        if model.cards.isEmpty {
             Color.clear
-        }
-    }
-
-    @ViewBuilder
-    private func content(_ content: MailCardContent) -> some View {
-        switch content {
-        case .text(let text): Text(verbatim: text)
-        case .html(let html, _): Text(verbatim: MailText.plain(html))
-        case .bodyLoading, .conversation, .draftNotice: word(content.key ?? "mail.card.bodyLoading")
+        } else {
+            CardStackView(model: model)
         }
     }
 }

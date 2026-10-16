@@ -11,8 +11,8 @@ final class DesignTests: XCTestCase {
         XCTAssertEqual(g.blobAwakeWidth, Design.Size.blobAwakeWidth)
         XCTAssertEqual(DesignColors.light.ground, RGB(1, 1, 1, 1))
         XCTAssertEqual(DesignColors.dark.ground.red, 13.0 / 255.0, accuracy: 0.001)
-        XCTAssertEqual(Design.Radius.contextMenu, 16)
-        XCTAssertEqual(Design.Radius.card, 20)
+        XCTAssertEqual(CardStack.tops(count: 6), [8, 16, 24, 68, 112, 156])
+        XCTAssertEqual(CardStack.tops(count: 3), [8, 52, 96])
         XCTAssertFalse(DesignStamp.adoptedAt.isEmpty)
     }
 }

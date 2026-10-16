@@ -16,10 +16,19 @@ private struct DesignStyleKey: EnvironmentKey {
     static let defaultValue = DesignStyle(dark: false)
 }
 
+private struct LaneFillKey: EnvironmentKey {
+    static let defaultValue = Color.white
+}
+
 extension EnvironmentValues {
     var design: DesignStyle {
         get { self[DesignStyleKey.self] }
         set { self[DesignStyleKey.self] = newValue }
+    }
+
+    var laneFill: Color {
+        get { self[LaneFillKey.self] }
+        set { self[LaneFillKey.self] = newValue }
     }
 }
 

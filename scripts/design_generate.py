@@ -157,11 +157,30 @@ def build(source_bytes, stamp):
         steps = ", ".join("DesignStackStep(surface: %s, ink: %s)" % (rgb(s["surface"]["$value"]), rgb(s["ink"]["$value"])) for s in source["stack"][mode])
         out.append("%sstatic let stack%s: [DesignStackStep] = [%s]" % (INDENT, cap(mode), steps))
     out.append("}")
+    out += surface_block(source)
     out += ["", "public enum DesignStamp {"]
     for field in STAMP_FIELDS:
         out.append("%spublic static let %s = %s" % (INDENT, field, json.dumps(stamp[field], ensure_ascii=False)))
     out.append("}")
     return ("\n".join(out) + "\n").encode("utf-8")
+
+
+def surface_block(source):
+    surface = source["surface"]
+    layers = {layer["name"]: layer for layer in surface["lacquer"]["layers"]}
+    gloss, seam, cast = layers["topGloss"], layers["topSeam"], layers["castShadow"]
+    items = [
+        ("topGlossFrontLight", gloss["front"]["light"]), ("topGlossFrontDark", gloss["front"]["dark"]),
+        ("topGlossBackLightCard", gloss["backLightCard"]), ("topGlossBackDarkCard", gloss["backDarkCard"]),
+        ("topSeamFrontLight", seam["front"]["light"]), ("topSeamBackLight", seam["back"]["light"]), ("topSeamDark", seam["dark"]),
+        ("castShadowLight", cast["light"]), ("castShadowDark", cast["dark"]),
+        ("glassLight", surface["glass"]["light"]), ("glassDark", surface["glass"]["dark"]),
+    ]
+    out = ["", "public enum DesignSurface {"]
+    for name, layer in items:
+        out.append("%spublic static let %s: [ShadowLayer] = %s" % (INDENT, name, shadow_expr(source, layer)))
+    out.append("}")
+    return out
 
 
 def read(path):
