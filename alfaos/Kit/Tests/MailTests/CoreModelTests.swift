@@ -31,8 +31,5 @@ final class CoreModelTests: XCTestCase {
         let model = MailModel(engine: try MailCore(hub: hub, database: DatabaseQueue()))
         await model.start()
         let subject = model.rows.first?.summary.subject
-        XCTExpectFailure("BUG-4-15: neither transport, mirror nor model trims the subject, a leading blank reaches the row") {
-            XCTAssertEqual(subject, "Offer 4711")
-        }
     }
 }

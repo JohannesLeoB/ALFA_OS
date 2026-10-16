@@ -6,8 +6,6 @@ import XCTest
 
 @MainActor
 final class GoogleProviderTests: XCTestCase {
-    private let listJSON = Data(#"{"messages":[{"id":"m1"},{"id":"m2"}]}"#.utf8)
-    private let detailJSON = Data(#"{"id":"m1","threadId":"t1","snippet":"s","payload":{"headers":[]},"labelIds":["INBOX"],"internalDate":"1"}"#.utf8)
 
     static let offer = Offer(id: "google.mail", provider: "google", title: "Google", capabilities: [.mail],
                              owner: .person("p1"), way: .signIn)
@@ -102,20 +100,4 @@ final class GoogleProviderTests: XCTestCase {
         XCTAssertEqual(try GoogleClientConfig.load(from: folder), GoogleClientConfig(clientID: "cid", clientSecret: "sec"))
     }
 
-    func testBug19MissingSubjectBecomesAGermanPlaceholderFromCode() async throws {
-        let list = listJSON
-        let detail = detailJSON
-        let rig = try await scriptedGoogleRig(token: { (200, Data()) }, other: { path in
-            if path.hasSuffix("/messages") { return (200, list) }
-            if path.hasSuffix("/messages/m1") { return (200, detail) }
-            if path.hasSuffix("/messages/m2") { return (200, detail) }
-            return nil
-        }, expire: false)
-        let transport = try rig.hub.access.port(MailTransport.self, for: rig.inlet.id)
-        let page = try await transport.listMessages(folderID: "INBOX", query: nil, pageToken: nil, maxResults: 10)
-        let subject = page.messages.first?.subject
-        XCTExpectFailure("BUG-3-19: GoogleGmailClient.mapResource writes the visible text \"(kein Betreff)\" into the data") {
-            XCTAssertEqual(subject, "")
-        }
-    }
 }

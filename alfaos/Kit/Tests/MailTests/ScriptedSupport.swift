@@ -2,7 +2,6 @@ import Foundation
 import Hub
 @testable import Mail
 import struct MykilosKit.EmailDraft
-import protocol MykilosServices.MailTransport
 import enum MykilosServices.MailFlag
 import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessageBody

@@ -1,5 +1,4 @@
 import Foundation
-import class GRDB.DatabaseQueue
 import Hub
 @testable import Mail
 import struct MykilosKit.EmailDraft
@@ -30,7 +29,6 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     var listError: Error? { get { lock.withLock { _listError } } set { lock.withLock { _listError = newValue } } }
     var sent: [EmailDraft] { lock.withLock { _sent } }
     var sendCalls: Int { lock.withLock { _sendCalls } }
-    var listCalls: Int { lock.withLock { _listCalls } }
 
     /// Seite je Ordner (gilt für jede Seitenmarke).
     func setPage(_ folder: String, _ page: MailMessagePage) { lock.withLock { _pages[folder] = page } }

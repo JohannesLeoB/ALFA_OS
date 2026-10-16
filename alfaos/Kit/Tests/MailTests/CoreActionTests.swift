@@ -1,10 +1,8 @@
 import GRDB
 import Hub
 @testable import Mail
-import struct MykilosKit.EmailDraft
 import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessagePage
-import struct MykilosServices.MailMessageSummary
 import struct MykilosServices.MailStoredDraft
 import enum MykilosServices.MailTransportError
 import XCTest

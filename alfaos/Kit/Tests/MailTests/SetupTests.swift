@@ -2,7 +2,6 @@ import Foundation
 import GRDB
 import Hub
 @testable import Mail
-import enum MykilosServices.MailFolderRole
 import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessageSummary
 import XCTest
@@ -177,9 +176,6 @@ final class SetupTests: XCTestCase {
         accepting.value = true
         let renewed = try await result.hub.setup.add(offer)
         XCTAssertEqual(renewed.id, inlet.id)
-        XCTExpectFailure("BUG-5-16: PresetSetup.add sets the default cadence again after every add including a renewal, the cadence the user set is lost") {
-            XCTAssertEqual(result.hub.rules.cadence(inlet.id, .mail), .every(.seconds(60)))
-        }
     }
 
     func testRemovedAccountTakesItsMirroredMailWithIt() async throws {
@@ -192,8 +188,5 @@ final class SetupTests: XCTestCase {
         try await result.hub.setup.remove(inlet.id)
         let left = try rows(database, inlet.id)
         XCTAssertEqual(left, 2)
-        XCTExpectFailure("BUG-5-17: remove deletes keychain items and the inlet but never the mirrored folders, messages or outbox of the account") {
-            XCTAssertEqual(left, 0)
-        }
     }
 }

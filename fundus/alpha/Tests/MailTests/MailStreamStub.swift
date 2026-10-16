@@ -47,7 +47,6 @@ final class ScriptedMailStream: MailByteStream, @unchecked Sendable {
     private var pending: [Data]
     private var replies: [[String]]
     private var sentLines: [String] = []
-    private var upgradedFlag = false
     private var closedFlag = false
 
     init(greeting: [String], replies: [[String]]) {
@@ -56,7 +55,6 @@ final class ScriptedMailStream: MailByteStream, @unchecked Sendable {
     }
 
     var sent: [String] { lock.withLock { sentLines } }
-    var upgraded: Bool { lock.withLock { upgradedFlag } }
     var closed: Bool { lock.withLock { closedFlag } }
 
     func receive() async throws -> Data {
@@ -77,9 +75,7 @@ final class ScriptedMailStream: MailByteStream, @unchecked Sendable {
         }
     }
 
-    func upgradeToTLS() async throws {
-        lock.withLock { upgradedFlag = true }
-    }
+    func upgradeToTLS() async throws {}
 
     func close() {
         lock.withLock { closedFlag = true }

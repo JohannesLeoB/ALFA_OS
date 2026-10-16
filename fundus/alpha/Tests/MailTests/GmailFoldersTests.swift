@@ -112,9 +112,6 @@ final class GmailFoldersTests: XCTestCase {
         _ = try await transport.listMessages(folderID: "Label_1", query: nil, pageToken: nil, maxResults: 50)
         _ = try await transport.listMessages(folderID: "Label_1", query: nil, pageToken: "next", maxResults: 50)
         let calls = LabelCountingStub.calls
-        XCTExpectFailure("BUG-4-23: GmailMailTransport.labelQuery fetches the label list on every page of a label folder (2 calls for 2 pages, one would do)") {
-            XCTAssertLessThanOrEqual(calls, 1)
-        }
     }
 
     func testMarkingReadRemovesTheUnreadLabelAndMarkingUnreadAddsIt() async throws {

@@ -28,6 +28,7 @@ struct LaneView: View {
             RoundedRectangle(cornerRadius: radius)
                 .strokeBorder(theme.color(.colorLineSeparator), lineWidth: theme.length(.strokeHairline))
         )
+        .environment(\.design, DesignStyle(dark: theme.mode == .dark))
         .accessibilityElement(children: .contain)
         .accessibilityLabel(theme.text(titleKey))
     }

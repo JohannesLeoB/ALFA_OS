@@ -1,7 +1,6 @@
 import Foundation
 import GRDB
 import Hub
-import struct MykilosKit.EmailDraft
 import protocol MykilosServices.MailTransport
 import XCTest
 

@@ -215,6 +215,6 @@ public extension Design {
 public enum DesignStamp {
     public static let delivery = "Arbeitswelt ALFA Interface Zugang (13).zip, sha256 6c3a927e1b5bae51eee3f12e03fb196c1ddd35ce5ed59fb16eec67d7904d3e4f, Datei TOKENBOGEN.json"
     public static let deliveredAt = "2026-10-16T02:05"
-    public static let adoptedAt = "2026-10-16T13:29"
-    public static let state = "Maße, Radien, Abstände, Bewegung, Schrift, Farben, Schatten und Kartenstapel erzeugt; Oberflächen (Lack, Glas) und Verbrauch im Code offen."
+    public static let adoptedAt = "2026-10-16T14:06"
+    public static let state = "Alle Werte erzeugt. In Ansichten genutzt: Mail-Konten, Mail-Liste und Einstellungen (Zeilen, Abstände, Radien, Farben, Schriftgrößen), Blob-Menü (Radien). Offen: Oberflächen Lack und Glas, Kartenstapel, Schrift Geist, Federn."
 }

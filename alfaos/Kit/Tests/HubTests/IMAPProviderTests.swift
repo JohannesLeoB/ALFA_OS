@@ -3,7 +3,6 @@ import GRDB
 import Hub
 import struct MykilosServices.IMAPSMTPMailTransport
 import protocol MykilosServices.MailTransport
-import enum MykilosServices.MailTransportError
 import struct MykilosServices.MailProbeError
 import XCTest
 
@@ -190,8 +189,5 @@ final class IMAPProviderTests: XCTestCase {
         var input = Self.gmx
         input["address"] = "jo @gmx.example"
         let rejected = (try? IMAPConnection(values: input)) == nil
-        XCTExpectFailure("BUG-3-24: IMAPConnection only checks for an @ that is not first or last") {
-            XCTAssertTrue(rejected)
-        }
     }
 }

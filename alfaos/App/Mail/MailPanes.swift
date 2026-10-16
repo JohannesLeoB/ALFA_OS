@@ -1,54 +1,47 @@
 import Hub
 import Mail
+import ShellCore
 import SwiftUI
 
 struct MailAccountsPane: View {
     let model: MailModel
 
-    private enum Pick: Hashable {
-        case account(Inlet.ID)
-        case folder(String)
-    }
-
-    private var pick: Binding<Pick?> {
-        Binding(
-            get: { model.selectedFolder.map(Pick.folder) ?? model.selectedInlet.map(Pick.account) },
-            set: { pick in
-                switch pick {
-                case .account(let id): Task { await model.selectAccount(id) }
-                case .folder(let id): Task { await model.selectFolder(id) }
-                case nil: break
-                }
-            })
-    }
-
     var body: some View {
-        List(selection: pick) {
-            if model.accounts.isEmpty { word("mail.accounts.none") }
-            ForEach(model.accounts) { account in
-                HStack {
-                    VStack(alignment: .leading) {
-                        word(account.title)
-                        if !account.account.isEmpty { Text(verbatim: account.account) }
-                        stateWords(account.state)
-                    }
-                    Spacer()
-                    Text(verbatim: String(model.unread[account.id] ?? 0))
-                }
-                .tag(Pick.account(account.id))
-                if account.id == model.selectedInlet {
-                    ForEach(model.sortedFolders) { folder in
-                        Group {
-                            if folder.role.rawValue == "other" {
-                                Text(verbatim: folder.name)
-                            } else {
-                                word("mail.role." + folder.role.rawValue)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                if model.accounts.isEmpty { word("mail.accounts.none").designText(\.inkTertiary) }
+                ForEach(model.accounts) { account in
+                    DesignRow(selected: model.selectedFolder == nil && model.selectedInlet == account.id, action: { Task { await model.selectAccount(account.id) } }) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 0) {
+                                word(account.title).designText()
+                                if !account.account.isEmpty {
+                                    Text(verbatim: account.account).designText(\.inkTertiary, size: Design.TextSize.small)
+                                }
+                                stateWords(account.state).designText(\.inkTertiary, size: Design.TextSize.small)
                             }
+                            Spacer()
+                            Text(verbatim: String(model.unread[account.id] ?? 0)).designText(\.inkTertiary)
                         }
-                        .tag(Pick.folder(folder.id))
+                    }
+                    if account.id == model.selectedInlet {
+                        ForEach(model.sortedFolders) { folder in
+                            DesignRow(selected: model.selectedFolder == folder.id, action: { Task { await model.selectFolder(folder.id) } }) {
+                                Group {
+                                    if folder.role.rawValue == "other" {
+                                        Text(verbatim: folder.name)
+                                    } else {
+                                        word("mail.role." + folder.role.rawValue)
+                                    }
+                                }
+                                .designText()
+                            }
+                            .padding(.leading, CGFloat(Design.Spacing.step12))
+                        }
                     }
                 }
             }
+            .padding(CGFloat(Design.Spacing.step8))
         }
     }
 
@@ -71,36 +64,43 @@ struct MailListPane: View {
     let model: MailModel
 
     var body: some View {
-        VStack(alignment: .leading) {
-            if let key = model.listState.key { word(key) }
-            if case .failed(let hint) = model.listState { hintWords(hint) }
-            List(selection: message) {
-                ForEach(model.rows) { row in
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(verbatim: row.summary.from)
-                            Spacer()
-                            if let date = row.summary.receivedAt { Text(date, format: .dateTime) }
-                        }
-                        HStack {
-                            Text(verbatim: row.summary.subject)
-                            Spacer()
-                            if row.states.contains(.unread) { word(MailRowState.unread.key) }
+        VStack(alignment: .leading, spacing: 0) {
+            if let key = model.listState.key {
+                word(key).designText(\.inkTertiary).padding(CGFloat(Design.Spacing.step12))
+            }
+            if case .failed(let hint) = model.listState {
+                hintWords(hint).designText(\.signal).padding(CGFloat(Design.Spacing.step12))
+            }
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    ForEach(model.rows) { row in
+                        let unread = row.states.contains(.unread)
+                        DesignRow(selected: model.selectedMessage == row.id, action: { Task { await model.open(row.id) } }) {
+                            VStack(alignment: .leading, spacing: 0) {
+                                HStack {
+                                    Text(verbatim: row.summary.from).designText(weight: unread ? .medium : .regular)
+                                    Spacer()
+                                    if let date = row.summary.receivedAt {
+                                        Text(date, format: .dateTime).designText(\.inkTertiary, size: Design.TextSize.small)
+                                    }
+                                }
+                                HStack {
+                                    Text(verbatim: row.summary.subject).designText(\.inkSecondary, size: Design.TextSize.small).lineLimit(1)
+                                    Spacer()
+                                    if unread { word(MailRowState.unread.key).designText(\.inkTertiary, size: Design.TextSize.small) }
+                                }
+                            }
                         }
                     }
-                    .tag(row.id)
+                    if model.canLoadMore {
+                        Button { Task { await model.loadMore() } } label: { word("mail.loadMore").designText(\.inkSecondary) }
+                            .buttonStyle(.plain)
+                            .padding(CGFloat(Design.Spacing.step12))
+                    }
                 }
-                if model.canLoadMore {
-                    Button { Task { await model.loadMore() } } label: { word("mail.loadMore") }
-                }
+                .padding(CGFloat(Design.Spacing.step8))
             }
         }
-    }
-
-    private var message: Binding<String?> {
-        Binding(
-            get: { model.selectedMessage },
-            set: { id in if let id { Task { await model.open(id) } } })
     }
 }
 

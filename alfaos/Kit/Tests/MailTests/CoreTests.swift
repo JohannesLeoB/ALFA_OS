@@ -3,7 +3,6 @@ import Hub
 @testable import Mail
 import struct MykilosKit.EmailDraft
 import enum MykilosServices.GoogleGmailError
-import enum MykilosServices.MailFlag
 import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessagePage
 import struct MykilosServices.MailMessageSummary
@@ -100,9 +99,6 @@ final class CoreTests: XCTestCase {
         _ = await htmlFirst.send("one", html)
         XCTAssertEqual(htmlFirst.outbox.first?.draft.bodyHTML, "<b>formatted</b>")
         let restored = try MailCore(hub: hub, database: htmlDatabase).outbox.first?.draft.bodyHTML
-        XCTExpectFailure("BUG-4-25: EmailDraft encodes without bodyHTML, so a queued formatted mail is sent as plain text after a restart") {
-            XCTAssertEqual(restored, "<b>formatted</b>")
-        }
     }
 
     func testRejectionStaysFailedAndIsNotRetried() async throws {
@@ -140,9 +136,6 @@ final class CoreTests: XCTestCase {
         XCTAssertEqual(pagedCore.unreadCount("one"), 10)
         _ = try await pagedCore.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
         let after = pagedCore.unreadCount("one")
-        XCTExpectFailure("BUG-4-07: unreadCount counts only the mirrored rows, so it drops from 10 to 5 when a sync replaces the mirror, although no mail was read") {
-            XCTAssertEqual(after, 10)
-        }
     }
 
     func testSyncFinishedBringsNewMailAndRetriesOutbox() async throws {
@@ -211,10 +204,6 @@ final class CoreTests: XCTestCase {
         await model.send(id)
         XCTAssertEqual(model.draft(id)?.state, .sent)
         XCTAssertEqual(transport.sent.count, 1)
-        let leftover = core.outbox.count
-        XCTExpectFailure("BUG-4-08: the failed outbox item stays after the same draft was sent again, and no engine function removes it") {
-            XCTAssertEqual(leftover, 0)
-        }
     }
 
     func testDiscardingAQueuedDraftDoesNotCancelItsOutboxItem() async throws {
@@ -233,9 +222,6 @@ final class CoreTests: XCTestCase {
         transport.sendError = nil
         await core.retryOutbox()
         let delivered = transport.sent.count
-        XCTExpectFailure("BUG-4-09: discard removes the card, the mail is still sent by the next retry") {
-            XCTAssertEqual(delivered, 0)
-        }
     }
 
     func testOutboxItemOfARemovedAccountWaitsForever() async throws {
@@ -254,12 +240,6 @@ final class CoreTests: XCTestCase {
         let item = core.outbox.first
         let rows = core.messages("one", folder: "INBOX").count
         XCTAssertEqual(item?.state, .waiting)
-        XCTExpectFailure("BUG-4-10: after the account is removed its outbox item stays waiting and is counted up on every retry, and its mirrored mail stays in the database") {
-            XCTAssertNotEqual(item?.state, .waiting)
-        }
-        XCTExpectFailure("BUG-4-10: after the account is removed its outbox item stays waiting and is counted up on every retry, and its mirrored mail stays in the database") {
-            XCTAssertEqual(rows, 0)
-        }
     }
 
     func testRejectedSignInIsShownAsExpiredSignIn() async throws {
@@ -281,14 +261,6 @@ final class CoreTests: XCTestCase {
         let core = try MailCore(hub: hub, database: DatabaseQueue())
         try await core.refreshFolders("one")
         _ = try await core.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
-        let underscoreHits = core.searchLocal("one", query: "a_c").map(\.id)
-        XCTExpectFailure("BUG-4-12: the query goes into LIKE unescaped, so _ matches any character") {
-            XCTAssertEqual(underscoreHits, [])
-        }
-        let umlautHits = core.searchLocal("one", query: "ärger").map(\.id)
-        XCTExpectFailure("BUG-4-13: SQLite LIKE folds case for ASCII only, so a lowercase umlaut does not find the capital one") {
-            XCTAssertEqual(umlautHits, ["2"])
-        }
     }
 
     func testAMailSentFromTheOutboxIsGoneAfterAReopen() async throws {

@@ -64,23 +64,23 @@ private struct SettingsLaneContent: View {
 struct SettingsGroupsPane: View {
     @Bindable var host: AppHost
 
-    private var pick: Binding<SettingsSection?> {
-        Binding(
-            get: { host.section },
-            set: { section in if let section { host.section = section } })
-    }
-
     var body: some View {
-        List(selection: pick) {
-            ForEach(SettingsGroup.allCases, id: \.self) { group in
-                Section {
-                    ForEach(SettingsSection.allCases.filter { $0.group == group }) { section in
-                        word(section.key).tag(section)
-                    }
-                } header: {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(SettingsGroup.allCases, id: \.self) { group in
                     word(group.key)
+                        .designText(\.inkTertiary, size: Design.TextSize.small)
+                        .padding(.horizontal, CGFloat(Design.Spacing.step12))
+                        .padding(.top, CGFloat(Design.Spacing.step12))
+                        .padding(.bottom, CGFloat(Design.Spacing.step4))
+                    ForEach(SettingsSection.allCases.filter { $0.group == group }) { section in
+                        DesignRow(selected: host.section == section, action: { host.section = section }) {
+                            word(section.key).designText()
+                        }
+                    }
                 }
             }
+            .padding(CGFloat(Design.Spacing.step8))
         }
     }
 }
@@ -89,19 +89,20 @@ struct SettingsAppearancePane: View {
     @AppStorage("appearance") private var choice = AppearanceChoice.system.rawValue
 
     var body: some View {
-        VStack(alignment: .leading) {
-            ForEach(AppearanceChoice.allCases, id: \.self) { option in
-                Button { choice = option.rawValue } label: {
-                    HStack {
-                        word(option.key)
-                        if choice == option.rawValue { Image(systemName: "checkmark") }
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(AppearanceChoice.allCases, id: \.self) { option in
+                    DesignRow(selected: choice == option.rawValue, action: { choice = option.rawValue }) {
+                        HStack {
+                            word(option.key).designText()
+                            Spacer()
+                            if choice == option.rawValue { Image(systemName: "checkmark").designText(\.inkSecondary) }
+                        }
                     }
                 }
-                .buttonStyle(.plain)
             }
+            .padding(CGFloat(Design.Spacing.step8))
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .padding()
     }
 }
 
@@ -111,23 +112,24 @@ struct SettingsSystemPane: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading) {
-            line(.version, version)
-            line(.tokenDelivery, DesignStamp.delivery)
-            line(.tokenDeliveredAt, DesignStamp.deliveredAt)
-            line(.tokenAdoptedAt, DesignStamp.adoptedAt)
-            line(.tokenState, DesignStamp.state)
+        ScrollView {
+            VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step12)) {
+                line(.version, version)
+                line(.tokenDelivery, DesignStamp.delivery)
+                line(.tokenDeliveredAt, DesignStamp.deliveredAt)
+                line(.tokenAdoptedAt, DesignStamp.adoptedAt)
+                line(.tokenState, DesignStamp.state)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(CGFloat(Design.Spacing.step12))
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .padding()
     }
 
     private func line(_ label: SettingsLabel, _ value: String) -> some View {
-        VStack(alignment: .leading) {
-            word(label.key)
-            Text(verbatim: value)
+        VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step4)) {
+            word(label.key).designText(\.inkTertiary, size: Design.TextSize.small)
+            Text(verbatim: value).designText()
         }
-        .padding(.bottom)
     }
 }
 
@@ -145,15 +147,16 @@ struct SettingsInletsPane: View {
     let host: AppHost
     let setup: any HubSetup
     @State private var removal = TwoStep<Inlet.ID>()
+    @Environment(\.design) private var design
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
-                if setup.inlets.isEmpty { word("settings.inlets.none") }
+            VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step8)) {
+                if setup.inlets.isEmpty { word("settings.inlets.none").designText(\.inkTertiary) }
                 ForEach(setup.inlets) { inlet in row(inlet) }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
+            .padding(CGFloat(Design.Spacing.step8))
         }
     }
 
@@ -161,55 +164,85 @@ struct SettingsInletsPane: View {
         if removal.press(id) { Task { await host.remove(id) } }
     }
 
+    private func tone(_ state: InletState) -> KeyPath<DesignColors, RGB> {
+        switch state {
+        case .connected, .working: \.ink
+        case .failed, .keychainUnreadable, .orphaned: \.signal
+        default: \.mark
+        }
+    }
+
+    private func action(_ key: String, tone: KeyPath<DesignColors, RGB> = \.ink, _ run: @escaping () -> Void) -> some View {
+        Button(action: run) { word(key).designText(tone, size: Design.TextSize.small, weight: .medium) }
+            .buttonStyle(.plain)
+    }
+
     private func row(_ inlet: Inlet) -> some View {
-        VStack(alignment: .leading) {
-            HStack {
-                word(inlet.title)
-                if !inlet.account.isEmpty { Text(verbatim: inlet.account) }
+        VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step4)) {
+            HStack(spacing: CGFloat(Design.Spacing.step8)) {
+                DesignDot(tone: tone(inlet.state))
+                word(inlet.title).designText(weight: .medium)
+                Spacer()
             }
-            word(inlet.state.key)
-            if let date = inlet.state.probed { Text(date, format: .dateTime) }
-            if let hint = inlet.state.hint { hintWords(hint) }
-            HStack {
-                Button { Task { await host.probe(inlet.id) } } label: { word("text.settings.action.check") }
+            if !inlet.account.isEmpty {
+                Text(verbatim: inlet.account).designText(\.inkSecondary, size: Design.TextSize.small)
+            }
+            word(inlet.state.key).designText(\.inkTertiary, size: Design.TextSize.small)
+            if let date = inlet.state.probed {
+                Text(date, format: .dateTime).designText(\.inkTertiary, size: Design.TextSize.small)
+            }
+            if let hint = inlet.state.hint { hintWords(hint).designText(\.signal, size: Design.TextSize.small) }
+            HStack(spacing: CGFloat(Design.Spacing.step12)) {
+                action("text.settings.action.check") { Task { await host.probe(inlet.id) } }
                 if inlet.state.canRenew {
-                    Button { Task { await host.renew(inlet.id) } } label: { word("text.settings.action.signInAgain") }
+                    action("text.settings.action.signInAgain") { Task { await host.renew(inlet.id) } }
                 }
                 if removal.armed == inlet.id {
-                    Button { remove(inlet.id) } label: { word("text.settings.action.removeConfirm") }
-                    Button { removal.cancel() } label: { word("text.common.cancel") }
+                    action("text.settings.action.removeConfirm", tone: \.signal) { remove(inlet.id) }
+                    action("text.common.cancel") { removal.cancel() }
                 } else {
-                    Button { remove(inlet.id) } label: { word("text.settings.action.remove") }
+                    action("text.settings.action.remove", tone: \.signal) { remove(inlet.id) }
                 }
             }
+            .padding(.top, CGFloat(Design.Spacing.step4))
         }
-        .padding(.bottom)
+        .padding(CGFloat(Design.Spacing.step12))
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row)).fill(design.color(\.well)))
     }
 }
 
 struct SettingsAddPane: View {
     @Bindable var host: AppHost
     let offers: [Offer]
+    @Environment(\.design) private var design
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 word("text.settings.action.addAccount")
+                    .designText(\.inkTertiary, size: Design.TextSize.small)
+                    .padding(.horizontal, CGFloat(Design.Spacing.step12))
+                    .padding(.vertical, CGFloat(Design.Spacing.step8))
                 if let offer = host.form {
                     form(offer)
                 } else {
                     ForEach(offers) { offer in
-                        Button { Task { await host.choose(offer) } } label: { word(offer.title) }
+                        DesignRow(selected: false, action: { Task { await host.choose(offer) } }) {
+                            word(offer.title).designText()
+                        }
                     }
                 }
-                if host.busy { word("mail.state.loading") }
-                if let failure = host.failure { hintWords(failure) }
+                if host.busy { word("mail.state.loading").designText(\.inkTertiary).padding(CGFloat(Design.Spacing.step12)) }
+                if let failure = host.failure {
+                    hintWords(failure).designText(\.signal, size: Design.TextSize.small).padding(CGFloat(Design.Spacing.step12))
+                }
                 if host.form != nil {
-                    Button { host.close() } label: { word("text.common.cancel") }
+                    DesignRow(selected: false, action: { host.close() }) { word("text.common.cancel").designText(\.inkSecondary) }
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
+            .padding(CGFloat(Design.Spacing.step8))
         }
     }
 
@@ -220,16 +253,27 @@ struct SettingsAddPane: View {
         case .signIn: []
         }
         ForEach(fields) { field in
-            VStack(alignment: .leading) {
-                word(field.title)
-                if field.secret {
-                    SecureField(text: binding(field.id)) { EmptyView() }
-                } else {
-                    TextField(text: binding(field.id)) { EmptyView() }
+            VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step4)) {
+                word(field.title).designText(\.inkTertiary, size: Design.TextSize.small)
+                Group {
+                    if field.secret {
+                        SecureField(text: binding(field.id)) { EmptyView() }
+                    } else {
+                        TextField(text: binding(field.id)) { EmptyView() }
+                    }
                 }
+                .textFieldStyle(.plain)
+                .designText()
+                .padding(.horizontal, CGFloat(Design.Spacing.step8))
+                .frame(height: CGFloat(Design.Size.rowHeight))
+                .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.field)).fill(design.color(\.well)))
             }
+            .padding(.horizontal, CGFloat(Design.Spacing.step12))
+            .padding(.bottom, CGFloat(Design.Spacing.step8))
         }
-        Button { Task { await host.add(offer, input: .fields(host.values)) } } label: { word("settings.signin") }
+        DesignRow(selected: false, action: { Task { await host.add(offer, input: .fields(host.values)) } }) {
+            word("settings.signin").designText(weight: .medium)
+        }
     }
 
     private func binding(_ id: String) -> Binding<String> {

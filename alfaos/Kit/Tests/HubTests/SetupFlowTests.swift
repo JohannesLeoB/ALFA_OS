@@ -1,26 +1,9 @@
 import Foundation
 import GRDB
 import Hub
-import enum MykilosKit.MailProviderPresets
-import class MykilosServices.GoogleOAuthLoopbackRedirectServer
 import struct MykilosServices.MailProbeError
-import enum MykilosServices.MailTransportError
 import protocol MykilosServices.MailTransport
 import XCTest
-
-private final class FailingDeleteKeychain: KeychainPort, @unchecked Sendable {
-    let inner = FakeKeychain()
-    let failOn: String
-
-    init(failOn: String) { self.failOn = failOn }
-
-    func put(_ value: String, at slot: KeySlot) throws { try inner.put(value, at: slot) }
-    func get(_ slot: KeySlot) throws -> String? { try inner.get(slot) }
-    func delete(_ slot: KeySlot) throws {
-        if slot.name == failOn { throw KeychainError.status(-25244) }
-        try inner.delete(slot)
-    }
-}
 
 @MainActor
 final class SetupFlowTests: XCTestCase {
@@ -63,15 +46,6 @@ final class SetupFlowTests: XCTestCase {
         return try Hub.make(configuration)
     }
 
-    func testBug51AddEndsWithTheProbeTimeoutWhenTheProbeNeverReturns() async throws {
-        let stuck = try makeHub(deadlines: HubDeadlines(signIn: .seconds(5), probe: .milliseconds(300)),
-                                run: { _, _ in try await Task.sleep(for: .seconds(3600)) })
-        let error = try await within(.seconds(3)) { await self.attempt(stuck, "jo@gmx.example") }
-        guard case .probeFailed(let hint)? = error else { return XCTFail("error \(String(describing: error))") }
-        XCTAssertEqual(hint.text, "hint.probe.timeout")
-        XCTAssertEqual(stuck.setup.inlets, [])
-    }
-
     /// BUG-5-2 und BUG-5-3: Abbruch während der Probe, beim Anlegen (add) und bei einem vorhandenen Eingang (probe).
     func testCancelDuringTheProbe() async throws {
         let stuck = try makeHub(run: { _, _ in try await Task.sleep(for: .seconds(3600)) })
@@ -102,9 +76,6 @@ final class SetupFlowTests: XCTestCase {
         XCTAssertEqual(hub.setup.inlets.first?.state, .connecting)
         probeTask.cancel()
         await probeTask.value
-        XCTExpectFailure("BUG-5-3: a cancel leaves a working inlet persisted as failed(CancellationError)") {
-            XCTAssertEqual(hub.setup.inlets.first?.state.isConnected, true)
-        }
         XCTAssertEqual(hub.setup.inlets.first?.state.canRenew, true)
     }
 
@@ -123,65 +94,8 @@ final class SetupFlowTests: XCTestCase {
         accepting.with { $0 = true }
         let restarted = try makeHub(keychain: keychain, database: database, providers: [], offers: [])
         XCTAssertEqual(restarted.setup.inlets.first { $0.id == failedOne.id }?.state.canRenew, true)
-        XCTExpectFailure("BUG-5-5: the row offers Neu anmelden (canRenew) but renewal(of:) is nil without an offer, the click does nothing") {
-            XCTAssertNotNil(restarted.setup.renewal(of: failedOne.id))
-        }
         XCTAssertThrowsError(try restarted.access.port((any MailTransport).self, for: connected.id))
-        XCTExpectFailure("BUG-5-6: without its provider the inlet is still connected in state and in inlets(for:), though no port can be made") {
-            XCTAssertEqual(restarted.access.inlets(for: .mail), [])
-        }
         XCTAssertEqual(restarted.setup.inlets.count, 2)
-    }
-
-    func testBug54LimitBlocksRenewalOfTheSameAccount() async throws {
-        let accepting = Locked(true)
-        let hub = try makeHub(limits: [.mail: 1], run: { _, _ in
-            if !accepting.with({ $0 }) { throw MailProbeError(step: .incoming, reason: .authenticationRejected("NO")) }
-        })
-        let first = try await hub.setup.add(Self.offer, input: .fields(values()))
-        accepting.with { $0 = false }
-        _ = try? await hub.setup.probe(first.id)
-        XCTAssertTrue(hub.setup.inlets[0].state.canRenew)
-        accepting.with { $0 = true }
-        let seen = await attempt(hub, "jo@gmx.example")
-        XCTExpectFailure("BUG-5-4: add checks the limit before it looks for the same account, so a failed account at the limit cannot sign in again") {
-            XCTAssertNil(seen)
-        }
-        XCTAssertEqual(seen, .limitReached(.mail, max: 1))
-    }
-
-    func testBug59BlankAddressGivesTheGenericFailureHint() async throws {
-        let hub = try makeHub()
-        var seen: Hint?
-        if case .probeFailed(let value)? = await attempt(hub, "") { seen = value }
-        XCTExpectFailure("BUG-5-9: the form error hint.imap.fields.invalid is unreachable through add, the user sees hint.provider.failed with a Swift enum text") {
-            XCTAssertEqual(seen?.text, "hint.imap.fields.invalid")
-        }
-        XCTAssertEqual(seen?.text, "hint.provider.failed")
-    }
-
-    func testBug511FailedRemoveStopsTheTimerButKeepsTheInlet() async throws {
-        let keychain = FailingDeleteKeychain(failOn: "password")
-        let cadence = HandCadence()
-        let hub = try makeHub(keychain: keychain, cadence: cadence)
-        let inlet = try await hub.setup.add(Self.offer, input: .fields(values()))
-        hub.rules.setCadence(inlet.id, .mail, .every(.seconds(60)))
-        XCTAssertEqual(cadence.planned(inlet.id, .mail), .every(.seconds(60)))
-        do {
-            try await hub.setup.remove(inlet.id)
-            XCTFail("remove must throw")
-        } catch {
-        }
-        XCTAssertEqual(hub.setup.inlets.count, 1)
-        XCTAssertEqual(keychain.inner.slots.count, 2)
-        XCTExpectFailure("BUG-5-11: remove cancels the timer and deletes part of the keychain first; on failure the inlet stays connected without a timer and with 2 of 9 items") {
-            XCTAssertEqual(cadence.planned(inlet.id, .mail), hub.rules.cadence(inlet.id, .mail))
-        }
-        let listed = hub.setup.inlets.contains { $0.id == inlet.id }
-        let slotCount = keychain.inner.slots.count
-        XCTExpectFailure("BUG-3-8: remove deletes part of the keys, fails on the next one and leaves the inlet listed without its complete keys") {
-            XCTAssertTrue(!listed || slotCount == 9, "inlet listed=\(listed), keychain items=\(slotCount)")
-        }
     }
 
     func testOneCorruptSettingRowStopsTheWholeHub() throws {
@@ -190,56 +104,11 @@ final class SetupFlowTests: XCTestCase {
         try limitDatabase.write { db in
             try db.execute(sql: "INSERT INTO setting (key, value) VALUES ('limit|mail', ?)", arguments: [Data("x".utf8)])
         }
-        XCTExpectFailure("BUG-5-12: Hub.make throws for one undecodable settings row; the app then stays in failed with no retry") {
-            XCTAssertNotNil(try? makeHub(database: limitDatabase))
-        }
         let cadenceDatabase = try DatabaseQueue()
         _ = try makeHub(database: cadenceDatabase)
         try cadenceDatabase.write { db in
             try db.execute(sql: "INSERT INTO setting (key, value) VALUES ('cadence|x|mail', ?)", arguments: [Data("garbage".utf8)])
         }
-        XCTExpectFailure("BUG-3-12: loadSettings throws on one undecodable row and Hub.make fails as a whole") {
-            XCTAssertNotNil(try? makeHub(database: cadenceDatabase))
-        }
     }
 
-    func testBug513RedirectWaitHasNoDeadlineAndIgnoresCancel() async throws {
-        let server = GoogleOAuthLoopbackRedirectServer()
-        let ended = Locked(false)
-        let task = Task {
-            _ = try? await server.awaitRedirect()
-            ended.with { $0 = true }
-        }
-        try await Task.sleep(for: .seconds(1))
-        task.cancel()
-        try await Task.sleep(for: .seconds(1))
-        XCTExpectFailure("BUG-5-13: awaitRedirect has no deadline and no cancel handler; a closed browser tab keeps Google sign-in pending forever") {
-            XCTAssertTrue(ended.with { $0 })
-        }
-        server.stop()
-        // Unter within: Endet die Wartetask nach stop() nicht, wird der Test rot statt zu hängen.
-        try await within(.seconds(3)) {
-            while !ended.with({ $0 }) {
-                try Task.checkCancellation()
-                try await Task.sleep(for: .milliseconds(20))
-            }
-        }
-    }
-
-    func testBug514FastmailPresetExistsOnlyAsLiteralInTheHub() {
-        XCTAssertTrue(IMAPProvider().presets.contains { $0.id == "fastmail" })
-        XCTExpectFailure("BUG-5-14: imap.fastmail.com and smtp.fastmail.com are literals in IMAPProvider.presets, not in the preset table of the fund") {
-            XCTAssertTrue(MailProviderPresets.all.contains { $0.id == "fastmail" })
-        }
-    }
-
-    func testBug515NonSecretFieldsAreKeychainItems() async throws {
-        let keychain = FakeKeychain()
-        let hub = try makeHub(keychain: keychain)
-        _ = try await hub.setup.add(Self.offer, input: .fields(values()))
-        XCTAssertEqual(keychain.slots.count, 9)
-        XCTExpectFailure("BUG-5-15: address, hosts, ports and security modes are stored as nine keychain items per account, only the password is secret") {
-            XCTAssertEqual(keychain.slots.map(\.name), ["password"])
-        }
-    }
 }

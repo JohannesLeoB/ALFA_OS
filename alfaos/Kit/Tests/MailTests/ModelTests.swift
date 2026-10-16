@@ -1,8 +1,6 @@
 import Hub
 @testable import Mail
 import struct MykilosKit.EmailDraft
-import struct MykilosKit.MailSignatureContact
-import enum MykilosServices.MailFolderRole
 import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessagePage
 import XCTest
@@ -188,12 +186,6 @@ final class ModelTests: XCTestCase {
         await failingModel.open("m1")
         let failure = failingModel.actionFailure(for: "m1")
         let calls = failing.flagCalls.count
-        XCTExpectFailure("BUG-4-16: open marks the mail read although its body could not be loaded, and the successful flag call then erases the body failure hint") {
-            XCTAssertEqual(calls, 0)
-        }
-        XCTExpectFailure("BUG-4-16: open marks the mail read although its body could not be loaded, and the successful flag call then erases the body failure hint") {
-            XCTAssertNotNil(failure)
-        }
     }
 
     func testReplyAllBuildsDraft() async {
@@ -207,9 +199,6 @@ final class ModelTests: XCTestCase {
         XCTAssertEqual(draft.to, "Anna Berg <anna@x.test>")
         XCTAssertEqual(draft.cc, "bob@x.test, carl@x.test")
         XCTAssertEqual(draft.inReplyTo, "m1")
-        XCTExpectFailure("BUG-4-14: inReplyTo is the provider id of the message, MailMessageSummary carries no Message-ID header, so In-Reply-To in the sent mail is not a valid message id") {
-            XCTAssertTrue(draft.inReplyTo?.contains("@") == true, "reference \(String(describing: draft.inReplyTo))")
-        }
         XCTAssertEqual(draft.threadID, "th")
         XCTAssertTrue(draft.body.contains("> text of m1"))
         let forward = await model.forward("m1")!

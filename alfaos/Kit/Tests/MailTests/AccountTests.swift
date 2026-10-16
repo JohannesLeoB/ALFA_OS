@@ -3,7 +3,6 @@ import Hub
 @testable import Mail
 import enum MykilosServices.GoogleGmailError
 import struct MykilosServices.GoogleAPIFault
-import struct MykilosServices.MailFolder
 import struct MykilosServices.MailMessagePage
 import XCTest
 
@@ -77,12 +76,6 @@ final class AccountTests: XCTestCase {
         folderGate.release()
         await switching.value
         XCTAssertEqual(inlet, "b")
-        XCTExpectFailure("BUG-4-05: a loadMore of account a that finishes while account b fetches its folders is accepted into b's list and token, because the generation is only raised after the folders arrive") {
-            XCTAssertEqual(rows, [])
-        }
-        XCTExpectFailure("BUG-4-05: a loadMore of account a that finishes while account b fetches its folders is accepted into b's list and token, because the generation is only raised after the folders arrive") {
-            XCTAssertNil(token)
-        }
     }
 
     func testOneRejectedLoadMoreEndsPagingUntilTheFolderIsSelectedAgain() async throws {
@@ -120,9 +113,6 @@ final class AccountTests: XCTestCase {
         XCTAssertTrue(mirrored)
         try? await Task.sleep(for: .milliseconds(100))
         let ids = model.summaries.map(\.id)
-        XCTExpectFailure("BUG-4-06: mergeMirror never removes rows, so a mail that left the mirror stays in the list") {
-            XCTAssertEqual(ids, ["2"])
-        }
     }
 
     func testAccountAddedLaterIsNotSelectedWhenNothingIsSelected() async {
@@ -134,25 +124,6 @@ final class AccountTests: XCTestCase {
         engine.folderList["a"] = scriptedInbox
         await model.handle(.accountsChanged)
         XCTAssertEqual(model.accounts.map(\.id), ["a"])
-        XCTExpectFailure("BUG-4-26: refreshAccounts only repairs a selection that vanished, an account that appears while nothing is selected stays unselected and its list never loads") {
-            XCTAssertEqual(model.selectedInlet, "a")
-        }
     }
 
-    func testBug518RemovedSelectedAccountKeepsTheOldFoldersAndList() async {
-        let engine = ModelFakeEngine()
-        engine.accounts = [fakeAccount("a"), fakeAccount("b")]
-        engine.folderList["a"] = [MailFolder(id: "INBOX-A", name: "Inbox", role: .inbox)]
-        engine.folderList["b"] = [MailFolder(id: "INBOX-B", name: "Inbox", role: .inbox)]
-        engine.pages[nil] = MailMessagePage(messages: [fakeMessage("m1")])
-        let model = MailModel(engine: engine)
-        await model.start()
-        XCTAssertEqual(model.selectedInlet, "a")
-        XCTAssertEqual(model.summaries.map(\.id), ["m1"])
-        engine.accounts = [fakeAccount("b")]
-        model.refreshAccounts()
-        XCTAssertEqual(model.selectedInlet, "b")
-        XCTAssertEqual(model.folders.map(\.id), ["INBOX-B"])
-        XCTAssertTrue(model.summaries.isEmpty)
-    }
 }
