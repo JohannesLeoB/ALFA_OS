@@ -33,7 +33,7 @@ final class ThemeTests: XCTestCase {
 
     func testValuesParse() throws {
         let theme = try Fixture.theme()
-        XCTAssertEqual(theme.length(.componentLaneRestingWidth), 300)
+        XCTAssertEqual(theme.length(.componentLaneRestingWidth), 280)
         XCTAssertEqual(theme.duration(.motionDurationChange), 0.2, accuracy: 1e-9)
         XCTAssertEqual(theme.curve(.motionCurveStandard), CubicBezier(x1: 0.2, y1: 0.8, x2: 0.2, y2: 1))
         XCTAssertEqual(theme.color(.colorBackgroundOverlay, .light), RGB(0, 0, 0, 0.2))

@@ -6,7 +6,7 @@ final class LayoutTests: XCTestCase {
     func testRestingWidthsOnTheLargeScreen() throws {
         let g = try Fixture.geometry()
         let widths = LaneLayout.widths(windowWidth: 1512, state: LaneState(rest: g.laneRest), geometry: g)
-        XCTAssertEqual([widths.leading, widths.center, widths.trailing], [300, 856, 300])
+        XCTAssertEqual([widths.leading, widths.center, widths.trailing], [280, 896, 280])
         XCTAssertEqual(widths.notes, [])
     }
 
