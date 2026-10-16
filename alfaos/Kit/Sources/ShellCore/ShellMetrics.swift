@@ -13,8 +13,7 @@ public enum ShellMeasure: String, CaseIterable, Sendable {
 }
 
 public struct ShellMetrics: Sendable, Decodable, Equatable {
-    public let laneMin: Double
-    public let centerMin: Double
+    public let minimum: [Double]
     public let blobWidth: Double
     public let blobThrow: Double
     public let shadowBlurFactor: Double
@@ -26,8 +25,7 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
     public func measure(_ key: ShellMeasure) -> Double { measures[key, default: 0] }
 
     enum CodingKeys: String, CodingKey {
-        case laneMin = "lane-min"
-        case centerMin = "center-min"
+        case minimum
         case blobWidth = "blob-width"
         case blobThrow = "blob-throw"
         case shadowBlurFactor = "shadow-blur-factor"
@@ -39,8 +37,7 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        laneMin = try container.decode(Double.self, forKey: .laneMin)
-        centerMin = try container.decode(Double.self, forKey: .centerMin)
+        minimum = try container.decode([Double].self, forKey: .minimum)
         blobWidth = try container.decode(Double.self, forKey: .blobWidth)
         blobThrow = try container.decode(Double.self, forKey: .blobThrow)
         shadowBlurFactor = try container.decode(Double.self, forKey: .shadowBlurFactor)
@@ -83,9 +80,7 @@ public struct ShellGeometry: Sendable, Equatable {
     public let laneRest: Double
     public let laneFolded: Double
     public let foldAt: Double
-    public let laneMin: Double
-    public let laneMax: Double
-    public let centerMin: Double
+    public let minimum: [Double]
     public let blobWidth: Double
     public let blobAwakeWidth: Double
     public let blobHeight: Double
@@ -105,9 +100,7 @@ public struct ShellGeometry: Sendable, Equatable {
         laneRest = Design.Size.laneRestWidth
         laneFolded = Design.Size.foldedWidth
         foldAt = Design.Size.foldThreshold
-        laneMin = metrics.laneMin
-        laneMax = theme.length(.componentLaneLeadingMaxWidth)
-        centerMin = metrics.centerMin
+        minimum = metrics.minimum
         blobWidth = Design.Size.blobWidth
         blobAwakeWidth = Design.Size.blobAwakeWidth
         blobHeight = Design.Size.blobHeight

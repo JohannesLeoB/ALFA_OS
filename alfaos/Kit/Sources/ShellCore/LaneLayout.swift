@@ -4,132 +4,210 @@ public enum Lane: String, Sendable, Codable, CaseIterable {
     case leading
     case center
     case trailing
-}
 
-public struct LaneState: Sendable, Codable, Equatable {
-    public var leading: Double
-    public var trailing: Double
-    public var leadingFolded: Bool
-    public var trailingFolded: Bool
-    public var maximized: Lane?
-
-    public init(rest: Double) {
-        leading = rest
-        trailing = rest
-        leadingFolded = false
-        trailingFolded = false
-        maximized = nil
+    public var index: Int {
+        switch self {
+        case .leading: 0
+        case .center: 1
+        case .trailing: 2
+        }
     }
 }
 
-public enum LaneNote: String, Sendable, Equatable {
-    case trailingNarrowed
-    case leadingNarrowed
-    case trailingFolded
-    case leadingFolded
+public struct AreaRules: Sendable, Equatable {
+    public let minimum: [Double]
+    public let maximum: [Double?]
+    public let yield: [Int]
+
+    public init(minimum: [Double], maximum: [Double?] = [nil, nil, nil], yield: [Int] = [0, 1, 2]) {
+        self.minimum = minimum
+        self.maximum = maximum
+        self.yield = yield
+    }
+
+    public static func rules(for id: String, geometry g: ShellGeometry) -> AreaRules {
+        switch id {
+        case "mail": AreaRules(minimum: g.minimum, maximum: [g.laneRest, nil, nil])
+        default: AreaRules(minimum: g.minimum)
+        }
+    }
+}
+
+public struct LaneState: Sendable, Codable, Equatable {
+    public var preferred: [Double]
+    public var folded: [Bool]
+    public var pinned: Bool
+    public var maximized: Lane?
+
+    public init(rest: Double) {
+        preferred = [rest, 0, rest]
+        folded = [false, false, false]
+        pinned = false
+        maximized = nil
+    }
 }
 
 public struct LaneWidths: Sendable, Equatable {
     public let leading: Double
     public let center: Double
     public let trailing: Double
-    public let notes: [LaneNote]
+
+    public var all: [Double] { [leading, center, trailing] }
 
     public func width(_ lane: Lane) -> Double {
-        switch lane {
-        case .leading: return leading
-        case .center: return center
-        case .trailing: return trailing
-        }
+        all[lane.index]
     }
 }
 
 public enum LaneLayout {
-    public static func widths(windowWidth: Double, state: LaneState, geometry g: ShellGeometry) -> LaneWidths {
-        let available = windowWidth - 2 * g.margin - 2 * g.gap
-        var leading = state.leadingFolded ? g.laneFolded : state.leading
-        var trailing = state.trailingFolded ? g.laneFolded : state.trailing
-        var notes: [LaneNote] = []
-        switch state.maximized {
-        case .center?:
-            leading = g.laneFolded
-            trailing = g.laneFolded
-        case .leading?:
-            trailing = g.laneFolded
-            leading = max(g.laneMin, available - trailing - g.centerMin)
-        case .trailing?:
-            leading = g.laneFolded
-            trailing = max(g.laneMin, available - leading - g.centerMin)
-        case nil:
-            func need() -> Double { leading + trailing + g.centerMin }
-            if need() > available, trailing > g.laneMin {
-                let next = max(g.laneMin, trailing - (need() - available))
-                if next < trailing { notes.append(.trailingNarrowed) }
-                trailing = next
-            }
-            if need() > available, leading > g.laneMin {
-                let next = max(g.laneMin, leading - (need() - available))
-                if next < leading { notes.append(.leadingNarrowed) }
-                leading = next
-            }
-            if need() > available, trailing > g.laneFolded {
-                trailing = g.laneFolded
-                notes.append(.trailingFolded)
-            }
-            if need() > available, leading > g.laneFolded {
-                leading = g.laneFolded
-                notes.append(.leadingFolded)
-            }
-        }
-        return LaneWidths(leading: leading, center: available - leading - trailing, trailing: trailing, notes: notes)
+    public static func available(_ windowWidth: Double, _ g: ShellGeometry) -> Double {
+        windowWidth - 2 * g.margin - 2 * g.gap
     }
 
-    public static func drag(lane: Lane, proposed: Double, state: LaneState, windowWidth: Double, geometry g: ShellGeometry) -> LaneState {
-        guard lane != .center, state.maximized == nil else { return state }
-        var next = state
-        let current = widths(windowWidth: windowWidth, state: state, geometry: g)
-        let other = lane == .leading ? current.trailing : current.leading
-        let room = windowWidth - 2 * g.margin - 2 * g.gap - other - g.centerMin
-        let folded = proposed < g.foldAt
-        let value = min(g.laneMax, max(g.laneMin, min(proposed, room))).rounded()
-        if lane == .leading {
-            next.leadingFolded = folded
-            if !folded { next.leading = value }
-        } else {
-            next.trailingFolded = folded
-            if !folded { next.trailing = value }
+    public static func widths(windowWidth: Double, state: LaneState, geometry g: ShellGeometry, rules: AreaRules, foldTrailing: Bool = false) -> LaneWidths {
+        let avail = available(windowWidth, g)
+        let fold = g.laneFolded
+        if let maximized = state.maximized {
+            var w = [fold, fold, fold]
+            w[maximized.index] = avail - 2 * fold
+            return LaneWidths(leading: w[0], center: w[1], trailing: w[2])
         }
-        return next
+        let limit = rules.minimum
+        var preferred = state.preferred
+        for i in 0..<3 {
+            if let top = rules.maximum[i], preferred[i] > top { preferred[i] = top }
+        }
+
+        func solve(_ folded: [Bool]) -> [Double] {
+            let open = (0..<3).filter { !folded[$0] }
+            var w = [fold, fold, fold]
+            if open.isEmpty { return w }
+            let room = avail - fold * Double(3 - open.count)
+            let flex = open.contains(1) ? 1 : (open.contains(2) ? 2 : 0)
+            var want: [Int: Double] = [:]
+            var used = 0.0
+            for i in open where i != flex && preferred[i] > 0 {
+                want[i] = preferred[i]
+                used += preferred[i]
+            }
+            for i in open where want[i] == nil {
+                want[i] = max(room - used, limit[i])
+            }
+            var free = open
+            var rest = room
+            var round = 0
+            while round < 4 && !free.isEmpty {
+                round += 1
+                let factor = rest / free.reduce(0) { $0 + want[$1]! }
+                var hit = false
+                for i in free {
+                    let floor = min(want[i]!, limit[i])
+                    if want[i]! * factor < floor {
+                        w[i] = floor
+                        rest -= floor
+                        free.removeAll { $0 == i }
+                        hit = true
+                    }
+                }
+                if !hit {
+                    for i in free { w[i] = want[i]! * factor }
+                    free = []
+                }
+            }
+            func yielded() -> [Bool] {
+                var next = folded
+                if let first = rules.yield.first(where: { !folded[$0] }) { next[first] = true }
+                return next
+            }
+            if rest < -0.5 && open.count > 1 { return solve(yielded()) }
+            var r = w.map { $0.rounded() }
+            let fix = open.contains(flex) ? flex : open[0]
+            r[fix] = avail - (0..<3).filter { $0 != fix }.reduce(0) { $0 + r[$1] }
+            if r[fix] < limit[fix] - 0.5 && open.count > 1 { return solve(yielded()) }
+            return r
+        }
+
+        let w = solve([state.folded[0], state.folded[1], state.folded[2] || foldTrailing])
+        return LaneWidths(leading: w[0], center: w[1], trailing: w[2])
     }
 
-    public static func reset(lane: Lane, state: LaneState, geometry g: ShellGeometry) -> LaneState {
+    public static func drag(lane: Lane, proposed: Double, start: [Double], state: LaneState, geometry g: ShellGeometry, rules: AreaRules) -> LaneState {
+        guard lane != .center else { return state }
+        let fold = g.laneFolded
+        let limit = rules.minimum
+        let o = lane.index
         var next = state
         next.maximized = nil
-        if lane == .leading {
-            next.leading = g.laneRest
-            next.leadingFolded = false
-        } else if lane == .trailing {
-            next.trailing = g.laneRest
-            next.trailingFolded = false
-        }
-        return next
-    }
-
-    public static func toggleFold(lane: Lane, state: LaneState, geometry g: ShellGeometry) -> LaneState {
-        guard lane != .center else {
-            var next = state
-            next.maximized = nil
+        if proposed < g.foldAt {
+            next.folded[o] = true
             return next
         }
+        var v = proposed
+        if let top = rules.maximum[o] { v = min(v, top) }
+        let opposite = 2 - o
+        if start[opposite] > fold && abs(v - start[opposite]) < 12 { v = start[opposite] }
+        let order = rules.yield.filter { $0 != o }
+        var w = start
+        var f = start.map { $0 <= fold }
+        w[o] = v.rounded()
+        f[o] = false
+        var need = w[o] - start[o]
+        let hysteresis = 64.0
+        if need > 0 {
+            for i in order {
+                if need <= 0 { break }
+                if f[i] { continue }
+                let room = w[i] - limit[i]
+                let take = min(room, need)
+                w[i] -= take
+                need -= take
+                if need > hysteresis {
+                    need -= w[i] - fold
+                    w[i] = fold
+                    f[i] = true
+                } else if need > 0 {
+                    w[o] -= need
+                    need = 0
+                }
+            }
+            if need > 0 { w[o] -= need }
+        } else {
+            var give = -need
+            for j in order.reversed() {
+                if !f[j] || j == o { continue }
+                if give >= limit[j] - fold + hysteresis {
+                    give -= limit[j] - fold
+                    w[j] = limit[j]
+                    f[j] = false
+                }
+            }
+        }
+        next.pinned = true
+        for k in 0..<3 {
+            next.preferred[k] = f[k] ? (start[k] > fold ? start[k] : limit[k]) : w[k].rounded()
+            next.folded[k] = f[k]
+        }
+        if !f[1] { next.preferred[1] = 0 }
+        return next
+    }
+
+    public static func reset(rest: Double) -> LaneState {
+        LaneState(rest: rest)
+    }
+
+    public static func toggleFold(lane: Lane, state: LaneState, start: [Double], geometry g: ShellGeometry, rules: AreaRules) -> LaneState {
         var next = state
         next.maximized = nil
-        if lane == .leading {
-            next.leadingFolded.toggle()
-            if !next.leadingFolded, next.leading < g.laneMin { next.leading = g.laneRest }
-        } else {
-            next.trailingFolded.toggle()
-            if !next.trailingFolded, next.trailing < g.laneMin { next.trailing = g.laneRest }
+        if lane == .center {
+            next.folded[1].toggle()
+            if !next.folded[1] { next.preferred[1] = 0 }
+            return next
         }
+        let o = lane.index
+        if start[o] <= g.laneFolded || state.folded[o] {
+            return drag(lane: lane, proposed: g.laneRest, start: start, state: state, geometry: g, rules: rules)
+        }
+        next.folded[o] = true
         return next
     }
 

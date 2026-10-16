@@ -16,6 +16,7 @@ public final class ShellModel {
     public private(set) var currentID: String
     public private(set) var window: Size
     public private(set) var lanes: [String: LaneState]
+    @ObservationIgnored private var dragStart: [Double]?
     public private(set) var blob: BlobPlacement
     public private(set) var openGroups: Set<String>
     public private(set) var menuOpen = false
@@ -50,8 +51,12 @@ public final class ShellModel {
         lanes[id] ?? LaneState(rest: geometry.laneRest)
     }
 
+    public var rules: AreaRules {
+        AreaRules.rules(for: currentID, geometry: geometry)
+    }
+
     public var widths: LaneWidths {
-        LaneLayout.widths(windowWidth: window.width, state: laneState(currentID), geometry: geometry)
+        LaneLayout.widths(windowWidth: window.width, state: laneState(currentID), geometry: geometry, rules: rules)
     }
 
     public var blobOrigin: Point {
@@ -109,18 +114,23 @@ public final class ShellModel {
     }
 
     public func dragLane(_ lane: Lane, proposed: Double) {
-        lanes[currentID] = LaneLayout.drag(lane: lane, proposed: proposed, state: laneState(currentID), windowWidth: window.width, geometry: geometry)
+        let start = dragStart ?? widths.all
+        dragStart = start
+        lanes[currentID] = LaneLayout.drag(lane: lane, proposed: proposed, start: start, state: laneState(currentID), geometry: geometry, rules: rules)
     }
 
-    public func endLaneDrag() { changed() }
+    public func endLaneDrag() {
+        dragStart = nil
+        changed()
+    }
 
     public func resetLane(_ lane: Lane) {
-        lanes[currentID] = LaneLayout.reset(lane: lane, state: laneState(currentID), geometry: geometry)
+        lanes[currentID] = LaneLayout.reset(rest: geometry.laneRest)
         changed()
     }
 
     public func toggleFold(_ lane: Lane) {
-        lanes[currentID] = LaneLayout.toggleFold(lane: lane, state: laneState(currentID), geometry: geometry)
+        lanes[currentID] = LaneLayout.toggleFold(lane: lane, state: laneState(currentID), start: widths.all, geometry: geometry, rules: rules)
         changed()
     }
 

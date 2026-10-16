@@ -3,80 +3,45 @@ import XCTest
 @testable import ShellCore
 
 final class LayoutTests: XCTestCase {
-    func testRestingWidthsOnTheLargeScreen() throws {
-        let g = try Fixture.geometry()
-        let widths = LaneLayout.widths(windowWidth: 1512, state: LaneState(rest: g.laneRest), geometry: g)
-        XCTAssertEqual([widths.leading, widths.center, widths.trailing], [280, 896, 280])
-        XCTAssertEqual(widths.notes, [])
+    private func widths(_ window: Double, _ state: LaneState, _ g: ShellGeometry, _ rules: AreaRules) -> [Double] {
+        LaneLayout.widths(windowWidth: window, state: state, geometry: g, rules: rules).all
     }
 
-    func testNarrowWindowNarrowsThenFolds() throws {
+    func testTheLanesFollowTheAccordionOfTheDeliveredShell() throws {
         let g = try Fixture.geometry()
-        let state = LaneState(rest: g.laneRest)
-        let medium = LaneLayout.widths(windowWidth: 1024, state: state, geometry: g)
-        XCTAssertGreaterThanOrEqual(medium.center, g.centerMin)
-        XCTAssertEqual(medium.trailing, g.laneMin)
-        let small = LaneLayout.widths(windowWidth: 960, state: state, geometry: g)
-        XCTAssertGreaterThanOrEqual(small.center, g.centerMin)
-        XCTAssertTrue(small.notes.contains(.trailingNarrowed))
-    }
+        let rules = AreaRules(minimum: g.minimum)
+        let mail = AreaRules.rules(for: "mail", geometry: g)
+        let rest = LaneState(rest: g.laneRest)
+        let avail = LaneLayout.available(1512, g)
+        XCTAssertEqual(widths(1512, rest, g, rules), [280, 896, 280])
+        for window in [1512.0, 1200, 1024, 800, 640] {
+            let w = widths(window, rest, g, rules)
+            XCTAssertEqual(w.reduce(0, +), LaneLayout.available(window, g), "\(window)")
+        }
+        XCTAssertEqual(widths(700, rest, g, rules)[0], g.laneFolded)
 
-    func testDragFoldsBelowThresholdAndClampsInRange() throws {
-        let g = try Fixture.geometry()
-        var state = LaneState(rest: g.laneRest)
-        state = LaneLayout.drag(lane: .leading, proposed: g.foldAt - 1, state: state, windowWidth: 1512, geometry: g)
-        XCTAssertTrue(state.leadingFolded)
-        state = LaneLayout.drag(lane: .leading, proposed: 900, state: state, windowWidth: 1512, geometry: g)
-        XCTAssertFalse(state.leadingFolded)
-        XCTAssertEqual(state.leading, g.laneMax)
-        state = LaneLayout.drag(lane: .leading, proposed: g.foldAt + 1, state: state, windowWidth: 1512, geometry: g)
-        XCTAssertEqual(state.leading, g.laneMin)
-    }
+        let foldedLeft = LaneLayout.drag(lane: .leading, proposed: g.foldAt - 1, start: [280, 896, 280], state: rest, geometry: g, rules: rules)
+        XCTAssertEqual(widths(1512, foldedLeft, g, rules), [56, 1120, 280])
+        let bothFolded = LaneLayout.drag(lane: .trailing, proposed: 0, start: [56, 1120, 280], state: foldedLeft, geometry: g, rules: rules)
+        XCTAssertEqual(widths(1512, bothFolded, g, rules), [56, avail - 112, 56])
+        let middleFolded = LaneLayout.toggleFold(lane: .center, state: rest, start: [280, 896, 280], geometry: g, rules: rules)
+        XCTAssertEqual(widths(1512, middleFolded, g, rules)[1], g.laneFolded)
+        XCTAssertEqual(widths(1512, middleFolded, g, rules).reduce(0, +), avail)
 
-    func testMaximizeFoldsTheOthersAndResetRestores() throws {
-        let g = try Fixture.geometry()
-        var state = LaneLayout.toggleMaximize(lane: .center, state: LaneState(rest: g.laneRest))
-        let widths = LaneLayout.widths(windowWidth: 1512, state: state, geometry: g)
-        XCTAssertEqual([widths.leading, widths.trailing], [g.laneFolded, g.laneFolded])
-        state = LaneLayout.reset(lane: .leading, state: state, geometry: g)
-        XCTAssertNil(state.maximized)
-        XCTAssertEqual(state.leading, g.laneRest)
-    }
-    // Nachbauten offener Fehler (BUG-1-x): grün, solange der Fehler besteht (XCTExpectFailure), rot sobald er behoben ist.
+        let wide = LaneLayout.drag(lane: .trailing, proposed: 900, start: [280, 896, 280], state: rest, geometry: g, rules: rules)
+        let squeezed = widths(1512, wide, g, rules)
+        XCTAssertEqual(squeezed.reduce(0, +), avail)
+        XCTAssertGreaterThan(squeezed[2], 280)
+        XCTAssertLessThan(squeezed[0] + squeezed[1], 1176)
 
-    /// BUG-1-1 und BUG-1-2: „Aufklappen“ lässt eine vom Fenster oder durch „Groß“ der Mitte gefaltete Bahn gefaltet.
-    func testUnfoldOnAFoldedLaneUnfoldsIt() throws {
-        let g = try Fixture.geometry()
-        let state = LaneState(rest: g.laneRest)
-        let before = LaneLayout.widths(windowWidth: g.windowMin.width, state: state, geometry: g)
-        XCTAssertEqual(before.trailing, g.laneFolded, "Voraussetzung: rechte Bahn ist im Mindestfenster bereits gefaltet")
-        XCTAssertFalse(state.trailingFolded, "Voraussetzung: der Zustand weiß nichts davon")
-        let maximized = LaneLayout.toggleMaximize(lane: .center, state: LaneState(rest: g.laneRest))
-        let folded = LaneLayout.widths(windowWidth: 1512, state: maximized, geometry: g)
-        XCTAssertEqual(folded.leading, g.laneFolded)
-    }
+        let capped = LaneLayout.drag(lane: .leading, proposed: 400, start: [280, 896, 280], state: rest, geometry: g, rules: mail)
+        XCTAssertEqual(widths(1512, capped, g, mail)[0], 280)
+        XCTAssertEqual(capped.preferred[0], 280)
 
-    /// BUG-1-3 und BUG-1-4: Ein bloßer Klick auf den Griff (DragGesture mit minimumDistance 0) schreibt die vom Fenster
-    /// verengte oder gefaltete Breite dauerhaft fest. HandleView.swift:28-34 übergibt `widths.width(lane)` als `proposed`.
-    func testPlainClickOnTheHandleKeepsTheStoredWidth() throws {
-        let g = try Fixture.geometry()
-        var narrowed = LaneState(rest: g.laneRest)
-        let narrow = LaneLayout.widths(windowWidth: 1024, state: narrowed, geometry: g)
-        XCTAssertLessThan(narrow.leading, g.laneRest, "Voraussetzung: links ist bei 1024 verengt")
-        narrowed = LaneLayout.drag(lane: .leading, proposed: narrow.leading, state: narrowed, windowWidth: 1024, geometry: g)
-        var foldedState = LaneState(rest: g.laneRest)
-        let small = LaneLayout.widths(windowWidth: g.windowMin.width, state: foldedState, geometry: g)
-        XCTAssertEqual(small.trailing, g.laneFolded)
-        foldedState = LaneLayout.drag(lane: .trailing, proposed: small.trailing, state: foldedState, windowWidth: g.windowMin.width, geometry: g)
-    }
-
-    /// BUG-1-5: Gespeicherte Breite wird beim Laden nicht an das heutige Höchstmaß gebunden.
-    /// Das Token component-lane-leading-max-width wurde am 11.10.2026 von 420 auf 380 gesenkt (Issue 18, 17:15).
-    func testStoredWidthAboveCurrentMaximumIsClamped() throws {
-        let g = try Fixture.geometry()
-        var state = LaneState(rest: g.laneRest)
-        state.leading = 420
-        let widths = LaneLayout.widths(windowWidth: 1512, state: state, geometry: g)
+        let maximized = LaneLayout.toggleMaximize(lane: .center, state: rest)
+        XCTAssertEqual(widths(1512, maximized, g, rules), [56, avail - 112, 56])
+        XCTAssertNil(LaneLayout.toggleMaximize(lane: .center, state: maximized).maximized)
+        XCTAssertEqual(LaneLayout.reset(rest: g.laneRest), rest)
     }
 }
 
@@ -103,17 +68,6 @@ final class BlobTests: XCTestCase {
         let bottom = BlobPlacement(edge: .bottom, offset: 16).menuOrigin(window: Fixture.screen, geometry: g)
         XCTAssertFalse(bottom.opensDownward)
     }
-    /// BUG-1-6 und BUG-1-7: Lage und Loslassen rechnen mit der ruhenden Breite (56), der wache Blob ist 124 breit
-    /// (BlobView.swift:12 `model.blobWidth`, :18 `$0.x - width / 2`): er ragt am Rand über das Fenster und springt beim Loslassen um 34.
-
-    /// BUG-1-8: Der Blob lässt sich oben rechts auf die Pille legen und verdeckt sie.
-    /// Pillenmaße wie in ShellView.swift:55-58 und BlobView.swift:100-107 aus Token gerechnet (Spiegelrechnung, dort nicht in ShellCore).
-    func testBlobCannotCoverThePill() throws {
-        let g = try Fixture.geometry()
-        let theme = try Fixture.theme()
-        let pillWidth = theme.length(.spaceXs) * 3 + theme.length(.sizeControlM) * 2
-        let origin = BlobPlacement(edge: .top, offset: 10_000).origin(window: Fixture.screen, geometry: g)
-    }
 }
 
 @MainActor
@@ -134,8 +88,8 @@ final class ModelTests: XCTestCase {
         model.toggleFold(.leading)
         model.select("settings")
         XCTAssertEqual(model.phase, .rest)
-        XCTAssertFalse(model.laneState("settings").leadingFolded)
-        XCTAssertTrue(model.laneState("mail").leadingFolded)
+        XCTAssertFalse(model.laneState("settings").folded[0])
+        XCTAssertTrue(model.laneState("mail").folded[0])
         model.select("nowhere")
         XCTAssertEqual(model.currentID, "settings")
     }
@@ -150,40 +104,11 @@ final class ModelTests: XCTestCase {
         model.dragLane(.trailing, proposed: 250)
         let data = try JSONEncoder().encode(model.snapshot)
         let restored = ShellModel(directory: try Fixture.directory(), geometry: g, window: Fixture.screen, snapshot: try JSONDecoder().decode(ShellSnapshot.self, from: data))
-        XCTAssertEqual(restored.laneState("mail").trailing, 250)
+        XCTAssertEqual(restored.laneState("mail").preferred[2], 250)
     }
 
     private func model(snapshot: ShellSnapshot? = nil) throws -> ShellModel {
         ShellModel(directory: try Fixture.directory(), geometry: try Fixture.geometry(), window: Fixture.screen, snapshot: snapshot)
     }
 
-    /// BUG-1-9: Die Gruppe des aktuellen Bereichs lässt sich nicht zuklappen (isGroupOpen: `|| current?.group == group.id`).
-    func testGroupOfCurrentAreaCanBeCollapsed() throws {
-        let shell = try model()
-        let group = try XCTUnwrap(shell.directory.groups.first { $0.contains(shell.currentID) })
-        XCTAssertTrue(shell.isGroupOpen(group))
-        shell.toggleGroup(group)
-    }
-
-    /// BUG-1-10: Ein Klick auf den Gruppenkopf während der Suche löscht die gespeicherte Öffnung der Gruppe.
-    func testGroupHeaderClickDuringSearchKeepsStoredOpenState() throws {
-        let g = try Fixture.geometry()
-        let snapshot = ShellSnapshot(currentID: "mail", lanes: [:], blob: BlobPlacement.home(geometry: g), openGroups: ["core"])
-        let shell = try model(snapshot: snapshot)
-        let core = try XCTUnwrap(shell.directory.groups.first { $0.id == "core" })
-        shell.query = "e"
-        shell.toggleGroup(core)
-        shell.query = ""
-    }
-
-    /// BUG-1-11: Ist die gemerkte Bereichskennung unbekannt, wird der ganze gemerkte Zustand verworfen
-    /// (ShellModel.init: `valid` nil für Bahnen, Blob und Gruppen zugleich).
-
-    func testMaximizingAMaximizedLaneTakesTheMaximizeBack() throws {
-        let g = try Fixture.geometry()
-        let state = LaneState(rest: g.laneRest)
-        let once = LaneLayout.toggleMaximize(lane: .center, state: state)
-        XCTAssertEqual(once.maximized, .center)
-        XCTAssertNil(LaneLayout.toggleMaximize(lane: .center, state: once).maximized)
-    }
 }

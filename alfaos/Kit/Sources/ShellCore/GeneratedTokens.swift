@@ -1,4 +1,4 @@
-// tokens.json version 1 sha256 e5fd457c03612d23cd8f854ff61b78069f7f448583139639919cc0feae1c82b6
+// tokens.json version 1 sha256 c839f5bd9ca95e40668feecd380d9b9e426c16d4d8be4bafc2094f0e53b33234
 
 public extension ThemeKey {
     static let colorBackgroundContainer = ThemeKey("color-background-container")
@@ -11,7 +11,6 @@ public extension ThemeKey {
     static let componentLaneRadius = ThemeKey("component-lane-radius")
     static let componentLaneHandleRadius = ThemeKey("component-lane-handle-radius")
     static let componentLaneHeaderHeight = ThemeKey("component-lane-header-height")
-    static let componentLaneLeadingMaxWidth = ThemeKey("component-lane-leading-max-width")
     static let componentLaneHandleWidth = ThemeKey("component-lane-handle-width")
     static let componentLaneHandleThickness = ThemeKey("component-lane-handle-thickness")
     static let componentLaneHandleLength = ThemeKey("component-lane-handle-length")
@@ -44,7 +43,6 @@ public extension ThemeKey {
         componentLaneRadius,
         componentLaneHandleRadius,
         componentLaneHeaderHeight,
-        componentLaneLeadingMaxWidth,
         componentLaneHandleWidth,
         componentLaneHandleThickness,
         componentLaneHandleLength,
@@ -99,6 +97,6 @@ public extension TextKey {
 public enum TokenStamp {
     public static let delivery = "Arbeitswelt ALFA Interface Zugang (13).zip, sha256 6c3a927e1b5bae51eee3f12e03fb196c1ddd35ce5ed59fb16eec67d7904d3e4f"
     public static let deliveredAt = "2026-10-16T02:05"
-    public static let adoptedAt = "2026-10-16T16:31"
-    public static let state = "Hülle (Maße, Rand, Fuge, Kopf, Ruhe, Falten, Blob), Bewegungen der Hülle, Schatten und alle Farben der Hülle lesen Design.*. 90 ungenutzte Tokens in der Quarantäne (quarantine.json). Offen: Akkordeon aus alfa-shell.js, Lack, Glas, Kartenstapel, Schrift Geist."
+    public static let adoptedAt = "2026-10-16T16:42"
+    public static let state = "Hülle: Maße, Bewegungen, Schatten, Farben und das Akkordeon (nach alfa-shell.js, Ruhe 280, Falten ab 112, Mitte faltet mit) aus dem Entwurf. Quarantäne in quarantine.json. Offen: Lack, Glas, Kartenstapel, Schrift Geist, Symbole."
 }

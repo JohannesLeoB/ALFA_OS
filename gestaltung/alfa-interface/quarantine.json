@@ -633,6 +633,12 @@
    "name": "motion-duration-stack",
    "value": "520ms",
    "usage": "Kartenstapel."
+  },
+  {
+   "family": "layout",
+   "name": "component-lane-leading-max-width",
+   "value": "380px",
+   "usage": "Größte Breite einer Seitenbahn, links wie rechts."
   }
  ]
 }

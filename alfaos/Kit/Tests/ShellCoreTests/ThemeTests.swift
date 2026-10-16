@@ -56,7 +56,7 @@ final class ThemeTests: XCTestCase {
 
     func testMissingMeasureFailsLoading() throws {
         let json = """
-        {"lane-min":1,"center-min":1,"blob-width":1,"blob-throw":1,"shadow-blur-factor":1,"assistant-width":1,
+        {"minimum":[1,1,1],"blob-width":1,"blob-throw":1,"shadow-blur-factor":1,"assistant-width":1,
         "window-min-width":1,"window-min-height":1,"measures":{"face-eye-gap":5}}
         """
         XCTAssertThrowsError(try ShellMetrics(data: Data(json.utf8)))

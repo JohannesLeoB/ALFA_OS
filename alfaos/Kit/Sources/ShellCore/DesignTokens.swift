@@ -215,6 +215,6 @@ public extension Design {
 public enum DesignStamp {
     public static let delivery = "Arbeitswelt ALFA Interface Zugang (13).zip, sha256 6c3a927e1b5bae51eee3f12e03fb196c1ddd35ce5ed59fb16eec67d7904d3e4f, Datei TOKENBOGEN.json"
     public static let deliveredAt = "2026-10-16T02:05"
-    public static let adoptedAt = "2026-10-16T16:32"
-    public static let state = "Gelesen von der App: Hülle (Rand, Fuge, Kopf, Ruhe 280, Faltschwelle, Blob samt Abstand oben 16, Leiste 68), Bewegungen der Hülle (Bahn, Blob, Blob-Flug, Stapel, Griff), Schatten floating, alle Farben der Hülle, Zeilen, Abstände, Radien und Schriftgrößen der Ansichten. Offen: Akkordeon aus alfa-shell.js, Lack, Glas, Kartenstapel, Schrift Geist, Symbole."
+    public static let adoptedAt = "2026-10-16T16:42"
+    public static let state = "Gelesen von der App: Hülle (Maße, Ruhe 280, Falten ab 112, Blob), Akkordeon aus alfa-shell.js (layout, grow; Mitte faltet mit), Bewegungen der Hülle, Schatten floating, alle Farben der Hülle, Zeilen, Abstände, Radien und Schriftgrößen der Ansichten. Offen: Mindestmaße der Bahnen (224, 280, 280 aus alfa-shell.js, nicht bestätigt), Lack, Glas, Kartenstapel, Schrift Geist, Symbole."
 }
