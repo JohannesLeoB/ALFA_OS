@@ -14,7 +14,6 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
     public let blobThrow: Double
     public let shadowBlurFactor: Double
     public let assistantWidth: Double
-    public let windowMinWidth: Double
     public let windowMinHeight: Double
     private let measures: [ShellMeasure: Double]
 
@@ -26,7 +25,6 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
         case blobThrow = "blob-throw"
         case shadowBlurFactor = "shadow-blur-factor"
         case assistantWidth = "assistant-width"
-        case windowMinWidth = "window-min-width"
         case windowMinHeight = "window-min-height"
         case measures
     }
@@ -38,7 +36,6 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
         blobThrow = try container.decode(Double.self, forKey: .blobThrow)
         shadowBlurFactor = try container.decode(Double.self, forKey: .shadowBlurFactor)
         assistantWidth = try container.decode(Double.self, forKey: .assistantWidth)
-        windowMinWidth = try container.decode(Double.self, forKey: .windowMinWidth)
         windowMinHeight = try container.decode(Double.self, forKey: .windowMinHeight)
         let raw = try container.decode([String: Double].self, forKey: .measures)
         var values: [ShellMeasure: Double] = [:]
@@ -105,6 +102,6 @@ public struct ShellGeometry: Sendable, Equatable {
         menuGap = theme.length(.spaceS)
         shadowBlurFactor = metrics.shadowBlurFactor
         assistantWidth = metrics.assistantWidth
-        windowMin = Size(width: metrics.windowMinWidth, height: metrics.windowMinHeight)
+        windowMin = Size(width: 2 * margin + 2 * gap + minimum.reduce(0, +), height: metrics.windowMinHeight)
     }
 }

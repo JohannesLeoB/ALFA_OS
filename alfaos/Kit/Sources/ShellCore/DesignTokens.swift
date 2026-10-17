@@ -228,9 +228,9 @@ public enum DesignSurface {
 }
 
 public enum DesignStamp {
-    public static let delivery = "Arbeitswelt ALFA Interface Zugang (14), folder from Downloads, file TOKENBOGEN.json sha256 b403b51657c69449288071a397d58f20c19c522e8962087ad494c738628eafa6"
-    public static let deliveredAt = "2026-10-16T16:58"
+    public static let delivery = "ALFA OS Interface CHEF 1610.zip from Downloads (newest, zip time 2026-10-16 23:42), file TOKENBOGEN.json sha256 b403b51657c69449288071a397d58f20c19c522e8962087ad494c738628eafa6, same sheet as Zugang (14)"
+    public static let deliveredAt = "2026-10-16T23:42"
     public static let adoptedAt = "2026-10-17T13:52"
-    public static let state = "Read by the app: shell, accordion (alfa-shell.js, side minimum 224 on both sides by Johannes 2026-10-17), motion, shadows, colors, rows, spacing, radii, type sizes, blob eyes, header buttons; mail card stack with flat surface, card head and foot, overview with tile sizes; lacquer kept behind a switch. Open: glass, overview folder mode, fold button on all lanes, strip click to unfold, arrow keys on the handle, symbols, Geist font."
+    public static let state = "Read by the app: shell, accordion (alfa-shell.js, side minimum 224 on both sides by Johannes 2026-10-17), motion, shadows, colors, rows, spacing, radii, type sizes, blob eyes, header buttons; mail card stack with flat surface, card head and foot, overview with tile sizes; lacquer kept behind a switch. Window minimum width from the lane minima (RUECKGABE 5, 16.10.: 960 no longer applies). Open: glass, overview folder mode, fold button on all lanes, strip click to unfold, arrow keys on the handle, symbols, Geist font."
     public static let content = "b403b51657c69449288071a397d58f20c19c522e8962087ad494c738628eafa6"
 }

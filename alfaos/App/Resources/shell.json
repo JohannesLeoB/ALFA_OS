@@ -4,7 +4,6 @@
   "blob-throw": 0.12,
   "shadow-blur-factor": 0.5,
   "assistant-width": 360,
-  "window-min-width": 960,
   "window-min-height": 600,
   "measures": {
     "lane-header-padding-end": 10,

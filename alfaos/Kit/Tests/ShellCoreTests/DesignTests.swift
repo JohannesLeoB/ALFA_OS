@@ -9,6 +9,7 @@ final class DesignTests: XCTestCase {
         XCTAssertEqual(g.blobTop, Design.Size.edge)
         XCTAssertEqual(g.strip, Design.Size.edge + Design.Size.blobHeight + Design.Size.gutter)
         XCTAssertEqual(g.blobAwakeWidth, Design.Size.blobAwakeWidth)
+        XCTAssertEqual(g.windowMin.width, 2 * g.margin + 2 * g.gap + g.minimum.reduce(0, +))
         XCTAssertEqual(DesignColors.light.ground, RGB(1, 1, 1, 1))
         XCTAssertEqual(DesignColors.dark.ground.red, 13.0 / 255.0, accuracy: 0.001)
         XCTAssertEqual(CardStack.tops(count: 6), [8, 16, 24, 68, 112, 156])
