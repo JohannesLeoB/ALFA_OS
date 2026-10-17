@@ -17,9 +17,9 @@ struct HandleView: View {
         ZStack {
             RoundedRectangle(cornerRadius: theme.length(.componentLaneHandleRadius))
                 .fill(theme.design(active ? \.ink : \.handle))
-                .frame(width: theme.length(.componentLaneHandleThickness), height: length)
+                .frame(width: theme.length(.strokeHairline), height: length)
         }
-        .frame(width: theme.length(.componentLaneHandleWidth), height: height)
+        .frame(width: CGFloat(Design.Spacing.step12), height: height)
         .contentShape(Rectangle())
         .pointerStyle(.columnResize)
         .onHover { hovering = $0 }

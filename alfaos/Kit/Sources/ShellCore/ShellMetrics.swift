@@ -9,7 +9,7 @@ public enum ShellMeasure: String, CaseIterable, Sendable {
 }
 
 public struct ShellMetrics: Sendable, Decodable, Equatable {
-    public let minimum: [Double]
+    public let minimumLeft: Double
     public let blobWidth: Double
     public let blobThrow: Double
     public let shadowBlurFactor: Double
@@ -21,7 +21,7 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
     public func measure(_ key: ShellMeasure) -> Double { measures[key, default: 0] }
 
     enum CodingKeys: String, CodingKey {
-        case minimum
+        case minimumLeft = "minimum-left"
         case blobWidth = "blob-width"
         case blobThrow = "blob-throw"
         case shadowBlurFactor = "shadow-blur-factor"
@@ -33,7 +33,7 @@ public struct ShellMetrics: Sendable, Decodable, Equatable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        minimum = try container.decode([Double].self, forKey: .minimum)
+        minimumLeft = try container.decode(Double.self, forKey: .minimumLeft)
         blobWidth = try container.decode(Double.self, forKey: .blobWidth)
         blobThrow = try container.decode(Double.self, forKey: .blobThrow)
         shadowBlurFactor = try container.decode(Double.self, forKey: .shadowBlurFactor)
@@ -96,7 +96,7 @@ public struct ShellGeometry: Sendable, Equatable {
         laneRest = Design.Size.laneRestWidth
         laneFolded = Design.Size.foldedWidth
         foldAt = Design.Size.foldThreshold
-        minimum = metrics.minimum
+        minimum = [metrics.minimumLeft, Design.Size.middleMinimumWidth, Design.Size.laneMinimumRight]
         blobWidth = Design.Size.blobWidth
         blobAwakeWidth = Design.Size.blobAwakeWidth
         blobHeight = Design.Size.blobHeight

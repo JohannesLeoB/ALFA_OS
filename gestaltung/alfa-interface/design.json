@@ -1,5 +1,5 @@
 {
- "$description": "ALFA Mail und ALFA Einstellungen · Tokenbogen, Stand Paket 1. Entwurf der Design-Sitzung, nichts davon ist mit „so“ abgenommen. Dieser Bogen ist die Quelle für Farben, Maße, Radien, Abstände, Schrift und Bewegung. ALFA Mail und ALFA Einstellungen sind Muster-Ansichtsbereiche der einen globalen Hülle und richten sich danach, keiner ist Gesetzgeber. Für Paket 1 sind die Werte aus den Bögen ausgelesen (WERTE.json), weil die Tokenbogen-Datei des Codes nicht vorliegt; Änderungen an Werten gehören ab jetzt zuerst hierher. Das Namensschema der echten Tokenbogen-Datei liegt der Design-Sitzung nicht vor; Gruppen und Namen hier sind ein Vorschlag, ausgenommen component-lane-radius (von Johannes genannt: Bahn 20). Nachtrag 15.10.2026: Ruhe rechts 280 (Johannes), Karten-Radius 20, Mono entfernt, Kartenfuß, Übersicht, Blob-Auge 4 × 8, Popup-Breite = Bahn darunter.",
+ "$description": "ALFA Mail und ALFA Einstellungen · Tokenbogen, Stand Paket 1. Entwurf der Design-Sitzung, nichts davon ist mit „so“ abgenommen. Dieser Bogen ist die Quelle für Farben, Maße, Radien, Abstände, Schrift und Bewegung. ALFA Mail und ALFA Einstellungen sind Muster-Ansichtsbereiche der einen globalen Hülle und richten sich danach, keiner ist Gesetzgeber. Änderungen an Werten gehören ab jetzt zuerst hierher. Das Namensschema der echten Tokenbogen-Datei liegt der Design-Sitzung nicht vor; Gruppen und Namen hier sind ein Vorschlag, ausgenommen component-lane-radius (von Johannes genannt: Bahn 20). Nachtrag 15.10.2026: Ruhe rechts 280 (Johannes), Karten-Radius 20, Mono entfernt, Kartenfuß, Übersicht, Blob-Auge 4 × 8, Popup-Breite = Bahn darunter. Nachtrag 16.10.2026: Mittelbahn-Minimum 280 (Johannes), Bahn-Hintergrund color.light.lane und color.dark.lane (Code A2), tote Verweise behoben (Code A3), Fenster 960 × 600.",
  "paket": "Paket 2 (Entwurf)",
  "$extensions": {
   "alfa": {
@@ -664,6 +664,26 @@
       "formerName": "orb-gloss"
      }
     }
+   },
+   "lane": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 1,
+     "hex": "#ffffff"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-lane",
+      "formerName": "lane"
+     }
+    },
+    "$description": "Bahn-Hintergrund. Quelle: alfa-theme.css --c-lane (Code A2)."
    }
   },
   "dark": {
@@ -1320,6 +1340,26 @@
       "formerName": "orb-gloss"
      }
     }
+   },
+   "lane": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.0784,
+      0.0784,
+      0.0784
+     ],
+     "alpha": 1,
+     "hex": "#141414"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-lane",
+      "formerName": "lane"
+     }
+    },
+    "$description": "Bahn-Hintergrund dunkel. Quelle: alfa-theme.css --c-lane (Code A2)."
    }
   },
   "lightGrayOverrides": {
@@ -1367,7 +1407,7 @@
        "value": 1,
        "unit": "px"
       },
-      "color": "{color.hell.line}"
+      "color": "{color.light.line}"
      }
     ],
     "$extensions": {
@@ -1545,7 +1585,7 @@
        "value": 1,
        "unit": "px"
       },
-      "color": "{color.dunkel.line}"
+      "color": "{color.dark.line}"
      }
     ],
     "$extensions": {
@@ -1845,7 +1885,7 @@
   "middleMinimumWidth": {
    "$type": "dimension",
    "$value": {
-    "value": 480,
+    "value": 280,
     "unit": "px"
    },
    "$extensions": {
@@ -2838,6 +2878,22 @@
       "source": "Übersicht: Action-Knöpfe, Vorschlag"
      }
     }
+   },
+   "labelDelay": {
+    "$type": "duration",
+    "$value": {
+     "value": 80,
+     "unit": "ms"
+    },
+    "$description": "Bereichsname im wachen Blob: Deckkraft wartet 80 ms (ALFA Shell.dc.html)"
+   },
+   "reelStagger": {
+    "$type": "duration",
+    "$value": {
+     "value": 40,
+     "unit": "ms"
+    },
+    "$description": "Menüzeilen des Blobs: Versatz je Zeile, höchstens 14 Zeilen (ALFA Shell.dc.html)"
    }
   },
   "easing": {
@@ -3734,6 +3790,7 @@
  },
  "component": {
   "laneRadius": {
+   "$type": "dimension",
    "$value": "{radius.lane}",
    "$description": "Johannes: „Bahn: 20 ist component-lane-radius im Tokenbogen.“",
    "$extensions": {
@@ -3743,6 +3800,7 @@
    }
   },
   "laneEdge": {
+   "$type": "dimension",
    "$value": "{size.edge}",
    "$description": "Fensterrand",
    "$extensions": {
@@ -3752,6 +3810,7 @@
    }
   },
   "laneGap": {
+   "$type": "dimension",
    "$value": "{size.gutter}",
    "$description": "Fuge zwischen Bahnen",
    "$extensions": {
@@ -3761,6 +3820,7 @@
    }
   },
   "laneHeaderHeight": {
+   "$type": "dimension",
    "$value": "{size.headerHeight}",
    "$extensions": {
     "alfa": {
@@ -3769,6 +3829,7 @@
    }
   },
   "laneFoldedWidth": {
+   "$type": "dimension",
    "$value": "{size.foldedWidth}",
    "$extensions": {
     "alfa": {
@@ -3777,6 +3838,7 @@
    }
   },
   "laneFoldThreshold": {
+   "$type": "dimension",
    "$value": "{size.foldThreshold}",
    "$extensions": {
     "alfa": {
@@ -3785,6 +3847,7 @@
    }
   },
   "laneMiddleMinimumWidth": {
+   "$type": "dimension",
    "$value": "{size.middleMinimumWidth}",
    "$extensions": {
     "alfa": {
@@ -3793,6 +3856,7 @@
    }
   },
   "rowHeight": {
+   "$type": "dimension",
    "$value": "{size.rowHeight}",
    "$extensions": {
     "alfa": {
@@ -3801,6 +3865,7 @@
    }
   },
   "rowRadius": {
+   "$type": "dimension",
    "$value": "{radius.row}",
    "$extensions": {
     "alfa": {
@@ -3809,6 +3874,7 @@
    }
   },
   "symbolSize": {
+   "$type": "dimension",
    "$value": "{size.symbolSize}",
    "$extensions": {
     "alfa": {
@@ -3817,6 +3883,7 @@
    }
   },
   "blobHeight": {
+   "$type": "dimension",
    "$value": "{size.blobHeight}",
    "$description": "Johannes: „wie wäre BLOB mit 20er Höhe? also gleichem Radius wie die Spalten ?“ Gebaut: Höhe 40, Radius 20",
    "$extensions": {
@@ -3826,6 +3893,7 @@
    }
   },
   "blobWidth": {
+   "$type": "dimension",
    "$value": "{size.blobWidth}",
    "$extensions": {
     "alfa": {
@@ -3834,6 +3902,7 @@
    }
   },
   "blobAwakeWidth": {
+   "$type": "dimension",
    "$value": "{size.blobAwakeWidth}",
    "$extensions": {
     "alfa": {
@@ -3842,6 +3911,7 @@
    }
   },
   "blobDockDistance": {
+   "$type": "dimension",
    "$value": "{size.blobDockDistance}",
    "$extensions": {
     "alfa": {
@@ -3850,6 +3920,7 @@
    }
   },
   "blobRadius": {
+   "$type": "dimension",
    "$value": "{radius.blob}",
    "$extensions": {
     "alfa": {
@@ -3858,6 +3929,7 @@
    }
   },
   "menuRadius": {
+   "$type": "dimension",
    "$value": "{radius.contextMenu}",
    "$extensions": {
     "alfa": {
@@ -3866,6 +3938,7 @@
    }
   },
   "cardRadius": {
+   "$type": "dimension",
    "$value": "{radius.card}",
    "$description": "Karten im Stapel bündig in der Bahn, ohne Einzug",
    "$extensions": {
@@ -3875,6 +3948,7 @@
    }
   },
   "cardInset": {
+   "$type": "dimension",
    "$value": "{size.cardInset}",
    "$extensions": {
     "alfa": {
@@ -3883,6 +3957,7 @@
    }
   },
   "noticeRadius": {
+   "$type": "dimension",
    "$value": "{radius.notice}",
    "$extensions": {
     "alfa": {
@@ -3891,6 +3966,7 @@
    }
   },
   "fieldRadius": {
+   "$type": "dimension",
    "$value": "{radius.field}",
    "$extensions": {
     "alfa": {
@@ -3899,6 +3975,7 @@
    }
   },
   "capsuleRadius": {
+   "$type": "dimension",
    "$value": "{radius.capsule}",
    "$extensions": {
     "alfa": {

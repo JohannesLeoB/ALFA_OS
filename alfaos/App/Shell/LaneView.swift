@@ -22,14 +22,14 @@ struct LaneView: View {
             content
         }
         .frame(width: size.width, height: size.height, alignment: .top)
-        .background(theme.color(.colorBackgroundContainer))
+        .background(theme.design(\.lane))
         .clipShape(RoundedRectangle(cornerRadius: radius))
         .overlay(
             RoundedRectangle(cornerRadius: radius)
                 .strokeBorder(theme.design(\.line), lineWidth: theme.length(.strokeHairline))
         )
         .environment(\.design, DesignStyle(dark: theme.mode == .dark))
-        .environment(\.laneFill, theme.color(.colorBackgroundContainer))
+        .environment(\.laneFill, theme.design(\.lane))
         .accessibilityElement(children: .contain)
         .accessibilityLabel(theme.text(titleKey))
     }

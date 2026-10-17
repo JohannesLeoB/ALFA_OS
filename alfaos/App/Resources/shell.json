@@ -1,5 +1,5 @@
 {
-  "minimum": [224, 280, 280],
+  "minimum-left": 224,
   "blob-width": 56,
   "blob-throw": 0.12,
   "shadow-blur-factor": 0.5,
