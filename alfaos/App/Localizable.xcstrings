@@ -859,6 +859,17 @@
         }
       }
     },
+    "mail.card.close" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen"
+          }
+        }
+      }
+    },
     "mail.card.conversation" : {
       "comment" : "roh",
       "localizations" : {
@@ -1075,6 +1086,72 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Limit erreicht"
+          }
+        }
+      }
+    },
+    "mail.footer.more" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr"
+          }
+        }
+      }
+    },
+    "mail.footer.project" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Projektordner sichern"
+          }
+        }
+      }
+    },
+    "mail.footer.spam" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Spam melden"
+          }
+        }
+      }
+    },
+    "mail.footer.star" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markieren"
+          }
+        }
+      }
+    },
+    "mail.footer.unread" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als ungelesen markieren"
+          }
+        }
+      }
+    },
+    "mail.footer.unstar" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markierung entfernen"
           }
         }
       }

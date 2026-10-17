@@ -30,6 +30,7 @@ struct LaneView: View {
         )
         .environment(\.design, DesignStyle(dark: theme.mode == .dark))
         .environment(\.laneFill, theme.design(\.lane))
+        .environment(\.hairline, theme.length(.strokeHairline))
         .accessibilityElement(children: .contain)
         .accessibilityLabel(theme.text(titleKey))
     }

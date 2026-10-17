@@ -20,7 +20,30 @@ private struct LaneFillKey: EnvironmentKey {
     static let defaultValue = Color.white
 }
 
+enum CardSurface: Equatable {
+    case flat
+    case lacquer
+}
+
+private struct CardSurfaceKey: EnvironmentKey {
+    static let defaultValue = CardSurface.flat
+}
+
+private struct HairlineKey: EnvironmentKey {
+    static let defaultValue = CGFloat(0)
+}
+
 extension EnvironmentValues {
+    var cardSurface: CardSurface {
+        get { self[CardSurfaceKey.self] }
+        set { self[CardSurfaceKey.self] = newValue }
+    }
+
+    var hairline: CGFloat {
+        get { self[HairlineKey.self] }
+        set { self[HairlineKey.self] = newValue }
+    }
+
     var design: DesignStyle {
         get { self[DesignStyleKey.self] }
         set { self[DesignStyleKey.self] = newValue }

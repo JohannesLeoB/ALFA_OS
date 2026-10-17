@@ -35,6 +35,8 @@ private struct StackCard: View {
     let first: Bool
     @Environment(\.design) private var design
     @Environment(\.laneFill) private var laneFill
+    @Environment(\.cardSurface) private var surface
+    @Environment(\.hairline) private var hairline
 
     private var front: Bool { depth == 0 }
 
@@ -50,6 +52,7 @@ private struct StackCard: View {
 
     private var fill: Color { step.map { paint($0.surface) } ?? laneFill }
     private var ink: Color { step.map { paint($0.ink) } ?? design.color(\.ink) }
+    private var lacquer: Bool { surface == .lacquer }
     private var light: Bool { step.map { $0.surface.red >= 0.75 } ?? true }
 
     private var gloss: [ShadowLayer] {
@@ -74,22 +77,27 @@ private struct StackCard: View {
     }
 
     var body: some View {
-        let seamLayer = seam.first
-        let castLayer = cast.first
+        let seamLayer = lacquer ? seam.first : nil
+        let castLayer = lacquer ? cast.first : nil
         VStack(spacing: 0) {
+            CardHeader(model: model, card: card, front: front, ink: ink)
             if front {
+                divider
                 FrontCardContent(model: model, card: card)
-            } else {
-                head
+                divider
+                CardFooter(model: model, card: card)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .foregroundStyle(ink)
         .background(fill)
         .overlay(alignment: .top) {
-            if let layer = gloss.first { Rectangle().fill(paint(layer.color)).frame(height: CGFloat(layer.y)) }
+            if lacquer, let layer = gloss.first { Rectangle().fill(paint(layer.color)).frame(height: CGFloat(layer.y)) }
         }
         .clipShape(shape)
+        .overlay {
+            if !lacquer { shape.strokeBorder(design.color(\.line), lineWidth: hairline) }
+        }
         .background {
             ZStack {
                 if let layer = castLayer {
@@ -107,17 +115,108 @@ private struct StackCard: View {
         .onTapGesture { if !front { Task { await model.open(card.id) } } }
     }
 
-    private var head: some View {
-        HStack {
-            Text(verbatim: card.summary.from).designText(size: Design.TextSize.body, weight: .medium)
-            Spacer()
-            if let date = card.summary.receivedAt {
-                Text(date, format: .dateTime).designText(size: Design.TextSize.small)
+    private var divider: some View {
+        Rectangle().fill(design.color(\.line)).frame(height: hairline)
+    }
+}
+
+private struct CardHeader: View {
+    let model: MailModel
+    let card: ReadingCard
+    let front: Bool
+    let ink: Color
+    @Environment(\.design) private var design
+
+    private var initials: String {
+        let parts = card.summary.from.split(separator: " ").prefix(2).compactMap(\.first)
+        return String(parts).uppercased()
+    }
+
+    private var address: String {
+        let raw = card.summary.fromRaw
+        guard let open = raw.lastIndex(of: "<"), let close = raw.lastIndex(of: ">"), open < close else { return raw }
+        return String(raw[raw.index(after: open)..<close])
+    }
+
+    var body: some View {
+        HStack(spacing: CGFloat(Design.Spacing.step8)) {
+            Text(verbatim: initials)
+                .designText(size: Design.TextSize.small, weight: .medium)
+                .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
+                .background(Circle().fill(design.color(\.hover)))
+            VStack(alignment: .leading, spacing: 0) {
+                Text(verbatim: card.summary.from).designText(size: Design.TextSize.body, weight: .medium).lineLimit(1)
+                if front {
+                    Text(verbatim: address).designText(\.inkSecondary, size: Design.TextSize.small).lineLimit(1)
+                } else if let date = card.summary.receivedAt {
+                    Text(date, format: .dateTime).designText(\.inkSecondary, size: Design.TextSize.small).lineLimit(1)
+                }
+            }
+            Spacer(minLength: 0)
+            if front {
+                CardButton(symbol: "xmark", label: "mail.card.close") { model.close(card.id) }
             }
         }
         .foregroundStyle(ink)
         .padding(.horizontal, CGFloat(Design.Size.edge))
         .frame(height: CGFloat(Design.Size.headerHeight))
+    }
+}
+
+private struct CardFooter: View {
+    let model: MailModel
+    let card: ReadingCard
+
+    private var starred: Bool { card.summary.flags.contains(.flagged) }
+
+    var body: some View {
+        HStack(spacing: CGFloat(Design.Spacing.step4)) {
+            CardButton(symbol: "folder.badge.plus", label: "mail.footer.project") { model.mailToProjectFolder(card.id) }
+            Spacer(minLength: 0)
+            CardButton(symbol: "archivebox", label: "mail.action.archive") { Task { await model.archive(card.id) } }
+            CardButton(symbol: "trash", label: "mail.action.trash") { Task { await model.trash(card.id) } }
+            Menu {
+                Button { Task { await model.setStarred(card.id, !starred) } } label: { word(starred ? "mail.footer.unstar" : "mail.footer.star") }
+                Button { Task { await model.setRead(card.id, false) } } label: { word("mail.footer.unread") }
+                Button { Task { await model.markSpam(card.id) } } label: { word("mail.footer.spam") }
+            } label: {
+                CardSymbol(symbol: "ellipsis")
+            }
+            .menuStyle(.button)
+            .buttonStyle(.plain)
+            .menuIndicator(.hidden)
+            .fixedSize()
+            .accessibilityLabel(Text(LocalizedStringKey("mail.footer.more")))
+        }
+        .padding(.horizontal, CGFloat(Design.Size.edge))
+        .frame(height: CGFloat(Design.Size.footerHeight))
+    }
+}
+
+private struct CardButton: View {
+    let symbol: String
+    let label: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) { CardSymbol(symbol: symbol) }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text(LocalizedStringKey(label)))
+    }
+}
+
+private struct CardSymbol: View {
+    let symbol: String
+    @Environment(\.design) private var design
+    @State private var hovering = false
+
+    var body: some View {
+        Image(systemName: symbol)
+            .designText(\.inkSecondary, size: Design.TextSize.body)
+            .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
+            .background(Circle().fill(hovering ? design.color(\.hover) : Color.clear))
+            .contentShape(Circle())
+            .onHover { hovering = $0 }
     }
 }
 
@@ -129,12 +228,6 @@ struct FrontCardContent: View {
         ScrollView {
             VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step8)) {
                 Text(verbatim: card.summary.subject).designText(weight: .medium)
-                Text(verbatim: card.summary.from).designText(\.inkSecondary, size: Design.TextSize.small)
-                HStack(spacing: CGFloat(Design.Spacing.step12)) {
-                    Button { Task { await model.archive(card.id) } } label: { word("mail.action.archive").designText(size: Design.TextSize.small, weight: .medium) }
-                    Button { Task { await model.trash(card.id) } } label: { word("mail.action.trash").designText(\.signal, size: Design.TextSize.small, weight: .medium) }
-                }
-                .buttonStyle(.plain)
                 if let hint = model.actionFailure(for: card.id) { hintWords(hint).designText(\.signal, size: Design.TextSize.small) }
                 content(card.content).designText(size: Design.TextSize.body)
             }
