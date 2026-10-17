@@ -130,7 +130,7 @@ public final class ShellModel {
     }
 
     public func toggleFold(_ lane: Lane) {
-        lanes[currentID] = LaneLayout.toggleFold(lane: lane, state: laneState(currentID), start: widths.all, geometry: geometry, rules: rules)
+        lanes[currentID] = LaneLayout.toggleFold(lane: lane, state: laneState(currentID))
         changed()
     }
 

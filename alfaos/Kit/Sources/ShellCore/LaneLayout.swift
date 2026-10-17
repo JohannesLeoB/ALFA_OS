@@ -16,20 +16,15 @@ public enum Lane: String, Sendable, Codable, CaseIterable {
 
 public struct AreaRules: Sendable, Equatable {
     public let minimum: [Double]
-    public let maximum: [Double?]
     public let yield: [Int]
 
-    public init(minimum: [Double], maximum: [Double?] = [nil, nil, nil], yield: [Int] = [0, 1, 2]) {
+    public init(minimum: [Double], yield: [Int] = [0, 1, 2]) {
         self.minimum = minimum
-        self.maximum = maximum
         self.yield = yield
     }
 
     public static func rules(for id: String, geometry g: ShellGeometry) -> AreaRules {
-        switch id {
-        case "mail": AreaRules(minimum: g.minimum, maximum: [g.laneRest, nil, nil])
-        default: AreaRules(minimum: g.minimum)
-        }
+        AreaRules(minimum: g.minimum)
     }
 }
 
@@ -73,10 +68,7 @@ public enum LaneLayout {
             return LaneWidths(leading: w[0], center: w[1], trailing: w[2])
         }
         let limit = rules.minimum
-        var preferred = state.preferred
-        for i in 0..<3 {
-            if let top = rules.maximum[i], preferred[i] > top { preferred[i] = top }
-        }
+        let preferred = state.preferred
 
         func solve(_ folded: [Bool]) -> [Double] {
             let open = (0..<3).filter { !folded[$0] }
@@ -122,6 +114,7 @@ public enum LaneLayout {
             if rest < -0.5 && open.count > 1 { return solve(yielded()) }
             var r = w.map { $0.rounded() }
             let fix = open.contains(flex) ? flex : open[0]
+            for i in open where i != fix { r[i] = max(limit[i], r[i]) }
             r[fix] = avail - (0..<3).filter { $0 != fix }.reduce(0) { $0 + r[$1] }
             if r[fix] < limit[fix] - 0.5 && open.count > 1 { return solve(yielded()) }
             return r
@@ -143,7 +136,6 @@ public enum LaneLayout {
             return next
         }
         var v = proposed
-        if let top = rules.maximum[o] { v = min(v, top) }
         let opposite = 2 - o
         if start[opposite] > fold && abs(v - start[opposite]) < 12 { v = start[opposite] }
         let order = rules.yield.filter { $0 != o }
@@ -195,19 +187,10 @@ public enum LaneLayout {
         LaneState(rest: rest)
     }
 
-    public static func toggleFold(lane: Lane, state: LaneState, start: [Double], geometry g: ShellGeometry, rules: AreaRules) -> LaneState {
+    public static func toggleFold(lane: Lane, state: LaneState) -> LaneState {
         var next = state
         next.maximized = nil
-        if lane == .center {
-            next.folded[1].toggle()
-            if !next.folded[1] { next.preferred[1] = 0 }
-            return next
-        }
-        let o = lane.index
-        if start[o] <= g.laneFolded || state.folded[o] {
-            return drag(lane: lane, proposed: g.laneRest, start: start, state: state, geometry: g, rules: rules)
-        }
-        next.folded[o] = true
+        next.folded[lane.index].toggle()
         return next
     }
 

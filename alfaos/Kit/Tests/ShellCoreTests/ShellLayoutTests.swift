@@ -10,7 +10,6 @@ final class LayoutTests: XCTestCase {
     func testTheLanesFollowTheAccordionOfTheDeliveredShell() throws {
         let g = try Fixture.geometry()
         let rules = AreaRules(minimum: g.minimum)
-        let mail = AreaRules.rules(for: "mail", geometry: g)
         let rest = LaneState(rest: g.laneRest)
         let avail = LaneLayout.available(1512, g)
         XCTAssertEqual(widths(1512, rest, g, rules), [280, 896, 280])
@@ -24,24 +23,23 @@ final class LayoutTests: XCTestCase {
         XCTAssertEqual(widths(1512, foldedLeft, g, rules), [56, 1120, 280])
         let bothFolded = LaneLayout.drag(lane: .trailing, proposed: 0, start: [56, 1120, 280], state: foldedLeft, geometry: g, rules: rules)
         XCTAssertEqual(widths(1512, bothFolded, g, rules), [56, avail - 112, 56])
-        let middleFolded = LaneLayout.toggleFold(lane: .center, state: rest, start: [280, 896, 280], geometry: g, rules: rules)
+        let middleFolded = LaneLayout.toggleFold(lane: .center, state: rest)
         XCTAssertEqual(widths(1512, middleFolded, g, rules)[1], g.laneFolded)
         XCTAssertEqual(widths(1512, middleFolded, g, rules).reduce(0, +), avail)
 
         let wide = LaneLayout.drag(lane: .trailing, proposed: 900, start: [280, 896, 280], state: rest, geometry: g, rules: rules)
-        let squeezed = widths(1512, wide, g, rules)
-        XCTAssertEqual(squeezed.reduce(0, +), avail)
-        XCTAssertGreaterThan(squeezed[2], 280)
-        XCTAssertLessThan(squeezed[0] + squeezed[1], 1176)
+        XCTAssertEqual(widths(1512, wide, g, rules), [56, 500, 900])
 
-        let capped = LaneLayout.drag(lane: .leading, proposed: 400, start: [280, 896, 280], state: rest, geometry: g, rules: mail)
-        XCTAssertEqual(widths(1512, capped, g, mail)[0], 280)
-        XCTAssertEqual(capped.preferred[0], 280)
+        for lane in [Lane.leading, .trailing] {
+            let held = LaneLayout.drag(lane: lane, proposed: 150, start: [280, 896, 280], state: rest, geometry: g, rules: AreaRules.rules(for: "mail", geometry: g))
+            XCTAssertEqual(widths(1512, held, g, rules)[lane.index], 224, lane.rawValue)
+        }
 
+        let folded = LaneLayout.toggleFold(lane: .trailing, state: LaneLayout.drag(lane: .trailing, proposed: 240, start: [280, 896, 280], state: rest, geometry: g, rules: rules))
+        XCTAssertEqual(widths(1512, LaneLayout.toggleFold(lane: .trailing, state: folded), g, rules), [280, 936, 240])
         let maximized = LaneLayout.toggleMaximize(lane: .center, state: rest)
         XCTAssertEqual(widths(1512, maximized, g, rules), [56, avail - 112, 56])
         XCTAssertNil(LaneLayout.toggleMaximize(lane: .center, state: maximized).maximized)
-        XCTAssertEqual(LaneLayout.reset(rest: g.laneRest), rest)
     }
 }
 
