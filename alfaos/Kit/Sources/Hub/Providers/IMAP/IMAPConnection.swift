@@ -34,7 +34,8 @@ package struct IMAPConnection: Equatable, Sendable {
         func text(_ key: String) -> String { (values[key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines) }
         let address = text(IMAPField.address)
         guard !address.isEmpty else { throw .missing(IMAPField.address) }
-        guard address.contains("@"), !address.hasPrefix("@"), !address.hasSuffix("@") else {
+        guard address.contains("@"), !address.hasPrefix("@"), !address.hasSuffix("@"),
+              address.rangeOfCharacter(from: .whitespacesAndNewlines) == nil else {
             throw .invalidAddress(address)
         }
         let password = values[IMAPField.password] ?? ""

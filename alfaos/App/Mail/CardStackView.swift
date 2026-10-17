@@ -87,7 +87,7 @@ private struct StackCard: View {
         .foregroundStyle(ink)
         .background(fill)
         .overlay(alignment: .top) {
-            if let layer = gloss.first { Rectangle().fill(paint(layer.color)).frame(height: 1) }
+            if let layer = gloss.first { Rectangle().fill(paint(layer.color)).frame(height: CGFloat(layer.y)) }
         }
         .clipShape(shape)
         .background {

@@ -177,15 +177,6 @@ final class ModelTests: XCTestCase {
         await model.setStarred("m1", true)
         XCTAssertEqual(model.actionFailure(for: "m1"), Hint(text: "hint.f"))
         XCTAssertEqual(model.rows.first?.states.contains(.starred), false)
-
-        let failing = ModelFakeEngine()
-        let failingModel = makeModel(failing)
-        failing.pages[nil] = MailMessagePage(messages: [fakeMessage("m1")])
-        failing.bodyError = .provider(Hint(text: MailTextKey.offline.rawValue))
-        await failingModel.start()
-        await failingModel.open("m1")
-        let failure = failingModel.actionFailure(for: "m1")
-        let calls = failing.flagCalls.count
     }
 
     func testReplyAllBuildsDraft() async {

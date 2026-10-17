@@ -187,6 +187,6 @@ final class IMAPProviderTests: XCTestCase {
     func testAddressWithInnerSpaceIsRejected() {
         var input = Self.gmx
         input["address"] = "jo @gmx.example"
-        let rejected = (try? IMAPConnection(values: input)) == nil
+        XCTAssertNil(try? IMAPConnection(values: input))
     }
 }

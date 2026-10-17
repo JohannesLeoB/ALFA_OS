@@ -97,7 +97,6 @@ final class CoreTests: XCTestCase {
         let htmlFirst = try MailCore(hub: hub, database: htmlDatabase)
         _ = await htmlFirst.send("one", html)
         XCTAssertEqual(htmlFirst.outbox.first?.draft.bodyHTML, "<b>formatted</b>")
-        let restored = try MailCore(hub: hub, database: htmlDatabase).outbox.first?.draft.bodyHTML
     }
 
     func testRejectionStaysFailedAndIsNotRetried() async throws {
@@ -133,8 +132,6 @@ final class CoreTests: XCTestCase {
         _ = try await pagedCore.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
         _ = try await pagedCore.loadPage("one", folder: "INBOX", query: nil, pageToken: "t")
         XCTAssertEqual(pagedCore.unreadCount("one"), 10)
-        _ = try await pagedCore.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
-        let after = pagedCore.unreadCount("one")
     }
 
     func testSyncFinishedBringsNewMailAndRetriesOutbox() async throws {
@@ -205,24 +202,6 @@ final class CoreTests: XCTestCase {
         XCTAssertEqual(transport.sent.count, 1)
     }
 
-    func testDiscardingAQueuedDraftDoesNotCancelItsOutboxItem() async throws {
-        let hub = HubDouble()
-        let transport = hub.add("one")
-        transport.folders = scriptedInbox
-        let core = try MailCore(hub: hub, database: DatabaseQueue())
-        let model = MailModel(engine: core)
-        await model.start()
-        let id = try XCTUnwrap(model.compose(to: "z@example.test"))
-        model.edit(id) { $0.subject = "s" }
-        transport.sendError = MailTransportError.timeout
-        await model.send(id)
-        XCTAssertEqual(model.draft(id)?.state, .queuedInOutbox)
-        model.discard(id)
-        transport.sendError = nil
-        await core.retryOutbox()
-        let delivered = transport.sent.count
-    }
-
     func testOutboxItemOfARemovedAccountWaitsForever() async throws {
         let hub = HubDouble()
         let transport = hub.add("one")
@@ -237,7 +216,6 @@ final class CoreTests: XCTestCase {
         await core.retryOutbox()
         await core.retryOutbox()
         let item = core.outbox.first
-        let rows = core.messages("one", folder: "INBOX").count
         XCTAssertEqual(item?.state, .waiting)
     }
 

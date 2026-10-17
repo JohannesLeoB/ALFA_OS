@@ -13,7 +13,6 @@ struct BlobView: View {
         let height = CGFloat(g.blobHeight)
         let origin = model.blobOrigin
         let awake = model.phase != .rest
-        let radius = height / 2
         let held = dragCenter != nil
         let x = dragCenter.map { $0.x - width / 2 } ?? CGFloat(origin.x)
         let y = dragCenter.map { $0.y - height / 2 } ?? CGFloat(origin.y)

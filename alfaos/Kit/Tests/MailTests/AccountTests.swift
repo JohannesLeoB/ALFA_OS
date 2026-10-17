@@ -70,8 +70,6 @@ final class AccountTests: XCTestCase {
         XCTAssertTrue(waitingFolders)
         moreGate.release()
         await more.value
-        let rows = model.summaries.map(\.id)
-        let token = model.nextPageToken
         let inlet = model.selectedInlet
         folderGate.release()
         await switching.value
@@ -111,8 +109,6 @@ final class AccountTests: XCTestCase {
         hub.push(.syncFinished(.mail, "one"))
         let mirrored = await eventually { core.messages("one", folder: "INBOX").map(\.id) == ["2"] }
         XCTAssertTrue(mirrored)
-        try? await Task.sleep(for: .milliseconds(100))
-        let ids = model.summaries.map(\.id)
     }
 
     func testAccountAddedLaterIsNotSelectedWhenNothingIsSelected() async {
