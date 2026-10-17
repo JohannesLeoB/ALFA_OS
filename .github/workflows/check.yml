@@ -1,0 +1,31 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Install SwiftLint
+        run: brew install swiftlint
+      - name: Commit message
+        run: python3 scripts/commit_check.py --rev HEAD
+      - name: Guardrails
+        env:
+          LIMITS_BASE: HEAD~1
+        run: python3 scripts/check.py --strict-stray --links
+      - name: Kit tests
+        run: swift test --package-path alfaos/Kit
+      - name: Generate project
+        run: brew install xcodegen && cd alfaos && xcodegen generate
+      - name: Build app
+        run: >
+          xcodebuild -project alfaos/ALFA_OS.xcodeproj -scheme ALFA_OS
+          -destination 'platform=macOS' -derivedDataPath build
+          CODE_SIGNING_ALLOWED=NO build

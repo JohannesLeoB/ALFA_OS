@@ -1,0 +1,55 @@
+only_rules:
+  - custom_rules
+
+included:
+  - alfaos
+
+excluded:
+  - alfaos/Kit/.build
+  - alfaos/ALFA_OS.xcodeproj
+
+custom_rules:
+  no_comment:
+    name: No comment
+    regex: '//'
+    match_kinds:
+      - comment
+      - comment.mark
+      - doccomment
+      - doccomment.field
+    excluded: 'Package\.swift$'
+    message: Code carries no comments.
+    severity: error
+  no_umlaut:
+    name: No umlaut in code
+    regex: '[äöüÄÖÜß]'
+    message: Names and strings in code are ASCII; visible text lives in Localizable.xcstrings.
+    severity: error
+  no_raw_color:
+    name: No raw color
+    regex: '0x[0-9A-Fa-f]{6}\b|#[0-9A-Fa-f]{6}\b|\bColor\([^)]*(red|white|hue):\s*[0-9]'
+    message: Colors come from Design.* through the theme.
+    severity: error
+  no_raw_layout_number:
+    name: No raw layout number
+    regex: '\.(frame|padding|cornerRadius|offset|blur)\([^)]*[(:,]\s*-?[1-9][0-9]*(\.[0-9]+)?\s*[,)]'
+    included: 'alfaos/App/.*\.swift'
+    message: Sizes, spacing, radii and offsets come from Design.*.
+    severity: error
+  no_fixed_text:
+    name: No fixed visible text
+    regex: '\bText\(\s*"'
+    included: 'alfaos/App/.*\.swift'
+    message: Visible text comes from Localizable.xcstrings through theme.text.
+    severity: error
+  no_raw_font_size:
+    name: No raw font size
+    regex: '\.system\(size:\s*[0-9]|Font\.system\(size'
+    included: 'alfaos/App/.*\.swift'
+    message: Type sizes come from Design.TextSize.
+    severity: error
+  no_german_identifier:
+    name: No German identifier
+    regex: '(?i)\b(let|var|func|case|class|struct|enum|protocol)\s+\w*(ordner|bereich|aufgabe|nachricht|einstellung|konto|entwurf|ansicht|datei|zeile|spalte|schluessel|kunde|angebot|rechnung|kosten|zeit)\w*'
+    message: Names are English.
+    severity: error
