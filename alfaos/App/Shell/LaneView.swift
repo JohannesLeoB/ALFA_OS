@@ -68,7 +68,7 @@ struct LaneView: View {
             Image(systemName: symbol)
                 .font(theme.font(.textButton))
                 .foregroundStyle(theme.design(\.inkTertiary))
-                .frame(width: theme.measure(.laneHeaderButton), height: theme.measure(.laneHeaderButton))
+                .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
                 .contentShape(Circle())
         }
         .buttonStyle(.plain)

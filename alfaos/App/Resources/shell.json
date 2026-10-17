@@ -8,13 +8,9 @@
   "window-min-height": 600,
   "measures": {
     "lane-header-padding-end": 10,
-    "lane-header-button": 26,
     "menu-field-padding": 10,
     "menu-group-padding": 10,
     "menu-row-padding-start": 18,
-    "menu-row-padding-end": 10,
-    "face-eye-width": 3,
-    "face-eye-height": 7,
-    "face-eye-gap": 5
+    "menu-row-padding-end": 10
   }
 }

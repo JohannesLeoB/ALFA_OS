@@ -2,14 +2,10 @@ import Foundation
 
 public enum ShellMeasure: String, CaseIterable, Sendable {
     case laneHeaderPaddingEnd = "lane-header-padding-end"
-    case laneHeaderButton = "lane-header-button"
     case menuFieldPadding = "menu-field-padding"
     case menuGroupPadding = "menu-group-padding"
     case menuRowPaddingStart = "menu-row-padding-start"
     case menuRowPaddingEnd = "menu-row-padding-end"
-    case faceEyeWidth = "face-eye-width"
-    case faceEyeHeight = "face-eye-height"
-    case faceEyeGap = "face-eye-gap"
 }
 
 public struct ShellMetrics: Sendable, Decodable, Equatable {

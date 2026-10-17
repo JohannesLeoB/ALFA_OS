@@ -53,7 +53,7 @@ struct BlobView: View {
         let size = theme.length(.sizeControlM)
         return ZStack {
             Circle().strokeBorder(theme.design(\.onInverse), lineWidth: theme.length(.strokeHairline))
-            HStack(spacing: theme.measure(.faceEyeGap)) {
+            HStack(spacing: CGFloat(Design.Size.blobEyeGap)) {
                 eye
                 eye
             }
@@ -64,7 +64,7 @@ struct BlobView: View {
     private var eye: some View {
         Capsule()
             .fill(theme.design(\.onInverse))
-            .frame(width: theme.measure(.faceEyeWidth), height: theme.measure(.faceEyeHeight))
+            .frame(width: CGFloat(Design.Size.blobEyeWidth), height: CGFloat(Design.Size.blobEyeHeight))
     }
 
     private var drag: some Gesture {
