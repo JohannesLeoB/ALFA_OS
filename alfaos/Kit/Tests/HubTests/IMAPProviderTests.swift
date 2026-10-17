@@ -169,7 +169,6 @@ final class IMAPProviderTests: XCTestCase {
         XCTAssertTrue(keychain.slots.isEmpty)
     }
 
-    /// Der Absendername kommt aus dem Formularwert "name", nicht aus dem Angebotstitel ("GMX") und nie leer.
     func testSenderNameOfTheTransportIsTheFormValue() async throws {
         var values = Self.gmx
         values["name"] = "Jo Berger"

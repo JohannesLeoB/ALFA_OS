@@ -111,8 +111,6 @@ final class GoogleRenewalTests: XCTestCase {
         _ = try rig.hub.access.port(MailTransport.self, for: rig.inlet.id)
     }
 
-    // Nachbauten und Pins zur Erneuerung des Google-Tokens (BUG-3-14 bis BUG-3-17).
-
     func testSyncAfterServerOutageOnRenewalKeepsTheInletConnected() async throws {
         let rig = try await scriptedGoogleRig(token: { (503, Data()) })
         await rig.cadence.trigger(rig.inlet.id, .mail)

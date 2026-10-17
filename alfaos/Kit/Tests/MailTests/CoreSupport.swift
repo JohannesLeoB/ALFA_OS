@@ -30,11 +30,8 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     var sent: [EmailDraft] { lock.withLock { _sent } }
     var sendCalls: Int { lock.withLock { _sendCalls } }
 
-    /// Seite je Ordner (gilt für jede Seitenmarke).
     func setPage(_ folder: String, _ page: MailMessagePage) { lock.withLock { _pages[folder] = page } }
-    /// Seite je Seitenmarke (nil = erste Seite).
     func setTokenPage(_ token: String?, _ page: MailMessagePage) { lock.withLock { _tokenPages[token ?? "-"] = page } }
-    /// Der n-te Aufruf von listMessages wirft.
     func failList(call: Int, _ error: Error) { lock.withLock { _failures[call] = error } }
 
     func listFolders() async throws -> [MailFolder] {

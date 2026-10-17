@@ -46,7 +46,6 @@ final class SetupFlowTests: XCTestCase {
         return try Hub.make(configuration)
     }
 
-    /// BUG-5-2 und BUG-5-3: Abbruch während der Probe, beim Anlegen (add) und bei einem vorhandenen Eingang (probe).
     func testCancelDuringTheProbe() async throws {
         let stuck = try makeHub(run: { _, _ in try await Task.sleep(for: .seconds(3600)) })
         let addTask = Task { @MainActor () -> SetupError? in
@@ -79,7 +78,6 @@ final class SetupFlowTests: XCTestCase {
         XCTAssertEqual(hub.setup.inlets.first?.state.canRenew, true)
     }
 
-    /// BUG-5-5 und BUG-5-6: Eingang, dessen Anbieter nach dem Neustart fehlt.
     func testInletOfAMissingProvider() async throws {
         let database = try DatabaseQueue()
         let keychain = FakeKeychain()

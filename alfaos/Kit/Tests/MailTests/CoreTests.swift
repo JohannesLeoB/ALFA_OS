@@ -71,7 +71,6 @@ final class CoreTests: XCTestCase {
         XCTAssertEqual(one.sent.count, 1)
         XCTAssertTrue(core.outbox.isEmpty)
 
-        // Ein Gmail-HTTP-Fehler 503 beim Senden ist vorübergehend: der Posten wartet und geht beim nächsten Versuch hinaus.
         let (gmailCore, _, gmail, _) = try make()
         gmail.sendError = GoogleGmailError.httpError(503)
         _ = await gmailCore.send("one", draft())
@@ -252,12 +251,11 @@ final class CoreTests: XCTestCase {
         XCTAssertEqual(model.listState, .signInExpired("one"))
     }
 
-    /// BUG-4-12 und BUG-4-13: Die lokale Suche geht ungeschützt in LIKE (`_` als Platzhalter, Umlaute nur ASCII-gefaltet).
     func testLocalSearchMatchesTheTextAsTyped() async throws {
         let hub = HubDouble()
         let transport = hub.add("one")
         transport.folders = scriptedInbox
-        transport.setPage("INBOX", MailMessagePage(messages: [message("1", subject: "abc"), message("2", subject: "Ärger im Büro")]))
+        transport.setPage("INBOX", MailMessagePage(messages: [message("1", subject: "abc"), message("2", subject: "\u{C4}rger im B\u{FC}ro")]))
         let core = try MailCore(hub: hub, database: DatabaseQueue())
         try await core.refreshFolders("one")
         _ = try await core.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)

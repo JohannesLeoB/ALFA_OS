@@ -1,5 +1,3 @@
-// tokens.json version 1 sha256 c839f5bd9ca95e40668feecd380d9b9e426c16d4d8be4bafc2094f0e53b33234
-
 public extension ThemeKey {
     static let colorBackgroundContainer = ThemeKey("color-background-container")
     static let paletteGray400 = ThemeKey("palette-gray-400")
@@ -98,5 +96,6 @@ public enum TokenStamp {
     public static let delivery = "Arbeitswelt ALFA Interface Zugang (13).zip, sha256 6c3a927e1b5bae51eee3f12e03fb196c1ddd35ce5ed59fb16eec67d7904d3e4f"
     public static let deliveredAt = "2026-10-16T02:05"
     public static let adoptedAt = "2026-10-16T16:42"
-    public static let state = "Hülle: Maße, Bewegungen, Schatten, Farben und das Akkordeon (nach alfa-shell.js, Ruhe 280, Falten ab 112, Mitte faltet mit) aus dem Entwurf. Quarantäne in quarantine.json. Offen: Lack, Glas, Kartenstapel, Schrift Geist, Symbole."
+    public static let state = "Legacy token sheet. The delivered sheet design.json is the source; unused tokens are in quarantine.json."
+    public static let content = "d16ec19d93e7e5cca28a5d933e03124a7c8e0cbad0efb1ea7ae1280603fe61b1"
 }

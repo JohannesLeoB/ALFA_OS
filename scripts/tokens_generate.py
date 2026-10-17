@@ -131,7 +131,7 @@ def stamp_of(source):
 
 def swift_stamp(stamp):
     lines = ["public enum TokenStamp {"]
-    for field in STAMP_FIELDS:
+    for field in STAMP_FIELDS + ("content",):
         lines.append("%spublic static let %s = %s" % (INDENT, field, json.dumps(stamp[field], ensure_ascii=False)))
     lines.append("}")
     return "\n".join(lines)
@@ -140,8 +140,7 @@ def swift_stamp(stamp):
 def swift_output(source, source_bytes, web_bytes):
     names = unique(VARIABLE.findall(web_bytes.decode("utf-8")))
     styles = unique(s["name"] for g in source["type"]["groups"] for s in g["styles"])
-    head = "// tokens.json version %s sha256 %s" % (source["version"], hashlib.sha256(source_bytes).hexdigest())
-    text = head + "\n\n" + swift_block("ThemeKey", names) + "\n\n" + swift_block("TextKey", styles)
+    text = swift_block("ThemeKey", names) + "\n\n" + swift_block("TextKey", styles)
     text += "\n\n" + swift_stamp(stamp_of(source)) + "\n"
     return text.encode("utf-8")
 

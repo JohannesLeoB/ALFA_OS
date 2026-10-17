@@ -1,5 +1,3 @@
-// design.json sha256 3fa6287aead9a14dc74cf899618ba1bcaa457d9ae6432cfc92c0a2a6ebf8994f
-
 public enum Design {
     public enum Size {
         public static let edge = 16.0
@@ -227,8 +225,9 @@ public enum DesignSurface {
 }
 
 public enum DesignStamp {
-    public static let delivery = "Arbeitswelt ALFA Interface Zugang (13).zip, sha256 6c3a927e1b5bae51eee3f12e03fb196c1ddd35ce5ed59fb16eec67d7904d3e4f, Datei TOKENBOGEN.json"
+    public static let delivery = "Arbeitswelt ALFA Interface Zugang (13).zip, sha256 6c3a927e1b5bae51eee3f12e03fb196c1ddd35ce5ed59fb16eec67d7904d3e4f, file TOKENBOGEN.json"
     public static let deliveredAt = "2026-10-16T02:05"
     public static let adoptedAt = "2026-10-16T18:11"
-    public static let state = "Gelesen von der App: Hülle, Akkordeon (alfa-shell.js), Bewegungen, Schatten, Farben, Zeilen, Abstände, Radien, Schriftgrößen; Kartenstapel der Mail-Leseansicht mit Lack (Stufen, Kopf, Naht, Wurfschatten, Tiefe 8 und 44). Offen: Glas, flach, Karten-Kopf und -Fuß, Fächern, Symbole, Schrift Geist, Mindestmaße der Bahnen (nicht bestätigt)."
+    public static let state = "Read by the app: shell, accordion (alfa-shell.js), motion, shadows, colors, rows, spacing, radii, type sizes, blob eyes, header buttons; mail card stack with lacquer (steps, head, seam, cast shadow, depth 8 and 44). Open: glass, flat, card head and foot, fanning, symbols, Geist font, lane minimums (not confirmed)."
+    public static let content = "3fa6287aead9a14dc74cf899618ba1bcaa457d9ae6432cfc92c0a2a6ebf8994f"
 }

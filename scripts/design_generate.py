@@ -126,7 +126,7 @@ def shadows_struct(keys):
 
 def build(source_bytes, stamp):
     source = json.loads(source_bytes.decode("utf-8"))
-    out = ["// design.json sha256 %s" % hashlib.sha256(source_bytes).hexdigest(), "", "public enum Design {"]
+    out = ["public enum Design {"]
     out += scalar_block("Size", source["size"], lambda l: num(dimension(l["$value"])))
     out += scalar_block("Spacing", source["spacing"], lambda l: num(dimension(l["$value"])))
     out += scalar_block("Radius", source["radius"], lambda l: num(dimension(l["$value"])))
@@ -159,7 +159,7 @@ def build(source_bytes, stamp):
     out.append("}")
     out += surface_block(source)
     out += ["", "public enum DesignStamp {"]
-    for field in STAMP_FIELDS:
+    for field in STAMP_FIELDS + ("content",):
         out.append("%spublic static let %s = %s" % (INDENT, field, json.dumps(stamp[field], ensure_ascii=False)))
     out.append("}")
     return ("\n".join(out) + "\n").encode("utf-8")
