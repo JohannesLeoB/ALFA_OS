@@ -333,8 +333,8 @@ private struct CardOverview: View {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: size.minWidth), spacing: CGFloat(Design.Spacing.step8))],
                           spacing: CGFloat(Design.Spacing.step8)) {
-                    ForEach(cards) { card in
-                        OverviewTile(model: model, card: card, current: card.id == front, size: size, fanned: $fanned)
+                    ForEach(Array(cards.enumerated()), id: \.element.id) { index, card in
+                        OverviewTile(model: model, card: card, index: index, current: card.id == front, size: size, fanned: $fanned)
                     }
                 }
                 .padding(CGFloat(Design.Spacing.step8))
@@ -348,12 +348,16 @@ private struct CardOverview: View {
 private struct OverviewTile: View {
     let model: MailModel
     let card: ReadingCard
+    let index: Int
     let current: Bool
     let size: OverviewSize
     @Binding var fanned: Bool
     @Environment(\.design) private var design
     @Environment(\.hairline) private var hairline
     @State private var hovering = false
+    @State private var entered = false
+
+    private var unread: Bool { !card.summary.flags.contains(.seen) }
 
     private var initials: String {
         String(card.summary.from.split(separator: " ").prefix(2).compactMap(\.first)).uppercased()
@@ -368,6 +372,13 @@ private struct OverviewTile: View {
                     .designText(size: Design.TextSize.small, weight: .medium)
                     .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
                     .overlay(Circle().strokeBorder(design.color(\.lineStrong), lineWidth: hairline))
+                    .overlay(alignment: .topTrailing) {
+                        if unread {
+                            Circle().fill(design.color(\.ink)).frame(width: CGFloat(Design.Spacing.step8), height: CGFloat(Design.Spacing.step8))
+                                .overlay(Circle().strokeBorder(design.color(\.well), lineWidth: CGFloat(Design.Radius.stroke)))
+                                .offset(x: CGFloat(Design.Radius.stroke), y: -CGFloat(Design.Radius.stroke))
+                        }
+                    }
                 Text(verbatim: card.summary.from).designText(weight: .medium).lineLimit(1)
                 Spacer(minLength: 0)
                 if let date = card.summary.receivedAt {
@@ -400,6 +411,11 @@ private struct OverviewTile: View {
         }
         .clipShape(shape)
         .contentShape(shape)
+        .opacity(entered ? 1 : 0)
+        .offset(y: entered ? 0 : CGFloat(Design.Spacing.step16))
+        .onAppear {
+            withAnimation(.easeOut(duration: Design.Duration.overviewEnter).delay(Design.Duration.overviewDelay / 2 + Double(index) * Design.Duration.overviewStagger)) { entered = true }
+        }
         .onHover { hovering = $0 }
         .animation(.easeOut(duration: Design.Duration.tileActions), value: hovering)
         .onTapGesture {
