@@ -5,6 +5,8 @@ import SwiftUI
 
 struct CardStackView: View {
     let model: MailModel
+    @State private var fanned = false
+    @State private var tileSize = OverviewSize.medium
 
     var body: some View {
         GeometryReader { proxy in
@@ -14,16 +16,23 @@ struct CardStackView: View {
             let tops = CardStack.tops(count: order.count)
             ZStack(alignment: .top) {
                 ForEach(Array(order.enumerated()), id: \.element.id) { index, card in
-                    StackCard(model: model, card: card, depth: order.count - 1 - index, first: index == 0)
+                    StackCard(model: model, card: card, depth: order.count - 1 - index, first: index == 0, fanned: $fanned)
                         .frame(height: max(0, proxy.size.height - tops[index]))
                         .offset(y: tops[index])
                         .zIndex(Double(index))
+                }
+                if fanned {
+                    CardOverview(model: model, cards: order, front: front, size: $tileSize, fanned: $fanned)
+                        .transition(.opacity)
+                        .zIndex(Double(order.count))
                 }
             }
             .frame(width: proxy.size.width, height: proxy.size.height, alignment: .top)
             .animation(
                 NSWorkspace.shared.accessibilityDisplayShouldReduceMotion ? .linear(duration: 0.001) : .spring(duration: Design.Duration.stack, bounce: 0.1),
                 value: order.map(\.id))
+            .animation(.easeOut(duration: Design.Duration.toggle), value: fanned)
+            .onChange(of: model.cards.isEmpty) { _, empty in if empty { fanned = false } }
         }
     }
 }
@@ -33,6 +42,7 @@ private struct StackCard: View {
     let card: ReadingCard
     let depth: Int
     let first: Bool
+    @Binding var fanned: Bool
     @Environment(\.design) private var design
     @Environment(\.laneFill) private var laneFill
     @Environment(\.cardSurface) private var surface
@@ -80,7 +90,7 @@ private struct StackCard: View {
         let seamLayer = lacquer ? seam.first : nil
         let castLayer = lacquer ? cast.first : nil
         VStack(spacing: 0) {
-            CardHeader(model: model, card: card, front: front, ink: ink)
+            CardHeader(model: model, card: card, front: front, ink: ink, fanned: $fanned)
             if front {
                 divider
                 FrontCardContent(model: model, card: card)
@@ -125,6 +135,7 @@ private struct CardHeader: View {
     let card: ReadingCard
     let front: Bool
     let ink: Color
+    @Binding var fanned: Bool
     @Environment(\.design) private var design
 
     private var initials: String {
@@ -154,6 +165,7 @@ private struct CardHeader: View {
             }
             Spacer(minLength: 0)
             if front {
+                CardButton(symbol: "square.grid.2x2", label: "mail.overview.open") { fanned = true }
                 CardButton(symbol: "xmark", label: "mail.card.close") { model.close(card.id) }
             }
         }
@@ -243,6 +255,156 @@ struct FrontCardContent: View {
         case .text(let text): Text(verbatim: text)
         case .html(let html, _): Text(verbatim: MailText.plain(html))
         case .bodyLoading, .conversation, .draftNotice: word(content.key ?? "mail.card.bodyLoading")
+        }
+    }
+}
+
+enum OverviewSize: CaseIterable {
+    case small
+    case medium
+    case large
+
+    var height: CGFloat {
+        switch self {
+        case .small: CGFloat(Design.Size.overviewTileHeightSmall)
+        case .medium: CGFloat(Design.Size.overviewTileHeightMedium)
+        case .large: CGFloat(Design.Size.overviewTileHeightLarge)
+        }
+    }
+
+    var minWidth: CGFloat {
+        switch self {
+        case .small: CGFloat(Design.Size.overviewTileMinWidthSmall)
+        case .medium: CGFloat(Design.Size.overviewTileMinWidthMedium)
+        case .large: CGFloat(Design.Size.overviewTileMinWidthLarge)
+        }
+    }
+
+    var lines: Int {
+        switch self {
+        case .small: 3
+        case .medium: 4
+        case .large: 8
+        }
+    }
+
+    var key: String {
+        switch self {
+        case .small: "mail.overview.small"
+        case .medium: "mail.overview.medium"
+        case .large: "mail.overview.large"
+        }
+    }
+}
+
+private struct CardOverview: View {
+    let model: MailModel
+    let cards: [ReadingCard]
+    let front: String?
+    @Binding var size: OverviewSize
+    @Binding var fanned: Bool
+    @Environment(\.design) private var design
+    @Environment(\.laneFill) private var laneFill
+    @Environment(\.hairline) private var hairline
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: CGFloat(Design.Spacing.step8)) {
+                CardButton(symbol: "rectangle.stack", label: "mail.overview.back") { fanned = false }
+                Spacer(minLength: 0)
+                HStack(spacing: 0) {
+                    ForEach(OverviewSize.allCases, id: \.self) { option in
+                        Button { size = option } label: {
+                            word(option.key)
+                                .designText(size == option ? \.onInverse : \.inkSecondary, size: Design.TextSize.small, weight: .medium)
+                                .padding(.horizontal, CGFloat(Design.Spacing.step8))
+                                .frame(height: CGFloat(Design.Size.chipHeight))
+                                .background(Capsule().fill(size == option ? design.color(\.inverse) : Color.clear))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(CGFloat(Design.Spacing.step4) / 2)
+                .overlay(Capsule().strokeBorder(design.color(\.lineStrong), lineWidth: hairline))
+            }
+            .padding(.horizontal, CGFloat(Design.Spacing.step8))
+            .frame(height: CGFloat(Design.Size.headerHeight))
+            Rectangle().fill(design.color(\.line)).frame(height: hairline)
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: size.minWidth), spacing: CGFloat(Design.Spacing.step8))],
+                          spacing: CGFloat(Design.Spacing.step8)) {
+                    ForEach(cards) { card in
+                        OverviewTile(model: model, card: card, current: card.id == front, size: size, fanned: $fanned)
+                    }
+                }
+                .padding(CGFloat(Design.Spacing.step8))
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(laneFill)
+    }
+}
+
+private struct OverviewTile: View {
+    let model: MailModel
+    let card: ReadingCard
+    let current: Bool
+    let size: OverviewSize
+    @Binding var fanned: Bool
+    @Environment(\.design) private var design
+    @Environment(\.hairline) private var hairline
+    @State private var hovering = false
+
+    private var initials: String {
+        String(card.summary.from.split(separator: " ").prefix(2).compactMap(\.first)).uppercased()
+    }
+
+    private var shape: RoundedRectangle { RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row)) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: CGFloat(Design.Spacing.step8)) {
+                Text(verbatim: initials)
+                    .designText(size: Design.TextSize.small, weight: .medium)
+                    .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
+                    .overlay(Circle().strokeBorder(design.color(\.lineStrong), lineWidth: hairline))
+                Text(verbatim: card.summary.from).designText(weight: .medium).lineLimit(1)
+                Spacer(minLength: 0)
+                if let date = card.summary.receivedAt {
+                    Text(date, format: .dateTime.day().month()).designText(\.inkTertiary, size: Design.TextSize.small).lineLimit(1)
+                }
+                CardButton(symbol: "xmark", label: "mail.card.close") { model.close(card.id) }
+            }
+            .padding(.horizontal, CGFloat(Design.Spacing.step8))
+            .frame(height: CGFloat(Design.Size.headerHeight))
+            VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step4)) {
+                Text(verbatim: card.summary.subject).designText(weight: .medium).lineLimit(2)
+                Text(verbatim: card.summary.snippet).designText(\.inkSecondary).lineLimit(size.lines)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, CGFloat(Design.Size.edge))
+            .padding(.top, CGFloat(Design.Spacing.step4))
+            Spacer(minLength: 0)
+        }
+        .frame(height: size.height)
+        .background(shape.fill(design.color(\.well)))
+        .overlay(shape.strokeBorder(current ? design.color(\.inkTertiary) : design.color(\.line), lineWidth: hairline))
+        .overlay(alignment: .bottomTrailing) {
+            HStack(spacing: CGFloat(Design.Spacing.step4)) {
+                CardButton(symbol: "archivebox", label: "mail.action.archive") { Task { await model.archive(card.id) } }
+                CardButton(symbol: "trash", label: "mail.action.trash") { Task { await model.trash(card.id) } }
+            }
+            .padding(CGFloat(Design.Spacing.step8))
+            .opacity(hovering ? 1 : 0)
+            .allowsHitTesting(hovering)
+        }
+        .clipShape(shape)
+        .contentShape(shape)
+        .onHover { hovering = $0 }
+        .animation(.easeOut(duration: Design.Duration.tileActions), value: hovering)
+        .onTapGesture {
+            fanned = false
+            Task { await model.open(card.id) }
         }
     }
 }
