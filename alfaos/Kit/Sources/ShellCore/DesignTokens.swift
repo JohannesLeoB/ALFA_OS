@@ -231,6 +231,6 @@ public enum DesignStamp {
     public static let delivery = "Arbeitswelt ALFA Interface Zugang (14), folder from Downloads, file TOKENBOGEN.json sha256 b403b51657c69449288071a397d58f20c19c522e8962087ad494c738628eafa6"
     public static let deliveredAt = "2026-10-16T16:58"
     public static let adoptedAt = "2026-10-17T13:52"
-    public static let state = "Read by the app: shell, accordion (alfa-shell.js), motion, shadows, colors, rows, spacing, radii, type sizes, blob eyes, header buttons; mail card stack with lacquer (steps, head, seam, cast shadow, depth 8 and 44). New in 14: lane colors, middle minimum 280, two durations. Open: glass, flat, card head and foot, fanning, symbols, Geist font."
+    public static let state = "Read by the app: shell, accordion (alfa-shell.js, side minimum 224 on both sides by Johannes 2026-10-17), motion, shadows, colors, rows, spacing, radii, type sizes, blob eyes, header buttons; mail card stack with flat surface, card head and foot, overview with tile sizes; lacquer kept behind a switch. Open: glass, overview folder mode, fold button on all lanes, strip click to unfold, arrow keys on the handle, symbols, Geist font."
     public static let content = "b403b51657c69449288071a397d58f20c19c522e8962087ad494c738628eafa6"
 }
