@@ -215,12 +215,6 @@
    "note": "im Entwurf teils nicht gezeigt (loadingMore, noFilterMatch, signInExpired)"
   },
   {
-   "code": "failed",
-   "design": "failed",
-   "status": "code",
-   "note": "im Entwurf teils nicht gezeigt (loadingMore, noFilterMatch, signInExpired)"
-  },
-  {
    "code": "notConnected",
    "design": "notConnected",
    "status": "code",
