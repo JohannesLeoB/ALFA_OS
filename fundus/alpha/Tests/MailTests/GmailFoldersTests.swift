@@ -1,5 +1,5 @@
 import XCTest
-@testable import MykilosServices
+@testable import AlfaServices
 
 private final class LabelsStub: URLProtocol {
     nonisolated(unsafe) static var body = Data()

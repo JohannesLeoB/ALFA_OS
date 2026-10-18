@@ -1,5 +1,5 @@
 import XCTest
-@testable import MykilosServices
+@testable import AlfaServices
 
 final class MailZitatTests: XCTestCase {
     func testStyleAndScriptContentNeverReachesTheText() {

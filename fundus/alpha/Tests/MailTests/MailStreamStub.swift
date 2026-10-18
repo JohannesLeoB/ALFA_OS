@@ -1,7 +1,7 @@
 import Foundation
 import XCTest
-@testable import MykilosServices
-import MykilosKit
+@testable import AlfaServices
+import AlfaKit
 
 enum MailWireFixture {
     /// Lädt Fixtures/MailWire.txt. Fehlt die Datei, scheitert der Test laut (kein stilles "").

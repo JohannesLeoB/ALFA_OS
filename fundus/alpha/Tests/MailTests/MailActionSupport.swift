@@ -1,7 +1,7 @@
 import Foundation
 import XCTest
-@testable import MykilosServices
-import MykilosKit
+@testable import AlfaServices
+import AlfaKit
 
 struct IMAPReply {
     var untagged: [String] = []

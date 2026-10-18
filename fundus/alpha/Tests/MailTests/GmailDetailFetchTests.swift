@@ -1,5 +1,5 @@
 import XCTest
-@testable import MykilosServices
+@testable import AlfaServices
 
 private struct StubToken: GoogleAccessTokenProviding {
     func validAccessToken() async throws -> String { "token" }

@@ -1,6 +1,6 @@
 import XCTest
-@testable import MykilosServices
-import MykilosKit
+@testable import AlfaServices
+import AlfaKit
 
 final class MailWireTests: XCTestCase {
     private func fx(_ key: String, file: StaticString = #filePath, line: UInt = #line) -> String {

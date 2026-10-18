@@ -1,6 +1,6 @@
 import XCTest
-@testable import MykilosServices
-import MykilosKit
+@testable import AlfaServices
+import AlfaKit
 
 final class GmailActionTests: XCTestCase {
     private func transport() -> GmailMailTransport {

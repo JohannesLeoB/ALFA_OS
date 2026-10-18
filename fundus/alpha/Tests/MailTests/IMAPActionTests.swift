@@ -1,6 +1,6 @@
 import XCTest
-@testable import MykilosServices
-import MykilosKit
+@testable import AlfaServices
+import AlfaKit
 
 final class IMAPActionTests: XCTestCase {
     private let message = "7:5:INBOX"

@@ -1,5 +1,5 @@
 import XCTest
-@testable import MykilosServices
+@testable import AlfaServices
 
 private final class Attrappe: KeychainAccessing, @unchecked Sendable {
     var content: [String: String] = [:]

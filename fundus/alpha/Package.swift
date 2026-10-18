@@ -6,30 +6,30 @@ let package = Package(
     defaultLocalization: "en",
     platforms: [.macOS("26.0"), .iOS("26.0")],
     products: [
-        .library(name: "MykilosKit", targets: ["MykilosKit"]),
+        .library(name: "AlfaKit", targets: ["AlfaKit"]),
         .library(name: "MykilosKalkulationsCore", targets: ["MykilosKalkulationsCore"]),
-        .library(name: "MykilosServices", targets: ["MykilosServices"]),
+        .library(name: "AlfaServices", targets: ["AlfaServices"]),
     ],
     dependencies: [
         .package(url: "https://github.com/groue/GRDB.swift", from: "6.0.0"),
     ],
     targets: [
-        .target(name: "MykilosKit",
-                path: "Sources/MykilosKit"),
+        .target(name: "AlfaKit",
+                path: "Sources/AlfaKit"),
 
         .target(name: "MykilosKalkulationsCore",
                 path: "Sources/MykilosKalkulationsCore"),
 
-        .target(name: "MykilosServices",
+        .target(name: "AlfaServices",
                 dependencies: [
-                    "MykilosKit",
+                    "AlfaKit",
                     "MykilosKalkulationsCore",
                     .product(name: "GRDB", package: "GRDB.swift"),
                 ],
-                path: "Sources/MykilosServices"),
+                path: "Sources/AlfaServices"),
 
         .testTarget(name: "MailTests",
-                    dependencies: ["MykilosServices", "MykilosKit"],
+                    dependencies: ["AlfaServices", "AlfaKit"],
                     path: "Tests/MailTests",
                     exclude: ["Fixtures"]),
     ]

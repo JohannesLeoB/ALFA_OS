@@ -1,6 +1,6 @@
 import XCTest
-@testable import MykilosServices
-import MykilosKit
+@testable import AlfaServices
+import AlfaKit
 
 final class MailProbeTests: XCTestCase {
     private func fx(_ key: String) -> String { MailWireFixture.line(key) }
