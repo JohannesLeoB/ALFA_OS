@@ -1,42 +1,27 @@
 import Foundation
 
 public enum ShellMeasure: String, CaseIterable, Sendable {
-    case laneHeaderPaddingEnd = "lane-header-padding-end"
     case menuFieldPadding = "menu-field-padding"
     case menuGroupPadding = "menu-group-padding"
-    case menuRowPaddingStart = "menu-row-padding-start"
-    case menuRowPaddingEnd = "menu-row-padding-end"
 }
 
 public struct ShellMetrics: Sendable, Decodable, Equatable {
-    public let minimumSide: Double
-    public let blobWidth: Double
     public let blobThrow: Double
     public let shadowBlurFactor: Double
-    public let assistantWidth: Double
-    public let windowMinHeight: Double
     private let measures: [ShellMeasure: Double]
 
     public func measure(_ key: ShellMeasure) -> Double { measures[key, default: 0] }
 
     enum CodingKeys: String, CodingKey {
-        case minimumSide = "minimum-side"
-        case blobWidth = "blob-width"
         case blobThrow = "blob-throw"
         case shadowBlurFactor = "shadow-blur-factor"
-        case assistantWidth = "assistant-width"
-        case windowMinHeight = "window-min-height"
         case measures
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        minimumSide = try container.decode(Double.self, forKey: .minimumSide)
-        blobWidth = try container.decode(Double.self, forKey: .blobWidth)
         blobThrow = try container.decode(Double.self, forKey: .blobThrow)
         shadowBlurFactor = try container.decode(Double.self, forKey: .shadowBlurFactor)
-        assistantWidth = try container.decode(Double.self, forKey: .assistantWidth)
-        windowMinHeight = try container.decode(Double.self, forKey: .windowMinHeight)
         let raw = try container.decode([String: Double].self, forKey: .measures)
         var values: [ShellMeasure: Double] = [:]
         for key in ShellMeasure.allCases {
@@ -93,7 +78,7 @@ public struct ShellGeometry: Sendable, Equatable {
         laneRest = Design.Size.laneRestWidth
         laneFolded = Design.Size.foldedWidth
         foldAt = Design.Size.foldThreshold
-        minimum = [metrics.minimumSide, Design.Size.middleMinimumWidth, metrics.minimumSide]
+        minimum = [Design.Size.laneMinimumLeft, Design.Size.middleMinimumWidth, Design.Size.laneMinimumRight]
         blobWidth = Design.Size.blobWidth
         blobAwakeWidth = Design.Size.blobAwakeWidth
         blobHeight = Design.Size.blobHeight
@@ -101,7 +86,7 @@ public struct ShellGeometry: Sendable, Equatable {
         menuWidth = theme.length(.componentMenuWidth)
         menuGap = theme.length(.spaceS)
         shadowBlurFactor = metrics.shadowBlurFactor
-        assistantWidth = metrics.assistantWidth
-        windowMin = Size(width: 2 * margin + 2 * gap + minimum.reduce(0, +), height: metrics.windowMinHeight)
+        assistantWidth = Design.Size.blobPopupFallbackWidth
+        windowMin = Size(width: 2 * margin + 2 * gap + minimum.reduce(0, +), height: strip + Design.Size.blobMenuMinHeight + margin)
     }
 }

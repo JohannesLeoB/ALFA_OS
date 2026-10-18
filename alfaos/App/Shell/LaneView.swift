@@ -59,7 +59,7 @@ struct LaneView: View {
             }
         }
         .padding(.leading, folded ? 0 : theme.length(.spaceL))
-        .padding(.trailing, folded ? 0 : theme.measure(.laneHeaderPaddingEnd))
+        .padding(.trailing, folded ? 0 : CGFloat(Design.Size.headPadRight))
         .frame(maxWidth: .infinity)
         .frame(height: theme.length(.componentLaneHeaderHeight))
     }

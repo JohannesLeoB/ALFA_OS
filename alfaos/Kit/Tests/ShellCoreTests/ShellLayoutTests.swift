@@ -32,11 +32,11 @@ final class LayoutTests: XCTestCase {
 
         for lane in [Lane.leading, .trailing] {
             let held = LaneLayout.drag(lane: lane, proposed: 150, start: [280, 896, 280], state: rest, geometry: g, rules: AreaRules.rules(for: "mail", geometry: g))
-            XCTAssertEqual(widths(1512, held, g, rules)[lane.index], 224, lane.rawValue)
+            XCTAssertEqual(widths(1512, held, g, rules)[lane.index], 280, lane.rawValue)
         }
 
         let folded = LaneLayout.toggleFold(lane: .trailing, state: LaneLayout.drag(lane: .trailing, proposed: 240, start: [280, 896, 280], state: rest, geometry: g, rules: rules))
-        XCTAssertEqual(widths(1512, LaneLayout.toggleFold(lane: .trailing, state: folded), g, rules), [280, 936, 240])
+        XCTAssertEqual(widths(1512, LaneLayout.toggleFold(lane: .trailing, state: folded), g, rules), [280, 896, 280])
         let maximized = LaneLayout.toggleMaximize(lane: .center, state: rest)
         XCTAssertEqual(widths(1512, maximized, g, rules), [56, avail - 112, 56])
         XCTAssertNil(LaneLayout.toggleMaximize(lane: .center, state: maximized).maximized)

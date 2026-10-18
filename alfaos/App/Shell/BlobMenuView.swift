@@ -146,8 +146,8 @@ struct MenuRow<Content: View>: View {
             content()
                 .font(theme.font(.callout))
                 .foregroundStyle(current ? background : foreground)
-                .padding(.leading, theme.measure(.menuRowPaddingStart))
-                .padding(.trailing, theme.measure(.menuRowPaddingEnd))
+                .padding(.leading, CGFloat(Design.Size.menuRowPadding))
+                .padding(.trailing, CGFloat(Design.Size.menuRowPadding))
                 .frame(height: theme.length(.componentMenuRowHeight))
                 .background(
                     RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row))

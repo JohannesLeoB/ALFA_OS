@@ -32,7 +32,8 @@ struct ALFA_OSApp: App {
                 ShellView(resources: resources, bundle: .main, model: model)
                     .environment(\.appHost, host)
                     .preferredColorScheme(AppearanceChoice(rawValue: appearance)?.scheme)
-                    .background(WindowConfigurator(minimum: CGSize(width: resources.geometry.windowMin.width, height: resources.geometry.windowMin.height)))
+                    .frame(minWidth: CGFloat(resources.geometry.windowMin.width), minHeight: CGFloat(resources.geometry.windowMin.height))
+                    .background(WindowConfigurator())
             } else {
                 Text(LocalizedStringKey("error.resources"))
             }
@@ -56,8 +57,6 @@ struct ShellStore {
 }
 
 struct WindowConfigurator: NSViewRepresentable {
-    let minimum: CGSize
-
     func makeNSView(context: Context) -> NSView {
         let view = NSView()
         DispatchQueue.main.async { [weak view] in
@@ -66,7 +65,6 @@ struct WindowConfigurator: NSViewRepresentable {
             window.titlebarAppearsTransparent = false
             window.styleMask.remove(.fullSizeContentView)
             window.isMovableByWindowBackground = false
-            window.contentMinSize = minimum
         }
         return view
     }
