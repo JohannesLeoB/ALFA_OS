@@ -1,16 +1,4 @@
-.build/
-.swiftpm/
-DerivedData/
-*.xcuserstate
-.DS_Store
-fundus/alfacolor/ALFAcolor/*.xcodeproj/
-.build-*/
-
-# Ausgehende ZIPs an die anderen Konten; Johannes trägt sie
-ausgang/
-
-# Gebaute, notarisierte Apps und DMGs (groß, nicht ins Git)
 dist/
+.DS_Store
+ausgang/
 alfaos/*.xcodeproj/
-
-company.json
