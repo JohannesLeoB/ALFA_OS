@@ -1,0 +1,19 @@
+- [Stand](stand.md) — laufender Stand 18.10. 17:19 UTC: Repo 254153b, 12 Stränge, Design-Master CHEF 1610 noch nicht in DESIGN/, 19 Dateien ohne Commit
+- [Arbeitsweise](arbeitsweise.md) — Ergebnisse statt Worte, alles lesen, nichts ohne Zustimmung schreiben, bauen statt analysieren, Arbeiten des zweiten Entwicklers nie
+- [Verlass ist der Job](verlass-ist-der-job.md) — blind verlassen können; nichts fertig, grün oder geprüft ohne Prüfung Wert für Wert
+- [Design ist das Ziel](design-ist-das-ziel.md) — letzter Design-Master ist einzige Wertquelle; Code ist Funktion, keine Gestaltung; nur Daten gegen Daten
+- [Entscheidung, Wortlaut, Herkunft](entscheidung-wortlaut-herkunft.md) — sein Entscheid, Designs Wortlaut und bloße Herkunft streng trennen
+- [Keine Rechte im Code](keine-rechte-im-code.md) — angemeldet heißt alles dürfen; nur die Firma sperrt; Rollen später als Einstellung
+- [Reichweite der App](reichweite-der-app.md) — Distribution (App Store, iOS, iPadOS, Web, Abo) ermöglichen, nicht erzwingen
+- [Erst Historie, dann fragen](erst-historie-dann-fragen.md) — vor jeder Frage seine Antworten in allen Transkripten suchen
+- [Keine Abkürzung](keine-abkuerzung.md) — Lücke belegen statt füllen, erst lesen dann bauen
+- [App: Vision](app-vision.md) — acht geprüfte Zitate zu Zweck und Richtung der App
+- [App: Ziel](app-ziel.md) — gestuft: Ende November Umfang C ohne Kalkulation, Launch Ende 2026 mit dem Rest
+- [App: Hülle](app-huelle.md) — Blob, Bahnen, Sync, Look: Ist, Soll, Offen
+- [App: Mail](app-mail.md) — Vertrag 155 Funktionen, Konten, Lücken: Ist, Soll, Offen
+- [App: Konten](app-konten.md) — Einstellungen, Hub, Rechte, Integrationen: Ist, Soll, Offen
+- [App: Projekte](app-projekte.md) — Akte, Fragebogen, Provisionierung: Ist, Soll, Offen
+- [App: Heute](app-heute.md) — Widget-Brett, 34 Arten: Ist, Soll, Offen
+- [App: Kataloge](app-kataloge.md) — Artikel, Datan als Modul: Ist, Soll, Offen
+- [App: Warenkorb](app-warenkorb.md) — Checkout, EK-Schutz, Rückweg: Ist, Soll, Offen
+- [App: Später](app-spaeter.md) — Werkstatt, Assistent, Studio, Kalkulation, ALFAcolor

@@ -1,0 +1,13 @@
+---
+name: arbeitsweise
+description: "Wie Johannes arbeitet und wie mit ihm gearbeitet wird: Ergebnisse statt Worte, alles lesen, nichts ohne Zustimmung schreiben, bauen statt analysieren"
+metadata:
+  node_type: memory
+  type: feedback
+  originSessionId: c2a04c8a-08ac-42dc-b4d2-3f9732b7dd70
+  modified: 2026-10-18T17:22:07.903Z
+---
+
+„Ich will kein Wort ich will Ergebnisse.“ (05.10. 02:48 a2df0c2a) · „was ich hier eingebe, IST IMMER vollständig zu lesen, nicht nur zu erfinden, zu bluffen.“ (05.10. 16:13 a2df0c2a) · „Nicht eine Zeile Text geht irgendwohin ohne meine zustimmung.“ (17.10. 22:17 c2a04c8a) · „wir schmeißen keine anderen Ansichten, Funktionen oder so weg, die nicht nicht den Ui overhaul durchlaufen sind!“ (05.10. 02:50 a2df0c2a) · „andere hatten so viele tests und limits aus meinen eingaben und ihren interpretationen aufgestellt, dass garnciht mehr gebaut wurde, sondern nurnoch analysiert“ (29.08. 23:36 6a6a9365) · „Haiku 5.5 als arbeiter, sonnet wenns nötig ist, Opus als Projektleiter, Visions udn Ziel-Leiter.“ (08.10. 21:18 055e95fd) · „CHEF ist gestrichen.“ (17.10. 23:07 c2a04c8a) · „Seid ihr Irre - die Issues dienen scheinbar nur dazu, einfach "Aufzuschreiben und noch mehr zu dokumentieren" und NIE auch nur je wieder zu lesen, was da steht.“ (13.10. 18:34 c2a04c8a) · Zu den Arbeiten des zweiten Entwicklers: „… ARBEITEN NIE Einbringen, nie verwenden, das ist seine alte, separate udn nciht gute arbeite mit der wir nichts zu tun haben wollen und es auch nicht kennen müssen. weg, löschen, nicht wieder erwähnen..“ (10.10. 21:08 7cc894d9)
+**Why:** Was nicht gelesen, nicht gebaut oder ohne seine Zustimmung geschrieben wird, kostet ihn Zeit und Vertrauen. Am 18.10. hat eine Sitzung den Zweig des zweiten Entwicklers gelesen und genannt.
+**How to apply:** Kurz antworten, nur Ergebnis mit Beleg. Jede seiner Nachrichten ganz lesen. Jeder Text braucht vorher seine Zustimmung zum Wortlaut. Ansichten und Funktionen, die den UI-Umbau noch nicht durchlaufen haben, bleiben. Bauen, sobald Design-Master und sein Wort reichen. Haiku arbeitet, Sonnet bei Bedarf, Opus führt. Keine Rollen über Stränge (L10), keine Issues (L2). Arbeiten des zweiten Entwicklers nie lesen, nennen oder verwenden.
