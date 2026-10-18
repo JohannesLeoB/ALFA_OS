@@ -1,10 +1,10 @@
 import class GRDB.DatabaseQueue
 import Hub
 @testable import Mail
-import struct MykilosServices.MailFolder
-import struct MykilosServices.MailMessagePage
-import struct MykilosServices.MailMessageSummary
-import enum MykilosServices.MailTransportError
+import struct AlfaServices.MailFolder
+import struct AlfaServices.MailMessagePage
+import struct AlfaServices.MailMessageSummary
+import enum AlfaServices.MailTransportError
 import XCTest
 
 @MainActor

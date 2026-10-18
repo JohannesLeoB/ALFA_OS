@@ -2,8 +2,8 @@ import Foundation
 import GRDB
 import Hub
 @testable import Mail
-import struct MykilosServices.MailFolder
-import struct MykilosServices.MailMessageSummary
+import struct AlfaServices.MailFolder
+import struct AlfaServices.MailMessageSummary
 import XCTest
 
 private final class SetupKeychain: KeychainPort, @unchecked Sendable {

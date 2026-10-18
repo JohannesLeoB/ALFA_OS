@@ -1,12 +1,12 @@
 import Foundation
 import Hub
-import struct MykilosKit.EmailDraft
-import enum MykilosServices.MailFlag
-import struct MykilosServices.MailFolder
-import struct MykilosServices.MailStoredDraft
-import struct MykilosServices.MailMessageBody
-import struct MykilosServices.MailMessagePage
-import struct MykilosServices.MailMessageSummary
+import struct AlfaKit.EmailDraft
+import enum AlfaServices.MailFlag
+import struct AlfaServices.MailFolder
+import struct AlfaServices.MailStoredDraft
+import struct AlfaServices.MailMessageBody
+import struct AlfaServices.MailMessagePage
+import struct AlfaServices.MailMessageSummary
 
 public enum OutboxState: Equatable, Sendable {
     case waiting

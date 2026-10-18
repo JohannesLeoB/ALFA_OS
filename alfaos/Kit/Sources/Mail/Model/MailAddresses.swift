@@ -1,5 +1,5 @@
 import Foundation
-import MykilosServices
+import AlfaServices
 
 enum MailAddresses {
     static func split(_ raw: String) -> [String] {

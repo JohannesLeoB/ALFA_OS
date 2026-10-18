@@ -1,10 +1,10 @@
 import Foundation
 import Hub
 import Observation
-import enum MykilosServices.MailFlag
-import struct MykilosServices.MailFolder
-import enum MykilosServices.MailFolderRole
-import struct MykilosServices.MailMessageSummary
+import enum AlfaServices.MailFlag
+import struct AlfaServices.MailFolder
+import enum AlfaServices.MailFolderRole
+import struct AlfaServices.MailMessageSummary
 
 enum MailLoadPhase: Equatable {
     case settled

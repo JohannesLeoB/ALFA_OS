@@ -1,11 +1,11 @@
 import Foundation
 import Hub
-import enum MykilosServices.MailFlag
-import struct MykilosServices.MailMessageBody
-import struct MykilosServices.MailMessageSummary
-import struct MykilosKit.MailSignatureContact
-import enum MykilosKit.MailSignatureParser
-import enum MykilosKit.MailLeadExtraktor
+import enum AlfaServices.MailFlag
+import struct AlfaServices.MailMessageBody
+import struct AlfaServices.MailMessageSummary
+import struct AlfaKit.MailSignatureContact
+import enum AlfaKit.MailSignatureParser
+import enum AlfaKit.MailLeadExtraktor
 
 extension MailModel {
     public func summary(_ id: String) -> MailMessageSummary? {

@@ -20,7 +20,7 @@ let package = Package(
         .target(
             name: "Hub",
             dependencies: [
-                .product(name: "MykilosServices", package: "alpha"),
+                .product(name: "AlfaServices", package: "alpha"),
                 .product(name: "GRDB", package: "GRDB.swift")
             ],
             swiftSettings: strict
@@ -29,8 +29,8 @@ let package = Package(
             name: "Mail",
             dependencies: [
                 "Hub",
-                .product(name: "MykilosServices", package: "alpha"),
-                .product(name: "MykilosKit", package: "alpha"),
+                .product(name: "AlfaServices", package: "alpha"),
+                .product(name: "AlfaKit", package: "alpha"),
                 .product(name: "GRDB", package: "GRDB.swift")
             ],
             swiftSettings: strict
@@ -40,8 +40,8 @@ let package = Package(
             name: "HubTests",
             dependencies: [
                 "Hub",
-                .product(name: "MykilosServices", package: "alpha"),
-                .product(name: "MykilosKit", package: "alpha")
+                .product(name: "AlfaServices", package: "alpha"),
+                .product(name: "AlfaKit", package: "alpha")
             ],
             swiftSettings: strict
         ),
@@ -50,8 +50,8 @@ let package = Package(
             dependencies: [
                 "Mail",
                 "Hub",
-                .product(name: "MykilosServices", package: "alpha"),
-                .product(name: "MykilosKit", package: "alpha")
+                .product(name: "AlfaServices", package: "alpha"),
+                .product(name: "AlfaKit", package: "alpha")
             ],
             swiftSettings: strict
         )

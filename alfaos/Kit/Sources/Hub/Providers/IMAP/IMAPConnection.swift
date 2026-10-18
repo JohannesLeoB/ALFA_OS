@@ -1,5 +1,5 @@
 import Foundation
-import MykilosKit
+import AlfaKit
 
 package enum IMAPSetupError: Error, Equatable, Sendable {
     case missing(String)

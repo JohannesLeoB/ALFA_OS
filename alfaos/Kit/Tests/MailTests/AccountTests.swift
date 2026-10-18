@@ -1,9 +1,9 @@
 import class GRDB.DatabaseQueue
 import Hub
 @testable import Mail
-import enum MykilosServices.GoogleGmailError
-import struct MykilosServices.GoogleAPIFault
-import struct MykilosServices.MailMessagePage
+import enum AlfaServices.GoogleGmailError
+import struct AlfaServices.GoogleAPIFault
+import struct AlfaServices.MailMessagePage
 import XCTest
 
 @MainActor

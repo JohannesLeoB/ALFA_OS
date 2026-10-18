@@ -1,7 +1,7 @@
 import Foundation
 import Hub
-import struct MykilosKit.MailLeadVorschlag
-import struct MykilosKit.MailSignatureContact
+import struct AlfaKit.MailLeadVorschlag
+import struct AlfaKit.MailSignatureContact
 
 public struct MailMessageRef: Equatable, Sendable {
     public let inlet: Inlet.ID

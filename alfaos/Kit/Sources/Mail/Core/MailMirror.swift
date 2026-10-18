@@ -1,11 +1,11 @@
 import Foundation
 import GRDB
 import Hub
-import struct MykilosKit.EmailDraft
-import enum MykilosServices.MailFlag
-import struct MykilosServices.MailFolder
-import enum MykilosServices.MailFolderRole
-import struct MykilosServices.MailMessageSummary
+import struct AlfaKit.EmailDraft
+import enum AlfaServices.MailFlag
+import struct AlfaServices.MailFolder
+import enum AlfaServices.MailFolderRole
+import struct AlfaServices.MailMessageSummary
 
 struct MailMirror: Sendable {
     let db: DatabaseQueue

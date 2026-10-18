@@ -1,13 +1,13 @@
 import Foundation
 import Hub
 @testable import Mail
-import struct MykilosKit.EmailDraft
-import enum MykilosServices.MailFlag
-import struct MykilosServices.MailFolder
-import struct MykilosServices.MailMessageBody
-import struct MykilosServices.MailMessagePage
-import struct MykilosServices.MailMessageSummary
-import struct MykilosServices.MailStoredDraft
+import struct AlfaKit.EmailDraft
+import enum AlfaServices.MailFlag
+import struct AlfaServices.MailFolder
+import struct AlfaServices.MailMessageBody
+import struct AlfaServices.MailMessagePage
+import struct AlfaServices.MailMessageSummary
+import struct AlfaServices.MailStoredDraft
 
 @MainActor
 final class ScriptedGate {

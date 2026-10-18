@@ -1,6 +1,6 @@
 import Foundation
 import Hub
-import enum MykilosServices.MailFolderRole
+import enum AlfaServices.MailFolderRole
 
 enum MailMove: Equatable {
     case archive

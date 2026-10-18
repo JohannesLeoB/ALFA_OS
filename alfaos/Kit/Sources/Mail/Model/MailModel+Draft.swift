@@ -1,8 +1,8 @@
 import Foundation
 import Hub
-import struct MykilosKit.EmailDraft
-import struct MykilosServices.MailMessageSummary
-import struct MykilosServices.MailStoredDraft
+import struct AlfaKit.EmailDraft
+import struct AlfaServices.MailMessageSummary
+import struct AlfaServices.MailStoredDraft
 
 public struct MailDraftCard: Identifiable, Equatable, Sendable {
     public let id: UUID

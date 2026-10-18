@@ -1,5 +1,5 @@
 import Foundation
-import MykilosServices
+import AlfaServices
 
 enum IMAPFailure {
     static func classify(_ error: any Error) -> Classification {

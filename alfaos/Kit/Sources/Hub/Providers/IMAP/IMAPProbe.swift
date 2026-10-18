@@ -1,6 +1,6 @@
 import Foundation
-import MykilosKit
-import MykilosServices
+import AlfaKit
+import AlfaServices
 
 package typealias IMAPProbeRun = @Sendable (MailAccount, String) async throws -> Void
 

@@ -1,10 +1,10 @@
 import Foundation
 import GRDB
 import Hub
-import enum MykilosServices.GoogleOAuthError
-import enum MykilosServices.GoogleGmailError
-import struct MykilosServices.GoogleAPIFault
-import enum MykilosServices.MailTransportError
+import enum AlfaServices.GoogleOAuthError
+import enum AlfaServices.GoogleGmailError
+import struct AlfaServices.GoogleAPIFault
+import enum AlfaServices.MailTransportError
 import XCTest
 
 @MainActor

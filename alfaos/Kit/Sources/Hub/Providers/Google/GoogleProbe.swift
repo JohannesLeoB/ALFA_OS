@@ -1,5 +1,5 @@
 import Foundation
-import MykilosServices
+import AlfaServices
 
 public struct GoogleProbe: ProbePort {
     let config: GoogleClientConfig

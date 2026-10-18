@@ -1,9 +1,9 @@
 import Foundation
 import GRDB
 import Hub
-import struct MykilosServices.IMAPSMTPMailTransport
-import protocol MykilosServices.MailTransport
-import struct MykilosServices.MailProbeError
+import struct AlfaServices.IMAPSMTPMailTransport
+import protocol AlfaServices.MailTransport
+import struct AlfaServices.MailProbeError
 import XCTest
 
 @MainActor

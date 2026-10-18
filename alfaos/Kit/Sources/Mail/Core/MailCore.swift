@@ -1,14 +1,14 @@
 import Foundation
 import GRDB
 import Hub
-import struct MykilosKit.EmailDraft
-import protocol MykilosServices.MailTransport
-import enum MykilosServices.MailFlag
-import struct MykilosServices.MailFolder
-import struct MykilosServices.MailStoredDraft
-import struct MykilosServices.MailMessageBody
-import struct MykilosServices.MailMessagePage
-import struct MykilosServices.MailMessageSummary
+import struct AlfaKit.EmailDraft
+import protocol AlfaServices.MailTransport
+import enum AlfaServices.MailFlag
+import struct AlfaServices.MailFolder
+import struct AlfaServices.MailStoredDraft
+import struct AlfaServices.MailMessageBody
+import struct AlfaServices.MailMessagePage
+import struct AlfaServices.MailMessageSummary
 
 @MainActor
 public final class MailCore: MailEngine {

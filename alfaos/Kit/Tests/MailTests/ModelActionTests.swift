@@ -1,12 +1,12 @@
 import Foundation
 import Hub
 @testable import Mail
-import struct MykilosKit.EmailDraft
-import struct MykilosServices.MailAttachmentInfo
-import struct MykilosServices.MailFolder
-import struct MykilosServices.MailMessageBody
-import struct MykilosServices.MailMessagePage
-import struct MykilosServices.MailStoredDraft
+import struct AlfaKit.EmailDraft
+import struct AlfaServices.MailAttachmentInfo
+import struct AlfaServices.MailFolder
+import struct AlfaServices.MailMessageBody
+import struct AlfaServices.MailMessagePage
+import struct AlfaServices.MailStoredDraft
 import XCTest
 
 @MainActor

@@ -1,6 +1,6 @@
 import Foundation
-import MykilosKit
-import MykilosServices
+import AlfaKit
+import AlfaServices
 
 public struct IMAPProvider: Provider {
     public static let providerID = "imap"

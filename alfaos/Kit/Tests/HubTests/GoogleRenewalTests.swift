@@ -1,7 +1,7 @@
 import Foundation
 import GRDB
 @testable import Hub
-import protocol MykilosServices.MailTransport
+import protocol AlfaServices.MailTransport
 import XCTest
 
 @MainActor

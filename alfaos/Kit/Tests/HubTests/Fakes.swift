@@ -1,15 +1,15 @@
 import Foundation
 import GRDB
 import Hub
-import struct MykilosKit.EmailDraft
-import protocol MykilosServices.MailTransport
-import struct MykilosServices.MailFolder
-import struct MykilosServices.MailMessagePage
-import struct MykilosServices.MailMessageBody
-import struct MykilosServices.MailMessageSummary
-import struct MykilosServices.MailStoredDraft
-import enum MykilosServices.MailFlag
-import enum MykilosServices.MailTransportError
+import struct AlfaKit.EmailDraft
+import protocol AlfaServices.MailTransport
+import struct AlfaServices.MailFolder
+import struct AlfaServices.MailMessagePage
+import struct AlfaServices.MailMessageBody
+import struct AlfaServices.MailMessageSummary
+import struct AlfaServices.MailStoredDraft
+import enum AlfaServices.MailFlag
+import enum AlfaServices.MailTransportError
 
 struct TestTimedOut: Error {}
 

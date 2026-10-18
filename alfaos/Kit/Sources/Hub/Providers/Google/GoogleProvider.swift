@@ -1,5 +1,5 @@
 import Foundation
-import MykilosServices
+import AlfaServices
 
 public struct GoogleProvider: Provider {
     public let id = "google"

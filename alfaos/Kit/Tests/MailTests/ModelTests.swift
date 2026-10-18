@@ -1,8 +1,8 @@
 import Hub
 @testable import Mail
-import struct MykilosKit.EmailDraft
-import struct MykilosServices.MailFolder
-import struct MykilosServices.MailMessagePage
+import struct AlfaKit.EmailDraft
+import struct AlfaServices.MailFolder
+import struct AlfaServices.MailMessagePage
 import XCTest
 
 @MainActor

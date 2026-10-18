@@ -1,8 +1,8 @@
 import Foundation
 import Hub
-import struct MykilosServices.MailAttachmentInfo
-import enum MykilosServices.MailFlag
-import struct MykilosServices.MailMessageSummary
+import struct AlfaServices.MailAttachmentInfo
+import enum AlfaServices.MailFlag
+import struct AlfaServices.MailMessageSummary
 
 public enum MailFilter: Equatable, Sendable, CaseIterable {
     case all
