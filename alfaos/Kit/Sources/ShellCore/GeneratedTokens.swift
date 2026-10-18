@@ -96,6 +96,6 @@ public enum TokenStamp {
     public static let delivery = "Arbeitswelt ALFA Interface Zugang (13).zip, sha256 6c3a927e1b5bae51eee3f12e03fb196c1ddd35ce5ed59fb16eec67d7904d3e4f"
     public static let deliveredAt = "2026-10-16T02:05"
     public static let adoptedAt = "2026-10-16T16:42"
-    public static let state = "Legacy token sheet. The delivered sheet design.json is the source; unused tokens are in quarantine.json."
+    public static let state = "Legacy token sheet. The latest design master in DESIGN/ is the source; unused tokens are in quarantine.json."
     public static let content = "d16ec19d93e7e5cca28a5d933e03124a7c8e0cbad0efb1ea7ae1280603fe61b1"
 }
