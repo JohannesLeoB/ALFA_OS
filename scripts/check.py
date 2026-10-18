@@ -23,7 +23,7 @@ def tracked():
 
 def counts():
     files = tracked()
-    docs = [p for p in files if p.endswith(".md") and not p.startswith("docs/adr/")]
+    docs = [p for p in files if p.endswith(".md") and not p.startswith("docs/adr/") and not p.startswith(".claude/agents/")]
     adrs = [p for p in files if p.startswith("docs/adr/") and p.endswith(".md")]
     tests = [p for p in files if p.endswith(".swift") and "Tests" in p]
     functions = 0
