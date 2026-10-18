@@ -146,7 +146,6 @@ extension AppearanceChoice {
 struct SettingsInletsPane: View {
     let host: AppHost
     let setup: any HubSetup
-    @State private var removal = TwoStep<Inlet.ID>()
     @Environment(\.design) private var design
 
     var body: some View {
@@ -158,10 +157,6 @@ struct SettingsInletsPane: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(CGFloat(Design.Spacing.step8))
         }
-    }
-
-    private func remove(_ id: Inlet.ID) {
-        if removal.press(id) { Task { await host.remove(id) } }
     }
 
     private func tone(_ state: InletState) -> KeyPath<DesignColors, RGB> {
@@ -197,12 +192,7 @@ struct SettingsInletsPane: View {
                 if inlet.state.canRenew {
                     action("text.settings.action.signInAgain") { Task { await host.renew(inlet.id) } }
                 }
-                if removal.armed == inlet.id {
-                    action("text.settings.action.removeConfirm", tone: \.signal) { remove(inlet.id) }
-                    action("text.common.cancel") { removal.cancel() }
-                } else {
-                    action("text.settings.action.remove", tone: \.signal) { remove(inlet.id) }
-                }
+                action("text.settings.action.remove", tone: \.signal) { Task { await host.remove(inlet.id) } }
             }
             .padding(.top, CGFloat(Design.Spacing.step4))
         }

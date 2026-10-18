@@ -1875,17 +1875,6 @@
         }
       }
     },
-    "text.settings.action.removeConfirm" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "removeConfirm"
-          }
-        }
-      }
-    },
     "text.settings.action.signInAgain" : {
       "comment" : "alpha",
       "extractionState" : "manual",
