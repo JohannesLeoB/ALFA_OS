@@ -13,7 +13,7 @@ SOURCES = [
     "alfaos/Kit/Sources/ShellCore",
     "alfaos/Kit/Sources/Hub",
     "alfaos/Kit/Sources/Mail",
-    "fundus/alpha/Sources/MykilosServices/Mail",
+    "fundus/alpha/Sources/AlfaServices/Mail",
 ]
 OUT = os.path.join(ROOT, "dist", ".build-mutation")
 OPERATORS = [
