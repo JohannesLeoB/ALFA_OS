@@ -1,7 +1,8 @@
 {
- "delivery": "ALFA OS Interface CHEF 1610.zip from Downloads (newest, zip time 2026-10-16 23:42), file TOKENBOGEN.json sha256 b403b51657c69449288071a397d58f20c19c522e8962087ad494c738628eafa6, same sheet as Zugang (14)",
- "deliveredAt": "2026-10-16T23:42",
- "adoptedAt": "2026-10-17T13:52",
- "state": "Read by the app: shell, accordion (alfa-shell.js, side minimum 224 on both sides by Johannes 2026-10-17), motion, shadows, colors, rows, spacing, radii, type sizes, blob eyes, header buttons; mail card stack with flat surface, card head and foot, overview with tile sizes; lacquer kept behind a switch. Window minimum width from the lane minima (RUECKGABE 5, 16.10.: 960 no longer applies). Open: glass, overview folder mode, fold button on all lanes, strip click to unfold, arrow keys on the handle, symbols, Geist font.",
- "content": "b403b51657c69449288071a397d58f20c19c522e8962087ad494c738628eafa6"
+ "delivery": "ALFA OS Interface CHEF 1610-handoff 1810.zip, dated 2026-10-18 in DESIGN/MANIFEST.json (rank latest), file TOKENBOGEN.json, Stand 18.10.2026 21:18 MESZ, not yet final polished (ABNAHME.md rows open)",
+ "deliveredAt": "2026-10-18T21:18",
+ "adoptedAt": "2026-10-19T01:00",
+ "state": "Generated from TOKENBOGEN.json of the latest master: size, spacing, radius, motion duration, easing and misc, type size, weight and line height, count, opacity, confirm numbers, component references, colors light, dark and lightGray, shadows, stack, lacquer and glass surfaces. Not generated: color.mood, confirm.tooltip, surface.lightFillRule, surface.flat, surface notes. Code that reads the new values is not yet built.",
+ "zipSha256": "d0ed5abbb39fc9c7ea69fc16af51f317d2f761ae7269e3a0a3bc4a903623c8d2",
+ "content": "658ae36360b4d0a835d097ce4665b47c2ad17953219caa751a477c9dcd83a902"
 }
