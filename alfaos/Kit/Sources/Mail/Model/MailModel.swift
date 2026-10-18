@@ -1,6 +1,7 @@
 import Foundation
 import Hub
 import Observation
+import ShellCore
 import enum AlfaServices.MailFlag
 import struct AlfaServices.MailFolder
 import enum AlfaServices.MailFolderRole
@@ -32,7 +33,7 @@ public final class MailModel {
     public internal(set) var unread: [Inlet.ID: Int] = [:]
     public internal(set) var outbox: [OutboxItem] = []
     public internal(set) var cards: [ReadingCard] = []
-    public internal(set) var cardLimit = 10
+    public internal(set) var cardLimit = Design.Count.stackMaxCards
     public internal(set) var drafts: [MailDraftCard] = []
     public internal(set) var actionFailures: [String: Hint] = [:]
     public var prefersHTML = true

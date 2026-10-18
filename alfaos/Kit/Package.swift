@@ -29,6 +29,7 @@ let package = Package(
             name: "Mail",
             dependencies: [
                 "Hub",
+                "ShellCore",
                 .product(name: "AlfaServices", package: "alpha"),
                 .product(name: "AlfaKit", package: "alpha"),
                 .product(name: "GRDB", package: "GRDB.swift")

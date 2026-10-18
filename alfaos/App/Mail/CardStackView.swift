@@ -414,7 +414,7 @@ private struct OverviewTile: View {
         .opacity(entered ? 1 : 0)
         .offset(y: entered ? 0 : CGFloat(Design.Spacing.step16))
         .onAppear {
-            withAnimation(.easeOut(duration: Design.Duration.overviewEnter).delay(Design.Duration.overviewDelay / 2 + Double(index) * Design.Duration.overviewStagger)) { entered = true }
+            withAnimation(.easeOut(duration: Design.Duration.overviewEnter).delay(Design.Duration.overviewDelay + Double(index) * Design.Duration.overviewStagger)) { entered = true }
         }
         .onHover { hovering = $0 }
         .animation(.easeOut(duration: Design.Duration.tileActions), value: hovering)

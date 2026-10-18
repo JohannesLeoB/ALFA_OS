@@ -137,14 +137,14 @@ public enum LaneLayout {
         }
         var v = proposed
         let opposite = 2 - o
-        if start[opposite] > fold && abs(v - start[opposite]) < 12 { v = start[opposite] }
+        if start[opposite] > fold && abs(v - start[opposite]) < Design.Size.laneSnap { v = start[opposite] }
         let order = rules.yield.filter { $0 != o }
         var w = start
         var f = start.map { $0 <= fold }
         w[o] = v.rounded()
         f[o] = false
         var need = w[o] - start[o]
-        let hysteresis = 64.0
+        let hysteresis = Design.Size.laneHysteresis
         if need > 0 {
             for i in order {
                 if need <= 0 { break }

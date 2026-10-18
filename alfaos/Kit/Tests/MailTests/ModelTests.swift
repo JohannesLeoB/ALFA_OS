@@ -156,10 +156,10 @@ final class ModelTests: XCTestCase {
         let model = makeModel(engine)
         engine.pages[nil] = MailMessagePage(messages: (1...12).map { fakeMessage("m\($0)", flags: [.seen]) })
         await model.start()
-        XCTAssertEqual(model.cardLimit, 10)
+        XCTAssertEqual(model.cardLimit, 6)
         for index in 1...12 { await model.open("m\(index)") }
-        XCTAssertEqual(model.cards.count, 10)
-        XCTAssertEqual(model.cards.first?.id, "m3")
+        XCTAssertEqual(model.cards.count, 6)
+        XCTAssertEqual(model.cards.first?.id, "m7")
         model.setCardLimit(2)
         XCTAssertEqual(model.cards.map(\.id), ["m11", "m12"])
     }

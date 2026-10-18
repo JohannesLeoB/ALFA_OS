@@ -36,7 +36,7 @@ struct BlobView: View {
         .themeShadow(theme, layers: theme.designShadow(\.floating), shape: Capsule())
         .offset(x: anchorX, y: y)
         .animation(held ? nil : theme.spring(Design.Duration.blobWidth), value: width)
-        .animation(held ? nil : theme.spring(Design.Duration.blobFlight, bounce: 0.2), value: model.blob)
+        .animation(held ? nil : theme.animation(Design.Duration.blobFlight, Design.Easing.blobFlight), value: model.blob)
         .onHover { model.setHovering($0) }
         .gesture(drag)
         .simultaneousGesture(
