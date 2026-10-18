@@ -8,6 +8,13 @@ struct CardStackView: View {
     @State private var fanned = false
     @State private var tileSize = OverviewSize.medium
 
+    private static var reorder: Animation {
+        let curve = Design.Easing.stack
+        return NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+            ? .linear(duration: 0.001)
+            : .timingCurve(curve.x1, curve.y1, curve.x2, curve.y2, duration: Design.Duration.stack)
+    }
+
     var body: some View {
         GeometryReader { proxy in
             let cards = model.cards
@@ -28,9 +35,7 @@ struct CardStackView: View {
                 }
             }
             .frame(width: proxy.size.width, height: proxy.size.height, alignment: .top)
-            .animation(
-                NSWorkspace.shared.accessibilityDisplayShouldReduceMotion ? .linear(duration: 0.001) : .spring(duration: Design.Duration.stack, bounce: 0.1),
-                value: order.map(\.id))
+            .animation(Self.reorder, value: order.map(\.id))
             .animation(.easeOut(duration: Design.Duration.toggle), value: fanned)
             .onChange(of: model.cards.isEmpty) { _, empty in if empty { fanned = false } }
         }
