@@ -106,7 +106,7 @@ struct ThemeShadow<S: InsettableShape>: ViewModifier {
             }
             return AnyView(view.shadow(
                 color: theme.color(layer.color),
-                radius: CGFloat(layer.blur * theme.metrics.shadowBlurFactor),
+                radius: CGFloat(layer.blur),
                 x: CGFloat(layer.x),
                 y: CGFloat(layer.y)
             ))

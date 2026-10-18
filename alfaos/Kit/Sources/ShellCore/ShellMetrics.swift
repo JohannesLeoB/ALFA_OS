@@ -6,19 +6,16 @@ public enum ShellMeasure: String, CaseIterable, Sendable {
 }
 
 public struct ShellMetrics: Sendable, Decodable, Equatable {
-    public let shadowBlurFactor: Double
     private let measures: [ShellMeasure: Double]
 
     public func measure(_ key: ShellMeasure) -> Double { measures[key, default: 0] }
 
     enum CodingKeys: String, CodingKey {
-        case shadowBlurFactor = "shadow-blur-factor"
         case measures
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        shadowBlurFactor = try container.decode(Double.self, forKey: .shadowBlurFactor)
         let raw = try container.decode([String: Double].self, forKey: .measures)
         var values: [ShellMeasure: Double] = [:]
         for key in ShellMeasure.allCases {
@@ -61,7 +58,6 @@ public struct ShellGeometry: Sendable, Equatable {
     public let blobHeight: Double
     public let menuWidth: Double
     public let menuGap: Double
-    public let shadowBlurFactor: Double
     public let assistantWidth: Double
     public let windowMin: Size
 
@@ -80,7 +76,6 @@ public struct ShellGeometry: Sendable, Equatable {
         blobHeight = Design.Size.blobHeight
         menuWidth = theme.length(.componentMenuWidth)
         menuGap = theme.length(.spaceS)
-        shadowBlurFactor = metrics.shadowBlurFactor
         assistantWidth = Design.Size.blobPopupFallbackWidth
         windowMin = Size(width: 2 * margin + 2 * gap + minimum.reduce(0, +), height: strip + Design.Size.blobMenuMinHeight + margin)
     }

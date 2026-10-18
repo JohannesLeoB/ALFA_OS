@@ -48,7 +48,6 @@ final class ThemeTests: XCTestCase {
 
     func testShellMeasuresComeFromTheDataFile() throws {
         let metrics = try Fixture.metrics()
-        XCTAssertEqual(metrics.shadowBlurFactor, 0.5)
         for key in ShellMeasure.allCases {
             XCTAssertGreaterThan(metrics.measure(key), 0, key.rawValue)
         }
@@ -56,7 +55,7 @@ final class ThemeTests: XCTestCase {
 
     func testMissingMeasureFailsLoading() throws {
         let json = """
-        {"shadow-blur-factor":1,"measures":{"menu-field-padding":5}}
+        {"measures":{"menu-field-padding":5}}
         """
         XCTAssertThrowsError(try ShellMetrics(data: Data(json.utf8)))
     }
