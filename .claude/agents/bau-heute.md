@@ -12,6 +12,7 @@ Bestand, nur lesen. Labor = ~/Developer/mykilos-labor/Sources, Fundus = fundus/a
 - Labor MykilosWidgets/: Kinds/SendungenWidget.swift, Kinds/TeamkalenderWidget.swift, Kinds/NotesWidget.swift, WidgetContainer.swift
 - Labor MykilosDesign/Widgetsystem/ (Klassen W1–W15, Zuschnitte, MykBoard)
 - Fundus MykilosKit/Domain/WidgetFoundation.swift
+Kein ‚myk‘ in Code, Namen, Tokens oder Metadaten (L8); was aus dem Bestand übernommen wird, bekommt einen englischen Namen ohne Firmennamen.
 Vorgehen:
 1. Aufgabe vom Lead lesen. Design-Master-Stelle und Bestandsstelle vollständig lesen.
 2. Fehlt ein Wert, Name oder Verhalten im Master: Lücke nach L3 an den Lead, nicht bauen.

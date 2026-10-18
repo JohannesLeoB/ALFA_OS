@@ -14,6 +14,7 @@ Bestand, nur lesen. Labor = ~/Developer/mykilos-labor/Sources, Fundus = fundus/a
 - Labor MykilosApp/Data/AppState.swift: erzeugeAusFragebogen (ab 1444), reserviereKollisionsfreieNummer (ab 2255), belebeLeadZuVollprojekt (ab 2476); Labor MykilosApp/Data/RegistryStore.swift, LocalDriveRootResolver.swift
 - Fundus MykilosKit/Domain: Project.swift, Projektnummer.swift, ProjectLifecycle.swift, Customer.swift; Fundus MykilosServices: Airtable/, ClickUp/, Google/
 Nie übernehmen: echte Kunden-, Personen- oder Projektnamen (z. B. aus InitialProjectSeed.swift), feste Basis-, Tabellen- oder Ordner-IDs im Code.
+Kein ‚myk‘ in Code, Namen, Tokens oder Metadaten (L8); was aus dem Bestand übernommen wird, bekommt einen englischen Namen ohne Firmennamen.
 Vorgehen:
 1. Aufgabe vom Lead lesen. Design-Master-Stelle und Bestandsstelle vollständig lesen.
 2. Fehlt ein Wert, Name oder Verhalten im Master: Lücke nach L3 an den Lead, nicht bauen.
