@@ -54,7 +54,7 @@ final class BlobTests: XCTestCase {
         let g = try Fixture.geometry()
         let placement = BlobPlacement.settle(dropAt: Point(x: 1400, y: 500), velocity: Point(x: 0, y: 0), window: Fixture.screen, geometry: g)
         XCTAssertEqual(placement.edge, .trailing)
-        let thrown = BlobPlacement.settle(dropAt: Point(x: 700, y: 500), velocity: Point(x: -8000, y: 0), window: Fixture.screen, geometry: g)
+        let thrown = BlobPlacement.settle(dropAt: Point(x: 700, y: 500), velocity: Point(x: -1000, y: 0), window: Fixture.screen, geometry: g)
         XCTAssertEqual(thrown.edge, .leading)
     }
 

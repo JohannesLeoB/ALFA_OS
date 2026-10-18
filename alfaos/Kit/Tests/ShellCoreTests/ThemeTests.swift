@@ -56,7 +56,7 @@ final class ThemeTests: XCTestCase {
 
     func testMissingMeasureFailsLoading() throws {
         let json = """
-        {"blob-throw":1,"shadow-blur-factor":1,"measures":{"menu-field-padding":5}}
+        {"shadow-blur-factor":1,"measures":{"menu-field-padding":5}}
         """
         XCTAssertThrowsError(try ShellMetrics(data: Data(json.utf8)))
     }

@@ -62,8 +62,10 @@ public struct BlobPlacement: Sendable, Codable, Equatable {
     }
 
     public static func settle(dropAt center: Point, velocity: Point, window: Size, geometry g: ShellGeometry) -> BlobPlacement {
-        let cx = center.x + velocity.x * g.blobThrow
-        let cy = center.y + velocity.y * g.blobThrow
+        let rate = Design.Motion.deceleration
+        let projection = rate / (1 - rate) / 1000
+        let cx = center.x + velocity.x * projection
+        let cy = center.y + velocity.y * projection
         let distances: [(Edge, Double)] = [(.top, cy), (.bottom, window.height - cy), (.leading, cx), (.trailing, window.width - cx)]
         let edge = distances.min { $0.1 < $1.1 }?.0 ?? .top
         switch edge {
