@@ -1,6 +1,6 @@
 ---
 name: stand
-description: Laufender Stand ALFA_OS am 18.10. 19:05 UTC
+description: Laufender Stand ALFA_OS am 18.10. 20:00 UTC
 metadata:
   type: project
 ---
@@ -8,7 +8,9 @@ metadata:
 - Repo `main` = GitHub; letzter Commit vor diesem Eintrag `541a57a`. LAWS AND ORDERS in `AGENTS.md` (ZIEL gestuft und L1 mit Funktionskarte seit `3df8ccc`, Gedächtnis im Repo seit `f5109e1`).
 - Gedächtnis liegt in `.claude/memory/`, der Claude-Ordner des Projekts zeigt per Link dorthin; jede Änderung wird committet und gepusht (L4).
 - 12 Strang-Definitionen in `.claude/agents/`: bau-heute, bau-kataloge, bau-mail, bau-projekte, design-bruecke, leser, produkt, pruefer-freund, pruefer-petzer, pruefer-spuerhund, pruefer-waterboarder, sammler.
-- Design-Master `ALFA OS Interface CHEF 1610.zip` ist noch nicht nach L7 verarbeitet; `DESIGN/` gibt es noch nicht.
+- `DESIGN/` (Commit a59341a, 18.10.): Original-ZIPs plus `MANIFEST.json` (Prüfsummen, Dateiliste je ZIP); entpackt wird nur in `dist/`. Letzter Master: `ALFA OS Interface CHEF 1610-handoff 1810.zip` (109 Dateien, 341 Tokens, noch nicht final poliert, ABNAHME.md 12 Kriterien offen). Vorletzter: `ALFA OS Interface CHEF 1610.zip` (245 Tokens). Johannes 18.10.: „Ja. Lege beide Master als Original-ZIP mit MANIFEST.json in DESIGN/ ab, entpackt wird nur in dist/.“
+- Im letzten Master gezeichnet: nur Mail und Einstellungen. Projekte, Heute, Kataloge, Warenkorb: kein Bogen (nur Textlisten in INHALT.json). Es fehlen `bauteile.json` und `mechanik.json` (von Design angekündigt). Widersprüche im Export: RUECKGABE-AN-CODE.md:14 (329/67 Tokens) gegen akte.json (341/78); Byte-Angaben in akte.json falsch.
+- Commit-Regeln des Repos: Betreff höchstens 72 Zeichen, letzte Zeile „Designed by Johannes Leo Berger, made with help of Claude“, kein Co-Authored-By.
 - Arbeitsbaum = GitHub: die 19 App-Dateien vom 17.10. (Nachbau Kartenstapel und Bahnen mit Abkürzungen) sind auf sein Wort vom 18.10. verworfen; nachlesbar nur im Transkript c2a04c8a.
 - Bestand gesichert: 27 Zweige `sicherung/*` im Repo `mykilos-Alphabet`; Ruleset „Sichi“ aktiv (gh api, 18.10.).
 - Die Zweige des zweiten Entwicklers sind gelöscht, lokal und auf GitHub (18.10.).
@@ -24,6 +26,7 @@ Offene Punkte aus dem alten Plan
 - D1: `scripts/lizenzen.txt` ohne GRDB-Zeile.
 - N1: Nomenklatur `gestaltung/nomenclature.json` steht auf `proposed`.
 
-Behalten bis zum Abgleich mit CHEF 1610: `AN-DESIGN.md`, `nomenclature.json`, `quarantine.json`, `bundle.*`, `entwurf-4.html`, `schablone.html`, die 2 PNG, `scripts/vertrag_aus_entwurf.py`.
+Behalten bis zum Abgleich mit dem letzten Master: `AN-DESIGN.md`, `nomenclature.json`, `quarantine.json`, `bundle.*`, `entwurf-4.html`, `schablone.html`, die 2 PNG, `scripts/vertrag_aus_entwurf.py`.
 
-Nächster Schritt: neue Lead-Sitzung; Gespräch über die App im Strang `produkt`.
+Offen, wartet auf Johannes' Wort: Wortlaut für `design-bruecke.md` (Datenformat, Generatoren mit --check, Abdeckungsliste, Vergleich zum Vorletzten, Lückenliste mit Rückschein und festen Nummern); Reife, ab der gebaut wird (freigegeben/freigabe-orange oder auch von-design-gesetzt); ob audit_swift aus dem Skill design-zu-swift auf Design.* angepasst nach scripts/ kommt. Gebaut wird nichts.
+Danach: Aufträge unten (Test, Wächter, xcodegen, ausgang).
