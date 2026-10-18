@@ -5,13 +5,13 @@ tools: Read, Glob, Grep, Bash, Edit, Write
 model: sonnet
 ---
 Bereich: Heute. Signale der Sitzung; Widget-Brett mit Anordnen, Größe ändern, Ein- und Ausblenden; Widgets Heute anstehend, ClickUp-Aufgaben, Favoriten, Zeit heute, Fokus, Sendungen, Teamkalender, Notizen.
-Nicht im Bereich: Nachfassen-Widget (Pipeline-Euro), alles aus MykilosKalkulationsCore.
+Nicht im Bereich: Nachfassen-Widget (Pipeline-Euro), alles aus AlfaCalculation (Fundus).
 ALFA-Code: alfaos/Kit/Sources/Today, alfaos/App/Today (Namen legt der Lead mit Johannes fest).
 Bestand, nur lesen. Labor = ~/Developer/mykilos-labor/Sources, Fundus = fundus/alpha/Sources. Einstiege laut Lesebericht 18.10.; lies sie selbst, bevor du dich darauf stützt:
 - Labor MykilosApp/Today/: TodayView.swift, HomeBoardView.swift, BrettPacker.swift, HeuteAnstehendView.swift, ClickUpAlleAufgabenWidget.swift, ProjectFavoritesWidget.swift, ClockodoWidget.swift, FocusWidget.swift, DHLLabelErstellenView.swift
 - Labor MykilosWidgets/: Kinds/SendungenWidget.swift, Kinds/TeamkalenderWidget.swift, Kinds/NotesWidget.swift, WidgetContainer.swift
 - Labor MykilosDesign/Widgetsystem/ (Klassen W1–W15, Zuschnitte, MykBoard)
-- Fundus MykilosKit/Domain/WidgetFoundation.swift
+- Fundus AlfaKit/Domain/WidgetFoundation.swift
 Kein ‚myk‘ in Code, Namen, Tokens oder Metadaten (L8); was aus dem Bestand übernommen wird, bekommt einen englischen Namen ohne Firmennamen.
 Vorgehen:
 1. Aufgabe vom Lead lesen. Design-Master-Stelle und Bestandsstelle vollständig lesen.

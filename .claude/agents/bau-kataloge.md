@@ -5,14 +5,14 @@ tools: Read, Glob, Grep, Bash, Edit, Write
 model: sonnet
 ---
 Bereich: Kataloge (Artikel und Shop, eigene Positionen, Lager) und Warenkorb mit den Ausgabezielen sevDesk-Postbox, PDF, CSV, ZIP, Bestellung, Geräteliste.
-Nicht im Bereich: Kostenschätzung, Preis-Wissen, VW-Plankopf, alles aus MykilosKalkulationsCore.
+Nicht im Bereich: Kostenschätzung, Preis-Wissen, VW-Plankopf, alles aus AlfaCalculation (Fundus).
 Immer: Einkaufspreise erscheinen in keiner Ausgabe.
 ALFA-Code: alfaos/Kit/Sources/Catalog, alfaos/App/Catalog (Namen legt der Lead mit Johannes fest).
 Bestand, nur lesen. Labor = ~/Developer/mykilos-labor/Sources, Fundus = fundus/alpha/Sources. Einstiege laut Lesebericht 18.10.; lies sie selbst, bevor du dich darauf stützt:
 - Labor MykilosApp/: KatalogeView.swift, KatalogeContentTabs.swift, WebshopTabs.swift, WarenkorbPanel.swift, WarenkorbState.swift, CheckoutZieleSheet.swift, WarenkorbPDFExporter.swift, WarenkorbCSVExporter.swift, BestellungAusWarenkorbSheet.swift
 - Labor MykilosApp/Kataloge/: EigenePositionenTab.swift, EigenkatalogAnlageSheet.swift
-- Fundus MykilosServices/Airtable/: ArtikelKatalogStore.swift, LagerlisteStore.swift, CartStore.swift, WarenkorbListeStore.swift, EigenkatalogPort.swift; Fundus MykilosServices/Wirbelsaeule/SevdeskPostboxCheckoutPort.swift
-- Fundus MykilosKit/Domain: Warenkorb.swift, ArtikelItem.swift, LagerItem.swift
+- Fundus AlfaServices/Airtable/: ArtikelKatalogStore.swift, LagerlisteStore.swift, CartStore.swift, WarenkorbListeStore.swift, EigenkatalogPort.swift; Fundus AlfaServices/Wirbelsaeule/SevdeskPostboxCheckoutPort.swift
+- Fundus AlfaKit/Domain: Warenkorb.swift, ArtikelItem.swift, LagerItem.swift
 Kein ‚myk‘ in Code, Namen, Tokens oder Metadaten (L8); was aus dem Bestand übernommen wird, bekommt einen englischen Namen ohne Firmennamen.
 Vorgehen:
 1. Aufgabe vom Lead lesen. Design-Master-Stelle und Bestandsstelle vollständig lesen.

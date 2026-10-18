@@ -5,14 +5,14 @@ tools: Read, Glob, Grep, Bash, Edit, Write
 model: sonnet
 ---
 Bereich: Projekte als Dreigespann aus Drive-Ordner, ClickUp-Liste und Airtable-Hub-Zeile. Galerie, Tabelle, Pipeline; Akte mit Übersicht, Beteiligte, Dateien, Material, Bemusterung, Termine, Service, Timeline; Fragebogen „Neues Projekt“ (Stufen Kontakt, Lead, Vollprojekt); Provisionierung; Lead beleben; Heilung (Liste anlegen, Ordnerbaum aufziehen, Namen heilen); Archivieren.
-Nicht im Bereich: Abrechnung, Kostenschätzung, Preis-Wissen, alles aus MykilosKalkulationsCore.
+Nicht im Bereich: Abrechnung, Kostenschätzung, Preis-Wissen, alles aus AlfaCalculation (Fundus).
 ALFA-Code: alfaos/Kit/Sources/Projects, alfaos/App/Projects (Namen legt der Lead mit Johannes fest).
 Bestand, nur lesen. Labor = ~/Developer/mykilos-labor/Sources, Fundus = fundus/alpha/Sources. Einstiege laut Lesebericht 18.10.; lies sie selbst, bevor du dich darauf stützt:
 - Labor MykilosApp/Gallery/: ProjectGalleryView.swift, ProjectCard.swift, ProjectPipelineView.swift, ProjectTableView.swift
 - Labor MykilosApp/Detail/: ProjectDetailView.swift, ProjektDashboard.swift, ProjectHeroView.swift, ProjectLifecycleBar.swift, FilesTabView.swift, MaterialTabView.swift, BemusterungTabView.swift, MeilensteinTabView.swift, ServiceTabView.swift, TimelineTabView.swift
 - Labor MykilosApp/Intake/: FragebogenView.swift, FragebogenModel.swift, IntakeResultBuilder.swift, ProjektHubAirtableWriter.swift, FragebogenRohMapper.swift, FragebogenAntwortenMapper.swift
 - Labor MykilosApp/Data/AppState.swift: erzeugeAusFragebogen (ab 1444), reserviereKollisionsfreieNummer (ab 2255), belebeLeadZuVollprojekt (ab 2476); Labor MykilosApp/Data/RegistryStore.swift, LocalDriveRootResolver.swift
-- Fundus MykilosKit/Domain: Project.swift, Projektnummer.swift, ProjectLifecycle.swift, Customer.swift; Fundus MykilosServices: Airtable/, ClickUp/, Google/
+- Fundus AlfaKit/Domain: Project.swift, Projektnummer.swift, ProjectLifecycle.swift, Customer.swift; Fundus AlfaServices: Airtable/, ClickUp/, Google/
 Nie übernehmen: echte Kunden-, Personen- oder Projektnamen (z. B. aus InitialProjectSeed.swift), feste Basis-, Tabellen- oder Ordner-IDs im Code.
 Kein ‚myk‘ in Code, Namen, Tokens oder Metadaten (L8); was aus dem Bestand übernommen wird, bekommt einen englischen Namen ohne Firmennamen.
 Vorgehen:

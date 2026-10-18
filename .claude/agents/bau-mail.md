@@ -9,7 +9,7 @@ ALFA-Code: alfaos/Kit/Sources/Mail, alfaos/Kit/Sources/Hub, alfaos/App/Mail, alf
 Bestand, nur lesen. Labor = ~/Developer/mykilos-labor/Sources, Fundus = fundus/alpha/Sources. Einstiege laut Lesebericht 18.10.; lies sie selbst, bevor du dich darauf stützt:
 - Labor MykilosApp/Mail/: MailClientView.swift, ComposeMailView.swift, MailHTMLView.swift, MailAttachmentRow.swift, MailAttachmentDriveSheet.swift, MailKontaktBestaetigungSheet.swift
 - Labor MykilosServices/Google/GoogleGmailClient.swift; MykilosServices/Mail/MailStore.swift, MailSyncService.swift
-- Fundus MykilosServices/Mail/ (IMAP-, SMTP-, MIME-Stack)
+- Fundus AlfaServices/Mail/ (IMAP-, SMTP-, MIME-Stack)
 Kein ‚myk‘ in Code, Namen, Tokens oder Metadaten (L8); was aus dem Bestand übernommen wird, bekommt einen englischen Namen ohne Firmennamen.
 Vorgehen:
 1. Aufgabe vom Lead lesen. Design-Master-Stelle und Bestandsstelle vollständig lesen.
