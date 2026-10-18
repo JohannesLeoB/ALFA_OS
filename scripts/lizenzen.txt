@@ -7,10 +7,6 @@
 # Format für jede fremde Abhängigkeit, eine Zeile je Paket, Trennzeichen |:
 #   Paket-Identität | Lizenz (SPDX) | Quelle (URL) | geprüft am JJJJ-MM-TT
 #
-# Fremdes Material im Repo, das nicht im Produkt steckt (Bauregel 4: Quelle und Lizenz bleiben):
-#   recherche/integrations-sh/ · MIT · Copyright 2026 Rhys Sullivan · Quelle: https://github.com/UsefulSoftwareCo/integrations
-#   (Auszug, Herkunft in recherche/integrations-sh/HERKUNFT.txt, Lizenztext in recherche/integrations-sh/LICENSE)
-
 # Fremdes Material, das in der Form übernommen ist (Brief B-213), ohne Farben und ohne Code aus der Quelle:
 #   Geometrie, Ablauf und Bewegung des Farbfächers (app/Sources/Motion/, ALFAcolor/App/Features/Swatches/)
 #   Interactive Fan Deck · MIT · Copyright (c) 2026 Eduard Wieandt · Quelle: https://eduardwieandt.com/playground/fan-deck

@@ -35,7 +35,7 @@ Mail
 Konten, Einstellungen, Hub
 - Ist: ALPHA: 6 Dienste verbunden (Google, Airtable, ClickUp, sevDesk, Claude, Clockodo; `~/ALPHA/BAUSTELLEN.tsv:8`). ALFA_OS: `alfaos/App/Settings`, `Kit/Sources/Hub`.
 - Soll: „es wird der HUB der die ganze App belegt und fließen lässt“ (12.10. 14:54 a9bb817c); „…es seih denn die FIRMA (Admin )  sperrt das für einzelne Dienste, aber NICHT DU.“ (12.10. 17:40 a9bb817c); „Rollen als Einstellung (Recommended)“ (10.10. 22:20 7cc894d9); „WIE die rollen gegated sind etc - das machen wir Später!!!“ (13.10. 20:56 97326b1d); „fehler/Eingeschränkt/onloine einwandfrei in drei Iconen/zuständen“ (12.10. 20:23 7cc894d9); „bis 15 volle tiefe mit allen options und voller wire“ (16.10. 20:52 97326b1d); „Fest verdrahtetes STRIKT raus aus dem Code und als Auswahlpfade oder User Setups in die App Einstellungen und/oder Onboarding udn Presets legen“ (26.09. 23:43 ffde6a84).
-- Offen: Erst-Setup; BOGEN-EINSTELLUNGEN 1.8.2 „proposal“, Sperre „Nur Verwaltende“ (BOGEN-EINSTELLUNGEN.json:354–357) gegen sein Wort.
+- Offen: Erst-Setup; BOGEN-EINSTELLUNGEN 1.8.2 „proposal“, Sperre „Nur Verwaltende“ (BOGEN-EINSTELLUNGEN.json:354–357) gegen sein Wort; `alfaos/Config/company.example.json` (60 Zeilen, ohne Werte) listet die Firmenwerte, die ALPHA fest brauchte (16 Airtable-Basen, 28 Tabellen, 12 Felder); wohin sie in Einstellungen oder Onboarding kommen, ist offen.
 Projekte (Akte, Fragebogen, Provisionierung)
 - Ist: nur ALPHA-Altbestand (`fundus/alpha`, Labor): Galerie, Pipeline, Tabelle, Akte; der Fragebogen legt Drive-Ordnerbaum, Airtable-Eintrag und ClickUp-Liste an; Provisionierung steht auf „test“ (ALPHA-Inventur Lauf 2, 25.09.). In ALFA_OS nicht vorhanden.
 - Soll: Akte „…an Dateien, Sammlungen, Dokumenten, Infos etc in drive liegt…“ und „…Daten wie Aufgaben, Zeiten, Moneys etc“ (04.10. 16:31 ee8f053d); „Die App Legt ihn immer zusammen mit airtable und clickup Liste an, wenn in der App ein "neues Projekt" angelegt wird...“ (04.10. 16:45 ee8f053d); Cash, Service, Akte „Teil von Projekte (Empfohlen)“ (04.10. 17:47 ee8f053d); „Projektübersichten als Dashboard im 3 Spalten blob menu button layout.“ (07.10. 23:40 055e95fd); „die projektakten von ihren 14 taps befreien“ (30.08. 00:05 6a6a9365); „Projekte und Aufgaben, dann Kalender (Empfehlung)“ (16.10. 20:52 97326b1d).
@@ -58,3 +58,10 @@ Nach dem ersten Ziel
 - Studio: Zeiten, Aufgaben, Termine, Kontakte; nur ALPHA-Altbestand.
 - Kalkulation: „c - aber noch ohne Kalkulation“ (18.10. 13:11 c2a04c8a).
 - ALFAcolor (`fundus/alfacolor`): „ALFAcolor alfafarb alfafarben war ist eingentlich nichts anderes als der Versuch, das App Design zu zementieren“ (10.10. 20:32 7cc894d9).
+
+## Offene Fragen an Johannes (aus alten Entwürfen, nicht entschieden)
+- Bereichsliste des Blob-Menüs: „Kommunikation, Projekte, Zeiten, Aufgaben, Geld, Werkzeuge, Platzhalter, Bereiche werden ebenfalls noch gestrafft gegliedert, umgegangen oder erweitert. Das blobmenü muss also auch als mitwachsendws Ui böock Element mitwachsen“ (10.10. 17:09 7cc894d9). Gilt diese Gliederung, und zeigt CHEF 1610 sie?
+- Offline: „App offline - alles geht lokal, wieder online - Dialog App synchronisieren?“ (21.09. 18:07 0db45317). Gehört der Abgleich nach der Rückkehr ins Netz zum ersten Ziel?
+- Erst-Setup: „Alles immer als Eingänge die es geben kann, aber nicht muss...  Und die entweder was "zum leuchten bringen" oder nciht...“ (04.10. 16:45 ee8f053d). Dazu der Kern „alles ist Einstellung“ aus der Schablone vom 10.10. (Entwurf, nicht sein Wort): Apps mit Steckbrief, Connectors, Orte, Einrichtung beim ersten Start. Ist das die Form für das Erst-Setup?
+- Assistent liest den offenen Bogen: Im Entwurf „ALFA Interface“ vom 11.10. gibt der Knopf „Bogen lesen“ die Texte der Bahnen als Kontext mit. Soll der Assistent das können?
+- Kartenturm: Aufgabenkarten als Stapel mit Häkchen und „Ordnen“ (Entwurf 11.10.). Gehört das zu den Aufgaben im Studio?

@@ -1,4 +1,4 @@
-- [Stand](stand.md) — laufender Stand 18.10. 18:15 UTC: Gedächtnis im Repo, 12 Stränge, Design-Master CHEF 1610 noch nicht in DESIGN/, Arbeitsbaum = GitHub
+- [Stand](stand.md) — laufender Stand 18.10. 19:05 UTC: Aufträge an die Lead, offene Punkte, Design-Master CHEF 1610 noch nicht in DESIGN/
 - [Arbeitsweise](arbeitsweise.md) — Ergebnisse statt Worte, alles lesen, nichts ohne Zustimmung schreiben, bauen statt analysieren, Arbeiten des zweiten Entwicklers nie
 - [Verlass ist der Job](verlass-ist-der-job.md) — blind verlassen können; nichts fertig, grün oder geprüft ohne Prüfung Wert für Wert
 - [Design ist das Ziel](design-ist-das-ziel.md) — letzter Design-Master ist einzige Wertquelle; Code ist Funktion, keine Gestaltung; nur Daten gegen Daten
