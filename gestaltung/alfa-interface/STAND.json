@@ -1,7 +1,0 @@
-{
-  "url": "https://claude.ai/artifact/VzXhbq7EHSfxgxZTW5a2wr",
-  "version": "1791731861-d49d",
-  "konto": "MAX",
-  "gezogen": "2026-10-11T17:19+02:00",
-  "hinweis": "tokens.css im Artifact ist veraltet, bis die Seite sie aus tokens.json neu erzeugt; im Repo gilt die erzeugte Datei."
-}
