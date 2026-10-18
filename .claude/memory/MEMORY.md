@@ -3,6 +3,7 @@
 - [Verlass ist der Job](verlass-ist-der-job.md) — blind verlassen können; nichts fertig, grün oder geprüft ohne Prüfung Wert für Wert
 - [Design ist das Ziel](design-ist-das-ziel.md) — letzter Design-Master ist einzige Wertquelle; Code ist Funktion, keine Gestaltung; nur Daten gegen Daten
 - [Entscheidung, Wortlaut, Herkunft](entscheidung-wortlaut-herkunft.md) — sein Entscheid, Designs Wortlaut und bloße Herkunft streng trennen
+- [Kein mykilos im Code](kein-mykilos-im-code.md) — App heißt ALFA; nie „mykilos“ in Code, Tokens, Metadaten, Schlüsseln
 - [Keine Rechte im Code](keine-rechte-im-code.md) — angemeldet heißt alles dürfen; nur die Firma sperrt; Rollen später als Einstellung
 - [Reichweite der App](reichweite-der-app.md) — Distribution (App Store, iOS, iPadOS, Web, Abo) ermöglichen, nicht erzwingen
 - [Erst Historie, dann fragen](erst-historie-dann-fragen.md) — vor jeder Frage seine Antworten in allen Transkripten suchen
