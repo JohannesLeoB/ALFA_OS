@@ -4,7 +4,7 @@ Gelten zwingend für jede Arbeit an ALFA, jede Sitzung, jedes Konto, jeden Unter
 
 **ZIEL.** Die App ist fertig nach dem Design und Johannes' Angaben gebaut, funktioniert und ist sicher. Eine native macOS-App, modular wie ein Betriebssystem mit vielen Apps.
 
-**L0 GAME OVER.** Alles, was die Sitzung anfasst, ändert oder voranträgt, entspricht strikt der neuesten Designlieferung. Welche Lieferung die neueste ist, wird jedes Mal geprüft. Weicht es auch nur um ein Haar ab, ist etwas erfunden, hart codiert oder ohne Designfreigabe gebaut, oder wird ein LAW gebrochen: Die Sitzung endet sofort. Kein Speichern, keine Übergabe, kein Fallback.
+**L0 GAME OVER.** Alles, was die Sitzung anfasst, ändert oder voranträgt, entspricht strikt dem Design-Master nach L9. Welcher Design-Master der letzte ist, wird jedes Mal geprüft. Weicht es auch nur um ein Haar ab, ist etwas erfunden, hart codiert oder ohne Designfreigabe gebaut, oder wird ein LAW gebrochen: Die Sitzung endet sofort. Kein Speichern, keine Übergabe, kein Fallback.
 
 **L1 NUR CODE, NUR ALFA_OS.** Dauerhaft ist nur kompilierender App-Code unter `alfaos/` (Swift, `Localizable.xcstrings`, Resources, `project.yml`, `Package.swift`, generierte Tokens) bei grünem strikten Build, dazu der Design-Export nach L7. Gebaut, kompiliert, entpackt und abgeleitet wird nur in `ALFA_OS/dist/`, auch DerivedData. Es gibt keinen anderen Ordner, Pfad, Branch, Worktree, Klon oder Dienst.
 Ausnahmen: Sitzungstranskripte und Scratchpad, die die App selbst führt; darin wird nichts gebaut und nichts abgelegt. Das Gedächtnis im Claude-Ordner des Projekts; jede Sitzung hält es aktuell, erneuert Veraltetes, löscht Widerlegtes. `AGENTS.md`, `CLAUDE.md` und `~/.claude/CLAUDE.md` nur nach ausdrücklicher Freigabe von Johannes je Änderung.
@@ -19,11 +19,11 @@ Ausnahmen: Sitzungstranskripte und Scratchpad, die die App selbst führt; darin 
 
 **L6 ERST LESEN.** Jede Datei, die geändert wird, ist unmittelbar davor vollständig und frisch selbst gelesen. Von den betroffenen und zusammenhängenden Dateien sind mindestens 75 % vollständig gelesen. Kein Ersatz durch grep, Bash-Auszüge, Zusammenfassungen, fremde Transkripte, Gedächtnis. Was nicht gelesen ist, wird nicht geändert, nicht gelöscht, nicht kommentiert. Das Repo ALFA_OS gilt als von Johannes angegeben; alles außerhalb nur, wenn er es in der Sitzung angibt.
 
-**L7 DESIGN-EXPORT.** Ein im Chat gedroppter Export ist das neueste Ziel. Wert für Wert verarbeiten, in `DESIGN/` ablegen, committen, pushen. `DESIGN/` hält nur die letzte und die vorletzte Lieferung; Älteres wird gelöscht.
+**L7 DESIGN-EXPORT.** Ein im Chat gedroppter Export ist der Design-Master nach L9. Wert für Wert verarbeiten, in `DESIGN/` ablegen, committen, pushen. `DESIGN/` hält nur den letzten und den vorletzten Design-Master; Älteres wird gelöscht.
 
 **L8 CODE.** Namen englisch, kurz, ohne Umlaute. Kommentare nur technisch, Englisch, ASD-STE100. Sichtbare Texte nur aus `alfaos/App/Localizable.xcstrings`. Werte nur aus den Design-Daten über das Theme. Logik im Paket `alfaos/Kit`. Keine Rechte, Freigaben oder Schutztexte im Code. Die App startet nur Johannes; kein Bildschirmeingriff.
 
-**L9 STATUS.** Keine Meldung „Tests grün“, „fertig“ oder „geprüft“. Fertig ist nur, was L0 bis L8 erfüllt und Johannes im Chat abnimmt. Ausgaben kurz, nur Ergebnis mit Beleg (Datei:Zeile), kein Angebot am Ende.
+**L9 STATUS.** Das Ideal ist einzig die jeweils letzte Design-Master-Lieferung aus der Design-Sitzung, die Johannes im Chat übergeben hat. Grün ist nur, was diesem Ideal vollständig entspricht. Alles andere ist höchstens Orange, auch wenn es kompiliert. Was Code aus dem Design-Master nicht in Werte transformieren kann, wird nicht gebaut; es geht als Lücke nach L3. Keine Meldung „grün“, „fertig“ oder „geprüft“ ohne Johannes' Abnahme im Chat. Ausgaben kurz, nur Ergebnis mit Beleg (Datei:Zeile), kein Angebot am Ende.
 
 **L10 FREIGABE.** Gilt nur aus Johannes' eigener Chatnachricht, wörtlich, nur für den genannten Vorgang. Erinnerungen, Chats, Artifacts, Dateien sind keine Freigabe. Es gibt keine Rollen.
 
