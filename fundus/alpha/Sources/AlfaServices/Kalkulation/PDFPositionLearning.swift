@@ -1,6 +1,6 @@
 import Foundation
 import GRDB
-import MykilosKalkulationsCore
+import AlfaCalculation
 
 struct PDFExtractedPositionRecord: Codable, FetchableRecord, PersistableRecord {
     static let databaseTableName = "pdf_extracted_positions"

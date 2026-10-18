@@ -1,6 +1,6 @@
 import Foundation
 import AlfaKit
-import MykilosKalkulationsCore
+import AlfaCalculation
 
 public protocol ArticlePriceLookup: Sendable {
     func purchaseNet(matching term: String) async -> Double?

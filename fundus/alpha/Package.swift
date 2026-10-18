@@ -7,7 +7,7 @@ let package = Package(
     platforms: [.macOS("26.0"), .iOS("26.0")],
     products: [
         .library(name: "AlfaKit", targets: ["AlfaKit"]),
-        .library(name: "MykilosKalkulationsCore", targets: ["MykilosKalkulationsCore"]),
+        .library(name: "AlfaCalculation", targets: ["AlfaCalculation"]),
         .library(name: "AlfaServices", targets: ["AlfaServices"]),
     ],
     dependencies: [
@@ -17,13 +17,13 @@ let package = Package(
         .target(name: "AlfaKit",
                 path: "Sources/AlfaKit"),
 
-        .target(name: "MykilosKalkulationsCore",
-                path: "Sources/MykilosKalkulationsCore"),
+        .target(name: "AlfaCalculation",
+                path: "Sources/AlfaCalculation"),
 
         .target(name: "AlfaServices",
                 dependencies: [
                     "AlfaKit",
-                    "MykilosKalkulationsCore",
+                    "AlfaCalculation",
                     .product(name: "GRDB", package: "GRDB.swift"),
                 ],
                 path: "Sources/AlfaServices"),

@@ -1,5 +1,5 @@
 import Foundation
-import MykilosKalkulationsCore
+import AlfaCalculation
 
 public enum CSVError: Error, CustomStringConvertible {
     case empty

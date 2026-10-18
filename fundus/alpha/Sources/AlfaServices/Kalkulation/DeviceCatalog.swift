@@ -1,6 +1,6 @@
 import Foundation
 import AlfaKit
-import MykilosKalkulationsCore
+import AlfaCalculation
 
 public struct DeviceCatalogEntry: Sendable, Equatable {
     public let manufacturer: String

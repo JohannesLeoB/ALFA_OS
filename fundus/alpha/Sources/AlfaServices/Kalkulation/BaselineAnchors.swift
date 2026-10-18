@@ -1,5 +1,5 @@
 import Foundation
-import MykilosKalkulationsCore
+import AlfaCalculation
 
 public enum BaselineAnchors {
     public static func all() -> [CandidateReleaseDecision] {

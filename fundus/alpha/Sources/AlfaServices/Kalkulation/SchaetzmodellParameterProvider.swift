@@ -1,5 +1,5 @@
 import Foundation
-import MykilosKalkulationsCore
+import AlfaCalculation
 import AlfaKit
 
 public struct SchaetzmodellParameterProvider {

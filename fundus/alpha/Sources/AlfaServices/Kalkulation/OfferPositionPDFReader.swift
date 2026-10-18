@@ -1,6 +1,6 @@
 import Foundation
 import PDFKit
-import MykilosKalkulationsCore
+import AlfaCalculation
 
 public enum OfferPositionPDFReader {
     public typealias Position = OfferPositionExtractor.ExtractedPosition

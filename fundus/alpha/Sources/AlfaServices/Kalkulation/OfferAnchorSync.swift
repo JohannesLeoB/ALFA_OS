@@ -1,5 +1,5 @@
 import Foundation
-import MykilosKalkulationsCore
+import AlfaCalculation
 
 public enum OfferAnchorInflation {
     public static let annualRate = 0.04

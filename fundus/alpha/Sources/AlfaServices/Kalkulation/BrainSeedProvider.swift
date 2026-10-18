@@ -1,6 +1,6 @@
 import Foundation
 import AlfaKit
-import MykilosKalkulationsCore
+import AlfaCalculation
 
 public struct BrainSeedProvider: PriceAnchorProviding {
     private let csvURL: URL

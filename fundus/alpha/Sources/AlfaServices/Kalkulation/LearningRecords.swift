@@ -1,7 +1,7 @@
 import Foundation
 import CryptoKit
 import GRDB
-import MykilosKalkulationsCore
+import AlfaCalculation
 
 enum LearningCodec {
     private static let posix = Locale(identifier: "en_US_POSIX")

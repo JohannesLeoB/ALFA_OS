@@ -1,7 +1,7 @@
 import Foundation
 import AlfaKit
 import GRDB
-import MykilosKalkulationsCore
+import AlfaCalculation
 
 public enum LearningStoreError: Error, CustomStringConvertible {
     case sessionNotFound(String)

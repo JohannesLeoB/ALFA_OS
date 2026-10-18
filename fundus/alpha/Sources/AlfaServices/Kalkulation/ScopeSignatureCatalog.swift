@@ -1,6 +1,6 @@
 import Foundation
 import AlfaKit
-import MykilosKalkulationsCore
+import AlfaCalculation
 
 public struct ScopeSignatureCatalog {
     private let densityByCandidate: [String: KitchenEquipmentDensity]

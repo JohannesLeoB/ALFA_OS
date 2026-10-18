@@ -1,6 +1,6 @@
 import Foundation
 import AlfaKit
-import MykilosKalkulationsCore
+import AlfaCalculation
 
 public struct CompanySetupSeed: Codable, Sendable {
     public var teamRoster: [TeamMember]
