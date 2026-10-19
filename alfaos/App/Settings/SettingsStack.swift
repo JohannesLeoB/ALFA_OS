@@ -49,19 +49,21 @@ struct SettingsStackPane: View {
     var body: some View {
         let front = board.front ?? board.cards.last
         let order = board.cards.filter { $0 != front } + board.cards.filter { $0 == front }
-        VStack(spacing: 0) {
-            SettingsCommandHead(host: host, board: board, readings: readings, disconnecting: $disconnecting)
-            CardPile(order: order, fanned: board.fanned) { id, depth, first in
-                SettingsStackCard(host: host, board: board, hub: hub, face: SettingsFace(id: id, readings: readings), depth: depth, first: first,
-                                  disconnecting: disconnecting)
-            } overview: {
-                CardOverview(entries: order.map { entry(SettingsFace(id: $0, readings: readings), current: $0 == front) },
-                             size: size, resize: { size = $0 }, hot: hot, aim: { hot = $0 }) {
-                    EmptyView()
-                }
-            } note: {
-                if let key = board.toast {
-                    Toast(message: word(key), onDismiss: { board.dismissToast() })
+        GeometryReader { proxy in
+            VStack(spacing: 0) {
+                SettingsCommandHead(host: host, board: board, readings: readings, width: proxy.size.width, disconnecting: $disconnecting)
+                CardPile(order: order, fanned: board.fanned) { id, depth, first in
+                    SettingsStackCard(host: host, board: board, hub: hub, face: SettingsFace(id: id, readings: readings), depth: depth, first: first,
+                                      disconnecting: disconnecting)
+                } overview: {
+                    CardOverview(entries: order.map { entry(SettingsFace(id: $0, readings: readings), current: $0 == front) },
+                                 size: size, resize: { size = $0 }, hot: hot, aim: { hot = $0 }) {
+                        EmptyView()
+                    }
+                } note: {
+                    if let key = board.toast {
+                        Toast(message: word(key), onDismiss: { board.dismissToast() })
+                    }
                 }
             }
         }
@@ -126,58 +128,82 @@ private struct SettingsStackCard: View {
     }
 }
 
+enum SettingsCommand: Equatable, Sendable {
+    case connect
+    case disconnect
+    case overview
+    case back
+    case fold
+}
+
 struct SettingsCommandHead: View {
-    @Environment(\.design) private var design
     @Environment(\.mailLaneLink) private var link
     @Bindable var host: AppHost
     let board: SettingsBoard
     let readings: [ServiceReading]
+    let width: Double
     @Binding var disconnecting: String?
 
-    var body: some View {
+    private var reading: ServiceReading? {
         let front = board.fanned ? nil : (board.front ?? board.cards.last)
-        let reading = front.flatMap { id in readings.first { $0.info.id == id } }
-        let asking = reading.map { $0.info.id == disconnecting } ?? false
-        let fan = !board.cards.isEmpty || board.fanned
-        let fold = (link?.openLanes ?? 1) > 1
-        HStack(spacing: CGFloat(Lane.trailing.headGap)) {
-            if let reading, !asking { main(reading) }
-            Spacer(minLength: 0)
-            if let reading, asking { pill(reading) }
-            if fan || fold {
-                Rectangle().fill(design.color(\.line)).frame(width: CGFloat(Design.Size.hairline), height: CGFloat(Design.Spacing.step20))
-                    .padding(.horizontal, CGFloat(Design.Spacing.step4))
-            }
-            if fan {
-                SymbolButton(help: board.fanned ? words("mail.action.backToStack") : words("mail.overview.tip", String(board.cards.count)),
-                             glyph: board.fanned ? .fan : .grid, selected: board.fanned, hover: .fill) { board.toggleFan() }
-            }
-            if fold {
-                SymbolButton(help: words("mail.action.foldColumn"), glyph: .minus, hover: .fill) { link?.fold(.trailing) }
-            }
-        }
-        .padding(.leading, CGFloat(Lane.trailing.headLeading))
-        .padding(.trailing, CGFloat(Lane.trailing.headTrailing))
-        .frame(height: CGFloat(Design.Size.headerHeight))
-        .frame(maxWidth: .infinity)
-        .background(design.color(\.lane))
+        return front.flatMap { id in readings.first { $0.info.id == id } }
     }
 
-    @ViewBuilder
-    private func main(_ reading: ServiceReading) -> some View {
-        HStack(spacing: CGFloat(Lane.trailing.headGap)) {
+    var body: some View {
+        let reading = reading
+        let asking = reading.map { $0.info.id == disconnecting } ?? false
+        var main: [CommandSlot<SettingsCommand>] = []
+        if let reading, !asking {
             if !reading.info.listsAccounts {
-                let off = reading.state == .connecting
-                SymbolButton(help: words(reading.asksReconnect ? "settings.action.reconnect" : "settings.action.connect"), glyph: .link,
-                             disabled: off, hover: .fill) {
-                    host.perform(reading.step, for: reading.info.id)
-                }
+                main.append(CommandSlot(id: "connect", action: .connect, off: reading.state == .connecting))
             }
             if reading.state.canDisconnect {
-                SymbolButton(help: words("settings.action.disconnect"), glyph: .close, tone: \.signal, hoverTone: \.signal, hover: .fill) {
-                    disconnecting = reading.info.id
-                }
+                main.append(CommandSlot(id: "disconnect", action: .disconnect, signal: true))
             }
+        }
+        let tail = reading != nil && asking ? [CommandSlot<SettingsCommand>(id: "disconnectPill", action: .disconnect, kind: .pill,
+                                                                               cost: SheetValues.commandConfirmCost)] : []
+        let fan = !board.cards.isEmpty || board.fanned
+            ? [CommandSlot<SettingsCommand>(id: "overview", action: board.fanned ? .back : .overview, accent: board.fanned)] : []
+        let fold = (link?.openLanes ?? 1) > 1 ? [CommandSlot<SettingsCommand>(id: "fold", action: .fold)] : []
+        let plan = CommandBar.plan(main: main, tail: tail, fan: fan, fold: fold, staticMore: false, width: width - Design.Size.edge)
+        return CommandHead(plan: plan, glyph: glyph, help: help, perform: perform, more: more) {
+            if let reading { pill(reading) }
+        }
+    }
+
+    private func glyph(_ command: SettingsCommand) -> Icon? {
+        switch command {
+        case .connect: .link
+        case .disconnect: .close
+        case .overview: .grid
+        case .back: .fan
+        case .fold: .minus
+        }
+    }
+
+    private func help(_ command: SettingsCommand) -> String {
+        switch command {
+        case .connect: words(reading?.asksReconnect == true ? "settings.action.reconnect" : "settings.action.connect")
+        case .disconnect: words("settings.action.disconnect")
+        case .overview: words("mail.overview.tip", String(board.cards.count))
+        case .back: words("mail.action.backToStack")
+        case .fold: words("mail.action.foldColumn")
+        }
+    }
+
+    private func perform(_ command: SettingsCommand) {
+        switch command {
+        case .connect: if let reading { host.perform(reading.step, for: reading.info.id) }
+        case .disconnect: disconnecting = reading?.info.id
+        case .overview, .back: board.toggleFan()
+        case .fold: link?.fold(.trailing)
+        }
+    }
+
+    private func more(_ commands: [SettingsCommand]) -> [MenuEntry] {
+        commands.enumerated().map { index, command in
+            .row(MenuItem(id: String(index), label: Text(verbatim: help(command))) { perform(command) })
         }
     }
 

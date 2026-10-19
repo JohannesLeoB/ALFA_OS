@@ -21,12 +21,29 @@ struct MailStackLane: View {
             let commands = model.commands(confirmDiscard: confirming, canFold: (link?.openLanes ?? 1) > 1, formatOn: formatOn,
                                           sendLabelled: width - Design.Size.edge >= Design.Size.breakpointSendLabel)
             VStack(spacing: 0) {
-                CommandHeader(model: model, commands: commands, width: width, discarding: $discarding, formatOn: $formatOn)
+                head(commands, width: width)
                 StackArea(model: model, commands: commands, width: width, discarding: $discarding, formatOn: $formatOn)
             }
         }
         .background(StackKeys(model: model, blobOpen: link?.blobOpen ?? false))
         .onChange(of: model.frontRef) { discarding = nil }
+    }
+
+    private func head(_ commands: MailCommands, width: Double) -> some View {
+        let run = SlotRun(model: model, link: link, discarding: $discarding, formatOn: $formatOn)
+        let plan = CommandBar.plan(main: commands.main, tail: commands.tail, fan: commands.fan, fold: commands.fold,
+                                   staticMore: commands.staticMore, width: width - Design.Size.edge)
+        return CommandHead(plan: plan, glyph: { $0.glyph }, help: { run.help($0) }, shortcut: { $0.shortcut }, perform: { run.perform($0) },
+                           more: { actions in MailMenuLine.entries(actions.map { MailMenuLine.item($0) }, warns: false) { run.perform($0) } }) {
+            ConfirmPill(label: nil, question: word("mail.confirm.discard.question"), yes: word("mail.confirm.discard.yes"),
+                        no: word("confirm.no"), holdHint: line("mail.confirm.hold", words("mail.confirm.discard.yes")),
+                        startsAsking: true, showsProgress: false, onYes: {
+                            if let id = discarding { model.discard(id) }
+                            discarding = nil
+                        }, onNo: { discarding = nil }) {
+                Glyph(.trash)
+            }
+        }
     }
 }
 
@@ -68,82 +85,9 @@ struct SlotRun {
     }
 
     @MainActor
-    func help(_ slot: CommandSlot) -> String {
-        guard let action = slot.action else { return "" }
+    func help(_ action: MailAction) -> String {
         if action == .overview { return words("mail.overview.tip", String(model.stackCount)) }
         return words(action.key)
-    }
-}
-
-struct CommandHeader: View {
-    @Environment(\.design) private var design
-    @Environment(\.mailLaneLink) private var link
-    let model: MailModel
-    let commands: MailCommands
-    let width: Double
-    @Binding var discarding: UUID?
-    @Binding var formatOn: Bool
-    @State private var moreAnchor = AnchorBox()
-
-    private var run: SlotRun { SlotRun(model: model, link: link, discarding: $discarding, formatOn: $formatOn) }
-
-    var body: some View {
-        let plan = CommandBar.plan(main: commands.main, tail: commands.tail, fan: commands.fan, fold: commands.fold,
-                                   staticMore: commands.staticMore, width: width - Design.Size.edge)
-        HStack(spacing: CGFloat(Lane.trailing.headGap)) {
-            group(plan.main, plan: plan)
-            Spacer(minLength: 0)
-            group(plan.end, plan: plan)
-        }
-        .padding(.leading, CGFloat(Lane.trailing.headLeading))
-        .padding(.trailing, CGFloat(Lane.trailing.headTrailing))
-        .frame(height: CGFloat(Design.Size.headerHeight))
-        .frame(maxWidth: .infinity)
-        .background(design.color(\.lane))
-    }
-
-    private func group(_ slots: [CommandSlot], plan: CommandPlan) -> some View {
-        HStack(spacing: CGFloat(Lane.trailing.headGap)) {
-            ForEach(Array(slots.enumerated()), id: \.offset) { _, slot in
-                view(slot, plan: plan)
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func view(_ slot: CommandSlot, plan: CommandPlan) -> some View {
-        switch slot.kind {
-        case .separator:
-            Rectangle().fill(design.color(\.line)).frame(width: CGFloat(Design.Size.hairline), height: CGFloat(Design.Spacing.step20))
-                .padding(.horizontal, CGFloat(Design.Spacing.step4))
-        case .pill:
-            ConfirmPill(label: nil, question: word("mail.confirm.discard.question"), yes: word("mail.confirm.discard.yes"),
-                        no: word("confirm.no"), holdHint: line("mail.confirm.hold", words("mail.confirm.discard.yes")),
-                        startsAsking: true, showsProgress: false, onYes: {
-                            if let id = discarding { model.discard(id) }
-                            discarding = nil
-                        }, onNo: { discarding = nil }) {
-                Glyph(.trash)
-            }
-        case .button:
-            if slot.action == .more {
-                SymbolButton(help: words("mail.action.more"), glyph: .more, hover: .fill) { openMore(plan) }
-                    .background(AnchorProbe(box: moreAnchor))
-            } else if let action = slot.action, let glyph = action.glyph {
-                SymbolButton(help: run.help(slot), glyph: glyph, selected: slot.accent, disabled: slot.off,
-                           tone: slot.signal ? \.signal : \.inkSecondary, hoverTone: slot.signal ? \.signal : \.ink, hover: .fill) {
-                    run.perform(action)
-                }
-                .keyboardShortcut(action.shortcut)
-            }
-        }
-    }
-
-    private func openMore(_ plan: CommandPlan) {
-        guard let rect = moreAnchor.screenRect() else { return }
-        let lines = plan.overflow.compactMap { slot in slot.action.map { MailMenuLine.item($0) } }
-        let entries = MailMenuLine.entries(lines, warns: false) { run.perform($0) }
-        MenuPanel.shared.show(entries: entries, width: Design.Size.menuWidthWide, anchor: .rect(rect), window: NSApp.keyWindow)
     }
 }
 

@@ -192,10 +192,10 @@ struct CardFoot: View {
         .overlay(alignment: .top) { Hairline() }
     }
 
-    private func group(_ slots: [CommandSlot]) -> some View {
+    private func group(_ slots: [MailSlot]) -> some View {
         HStack(spacing: CGFloat(Design.Size.headGapStack)) {
             ForEach(slots) { slot in
-                if slot.action == .more {
+                if slot.kind == .more {
                     SymbolButton(help: words("mail.action.more"), glyph: .more, hover: .fill) { openMore() }
                         .background(AnchorProbe(box: moreAnchor))
                 } else if slot.action == .send, slot.cost > SheetValues.commandIconCost {
@@ -209,7 +209,7 @@ struct CardFoot: View {
                                 .accessibilityHidden(true)
                         }
                 } else if let action = slot.action, let glyph = action.glyph {
-                    SymbolButton(help: run.help(slot), glyph: glyph, selected: slot.accent, disabled: slot.off, hover: .fill) {
+                    SymbolButton(help: run.help(action), glyph: glyph, selected: slot.accent, disabled: slot.off, hover: .fill) {
                         run.perform(action)
                     }
                     .keyboardShortcut(action.shortcut)
