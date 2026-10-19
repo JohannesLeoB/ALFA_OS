@@ -81,7 +81,7 @@ struct LaneView: View {
 
     private var header: some View {
         LaneHead(lane: lane) {
-            HeaderTitle(text: title)
+            if !(model.currentID == "settings" && lane == .leading) { HeaderTitle(text: title) }
             Spacer(minLength: 0)
             if model.currentID == "settings" { tools }
         }
