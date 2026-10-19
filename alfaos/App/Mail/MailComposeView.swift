@@ -71,7 +71,6 @@ struct ComposeView: View {
             .font(.system(size: CGFloat(Design.TextSize.body)))
             .lineSpacing(CGFloat(Design.LineHeight.mailBody * Design.TextSize.body - Design.TextSize.body) * 0.75)
             .scrollContentBackground(.hidden)
-            .scrollDisabled(true)
             .foregroundStyle(design.color(\.sheetInk))
             .padding(.top, CGFloat(MailSheet.bodyPadTop))
             .padding(.horizontal, CGFloat(MailSheet.bodyPadSide))

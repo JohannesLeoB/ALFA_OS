@@ -26,6 +26,7 @@ struct MailStackLane: View {
             }
         }
         .replacingLaneHeader()
+        .onChange(of: model.frontRef) { discarding = nil }
     }
 }
 

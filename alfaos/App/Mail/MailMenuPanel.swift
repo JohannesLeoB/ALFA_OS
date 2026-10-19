@@ -17,7 +17,7 @@ struct AnchorProbe: NSViewRepresentable {
     let box: AnchorBox
 
     func makeNSView(context: Context) -> NSView {
-        let view = NSView()
+        let view = ProbeView()
         box.view = view
         return view
     }
@@ -25,6 +25,10 @@ struct AnchorProbe: NSViewRepresentable {
     func updateNSView(_ view: NSView, context: Context) {
         box.view = view
     }
+}
+
+final class ProbeView: NSView {
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
 }
 
 enum MenuAnchor {
