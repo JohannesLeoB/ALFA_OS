@@ -270,15 +270,22 @@ struct ServiceCardBody: View {
     }
 
     private func canRun(_ extra: ServiceExtra, _ reading: ServiceReading) -> Bool {
-        guard case .syncNow(let capability) = extra.action else { return false }
-        return reading.inlets.contains { $0.capabilities.contains(capability) }
+        switch extra.action {
+        case .syncNow(let capability): reading.inlets.contains { $0.capabilities.contains(capability) }
+        case .clearCache: true
+        }
     }
 
     private func run(_ extra: ServiceExtra, _ reading: ServiceReading) {
-        guard case .syncNow(let capability) = extra.action, let inlet = reading.inlets.first(where: { $0.capabilities.contains(capability) }) else { return }
-        Task {
-            await hub.rules.syncNow(inlet.id, capability)
-            revision += 1
+        switch extra.action {
+        case .syncNow(let capability):
+            guard let inlet = reading.inlets.first(where: { $0.capabilities.contains(capability) }) else { return }
+            Task {
+                await hub.rules.syncNow(inlet.id, capability)
+                revision += 1
+            }
+        case .clearCache:
+            if (try? ProjectCache.clear()) != nil { board.notify("settings.toast.cacheCleared") }
         }
     }
 
