@@ -67,6 +67,7 @@ struct MailLaneLink: Sendable {
     var maximized: Lane?
     var toggleMaximize: @MainActor @Sendable (Lane) -> Void = { _ in }
     var openSettings: @MainActor @Sendable () -> Void = {}
+    var blobOpen = false
 }
 
 extension MailLaneLink {
@@ -74,7 +75,8 @@ extension MailLaneLink {
     init(shell: ShellModel) {
         let open = shell.widths.all.filter { $0 > shell.geometry.laneFolded }.count
         self.init(openLanes: open, fold: { shell.toggleFold($0) }, maximized: shell.laneState(shell.currentID).maximized,
-                  toggleMaximize: { shell.toggleMaximize($0) }, openSettings: { shell.select("settings") })
+                  toggleMaximize: { shell.toggleMaximize($0) }, openSettings: { shell.select("settings") },
+                  blobOpen: shell.mode != nil)
     }
 }
 

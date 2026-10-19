@@ -26,10 +26,7 @@ struct MailListLane: View {
                 content(width: proxy.size.width)
             }
         }
-        .onChange(of: model.selectedFolder) {
-            text = ""
-            window = SheetValues.listWindow
-        }
+        .onChange(of: model.selectedFolder) { text = "" }
         .onChange(of: model.searching) { _, on in if !on { text = "" } }
         .task(id: text) {
             guard model.searching || !text.isEmpty else { return }
@@ -63,7 +60,8 @@ struct MailListLane: View {
         let labelled = on && width >= Design.Size.breakpointFilterLabel
         return HStack(spacing: CGFloat(Design.Size.headGapList)) {
             filterButton(on: on, labelled: labelled)
-            SymbolButton(help: words(model.searching ? "mail.search.close" : "mail.search.open"), glyph: .search, selected: model.searching, hover: .none) {
+            SymbolButton(help: words(model.searching ? "mail.search.close" : "mail.search.open"), glyph: .search, selected: model.searching, hover: .none,
+                         pressed: false) {
                 Task { await model.setSearching(!model.searching) }
             }
         }
@@ -74,9 +72,9 @@ struct MailListLane: View {
         let help = on ? words("mail.filter.named", filterName(model.filter)) : words("mail.filter")
         Group {
             if labelled {
-                TextButton(label: Text(verbatim: filterName(model.filter)), kind: .accent, action: openFilter) { Glyph(.filter) }
+                TextButton(label: Text(verbatim: filterName(model.filter)), kind: .accent, pressed: false, action: openFilter) { Glyph(.filter) }
             } else {
-                SymbolButton(help: help, glyph: .filter, selected: on, hover: .none, action: openFilter)
+                SymbolButton(help: help, glyph: .filter, selected: on, hover: .none, pressed: false, action: openFilter)
             }
         }
         .help(Text(verbatim: help))
@@ -103,11 +101,11 @@ struct MailListLane: View {
     private var pickTools: some View {
         let all = model.pickedInList.count == model.rows.count
         return HStack(spacing: CGFloat(Design.Size.headGapList)) {
-            SymbolButton(help: words(all ? "mail.pick.none" : "mail.pick.all"), glyph: .list, hover: .none) { model.pickAllToggle() }
-            SymbolButton(help: words("mail.pick.read"), glyph: .envelope, hover: .none) { Task { await model.bulk(.read) } }
-            SymbolButton(help: words("mail.action.archive"), glyph: .archive, hover: .none) { Task { await model.bulk(.archive) } }
-            SymbolButton(help: words("mail.action.trash"), glyph: .trash, tone: \.signal, hover: .none) { Task { await model.bulk(.trash) } }
-            SymbolButton(help: words("mail.pick.clear"), glyph: .close, hover: .none) { model.clearPicked() }
+            SymbolButton(help: words(all ? "mail.pick.none" : "mail.pick.all"), glyph: .list, hover: .none, pressed: false) { model.pickAllToggle() }
+            SymbolButton(help: words("mail.pick.read"), glyph: .envelope, hover: .none, pressed: false) { Task { await model.bulk(.read) } }
+            SymbolButton(help: words("mail.action.archive"), glyph: .archive, hover: .none, pressed: false) { Task { await model.bulk(.archive) } }
+            SymbolButton(help: words("mail.action.trash"), glyph: .trash, tone: \.signal, hover: .none, pressed: false) { Task { await model.bulk(.trash) } }
+            SymbolButton(help: words("mail.pick.clear"), glyph: .close, hover: .none, pressed: false) { model.clearPicked() }
         }
     }
 
@@ -115,10 +113,11 @@ struct MailListLane: View {
     private var laneTools: some View {
         if let link {
             if link.openLanes > 1 {
-                SymbolButton(help: words("mail.fold.named", title), glyph: .minus) { link.fold(.center) }
+                SymbolButton(help: words("mail.fold.named", title), glyph: .minus, pressed: false) { link.fold(.center) }
             }
             let maxed = link.maximized == .center
-            SymbolButton(help: maxed ? words("mail.lane.back") : words("mail.grow.named", title), glyph: maxed ? .shrink : .expand) {
+            SymbolButton(help: maxed ? words("mail.lane.back") : words("mail.grow.named", title), glyph: maxed ? .shrink : .expand,
+                         pressed: false) {
                 link.toggleMaximize(.center)
             }
         }
@@ -187,15 +186,7 @@ struct MailListLane: View {
         .onScrollGeometryChange(for: Bool.self) { geometry in
             geometry.contentSize.height - geometry.contentOffset.y - geometry.containerSize.height < SheetValues.listLoadAhead
         } action: { _, near in
-            if near { more(count: items.count) }
-        }
-    }
-
-    private func more(count: Int) {
-        if window < count {
-            window += SheetValues.listWindowStep
-        } else if model.canLoadMore {
-            Task { await model.loadMore() }
+            if near, window < items.count { window += SheetValues.listWindowStep }
         }
     }
 

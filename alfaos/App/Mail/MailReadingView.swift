@@ -183,7 +183,7 @@ struct SheetBody: View {
             Text(verbatim: card.summary.subject.isEmpty ? words("mail.row.noSubject") : card.summary.subject)
                 .font(system(Design.TextSize.title, .medium))
                 .tracking(CGFloat(SheetValues.subjectTracking * Design.TextSize.title))
-                .lineHeight(Design.LineHeight.title * Design.TextSize.title, size: Design.TextSize.title)
+                .lineHeight(Design.LineHeight.title * Design.TextSize.title, size: Design.TextSize.title, sheet: true)
                 .fixedSize(horizontal: false, vertical: true)
             if card.hasConversation {
                 line("mail.read.conversation", card.conversation.count)
@@ -224,7 +224,8 @@ struct SheetButton: View {
     var body: some View {
         Button(action: action) {
             label
-                .designText(\.sheetInk, size: Design.TextSize.small, weight: .medium)
+                .font(Font(Typeface.sheet(size: Design.TextSize.small, weight: .medium)))
+                .foregroundStyle(design.color(\.sheetInk))
                 .padding(.horizontal, CGFloat(Design.Spacing.step12))
                 .frame(height: CGFloat(Design.Spacing.step28))
                 .background(Capsule().fill(design.color(\.sheet)))
@@ -262,12 +263,13 @@ struct ThreadItemView: View {
             }
             Text(verbatim: item.text)
                 .font(system(Design.TextSize.body))
-                .lineHeight(Design.LineHeight.mailBody * Design.TextSize.body, size: Design.TextSize.body)
+                .lineHeight(Design.LineHeight.mailBody * Design.TextSize.body, size: Design.TextSize.body, sheet: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
             if let quote = item.quote {
                 Button { model.toggleQuote(card.id, message: item.id) } label: {
                     (item.quoteOpen ? word("mail.quote.hide") : line("mail.quote.show", quote.lines))
-                        .designText(\.sheetInkSecondary, size: Design.TextSize.small, weight: .medium)
+                        .font(system(Design.TextSize.small, .medium))
+                        .foregroundStyle(design.color(\.sheetInkSecondary))
                         .padding(.horizontal, CGFloat(Design.Spacing.step8))
                         .frame(height: CGFloat(Design.Size.chipHeight))
                         .overlay(Capsule().strokeBorder(design.color(\.lineStrong), lineWidth: hairline))

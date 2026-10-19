@@ -166,8 +166,8 @@ struct SettingsCommandHead: View {
         let front = board.fanned ? nil : (board.front ?? board.cards.last)
         let reading = front.flatMap { id in readings.first { $0.info.id == id } }
         let asking = reading.map { $0.info.id == disconnecting } ?? false
-        let fan = (!board.cards.isEmpty || board.fanned) && !asking
-        let fold = (link?.openLanes ?? 1) > 1 && !asking
+        let fan = !board.cards.isEmpty || board.fanned
+        let fold = (link?.openLanes ?? 1) > 1
         HStack(spacing: CGFloat(Lane.trailing.headGap)) {
             if let reading, !asking { main(reading) }
             Spacer(minLength: 0)
@@ -177,7 +177,7 @@ struct SettingsCommandHead: View {
                     .padding(.horizontal, CGFloat(Design.Spacing.step4))
             }
             if fan {
-                SymbolButton(help: board.fanned ? words("mail.action.backToStack") : words("mail.overview.tip", MailNames.number(board.cards.count)),
+                SymbolButton(help: board.fanned ? words("mail.action.backToStack") : words("mail.overview.tip", String(board.cards.count)),
                              glyph: board.fanned ? .fan : .grid, selected: board.fanned, hover: .fill) { board.toggleFan() }
             }
             if fold {
@@ -195,7 +195,7 @@ struct SettingsCommandHead: View {
     private func main(_ reading: ServiceReading) -> some View {
         HStack(spacing: CGFloat(Lane.trailing.headGap)) {
             if !reading.info.listsAccounts {
-                let off = host.busy || reading.state == .connecting || reading.step == .none
+                let off = reading.state == .connecting
                 SymbolButton(help: words(reading.asksReconnect ? "settings.action.reconnect" : "settings.action.connect"), glyph: .link,
                              disabled: off, hover: .fill) {
                     host.perform(reading.step, for: reading.info.id)

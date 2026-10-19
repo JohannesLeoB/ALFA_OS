@@ -37,8 +37,8 @@ extension View {
         overlay(shape.strokeBorder(color ?? .clear, lineWidth: CGFloat(Design.Size.hairline)))
     }
 
-    func lineHeight(_ height: Double, size: Double) -> some View {
-        let font = Typeface.font(size: size, weight: Design.Weight.regular)
+    func lineHeight(_ height: Double, size: Double, sheet: Bool = false) -> some View {
+        let font = sheet ? Typeface.sheet(size: size) : Typeface.font(size: size, weight: Design.Weight.regular)
         let natural = font.ascender - font.descender + font.leading
         let gap = max(0, CGFloat(height) - natural)
         return lineSpacing(gap).padding(.vertical, gap / 2)

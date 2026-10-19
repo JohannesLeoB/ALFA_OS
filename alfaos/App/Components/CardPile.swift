@@ -159,6 +159,7 @@ struct CardHeadButton: View {
     let ink: Color
     var dim = true
     var fills = true
+    var pressed = true
     let action: () -> Void
     @State private var hovering = false
 
@@ -172,7 +173,7 @@ struct CardHeadButton: View {
                 .background(Circle().fill(hovering && fills ? design.color(\.hover) : Color.clear))
                 .contentShape(Circle())
         }
-        .buttonStyle(PressScale(scale: SheetValues.pressScale))
+        .buttonStyle(PressScale(scale: pressed ? SheetValues.pressScale : 1))
         .help(Text(verbatim: help))
         .accessibilityLabel(Text(verbatim: help))
         .onHover { hovering = $0 }
@@ -336,7 +337,7 @@ private struct OverviewTileView: View {
             entry.title.designText(size: Design.TextSize.body, weight: .medium).lineLimit(1).frame(maxWidth: .infinity, alignment: .leading)
             entry.date.designText(\.inkTertiary, size: Design.TextSize.small).monospacedDigit().lineLimit(1).fixedSize()
             if let close = entry.close {
-                CardHeadButton(help: words("card.close"), glyph: .close, ink: design.color(\.ink), fills: false, action: close)
+                CardHeadButton(help: words("card.close"), glyph: .close, ink: design.color(\.ink), pressed: false, action: close)
             }
         }
         .padding(.horizontal, CGFloat(Design.Spacing.step8))

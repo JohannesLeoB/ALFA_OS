@@ -242,7 +242,7 @@ private struct KeyInventoryCard: View {
                 SettingsRow(label: word(reading.info.nameKey)) {
                     ServiceStatus(state: reading.state.service, label: word(reading.state.key), trailingInset: reading.state == .notConnected)
                     if reading.state != .notConnected {
-                        TextButton(label: word("text.settings.action.remove"), kind: .plain, disabled: host.busy) {
+                        TextButton(label: word("text.settings.action.remove"), kind: .plain, disabled: reading.inlets.isEmpty) {
                             Task { for inlet in reading.inlets { await host.remove(inlet.id) } }
                         }
                     }

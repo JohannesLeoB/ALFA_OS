@@ -18,6 +18,7 @@ struct SymbolButton: View {
     var hoverTone: KeyPath<DesignColors, RGB> = \.ink
     var ringed = true
     var hover = SymbolHover.ring
+    var pressed = true
     let action: () -> Void
     @State private var hovering = false
 
@@ -50,7 +51,7 @@ struct SymbolButton: View {
                 .contentShape(Capsule())
                 .opacity(disabled ? SheetValues.disabledOpacity : 1)
         }
-        .buttonStyle(PressScale(scale: disabled ? 1 : SheetValues.pressScale))
+        .buttonStyle(PressScale(scale: disabled || !pressed ? 1 : SheetValues.pressScale))
         .help(Text(verbatim: help))
         .accessibilityLabel(Text(verbatim: help))
         .allowsHitTesting(!disabled)

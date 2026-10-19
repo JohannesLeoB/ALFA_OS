@@ -98,12 +98,12 @@ struct LaneView: View {
         let open = model.widths.all.filter { $0 > model.geometry.laneFolded }.count
         let name = titleString
         if open > 1 {
-            SymbolButton(help: String(format: theme.string("mail.fold.named"), name), glyph: .minus) { model.toggleFold(lane) }
+            SymbolButton(help: String(format: theme.string("mail.fold.named"), name), glyph: .minus, pressed: lane != .center) { model.toggleFold(lane) }
         }
         if lane == .center {
             let maxed = model.laneState(model.currentID).maximized == .center
             SymbolButton(help: maxed ? theme.string("mail.lane.back") : String(format: theme.string("mail.grow.named"), name),
-                         glyph: maxed ? .shrink : .expand) { model.toggleMaximize(.center) }
+                         glyph: maxed ? .shrink : .expand, pressed: false) { model.toggleMaximize(.center) }
         }
     }
 

@@ -21,6 +21,7 @@ struct TextButton<Glyph: View>: View {
     var kind = TextButtonKind.neutral
     var size = TextButtonSize.regular
     var disabled = false
+    var pressed = true
     let action: () -> Void
     @ViewBuilder let glyph: Glyph
     @State private var hovering = false
@@ -69,7 +70,7 @@ struct TextButton<Glyph: View>: View {
             .ring(Capsule(), ringColor)
             .contentShape(Capsule())
         }
-        .buttonStyle(PressScale(scale: disabled ? 1 : SheetValues.pressScale))
+        .buttonStyle(PressScale(scale: disabled || !pressed ? 1 : SheetValues.pressScale))
         .allowsHitTesting(!disabled)
         .onHover { hovering = $0 }
         .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.hover), value: hovering)
@@ -77,7 +78,8 @@ struct TextButton<Glyph: View>: View {
 }
 
 extension TextButton where Glyph == EmptyView {
-    init(label: Text, kind: TextButtonKind = .neutral, size: TextButtonSize = .regular, disabled: Bool = false, action: @escaping () -> Void) {
-        self.init(label: label, kind: kind, size: size, disabled: disabled, action: action) { EmptyView() }
+    init(label: Text, kind: TextButtonKind = .neutral, size: TextButtonSize = .regular, disabled: Bool = false, pressed: Bool = true,
+         action: @escaping () -> Void) {
+        self.init(label: label, kind: kind, size: size, disabled: disabled, pressed: pressed, action: action) { EmptyView() }
     }
 }

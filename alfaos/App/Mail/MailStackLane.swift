@@ -25,7 +25,7 @@ struct MailStackLane: View {
                 StackArea(model: model, commands: commands, width: width, discarding: $discarding, formatOn: $formatOn)
             }
         }
-        .background(StackKeys(model: model))
+        .background(StackKeys(model: model, blobOpen: link?.blobOpen ?? false))
         .onChange(of: model.frontRef) { discarding = nil }
     }
 }
@@ -70,7 +70,7 @@ struct SlotRun {
     @MainActor
     func help(_ slot: CommandSlot) -> String {
         guard let action = slot.action else { return "" }
-        if action == .overview { return words("mail.overview.tip", MailNames.number(model.stackCount)) }
+        if action == .overview { return words("mail.overview.tip", String(model.stackCount)) }
         return words(action.key)
     }
 }
@@ -171,13 +171,14 @@ struct StackArea: View {
     }
 
     private func toastText(_ toast: MailToast) -> Text {
-        if let count = toast.kind.count { return line(toast.kind.key, MailNames.number(count)) }
+        if let count = toast.kind.count { return line(toast.kind.key, String(count)) }
         return word(toast.kind.key)
     }
 }
 
 struct StackKeys: NSViewRepresentable {
     let model: MailModel
+    let blobOpen: Bool
 
     func makeNSView(context: Context) -> StackKeysView {
         StackKeysView()
@@ -185,6 +186,7 @@ struct StackKeys: NSViewRepresentable {
 
     func updateNSView(_ view: StackKeysView, context: Context) {
         view.model = model
+        view.blobOpen = blobOpen
         view.listen(true)
     }
 
@@ -195,6 +197,7 @@ struct StackKeys: NSViewRepresentable {
 
 final class StackKeysView: NSView {
     var model: MailModel?
+    var blobOpen = false
     private var monitor: Any?
 
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
@@ -211,8 +214,8 @@ final class StackKeysView: NSView {
     }
 
     private func handle(_ event: NSEvent) -> Bool {
-        guard let model, event.window === window, !model.overview.open, case .message(let id) = model.frontRef else { return false }
-        guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return false }
+        guard let model, !blobOpen, event.window === window, !model.overview.open, case .message(let id) = model.frontRef else { return false }
+        guard event.modifierFlags.intersection([.command, .control]).isEmpty else { return false }
         if window?.firstResponder is NSText { return false }
         let actions = MailDo(model: model)
         switch event.charactersIgnoringModifiers?.lowercased() {

@@ -9,8 +9,8 @@ struct OverviewView: View {
     private var title: String { folderTitle(model.currentFolderName) }
 
     private var modes: [SegmentOption<MailOverviewMode>] {
-        [SegmentOption(id: .stack, label: line("mail.overview.stack", MailNames.number(model.stackCount))),
-         SegmentOption(id: .folder, label: line("mail.overview.folder", title, MailNames.number(model.rows.count)))]
+        [SegmentOption(id: .stack, label: line("mail.overview.stack", String(model.stackCount))),
+         SegmentOption(id: .folder, label: line("mail.overview.folder", title, String(model.rows.count)))]
     }
 
     private var entries: [(entry: OverviewEntry, ref: CardRef)] {
