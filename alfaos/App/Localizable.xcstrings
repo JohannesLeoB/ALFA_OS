@@ -4963,6 +4963,16 @@
         }
       }
     },
+    "settings.value.default" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        }
+      }
+    },
     "settings.value.empty" : {
       "localizations" : {
         "de" : {

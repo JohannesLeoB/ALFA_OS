@@ -58,6 +58,7 @@ struct ServiceCardBody: View {
     @Environment(\.narrowCard) private var narrow
     @State private var revision = 0
     @State private var started = false
+    @State private var held = ServiceValues.none
 
     private var reading: ServiceReading {
         _ = revision
@@ -83,9 +84,9 @@ struct ServiceCardBody: View {
                 SettingsAddForm(host: host, offer: offer)
             } else {
                 ForEach(info.fields, id: \.id) { field in
-                    let empty = reading.state == .notConnected || !field.secret
+                    let value = value(of: field, reading)
                     SettingsRow(label: word(info.fieldKey(field))) {
-                        SettingsValue(text: empty ? word("settings.value.empty") : word("settings.value.masked"), tone: empty ? \.inkTertiary : \.inkSecondary)
+                        SettingsValue(text: value.text, tone: value.tone)
                     }
                 }
             }
@@ -99,6 +100,17 @@ struct ServiceCardBody: View {
                 }
             }
         }
+        .task(id: reading.inlets.map(\.id).joined() + reading.state.rawValue) {
+            held = ServiceValues.read(reading, keychain: KeychainAdapter())
+        }
+    }
+
+    private func value(of field: ServiceField, _ reading: ServiceReading) -> (text: Text, tone: KeyPath<DesignColors, RGB>) {
+        guard reading.state != .notConnected else { return (word("settings.value.empty"), \.inkTertiary) }
+        if field.secret { return (word("settings.value.masked"), \.inkSecondary) }
+        if let text = held.text[field.id] { return (Text(verbatim: text), \.inkSecondary) }
+        if let key = field.fallbackKey { return (word(key), \.inkSecondary) }
+        return (word("settings.value.empty"), \.inkTertiary)
     }
 
     private var access: String {
