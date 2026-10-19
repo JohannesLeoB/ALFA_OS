@@ -31,11 +31,13 @@ struct ContentState<Glyph: View, Action: View>: View {
                     .font(.face(Design.TextSize.body, weight: Design.Weight.medium))
                     .foregroundStyle(design.color(\.ink))
                     .lineHeight(Design.LineHeight.body * Design.TextSize.body, size: Design.TextSize.body)
+                    .frame(maxWidth: CGFloat(SheetValues.stateTextWidth))
             }
             text
                 .font(.face(Design.TextSize.body))
                 .foregroundStyle(design.color(\.inkTertiary))
                 .lineHeight(Design.LineHeight.body * Design.TextSize.body, size: Design.TextSize.body)
+                .frame(maxWidth: CGFloat(SheetValues.stateTextWidth))
             action
         }
         .multilineTextAlignment(.center)

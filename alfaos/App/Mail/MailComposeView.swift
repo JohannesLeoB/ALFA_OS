@@ -68,8 +68,8 @@ struct ComposeView: View {
     private var bodySheet: some View {
         let binding = Binding(get: { card.draft.body }, set: { value in model.edit(card.id) { $0.body = value } })
         return TextEditor(text: binding)
-            .font(.face(Design.TextSize.body))
-            .lineSpacing(CGFloat(Design.LineHeight.mailBody * Design.TextSize.body - Design.TextSize.body) * 0.75)
+            .font(Font(Typeface.sheet(size: Design.TextSize.body)))
+            .lineSpacing(Typeface.sheetSpacing(size: Design.TextSize.body, line: Design.LineHeight.mailBody * Design.TextSize.body))
             .scrollContentBackground(.hidden)
             .foregroundStyle(design.color(\.sheetInk))
             .padding(.top, CGFloat(SheetValues.bodyPadTop))
@@ -137,13 +137,19 @@ struct FromButton: View {
     let card: MailDraftCard
     @State private var anchor = AnchorBox()
     @State private var hovering = false
+    @AppStorage(SettingsKey.identityName) private var name = ""
 
     private var address: String { model.accounts.first { $0.id == card.inlet }?.account ?? "" }
 
     var body: some View {
         Button { open() } label: {
             HStack(spacing: CGFloat(Design.Spacing.step8)) {
-                Text(verbatim: address).designText(\.ink, size: Design.TextSize.body, weight: .medium).lineLimit(1)
+                if name.isEmpty {
+                    Text(verbatim: address).designText(\.ink, size: Design.TextSize.body, weight: .medium).lineLimit(1)
+                } else {
+                    Text(verbatim: name).designText(\.ink, size: Design.TextSize.body, weight: .medium).lineLimit(1).fixedSize()
+                    Text(verbatim: address).designText(\.inkTertiary, size: Design.TextSize.small).lineLimit(1).truncationMode(.tail)
+                }
                 Glyph.small(.chevron).foregroundStyle(design.color(\.inkTertiary))
             }
             .padding(.horizontal, CGFloat(Design.Spacing.step8))
@@ -201,7 +207,7 @@ struct RecipientRow: View {
                     summaryOrChips
                 } else {
                     Disclosure(open: true, help: words("mail.read.less")) {
-                        SmallText(text: line("mail.read.count", people.count))
+                        SmallText(text: line("mail.read.count", MailNames.number(people.count)))
                     } action: { expanded = false }
                     Spacer(minLength: 0)
                 }
@@ -224,15 +230,15 @@ struct RecipientRow: View {
         if inline {
             HStack(spacing: CGFloat(Design.Spacing.step4)) {
                 ForEach(people) { person in
-                    Chip(name: person.label, detail: person.address, removeKey: "mail.compose.remove",
+                    Chip(name: person.chipLabel, detail: person.address, removeKey: "mail.compose.remove",
                          onRemove: { model.removeRecipient(card.id, field, at: person.id) }, removeGlyph: { Glyph.tiny(.close) })
                 }
                 inputField
             }
         } else {
-            Disclosure(open: false, help: words("mail.compose.showAll", people.count)) {
-                Text(verbatim: people.first?.first ?? "").designText(\.ink, size: Design.TextSize.body, weight: .medium).lineLimit(1)
-                SmallText(text: line("mail.read.more", people.count - 1))
+            Disclosure(open: false, help: words("mail.compose.showAll", MailNames.number(people.count))) {
+                Text(verbatim: people.first.map { $0.name.isEmpty ? $0.chipLabel : $0.name } ?? "").designText(\.ink, size: Design.TextSize.body, weight: .medium).lineLimit(1)
+                SmallText(text: line("mail.read.more", MailNames.number(people.count - 1)))
             } action: { expanded = true }
             Spacer(minLength: 0)
         }
@@ -292,11 +298,13 @@ struct RecipientRow: View {
                 }
                 HStack(spacing: CGFloat(Design.Spacing.step8)) {
                     Color.clear.frame(width: CGFloat(Design.Size.recipientLabelColumn))
-                    Glyph.tiny(.close)
-                        .rotationEffect(.degrees(45))
+                    GlyphShape(path: IconPath(data: SheetValues.plusGlyph))
+                        .stroke(style: StrokeStyle(lineWidth: CGFloat(SheetValues.tinyIconStroke * SheetValues.tinyIcon / SheetValues.iconBox), lineCap: .round))
+                        .frame(width: CGFloat(SheetValues.tinyIcon), height: CGFloat(SheetValues.tinyIcon))
                         .foregroundStyle(design.color(\.inkTertiary))
                         .frame(width: CGFloat(Design.Size.recipientMarkColumn), height: CGFloat(Design.Size.recipientMarkColumn))
-                        .overlay(Circle().strokeBorder(design.color(\.lineStrong), style: StrokeStyle(lineWidth: CGFloat(Design.Size.hairline), dash: [2, 2])))
+                        .overlay(Circle().strokeBorder(design.color(\.lineStrong),
+                                                       style: StrokeStyle(lineWidth: CGFloat(Design.Size.hairline), dash: SheetValues.dashedLine.map { CGFloat($0) })))
                     TextField(text: $input, prompt: word("mail.compose.add")) { word("mail.compose.add") }
                         .textFieldStyle(.plain)
                         .designText(\.ink, size: Design.TextSize.body)

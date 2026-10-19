@@ -48,7 +48,11 @@ public enum SheetValues {
     public static let rowSeparatorInset = 56.0
     public static let rowTextLine = 20.0
     public static let previewLines = 2
-    public static let personNameLimit = 34
+    public static let personNameLimit = 40
+    public static let chipNameLimit = 30
+    public static let summaryNameLimit = 30
+    public static let senderNameLimit = 40
+    public static let middleHead = 0.55
     public static let personAddressLimit = 44
     public static let firstNameLimit = 24
     public static let suggestionAddressLimit = 40
@@ -101,6 +105,21 @@ public enum SheetValues {
     public static let cardFlatCast = 0.22
     public static let cardFlatBackRing = 0.06
     public static let cardFlatBackCast = 0.18
+    public static let cardFlatFrontSpread = -12.0
+    public static let cardFlatFrontBlur = 24.0
+    public static let cardFlatFrontY = -8.0
+    public static let cardFlatBackSpread = -10.0
+    public static let cardFlatBackBlur = 16.0
+    public static let cardFlatBackY = -6.0
+    public static let lightSurfaceRed = 192.0 / 255.0
+    public static let unreadDotShift = 2.0
+    public static let markTracking = 0.06
+    public static let stateTextWidth = 320.0
+    public static let listWindow = 60
+    public static let listWindowStep = 120
+    public static let listLoadAhead = 1200.0
+    public static let plusGlyph = "M8 3v10M3 8h10"
+    public static let dashedLine = [2.0, 2.0]
 }
 
 public struct SearchGlyph: Sendable, Equatable {

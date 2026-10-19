@@ -74,6 +74,22 @@ enum Typeface {
         return font(size: size, weight: value)
     }
 
+    static func sheet(size: Double, weight: Font.Weight = .regular) -> NSFont {
+        let value: Int
+        switch weight {
+        case .light: value = Design.Weight.light
+        case .medium: value = Design.Weight.medium
+        case .semibold: value = Design.Weight.semibold
+        default: value = Design.Weight.regular
+        }
+        return NSFont.systemFont(ofSize: CGFloat(size), weight: systemWeight(value))
+    }
+
+    static func sheetSpacing(size: Double, line: Double) -> CGFloat {
+        let face = sheet(size: size)
+        return max(0, CGFloat(line) - (face.ascender - face.descender + face.leading))
+    }
+
     static func leading(size: Double, weight: Int) -> CGFloat {
         let face = font(size: size, weight: weight)
         let natural = face.ascender - face.descender + face.leading

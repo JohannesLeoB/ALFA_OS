@@ -50,7 +50,7 @@ struct SymbolButton: View {
                 .contentShape(Capsule())
                 .opacity(disabled ? SheetValues.disabledOpacity : 1)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressScale(scale: disabled ? 1 : SheetValues.pressScale))
         .help(Text(verbatim: help))
         .accessibilityLabel(Text(verbatim: help))
         .allowsHitTesting(!disabled)

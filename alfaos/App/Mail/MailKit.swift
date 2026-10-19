@@ -4,7 +4,15 @@ import ShellCore
 import SwiftUI
 
 struct GlyphShape: Shape {
-    let glyph: Icon
+    let shape: IconPath
+
+    init(glyph: Icon) {
+        shape = glyph.path
+    }
+
+    init(path: IconPath) {
+        shape = path
+    }
 
     func path(in rect: CGRect) -> Path {
         let scale = rect.width / CGFloat(SheetValues.iconBox)
@@ -12,7 +20,7 @@ struct GlyphShape: Shape {
             CGPoint(x: rect.minX + CGFloat(x) * scale, y: rect.minY + CGFloat(y) * scale)
         }
         var path = Path()
-        for segment in glyph.path.segments {
+        for segment in shape.segments {
             switch segment {
             case .move(let x, let y): path.move(to: point(x, y))
             case .line(let x, let y): path.addLine(to: point(x, y))

@@ -12,7 +12,9 @@ enum MailMove: Equatable {
 extension MailModel {
     public func archive(_ id: String, undoable: Bool = false) async { await relocate(id, .archive, undoable: undoable) }
 
-    public func trash(_ id: String, undoable: Bool = true) async { await relocate(id, .trash, undoable: undoable) }
+    public func trash(_ id: String, undoable: Bool = true, fromMenu: Bool = false) async {
+        await relocate(id, .trash, undoable: undoable, toast: fromMenu ? .inTrash : .trashed)
+    }
 
     public func markSpam(_ id: String) async { await relocate(id, .spam) }
 
@@ -33,7 +35,7 @@ extension MailModel {
         post(.purged)
     }
 
-    func relocate(_ id: String, _ move: MailMove, undoable: Bool = false) async {
+    func relocate(_ id: String, _ move: MailMove, undoable: Bool = false, toast: MailToastKind = .trashed) async {
         guard let inlet = cardInlet(id) ?? selectedInlet else { return }
         let origin = selectedFolder
         do {
@@ -62,7 +64,7 @@ extension MailModel {
         }
         switch move {
         case .archive: post(.archived, undo: undo)
-        case .trash: post(.trashed, undo: undo)
+        case .trash: post(toast, undo: undo)
         case .spam, .folder: break
         }
     }

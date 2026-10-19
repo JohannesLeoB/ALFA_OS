@@ -9,9 +9,7 @@ public enum MailTextKey: String, CaseIterable, Sendable {
     case capabilityMissing = "hint.mail.capabilityMissing"
     case remoteImagesBlocked = "mail.card.remoteImagesBlocked"
     case quoteCollapsed = "mail.card.quoteCollapsed"
-    case signatureCollapsed = "mail.card.signatureCollapsed"
     case recipientsExpanded = "mail.card.recipientsExpanded"
-    case actionFailed = "mail.card.actionFailed"
 }
 
 extension MailListState {
@@ -54,30 +52,29 @@ extension MailListState {
 
 extension MailRowState {
     public enum Kind: CaseIterable, Sendable {
-        case unread, starred, selected, hasAttachments, threadCount
+        case unread, starred, hasAttachments, threadCount
 
         public var key: String {
             switch self {
             case .unread: "mail.row.unread"
             case .starred: "mail.row.starred"
-            case .selected: "mail.row.selected"
             case .hasAttachments: "mail.row.hasAttachments"
             case .threadCount: "mail.row.threadCount"
             }
         }
     }
 
-    public var kind: Kind {
+    public var kind: Kind? {
         switch self {
         case .unread: .unread
         case .starred: .starred
-        case .selected: .selected
+        case .selected: nil
         case .hasAttachments: .hasAttachments
         case .threadCount: .threadCount
         }
     }
 
-    public var key: String { kind.key }
+    public var key: String? { kind?.key }
 }
 
 extension MailCardContent {
@@ -109,16 +106,12 @@ extension MailCardContent {
 
 extension MailDraftState {
     public enum Kind: CaseIterable, Sendable {
-        case idle, edited, saving, saved, sending, sent, sendBlockedNoSubject, sendBlockedNoRecipient, sendFailed, queuedInOutbox
+        case saved, sending, sendBlockedNoSubject, sendBlockedNoRecipient, sendFailed, queuedInOutbox
 
         public var key: String {
             switch self {
-            case .idle: "mail.draft.idle"
-            case .edited: "mail.draft.edited"
-            case .saving: "mail.draft.saving"
             case .saved: "mail.draft.saved"
             case .sending: "mail.draft.sending"
-            case .sent: "mail.draft.sent"
             case .sendBlockedNoSubject: "mail.draft.sendBlocked.noSubject"
             case .sendBlockedNoRecipient: "mail.draft.sendBlocked.noRecipient"
             case .sendFailed: "mail.draft.sendFailed"
@@ -127,14 +120,11 @@ extension MailDraftState {
         }
     }
 
-    public var kind: Kind {
+    public var kind: Kind? {
         switch self {
-        case .idle: .idle
-        case .edited: .edited
-        case .saving: .saving
+        case .idle, .edited, .saving, .sent: nil
         case .saved: .saved
         case .sending: .sending
-        case .sent: .sent
         case .sendBlocked(.noSubject): .sendBlockedNoSubject
         case .sendBlocked(.noRecipient): .sendBlockedNoRecipient
         case .sendFailed: .sendFailed
@@ -142,5 +132,5 @@ extension MailDraftState {
         }
     }
 
-    public var key: String { kind.key }
+    public var key: String? { kind?.key }
 }

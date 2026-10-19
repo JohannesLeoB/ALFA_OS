@@ -69,7 +69,7 @@ struct TextButton<Glyph: View>: View {
             .ring(Capsule(), ringColor)
             .contentShape(Capsule())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressScale(scale: disabled ? 1 : SheetValues.pressScale))
         .allowsHitTesting(!disabled)
         .onHover { hovering = $0 }
         .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.hover), value: hovering)

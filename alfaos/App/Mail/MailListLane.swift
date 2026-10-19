@@ -13,6 +13,7 @@ struct MailListLane: View {
     @State private var scrolled = false
     @State private var text = ""
     @State private var filterAnchor = AnchorBox()
+    @State private var window = SheetValues.listWindow
     @FocusState private var focused: Bool
 
     private var title: String { folderTitle(model.currentFolderName) }
@@ -25,7 +26,10 @@ struct MailListLane: View {
                 content(width: proxy.size.width)
             }
         }
-        .onChange(of: model.selectedFolder) { text = "" }
+        .onChange(of: model.selectedFolder) {
+            text = ""
+            window = SheetValues.listWindow
+        }
         .onChange(of: model.searching) { _, on in if !on { text = "" } }
         .task(id: text) {
             guard model.searching || !text.isEmpty else { return }
@@ -36,7 +40,7 @@ struct MailListLane: View {
     private func header(width: Double) -> some View {
         LaneHead(scrolled: scrolled) {
             if model.picking {
-                HeaderTitle(text: line("mail.pick.count", model.pickedInList.count))
+                HeaderTitle(text: line("mail.pick.count", MailNames.number(model.pickedInList.count)))
                 Spacer(minLength: 0)
                 pickTools
             } else if model.searching {
@@ -162,29 +166,37 @@ struct MailListLane: View {
         let picking = model.picking
         return ScrollView {
             LazyVStack(spacing: 0) {
-                if !model.query.isEmpty, model.searchScope == .all {
-                    Text(verbatim: words("mail.search.results", items.count))
+                if !model.query.isEmpty, !items.isEmpty {
+                    Text(verbatim: words("mail.search.results", MailNames.number(items.count)))
                         .designText(\.inkTertiary, size: Design.TextSize.small)
                         .frame(maxWidth: .infinity, minHeight: CGFloat(Design.Spacing.step32), alignment: .bottomLeading)
                         .padding(.horizontal, CGFloat(Design.Spacing.step8))
                         .padding(.bottom, CGFloat(Design.Spacing.step8))
                 }
-                ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+                ForEach(Array(items.prefix(window).enumerated()), id: \.element.id) { index, item in
                     let next = items.indices.contains(index + 1) ? items[index + 1] : nil
                     MailRowView(model: model, item: item,
                                 separated: next != nil && !item.selected && next?.selected != true,
                                 inTrash: trash, picking: picking)
-                }
-                if model.canLoadMore {
-                    TextButton(label: word("mail.loadMore"), kind: .neutral) { Task { await model.loadMore() } }
-                        .padding(.top, CGFloat(Design.Spacing.step16))
-                        .padding(.bottom, CGFloat(Design.Spacing.step8))
                 }
             }
             .padding(CGFloat(Design.Spacing.step8))
         }
         .scrollIndicators(.automatic)
         .scrolledSignal($scrolled)
+        .onScrollGeometryChange(for: Bool.self) { geometry in
+            geometry.contentSize.height - geometry.contentOffset.y - geometry.containerSize.height < SheetValues.listLoadAhead
+        } action: { _, near in
+            if near { more(count: items.count) }
+        }
+    }
+
+    private func more(count: Int) {
+        if window < count {
+            window += SheetValues.listWindowStep
+        } else if model.canLoadMore {
+            Task { await model.loadMore() }
+        }
     }
 
     @ViewBuilder

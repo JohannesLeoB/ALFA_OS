@@ -140,7 +140,7 @@ private struct SettingsStackCard: View {
             if front {
                 CardHeadButton(help: words("settings.stack.overview"), glyph: .grid, ink: ink, dim: false) { board.toggleFan() }
             }
-            CardHeadButton(help: words("card.close"), glyph: .close, ink: ink) { board.close(face.id) }
+            CardHeadButton(help: words("card.close"), glyph: .close, ink: ink, fills: false) { board.close(face.id) }
         }
         .padding(.horizontal, CGFloat(Design.Spacing.step8))
         .frame(height: CGFloat(Design.Size.headerHeight))

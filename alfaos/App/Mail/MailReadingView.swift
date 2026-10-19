@@ -43,14 +43,14 @@ struct RecipientHeader: View {
                 .frame(width: CGFloat(SheetValues.fieldLabelWidthRead), alignment: .leading)
                 Disclosure(open: open, help: words(open ? "mail.read.less" : "mail.read.all")) {
                     if open {
-                        SmallText(text: line("mail.read.count", people.all.count))
+                        SmallText(text: line("mail.read.count", MailNames.number(people.all.count)))
                     } else {
                         Text(verbatim: people.summary)
                             .designText(\.ink, size: Design.TextSize.body, weight: .medium)
                             .lineLimit(1)
                             .truncationMode(.tail)
                         if let more = people.more {
-                            SmallText(text: line("mail.read.more", more))
+                            SmallText(text: line("mail.read.more", MailNames.number(more)))
                         }
                     }
                 } action: { toggle() }
@@ -174,7 +174,7 @@ struct SheetBody: View {
     let card: ReadingCard
 
     private func system(_ size: Double, _ weight: Font.Weight = .regular) -> Font {
-        Font(Typeface.font(size: size, weight: weight))
+        Font(Typeface.sheet(size: size, weight: weight))
     }
 
     var body: some View {
@@ -246,7 +246,7 @@ struct ThreadItemView: View {
     @State private var anchor = AnchorBox()
 
     private func system(_ size: Double, _ weight: Font.Weight = .regular) -> Font {
-        Font(Typeface.font(size: size, weight: weight))
+        Font(Typeface.sheet(size: size, weight: weight))
     }
 
     var body: some View {
@@ -343,11 +343,11 @@ struct AttachmentLine: View {
                 .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
                 .overlay(RoundedRectangle(cornerRadius: CGFloat(SheetValues.attachmentMarkRadius)).strokeBorder(design.color(\.sheetLineStrong), lineWidth: hairline))
             Text(verbatim: row.name)
-                .font(.face(Design.TextSize.body, weight: Design.Weight.medium))
+                .font(Font(Typeface.sheet(size: Design.TextSize.body, weight: .medium)))
                 .lineLimit(1)
                 .truncationMode(.tail)
             Text(verbatim: row.size)
-                .font(.face(Design.TextSize.small))
+                .font(Font(Typeface.sheet(size: Design.TextSize.small)))
                 .foregroundStyle(design.color(\.sheetInkTertiary))
                 .fixedSize()
             Spacer(minLength: 0)

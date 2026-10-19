@@ -120,7 +120,7 @@ final class MenuPanel {
 
 extension MailMenuLine {
     @MainActor
-    static func entries(_ lines: [MailMenuLine], run: @escaping (MailAction) -> Void) -> [MenuEntry] {
+    static func entries(_ lines: [MailMenuLine], warns: Bool = true, run: @escaping (MailAction) -> Void) -> [MenuEntry] {
         lines.enumerated().map { index, line in
             let id = String(index)
             switch line {
@@ -128,7 +128,7 @@ extension MailMenuLine {
             case .head(let text): return .head(id: id, label: Text(verbatim: text))
             case .item(let action, let checked):
                 return .row(MenuItem(id: id, label: word(action.key), check: checked ? word("mail.menu.check") : nil,
-                                     danger: action.danger) { run(action) })
+                                     danger: warns && action.danger) { run(action) })
             }
         }
     }

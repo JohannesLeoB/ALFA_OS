@@ -9,8 +9,8 @@ struct OverviewView: View {
     private var title: String { folderTitle(model.currentFolderName) }
 
     private var modes: [SegmentOption<MailOverviewMode>] {
-        [SegmentOption(id: .stack, label: line("mail.overview.stack", model.stackCount)),
-         SegmentOption(id: .folder, label: line("mail.overview.folder", title, model.rows.count))]
+        [SegmentOption(id: .stack, label: line("mail.overview.stack", MailNames.number(model.stackCount))),
+         SegmentOption(id: .folder, label: line("mail.overview.folder", title, MailNames.number(model.rows.count)))]
     }
 
     private var entries: [(entry: OverviewEntry, ref: CardRef)] {
@@ -20,7 +20,7 @@ struct OverviewView: View {
                                           title: row.outgoing ? line("mail.row.to", row.sender) : Text(verbatim: row.sender),
                                           date: dateText(row.date), unread: row.unread, subject: row.subject ?? "", preview: row.preview ?? "",
                                           current: model.frontRef == .message(row.id), commands: row.draft ? [] : commands(row.id),
-                                          choose: { if !row.draft { open(row.id) } })
+                                          choose: { if row.draft { openDraft(row.id) } else { open(row.id) } })
                 return (entry, .message(row.id))
             }
         }
@@ -94,5 +94,10 @@ struct OverviewView: View {
     private func open(_ id: String) {
         model.openOverview(false)
         Task { await model.open(id) }
+    }
+
+    private func openDraft(_ id: String) {
+        model.openOverview(false)
+        Task { _ = await model.editDraft(id) }
     }
 }

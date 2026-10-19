@@ -6,13 +6,13 @@ import SwiftUI
 struct MailDo {
     let model: MailModel
 
-    func message(_ action: MailAction, _ id: String, undoable: Bool = false) {
+    func message(_ action: MailAction, _ id: String, undoable: Bool = false, fromMenu: Bool = false) {
         switch action {
         case .reply: Task { _ = await model.reply(to: id) }
         case .replyAll: Task { _ = await model.reply(to: id, all: true) }
         case .forward: Task { _ = await model.forward(id) }
         case .archive: Task { await model.archive(id, undoable: undoable) }
-        case .trash: Task { await model.trash(id) }
+        case .trash: Task { await model.trash(id, fromMenu: fromMenu) }
         case .markRead: Task { await model.setRead(id, true) }
         case .markUnread: Task { await model.setRead(id, false) }
         case .star: Task { await model.setStarred(id, true) }

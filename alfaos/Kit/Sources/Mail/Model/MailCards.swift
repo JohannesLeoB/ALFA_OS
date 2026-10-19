@@ -34,6 +34,7 @@ public struct MailOverview: Equatable, Sendable {
 public enum MailToastKind: Equatable, Sendable {
     case archived
     case trashed
+    case inTrash
     case purged
     case draftSaved
     case recipientMissing
@@ -46,6 +47,7 @@ public enum MailToastKind: Equatable, Sendable {
         switch self {
         case .archived: "mail.toast.archived"
         case .trashed: "mail.toast.trashed"
+        case .inTrash: "mail.toast.inTrash"
         case .purged: "mail.toast.purged"
         case .draftSaved: "mail.toast.draftSaved"
         case .recipientMissing: "mail.toast.recipientMissing"

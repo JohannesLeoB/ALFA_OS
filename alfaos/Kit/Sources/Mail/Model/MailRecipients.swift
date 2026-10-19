@@ -20,6 +20,8 @@ public struct MailPerson: Identifiable, Equatable, Sendable {
 
     public var label: String { name.isEmpty ? MailNames.middle(address, limit: SheetValues.personNameLimit) : name }
 
+    public var chipLabel: String { name.isEmpty ? MailNames.middle(address, limit: SheetValues.chipNameLimit) : name }
+
     public var detail: String { name.isEmpty ? "" : MailNames.middle(address, limit: SheetValues.personAddressLimit) }
 
     public var full: String { name.isEmpty ? address : name + " · " + address }
@@ -60,7 +62,7 @@ public enum MailRecipients {
     public static func summary(_ people: [MailPerson]) -> String {
         guard let first = people.first else { return "" }
         if people.count > SheetValues.recipientsInline { return first.first }
-        return people.map { $0.name.isEmpty ? MailNames.middle($0.address, limit: SheetValues.personNameLimit) : $0.name }
+        return people.map { $0.name.isEmpty ? MailNames.middle($0.address, limit: SheetValues.summaryNameLimit) : $0.name }
             .joined(separator: ", ")
     }
 

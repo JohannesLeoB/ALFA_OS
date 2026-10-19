@@ -53,7 +53,7 @@ struct CardHead: View {
             if case .message(let id) = ref, model.card(id)?.pinned == false {
                 CardHeadButton(help: words("mail.card.pin.tip"), glyph: .pin, ink: ink) { model.pin(id) }
             }
-            CardHeadButton(help: words("card.close"), glyph: .close, ink: ink) { close() }
+            CardHeadButton(help: words("card.close"), glyph: .close, ink: ink, fills: false) { close() }
         }
         .padding(.horizontal, CGFloat(Design.Size.headPadRight))
         .frame(height: CGFloat(Design.Size.headerHeight))
@@ -149,7 +149,7 @@ struct CardHead: View {
             let more = max(0, draftPeople.count - 1)
             if !front && more > 0 {
                 Spacer(minLength: 0)
-                line("mail.card.more", more).designText(size: Design.TextSize.small).opacity(opacity).lineLimit(1)
+                line("mail.card.more", MailNames.number(more)).designText(size: Design.TextSize.small).opacity(opacity).lineLimit(1)
             } else {
                 draftMeta(card)
                     .designText(size: Design.TextSize.small)

@@ -1,4 +1,5 @@
 import Foundation
+import ShellCore
 
 public enum MailNames {
     private static let particles: Set<String> = ["ii", "iii", "iv", "jr", "jr.", "sr", "sr.", "de", "la", "del", "y", "von", "van", "der", "den", "da", "di", "du"]
@@ -19,7 +20,7 @@ public enum MailNames {
     public static func middle(_ text: String, limit: Int) -> String {
         let letters = Array(text)
         guard letters.count > limit else { return text }
-        let head = Int((Double(limit - 1) * 0.55).rounded(.up))
+        let head = Int((Double(limit - 1) * SheetValues.middleHead).rounded(.up))
         let tail = limit - 1 - head
         return String(letters.prefix(head)) + "…" + String(letters.suffix(tail))
     }

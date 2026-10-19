@@ -42,6 +42,7 @@ struct Mark<Content: View>: View {
         let side = CGFloat(size == .regular ? Design.Size.symbolSize : Design.Size.chipHeight)
         content
             .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
+            .tracking(CGFloat(SheetValues.markTracking * Design.TextSize.small))
             .lineLimit(1)
             .foregroundStyle(foreground)
             .frame(width: side, height: side)

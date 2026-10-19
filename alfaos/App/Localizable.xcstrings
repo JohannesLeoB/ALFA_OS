@@ -132,6 +132,17 @@
         }
       }
     },
+    "confirm.no" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nein"
+          }
+        }
+      }
+    },
     "error.resources" : {
       "comment" : "roh",
       "localizations" : {
@@ -1232,17 +1243,6 @@
         }
       }
     },
-    "mail.card.actionFailed" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "card.actionFailed"
-          }
-        }
-      }
-    },
     "mail.card.bodyLoading" : {
       "comment" : "roh",
       "localizations" : {
@@ -1282,7 +1282,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "und %lld weitere"
+            "value" : "und %@ weitere"
           }
         }
       }
@@ -1327,17 +1327,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Externe Bilder blockiert"
-          }
-        }
-      }
-    },
-    "mail.card.signatureCollapsed" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "card.signatureCollapsed"
           }
         }
       }
@@ -1447,7 +1436,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alle %lld Empfänger zeigen"
+            "value" : "Alle %@ Empfänger zeigen"
           }
         }
       }
@@ -1573,17 +1562,6 @@
         }
       }
     },
-    "mail.draft.edited" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "draft.edited"
-          }
-        }
-      }
-    },
     "mail.draft.failed.act" : {
       "comment" : "alpha",
       "localizations" : {
@@ -1639,17 +1617,6 @@
         }
       }
     },
-    "mail.draft.idle" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "draft.idle"
-          }
-        }
-      }
-    },
     "mail.draft.queuedInOutbox" : {
       "comment" : "roh",
       "localizations" : {
@@ -1668,17 +1635,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entwurf gesichert"
-          }
-        }
-      }
-    },
-    "mail.draft.saving" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "draft.saving"
           }
         }
       }
@@ -1723,17 +1679,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sendet …"
-          }
-        }
-      }
-    },
-    "mail.draft.sent" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "draft.sent"
           }
         }
       }
@@ -2288,17 +2233,6 @@
         }
       }
     },
-    "mail.loadMore" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Weitere laden"
-          }
-        }
-      }
-    },
     "mail.menu.check" : {
       "comment" : "alpha",
       "localizations" : {
@@ -2327,7 +2261,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · %lld"
+            "value" : "%@ · %@"
           }
         }
       }
@@ -2349,7 +2283,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stapel · %lld"
+            "value" : "Stapel · %@"
           }
         }
       }
@@ -2360,7 +2294,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Übersicht · %lld Karten"
+            "value" : "Übersicht · %@ Karten"
           }
         }
       }
@@ -2404,7 +2338,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld gewählt"
+            "value" : "%@ gewählt"
           }
         }
       }
@@ -2503,7 +2437,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld Empfänger"
+            "value" : "%@ Empfänger"
           }
         }
       }
@@ -2547,7 +2481,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "und %lld weitere"
+            "value" : "und %@ weitere"
           }
         }
       }
@@ -2695,17 +2629,6 @@
         }
       }
     },
-    "mail.row.selected" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "row.selected"
-          }
-        }
-      }
-    },
     "mail.row.starred" : {
       "comment" : "roh",
       "localizations" : {
@@ -2833,7 +2756,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld Treffer in allen Ordnern"
+            "value" : "%@ Treffer in allen Ordnern"
           }
         }
       }
@@ -3020,7 +2943,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld Mails archiviert"
+            "value" : "%@ Mails archiviert"
           }
         }
       }
@@ -3042,7 +2965,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld Mails gelesen"
+            "value" : "%@ Mails gelesen"
           }
         }
       }
@@ -3064,7 +2987,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld Mails ungelesen"
+            "value" : "%@ Mails ungelesen"
           }
         }
       }
@@ -3086,7 +3009,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld Mails in den Papierkorb gelegt"
+            "value" : "%@ Mails in den Papierkorb gelegt"
           }
         }
       }
@@ -3098,6 +3021,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entwurf gesichert"
+          }
+        }
+      }
+    },
+    "mail.toast.inTrash" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Papierkorb"
           }
         }
       }

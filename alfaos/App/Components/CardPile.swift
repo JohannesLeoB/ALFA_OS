@@ -75,7 +75,7 @@ struct CardFace<Head: View, Content: View>: View {
     private var fill: Color { step.map { paint($0.surface) } ?? laneFill }
     private var ink: Color { step.map { paint($0.ink) } ?? design.color(\.ink) }
     private var lacquer: Bool { surface == .lacquer }
-    private var light: Bool { step.map { $0.surface.red >= 0.75 } ?? true }
+    private var light: Bool { step.map { $0.surface.red >= SheetValues.lightSurfaceRed } ?? true }
 
     private var shape: UnevenRoundedRectangle {
         let top = CGFloat(Design.Radius.card)
@@ -126,10 +126,12 @@ struct CardFace<Head: View, Content: View>: View {
             ZStack {
                 shape.fill(design.color(\.line)).padding(-hairline)
                 if front {
-                    soft(spread: -12, blur: 24, y: -8, alpha: SheetValues.cardFlatCast)
+                    soft(spread: SheetValues.cardFlatFrontSpread, blur: SheetValues.cardFlatFrontBlur, y: SheetValues.cardFlatFrontY,
+                         alpha: SheetValues.cardFlatCast)
                 } else {
                     shape.fill(Color.black.opacity(SheetValues.cardFlatBackRing)).padding(-hairline)
-                    soft(spread: -10, blur: 16, y: -6, alpha: SheetValues.cardFlatBackCast)
+                    soft(spread: SheetValues.cardFlatBackSpread, blur: SheetValues.cardFlatBackBlur, y: SheetValues.cardFlatBackY,
+                         alpha: SheetValues.cardFlatBackCast)
                 }
             }
         }
@@ -156,6 +158,7 @@ struct CardHeadButton: View {
     let glyph: Icon
     let ink: Color
     var dim = true
+    var fills = true
     let action: () -> Void
     @State private var hovering = false
 
@@ -166,7 +169,7 @@ struct CardHeadButton: View {
                 .frame(width: side, height: side)
                 .foregroundStyle(ink)
                 .opacity(hovering || !dim ? 1 : SheetValues.closeOpacity)
-                .background(Circle().fill(hovering ? design.color(\.hover) : Color.clear))
+                .background(Circle().fill(hovering && fills ? design.color(\.hover) : Color.clear))
                 .contentShape(Circle())
         }
         .buttonStyle(PressScale(scale: SheetValues.pressScale))
@@ -326,14 +329,14 @@ private struct OverviewTileView: View {
                     Circle().fill(design.color(\.ink))
                         .frame(width: CGFloat(Design.Spacing.statusDot), height: CGFloat(Design.Spacing.statusDot))
                         .overlay(Circle().strokeBorder(design.color(\.well), lineWidth: CGFloat(Design.Size.markSeparatorRing)))
-                        .offset(x: CGFloat(Design.Radius.stroke), y: -CGFloat(Design.Radius.stroke))
+                        .offset(x: CGFloat(SheetValues.unreadDotShift), y: -CGFloat(SheetValues.unreadDotShift))
                 }
             }
             .padding(.trailing, CGFloat(Design.Spacing.step4))
             entry.title.designText(size: Design.TextSize.body, weight: .medium).lineLimit(1).frame(maxWidth: .infinity, alignment: .leading)
             entry.date.designText(\.inkTertiary, size: Design.TextSize.small).monospacedDigit().lineLimit(1).fixedSize()
             if let close = entry.close {
-                CardHeadButton(help: words("card.close"), glyph: .close, ink: design.color(\.ink), action: close)
+                CardHeadButton(help: words("card.close"), glyph: .close, ink: design.color(\.ink), fills: false, action: close)
             }
         }
         .padding(.horizontal, CGFloat(Design.Spacing.step8))

@@ -181,7 +181,7 @@ struct MailRowView: View {
                 }
                 if inTrash {
                     ConfirmPill(label: nil, question: word("mail.confirm.purge.question"), yes: word("mail.confirm.purge.yes"),
-                                no: word("text.common.cancel"), holdHint: line("mail.confirm.hold", words("mail.confirm.purge.yes")),
+                                no: word("confirm.no"), holdHint: line("mail.confirm.hold", words("mail.confirm.purge.yes")),
                                 startsAsking: true, showsProgress: false, onYes: { actions.message(.purge, item.id) }) {
                         Glyph(.trash)
                     }
@@ -200,7 +200,7 @@ struct MailRowView: View {
 
     private func contextMenu(at point: NSPoint) {
         let lines = MailMenus.row(unread: item.unread, draft: item.draft)
-        let entries = MailMenuLine.entries(lines) { action in actions.message(action, item.id, undoable: true) }
+        let entries = MailMenuLine.entries(lines) { action in actions.message(action, item.id, undoable: true, fromMenu: true) }
         menuOpen = true
         MenuPanel.shared.show(entries: entries, width: Design.Size.menuWidthRow, anchor: .point(point), window: NSApp.keyWindow) {
             menuOpen = false

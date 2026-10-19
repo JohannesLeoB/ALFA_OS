@@ -25,6 +25,7 @@ struct MailStackLane: View {
                 StackArea(model: model, commands: commands, width: width, discarding: $discarding, formatOn: $formatOn)
             }
         }
+        .background(StackKeys(model: model))
         .onChange(of: model.frontRef) { discarding = nil }
     }
 }
@@ -69,7 +70,7 @@ struct SlotRun {
     @MainActor
     func help(_ slot: CommandSlot) -> String {
         guard let action = slot.action else { return "" }
-        if action == .overview { return words("mail.overview.tip", model.stackCount) }
+        if action == .overview { return words("mail.overview.tip", MailNames.number(model.stackCount)) }
         return words(action.key)
     }
 }
@@ -117,7 +118,7 @@ struct CommandHeader: View {
                 .padding(.horizontal, CGFloat(Design.Spacing.step4))
         case .pill:
             ConfirmPill(label: nil, question: word("mail.confirm.discard.question"), yes: word("mail.confirm.discard.yes"),
-                        no: word("text.common.cancel"), holdHint: line("mail.confirm.hold", words("mail.confirm.discard.yes")),
+                        no: word("confirm.no"), holdHint: line("mail.confirm.hold", words("mail.confirm.discard.yes")),
                         startsAsking: true, showsProgress: false, onYes: {
                             if let id = discarding { model.discard(id) }
                             discarding = nil
@@ -141,7 +142,7 @@ struct CommandHeader: View {
     private func openMore(_ plan: CommandPlan) {
         guard let rect = moreAnchor.screenRect() else { return }
         let lines = plan.overflow.compactMap { slot in slot.action.map { MailMenuLine.item($0) } }
-        let entries = MailMenuLine.entries(lines) { run.perform($0) }
+        let entries = MailMenuLine.entries(lines, warns: false) { run.perform($0) }
         MenuPanel.shared.show(entries: entries, width: Design.Size.menuWidthWide, anchor: .rect(rect), window: NSApp.keyWindow)
     }
 }
@@ -170,7 +171,59 @@ struct StackArea: View {
     }
 
     private func toastText(_ toast: MailToast) -> Text {
-        if let count = toast.kind.count { return line(toast.kind.key, count) }
+        if let count = toast.kind.count { return line(toast.kind.key, MailNames.number(count)) }
         return word(toast.kind.key)
+    }
+}
+
+struct StackKeys: NSViewRepresentable {
+    let model: MailModel
+
+    func makeNSView(context: Context) -> StackKeysView {
+        StackKeysView()
+    }
+
+    func updateNSView(_ view: StackKeysView, context: Context) {
+        view.model = model
+        view.listen(true)
+    }
+
+    static func dismantleNSView(_ view: StackKeysView, coordinator: ()) {
+        view.listen(false)
+    }
+}
+
+final class StackKeysView: NSView {
+    var model: MailModel?
+    private var monitor: Any?
+
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
+
+    func listen(_ on: Bool) {
+        if on, monitor == nil {
+            monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+                MainActor.assumeIsolated { self?.handle(event) ?? false } ? nil : event
+            }
+        } else if !on, let current = monitor {
+            NSEvent.removeMonitor(current)
+            monitor = nil
+        }
+    }
+
+    private func handle(_ event: NSEvent) -> Bool {
+        guard let model, event.window === window, !model.overview.open, case .message(let id) = model.frontRef else { return false }
+        guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return false }
+        if window?.firstResponder is NSText { return false }
+        let actions = MailDo(model: model)
+        switch event.charactersIgnoringModifiers?.lowercased() {
+        case "e":
+            actions.message(.archive, id)
+            return true
+        case "\u{7F}", "\u{F728}":
+            actions.message(.trash, id)
+            return true
+        default:
+            return false
+        }
     }
 }

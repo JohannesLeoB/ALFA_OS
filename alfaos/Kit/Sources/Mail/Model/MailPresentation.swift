@@ -107,7 +107,7 @@ extension MailModel {
             return MailRowPresentation(
                 id: item.id,
                 initials: MailNames.initials(party.name),
-                sender: party.name.isEmpty ? MailNames.middle(name, limit: 40) : name,
+                sender: party.name.isEmpty ? MailNames.middle(name, limit: SheetValues.senderNameLimit) : name,
                 address: party.address,
                 outgoing: outgoing,
                 draft: draftsFolder,
