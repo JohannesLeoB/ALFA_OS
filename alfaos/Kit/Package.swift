@@ -36,24 +36,17 @@ let package = Package(
             ],
             swiftSettings: strict
         ),
-        .testTarget(name: "ShellCoreTests", dependencies: ["ShellCore"], swiftSettings: strict),
         .testTarget(
-            name: "HubTests",
-            dependencies: [
-                "Hub",
-                .product(name: "AlfaServices", package: "alpha"),
-                .product(name: "AlfaKit", package: "alpha")
-            ],
-            swiftSettings: strict
-        ),
-        .testTarget(
-            name: "MailTests",
+            name: "WholeAppTests",
             dependencies: [
                 "Mail",
                 "Hub",
+                "ShellCore",
                 .product(name: "AlfaServices", package: "alpha"),
-                .product(name: "AlfaKit", package: "alpha")
+                .product(name: "AlfaKit", package: "alpha"),
+                .product(name: "GRDB", package: "GRDB.swift")
             ],
+            exclude: ["golden.txt"],
             swiftSettings: strict
         )
     ]
