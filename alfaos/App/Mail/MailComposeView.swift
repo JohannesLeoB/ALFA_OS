@@ -135,13 +135,12 @@ struct FromButton: View {
     let model: MailModel
     let card: MailDraftCard
     @State private var anchor = AnchorBox()
-    @State private var hovering = false
     @AppStorage(SettingsKey.identityName) private var name = ""
 
     private var address: String { model.accounts.first { $0.id == card.inlet }?.account ?? "" }
 
     var body: some View {
-        Button { open() } label: {
+        AddressButton(capsule: true, action: open) {
             HStack(spacing: CGFloat(Design.Spacing.step8)) {
                 if name.isEmpty {
                     Text(verbatim: address).designText(\.ink, size: Design.TextSize.body, weight: .medium).lineLimit(1)
@@ -151,15 +150,8 @@ struct FromButton: View {
                 }
                 Glyph.small(.chevron).foregroundStyle(design.color(\.inkTertiary))
             }
-            .padding(.horizontal, CGFloat(Design.Spacing.step8))
-            .frame(height: CGFloat(Design.Spacing.step28))
-            .background(Capsule().fill(hovering ? design.color(\.hover) : Color.clear))
-            .contentShape(Capsule())
         }
-        .buttonStyle(.plain)
-        .padding(.leading, -CGFloat(Design.Spacing.step8))
         .background(AnchorProbe(box: anchor))
-        .onHover { hovering = $0 }
     }
 
     private func open() {

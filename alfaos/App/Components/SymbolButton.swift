@@ -4,6 +4,7 @@ import SwiftUI
 enum SymbolHover {
     case ring
     case fill
+    case tint
     case none
 }
 
@@ -17,6 +18,8 @@ struct SymbolButton: View {
     var tone: KeyPath<DesignColors, RGB> = \.inkTertiary
     var hoverTone: KeyPath<DesignColors, RGB> = \.ink
     var ringed = true
+    var plate: KeyPath<DesignColors, RGB>?
+    var ringTone: KeyPath<DesignColors, RGB> = \.lineStrong
     var hover = SymbolHover.ring
     var pressed = true
     let action: () -> Void
@@ -31,13 +34,14 @@ struct SymbolButton: View {
 
     private var fill: Color {
         if selected { return design.color(\.inverse) }
-        return live && hover == .fill ? design.color(\.hover) : Color.clear
+        if live && hover == .fill { return design.color(\.hover) }
+        return plate.map { design.color($0) } ?? Color.clear
     }
 
     private var ring: Color? {
         if selected { return nil }
         if live && hover == .ring { return design.color(\.inkTertiary) }
-        return ringed ? design.color(\.lineStrong) : nil
+        return ringed ? design.color(ringTone) : nil
     }
 
     var body: some View {

@@ -85,36 +85,6 @@ struct RecipientHeader: View {
     }
 }
 
-struct Disclosure<Content: View>: View {
-    @Environment(\.design) private var design
-    @Environment(\.accessibilityReduceMotion) private var reduced
-    let open: Bool
-    let help: String
-    @ViewBuilder let content: Content
-    let action: () -> Void
-    @State private var hovering = false
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: CGFloat(Design.Spacing.step8)) {
-                content
-                Glyph.small(.chevron)
-                    .foregroundStyle(design.color(\.inkTertiary))
-                    .rotationEffect(.degrees(open ? 180 : 0))
-            }
-            .padding(.horizontal, CGFloat(Design.Spacing.step8))
-            .frame(height: CGFloat(Design.Spacing.step28))
-            .background(Capsule().fill(hovering ? design.color(\.hover) : Color.clear))
-            .contentShape(Capsule())
-        }
-        .buttonStyle(PressScale(scale: SheetValues.pressScaleDisclosure))
-        .padding(.leading, -CGFloat(Design.Spacing.step8))
-        .help(Text(verbatim: help))
-        .onHover { hovering = $0 }
-        .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.chevron), value: open)
-    }
-}
-
 struct PersonRow: View {
     let model: MailModel
     let card: ReadingCard
@@ -172,7 +142,7 @@ struct SheetBody: View {
             if card.remoteImagesBlocked {
                 Notice(kind: .warning, title: word("mail.read.images.title"), text: word("mail.read.images.text"), onSheet: true,
                        glyph: { Glyph(.alert) },
-                       actions: { SheetButton(label: word("mail.action.loadImages")) { model.allowRemoteImages(card.id) } })
+                       actions: { TextButton(label: word("mail.action.loadImages"), kind: .sheet) { model.allowRemoteImages(card.id) } })
                     .padding(.horizontal, -CGFloat(SheetValues.bodyPadSide))
                     .padding(.top, CGFloat(SheetValues.bodyPadTop))
             }
@@ -193,27 +163,6 @@ struct SheetBody: View {
     }
 }
 
-struct SheetButton: View {
-    @Environment(\.design) private var design
-    @Environment(\.hairline) private var hairline
-    let label: Text
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            label
-                .font(Font(Typeface.sheet(size: Design.TextSize.small, weight: .medium)))
-                .foregroundStyle(design.color(\.sheetInk))
-                .padding(.horizontal, CGFloat(Design.Spacing.step12))
-                .frame(height: CGFloat(Design.Spacing.step28))
-                .background(Capsule().fill(design.color(\.sheet)))
-                .overlay(Capsule().strokeBorder(design.color(\.sheetLineStrong), lineWidth: hairline))
-                .contentShape(Capsule())
-        }
-        .buttonStyle(PressScale(scale: SheetValues.pressScale))
-    }
-}
-
 struct ThreadItemView: View {
     @Environment(\.design) private var design
     @Environment(\.hairline) private var hairline
@@ -231,10 +180,9 @@ struct ThreadItemView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step8)) {
             HStack(alignment: .firstTextBaseline, spacing: CGFloat(Design.Spacing.step8)) {
-                Button { menu() } label: {
+                AddressButton(action: menu) {
                     Text(verbatim: item.name).font(system(Design.TextSize.body, .medium))
                 }
-                .buttonStyle(.plain)
                 .background(AnchorProbe(box: anchor))
                 Spacer(minLength: 0)
                 if let date = item.date { threadDate(date) }
@@ -244,16 +192,9 @@ struct ThreadItemView: View {
                 .lineHeight(Design.LineHeight.mailBody * Design.TextSize.body, size: Design.TextSize.body, sheet: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
             if let quote = item.quote {
-                Button { model.toggleQuote(card.id, message: item.id) } label: {
-                    (item.quoteOpen ? word("mail.quote.hide") : line("mail.quote.show", quote.lines))
-                        .font(system(Design.TextSize.small, .medium))
-                        .foregroundStyle(design.color(\.sheetInkSecondary))
-                        .padding(.horizontal, CGFloat(Design.Spacing.step8))
-                        .frame(height: CGFloat(Design.Size.chipHeight))
-                        .overlay(Capsule().strokeBorder(design.color(\.lineStrong), lineWidth: hairline))
-                        .contentShape(Capsule())
+                QuoteToggle(label: item.quoteOpen ? word("mail.quote.hide") : line("mail.quote.show", quote.lines)) {
+                    model.toggleQuote(card.id, message: item.id)
                 }
-                .buttonStyle(.plain)
                 if item.quoteOpen {
                     Text(verbatim: quote.text)
                         .font(system(Design.TextSize.body))

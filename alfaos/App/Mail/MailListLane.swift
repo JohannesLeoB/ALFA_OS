@@ -127,10 +127,11 @@ struct MailListLane: View {
         let here = model.searchScope == .here
         let placeholder = here ? words("mail.search.placeholder.here", title) : words("mail.search.placeholder.all")
         return InputField(text: $text, placeholder: Text(verbatim: placeholder), labelKey: "mail.search.label", focus: $focused) {
-            ScopeButton(label: here ? words("mail.search.scope.here", title) : words("mail.search.scope.all"),
-                        help: here ? words("mail.search.tip.here", title) : words("mail.search.tip.all", title)) {
+            TextButton(label: Text(verbatim: here ? words("mail.search.scope.here", title) : words("mail.search.scope.all")), kind: .quiet,
+                       size: .compact) {
                 Task { await model.toggleScope() }
             }
+            .help(Text(verbatim: here ? words("mail.search.tip.here", title) : words("mail.search.tip.all", title)))
         }
         .onKeyPress(.escape) {
             Task { await model.setSearching(false) }
@@ -220,31 +221,5 @@ struct MailListLane: View {
         formatter.unitsStyle = .full
         let relative = formatter.localizedString(for: last, relativeTo: model.now)
         return Text(verbatim: words("mail.list.failed.text") + " " + words("mail.list.failed.last", relative))
-    }
-}
-
-struct ScopeButton: View {
-    @Environment(\.design) private var design
-    @Environment(\.hairline) private var hairline
-    let label: String
-    let help: String
-    let action: () -> Void
-    @State private var hovering = false
-
-    var body: some View {
-        Button(action: action) {
-            Text(verbatim: label)
-                .designText(\.inkSecondary, size: Design.TextSize.small, weight: .medium)
-                .lineLimit(1)
-                .truncationMode(.tail)
-                .padding(.horizontal, CGFloat(Design.Spacing.step12))
-                .frame(height: CGFloat(Design.Size.chipHeight))
-                .background(Capsule().fill(hovering ? design.color(\.hover) : Color.clear))
-                .overlay(Capsule().strokeBorder(design.color(\.lineStrong), lineWidth: hairline))
-                .contentShape(Capsule())
-        }
-        .buttonStyle(PressScale(scale: SheetValues.pressScale))
-        .help(Text(verbatim: help))
-        .onHover { hovering = $0 }
     }
 }

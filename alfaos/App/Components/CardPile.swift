@@ -349,7 +349,8 @@ private struct OverviewTileView: View {
         if !entry.commands.isEmpty {
             HStack(spacing: CGFloat(Design.Spacing.step4)) {
                 ForEach(entry.commands) { command in
-                    OverviewCommandButton(command: command)
+                    SymbolButton(help: command.help, glyph: command.icon, tone: command.tone, hoverTone: command.tone, plate: \.lane,
+                                 hover: .fill, action: command.run)
                 }
             }
             .padding(CGFloat(Design.Spacing.step8))
@@ -358,28 +359,5 @@ private struct OverviewTileView: View {
             .allowsHitTesting(hot)
             .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.tileActions), value: hot)
         }
-    }
-}
-
-private struct OverviewCommandButton: View {
-    @Environment(\.design) private var design
-    @Environment(\.hairline) private var hairline
-    let command: OverviewCommand
-    @State private var hovering = false
-
-    var body: some View {
-        let side = CGFloat(Design.Size.symbolSize)
-        Button(action: command.run) {
-            Glyph(command.icon)
-                .frame(width: side, height: side)
-                .foregroundStyle(design.color(command.tone))
-                .background(Circle().fill(hovering ? design.color(\.hover) : design.color(\.lane)))
-                .overlay(Circle().strokeBorder(design.color(\.lineStrong), lineWidth: hairline))
-                .contentShape(Circle())
-        }
-        .buttonStyle(PressScale(scale: SheetValues.pressScale))
-        .help(Text(verbatim: command.help))
-        .accessibilityLabel(Text(verbatim: command.help))
-        .onHover { hovering = $0 }
     }
 }

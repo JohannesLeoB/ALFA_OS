@@ -7,6 +7,8 @@ enum TextButtonKind {
     case signal
     case plain
     case destructive
+    case quiet
+    case sheet
 }
 
 enum TextButtonSize {
@@ -30,7 +32,8 @@ struct TextButton<Glyph: View>: View {
         switch kind {
         case .accent: return design.color(\.inverse)
         case .destructive: return design.color(\.lane)
-        case .neutral, .signal, .plain: return hovering && !disabled ? design.color(\.hover) : Color.clear
+        case .sheet: return design.color(\.sheet)
+        case .neutral, .signal, .plain, .quiet: return hovering && !disabled ? design.color(\.hover) : Color.clear
         }
     }
 
@@ -39,15 +42,17 @@ struct TextButton<Glyph: View>: View {
         case .accent: design.color(\.onInverse)
         case .neutral: design.color(\.ink)
         case .signal, .destructive: design.color(\.signal)
-        case .plain: design.color(\.inkSecondary)
+        case .plain, .quiet: design.color(\.inkSecondary)
+        case .sheet: design.color(\.sheetInk)
         }
     }
 
     private var ringColor: Color? {
         switch kind {
         case .accent, .plain: nil
-        case .neutral: design.color(\.lineStrong)
+        case .neutral, .quiet: design.color(\.lineStrong)
         case .signal, .destructive: design.color(\.signal)
+        case .sheet: design.color(\.sheetLineStrong)
         }
     }
 
@@ -61,7 +66,8 @@ struct TextButton<Glyph: View>: View {
                 glyph
                 label.lineLimit(1)
             }
-            .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
+            .font(kind == .sheet ? Font(Typeface.sheet(size: Design.TextSize.small, weight: .medium))
+                  : .face(Design.TextSize.small, weight: Design.Weight.medium))
             .foregroundStyle(foreground)
             .padding(.leading, CGFloat(Glyph.self == EmptyView.self ? Design.Spacing.step12 : Design.Spacing.step8))
             .padding(.trailing, CGFloat(Design.Spacing.step12))

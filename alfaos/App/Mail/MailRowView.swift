@@ -155,13 +155,13 @@ struct MailRowView: View {
     private var rowActions: some View {
         if hovering && !picking && !item.draft {
             HStack(spacing: CGFloat(Design.Spacing.step4)) {
-                RowAction(help: word(item.starred ? "mail.action.unstar" : "mail.action.star"), glyph: .flag, selected: selected, tone: item.starred ? tone.primary : \.inkTertiary) {
+                rowAction(item.starred ? "mail.action.unstar" : "mail.action.star", glyph: .flag, tone: item.starred ? tone.primary : \.inkTertiary) {
                     actions.message(item.starred ? .unstar : .star, item.id)
                 }
-                RowAction(help: word(item.unread ? "mail.action.markRead" : "mail.action.markUnread"), glyph: .envelope, selected: selected, tone: tone.secondary) {
+                rowAction(item.unread ? "mail.action.markRead" : "mail.action.markUnread", glyph: .envelope, tone: tone.secondary) {
                     actions.message(item.unread ? .markRead : .markUnread, item.id)
                 }
-                RowAction(help: word("mail.action.archive"), glyph: .archive, selected: selected, tone: tone.secondary) {
+                rowAction("mail.action.archive", glyph: .archive, tone: tone.secondary) {
                     actions.message(.archive, item.id)
                 }
                 if inTrash {
@@ -171,7 +171,7 @@ struct MailRowView: View {
                         Glyph(.trash)
                     }
                 } else {
-                    RowAction(help: word("mail.action.trash"), glyph: .trash, selected: selected, tone: tone.secondary) {
+                    rowAction("mail.action.trash", glyph: .trash, tone: tone.secondary) {
                         actions.message(.trash, item.id)
                     }
                 }
@@ -181,6 +181,11 @@ struct MailRowView: View {
             .padding(.trailing, CGFloat(Design.Spacing.step8))
             .background(selected ? design.color(\.ink) : design.color(\.lane))
         }
+    }
+
+    private func rowAction(_ key: String, glyph: Icon, tone: KeyPath<DesignColors, RGB>, action: @escaping () -> Void) -> some View {
+        SymbolButton(help: words(key), glyph: glyph, tone: tone, hoverTone: selected ? \.onInverse : \.ink, plate: selected ? \.ink : \.lane,
+                     ringTone: selected ? \.onInverseLine : \.lineStrong, hover: .tint, action: action)
     }
 
     private func contextMenu(at point: NSPoint) {
@@ -214,33 +219,5 @@ struct MailDate: View {
         case .draft: word("mail.date.draft")
         case .none: Text(verbatim: "")
         }
-    }
-}
-
-struct RowAction: View {
-    @Environment(\.design) private var design
-    @Environment(\.hairline) private var hairline
-    let help: Text
-    let glyph: Icon
-    let selected: Bool
-    var tone: KeyPath<DesignColors, RGB> = \.inkSecondary
-    let action: () -> Void
-    @State private var hovering = false
-
-    var body: some View {
-        let side = CGFloat(Design.Size.symbolSize)
-        let line = selected ? design.color(\.onInverseLine) : design.color(\.lineStrong)
-        Button(action: action) {
-            Glyph(glyph)
-                .frame(width: side, height: side)
-                .foregroundStyle(design.color(hovering ? (selected ? \.onInverse : \.ink) : tone))
-                .background(Circle().fill(selected ? design.color(\.ink) : design.color(\.lane)))
-                .overlay(Circle().strokeBorder(line, lineWidth: hairline))
-                .contentShape(Circle())
-        }
-        .buttonStyle(PressScale(scale: SheetValues.pressScale))
-        .help(help)
-        .accessibilityLabel(help)
-        .onHover { hovering = $0 }
     }
 }
