@@ -47,4 +47,37 @@ public struct AppDirectory: Sendable, Decodable, Equatable {
             return members.isEmpty ? nil : (group, members)
         }
     }
+
+    public func menu(matching query: String, title: (String) -> String) -> [MenuLine] {
+        var lines: [MenuLine] = []
+        var hit = 0
+        for row in rows(matching: query, title: title) {
+            if !lines.isEmpty { lines.append(.separator(lines.count)) }
+            for entry in row.apps {
+                lines.append(.entry(entry, hit))
+                hit += 1
+            }
+        }
+        return lines
+    }
+}
+
+public enum MenuLine: Sendable, Equatable, Identifiable {
+    case separator(Int)
+    case entry(AppEntry, Int)
+
+    public var id: String {
+        switch self {
+        case .separator(let line): "separator." + String(line)
+        case .entry(let entry, _): entry.id
+        }
+    }
+
+    public var entry: AppEntry? {
+        if case .entry(let entry, _) = self { entry } else { nil }
+    }
+
+    public var hit: Int? {
+        if case .entry(_, let hit) = self { hit } else { nil }
+    }
 }

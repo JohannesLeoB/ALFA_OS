@@ -56,12 +56,12 @@ public struct ShellGeometry: Sendable, Equatable {
     public let blobWidth: Double
     public let blobAwakeWidth: Double
     public let blobHeight: Double
+    public let blobDock: Double
     public let menuWidth: Double
-    public let menuGap: Double
     public let assistantWidth: Double
     public let windowMin: Size
 
-    public init(theme: TokenTheme, metrics: ShellMetrics) {
+    public init() {
         margin = Design.Size.edge
         gap = Design.Size.gutter
         blobTop = Design.Size.edge
@@ -74,9 +74,17 @@ public struct ShellGeometry: Sendable, Equatable {
         blobWidth = Design.Size.blobWidth
         blobAwakeWidth = Design.Size.blobAwakeWidth
         blobHeight = Design.Size.blobHeight
-        menuWidth = theme.length(.componentMenuWidth)
-        menuGap = theme.length(.spaceS)
+        blobDock = Design.Size.blobDockDistance
+        menuWidth = Design.Size.blobPopupFallbackWidth
         assistantWidth = Design.Size.blobPopupFallbackWidth
-        windowMin = Size(width: 2 * margin + 2 * gap + minimum.reduce(0, +), height: strip + Design.Size.blobMenuMinHeight + margin)
+        windowMin = SheetValues.windowMin
+    }
+
+    public init(theme: TokenTheme, metrics: ShellMetrics) {
+        self.init()
+    }
+
+    public func laneHeight(_ window: Size) -> Double {
+        window.height - strip - margin
     }
 }

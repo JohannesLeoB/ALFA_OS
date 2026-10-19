@@ -63,7 +63,7 @@ private struct DesignTextModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .font(.system(size: CGFloat(size), weight: weight))
+            .font(Font(Typeface.font(size: size, weight: weight)))
             .foregroundStyle(design.color(tone))
     }
 }

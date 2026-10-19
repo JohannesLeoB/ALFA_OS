@@ -21,8 +21,37 @@ final class AppHost {
     var section: SettingsSection = .integrations
     var values: [String: String] = [:]
 
+    private(set) var syncing = false
+
     var isIdle: Bool {
         if case .idle = phase { true } else { false }
+    }
+
+    var mail: MailModel? {
+        if case .ready(let assembly) = phase { assembly.model } else { nil }
+    }
+
+    var stackEmpty: Bool { mail?.cards.isEmpty ?? true }
+
+    var unread: Int { mail?.totalUnread ?? 0 }
+
+    var failedInlets: Int {
+        mail?.accounts.filter { if case .failed = $0.state { true } else { false } }.count ?? 0
+    }
+
+    var syncFailed: Bool {
+        switch mail?.listState {
+        case .failed, .offline, .signInExpired: true
+        default: false
+        }
+    }
+
+    func sync() async {
+        guard let mail, !syncing else { return }
+        syncing = true
+        await mail.refreshFolders()
+        await mail.loadSelection()
+        syncing = false
     }
 
     func prepare() {

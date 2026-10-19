@@ -1,74 +1,36 @@
 import AppKit
+import CoreText
 import ShellCore
 import SwiftUI
 
 struct Theme {
-    let tokens: TokenTheme
     let geometry: ShellGeometry
-    let metrics: ShellMetrics
-    let mode: TokenMode
+    let dark: Bool
+    let still: Bool
     let bundle: Bundle
 
-    func color(_ key: ThemeKey) -> Color {
-        let value = tokens.color(key, mode)
-        var parts: [CGFloat] = [value.red, value.green, value.blue, value.alpha]
-        return Color(nsColor: NSColor(colorSpace: .sRGB, components: &parts, count: parts.count))
-    }
-
     func design(_ key: KeyPath<DesignColors, RGB>) -> Color {
-        DesignStyle(dark: mode == .dark).color(key)
+        DesignStyle(dark: dark).color(key)
     }
 
-    func pick(light: ThemeKey, dark: ThemeKey) -> Color {
-        color(mode == .light ? light : dark)
-    }
-
-    func length(_ key: ThemeKey) -> CGFloat {
-        CGFloat(tokens.length(key))
-    }
-
-    func measure(_ key: ShellMeasure) -> CGFloat {
-        CGFloat(metrics.measure(key))
-    }
-
-    func font(_ key: TextKey) -> Font {
-        guard let style = tokens.textStyle(key) else { return Font.body }
-        let weight = Self.weight(style.weight)
-        let size = CGFloat(style.size)
-        let base = style.family == "mono"
-            ? NSFont.monospacedSystemFont(ofSize: size, weight: weight)
-            : NSFont.systemFont(ofSize: size, weight: weight)
-        return Font(base)
-    }
-
-    func tracking(_ key: TextKey) -> CGFloat {
-        CGFloat(tokens.textStyle(key)?.tracking ?? 0)
-    }
-
-    func spring(_ seconds: Double, bounce: Double = 0) -> Animation {
-        NSWorkspace.shared.accessibilityDisplayShouldReduceMotion ? .linear(duration: 0.001) : .spring(duration: seconds, bounce: bounce)
-    }
-
-    func animation(_ seconds: Double, _ curve: CubicBezier = Design.Easing.standard) -> Animation {
-        Animation.timingCurve(curve.x1, curve.y1, curve.x2, curve.y2, duration: seconds)
-    }
-
-    func animation(_ duration: ThemeKey) -> Animation {
-        let curve = tokens.curve(.motionCurveStandard)
-        return Animation.timingCurve(curve.x1, curve.y1, curve.x2, curve.y2, duration: tokens.duration(duration))
-    }
-
-    func designShadow(_ key: KeyPath<DesignShadows, [ShadowLayer]>) -> [ShadowLayer] {
-        (mode == .dark ? DesignShadows.dark : DesignShadows.light)[keyPath: key]
-    }
-
-    func shadows(_ key: ThemeKey) -> [ShadowLayer] {
-        tokens.shadow(key, mode)
+    func mood(_ key: KeyPath<DesignMoods, RGB>) -> Color {
+        color((dark ? DesignMoods.dark : DesignMoods.light)[keyPath: key])
     }
 
     func color(_ rgb: RGB) -> Color {
-        var parts: [CGFloat] = [rgb.red, rgb.green, rgb.blue, rgb.alpha]
-        return Color(nsColor: NSColor(colorSpace: .sRGB, components: &parts, count: parts.count))
+        Color(.sRGB, red: rgb.red, green: rgb.green, blue: rgb.blue, opacity: rgb.alpha)
+    }
+
+    func designShadow(_ key: KeyPath<DesignShadows, [ShadowLayer]>) -> [ShadowLayer] {
+        (dark ? DesignShadows.dark : DesignShadows.light)[keyPath: key]
+    }
+
+    func font(_ size: Double = Design.TextSize.body, weight: Int = Design.Weight.regular) -> Font {
+        Font(Typeface.font(size: size, weight: weight))
+    }
+
+    func ease(_ seconds: Double, _ curve: CubicBezier = Design.Easing.standard, delay: Double = 0) -> Animation? {
+        still ? nil : Animation.timingCurve(curve.x1, curve.y1, curve.x2, curve.y2, duration: seconds).delay(delay)
     }
 
     func text(_ key: String) -> Text {
@@ -78,14 +40,56 @@ struct Theme {
     func string(_ key: String) -> String {
         String(localized: String.LocalizationValue(key), bundle: bundle)
     }
+}
 
-    private static func weight(_ value: Int) -> NSFont.Weight {
+enum Typeface {
+    private final class Anchor {}
+
+    private static let ready: Bool = {
+        guard let url = Bundle(for: Anchor.self).url(forResource: "Geist-VariableFont_wght", withExtension: "ttf") else { return false }
+        return CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+    }()
+
+    private static let weightAxis = 0x7767_6874
+
+    static func font(size: Double, weight: Int) -> NSFont {
+        _ = ready
+        let size = CGFloat(size)
+        if let family = Design.Family.text.first {
+            let variation = NSFontDescriptor.AttributeName(rawValue: kCTFontVariationAttribute as String)
+            let descriptor = NSFontDescriptor(fontAttributes: [.family: family, variation: [weightAxis: weight]])
+            if let font = NSFont(descriptor: descriptor, size: size), font.familyName == family { return font }
+        }
+        return NSFont.systemFont(ofSize: size, weight: systemWeight(weight))
+    }
+
+    static func font(size: Double, weight: Font.Weight) -> NSFont {
+        let value: Int
+        switch weight {
+        case .light: value = Design.Weight.light
+        case .medium: value = Design.Weight.medium
+        case .semibold: value = Design.Weight.semibold
+        default: value = Design.Weight.regular
+        }
+        return font(size: size, weight: value)
+    }
+
+    static func leading(size: Double, weight: Int) -> CGFloat {
+        let face = font(size: size, weight: weight)
+        let natural = face.ascender - face.descender + face.leading
+        return max(0, CGFloat(size * Design.LineHeight.body) - natural)
+    }
+
+    static func width(_ text: String, size: Double, weight: Int) -> Double {
+        Double((text as NSString).size(withAttributes: [.font: font(size: size, weight: weight)]).width)
+    }
+
+    private static func systemWeight(_ value: Int) -> NSFont.Weight {
         switch value {
-        case ..<350: return .light
-        case ..<450: return .regular
-        case ..<550: return .medium
-        case ..<650: return .semibold
-        default: return .bold
+        case ..<Design.Weight.regular: .light
+        case ..<Design.Weight.medium: .regular
+        case ..<Design.Weight.semibold: .medium
+        default: .semibold
         }
     }
 }
@@ -106,7 +110,7 @@ struct ThemeShadow<S: InsettableShape>: ViewModifier {
             }
             return AnyView(view.shadow(
                 color: theme.color(layer.color),
-                radius: CGFloat(layer.blur),
+                radius: CGFloat(layer.blur / 2),
                 x: CGFloat(layer.x),
                 y: CGFloat(layer.y)
             ))
@@ -115,10 +119,6 @@ struct ThemeShadow<S: InsettableShape>: ViewModifier {
 }
 
 extension View {
-    func themeShadow<S: InsettableShape>(_ theme: Theme, _ key: ThemeKey, shape: S) -> some View {
-        modifier(ThemeShadow(theme: theme, layers: theme.shadows(key), shape: shape))
-    }
-
     func themeShadow<S: InsettableShape>(_ theme: Theme, layers: [ShadowLayer], shape: S) -> some View {
         modifier(ThemeShadow(theme: theme, layers: layers, shape: shape))
     }

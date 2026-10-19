@@ -46,6 +46,7 @@
       }
     },
     "app.settings.lane.center" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -53,10 +54,10 @@
             "value" : "Konten"
           }
         }
-      },
-      "comment" : "roh"
+      }
     },
     "app.settings.lane.leading" : {
+      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -64,27 +65,15 @@
             "value" : "Einstellungen"
           }
         }
-      },
-      "comment" : "roh"
+      }
     },
     "app.settings.lane.trailing" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hinzufügen"
-          }
-        }
-      },
-      "comment" : "roh"
-    },
-    "assistant.close" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schließen"
+            "value" : "Hinzufügen"
           }
         }
       }
@@ -100,13 +89,24 @@
         }
       }
     },
-    "assistant.state" : {
+    "assistant.idle" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nicht verbunden"
+            "value" : "Füge Text, Dateien oder Links ein."
+          }
+        }
+      }
+    },
+    "assistant.noMessage" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Nachricht offen."
           }
         }
       }
@@ -122,13 +122,13 @@
         }
       }
     },
-    "blob.label" : {
+    "blob.help" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Blob"
+            "value" : "Klick: Bereiche · Doppelklick: Assistent"
           }
         }
       }
@@ -749,57 +749,46 @@
         }
       }
     },
-    "lane.fold" : {
+    "lane.handle.help" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Falten"
+            "value" : "Ziehen · Doppelklick setzt zurück"
           }
         }
       }
     },
-    "lane.handle" : {
+    "lane.handle.leading" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Breite der Bahn"
+            "value" : "Breite der linken Bahn"
           }
         }
       }
     },
-    "lane.maximize" : {
+    "lane.handle.trailing" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Groß"
+            "value" : "Breite der rechten Bahn"
           }
         }
       }
     },
-    "lane.restore" : {
+    "lane.handle.value" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zurück"
-          }
-        }
-      }
-    },
-    "lane.unfold" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aufklappen"
+            "value" : "%lld pt"
           }
         }
       }
@@ -1574,24 +1563,13 @@
         }
       }
     },
-    "menu.assistant" : {
+    "menu.empty" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Assistent"
-          }
-        }
-      }
-    },
-    "menu.label" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Blob-Menü"
+            "value" : "Nichts gefunden"
           }
         }
       }
@@ -1602,18 +1580,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Finden …"
-          }
-        }
-      }
-    },
-    "menu.search.label" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bereich finden"
+            "value" : "Finden"
           }
         }
       }
@@ -1636,17 +1603,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "JB"
-          }
-        }
-      }
-    },
-    "pill.label" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abgleich und Person"
           }
         }
       }
@@ -1823,6 +1779,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anmelden"
+          }
+        }
+      }
+    },
+    "sync.failed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgleich fehlgeschlagen. Zum Wiederholen drücken."
+          }
+        }
+      }
+    },
+    "sync.fresh" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neu laden · Gerade abgeglichen"
+          }
+        }
+      }
+    },
+    "sync.running" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gleicht ab …"
           }
         }
       }
