@@ -48,7 +48,11 @@ struct ShellView: View {
     }
 
     private var stackEmpty: Bool {
-        model.currentID == "mail" && (host?.stackEmpty ?? true)
+        switch model.currentID {
+        case "mail": host?.stackEmpty ?? true
+        case "settings": SettingsShared.board.cards.isEmpty
+        default: false
+        }
     }
 
     private func laneAnimation(_ theme: Theme) -> Animation? {
@@ -67,7 +71,7 @@ struct ShellView: View {
         let g = theme.geometry
         let height = CGFloat(g.laneHeight(model.window))
         let entry = model.current
-        let keys = [entry?.lanes.leadingKey ?? "", entry?.lanes.centerKey ?? "", entry?.lanes.trailingKey ?? ""]
+        let keys = [entry?.lanes.leadingKey ?? "", "", entry?.lanes.trailingKey ?? ""]
         let x = lefts(theme)
         return ZStack(alignment: .topLeading) {
             ForEach(Lane.allCases, id: \.self) { lane in

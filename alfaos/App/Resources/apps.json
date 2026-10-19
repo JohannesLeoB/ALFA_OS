@@ -9,8 +9,7 @@
           "titleKey": "app.mail",
           "symbol": "envelope",
           "lanes": {
-            "leadingKey": "app.mail.lane.leading",
-            "centerKey": "app.mail.lane.center"
+            "leadingKey": "app.mail.lane.leading"
           }
         }
       ]
@@ -25,7 +24,6 @@
           "symbol": "gearshape",
           "lanes": {
             "leadingKey": "app.settings.lane.leading",
-            "centerKey": "app.settings.lane.center",
             "trailingKey": "app.settings.lane.trailing"
           }
         }

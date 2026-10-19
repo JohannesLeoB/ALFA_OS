@@ -25,7 +25,6 @@ struct MailStackLane: View {
                 StackArea(model: model, commands: commands, width: width, discarding: $discarding, formatOn: $formatOn)
             }
         }
-        .replacingLaneHeader()
         .onChange(of: model.frontRef) { discarding = nil }
     }
 }

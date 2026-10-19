@@ -1,3 +1,4 @@
+import Mail
 import ShellCore
 import SwiftUI
 
@@ -7,6 +8,19 @@ struct LaneView: View {
     let lane: Lane
     let titleKey: String
     let size: CGSize
+    @Environment(\.appHost) private var host
+    @Environment(\.hostLive) private var live
+
+    private var ownHead: Bool { model.currentID == "mail" }
+
+    private var title: Text {
+        guard lane == .center else { return theme.text(titleKey) }
+        switch model.currentID {
+        case "mail": return host?.mail.map { Text(verbatim: folderTitle($0.currentFolderName)) } ?? theme.text(titleKey)
+        case "settings": return theme.text(SettingsShared.board.group.key)
+        default: return theme.text(titleKey)
+        }
+    }
 
     var body: some View {
         let g = theme.geometry
@@ -22,13 +36,20 @@ struct LaneView: View {
                     .onTapGesture { model.openStrip(lane) }
                     .pointerStyle(.link)
             }
+            marks
+                .frame(width: size.width, height: size.height, alignment: .top)
+                .opacity(strip ? 1 : 0)
+                .allowsHitTesting(strip)
+                .accessibilityHidden(!strip)
+                .animation(fade, value: strip)
             VStack(spacing: 0) {
-                header
+                if !ownHead { header }
                 content
             }
             .frame(width: inner, height: size.height, alignment: .topLeading)
             .opacity(strip ? 0 : 1)
             .allowsHitTesting(!strip)
+            .accessibilityHidden(strip)
             .animation(fade, value: strip)
         }
         .frame(width: size.width, height: size.height, alignment: .topLeading)
@@ -38,18 +59,24 @@ struct LaneView: View {
         .environment(\.design, DesignStyle(dark: theme.dark))
         .environment(\.laneFill, theme.design(\.lane))
         .environment(\.hairline, CGFloat(Design.Size.hairline))
+        .environment(\.mailLaneLink, MailLaneLink(shell: model))
         .accessibilityElement(children: .contain)
-        .accessibilityLabel(theme.text(titleKey))
+        .accessibilityLabel(title)
+    }
+
+    @ViewBuilder
+    private var marks: some View {
+        if live, model.currentID == "mail", let mail = host?.mail {
+            MailStripMarks(model: mail, lane: lane, height: Double(size.height))
+        }
     }
 
     private var header: some View {
         HStack(spacing: CGFloat(Design.Size.headGapList)) {
-            if !titleKey.isEmpty {
-                theme.text(titleKey)
-                    .font(theme.font(weight: Design.Weight.medium))
-                    .foregroundStyle(theme.design(\.ink))
-                    .lineLimit(1)
-            }
+            title
+                .font(theme.font(weight: Design.Weight.medium))
+                .foregroundStyle(theme.design(\.ink))
+                .lineLimit(1)
             Spacer(minLength: 0)
         }
         .padding(.leading, CGFloat(Design.Size.headPadLeftList))

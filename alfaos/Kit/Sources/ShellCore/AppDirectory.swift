@@ -2,7 +2,6 @@ import Foundation
 
 public struct AppLanes: Sendable, Decodable, Equatable {
     public let leadingKey: String?
-    public let centerKey: String?
     public let trailingKey: String?
 }
 

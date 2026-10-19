@@ -104,10 +104,6 @@ func line(_ key: String, _ args: CVarArg...) -> Text {
 }
 
 extension View {
-    func replacingLaneHeader() -> some View {
-        padding(.top, -CGFloat(Design.Size.headerHeight))
-    }
-
     func scrolledSignal(_ scrolled: Binding<Bool>) -> some View {
         onScrollGeometryChange(for: Bool.self) { $0.contentOffset.y > 0 } action: { _, now in scrolled.wrappedValue = now }
     }

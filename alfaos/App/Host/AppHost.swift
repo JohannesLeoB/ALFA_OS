@@ -18,7 +18,6 @@ final class AppHost {
     private(set) var busy = false
     private(set) var failure: Hint?
     var form: Offer?
-    var section: SettingsSection = .integrations
     var values: [String: String] = [:]
 
     private(set) var syncing = false
@@ -31,7 +30,7 @@ final class AppHost {
         if case .ready(let assembly) = phase { assembly.model } else { nil }
     }
 
-    var stackEmpty: Bool { mail?.cards.isEmpty ?? true }
+    var stackEmpty: Bool { mail?.stackEmpty ?? true }
 
     var unread: Int { mail?.totalUnread ?? 0 }
 

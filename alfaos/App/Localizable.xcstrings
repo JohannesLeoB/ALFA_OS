@@ -12,17 +12,6 @@
         }
       }
     },
-    "app.mail.lane.center" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eingang"
-          }
-        }
-      }
-    },
     "app.mail.lane.leading" : {
       "comment" : "roh",
       "localizations" : {
@@ -41,17 +30,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einstellungen"
-          }
-        }
-      }
-    },
-    "app.settings.lane.center" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konten"
           }
         }
       }

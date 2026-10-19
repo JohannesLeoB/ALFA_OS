@@ -26,7 +26,6 @@ struct MailListLane: View {
                 content(width: proxy.size.width)
             }
         }
-        .replacingLaneHeader()
         .onChange(of: model.selectedFolder) { text = "" }
         .onChange(of: model.searching) { _, on in if !on { text = "" } }
         .task(id: text) {

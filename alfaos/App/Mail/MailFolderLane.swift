@@ -42,7 +42,6 @@ struct MailFolderLane: View {
             .scrolledSignal($scrolled)
             ComposeButton { _ = model.compose() }
         }
-        .replacingLaneHeader()
     }
 }
 
