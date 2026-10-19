@@ -55,6 +55,7 @@ struct SettingsStackPane: View {
                 CardPile(order: order, fanned: board.fanned) { id, depth, first in
                     SettingsStackCard(host: host, board: board, hub: hub, face: SettingsFace(id: id, readings: readings), depth: depth, first: first,
                                       disconnecting: disconnecting)
+                        .environment(\.narrowCard, proxy.size.width < Design.Size.breakpointNarrowCard)
                 } overview: {
                     CardOverview(entries: order.map { entry(SettingsFace(id: $0, readings: readings), current: $0 == front) },
                                  size: size, resize: { size = $0 }, hot: hot, aim: { hot = $0 }) {

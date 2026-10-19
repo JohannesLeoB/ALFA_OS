@@ -55,6 +55,7 @@ struct ServiceCardBody: View {
     let hub: Hub
     let info: ServiceInfo
     var disconnecting = false
+    @Environment(\.narrowCard) private var narrow
     @State private var revision = 0
     @State private var started = false
 
@@ -216,21 +217,33 @@ struct ServiceCardBody: View {
             ForEach(reading.areas) { area in
                 SettingsRow(label: word(info.areaKey(area.area)), sub: sync(area)) {
                     ChoiceButton(label: word(area.choice.key)) {
-                        CadenceChoice.allCases.map { choice in
+                        var entries: [MenuEntry] = CadenceChoice.allCases.map { choice in
                             .row(MenuItem(id: choice.rawValue, label: word(choice.key), check: choice == area.choice ? word("mail.menu.check") : nil) {
                                 hub.rules.setCadence(area.inlet, area.capability, choice.cadence)
                                 revision += 1
                             })
                         }
-                    }
-                    TextButton(label: word(area.running ? "settings.link.working" : "settings.sync.now"), disabled: area.running) {
-                        Task {
-                            await hub.rules.syncNow(area.inlet, area.capability)
-                            revision += 1
+                        if narrow {
+                            entries.append(.separator(id: "sync.separator"))
+                            entries.append(.row(MenuItem(id: "sync.now", label: word(area.running ? "settings.link.working" : "settings.sync.now")) {
+                                syncNow(area)
+                            }))
                         }
+                        return entries
+                    }
+                    if !narrow {
+                        TextButton(label: word(area.running ? "settings.link.working" : "settings.sync.now"), disabled: area.running) { syncNow(area) }
                     }
                 }
             }
+        }
+    }
+
+    private func syncNow(_ area: AreaReading) {
+        guard !area.running else { return }
+        Task {
+            await hub.rules.syncNow(area.inlet, area.capability)
+            revision += 1
         }
     }
 

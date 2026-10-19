@@ -29,6 +29,10 @@ private struct CardSurfaceKey: EnvironmentKey {
     static let defaultValue = CardSurface.flat
 }
 
+private struct NarrowCardKey: EnvironmentKey {
+    static let defaultValue = false
+}
+
 private struct HairlineKey: EnvironmentKey {
     static let defaultValue = CGFloat(0)
 }
@@ -37,6 +41,11 @@ extension EnvironmentValues {
     var cardSurface: CardSurface {
         get { self[CardSurfaceKey.self] }
         set { self[CardSurfaceKey.self] = newValue }
+    }
+
+    var narrowCard: Bool {
+        get { self[NarrowCardKey.self] }
+        set { self[NarrowCardKey.self] = newValue }
     }
 
     var hairline: CGFloat {

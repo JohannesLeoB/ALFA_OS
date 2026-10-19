@@ -117,6 +117,7 @@ private struct IdentityCard: View {
 }
 
 private struct AppearanceCard: View {
+    @Environment(\.narrowCard) private var narrow
     @AppStorage(SettingsKey.appearance) private var appearance = AppearanceChoice.system.rawValue
     @AppStorage(SettingsKey.startView) private var start = StartView.mail.rawValue
     @AppStorage(SettingsKey.lockOn) private var lockOn = true
@@ -124,10 +125,16 @@ private struct AppearanceCard: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            SettingsRow(label: word("settings.appearance.label")) {
-                SegmentedControl(
-                    options: AppearanceChoice.allCases.map { SegmentOption(id: $0, label: word($0.key)) },
-                    selection: Binding(get: { AppearanceChoice(rawValue: appearance) ?? .system }, set: { appearance = $0.rawValue }))
+            if narrow {
+                SettingsChoiceRow(
+                    labelKey: "settings.appearance.label", current: AppearanceChoice(rawValue: appearance) ?? .system,
+                    choices: AppearanceChoice.allCases, key: { $0.key }, pick: { appearance = $0.rawValue })
+            } else {
+                SettingsRow(label: word("settings.appearance.label")) {
+                    SegmentedControl(
+                        options: AppearanceChoice.allCases.map { SegmentOption(id: $0, label: word($0.key)) },
+                        selection: Binding(get: { AppearanceChoice(rawValue: appearance) ?? .system }, set: { appearance = $0.rawValue }))
+                }
             }
             SettingsRow(label: word("settings.appearance.foreign"), sub: word("settings.appearance.foreign.sub")) {
                 SettingsValue(text: word("settings.appearance.foreign.value"))

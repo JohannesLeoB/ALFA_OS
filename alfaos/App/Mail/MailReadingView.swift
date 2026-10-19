@@ -181,7 +181,9 @@ struct ThreadItemView: View {
         VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step8)) {
             HStack(alignment: .firstTextBaseline, spacing: CGFloat(Design.Spacing.step8)) {
                 AddressButton(action: menu) {
-                    Text(verbatim: item.name).font(system(Design.TextSize.body, .medium))
+                    Text(verbatim: item.name)
+                        .font(system(Design.TextSize.body, .medium))
+                        .lineHeight(Design.LineHeight.mailBody * Design.TextSize.body, size: Design.TextSize.body, sheet: true)
                 }
                 .background(AnchorProbe(box: anchor))
                 Spacer(minLength: 0)
