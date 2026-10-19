@@ -19,6 +19,15 @@ public enum ServiceAccess: String, Sendable {
 public struct ServiceField: Equatable, Sendable {
     public let id: String
     public let secret: Bool
+    public let optional: Bool
+    public let fallbackKey: String?
+
+    init(id: String, secret: Bool, optional: Bool = false, fallbackKey: String? = nil) {
+        self.id = id
+        self.secret = secret
+        self.optional = optional
+        self.fallbackKey = fallbackKey
+    }
 }
 
 public struct ServiceArea: Equatable, Sendable {
@@ -80,34 +89,35 @@ public enum ServiceCatalog {
         ServiceInfo(id: "clickup", group: .personal, access: .key, companyOwned: false, personOnly: false,
                     fields: [ServiceField(id: "token", secret: true)],
                     areas: [ServiceArea(id: "phases", capability: .tasks), ServiceArea(id: "taskFields", capability: .tasks)],
-                    extras: [], hasNote: false, listsAccounts: false, providers: [], logo: nil),
+                    extras: [], hasNote: false, listsAccounts: false, providers: ["clickup"], logo: nil),
         ServiceInfo(id: "clockodo", group: .personal, access: .emailKey, companyOwned: false, personOnly: true,
                     fields: [ServiceField(id: "email", secret: false), ServiceField(id: "key", secret: true),
-                             ServiceField(id: "user", secret: false)],
-                    areas: [], extras: [], hasNote: false, listsAccounts: false, providers: [],
+                             ServiceField(id: "user", secret: false, optional: true)],
+                    areas: [], extras: [], hasNote: false, listsAccounts: false, providers: ["clockodo"],
                     logo: ServiceLogo(resource: "clockodo", fileExtension: "png")),
         ServiceInfo(id: "claude", group: .personal, access: .key, companyOwned: false, personOnly: false,
-                    fields: [ServiceField(id: "key", secret: true), ServiceField(id: "model", secret: false)],
-                    areas: [], extras: [], hasNote: false, listsAccounts: false, providers: [], logo: nil),
+                    fields: [ServiceField(id: "key", secret: true),
+                             ServiceField(id: "model", secret: false, optional: true, fallbackKey: "settings.value.default")],
+                    areas: [], extras: [], hasNote: false, listsAccounts: false, providers: ["claude"], logo: nil),
         ServiceInfo(id: "airtable", group: .company, access: .key, companyOwned: true, personOnly: false,
                     fields: [ServiceField(id: "base", secret: false), ServiceField(id: "token", secret: true)],
                     areas: [ServiceArea(id: "projects", capability: nil)],
                     extras: [ServiceExtra(id: "cache", action: .clearCache, actionKey: clearKey)],
-                    hasNote: false, listsAccounts: false, providers: [], logo: nil),
+                    hasNote: false, listsAccounts: false, providers: ["airtable"], logo: nil),
         ServiceInfo(id: "sevdesk", group: .company, access: .key, companyOwned: true, personOnly: false,
                     fields: [ServiceField(id: "token", secret: true)],
-                    areas: [], extras: [], hasNote: false, listsAccounts: false, providers: [], logo: nil),
+                    areas: [], extras: [], hasNote: false, listsAccounts: false, providers: ["sevdesk"], logo: nil),
         ServiceInfo(id: "dhl", group: .company, access: .key, companyOwned: true, personOnly: false,
                     fields: [ServiceField(id: "key", secret: true)],
-                    areas: [], extras: [], hasNote: false, listsAccounts: false, providers: [],
+                    areas: [], extras: [], hasNote: false, listsAccounts: false, providers: ["dhl"],
                     logo: ServiceLogo(resource: "dhl", fileExtension: "svg")),
         ServiceInfo(id: "dhlship", group: .company, access: .key, companyOwned: true, personOnly: false,
                     fields: [ServiceField(id: "key", secret: true)],
-                    areas: [], extras: [], hasNote: false, listsAccounts: false, providers: [],
+                    areas: [], extras: [], hasNote: false, listsAccounts: false, providers: ["dhlship"],
                     logo: ServiceLogo(resource: "dhl", fileExtension: "svg")),
         ServiceInfo(id: "happa", group: .company, access: .key, companyOwned: true, personOnly: false,
                     fields: [ServiceField(id: "key", secret: true)],
-                    areas: [], extras: [], hasNote: false, listsAccounts: false, providers: [], logo: nil)
+                    areas: [], extras: [], hasNote: false, listsAccounts: false, providers: ["happa"], logo: nil)
     ]
 
     public static func info(_ id: String) -> ServiceInfo? { all.first { $0.id == id } }
@@ -115,4 +125,10 @@ public enum ServiceCatalog {
     public static func services(in group: ServiceGroup) -> [ServiceInfo] { all.filter { $0.group == group } }
 
     public static var inventory: [ServiceInfo] { all.filter { !$0.listsAccounts } }
+
+    public static let ownPerson = Owner.person("")
+
+    public static func offer(for info: ServiceInfo) -> Offer? {
+        KeyProviders.standard.first { $0.id == info.id }?.offer
+    }
 }

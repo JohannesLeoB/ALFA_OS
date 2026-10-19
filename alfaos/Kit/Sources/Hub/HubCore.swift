@@ -25,6 +25,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         self.config = config
         self.store = try Store(config.database)
         self.limits = config.company.limits
+        for provider in KeyProviders.standard { providers[provider.id] = provider }
         for provider in config.providers { providers[provider.id] = provider }
         records = try store.loadInlets()
         reports = try store.loadReports()
@@ -305,8 +306,9 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             throw .probeFailed(Hint(text: "hint.provider.unknown", detail: offer.provider))
         }
         try checkLimits(offer)
+        let owner = offer.owner == ServiceCatalog.ownPerson ? Owner.person(config.person.id) : offer.owner
         var inlet = Inlet(id: offer.provider + "-" + UUID().uuidString, provider: offer.provider,
-                          capabilities: offer.capabilities, owner: offer.owner, title: offer.title)
+                          capabilities: offer.capabilities, owner: owner, title: offer.title)
         let grant: Grant
         let candidate = inlet
         let values = input.values

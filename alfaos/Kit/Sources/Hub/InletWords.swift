@@ -31,7 +31,8 @@ public struct Renewal: Equatable, Sendable {
 extension HubSetup {
     public func renewal(of id: Inlet.ID) -> Renewal? {
         guard let inlet = inlets.first(where: { $0.id == id }), inlet.state.canRenew else { return nil }
-        let matching = offers.filter { $0.provider == inlet.provider }
+        let keyed = ServiceCatalog.all.compactMap { ServiceCatalog.offer(for: $0) }
+        let matching = (offers + keyed).filter { $0.provider == inlet.provider }
         guard let offer = matching.first(where: { $0.title == inlet.title }) ?? matching.first else { return nil }
         var values = offer.preset?.values ?? [:]
         if case .form(let fields) = offer.way, fields.contains(where: { $0.id == IMAPField.address }) {

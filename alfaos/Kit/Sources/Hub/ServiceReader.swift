@@ -50,7 +50,7 @@ public struct ServiceReading: Identifiable, Equatable, Sendable {
 public enum ServiceReader {
     public static func read(_ info: ServiceInfo, setup: any HubSetup, rules: any HubRules) -> ServiceReading {
         let inlets = setup.inlets.filter { info.providers.contains($0.provider) }
-        let offers = setup.offers.filter { info.providers.contains($0.provider) }
+        let offers = setup.offers.filter { info.providers.contains($0.provider) } + (ServiceCatalog.offer(for: info).map { [$0] } ?? [])
         let states = inlets.map { LinkState($0.state) }
         let state = LinkState.combined(states)
         let lead = inlets.first { LinkState($0.state) == state }
@@ -93,5 +93,23 @@ public enum ServiceReader {
 
     public static func badCount(_ readings: [ServiceReading]) -> Int {
         readings.filter { $0.state.isBad }.count
+    }
+}
+
+public struct ServiceValues: Equatable, Sendable {
+    public var text: [String: String]
+    public var held: Set<String>
+
+    public static let none = ServiceValues(text: [:], held: [])
+
+    public static func read(_ reading: ServiceReading, keychain: any KeychainPort) -> ServiceValues {
+        guard let inlet = reading.inlets.first else { return .none }
+        var values = ServiceValues.none
+        for field in reading.info.fields {
+            guard let value = try? keychain.get(KeySlot(inlet: inlet.id, name: field.id)), !value.isEmpty else { continue }
+            values.held.insert(field.id)
+            if !field.secret { values.text[field.id] = value }
+        }
+        return values
     }
 }
