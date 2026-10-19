@@ -15,7 +15,6 @@ public enum MailSheet {
     public static let cardTitleLimit = 34
     public static let cardAddressLimit = 36
     public static let recipientsInline = 2
-    public static let threadBodyLimit = 20
     public static let listCountShown = false
     public static let rowSpacing = 20.0
     public static let rowPadding = 12.0
@@ -61,8 +60,6 @@ public enum MailSheet {
     public static let spinnerArc = 0.22
     public static let menuMargin = 16.0
     public static let attachmentChipNameLimit = 26
-    public static let searchDelay = 0.3
-    public static let menuShadowMargin = 40.0
     public static let cardFlatCast = 0.22
     public static let cardFlatBackRing = 0.06
     public static let cardFlatBackCast = 0.18

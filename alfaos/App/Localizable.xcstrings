@@ -3729,16 +3729,6 @@
         }
       }
     },
-    "settings.hold.signOut" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Halten zum Abmelden"
-          }
-        }
-      }
-    },
     "settings.identity.account" : {
       "localizations" : {
         "de" : {
@@ -3815,16 +3805,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abmelden"
-          }
-        }
-      }
-    },
-    "settings.identity.signOut.ask" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abmelden?"
           }
         }
       }

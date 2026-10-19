@@ -135,7 +135,7 @@ extension MailModel {
     public func loadThreadTexts(_ id: String) async {
         await loadThread(id)
         guard let card = card(id) else { return }
-        for item in card.conversation.suffix(MailSheet.threadBodyLimit) where item.id != id {
+        for item in card.conversation where item.id != id {
             guard let inlet = cardInlet(id) ?? selectedInlet,
                   let body = try? await engine.body(inlet, messageID: item.id) else { continue }
             let text = body.text ?? body.html.map(MailAddresses.plainText) ?? item.snippet

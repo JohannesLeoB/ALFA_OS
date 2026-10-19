@@ -30,8 +30,7 @@ struct MailListLane: View {
         .onChange(of: model.searching) { _, on in if !on { text = "" } }
         .task(id: text) {
             guard model.searching || !text.isEmpty else { return }
-            if !text.isEmpty { try? await Task.sleep(for: .seconds(MailSheet.searchDelay)) }
-            if !Task.isCancelled { await model.search(text) }
+            await model.search(text)
         }
     }
 

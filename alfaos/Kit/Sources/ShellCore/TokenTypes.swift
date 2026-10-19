@@ -42,6 +42,10 @@ public struct ShadowLayer: Sendable, Equatable {
     public let color: RGB
 
     public var isContour: Bool { !inset && blur == 0 && spread != 0 }
+
+    public var reach: Double { inset ? 0 : blur + max(abs(x), abs(y)) + max(0, spread) }
+
+    public static func reach(_ layers: [ShadowLayer]) -> Double { layers.map(\.reach).max() ?? 0 }
 }
 
 public struct CubicBezier: Sendable, Equatable {

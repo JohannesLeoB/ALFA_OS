@@ -120,14 +120,7 @@ private struct IdentityCard: View {
             SettingsSwitchRow(labelKey: "settings.identity.birthdays", isOn: $birthdays)
             SettingsBlockHead(key: "settings.identity.account")
             SettingsRow(label: word("settings.identity.signOut"), sub: word("settings.identity.signOut.sub"), line: false) {
-                ConfirmPill(
-                    label: word("settings.identity.signOut.action"),
-                    question: word("settings.identity.signOut.ask"),
-                    yes: word("settings.identity.signOut.action"),
-                    no: word("text.common.cancel"),
-                    holdHint: word("settings.hold.signOut"),
-                    showsProgress: false,
-                    onYes: { signOut() })
+                TextButton(label: word("settings.identity.signOut.action"), kind: .signal) { signOut() }
             }
         }
     }

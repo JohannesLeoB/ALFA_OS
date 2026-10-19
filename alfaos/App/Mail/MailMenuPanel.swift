@@ -49,7 +49,7 @@ final class MenuPanel {
         closing = onClose
         guard let window = window ?? NSApp.keyWindow else { return }
         let dark = window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-        let margin = CGFloat(MailSheet.menuShadowMargin)
+        let margin = CGFloat(ShadowLayer.reach((dark ? DesignShadows.dark : DesignShadows.light).floating))
         let wrapped = entries.map { entry -> MenuEntry in
             guard case .row(let row) = entry else { return entry }
             return .row(MenuItem(id: row.id, label: row.label, meta: row.meta, check: row.check, danger: row.danger) { [weak self] in
