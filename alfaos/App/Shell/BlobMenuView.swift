@@ -253,22 +253,27 @@ struct BlobAssistant: View {
                 }
                 .padding(.horizontal, inset)
             }
-            theme.text(model.currentID == "mail" && host?.stackEmpty != false ? "assistant.noMessage" : "assistant.idle")
+            theme.text(assistantKey)
                 .lineSpacing(Typeface.leading(size: Design.TextSize.body, weight: Design.Weight.regular))
                 .fixedSize(horizontal: false, vertical: true)
                 .opacity(SheetValues.mutedOpacity)
                 .padding(.horizontal, inset)
             theme.text("assistant.field")
-                .opacity(SheetValues.fieldOpacity)
                 .padding(.horizontal, inset)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .frame(height: CGFloat(Design.Size.assistantFieldHeight))
                 .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row)).fill(theme.design(\.inverseField)))
+                .opacity(SheetValues.fieldOpacity)
         }
         .font(theme.font())
         .padding(.horizontal, CGFloat(Design.Size.menuEdge))
         .padding(.bottom, CGFloat(Design.Size.menuEdge))
         .accessibilityElement(children: .contain)
         .accessibilityLabel(theme.text("assistant.title"))
+    }
+
+    private var assistantKey: String {
+        if host?.assistantFailed == true { return "assistant.failed" }
+        return model.currentID == "mail" && host?.stackEmpty != false ? "assistant.noMessage" : "assistant.idle"
     }
 }

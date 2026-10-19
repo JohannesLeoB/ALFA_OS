@@ -133,6 +133,27 @@ public enum SettingsLabel: String, CaseIterable, Sendable {
     public var key: String { "settings.label." + rawValue }
 }
 
+public struct SettingsStripMark: Identifiable, Equatable, Sendable {
+    public enum Face: Equatable, Sendable {
+        case glyph(Icon)
+        case text(String)
+    }
+
+    public enum Run: Equatable, Sendable {
+        case group(SettingsGroup)
+        case open(String)
+        case bring(String)
+    }
+
+    public let id: String
+    public let face: Face
+    public let titleKey: String?
+    public let title: String
+    public let selected: Bool
+    public let dot: Bool
+    public let run: Run
+}
+
 @MainActor
 @Observable
 public final class SettingsBoard {
@@ -169,6 +190,37 @@ public final class SettingsBoard {
     }
 
     public func notify(_ key: String) { toast = key }
+
+    public func stripMarks(_ lane: Lane, height: Double, entries: [String], failed: Set<String>,
+                           title: (String) -> String) -> [SettingsStripMark] {
+        func initial(_ id: String) -> SettingsStripMark.Face { .text(String(title(id).prefix(1))) }
+        switch lane {
+        case .leading:
+            return SettingsGroup.allCases.map { item in
+                SettingsStripMark(id: "group." + item.rawValue, face: .glyph(Icon(rawValue: item.symbol) ?? .system), titleKey: item.key, title: "",
+                                  selected: group == item, dot: false, run: .group(item))
+            }
+        case .center:
+            let room = max(1, Int((height - Design.Size.stripReserveTop - Design.Size.stripReserveBottom) / Design.Size.rowHeight))
+            return entries.prefix(room).map { id in
+                SettingsStripMark(id: "entry." + id, face: initial(id), titleKey: nil, title: title(id), selected: front == id,
+                                  dot: failed.contains(id), run: .open(id))
+            }
+        case .trailing:
+            return cards.map { id in
+                SettingsStripMark(id: "card." + id, face: initial(id), titleKey: nil, title: title(id), selected: false, dot: false,
+                                  run: .bring(id))
+            }
+        }
+    }
+
+    public func run(_ mark: SettingsStripMark.Run) {
+        switch mark {
+        case .group(let next): group = next
+        case .open(let id): open(id)
+        case .bring(let id): bring(id)
+        }
+    }
 
     public func dismissToast() { toast = nil }
 }

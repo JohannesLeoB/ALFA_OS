@@ -68,19 +68,21 @@ struct LaneView: View {
     private var marks: some View {
         if live, model.currentID == "mail", let mail = host?.mail {
             MailStripMarks(model: mail, lane: lane, height: Double(size.height))
+        } else if live, model.currentID == "settings", let host {
+            SettingsStripMarks(host: host, lane: lane, height: Double(size.height))
         }
     }
 
     private var header: some View {
-        HStack(spacing: CGFloat(Design.Size.headGapList)) {
+        HStack(spacing: CGFloat(lane.headGap)) {
             title
                 .font(theme.font(weight: Design.Weight.medium))
                 .foregroundStyle(theme.design(\.ink))
                 .lineLimit(1)
             Spacer(minLength: 0)
         }
-        .padding(.leading, CGFloat(Design.Size.headPadLeftList))
-        .padding(.trailing, CGFloat(Design.Size.headPadRight))
+        .padding(.leading, CGFloat(lane.headLeading))
+        .padding(.trailing, CGFloat(lane.headTrailing))
         .frame(height: CGFloat(Design.Size.headerHeight))
     }
 

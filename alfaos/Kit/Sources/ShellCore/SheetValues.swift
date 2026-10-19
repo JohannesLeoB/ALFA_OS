@@ -27,7 +27,11 @@ public enum SheetValues {
     public static let orbGlossX = 0.35
     public static let orbGlossY = 0.28
     public static let orbGlossStop = 0.45
-    public static let syncTurns = 2.0
+    public static let syncArcStart = -90.0
+    public static let syncSweep = 720.0
+    public static let keyframeMiddle = 0.5
+    public static let dockHoverGrow = 4.0
+    public static let laneShiftStep = 8.0
     public static let syncErrorArc = 0.25
     public static let initialsTracking = 0.08
     public static let settingsTileHeight = 112.0

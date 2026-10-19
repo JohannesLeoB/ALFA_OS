@@ -56,6 +56,17 @@
         }
       }
     },
+    "assistant.failed" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude antwortet gerade nicht. In den Einstellungen neu verbinden."
+          }
+        }
+      }
+    },
     "assistant.field" : {
       "comment" : "roh",
       "localizations" : {

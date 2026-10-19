@@ -79,7 +79,7 @@ struct HandleView: View {
             model.resetLane(lane)
             return .handled
         }
-        let step = press.modifiers.contains(.shift) ? Design.Spacing.step8 : Design.Size.foldedWidth
+        let step = press.modifiers.contains(.shift) ? SheetValues.laneShiftStep : Design.Size.foldedWidth
         let direction: Double = press.key == .leftArrow ? -1 : 1
         model.stepLane(lane, by: step * direction * (lane == .leading ? 1 : -1))
         return .handled

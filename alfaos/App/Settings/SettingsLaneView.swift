@@ -49,6 +49,42 @@ private struct SettingsLaneContent: View {
     }
 }
 
+struct SettingsStripMarks: View {
+    let host: AppHost
+    let lane: Lane
+    let height: Double
+
+    var body: some View {
+        if case .ready(let assembly) = host.phase {
+            let readings = ServiceReader.readAll(setup: assembly.hub.setup, rules: assembly.hub.rules)
+            let board = SettingsShared.board
+            let entries = board.group == .connections
+                ? readings.map(\.info.id) + [SettingsSection.keyInventory.rawValue]
+                : board.group.sections.map(\.rawValue)
+            let failed = Set(readings.filter { $0.state == .failed }.map(\.info.id))
+            let marks = board.stripMarks(lane, height: height, entries: entries, failed: failed) { SettingsFace(id: $0, readings: readings).title }
+            VStack(spacing: CGFloat(Design.Spacing.step8)) {
+                ForEach(marks) { mark in
+                    StripMarkButton(glyph: mark.glyph, text: mark.text, help: mark.titleKey.map { word($0) } ?? Text(verbatim: mark.title),
+                                    selected: mark.selected, dot: mark.dot) { board.run(mark.run) }
+                }
+            }
+            .padding(.vertical, CGFloat(Design.Spacing.step8))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        }
+    }
+}
+
+extension SettingsStripMark {
+    var glyph: Icon? {
+        if case .glyph(let icon) = face { icon } else { nil }
+    }
+
+    var text: String {
+        if case .text(let value) = face { value } else { "" }
+    }
+}
+
 extension AppearanceChoice {
     var scheme: ColorScheme? {
         switch self {

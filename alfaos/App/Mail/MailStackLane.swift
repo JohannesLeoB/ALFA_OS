@@ -89,19 +89,20 @@ struct CommandHeader: View {
     var body: some View {
         let plan = CommandBar.plan(main: commands.main, tail: commands.tail, fan: commands.fan, fold: commands.fold,
                                    staticMore: commands.staticMore, width: width - Design.Size.edge)
-        HStack(spacing: CGFloat(Design.Size.headGapStack)) {
+        HStack(spacing: CGFloat(Lane.trailing.headGap)) {
             group(plan.main, plan: plan)
             Spacer(minLength: 0)
             group(plan.end, plan: plan)
         }
-        .padding(.horizontal, CGFloat(Design.Size.headPadRight))
+        .padding(.leading, CGFloat(Lane.trailing.headLeading))
+        .padding(.trailing, CGFloat(Lane.trailing.headTrailing))
         .frame(height: CGFloat(Design.Size.headerHeight))
         .frame(maxWidth: .infinity)
         .background(design.color(\.lane))
     }
 
     private func group(_ slots: [CommandSlot], plan: CommandPlan) -> some View {
-        HStack(spacing: CGFloat(Design.Size.headGapStack)) {
+        HStack(spacing: CGFloat(Lane.trailing.headGap)) {
             ForEach(Array(slots.enumerated()), id: \.offset) { _, slot in
                 view(slot, plan: plan)
             }

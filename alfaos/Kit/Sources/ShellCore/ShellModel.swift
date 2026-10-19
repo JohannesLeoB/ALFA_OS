@@ -72,7 +72,7 @@ public final class ShellModel {
 
     public var blobWidth: Double {
         if mode != nil { return geometry.menuWidth }
-        if docked { return geometry.blobDock + (hovering ? Design.Spacing.step4 : 0) }
+        if docked { return geometry.blobDock + (hovering ? SheetValues.dockHoverGrow : 0) }
         return awake ? BlobPlacement.awakeWidth(label: labelWidth) : geometry.blobWidth
     }
 

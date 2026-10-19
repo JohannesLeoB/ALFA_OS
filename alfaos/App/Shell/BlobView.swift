@@ -377,7 +377,8 @@ struct LidEffect: ViewModifier, Animatable {
         switch kind {
         case .blink:
             let low = SheetValues.blinkScale
-            return p < 0.5 ? 1 - (1 - low) * p / 0.5 : low + (1 - low) * (p - 0.5) / 0.5
+            let mid = SheetValues.keyframeMiddle
+            return p < mid ? 1 - (1 - low) * p / mid : low + (1 - low) * (p - mid) / (1 - mid)
         case .wink:
             let low = SheetValues.winkScale
             let close = SheetValues.winkCloseAt
@@ -417,7 +418,8 @@ struct PulseEffect: ViewModifier, Animatable {
     func body(content: Content) -> some View {
         let peak = SheetValues.pulseScale
         let p = min(1, max(0, progress))
-        let scale = p < 0.5 ? 1 + (peak - 1) * p / 0.5 : peak - (peak - 1) * (p - 0.5) / 0.5
+        let mid = SheetValues.keyframeMiddle
+        let scale = p < mid ? 1 + (peak - 1) * p / mid : peak - (peak - 1) * (p - mid) / (1 - mid)
         content.scaleEffect(CGFloat(scale))
     }
 }

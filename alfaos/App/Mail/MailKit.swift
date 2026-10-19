@@ -115,14 +115,13 @@ struct LaneHead<Content: View>: View {
     @Environment(\.hairline) private var hairline
     @Environment(\.accessibilityReduceMotion) private var reduced
     var scrolled = false
-    var leading = Design.Size.headPadLeftList
-    var gap = Design.Size.headGapList
+    var lane = Lane.leading
     @ViewBuilder let content: Content
 
     var body: some View {
-        HStack(spacing: CGFloat(gap)) { content }
-            .padding(.leading, CGFloat(leading))
-            .padding(.trailing, CGFloat(Design.Size.headPadRight))
+        HStack(spacing: CGFloat(lane.headGap)) { content }
+            .padding(.leading, CGFloat(lane.headLeading))
+            .padding(.trailing, CGFloat(lane.headTrailing))
             .frame(height: CGFloat(Design.Size.headerHeight))
             .frame(maxWidth: .infinity)
             .background(laneFill)

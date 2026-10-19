@@ -38,6 +38,11 @@ final class AppHost {
         mail?.accounts.filter { if case .failed = $0.state { true } else { false } }.count ?? 0
     }
 
+    var assistantFailed: Bool {
+        guard case .ready(let assembly) = phase, let info = ServiceCatalog.info("claude") else { return false }
+        return ServiceReader.read(info, setup: assembly.hub.setup, rules: assembly.hub.rules).state == .failed
+    }
+
     var syncFailed: Bool {
         switch mail?.listState {
         case .failed, .offline, .signInExpired: true

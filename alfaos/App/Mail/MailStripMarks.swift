@@ -10,7 +10,8 @@ struct MailStripMarks: View {
     var body: some View {
         VStack(spacing: CGFloat(Design.Spacing.step8)) {
             ForEach(model.stripMarks(lane, height: height)) { mark in
-                StripMarkView(mark: mark) { Task { await model.run(mark.run) } }
+                StripMarkButton(glyph: mark.glyph, text: mark.text, help: mark.help.key.map { word($0) } ?? Text(verbatim: mark.help.text),
+                                selected: mark.selected, dot: mark.dot) { Task { await model.run(mark.run) } }
             }
         }
         .padding(.vertical, CGFloat(Design.Spacing.step8))
@@ -18,27 +19,42 @@ struct MailStripMarks: View {
     }
 }
 
-private struct StripMarkView: View {
+extension MailStripMark {
+    var glyph: Icon? {
+        if case .glyph(let icon) = face { icon } else { nil }
+    }
+
+    var text: String {
+        if case .text(let value) = face { value } else { "" }
+    }
+}
+
+struct StripMarkButton: View {
     @Environment(\.design) private var design
     @Environment(\.hairline) private var hairline
-    let mark: MailStripMark
+    let glyph: Icon?
+    let text: String
+    let help: Text
+    let selected: Bool
+    let dot: Bool
     let action: () -> Void
 
     var body: some View {
         let side = CGFloat(Design.Size.symbolSize)
         Button(action: action) {
             Group {
-                switch mark.face {
-                case .glyph(let glyph): Glyph(glyph)
-                case .text(let text): Text(verbatim: text).lineLimit(1)
+                if let glyph {
+                    Glyph(glyph)
+                } else {
+                    Text(verbatim: text).lineLimit(1)
                 }
             }
-            .designText(mark.selected ? \.lane : \.inkSecondary, size: Design.TextSize.small, weight: .medium)
+            .designText(selected ? \.lane : \.inkSecondary, size: Design.TextSize.small, weight: .medium)
             .frame(width: side, height: side)
-            .background(Circle().fill(mark.selected ? design.color(\.ink) : Color.clear))
-            .overlay(Circle().strokeBorder(mark.selected ? Color.clear : design.color(\.lineStrong), lineWidth: hairline))
+            .background(Circle().fill(selected ? design.color(\.ink) : Color.clear))
+            .overlay(Circle().strokeBorder(selected ? Color.clear : design.color(\.lineStrong), lineWidth: hairline))
             .overlay(alignment: .topTrailing) {
-                if mark.dot {
+                if dot {
                     Circle().fill(design.color(\.ink))
                         .frame(width: CGFloat(Design.Spacing.statusDot), height: CGFloat(Design.Spacing.statusDot))
                         .overlay(Circle().strokeBorder(design.color(\.lane), lineWidth: CGFloat(Design.Size.markSeparatorRing)))
@@ -48,7 +64,7 @@ private struct StripMarkView: View {
             .contentShape(Circle())
         }
         .buttonStyle(.plain)
-        .help(mark.help.key.map { word($0) } ?? Text(verbatim: mark.help.text))
-        .accessibilityLabel(mark.help.key.map { word($0) } ?? Text(verbatim: mark.help.text))
+        .help(help)
+        .accessibilityLabel(help)
     }
 }

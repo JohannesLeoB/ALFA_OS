@@ -119,7 +119,7 @@ struct SyncButton: View {
                     .inset(by: line / 2)
                     .trim(from: 0, to: failed ? CGFloat(SheetValues.syncErrorArc) : 1)
                     .stroke(failed ? AnyShapeStyle(theme.design(\.signal)) : AnyShapeStyle(.foreground), lineWidth: line)
-                    .rotationEffect(.degrees(-90 + turn))
+                    .rotationEffect(.degrees(SheetValues.syncArcStart + turn))
             }
             .frame(width: ring, height: ring)
             .padding(.horizontal, CGFloat(Design.Spacing.blobInset))
@@ -146,7 +146,7 @@ struct SyncButton: View {
     private func run() {
         guard let host, !host.syncing else { return }
         if let spin = theme.ease(Design.Duration.syncSpin) {
-            withAnimation(spin) { turn += 360 * SheetValues.syncTurns }
+            withAnimation(spin) { turn += SheetValues.syncSweep }
         }
         Task { await host.sync() }
     }

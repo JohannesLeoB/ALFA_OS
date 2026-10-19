@@ -12,6 +12,12 @@ public enum Lane: String, Sendable, Codable, CaseIterable {
         case .trailing: 2
         }
     }
+
+    public var headLeading: Double { self == .trailing ? Design.Size.headPadLeftStack : Design.Size.headPadLeftList }
+
+    public var headTrailing: Double { Design.Size.headPadRight }
+
+    public var headGap: Double { self == .trailing ? Design.Size.headGapStack : Design.Size.headGapList }
 }
 
 public struct AreaRules: Sendable, Equatable {
