@@ -47,6 +47,7 @@ public enum SheetValues {
     public static let commandSlack = 12.0
     public static let rowSeparatorInset = 56.0
     public static let rowTextLine = 20.0
+    public static let valueMaxShare = 0.6
     public static let previewLines = 2
     public static let personNameLimit = 40
     public static let chipNameLimit = 30

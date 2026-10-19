@@ -24,7 +24,7 @@ struct CardPile<Item: Hashable, Card: View, Over: View, Note: View>: View {
                 }
                 ForEach(Array(order.enumerated()), id: \.element) { index, item in
                     card(item, order.count - 1 - index, index == 0)
-                        .frame(height: max(0, proxy.size.height - CGFloat(tops[index])))
+                        .frame(width: proxy.size.width, height: max(0, proxy.size.height - CGFloat(tops[index])))
                         .offset(y: CGFloat(tops[index]))
                         .zIndex(Double(index))
                         .opacity(fanned ? 0 : 1)

@@ -66,6 +66,7 @@ struct TextButton<Glyph: View>: View {
                 glyph
                 label.lineLimit(1)
             }
+            .fixedSize(horizontal: true, vertical: false)
             .font(kind == .sheet ? Font(Typeface.sheet(size: Design.TextSize.small, weight: .medium))
                   : .face(Design.TextSize.small, weight: Design.Weight.medium))
             .foregroundStyle(foreground)

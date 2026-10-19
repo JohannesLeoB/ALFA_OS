@@ -12,6 +12,7 @@ struct ComposeButton: View {
         Button(action: action) {
             HStack(spacing: CGFloat(SheetValues.rowSpacing)) {
                 Glyph(.compose)
+                    .foregroundStyle(design.color(\.onInverse))
                     .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
                     .overlay(Circle().strokeBorder(design.color(\.onInverse).opacity(Design.Opacity.ringOnColor), lineWidth: hairline))
                 word("mail.action.compose")

@@ -9,7 +9,8 @@ struct SettingsRow<Trailing: View>: View {
     @ViewBuilder let trailing: Trailing
 
     var body: some View {
-        HStack(spacing: CGFloat(Design.Spacing.step12)) {
+        SettingsRowLayout(gap: CGFloat(Design.Spacing.step12), stackedGap: CGFloat(Design.Spacing.step8),
+                          minimum: CGFloat(Design.Size.composeColumnMinWidth)) {
             VStack(alignment: .leading, spacing: 0) {
                 label
                     .lineLimit(1)
@@ -24,8 +25,8 @@ struct SettingsRow<Trailing: View>: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
-            .frame(minWidth: CGFloat(Design.Size.composeColumnMinWidth), maxWidth: .infinity, alignment: .leading)
-            trailing
+            .frame(maxWidth: .infinity, alignment: .leading)
+            HStack(spacing: CGFloat(Design.Spacing.step8)) { trailing }
         }
         .padding(.vertical, CGFloat(Design.Spacing.step8))
         .padding(.leading, CGFloat(Design.Spacing.step16))
@@ -36,6 +37,54 @@ struct SettingsRow<Trailing: View>: View {
                 Hairline()
                     .padding(.horizontal, CGFloat(Design.Spacing.step16))
             }
+        }
+    }
+}
+
+struct SettingsRowLayout: Layout {
+    let gap: CGFloat
+    let stackedGap: CGFloat
+    let minimum: CGFloat
+
+    private struct Plan {
+        let stacked: Bool
+        let trailing: CGFloat
+        let label: CGFloat
+    }
+
+    private func plan(_ width: CGFloat, _ subviews: Subviews) -> Plan {
+        let ideal = subviews[1].sizeThatFits(.unspecified).width
+        let least = subviews[1].sizeThatFits(ProposedViewSize(width: 0, height: nil)).width
+        let room = width - gap - minimum
+        if least > room { return Plan(stacked: true, trailing: min(ideal, width), label: width) }
+        let share = CGFloat(SheetValues.valueMaxShare) * width
+        let trailing = min(ideal, max(least, min(room, share)))
+        return Plan(stacked: false, trailing: trailing, label: width - gap - trailing)
+    }
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        guard subviews.count == 2 else { return .zero }
+        let width = proposal.width ?? (subviews[0].sizeThatFits(.unspecified).width + gap + subviews[1].sizeThatFits(.unspecified).width)
+        let plan = plan(width, subviews)
+        let label = subviews[0].sizeThatFits(ProposedViewSize(width: plan.label, height: nil))
+        let trailing = subviews[1].sizeThatFits(ProposedViewSize(width: plan.trailing, height: nil))
+        return CGSize(width: width, height: plan.stacked ? label.height + stackedGap + trailing.height : max(label.height, trailing.height))
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        guard subviews.count == 2 else { return }
+        let plan = plan(bounds.width, subviews)
+        let label = subviews[0].sizeThatFits(ProposedViewSize(width: plan.label, height: nil))
+        let trailing = subviews[1].sizeThatFits(ProposedViewSize(width: plan.trailing, height: nil))
+        if plan.stacked {
+            subviews[0].place(at: bounds.origin, anchor: .topLeading, proposal: ProposedViewSize(width: plan.label, height: label.height))
+            subviews[1].place(at: CGPoint(x: bounds.minX, y: bounds.minY + label.height + stackedGap), anchor: .topLeading,
+                              proposal: ProposedViewSize(width: plan.trailing, height: trailing.height))
+        } else {
+            subviews[0].place(at: CGPoint(x: bounds.minX, y: bounds.midY), anchor: .leading,
+                              proposal: ProposedViewSize(width: plan.label, height: label.height))
+            subviews[1].place(at: CGPoint(x: bounds.maxX, y: bounds.midY), anchor: .trailing,
+                              proposal: ProposedViewSize(width: plan.trailing, height: trailing.height))
         }
     }
 }
@@ -68,6 +117,7 @@ struct ChoiceButton: View {
                 label.lineLimit(1)
                 Glyph(.chevron, size: Design.Spacing.step12, stroke: SheetValues.smallIconStroke)
             }
+            .fixedSize(horizontal: true, vertical: false)
             .font(.face(Design.TextSize.body))
             .foregroundStyle(design.color(\.ink))
             .padding(.leading, CGFloat(Design.Spacing.step12))
