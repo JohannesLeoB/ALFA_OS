@@ -55,17 +55,18 @@ struct SettingsValue: View {
     }
 }
 
-struct ChoiceButton<Chevron: View>: View {
+struct ChoiceButton: View {
     @Environment(\.design) private var design
     let label: Text
-    let action: () -> Void
-    @ViewBuilder let chevron: Chevron
+    var width = Design.Size.menuWidthNarrow
+    let entries: () -> [MenuEntry]
+    @State private var anchor = AnchorBox()
 
     var body: some View {
-        Button(action: action) {
+        Button(action: open) {
             HStack(spacing: CGFloat(Design.Spacing.step8)) {
                 label.lineLimit(1)
-                chevron
+                Glyph(.chevron, size: Design.Spacing.step12, stroke: SheetValues.smallIconStroke)
             }
             .font(.face(Design.TextSize.body))
             .foregroundStyle(design.color(\.ink))
@@ -76,6 +77,12 @@ struct ChoiceButton<Chevron: View>: View {
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)
+        .background(AnchorProbe(box: anchor))
+    }
+
+    private func open() {
+        guard let rect = anchor.screenRect() else { return }
+        MenuPanel.shared.show(entries: entries(), width: width, anchor: .rect(rect), window: NSApp.keyWindow)
     }
 }
 

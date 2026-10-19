@@ -83,3 +83,21 @@ extension TextButton where Glyph == EmptyView {
         self.init(label: label, kind: kind, size: size, disabled: disabled, pressed: pressed, action: action) { EmptyView() }
     }
 }
+
+struct TextMenuButton: View {
+    let label: Text
+    var kind = TextButtonKind.neutral
+    var width = Design.Size.menuWidthRow
+    let entries: () -> [MenuEntry]
+    @State private var anchor = AnchorBox()
+
+    var body: some View {
+        TextButton(label: label, kind: kind, action: open)
+            .background(AnchorProbe(box: anchor))
+    }
+
+    private func open() {
+        guard let rect = anchor.screenRect() else { return }
+        MenuPanel.shared.show(entries: entries(), width: width, anchor: .rect(rect), window: NSApp.keyWindow)
+    }
+}

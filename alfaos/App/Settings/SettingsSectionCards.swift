@@ -72,9 +72,9 @@ private struct SettingsChoiceRow<Choice: Hashable>: View {
 
     var body: some View {
         SettingsRow(label: word(labelKey), line: line) {
-            SettingsMenuChoice(label: word(key(current))) {
+            ChoiceButton(label: word(key(current))) {
                 choices.map { choice in
-                    .row(MenuItem(id: key(choice), label: word(key(choice)), check: choice == current ? Text(Image(systemName: "checkmark")) : nil) {
+                    .row(MenuItem(id: key(choice), label: word(key(choice)), check: choice == current ? word("mail.menu.check") : nil) {
                         pick(choice)
                     })
                 }

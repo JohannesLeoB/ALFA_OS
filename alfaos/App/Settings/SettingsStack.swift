@@ -42,7 +42,6 @@ struct SettingsStackPane: View {
     let board: SettingsBoard
     let hub: Hub
     let readings: [ServiceReading]
-    @State private var menus = SettingsMenuState()
     @State private var size = OverviewSize.medium
     @State private var hot: String?
     @State private var disconnecting: String?
@@ -65,9 +64,6 @@ struct SettingsStackPane: View {
                     Toast(message: word(key), onDismiss: { board.dismissToast() })
                 }
             }
-            .overlay { menuLayer }
-            .coordinateSpace(name: SettingsSpace.stack)
-            .environment(\.menuState, menus)
         }
         .onChange(of: board.front) { disconnecting = nil }
     }
@@ -76,29 +72,6 @@ struct SettingsStackPane: View {
         OverviewEntry(id: face.id, mark: .text(face.mark), title: Text(verbatim: face.title), date: Text(verbatim: ""), unread: false,
                       subject: face.detail, preview: face.preview, current: current, close: { board.close(face.id) },
                       choose: { board.bring(face.id) })
-    }
-
-    @ViewBuilder
-    private var menuLayer: some View {
-        if let menu = menus.request {
-            ZStack(alignment: .topLeading) {
-                Color.clear
-                    .contentShape(Rectangle())
-                    .onTapGesture { menus.request = nil }
-                AnchoredMenu(width: menu.width, entries: closing(menu.entries))
-                    .offset(x: max(0, menu.anchor.maxX - CGFloat(menu.width)), y: menu.anchor.maxY + CGFloat(Design.Spacing.step4))
-            }
-        }
-    }
-
-    private func closing(_ entries: [MenuEntry]) -> [MenuEntry] {
-        entries.map { entry in
-            guard case .row(let row) = entry else { return entry }
-            return .row(MenuItem(id: row.id, label: row.label, meta: row.meta, check: row.check, danger: row.danger) {
-                row.action()
-                menus.request = nil
-            })
-        }
     }
 }
 

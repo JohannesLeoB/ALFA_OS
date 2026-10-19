@@ -200,7 +200,7 @@ struct ServiceCardBody: View {
     }
 
     private func addAccount(_ reading: ServiceReading, kind: TextButtonKind) -> some View {
-        SettingsMenuAction(label: word("text.settings.action.addAccount"), kind: kind) {
+        TextMenuButton(label: word("text.settings.action.addAccount"), kind: kind) {
             reading.offers.map { offer in
                 .row(MenuItem(id: offer.id, label: word(offer.title)) {
                     started = true
@@ -218,9 +218,9 @@ struct ServiceCardBody: View {
             SettingsBlockHead(key: "settings.sync.head")
             ForEach(reading.areas) { area in
                 SettingsRow(label: word(info.areaKey(area.area)), sub: sync(area)) {
-                    SettingsMenuChoice(label: word(area.choice.key)) {
+                    ChoiceButton(label: word(area.choice.key)) {
                         CadenceChoice.allCases.map { choice in
-                            .row(MenuItem(id: choice.rawValue, label: word(choice.key), check: choice == area.choice ? Text(Image(systemName: "checkmark")) : nil) {
+                            .row(MenuItem(id: choice.rawValue, label: word(choice.key), check: choice == area.choice ? word("mail.menu.check") : nil) {
                                 hub.rules.setCadence(area.inlet, area.capability, choice.cadence)
                                 revision += 1
                             })
