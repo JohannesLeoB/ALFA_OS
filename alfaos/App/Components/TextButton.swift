@@ -60,7 +60,7 @@ struct TextButton<Glyph: View>: View {
                 glyph
                 label.lineLimit(1)
             }
-            .font(.system(size: CGFloat(Design.TextSize.small), weight: .design(Design.Weight.medium)))
+            .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
             .foregroundStyle(foreground)
             .padding(.leading, CGFloat(Glyph.self == EmptyView.self ? Design.Spacing.step12 : Design.Spacing.step8))
             .padding(.trailing, CGFloat(Design.Spacing.step12))

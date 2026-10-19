@@ -19,7 +19,7 @@ struct SegmentedControl<ID: Hashable>: View {
                 Button(action: { selection = option.id }) {
                     option.label
                         .lineLimit(1)
-                        .font(.system(size: CGFloat(Design.TextSize.small), weight: .design(Design.Weight.medium)))
+                        .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
                         .foregroundStyle(design.color(on ? \.onInverse : \.inkSecondary))
                         .padding(.horizontal, CGFloat(Design.Spacing.step8))
                         .frame(height: CGFloat(Design.Size.chipHeight))

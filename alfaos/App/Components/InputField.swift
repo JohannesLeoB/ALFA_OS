@@ -6,16 +6,12 @@ struct InputField<Trailing: View>: View {
     @Binding var text: String
     let placeholder: Text
     let labelKey: String
+    var focus: FocusState<Bool>.Binding?
     @ViewBuilder let trailing: Trailing
 
     var body: some View {
         HStack(spacing: CGFloat(Design.Spacing.step8)) {
-            TextField(text: $text, prompt: placeholder) { word(labelKey) }
-                .textFieldStyle(.plain)
-                .font(.system(size: CGFloat(Design.TextSize.body)))
-                .foregroundStyle(design.color(\.ink))
-                .autocorrectionDisabled()
-                .accessibilityLabel(word(labelKey))
+            field
             trailing
         }
         .frame(height: CGFloat(Design.Spacing.step28))
@@ -25,10 +21,25 @@ struct InputField<Trailing: View>: View {
                 .frame(height: CGFloat(Design.Size.hairline))
         }
     }
+
+    @ViewBuilder
+    private var field: some View {
+        let base = TextField(text: $text, prompt: placeholder) { word(labelKey) }
+            .textFieldStyle(.plain)
+            .font(.face(Design.TextSize.body))
+            .foregroundStyle(design.color(\.ink))
+            .autocorrectionDisabled()
+            .accessibilityLabel(word(labelKey))
+        if let focus {
+            base.focused(focus)
+        } else {
+            base
+        }
+    }
 }
 
 extension InputField where Trailing == EmptyView {
-    init(text: Binding<String>, placeholder: Text, labelKey: String) {
-        self.init(text: text, placeholder: placeholder, labelKey: labelKey) { EmptyView() }
+    init(text: Binding<String>, placeholder: Text, labelKey: String, focus: FocusState<Bool>.Binding? = nil) {
+        self.init(text: text, placeholder: placeholder, labelKey: labelKey, focus: focus) { EmptyView() }
     }
 }

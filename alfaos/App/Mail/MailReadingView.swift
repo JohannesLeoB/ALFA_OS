@@ -174,7 +174,7 @@ struct SheetBody: View {
     let card: ReadingCard
 
     private func system(_ size: Double, _ weight: Font.Weight = .regular) -> Font {
-        .system(size: CGFloat(size), weight: weight)
+        Font(Typeface.font(size: size, weight: weight))
     }
 
     var body: some View {
@@ -246,7 +246,7 @@ struct ThreadItemView: View {
     @State private var anchor = AnchorBox()
 
     private func system(_ size: Double, _ weight: Font.Weight = .regular) -> Font {
-        .system(size: CGFloat(size), weight: weight)
+        Font(Typeface.font(size: size, weight: weight))
     }
 
     var body: some View {
@@ -343,11 +343,11 @@ struct AttachmentLine: View {
                 .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
                 .overlay(RoundedRectangle(cornerRadius: CGFloat(SheetValues.attachmentMarkRadius)).strokeBorder(design.color(\.sheetLineStrong), lineWidth: hairline))
             Text(verbatim: row.name)
-                .font(.system(size: CGFloat(Design.TextSize.body), weight: .medium))
+                .font(.face(Design.TextSize.body, weight: Design.Weight.medium))
                 .lineLimit(1)
                 .truncationMode(.tail)
             Text(verbatim: row.size)
-                .font(.system(size: CGFloat(Design.TextSize.small)))
+                .font(.face(Design.TextSize.small))
                 .foregroundStyle(design.color(\.sheetInkTertiary))
                 .fixedSize()
             Spacer(minLength: 0)

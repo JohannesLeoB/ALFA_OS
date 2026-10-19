@@ -1,42 +1,60 @@
 import ShellCore
 import SwiftUI
 
-struct SymbolButton<Glyph: View>: View {
+enum SymbolHover {
+    case ring
+    case fill
+    case none
+}
+
+struct SymbolButton: View {
     @Environment(\.design) private var design
     @Environment(\.accessibilityReduceMotion) private var reduced
-    let titleKey: String
+    let help: String
+    let glyph: Icon
     var selected = false
-    var ringed = true
+    var disabled = false
     var tone: KeyPath<DesignColors, RGB> = \.inkTertiary
+    var hoverTone: KeyPath<DesignColors, RGB> = \.ink
+    var ringed = true
+    var hover = SymbolHover.ring
     let action: () -> Void
-    @ViewBuilder let glyph: Glyph
     @State private var hovering = false
+
+    private var live: Bool { hovering && !disabled }
 
     private var foreground: Color {
         if selected { return design.color(\.onInverse) }
-        return design.color(hovering ? \.ink : tone)
+        return design.color(live && hover != .none ? hoverTone : tone)
     }
 
-    private var ringColor: Color? {
+    private var fill: Color {
+        if selected { return design.color(\.inverse) }
+        return live && hover == .fill ? design.color(\.hover) : Color.clear
+    }
+
+    private var ring: Color? {
         if selected { return nil }
-        if hovering { return design.color(\.inkTertiary) }
+        if live && hover == .ring { return design.color(\.inkTertiary) }
         return ringed ? design.color(\.lineStrong) : nil
     }
 
     var body: some View {
-        let size = CGFloat(Design.Size.symbolSize)
-        Button(action: action) {
-            glyph
-                .frame(width: size, height: size)
+        let side = CGFloat(Design.Size.symbolSize)
+        Button(action: { if !disabled { action() } }) {
+            Glyph(glyph)
+                .frame(width: side, height: side)
                 .foregroundStyle(foreground)
-                .background(Capsule().fill(selected ? design.color(\.inverse) : Color.clear))
-                .ring(Capsule(), ringColor)
+                .background(Capsule().fill(fill))
+                .ring(Capsule(), ring)
                 .contentShape(Capsule())
+                .opacity(disabled ? SheetValues.disabledOpacity : 1)
         }
         .buttonStyle(.plain)
-        .help(word(titleKey))
-        .accessibilityLabel(word(titleKey))
+        .help(Text(verbatim: help))
+        .accessibilityLabel(Text(verbatim: help))
+        .allowsHitTesting(!disabled)
         .onHover { hovering = $0 }
-        .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.hover), value: hovering)
+        .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.hover), value: live)
     }
 }

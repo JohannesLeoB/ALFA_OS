@@ -48,7 +48,7 @@ struct AnchoredMenu: View {
     private func head(_ label: Text) -> some View {
         label
             .lineLimit(1)
-            .font(.system(size: CGFloat(Design.TextSize.small)))
+            .font(.face(Design.TextSize.small))
             .foregroundStyle(design.color(\.inkTertiary))
             .padding(.horizontal, CGFloat(Design.Spacing.step8))
             .padding(.bottom, CGFloat(Design.Spacing.step4))
@@ -73,15 +73,15 @@ private struct AnchoredMenuRow: View {
         Button(action: row.action) {
             HStack(spacing: CGFloat(Design.Size.menuRowGap)) {
                 (row.check ?? Text(verbatim: ""))
-                    .font(.system(size: CGFloat(Design.TextSize.small)))
+                    .font(.face(Design.TextSize.small))
                     .frame(width: CGFloat(Design.Spacing.step12))
                 row.label
                     .lineLimit(1)
-                    .font(.system(size: CGFloat(Design.TextSize.body)))
+                    .font(.face(Design.TextSize.body))
                     .frame(maxWidth: .infinity, alignment: .leading)
                 if let meta = row.meta {
                     meta
-                        .font(.system(size: CGFloat(Design.TextSize.small)))
+                        .font(.face(Design.TextSize.small))
                         .foregroundStyle(design.color(\.inkTertiary))
                 }
             }

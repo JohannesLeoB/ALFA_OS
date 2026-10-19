@@ -19,7 +19,7 @@ struct Toast: View {
                 Button(action: onUndo) {
                     undoLabel
                         .lineLimit(1)
-                        .font(.system(size: CGFloat(Design.TextSize.small), weight: .design(Design.Weight.medium)))
+                        .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
                         .padding(.horizontal, CGFloat(Design.Spacing.step8))
                         .frame(height: CGFloat(Design.Spacing.step20))
                         .ring(Capsule(), design.color(\.onInverse))
@@ -29,7 +29,7 @@ struct Toast: View {
                 .padding(.trailing, -CGFloat(Design.Spacing.step8))
             }
         }
-        .font(.system(size: CGFloat(Design.TextSize.small)))
+        .font(.face(Design.TextSize.small))
         .foregroundStyle(design.color(\.onInverse))
         .padding(.horizontal, CGFloat(Design.Spacing.step12))
         .frame(height: CGFloat(Design.Spacing.step28))

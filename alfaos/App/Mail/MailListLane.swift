@@ -9,7 +9,6 @@ func folderTitle(_ name: MailFolderName) -> String {
 
 struct MailListLane: View {
     let model: MailModel
-    @Environment(\.design) private var design
     @Environment(\.mailLaneLink) private var link
     @State private var scrolled = false
     @State private var text = ""
@@ -60,7 +59,7 @@ struct MailListLane: View {
         let labelled = on && width >= Design.Size.breakpointFilterLabel
         return HStack(spacing: CGFloat(Design.Size.headGapList)) {
             filterButton(on: on, labelled: labelled)
-            HeadSymbol(help: words(model.searching ? "mail.search.close" : "mail.search.open"), glyph: .search, selected: model.searching, hover: .none) {
+            SymbolButton(help: words(model.searching ? "mail.search.close" : "mail.search.open"), glyph: .search, selected: model.searching, hover: .none) {
                 Task { await model.setSearching(!model.searching) }
             }
         }
@@ -73,7 +72,7 @@ struct MailListLane: View {
             if labelled {
                 TextButton(label: Text(verbatim: filterName(model.filter)), kind: .accent, action: openFilter) { Glyph(.filter) }
             } else {
-                HeadSymbol(help: help, glyph: .filter, selected: on, hover: .none, action: openFilter)
+                SymbolButton(help: help, glyph: .filter, selected: on, hover: .none, action: openFilter)
             }
         }
         .help(Text(verbatim: help))
@@ -100,11 +99,11 @@ struct MailListLane: View {
     private var pickTools: some View {
         let all = model.pickedInList.count == model.rows.count
         return HStack(spacing: CGFloat(Design.Size.headGapList)) {
-            HeadSymbol(help: words(all ? "mail.pick.none" : "mail.pick.all"), glyph: .list, hover: .none) { model.pickAllToggle() }
-            HeadSymbol(help: words("mail.pick.read"), glyph: .envelope, hover: .none) { Task { await model.bulk(.read) } }
-            HeadSymbol(help: words("mail.action.archive"), glyph: .archive, hover: .none) { Task { await model.bulk(.archive) } }
-            HeadSymbol(help: words("mail.action.trash"), glyph: .trash, tone: \.signal, hover: .none) { Task { await model.bulk(.trash) } }
-            HeadSymbol(help: words("mail.pick.clear"), glyph: .close, hover: .none) { model.clearPicked() }
+            SymbolButton(help: words(all ? "mail.pick.none" : "mail.pick.all"), glyph: .list, hover: .none) { model.pickAllToggle() }
+            SymbolButton(help: words("mail.pick.read"), glyph: .envelope, hover: .none) { Task { await model.bulk(.read) } }
+            SymbolButton(help: words("mail.action.archive"), glyph: .archive, hover: .none) { Task { await model.bulk(.archive) } }
+            SymbolButton(help: words("mail.action.trash"), glyph: .trash, tone: \.signal, hover: .none) { Task { await model.bulk(.trash) } }
+            SymbolButton(help: words("mail.pick.clear"), glyph: .close, hover: .none) { model.clearPicked() }
         }
     }
 
@@ -112,10 +111,10 @@ struct MailListLane: View {
     private var laneTools: some View {
         if let link {
             if link.openLanes > 1 {
-                HeadSymbol(help: words("mail.fold.named", title), glyph: .minus) { link.fold(.center) }
+                SymbolButton(help: words("mail.fold.named", title), glyph: .minus) { link.fold(.center) }
             }
             let maxed = link.maximized == .center
-            HeadSymbol(help: maxed ? words("mail.lane.back") : words("mail.grow.named", title), glyph: maxed ? .shrink : .expand) {
+            SymbolButton(help: maxed ? words("mail.lane.back") : words("mail.grow.named", title), glyph: maxed ? .shrink : .expand) {
                 link.toggleMaximize(.center)
             }
         }
@@ -124,24 +123,16 @@ struct MailListLane: View {
     private var searchField: some View {
         let here = model.searchScope == .here
         let placeholder = here ? words("mail.search.placeholder.here", title) : words("mail.search.placeholder.all")
-        return HStack(spacing: CGFloat(Design.Spacing.step8)) {
-            TextField(text: $text, prompt: Text(verbatim: placeholder)) { word("mail.search.label") }
-                .textFieldStyle(.plain)
-                .designText(\.ink, size: Design.TextSize.body)
-                .focused($focused)
-                .autocorrectionDisabled()
-                .onKeyPress(.escape) {
-                    Task { await model.setSearching(false) }
-                    return .handled
-                }
-                .accessibilityLabel(word("mail.search.label"))
+        return InputField(text: $text, placeholder: Text(verbatim: placeholder), labelKey: "mail.search.label", focus: $focused) {
             ScopeButton(label: here ? words("mail.search.scope.here", title) : words("mail.search.scope.all"),
                         help: here ? words("mail.search.tip.here", title) : words("mail.search.tip.all", title)) {
                 Task { await model.toggleScope() }
             }
         }
-        .frame(height: CGFloat(Design.Spacing.step28))
-        .overlay(alignment: .bottom) { Rectangle().fill(design.color(\.ink)).frame(height: CGFloat(Design.Size.hairline)) }
+        .onKeyPress(.escape) {
+            Task { await model.setSearching(false) }
+            return .handled
+        }
         .task {
             try? await Task.sleep(for: .seconds(Design.Duration.searchFocusDelay))
             focused = true
@@ -200,7 +191,7 @@ struct MailListLane: View {
     private func state(_ kind: MailEmptyKind) -> some View {
         switch kind {
         case .loading:
-            ContentState(kind: .noResults, text: word("mail.list.loading"), glyph: { Spinner() }, action: { EmptyView() })
+            ContentState(loading: word("mail.list.loading"))
         case .notConnected:
             ContentState(kind: .permissionRequired, title: word("mail.list.notConnected"), text: word("mail.list.notConnected.text"),
                          glyph: { Glyph(.envelope) },
@@ -252,24 +243,5 @@ struct ScopeButton: View {
         .buttonStyle(PressScale(scale: SheetValues.pressScale))
         .help(Text(verbatim: help))
         .onHover { hovering = $0 }
-    }
-}
-
-struct Spinner: View {
-    @Environment(\.design) private var design
-    @Environment(\.hairline) private var hairline
-    @Environment(\.accessibilityReduceMotion) private var reduced
-    @State private var turn = 0.0
-
-    var body: some View {
-        Circle()
-            .trim(from: 0, to: CGFloat(SheetValues.spinnerArc))
-            .stroke(design.color(\.ink), lineWidth: hairline)
-            .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
-            .rotationEffect(.degrees(turn))
-            .task {
-                guard !reduced else { return }
-                withAnimation(.linear(duration: Design.Duration.thinking).repeatForever(autoreverses: false)) { turn = 360 }
-            }
     }
 }

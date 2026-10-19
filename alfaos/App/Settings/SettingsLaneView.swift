@@ -97,7 +97,7 @@ private struct GroupRow: View {
                 }
                 word(group.key)
                     .lineLimit(1)
-                    .font(.system(size: CGFloat(Design.TextSize.body), weight: .design(selected ? Design.Weight.medium : Design.Weight.regular)))
+                    .font(.face(Design.TextSize.body, weight: selected ? Design.Weight.medium : Design.Weight.regular))
                     .foregroundStyle(design.color(selected ? \.lane : \.ink))
                 Spacer(minLength: 0)
                 if bad > 0 { Counter(value: String(bad), tone: selected ? \.lane : \.signal) }
@@ -177,12 +177,12 @@ private struct SectionRow: View {
                     HStack(spacing: CGFloat(Design.Spacing.step8)) {
                         word(section.key)
                             .lineLimit(1)
-                            .font(.system(size: CGFloat(Design.TextSize.body), weight: .design(Design.Weight.medium)))
+                            .font(.face(Design.TextSize.body, weight: Design.Weight.medium))
                             .foregroundStyle(design.color(selected ? \.lane : \.ink))
                         Spacer(minLength: 0)
                         if let value {
                             Text(verbatim: value)
-                                .font(.system(size: CGFloat(Design.TextSize.small)))
+                                .font(.face(Design.TextSize.small))
                                 .monospacedDigit()
                                 .foregroundStyle(design.color(ink.tertiary))
                         }
@@ -190,7 +190,7 @@ private struct SectionRow: View {
                     .frame(height: CGFloat(Design.LineHeight.notice))
                     word(section.detailKey)
                         .lineLimit(1)
-                        .font(.system(size: CGFloat(Design.TextSize.body)))
+                        .font(.face(Design.TextSize.body))
                         .foregroundStyle(design.color(ink.tertiary))
                         .frame(height: CGFloat(Design.LineHeight.notice), alignment: .leading)
                 }
@@ -292,11 +292,11 @@ private struct ServiceTile: View {
                 VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step4) / 2) {
                     Text(name)
                         .lineLimit(1)
-                        .font(.system(size: CGFloat(Design.TextSize.body), weight: .design(Design.Weight.medium)))
+                        .font(.face(Design.TextSize.body, weight: Design.Weight.medium))
                         .foregroundStyle(design.color(selected ? \.lane : \.ink))
                     Text(LocalizedStringKey(sub))
                         .lineLimit(1)
-                        .font(.system(size: CGFloat(Design.TextSize.small)))
+                        .font(.face(Design.TextSize.small))
                         .foregroundStyle(design.color(selected ? \.lane : (bad ? \.signal : \.inkTertiary)))
                 }
             }
@@ -324,7 +324,7 @@ private struct ServiceTile: View {
                     .frame(width: CGFloat(Design.Size.tileLogoSize), height: CGFloat(Design.Size.tileLogoSize))
             } else {
                 Text(verbatim: initial)
-                    .font(.system(size: CGFloat(Design.TextSize.small), weight: .design(Design.Weight.medium)))
+                    .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
                     .foregroundStyle(design.color(selected ? \.lane : \.ink))
             }
         }

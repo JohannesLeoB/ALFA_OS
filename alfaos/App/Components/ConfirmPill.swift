@@ -70,7 +70,7 @@ struct ConfirmPill<Glyph: View>: View {
             case .done: doneContent.transition(enter)
             }
         }
-        .font(.system(size: CGFloat(Design.TextSize.body)))
+        .font(.face(Design.TextSize.body))
         .foregroundStyle(design.color(\.ink))
         .padding(CGFloat(Design.Spacing.step4))
         .frame(height: CGFloat(Design.Spacing.step28))
@@ -107,7 +107,7 @@ struct ConfirmPill<Glyph: View>: View {
         TimelineView(.animation(paused: hold == nil)) { context in
             let fill = hold?.fill(at: context.date) ?? 0
             sized(yes)
-                .font(.system(size: CGFloat(Design.TextSize.small), weight: .design(Design.Weight.medium)))
+                .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
                 .foregroundStyle(design.color(\.signal))
                 .padding(.horizontal, CGFloat(Design.Spacing.step8))
                 .frame(height: CGFloat(Design.Spacing.step20))
@@ -136,7 +136,7 @@ struct ConfirmPill<Glyph: View>: View {
             ConfirmSpinner()
             if let running { running }
         }
-        .font(.system(size: CGFloat(Design.TextSize.small), weight: .design(Design.Weight.medium)))
+        .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
         .foregroundStyle(design.color(\.inkSecondary))
         .padding(.horizontal, CGFloat(Design.Spacing.step8))
     }
@@ -148,7 +148,7 @@ struct ConfirmPill<Glyph: View>: View {
                 InnerButton(action: revert) { undo }
             }
         }
-        .font(.system(size: CGFloat(Design.TextSize.small), weight: .design(Design.Weight.medium)))
+        .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
         .padding(.leading, CGFloat(Design.Spacing.step8))
         .padding(.trailing, CGFloat(Design.Spacing.step4))
     }
@@ -255,7 +255,7 @@ private struct InnerButton<Label: View>: View {
     var body: some View {
         Button(action: action) {
             label
-                .font(.system(size: CGFloat(Design.TextSize.small), weight: .design(Design.Weight.medium)))
+                .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
                 .foregroundStyle(design.color(hovering ? \.ink : \.inkSecondary))
                 .padding(.horizontal, CGFloat(Design.Spacing.step8))
                 .frame(height: CGFloat(Design.Spacing.step20))

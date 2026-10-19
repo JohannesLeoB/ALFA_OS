@@ -39,7 +39,7 @@ private struct SettingsValueField: View {
         TextField(text: $text, prompt: prompt?.foregroundStyle(design.color(\.inkTertiary))) { word(labelKey) }
             .textFieldStyle(.plain)
             .multilineTextAlignment(.trailing)
-            .font(.system(size: CGFloat(Design.TextSize.body)))
+            .font(.face(Design.TextSize.body))
             .foregroundStyle(design.color(\.ink))
             .autocorrectionDisabled()
             .padding(.trailing, CGFloat(Design.Size.trailingTextInset))

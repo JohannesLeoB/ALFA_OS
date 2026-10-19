@@ -13,11 +13,11 @@ struct SettingsRow<Trailing: View>: View {
             VStack(alignment: .leading, spacing: 0) {
                 label
                     .lineLimit(1)
-                    .font(.system(size: CGFloat(Design.TextSize.body)))
+                    .font(.face(Design.TextSize.body))
                     .foregroundStyle(design.color(\.ink))
                 if let sub {
                     sub
-                        .font(.system(size: CGFloat(Design.TextSize.small)))
+                        .font(.face(Design.TextSize.small))
                         .monospacedDigit()
                         .foregroundStyle(design.color(\.inkTertiary))
                         .lineHeight(Design.LineHeight.small, size: Design.TextSize.small)
@@ -51,7 +51,7 @@ struct SettingsValue: View {
         text
             .lineLimit(1)
             .truncationMode(.tail)
-            .font(.system(size: CGFloat(Design.TextSize.body)))
+            .font(.face(Design.TextSize.body))
             .foregroundStyle(design.color(tone))
             .padding(.trailing, CGFloat(Design.Size.trailingTextInset))
     }
@@ -69,7 +69,7 @@ struct ChoiceButton<Chevron: View>: View {
                 label.lineLimit(1)
                 chevron
             }
-            .font(.system(size: CGFloat(Design.TextSize.body)))
+            .font(.face(Design.TextSize.body))
             .foregroundStyle(design.color(\.ink))
             .padding(.leading, CGFloat(Design.Spacing.step12))
             .padding(.trailing, CGFloat(Design.Spacing.step8))
@@ -88,7 +88,7 @@ struct KeyCap: View {
     var body: some View {
         let side = CGFloat(Design.Spacing.step20)
         Text(verbatim: text)
-            .font(.system(size: CGFloat(Design.TextSize.small), weight: .design(Design.Weight.medium)))
+            .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
             .foregroundStyle(design.color(\.inkSecondary))
             .padding(.horizontal, CGFloat(Design.Spacing.step4))
             .frame(minWidth: side, minHeight: side, maxHeight: side)

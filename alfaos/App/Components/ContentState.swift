@@ -21,19 +21,19 @@ struct ContentState<Glyph: View, Action: View>: View {
         let symbol = CGFloat(Design.Size.symbolSize)
         VStack(spacing: CGFloat(Design.Spacing.step12)) {
             ZStack {
-                if kind != .loading { glyph }
+                if kind == .loading { Spinner() } else { glyph }
             }
             .foregroundStyle(design.color(\.inkTertiary))
             .frame(width: symbol, height: symbol)
             .ring(Circle(), design.color(\.lineStrong))
             if let title {
                 title
-                    .font(.system(size: CGFloat(Design.TextSize.body), weight: .design(Design.Weight.medium)))
+                    .font(.face(Design.TextSize.body, weight: Design.Weight.medium))
                     .foregroundStyle(design.color(\.ink))
                     .lineHeight(Design.LineHeight.body * Design.TextSize.body, size: Design.TextSize.body)
             }
             text
-                .font(.system(size: CGFloat(Design.TextSize.body)))
+                .font(.face(Design.TextSize.body))
                 .foregroundStyle(design.color(\.inkTertiary))
                 .lineHeight(Design.LineHeight.body * Design.TextSize.body, size: Design.TextSize.body)
             action
@@ -41,5 +41,30 @@ struct ContentState<Glyph: View, Action: View>: View {
         .multilineTextAlignment(.center)
         .padding(CGFloat(Design.Spacing.step24))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+extension ContentState where Glyph == EmptyView, Action == EmptyView {
+    init(loading text: Text) {
+        self.init(kind: .loading, text: text, glyph: { EmptyView() }, action: { EmptyView() })
+    }
+}
+
+struct Spinner: View {
+    @Environment(\.design) private var design
+    @Environment(\.hairline) private var hairline
+    @Environment(\.accessibilityReduceMotion) private var reduced
+    @State private var turn = 0.0
+
+    var body: some View {
+        Circle()
+            .trim(from: 0, to: CGFloat(SheetValues.spinnerArc))
+            .stroke(design.color(\.ink), lineWidth: hairline)
+            .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
+            .rotationEffect(.degrees(turn))
+            .task {
+                guard !reduced else { return }
+                withAnimation(.linear(duration: Design.Duration.thinking).repeatForever(autoreverses: false)) { turn = 360 }
+            }
     }
 }

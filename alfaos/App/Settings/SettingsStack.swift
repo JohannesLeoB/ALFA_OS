@@ -124,15 +124,15 @@ private struct SettingsStackCard: View {
     private func header(_ ink: Color) -> some View {
         HStack(spacing: CGFloat(Design.Spacing.step8)) {
             Text(verbatim: face.mark)
-                .font(.system(size: CGFloat(Design.TextSize.small), weight: .design(Design.Weight.medium)))
+                .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
                 .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
                 .overlay(Circle().strokeBorder(ink.opacity(Design.Opacity.ringOnMark), lineWidth: hairline))
                 .padding(.trailing, CGFloat(Design.Spacing.step12))
             Text(verbatim: face.title)
-                .font(.system(size: CGFloat(Design.TextSize.body), weight: .design(Design.Weight.medium)))
+                .font(.face(Design.TextSize.body, weight: Design.Weight.medium))
                 .lineLimit(1)
             Text(verbatim: face.meta)
-                .font(.system(size: CGFloat(Design.TextSize.small)))
+                .font(.face(Design.TextSize.small))
                 .monospacedDigit()
                 .lineLimit(1)
                 .opacity(SheetValues.metaOpacity)

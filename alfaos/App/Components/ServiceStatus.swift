@@ -64,7 +64,7 @@ struct ServiceStatus: View {
                 .lineLimit(1)
                 .padding(.trailing, trailingInset ? CGFloat(Design.Size.trailingTextInset) : 0)
         }
-        .font(.system(size: CGFloat(Design.TextSize.small)))
+        .font(.face(Design.TextSize.small))
         .foregroundStyle(design.color(foreground))
     }
 }

@@ -41,7 +41,7 @@ struct Mark<Content: View>: View {
     var body: some View {
         let side = CGFloat(size == .regular ? Design.Size.symbolSize : Design.Size.chipHeight)
         content
-            .font(.system(size: CGFloat(Design.TextSize.small), weight: .design(Design.Weight.medium)))
+            .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
             .lineLimit(1)
             .foregroundStyle(foreground)
             .frame(width: side, height: side)

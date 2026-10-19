@@ -14,7 +14,7 @@ struct Chip<RemoveGlyph: View>: View {
             Text(verbatim: name)
                 .lineLimit(1)
                 .truncationMode(.tail)
-                .font(.system(size: CGFloat(Design.TextSize.body)))
+                .font(.face(Design.TextSize.body))
                 .foregroundStyle(design.color(\.ink))
             ChipRemove(titleKey: removeKey, action: onRemove) { removeGlyph }
         }
@@ -51,7 +51,7 @@ struct AttachmentChip<Glyph: View, RemoveGlyph: View>: View {
                 ChipRemove(titleKey: removeKey, action: onRemove) { removeGlyph }
             }
         }
-        .font(.system(size: CGFloat(Design.TextSize.small)))
+        .font(.face(Design.TextSize.small))
         .foregroundStyle(design.color(ink.secondary))
         .padding(.leading, CGFloat(Design.Spacing.step8))
         .padding(.trailing, CGFloat(onRemove == nil ? Design.Spacing.step8 : Design.Spacing.step4))

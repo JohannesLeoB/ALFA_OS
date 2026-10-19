@@ -14,6 +14,12 @@ extension Font.Weight {
     }
 }
 
+extension Font {
+    static func face(_ size: Double, weight: Int = ShellCore.Design.Weight.regular) -> Font {
+        Font(Typeface.font(size: size, weight: weight))
+    }
+}
+
 struct InkSet {
     let primary: KeyPath<DesignColors, RGB>
     let secondary: KeyPath<DesignColors, RGB>
@@ -32,7 +38,7 @@ extension View {
     }
 
     func lineHeight(_ height: Double, size: Double) -> some View {
-        let font = NSFont.systemFont(ofSize: CGFloat(size))
+        let font = Typeface.font(size: size, weight: Design.Weight.regular)
         let natural = font.ascender - font.descender + font.leading
         let gap = max(0, CGFloat(height) - natural)
         return lineSpacing(gap).padding(.vertical, gap / 2)
@@ -54,7 +60,7 @@ private struct FloatingShadow<S: InsettableShape>: ViewModifier {
             if layer.isContour {
                 return AnyView(view.background(shape.fill(color).padding(-CGFloat(layer.spread))))
             }
-            return AnyView(view.shadow(color: color, radius: CGFloat(layer.blur), x: CGFloat(layer.x), y: CGFloat(layer.y)))
+            return AnyView(view.shadow(color: color, radius: CGFloat(layer.blur / 2), x: CGFloat(layer.x), y: CGFloat(layer.y)))
         }
     }
 }

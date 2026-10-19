@@ -68,7 +68,7 @@ struct ComposeView: View {
     private var bodySheet: some View {
         let binding = Binding(get: { card.draft.body }, set: { value in model.edit(card.id) { $0.body = value } })
         return TextEditor(text: binding)
-            .font(.system(size: CGFloat(Design.TextSize.body)))
+            .font(.face(Design.TextSize.body))
             .lineSpacing(CGFloat(Design.LineHeight.mailBody * Design.TextSize.body - Design.TextSize.body) * 0.75)
             .scrollContentBackground(.hidden)
             .foregroundStyle(design.color(\.sheetInk))
@@ -101,7 +101,7 @@ struct ComposeView: View {
     private var formatBar: some View {
         HStack(spacing: CGFloat(Design.Size.headGapStack)) {
             ForEach(MailFormatting.items, id: \.rawValue) { item in
-                HeadSymbol(help: words("mail.format." + item.rawValue), glyph: item.glyph, tone: \.inkSecondary, hover: .fill) {}
+                SymbolButton(help: words("mail.format." + item.rawValue), glyph: item.glyph, tone: \.inkSecondary, hover: .fill) {}
             }
             Spacer(minLength: 0)
         }
@@ -206,7 +206,7 @@ struct RecipientRow: View {
                     Spacer(minLength: 0)
                 }
                 if field == .to {
-                    HeadSymbol(help: words("mail.compose.copy"), glyph: .people, selected: showCopy, hover: .none) { showCopy.toggle() }
+                    SymbolButton(help: words("mail.compose.copy"), glyph: .people, selected: showCopy, hover: .none) { showCopy.toggle() }
                 }
             }
             .padding(.leading, CGFloat(Design.Size.edge))

@@ -24,7 +24,7 @@ struct MailFolderLane: View {
                     .help(Text(verbatim: state.text))
                     .frame(maxWidth: .infinity, alignment: .leading)
                 if let link, link.openLanes > 1 {
-                    HeadSymbol(help: words("mail.lane.fold"), glyph: .minus) { link.fold(.leading) }
+                    SymbolButton(help: words("mail.lane.fold"), glyph: .minus) { link.fold(.leading) }
                 }
             }
             ScrollView {

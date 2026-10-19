@@ -199,7 +199,7 @@ struct CardFoot: View {
         HStack(spacing: CGFloat(Design.Size.headGapStack)) {
             ForEach(slots) { slot in
                 if slot.action == .more {
-                    HeadSymbol(help: words("mail.action.more"), glyph: .more, hover: .fill) { openMore() }
+                    SymbolButton(help: words("mail.action.more"), glyph: .more, hover: .fill) { openMore() }
                         .background(AnchorProbe(box: moreAnchor))
                 } else if slot.action == .send, slot.cost > SheetValues.commandIconCost {
                     TextButton(label: word("mail.action.send"), kind: .accent, disabled: slot.off, action: { run.perform(.send) }) { Glyph(.send) }
@@ -212,7 +212,7 @@ struct CardFoot: View {
                                 .accessibilityHidden(true)
                         }
                 } else if let action = slot.action, let glyph = action.glyph {
-                    HeadSymbol(help: run.help(slot), glyph: glyph, selected: slot.accent, disabled: slot.off, hover: .fill) {
+                    SymbolButton(help: run.help(slot), glyph: glyph, selected: slot.accent, disabled: slot.off, hover: .fill) {
                         run.perform(action)
                     }
                     .keyboardShortcut(action.shortcut)

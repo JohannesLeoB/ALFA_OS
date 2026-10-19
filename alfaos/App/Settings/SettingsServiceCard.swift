@@ -8,7 +8,7 @@ struct SettingsBlockHead: View {
 
     var body: some View {
         word(key)
-            .font(.system(size: CGFloat(Design.TextSize.small)))
+            .font(.face(Design.TextSize.small))
             .foregroundStyle(design.color(\.inkTertiary))
             .padding(.horizontal, CGFloat(Design.Spacing.step16))
             .padding(.bottom, CGFloat(Design.Spacing.step8))
@@ -22,7 +22,7 @@ struct SettingsBlockNote: View {
 
     var body: some View {
         text
-            .font(.system(size: CGFloat(Design.TextSize.small)))
+            .font(.face(Design.TextSize.small))
             .foregroundStyle(design.color(\.inkTertiary))
             .lineHeight(Design.LineHeight.small, size: Design.TextSize.small)
             .fixedSize(horizontal: false, vertical: true)
@@ -366,7 +366,7 @@ private struct FormInput: View {
                 }
             }
             .textFieldStyle(.plain)
-            .font(.system(size: CGFloat(Design.TextSize.body)))
+            .font(.face(Design.TextSize.body))
             .foregroundStyle(design.color(\.ink))
             .autocorrectionDisabled()
             .frame(height: CGFloat(Design.Spacing.step28))

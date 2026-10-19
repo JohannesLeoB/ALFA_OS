@@ -35,11 +35,11 @@ struct Notice<Glyph: View, Actions: View>: View {
                 .ring(Circle(), design.color(onSheet ? \.sheetLineStrong : symbolTone))
             VStack(alignment: .leading, spacing: 0) {
                 title
-                    .font(.system(size: CGFloat(Design.TextSize.body), weight: .design(Design.Weight.medium)))
+                    .font(.face(Design.TextSize.body, weight: Design.Weight.medium))
                     .foregroundStyle(design.color(onSheet ? \.sheetInk : \.ink))
                     .lineHeight(Design.LineHeight.notice, size: Design.TextSize.body)
                 text
-                    .font(.system(size: CGFloat(Design.TextSize.body)))
+                    .font(.face(Design.TextSize.body))
                     .foregroundStyle(design.color(onSheet ? \.sheetInkTertiary : \.inkTertiary))
                     .lineHeight(Design.LineHeight.notice, size: Design.TextSize.body)
                 HStack(spacing: CGFloat(Design.Spacing.step8)) { actions }

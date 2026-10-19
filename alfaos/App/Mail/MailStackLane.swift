@@ -125,10 +125,10 @@ struct CommandHeader: View {
             }
         case .button:
             if slot.action == .more {
-                HeadSymbol(help: words("mail.action.more"), glyph: .more, hover: .fill) { openMore(plan) }
+                SymbolButton(help: words("mail.action.more"), glyph: .more, hover: .fill) { openMore(plan) }
                     .background(AnchorProbe(box: moreAnchor))
             } else if let action = slot.action, let glyph = action.glyph {
-                HeadSymbol(help: run.help(slot), glyph: glyph, selected: slot.accent, disabled: slot.off,
+                SymbolButton(help: run.help(slot), glyph: glyph, selected: slot.accent, disabled: slot.off,
                            tone: slot.signal ? \.signal : \.inkSecondary, hoverTone: slot.signal ? \.signal : \.ink, hover: .fill) {
                     run.perform(action)
                 }
