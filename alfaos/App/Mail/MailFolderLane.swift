@@ -38,12 +38,30 @@ struct MailFolderLane: View {
                             Task { await model.selectFolder(row.folder.id) }
                         }
                     }
+                    labels
                 }
                 .padding(CGFloat(Design.Spacing.step8))
             }
             .scrollIndicators(.hidden)
             .scrolledSignal($scrolled)
             ComposeButton { _ = model.compose() }
+        }
+    }
+
+    @ViewBuilder
+    private var labels: some View {
+        let rows = model.labelRows
+        if !rows.isEmpty {
+            word("mail.lane.labels")
+                .designText(\.inkTertiary, size: Design.TextSize.small)
+                .padding(.horizontal, CGFloat(Design.Spacing.step8))
+                .padding(.bottom, CGFloat(Design.Spacing.step8))
+                .frame(maxWidth: .infinity, minHeight: CGFloat(Design.Spacing.step32), alignment: .bottomLeading)
+            ForEach(rows) { row in
+                LaneRow(glyph: row.glyph, label: Text(verbatim: row.folder.name), selected: row.selected, count: nil) {
+                    Task { await model.selectFolder(row.folder.id) }
+                }
+            }
         }
     }
 

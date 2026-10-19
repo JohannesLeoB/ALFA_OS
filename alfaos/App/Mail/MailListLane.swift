@@ -169,9 +169,9 @@ struct MailListLane: View {
                 if !model.query.isEmpty, !items.isEmpty {
                     Text(verbatim: words("mail.search.results", MailNames.number(items.count)))
                         .designText(\.inkTertiary, size: Design.TextSize.small)
-                        .frame(maxWidth: .infinity, minHeight: CGFloat(Design.Spacing.step32), alignment: .bottomLeading)
                         .padding(.horizontal, CGFloat(Design.Spacing.step8))
                         .padding(.bottom, CGFloat(Design.Spacing.step8))
+                        .frame(maxWidth: .infinity, minHeight: CGFloat(Design.Spacing.step32), alignment: .bottomLeading)
                 }
                 ForEach(Array(items.prefix(window).enumerated()), id: \.element.id) { index, item in
                     let next = items.indices.contains(index + 1) ? items[index + 1] : nil

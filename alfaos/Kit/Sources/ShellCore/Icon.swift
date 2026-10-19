@@ -6,6 +6,7 @@ public enum Icon: String, CaseIterable, Sendable {
     case export, attach, folder, person, personAdd, people, bold, italic, underline, list
     case numbered, link, textSize, save, expand, shrink, minus, check, docText, chevron
     case lock, envelope, doc, alert, tick, building, plug, system, contrast, key
+    case tag
 
     public var data: String {
         switch self {
@@ -59,6 +60,7 @@ public enum Icon: String, CaseIterable, Sendable {
         case .system: "M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4"
         case .contrast: "M8 13.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM8 2.5v11"
         case .key: "M5.5 10.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM8.5 7.5h5v2M11.5 7.5v2"
+        case .tag: "M2.5 2.5h5.5l5.5 5.5-5.5 5.5-5.5-5.5ZM5.5 5.25v.5"
         }
     }
 

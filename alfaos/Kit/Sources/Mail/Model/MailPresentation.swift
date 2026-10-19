@@ -57,6 +57,12 @@ extension MailModel {
         }
     }
 
+    public var labelRows: [MailFolderRow] {
+        sortedFolders.filter { $0.role == .other }.map { folder in
+            MailFolderRow(folder: folder, glyph: .tag, count: 0, selected: folder.id == selectedFolder)
+        }
+    }
+
     public var savedDraftCount: Int {
         drafts.filter { card in
             switch card.state {

@@ -1947,6 +1947,17 @@
         }
       }
     },
+    "mail.lane.labels" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Labels"
+          }
+        }
+      }
+    },
     "mail.lane.title" : {
       "comment" : "alpha",
       "localizations" : {
