@@ -13,4 +13,4 @@ Nach dem ersten Ziel
 - Assistent: „Nur in den blob. Und der Assistent bekommt später einen eigenen vollen ansichtsbereich“ (11.10. 00:46 7cc894d9).
 - Studio: Zeiten, Aufgaben, Termine, Kontakte; nur ALPHA-Altbestand.
 - Kalkulation: „c - aber noch ohne Kalkulation“ (18.10. 13:11 c2a04c8a).
-- ALFAcolor (`fundus/alfacolor`): „ALFAcolor alfafarb alfafarben war ist eingentlich nichts anderes als der Versuch, das App Design zu zementieren“ (10.10. 20:32 7cc894d9).
+- ALFAcolor (bis 19.10. `fundus/alfacolor`, entfernt, nachlesbar in Git): „ALFAcolor alfafarb alfafarben war ist eingentlich nichts anderes als der Versuch, das App Design zu zementieren“ (10.10. 20:32 7cc894d9).

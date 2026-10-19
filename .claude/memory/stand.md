@@ -33,10 +33,7 @@ Aufträge an die Lead
 
 Offene Punkte aus dem alten Plan
 - C2: Proben für Airtable, ClickUp, Clockodo, sevDesk, Claude, DHL fehlen; `alfaos/Kit/Sources/Hub/Providers/` hat nur Google und IMAP.
-- D1: `scripts/lizenzen.txt` ohne GRDB-Zeile.
-- N1: Nomenklatur `gestaltung/nomenclature.json` steht auf `proposed`.
-
-Behalten bis zum Abgleich mit dem letzten Master: `AN-DESIGN.md`, `nomenclature.json`, `quarantine.json`, `bundle.*`, `entwurf-4.html`, `schablone.html`, die 2 PNG, `scripts/vertrag_aus_entwurf.py`.
+- Entschlackung 19.10. (Johannes: „räume raus was da nicht sein muss“): dist-Reste, plan/, recherche/, fundus/alfacolor, gestaltung (AN-DESIGN.md, nomenclature.json, components/, entwuerfe/, briefing-ansichten/), scripts/vertrag_aus_entwurf.py entfernt; nachlesbar nur in Git. lizenzen.txt nennt GRDB.swift 6.29.3 (MIT). In gestaltung bleiben tokens.json, tokens.css, quarantine.json, design.stamp.json. Offen: d's Ordner in dist/ nach d.
 
 Offen, wartet auf Johannes' Wort: Wortlaut für `design-bruecke.md` (Datenformat, Generatoren mit --check, Abdeckungsliste, Vergleich zum Vorletzten, Lückenliste mit Rückschein und festen Nummern); Reife, ab der gebaut wird (freigegeben/freigabe-orange oder auch von-design-gesetzt); ob audit_swift aus dem Skill design-zu-swift auf Design.* angepasst nach scripts/ kommt. Gebaut wird nichts.
 Danach: Aufträge unten (Test, Wächter, xcodegen, ausgang).

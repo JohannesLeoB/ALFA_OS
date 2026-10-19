@@ -12,18 +12,15 @@ Native macOS-App ALFA (Swift, SwiftUI). Regeln: `AGENTS.md`; sie gehen allem vor
 | `alfaos/Config/` | Entitlements, Info.plist, Export-Optionen, Beispielwerte ohne Firmendaten | dauerhaft |
 | `alfaos/Tests/` | App-Test `HullProbeTests.swift`; geht in den einen Test über (L5) | bis überführt |
 | `fundus/alpha/` | Bestandscode, eingebunden als `AlfaKit`, `AlfaServices`, `AlfaCalculation` | bis abgelöst |
-| `fundus/alfacolor/` | alter Farbsystem-Versuch, von nichts benutzt | Löschkandidat |
 | `DESIGN/` | letzter und vorletzter Design-Master (ZIP), `MANIFEST.json` | nach L7 |
 | `DESIGN/brief/` | aktueller Brief an Design mit Schemas, Prüfskripten, Beispielen | nur der letzte |
-| `gestaltung/alfa-interface/` | `tokens.json`, `tokens.css` (altes Theme), `design.stamp.json` (Stempel des Masters) | bis abgelöst |
-| `gestaltung/` (Rest) | überholte Entwürfe und Listen | Löschkandidat |
-| `scripts/` | Generatoren mit `--check`, `mutate.py`; Prüf- und Hook-Dateien (Wächter) | dauerhaft |
+| `gestaltung/alfa-interface/` | `tokens.json`, `tokens.css` (altes Theme), `quarantine.json` (Alt-Tokens ohne Rolle), `design.stamp.json` (Stempel des Masters) | bis abgelöst |
+| `scripts/` | Generatoren mit `--check`, `mutate.py`, `lizenzen.txt`; Prüf- und Hook-Dateien (Wächter) | dauerhaft |
 | `.githooks/`, `.github/workflows/` | Commit-Hook, GitHub-Prüflauf (Wächter) | dauerhaft |
 | `.claude/agents/` | Stränge (Arbeitsbereiche der Sitzungen) | dauerhaft |
 | `.claude/memory/` | Gedächtnis | dauerhaft |
 | `dist/` | Gebautes und Abgeleitetes; nicht in Git; jederzeit löschbar | flüchtig |
 | `ausgang/` | Forensik; nicht in Git | bis Forensik fertig |
-| `plan/`, `recherche/` | leer (nur .DS_Store), aus Git schon entfernt | Löschkandidat |
 | Wurzel | `AGENTS.md` (Regeln), `CLAUDE.md` (verweist auf AGENTS.md), `README.md` (Karte), `.gitignore`, `.swiftlint.yml` | dauerhaft |
 
 ## Einstieg für Agenten

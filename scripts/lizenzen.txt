@@ -1,31 +1,4 @@
-# Lizenzen · ALFAcolor · von Hand geprüft am 2026-10-08 (Brief B-105)
-#
-# Stand: keine fremden Abhängigkeiten. app/Package.swift bindet kein Paket von außen ein,
-# und es gibt kein Package.resolved mit Pins. Foundation, CoreGraphics, SwiftUI, AppKit und
-# WebKit sind Apple-Systemframeworks und brauchen keinen Eintrag.
-#
-# Format für jede fremde Abhängigkeit, eine Zeile je Paket, Trennzeichen |:
-#   Paket-Identität | Lizenz (SPDX) | Quelle (URL) | geprüft am JJJJ-MM-TT
-#
-# Fremdes Material, das in der Form übernommen ist (Brief B-213), ohne Farben und ohne Code aus der Quelle:
-#   Geometrie, Ablauf und Bewegung des Farbfächers (app/Sources/Motion/, ALFAcolor/App/Features/Swatches/)
-#   Interactive Fan Deck · MIT · Copyright (c) 2026 Eduard Wieandt · Quelle: https://eduardwieandt.com/playground/fan-deck
-#   (Repository: https://github.com/wieandteduard/interactive-fan-deck · Lizenztext: LICENSE im Quellpaket)
-#   Papiertextur (ambientCG Paper001, CC0) ist nicht übernommen; sie wartet auf Johannes' Wort.
-
-# Fremdes Material, das als Bausteine in der Startbibliothek liegt (Brief B-215), Stand 2026-10-09.
-# Die Quelltexte liegen als Ressource unter ALFAcolor/App/Resources/Starter/source, der Bau erzeugt daraus
-# das Beispiel-Dokument ALFAcolor/App/Resources/Starter/Bausteine.alfacolor. Nur Bauteile, Abläufe und Bewegung,
-# keine Farben aus der Quelle in der App-Oberfläche. Jede Karte trägt Herkunft und MIT-Text im Stück.
-#   motion-primitives · MIT · Copyright (c) 2024 ibelick · Quelle: https://github.com/ibelick/motion-primitives
-#   (Lizenztext: LICENCE.md des Quellpakets; die Datei endet dort mit einer Zeile „app/page.tsx“, die nicht zur Lizenz gehört und nicht übernommen ist.)
-#   Übernommen: components/core/*.tsx (33 Bauteile), Demos aus app/docs/*, hooks/useClickOutside.tsx, hooks/usePreventScroll.tsx.
-#   framer-motion 11.12.0 · MIT · Autor laut package.json: Matt Perry · Quelle: https://github.com/framer/motion/
-#   (Wird zur Laufzeit von cdn.jsdelivr.net geladen, nicht in den Quellen enthalten; die Bewegung der Bausteine läuft darüber.)
-#   Die Icons in runtime/shims.tsx sind eigene Strichzeichnungen, keine Fremdgrafik.
-
-# Fremdes Material, das in der Form übernommen ist (Brief B-214), ohne Farben und ohne Code aus der Quelle:
-#   Ablauf und Bewegung von sliding-number, border-trail, progressive-blur, transition-panel, image-comparison und spotlight
-#   (app/Sources/Motion/, ALFAcolor/App/Features/Motion/, ALFAcolor/App/Features/Blob/, ALFAcolor/App/Shell/StatusBarView.swift)
-#   motion-primitives · MIT · Copyright (c) 2024 ibelick · Quelle: https://github.com/ibelick/motion-primitives
-#   Nativ in SwiftUI nachgebaut; die Farben der Quelle sind nicht übernommen, alle Werte kommen aus dem Theme.
+# Lizenzen · ALFA · fremde Abhängigkeiten, geprüft am 2026-10-19
+# Quelle der Liste: fundus/alpha/Package.resolved; Lizenztext gelesen im Checkout des Pakets.
+# Format: Paket | Lizenz (SPDX) | Quelle | Version | geprüft am
+grdb.swift | MIT | https://github.com/groue/GRDB.swift | 6.29.3 | 2026-10-19
