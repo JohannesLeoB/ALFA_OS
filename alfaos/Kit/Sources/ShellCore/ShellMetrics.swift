@@ -1,5 +1,48 @@
 import Foundation
 
+public enum ShellMeasure: String, CaseIterable, Sendable {
+    case menuFieldPadding = "menu-field-padding"
+    case menuGroupPadding = "menu-group-padding"
+}
+
+public struct ShellMetrics: Sendable, Decodable, Equatable {
+    private let measures: [ShellMeasure: Double]
+
+    public func measure(_ key: ShellMeasure) -> Double { measures[key, default: 0] }
+
+    enum CodingKeys: String, CodingKey {
+        case measures
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let raw = try container.decode([String: Double].self, forKey: .measures)
+        var values: [ShellMeasure: Double] = [:]
+        for key in ShellMeasure.allCases {
+            guard let value = raw[key.rawValue] else {
+                throw DecodingError.keyNotFound(
+                    DynamicKey(key.rawValue),
+                    DecodingError.Context(codingPath: container.codingPath + [CodingKeys.measures], debugDescription: key.rawValue))
+            }
+            values[key] = value
+        }
+        measures = values
+    }
+
+    public init(data: Data) throws {
+        self = try JSONDecoder().decode(ShellMetrics.self, from: data)
+    }
+}
+
+private struct DynamicKey: CodingKey {
+    let stringValue: String
+    let intValue: Int? = nil
+
+    init(_ value: String) { stringValue = value }
+    init?(stringValue: String) { self.stringValue = stringValue }
+    init?(intValue: Int) { return nil }
+}
+
 public struct ShellGeometry: Sendable, Equatable {
     public let margin: Double
     public let gap: Double
@@ -45,6 +88,10 @@ public struct ShellGeometry: Sendable, Equatable {
         let width = 2 * margin + 2 * gap + minimum.reduce(0, +)
         guard screen.width > 0, screen.height > 0 else { return Size(width: width, height: width) }
         return Size(width: width, height: (width * screen.height / screen.width).rounded(.up))
+    }
+
+    public init(theme: TokenTheme, metrics: ShellMetrics) {
+        self.init()
     }
 
     public func laneHeight(_ window: Size) -> Double {
