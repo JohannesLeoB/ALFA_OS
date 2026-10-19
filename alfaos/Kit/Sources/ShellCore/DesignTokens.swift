@@ -206,6 +206,9 @@ public enum Design {
         public static let counter = 1.0
         public static let control = 18.0
     }
+    public enum Family {
+        public static let text = ["Geist", "SF Pro Text", "system-ui"]
+    }
     public enum Count {
         public static let stackMaxCards = 6
         public static let overviewLinesSmall = 3
@@ -315,6 +318,17 @@ public extension DesignColors {
     static let light = DesignColors(ground: RGB(1.0, 1.0, 1.0, 1.0), line: RGB(0.9098, 0.9098, 0.9098, 1.0), lineStrong: RGB(0.851, 0.851, 0.851, 1.0), ink: RGB(0.0902, 0.0902, 0.0902, 1.0), inkSecondary: RGB(0.302, 0.302, 0.302, 1.0), inkTertiary: RGB(0.4196, 0.4196, 0.4196, 1.0), mark: RGB(0.5412, 0.5412, 0.5412, 1.0), well: RGB(0.9608, 0.9608, 0.9608, 1.0), hover: RGB(0.0, 0.0, 0.0, 0.05), selection: RGB(0.0, 0.0, 0.0, 0.05), focus: RGB(0.4196, 0.4196, 0.4196, 1.0), handle: RGB(0.6392, 0.6392, 0.6392, 1.0), inverse: RGB(0.0902, 0.0902, 0.0902, 1.0), onInverse: RGB(1.0, 1.0, 1.0, 1.0), inverseHot: RGB(1.0, 1.0, 1.0, 0.12), inverseLine: RGB(1.0, 1.0, 1.0, 0.2), inverseField: RGB(1.0, 1.0, 1.0, 0.08), safeArea: RGB(0.0, 0.0, 0.0, 1.0), menu: RGB(1.0, 1.0, 1.0, 1.0), signal: RGB(0.702, 0.2549, 0.1804, 1.0), sheet: RGB(1.0, 1.0, 1.0, 1.0), sheetInk: RGB(0.0902, 0.0902, 0.0902, 1.0), sheetInkSecondary: RGB(0.302, 0.302, 0.302, 1.0), sheetInkTertiary: RGB(0.4196, 0.4196, 0.4196, 1.0), sheetLine: RGB(0.9098, 0.9098, 0.9098, 1.0), glaze: RGB(1.0, 1.0, 1.0, 0.75), sheetWell: RGB(0.9608, 0.9608, 0.9608, 1.0), sheetLineStrong: RGB(0.851, 0.851, 0.851, 1.0), onSignal: RGB(1.0, 1.0, 1.0, 1.0), onInverseSecondary: RGB(1.0, 1.0, 1.0, 0.8), onInverseTertiary: RGB(1.0, 1.0, 1.0, 0.6), onInverseLine: RGB(1.0, 1.0, 1.0, 0.3), orb: RGB(0.051, 0.051, 0.051, 1.0), orbRim: RGB(1.0, 1.0, 1.0, 0.12), orbGloss: RGB(1.0, 1.0, 1.0, 0.28), lane: RGB(1.0, 1.0, 1.0, 1.0))
     static let dark = DesignColors(ground: RGB(0.051, 0.051, 0.051, 1.0), line: RGB(0.1647, 0.1647, 0.1647, 1.0), lineStrong: RGB(0.2275, 0.2275, 0.2275, 1.0), ink: RGB(0.9804, 0.9804, 0.9804, 1.0), inkSecondary: RGB(0.851, 0.851, 0.851, 1.0), inkTertiary: RGB(0.6392, 0.6392, 0.6392, 1.0), mark: RGB(0.5412, 0.5412, 0.5412, 1.0), well: RGB(0.1216, 0.1216, 0.1216, 1.0), hover: RGB(1.0, 1.0, 1.0, 0.08), selection: RGB(1.0, 1.0, 1.0, 0.08), focus: RGB(0.6392, 0.6392, 0.6392, 1.0), handle: RGB(0.4196, 0.4196, 0.4196, 1.0), inverse: RGB(0.9608, 0.9608, 0.9608, 1.0), onInverse: RGB(0.051, 0.051, 0.051, 1.0), inverseHot: RGB(0.0, 0.0, 0.0, 0.08), inverseLine: RGB(0.0, 0.0, 0.0, 0.14), inverseField: RGB(0.0, 0.0, 0.0, 0.05), safeArea: RGB(0.0, 0.0, 0.0, 1.0), menu: RGB(0.1216, 0.1216, 0.1216, 1.0), signal: RGB(0.8784, 0.5412, 0.4549, 1.0), sheet: RGB(1.0, 1.0, 1.0, 1.0), sheetInk: RGB(0.0902, 0.0902, 0.0902, 1.0), sheetInkSecondary: RGB(0.302, 0.302, 0.302, 1.0), sheetInkTertiary: RGB(0.4196, 0.4196, 0.4196, 1.0), sheetLine: RGB(0.9098, 0.9098, 0.9098, 1.0), glaze: RGB(1.0, 1.0, 1.0, 0.07), sheetWell: RGB(0.9608, 0.9608, 0.9608, 1.0), sheetLineStrong: RGB(0.851, 0.851, 0.851, 1.0), onSignal: RGB(0.050980392156862744, 0.050980392156862744, 0.050980392156862744, 1.0), onInverseSecondary: RGB(0.0, 0.0, 0.0, 0.72), onInverseTertiary: RGB(0.0, 0.0, 0.0, 0.55), onInverseLine: RGB(0.0, 0.0, 0.0, 0.22), orb: RGB(0.051, 0.051, 0.051, 1.0), orbRim: RGB(1.0, 1.0, 1.0, 0.12), orbGloss: RGB(1.0, 1.0, 1.0, 0.28), lane: RGB(0.0784, 0.0784, 0.0784, 1.0))
     static let lightGray = DesignColors(ground: RGB(0.949, 0.949, 0.949, 1.0), line: RGB(0.9098, 0.9098, 0.9098, 1.0), lineStrong: RGB(0.851, 0.851, 0.851, 1.0), ink: RGB(0.0902, 0.0902, 0.0902, 1.0), inkSecondary: RGB(0.302, 0.302, 0.302, 1.0), inkTertiary: RGB(0.4196, 0.4196, 0.4196, 1.0), mark: RGB(0.5412, 0.5412, 0.5412, 1.0), well: RGB(0.9608, 0.9608, 0.9608, 1.0), hover: RGB(0.0, 0.0, 0.0, 0.05), selection: RGB(0.0, 0.0, 0.0, 0.05), focus: RGB(0.4196, 0.4196, 0.4196, 1.0), handle: RGB(0.6392, 0.6392, 0.6392, 1.0), inverse: RGB(0.0902, 0.0902, 0.0902, 1.0), onInverse: RGB(1.0, 1.0, 1.0, 1.0), inverseHot: RGB(1.0, 1.0, 1.0, 0.12), inverseLine: RGB(1.0, 1.0, 1.0, 0.2), inverseField: RGB(1.0, 1.0, 1.0, 0.08), safeArea: RGB(0.0, 0.0, 0.0, 1.0), menu: RGB(1.0, 1.0, 1.0, 1.0), signal: RGB(0.702, 0.2549, 0.1804, 1.0), sheet: RGB(1.0, 1.0, 1.0, 1.0), sheetInk: RGB(0.0902, 0.0902, 0.0902, 1.0), sheetInkSecondary: RGB(0.302, 0.302, 0.302, 1.0), sheetInkTertiary: RGB(0.4196, 0.4196, 0.4196, 1.0), sheetLine: RGB(0.9098, 0.9098, 0.9098, 1.0), glaze: RGB(1.0, 1.0, 1.0, 0.75), sheetWell: RGB(0.9608, 0.9608, 0.9608, 1.0), sheetLineStrong: RGB(0.851, 0.851, 0.851, 1.0), onSignal: RGB(1.0, 1.0, 1.0, 1.0), onInverseSecondary: RGB(1.0, 1.0, 1.0, 0.8), onInverseTertiary: RGB(1.0, 1.0, 1.0, 0.6), onInverseLine: RGB(1.0, 1.0, 1.0, 0.3), orb: RGB(0.051, 0.051, 0.051, 1.0), orbRim: RGB(1.0, 1.0, 1.0, 0.12), orbGloss: RGB(1.0, 1.0, 1.0, 0.28), lane: RGB(1.0, 1.0, 1.0, 1.0))
+}
+
+public struct DesignMoods: Sendable, Equatable {
+    public let coral: RGB
+    public let apricot: RGB
+    public let rose: RGB
+}
+
+public extension DesignMoods {
+    static let light = DesignMoods(coral: RGB(0.9765, 0.3608, 0.2941, 1.0), apricot: RGB(0.9529, 0.6235, 0.3529, 1.0), rose: RGB(0.9098, 0.7373, 0.7255, 1.0))
+    static let dark = DesignMoods(coral: RGB(0.9765, 0.3608, 0.2941, 1.0), apricot: RGB(0.9529, 0.6235, 0.3529, 1.0), rose: RGB(0.9098, 0.7373, 0.7255, 1.0))
 }
 
 public struct DesignShadows: Sendable, Equatable {

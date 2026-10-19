@@ -140,6 +140,25 @@ def colors_value(source, node, keys, name, fallback=None):
     return "%s(%s)" % (name, ", ".join(items))
 
 
+def hex_rgb(text):
+    h = text.lstrip("#")
+    parts = [int(h[i:i + 2], 16) / 255.0 for i in (0, 2, 4)]
+    return "RGB(%s, %s, %s, 1.0)" % tuple(num(round(p, 4)) for p in parts)
+
+
+def mood_block(node):
+    keys = [k for k, v in children(node) if is_leaf(v)]
+    out = ["", "public struct DesignMoods: Sendable, Equatable {"]
+    for key in keys:
+        out.append("%spublic let %s: RGB" % (INDENT, ident(key)))
+    out += ["}", "", "public extension DesignMoods {"]
+    for mode in ("light", "dark"):
+        items = ", ".join("%s: %s" % (ident(k), hex_rgb(node[k]["$value"][mode])) for k in keys)
+        out.append("%sstatic let %s = DesignMoods(%s)" % (INDENT, mode, items))
+    out.append("}")
+    return out
+
+
 def shadows_struct(keys):
     lines = ["public struct DesignShadows: Sendable, Equatable {"]
     for key in keys:
@@ -159,6 +178,7 @@ def build(source_bytes, stamp):
     out += scalar_block("TextSize", source["typography"]["size"], lambda l: num(dimension(l["$value"])))
     out += scalar_block("Weight", source["typography"]["weight"], lambda l: str(int(l["$value"])))
     out += scalar_block("LineHeight", source["typography"]["lineHeight"], lambda l: num(dimension(l["$value"])))
+    out += scalar_block("Family", source["typography"]["family"], lambda l: json.dumps(l["$value"]))
     out += numeric_block("Count", source["count"], whole=True)
     out += numeric_block("Opacity", source["opacity"])
     out += numeric_block("Confirm", source["confirm"])
@@ -173,7 +193,8 @@ def build(source_bytes, stamp):
     out.append("%sstatic let dark = %s" % (INDENT, colors_value(source, source["color"]["dark"], keys, "DesignColors")))
     out.append("%sstatic let lightGray = %s" % (INDENT, colors_value(source, source["color"]["lightGrayOverrides"], keys, "DesignColors", light)))
     out.append("}")
-    shadow_keys = [k for k, v in children(source["shadow"]["light"]) if is_leaf(v) and k in source["shadow"]["dark"]]
+    out += mood_block(source["color"]["mood"])
+    shadow_keys =[k for k, v in children(source["shadow"]["light"]) if is_leaf(v) and k in source["shadow"]["dark"]]
     single = [(m, k) for m in ("light", "dark") for k, v in children(source["shadow"][m]) if is_leaf(v) and k not in source["shadow"]["dark" if m == "light" else "light"]]
     out += [""] + shadows_struct(shadow_keys)
     out += ["", "public extension DesignShadows {"]
