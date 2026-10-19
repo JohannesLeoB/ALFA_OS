@@ -44,20 +44,17 @@ struct CardHead: View {
     @State private var titleAnchor = AnchorBox()
 
     var body: some View {
-        HStack(spacing: CGFloat(Design.Size.headGapList)) {
+        CardHeader(front: front, ink: ink) {
             markView
-                .padding(.trailing, CGFloat(Design.Spacing.step12))
+        } title: {
             titleView
+        } meta: {
             metaView
+        } trailing: {
             if case .message(let id) = ref, model.card(id)?.pinned == false {
                 CardHeadButton(help: words("mail.card.pin.tip"), glyph: .pin, ink: ink) { model.pin(id) }
             }
             CardHeadButton(help: words("card.close"), glyph: .close, ink: ink, fills: false) { close() }
-        }
-        .padding(.horizontal, CGFloat(Design.Size.headPadRight))
-        .frame(height: CGFloat(Design.Size.headerHeight))
-        .overlay(alignment: .bottom) {
-            if front { Hairline() }
         }
     }
 
@@ -78,20 +75,14 @@ struct CardHead: View {
         return card.people(.to)
     }
 
+    @ViewBuilder
     private var markView: some View {
-        let side = CGFloat(Design.Size.symbolSize)
-        return Group {
-            if let party {
-                let initials = MailNames.initials(party.name)
-                if initials.isEmpty { Glyph(.person) } else { Text(verbatim: initials) }
-            } else {
-                Glyph(.compose)
-            }
+        if let party {
+            let initials = MailNames.initials(party.name)
+            if initials.isEmpty { Glyph(.person) } else { Text(verbatim: initials) }
+        } else {
+            Glyph(.compose)
         }
-        .designText(size: Design.TextSize.small, weight: .medium)
-        .lineLimit(1)
-        .frame(width: side, height: side)
-        .overlay(Circle().strokeBorder(ink.opacity(Design.Opacity.ringOnMark), lineWidth: CGFloat(Design.Size.hairline)))
     }
 
     @ViewBuilder

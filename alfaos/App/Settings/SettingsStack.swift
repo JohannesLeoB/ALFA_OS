@@ -85,7 +85,6 @@ private struct SettingsStackCard: View {
     let depth: Int
     let first: Bool
     let disconnecting: String?
-    @Environment(\.hairline) private var hairline
 
     private var front: Bool { depth == 0 }
 
@@ -103,27 +102,21 @@ private struct SettingsStackCard: View {
     }
 
     private func header(_ ink: Color) -> some View {
-        HStack(spacing: CGFloat(Design.Spacing.step8)) {
+        CardHeader(front: front, ink: ink) {
             Text(verbatim: face.mark)
-                .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
-                .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
-                .overlay(Circle().strokeBorder(ink.opacity(Design.Opacity.ringOnMark), lineWidth: hairline))
-                .padding(.trailing, CGFloat(Design.Spacing.step12))
+        } title: {
             Text(verbatim: face.title)
                 .font(.face(Design.TextSize.body, weight: Design.Weight.medium))
                 .lineLimit(1)
+        } meta: {
             Text(verbatim: face.meta)
                 .font(.face(Design.TextSize.small))
                 .monospacedDigit()
                 .lineLimit(1)
                 .opacity(SheetValues.metaOpacity)
                 .frame(maxWidth: .infinity, alignment: .leading)
+        } trailing: {
             CardHeadButton(help: words("card.close"), glyph: .close, ink: ink, fills: false) { board.close(face.id) }
-        }
-        .padding(.horizontal, CGFloat(Design.Spacing.step8))
-        .frame(height: CGFloat(Design.Size.headerHeight))
-        .overlay(alignment: .bottom) {
-            if front { Hairline() }
         }
     }
 }
