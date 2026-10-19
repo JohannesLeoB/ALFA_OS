@@ -318,11 +318,18 @@ struct CardFoot: View {
                 } else if slot.action == .send, slot.cost > MailSheet.commandIconCost {
                     TextButton(label: word("mail.action.send"), kind: .accent, disabled: slot.off, action: { run.perform(.send) }) { Glyph(.send) }
                         .opacity(slot.off ? MailSheet.disabledOpacity : 1)
-                        .keyboardShortcut(.return, modifiers: .command)
+                        .background {
+                            Button("") { if slot.off { model.announce(.recipientMissing) } else { run.perform(.send) } }
+                                .keyboardShortcut(.return, modifiers: .command)
+                                .opacity(0)
+                                .allowsHitTesting(false)
+                                .accessibilityHidden(true)
+                        }
                 } else if let action = slot.action, let glyph = action.glyph {
                     HeadSymbol(help: run.help(slot), glyph: glyph, selected: slot.accent, disabled: slot.off, hover: .fill) {
                         run.perform(action)
                     }
+                    .keyboardShortcut(action.shortcut)
                 }
             }
         }

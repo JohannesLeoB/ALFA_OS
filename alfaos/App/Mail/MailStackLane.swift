@@ -132,6 +132,7 @@ struct CommandHeader: View {
                            tone: slot.signal ? \.signal : \.inkSecondary, hoverTone: slot.signal ? \.signal : \.ink, hover: .fill) {
                     run.perform(action)
                 }
+                .keyboardShortcut(action.shortcut)
             }
         }
     }

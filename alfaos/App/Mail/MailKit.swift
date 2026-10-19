@@ -61,6 +61,28 @@ struct MailLaneLink: Sendable {
     var openSettings: @MainActor @Sendable () -> Void = {}
 }
 
+extension MailLaneLink {
+    @MainActor
+    init(shell: ShellModel) {
+        let open = shell.widths.all.filter { $0 > shell.geometry.laneFolded }.count
+        self.init(openLanes: open, fold: { shell.toggleFold($0) }, maximized: shell.laneState(shell.currentID).maximized,
+                  toggleMaximize: { shell.toggleMaximize($0) }, openSettings: { shell.select("settings") })
+    }
+}
+
+extension MailAction {
+    var shortcut: KeyboardShortcut? {
+        switch self {
+        case .reply: KeyboardShortcut("r", modifiers: .command)
+        case .replyAll: KeyboardShortcut("r", modifiers: [.command, .shift])
+        case .forward: KeyboardShortcut("f", modifiers: [.command, .shift])
+        case .saveDraft: KeyboardShortcut("s", modifiers: .command)
+        case .print: KeyboardShortcut("p", modifiers: .command)
+        default: nil
+        }
+    }
+}
+
 private struct MailLaneLinkKey: EnvironmentKey {
     static let defaultValue: MailLaneLink? = nil
 }

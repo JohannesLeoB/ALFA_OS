@@ -1,6 +1,5 @@
 public enum MailSheet {
     public static let commandIconCost = 28.0
-    public static let commandLabelCost = 84.0
     public static let commandSendCost = 92.0
     public static let commandConfirmCost = 290.0
     public static let commandSeparatorCost = 9.0
@@ -8,7 +7,6 @@ public enum MailSheet {
     public static let rowSeparatorInset = 56.0
     public static let rowTextLine = 20.0
     public static let previewLines = 2
-    public static let senderLimit = 40
     public static let personNameLimit = 34
     public static let personAddressLimit = 44
     public static let firstNameLimit = 24
@@ -18,10 +16,6 @@ public enum MailSheet {
     public static let cardAddressLimit = 36
     public static let recipientsInline = 2
     public static let threadBodyLimit = 20
-    public static let pageAhead = 1200.0
-    public static let pageStep = 120
-    public static let pageFirst = 60
-    public static let scopeMaxShare = 0.5
     public static let listCountShown = false
     public static let rowSpacing = 20.0
     public static let rowPadding = 12.0
@@ -29,14 +23,12 @@ public enum MailSheet {
     public static let smallIconStroke = 1.5
     public static let tinyIcon = 10.0
     public static let tinyIconStroke = 1.8
-    public static let removeSize = 16.0
     public static let removeRowSize = 24.0
     public static let bodyPadTop = 16.0
     public static let bodyPadBottom = 24.0
     public static let bodyPadSide = 8.0
     public static let bodyMargin = 8.0
     public static let bodyRadius = 4.0
-    public static let subjectLine = 1.25
     public static let subjectTracking = -0.02
     public static let conversationLine = 16.0
     public static let attachmentRowHeight = 40.0
@@ -48,15 +40,12 @@ public enum MailSheet {
     public static let recipientRowHeight = 44.0
     public static let recipientInputHeight = 36.0
     public static let suggestionColumnGap = 12.0
-    public static let signatureRule = 24.0
-    public static let signatureGap = 2.0
     public static let hoverRowOpacity = 0.88
     public static let pressScaleCompose = 0.98
     public static let pressScaleDisclosure = 0.99
     public static let pressScaleChip = 0.92
     public static let closeOpacity = 0.7
     public static let metaOpacity = 0.72
-    public static let lockOpacity = 0.6
     public static let disabledOpacity = 0.4
     public static let overviewOtherOpacity = 0.55
     public static let overviewHoverScale = 1.012
@@ -69,7 +58,6 @@ public enum MailSheet {
     public static let overviewTileTitleLine = 1.35
     public static let overviewTitleLines = 2
     public static let toastBottom = 16.0
-    public static let emptyTextMaxWidth = 320.0
     public static let spinnerArc = 0.22
     public static let menuMargin = 16.0
     public static let attachmentChipNameLimit = 26
