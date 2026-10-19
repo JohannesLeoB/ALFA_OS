@@ -82,50 +82,17 @@ struct SettingsGroupsPane: View {
         ScrollView {
             VStack(spacing: 0) {
                 ForEach(SettingsGroup.allCases, id: \.self) { group in
-                    GroupRow(
-                        group: group,
-                        selected: board.group == group,
-                        bad: group == .connections ? ServiceReader.badCount(readings) : 0,
-                        action: { board.group = group })
+                    let selected = board.group == group
+                    let bad = group == .connections ? ServiceReader.badCount(readings) : 0
+                    LaneRow(glyph: Icon(rawValue: group.symbol) ?? .system, label: word(group.key), selected: selected,
+                            count: bad > 0 ? String(bad) : nil, countTone: selected ? \.lane : \.signal) {
+                        board.group = group
+                    }
                 }
             }
             .padding(CGFloat(Design.Spacing.step8))
         }
         .scrollIndicators(.never)
-    }
-}
-
-private struct GroupRow: View {
-    @Environment(\.design) private var design
-    let group: SettingsGroup
-    let selected: Bool
-    let bad: Int
-    let action: () -> Void
-    @State private var hovering = false
-
-    var body: some View {
-        let shape = RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row))
-        Button(action: action) {
-            HStack(spacing: CGFloat(Design.Spacing.step20)) {
-                Mark(inverted: selected, tone: selected ? \.lane : \.inkTertiary) {
-                    Glyph(Icon(rawValue: group.symbol) ?? .system)
-                }
-                word(group.key)
-                    .lineLimit(1)
-                    .font(.face(Design.TextSize.body, weight: selected ? Design.Weight.medium : Design.Weight.regular))
-                    .foregroundStyle(design.color(selected ? \.lane : \.ink))
-                Spacer(minLength: 0)
-                if bad > 0 { Counter(value: String(bad), tone: selected ? \.lane : \.signal) }
-            }
-            .padding(.horizontal, CGFloat(Design.Spacing.step8))
-            .frame(height: CGFloat(Design.Size.rowHeight))
-            .background(shape.fill(selected ? design.color(\.ink) : Color.clear))
-            .ring(shape, hovering && !selected ? design.color(\.lineStrong) : nil)
-            .contentShape(shape)
-        }
-        .buttonStyle(.plain)
-        .onHover { hovering = $0 }
-        .accessibilityAddTraits(selected ? .isSelected : [])
     }
 }
 
@@ -186,42 +153,29 @@ private struct SectionRow: View {
         let shape = RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row))
         let ink = selected ? InkSet.inverse : InkSet.lane
         Button(action: action) {
-            HStack(alignment: .top, spacing: CGFloat(Design.Spacing.step20)) {
+            MessageRow(fill: selected ? design.color(\.ink) : (hovering ? design.color(\.lane) : Color.clear),
+                       ring: hovering && !selected ? design.color(\.lineStrong) : nil, separated: separated) {
                 Mark(inverted: selected) { Text(verbatim: SettingsFormat.initial(String(localized: String.LocalizationValue(section.key)))) }
-                VStack(alignment: .leading, spacing: 0) {
-                    HStack(spacing: CGFloat(Design.Spacing.step8)) {
-                        word(section.key)
-                            .lineLimit(1)
-                            .font(.face(Design.TextSize.body, weight: Design.Weight.medium))
-                            .foregroundStyle(design.color(selected ? \.lane : \.ink))
-                        Spacer(minLength: 0)
-                        if let value {
-                            Text(verbatim: value)
-                                .font(.face(Design.TextSize.small))
-                                .monospacedDigit()
-                                .foregroundStyle(design.color(ink.tertiary))
-                        }
-                    }
-                    .frame(height: CGFloat(Design.LineHeight.notice))
-                    word(section.detailKey)
+            } content: {
+                HStack(spacing: CGFloat(Design.Spacing.step8)) {
+                    word(section.key)
                         .lineLimit(1)
-                        .font(.face(Design.TextSize.body))
-                        .foregroundStyle(design.color(ink.tertiary))
-                        .frame(height: CGFloat(Design.LineHeight.notice), alignment: .leading)
+                        .font(.face(Design.TextSize.body, weight: Design.Weight.medium))
+                        .foregroundStyle(design.color(selected ? \.lane : \.ink))
+                    Spacer(minLength: 0)
+                    if let value {
+                        Text(verbatim: value)
+                            .font(.face(Design.TextSize.small))
+                            .monospacedDigit()
+                            .foregroundStyle(design.color(ink.tertiary))
+                    }
                 }
-                .padding(.top, CGFloat(Design.Spacing.step4))
-            }
-            .padding(.vertical, CGFloat(Design.Spacing.step12))
-            .padding(.horizontal, CGFloat(Design.Spacing.step8))
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(shape.fill(selected ? design.color(\.ink) : (hovering ? design.color(\.lane) : Color.clear)))
-            .ring(shape, hovering && !selected ? design.color(\.lineStrong) : nil)
-            .overlay(alignment: .bottom) {
-                if separated {
-                    Hairline()
-                        .padding(.leading, CGFloat(Design.Spacing.step56))
-                        .padding(.trailing, CGFloat(Design.Spacing.step8))
-                }
+                .frame(height: CGFloat(Design.LineHeight.notice))
+                word(section.detailKey)
+                    .lineLimit(1)
+                    .font(.face(Design.TextSize.body))
+                    .foregroundStyle(design.color(ink.tertiary))
+                    .frame(height: CGFloat(Design.LineHeight.notice), alignment: .leading)
             }
             .contentShape(shape)
         }

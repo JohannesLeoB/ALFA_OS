@@ -31,7 +31,10 @@ struct MailFolderLane: View {
                 VStack(spacing: 0) {
                     MailAccountPicker(model: model)
                     ForEach(model.folderRows) { row in
-                        FolderRowView(row: row, live: model.accountReachable && model.listState != .loading) {
+                        let live = model.accountReachable && model.listState != .loading
+                        LaneRow(glyph: row.glyph, label: name(row), selected: row.selected,
+                                count: live && row.count > 0 ? MailNames.number(row.count) : nil,
+                                countTone: row.selected ? \.onInverseSecondary : \.inkTertiary) {
                             Task { await model.selectFolder(row.folder.id) }
                         }
                     }
@@ -43,37 +46,9 @@ struct MailFolderLane: View {
             ComposeButton { _ = model.compose() }
         }
     }
-}
 
-private struct FolderRowView: View {
-    @Environment(\.design) private var design
-    let row: MailFolderRow
-    let live: Bool
-    let action: () -> Void
-    @State private var hovering = false
-
-    var body: some View {
-        let name = row.folder.role == .other ? Text(verbatim: row.folder.name) : word("mail.role." + row.folder.role.rawValue)
-        Button(action: action) {
-            HStack(spacing: CGFloat(SheetValues.rowSpacing)) {
-                Mark(fill: .rest, inverted: row.selected, tone: row.selected ? \.lane : \.inkTertiary) { Glyph(row.glyph) }
-                name
-                    .designText(row.selected ? \.lane : \.ink, size: Design.TextSize.body, weight: row.selected ? .medium : .regular)
-                    .lineLimit(1)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                if live, row.count > 0 {
-                    Counter(value: MailNames.number(row.count), tone: row.selected ? \.onInverseSecondary : \.inkTertiary)
-                }
-            }
-            .padding(.horizontal, CGFloat(Design.Spacing.step8))
-            .frame(height: CGFloat(Design.Size.rowHeight))
-            .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row)).fill(row.selected ? design.color(\.ink) : Color.clear))
-            .ring(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row)), hovering && !row.selected ? design.color(\.lineStrong) : nil)
-            .contentShape(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row)))
-        }
-        .buttonStyle(.plain)
-        .onHover { hovering = $0 }
-        .accessibilityAddTraits(row.selected ? .isSelected : [])
+    private func name(_ row: MailFolderRow) -> Text {
+        row.folder.role == .other ? Text(verbatim: row.folder.name) : word("mail.role." + row.folder.role.rawValue)
     }
 }
 

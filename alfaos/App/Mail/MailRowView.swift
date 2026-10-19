@@ -17,7 +17,6 @@ struct RowTone {
 
 struct MailRowView: View {
     @Environment(\.design) private var design
-    @Environment(\.hairline) private var hairline
     @Environment(\.accessibilityReduceMotion) private var reduced
     let model: MailModel
     let item: MailRowPresentation
@@ -41,26 +40,12 @@ struct MailRowView: View {
     }
 
     var body: some View {
-        HStack(alignment: .top, spacing: CGFloat(SheetValues.rowSpacing)) {
+        MessageRow(fill: fill, ring: ringColor, separated: separated) {
             mark
-            VStack(alignment: .leading, spacing: 0) {
-                head
-                subject
-                preview
-            }
-            .padding(.top, CGFloat(Design.Spacing.step4))
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .padding(.vertical, CGFloat(SheetValues.rowPadding))
-        .padding(.horizontal, CGFloat(Design.Spacing.step8))
-        .background(shape.fill(fill))
-        .ring(shape, ringColor)
-        .overlay(alignment: .bottomTrailing) {
-            if separated {
-                Rectangle().fill(design.color(\.line)).frame(height: hairline)
-                    .padding(.leading, CGFloat(SheetValues.rowSeparatorInset))
-                    .padding(.trailing, CGFloat(Design.Spacing.step8))
-            }
+        } content: {
+            head
+            subject
+            preview
         }
         .overlay(alignment: .topTrailing) { rowActions }
         .contentShape(shape)
