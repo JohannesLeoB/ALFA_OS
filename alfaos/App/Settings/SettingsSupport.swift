@@ -69,7 +69,7 @@ struct SettingsMenuChoice: View {
     let entries: () -> [MenuEntry]
 
     var body: some View {
-        ChoiceButton(label: label, action: { menus?.request = SettingsMenuRequest(anchor: frame, entries: entries()) }) {
+        ChoiceButton(label: label, action: { menus?.request = SettingsMenuRequest(anchor: frame, entries: entries(), width: Design.Size.menuWidthNarrow) }) {
             Glyph(.chevron, size: Design.Spacing.step12, stroke: SheetValues.smallIconStroke)
         }
         .anchorFrame($frame)

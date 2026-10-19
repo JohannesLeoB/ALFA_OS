@@ -54,6 +54,7 @@ struct ServiceCardBody: View {
     let board: SettingsBoard
     let hub: Hub
     let info: ServiceInfo
+    var disconnecting = false
     @State private var revision = 0
     @State private var started = false
 
@@ -67,11 +68,12 @@ struct ServiceCardBody: View {
     var body: some View {
         let reading = reading
         VStack(spacing: 0) {
-            actions(reading)
+            progress
             SettingsRow(label: word("settings.row.state"), sub: note(reading.note)) {
                 ServiceStatus(state: reading.state.service, label: word(reading.state.key), trailingInset: true)
             }
             notices(reading)
+            if disconnecting { SettingsBlockNote(text: Text(verbatim: SettingsFormat.text("settings.disconnect.text", name))) }
             accounts(reading)
             SettingsRow(label: word("settings.row.access")) {
                 SettingsValue(text: Text(verbatim: access))
@@ -118,42 +120,16 @@ struct ServiceCardBody: View {
     }
 
     @ViewBuilder
-    private func actions(_ reading: ServiceReading) -> some View {
-        let busy = host.busy
-        VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step4)) {
-            HStack(spacing: CGFloat(Design.Spacing.step4)) {
-                if !info.listsAccounts {
-                    let off = busy || reading.state == .connecting || reading.step == .none
-                    TextButton(label: word(reading.asksReconnect ? "settings.action.reconnect" : "settings.action.connect"), disabled: off) {
-                        perform(reading.step)
-                    } glyph: {
-                        Glyph(.link)
-                    }
-                    .opacity(off ? SheetValues.disabledOpacity : 1)
-                }
-                if reading.state.canDisconnect {
-                    ConfirmPill(
-                        label: word("settings.action.disconnect"),
-                        question: Text(verbatim: SettingsFormat.text("settings.disconnect.ask", name)),
-                        yes: word("settings.action.disconnect"),
-                        no: word("text.common.cancel"),
-                        holdHint: word("settings.hold.disconnect"),
-                        showsProgress: false,
-                        onYes: { disconnect(reading) }
-                    ) {
-                        Glyph(.close)
-                    }
-                }
-                Spacer(minLength: 0)
-            }
-            if started {
-                if busy { word("settings.link.connecting").designText(\.inkTertiary, size: Design.TextSize.small) }
+    private var progress: some View {
+        if started || host.actedOn == info.id, host.busy || host.failure != nil {
+            VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step4)) {
+                if host.busy { word("settings.link.connecting").designText(\.inkTertiary, size: Design.TextSize.small) }
                 if let failure = host.failure { hintWords(failure).designText(\.signal, size: Design.TextSize.small) }
             }
+            .padding(.horizontal, CGFloat(Design.Spacing.step16))
+            .padding(.vertical, CGFloat(Design.Spacing.step8))
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(.horizontal, CGFloat(Design.Spacing.step16))
-        .padding(.vertical, CGFloat(Design.Spacing.step8))
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     @ViewBuilder
@@ -173,23 +149,11 @@ struct ServiceCardBody: View {
             }
         case .orphaned:
             SettingsBlockNotice(kind: .warning, title: word("settings.orphaned.title"), text: word("settings.orphaned.body")) {
-                removePill(reading)
+                TextButton(label: word("text.settings.action.remove"), kind: .signal, disabled: host.busy) { disconnect(reading) }
             }
         default:
             EmptyView()
         }
-    }
-
-    private func removePill(_ reading: ServiceReading) -> some View {
-        ConfirmPill(
-            label: word("text.settings.action.remove"),
-            question: Text(verbatim: SettingsFormat.text("settings.disconnect.ask", name)),
-            yes: word("text.settings.action.remove"),
-            no: word("text.common.cancel"),
-            holdHint: word("settings.hold.remove"),
-            showsProgress: false,
-            onYes: { disconnect(reading) }
-        )
     }
 
     private func reason(_ hint: Hint?) -> String {
@@ -221,7 +185,7 @@ struct ServiceCardBody: View {
                             label: word("text.settings.action.remove"),
                             question: Text(verbatim: SettingsFormat.text("settings.disconnect.ask", String(localized: String.LocalizationValue(inlet.title)))),
                             yes: word("text.settings.action.remove"),
-                            no: word("text.common.cancel"),
+                            no: word("confirm.no"),
                             holdHint: word("settings.hold.remove"),
                             showsProgress: false,
                             onYes: { Task { await host.remove(inlet.id) } }
@@ -295,16 +259,7 @@ struct ServiceCardBody: View {
 
     private func perform(_ step: ServiceStep) {
         started = true
-        switch step {
-        case .add(let offers):
-            if let offer = offers.first { Task { await host.choose(offer) } }
-        case .renew(let id):
-            Task { await host.renew(id) }
-        case .check(let id):
-            Task { await host.probe(id) }
-        case .none:
-            break
-        }
+        host.perform(step, for: info.id)
     }
 
     private func disconnect(_ reading: ServiceReading) {

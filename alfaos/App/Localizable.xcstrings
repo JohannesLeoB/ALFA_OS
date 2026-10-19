@@ -693,72 +693,6 @@
         }
       }
     },
-    "inlet.state.connecting" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prüft"
-          }
-        }
-      }
-    },
-    "inlet.state.keychain" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schlüsselbund"
-          }
-        }
-      }
-    },
-    "inlet.state.locked" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gesperrt"
-          }
-        }
-      }
-    },
-    "inlet.state.orphaned" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verwaist"
-          }
-        }
-      }
-    },
-    "inlet.state.signedIn" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Angemeldet"
-          }
-        }
-      }
-    },
-    "inlet.state.working" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gleicht ab"
-          }
-        }
-      }
-    },
     "lane.handle.help" : {
       "comment" : "roh",
       "localizations" : {
@@ -3497,6 +3431,17 @@
         }
       }
     },
+    "settings.disconnect.text" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die App nutzt %@ danach nicht mehr."
+          }
+        }
+      }
+    },
     "settings.extra.clear" : {
       "localizations" : {
         "de" : {
@@ -3765,6 +3710,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Signatur"
+          }
+        }
+      }
+    },
+    "settings.label.branch" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zweig"
           }
         }
       }
@@ -4764,26 +4720,6 @@
         }
       }
     },
-    "settings.stack.back" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zurück zum Stapel"
-          }
-        }
-      }
-    },
-    "settings.stack.overview" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Übersicht"
-          }
-        }
-      }
-    },
     "settings.start.label" : {
       "localizations" : {
         "de" : {
@@ -4824,26 +4760,6 @@
         }
       }
     },
-    "settings.state.failed" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fehler"
-          }
-        }
-      }
-    },
-    "settings.state.loading" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lädt"
-          }
-        }
-      }
-    },
     "settings.sync.head" : {
       "localizations" : {
         "de" : {
@@ -4880,6 +4796,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Jetzt abgleichen"
+          }
+        }
+      }
+    },
+    "settings.system.branch.format" : {
+      "comment" : "roh",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %@"
           }
         }
       }
@@ -5091,77 +5018,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entfernen"
-          }
-        }
-      }
-    },
-    "text.settings.action.signInAgain" : {
-      "comment" : "alpha",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Neu anmelden"
-          }
-        }
-      }
-    },
-    "text.settings.connection.connected" : {
-      "comment" : "alpha",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbunden"
-          }
-        }
-      }
-    },
-    "text.settings.connection.error" : {
-      "comment" : "alpha",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fehler"
-          }
-        }
-      }
-    },
-    "text.settings.connection.notConnected" : {
-      "comment" : "alpha",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nicht verbunden"
-          }
-        }
-      }
-    },
-    "text.settings.provider.other" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Andere"
-          }
-        }
-      }
-    },
-    "text.settings.row.mail.accounts" : {
-      "comment" : "alpha",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Konten"
           }
         }
       }

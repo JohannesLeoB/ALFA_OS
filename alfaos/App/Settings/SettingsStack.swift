@@ -1,4 +1,5 @@
 import Hub
+import Mail
 import ShellCore
 import SwiftUI
 
@@ -44,26 +45,31 @@ struct SettingsStackPane: View {
     @State private var menus = SettingsMenuState()
     @State private var size = OverviewSize.medium
     @State private var hot: String?
-    @Environment(\.design) private var design
+    @State private var disconnecting: String?
 
     var body: some View {
         let front = board.front ?? board.cards.last
         let order = board.cards.filter { $0 != front } + board.cards.filter { $0 == front }
-        CardPile(order: order, fanned: board.fanned) { id, depth, first in
-            SettingsStackCard(host: host, board: board, hub: hub, face: SettingsFace(id: id, readings: readings), depth: depth, first: first)
-        } overview: {
-            CardOverview(entries: order.map { entry(SettingsFace(id: $0, readings: readings), current: $0 == front) },
-                         size: size, resize: { size = $0 }, hot: hot, aim: { hot = $0 }) {
-                CardHeadButton(help: words("settings.stack.back"), glyph: .fan, ink: design.color(\.ink), dim: false) { board.toggleFan() }
+        VStack(spacing: 0) {
+            SettingsCommandHead(host: host, board: board, readings: readings, disconnecting: $disconnecting)
+            CardPile(order: order, fanned: board.fanned) { id, depth, first in
+                SettingsStackCard(host: host, board: board, hub: hub, face: SettingsFace(id: id, readings: readings), depth: depth, first: first,
+                                  disconnecting: disconnecting)
+            } overview: {
+                CardOverview(entries: order.map { entry(SettingsFace(id: $0, readings: readings), current: $0 == front) },
+                             size: size, resize: { size = $0 }, hot: hot, aim: { hot = $0 }) {
+                    EmptyView()
+                }
+            } note: {
+                if let key = board.toast {
+                    Toast(message: word(key), onDismiss: { board.dismissToast() })
+                }
             }
-        } note: {
-            if let key = board.toast {
-                Toast(message: word(key), onDismiss: { board.dismissToast() })
-            }
+            .overlay { menuLayer }
+            .coordinateSpace(name: SettingsSpace.stack)
+            .environment(\.menuState, menus)
         }
-        .overlay { menuLayer }
-        .coordinateSpace(name: SettingsSpace.stack)
-        .environment(\.menuState, menus)
+        .onChange(of: board.front) { disconnecting = nil }
     }
 
     private func entry(_ face: SettingsFace, current: Bool) -> OverviewEntry {
@@ -103,6 +109,7 @@ private struct SettingsStackCard: View {
     let face: SettingsFace
     let depth: Int
     let first: Bool
+    let disconnecting: String?
     @Environment(\.design) private var design
     @Environment(\.hairline) private var hairline
 
@@ -113,7 +120,7 @@ private struct SettingsStackCard: View {
             header(ink)
         } content: {
             ScrollView {
-                SettingsCardBody(host: host, board: board, hub: hub, id: face.id)
+                SettingsCardBody(host: host, board: board, hub: hub, id: face.id, disconnecting: disconnecting == face.id)
                     .padding(.top, CGFloat(Design.Spacing.step4))
                     .padding(.bottom, CGFloat(Design.Spacing.step8))
             }
@@ -137,15 +144,80 @@ private struct SettingsStackCard: View {
                 .lineLimit(1)
                 .opacity(SheetValues.metaOpacity)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            if front {
-                CardHeadButton(help: words("settings.stack.overview"), glyph: .grid, ink: ink, dim: false) { board.toggleFan() }
-            }
             CardHeadButton(help: words("card.close"), glyph: .close, ink: ink, fills: false) { board.close(face.id) }
         }
         .padding(.horizontal, CGFloat(Design.Spacing.step8))
         .frame(height: CGFloat(Design.Size.headerHeight))
         .overlay(alignment: .bottom) {
             if front { Rectangle().fill(design.color(\.line)).frame(height: hairline) }
+        }
+    }
+}
+
+struct SettingsCommandHead: View {
+    @Environment(\.design) private var design
+    @Environment(\.mailLaneLink) private var link
+    @Bindable var host: AppHost
+    let board: SettingsBoard
+    let readings: [ServiceReading]
+    @Binding var disconnecting: String?
+
+    var body: some View {
+        let front = board.fanned ? nil : (board.front ?? board.cards.last)
+        let reading = front.flatMap { id in readings.first { $0.info.id == id } }
+        let asking = reading.map { $0.info.id == disconnecting } ?? false
+        let fan = (!board.cards.isEmpty || board.fanned) && !asking
+        let fold = (link?.openLanes ?? 1) > 1 && !asking
+        HStack(spacing: CGFloat(Lane.trailing.headGap)) {
+            if let reading, !asking { main(reading) }
+            Spacer(minLength: 0)
+            if let reading, asking { pill(reading) }
+            if fan || fold {
+                Rectangle().fill(design.color(\.line)).frame(width: CGFloat(Design.Size.hairline), height: CGFloat(Design.Spacing.step20))
+                    .padding(.horizontal, CGFloat(Design.Spacing.step4))
+            }
+            if fan {
+                SymbolButton(help: board.fanned ? words("mail.action.backToStack") : words("mail.overview.tip", MailNames.number(board.cards.count)),
+                             glyph: board.fanned ? .fan : .grid, selected: board.fanned, hover: .fill) { board.toggleFan() }
+            }
+            if fold {
+                SymbolButton(help: words("mail.action.foldColumn"), glyph: .minus, hover: .fill) { link?.fold(.trailing) }
+            }
+        }
+        .padding(.leading, CGFloat(Lane.trailing.headLeading))
+        .padding(.trailing, CGFloat(Lane.trailing.headTrailing))
+        .frame(height: CGFloat(Design.Size.headerHeight))
+        .frame(maxWidth: .infinity)
+        .background(design.color(\.lane))
+    }
+
+    @ViewBuilder
+    private func main(_ reading: ServiceReading) -> some View {
+        HStack(spacing: CGFloat(Lane.trailing.headGap)) {
+            if !reading.info.listsAccounts {
+                let off = host.busy || reading.state == .connecting || reading.step == .none
+                SymbolButton(help: words(reading.asksReconnect ? "settings.action.reconnect" : "settings.action.connect"), glyph: .link,
+                             disabled: off, hover: .fill) {
+                    host.perform(reading.step, for: reading.info.id)
+                }
+            }
+            if reading.state.canDisconnect {
+                SymbolButton(help: words("settings.action.disconnect"), glyph: .close, tone: \.signal, hoverTone: \.signal, hover: .fill) {
+                    disconnecting = reading.info.id
+                }
+            }
+        }
+    }
+
+    private func pill(_ reading: ServiceReading) -> some View {
+        let name = String(localized: String.LocalizationValue(reading.info.nameKey))
+        return ConfirmPill(label: nil, question: Text(verbatim: SettingsFormat.text("settings.disconnect.ask", name)),
+                           yes: word("settings.action.disconnect"), no: word("confirm.no"), holdHint: word("settings.hold.disconnect"),
+                           startsAsking: true, showsProgress: false, onYes: {
+                               disconnecting = nil
+                               Task { for inlet in reading.inlets { await host.remove(inlet.id) } }
+                           }, onNo: { disconnecting = nil }) {
+            Glyph(.close)
         }
     }
 }

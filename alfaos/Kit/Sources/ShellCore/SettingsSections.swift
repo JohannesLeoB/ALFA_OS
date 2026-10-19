@@ -127,6 +127,7 @@ public enum ImprintRow: String, CaseIterable, Sendable {
 
 public enum SettingsLabel: String, CaseIterable, Sendable {
     case version
+    case branch
     case database
     case diagnosis
 

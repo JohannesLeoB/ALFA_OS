@@ -1,20 +1,6 @@
 import Foundation
 
 extension InletState {
-    public var key: String {
-        switch self {
-        case .created: "text.settings.connection.notConnected"
-        case .signedIn: "inlet.state.signedIn"
-        case .connecting: "inlet.state.connecting"
-        case .connected: "text.settings.connection.connected"
-        case .working: "inlet.state.working"
-        case .failed: "text.settings.connection.error"
-        case .keychainUnreadable: "inlet.state.keychain"
-        case .orphaned: "inlet.state.orphaned"
-        case .locked: "inlet.state.locked"
-        }
-    }
-
     public var probed: Date? {
         if case .connected(let date) = self { date } else { nil }
     }

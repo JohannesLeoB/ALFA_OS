@@ -21,6 +21,7 @@ final class AppHost {
     var values: [String: String] = [:]
 
     private(set) var syncing = false
+    private(set) var actedOn: String?
 
     var isIdle: Bool {
         if case .idle = phase { true } else { false }
@@ -83,6 +84,20 @@ final class AppHost {
         case .form, .key:
             form = offer
             values = preset ?? offer.preset?.values ?? [:]
+        }
+    }
+
+    func perform(_ step: ServiceStep, for id: String) {
+        actedOn = id
+        switch step {
+        case .add(let offers):
+            if let offer = offers.first { Task { await choose(offer) } }
+        case .renew(let inlet):
+            Task { await renew(inlet) }
+        case .check(let inlet):
+            Task { await probe(inlet) }
+        case .none:
+            break
         }
     }
 

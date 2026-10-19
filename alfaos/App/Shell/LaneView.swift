@@ -11,7 +11,13 @@ struct LaneView: View {
     @Environment(\.appHost) private var host
     @Environment(\.hostLive) private var live
 
-    private var ownHead: Bool { model.currentID == "mail" }
+    private var ownHead: Bool {
+        model.currentID == "mail" || (model.currentID == "settings" && lane == .trailing && live && host?.mail != nil)
+    }
+
+    private var titleString: String {
+        lane == .center && model.currentID == "settings" ? theme.string(SettingsShared.board.group.key) : theme.string(titleKey)
+    }
 
     private var title: Text {
         guard lane == .center else { return theme.text(titleKey) }
@@ -80,10 +86,25 @@ struct LaneView: View {
                 .foregroundStyle(theme.design(\.ink))
                 .lineLimit(1)
             Spacer(minLength: 0)
+            if model.currentID == "settings" { tools }
         }
         .padding(.leading, CGFloat(lane.headLeading))
         .padding(.trailing, CGFloat(lane.headTrailing))
         .frame(height: CGFloat(Design.Size.headerHeight))
+    }
+
+    @ViewBuilder
+    private var tools: some View {
+        let open = model.widths.all.filter { $0 > model.geometry.laneFolded }.count
+        let name = titleString
+        if open > 1 {
+            SymbolButton(help: String(format: theme.string("mail.fold.named"), name), glyph: .minus) { model.toggleFold(lane) }
+        }
+        if lane == .center {
+            let maxed = model.laneState(model.currentID).maximized == .center
+            SymbolButton(help: maxed ? theme.string("mail.lane.back") : String(format: theme.string("mail.grow.named"), name),
+                         glyph: maxed ? .shrink : .expand) { model.toggleMaximize(.center) }
+        }
     }
 
     @ViewBuilder

@@ -29,15 +29,8 @@ private struct SettingsLaneContent: View {
     @ViewBuilder
     private var content: some View {
         switch host.phase {
-        case .idle:
-            word("settings.state.loading").designText(\.inkTertiary).padding(CGFloat(Design.Spacing.step16))
-        case .failed(let description):
-            VStack(alignment: .leading) {
-                word("settings.state.failed")
-                Text(verbatim: description)
-            }
-            .designText(\.signal)
-            .padding(CGFloat(Design.Spacing.step16))
+        case .idle, .failed:
+            Color.clear
         case .ready(let assembly):
             let readings = ServiceReader.readAll(setup: assembly.hub.setup, rules: assembly.hub.rules)
             switch lane {

@@ -8,10 +8,11 @@ struct SettingsCardBody: View {
     let board: SettingsBoard
     let hub: Hub
     let id: String
+    var disconnecting = false
 
     var body: some View {
         if let info = ServiceCatalog.info(id) {
-            ServiceCardBody(host: host, board: board, hub: hub, info: info)
+            ServiceCardBody(host: host, board: board, hub: hub, info: info, disconnecting: disconnecting)
         } else if let section = SettingsSection(rawValue: id) {
             switch section {
             case .identity: IdentityCard(host: host, hub: hub)
@@ -139,7 +140,7 @@ private struct IdentityCard: View {
 private struct AppearanceCard: View {
     @AppStorage(SettingsKey.appearance) private var appearance = AppearanceChoice.system.rawValue
     @AppStorage(SettingsKey.startView) private var start = StartView.mail.rawValue
-    @AppStorage(SettingsKey.lockOn) private var lockOn = false
+    @AppStorage(SettingsKey.lockOn) private var lockOn = true
     @AppStorage(SettingsKey.lockDelay) private var delay = LockDelay.minutes5.rawValue
 
     var body: some View {
@@ -204,10 +205,13 @@ private struct StoredValueRow: View {
 private struct FoldersCard: View {
     var body: some View {
         VStack(spacing: 0) {
-            ForEach(["settings.folders.projects", "settings.folders.data", "settings.folders.templates"], id: \.self) { key in
+            ForEach(["settings.folders.projects", "settings.folders.data"], id: \.self) { key in
                 SettingsRow(label: word(key)) {
                     SettingsValue(text: word("settings.value.empty"), tone: \.inkTertiary)
                 }
+            }
+            SettingsRow(label: word("settings.folders.templates")) {
+                SettingsValue(text: word("settings.templates.none"), tone: \.inkTertiary)
             }
             SettingsRow(label: word("settings.folders.setup"), line: false) {
                 SettingsDisabledButton(labelKey: "settings.folders.setup.action")
@@ -238,14 +242,9 @@ private struct KeyInventoryCard: View {
                 SettingsRow(label: word(reading.info.nameKey)) {
                     ServiceStatus(state: reading.state.service, label: word(reading.state.key), trailingInset: reading.state == .notConnected)
                     if reading.state != .notConnected {
-                        ConfirmPill(
-                            label: word("text.settings.action.remove"),
-                            question: Text(verbatim: SettingsFormat.text("settings.disconnect.ask", String(localized: String.LocalizationValue(reading.info.nameKey)))),
-                            yes: word("text.settings.action.remove"),
-                            no: word("text.common.cancel"),
-                            holdHint: word("settings.hold.remove"),
-                            showsProgress: false,
-                            onYes: { Task { for inlet in reading.inlets { await host.remove(inlet.id) } } })
+                        TextButton(label: word("text.settings.action.remove"), kind: .plain, disabled: host.busy) {
+                            Task { for inlet in reading.inlets { await host.remove(inlet.id) } }
+                        }
                     }
                 }
             }
@@ -280,6 +279,13 @@ private struct SystemCard: View {
         return SettingsFormat.text("settings.system.version.format", short, build)
     }
 
+    private var branch: String? {
+        let info = Bundle.main
+        guard let name = info.object(forInfoDictionaryKey: "ALFABranch") as? String, !name.isEmpty,
+              let commit = info.object(forInfoDictionaryKey: "ALFACommit") as? String, !commit.isEmpty else { return nil }
+        return SettingsFormat.text("settings.system.branch.format", name, commit)
+    }
+
     private var database: String {
         guard let size = HubDatabase.size() else { return String(localized: "settings.value.empty") }
         let formatter = ByteCountFormatter()
@@ -290,6 +296,9 @@ private struct SystemCard: View {
     var body: some View {
         VStack(spacing: 0) {
             SettingsRow(label: word(SettingsLabel.version.key)) { SettingsValue(text: Text(verbatim: version)) }
+            if let branch {
+                SettingsRow(label: word(SettingsLabel.branch.key)) { SettingsValue(text: Text(verbatim: branch)) }
+            }
             SettingsRow(label: word(SettingsLabel.database.key)) { SettingsValue(text: Text(verbatim: database)) }
             SettingsRow(label: word(SettingsLabel.diagnosis.key), line: false) {
                 TextButton(label: word("settings.system.copy")) { copy() }
@@ -298,10 +307,9 @@ private struct SystemCard: View {
     }
 
     private func copy() {
-        let lines = [
-            String(localized: String.LocalizationValue(SettingsLabel.version.key)) + ": " + version,
-            String(localized: String.LocalizationValue(SettingsLabel.database.key)) + ": " + database
-        ]
+        var lines = [String(localized: String.LocalizationValue(SettingsLabel.version.key)) + ": " + version]
+        if let branch { lines.append(String(localized: String.LocalizationValue(SettingsLabel.branch.key)) + ": " + branch) }
+        lines.append(String(localized: String.LocalizationValue(SettingsLabel.database.key)) + ": " + database)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(lines.joined(separator: "\n"), forType: .string)
         board.notify("settings.toast.copied")

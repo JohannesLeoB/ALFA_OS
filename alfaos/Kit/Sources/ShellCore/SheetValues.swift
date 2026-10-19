@@ -120,6 +120,9 @@ public enum SheetValues {
     public static let listLoadAhead = 1200.0
     public static let plusGlyph = "M8 3v10M3 8h10"
     public static let dashedLine = [2.0, 2.0]
+    public static let statusArcBox = 12.0
+    public static let statusArc = 0.3
+    public static let fullTurn = 360.0
 }
 
 public struct SearchGlyph: Sendable, Equatable {

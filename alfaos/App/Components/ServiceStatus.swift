@@ -46,6 +46,8 @@ struct ServiceStatus: View {
         }
     }
 
+    private var spins: Bool { state == .connecting || state == .working }
+
     var body: some View {
         let dot = CGFloat(Design.Spacing.statusDot)
         HStack(spacing: CGFloat(Design.Spacing.step8)) {
@@ -59,12 +61,38 @@ struct ServiceStatus: View {
                 }
             }
             .frame(width: dot, height: dot)
-            .ring(Circle(), design.color(border))
+            .overlay {
+                if state == .orphaned {
+                    Circle().strokeBorder(design.color(border), style: StrokeStyle(lineWidth: CGFloat(Design.Size.hairline),
+                                                                                 dash: SheetValues.dashedLine.map { CGFloat($0) }))
+                } else {
+                    Circle().strokeBorder(design.color(border), lineWidth: CGFloat(Design.Size.hairline))
+                }
+            }
+            .overlay { if spins { StatusArc() } }
             label
                 .lineLimit(1)
                 .padding(.trailing, trailingInset ? CGFloat(Design.Size.trailingTextInset) : 0)
         }
         .font(.face(Design.TextSize.small))
         .foregroundStyle(design.color(foreground))
+    }
+}
+
+private struct StatusArc: View {
+    @Environment(\.accessibilityReduceMotion) private var reduced
+    @State private var turn = 0.0
+
+    var body: some View {
+        let side = CGFloat(SheetValues.statusArcBox)
+        Circle()
+            .trim(from: 0, to: CGFloat(SheetValues.statusArc))
+            .stroke(.foreground, style: StrokeStyle(lineWidth: CGFloat(SheetValues.iconStroke), lineCap: .round))
+            .frame(width: side, height: side)
+            .rotationEffect(.degrees(turn))
+            .task {
+                guard !reduced else { return }
+                withAnimation(.linear(duration: Design.Duration.thinking).repeatForever(autoreverses: false)) { turn = SheetValues.fullTurn }
+            }
     }
 }
