@@ -79,10 +79,14 @@ struct ServiceCardBody: View {
             SettingsRow(label: word("settings.row.access")) {
                 SettingsValue(text: Text(verbatim: access))
             }
-            ForEach(info.fields, id: \.id) { field in
-                let empty = reading.state == .notConnected || !field.secret
-                SettingsRow(label: word(info.fieldKey(field))) {
-                    SettingsValue(text: empty ? word("settings.value.empty") : word("settings.value.masked"), tone: empty ? \.inkTertiary : \.inkSecondary)
+            if let offer = host.form, !info.listsAccounts, info.providers.contains(offer.provider) {
+                SettingsAddForm(host: host, offer: offer)
+            } else {
+                ForEach(info.fields, id: \.id) { field in
+                    let empty = reading.state == .notConnected || !field.secret
+                    SettingsRow(label: word(info.fieldKey(field))) {
+                        SettingsValue(text: empty ? word("settings.value.empty") : word("settings.value.masked"), tone: empty ? \.inkTertiary : \.inkSecondary)
+                    }
                 }
             }
             if info.hasNote { SettingsBlockNote(text: word(info.noteKey)) }
@@ -289,13 +293,17 @@ struct SettingsAddForm: View {
         }
     }
 
+    private var keyed: Bool {
+        if case .key = offer.way { true } else { false }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step8)) {
             ForEach(fields) { field in
                 FormInput(labelKey: field.title, secret: field.secret, text: binding(field.id))
             }
             HStack(spacing: CGFloat(Design.Spacing.step8)) {
-                TextButton(label: word("settings.signin"), kind: .accent, disabled: host.busy) {
+                TextButton(label: word(keyed ? "settings.action.connect" : "settings.signin"), kind: .accent, disabled: host.busy) {
                     Task { await host.add(offer, input: .fields(host.values)) }
                 }
                 TextButton(label: word("text.common.cancel"), kind: .plain) { host.close() }

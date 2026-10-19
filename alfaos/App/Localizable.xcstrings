@@ -451,6 +451,36 @@
         }
       }
     },
+    "hint.key.failed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Antwort"
+          }
+        }
+      }
+    },
+    "hint.key.fields.invalid" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angaben ungültig"
+          }
+        }
+      }
+    },
+    "hint.key.rejected" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüssel abgelehnt"
+          }
+        }
+      }
+    },
     "hint.keychain.unreadable" : {
       "comment" : "roh",
       "localizations" : {
