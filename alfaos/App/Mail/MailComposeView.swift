@@ -72,13 +72,13 @@ struct ComposeView: View {
             .lineSpacing(CGFloat(Design.LineHeight.mailBody * Design.TextSize.body - Design.TextSize.body) * 0.75)
             .scrollContentBackground(.hidden)
             .foregroundStyle(design.color(\.sheetInk))
-            .padding(.top, CGFloat(MailSheet.bodyPadTop))
-            .padding(.horizontal, CGFloat(MailSheet.bodyPadSide))
+            .padding(.top, CGFloat(SheetValues.bodyPadTop))
+            .padding(.horizontal, CGFloat(SheetValues.bodyPadSide))
             .padding(.bottom, CGFloat(Design.Spacing.step8))
             .frame(maxWidth: .infinity, minHeight: CGFloat(Design.Size.composeSheetMinHeight), alignment: .topLeading)
-            .background(RoundedRectangle(cornerRadius: CGFloat(MailSheet.bodyRadius)).fill(design.color(\.sheet)))
+            .background(RoundedRectangle(cornerRadius: CGFloat(SheetValues.bodyRadius)).fill(design.color(\.sheet)))
             .environment(\.colorScheme, .light)
-            .padding(CGFloat(MailSheet.bodyMargin))
+            .padding(CGFloat(SheetValues.bodyMargin))
             .accessibilityLabel(word("mail.compose.body"))
     }
 
@@ -86,7 +86,7 @@ struct ComposeView: View {
         ScrollView(.horizontal) {
             HStack(spacing: CGFloat(Design.Spacing.step8)) {
                 ForEach(Array(card.draft.attachments.enumerated()), id: \.offset) { index, item in
-                    AttachmentChip(name: MailNames.middle(item.filename, limit: MailSheet.attachmentChipNameLimit), size: item.humanSize,
+                    AttachmentChip(name: MailNames.middle(item.filename, limit: SheetValues.attachmentChipNameLimit), size: item.humanSize,
                                    detail: item.filename, removeKey: "mail.compose.remove",
                                    onRemove: { model.removeAttachment(card.id, at: index) }, glyph: { Glyph.small(.doc) },
                                    removeGlyph: { Glyph.tiny(.close) })
@@ -124,7 +124,7 @@ struct FieldRow<Content: View>: View {
         }
         .padding(.leading, CGFloat(Design.Size.edge))
         .padding(.trailing, CGFloat(Design.Spacing.step8))
-        .frame(height: CGFloat(MailSheet.fieldRowHeight))
+        .frame(height: CGFloat(SheetValues.fieldRowHeight))
         .overlay(alignment: .bottom) {
             Hairline().padding(.horizontal, CGFloat(Design.Size.edge))
         }
@@ -211,7 +211,7 @@ struct RecipientRow: View {
             }
             .padding(.leading, CGFloat(Design.Size.edge))
             .padding(.trailing, CGFloat(Design.Spacing.step8))
-            .frame(minHeight: CGFloat(MailSheet.fieldRowHeight))
+            .frame(minHeight: CGFloat(SheetValues.fieldRowHeight))
             if !found.isEmpty { suggestions(found) }
             if !inline && expanded { list }
         }
@@ -305,7 +305,7 @@ struct RecipientRow: View {
                 }
                 .padding(.leading, CGFloat(Design.Spacing.step8))
                 .padding(.trailing, CGFloat(Design.Spacing.step4))
-                .frame(height: CGFloat(MailSheet.recipientInputHeight))
+                .frame(height: CGFloat(SheetValues.recipientInputHeight))
             }
             .padding(.horizontal, CGFloat(Design.Spacing.step8))
             .padding(.bottom, CGFloat(Design.Spacing.step8))
@@ -323,21 +323,21 @@ struct SuggestionRow: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: CGFloat(MailSheet.suggestionColumnGap)) {
+            HStack(spacing: CGFloat(SheetValues.suggestionColumnGap)) {
                 Mark(size: .small) {
                     if item.initials.isEmpty { Glyph.small(.person) } else { Text(verbatim: item.initials) }
                 }
                 VStack(alignment: .leading, spacing: 0) {
                     Text(verbatim: item.name.isEmpty ? item.shown : item.name).designText().lineLimit(1)
-                        .frame(height: CGFloat(MailSheet.conversationLine))
+                        .frame(height: CGFloat(SheetValues.conversationLine))
                     Text(verbatim: item.shown).designText(\.inkTertiary, size: Design.TextSize.small).lineLimit(1)
-                        .frame(height: CGFloat(MailSheet.conversationLine))
+                        .frame(height: CGFloat(SheetValues.conversationLine))
                 }
                 Spacer(minLength: 0)
                 word("mail.suggest.sender").designText(\.inkTertiary, size: Design.TextSize.small).lineLimit(1)
             }
             .padding(.horizontal, CGFloat(Design.Spacing.step8))
-            .frame(height: CGFloat(MailSheet.recipientRowHeight))
+            .frame(height: CGFloat(SheetValues.recipientRowHeight))
             .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.field)).fill(hovering ? design.color(\.hover) : Color.clear))
             .contentShape(Rectangle())
         }
@@ -360,25 +360,25 @@ struct ComposePersonRow: View {
                 if person.initials.isEmpty { Glyph.small(.person) } else { Text(verbatim: person.initials) }
             }
             VStack(alignment: .leading, spacing: 0) {
-                Text(verbatim: person.label).designText().lineLimit(1).frame(height: CGFloat(MailSheet.conversationLine))
+                Text(verbatim: person.label).designText().lineLimit(1).frame(height: CGFloat(SheetValues.conversationLine))
                 if !person.detail.isEmpty {
                     Text(verbatim: person.detail).designText(\.inkTertiary, size: Design.TextSize.small).lineLimit(1)
-                        .frame(height: CGFloat(MailSheet.conversationLine))
+                        .frame(height: CGFloat(SheetValues.conversationLine))
                 }
             }
             Spacer(minLength: 0)
             Button(action: remove) {
                 Glyph.tiny(.close)
                     .foregroundStyle(design.color(\.inkTertiary))
-                    .frame(width: CGFloat(MailSheet.removeRowSize), height: CGFloat(MailSheet.removeRowSize))
+                    .frame(width: CGFloat(SheetValues.removeRowSize), height: CGFloat(SheetValues.removeRowSize))
                     .contentShape(Circle())
             }
-            .buttonStyle(PressScale(scale: MailSheet.pressScaleChip))
+            .buttonStyle(PressScale(scale: SheetValues.pressScaleChip))
             .help(word("mail.compose.remove"))
         }
         .padding(.leading, CGFloat(Design.Spacing.step8))
         .padding(.trailing, CGFloat(Design.Spacing.step4))
-        .frame(height: CGFloat(MailSheet.recipientRowHeight))
+        .frame(height: CGFloat(SheetValues.recipientRowHeight))
         .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.field)).fill(hovering ? design.color(\.hover) : Color.clear))
         .help(Text(verbatim: person.full))
         .onHover { hovering = $0 }

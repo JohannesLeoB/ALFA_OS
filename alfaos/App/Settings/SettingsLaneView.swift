@@ -93,7 +93,7 @@ private struct GroupRow: View {
         Button(action: action) {
             HStack(spacing: CGFloat(Design.Spacing.step20)) {
                 Mark(inverted: selected, tone: selected ? \.lane : \.inkTertiary) {
-                    SettingsSymbol(name: SymbolName(rawValue: group.symbol) ?? .system)
+                    Glyph(Icon(rawValue: group.symbol) ?? .system)
                 }
                 word(group.key)
                     .lineLimit(1)

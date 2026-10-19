@@ -40,7 +40,7 @@ struct SettingsBlockNotice<Actions: View>: View {
 
     var body: some View {
         Notice(kind: kind, title: title, text: text) {
-            SettingsSymbol(name: kind == .success ? .check : .alert)
+            Glyph(kind == .success ? .check : .alert)
         } actions: {
             actions
         }
@@ -127,7 +127,7 @@ struct ServiceCardBody: View {
                     TextButton(label: word(reading.asksReconnect ? "settings.action.reconnect" : "settings.action.connect"), disabled: off) {
                         perform(reading.step)
                     } glyph: {
-                        SettingsSymbol(name: .link)
+                        Glyph(.link)
                     }
                     .opacity(off ? SheetValues.disabledOpacity : 1)
                 }
@@ -141,7 +141,7 @@ struct ServiceCardBody: View {
                         showsProgress: false,
                         onYes: { disconnect(reading) }
                     ) {
-                        SettingsSymbol(name: .close)
+                        Glyph(.close)
                     }
                 }
                 Spacer(minLength: 0)

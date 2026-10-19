@@ -3,7 +3,7 @@ import ShellCore
 
 public struct MailStripMark: Identifiable, Equatable, Sendable {
     public enum Face: Equatable, Sendable {
-        case glyph(MailGlyph)
+        case glyph(Icon)
         case text(String)
     }
 

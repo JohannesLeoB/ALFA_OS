@@ -66,7 +66,7 @@ final class MenuPanel {
         let menuWidth = size.width - 2 * margin
         let bounds = window.frame
         let gap = CGFloat(Design.Spacing.step4)
-        let edge = CGFloat(MailSheet.menuMargin)
+        let edge = CGFloat(SheetValues.menuMargin)
         let left: CGFloat
         var top: CGFloat
         switch anchor {

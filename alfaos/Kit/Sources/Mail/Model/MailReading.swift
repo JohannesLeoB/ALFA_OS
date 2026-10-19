@@ -1,4 +1,5 @@
 import Foundation
+import ShellCore
 import struct AlfaServices.MailAttachmentInfo
 import struct AlfaServices.MailMessageSummary
 
@@ -43,7 +44,7 @@ public struct MailRecipientList: Equatable, Sendable {
 
     public var summary: String { MailRecipients.summary(all) }
 
-    public var more: Int? { all.count > MailSheet.recipientsInline ? all.count - 1 : nil }
+    public var more: Int? { all.count > SheetValues.recipientsInline ? all.count - 1 : nil }
 
     public func group(at index: Int) -> MailRecipientGroup {
         if index == 0 { return .to }

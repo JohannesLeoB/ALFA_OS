@@ -11,7 +11,7 @@ struct MailFolderLane: View {
         switch model.listState {
         case .notConnected: (words("mail.lane.detail.none"), false)
         case .signInExpired: (words("mail.lane.detail.unreachable"), true)
-        default: (MailNames.middle(model.address, limit: MailSheet.headerAddressLimit), false)
+        default: (MailNames.middle(model.address, limit: SheetValues.headerAddressLimit), false)
         }
     }
 
@@ -55,7 +55,7 @@ private struct FolderRowView: View {
     var body: some View {
         let name = row.folder.role == .other ? Text(verbatim: row.folder.name) : word("mail.role." + row.folder.role.rawValue)
         Button(action: action) {
-            HStack(spacing: CGFloat(MailSheet.rowSpacing)) {
+            HStack(spacing: CGFloat(SheetValues.rowSpacing)) {
                 Mark(fill: .rest, inverted: row.selected, tone: row.selected ? \.lane : \.inkTertiary) { Glyph(row.glyph) }
                 name
                     .designText(row.selected ? \.lane : \.ink, size: Design.TextSize.body, weight: row.selected ? .medium : .regular)
@@ -86,7 +86,7 @@ private struct ComposeButton: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: CGFloat(MailSheet.rowSpacing)) {
+            HStack(spacing: CGFloat(SheetValues.rowSpacing)) {
                 Glyph(.compose)
                     .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
                     .overlay(Circle().strokeBorder(design.color(\.onInverse).opacity(Design.Opacity.ringOnColor), lineWidth: hairline))
@@ -99,10 +99,10 @@ private struct ComposeButton: View {
             .padding(.trailing, CGFloat(Design.Spacing.step12))
             .frame(height: CGFloat(Design.Size.rowHeight))
             .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row)).fill(design.color(\.inverse)))
-            .opacity(hovering ? MailSheet.hoverRowOpacity : 1)
+            .opacity(hovering ? SheetValues.hoverRowOpacity : 1)
             .contentShape(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row)))
         }
-        .buttonStyle(PressScale(scale: MailSheet.pressScaleCompose))
+        .buttonStyle(PressScale(scale: SheetValues.pressScaleCompose))
         .keyboardShortcut("n", modifiers: .command)
         .help(word("mail.action.compose"))
         .padding(CGFloat(Design.Spacing.step8))

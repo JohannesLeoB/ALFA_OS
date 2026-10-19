@@ -40,7 +40,7 @@ struct RecipientHeader: View {
                         word("mail.read.to").designText(\.inkTertiary, size: Design.TextSize.small)
                     }
                 }
-                .frame(width: CGFloat(MailSheet.fieldLabelWidthRead), alignment: .leading)
+                .frame(width: CGFloat(SheetValues.fieldLabelWidthRead), alignment: .leading)
                 Disclosure(open: open, help: words(open ? "mail.read.less" : "mail.read.all")) {
                     if open {
                         SmallText(text: line("mail.read.count", people.all.count))
@@ -58,7 +58,7 @@ struct RecipientHeader: View {
             }
             .padding(.leading, CGFloat(Design.Size.edge))
             .padding(.trailing, CGFloat(Design.Spacing.step8))
-            .frame(height: CGFloat(MailSheet.fieldRowHeightRead))
+            .frame(height: CGFloat(SheetValues.fieldRowHeightRead))
             if open {
                 ScrollView {
                     VStack(spacing: 0) {
@@ -107,7 +107,7 @@ struct Disclosure<Content: View>: View {
             .background(Capsule().fill(hovering ? design.color(\.hover) : Color.clear))
             .contentShape(Capsule())
         }
-        .buttonStyle(PressScale(scale: MailSheet.pressScaleDisclosure))
+        .buttonStyle(PressScale(scale: SheetValues.pressScaleDisclosure))
         .padding(.leading, -CGFloat(Design.Spacing.step8))
         .help(Text(verbatim: help))
         .onHover { hovering = $0 }
@@ -139,17 +139,17 @@ struct PersonRow: View {
                 if person.initials.isEmpty { Glyph.small(.person) } else { Text(verbatim: person.initials) }
             }
             VStack(alignment: .leading, spacing: 0) {
-                Text(verbatim: person.label).designText().lineLimit(1).frame(height: CGFloat(MailSheet.conversationLine))
+                Text(verbatim: person.label).designText().lineLimit(1).frame(height: CGFloat(SheetValues.conversationLine))
                 if !person.detail.isEmpty {
                     Text(verbatim: person.detail).designText(\.inkTertiary, size: Design.TextSize.small).lineLimit(1)
-                        .frame(height: CGFloat(MailSheet.conversationLine))
+                        .frame(height: CGFloat(SheetValues.conversationLine))
                 }
             }
             Spacer(minLength: 0)
         }
         .padding(.leading, CGFloat(Design.Spacing.step8))
         .padding(.trailing, CGFloat(Design.Spacing.step4))
-        .frame(height: CGFloat(MailSheet.recipientRowHeight))
+        .frame(height: CGFloat(SheetValues.recipientRowHeight))
         .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.field)).fill(hovering ? design.color(\.hover) : Color.clear))
         .contentShape(Rectangle())
         .help(Text(verbatim: person.full))
@@ -182,7 +182,7 @@ struct SheetBody: View {
         VStack(alignment: .leading, spacing: 0) {
             Text(verbatim: card.summary.subject.isEmpty ? words("mail.row.noSubject") : card.summary.subject)
                 .font(system(Design.TextSize.title, .medium))
-                .tracking(CGFloat(MailSheet.subjectTracking * Design.TextSize.title))
+                .tracking(CGFloat(SheetValues.subjectTracking * Design.TextSize.title))
                 .lineHeight(Design.LineHeight.title * Design.TextSize.title, size: Design.TextSize.title)
                 .fixedSize(horizontal: false, vertical: true)
             if card.hasConversation {
@@ -195,23 +195,23 @@ struct SheetBody: View {
                 Notice(kind: .warning, title: word("mail.read.images.title"), text: word("mail.read.images.text"), onSheet: true,
                        glyph: { Glyph(.alert) },
                        actions: { SheetButton(label: word("mail.action.loadImages")) { model.allowRemoteImages(card.id) } })
-                    .padding(.horizontal, -CGFloat(MailSheet.bodyPadSide))
-                    .padding(.top, CGFloat(MailSheet.bodyPadTop))
+                    .padding(.horizontal, -CGFloat(SheetValues.bodyPadSide))
+                    .padding(.top, CGFloat(SheetValues.bodyPadTop))
             }
             ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
                 ThreadItemView(model: model, card: card, item: item, first: index == 0, last: index == items.count - 1)
             }
         }
-        .padding(.top, CGFloat(MailSheet.bodyPadTop))
-        .padding(.bottom, CGFloat(MailSheet.bodyPadBottom))
-        .padding(.horizontal, CGFloat(MailSheet.bodyPadSide))
+        .padding(.top, CGFloat(SheetValues.bodyPadTop))
+        .padding(.bottom, CGFloat(SheetValues.bodyPadBottom))
+        .padding(.horizontal, CGFloat(SheetValues.bodyPadSide))
         .frame(maxWidth: .infinity, alignment: .leading)
         .foregroundStyle(design.color(\.sheetInk))
-        .background(RoundedRectangle(cornerRadius: CGFloat(MailSheet.bodyRadius)).fill(design.color(\.sheet)))
+        .background(RoundedRectangle(cornerRadius: CGFloat(SheetValues.bodyRadius)).fill(design.color(\.sheet)))
         .environment(\.colorScheme, .light)
         .textSelection(.enabled)
-        .padding(.horizontal, CGFloat(MailSheet.bodyMargin))
-        .padding(.bottom, CGFloat(MailSheet.bodyMargin))
+        .padding(.horizontal, CGFloat(SheetValues.bodyMargin))
+        .padding(.bottom, CGFloat(SheetValues.bodyMargin))
     }
 }
 
@@ -294,11 +294,11 @@ struct ThreadItemView: View {
                 .padding(.top, CGFloat(Design.Spacing.step4))
             }
         }
-        .padding(.top, CGFloat(first ? 0 : MailSheet.bodyPadTop))
+        .padding(.top, CGFloat(first ? 0 : SheetValues.bodyPadTop))
         .overlay(alignment: .top) {
             if !first { Rectangle().fill(design.color(\.sheetLine)).frame(height: hairline) }
         }
-        .padding(.top, CGFloat(first ? MailSheet.bodyPadTop : MailSheet.bodyPadTop))
+        .padding(.top, CGFloat(first ? SheetValues.bodyPadTop : SheetValues.bodyPadTop))
     }
 
     @ViewBuilder
@@ -337,11 +337,11 @@ struct AttachmentLine: View {
     @State private var anchor = AnchorBox()
 
     var body: some View {
-        HStack(spacing: CGFloat(MailSheet.attachmentGap)) {
+        HStack(spacing: CGFloat(SheetValues.attachmentGap)) {
             Glyph(.doc)
                 .foregroundStyle(design.color(\.sheetInkTertiary))
                 .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
-                .overlay(RoundedRectangle(cornerRadius: CGFloat(MailSheet.attachmentMarkRadius)).strokeBorder(design.color(\.sheetLineStrong), lineWidth: hairline))
+                .overlay(RoundedRectangle(cornerRadius: CGFloat(SheetValues.attachmentMarkRadius)).strokeBorder(design.color(\.sheetLineStrong), lineWidth: hairline))
             Text(verbatim: row.name)
                 .font(.system(size: CGFloat(Design.TextSize.body), weight: .medium))
                 .lineLimit(1)
@@ -354,7 +354,7 @@ struct AttachmentLine: View {
             Glyph.small(.chevron).foregroundStyle(design.color(\.sheetInkTertiary))
         }
         .padding(.horizontal, CGFloat(Design.Spacing.step8))
-        .frame(height: CGFloat(MailSheet.attachmentRowHeight))
+        .frame(height: CGFloat(SheetValues.attachmentRowHeight))
         .background(Capsule().fill(hovering ? design.color(\.sheetWell) : Color.clear))
         .contentShape(Capsule())
         .help(Text(verbatim: row.name))

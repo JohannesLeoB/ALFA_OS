@@ -1,4 +1,5 @@
 import Foundation
+import ShellCore
 
 public enum MailHeadState: Equatable, Sendable {
     case empty
@@ -52,7 +53,7 @@ extension MailModel {
         } else if case .draft(let id) = frontRef, let card = draft(id) {
             if confirmDiscard {
                 state = .confirm
-                tail = [CommandSlot(id: "discardPill", action: .discardDraft, kind: .pill, cost: MailSheet.commandConfirmCost)]
+                tail = [CommandSlot(id: "discardPill", action: .discardDraft, kind: .pill, cost: SheetValues.commandConfirmCost)]
             } else {
                 state = .draft
                 main = [
@@ -66,7 +67,7 @@ extension MailModel {
                 ]
                 right = [
                     CommandSlot(id: "footMore", action: .more),
-                    CommandSlot(id: "send", action: .send, cost: sendLabelled ? MailSheet.commandSendCost : MailSheet.commandIconCost,
+                    CommandSlot(id: "send", action: .send, cost: sendLabelled ? SheetValues.commandSendCost : SheetValues.commandIconCost,
                                 off: !card.canSend, accent: true)
                 ]
             }

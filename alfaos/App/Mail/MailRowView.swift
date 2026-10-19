@@ -41,7 +41,7 @@ struct MailRowView: View {
     }
 
     var body: some View {
-        HStack(alignment: .top, spacing: CGFloat(MailSheet.rowSpacing)) {
+        HStack(alignment: .top, spacing: CGFloat(SheetValues.rowSpacing)) {
             mark
             VStack(alignment: .leading, spacing: 0) {
                 head
@@ -51,14 +51,14 @@ struct MailRowView: View {
             .padding(.top, CGFloat(Design.Spacing.step4))
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(.vertical, CGFloat(MailSheet.rowPadding))
+        .padding(.vertical, CGFloat(SheetValues.rowPadding))
         .padding(.horizontal, CGFloat(Design.Spacing.step8))
         .background(shape.fill(fill))
         .ring(shape, ringColor)
         .overlay(alignment: .bottomTrailing) {
             if separated {
                 Rectangle().fill(design.color(\.line)).frame(height: hairline)
-                    .padding(.leading, CGFloat(MailSheet.rowSeparatorInset))
+                    .padding(.leading, CGFloat(SheetValues.rowSeparatorInset))
                     .padding(.trailing, CGFloat(Design.Spacing.step8))
             }
         }
@@ -74,7 +74,7 @@ struct MailRowView: View {
     }
 
     private func onMark(_ point: CGPoint) -> Bool {
-        CGRect(x: Design.Spacing.step8, y: MailSheet.rowPadding, width: Design.Size.symbolSize, height: Design.Size.symbolSize)
+        CGRect(x: Design.Spacing.step8, y: SheetValues.rowPadding, width: Design.Size.symbolSize, height: Design.Size.symbolSize)
             .contains(point)
     }
 
@@ -118,7 +118,7 @@ struct MailRowView: View {
             }
             MailDate(label: item.date, tone: tone.tertiary).opacity(hovering ? 0 : 1)
         }
-        .frame(height: CGFloat(MailSheet.rowTextLine))
+        .frame(height: CGFloat(SheetValues.rowTextLine))
     }
 
     private var sender: some View {
@@ -150,7 +150,7 @@ struct MailRowView: View {
             }
         }
         .lineLimit(1)
-        .frame(height: CGFloat(MailSheet.rowTextLine), alignment: .leading)
+        .frame(height: CGFloat(SheetValues.rowTextLine), alignment: .leading)
     }
 
     private var preview: some View {
@@ -161,8 +161,8 @@ struct MailRowView: View {
                 word("mail.row.noText").designText(tone.tertiary, size: Design.TextSize.body, weight: .light)
             }
         }
-        .lineLimit(MailSheet.previewLines)
-        .lineHeight(MailSheet.rowTextLine, size: Design.TextSize.body)
+        .lineLimit(SheetValues.previewLines)
+        .lineHeight(SheetValues.rowTextLine, size: Design.TextSize.body)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -192,7 +192,7 @@ struct MailRowView: View {
                 }
             }
             .padding(.leading, CGFloat(Design.Spacing.step8))
-            .padding(.top, CGFloat(MailSheet.rowPadding))
+            .padding(.top, CGFloat(SheetValues.rowPadding))
             .padding(.trailing, CGFloat(Design.Spacing.step8))
             .background(selected ? design.color(\.ink) : design.color(\.lane))
         }
@@ -236,7 +236,7 @@ struct RowAction: View {
     @Environment(\.design) private var design
     @Environment(\.hairline) private var hairline
     let help: Text
-    let glyph: MailGlyph
+    let glyph: Icon
     let selected: Bool
     var tone: KeyPath<DesignColors, RGB> = \.inkSecondary
     let action: () -> Void

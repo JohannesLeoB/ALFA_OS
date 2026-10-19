@@ -1,5 +1,6 @@
 import Foundation
 import Hub
+import ShellCore
 import enum AlfaServices.MailFlag
 import struct AlfaServices.MailFolder
 import enum AlfaServices.MailFolderRole
@@ -137,7 +138,7 @@ extension MailModel {
         return MailNames.display(first)
     }
 
-    static func glyph(_ role: MailFolderRole) -> MailGlyph {
+    static func glyph(_ role: MailFolderRole) -> Icon {
         switch role {
         case .inbox: .inbox
         case .starred: .flag

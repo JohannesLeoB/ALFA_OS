@@ -4,11 +4,6 @@ import ShellCore
 import SwiftUI
 
 struct StackCardView: View {
-    @Environment(\.design) private var design
-    @Environment(\.laneFill) private var laneFill
-    @Environment(\.cardSurface) private var surface
-    @Environment(\.hairline) private var hairline
-    @Environment(\.accessibilityReduceMotion) private var reduced
     let model: MailModel
     let ref: CardRef
     let depth: Int
@@ -16,52 +11,16 @@ struct StackCardView: View {
     let commands: MailCommands
     @Binding var discarding: UUID?
     @Binding var formatOn: Bool
-    @State private var hovering = false
-
-    private var front: Bool { depth == 0 }
-
-    private var step: DesignStackStep? {
-        guard depth > 0 else { return nil }
-        let steps = design.dark ? Design.stackDark : Design.stackLight
-        return steps[min(CardStack.levelIndex(depth: depth), steps.count - 1)]
-    }
-
-    private func paint(_ value: RGB) -> Color {
-        Color(.sRGB, red: value.red, green: value.green, blue: value.blue, opacity: value.alpha)
-    }
-
-    private var fill: Color { step.map { paint($0.surface) } ?? laneFill }
-    private var ink: Color { step.map { paint($0.ink) } ?? design.color(\.ink) }
-    private var lacquer: Bool { surface == .lacquer }
-    private var light: Bool { step.map { $0.surface.red >= 0.75 } ?? true }
-
-    private var shape: UnevenRoundedRectangle {
-        let top = CGFloat(Design.Radius.card)
-        let bottom = CGFloat(Design.Radius.cardBottom)
-        return UnevenRoundedRectangle(topLeadingRadius: top, bottomLeadingRadius: bottom, bottomTrailingRadius: bottom, topTrailingRadius: top)
-    }
 
     var body: some View {
-        VStack(spacing: 0) {
-            CardHead(model: model, ref: ref, front: front, ink: ink)
-            if front {
-                content
-                if commands.hasFooter {
-                    CardFoot(model: model, commands: commands, formatOn: $formatOn)
-                }
+        CardFace(depth: depth, first: first, bring: { model.bring(ref) }) { ink in
+            CardHead(model: model, ref: ref, front: depth == 0, ink: ink)
+        } content: {
+            content
+            if commands.hasFooter {
+                CardFoot(model: model, commands: commands, formatOn: $formatOn)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .foregroundStyle(ink)
-        .background(fill)
-        .overlay(alignment: .top) { gloss }
-        .clipShape(shape)
-        .background { cast }
-        .contentShape(shape)
-        .offset(y: !front && hovering ? -CGFloat(MailSheet.stackHoverLift) : 0)
-        .onHover { hovering = $0 }
-        .onTapGesture { if !front { model.bring(ref) } }
-        .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.stackLift), value: hovering)
     }
 
     @ViewBuilder
@@ -74,54 +33,6 @@ struct StackCardView: View {
                 ComposeView(model: model, card: card, formatOn: formatOn)
             }
         }
-    }
-
-    @ViewBuilder
-    private var gloss: some View {
-        let layers: [ShadowLayer] = front
-            ? (design.dark ? DesignSurface.topGlossFrontDark : DesignSurface.topGlossFrontLight)
-            : (light ? DesignSurface.topGlossBackLightCard : DesignSurface.topGlossBackDarkCard)
-        if lacquer, let layer = layers.first {
-            Rectangle().fill(paint(layer.color)).frame(height: CGFloat(layer.y))
-        } else if !lacquer {
-            Rectangle().fill(design.color(\.glaze)).frame(height: hairline)
-        }
-    }
-
-    @ViewBuilder
-    private var cast: some View {
-        if lacquer {
-            let layer = (design.dark ? DesignSurface.castShadowDark : DesignSurface.castShadowLight).first
-            let seam = (design.dark ? DesignSurface.topSeamDark : front ? DesignSurface.topSeamFrontLight : DesignSurface.topSeamBackLight).first
-            ZStack {
-                if let layer, !first { softShadow(layer) }
-                if let seam { shape.fill(paint(seam.color)).offset(y: CGFloat(seam.y)) }
-            }
-        } else {
-            ZStack {
-                shape.fill(design.color(\.line)).padding(-hairline)
-                if front {
-                    soft(spread: -12, blur: 24, y: -8, alpha: MailSheet.cardFlatCast)
-                } else {
-                    shape.fill(Color.black.opacity(MailSheet.cardFlatBackRing)).padding(-hairline)
-                    soft(spread: -10, blur: 16, y: -6, alpha: MailSheet.cardFlatBackCast)
-                }
-            }
-        }
-    }
-
-    private func softShadow(_ layer: ShadowLayer) -> some View {
-        shape.inset(by: CGFloat(-layer.spread))
-            .fill(paint(layer.color))
-            .blur(radius: CGFloat(layer.blur / 2))
-            .offset(x: CGFloat(layer.x), y: CGFloat(layer.y))
-    }
-
-    private func soft(spread: Double, blur: Double, y: Double, alpha: Double) -> some View {
-        shape.inset(by: CGFloat(-spread))
-            .fill(Color.black.opacity(alpha))
-            .blur(radius: CGFloat(blur / 2))
-            .offset(y: CGFloat(y))
     }
 }
 
@@ -142,7 +53,7 @@ struct CardHead: View {
             if case .message(let id) = ref, model.card(id)?.pinned == false {
                 CardHeadButton(help: words("mail.card.pin.tip"), glyph: .pin, ink: ink) { model.pin(id) }
             }
-            CardHeadButton(help: words("mail.card.close"), glyph: .close, ink: ink) { close() }
+            CardHeadButton(help: words("card.close"), glyph: .close, ink: ink) { close() }
         }
         .padding(.horizontal, CGFloat(Design.Size.headPadRight))
         .frame(height: CGFloat(Design.Size.headerHeight))
@@ -187,7 +98,7 @@ struct CardHead: View {
     @ViewBuilder
     private var titleView: some View {
         if case .message(let id) = ref, let party {
-            let name = party.name.isEmpty ? MailNames.middle(party.address, limit: MailSheet.cardTitleLimit) : party.name
+            let name = party.name.isEmpty ? MailNames.middle(party.address, limit: SheetValues.cardTitleLimit) : party.name
             Text(verbatim: name)
                 .designText(size: Design.TextSize.body, weight: .medium)
                 .lineLimit(1)
@@ -220,10 +131,10 @@ struct CardHead: View {
 
     @ViewBuilder
     private var metaView: some View {
-        let opacity = MailSheet.metaOpacity
+        let opacity = SheetValues.metaOpacity
         if case .message(let id) = ref, let card = model.card(id), let party {
             if front {
-                Text(verbatim: party.name.isEmpty ? "" : MailNames.middle(party.address, limit: MailSheet.cardAddressLimit))
+                Text(verbatim: party.name.isEmpty ? "" : MailNames.middle(party.address, limit: SheetValues.cardAddressLimit))
                     .designText(size: Design.TextSize.small)
                     .opacity(opacity)
                     .lineLimit(1)
@@ -261,31 +172,6 @@ struct CardHead: View {
     }
 }
 
-struct CardHeadButton: View {
-    @Environment(\.design) private var design
-    let help: String
-    let glyph: MailGlyph
-    let ink: Color
-    let action: () -> Void
-    @State private var hovering = false
-
-    var body: some View {
-        let side = CGFloat(Design.Size.symbolSize)
-        Button(action: action) {
-            Glyph(glyph)
-                .frame(width: side, height: side)
-                .foregroundStyle(ink)
-                .opacity(hovering ? 1 : MailSheet.closeOpacity)
-                .background(Circle().fill(hovering ? design.color(\.hover) : Color.clear))
-                .contentShape(Circle())
-        }
-        .buttonStyle(PressScale(scale: SheetValues.pressScale))
-        .help(Text(verbatim: help))
-        .accessibilityLabel(Text(verbatim: help))
-        .onHover { hovering = $0 }
-    }
-}
-
 struct CardFoot: View {
     @Environment(\.design) private var design
     @Environment(\.hairline) private var hairline
@@ -315,9 +201,9 @@ struct CardFoot: View {
                 if slot.action == .more {
                     HeadSymbol(help: words("mail.action.more"), glyph: .more, hover: .fill) { openMore() }
                         .background(AnchorProbe(box: moreAnchor))
-                } else if slot.action == .send, slot.cost > MailSheet.commandIconCost {
+                } else if slot.action == .send, slot.cost > SheetValues.commandIconCost {
                     TextButton(label: word("mail.action.send"), kind: .accent, disabled: slot.off, action: { run.perform(.send) }) { Glyph(.send) }
-                        .opacity(slot.off ? MailSheet.disabledOpacity : 1)
+                        .opacity(slot.off ? SheetValues.disabledOpacity : 1)
                         .background {
                             Button("") { if slot.off { model.announce(.recipientMissing) } else { run.perform(.send) } }
                                 .keyboardShortcut(.return, modifiers: .command)

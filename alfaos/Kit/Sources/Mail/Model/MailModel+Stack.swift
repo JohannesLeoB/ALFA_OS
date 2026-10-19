@@ -1,4 +1,5 @@
 import Foundation
+import ShellCore
 import struct AlfaServices.MailMessageSummary
 
 extension MailModel {
@@ -62,7 +63,7 @@ extension MailModel {
         overview.mode = mode
     }
 
-    public func setOverviewSize(_ size: MailOverviewSize) {
+    public func setOverviewSize(_ size: OverviewSize) {
         overview.size = size
     }
 

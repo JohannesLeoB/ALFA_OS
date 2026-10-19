@@ -24,40 +24,10 @@ public enum MailOverviewMode: Equatable, Sendable, CaseIterable {
     case folder
 }
 
-public enum MailOverviewSize: Equatable, Sendable, CaseIterable {
-    case small
-    case medium
-    case large
-
-    public var tileHeight: Double {
-        switch self {
-        case .small: Design.Size.overviewTileHeightSmall
-        case .medium: Design.Size.overviewTileHeightMedium
-        case .large: Design.Size.overviewTileHeightLarge
-        }
-    }
-
-    public var tileMinWidth: Double {
-        switch self {
-        case .small: Design.Size.overviewTileMinWidthSmall
-        case .medium: Design.Size.overviewTileMinWidthMedium
-        case .large: Design.Size.overviewTileMinWidthLarge
-        }
-    }
-
-    public var lines: Int {
-        switch self {
-        case .small: Design.Count.overviewLinesSmall
-        case .medium: Design.Count.overviewLinesMedium
-        case .large: Design.Count.overviewLinesLarge
-        }
-    }
-}
-
 public struct MailOverview: Equatable, Sendable {
     public var open = false
     public var mode = MailOverviewMode.stack
-    public var size = MailOverviewSize.medium
+    public var size = OverviewSize.medium
     public var hot: CardRef?
 }
 
@@ -103,7 +73,7 @@ public struct MailToast: Equatable, Sendable {
 public struct MailFolderRow: Identifiable, Equatable, Sendable {
     public var id: String { folder.id }
     public let folder: MailFolder
-    public let glyph: MailGlyph
+    public let glyph: Icon
     public let count: Int
     public let selected: Bool
 }

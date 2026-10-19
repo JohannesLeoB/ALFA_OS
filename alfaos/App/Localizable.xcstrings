@@ -111,6 +111,16 @@
         }
       }
     },
+    "card.close" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen"
+          }
+        }
+      }
+    },
     "error.resources" : {
       "comment" : "roh",
       "localizations" : {
@@ -1233,17 +1243,6 @@
         }
       }
     },
-    "mail.card.close" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schließen"
-          }
-        }
-      }
-    },
     "mail.card.conversation" : {
       "comment" : "roh",
       "localizations" : {
@@ -2322,28 +2321,6 @@
         }
       }
     },
-    "mail.overview.large" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Groß"
-          }
-        }
-      }
-    },
-    "mail.overview.medium" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mittel"
-          }
-        }
-      }
-    },
     "mail.overview.open" : {
       "comment" : "roh",
       "localizations" : {
@@ -2351,17 +2328,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Übersicht"
-          }
-        }
-      }
-    },
-    "mail.overview.small" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Klein"
           }
         }
       }
@@ -2905,17 +2871,6 @@
         }
       }
     },
-    "mail.stack.empty" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leere Karte"
-          }
-        }
-      }
-    },
     "mail.state.connected" : {
       "comment" : "roh",
       "localizations" : {
@@ -3213,6 +3168,36 @@
         }
       }
     },
+    "overview.large" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groß"
+          }
+        }
+      }
+    },
+    "overview.medium" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mittel"
+          }
+        }
+      }
+    },
+    "overview.small" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klein"
+          }
+        }
+      }
+    },
     "person.initials" : {
       "comment" : "roh",
       "localizations" : {
@@ -3503,16 +3488,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle 30 Sekunden"
-          }
-        }
-      }
-    },
-    "settings.card.close" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schließen"
           }
         }
       }
@@ -4096,36 +4071,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verwaister Schlüssel"
-          }
-        }
-      }
-    },
-    "settings.overview.large" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Groß"
-          }
-        }
-      }
-    },
-    "settings.overview.medium" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mittel"
-          }
-        }
-      }
-    },
-    "settings.overview.small" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Klein"
           }
         }
       }
@@ -4884,16 +4829,6 @@
         }
       }
     },
-    "settings.stack.empty" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leere Karte"
-          }
-        }
-      }
-    },
     "settings.stack.overview" : {
       "localizations" : {
         "de" : {
@@ -5120,6 +5055,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "••••••••••••"
+          }
+        }
+      }
+    },
+    "stack.empty" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leere Karte"
           }
         }
       }

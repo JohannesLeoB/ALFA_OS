@@ -18,14 +18,14 @@ public struct MailPerson: Identifiable, Equatable, Sendable {
 
     public var initials: String { MailNames.initials(name) }
 
-    public var label: String { name.isEmpty ? MailNames.middle(address, limit: MailSheet.personNameLimit) : name }
+    public var label: String { name.isEmpty ? MailNames.middle(address, limit: SheetValues.personNameLimit) : name }
 
-    public var detail: String { name.isEmpty ? "" : MailNames.middle(address, limit: MailSheet.personAddressLimit) }
+    public var detail: String { name.isEmpty ? "" : MailNames.middle(address, limit: SheetValues.personAddressLimit) }
 
     public var full: String { name.isEmpty ? address : name + " · " + address }
 
     public var first: String {
-        name.isEmpty ? MailNames.middle(address, limit: MailSheet.firstNameLimit)
+        name.isEmpty ? MailNames.middle(address, limit: SheetValues.firstNameLimit)
             : String(name.split(whereSeparator: { $0.isWhitespace }).first ?? "")
     }
 }
@@ -37,7 +37,7 @@ public struct MailSuggestion: Identifiable, Equatable, Sendable {
 
     public var initials: String { MailNames.initials(name) }
 
-    public var shown: String { MailNames.middle(address, limit: MailSheet.suggestionAddressLimit) }
+    public var shown: String { MailNames.middle(address, limit: SheetValues.suggestionAddressLimit) }
 }
 
 public enum MailRecipients {
@@ -59,12 +59,12 @@ public enum MailRecipients {
 
     public static func summary(_ people: [MailPerson]) -> String {
         guard let first = people.first else { return "" }
-        if people.count > MailSheet.recipientsInline { return first.first }
-        return people.map { $0.name.isEmpty ? MailNames.middle($0.address, limit: MailSheet.personNameLimit) : $0.name }
+        if people.count > SheetValues.recipientsInline { return first.first }
+        return people.map { $0.name.isEmpty ? MailNames.middle($0.address, limit: SheetValues.personNameLimit) : $0.name }
             .joined(separator: ", ")
     }
 
-    public static func isInline(_ count: Int) -> Bool { count <= MailSheet.recipientsInline }
+    public static func isInline(_ count: Int) -> Bool { count <= SheetValues.recipientsInline }
 }
 
 extension MailDraftCard {

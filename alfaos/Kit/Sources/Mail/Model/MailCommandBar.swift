@@ -17,7 +17,7 @@ public struct CommandSlot: Identifiable, Equatable, Sendable {
     public let signal: Bool
     public let accent: Bool
 
-    public init(id: String, action: MailAction?, kind: Kind = .button, priority: Int = 0, cost: Double = MailSheet.commandIconCost,
+    public init(id: String, action: MailAction?, kind: Kind = .button, priority: Int = 0, cost: Double = SheetValues.commandIconCost,
                 off: Bool = false, signal: Bool = false, accent: Bool = false) {
         self.id = id
         self.action = action
@@ -29,7 +29,7 @@ public struct CommandSlot: Identifiable, Equatable, Sendable {
         self.accent = accent
     }
 
-    public static let separator = CommandSlot(id: "separator", action: nil, kind: .separator, cost: MailSheet.commandSeparatorCost)
+    public static let separator = CommandSlot(id: "separator", action: nil, kind: .separator, cost: SheetValues.commandSeparatorCost)
 }
 
 public struct CommandPlan: Equatable, Sendable {
@@ -56,7 +56,7 @@ public enum CommandBar {
         var hidden: [CommandSlot] = []
         var tailEnd = end([])
         func fits() -> Bool {
-            sum(main) + (main.isEmpty ? 0 : gap) + sum(tailEnd) + MailSheet.commandSlack <= width
+            sum(main) + (main.isEmpty ? 0 : gap) + sum(tailEnd) + SheetValues.commandSlack <= width
         }
         while !fits(), main.contains(where: { $0.kind == .button }) {
             guard let candidate = main.filter({ $0.kind == .button }).max(by: { $0.priority < $1.priority }) else { break }

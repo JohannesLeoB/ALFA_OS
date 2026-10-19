@@ -23,45 +23,6 @@ extension LinkState {
     }
 }
 
-struct SettingsSymbolShape: Shape {
-    let name: SymbolName
-
-    func path(in rect: CGRect) -> Path {
-        let scale = min(rect.width, rect.height) / CGFloat(SheetValues.iconBox)
-        var path = Path()
-        for command in name.commands {
-            switch command {
-            case .move(let x, let y):
-                path.move(to: CGPoint(x: rect.minX + CGFloat(x) * scale, y: rect.minY + CGFloat(y) * scale))
-            case .line(let x, let y):
-                path.addLine(to: CGPoint(x: rect.minX + CGFloat(x) * scale, y: rect.minY + CGFloat(y) * scale))
-            case .curve(let x1, let y1, let x2, let y2, let x, let y):
-                path.addCurve(
-                    to: CGPoint(x: rect.minX + CGFloat(x) * scale, y: rect.minY + CGFloat(y) * scale),
-                    control1: CGPoint(x: rect.minX + CGFloat(x1) * scale, y: rect.minY + CGFloat(y1) * scale),
-                    control2: CGPoint(x: rect.minX + CGFloat(x2) * scale, y: rect.minY + CGFloat(y2) * scale))
-            case .close:
-                path.closeSubpath()
-            }
-        }
-        return path
-    }
-}
-
-struct SettingsSymbol: View {
-    let name: SymbolName
-    var size = SheetValues.iconSize
-    var stroke = SheetValues.iconStroke
-
-    var body: some View {
-        let side = CGFloat(size)
-        let width = CGFloat(stroke * size / SheetValues.iconBox)
-        SettingsSymbolShape(name: name)
-            .stroke(style: StrokeStyle(lineWidth: width, lineCap: .round, lineJoin: .round))
-            .frame(width: side, height: side)
-    }
-}
-
 struct SettingsMenuRequest: Identifiable {
     let id = UUID()
     let anchor: CGRect
@@ -109,7 +70,7 @@ struct SettingsMenuChoice: View {
 
     var body: some View {
         ChoiceButton(label: label, action: { menus?.request = SettingsMenuRequest(anchor: frame, entries: entries()) }) {
-            SettingsSymbol(name: .chevron, size: Design.Spacing.step12, stroke: SheetValues.smallIconStroke)
+            Glyph(.chevron, size: Design.Spacing.step12, stroke: SheetValues.smallIconStroke)
         }
         .anchorFrame($frame)
     }

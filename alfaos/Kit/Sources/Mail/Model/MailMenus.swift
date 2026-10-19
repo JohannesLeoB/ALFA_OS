@@ -1,4 +1,5 @@
 import Foundation
+import ShellCore
 
 public enum MailAction: String, Sendable, CaseIterable {
     case reply, replyAll, forward, archive, trash, markRead, markUnread, star, unstar, move, spam
@@ -10,7 +11,7 @@ public enum MailAction: String, Sendable, CaseIterable {
 
     public var danger: Bool { self == .trash || self == .discardDraft }
 
-    public var glyph: MailGlyph? {
+    public var glyph: Icon? {
         switch self {
         case .reply: .reply
         case .replyAll: .replyAll
@@ -67,7 +68,7 @@ public enum MailMenus {
 public enum MailFormatting: String, CaseIterable, Sendable {
     case bold, italic, underline, list, numbered, link
 
-    public var glyph: MailGlyph {
+    public var glyph: Icon {
         switch self {
         case .bold: .bold
         case .italic: .italic

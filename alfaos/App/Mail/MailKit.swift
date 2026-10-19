@@ -4,7 +4,7 @@ import ShellCore
 import SwiftUI
 
 struct GlyphShape: Shape {
-    let glyph: MailGlyph
+    let glyph: Icon
 
     func path(in rect: CGRect) -> Path {
         let scale = rect.width / CGFloat(SheetValues.iconBox)
@@ -26,11 +26,11 @@ struct GlyphShape: Shape {
 }
 
 struct Glyph: View {
-    let glyph: MailGlyph
+    let glyph: Icon
     var size = SheetValues.iconSize
     var stroke = SheetValues.iconStroke
 
-    init(_ glyph: MailGlyph, size: Double = SheetValues.iconSize, stroke: Double = SheetValues.iconStroke) {
+    init(_ glyph: Icon, size: Double = SheetValues.iconSize, stroke: Double = SheetValues.iconStroke) {
         self.glyph = glyph
         self.size = size
         self.stroke = stroke
@@ -44,12 +44,12 @@ struct Glyph: View {
 }
 
 extension Glyph {
-    static func small(_ glyph: MailGlyph) -> Glyph {
-        Glyph(glyph, size: MailSheet.smallIcon, stroke: MailSheet.smallIconStroke)
+    static func small(_ glyph: Icon) -> Glyph {
+        Glyph(glyph, size: SheetValues.smallIcon, stroke: SheetValues.smallIconStroke)
     }
 
-    static func tiny(_ glyph: MailGlyph) -> Glyph {
-        Glyph(glyph, size: MailSheet.tinyIcon, stroke: MailSheet.tinyIconStroke)
+    static func tiny(_ glyph: Icon) -> Glyph {
+        Glyph(glyph, size: SheetValues.tinyIcon, stroke: SheetValues.tinyIconStroke)
     }
 }
 
@@ -176,7 +176,7 @@ struct HeadSymbol: View {
     @Environment(\.hairline) private var hairline
     @Environment(\.accessibilityReduceMotion) private var reduced
     let help: String
-    let glyph: MailGlyph
+    let glyph: Icon
     var selected = false
     var disabled = false
     var tone: KeyPath<DesignColors, RGB> = \.inkTertiary
@@ -213,7 +213,7 @@ struct HeadSymbol: View {
                 .background(Capsule().fill(fill))
                 .ring(Capsule(), ring)
                 .contentShape(Capsule())
-                .opacity(disabled ? MailSheet.disabledOpacity : 1)
+                .opacity(disabled ? SheetValues.disabledOpacity : 1)
         }
         .buttonStyle(.plain)
         .help(Text(verbatim: help))

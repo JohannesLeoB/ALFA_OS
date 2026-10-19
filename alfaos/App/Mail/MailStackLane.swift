@@ -146,57 +146,25 @@ struct CommandHeader: View {
 }
 
 struct StackArea: View {
-    @Environment(\.design) private var design
-    @Environment(\.accessibilityReduceMotion) private var reduced
     let model: MailModel
     let commands: MailCommands
     let width: Double
     @Binding var discarding: UUID?
     @Binding var formatOn: Bool
 
-    private var reorder: Animation? {
-        let curve = Design.Easing.stack
-        return reduced ? nil : .timingCurve(curve.x1, curve.y1, curve.x2, curve.y2, duration: Design.Duration.stack)
-    }
-
     var body: some View {
-        GeometryReader { proxy in
-            let order = model.stackOrder
-            let tops = CardStack.tops(count: order.count)
-            ZStack(alignment: .top) {
-                if order.isEmpty {
-                    RoundedRectangle(cornerRadius: CGFloat(Design.Radius.card))
-                        .fill(design.color(\.lane))
-                        .overlay(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.card)).strokeBorder(design.color(\.line), lineWidth: CGFloat(Design.Size.hairline)))
-                        .accessibilityLabel(word("mail.stack.empty"))
-                }
-                ForEach(Array(order.enumerated()), id: \.element) { index, ref in
-                    StackCardView(model: model, ref: ref, depth: order.count - 1 - index, first: index == 0, commands: commands,
-                                  discarding: $discarding, formatOn: $formatOn)
-                        .frame(height: max(0, proxy.size.height - CGFloat(tops[index])))
-                        .offset(y: CGFloat(tops[index]))
-                        .zIndex(Double(index))
-                        .opacity(model.overview.open ? 0 : 1)
-                        .allowsHitTesting(!model.overview.open)
-                }
-                if model.overview.open {
-                    OverviewView(model: model)
-                        .zIndex(Double(order.count + 1))
-                }
-                if let toast = model.toast {
-                    VStack {
-                        Spacer(minLength: 0)
-                        Toast(message: toastText(toast), undoLabel: toast.undoable ? word("mail.toast.undo") : nil,
-                              onUndo: toast.undoable ? { Task { await model.undoToast() } } : nil,
-                              onDismiss: { model.dismissToast(toast.serial) })
-                            .id(toast.serial)
-                            .padding(.bottom, CGFloat(MailSheet.toastBottom))
-                    }
-                    .zIndex(Double(order.count + 2))
-                }
+        CardPile(order: model.stackOrder, fanned: model.overview.open) { ref, depth, first in
+            StackCardView(model: model, ref: ref, depth: depth, first: first, commands: commands,
+                          discarding: $discarding, formatOn: $formatOn)
+        } overview: {
+            OverviewView(model: model)
+        } note: {
+            if let toast = model.toast {
+                Toast(message: toastText(toast), undoLabel: toast.undoable ? word("mail.toast.undo") : nil,
+                      onUndo: toast.undoable ? { Task { await model.undoToast() } } : nil,
+                      onDismiss: { model.dismissToast(toast.serial) })
+                    .id(toast.serial)
             }
-            .frame(width: proxy.size.width, height: proxy.size.height, alignment: .top)
-            .animation(reorder, value: order)
         }
     }
 

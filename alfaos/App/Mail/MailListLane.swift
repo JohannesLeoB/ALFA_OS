@@ -45,7 +45,7 @@ struct MailListLane: View {
                 tools(width: width)
             } else {
                 HeaderTitle(text: Text(verbatim: title))
-                if MailSheet.listCountShown, model.listUnread > 0 {
+                if SheetValues.listCountShown, model.listUnread > 0 {
                     Counter(value: MailNames.number(model.listUnread))
                 }
                 Spacer(minLength: 0)
@@ -263,7 +263,7 @@ struct Spinner: View {
 
     var body: some View {
         Circle()
-            .trim(from: 0, to: CGFloat(MailSheet.spinnerArc))
+            .trim(from: 0, to: CGFloat(SheetValues.spinnerArc))
             .stroke(design.color(\.ink), lineWidth: hairline)
             .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
             .rotationEffect(.degrees(turn))
