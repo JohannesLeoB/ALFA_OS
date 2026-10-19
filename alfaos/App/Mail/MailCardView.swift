@@ -200,7 +200,6 @@ struct CardFoot: View {
                         .background(AnchorProbe(box: moreAnchor))
                 } else if slot.action == .send, slot.cost > SheetValues.commandIconCost {
                     TextButton(label: word("mail.action.send"), kind: .accent, disabled: slot.off, action: { run.perform(.send) }) { Glyph(.send) }
-                        .opacity(slot.off ? SheetValues.disabledOpacity : 1)
                         .background {
                             Button("") { if slot.off { model.announce(.recipientMissing) } else { run.perform(.send) } }
                                 .keyboardShortcut(.return, modifiers: .command)

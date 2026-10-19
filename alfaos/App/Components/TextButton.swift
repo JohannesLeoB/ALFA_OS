@@ -69,6 +69,7 @@ struct TextButton<Glyph: View>: View {
             .background(Capsule().fill(fill))
             .ring(Capsule(), ringColor)
             .contentShape(Capsule())
+            .opacity(disabled ? SheetValues.disabledOpacity : 1)
         }
         .buttonStyle(PressScale(scale: disabled || !pressed ? 1 : SheetValues.pressScale))
         .allowsHitTesting(!disabled)
@@ -87,12 +88,13 @@ extension TextButton where Glyph == EmptyView {
 struct TextMenuButton: View {
     let label: Text
     var kind = TextButtonKind.neutral
+    var disabled = false
     var width = Design.Size.menuWidthRow
     let entries: () -> [MenuEntry]
     @State private var anchor = AnchorBox()
 
     var body: some View {
-        TextButton(label: label, kind: kind, action: open)
+        TextButton(label: label, kind: kind, disabled: disabled, action: open)
             .background(AnchorProbe(box: anchor))
     }
 

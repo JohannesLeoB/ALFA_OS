@@ -90,7 +90,6 @@ struct ServiceCardBody: View {
                 ForEach(info.extras, id: \.id) { extra in
                     SettingsRow(label: word(info.extraKey(extra))) {
                         TextButton(label: word(extra.actionKey), disabled: !canRun(extra, reading)) { run(extra, reading) }
-                            .opacity(canRun(extra, reading) ? 1 : SheetValues.disabledOpacity)
                     }
                 }
             }
@@ -200,7 +199,7 @@ struct ServiceCardBody: View {
     }
 
     private func addAccount(_ reading: ServiceReading, kind: TextButtonKind) -> some View {
-        TextMenuButton(label: word("text.settings.action.addAccount"), kind: kind) {
+        TextMenuButton(label: word("text.settings.action.addAccount"), kind: kind, disabled: host.busy || reading.offers.isEmpty) {
             reading.offers.map { offer in
                 .row(MenuItem(id: offer.id, label: word(offer.title)) {
                     started = true
@@ -208,8 +207,6 @@ struct ServiceCardBody: View {
                 })
             }
         }
-        .opacity(host.busy || reading.offers.isEmpty ? SheetValues.disabledOpacity : 1)
-        .allowsHitTesting(!host.busy && !reading.offers.isEmpty)
     }
 
     @ViewBuilder
@@ -232,7 +229,6 @@ struct ServiceCardBody: View {
                             revision += 1
                         }
                     }
-                    .opacity(area.running ? SheetValues.disabledOpacity : 1)
                 }
             }
         }
@@ -305,7 +301,6 @@ struct SettingsAddForm: View {
 }
 
 private struct FormInput: View {
-    @Environment(\.design) private var design
     let labelKey: String
     let secret: Bool
     @Binding var text: String
@@ -313,21 +308,7 @@ private struct FormInput: View {
     var body: some View {
         VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step4)) {
             word(labelKey).designText(\.inkTertiary, size: Design.TextSize.small)
-            Group {
-                if secret {
-                    SecureField(text: $text) { word(labelKey) }
-                } else {
-                    TextField(text: $text) { word(labelKey) }
-                }
-            }
-            .textFieldStyle(.plain)
-            .font(.face(Design.TextSize.body))
-            .foregroundStyle(design.color(\.ink))
-            .autocorrectionDisabled()
-            .frame(height: CGFloat(Design.Spacing.step28))
-            .overlay(alignment: .bottom) {
-                Rectangle().fill(design.color(\.ink)).frame(height: CGFloat(Design.Size.hairline))
-            }
+            InputField(text: $text, placeholder: nil, labelKey: labelKey, secret: secret)
         }
     }
 }

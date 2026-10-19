@@ -49,19 +49,6 @@ private struct SettingsValueField: View {
     }
 }
 
-private struct SettingsSwitchRow: View {
-    let labelKey: String
-    var subKey: String?
-    var line = true
-    @Binding var isOn: Bool
-
-    var body: some View {
-        SettingsRow(label: word(labelKey), sub: subKey.map { word($0) }, line: line) {
-            ToggleSwitch(isOn: $isOn, labelKey: labelKey)
-        }
-    }
-}
-
 private struct SettingsChoiceRow<Choice: Hashable>: View {
     let labelKey: String
     var line = true
@@ -80,16 +67,6 @@ private struct SettingsChoiceRow<Choice: Hashable>: View {
                 }
             }
         }
-    }
-}
-
-private struct SettingsDisabledButton: View {
-    let labelKey: String
-    var kind = TextButtonKind.neutral
-
-    var body: some View {
-        TextButton(label: word(labelKey), kind: kind, disabled: true) {}
-            .opacity(SheetValues.disabledOpacity)
     }
 }
 
@@ -118,7 +95,9 @@ private struct IdentityCard: View {
             SettingsRow(label: word("settings.identity.phone")) {
                 SettingsValueField(text: $phone, labelKey: "settings.identity.phone", prompt: word("settings.value.empty"))
             }
-            SettingsSwitchRow(labelKey: "settings.identity.birthdays", isOn: $birthdays)
+            SettingsRow(label: word("settings.identity.birthdays")) {
+                ToggleSwitch(isOn: $birthdays, labelKey: "settings.identity.birthdays")
+            }
             SettingsBlockHead(key: "settings.identity.account")
             SettingsRow(label: word("settings.identity.signOut"), sub: word("settings.identity.signOut.sub"), line: false) {
                 TextButton(label: word("settings.identity.signOut.action"), kind: .signal) { signOut() }
@@ -156,7 +135,9 @@ private struct AppearanceCard: View {
             SettingsChoiceRow(
                 labelKey: "settings.start.label", current: StartView(rawValue: start) ?? .mail, choices: StartView.allCases,
                 key: { $0.key }, pick: { start = $0.rawValue })
-            SettingsSwitchRow(labelKey: "settings.lock.label", subKey: "settings.lock.sub", isOn: $lockOn)
+            SettingsRow(label: word("settings.lock.label"), sub: word("settings.lock.sub")) {
+                ToggleSwitch(isOn: $lockOn, labelKey: "settings.lock.label")
+            }
             SettingsChoiceRow(
                 labelKey: "settings.lock.after", current: LockDelay(rawValue: delay) ?? .minutes5, choices: LockDelay.allCases,
                 key: { $0.key }, pick: { delay = $0.rawValue })
@@ -214,7 +195,7 @@ private struct FoldersCard: View {
                 SettingsValue(text: word("settings.templates.none"), tone: \.inkTertiary)
             }
             SettingsRow(label: word("settings.folders.setup"), line: false) {
-                SettingsDisabledButton(labelKey: "settings.folders.setup.action")
+                TextButton(label: word("settings.folders.setup.action"), disabled: true) {}
             }
         }
     }
@@ -225,7 +206,7 @@ private struct TemplatesCard: View {
         VStack(spacing: 0) {
             SettingsBlockNote(text: word("settings.templates.none"))
             SettingsRow(label: word("settings.templates.create"), line: false) {
-                SettingsDisabledButton(labelKey: "settings.templates.create.action")
+                TextButton(label: word("settings.templates.create.action"), disabled: true) {}
             }
         }
     }
@@ -259,11 +240,17 @@ private struct PrivacyCard: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            SettingsSwitchRow(labelKey: "settings.privacy.images", subKey: images ? "settings.privacy.images.on" : "settings.privacy.images.off", isOn: $images)
-            SettingsSwitchRow(labelKey: "settings.privacy.assistantOff", subKey: "settings.privacy.assistantOff.sub", isOn: $assistantOff)
-            SettingsSwitchRow(labelKey: "settings.privacy.chatFiles", subKey: "settings.privacy.chatFiles.sub", isOn: $chatFiles)
+            SettingsRow(label: word("settings.privacy.images"), sub: word(images ? "settings.privacy.images.on" : "settings.privacy.images.off")) {
+                ToggleSwitch(isOn: $images, labelKey: "settings.privacy.images")
+            }
+            SettingsRow(label: word("settings.privacy.assistantOff"), sub: word("settings.privacy.assistantOff.sub")) {
+                ToggleSwitch(isOn: $assistantOff, labelKey: "settings.privacy.assistantOff")
+            }
+            SettingsRow(label: word("settings.privacy.chatFiles"), sub: word("settings.privacy.chatFiles.sub")) {
+                ToggleSwitch(isOn: $chatFiles, labelKey: "settings.privacy.chatFiles")
+            }
             SettingsRow(label: word("settings.privacy.export"), line: false) {
-                SettingsDisabledButton(labelKey: "settings.privacy.export.action")
+                TextButton(label: word("settings.privacy.export.action"), disabled: true) {}
             }
         }
     }
