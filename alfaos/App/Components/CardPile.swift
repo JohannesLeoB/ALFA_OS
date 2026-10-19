@@ -329,7 +329,7 @@ private struct OverviewTileView: View {
                 if entry.unread {
                     Circle().fill(design.color(\.ink))
                         .frame(width: CGFloat(Design.Spacing.statusDot), height: CGFloat(Design.Spacing.statusDot))
-                        .overlay(Circle().strokeBorder(design.color(\.well), lineWidth: CGFloat(Design.Size.markSeparatorRing)))
+                        .background(Circle().fill(design.color(\.well)).padding(-CGFloat(Design.Size.markSeparatorRing)))
                         .offset(x: CGFloat(SheetValues.unreadDotShift), y: -CGFloat(SheetValues.unreadDotShift))
                 }
             }

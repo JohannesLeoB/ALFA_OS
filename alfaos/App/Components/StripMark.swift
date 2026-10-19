@@ -46,7 +46,7 @@ struct StripMark: View {
                 if item.dot {
                     Circle().fill(design.color(\.ink))
                         .frame(width: CGFloat(Design.Spacing.statusDot), height: CGFloat(Design.Spacing.statusDot))
-                        .overlay(Circle().strokeBorder(design.color(\.lane), lineWidth: CGFloat(Design.Size.markSeparatorRing)))
+                        .background(Circle().fill(design.color(\.lane)).padding(-CGFloat(Design.Size.markSeparatorRing)))
                         .offset(x: hairline, y: -hairline)
                 }
             }
