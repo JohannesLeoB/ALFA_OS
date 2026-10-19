@@ -4,6 +4,17 @@ import ShellCore
 import Observation
 import SwiftUI
 
+private struct SettingsKeychainKey: EnvironmentKey {
+    static let defaultValue: any KeychainPort = KeychainAdapter()
+}
+
+extension EnvironmentValues {
+    var settingsKeychain: any KeychainPort {
+        get { self[SettingsKeychainKey.self] }
+        set { self[SettingsKeychainKey.self] = newValue }
+    }
+}
+
 enum SettingsShared {
     @MainActor static let board = SettingsBoard()
 }

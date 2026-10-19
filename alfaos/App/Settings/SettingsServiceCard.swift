@@ -56,6 +56,7 @@ struct ServiceCardBody: View {
     let info: ServiceInfo
     var disconnecting = false
     @Environment(\.narrowCard) private var narrow
+    @Environment(\.settingsKeychain) private var keychain
     @State private var revision = 0
     @State private var started = false
     @State private var held = ServiceValues.none
@@ -101,7 +102,7 @@ struct ServiceCardBody: View {
             }
         }
         .task(id: reading.inlets.map(\.id).joined() + reading.state.rawValue) {
-            held = ServiceValues.read(reading, keychain: KeychainAdapter())
+            held = ServiceValues.read(reading, keychain: keychain)
         }
     }
 
