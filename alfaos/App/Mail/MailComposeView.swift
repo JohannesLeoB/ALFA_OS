@@ -31,10 +31,10 @@ struct ComposeView: View {
                             .padding(.top, CGFloat(Design.Spacing.step8))
                     }
                     fromRow
-                    RecipientRow(model: model, card: card, field: .to, showCopy: $showCopy, expanded: $expanded)
+                    RecipientFieldView(model: model, card: card, field: .to, showCopy: $showCopy, expanded: $expanded)
                     if showCopy {
-                        RecipientRow(model: model, card: card, field: .cc, showCopy: $showCopy, expanded: $expanded)
-                        RecipientRow(model: model, card: card, field: .bcc, showCopy: $showCopy, expanded: $expanded)
+                        RecipientFieldView(model: model, card: card, field: .cc, showCopy: $showCopy, expanded: $expanded)
+                        RecipientFieldView(model: model, card: card, field: .bcc, showCopy: $showCopy, expanded: $expanded)
                     }
                     subjectRow
                     bodySheet
@@ -172,7 +172,7 @@ struct FromButton: View {
     }
 }
 
-struct RecipientRow: View {
+struct RecipientFieldView: View {
     @Environment(\.design) private var design
     @Environment(\.accessibilityReduceMotion) private var reduced
     let model: MailModel
@@ -293,7 +293,17 @@ struct RecipientRow: View {
         ScrollView {
             VStack(spacing: 0) {
                 ForEach(people) { person in
-                    ComposePersonRow(person: person) { model.removeRecipient(card.id, field, at: person.id) }
+                    RecipientRow(label: Text(verbatim: ""), initials: person.initials, title: person.label, detail: person.detail,
+                                 help: person.full) {
+                        Button { model.removeRecipient(card.id, field, at: person.id) } label: {
+                            Glyph.tiny(.close)
+                                .foregroundStyle(design.color(\.inkTertiary))
+                                .frame(width: CGFloat(SheetValues.removeRowSize), height: CGFloat(SheetValues.removeRowSize))
+                                .contentShape(Circle())
+                        }
+                        .buttonStyle(PressScale(scale: SheetValues.pressScaleChip))
+                        .help(word("mail.compose.remove"))
+                    }
                 }
                 HStack(spacing: CGFloat(Design.Spacing.step8)) {
                     Color.clear.frame(width: CGFloat(Design.Size.recipientLabelColumn))
@@ -350,44 +360,6 @@ struct SuggestionRow: View {
         }
         .buttonStyle(.plain)
         .help(Text(verbatim: item.address))
-        .onHover { hovering = $0 }
-    }
-}
-
-struct ComposePersonRow: View {
-    @Environment(\.design) private var design
-    let person: MailPerson
-    let remove: () -> Void
-    @State private var hovering = false
-
-    var body: some View {
-        HStack(spacing: CGFloat(Design.Spacing.step8)) {
-            Color.clear.frame(width: CGFloat(Design.Size.recipientLabelColumn))
-            Mark(size: .small) {
-                if person.initials.isEmpty { Glyph.small(.person) } else { Text(verbatim: person.initials) }
-            }
-            VStack(alignment: .leading, spacing: 0) {
-                Text(verbatim: person.label).designText().lineLimit(1).frame(height: CGFloat(SheetValues.conversationLine))
-                if !person.detail.isEmpty {
-                    Text(verbatim: person.detail).designText(\.inkTertiary, size: Design.TextSize.small).lineLimit(1)
-                        .frame(height: CGFloat(SheetValues.conversationLine))
-                }
-            }
-            Spacer(minLength: 0)
-            Button(action: remove) {
-                Glyph.tiny(.close)
-                    .foregroundStyle(design.color(\.inkTertiary))
-                    .frame(width: CGFloat(SheetValues.removeRowSize), height: CGFloat(SheetValues.removeRowSize))
-                    .contentShape(Circle())
-            }
-            .buttonStyle(PressScale(scale: SheetValues.pressScaleChip))
-            .help(word("mail.compose.remove"))
-        }
-        .padding(.leading, CGFloat(Design.Spacing.step8))
-        .padding(.trailing, CGFloat(Design.Spacing.step4))
-        .frame(height: CGFloat(SheetValues.recipientRowHeight))
-        .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.field)).fill(hovering ? design.color(\.hover) : Color.clear))
-        .help(Text(verbatim: person.full))
         .onHover { hovering = $0 }
     }
 }

@@ -116,46 +116,24 @@ struct Disclosure<Content: View>: View {
 }
 
 struct PersonRow: View {
-    @Environment(\.design) private var design
     let model: MailModel
     let card: ReadingCard
     let person: MailPerson
     let group: MailRecipientGroup
-    @State private var hovering = false
     @State private var anchor = AnchorBox()
 
-    var body: some View {
-        HStack(spacing: CGFloat(Design.Spacing.step8)) {
-            Group {
-                switch group {
-                case .to: word("mail.read.to")
-                case .cc: word("mail.read.cc")
-                case .none: Text(verbatim: "")
-                }
-            }
-            .designText(\.inkTertiary, size: Design.TextSize.small)
-            .frame(width: CGFloat(Design.Size.recipientLabelColumn), alignment: .leading)
-            Mark(size: .small) {
-                if person.initials.isEmpty { Glyph.small(.person) } else { Text(verbatim: person.initials) }
-            }
-            VStack(alignment: .leading, spacing: 0) {
-                Text(verbatim: person.label).designText().lineLimit(1).frame(height: CGFloat(SheetValues.conversationLine))
-                if !person.detail.isEmpty {
-                    Text(verbatim: person.detail).designText(\.inkTertiary, size: Design.TextSize.small).lineLimit(1)
-                        .frame(height: CGFloat(SheetValues.conversationLine))
-                }
-            }
-            Spacer(minLength: 0)
+    private var label: Text {
+        switch group {
+        case .to: word("mail.read.to")
+        case .cc: word("mail.read.cc")
+        case .none: Text(verbatim: "")
         }
-        .padding(.leading, CGFloat(Design.Spacing.step8))
-        .padding(.trailing, CGFloat(Design.Spacing.step4))
-        .frame(height: CGFloat(SheetValues.recipientRowHeight))
-        .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.field)).fill(hovering ? design.color(\.hover) : Color.clear))
-        .contentShape(Rectangle())
-        .help(Text(verbatim: person.full))
-        .background(AnchorProbe(box: anchor))
-        .onHover { hovering = $0 }
-        .onTapGesture { menu() }
+    }
+
+    var body: some View {
+        RecipientRow(label: label, initials: person.initials, title: person.label, detail: person.detail, help: person.full)
+            .background(AnchorProbe(box: anchor))
+            .onTapGesture { menu() }
     }
 
     private func menu() {
