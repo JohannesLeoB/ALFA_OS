@@ -54,7 +54,7 @@ public final class ShellModel {
         currentID = valid?.currentID ?? directory.first?.id ?? ""
         lanes = valid?.lanes ?? [:]
         blob = valid?.blob.normalized ?? BlobPlacement.home(geometry: geometry)
-        face = valid?.face ?? .eyes
+        face = .orb
     }
 
     public var current: AppEntry? { directory.app(currentID) }
