@@ -44,6 +44,8 @@ public final class MailModel {
     public internal(set) var searching = false
     public internal(set) var overview = MailOverview()
     public internal(set) var toast: MailToast?
+    public internal(set) var rowAttachments: [String: [MailAttachmentRow]] = [:]
+    public internal(set) var threadSizes: [String: Int] = [:]
     var toastSerial = 0
     @ObservationIgnored var undoAction: (@MainActor () async -> Void)?
 

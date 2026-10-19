@@ -177,6 +177,7 @@ struct MailListLane: View {
                     let next = items.indices.contains(index + 1) ? items[index + 1] : nil
                     MailRowView(model: model, item: item,
                                 separated: next != nil && !item.selected && next?.selected != true,
+                                wide: width >= Design.Size.breakpointAttachments,
                                 inTrash: trash, picking: picking)
                 }
             }

@@ -23,6 +23,8 @@ public struct MailRowPresentation: Identifiable, Equatable, Sendable {
     public let selected: Bool
     public let picked: Bool
     public let thread: Int?
+    public let attachments: [MailAttachmentRow]
+    public let attachmentTotal: Int
     public let date: MailDateLabel
     public let subject: String?
     public let preview: String?
@@ -104,6 +106,7 @@ extension MailModel {
             let item = row.summary
             let party = outgoing ? Self.firstParty(item.toRaw) : Self.sender(item)
             let name = party.name.isEmpty ? party.address : party.name
+            let thread = max(row.threadCount, threadSizes[item.threadID] ?? 1)
             return MailRowPresentation(
                 id: item.id,
                 initials: MailNames.initials(party.name),
@@ -115,7 +118,9 @@ extension MailModel {
                 starred: item.flags.contains(.flagged),
                 selected: row.selected && stack.contains(.message(item.id)),
                 picked: picked.contains(item.id),
-                thread: row.threadCount > 1 ? row.threadCount : nil,
+                thread: thread > 1 ? thread : nil,
+                attachments: rowAttachments[item.id] ?? [],
+                attachmentTotal: max(item.attachmentCount, rowAttachments[item.id]?.count ?? 0),
                 date: MailDateLabel.of(item.receivedAt, now: now),
                 subject: item.subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : item.subject,
                 preview: item.snippet.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : item.snippet

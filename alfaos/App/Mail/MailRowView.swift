@@ -21,6 +21,7 @@ struct MailRowView: View {
     let model: MailModel
     let item: MailRowPresentation
     let separated: Bool
+    let wide: Bool
     let inTrash: Bool
     let picking: Bool
     @State private var hovering = false
@@ -46,7 +47,9 @@ struct MailRowView: View {
             head
             subject
             preview
+            chips
         }
+        .task { await model.measureRow(item.id) }
         .overlay(alignment: .topTrailing) { rowActions }
         .contentShape(shape)
         .simultaneousGesture(SpatialTapGesture(count: 2).onEnded { if !onMark($0.location) { open(pin: true) } })
@@ -149,6 +152,26 @@ struct MailRowView: View {
         .lineLimit(SheetValues.previewLines)
         .lineHeight(SheetValues.rowTextLine, size: Design.TextSize.body)
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private var chips: some View {
+        let shown = Array(item.attachments.prefix(wide ? Design.Count.attachmentsWide : Design.Count.attachmentsNarrow))
+        let more = item.attachmentTotal - shown.count
+        if !shown.isEmpty {
+            HStack(spacing: CGFloat(Design.Spacing.step8)) {
+                ForEach(shown) { row in
+                    AttachmentChip(name: MailNames.middle(row.name, limit: SheetValues.attachmentChipNameLimit), detail: row.name + " · " + row.size,
+                                   inverted: selected) { Glyph.small(.doc) }
+                }
+                if more > 0 {
+                    Counter(value: "+" + MailNames.number(more), tone: tone.tertiary, ringTone: tone.line)
+                        .help(word("mail.row.moreAttachments"))
+                }
+            }
+            .padding(.top, CGFloat(Design.Spacing.step8))
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 
     @ViewBuilder
