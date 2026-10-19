@@ -18,14 +18,18 @@ extension MailModel {
         actionFailures[messageID] = nil
     }
 
-    public func open(_ id: String) async {
+    public func open(_ id: String, pin: Bool = false) async {
         guard let inlet = selectedInlet, let summary = summary(id) else { return }
         selectedMessage = id
         if let index = cards.firstIndex(where: { $0.id == id }) {
+            if pin { cards[index].pinned = true }
             cards.append(cards.remove(at: index))
+            attach(.message(id))
             return
         }
-        cards.append(ReadingCard(inlet: inlet, summary: summary, content: .bodyLoading))
+        dropPreviews()
+        cards.append(ReadingCard(inlet: inlet, summary: summary, content: .bodyLoading, pinned: pin))
+        attach(.message(id))
         trimCards()
         await loadBody(id)
         if !summary.flags.contains(.seen) { await setRead(id, true) }
@@ -33,11 +37,12 @@ extension MailModel {
 
     public func close(_ id: String) {
         cards.removeAll { $0.id == id }
+        detach(.message(id))
         if selectedMessage == id { selectedMessage = cards.last?.id }
     }
 
     func trimCards() {
-        while cards.count > cardLimit { cards.removeFirst() }
+        while cards.count > cardLimit { detach(.message(cards.removeFirst().id)) }
     }
 
     func loadBody(_ id: String) async {
@@ -143,6 +148,16 @@ extension MailModel {
     public func mailToProjectFolder(_ id: String, project: String? = nil) {
         guard let inlet = cardInlet(id) ?? selectedInlet, summary(id) != nil else { return }
         commandContinuation.yield(.mailToProjectFolder(MailMessageRef(inlet: inlet, messageID: id), project: project))
+    }
+
+    public func print(_ id: String) {
+        guard let inlet = cardInlet(id) ?? selectedInlet, summary(id) != nil else { return }
+        commandContinuation.yield(.print(MailMessageRef(inlet: inlet, messageID: id)))
+    }
+
+    public func exportPDF(_ id: String) {
+        guard let inlet = cardInlet(id) ?? selectedInlet, summary(id) != nil else { return }
+        commandContinuation.yield(.exportPDF(MailMessageRef(inlet: inlet, messageID: id)))
     }
 
     public func attachmentToProjectFolder(_ id: String, attachmentID: String, project: String? = nil) {

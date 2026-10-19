@@ -74,11 +74,14 @@ public struct ReadingCard: Identifiable, Equatable, Sendable {
     public var summary: MailMessageSummary
     public var content: MailCardContent
     public var remoteImagesAllowed = false
+    public var pinned = false
     public var quoteCollapsed = true
     public var signatureCollapsed = true
     public var recipientsExpanded = false
     public var attachments: [MailAttachmentInfo] = []
     public var conversation: [MailMessageSummary] = []
+    public var threadTexts: [String: String] = [:]
+    public var quotesOpen: Set<String> = []
 
     public var remoteImagesBlocked: Bool {
         if case .html = content { return !remoteImagesAllowed }

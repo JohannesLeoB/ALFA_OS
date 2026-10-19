@@ -1,0 +1,342 @@
+import AppKit
+import Mail
+import ShellCore
+import SwiftUI
+
+struct StackCardView: View {
+    @Environment(\.design) private var design
+    @Environment(\.laneFill) private var laneFill
+    @Environment(\.cardSurface) private var surface
+    @Environment(\.hairline) private var hairline
+    @Environment(\.accessibilityReduceMotion) private var reduced
+    let model: MailModel
+    let ref: CardRef
+    let depth: Int
+    let first: Bool
+    let commands: MailCommands
+    @Binding var discarding: UUID?
+    @Binding var formatOn: Bool
+    @State private var hovering = false
+
+    private var front: Bool { depth == 0 }
+
+    private var step: DesignStackStep? {
+        guard depth > 0 else { return nil }
+        let steps = design.dark ? Design.stackDark : Design.stackLight
+        return steps[min(CardStack.levelIndex(depth: depth), steps.count - 1)]
+    }
+
+    private func paint(_ value: RGB) -> Color {
+        Color(.sRGB, red: value.red, green: value.green, blue: value.blue, opacity: value.alpha)
+    }
+
+    private var fill: Color { step.map { paint($0.surface) } ?? laneFill }
+    private var ink: Color { step.map { paint($0.ink) } ?? design.color(\.ink) }
+    private var lacquer: Bool { surface == .lacquer }
+    private var light: Bool { step.map { $0.surface.red >= 0.75 } ?? true }
+
+    private var shape: UnevenRoundedRectangle {
+        let top = CGFloat(Design.Radius.card)
+        let bottom = CGFloat(Design.Radius.cardBottom)
+        return UnevenRoundedRectangle(topLeadingRadius: top, bottomLeadingRadius: bottom, bottomTrailingRadius: bottom, topTrailingRadius: top)
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            CardHead(model: model, ref: ref, front: front, ink: ink)
+            if front {
+                content
+                if commands.hasFooter {
+                    CardFoot(model: model, commands: commands, formatOn: $formatOn)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .foregroundStyle(ink)
+        .background(fill)
+        .overlay(alignment: .top) { gloss }
+        .clipShape(shape)
+        .background { cast }
+        .contentShape(shape)
+        .offset(y: !front && hovering ? -CGFloat(MailSheet.stackHoverLift) : 0)
+        .onHover { hovering = $0 }
+        .onTapGesture { if !front { model.bring(ref) } }
+        .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.stackLift), value: hovering)
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        switch ref {
+        case .message(let id):
+            if let card = model.card(id) { ReadingView(model: model, card: card) }
+        case .draft(let id):
+            if let card = model.draft(id) {
+                ComposeView(model: model, card: card, formatOn: formatOn)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var gloss: some View {
+        let layers: [ShadowLayer] = front
+            ? (design.dark ? DesignSurface.topGlossFrontDark : DesignSurface.topGlossFrontLight)
+            : (light ? DesignSurface.topGlossBackLightCard : DesignSurface.topGlossBackDarkCard)
+        if lacquer, let layer = layers.first {
+            Rectangle().fill(paint(layer.color)).frame(height: CGFloat(layer.y))
+        } else if !lacquer {
+            Rectangle().fill(design.color(\.glaze)).frame(height: hairline)
+        }
+    }
+
+    @ViewBuilder
+    private var cast: some View {
+        if lacquer {
+            let layer = (design.dark ? DesignSurface.castShadowDark : DesignSurface.castShadowLight).first
+            let seam = (design.dark ? DesignSurface.topSeamDark : front ? DesignSurface.topSeamFrontLight : DesignSurface.topSeamBackLight).first
+            ZStack {
+                if let layer, !first { softShadow(layer) }
+                if let seam { shape.fill(paint(seam.color)).offset(y: CGFloat(seam.y)) }
+            }
+        } else {
+            ZStack {
+                shape.fill(design.color(\.line)).padding(-hairline)
+                if front {
+                    soft(spread: -12, blur: 24, y: -8, alpha: MailSheet.cardFlatCast)
+                } else {
+                    shape.fill(Color.black.opacity(MailSheet.cardFlatBackRing)).padding(-hairline)
+                    soft(spread: -10, blur: 16, y: -6, alpha: MailSheet.cardFlatBackCast)
+                }
+            }
+        }
+    }
+
+    private func softShadow(_ layer: ShadowLayer) -> some View {
+        shape.inset(by: CGFloat(-layer.spread))
+            .fill(paint(layer.color))
+            .blur(radius: CGFloat(layer.blur / 2))
+            .offset(x: CGFloat(layer.x), y: CGFloat(layer.y))
+    }
+
+    private func soft(spread: Double, blur: Double, y: Double, alpha: Double) -> some View {
+        shape.inset(by: CGFloat(-spread))
+            .fill(Color.black.opacity(alpha))
+            .blur(radius: CGFloat(blur / 2))
+            .offset(y: CGFloat(y))
+    }
+}
+
+struct CardHead: View {
+    @Environment(\.design) private var design
+    let model: MailModel
+    let ref: CardRef
+    let front: Bool
+    let ink: Color
+    @State private var titleAnchor = AnchorBox()
+
+    var body: some View {
+        HStack(spacing: CGFloat(Design.Size.headGapList)) {
+            markView
+                .padding(.trailing, CGFloat(Design.Spacing.step12))
+            titleView
+            metaView
+            if case .message(let id) = ref, model.card(id)?.pinned == false {
+                CardHeadButton(help: words("mail.card.pin.tip"), glyph: .pin, ink: ink) { model.pin(id) }
+            }
+            CardHeadButton(help: words("mail.card.close"), glyph: .close, ink: ink) { close() }
+        }
+        .padding(.horizontal, CGFloat(Design.Size.headPadRight))
+        .frame(height: CGFloat(Design.Size.headerHeight))
+        .overlay(alignment: .bottom) {
+            Rectangle().fill(front ? design.color(\.line) : Color.clear).frame(height: CGFloat(Design.Size.hairline))
+        }
+    }
+
+    private func close() {
+        switch ref {
+        case .message(let id): model.close(id)
+        case .draft(let id): Task { await model.closeDraft(id) }
+        }
+    }
+
+    private var party: (name: String, address: String)? {
+        guard case .message(let id) = ref, let card = model.card(id) else { return nil }
+        return model.party(card.summary)
+    }
+
+    private var draftPeople: [MailPerson] {
+        guard case .draft(let id) = ref, let card = model.draft(id) else { return [] }
+        return card.people(.to)
+    }
+
+    private var markView: some View {
+        let side = CGFloat(Design.Size.symbolSize)
+        return Group {
+            if let party {
+                let initials = MailNames.initials(party.name)
+                if initials.isEmpty { Glyph(.person) } else { Text(verbatim: initials) }
+            } else {
+                Glyph(.compose)
+            }
+        }
+        .designText(size: Design.TextSize.small, weight: .medium)
+        .lineLimit(1)
+        .frame(width: side, height: side)
+        .overlay(Circle().strokeBorder(ink.opacity(Design.Opacity.ringOnMark), lineWidth: CGFloat(Design.Size.hairline)))
+    }
+
+    @ViewBuilder
+    private var titleView: some View {
+        if case .message(let id) = ref, let party {
+            let name = party.name.isEmpty ? MailNames.middle(party.address, limit: MailSheet.cardTitleLimit) : party.name
+            Text(verbatim: name)
+                .designText(size: Design.TextSize.body, weight: .medium)
+                .lineLimit(1)
+                .truncationMode(.tail)
+                .help(Text(verbatim: front ? party.address : ""))
+                .background(AnchorProbe(box: titleAnchor))
+                .onTapGesture { if front { personMenu(id: id, party: party) } }
+        } else if case .draft = ref {
+            Group {
+                if let first = draftPeople.first {
+                    line("mail.row.to", first.label)
+                } else {
+                    word("mail.row.newMessage")
+                }
+            }
+            .designText(size: Design.TextSize.body, weight: .medium)
+            .lineLimit(1)
+            .truncationMode(.tail)
+        }
+    }
+
+    private func personMenu(id: String, party: (name: String, address: String)) {
+        guard let rect = titleAnchor.screenRect() else { return }
+        let actions = MailDo(model: model)
+        let entries = MailMenuLine.entries(MailMenus.person(address: party.address)) { action in
+            actions.person(action, name: party.name, address: party.address, message: id)
+        }
+        MenuPanel.shared.show(entries: entries, width: Design.Size.menuWidthWide, anchor: .rect(rect), window: NSApp.keyWindow)
+    }
+
+    @ViewBuilder
+    private var metaView: some View {
+        let opacity = MailSheet.metaOpacity
+        if case .message(let id) = ref, let card = model.card(id), let party {
+            if front {
+                Text(verbatim: party.name.isEmpty ? "" : MailNames.middle(party.address, limit: MailSheet.cardAddressLimit))
+                    .designText(size: Design.TextSize.small)
+                    .opacity(opacity)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                Spacer(minLength: 0)
+                MailDate(label: MailDateLabel.of(card.summary.receivedAt, now: model.now), tone: \.ink)
+                    .opacity(opacity)
+            }
+        } else if case .draft(let id) = ref, let card = model.draft(id) {
+            let more = max(0, draftPeople.count - 1)
+            if !front && more > 0 {
+                Spacer(minLength: 0)
+                line("mail.card.more", more).designText(size: Design.TextSize.small).opacity(opacity).lineLimit(1)
+            } else {
+                draftMeta(card)
+                    .designText(size: Design.TextSize.small)
+                    .opacity(opacity)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+    }
+
+    private func draftMeta(_ card: MailDraftCard) -> Text {
+        guard front else { return Text(verbatim: card.draft.subject) }
+        switch card.state {
+        case .saved: return word("mail.draft.saved")
+        case .sending, .queuedInOutbox: return word("mail.draft.sending")
+        case .sendFailed: return word("mail.draft.sendFailed")
+        default: return Text(verbatim: card.draft.subject)
+        }
+    }
+}
+
+struct CardHeadButton: View {
+    @Environment(\.design) private var design
+    let help: String
+    let glyph: MailGlyph
+    let ink: Color
+    let action: () -> Void
+    @State private var hovering = false
+
+    var body: some View {
+        let side = CGFloat(Design.Size.symbolSize)
+        Button(action: action) {
+            Glyph(glyph)
+                .frame(width: side, height: side)
+                .foregroundStyle(ink)
+                .opacity(hovering ? 1 : MailSheet.closeOpacity)
+                .background(Circle().fill(hovering ? design.color(\.hover) : Color.clear))
+                .contentShape(Circle())
+        }
+        .buttonStyle(PressScale(scale: SheetValues.pressScale))
+        .help(Text(verbatim: help))
+        .accessibilityLabel(Text(verbatim: help))
+        .onHover { hovering = $0 }
+    }
+}
+
+struct CardFoot: View {
+    @Environment(\.design) private var design
+    @Environment(\.hairline) private var hairline
+    @Environment(\.mailLaneLink) private var link
+    let model: MailModel
+    let commands: MailCommands
+    @Binding var formatOn: Bool
+    @State private var moreAnchor = AnchorBox()
+    @State private var discarding: UUID?
+
+    private var run: SlotRun { SlotRun(model: model, link: link, discarding: $discarding, formatOn: $formatOn) }
+
+    var body: some View {
+        HStack(spacing: CGFloat(Design.Size.headGapList)) {
+            group(commands.footLeft)
+            Spacer(minLength: 0)
+            group(commands.footRight)
+        }
+        .padding(.horizontal, CGFloat(Design.Size.headPadRight))
+        .frame(height: CGFloat(Design.Size.footerHeight))
+        .overlay(alignment: .top) { Rectangle().fill(design.color(\.line)).frame(height: hairline) }
+    }
+
+    private func group(_ slots: [CommandSlot]) -> some View {
+        HStack(spacing: CGFloat(Design.Size.headGapStack)) {
+            ForEach(slots) { slot in
+                if slot.action == .more {
+                    HeadSymbol(help: words("mail.action.more"), glyph: .more, hover: .fill) { openMore() }
+                        .background(AnchorProbe(box: moreAnchor))
+                } else if slot.action == .send, slot.cost > MailSheet.commandIconCost {
+                    TextButton(label: word("mail.action.send"), kind: .accent, disabled: slot.off, action: { run.perform(.send) }) { Glyph(.send) }
+                        .opacity(slot.off ? MailSheet.disabledOpacity : 1)
+                        .keyboardShortcut(.return, modifiers: .command)
+                } else if let action = slot.action, let glyph = action.glyph {
+                    HeadSymbol(help: run.help(slot), glyph: glyph, selected: slot.accent, disabled: slot.off, hover: .fill) {
+                        run.perform(action)
+                    }
+                }
+            }
+        }
+    }
+
+    private func openMore() {
+        guard let rect = moreAnchor.screenRect() else { return }
+        let lines: [MailMenuLine]
+        switch model.frontRef {
+        case .message(let id): lines = MailMenus.readingMore(starred: model.card(id)?.summary.flags.contains(.flagged) ?? false)
+        case .draft: lines = MailMenus.draftMore()
+        case nil: return
+        }
+        let entries = MailMenuLine.entries(lines) { run.perform($0) }
+        MenuPanel.shared.show(entries: entries, width: Design.Size.menuWidthWide, anchor: .rect(rect), window: NSApp.keyWindow)
+    }
+}

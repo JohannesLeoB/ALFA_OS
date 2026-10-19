@@ -74,6 +74,7 @@ public protocol MailEngine: AnyObject {
     func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError)
     func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError)
     func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubError)
+    func purge(_ inlet: Inlet.ID, messageID: String) async throws(HubError)
     func attachment(_ inlet: Inlet.ID, messageID: String, attachmentID: String) async throws(HubError) -> Data
     func thread(_ inlet: Inlet.ID, messageID: String, threadID: String) async throws(HubError) -> [MailMessageSummary]
     func saveDraft(_ inlet: Inlet.ID, _ draft: EmailDraft, replacing draftID: String?) async throws(HubError) -> String
@@ -85,4 +86,10 @@ public protocol MailEngine: AnyObject {
     func retryOutbox() async
     func unreadCount(_ inlet: Inlet.ID) -> Int
     var events: AsyncStream<MailEngineEvent> { get }
+}
+
+extension MailEngine {
+    public func purge(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {
+        throw HubError.capabilityMissing(inlet, .mail)
+    }
 }

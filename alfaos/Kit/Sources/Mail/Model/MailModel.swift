@@ -37,6 +37,15 @@ public final class MailModel {
     public internal(set) var drafts: [MailDraftCard] = []
     public internal(set) var actionFailures: [String: Hint] = [:]
     public var prefersHTML = true
+    public internal(set) var stack: [CardRef] = []
+    public internal(set) var front: CardRef?
+    public internal(set) var picked: [String] = []
+    public internal(set) var searchScope = MailSearchScope.all
+    public internal(set) var searching = false
+    public internal(set) var overview = MailOverview()
+    public internal(set) var toast: MailToast?
+    var toastSerial = 0
+    @ObservationIgnored var undoAction: (@MainActor () async -> Void)?
 
     var phase: MailLoadPhase = .settled
     var generation = 0
@@ -53,6 +62,8 @@ public final class MailModel {
         commands = stream
         commandContinuation = continuation
     }
+
+    public var now: Date { clock() }
 
     public var totalUnread: Int { unread.values.reduce(0, +) }
 
@@ -165,6 +176,8 @@ public final class MailModel {
         guard selectedInlet != nil else { return }
         selectedFolder = id
         query = ""
+        filter = .all
+        picked = []
         await loadSelection()
     }
 
@@ -198,7 +211,7 @@ public final class MailModel {
         }
         generation += 1
         let mine = generation
-        summaries = engine.searchLocal(inlet, query: trimmed)
+        summaries = scoped(engine.searchLocal(inlet, query: trimmed), folder: folder)
         nextPageToken = nil
         phase = .loading
         await fetch(inlet: inlet, folder: folder, query: trimmed, token: nil, generation: mine, replace: true)
@@ -260,7 +273,13 @@ public final class MailModel {
             let page = try await engine.loadPage(inlet, folder: folder, query: query, pageToken: token)
             guard mine == generation else { return }
             if replace {
-                summaries = page.messages
+                if let query, searchScope == .all {
+                    let known = Set(page.messages.map(\.id))
+                    summaries = page.messages + scoped(engine.searchLocal(inlet, query: query), folder: folder)
+                        .filter { !known.contains($0.id) }
+                } else {
+                    summaries = page.messages
+                }
             } else {
                 let known = Set(summaries.map(\.id))
                 summaries += page.messages.filter { !known.contains($0.id) }
@@ -352,5 +371,31 @@ public final class MailModel {
         case .trash: 7
         case .other: 8
         }
+    }
+}
+
+extension MailModel {
+    func scoped(_ list: [MailMessageSummary], folder: String) -> [MailMessageSummary] {
+        switch searchScope {
+        case .here:
+            return list.filter { $0.folderIDs.isEmpty || $0.folderIDs.contains(folder) }
+        case .all:
+            let hidden = Set(folders.filter { $0.role == .spam || $0.role == .trash }.map(\.id))
+            return list.filter { !$0.folderIDs.contains(where: hidden.contains) }
+        }
+    }
+
+    public func setSearching(_ on: Bool) async {
+        searching = on
+        if !on, !query.isEmpty { await search("") }
+    }
+
+    public func toggleScope() async {
+        searchScope = searchScope == .here ? .all : .here
+        if !query.isEmpty { await search(query) }
+    }
+
+    public var currentFolder: MailFolder? {
+        folders.first { $0.id == selectedFolder }
     }
 }

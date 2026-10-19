@@ -1,0 +1,207 @@
+import AppKit
+import Mail
+import ShellCore
+import SwiftUI
+
+struct GlyphShape: Shape {
+    let glyph: MailGlyph
+
+    func path(in rect: CGRect) -> Path {
+        let scale = rect.width / CGFloat(SheetValues.iconBox)
+        func point(_ x: Double, _ y: Double) -> CGPoint {
+            CGPoint(x: rect.minX + CGFloat(x) * scale, y: rect.minY + CGFloat(y) * scale)
+        }
+        var path = Path()
+        for segment in glyph.path.segments {
+            switch segment {
+            case .move(let x, let y): path.move(to: point(x, y))
+            case .line(let x, let y): path.addLine(to: point(x, y))
+            case .cubic(let c1x, let c1y, let c2x, let c2y, let x, let y):
+                path.addCurve(to: point(x, y), control1: point(c1x, c1y), control2: point(c2x, c2y))
+            case .close: path.closeSubpath()
+            }
+        }
+        return path
+    }
+}
+
+struct Glyph: View {
+    let glyph: MailGlyph
+    var size = SheetValues.iconSize
+    var stroke = SheetValues.iconStroke
+
+    init(_ glyph: MailGlyph, size: Double = SheetValues.iconSize, stroke: Double = SheetValues.iconStroke) {
+        self.glyph = glyph
+        self.size = size
+        self.stroke = stroke
+    }
+
+    var body: some View {
+        GlyphShape(glyph: glyph)
+            .stroke(style: StrokeStyle(lineWidth: CGFloat(stroke * size / SheetValues.iconBox), lineCap: .round, lineJoin: .round))
+            .frame(width: CGFloat(size), height: CGFloat(size))
+    }
+}
+
+extension Glyph {
+    static func small(_ glyph: MailGlyph) -> Glyph {
+        Glyph(glyph, size: MailSheet.smallIcon, stroke: MailSheet.smallIconStroke)
+    }
+
+    static func tiny(_ glyph: MailGlyph) -> Glyph {
+        Glyph(glyph, size: MailSheet.tinyIcon, stroke: MailSheet.tinyIconStroke)
+    }
+}
+
+struct MailLaneLink: Sendable {
+    var openLanes = 3
+    var fold: @MainActor @Sendable (Lane) -> Void = { _ in }
+    var maximized: Lane?
+    var toggleMaximize: @MainActor @Sendable (Lane) -> Void = { _ in }
+    var openSettings: @MainActor @Sendable () -> Void = {}
+}
+
+private struct MailLaneLinkKey: EnvironmentKey {
+    static let defaultValue: MailLaneLink? = nil
+}
+
+extension EnvironmentValues {
+    var mailLaneLink: MailLaneLink? {
+        get { self[MailLaneLinkKey.self] }
+        set { self[MailLaneLinkKey.self] = newValue }
+    }
+}
+
+func words(_ key: String, _ args: CVarArg...) -> String {
+    let format = String(localized: String.LocalizationValue(key))
+    return args.isEmpty ? format : String(format: format, arguments: args)
+}
+
+func line(_ key: String, _ args: CVarArg...) -> Text {
+    Text(verbatim: args.isEmpty ? words(key) : String(format: words(key), arguments: args))
+}
+
+extension View {
+    func replacingLaneHeader() -> some View {
+        padding(.top, -CGFloat(Design.Size.headerHeight))
+    }
+
+    func scrolledSignal(_ scrolled: Binding<Bool>) -> some View {
+        onScrollGeometryChange(for: Bool.self) { $0.contentOffset.y > 0 } action: { _, now in scrolled.wrappedValue = now }
+    }
+}
+
+struct LaneHead<Content: View>: View {
+    @Environment(\.design) private var design
+    @Environment(\.laneFill) private var laneFill
+    @Environment(\.hairline) private var hairline
+    @Environment(\.accessibilityReduceMotion) private var reduced
+    var scrolled = false
+    var leading = Design.Size.headPadLeftList
+    var gap = Design.Size.headGapList
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        HStack(spacing: CGFloat(gap)) { content }
+            .padding(.leading, CGFloat(leading))
+            .padding(.trailing, CGFloat(Design.Size.headPadRight))
+            .frame(height: CGFloat(Design.Size.headerHeight))
+            .frame(maxWidth: .infinity)
+            .background(laneFill)
+            .overlay(alignment: .bottom) {
+                Rectangle().fill(scrolled ? design.color(\.line) : Color.clear).frame(height: hairline)
+            }
+            .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.hover), value: scrolled)
+    }
+}
+
+struct HeaderTitle: View {
+    let text: Text
+
+    var body: some View {
+        text
+            .designText(\.ink, size: Design.TextSize.body, weight: .medium)
+            .lineLimit(1)
+            .fixedSize()
+    }
+}
+
+struct SmallText: View {
+    let text: Text
+    var tone: KeyPath<DesignColors, RGB> = \.inkTertiary
+
+    var body: some View {
+        text
+            .designText(tone, size: Design.TextSize.small)
+            .lineLimit(1)
+    }
+}
+
+struct Hairline: View {
+    @Environment(\.design) private var design
+    @Environment(\.hairline) private var hairline
+    var tone: KeyPath<DesignColors, RGB> = \.line
+
+    var body: some View {
+        Rectangle().fill(design.color(tone)).frame(height: hairline)
+    }
+}
+
+struct HeadSymbol: View {
+    enum Hover {
+        case ring
+        case fill
+        case none
+    }
+
+    @Environment(\.design) private var design
+    @Environment(\.hairline) private var hairline
+    @Environment(\.accessibilityReduceMotion) private var reduced
+    let help: String
+    let glyph: MailGlyph
+    var selected = false
+    var disabled = false
+    var tone: KeyPath<DesignColors, RGB> = \.inkTertiary
+    var hoverTone: KeyPath<DesignColors, RGB> = \.ink
+    var ringed = true
+    var hover = Hover.ring
+    let action: () -> Void
+    @State private var hovering = false
+
+    private var live: Bool { hovering && !disabled }
+
+    private var foreground: Color {
+        if selected { return design.color(\.onInverse) }
+        return design.color(live && hover != .none ? hoverTone : tone)
+    }
+
+    private var fill: Color {
+        if selected { return design.color(\.inverse) }
+        return live && hover == .fill ? design.color(\.hover) : Color.clear
+    }
+
+    private var ring: Color? {
+        if selected { return nil }
+        if live && hover == .ring { return design.color(\.inkTertiary) }
+        return ringed ? design.color(\.lineStrong) : nil
+    }
+
+    var body: some View {
+        let side = CGFloat(Design.Size.symbolSize)
+        Button(action: { if !disabled { action() } }) {
+            Glyph(glyph)
+                .frame(width: side, height: side)
+                .foregroundStyle(foreground)
+                .background(Capsule().fill(fill))
+                .ring(Capsule(), ring)
+                .contentShape(Capsule())
+                .opacity(disabled ? MailSheet.disabledOpacity : 1)
+        }
+        .buttonStyle(.plain)
+        .help(Text(verbatim: help))
+        .accessibilityLabel(Text(verbatim: help))
+        .allowsHitTesting(!disabled)
+        .onHover { hovering = $0 }
+        .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.hover), value: live)
+    }
+}

@@ -18,4 +18,6 @@ public enum MailCommand: Equatable, Sendable {
     case contactFromSignature(MailMessageRef, MailSignatureContact)
     case leadFromMail(MailMessageRef, MailLeadVorschlag)
     case mailToProjectFolder(MailMessageRef, project: String?)
+    case print(MailMessageRef)
+    case exportPDF(MailMessageRef)
 }

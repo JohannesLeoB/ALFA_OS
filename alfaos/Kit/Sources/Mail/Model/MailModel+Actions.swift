@@ -10,16 +10,32 @@ enum MailMove: Equatable {
 }
 
 extension MailModel {
-    public func archive(_ id: String) async { await relocate(id, .archive) }
+    public func archive(_ id: String, undoable: Bool = false) async { await relocate(id, .archive, undoable: undoable) }
 
-    public func trash(_ id: String) async { await relocate(id, .trash) }
+    public func trash(_ id: String, undoable: Bool = true) async { await relocate(id, .trash, undoable: undoable) }
 
     public func markSpam(_ id: String) async { await relocate(id, .spam) }
 
     public func move(_ id: String, toFolder folder: String) async { await relocate(id, .folder(folder)) }
 
-    func relocate(_ id: String, _ move: MailMove) async {
+    public func purge(_ id: String) async {
         guard let inlet = cardInlet(id) ?? selectedInlet else { return }
+        do {
+            try await engine.purge(inlet, messageID: id)
+        } catch {
+            actionFailures[id] = Self.hint(error)
+            return
+        }
+        actionFailures[id] = nil
+        summaries.removeAll { $0.id == id }
+        close(id)
+        refreshCounts()
+        post(.purged)
+    }
+
+    func relocate(_ id: String, _ move: MailMove, undoable: Bool = false) async {
+        guard let inlet = cardInlet(id) ?? selectedInlet else { return }
+        let origin = selectedFolder
         do {
             switch move {
             case .archive: try await engine.archive(inlet, messageID: id)
@@ -36,6 +52,19 @@ extension MailModel {
         if !staysListed { summaries.removeAll { $0.id == id } }
         close(id)
         refreshCounts()
+        var undo: (@MainActor () async -> Void)?
+        if undoable {
+            undo = { [weak self] in
+                guard let self, let origin else { return }
+                try? await self.engine.move(inlet, messageID: id, toFolder: origin)
+                await self.loadSelection()
+            }
+        }
+        switch move {
+        case .archive: post(.archived, undo: undo)
+        case .trash: post(.trashed, undo: undo)
+        case .spam, .folder: break
+        }
     }
 
     public func attachmentData(_ id: String, attachmentID: String) async -> Data? {

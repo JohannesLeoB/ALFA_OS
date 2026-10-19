@@ -38,9 +38,9 @@ private struct MailLaneContent: View {
             }
         case .ready(let assembly):
             switch lane {
-            case .leading: MailAccountsPane(model: assembly.model)
-            case .center: MailListPane(model: assembly.model)
-            case .trailing: MailReadingPane(model: assembly.model)
+            case .leading: MailFolderLane(model: assembly.model)
+            case .center: MailListLane(model: assembly.model)
+            case .trailing: MailStackLane(model: assembly.model)
             }
         }
     }

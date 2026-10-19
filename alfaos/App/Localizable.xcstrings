@@ -29,7 +29,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Postfächer"
+            "value" : "Postfach"
           }
         }
       }
@@ -815,6 +815,391 @@
         }
       }
     },
+    "mail.action.attachFile" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datei anhängen"
+          }
+        }
+      }
+    },
+    "mail.action.backToStack" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurück zum Stapel"
+          }
+        }
+      }
+    },
+    "mail.action.compose" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Mail"
+          }
+        }
+      }
+    },
+    "mail.action.copyAddress" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse kopieren"
+          }
+        }
+      }
+    },
+    "mail.action.discardDraft" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwurf verwerfen"
+          }
+        }
+      }
+    },
+    "mail.action.foldColumn" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spalte falten"
+          }
+        }
+      }
+    },
+    "mail.action.format" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format"
+          }
+        }
+      }
+    },
+    "mail.action.forward" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiterleiten"
+          }
+        }
+      }
+    },
+    "mail.action.fromProject" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus Projektordner"
+          }
+        }
+      }
+    },
+    "mail.action.laterSend" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Später senden …"
+          }
+        }
+      }
+    },
+    "mail.action.loadImages" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilder laden"
+          }
+        }
+      }
+    },
+    "mail.action.markRead" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als gelesen markieren"
+          }
+        }
+      }
+    },
+    "mail.action.markUnread" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als ungelesen markieren"
+          }
+        }
+      }
+    },
+    "mail.action.more" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr"
+          }
+        }
+      }
+    },
+    "mail.action.move" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschieben nach …"
+          }
+        }
+      }
+    },
+    "mail.action.note" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notiz anfügen"
+          }
+        }
+      }
+    },
+    "mail.action.openDraft" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwurf öffnen"
+          }
+        }
+      }
+    },
+    "mail.action.original" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Original anzeigen"
+          }
+        }
+      }
+    },
+    "mail.action.otherProject" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In anderes Projekt …"
+          }
+        }
+      }
+    },
+    "mail.action.overview" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übersicht"
+          }
+        }
+      }
+    },
+    "mail.action.pdf" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als PDF sichern"
+          }
+        }
+      }
+    },
+    "mail.action.preview" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorschau"
+          }
+        }
+      }
+    },
+    "mail.action.print" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drucken"
+          }
+        }
+      }
+    },
+    "mail.action.purge" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Endgültig löschen"
+          }
+        }
+      }
+    },
+    "mail.action.receipt" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lesebestätigung anfordern"
+          }
+        }
+      }
+    },
+    "mail.action.reply" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antworten"
+          }
+        }
+      }
+    },
+    "mail.action.replyAll" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allen antworten"
+          }
+        }
+      }
+    },
+    "mail.action.saveAs" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sichern unter …"
+          }
+        }
+      }
+    },
+    "mail.action.saveContact" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Kontakt sichern"
+          }
+        }
+      }
+    },
+    "mail.action.saveDraft" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwurf sichern"
+          }
+        }
+      }
+    },
+    "mail.action.send" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senden"
+          }
+        }
+      }
+    },
+    "mail.action.spam" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Spam melden"
+          }
+        }
+      }
+    },
+    "mail.action.star" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markieren"
+          }
+        }
+      }
+    },
+    "mail.action.template" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Vorlage sichern"
+          }
+        }
+      }
+    },
+    "mail.action.toProject" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Projektordner sichern"
+          }
+        }
+      }
+    },
     "mail.action.trash" : {
       "comment" : "roh",
       "localizations" : {
@@ -822,6 +1207,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "In den Papierkorb"
+          }
+        }
+      }
+    },
+    "mail.action.unstar" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markierung entfernen"
+          }
+        }
+      }
+    },
+    "mail.action.writeMail" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail schreiben"
           }
         }
       }
@@ -881,13 +1288,35 @@
         }
       }
     },
+    "mail.card.more" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "und %lld weitere"
+          }
+        }
+      }
+    },
+    "mail.card.pin.tip" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anheften · bleibt im Stapel"
+          }
+        }
+      }
+    },
     "mail.card.quoteCollapsed" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "card.quoteCollapsed"
+            "value" : "Zitat zeigen · %lld Zeilen"
           }
         }
       }
@@ -898,7 +1327,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "card.recipientsExpanded"
+            "value" : "Weniger zeigen"
           }
         }
       }
@@ -909,7 +1338,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "card.remoteImagesBlocked"
+            "value" : "Externe Bilder blockiert"
           }
         }
       }
@@ -925,6 +1354,237 @@
         }
       }
     },
+    "mail.compose.add" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empfänger hinzufügen"
+          }
+        }
+      }
+    },
+    "mail.compose.bcc" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bcc"
+          }
+        }
+      }
+    },
+    "mail.compose.bcc.placeholder" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blindkopie"
+          }
+        }
+      }
+    },
+    "mail.compose.body" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text"
+          }
+        }
+      }
+    },
+    "mail.compose.cc" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cc"
+          }
+        }
+      }
+    },
+    "mail.compose.cc.placeholder" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopie"
+          }
+        }
+      }
+    },
+    "mail.compose.copy" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cc und Bcc"
+          }
+        }
+      }
+    },
+    "mail.compose.from" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von"
+          }
+        }
+      }
+    },
+    "mail.compose.remove" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen"
+          }
+        }
+      }
+    },
+    "mail.compose.showAll" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle %lld Empfänger zeigen"
+          }
+        }
+      }
+    },
+    "mail.compose.subject" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Betreff"
+          }
+        }
+      }
+    },
+    "mail.compose.to" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An"
+          }
+        }
+      }
+    },
+    "mail.compose.to.placeholder" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name oder Adresse"
+          }
+        }
+      }
+    },
+    "mail.confirm.discard.question" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwurf verwerfen?"
+          }
+        }
+      }
+    },
+    "mail.confirm.discard.yes" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwerfen"
+          }
+        }
+      }
+    },
+    "mail.confirm.hold" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halten zum %@"
+          }
+        }
+      }
+    },
+    "mail.confirm.purge.question" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Endgültig löschen?"
+          }
+        }
+      }
+    },
+    "mail.confirm.purge.yes" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
+          }
+        }
+      }
+    },
+    "mail.date.draft" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwurf"
+          }
+        }
+      }
+    },
+    "mail.date.today" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute"
+          }
+        }
+      }
+    },
+    "mail.date.yesterday" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestern"
+          }
+        }
+      }
+    },
     "mail.draft.edited" : {
       "comment" : "roh",
       "localizations" : {
@@ -932,6 +1592,61 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "draft.edited"
+          }
+        }
+      }
+    },
+    "mail.draft.failed.act" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut senden"
+          }
+        }
+      }
+    },
+    "mail.draft.failed.text" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Server hat nicht geantwortet. Der Entwurf liegt sicher in den Entwürfen."
+          }
+        }
+      }
+    },
+    "mail.draft.grant.act" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen öffnen"
+          }
+        }
+      }
+    },
+    "mail.draft.grant.text" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einmal neu anmelden, dann geht der Entwurf raus."
+          }
+        }
+      }
+    },
+    "mail.draft.grant.title" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senden braucht die Schreibfreigabe"
           }
         }
       }
@@ -953,7 +1668,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "draft.queuedInOutbox"
+            "value" : "Sendet …"
           }
         }
       }
@@ -964,7 +1679,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "draft.saved"
+            "value" : "Entwurf gesichert"
           }
         }
       }
@@ -986,7 +1701,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "draft.sendBlocked.noRecipient"
+            "value" : "Empfänger fehlt"
           }
         }
       }
@@ -997,7 +1712,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "draft.sendBlocked.noSubject"
+            "value" : "Betreff fehlt"
           }
         }
       }
@@ -1008,7 +1723,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "draft.sendFailed"
+            "value" : "Nicht gesendet"
           }
         }
       }
@@ -1019,7 +1734,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "draft.sending"
+            "value" : "Sendet …"
           }
         }
       }
@@ -1075,6 +1790,72 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Limit erreicht"
+          }
+        }
+      }
+    },
+    "mail.filter" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter"
+          }
+        }
+      }
+    },
+    "mail.filter.all" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle"
+          }
+        }
+      }
+    },
+    "mail.filter.attachments" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit Anhang"
+          }
+        }
+      }
+    },
+    "mail.filter.named" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter: %@"
+          }
+        }
+      }
+    },
+    "mail.filter.unread" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ungelesen"
+          }
+        }
+      }
+    },
+    "mail.fold.named" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ falten"
           }
         }
       }
@@ -1145,6 +1926,83 @@
         }
       }
     },
+    "mail.format.bold" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fett"
+          }
+        }
+      }
+    },
+    "mail.format.italic" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kursiv"
+          }
+        }
+      }
+    },
+    "mail.format.link" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link"
+          }
+        }
+      }
+    },
+    "mail.format.list" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufzählung"
+          }
+        }
+      }
+    },
+    "mail.format.numbered" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nummerierung"
+          }
+        }
+      }
+    },
+    "mail.format.underline" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unterstrichen"
+          }
+        }
+      }
+    },
+    "mail.grow.named" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ groß"
+          }
+        }
+      }
+    },
     "mail.hint.failed" : {
       "comment" : "roh",
       "localizations" : {
@@ -1178,13 +2036,79 @@
         }
       }
     },
+    "mail.lane.back" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurück"
+          }
+        }
+      }
+    },
+    "mail.lane.detail.none" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Postfach verbunden"
+          }
+        }
+      }
+    },
+    "mail.lane.detail.unreachable" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nicht erreichbar"
+          }
+        }
+      }
+    },
+    "mail.lane.fold" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postfach falten"
+          }
+        }
+      }
+    },
+    "mail.lane.title" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postfach"
+          }
+        }
+      }
+    },
     "mail.list.empty" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Leer"
+            "value" : "Keine Nachrichten in %@."
+          }
+        }
+      }
+    },
+    "mail.list.empty.act" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verfassen"
           }
         }
       }
@@ -1195,7 +2119,18 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Leer"
+            "value" : "Keine Treffer für „%@“ in %@."
+          }
+        }
+      }
+    },
+    "mail.list.emptySearch.act" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suche leeren"
           }
         }
       }
@@ -1206,7 +2141,40 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fehler"
+            "value" : "Nachrichten konnten nicht geladen werden"
+          }
+        }
+      }
+    },
+    "mail.list.failed.act" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut versuchen"
+          }
+        }
+      }
+    },
+    "mail.list.failed.last" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zuletzt geladen %@."
+          }
+        }
+      }
+    },
+    "mail.list.failed.text" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Server hat nicht geantwortet."
           }
         }
       }
@@ -1217,7 +2185,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lädt"
+            "value" : "Nachrichten werden geladen"
           }
         }
       }
@@ -1239,7 +2207,18 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Leer"
+            "value" : "Keine Treffer für diesen Filter."
+          }
+        }
+      }
+    },
+    "mail.list.noFilterMatch.act" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle zeigen"
           }
         }
       }
@@ -1250,7 +2229,29 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nicht verbunden"
+            "value" : "Kein Postfach verbunden"
+          }
+        }
+      }
+    },
+    "mail.list.notConnected.act" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postfach verbinden"
+          }
+        }
+      }
+    },
+    "mail.list.notConnected.text" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinde ein Postfach, um Mails hier zu lesen und zu schreiben."
           }
         }
       }
@@ -1272,7 +2273,29 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Anmeldung abgelaufen"
+            "value" : "%@ ist nicht erreichbar"
+          }
+        }
+      }
+    },
+    "mail.list.signInExpired.act" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut verbinden"
+          }
+        }
+      }
+    },
+    "mail.list.signInExpired.text" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anmeldung abgelaufen. Die zuletzt geladenen Mails bleiben lesbar; Gesendetes wartet im Postausgang."
           }
         }
       }
@@ -1283,7 +2306,18 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mehr laden"
+            "value" : "Weitere laden"
+          }
+        }
+      }
+    },
+    "mail.menu.check" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "✓"
           }
         }
       }
@@ -1295,6 +2329,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zurück zum Stapel"
+          }
+        }
+      }
+    },
+    "mail.overview.folder" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · %lld"
           }
         }
       }
@@ -1343,6 +2388,226 @@
         }
       }
     },
+    "mail.overview.stack" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stapel · %lld"
+          }
+        }
+      }
+    },
+    "mail.overview.tip" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übersicht · %lld Karten"
+          }
+        }
+      }
+    },
+    "mail.pick.add" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswählen"
+          }
+        }
+      }
+    },
+    "mail.pick.all" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle wählen"
+          }
+        }
+      }
+    },
+    "mail.pick.clear" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswahl aufheben"
+          }
+        }
+      }
+    },
+    "mail.pick.count" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld gewählt"
+          }
+        }
+      }
+    },
+    "mail.pick.none" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswahl leeren"
+          }
+        }
+      }
+    },
+    "mail.pick.read" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gelesen / ungelesen"
+          }
+        }
+      }
+    },
+    "mail.pick.remove" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswahl entfernen"
+          }
+        }
+      }
+    },
+    "mail.quote.hide" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zitat ausblenden"
+          }
+        }
+      }
+    },
+    "mail.quote.show" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zitat zeigen · %lld Zeilen"
+          }
+        }
+      }
+    },
+    "mail.read.all" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Empfänger zeigen"
+          }
+        }
+      }
+    },
+    "mail.read.cc" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cc"
+          }
+        }
+      }
+    },
+    "mail.read.conversation" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Nachrichten in dieser Unterhaltung"
+          }
+        }
+      }
+    },
+    "mail.read.count" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Empfänger"
+          }
+        }
+      }
+    },
+    "mail.read.images.text" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim Laden erfährt der Absender, dass die Mail geöffnet wurde."
+          }
+        }
+      }
+    },
+    "mail.read.images.title" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Externe Bilder blockiert"
+          }
+        }
+      }
+    },
+    "mail.read.less" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weniger zeigen"
+          }
+        }
+      }
+    },
+    "mail.read.more" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "und %lld weitere"
+          }
+        }
+      }
+    },
+    "mail.read.to" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An"
+          }
+        }
+      }
+    },
     "mail.role.all" : {
       "comment" : "roh",
       "localizations" : {
@@ -1350,6 +2615,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle"
+          }
+        }
+      }
+    },
+    "mail.role.archive" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archiv"
           }
         }
       }
@@ -1426,7 +2702,40 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "row.hasAttachments"
+            "value" : "Mit Anhang"
+          }
+        }
+      }
+    },
+    "mail.row.newMessage" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Nachricht"
+          }
+        }
+      }
+    },
+    "mail.row.noSubject" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Betreff"
+          }
+        }
+      }
+    },
+    "mail.row.noText" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Text"
           }
         }
       }
@@ -1448,7 +2757,18 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "row.starred"
+            "value" : "Markiert"
+          }
+        }
+      }
+    },
+    "mail.row.thread" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nachrichten in dieser Unterhaltung"
           }
         }
       }
@@ -1459,7 +2779,29 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "row.threadCount"
+            "value" : "Nachrichten in dieser Unterhaltung"
+          }
+        }
+      }
+    },
+    "mail.row.to" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An %@"
+          }
+        }
+      }
+    },
+    "mail.row.unknown" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unbekannt"
           }
         }
       }
@@ -1471,6 +2813,127 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ungelesen"
+          }
+        }
+      }
+    },
+    "mail.search.close" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suche schließen"
+          }
+        }
+      }
+    },
+    "mail.search.label" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liste durchsuchen"
+          }
+        }
+      }
+    },
+    "mail.search.open" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In der Liste suchen"
+          }
+        }
+      }
+    },
+    "mail.search.placeholder.all" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In allen Ordnern suchen"
+          }
+        }
+      }
+    },
+    "mail.search.placeholder.here" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %@ suchen"
+          }
+        }
+      }
+    },
+    "mail.search.results" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Treffer in allen Ordnern"
+          }
+        }
+      }
+    },
+    "mail.search.scope.all" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überall"
+          }
+        }
+      }
+    },
+    "mail.search.scope.here" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur %@"
+          }
+        }
+      }
+    },
+    "mail.search.tip.all" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sucht in allen Ordnern außer Spam und Papierkorb. Klicken: nur in %@"
+          }
+        }
+      }
+    },
+    "mail.search.tip.here" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sucht nur in %@. Klicken: überall suchen"
+          }
+        }
+      }
+    },
+    "mail.stack.empty" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leere Karte"
           }
         }
       }
@@ -1559,6 +3022,182 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Angemeldet"
+          }
+        }
+      }
+    },
+    "mail.suggest.sender" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Absender"
+          }
+        }
+      }
+    },
+    "mail.toast.addressCopied" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse kopiert"
+          }
+        }
+      }
+    },
+    "mail.toast.archived" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archiviert"
+          }
+        }
+      }
+    },
+    "mail.toast.bulkArchived.one" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 Mail archiviert"
+          }
+        }
+      }
+    },
+    "mail.toast.bulkArchived.other" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Mails archiviert"
+          }
+        }
+      }
+    },
+    "mail.toast.bulkRead.read.one" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 Mail gelesen"
+          }
+        }
+      }
+    },
+    "mail.toast.bulkRead.read.other" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Mails gelesen"
+          }
+        }
+      }
+    },
+    "mail.toast.bulkRead.unread.one" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 Mail ungelesen"
+          }
+        }
+      }
+    },
+    "mail.toast.bulkRead.unread.other" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Mails ungelesen"
+          }
+        }
+      }
+    },
+    "mail.toast.bulkTrashed.one" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 Mail in den Papierkorb gelegt"
+          }
+        }
+      }
+    },
+    "mail.toast.bulkTrashed.other" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Mails in den Papierkorb gelegt"
+          }
+        }
+      }
+    },
+    "mail.toast.draftSaved" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwurf gesichert"
+          }
+        }
+      }
+    },
+    "mail.toast.purged" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Endgültig gelöscht"
+          }
+        }
+      }
+    },
+    "mail.toast.recipientMissing" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empfänger fehlt"
+          }
+        }
+      }
+    },
+    "mail.toast.trashed" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In den Papierkorb gelegt"
+          }
+        }
+      }
+    },
+    "mail.toast.undo" : {
+      "comment" : "alpha",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rückgängig"
           }
         }
       }

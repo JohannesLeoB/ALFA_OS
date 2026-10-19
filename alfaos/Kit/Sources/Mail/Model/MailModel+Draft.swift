@@ -6,7 +6,7 @@ import struct AlfaServices.MailStoredDraft
 
 public struct MailDraftCard: Identifiable, Equatable, Sendable {
     public let id: UUID
-    public let inlet: Inlet.ID
+    public var inlet: Inlet.ID
     public var draft: EmailDraft
     public var state: MailDraftState
     public var outboxID: OutboxItem.ID?
@@ -20,7 +20,32 @@ extension MailModel {
     @discardableResult
     public func compose(to: String? = nil) -> UUID? {
         guard let inlet = selectedInlet else { return nil }
+        if to == nil, let open = stack.compactMap({ ref -> MailDraftCard? in
+            if case .draft(let id) = ref { return draft(id) }
+            return nil
+        }).first(where: { $0.state == .idle && $0.remoteID == nil && Self.blank($0.draft) }) {
+            bring(.draft(open.id))
+            return open.id
+        }
         return add(inlet: inlet, EmailDraft(to: to, subject: "", body: ""))
+    }
+
+    static func blank(_ draft: EmailDraft) -> Bool {
+        (draft.to ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && draft.subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && draft.body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && draft.attachments.isEmpty
+    }
+
+    public func closeDraft(_ id: UUID) async {
+        guard let card = draft(id) else { return }
+        detach(.draft(id))
+        if Self.blank(card.draft) {
+            if card.remoteID == nil { drafts.removeAll { $0.id == id } }
+            return
+        }
+        post(.draftSaved)
+        await save(id)
     }
 
     @discardableResult
@@ -36,6 +61,7 @@ extension MailModel {
                 .filter { !taken.contains(MailAddresses.email($0)) }
             cc = others.isEmpty ? nil : others.joined(separator: ", ")
         }
+        pin(messageID)
         let quote = await quoted(messageID, summary: summary)
         let draft = EmailDraft(to: to.isEmpty ? nil : to, cc: cc, subject: Self.prefixed("Re:", summary.subject),
                                body: quote, inReplyTo: summary.id,
@@ -46,6 +72,7 @@ extension MailModel {
     @discardableResult
     public func forward(_ messageID: String) async -> UUID? {
         guard let inlet = cardInlet(messageID) ?? selectedInlet, let summary = summary(messageID) else { return nil }
+        pin(messageID)
         let quote = await quoted(messageID, summary: summary)
         return add(inlet: inlet, EmailDraft(subject: Self.prefixed("Fwd:", summary.subject), body: quote))
     }
@@ -62,6 +89,7 @@ extension MailModel {
 
     public func discard(_ id: UUID) {
         drafts.removeAll { $0.id == id }
+        detach(.draft(id))
     }
 
     public func save(_ id: UUID) async {
@@ -97,6 +125,7 @@ extension MailModel {
             }
         }
         drafts.removeAll { $0.id == id }
+        detach(.draft(id))
     }
 
     @discardableResult
@@ -110,7 +139,10 @@ extension MailModel {
             return nil
         }
         actionFailures[messageID] = nil
-        if let open = drafts.first(where: { $0.inlet == inlet && $0.remoteID == stored.id }) { return open.id }
+        if let open = drafts.first(where: { $0.inlet == inlet && $0.remoteID == stored.id }) {
+            attach(.draft(open.id))
+            return open.id
+        }
         let id = add(inlet: inlet, stored.draft)
         if let index = drafts.firstIndex(where: { $0.id == id }) { drafts[index].remoteID = stored.id }
         return id
@@ -169,6 +201,7 @@ extension MailModel {
         let card = MailDraftCard(id: UUID(), inlet: inlet, draft: draft, state: .idle, outboxID: nil, remoteID: nil,
                               saveFailure: nil)
         drafts.append(card)
+        attach(.draft(card.id))
         return card.id
     }
 
