@@ -1,4 +1,3 @@
-- [Quellen ZUERST](quellen.md) — wo das Wissen liegt (Funktionskarte, Register ~/ALPHA/ASSUMPTIONS.tsv, Verträge, Master, Bibliothek, Transkripte), Lesereihenfolge, seine stehenden Regeln A440/A428/A347; vor jeder Frage, Aussage, Brief, Bauauftrag
 - [Stand](stand.md) — laufender Stand 18.10. 20:00 UTC: Aufträge an die Lead, offene Punkte, Master 1810 und 1610 als ZIP in DESIGN/
 - [Arbeitsweise](arbeitsweise.md) — Ergebnisse statt Worte, alles lesen, nichts ohne Zustimmung schreiben, bauen statt analysieren, Arbeiten des zweiten Entwicklers nie
 - [Lead-Verantwortung](lead-verantwortung.md) — Lead denkt voraus; Schlamperei rieselt in jede Sitzung durch
