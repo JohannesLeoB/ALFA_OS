@@ -56,25 +56,11 @@ struct SettingsStripMarks: View {
                 : board.group.sections.map(\.rawValue)
             let failed = Set(readings.filter { $0.state == .failed }.map(\.info.id))
             let marks = board.stripMarks(lane, height: height, entries: entries, failed: failed) { SettingsFace(id: $0, readings: readings).title }
-            VStack(spacing: CGFloat(Design.Spacing.step8)) {
-                ForEach(marks) { mark in
-                    StripMarkButton(glyph: mark.glyph, text: mark.text, help: mark.titleKey.map { word($0) } ?? Text(verbatim: mark.title),
-                                    selected: mark.selected, dot: mark.dot) { board.run(mark.run) }
-                }
-            }
-            .padding(.vertical, CGFloat(Design.Spacing.step8))
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            StripMarks(items: marks.map { mark in
+                StripMarkItem(id: mark.id, face: mark.face, help: mark.titleKey.map { word($0) } ?? Text(verbatim: mark.title),
+                              selected: mark.selected, dot: mark.dot) { board.run(mark.run) }
+            })
         }
-    }
-}
-
-extension SettingsStripMark {
-    var glyph: Icon? {
-        if case .glyph(let icon) = face { icon } else { nil }
-    }
-
-    var text: String {
-        if case .text(let value) = face { value } else { "" }
     }
 }
 

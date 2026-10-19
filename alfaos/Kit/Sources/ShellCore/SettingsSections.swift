@@ -135,11 +135,6 @@ public enum SettingsLabel: String, CaseIterable, Sendable {
 }
 
 public struct SettingsStripMark: Identifiable, Equatable, Sendable {
-    public enum Face: Equatable, Sendable {
-        case glyph(Icon)
-        case text(String)
-    }
-
     public enum Run: Equatable, Sendable {
         case group(SettingsGroup)
         case open(String)
@@ -147,7 +142,7 @@ public struct SettingsStripMark: Identifiable, Equatable, Sendable {
     }
 
     public let id: String
-    public let face: Face
+    public let face: StripFace
     public let titleKey: String?
     public let title: String
     public let selected: Bool
@@ -194,7 +189,7 @@ public final class SettingsBoard {
 
     public func stripMarks(_ lane: Lane, height: Double, entries: [String], failed: Set<String>,
                            title: (String) -> String) -> [SettingsStripMark] {
-        func initial(_ id: String) -> SettingsStripMark.Face { .text(String(title(id).prefix(1))) }
+        func initial(_ id: String) -> StripFace { .text(String(title(id).prefix(1))) }
         switch lane {
         case .leading:
             return SettingsGroup.allCases.map { item in

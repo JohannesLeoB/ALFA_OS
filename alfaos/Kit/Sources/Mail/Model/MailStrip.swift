@@ -2,11 +2,6 @@ import Foundation
 import ShellCore
 
 public struct MailStripMark: Identifiable, Equatable, Sendable {
-    public enum Face: Equatable, Sendable {
-        case glyph(Icon)
-        case text(String)
-    }
-
     public enum Run: Equatable, Sendable {
         case folder(String)
         case compose
@@ -17,7 +12,7 @@ public struct MailStripMark: Identifiable, Equatable, Sendable {
     }
 
     public let id: String
-    public let face: Face
+    public let face: StripFace
     public let help: MailFolderName
     public let selected: Bool
     public let dot: Bool
