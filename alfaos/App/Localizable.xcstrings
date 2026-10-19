@@ -73,7 +73,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hinzufügen"
+            "value" : "Offen"
           }
         }
       }
@@ -1607,6 +1607,136 @@
         }
       }
     },
+    "settings.access.browser" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anmeldung im Browser"
+          }
+        }
+      }
+    },
+    "settings.access.company" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · für die Firma"
+          }
+        }
+      }
+    },
+    "settings.access.emailKey" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-Mail und Schlüssel"
+          }
+        }
+      }
+    },
+    "settings.access.key" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüssel"
+          }
+        }
+      }
+    },
+    "settings.access.password" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benutzer und Passwort"
+          }
+        }
+      }
+    },
+    "settings.access.personal" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · persönlich"
+          }
+        }
+      }
+    },
+    "settings.accounts.head" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postfächer"
+          }
+        }
+      }
+    },
+    "settings.accounts.none.text" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeder Anbieter über IMAP und SMTP."
+          }
+        }
+      }
+    },
+    "settings.accounts.none.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch kein Mail-Konto."
+          }
+        }
+      }
+    },
+    "settings.action.connect" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinden"
+          }
+        }
+      }
+    },
+    "settings.action.disconnect" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trennen"
+          }
+        }
+      }
+    },
+    "settings.action.reconnect" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut verbinden"
+          }
+        }
+      }
+    },
+    "settings.action.reenter" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neu eintragen"
+          }
+        }
+      }
+    },
     "settings.appearance.dark" : {
       "comment" : "roh",
       "localizations" : {
@@ -1614,6 +1744,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dunkel"
+          }
+        }
+      }
+    },
+    "settings.appearance.foreign" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fremde Inhalte"
+          }
+        }
+      }
+    },
+    "settings.appearance.foreign.sub" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mails und Dokumente bleiben auf Weiß, auch im Dunkeln."
+          }
+        }
+      }
+    },
+    "settings.appearance.foreign.value" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Immer hell"
+          }
+        }
+      }
+    },
+    "settings.appearance.label" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erscheinung"
           }
         }
       }
@@ -1640,6 +1810,256 @@
         }
       }
     },
+    "settings.cadence.hour1" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jede Stunde"
+          }
+        }
+      }
+    },
+    "settings.cadence.manual" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manuell"
+          }
+        }
+      }
+    },
+    "settings.cadence.minute1" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jede Minute"
+          }
+        }
+      }
+    },
+    "settings.cadence.minutes15" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle 15 Minuten"
+          }
+        }
+      }
+    },
+    "settings.cadence.minutes30" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle 30 Minuten"
+          }
+        }
+      }
+    },
+    "settings.cadence.minutes5" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle 5 Minuten"
+          }
+        }
+      }
+    },
+    "settings.cadence.off" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus"
+          }
+        }
+      }
+    },
+    "settings.cadence.seconds30" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle 30 Sekunden"
+          }
+        }
+      }
+    },
+    "settings.card.close" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schließen"
+          }
+        }
+      }
+    },
+    "settings.company.row.address" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anschrift"
+          }
+        }
+      }
+    },
+    "settings.company.row.mail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
+          }
+        }
+      }
+    },
+    "settings.company.row.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firma"
+          }
+        }
+      }
+    },
+    "settings.company.row.phone" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefon"
+          }
+        }
+      }
+    },
+    "settings.company.row.web" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Web"
+          }
+        }
+      }
+    },
+    "settings.disconnect.ask" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ trennen?"
+          }
+        }
+      }
+    },
+    "settings.extra.clear" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leeren"
+          }
+        }
+      }
+    },
+    "settings.failed.body" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Assistent bleibt aus, bis die Verbindung wieder steht."
+          }
+        }
+      }
+    },
+    "settings.failed.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler · %@"
+          }
+        }
+      }
+    },
+    "settings.failed.unknown" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Antwort"
+          }
+        }
+      }
+    },
+    "settings.folders.data" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projektdaten"
+          }
+        }
+      }
+    },
+    "settings.folders.projects" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projektordner"
+          }
+        }
+      }
+    },
+    "settings.folders.setup" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einrichtung"
+          }
+        }
+      }
+    },
+    "settings.folders.setup.action" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut durchgehen"
+          }
+        }
+      }
+    },
+    "settings.folders.templates" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorlagen"
+          }
+        }
+      }
+    },
+    "settings.group.company" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firma"
+          }
+        }
+      }
+    },
     "settings.group.connections" : {
       "comment" : "roh",
       "localizations" : {
@@ -1662,8 +2082,7 @@
         }
       }
     },
-    "settings.group.system" : {
-      "comment" : "roh",
+    "settings.group.protection" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1673,57 +2092,182 @@
         }
       }
     },
-    "settings.inlets.none" : {
-      "comment" : "roh",
+    "settings.hold.disconnect" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kein Konto"
+            "value" : "Halten zum Trennen"
           }
         }
       }
     },
-    "settings.label.tokenAdoptedAt" : {
-      "comment" : "roh",
+    "settings.hold.remove" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Übernommen"
+            "value" : "Halten zum Entfernen"
           }
         }
       }
     },
-    "settings.label.tokenDeliveredAt" : {
-      "comment" : "roh",
+    "settings.hold.signOut" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geliefert"
+            "value" : "Halten zum Abmelden"
           }
         }
       }
     },
-    "settings.label.tokenDelivery" : {
-      "comment" : "roh",
+    "settings.identity.account" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tokenbogen, Lieferung"
+            "value" : "Konto"
           }
         }
       }
     },
-    "settings.label.tokenState" : {
-      "comment" : "roh",
+    "settings.identity.birthdays" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stand der Umsetzung"
+            "value" : "Geburtstag im Team zeigen"
+          }
+        }
+      }
+    },
+    "settings.identity.code" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kürzel"
+          }
+        }
+      }
+    },
+    "settings.identity.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
+    },
+    "settings.identity.phone" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefon"
+          }
+        }
+      }
+    },
+    "settings.identity.role" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rolle"
+          }
+        }
+      }
+    },
+    "settings.identity.signOut" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf diesem Mac abmelden"
+          }
+        }
+      }
+    },
+    "settings.identity.signOut.action" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abmelden"
+          }
+        }
+      }
+    },
+    "settings.identity.signOut.ask" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abmelden?"
+          }
+        }
+      }
+    },
+    "settings.identity.signOut.sub" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trennt Google, Clockodo, ClickUp, sevDesk, Airtable und Claude und startet die App neu."
+          }
+        }
+      }
+    },
+    "settings.imprint.row.author" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Urheber"
+          }
+        }
+      }
+    },
+    "settings.imprint.row.rights" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechte"
+          }
+        }
+      }
+    },
+    "settings.imprint.row.signature" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signatur"
+          }
+        }
+      }
+    },
+    "settings.label.database" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datenbank"
+          }
+        }
+      }
+    },
+    "settings.label.diagnosis" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnose"
           }
         }
       }
@@ -1739,6 +2283,366 @@
         }
       }
     },
+    "settings.link.connected" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbunden"
+          }
+        }
+      }
+    },
+    "settings.link.connecting" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbindet …"
+          }
+        }
+      }
+    },
+    "settings.link.failed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler"
+          }
+        }
+      }
+    },
+    "settings.link.notConnected" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht verbunden"
+          }
+        }
+      }
+    },
+    "settings.link.orphaned" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwaist"
+          }
+        }
+      }
+    },
+    "settings.link.stored" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüssel gespeichert"
+          }
+        }
+      }
+    },
+    "settings.link.unreadable" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüsselbund nicht lesbar"
+          }
+        }
+      }
+    },
+    "settings.link.working" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gleicht ab …"
+          }
+        }
+      }
+    },
+    "settings.lock.after" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sperren nach"
+          }
+        }
+      }
+    },
+    "settings.lock.delay.immediately" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sofort"
+          }
+        }
+      }
+    },
+    "settings.lock.delay.minute1" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 Minute"
+          }
+        }
+      }
+    },
+    "settings.lock.delay.minutes15" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "15 Minuten Pause"
+          }
+        }
+      }
+    },
+    "settings.lock.delay.minutes5" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 Minuten Pause"
+          }
+        }
+      }
+    },
+    "settings.lock.label" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App-Sperre"
+          }
+        }
+      }
+    },
+    "settings.lock.sub" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit Touch ID oder Passwort."
+          }
+        }
+      }
+    },
+    "settings.note.checked" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim Anbieter geprüft · %@"
+          }
+        }
+      }
+    },
+    "settings.note.failed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzter Fehler %@ · letzter Erfolg %@"
+          }
+        }
+      }
+    },
+    "settings.note.failedOnly" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzter Fehler %@"
+          }
+        }
+      }
+    },
+    "settings.note.signingIn" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anmeldung läuft"
+          }
+        }
+      }
+    },
+    "settings.note.unchecked" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht beim Anbieter geprüft"
+          }
+        }
+      }
+    },
+    "settings.orphaned.body" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Er gehört zu einer anderen Kennung und wird von keiner Anmeldung genutzt."
+          }
+        }
+      }
+    },
+    "settings.orphaned.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwaister Schlüssel"
+          }
+        }
+      }
+    },
+    "settings.overview.large" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Groß"
+          }
+        }
+      }
+    },
+    "settings.overview.medium" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mittel"
+          }
+        }
+      }
+    },
+    "settings.overview.small" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klein"
+          }
+        }
+      }
+    },
+    "settings.privacy.assistantOff" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assistent ganz aus"
+          }
+        }
+      }
+    },
+    "settings.privacy.assistantOff.sub" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stoppt jeden Aufruf an den Assistenten."
+          }
+        }
+      }
+    },
+    "settings.privacy.chatFiles" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien im Chat"
+          }
+        }
+      }
+    },
+    "settings.privacy.chatFiles.sub" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Assistent darf angehängte Dateien lesen."
+          }
+        }
+      }
+    },
+    "settings.privacy.export" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigene Daten exportieren"
+          }
+        }
+      }
+    },
+    "settings.privacy.export.action" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportieren"
+          }
+        }
+      }
+    },
+    "settings.privacy.images" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilder in Mails laden"
+          }
+        }
+      }
+    },
+    "settings.privacy.images.off" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilder werden nicht geladen. Der Absender erfährt nicht, wann du die Mail geöffnet hast."
+          }
+        }
+      }
+    },
+    "settings.privacy.images.on" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilder werden geladen. Zählpixel melden dem Absender damit, wann du die Mail geöffnet hast."
+          }
+        }
+      }
+    },
+    "settings.row.access" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anmeldung"
+          }
+        }
+      }
+    },
+    "settings.row.state" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zustand"
+          }
+        }
+      }
+    },
     "settings.section.appearance" : {
       "comment" : "roh",
       "localizations" : {
@@ -1746,6 +2650,96 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Darstellung"
+          }
+        }
+      }
+    },
+    "settings.section.appearance.detail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erscheinung, Startansicht, App-Sperre"
+          }
+        }
+      }
+    },
+    "settings.section.companyData" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firmendaten"
+          }
+        }
+      }
+    },
+    "settings.section.companyData.detail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firma, Anschrift, Kontakt"
+          }
+        }
+      }
+    },
+    "settings.section.folders" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateiordner"
+          }
+        }
+      }
+    },
+    "settings.section.folders.detail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordnerschema, Einrichtung im geteilten Drive"
+          }
+        }
+      }
+    },
+    "settings.section.identity" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Identität"
+          }
+        }
+      }
+    },
+    "settings.section.identity.detail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name, Rolle, Kürzel im Team"
+          }
+        }
+      }
+    },
+    "settings.section.imprint" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impressum"
+          }
+        }
+      }
+    },
+    "settings.section.imprint.detail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Urheber, Rechte, Signatur"
           }
         }
       }
@@ -1761,6 +2755,46 @@
         }
       }
     },
+    "settings.section.keyInventory" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüssel-Inventar"
+          }
+        }
+      }
+    },
+    "settings.section.keyInventory.detail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur Zustand, keine Werte"
+          }
+        }
+      }
+    },
+    "settings.section.privacy" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datenschutz"
+          }
+        }
+      }
+    },
+    "settings.section.privacy.detail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Was die App lädt und teilt"
+          }
+        }
+      }
+    },
     "settings.section.system" : {
       "comment" : "roh",
       "localizations" : {
@@ -1772,6 +2806,466 @@
         }
       }
     },
+    "settings.section.system.detail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version, Build, Datenbank"
+          }
+        }
+      }
+    },
+    "settings.section.templates" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorlagen"
+          }
+        }
+      }
+    },
+    "settings.section.templates.detail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Vorlage"
+          }
+        }
+      }
+    },
+    "settings.service.airtable.area.projects" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projekte"
+          }
+        }
+      }
+    },
+    "settings.service.airtable.extra.cache" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zwischenspeicher"
+          }
+        }
+      }
+    },
+    "settings.service.airtable.field.base" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Base"
+          }
+        }
+      }
+    },
+    "settings.service.airtable.field.token" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zugriffsschlüssel"
+          }
+        }
+      }
+    },
+    "settings.service.airtable.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Airtable"
+          }
+        }
+      }
+    },
+    "settings.service.airtable.use" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projekte und Kunden"
+          }
+        }
+      }
+    },
+    "settings.service.claude.field.key" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüssel"
+          }
+        }
+      }
+    },
+    "settings.service.claude.field.model" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modell"
+          }
+        }
+      }
+    },
+    "settings.service.claude.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude"
+          }
+        }
+      }
+    },
+    "settings.service.claude.use" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assistent"
+          }
+        }
+      }
+    },
+    "settings.service.clickup.area.phases" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phasen"
+          }
+        }
+      }
+    },
+    "settings.service.clickup.area.taskFields" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufgabenfelder"
+          }
+        }
+      }
+    },
+    "settings.service.clickup.field.token" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zugriffsschlüssel"
+          }
+        }
+      }
+    },
+    "settings.service.clickup.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ClickUp"
+          }
+        }
+      }
+    },
+    "settings.service.clickup.use" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufgaben"
+          }
+        }
+      }
+    },
+    "settings.service.clockodo.field.email" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-Mail"
+          }
+        }
+      }
+    },
+    "settings.service.clockodo.field.key" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüssel"
+          }
+        }
+      }
+    },
+    "settings.service.clockodo.field.user" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clockodo-Nutzer"
+          }
+        }
+      }
+    },
+    "settings.service.clockodo.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clockodo"
+          }
+        }
+      }
+    },
+    "settings.service.clockodo.use" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeiten"
+          }
+        }
+      }
+    },
+    "settings.service.dhl.field.key" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüssel"
+          }
+        }
+      }
+    },
+    "settings.service.dhl.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DHL Sendungen"
+          }
+        }
+      }
+    },
+    "settings.service.dhl.use" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sendungen verfolgen"
+          }
+        }
+      }
+    },
+    "settings.service.dhlship.field.key" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüssel"
+          }
+        }
+      }
+    },
+    "settings.service.dhlship.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DHL Versand"
+          }
+        }
+      }
+    },
+    "settings.service.dhlship.use" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etiketten erstellen"
+          }
+        }
+      }
+    },
+    "settings.service.google.area.contacts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontakte"
+          }
+        }
+      }
+    },
+    "settings.service.google.area.files" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien"
+          }
+        }
+      }
+    },
+    "settings.service.google.area.mail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
+          }
+        }
+      }
+    },
+    "settings.service.google.extra.driveFolders" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drive-Ordner der Projekte"
+          }
+        }
+      }
+    },
+    "settings.service.google.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google"
+          }
+        }
+      }
+    },
+    "settings.service.google.note" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liest und schreibt Mail, Dateien, Kalender und Kontakte. Die Anmeldung über Google ist zugleich der Eingang in die App."
+          }
+        }
+      }
+    },
+    "settings.service.google.use" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail, Dateien, Kalender, Kontakte"
+          }
+        }
+      }
+    },
+    "settings.service.group.company" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Firma"
+          }
+        }
+      }
+    },
+    "settings.service.group.personal" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persönlich"
+          }
+        }
+      }
+    },
+    "settings.service.happa.field.key" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüssel"
+          }
+        }
+      }
+    },
+    "settings.service.happa.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Happa Happa"
+          }
+        }
+      }
+    },
+    "settings.service.happa.use" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speiseplan"
+          }
+        }
+      }
+    },
+    "settings.service.mailaccounts.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail-Konten"
+          }
+        }
+      }
+    },
+    "settings.service.mailaccounts.use" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weitere Postfächer über IMAP und SMTP"
+          }
+        }
+      }
+    },
+    "settings.service.sevdesk.field.token" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zugriffsschlüssel"
+          }
+        }
+      }
+    },
+    "settings.service.sevdesk.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sevDesk"
+          }
+        }
+      }
+    },
+    "settings.service.sevdesk.use" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belege und Angebote"
+          }
+        }
+      }
+    },
     "settings.signin" : {
       "comment" : "roh",
       "localizations" : {
@@ -1779,6 +3273,256 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anmelden"
+          }
+        }
+      }
+    },
+    "settings.stack.back" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurück zum Stapel"
+          }
+        }
+      }
+    },
+    "settings.stack.empty" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leere Karte"
+          }
+        }
+      }
+    },
+    "settings.stack.overview" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übersicht"
+          }
+        }
+      }
+    },
+    "settings.start.label" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim Öffnen"
+          }
+        }
+      }
+    },
+    "settings.start.lastOpen" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zuletzt offen"
+          }
+        }
+      }
+    },
+    "settings.start.mail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
+          }
+        }
+      }
+    },
+    "settings.start.settings" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
+          }
+        }
+      }
+    },
+    "settings.state.failed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler"
+          }
+        }
+      }
+    },
+    "settings.state.loading" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lädt"
+          }
+        }
+      }
+    },
+    "settings.sync.head" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgleich"
+          }
+        }
+      }
+    },
+    "settings.sync.last" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzter Abgleich %@"
+          }
+        }
+      }
+    },
+    "settings.sync.never" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch nicht abgeglichen"
+          }
+        }
+      }
+    },
+    "settings.sync.now" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt abgleichen"
+          }
+        }
+      }
+    },
+    "settings.system.copy" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieren"
+          }
+        }
+      }
+    },
+    "settings.system.version.format" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ (%@)"
+          }
+        }
+      }
+    },
+    "settings.templates.create" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorlage anlegen"
+          }
+        }
+      }
+    },
+    "settings.templates.create.action" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anlegen"
+          }
+        }
+      }
+    },
+    "settings.templates.none" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Vorlage."
+          }
+        }
+      }
+    },
+    "settings.tiles.integrations" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Integrationen"
+          }
+        }
+      }
+    },
+    "settings.tiles.keys" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlüssel"
+          }
+        }
+      }
+    },
+    "settings.toast.copied" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In die Zwischenablage kopiert"
+          }
+        }
+      }
+    },
+    "settings.unreadable.body" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Schlüssel ist gespeichert, die App kommt nicht an ihn heran. Einmal neu eintragen."
+          }
+        }
+      }
+    },
+    "settings.unreadable.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Schlüsselbund kann nicht gelesen werden."
+          }
+        }
+      }
+    },
+    "settings.value.empty" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht eingetragen"
+          }
+        }
+      }
+    },
+    "settings.value.masked" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "••••••••••••"
           }
         }
       }

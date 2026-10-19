@@ -1,5 +1,4 @@
 import Hub
-import Mail
 import ShellCore
 import SwiftUI
 
@@ -28,107 +27,24 @@ private struct SettingsLaneContent: View {
     }
 
     @ViewBuilder
-    private func center(_ setup: any HubSetup) -> some View {
-        switch host.section {
-        case .integrations: SettingsInletsPane(host: host, setup: setup)
-        case .appearance: SettingsAppearancePane()
-        case .system: SettingsSystemPane()
-        }
-    }
-
-    @ViewBuilder
     private var content: some View {
         switch host.phase {
         case .idle:
-            word("mail.state.loading")
+            word("settings.state.loading").designText(\.inkTertiary).padding(CGFloat(Design.Spacing.step16))
         case .failed(let description):
             VStack(alignment: .leading) {
-                word("mail.state.failed")
+                word("settings.state.failed")
                 Text(verbatim: description)
             }
+            .designText(\.signal)
+            .padding(CGFloat(Design.Spacing.step16))
         case .ready(let assembly):
+            let readings = ServiceReader.readAll(setup: assembly.hub.setup, rules: assembly.hub.rules)
             switch lane {
-            case .leading: SettingsGroupsPane(host: host)
-            case .center: center(assembly.hub.setup)
-            case .trailing:
-                if host.section == .integrations {
-                    SettingsAddPane(host: host, offers: assembly.hub.setup.offers)
-                } else {
-                    Color.clear
-                }
+            case .leading: SettingsGroupsPane(board: SettingsShared.board, readings: readings)
+            case .center: SettingsCenterPane(board: SettingsShared.board, readings: readings)
+            case .trailing: SettingsStackPane(host: host, board: SettingsShared.board, hub: assembly.hub, readings: readings)
             }
-        }
-    }
-}
-
-struct SettingsGroupsPane: View {
-    @Bindable var host: AppHost
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                ForEach(SettingsGroup.allCases, id: \.self) { group in
-                    word(group.key)
-                        .designText(\.inkTertiary, size: Design.TextSize.small)
-                        .padding(.horizontal, CGFloat(Design.Spacing.step12))
-                        .padding(.top, CGFloat(Design.Spacing.step12))
-                        .padding(.bottom, CGFloat(Design.Spacing.step4))
-                    ForEach(SettingsSection.allCases.filter { $0.group == group }) { section in
-                        DesignRow(selected: host.section == section, action: { host.section = section }) {
-                            word(section.key).designText()
-                        }
-                    }
-                }
-            }
-            .padding(CGFloat(Design.Spacing.step8))
-        }
-    }
-}
-
-struct SettingsAppearancePane: View {
-    @AppStorage("appearance") private var choice = AppearanceChoice.system.rawValue
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                ForEach(AppearanceChoice.allCases, id: \.self) { option in
-                    DesignRow(selected: choice == option.rawValue, action: { choice = option.rawValue }) {
-                        HStack {
-                            word(option.key).designText()
-                            Spacer()
-                            if choice == option.rawValue { Image(systemName: "checkmark").designText(\.inkSecondary) }
-                        }
-                    }
-                }
-            }
-            .padding(CGFloat(Design.Spacing.step8))
-        }
-    }
-}
-
-struct SettingsSystemPane: View {
-    private var version: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
-    }
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step12)) {
-                line(.version, version)
-                line(.tokenDelivery, DesignStamp.delivery)
-                line(.tokenDeliveredAt, DesignStamp.deliveredAt)
-                line(.tokenAdoptedAt, DesignStamp.adoptedAt)
-                line(.tokenState, DesignStamp.state)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(CGFloat(Design.Spacing.step12))
-        }
-    }
-
-    private func line(_ label: SettingsLabel, _ value: String) -> some View {
-        VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step4)) {
-            word(label.key).designText(\.inkTertiary, size: Design.TextSize.small)
-            Text(verbatim: value).designText()
         }
     }
 }
@@ -143,130 +59,282 @@ extension AppearanceChoice {
     }
 }
 
-struct SettingsInletsPane: View {
-    let host: AppHost
-    let setup: any HubSetup
-    @Environment(\.design) private var design
+struct SettingsGroupsPane: View {
+    let board: SettingsBoard
+    let readings: [ServiceReading]
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step8)) {
-                if setup.inlets.isEmpty { word("settings.inlets.none").designText(\.inkTertiary) }
-                ForEach(setup.inlets) { inlet in row(inlet) }
+            VStack(spacing: 0) {
+                ForEach(SettingsGroup.allCases, id: \.self) { group in
+                    GroupRow(
+                        group: group,
+                        selected: board.group == group,
+                        bad: group == .connections ? ServiceReader.badCount(readings) : 0,
+                        action: { board.group = group })
+                }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(CGFloat(Design.Spacing.step8))
         }
-    }
-
-    private func tone(_ state: InletState) -> KeyPath<DesignColors, RGB> {
-        switch state {
-        case .connected, .working: \.ink
-        case .failed, .keychainUnreadable, .orphaned: \.signal
-        default: \.mark
-        }
-    }
-
-    private func action(_ key: String, tone: KeyPath<DesignColors, RGB> = \.ink, _ run: @escaping () -> Void) -> some View {
-        Button(action: run) { word(key).designText(tone, size: Design.TextSize.small, weight: .medium) }
-            .buttonStyle(.plain)
-    }
-
-    private func row(_ inlet: Inlet) -> some View {
-        VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step4)) {
-            HStack(spacing: CGFloat(Design.Spacing.step8)) {
-                DesignDot(tone: tone(inlet.state))
-                word(inlet.title).designText(weight: .medium)
-                Spacer()
-            }
-            if !inlet.account.isEmpty {
-                Text(verbatim: inlet.account).designText(\.inkSecondary, size: Design.TextSize.small)
-            }
-            word(inlet.state.key).designText(\.inkTertiary, size: Design.TextSize.small)
-            if let date = inlet.state.probed {
-                Text(date, format: .dateTime).designText(\.inkTertiary, size: Design.TextSize.small)
-            }
-            if let hint = inlet.state.hint { hintWords(hint).designText(\.signal, size: Design.TextSize.small) }
-            HStack(spacing: CGFloat(Design.Spacing.step12)) {
-                action("text.settings.action.check") { Task { await host.probe(inlet.id) } }
-                if inlet.state.canRenew {
-                    action("text.settings.action.signInAgain") { Task { await host.renew(inlet.id) } }
-                }
-                action("text.settings.action.remove", tone: \.signal) { Task { await host.remove(inlet.id) } }
-            }
-            .padding(.top, CGFloat(Design.Spacing.step4))
-        }
-        .padding(CGFloat(Design.Spacing.step12))
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row)).fill(design.color(\.well)))
+        .scrollIndicators(.never)
     }
 }
 
-struct SettingsAddPane: View {
-    @Bindable var host: AppHost
-    let offers: [Offer]
+private struct GroupRow: View {
     @Environment(\.design) private var design
+    let group: SettingsGroup
+    let selected: Bool
+    let bad: Int
+    let action: () -> Void
+    @State private var hovering = false
+
+    var body: some View {
+        let shape = RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row))
+        Button(action: action) {
+            HStack(spacing: CGFloat(Design.Spacing.step20)) {
+                Mark(inverted: selected, tone: selected ? \.lane : \.inkTertiary) {
+                    SettingsSymbol(name: SymbolName(rawValue: group.symbol) ?? .system)
+                }
+                word(group.key)
+                    .lineLimit(1)
+                    .font(.system(size: CGFloat(Design.TextSize.body), weight: .design(selected ? Design.Weight.medium : Design.Weight.regular)))
+                    .foregroundStyle(design.color(selected ? \.lane : \.ink))
+                Spacer(minLength: 0)
+                if bad > 0 { Counter(value: String(bad), tone: selected ? \.lane : \.signal) }
+            }
+            .padding(.horizontal, CGFloat(Design.Spacing.step8))
+            .frame(height: CGFloat(Design.Size.rowHeight))
+            .background(shape.fill(selected ? design.color(\.ink) : Color.clear))
+            .ring(shape, hovering && !selected ? design.color(\.lineStrong) : nil)
+            .contentShape(shape)
+        }
+        .buttonStyle(.plain)
+        .onHover { hovering = $0 }
+        .accessibilityAddTraits(selected ? .isSelected : [])
+    }
+}
+
+struct SettingsCenterPane: View {
+    let board: SettingsBoard
+    let readings: [ServiceReading]
+
+    var body: some View {
+        if board.group == .connections {
+            SettingsTiles(board: board, readings: readings)
+        } else {
+            SettingsSectionList(board: board)
+        }
+    }
+}
+
+private struct SettingsSectionList: View {
+    let board: SettingsBoard
+    @AppStorage(SettingsKey.appearance) private var appearance = AppearanceChoice.system.rawValue
+
+    var body: some View {
+        let sections = board.group.sections
+        ScrollView {
+            VStack(spacing: 0) {
+                ForEach(Array(sections.enumerated()), id: \.element.id) { index, section in
+                    let selected = board.front == section.rawValue
+                    let next = sections.indices.contains(index + 1) ? sections[index + 1] : nil
+                    SectionRow(
+                        section: section,
+                        value: value(of: section),
+                        selected: selected,
+                        separated: next != nil && !selected && board.front != next?.rawValue,
+                        action: { board.open(section.rawValue) })
+                }
+            }
+            .padding(CGFloat(Design.Spacing.step8))
+        }
+        .scrollIndicators(.never)
+    }
+
+    private func value(of section: SettingsSection) -> String? {
+        guard section == .appearance else { return nil }
+        let choice = AppearanceChoice(rawValue: appearance) ?? .system
+        return String(localized: String.LocalizationValue(choice.key))
+    }
+}
+
+private struct SectionRow: View {
+    @Environment(\.design) private var design
+    let section: SettingsSection
+    let value: String?
+    let selected: Bool
+    let separated: Bool
+    let action: () -> Void
+    @State private var hovering = false
+
+    var body: some View {
+        let shape = RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row))
+        let ink = selected ? InkSet.inverse : InkSet.lane
+        Button(action: action) {
+            HStack(alignment: .top, spacing: CGFloat(Design.Spacing.step20)) {
+                Mark(inverted: selected) { Text(verbatim: SettingsFormat.initial(String(localized: String.LocalizationValue(section.key)))) }
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack(spacing: CGFloat(Design.Spacing.step8)) {
+                        word(section.key)
+                            .lineLimit(1)
+                            .font(.system(size: CGFloat(Design.TextSize.body), weight: .design(Design.Weight.medium)))
+                            .foregroundStyle(design.color(selected ? \.lane : \.ink))
+                        Spacer(minLength: 0)
+                        if let value {
+                            Text(verbatim: value)
+                                .font(.system(size: CGFloat(Design.TextSize.small)))
+                                .monospacedDigit()
+                                .foregroundStyle(design.color(ink.tertiary))
+                        }
+                    }
+                    .frame(height: CGFloat(Design.LineHeight.notice))
+                    word(section.detailKey)
+                        .lineLimit(1)
+                        .font(.system(size: CGFloat(Design.TextSize.body)))
+                        .foregroundStyle(design.color(ink.tertiary))
+                        .frame(height: CGFloat(Design.LineHeight.notice), alignment: .leading)
+                }
+                .padding(.top, CGFloat(Design.Spacing.step4))
+            }
+            .padding(.vertical, CGFloat(Design.Spacing.step12))
+            .padding(.horizontal, CGFloat(Design.Spacing.step8))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(shape.fill(selected ? design.color(\.ink) : (hovering ? design.color(\.lane) : Color.clear)))
+            .ring(shape, hovering && !selected ? design.color(\.lineStrong) : nil)
+            .overlay(alignment: .bottom) {
+                if separated {
+                    Rectangle()
+                        .fill(design.color(\.line))
+                        .frame(height: CGFloat(Design.Size.hairline))
+                        .padding(.leading, CGFloat(Design.Spacing.step56))
+                        .padding(.trailing, CGFloat(Design.Spacing.step8))
+                }
+            }
+            .contentShape(shape)
+        }
+        .buttonStyle(.plain)
+        .onHover { hovering = $0 }
+        .accessibilityAddTraits(selected ? .isSelected : [])
+    }
+}
+
+private struct SettingsTiles: View {
+    let board: SettingsBoard
+    let readings: [ServiceReading]
 
     var body: some View {
         ScrollView {
+            VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step16)) {
+                tileGroup("settings.tiles.integrations") {
+                    ForEach(readings) { reading in
+                        ServiceTile(
+                            name: LocalizedStringKey(reading.info.nameKey),
+                            initial: SettingsFormat.initial(String(localized: String.LocalizationValue(reading.info.nameKey))),
+                            logo: reading.info.logo,
+                            sub: reading.state.key,
+                            bad: reading.state.isBad,
+                            selected: board.front == reading.info.id && !board.fanned,
+                            action: { board.open(reading.info.id) })
+                    }
+                }
+                tileGroup("settings.tiles.keys") {
+                    ServiceTile(
+                        name: LocalizedStringKey(SettingsSection.keyInventory.key),
+                        initial: SettingsFormat.initial(String(localized: String.LocalizationValue(SettingsSection.keyInventory.key))),
+                        logo: nil,
+                        sub: SettingsSection.keyInventory.detailKey,
+                        bad: false,
+                        selected: board.front == SettingsSection.keyInventory.rawValue && !board.fanned,
+                        action: { board.open(SettingsSection.keyInventory.rawValue) })
+                }
+            }
+            .padding(.horizontal, CGFloat(Design.Spacing.step16))
+            .padding(.top, CGFloat(Design.Spacing.step8))
+            .padding(.bottom, CGFloat(Design.Spacing.step16))
+        }
+        .scrollIndicators(.never)
+    }
+
+    private func tileGroup<Content: View>(_ key: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step8)) {
+            word(key)
+                .designText(\.inkTertiary, size: Design.TextSize.small)
+                .padding(.horizontal, CGFloat(Design.Spacing.step4))
+                .frame(height: CGFloat(Design.Spacing.step24), alignment: .bottomLeading)
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: CGFloat(Design.Size.settingsTileMinWidth)), spacing: CGFloat(Design.Spacing.step8))],
+                spacing: CGFloat(Design.Spacing.step8)) {
+                    content()
+                }
+        }
+    }
+}
+
+private struct ServiceTile: View {
+    @Environment(\.design) private var design
+    @Environment(\.accessibilityReduceMotion) private var reduced
+    let name: LocalizedStringKey
+    let initial: String
+    let logo: ServiceLogo?
+    let sub: String
+    let bad: Bool
+    let selected: Bool
+    let action: () -> Void
+    @State private var hovering = false
+
+    var body: some View {
+        let shape = RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row))
+        let lift = hovering && !selected ? CGFloat(Design.Size.tileHoverLift) : 0
+        Button(action: action) {
             VStack(alignment: .leading, spacing: 0) {
-                word("text.settings.action.addAccount")
-                    .designText(\.inkTertiary, size: Design.TextSize.small)
-                    .padding(.horizontal, CGFloat(Design.Spacing.step12))
-                    .padding(.vertical, CGFloat(Design.Spacing.step8))
-                if let offer = host.form {
-                    form(offer)
-                } else {
-                    ForEach(offers) { offer in
-                        DesignRow(selected: false, action: { Task { await host.choose(offer) } }) {
-                            word(offer.title).designText()
-                        }
-                    }
-                }
-                if host.busy { word("mail.state.loading").designText(\.inkTertiary).padding(CGFloat(Design.Spacing.step12)) }
-                if let failure = host.failure {
-                    hintWords(failure).designText(\.signal, size: Design.TextSize.small).padding(CGFloat(Design.Spacing.step12))
-                }
-                if host.form != nil {
-                    DesignRow(selected: false, action: { host.close() }) { word("text.common.cancel").designText(\.inkSecondary) }
+                badge
+                Spacer(minLength: 0)
+                VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step4) / 2) {
+                    Text(name)
+                        .lineLimit(1)
+                        .font(.system(size: CGFloat(Design.TextSize.body), weight: .design(Design.Weight.medium)))
+                        .foregroundStyle(design.color(selected ? \.lane : \.ink))
+                    Text(LocalizedStringKey(sub))
+                        .lineLimit(1)
+                        .font(.system(size: CGFloat(Design.TextSize.small)))
+                        .foregroundStyle(design.color(selected ? \.lane : (bad ? \.signal : \.inkTertiary)))
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(CGFloat(Design.Spacing.step8))
+            .padding(CGFloat(Design.Spacing.step12))
+            .frame(maxWidth: .infinity, minHeight: CGFloat(SheetValues.settingsTileHeight), maxHeight: CGFloat(SheetValues.settingsTileHeight), alignment: .topLeading)
+            .background(shape.fill(selected ? design.color(\.ink) : design.color(\.well)))
+            .ring(shape, hovering && !selected ? design.color(\.inkTertiary) : nil)
+            .offset(y: -lift)
+            .contentShape(shape)
         }
+        .buttonStyle(.plain)
+        .onHover { hovering = $0 }
+        .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.hover), value: hovering)
+        .accessibilityAddTraits(selected ? .isSelected : [])
     }
 
-    @ViewBuilder
-    private func form(_ offer: Offer) -> some View {
-        let fields: [Field] = switch offer.way {
-        case .form(let fields), .key(let fields): fields
-        case .signIn: []
-        }
-        ForEach(fields) { field in
-            VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step4)) {
-                word(field.title).designText(\.inkTertiary, size: Design.TextSize.small)
-                Group {
-                    if field.secret {
-                        SecureField(text: binding(field.id)) { EmptyView() }
-                    } else {
-                        TextField(text: binding(field.id)) { EmptyView() }
-                    }
-                }
-                .textFieldStyle(.plain)
-                .designText()
-                .padding(.horizontal, CGFloat(Design.Spacing.step8))
-                .frame(height: CGFloat(Design.Size.rowHeight))
-                .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.field)).fill(design.color(\.well)))
+    private var badge: some View {
+        let side = CGFloat(Design.Size.symbolSize)
+        return ZStack {
+            if let image = logoImage {
+                Circle().fill(Color(.sRGB, red: DesignColors.light.lane.red, green: DesignColors.light.lane.green, blue: DesignColors.light.lane.blue, opacity: DesignColors.light.lane.alpha))
+                Image(nsImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: CGFloat(Design.Size.tileLogoSize), height: CGFloat(Design.Size.tileLogoSize))
+            } else {
+                Text(verbatim: initial)
+                    .font(.system(size: CGFloat(Design.TextSize.small), weight: .design(Design.Weight.medium)))
+                    .foregroundStyle(design.color(selected ? \.lane : \.ink))
             }
-            .padding(.horizontal, CGFloat(Design.Spacing.step12))
-            .padding(.bottom, CGFloat(Design.Spacing.step8))
         }
-        DesignRow(selected: false, action: { Task { await host.add(offer, input: .fields(host.values)) } }) {
-            word("settings.signin").designText(weight: .medium)
-        }
+        .frame(width: side, height: side)
+        .clipShape(Circle())
+        .ring(Circle(), design.color(selected ? \.lane : \.lineStrong))
     }
 
-    private func binding(_ id: String) -> Binding<String> {
-        Binding(get: { host.values[id] ?? "" }, set: { host.values[id] = $0 })
+    private var logoImage: NSImage? {
+        guard let logo, let url = Bundle.main.url(forResource: logo.resource, withExtension: logo.fileExtension) else { return nil }
+        return NSImage(contentsOf: url)
     }
 }

@@ -6,6 +6,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
     private(set) var records: [Inlet] = []
     private(set) var queue: [SyncJob] = []
     private(set) var reports: [Inlet.ID: [ReportEntry]] = [:]
+    private(set) var syncedAt: [String: Date] = [:]
 
     @ObservationIgnored private let config: HubConfiguration
     @ObservationIgnored private let store: Store
@@ -46,6 +47,8 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             switch parts.first {
             case "cadence" where parts.count == 3:
                 cadences[parts[1] + "|" + parts[2]] = try decoder.decode(Cadence.self, from: data)
+            case "lastsync" where parts.count == 3:
+                syncedAt[parts[1] + "|" + parts[2]] = try decoder.decode(Date.self, from: data)
             case "truth" where parts.count == 2:
                 if let kind = DataKind(rawValue: parts[1]) { truths[kind] = try decoder.decode(String.self, from: data) }
             case "limit" where parts.count == 2:
@@ -261,6 +264,8 @@ final class HubCore: HubAccess, HubSetup, HubRules {
                 update(inletID, persist: false) { $0.state = previous }
             }
             log(inletID, .sync, capability: capability, ok: true)
+            syncedAt[key] = now
+            persist("lastsync|" + key, now)
             emit(.syncFinished(capability, inletID))
             return SyncReport(inlet: inletID, capability: capability, result: .finished(items: outcome.count))
         } catch {
@@ -447,6 +452,8 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         try store.delete(inletID)
         try store.deleteSettings(withPrefix: "cadence|\(inletID)|")
         cadences = cadences.filter { !$0.key.hasPrefix(inletID + "|") }
+        try store.deleteSettings(withPrefix: "lastsync|\(inletID)|")
+        syncedAt = syncedAt.filter { !$0.key.hasPrefix(inletID + "|") }
         for (kind, truth) in truths where truth == inletID {
             truths[kind] = nil
             try store.deleteSettings(withPrefix: "truth|\(kind.rawValue)")
@@ -470,6 +477,14 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         if records.first(where: { $0.id == inlet })?.state.isConnected == true {
             config.cadence.plan(inlet, capability, value)
         }
+    }
+
+    func lastSync(_ inlet: Inlet.ID, _ capability: Capability) -> Date? {
+        syncedAt[inlet + "|" + capability.rawValue]
+    }
+
+    func syncNow(_ inlet: Inlet.ID, _ capability: Capability) async {
+        await config.cadence.trigger(inlet, capability)
     }
 
     func truth(_ kind: DataKind) -> Inlet.ID? { truths[kind] }

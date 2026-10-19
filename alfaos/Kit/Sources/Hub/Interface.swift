@@ -38,6 +38,13 @@ public protocol HubRules: AnyObject {
     func limit(_ capability: Capability) -> Int
     func setLimit(_ capability: Capability, _ value: Int)
     var queue: [SyncJob] { get }
+    func lastSync(_ inlet: Inlet.ID, _ capability: Capability) -> Date?
+    func syncNow(_ inlet: Inlet.ID, _ capability: Capability) async
+}
+
+extension HubRules {
+    public func lastSync(_ inlet: Inlet.ID, _ capability: Capability) -> Date? { nil }
+    public func syncNow(_ inlet: Inlet.ID, _ capability: Capability) async {}
 }
 
 public struct Hub {

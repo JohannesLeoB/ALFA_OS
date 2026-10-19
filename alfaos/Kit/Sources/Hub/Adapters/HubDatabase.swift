@@ -11,6 +11,12 @@ public enum HubDatabase {
         return base.appendingPathComponent(directoryName, isDirectory: true)
     }
 
+    public static func size(in directory: URL? = nil) -> Int? {
+        guard let folder = try? directory ?? defaultDirectory() else { return nil }
+        let attributes = try? FileManager.default.attributesOfItem(atPath: folder.appendingPathComponent(fileName).path)
+        return (attributes?[.size] as? NSNumber)?.intValue
+    }
+
     public static func open(in directory: URL? = nil) throws -> DatabaseQueue {
         let folder = try directory ?? defaultDirectory()
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
