@@ -20,7 +20,6 @@ Native macOS-App ALFA (Swift, SwiftUI). Regeln: `AGENTS.md`; sie gehen allem vor
 | `.claude/agents/` | Stränge (Arbeitsbereiche der Sitzungen) | dauerhaft |
 | `.claude/memory/` | Gedächtnis | dauerhaft |
 | `dist/` | Gebautes und Abgeleitetes; nicht in Git; jederzeit löschbar | flüchtig |
-| `ausgang/` | Forensik; nicht in Git | bis Forensik fertig |
 | Wurzel | `AGENTS.md` (Regeln), `CLAUDE.md` (verweist auf AGENTS.md), `README.md` (Karte), `.gitignore`, `.swiftlint.yml` | dauerhaft |
 
 ## Einstieg für Agenten

@@ -34,7 +34,6 @@ Aufträge an die Lead
 - Test nach L5 (aus `plan/EIN-TEST.md`, 16.10.): genau eine Testfunktion `testTheWholeApp` in `alfaos/Kit/Tests/WholeAppTests/WholeAppTests.swift`. Sie startet die App-Zusammenstellung ohne Fenster, mit In-Memory-Datenbank und Attrappen, und spielt ein festes Skript über Hülle, Generatoren, Einstellungen und Mail; das Protokoll wird mit `golden.txt` verglichen. Erst `scripts/mutate.py` gegen die alten Tests, dann der eine Test, bis jeder erkennbare Mutant ihn rot macht; erst danach die alten Tests löschen. Abnahme: 1 Testfunktion, unter 60 s, mindestens 200 Mutanten erkannt oder einzeln begründet.
 - Wächter (Johannes 18.10.): GitHub Actions melden, sperren nicht (Build in `dist/`); Codex prüft unangekündigt. Die Lead entwirft beides, Text vorher an Johannes.
 - xcodegen erzeugt das Projekt künftig in `dist/`; danach entfällt die Zeile `alfaos/*.xcodeproj/` in `.gitignore`.
-- `ausgang/pruefung-48h/` bleibt, bis die Forensik-Sitzung fertig ist; dann entfallen `ausgang/` und die Zeile in `.gitignore`.
 
 Offene Punkte aus dem alten Plan
 - C2: Proben für Airtable, ClickUp, Clockodo, sevDesk, Claude, DHL fehlen; `alfaos/Kit/Sources/Hub/Providers/` hat nur Google und IMAP.
@@ -42,4 +41,4 @@ Offene Punkte aus dem alten Plan
 
 Erledigt: Wortlaut `design-bruecke.md` (fe7f26e). Gebaut wird seit 19.10. auf sein Wort (Mail und Einstellungen als Hub, nach Master 1810). C2 teils: ClickUp, Clockodo, Claude, Airtable, sevDesk, DHL Sendungen mit Prüfung beim Anbieter (6668bcd); DHL Versand und Happa Happa ohne Anbindung.
 Offen, wartet auf Johannes' Wort: Reife, ab der gebaut wird (freigegeben/freigabe-orange oder auch von-design-gesetzt); ob audit_swift aus dem Skill design-zu-swift nach scripts/ kommt; Freigabe der neuen golden.txt-Zeilen; Sperren in ~/.claude/settings.json.
-Offen für die Lead: Test (Schalter ALFA_GOLDEN, Istwert-Protokoll, Mutanten unter 200), Wächter-Entwurf, xcodegen nach dist/ (alfaos/ALFA_OS.xcodeproj liegt noch in alfaos/), ausgang/ nach der Forensik.
+Offen für die Lead: Test (Schalter ALFA_GOLDEN, Istwert-Protokoll, Mutanten unter 200), Wächter-Entwurf, xcodegen nach dist/ (alfaos/ALFA_OS.xcodeproj liegt noch in alfaos/).
