@@ -1,7 +1,7 @@
 import Foundation
 
 public enum SheetValues {
-    public static let windowMin = Size(width: 640, height: 480)
+    public static let previewScreen = Size(width: 1512, height: 982)
     public static let pressScale = 0.96
     public static let releaseSamples = 6
     public static let releaseSpan = 0.016
@@ -16,6 +16,7 @@ public enum SheetValues {
     public static let iconSize = 14.0
     public static let iconBox = 16.0
     public static let iconStroke = 1.3
+    public static let smallIconStroke = 1.5
     public static let iconOpacity = 0.8
     public static let placeholderOpacity = 0.45
     public static let mutedOpacity = 0.6
@@ -30,6 +31,10 @@ public enum SheetValues {
     public static let syncTurns = 2.0
     public static let syncErrorArc = 0.25
     public static let initialsTracking = 0.08
+    public static let settingsTileHeight = 112.0
+    public static let cardMetaOpacity = 0.72
+    public static let cardCloseOpacity = 0.7
+    public static let disabledOpacity = 0.4
     public static let gripCurve = CubicBezier(x1: 0.25, y1: 0.1, x2: 0.25, y2: 1)
     public static let searchGlyph = SearchGlyph(center: Point(x: 7, y: 7), radius: 5.5, from: Point(x: 11, y: 11), to: Point(x: 14.5, y: 14.5))
 }

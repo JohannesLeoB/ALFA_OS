@@ -32,13 +32,18 @@ struct ALFA_OSApp: App {
                 ShellView(resources: resources, bundle: .main, model: model)
                     .environment(\.appHost, host)
                     .preferredColorScheme(AppearanceChoice(rawValue: appearance)?.scheme)
-                    .frame(minWidth: CGFloat(resources.geometry.windowMin.width), minHeight: CGFloat(resources.geometry.windowMin.height))
+                    .frame(minWidth: CGFloat(minimum(resources).width), minHeight: CGFloat(minimum(resources).height))
                     .background(WindowConfigurator())
             } else {
                 Text(LocalizedStringKey("error.resources"))
             }
         }
         .windowResizability(.contentMinSize)
+    }
+
+    private func minimum(_ resources: ShellResources) -> ShellCore.Size {
+        guard let frame = NSScreen.main?.frame else { return resources.geometry.windowMin }
+        return resources.geometry.windowMin(screen: ShellCore.Size(width: Double(frame.width), height: Double(frame.height)))
     }
 }
 

@@ -77,7 +77,17 @@ public struct ShellGeometry: Sendable, Equatable {
         blobDock = Design.Size.blobDockDistance
         menuWidth = Design.Size.blobPopupFallbackWidth
         assistantWidth = Design.Size.blobPopupFallbackWidth
-        windowMin = SheetValues.windowMin
+        windowMin = ShellGeometry.windowMin(margin: margin, gap: gap, minimum: minimum, screen: SheetValues.previewScreen)
+    }
+
+    public func windowMin(screen: Size) -> Size {
+        ShellGeometry.windowMin(margin: margin, gap: gap, minimum: minimum, screen: screen)
+    }
+
+    private static func windowMin(margin: Double, gap: Double, minimum: [Double], screen: Size) -> Size {
+        let width = 2 * margin + 2 * gap + minimum.reduce(0, +)
+        guard screen.width > 0, screen.height > 0 else { return Size(width: width, height: width) }
+        return Size(width: width, height: (width * screen.height / screen.width).rounded(.up))
     }
 
     public init(theme: TokenTheme, metrics: ShellMetrics) {
