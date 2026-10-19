@@ -110,12 +110,3 @@ private struct ComposeButton: View {
         .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.hover), value: hovering)
     }
 }
-
-struct PressScale: ButtonStyle {
-    let scale: Double
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? CGFloat(scale) : 1)
-    }
-}

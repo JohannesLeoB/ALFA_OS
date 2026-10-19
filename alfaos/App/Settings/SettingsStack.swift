@@ -110,7 +110,6 @@ private struct SettingsStackCard: View {
     let depth: Int
     let first: Bool
     let disconnecting: String?
-    @Environment(\.design) private var design
     @Environment(\.hairline) private var hairline
 
     private var front: Bool { depth == 0 }
@@ -149,7 +148,7 @@ private struct SettingsStackCard: View {
         .padding(.horizontal, CGFloat(Design.Spacing.step8))
         .frame(height: CGFloat(Design.Size.headerHeight))
         .overlay(alignment: .bottom) {
-            if front { Rectangle().fill(design.color(\.line)).frame(height: hairline) }
+            if front { Hairline() }
         }
     }
 }

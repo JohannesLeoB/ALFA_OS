@@ -80,17 +80,11 @@ struct LaneView: View {
     }
 
     private var header: some View {
-        HStack(spacing: CGFloat(lane.headGap)) {
-            title
-                .font(theme.font(weight: Design.Weight.medium))
-                .foregroundStyle(theme.design(\.ink))
-                .lineLimit(1)
+        LaneHead(lane: lane) {
+            HeaderTitle(text: title)
             Spacer(minLength: 0)
             if model.currentID == "settings" { tools }
         }
-        .padding(.leading, CGFloat(lane.headLeading))
-        .padding(.trailing, CGFloat(lane.headTrailing))
-        .frame(height: CGFloat(Design.Size.headerHeight))
     }
 
     @ViewBuilder

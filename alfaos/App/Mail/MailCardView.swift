@@ -37,7 +37,6 @@ struct StackCardView: View {
 }
 
 struct CardHead: View {
-    @Environment(\.design) private var design
     let model: MailModel
     let ref: CardRef
     let front: Bool
@@ -58,7 +57,7 @@ struct CardHead: View {
         .padding(.horizontal, CGFloat(Design.Size.headPadRight))
         .frame(height: CGFloat(Design.Size.headerHeight))
         .overlay(alignment: .bottom) {
-            Rectangle().fill(front ? design.color(\.line) : Color.clear).frame(height: CGFloat(Design.Size.hairline))
+            if front { Hairline() }
         }
     }
 
@@ -173,8 +172,6 @@ struct CardHead: View {
 }
 
 struct CardFoot: View {
-    @Environment(\.design) private var design
-    @Environment(\.hairline) private var hairline
     @Environment(\.mailLaneLink) private var link
     let model: MailModel
     let commands: MailCommands
@@ -192,7 +189,7 @@ struct CardFoot: View {
         }
         .padding(.horizontal, CGFloat(Design.Size.headPadRight))
         .frame(height: CGFloat(Design.Size.footerHeight))
-        .overlay(alignment: .top) { Rectangle().fill(design.color(\.line)).frame(height: hairline) }
+        .overlay(alignment: .top) { Hairline() }
     }
 
     private func group(_ slots: [CommandSlot]) -> some View {

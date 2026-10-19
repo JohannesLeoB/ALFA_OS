@@ -6,7 +6,6 @@ import SwiftUI
 
 struct ComposeView: View {
     @Environment(\.design) private var design
-    @Environment(\.hairline) private var hairline
     @Environment(\.mailLaneLink) private var link
     let model: MailModel
     let card: MailDraftCard
@@ -107,7 +106,7 @@ struct ComposeView: View {
         }
         .padding(.horizontal, CGFloat(Design.Size.headPadRight))
         .frame(height: CGFloat(Design.Size.footerHeight))
-        .overlay(alignment: .top) { Rectangle().fill(design.color(\.line)).frame(height: hairline) }
+        .overlay(alignment: .top) { Hairline() }
     }
 }
 

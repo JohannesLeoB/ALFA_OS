@@ -3,64 +3,6 @@ import Mail
 import ShellCore
 import SwiftUI
 
-struct GlyphShape: Shape {
-    let shape: IconPath
-
-    init(glyph: Icon) {
-        shape = glyph.path
-    }
-
-    init(path: IconPath) {
-        shape = path
-    }
-
-    func path(in rect: CGRect) -> Path {
-        let scale = rect.width / CGFloat(SheetValues.iconBox)
-        func point(_ x: Double, _ y: Double) -> CGPoint {
-            CGPoint(x: rect.minX + CGFloat(x) * scale, y: rect.minY + CGFloat(y) * scale)
-        }
-        var path = Path()
-        for segment in shape.segments {
-            switch segment {
-            case .move(let x, let y): path.move(to: point(x, y))
-            case .line(let x, let y): path.addLine(to: point(x, y))
-            case .cubic(let c1x, let c1y, let c2x, let c2y, let x, let y):
-                path.addCurve(to: point(x, y), control1: point(c1x, c1y), control2: point(c2x, c2y))
-            case .close: path.closeSubpath()
-            }
-        }
-        return path
-    }
-}
-
-struct Glyph: View {
-    let glyph: Icon
-    var size = SheetValues.iconSize
-    var stroke = SheetValues.iconStroke
-
-    init(_ glyph: Icon, size: Double = SheetValues.iconSize, stroke: Double = SheetValues.iconStroke) {
-        self.glyph = glyph
-        self.size = size
-        self.stroke = stroke
-    }
-
-    var body: some View {
-        GlyphShape(glyph: glyph)
-            .stroke(style: StrokeStyle(lineWidth: CGFloat(stroke * size / SheetValues.iconBox), lineCap: .round, lineJoin: .round))
-            .frame(width: CGFloat(size), height: CGFloat(size))
-    }
-}
-
-extension Glyph {
-    static func small(_ glyph: Icon) -> Glyph {
-        Glyph(glyph, size: SheetValues.smallIcon, stroke: SheetValues.smallIconStroke)
-    }
-
-    static func tiny(_ glyph: Icon) -> Glyph {
-        Glyph(glyph, size: SheetValues.tinyIcon, stroke: SheetValues.tinyIconStroke)
-    }
-}
-
 struct MailLaneLink: Sendable {
     var openLanes = 3
     var fold: @MainActor @Sendable (Lane) -> Void = { _ in }
@@ -119,40 +61,6 @@ extension View {
     }
 }
 
-struct LaneHead<Content: View>: View {
-    @Environment(\.design) private var design
-    @Environment(\.laneFill) private var laneFill
-    @Environment(\.hairline) private var hairline
-    @Environment(\.accessibilityReduceMotion) private var reduced
-    var scrolled = false
-    var lane = Lane.leading
-    @ViewBuilder let content: Content
-
-    var body: some View {
-        HStack(spacing: CGFloat(lane.headGap)) { content }
-            .padding(.leading, CGFloat(lane.headLeading))
-            .padding(.trailing, CGFloat(lane.headTrailing))
-            .frame(height: CGFloat(Design.Size.headerHeight))
-            .frame(maxWidth: .infinity)
-            .background(laneFill)
-            .overlay(alignment: .bottom) {
-                Rectangle().fill(scrolled ? design.color(\.line) : Color.clear).frame(height: hairline)
-            }
-            .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.hover), value: scrolled)
-    }
-}
-
-struct HeaderTitle: View {
-    let text: Text
-
-    var body: some View {
-        text
-            .designText(\.ink, size: Design.TextSize.body, weight: .medium)
-            .lineLimit(1)
-            .fixedSize()
-    }
-}
-
 struct SmallText: View {
     let text: Text
     var tone: KeyPath<DesignColors, RGB> = \.inkTertiary
@@ -161,15 +69,5 @@ struct SmallText: View {
         text
             .designText(tone, size: Design.TextSize.small)
             .lineLimit(1)
-    }
-}
-
-struct Hairline: View {
-    @Environment(\.design) private var design
-    @Environment(\.hairline) private var hairline
-    var tone: KeyPath<DesignColors, RGB> = \.line
-
-    var body: some View {
-        Rectangle().fill(design.color(tone)).frame(height: hairline)
     }
 }

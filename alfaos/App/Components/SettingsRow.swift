@@ -33,9 +33,7 @@ struct SettingsRow<Trailing: View>: View {
         .frame(minHeight: CGFloat(Design.Spacing.step44))
         .overlay(alignment: .bottom) {
             if line {
-                Rectangle()
-                    .fill(design.color(\.line))
-                    .frame(height: CGFloat(Design.Size.hairline))
+                Hairline()
                     .padding(.horizontal, CGFloat(Design.Spacing.step16))
             }
         }

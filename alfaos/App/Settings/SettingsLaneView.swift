@@ -232,9 +232,7 @@ private struct SectionRow: View {
             .ring(shape, hovering && !selected ? design.color(\.lineStrong) : nil)
             .overlay(alignment: .bottom) {
                 if separated {
-                    Rectangle()
-                        .fill(design.color(\.line))
-                        .frame(height: CGFloat(Design.Size.hairline))
+                    Hairline()
                         .padding(.leading, CGFloat(Design.Spacing.step56))
                         .padding(.trailing, CGFloat(Design.Spacing.step8))
                 }
