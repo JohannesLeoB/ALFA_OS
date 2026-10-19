@@ -73,7 +73,7 @@ struct ChoiceButton: View {
             .padding(.leading, CGFloat(Design.Spacing.step12))
             .padding(.trailing, CGFloat(Design.Spacing.step8))
             .frame(height: CGFloat(Design.Spacing.step28))
-            .ring(Capsule(), design.color(\.lineStrong))
+            .ring(Pill(), design.color(\.lineStrong))
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)

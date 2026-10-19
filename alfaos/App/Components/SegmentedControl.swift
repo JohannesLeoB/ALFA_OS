@@ -31,6 +31,6 @@ struct SegmentedControl<ID: Hashable>: View {
             }
         }
         .padding(inset)
-        .ring(Capsule(), design.color(\.lineStrong))
+        .ring(Pill(), design.color(\.lineStrong))
     }
 }

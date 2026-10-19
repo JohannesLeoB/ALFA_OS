@@ -17,6 +17,6 @@ struct Counter: View {
             .foregroundStyle(design.color(tone))
             .padding(.horizontal, CGFloat(ringed ? Design.Spacing.step8 : Design.Spacing.step4))
             .frame(minWidth: side, minHeight: side, maxHeight: side)
-            .ring(Capsule(), ringTone.map { design.color($0) })
+            .ring(Pill(), ringTone.map { design.color($0) })
     }
 }

@@ -22,7 +22,7 @@ struct ToggleSwitch: View {
                     )
             }
             .frame(width: CGFloat(Design.Spacing.step32), height: CGFloat(height))
-            .ring(Capsule(), isOn ? nil : design.color(\.lineStrong))
+            .ring(Pill(), isOn ? nil : design.color(\.lineStrong))
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)

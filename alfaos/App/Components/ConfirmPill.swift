@@ -75,7 +75,7 @@ struct ConfirmPill<Glyph: View>: View {
         .padding(CGFloat(Design.Spacing.step4))
         .frame(height: CGFloat(Design.Spacing.step28))
         .background(Capsule().fill(asking ? design.color(\.well) : Color.clear))
-        .ring(Capsule(), asking ? design.color(\.line) : nil)
+        .ring(Pill(), asking ? design.color(\.line) : nil)
         .onDisappear { job?.cancel() }
     }
 
@@ -111,7 +111,7 @@ struct ConfirmPill<Glyph: View>: View {
                 .foregroundStyle(design.color(\.signal))
                 .padding(.horizontal, CGFloat(Design.Spacing.step8))
                 .frame(height: CGFloat(Design.Spacing.step20))
-                .ring(Capsule(), design.color(\.signal))
+                .ring(Pill(), design.color(\.signal))
                 .contentShape(Capsule())
                 .mask { erase(fill) }
                 .blur(radius: CGFloat(fill * Design.Confirm.eraseBlur))

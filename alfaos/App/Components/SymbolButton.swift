@@ -50,9 +50,9 @@ struct SymbolButton: View {
             Glyph(glyph)
                 .frame(width: side, height: side)
                 .foregroundStyle(foreground)
-                .background(Capsule().fill(fill))
-                .ring(Capsule(), ring)
-                .contentShape(Capsule())
+                .background(Circle().fill(fill))
+                .ring(Circle(), ring)
+                .contentShape(Circle())
                 .opacity(disabled ? SheetValues.disabledOpacity : 1)
         }
         .buttonStyle(PressScale(scale: disabled || !pressed ? 1 : SheetValues.pressScale))

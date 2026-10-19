@@ -73,7 +73,7 @@ struct TextButton<Glyph: View>: View {
             .padding(.trailing, CGFloat(Design.Spacing.step12))
             .frame(height: height)
             .background(Capsule().fill(fill))
-            .ring(Capsule(), ringColor)
+            .ring(Pill(), ringColor)
             .contentShape(Capsule())
             .opacity(disabled ? SheetValues.disabledOpacity : 1)
         }

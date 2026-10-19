@@ -22,7 +22,7 @@ struct Toast: View {
                         .font(.face(Design.TextSize.small, weight: Design.Weight.medium))
                         .padding(.horizontal, CGFloat(Design.Spacing.step8))
                         .frame(height: CGFloat(Design.Spacing.step20))
-                        .ring(Capsule(), design.color(\.onInverse))
+                        .ring(Pill(), design.color(\.onInverse))
                         .contentShape(Capsule())
                 }
                 .buttonStyle(.plain)

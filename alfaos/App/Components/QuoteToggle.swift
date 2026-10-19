@@ -14,7 +14,7 @@ struct QuoteToggle: View {
                 .foregroundStyle(design.color(\.sheetInkSecondary))
                 .padding(.horizontal, CGFloat(Design.Spacing.step8))
                 .frame(height: CGFloat(Design.Size.chipHeight))
-                .overlay(Capsule().strokeBorder(design.color(\.lineStrong), lineWidth: hairline))
+                .overlay(Pill().strokeBorder(design.color(\.lineStrong), lineWidth: hairline))
                 .contentShape(Capsule())
         }
         .buttonStyle(.plain)

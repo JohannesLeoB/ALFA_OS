@@ -21,7 +21,7 @@ struct Chip<RemoveGlyph: View>: View {
         .padding(.leading, CGFloat(Design.Spacing.step8))
         .padding(.trailing, CGFloat(Design.Spacing.step4))
         .frame(height: CGFloat(Design.Size.chipHeight))
-        .ring(Capsule(), design.color(\.lineStrong))
+        .ring(Pill(), design.color(\.lineStrong))
         .help(Text(verbatim: detail ?? name))
     }
 }
@@ -56,7 +56,7 @@ struct AttachmentChip<Glyph: View, RemoveGlyph: View>: View {
         .padding(.leading, CGFloat(Design.Spacing.step8))
         .padding(.trailing, CGFloat(onRemove == nil ? Design.Spacing.step8 : Design.Spacing.step4))
         .frame(height: CGFloat(Design.Size.chipHeight))
-        .ring(Capsule(), design.color(ink.line))
+        .ring(Pill(), design.color(ink.line))
         .help(Text(verbatim: detail ?? name))
     }
 }
