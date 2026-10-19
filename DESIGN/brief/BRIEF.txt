@@ -1,0 +1,81 @@
+Brief Code → Design · v9 · 19.10.2026
+
+ZIEL
+Der nächste Export liefert für Mail, Einstellungen und Hülle (ALFA Shell) einen vollständigen Vertrag im Ordner contract/: jeder Wert ein Token, jedes Bauteil und Element mit fester id, jeder sichtbare Text mit Schlüssel, jede Änderung protokolliert. Code liest ihn per Skript und baut daraus.
+
+GRUNDLAGE
+- Stand: Export "ALFA OS Interface CHEF 1610-handoff 1810.zip", 18.10.2026, sha256 d0ed5abb…3c8d2.
+- Anhang: sechs Schemas, validate.py, check_contract.py, diff_contract.py, examples/ (stimmiger Mini-Vertrag), tokens-gegen-schema.txt (297 Funde). Die Schemas bestimmen Dateien, Felder und Werte.
+- Regeln (Johannes): Der neueste Export gilt und muss vollständig sein. Namen unter der Oberfläche englisch. Namensraum der Erweiterungen: alfa.
+- Pilot-Bögen: ALFA Mail, ALFA Shell, ALFA Bestaetigen. ALFA Einstellungen lädt ALFA Mail (ALFA Einstellungen.dc.html:12).
+
+PRÜFBEFEHLE (im Ordner mit den Skripten; contract ist dein neuer Vertragsordner)
+P1  python3 validate.py contract                      → letzte Zeile "contract: valid"
+P2  python3 check_contract.py contract --areas shell,mail,settings "ALFA Mail.dc.html" "ALFA Shell.dc.html" "ALFA Bestaetigen.dc.html"   → "consistent"
+P3  python3 diff_contract.py <voriger contract> contract   → "log matches"
+
+SCHRITTE (der Reihe nach)
+
+T1 Tokens nach DTCG
+Ergebnis: base.tokens.json, theme-light.tokens.json, theme-dark.tokens.json, alfa.resolver.json.
+Arbeitsliste tokens-gegen-schema.txt:
+- Status umbenennen: freigegeben → approved, freigabe-orange → approved-provisional, von-design-gesetzt → set-by-design.
+- Tokens ohne status und ohne source bekommen set-by-design oder Johannes' Wortlaut als source.
+- component: Verweise als Token mit $value, $type, Erweiterung.
+- stack und surface: benannte Tokens (color bzw. shadow), z. B. stack.depth0.surface.
+- color.mood: je Wert in die Themen-Dateien.
+- export, paket: in $extensions.alfa der Datei.
+- confirm.tooltip: als Angabe am Bauteil confirm-pill in components.json.
+- Bewegung zusätzlich als Typ transition, z. B. motion.transition.stack.
+Fertig, wenn: P1 meldet "contract: valid" und check_contract.py contract meldet "consistent".
+
+T2 Bauteile und Elemente
+Ergebnis: components.json; data-id an jedem zu bauenden Element in den drei Bögen.
+Inhalt: ein Eintrag je data-part-Name, auch für Namen aus Logik wie part: "filter-capsule" (ALFA Mail.dc.html:851); Maße und Zustände als Token-Verweise; Muster mit flow.
+
+T3 Ansichten
+Ergebnis: views.json mit shell, mail, settings.
+
+T4 Texte
+Ergebnis: texts.json (key, de, area, kind; en, element, placeholders, wo vorhanden).
+Fertig für T2 bis T4: P1 und P2 ohne Fund.
+
+T5 Fehlender Inhalt (zeichnen, in T2 bis T4 eintragen)
+L-008 Konto hinzufügen: Knopf zeigt nur einen Toast (ALFA Mail.dc.html:737); Felder in INHALT.json:1063.
+L-009 Kontowechsel in Mail für bis zu drei Konten (decisions.json:30). Johannes 19.10.: Tendenz Wähler; Entscheidung nach deiner Zeichnung. Heute ein Postfach im Kopf (ALFA Mail.dc.html:830).
+L-010 Signaturen in den Einstellungen anlegen, in Mail wählen; heute keine Anlage (ALFA Mail.dc.html:759); Text in INHALT.json:908.
+L-011 Logos für die Dienste in ALFA Mail (:391–401) ohne Logo: Google, Mail-Konten, ClickUp, Claude, Airtable, sevDesk, Happa Happa (Clockodo, DHL Sendungen, DHL Versand haben eins).
+L-012 Rückmeldungen von „Jetzt abgleichen“ (ALFA Mail.dc.html:744) anzeigen; Wortlaut INHALT.json:928–958.
+L-013 Konto entfernen und Vorlage entfernen mit Bestätigen-Pille; Wortlaut INHALT.json:1013, :1023.
+Fertig, wenn: jede Nummer hat ihre Elemente mit id im Vertrag, und P1, P2 ohne Fund.
+
+T6 Werte festlegen (je Punkt genau ein Wert im Vertrag)
+L-015 Fokusring-Abstand: alfa-theme.css:6 = 2, ALFA Bestaetigen.dc.html:20, :28, :29, :39 = 1. Wert wählst du.
+L-016 menu-row: ALFA Shell.dc.html:76 Radius 12, Innenabstand 12; ALFA Mail.dc.html:350 Radius 8, Innenabstand 8. Wert wählst du.
+W-03 „Fenster 960 × 600“ in TOKENBOGEN.json:3 und ALFA Huelle.dc.html:77 streichen.
+W-04 trailingTextInset 12; lieferung-an-code/decisions.json:99 nennt noch 14.
+W-05 Dienstzahl in settings-sections.json:4 auf das Gezählte bringen: 10 in ALFA Mail, monday nur in ALFA Dienste.
+W-06 Gruppen der Einstellungen wie im Bogen: Ich, Firma, Verbindungen, Schutz und System (ALFA Mail.dc.html:389); INHALT.json:93 und :1223 nachziehen.
+W-07 Jedes der 47 Felder in INHALT.json felder_je_abschnitt im Vertrag oder gestrichen.
+Entschieden (Johannes 19.10.): Kachelhöhe Integrationen 112. Kartenstapel 8a und 8b als Einstellung, Vorgabe 8a. L-014 Firmendaten und Impressum trägt der Nutzer ein (Felder ohne Werte, mit Bezeichnung und Platzhalter).
+Fertig, wenn: jeder Punkt hat genau einen Wert im Vertrag.
+
+T7 Begleitdokumente per Skript
+Ergebnis: dein Skript erzeugt akte.json und werte-abgleich.json aus den Dateien; akte.json bekommt das Feld answered mit allen erledigten Nummern aus T5 und T6.
+Zugleich behoben:
+W-01 Tokenzahl in den Begleitdokumenten = Zählung im Vertrag.
+W-02 Byte-Angaben in akte.json = Dateigrößen.
+W-08 Zeilenangaben (where, werte-abgleich.json) = Fundzeile.
+W-09 Verweise in RUECKGABE-AN-CODE.md: :42 → entscheidungen.md:137; :72 → ALFA Shell.dc.html:155 und :160.
+W-10 Zahl neuer Tokens = Vergleich mit dem vorigen Stand.
+Fertig, wenn: zwei Läufe ergeben dieselben Dateien.
+
+T8 Änderungsprotokoll
+Ergebnis: changes.json; dein Skript hängt je Export einen Block an (Vergleich mit dem vorigen Vertrag; Grund höchstens 120 Zeichen; erster Block previous "none"). Token-ids: base ohne Vorsatz (size.edge), Themen mit Vorsatz (theme-dark:color.ground).
+Fertig, wenn: P1 ohne Fund und ab dem zweiten Vertrag P3 "log matches".
+
+ABGABE
+Je Schritt T1 bis T8 „erledigt“ oder „offen“, dazu die Ausgaben von P1, P2, P3.
+
+SPÄTER
+Funktions-Specs B-01 bis B-04 und B-06 bis B-09 (Lead aus Mail, Kontaktblatt, Speichern in Drive, Ablegen per Ziehen, Klartext/HTML, Link öffnen, Mehr laden, Alle Anhänge) folgen gesondert. Projekte, Heute, Kataloge, Warenkorb folgen nach dem Pilot im selben Format.
