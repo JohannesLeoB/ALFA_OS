@@ -6,7 +6,8 @@ additionalProperties, propertyNames, items, prefixItems, minItems, maxItems, min
 pattern, minLength, maxLength, minProperties, anyOf, allOf, if/then/else.
 Exit 0 = valid, 1 = errors, 2 = usage.
 Usage: validate.py SCHEMA FILE [--max N]
-       validate.py CONTRACT_DIR   (each known file against its schema, schemas next to this script)
+       validate.py CONTRACT_DIR   (all required files must exist and hold JSON; each one with a schema is checked
+                                  against it; akte.json and werte-abgleich.json have no schema yet)
 """
 import json
 import re
@@ -114,21 +115,48 @@ class Validator:
 MAP = [(".tokens.json", "alfa.tokens.schema.json"), ("alfa.resolver.json", "alfa.resolver.schema.json"),
        ("components.json", "components.schema.json"), ("views.json", "views.schema.json"),
        ("texts.json", "texts.schema.json"), ("changes.json", "changes.schema.json")]
+REQUIRED = ["base.tokens.json", "theme-light.tokens.json", "theme-dark.tokens.json", "alfa.resolver.json",
+            "components.json", "views.json", "texts.json", "changes.json", "akte.json", "werte-abgleich.json"]
+NO_SCHEMA = ("akte.json", "werte-abgleich.json")
+
+
+def read_json(path):
+    """Return (data, error). A missing, empty or unreadable file gives an error text, never a crash."""
+    import os
+    if not os.path.isfile(path):
+        return None, "file is missing"
+    try:
+        with open(path, encoding="utf-8") as f:
+            text = f.read()
+    except (OSError, UnicodeDecodeError) as error:
+        return None, "file is unreadable (%s)" % error
+    if not text.strip():
+        return None, "file is empty"
+    try:
+        return json.loads(text), None
+    except ValueError as error:
+        return None, "invalid JSON (%s)" % error
 
 
 def contract(folder):
     import os
     here = os.path.dirname(os.path.abspath(__file__))
     bad = 0
-    for name in sorted(os.listdir(folder)):
+    names = list(REQUIRED)
+    if os.path.isdir(folder):
+        names += [n for n in sorted(os.listdir(folder)) if n not in names and any(n.endswith(e) for e, _ in MAP)]
+    for name in names:
+        data, problem = read_json(os.path.join(folder, name))
+        errs = [problem] if problem else []
+        if not errs and name in NO_SCHEMA and (not data or not isinstance(data, (dict, list))):
+            errs = ["no content: a non-empty object or array is required"]
         schema = next((s for end, s in MAP if name.endswith(end)), None)
-        if schema is None:
-            continue
-        with open(os.path.join(here, schema), encoding="utf-8") as f:
-            sch = json.load(f)
-        with open(os.path.join(folder, name), encoding="utf-8") as f:
-            data = json.load(f)
-        errs = Validator(sch).errors(sch, data, "#")
+        if not errs and schema is not None:
+            sch, problem = read_json(os.path.join(here, schema))
+            if problem:
+                errs = ["schema %s: %s" % (schema, problem)]
+            else:
+                errs = Validator(sch).errors(sch, data, "#")
         print("%s: %s" % (name, "%d error(s)" % len(errs) if errs else "valid"))
         for e in errs[:20]:
             print("  " + e)
