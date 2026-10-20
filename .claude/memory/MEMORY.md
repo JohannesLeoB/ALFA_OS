@@ -4,6 +4,7 @@
 - [Stammtisch](stammtisch.md) — Arbeitsform, geltende Antworten, offene Fragen F-01 bis F-22 (Stand 20.10.; seither F-23 bis F-31, siehe stand.md)
 - [Arbeitsweise](arbeitsweise.md) — Ergebnisse statt Worte, alles lesen, nichts ohne Zustimmung schreiben, bauen statt analysieren, Arbeiten des zweiten Entwicklers nie
 - [Lead-Verantwortung](lead-verantwortung.md) — Lead denkt voraus; Schlamperei rieselt in jede Sitzung durch
+- [Strang-Meldungen](strang-meldungen.md) — jeden Strang melden: Start, blockiert, fertig, mit Beleg (20.10.)
 - [Verlass ist der Job](verlass-ist-der-job.md) — blind verlassen können; nichts fertig, grün oder geprüft ohne Prüfung Wert für Wert
 - [Design ist das Ziel](design-ist-das-ziel.md) — letzter Design-Master ist einzige Wertquelle; Code ist Funktion, keine Gestaltung; nur Daten gegen Daten
 - [Entscheidung, Wortlaut, Herkunft](entscheidung-wortlaut-herkunft.md) — sein Entscheid, Designs Wortlaut und bloße Herkunft streng trennen
