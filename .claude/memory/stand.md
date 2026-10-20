@@ -64,7 +64,15 @@ metadata:
 
 Übergabe Lead 20.10. abends (vor Compact, „zweite Amtszeit“)
 - Gebaut seit Mittag, alles in main und gepusht: F1 Fundus-Tests in den einen Test 404342e (Testdateien 13 → 2, testLines 5714), README.md als Karte mit Wegweiser, Bauen, Commit 8dfb074. Gedächtnis: test-verstaendnis.md, nebensitzungen.md (L1-Ausnahme d64fe38), strang-meldungen.md, design-brief-aktuell.md.
-- Läuft: Ticket A1 (Mail: Paging an loadMore, Outbox-Fehler nicht verschlucken, Aktionsfehler nur zeigen wenn Master es zeichnet, sonst Lücke). Haiku prüft das Ticket; danach bau-mail mit Sonnet, Lead prüft und committet. Ticket-Text im Lead-Scratchpad `ticket-A1.txt` (flüchtig).
+- A1 nach Haiku-Prüfung auf A1b verengt; Nachladen und Aktionsfehler sind Lücken im Master (Brief v10 N7). A1b Postausgang 55bcf5b:
+  - Fehlgeschlagenes Speichern behält den Eintrag und speichert beim nächsten Durchlauf nach.
+  - Gesendete Zeilen, die sich nicht entfernen lassen, werden als `sent` markiert, nie wieder geladen, beim nächsten Durchlauf entfernt und beim Start gelöscht.
+  - „Erneut senden“ wiederholt den fehlgeschlagenen Eintrag mit dem aktuellen Text.
+  - Prüfung: Mutanten des Bauers und zwei der Lead sind rot, App-Build grün.
+  - Verworfen: Meldung über `.syncFailed`, sie ersetzte die ganze Mailliste (MailModel.swift:393-399 → MailListLane.swift:158).
+  - Offen:
+    - Unlesbare Postausgang-Zeilen und lokale Speicherfehler sind unsichtbar (Anzeige ist Lücke an Design, N7).
+    - A1c: `card.remoteID` folgt bei IMAP nicht der `draftID` des Postausgangs (IMAPSMTPMailTransport.swift:251-273 hängt neu an), danach bleibt ein verwaister Entwurf auf dem Server; schon vor A1b.
 - Parallel bei Johannes: AGENTS.md wird in Codex neu gefasst (Lead hat Korrekturen geliefert: Gedächtnis, Leseorte, fundus, Ehrenkodex, Wegweiser, Rangfolge mit Quelle, Export erst nach Prüfskripten, 75 %-Regel, Haiku-Pflicht eingrenzen). Produktsitzung grillt Johannes zu Umfang, Einstellungen, Dateien/Vorlagen, Projekte, Heute, Kataloge, Mail-Resten, Datenhaltung. Eigene Grill-Sitzung des Lotsen (Auftrag GRILL-LOTSE-AUFTRAG.md bei Johannes) zu Lastenheft, offenen Lead-Entscheiden, Code-Rückschau, Codebase-Design, Ablauf.
 - Wartet danach: B Ballast und D Namen/myk erst nach Johannes' Entscheid in der Grill-Sitzung, was weg darf. C Tempo, E2 SheetValues-Quellen, H7 Datenspeicher (Stammtisch-Entwurf H7 in STAMMTISCH/ALFA Stammtisch.rtf).
 - Johannes 20.10. zu Tests: „bitte manage du das mit den tests“ (test-verstaendnis.md). Unabhängige Prüfung liegt auf der Wächter-Seite bei Johannes; die Lead kennt keine Einzelheiten und fragt nicht danach.
