@@ -303,7 +303,7 @@ final class BlobTests {
         let g = try Fixture.geometry()
         let top = BlobPlacement.home(geometry: g).menuOrigin(window: Fixture.screen, geometry: g)
         recordTrue(top.opensDownward)
-        recordEqual(top.origin, Point(x: 16, y: 64))
+        recordEqual(top.origin, Point(x: g.margin, y: g.blobTop))
         let bottom = BlobPlacement(edge: .bottom, offset: 16).menuOrigin(window: Fixture.screen, geometry: g)
         recordFalse(bottom.opensDownward)
     }
@@ -2739,11 +2739,15 @@ final class MailModelTests {
         engine.pages[nil] = MailMessagePage(messages: (1...12).map { fakeMessage("m\($0)", flags: [.seen]) })
         await model.start()
         recordEqual(model.cardLimit, 6)
-        for index in 1...12 { await model.open("m\(index)") }
+        for index in 1...12 { await model.open("m\(index)", pin: true) }
         recordEqual(model.cards.count, 6)
         recordEqual(model.cards.first?.id, "m7")
         model.setCardLimit(2)
         recordEqual(model.cards.map(\.id), ["m11", "m12"])
+        model.setCardLimit(6)
+        await model.open("m1")
+        await model.open("m2")
+        recordEqual(model.cards.map(\.id), ["m11", "m12", "m2"])
     }
     func runOpenMarksReadAndFlagFailureKeepsHint() async {
         let engine = ModelFakeEngine()
@@ -2898,7 +2902,7 @@ final class ModelActionTests {
         engine.pages[nil] = MailMessagePage(messages: [fakeMessage("m1", thread: "t9"), fakeMessage("m2")])
         await model.loadSelection()
         engine.threadMessages = [fakeMessage("m0", thread: "t9"), fakeMessage("m1", thread: "t9")]
-        await model.open("m1")
+        await model.open("m1", pin: true)
         await model.open("m2")
         await model.loadThread("m1")
         recordEqual(model.cards.first { $0.id == "m1" }?.conversation.map(\.id), ["m0", "m1"])
@@ -3369,14 +3373,14 @@ final class MailSweepTests {
     func runTheCardsKeepTheLastOpenOneSelected() async {
         let (model, _) = make(["a"])
         await model.start()
-        for id in ["m1", "m2", "m3"] { await model.open(id) }
+        for id in ["m1", "m2", "m3"] { await model.open(id, pin: true) }
         note("opened", look(model))
         model.close("m3")
         note("close-selected", look(model))
-        await model.open("m3")
+        await model.open("m3", pin: true)
         model.close("m2")
         note("close-middle", look(model))
-        await model.open("m2")
+        await model.open("m2", pin: true)
         model.close("m1")
         note("close-first", look(model))
         model.close("none")
