@@ -2154,6 +2154,22 @@ final class CoreTests {
         XCTAssertEqual(transport.sent.map(\.subject), ["t"])
         XCTAssertTrue(core.outbox.isEmpty)
     }
+    func runSendAgainReplacesTheDraftTheOutboxSaved() async throws {
+        for saveFirst in [false, true] {
+            let hub = HubDouble(), transport = hub.add("one")
+            transport.folders = scriptedInbox
+            let model = MailModel(engine: try MailCore(hub: hub, database: DatabaseQueue()))
+            await model.start()
+            let id = try XCTUnwrap(model.compose(to: "z@example.test"))
+            model.edit(id) { $0.subject = "s" }
+            transport.savedID = "d1"; await model.save(id); transport.savedID = "d2"
+            transport.sendError = MailTransportError.recipientRejected("z@example.test", 550, "no such user")
+            await model.send(id); transport.sendError = nil
+            if saveFirst { transport.savedID = "d3"; await model.save(id); await model.handle(.outboxChanged) }
+            transport.savedID = "d9"; await model.send(id)
+            XCTAssertEqual(transport.calls.filter { $0.hasPrefix("saveDraft") }, ["saveDraft:-:s", "saveDraft:d1:s", "saveDraft:d2:s"] + (saveFirst ? ["saveDraft:d3:s"] : []))
+        }
+    }
     func runOutboxItemWithoutATransportStaysWaiting() async throws {
         let hub = HubDouble()
         let transport = hub.add("one")
@@ -5528,6 +5544,7 @@ final class WholeAppTests: XCTestCase {
         try await step("CoreTests.runSyncFailureKeepsLastStateAndReports") { try await CoreTests().runSyncFailureKeepsLastStateAndReports() }
         try await step("CoreTests.runGmailHttpErrorsAreClassified") { CoreTests().runGmailHttpErrorsAreClassified() }
         try await step("CoreTests.runSendAgainAfterARejectionRetriesTheFailedItem") { try await CoreTests().runSendAgainAfterARejectionRetriesTheFailedItem() }
+        try await step("CoreTests.runSendAgainReplacesTheDraftTheOutboxSaved") { try await CoreTests().runSendAgainReplacesTheDraftTheOutboxSaved() }
         try await step("CoreTests.runOutboxItemWithoutATransportStaysWaiting") { try await CoreTests().runOutboxItemWithoutATransportStaysWaiting() }
         try await step("CoreTests.runRejectedSignInIsShownAsExpiredSignIn") { try await CoreTests().runRejectedSignInIsShownAsExpiredSignIn() }
         try await step("CoreTests.runAMailSentFromTheOutboxIsGoneAfterAReopen") { try await CoreTests().runAMailSentFromTheOutboxIsGoneAfterAReopen() }

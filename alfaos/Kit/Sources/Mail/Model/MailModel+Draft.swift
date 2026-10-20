@@ -192,6 +192,7 @@ extension MailModel {
                 if drafts[index].state == .queuedInOutbox { drafts[index].state = .sent }
                 continue
             }
+            if drafts[index].state == .queuedInOutbox, let current = item.draftID { drafts[index].remoteID = current }
             switch item.state {
             case .failed(let hint): drafts[index].state = .sendFailed(hint)
             case .waiting, .sending: drafts[index].state = .queuedInOutbox
