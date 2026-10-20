@@ -9,4 +9,4 @@ Johannes 20.10.: „Wenn es sinn ergibt, der App Entwicklung "gut tut" dann sind
 
 **Why:** Parallele Stränge im selben Ordner vermischen unfertige Änderungen (20.10.: I3 und K1 in WholeAppTests.swift); eigene Worktrees trennen sie, aber Reste dürfen nicht liegen bleiben (L1).
 
-**How to apply:** Nur wenn es der App nützt. Vorher Brief schreiben, von einem Haiku-Prüfer gegenlesen lassen, dann Sitzung mit Worktree starten. Ergebnis selbst prüfen, Zweig nach main führen, pushen; danach Worktree, Zweig (lokal und GitHub) und alle Reste sofort entfernen und Johannes melden ([[strang-meldungen]]). Gilt erst als Regel in AGENTS.md L1, wenn Johannes den Wortlaut freigibt.
+**How to apply:** Nur wenn es der App nützt. Vorher Brief schreiben, von einem Haiku-Prüfer gegenlesen lassen, dann Sitzung mit Worktree starten. Ergebnis selbst prüfen, Zweig nach main führen, pushen; danach Worktree, Zweig (lokal und GitHub) und alle Reste sofort entfernen und Johannes melden ([[strang-meldungen]]). Steht seit 20.10. als Ausnahme in AGENTS.md L1 (Johannes: „L1 ist ok!“).
