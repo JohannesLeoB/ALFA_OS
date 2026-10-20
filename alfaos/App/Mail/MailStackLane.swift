@@ -38,7 +38,7 @@ struct MailStackLane: View {
             ConfirmPill(label: nil, question: word("mail.confirm.discard.question"), yes: word("mail.confirm.discard.yes"),
                         no: word("confirm.no"), holdHint: line("mail.confirm.hold", words("mail.confirm.discard.yes")),
                         startsAsking: true, showsProgress: false, onYes: {
-                            if let id = discarding { model.discard(id) }
+                            if let id = discarding { Task { await model.deleteDraft(id) } }
                             discarding = nil
                         }, onNo: { discarding = nil }) {
                 Glyph(.trash)

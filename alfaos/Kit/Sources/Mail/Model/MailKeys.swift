@@ -106,14 +106,12 @@ extension MailCardContent {
 
 extension MailDraftState {
     public enum Kind: CaseIterable, Sendable {
-        case saved, sending, sendBlockedNoSubject, sendBlockedNoRecipient, sendFailed, queuedInOutbox
+        case saved, sending, sendFailed, queuedInOutbox
 
         public var key: String {
             switch self {
             case .saved: "mail.draft.saved"
             case .sending: "mail.draft.sending"
-            case .sendBlockedNoSubject: "mail.draft.sendBlocked.noSubject"
-            case .sendBlockedNoRecipient: "mail.draft.sendBlocked.noRecipient"
             case .sendFailed: "mail.draft.sendFailed"
             case .queuedInOutbox: "mail.draft.queuedInOutbox"
             }
@@ -125,8 +123,6 @@ extension MailDraftState {
         case .idle, .edited, .saving, .sent: nil
         case .saved: .saved
         case .sending: .sending
-        case .sendBlocked(.noSubject): .sendBlockedNoSubject
-        case .sendBlocked(.noRecipient): .sendBlockedNoRecipient
         case .sendFailed: .sendFailed
         case .queuedInOutbox: .queuedInOutbox
         }

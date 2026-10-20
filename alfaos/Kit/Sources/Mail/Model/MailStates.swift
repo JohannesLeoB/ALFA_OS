@@ -89,11 +89,6 @@ public struct ReadingCard: Identifiable, Equatable, Sendable {
     }
 }
 
-public enum SendBlockReason: Equatable, Sendable {
-    case noSubject
-    case noRecipient
-}
-
 public enum MailDraftState: Equatable, Sendable {
     case idle
     case edited
@@ -101,7 +96,6 @@ public enum MailDraftState: Equatable, Sendable {
     case saved(Date)
     case sending
     case sent
-    case sendBlocked(SendBlockReason)
     case sendFailed(Hint)
     case queuedInOutbox
 }

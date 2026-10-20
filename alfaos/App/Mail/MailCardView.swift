@@ -186,26 +186,32 @@ struct CardFoot: View {
     private func group(_ slots: [MailSlot]) -> some View {
         HStack(spacing: CGFloat(Design.Size.headGapStack)) {
             ForEach(slots) { slot in
-                if slot.kind == .more {
-                    SymbolButton(help: words("mail.action.more"), glyph: .more, hover: .fill) { openMore() }
-                        .background(AnchorProbe(box: moreAnchor))
-                } else if slot.action == .send, slot.cost > SheetValues.commandIconCost {
-                    TextButton(label: word("mail.action.send"), kind: .accent, disabled: slot.off, action: { run.perform(.send) }) { Glyph(.send) }
-                        .background {
-                            Button("") { if slot.off { model.announce(.recipientMissing) } else { run.perform(.send) } }
-                                .keyboardShortcut(.return, modifiers: .command)
-                                .opacity(0)
-                                .allowsHitTesting(false)
-                                .accessibilityHidden(true)
-                        }
-                } else if let action = slot.action, let glyph = action.glyph {
-                    SymbolButton(help: run.help(action), glyph: glyph, selected: slot.accent, disabled: slot.off, hover: .fill) {
-                        run.perform(action)
-                    }
-                    .keyboardShortcut(action.shortcut)
-                }
+                slotView(slot).background { if slot.action == .send { sendKey(slot) } }
             }
         }
+    }
+
+    @ViewBuilder
+    private func slotView(_ slot: MailSlot) -> some View {
+        if slot.kind == .more {
+            SymbolButton(help: words("mail.action.more"), glyph: .more, hover: .fill) { openMore() }
+                .background(AnchorProbe(box: moreAnchor))
+        } else if slot.action == .send, slot.cost > SheetValues.commandIconCost {
+            TextButton(label: word("mail.action.send"), kind: .accent, disabled: slot.off, action: { run.perform(.send) }) { Glyph(.send) }
+        } else if let action = slot.action, let glyph = action.glyph {
+            SymbolButton(help: run.help(action), glyph: glyph, selected: slot.accent, disabled: slot.off, hover: .fill) {
+                run.perform(action)
+            }
+            .keyboardShortcut(action.shortcut)
+        }
+    }
+
+    private func sendKey(_ slot: MailSlot) -> some View {
+        Button("") { if slot.off { model.announce(.recipientMissing) } else { run.perform(.send) } }
+            .keyboardShortcut(.return, modifiers: .command)
+            .opacity(0)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
     }
 
     private func openMore() {

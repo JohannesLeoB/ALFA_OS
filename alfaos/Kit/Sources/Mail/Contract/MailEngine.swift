@@ -89,6 +89,7 @@ public protocol MailEngine: AnyObject {
     var outbox: [OutboxItem] { get }
     func retryOutbox() async
     func resend(_ id: OutboxItem.ID, _ draft: EmailDraft, draftID: String?) async -> SendOutcome?
+    func revise(_ id: OutboxItem.ID, _ draft: EmailDraft)
     func unreadCount(_ inlet: Inlet.ID) -> Int
     var events: AsyncStream<MailEngineEvent> { get }
 }
@@ -101,4 +102,5 @@ extension MailEngine {
         throw HubError.capabilityMissing(inlet, .mail)
     }
     public func resend(_ id: OutboxItem.ID, _ draft: EmailDraft, draftID: String?) async -> SendOutcome? { nil }
+    public func revise(_ id: OutboxItem.ID, _ draft: EmailDraft) {}
 }

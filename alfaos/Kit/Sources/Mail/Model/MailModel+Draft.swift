@@ -79,18 +79,17 @@ extension MailModel {
 
     public func edit(_ id: UUID, _ change: (inout EmailDraft) -> Void) {
         guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
-        switch drafts[index].state {
-        case .sending, .sent, .queuedInOutbox: return
-        default: break
-        }
+        if drafts[index].state == .sent { return }
         change(&drafts[index].draft)
-        if case .sendFailed = drafts[index].state { return }
-        drafts[index].state = .edited
-    }
-
-    public func discard(_ id: UUID) {
-        drafts.removeAll { $0.id == id }
-        detach(.draft(id))
+        switch drafts[index].state {
+        case .sendFailed, .sending: return
+        case .queuedInOutbox:
+            if let outboxID = drafts[index].outboxID {
+                engine.revise(outboxID, drafts[index].draft)
+                outbox = engine.outbox
+            }
+        default: drafts[index].state = .edited
+        }
     }
 
     public func save(_ id: UUID) async {
@@ -107,6 +106,8 @@ extension MailModel {
             if let now = drafts.firstIndex(where: { $0.id == id }) {
                 drafts[now].remoteID = remoteID
                 if drafts[now].state == .saving { drafts[now].state = .saved(clock()) }
+            } else {
+                try? await engine.deleteDraft(card.inlet, draftID: remoteID)
             }
         } catch {
             if let now = drafts.firstIndex(where: { $0.id == id }) {
@@ -163,13 +164,10 @@ extension MailModel {
         case .sending, .sent, .queuedInOutbox: return
         default: break
         }
-        if card.draft.subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            drafts[index].state = .sendBlocked(.noSubject)
-            return
-        }
         let recipients = [card.draft.to, card.draft.cc, card.draft.bcc].compactMap { $0 }
-        if recipients.allSatisfy({ MailAddresses.split($0).isEmpty }) {
-            drafts[index].state = .sendBlocked(.noRecipient)
+        if card.draft.subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            || recipients.allSatisfy({ MailAddresses.split($0).isEmpty }) {
+            post(.recipientMissing)
             return
         }
         drafts[index].state = .sending
@@ -189,6 +187,7 @@ extension MailModel {
         case .queued(let outboxID):
             drafts[now].outboxID = outboxID
             drafts[now].state = .queuedInOutbox
+            if drafts[now].draft != card.draft { engine.revise(outboxID, drafts[now].draft) }
             reconcileDrafts()
         }
     }

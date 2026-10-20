@@ -463,8 +463,6 @@ MailModelTests.runFilterWithoutHitsIsNoFilterMatch eq MailListState.loaded()
 MailModelTests.runLoadMoreAppendsByPageToken true some(true)
 MailModelTests.runLoadMoreAppendsByPageToken eq ["m1","m2"]
 MailModelTests.runLoadMoreAppendsByPageToken false some(false)
-MailModelTests.runSendWithoutSubjectIsBlocked eq some(MailDraftState.sendBlocked(sendBlocked=SendBlockReason.noSubject()))
-MailModelTests.runSendWithoutSubjectIsBlocked eq some(MailDraftState.sendBlocked(sendBlocked=SendBlockReason.noRecipient()))
 MailModelTests.runSendWithoutSubjectIsBlocked true some(true)
 MailModelTests.runSendQueuedIsQueuedInOutbox eq some(MailDraftState.queuedInOutbox())
 MailModelTests.runSendQueuedIsQueuedInOutbox eq some(MailDraftState.sent())
@@ -506,7 +504,6 @@ MailModelTests.runRowStatesAndThreadCount eq [MailRowState.selected()]
 MailModelTests.runRowStatesAndThreadCount false some(false)
 MailModelTests.runSelectFolderChangesTheSelectionAndKeepsTheRole eq "SENT"
 MailModelTests.runSelectFolderChangesTheSelectionAndKeepsTheRole eq some(MailFolderRole.sent())
-MailModelTests.runADraftWithOnlyBccCountsAsHavingARecipient ne some(MailDraftState.sent())
 MailModelTests.runADraftWithOnlyBccCountsAsHavingARecipient eq ["hidden@x.test"]
 ModelActionTests.runTheModelActions eq ["archive:m1"]
 ModelActionTests.runTheModelActions eq ["m2"]

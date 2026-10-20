@@ -1603,28 +1603,6 @@
         }
       }
     },
-    "mail.draft.sendBlocked.noRecipient" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empfänger fehlt"
-          }
-        }
-      }
-    },
-    "mail.draft.sendBlocked.noSubject" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Betreff fehlt"
-          }
-        }
-      }
-    },
     "mail.draft.sendFailed" : {
       "comment" : "roh",
       "localizations" : {

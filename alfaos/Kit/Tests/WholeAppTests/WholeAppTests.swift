@@ -1658,6 +1658,10 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     private var _listCalls = 0
     private var _folderCalls = 0
     private var _bodyCalls = 0
+    private var _gate: CheckedContinuation<Void, Never>?
+    var holdSend = false
+    var sendHeld: Bool { lock.withLock { _gate != nil } }
+    func releaseSend() { lock.withLock { () -> CheckedContinuation<Void, Never>? in defer { _gate = nil }; return _gate }?.resume() }
     var folderCalls: Int { lock.withLock { _folderCalls } }
     var folders: [MailFolder] { get { lock.withLock { _folders } } set { lock.withLock { _folders = newValue } } }
     var sendError: Error? { get { lock.withLock { _sendError } } set { lock.withLock { _sendError = newValue } } }
@@ -1688,6 +1692,7 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     }
     func send(_ draft: EmailDraft) async throws {
         lock.withLock { _sendCalls += 1 }
+        if holdSend { await withCheckedContinuation { c in lock.withLock { _gate = c } } }
         if let error = sendError { throw error }
         lock.withLock { _sent.append(draft) }
     }
@@ -1996,9 +2001,11 @@ final class CoreTests {
         guard case .queued(let id) = outcome else { return XCTFail("expected queued") }
         recordEqual(core.outbox.map(\.id), [id])
         recordEqual(core.outbox.first?.state, .waiting)
+        var edited = draft(); edited.subject = "edited"; core.revise(id, edited)
         one.sendError = nil
         await core.retryOutbox()
         recordEqual(one.sent.count, 1)
+        XCTAssertEqual(one.sent.map(\.subject), ["edited"])
         recordTrue(core.outbox.isEmpty)
         let (gmailCore, _, gmail, _) = try make()
         gmail.sendError = GoogleGmailError.httpError(503)
@@ -2155,6 +2162,16 @@ final class CoreTests {
         recordEqual(transport.sent.count, 1)
         XCTAssertEqual(transport.sent.map(\.subject), ["t"])
         XCTAssertTrue(core.outbox.isEmpty)
+        let held = try XCTUnwrap(model.compose(to: "z@example.test"))
+        model.edit(held) { $0.subject = "u" }
+        transport.holdSend = true
+        let task = Task { await model.send(held) }
+        for _ in 0..<1000 where !transport.sendHeld { await Task.yield() }
+        model.edit(held) { $0.subject = "v" }
+        transport.sendError = MailTransportError.timeout; transport.holdSend = false; transport.releaseSend()
+        await task.value
+        transport.sendError = nil; await core.retryOutbox()
+        XCTAssertEqual(transport.sent.map(\.subject), ["t", "v"])
     }
     func runSendAgainReplacesTheDraftTheOutboxSaved() async throws {
         for saveFirst in [false, true] {
@@ -2791,10 +2808,10 @@ final class MailModelTests {
         await model.start()
         let id = model.compose(to: "z@x.test")!
         await model.send(id)
-        recordEqual(model.draft(id)?.state, .sendBlocked(.noSubject))
+        XCTAssertEqual(model.toast?.kind, .recipientMissing)
         model.edit(id) { $0.subject = "s" ; $0.to = nil }
         await model.send(id)
-        recordEqual(model.draft(id)?.state, .sendBlocked(.noRecipient))
+        XCTAssertEqual(model.toast?.serial, 2)
         recordTrue(engine.sentDrafts.isEmpty)
     }
     func runSendQueuedIsQueuedInOutbox() async {
@@ -2809,9 +2826,13 @@ final class MailModelTests {
         model.edit(id) { $0.subject = "s" }
         await model.send(id)
         recordEqual(model.draft(id)?.state, .queuedInOutbox)
+        model.edit(id) { $0.subject = "t" }
+        XCTAssertEqual(model.draft(id)?.state, .queuedInOutbox)
         engine.outbox = []
         await model.handle(.outboxChanged)
         recordEqual(model.draft(id)?.state, .sent)
+        model.edit(id) { $0.subject = "u" }
+        XCTAssertEqual(model.draft(id)?.draft.subject, "t")
     }
     func runSendSent() async {
         let engine = ModelFakeEngine()
@@ -2950,7 +2971,7 @@ final class MailModelTests {
         let id = model.compose(to: "z@x.test")!
         model.edit(id) { $0.subject = "s"; $0.to = nil; $0.cc = nil; $0.bcc = "hidden@x.test" }
         await model.send(id)
-        recordNotEqual(model.draft(id)?.state, .sendBlocked(.noRecipient))
+        XCTAssertNil(model.toast)
         recordEqual(engine.sentDrafts.map(\.bcc), ["hidden@x.test"])
     }
 }
@@ -3155,10 +3176,11 @@ final class ModelActionTests {
         let second = Task { await model.save(gone) }
         for _ in 0..<1000 where engine.saveGate == nil { await Task.yield() }
         await model.send(gone)
-        model.discard(gone)
+        await model.deleteDraft(gone)
         engine.holdSave = false
         engine.release()
         await second.value
+        XCTAssertEqual(engine.actionCalls.last, "deleteDraft:remote-1")
         XCTAssertEqual(engine.sentFromDraft.count, 1)
         XCTAssertTrue(model.sendAfterSave.isEmpty)
         let failed = newDraft(model); engine.holdSave = true; engine.actionError = .provider(Hint(text: "mail.hint.offline"))

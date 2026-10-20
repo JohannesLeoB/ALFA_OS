@@ -282,6 +282,14 @@ public final class MailCore: MailEngine {
         return items.contains { $0.id == id } ? .queued(id) : .sent
     }
 
+    public func revise(_ id: OutboxItem.ID, _ draft: EmailDraft) {
+        guard let index = items.firstIndex(where: { $0.id == id }), items[index].state == .waiting else { return }
+        let old = items[index]
+        items[index] = OutboxItem(id: id, inlet: old.inlet, draft: draft, messageID: old.messageID, draftID: old.draftID,
+                                  state: .waiting, attempts: old.attempts)
+        persist(id)
+    }
+
     private func pass(_ inlet: Inlet.ID?) async {
         flush()
         for item in items where item.state == .waiting && (inlet == nil || item.inlet == inlet) {
