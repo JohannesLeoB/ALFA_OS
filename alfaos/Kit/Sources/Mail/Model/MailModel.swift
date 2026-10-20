@@ -51,6 +51,7 @@ public final class MailModel {
     public internal(set) var toast: MailToast?
     var toastSerial = 0
     @ObservationIgnored var undoAction: (@MainActor () async -> Void)?
+    @ObservationIgnored var sendAfterSave: Set<UUID> = []
 
     var phase: MailLoadPhase = .settled
     var generation = 0

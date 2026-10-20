@@ -84,6 +84,7 @@ extension MailModel {
         default: break
         }
         change(&drafts[index].draft)
+        if case .sendFailed = drafts[index].state { return }
         drafts[index].state = .edited
     }
 
@@ -103,14 +104,18 @@ extension MailModel {
         let card = drafts[index]
         do {
             let remoteID = try await engine.saveDraft(card.inlet, card.draft, replacing: card.remoteID)
-            guard let now = drafts.firstIndex(where: { $0.id == id }) else { return }
-            drafts[now].remoteID = remoteID
-            if drafts[now].state == .saving { drafts[now].state = .saved(clock()) }
+            if let now = drafts.firstIndex(where: { $0.id == id }) {
+                drafts[now].remoteID = remoteID
+                if drafts[now].state == .saving { drafts[now].state = .saved(clock()) }
+            }
         } catch {
-            guard let now = drafts.firstIndex(where: { $0.id == id }) else { return }
-            drafts[now].saveFailure = Self.hint(error)
-            drafts[now].state = .edited
+            if let now = drafts.firstIndex(where: { $0.id == id }) {
+                drafts[now].saveFailure = Self.hint(error)
+                drafts[now].state = .edited
+            }
         }
+        guard sendAfterSave.remove(id) != nil else { return }
+        await send(id)
     }
 
     public func deleteDraft(_ id: UUID) async {
@@ -152,6 +157,9 @@ extension MailModel {
         guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
         let card = drafts[index]
         switch card.state {
+        case .saving:
+            sendAfterSave.insert(id)
+            return
         case .sending, .sent, .queuedInOutbox: return
         default: break
         }
@@ -187,12 +195,12 @@ extension MailModel {
 
     func reconcileDrafts() {
         for index in drafts.indices {
-            guard let outboxID = drafts[index].outboxID else { continue }
+            guard drafts[index].state == .queuedInOutbox, let outboxID = drafts[index].outboxID else { continue }
             guard let item = outbox.first(where: { $0.id == outboxID }) else {
-                if drafts[index].state == .queuedInOutbox { drafts[index].state = .sent }
+                drafts[index].state = .sent
                 continue
             }
-            if drafts[index].state == .queuedInOutbox, let current = item.draftID { drafts[index].remoteID = current }
+            if let current = item.draftID { drafts[index].remoteID = current }
             switch item.state {
             case .failed(let hint): drafts[index].state = .sendFailed(hint)
             case .waiting, .sending: drafts[index].state = .queuedInOutbox

@@ -2145,7 +2145,9 @@ final class CoreTests {
         await model.send(id)
         guard case .sendFailed(let hint) = model.draft(id)?.state else { return XCTFail("state \(String(describing: model.draft(id)?.state))") }
         recordEqual(hint.text, MailTextKey.rejected.rawValue)
-        model.edit(id) { $0.subject = "t" }; await model.send(id)
+        model.edit(id) { $0.subject = "t" }
+        XCTAssertEqual(model.draft(id)?.state, .sendFailed(hint))
+        await model.send(id)
         XCTAssertEqual(core.outbox.count, 1)
         transport.sendError = nil
         await model.send(id)
@@ -2166,6 +2168,7 @@ final class CoreTests {
             transport.sendError = MailTransportError.recipientRejected("z@example.test", 550, "no such user")
             await model.send(id); transport.sendError = nil
             if saveFirst { transport.savedID = "d3"; await model.save(id); await model.handle(.outboxChanged) }
+            if saveFirst { XCTAssertEqual(model.draft(id)?.state.key, MailDraftState.Kind.saved.key) }
             transport.savedID = "d9"; await model.send(id)
             XCTAssertEqual(transport.calls.filter { $0.hasPrefix("saveDraft") }, ["saveDraft:-:s", "saveDraft:d1:s", "saveDraft:d2:s"] + (saveFirst ? ["saveDraft:d3:s"] : []))
         }
@@ -3133,6 +3136,37 @@ final class ModelActionTests {
         recordEqual(engine.sentDrafts.count, 1)
         recordEqual(engine.sentFromDraft.count, 1)
     }
+    private func stepASendDuringARunningSaveWaitsForTheSaveAndGoesOutThroughTheDraftItSaved() async {
+        let (model, engine) = await make()
+        let id = newDraft(model)
+        engine.holdSave = true
+        let task = Task { await model.save(id) }
+        for _ in 0..<1000 where engine.saveGate == nil { await Task.yield() }
+        await model.send(id)
+        XCTAssertTrue(engine.sentDrafts.isEmpty && engine.sentFromDraft.isEmpty)
+        engine.holdSave = false
+        engine.release()
+        await task.value
+        XCTAssertEqual(engine.sentFromDraft.map(\.id), ["remote-1"])
+        XCTAssertTrue(engine.sentDrafts.isEmpty)
+        XCTAssertEqual(model.draft(id)?.state, .sent)
+        let gone = newDraft(model)
+        engine.holdSave = true
+        let second = Task { await model.save(gone) }
+        for _ in 0..<1000 where engine.saveGate == nil { await Task.yield() }
+        await model.send(gone)
+        model.discard(gone)
+        engine.holdSave = false
+        engine.release()
+        await second.value
+        XCTAssertEqual(engine.sentFromDraft.count, 1)
+        XCTAssertTrue(model.sendAfterSave.isEmpty)
+        let failed = newDraft(model); engine.holdSave = true; engine.actionError = .provider(Hint(text: "mail.hint.offline"))
+        let third = Task { await model.save(failed) }
+        for _ in 0..<1000 where engine.saveGate == nil { await Task.yield() }
+        await model.send(failed); engine.holdSave = false; engine.release(); await third.value
+        XCTAssertEqual(engine.sentDrafts.count, 1)
+    }
     private func stepOpeningAStoredDraftMakesACardLinkedToTheServerDraftOnlyOnce() async {
         let (model, engine) = await make()
         engine.storedDraft = MailStoredDraft(id: "d7", draft: EmailDraft(to: "a@x.test", subject: "Stored", body: "text"))
@@ -3167,6 +3201,7 @@ final class ModelActionTests {
         await stepDiscardingASavedDraftDeletesItOnTheServerAndAnUnsavedOneJustGoes()
         await stepADraftThatCannotBeDeletedOnTheServerStaysWithTheFailure()
         await stepSendingASavedDraftGoesThroughTheDraftAndAnUnsavedOneThroughPlainSend()
+        await stepASendDuringARunningSaveWaitsForTheSaveAndGoesOutThroughTheDraftItSaved()
         await stepOpeningAStoredDraftMakesACardLinkedToTheServerDraftOnlyOnce()
         await stepAStoredDraftThatCannotBeLoadedMakesNoCardAndShowsTheHint()
     }
