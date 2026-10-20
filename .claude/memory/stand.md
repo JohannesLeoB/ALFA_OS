@@ -1,6 +1,6 @@
 ---
 name: stand
-description: Laufender Stand ALFA_OS am 20.10. 10:30 MESZ
+description: Laufender Stand ALFA_OS am 20.10. abends (nach b1515f4)
 metadata:
   type: project
 ---
@@ -54,9 +54,14 @@ metadata:
   - Gmail zu groß: Google nennt keinen eigenen Status (developers.google.com/workspace/gmail/api/guides/handle-errors). Jede Antwort, die keine Netzstörung ist, endet schon als Ablehnung ohne Wiederholung; der Test hält das: 39742e2. Lücke an Design: kein eigener Hinweistext für „zu groß“.
   - Kein doppeltes Senden: e5a5d14. Feste Message-ID je Postausgang-Eintrag, vor jedem Wiederholen Suche im Ordner „Gesendet“. Ohne Gesendet-Ordner wird wie bisher gesendet. `myk_` in den Gmail-MIME-Grenzen ist entfernt. Grenze: Server, die SMTP-Mail nicht selbst in „Gesendet“ ablegen, schützt das nicht; gegen echte Server ungetestet.
   - App-Build `dist/ALFA_OS-e5a5d14.app`. testLines 5762 von 5895.
-- Johannes 20.10. zu IDLE: „IDLE wäre eigentlich wünschenswert - ist das heftig aufwändig?“ Lead: machbar in drei Tickets (IDLE-Befehl, offene Sitzung je Konto mit Neuaufbau, Anbindung an Cadence.push im Hub), gehört zu H4. Gmail-API hat kein IDLE (Push bräuchte Pub/Sub mit Server); Gmail bleibt beim Abfragetakt oder läuft über IMAP mit XOAUTH2. Freigabe offen.
+- IDLE, Johannes 20.10.: „Ja. IDLE mit offener Sitzung je Konto und Anbindung an Cadence.push über bau-mail mit Sonnet, je ein Ticket, du prüfst und committest.“ Gebaut: I1 IDLE-Befehl 7c16892, I2 eine Sitzung je Konto ead93a8, I3 Wächter je Konto auf eigener Verbindung löst cadence.trigger aus (nur bei .every/.push) und STARTTLS-Abbruch schließt den Socket d612a48. Gmail bleibt beim Takt. Lücke: Takt „Sofort“ fehlt im Master (Brief v10 N5).
+- Kachelraster K1 15eb550: nicht-lazy Layout wie auto-fill, ohne geerbte Animation. Kachelhöhe bleibt 112 (Johannes 19.10., BRIEF.txt:60); Master 96.
+- Vier Prüfungen 20.10. (nur lesend, Ergebnisse im Lead-Chat): Tests (84 Mutanten, 43 grün; 26 Schritte nur golden), Pipeline (Generator liest nur TOKENBOGEN.json, leere Verträge bestanden die Prüfskripte, 123 SheetValues ohne Quelle, alter Token-Kanal tokens.json/shell.json/GeneratedTokens), Lücken nach L3 (G1 DHL, G3 Abmelden, G5 Laufweite, G8 zu groß, G9 Sofort belegt; G4, G11 falsch bzw. gelöst; Heute/Widgets gestrichen, Johannes 11.10. „Widgets sind JETZT kein thema.“), Rückschau Mail/Einstellungen (Postfach endet bei 50: loadMore ohne Aufrufer; actionFailures nie angezeigt; Outbox-Fehler per try?; toter Fundus-Mail-Zweig 571 Zeilen; Hub-Teile ohne Aufrufer; deutsche Namen im Fundus; 118 myk im Fundus).
+- Danach gebaut: A2 Tests ehrlich b94e0e4 (kein ALFA_GOLDEN mehr, APPEND-Schritt beweist kein Wiederholen, sechs Literal-Prüfungen, leerer Gmail-Test weg, testLines 5821). E1 Pipeline-Schranken b1515f4 (aus Nebensitzung mit Worktree, verräumt): validate.py prüft Pflichtdateien, check_contract je Theme, diff_contract-Fehler behoben, scripts/receive_master.py prüft Manifest und Stempel, design_generate.py liest auch contract/.
+- Johannes 20.10. Entscheidungen: Ticket-Reihenfolge „Tickets in der bestmöglichen Reihenfolge nach effizientestem und qualitativ bestem Ablauf.“ Lead-Reihenfolge: A2, E1, F1 (Fundus-Tests in die eine Datei, läuft), B Ballast, A1 Mail-Fehler, C Tempo, D Namen/myk, E2 SheetValues-Quellen, H7 Datenspeicher. L1-Ausnahme Nebensitzungen d64fe38. DHL eine Integration, Sandbox raus (app-konten.md). Stock und Kostenzählung bleiben als Hub-Wurzelwerk; H7 Datenspeicher (SQLite/GRDB, eine Tabelle je Datenart, Stock als Sicht, Delta-Sync) am Stammtisch zum Grillen. KI-Karte: Modellwahl, Token-Zähler mit Zurücksetzen, Schätzwert aus vom Nutzer eingetragenem Preis (Claude liefert Kosten nur mit Admin-Schlüssel, kein Guthaben, keine Preisliste per API).
+- Brief v10 (Entwurf, L2-geprüft, im Lead-Scratchpad): A1–A7 Arbeitsweise, N1–N5 plus N6 KI-Karte. Freigabe zum Ablegen offen.
+- Offen bei Johannes: Brief v10 ablegen; HullProbeTests.swift streichen oder als App-Test behalten (L5); Google-Anmeldeweg A/C.
 - Offen danach:
-  - Verbindung je Konto offen halten (Pooling) und IDLE, mit H4.
   - Rückgängig über COPYUID statt Suche per Message-ID.
   - MIME-Aufbau nicht streamend, große Anhänge ganz im Speicher.
   - Gmail-Rückgängig aus dem Papierkorb setzt nur INBOX, ungeprüft.
@@ -72,4 +77,4 @@ Offene Punkte aus dem alten Plan
 
 Erledigt: Wortlaut `design-bruecke.md` (fe7f26e). Gebaut wird seit 19.10. auf sein Wort (Mail und Einstellungen als Hub, nach Master 1810). C2 teils: ClickUp, Clockodo, Claude, Airtable, sevDesk, DHL Sendungen mit Prüfung beim Anbieter (6668bcd); DHL Versand und Happa Happa ohne Anbindung.
 Offen, wartet auf Johannes' Wort: Reife, ab der gebaut wird (freigegeben/freigabe-orange oder auch von-design-gesetzt); ob audit_swift aus dem Skill design-zu-swift nach scripts/ kommt; Sperren in ~/.claude/settings.json.
-Offen für die Lead: Test (Schalter ALFA_GOLDEN, Istwert-Protokoll, Mutanten unter 200), Wächter-Entwurf, xcodegen nach dist/ (alfaos/ALFA_OS.xcodeproj liegt noch in alfaos/).
+Offen für die Lead: Test (Istwert-Protokoll, Mutanten unter 200; Schalter ALFA_GOLDEN seit b94e0e4 weg), Wächter-Entwurf, xcodegen nach dist/ (alfaos/ALFA_OS.xcodeproj liegt noch in alfaos/).
