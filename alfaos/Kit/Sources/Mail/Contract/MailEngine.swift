@@ -68,6 +68,7 @@ public protocol MailEngine: AnyObject {
     func lastSync(_ inlet: Inlet.ID, folder: String) -> Date?
     func loadPage(_ inlet: Inlet.ID, folder: String, query: String?, pageToken: String?) async throws(HubError) -> MailMessagePage
     func searchLocal(_ inlet: Inlet.ID, query: String) -> [MailMessageSummary]
+    func searchOpen(_ inlet: Inlet.ID, query: String, excluding folders: Set<String>) async -> [MailMessageSummary]
     func body(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> MailMessageBody
     func setFlags(_ inlet: Inlet.ID, messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws(HubError)
     @discardableResult func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> String?
@@ -89,6 +90,9 @@ public protocol MailEngine: AnyObject {
 }
 
 extension MailEngine {
+    public func searchOpen(_ inlet: Inlet.ID, query: String, excluding folders: Set<String>) async -> [MailMessageSummary] {
+        searchLocal(inlet, query: query).filter { !$0.folderIDs.contains(where: folders.contains) }
+    }
     public func purge(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {
         throw HubError.capabilityMissing(inlet, .mail)
     }

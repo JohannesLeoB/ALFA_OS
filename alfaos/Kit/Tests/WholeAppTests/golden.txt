@@ -327,6 +327,8 @@ CoreTests.runAMailSentFromTheOutboxIsGoneAfterAReopen eq 1
 CoreTests.runAMailSentFromTheOutboxIsGoneAfterAReopen true some(true)
 CoreTests.runAMailSentFromTheOutboxIsGoneAfterAReopen true some(true)
 CoreTests.runLocalSearchListsTheNewestHitsFirst eq ["new","middle","old"]
+CoreTests.runTypingSearchesEveryFolderButSpamAndTrashWithoutTheTransport eq set["INBOX","S"]
+CoreTests.runTypingSearchesEveryFolderButSpamAndTrashWithoutTheTransport eq MailListState.loaded()
 CoreActionTests.runTheCoreActions eq ["archive:1"]
 CoreActionTests.runTheCoreActions eq ["2"]
 CoreActionTests.runTheCoreActions eq ["1","3"]

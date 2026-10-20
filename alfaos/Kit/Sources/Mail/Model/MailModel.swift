@@ -30,6 +30,10 @@ public final class MailModel {
     public internal(set) var filter: MailFilter = .all
     public internal(set) var query = ""
     public internal(set) var typed = ""
+    var crossHits: [MailMessageSummary] = []
+    var crossInlet: Inlet.ID?
+    var crossQuery = ""
+    var typeGeneration = 0
     public internal(set) var nextPageToken: String?
     public internal(set) var unread: [Inlet.ID: Int] = [:]
     public internal(set) var outbox: [OutboxItem] = []
@@ -82,7 +86,7 @@ public final class MailModel {
         var counts: [String: Int] = [:]
         for summary in summaries where !summary.threadID.isEmpty { counts[summary.threadID, default: 0] += 1 }
         let needle = localNeedle
-        return summaries.filter { filter.matches($0) && (needle.isEmpty || Self.contains($0, needle)) }.map {
+        return (crossActive ? crossHits : summaries).filter { filter.matches($0) && (needle.isEmpty || Self.contains($0, needle)) }.map {
             MailRow(summary: $0, selected: $0.id == selectedMessage,
                     threadCount: $0.threadID.isEmpty ? 1 : counts[$0.threadID, default: 1])
         }
@@ -92,8 +96,14 @@ public final class MailModel {
         typed == query ? "" : typed.lowercased()
     }
 
+    var crossActive: Bool {
+        let needle = localNeedle
+        return searchScope == .all && !needle.isEmpty && crossInlet == selectedInlet && !crossQuery.isEmpty
+            && needle.hasPrefix(crossQuery)
+    }
+
     static func contains(_ summary: MailMessageSummary, _ needle: String) -> Bool {
-        [summary.from, summary.fromRaw, summary.toRaw, summary.subject, summary.snippet]
+        [summary.from, summary.fromRaw, summary.subject, summary.snippet]
             .joined(separator: " ").lowercased().contains(needle)
     }
 
@@ -127,6 +137,7 @@ public final class MailModel {
         case .settled: break
         }
         let folder = selectedFolder ?? ""
+        if crossActive { return rows.isEmpty ? .emptySearch(query: typed, folder: folder) : .loaded }
         if summaries.isEmpty {
             return query.isEmpty ? .empty(folder: folder) : .emptySearch(query: query, folder: folder)
         }
@@ -235,7 +246,20 @@ public final class MailModel {
 
     public func type(_ text: String) async {
         typed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        if typed.isEmpty, !query.isEmpty { await submit("") }
+        typeGeneration += 1
+        let mine = typeGeneration
+        if typed.isEmpty {
+            if !query.isEmpty { await submit("") }
+            return
+        }
+        guard searchScope == .all, let inlet = selectedInlet else { return }
+        let needle = typed
+        let hidden = Set(folders.filter { $0.role == .spam || $0.role == .trash }.map(\.id))
+        let hits = await engine.searchOpen(inlet, query: needle, excluding: hidden)
+        guard mine == typeGeneration, inlet == selectedInlet else { return }
+        crossHits = hits.filter { !$0.folderIDs.contains(where: hidden.contains) }
+        crossInlet = inlet
+        crossQuery = needle.lowercased()
     }
 
     public func submit(_ text: String) async {

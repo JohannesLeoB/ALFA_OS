@@ -1809,7 +1809,7 @@ final class ModelFakeEngine: MailEngine {
         if let pageError { throw pageError }
         return pages[pageToken] ?? MailMessagePage(messages: [])
     }
-    func searchLocal(_ inlet: Inlet.ID, query: String) -> [MailMessageSummary] { [] }
+    func searchLocal(_ inlet: Inlet.ID, query: String) -> [MailMessageSummary] { mirror.values.flatMap { $0 }.filter { $0.subject.lowercased().contains(query.lowercased()) } }
     func body(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> MailMessageBody {
         return bodies[messageID] ?? MailMessageBody(text: "text of " + messageID)
     }
@@ -2121,6 +2121,19 @@ final class CoreTests {
         one.setPage("INBOX", MailMessagePage(messages: [old, new, middle]))
         _ = try await core.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
         recordEqual(core.searchLocal("one", query: "hit").map(\.id), ["new", "middle", "old"])
+    }
+    func runTypingSearchesEveryFolderButSpamAndTrashWithoutTheTransport() async throws {
+        let (core, _, one, _) = try make()
+        one.folders += [MailFolder(id: "T", name: "Trash", role: .trash), MailFolder(id: "X", name: "Spam", role: .spam)]
+        for folder in ["INBOX", "S", "T", "X"] {
+            one.setPage(folder, MailMessagePage(messages: [message(folder, subject: "hit")]))
+            _ = try await core.loadPage("one", folder: folder, query: nil, pageToken: nil)
+        }
+        let model = MailModel(engine: core)
+        await model.start(); one.listError = MailTransportError.timeout
+        await model.type("hit")
+        recordEqual(Set(model.rows.map(\.id)), ["INBOX", "S"])
+        recordEqual(model.listState, .loaded)
     }
 }
 
@@ -2603,6 +2616,7 @@ final class MailModelTests {
         let engine = ModelFakeEngine()
         let model = makeModel(engine)
         engine.pages[nil] = MailMessagePage(messages: [fakeMessage("m1", subject: "Alpha"), fakeMessage("m2", subject: "Beta")])
+        engine.mirror["aINBOX"] = engine.pages[nil]?.messages
         await model.start()
         for text in ["a", "al", "alp"] { await model.type(text) }
         recordEqual(engine.searchCalls, [])
@@ -3807,6 +3821,7 @@ final class WholeAppTests: XCTestCase {
         try await step("CoreTests.runRejectedSignInIsShownAsExpiredSignIn") { try await CoreTests().runRejectedSignInIsShownAsExpiredSignIn() }
         try await step("CoreTests.runAMailSentFromTheOutboxIsGoneAfterAReopen") { try await CoreTests().runAMailSentFromTheOutboxIsGoneAfterAReopen() }
         try await step("CoreTests.runLocalSearchListsTheNewestHitsFirst") { try await CoreTests().runLocalSearchListsTheNewestHitsFirst() }
+        try await step("CoreTests.runTypingSearchesEveryFolderButSpamAndTrashWithoutTheTransport") { try await CoreTests().runTypingSearchesEveryFolderButSpamAndTrashWithoutTheTransport() }
         try await step("CoreActionTests.runTheCoreActions") { try await CoreActionTests().runTheCoreActions() }
         try await step("CoreModelTests.runModelOverCoreShowsOfflineWhenTheNetworkDrops") { try await CoreModelTests().runModelOverCoreShowsOfflineWhenTheNetworkDrops() }
         try await step("CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch") { try await CoreModelTests().runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch() }

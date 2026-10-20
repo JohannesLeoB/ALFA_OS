@@ -70,6 +70,11 @@ public final class MailCore: MailEngine {
         mirror.search(inlet, query: query)
     }
 
+    public func searchOpen(_ inlet: Inlet.ID, query: String, excluding folders: Set<String>) async -> [MailMessageSummary] {
+        let mirror = mirror
+        return await Task.detached { mirror.searchOpen(inlet, query: query, excluding: folders) }.value
+    }
+
     public func unreadCount(_ inlet: Inlet.ID) -> Int {
         mirror.unread(inlet)
     }

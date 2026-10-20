@@ -114,6 +114,21 @@ struct MailMirror: Sendable {
         return rows.map(Self.summary)
     }
 
+    func searchOpen(_ inlet: Inlet.ID, query: String, excluding folders: Set<String>) -> [MailMessageSummary] {
+        let pattern = "%" + query.replacingOccurrences(of: "%", with: "") + "%"
+        let marks = Array(repeating: "?", count: folders.count).joined(separator: ",")
+        let rows = (try? db.read { db in
+            try Row.fetchAll(db, sql: """
+                SELECT * FROM mail_message WHERE inlet = ?
+                AND (subject LIKE ? OR sender LIKE ? OR fromRaw LIKE ? OR snippet LIKE ?)
+                AND folder NOT IN (\(marks))
+                GROUP BY id ORDER BY receivedAt DESC
+                """,
+                arguments: StatementArguments([inlet, pattern, pattern, pattern, pattern] + folders.sorted()))
+        }) ?? []
+        return rows.map(Self.summary)
+    }
+
     func replaceMessages(_ inlet: Inlet.ID, folder: String, _ messages: [MailMessageSummary], at date: Date) throws {
         try db.write { db in
             try db.execute(sql: "DELETE FROM mail_message WHERE inlet = ? AND folder = ?", arguments: [inlet, folder])
