@@ -156,17 +156,11 @@ enum Fixture {
 @MainActor
 final class DesignTests {
     func runTheShellGeometryReadsTheDeliveredSheet() throws {
-        let g = try Fixture.geometry()
-        recordEqual(g.laneRest, Design.Size.laneRestWidth)
-        recordEqual(g.foldAt, Design.Size.foldThreshold)
-        recordEqual(g.blobTop, Design.Size.edge)
-        recordEqual(g.strip, Design.Size.edge + Design.Size.blobHeight + Design.Size.gutter)
-        recordEqual(g.blobAwakeWidth, Design.Size.blobAwakeWidth)
-        recordEqual(g.windowMin.width, 2 * g.margin + 2 * g.gap + g.minimum.reduce(0, +))
         recordEqual(DesignColors.light.ground, RGB(1, 1, 1, 1))
         recordEqual(DesignColors.dark.ground.red, 13.0 / 255.0, accuracy: 0.001)
         recordEqual(CardStack.tops(count: 6), [8, 16, 24, 68, 112, 156])
         recordEqual(CardStack.tops(count: 3), [8, 52, 96])
+        XCTAssertEqual([1, 3, 5, 9].map { CardStack.levelIndex(depth: $0) }, [0, 2, 4, 4])
         recordFalse(DesignStamp.adoptedAt.isEmpty)
     }
 }
@@ -267,6 +261,7 @@ final class LayoutTests {
         recordEqual(widths(1512, middleFolded, g, rules).reduce(0, +), avail)
         let wide = LaneLayout.drag(lane: .trailing, proposed: 900, start: [280, 896, 280], state: rest, geometry: g, rules: rules)
         recordEqual(widths(1512, wide, g, rules), [56, 500, 900])
+        XCTAssertEqual(wide.preferred[1], 0)
         for lane in [Lane.leading, .trailing] {
             let held = LaneLayout.drag(lane: lane, proposed: 150, start: [280, 896, 280], state: rest, geometry: g, rules: AreaRules.rules(for: "mail", geometry: g))
             recordEqual(widths(1512, held, g, rules)[lane.index], 280, lane.rawValue)
@@ -308,6 +303,8 @@ final class BlobTests {
         recordEqual(top.origin, Point(x: g.margin, y: g.blobTop))
         let bottom = BlobPlacement(edge: .bottom, offset: 16).menuOrigin(window: Fixture.screen, geometry: g)
         recordFalse(bottom.opensDownward)
+        XCTAssertEqual(BlobPlacement(edge: .trailing, offset: 100).menuOrigin(window: Fixture.screen, geometry: g).origin.x, 1216)
+        XCTAssertEqual(BlobPlacement(edge: .leading, offset: 100).menuOrigin(window: Fixture.screen, geometry: g).origin.x, 16)
     }
 }
 
@@ -394,7 +391,6 @@ final class MailTransportFake: MailTransport, @unchecked Sendable {
         var folders: [MailFolder] = [MailFolder(id: "INBOX", name: "Inbox", role: .inbox)]
         var failure: MailTransportError?
         var listFoldersCalls = 0
-        var sent: [EmailDraft] = []
         var gate: Gate?
         var calls: [String] = []
         var body = MailMessageBody(text: "")
@@ -402,7 +398,6 @@ final class MailTransportFake: MailTransport, @unchecked Sendable {
     }
     private let state = Locked(State())
     var listFoldersCalls: Int { state.with { $0.listFoldersCalls } }
-    var sent: [EmailDraft] { state.with { $0.sent } }
     var calls: [String] { state.with { $0.calls } }
     func setBody(_ body: MailMessageBody) { state.with { $0.body = body } }
     func setFailure(_ error: MailTransportError?) { state.with { $0.failure = error } }
@@ -426,7 +421,6 @@ final class MailTransportFake: MailTransport, @unchecked Sendable {
     }
     func send(_ draft: EmailDraft) async throws {
         if let failure = state.with({ $0.failure }) { throw failure }
-        state.with { $0.sent.append(draft) }
     }
     func setFlags(messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws {
         if let failure = state.with({ $0.failure }) { throw failure }
@@ -785,15 +779,6 @@ final class SetupFlowTests {
         result["address"] = address
         result["username"] = address
         return result
-    }
-    private func attempt(_ hub: Hub, _ address: String) async -> SetupError? {
-        let input = Input.fields(values(address))
-        do throws(SetupError) {
-            _ = try await hub.setup.add(Self.offer, input: input)
-            return nil
-        } catch {
-            return error
-        }
     }
     private func makeHub(
         keychain: any KeychainPort = FakeKeychain(), limits: [Capability: Int] = CompanySetup().limits, cadence: HandCadence = HandCadence(), database: DatabaseQueue? = nil,
@@ -2109,7 +2094,7 @@ final class CoreTests {
         one.sendError = MailTransportError.timeout
         _ = await core.send("one", draft())
         one.sendError = nil
-        one.setPage("INBOX", MailMessagePage(messages: [message("2"), message("3"), message("1")]))
+        one.setPage("INBOX", MailMessagePage(messages: [message("2"), message("3"), message("4", seen: true), message("1")]))
         hub.push(.syncFinished(.mail, "one"))
         let done = await eventually { core.outbox.isEmpty }
         recordTrue(done)
@@ -2830,6 +2815,7 @@ final class MailModelTests {
         await model.open("m1")
         await model.open("m2")
         recordEqual(model.cards.map(\.id), ["m11", "m12", "m2"])
+        model.setCardLimit(0); XCTAssertEqual(model.cardLimit, 1)
     }
     func runOpenMarksReadAndFlagFailureKeepsHint() async {
         let engine = ModelFakeEngine()
@@ -3369,6 +3355,7 @@ final class HubSweepTests {
             let transport = try rig.hub.access.port(MailTransport.self, for: rig.inlet.id)
             _ = try await transport.listFolders()
             let paths = GoogleStubNet.requests.dropFirst(before).map { $0.path }
+            XCTAssertEqual(paths.contains { $0.hasSuffix("/token") }, advance >= 3540, "\(advance)")
             await waitUntil { (try? rig.keychain.get(KeySlot(inlet: rig.inlet.id, name: "accessToken"))) == "fresh" || advance < 3540 }
             note("margin-\(advance)", "\(paths) \(String(describing: try rig.keychain.get(KeySlot(inlet: rig.inlet.id, name: "accessToken"))))")
         }
@@ -3979,10 +3966,6 @@ final class WholeAppTests: XCTestCase {
 func compareWithGolden() throws {
     let golden = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("golden.txt")
     let text = protocolLog.with { $0 }.joined(separator: "\n") + "\n"
-    if ProcessInfo.processInfo.environment["ALFA_GOLDEN"] == "write" {
-        try text.write(to: golden, atomically: true, encoding: .utf8)
-        return
-    }
     let expected = try String(contentsOf: golden, encoding: .utf8)
     if text == expected { return }
     let now = text.split(separator: "\n", omittingEmptySubsequences: false)

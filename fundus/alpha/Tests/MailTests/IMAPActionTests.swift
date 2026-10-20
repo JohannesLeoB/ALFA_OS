@@ -293,18 +293,27 @@ final class IMAPActionTests: XCTestCase {
     }
     private func stepOneSessionServesAllReadsReconnectsOnceAfterALossAndNeverRetriesAnAppend() async throws {
         let dropped = IMAPReply(status: "")
-        let first = ActionFixture.server(capabilities: "IMAP4rev1") { command, _ in command.hasPrefix("EXAMINE") || command.hasPrefix("APPEND") ? dropped : nil }
-        let second = ActionFixture.server(capabilities: "IMAP4rev1")
-        let queue = StreamQueue([first, second, ActionFixture.server(capabilities: "IMAP4rev1")])
+        let first = ActionFixture.server(capabilities: "IMAP4rev1") { command, _ in command.hasPrefix("EXAMINE") ? dropped : nil }
+        let second = ActionFixture.server(capabilities: "IMAP4rev1") { command, _ in command.hasPrefix("APPEND") ? dropped : nil }
+        let third = ActionFixture.server(capabilities: "IMAP4rev1")
+        let queue = StreamQueue([first, second, third])
         let transport = ActionFixture.transport(queue)
         _ = try await transport.listFolders()
         _ = try await transport.listFolders()
         XCTAssertEqual(first.commands.filter { $0.hasPrefix("LOGIN") }.count, 1)
+        XCTAssertEqual(queue.openedCount, 1)
         _ = try await transport.listMessages(folderID: "INBOX", query: nil, pageToken: nil, maxResults: 5)
         XCTAssertEqual(second.commands.filter { $0.hasPrefix("LOGIN") }.count, 1)
         XCTAssertEqual(queue.openedCount, 2)
-        do { _ = try await transport.saveDraft(EmailDraft(to: "ann@x.test", subject: "Hi", body: "text"), replacing: nil); XCTFail("append must fail") } catch {}
+        do {
+            _ = try await transport.saveDraft(EmailDraft(to: "ann@x.test", subject: "Hi", body: "text"), replacing: nil)
+            XCTFail("append must fail")
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .connectionClosed)
+        }
+        XCTAssertEqual(second.commands.filter { $0.hasPrefix("APPEND") }.count, 1)
         XCTAssertEqual(queue.openedCount, 2)
+        XCTAssertTrue(third.commands.isEmpty)
     }
 
     func testTheIMAPActions() async throws {

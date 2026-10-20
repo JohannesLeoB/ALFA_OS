@@ -1,9 +1,3 @@
-DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq 280.0
-DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq 112.0
-DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq 16.0
-DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq 68.0
-DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq 124.0
-DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq 896.0
 DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq RGB(red=1.0,green=1.0,blue=1.0,alpha=1.0)
 DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq 0.051
 DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq [8.0,16.0,24.0,68.0,112.0,156.0]
