@@ -2,10 +2,11 @@
 """Check the cross-references of an ALFA contract folder.
 
 Checks: resolver $ref files exist; every alias inside the token files and in components.json
-resolves; element ids unique; every element id in views.json exists in components.json; every
+resolves in each theme on its own (base, then that theme, as alfa.resolver.json orders it; an
+alias that exists in one theme only is a finding); element ids unique; every element id in views.json exists in components.json; every
 textKey and feedbackKey exists in texts.json; with --areas: views.json has each named area;
 with drafts: every data-id and every data-part name in the drafts has its entry in
-components.json, and the reverse.
+components.json, and the reverse. A data-id or data-part value with {{ }} in a draft is a finding.
 Exit 0 = no findings, 1 = findings, 2 = usage.
 Usage: check_contract.py CONTRACT_DIR [--areas shell,mail,settings] [DRAFT.dc.html ...]
 """
@@ -35,6 +36,33 @@ def token_paths(node, prefix, out):
                 token_paths(sub, prefix + "." + key if prefix else key, out)
 
 
+def ref_files(sources):
+    return [r["$ref"] for r in sources]
+
+
+def theme_files(resolver, folder):
+    """Return {theme: [token files in resolution order]} as the resolver orders them."""
+    if resolver:
+        order = resolver.get("resolutionOrder", [])
+        themes = {}
+        names = []
+        for step in order:
+            kind, _, name = step["$ref"].lstrip("#/").partition("/")
+            if kind == "modifiers":
+                names = list(resolver.get("modifiers", {}).get(name, {}).get("contexts", {}))
+        for theme in names:
+            files = []
+            for step in order:
+                kind, _, name = step["$ref"].lstrip("#/").partition("/")
+                if kind == "sets":
+                    files += ref_files(resolver.get("sets", {}).get(name, {}).get("sources", []))
+                elif kind == "modifiers":
+                    files += ref_files(resolver["modifiers"].get(name, {}).get("contexts", {}).get(theme, []))
+            themes[theme] = files
+        return themes
+    return {}
+
+
 def main(argv):
     if not argv:
         print(__doc__)
@@ -58,13 +86,18 @@ def main(argv):
         for r in refs:
             if not os.path.exists(os.path.join(folder, r["$ref"])):
                 findings.append("resolver source missing: %s" % r["$ref"])
-    tokens = set()
-    token_aliases = set()
-    for name in sorted(os.listdir(folder)):
-        if name.endswith(".tokens.json"):
+    themes = theme_files(resolver, folder)
+    if not themes:
+        findings.append("no themes resolved: alfa.resolver.json missing or without a theme modifier")
+    tokens, token_aliases = {}, {}
+    for theme, files in themes.items():
+        tokens[theme], token_aliases[theme] = set(), set()
+        for name in files:
             data = load(folder, name)
-            token_paths(data, "", tokens)
-            token_aliases |= set(re.findall(r'"(\{[A-Za-z0-9.]+\})"', json.dumps(data)))
+            if data is None:
+                continue
+            token_paths(data, "", tokens[theme])
+            token_aliases[theme] |= set(re.findall(r'"(\{[A-Za-z0-9.]+\})"', json.dumps(data)))
     comps = (load(folder, "components.json") or {}).get("components", [])
     views = (load(folder, "views.json") or {}).get("views", [])
     texts = {t["key"] for t in (load(folder, "texts.json") or {}).get("texts", [])}
@@ -101,17 +134,22 @@ def main(argv):
     for a in areas:
         if a not in found:
             findings.append("views.json: area %s missing" % a)
-    if tokens:
-        for a in sorted(aliases | token_aliases):
+    for theme in themes:
+        if not tokens[theme]:
+            findings.append("no tokens in theme %s" % theme)
+        for a in sorted(aliases | token_aliases[theme]):
             m = ALIAS.match(a or "")
-            if a and (not m or m.group(1) not in tokens):
-                findings.append("token alias does not resolve: %s" % a)
-    else:
-        findings.append("no *.tokens.json in %s" % folder)
+            if a and (not m or m.group(1) not in tokens[theme]):
+                findings.append("token alias does not resolve in %s: %s" % (theme, a))
     drawn, parts = set(), set()
     for d in drafts:
         with open(d, encoding="utf-8") as f:
             text = f.read()
+        for kind, found in (("data-id", re.findall(r'data-id="([^"]+)"', text)),
+                            ("data-part", re.findall(r'data-part="([^"]+)"', text))):
+            for value in sorted(set(found)):
+                if "{{" in value or "}}" in value:
+                    findings.append("%s with {{ }} in %s cannot be checked: %s" % (kind, d, value))
         drawn |= set(re.findall(r'data-id="([^"{}]+)"', text))
         parts |= set(re.findall(r'data-part="([^"{}]+)"', text)) | set(re.findall(r'part:\s*"([a-z0-9-]+)"', text))
     if drafts:
