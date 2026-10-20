@@ -2132,7 +2132,7 @@ final class CoreTests {
         recordEqual(tooMany.hint.code, "gmail.429")
         recordTrue(unavailable.isTransient)
     }
-    func runSendAgainAfterARejectionLeavesTheFailedItemInTheOutbox() async throws {
+    func runSendAgainAfterARejectionRetriesTheFailedItem() async throws {
         let hub = HubDouble()
         let transport = hub.add("one")
         transport.folders = scriptedInbox
@@ -2145,10 +2145,14 @@ final class CoreTests {
         await model.send(id)
         guard case .sendFailed(let hint) = model.draft(id)?.state else { return XCTFail("state \(String(describing: model.draft(id)?.state))") }
         recordEqual(hint.text, MailTextKey.rejected.rawValue)
+        model.edit(id) { $0.subject = "t" }; await model.send(id)
+        XCTAssertEqual(core.outbox.count, 1)
         transport.sendError = nil
         await model.send(id)
         recordEqual(model.draft(id)?.state, .sent)
         recordEqual(transport.sent.count, 1)
+        XCTAssertEqual(transport.sent.map(\.subject), ["t"])
+        XCTAssertTrue(core.outbox.isEmpty)
     }
     func runOutboxItemWithoutATransportStaysWaiting() async throws {
         let hub = HubDouble()
@@ -2185,6 +2189,37 @@ final class CoreTests {
         recordTrue(first.outbox.isEmpty)
         let second = try MailCore(hub: hub, database: database)
         recordTrue(second.outbox.isEmpty)
+    }
+    private func fault(_ database: DatabaseQueue, _ event: String = "") throws {
+        try database.write { try $0.execute(sql: "DROP TRIGGER IF EXISTS block;" + (event.isEmpty ? "" : "CREATE TRIGGER block BEFORE \(event) ON mail_outbox BEGIN SELECT RAISE(ABORT, 'full'); END")) }
+    }
+    func runAQueuedMailSurvivesAFailedSaveAndIsSavedOnTheNextPass() async throws {
+        let hub = HubDouble(), database = try DatabaseQueue()
+        hub.add("one").sendError = MailTransportError.recipientRejected("z@example.test", 550, "no such user")
+        let core = try MailCore(hub: hub, database: database)
+        try fault(database, "INSERT")
+        _ = await core.send("one", draft())
+        try fault(database)
+        await core.retryOutbox()
+        XCTAssertEqual(core.outbox.count, 1)
+        XCTAssertEqual(try MailCore(hub: hub, database: database).outbox.count, 1)
+    }
+    func runASentMailNeverComesBackWhenItsRowCannotBeRemoved() async throws {
+        let hub = HubDouble(), database = try DatabaseQueue()
+        let one = hub.add("one"); one.sendError = MailTransportError.timeout
+        let core = try MailCore(hub: hub, database: database)
+        _ = await core.send("one", draft())
+        try fault(database, "DELETE")
+        one.sendError = nil
+        await core.retryOutbox()
+        XCTAssertEqual(one.sent.count, 1)
+        XCTAssertTrue(try MailCore(hub: hub, database: database).outbox.isEmpty)
+        try fault(database); await core.retryOutbox()
+        let rows = try await database.read { try Int.fetchOne($0, sql: "SELECT COUNT(*) FROM mail_outbox") }
+        XCTAssertEqual(rows, 0)
+        try await database.write { try $0.execute(sql: "INSERT INTO mail_outbox (id, inlet, draft, state, attempts, position, messageID) VALUES ('x', 'one', x'00', 'sent', 0, 0, '')") }; _ = try MailCore(hub: hub, database: database)
+        let left = try await database.read { try Int.fetchOne($0, sql: "SELECT COUNT(*) FROM mail_outbox") }
+        XCTAssertEqual(left, 0)
     }
     func runLocalSearchListsTheNewestHitsFirst() async throws {
         let (core, _, one, _) = try make()
@@ -5492,10 +5527,12 @@ final class WholeAppTests: XCTestCase {
         try await step("CoreTests.runSyncFinishedBringsNewMailAndRetriesOutbox") { try await CoreTests().runSyncFinishedBringsNewMailAndRetriesOutbox() }
         try await step("CoreTests.runSyncFailureKeepsLastStateAndReports") { try await CoreTests().runSyncFailureKeepsLastStateAndReports() }
         try await step("CoreTests.runGmailHttpErrorsAreClassified") { CoreTests().runGmailHttpErrorsAreClassified() }
-        try await step("CoreTests.runSendAgainAfterARejectionLeavesTheFailedItemInTheOutbox") { try await CoreTests().runSendAgainAfterARejectionLeavesTheFailedItemInTheOutbox() }
+        try await step("CoreTests.runSendAgainAfterARejectionRetriesTheFailedItem") { try await CoreTests().runSendAgainAfterARejectionRetriesTheFailedItem() }
         try await step("CoreTests.runOutboxItemWithoutATransportStaysWaiting") { try await CoreTests().runOutboxItemWithoutATransportStaysWaiting() }
         try await step("CoreTests.runRejectedSignInIsShownAsExpiredSignIn") { try await CoreTests().runRejectedSignInIsShownAsExpiredSignIn() }
         try await step("CoreTests.runAMailSentFromTheOutboxIsGoneAfterAReopen") { try await CoreTests().runAMailSentFromTheOutboxIsGoneAfterAReopen() }
+        try await step("CoreTests.runAQueuedMailSurvivesAFailedSaveAndIsSavedOnTheNextPass") { try await CoreTests().runAQueuedMailSurvivesAFailedSaveAndIsSavedOnTheNextPass() }
+        try await step("CoreTests.runASentMailNeverComesBackWhenItsRowCannotBeRemoved") { try await CoreTests().runASentMailNeverComesBackWhenItsRowCannotBeRemoved() }
         try await step("CoreTests.runLocalSearchListsTheNewestHitsFirst") { try await CoreTests().runLocalSearchListsTheNewestHitsFirst() }
         try await step("CoreTests.runTypingSearchesEveryFolderButSpamAndTrashWithoutTheTransport") { try await CoreTests().runTypingSearchesEveryFolderButSpamAndTrashWithoutTheTransport() }
         try await step("CoreActionTests.runTheCoreActions") { try await CoreActionTests().runTheCoreActions() }

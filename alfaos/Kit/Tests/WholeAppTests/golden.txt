@@ -327,9 +327,9 @@ CoreTests.runGmailHttpErrorsAreClassified eq "hint.signin.expired"
 CoreTests.runGmailHttpErrorsAreClassified true some(true)
 CoreTests.runGmailHttpErrorsAreClassified eq "gmail.429"
 CoreTests.runGmailHttpErrorsAreClassified true some(true)
-CoreTests.runSendAgainAfterARejectionLeavesTheFailedItemInTheOutbox eq "mail.hint.rejected"
-CoreTests.runSendAgainAfterARejectionLeavesTheFailedItemInTheOutbox eq some(MailDraftState.sent())
-CoreTests.runSendAgainAfterARejectionLeavesTheFailedItemInTheOutbox eq 1
+CoreTests.runSendAgainAfterARejectionRetriesTheFailedItem eq "mail.hint.rejected"
+CoreTests.runSendAgainAfterARejectionRetriesTheFailedItem eq some(MailDraftState.sent())
+CoreTests.runSendAgainAfterARejectionRetriesTheFailedItem eq 1
 CoreTests.runOutboxItemWithoutATransportStaysWaiting eq some(OutboxState.waiting())
 CoreTests.runRejectedSignInIsShownAsExpiredSignIn eq MailListState.signInExpired(signInExpired="one")
 CoreTests.runAMailSentFromTheOutboxIsGoneAfterAReopen eq 1

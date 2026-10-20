@@ -19,6 +19,8 @@ public final class MailCore: MailEngine {
     private let mirror: MailMirror
     private let now: @Sendable () -> Date
     private var items: [OutboxItem]
+    private var unsaved: Set<OutboxItem.ID> = []
+    private var unremoved: Set<OutboxItem.ID> = []
     private var listeners: [UUID: AsyncStream<MailEngineEvent>.Continuation] = [:]
     private var watcher: Task<Void, Never>?
 
@@ -27,6 +29,7 @@ public final class MailCore: MailEngine {
         self.mirror = try MailMirror(database)
         self.now = now
         self.items = mirror.outbox()
+        try? mirror.dropSent()
         watcher = Task { [weak self] in
             guard let events = self?.hub.events else { return }
             for await event in events {
@@ -267,8 +270,50 @@ public final class MailCore: MailEngine {
     }
 
     public func retryOutbox() async {
-        for item in items where item.state == .waiting {
+        await pass(nil)
+    }
+
+    public func resend(_ id: OutboxItem.ID, _ draft: EmailDraft, draftID: String?) async -> SendOutcome? {
+        guard let index = items.firstIndex(where: { $0.id == id }), case .failed = items[index].state else { return nil }
+        let old = items[index]
+        items[index] = OutboxItem(id: id, inlet: old.inlet, draft: draft, messageID: old.messageID,
+                                  draftID: draftID ?? old.draftID, state: .waiting, attempts: old.attempts)
+        await retry(id)
+        return items.contains { $0.id == id } ? .queued(id) : .sent
+    }
+
+    private func pass(_ inlet: Inlet.ID?) async {
+        flush()
+        for item in items where item.state == .waiting && (inlet == nil || item.inlet == inlet) {
             await retry(item.id)
+        }
+    }
+
+    private func flush() {
+        for id in unremoved where (try? mirror.remove(id)) != nil { unremoved.remove(id) }
+        for id in unsaved { persist(id) }
+    }
+
+    private func persist(_ id: OutboxItem.ID) {
+        guard let item = items.first(where: { $0.id == id }) else {
+            unsaved.remove(id)
+            return
+        }
+        do {
+            try mirror.save(item)
+            unsaved.remove(id)
+        } catch {
+            unsaved.insert(id)
+        }
+    }
+
+    private func finish(_ id: OutboxItem.ID) {
+        do {
+            try mirror.remove(id)
+            unremoved.remove(id)
+        } catch {
+            unremoved.insert(id)
+            try? mirror.markSent(id)
         }
     }
 
@@ -323,20 +368,21 @@ public final class MailCore: MailEngine {
         switch result {
         case .sent:
             items.remove(at: current)
-            try? mirror.remove(id)
+            unsaved.remove(id)
+            finish(id)
         case .transient:
             items[current].wait()
-            try? mirror.save(items[current])
+            persist(id)
         case .rejected(let hint):
             items[current].fail(hint)
-            try? mirror.save(items[current])
+            persist(id)
         }
         emit(.outboxChanged)
     }
 
     private func store(_ item: OutboxItem) {
         items.append(item)
-        try? mirror.save(item)
+        persist(item.id)
         emit(.outboxChanged)
     }
 
@@ -384,9 +430,7 @@ public final class MailCore: MailEngine {
             emit(.syncFailed(inlet, hint))
             return
         }
-        for item in items where item.inlet == inlet && item.state == .waiting {
-            await retry(item.id)
-        }
+        await pass(inlet)
     }
 
     private func emit(_ event: MailEngineEvent) {

@@ -166,7 +166,9 @@ extension MailModel {
         }
         drafts[index].state = .sending
         let outcome: SendOutcome
-        if let remoteID = card.remoteID {
+        if let outboxID = card.outboxID, let again = await engine.resend(outboxID, card.draft, draftID: card.remoteID) {
+            outcome = again
+        } else if let remoteID = card.remoteID {
             outcome = await engine.sendDraft(card.inlet, draftID: remoteID, card.draft)
         } else {
             outcome = await engine.send(card.inlet, card.draft)

@@ -202,7 +202,7 @@ struct MailMirror: Sendable {
 
     func outbox() -> [OutboxItem] {
         let rows = (try? db.read { db in
-            try Row.fetchAll(db, sql: "SELECT * FROM mail_outbox ORDER BY position")
+            try Row.fetchAll(db, sql: "SELECT * FROM mail_outbox WHERE state != 'sent' ORDER BY position")
         }) ?? []
         return rows.compactMap { row in
             guard let id = UUID(uuidString: row["id"]),
@@ -238,6 +238,18 @@ struct MailMirror: Sendable {
     func remove(_ id: OutboxItem.ID) throws {
         try db.write { db in
             try db.execute(sql: "DELETE FROM mail_outbox WHERE id = ?", arguments: [id.uuidString])
+        }
+    }
+
+    func markSent(_ id: OutboxItem.ID) throws {
+        try db.write { db in
+            try db.execute(sql: "UPDATE mail_outbox SET state = 'sent' WHERE id = ?", arguments: [id.uuidString])
+        }
+    }
+
+    func dropSent() throws {
+        try db.write { db in
+            try db.execute(sql: "DELETE FROM mail_outbox WHERE state = 'sent'")
         }
     }
 
