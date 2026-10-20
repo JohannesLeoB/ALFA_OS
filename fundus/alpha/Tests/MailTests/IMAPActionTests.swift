@@ -245,6 +245,17 @@ final class IMAPActionTests: XCTestCase {
         XCTAssertEqual(queue.openedCount, 1)
     }
 
+    private func stepASendLargerThanTheDeclaredSizeIsRefusedBeforeUpload() async {
+        let smtp = EmulatedSMTPStream(size: 100)
+        do {
+            try await ActionFixture.transport(StreamQueue([smtp])).send(EmailDraft(to: "ann@x.test", subject: "Plan", body: "hello"))
+            XCTFail("send must throw")
+        } catch {
+            guard case .smtpRejected(552, _)? = error as? MailTransportError else { return XCTFail("wrong error \(error)") }
+        }
+        XCTAssertFalse(smtp.commands.contains("DATA"))
+    }
+
     private func stepDeletingADraftFlagsItDeletedAndExpunges() async throws {
         let server = ActionFixture.server(capabilities: "IMAP4rev1 UIDPLUS")
         try await ActionFixture.transport(StreamQueue([server])).deleteDraft(id: "7:20:Drafts")
@@ -273,6 +284,7 @@ final class IMAPActionTests: XCTestCase {
         try await stepAStoredDraftIsRebuiltFromEnvelopeAndText()
         try await stepSendingAStoredDraftSendsItThenRemovesIt()
         await stepAFailedSendKeepsTheStoredDraft()
+        await stepASendLargerThanTheDeclaredSizeIsRefusedBeforeUpload()
         try await stepDeletingADraftFlagsItDeletedAndExpunges()
     }
 }

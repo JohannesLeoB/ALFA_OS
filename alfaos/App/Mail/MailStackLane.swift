@@ -77,10 +77,13 @@ struct SlotRun {
         panel.allowsMultipleSelection = true
         panel.canChooseDirectories = false
         guard panel.runModal() == .OK else { return }
-        for url in panel.urls {
-            guard let data = try? Data(contentsOf: url) else { continue }
-            let mime = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType ?? "application/octet-stream"
-            model.attach(id, filename: url.lastPathComponent, mimeType: mime, data: data)
+        let urls = panel.urls
+        Task {
+            for url in urls {
+                guard let data = try? await Task.detached(operation: { try Data(contentsOf: url) }).value else { continue }
+                let mime = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType ?? "application/octet-stream"
+                model.attach(id, filename: url.lastPathComponent, mimeType: mime, data: data)
+            }
         }
     }
 

@@ -133,7 +133,18 @@ actor SMTPSession {
         guard reply.code == 235 else { throw MailTransportError.authenticationRejected("\(reply.code) \(reply.text)") }
     }
 
+    var declaredSize: Int? {
+        for line in extensions {
+            let words = line.uppercased().split(separator: " ")
+            if words.count == 2, words[0] == "SIZE", let size = Int(words[1]), size > 0 { return size }
+        }
+        return nil
+    }
+
     func send(from sender: String, recipients: [String], message: Data) async throws {
+        if let limit = declaredSize, message.count > limit {
+            throw MailTransportError.smtpRejected(552, "5.3.4 Message size exceeds the server limit of \(limit) bytes")
+        }
         _ = try await command(Self.line("MAIL", "FROM:<\(sender)>"), expect: [250])
         for recipient in recipients {
             let reply = try await command(Self.line("RCPT", "TO:<\(recipient)>"), expect: [])

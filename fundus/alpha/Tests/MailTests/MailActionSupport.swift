@@ -103,6 +103,11 @@ final class EmulatedSMTPStream: MailByteStream, @unchecked Sendable {
     private var inData = false
     private var lines: [String] = []
     private var message = Data()
+    private let sizeLine: String
+
+    init(size: Int? = nil) {
+        sizeLine = size.map { "250 SIZE \($0)\r\n" } ?? ""
+    }
 
     var commands: [String] { lock.withLock { lines } }
     var delivered: String { lock.withLock { String(decoding: message, as: UTF8.self) } }
@@ -131,7 +136,7 @@ final class EmulatedSMTPStream: MailByteStream, @unchecked Sendable {
                 lines.append(line)
                 let word = line.split(separator: " ").first.map { $0.uppercased() } ?? ""
                 switch word {
-                case "EHLO": pending.append(Data("250-ready\r\n250 AUTH PLAIN\r\n".utf8))
+                case "EHLO": pending.append(Data((sizeLine.isEmpty ? "250-ready\r\n250 AUTH PLAIN\r\n" : "250-ready\r\n250-AUTH PLAIN\r\n" + sizeLine).utf8))
                 case "AUTH": pending.append(Data("235 ok\r\n".utf8))
                 case "DATA":
                     inData = true
