@@ -144,6 +144,6 @@ public struct GmailMailTransport: MailTransport {
             id: message.id, threadID: message.threadID, subject: message.subject, from: message.from,
             fromRaw: message.fromRaw, toRaw: message.toRaw, ccRaw: message.ccRaw, snippet: message.snippet,
             receivedAt: message.receivedAt, flags: flags, folderIDs: message.labels,
-            attachmentCount: message.attachments.count)
+            attachmentCount: message.attachments.count, messageIDHeader: message.messageIDHeader)
     }
 }

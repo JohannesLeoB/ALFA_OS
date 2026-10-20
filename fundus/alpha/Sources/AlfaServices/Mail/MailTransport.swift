@@ -46,10 +46,11 @@ public struct MailMessageSummary: Identifiable, Equatable, Sendable {
     public var flags: Set<MailFlag>
     public var folderIDs: [String]
     public var attachmentCount: Int
+    public var messageIDHeader: String
 
     public init(id: String, threadID: String = "", subject: String, from: String, fromRaw: String = "", toRaw: String = "",
                 ccRaw: String = "", snippet: String = "", receivedAt: Date? = nil, flags: Set<MailFlag> = [],
-                folderIDs: [String] = [], attachmentCount: Int = 0) {
+                folderIDs: [String] = [], attachmentCount: Int = 0, messageIDHeader: String = "") {
         self.id = id
         self.threadID = threadID
         self.subject = subject
@@ -62,6 +63,7 @@ public struct MailMessageSummary: Identifiable, Equatable, Sendable {
         self.flags = flags
         self.folderIDs = folderIDs
         self.attachmentCount = attachmentCount
+        self.messageIDHeader = messageIDHeader
     }
 }
 

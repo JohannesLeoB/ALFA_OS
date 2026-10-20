@@ -1922,9 +1922,9 @@ func fakeAccount(_ id: String, state: InletState = .connected(probed: Date()), a
 }
 
 func fakeMessage(_ id: String, flags: Set<MailFlag> = [], attachments: Int = 0, thread: String = "",
-                 from: String = "Anna Berg <anna@x.test>", subject: String = "Hello") -> MailMessageSummary {
+                 from: String = "Anna Berg <anna@x.test>", subject: String = "Hello", messageID: String = "") -> MailMessageSummary {
     MailMessageSummary(id: id, threadID: thread, subject: subject, from: from, fromRaw: from, toRaw: "me@x.test, bob@x.test", ccRaw: "carl@x.test", snippet: "snip " + id,
-                       flags: flags, attachmentCount: attachments)
+                       flags: flags, attachmentCount: attachments, messageIDHeader: messageID)
 }
 
 @MainActor
@@ -2772,16 +2772,19 @@ final class MailModelTests {
     func runReplyAllBuildsDraft() async {
         let engine = ModelFakeEngine()
         let model = makeModel(engine)
-        engine.pages[nil] = MailMessagePage(messages: [fakeMessage("m1", thread: "th", subject: "Hello")])
+        engine.pages[nil] = MailMessagePage(messages: [
+            fakeMessage("m1", thread: "th", subject: "Hello"), fakeMessage("m2", messageID: "<abc@x.test>")])
         await model.start()
         let id = await model.reply(to: "m1", all: true)!
         let draft = model.draft(id)!.draft
         recordEqual(draft.subject, "Re: Hello")
         recordEqual(draft.to, "Anna Berg <anna@x.test>")
         recordEqual(draft.cc, "bob@x.test, carl@x.test")
-        recordEqual(draft.inReplyTo, "m1")
+        recordNil(draft.inReplyTo)
         recordEqual(draft.threadID, "th")
         recordTrue(draft.body.contains("> text of m1"))
+        let known = await model.reply(to: "m2")!
+        recordEqual(model.draft(known)!.draft.inReplyTo, "<abc@x.test>")
         let forward = await model.forward("m1")!
         recordEqual(model.draft(forward)?.draft.subject, "Fwd: Hello")
         recordTrue(model.draft(forward)!.draft.attachments.isEmpty)

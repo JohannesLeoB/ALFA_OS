@@ -364,7 +364,8 @@ public struct IMAPSMTPMailTransport: MailTransport {
             ccRaw: (envelope?.cc ?? []).map(\.raw).joined(separator: ", "),
             snippet: "",
             receivedAt: entry.internalDate ?? envelope?.date.flatMap(MailMIME.parseMessageDate),
-            flags: flags, folderIDs: [folder], attachmentCount: entry.structure?.attachments.count ?? 0)
+            flags: flags, folderIDs: [folder], attachmentCount: entry.structure?.attachments.count ?? 0,
+            messageIDHeader: envelope?.messageID ?? "")
     }
 
     private func withIncoming<T: Sendable>(_ body: @Sendable (IMAPSession) async throws -> T) async throws -> T {

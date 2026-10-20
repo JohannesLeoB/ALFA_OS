@@ -64,7 +64,7 @@ extension MailModel {
         pin(messageID)
         let quote = await quoted(messageID, summary: summary)
         let draft = EmailDraft(to: to.isEmpty ? nil : to, cc: cc, subject: Self.prefixed("Re:", summary.subject),
-                               body: quote, inReplyTo: summary.id,
+                               body: quote, inReplyTo: summary.messageIDHeader.isEmpty ? nil : summary.messageIDHeader,
                                threadID: summary.threadID.isEmpty ? nil : summary.threadID)
         return add(inlet: inlet, draft)
     }

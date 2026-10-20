@@ -443,9 +443,10 @@ MailModelTests.runOpenMarksReadAndFlagFailureKeepsHint eq some(false)
 MailModelTests.runReplyAllBuildsDraft eq "Re: Hello"
 MailModelTests.runReplyAllBuildsDraft eq "Anna Berg <anna@x.test>"
 MailModelTests.runReplyAllBuildsDraft eq "bob@x.test, carl@x.test"
-MailModelTests.runReplyAllBuildsDraft eq "m1"
+MailModelTests.runReplyAllBuildsDraft nil true
 MailModelTests.runReplyAllBuildsDraft eq "th"
 MailModelTests.runReplyAllBuildsDraft true some(true)
+MailModelTests.runReplyAllBuildsDraft eq "<abc@x.test>"
 MailModelTests.runReplyAllBuildsDraft eq "Fwd: Hello"
 MailModelTests.runReplyAllBuildsDraft true some(true)
 MailModelTests.runOfflineKeepsLastSync eq MailListState.offline(offline=(lastSync: Optional<Date>)(lastSync=date(100.0)))
