@@ -182,10 +182,14 @@ final class BlockingMailStream: MailByteStream, @unchecked Sendable {
     private let input: InputStream
     private let output: OutputStream
     private let queue = DispatchQueue(label: "mail.blocking.stream")
+    private let handle: Int32?
+    private let closeLock = NSLock()
+    private var isClosed = false
 
-    private init(input: InputStream, output: OutputStream) {
+    private init(input: InputStream, output: OutputStream, handle: Int32?) {
         self.input = input
         self.output = output
+        self.handle = handle
     }
 
     static func open(host: String, port: Int) async throws -> BlockingMailStream {
@@ -225,34 +229,48 @@ final class BlockingMailStream: MailByteStream, @unchecked Sendable {
             output.close()
             throw MailTransportError.connectionFailed(reason.map { String(describing: $0) } ?? host)
         }
-        applyTimeouts(input)
-        return BlockingMailStream(input: input, output: output)
+        let handle = nativeHandle(input)
+        applyTimeouts(handle)
+        return BlockingMailStream(input: input, output: output, handle: handle)
     }
 
-    private static func applyTimeouts(_ input: InputStream) {
+    private static func nativeHandle(_ input: InputStream) -> Int32? {
         let key = Stream.PropertyKey(rawValue: "kCFStreamPropertySocketNativeHandle")
-        guard let data = input.property(forKey: key) as? Data, data.count >= MemoryLayout<Int32>.size else { return }
-        let handle = data.withUnsafeBytes { $0.loadUnaligned(as: Int32.self) }
+        guard let data = input.property(forKey: key) as? Data, data.count >= MemoryLayout<Int32>.size else { return nil }
+        return data.withUnsafeBytes { $0.loadUnaligned(as: Int32.self) }
+    }
+
+    private static func applyTimeouts(_ handle: Int32?) {
+        guard let handle else { return }
         var interval = timeval(tv_sec: Int(MailStreams.timeout), tv_usec: 0)
         setsockopt(handle, SOL_SOCKET, SO_RCVTIMEO, &interval, socklen_t(MemoryLayout<timeval>.size))
         setsockopt(handle, SOL_SOCKET, SO_SNDTIMEO, &interval, socklen_t(MemoryLayout<timeval>.size))
     }
 
     func receive() async throws -> Data {
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data, Error>) in
-            queue.async {
-                var buffer = [UInt8](repeating: 0, count: 65536)
-                let count = self.input.read(&buffer, maxLength: buffer.count)
-                if count > 0 {
-                    continuation.resume(returning: Data(buffer[0..<count]))
-                } else if count == 0 {
-                    continuation.resume(throwing: MailTransportError.connectionClosed)
-                } else if let error = self.input.streamError {
-                    continuation.resume(throwing: MailTransportError.connectionFailed(String(describing: error)))
-                } else {
-                    continuation.resume(throwing: MailTransportError.timeout)
+        do {
+            return try await withTaskCancellationHandler {
+                try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data, Error>) in
+                    queue.async {
+                        var buffer = [UInt8](repeating: 0, count: 65536)
+                        let count = self.input.read(&buffer, maxLength: buffer.count)
+                        if count > 0 {
+                            continuation.resume(returning: Data(buffer[0..<count]))
+                        } else if count == 0 {
+                            continuation.resume(throwing: MailTransportError.connectionClosed)
+                        } else if let error = self.input.streamError {
+                            continuation.resume(throwing: MailTransportError.connectionFailed(String(describing: error)))
+                        } else {
+                            continuation.resume(throwing: MailTransportError.timeout)
+                        }
+                    }
                 }
+            } onCancel: {
+                close()
             }
+        } catch {
+            if Task.isCancelled { throw CancellationError() }
+            throw error
         }
     }
 
@@ -293,6 +311,12 @@ final class BlockingMailStream: MailByteStream, @unchecked Sendable {
     }
 
     func close() {
+        let first = closeLock.withLock { () -> Bool in
+            defer { isClosed = true }
+            return !isClosed
+        }
+        guard first else { return }
+        if let handle { shutdown(handle, SHUT_RDWR) }
         queue.async {
             self.input.close()
             self.output.close()

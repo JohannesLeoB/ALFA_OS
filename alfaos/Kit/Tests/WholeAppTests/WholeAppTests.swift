@@ -473,6 +473,8 @@ final class FakeKeychain: KeychainPort, @unchecked Sendable {
 final class HandCadence: CadencePort, @unchecked Sendable {
     private let runner = Locked<SyncRunner?>(nil)
     private let planned = Locked<[String: Cadence]>([:])
+    private let fired = Locked(0)
+    var triggers: Int { fired.with { $0 } }
     private let continuation: AsyncStream<SyncReport>.Continuation
     let reports: AsyncStream<SyncReport>
     init() {
@@ -486,6 +488,7 @@ final class HandCadence: CadencePort, @unchecked Sendable {
         planned.with { $0[inlet + "|" + capability.rawValue] = cadence }
     }
     func trigger(_ inlet: Inlet.ID, _ capability: Capability) async {
+        fired.with { $0 += 1 }
         guard let run = runner.with({ $0 }) else { return }
         continuation.yield(await run(inlet, capability))
     }
@@ -519,13 +522,26 @@ struct FakeProbe: ProbePort {
         return ProbeResult(account: account, rejection: Hint(text: "hint.fake.rejected"))
     }
 }
-
+final class FakeChanges: ChangePort, @unchecked Sendable {
+    private let state = Locked<(opened: Int, ended: Int, live: AsyncThrowingStream<Void, any Error>.Continuation?)>((0, 0, nil))
+    var opened: Int { state.with { $0.opened } }
+    var ended: Int { state.with { $0.ended } }
+    func changes() -> AsyncThrowingStream<Void, any Error> {
+        let (stream, continuation) = AsyncThrowingStream<Void, any Error>.makeStream()
+        continuation.onTermination = { [state] _ in state.with { $0.ended += 1 } }
+        state.with { $0.opened += 1; $0.live = continuation }
+        return stream
+    }
+    func push() { state.with { _ = $0.live?.yield() } }
+    func fail(_ error: any Error) { state.with { $0.live }?.finish(throwing: error) }
+}
 final class FakeProvider: Provider, @unchecked Sendable {
     let id = "fake"
     let capabilities: Set<Capability>
     let form: [Field] = []
     let presets: [Preset] = []
     let mail = MailTransportFake()
+    let changes = FakeChanges()
     private let accepting = Locked(true)
     let renewals = Locked<[GrantRenewal]>([])
     let signIn: any SignInPort
@@ -543,6 +559,7 @@ final class FakeProvider: Provider, @unchecked Sendable {
         switch ObjectIdentifier(port) {
         case ObjectIdentifier((any MailTransport).self): made = mail as any MailTransport
         case ObjectIdentifier((any CalendarPort).self): made = FakeCalendar() as any CalendarPort
+        case ObjectIdentifier((any ChangePort).self): made = changes as any ChangePort
         default: throw HubError.capabilityMissing(inlet.id, inlet.capabilities.first ?? .mail)
         }
         guard let typed = made as? P else { throw HubError.capabilityMissing(inlet.id, .mail) }
@@ -1437,6 +1454,32 @@ final class AdapterTimerTests {
         let after = await counter.calls
         recordEqual(after, 1)
         cadence.plan("i1", .mail, .off)
+    }
+    func runChangesTriggerTheSyncAndStopWithTheCadenceOrTheInlet() async throws {
+        let provider = FakeProvider(capabilities: [.mail])
+        let cadence = HandCadence()
+        let hub = try Hub.make(HubConfiguration(person: Person(id: "p1", name: "P"), company: CompanySetup(offers: [ScriptedRig.mailOffer]), providers: [provider],
+            keychain: FakeKeychain(), cadence: cadence, cost: FakeCost(), catalog: .withMail, database: try DatabaseQueue(), deadlines: HubDeadlines(watchPause: .milliseconds(10))))
+        let inlet = try await hub.setup.add(ScriptedRig.mailOffer, input: .fields(["address": "a@x"]))
+        func wait(_ condition: @escaping @Sendable () -> Bool) async { let ok = await until { condition() }; XCTAssertTrue(ok) }
+        hub.rules.setCadence(inlet.id, .mail, .push)
+        await wait { provider.changes.opened == 1 }
+        provider.changes.push()
+        await wait { cadence.triggers == 1 }
+        hub.rules.setCadence(inlet.id, .mail, .manual)
+        await wait { provider.changes.ended == 1 }
+        hub.rules.setCadence(inlet.id, .mail, .every(.seconds(60)))
+        await wait { provider.changes.opened == 2 }
+        provider.changes.fail(URLError(.timedOut))
+        await wait { provider.changes.opened == 3 }
+        provider.changes.fail(MailTransportError.unsupportedCapability("IDLE"))
+        await wait { provider.changes.ended == 3 }
+        try await Task.sleep(for: .milliseconds(80))
+        XCTAssertEqual(provider.changes.opened, 3)
+        hub.rules.setCadence(inlet.id, .mail, .push)
+        await wait { provider.changes.opened == 4 }
+        try await hub.setup.remove(inlet.id)
+        await wait { provider.changes.ended == 4 }
     }
     func runSecondTriggerDuringARunIsSkipped() async throws {
         let counter = Counter()
@@ -3830,6 +3873,7 @@ final class WholeAppTests: XCTestCase {
         try await step("FailureTests.runReportIsLimitedPerInlet") { try await FailureTests().runReportIsLimitedPerInlet() }
         try await step("FailureTests.runSignInDeadlineEndsWithTheSignInTimeout") { try await FailureTests().runSignInDeadlineEndsWithTheSignInTimeout() }
         try await step("AdapterTimerTests.runIntervalTriggersExactlyOnceAfterTheTick") { try await AdapterTimerTests().runIntervalTriggersExactlyOnceAfterTheTick() }
+        try await step("AdapterTimerTests.runChangesTriggerTheSyncAndStopWithTheCadenceOrTheInlet") { try await AdapterTimerTests().runChangesTriggerTheSyncAndStopWithTheCadenceOrTheInlet() }
         try await step("AdapterTimerTests.runSecondTriggerDuringARunIsSkipped") { try await AdapterTimerTests().runSecondTriggerDuringARunIsSkipped() }
         try await step("AdapterTimerTests.runReplanningWithOffStopsTheTimer") { try await AdapterTimerTests().runReplanningWithOffStopsTheTimer() }
         try await step("AdapterCostTests.runSumsPerDayAndInlet") { try AdapterCostTests().runSumsPerDayAndInlet() }

@@ -10,6 +10,10 @@ public protocol DocumentsPort: CapabilityPort {}
 public protocol AssistantPort: CapabilityPort {}
 public protocol ShippingPort: CapabilityPort {}
 
+public protocol ChangePort: Sendable {
+    func changes() -> AsyncThrowingStream<Void, any Error>
+}
+
 public struct KeySlot: Hashable, Sendable {
     public var inlet: Inlet.ID
     public var name: String

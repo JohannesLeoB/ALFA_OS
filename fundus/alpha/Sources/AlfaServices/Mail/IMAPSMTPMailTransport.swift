@@ -327,6 +327,25 @@ public struct IMAPSMTPMailTransport: MailTransport {
         }
     }
 
+    public func changes() -> AsyncThrowingStream<Void, any Error> {
+        let (stream, continuation) = AsyncThrowingStream<Void, any Error>.makeStream()
+        let task = Task {
+            var live: IMAPSession?
+            do {
+                guard account.incoming.isComplete else { throw MailTransportError.accountIncomplete("incoming") }
+                let session = try await openIncoming()
+                live = session
+                for try await _ in try await session.idle(in: "INBOX") { continuation.yield() }
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
+            }
+            await live?.close()
+        }
+        continuation.onTermination = { _ in task.cancel() }
+        return stream
+    }
+
     private static let summaryItems = ["UID", "FLAGS", "INTERNALDATE", "RFC822.SIZE", "ENVELOPE", "BODYSTRUCTURE",
                                         "BODY.PEEK[HEADER.FIELDS (REFERENCES)]"]
     private static let threadLimit = 20

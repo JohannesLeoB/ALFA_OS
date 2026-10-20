@@ -20,11 +20,13 @@ final class HubCore: HubAccess, HubSetup, HubRules {
     @ObservationIgnored private var cadences: [String: Cadence] = [:]
     @ObservationIgnored private var truths: [DataKind: Inlet.ID] = [:]
     @ObservationIgnored private var limits: [Capability: Int]
+    @ObservationIgnored private let watchers: ChangeWatchers
 
     init(_ config: HubConfiguration) throws {
         self.config = config
         self.store = try Store(config.database)
         self.limits = config.company.limits
+        self.watchers = ChangeWatchers(firstPause: config.deadlines.watchPause)
         for provider in KeyProviders.standard { providers[provider.id] = provider }
         for provider in config.providers { providers[provider.id] = provider }
         records = try store.loadInlets()
@@ -35,10 +37,30 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             return await self.runSync(inlet, capability)
         }
         for inlet in records where inlet.state.isConnected {
-            for capability in inlet.capabilities {
-                config.cadence.plan(inlet.id, capability, cadence(inlet.id, capability))
-            }
+            for capability in inlet.capabilities { plan(inlet.id, capability) }
         }
+    }
+
+    private func plan(_ inlet: Inlet.ID, _ capability: Capability) {
+        let value = cadence(inlet, capability)
+        config.cadence.plan(inlet, capability, value)
+        watch(inlet, capability, value)
+    }
+
+    private func watch(_ inletID: Inlet.ID, _ capability: Capability, _ value: Cadence) {
+        let key = inletID + "|" + capability.rawValue
+        watchers.stop(key)
+        switch value {
+        case .every, .push: break
+        case .off, .manual, .hook: return
+        }
+        guard let inlet = records.first(where: { $0.id == inletID }), inlet.state.isConnected,
+              inlet.capabilities.contains(capability), let provider = providers[inlet.provider],
+              let grant = grant(for: inlet),
+              let port = try? provider.adapter(ChangePort.self, for: inlet, grant, renewal: renewal(inletID)) else { return }
+        let cadence = config.cadence
+        watchers.start(key, port: port, isTransient: { provider.classify($0).kind == .transient },
+                       fire: { await cadence.trigger(inletID, capability) })
     }
 
     private func loadSettings() throws {
@@ -383,9 +405,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         records.append(inlet)
         log(inlet.id, .probe, ok: true)
         emit(.inletChanged(inlet.id))
-        for capability in inlet.capabilities {
-            config.cadence.plan(inlet.id, capability, cadence(inlet.id, capability))
-        }
+        for capability in inlet.capabilities { plan(inlet.id, capability) }
         return inlet
     }
 
@@ -399,9 +419,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             try store.save(inlet, slots: grant.values.keys.sorted())
             grants[inlet.id] = grant
             update(inlet.id, persist: false) { $0 = inlet }
-            for capability in inlet.capabilities {
-                config.cadence.plan(inlet.id, capability, cadence(inlet.id, capability))
-            }
+            for capability in inlet.capabilities { plan(inlet.id, capability) }
             return inlet
         } catch {
             if case KeychainError.status(let status) = error { throw .keychain(status) }
@@ -434,9 +452,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             let now = config.clock()
             log(inletID, .probe, ok: true)
             update(inletID, persist: true) { $0.state = .connected(probed: now) }
-            for capability in inlet.capabilities {
-                config.cadence.plan(inletID, capability, cadence(inletID, capability))
-            }
+            for capability in inlet.capabilities { plan(inletID, capability) }
             return result
         } catch let error as SetupError {
             throw error
@@ -464,7 +480,10 @@ final class HubCore: HubAccess, HubSetup, HubRules {
 
     func remove(_ inletID: Inlet.ID) async throws {
         guard let inlet = records.first(where: { $0.id == inletID }) else { return }
-        for capability in inlet.capabilities { config.cadence.plan(inletID, capability, .off) }
+        for capability in inlet.capabilities {
+            config.cadence.plan(inletID, capability, .off)
+            watchers.stop(inletID + "|" + capability.rawValue)
+        }
         let names = try store.slots(of: inletID)
         for name in names { try config.keychain.delete(KeySlot(inlet: inletID, name: name)) }
         if let provider = providers[inlet.provider] { try? await provider.signIn.signOut(inlet) }
@@ -496,6 +515,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         if records.first(where: { $0.id == inlet })?.state.isConnected == true {
             config.cadence.plan(inlet, capability, value)
         }
+        watch(inlet, capability, value)
     }
 
     func lastSync(_ inlet: Inlet.ID, _ capability: Capability) -> Date? {
@@ -543,6 +563,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             try store.save(inlet, slots: grant.values.keys.sorted())
             log(inletID, .renewal, ok: true)
             emit(.inletChanged(inletID))
+            for capability in inlet.capabilities { watch(inletID, capability, cadence(inletID, capability)) }
         } catch {
             let failure = Hint(text: "hint.keychain.unwritable", detail: String(describing: error), fixIn: .inlet(inletID))
             update(inletID, persist: true) { $0.state = .failed(failure) }

@@ -14,10 +14,12 @@ public struct CompanySetup: Sendable {
 public struct HubDeadlines: Equatable, Sendable {
     public var signIn: Duration
     public var probe: Duration
+    public var watchPause: Duration
 
-    public init(signIn: Duration = .seconds(300), probe: Duration = .seconds(60)) {
+    public init(signIn: Duration = .seconds(300), probe: Duration = .seconds(60), watchPause: Duration = .seconds(2)) {
         self.signIn = signIn
         self.probe = probe
+        self.watchPause = watchPause
     }
 
     public static let standard = HubDeadlines()

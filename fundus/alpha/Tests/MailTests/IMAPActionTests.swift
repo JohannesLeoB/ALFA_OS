@@ -1,4 +1,5 @@
 import XCTest
+import os
 @testable import AlfaServices
 import AlfaKit
 
@@ -276,6 +277,20 @@ final class IMAPActionTests: XCTestCase {
         }
     }
 
+    private func stepTheChangeStreamIdlesOnInboxYieldsOnExistsAndCancelEndsTheSession() async throws {
+        let pushed = IMAPReply(untagged: ["+ idling", "* 5 EXISTS"], status: "")
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 IDLE") { command, _ in command == "IDLE" ? pushed : nil }
+        let changes = ActionFixture.transport(StreamQueue([server])).changes()
+        let seen = OSAllocatedUnfairLock(initialState: 0)
+        let reader = Task { for try await _ in changes { seen.withLock { $0 += 1 } } }
+        for _ in 0..<400 where seen.withLock({ $0 }) == 0 { try await Task.sleep(for: .milliseconds(5)) }
+        XCTAssertEqual(seen.withLock { $0 }, 1)
+        reader.cancel()
+        try await reader.value
+        for _ in 0..<400 where !server.closed || commands(server).last != "DONE" { try await Task.sleep(for: .milliseconds(5)) }
+        XCTAssertEqual(commands(server), ["EXAMINE \"INBOX\"", "IDLE", "DONE"])
+        XCTAssertTrue(server.closed)
+    }
     private func stepOneSessionServesAllReadsReconnectsOnceAfterALossAndNeverRetriesAnAppend() async throws {
         let dropped = IMAPReply(status: "")
         let first = ActionFixture.server(capabilities: "IMAP4rev1") { command, _ in command.hasPrefix("EXAMINE") || command.hasPrefix("APPEND") ? dropped : nil }
@@ -295,6 +310,7 @@ final class IMAPActionTests: XCTestCase {
     func testTheIMAPActions() async throws {
         try await stepOneSessionServesAllReadsReconnectsOnceAfterALossAndNeverRetriesAnAppend()
         try await stepIdleYieldsPushedChangesEndsWithDoneAndLeavesTheSessionUsable()
+        try await stepTheChangeStreamIdlesOnInboxYieldsOnExistsAndCancelEndsTheSession()
         try await stepArchiveMovesToTheArchiveFolder()
         try await stepArchiveWithoutMoveCopiesFlagsDeletedAndExpunges()
         await stepArchiveWithoutAnArchiveFolderIsRefusedAndTouchesNothing()

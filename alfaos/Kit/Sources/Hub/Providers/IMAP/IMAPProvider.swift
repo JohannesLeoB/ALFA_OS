@@ -73,19 +73,27 @@ public struct IMAPProvider: Provider {
     public func classify(_ error: any Error) -> Classification { IMAPFailure.classify(error) }
 
     public func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P {
-        guard ObjectIdentifier(port) == ObjectIdentifier((any MailTransport).self) else {
+        let wantsChanges = ObjectIdentifier(port) == ObjectIdentifier((any ChangePort).self)
+        guard wantsChanges || ObjectIdentifier(port) == ObjectIdentifier((any MailTransport).self) else {
             throw HubError.capabilityMissing(inlet.id, inlet.capabilities.first ?? .mail)
         }
         let connection = try IMAPConnection(values: grant.values)
         let password = connection.password
-        let transport: any MailTransport = IMAPSMTPMailTransport(
+        let transport = IMAPSMTPMailTransport(
             account: connection.account(id: inlet.id),
             accessToken: { throw MailTransportError.oauthUnavailable(.generic) },
             password: { password },
             channel: channels.channel(for: inlet.id, fingerprint: connection.values.hashValue))
-        guard let typed = transport as? P else {
+        let made: Any = wantsChanges ? IMAPChangePort(transport: transport) : transport
+        guard let typed = made as? P else {
             throw HubError.capabilityMissing(inlet.id, .mail)
         }
         return typed
     }
+}
+
+struct IMAPChangePort: ChangePort {
+    let transport: IMAPSMTPMailTransport
+
+    func changes() -> AsyncThrowingStream<Void, any Error> { transport.changes() }
 }
