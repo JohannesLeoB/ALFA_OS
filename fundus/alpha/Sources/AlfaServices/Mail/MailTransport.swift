@@ -171,6 +171,8 @@ public protocol MailTransport: Sendable {
     func deleteDraft(id: String) async throws
 
     func sendDraft(id: String) async throws
+
+    func wasSent(messageID: String) async throws -> Bool
 }
 
 public enum MailTransports {

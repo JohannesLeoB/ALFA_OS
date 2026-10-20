@@ -713,9 +713,12 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
         return body
     }
 
+    static let messageIDDomain = "mail.gmail.com"
+
     static func threadingHeaderLines(_ draft: EmailDraft) -> [String] {
-        guard let ref = draft.inReplyTo?.trimmingCharacters(in: .whitespacesAndNewlines), !ref.isEmpty else { return [] }
-        return ["In-Reply-To: \(ref)", "References: \(ref)"]
+        let identity = draft.messageID.map { ["Message-ID: <\($0)@\(messageIDDomain)>"] } ?? []
+        guard let ref = draft.inReplyTo?.trimmingCharacters(in: .whitespacesAndNewlines), !ref.isEmpty else { return identity }
+        return identity + ["In-Reply-To: \(ref)", "References: \(ref)"]
     }
 
     static func messageRawPayload(raw: String, draft: EmailDraft) -> [String: Any] {
@@ -757,7 +760,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
                     "",
                     base64Lines(Data(draft.body.utf8))]
         }
-        let alt = "myk_alt_\(boundaryBase)"
+        let alt = "alfa_alt_\(boundaryBase)"
         return ["Content-Type: multipart/alternative; boundary=\"\(alt)\"",
                 "",
                 "--\(alt)",
@@ -781,7 +784,7 @@ public struct GoogleGmailClient: GoogleGmailFetching, GoogleGmailWriting, Google
 
     static func buildMIMEMultipart(_ draft: EmailDraft) -> String {
         guard !draft.attachments.isEmpty else { return buildMIME(draft) }
-        let boundary = "myk_boundary_\(abs(draft.subject.hashValue))"
+        let boundary = "alfa_boundary_\(abs(draft.subject.hashValue))"
         var lines: [String] = []
         if let to = draft.to?.trimmingCharacters(in: .whitespacesAndNewlines), !to.isEmpty {
             lines.append("To: \(to)")

@@ -278,20 +278,30 @@ public final class MailCore: MailEngine {
         case rejected(Hint)
     }
 
-    private func deliver(_ item: inout OutboxItem) async -> Delivery {
+    private func deliver(_ item: inout OutboxItem, verify: Bool = false) async -> Delivery {
         let transport: any MailTransport
         do {
             transport = try self.transport(item.inlet)
         } catch {
             return .transient(Hint(text: MailTextKey.offline.rawValue, detail: String(describing: error)))
         }
+        if verify {
+            do {
+                if try await transport.wasSent(messageID: item.messageID) { return .sent }
+            } catch {
+                let failure = MailFailure.classify(error, inlet: item.inlet, hub: hub)
+                if failure.isTransient { return .transient(failure.hint) }
+            }
+        }
+        var outgoing = item.draft
+        outgoing.messageID = item.messageID
         do {
             if let draftID = item.draftID {
-                let current = try await transport.saveDraft(item.draft, replacing: draftID)
+                let current = try await transport.saveDraft(outgoing, replacing: draftID)
                 item.draftID = current
                 try await transport.sendDraft(id: current)
             } else {
-                try await transport.send(item.draft)
+                try await transport.send(outgoing)
             }
             return .sent
         } catch {
@@ -307,7 +317,7 @@ public final class MailCore: MailEngine {
         items[index].startSending()
         var item = items[index]
         emit(.outboxChanged)
-        let result = await deliver(&item)
+        let result = await deliver(&item, verify: true)
         guard let current = items.firstIndex(where: { $0.id == id }) else { return }
         items[current].draftID = item.draftID
         switch result {

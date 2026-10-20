@@ -41,6 +41,9 @@ struct MailMirror: Sendable {
             if !columns.contains("draftID") {
                 try db.execute(sql: "ALTER TABLE mail_outbox ADD COLUMN draftID TEXT")
             }
+            if !columns.contains("messageID") {
+                try db.execute(sql: "ALTER TABLE mail_outbox ADD COLUMN messageID TEXT NOT NULL DEFAULT ''")
+            }
             let messageColumns = try String.fetchAll(db, sql: "SELECT name FROM pragma_table_info('mail_message')")
             if !messageColumns.contains("messageIDHeader") {
                 try db.execute(sql: "ALTER TABLE mail_message ADD COLUMN messageIDHeader TEXT NOT NULL DEFAULT ''")
@@ -209,8 +212,10 @@ struct MailMirror: Sendable {
                 let hint = (row["hint"] as Data?).flatMap { try? JSONDecoder().decode(Hint.self, from: $0) }
                 state = .failed(hint ?? Hint(text: MailTextKey.failed.rawValue))
             }
-            return OutboxItem(id: id, inlet: row["inlet"], draft: draft, draftID: row["draftID"], state: state,
-                              attempts: row["attempts"])
+            let stored: String = row["messageID"]
+            return OutboxItem(id: id, inlet: row["inlet"], draft: draft,
+                              messageID: stored.isEmpty ? UUID().uuidString.lowercased() : stored,
+                              draftID: row["draftID"], state: state, attempts: row["attempts"])
         }
     }
 
@@ -225,8 +230,8 @@ struct MailMirror: Sendable {
         try db.write { db in
             let position = try Int.fetchOne(db, sql: "SELECT position FROM mail_outbox WHERE id = ?", arguments: [item.id.uuidString])
                 ?? ((try Int.fetchOne(db, sql: "SELECT MAX(position) FROM mail_outbox") ?? -1) + 1)
-            try db.execute(sql: "INSERT OR REPLACE INTO mail_outbox (id, inlet, draft, state, hint, attempts, position, draftID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                           arguments: [item.id.uuidString, item.inlet, draft, name, hint, item.attempts, position, item.draftID])
+            try db.execute(sql: "INSERT OR REPLACE INTO mail_outbox (id, inlet, draft, state, hint, attempts, position, draftID, messageID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                           arguments: [item.id.uuidString, item.inlet, draft, name, hint, item.attempts, position, item.draftID, item.messageID])
         }
     }
 

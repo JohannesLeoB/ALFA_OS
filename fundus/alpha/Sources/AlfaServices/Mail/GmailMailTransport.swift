@@ -102,6 +102,11 @@ public struct GmailMailTransport: MailTransport {
         try await client.sendMessage(draft)
     }
 
+    public func wasSent(messageID: String) async throws -> Bool {
+        let query = "in:sent rfc822msgid:\(messageID)@\(GoogleGmailClient.messageIDDomain)"
+        return try await client.searchMessages(query: query, maxResults: 1).isEmpty == false
+    }
+
     public func setFlags(messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws {
         if add.contains(.deleted) {
             try await trash(messageID: messageID)

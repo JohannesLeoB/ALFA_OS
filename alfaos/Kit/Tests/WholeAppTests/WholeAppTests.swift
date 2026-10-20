@@ -452,6 +452,7 @@ final class MailTransportFake: MailTransport, @unchecked Sendable {
     }
     func deleteDraft(id: String) async throws { try record("deleteDraft:" + id) }
     func sendDraft(id: String) async throws { try record("sendDraft:" + id) }
+    func wasSent(messageID: String) async throws -> Bool { false }
 }
 
 struct FakeCalendar: CalendarPort {}
@@ -1695,6 +1696,9 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
         if let error = sendError { throw error }
         lock.withLock { _sendCalls += 1 }
     }
+    var foundIDs: Set<String> = []
+    var checkError: Error?
+    func wasSent(messageID: String) async throws -> Bool { if let checkError { throw checkError }; return foundIDs.contains(messageID) }
 }
 
 func mailTestClassify(_ error: Error) -> Classification {
@@ -1962,6 +1966,24 @@ final class CoreTests {
         await gmailCore.retryOutbox()
         recordEqual(stateAfter503, .waiting)
         recordEqual(gmail.sent.count, 1)
+    }
+    func runARetryChecksTheSentFolderBeforeSendingAgain() async throws {
+        let (core, _, one, _) = try make()
+        one.sendError = MailTransportError.timeout
+        _ = await core.send("one", draft())
+        one.sendError = nil
+        one.foundIDs = [try XCTUnwrap(core.outbox.first).messageID]
+        await core.retryOutbox()
+        recordEqual(one.sendCalls, 1)
+        recordTrue(core.outbox.isEmpty)
+        one.sendError = MailTransportError.timeout
+        _ = await core.send("one", draft())
+        one.sendError = nil
+        await core.retryOutbox()
+        recordEqual(one.sent.count, 1)
+        recordTrue(core.outbox.isEmpty)
+        one.checkError = MailTransportError.folderNotFound("sent"); one.sendError = MailTransportError.timeout; _ = await core.send("one", draft())
+        one.sendError = nil; await core.retryOutbox(); recordEqual(one.sent.count, 2)
     }
     func runOutboxSurvivesAReopenedDatabase() async throws {
         let hub = HubDouble()
@@ -3820,6 +3842,7 @@ final class WholeAppTests: XCTestCase {
         try await step("CoreTests.runNotConnectedSurfacesAsHubError") { try await CoreTests().runNotConnectedSurfacesAsHubError() }
         try await step("CoreTests.runLoadPageFillsMirror") { try await CoreTests().runLoadPageFillsMirror() }
         try await step("CoreTests.runSendWithoutNetworkQueuesAndRetrySends") { try await CoreTests().runSendWithoutNetworkQueuesAndRetrySends() }
+        try await step("CoreTests.runARetryChecksTheSentFolderBeforeSendingAgain") { try await CoreTests().runARetryChecksTheSentFolderBeforeSendingAgain() }
         try await step("CoreTests.runOutboxSurvivesAReopenedDatabase") { try await CoreTests().runOutboxSurvivesAReopenedDatabase() }
         try await step("CoreTests.runRejectionStaysFailedAndIsNotRetried") { try await CoreTests().runRejectionStaysFailedAndIsNotRetried() }
         try await step("CoreTests.runGmailMessageOverTheSizeLimitFailsAndIsNotRetried") { try await CoreTests().runGmailMessageOverTheSizeLimitFailsAndIsNotRetried() }

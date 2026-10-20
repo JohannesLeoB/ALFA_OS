@@ -294,8 +294,13 @@ CoreTests.runSendWithoutNetworkQueuesAndRetrySends eq 1
 CoreTests.runSendWithoutNetworkQueuesAndRetrySends true some(true)
 CoreTests.runSendWithoutNetworkQueuesAndRetrySends eq some(OutboxState.waiting())
 CoreTests.runSendWithoutNetworkQueuesAndRetrySends eq 1
+CoreTests.runARetryChecksTheSentFolderBeforeSendingAgain eq 1
+CoreTests.runARetryChecksTheSentFolderBeforeSendingAgain true some(true)
+CoreTests.runARetryChecksTheSentFolderBeforeSendingAgain eq 1
+CoreTests.runARetryChecksTheSentFolderBeforeSendingAgain true some(true)
+CoreTests.runARetryChecksTheSentFolderBeforeSendingAgain eq 2
 CoreTests.runOutboxSurvivesAReopenedDatabase eq 1
-CoreTests.runOutboxSurvivesAReopenedDatabase eq some(EmailDraft(to="z@example.test",cc=nil,bcc=nil,subject="s",body="b",attachments=[],inReplyTo=nil,threadID=nil,bodyHTML=nil))
+CoreTests.runOutboxSurvivesAReopenedDatabase eq some(EmailDraft(to="z@example.test",cc=nil,bcc=nil,subject="s",body="b",attachments=[],inReplyTo=nil,threadID=nil,bodyHTML=nil,messageID=nil))
 CoreTests.runOutboxSurvivesAReopenedDatabase eq "<b>formatted</b>"
 CoreTests.runRejectionStaysFailedAndIsNotRetried eq "mail.hint.rejected"
 CoreTests.runRejectionStaysFailedAndIsNotRetried eq 1

@@ -18,18 +18,21 @@ public struct OutboxItem: Identifiable, Equatable, Sendable {
     public let id: UUID
     public let inlet: Inlet.ID
     public let draft: EmailDraft
+    public let messageID: String
     public internal(set) var draftID: String?
     public private(set) var state: OutboxState
     public private(set) var attempts: Int
 
     public init(inlet: Inlet.ID, draft: EmailDraft, draftID: String? = nil) {
-        self.init(id: UUID(), inlet: inlet, draft: draft, draftID: draftID, state: .waiting, attempts: 0)
+        self.init(id: UUID(), inlet: inlet, draft: draft, messageID: UUID().uuidString.lowercased(), draftID: draftID,
+                  state: .waiting, attempts: 0)
     }
 
-    init(id: UUID, inlet: Inlet.ID, draft: EmailDraft, draftID: String?, state: OutboxState, attempts: Int) {
+    init(id: UUID, inlet: Inlet.ID, draft: EmailDraft, messageID: String, draftID: String?, state: OutboxState, attempts: Int) {
         self.id = id
         self.inlet = inlet
         self.draft = draft
+        self.messageID = messageID
         self.draftID = draftID
         self.state = state
         self.attempts = attempts

@@ -33,11 +33,13 @@ public struct EmailDraft: Codable, Sendable, Equatable {
 
     public var threadID: String?
     public var bodyHTML: String?
+    public var messageID: String?
 
     public init(to: String? = nil, cc: String? = nil, bcc: String? = nil, subject: String, body: String,
                 attachments: [DraftAttachment] = [], inReplyTo: String? = nil, threadID: String? = nil,
-                bodyHTML: String? = nil) {
+                bodyHTML: String? = nil, messageID: String? = nil) {
         self.bodyHTML = bodyHTML
+        self.messageID = messageID
         self.to = to
         self.cc = cc
         self.bcc = bcc

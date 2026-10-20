@@ -84,6 +84,11 @@ struct CountingMailTransport: MailTransport {
         meter.record()
         try await base.sendDraft(id: id)
     }
+
+    func wasSent(messageID: String) async throws -> Bool {
+        meter.record()
+        return try await base.wasSent(messageID: messageID)
+    }
 }
 
 extension PortCatalog {

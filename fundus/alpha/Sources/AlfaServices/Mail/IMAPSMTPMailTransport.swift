@@ -113,7 +113,8 @@ public struct IMAPSMTPMailTransport: MailTransport {
     }
 
     public func send(_ draft: EmailDraft) async throws {
-        let outgoing = try MailMessageBuilder.build(draft, account: account)
+        let outgoing = try MailMessageBuilder.build(draft, account: account,
+                                                    messageID: draft.messageID ?? UUID().uuidString.lowercased())
         guard account.outgoing.isComplete else { throw MailTransportError.accountIncomplete("outgoing") }
         let credential = try await credential(for: account.outgoing)
         let session = try await SMTPSession.open(settings: account.outgoing, opener: opener)
@@ -244,7 +245,7 @@ public struct IMAPSMTPMailTransport: MailTransport {
     }
 
     public func saveDraft(_ draft: EmailDraft, replacing draftID: String?) async throws -> String {
-        let token = UUID().uuidString.lowercased()
+        let token = draft.messageID ?? UUID().uuidString.lowercased()
         let message = try MailMessageBuilder.build(draft, account: account, messageID: token, asDraft: true)
         let replaced = try draftID.map(IMAPMessageReference.decode)
         return try await withIncoming { session in
@@ -280,7 +281,8 @@ public struct IMAPSMTPMailTransport: MailTransport {
             let envelope = fetched.envelope
             let join: ([IMAPAddress]) -> String? = { $0.isEmpty ? nil : $0.map(\.raw).joined(separator: ", ") }
             var draft = EmailDraft(to: join(envelope?.to ?? []), cc: join(envelope?.cc ?? []), bcc: join(envelope?.bcc ?? []),
-                                   subject: envelope?.subject ?? "", body: "", inReplyTo: envelope?.inReplyTo)
+                                   subject: envelope?.subject ?? "", body: "", inReplyTo: envelope?.inReplyTo,
+                                   messageID: Self.localPart(envelope?.messageID))
             if let part = structure.firstPlainText {
                 draft.body = try await Self.decodedText(part, session: session, uid: reference.uid)
             }
@@ -310,11 +312,28 @@ public struct IMAPSMTPMailTransport: MailTransport {
         try? await deleteDraft(id: id)
     }
 
+    public func wasSent(messageID: String) async throws -> Bool {
+        try await withIncoming { session in
+            guard let sent = try await session.listFolders().first(where: { $0.role == .sent && $0.isSelectable }) else {
+                throw MailTransportError.folderNotFound(MailFolderRole.sent.rawValue)
+            }
+            _ = try await session.select(sent.path, readOnly: true)
+            let found = try await session.searchUIDs([.raw("HEADER"), .raw("MESSAGE-ID"), .string(messageID)])
+            return found.isEmpty == false
+        }
+    }
+
     private static let summaryItems = ["UID", "FLAGS", "INTERNALDATE", "RFC822.SIZE", "ENVELOPE", "BODYSTRUCTURE",
                                         "BODY.PEEK[HEADER.FIELDS (REFERENCES)]"]
     private static let threadLimit = 20
     private static let inlineImageLimit = 2_097_152
     private static let inlineImageBudget = 8_388_608
+
+    private static func localPart(_ header: String?) -> String? {
+        guard let header else { return nil }
+        let bare = header.trimmingCharacters(in: CharacterSet(charactersIn: "<> "))
+        return bare.split(separator: "@", maxSplits: 1).first.map(String.init)
+    }
 
     private static func decodedText(_ part: IMAPBodyPart, session: IMAPSession, uid: Int) async throws -> String {
         let raw = try await session.fetchSection(uid: uid, section: part.section)
