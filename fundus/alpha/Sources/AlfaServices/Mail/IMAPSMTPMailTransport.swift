@@ -51,9 +51,8 @@ public struct IMAPSMTPMailTransport: MailTransport {
                 criteria.append(.raw("UID 1:\(before - 1)"))
             }
             let text = query?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-            if text.isEmpty {
-                if criteria.isEmpty { criteria.append(.raw("ALL")) }
-            } else {
+            criteria.append(.raw("UNDELETED"))
+            if text.isEmpty == false {
                 if text.unicodeScalars.contains(where: { $0.value > 126 }) {
                     criteria.insert(contentsOf: [.raw("CHARSET"), .raw("UTF-8")], at: 0)
                 }
@@ -236,7 +235,7 @@ public struct IMAPSMTPMailTransport: MailTransport {
             if threadID != messageID, (try? IMAPMessageReference.decode(threadID)) == nil {
                 let id = IMAPArgument.string(threadID)
                 let found = try await session.searchUIDs(
-                    [.raw("OR"), .raw("OR"), .raw("HEADER"), .raw("MESSAGE-ID"), id,
+                    [.raw("UNDELETED"), .raw("OR"), .raw("OR"), .raw("HEADER"), .raw("MESSAGE-ID"), id,
                      .raw("HEADER"), .raw("REFERENCES"), id, .raw("HEADER"), .raw("IN-REPLY-TO"), id])
                 uids = Array(Set(found + [reference.uid])).sorted()
             }

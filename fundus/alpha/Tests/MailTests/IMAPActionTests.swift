@@ -119,8 +119,17 @@ final class IMAPActionTests: XCTestCase {
         XCTAssertEqual(thread.map(\.id), ["7:3:INBOX", "7:5:INBOX", "7:6:INBOX"])
         let id = "\"<root@x.test>\""
         XCTAssertTrue(commands(server).contains(
-            "UID SEARCH OR OR HEADER MESSAGE-ID \(id) HEADER REFERENCES \(id) HEADER IN-REPLY-TO \(id)"))
+            "UID SEARCH UNDELETED OR OR HEADER MESSAGE-ID \(id) HEADER REFERENCES \(id) HEADER IN-REPLY-TO \(id)"))
         XCTAssertTrue(commands(server).contains("EXAMINE \"INBOX\""))
+    }
+
+    private func stepListSearchesExcludeMessagesFlaggedDeleted() async throws {
+        let server = threadServer(found: "3")
+        _ = try await ActionFixture.transport(StreamQueue([server])).listMessages(folderID: "INBOX", query: nil, pageToken: nil, maxResults: 5)
+        XCTAssertTrue(commands(server).contains("UID SEARCH UNDELETED"))
+        let second = threadServer(found: "3")
+        _ = try await ActionFixture.transport(StreamQueue([second])).listMessages(folderID: "INBOX", query: "abc", pageToken: nil, maxResults: 5)
+        XCTAssertTrue(commands(second).contains("UID SEARCH UNDELETED TEXT \"abc\""))
     }
 
     private func stepThreadWithoutHeadersIsTheMessageAloneAndNoSearchRuns() async throws {
@@ -254,6 +263,7 @@ final class IMAPActionTests: XCTestCase {
         try await stepBodyListsTheAttachmentsOfTheMessage()
         try await stepAttachmentIsFetchedBySectionWithoutMarkingReadAndDecoded()
         try await stepThreadIsFoundThroughMessageIDReferencesAndInReplyToInTheSameFolder()
+        try await stepListSearchesExcludeMessagesFlaggedDeleted()
         try await stepThreadWithoutHeadersIsTheMessageAloneAndNoSearchRuns()
         try await stepSavingADraftAppendsItToTheDraftsFolderFlaggedDraft()
         try await stepADraftWithoutRecipientIsSavedAndKeepsItsBlindCopy()
