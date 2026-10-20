@@ -11,7 +11,7 @@ Status 20.10.: Entwurf, nicht abgelegt. Johannes 20.10. zu N6: „Mit, aber simp
 Brief Code → Design · v10 · 20.10.2026
 
 ZIEL
-Unverändert aus v9: Der nächste Export liefert für Mail, Einstellungen und Hülle (ALFA Shell) einen vollständigen Vertrag im Ordner contract/. Neu in v10: die Arbeitsweise (A1–A7) und sechs Nachlieferungen (N1–N6). T1 bis T8 aus v9 gelten weiter.
+Unverändert aus v9: Der nächste Export liefert für Mail, Einstellungen und Hülle (ALFA Shell) einen vollständigen Vertrag im Ordner contract/. Neu in v10: die Arbeitsweise (A1–A7) und sieben Nachlieferungen (N1–N7). T1 bis T8 aus v9 gelten weiter.
 
 GRUNDLAGE
 - Stand: Export "ALFA OS Interface CHEF 1610-handoff 1810.zip", 18.10.2026, sha256 d0ed5abb…3c8d2.
@@ -38,10 +38,12 @@ N5 Sofort-Abgleich. Das Takt-Menü (ALFA Mail.dc.html:744) hat Aus, Manuell und 
 
 N6 KI-Integrationen (Claude und folgende): Modellwahl aus der Modellliste des Anbieters. Zähler „Tokens seit <Datum>, <n> Tage“ (Eingabe und Ausgabe), kumuliert ohne Einzeleinträge, mit Zurücksetzen und Bestätigung. Dazu ein Schätzwert „ca. <Betrag>“ aus Tokens × Preis je Mio. Tokens (Eingabe und Ausgabe); den Preis je Modell trägt der Nutzer in der Detailkarte ein, ohne Preis kein Schätzwert. Kein Guthaben (beim Anbieter nicht abrufbar).
 
+N7 Fehler und Nachladen in Mail. Gezeichnet sind Fehler nur für Liste (ALFA Mail.dc.html:868), Verbindung (:874), Senden (:935, :1000–1002) und Abgleich (:1077); 33 toastIt-Aufrufe (:530–1086) ohne Fehlertext. Für Archivieren, Verschieben, Papierkorb, Markieren, Lesen, Anhang, Verlauf, Entwurf speichern und einen lokal nicht gespeicherten Postausgang fehlt eine Darstellung samt Text. Nachladen: Der Knopf „Mehr laden“ ist gezeichnet (:121), aber nie aktiv (:844 hasMore: false; loadMore und moreText nicht definiert); das Fenster wächst nur über geladene Zeilen (:877–878). Festlegen: Fehlerdarstellung je Aktion; ob weitere Mails vom Server per Knopf oder beim Scrollen kommen, mit Text.
+
 ERINNERUNG AUS v9
 - Kachelhöhe Integrationen 112 (Johannes 19.10.); der Export hat 96 (ALFA Mail.dc.html:74, TOKENBOGEN.json:2587). Im Vertrag 112.
 - W-05 Dienstzahl und L-010 Signaturen je Postfach sind weiter offen.
 
 ABGABE
-Je Schritt T1 bis T8 und N1 bis N6 „erledigt“ oder „offen“, dazu contract/PRUEFUNG.txt.
+Je Schritt T1 bis T8 und N1 bis N7 „erledigt“ oder „offen“, dazu contract/PRUEFUNG.txt.
 ```
