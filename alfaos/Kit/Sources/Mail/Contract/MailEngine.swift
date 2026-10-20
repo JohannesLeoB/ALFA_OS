@@ -18,7 +18,7 @@ public struct OutboxItem: Identifiable, Equatable, Sendable {
     public let id: UUID
     public let inlet: Inlet.ID
     public let draft: EmailDraft
-    public let draftID: String?
+    public internal(set) var draftID: String?
     public private(set) var state: OutboxState
     public private(set) var attempts: Int
 

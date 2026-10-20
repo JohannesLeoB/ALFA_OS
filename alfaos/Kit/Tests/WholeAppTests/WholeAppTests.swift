@@ -1772,6 +1772,7 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     func deleteDraft(id: String) async throws { try record("deleteDraft:" + id) }
     func sendDraft(id: String) async throws {
         try record("sendDraft:" + id)
+        if let error = sendError { throw error }
         lock.withLock { _sendCalls += 1 }
     }
 }
@@ -2335,6 +2336,12 @@ final class CoreActionTests {
         recordTrue(second.outbox.isEmpty)
         recordTrue(transport.sent.isEmpty)
         recordEqual(transport.calls.suffix(2), ["saveDraft:d1:s", "sendDraft:draft-1"])
+        transport.sendError = MailTransportError.timeout
+        _ = await second.sendDraft("one", draftID: "d1", draft())
+        transport.savedID = "draft-2"
+        await second.retryOutbox()
+        recordEqual(transport.calls.suffix(4), ["saveDraft:d1:s", "sendDraft:draft-1", "saveDraft:draft-1:s", "sendDraft:draft-2"])
+        recordEqual(try MailCore(hub: hub, database: database).outbox.first?.draftID, "draft-2")
     }
     private func stepUndoAfterArchiveMovesTheNewIDBackToTheOrigin() async throws {
         let old = "7:5:INBOX"

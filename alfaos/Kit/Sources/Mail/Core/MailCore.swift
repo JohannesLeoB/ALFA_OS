@@ -229,8 +229,9 @@ public final class MailCore: MailEngine {
         for folder in folders { emit(.messagesChanged(inlet, folder: folder)) }
     }
 
-    private func submit(_ item: OutboxItem) async -> SendOutcome {
-        switch await deliver(item) {
+    private func submit(_ queued: OutboxItem) async -> SendOutcome {
+        var item = queued
+        switch await deliver(&item) {
         case .sent:
             return .sent
         case .transient:
@@ -257,7 +258,7 @@ public final class MailCore: MailEngine {
         case rejected(Hint)
     }
 
-    private func deliver(_ item: OutboxItem) async -> Delivery {
+    private func deliver(_ item: inout OutboxItem) async -> Delivery {
         let transport: any MailTransport
         do {
             transport = try self.transport(item.inlet)
@@ -267,6 +268,7 @@ public final class MailCore: MailEngine {
         do {
             if let draftID = item.draftID {
                 let current = try await transport.saveDraft(item.draft, replacing: draftID)
+                item.draftID = current
                 try await transport.sendDraft(id: current)
             } else {
                 try await transport.send(item.draft)
@@ -283,10 +285,11 @@ public final class MailCore: MailEngine {
     private func retry(_ id: OutboxItem.ID) async {
         guard let index = items.firstIndex(where: { $0.id == id }), items[index].state == .waiting else { return }
         items[index].startSending()
-        let item = items[index]
+        var item = items[index]
         emit(.outboxChanged)
-        let result = await deliver(item)
+        let result = await deliver(&item)
         guard let current = items.firstIndex(where: { $0.id == id }) else { return }
+        items[current].draftID = item.draftID
         switch result {
         case .sent:
             items.remove(at: current)

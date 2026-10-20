@@ -355,6 +355,8 @@ CoreActionTests.runTheCoreActions eq "d1"
 CoreActionTests.runTheCoreActions true some(true)
 CoreActionTests.runTheCoreActions true some(true)
 CoreActionTests.runTheCoreActions eq ["saveDraft:d1:s","sendDraft:draft-1"]
+CoreActionTests.runTheCoreActions eq ["saveDraft:d1:s","sendDraft:draft-1","saveDraft:draft-1:s","sendDraft:draft-2"]
+CoreActionTests.runTheCoreActions eq "draft-2"
 CoreActionTests.runTheCoreActions true some(true)
 CoreActionTests.runTheCoreActions eq some(true)
 CoreActionTests.runTheCoreActions eq ["archive:7:5:INBOX","move:7:9:Archive>INBOX"]
