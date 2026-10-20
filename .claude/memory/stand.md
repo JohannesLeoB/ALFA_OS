@@ -1,11 +1,11 @@
 ---
 name: stand
-description: Laufender Stand ALFA_OS am 20.10. 07:00 MESZ
+description: Laufender Stand ALFA_OS am 20.10. 08:30 MESZ
 metadata:
   type: project
 ---
 
-- Repo `main` = GitHub; letzter Commit vor diesem Eintrag `34f4d5d`. LAWS AND ORDERS in `AGENTS.md` (ZIEL gestuft und L1 mit Funktionskarte seit `3df8ccc`, Gedächtnis im Repo seit `f5109e1`).
+- Repo `main` = GitHub; letzter Commit vor diesem Eintrag `86e3bc6`. LAWS AND ORDERS in `AGENTS.md` (ZIEL gestuft und L1 mit Funktionskarte seit `3df8ccc`, Gedächtnis im Repo seit `f5109e1`).
 - Gedächtnis liegt in `.claude/memory/`, der Claude-Ordner des Projekts zeigt per Link dorthin; jede Änderung wird committet und gepusht (L4).
 - 13 Strang-Definitionen in `.claude/agents/`: bau-heute, bau-kataloge, bau-mail, bau-projekte, design-bruecke, figma-spiegel, leser, produkt, pruefer-freund, pruefer-petzer, pruefer-spuerhund, pruefer-waterboarder, sammler.
 - `DESIGN/` (Commit a59341a, 18.10.): Original-ZIPs plus `MANIFEST.json` (Prüfsummen, Dateiliste je ZIP); entpackt wird nur in `dist/`. Letzter Master: `ALFA OS Interface CHEF 1610-handoff 1810.zip` (109 Dateien, 341 Tokens, noch nicht final poliert, ABNAHME.md 12 Kriterien offen). Vorletzter: `ALFA OS Interface CHEF 1610.zip` (245 Tokens). Johannes 18.10.: „Ja. Lege beide Master als Original-ZIP mit MANIFEST.json in DESIGN/ ab, entpackt wird nur in dist/.“
@@ -40,7 +40,25 @@ metadata:
 - Google-Anmeldung: Johannes 20.10.: „die App wird aber auch in 6 Monaten noch eher maximal 10-20 "test User" haben udn nicht kommerziell auf dem Markt sein, ich bin Solo Entwickler, kein Siftware House...“. Wege: A intern (nur eigener Workspace, keine Prüfung), B extern Testing (Token 7 Tage), C extern „In Produktion“ ungeprüft (Warnung einmal, max. 100 Nutzer, kostenlos), D extern geprüft (Datenschutz, Domain, CASA jährlich). Lead empfiehlt C; Entscheidung offen bei Johannes; GoogleClientConfig noch nicht gelesen.
 - Ticket 1 (DHL 404) entfällt: 404 auf die Probenummer heißt Schlüssel angenommen, 401/403 lehnen ab (DHLSendungsClient.swift:76-77); F-11/A1 war falsch. Ticket 3 (ALFA_GOLDEN raus, Werte aus Design.*) liegt als F-19 bis F-22 am Stammtisch.
 - Gegen-Review 20.10. (Performance-Prüfer, Sonnet, 14 Funde, alle vom Lotsen am Code nachgelesen). Johannes 20.10.: „Ja. Die sieben bestätigten Funde über bau-mail mit Sonnet beheben, je Fund ein Ticket, du prüfst und committest; die unbestätigten vorher selbst nachlesen.“ Behoben: Erneuern an der Grenze e85bdfb, Message-ID im Antwort-Kopf 5c330ba, Rückgängig nach Verschieben 9f3eeef (MailCore sucht die neue IMAP-Kennung per Message-ID im Zielordner, eine Abfrage mehr je Vorgang; COPYUID im Fundus wäre die Wurzel), Mails beim Entfernen löschen c318ba7 (neues HubEvent.inletRemoved), fehlerhaftes Konto bleibt in Mail 5e7bb81, Suche lokal beim Tippen und Server erst mit Enter 9735155 (Master filtert lokal über alle Ordner außer Spam/Papierkorb, Mail.dc.html:599-600, :846-847; wir filtern beim Tippen nur den geladenen Ordner: Abweichung), Zeilen ohne Abruf je Zeile 34f4d5d (Anhänge aus BODYSTRUCTURE/Gmail im Summary, Thread-Zahl aus geladenen Zeilen; measureRow gelöscht). Test grün, App-Build grün.
-- Offen aus dem Review, bestätigt, nicht freigegeben: Probelauf ohne Netz oder abgebrochen speichert „fehlerhaft“ und plant keinen Takt (HubCore.swift:418-443); „arbeitet“ wird bei Token-Erneuerung mitgespeichert (adopt); dreifacher Abgleich und eine Verbindung je IMAP-Vorgang (MailCore.swift sync, withIncoming); `SEARCH ALL` statt `UNDELETED`; eine kaputte Zeile in Einstellungen oder Konten verhindert den Start (try decode); Entwurf-Kennung im Postausgang unveränderlich (Waisen-Entwürfe); Anhänge ohne Größengrenze synchron auf dem Hauptthread (MailStackLane.swift:81). Dazu: Gmail-Rückgängig aus dem Papierkorb setzt nur INBOX, ungeprüft; der Test CoreTests.runOutboxItemOfARemovedAccountWaitsForever beschreibt noch das alte Verhalten; testLines 5774 von 5895 (Hook-Grenze nahe).
+- Weitere sieben Review-Funde behoben. Johannes 20.10.: „Ja. Die sieben weiteren bestätigten Funde über bau-mail mit Sonnet beheben, je Fund ein Ticket, du prüfst und committest.“
+  - Kaputte Zeilen beim Laden überspringen: 65e310f.
+  - „Arbeitet“ nie speichern: 2f06512. Ein altes Prüfdatum gilt als ungeprüft.
+  - Probelauf offline oder abgebrochen behält den Zustand und plant den Takt neu: bdcc451.
+  - IMAP-Suche mit `UNDELETED`: 4a0bfe5.
+  - Postausgang behält die aktuelle Entwurf-Kennung: 9c82fee.
+  - Anhänge abseits des Hauptthreads und SMTP-`SIZE` vor dem Upload: 1cfe12b.
+  - Ordner einmal je Abgleich, keine Mail-Arbeit nach Fehlschlag, kein zweites LIST: 86e3bc6. Neu dafür: HubEvent.syncFailed. Logins je Abgleich 3 → 2.
+  - App-Build `dist/ALFA_OS-86e3bc6.app`.
+- Offen danach:
+  - Verbindungs-Pooling bei IMAP; IDLE fehlt.
+  - Rückgängig über COPYUID statt Suche per Message-ID.
+  - MIME-Aufbau nicht streamend.
+  - Doppelt gesendete Mail nach Timeout nach DATA.
+  - Gmail ohne Größengrenze.
+  - Gmail-Rückgängig aus dem Papierkorb setzt nur INBOX, ungeprüft.
+  - Der Test CoreTests.runOutboxItemOfARemovedAccountWaitsForever beschreibt noch das alte Verhalten.
+  - Suche beim Tippen nur im geladenen Ordner, Master filtert über alle.
+  - testLines 5868 von 5895: die Hook-Grenze ist fast erreicht.
 
 Aufträge an die Lead
 - Test nach L5 (aus `plan/EIN-TEST.md`, 16.10.): genau eine Testfunktion `testTheWholeApp` in `alfaos/Kit/Tests/WholeAppTests/WholeAppTests.swift`. Sie startet die App-Zusammenstellung ohne Fenster, mit In-Memory-Datenbank und Attrappen, und spielt ein festes Skript über Hülle, Generatoren, Einstellungen und Mail; das Protokoll wird mit `golden.txt` verglichen. Erst `scripts/mutate.py` gegen die alten Tests, dann der eine Test, bis jeder erkennbare Mutant ihn rot macht; erst danach die alten Tests löschen. Abnahme: 1 Testfunktion, unter 60 s, mindestens 200 Mutanten erkannt oder einzeln begründet.
