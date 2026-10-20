@@ -233,11 +233,10 @@ private struct SettingsTiles: View {
                 .designText(\.inkTertiary, size: Design.TextSize.small)
                 .padding(.horizontal, CGFloat(Design.Spacing.step4))
                 .frame(height: CGFloat(Design.Spacing.step24), alignment: .bottomLeading)
-            LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: CGFloat(Design.Size.settingsTileMinWidth)), spacing: CGFloat(Design.Spacing.step8))],
-                spacing: CGFloat(Design.Spacing.step8)) {
-                    content()
-                }
+            TileFlow(minimum: Design.Size.settingsTileMinWidth, gap: Design.Spacing.step8, height: SheetValues.settingsTileHeight) {
+                content()
+            }
+            .transaction { $0.animation = nil }
         }
     }
 }

@@ -51,6 +51,15 @@ LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq 280.0
 LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq [280.0,896.0,280.0]
 LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq [56.0,1344.0,56.0]
 LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell nil true
+LayoutTests.runTilesFlowLikeAutoFill eq 1
+LayoutTests.runTilesFlowLikeAutoFill eq 1
+LayoutTests.runTilesFlowLikeAutoFill eq 2
+LayoutTests.runTilesFlowLikeAutoFill eq 1
+LayoutTests.runTilesFlowLikeAutoFill eq 3
+LayoutTests.runTilesFlowLikeAutoFill eq 2
+LayoutTests.runTilesFlowLikeAutoFill eq 4
+LayoutTests.runTilesFlowLikeAutoFill eq 3
+LayoutTests.runTilesFlowLikeAutoFill eq 132.0
 BlobTests.runHomeSitsInTheStripAtTheMargin eq Point(x=16.0,y=16.0)
 BlobTests.runThrowSettlesAtTheNearestEdge eq Edge.trailing()
 BlobTests.runThrowSettlesAtTheNearestEdge eq Edge.leading()

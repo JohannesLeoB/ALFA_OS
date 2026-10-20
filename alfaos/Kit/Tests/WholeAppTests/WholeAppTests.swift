@@ -277,6 +277,14 @@ final class LayoutTests {
         recordEqual(widths(1512, maximized, g, rules), [56, avail - 112, 56])
         recordNil(LaneLayout.toggleMaximize(lane: .center, state: maximized).maximized)
     }
+    func runTilesFlowLikeAutoFill() throws {
+        for n in 1...4 {
+            let edge = Double(n) * 132 + Double(n - 1) * 8
+            recordEqual(TileGrid.columns(width: edge, minimum: 132, gap: 8), n)
+            recordEqual(TileGrid.columns(width: edge - 1, minimum: 132, gap: 8), max(1, n - 1))
+        }
+        recordEqual(TileGrid.columnWidth(width: 272, count: 2, gap: 8), 132)
+    }
 }
 
 @MainActor
@@ -3826,6 +3834,7 @@ final class WholeAppTests: XCTestCase {
         try await step("ThemeTests.runMissingMeasureFailsLoading") { try ThemeTests().runMissingMeasureFailsLoading() }
         try await step("SettingsTests.runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp") { try SettingsTests().runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp() }
         try await step("LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell") { try LayoutTests().runTheLanesFollowTheAccordionOfTheDeliveredShell() }
+        try await step("LayoutTests.runTilesFlowLikeAutoFill") { try LayoutTests().runTilesFlowLikeAutoFill() }
         try await step("BlobTests.runHomeSitsInTheStripAtTheMargin") { try BlobTests().runHomeSitsInTheStripAtTheMargin() }
         try await step("BlobTests.runThrowSettlesAtTheNearestEdge") { try BlobTests().runThrowSettlesAtTheNearestEdge() }
         try await step("BlobTests.runMenuOpensBelowAtTheTopAndAboveAtTheBottom") { try BlobTests().runMenuOpensBelowAtTheTopAndAboveAtTheBottom() }
