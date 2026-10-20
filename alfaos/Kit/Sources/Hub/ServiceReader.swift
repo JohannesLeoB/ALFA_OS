@@ -59,7 +59,7 @@ public enum ServiceReader {
         if let lead {
             switch lead.state {
             case .connected(let probed):
-                note = .checked(probed)
+                note = probed == .distantPast ? .unchecked : .checked(probed)
             case .signedIn:
                 note = .unchecked
             case .connecting:

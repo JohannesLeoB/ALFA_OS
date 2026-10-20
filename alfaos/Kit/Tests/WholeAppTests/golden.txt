@@ -863,3 +863,10 @@ GapTests.runAnEmptyGrantAndAGenericProbeFailureAreKept empty-port HubError.notCo
 GapTests.runAnEmptyGrantAndAGenericProbeFailureAreKept empty-state [InletState.keychainUnreadable()]
 GapTests.runAnEmptyGrantAndAGenericProbeFailureAreKept imap-failed ["hint.imap.login.rejected"]
 GapTests.runAnEmptyGrantAndAGenericProbeFailureAreKept imap-restart ["hint.imap.login.rejected"]
+GapTests.runATransientStateNeverReachesTheStore eq InletState.working()
+GapTests.runATransientStateNeverReachesTheStore false some(false)
+GapTests.runATransientStateNeverReachesTheStore notnil true
+GapTests.runATransientStateNeverReachesTheStore false some(false)
+GapTests.runATransientStateNeverReachesTheStore true some(true)
+GapTests.runATransientStateNeverReachesTheStore nil true
+GapTests.runATransientStateNeverReachesTheStore eq some(LinkNote.unchecked())

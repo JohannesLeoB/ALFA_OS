@@ -538,6 +538,7 @@ final class FakeProvider: Provider, @unchecked Sendable {
     let mail = MailTransportFake()
     private let accepting = Locked(true)
     private let signedOutList = Locked<[Inlet.ID]>([])
+    let renewals = Locked<[GrantRenewal]>([])
     let signIn: any SignInPort
     let probe: any ProbePort
     init(capabilities: Set<Capability>, signIn: (any SignInPort)? = nil) {
@@ -549,6 +550,7 @@ final class FakeProvider: Provider, @unchecked Sendable {
     var signedOut: [Inlet.ID] { signedOutList.with { $0 } }
     func setAccepting(_ value: Bool) { accepting.with { $0 = value } }
     func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P {
+        renewals.with { $0.append(renewal) }
         let made: Any
         switch ObjectIdentifier(port) {
         case ObjectIdentifier((any MailTransport).self): made = mail as any MailTransport
@@ -3778,6 +3780,40 @@ final class GapTests {
             note("shadow", "\(name) \(theme.shadow(ThemeKey(name), .light)) \(theme.shadow(ThemeKey(name), .dark))")
         }
     }
+    func runATransientStateNeverReachesTheStore() async throws {
+        let database = try DatabaseQueue()
+        let keychain = FakeKeychain()
+        let rig = try ScriptedRig.make(database: database, keychain: keychain)
+        let inlet = try await rig.connect("a@x")
+        let gate = Gate()
+        rig.provider.mail.setGate(gate)
+        let sync = Task { @MainActor in await rig.cadence.trigger(inlet.id, .mail) }
+        await waitUntil { rig.provider.mail.listFoldersCalls == 1 }
+        recordEqual(rig.hub.setup.inlets[0].state, .working)
+        let renewal = try XCTUnwrap(rig.provider.renewals.with { $0.last })
+        renewal.renewed(Grant(values: ["token": "fresh"]))
+        await waitUntil { rig.hub.setup.report(for: inlet.id).contains { $0.event == .renewal } }
+        await gate.release()
+        await sync.value
+        let raw = try await database.read { try Data.fetchOne($0, sql: "SELECT json FROM inlet WHERE id = ?", arguments: [inlet.id]) }
+        let stored = try JSONDecoder().decode(Inlet.self, from: try XCTUnwrap(raw)).state
+        recordFalse(stored == .working)
+        recordNotNil(stored.probed)
+        try await database.write { db in
+            var legacy = inlet
+            legacy.state = .working
+            try db.execute(sql: "UPDATE inlet SET json = ? WHERE id = ?", arguments: [try JSONEncoder().encode(legacy), inlet.id])
+        }
+        let old = try ScriptedRig.make(database: database, provider: rig.provider, keychain: keychain)
+        recordFalse(old.hub.setup.inlets[0].state == .working)
+        recordTrue(old.hub.setup.inlets[0].state.isConnected)
+        recordNil(old.hub.setup.inlets[0].state.probed)
+        let base = try XCTUnwrap(ServiceCatalog.all.first)
+        let info = ServiceInfo(id: base.id, group: base.group, access: base.access, companyOwned: base.companyOwned, personOnly: base.personOnly,
+                               fields: base.fields, areas: base.areas, extras: base.extras, hasNote: base.hasNote,
+                               listsAccounts: base.listsAccounts, providers: ["fake"], logo: base.logo)
+        recordEqual(ServiceReader.read(info, setup: old.hub.setup, rules: old.hub.rules).note, .unchecked)
+    }
     func runTheTaskRaceEndsOnceAndExpires() async throws {
         let quick = try await Deadline.run(.seconds(5)) { 7 }
         note("quick", quick)
@@ -3960,6 +3996,7 @@ final class WholeAppTests: XCTestCase {
         try await step("GapTests.runShadowTokensResolveByMode") { try GapTests().runShadowTokensResolveByMode() }
         try await step("GapTests.runTheTaskRaceEndsOnceAndExpires") { try await GapTests().runTheTaskRaceEndsOnceAndExpires() }
         try await step("GapTests.runAnEmptyGrantAndAGenericProbeFailureAreKept") { try await GapTests().runAnEmptyGrantAndAGenericProbeFailureAreKept() }
+        try await step("GapTests.runATransientStateNeverReachesTheStore") { try await GapTests().runATransientStateNeverReachesTheStore() }
         try compareWithGolden()
     }
 }

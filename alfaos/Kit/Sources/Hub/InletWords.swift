@@ -2,7 +2,7 @@ import Foundation
 
 extension InletState {
     public var probed: Date? {
-        if case .connected(let date) = self { date } else { nil }
+        if case .connected(let date) = self, date != .distantPast { date } else { nil }
     }
 
     public var hint: Hint? {

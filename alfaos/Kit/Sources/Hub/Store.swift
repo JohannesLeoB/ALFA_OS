@@ -24,14 +24,30 @@ struct Store {
         try db.read { db in
             try Row.fetchAll(db, sql: "SELECT json FROM inlet ORDER BY rowid").compactMap { row in
                 let data: Data = row["json"]
-                return try? JSONDecoder().decode(Inlet.self, from: data)
+                guard var inlet = try? JSONDecoder().decode(Inlet.self, from: data) else { return nil }
+                inlet.state = Self.durable(inlet.state)
+                return inlet
             }
         }
     }
 
+    static func durable(_ state: InletState) -> InletState {
+        switch state {
+        case .working: .connected(probed: .distantPast)
+        case .connecting: .created
+        default: state
+        }
+    }
+
     func save(_ inlet: Inlet, slots: [String]? = nil) throws {
-        let data = try JSONEncoder().encode(inlet)
         try db.write { db in
+            var row = inlet
+            if row.state != Self.durable(row.state) {
+                let old = try Data.fetchOne(db, sql: "SELECT json FROM inlet WHERE id = ?", arguments: [inlet.id])
+                let stored = old.flatMap { try? JSONDecoder().decode(Inlet.self, from: $0) }
+                row.state = Self.durable(stored?.state ?? row.state)
+            }
+            let data = try JSONEncoder().encode(row)
             try db.execute(sql: "INSERT INTO inlet (id, json) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET json = excluded.json",
                            arguments: [inlet.id, data])
             if let slots {
