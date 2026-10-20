@@ -1,7 +1,7 @@
 - [Stand](stand.md) — laufender Stand 20.10.: Aufträge an die Lead, offene Punkte, Master 1810 und 1610 als ZIP in DESIGN/
 - [Artefakte-Karte](artefakte-karte.md) — 56 Artefakte gelesen: nicht lesbar, Quellenrisiko der Karten-Zitate, Funde, Widersprüche
 - [Grundsätze](grundsaetze.md) — 20 Grundsätze mit Zitaten und Datum (Artefakt, Stand 10.10.), überholte Stellen markiert
-- [Stammtisch](stammtisch.md) — Arbeitsform, geltende Antworten, offene Fragen F-01 bis F-22 (Stand 20.10.)
+- [Stammtisch](stammtisch.md) — Arbeitsform, geltende Antworten, offene Fragen F-01 bis F-22 (Stand 20.10.; seither F-23 bis F-31, siehe stand.md)
 - [Arbeitsweise](arbeitsweise.md) — Ergebnisse statt Worte, alles lesen, nichts ohne Zustimmung schreiben, bauen statt analysieren, Arbeiten des zweiten Entwicklers nie
 - [Lead-Verantwortung](lead-verantwortung.md) — Lead denkt voraus; Schlamperei rieselt in jede Sitzung durch
 - [Verlass ist der Job](verlass-ist-der-job.md) — blind verlassen können; nichts fertig, grün oder geprüft ohne Prüfung Wert für Wert
@@ -15,7 +15,7 @@
 - [App: Vision](app-vision.md) — acht geprüfte Zitate zu Zweck und Richtung der App
 - [App: Ziel](app-ziel.md) — gestuft: Ende November Umfang C ohne Kalkulation, Launch Ende 2026 mit dem Rest
 - [App: Hülle](app-huelle.md) — Blob, Bahnen, Sync, Look: Ist, Soll, Offen
-- [App: Mail](app-mail.md) — Vertrag 155 Funktionen, Konten, Lücken: Ist, Soll, Offen
+- [App: Mail](app-mail.md) — Vertrag 155 Funktionen, Konten, Anmeldung je Anbieter, Lücken: Ist, Soll, Offen
 - [App: Konten](app-konten.md) — Einstellungen, Hub, Rechte, Integrationen: Ist, Soll, Offen
 - [App: Projekte](app-projekte.md) — Akte, Fragebogen, Provisionierung: Ist, Soll, Offen
 - [App: Heute](app-heute.md) — Widget-Brett, 34 Arten: Ist, Soll, Offen
