@@ -24,17 +24,23 @@ public struct GoogleProbe: ProbePort {
         let token: String
         do {
             token = try await tokens.validAccessToken()
+        } catch is CancellationError {
+            throw CancellationError()
         } catch {
             return ProbeResult(account: inlet.id, rejection: Self.hint("hint.google.token", error))
         }
         let email: String
         do {
             email = try await GoogleUserInfoClient(httpClient: session).fetchUserInfo(accessToken: token).email
+        } catch is CancellationError {
+            throw CancellationError()
         } catch {
             return ProbeResult(account: inlet.id, rejection: Self.hint("hint.google.userinfo", error))
         }
         do {
             _ = try await GoogleGmailClient(tokenProvider: tokens, session: session).listLabels()
+        } catch is CancellationError {
+            throw CancellationError()
         } catch {
             return ProbeResult(account: email, rejection: Self.hint("hint.google.labels", error))
         }

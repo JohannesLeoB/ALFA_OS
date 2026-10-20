@@ -841,24 +841,34 @@ final class SetupFlowTests {
         recordEqual(hub.setup.inlets.first?.state, .connecting)
         probeTask.cancel()
         await probeTask.value
-        recordEqual(hub.setup.inlets.first?.state.canRenew, true)
+        recordEqual(hub.setup.inlets.first?.state.isConnected, true)
     }
     func runInletOfAMissingProvider() async throws {
         let database = try DatabaseQueue()
         let keychain = FakeKeychain()
         let accepting = Locked(true)
-        let first = try makeHub(keychain: keychain, database: database, run: { _, _ in
+        let offline = Locked(false)
+        let cadence = HandCadence()
+        let first = try makeHub(keychain: keychain, cadence: cadence, database: database, run: { _, _ in
+            if offline.with({ $0 }) { throw MailProbeError(step: .incoming, reason: .connectionFailed("down")) }
             if !accepting.with({ $0 }) { throw MailProbeError(step: .incoming, reason: .authenticationRejected("NO")) }
         })
         let connected = try await first.setup.add(Self.offer, input: .fields(values("jo@gmx.example")))
         let failedOne = try await first.setup.add(Self.offer, input: .fields(values("ka@gmx.example")))
+        offline.with { $0 = true }
+        _ = try? await first.setup.probe(connected.id)
+        recordEqual(first.setup.inlets.first { $0.id == connected.id }?.state.isConnected, true)
+        offline.with { $0 = false }
         accepting.with { $0 = false }
         _ = try? await first.setup.probe(failedOne.id)
+        first.rules.setCadence(failedOne.id, .mail, .every(.seconds(300)))
         accepting.with { $0 = true }
         let restarted = try makeHub(keychain: keychain, database: database, providers: [], offers: [])
         recordEqual(restarted.setup.inlets.first { $0.id == failedOne.id }?.state.canRenew, true)
         recordThrowsError(try restarted.access.port((any MailTransport).self, for: connected.id))
         recordEqual(restarted.setup.inlets.count, 2)
+        _ = try await first.setup.probe(failedOne.id)
+        recordEqual(cadence.planned(failedOne.id, .mail), .every(.seconds(300)))
     }
     func runOneCorruptSettingRowStopsTheWholeHub() async throws {
         let database = try DatabaseQueue()

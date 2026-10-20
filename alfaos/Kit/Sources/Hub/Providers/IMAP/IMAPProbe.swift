@@ -28,7 +28,8 @@ struct IMAPProbe: ProbePort {
             throw CancellationError()
         } catch {
             return ProbeResult(account: connection.address, rejection: Hint(
-                text: "hint.imap.failed", detail: String(describing: error), fixIn: .inlet(inlet.id)))
+                text: "hint.imap.failed", detail: String(describing: error), fixIn: .inlet(inlet.id),
+                kind: error is URLError ? .transient : nil))
         }
     }
 
@@ -48,7 +49,13 @@ struct IMAPProbe: ProbePort {
         case .accountIncomplete, .credentialsMissing: kind = "fields.invalid"
         default: kind = "failed"
         }
-        return Hint(text: "hint.\(protocolName).\(kind)", detail: detail(error.reason), fixIn: .inlet(inlet))
+        let transient: Bool
+        switch error.reason {
+        case .connectionFailed, .connectionClosed, .timeout: transient = true
+        default: transient = false
+        }
+        return Hint(text: "hint.\(protocolName).\(kind)", detail: detail(error.reason), fixIn: .inlet(inlet),
+                    kind: transient ? .transient : nil)
     }
 
     static func detail(_ error: MailTransportError) -> String? {

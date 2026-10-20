@@ -99,8 +99,10 @@ SetupFlowTests.runCancelDuringTheProbe eq some(SetupError.cancelled())
 SetupFlowTests.runCancelDuringTheProbe eq some(InletState.connecting())
 SetupFlowTests.runCancelDuringTheProbe eq some(true)
 SetupFlowTests.runInletOfAMissingProvider eq some(true)
+SetupFlowTests.runInletOfAMissingProvider eq some(true)
 SetupFlowTests.runInletOfAMissingProvider throws "notConnected("imap-<uuid>")"
 SetupFlowTests.runInletOfAMissingProvider eq 2
+SetupFlowTests.runInletOfAMissingProvider eq some(Cadence.every(every=Duration(_low=4852094820647174144,_high=16)))
 SetupFlowTests.runOneCorruptSettingRowStopsTheWholeHub eq ["fake-<uuid>"]
 SetupFlowTests.runOneCorruptSettingRowStopsTheWholeHub eq ["token"]
 SetupFlowTests.runOneCorruptSettingRowStopsTheWholeHub eq 3

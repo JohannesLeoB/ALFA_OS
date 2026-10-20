@@ -274,6 +274,10 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             emit(.syncFinished(capability, inletID))
             return SyncReport(inlet: inletID, capability: capability, result: .finished(items: outcome.count))
         } catch {
+            if error is CancellationError {
+                update(inletID, persist: false) { if $0.state == .working { $0.state = previous } }
+                return SyncReport(inlet: inletID, capability: capability, result: .skipped)
+            }
             let classification = classify(error, inlet: inletID)
             var failure = hint(classification, fixIn: .inlet(inletID))
             if case .failed(let current) = records.first(where: { $0.id == inletID })?.state,
@@ -420,21 +424,32 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             let result = try await Deadline.run(limit) { try await provider.probe.probe(inlet, grant) }
             if let rejection = result.rejection {
                 logFailure(inletID, .probe, rejection)
-                update(inletID, persist: true) { $0.state = .failed(rejection) }
+                if rejection.kind == .transient {
+                    update(inletID, persist: false) { $0.state = previous }
+                } else {
+                    update(inletID, persist: true) { $0.state = .failed(rejection) }
+                }
                 throw SetupError.probeFailed(rejection)
             }
             let now = config.clock()
             log(inletID, .probe, ok: true)
             update(inletID, persist: true) { $0.state = .connected(probed: now) }
+            for capability in inlet.capabilities {
+                config.cadence.plan(inletID, capability, cadence(inletID, capability))
+            }
             return result
         } catch let error as SetupError {
             throw error
         } catch is DeadlineExpired {
-            let failure = Hint(text: Self.timeoutText, fixIn: .inlet(inletID))
+            let failure = Hint(text: Self.timeoutText, fixIn: .inlet(inletID), kind: .transient)
             logFailure(inletID, .probe, failure)
-            update(inletID, persist: true) { $0.state = .failed(failure) }
+            update(inletID, persist: false) { $0.state = previous }
             throw .probeFailed(failure)
         } catch {
+            if error is CancellationError {
+                update(inletID, persist: false) { $0.state = previous }
+                throw .cancelled
+            }
             let classification = classify(error, inlet: inletID)
             let failure = hint(classification, fixIn: .inlet(inletID))
             logFailure(inletID, .probe, failure)
@@ -443,7 +458,6 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             } else {
                 update(inletID, persist: true) { $0.state = .failed(failure) }
             }
-            if error is CancellationError { throw .cancelled }
             throw .probeFailed(failure)
         }
     }
