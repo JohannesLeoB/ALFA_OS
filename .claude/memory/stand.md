@@ -83,7 +83,17 @@ metadata:
   - Offen (Funde, nicht gebaut):
     - Verwerfen während eines laufenden Speicherns lässt den gespeicherten Entwurf auf dem Server.
     - `edit` verwirft Eingaben in `.sending`, `.sent`, `.queuedInOutbox` (MailModel+Draft.swift:82-85); der Master erlaubt dort Bearbeiten und behält die Phase (:659).
-    - Der Master leitet „Empfänger fehlt“ und „Betreff fehlt“ immer aus dem Inhalt ab (:1000); der Code zeigt sie nur nach einem Sendeversuch (`.sendBlocked`).
+    - (erledigt in A1e) Verwerfen, Bearbeiten beim Senden, Hinweise.
+- A1e eb89ff4 (Johannes 20.10.: „Ja. A1e (Verwerfen während Speichern, Bearbeiten während Senden, Hinweise aus dem Inhalt) über bau-mail mit Sonnet, Ticket vorher von Haiku prüfen lassen, du prüfst und committest.“):
+  - Verwerfen löscht den Entwurf auf dem Server wie im Master (:671), auch während eines Speicherns.
+  - Bearbeiten beim Senden und im Postausgang bleibt erhalten (:659); wartende Einträge gehen mit dem neuen Text raus (`MailCore.revise`).
+  - Senden ohne Empfänger oder Betreff zeigt den Toast „Empfänger fehlt“ (:632, `c.ok` = Empfänger und Betreff). `.sendBlocked` und seine zwei Texte sind entfernt. `status` (:1000) bindet der Master nirgends.
+  - Prüfung: Mutanten des Bauers und der Lead rot; App-Build grün; testLines 5825/5895; golden.txt −3.
+  - Fehler der Lead: Der Commit eb89ff4 hat keine Leerzeile nach dem Betreff, dadurch ist der Betreff zu lang. Er ist gepusht und nicht berichtigt, weil das einen Force-Push auf main bräuchte.
+  - Offen (Funde, nicht gebaut):
+    - Der Master entfernt die Karte nach erfolgreichem Senden (:677); die App behält sie als `.sent`.
+    - `canSend` prüft nur An (wie der Master), `model.send` nimmt auch nur Cc oder Bcc.
+    - Lücke an Design: kein eigener Text für einen leeren Betreff.
 - Parallel bei Johannes: AGENTS.md wird in Codex neu gefasst (Lead hat Korrekturen geliefert: Gedächtnis, Leseorte, fundus, Ehrenkodex, Wegweiser, Rangfolge mit Quelle, Export erst nach Prüfskripten, 75 %-Regel, Haiku-Pflicht eingrenzen). Produktsitzung grillt Johannes zu Umfang, Einstellungen, Dateien/Vorlagen, Projekte, Heute, Kataloge, Mail-Resten, Datenhaltung. Eigene Grill-Sitzung des Lotsen (Auftrag GRILL-LOTSE-AUFTRAG.md bei Johannes) zu Lastenheft, offenen Lead-Entscheiden, Code-Rückschau, Codebase-Design, Ablauf.
 - Wartet danach: B Ballast und D Namen/myk erst nach Johannes' Entscheid in der Grill-Sitzung, was weg darf. C Tempo, E2 SheetValues-Quellen, H7 Datenspeicher (Stammtisch-Entwurf H7 in STAMMTISCH/ALFA Stammtisch.rtf).
 - Johannes 20.10. zu Tests: „bitte manage du das mit den tests“ (test-verstaendnis.md). Unabhängige Prüfung liegt auf der Wächter-Seite bei Johannes; die Lead kennt keine Einzelheiten und fragt nicht danach.
