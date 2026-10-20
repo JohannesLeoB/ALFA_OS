@@ -1,11 +1,12 @@
-Brief Code → Design · v9 · 19.10.2026
+Brief Code → Design · v10 · 20.10.2026
 
 ZIEL
 Der nächste Export liefert für Mail, Einstellungen und Hülle (ALFA Shell) einen vollständigen Vertrag im Ordner contract/: jeder Wert ein Token, jedes Bauteil und Element mit fester id, jeder sichtbare Text mit Schlüssel, jede Änderung protokolliert. Code liest ihn per Skript und baut daraus.
+Neu in v10: die Arbeitsweise (A1–A7) und sieben Nachlieferungen (N1–N7). T1 bis T8 aus v9 gelten unverändert weiter.
 
 GRUNDLAGE
-- Stand: Export "ALFA OS Interface CHEF 1610-handoff 1810.zip", 18.10.2026, sha256 d0ed5abb…3c8d2.
-- Anhang: sechs Schemas, validate.py, check_contract.py, diff_contract.py, examples/ (stimmiger Mini-Vertrag), tokens-gegen-schema.txt (297 Funde). Die Schemas bestimmen Dateien, Felder und Werte.
+- Stand: Export "ALFA OS Interface CHEF 1610-handoff 1810.zip", 18.10.2026, sha256 d0ed5abb…3c8d2. Was du seither schon erledigt hast, meldest du in der ABGABE als erledigt.
+- Anhang: sechs Schemas, validate.py, check_contract.py, diff_contract.py, examples/ (stimmiger Mini-Vertrag), tokens-gegen-schema.txt (297 Funde). Die Schemas bestimmen Dateien, Felder und Werte. Maßgeblich ist immer die Fassung in diesem Ordner auf GitHub (JohannesLeoB/ALFA_OS, DESIGN/brief/).
 - Regeln (Johannes): Der neueste Export gilt und muss vollständig sein. Namen unter der Oberfläche englisch. Namensraum der Erweiterungen: alfa.
 - Pilot-Bögen: ALFA Mail, ALFA Shell, ALFA Bestaetigen. ALFA Einstellungen lädt ALFA Mail (ALFA Einstellungen.dc.html:12).
 
@@ -13,6 +14,18 @@ PRÜFBEFEHLE (im Ordner mit den Skripten; contract ist dein neuer Vertragsordner
 P1  python3 validate.py contract                      → letzte Zeile "contract: valid"
 P2  python3 check_contract.py contract --areas shell,mail,settings "ALFA Mail.dc.html" "ALFA Shell.dc.html" "ALFA Bestaetigen.dc.html"   → "consistent"
 P3  python3 diff_contract.py <voriger contract> contract   → "log matches"
+
+ARBEITSWEISE
+A1 Eine Quelle. Jeder Wert, den eine Ansicht zeigt (Maß, Farbe, Schrift, Laufweite, Deckkraft, Dauer, Kurve, Grenze, Zahl), steht als Token im Vertrag. Die Bögen verweisen nur per var(--…) darauf. Eine Zahl, die nur inline im Bogen steht, gilt als nicht geliefert. Beispiele, die heute nur inline stehen: ALFA Mail.dc.html:74 height:96px, :59 letter-spacing .01em.
+A2 Ein Format. TOKENBOGEN.json entfällt oder wird aus contract/ erzeugt; zwei Wertquellen nebeneinander gibt es nicht.
+A3 Ort. contract/ liegt im Export auf oberster Ebene neben project/.
+A4 Pflichtdateien. base.tokens.json, theme-light.tokens.json, theme-dark.tokens.json, alfa.resolver.json, components.json, views.json, texts.json, changes.json, dazu akte.json und werte-abgleich.json aus T7. Fehlt eine oder ist sie leer, ist der Export nicht geliefert.
+A5 Prüfen vor dem Export. P1 und P2 laufen ohne Fund, P3 ab dem zweiten Vertrag (wie T8), bevor die ZIP entsteht; ihre Ausgaben liegen dem Export als contract/PRUEFUNG.txt bei.
+A6 Verhalten. Zu jedem Bauteil mit Zuständen oder Bewegung: Zustände, Übergänge, Grenzbreiten und Umbruch als Angaben in components.json. Was nicht angegeben ist, baut Code ohne Übergang.
+A7 Entscheidungen von Johannes gehen vor. Sie stehen in diesem Brief mit Datum; der Vertrag übernimmt sie wörtlich.
+
+ANNAHME BEI CODE
+Code prüft jeden Export mit denselben Skripten und sucht zusätzlich lose Zahlen in den Bögen. Ein Fund heißt: nicht angenommen, nichts gebaut, Rückgabe als Liste an dich.
 
 SCHRITTE (der Reihe nach)
 
@@ -57,7 +70,7 @@ W-04 trailingTextInset 12; lieferung-an-code/decisions.json:99 nennt noch 14.
 W-05 Dienstzahl in settings-sections.json:4 auf das Gezählte bringen: 10 in ALFA Mail, monday nur in ALFA Dienste.
 W-06 Gruppen der Einstellungen wie im Bogen: Ich, Firma, Verbindungen, Schutz und System (ALFA Mail.dc.html:389); INHALT.json:93 und :1223 nachziehen.
 W-07 Jedes der 47 Felder in INHALT.json felder_je_abschnitt im Vertrag oder gestrichen.
-Entschieden (Johannes 19.10.): Kachelhöhe Integrationen 112. Kartenstapel 8a und 8b als Einstellung, Vorgabe 8a. L-014 Firmendaten und Impressum trägt der Nutzer ein (Felder ohne Werte, mit Bezeichnung und Platzhalter).
+Entschieden (Johannes 19.10.): Kachelhöhe Integrationen 112; der Export 1810 hat noch 96 (ALFA Mail.dc.html:74, TOKENBOGEN.json:2587), im Vertrag 112. Kartenstapel 8a und 8b als Einstellung, Vorgabe 8a. L-014 Firmendaten und Impressum trägt der Nutzer ein (Felder ohne Werte, mit Bezeichnung und Platzhalter).
 Fertig, wenn: jeder Punkt hat genau einen Wert im Vertrag.
 
 T7 Begleitdokumente per Skript
@@ -74,8 +87,20 @@ T8 Änderungsprotokoll
 Ergebnis: changes.json; dein Skript hängt je Export einen Block an (Vergleich mit dem vorigen Vertrag; Grund höchstens 120 Zeichen; erster Block previous "none"). Token-ids: base ohne Vorsatz (size.edge), Themen mit Vorsatz (theme-dark:color.ground).
 Fertig, wenn: P1 ohne Fund und ab dem zweiten Vertrag P3 "log matches".
 
+NACHLIEFERUNGEN (zeichnen und in T2–T4 eintragen)
+N1 DHL als eine Integration. Johannes 20.10.: „DHL Versand und Sendungsverfolgung sind EIN Integrations Item. keine zwei "stecker" sondern über dhl api readme und manual siehe apps von dhl dev.“ Heute zwei Karten: ALFA Dienste.dc.html:102 (dhl) und :103 (dhlversand), ebenso ALFA Mail.dc.html:399–400. Gesucht: eine Karte mit den Feldern für den DHL-Zugang.
+N2 Abmelden. Johannes 20.10. auf die Frage, ob „Auf diesem Mac abmelden“ alle Verbindungen trennt und deren lokale Daten löscht, auch ungesendete Mails im Postausgang, mit einer Warnung davor (Zahl der ungesendeten Mails), während Name, Firmendaten und Darstellung bleiben: „lets go“. Heute nennt ALFA Mail.dc.html:758 fest sechs Dienste („Trennt Google, Clockodo, ClickUp, sevDesk, Airtable und Claude …“), INHALT.json:403 „alle Dienste“; es gibt zehn. Gesucht: die Warnung vor dem Abmelden mit der Zahl der ungesendeten Mails, und ein Text, der die tatsächlich verbundenen Dienste nennt.
+N3 Laufweite. Kein Token für letter-spacing; inline stehen .01em, .02em, .04em, .06em, .08em, -.02em, -.035em (ALFA Mail.dc.html, ALFA Shell.dc.html:47, ALFA Dienste.dc.html:18, :28, ALFA Huelle.dc.html:17); tracking-display -0.01em nur als Vorschlag (design-system/alfa-ds-tokens.js:80). Je Textstil ein Laufweite-Token.
+N4 Mail zu groß. Gezeichnet sind nur „Nicht gesendet / Der Server hat nicht geantwortet“ (ALFA Mail.dc.html:1002) und „Senden braucht die Schreibfreigabe“ (:1003). Hinweis und Text, wenn eine Mail die Größengrenze des Anbieters überschreitet.
+N5 Sofort-Abgleich. Das Takt-Menü (ALFA Mail.dc.html:744) hat Aus, Manuell und sechs Zeitabstände. Code kann bei IMAP-Konten neue Mail sofort melden (IDLE). Eintrag und Text dafür, oder die Angabe, dass er nicht sichtbar wird.
+N6 KI-Integrationen (Claude und folgende): Modellwahl aus der Modellliste des Anbieters. Zähler „Tokens seit <Datum>, <n> Tage“ (Eingabe und Ausgabe), kumuliert ohne Einzeleinträge, mit Zurücksetzen und Bestätigung. Dazu ein Schätzwert „ca. <Betrag>“ aus Tokens × Preis je Mio. Tokens (Eingabe und Ausgabe); den Preis je Modell trägt der Nutzer in der Detailkarte ein, ohne Preis kein Schätzwert. Kein Guthaben (beim Anbieter nicht abrufbar).
+N7 Fehler und Nachladen in Mail. Gezeichnet sind Fehler nur für Liste (ALFA Mail.dc.html:868), Verbindung (:874), Senden (:935, :1000–1002) und Abgleich (:1077); 33 toastIt-Aufrufe (:530–1086) ohne Fehlertext. Für Archivieren, Verschieben, Papierkorb, Markieren, Lesen, Anhang, Verlauf, Entwurf speichern und einen lokal nicht gespeicherten Postausgang fehlt eine Darstellung samt Text. Nachladen: Der Knopf „Mehr laden“ ist gezeichnet (:121), aber nie aktiv (:844 hasMore: false; loadMore und moreText nicht definiert); das Fenster wächst nur über geladene Zeilen (:877–878). Festlegen: Fehlerdarstellung je Aktion; ob weitere Mails vom Server per Knopf oder beim Scrollen kommen, mit Text.
+
+ERINNERUNG AUS v9
+- W-05 Dienstzahl und L-010 Signaturen je Postfach sind weiter offen.
+
 ABGABE
-Je Schritt T1 bis T8 „erledigt“ oder „offen“, dazu die Ausgaben von P1, P2, P3.
+Je Schritt T1 bis T8 und N1 bis N7 „erledigt“ oder „offen“, dazu contract/PRUEFUNG.txt mit den Ausgaben von P1, P2, P3.
 
 SPÄTER
-Funktions-Specs B-01 bis B-04 und B-06 bis B-09 (Lead aus Mail, Kontaktblatt, Speichern in Drive, Ablegen per Ziehen, Klartext/HTML, Link öffnen, Mehr laden, Alle Anhänge) folgen gesondert. Projekte, Heute, Kataloge, Warenkorb folgen nach dem Pilot im selben Format.
+Funktions-Specs B-01 bis B-04 und B-06 bis B-09 (Lead aus Mail, Kontaktblatt, Speichern in Drive, Ablegen per Ziehen, Klartext/HTML, Link öffnen, Mehr laden, Alle Anhänge) folgen gesondert, außer Mehr laden: das steht schon in N7. Projekte, Heute, Kataloge, Warenkorb folgen nach dem Pilot im selben Format.
