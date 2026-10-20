@@ -10,13 +10,17 @@ public struct IMAPSMTPMailTransport: MailTransport {
     private let accessToken: AccessTokenSource?
     private let password: PasswordSource?
     private let opener: MailStreamOpener
+    private let channel: IMAPCommandChannel
 
-    public init(account: MailAccount, accessToken: AccessTokenSource? = nil, password: PasswordSource? = nil) {
-        self.init(account: account, accessToken: accessToken, password: password, opener: MailStreams.open)
+    public init(account: MailAccount, accessToken: AccessTokenSource? = nil, password: PasswordSource? = nil,
+                channel: IMAPCommandChannel = IMAPCommandChannel()) {
+        self.init(account: account, accessToken: accessToken, password: password, opener: MailStreams.open, channel: channel)
     }
 
-    init(account: MailAccount, accessToken: AccessTokenSource?, password: PasswordSource?, opener: @escaping MailStreamOpener) {
+    init(account: MailAccount, accessToken: AccessTokenSource?, password: PasswordSource?, opener: @escaping MailStreamOpener,
+         channel: IMAPCommandChannel = IMAPCommandChannel()) {
         self.account = account
+        self.channel = channel
         self.opener = opener
         self.password = password
         if let accessToken {
@@ -248,7 +252,7 @@ public struct IMAPSMTPMailTransport: MailTransport {
         let token = draft.messageID ?? UUID().uuidString.lowercased()
         let message = try MailMessageBuilder.build(draft, account: account, messageID: token, asDraft: true)
         let replaced = try draftID.map(IMAPMessageReference.decode)
-        return try await withIncoming { session in
+        return try await withIncoming(retry: false) { session in
             let folders = try await session.listFolders()
             guard let drafts = folders.first(where: { $0.role == .drafts && $0.isSelectable }) else {
                 throw MailTransportError.folderNotFound(MailFolderRole.drafts.rawValue)
@@ -385,19 +389,21 @@ public struct IMAPSMTPMailTransport: MailTransport {
             attachments: attachments, messageIDHeader: envelope?.messageID ?? "")
     }
 
-    private func withIncoming<T: Sendable>(_ body: @Sendable (IMAPSession) async throws -> T) async throws -> T {
+    private func withIncoming<T: Sendable>(retry: Bool = true, _ body: @Sendable (IMAPSession) async throws -> T) async throws -> T {
         guard account.incoming.isComplete else { throw MailTransportError.accountIncomplete("incoming") }
+        return try await channel.perform(retry: retry, open: { try await openIncoming() }, body: body)
+    }
+
+    private func openIncoming() async throws -> IMAPSession {
         let credential = try await credential(for: account.incoming)
         let session = try await IMAPSession.open(settings: account.incoming, opener: opener)
         do {
             try await session.authenticate(credential)
-            let value = try await body(session)
-            await session.logout()
-            return value
         } catch {
             await session.close()
             throw error
         }
+        return session
     }
 
     private func credential(for settings: MailServerSettings) async throws -> MailCredential {

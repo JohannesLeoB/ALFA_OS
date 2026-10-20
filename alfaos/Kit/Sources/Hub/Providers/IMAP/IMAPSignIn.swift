@@ -1,6 +1,9 @@
 import Foundation
+import AlfaServices
 
 struct IMAPAppPasswordSignIn: SignInPort {
+    let channels: IMAPChannelRegistry
+
     func signIn(_ inlet: Inlet, input: [Field.ID: String]) async throws -> Grant {
         Grant(values: try IMAPConnection(values: input).values)
     }
@@ -10,5 +13,7 @@ struct IMAPAppPasswordSignIn: SignInPort {
         return grant
     }
 
-    func signOut(_ inlet: Inlet) async throws {}
+    func signOut(_ inlet: Inlet) async throws {
+        channels.release(inlet.id)
+    }
 }

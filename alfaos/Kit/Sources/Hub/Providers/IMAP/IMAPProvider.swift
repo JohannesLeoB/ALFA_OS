@@ -9,14 +9,15 @@ public struct IMAPProvider: Provider {
     public let capabilities: Set<Capability> = [.mail]
     public let signIn: any SignInPort
     public let probe: any ProbePort
+    private let channels = IMAPChannelRegistry()
 
     public init() {
-        signIn = IMAPAppPasswordSignIn()
+        signIn = IMAPAppPasswordSignIn(channels: channels)
         probe = IMAPProbe()
     }
 
     package init(probeRun: @escaping IMAPProbeRun) {
-        signIn = IMAPAppPasswordSignIn()
+        signIn = IMAPAppPasswordSignIn(channels: channels)
         probe = IMAPProbe(run: probeRun)
     }
 
@@ -80,7 +81,8 @@ public struct IMAPProvider: Provider {
         let transport: any MailTransport = IMAPSMTPMailTransport(
             account: connection.account(id: inlet.id),
             accessToken: { throw MailTransportError.oauthUnavailable(.generic) },
-            password: { password })
+            password: { password },
+            channel: channels.channel(for: inlet.id, fingerprint: connection.values.hashValue))
         guard let typed = transport as? P else {
             throw HubError.capabilityMissing(inlet.id, .mail)
         }

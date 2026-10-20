@@ -225,12 +225,11 @@ final class IMAPActionTests: XCTestCase {
     private func stepSendingAStoredDraftSendsItThenRemovesIt() async throws {
         let fetch = storedDraftServer()
         let smtp = EmulatedSMTPStream()
-        let remove = storedDraftServer()
-        let queue = StreamQueue([fetch, smtp, remove])
+        let queue = StreamQueue([fetch, smtp])
         try await ActionFixture.transport(queue).sendDraft(id: "7:20:Drafts")
         XCTAssertTrue(smtp.delivered.contains("Subject: Plan"))
         XCTAssertTrue(smtp.commands.contains { $0.hasPrefix("RCPT TO:<ann@x.test>") })
-        XCTAssertEqual(ActionFixture.withoutLogin(remove.commands).suffix(2),
+        XCTAssertEqual(ActionFixture.withoutLogin(fetch.commands).suffix(2),
                        ["UID STORE 20 +FLAGS.SILENT (\\Deleted)", "UID EXPUNGE 20"])
     }
 
@@ -277,7 +276,24 @@ final class IMAPActionTests: XCTestCase {
         }
     }
 
+    private func stepOneSessionServesAllReadsReconnectsOnceAfterALossAndNeverRetriesAnAppend() async throws {
+        let dropped = IMAPReply(status: "")
+        let first = ActionFixture.server(capabilities: "IMAP4rev1") { command, _ in command.hasPrefix("EXAMINE") || command.hasPrefix("APPEND") ? dropped : nil }
+        let second = ActionFixture.server(capabilities: "IMAP4rev1")
+        let queue = StreamQueue([first, second, ActionFixture.server(capabilities: "IMAP4rev1")])
+        let transport = ActionFixture.transport(queue)
+        _ = try await transport.listFolders()
+        _ = try await transport.listFolders()
+        XCTAssertEqual(first.commands.filter { $0.hasPrefix("LOGIN") }.count, 1)
+        _ = try await transport.listMessages(folderID: "INBOX", query: nil, pageToken: nil, maxResults: 5)
+        XCTAssertEqual(second.commands.filter { $0.hasPrefix("LOGIN") }.count, 1)
+        XCTAssertEqual(queue.openedCount, 2)
+        do { _ = try await transport.saveDraft(EmailDraft(to: "ann@x.test", subject: "Hi", body: "text"), replacing: nil); XCTFail("append must fail") } catch {}
+        XCTAssertEqual(queue.openedCount, 2)
+    }
+
     func testTheIMAPActions() async throws {
+        try await stepOneSessionServesAllReadsReconnectsOnceAfterALossAndNeverRetriesAnAppend()
         try await stepIdleYieldsPushedChangesEndsWithDoneAndLeavesTheSessionUsable()
         try await stepArchiveMovesToTheArchiveFolder()
         try await stepArchiveWithoutMoveCopiesFlagsDeletedAndExpunges()
