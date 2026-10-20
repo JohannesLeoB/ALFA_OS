@@ -262,7 +262,23 @@ final class IMAPActionTests: XCTestCase {
         XCTAssertEqual(commands(server), ["SELECT \"Drafts\"", "UID STORE 20 +FLAGS.SILENT (\\Deleted)", "UID EXPUNGE 20"])
     }
 
+    private func stepIdleYieldsPushedChangesEndsWithDoneAndLeavesTheSessionUsable() async throws {
+        let open = { (server: EmulatedIMAPStream) in
+            try await IMAPSession.open(settings: ActionFixture.account.incoming, opener: StreamQueue([server]).opener)
+        }
+        let pushed = IMAPReply(untagged: ["+ idling", "* 5 EXISTS"], status: "")
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 IDLE") { command, _ in command == "IDLE" ? pushed : nil }
+        let session = try await open(server)
+        for try await change in try await session.idle(in: "INBOX") { XCTAssertEqual(change, IMAPChange.exists(5)); break }
+        _ = try await session.listFolders()
+        XCTAssertEqual(commands(server).suffix(3), ["IDLE", "DONE", "LIST \"\" \"*\""])
+        do { _ = try await open(ActionFixture.server(capabilities: "IMAP4rev1")).idle(in: "INBOX"); XCTFail("idle must throw") } catch {
+            XCTAssertEqual(error as? MailTransportError, .unsupportedCapability("IDLE"))
+        }
+    }
+
     func testTheIMAPActions() async throws {
+        try await stepIdleYieldsPushedChangesEndsWithDoneAndLeavesTheSessionUsable()
         try await stepArchiveMovesToTheArchiveFolder()
         try await stepArchiveWithoutMoveCopiesFlagsDeletedAndExpunges()
         await stepArchiveWithoutAnArchiveFolderIsRefusedAndTouchesNothing()

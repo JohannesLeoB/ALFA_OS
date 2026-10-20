@@ -130,6 +130,7 @@ public enum MailTransportError: Error, Equatable, Sendable {
     case credentialsMissing
     case oauthUnavailable(MailProviderKind)
     case unsupportedAuthentication(String)
+    case unsupportedCapability(String)
     case authenticationRejected(String)
     case serverRejected(String)
     case smtpRejected(Int, String)

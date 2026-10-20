@@ -4,9 +4,22 @@ import AlfaKit
 
 protocol MailByteStream: Sendable {
     func receive() async throws -> Data
+    func receiveIdle() async throws -> Data
     func send(_ data: Data) async throws
     func upgradeToTLS() async throws
     func close()
+}
+
+extension MailByteStream {
+    func receiveIdle() async throws -> Data {
+        while true {
+            do {
+                return try await receive()
+            } catch MailTransportError.timeout {
+                try Task.checkCancellation()
+            }
+        }
+    }
 }
 
 typealias MailStreamOpener = @Sendable (String, Int, MailSecurity) async throws -> any MailByteStream
@@ -98,28 +111,47 @@ final class NetworkMailStream: MailByteStream, @unchecked Sendable {
     }
 
     func receive() async throws -> Data {
+        try await read(bounded: true)
+    }
+
+    func receiveIdle() async throws -> Data {
+        try await read(bounded: false)
+    }
+
+    private func read(bounded: Bool) async throws -> Data {
         let connection = self.connection
         let queue = self.queue
-        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data, Error>) in
-            let gate = MailResumeGate()
-            queue.asyncAfter(deadline: .now() + MailStreams.timeout) {
-                if gate.take() {
-                    continuation.resume(throwing: MailTransportError.timeout)
-                    connection.cancel()
+        do {
+            return try await withTaskCancellationHandler {
+                try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data, Error>) in
+                    let gate = MailResumeGate()
+                    if bounded {
+                        queue.asyncAfter(deadline: .now() + MailStreams.timeout) {
+                            if gate.take() {
+                                continuation.resume(throwing: MailTransportError.timeout)
+                                connection.cancel()
+                            }
+                        }
+                    }
+                    connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) { data, _, isComplete, error in
+                        guard gate.take() else { return }
+                        if let error {
+                            continuation.resume(throwing: MailTransportError.connectionFailed(String(describing: error)))
+                        } else if let data, data.isEmpty == false {
+                            continuation.resume(returning: data)
+                        } else if isComplete {
+                            continuation.resume(throwing: MailTransportError.connectionClosed)
+                        } else {
+                            continuation.resume(returning: Data())
+                        }
+                    }
                 }
+            } onCancel: {
+                connection.cancel()
             }
-            connection.receive(minimumIncompleteLength: 1, maximumLength: 65536) { data, _, isComplete, error in
-                guard gate.take() else { return }
-                if let error {
-                    continuation.resume(throwing: MailTransportError.connectionFailed(String(describing: error)))
-                } else if let data, data.isEmpty == false {
-                    continuation.resume(returning: data)
-                } else if isComplete {
-                    continuation.resume(throwing: MailTransportError.connectionClosed)
-                } else {
-                    continuation.resume(returning: Data())
-                }
-            }
+        } catch {
+            if Task.isCancelled { throw CancellationError() }
+            throw error
         }
     }
 
@@ -280,7 +312,7 @@ actor MailReader {
         self.stream = stream
     }
 
-    func readLine() async throws -> Data {
+    func readLine(idle: Bool = false) async throws -> Data {
         let terminator = Data([13, 10])
         while true {
             if let range = buffer.firstRange(of: terminator) {
@@ -289,7 +321,7 @@ actor MailReader {
                 return line
             }
             if buffer.count > Self.maxLine { throw MailTransportError.malformedResponse("line") }
-            buffer.append(try await stream.receive())
+            buffer.append(try await (idle ? stream.receiveIdle() : stream.receive()))
         }
     }
 

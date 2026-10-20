@@ -29,11 +29,23 @@ struct IMAPSelection: Equatable, Sendable {
     var uidNext: Int?
 }
 
+enum IMAPChange: Equatable, Sendable {
+    case exists(Int)
+    case expunge(Int)
+    case flags(sequence: Int, flags: Set<String>)
+}
+
 actor IMAPSession {
+    static let rfc2177ReissueInterval: Duration = .seconds(29 * 60)
+
     private let reader: MailReader
     private var tagCounter = 0
     private(set) var capabilities: Set<String> = []
     private var authenticated = false
+    private var idleStopped = false
+    private var idleActive = false
+    private var doneSent = false
+    private var idleTask: Task<Void, Never>?
 
     private init(reader: MailReader) {
         self.reader = reader
@@ -210,6 +222,91 @@ actor IMAPSession {
         _ = try await run([.raw("UID"), .raw("EXPUNGE"), .raw(String(uid))])
     }
 
+    func idle(in folder: String) async throws -> AsyncThrowingStream<IMAPChange, Error> {
+        guard has("IDLE") else { throw MailTransportError.unsupportedCapability("IDLE") }
+        await finishIdle()
+        _ = try await select(folder, readOnly: true)
+        idleStopped = false
+        let (stream, continuation) = AsyncThrowingStream<IMAPChange, Error>.makeStream()
+        idleTask = Task { await self.idleLoop(continuation) }
+        continuation.onTermination = { _ in
+            Task { await self.stopIdle() }
+        }
+        return stream
+    }
+
+    private func idleLoop(_ continuation: AsyncThrowingStream<IMAPChange, Error>.Continuation) async {
+        do {
+            while idleStopped == false { try await idleOnce(continuation) }
+            continuation.finish()
+        } catch {
+            continuation.finish(throwing: error)
+        }
+    }
+
+    private func finishIdle() async {
+        guard let task = idleTask else { return }
+        await stopIdle()
+        await task.value
+        idleTask = nil
+    }
+
+    private func stopIdle() async {
+        idleStopped = true
+        await sendDone()
+    }
+
+    private func sendDone() async {
+        guard idleActive, doneSent == false else { return }
+        doneSent = true
+        try? await reader.write(Data("DONE\r\n".utf8))
+    }
+
+    private func idleOnce(_ continuation: AsyncThrowingStream<IMAPChange, Error>.Continuation) async throws {
+        let tag = nextTag()
+        idleActive = false
+        doneSent = false
+        try await reader.write(Data("\(tag) IDLE\r\n".utf8))
+        let timer = Task {
+            try await Task.sleep(for: Self.rfc2177ReissueInterval)
+            await sendDone()
+        }
+        defer {
+            timer.cancel()
+            idleActive = false
+        }
+        while true {
+            let response = try await nextResponse(idle: true)
+            switch response {
+            case .continuation:
+                idleActive = true
+                if idleStopped { await sendDone() }
+            case .tagged(let receivedTag, let status, let code, let text):
+                guard receivedTag == tag else { continue }
+                guard status == .ok else { throw MailTransportError.serverRejected(Self.verbatim(status, code, text)) }
+                return
+            case .status(let status, _, let text):
+                if status == .bye { throw MailTransportError.serverRejected("BYE \(text)") }
+            case .data(let values):
+                if let change = Self.change(values) { continuation.yield(change) }
+            }
+        }
+    }
+
+    private static func change(_ values: [IMAPValue]) -> IMAPChange? {
+        guard values.count >= 2, let number = values[0].int, let word = values[1].string?.uppercased() else { return nil }
+        switch word {
+        case "EXISTS": return .exists(number)
+        case "EXPUNGE": return .expunge(number)
+        case "FETCH":
+            guard values.count >= 3, let items = values[2].items,
+                  let key = items.firstIndex(where: { $0.string?.uppercased() == "FLAGS" }), key + 1 < items.count,
+                  let list = items[key + 1].items else { return nil }
+            return .flags(sequence: number, flags: Set(list.compactMap { $0.string?.lowercased() }))
+        default: return nil
+        }
+    }
+
     func logout() async {
         _ = try? await run([.raw("LOGOUT")])
         await close()
@@ -224,8 +321,8 @@ actor IMAPSession {
         return String(format: "A%04d", tagCounter)
     }
 
-    func nextResponse() async throws -> IMAPResponse {
-        var assembled = try await reader.readLine()
+    func nextResponse(idle: Bool = false) async throws -> IMAPResponse {
+        var assembled = try await reader.readLine(idle: idle)
         while let size = IMAPResponseParser.literalSize(endingLine: assembled) {
             assembled.append(contentsOf: [13, 10])
             assembled.append(try await reader.readBytes(size))
@@ -235,6 +332,7 @@ actor IMAPSession {
     }
 
     func run(_ arguments: [IMAPArgument], replies: [String] = []) async throws -> IMAPCommandResult {
+        await finishIdle()
         let tag = nextTag()
         var untagged: [IMAPResponse] = []
         var continuations: [String] = []

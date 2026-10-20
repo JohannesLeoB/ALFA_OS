@@ -34,6 +34,8 @@ enum IMAPFailure {
             return make(.signIn, provider ?? "imap", code: "oauthUnavailable")
         case .unsupportedAuthentication(let text):
             return make(.signIn, provider ?? "imap", code: "unsupportedAuthentication", text: text)
+        case .unsupportedCapability(let text):
+            return make(.rejected, provider ?? "imap", code: "unsupportedCapability", text: text)
         case .accountIncomplete(let text):
             return make(.signIn, provider ?? "imap", code: "accountIncomplete", text: text)
         case .malformedResponse(let text):

@@ -19,6 +19,7 @@ final class EmulatedIMAPStream: MailByteStream, @unchecked Sendable {
     private var logged: [String] = []
     private var bodies: [Data] = []
     private var closedFlag = false
+    private var heldTag: String?
     private let capabilities: String
 
     init(capabilities: String = "IMAP4rev1", handler: @escaping Handler) {
@@ -35,6 +36,11 @@ final class EmulatedIMAPStream: MailByteStream, @unchecked Sendable {
         let chunk = lock.withLock { pending.isEmpty ? nil : pending.removeFirst() }
         guard let chunk else { throw MailTransportError.connectionClosed }
         return chunk
+    }
+
+    func receiveIdle() async throws -> Data {
+        while lock.withLock({ pending.isEmpty }) { try await Task.sleep(for: .milliseconds(5)) }
+        return try await receive()
     }
 
     func send(_ data: Data) async throws {
@@ -63,6 +69,7 @@ final class EmulatedIMAPStream: MailByteStream, @unchecked Sendable {
             guard let end = buffer.range(of: Data("\r\n".utf8)) else { return }
             let line = String(decoding: buffer[buffer.startIndex..<end.lowerBound], as: UTF8.self)
             buffer = Data(buffer.dropFirst(line.utf8.count + 2))
+            if line == "DONE", let held = heldTag { logged.append(line); pending.append(Data("\(held) OK done\r\n".utf8)); continue }
             let words = line.split(separator: " ", maxSplits: 1).map(String.init)
             guard words.count == 2 else { continue }
             let tag = words[0]
@@ -91,7 +98,7 @@ final class EmulatedIMAPStream: MailByteStream, @unchecked Sendable {
             reply = handler(command, literal)
         }
         var text = reply.untagged.map { $0 + "\r\n" }.joined()
-        text += "\(tag) \(reply.status)\r\n"
+        if reply.status.isEmpty { heldTag = tag } else { text += "\(tag) \(reply.status)\r\n" }
         pending.append(Data(text.utf8))
     }
 }
