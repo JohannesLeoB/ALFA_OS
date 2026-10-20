@@ -70,9 +70,9 @@ public protocol MailEngine: AnyObject {
     func searchLocal(_ inlet: Inlet.ID, query: String) -> [MailMessageSummary]
     func body(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> MailMessageBody
     func setFlags(_ inlet: Inlet.ID, messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws(HubError)
-    func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError)
-    func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError)
-    func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError)
+    @discardableResult func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> String?
+    @discardableResult func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError) -> String?
+    @discardableResult func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> String?
     func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubError)
     func purge(_ inlet: Inlet.ID, messageID: String) async throws(HubError)
     func attachment(_ inlet: Inlet.ID, messageID: String, attachmentID: String) async throws(HubError) -> Data

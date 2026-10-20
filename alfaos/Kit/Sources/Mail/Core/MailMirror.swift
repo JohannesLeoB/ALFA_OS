@@ -60,6 +60,18 @@ struct MailMirror: Sendable {
         folders(inlet).first { $0.role == .inbox }?.id
     }
 
+    func header(_ inlet: Inlet.ID, messageID: String) -> String {
+        let value = try? db.read { db in
+            try String.fetchOne(db, sql: "SELECT messageIDHeader FROM mail_message WHERE inlet = ? AND id = ? LIMIT 1",
+                                arguments: [inlet, messageID])
+        }
+        return value.flatMap { $0 } ?? ""
+    }
+
+    func folderID(_ inlet: Inlet.ID, role: MailFolderRole) -> String? {
+        folders(inlet).first { $0.role == role }?.id
+    }
+
     func replaceFolders(_ inlet: Inlet.ID, _ folders: [MailFolder]) throws {
         try db.write { db in
             try db.execute(sql: "DELETE FROM mail_folder WHERE inlet = ?", arguments: [inlet])

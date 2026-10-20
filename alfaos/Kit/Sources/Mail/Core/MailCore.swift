@@ -132,29 +132,52 @@ public final class MailCore: MailEngine {
         emit(.messagesChanged(inlet, folder: mirror.inboxID(inlet) ?? ""))
     }
 
-    public func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {
+    @discardableResult
+    public func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> String? {
         let inbox = mirror.inboxID(inlet)
-        let touched = try await perform(inlet) { transport in
+        let header = mirror.header(inlet, messageID: messageID)
+        let target = mirror.folderID(inlet, role: .archive)
+        let (touched, landed) = try await perform(inlet) { transport in
             try await transport.archive(messageID: messageID)
-            return try self.mirror.remove(inlet, messageID: messageID, folder: inbox ?? "")
+            let touched = try self.mirror.remove(inlet, messageID: messageID, folder: inbox ?? "")
+            return (touched, await Self.landed(transport, messageID, header: header, folder: target))
         }
         announce(inlet, touched)
+        return landed
     }
 
-    public func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError) {
-        let touched = try await perform(inlet) { transport in
+    @discardableResult
+    public func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError) -> String? {
+        let header = mirror.header(inlet, messageID: messageID)
+        let (touched, landed) = try await perform(inlet) { transport in
             try await transport.move(messageID: messageID, toFolderID: toFolder)
-            return try self.mirror.remove(inlet, messageID: messageID, folder: nil)
+            let touched = try self.mirror.remove(inlet, messageID: messageID, folder: nil)
+            return (touched, await Self.landed(transport, messageID, header: header, folder: toFolder))
         }
         announce(inlet, touched)
+        return landed
     }
 
-    public func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {
-        let touched = try await perform(inlet) { transport in
+    @discardableResult
+    public func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> String? {
+        let header = mirror.header(inlet, messageID: messageID)
+        let target = mirror.folderID(inlet, role: .trash)
+        let (touched, landed) = try await perform(inlet) { transport in
             try await transport.trash(messageID: messageID)
-            return try self.mirror.remove(inlet, messageID: messageID, folder: nil)
+            let touched = try self.mirror.remove(inlet, messageID: messageID, folder: nil)
+            return (touched, await Self.landed(transport, messageID, header: header, folder: target))
         }
         announce(inlet, touched)
+        return landed
+    }
+
+    private static func landed(_ transport: any MailTransport, _ messageID: String, header: String, folder: String?) async -> String? {
+        guard messageID.contains(":") else { return messageID }
+        guard let folder, !header.isEmpty,
+              let page = try? await transport.listMessages(folderID: folder, query: nil, pageToken: nil, maxResults: pageSize) else {
+            return nil
+        }
+        return page.messages.first { $0.messageIDHeader == header }?.id
     }
 
     public func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {

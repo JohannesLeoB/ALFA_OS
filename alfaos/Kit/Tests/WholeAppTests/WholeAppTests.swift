@@ -1651,9 +1651,9 @@ final class ScriptedEngine: MailEngine {
         async throws(HubError) {
         flagCalls.append(messageID + "+" + add.map(\.rawValue).sorted().joined(separator: ","))
     }
-    func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {}
-    func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError) {}
-    func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {}
+    func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> String? { messageID }
+    func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError) -> String? { messageID }
+    func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> String? { messageID }
     func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {}
     func attachment(_ inlet: Inlet.ID, messageID: String, attachmentID: String) async throws(HubError) -> Data { Data() }
     func thread(_ inlet: Inlet.ID, messageID: String, threadID: String) async throws(HubError) -> [MailMessageSummary] { [] }
@@ -1877,11 +1877,18 @@ final class ModelFakeEngine: MailEngine {
         actionCalls.append(call)
         if let actionError { throw actionError }
     }
-    func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError) { try act("archive:" + messageID) }
-    func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError) {
-        try act("move:" + messageID + ">" + toFolder)
+    func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> String? {
+        try act("archive:" + messageID)
+        return messageID
     }
-    func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError) { try act("trash:" + messageID) }
+    func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError) -> String? {
+        try act("move:" + messageID + ">" + toFolder)
+        return messageID
+    }
+    func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> String? {
+        try act("trash:" + messageID)
+        return messageID
+    }
     func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubError) { try act("spam:" + messageID) }
     func attachment(_ inlet: Inlet.ID, messageID: String, attachmentID: String) async throws(HubError) -> Data {
         try act("attachment:" + messageID + "/" + attachmentID)
@@ -2304,6 +2311,33 @@ final class CoreActionTests {
         recordTrue(transport.sent.isEmpty)
         recordEqual(transport.calls.suffix(2), ["saveDraft:d1:s", "sendDraft:draft-1"])
     }
+    private func stepUndoAfterArchiveMovesTheNewIDBackToTheOrigin() async throws {
+        let old = "7:5:INBOX"
+        let new = "7:9:Archive"
+        func rig() async throws -> (MailModel, TransportDouble) {
+            let hub = HubDouble()
+            let transport = hub.add("one")
+            transport.folders = [MailFolder(id: "INBOX", name: "Inbox", role: .inbox), MailFolder(id: "Archive", name: "Archive", role: .archive)]
+            transport.setPage("INBOX", MailMessagePage(messages: [fakeMessage(old, messageID: "<h@x.test>")]))
+            transport.setPage("Archive", MailMessagePage(messages: [fakeMessage(new, messageID: "<h@x.test>")]))
+            let model = MailModel(engine: try MailCore(hub: hub, database: DatabaseQueue()))
+            await model.start()
+            return (model, transport)
+        }
+        let (model, transport) = try await rig()
+        await model.archive(old, undoable: true)
+        recordTrue(model.summaries.isEmpty)
+        recordEqual(model.toast?.undoable, true)
+        await model.undoToast()
+        recordEqual(transport.calls, ["archive:" + old, "move:" + new + ">INBOX"])
+        recordEqual(model.summaries.map(\.id), [old])
+        recordNil(model.actionFailure(for: old))
+        let (failing, broken) = try await rig()
+        await failing.archive(old, undoable: true)
+        broken.actionError = MailTransportError.serverRejected("NO [CANNOT] gone")
+        await failing.undoToast()
+        recordEqual(failing.actionFailure(for: old)?.detail, "NO [CANNOT] gone")
+    }
     func runTheCoreActions() async throws {
         try await stepArchiveLeavesTheInboxOnlyAndTellsTheListSo()
         try await stepTrashAndSpamLeaveEveryFolder()
@@ -2313,6 +2347,7 @@ final class CoreActionTests {
         try await stepDraftsAreSavedLoadedAndDeletedThroughTheTransport()
         try await stepSendingFromADraftStoresTheLatestTextThenSendsTheDraft()
         try await stepAQueuedDraftKeepsItsDraftThroughARestartAndGoesOutAsADraft()
+        try await stepUndoAfterArchiveMovesTheNewIDBackToTheOrigin()
     }
 }
 

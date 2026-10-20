@@ -41,31 +41,40 @@ extension MailModel {
             post(.bulkRead(count: list.count, read: anyUnread))
         case .archive, .trash:
             let origin = selectedFolder
-            var moved: [(String, Inlet.ID)] = []
+            var moved: [(id: String, landed: String?, inlet: Inlet.ID)] = []
             for item in list {
                 guard let inlet = cardInlet(item.id) ?? selectedInlet else { continue }
                 do {
+                    let landed: String?
                     if kind == .archive {
-                        try await engine.archive(inlet, messageID: item.id)
+                        landed = try await engine.archive(inlet, messageID: item.id)
                     } else {
-                        try await engine.trash(inlet, messageID: item.id)
+                        landed = try await engine.trash(inlet, messageID: item.id)
                     }
-                    moved.append((item.id, inlet))
+                    moved.append((item.id, landed, inlet))
                 } catch {
                     actionFailures[item.id] = Self.hint(error)
                 }
             }
-            let gone = Set(moved.map(\.0))
+            let gone = Set(moved.map(\.id))
             summaries.removeAll { gone.contains($0.id) }
             for id in gone { close(id) }
             picked = []
             refreshCounts()
             let undo: @MainActor () async -> Void = { [weak self] in
                 guard let self, let origin else { return }
-                for (id, inlet) in moved { try? await self.engine.move(inlet, messageID: id, toFolder: origin) }
+                for entry in moved {
+                    guard let landed = entry.landed else { continue }
+                    do throws(HubError) {
+                        try await self.engine.move(entry.inlet, messageID: landed, toFolder: origin)
+                    } catch {
+                        self.actionFailures[entry.id] = Self.hint(error)
+                    }
+                }
                 await self.loadSelection()
             }
-            post(kind == .archive ? .bulkArchived(count: moved.count) : .bulkTrashed(count: moved.count), undo: undo)
+            let undoable = moved.contains { $0.landed != nil }
+            post(kind == .archive ? .bulkArchived(count: moved.count) : .bulkTrashed(count: moved.count), undo: undoable ? undo : nil)
         }
     }
 }

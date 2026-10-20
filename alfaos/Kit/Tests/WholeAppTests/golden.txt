@@ -350,6 +350,12 @@ CoreActionTests.runTheCoreActions eq "d1"
 CoreActionTests.runTheCoreActions true some(true)
 CoreActionTests.runTheCoreActions true some(true)
 CoreActionTests.runTheCoreActions eq ["saveDraft:d1:s","sendDraft:draft-1"]
+CoreActionTests.runTheCoreActions true some(true)
+CoreActionTests.runTheCoreActions eq some(true)
+CoreActionTests.runTheCoreActions eq ["archive:7:5:INBOX","move:7:9:Archive>INBOX"]
+CoreActionTests.runTheCoreActions eq ["7:5:INBOX"]
+CoreActionTests.runTheCoreActions nil true
+CoreActionTests.runTheCoreActions eq "NO [CANNOT] gone"
 CoreModelTests.runModelOverCoreShowsOfflineWhenTheNetworkDrops eq MailListState.loaded()
 AccountTests.runRemovingTheSelectedAccountLetsLoadMoreUseTheTokenOfTheOldOne eq "a"
 AccountTests.runRemovingTheSelectedAccountLetsLoadMoreUseTheTokenOfTheOldOne eq "token-of-a"

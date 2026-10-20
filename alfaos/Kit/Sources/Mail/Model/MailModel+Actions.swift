@@ -38,12 +38,15 @@ extension MailModel {
     func relocate(_ id: String, _ move: MailMove, undoable: Bool = false, toast: MailToastKind = .trashed) async {
         guard let inlet = cardInlet(id) ?? selectedInlet else { return }
         let origin = selectedFolder
+        let landed: String?
         do {
             switch move {
-            case .archive: try await engine.archive(inlet, messageID: id)
-            case .trash: try await engine.trash(inlet, messageID: id)
-            case .spam: try await engine.markSpam(inlet, messageID: id)
-            case .folder(let folder): try await engine.move(inlet, messageID: id, toFolder: folder)
+            case .archive: landed = try await engine.archive(inlet, messageID: id)
+            case .trash: landed = try await engine.trash(inlet, messageID: id)
+            case .spam:
+                try await engine.markSpam(inlet, messageID: id)
+                landed = nil
+            case .folder(let folder): landed = try await engine.move(inlet, messageID: id, toFolder: folder)
             }
         } catch {
             actionFailures[id] = Self.hint(error)
@@ -55,10 +58,15 @@ extension MailModel {
         close(id)
         refreshCounts()
         var undo: (@MainActor () async -> Void)?
-        if undoable {
+        if undoable, let landed {
             undo = { [weak self] in
                 guard let self, let origin else { return }
-                try? await self.engine.move(inlet, messageID: id, toFolder: origin)
+                do throws(HubError) {
+                    try await self.engine.move(inlet, messageID: landed, toFolder: origin)
+                } catch {
+                    self.actionFailures[id] = Self.hint(error)
+                    return
+                }
                 await self.loadSelection()
             }
         }
