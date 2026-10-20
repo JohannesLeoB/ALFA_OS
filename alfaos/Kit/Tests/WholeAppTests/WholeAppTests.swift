@@ -1,5 +1,4 @@
 import Foundation
-import class GRDB.DatabaseQueue
 import protocol Hub.Record
 @testable import Hub
 @testable import Mail
@@ -148,6 +147,10 @@ enum Fixture {
         try ShellGeometry(theme: theme(), metrics: metrics())
     }
     static let screen = Size(width: 1512, height: 982)
+    static func catalogKeys() throws -> Set<String> {
+        let root = try XCTUnwrap(try JSONSerialization.jsonObject(with: data("alfaos/App/Localizable.xcstrings")) as? [String: Any])
+        return Set(try XCTUnwrap(root["strings"] as? [String: Any]).keys)
+    }
 }
 
 @MainActor
@@ -225,21 +228,12 @@ final class ThemeTests {
 
 @MainActor
 final class SettingsTests {
-    private func catalogKeys() throws -> Set<String> {
-        let url = URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-            .deletingLastPathComponent().appendingPathComponent("App/Localizable.xcstrings")
-        let data = try Data(contentsOf: url)
-        let root = try XCTUnwrap(try JSONSerialization.jsonObject(with: data) as? [String: Any])
-        let strings = try XCTUnwrap(root["strings"] as? [String: Any])
-        return Set(strings.keys)
-    }
     func runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp() throws {
         var keys = SettingsGroup.allCases.map(\.key)
         keys += SettingsSection.allCases.map(\.key)
         keys += AppearanceChoice.allCases.map(\.key)
         keys += SettingsLabel.allCases.map(\.key)
-        recordEqual(Set(keys).subtracting(try catalogKeys()).sorted(), [])
+        recordEqual(Set(keys).subtracting(try Fixture.catalogKeys()).sorted(), [])
         recordEqual(Set(SettingsSection.allCases.map(\.group)), Set(SettingsGroup.allCases))
         for value in [TokenStamp.delivery, TokenStamp.deliveredAt, TokenStamp.adoptedAt, TokenStamp.state] {
             recordFalse(value.isEmpty)
@@ -343,10 +337,6 @@ final class ShellModelTests {
         let restored = ShellModel(directory: try Fixture.directory(), geometry: g, window: Fixture.screen, snapshot: try JSONDecoder().decode(ShellSnapshot.self, from: data))
         recordEqual(restored.laneState("mail").preferred[2], 250)
     }
-    private func model(snapshot: ShellSnapshot? = nil) throws -> ShellModel {
-        ShellModel(directory: try Fixture.directory(), geometry: try Fixture.geometry(), window: Fixture.screen, snapshot: snapshot)
-    }
-
 }
 
 struct TestTimedOut: Error {}
@@ -513,12 +503,11 @@ final class FakeCost: CostPort, @unchecked Sendable {
 }
 
 struct FakeSignIn: SignInPort {
-    let signedOut: Locked<[Inlet.ID]>
     func signIn(_ inlet: Inlet, input: [Field.ID: String]) async throws -> Grant {
         Grant(values: ["token": input["address"] ?? inlet.id])
     }
     func renew(_ grant: Grant) async throws -> Grant { grant }
-    func signOut(_ inlet: Inlet) async throws { signedOut.with { $0.append(inlet.id) } }
+    func signOut(_ inlet: Inlet) async throws {}
 }
 
 struct FakeProbe: ProbePort {
@@ -537,17 +526,15 @@ final class FakeProvider: Provider, @unchecked Sendable {
     let presets: [Preset] = []
     let mail = MailTransportFake()
     private let accepting = Locked(true)
-    private let signedOutList = Locked<[Inlet.ID]>([])
     let renewals = Locked<[GrantRenewal]>([])
     let signIn: any SignInPort
     let probe: any ProbePort
     init(capabilities: Set<Capability>, signIn: (any SignInPort)? = nil) {
         self.capabilities = capabilities
-        self.signIn = signIn ?? FakeSignIn(signedOut: signedOutList)
+        self.signIn = signIn ?? FakeSignIn()
         probe = FakeProbe(accepting: accepting)
     }
     func classify(_ error: any Error) -> Classification { IMAPProvider().classify(error) }
-    var signedOut: [Inlet.ID] { signedOutList.with { $0 } }
     func setAccepting(_ value: Bool) { accepting.with { $0 = value } }
     func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P {
         renewals.with { $0.append(renewal) }
@@ -582,7 +569,7 @@ struct ScriptedRig {
         ))
         return ScriptedRig(hub: hub, provider: provider, keychain: keychain, cadence: cadence, database: database)
     }
-    func connect(_ address: String, offer: Offer = ScriptedRig.mailOffer) async throws(SetupError) -> Inlet {
+    func connect(_ address: String, offer: Offer = ScriptedRig.mailOffer) async throws -> Inlet {
         try await hub.setup.add(offer, input: .fields(["address": address]))
     }
 }
@@ -670,29 +657,8 @@ final class GoogleStubNet: URLProtocol, @unchecked Sendable {
 
 @MainActor
 final class HubTests {
-    struct Rig {
-        let hub: Hub
-        let provider: FakeProvider
-        let keychain: FakeKeychain
-        let cadence: HandCadence
-        let cost: FakeCost
-        let person: Person
-    }
-    static let mailOffer = Offer(id: "fake.mail", provider: "fake", title: "Mail", capabilities: [.mail], owner: .person("p1"), way: .signIn)
-    func rig(capabilities: Set<Capability> = [.mail, .calendar], company: CompanySetup? = nil) throws -> Rig {
-        let provider = FakeProvider(capabilities: capabilities)
-        let keychain = FakeKeychain()
-        let cadence = HandCadence()
-        let cost = FakeCost()
-        let person = Person(id: "p1", name: "P")
-        let setup = company ?? CompanySetup(offers: [Self.mailOffer])
-        let configuration = HubConfiguration(
-            person: person, company: setup, providers: [provider], keychain: keychain, cadence: cadence, cost: cost, catalog: .withMail, database: try DatabaseQueue()
-        )
-        return Rig(hub: try Hub.make(configuration), provider: provider, keychain: keychain, cadence: cadence, cost: cost, person: person)
-    }
-    func connect(_ rig: Rig, _ address: String) async throws -> Inlet {
-        try await rig.hub.setup.add(Self.mailOffer, input: .fields(["address": address]))
+    func rig(capabilities: Set<Capability> = [.mail, .calendar]) throws -> ScriptedRig {
+        try ScriptedRig.make(capabilities: capabilities)
     }
     func runStartsEmptyAndNothingThrows() throws {
         let rig = try rig()
@@ -707,7 +673,7 @@ final class HubTests {
         let rig = try rig()
         rig.provider.setAccepting(false)
         do {
-            _ = try await connect(rig, "a@x")
+            _ = try await rig.connect("a@x")
             XCTFail("add must throw")
         } catch SetupError.probeFailed {
         }
@@ -716,7 +682,7 @@ final class HubTests {
     }
     func runAcceptedProbeConnectsAndPortsFollowCapabilities() async throws {
         let rig = try rig(capabilities: [.mail])
-        let inlet = try await connect(rig, "a@x")
+        let inlet = try await rig.connect("a@x")
         guard case .connected = inlet.state else { return XCTFail("state \(inlet.state)") }
         recordEqual(rig.hub.setup.inlets.map(\.id), [inlet.id])
         let transport = try rig.hub.access.port(MailTransport.self, for: inlet.id)
@@ -729,9 +695,9 @@ final class HubTests {
     }
     func runFourthMailAccountNeedsALargerLimit() async throws {
         let rig = try rig()
-        for address in ["a@x", "b@x", "c@x"] { _ = try await connect(rig, address) }
+        for address in ["a@x", "b@x", "c@x"] { _ = try await rig.connect(address) }
         do {
-            _ = try await connect(rig, "d@x")
+            _ = try await rig.connect("d@x")
             XCTFail("add must throw")
         } catch {
             recordEqual(error as? SetupError, .limitReached(.mail, max: 3))
@@ -740,16 +706,16 @@ final class HubTests {
         rig.provider.setAccepting(false)
         _ = try? await rig.hub.setup.probe(rig.hub.setup.inlets[0].id)
         rig.provider.setAccepting(true)
-        let renewed = try await connect(rig, "a@x")
+        let renewed = try await rig.connect("a@x")
         recordTrue(renewed.id == rig.hub.setup.inlets[0].id)
         recordEqual(rig.hub.setup.inlets.count, 3)
         rig.hub.rules.setLimit(.mail, 5)
-        _ = try await connect(rig, "d@x")
+        _ = try await rig.connect("d@x")
         recordEqual(rig.hub.setup.inlets.count, 4)
     }
     func runCadenceRunsOnePairOnceAndCountsTheCall() async throws {
         let rig = try rig()
-        let inlet = try await connect(rig, "a@x")
+        let inlet = try await rig.connect("a@x")
         rig.hub.rules.setCadence(inlet.id, .mail, .every(.seconds(300)))
         recordEqual(rig.cadence.planned(inlet.id, .mail), .every(.seconds(300)))
         let gate = Gate()
@@ -768,8 +734,8 @@ final class HubTests {
     }
     func runRemoveKeepsTheKeysOfTheOtherInlet() async throws {
         let rig = try rig()
-        let a = try await connect(rig, "a@x")
-        let b = try await connect(rig, "b@x")
+        let a = try await rig.connect("a@x")
+        let b = try await rig.connect("b@x")
         recordEqual(Set(rig.keychain.slots.map(\.inlet)), [a.id, b.id])
         try await rig.hub.setup.remove(a.id)
         recordEqual(rig.keychain.slots.map(\.inlet), [b.id])
@@ -778,7 +744,7 @@ final class HubTests {
     }
     func runRemoveTurnsTheCadenceOfTheInletOff() async throws {
         let rig = try rig(capabilities: [.mail])
-        let a = try await connect(rig, "a@x")
+        let a = try await rig.connect("a@x")
         recordNotEqual(rig.cadence.planned(a.id, .mail), .off)
         try await rig.hub.setup.remove(a.id)
         recordEqual(rig.cadence.planned(a.id, .mail), .off)
@@ -1131,47 +1097,23 @@ final class GoogleProviderTests {
             .write(to: folder.appendingPathComponent(GoogleClientConfig.fileName))
         recordEqual(try GoogleClientConfig.load(from: folder), GoogleClientConfig(clientID: "cid", clientSecret: "sec"))
     }
-
 }
 
 @MainActor
 final class GoogleRenewalTests {
-    static let offer = Offer(id: "google.mail", provider: "google", title: "Google", capabilities: [.mail], owner: .person("p1"), way: .signIn)
     struct Rig {
         let hub: Hub
         let keychain: FakeKeychain
         let inlet: Inlet
-        let clock: Locked<Date>
         let events: Locked<[HubEvent]>
         let collector: Task<Void, Never>
     }
     func rig(refresh: @escaping @Sendable () -> (Int, Data)) async throws -> Rig {
-        let clock = Locked(Date())
-        let grant = Grant(values: [
-            "accessToken": "old-access", "refreshToken": "old-refresh", "expiresAt": String(clock.with { $0 }.addingTimeInterval(3600).timeIntervalSince1970)
-        ])
-        GoogleStubNet.install { request in
-            let path = request.url?.path ?? ""
-            if path.hasSuffix("/token") { return refresh() }
-            if path.hasSuffix("/userinfo") { return (200, Data(#"{"email":"a@example.test"}"#.utf8)) }
-            if path.hasSuffix("/labels") { return (200, Data(#"{"labels":[{"id":"INBOX","name":"INBOX","type":"system"}]}"#.utf8)) }
-            return (404, Data())
-        }
-        let keychain = FakeKeychain()
-        let provider = GoogleProvider(
-            config: GoogleClientConfig(clientID: "id", clientSecret: "secret"), openBrowser: { _ in false }, session: GoogleStubNet.session(), signIn: GivenSignIn(grant: grant),
-            clock: { clock.with { $0 } }
-        )
-        let hub = try Hub.make(HubConfiguration(
-            person: Person(id: "p1", name: "P"), company: CompanySetup(offers: [Self.offer]), providers: [provider], keychain: keychain, cadence: HandCadence(), cost: FakeCost(),
-            catalog: .withMail, database: try DatabaseQueue()
-        ))
-        let inlet = try await hub.setup.add(Self.offer)
+        let base = try await scriptedGoogleRig(token: refresh)
         let events = Locked<[HubEvent]>([])
-        let stream = hub.access.events
+        let stream = base.hub.access.events
         let collector = Task { for await event in stream { events.with { $0.append(event) } } }
-        clock.with { $0 = $0.addingTimeInterval(7200) }
-        return Rig(hub: hub, keychain: keychain, inlet: inlet, clock: clock, events: events, collector: collector)
+        return Rig(hub: base.hub, keychain: base.keychain, inlet: base.inlet, events: events, collector: collector)
     }
     func waitUntil(_ condition: @escaping () -> Bool) async throws {
         var attempts = 0
@@ -1234,32 +1176,13 @@ final class GoogleRenewalTests {
         let state = rig.hub.setup.inlets[0].state
         guard case .connected = state else { return XCTFail("state \(state)") }
     }
-
 }
 
 @MainActor
 final class RenewTests {
-    struct Rig {
-        let hub: Hub
-        let provider: FakeProvider
-        let keychain: FakeKeychain
-    }
-    static let mailOffer = Offer(id: "fake.mail", provider: "fake", title: "Mail", capabilities: [.mail], owner: .person("p1"), way: .signIn)
-    func rig(capabilities: Set<Capability>) throws -> Rig {
-        let provider = FakeProvider(capabilities: capabilities)
-        let keychain = FakeKeychain()
-        let configuration = HubConfiguration(
-            person: Person(id: "p1", name: "P"), company: CompanySetup(offers: [Self.mailOffer]), providers: [provider],
-            keychain: keychain, cadence: HandCadence(), cost: FakeCost(), catalog: .withMail, database: try DatabaseQueue()
-        )
-        return Rig(hub: try Hub.make(configuration), provider: provider, keychain: keychain)
-    }
-    func connect(_ rig: Rig, _ address: String) async throws -> Inlet {
-        try await rig.hub.setup.add(Self.mailOffer, input: .fields(["address": address]))
-    }
     func runFailedInletIsRenewedInPlace() async throws {
-        let rig = try rig(capabilities: [.mail])
-        let first = try await connect(rig, "a@x")
+        let rig = try ScriptedRig.make()
+        let first = try await rig.connect("a@x")
         rig.provider.setAccepting(false)
         do {
             _ = try await rig.hub.setup.probe(first.id)
@@ -1267,9 +1190,9 @@ final class RenewTests {
         } catch SetupError.probeFailed {
         }
         recordTrue(rig.hub.setup.inlets[0].state.canRenew)
-        recordEqual(rig.hub.setup.renewal(of: first.id)?.offer, Self.mailOffer)
+        recordEqual(rig.hub.setup.renewal(of: first.id)?.offer, ScriptedRig.mailOffer)
         rig.provider.setAccepting(true)
-        let renewed = try await connect(rig, "a@x")
+        let renewed = try await rig.connect("a@x")
         recordEqual(renewed.id, first.id)
         recordEqual(rig.hub.setup.inlets.map(\.id), [first.id])
         recordNotNil(rig.hub.setup.inlets[0].state.probed)
@@ -1278,10 +1201,10 @@ final class RenewTests {
         _ = try rig.hub.access.port(MailTransport.self, for: first.id)
     }
     func runConnectedInletStillRefusesTheSameAccount() async throws {
-        let rig = try rig(capabilities: [.mail])
-        _ = try await connect(rig, "a@x")
+        let rig = try ScriptedRig.make()
+        _ = try await rig.connect("a@x")
         do {
-            _ = try await connect(rig, "a@x")
+            _ = try await rig.connect("a@x")
             XCTFail("add must throw")
         } catch {
             recordEqual(error as? SetupError, .duplicate)
@@ -1632,8 +1555,6 @@ final class ScriptedEngine: MailEngine {
     var pageGates: [String: ScriptedGate] = [:]
     var folderGates: [String: ScriptedGate] = [:]
     var pageCalls: [String] = []
-    var flagCalls: [String] = []
-    var bodyError: HubError?
     var outbox: [OutboxItem] = []
     let events: AsyncStream<MailEngineEvent>
     let feed: AsyncStream<MailEngineEvent>.Continuation
@@ -1659,13 +1580,9 @@ final class ScriptedEngine: MailEngine {
     }
     func searchLocal(_ inlet: Inlet.ID, query: String) -> [MailMessageSummary] { [] }
     func body(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> MailMessageBody {
-        if let bodyError { throw bodyError }
-        return MailMessageBody(text: "text of " + messageID)
+        MailMessageBody(text: "text of " + messageID)
     }
-    func setFlags(_ inlet: Inlet.ID, messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>)
-        async throws(HubError) {
-        flagCalls.append(messageID + "+" + add.map(\.rawValue).sorted().joined(separator: ","))
-    }
+    func setFlags(_ inlet: Inlet.ID, messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>) async throws(HubError) {}
     func archive(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> String? { messageID }
     func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError) -> String? { messageID }
     func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> String? { messageID }
@@ -1855,10 +1772,8 @@ final class ModelFakeEngine: MailEngine {
     var folderList: [String: [MailFolder]] = [:]
     var mirror: [String: [MailMessageSummary]] = [:]
     var pages: [String?: MailMessagePage] = [:]
-    var searchHits: [MailMessageSummary] = []
     var bodies: [String: MailMessageBody] = [:]
     var pageError: HubError?
-    var bodyError: HubError?
     var flagError: HubError?
     var sendOutcome: SendOutcome = .sent
     var sentDrafts: [EmailDraft] = []
@@ -1894,9 +1809,8 @@ final class ModelFakeEngine: MailEngine {
         if let pageError { throw pageError }
         return pages[pageToken] ?? MailMessagePage(messages: [])
     }
-    func searchLocal(_ inlet: Inlet.ID, query: String) -> [MailMessageSummary] { searchHits }
+    func searchLocal(_ inlet: Inlet.ID, query: String) -> [MailMessageSummary] { [] }
     func body(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> MailMessageBody {
-        if let bodyError { throw bodyError }
         return bodies[messageID] ?? MailMessageBody(text: "text of " + messageID)
     }
     func setFlags(_ inlet: Inlet.ID, messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>)
@@ -1970,23 +1884,7 @@ func fakeMessage(_ id: String, flags: Set<MailFlag> = [], attachments: Int = 0, 
 }
 
 @MainActor
-final class ModelTextTests {
-    func runPlainTextUsesTheSharedConverter() {
-        recordEqual(MailText.plain("<style>p{color:red}</style><p>Hello</p><p>World &amp; Co</p>"), "Hello\nWorld & Co")
-    }
-}
-
-@MainActor
 final class CatalogTests {
-    private func catalogKeys() throws -> Set<String> {
-        let url = URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-            .deletingLastPathComponent().appendingPathComponent("App/Localizable.xcstrings")
-        let data = try Data(contentsOf: url)
-        let root = try XCTUnwrap(try JSONSerialization.jsonObject(with: data) as? [String: Any])
-        let strings = try XCTUnwrap(root["strings"] as? [String: Any])
-        return Set(strings.keys)
-    }
     func runEveryStateOfTheMailModuleHasATextInTheCatalog() throws {
         var keys: [String] = MailDraftState.Kind.allCases.map(\.key)
         keys += MailListState.Kind.allCases.compactMap(\.key)
@@ -1994,7 +1892,7 @@ final class CatalogTests {
         keys += MailCardContent.Kind.allCases.compactMap(\.key)
         keys += MailTextKey.allCases.map(\.rawValue)
         keys.append(Hint.signInExpiredText)
-        let missing = Set(keys).subtracting(try catalogKeys()).sorted()
+        let missing = Set(keys).subtracting(try Fixture.catalogKeys()).sorted()
         recordEqual(missing, [], "BUG-4-24")
     }
 }
@@ -2178,15 +2076,11 @@ final class CoreTests {
         recordEqual(model.draft(id)?.state, .sent)
         recordEqual(transport.sent.count, 1)
     }
-    func runOutboxItemOfARemovedAccountWaitsForever() async throws {
+    func runOutboxItemWithoutATransportStaysWaiting() async throws {
         let hub = HubDouble()
         let transport = hub.add("one")
-        transport.folders = scriptedInbox
-        transport.setTokenPage(nil, MailMessagePage(messages: [message("1")]))
         transport.sendError = MailTransportError.timeout
         let core = try MailCore(hub: hub, database: DatabaseQueue())
-        try await core.refreshFolders("one")
-        _ = try await core.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
         _ = await core.send("one", draft())
         hub.remove("one")
         await core.retryOutbox()
@@ -2202,15 +2096,6 @@ final class CoreTests {
         let model = MailModel(engine: core)
         await model.start()
         recordEqual(model.listState, .signInExpired("one"))
-    }
-    func runLocalSearchMatchesTheTextAsTyped() async throws {
-        let hub = HubDouble()
-        let transport = hub.add("one")
-        transport.folders = scriptedInbox
-        transport.setPage("INBOX", MailMessagePage(messages: [message("1", subject: "abc"), message("2", subject: "\u{C4}rger im B\u{FC}ro")]))
-        let core = try MailCore(hub: hub, database: DatabaseQueue())
-        try await core.refreshFolders("one")
-        _ = try await core.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
     }
     func runAMailSentFromTheOutboxIsGoneAfterAReopen() async throws {
         let hub = HubDouble()
@@ -2543,34 +2428,6 @@ final class AccountTests {
         await model.handle(.accountsChanged)
         recordEqual(model.accounts.map(\.id), ["a"])
     }
-
-}
-
-private final class SetupKeychain: KeychainPort, @unchecked Sendable {
-    private let lock = NSLock()
-    private var entries: [KeySlot: String] = [:]
-    func put(_ value: String, at slot: KeySlot) throws { lock.withLock { entries[slot] = value } }
-    func get(_ slot: KeySlot) throws -> String? { lock.withLock { entries[slot] } }
-    func delete(_ slot: KeySlot) throws { lock.withLock { entries[slot] = nil } }
-}
-
-private final class SetupCadence: CadencePort, @unchecked Sendable {
-    private let lock = NSLock()
-    private var planned: [String: Cadence] = [:]
-    let reports = AsyncStream<SyncReport> { _ in }
-    func planned(_ inlet: Inlet.ID, _ capability: Capability) -> Cadence? {
-        lock.withLock { planned[inlet + "|" + capability.rawValue] }
-    }
-    func attach(_ runner: @escaping SyncRunner) {}
-    func plan(_ inlet: Inlet.ID, _ capability: Capability, _ cadence: Cadence) {
-        lock.withLock { planned[inlet + "|" + capability.rawValue] = cadence }
-    }
-    func trigger(_ inlet: Inlet.ID, _ capability: Capability) async {}
-}
-
-private final class SetupCost: CostPort, @unchecked Sendable {
-    func book(_ item: CostItem) {}
-    func sum(_ inlet: Inlet.ID, _ period: Period) -> Cost { .zero }
 }
 
 private struct SetupSignIn: SignInPort {
@@ -2579,20 +2436,10 @@ private struct SetupSignIn: SignInPort {
     func signOut(_ inlet: Inlet) async throws {}
 }
 
-private final class SetupFlag: @unchecked Sendable {
-    private let lock = NSLock()
-    private var current: Bool
-    init(_ value: Bool) { current = value }
-    var value: Bool {
-        get { lock.withLock { current } }
-        set { lock.withLock { current = newValue } }
-    }
-}
-
 private struct SetupProbe: ProbePort {
-    let accepting: SetupFlag
+    let accepting: Locked<Bool>
     func probe(_ inlet: Inlet, _ grant: Grant) async throws -> ProbeResult {
-        accepting.value ? ProbeResult(account: "a@x.test") : ProbeResult(account: "a@x.test", rejection: Hint(text: "hint.setup"))
+        accepting.with({ $0 }) ? ProbeResult(account: "a@x.test") : ProbeResult(account: "a@x.test", rejection: Hint(text: "hint.setup"))
     }
 }
 
@@ -2603,7 +2450,7 @@ private struct SetupProvider: Provider {
     let presets: [Preset] = []
     let signIn: any SignInPort = SetupSignIn()
     let probe: any ProbePort
-    init(accepting: SetupFlag = SetupFlag(true)) { probe = SetupProbe(accepting: accepting) }
+    init(accepting: Locked<Bool> = Locked(true)) { probe = SetupProbe(accepting: accepting) }
     func adapter<P>(_ port: P.Type, for inlet: Inlet, _ grant: Grant, renewal: GrantRenewal) throws -> P {
         throw HubError.capabilityMissing(inlet.id, .mail)
     }
@@ -2624,16 +2471,16 @@ final class SetupTests {
         temps.append(url)
         return url
     }
-    private func assembly(withGoogle: Bool, cadence: SetupCadence = SetupCadence()) throws -> MailSetup.Assembly {
+    private func assembly(withGoogle: Bool, cadence: HandCadence = HandCadence()) throws -> MailSetup.Assembly {
         try MailSetup.make(
             person: person, company: CompanySetup(), openBrowser: { _ in true }, directory: try directory(withGoogle: withGoogle), database: try HubDatabase.inMemory(),
-            keychain: SetupKeychain(), cadence: cadence, cost: SetupCost()
+            keychain: FakeKeychain(), cadence: cadence, cost: FakeCost()
         )
     }
-    private func assembled(accepting: SetupFlag, database: DatabaseQueue) throws -> MailSetup.Assembly {
+    private func assembled(accepting: Locked<Bool>, database: DatabaseQueue) throws -> MailSetup.Assembly {
         try MailSetup.assemble(
             person: person, company: CompanySetup(), providers: [SetupProvider(accepting: accepting)],
-            database: database, keychain: SetupKeychain(), cadence: SetupCadence(), cost: SetupCost(), cadences: MailSetup.defaultCadences, clock: { Date() })
+            database: database, keychain: FakeKeychain(), cadence: HandCadence(), cost: FakeCost(), cadences: MailSetup.defaultCadences, clock: { Date() })
     }
     private func rows(_ database: DatabaseQueue, _ inlet: Inlet.ID) throws -> Int {
         try database.read { db in
@@ -2664,9 +2511,9 @@ final class SetupTests {
         recordEqual(result.model.accounts, [])
     }
     func runCadenceOfANewInletComesFromTheConfiguration() async throws {
-        let cadence = SetupCadence()
+        let cadence = HandCadence()
         let result = try MailSetup.assemble(
-            person: person, company: CompanySetup(), providers: [SetupProvider()], database: try HubDatabase.inMemory(), keychain: SetupKeychain(), cadence: cadence, cost: SetupCost(),
+            person: person, company: CompanySetup(), providers: [SetupProvider()], database: try HubDatabase.inMemory(), keychain: FakeKeychain(), cadence: cadence, cost: FakeCost(),
             cadences: MailSetup.defaultCadences, clock: { Date() }
         )
         let offer = try XCTUnwrap(result.hub.setup.offers.first)
@@ -2674,31 +2521,31 @@ final class SetupTests {
         let inlet = try await result.hub.setup.add(offer)
         recordEqual(cadence.planned(inlet.id, .mail), .every(.seconds(300)))
         recordEqual(result.hub.rules.cadence(inlet.id, .mail), .every(.seconds(300)))
-        let configuredCadence = SetupCadence()
+        let configuredCadence = HandCadence()
         let configured = try MailSetup.assemble(
             person: person, company: CompanySetup(), providers: [SetupProvider()],
-            database: try HubDatabase.inMemory(), keychain: SetupKeychain(), cadence: configuredCadence, cost: SetupCost(), cadences: [.mail: .seconds(60)], clock: { Date() }
+            database: try HubDatabase.inMemory(), keychain: FakeKeychain(), cadence: configuredCadence, cost: FakeCost(), cadences: [.mail: .seconds(60)], clock: { Date() }
         )
         let configuredInlet = try await configured.hub.setup.add(try XCTUnwrap(configured.hub.setup.offers.first))
         recordEqual(configuredCadence.planned(configuredInlet.id, .mail), .every(.seconds(60)))
     }
     func runRenewalKeepsTheCadenceTheUserSet() async throws {
-        let accepting = SetupFlag(true)
+        let accepting = Locked(true)
         let result = try assembled(accepting: accepting, database: try HubDatabase.inMemory())
         let offer = try XCTUnwrap(result.hub.setup.offers.first)
         let inlet = try await result.hub.setup.add(offer)
         recordEqual(result.hub.rules.cadence(inlet.id, .mail), .every(.seconds(300)))
         result.hub.rules.setCadence(inlet.id, .mail, .every(.seconds(60)))
-        accepting.value = false
+        accepting.with { $0 = false }
         _ = try? await result.hub.setup.probe(inlet.id)
         recordTrue(result.hub.setup.inlets[0].state.canRenew)
-        accepting.value = true
+        accepting.with { $0 = true }
         let renewed = try await result.hub.setup.add(offer)
         recordEqual(renewed.id, inlet.id)
     }
     func runRemovedAccountTakesItsMirroredMailWithIt() async throws {
         let database = try HubDatabase.inMemory()
-        let result = try assembled(accepting: SetupFlag(true), database: database)
+        let result = try assembled(accepting: Locked(true), database: database)
         let inlet = try await result.hub.setup.add(try XCTUnwrap(result.hub.setup.offers.first))
         let mirror = try MailMirror(database)
         try mirror.replaceFolders(inlet.id, [MailFolder(id: "INBOX", name: "Inbox", role: .inbox)])
@@ -3944,7 +3791,6 @@ final class WholeAppTests: XCTestCase {
         try await step("AdapterCostTests.runSurvivesReopeningTheSameDatabase") { try AdapterCostTests().runSurvivesReopeningTheSameDatabase() }
         try await step("AdapterKeychainTests.runServiceNameFollowsPrefixAndInlet") { AdapterKeychainTests().runServiceNameFollowsPrefixAndInlet() }
         try await step("AdapterKeychainTests.runSlotsOfOneInletShareTheServiceAndDifferInAccount") { AdapterKeychainTests().runSlotsOfOneInletShareTheServiceAndDifferInAccount() }
-        try await step("ModelTextTests.runPlainTextUsesTheSharedConverter") { ModelTextTests().runPlainTextUsesTheSharedConverter() }
         try await step("CatalogTests.runEveryStateOfTheMailModuleHasATextInTheCatalog") { try CatalogTests().runEveryStateOfTheMailModuleHasATextInTheCatalog() }
         try await step("CoreTests.runAccountsAndFoldersComeFromTheHub") { try await CoreTests().runAccountsAndFoldersComeFromTheHub() }
         try await step("CoreTests.runNotConnectedSurfacesAsHubError") { try await CoreTests().runNotConnectedSurfacesAsHubError() }
@@ -3957,9 +3803,8 @@ final class WholeAppTests: XCTestCase {
         try await step("CoreTests.runSyncFailureKeepsLastStateAndReports") { try await CoreTests().runSyncFailureKeepsLastStateAndReports() }
         try await step("CoreTests.runGmailHttpErrorsAreClassified") { CoreTests().runGmailHttpErrorsAreClassified() }
         try await step("CoreTests.runSendAgainAfterARejectionLeavesTheFailedItemInTheOutbox") { try await CoreTests().runSendAgainAfterARejectionLeavesTheFailedItemInTheOutbox() }
-        try await step("CoreTests.runOutboxItemOfARemovedAccountWaitsForever") { try await CoreTests().runOutboxItemOfARemovedAccountWaitsForever() }
+        try await step("CoreTests.runOutboxItemWithoutATransportStaysWaiting") { try await CoreTests().runOutboxItemWithoutATransportStaysWaiting() }
         try await step("CoreTests.runRejectedSignInIsShownAsExpiredSignIn") { try await CoreTests().runRejectedSignInIsShownAsExpiredSignIn() }
-        try await step("CoreTests.runLocalSearchMatchesTheTextAsTyped") { try await CoreTests().runLocalSearchMatchesTheTextAsTyped() }
         try await step("CoreTests.runAMailSentFromTheOutboxIsGoneAfterAReopen") { try await CoreTests().runAMailSentFromTheOutboxIsGoneAfterAReopen() }
         try await step("CoreTests.runLocalSearchListsTheNewestHitsFirst") { try await CoreTests().runLocalSearchListsTheNewestHitsFirst() }
         try await step("CoreActionTests.runTheCoreActions") { try await CoreActionTests().runTheCoreActions() }

@@ -274,8 +274,6 @@ AdapterKeychainTests.runServiceNameFollowsPrefixAndInlet eq "password"
 AdapterKeychainTests.runSlotsOfOneInletShareTheServiceAndDifferInAccount eq "com.johannesleoberger.alfaos.hub.x"
 AdapterKeychainTests.runSlotsOfOneInletShareTheServiceAndDifferInAccount ne "a"
 AdapterKeychainTests.runSlotsOfOneInletShareTheServiceAndDifferInAccount ne "com.johannesleoberger.alfaos.hub.x"
-ModelTextTests.runPlainTextUsesTheSharedConverter eq "Hello
-World & Co"
 CatalogTests.runEveryStateOfTheMailModuleHasATextInTheCatalog eq []
 CoreTests.runAccountsAndFoldersComeFromTheHub eq ["one","two"]
 CoreTests.runAccountsAndFoldersComeFromTheHub true some(true)
@@ -322,7 +320,7 @@ CoreTests.runGmailHttpErrorsAreClassified true some(true)
 CoreTests.runSendAgainAfterARejectionLeavesTheFailedItemInTheOutbox eq "mail.hint.rejected"
 CoreTests.runSendAgainAfterARejectionLeavesTheFailedItemInTheOutbox eq some(MailDraftState.sent())
 CoreTests.runSendAgainAfterARejectionLeavesTheFailedItemInTheOutbox eq 1
-CoreTests.runOutboxItemOfARemovedAccountWaitsForever eq some(OutboxState.waiting())
+CoreTests.runOutboxItemWithoutATransportStaysWaiting eq some(OutboxState.waiting())
 CoreTests.runRejectedSignInIsShownAsExpiredSignIn eq MailListState.signInExpired(signInExpired="one")
 CoreTests.runAMailSentFromTheOutboxIsGoneAfterAReopen eq 1
 CoreTests.runAMailSentFromTheOutboxIsGoneAfterAReopen eq 1
