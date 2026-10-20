@@ -1991,6 +1991,16 @@ final class CoreTests {
         recordEqual(one.sendCalls, calls)
         recordEqual(core.outbox.count, 1)
     }
+    func runGmailMessageOverTheSizeLimitFailsAndIsNotRetried() async throws {
+        let (core, _, gmail, _) = try make()
+        gmail.sendError = GoogleGmailError.api(GoogleAPIFault(status: 413))
+        _ = await core.send("one", draft())
+        guard case .failed(let hint) = core.outbox.first?.state else { return XCTFail("expected failed") }
+        recordEqual(hint.text, "mail.hint.rejected")
+        gmail.sendError = nil
+        await core.retryOutbox()
+        recordEqual(gmail.sent.count, 0)
+    }
     func runUnreadCountPerAccount() async throws {
         let (core, _, one, two) = try make()
         one.setPage("INBOX", MailMessagePage(messages: [message("1"), message("2"), message("3", seen: true)]))
@@ -3812,6 +3822,7 @@ final class WholeAppTests: XCTestCase {
         try await step("CoreTests.runSendWithoutNetworkQueuesAndRetrySends") { try await CoreTests().runSendWithoutNetworkQueuesAndRetrySends() }
         try await step("CoreTests.runOutboxSurvivesAReopenedDatabase") { try await CoreTests().runOutboxSurvivesAReopenedDatabase() }
         try await step("CoreTests.runRejectionStaysFailedAndIsNotRetried") { try await CoreTests().runRejectionStaysFailedAndIsNotRetried() }
+        try await step("CoreTests.runGmailMessageOverTheSizeLimitFailsAndIsNotRetried") { try await CoreTests().runGmailMessageOverTheSizeLimitFailsAndIsNotRetried() }
         try await step("CoreTests.runUnreadCountPerAccount") { try await CoreTests().runUnreadCountPerAccount() }
         try await step("CoreTests.runSyncFinishedBringsNewMailAndRetriesOutbox") { try await CoreTests().runSyncFinishedBringsNewMailAndRetriesOutbox() }
         try await step("CoreTests.runSyncFailureKeepsLastStateAndReports") { try await CoreTests().runSyncFailureKeepsLastStateAndReports() }

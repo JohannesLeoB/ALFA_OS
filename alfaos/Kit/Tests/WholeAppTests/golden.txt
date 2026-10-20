@@ -300,6 +300,8 @@ CoreTests.runOutboxSurvivesAReopenedDatabase eq "<b>formatted</b>"
 CoreTests.runRejectionStaysFailedAndIsNotRetried eq "mail.hint.rejected"
 CoreTests.runRejectionStaysFailedAndIsNotRetried eq 1
 CoreTests.runRejectionStaysFailedAndIsNotRetried eq 1
+CoreTests.runGmailMessageOverTheSizeLimitFailsAndIsNotRetried eq "mail.hint.rejected"
+CoreTests.runGmailMessageOverTheSizeLimitFailsAndIsNotRetried eq 0
 CoreTests.runUnreadCountPerAccount eq 2
 CoreTests.runUnreadCountPerAccount eq 1
 CoreTests.runUnreadCountPerAccount eq 1
