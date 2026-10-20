@@ -7,6 +7,7 @@
 - [Strang-Meldungen](strang-meldungen.md) — jeden Strang melden: Start, blockiert, fertig, mit Beleg (20.10.)
 - [Test-Verständnis](test-verstaendnis.md) — Test heißt: kann rot werden; nie „N Tests grün“ als Maß; Lead managt Tests (20.10.)
 - [Nebensitzungen](nebensitzungen.md) — mit Worktree erlaubt: vorbereitet, Brief von Haiku gegengelesen, danach sofort verräumt (20.10.)
+- [Brief v10 Entwurf](brief-v10-entwurf.md) — Entwurf an Design, L2-geprüft, wartet auf Freigabe (20.10.)
 - [Design-Brief aktuell](design-brief-aktuell.md) — Brief, Nachlieferungen, Arbeitsweise in DESIGN/brief/ auf GitHub, immer aktuell (20.10.)
 - [Verlass ist der Job](verlass-ist-der-job.md) — blind verlassen können; nichts fertig, grün oder geprüft ohne Prüfung Wert für Wert
 - [Design ist das Ziel](design-ist-das-ziel.md) — letzter Design-Master ist einzige Wertquelle; Code ist Funktion, keine Gestaltung; nur Daten gegen Daten
