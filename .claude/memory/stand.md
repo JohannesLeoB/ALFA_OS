@@ -1,11 +1,11 @@
 ---
 name: stand
-description: Laufender Stand ALFA_OS am 20.10. 08:30 MESZ
+description: Laufender Stand ALFA_OS am 20.10. 10:30 MESZ
 metadata:
   type: project
 ---
 
-- Repo `main` = GitHub; letzter Commit vor diesem Eintrag `86e3bc6`. LAWS AND ORDERS in `AGENTS.md` (ZIEL gestuft und L1 mit Funktionskarte seit `3df8ccc`, Gedächtnis im Repo seit `f5109e1`).
+- Repo `main` = GitHub; letzter Commit vor diesem Eintrag `e5a5d14`. LAWS AND ORDERS in `AGENTS.md` (ZIEL gestuft und L1 mit Funktionskarte seit `3df8ccc`, Gedächtnis im Repo seit `f5109e1`).
 - Gedächtnis liegt in `.claude/memory/`, der Claude-Ordner des Projekts zeigt per Link dorthin; jede Änderung wird committet und gepusht (L4).
 - 13 Strang-Definitionen in `.claude/agents/`: bau-heute, bau-kataloge, bau-mail, bau-projekte, design-bruecke, figma-spiegel, leser, produkt, pruefer-freund, pruefer-petzer, pruefer-spuerhund, pruefer-waterboarder, sammler.
 - `DESIGN/` (Commit a59341a, 18.10.): Original-ZIPs plus `MANIFEST.json` (Prüfsummen, Dateiliste je ZIP); entpackt wird nur in `dist/`. Letzter Master: `ALFA OS Interface CHEF 1610-handoff 1810.zip` (109 Dateien, 341 Tokens, noch nicht final poliert, ABNAHME.md 12 Kriterien offen). Vorletzter: `ALFA OS Interface CHEF 1610.zip` (245 Tokens). Johannes 18.10.: „Ja. Lege beide Master als Original-ZIP mit MANIFEST.json in DESIGN/ ab, entpackt wird nur in dist/.“
@@ -48,17 +48,18 @@ metadata:
   - Postausgang behält die aktuelle Entwurf-Kennung: 9c82fee.
   - Anhänge abseits des Hauptthreads und SMTP-`SIZE` vor dem Upload: 1cfe12b.
   - Ordner einmal je Abgleich, keine Mail-Arbeit nach Fehlschlag, kein zweites LIST: 86e3bc6. Neu dafür: HubEvent.syncFailed. Logins je Abgleich 3 → 2.
-  - App-Build `dist/ALFA_OS-86e3bc6.app`.
+- Reste behoben. Johannes 20.10.: „Ja. Schritt 0 und die drei kleinen Korrekturen über bau-mail mit Sonnet, je ein Ticket, du prüfst und committest.“
+  - Test entschlackt, −155 Zeilen bei gleichen Golden-Einträgen: 5e033a5. Der alte Postausgang-Schritt heißt jetzt runOutboxItemWithoutATransportStaysWaiting.
+  - Suche beim Tippen über alle Ordner außer Spam und Papierkorb, wie im Master: 41e46f3.
+  - Gmail zu groß: Google nennt keinen eigenen Status (developers.google.com/workspace/gmail/api/guides/handle-errors). Jede Antwort, die keine Netzstörung ist, endet schon als Ablehnung ohne Wiederholung; der Test hält das: 39742e2. Lücke an Design: kein eigener Hinweistext für „zu groß“.
+  - Kein doppeltes Senden: e5a5d14. Feste Message-ID je Postausgang-Eintrag, vor jedem Wiederholen Suche im Ordner „Gesendet“. Ohne Gesendet-Ordner wird wie bisher gesendet. `myk_` in den Gmail-MIME-Grenzen ist entfernt. Grenze: Server, die SMTP-Mail nicht selbst in „Gesendet“ ablegen, schützt das nicht; gegen echte Server ungetestet.
+  - App-Build `dist/ALFA_OS-e5a5d14.app`. testLines 5762 von 5895.
+- Johannes 20.10. zu IDLE: „IDLE wäre eigentlich wünschenswert - ist das heftig aufwändig?“ Lead: machbar in drei Tickets (IDLE-Befehl, offene Sitzung je Konto mit Neuaufbau, Anbindung an Cadence.push im Hub), gehört zu H4. Gmail-API hat kein IDLE (Push bräuchte Pub/Sub mit Server); Gmail bleibt beim Abfragetakt oder läuft über IMAP mit XOAUTH2. Freigabe offen.
 - Offen danach:
-  - Verbindungs-Pooling bei IMAP; IDLE fehlt.
+  - Verbindung je Konto offen halten (Pooling) und IDLE, mit H4.
   - Rückgängig über COPYUID statt Suche per Message-ID.
-  - MIME-Aufbau nicht streamend.
-  - Doppelt gesendete Mail nach Timeout nach DATA.
-  - Gmail ohne Größengrenze.
+  - MIME-Aufbau nicht streamend, große Anhänge ganz im Speicher.
   - Gmail-Rückgängig aus dem Papierkorb setzt nur INBOX, ungeprüft.
-  - Der Test CoreTests.runOutboxItemOfARemovedAccountWaitsForever beschreibt noch das alte Verhalten.
-  - Suche beim Tippen nur im geladenen Ordner, Master filtert über alle.
-  - testLines 5868 von 5895: die Hook-Grenze ist fast erreicht.
 
 Aufträge an die Lead
 - Test nach L5 (aus `plan/EIN-TEST.md`, 16.10.): genau eine Testfunktion `testTheWholeApp` in `alfaos/Kit/Tests/WholeAppTests/WholeAppTests.swift`. Sie startet die App-Zusammenstellung ohne Fenster, mit In-Memory-Datenbank und Attrappen, und spielt ein festes Skript über Hülle, Generatoren, Einstellungen und Mail; das Protokoll wird mit `golden.txt` verglichen. Erst `scripts/mutate.py` gegen die alten Tests, dann der eine Test, bis jeder erkennbare Mutant ihn rot macht; erst danach die alten Tests löschen. Abnahme: 1 Testfunktion, unter 60 s, mindestens 200 Mutanten erkannt oder einzeln begründet.
