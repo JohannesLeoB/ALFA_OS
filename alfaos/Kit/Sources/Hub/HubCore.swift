@@ -294,7 +294,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             case .signIn, .rejected:
                 update(inletID, persist: true) { $0.state = .failed(failure) }
             }
-            emit(.syncFinished(capability, inletID))
+            emit(.syncFailed(capability, inletID, failure))
             return SyncReport(inlet: inletID, capability: capability, result: .failed(failure))
         }
     }

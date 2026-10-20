@@ -5,6 +5,7 @@ import struct AlfaKit.EmailDraft
 import protocol AlfaServices.MailTransport
 import enum AlfaServices.MailFlag
 import struct AlfaServices.MailFolder
+import enum AlfaServices.MailFolderRole
 import struct AlfaServices.MailStoredDraft
 import struct AlfaServices.MailMessageBody
 import struct AlfaServices.MailMessagePage
@@ -77,6 +78,20 @@ public final class MailCore: MailEngine {
         let transport = try transport(inlet)
         do {
             let folders = try await transport.listFolders()
+            try mirror.replaceFolders(inlet, folders)
+        } catch {
+            throw MailFailure.hubError(error, inlet: inlet, hub: hub)
+        }
+        emit(.foldersChanged(inlet))
+    }
+
+    private func mirrorDeliveredFolders(_ inlet: Inlet.ID) throws(HubError) {
+        let prefix = inlet + "/"
+        let folders = hub.stock(.mailboxes, as: MailboxRecord.self).items.filter { $0.inlet == inlet }.map {
+            MailFolder(id: $0.id.replacingOccurrences(of: prefix, with: "", options: .anchored), name: $0.name,
+                       role: MailFolderRole(rawValue: $0.role) ?? .other)
+        }
+        do {
             try mirror.replaceFolders(inlet, folders)
         } catch {
             throw MailFailure.hubError(error, inlet: inlet, hub: hub)
@@ -322,6 +337,8 @@ public final class MailCore: MailEngine {
             purge(inlet)
         case .syncFinished(.mail, let inlet):
             await sync(inlet)
+        case .syncFailed(.mail, let inlet, let hint):
+            emit(.syncFailed(inlet, hint))
         default:
             break
         }
@@ -338,7 +355,7 @@ public final class MailCore: MailEngine {
 
     private func sync(_ inlet: Inlet.ID) async {
         do {
-            try await refreshFolders(inlet)
+            try mirrorDeliveredFolders(inlet)
             if let inbox = mirror.inboxID(inlet) {
                 _ = try await loadPage(inlet, folder: inbox, query: nil, pageToken: nil)
             }

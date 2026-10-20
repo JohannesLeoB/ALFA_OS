@@ -307,11 +307,13 @@ CoreTests.runUnreadCountPerAccount eq 1
 CoreTests.runUnreadCountPerAccount eq 1
 CoreTests.runUnreadCountPerAccount eq 10
 CoreTests.runSyncFinishedBringsNewMailAndRetriesOutbox true some(true)
+CoreTests.runSyncFinishedBringsNewMailAndRetriesOutbox eq 0
 CoreTests.runSyncFinishedBringsNewMailAndRetriesOutbox false some(false)
 CoreTests.runSyncFinishedBringsNewMailAndRetriesOutbox true some(true)
 CoreTests.runSyncFinishedBringsNewMailAndRetriesOutbox true some(true)
 CoreTests.runSyncFinishedBringsNewMailAndRetriesOutbox eq 3
 CoreTests.runSyncFailureKeepsLastStateAndReports true some(true)
+CoreTests.runSyncFailureKeepsLastStateAndReports eq 1
 CoreTests.runSyncFailureKeepsLastStateAndReports eq ["1"]
 CoreTests.runGmailHttpErrorsAreClassified eq "hint.signin.expired"
 CoreTests.runGmailHttpErrorsAreClassified true some(true)

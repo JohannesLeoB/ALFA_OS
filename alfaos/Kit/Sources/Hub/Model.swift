@@ -246,6 +246,7 @@ public enum HubEvent: Equatable, Sendable {
     case inletChanged(Inlet.ID)
     case inletRemoved(Inlet.ID)
     case syncFinished(Capability, Inlet.ID)
+    case syncFailed(Capability, Inlet.ID, Hint)
     case newItems(DataKind)
 }
 

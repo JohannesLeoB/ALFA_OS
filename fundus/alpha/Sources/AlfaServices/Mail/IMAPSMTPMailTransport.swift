@@ -40,10 +40,6 @@ public struct IMAPSMTPMailTransport: MailTransport {
     public func listMessages(folderID: String, query: String?, pageToken: String?, maxResults: Int) async throws -> MailMessagePage {
         let limit = max(1, maxResults)
         return try await withIncoming { session in
-            let folders = try await session.listFolders()
-            guard folders.contains(where: { $0.path == folderID && $0.isSelectable }) else {
-                throw MailTransportError.folderNotFound(folderID)
-            }
             let selection = try await session.select(folderID, readOnly: true)
             var criteria: [IMAPArgument] = []
             if let pageToken, let before = Int(pageToken) {

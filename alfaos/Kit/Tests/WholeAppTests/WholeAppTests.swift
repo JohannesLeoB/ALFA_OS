@@ -1696,7 +1696,9 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     private var _sent: [EmailDraft] = []
     private var _sendCalls = 0
     private var _listCalls = 0
+    private var _folderCalls = 0
     private var _bodyCalls = 0
+    var folderCalls: Int { lock.withLock { _folderCalls } }
     var folders: [MailFolder] { get { lock.withLock { _folders } } set { lock.withLock { _folders = newValue } } }
     var sendError: Error? { get { lock.withLock { _sendError } } set { lock.withLock { _sendError = newValue } } }
     var listError: Error? { get { lock.withLock { _listError } } set { lock.withLock { _listError = newValue } } }
@@ -1707,6 +1709,7 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     func setTokenPage(_ token: String?, _ page: MailMessagePage) { lock.withLock { _tokenPages[token ?? "-"] = page } }
     func failList(call: Int, _ error: Error) { lock.withLock { _failures[call] = error } }
     func listFolders() async throws -> [MailFolder] {
+        lock.withLock { _folderCalls += 1 }
         if let error = listError { throw error }
         return folders
     }
@@ -1794,7 +1797,13 @@ final class HubDouble: HubAccess {
         (stream, continuation) = AsyncStream<HubEvent>.makeStream()
     }
     var events: AsyncStream<HubEvent> { stream }
-    func push(_ event: HubEvent) { continuation.yield(event) }
+    let boxes = Stock<MailboxRecord> {}
+    func push(_ event: HubEvent) {
+        if case .syncFinished(.mail, let id) = event, let folders = transports[id]?.folders {
+            boxes.apply(inlet: id, records: folders.map { MailboxRecord(id: id + "/" + $0.id, inlet: id, name: $0.name, role: $0.role.rawValue) }, at: Date())
+        }
+        continuation.yield(event)
+    }
     func inlets(for capability: Capability) -> [Inlet] {
         capability == .mail ? mailInlets : []
     }
@@ -1806,7 +1815,7 @@ final class HubDouble: HubAccess {
         return transport
     }
     func stock<T: Record>(_ kind: DataKind, as type: T.Type) -> Stock<T> {
-        fatalError()
+        (boxes as? Stock<T>) ?? Stock<T> {}
     }
     func write(_ order: WriteOrder) async throws(HubError) {}
     func classify(_ error: any Error, inlet: Inlet.ID) -> Classification { mailTestClassify(error) }
@@ -2114,6 +2123,7 @@ final class CoreTests {
         hub.push(.syncFinished(.mail, "one"))
         let first = await eventually { core.lastSync("one", folder: "INBOX") != nil }
         recordTrue(first)
+        recordEqual(one.folderCalls, 0)
         recordFalse(seen.contains { if case .newMail = $0 { true } else { false } })
         one.sendError = MailTransportError.timeout
         _ = await core.send("one", draft())
@@ -2134,10 +2144,10 @@ final class CoreTests {
         one.setPage("INBOX", MailMessagePage(messages: [message("1")]))
         try await core.refreshFolders("one")
         _ = try await core.loadPage("one", folder: "INBOX", query: nil, pageToken: nil)
-        one.listError = MailTransportError.timeout
-        hub.push(.syncFinished(.mail, "one"))
+        hub.push(.syncFailed(.mail, "one", Hint(text: "x")))
         let failed = await eventually { seen.contains { if case .syncFailed("one", _) = $0 { true } else { false } } }
         recordTrue(failed)
+        recordEqual(one.folderCalls, 1)
         recordEqual(core.messages("one", folder: "INBOX").map(\.id), ["1"])
     }
     func runGmailHttpErrorsAreClassified() {
