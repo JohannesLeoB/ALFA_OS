@@ -5,7 +5,7 @@ metadata:
   type: project
 ---
 
-- Repo `main` = GitHub; letzter Commit vor diesem Eintrag `1785da4`. LAWS AND ORDERS in `AGENTS.md` (ZIEL gestuft und L1 mit Funktionskarte seit `3df8ccc`, Gedächtnis im Repo seit `f5109e1`).
+- Repo `main` = GitHub; letzter Commit vor diesem Eintrag `ddc121c`. LAWS AND ORDERS in `AGENTS.md` (ZIEL gestuft und L1 mit Funktionskarte seit `3df8ccc`, Gedächtnis im Repo seit `f5109e1`).
 - Gedächtnis liegt in `.claude/memory/`, der Claude-Ordner des Projekts zeigt per Link dorthin; jede Änderung wird committet und gepusht (L4).
 - 13 Strang-Definitionen in `.claude/agents/`: bau-heute, bau-kataloge, bau-mail, bau-projekte, design-bruecke, figma-spiegel, leser, produkt, pruefer-freund, pruefer-petzer, pruefer-spuerhund, pruefer-waterboarder, sammler.
 - `DESIGN/` (Commit a59341a, 18.10.): Original-ZIPs plus `MANIFEST.json` (Prüfsummen, Dateiliste je ZIP); entpackt wird nur in `dist/`. Letzter Master: `ALFA OS Interface CHEF 1610-handoff 1810.zip` (109 Dateien, 341 Tokens, noch nicht final poliert, ABNAHME.md 12 Kriterien offen). Vorletzter: `ALFA OS Interface CHEF 1610.zip` (245 Tokens). Johannes 18.10.: „Ja. Lege beide Master als Original-ZIP mit MANIFEST.json in DESIGN/ ab, entpackt wird nur in dist/.“
@@ -30,13 +30,15 @@ metadata:
 - Bestand gesichert: 27 Zweige `sicherung/*` im Repo `mykilos-Alphabet`; Ruleset „Sichi“ aktiv (gh api, 18.10.).
 - Die Zweige des zweiten Entwicklers sind gelöscht, lokal und auf GitHub (18.10.).
 
+- Artefakte (20.10.): 56 der Liste gelesen und gegen dieses Gedächtnis abgeglichen, Ergebnis in `artefakte-karte.md`, `grundsaetze.md`, `stammtisch.md`. Wichtig: 21 von 44 Zitaten der `app-*.md`-Karten sind im Korpus nicht gefunden (Willensbaum); Stammtisch meldet den Test rot bei 1785da4, hier steht grün seit ddc121c (Stammtisch älter); Stammtisch nennt ALFA_GOLDEN bei :3837-3840 gegen :3833 oben, ungeprüft.
+
 Aufträge an die Lead
 - Test nach L5 (aus `plan/EIN-TEST.md`, 16.10.): genau eine Testfunktion `testTheWholeApp` in `alfaos/Kit/Tests/WholeAppTests/WholeAppTests.swift`. Sie startet die App-Zusammenstellung ohne Fenster, mit In-Memory-Datenbank und Attrappen, und spielt ein festes Skript über Hülle, Generatoren, Einstellungen und Mail; das Protokoll wird mit `golden.txt` verglichen. Erst `scripts/mutate.py` gegen die alten Tests, dann der eine Test, bis jeder erkennbare Mutant ihn rot macht; erst danach die alten Tests löschen. Abnahme: 1 Testfunktion, unter 60 s, mindestens 200 Mutanten erkannt oder einzeln begründet.
 - Wächter (Johannes 18.10.): GitHub Actions melden, sperren nicht (Build in `dist/`); Codex prüft unangekündigt. Die Lead entwirft beides, Text vorher an Johannes.
 - xcodegen erzeugt das Projekt künftig in `dist/`; danach entfällt die Zeile `alfaos/*.xcodeproj/` in `.gitignore`.
 
 Offene Punkte aus dem alten Plan
-- C2: Proben für Airtable, ClickUp, Clockodo, sevDesk, Claude, DHL fehlen; `alfaos/Kit/Sources/Hub/Providers/` hat nur Google und IMAP.
+- C2 (überholt, siehe „Erledigt“ unten: sechs Dienste seit 6668bcd mit Prüfung beim Anbieter; ohne Anbindung bleiben DHL Versand und Happa Happa): Proben für Airtable, ClickUp, Clockodo, sevDesk, Claude, DHL fehlten am 18.10.; `alfaos/Kit/Sources/Hub/Providers/` hatte nur Google und IMAP.
 - Entschlackung 19.10. (Johannes: „räume raus was da nicht sein muss“): dist-Reste, plan/, recherche/, fundus/alfacolor, gestaltung (AN-DESIGN.md, nomenclature.json, components/, entwuerfe/, briefing-ansichten/), scripts/vertrag_aus_entwurf.py entfernt; nachlesbar nur in Git. lizenzen.txt nennt GRDB.swift 6.29.3 (MIT). In gestaltung bleiben tokens.json, tokens.css, quarantine.json, design.stamp.json. Offen: d's Ordner in dist/ nach d.
 
 Erledigt: Wortlaut `design-bruecke.md` (fe7f26e). Gebaut wird seit 19.10. auf sein Wort (Mail und Einstellungen als Hub, nach Master 1810). C2 teils: ClickUp, Clockodo, Claude, Airtable, sevDesk, DHL Sendungen mit Prüfung beim Anbieter (6668bcd); DHL Versand und Happa Happa ohne Anbindung.

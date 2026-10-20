@@ -1,4 +1,7 @@
-- [Stand](stand.md) — laufender Stand 18.10. 20:00 UTC: Aufträge an die Lead, offene Punkte, Master 1810 und 1610 als ZIP in DESIGN/
+- [Stand](stand.md) — laufender Stand 20.10.: Aufträge an die Lead, offene Punkte, Master 1810 und 1610 als ZIP in DESIGN/
+- [Artefakte-Karte](artefakte-karte.md) — 56 Artefakte gelesen: nicht lesbar, Quellenrisiko der Karten-Zitate, Funde, Widersprüche
+- [Grundsätze](grundsaetze.md) — 20 Grundsätze mit Zitaten und Datum (Artefakt, Stand 10.10.), überholte Stellen markiert
+- [Stammtisch](stammtisch.md) — Arbeitsform, geltende Antworten, offene Fragen F-01 bis F-22 (Stand 20.10.)
 - [Arbeitsweise](arbeitsweise.md) — Ergebnisse statt Worte, alles lesen, nichts ohne Zustimmung schreiben, bauen statt analysieren, Arbeiten des zweiten Entwicklers nie
 - [Lead-Verantwortung](lead-verantwortung.md) — Lead denkt voraus; Schlamperei rieselt in jede Sitzung durch
 - [Verlass ist der Job](verlass-ist-der-job.md) — blind verlassen können; nichts fertig, grün oder geprüft ohne Prüfung Wert für Wert
