@@ -27,10 +27,5 @@ let package = Package(
                     .product(name: "GRDB", package: "GRDB.swift"),
                 ],
                 path: "Sources/AlfaServices"),
-
-        .testTarget(name: "MailTests",
-                    dependencies: ["AlfaServices", "AlfaKit"],
-                    path: "Tests/MailTests",
-                    exclude: ["Fixtures"]),
     ]
 )

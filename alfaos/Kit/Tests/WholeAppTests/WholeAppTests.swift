@@ -10,7 +10,13 @@ import enum AlfaServices.GoogleOAuthError
 import enum AlfaServices.MailFlag
 import enum AlfaServices.MailTransportError
 import protocol AlfaServices.MailTransport
+@testable import AlfaServices
+import struct AlfaKit.DraftAttachment
 import struct AlfaKit.EmailDraft
+import struct AlfaKit.MailAccount
+import enum AlfaKit.MailProviderPresets
+import struct AlfaKit.MailServerSettings
+import enum AlfaKit.MailSecurity
 import struct AlfaServices.GoogleAPIFault
 import struct AlfaServices.IMAPSMTPMailTransport
 import struct AlfaServices.MailAttachmentInfo
@@ -3802,6 +3808,1602 @@ final class GapTests {
     }
 }
 
+struct IMAPReply {
+    var untagged: [String] = []
+    var status = "OK done"
+}
+
+final class EmulatedIMAPStream: MailByteStream, @unchecked Sendable {
+    typealias Handler = (_ command: String, _ literal: Data?) -> IMAPReply
+
+    private let lock = NSLock()
+    private let handler: Handler
+    private var pending: [Data]
+    private var buffer = Data()
+    private var awaiting: (tag: String, command: String, size: Int)?
+    private var logged: [String] = []
+    private var bodies: [Data] = []
+    private var closedFlag = false
+    private var heldTag: String?
+    private let capabilities: String
+
+    init(capabilities: String = "IMAP4rev1", handler: @escaping Handler) {
+        self.capabilities = capabilities
+        self.handler = handler
+        pending = [Data("* OK [CAPABILITY \(capabilities)] ready\r\n".utf8)]
+    }
+
+    var commands: [String] { lock.withLock { logged } }
+    var literals: [Data] { lock.withLock { bodies } }
+    var closed: Bool { lock.withLock { closedFlag } }
+
+    func receive() async throws -> Data {
+        let chunk = lock.withLock { pending.isEmpty ? nil : pending.removeFirst() }
+        guard let chunk else { throw MailTransportError.connectionClosed }
+        return chunk
+    }
+
+    func receiveIdle() async throws -> Data {
+        while lock.withLock({ pending.isEmpty }) { try await Task.sleep(for: .milliseconds(5)) }
+        return try await receive()
+    }
+
+    func send(_ data: Data) async throws {
+        lock.withLock {
+            buffer.append(data)
+            drain()
+        }
+    }
+
+    func upgradeToTLS() async throws {}
+
+    func close() { lock.withLock { closedFlag = true } }
+
+    private func drain() {
+        while true {
+            if let waiting = awaiting {
+                guard buffer.count >= waiting.size + 2 else { return }
+                let payload = Data(buffer.prefix(waiting.size))
+                buffer = Data(buffer.dropFirst(waiting.size + 2))
+                awaiting = nil
+                bodies.append(payload)
+                logged.append(waiting.command)
+                answer(tag: waiting.tag, command: waiting.command, literal: payload)
+                continue
+            }
+            guard let end = buffer.range(of: Data("\r\n".utf8)) else { return }
+            let line = String(decoding: buffer[buffer.startIndex..<end.lowerBound], as: UTF8.self)
+            buffer = Data(buffer.dropFirst(line.utf8.count + 2))
+            if line == "DONE", let held = heldTag { logged.append(line); pending.append(Data("\(held) OK done\r\n".utf8)); continue }
+            let words = line.split(separator: " ", maxSplits: 1).map(String.init)
+            guard words.count == 2 else { continue }
+            let tag = words[0]
+            let command = words[1]
+            if let open = command.lastIndex(of: "{"), command.hasSuffix("}"),
+               let size = Int(command[command.index(after: open)..<command.index(before: command.endIndex)]) {
+                awaiting = (tag, command, size)
+                pending.append(Data("+ go ahead\r\n".utf8))
+                continue
+            }
+            logged.append(command)
+            answer(tag: tag, command: command, literal: nil)
+        }
+    }
+
+    private func answer(tag: String, command: String, literal: Data?) {
+        let reply: IMAPReply
+        switch command.split(separator: " ").first.map({ $0.uppercased() }) {
+        case "CAPABILITY":
+            reply = IMAPReply(untagged: ["* CAPABILITY \(capabilities)"])
+        case "LOGIN":
+            reply = IMAPReply()
+        case "LOGOUT":
+            reply = IMAPReply(untagged: ["* BYE bye"])
+        default:
+            reply = handler(command, literal)
+        }
+        var text = reply.untagged.map { $0 + "\r\n" }.joined()
+        if reply.status.isEmpty { heldTag = tag } else { text += "\(tag) \(reply.status)\r\n" }
+        pending.append(Data(text.utf8))
+    }
+}
+
+final class EmulatedSMTPStream: MailByteStream, @unchecked Sendable {
+    private let lock = NSLock()
+    private var pending: [Data] = [Data("220 ready\r\n".utf8)]
+    private var buffer = Data()
+    private var inData = false
+    private var lines: [String] = []
+    private var message = Data()
+    private let sizeLine: String
+
+    init(size: Int? = nil) {
+        sizeLine = size.map { "250 SIZE \($0)\r\n" } ?? ""
+    }
+
+    var commands: [String] { lock.withLock { lines } }
+    var delivered: String { lock.withLock { String(decoding: message, as: UTF8.self) } }
+
+    func receive() async throws -> Data {
+        let chunk = lock.withLock { pending.isEmpty ? nil : pending.removeFirst() }
+        guard let chunk else { throw MailTransportError.connectionClosed }
+        return chunk
+    }
+
+    func send(_ data: Data) async throws {
+        lock.withLock {
+            buffer.append(data)
+            while true {
+                if inData {
+                    guard let end = buffer.range(of: Data("\r\n.\r\n".utf8)) else { return }
+                    message = Data(buffer[buffer.startIndex..<end.lowerBound])
+                    buffer = Data(buffer[end.upperBound...])
+                    inData = false
+                    pending.append(Data("250 OK queued\r\n".utf8))
+                    continue
+                }
+                guard let end = buffer.range(of: Data("\r\n".utf8)) else { return }
+                let line = String(decoding: buffer[buffer.startIndex..<end.lowerBound], as: UTF8.self)
+                buffer = Data(buffer[end.upperBound...])
+                lines.append(line)
+                let word = line.split(separator: " ").first.map { $0.uppercased() } ?? ""
+                switch word {
+                case "EHLO": pending.append(Data((sizeLine.isEmpty ? "250-ready\r\n250 AUTH PLAIN\r\n" : "250-ready\r\n250-AUTH PLAIN\r\n" + sizeLine).utf8))
+                case "AUTH": pending.append(Data("235 ok\r\n".utf8))
+                case "DATA":
+                    inData = true
+                    pending.append(Data("354 go\r\n".utf8))
+                case "QUIT": pending.append(Data("221 bye\r\n".utf8))
+                default: pending.append(Data("250 OK\r\n".utf8))
+                }
+            }
+        }
+    }
+
+    func upgradeToTLS() async throws {}
+
+    func close() {}
+}
+
+final class StreamQueue: @unchecked Sendable {
+    private let lock = NSLock()
+    private var streams: [any MailByteStream]
+    private var opened = 0
+
+    init(_ streams: [any MailByteStream]) {
+        self.streams = streams
+    }
+
+    var openedCount: Int { lock.withLock { opened } }
+
+    var opener: MailStreamOpener {
+        { [self] host, _, _ in
+            try lock.withLock {
+                guard streams.isEmpty == false else { throw MailTransportError.connectionFailed(host) }
+                opened += 1
+                return streams.removeFirst()
+            }
+        }
+    }
+}
+
+enum ActionFixture {
+    static var account: MailAccount {
+        MailProviderPresets.preset(for: .ionos).account(id: "p", displayName: "", address: "jo@example.test")
+    }
+
+    static func transport(_ queue: StreamQueue) -> IMAPSMTPMailTransport {
+        IMAPSMTPMailTransport(account: account, accessToken: nil, password: { "app-secret" }, opener: queue.opener)
+    }
+
+    static let folders = [
+        "* LIST (\\HasNoChildren) \"/\" INBOX",
+        "* LIST (\\HasNoChildren \\Archive) \"/\" \"Archive\"",
+        "* LIST (\\HasNoChildren \\Trash) \"/\" \"Trash\"",
+        "* LIST (\\HasNoChildren \\Junk) \"/\" \"Junk\"",
+        "* LIST (\\HasNoChildren \\Drafts) \"/\" \"Drafts\"",
+        "* LIST (\\HasNoChildren) \"/\" \"Projects\"",
+    ]
+
+    static let selected = ["* 3 EXISTS", "* OK [UIDVALIDITY 7] ok", "* OK [UIDNEXT 9] next"]
+
+    static func server(capabilities: String, folders: [String] = ActionFixture.folders,
+                       extra: @escaping (String, Data?) -> IMAPReply? = { _, _ in nil }) -> EmulatedIMAPStream {
+        EmulatedIMAPStream(capabilities: capabilities) { command, literal in
+            if let reply = extra(command, literal) { return reply }
+            if command.hasPrefix("LIST") { return IMAPReply(untagged: folders) }
+            if command.hasPrefix("SELECT") || command.hasPrefix("EXAMINE") { return IMAPReply(untagged: selected) }
+            return IMAPReply()
+        }
+    }
+
+    static func withoutLogin(_ commands: [String]) -> [String] {
+        commands.filter { $0.hasPrefix("LOGIN") == false && $0 != "CAPABILITY" && $0 != "LOGOUT" }
+    }
+}
+
+final class RecordingGmail: URLProtocol, @unchecked Sendable {
+    struct Call: Equatable {
+        var method: String
+        var path: String
+        var body: Data
+    }
+
+    private static let lock = NSLock()
+    nonisolated(unsafe) private static var recorded: [Call] = []
+    nonisolated(unsafe) private static var router: (Call) -> (Int, String) = { _ in (200, "{}") }
+
+    static var calls: [Call] { lock.withLock { recorded } }
+
+    static func reset(_ route: @escaping (Call) -> (Int, String) = { _ in (200, "{}") }) {
+        lock.withLock {
+            recorded = []
+            router = route
+        }
+    }
+
+    static func session() -> URLSession {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [RecordingGmail.self]
+        return URLSession(configuration: configuration)
+    }
+
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override func stopLoading() {}
+
+    override func startLoading() {
+        let body = requestBody(request)
+        let call = Call(method: request.httpMethod ?? "GET", path: request.url?.path ?? "", body: body)
+        let route = Self.lock.withLock { () -> (Call) -> (Int, String) in
+            Self.recorded.append(call)
+            return Self.router
+        }
+        let (status, text) = route(call)
+        let response = HTTPURLResponse(url: request.url!, statusCode: status, httpVersion: nil, headerFields: nil)!
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocol(self, didLoad: Data(text.utf8))
+        client?.urlProtocolDidFinishLoading(self)
+    }
+}
+
+struct TokenStub: GoogleAccessTokenProviding {
+    func validAccessToken() async throws -> String { "token" }
+}
+
+func requestBody(_ request: URLRequest) -> Data {
+    var body = request.httpBody ?? Data()
+    if let stream = request.httpBodyStream {
+        stream.open()
+        var buffer = [UInt8](repeating: 0, count: 4096)
+        while stream.hasBytesAvailable {
+            let count = stream.read(&buffer, maxLength: buffer.count)
+            if count <= 0 { break }
+            body.append(buffer, count: count)
+        }
+        stream.close()
+    }
+    return body
+}
+
+enum MailWireFixture {
+    static let values: [String: String] = {
+        let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("MailWire.txt")
+        guard let text = try? String(contentsOf: path, encoding: .utf8) else {
+            XCTFail("fixture file missing or unreadable: \(path.path)")
+            return [:]
+        }
+        var result: [String: String] = [:]
+        for line in text.split(separator: "\n") {
+            guard let range = line.range(of: " = ") else { continue }
+            let value = line[range.upperBound...]
+                .replacingOccurrences(of: "<CRLF>", with: "\r\n")
+                .replacingOccurrences(of: "<LF>", with: "\n")
+            result[String(line[line.startIndex..<range.lowerBound])] = value
+        }
+        return result
+    }()
+
+    static func line(_ key: String, file: StaticString = #filePath, line lineNumber: UInt = #line) -> String {
+        guard let value = values[key] else {
+            XCTFail("fixture key missing: \(key)", file: file, line: lineNumber)
+            return ""
+        }
+        return value
+    }
+
+    static func retag(_ key: String, to tag: String) -> String {
+        let words = line(key).split(separator: " ", maxSplits: 1).map(String.init)
+        return ([tag] + words.dropFirst()).joined(separator: " ")
+    }
+
+    static func coded(_ key: String, _ code: Int) -> String {
+        "\(code) " + line(key).split(separator: " ", maxSplits: 1).dropFirst().joined(separator: " ")
+    }
+}
+
+final class ScriptedMailStream: MailByteStream, @unchecked Sendable {
+    private let lock = NSLock()
+    private var pending: [Data]
+    private var replies: [[String]]
+    private var sentLines: [String] = []
+    private var closedFlag = false
+
+    init(greeting: [String], replies: [[String]]) {
+        pending = greeting.map { Data(($0 + "\r\n").utf8) }
+        self.replies = replies
+    }
+
+    var sent: [String] { lock.withLock { sentLines } }
+    var closed: Bool { lock.withLock { closedFlag } }
+
+    func receive() async throws -> Data {
+        let chunk = lock.withLock { pending.isEmpty ? nil : pending.removeFirst() }
+        guard let chunk else { throw MailTransportError.connectionClosed }
+        return chunk
+    }
+
+    func send(_ data: Data) async throws {
+        let text = String(decoding: data, as: UTF8.self)
+        lock.withLock {
+            for line in text.components(separatedBy: "\r\n").dropLast() {
+                sentLines.append(line)
+                if replies.isEmpty == false {
+                    pending.append(contentsOf: replies.removeFirst().map { Data(($0 + "\r\n").utf8) })
+                }
+            }
+        }
+    }
+
+    func upgradeToTLS() async throws {}
+
+    func close() {
+        lock.withLock { closedFlag = true }
+    }
+}
+
+final class ScriptedMailNetwork: @unchecked Sendable {
+    struct Endpoint: Equatable {
+        var host: String
+        var port: Int
+        var security: MailSecurity
+    }
+
+    private let lock = NSLock()
+    private var streams: [ScriptedMailStream]
+    private var opened: [Endpoint] = []
+
+    init(_ streams: [ScriptedMailStream]) {
+        self.streams = streams
+    }
+
+    var endpoints: [Endpoint] { lock.withLock { opened } }
+
+    var opener: MailStreamOpener {
+        { [self] host, port, security in
+            try lock.withLock {
+                opened.append(Endpoint(host: host, port: port, security: security))
+                guard streams.isEmpty == false else { throw MailTransportError.connectionFailed(host) }
+                return streams.removeFirst()
+            }
+        }
+    }
+}
+
+final class LoopbackIMAPServer: @unchecked Sendable {
+    private let listener: Int32
+    private let uids: [Int]
+    let port: Int
+
+    init(uids: [Int]) throws {
+        self.uids = uids
+        let fd = socket(AF_INET, SOCK_STREAM, 0)
+        var reuse: Int32 = 1
+        setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &reuse, socklen_t(MemoryLayout<Int32>.size))
+        var address = sockaddr_in()
+        address.sin_family = sa_family_t(AF_INET)
+        address.sin_addr.s_addr = inet_addr("127.0.0.1")
+        address.sin_port = 0
+        let bound = withUnsafePointer(to: &address) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { bind(fd, $0, socklen_t(MemoryLayout<sockaddr_in>.size)) }
+        }
+        guard bound == 0, listen(fd, 1) == 0 else { throw MailTransportError.connectionFailed("loopback") }
+        var assigned = sockaddr_in()
+        var length = socklen_t(MemoryLayout<sockaddr_in>.size)
+        _ = withUnsafeMutablePointer(to: &assigned) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { getsockname(fd, $0, &length) }
+        }
+        listener = fd
+        port = Int(UInt16(bigEndian: assigned.sin_port))
+        let thread = Thread { [self] in serve() }
+        thread.start()
+    }
+
+    func stop() { close(listener) }
+
+    private func serve() {
+        let client = accept(listener, nil, nil)
+        guard client >= 0 else { return }
+        defer { close(client) }
+        write(client, "* OK [CAPABILITY IMAP4rev1] ready\r\n")
+        var buffer = Data()
+        var chunk = [UInt8](repeating: 0, count: 4096)
+        while true {
+            let count = read(client, &chunk, chunk.count)
+            if count <= 0 { return }
+            buffer.append(chunk, count: count)
+            while let end = buffer.range(of: Data("\r\n".utf8)) {
+                let line = String(decoding: buffer[buffer.startIndex..<end.lowerBound], as: UTF8.self)
+                buffer.removeSubrange(buffer.startIndex..<end.upperBound)
+                if reply(to: line, on: client) == false { return }
+            }
+        }
+    }
+
+    private func reply(to line: String, on client: Int32) -> Bool {
+        let words = line.split(separator: " ").map(String.init)
+        guard words.count >= 2 else { return true }
+        let tag = words[0]
+        switch words[1].uppercased() {
+        case "CAPABILITY":
+            write(client, "* CAPABILITY IMAP4rev1\r\n\(tag) OK done\r\n")
+        case "LOGIN":
+            write(client, "\(tag) OK logged in\r\n")
+        case "LIST":
+            write(client, "* LIST (\\HasNoChildren) \"/\" INBOX\r\n\(tag) OK done\r\n")
+        case "EXAMINE", "SELECT":
+            write(client, "* \(uids.count) EXISTS\r\n* OK [UIDVALIDITY 7] ok\r\n\(tag) OK done\r\n")
+        case "UID" where words.count > 2 && words[2].uppercased() == "SEARCH":
+            write(client, "* SEARCH \(uids.map(String.init).joined(separator: " "))\r\n\(tag) OK done\r\n")
+        case "UID" where words.count > 3 && words[2].uppercased() == "FETCH":
+            var out = ""
+            for (index, uid) in words[3].split(separator: ",").compactMap({ Int($0) }).enumerated() {
+                out += "* \(index + 1) FETCH (UID \(uid) FLAGS ())\r\n"
+            }
+            write(client, out + "\(tag) OK done\r\n")
+        case "LOGOUT":
+            write(client, "* BYE bye\r\n\(tag) OK done\r\n")
+            return false
+        default:
+            write(client, "\(tag) BAD unknown\r\n")
+        }
+        return true
+    }
+
+    private func write(_ client: Int32, _ text: String) {
+        let bytes = Array(text.utf8)
+        var sent = 0
+        while sent < bytes.count {
+            let count = send(client, Array(bytes[sent...]), bytes.count - sent, 0)
+            if count <= 0 { return }
+            sent += count
+        }
+    }
+}
+
+final class IMAPActionTests {
+    private let message = "7:5:INBOX"
+
+    private func commands(_ server: EmulatedIMAPStream) -> [String] {
+        ActionFixture.withoutLogin(server.commands)
+    }
+
+    private func stepArchiveMovesToTheArchiveFolder() async throws {
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 MOVE UIDPLUS")
+        try await ActionFixture.transport(StreamQueue([server])).archive(messageID: message)
+        XCTAssertEqual(commands(server), ["SELECT \"INBOX\"", "LIST \"\" \"*\"", "UID MOVE 5 \"Archive\""])
+    }
+
+    private func stepArchiveWithoutMoveCopiesFlagsDeletedAndExpunges() async throws {
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 UIDPLUS")
+        try await ActionFixture.transport(StreamQueue([server])).archive(messageID: message)
+        XCTAssertEqual(commands(server).suffix(3), ["UID COPY 5 \"Archive\"", "UID STORE 5 +FLAGS.SILENT (\\Deleted)", "UID EXPUNGE 5"])
+    }
+
+    private func stepArchiveWithoutAnArchiveFolderIsRefusedAndTouchesNothing() async {
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 MOVE", folders: ["* LIST (\\HasNoChildren) \"/\" INBOX"])
+        do {
+            try await ActionFixture.transport(StreamQueue([server])).archive(messageID: message)
+            XCTFail("archive must throw")
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .folderNotFound("archive"))
+        }
+        XCTAssertFalse(commands(server).contains { $0.contains("MOVE") || $0.contains("COPY") || $0.contains("STORE") })
+    }
+
+    private func stepMoveGoesToTheNamedFolderAndRefusesUnknownOnes() async throws {
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 MOVE")
+        let transport = ActionFixture.transport(StreamQueue([server, ActionFixture.server(capabilities: "IMAP4rev1 MOVE")]))
+        try await transport.move(messageID: message, toFolderID: "Projects")
+        XCTAssertEqual(commands(server).last, "UID MOVE 5 \"Projects\"")
+        do {
+            try await transport.move(messageID: message, toFolderID: "Nowhere")
+            XCTFail("move must throw")
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .folderNotFound("Nowhere"))
+        }
+    }
+
+    private func stepTrashGoesToTheTrashFolder() async throws {
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 MOVE")
+        try await ActionFixture.transport(StreamQueue([server])).trash(messageID: message)
+        XCTAssertEqual(commands(server).last, "UID MOVE 5 \"Trash\"")
+    }
+
+    private func stepTrashWithoutATrashFolderOnlyFlagsTheMessageDeleted() async throws {
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 MOVE", folders: ["* LIST (\\HasNoChildren) \"/\" INBOX"])
+        try await ActionFixture.transport(StreamQueue([server])).trash(messageID: message)
+        XCTAssertEqual(commands(server).last, "UID STORE 5 +FLAGS.SILENT (\\Deleted)")
+        XCTAssertFalse(commands(server).contains { $0.contains("MOVE") })
+    }
+
+    private func stepSpamGoesToTheJunkFolder() async throws {
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 MOVE")
+        try await ActionFixture.transport(StreamQueue([server])).markSpam(messageID: message)
+        XCTAssertEqual(commands(server).last, "UID MOVE 5 \"Junk\"")
+    }
+
+    private func stepAMessageOfAnOlderMailboxVersionIsNeverTouched() async {
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 MOVE")
+        do {
+            try await ActionFixture.transport(StreamQueue([server])).archive(messageID: "8:5:INBOX")
+            XCTFail("archive must throw")
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .messageNotFound("8:5:INBOX"))
+        }
+        XCTAssertFalse(commands(server).contains { $0.contains("MOVE") })
+    }
+
+    private static let structure = "* 1 FETCH (UID 5 BODYSTRUCTURE ((\"TEXT\" \"PLAIN\" (\"CHARSET\" \"UTF-8\") NIL NIL \"7BIT\" 5 1)"
+        + "(\"APPLICATION\" \"PDF\" (\"NAME\" \"a.pdf\") NIL NIL \"BASE64\" 8 NIL (\"ATTACHMENT\" (\"FILENAME\" \"a.pdf\")) NIL)"
+        + " \"MIXED\" (\"BOUNDARY\" \"x\") NIL NIL))"
+
+    private func attachmentServer() -> EmulatedIMAPStream {
+        ActionFixture.server(capabilities: "IMAP4rev1") { command, _ in
+            if command.hasSuffix("(UID BODYSTRUCTURE)") { return IMAPReply(untagged: [Self.structure]) }
+            if command.hasSuffix("BODY.PEEK[1])") { return IMAPReply(untagged: ["* 1 FETCH (UID 5 BODY[1] {5}\r\nhello)"]) }
+            if command.hasSuffix("BODY.PEEK[2])") { return IMAPReply(untagged: ["* 1 FETCH (UID 5 BODY[2] {8}\r\nSGVsbG8h)"]) }
+            return nil
+        }
+    }
+
+    private func stepBodyListsTheAttachmentsOfTheMessage() async throws {
+        let body = try await ActionFixture.transport(StreamQueue([attachmentServer()])).fetchBody(messageID: message)
+        XCTAssertEqual(body.text, "hello")
+        XCTAssertEqual(body.attachments, [MailAttachmentInfo(id: "2", filename: "a.pdf", mimeType: "application/pdf", sizeBytes: 8)])
+    }
+
+    private func stepAttachmentIsFetchedBySectionWithoutMarkingReadAndDecoded() async throws {
+        let server = attachmentServer()
+        let data = try await ActionFixture.transport(StreamQueue([server])).fetchAttachment(messageID: message, attachmentID: "2")
+        XCTAssertEqual(data, Data("Hello!".utf8))
+        XCTAssertTrue(commands(server).contains("UID FETCH 5 (UID BODY.PEEK[2])"))
+    }
+
+    private func threadServer(found: String) -> EmulatedIMAPStream {
+        ActionFixture.server(capabilities: "IMAP4rev1") { command, _ in
+            if command.hasPrefix("UID SEARCH") { return IMAPReply(untagged: ["* SEARCH \(found)"]) }
+            if command.hasPrefix("UID FETCH") {
+                let uids = command.split(separator: " ")[2].split(separator: ",")
+                return IMAPReply(untagged: uids.enumerated().map { "* \($0.offset + 1) FETCH (UID \($0.element) FLAGS (\\Seen))" })
+            }
+            return nil
+        }
+    }
+
+    private func stepThreadIsFoundThroughMessageIDReferencesAndInReplyToInTheSameFolder() async throws {
+        let server = threadServer(found: "3 6")
+        let thread = try await ActionFixture.transport(StreamQueue([server]))
+            .fetchThread(messageID: message, threadID: "<root@x.test>")
+        XCTAssertEqual(thread.map(\.id), ["7:3:INBOX", "7:5:INBOX", "7:6:INBOX"])
+        let id = "\"<root@x.test>\""
+        XCTAssertTrue(commands(server).contains(
+            "UID SEARCH UNDELETED OR OR HEADER MESSAGE-ID \(id) HEADER REFERENCES \(id) HEADER IN-REPLY-TO \(id)"))
+        XCTAssertTrue(commands(server).contains("EXAMINE \"INBOX\""))
+    }
+
+    private func stepListSearchesExcludeMessagesFlaggedDeleted() async throws {
+        let server = threadServer(found: "3")
+        _ = try await ActionFixture.transport(StreamQueue([server])).listMessages(folderID: "INBOX", query: nil, pageToken: nil, maxResults: 5)
+        XCTAssertTrue(commands(server).contains("UID SEARCH UNDELETED"))
+        let second = threadServer(found: "3")
+        _ = try await ActionFixture.transport(StreamQueue([second])).listMessages(folderID: "INBOX", query: "abc", pageToken: nil, maxResults: 5)
+        XCTAssertTrue(commands(second).contains("UID SEARCH UNDELETED TEXT \"abc\""))
+    }
+
+    private func stepThreadWithoutHeadersIsTheMessageAloneAndNoSearchRuns() async throws {
+        let server = threadServer(found: "3")
+        let thread = try await ActionFixture.transport(StreamQueue([server])).fetchThread(messageID: message, threadID: message)
+        XCTAssertEqual(thread.map(\.id), [message])
+        XCTAssertFalse(commands(server).contains { $0.hasPrefix("UID SEARCH") })
+    }
+
+    private func draftServer(capabilities: String = "IMAP4rev1 UIDPLUS", appendStatus: String = "OK [APPENDUID 99 12] done")
+        -> EmulatedIMAPStream {
+        ActionFixture.server(capabilities: capabilities) { command, _ in
+            if command.hasPrefix("APPEND") { return IMAPReply(status: appendStatus) }
+            if command.hasPrefix("UID SEARCH") { return IMAPReply(untagged: ["* SEARCH 41"]) }
+            return nil
+        }
+    }
+
+    private func stepSavingADraftAppendsItToTheDraftsFolderFlaggedDraft() async throws {
+        let server = draftServer()
+        let id = try await ActionFixture.transport(StreamQueue([server]))
+            .saveDraft(EmailDraft(to: "ann@x.test", subject: "Hi", body: "text"), replacing: nil)
+        XCTAssertEqual(id, "99:12:Drafts")
+        let append = try XCTUnwrap(commands(server).first { $0.hasPrefix("APPEND") })
+        XCTAssertTrue(append.hasPrefix("APPEND \"Drafts\" (\\Draft) {"))
+        let stored = String(decoding: try XCTUnwrap(server.literals.first), as: UTF8.self)
+        XCTAssertTrue(stored.contains("Subject: Hi\r\n"))
+        XCTAssertTrue(stored.contains("To: ann@x.test\r\n"))
+    }
+
+    private func stepADraftWithoutRecipientIsSavedAndKeepsItsBlindCopy() async throws {
+        let server = draftServer()
+        _ = try await ActionFixture.transport(StreamQueue([server]))
+            .saveDraft(EmailDraft(bcc: "hidden@x.test", subject: "Hi", body: "text"), replacing: nil)
+        let stored = String(decoding: try XCTUnwrap(server.literals.first), as: UTF8.self)
+        XCTAssertTrue(stored.contains("Bcc: hidden@x.test\r\n"))
+    }
+
+    private func stepSavingWithoutAnAppendUidFindsTheNewDraftByItsMessageID() async throws {
+        let server = draftServer(capabilities: "IMAP4rev1", appendStatus: "OK done")
+        let id = try await ActionFixture.transport(StreamQueue([server]))
+            .saveDraft(EmailDraft(to: "ann@x.test", subject: "Hi", body: "text"), replacing: nil)
+        XCTAssertEqual(id, "7:41:Drafts")
+        XCTAssertTrue(commands(server).contains { $0.hasPrefix("UID SEARCH HEADER MESSAGE-ID \"") })
+    }
+
+    private func stepReplacingADraftRemovesTheOldOneOnlyAfterTheNewOneIsStored() async throws {
+        let server = draftServer()
+        let id = try await ActionFixture.transport(StreamQueue([server]))
+            .saveDraft(EmailDraft(to: "ann@x.test", subject: "Hi", body: "text"), replacing: "7:20:Drafts")
+        XCTAssertEqual(id, "99:12:Drafts")
+        let log = commands(server)
+        let append = try XCTUnwrap(log.firstIndex { $0.hasPrefix("APPEND") })
+        let remove = try XCTUnwrap(log.firstIndex(of: "UID STORE 20 +FLAGS.SILENT (\\Deleted)"))
+        XCTAssertLessThan(append, remove)
+        XCTAssertEqual(log.last, "UID EXPUNGE 20")
+    }
+
+    private func stepSavingWithoutADraftsFolderIsRefused() async {
+        let server = ActionFixture.server(capabilities: "IMAP4rev1", folders: ["* LIST (\\HasNoChildren) \"/\" INBOX"])
+        do {
+            _ = try await ActionFixture.transport(StreamQueue([server])).saveDraft(EmailDraft(subject: "Hi", body: "x"), replacing: nil)
+            XCTFail("save must throw")
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .folderNotFound("drafts"))
+        }
+        XCTAssertTrue(server.literals.isEmpty)
+    }
+
+    private static let envelopeDraft = "* 1 FETCH (UID 20 ENVELOPE (\"Mon, 1 Jan 2026 10:00:00 +0000\" \"Plan\" NIL NIL NIL"
+        + " ((\"Ann\" NIL \"ann\" \"x.test\")) NIL ((\"Bob\" NIL \"bob\" \"x.test\")) \"<r@x.test>\" \"<d@x.test>\")"
+        + " BODYSTRUCTURE (\"TEXT\" \"PLAIN\" (\"CHARSET\" \"UTF-8\") NIL NIL \"7BIT\" 5 1))"
+
+    private func storedDraftServer(capabilities: String = "IMAP4rev1 UIDPLUS") -> EmulatedIMAPStream {
+        ActionFixture.server(capabilities: capabilities) { command, _ in
+            if command.hasSuffix("(UID ENVELOPE BODYSTRUCTURE)") { return IMAPReply(untagged: [Self.envelopeDraft]) }
+            if command.hasSuffix("BODY.PEEK[1])") { return IMAPReply(untagged: ["* 1 FETCH (UID 20 BODY[1] {5}\r\nhello)"]) }
+            return nil
+        }
+    }
+
+    private func stepAStoredDraftIsRebuiltFromEnvelopeAndText() async throws {
+        let stored = try await ActionFixture.transport(StreamQueue([storedDraftServer()])).fetchDraft(messageID: "7:20:Drafts")
+        XCTAssertEqual(stored.id, "7:20:Drafts")
+        XCTAssertEqual(stored.draft.subject, "Plan")
+        XCTAssertEqual(stored.draft.body, "hello")
+        XCTAssertTrue(try XCTUnwrap(stored.draft.to).contains("ann@x.test"))
+        XCTAssertTrue(try XCTUnwrap(stored.draft.bcc).contains("bob@x.test"))
+        XCTAssertNil(stored.draft.cc)
+        XCTAssertEqual(stored.draft.inReplyTo, "<r@x.test>")
+    }
+
+    private func stepSendingAStoredDraftSendsItThenRemovesIt() async throws {
+        let fetch = storedDraftServer()
+        let smtp = EmulatedSMTPStream()
+        let queue = StreamQueue([fetch, smtp])
+        try await ActionFixture.transport(queue).sendDraft(id: "7:20:Drafts")
+        XCTAssertTrue(smtp.delivered.contains("Subject: Plan"))
+        XCTAssertTrue(smtp.commands.contains { $0.hasPrefix("RCPT TO:<ann@x.test>") })
+        XCTAssertEqual(ActionFixture.withoutLogin(fetch.commands).suffix(2),
+                       ["UID STORE 20 +FLAGS.SILENT (\\Deleted)", "UID EXPUNGE 20"])
+    }
+
+    private func stepAFailedSendKeepsTheStoredDraft() async {
+        let queue = StreamQueue([storedDraftServer()])
+        do {
+            try await ActionFixture.transport(queue).sendDraft(id: "7:20:Drafts")
+            XCTFail("send must throw")
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .connectionFailed("smtp.ionos.de"))
+        }
+        XCTAssertEqual(queue.openedCount, 1)
+    }
+
+    private func stepASendLargerThanTheDeclaredSizeIsRefusedBeforeUpload() async {
+        let smtp = EmulatedSMTPStream(size: 100)
+        do {
+            try await ActionFixture.transport(StreamQueue([smtp])).send(EmailDraft(to: "ann@x.test", subject: "Plan", body: "hello"))
+            XCTFail("send must throw")
+        } catch {
+            guard case .smtpRejected(552, _)? = error as? MailTransportError else { return XCTFail("wrong error \(error)") }
+        }
+        XCTAssertFalse(smtp.commands.contains("DATA"))
+    }
+
+    private func stepDeletingADraftFlagsItDeletedAndExpunges() async throws {
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 UIDPLUS")
+        try await ActionFixture.transport(StreamQueue([server])).deleteDraft(id: "7:20:Drafts")
+        XCTAssertEqual(commands(server), ["SELECT \"Drafts\"", "UID STORE 20 +FLAGS.SILENT (\\Deleted)", "UID EXPUNGE 20"])
+    }
+
+    private func stepIdleYieldsPushedChangesEndsWithDoneAndLeavesTheSessionUsable() async throws {
+        let open = { (server: EmulatedIMAPStream) in
+            try await IMAPSession.open(settings: ActionFixture.account.incoming, opener: StreamQueue([server]).opener)
+        }
+        let pushed = IMAPReply(untagged: ["+ idling", "* 5 EXISTS"], status: "")
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 IDLE") { command, _ in command == "IDLE" ? pushed : nil }
+        let session = try await open(server)
+        for try await change in try await session.idle(in: "INBOX") { XCTAssertEqual(change, IMAPChange.exists(5)); break }
+        _ = try await session.listFolders()
+        XCTAssertEqual(commands(server).suffix(3), ["IDLE", "DONE", "LIST \"\" \"*\""])
+        do { _ = try await open(ActionFixture.server(capabilities: "IMAP4rev1")).idle(in: "INBOX"); XCTFail("idle must throw") } catch {
+            XCTAssertEqual(error as? MailTransportError, .unsupportedCapability("IDLE"))
+        }
+    }
+
+    private func stepTheChangeStreamIdlesOnInboxYieldsOnExistsAndCancelEndsTheSession() async throws {
+        let pushed = IMAPReply(untagged: ["+ idling", "* 5 EXISTS"], status: "")
+        let server = ActionFixture.server(capabilities: "IMAP4rev1 IDLE") { command, _ in command == "IDLE" ? pushed : nil }
+        let changes = ActionFixture.transport(StreamQueue([server])).changes()
+        let seen = Locked(0)
+        let reader = Task { for try await _ in changes { seen.with { $0 += 1 } } }
+        for _ in 0..<400 where seen.with({ $0 }) == 0 { try await Task.sleep(for: .milliseconds(5)) }
+        XCTAssertEqual(seen.with { $0 }, 1)
+        reader.cancel()
+        try await reader.value
+        for _ in 0..<400 where !server.closed || commands(server).last != "DONE" { try await Task.sleep(for: .milliseconds(5)) }
+        XCTAssertEqual(commands(server), ["EXAMINE \"INBOX\"", "IDLE", "DONE"])
+        XCTAssertTrue(server.closed)
+    }
+    private func stepOneSessionServesAllReadsReconnectsOnceAfterALossAndNeverRetriesAnAppend() async throws {
+        let dropped = IMAPReply(status: "")
+        let first = ActionFixture.server(capabilities: "IMAP4rev1") { command, _ in command.hasPrefix("EXAMINE") ? dropped : nil }
+        let second = ActionFixture.server(capabilities: "IMAP4rev1") { command, _ in command.hasPrefix("APPEND") ? dropped : nil }
+        let third = ActionFixture.server(capabilities: "IMAP4rev1")
+        let queue = StreamQueue([first, second, third])
+        let transport = ActionFixture.transport(queue)
+        _ = try await transport.listFolders()
+        _ = try await transport.listFolders()
+        XCTAssertEqual(first.commands.filter { $0.hasPrefix("LOGIN") }.count, 1)
+        XCTAssertEqual(queue.openedCount, 1)
+        _ = try await transport.listMessages(folderID: "INBOX", query: nil, pageToken: nil, maxResults: 5)
+        XCTAssertEqual(second.commands.filter { $0.hasPrefix("LOGIN") }.count, 1)
+        XCTAssertEqual(queue.openedCount, 2)
+        do {
+            _ = try await transport.saveDraft(EmailDraft(to: "ann@x.test", subject: "Hi", body: "text"), replacing: nil)
+            XCTFail("append must fail")
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .connectionClosed)
+        }
+        XCTAssertEqual(second.commands.filter { $0.hasPrefix("APPEND") }.count, 1)
+        XCTAssertEqual(queue.openedCount, 2)
+        XCTAssertTrue(third.commands.isEmpty)
+    }
+
+    func runTheIMAPActions() async throws {
+        try await stepOneSessionServesAllReadsReconnectsOnceAfterALossAndNeverRetriesAnAppend()
+        try await stepIdleYieldsPushedChangesEndsWithDoneAndLeavesTheSessionUsable()
+        try await stepTheChangeStreamIdlesOnInboxYieldsOnExistsAndCancelEndsTheSession()
+        try await stepArchiveMovesToTheArchiveFolder()
+        try await stepArchiveWithoutMoveCopiesFlagsDeletedAndExpunges()
+        await stepArchiveWithoutAnArchiveFolderIsRefusedAndTouchesNothing()
+        try await stepMoveGoesToTheNamedFolderAndRefusesUnknownOnes()
+        try await stepTrashGoesToTheTrashFolder()
+        try await stepTrashWithoutATrashFolderOnlyFlagsTheMessageDeleted()
+        try await stepSpamGoesToTheJunkFolder()
+        await stepAMessageOfAnOlderMailboxVersionIsNeverTouched()
+        try await stepBodyListsTheAttachmentsOfTheMessage()
+        try await stepAttachmentIsFetchedBySectionWithoutMarkingReadAndDecoded()
+        try await stepThreadIsFoundThroughMessageIDReferencesAndInReplyToInTheSameFolder()
+        try await stepListSearchesExcludeMessagesFlaggedDeleted()
+        try await stepThreadWithoutHeadersIsTheMessageAloneAndNoSearchRuns()
+        try await stepSavingADraftAppendsItToTheDraftsFolderFlaggedDraft()
+        try await stepADraftWithoutRecipientIsSavedAndKeepsItsBlindCopy()
+        try await stepSavingWithoutAnAppendUidFindsTheNewDraftByItsMessageID()
+        try await stepReplacingADraftRemovesTheOldOneOnlyAfterTheNewOneIsStored()
+        await stepSavingWithoutADraftsFolderIsRefused()
+        try await stepAStoredDraftIsRebuiltFromEnvelopeAndText()
+        try await stepSendingAStoredDraftSendsItThenRemovesIt()
+        await stepAFailedSendKeepsTheStoredDraft()
+        await stepASendLargerThanTheDeclaredSizeIsRefusedBeforeUpload()
+        try await stepDeletingADraftFlagsItDeletedAndExpunges()
+    }
+}
+
+final class GmailActionTests {
+    private func transport() -> GmailMailTransport {
+        GmailMailTransport(client: GoogleGmailClient(tokenProvider: TokenStub(), session: RecordingGmail.session()))
+    }
+
+    private func labels(_ call: RecordingGmail.Call) throws -> [String: [String]] {
+        try XCTUnwrap(JSONSerialization.jsonObject(with: call.body) as? [String: [String]])
+    }
+
+    private let messages = "/gmail/v1/users/me/messages"
+    private let drafts = "/gmail/v1/users/me/drafts"
+
+    private func stepArchiveRemovesTheInboxLabelOnly() async throws {
+        RecordingGmail.reset()
+        try await transport().archive(messageID: "m1")
+        let call = try XCTUnwrap(RecordingGmail.calls.first)
+        XCTAssertEqual(RecordingGmail.calls.count, 1)
+        XCTAssertEqual(call.method, "POST")
+        XCTAssertEqual(call.path, "\(messages)/m1/modify")
+        XCTAssertEqual(try labels(call), ["removeLabelIds": ["INBOX"]])
+    }
+
+    private func stepTrashUsesTheTrashEndpoint() async throws {
+        RecordingGmail.reset()
+        try await transport().trash(messageID: "m1")
+        XCTAssertEqual(RecordingGmail.calls, [RecordingGmail.Call(method: "POST", path: "\(messages)/m1/trash", body: Data())])
+    }
+
+    private func stepSpamAddsTheSpamLabelAndLeavesTheInbox() async throws {
+        RecordingGmail.reset()
+        try await transport().markSpam(messageID: "m1")
+        let call = try XCTUnwrap(RecordingGmail.calls.first)
+        XCTAssertEqual(call.path, "\(messages)/m1/modify")
+        XCTAssertEqual(try labels(call), ["addLabelIds": ["SPAM"], "removeLabelIds": ["INBOX"]])
+    }
+
+    private func stepMoveToALabelAddsItAndLeavesTheInbox() async throws {
+        RecordingGmail.reset()
+        try await transport().move(messageID: "m1", toFolderID: "Label_7")
+        XCTAssertEqual(try labels(try XCTUnwrap(RecordingGmail.calls.first)), ["addLabelIds": ["Label_7"], "removeLabelIds": ["INBOX"]])
+    }
+
+    private func stepMoveToTheSystemFoldersFollowsTheirMeaning() async throws {
+        RecordingGmail.reset()
+        let transport = transport()
+        try await transport.move(messageID: "m1", toFolderID: "TRASH")
+        try await transport.move(messageID: "m1", toFolderID: "ALL")
+        try await transport.move(messageID: "m1", toFolderID: "INBOX")
+        let paths = RecordingGmail.calls.map(\.path)
+        XCTAssertEqual(paths, ["\(messages)/m1/trash", "\(messages)/m1/modify", "\(messages)/m1/modify"])
+        XCTAssertEqual(try labels(RecordingGmail.calls[1]), ["removeLabelIds": ["INBOX"]])
+        XCTAssertEqual(try labels(RecordingGmail.calls[2]), ["addLabelIds": ["INBOX"]])
+    }
+
+    private func stepMoveIntoAFolderThatCannotHoldMailIsRefused() async {
+        RecordingGmail.reset()
+        do {
+            try await transport().move(messageID: "m1", toFolderID: "SENT")
+            XCTFail("move must throw")
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .folderNotFound("SENT"))
+        }
+        XCTAssertTrue(RecordingGmail.calls.isEmpty)
+    }
+
+    private func stepAttachmentIsDownloadedFromTheAttachmentEndpointAndDecoded() async throws {
+        RecordingGmail.reset { _ in (200, #"{"data":"SGVsbG8h"}"#) }
+        let data = try await transport().fetchAttachment(messageID: "m1", attachmentID: "a1")
+        XCTAssertEqual(data, Data("Hello!".utf8))
+        XCTAssertEqual(RecordingGmail.calls.first?.path, "\(messages)/m1/attachments/a1")
+    }
+
+    private func stepBodyCarriesTheAttachmentList() async throws {
+        let parts = #"[{"mimeType":"text/plain","body":{"data":"aGk="}},{"mimeType":"application/pdf","filename":"a.pdf","body":{"attachmentId":"att1","size":42}}]"#
+        RecordingGmail.reset { _ in (200, "{\"id\":\"m1\",\"payload\":{\"mimeType\":\"multipart/mixed\",\"parts\":\(parts)}}") }
+        let body = try await transport().fetchBody(messageID: "m1")
+        XCTAssertEqual(body.text, "hi")
+        XCTAssertEqual(body.attachments, [MailAttachmentInfo(id: "att1", filename: "a.pdf", mimeType: "application/pdf", sizeBytes: 42)])
+    }
+
+    private func stepThreadReturnsEveryMessageOfTheThreadAsSummaries() async throws {
+        let first = #"{"id":"m1","threadId":"t1","snippet":"one","labelIds":["INBOX"],"payload":{"headers":[{"name":"Subject","value":"Plan"}]}}"#
+        let second = #"{"id":"m2","threadId":"t1","snippet":"two","labelIds":["INBOX","UNREAD"],"payload":{"headers":[{"name":"Subject","value":"Re: Plan"}]}}"#
+        RecordingGmail.reset { _ in (200, "{\"messages\":[\(first),\(second)]}") }
+        let thread = try await transport().fetchThread(messageID: "m2", threadID: "t1")
+        XCTAssertEqual(thread.map(\.id), ["m1", "m2"])
+        XCTAssertEqual(thread.map(\.subject), ["Plan", "Re: Plan"])
+        XCTAssertEqual(thread[0].flags, [.seen])
+        XCTAssertEqual(thread[1].flags, [])
+        XCTAssertEqual(RecordingGmail.calls.first?.path, "/gmail/v1/users/me/threads/t1")
+    }
+
+    private func stepANewDraftIsCreatedAndAChangedOneIsUpdatedInPlace() async throws {
+        RecordingGmail.reset { _ in (200, #"{"id":"d9"}"#) }
+        let transport = transport()
+        let draft = EmailDraft(to: "ann@x.test", subject: "Hi", body: "text")
+        let created = try await transport.saveDraft(draft, replacing: nil)
+        let updated = try await transport.saveDraft(draft, replacing: "d1")
+        XCTAssertEqual(created, "d9")
+        XCTAssertEqual(updated, "d9")
+        XCTAssertEqual(RecordingGmail.calls.map { $0.method + " " + $0.path }, ["POST \(drafts)", "PUT \(drafts)/d1"])
+    }
+
+    private func stepDeletingADraftUsesTheDeleteVerb() async throws {
+        RecordingGmail.reset()
+        try await transport().deleteDraft(id: "d1")
+        XCTAssertEqual(RecordingGmail.calls, [RecordingGmail.Call(method: "DELETE", path: "\(drafts)/d1", body: Data())])
+    }
+
+    private func stepSendingADraftPostsItsID() async throws {
+        RecordingGmail.reset()
+        try await transport().sendDraft(id: "d1")
+        let call = try XCTUnwrap(RecordingGmail.calls.first)
+        XCTAssertEqual(call.method + " " + call.path, "POST \(drafts)/send")
+        XCTAssertEqual(try XCTUnwrap(JSONSerialization.jsonObject(with: call.body) as? [String: String]), ["id": "d1"])
+    }
+
+    private func stepAMessageOfTheDraftsFolderOpensItsDraftThroughTheDraftIDMap() async throws {
+        let list = #"{"drafts":[{"id":"d1","message":{"id":"m5"}}]}"#
+        let draft = #"{"id":"d1","message":{"id":"m5","threadId":"t5","payload":{"headers":[{"name":"To","value":"ann@x.test"},{"name":"Subject","value":"Plan"}],"mimeType":"text/plain","body":{"data":"aGk="}}}}"#
+        RecordingGmail.reset { $0.path.hasSuffix("/d1") ? (200, draft) : (200, list) }
+        let stored = try await transport().fetchDraft(messageID: "m5")
+        XCTAssertEqual(stored.id, "d1")
+        XCTAssertEqual(stored.draft.to, "ann@x.test")
+        XCTAssertEqual(stored.draft.subject, "Plan")
+        XCTAssertEqual(stored.draft.threadID, "t5")
+    }
+
+    private func stepAMessageThatIsNoDraftIsNotFoundAsOne() async {
+        RecordingGmail.reset { _ in (200, #"{"drafts":[]}"#) }
+        do {
+            _ = try await transport().fetchDraft(messageID: "m5")
+            XCTFail("fetchDraft must throw")
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .messageNotFound("m5"))
+        }
+    }
+
+    private func stepAProviderRefusalSurfacesAsTheOriginalGoogleError() async {
+        RecordingGmail.reset { _ in (403, #"{"error":{"code":403,"message":"Insufficient Permission","errors":[{"domain":"global","reason":"insufficientPermissions"}]}}"#) }
+        do {
+            try await transport().archive(messageID: "m1")
+            XCTFail("archive must throw")
+        } catch let error as GoogleGmailError {
+            guard case .api(let fault) = error else { return XCTFail("\(error)") }
+            XCTAssertEqual(fault.status, 403)
+            XCTAssertEqual(fault.reason, "insufficientPermissions")
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
+
+    func runTheGmailActions() async throws {
+        try await stepArchiveRemovesTheInboxLabelOnly()
+        try await stepTrashUsesTheTrashEndpoint()
+        try await stepSpamAddsTheSpamLabelAndLeavesTheInbox()
+        try await stepMoveToALabelAddsItAndLeavesTheInbox()
+        try await stepMoveToTheSystemFoldersFollowsTheirMeaning()
+        await stepMoveIntoAFolderThatCannotHoldMailIsRefused()
+        try await stepAttachmentIsDownloadedFromTheAttachmentEndpointAndDecoded()
+        try await stepBodyCarriesTheAttachmentList()
+        try await stepThreadReturnsEveryMessageOfTheThreadAsSummaries()
+        try await stepANewDraftIsCreatedAndAChangedOneIsUpdatedInPlace()
+        try await stepDeletingADraftUsesTheDeleteVerb()
+        try await stepSendingADraftPostsItsID()
+        try await stepAMessageOfTheDraftsFolderOpensItsDraftThroughTheDraftIDMap()
+        await stepAMessageThatIsNoDraftIsNotFoundAsOne()
+        await stepAProviderRefusalSurfacesAsTheOriginalGoogleError()
+    }
+}
+
+private final class DetailStub: URLProtocol, @unchecked Sendable {
+    nonisolated(unsafe) static var lock = NSLock()
+    nonisolated(unsafe) static var active = 0
+    nonisolated(unsafe) static var peak = 0
+    nonisolated(unsafe) static var attempts: [String: Int] = [:]
+    nonisolated(unsafe) static var plan: [String: [Int]] = [:]
+    nonisolated(unsafe) static var ids: [String] = []
+
+    static func reset(ids: [String], plan: [String: [Int]] = [:]) {
+        lock.withLock {
+            active = 0
+            peak = 0
+            attempts = [:]
+            self.plan = plan
+            self.ids = ids
+        }
+    }
+
+    static func session() -> URLSession {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [DetailStub.self]
+        return URLSession(configuration: configuration)
+    }
+
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override func stopLoading() {}
+
+    override func startLoading() {
+        let path = request.url?.path ?? ""
+        if path.hasSuffix("/messages") {
+            let list = Self.lock.withLock { Self.ids }.map { "{\"id\":\"\($0)\"}" }.joined(separator: ",")
+            respond(200, "{\"messages\":[\(list)]}")
+            return
+        }
+        let id = String(path.split(separator: "/").last ?? "")
+        let status = Self.lock.withLock { () -> Int in
+            Self.active += 1
+            Self.peak = max(Self.peak, Self.active)
+            let attempt = Self.attempts[id, default: 0]
+            Self.attempts[id] = attempt + 1
+            let steps = Self.plan[id] ?? []
+            return attempt < steps.count ? steps[attempt] : (steps.last == 200 || steps.isEmpty ? 200 : steps.last ?? 200)
+        }
+        DispatchQueue.global().asyncAfter(deadline: .now() + 0.05) {
+            Self.lock.withLock { Self.active -= 1 }
+            switch status {
+            case 200:
+                self.respond(200, "{\"id\":\"\(id)\",\"threadId\":\"t\",\"snippet\":\"s\",\"labelIds\":[\"INBOX\"],\"payload\":{\"headers\":[]}}")
+            case 403:
+                self.respond(403, #"{"error":{"code":403,"message":"Rate Limit Exceeded","errors":[{"domain":"usageLimits","reason":"rateLimitExceeded"}]}}"#)
+            case 429:
+                self.respond(429, #"{"error":{"code":429,"message":"Too many concurrent requests for user","status":"RESOURCE_EXHAUSTED"}}"#)
+            default:
+                self.respond(status, "")
+            }
+        }
+    }
+
+    private func respond(_ status: Int, _ body: String) {
+        guard let url = request.url, let response = HTTPURLResponse(url: url, statusCode: status, httpVersion: nil, headerFields: nil) else { return }
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocol(self, didLoad: Data(body.utf8))
+        client?.urlProtocolDidFinishLoading(self)
+    }
+}
+
+final class GmailDetailFetchTests {
+    private func client(_ policy: GmailRequestPolicy) -> GoogleGmailClient {
+        GoogleGmailClient(tokenProvider: TokenStub(), session: DetailStub.session(), policy: policy)
+    }
+
+    func runDetailRequestsRunWithBoundedConcurrency() async throws {
+        DetailStub.reset(ids: (1...20).map { "m\($0)" })
+        let policy = GmailRequestPolicy(maxConcurrentDetails: 3, maxAttempts: 3, firstDelay: .milliseconds(1))
+        let page = try await client(policy).listMessages(query: "", maxResults: 20, pageToken: nil)
+        XCTAssertEqual(page.messages.count, 20)
+        XCTAssertEqual(page.messages.map(\.id), (1...20).map { "m\($0)" })
+        let peak = DetailStub.lock.withLock { DetailStub.peak }
+        XCTAssertLessThanOrEqual(peak, 3)
+        XCTAssertGreaterThan(peak, 1)
+    }
+
+    func runRateLimitedDetailIsRetriedWithBackoffAndSucceeds() async throws {
+        DetailStub.reset(ids: ["m1", "m2"], plan: ["m1": [429, 403, 200], "m2": [503, 200]])
+        let policy = GmailRequestPolicy(maxConcurrentDetails: 2, maxAttempts: 3, firstDelay: .milliseconds(5))
+        let page = try await client(policy).listMessages(query: "", maxResults: 2, pageToken: nil)
+        XCTAssertEqual(page.messages.map(\.id), ["m1", "m2"])
+        let attempts = DetailStub.lock.withLock { DetailStub.attempts }
+        XCTAssertEqual(attempts, ["m1": 3, "m2": 2])
+    }
+
+    func runDetailThatKeepsFailingFailsThePageWithTheOriginalError() async throws {
+        DetailStub.reset(ids: ["m1", "m2"], plan: ["m2": [429]])
+        let policy = GmailRequestPolicy(maxConcurrentDetails: 2, maxAttempts: 3, firstDelay: .milliseconds(1))
+        do {
+            _ = try await client(policy).listMessages(query: "", maxResults: 2, pageToken: nil)
+            XCTFail("the page must fail")
+        } catch GoogleGmailError.api(let fault) {
+            XCTAssertEqual(fault.status, 429)
+            XCTAssertEqual(fault.message, "Too many concurrent requests for user")
+            XCTAssertEqual(fault.state, "RESOURCE_EXHAUSTED")
+        }
+        XCTAssertEqual(DetailStub.lock.withLock { DetailStub.attempts["m2"] }, 3)
+    }
+
+    func runNonRetryableDetailErrorIsNotRepeated() async throws {
+        DetailStub.reset(ids: ["m1"], plan: ["m1": [404]])
+        let policy = GmailRequestPolicy(maxConcurrentDetails: 1, maxAttempts: 3, firstDelay: .milliseconds(1))
+        do {
+            _ = try await client(policy).listMessages(query: "", maxResults: 1, pageToken: nil)
+            XCTFail("the page must fail")
+        } catch GoogleGmailError.api(let fault) {
+            XCTAssertEqual(fault.status, 404)
+        }
+        XCTAssertEqual(DetailStub.lock.withLock { DetailStub.attempts["m1"] }, 1)
+    }
+}
+
+final class MailProbeTests {
+    private func fx(_ key: String) -> String { MailWireFixture.line(key) }
+
+    private var account: MailAccount {
+        MailProviderPresets.preset(for: .ionos).account(id: "p", displayName: "", address: "jo@example.test")
+    }
+
+    private func imapScript(loginReply: String? = nil) -> ScriptedMailStream {
+        let tag = { MailWireFixture.retag("tagged.ok", to: $0) }
+        return ScriptedMailStream(
+            greeting: [fx("status.validity")],
+            replies: [
+                ["* CAPABILITY IMAP4rev1", tag("A0001")],
+                [loginReply ?? tag("A0002")],
+                ["* CAPABILITY IMAP4rev1", tag("A0003")],
+                [tag("A0004")],
+                [tag("A0005")]
+            ])
+    }
+
+    private func smtpScript(authReply: String? = nil) -> ScriptedMailStream {
+        let multi = ["smtp.multi.1", "smtp.multi.2", "smtp.multi.3", "smtp.multi.4"].map(fx)
+        return ScriptedMailStream(
+            greeting: [MailWireFixture.coded("smtp.ok", 220)],
+            replies: [multi, [authReply ?? MailWireFixture.coded("smtp.ok", 235)], [MailWireFixture.coded("smtp.ok", 221)]])
+    }
+
+    func runProbeIsGreenWithLoginNoopAndAuth() async throws {
+        let incoming = imapScript()
+        let outgoing = smtpScript()
+        let net = ScriptedMailNetwork([incoming, outgoing])
+        try await MailConnectionProbe.probe(account: account, password: "app-secret", opener: net.opener)
+        XCTAssertEqual(incoming.sent.prefix(4), ["A0001 CAPABILITY", "A0002 LOGIN \"jo@example.test\" \"app-secret\"",
+                                                "A0003 CAPABILITY", "A0004 NOOP"])
+        let payload = Data("\0jo@example.test\0app-secret".utf8).base64EncodedString()
+        XCTAssertEqual(outgoing.sent.prefix(3), ["EHLO localhost", "AUTH PLAIN \(payload)", "QUIT"])
+        XCTAssertTrue(incoming.closed)
+        XCTAssertTrue(outgoing.closed)
+        XCTAssertEqual(net.endpoints, [
+            ScriptedMailNetwork.Endpoint(host: "imap.ionos.de", port: 993, security: .ssl),
+            ScriptedMailNetwork.Endpoint(host: "smtp.ionos.de", port: 465, security: .ssl)
+        ])
+    }
+
+    func runProbeIsRedWhenLoginIsRefusedAndNamesTheServerAnswer() async {
+        let incoming = imapScript(loginReply: MailWireFixture.retag("tagged.no", to: "A0002"))
+        let net = ScriptedMailNetwork([incoming])
+        do {
+            try await MailConnectionProbe.probe(account: account, password: "x", opener: net.opener)
+            XCTFail("probe must throw")
+        } catch {
+            XCTAssertEqual(error as? MailProbeError,
+                           MailProbeError(step: .incoming, reason: .authenticationRejected("NO [AUTHENTICATIONFAILED] " + fx("tagged.no.text"))))
+        }
+        XCTAssertEqual(net.endpoints.count, 1)
+        XCTAssertTrue(incoming.closed)
+    }
+
+    func runProbeIsRedWhenSMTPRefusesTheAuthentication() async {
+        let outgoing = smtpScript(authReply: MailWireFixture.coded("smtp.ok", 535))
+        let net = ScriptedMailNetwork([imapScript(), outgoing])
+        do {
+            try await MailConnectionProbe.probe(account: account, password: "x", opener: net.opener)
+            XCTFail("probe must throw")
+        } catch {
+            XCTAssertEqual(error as? MailProbeError,
+                           MailProbeError(step: .outgoing, reason: .authenticationRejected("535 " + fx("smtp.ok").dropFirst(4))))
+        }
+        XCTAssertTrue(outgoing.closed)
+    }
+
+    func runProbeIsRedWhenTheConnectionFails() async {
+        let net = ScriptedMailNetwork([])
+        do {
+            try await MailConnectionProbe.probe(account: account, password: "x", opener: net.opener)
+            XCTFail("probe must throw")
+        } catch {
+            XCTAssertEqual(error as? MailProbeError,
+                           MailProbeError(step: .incoming, reason: .connectionFailed("imap.ionos.de")))
+        }
+    }
+
+    func runProbeWithEmptyPasswordIsRed() async {
+        do {
+            try await MailConnectionProbe.probe(account: account, password: "", opener: ScriptedMailNetwork([]).opener)
+            XCTFail("probe must throw")
+        } catch {
+            XCTAssertEqual(error as? MailProbeError, MailProbeError(step: .incoming, reason: .credentialsMissing))
+        }
+    }
+
+    func runPasswordClosureReplacesTheKeychainForPasswordAccounts() async {
+        let account = MailAccount(
+            id: "pw", displayName: "", address: "jo@example.test", provider: .generic,
+            incoming: MailServerSettings(host: "imap.example.test", port: 0, security: .ssl, authentication: .password,
+                                         username: "jo"),
+            outgoing: MailServerSettings(host: "smtp.example.test", port: 0, security: .ssl, authentication: .password,
+                                         username: "jo"))
+        let calls = Locked(0)
+        let transport = IMAPSMTPMailTransport(account: account, password: { calls.with { $0 += 1 }; return "app-secret" })
+        do {
+            try await transport.send(EmailDraft(to: "a@example.com", subject: "S", body: "b"))
+            XCTFail("send must throw")
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .accountIncomplete("smtp.example.test"))
+        }
+        XCTAssertEqual(calls.with { $0 }, 1)
+        let empty = IMAPSMTPMailTransport(account: account, password: { "" })
+        do {
+            try await empty.send(EmailDraft(to: "a@example.com", subject: "S", body: "b"))
+            XCTFail("send must throw")
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .credentialsMissing)
+        }
+    }
+}
+
+final class MailWireTests {
+    private func fx(_ key: String, file: StaticString = #filePath, line: UInt = #line) -> String {
+        MailWireFixture.line(key, file: file, line: line)
+    }
+
+    private func parse(_ text: String) throws -> IMAPResponse {
+        try IMAPResponseParser.parse(Data(text.utf8))
+    }
+
+    private func fetched(_ key: String) throws -> IMAPFetched {
+        guard case .data(let values) = try parse(fx(key)), let fetched = try IMAPFetched.parse(values) else {
+            throw MailTransportError.malformedResponse(key)
+        }
+        return fetched
+    }
+
+    func runTaggedAndStatusResponses() throws {
+        XCTAssertEqual(try parse(fx("tagged.ok")), .tagged(tag: "a001", status: .ok, code: nil, text: fx("tagged.ok.text")))
+        XCTAssertEqual(try parse(fx("tagged.no")),
+                       .tagged(tag: "a002", status: .no, code: IMAPResponseCode(name: "AUTHENTICATIONFAILED", values: []),
+                               text: fx("tagged.no.text")))
+        XCTAssertEqual(try parse(fx("status.validity")),
+                       .status(.ok, code: IMAPResponseCode(name: "UIDVALIDITY", values: [.number(3857529045)]),
+                               text: fx("status.validity.text")))
+        XCTAssertEqual(try parse(fx("status.bye")), .status(.bye, code: nil, text: fx("status.bye.text")))
+        XCTAssertEqual(try parse(fx("continuation")), .continuation(fx("continuation.text")))
+    }
+
+    func runResponseCodeWithList() throws {
+        guard case .status(_, let code?, _) = try parse(fx("permanent")) else { return XCTFail() }
+        XCTAssertEqual(code.name, "PERMANENTFLAGS")
+        XCTAssertEqual(code.values, [.list([.atom("\\Deleted"), .atom("\\Seen"), .atom("\\*")])])
+    }
+
+    func runUntaggedData() throws {
+        XCTAssertEqual(try parse("* 172 EXISTS"), .data([.number(172), .atom("EXISTS")]))
+        XCTAssertEqual(try parse("* SEARCH 2 84 882"), .data([.atom("SEARCH"), .number(2), .number(84), .number(882)]))
+        XCTAssertEqual(try parse("* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)"),
+                       .data([.atom("FLAGS"), .list([.atom("\\Answered"), .atom("\\Flagged"), .atom("\\Deleted"),
+                                                     .atom("\\Seen"), .atom("\\Draft")])]))
+        guard case .data(let values) = try parse(fx("list.noselect")) else { return XCTFail() }
+        let entry = IMAPListEntry.parse(values)
+        XCTAssertEqual(entry?.path, "~/Mail/foo")
+        XCTAssertEqual(entry?.delimiter, "/")
+        XCTAssertEqual(entry?.isSelectable, false)
+    }
+
+    func runListWithNilDelimiterAndSpecialUse() throws {
+        guard case .data(let values) = try parse(fx("list.sent")) else { return XCTFail() }
+        let entry = IMAPListEntry.parse(values)
+        XCTAssertNil(entry?.delimiter)
+        XCTAssertEqual(entry?.role, .sent)
+    }
+
+    func runLiteralInsideFetch() throws {
+        let result = try fetched("fetch.literal")
+        XCTAssertEqual(result.sections["TEXT"], Data(fx("fetch.literal.body").utf8))
+        XCTAssertEqual(result.uid, 4)
+    }
+
+    func runLiteralSizeDetection() {
+        XCTAssertEqual(IMAPResponseParser.literalSize(endingLine: Data("* 1 FETCH (BODY[TEXT] {342}".utf8)), 342)
+        XCTAssertEqual(IMAPResponseParser.literalSize(endingLine: Data("a1 LOGIN x {5+}".utf8)), 5)
+        XCTAssertNil(IMAPResponseParser.literalSize(endingLine: Data("* 1 EXISTS".utf8)))
+    }
+
+    func runEnvelopeAndInternalDateFromSpecificationExample() throws {
+        let result = try fetched("envelope.raw")
+        XCTAssertEqual(result.sequence, 12)
+        XCTAssertEqual(result.flags, ["\\seen"])
+        XCTAssertEqual(result.size, 4286)
+        XCTAssertEqual(result.envelope?.subject, fx("envelope.subject"))
+        XCTAssertEqual(result.envelope?.from.first?.address, fx("envelope.address"))
+        XCTAssertEqual(result.envelope?.from.first?.display, fx("envelope.name"))
+        XCTAssertEqual(result.envelope?.to.first?.display, fx("envelope.to"))
+        XCTAssertEqual(result.envelope?.cc.count, 2)
+        XCTAssertEqual(result.envelope?.messageID, fx("envelope.messageid"))
+        XCTAssertEqual(result.internalDate, Date(timeIntervalSince1970: 837_596_665))
+        XCTAssertEqual(result.envelope?.date.flatMap(MailMIME.parseMessageDate), Date(timeIntervalSince1970: 837_595_405))
+    }
+
+    func runBodyStructureFromSpecificationExample() throws {
+        guard let structure = try fetched("structure.mixed").structure else { return XCTFail() }
+        XCTAssertTrue(structure.isMultipart)
+        XCTAssertEqual(structure.subtype, "mixed")
+        XCTAssertEqual(structure.children.map(\.section), ["1", "2"])
+        XCTAssertEqual(structure.children[1].filename, "cc.diff")
+        XCTAssertEqual(structure.children[1].encoding, "base64")
+        XCTAssertEqual(structure.children[1].contentID, fx("structure.contentid"))
+        XCTAssertEqual(structure.children[0].charset, "US-ASCII")
+        XCTAssertEqual(structure.attachments.map(\.section), ["2"])
+        XCTAssertEqual(structure.firstPlainText?.section, "1")
+    }
+
+    func runNestedBodyStructureWithDisposition() throws {
+        guard let structure = try fetched("structure.nested").structure else { return XCTFail() }
+        XCTAssertEqual(structure.firstHTML?.section, "1")
+        XCTAssertEqual(structure.attachments.first?.filename, "a.pdf")
+        XCTAssertEqual(structure.children[1].disposition, "attachment")
+    }
+
+    func runSingleMessageStructureGetsSectionOne() throws {
+        guard let structure = try fetched("structure.single").structure else { return XCTFail() }
+        XCTAssertEqual(structure.section, "1")
+        XCTAssertEqual(structure.firstPlainText?.section, "1")
+    }
+
+    func runModifiedUTF7() {
+        XCTAssertEqual(IMAPModifiedUTF7.decode(fx("utf7.encoded")), fx("utf7.decoded"))
+        XCTAssertEqual(IMAPModifiedUTF7.encode(fx("utf7.decoded")), fx("utf7.encoded"))
+        XCTAssertEqual(IMAPModifiedUTF7.decode(fx("utf7.ampersand.encoded")), fx("utf7.ampersand.decoded"))
+        XCTAssertEqual(IMAPModifiedUTF7.encode(fx("utf7.umlaut.decoded")), fx("utf7.umlaut.encoded"))
+        XCTAssertEqual(IMAPModifiedUTF7.decode(fx("utf7.umlaut.encoded")), fx("utf7.umlaut.decoded"))
+    }
+
+    func runEncodedWordExamplesFromSpecification() {
+        XCTAssertEqual(MailMIME.decodeEncodedWords("=?ISO-8859-1?Q?a?="), "a")
+        XCTAssertEqual(MailMIME.decodeEncodedWords(fx("word.space")), fx("word.space.decoded"))
+        XCTAssertEqual(MailMIME.decodeEncodedWords("=?ISO-8859-1?Q?a?= =?ISO-8859-1?Q?b?="), "ab")
+        XCTAssertEqual(MailMIME.decodeEncodedWords(fx("word.folded")), "ab")
+        XCTAssertEqual(MailMIME.decodeEncodedWords(fx("word.underscore")), fx("word.underscore.decoded"))
+        XCTAssertEqual(MailMIME.decodeEncodedWords(fx("word.charsets")), fx("word.charsets.decoded"))
+        XCTAssertEqual(MailMIME.decodeEncodedWords(fx("word.address")), fx("word.address.decoded"))
+        XCTAssertEqual(MailMIME.decodeEncodedWords(fx("word.latin")), fx("word.latin.decoded"))
+    }
+
+    func runTransferDecoding() {
+        XCTAssertEqual(String(data: MailMIME.decodeTransfer(Data(fx("quoted.printable").utf8), encoding: "quoted-printable"),
+                              encoding: .utf8), fx("quoted.printable.decoded"))
+        XCTAssertEqual(MailMIME.decodeTransfer(Data("SGVs\r\nbG8=".utf8), encoding: "base64"), Data("Hello".utf8))
+        XCTAssertEqual(MailMIME.string(from: Data([0x4B, 0xFC, 0x63, 0x68, 0x65]), charset: "iso-8859-1"), fx("charset.utf8"))
+        XCTAssertEqual(MailMIME.string(from: Data(fx("charset.utf8").utf8), charset: "utf-8"), fx("charset.utf8"))
+        XCTAssertEqual(MailMIME.string(from: Data([0x4B, 0xFC, 0x63, 0x68, 0x65]), charset: nil), fx("charset.utf8"))
+    }
+
+    func runParameterizedValuesWithExtendedFilename() {
+        let simple = MailMIME.parseParameterized(fx("param.simple"))
+        XCTAssertEqual(simple.value, "text/plain")
+        XCTAssertEqual(simple.parameters["charset"], "utf-8")
+        XCTAssertEqual(MailMIME.parseParameterized(fx("param.extended")).parameters["filename"], fx("param.extended.decoded"))
+        XCTAssertEqual(MailMIME.parseParameterized(fx("param.continued")).parameters["filename"], fx("param.continued.decoded"))
+    }
+
+    func runHeaderUnfolding() {
+        let fields = MailMIME.parseHeaders(Data(fx("header.folded").utf8))
+        XCTAssertEqual(fields.map(\.name), ["Subject", "From"])
+        XCTAssertEqual(fields[0].value, fx("header.folded.decoded"))
+    }
+
+    func runAddressSplittingAndMailbox() {
+        let list = MailMIME.splitAddresses(fx("address.list"))
+        XCTAssertEqual(list.count, 3)
+        let first = MailMIME.parseMailbox(list[0])
+        XCTAssertEqual(first?.name, fx("address.name"))
+        XCTAssertEqual(first?.address, fx("envelope.address"))
+        XCTAssertEqual(MailMIME.parseMailbox("plain@example.com")?.address, "plain@example.com")
+        XCTAssertNil(MailMIME.parseMailbox(fx("address.invalid")))
+    }
+
+    func runMessageReferenceRoundTrip() throws {
+        let reference = IMAPMessageReference(folder: "INBOX/a:b", uidValidity: 7, uid: 99)
+        XCTAssertEqual(try IMAPMessageReference.decode(reference.encoded), reference)
+        XCTAssertThrowsError(try IMAPMessageReference.decode("garbage"))
+    }
+
+    func runQuotingChoosesLiteralForNonASCII() {
+        XCTAssertEqual(IMAPSession.quote("INBOX"), "\"INBOX\"")
+        XCTAssertEqual(IMAPSession.quote("a\"b\\c"), "\"a\\\"b\\\\c\"")
+        XCTAssertNil(IMAPSession.quote(fx("charset.utf8")))
+        XCTAssertNil(IMAPSession.quote("a\r\nb"))
+    }
+
+    func runSMTPReplyParsing() throws {
+        XCTAssertEqual(try SMTPReply.assemble([fx("smtp.ok")]), SMTPReply(code: 250, lines: ["OK"]))
+        let multi = try SMTPReply.assemble(["smtp.multi.1", "smtp.multi.2", "smtp.multi.3", "smtp.multi.4"].map { fx($0) })
+        XCTAssertEqual(multi.code, 250)
+        XCTAssertEqual(multi.lines.count, 4)
+        XCTAssertEqual(try SMTPReply.parseLine(fx("smtp.greeting")).isLast, true)
+        XCTAssertEqual(try SMTPReply.parseLine("250-first").isLast, false)
+        XCTAssertEqual(try SMTPReply.parseLine("221").isLast, true)
+        XCTAssertThrowsError(try SMTPReply.parseLine("hello"))
+        XCTAssertThrowsError(try SMTPReply.assemble(["250-a", "251 b"]))
+    }
+
+    func runDotStuffing() {
+        XCTAssertEqual(String(data: SMTPDotStuffing.apply(Data(fx("smtp.stuffed.in").utf8)), encoding: .utf8), fx("smtp.stuffed.out"))
+        XCTAssertEqual(String(data: SMTPDotStuffing.apply(Data("x\r\n".utf8)), encoding: .utf8), "x\r\n.\r\n")
+        XCTAssertEqual(String(data: SMTPDotStuffing.apply(Data(".a".utf8)), encoding: .utf8), "..a\r\n.\r\n")
+    }
+
+    private var account: MailAccount {
+        MailProviderPresets.preset(for: .gmx).account(id: "t", displayName: fx("sender.name"), address: "joerg@example.com")
+    }
+
+    func runMessageBuilderHeadersAndRecipients() throws {
+        let draft = EmailDraft(to: "A <a@example.com>, b@example.com", cc: "c@example.com", bcc: "hidden@example.com",
+                               subject: fx("subject.unicode"), body: fx("body.two"), inReplyTo: "abc@x")
+        let message = try MailMessageBuilder.build(draft, account: account, messageID: "id-1", date: Date(timeIntervalSince1970: 0))
+        let text = String(decoding: message.data, as: UTF8.self)
+        XCTAssertEqual(message.recipients, ["a@example.com", "b@example.com", "c@example.com", "hidden@example.com"])
+        XCTAssertEqual(message.sender, "joerg@example.com")
+        XCTAssertTrue(text.contains("From: =?UTF-8?B?"))
+        XCTAssertTrue(text.contains("<joerg@example.com>"))
+        XCTAssertTrue(text.contains("Cc: c@example.com\r\n"))
+        XCTAssertFalse(text.lowercased().contains("hidden@example.com"))
+        XCTAssertTrue(text.contains("Date: Thu, 01 Jan 1970 00:00:00 +0000"))
+        XCTAssertTrue(text.contains("In-Reply-To: <abc@x>"))
+        XCTAssertTrue(text.contains("Message-ID: <id-1@example.com>"))
+        XCTAssertTrue(text.contains("Content-Type: text/plain; charset=\"UTF-8\""))
+        XCTAssertFalse(text.replacingOccurrences(of: "\r\n", with: "").contains("\n"))
+        XCTAssertTrue(message.data.allSatisfy { $0 < 128 })
+        XCTAssertNotNil(message.data.firstRange(of: Data("\r\n\r\n".utf8)))
+    }
+
+    func runMessageBuilderAttachmentsAndAlternative() throws {
+        let attachment = DraftAttachment(filename: fx("attachment.name"), mimeType: "application/pdf", data: Data(repeating: 7, count: 100))
+        let draft = EmailDraft(to: "a@example.com", subject: "S", body: "plain", attachments: [attachment], bodyHTML: "<p>hi</p>")
+        let message = try MailMessageBuilder.build(draft, account: account, messageID: "id-2")
+        let text = String(decoding: message.data, as: UTF8.self)
+        XCTAssertTrue(text.contains("multipart/mixed"))
+        XCTAssertTrue(text.contains("multipart/alternative"))
+        XCTAssertTrue(text.contains("text/html"))
+        XCTAssertTrue(text.contains(fx("attachment.fallback")))
+        XCTAssertTrue(text.contains("filename*=UTF-8''"))
+        XCTAssertTrue(message.data.allSatisfy { $0 < 128 })
+    }
+
+    func runMessageBuilderRejectsMissingOrInvalidRecipients() {
+        XCTAssertThrowsError(try MailMessageBuilder.build(EmailDraft(subject: "S", body: "b"), account: account)) {
+            XCTAssertEqual($0 as? MailTransportError, .noRecipients)
+        }
+        XCTAssertThrowsError(try MailMessageBuilder.build(EmailDraft(to: "nonsense", subject: "S", body: "b"), account: account)) {
+            XCTAssertEqual($0 as? MailTransportError, .invalidRecipient("nonsense"))
+        }
+    }
+
+    func runLongNonASCIIHeaderIsFoldedIntoShortEncodedWords() {
+        let source = String(repeating: "\u{E4}", count: 80)
+        let encoded = MailMessageBuilder.encodeHeader(source)
+        for line in encoded.components(separatedBy: "\r\n") {
+            XCTAssertLessThanOrEqual(line.count, 76)
+            XCTAssertTrue(line.trimmingCharacters(in: .whitespaces).hasPrefix("=?UTF-8?B?"))
+        }
+        XCTAssertEqual(MailMIME.decodeEncodedWords(encoded), source)
+    }
+
+    func runOAuthWithoutTokenSourceIsTypedError() async {
+        let outlook = MailProviderPresets.preset(for: .outlook).account(id: "o", displayName: "", address: "x@example.com")
+        do {
+            _ = try await IMAPSMTPMailTransport(account: outlook).listFolders()
+            XCTFail()
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .oauthUnavailable(.outlook))
+        }
+    }
+
+    func runIncompleteAccountIsTypedError() async {
+        let generic = MailProviderPresets.preset(for: .generic).account(id: "g", displayName: "", address: "x@example.com")
+        do {
+            _ = try await IMAPSMTPMailTransport(account: generic).listFolders()
+            XCTFail()
+        } catch {
+            XCTAssertEqual(error as? MailTransportError, .accountIncomplete("incoming"))
+        }
+    }
+
+    func runAnIMAPPageHoldsTheNewestUIDsAndTheTokenPointsAtTheOldestOfThem() async throws {
+        let server = try LoopbackIMAPServer(uids: [1, 2, 3, 4, 5])
+        defer { server.stop() }
+        var account = MailProviderPresets.preset(for: .generic).account(id: "g", displayName: "", address: "x@example.test")
+        account.incoming = MailServerSettings(host: "127.0.0.1", port: server.port, security: .none, authentication: .password, username: "x")
+        let transport = IMAPSMTPMailTransport(account: account, password: { "secret" })
+        let page = try await transport.listMessages(folderID: "INBOX", query: nil, pageToken: nil, maxResults: 2)
+        let uids = try page.messages.map { try IMAPMessageReference.decode($0.id).uid }
+        XCTAssertEqual(uids, [5, 4])
+        XCTAssertEqual(page.nextPageToken, "4")
+    }
+}
+
+final class MailQuoteTests {
+    func runStyleAndScriptContentNeverReachesTheText() {
+        let html = """
+        <html><head><title>Weg</title><style>
+        #outlook a { padding:0; }
+        @font-face { font-family: 'X'; src: url('y.otf'); }
+        </style></head>
+        <body><script>var a = 1;</script><p>Hallo Person A,</p><p>Anbei der Schein.</p></body></html>
+        """
+        let text = HTMLText.plain(html)
+        XCTAssertFalse(text.contains("padding"), "CSS must not reach the text")
+        XCTAssertFalse(text.contains("font-face"))
+        XCTAssertFalse(text.contains("var a"))
+        XCTAssertFalse(text.contains("Weg"), "the title is not part of the text")
+        XCTAssertTrue(text.contains("Hallo Person A,"))
+        XCTAssertTrue(text.contains("Anbei der Schein."))
+    }
+
+    func runParagraphsBecomeLinesInsteadOfOneBlob() {
+        let text = HTMLText.plain("<p>Eins</p><p>Zwei</p>Drei<br>Vier")
+        XCTAssertEqual(text, "Eins\nZwei\nDrei\nVier")
+    }
+
+    func runCommentsAreDropped() {
+        XCTAssertEqual(HTMLText.plain("A<!-- [if mso]><table><![endif] -->B"), "A B")
+    }
+
+    func runConditionalCommentsDropTheirContent() {
+        XCTAssertEqual(HTMLText.plain("<!--[if mso]><p>Only Outlook</p><![endif]--><p>Real</p>"), "Real")
+    }
+
+    func runEntitiesAreDecodedOnceAndUnknownOnesStayRaw() {
+        XCTAssertEqual(
+            HTMLText.plain("&quot;Volkswagen&quot; &amp; Co&nbsp;KG &#39;x&#x27; &auml; &unknown; AT&T Caf&eacute; a&bull;b Pro&trade;"),
+            "\"Volkswagen\" & Co KG 'x' \u{00E4} &unknown; AT&T Caf\u{00E9} a\u{2022}b Pro\u{2122}")
+        XCTAssertEqual(HTMLText.plain("&amp;lt;"), "&lt;")
+    }
+
+    func runSourceWhitespaceIsCollapsedAndTrimmed() {
+        XCTAssertEqual(HTMLText.plain("\n    <div>\n      <p>Hi</p>\n    </div>\n"), "Hi")
+    }
+
+    func runAQuoteWithoutADateDoesNotSayAmNothing() {
+        let withoutDate = GoogleGmailMessage(
+            id: "1", threadID: "1", subject: "S", from: "Anthropic", snippet: "", receivedAt: nil)
+        XCTAssertTrue(withoutDate.quotedBody("Text").hasPrefix("\n\n\u{2014} Anthropic schrieb:\n"))
+    }
+}
+
+final class GmailFoldersTests {
+    private func transport() -> GmailMailTransport {
+        GmailMailTransport(client: GoogleGmailClient(tokenProvider: TokenStub(), session: RecordingGmail.session()))
+    }
+
+    func runSystemFoldersCarryRolesAndUserLabelsFollow() async throws {
+        let labels = #"""
+        {"labels":[
+          {"id":"INBOX","name":"INBOX","type":"system"},
+          {"id":"SENT","name":"SENT","type":"system"},
+          {"id":"Label_1","name":"Projects","type":"user"},
+          {"id":"Label_2","name":"Archive","type":"user"}
+        ]}
+        """#
+        RecordingGmail.reset { _ in (200, labels) }
+        let folders = try await transport().listFolders()
+        XCTAssertEqual(folders.prefix(7).map(\.role), [.inbox, .starred, .sent, .drafts, .all, .spam, .trash])
+        XCTAssertEqual(folders.prefix(7).map(\.id), ["INBOX", "STARRED", "SENT", "DRAFT", "ALL", "SPAM", "TRASH"])
+        XCTAssertEqual(folders.dropFirst(7).map(\.name), ["Archive", "Projects"])
+        XCTAssertTrue(folders.dropFirst(7).allSatisfy { $0.role == .other })
+    }
+
+    func runMarkingReadRemovesTheUnreadLabelAndMarkingUnreadAddsIt() async throws {
+        RecordingGmail.reset()
+        let transport = transport()
+        try await transport.setFlags(messageID: "m1", add: [.seen], remove: [])
+        try await transport.setFlags(messageID: "m1", add: [], remove: [.seen])
+        let bodies = try RecordingGmail.calls.map { try XCTUnwrap(JSONSerialization.jsonObject(with: $0.body) as? [String: [String]]) }
+        XCTAssertEqual(bodies.count, 2)
+        XCTAssertEqual(bodies[0]["removeLabelIds"], ["UNREAD"])
+        XCTAssertNil(bodies[0]["addLabelIds"])
+        XCTAssertEqual(bodies[1]["addLabelIds"], ["UNREAD"])
+        XCTAssertNil(bodies[1]["removeLabelIds"])
+    }
+}
+
+final class KeychainNamespaceTests {
+    func runServiceNamesLiveInTheAlfaNamespace() {
+        defer { CurrentUserContext.resetForTesting() }
+        let name = PerUserKeychainService.perUser("google", userID: "user")
+        XCTAssertEqual(name, "com.johannesleoberger.alfaos.google.user")
+        XCTAssertEqual(PerUserKeychainService.perUser("google", userID: nil), "com.johannesleoberger.alfaos.google.local")
+    }
+}
+
 @MainActor
 func step(_ name: String, _ body: () async throws -> Void) async throws {
     protocolStep.with { $0 = name }
@@ -3958,6 +5560,55 @@ final class WholeAppTests: XCTestCase {
         try await step("GapTests.runTheTaskRaceEndsOnceAndExpires") { try await GapTests().runTheTaskRaceEndsOnceAndExpires() }
         try await step("GapTests.runAnEmptyGrantAndAGenericProbeFailureAreKept") { try await GapTests().runAnEmptyGrantAndAGenericProbeFailureAreKept() }
         try await step("GapTests.runATransientStateNeverReachesTheStore") { try await GapTests().runATransientStateNeverReachesTheStore() }
+        try await step("IMAPActionTests.runTheIMAPActions") { try await IMAPActionTests().runTheIMAPActions() }
+        try await step("GmailActionTests.runTheGmailActions") { try await GmailActionTests().runTheGmailActions() }
+        try await step("GmailDetailFetchTests.runDetailRequestsRunWithBoundedConcurrency") { try await GmailDetailFetchTests().runDetailRequestsRunWithBoundedConcurrency() }
+        try await step("GmailDetailFetchTests.runRateLimitedDetailIsRetriedWithBackoffAndSucceeds") { try await GmailDetailFetchTests().runRateLimitedDetailIsRetriedWithBackoffAndSucceeds() }
+        try await step("GmailDetailFetchTests.runDetailThatKeepsFailingFailsThePageWithTheOriginalError") { try await GmailDetailFetchTests().runDetailThatKeepsFailingFailsThePageWithTheOriginalError() }
+        try await step("GmailDetailFetchTests.runNonRetryableDetailErrorIsNotRepeated") { try await GmailDetailFetchTests().runNonRetryableDetailErrorIsNotRepeated() }
+        try await step("MailProbeTests.runProbeIsGreenWithLoginNoopAndAuth") { try await MailProbeTests().runProbeIsGreenWithLoginNoopAndAuth() }
+        try await step("MailProbeTests.runProbeIsRedWhenLoginIsRefusedAndNamesTheServerAnswer") { await MailProbeTests().runProbeIsRedWhenLoginIsRefusedAndNamesTheServerAnswer() }
+        try await step("MailProbeTests.runProbeIsRedWhenSMTPRefusesTheAuthentication") { await MailProbeTests().runProbeIsRedWhenSMTPRefusesTheAuthentication() }
+        try await step("MailProbeTests.runProbeIsRedWhenTheConnectionFails") { await MailProbeTests().runProbeIsRedWhenTheConnectionFails() }
+        try await step("MailProbeTests.runProbeWithEmptyPasswordIsRed") { await MailProbeTests().runProbeWithEmptyPasswordIsRed() }
+        try await step("MailProbeTests.runPasswordClosureReplacesTheKeychainForPasswordAccounts") { await MailProbeTests().runPasswordClosureReplacesTheKeychainForPasswordAccounts() }
+        try await step("MailWireTests.runTaggedAndStatusResponses") { try MailWireTests().runTaggedAndStatusResponses() }
+        try await step("MailWireTests.runResponseCodeWithList") { try MailWireTests().runResponseCodeWithList() }
+        try await step("MailWireTests.runUntaggedData") { try MailWireTests().runUntaggedData() }
+        try await step("MailWireTests.runListWithNilDelimiterAndSpecialUse") { try MailWireTests().runListWithNilDelimiterAndSpecialUse() }
+        try await step("MailWireTests.runLiteralInsideFetch") { try MailWireTests().runLiteralInsideFetch() }
+        try await step("MailWireTests.runLiteralSizeDetection") { MailWireTests().runLiteralSizeDetection() }
+        try await step("MailWireTests.runEnvelopeAndInternalDateFromSpecificationExample") { try MailWireTests().runEnvelopeAndInternalDateFromSpecificationExample() }
+        try await step("MailWireTests.runBodyStructureFromSpecificationExample") { try MailWireTests().runBodyStructureFromSpecificationExample() }
+        try await step("MailWireTests.runNestedBodyStructureWithDisposition") { try MailWireTests().runNestedBodyStructureWithDisposition() }
+        try await step("MailWireTests.runSingleMessageStructureGetsSectionOne") { try MailWireTests().runSingleMessageStructureGetsSectionOne() }
+        try await step("MailWireTests.runModifiedUTF7") { MailWireTests().runModifiedUTF7() }
+        try await step("MailWireTests.runEncodedWordExamplesFromSpecification") { MailWireTests().runEncodedWordExamplesFromSpecification() }
+        try await step("MailWireTests.runTransferDecoding") { MailWireTests().runTransferDecoding() }
+        try await step("MailWireTests.runParameterizedValuesWithExtendedFilename") { MailWireTests().runParameterizedValuesWithExtendedFilename() }
+        try await step("MailWireTests.runHeaderUnfolding") { MailWireTests().runHeaderUnfolding() }
+        try await step("MailWireTests.runAddressSplittingAndMailbox") { MailWireTests().runAddressSplittingAndMailbox() }
+        try await step("MailWireTests.runMessageReferenceRoundTrip") { try MailWireTests().runMessageReferenceRoundTrip() }
+        try await step("MailWireTests.runQuotingChoosesLiteralForNonASCII") { MailWireTests().runQuotingChoosesLiteralForNonASCII() }
+        try await step("MailWireTests.runSMTPReplyParsing") { try MailWireTests().runSMTPReplyParsing() }
+        try await step("MailWireTests.runDotStuffing") { MailWireTests().runDotStuffing() }
+        try await step("MailWireTests.runMessageBuilderHeadersAndRecipients") { try MailWireTests().runMessageBuilderHeadersAndRecipients() }
+        try await step("MailWireTests.runMessageBuilderAttachmentsAndAlternative") { try MailWireTests().runMessageBuilderAttachmentsAndAlternative() }
+        try await step("MailWireTests.runMessageBuilderRejectsMissingOrInvalidRecipients") { MailWireTests().runMessageBuilderRejectsMissingOrInvalidRecipients() }
+        try await step("MailWireTests.runLongNonASCIIHeaderIsFoldedIntoShortEncodedWords") { MailWireTests().runLongNonASCIIHeaderIsFoldedIntoShortEncodedWords() }
+        try await step("MailWireTests.runOAuthWithoutTokenSourceIsTypedError") { await MailWireTests().runOAuthWithoutTokenSourceIsTypedError() }
+        try await step("MailWireTests.runIncompleteAccountIsTypedError") { await MailWireTests().runIncompleteAccountIsTypedError() }
+        try await step("MailWireTests.runAnIMAPPageHoldsTheNewestUIDsAndTheTokenPointsAtTheOldestOfThem") { try await MailWireTests().runAnIMAPPageHoldsTheNewestUIDsAndTheTokenPointsAtTheOldestOfThem() }
+        try await step("MailQuoteTests.runStyleAndScriptContentNeverReachesTheText") { MailQuoteTests().runStyleAndScriptContentNeverReachesTheText() }
+        try await step("MailQuoteTests.runParagraphsBecomeLinesInsteadOfOneBlob") { MailQuoteTests().runParagraphsBecomeLinesInsteadOfOneBlob() }
+        try await step("MailQuoteTests.runCommentsAreDropped") { MailQuoteTests().runCommentsAreDropped() }
+        try await step("MailQuoteTests.runConditionalCommentsDropTheirContent") { MailQuoteTests().runConditionalCommentsDropTheirContent() }
+        try await step("MailQuoteTests.runEntitiesAreDecodedOnceAndUnknownOnesStayRaw") { MailQuoteTests().runEntitiesAreDecodedOnceAndUnknownOnesStayRaw() }
+        try await step("MailQuoteTests.runSourceWhitespaceIsCollapsedAndTrimmed") { MailQuoteTests().runSourceWhitespaceIsCollapsedAndTrimmed() }
+        try await step("MailQuoteTests.runAQuoteWithoutADateDoesNotSayAmNothing") { MailQuoteTests().runAQuoteWithoutADateDoesNotSayAmNothing() }
+        try await step("GmailFoldersTests.runSystemFoldersCarryRolesAndUserLabelsFollow") { try await GmailFoldersTests().runSystemFoldersCarryRolesAndUserLabelsFollow() }
+        try await step("GmailFoldersTests.runMarkingReadRemovesTheUnreadLabelAndMarkingUnreadAddsIt") { try await GmailFoldersTests().runMarkingReadRemovesTheUnreadLabelAndMarkingUnreadAddsIt() }
+        try await step("KeychainNamespaceTests.runServiceNamesLiveInTheAlfaNamespace") { KeychainNamespaceTests().runServiceNamesLiveInTheAlfaNamespace() }
         try compareWithGolden()
     }
 }

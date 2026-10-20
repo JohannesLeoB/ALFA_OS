@@ -46,7 +46,7 @@ let package = Package(
                 .product(name: "AlfaKit", package: "alpha"),
                 .product(name: "GRDB", package: "GRDB.swift")
             ],
-            exclude: ["golden.txt"],
+            exclude: ["golden.txt", "MailWire.txt"],
             swiftSettings: strict
         )
     ]
