@@ -858,19 +858,22 @@ final class SetupFlowTests {
         recordThrowsError(try restarted.access.port((any MailTransport).self, for: connected.id))
         recordEqual(restarted.setup.inlets.count, 2)
     }
-    func runOneCorruptSettingRowStopsTheWholeHub() throws {
-        let limitDatabase = try DatabaseQueue()
-        _ = try makeHub(database: limitDatabase)
-        try limitDatabase.write { db in
+    func runOneCorruptSettingRowStopsTheWholeHub() async throws {
+        let database = try DatabaseQueue()
+        let keychain = FakeKeychain()
+        let first = try ScriptedRig.make(database: database, keychain: keychain)
+        let good = try await first.connect("a@x")
+        try await database.write { db in
+            try db.execute(sql: "INSERT INTO inlet (id, json) VALUES ('broken', ?)", arguments: [Data("garbage".utf8)])
+            try db.execute(sql: "INSERT INTO key_slot (inlet, name) VALUES ('broken', 'token')")
             try db.execute(sql: "INSERT INTO setting (key, value) VALUES ('limit|mail', ?)", arguments: [Data("x".utf8)])
-        }
-        let cadenceDatabase = try DatabaseQueue()
-        _ = try makeHub(database: cadenceDatabase)
-        try cadenceDatabase.write { db in
             try db.execute(sql: "INSERT INTO setting (key, value) VALUES ('cadence|x|mail', ?)", arguments: [Data("garbage".utf8)])
         }
+        let again = try ScriptedRig.make(database: database, provider: first.provider, keychain: keychain)
+        recordEqual(again.hub.setup.inlets.map(\.id), [good.id])
+        recordEqual(try Store(database).slots(of: "broken"), ["token"])
+        recordEqual(again.hub.rules.limit(.mail), 3)
     }
-
 }
 
 @MainActor
@@ -3839,7 +3842,7 @@ final class WholeAppTests: XCTestCase {
         try await step("HubTests.runRemoveTurnsTheCadenceOfTheInletOff") { try await HubTests().runRemoveTurnsTheCadenceOfTheInletOff() }
         try await step("SetupFlowTests.runCancelDuringTheProbe") { try await SetupFlowTests().runCancelDuringTheProbe() }
         try await step("SetupFlowTests.runInletOfAMissingProvider") { try await SetupFlowTests().runInletOfAMissingProvider() }
-        try await step("SetupFlowTests.runOneCorruptSettingRowStopsTheWholeHub") { try SetupFlowTests().runOneCorruptSettingRowStopsTheWholeHub() }
+        try await step("SetupFlowTests.runOneCorruptSettingRowStopsTheWholeHub") { try await SetupFlowTests().runOneCorruptSettingRowStopsTheWholeHub() }
         try await step("IMAPProviderTests.runPresetGMXFillsServerAndPorts") { try IMAPProviderTests().runPresetGMXFillsServerAndPorts() }
         try await step("IMAPProviderTests.runPresetsWithoutGmailAndOutlook") { try IMAPProviderTests().runPresetsWithoutGmailAndOutlook() }
         try await step("IMAPProviderTests.runSignInRejectsNone") { try await IMAPProviderTests().runSignInRejectsNone() }

@@ -47,13 +47,13 @@ final class HubCore: HubAccess, HubSetup, HubRules {
             let parts = key.split(separator: "|", omittingEmptySubsequences: false).map(String.init)
             switch parts.first {
             case "cadence" where parts.count == 3:
-                cadences[parts[1] + "|" + parts[2]] = try decoder.decode(Cadence.self, from: data)
+                if let value = try? decoder.decode(Cadence.self, from: data) { cadences[parts[1] + "|" + parts[2]] = value }
             case "lastsync" where parts.count == 3:
-                syncedAt[parts[1] + "|" + parts[2]] = try decoder.decode(Date.self, from: data)
+                if let value = try? decoder.decode(Date.self, from: data) { syncedAt[parts[1] + "|" + parts[2]] = value }
             case "truth" where parts.count == 2:
-                if let kind = DataKind(rawValue: parts[1]) { truths[kind] = try decoder.decode(String.self, from: data) }
+                if let kind = DataKind(rawValue: parts[1]), let value = try? decoder.decode(String.self, from: data) { truths[kind] = value }
             case "limit" where parts.count == 2:
-                if let capability = Capability(rawValue: parts[1]) { limits[capability] = try decoder.decode(Int.self, from: data) }
+                if let capability = Capability(rawValue: parts[1]), let value = try? decoder.decode(Int.self, from: data) { limits[capability] = value }
             default:
                 break
             }

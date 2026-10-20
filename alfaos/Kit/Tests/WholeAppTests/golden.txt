@@ -101,6 +101,9 @@ SetupFlowTests.runCancelDuringTheProbe eq some(true)
 SetupFlowTests.runInletOfAMissingProvider eq some(true)
 SetupFlowTests.runInletOfAMissingProvider throws "notConnected("imap-<uuid>")"
 SetupFlowTests.runInletOfAMissingProvider eq 2
+SetupFlowTests.runOneCorruptSettingRowStopsTheWholeHub eq ["fake-<uuid>"]
+SetupFlowTests.runOneCorruptSettingRowStopsTheWholeHub eq ["token"]
+SetupFlowTests.runOneCorruptSettingRowStopsTheWholeHub eq 3
 IMAPProviderTests.runPresetGMXFillsServerAndPorts eq "imap.gmx.net"
 IMAPProviderTests.runPresetGMXFillsServerAndPorts eq "993"
 IMAPProviderTests.runPresetGMXFillsServerAndPorts eq "ssl"

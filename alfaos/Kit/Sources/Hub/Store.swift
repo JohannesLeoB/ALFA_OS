@@ -22,9 +22,9 @@ struct Store {
 
     func loadInlets() throws -> [Inlet] {
         try db.read { db in
-            try Row.fetchAll(db, sql: "SELECT json FROM inlet ORDER BY rowid").map { row in
+            try Row.fetchAll(db, sql: "SELECT json FROM inlet ORDER BY rowid").compactMap { row in
                 let data: Data = row["json"]
-                return try JSONDecoder().decode(Inlet.self, from: data)
+                return try? JSONDecoder().decode(Inlet.self, from: data)
             }
         }
     }
