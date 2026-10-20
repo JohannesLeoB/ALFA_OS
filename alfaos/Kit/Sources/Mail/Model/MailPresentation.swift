@@ -90,6 +90,11 @@ extension MailModel {
         return nil
     }
 
+    public var fixService: String? {
+        guard let account = selectedAccount, case .failed(let hint) = account.state, hint.fixIn == .inlet(account.id) else { return nil }
+        return ServiceCatalog.info(forProvider: account.provider)?.id
+    }
+
     public var emptyKind: MailEmptyKind? {
         switch listState {
         case .loading: .loading

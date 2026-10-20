@@ -39,7 +39,7 @@ public final class MailCore: MailEngine {
         watcher?.cancel()
     }
 
-    public var accounts: [Inlet] { hub.inlets(for: .mail) }
+    public var accounts: [Inlet] { hub.configured(for: .mail) }
 
     public var outbox: [OutboxItem] { items }
 

@@ -712,6 +712,14 @@ HubSweepTests.runTheTokenIsRenewedWithinASixtySecondMargin margin-3599.0 "["/tok
 HubSweepTests.runTheTokenIsRenewedWithinASixtySecondMargin margin-3600.0 "["/token", "/gmail/v1/users/me/labels"] Optional("fresh")"
 HubSweepTests.runTheTokenIsRenewedWithinASixtySecondMargin margin-3601.0 "["/token", "/gmail/v1/users/me/labels"] Optional("fresh")"
 HubSweepTests.runTheTokenIsRenewedWithinASixtySecondMargin margin-7200.0 "["/token", "/gmail/v1/users/me/labels"] Optional("fresh")"
+HubSweepTests.runAnExpiredMailAccountStaysInMailWithItsNotice eq "fake-<uuid>"
+HubSweepTests.runAnExpiredMailAccountStaysInMailWithItsNotice eq MailListState.empty(empty=(folder: String)(folder="INBOX"))
+HubSweepTests.runAnExpiredMailAccountStaysInMailWithItsNotice true some(true)
+HubSweepTests.runAnExpiredMailAccountStaysInMailWithItsNotice eq []
+HubSweepTests.runAnExpiredMailAccountStaysInMailWithItsNotice eq ["fake-<uuid>"]
+HubSweepTests.runAnExpiredMailAccountStaysInMailWithItsNotice eq "fake-<uuid>"
+HubSweepTests.runAnExpiredMailAccountStaysInMailWithItsNotice eq MailListState.signInExpired(signInExpired="fake-<uuid>")
+HubSweepTests.runAnExpiredMailAccountStaysInMailWithItsNotice eq "a@x"
 MailSweepTests.runAddressesSplitAndReduce addresses "|[]|[]|"
 MailSweepTests.runAddressesSplitAndReduce addresses "a@x.test|["a@x.test"]|["a@x.test"]|a@x.test"
 MailSweepTests.runAddressesSplitAndReduce addresses "A <A@X.test>|["A <A@X.test>"]|["a@x.test"]|a@x.test"

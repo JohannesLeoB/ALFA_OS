@@ -175,6 +175,10 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         records.filter { $0.state.isConnected && $0.capabilities.contains(capability) }
     }
 
+    func configured(for capability: Capability) -> [Inlet] {
+        records.filter { $0.capabilities.contains(capability) }
+    }
+
     private func grant(for inlet: Inlet) -> Grant? {
         if let cached = grants[inlet.id] { return cached }
         guard let names = try? store.slots(of: inlet.id), !names.isEmpty else { return nil }

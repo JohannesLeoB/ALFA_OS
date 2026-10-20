@@ -146,9 +146,13 @@ struct MailListLane: View {
     private func expired(_ address: String) -> some View {
         Notice(kind: .failure, title: line("mail.list.signInExpired", address), text: word("mail.list.signInExpired.text"),
                glyph: { Glyph(.alert) },
-               actions: { TextButton(label: word("mail.list.signInExpired.act"), kind: .accent) { link?.openSettings() } })
+               actions: { TextButton(label: word("mail.list.signInExpired.act"), kind: .accent) { openExpired() } })
             .padding(.horizontal, CGFloat(Design.Spacing.step8))
             .padding(.top, CGFloat(Design.Spacing.step8))
+    }
+
+    private func openExpired() {
+        if let service = model.fixService { link?.openService(service) } else { link?.openSettings() }
     }
 
     @ViewBuilder

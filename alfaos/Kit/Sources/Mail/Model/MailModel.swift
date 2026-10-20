@@ -315,9 +315,14 @@ public final class MailModel {
         switch event {
         case .accountsChanged:
             let before = selectedInlet
+            let reachable = selectedAccount?.state.isConnected ?? true
             refreshAccounts()
             refreshCounts()
-            if selectedInlet != before, selectedInlet != nil { await loadSelection() }
+            if selectedInlet != before, selectedInlet != nil {
+                await loadSelection()
+            } else if !reachable, selectedAccount?.state.isConnected == true {
+                await loadSelection()
+            }
         case .foldersChanged(let inlet):
             if inlet == selectedInlet { loadFoldersFromEngine() }
         case .messagesChanged(let inlet, let folder):

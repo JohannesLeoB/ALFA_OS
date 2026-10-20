@@ -122,6 +122,8 @@ public enum ServiceCatalog {
 
     public static func info(_ id: String) -> ServiceInfo? { all.first { $0.id == id } }
 
+    public static func info(forProvider provider: String) -> ServiceInfo? { all.first { $0.providers.contains(provider) } }
+
     public static func services(in group: ServiceGroup) -> [ServiceInfo] { all.filter { $0.group == group } }
 
     public static var inventory: [ServiceInfo] { all.filter { !$0.listsAccounts } }

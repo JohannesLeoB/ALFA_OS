@@ -1777,6 +1777,9 @@ final class HubDouble: HubAccess {
     func inlets(for capability: Capability) -> [Inlet] {
         capability == .mail ? mailInlets : []
     }
+    func configured(for capability: Capability) -> [Inlet] {
+        capability == .mail ? mailInlets : []
+    }
     func port<P>(_ port: P.Type, for inlet: Inlet.ID) throws(HubError) -> P {
         guard let known = mailInlets.first(where: { $0.id == inlet }), known.state.isConnected, let transport = transports[inlet] as? P else { throw .notConnected(inlet) }
         return transport
@@ -3340,6 +3343,25 @@ final class HubSweepTests {
             note("margin-\(advance)", "\(paths) \(String(describing: try rig.keychain.get(KeySlot(inlet: rig.inlet.id, name: "accessToken"))))")
         }
     }
+    func runAnExpiredMailAccountStaysInMailWithItsNotice() async throws {
+        let rig = try ScriptedRig.make()
+        let inlet = try await rig.connect("a@x")
+        let engine = try MailCore(hub: rig.hub.access, database: rig.database)
+        let model = MailModel(engine: engine)
+        await model.start()
+        defer { model.stop() }
+        recordEqual(model.selectedInlet, inlet.id)
+        recordEqual(model.listState, .empty(folder: "INBOX"))
+        rig.provider.mail.setFailure(.authenticationRejected("NO [AUTHENTICATIONFAILED] Invalid credentials"))
+        await rig.cadence.trigger(inlet.id, .mail)
+        let seen = await eventually { model.selectedAccount?.state.hint?.text == Hint.signInExpiredText }
+        recordTrue(seen)
+        recordEqual(rig.hub.access.inlets(for: .mail), [])
+        recordEqual(engine.accounts.map(\.id), [inlet.id])
+        recordEqual(model.selectedInlet, inlet.id)
+        recordEqual(model.listState, .signInExpired(inlet.id))
+        recordEqual(model.expiredAddress, "a@x")
+    }
 }
 
 @MainActor
@@ -3861,6 +3883,7 @@ final class WholeAppTests: XCTestCase {
         try await step("HubSweepTests.runTheCountedCallsAndBytesOfEveryMailCall") { try await HubSweepTests().runTheCountedCallsAndBytesOfEveryMailCall() }
         try await step("HubSweepTests.runAFailedRenewalSurvivesARestartAndAnOutageDoesNot") { try await HubSweepTests().runAFailedRenewalSurvivesARestartAndAnOutageDoesNot() }
         try await step("HubSweepTests.runTheTokenIsRenewedWithinASixtySecondMargin") { try await HubSweepTests().runTheTokenIsRenewedWithinASixtySecondMargin() }
+        try await step("HubSweepTests.runAnExpiredMailAccountStaysInMailWithItsNotice") { try await HubSweepTests().runAnExpiredMailAccountStaysInMailWithItsNotice() }
         try await step("MailSweepTests.runAddressesSplitAndReduce") { MailSweepTests().runAddressesSplitAndReduce() }
         try await step("MailSweepTests.runTheSelectionSurvivesTheLossOfAnAccount") { await MailSweepTests().runTheSelectionSurvivesTheLossOfAnAccount() }
         try await step("MailSweepTests.runEventsReachTheListOnlyWhereTheyBelong") { await MailSweepTests().runEventsReachTheListOnlyWhereTheyBelong() }

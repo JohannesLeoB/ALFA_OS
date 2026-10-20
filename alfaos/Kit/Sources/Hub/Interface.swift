@@ -5,6 +5,7 @@ public protocol HubAccess: AnyObject {
     func stock<T: Record>(_ kind: DataKind, as type: T.Type) -> Stock<T>
     func port<P>(_ port: P.Type, for inlet: Inlet.ID) throws(HubError) -> P
     func inlets(for capability: Capability) -> [Inlet]
+    func configured(for capability: Capability) -> [Inlet]
     func write(_ order: WriteOrder) async throws(HubError)
     func classify(_ error: any Error, inlet: Inlet.ID) -> Classification
     func health(of inlet: Inlet.ID) -> InletHealth
