@@ -424,6 +424,12 @@ MailModelTests.runListEmptyLoadingLoadedFailed eq MailListState.loading()
 MailModelTests.runListEmptyLoadingLoadedFailed eq MailListState.loaded()
 MailModelTests.runListEmptyLoadingLoadedFailed eq MailListState.failed(failed=Hint(text="hint.x",detail=nil,fixIn=nil,kind=nil,original=nil))
 MailModelTests.runSearchWithoutHitsIsEmptySearch eq MailListState.emptySearch(emptySearch=(query: String, folder: String)(query="zzz",folder="INBOX"))
+MailModelTests.runTypingFiltersLocallySubmitSearchesOnceAndAStaleResultLoses eq []
+MailModelTests.runTypingFiltersLocallySubmitSearchesOnceAndAStaleResultLoses eq ["m1"]
+MailModelTests.runTypingFiltersLocallySubmitSearchesOnceAndAStaleResultLoses eq ["alp"]
+MailModelTests.runTypingFiltersLocallySubmitSearchesOnceAndAStaleResultLoses true some(true)
+MailModelTests.runTypingFiltersLocallySubmitSearchesOnceAndAStaleResultLoses eq ["alp","old","new"]
+MailModelTests.runTypingFiltersLocallySubmitSearchesOnceAndAStaleResultLoses eq ["new"]
 MailModelTests.runFilterWithoutHitsIsNoFilterMatch eq MailListState.noFilterMatch()
 MailModelTests.runFilterWithoutHitsIsNoFilterMatch eq MailListState.loaded()
 MailModelTests.runLoadMoreAppendsByPageToken true some(true)

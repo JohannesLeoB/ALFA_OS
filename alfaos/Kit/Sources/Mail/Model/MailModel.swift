@@ -29,6 +29,7 @@ public final class MailModel {
     public internal(set) var selectedMessage: String?
     public internal(set) var filter: MailFilter = .all
     public internal(set) var query = ""
+    public internal(set) var typed = ""
     public internal(set) var nextPageToken: String?
     public internal(set) var unread: [Inlet.ID: Int] = [:]
     public internal(set) var outbox: [OutboxItem] = []
@@ -52,6 +53,7 @@ public final class MailModel {
     var phase: MailLoadPhase = .settled
     var generation = 0
     var eventTask: Task<Void, Never>?
+    @ObservationIgnored var searchTask: Task<Void, Never>?
     let commandContinuation: AsyncStream<MailCommand>.Continuation
     public let commands: AsyncStream<MailCommand>
 
@@ -81,10 +83,20 @@ public final class MailModel {
     public var rows: [MailRow] {
         var counts: [String: Int] = [:]
         for summary in summaries where !summary.threadID.isEmpty { counts[summary.threadID, default: 0] += 1 }
-        return summaries.filter { filter.matches($0) }.map {
+        let needle = localNeedle
+        return summaries.filter { filter.matches($0) && (needle.isEmpty || Self.contains($0, needle)) }.map {
             MailRow(summary: $0, selected: $0.id == selectedMessage,
                     threadCount: $0.threadID.isEmpty ? 1 : counts[$0.threadID, default: 1])
         }
+    }
+
+    var localNeedle: String {
+        typed == query ? "" : typed.lowercased()
+    }
+
+    static func contains(_ summary: MailMessageSummary, _ needle: String) -> Bool {
+        [summary.from, summary.fromRaw, summary.toRaw, summary.subject, summary.snippet]
+            .joined(separator: " ").lowercased().contains(needle)
     }
 
     public var canLoadMore: Bool {
@@ -120,7 +132,7 @@ public final class MailModel {
         if summaries.isEmpty {
             return query.isEmpty ? .empty(folder: folder) : .emptySearch(query: query, folder: folder)
         }
-        if rows.isEmpty { return .noFilterMatch }
+        if rows.isEmpty { return localNeedle.isEmpty ? .noFilterMatch : .emptySearch(query: typed, folder: folder) }
         return .loaded
     }
 
@@ -155,6 +167,7 @@ public final class MailModel {
             selectedFolder = nil
             selectedMessage = nil
             query = ""
+            typed = ""
             summaries = []
             nextPageToken = nil
             phase = .settled
@@ -167,6 +180,7 @@ public final class MailModel {
         selectedInlet = id
         selectedFolder = nil
         query = ""
+        typed = ""
         summaries = []
         nextPageToken = nil
         selectedMessage = nil
@@ -178,6 +192,7 @@ public final class MailModel {
         guard selectedInlet != nil else { return }
         selectedFolder = id
         query = ""
+        typed = ""
         filter = .all
         picked = []
         await loadSelection()
@@ -206,6 +221,7 @@ public final class MailModel {
     public func search(_ text: String) async {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         query = trimmed
+        typed = trimmed
         guard let inlet = selectedInlet, let folder = selectedFolder else { return }
         if trimmed.isEmpty {
             await loadSelection()
@@ -217,6 +233,21 @@ public final class MailModel {
         nextPageToken = nil
         phase = .loading
         await fetch(inlet: inlet, folder: folder, query: trimmed, token: nil, generation: mine, replace: true)
+    }
+
+    public func type(_ text: String) async {
+        typed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if typed.isEmpty, !query.isEmpty { await submit("") }
+    }
+
+    public func submit(_ text: String) async {
+        searchTask?.cancel()
+        let task = Task {
+            guard !Task.isCancelled else { return }
+            await search(text)
+        }
+        searchTask = task
+        await task.value
     }
 
     func fail(_ error: HubError, inlet: Inlet.ID, folder: String) {
@@ -394,6 +425,7 @@ extension MailModel {
 
     public func setSearching(_ on: Bool) async {
         searching = on
+        if !on { typed = "" }
         if !on, !query.isEmpty { await search("") }
     }
 

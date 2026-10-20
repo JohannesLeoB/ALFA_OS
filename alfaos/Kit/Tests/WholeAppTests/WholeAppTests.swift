@@ -1847,6 +1847,7 @@ final class ModelFakeEngine: MailEngine {
     var holdSave = false
     var gate: CheckedContinuation<Void, Never>?
     var holdPages = false
+    var searchCalls: [String] = []
     let events: AsyncStream<MailEngineEvent>
     let feed: AsyncStream<MailEngineEvent>.Continuation
     init() {
@@ -1858,6 +1859,7 @@ final class ModelFakeEngine: MailEngine {
     func lastSync(_ inlet: Inlet.ID, folder: String) -> Date? { Date(timeIntervalSince1970: 100) }
     func loadPage(_ inlet: Inlet.ID, folder: String, query: String?, pageToken: String?) async throws(HubError)
         -> MailMessagePage {
+        if let query { searchCalls.append(query) }
         if holdPages { await withCheckedContinuation { gate = $0 } }
         if let pageError { throw pageError }
         return pages[pageToken] ?? MailMessagePage(messages: [])
@@ -2688,6 +2690,29 @@ final class MailModelTests {
         await model.start()
         await model.search("zzz")
         recordEqual(model.listState, .emptySearch(query: "zzz", folder: "INBOX"))
+    }
+    func runTypingFiltersLocallySubmitSearchesOnceAndAStaleResultLoses() async {
+        let engine = ModelFakeEngine()
+        let model = makeModel(engine)
+        engine.pages[nil] = MailMessagePage(messages: [fakeMessage("m1", subject: "Alpha"), fakeMessage("m2", subject: "Beta")])
+        await model.start()
+        for text in ["a", "al", "alp"] { await model.type(text) }
+        recordEqual(engine.searchCalls, [])
+        recordEqual(model.rows.map(\.id), ["m1"])
+        await model.submit("alp")
+        recordEqual(engine.searchCalls, ["alp"])
+        engine.holdPages = true
+        let old = Task { await model.submit("old") }
+        let waiting = await eventually { engine.gate != nil }
+        recordTrue(waiting)
+        engine.holdPages = false
+        engine.pages[nil] = MailMessagePage(messages: [fakeMessage("new")])
+        await model.submit("new")
+        engine.pages[nil] = MailMessagePage(messages: [fakeMessage("stale")])
+        engine.release()
+        await old.value
+        recordEqual(engine.searchCalls, ["alp", "old", "new"])
+        recordEqual(model.summaries.map(\.id), ["new"])
     }
     func runFilterWithoutHitsIsNoFilterMatch() async {
         let engine = ModelFakeEngine()
@@ -3857,6 +3882,7 @@ final class WholeAppTests: XCTestCase {
         try await step("SetupTests.runRemovedAccountTakesItsMirroredMailWithIt") { let item = SetupTests(); try await item.runRemovedAccountTakesItsMirroredMailWithIt(); item.cleanup() }
         try await step("MailModelTests.runListEmptyLoadingLoadedFailed") { await MailModelTests().runListEmptyLoadingLoadedFailed() }
         try await step("MailModelTests.runSearchWithoutHitsIsEmptySearch") { await MailModelTests().runSearchWithoutHitsIsEmptySearch() }
+        try await step("MailModelTests.runTypingFiltersLocallySubmitSearchesOnceAndAStaleResultLoses") { await MailModelTests().runTypingFiltersLocallySubmitSearchesOnceAndAStaleResultLoses() }
         try await step("MailModelTests.runFilterWithoutHitsIsNoFilterMatch") { await MailModelTests().runFilterWithoutHitsIsNoFilterMatch() }
         try await step("MailModelTests.runLoadMoreAppendsByPageToken") { await MailModelTests().runLoadMoreAppendsByPageToken() }
         try await step("MailModelTests.runSendWithoutSubjectIsBlocked") { await MailModelTests().runSendWithoutSubjectIsBlocked() }

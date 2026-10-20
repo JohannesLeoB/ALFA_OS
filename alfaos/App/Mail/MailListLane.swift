@@ -28,10 +28,7 @@ struct MailListLane: View {
         }
         .onChange(of: model.selectedFolder) { text = "" }
         .onChange(of: model.searching) { _, on in if !on { text = "" } }
-        .task(id: text) {
-            guard model.searching || !text.isEmpty else { return }
-            await model.search(text)
-        }
+        .onChange(of: text) { Task { await model.type(text) } }
     }
 
     private func header(width: Double) -> some View {
@@ -133,6 +130,7 @@ struct MailListLane: View {
             }
             .help(Text(verbatim: here ? words("mail.search.tip.here", title) : words("mail.search.tip.all", title)))
         }
+        .onSubmit { Task { await model.submit(text) } }
         .onKeyPress(.escape) {
             Task { await model.setSearching(false) }
             return .handled
@@ -170,7 +168,7 @@ struct MailListLane: View {
         let picking = model.picking
         return ScrollView {
             LazyVStack(spacing: 0) {
-                if !model.query.isEmpty, !items.isEmpty {
+                if !model.typed.isEmpty, !items.isEmpty {
                     Text(verbatim: words("mail.search.results", MailNames.number(items.count)))
                         .designText(\.inkTertiary, size: Design.TextSize.small)
                         .padding(.horizontal, CGFloat(Design.Spacing.step8))
@@ -210,7 +208,7 @@ struct MailListLane: View {
                          action: { TextButton(label: word("mail.list.failed.act")) { Task { await model.loadSelection() } } })
         case .noResults(let query, let folder):
             ContentState(kind: .noResults, text: line("mail.list.emptySearch", query, folderTitle(folder)), glyph: { Glyph(.search) },
-                         action: { TextButton(label: word("mail.list.emptySearch.act")) { Task { await model.search("") } } })
+                         action: { TextButton(label: word("mail.list.emptySearch.act")) { text = ""; Task { await model.submit("") } } })
         case .noFilterMatch:
             ContentState(kind: .noResults, text: word("mail.list.noFilterMatch"), glyph: { Glyph(.filter) },
                          action: { TextButton(label: word("mail.list.noFilterMatch.act")) { model.setFilter(.all) } })
