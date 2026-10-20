@@ -735,6 +735,12 @@ final class HubTests {
             recordEqual(error as? SetupError, .limitReached(.mail, max: 3))
         }
         recordEqual(rig.hub.setup.inlets.count, 3)
+        rig.provider.setAccepting(false)
+        _ = try? await rig.hub.setup.probe(rig.hub.setup.inlets[0].id)
+        rig.provider.setAccepting(true)
+        let renewed = try await connect(rig, "a@x")
+        recordTrue(renewed.id == rig.hub.setup.inlets[0].id)
+        recordEqual(rig.hub.setup.inlets.count, 3)
         rig.hub.rules.setLimit(.mail, 5)
         _ = try await connect(rig, "d@x")
         recordEqual(rig.hub.setup.inlets.count, 4)

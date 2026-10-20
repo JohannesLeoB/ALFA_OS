@@ -82,6 +82,8 @@ HubTests.runAcceptedProbeConnectsAndPortsFollowCapabilities throws "capabilityMi
 HubTests.runAcceptedProbeConnectsAndPortsFollowCapabilities eq some(HubError.capabilityMissing(capabilityMissing=(String, Capability)(.0="fake-<uuid>",.1=Capability.calendar())))
 HubTests.runFourthMailAccountNeedsALargerLimit eq some(SetupError.limitReached(limitReached=(Capability, max: Int)(.0=Capability.mail(),max=3)))
 HubTests.runFourthMailAccountNeedsALargerLimit eq 3
+HubTests.runFourthMailAccountNeedsALargerLimit true some(true)
+HubTests.runFourthMailAccountNeedsALargerLimit eq 3
 HubTests.runFourthMailAccountNeedsALargerLimit eq 4
 HubTests.runCadenceRunsOnePairOnceAndCountsTheCall eq some(Cadence.every(every=Duration(_low=4852094820647174144,_high=16)))
 HubTests.runCadenceRunsOnePairOnceAndCountsTheCall eq 1

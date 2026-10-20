@@ -305,7 +305,6 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         guard let provider = providers[offer.provider] else {
             throw .probeFailed(Hint(text: "hint.provider.unknown", detail: offer.provider))
         }
-        try checkLimits(offer)
         let owner = offer.owner == ServiceCatalog.ownPerson ? Owner.person(config.person.id) : offer.owner
         var inlet = Inlet(id: offer.provider + "-" + UUID().uuidString, provider: offer.provider,
                           capabilities: offer.capabilities, owner: owner, title: offer.title)
