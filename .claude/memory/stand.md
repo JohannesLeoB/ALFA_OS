@@ -72,7 +72,13 @@ metadata:
   - Verworfen: Meldung über `.syncFailed`, sie ersetzte die ganze Mailliste (MailModel.swift:393-399 → MailListLane.swift:158).
   - Offen:
     - Unlesbare Postausgang-Zeilen und lokale Speicherfehler sind unsichtbar (Anzeige ist Lücke an Design, N7).
-    - A1c: `card.remoteID` folgt bei IMAP nicht der `draftID` des Postausgangs (IMAPSMTPMailTransport.swift:251-273 hängt neu an), danach bleibt ein verwaister Entwurf auf dem Server; schon vor A1b.
+- A1c ab31263 (Johannes 20.10.: „Ja. A1c (Entwurf-ID nach Erneut senden bei IMAP) über bau-mail mit Sonnet, Ticket vorher von Haiku prüfen lassen, du prüfst und committest.“):
+  - Solange die Karte in `.queuedInOutbox` steht, übernimmt sie die `draftID` des Postausgangs (MailModel+Draft.swift:195); ein Speichern nach dem Fehlschlag gewinnt weiter.
+  - Prüfung: neuer Schritt `runSendAgainReplacesTheDraftTheOutboxSaved`; Mutanten des Bauers A und B rot, Lead-Mutant (Vorrang in `resend` umgedreht) rot an :2170; App-Build grün; testLines 5768.
+  - Den ungeprüften Zweig `.sending` hat die Lead streichen lassen.
+  - Offen, schon vorher so:
+    - Ein laufendes Speichern (.saving) schreibt `remoteID` ohne Zustandsprüfung, und Senden sperrt `.saving` nicht (MailModel+Draft.swift:101, :107, :155).
+    - `reconcileDrafts` setzt eine Karte mit fehlgeschlagenem Eintrag bei jedem Postausgang-Ereignis wieder auf `.sendFailed`, auch nach Bearbeiten oder Speichern.
 - Parallel bei Johannes: AGENTS.md wird in Codex neu gefasst (Lead hat Korrekturen geliefert: Gedächtnis, Leseorte, fundus, Ehrenkodex, Wegweiser, Rangfolge mit Quelle, Export erst nach Prüfskripten, 75 %-Regel, Haiku-Pflicht eingrenzen). Produktsitzung grillt Johannes zu Umfang, Einstellungen, Dateien/Vorlagen, Projekte, Heute, Kataloge, Mail-Resten, Datenhaltung. Eigene Grill-Sitzung des Lotsen (Auftrag GRILL-LOTSE-AUFTRAG.md bei Johannes) zu Lastenheft, offenen Lead-Entscheiden, Code-Rückschau, Codebase-Design, Ablauf.
 - Wartet danach: B Ballast und D Namen/myk erst nach Johannes' Entscheid in der Grill-Sitzung, was weg darf. C Tempo, E2 SheetValues-Quellen, H7 Datenspeicher (Stammtisch-Entwurf H7 in STAMMTISCH/ALFA Stammtisch.rtf).
 - Johannes 20.10. zu Tests: „bitte manage du das mit den tests“ (test-verstaendnis.md). Unabhängige Prüfung liegt auf der Wächter-Seite bei Johannes; die Lead kennt keine Einzelheiten und fragt nicht danach.
