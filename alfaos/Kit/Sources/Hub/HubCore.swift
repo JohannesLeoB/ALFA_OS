@@ -464,7 +464,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         for kind in delivered.keys { delivered[kind]?[inletID] = nil }
         records.removeAll { $0.id == inletID }
         for list in feeds.values { list.forEach { $0.drop(inlet: inletID) } }
-        emit(.inletChanged(inletID))
+        emit(.inletRemoved(inletID))
     }
 
     func cadence(_ inlet: Inlet.ID, _ capability: Capability) -> Cadence {

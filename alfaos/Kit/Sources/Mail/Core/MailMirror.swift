@@ -217,6 +217,14 @@ struct MailMirror: Sendable {
         }
     }
 
+    func purge(_ inlet: Inlet.ID) throws {
+        try db.write { db in
+            for table in ["mail_message", "mail_folder", "mail_sync", "mail_outbox"] {
+                try db.execute(sql: "DELETE FROM \(table) WHERE inlet = ?", arguments: [inlet])
+            }
+        }
+    }
+
     private static func stamp(_ db: Database, inlet: Inlet.ID, folder: String, at date: Date) throws {
         try db.execute(sql: "INSERT OR REPLACE INTO mail_sync (inlet, folder, at) VALUES (?, ?, ?)",
                        arguments: [inlet, folder, date.timeIntervalSince1970])

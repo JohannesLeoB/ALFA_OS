@@ -244,6 +244,7 @@ public enum SetupError: Error, Equatable, Sendable {
 
 public enum HubEvent: Equatable, Sendable {
     case inletChanged(Inlet.ID)
+    case inletRemoved(Inlet.ID)
     case syncFinished(Capability, Inlet.ID)
     case newItems(DataKind)
 }

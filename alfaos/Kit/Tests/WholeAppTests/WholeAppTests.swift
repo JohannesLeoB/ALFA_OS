@@ -2637,9 +2637,17 @@ final class SetupTests {
         let mirror = try MailMirror(database)
         try mirror.replaceFolders(inlet.id, [MailFolder(id: "INBOX", name: "Inbox", role: .inbox)])
         try mirror.replaceMessages(inlet.id, folder: "INBOX", [MailMessageSummary(id: "m1", subject: "s", from: "a")], at: Date())
+        let outcome = await result.engine.send(inlet.id, draft())
+        guard case .queued = outcome else { return XCTFail("expected queued") }
+        recordEqual(result.engine.outbox.count, 1)
+        recordEqual(mirror.outbox().count, 1)
         try await result.hub.setup.remove(inlet.id)
-        let left = try rows(database, inlet.id)
-        recordEqual(left, 2)
+        let purged = await eventually { result.engine.outbox.isEmpty }
+        recordTrue(purged)
+        recordEqual(try rows(database, inlet.id), 0)
+        recordEqual(mirror.outbox().count, 0)
+        recordEqual(result.engine.messages(inlet.id, folder: "INBOX").count, 0)
+        recordEqual(result.engine.folders(inlet.id).count, 0)
     }
 }
 

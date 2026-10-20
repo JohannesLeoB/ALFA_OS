@@ -411,7 +411,13 @@ SetupTests.runCadenceOfANewInletComesFromTheConfiguration eq some(Cadence.every(
 SetupTests.runRenewalKeepsTheCadenceTheUserSet eq Cadence.every(every=Duration(_low=4852094820647174144,_high=16))
 SetupTests.runRenewalKeepsTheCadenceTheUserSet true some(true)
 SetupTests.runRenewalKeepsTheCadenceTheUserSet eq "double-<uuid>"
-SetupTests.runRemovedAccountTakesItsMirroredMailWithIt eq 2
+SetupTests.runRemovedAccountTakesItsMirroredMailWithIt eq 1
+SetupTests.runRemovedAccountTakesItsMirroredMailWithIt eq 1
+SetupTests.runRemovedAccountTakesItsMirroredMailWithIt true some(true)
+SetupTests.runRemovedAccountTakesItsMirroredMailWithIt eq 0
+SetupTests.runRemovedAccountTakesItsMirroredMailWithIt eq 0
+SetupTests.runRemovedAccountTakesItsMirroredMailWithIt eq 0
+SetupTests.runRemovedAccountTakesItsMirroredMailWithIt eq 0
 MailModelTests.runListEmptyLoadingLoadedFailed eq "INBOX"
 MailModelTests.runListEmptyLoadingLoadedFailed eq MailListState.empty(empty=(folder: String)(folder="INBOX"))
 MailModelTests.runListEmptyLoadingLoadedFailed eq MailListState.loading()

@@ -315,11 +315,22 @@ public final class MailCore: MailEngine {
         switch event {
         case .inletChanged:
             emit(.accountsChanged)
+        case .inletRemoved(let inlet):
+            purge(inlet)
         case .syncFinished(.mail, let inlet):
             await sync(inlet)
         default:
             break
         }
+    }
+
+    private func purge(_ inlet: Inlet.ID) {
+        guard (try? mirror.purge(inlet)) != nil else { return }
+        let before = items.count
+        items.removeAll { $0.inlet == inlet }
+        emit(.foldersChanged(inlet))
+        if items.count != before { emit(.outboxChanged) }
+        emit(.accountsChanged)
     }
 
     private func sync(_ inlet: Inlet.ID) async {
