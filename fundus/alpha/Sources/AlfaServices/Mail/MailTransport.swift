@@ -46,11 +46,13 @@ public struct MailMessageSummary: Identifiable, Equatable, Sendable {
     public var flags: Set<MailFlag>
     public var folderIDs: [String]
     public var attachmentCount: Int
+    public var attachments: [MailAttachmentInfo]
     public var messageIDHeader: String
 
     public init(id: String, threadID: String = "", subject: String, from: String, fromRaw: String = "", toRaw: String = "",
                 ccRaw: String = "", snippet: String = "", receivedAt: Date? = nil, flags: Set<MailFlag> = [],
-                folderIDs: [String] = [], attachmentCount: Int = 0, messageIDHeader: String = "") {
+                folderIDs: [String] = [], attachmentCount: Int = 0, attachments: [MailAttachmentInfo] = [],
+                messageIDHeader: String = "") {
         self.id = id
         self.threadID = threadID
         self.subject = subject
@@ -63,6 +65,7 @@ public struct MailMessageSummary: Identifiable, Equatable, Sendable {
         self.flags = flags
         self.folderIDs = folderIDs
         self.attachmentCount = attachmentCount
+        self.attachments = attachments
         self.messageIDHeader = messageIDHeader
     }
 }
@@ -77,7 +80,7 @@ public struct MailMessagePage: Equatable, Sendable {
     }
 }
 
-public struct MailAttachmentInfo: Equatable, Sendable {
+public struct MailAttachmentInfo: Equatable, Sendable, Codable {
     public var id: String
     public var filename: String
     public var mimeType: String

@@ -5,6 +5,7 @@ import struct AlfaKit.EmailDraft
 import enum AlfaServices.MailFlag
 import struct AlfaServices.MailFolder
 import enum AlfaServices.MailFolderRole
+import struct AlfaServices.MailAttachmentInfo
 import struct AlfaServices.MailMessageSummary
 
 struct MailMirror: Sendable {
@@ -24,7 +25,7 @@ struct MailMirror: Sendable {
                     thread TEXT NOT NULL, subject TEXT NOT NULL, sender TEXT NOT NULL, fromRaw TEXT NOT NULL,
                     toRaw TEXT NOT NULL, ccRaw TEXT NOT NULL, snippet TEXT NOT NULL, receivedAt REAL,
                     flags TEXT NOT NULL, seen INTEGER NOT NULL, folderIDs TEXT NOT NULL, attachmentCount INTEGER NOT NULL,
-                    messageIDHeader TEXT NOT NULL DEFAULT '',
+                    messageIDHeader TEXT NOT NULL DEFAULT '', attachments BLOB,
                     PRIMARY KEY (inlet, folder, id))
                 """)
             try db.execute(sql: """
@@ -43,6 +44,9 @@ struct MailMirror: Sendable {
             let messageColumns = try String.fetchAll(db, sql: "SELECT name FROM pragma_table_info('mail_message')")
             if !messageColumns.contains("messageIDHeader") {
                 try db.execute(sql: "ALTER TABLE mail_message ADD COLUMN messageIDHeader TEXT NOT NULL DEFAULT ''")
+            }
+            if !messageColumns.contains("attachments") {
+                try db.execute(sql: "ALTER TABLE mail_message ADD COLUMN attachments BLOB")
             }
         }
     }
@@ -233,23 +237,26 @@ struct MailMirror: Sendable {
     private static func insert(_ db: Database, inlet: Inlet.ID, folder: String, position: Int, _ m: MailMessageSummary) throws {
         try db.execute(sql: """
             INSERT OR REPLACE INTO mail_message
-            (inlet, folder, id, position, thread, subject, sender, fromRaw, toRaw, ccRaw, snippet, receivedAt, flags, seen, folderIDs, attachmentCount, messageIDHeader)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (inlet, folder, id, position, thread, subject, sender, fromRaw, toRaw, ccRaw, snippet, receivedAt, flags, seen, folderIDs, attachmentCount, messageIDHeader, attachments)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             arguments: [inlet, folder, m.id, position, m.threadID, m.subject, m.from, m.fromRaw, m.toRaw, m.ccRaw, m.snippet,
                         m.receivedAt?.timeIntervalSince1970, encode(m.flags), m.flags.contains(.seen) ? 1 : 0,
-                        m.folderIDs.joined(separator: "\n"), m.attachmentCount, m.messageIDHeader])
+                        m.folderIDs.joined(separator: "\n"), m.attachmentCount, m.messageIDHeader,
+                        try JSONEncoder().encode(m.attachments)])
     }
 
     private static func summary(_ row: Row) -> MailMessageSummary {
         let received: Double? = row["receivedAt"]
         let ids: String = row["folderIDs"]
+        let stored: Data? = row["attachments"]
+        let attachments = stored.flatMap { try? JSONDecoder().decode([MailAttachmentInfo].self, from: $0) } ?? []
         return MailMessageSummary(
             id: row["id"], threadID: row["thread"], subject: row["subject"], from: row["sender"], fromRaw: row["fromRaw"],
             toRaw: row["toRaw"], ccRaw: row["ccRaw"], snippet: row["snippet"],
             receivedAt: received.map { Date(timeIntervalSince1970: $0) }, flags: flags(row["flags"]),
             folderIDs: ids.isEmpty ? [] : ids.components(separatedBy: "\n"), attachmentCount: row["attachmentCount"],
-            messageIDHeader: row["messageIDHeader"])
+            attachments: attachments, messageIDHeader: row["messageIDHeader"])
     }
 
     private static func encode(_ flags: Set<MailFlag>) -> String {

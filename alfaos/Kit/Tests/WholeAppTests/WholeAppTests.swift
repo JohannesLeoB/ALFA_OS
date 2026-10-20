@@ -1681,11 +1681,13 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     private var _sent: [EmailDraft] = []
     private var _sendCalls = 0
     private var _listCalls = 0
+    private var _bodyCalls = 0
     var folders: [MailFolder] { get { lock.withLock { _folders } } set { lock.withLock { _folders = newValue } } }
     var sendError: Error? { get { lock.withLock { _sendError } } set { lock.withLock { _sendError = newValue } } }
     var listError: Error? { get { lock.withLock { _listError } } set { lock.withLock { _listError = newValue } } }
     var sent: [EmailDraft] { lock.withLock { _sent } }
     var sendCalls: Int { lock.withLock { _sendCalls } }
+    var bodyCalls: Int { lock.withLock { _bodyCalls } }
     func setPage(_ folder: String, _ page: MailMessagePage) { lock.withLock { _pages[folder] = page } }
     func setTokenPage(_ token: String?, _ page: MailMessagePage) { lock.withLock { _tokenPages[token ?? "-"] = page } }
     func failList(call: Int, _ error: Error) { lock.withLock { _failures[call] = error } }
@@ -1702,7 +1704,10 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
         if let failure { throw failure }
         return page ?? MailMessagePage(messages: [])
     }
-    func fetchBody(messageID: String) async throws -> MailMessageBody { MailMessageBody(text: "body") }
+    func fetchBody(messageID: String) async throws -> MailMessageBody {
+        lock.withLock { _bodyCalls += 1 }
+        return MailMessageBody(text: "body")
+    }
     func send(_ draft: EmailDraft) async throws {
         lock.withLock { _sendCalls += 1 }
         if let error = sendError { throw error }
@@ -2370,6 +2375,30 @@ final class CoreModelTests {
         transport.listError = MailTransportError.timeout
         await model.loadSelection()
         guard case .offline = model.listState else { return XCTFail("state \(model.listState)") }
+    }
+    func runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch() async throws {
+        let hub = HubDouble()
+        let transport = hub.add("one")
+        transport.folders = scriptedInbox
+        let plan = MailAttachmentInfo(id: "a1", filename: "plan.pdf", mimeType: "application/pdf", sizeBytes: 2_048)
+        let photo = MailAttachmentInfo(id: "a2", filename: "photo.png", mimeType: "image/png", sizeBytes: 4_096)
+        var first = fakeMessage("m1", attachments: 2, thread: "t")
+        first.attachments = [plan, photo]
+        transport.setTokenPage(nil, MailMessagePage(messages: [first, fakeMessage("m2", thread: "t"), fakeMessage("m3", thread: "u")]))
+        let core = try MailCore(hub: hub, database: DatabaseQueue())
+        let model = MailModel(engine: core)
+        await model.start()
+        let rows = model.rowPresentations
+        recordEqual(rows[0].attachments.map(\.name), ["plan.pdf", "photo.png"])
+        recordEqual(rows[0].attachments.map(\.id), ["a1", "a2"])
+        recordEqual(rows[0].attachmentTotal, 2)
+        recordTrue(rows[1].attachments.isEmpty)
+        recordEqual(rows.map(\.thread), [2, 2, nil])
+        recordEqual(core.messages("one", folder: "INBOX").first?.attachments, [plan, photo])
+        recordEqual(transport.bodyCalls, 0)
+        recordEqual(transport.calls, [])
+        await model.open("m1")
+        recordEqual(transport.bodyCalls, 1)
     }
 }
 
@@ -3869,6 +3898,7 @@ final class WholeAppTests: XCTestCase {
         try await step("CoreTests.runLocalSearchListsTheNewestHitsFirst") { try await CoreTests().runLocalSearchListsTheNewestHitsFirst() }
         try await step("CoreActionTests.runTheCoreActions") { try await CoreActionTests().runTheCoreActions() }
         try await step("CoreModelTests.runModelOverCoreShowsOfflineWhenTheNetworkDrops") { try await CoreModelTests().runModelOverCoreShowsOfflineWhenTheNetworkDrops() }
+        try await step("CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch") { try await CoreModelTests().runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch() }
         try await step("AccountTests.runRemovingTheSelectedAccountLetsLoadMoreUseTheTokenOfTheOldOne") { await AccountTests().runRemovingTheSelectedAccountLetsLoadMoreUseTheTokenOfTheOldOne() }
         try await step("AccountTests.runRemovingTheOnlyAccountStillListsItsRows") { await AccountTests().runRemovingTheOnlyAccountStillListsItsRows() }
         try await step("AccountTests.runLoadMoreOfTheOldAccountLandsInTheNewAccountWhileItsFoldersLoad") { await AccountTests().runLoadMoreOfTheOldAccountLandsInTheNewAccountWhileItsFoldersLoad() }

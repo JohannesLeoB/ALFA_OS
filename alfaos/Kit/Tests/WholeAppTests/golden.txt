@@ -357,6 +357,15 @@ CoreActionTests.runTheCoreActions eq ["7:5:INBOX"]
 CoreActionTests.runTheCoreActions nil true
 CoreActionTests.runTheCoreActions eq "NO [CANNOT] gone"
 CoreModelTests.runModelOverCoreShowsOfflineWhenTheNetworkDrops eq MailListState.loaded()
+CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch eq ["plan.pdf","photo.png"]
+CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch eq ["a1","a2"]
+CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch eq 2
+CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch true some(true)
+CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch eq [some(2),some(2),nil]
+CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch eq some([MailAttachmentInfo(id="a1",filename="plan.pdf",mimeType="application/pdf",sizeBytes=2048),MailAttachmentInfo(id="a2",filename="photo.png",mimeType="image/png",sizeBytes=4096)])
+CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch eq 0
+CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch eq []
+CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch eq 1
 AccountTests.runRemovingTheSelectedAccountLetsLoadMoreUseTheTokenOfTheOldOne eq "a"
 AccountTests.runRemovingTheSelectedAccountLetsLoadMoreUseTheTokenOfTheOldOne eq "token-of-a"
 AccountTests.runRemovingTheSelectedAccountLetsLoadMoreUseTheTokenOfTheOldOne eq "b"

@@ -49,7 +49,6 @@ struct MailRowView: View {
             preview
             chips
         }
-        .task { await model.measureRow(item.id) }
         .overlay(alignment: .topTrailing) { rowActions }
         .contentShape(shape)
         .simultaneousGesture(SpatialTapGesture(count: 2).onEnded { if !onMark($0.location) { open(pin: true) } })

@@ -140,10 +140,14 @@ public struct GmailMailTransport: MailTransport {
         if message.labels.contains(GmailSystemLabel.unread) == false { flags.insert(.seen) }
         if message.labels.contains(GmailSystemLabel.starred) { flags.insert(.flagged) }
         if message.labels.contains(GmailSystemLabel.draft) { flags.insert(.draft) }
+        let attachments = message.attachments.map {
+            MailAttachmentInfo(id: $0.attachmentID, filename: $0.filename, mimeType: $0.mimeType, sizeBytes: $0.sizeBytes)
+        }
         return MailMessageSummary(
             id: message.id, threadID: message.threadID, subject: message.subject, from: message.from,
             fromRaw: message.fromRaw, toRaw: message.toRaw, ccRaw: message.ccRaw, snippet: message.snippet,
             receivedAt: message.receivedAt, flags: flags, folderIDs: message.labels,
-            attachmentCount: message.attachments.count, messageIDHeader: message.messageIDHeader)
+            attachmentCount: attachments.count, attachments: attachments,
+            messageIDHeader: message.messageIDHeader)
     }
 }

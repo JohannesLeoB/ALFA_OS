@@ -357,6 +357,9 @@ public struct IMAPSMTPMailTransport: MailTransport {
             .split(separator: " ").first.map(String.init)
         let thread = references ?? envelope?.inReplyTo ?? envelope?.messageID ?? id
         let sender = envelope?.from.first ?? envelope?.sender.first
+        let attachments = (entry.structure?.attachments ?? []).map {
+            MailAttachmentInfo(id: $0.section, filename: $0.filename ?? $0.section, mimeType: $0.mimeType, sizeBytes: $0.size)
+        }
         return MailMessageSummary(
             id: id, threadID: thread, subject: envelope?.subject ?? "", from: sender?.display ?? "",
             fromRaw: (envelope?.from ?? []).map(\.raw).joined(separator: ", "),
@@ -364,8 +367,8 @@ public struct IMAPSMTPMailTransport: MailTransport {
             ccRaw: (envelope?.cc ?? []).map(\.raw).joined(separator: ", "),
             snippet: "",
             receivedAt: entry.internalDate ?? envelope?.date.flatMap(MailMIME.parseMessageDate),
-            flags: flags, folderIDs: [folder], attachmentCount: entry.structure?.attachments.count ?? 0,
-            messageIDHeader: envelope?.messageID ?? "")
+            flags: flags, folderIDs: [folder], attachmentCount: attachments.count,
+            attachments: attachments, messageIDHeader: envelope?.messageID ?? "")
     }
 
     private func withIncoming<T: Sendable>(_ body: @Sendable (IMAPSession) async throws -> T) async throws -> T {
