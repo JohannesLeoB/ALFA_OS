@@ -1,6 +1,6 @@
 # ALFA_OS
 
-Native macOS-App ALFA (Swift, SwiftUI). Regeln: `AGENTS.md`; sie gehen allem vor. Diese Datei ist die Karte: jeder Ordner im Repo steht hier mit Zweck und Lebensdauer.
+Native macOS-App ALFA (Swift, SwiftUI). Regeln: `AGENTS.md`; sie gehen allem vor. Hier steht Nachschlagwissen, auf das `AGENTS.md` verweist. Diese Datei ist die Karte: jeder Ordner im Repo steht hier mit Zweck und Lebensdauer.
 
 ## Karte
 
@@ -11,9 +11,9 @@ Native macOS-App ALFA (Swift, SwiftUI). Regeln: `AGENTS.md`; sie gehen allem vor
 | `alfaos/Kit/` | Logik (Swift-Paket: ShellCore, Mail, Hub), Tests | dauerhaft |
 | `alfaos/project.yml` | Xcode-Projekt-Vorlage (xcodegen) | dauerhaft |
 | `alfaos/Config/` | Entitlements, Info.plist, Export-Optionen, Beispielwerte ohne Firmendaten | dauerhaft |
-| `alfaos/Tests/` | App-Test `HullProbeTests.swift`; geht in den einen Test über (L5) | bis überführt |
+| `alfaos/Tests/` | App-Test `HullProbeTests.swift`; geht in den einen Test über (`AGENTS.md` §10) | bis überführt |
 | `fundus/alpha/` | Bestandscode, eingebunden als `AlfaKit`, `AlfaServices`, `AlfaCalculation` | bis abgelöst |
-| `DESIGN/` | letzter und vorletzter Design-Master (ZIP), `MANIFEST.json` | nach L7 |
+| `DESIGN/` | letzter und vorletzter Design-Master (ZIP), `MANIFEST.json` | nach `AGENTS.md` §8 |
 | `DESIGN/brief/` | aktueller Brief an Design mit Schemas, Prüfskripten, Beispielen | nur der letzte |
 | `gestaltung/alfa-interface/` | `tokens.json`, `tokens.css` (altes Theme), `quarantine.json` (Alt-Tokens ohne Rolle), `design.stamp.json` (Stempel des Masters) | bis abgelöst |
 | `scripts/` | Generatoren mit `--check`, `mutate.py`, `lizenzen.txt`; Prüf- und Hook-Dateien (Wächter) | dauerhaft |
@@ -62,7 +62,7 @@ Code
 Außerhalb des Repos
 - `~/Developer/STAMMTISCH/ALFA Stammtisch.rtf`: Beratung zwischen Lead, Archivar und Produkt.
 - `~/Developer/SKILLS/alfa-bibliothekar/books/`: Bücher je Bereich (Stand nicht garantiert; an der Quelle prüfen).
-- Nur lesend, laut `AGENTS.md` L6: `~/Developer/ARCHIV/mykilos-Alphabet` (Branch `labor/ansicht`), `~/Developer/mykilos-labor`, `~/ALPHA`.
+- Nur lesend, laut `AGENTS.md` §5: `~/Developer/ARCHIV/mykilos-Alphabet` (Branch `labor/ansicht`, gesichert als `sicherung/labor-*` auf GitHub), `~/Developer/mykilos-labor`, `~/ALPHA`.
 
 ## Bauen und prüfen
 
@@ -75,12 +75,17 @@ Jede Sitzung arbeitet in genau **einem** Ordner `dist/<sitzung>/` (die Lead: `di
 
 ## Commit
 
-- Betreff höchstens 72 Zeichen; letzte Zeile genau `Designed by Johannes Leo Berger, made with help of Claude`; kein `Co-Authored-By`.
+- Betreff höchstens 72 Zeichen, Leerzeile, dann höchstens drei Zeilen Text; die letzte ist genau `Designed by Johannes Leo Berger, made with help of Claude`; kein `Co-Authored-By`.
 - Der Hook prüft swiftlint (keine Kommentare, keine Umlaute in Code), Generatoren (`--check`) und Grenzen.
-- Nach jedem Commit pushen; lokal und GitHub gleich (`AGENTS.md` L4).
+- Nach jedem Commit pushen; lokal und GitHub gleich (`AGENTS.md` §11).
+
+## Zweige und GitHub-Regeln
+
+- `main`: Arbeitszweig. Regel `main-protect`: kein Force-Push, kein Löschen, lineare Historie.
+- `alfa-draws`: Zweig der Prototyp-Sitzung (`alfaos/Draws`). Regel `only-main` sperrt alle anderen Zweige; eine Nebensitzung mit eigenem Zweig braucht vorher Johannes' Ausnahme.
 
 ## Ablage
 
 - Neue Ordner oder Dateien außerhalb dieser Karte nur auf Johannes' Wort; die Karte im selben Commit nachziehen.
 - Entpackter Master nur in `dist/master-latest/`.
-- `dist/` zeigt sichtbar nur: fertige Apps, `master-latest/` und je laufender Sitzung einen Ordner. Nichts versteckt, keine Berichte; Berichte gehen an Johannes und werden danach gelöscht.
+- `dist/` zeigt sichtbar nur: fertige Apps, `master-latest/`, den Zwischenordner `build/` von `build_app.sh` und je laufender Sitzung einen Ordner. Worktrees von Nebensitzungen liegen als eigener Ordner in `dist/` und werden mit ihrem Zweig entfernt. Nichts versteckt, keine Berichte; Berichte gehen an Johannes und werden danach gelöscht.
