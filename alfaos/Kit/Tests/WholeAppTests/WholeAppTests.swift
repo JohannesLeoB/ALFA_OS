@@ -5524,6 +5524,33 @@ final class KeychainNamespaceTests {
     }
 }
 
+final class MailHTMLTests {
+    func runInlineReferencesResolveAndNavigationStaysInsideTheMail() {
+        let png = Data([0x89, 0x50, 0x4E, 0x47, 0x0D])
+        let images = ["a@x": "att1", "p": "data:image/png;base64," + png.base64EncodedString()]
+        XCTAssertEqual(MailHTML.inlineSource("cid:a@x", in: images), .attachment("att1"))
+        XCTAssertEqual(MailHTML.inlineSource("CID:<a@x>", in: images), .attachment("att1"))
+        XCTAssertEqual(MailHTML.inlineSource("<a@x>", in: images), .attachment("att1"))
+        XCTAssertNil(MailHTML.inlineSource("cid:zz", in: images))
+        XCTAssertEqual(MailHTML.inlineSource("cid:p", in: images), .embedded(png, mime: "image/png"))
+        XCTAssertEqual(MailHTML.mimeType(of: Data([0xFF, 0xD8, 0x00])), "image/jpeg")
+        XCTAssertEqual(MailHTML.navigation(scheme: "HTTPS", linkActivated: true, mainFrame: true), .open)
+        XCTAssertEqual(MailHTML.navigation(scheme: "file", linkActivated: true, mainFrame: true), .cancel)
+        XCTAssertEqual(MailHTML.navigation(scheme: "https", linkActivated: false, mainFrame: true), .cancel)
+        XCTAssertEqual(MailHTML.navigation(scheme: "about", linkActivated: false, mainFrame: true), .allow)
+    }
+    func runTheRemoteRuleBlocksEveryWebAddressForEveryResourceType() throws {
+        let rules = try JSONSerialization.jsonObject(with: Data(MailHTML.blockRemoteRules.utf8)) as? [[String: [String: Any]]]
+        let rule = try XCTUnwrap(rules?.first)
+        XCTAssertEqual(rule["action"]?["type"] as? String, "block")
+        XCTAssertNil(rule["trigger"]?["resource-type"])
+        let filter = try NSRegularExpression(pattern: try XCTUnwrap(rule["trigger"]?["url-filter"] as? String))
+        func hits(_ url: String) -> Bool { filter.firstMatch(in: url, range: NSRange(url.startIndex..., in: url)) != nil }
+        XCTAssertTrue(hits("http://x.test/a.png") && hits("https://x.test/a.png"))
+        XCTAssertFalse(hits("cid:a") || hits("data:image/png;base64,AA=="))
+    }
+}
+
 @MainActor
 func step(_ name: String, _ body: () async throws -> Void) async throws {
     protocolStep.with { $0 = name }
@@ -5732,6 +5759,8 @@ final class WholeAppTests: XCTestCase {
         try await step("GmailFoldersTests.runSystemFoldersCarryRolesAndUserLabelsFollow") { try await GmailFoldersTests().runSystemFoldersCarryRolesAndUserLabelsFollow() }
         try await step("GmailFoldersTests.runMarkingReadRemovesTheUnreadLabelAndMarkingUnreadAddsIt") { try await GmailFoldersTests().runMarkingReadRemovesTheUnreadLabelAndMarkingUnreadAddsIt() }
         try await step("KeychainNamespaceTests.runServiceNamesLiveInTheAlfaNamespace") { KeychainNamespaceTests().runServiceNamesLiveInTheAlfaNamespace() }
+        try await step("MailHTMLTests.runInlineReferencesResolveAndNavigationStaysInsideTheMail") { MailHTMLTests().runInlineReferencesResolveAndNavigationStaysInsideTheMail() }
+        try await step("MailHTMLTests.runTheRemoteRuleBlocksEveryWebAddressForEveryResourceType") { try MailHTMLTests().runTheRemoteRuleBlocksEveryWebAddressForEveryResourceType() }
         try compareWithGolden()
     }
 }

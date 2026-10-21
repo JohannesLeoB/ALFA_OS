@@ -167,12 +167,17 @@ struct SheetBody: View {
 struct ThreadItemView: View {
     @Environment(\.design) private var design
     @Environment(\.hairline) private var hairline
+    @AppStorage(SettingsKey.loadImages) private var loadImages = false
     let model: MailModel
     let card: ReadingCard
     let item: MailThreadItem
     let first: Bool
     let last: Bool
     @State private var anchor = AnchorBox()
+
+    private var showsHTML: Bool {
+        if item.current, case .html = card.content { true } else { false }
+    }
 
     private func system(_ size: Double, _ weight: Font.Weight = .regular) -> Font {
         Font(Typeface.sheet(size: size, weight: weight))
@@ -190,11 +195,16 @@ struct ThreadItemView: View {
                 Spacer(minLength: 0)
                 if let date = item.date { threadDate(date) }
             }
-            Text(verbatim: item.text)
-                .font(system(Design.TextSize.body))
-                .lineHeight(Design.LineHeight.mailBody * Design.TextSize.body, size: Design.TextSize.body, sheet: true)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            if let quote = item.quote {
+            if item.current, case .html(let html, let inline) = card.content {
+                MailHTMLBody(model: model, card: card, html: html, inlineImages: inline,
+                             allowRemote: !card.remoteImagesBlocked(loadRemote: loadImages))
+            } else {
+                Text(verbatim: item.text)
+                    .font(system(Design.TextSize.body))
+                    .lineHeight(Design.LineHeight.mailBody * Design.TextSize.body, size: Design.TextSize.body, sheet: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            if let quote = item.quote, !showsHTML {
                 QuoteToggle(label: item.quoteOpen ? word("mail.quote.hide") : line("mail.quote.show", quote.lines)) {
                     model.toggleQuote(card.id, message: item.id)
                 }

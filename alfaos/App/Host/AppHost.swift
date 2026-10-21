@@ -68,7 +68,6 @@ final class AppHost {
                 openBrowser: { url in await MainActor.run { NSWorkspace.shared.open(url) } },
                 directory: try HubDatabase.defaultDirectory()
             )
-            assembly.model.prefersHTML = false
             phase = .ready(assembly)
             Task { await assembly.model.start() }
         } catch {
