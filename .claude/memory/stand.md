@@ -62,6 +62,16 @@ metadata:
 - Brief v10 liegt in `DESIGN/brief/BRIEF.txt` (ersetzt v9; T1–T8 aus v9 vollständig, dazu A1–A7, N1–N7, N2 nach Johannes' „lets go“ vom 20.10. 22:08). Abgelegt auf Johannes 20.10. 22:39: „Du musst aber Brief erst schicken …“, dazu sein Klick „schreib N2 nach meinem Wort neu“. N8 (Heute fehlt in „Beim Öffnen“, ALFA Mail.dc.html:762) wartet auf sein Ja. Danach kommt sein neuer Export; Prüfung siehe [[design-brief-aktuell]].
 - Offen bei Johannes: HullProbeTests.swift streichen oder als App-Test behalten (L5).
 
+Übergabe Lead 21.10. nachmittags (vor Compact, dritte Amtszeit)
+- Läuft: D1 Google Drive über den Hub, bau-mail mit Nachbesserung. Ticket `scratchpad/ticket-D1.txt`. Nach dem Diff-Lesen und einem blinden Review: Drive-Fehler legt Mail lahm, `widen()` ohne Zustimmung, erfundener Ordner „Projekte“, Mail→Projekt über Labelnamen, Teil-PDF, myk im Fundus-Drive-Client, Timer ohne Wurzel. Volle Drive-Berechtigung: Johannes 21.10. „JA!“, danach einmal neu bei Google anmelden. Nach Rückkehr: Diff lesen, blind prüfen lassen, Mutant, `scripts/build_app.sh --keep-running`, committen.
+- Danach im selben Paket (Johannes: mehrere Stücke, ein Build, eine kurze Meldung): Kontakt aus Signatur und Lead aus Mail (Logik im Fundus), dann ClickUp und Clockodo mit echter Funktion, soweit der Master es zeichnet.
+- Offen bei Johannes:
+  - AGENTS.md-Neufassung (Entwurf `scratchpad/AGENTS-ENTWURF.md`, Vorschläge 8/9/10; „mache ich gleich“);
+  - Lastenheft je Bereich als Brief v12 für Design (gefragt);
+  - die 10 Widersprüche aus der Triage (`dist/lead/inventur/ZITATE-TRIAGE.md`);
+  - fremde Ordner in dist/ (Prototyp-Sitzung u. a.).
+- Arbeitsweise neu: `bau-takt.md` (bauen, dann Diff zweimal lesen, Meldungen kurz), `ein-ordner-je-sitzung.md`, `bestand-zuerst.md`. GitHub: direkt auf main pushen, PR-Pflicht ist weg; `alfa-draws` gehört der Prototyp-Sitzung.
+
 Übergabe Lead 20.10. abends (vor Compact, „zweite Amtszeit“)
 - Gebaut seit Mittag, alles in main und gepusht: F1 Fundus-Tests in den einen Test 404342e (Testdateien 13 → 2, testLines 5714), README.md als Karte mit Wegweiser, Bauen, Commit 8dfb074. Gedächtnis: test-verstaendnis.md, nebensitzungen.md (L1-Ausnahme d64fe38), strang-meldungen.md, design-brief-aktuell.md.
 - A1 nach Haiku-Prüfung auf A1b verengt; Nachladen und Aktionsfehler sind Lücken im Master (Brief v10 N7). A1b Postausgang 55bcf5b:
