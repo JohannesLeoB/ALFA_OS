@@ -63,7 +63,12 @@ metadata:
 - Offen bei Johannes: HullProbeTests.swift streichen oder als App-Test behalten (L5).
 
 Übergabe Lead 21.10. nachmittags (vor Compact, dritte Amtszeit)
-- Läuft: D1 Google Drive über den Hub, bau-mail mit Nachbesserung. Ticket `scratchpad/ticket-D1.txt`. Nach dem Diff-Lesen und einem blinden Review: Drive-Fehler legt Mail lahm, `widen()` ohne Zustimmung, erfundener Ordner „Projekte“, Mail→Projekt über Labelnamen, Teil-PDF, myk im Fundus-Drive-Client, Timer ohne Wurzel. Volle Drive-Berechtigung: Johannes 21.10. „JA!“, danach einmal neu bei Google anmelden. Nach Rückkehr: Diff lesen, blind prüfen lassen, Mutant, `scripts/build_app.sh --keep-running`, committen.
+- D1 ist committet (f99797f).
+  - Was steht: Drive-Port im Hub, Fehler bleiben je Fähigkeit (Mail bleibt verbunden), volle Drive-Berechtigung, eigener Upload ohne myk.
+  - Bewusst aus, bis Design die Wahl der Projekt-Wurzel zeichnet (Master :766 zeigt nur den Wert). Diese Lücke gehört in Brief v12, ebenso Leerzustände, Fehleranzeige an der Sync-Zeile, Neu-Anmelden für Dateien, PDF-Aussehen und die zweite Menüebene.
+  - Der Fundus-`GoogleDriveClient.uploadFile` hat noch myk und eine feste Sperr-ID (:241-264); ALFA benutzt ihn nicht mehr.
+  - Neu anmelden geht heute nur über Trennen und Anmelden (löscht den lokalen Mail-Spiegel).
+- Vorher lief D1 als Google Drive über den Hub, bau-mail mit Nachbesserung. Ticket `scratchpad/ticket-D1.txt`. Nach dem Diff-Lesen und einem blinden Review: Drive-Fehler legt Mail lahm, `widen()` ohne Zustimmung, erfundener Ordner „Projekte“, Mail→Projekt über Labelnamen, Teil-PDF, myk im Fundus-Drive-Client, Timer ohne Wurzel. Volle Drive-Berechtigung: Johannes 21.10. „JA!“, danach einmal neu bei Google anmelden. Nach Rückkehr: Diff lesen, blind prüfen lassen, Mutant, `scripts/build_app.sh --keep-running`, committen.
 - Danach im selben Paket (Johannes: mehrere Stücke, ein Build, eine kurze Meldung): Kontakt aus Signatur und Lead aus Mail (Logik im Fundus), dann ClickUp und Clockodo mit echter Funktion, soweit der Master es zeichnet.
 - Offen bei Johannes:
   - AGENTS.md-Neufassung (Entwurf `scratchpad/AGENTS-ENTWURF.md`, Vorschläge 8/9/10; „mache ich gleich“);
