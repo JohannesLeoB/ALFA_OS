@@ -60,7 +60,7 @@ Kein Protokoll: nur, was heute gilt. Verlauf steht in `git log`. Johannes' Wort 
 - ClickUp-Fähigkeit nicht verdrahtet (`KeyProvider.swift:87`, `capabilities` leer): bewusst ohne Abnehmer; Master-Zeilen „Phasen/Aufgabenfelder“ erscheinen nie.
 - Drive 403 gilt pauschal als Anmeldefehler (`GoogleFailure.swift`).
 - Postfach endet bei 50: `loadMore` (`MailModel.swift:320`) hat keinen Aufrufer. `actionFailures` wird gesetzt, die App liest sie nie: Aktionsfehler bleiben unsichtbar.
-- Fundus: DHL-Sandbox-Zugang fest im Code (`DHLVersandClient.swift:54-55`), obwohl Johannes 20.10. „SANDBOX Raus“ sagte; 118 Zeilen mit `myk` in 47 Dateien (§6 verlangt Entfernen); deutsche Namen; toter Mail-Zweig.
+- Fundus: DHL-Sandbox-Zugang am 21.10. entfernt (S1); ein alter Schlüsselbund-Eintrag „sandbox“ kann bei bestehenden Nutzern verwaist bleiben; 118 Zeilen mit `myk` in 47 Dateien (§6 verlangt Entfernen); deutsche Namen; toter Mail-Zweig.
 - Abweichungen vom Master, bewusst: Kachelhöhe 112 (sein Wort 19.10.) gegen 96; Suche beim Tippen über alle Ordner außer Spam und Papierkorb wie Master (41e46f3); HTML-Mail zeigt echten Inhalt, der Master zeichnet Text und Kacheln.
 - Commit eb89ff4 hat keine Leerzeile nach dem Betreff (Betreff zu lang); gepusht, nicht berichtigt, weil das einen Force-Push bräuchte.
 - Claude-Schlüssel (Fund der Draws-Sitzung 21.10., nicht nachgeprüft): Der Hub speichert unter Accounts `key`/`model` (`alfaos/Kit/Sources/Hub/Adapters/KeychainAdapter.swift`), der Fundus-`KeychainClaudeCredentialsStore` liest `apiKey`/`model`; ein im Hub gesetzter Schlüssel wäre für Fundus-Code unsichtbar.

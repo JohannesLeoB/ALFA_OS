@@ -48,19 +48,14 @@ public struct DHLVersandClient: SendungErstellend {
     private let apiSecret: String?
     private let benutzer: String?
     private let passwort: String?
-    private let sandbox: Bool?
     private let session: URLSession
 
-    public static let sandboxBenutzer = "user-valid"
-    public static let sandboxPasswort = "SandboxPasswort2023!"
-
     public init(apiKey: String? = nil, apiSecret: String? = nil, benutzer: String? = nil, passwort: String? = nil,
-                sandbox: Bool?, session: URLSession = .shared) {
+                session: URLSession = .shared) {
         self.apiKey = apiKey
         self.apiSecret = apiSecret
         self.benutzer = benutzer
         self.passwort = passwort
-        self.sandbox = sandbox
         self.session = session
     }
 
@@ -71,18 +66,11 @@ public struct DHLVersandClient: SendungErstellend {
         let creds = try? store.load()
         return DHLVersandClient(
             apiKey: creds?.apiKey, apiSecret: creds?.apiSecret, benutzer: creds?.benutzer, passwort: creds?.passwort,
-            sandbox: creds?.sandbox, session: session)
+            session: session)
     }
 
-    private var endpoint: String {
-        sandbox == true ? "https://api-sandbox.dhl.com/parcel/de/shipping/v2/orders"
-                : "https://api-eu.dhl.com/parcel/de/shipping/v2/orders"
-    }
-
-    private var tokenEndpoint: String {
-        sandbox == true ? "https://api-sandbox.dhl.com/parcel/de/account/auth/ropc/v1/token"
-                : "https://api-eu.dhl.com/parcel/de/account/auth/ropc/v1/token"
-    }
+    private static let endpoint = "https://api-eu.dhl.com/parcel/de/shipping/v2/orders"
+    private static let tokenEndpoint = "https://api-eu.dhl.com/parcel/de/account/auth/ropc/v1/token"
 
     public var istAngeschlossen: Bool {
         (apiKey?.isEmpty == false) && (apiSecret?.isEmpty == false)
@@ -102,7 +90,7 @@ public struct DHLVersandClient: SendungErstellend {
 
         let token = try await holeToken(apiKey: apiKey, apiSecret: apiSecret, benutzer: benutzer, passwort: passwort)
 
-        var req = URLRequest(url: URL(string: endpoint)!)
+        var req = URLRequest(url: URL(string: Self.endpoint)!)
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -125,7 +113,7 @@ public struct DHLVersandClient: SendungErstellend {
     }
 
     private func holeToken(apiKey: String, apiSecret: String, benutzer: String, passwort: String) async throws -> String {
-        var req = URLRequest(url: URL(string: tokenEndpoint)!)
+        var req = URLRequest(url: URL(string: Self.tokenEndpoint)!)
         req.httpMethod = "POST"
         req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         req.httpBody = Self.buildTokenRequestBody(
