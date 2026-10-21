@@ -24,7 +24,7 @@ Kein Protokoll: nur, was heute gilt. Verlauf steht in `git log`. Johannes' Wort 
 
 ## Ungeprüft oder blind gebaut
 - Niemand hat K1 (df16331), H2 (223bc67), D1, E2 (HTML-Mail), H1, IDLE und „kein doppeltes Senden“ in der laufenden App oder gegen echte Server gesehen. Das gilt auch für den Schutz bei Servern, die SMTP-Mail nicht selbst in „Gesendet“ ablegen.
-- App-Icon: Rundung im Dock ungeprüft. Die letzte App für Johannes ist älter als K1; Kontakte und Statuszeile hat er nie gesehen.
+- App-Icon: Rundung im Dock ungeprüft. Letzte App für Johannes: `dist/ALFA OS 943.app` (22.10., mit K1 und M2); im Lauf noch nicht gesehen.
 - Nichts davon ist grün (§9): grün erst nach seiner Abnahme. Im Bild prüft nur Johannes (die App startet nur er).
 
 ## Lücken an Design (für Brief v13; Wortlaut vorher Johannes zeigen)
@@ -45,7 +45,7 @@ Kein Protokoll: nur, was heute gilt. Verlauf steht in `git log`. Johannes' Wort 
 
 ## Nächste Schritte
 1. Brief v13 an Design (Text erst Johannes zeigen), Inhalt wie unter „Lücken an Design“.
-2. App für Johannes mit `scripts/build_app.sh` (Kontakte, Statuszeile seit dem letzten Build neu); er prüft im Bild.
+2. (erledigt 22.10.: `dist/ALFA OS 943.app`) Johannes prüft im Bild.
 3. Erklärsätze in der App streichen, die nicht funktionsbedingt sind (Kontakte-Leerhinweis, Google-Hinweistext), nach Liste (`spec-arbeit.md`).
 4. B Ballast und D Namen/myk (Fundus, siehe unten) nach seinem Entscheid, was weg darf; C Tempo; E2 SheetValues-Quellen (134 Zeilen ohne Fundstelle); H7 Datenspeicher (SQLite/GRDB, eine Tabelle je Datenart, Stock als Sicht, Delta-Sync) wartet auf sein Wort (Entwurf am Stammtisch).
 5. xcodegen erzeugt das Projekt noch in `alfaos/` (`ALFA_OS.xcodeproj`); künftig in `dist/`, dann entfällt `alfaos/*.xcodeproj/` in `.gitignore`.
@@ -69,3 +69,4 @@ Kein Protokoll: nur, was heute gilt. Verlauf steht in `git log`. Johannes' Wort 
 - 22.10. nachts: M2 7f6124d (Weiterleiten mit Anhängen, Drucken und Als PDF sichern über PDFKit/NSSavePanel, Endgültig löschen nur IMAP über `IMAPSMTPMailTransport.purge`, Gmail ohne Eintrag); S1 e976390 (DHL-Sandbox raus); Strang-Dateien 033313e; AGENTS-Verweise 9e0cdd7; Brief N2 85d19a7. App für Johannes: `dist/ALFA OS 943.app` (Kontakte, Statuszeile, M2), nicht im Lauf gesehen. Nächste Lead: dist/lead/STARTPROMPT-NEUE-LEAD.md; Pate = diese Sitzung (bc4854d7), nur lesend.
 - Draws-Sitzung seit 21.10. abends: eigener Clone `~/Developer/ALFA_DRAWS` auf Zweig `alfa-draws`, Push über Konto `bergerjohannesleo-dot` (SSH-Host `github-draws`); `main-protect` sperrt `main` für dieses Konto (Admin darf vorbei). Alter Worktree `dist/alfa-draws` entfernt. Draws baut neutrale Ein-/Ausgabe-Module (spec-ziel ZIEL-K11); nach Kit nur auf Johannes' Wort.
 - Fremde Ordner in `dist/` (Stand 22.10.): `anatomy-map`, `farbe`, `hotline-quotes`, `review` (Eigentümer unbekannt), `kit-drawing` und Worktree `wt-drawing` mit lokalem Zweig `drawing` (vermutlich Sitzung „DrawingDude package draft“). Löschen nur auf Johannes' Wort.
+- Draws-Zweig: auf GitHub liegt `alfa-draws` weiter als im lokalen ALFA_OS-Clone (dort nicht gefetcht); Draws arbeitet nur in `~/Developer/ALFA_DRAWS`.

@@ -53,4 +53,4 @@ metadata:
 - Was eine andere Spec-Datei trägt: nur Verweis (`siehe spec-hub HUB-F03`), nicht doppelt.
 - Keine Zahl ohne Beleg. Kein „myk“ in Kürzeln oder Namen.
 - Länge: so kurz wie möglich, so vollständig wie nötig. Richtwert 80–200 Zeilen je Bereich.
-- Kürzel: ZIEL, HUELLE, MAIL, HUB, PROJ, HEUTE, KAT, KORB, SPAET, ARBEIT.
+- Kürzel: ZIEL, HUELLE, MAIL, HUB, PROJ, HEUTE, KAT, KORB, SPAET, ARBEIT, ARCH.

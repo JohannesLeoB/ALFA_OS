@@ -71,7 +71,7 @@ Jede Sitzung arbeitet in genau **einem** Ordner `dist/<sitzung>/` (die Lead den 
 - Kit-Test: `cd alfaos/Kit && swift test --scratch-path "$PWD/../../dist/<sitzung>/kit"`
 - App: `cd alfaos && xcodegen && xcodebuild -project ALFA_OS.xcodeproj -scheme ALFA_OS -derivedDataPath "$PWD/../dist/<sitzung>/app" build -quiet`
 - Fundus: `cd fundus/alpha && swift build --scratch-path "$PWD/../../dist/<sitzung>/fundus"`
-- Fertige App: `scripts/build_app.sh` (nummeriert `dist/ALFA OS <Nr>.app`, nur die zwei neuesten)
+- Fertige App: `scripts/build_app.sh --keep-running` (nummeriert `dist/ALFA OS <Nr>.app`, nur die zwei neuesten; ohne das Flag beendet das Skript die laufende App, die App startet nur Johannes)
 
 ## Commit
 
