@@ -1,4 +1,4 @@
-- [Stand](stand.md) — laufender Stand 20.10.: Aufträge an die Lead, offene Punkte, Master 1810 und 1610 als ZIP in DESIGN/
+- [Stand](stand.md) — Übergabe 21.10. abends: neue AGENTS.md, K1, H2, Brief v12; nächste Schritte Brief v13, App
 - [Artefakte-Karte](artefakte-karte.md) — 56 Artefakte gelesen: nicht lesbar, Quellenrisiko der Karten-Zitate, Funde, Widersprüche
 - [Grundsätze](grundsaetze.md) — 20 Grundsätze mit Zitaten und Datum (Artefakt, Stand 10.10.), überholte Stellen markiert
 - [Stammtisch](stammtisch.md) — Arbeitsform, geltende Antworten, offene Fragen F-01 bis F-22 (Stand 20.10.; seither F-23 bis F-31, siehe stand.md)

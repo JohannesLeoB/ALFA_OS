@@ -1,6 +1,6 @@
 ---
 name: stand
-description: Laufender Stand ALFA_OS am 20.10. abends (nach b1515f4)
+description: Laufender Stand ALFA_OS, Übergabe 21.10. abends (nach 223bc67)
 metadata:
   type: project
 ---
@@ -61,6 +61,21 @@ metadata:
 - Johannes 20.10. Entscheidungen: Ticket-Reihenfolge „Tickets in der bestmöglichen Reihenfolge nach effizientestem und qualitativ bestem Ablauf.“ Lead-Reihenfolge: A2, E1, F1 (Fundus-Tests in die eine Datei, läuft), B Ballast, A1 Mail-Fehler, C Tempo, D Namen/myk, E2 SheetValues-Quellen, H7 Datenspeicher. L1-Ausnahme Nebensitzungen d64fe38. DHL eine Integration, Sandbox raus (app-konten.md). Stock und Kostenzählung bleiben als Hub-Wurzelwerk; H7 Datenspeicher (SQLite/GRDB, eine Tabelle je Datenart, Stock als Sicht, Delta-Sync) am Stammtisch zum Grillen. KI-Karte: Modellwahl, Token-Zähler mit Zurücksetzen, Schätzwert aus vom Nutzer eingetragenem Preis (Claude liefert Kosten nur mit Admin-Schlüssel, kein Guthaben, keine Preisliste per API).
 - Brief v10 liegt in `DESIGN/brief/BRIEF.txt` (ersetzt v9; T1–T8 aus v9 vollständig, dazu A1–A7, N1–N7, N2 nach Johannes' „lets go“ vom 20.10. 22:08). Abgelegt auf Johannes 20.10. 22:39: „Du musst aber Brief erst schicken …“, dazu sein Klick „schreib N2 nach meinem Wort neu“. N8 (Heute fehlt in „Beim Öffnen“, ALFA Mail.dc.html:762) wartet auf sein Ja. Danach kommt sein neuer Export; Prüfung siehe [[design-brief-aktuell]].
 - Offen bei Johannes: HullProbeTests.swift streichen oder als App-Test behalten (L5).
+
+Übergabe Lead 21.10. abends (an die nächste Lead-Sitzung; diese lief bis ~490k Kontext)
+- Regeln: neue `AGENTS.md` seit 95f23ff (Johannes 21.10.: „Ja, AGENTS.md und README so ersetzen“). Leitbild der Sitzungen; jüngeres Wort von Johannes gilt vor älterem und vor dem Master. README hält Nachschlagwissen (Zweige, Commit, dist/).
+- Neu im Gedächtnis 21.10.: `keine-babysitter-texte.md` (nur Funktionsbedingtes in die UI, Fehler und Warnungen ja), `fragen-nur-zu-seinem-wort.md`; in `app-konten.md`: Hub-Katalog-Richtung (Bilder ClickUp/Slack), Hub-Bauplan, sein gesammeltes Wort zum Einstellungs-Hub (Recherche mit Transkripten), seine vier Entscheidungen zum Einstellungsbaum.
+- Gebaut und gepusht heute abend:
+  - b71bea8 Brief v12 (Kopf „So arbeitest du“, Lieferschein `LIEFERUNG.json`, `check_delivery.py` = P4, N14–N17 Drive; N12 und N18 entfallen, N18 mit seinem Wort zu Erklärsätzen).
+  - df16331 K1: Kontakte wie im Master (Sichern, Bearbeiten, Entfernen, Vorschläge aus Absendern, Personenmenü) und Statuszeile der vorderen Entwurfskarte nach :1000 („Empfänger fehlt“, „Betreff fehlt“, Sendefehler in Signalfarbe :1001). Abweichung: `.contacts` ist ein eigener Abschnitt in Gruppe connections; nach Johannes 15.10. sind Kontakte eine Integration. Nachziehen, wenn Design den Baum zeichnet. Kontakte liegen in UserDefaults `mail.contacts`.
+  - 223bc67 H2: Einstellungen je Dienst-Verbindung im Hub (`ServiceSetting`, `ServiceValue`, `HubRules.setting/setSetting`, Tabelle `setting` unter `service|<inlet>|<id>`, geprüft, beobachtbar, beim Trennen gelöscht). Für echte Dienste ist nichts deklariert (Master zeichnet nichts).
+- ClickUp: bewusst NICHT verdrahtet (Johannes 21.10. „wohin willst du clickup verdrahten?“; Lead: heute nimmt kein Bereich die Daten ab, eine Abgleich-Zeile ohne Abnehmer täte nur so). Fehler im Code bleibt: `KeyProvider.swift:87` capabilities [] lässt Master-Zeilen „Phasen/Aufgabenfelder“ nie erscheinen.
+- Nächste Schritte:
+  1. Brief v13 an Design (Text erst Johannes zeigen): Hub-Katalog (Kategorien, Zustand, Verwalten-Seite je Dienst mit Einstellungen und Zuordnungen, „versorgt welche Bereiche“), Einstellungsbaum nach seinen vier Entscheidungen (erweiterbare Gruppen; nur zeigen, was funktioniert; Vorlagen als Teil von Speicherorte/Arbeitsordner/Material; Mail-Konten mit Signatur je Postfach und Kontakte als Integration; Mitteilungen je Dienst plus global stumm; Dateiorte im Hub; Erst-Setup), Erklärsätze im Master streichen (Liste noch zu erheben: App und Master durchgehen), Mono-Schriftrolle, „Vorlagen & CI“ und Draws als Bereich nur nach seinem Wort.
+  2. App für Johannes mit `scripts/build_app.sh` (Kontakte, Statuszeile seit dem letzten Build neu).
+  3. Erklärsätze in der App streichen, die nicht funktionsbedingt sind (z. B. Kontakte-Leerhinweis, Google-Hinweistext), nach Liste.
+- Offen bei Johannes: Katalog-Satz je Dienst ja/nein (gefragt, keine Antwort); Draws-Wünsche 2/3 in v13 (gefragt); Zweig `drawing` nur lokal (Worktree dist/wt-drawing, fremde Sitzung); fremde Ordner in dist/; SheetValues ohne Fundstellen (134 Zeilen); Codex-Fassung ist ersetzt.
+- Zitat-Triage-Sitzung (local_e43a39c0) wartet auf sein Wort zur Rohfassung; ihre Zahlen „8.492“ sind falsch.
 
 Übergabe Lead 21.10. nachmittags (vor Compact, dritte Amtszeit)
 - D1 ist committet (f99797f).
