@@ -94,6 +94,10 @@ public enum ServiceReader {
     public static func badCount(_ readings: [ServiceReading]) -> Int {
         readings.filter { $0.state.isBad }.count
     }
+
+    public static func failedCount(_ readings: [ServiceReading]) -> Int {
+        readings.filter { $0.state == .failed }.count
+    }
 }
 
 public struct ServiceValues: Equatable, Sendable {

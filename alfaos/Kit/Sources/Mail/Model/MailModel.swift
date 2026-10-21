@@ -398,6 +398,12 @@ public final class MailModel {
             } else {
                 phase = .failed(hint)
             }
+        case .syncFinished(let inlet):
+            guard inlet == selectedInlet else { return }
+            switch phase {
+            case .failed, .offline: await loadSelection()
+            default: break
+            }
         }
     }
 

@@ -56,8 +56,4 @@ enum SettingsFormat {
     static func initial(_ text: String) -> String {
         text.first.map { String($0) } ?? ""
     }
-
-    static func initials(_ text: String) -> String {
-        String(text.split(separator: " ").prefix(2).compactMap(\.first)).uppercased()
-    }
 }

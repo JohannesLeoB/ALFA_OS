@@ -5,15 +5,18 @@ struct SyncButton: View {
     let theme: Theme
     let host: AppHost?
     @State private var turn = 0.0
+    @AppStorage(SettingsKey.identityName) private var name = ""
+    @AppStorage(SettingsKey.identityCode) private var code = ""
 
     var body: some View {
         let failed = host?.syncFailed ?? false
+        let face = Initials.avatar(code: code, name: name)
         let title = host?.syncing == true ? "sync.running" : failed ? "sync.failed" : "sync.fresh"
         let ring = CGFloat(Design.Size.symbolSize)
         let line = CGFloat(Design.Size.hairline)
         Button(action: run) {
             ZStack {
-                theme.text("person.initials")
+                Text(verbatim: face)
                     .font(theme.font(Design.TextSize.blobFace, weight: Design.Weight.medium))
                     .tracking(CGFloat(SheetValues.initialsTracking * Design.TextSize.blobFace))
                 Circle()

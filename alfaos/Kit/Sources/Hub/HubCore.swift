@@ -45,6 +45,13 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         let value = cadence(inlet, capability)
         config.cadence.plan(inlet, capability, value)
         watch(inlet, capability, value)
+        switch value {
+        case .every, .push:
+            let port = config.cadence
+            Task { await port.trigger(inlet, capability) }
+        case .off, .manual, .hook:
+            break
+        }
     }
 
     private func watch(_ inletID: Inlet.ID, _ capability: Capability, _ value: Cadence) {

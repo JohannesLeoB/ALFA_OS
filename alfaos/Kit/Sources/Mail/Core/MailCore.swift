@@ -439,6 +439,7 @@ public final class MailCore: MailEngine {
             return
         }
         await pass(inlet)
+        emit(.syncFinished(inlet))
     }
 
     private func emit(_ event: MailEngineEvent) {

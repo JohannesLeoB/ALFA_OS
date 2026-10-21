@@ -90,7 +90,7 @@ private struct IdentityCard: View {
             SettingsRow(label: word("settings.identity.code")) {
                 SettingsValueField(
                     text: $code, labelKey: "settings.identity.code",
-                    prompt: SettingsFormat.initials(name).isEmpty ? word("settings.value.empty") : Text(verbatim: SettingsFormat.initials(name)))
+                    prompt: Initials.from(name).isEmpty ? word("settings.value.empty") : Text(verbatim: Initials.from(name)))
             }
             SettingsRow(label: word("settings.identity.phone")) {
                 SettingsValueField(text: $phone, labelKey: "settings.identity.phone", prompt: word("settings.value.empty"))

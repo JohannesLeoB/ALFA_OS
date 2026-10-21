@@ -195,7 +195,7 @@ struct BlobMenu: View {
     private func badge(_ id: String) -> Int {
         switch id {
         case "mail": host?.unread ?? 0
-        case "settings": host?.failedInlets ?? 0
+        case "settings": host?.failedServices ?? 0
         default: 0
         }
     }

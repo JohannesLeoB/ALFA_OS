@@ -35,8 +35,9 @@ final class AppHost {
 
     var unread: Int { mail?.totalUnread ?? 0 }
 
-    var failedInlets: Int {
-        mail?.accounts.filter { if case .failed = $0.state { true } else { false } }.count ?? 0
+    var failedServices: Int {
+        guard case .ready(let assembly) = phase else { return 0 }
+        return ServiceReader.failedCount(ServiceReader.readAll(setup: assembly.hub.setup, rules: assembly.hub.rules))
     }
 
     var assistantFailed: Bool {

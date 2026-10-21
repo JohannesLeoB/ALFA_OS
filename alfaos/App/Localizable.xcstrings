@@ -3107,17 +3107,6 @@
         }
       }
     },
-    "person.initials" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "JB"
-          }
-        }
-      }
-    },
     "settings.access.browser" : {
       "localizations" : {
         "de" : {

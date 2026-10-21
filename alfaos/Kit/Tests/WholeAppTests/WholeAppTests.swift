@@ -5296,6 +5296,43 @@ final class MailHTMLTests {
 }
 
 @MainActor
+final class StartSyncTests {
+    func runTheStartRunsEveryInletOnce() async throws {
+        let database = try DatabaseQueue(), keychain = FakeKeychain()
+        let first = try ScriptedRig.make(database: database, keychain: keychain)
+        let a = try await first.connect("a@x")
+        _ = try await first.connect("b@x")
+        first.hub.rules.setCadence(a.id, .mail, .every(.seconds(300)))
+        let second = try ScriptedRig.make(database: database, provider: first.provider, keychain: keychain)
+        for _ in 0..<400 where second.cadence.triggers == 0 { try await Task.sleep(for: .milliseconds(5)) }
+        try await Task.sleep(for: .milliseconds(50))
+        XCTAssertEqual(second.cadence.triggers, 1)
+        XCTAssertEqual(first.provider.mail.listFoldersCalls, 1)
+        _ = try await second.hub.setup.probe(a.id)
+        for _ in 0..<400 where second.cadence.triggers < 2 { try await Task.sleep(for: .milliseconds(5)) }
+        XCTAssertEqual(second.cadence.triggers, 2)
+    }
+    func runTheDisplayTellsTheTruth() async {
+        let (model, engine) = MailModelTests().fresh()
+        await model.start()
+        for text in ["hint.x", MailTextKey.offline.rawValue] {
+            engine.pageError = .provider(Hint(text: text))
+            await model.loadSelection()
+            engine.pageError = nil
+            await model.handle(.syncFinished("a"))
+            XCTAssertEqual(model.listState, .empty(folder: "INBOX"))
+        }
+        await model.handle(.syncFailed("a", Hint(text: "hint.y")))
+        XCTAssertEqual(model.listState, .failed(Hint(text: "hint.y")))
+        let reading = { (state: LinkState) in ServiceReading(info: ServiceCatalog.all[0], state: state, note: nil, hint: nil, inlets: [], offers: [], areas: []) }
+        let all = [reading(.failed), reading(.unreadable), reading(.connected)]
+        XCTAssertEqual([ServiceReader.failedCount(all), ServiceReader.badCount(all)], [1, 2])
+        for (name, want) in [("Anna Berg", "AB"), ("Anna", "A"), ("Anna von Berg", "AB"), ("An Ida Cruz", "IC"), ("  ", ""), ("élodie de la Cruz Jr.", "ÉC")] { XCTAssertEqual(Initials.from(name), want) }
+        XCTAssertEqual([Initials.avatar(code: "xy", name: "Anna Berg"), Initials.avatar(code: " ", name: "Anna Berg")], ["xy", "AB"])
+    }
+}
+
+@MainActor
 func step(_ name: String, _ body: () async throws -> Void) async throws {
     protocolStep.with { $0 = name }
     try await body()
@@ -5496,6 +5533,8 @@ final class WholeAppTests: XCTestCase {
         try await step("KeychainNamespaceTests.runServiceNamesLiveInTheAlfaNamespace") { KeychainNamespaceTests().runServiceNamesLiveInTheAlfaNamespace() }
         try await step("MailHTMLTests.runInlineReferencesResolveAndNavigationStaysInsideTheMail") { MailHTMLTests().runInlineReferencesResolveAndNavigationStaysInsideTheMail() }
         try await step("MailHTMLTests.runTheRemoteRuleBlocksEveryWebAddressForEveryResourceType") { try MailHTMLTests().runTheRemoteRuleBlocksEveryWebAddressForEveryResourceType() }
+        try await step("StartSyncTests.runTheStartRunsEveryInletOnce") { try await StartSyncTests().runTheStartRunsEveryInletOnce() }
+        try await step("StartSyncTests.runTheDisplayTellsTheTruth") { await StartSyncTests().runTheDisplayTellsTheTruth() }
         try compareWithGolden()
     }
 }

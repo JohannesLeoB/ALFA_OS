@@ -60,6 +60,7 @@ public enum MailEngineEvent: Equatable, Sendable {
     case newMail(Inlet.ID, count: Int)
     case outboxChanged
     case syncFailed(Inlet.ID, Hint)
+    case syncFinished(Inlet.ID)
 }
 
 @MainActor
