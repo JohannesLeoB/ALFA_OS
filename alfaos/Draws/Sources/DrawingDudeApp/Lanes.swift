@@ -1,4 +1,5 @@
 import DrawingKit
+import DrawsDock
 import ShellCore
 import SwiftUI
 
@@ -20,6 +21,11 @@ struct ProjectLane: View {
                             get: { model.project[key] ?? "" },
                             set: { model.project[key] = $0 }))
                     }
+                    FieldRow(label: word("draws.field.number"), value: $model.number, needed: false)
+                    FieldRow(label: word("draws.field.status"), value: Binding(
+                        get: { model.project["status"] ?? "" },
+                        set: { model.project["status"] = $0 }), needed: false)
+                    FieldRow(label: word("draws.field.trade"), value: $model.trade, needed: false)
                     SectionHead(key: "draws.section.packs")
                     ListRow(name: word("draws.pack.ci"), symbol: "shippingbox",
                             meta: word(model.ci?.pack.placeholder == true ? "draws.pack.placeholder" : "draws.pack.real"))
@@ -599,6 +605,14 @@ struct StyleTab: View {
 struct ExportTab: View {
     @Bindable var model: DrawsModel
 
+    private func symbol(_ state: PortState) -> String {
+        switch state {
+        case .connected: "link"
+        case .local: "internaldrive"
+        case .missing: "exclamationmark.triangle"
+        }
+    }
+
     var body: some View {
         let n = model.missing.count + model.defects.count
         SectionHead(key: "draws.export.file")
@@ -608,11 +622,26 @@ struct ExportTab: View {
         Labeled(key: "draws.export.pages", enabled: model.pdf) {
             Segments(options: [(false, "draws.export.one"), (true, "draws.export.all")], selection: $model.allPages)
         }
+        HStack(spacing: CGFloat(Design.Spacing.step8)) {
+            Pill(key: "draws.export.print") { model.hand(.print) }
+            Pill(key: "draws.export.mail") { model.hand(.mail) }
+        }
+        .padding(.horizontal, CGFloat(Design.Spacing.step8))
+        .padding(.vertical, CGFloat(Design.Spacing.step4))
+        .opacity(model.sheet == nil ? Proto.disabled : 1)
+        .allowsHitTesting(model.sheet != nil)
         SectionHead(key: "draws.export.check", meta: n == 0 ? "" : (n == 1 ? word("draws.export.oneDefect") : String(format: word("draws.export.defects"), n)),
                     metaTone: \.signal)
         if let failure = model.failure {
             SectionHead(key: "draws.export.error", metaTone: \.signal)
             Note(text: failure, tone: \.signal)
+        }
+        SectionHead(key: "draws.export.dock").onAppear { model.checkDock() }
+        ForEach(model.checks, id: \.port) { check in
+            let missing = check.state.reason != nil
+            ListRow(name: word(check.port.key), symbol: symbol(check.state),
+                    meta: word(check.state.reason ?? check.state.key), symbolTone: missing ? \.signal : \.inkTertiary,
+                    metaTone: missing ? \.signal : \.inkTertiary)
         }
     }
 }

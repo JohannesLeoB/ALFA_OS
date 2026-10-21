@@ -177,10 +177,11 @@ struct FieldRow: View {
     @Environment(\.style) private var style
     let label: String
     @Binding var value: String
+    var needed = true
     @State private var hovering = false
 
     var body: some View {
-        let empty = value.trimmingCharacters(in: .whitespaces).isEmpty
+        let empty = needed && value.trimmingCharacters(in: .whitespaces).isEmpty
         HStack(spacing: CGFloat(Design.Spacing.step12)) {
             Text(verbatim: label)
                 .font(style.font(Design.TextSize.small))

@@ -2,6 +2,7 @@ import AppKit
 import CoreGraphics
 import DrawingKit
 import DrawsAI
+import DrawsDock
 import DrawsFonts
 import Foundation
 import Observation
@@ -48,6 +49,11 @@ final class DrawsModel {
     var objectName = ""
     var parts: [Part] = []
     var project: [String: String] = [:] { didSet { render() } }
+    var number = ""
+    var trade = ""
+    var checks: [Check] = []
+    var fonts = DrawsFonts.fallback
+    let dock: Dock
     var ci: Loaded<CIPack>?
     var template: Loaded<TemplatePack>?
     var material: Loaded<MaterialPack>?
@@ -106,7 +112,14 @@ final class DrawsModel {
     var questions: [String] = []
     var variants: [Variant] = []
     private var ready = false
-    private let designer: Designer = ClaudeDesigner()
+    private let designer: Designer
+
+    init() {
+        let places = LocalPlaces(root: LocalPlaces.support)
+        places.prepare()
+        dock = Dock.local(packs: Self.root.appendingPathComponent("Packs"), places: places)
+        designer = ClaudeDesigner(credentials: dock.claude.credentials)
+    }
 
     var sheet: Sheet? { pages.indices.contains(page) ? pages[page] : nil }
 
@@ -197,9 +210,14 @@ final class DrawsModel {
 
     func start() {
         do {
-            ci = try Packs.loadCI(Self.root.appendingPathComponent("Packs/ci/platzhalter"))
-            template = try Packs.loadTemplate(Self.root.appendingPathComponent("Packs/template/a3-quer"))
-            material = try Packs.loadMaterial(Self.root.appendingPathComponent("Packs/material/platzhalter"))
+            ci = try dock.loadCI()
+            template = try dock.loadTemplate()
+            material = try dock.loadMaterial()
+            fonts = DrawsFonts.resolve(upload: dock.templates.fonts())
+            guard ci != nil, template != nil else {
+                failure = word("dock.reason.packs")
+                return
+            }
             resetStyle()
             cells = preset()
             ready = true
@@ -233,6 +251,7 @@ final class DrawsModel {
             ready = false
             parts = object.parts
             project = object.project ?? [:]
+            adopt()
             variants = object.variants ?? []
             hidden = []
             accent = nil
@@ -243,6 +262,16 @@ final class DrawsModel {
         } catch {
             failure = "\(error)"
         }
+    }
+
+    func adopt() {
+        guard let ref = dock.project.current() else { return }
+        project.merge(ref.fields) { _, new in new }
+        number = ref.projectNumber
+    }
+
+    func checkDock() {
+        checks = dock.check()
     }
 
     func clear() {
@@ -286,7 +315,7 @@ final class DrawsModel {
             pages = try DrawingEngine.render(Job(parts: shown, ci: ci.pack, template: template.pack, project: project,
                                                  products: [product()], style: style(), dimensions: dimensions,
                                                  material: material?.pack, variants: variants, dims: dimensions ? .given : .none,
-                                                 fonts: DrawsFonts.fallback))
+                                                 fonts: fonts))
             page = min(page, max(0, pages.count - 1))
             failure = nil
         } catch DrawingError.overflow {
@@ -305,17 +334,45 @@ final class DrawsModel {
         if panel.runModal() == .OK, let url = panel.url { load(url) }
     }
 
+    var place: Place {
+        Stage(status: project["status"]) == .preprint && !trade.isEmpty ? .trade : .presentation
+    }
+
+    func fileName(_ ext: String) -> String {
+        if let name = ExportName.make(project: project, number: number, trade: trade, variants: variants.map(\.name),
+                                      now: Date(), ext: ext) {
+            return name
+        }
+        let base = objectName.components(separatedBy: CharacterSet(charactersIn: "/:")).joined()
+        return (base.isEmpty ? "" : "\(base)-") + "\(layout.rawValue).\(ext)"
+    }
+
     func export() {
         guard let sheet else { return }
         let panel = NSSavePanel()
         panel.allowedContentTypes = [pdf ? .pdf : .svg]
-        let base = objectName.components(separatedBy: CharacterSet(charactersIn: "/:")).joined()
-        panel.nameFieldStringValue = (base.isEmpty ? "" : "\(base)-") + "\(layout.rawValue).\(pdf ? "pdf" : "svg")"
+        panel.nameFieldStringValue = fileName(pdf ? "pdf" : "svg")
+        panel.directoryURL = dock.destination(place, project: number)
         guard panel.runModal() == .OK, let url = panel.url else { return }
-        do {
-            try (pdf ? SheetExporter.pdf(allPages ? pages : [sheet]) : SheetExporter.svg(sheet)).write(to: url)
-        } catch {
-            failure = "\(error)"
+        let type = pdf ? UTType.pdf : UTType.svg
+        let data = pdf ? SheetExporter.pdf(allPages ? pages : [sheet]) : SheetExporter.svg(sheet)
+        send(Deliverable(name: url.lastPathComponent, mimeType: type.preferredMIMEType ?? "", data: data,
+                         folder: url.deletingLastPathComponent()), .save)
+    }
+
+    func hand(_ handoff: Handoff) {
+        guard let sheet else { return }
+        let data = SheetExporter.pdf(allPages ? pages : [sheet])
+        send(Deliverable(name: fileName("pdf"), mimeType: UTType.pdf.preferredMIMEType ?? "", data: data), handoff)
+    }
+
+    private func send(_ file: Deliverable, _ handoff: Handoff) {
+        Task {
+            switch await dock.delivery.deliver(file, via: handoff) {
+            case .done: break
+            case .failed(let reason): failure = reason.hasPrefix("dock.") ? word(reason) : reason
+            case .notConnected: failure = word("dock.reason.hub")
+            }
         }
     }
 
@@ -363,6 +420,7 @@ final class DrawsModel {
                 } else {
                     project = proposal.project
                 }
+                adopt()
                 parts = proposal.parts
                 variants = proposal.variants
                 assumptions = proposal.assumptions
