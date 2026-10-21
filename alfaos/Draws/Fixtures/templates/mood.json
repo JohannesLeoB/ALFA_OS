@@ -1,0 +1,11 @@
+{
+ "width": 297,
+ "height": 210,
+ "background": "#f4f1ea",
+ "zones": [
+  {"name": "hero", "x": 10, "y": 10, "w": 170, "h": 190, "role": "image", "fit": "fill"},
+  {"name": "upper", "x": 190, "y": 10, "w": 97, "h": 90, "role": "image", "fit": "fill"},
+  {"name": "lower", "x": 190, "y": 110, "w": 97, "h": 60, "role": "image", "fit": "fit"},
+  {"name": "title", "x": 190, "y": 175, "w": 97, "h": 25, "role": "text", "ink": {"size": 6, "color": "#1a1a1a", "weight": 500, "leading": 7}}
+ ]
+}

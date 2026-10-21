@@ -13,6 +13,7 @@ let package = Package(
         .library(name: "DrawsAI", targets: ["DrawsAI"]),
         .library(name: "DrawsDock", targets: ["DrawsDock"]),
         .library(name: "Intake", targets: ["Intake"]),
+        .library(name: "Templates", targets: ["Templates"]),
         .executable(name: "drawingdude", targets: ["drawingdude"]),
         .executable(name: "DrawingDudeApp", targets: ["DrawingDudeApp"])
     ],
@@ -27,6 +28,7 @@ let package = Package(
         .target(name: "DrawsAI", dependencies: ["DrawingKit", .product(name: "AlfaServices", package: "alpha")], resources: [.copy("Resources/designer.md")], swiftSettings: strict),
         .target(name: "DrawsDock", dependencies: ["DrawingKit", .product(name: "AlfaServices", package: "alpha")], swiftSettings: strict),
         .target(name: "Intake", dependencies: [.product(name: "ZIPFoundation", package: "ZIPFoundation")], swiftSettings: strict),
+        .target(name: "Templates", dependencies: ["Pages", "Intake"], swiftSettings: strict),
         .target(name: "DrawsFonts", dependencies: ["DrawingKit", .product(name: "ShellCore", package: "Kit")],
                 resources: [.copy("Resources/Geist-VariableFont_wght.ttf")], swiftSettings: strict),
         .executableTarget(name: "drawingdude", dependencies: ["DrawingKit", "DrawsFonts"], swiftSettings: strict),
@@ -36,6 +38,6 @@ let package = Package(
             resources: [.process("Resources")],
             swiftSettings: strict
         ),
-        .testTarget(name: "DrawsTests", dependencies: ["Pages", "DrawingKit", "DrawsAI", "DrawsDock", "DrawsFonts", "Intake"], swiftSettings: strict)
+        .testTarget(name: "DrawsTests", dependencies: ["Pages", "DrawingKit", "DrawsAI", "DrawsDock", "DrawsFonts", "Intake", "Templates"], swiftSettings: strict)
     ]
 )

@@ -4156,3 +4156,22 @@ ingest n.txt text>assistant text / text plain
 ingest d.dwg dwg>assistant dwg / notes ["dwg.binary", "dwg.AC1027"]
 ingest x.bin unknown>assistant unknown / notes ["kind.unknown"]
 ingest blob pdf>files:drive pdf / pages 0/340x113/Hello World@23,48,175,34 / text Hello World
+tpl <h1>A &amp; &lt;B&gt;</h1><li>x</li><li>y</li><i> ["missing"]
+mood 2 [1:nope:zone] [4, 1]
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 297.00 210.00" width="297.00mm" height="210.00mm" font-family="Helvetica">
+<rect width="297.00" height="210.00" fill="#f4f1ea"/>
+<clipPath id="clip1"><rect x="10.00" y="10.00" width="170.00" height="190.00"/></clipPath>
+<g clip-path="url(#clip1)">
+<image x="-47.50" y="10.00" width="285.00" height="190.00" preserveAspectRatio="xMidYMid meet" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAAoCAYAAACiu5n/AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAPKADAAQAAAABAAAAKAAAAAAev9geAAAAt0lEQVRoBe3asQkCURBF0VlhS9kijLUP+7AUU1sQBDPB1NhQE3NhIzHQKt7cwPsbuMw76R8e2823mt9pnGp/vjVXq46HXS3aq3DQg2GAeF7h+MRwQGEYIJ5XOD4xHFAYBojnFY5PDAcUhgHieYXjE8MBhWGAeF7h+MRwQGEYIJ5XOD4xHFAYBojnFY5PDAcUhgHieYXjE8MBhWGAeF7h+MRw4O+Eh/l6af+29PyMdX+9263Xq2X9AClqERvXC48HAAAAAElFTkSuQmCC"/>
+</g>
+<clipPath id="clip2"><rect x="190.00" y="10.00" width="97.00" height="90.00"/></clipPath>
+<g clip-path="url(#clip2)">
+<image x="190.00" y="-17.75" width="97.00" height="145.50" preserveAspectRatio="xMidYMid meet" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAA8CAYAAAAUufjgAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAKKADAAQAAAABAAAAPAAAAADvhlfuAAAApUlEQVRoBe3asQ2DQBAF0b3lhORGHBORAS7Akgtw/x2cYyhilsQa8r86PU1I217fM4q+/b3G/HwUXYv4LEdk2bWbDvlACqugglSA7m1QQSpA9zaoIBWgextUkArQvQ0qSAXo3gYVpAJ0b4MKUgG6t0EFqQDd26CCVIDubVBBKkD3NqggFaB7G1SQCtC9DSpIBejeBv9esI3xK/s1KjMje101fepxATKwB/aU/+EoAAAAAElFTkSuQmCC"/>
+</g>
+<image x="208.50" y="110.00" width="60.00" height="60.00" preserveAspectRatio="xMidYMid meet" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAMqADAAQAAAABAAAAMgAAAAB1y6+rAAAAzUlEQVRoBe2asQ3CQBTFfpImAlGlpQ+zMAHrsAZjMBJKk4YRkqxgIZ0L9K5+Ouvs9rrn+7VXw3O/TjVvn4aEqtPtUX1Tgnh5HiLKRqgUQZrEUYqIshEqRZAmcZQiomyEShGkSRyliCgboVIEaRJHKSLKRqgUQZrEUYqIshEqRZAmcZQiomyEShGkSRyliCgboVIEaRJHKSLKRqgUQZrEUYqIshEqRZAmcZQiomyEShGkSRyliCgbof6mSLd816Yfz85D1WXYkNVfR/041QHbIQss5HQVhwAAAABJRU5ErkJggg=="/>
+<clipPath id="clip3"><rect x="0.00" y="0.00" width="97.00" height="25.00"/></clipPath>
+<g transform="translate(190.00 175.00)" clip-path="url(#clip3)">
+<text x="0.00" y="6.00" font-size="6.00" text-anchor="start" font-weight="500" fill="#1a1a1a">Moodboard</text>
+</g>
+</svg>
+idml 210x297 tf1 text - [20, 30, 100, 20];r1 image fill [50, 150, 50, 50] 1 []

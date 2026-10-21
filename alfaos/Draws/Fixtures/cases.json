@@ -2,7 +2,11 @@
  "flow": {
   "ink": "black",
   "rule": "gray",
-  "paper": "#ffffff"
+  "paper": "#ffffff",
+  "tone0": "#e07a5f",
+  "tone1": "#3d405b",
+  "tone2": "#81b29a",
+  "tone3": "#f2cc8f"
  },
  "draw": [
   {
