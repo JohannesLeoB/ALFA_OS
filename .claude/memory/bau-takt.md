@@ -18,4 +18,5 @@ Johannes 21.10. (Lead-Sitzung bc4854d7): „Viel zu viel geredet und wenig weite
   - Abweichungen klärt die Lead am Code;
   - eine Nachbesserung, dann Commit.
 - Je neuer Logik ein Mutant. Nach jedem Stück eine App für Johannes über `scripts/build_app.sh`.
+- Meldungen an Johannes: kurz, Stand plus nächster Schritt, keine Seiten. Johannes 21.10.: „Ich kann nciht immer 3 seiten dies das jenes lesen - weil ich dann infos verpasse etc.“
 - Gesetze bleiben: L0 Werte nur aus dem Master, L5 echte Prüfungen, L4 sofort pushen. Siehe [[test-verstaendnis]], [[ein-ordner-je-sitzung]].
