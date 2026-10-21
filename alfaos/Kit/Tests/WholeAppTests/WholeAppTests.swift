@@ -546,7 +546,7 @@ final class FakeProvider: Provider, @unchecked Sendable {
 }
 
 @MainActor
-func testHub(_ offers: [Offer], _ providers: [any Provider], limits: [Capability: Int] = CompanySetup().limits, keychain: any KeychainPort = FakeKeychain(),
+func hubFixture(_ offers: [Offer], _ providers: [any Provider], limits: [Capability: Int] = CompanySetup().limits, keychain: any KeychainPort = FakeKeychain(),
              cadence: any CadencePort = HandCadence(), catalog: PortCatalog = .withMail, database: DatabaseQueue? = nil, deadlines: HubDeadlines = .standard,
              reportLimit: Int = 100) throws -> Hub {
     try Hub.make(HubConfiguration(
@@ -568,7 +568,7 @@ struct ScriptedRig {
         let keychain = keychain ?? FakeKeychain()
         let cadence = HandCadence()
         let database = try database ?? DatabaseQueue()
-        let hub = try testHub([offer], [provider], keychain: keychain, cadence: cadence, catalog: catalog, database: database)
+        let hub = try hubFixture([offer], [provider], keychain: keychain, cadence: cadence, catalog: catalog, database: database)
         return ScriptedRig(hub: hub, provider: provider, keychain: keychain, cadence: cadence, database: database)
     }
     func connect(_ address: String, offer: Offer = ScriptedRig.mailOffer) async throws -> Inlet {
@@ -615,7 +615,7 @@ func scriptedGoogleRig(token: @escaping @Sendable () -> (Int, Data), other: @esc
         session: GoogleStubNet.session(), signIn: GivenSignIn(grant: grant), clock: { clock.with { $0 } }
     )
     let database = try DatabaseQueue()
-    let hub = try testHub([offer], [provider], keychain: keychain, cadence: cadence, database: database)
+    let hub = try hubFixture([offer], [provider], keychain: keychain, cadence: cadence, database: database)
     let inlet = try await hub.setup.add(offer)
     if expire { clock.with { $0 = $0.addingTimeInterval(advance) } }
     return GoogleRig(hub: hub, keychain: keychain, cadence: cadence, inlet: inlet, clock: clock, database: database, offer: offer, provider: provider)
@@ -775,7 +775,7 @@ final class SetupFlowTests {
         keychain: any KeychainPort = FakeKeychain(), limits: [Capability: Int] = CompanySetup().limits, cadence: HandCadence = HandCadence(), database: DatabaseQueue? = nil,
         providers: [any Provider]? = nil, offers: [Offer]? = nil, deadlines: HubDeadlines = .standard, run: @escaping IMAPProbeRun = { _, _ in }
     ) throws -> Hub {
-        try testHub(offers ?? [Self.offer], providers ?? [IMAPProvider(probeRun: run)], limits: limits, keychain: keychain, cadence: cadence, database: database, deadlines: deadlines)
+        try hubFixture(offers ?? [Self.offer], providers ?? [IMAPProvider(probeRun: run)], limits: limits, keychain: keychain, cadence: cadence, database: database, deadlines: deadlines)
     }
     func runCancelDuringTheProbe() async throws {
         let stuck = try makeHub(run: { _, _ in try await Task.sleep(for: .seconds(3600)) })
@@ -962,7 +962,7 @@ final class IMAPProviderTests {
         }
     }
     private func rig(keychain: FakeKeychain, run: @escaping IMAPProbeRun) throws -> Hub {
-        try testHub([Self.offer], [IMAPProvider(probeRun: run)], keychain: keychain)
+        try hubFixture([Self.offer], [IMAPProvider(probeRun: run)], keychain: keychain)
     }
     func runHubStoresThePasswordInTheKeychainAfterAGreenProbe() async throws {
         let keychain = FakeKeychain()
@@ -989,7 +989,7 @@ final class IMAPProviderTests {
         values["name"] = "Jo Berger"
         var catalog = PortCatalog.standard
         catalog.register((any MailTransport).self, capability: .mail)
-        let hub = try testHub([Self.offer], [IMAPProvider(probeRun: { _, _ in })], catalog: catalog)
+        let hub = try hubFixture([Self.offer], [IMAPProvider(probeRun: { _, _ in })], catalog: catalog)
         let inlet = try await hub.setup.add(Self.offer, input: .fields(values))
         let transport = try hub.access.port((any MailTransport).self, for: inlet.id)
         let name = (transport as? IMAPSMTPMailTransport)?.account.displayName
@@ -1012,7 +1012,7 @@ final class GoogleProviderTests {
         let provider = GoogleProvider(
             config: GoogleClientConfig(clientID: "id", clientSecret: "secret"), openBrowser: { _ in false }, session: GoogleStubNet.session(), signIn: GivenSignIn(grant: Self.grant)
         )
-        return try testHub([Self.offer], [provider], keychain: keychain)
+        return try hubFixture([Self.offer], [provider], keychain: keychain)
     }
     func runGoogleProviderDeliversMailTransportAfterGreenProbe() async throws {
         GoogleStubNet.install { call in
@@ -1293,7 +1293,7 @@ final class FailureTests {
     func runReportIsLimitedPerInlet() async throws {
         let provider = FakeProvider(capabilities: [.mail])
         let cadence = HandCadence()
-        let hub = try testHub([ScriptedRig.mailOffer], [provider], cadence: cadence, reportLimit: 3)
+        let hub = try hubFixture([ScriptedRig.mailOffer], [provider], cadence: cadence, reportLimit: 3)
         let inlet = try await hub.setup.add(ScriptedRig.mailOffer, input: .fields(["address": "a@x"]))
         for number in 1...5 {
             provider.mail.setFailure(.smtpRejected(450, "4.2.0 Attempt \(number)"))
@@ -1306,7 +1306,7 @@ final class FailureTests {
     func runSignInDeadlineEndsWithTheSignInTimeout() async throws {
         let stuck = StuckSignIn()
         let provider = FakeProvider(capabilities: [.mail], signIn: stuck)
-        let hub = try testHub([ScriptedRig.mailOffer], [provider], deadlines: HubDeadlines(signIn: .milliseconds(200), probe: .seconds(5)))
+        let hub = try hubFixture([ScriptedRig.mailOffer], [provider], deadlines: HubDeadlines(signIn: .milliseconds(200), probe: .seconds(5)))
         let outcome = try await within(.seconds(3)) { () -> SetupError? in
             do throws(SetupError) {
                 _ = try await hub.setup.add(ScriptedRig.mailOffer, input: .none)
@@ -1399,7 +1399,7 @@ final class AdapterTimerTests {
     func runChangesTriggerTheSyncAndStopWithTheCadenceOrTheInlet() async throws {
         let provider = FakeProvider(capabilities: [.mail])
         let cadence = HandCadence()
-        let hub = try testHub([ScriptedRig.mailOffer], [provider], cadence: cadence, deadlines: HubDeadlines(watchPause: .milliseconds(10)))
+        let hub = try hubFixture([ScriptedRig.mailOffer], [provider], cadence: cadence, deadlines: HubDeadlines(watchPause: .milliseconds(10)))
         let inlet = try await hub.setup.add(ScriptedRig.mailOffer, input: .fields(["address": "a@x"]))
         func wait(_ condition: @escaping @Sendable () -> Bool) async { let ok = await until { condition() }; XCTAssertTrue(ok) }
         hub.rules.setCadence(inlet.id, .mail, .push)
@@ -3202,7 +3202,7 @@ final class HubSweepTests {
         note("inlets", third.hub.setup.inlets.count)
     }
     private func hub(_ database: DatabaseQueue, _ provider: FakeProvider, _ keychain: any KeychainPort, _ cadence: HandCadence) throws -> Hub {
-        try testHub([ScriptedRig.mailOffer], [provider], keychain: keychain, cadence: cadence, database: database)
+        try hubFixture([ScriptedRig.mailOffer], [provider], keychain: keychain, cadence: cadence, database: database)
     }
     func runALostKeychainMarksTheInletAndTheStateIsKept() async throws {
         let database = try DatabaseQueue()
@@ -3272,13 +3272,13 @@ final class HubSweepTests {
         _ = try? await transport.listFolders()
         await waitUntil { red.hub.setup.inlets[0].state.hint != nil }
         note("red-state", red.hub.setup.inlets[0].state)
-        let restarted = try testHub([red.offer], [red.provider], keychain: red.keychain, database: red.database)
+        let restarted = try hubFixture([red.offer], [red.provider], keychain: red.keychain, database: red.database)
         note("red-restart", restarted.setup.inlets.map(\.state))
         let outage = try await scriptedGoogleRig(token: { (503, Data()) })
         let other = try outage.hub.access.port(MailTransport.self, for: outage.inlet.id)
         _ = try? await other.listFolders()
         try await Task.sleep(for: .milliseconds(30))
-        let again = try testHub([outage.offer], [outage.provider], keychain: outage.keychain, database: outage.database)
+        let again = try hubFixture([outage.offer], [outage.provider], keychain: outage.keychain, database: outage.database)
         note("outage-restart", again.setup.inlets.map(\.state))
     }
     func runTheTokenIsRenewedWithinASixtySecondMargin() async throws {
@@ -3507,7 +3507,7 @@ final class GapTests {
         _ = try await transport.listFolders()
         await waitUntil { rig.hub.setup.inlets[0].state.hint != nil }
         note("state", rig.hub.setup.inlets.map(\.state.hint?.text))
-        let restarted = try testHub([rig.offer], [rig.provider], keychain: keychain, database: rig.database)
+        let restarted = try hubFixture([rig.offer], [rig.provider], keychain: keychain, database: rig.database)
         note("restart", restarted.setup.inlets.map(\.state.hint?.text))
     }
     func runAConnectionNeedsAUserAndTakesTheAddressAsDefault() {
@@ -3595,7 +3595,7 @@ final class GapTests {
         let database = try DatabaseQueue()
         let working = Locked(true)
         let config = { (database: DatabaseQueue) in
-            try testHub([IMAPProviderTests.offer], [IMAPProvider(probeRun: { _, _ in
+            try hubFixture([IMAPProviderTests.offer], [IMAPProvider(probeRun: { _, _ in
                 if !working.with({ $0 }) { throw MailProbeError(step: .incoming, reason: .authenticationRejected("NO x")) }
             })], database: database)
         }
