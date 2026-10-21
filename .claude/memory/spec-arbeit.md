@@ -84,7 +84,7 @@ Prüfen (ergänzt AGENTS §9, §10)
 - **ARBEIT-E08 Code vor Text (Hinweis)**: Der Aufwand eines Auftrags steckt überwiegend in Code, nicht in Berichten, Merkblättern, Fragerunden oder Testmasse. Quelle: nur Hinweis aus der Draws-Sitzung (`spec-arbeit.md`), siehe ARBEIT-D04.
 
 ## Lücken
-- **ARBEIT-L01 Toter Verweis**: AGENTS §3 verweist auf `strang-meldungen.md`; die Datei gibt es nicht mehr, das Format steht in ARBEIT-R09. Ändern von AGENTS.md braucht seine Freigabe; liefert Johannes. Beleg: `AGENTS.md:24`; `grep -rn strang-meldungen AGENTS.md README.md .claude` nur diese Fundstelle, `ls .claude/memory/` ohne die Datei.
+- **ARBEIT-L01 (erledigt 21.10., 9e0cdd7) Toter Verweis**: AGENTS §3 verwies auf `strang-meldungen.md`; die Datei gibt es nicht mehr, das Format steht in ARBEIT-R09. Ändern von AGENTS.md braucht seine Freigabe; liefert Johannes. Beleg: `AGENTS.md:24`; `grep -rn strang-meldungen AGENTS.md README.md .claude` nur diese Fundstelle, `ls .claude/memory/` ohne die Datei.
 - **ARBEIT-L02 Kürzel fehlen noch**: Sitzungskürzel für ARBEIT-R10 (19.10.), ARBEIT-R18 (19.10. 23:55, F-07), ARBEIT-R22 (18.10.), ARBEIT-E03 (20.10.) und die Draws-Sitzung fehlen in den Quellen; liefert die Lead aus den Transkripten. Beleg: die Quellzeilen dieser Regeln in `spec-arbeit.md` tragen „Kürzel nicht belegt“. Erledigt am 21.10.: R09, R11, R15, R23, R24 stehen in Sitzung bc4854d7.
 - **ARBEIT-L03 Wächter-Prüfung**: Ob das „Abitur“ (ARBEIT-R24) auf der Wächter-Seite existiert, ist ungeprüft; die Wächterdateien liest diese Spec nicht (AGENTS §10).
 

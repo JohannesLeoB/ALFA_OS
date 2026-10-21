@@ -38,8 +38,7 @@ Regeln
 Gedächtnis (Inhaltsarchiv)
 - `.claude/memory/MEMORY.md`: Index. Lies ihn zu Beginn jeder Sitzung.
 - `.claude/memory/stand.md`: aktueller Stand (Gebautes, Ungeprüftes, Lücken an Design, Offenes, bekannte Fehler). Lies ihn, bevor du etwas für offen oder erledigt erklärst.
-- `.claude/memory/app-*.md`: Funktionskarte je Bereich (Ist, Soll, Offen) mit Johannes' Wort. Lies die Karte des Bereichs, an dem du arbeitest.
-- `.claude/memory/arbeitsweise.md` (Bauen, Ordner, Nebensitzungen, Meldungen, Brief an Design, Namen, Rechte), `haltung.md`, `fragen.md`, `test-verstaendnis.md`: wie gearbeitet, geprüft, gemeldet und gefragt wird. `artefakte.md` ist nur Hinweis (AGENTS.md §2.4), keine Quelle.
+- `.claude/memory/spec-*.md`: Spec je Bereich (Ziel, Funktionen mit Ist-Beleg und Status, Regeln, Lücken); `spec-format.md` sagt, wie sie gepflegt werden; `spec-arbeit.md` ergänzt AGENTS.md um die Arbeitsweise; `spec-architektur.md` ist das Bild der App. `artefakte.md` ist nur Hinweis (AGENTS.md §2.4), keine Quelle.
 - Johannes' Wort im Original: Transkripte unter `~/.claude/projects/-Users-johannesleoberger-Developer-ALFA-OS*/`; Nutzernachrichten und eingereihte Nachrichten (`queue-operation`, `queued_command`) durchsuchen.
 
 Stränge
@@ -67,7 +66,7 @@ Außerhalb des Repos
 
 ## Bauen und prüfen
 
-Jede Sitzung arbeitet in genau **einem** Ordner `dist/<sitzung>/` (die Lead: `dist/lead/`; ein Bau-Strang den Ordner, den sein Auftrag nennt) und löscht ihn am Ende selbst (Johannes 21.10., `.claude/memory/arbeitsweise.md`, Abschnitt Ordner und Ablage). Pfade immer vollständig angeben, nie unter `alfaos/`.
+Jede Sitzung arbeitet in genau **einem** Ordner `dist/<sitzung>/` (die Lead den Ordner, den ihr Startprompt nennt; ein Bau-Strang den Ordner, den sein Auftrag nennt) und löscht ihn am Ende selbst (Johannes 21.10., `.claude/memory/spec-arbeit.md`). Pfade immer vollständig angeben, nie unter `alfaos/`.
 
 - Kit-Test: `cd alfaos/Kit && swift test --scratch-path "$PWD/../../dist/<sitzung>/kit"`
 - App: `cd alfaos && xcodegen && xcodebuild -project ALFA_OS.xcodeproj -scheme ALFA_OS -derivedDataPath "$PWD/../dist/<sitzung>/app" build -quiet`

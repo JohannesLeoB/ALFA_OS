@@ -4,7 +4,7 @@
 - [Spec: Architektur](spec-architektur.md) — Johannes' Bild (Hub+Einstellungen Mitte, Bausteine, Schubladen) und fünf Bauregeln
 - [Spec: Ziel](spec-ziel.md) — Zweck, Stufen, Bereiche mit Rang, Plattform und Reichweite
 - [Spec: Hülle](spec-huelle.md) — Blob, Bahnen, Stapel, Fenster, Sync, Avatar, Look, Icon
-- [Spec: Mail](spec-mail.md) — 59 Funktionen mit Ist-Beleg und Status, 12 rot
+- [Spec: Mail](spec-mail.md) — 59 Funktionen mit Ist-Beleg und Status, 8 rot (22.10.)
 - [Spec: Hub](spec-hub.md) — Einstellungen, Konten, Integrationen, Einstellungsbaum, Lücken für Brief v13
 - [Spec: Projekte](spec-projekte.md) — Akte, Fragebogen, Provisionierung; kein Code, Bestand belegt
 - [Spec: Heute](spec-heute.md) — Widget-Brett; kein Code, Bestand belegt
