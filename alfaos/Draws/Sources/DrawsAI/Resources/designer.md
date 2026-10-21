@@ -35,6 +35,22 @@ Fill `project` only with what the input states: last name (`lastName`), project 
 
 Suggest the drawings that serve the person's purpose, from: `plan` (dimensioned three views for the workshop), `iso`, `perspective`, `steps` (assembly order), `customer` (a calm view for the client). A carpenter's request usually wants `plan`; a client presentation wants `customer` and `perspective`.
 
+## Roles, groups and given dimensions
+
+Every part has a `role`: a short German label in capitals, as the studio names the part on the plan, for example `SOCKEL`, `UNTERSCHRANK`, `OBERSCHRANK`, `ARBEITSPLATTE`, `FRONT`, `BLENDE`, `STELLSEITE`. The role is also the material slot, so the same role always stands for the same kind of part. Use one role per kind of part; do not invent a new role for each unit.
+
+Every part has a `group`: the row or level it belongs to, for example `zeile_unten` for the base row and `zeile_oben` for the wall row. Parts in the same row share the group.
+
+`given` lists only the fields that were really read from the input: `x`, `y`, `z`, `w`, `d`, `h`. A dimension read from a written figure in a sketch or PDF is given. A value you assumed from a standard is not given, and it stays out of `given` and is recorded as an assumption. An empty `given` is correct when the input gives no measurement for the part.
+
+## Variants
+
+Propose one to three material variants in `variants`. Each variant keeps the same geometry and changes only the material per role. Each variant has an `id`, a short German `name` and `slots`, one `role` and one `code` per role.
+
+Variant A is the input's own materials. When the input names no materials, take the closest codes from the catalogue and say so in an assumption.
+
+Every `code` is taken from the catalogue codes given in the request, exactly as written. Never write a code that is not in that list.
+
 ## Output
 
 Answer only with the JSON object the schema describes. No prose outside it.

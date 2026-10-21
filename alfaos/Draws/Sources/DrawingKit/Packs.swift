@@ -64,6 +64,21 @@ public struct TemplatePack: Sendable {
     public var viewTitles: [String: String]
     public var titles: [String: String]
     public var block: TitleBlock
+    public var presentation: Presentation
+
+    public struct Presentation: Sendable {
+        public var columnGap: Double
+        public var titleGap: Double
+        public var labelGap: Double
+        public var labelStep: Double
+        public var blockGap: Double
+        public var blockRow: Double
+        public var swatch: Double
+        public var stamp: String
+        public var stampStatuses: [String]
+        public var stampSize: Double
+        public var totalPad: Double
+    }
 
     public struct Insets: Codable, Sendable {
         public var left: Double
@@ -130,7 +145,7 @@ public enum Packs {
 
     public static func decodeTemplate(_ data: Data) throws -> Loaded<TemplatePack> {
         let r = try Reader(data, prefix: "template")
-        let frame = r.object("frame"), iso = r.object("isoMargin"), b = r.object("block")
+        let frame = r.object("frame"), iso = r.object("isoMargin"), b = r.object("block"), pr = r.object("presentation")
         func insets(_ o: Reader) -> TemplatePack.Insets {
             .init(left: o.number("left"), top: o.number("top"), right: o.number("right"), bottom: o.number("bottom"))
         }
@@ -151,9 +166,14 @@ public enum Packs {
             minPaperLength: r.number("minPaperLength"), tick: r.number("tick"), extensionGap: r.number("extensionGap"),
             titleOffset: r.number("titleOffset"), noScale: r.text("noScale"),
             scales: r.ratios("scales"), isoScales: r.ratios("isoScales"), isoMargin: insets(iso),
-            viewTitles: r.table("viewTitles"), titles: r.table("titles"), block: block
+            viewTitles: r.table("viewTitles"), titles: r.table("titles"), block: block,
+            presentation: TemplatePack.Presentation(
+                columnGap: pr.number("columnGap"), titleGap: pr.number("titleGap"), labelGap: pr.number("labelGap"),
+                labelStep: pr.number("labelStep"), blockGap: pr.number("blockGap"), blockRow: pr.number("blockRow"),
+                swatch: pr.number("swatch"), stamp: pr.text("stamp"), stampStatuses: pr.strings("stampStatuses"),
+                stampSize: pr.number("stampSize"), totalPad: pr.number("totalPad"))
         )
-        var defects = r.defects + frame.defects + iso.defects + b.defects
+        var defects = r.defects + frame.defects + iso.defects + b.defects + pr.defects
         if method == nil, !defects.contains("template.method") { defects.append("template.method") }
         if pack.chainOffset + pack.chainStep >= pack.band, !defects.contains("template.band") { defects.append("template.band") }
         return Loaded(pack: pack, defects: defects)
@@ -241,5 +261,53 @@ final class Reader {
     func list(_ key: String) -> [Reader] {
         guard let v = root[key] as? [[String: Any]] else { miss(key); return [] }
         return v.enumerated().map { Reader($0.element, prefix: "\(prefix).\(key)[\($0.offset)]", missing: false) }
+    }
+}
+
+public struct Material: Sendable, Equatable {
+    public var code: String
+    public var name: String
+    public var tone: String
+    public var status: String
+}
+
+public struct MaterialPack: Sendable {
+    public var placeholder: Bool
+    public var materials: [Material]
+    public var slots: [String: String]
+
+    public func material(_ code: String) -> Material? { materials.first { $0.code == code } }
+}
+
+public extension Packs {
+    static func loadMaterial(_ folder: URL) throws -> Loaded<MaterialPack> {
+        try decodeMaterial(Data(contentsOf: folder.appendingPathComponent("material.json")))
+    }
+
+    static func decodeMaterial(_ data: Data) throws -> Loaded<MaterialPack> {
+        let r = try Reader(data, prefix: "material")
+        var defects: [String] = []
+        var materials: [Material] = []
+        for item in r.list("materials") {
+            let tone = item.object("tone")
+            materials.append(Material(
+                code: item.text("code"), name: item.text("name"),
+                tone: tone.color("srgb"), status: item.text("status")
+            ))
+            defects += item.defects + tone.defects
+        }
+        let slots = r.table("slots")
+        let codes = Set(materials.map(\.code))
+        for (key, code) in slots.sorted(by: { $0.key < $1.key }) where !codes.contains(code) {
+            defects.append("material.slots.\(key)")
+        }
+        var seen = Set<String>()
+        var repeated = Set<String>()
+        for code in materials.map(\.code) where !seen.insert(code).inserted {
+            repeated.insert(code)
+        }
+        defects += repeated.sorted().map { "material.materials.\($0)" }
+        let pack = MaterialPack(placeholder: r.flag("platzhalter"), materials: materials, slots: slots)
+        return Loaded(pack: pack, defects: r.defects + defects)
     }
 }

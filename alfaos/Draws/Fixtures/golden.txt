@@ -1,9 +1,10 @@
-packs [] []
-["ci.ink", "ci.muted", "ci.weightTitle", "ci.tints.korpus"] ["template.method", "template.format", "template.width", "template.height", "template.band", "template.gap", "template.chainOffset", "template.chainStep", "template.minPaperLength", "template.tick", "template.extensionGap", "template.titleOffset", "template.noScale", "template.scales", "template.isoScales", "template.viewTitles", "template.titles", "template.frame", "template.frame.left", "template.frame.top", "template.frame.right", "template.frame.bottom", "template.isoMargin", "template.isoMargin.left", "template.isoMargin.top", "template.isoMargin.right", "template.isoMargin.bottom", "template.block", "template.block.rows", "template.block.inset", "template.block.notes", "template.block.notesTop", "template.block.notesStep", "template.block.rowsTop", "template.block.rowHeight", "template.block.labelBaseline", "template.block.valueBaseline", "template.block.footerHeight", "template.block.footer", "template.block.footerStep", "template.block.stamp"]
-["ci.weightTitle"] ["template.method", "template.format", "template.width", "template.height", "template.band", "template.gap", "template.chainOffset", "template.chainStep", "template.minPaperLength", "template.tick", "template.extensionGap", "template.titleOffset", "template.noScale", "template.scales", "template.isoScales", "template.viewTitles", "template.titles", "template.frame", "template.frame.left", "template.frame.top", "template.frame.right", "template.frame.bottom", "template.isoMargin", "template.isoMargin.left", "template.isoMargin.top", "template.isoMargin.right", "template.isoMargin.bottom", "template.block", "template.block.rows", "template.block.inset", "template.block.notes", "template.block.notesTop", "template.block.notesStep", "template.block.rowsTop", "template.block.rowHeight", "template.block.labelBaseline", "template.block.valueBaseline", "template.block.footerHeight", "template.block.footer", "template.block.footerStep", "template.block.stamp"]
-["ci.font", "ci.pdfFont", "ci.ink", "ci.muted", "ci.signal", "ci.paper", "ci.lineFrame", "ci.lineBlock", "ci.lineEdge", "ci.lineDimension", "ci.lineExtension", "ci.lineTick", "ci.textDimension", "ci.textTitle", "ci.textLabel", "ci.textValue", "ci.textNote", "ci.weightTitle", "ci.tints", "ci.accent", "ci.iso", "ci.iso.top", "ci.iso.side", "ci.iso.front", "ci.iso.edge", "ci.iso.outline", "ci.iso.shadow", "ci.iso.spread"] ["template.scales", "template.isoScales", "template.band"]
-["ci.font", "ci.pdfFont", "ci.ink", "ci.muted", "ci.signal", "ci.paper", "ci.lineFrame", "ci.lineBlock", "ci.lineEdge", "ci.lineDimension", "ci.lineExtension", "ci.lineTick", "ci.textDimension", "ci.textTitle", "ci.textLabel", "ci.textValue", "ci.textNote", "ci.weightTitle", "ci.tints", "ci.accent", "ci.iso", "ci.iso.top", "ci.iso.side", "ci.iso.front", "ci.iso.edge", "ci.iso.outline", "ci.iso.shadow", "ci.iso.spread"] ["template.method", "template.format", "template.width", "template.height", "template.band", "template.gap", "template.chainOffset", "template.chainStep", "template.minPaperLength", "template.tick", "template.extensionGap", "template.titleOffset", "template.noScale", "template.scales", "template.isoScales", "template.viewTitles", "template.titles", "template.frame", "template.frame.left", "template.frame.top", "template.frame.right", "template.frame.bottom", "template.isoMargin", "template.isoMargin.left", "template.isoMargin.top", "template.isoMargin.right", "template.isoMargin.bottom", "template.block", "template.block.rows", "template.block.inset", "template.block.notes", "template.block.notesTop", "template.block.notesStep", "template.block.rowsTop", "template.block.rowHeight", "template.block.labelBaseline", "template.block.valueBaseline", "template.block.footerHeight", "template.block.footer", "template.block.footerStep", "template.block.stamp"]
-["ci.weightTitle"] ["template.method", "template.format", "template.width", "template.height", "template.band", "template.gap", "template.chainOffset", "template.chainStep", "template.minPaperLength", "template.tick", "template.extensionGap", "template.titleOffset", "template.noScale", "template.scales", "template.isoScales", "template.viewTitles", "template.titles", "template.frame", "template.frame.left", "template.frame.top", "template.frame.right", "template.frame.bottom", "template.isoMargin", "template.isoMargin.left", "template.isoMargin.top", "template.isoMargin.right", "template.isoMargin.bottom", "template.block", "template.block.rows", "template.block.inset", "template.block.notes", "template.block.notesTop", "template.block.notesStep", "template.block.rowsTop", "template.block.rowHeight", "template.block.labelBaseline", "template.block.valueBaseline", "template.block.footerHeight", "template.block.footer", "template.block.footerStep", "template.block.stamp"]
+packs [] [] [] 6
+["ci.ink", "ci.muted", "ci.weightTitle", "ci.tints.korpus"] ["template.method", "template.format", "template.width", "template.height", "template.band", "template.gap", "template.chainOffset", "template.chainStep", "template.minPaperLength", "template.tick", "template.extensionGap", "template.titleOffset", "template.noScale", "template.scales", "template.isoScales", "template.viewTitles", "template.titles", "template.frame", "template.frame.left", "template.frame.top", "template.frame.right", "template.frame.bottom", "template.isoMargin", "template.isoMargin.left", "template.isoMargin.top", "template.isoMargin.right", "template.isoMargin.bottom", "template.block", "template.block.rows", "template.block.inset", "template.block.notes", "template.block.notesTop", "template.block.notesStep", "template.block.rowsTop", "template.block.rowHeight", "template.block.labelBaseline", "template.block.valueBaseline", "template.block.footerHeight", "template.block.footer", "template.block.footerStep", "template.block.stamp", "template.presentation", "template.presentation.columnGap", "template.presentation.titleGap", "template.presentation.labelGap", "template.presentation.labelStep", "template.presentation.blockGap", "template.presentation.blockRow", "template.presentation.swatch", "template.presentation.stamp", "template.presentation.stampStatuses", "template.presentation.stampSize", "template.presentation.totalPad"] ["material.materials", "material.slots"]
+["ci.weightTitle"] ["template.method", "template.format", "template.width", "template.height", "template.band", "template.gap", "template.chainOffset", "template.chainStep", "template.minPaperLength", "template.tick", "template.extensionGap", "template.titleOffset", "template.noScale", "template.scales", "template.isoScales", "template.viewTitles", "template.titles", "template.frame", "template.frame.left", "template.frame.top", "template.frame.right", "template.frame.bottom", "template.isoMargin", "template.isoMargin.left", "template.isoMargin.top", "template.isoMargin.right", "template.isoMargin.bottom", "template.block", "template.block.rows", "template.block.inset", "template.block.notes", "template.block.notesTop", "template.block.notesStep", "template.block.rowsTop", "template.block.rowHeight", "template.block.labelBaseline", "template.block.valueBaseline", "template.block.footerHeight", "template.block.footer", "template.block.footerStep", "template.block.stamp", "template.presentation", "template.presentation.columnGap", "template.presentation.titleGap", "template.presentation.labelGap", "template.presentation.labelStep", "template.presentation.blockGap", "template.presentation.blockRow", "template.presentation.swatch", "template.presentation.stamp", "template.presentation.stampStatuses", "template.presentation.stampSize", "template.presentation.totalPad"] ["material.materials", "material.slots"]
+["ci.font", "ci.pdfFont", "ci.ink", "ci.muted", "ci.signal", "ci.paper", "ci.lineFrame", "ci.lineBlock", "ci.lineEdge", "ci.lineDimension", "ci.lineExtension", "ci.lineTick", "ci.textDimension", "ci.textTitle", "ci.textLabel", "ci.textValue", "ci.textNote", "ci.weightTitle", "ci.tints", "ci.accent", "ci.iso", "ci.iso.top", "ci.iso.side", "ci.iso.front", "ci.iso.edge", "ci.iso.outline", "ci.iso.shadow", "ci.iso.spread"] ["template.scales", "template.isoScales", "template.presentation", "template.presentation.columnGap", "template.presentation.titleGap", "template.presentation.labelGap", "template.presentation.labelStep", "template.presentation.blockGap", "template.presentation.blockRow", "template.presentation.swatch", "template.presentation.stamp", "template.presentation.stampStatuses", "template.presentation.stampSize", "template.presentation.totalPad", "template.band"] ["material.materials", "material.slots"]
+["ci.font", "ci.pdfFont", "ci.ink", "ci.muted", "ci.signal", "ci.paper", "ci.lineFrame", "ci.lineBlock", "ci.lineEdge", "ci.lineDimension", "ci.lineExtension", "ci.lineTick", "ci.textDimension", "ci.textTitle", "ci.textLabel", "ci.textValue", "ci.textNote", "ci.weightTitle", "ci.tints", "ci.accent", "ci.iso", "ci.iso.top", "ci.iso.side", "ci.iso.front", "ci.iso.edge", "ci.iso.outline", "ci.iso.shadow", "ci.iso.spread"] ["template.method", "template.format", "template.width", "template.height", "template.band", "template.gap", "template.chainOffset", "template.chainStep", "template.minPaperLength", "template.tick", "template.extensionGap", "template.titleOffset", "template.noScale", "template.scales", "template.isoScales", "template.viewTitles", "template.titles", "template.frame", "template.frame.left", "template.frame.top", "template.frame.right", "template.frame.bottom", "template.isoMargin", "template.isoMargin.left", "template.isoMargin.top", "template.isoMargin.right", "template.isoMargin.bottom", "template.block", "template.block.rows", "template.block.inset", "template.block.notes", "template.block.notesTop", "template.block.notesStep", "template.block.rowsTop", "template.block.rowHeight", "template.block.labelBaseline", "template.block.valueBaseline", "template.block.footerHeight", "template.block.footer", "template.block.footerStep", "template.block.stamp", "template.presentation", "template.presentation.columnGap", "template.presentation.titleGap", "template.presentation.labelGap", "template.presentation.labelStep", "template.presentation.blockGap", "template.presentation.blockRow", "template.presentation.swatch", "template.presentation.stamp", "template.presentation.stampStatuses", "template.presentation.stampSize", "template.presentation.totalPad"] ["material.materials", "material.slots"]
+["ci.weightTitle"] ["template.method", "template.format", "template.width", "template.height", "template.band", "template.gap", "template.chainOffset", "template.chainStep", "template.minPaperLength", "template.tick", "template.extensionGap", "template.titleOffset", "template.noScale", "template.scales", "template.isoScales", "template.viewTitles", "template.titles", "template.frame", "template.frame.left", "template.frame.top", "template.frame.right", "template.frame.bottom", "template.isoMargin", "template.isoMargin.left", "template.isoMargin.top", "template.isoMargin.right", "template.isoMargin.bottom", "template.block", "template.block.rows", "template.block.inset", "template.block.notes", "template.block.notesTop", "template.block.notesStep", "template.block.rowsTop", "template.block.rowHeight", "template.block.labelBaseline", "template.block.valueBaseline", "template.block.footerHeight", "template.block.footer", "template.block.footerStep", "template.block.stamp", "template.presentation", "template.presentation.columnGap", "template.presentation.titleGap", "template.presentation.labelGap", "template.presentation.labelStep", "template.presentation.blockGap", "template.presentation.blockRow", "template.presentation.swatch", "template.presentation.stamp", "template.presentation.stampStatuses", "template.presentation.stampSize", "template.presentation.totalPad"] ["material.materials", "material.slots"]
+["ci.font", "ci.pdfFont", "ci.ink", "ci.muted", "ci.signal", "ci.paper", "ci.lineFrame", "ci.lineBlock", "ci.lineEdge", "ci.lineDimension", "ci.lineExtension", "ci.lineTick", "ci.textDimension", "ci.textTitle", "ci.textLabel", "ci.textValue", "ci.textNote", "ci.weightTitle", "ci.tints", "ci.accent", "ci.iso", "ci.iso.top", "ci.iso.side", "ci.iso.front", "ci.iso.edge", "ci.iso.outline", "ci.iso.shadow", "ci.iso.spread"] ["template.method", "template.format", "template.width", "template.height", "template.band", "template.gap", "template.chainOffset", "template.chainStep", "template.minPaperLength", "template.tick", "template.extensionGap", "template.titleOffset", "template.noScale", "template.scales", "template.isoScales", "template.viewTitles", "template.titles", "template.frame", "template.frame.left", "template.frame.top", "template.frame.right", "template.frame.bottom", "template.isoMargin", "template.isoMargin.left", "template.isoMargin.top", "template.isoMargin.right", "template.isoMargin.bottom", "template.block", "template.block.rows", "template.block.inset", "template.block.notes", "template.block.notesTop", "template.block.notesStep", "template.block.rowsTop", "template.block.rowHeight", "template.block.labelBaseline", "template.block.valueBaseline", "template.block.footerHeight", "template.block.footer", "template.block.footerStep", "template.block.stamp", "template.presentation", "template.presentation.columnGap", "template.presentation.titleGap", "template.presentation.labelGap", "template.presentation.labelStep", "template.presentation.blockGap", "template.presentation.blockRow", "template.presentation.swatch", "template.presentation.stamp", "template.presentation.stampStatuses", "template.presentation.stampSize", "template.presentation.totalPad"] ["material.materials[7].tone.srgb", "material.slots.front", "material.materials.platzhalter:korpus"]
 ## kitchen pages 8
 plan []
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420.00 297.00" width="420.00mm" height="297.00mm" font-family="Helvetica, Arial, sans-serif">
@@ -1867,7 +1868,7 @@ plan []
 <text x="321.00" y="16.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Maße vor Ort prüfen. Höhen ab OKFF.</text>
 <line x1="319.00" y1="27.00" x2="418.00" y2="27.00" stroke="#171717" stroke-width="0.18"/>
 <text x="321.00" y="30.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Nachname</text>
-<text x="321.00" y="35.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX…</text>
+<text x="321.00" y="35.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX…</text>
 <line x1="319.00" y1="38.50" x2="418.00" y2="38.50" stroke="#171717" stroke-width="0.18"/>
 <text x="321.00" y="42.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Projektbezeichnung</text>
 <text x="321.00" y="46.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
@@ -2413,13 +2414,334 @@ plan []
 <text x="321.00" y="278.50" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Musterstraße 1, 12345 Musterstadt</text>
 <text x="321.00" y="292.50" font-size="1.80" text-anchor="start" font-weight="400" fill="#b3412e">PLATZHALTER-PACKS · Testlauf</text>
 </svg>
+## presentation plain pages 1
+presentation []
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420.00 297.00" width="420.00mm" height="297.00mm" font-family="Helvetica, Arial, sans-serif">
+<rect width="420.00" height="297.00" fill="#ffffff"/>
+<rect x="15.00" y="2.00" width="302.00" height="292.50" fill="none" stroke="#171717" stroke-width="0.70"/>
+<text x="25.70" y="109.25" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Variante A</text>
+<rect x="25.70" y="113.75" width="32.00" height="28.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="25.70" y1="141.75" x2="57.70" y2="141.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="25.70" y1="113.75" x2="57.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="25.70" y1="141.75" x2="25.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="57.70" y1="141.75" x2="57.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="57.70" y="113.75" width="32.00" height="28.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="57.70" y1="141.75" x2="89.70" y2="141.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="57.70" y1="113.75" x2="89.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="57.70" y1="141.75" x2="57.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="89.70" y1="141.75" x2="89.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="89.70" y="113.75" width="32.00" height="28.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="89.70" y1="141.75" x2="121.70" y2="141.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="89.70" y1="113.75" x2="121.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="89.70" y1="141.75" x2="89.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="121.70" y1="141.75" x2="121.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="25.70" y="163.35" width="96.00" height="1.60" fill="#c9c2b6" stroke="none" stroke-width="0.00"/>
+<line x1="25.70" y1="164.95" x2="121.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="25.70" y1="163.35" x2="121.70" y2="163.35" stroke="#171717" stroke-width="0.25"/>
+<line x1="25.70" y1="164.95" x2="25.70" y2="163.35" stroke="#171717" stroke-width="0.25"/>
+<line x1="121.70" y1="164.95" x2="121.70" y2="163.35" stroke="#171717" stroke-width="0.25"/>
+<rect x="25.70" y="193.75" width="96.00" height="4.00" fill="#9a9a9a" stroke="none" stroke-width="0.00"/>
+<line x1="25.70" y1="197.75" x2="121.70" y2="197.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="25.70" y1="193.75" x2="121.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="25.70" y1="197.75" x2="25.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="121.70" y1="197.75" x2="121.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="25.70" y="164.95" width="24.00" height="28.80" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="25.70" y1="193.75" x2="49.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="25.70" y1="164.95" x2="49.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="25.70" y1="193.75" x2="25.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="49.70" y1="193.75" x2="49.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<rect x="49.70" y="164.95" width="24.00" height="28.80" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="49.70" y1="193.75" x2="73.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="49.70" y1="164.95" x2="73.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="49.70" y1="193.75" x2="49.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="73.70" y1="193.75" x2="73.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<rect x="73.70" y="164.95" width="24.00" height="28.80" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="73.70" y1="193.75" x2="97.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="73.70" y1="164.95" x2="97.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="73.70" y1="193.75" x2="73.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="97.70" y1="193.75" x2="97.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<rect x="97.70" y="164.95" width="24.00" height="28.80" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="97.70" y1="193.75" x2="121.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="97.70" y1="164.95" x2="121.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="97.70" y1="193.75" x2="97.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="121.70" y1="193.75" x2="121.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<text x="127.70" y="128.85" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">OBERSCHRANK</text>
+<text x="127.70" y="165.25" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">ARBEITSPLATTE</text>
+<text x="127.70" y="180.45" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">UNTERSCHRANK</text>
+<text x="127.70" y="196.85" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">SOCKEL</text>
+<text x="183.70" y="109.25" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Variante B</text>
+<rect x="183.70" y="113.75" width="32.00" height="28.00" fill="#5b6670" stroke="none" stroke-width="0.00"/>
+<line x1="183.70" y1="141.75" x2="215.70" y2="141.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="183.70" y1="113.75" x2="215.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="183.70" y1="141.75" x2="183.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="215.70" y1="141.75" x2="215.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="215.70" y="113.75" width="32.00" height="28.00" fill="#5b6670" stroke="none" stroke-width="0.00"/>
+<line x1="215.70" y1="141.75" x2="247.70" y2="141.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="215.70" y1="113.75" x2="247.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="215.70" y1="141.75" x2="215.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="247.70" y1="141.75" x2="247.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="247.70" y="113.75" width="32.00" height="28.00" fill="#5b6670" stroke="none" stroke-width="0.00"/>
+<line x1="247.70" y1="141.75" x2="279.70" y2="141.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="247.70" y1="113.75" x2="279.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="247.70" y1="141.75" x2="247.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="279.70" y1="141.75" x2="279.70" y2="113.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="183.70" y="163.35" width="96.00" height="1.60" fill="#e4dfd6" stroke="none" stroke-width="0.00"/>
+<line x1="183.70" y1="164.95" x2="279.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="183.70" y1="163.35" x2="279.70" y2="163.35" stroke="#171717" stroke-width="0.25"/>
+<line x1="183.70" y1="164.95" x2="183.70" y2="163.35" stroke="#171717" stroke-width="0.25"/>
+<line x1="279.70" y1="164.95" x2="279.70" y2="163.35" stroke="#171717" stroke-width="0.25"/>
+<rect x="183.70" y="193.75" width="96.00" height="4.00" fill="#9a9a9a" stroke="none" stroke-width="0.00"/>
+<line x1="183.70" y1="197.75" x2="279.70" y2="197.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="183.70" y1="193.75" x2="279.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="183.70" y1="197.75" x2="183.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="279.70" y1="197.75" x2="279.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="183.70" y="164.95" width="24.00" height="28.80" fill="#5b6670" stroke="none" stroke-width="0.00"/>
+<line x1="183.70" y1="193.75" x2="207.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="183.70" y1="164.95" x2="207.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="183.70" y1="193.75" x2="183.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="207.70" y1="193.75" x2="207.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<rect x="207.70" y="164.95" width="24.00" height="28.80" fill="#5b6670" stroke="none" stroke-width="0.00"/>
+<line x1="207.70" y1="193.75" x2="231.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="207.70" y1="164.95" x2="231.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="207.70" y1="193.75" x2="207.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="231.70" y1="193.75" x2="231.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<rect x="231.70" y="164.95" width="24.00" height="28.80" fill="#5b6670" stroke="none" stroke-width="0.00"/>
+<line x1="231.70" y1="193.75" x2="255.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="231.70" y1="164.95" x2="255.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="231.70" y1="193.75" x2="231.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="255.70" y1="193.75" x2="255.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<rect x="255.70" y="164.95" width="24.00" height="28.80" fill="#5b6670" stroke="none" stroke-width="0.00"/>
+<line x1="255.70" y1="193.75" x2="279.70" y2="193.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="255.70" y1="164.95" x2="279.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="255.70" y1="193.75" x2="255.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<line x1="279.70" y1="193.75" x2="279.70" y2="164.95" stroke="#171717" stroke-width="0.25"/>
+<text x="285.70" y="128.85" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">OBERSCHRANK</text>
+<text x="285.70" y="165.25" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">ARBEITSPLATTE</text>
+<text x="285.70" y="180.45" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">UNTERSCHRANK</text>
+<text x="285.70" y="196.85" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">SOCKEL</text>
+<text x="315.00" y="8.00" font-size="6.00" text-anchor="end" font-weight="500" fill="#171717">VORABZUG</text>
+<text x="321.00" y="150.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Variante A</text>
+<rect x="321.00" y="151.50" width="3.50" height="3.50" fill="#ececec" stroke="#171717" stroke-width="0.18"/>
+<text x="326.50" y="155.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">UNTERSCHRANK, OBERSCHRANK – KORPUS</text>
+<rect x="321.00" y="156.50" width="3.50" height="3.50" fill="#c9c2b6" stroke="#171717" stroke-width="0.18"/>
+<text x="326.50" y="160.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">ARBEITSPLATTE – ARBEITSPLATTE</text>
+<rect x="321.00" y="161.50" width="3.50" height="3.50" fill="#9a9a9a" stroke="#171717" stroke-width="0.18"/>
+<text x="326.50" y="165.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">SOCKEL – SOCKEL</text>
+<text x="321.00" y="174.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Variante B</text>
+<rect x="321.00" y="175.50" width="3.50" height="3.50" fill="#9a9a9a" stroke="#171717" stroke-width="0.18"/>
+<text x="326.50" y="179.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">SOCKEL – SOCKEL</text>
+<rect x="321.00" y="180.50" width="3.50" height="3.50" fill="#5b6670" stroke="#171717" stroke-width="0.18"/>
+<text x="326.50" y="184.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">UNTERSCHRANK, OBERSCHRANK – FRONT DUNKEL</text>
+<rect x="321.00" y="185.50" width="3.50" height="3.50" fill="#e4dfd6" stroke="#171717" stroke-width="0.18"/>
+<text x="326.50" y="189.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">ARBEITSPLATTE – ARBEITSPLATTE HELL</text>
+<rect x="319.00" y="2.00" width="99.00" height="292.50" fill="none" stroke="#171717" stroke-width="0.50"/>
+<text x="321.00" y="11.00" font-size="2.20" text-anchor="start" font-weight="500" fill="#171717">Alle Maßangaben in Millimetern</text>
+<text x="321.00" y="16.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Maße vor Ort prüfen. Höhen ab OKFF.</text>
+<line x1="319.00" y1="27.00" x2="418.00" y2="27.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="30.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Nachname</text>
+<text x="321.00" y="35.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Mustermann</text>
+<line x1="319.00" y1="38.50" x2="418.00" y2="38.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="42.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Projektbezeichnung</text>
+<text x="321.00" y="46.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="50.00" x2="418.00" y2="50.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="53.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Straße Hausnr.</text>
+<text x="321.00" y="58.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="61.50" x2="418.00" y2="61.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="65.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">PLZ Stadt</text>
+<text x="321.00" y="69.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="73.00" x2="418.00" y2="73.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="76.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Kundennr.</text>
+<text x="321.00" y="81.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="84.50" x2="418.00" y2="84.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="88.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Datum</text>
+<text x="321.00" y="92.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="96.00" x2="418.00" y2="96.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="99.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Maßstab</text>
+<text x="321.00" y="104.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">1:25</text>
+<line x1="319.00" y1="107.50" x2="418.00" y2="107.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="111.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Format</text>
+<text x="321.00" y="115.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">A3</text>
+<line x1="319.00" y1="119.00" x2="418.00" y2="119.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="122.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Zeichnung</text>
+<text x="321.00" y="127.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="130.50" x2="418.00" y2="130.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="134.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Layout</text>
+<text x="321.00" y="138.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="268.50" x2="418.00" y2="268.50" stroke="#171717" stroke-width="0.50"/>
+<text x="321.00" y="273.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Musterstudio GmbH</text>
+<text x="321.00" y="278.50" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Musterstraße 1, 12345 Musterstadt</text>
+<text x="321.00" y="292.50" font-size="1.80" text-anchor="start" font-weight="400" fill="#b3412e">PLATZHALTER-PACKS · Testlauf</text>
+</svg>
+## presentation given dims pages 1
+presentation []
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420.00 297.00" width="420.00mm" height="297.00mm" font-family="Helvetica, Arial, sans-serif">
+<rect width="420.00" height="297.00" fill="#ffffff"/>
+<rect x="15.00" y="2.00" width="302.00" height="292.50" fill="none" stroke="#171717" stroke-width="0.70"/>
+<text x="32.70" y="30.25" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Variante A</text>
+<rect x="32.70" y="50.75" width="80.00" height="70.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="32.70" y1="120.75" x2="112.70" y2="120.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="32.70" y1="50.75" x2="112.70" y2="50.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="32.70" y1="120.75" x2="32.70" y2="50.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="112.70" y1="120.75" x2="112.70" y2="50.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="112.70" y="50.75" width="80.00" height="70.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="112.70" y1="120.75" x2="192.70" y2="120.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="112.70" y1="50.75" x2="192.70" y2="50.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="112.70" y1="120.75" x2="112.70" y2="50.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="192.70" y1="120.75" x2="192.70" y2="50.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="192.70" y="50.75" width="80.00" height="70.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="192.70" y1="120.75" x2="272.70" y2="120.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="192.70" y1="50.75" x2="272.70" y2="50.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="192.70" y1="120.75" x2="192.70" y2="50.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="272.70" y1="120.75" x2="272.70" y2="50.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="32.70" y="174.75" width="240.00" height="4.00" fill="#c9c2b6" stroke="none" stroke-width="0.00"/>
+<line x1="32.70" y1="178.75" x2="272.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="32.70" y1="174.75" x2="272.70" y2="174.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="32.70" y1="178.75" x2="32.70" y2="174.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="272.70" y1="178.75" x2="272.70" y2="174.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="32.70" y="250.75" width="240.00" height="10.00" fill="#9a9a9a" stroke="none" stroke-width="0.00"/>
+<line x1="32.70" y1="260.75" x2="272.70" y2="260.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="32.70" y1="250.75" x2="272.70" y2="250.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="32.70" y1="260.75" x2="32.70" y2="250.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="272.70" y1="260.75" x2="272.70" y2="250.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="32.70" y="178.75" width="60.00" height="72.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="32.70" y1="250.75" x2="92.70" y2="250.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="32.70" y1="178.75" x2="92.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="32.70" y1="250.75" x2="32.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="92.70" y1="250.75" x2="92.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="92.70" y="178.75" width="60.00" height="72.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="92.70" y1="250.75" x2="152.70" y2="250.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="92.70" y1="178.75" x2="152.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="92.70" y1="250.75" x2="92.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="152.70" y1="250.75" x2="152.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="152.70" y="178.75" width="60.00" height="72.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="152.70" y1="250.75" x2="212.70" y2="250.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="152.70" y1="178.75" x2="212.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="152.70" y1="250.75" x2="152.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="212.70" y1="250.75" x2="212.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<rect x="212.70" y="178.75" width="60.00" height="72.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="212.70" y1="250.75" x2="272.70" y2="250.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="212.70" y1="178.75" x2="272.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="212.70" y1="250.75" x2="212.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<line x1="272.70" y1="250.75" x2="272.70" y2="178.75" stroke="#171717" stroke-width="0.25"/>
+<text x="278.70" y="86.85" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">OBERSCHRANK</text>
+<text x="278.70" y="177.85" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">ARBEITSPLATTE</text>
+<text x="278.70" y="215.85" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">UNTERSCHRANK</text>
+<text x="278.70" y="256.85" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">SOCKEL</text>
+<rect x="148.54" y="261.55" width="8.34" height="4.20" fill="#ffffff" stroke="#171717" stroke-width="0.18"/>
+<text x="152.70" y="264.75" font-size="2.20" text-anchor="middle" font-weight="400" fill="#171717">2400</text>
+<line x1="32.70" y1="265.75" x2="272.70" y2="265.75" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="150.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Variante A</text>
+<rect x="321.00" y="151.50" width="3.50" height="3.50" fill="#ececec" stroke="#171717" stroke-width="0.18"/>
+<text x="326.50" y="155.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">UNTERSCHRANK, OBERSCHRANK – KORPUS</text>
+<rect x="321.00" y="156.50" width="3.50" height="3.50" fill="#c9c2b6" stroke="#171717" stroke-width="0.18"/>
+<text x="326.50" y="160.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">ARBEITSPLATTE – ARBEITSPLATTE</text>
+<rect x="321.00" y="161.50" width="3.50" height="3.50" fill="#9a9a9a" stroke="#171717" stroke-width="0.18"/>
+<text x="326.50" y="165.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">SOCKEL – SOCKEL</text>
+<rect x="319.00" y="2.00" width="99.00" height="292.50" fill="none" stroke="#171717" stroke-width="0.50"/>
+<text x="321.00" y="11.00" font-size="2.20" text-anchor="start" font-weight="500" fill="#171717">Alle Maßangaben in Millimetern</text>
+<text x="321.00" y="16.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Maße vor Ort prüfen. Höhen ab OKFF.</text>
+<line x1="319.00" y1="27.00" x2="418.00" y2="27.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="30.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Nachname</text>
+<text x="321.00" y="35.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="38.50" x2="418.00" y2="38.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="42.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Projektbezeichnung</text>
+<text x="321.00" y="46.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="50.00" x2="418.00" y2="50.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="53.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Straße Hausnr.</text>
+<text x="321.00" y="58.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="61.50" x2="418.00" y2="61.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="65.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">PLZ Stadt</text>
+<text x="321.00" y="69.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="73.00" x2="418.00" y2="73.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="76.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Kundennr.</text>
+<text x="321.00" y="81.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="84.50" x2="418.00" y2="84.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="88.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Datum</text>
+<text x="321.00" y="92.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="96.00" x2="418.00" y2="96.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="99.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Maßstab</text>
+<text x="321.00" y="104.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">1:10</text>
+<line x1="319.00" y1="107.50" x2="418.00" y2="107.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="111.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Format</text>
+<text x="321.00" y="115.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">A3</text>
+<line x1="319.00" y1="119.00" x2="418.00" y2="119.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="122.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Zeichnung</text>
+<text x="321.00" y="127.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="130.50" x2="418.00" y2="130.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="134.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Layout</text>
+<text x="321.00" y="138.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="268.50" x2="418.00" y2="268.50" stroke="#171717" stroke-width="0.50"/>
+<text x="321.00" y="273.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Musterstudio GmbH</text>
+<text x="321.00" y="278.50" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Musterstraße 1, 12345 Musterstadt</text>
+<text x="321.00" y="292.50" font-size="1.80" text-anchor="start" font-weight="400" fill="#b3412e">PLATZHALTER-PACKS · Testlauf</text>
+</svg>
+## presentation no variants pages 1
+presentation []
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420.00 297.00" width="420.00mm" height="297.00mm" font-family="Helvetica, Arial, sans-serif">
+<rect width="420.00" height="297.00" fill="#ffffff"/>
+<rect x="15.00" y="2.00" width="302.00" height="292.50" fill="none" stroke="#171717" stroke-width="0.70"/>
+<rect x="33.50" y="182.25" width="240.00" height="10.00" fill="#9a9a9a" stroke="none" stroke-width="0.00"/>
+<line x1="33.50" y1="192.25" x2="273.50" y2="192.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="33.50" y1="182.25" x2="273.50" y2="182.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="33.50" y1="192.25" x2="33.50" y2="182.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="273.50" y1="192.25" x2="273.50" y2="182.25" stroke="#171717" stroke-width="0.25"/>
+<rect x="33.50" y="110.25" width="60.00" height="72.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="33.50" y1="182.25" x2="93.50" y2="182.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="33.50" y1="110.25" x2="93.50" y2="110.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="33.50" y1="182.25" x2="33.50" y2="110.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="93.50" y1="182.25" x2="93.50" y2="110.25" stroke="#171717" stroke-width="0.25"/>
+<text x="279.50" y="147.35" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">UNTERSCHRANK</text>
+<text x="279.50" y="188.35" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">SOCKEL</text>
+<rect x="321.00" y="146.50" width="3.50" height="3.50" fill="#ececec" stroke="#171717" stroke-width="0.18"/>
+<text x="326.50" y="150.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">UNTERSCHRANK – KORPUS</text>
+<rect x="321.00" y="151.50" width="3.50" height="3.50" fill="#9a9a9a" stroke="#171717" stroke-width="0.18"/>
+<text x="326.50" y="155.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">SOCKEL – SOCKEL</text>
+<rect x="319.00" y="2.00" width="99.00" height="292.50" fill="none" stroke="#171717" stroke-width="0.50"/>
+<text x="321.00" y="11.00" font-size="2.20" text-anchor="start" font-weight="500" fill="#171717">Alle Maßangaben in Millimetern</text>
+<text x="321.00" y="16.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Maße vor Ort prüfen. Höhen ab OKFF.</text>
+<line x1="319.00" y1="27.00" x2="418.00" y2="27.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="30.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Nachname</text>
+<text x="321.00" y="35.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="38.50" x2="418.00" y2="38.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="42.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Projektbezeichnung</text>
+<text x="321.00" y="46.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="50.00" x2="418.00" y2="50.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="53.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Straße Hausnr.</text>
+<text x="321.00" y="58.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="61.50" x2="418.00" y2="61.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="65.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">PLZ Stadt</text>
+<text x="321.00" y="69.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="73.00" x2="418.00" y2="73.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="76.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Kundennr.</text>
+<text x="321.00" y="81.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="84.50" x2="418.00" y2="84.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="88.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Datum</text>
+<text x="321.00" y="92.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="96.00" x2="418.00" y2="96.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="99.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Maßstab</text>
+<text x="321.00" y="104.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">1:10</text>
+<line x1="319.00" y1="107.50" x2="418.00" y2="107.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="111.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Format</text>
+<text x="321.00" y="115.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">A3</text>
+<line x1="319.00" y1="119.00" x2="418.00" y2="119.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="122.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Zeichnung</text>
+<text x="321.00" y="127.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="130.50" x2="418.00" y2="130.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="134.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Layout</text>
+<text x="321.00" y="138.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="268.50" x2="418.00" y2="268.50" stroke="#171717" stroke-width="0.50"/>
+<text x="321.00" y="273.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Musterstudio GmbH</text>
+<text x="321.00" y="278.50" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Musterstraße 1, 12345 Musterstadt</text>
+<text x="321.00" y="292.50" font-size="1.80" text-anchor="start" font-weight="400" fill="#b3412e">PLATZHALTER-PACKS · Testlauf</text>
+</svg>
 [(key: "Content-Type", value: "application/json"), (key: "anthropic-beta", value: "server-side-fallback-2026-07-01"), (key: "anthropic-version", value: "2023-06-01"), (key: "x-api-key", value: "k")]
-{"fallbacks":"default","max_tokens":16000,"messages":[{"content":[{"source":{"data":"AQ==","media_type":"image\/png","type":"base64"},"type":"image"},{"source":{"data":"Ag==","media_type":"application\/pdf","type":"base64"},"type":"document"},{"text":"Kitchen","type":"text"}],"role":"user"}],"model":"claude-opus-5-5","output_config":{"effort":"high","format":{"schema":{"additionalProperties":false,"properties":{"assumptions":{"items":{"type":"string"},"type":"array"},"parts":{"items":{"additionalProperties":false,"properties":{"d":{"type":"number"},"h":{"type":"number"},"id":{"type":"string"},"material":{"type":"string"},"name":{"type":"string"},"w":{"type":"number"},"x":{"type":"number"},"y":{"type":"number"},"z":{"type":"number"}},"required":["d","h","id","material","name","w","x","y","z"],"type":"object"},"type":"array"},"products":{"items":{"enum":["plan","iso","perspective","steps","customer"],"type":"string"},"type":"array"},"project":{"items":{"additionalProperties":false,"properties":{"key":{"enum":["lastName","project","street","city","customer","date"],"type":"string"},"value":{"type":"string"}},"required":["key","value"],"type":"object"},"type":"array"},"questions":{"items":{"type":"string"},"type":"array"}},"required":["assumptions","parts","products","project","questions"],"type":"object"},"type":"json_schema"}},"system":"You design objects for ALFA Draws, the drawing module of the ALFA app. An interior studio uses it to turn sketches, photos, plans and short descriptions into measured drawings: a dimensioned plan, isometric views, a perspective, assembly steps and a customer view. You deliver the object as data. A drawing engine then computes every view, scale and dimension from your data, so your job is the object itself, not the drawing.\n\n## What you receive\n\n- The person's description, in German most of the time.\n- Optional sketches, photos or PDFs. Read every written dimension in them; a handwritten 600 on a cabinet front is the width of that cabinet.\n- Optional current parts. When they are present and the description asks for a change, return the complete updated list, not only the changed parts.\n- The list of materials the studio's pack knows.\n\n## The object\n\nThe object is a set of axis-aligned boxes. Each part has an id, a name, a material and a position and size in millimetres:\n\n- x runs to the right along the front, y runs into the depth away from the viewer, z runs up.\n- The origin is the finished floor level at the front left corner of the object.\n- x, y, z are the low corner; w, d, h are the sizes along x, y, z. Sizes are always greater than zero.\n- Ids are short, lowercase, unique and stable (`sockel`, `u0`, `platte`, `o2`). Keep the ids of current parts when you change them.\n- Names are short and German, as a carpenter would label the part.\n\nBuild the real object from its real parts, the way it is made: plinth, carcasses, worktop, wall units, shelves, side panels, fronts when they are drawn separately. A good proposal has every part that shows in a drawing and nothing that is noise. Each part stands on the floor or on another part, or hangs on the wall; parts touch, they do not pass through each other. List parts from the bottom up, so the assembly steps read in the order the object is built.\n\n## Materials\n\nUse only materials from the given list. When nothing fits, take the closest one and say so in an assumption.\n\n## Dimensions and honesty\n\nTake every dimension you can from the input. When you must fill a gap, use the common standard for the object (for a kitchen, for example, worktop height, cabinet depth and plinth height) and record each such value as an assumption in one short German sentence with the value and the reason. Never present an assumed value as given. When something essential is unclear and no standard answers it, ask: put one short German question per open point into `questions`, and still return your best proposal.\n\n## Project data\n\nFill `project` only with what the input states: last name (`lastName`), project name (`project`), street (`street`), postcode and city (`city`), customer number (`customer`), date (`date`). Leave out what is not given.\n\n## Products\n\nSuggest the drawings that serve the person's purpose, from: `plan` (dimensioned three views for the workshop), `iso`, `perspective`, `steps` (assembly order), `customer` (a calm view for the client). A carpenter's request usually wants `plan`; a client presentation wants `customer` and `perspective`.\n\n## Output\n\nAnswer only with the JSON object the schema describes. No prose outside it.\n\n\nMaterials: korpus, platte","thinking":{"type":"adaptive"}}
+{"fallbacks":"default","max_tokens":16000,"messages":[{"content":[{"source":{"data":"AQ==","media_type":"image\/png","type":"base64"},"type":"image"},{"source":{"data":"Ag==","media_type":"application\/pdf","type":"base64"},"type":"document"},{"text":"Kitchen","type":"text"}],"role":"user"}],"model":"claude-opus-5-5","output_config":{"effort":"high","format":{"schema":{"additionalProperties":false,"properties":{"assumptions":{"items":{"type":"string"},"type":"array"},"parts":{"items":{"additionalProperties":false,"properties":{"d":{"type":"number"},"given":{"items":{"enum":["x","y","z","w","d","h"],"type":"string"},"type":"array"},"group":{"type":"string"},"h":{"type":"number"},"id":{"type":"string"},"material":{"type":"string"},"name":{"type":"string"},"role":{"type":"string"},"w":{"type":"number"},"x":{"type":"number"},"y":{"type":"number"},"z":{"type":"number"}},"required":["d","given","group","h","id","material","name","role","w","x","y","z"],"type":"object"},"type":"array"},"products":{"items":{"enum":["plan","iso","perspective","steps","customer"],"type":"string"},"type":"array"},"project":{"items":{"additionalProperties":false,"properties":{"key":{"enum":["lastName","project","street","city","customer","date"],"type":"string"},"value":{"type":"string"}},"required":["key","value"],"type":"object"},"type":"array"},"questions":{"items":{"type":"string"},"type":"array"},"variants":{"items":{"additionalProperties":false,"properties":{"id":{"type":"string"},"name":{"type":"string"},"slots":{"items":{"additionalProperties":false,"properties":{"code":{"type":"string"},"role":{"type":"string"}},"required":["code","role"],"type":"object"},"type":"array"}},"required":["id","name","slots"],"type":"object"},"type":"array"}},"required":["assumptions","parts","products","project","questions","variants"],"type":"object"},"type":"json_schema"}},"system":"You design objects for ALFA Draws, the drawing module of the ALFA app. An interior studio uses it to turn sketches, photos, plans and short descriptions into measured drawings: a dimensioned plan, isometric views, a perspective, assembly steps and a customer view. You deliver the object as data. A drawing engine then computes every view, scale and dimension from your data, so your job is the object itself, not the drawing.\n\n## What you receive\n\n- The person's description, in German most of the time.\n- Optional sketches, photos or PDFs. Read every written dimension in them; a handwritten 600 on a cabinet front is the width of that cabinet.\n- Optional current parts. When they are present and the description asks for a change, return the complete updated list, not only the changed parts.\n- The list of materials the studio's pack knows.\n\n## The object\n\nThe object is a set of axis-aligned boxes. Each part has an id, a name, a material and a position and size in millimetres:\n\n- x runs to the right along the front, y runs into the depth away from the viewer, z runs up.\n- The origin is the finished floor level at the front left corner of the object.\n- x, y, z are the low corner; w, d, h are the sizes along x, y, z. Sizes are always greater than zero.\n- Ids are short, lowercase, unique and stable (`sockel`, `u0`, `platte`, `o2`). Keep the ids of current parts when you change them.\n- Names are short and German, as a carpenter would label the part.\n\nBuild the real object from its real parts, the way it is made: plinth, carcasses, worktop, wall units, shelves, side panels, fronts when they are drawn separately. A good proposal has every part that shows in a drawing and nothing that is noise. Each part stands on the floor or on another part, or hangs on the wall; parts touch, they do not pass through each other. List parts from the bottom up, so the assembly steps read in the order the object is built.\n\n## Materials\n\nUse only materials from the given list. When nothing fits, take the closest one and say so in an assumption.\n\n## Dimensions and honesty\n\nTake every dimension you can from the input. When you must fill a gap, use the common standard for the object (for a kitchen, for example, worktop height, cabinet depth and plinth height) and record each such value as an assumption in one short German sentence with the value and the reason. Never present an assumed value as given. When something essential is unclear and no standard answers it, ask: put one short German question per open point into `questions`, and still return your best proposal.\n\n## Project data\n\nFill `project` only with what the input states: last name (`lastName`), project name (`project`), street (`street`), postcode and city (`city`), customer number (`customer`), date (`date`). Leave out what is not given.\n\n## Products\n\nSuggest the drawings that serve the person's purpose, from: `plan` (dimensioned three views for the workshop), `iso`, `perspective`, `steps` (assembly order), `customer` (a calm view for the client). A carpenter's request usually wants `plan`; a client presentation wants `customer` and `perspective`.\n\n## Roles, groups and given dimensions\n\nEvery part has a `role`: a short German label in capitals, as the studio names the part on the plan, for example `SOCKEL`, `UNTERSCHRANK`, `OBERSCHRANK`, `ARBEITSPLATTE`, `FRONT`, `BLENDE`, `STELLSEITE`. The role is also the material slot, so the same role always stands for the same kind of part. Use one role per kind of part; do not invent a new role for each unit.\n\nEvery part has a `group`: the row or level it belongs to, for example `zeile_unten` for the base row and `zeile_oben` for the wall row. Parts in the same row share the group.\n\n`given` lists only the fields that were really read from the input: `x`, `y`, `z`, `w`, `d`, `h`. A dimension read from a written figure in a sketch or PDF is given. A value you assumed from a standard is not given, and it stays out of `given` and is recorded as an assumption. An empty `given` is correct when the input gives no measurement for the part.\n\n## Variants\n\nPropose one to three material variants in `variants`. Each variant keeps the same geometry and changes only the material per role. Each variant has an `id`, a short German `name` and `slots`, one `role` and one `code` per role.\n\nVariant A is the input's own materials. When the input names no materials, take the closest codes from the catalogue and say so in an assumption.\n\nEvery `code` is taken from the catalogue codes given in the request, exactly as written. Never write a code that is not in that list.\n\n## Output\n\nAnswer only with the JSON object the schema describes. No prose outside it.\n\n\nMaterials: korpus, platte\nCatalogue codes: platzhalter:front, platzhalter:korpus, platzhalter:platte, platzhalter:sockel, variante:front-dunkel, variante:platte-hell","thinking":{"type":"adaptive"}}
 [true, true, true, false] [20.0, 4.0]
-[DrawingKit.Part(id: "u0", name: "u0", material: "korpus", x: 0.0, y: 0.0, z: 0.0, w: 600.0, d: 560.0, h: 720.0), DrawingKit.Part(id: "platte", name: "platte", material: "platte", x: 0.0, y: 0.0, z: 720.0, w: 600.0, d: 600.0, h: 40.0)] [(key: "lastName", value: "Muster")] ["plan"] ["Tiefe 560 angenommen"] ["Griffe?"]
+[DrawingKit.Part(id: "u0", name: "u0", material: "korpus", x: 0.0, y: 0.0, z: 0.0, w: 600.0, d: 560.0, h: 720.0, role: Optional("UNTERSCHRANK"), group: Optional("zeile_unten"), given: Optional(["w"])), DrawingKit.Part(id: "platte", name: "platte", material: "platte", x: 0.0, y: 0.0, z: 720.0, w: 600.0, d: 600.0, h: 40.0, role: Optional("ARBEITSPLATTE"), group: Optional("zeile_unten"), given: Optional(["w", "h"]))] [(key: "lastName", value: "Muster")] [] ["Tiefe 560 angenommen"] ["Griffe?"] ["a Variante A []", "b Variante B [(key: \"UNTERSCHRANK\", value: \"variante:front-dunkel\")]"]
 error truncated
 error refused("no")
 error unknownMaterial("glas")
 error invalid(DrawingKit.DrawingError.duplicateID("a"))
+error unknownMaterial("erfunden:42")
 error malformed("json")
 error malformed("reply")

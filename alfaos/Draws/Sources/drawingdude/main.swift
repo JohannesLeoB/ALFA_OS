@@ -8,7 +8,7 @@ func fail(_ text: String) -> Never {
 
 let args = Array(CommandLine.arguments.dropFirst())
 guard args.first == "render", args.count >= 2 else {
-    fail("usage: drawingdude render object.json --ci <folder> --template <folder> --out <folder> [--products plan,iso,perspective,steps,customer] [--distance <mm>]")
+    fail("usage: drawingdude render object.json --ci <folder> --template <folder> --out <folder> [--material <folder>] [--dims none|given] [--products presentation,plan,iso,perspective,steps,customer] [--distance <mm>]")
 }
 func option(_ name: String) -> String {
     guard let i = args.firstIndex(of: name), i + 1 < args.count else { fail("missing \(name)") }
@@ -24,6 +24,11 @@ func product(_ name: String) -> Product {
     guard let product = Product.named(name, distance: distance) else { fail("unknown product \(name)") }
     return product
 }
+func dimMode(_ name: String) -> DimMode {
+    guard let mode = DimMode(rawValue: name) else { fail("unknown dims \(name)") }
+    return mode
+}
+let dims = optional("--dims").map(dimMode) ?? .none
 let products = (optional("--products") ?? "plan,iso").split(separator: ",").map { product(String($0)) }
 let objectURL = URL(fileURLWithPath: args[1])
 let out = URL(fileURLWithPath: option("--out"), isDirectory: true)
@@ -32,11 +37,13 @@ do {
     let object = try DrawingObject.load(objectURL)
     let ci = try Packs.loadCI(URL(fileURLWithPath: option("--ci"), isDirectory: true))
     let template = try Packs.loadTemplate(URL(fileURLWithPath: option("--template"), isDirectory: true))
-    let defects = ci.defects + template.defects
+    let material = try optional("--material").map { try Packs.loadMaterial(URL(fileURLWithPath: $0, isDirectory: true)) }
+    let defects = ci.defects + template.defects + (material?.defects ?? [])
     if !defects.isEmpty { fail("pack defects: " + defects.joined(separator: ", ")) }
     try FileManager.default.createDirectory(at: out, withIntermediateDirectories: true)
     let job = Job(parts: object.parts, ci: ci.pack, template: template.pack,
-                  project: object.project ?? [:], products: products)
+                  project: object.project ?? [:], products: products,
+                  material: material?.pack, variants: object.variants ?? [], dims: dims)
     let sheets = try DrawingEngine.render(job)
     for (index, sheet) in sheets.enumerated() {
         let number = String(format: "%02d", index + 1)

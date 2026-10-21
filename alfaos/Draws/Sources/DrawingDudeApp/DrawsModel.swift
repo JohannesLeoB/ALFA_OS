@@ -6,10 +6,11 @@ import Observation
 import UniformTypeIdentifiers
 
 enum Kind: String, CaseIterable {
-    case plan, iso, steps, customer
+    case presentation, plan, iso, steps, customer
 
     var product: Product {
         switch self {
+        case .presentation: return .presentation
         case .plan: return .plan
         case .iso: return .iso(ViewSpec(kind: .iso))
         case .steps: return .steps(ViewSpec(kind: .iso), [])
@@ -26,7 +27,8 @@ final class DrawsModel {
     var project: [String: String] = [:]
     var ci: Loaded<CIPack>?
     var template: Loaded<TemplatePack>?
-    var layout = Kind.plan
+    var material: Loaded<MaterialPack>?
+    var layout = Kind.presentation
     var dimensions = true
     var outline = true { didSet { render() } }
     var shadow = true { didSet { render() } }
@@ -39,6 +41,7 @@ final class DrawsModel {
     var designing = false
     var assumptions: [String] = []
     var questions: [String] = []
+    var variants: [Variant] = []
     private let designer: Designer = ClaudeDesigner()
 
     func attach(_ urls: [URL]) {
@@ -58,7 +61,8 @@ final class DrawsModel {
     func design() {
         guard !designing else { return }
         let request = Brief(text: brief, attachments: attachments, current: parts,
-                            materials: ci.map { Array($0.pack.tints.keys) } ?? [])
+                            materials: ci.map { Array($0.pack.tints.keys) } ?? [],
+                            catalog: material?.pack.materials.map(\.code) ?? [])
         let snapshot = parts
         let title = brief.split(separator: "\n").first.map(String.init) ?? objectName
         designing = true
@@ -75,6 +79,7 @@ final class DrawsModel {
                     project = proposal.project
                 }
                 parts = proposal.parts
+                variants = proposal.variants
                 assumptions = proposal.assumptions
                 questions = proposal.questions
                 objectName = title
@@ -96,13 +101,14 @@ final class DrawsModel {
         .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
 
     var defects: [String] {
-        (ci?.defects ?? []) + (template?.defects ?? []) + (sheet?.defects ?? [])
+        (ci?.defects ?? []) + (template?.defects ?? []) + (material?.defects ?? []) + (sheet?.defects ?? [])
     }
 
     func start() {
         do {
             ci = try Packs.loadCI(Self.root.appendingPathComponent("Packs/ci/platzhalter"))
             template = try Packs.loadTemplate(Self.root.appendingPathComponent("Packs/template/a3-quer"))
+            material = try Packs.loadMaterial(Self.root.appendingPathComponent("Packs/material/platzhalter"))
             load(Self.root.appendingPathComponent("Examples/kueche.json"))
         } catch {
             failure = "\(error)"
@@ -115,6 +121,7 @@ final class DrawsModel {
             try Validate.parts(object.parts)
             parts = object.parts
             project = object.project ?? [:]
+            variants = object.variants ?? []
             objectName = url.deletingPathExtension().lastPathComponent
             render()
         } catch {
@@ -130,7 +137,8 @@ final class DrawsModel {
         style.accent = accent
         do {
             pages = try DrawingEngine.render(Job(parts: parts, ci: ci.pack, template: template.pack, project: project,
-                                                 products: [layout.product], style: style, dimensions: dimensions))
+                                                 products: [layout.product], style: style, dimensions: dimensions,
+                                                 material: material?.pack, variants: variants, dims: dimensions ? .given : .none))
             page = min(page, max(0, pages.count - 1))
             failure = nil
         } catch {

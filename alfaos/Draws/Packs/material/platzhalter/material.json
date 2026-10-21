@@ -1,0 +1,78 @@
+{
+  "pack": {
+    "id": "material/beispiel-snapshot",
+    "version": "0.0.1",
+    "schema_version": "0.1",
+    "engine_min": "0.1.0",
+    "approved_by": null,
+    "changelog": [
+      "2026-10-21 Gerüst aus Konzept v3"
+    ]
+  },
+  "platzhalter": true,
+  "hinweis": "Platzhalter-Töne aus render.py. Echte Einträge aus Airtable 'Papers' (inputs/7). Herstellertöne bleiben herstellertreu. Zusatz 21.10.: Eintraege 'variante:*' sind Testtoene fuer Varianten (Annahme, kein Hersteller).",
+  "fetched_at": null,
+  "source": "Airtable appQA2RdJN39Zo8HA / Katalogpositionen (noch nicht abgerufen)",
+  "materials": [
+    {
+      "code": "platzhalter:korpus",
+      "name": "Korpus",
+      "tone": {
+        "srgb": "#ececec"
+      },
+      "hatch_bw": "leer",
+      "status": "platzhalter"
+    },
+    {
+      "code": "platzhalter:front",
+      "name": "Front",
+      "tone": {
+        "srgb": "#f7f7f7"
+      },
+      "hatch_bw": "leer",
+      "status": "platzhalter"
+    },
+    {
+      "code": "platzhalter:platte",
+      "name": "Arbeitsplatte",
+      "tone": {
+        "srgb": "#c9c2b6"
+      },
+      "hatch_bw": "punkte",
+      "status": "platzhalter"
+    },
+    {
+      "code": "platzhalter:sockel",
+      "name": "Sockel",
+      "tone": {
+        "srgb": "#9a9a9a"
+      },
+      "hatch_bw": "schraeg",
+      "status": "platzhalter"
+    },
+    {
+      "code": "variante:front-dunkel",
+      "name": "Front dunkel",
+      "tone": {
+        "srgb": "#5b6670"
+      },
+      "hatch_bw": "leer",
+      "status": "platzhalter"
+    },
+    {
+      "code": "variante:platte-hell",
+      "name": "Arbeitsplatte hell",
+      "tone": {
+        "srgb": "#e4dfd6"
+      },
+      "hatch_bw": "punkte",
+      "status": "platzhalter"
+    }
+  ],
+  "slots": {
+    "korpus": "platzhalter:korpus",
+    "front": "platzhalter:front",
+    "platte": "platzhalter:platte",
+    "sockel": "platzhalter:sockel"
+  }
+}

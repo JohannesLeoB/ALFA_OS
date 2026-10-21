@@ -18,12 +18,19 @@ public struct Part: Codable, Hashable, Sendable {
     public var material: String
     public var x: Double, y: Double, z: Double
     public var w: Double, d: Double, h: Double
+    public var role: String?
+    public var group: String?
+    public var given: [String]?
 
     public init(id: String, name: String, material: String,
-                x: Double, y: Double, z: Double, w: Double, d: Double, h: Double) {
+                x: Double, y: Double, z: Double, w: Double, d: Double, h: Double,
+                role: String? = nil, group: String? = nil, given: [String]? = nil) {
         self.id = id; self.name = name; self.material = material
         self.x = x; self.y = y; self.z = z; self.w = w; self.d = d; self.h = h
+        self.role = role; self.group = group; self.given = given
     }
+
+    public func isGiven(_ field: String) -> Bool { given?.contains(field) ?? false }
 
     var maxX: Double { x + w }
     var maxY: Double { y + d }
@@ -34,10 +41,20 @@ public struct Part: Codable, Hashable, Sendable {
     func center(_ axis: Int) -> Double { (low(axis) + high(axis)) / 2 }
 }
 
+public struct Variant: Codable, Hashable, Sendable {
+    public var id: String
+    public var name: String
+    public var slots: [String: String]
+    public init(id: String, name: String, slots: [String: String]) { self.id = id; self.name = name; self.slots = slots }
+}
+
 public struct DrawingObject: Codable, Sendable {
     public var parts: [Part]
     public var project: [String: String]?
-    public init(parts: [Part], project: [String: String]? = nil) { self.parts = parts; self.project = project }
+    public var variants: [Variant]?
+    public init(parts: [Part], project: [String: String]? = nil, variants: [Variant]? = nil) {
+        self.parts = parts; self.project = project; self.variants = variants
+    }
 
     public static func load(_ url: URL) throws -> DrawingObject {
         try JSONDecoder().decode(DrawingObject.self, from: Data(contentsOf: url))

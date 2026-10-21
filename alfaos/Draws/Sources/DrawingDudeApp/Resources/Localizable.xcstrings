@@ -485,6 +485,17 @@
           }
         }
       }
+    },
+    "draws.product.presentation": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Präsentation"
+          }
+        }
+      }
     }
   }
 }

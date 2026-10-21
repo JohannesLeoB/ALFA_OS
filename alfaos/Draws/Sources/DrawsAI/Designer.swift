@@ -21,9 +21,12 @@ public struct Brief: Sendable {
     public var attachments: [Attachment]
     public var current: [Part]
     public var materials: [String]
+    public var catalog: [String]
 
-    public init(text: String, attachments: [Attachment] = [], current: [Part] = [], materials: [String]) {
+    public init(text: String, attachments: [Attachment] = [], current: [Part] = [], materials: [String],
+                catalog: [String] = []) {
         self.text = text; self.attachments = attachments; self.current = current; self.materials = materials
+        self.catalog = catalog
     }
 }
 
@@ -33,10 +36,12 @@ public struct Proposal: Sendable, Codable, Equatable {
     public var products: [String]
     public var assumptions: [String]
     public var questions: [String]
+    public var variants: [Variant]
 
-    public init(parts: [Part], project: [String: String], products: [String], assumptions: [String], questions: [String]) {
+    public init(parts: [Part], project: [String: String], products: [String], assumptions: [String], questions: [String],
+                variants: [Variant] = []) {
         self.parts = parts; self.project = project; self.products = products
-        self.assumptions = assumptions; self.questions = questions
+        self.assumptions = assumptions; self.questions = questions; self.variants = variants
     }
 }
 

@@ -116,6 +116,24 @@
     "iso": "Isometrie {az}° / {el}°",
     "perspective": "Perspektive {az}° / {el}°",
     "steps": "Schritt {n} von {of}",
-    "customer": "Ansicht"
+    "customer": "Ansicht",
+    "presentation": "Entwurf"
+  },
+  "presentation": {
+    "quelle": "stamp, stampStatuses, stampSize aus packs-entwurf/ci/platzhalter (Stempel VORABZUG, 6 mm); alle Abstaende Annahme bis inputs/4 (Entwurfspraesentation) vorliegt",
+    "columnGap": 14,
+    "titleGap": 9,
+    "labelGap": 6,
+    "labelStep": 4,
+    "blockGap": 8,
+    "blockRow": 5,
+    "swatch": 3.5,
+    "stamp": "VORABZUG",
+    "stampStatuses": [
+      "entwurf",
+      "vorabzug"
+    ],
+    "stampSize": 6,
+    "totalPad": 1
   }
 }

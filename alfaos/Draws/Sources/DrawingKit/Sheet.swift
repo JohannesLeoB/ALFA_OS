@@ -35,6 +35,7 @@ public enum Product: Sendable, Equatable {
     case iso(ViewSpec)
     case steps(ViewSpec, [[String]])
     case customer(ViewSpec)
+    case presentation
 
     public static func named(_ name: String, distance: Double? = nil) -> Product? {
         switch name {
@@ -43,6 +44,7 @@ public enum Product: Sendable, Equatable {
         case "perspective": return .iso(ViewSpec(kind: .perspective, distance: distance))
         case "steps": return .steps(ViewSpec(kind: .iso), [])
         case "customer": return .customer(ViewSpec(kind: .iso))
+        case "presentation": return .presentation
         default: return nil
         }
     }
@@ -53,9 +55,12 @@ public enum Product: Sendable, Equatable {
         case .iso(let v): return v.distance == nil ? "iso" : "perspective"
         case .steps: return "steps"
         case .customer: return "customer"
+        case .presentation: return "presentation"
         }
     }
 }
+
+public enum DimMode: String, Codable, Sendable, CaseIterable { case none, given }
 
 public struct Job: Sendable {
     public var parts: [Part]
@@ -65,11 +70,16 @@ public struct Job: Sendable {
     public var products: [Product]
     public var style: IsoStyle?
     public var dimensions: Bool
+    public var material: MaterialPack?
+    public var variants: [Variant]
+    public var dims: DimMode
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
-                products: [Product], style: IsoStyle? = nil, dimensions: Bool = true) {
+                products: [Product], style: IsoStyle? = nil, dimensions: Bool = true,
+                material: MaterialPack? = nil, variants: [Variant] = [], dims: DimMode = .none) {
         self.parts = parts; self.ci = ci; self.template = template; self.project = project
         self.products = products; self.style = style; self.dimensions = dimensions
+        self.material = material; self.variants = variants; self.dims = dims
     }
 }
 

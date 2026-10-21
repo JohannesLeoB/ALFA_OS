@@ -40,7 +40,7 @@ public struct ClaudeDesigner: Designer {
             let (data, response) = try await http.data(for: request)
             guard let status = (response as? HTTPURLResponse)?.statusCode else { throw DesignError.malformed("response") }
             if (200...299).contains(status) {
-                return try Self.proposal(from: data, materials: brief.materials)
+                return try Self.proposal(from: data, materials: brief.materials, catalog: brief.catalog)
             }
             guard Self.retryable(status), attempt < Self.retries else {
                 throw DesignError.http(status, String(decoding: data.prefix(400), as: UTF8.self))
@@ -83,7 +83,8 @@ public struct ClaudeDesigner: Designer {
             "thinking": ["type": "adaptive"],
             "output_config": ["effort": "high", "format": ["type": "json_schema", "schema": Self.schema]],
             "fallbacks": "default",
-            "system": skill + "\n\nMaterials: " + brief.materials.sorted().joined(separator: ", "),
+            "system": skill + "\n\nMaterials: " + brief.materials.sorted().joined(separator: ", ")
+                + "\nCatalogue codes: " + brief.catalog.sorted().joined(separator: ", "),
             "messages": [["role": "user", "content": content]]
         ]
         var r = URLRequest(url: url)
@@ -97,7 +98,7 @@ public struct ClaudeDesigner: Designer {
         return r
     }
 
-    static func proposal(from data: Data, materials: [String]) throws -> Proposal {
+    static func proposal(from data: Data, materials: [String], catalog: [String] = []) throws -> Proposal {
         guard let reply = try? JSONDecoder().decode(Reply.self, from: data) else { throw DesignError.malformed("reply") }
         if reply.stopReason == "refusal" { throw DesignError.refused(reply.stopDetails?.explanation ?? "") }
         if reply.stopReason == "max_tokens" { throw DesignError.truncated }
@@ -109,10 +110,17 @@ public struct ClaudeDesigner: Designer {
         if let odd = wire.parts.first(where: { !materials.contains($0.material) }) {
             throw DesignError.unknownMaterial(odd.material)
         }
+        if let odd = wire.variants.flatMap(\.slots).first(where: { !catalog.contains($0.code) }) {
+            throw DesignError.unknownMaterial(odd.code)
+        }
         let project = Dictionary(wire.project.filter { projectKeys.contains($0.key) }.map { ($0.key, $0.value) },
                                  uniquingKeysWith: { _, last in last })
+        let variants = wire.variants.map { variant in
+            Variant(id: variant.id, name: variant.name,
+                    slots: Dictionary(variant.slots.map { ($0.role, $0.code) }, uniquingKeysWith: { _, last in last }))
+        }
         return Proposal(parts: wire.parts, project: project, products: wire.products.filter { products.contains($0) },
-                        assumptions: wire.assumptions, questions: wire.questions)
+                        assumptions: wire.assumptions, questions: wire.questions, variants: variants)
     }
 
     struct Reply: Decodable {
@@ -126,11 +134,14 @@ public struct ClaudeDesigner: Designer {
 
     struct Wire: Decodable {
         struct Pair: Decodable { var key: String; var value: String }
+        struct Slot: Decodable { var role: String; var code: String }
+        struct WireVariant: Decodable { var id: String; var name: String; var slots: [Slot] }
         var parts: [Part]
         var project: [Pair]
         var products: [String]
         var assumptions: [String]
         var questions: [String]
+        var variants: [WireVariant]
     }
 
     static var schema: [String: Any] {
@@ -140,12 +151,17 @@ public struct ClaudeDesigner: Designer {
         func object(_ fields: [String: [String: Any]]) -> [String: Any] {
             ["type": "object", "properties": fields, "required": fields.keys.sorted(), "additionalProperties": false]
         }
-        let part = object(["id": text(), "name": text(), "material": text(),
+        let axes: [String: Any] = ["type": "string", "enum": ["x", "y", "z", "w", "d", "h"]]
+        let part = object(["id": text(), "name": text(), "material": text(), "role": text(), "group": text(),
+                           "given": list(axes),
                            "x": number(), "y": number(), "z": number(), "w": number(), "d": number(), "h": number()])
         let pair = object(["key": ["type": "string", "enum": projectKeys],
                            "value": text()])
+        let slot = object(["role": text(), "code": text()])
+        let variant = object(["id": text(), "name": text(), "slots": list(slot)])
         return object(["parts": list(part), "project": list(pair),
                        "products": list(["type": "string", "enum": products]),
-                       "assumptions": list(text()), "questions": list(text())])
+                       "assumptions": list(text()), "questions": list(text()),
+                       "variants": list(variant)])
     }
 }

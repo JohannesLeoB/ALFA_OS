@@ -40,6 +40,12 @@ public enum DrawingEngine {
                     r.step = (index + 1, all.count)
                     out.append(try render(r))
                 }
+            case .presentation:
+                var c = Composer(base)
+                try c.presentation(job)
+                c.titleBlock()
+                c.sheet.product = base.product
+                out.append(c.sheet)
             }
         }
         return out
@@ -211,8 +217,10 @@ struct Composer {
         return out
     }
 
+    static let glyph = 0.72
+
     static func fit(_ text: String, width: Double, size: Double) -> String {
-        let room = Int(max(0, width / (size * 0.6)))
+        let room = Int(max(0, width / (size * glyph)))
         guard text.count > room, room > 1 else { return text }
         return String(text.prefix(room - 1)) + "…"
     }

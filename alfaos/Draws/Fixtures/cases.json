@@ -511,14 +511,398 @@
    "products": [
     "plan"
    ]
+  },
+  {
+   "name": "presentation plain",
+   "parts": [
+    {
+     "id": "sockel",
+     "name": "Sockel",
+     "material": "sockel",
+     "x": 0,
+     "y": 70,
+     "z": 0,
+     "w": 2400,
+     "d": 530,
+     "h": 100,
+     "role": "SOCKEL",
+     "group": "zeile_unten",
+     "given": [
+      "w"
+     ]
+    },
+    {
+     "id": "u0",
+     "name": "Unterschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720,
+     "role": "UNTERSCHRANK",
+     "group": "zeile_unten",
+     "given": [
+      "w"
+     ]
+    },
+    {
+     "id": "u1",
+     "name": "Unterschrank 2",
+     "material": "korpus",
+     "x": 600,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720,
+     "role": "UNTERSCHRANK",
+     "group": "zeile_unten",
+     "given": [
+      "w"
+     ]
+    },
+    {
+     "id": "u2",
+     "name": "Unterschrank 3",
+     "material": "korpus",
+     "x": 1200,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720,
+     "role": "UNTERSCHRANK",
+     "group": "zeile_unten",
+     "given": [
+      "w"
+     ]
+    },
+    {
+     "id": "u3",
+     "name": "Unterschrank 4",
+     "material": "korpus",
+     "x": 1800,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720,
+     "role": "UNTERSCHRANK",
+     "group": "zeile_unten",
+     "given": [
+      "w"
+     ]
+    },
+    {
+     "id": "platte",
+     "name": "Arbeitsplatte",
+     "material": "platte",
+     "x": 0,
+     "y": 0,
+     "z": 820,
+     "w": 2400,
+     "d": 600,
+     "h": 40,
+     "role": "ARBEITSPLATTE",
+     "group": "zeile_unten",
+     "given": [
+      "w",
+      "h"
+     ]
+    },
+    {
+     "id": "o0",
+     "name": "Oberschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700,
+     "role": "OBERSCHRANK",
+     "group": "zeile_oben",
+     "given": [
+      "w",
+      "h"
+     ]
+    },
+    {
+     "id": "o1",
+     "name": "Oberschrank 2",
+     "material": "korpus",
+     "x": 800,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700,
+     "role": "OBERSCHRANK",
+     "group": "zeile_oben",
+     "given": [
+      "w",
+      "h"
+     ]
+    },
+    {
+     "id": "o2",
+     "name": "Oberschrank 3",
+     "material": "korpus",
+     "x": 1600,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700,
+     "role": "OBERSCHRANK",
+     "group": "zeile_oben",
+     "given": [
+      "w",
+      "h"
+     ]
+    }
+   ],
+   "project": {
+    "lastName": "Mustermann",
+    "status": "vorabzug"
+   },
+   "products": [
+    "presentation"
+   ],
+   "variants": [
+    {
+     "id": "a",
+     "name": "Variante A",
+     "slots": {}
+    },
+    {
+     "id": "b",
+     "name": "Variante B",
+     "slots": {
+      "UNTERSCHRANK": "variante:front-dunkel",
+      "OBERSCHRANK": "variante:front-dunkel",
+      "ARBEITSPLATTE": "variante:platte-hell"
+     }
+    }
+   ]
+  },
+  {
+   "name": "presentation given dims",
+   "parts": [
+    {
+     "id": "sockel",
+     "name": "Sockel",
+     "material": "sockel",
+     "x": 0,
+     "y": 70,
+     "z": 0,
+     "w": 2400,
+     "d": 530,
+     "h": 100,
+     "role": "SOCKEL",
+     "group": "zeile_unten",
+     "given": [
+      "w"
+     ]
+    },
+    {
+     "id": "u0",
+     "name": "Unterschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720,
+     "role": "UNTERSCHRANK",
+     "group": "zeile_unten",
+     "given": [
+      "w"
+     ]
+    },
+    {
+     "id": "u1",
+     "name": "Unterschrank 2",
+     "material": "korpus",
+     "x": 600,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720,
+     "role": "UNTERSCHRANK",
+     "group": "zeile_unten",
+     "given": [
+      "w"
+     ]
+    },
+    {
+     "id": "u2",
+     "name": "Unterschrank 3",
+     "material": "korpus",
+     "x": 1200,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720,
+     "role": "UNTERSCHRANK",
+     "group": "zeile_unten",
+     "given": [
+      "w"
+     ]
+    },
+    {
+     "id": "u3",
+     "name": "Unterschrank 4",
+     "material": "korpus",
+     "x": 1800,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720,
+     "role": "UNTERSCHRANK",
+     "group": "zeile_unten",
+     "given": [
+      "w"
+     ]
+    },
+    {
+     "id": "platte",
+     "name": "Arbeitsplatte",
+     "material": "platte",
+     "x": 0,
+     "y": 0,
+     "z": 820,
+     "w": 2400,
+     "d": 600,
+     "h": 40,
+     "role": "ARBEITSPLATTE",
+     "group": "zeile_unten",
+     "given": [
+      "w",
+      "h"
+     ]
+    },
+    {
+     "id": "o0",
+     "name": "Oberschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700,
+     "role": "OBERSCHRANK",
+     "group": "zeile_oben",
+     "given": [
+      "w",
+      "h"
+     ]
+    },
+    {
+     "id": "o1",
+     "name": "Oberschrank 2",
+     "material": "korpus",
+     "x": 800,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700,
+     "role": "OBERSCHRANK",
+     "group": "zeile_oben",
+     "given": [
+      "w",
+      "h"
+     ]
+    },
+    {
+     "id": "o2",
+     "name": "Oberschrank 3",
+     "material": "korpus",
+     "x": 1600,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700,
+     "role": "OBERSCHRANK",
+     "group": "zeile_oben",
+     "given": [
+      "w",
+      "h"
+     ]
+    }
+   ],
+   "project": {
+    "status": "freigabe"
+   },
+   "products": [
+    "presentation"
+   ],
+   "variants": [
+    {
+     "id": "a",
+     "name": "Variante A",
+     "slots": {}
+    }
+   ],
+   "dims": "given"
+  },
+  {
+   "name": "presentation no variants",
+   "parts": [
+    {
+     "id": "sockel",
+     "name": "Sockel",
+     "material": "sockel",
+     "x": 0,
+     "y": 70,
+     "z": 0,
+     "w": 2400,
+     "d": 530,
+     "h": 100,
+     "role": "SOCKEL",
+     "group": "zeile_unten",
+     "given": [
+      "w"
+     ]
+    },
+    {
+     "id": "u0",
+     "name": "Unterschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720,
+     "role": "UNTERSCHRANK",
+     "group": "zeile_unten",
+     "given": [
+      "w"
+     ]
+    }
+   ],
+   "products": [
+    "presentation"
+   ]
   }
  ],
  "replies": [
-  "{\"content\": [{\"type\": \"text\", \"text\": \"{\\\"parts\\\": [{\\\"id\\\": \\\"u0\\\", \\\"name\\\": \\\"u0\\\", \\\"material\\\": \\\"korpus\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 0, \\\"w\\\": 600, \\\"d\\\": 560, \\\"h\\\": 720}, {\\\"id\\\": \\\"platte\\\", \\\"name\\\": \\\"platte\\\", \\\"material\\\": \\\"platte\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 720, \\\"w\\\": 600, \\\"d\\\": 600, \\\"h\\\": 40}], \\\"project\\\": [{\\\"key\\\": \\\"lastName\\\", \\\"value\\\": \\\"Muster\\\"}, {\\\"key\\\": \\\"format\\\", \\\"value\\\": \\\"A0\\\"}], \\\"products\\\": [\\\"plan\\\", \\\"bogus\\\"], \\\"assumptions\\\": [\\\"Tiefe 560 angenommen\\\"], \\\"questions\\\": [\\\"Griffe?\\\"]}\"}], \"stop_reason\": \"end_turn\"}",
-  "{\"content\": [{\"type\": \"text\", \"text\": \"{\\\"parts\\\": [{\\\"id\\\": \\\"u0\\\", \\\"name\\\": \\\"u0\\\", \\\"material\\\": \\\"korpus\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 0, \\\"w\\\": 600, \\\"d\\\": 560, \\\"h\\\": 720}, {\\\"id\\\": \\\"platte\\\", \\\"name\\\": \\\"platte\\\", \\\"material\\\": \\\"platte\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 720, \\\"w\\\": 600, \\\"d\\\": 600, \\\"h\\\": 40}], \\\"project\\\": [{\\\"key\\\": \\\"lastName\\\", \\\"value\\\": \\\"Muster\\\"}, {\\\"key\\\": \\\"format\\\", \\\"value\\\": \\\"A0\\\"}], \\\"products\\\": [\\\"plan\\\", \\\"bogus\\\"], \\\"assumptions\\\": [\\\"Tiefe 560 angenommen\\\"], \\\"questions\\\": [\\\"Griffe?\\\"]}\"}], \"stop_reason\": \"max_tokens\"}",
+  "{\"content\": [{\"type\": \"text\", \"text\": \"{\\\"parts\\\": [{\\\"id\\\": \\\"u0\\\", \\\"name\\\": \\\"u0\\\", \\\"material\\\": \\\"korpus\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 0, \\\"w\\\": 600, \\\"d\\\": 560, \\\"h\\\": 720, \\\"role\\\": \\\"UNTERSCHRANK\\\", \\\"group\\\": \\\"zeile_unten\\\", \\\"given\\\": [\\\"w\\\"]}, {\\\"id\\\": \\\"platte\\\", \\\"name\\\": \\\"platte\\\", \\\"material\\\": \\\"platte\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 720, \\\"w\\\": 600, \\\"d\\\": 600, \\\"h\\\": 40, \\\"role\\\": \\\"ARBEITSPLATTE\\\", \\\"group\\\": \\\"zeile_unten\\\", \\\"given\\\": [\\\"w\\\", \\\"h\\\"]}], \\\"project\\\": [{\\\"key\\\": \\\"lastName\\\", \\\"value\\\": \\\"Muster\\\"}, {\\\"key\\\": \\\"format\\\", \\\"value\\\": \\\"A0\\\"}], \\\"products\\\": [\\\"presentation\\\", \\\"bogus\\\"], \\\"assumptions\\\": [\\\"Tiefe 560 angenommen\\\"], \\\"questions\\\": [\\\"Griffe?\\\"], \\\"variants\\\": [{\\\"id\\\": \\\"a\\\", \\\"name\\\": \\\"Variante A\\\", \\\"slots\\\": []}, {\\\"id\\\": \\\"b\\\", \\\"name\\\": \\\"Variante B\\\", \\\"slots\\\": [{\\\"role\\\": \\\"UNTERSCHRANK\\\", \\\"code\\\": \\\"variante:front-dunkel\\\"}]}]}\"}], \"stop_reason\": \"end_turn\"}",
+  "{\"content\": [{\"type\": \"text\", \"text\": \"{\\\"parts\\\": [{\\\"id\\\": \\\"u0\\\", \\\"name\\\": \\\"u0\\\", \\\"material\\\": \\\"korpus\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 0, \\\"w\\\": 600, \\\"d\\\": 560, \\\"h\\\": 720, \\\"role\\\": \\\"UNTERSCHRANK\\\", \\\"group\\\": \\\"zeile_unten\\\", \\\"given\\\": [\\\"w\\\"]}, {\\\"id\\\": \\\"platte\\\", \\\"name\\\": \\\"platte\\\", \\\"material\\\": \\\"platte\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 720, \\\"w\\\": 600, \\\"d\\\": 600, \\\"h\\\": 40, \\\"role\\\": \\\"ARBEITSPLATTE\\\", \\\"group\\\": \\\"zeile_unten\\\", \\\"given\\\": [\\\"w\\\", \\\"h\\\"]}], \\\"project\\\": [{\\\"key\\\": \\\"lastName\\\", \\\"value\\\": \\\"Muster\\\"}, {\\\"key\\\": \\\"format\\\", \\\"value\\\": \\\"A0\\\"}], \\\"products\\\": [\\\"presentation\\\", \\\"bogus\\\"], \\\"assumptions\\\": [\\\"Tiefe 560 angenommen\\\"], \\\"questions\\\": [\\\"Griffe?\\\"], \\\"variants\\\": [{\\\"id\\\": \\\"a\\\", \\\"name\\\": \\\"Variante A\\\", \\\"slots\\\": []}, {\\\"id\\\": \\\"b\\\", \\\"name\\\": \\\"Variante B\\\", \\\"slots\\\": [{\\\"role\\\": \\\"UNTERSCHRANK\\\", \\\"code\\\": \\\"variante:front-dunkel\\\"}]}]}\"}], \"stop_reason\": \"max_tokens\"}",
   "{\"content\": [], \"stop_reason\": \"refusal\", \"stop_details\": {\"explanation\": \"no\"}}",
-  "{\"content\": [{\"type\": \"text\", \"text\": \"{\\\"parts\\\": [{\\\"id\\\": \\\"g\\\", \\\"name\\\": \\\"g\\\", \\\"material\\\": \\\"glas\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 0, \\\"w\\\": 1, \\\"d\\\": 1, \\\"h\\\": 1}], \\\"project\\\": [{\\\"key\\\": \\\"lastName\\\", \\\"value\\\": \\\"Muster\\\"}, {\\\"key\\\": \\\"format\\\", \\\"value\\\": \\\"A0\\\"}], \\\"products\\\": [\\\"plan\\\", \\\"bogus\\\"], \\\"assumptions\\\": [\\\"Tiefe 560 angenommen\\\"], \\\"questions\\\": [\\\"Griffe?\\\"]}\"}], \"stop_reason\": \"end_turn\"}",
-  "{\"content\": [{\"type\": \"text\", \"text\": \"{\\\"parts\\\": [{\\\"id\\\": \\\"a\\\", \\\"name\\\": \\\"a\\\", \\\"material\\\": \\\"korpus\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 0, \\\"w\\\": 1, \\\"d\\\": 1, \\\"h\\\": 1}, {\\\"id\\\": \\\"a\\\", \\\"name\\\": \\\"a\\\", \\\"material\\\": \\\"korpus\\\", \\\"x\\\": 2, \\\"y\\\": 0, \\\"z\\\": 0, \\\"w\\\": 1, \\\"d\\\": 1, \\\"h\\\": 1}], \\\"project\\\": [{\\\"key\\\": \\\"lastName\\\", \\\"value\\\": \\\"Muster\\\"}, {\\\"key\\\": \\\"format\\\", \\\"value\\\": \\\"A0\\\"}], \\\"products\\\": [\\\"plan\\\", \\\"bogus\\\"], \\\"assumptions\\\": [\\\"Tiefe 560 angenommen\\\"], \\\"questions\\\": [\\\"Griffe?\\\"]}\"}], \"stop_reason\": \"end_turn\"}",
+  "{\"content\": [{\"type\": \"text\", \"text\": \"{\\\"parts\\\": [{\\\"id\\\": \\\"g\\\", \\\"name\\\": \\\"g\\\", \\\"material\\\": \\\"glas\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 0, \\\"w\\\": 1, \\\"d\\\": 1, \\\"h\\\": 1, \\\"role\\\": \\\"UNTERSCHRANK\\\", \\\"group\\\": \\\"zeile_unten\\\", \\\"given\\\": [\\\"w\\\"]}], \\\"project\\\": [{\\\"key\\\": \\\"lastName\\\", \\\"value\\\": \\\"Muster\\\"}, {\\\"key\\\": \\\"format\\\", \\\"value\\\": \\\"A0\\\"}], \\\"products\\\": [\\\"presentation\\\", \\\"bogus\\\"], \\\"assumptions\\\": [\\\"Tiefe 560 angenommen\\\"], \\\"questions\\\": [\\\"Griffe?\\\"], \\\"variants\\\": [{\\\"id\\\": \\\"a\\\", \\\"name\\\": \\\"Variante A\\\", \\\"slots\\\": []}, {\\\"id\\\": \\\"b\\\", \\\"name\\\": \\\"Variante B\\\", \\\"slots\\\": [{\\\"role\\\": \\\"UNTERSCHRANK\\\", \\\"code\\\": \\\"variante:front-dunkel\\\"}]}]}\"}], \"stop_reason\": \"end_turn\"}",
+  "{\"content\": [{\"type\": \"text\", \"text\": \"{\\\"parts\\\": [{\\\"id\\\": \\\"a\\\", \\\"name\\\": \\\"a\\\", \\\"material\\\": \\\"korpus\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 0, \\\"w\\\": 1, \\\"d\\\": 1, \\\"h\\\": 1, \\\"role\\\": \\\"UNTERSCHRANK\\\", \\\"group\\\": \\\"zeile_unten\\\", \\\"given\\\": [\\\"w\\\"]}, {\\\"id\\\": \\\"a\\\", \\\"name\\\": \\\"a\\\", \\\"material\\\": \\\"korpus\\\", \\\"x\\\": 2, \\\"y\\\": 0, \\\"z\\\": 0, \\\"w\\\": 1, \\\"d\\\": 1, \\\"h\\\": 1, \\\"role\\\": \\\"UNTERSCHRANK\\\", \\\"group\\\": \\\"zeile_unten\\\", \\\"given\\\": [\\\"w\\\"]}], \\\"project\\\": [{\\\"key\\\": \\\"lastName\\\", \\\"value\\\": \\\"Muster\\\"}, {\\\"key\\\": \\\"format\\\", \\\"value\\\": \\\"A0\\\"}], \\\"products\\\": [\\\"presentation\\\", \\\"bogus\\\"], \\\"assumptions\\\": [\\\"Tiefe 560 angenommen\\\"], \\\"questions\\\": [\\\"Griffe?\\\"], \\\"variants\\\": [{\\\"id\\\": \\\"a\\\", \\\"name\\\": \\\"Variante A\\\", \\\"slots\\\": []}, {\\\"id\\\": \\\"b\\\", \\\"name\\\": \\\"Variante B\\\", \\\"slots\\\": [{\\\"role\\\": \\\"UNTERSCHRANK\\\", \\\"code\\\": \\\"variante:front-dunkel\\\"}]}]}\"}], \"stop_reason\": \"end_turn\"}",
+  "{\"content\": [{\"type\": \"text\", \"text\": \"{\\\"parts\\\": [{\\\"id\\\": \\\"u0\\\", \\\"name\\\": \\\"u0\\\", \\\"material\\\": \\\"korpus\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 0, \\\"w\\\": 600, \\\"d\\\": 560, \\\"h\\\": 720, \\\"role\\\": \\\"UNTERSCHRANK\\\", \\\"group\\\": \\\"zeile_unten\\\", \\\"given\\\": [\\\"w\\\"]}, {\\\"id\\\": \\\"platte\\\", \\\"name\\\": \\\"platte\\\", \\\"material\\\": \\\"platte\\\", \\\"x\\\": 0, \\\"y\\\": 0, \\\"z\\\": 720, \\\"w\\\": 600, \\\"d\\\": 600, \\\"h\\\": 40, \\\"role\\\": \\\"ARBEITSPLATTE\\\", \\\"group\\\": \\\"zeile_unten\\\", \\\"given\\\": [\\\"w\\\", \\\"h\\\"]}], \\\"project\\\": [{\\\"key\\\": \\\"lastName\\\", \\\"value\\\": \\\"Muster\\\"}, {\\\"key\\\": \\\"format\\\", \\\"value\\\": \\\"A0\\\"}], \\\"products\\\": [\\\"presentation\\\", \\\"bogus\\\"], \\\"assumptions\\\": [\\\"Tiefe 560 angenommen\\\"], \\\"questions\\\": [\\\"Griffe?\\\"], \\\"variants\\\": [{\\\"id\\\": \\\"x\\\", \\\"name\\\": \\\"X\\\", \\\"slots\\\": [{\\\"role\\\": \\\"SOCKEL\\\", \\\"code\\\": \\\"erfunden:42\\\"}]}]}\"}], \"stop_reason\": \"end_turn\"}",
   "{\"content\": [{\"type\": \"text\", \"text\": \"not json\"}], \"stop_reason\": \"end_turn\"}",
   "garbage"
  ],
@@ -527,6 +911,7 @@
   "{\"platzhalter\": true, \"quelle\": \"Werte aus ref/python/render.py (CI-Dict, Linien und Schriften der SVG-Ausgabe). Kein Studio-CI. iso.top/side/front aus render.py (shade). iso.outline, iso.shadow, iso.spread und accent haben keine Vorlage: Testwerte nach dem Anatomy-Stil, accent = signal.\", \"font\": \"Helvetica, Arial, sans-serif\", \"pdfFont\": \"Helvetica\", \"ink\": \"#171717\", \"muted\": \"#6b6b6b\", \"signal\": \"#b3412e\", \"paper\": \"#ffffff\", \"lineFrame\": 0.7, \"lineBlock\": 0.5, \"lineEdge\": 0.25, \"lineDimension\": 0.18, \"lineExtension\": 0.12, \"lineTick\": 0.3, \"textDimension\": 2.2, \"textTitle\": 3.0, \"textLabel\": 1.8, \"textValue\": 3.0, \"textNote\": 2.2, \"weightTitle\": 500.5, \"tints\": {\"korpus\": \"#ececec\", \"front\": \"#f7f7f7\", \"platte\": \"#c9c2b6\", \"sockel\": \"#9a9a9a\"}, \"accent\": \"#b3412e\", \"iso\": {\"top\": 1.0, \"side\": 0.92, \"front\": 0.84, \"edge\": 0.25, \"outline\": 0.5, \"shadow\": 0.12, \"spread\": 40}}",
   "{\"platzhalter\": true, \"quelle\": \"Werte aus ref/python/render.py (TPL, BAND, GAP, Plankopf). Plankopf-Ma\\u00dfe dort aus PDF-Bild gesch\\u00e4tzt.\", \"format\": \"A3\", \"width\": 420, \"height\": 297, \"frame\": {\"left\": 15, \"top\": 2, \"right\": 103, \"bottom\": 2.5}, \"method\": \"first\", \"band\": 16, \"gap\": 14, \"chainOffset\": 5, \"chainStep\": 20, \"minPaperLength\": 4, \"tick\": 1.6, \"extensionGap\": 1, \"titleOffset\": 9, \"noScale\": \"o. M.\", \"scales\": [0.5, 20, 1000000000.0], \"isoScales\": [], \"isoMargin\": {\"left\": 15, \"top\": 20, \"right\": 15, \"bottom\": 20}, \"viewTitles\": {\"front\": \"Vorderansicht\", \"top\": \"Draufsicht\", \"right\": \"Ansicht von rechts\", \"left\": \"Ansicht von links\", \"back\": \"R\\u00fcckansicht\"}, \"block\": {\"inset\": 2, \"notes\": [\"Alle Ma\\u00dfangaben in Millimetern\", \"Ma\\u00dfe vor Ort pr\\u00fcfen. H\\u00f6hen ab OKFF.\"], \"notesTop\": 9, \"notesStep\": 5, \"rowsTop\": 25, \"rowHeight\": 11.5, \"labelBaseline\": 3.6, \"valueBaseline\": 8, \"rows\": [{\"label\": \"Nachname\", \"key\": \"lastName\"}, {\"label\": \"Projektbezeichnung\", \"key\": \"project\"}, {\"label\": \"Stra\\u00dfe Hausnr.\", \"key\": \"street\"}, {\"label\": \"PLZ Stadt\", \"key\": \"city\"}, {\"label\": \"Kundennr.\", \"key\": \"customer\"}, {\"label\": \"Datum\", \"key\": \"date\"}, {\"label\": \"Ma\\u00dfstab\", \"key\": \"scale\"}, {\"label\": \"Format\", \"key\": \"format\"}, {\"label\": \"Zeichnung\", \"key\": \"drawn\"}, {\"label\": \"Layout\", \"key\": \"layout\"}], \"footerHeight\": 26, \"footer\": [\"Musterstudio GmbH\", \"Musterstra\\u00dfe 1, 12345 Musterstadt\"], \"footerStep\": 5, \"stamp\": \"PLATZHALTER-PACKS \\u00b7 Testlauf\"}, \"titles\": {\"iso\": \"Isometrie {az}\\u00b0 / {el}\\u00b0\", \"perspective\": \"Perspektive {az}\\u00b0 / {el}\\u00b0\", \"steps\": \"Schritt {n} von {of}\", \"customer\": \"Ansicht\"}}",
   "{}",
-  "{\"platzhalter\": true, \"quelle\": \"Werte aus ref/python/render.py (CI-Dict, Linien und Schriften der SVG-Ausgabe). Kein Studio-CI. iso.top/side/front aus render.py (shade). iso.outline, iso.shadow, iso.spread und accent haben keine Vorlage: Testwerte nach dem Anatomy-Stil, accent = signal.\", \"font\": \"Helvetica, Arial, sans-serif\", \"pdfFont\": \"Helvetica\", \"ink\": \"#171717\", \"muted\": \"#6b6b6b\", \"signal\": \"#b3412e\", \"paper\": \"#ffffff\", \"lineFrame\": 0.7, \"lineBlock\": 0.5, \"lineEdge\": 0.25, \"lineDimension\": 0.18, \"lineExtension\": 0.12, \"lineTick\": 0.3, \"textDimension\": 2.2, \"textTitle\": 3.0, \"textLabel\": 1.8, \"textValue\": 3.0, \"textNote\": 2.2, \"weightTitle\": 1000, \"tints\": {\"korpus\": \"#ececec\", \"front\": \"#f7f7f7\", \"platte\": \"#c9c2b6\", \"sockel\": \"#9a9a9a\"}, \"accent\": \"#b3412e\", \"iso\": {\"top\": 1.0, \"side\": 0.92, \"front\": 0.84, \"edge\": 0.25, \"outline\": 0.5, \"shadow\": 0.12, \"spread\": 40}}"
+  "{\"platzhalter\": true, \"quelle\": \"Werte aus ref/python/render.py (CI-Dict, Linien und Schriften der SVG-Ausgabe). Kein Studio-CI. iso.top/side/front aus render.py (shade). iso.outline, iso.shadow, iso.spread und accent haben keine Vorlage: Testwerte nach dem Anatomy-Stil, accent = signal.\", \"font\": \"Helvetica, Arial, sans-serif\", \"pdfFont\": \"Helvetica\", \"ink\": \"#171717\", \"muted\": \"#6b6b6b\", \"signal\": \"#b3412e\", \"paper\": \"#ffffff\", \"lineFrame\": 0.7, \"lineBlock\": 0.5, \"lineEdge\": 0.25, \"lineDimension\": 0.18, \"lineExtension\": 0.12, \"lineTick\": 0.3, \"textDimension\": 2.2, \"textTitle\": 3.0, \"textLabel\": 1.8, \"textValue\": 3.0, \"textNote\": 2.2, \"weightTitle\": 1000, \"tints\": {\"korpus\": \"#ececec\", \"front\": \"#f7f7f7\", \"platte\": \"#c9c2b6\", \"sockel\": \"#9a9a9a\"}, \"accent\": \"#b3412e\", \"iso\": {\"top\": 1.0, \"side\": 0.92, \"front\": 0.84, \"edge\": 0.25, \"outline\": 0.5, \"shadow\": 0.12, \"spread\": 40}}",
+  "{\"pack\": {\"id\": \"material/beispiel-snapshot\", \"version\": \"0.0.1\", \"schema_version\": \"0.1\", \"engine_min\": \"0.1.0\", \"approved_by\": null, \"changelog\": [\"2026-10-21 Ger\\u00fcst aus Konzept v3\"]}, \"platzhalter\": true, \"hinweis\": \"Platzhalter-T\\u00f6ne aus render.py. Echte Eintr\\u00e4ge aus Airtable 'Papers' (inputs/7). Herstellert\\u00f6ne bleiben herstellertreu. Zusatz 21.10.: Eintraege 'variante:*' sind Testtoene fuer Varianten (Annahme, kein Hersteller).\", \"fetched_at\": null, \"source\": \"Airtable appQA2RdJN39Zo8HA / Katalogpositionen (noch nicht abgerufen)\", \"materials\": [{\"code\": \"platzhalter:korpus\", \"name\": \"Korpus\", \"tone\": {\"srgb\": \"#ececec\"}, \"hatch_bw\": \"leer\", \"status\": \"platzhalter\"}, {\"code\": \"platzhalter:front\", \"name\": \"Front\", \"tone\": {\"srgb\": \"#f7f7f7\"}, \"hatch_bw\": \"leer\", \"status\": \"platzhalter\"}, {\"code\": \"platzhalter:platte\", \"name\": \"Arbeitsplatte\", \"tone\": {\"srgb\": \"#c9c2b6\"}, \"hatch_bw\": \"punkte\", \"status\": \"platzhalter\"}, {\"code\": \"platzhalter:sockel\", \"name\": \"Sockel\", \"tone\": {\"srgb\": \"#9a9a9a\"}, \"hatch_bw\": \"schraeg\", \"status\": \"platzhalter\"}, {\"code\": \"variante:front-dunkel\", \"name\": \"Front dunkel\", \"tone\": {\"srgb\": \"#5b6670\"}, \"hatch_bw\": \"leer\", \"status\": \"platzhalter\"}, {\"code\": \"variante:platte-hell\", \"name\": \"Arbeitsplatte hell\", \"tone\": {\"srgb\": \"#e4dfd6\"}, \"hatch_bw\": \"punkte\", \"status\": \"platzhalter\"}, {\"code\": \"platzhalter:korpus\", \"name\": \"Korpus\", \"tone\": {\"srgb\": \"#ececec\"}, \"hatch_bw\": \"leer\", \"status\": \"platzhalter\"}, {\"code\": \"x\", \"name\": \"X\", \"tone\": {\"srgb\": \"blau\"}, \"status\": \"?\"}], \"slots\": {\"korpus\": \"platzhalter:korpus\", \"front\": \"fehlt\", \"platte\": \"platzhalter:platte\", \"sockel\": \"platzhalter:sockel\"}}"
  ]
 }
