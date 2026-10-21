@@ -57,6 +57,7 @@ public struct TemplatePack: Sendable {
     public var tick: Double
     public var extensionGap: Double
     public var titleOffset: Double
+    public var noScale: String
     public var scales: [Double]
     public var isoScales: [Double]
     public var isoMargin: Insets
@@ -113,13 +114,13 @@ public enum Packs {
         let pack = CIPack(
             placeholder: r.flag("platzhalter"),
             font: r.text("font"), pdfFont: r.text("pdfFont"),
-            ink: r.text("ink"), muted: r.text("muted"), signal: r.text("signal"), paper: r.text("paper"),
+            ink: r.color("ink"), muted: r.color("muted"), signal: r.color("signal"), paper: r.color("paper"),
             lineFrame: r.number("lineFrame"), lineBlock: r.number("lineBlock"), lineEdge: r.number("lineEdge"),
             lineDimension: r.number("lineDimension"), lineExtension: r.number("lineExtension"), lineTick: r.number("lineTick"),
             textDimension: r.number("textDimension"), textTitle: r.number("textTitle"), textLabel: r.number("textLabel"),
             textValue: r.number("textValue"), textNote: r.number("textNote"),
-            weightTitle: Int(r.number("weightTitle")),
-            tints: r.table("tints"), accent: r.text("accent"),
+            weightTitle: r.weight("weightTitle"),
+            tints: r.colours("tints"), accent: r.color("accent"),
             iso: IsoStyle(top: iso.number("top"), side: iso.number("side"), front: iso.number("front"),
                           edge: iso.number("edge"), outline: iso.number("outline"),
                           shadow: iso.number("shadow"), spread: iso.number("spread"), accent: nil)
@@ -148,12 +149,13 @@ public enum Packs {
             method: method ?? .first,
             band: r.number("band"), gap: r.number("gap"), chainOffset: r.number("chainOffset"), chainStep: r.number("chainStep"),
             minPaperLength: r.number("minPaperLength"), tick: r.number("tick"), extensionGap: r.number("extensionGap"),
-            titleOffset: r.number("titleOffset"),
-            scales: r.numbers("scales"), isoScales: r.numbers("isoScales"), isoMargin: insets(iso),
+            titleOffset: r.number("titleOffset"), noScale: r.text("noScale"),
+            scales: r.ratios("scales"), isoScales: r.ratios("isoScales"), isoMargin: insets(iso),
             viewTitles: r.table("viewTitles"), titles: r.table("titles"), block: block
         )
         var defects = r.defects + frame.defects + iso.defects + b.defects
         if method == nil, !defects.contains("template.method") { defects.append("template.method") }
+        if pack.chainOffset + pack.chainStep >= pack.band, !defects.contains("template.band") { defects.append("template.band") }
         return Loaded(pack: pack, defects: defects)
     }
 }
@@ -191,9 +193,34 @@ final class Reader {
 
     func flag(_ key: String) -> Bool { root[key] as? Bool ?? false }
 
-    func numbers(_ key: String) -> [Double] {
-        guard let v = root[key] as? [Double], !v.isEmpty, v.allSatisfy({ $0.isFinite && $0 > 0 }) else { miss(key); return [] }
+    func color(_ key: String) -> String {
+        guard let v = root[key] as? String, Reader.isColour(v) else { miss(key); return "" }
         return v
+    }
+
+    func colours(_ key: String) -> [String: String] {
+        var values = table(key)
+        for (name, value) in values where !Reader.isColour(value) {
+            defects.append("\(prefix).\(key).\(name)")
+            values[name] = ""
+        }
+        return values
+    }
+
+    func weight(_ key: String) -> Int {
+        guard let v = root[key] as? Double, let w = Int(exactly: v), (100...900).contains(w) else { miss(key); return 400 }
+        return w
+    }
+
+    func ratios(_ key: String) -> [Double] {
+        guard let v = root[key] as? [Any] else { miss(key); return [] }
+        let valid = v.compactMap { $0 as? Double }.filter { $0.isFinite && $0 >= 1 && $0 <= 10000 }
+        if valid.isEmpty || valid.count != v.count { miss(key) }
+        return valid
+    }
+
+    static func isColour(_ s: String) -> Bool {
+        s.count == 7 && s.hasPrefix("#") && s.dropFirst().allSatisfy { $0.isHexDigit }
     }
 
     func strings(_ key: String) -> [String] {

@@ -25,11 +25,11 @@ enum Dimensioner {
         for v in raw {
             let isDatum = anchor.map { abs($0 - v) <= tolerance } ?? false
             if v - start <= tolerance, !clusters.isEmpty {
-                if isDatum { clusters[clusters.count - 1] = (v.rounded(), true) }
+                if isDatum { clusters[clusters.count - 1] = (tenth(v), true) }
                 continue
             }
             start = v
-            clusters.append((v.rounded(), isDatum))
+            clusters.append((tenth(v), isDatum))
         }
         guard clusters.count > 1 else { return [] }
 
@@ -56,7 +56,12 @@ enum Dimensioner {
         return out
     }
 
+    static func tenth(_ v: Double) -> Double {
+        (v * 10).rounded() / 10
+    }
+
     static func label(_ v: Double) -> String {
-        Int(exactly: v.rounded()).map(String.init) ?? ""
+        guard let t = Int(exactly: (v * 10).rounded()) else { return "" }
+        return t % 10 == 0 ? String(t / 10) : "\(t / 10),\(abs(t % 10))"
     }
 }

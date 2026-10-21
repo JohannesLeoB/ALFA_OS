@@ -27,5 +27,6 @@ let package = Package(
             resources: [.process("Resources")],
             swiftSettings: strict
         ),
+        .testTarget(name: "DrawsTests", dependencies: ["DrawingKit", "DrawsAI"], swiftSettings: strict)
     ]
 )

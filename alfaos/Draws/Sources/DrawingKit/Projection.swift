@@ -72,7 +72,8 @@ enum Projection {
     static func faces(_ ps: [Part], spec: ViewSpec, shadow spread: Double? = nil, around: [Part]? = nil) throws -> [Face2D] {
         try Validate.parts(ps)
         if let dist = spec.distance { guard dist.isFinite, dist > 0 else { throw DrawingError.invalidCamera } }
-        guard spec.azimuth.isFinite, spec.elevation.isFinite else { throw DrawingError.invalidCamera }
+        guard spec.azimuth.isFinite, spec.elevation.isFinite, abs(spec.elevation) < 90 else { throw DrawingError.invalidCamera }
+        if spec.kind == .perspective, spec.distance == nil { throw DrawingError.invalidCamera }
         let a = spec.azimuth * .pi / 180, e = spec.elevation * .pi / 180
         let hub = around ?? ps
         let c = (center(hub, 0), center(hub, 1), center(hub, 2))
@@ -90,14 +91,17 @@ enum Projection {
         let viewer: Order.Viewer = eye.map { .eye($0.0, $0.1, $0.2) } ?? .direction(fwd.0, fwd.1, fwd.2)
         var out: [Face2D] = []
         func project(_ quad: [(Double, Double, Double)]) -> [CGPoint] {
-            guard let dist = spec.distance else { return quad.map(cam).map { CGPoint(x: $0.r, y: $0.u) } }
+            guard let dist = spec.distance else {
+                let k = 1 / cos(e)
+                return quad.map(cam).map { CGPoint(x: $0.r * k, y: $0.u * k) }
+            }
             return clipNear(quad.map(cam), dist: dist, near: near).map { k in
                 let s = dist / (k.f + dist)
                 return CGPoint(x: k.r * s, y: k.u * s)
             }
         }
         if let spread, spread.isFinite, spread >= 0, let floor = ps.map(\.z).min() {
-            for p in ps where p.z <= floor + Order.epsilon {
+            for p in ps.sorted(by: { $0.id < $1.id }) where p.z <= floor + Order.epsilon {
                 let x0 = p.x - spread, x1 = p.maxX + spread, y0 = p.y - spread, y1 = p.maxY + spread
                 let poly = project([(x0, y0, floor), (x1, y0, floor), (x1, y1, floor), (x0, y1, floor)])
                 if poly.count >= 3 { out.append(Face2D(poly: poly, partID: p.id, normal: shadowNormal)) }

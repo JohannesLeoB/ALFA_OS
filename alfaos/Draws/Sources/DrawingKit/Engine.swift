@@ -111,7 +111,7 @@ struct Composer {
     }
 
     mutating func tint(_ material: String) -> String? {
-        if let t = r.ci.tints[material] { return t }
+        if let t = r.ci.tints[material], !t.isEmpty { return t }
         let defect = "ci.tints.\(material)"
         if !sheet.defects.contains(defect) { sheet.defects.append(defect) }
         return nil
@@ -120,7 +120,10 @@ struct Composer {
     mutating func threeView() throws {
         let t = r.template, kinds: [ViewKind] = [.front, .top, .right]
         var extents: [ViewKind: CGRect] = [:]
-        for k in kinds { extents[k] = Projection.extent(r.parts, k) }
+        for k in kinds {
+            let e = Projection.extent(r.parts, k)
+            extents[k] = k == .top ? e : e.union(CGRect(x: e.minX, y: 0, width: e.width, height: 0))
+        }
         let n = try ScaleSolver.solve(sizes: extents.mapValues(\.size), method: t.method, gap: t.gap, band: t.band,
                                       field: field.size, steps: t.scales)
         sheet.scale = n
@@ -145,8 +148,12 @@ struct Composer {
         let material = Dictionary(uniqueKeysWithValues: r.parts.map { ($0.id, $0.material) })
         for entry in visible.reversed() {
             let fill = tint(material[entry.id] ?? "")
-            for piece in entry.rects {
-                sheet.items.append(.rect(paper(piece), fill: fill, stroke: ci.ink, width: ci.lineEdge))
+            if !entry.rects.isEmpty, let p = r.parts.first(where: { $0.id == entry.id }) {
+                sheet.items.append(.rect(paper(Projection.rect(p, k)), fill: fill, stroke: nil, width: 0))
+            }
+            for (a, b) in Composer.outline(entry.rects) {
+                sheet.items.append(.line(CGPoint(x: px(Double(a.x)), y: py(Double(a.y))),
+                                         CGPoint(x: px(Double(b.x)), y: py(Double(b.y))), width: ci.lineEdge, color: ci.ink))
             }
         }
         let title = t.viewTitles[k.rawValue] ?? ""
@@ -176,6 +183,38 @@ struct Composer {
                       extFrom: CGPoint(x: left - t.extensionGap, y: a), extFrom2: CGPoint(x: left - t.extensionGap, y: b),
                       text: d.text, rotation: -90)
         }
+    }
+
+    static func outline(_ pieces: [CGRect]) -> [(CGPoint, CGPoint)] {
+        let e = CGFloat(Order.epsilon)
+        var out: [(CGPoint, CGPoint)] = []
+        for (i, p) in pieces.enumerated() {
+            let others = pieces.enumerated().filter { $0.offset != i }.map(\.element)
+            let edges: [(fixed: CGFloat, from: CGFloat, to: CGFloat, horizontal: Bool, outside: (CGRect) -> CGFloat)] = [
+                (p.minY, p.minX, p.maxX, true, { $0.maxY }), (p.maxY, p.minX, p.maxX, true, { $0.minY }),
+                (p.minX, p.minY, p.maxY, false, { $0.maxX }), (p.maxX, p.minY, p.maxY, false, { $0.minX })
+            ]
+            for edge in edges {
+                var free = [(edge.from, edge.to)]
+                for o in others where abs(edge.outside(o) - edge.fixed) <= e {
+                    let (lo, hi) = edge.horizontal ? (o.minX, o.maxX) : (o.minY, o.maxY)
+                    free = free.flatMap { s -> [(CGFloat, CGFloat)] in
+                        [(s.0, min(s.1, lo)), (max(s.0, hi), s.1)].filter { $0.1 - $0.0 > e }
+                    }
+                }
+                for s in free {
+                    out.append(edge.horizontal ? (CGPoint(x: s.0, y: edge.fixed), CGPoint(x: s.1, y: edge.fixed))
+                                               : (CGPoint(x: edge.fixed, y: s.0), CGPoint(x: edge.fixed, y: s.1)))
+                }
+            }
+        }
+        return out
+    }
+
+    static func fit(_ text: String, width: Double, size: Double) -> String {
+        let room = Int(max(0, width / (size * 0.6)))
+        guard text.count > room, room > 1 else { return text }
+        return String(text.prefix(room - 1)) + "…"
     }
 
     mutating func dimension(from a: CGPoint, to b: CGPoint, extFrom ea: CGPoint, extFrom2 eb: CGPoint, text: String, rotation: Double) {
@@ -234,7 +273,7 @@ struct Composer {
             .replacingOccurrences(of: "{az}", with: String(format: "%.0f", r.iso.azimuth))
             .replacingOccurrences(of: "{el}", with: String(format: "%.3f", r.iso.elevation))
             .replacingOccurrences(of: "{n}", with: "\(r.step.0)")
-            .replacingOccurrences(of: "{of}", with: "\(r.step.1)") + "   1:\(Int(n))"
+            .replacingOccurrences(of: "{of}", with: "\(r.step.1)") + (r.iso.distance == nil ? "   1:\(Int(n))" : "")
         sheet.items.append(.text(title, at: CGPoint(x: field.minX + t.isoMargin.left, y: field.minY + t.titleOffset),
                                  size: ci.textTitle, anchor: .start, weight: ci.weightTitle, color: ci.ink, rotation: 0))
     }
@@ -248,7 +287,7 @@ struct Composer {
                                      size: ci.textNote, anchor: .start, weight: i == 0 ? ci.weightTitle : 400, color: ci.ink, rotation: 0))
         }
         var values = r.project
-        values["scale"] = "1:\(Int(sheet.scale))"
+        values["scale"] = r.layout == .iso && r.iso.distance != nil ? t.noScale : "1:\(Int(sheet.scale))"
         values["format"] = values["format"] ?? t.format
         var y = field.minY + b.rowsTop
         for row in b.rows {
@@ -256,7 +295,7 @@ struct Composer {
             sheet.items.append(.text(row.label, at: CGPoint(x: x + b.inset, y: y + b.labelBaseline), size: ci.textLabel,
                                      anchor: .start, weight: 400, color: ci.muted, rotation: 0))
             let layout = values["layout.\(r.product)"] ?? values["layout.\(r.layout.rawValue)"] ?? ""
-            let value = row.key == "layout" ? layout : (values[row.key] ?? "")
+            let value = Composer.fit(row.key == "layout" ? layout : (values[row.key] ?? ""), width: w - 2 * b.inset, size: ci.textValue)
             sheet.items.append(.text(value, at: CGPoint(x: x + b.inset, y: y + b.valueBaseline), size: ci.textValue,
                                      anchor: .start, weight: ci.weightTitle, color: ci.ink, rotation: 0))
             y += b.rowHeight

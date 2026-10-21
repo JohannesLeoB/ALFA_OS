@@ -19,6 +19,7 @@
   "tick": 1.6,
   "extensionGap": 1,
   "titleOffset": 9,
+  "noScale": "o. M.",
   "scales": [
     1,
     2,

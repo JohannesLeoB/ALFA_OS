@@ -1,0 +1,29 @@
+import CoreGraphics
+import Foundation
+import Testing
+@testable import DrawingKit
+@testable import DrawsAI
+
+struct Case: Decodable { var name: String; var parts: [Part]; var project: [String: String]?; var products: [String]; var distance: Double?; var tints: [String: String]? }
+struct Fixture: Decodable { var draw: [Case]; var replies: [String]; var packs: [String] }
+
+@Test func drawsMatchesGolden() throws {
+    let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(path: "../..").standardized
+    let fixture = try JSONDecoder().decode(Fixture.self, from: Data(contentsOf: root.appending(path: "Fixtures/cases.json")))
+    let ci = try Packs.loadCI(root.appending(path: "Packs/ci/platzhalter")), tpl = try Packs.loadTemplate(root.appending(path: "Packs/template/a3-quer"))
+    var out = "packs \(ci.defects) \(tpl.defects)\n" + fixture.packs.map { "\((try? Packs.decodeCI(Data($0.utf8)))?.defects ?? []) \((try? Packs.decodeTemplate(Data($0.utf8)))?.defects ?? [])" }.joined(separator: "\n") + "\n"
+    for c in fixture.draw {
+        let pack = c.tints.map { t in var p = ci.pack; p.tints.merge(t) { $1 }; return p } ?? ci.pack
+        let job = Job(parts: c.parts, ci: pack, template: tpl.pack, project: c.project ?? [:], products: c.products.compactMap { Product.named($0, distance: c.distance) })
+        do { let s = try DrawingEngine.render(job); out += "## \(c.name) pages \(CGDataProvider(data: SheetExporter.pdf(s) as CFData).flatMap(CGPDFDocument.init)?.numberOfPages ?? 0)\n" + s.map { "\($0.product) \($0.defects)\n" + String(decoding: SheetExporter.svg($0), as: UTF8.self) }.joined(separator: "\n") + "\n" } catch { out += "## \(c.name) error \(error)\n" }
+    }
+    let request = try ClaudeDesigner().request(Brief(text: "Kitchen", attachments: [Attachment(name: "a.png", data: Data([1]), mediaType: "image/png"), Attachment(name: "b.pdf", data: Data([2]), mediaType: "application/pdf")], materials: ["platte", "korpus"]), key: "k")
+    out += "\((request.allHTTPHeaderFields ?? [:]).sorted { $0.key < $1.key })\n" + String(decoding: request.httpBody ?? Data(), as: UTF8.self) + "\n"
+    out += "\([429, 529, 500, 400].map(ClaudeDesigner.retryable)) \([ClaudeDesigner.delay(attempt: 0, retryAfter: "90"), ClaudeDesigner.delay(attempt: 1, retryAfter: nil)])\n"
+    for reply in fixture.replies {
+        do { let p = try ClaudeDesigner.proposal(from: Data(reply.utf8), materials: ["korpus", "platte"]); out += "\(p.parts) \(p.project.sorted { $0.key < $1.key }) \(p.products) \(p.assumptions) \(p.questions)\n" } catch { out += "error \(error)\n" }
+    }
+    let golden = root.appending(path: "Fixtures/golden.txt")
+    if ProcessInfo.processInfo.environment["DRAWS_GOLDEN"] != nil { try out.write(to: golden, atomically: true, encoding: .utf8) }
+    #expect(out == (try String(contentsOf: golden, encoding: .utf8)))
+}

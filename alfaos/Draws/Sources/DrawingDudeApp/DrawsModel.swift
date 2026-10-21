@@ -43,6 +43,7 @@ final class DrawsModel {
 
     func attach(_ urls: [URL]) {
         for url in urls {
+            guard !attachments.contains(where: { $0.name == url.lastPathComponent }) else { continue }
             guard let data = try? Data(contentsOf: url),
                   let type = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType else { continue }
             let item = Attachment(name: url.lastPathComponent, data: data, mediaType: type)
@@ -58,22 +59,30 @@ final class DrawsModel {
         guard !designing else { return }
         let request = Brief(text: brief, attachments: attachments, current: parts,
                             materials: ci.map { Array($0.pack.tints.keys) } ?? [])
+        let snapshot = parts
+        let title = brief.split(separator: "\n").first.map(String.init) ?? objectName
         designing = true
         failure = nil
         Task {
+            defer { designing = false }
             do {
                 let proposal = try await designer.design(request)
+                guard parts == snapshot else { throw DesignError.stale }
+                let known = Set(snapshot.map(\.id))
+                if proposal.parts.contains(where: { known.contains($0.id) }) {
+                    project.merge(proposal.project) { _, new in new }
+                } else {
+                    project = proposal.project
+                }
                 parts = proposal.parts
-                project.merge(proposal.project) { _, new in new }
                 assumptions = proposal.assumptions
                 questions = proposal.questions
-                objectName = brief.split(separator: "\n").first.map(String.init) ?? objectName
+                objectName = title
                 if let first = proposal.products.first, let kind = Kind(rawValue: first) { layout = kind }
                 render()
             } catch {
                 failure = "\(error)"
             }
-            designing = false
         }
     }
 
@@ -103,6 +112,7 @@ final class DrawsModel {
     func load(_ url: URL) {
         do {
             let object = try DrawingObject.load(url)
+            try Validate.parts(object.parts)
             parts = object.parts
             project = object.project ?? [:]
             objectName = url.deletingPathExtension().lastPathComponent

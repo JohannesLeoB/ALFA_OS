@@ -20,16 +20,9 @@ func optional(_ name: String) -> String? {
 }
 let distance = optional("--distance").flatMap(Double.init).flatMap { $0 > 0 ? $0 : nil }
 func product(_ name: String) -> Product {
-    switch name {
-    case "plan": return .plan
-    case "iso": return .iso(ViewSpec(kind: .iso))
-    case "perspective":
-        guard let distance else { fail("missing --distance") }
-        return .iso(ViewSpec(kind: .perspective, distance: distance))
-    case "steps": return .steps(ViewSpec(kind: .iso), [])
-    case "customer": return .customer(ViewSpec(kind: .iso))
-    default: fail("unknown product \(name)")
-    }
+    if name == "perspective", distance == nil { fail("missing --distance") }
+    guard let product = Product.named(name, distance: distance) else { fail("unknown product \(name)") }
+    return product
 }
 let products = (optional("--products") ?? "plan,iso").split(separator: ",").map { product(String($0)) }
 let objectURL = URL(fileURLWithPath: args[1])

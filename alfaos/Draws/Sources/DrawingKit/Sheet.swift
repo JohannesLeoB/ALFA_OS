@@ -36,6 +36,17 @@ public enum Product: Sendable, Equatable {
     case steps(ViewSpec, [[String]])
     case customer(ViewSpec)
 
+    public static func named(_ name: String, distance: Double? = nil) -> Product? {
+        switch name {
+        case "plan": return .plan
+        case "iso": return .iso(ViewSpec(kind: .iso))
+        case "perspective": return .iso(ViewSpec(kind: .perspective, distance: distance))
+        case "steps": return .steps(ViewSpec(kind: .iso), [])
+        case "customer": return .customer(ViewSpec(kind: .iso))
+        default: return nil
+        }
+    }
+
     public var key: String {
         switch self {
         case .plan: return "plan"

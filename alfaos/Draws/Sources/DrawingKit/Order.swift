@@ -16,17 +16,23 @@ enum Order {
     static let epsilon = 1e-6
 
     static func compare(_ a: Part, _ b: Part, _ viewer: Viewer) -> Int {
-        var bNearer = false, aNearer = false
+        var bNearer = false, aNearer = false, apart = false
         for axis in 0..<3 {
             let v = viewer.component(axis)
             if a.high(axis) <= b.low(axis) + epsilon {
+                apart = true
                 let side = side(plane: (a.high(axis) + b.low(axis)) / 2, axis: v, viewer: viewer)
                 if side > 0 { bNearer = true } else if side < 0 { aNearer = true }
             }
             if b.high(axis) <= a.low(axis) + epsilon {
+                apart = true
                 let side = side(plane: (b.high(axis) + a.low(axis)) / 2, axis: v, viewer: viewer)
                 if side > 0 { aNearer = true } else if side < 0 { bNearer = true }
             }
+        }
+        if !apart {
+            let da = depth(a, viewer), db = depth(b, viewer)
+            return da != db ? (da > db ? 1 : -1) : (a.id < b.id ? 1 : -1)
         }
         if bNearer == aNearer { return 0 }
         return bNearer ? 1 : -1
@@ -49,7 +55,8 @@ enum Order {
         }
     }
 
-    static func farToNear(_ ps: [Part], _ viewer: Viewer) -> [Part] {
+    static func farToNear(_ parts: [Part], _ viewer: Viewer) -> [Part] {
+        let ps = parts.sorted { $0.id < $1.id }
         let n = ps.count
         var next = Array(repeating: [Int](), count: n)
         for i in 0..<n {

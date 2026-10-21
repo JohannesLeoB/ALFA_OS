@@ -5,31 +5,61 @@ import Foundation
 public struct ClaudeDesigner: Designer {
     public static let model = "claude-opus-5-5"
     public static let products = ["plan", "iso", "perspective", "steps", "customer"]
+    static let projectKeys = ["lastName", "project", "street", "city", "customer", "date"]
+    static let attachmentLimit = 30_000_000
+    static let retries = 2
 
     private let credentials: ClaudeCredentialsStoring
     private let http: ClaudeHTTPClient
     private let url: URL
+    private let pause: @Sendable (Double) async -> Void
     private let skill: String
 
     public init(credentials: ClaudeCredentialsStoring = KeychainClaudeCredentialsStore(),
                 http: ClaudeHTTPClient = URLSession.shared,
-                url: URL = URL(string: "https://api.anthropic.com/v1/messages")!) {
+                url: URL = URL(string: "https://api.anthropic.com/v1/messages")!,
+                pause: @escaping @Sendable (Double) async -> Void = { seconds in
+                    try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+                }) {
         self.credentials = credentials
         self.http = http
         self.url = url
+        self.pause = pause
         skill = Bundle.module.url(forResource: "designer", withExtension: "md")
             .flatMap { try? String(contentsOf: $0, encoding: .utf8) } ?? ""
     }
 
     public func design(_ brief: Brief) async throws -> Proposal {
         guard let key = try credentials.load()?.apiKey, !key.isEmpty else { throw DesignError.noKey }
-        let request = try self.request(brief, key: key)
-        let (data, response) = try await http.data(for: request)
-        guard let status = (response as? HTTPURLResponse)?.statusCode else { throw DesignError.malformed("response") }
-        guard (200...299).contains(status) else {
-            throw DesignError.http(status, String(decoding: data.prefix(400), as: UTF8.self))
+        guard brief.attachments.reduce(0, { $0 + $1.data.count }) <= Self.attachmentLimit else {
+            throw DesignError.tooLarge
         }
-        return try Self.proposal(from: data, materials: brief.materials)
+        let request = try self.request(brief, key: key)
+        var attempt = 0
+        while true {
+            let (data, response) = try await http.data(for: request)
+            guard let status = (response as? HTTPURLResponse)?.statusCode else { throw DesignError.malformed("response") }
+            if (200...299).contains(status) {
+                return try Self.proposal(from: data, materials: brief.materials)
+            }
+            guard Self.retryable(status), attempt < Self.retries else {
+                throw DesignError.http(status, String(decoding: data.prefix(400), as: UTF8.self))
+            }
+            let header = (response as? HTTPURLResponse)?.value(forHTTPHeaderField: "Retry-After")
+            await pause(Self.delay(attempt: attempt, retryAfter: header))
+            attempt += 1
+        }
+    }
+
+    static func retryable(_ status: Int) -> Bool {
+        status == 429 || (500...599).contains(status)
+    }
+
+    static func delay(attempt: Int, retryAfter: String?) -> Double {
+        if let header = retryAfter, let seconds = Double(header.trimmingCharacters(in: .whitespaces)), seconds >= 0 {
+            return min(seconds, 20)
+        }
+        return attempt == 0 ? 2 : 4
     }
 
     func request(_ brief: Brief, key: String) throws -> URLRequest {
@@ -79,7 +109,8 @@ public struct ClaudeDesigner: Designer {
         if let odd = wire.parts.first(where: { !materials.contains($0.material) }) {
             throw DesignError.unknownMaterial(odd.material)
         }
-        let project = Dictionary(wire.project.map { ($0.key, $0.value) }, uniquingKeysWith: { _, last in last })
+        let project = Dictionary(wire.project.filter { projectKeys.contains($0.key) }.map { ($0.key, $0.value) },
+                                 uniquingKeysWith: { _, last in last })
         return Proposal(parts: wire.parts, project: project, products: wire.products.filter { products.contains($0) },
                         assumptions: wire.assumptions, questions: wire.questions)
     }
@@ -111,7 +142,7 @@ public struct ClaudeDesigner: Designer {
         }
         let part = object(["id": text(), "name": text(), "material": text(),
                            "x": number(), "y": number(), "z": number(), "w": number(), "d": number(), "h": number()])
-        let pair = object(["key": ["type": "string", "enum": ["lastName", "project", "street", "city", "customer", "date"]],
+        let pair = object(["key": ["type": "string", "enum": projectKeys],
                            "value": text()])
         return object(["parts": list(part), "project": list(pair),
                        "products": list(["type": "string", "enum": products]),

@@ -50,6 +50,8 @@ public enum DesignError: Error, Equatable, Sendable {
     case malformed(String)
     case invalid(DrawingError)
     case unknownMaterial(String)
+    case tooLarge
+    case stale
 }
 
 public protocol Designer: Sendable {
