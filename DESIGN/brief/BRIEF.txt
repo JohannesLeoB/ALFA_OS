@@ -9,7 +9,7 @@ SO ARBEITEST DU (fest, gilt vor allem anderen)
 
 ZIEL
 Der nächste Export liefert für Mail, Einstellungen und Hülle (ALFA Shell) einen vollständigen Vertrag im Ordner contract/: jeder Wert ein Token, jedes Bauteil und Element mit fester id, jeder sichtbare Text mit Schlüssel, jede Änderung protokolliert. Code liest ihn per Skript und baut daraus.
-Neu in v12: der Kopf „So arbeitest du“, A8 und A9, der Lieferschein (P4, delivery.schema.json, check_delivery.py), N14–N18 zu Dateien über Google Drive; N12 entfällt. T1 bis T8 und N1 bis N11, N13 gelten unverändert weiter.
+Neu in v12: der Kopf „So arbeitest du“, A8 und A9, der Lieferschein (P4, delivery.schema.json, check_delivery.py), N14–N17 zu Dateien über Google Drive; N12 und N18 entfallen. T1 bis T8 und N1 bis N11, N13 gelten unverändert weiter.
 
 GRUNDLAGE
 - Stand: Export "ALFA OS Interface CHEF 1610-handoff 1810.zip", 18.10.2026, sha256 d0ed5abb…3c8d2. Was du seither schon erledigt hast, meldest du in der ABGABE als erledigt.

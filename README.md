@@ -48,7 +48,7 @@ Design (einzige Wertquelle)
 - `DESIGN/MANIFEST.json`: welcher Master gilt (Rang `latest`), Prüfsummen.
 - `DESIGN/*.zip`: letzter und vorletzter Master im Original.
 - `DESIGN/brief/BRIEF.txt`: aktueller Brief an Design, mit Schemas und Prüfskripten (`validate.py`, `check_contract.py`, `diff_contract.py`, `check_delivery.py`).
-- `dist/master-latest/`: entpackter Master zum Lesen (lange Zeilen mit `python3` lesen).
+- `dist/master-latest/`: entpackter Master zum Lesen; fehlt er, neu entpacken: `unzip -q "DESIGN/ALFA OS Interface CHEF 1610-handoff 1810.zip" -d dist/master-latest` (Name der ZIP nach `DESIGN/MANIFEST.json`, Rang latest) (lange Zeilen mit `python3` lesen).
 
 Code
 - `alfaos/App/`: Ansichten. `alfaos/App/Localizable.xcstrings`: alle sichtbaren Texte.

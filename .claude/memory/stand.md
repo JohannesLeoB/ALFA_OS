@@ -1,6 +1,6 @@
 ---
 name: stand
-description: Laufender Stand ALFA_OS nach Commit 337a6bc (21.10. abends): Regeln, Gebautes, Ungeprüftes, Lücken an Design, Offenes, nächste Schritte, bekannte Fehler
+description: Laufender Stand ALFA_OS (22.10. nachts, nach b9d609e): Regeln, Gebautes, Ungeprüftes, Lücken an Design, Offenes, nächste Schritte, bekannte Fehler
 metadata:
   type: project
 ---
@@ -20,7 +20,7 @@ Kein Protokoll: nur, was heute gilt. Verlauf steht in `git log`. Johannes' Wort 
 - Mail: Liste und Karten 7532c78/9226e69/1d790a2 (Verdrahtung ba9f691–cf1ec00); Postausgang und Entwurf A1b–A1e (55bcf5b … eb89ff4); Kein doppeltes Senden e5a5d14; IDLE d612a48; HTML-Mail 92ced80; Kontakte und Statuszeile K1 df16331.
 - Hub: Prüfung beim Anbieter 6668bcd; Abgleich beim Start H1 145e6f3; Einstellungen je Dienst H2 223bc67; Drive-Port D1 f99797f (aus, bis Design die Projekt-Wurzel zeichnet); Kachelraster K1 15eb550.
 - Pipeline: Generator liest `DESIGN/` d485c9d; `receive_master.py`, `validate.py` E1 b1515f4; `scripts/build_app.sh` a7cb288 (`dist/ALFA OS <Nr>.app`, die zwei neuesten).
-- Test: zwei Testdateien, `alfaos/Kit/Tests/WholeAppTests/WholeAppTests.swift` und `alfaos/Tests/HullProbeTests.swift` (wird noch überführt, §10); Fundus-Tests überführt 404342e; ehrlich gemacht b94e0e4; entschlackt ebc9d3a/d213d33. Nicht gebaut: Projekte, Heute, Kataloge, Warenkorb, Datan (`alfaos/App` hat nur Mail, Settings, Shell).
+- Test: zwei Testdateien, `alfaos/Kit/Tests/WholeAppTests/WholeAppTests.swift` und `alfaos/Tests/HullProbeTests.swift` (wird noch überführt, §10); Fundus-Tests überführt 404342e; ehrlich gemacht b94e0e4; entschlackt ebc9d3a/d213d33. Nicht gebaut: Projekte, Heute, Kataloge, Warenkorb, Datan (`alfaos/App` hat außer Components, Host, Resources, Theme nur die Bereiche Mail, Settings, Shell).
 
 ## Ungeprüft oder blind gebaut
 - Niemand hat K1 (df16331), H2 (223bc67), D1, E2 (HTML-Mail), H1, IDLE und „kein doppeltes Senden“ in der laufenden App oder gegen echte Server gesehen. Das gilt auch für den Schutz bei Servern, die SMTP-Mail nicht selbst in „Gesendet“ ablegen.
@@ -52,9 +52,9 @@ Kein Protokoll: nur, was heute gilt. Verlauf steht in `git log`. Johannes' Wort 
 6. Danach: Rückgängig über COPYUID statt Message-ID-Suche; MIME-Aufbau streamend; Gmail-Rückgängig aus dem Papierkorb prüfen.
 
 ## Bekannte Fehler im Code (Befund Lead 21.10., am Code gelesen)
-- „Drucken“ und „Als PDF sichern“ tun nichts: `MailModel+Reading.swift:140` und `:145` senden `.print` und `.exportPDF` in den Strom `commands`; niemand liest ihn (kein `for await` in `alfaos/App`). Zu prüfen ist dasselbe für `leadFromMail` (`:135`) und `attachmentToProjectFolder` (`:150`): sie senden ebenfalls in den Strom.
-- Kontakte: `MailContacts.swift` schreibt per `didSet` bei jedem Tastendruck die ganze Liste nach UserDefaults `mail.contacts`, Fehler per `try?` verschluckt. Ort (UserDefaults oder Hub/DB) nicht entschieden. `.contacts` ist ein eigener Abschnitt statt Integration (Design-Text 15.10. `entscheidungen.md:224`, der Johannes zitiert; seine eigene Nachricht dazu nicht gefunden).
-- Zwei PDF-Wege: `MailPDF.swift` (Core Text, Klartext) neben den toten Befehlen.
+- Ungelesene Befehle: `leadFromMail` (`MailModel+Reading.swift:135`) und `attachmentToProjectFolder` (`:138-140`) senden in den Strom `commands`, den niemand liest (kein `for await` in `alfaos/App`). Drucken/PDF sind seit M2 7f6124d behoben.
+- Kontakte: `MailModel.swift:52` schreibt per `didSet` bei jedem Tastendruck die ganze Liste nach UserDefaults `mail.contacts`, Fehler per `try?` verschluckt. Ort (UserDefaults oder Hub/DB) nicht entschieden. `.contacts` ist ein eigener Abschnitt statt Integration (Design-Text 15.10. `entscheidungen.md:224`, der Johannes zitiert; seine eigene Nachricht dazu nicht gefunden).
+- PDF: seit M2 ein Weg (`MailModel+Files.swift` `mailDocument` mit `MailPDF.swift`, Klartext über Core Text) für Drucken, Sichern und Projektordner.
 - Drive-Upload baut Multipart selbst (`GoogleDriveFiles.swift:28-60`), statt den Fundus-Client zu nutzen: bewusst wegen `myk` und fester Sperr-ID im Fundus-Client (D1). `projectsRoot` wird nie gesetzt (`ProviderCatalog.swift:7`); Drive bleibt aus bis Design N14.
 - H2 (`ServiceSetting`) hat keinen Aufrufer: bewusst, Fundament.
 - ClickUp-Fähigkeit nicht verdrahtet (`KeyProvider.swift:87`, `capabilities` leer): bewusst ohne Abnehmer; Master-Zeilen „Phasen/Aufgabenfelder“ erscheinen nie.
