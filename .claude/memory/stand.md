@@ -108,6 +108,18 @@ metadata:
   - Auslegung der Lead: Der Master zeichnet keine gerenderte HTML-Mail, nur Text und Kacheln (:976-977). Wegen „Fremde Inhalte … Immer hell“ (:761) wird der echte Inhalt gezeigt. Bestätigt, Johannes 21.10. ~11:15 (Knopf im Lead-Chat): „Ja, HTML-Mails zeigen ihren echten Inhalt auf hellem Blatt. Weiter: Test entschlacken, dann der nächste Bau.“
   - Lücken an Design: Kachel „Bild blockiert“ in der Mail (:977) ohne Textschlüssel. Die Schrift der Mail kommt aus dem Token (Geist zuerst), das native Blatt nutzt die Systemschrift (Theme.swift:85).
   - Prüfung: Mutanten des Bauers und der Lead rot; App-Build grün. testLines 5866/5895, vor dem nächsten Bau entschlacken.
+- T1 ebc9d3a und d213d33: Der Test hat 265 Zeilen weniger (testLines 5601). Zehn Duplikate sind mit Beleg entfernt. 1.007 automatische Mutanten vorher und nachher: kein roter Mutant verloren. Hilfsfunktion `hubFixture` (ein Name mit „test“ zählt der Hook als Test).
+- H1 145e6f3 (Johannes 21.10.: „Ja. H1 (Abgleich beim Start, Karte neu zeichnen, Fehlerpunkt zurück, Zählung wie Master, Avatar-Kürzel aus Einstellungen/Name statt fest JB) …“):
+  - Erster Abgleich beim Start und nach einer Prüfung, nur bei Takt „alle …“ oder „Sofort“ (HubCore.swift:44-53).
+  - Ein guter Abgleich räumt den Fehlerzustand der Liste ab (Ereignis `syncFinished`).
+  - Das Blob-Menü zählt wie Master :1074 (nur Fehler).
+  - Avatar: eigenes Kürzel, sonst Initialen nach Master-Regel `ini` (:577, `ShellCore/Initials.swift`), sonst nichts (Shell :47). „Kürzel gewinnt“ ist Johannes' Wort, nicht Master. Der feste Eintrag „JB“ ist aus dem Katalog entfernt.
+  - Die Untersuchung vorher (Datenbank nur lesend): Das Konto war gesund, die Anzeige veraltet. Die Karte zeichnet nach einem Abgleich schon neu (HubCore ist @Observable).
+- GitHub-Regeln 21.10.:
+  - `main-protect` mit non_fast_forward, deletion, required_linear_history. Die Pull-Request-Pflicht hat Johannes nach Rückfrage wieder herausgenommen: „Ich habe die PR-Pflicht aus main-protect genommen, alles andere bleibt. Push H1.“
+  - `only-main` erlaubt nur `main` und `alfa-draws`. Johannes 21.10.: „ich wollte in alfa draws mit einer anderen session einen prototypen einer App Funktion testen“.
+  - Die Lead fasst `alfa-draws` nicht an. Beide Sitzungen pushen als dasselbe Konto, GitHub trennt sie nicht.
+- Fehler eines Bau-Strangs 21.10.: Build-Ordner unter `alfaos/dist/` statt `ALFA_OS/dist/` (934 MB, Verweis ins Leere). Daran ist swiftlint im Hook abgestürzt. Der Ordner ist entfernt. Künftig im Ticket den absoluten Pfad für `--scratch-path` nennen.
 - Bestands-Inventur 21.10. (sechs Lese-Stränge) und Zitat-Triage liegen in `dist/inventur/` (nicht in Git). Johannes 21.10. 02:28 dazu siehe [[bestand-zuerst]].
 - Parallel bei Johannes: AGENTS.md wird in Codex neu gefasst (Lead hat Korrekturen geliefert: Gedächtnis, Leseorte, fundus, Ehrenkodex, Wegweiser, Rangfolge mit Quelle, Export erst nach Prüfskripten, 75 %-Regel, Haiku-Pflicht eingrenzen). Produktsitzung grillt Johannes zu Umfang, Einstellungen, Dateien/Vorlagen, Projekte, Heute, Kataloge, Mail-Resten, Datenhaltung. Eigene Grill-Sitzung des Lotsen (Auftrag GRILL-LOTSE-AUFTRAG.md bei Johannes) zu Lastenheft, offenen Lead-Entscheiden, Code-Rückschau, Codebase-Design, Ablauf.
 - Wartet danach: B Ballast und D Namen/myk erst nach Johannes' Entscheid in der Grill-Sitzung, was weg darf. C Tempo, E2 SheetValues-Quellen, H7 Datenspeicher (Stammtisch-Entwurf H7 in STAMMTISCH/ALFA Stammtisch.rtf).
