@@ -1,13 +1,24 @@
 import CoreGraphics
 import Foundation
+import Pages
 
-public enum TextAnchor: String, Sendable { case start, middle, end }
+public typealias TextAnchor = Anchor
 
 public enum SheetItem: Sendable {
     case line(CGPoint, CGPoint, width: Double, color: String)
     case rect(CGRect, fill: String?, stroke: String?, width: Double)
     case polygon([CGPoint], fill: String?, stroke: String?, width: Double)
     case text(String, at: CGPoint, size: Double, anchor: TextAnchor, weight: Int, color: String, rotation: Double)
+
+    var item: Item {
+        switch self {
+        case let .line(a, b, width, color): return .line(a, b, Paint(stroke: color, width: width))
+        case let .rect(r, fill, stroke, width): return .rect(r, Paint(fill: fill, stroke: stroke, width: width))
+        case let .polygon(points, fill, stroke, width): return .polygon(points, Paint(fill: fill, stroke: stroke, width: width))
+        case let .text(text, at, size, anchor, weight, color, rotation):
+            return .text(Run(text, origin: at, size: size, weight: weight, color: color, anchor: anchor, rotation: rotation))
+        }
+    }
 }
 
 public struct PlacedDimension: Sendable {
@@ -26,6 +37,18 @@ public struct Sheet: Sendable {
     public var defects: [String]
     public var product = ""
     public var cells: [Placed] = []
+
+    public var page: Page {
+        Page(size: CGSize(width: width, height: height), background: paper, items: items.map(\.item))
+    }
+
+    public var faces: [FontFace] {
+        [FontFace(role: .sans, family: fonts.sans)]
+    }
+
+    public var document: Document {
+        Document(pages: [page], fonts: faces)
+    }
 }
 
 public struct Cell: Sendable, Equatable, Identifiable {

@@ -3581,3 +3581,19 @@ error invalid(DrawingKit.DrawingError.duplicateID("a"))
 error unknownMaterial("erfunden:42")
 error malformed("json")
 error malformed("reply")
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100.00 60.00" width="100.00mm" height="60.00mm" font-family="Helvetica">
+<rect x="0.00" y="0.00" width="100.00" height="60.00" fill="none" stroke="black" stroke-width="0.50"/>
+<clipPath id="clip1"><rect x="0.00" y="0.00" width="40.00" height="20.00"/></clipPath>
+<g transform="translate(5.00 20.00)" clip-path="url(#clip1)">
+<text x="0.00" y="5.00" font-size="5.00" text-anchor="start" font-weight="400" fill="black">alpha beta</text>
+<text x="0.00" y="11.00" font-size="5.00" text-anchor="start" font-weight="400" fill="black">gamma delta</text>
+<text x="0.00" y="17.00" font-size="5.00" text-anchor="start" font-weight="400" fill="black">epsilon zeta eta</text>
+<rect x="25.00" y="10.00" width="10.00" height="6.00" fill="gray" stroke="none" stroke-width="0.00" transform="rotate(30.00 30.00 13.00)"/>
+</g>
+<clipPath id="clip2"><rect x="0.00" y="0.00" width="90.00" height="10.00"/></clipPath>
+<g transform="translate(5.00 5.00)" clip-path="url(#clip2)">
+<text x="0.00" y="8.00" font-size="6.00" text-anchor="start" font-weight="400" fill="black">Header</text>
+<line x1="0.00" y1="9.00" x2="95.00" y2="9.00" stroke="gray" stroke-width="0.20" stroke-dasharray="1.00 1.00"/>
+</g>
+</svg>
+[body#0:text, foot#-1:zone, head#1:bounds]

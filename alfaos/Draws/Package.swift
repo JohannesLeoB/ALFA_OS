@@ -8,6 +8,7 @@ let package = Package(
     defaultLocalization: "de",
     platforms: [.macOS("26.0")],
     products: [
+        .library(name: "Pages", targets: ["Pages"]),
         .library(name: "DrawingKit", targets: ["DrawingKit"]),
         .library(name: "DrawsAI", targets: ["DrawsAI"]),
         .library(name: "DrawsDock", targets: ["DrawsDock"]),
@@ -19,7 +20,8 @@ let package = Package(
         .package(path: "../../fundus/alpha")
     ],
     targets: [
-        .target(name: "DrawingKit", swiftSettings: strict),
+        .target(name: "Pages", swiftSettings: strict),
+        .target(name: "DrawingKit", dependencies: ["Pages"], swiftSettings: strict),
         .target(name: "DrawsAI", dependencies: ["DrawingKit", .product(name: "AlfaServices", package: "alpha")], resources: [.copy("Resources/designer.md")], swiftSettings: strict),
         .target(name: "DrawsDock", dependencies: ["DrawingKit", .product(name: "AlfaServices", package: "alpha")], swiftSettings: strict),
         .target(name: "DrawsFonts", dependencies: ["DrawingKit", .product(name: "ShellCore", package: "Kit")],
@@ -31,6 +33,6 @@ let package = Package(
             resources: [.process("Resources")],
             swiftSettings: strict
         ),
-        .testTarget(name: "DrawsTests", dependencies: ["DrawingKit", "DrawsAI", "DrawsDock", "DrawsFonts"], swiftSettings: strict)
+        .testTarget(name: "DrawsTests", dependencies: ["Pages", "DrawingKit", "DrawsAI", "DrawsDock", "DrawsFonts"], swiftSettings: strict)
     ]
 )

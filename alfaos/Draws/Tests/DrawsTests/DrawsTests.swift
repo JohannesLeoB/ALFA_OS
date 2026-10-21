@@ -3,7 +3,7 @@ import Foundation
 import Testing
 @testable import DrawingKit
 @testable import DrawsAI
-import DrawsFonts; import DrawsDock
+import DrawsFonts; import DrawsDock; import Pages
 
 struct Case: Decodable { var name: String; var parts: [Part]; var project: [String: String]?; var products: [String]; var distance: Double?; var tints: [String: String]?; var variants: [Variant]?; var dims: DimMode?; var faces: [String]?; var accent: String?; var accentColor: String?; var scale: Double?; var cells: [Cl]? }; struct Cl: Decodable { var id: String; var view: ViewKind; var x: Double; var y: Double; var w: Double; var h: Double; var scale: Double?; var focus: String?; var step: Int?; var dims: Bool?; var cell: Cell { Cell(id: id, view: view, frame: CGRect(x: x, y: y, width: w, height: h), scale: scale, focus: focus, step: step ?? 0, dims: dims ?? true) } }; struct Fixture: Decodable { var draw: [Case]; var replies: [String]; var packs: [String] }
 
@@ -23,7 +23,7 @@ struct Case: Decodable { var name: String; var parts: [Part]; var project: [Stri
     for reply in fixture.replies {
         do { let p = try ClaudeDesigner.proposal(from: Data(reply.utf8), materials: ["korpus", "platte"], catalog: mat.pack.materials.map(\.code)); out += "\(p.parts) \(p.project.sorted { $0.key < $1.key }) \(p.products) \(p.assumptions) \(p.questions) \(p.variants.map { "\($0.id) \($0.name) \($0.slots.sorted { $0.key < $1.key })" })\n" } catch { out += "error \(error)\n" }
     }
-    let golden = root.appending(path: "Fixtures/golden.txt")
+    let flow = fill(PageTemplate(size: CGSize(width: 100, height: 60), zones: ["head": CGRect(x: 5, y: 5, width: 90, height: 10), "body": CGRect(x: 5, y: 20, width: 40, height: 20)], fixed: [.rect(CGRect(x: 0, y: 0, width: 100, height: 60), Paint(stroke: "black", width: 0.5))]), ["head": [.text(Run("Header", origin: CGPoint(x: 0, y: 8), size: 6)), .line(CGPoint(x: 0, y: 9), CGPoint(x: 95, y: 9), Paint(stroke: "gray", width: 0.2, dash: [1, 1]))], "body": [.textBlock(Block("alpha beta gamma delta epsilon zeta eta theta iota", frame: CGRect(x: 0, y: 0, width: 40, height: 20), size: 5, leading: 6)), .rect(CGRect(x: 25, y: 10, width: 10, height: 6), Paint(fill: "gray", rotation: 30))], "foot": [.rect(CGRect(x: 0, y: 0, width: 1, height: 1), Paint())]], fonts: [FontFace(role: .sans, family: "Helvetica")]); out += SVGRenderer().svg(flow.page, fonts: [FontFace(role: .sans, family: "Helvetica")]) + "\n\(flow.overflow)\n"; let golden = root.appending(path: "Fixtures/golden.txt")
     if ProcessInfo.processInfo.environment["DRAWS_GOLDEN"] != nil { try out.write(to: golden, atomically: true, encoding: .utf8) }
     #expect(out == (try String(contentsOf: golden, encoding: .utf8)))
 }
