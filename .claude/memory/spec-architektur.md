@@ -7,11 +7,8 @@ metadata:
 
 # Architektur · Spec (Stand 21.10.)
 
-## Johannes' Bild (Skizze 21.10., Lead-Chat bc4854d7, „Glaube wir meinen dasselbe?!“)
-- **Mitte:** HUB und Einstellungen als ein Block (vgl. sein Wort 14.09.: Einstellungen und Integrationen „prinzipiell EINS“).
-- **Ring der Bausteine:** Projekte, Tasks, Team, Zeit, Geld, Mail; dazu zwei große Bestände als eigene Kreise: **Artikel** und **DATA** (Medien, Dateien, Daten). Bestände sind erst im Vorgang wertvoll (spec-ziel ZIEL-K01, K02).
-- **Fächer der Schubladen:** Google, ClickUp, Clockodo, Geld (€), Dokumente, Mail (@), Personen, Firmen/Lieferanten, Kunden, Web.
-- **Linien:** jede Verbindung läuft über den Hub (Ströme mit Richtung, spec-hub HUB-R10).
+## Johannes' Bild (Skizze 21.10., Lead-Chat bc4854d7)
+Grobe Idee, kein Plan: „in ca 40 sekunden mit BIC Kuli im Bett nach 23 Uhr entstanden - kein ausgetüftelter architekturplan“. Daraus nur der Kern, keine Details ableiten: Hub und Einstellungen in der Mitte (vgl. sein Wort 14.09.: „prinzipiell EINS“), ringsum die Bausteine eines Vorgangs (Projekte, Aufgaben, Team, Zeit, Geld, Mail, Artikel, Daten), darunter die Schubladen (Google, ClickUp, Clockodo, Geld, Dokumente, Mail, Personen, Firmen, Kunden, Web), alles über den Hub verbunden.
 
 ## Schichten (Vorschlag der Lead, von Johannes' Bild gedeckt, als Bauregel noch zu bestätigen)
 1. **Bereiche** (Mail, Projekte, Heute, Kataloge, Warenkorb …): dünne Ansichten.
