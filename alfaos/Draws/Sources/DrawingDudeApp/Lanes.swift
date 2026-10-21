@@ -416,8 +416,6 @@ struct StyleTab: View {
             }
         }
         Swatches(key: "draws.style.color", colors: Tone.accents, selected: model.accentColor) { model.accentColor = $0 }
-        HStack { Pill(key: "draws.style.reset") { model.resetStyle() } }
-            .padding(CGFloat(Design.Spacing.step8))
     }
 
     private func mm(_ v: Double) -> String {

@@ -558,7 +558,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Einpassen (0)"
+            "value": "Einpassen"
           }
         }
       }
@@ -580,7 +580,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Raster (R)"
+            "value": "Raster"
           }
         }
       }
@@ -1241,17 +1241,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Farbe"
-          }
-        }
-      }
-    },
-    "draws.style.reset": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stil zurücksetzen"
           }
         }
       }
