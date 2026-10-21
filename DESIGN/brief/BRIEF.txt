@@ -2,7 +2,7 @@ Brief Code → Design · v12 · 21.10.2026
 
 SO ARBEITEST DU (fest, gilt vor allem anderen)
 1. Lies nur diesen Brief und die Dateien, die er nennt. Du musst nichts suchen und nichts fragen, was du lesen sollst.
-2. Arbeite T1 bis T8 und dann N1 bis N18 (ohne N12, entfällt) der Reihe nach ab, ohne Unterbrechung. Ein Punkt ist fertig, wenn das Verlangte im Bogen und im Vertrag steht und, wo genannt, sein „Fertig, wenn“ erfüllt ist.
+2. Arbeite T1 bis T8 und dann N1 bis N17 (ohne N12, entfällt) der Reihe nach ab, ohne Unterbrechung. Ein Punkt ist fertig, wenn das Verlangte im Bogen und im Vertrag steht und, wo genannt, sein „Fertig, wenn“ erfüllt ist.
 3. Kannst du einen Punkt nicht entscheiden, setze ihn im Lieferschein auf "question" mit einer Frage und arbeite mit dem nächsten Punkt weiter. Alle Fragen kommen gesammelt mit der Lieferung, nicht dazwischen.
 4. Jede Änderung steht im Bogen selbst (.dc.html) und im Vertrag (contract/). Ein Wert nur im Chat, nur in einer Notiz oder nur in einer .md gilt als nicht geliefert.
 5. Zuletzt schreibst du contract/PRUEFUNG.txt (Ausgaben von P1 bis P3), dann contract/LIEFERUNG.json, dann läuft P4. Erst danach entsteht die ZIP.
@@ -115,7 +115,7 @@ N14 Projektordner wählen. Gezeichnet ist nur die Zeile „Projektordner“ mit 
 N15 Aus Projektordner. Das Menü im Entwurf (ALFA Mail.dc.html:998, Knopf :1037) zeigt drei feste Einträge mit Meta „Drive“ und hängt eine erfundene Datei an. Gesucht: Weg Projekt → Ordner → Datei (eine oder mehrere Ebenen), Leerzustand, Laden, Fehler und die Höchstzahl der Einträge.
 N16 Mail in Projektordner sichern. Gezeichnet sind nur der Eintrag (ALFA Mail.dc.html:972), der Knopf (:1033) und der Toast „Als PDF im Projektordner gesichert“. Gesucht: in welchen Ordner des Projekts, der Dateiname, der Fehlerfall, der Zustand ohne Projektordner und das Aussehen des PDF (Kopf mit Absender, Datum, Betreff; Seitenformat).
 N17 In anderes Projekt. Der Eintrag „In anderes Projekt …“ (ALFA Mail.dc.html:699) führt nirgendwohin. Gesucht: die Auswahl des Projekts und was danach geschieht.
-N18 Drive-Freigabe fehlt. Für Dateien braucht ALFA die Drive-Berechtigung von Google; wer schon angemeldet ist, muss sie einmal nachholen. Gezeichnet ist nur der Fall beim Senden „Senden braucht die Schreibfreigabe / Einmal neu anmelden, dann geht der Entwurf raus.“ (:1003). Gesucht: Hinweis und Text, wenn die Freigabe für Dateien fehlt, und wo er erscheint.
+N18 (entfällt) Johannes 21.10.: keine erklärenden Hinweistexte in der UI („Keine Meta Slopp ‚macht dies das jenes‘ in der UI!“). Zeichne keine neuen Hinweis- oder Erklärsätze, die er nicht selbst gesagt hat.
 
 ERINNERUNG AUS v9
 - W-05 Dienstzahl und L-010 Signaturen je Postfach sind weiter offen.
