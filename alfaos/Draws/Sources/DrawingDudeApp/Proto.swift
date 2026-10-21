@@ -42,4 +42,6 @@ enum Proto {
     static let edge = Dial(low: 0, high: 1, step: 0.02)
     static let outline = Dial(low: 0, high: 2, step: 0.05)
     static let shadow = Dial(low: 0, high: 60, step: 2)
+    static let pose = Dial(low: 0, high: 1, step: 0.02)
+    static let glideSteps = 8
 }

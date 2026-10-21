@@ -104,7 +104,17 @@ public protocol ClaudePort: Linked {
     var credentials: any ClaudeCredentialsStoring { get }
 }
 
+public enum ClaudeEntryError: Error, Sendable {
+    case noModel
+}
+
 extension ClaudePort {
+    @MainActor
+    public func connect(key: String, model: String) throws {
+        guard !model.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { throw ClaudeEntryError.noModel }
+        try ClaudeAuthService(credentialsStore: credentials).connect(apiKey: key, model: model)
+    }
+
     public func readiness() -> Readiness {
         let stored = try? credentials.load()
         guard let key = stored?.apiKey, !key.isEmpty else { return .noKey }

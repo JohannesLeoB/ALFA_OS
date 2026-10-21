@@ -33,6 +33,7 @@ struct ProjectLane: View {
                             meta: model.template.map { "\($0.pack.format) · \(word($0.pack.placeholder ? "draws.pack.placeholder" : "draws.pack.real"))" } ?? "")
                     defects
                     object
+                    unitList
                     if !model.assumptions.isEmpty {
                         SectionHead(key: "draws.section.assumptions")
                         ForEach(Array(model.assumptions.enumerated()), id: \.offset) { Note(text: $0.element, tone: \.inkSecondary) }
@@ -95,6 +96,20 @@ struct ProjectLane: View {
                 model.accent = lit ? nil : p.id
             }
             .help(word(lit ? "draws.object.unaccent" : "draws.object.accent"))
+        }
+    }
+
+    @ViewBuilder
+    private var unitList: some View {
+        let list = model.readouts
+        if !list.isEmpty {
+            SectionHead(key: "draws.section.units", meta: "\(list.count)")
+            ForEach(list, id: \.unit) { r in
+                ListRow(name: word("draws.kind.\(r.kind.rawValue)") + " · " + model.label(r.unit), symbol: r.kind.symbol,
+                        meta: r.summary, selected: model.active == r.unit, bold: (model.pose[r.unit] ?? 0) > 0) {
+                    model.swing(r.unit)
+                }
+            }
         }
     }
 }
@@ -493,6 +508,7 @@ struct ViewTab: View {
             }
         }
         if model.layout != .presentation, let cell = model.cell(model.selected) { selection(cell) }
+        if let r = model.readout(model.active) { unit(r) }
         SectionHead(key: "draws.section.sheet", meta: model.template?.pack.format ?? "")
         Labeled(key: "draws.pack.template") {
             Choice(value: model.choice) {
@@ -509,6 +525,13 @@ struct ViewTab: View {
             Text(verbatim: word(model.template?.pack.method == .third ? "draws.method.third" : "draws.method.first"))
         }
         if !model.choices.isEmpty { underlay }
+    }
+
+    @ViewBuilder
+    private func unit(_ r: Readout) -> some View {
+        SectionHead(key: "draws.section.units", meta: model.label(r.unit))
+        SliderRow(key: "draws.kind.\(r.kind.rawValue)", dial: Proto.pose,
+                  value: Binding(get: { model.pose[r.unit] ?? 0 }, set: { model.shift(r.unit, $0) }), text: r.travel)
     }
 
     @ViewBuilder
@@ -668,6 +691,7 @@ struct ExportTab: View {
             ListRow(name: word(check.port.key), symbol: symbol(check.state),
                     meta: word(check.state.reason ?? check.state.key), symbolTone: missing ? \.signal : \.inkTertiary,
                     metaTone: missing ? \.signal : \.inkTertiary)
+            if check.port == .claude { ClaudeEntry(model: model) }
         }
     }
 }

@@ -81,6 +81,10 @@ final class DrawsModel {
     var accent: String? { didSet { render() } }
     var accentColor: String? { didSet { render() } }
     var cells: [Cell] = [] { didSet { render() } }
+    var units: [DrawingKit.Unit] = [] { didSet { render() } }
+    var pose: [String: Double] = [:] { didSet { render() } }
+    var active: String?
+    var claudeModel: String?
     var selected: String?
     var grip: Grip?
     var hidden: Set<String> = [] {
@@ -126,6 +130,7 @@ final class DrawsModel {
     }
     private var ready = false
     private let designer: Designer
+    @ObservationIgnored private var glide: Task<Void, Never>?
 
     init() {
         let places = LocalPlaces(root: LocalPlaces.support)
@@ -173,6 +178,50 @@ final class DrawsModel {
     var defects: [String] {
         (ci?.defects ?? []) + (template?.defects ?? []) + (material?.defects ?? [])
             + (sheet?.defects ?? []).filter { !$0.hasPrefix("board.") }
+    }
+
+    var live: [DrawingKit.Unit] {
+        let ids = Set(shown.map(\.id))
+        return units.filter { ($0.front + $0.body).allSatisfy(ids.contains) }
+    }
+
+    var readouts: [Readout] {
+        Readout.make(parts, units, amounts: pose)
+    }
+
+    func readout(_ id: String?) -> Readout? {
+        id.flatMap { id in readouts.first { $0.unit == id } }
+    }
+
+    func label(_ unit: String) -> String {
+        let names = units.first { $0.id == unit }?.front.compactMap { id in parts.first { $0.id == id }?.name } ?? []
+        return names.isEmpty ? unit : names.joined(separator: ", ")
+    }
+
+    func swing(_ id: String) {
+        active = id
+        glide?.cancel()
+        let start = pose[id] ?? 0, target = start > 0.5 ? 0.0 : 1.0, steps = Proto.glideSteps
+        glide = Task {
+            for n in 1...steps {
+                try? await Task.sleep(for: .seconds(Design.Duration.lane / Double(steps)))
+                guard !Task.isCancelled else { return }
+                pose[id] = n == steps ? target : start + (target - start) * Double(n) / Double(steps)
+            }
+        }
+    }
+
+    func shift(_ id: String, _ value: Double) {
+        glide?.cancel()
+        active = id
+        pose[id] = min(1, max(0, value))
+    }
+
+    private func replace(units next: [DrawingKit.Unit]) {
+        glide?.cancel()
+        pose = [:]
+        active = nil
+        units = next
     }
 
     func cell(_ id: String?) -> Cell? {
@@ -295,8 +344,10 @@ final class DrawsModel {
         do {
             let object = try DrawingObject.load(url)
             try Validate.parts(object.parts)
+            try Validate.units(object.units ?? [], parts: object.parts)
             ready = false
             parts = object.parts
+            replace(units: object.units ?? [])
             project = object.project ?? [:]
             adopt()
             variants = object.variants ?? []
@@ -320,11 +371,24 @@ final class DrawsModel {
 
     func checkDock() {
         checks = dock.check()
+        if case .ready(let name) = dock.claude.readiness() { claudeModel = name } else { claudeModel = nil }
+    }
+
+    func saveClaude(key: String, name: String) -> Bool {
+        do {
+            try dock.claude.connect(key: key, model: name)
+            checkDock()
+            return true
+        } catch {
+            failure = "\(error)"
+            return false
+        }
     }
 
     func clear() {
         ready = false
         parts = []
+        replace(units: [])
         blocks = []
         hidden = []
         accent = nil
@@ -361,11 +425,13 @@ final class DrawsModel {
             failure = nil
             return
         }
+        let running = live, ids = Set(running.map(\.id))
         do {
             pages = try DrawingEngine.render(Job(parts: shown, ci: ci.pack, template: template.pack, project: project,
                                                  products: [product()], style: style(), dimensions: dimensions,
                                                  material: material?.pack, variants: variants, dims: dimensions ? .given : .none,
-                                                 fonts: fonts, blocks: blocks))
+                                                 fonts: fonts, blocks: blocks, units: running,
+                                                 pose: pose.filter { ids.contains($0.key) }))
             page = min(page, max(0, pages.count - 1))
             failure = nil
         } catch DrawingError.overflow {
@@ -509,6 +575,7 @@ final class DrawsModel {
                 adopt()
                 absorb(proposal.materials)
                 parts = proposal.parts
+                replace(units: proposal.units)
                 variants = proposal.variants
                 assumptions = proposal.assumptions
                 questions = proposal.questions

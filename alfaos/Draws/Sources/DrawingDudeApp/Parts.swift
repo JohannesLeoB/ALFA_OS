@@ -178,6 +178,7 @@ struct FieldRow: View {
     let label: String
     @Binding var value: String
     var needed = true
+    var secret = false
     @State private var hovering = false
 
     var body: some View {
@@ -188,10 +189,16 @@ struct FieldRow: View {
                 .foregroundStyle(style.color(empty ? \.signal : \.inkTertiary))
                 .lineLimit(1)
                 .frame(width: CGFloat(Design.Size.fieldLabelWidth), alignment: .leading)
-            TextField(text: $value, prompt: empty ? say("draws.field.missing") : nil) { EmptyView() }
-                .textFieldStyle(.plain)
-                .font(style.font())
-                .foregroundStyle(style.color(\.ink))
+            Group {
+                if secret {
+                    SecureField(text: $value) { EmptyView() }
+                } else {
+                    TextField(text: $value, prompt: empty ? say("draws.field.missing") : nil) { EmptyView() }
+                }
+            }
+            .textFieldStyle(.plain)
+            .font(style.font())
+            .foregroundStyle(style.color(\.ink))
         }
         .padding(.horizontal, CGFloat(Design.Spacing.step8))
         .frame(height: CGFloat(Design.Size.rowHeight))

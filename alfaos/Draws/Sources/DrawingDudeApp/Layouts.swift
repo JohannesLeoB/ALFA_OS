@@ -27,6 +27,29 @@ extension Cell {
     }
 }
 
+extension UnitKind {
+    var symbol: String {
+        switch self {
+        case .drawer: return "tray"
+        case .pullout: return "tray.full"
+        case .door: return "door.left.hand.closed"
+        case .flap: return "chevron.up.square"
+        case .fixed: return "square"
+        }
+    }
+}
+
+extension Readout {
+    var summary: String {
+        String(format: word("draws.readout.width"), Int(width.rounded())) + " · "
+            + String(format: word("draws.readout.fronts"), fronts)
+    }
+
+    var travel: String {
+        String(format: word(measure == .mm ? "draws.readout.travel" : "draws.readout.angle"), Int(now.rounded()), Int(max.rounded()))
+    }
+}
+
 struct Guide: Hashable {
     let vertical: Bool
     let at: Double
