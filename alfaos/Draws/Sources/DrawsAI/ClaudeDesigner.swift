@@ -3,8 +3,8 @@ import DrawingKit
 import Foundation
 
 public struct ClaudeDesigner: Designer {
-    public static let model = "claude-opus-5-5"
-    public static let products = ["plan", "iso", "perspective", "steps", "customer"]
+    public static let products = ["presentation", "plan", "iso", "perspective", "steps", "customer"]
+    static let schemaErrors = ["output_config", "json_schema", "structured output", "output_format"]
     static let projectKeys = ["lastName", "project", "street", "city", "customer", "date"]
     static let attachmentLimit = 30_000_000
     static let retries = 2
@@ -30,11 +30,14 @@ public struct ClaudeDesigner: Designer {
     }
 
     public func design(_ brief: Brief) async throws -> Proposal {
-        guard let key = try credentials.load()?.apiKey, !key.isEmpty else { throw DesignError.noKey }
+        let stored = try credentials.load()
+        guard let key = stored?.apiKey, !key.isEmpty else { throw DesignError.noKey }
+        let model = stored?.model.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        guard !model.isEmpty else { throw DesignError.noModel }
         guard brief.attachments.reduce(0, { $0 + $1.data.count }) <= Self.attachmentLimit else {
             throw DesignError.tooLarge
         }
-        let request = try self.request(brief, key: key)
+        let request = try self.request(brief, key: key, model: model)
         var attempt = 0
         while true {
             let (data, response) = try await http.data(for: request)
@@ -42,13 +45,17 @@ public struct ClaudeDesigner: Designer {
             if (200...299).contains(status) {
                 return try Self.proposal(from: data, materials: brief.materials, catalog: brief.catalog)
             }
-            guard Self.retryable(status), attempt < Self.retries else {
-                throw DesignError.http(status, String(decoding: data.prefix(400), as: UTF8.self))
-            }
+            let detail = String(decoding: data.prefix(400), as: UTF8.self)
+            guard Self.retryable(status), attempt < Self.retries else { throw Self.failure(status, detail, model: model) }
             let header = (response as? HTTPURLResponse)?.value(forHTTPHeaderField: "Retry-After")
             await pause(Self.delay(attempt: attempt, retryAfter: header))
             attempt += 1
         }
+    }
+
+    static func failure(_ status: Int, _ detail: String, model: String) -> DesignError {
+        if status == 400, schemaErrors.contains(where: { detail.lowercased().contains($0) }) { return .noStructuredOutput(model) }
+        return .http(status, detail)
     }
 
     static func retryable(_ status: Int) -> Bool {
@@ -62,7 +69,7 @@ public struct ClaudeDesigner: Designer {
         return attempt == 0 ? 2 : 4
     }
 
-    func request(_ brief: Brief, key: String) throws -> URLRequest {
+    func request(_ brief: Brief, key: String, model: String) throws -> URLRequest {
         let text = brief.text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty || !brief.attachments.isEmpty else { throw DesignError.emptyBrief }
         var content: [[String: Any]] = []
@@ -78,11 +85,10 @@ public struct ClaudeDesigner: Designer {
         }
         content.append(["type": "text", "text": prompt])
         let body: [String: Any] = [
-            "model": Self.model,
+            "model": model,
             "max_tokens": 16000,
             "thinking": ["type": "adaptive"],
             "output_config": ["effort": "high", "format": ["type": "json_schema", "schema": Self.schema]],
-            "fallbacks": "default",
             "system": skill + "\n\nMaterials: " + brief.materials.sorted().joined(separator: ", ")
                 + "\nCatalogue codes: " + brief.catalog.sorted().joined(separator: ", "),
             "messages": [["role": "user", "content": content]]
@@ -92,7 +98,6 @@ public struct ClaudeDesigner: Designer {
         r.setValue("application/json", forHTTPHeaderField: "Content-Type")
         r.setValue(key, forHTTPHeaderField: "x-api-key")
         r.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
-        r.setValue("server-side-fallback-2026-07-01", forHTTPHeaderField: "anthropic-beta")
         r.timeoutInterval = 600
         r.httpBody = try JSONSerialization.data(withJSONObject: body, options: [.sortedKeys])
         return r

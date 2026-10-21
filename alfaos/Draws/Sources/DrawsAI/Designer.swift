@@ -57,6 +57,8 @@ public enum DesignError: Error, Equatable, Sendable {
     case unknownMaterial(String)
     case tooLarge
     case stale
+    case noModel
+    case noStructuredOutput(String)
 }
 
 public protocol Designer: Sendable {
