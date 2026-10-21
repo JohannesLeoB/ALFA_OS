@@ -36,6 +36,37 @@ public protocol PlacesPort: Linked {
     func folder(_ place: Place, project: String?) -> URL?
 }
 
+public struct FileFolder: Identifiable, Hashable, Sendable {
+    public let id: String
+    public let name: String
+
+    public init(id: String, name: String) {
+        self.id = id
+        self.name = name
+    }
+}
+
+public struct FileEntry: Identifiable, Hashable, Sendable {
+    public let id: String
+    public let name: String
+    public let mimeType: String
+    public let isFolder: Bool
+
+    public init(id: String, name: String, mimeType: String, isFolder: Bool = false) {
+        self.id = id
+        self.name = name
+        self.mimeType = mimeType
+        self.isFolder = isFolder
+    }
+}
+
+public protocol FilesPort: Linked {
+    func projectFolders() async throws -> [FileFolder]
+    func files(in folderID: String) async throws -> [FileEntry]
+    func read(_ fileID: String) async throws -> Data
+    func put(name: String, mimeType: String, data: Data, into folderID: String) async throws -> FileEntry
+}
+
 public enum PackKind: String, CaseIterable, Sendable {
     case ci
     case template
@@ -94,12 +125,14 @@ public struct Deliverable: Sendable, Equatable {
     public var mimeType: String
     public var data: Data
     public var folder: URL?
+    public var place: Place
 
-    public init(name: String, mimeType: String, data: Data, folder: URL? = nil) {
+    public init(name: String, mimeType: String, data: Data, folder: URL? = nil, place: Place = .presentation) {
         self.name = name
         self.mimeType = mimeType
         self.data = data
         self.folder = folder
+        self.place = place
     }
 }
 

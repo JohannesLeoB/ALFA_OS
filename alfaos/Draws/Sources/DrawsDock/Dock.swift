@@ -4,6 +4,7 @@ import Foundation
 public enum PortID: String, CaseIterable, Sendable {
     case project
     case places
+    case files
     case templates
     case claude
     case delivery
@@ -43,15 +44,17 @@ public struct Check: Sendable, Equatable {
 public struct Dock: Sendable {
     public var project: any ProjectPort
     public var places: any PlacesPort
+    public var files: any FilesPort
     public var templates: any TemplatesPort
     public var claude: any ClaudePort
     public var delivery: any DeliveryPort
     public var catalogue: any CataloguePort
 
-    public init(project: any ProjectPort, places: any PlacesPort, templates: any TemplatesPort, claude: any ClaudePort,
+    public init(project: any ProjectPort, places: any PlacesPort, files: any FilesPort, templates: any TemplatesPort, claude: any ClaudePort,
                 delivery: any DeliveryPort, catalogue: any CataloguePort) {
         self.project = project
         self.places = places
+        self.files = files
         self.templates = templates
         self.claude = claude
         self.delivery = delivery
@@ -60,14 +63,16 @@ public struct Dock: Sendable {
 
     public static func local(packs: URL, places: LocalPlaces, claude: any ClaudePort = KeychainClaude()) -> Dock {
         let templates = LocalTemplates(packs: packs, fonts: places.fonts)
-        return Dock(project: TypedProject(), places: places, templates: templates, claude: claude,
-                    delivery: LocalDelivery(), catalogue: PackCatalogue(templates: templates))
+        let files = LocalFiles(places: places)
+        return Dock(project: TypedProject(), places: places, files: files, templates: templates, claude: claude,
+                    delivery: LocalDelivery(files: files), catalogue: PackCatalogue(templates: templates))
     }
 
     public func check() -> [Check] {
         let rows: [(PortID, Origin, String?)] = [
             (.project, project.origin, project.origin == .hub && project.current() == nil ? "dock.reason.project" : nil),
             (.places, places.origin, placesLack()),
+            (.files, files.origin, files.origin == .local ? placesLack() : nil),
             (.templates, templates.origin, PackKind.allCases.contains { templates.packs($0).isEmpty } ? "dock.reason.packs" : nil),
             (.claude, claude.origin, claudeLack()),
             (.delivery, delivery.origin, nil),

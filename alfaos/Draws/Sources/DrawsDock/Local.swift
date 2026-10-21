@@ -3,6 +3,7 @@ import AppKit
 import DrawingKit
 import Foundation
 import PDFKit
+import UniformTypeIdentifiers
 
 public struct TypedProject: ProjectPort {
     public init() {}
@@ -104,8 +105,72 @@ public struct FixedClaude: ClaudePort {
     }
 }
 
+public enum FilesError: Error, Equatable {
+    case unknownFolder(String)
+    case outside(String)
+}
+
+public struct LocalFiles: FilesPort {
+    static let shelves: [Place] = [.presentation, .trade]
+
+    public let places: any PlacesPort
+
+    public init(places: any PlacesPort) {
+        self.places = places
+    }
+
+    public var origin: Origin { .local }
+
+    public func projectFolders() async throws -> [FileFolder] {
+        Self.shelves.compactMap { place in
+            places.folder(place, project: nil).map { _ in FileFolder(id: place.rawValue, name: place.rawValue) }
+        }
+    }
+
+    public func files(in folderID: String) async throws -> [FileEntry] {
+        let url = try folder(folderID)
+        let keys: [URLResourceKey] = [.isDirectoryKey]
+        let items = (try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: keys)) ?? []
+        return items.sorted { $0.lastPathComponent < $1.lastPathComponent }.map { item in
+            FileEntry(id: item.path, name: item.lastPathComponent, mimeType: Self.mime(item.lastPathComponent),
+                      isFolder: (try? item.resourceValues(forKeys: Set(keys)).isDirectory) ?? false)
+        }
+    }
+
+    public func read(_ fileID: String) async throws -> Data {
+        let url = URL(fileURLWithPath: fileID).standardized
+        guard Self.shelves.contains(where: { place in
+            places.folder(place, project: nil).map { url.path.hasPrefix($0.standardized.path + "/") } ?? false
+        }) else { throw FilesError.outside(fileID) }
+        return try Data(contentsOf: url)
+    }
+
+    public func put(name: String, mimeType: String, data: Data, into folderID: String) async throws -> FileEntry {
+        let url = try folder(folderID)
+        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        let target = url.appendingPathComponent((name as NSString).lastPathComponent)
+        try data.write(to: target)
+        return FileEntry(id: target.path, name: target.lastPathComponent, mimeType: mimeType)
+    }
+
+    private func folder(_ id: String) throws -> URL {
+        guard let place = Self.shelves.first(where: { $0.rawValue == id }), let url = places.folder(place, project: nil) else {
+            throw FilesError.unknownFolder(id)
+        }
+        return url
+    }
+
+    private static func mime(_ name: String) -> String {
+        UTType(filenameExtension: (name as NSString).pathExtension)?.preferredMIMEType ?? "application/octet-stream"
+    }
+}
+
 public struct LocalDelivery: DeliveryPort {
-    public init() {}
+    public let files: any FilesPort
+
+    public init(files: any FilesPort) {
+        self.files = files
+    }
 
     public var origin: Origin { .local }
 
@@ -115,7 +180,19 @@ public struct LocalDelivery: DeliveryPort {
         case .save: save(file)
         case .print: print(file)
         case .mail: mail(file)
-        case .drive: .notConnected
+        case .drive: await drive(file)
+        }
+    }
+
+    private func drive(_ file: Deliverable) async -> Outcome {
+        do {
+            guard let target = try await files.projectFolders().first(where: { $0.id == file.place.rawValue }) else {
+                return .failed("dock.reason.folder")
+            }
+            let entry = try await files.put(name: file.name, mimeType: file.mimeType, data: file.data, into: target.id)
+            return .done(location: entry.id)
+        } catch {
+            return .failed("\(error)")
         }
     }
 

@@ -3,13 +3,7 @@ import CoreText
 import Foundation
 
 enum Tint {
-    static let names: [String: (Double, Double, Double)] = [
-        "black": (0, 0, 0), "white": (1, 1, 1), "gray": (0.5, 0.5, 0.5),
-        "red": (1, 0, 0), "green": (0, 0.5, 0), "blue": (0, 0, 1)
-    ]
-
     static func rgb(_ value: String) -> (Double, Double, Double) {
-        if let named = names[value.lowercased()] { return named }
         let s = value.hasPrefix("#") ? String(value.dropFirst()) : value
         guard s.count == 6, let v = UInt32(s, radix: 16) else { return (0, 0, 0) }
         return (Double((v >> 16) & 0xff) / 255, Double((v >> 8) & 0xff) / 255, Double(v & 0xff) / 255)

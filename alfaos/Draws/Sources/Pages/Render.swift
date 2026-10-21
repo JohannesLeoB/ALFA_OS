@@ -36,9 +36,11 @@ public struct PDFRenderer: Renderer {
 
 public struct BitmapRenderer: Renderer {
     public var dpi: Double
+    public var paper: String
 
-    public init(dpi: Double = 150) {
+    public init(paper: String, dpi: Double = 150) {
         self.dpi = dpi
+        self.paper = paper
     }
 
     public func render(_ doc: Document) -> [Data] {
@@ -51,7 +53,7 @@ public struct BitmapRenderer: Renderer {
         guard let space = CGColorSpace(name: CGColorSpace.sRGB),
               let ctx = CGContext(data: nil, width: w, height: h, bitsPerComponent: 8, bytesPerRow: 0, space: space,
                                   bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
-        ctx.setFillColor(Tint.cg("white"))
+        ctx.setFillColor(Tint.cg(paper))
         ctx.fill(CGRect(x: 0, y: 0, width: w, height: h))
         ctx.translateBy(x: 0, y: CGFloat(h))
         ctx.scaleBy(x: k, y: -k)

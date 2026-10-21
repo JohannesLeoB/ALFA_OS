@@ -36,7 +36,7 @@ public struct Run: Sendable, Equatable {
     public var rotation: Double
     public var role: FontRole
 
-    public init(_ text: String, origin: CGPoint, size: Double, weight: Int = 400, color: String = "black",
+    public init(_ text: String, origin: CGPoint, size: Double, weight: Int = 400, color: String,
                 anchor: Anchor = .start, rotation: Double = 0, role: FontRole = .sans) {
         self.text = text; self.origin = origin; self.size = size; self.weight = weight; self.color = color
         self.anchor = anchor; self.rotation = rotation; self.role = role
@@ -53,7 +53,7 @@ public struct Block: Sendable, Equatable {
     public var align: Align
     public var role: FontRole
 
-    public init(_ text: String, frame: CGRect, size: Double, weight: Int = 400, color: String = "black",
+    public init(_ text: String, frame: CGRect, size: Double, weight: Int = 400, color: String,
                 leading: Double = 0, align: Align = .left, role: FontRole = .sans) {
         self.text = text; self.frame = frame; self.size = size; self.weight = weight; self.color = color
         self.leading = leading; self.align = align; self.role = role

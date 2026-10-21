@@ -1,4 +1,8 @@
 {
+ "flow": {
+  "ink": "black",
+  "rule": "gray"
+ },
  "draw": [
   {
    "name": "kitchen",
