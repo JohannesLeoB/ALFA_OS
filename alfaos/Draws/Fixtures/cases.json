@@ -1,7 +1,8 @@
 {
  "flow": {
   "ink": "black",
-  "rule": "gray"
+  "rule": "gray",
+  "paper": "#ffffff"
  },
  "draw": [
   {

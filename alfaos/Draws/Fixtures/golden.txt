@@ -4141,3 +4141,18 @@ error malformed("reply")
 </g>
 </svg>
 [body#0:text, foot#-1:zone, head#1:bounds]
+ingest a.pdf pdf>files:drive pdf / pages 0/340x113/Hello World@23,48,175,34 / text Hello World
+ingest scan.pdf pdf>files:drive pdf / pages 0/340x113/Hello World@23,48,175,30 / text Hello World / notes ["ocr.scan"]
+ingest a.png png>canvas:mood png / pages 0/709x237/Hello World@48,100,365,62 / text Hello World / images 709x237
+ingest t.csv csv>mail:new csv / text a	b,c	d|1	x"y	ä / table  2 a,b,c,d|1,x"y,ä
+ingest mini.xlsx xlsx>assistant xlsx / text Name	Qty		|Platte	3	a&b, c	|	3		TRUE|	|	x / table Alpha 3 Name,Qty,,|Platte,3,a&b, c,|,3,,TRUE / table Beta 2 ,|,x / notes ["xlsx.formula"]
+ingest mini.idml idml>assistant idml / text Hello IDML|Second line / styles ["Head", "Body"] ["Bold"] / spread u1 1 210x297 MasterSpread_ua text:20,30,100,20:Hello IDML|Second line:Head:Bold:-;image:50,150,50,50::-:-:file:/pics/a.jpg;rect:5,5,10,10::-:-:- loose 0 / master MasterSpread_ua 1 210x297 - text:100,139,10,5:#:Body:Bold:- loose 0
+ingest mini.dxf dxf>assistant dxf / text Kitchen 1 / units mm layers ["WALL", "DOOR", "NOTE"] / lines WALL:0,0-100,50 / polys WALL:3:true / rounds DOOR:5,5:2.5:-1.0:-1.0;DOOR:5,5:4.0:0.0:90.0 / captions NOTE:Kitchen 1:1,2:3.5 / notes ["dxf.skip.SPLINE"]
+ingest m.mustache mustache>assistant mustache / vars ["name", "items", "raw"] 60
+ingest p.html html>assistant html / text Title|Body & text
+ingest v.svg svg>assistant svg / text Label
+ingest j.json json>assistant json / text {"a":1}
+ingest n.txt text>assistant text / text plain
+ingest d.dwg dwg>assistant dwg / notes ["dwg.binary", "dwg.AC1027"]
+ingest x.bin unknown>assistant unknown / notes ["kind.unknown"]
+ingest blob pdf>files:drive pdf / pages 0/340x113/Hello World@23,48,175,34 / text Hello World
