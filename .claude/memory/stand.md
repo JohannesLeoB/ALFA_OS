@@ -94,6 +94,16 @@ metadata:
     - Der Master entfernt die Karte nach erfolgreichem Senden (:677); die App behält sie als `.sent`.
     - `canSend` prüft nur An (wie der Master), `model.send` nimmt auch nur Cc oder Bcc.
     - Lücke an Design: kein eigener Text für einen leeren Betreff.
+- E1 b3977df (Johannes 21.10.: „Ja. E1 (Einstellungen mit Wirkung: Startansicht, App-Sperre, Datenschutz-Schalter usw.) über bau-mail mit Sonnet, Ticket vorher von Haiku prüfen lassen, du prüfst und committest.“):
+  - Die Startansicht (Mail, Einstellungen, Zuletzt offen; ALFA Mail.dc.html:762) greift beim Start (ShellModel.swift:54).
+  - „Bilder in Mails laden“ wirkt wie im Master (:969; Vorgabe aus, :487).
+  - Prüfung: Mutanten des Bauers und der Lead rot; App-Build grün; testLines 5837/5895.
+  - Lücken an Design (für Brief v11, Wortlaut vorher Johannes zeigen):
+    - Die App-Sperre ist im Master ohne gesperrten Zustand: kein Overlay, kein Entsperren, kein Fehlschlag.
+    - INHALT.json:550-551 „Externe Bilder“ (bilder) und :576-577 „Mail-Bilder“ (mbilder) sind doppelt.
+  - Befund: Die App zeigt Mails nur als Text (AppHost.swift:71 `prefersHTML = false`). Der Bilder-Schalter wird erst mit HTML-Mail sichtbar. HTML-Mail gibt es im Bestand (~/ALPHA Mail/MailHTMLView).
+  - Ohne Wirkung, weil der Bereich fehlt: Assistent aus und Chat-Dateien (kein Assistent), Geburtstage (keine Kontakte), Rolle, Kürzel und Telefon (im Master nur in der Profilkarte, :758).
+- Bestands-Inventur 21.10. (sechs Lese-Stränge) und Zitat-Triage liegen in `dist/inventur/` (nicht in Git). Johannes 21.10. 02:28 dazu siehe [[bestand-zuerst]].
 - Parallel bei Johannes: AGENTS.md wird in Codex neu gefasst (Lead hat Korrekturen geliefert: Gedächtnis, Leseorte, fundus, Ehrenkodex, Wegweiser, Rangfolge mit Quelle, Export erst nach Prüfskripten, 75 %-Regel, Haiku-Pflicht eingrenzen). Produktsitzung grillt Johannes zu Umfang, Einstellungen, Dateien/Vorlagen, Projekte, Heute, Kataloge, Mail-Resten, Datenhaltung. Eigene Grill-Sitzung des Lotsen (Auftrag GRILL-LOTSE-AUFTRAG.md bei Johannes) zu Lastenheft, offenen Lead-Entscheiden, Code-Rückschau, Codebase-Design, Ablauf.
 - Wartet danach: B Ballast und D Namen/myk erst nach Johannes' Entscheid in der Grill-Sitzung, was weg darf. C Tempo, E2 SheetValues-Quellen, H7 Datenspeicher (Stammtisch-Entwurf H7 in STAMMTISCH/ALFA Stammtisch.rtf).
 - Johannes 20.10. zu Tests: „bitte manage du das mit den tests“ (test-verstaendnis.md). Unabhängige Prüfung liegt auf der Wächter-Seite bei Johannes; die Lead kennt keine Einzelheiten und fragt nicht danach.
