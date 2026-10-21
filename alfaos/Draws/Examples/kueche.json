@@ -1,0 +1,115 @@
+{
+ "platzhalter": true,
+ "project": {
+  "lastName": "Mustermann",
+  "project": "Küche EG",
+  "street": "Beispielweg 1",
+  "city": "20457 Hamburg",
+  "customer": "2026-001",
+  "date": "21.10.2026",
+  "drawn": "GEZ",
+  "layout.threeView": "Küchenzeile Ansichten",
+  "layout.iso": "Küchenzeile Isometrie"
+ },
+ "parts": [
+  {
+   "id": "sockel",
+   "name": "Sockel",
+   "material": "sockel",
+   "x": 0,
+   "y": 70,
+   "z": 0,
+   "w": 2400,
+   "d": 530,
+   "h": 100
+  },
+  {
+   "id": "u0",
+   "name": "Unterschrank 1",
+   "material": "korpus",
+   "x": 0,
+   "y": 40,
+   "z": 100,
+   "w": 600,
+   "d": 560,
+   "h": 720
+  },
+  {
+   "id": "u1",
+   "name": "Unterschrank 2",
+   "material": "korpus",
+   "x": 600,
+   "y": 40,
+   "z": 100,
+   "w": 600,
+   "d": 560,
+   "h": 720
+  },
+  {
+   "id": "u2",
+   "name": "Unterschrank 3",
+   "material": "korpus",
+   "x": 1200,
+   "y": 40,
+   "z": 100,
+   "w": 600,
+   "d": 560,
+   "h": 720
+  },
+  {
+   "id": "u3",
+   "name": "Unterschrank 4",
+   "material": "korpus",
+   "x": 1800,
+   "y": 40,
+   "z": 100,
+   "w": 600,
+   "d": 560,
+   "h": 720
+  },
+  {
+   "id": "platte",
+   "name": "Arbeitsplatte",
+   "material": "platte",
+   "x": 0,
+   "y": 0,
+   "z": 820,
+   "w": 2400,
+   "d": 620,
+   "h": 40
+  },
+  {
+   "id": "o0",
+   "name": "Oberschrank 1",
+   "material": "korpus",
+   "x": 0,
+   "y": 280,
+   "z": 1400,
+   "w": 800,
+   "d": 320,
+   "h": 700
+  },
+  {
+   "id": "o1",
+   "name": "Oberschrank 2",
+   "material": "korpus",
+   "x": 800,
+   "y": 280,
+   "z": 1400,
+   "w": 800,
+   "d": 320,
+   "h": 700
+  },
+  {
+   "id": "o2",
+   "name": "Oberschrank 3",
+   "material": "korpus",
+   "x": 1600,
+   "y": 280,
+   "z": 1400,
+   "w": 800,
+   "d": 320,
+   "h": 700
+  }
+ ]
+}
