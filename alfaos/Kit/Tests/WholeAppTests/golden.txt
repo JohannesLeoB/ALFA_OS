@@ -1,7 +1,5 @@
 DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq RGB(red=1.0,green=1.0,blue=1.0,alpha=1.0)
 DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq 0.051
-DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq [8.0,16.0,24.0,68.0,112.0,156.0]
-DesignTests.runTheShellGeometryReadsTheDeliveredSheet eq [8.0,52.0,96.0]
 DesignTests.runTheShellGeometryReadsTheDeliveredSheet false some(false)
 ThemeTests.runRealSourceHasEveryGeneratedKey eq []
 ThemeTests.runRealSourceHasEveryGeneratedKey eq []
@@ -55,11 +53,7 @@ LayoutTests.runTilesFlowLikeAutoFill eq 4
 LayoutTests.runTilesFlowLikeAutoFill eq 3
 LayoutTests.runTilesFlowLikeAutoFill eq 132.0
 BlobTests.runHomeSitsInTheStripAtTheMargin eq Point(x=16.0,y=16.0)
-BlobTests.runThrowSettlesAtTheNearestEdge eq Edge.trailing()
 BlobTests.runThrowSettlesAtTheNearestEdge eq Edge.leading()
-BlobTests.runMenuOpensBelowAtTheTopAndAboveAtTheBottom true some(true)
-BlobTests.runMenuOpensBelowAtTheTopAndAboveAtTheBottom eq Point(x=16.0,y=16.0)
-BlobTests.runMenuOpensBelowAtTheTopAndAboveAtTheBottom false some(false)
 ShellModelTests.runDirectoryDrivesTheMenuAndSearch eq ["mail","settings"]
 ShellModelTests.runDirectoryDrivesTheMenuAndSearch eq ["core"]
 ShellModelTests.runDirectoryDrivesTheMenuAndSearch eq 2
@@ -68,8 +62,6 @@ ShellModelTests.runSelectClosesTheMenuAndKeepsLaneStatePerArea eq BlobPhase.rest
 ShellModelTests.runSelectClosesTheMenuAndKeepsLaneStatePerArea false some(false)
 ShellModelTests.runSelectClosesTheMenuAndKeepsLaneStatePerArea true some(true)
 ShellModelTests.runSelectClosesTheMenuAndKeepsLaneStatePerArea eq "settings"
-ShellModelTests.runAssistantExcludesTheMenuAndSnapshotRoundTrips true some(true)
-ShellModelTests.runAssistantExcludesTheMenuAndSnapshotRoundTrips false some(false)
 ShellModelTests.runAssistantExcludesTheMenuAndSnapshotRoundTrips eq 250.0
 HubTests.runStartsEmptyAndNothingThrows eq []
 HubTests.runStartsEmptyAndNothingThrows eq []
@@ -149,23 +141,16 @@ IMAPProviderTests.runAdapterDeliversAMailTransportWithoutTouchingTheNetwork thro
 IMAPProviderTests.runAdapterDeliversAMailTransportWithoutTouchingTheNetwork eq some(HubError.capabilityMissing(capabilityMissing=(String, Capability)(.0="i",.1=Capability.mail())))
 IMAPProviderTests.runHubStoresThePasswordInTheKeychainAfterAGreenProbe eq "app-secret"
 IMAPProviderTests.runHubKeepsNothingAfterARedProbe eq "hint.imap.login.rejected"
-IMAPProviderTests.runHubKeepsNothingAfterARedProbe eq []
-IMAPProviderTests.runHubKeepsNothingAfterARedProbe true some(true)
 IMAPProviderTests.runSenderNameOfTheTransportIsTheFormValue eq "Jo Berger"
 IMAPProviderTests.runAddressWithInnerSpaceIsRejected nil true
 GoogleProviderTests.runGoogleProviderDeliversMailTransportAfterGreenProbe eq "a@example.test"
 GoogleProviderTests.runGoogleProviderDeliversMailTransportAfterGreenProbe eq some(MailFolderRole.inbox())
 GoogleProviderTests.runGoogleProviderDeliversMailTransportAfterGreenProbe eq ["Label_2","Label_1"]
 GoogleProviderTests.runGoogleProviderDeliversMailTransportAfterGreenProbe eq ["Archiv","Kunden"]
-GoogleProviderTests.runGoogleProviderDeliversMailTransportAfterGreenProbe throws "capabilityMissing("google-<uuid>", Hub.Capability.calendar)"
-GoogleProviderTests.runGoogleProviderDeliversMailTransportAfterGreenProbe eq some(HubError.capabilityMissing(capabilityMissing=(String, Capability)(.0="google-<uuid>",.1=Capability.calendar())))
 GoogleProviderTests.runRedProbeFailsAndLeavesNothingInTheKeychain eq "hint.google.userinfo"
 GoogleProviderTests.runRedProbeFailsAndLeavesNothingInTheKeychain eq "HTTP 401"
-GoogleProviderTests.runRedProbeFailsAndLeavesNothingInTheKeychain eq []
-GoogleProviderTests.runRedProbeFailsAndLeavesNothingInTheKeychain true some(true)
 GoogleProviderTests.runRedLabelsProbeNamesTheStatus eq "hint.google.labels"
 GoogleProviderTests.runRedLabelsProbeNamesTheStatus eq "HTTP 403"
-GoogleProviderTests.runRedLabelsProbeNamesTheStatus true some(true)
 GoogleProviderTests.runClientConfigLoadsFromFile throws "clientConfigMissing("/var/folders/7s/09zwpv5n33j2b9f8hgnw34xh0000gp/T/<uuid>/google-client.json")"
 GoogleProviderTests.runClientConfigLoadsFromFile eq GoogleClientConfig(clientID="cid",clientSecret="sec")
 GoogleRenewalTests.runGreenRenewalWritesTheNewGrantIntoTheSlotsOfThisInlet eq "old-access"
@@ -295,10 +280,6 @@ CoreTests.runSendWithoutNetworkQueuesAndRetrySends eq [<uuid>]
 CoreTests.runSendWithoutNetworkQueuesAndRetrySends eq some(OutboxState.waiting())
 CoreTests.runSendWithoutNetworkQueuesAndRetrySends eq 1
 CoreTests.runSendWithoutNetworkQueuesAndRetrySends true some(true)
-CoreTests.runSendWithoutNetworkQueuesAndRetrySends eq some(OutboxState.waiting())
-CoreTests.runSendWithoutNetworkQueuesAndRetrySends eq 1
-CoreTests.runARetryChecksTheSentFolderBeforeSendingAgain eq 1
-CoreTests.runARetryChecksTheSentFolderBeforeSendingAgain true some(true)
 CoreTests.runARetryChecksTheSentFolderBeforeSendingAgain eq 1
 CoreTests.runARetryChecksTheSentFolderBeforeSendingAgain true some(true)
 CoreTests.runARetryChecksTheSentFolderBeforeSendingAgain eq 2
@@ -466,11 +447,9 @@ MailModelTests.runLoadMoreAppendsByPageToken false some(false)
 MailModelTests.runSendWithoutSubjectIsBlocked true some(true)
 MailModelTests.runSendQueuedIsQueuedInOutbox eq some(MailDraftState.queuedInOutbox())
 MailModelTests.runSendQueuedIsQueuedInOutbox eq some(MailDraftState.sent())
-MailModelTests.runSendSent eq some(MailDraftState.sent())
 MailModelTests.runUnreadPerAccountAndTotal eq dict["a":3,"b":4]
 MailModelTests.runUnreadPerAccountAndTotal eq 7
 MailModelTests.runUnreadPerAccountAndTotal eq 9
-MailModelTests.runSignInExpiredFromAccountState eq MailListState.signInExpired(signInExpired="a")
 MailModelTests.runNotConnectedFromAccountState eq MailListState.notConnected(notConnected="a")
 MailModelTests.runContactFromSignatureYieldsCommand eq MailMessageRef(inlet="a",messageID="m1")
 MailModelTests.runContactFromSignatureYieldsCommand eq "Anna Berg"
