@@ -2,7 +2,16 @@ import Foundation
 import AlfaKit
 import AlfaServices
 
-struct CountingMailTransport: MailTransport {
+public protocol MailPurging: Sendable {
+    var canPurge: Bool { get }
+    func purge(messageID: String) async throws
+}
+
+extension IMAPSMTPMailTransport: MailPurging {
+    public var canPurge: Bool { true }
+}
+
+struct CountingMailTransport: MailTransport, MailPurging {
     let base: any MailTransport
     let meter: CostMeter
 
@@ -88,6 +97,14 @@ struct CountingMailTransport: MailTransport {
     func wasSent(messageID: String) async throws -> Bool {
         meter.record()
         return try await base.wasSent(messageID: messageID)
+    }
+
+    var canPurge: Bool { (base as? any MailPurging)?.canPurge ?? false }
+
+    func purge(messageID: String) async throws {
+        guard let base = base as? any MailPurging, base.canPurge else { throw MailTransportError.unsupportedCapability("purge") }
+        meter.record()
+        try await base.purge(messageID: messageID)
     }
 }
 

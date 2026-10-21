@@ -186,13 +186,13 @@ struct MailRowView: View {
                 rowAction("mail.action.archive", glyph: .archive, tone: tone.secondary) {
                     actions.message(.archive, item.id)
                 }
-                if inTrash {
+                if inTrash && model.canPurge(item.id) {
                     ConfirmPill(label: nil, question: word("mail.confirm.purge.question"), yes: word("mail.confirm.purge.yes"),
                                 no: word("confirm.no"), holdHint: line("mail.confirm.hold", words("mail.confirm.purge.yes")),
                                 startsAsking: true, showsProgress: false, onYes: { actions.message(.purge, item.id) }) {
                         Glyph(.trash)
                     }
-                } else {
+                } else if !inTrash {
                     rowAction("mail.action.trash", glyph: .trash, tone: tone.secondary) {
                         actions.message(.trash, item.id)
                     }

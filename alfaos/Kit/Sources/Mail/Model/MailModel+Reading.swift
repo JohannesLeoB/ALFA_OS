@@ -135,16 +135,6 @@ extension MailModel {
         commandContinuation.yield(.leadFromMail(MailMessageRef(inlet: inlet, messageID: id), lead))
     }
 
-    public func print(_ id: String) {
-        guard let inlet = cardInlet(id) ?? selectedInlet, summary(id) != nil else { return }
-        commandContinuation.yield(.print(MailMessageRef(inlet: inlet, messageID: id)))
-    }
-
-    public func exportPDF(_ id: String) {
-        guard let inlet = cardInlet(id) ?? selectedInlet, summary(id) != nil else { return }
-        commandContinuation.yield(.exportPDF(MailMessageRef(inlet: inlet, messageID: id)))
-    }
-
     public func attachmentToProjectFolder(_ id: String, attachmentID: String, project: String? = nil) {
         guard let inlet = cardInlet(id) ?? selectedInlet, summary(id) != nil else { return }
         commandContinuation.yield(.attachmentToProjectFolder(

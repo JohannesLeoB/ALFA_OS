@@ -2,6 +2,11 @@ import Foundation
 import Hub
 import struct AlfaServices.MailMessageBody
 
+public struct MailDocument: Equatable, Sendable {
+    public let name: String
+    public let data: Data
+}
+
 extension MailModel {
     public func projectFolders(for draft: UUID) async -> [ProjectFolderRecord] {
         await projects(key: draft.uuidString)
@@ -36,24 +41,35 @@ extension MailModel {
         await projects(key: id)
     }
 
-    public func mailToProjectFolder(_ id: String, project: ProjectFolderRecord, render: (ReadingCard) -> Data?) async {
-        guard var card = card(id) else { return }
+    public func mailDocument(_ id: String, render: (ReadingCard) -> Data?) async -> MailDocument? {
+        guard var card = card(id) else { return nil }
         let body: MailMessageBody
         do {
             body = try await engine.body(card.inlet, messageID: id)
         } catch {
             actionFailures[id] = Self.hint(error)
-            return
+            return nil
         }
         card.content = content(for: body, fallback: "")
         guard body.text != nil || body.html != nil, let data = render(card) else {
             actionFailures[id] = Hint(text: MailTextKey.failed.rawValue, detail: id)
-            return
+            return nil
         }
         let title = card.summary.subject.isEmpty ? card.id : card.summary.subject
         let name = title.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ":", with: "-") + ".pdf"
+        actionFailures[id] = nil
+        return MailDocument(name: name, data: data)
+    }
+
+    public func documentFailed(_ id: String) {
+        actionFailures[id] = Hint(text: MailTextKey.failed.rawValue, detail: id)
+    }
+
+    public func mailToProjectFolder(_ id: String, project: ProjectFolderRecord, render: (ReadingCard) -> Data?) async {
+        guard let document = await mailDocument(id, render: render) else { return }
         do {
-            _ = try await engine.putFile(project.inlet, folder: project.folderID, name: name, mimeType: "application/pdf", data: data)
+            _ = try await engine.putFile(project.inlet, folder: project.folderID, name: document.name, mimeType: "application/pdf",
+                                         data: document.data)
         } catch {
             actionFailures[id] = Self.hint(error)
             return

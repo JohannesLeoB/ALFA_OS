@@ -310,6 +310,13 @@ public struct IMAPSMTPMailTransport: MailTransport {
         }
     }
 
+    public func purge(messageID: String) async throws {
+        let reference = try IMAPMessageReference.decode(messageID)
+        try await withIncoming { session in
+            try await Self.removeMessage(reference, session: session)
+        }
+    }
+
     public func sendDraft(id: String) async throws {
         let stored = try await fetchDraft(messageID: id)
         try await send(stored.draft)

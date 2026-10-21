@@ -1,6 +1,7 @@
 import Foundation
 import GRDB
 import Hub
+import enum AlfaServices.MailTransportError
 import struct AlfaKit.EmailDraft
 import protocol AlfaServices.MailTransport
 import enum AlfaServices.MailFlag
@@ -201,6 +202,20 @@ public final class MailCore: MailEngine {
             return nil
         }
         return page.messages.first { $0.messageIDHeader == header }?.id
+    }
+
+    public func canPurge(_ inlet: Inlet.ID) -> Bool {
+        ((try? transport(inlet)) as? any MailPurging)?.canPurge ?? false
+    }
+
+    public func purge(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {
+        guard canPurge(inlet) else { throw HubError.capabilityMissing(inlet, .mail) }
+        let touched = try await perform(inlet) { transport in
+            guard let purging = transport as? any MailPurging else { throw MailTransportError.unsupportedCapability("purge") }
+            try await purging.purge(messageID: messageID)
+            return try self.mirror.remove(inlet, messageID: messageID, folder: nil)
+        }
+        announce(inlet, touched)
     }
 
     public func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {

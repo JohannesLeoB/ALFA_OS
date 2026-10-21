@@ -79,6 +79,7 @@ public protocol MailEngine: AnyObject {
     @discardableResult func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubError) -> String?
     @discardableResult func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> String?
     func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubError)
+    func canPurge(_ inlet: Inlet.ID) -> Bool
     func purge(_ inlet: Inlet.ID, messageID: String) async throws(HubError)
     func attachment(_ inlet: Inlet.ID, messageID: String, attachmentID: String) async throws(HubError) -> Data
     func thread(_ inlet: Inlet.ID, messageID: String, threadID: String) async throws(HubError) -> [MailMessageSummary]
@@ -104,6 +105,7 @@ extension MailEngine {
     public func searchOpen(_ inlet: Inlet.ID, query: String, excluding folders: Set<String>) async -> [MailMessageSummary] {
         searchLocal(inlet, query: query).filter { !$0.folderIDs.contains(where: folders.contains) }
     }
+    public func canPurge(_ inlet: Inlet.ID) -> Bool { false }
     public func purge(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {
         throw HubError.capabilityMissing(inlet, .mail)
     }

@@ -1,6 +1,8 @@
 import Foundation
 import Hub
+import struct AlfaKit.DraftAttachment
 import struct AlfaKit.EmailDraft
+import struct AlfaServices.MailAttachmentInfo
 import struct AlfaServices.MailMessageSummary
 import struct AlfaServices.MailStoredDraft
 
@@ -72,9 +74,34 @@ extension MailModel {
     @discardableResult
     public func forward(_ messageID: String) async -> UUID? {
         guard let inlet = cardInlet(messageID) ?? selectedInlet, let summary = summary(messageID) else { return nil }
+        let wasPinned = card(messageID)?.pinned ?? false
         pin(messageID)
+        guard let attachments = await originalAttachments(messageID, inlet: inlet) else {
+            update(messageID) { $0.pinned = wasPinned }
+            return nil
+        }
         let quote = await quoted(messageID, summary: summary)
-        return add(inlet: inlet, EmailDraft(subject: Self.prefixed("Fwd:", summary.subject), body: quote))
+        return add(inlet: inlet, EmailDraft(subject: Self.prefixed("Fwd:", summary.subject), body: quote, attachments: attachments))
+    }
+
+    private func originalAttachments(_ messageID: String, inlet: Inlet.ID) async -> [DraftAttachment]? {
+        let infos: [MailAttachmentInfo]
+        if let card = card(messageID), card.content != .bodyLoading {
+            infos = card.attachments
+        } else {
+            do {
+                infos = try await engine.body(inlet, messageID: messageID).attachments
+            } catch {
+                actionFailures[messageID] = Self.hint(error)
+                return nil
+            }
+        }
+        var loaded: [DraftAttachment] = []
+        for info in infos {
+            guard let data = await attachmentData(messageID, attachmentID: info.id) else { return nil }
+            loaded.append(DraftAttachment(filename: info.filename, mimeType: info.mimeType, data: data))
+        }
+        return loaded
     }
 
     public func edit(_ id: UUID, _ change: (inout EmailDraft) -> Void) {

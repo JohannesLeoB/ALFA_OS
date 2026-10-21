@@ -4,6 +4,7 @@ import struct Hub.SyncReport
 @testable import Hub
 @testable import Mail
 @testable import ShellCore
+import PDFKit
 import XCTest
 import class GRDB.DatabaseQueue
 @testable import AlfaServices
@@ -1656,7 +1657,11 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     var foundIDs: Set<String> = []
     var checkError: Error?
     func wasSent(messageID: String) async throws -> Bool { if let checkError { throw checkError }; return foundIDs.contains(messageID) }
+    var canPurge = false
+    func purge(messageID: String) async throws { try record("purge:" + messageID) }
 }
+
+extension TransportDouble: MailPurging {}
 
 func mailTestClassify(_ error: Error) -> Classification {
     if error is GoogleGmailError {
@@ -3115,7 +3120,46 @@ final class ModelActionTests {
         _ = await model.projectFolders(for: id)
         XCTAssertEqual(model.actionFailure(for: id.uuidString)?.text, MailTextKey.capabilityMissing.rawValue)
     }
+    private func stepForwardingKeepsTheAttachmentsOfTheOriginal() async {
+        let (model, engine) = await make()
+        engine.bodies["m1"] = MailMessageBody(text: "hi", attachments: [MailAttachmentInfo(id: "a1", filename: "plan.pdf", mimeType: "application/pdf", sizeBytes: 3)])
+        engine.attachmentData = Data("pdf".utf8)
+        let id = await model.forward("m1")
+        XCTAssertEqual(id.flatMap { model.draft($0) }?.draft.attachments, [DraftAttachment(filename: "plan.pdf", mimeType: "application/pdf", data: Data("pdf".utf8))])
+    }
+    private func stepAFailedAttachmentDownloadStopsTheForwardAndUnpinsTheMail() async {
+        let (model, engine) = await make()
+        engine.bodies["m1"] = MailMessageBody(text: "hi", attachments: [MailAttachmentInfo(id: "a1", filename: "plan.pdf", mimeType: "application/pdf", sizeBytes: 3)])
+        await model.open("m1")
+        engine.actionError = .provider(Hint(text: "mail.hint.failed"))
+        let id = await model.forward("m1")
+        XCTAssertNil(id)
+        XCTAssertTrue(model.drafts.isEmpty)
+        XCTAssertEqual(model.actionFailure(for: "m1"), Hint(text: "mail.hint.failed"))
+        XCTAssertEqual(model.card("m1")?.pinned, false)
+    }
+    private func stepThePdfOfAMailHoldsItsSubject() async {
+        let (model, _) = await make()
+        await model.open("m1")
+        let document = await model.mailDocument("m1") { MailPDF.render($0, page: CGSize(width: 595, height: 842), margin: 36) }
+        XCTAssertEqual(document?.name, "Hello.pdf")
+        XCTAssertTrue(PDFDocument(data: document?.data ?? Data())?.string?.contains("Hello") == true)
+    }
+    private func stepPurgingNeedsATransportThatCanDoIt() async throws {
+        let rig = try mailRig()
+        XCTAssertFalse(rig.core.canPurge("one"))
+        try? await rig.core.purge("one", messageID: "m1")
+        XCTAssertEqual(rig.transport.calls, [])
+        rig.transport.canPurge = true
+        XCTAssertTrue(rig.core.canPurge("one"))
+        try await rig.core.purge("one", messageID: "m1")
+        XCTAssertEqual(rig.transport.calls, ["purge:m1"])
+    }
     func runTheModelActions() async throws {
+        await stepForwardingKeepsTheAttachmentsOfTheOriginal()
+        await stepAFailedAttachmentDownloadStopsTheForwardAndUnpinsTheMail()
+        await stepThePdfOfAMailHoldsItsSubject()
+        try await stepPurgingNeedsATransportThatCanDoIt()
         try await stepAProjectFileIsAttachedAndAMailIsPutIntoItsProjectFolder()
         await stepArchiveRemovesTheRowClosesTheCardAndCountsAgain()
         await stepArchiveInTheAllFolderKeepsTheRowListed()

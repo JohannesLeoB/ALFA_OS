@@ -20,6 +20,11 @@ extension MailModel {
 
     public func move(_ id: String, toFolder folder: String) async { await relocate(id, .folder(folder)) }
 
+    public func canPurge(_ id: String) -> Bool {
+        guard let inlet = cardInlet(id) ?? selectedInlet else { return false }
+        return engine.canPurge(inlet)
+    }
+
     public func purge(_ id: String) async {
         guard let inlet = cardInlet(id) ?? selectedInlet else { return }
         do {

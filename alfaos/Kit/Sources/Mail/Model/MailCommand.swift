@@ -15,6 +15,4 @@ public struct MailMessageRef: Equatable, Sendable {
 public enum MailCommand: Equatable, Sendable {
     case attachmentToProjectFolder(MailMessageRef, attachmentID: String, project: String?)
     case leadFromMail(MailMessageRef, MailLeadVorschlag)
-    case print(MailMessageRef)
-    case exportPDF(MailMessageRef)
 }

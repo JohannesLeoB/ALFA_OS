@@ -40,6 +40,7 @@ public enum MailToastKind: Equatable, Sendable {
     case recipientMissing
     case addressCopied
     case projectSaved
+    case pdfSaved
     case contactSaved(String)
     case contactExists(String)
     case contactRemoved
@@ -57,6 +58,7 @@ public enum MailToastKind: Equatable, Sendable {
         case .recipientMissing: "mail.toast.recipientMissing"
         case .addressCopied: "mail.toast.addressCopied"
         case .projectSaved: "mail.toast.projectSaved"
+        case .pdfSaved: "mail.toast.pdfSaved"
         case .contactSaved: "mail.toast.contactSaved"
         case .contactExists: "mail.toast.contactExists"
         case .contactRemoved: "mail.toast.contactRemoved"
