@@ -59,9 +59,6 @@ struct ProjectLane: View {
         let missing = model.missing, packs = model.defects, misfits = model.misfits
         let count = missing.count + packs.count + misfits.count + (model.overflow ? 1 : 0)
         SectionHead(key: "draws.section.defects", meta: count > 0 ? "\(count)" : "", metaTone: \.signal)
-        if count == 0 {
-            Note(text: word("draws.defects.none"))
-        }
         ForEach(missing, id: \.self) { key in
             ListRow(name: String(format: word("draws.defects.field"), word("draws.field.\(key)")), symbol: "exclamationmark.triangle",
                     meta: word("draws.defects.fill"), symbolTone: \.signal)
@@ -82,9 +79,6 @@ struct ProjectLane: View {
     @ViewBuilder
     private var object: some View {
         SectionHead(key: "draws.section.object", meta: model.objectName)
-        if model.parts.isEmpty {
-            Note(text: word("draws.object.empty"))
-        }
         ForEach(model.parts, id: \.id) { p in
             let off = model.hidden.contains(p.id), lit = model.accent == p.id
             ListRow(name: p.name, symbol: "cube", meta: "\(Int(p.w)) × \(Int(p.d)) × \(Int(p.h))",
@@ -420,8 +414,6 @@ struct EmptyCard: View {
         let shape = RoundedRectangle(cornerRadius: CGFloat(Design.Radius.contextMenu))
         VStack(alignment: .leading, spacing: CGFloat(Design.Spacing.step8)) {
             say("draws.empty.title").font(style.font(Design.TextSize.body, weight: Design.Weight.medium)).foregroundStyle(style.color(\.ink))
-            say("draws.empty.text").font(style.font(Design.TextSize.small)).foregroundStyle(style.color(\.inkTertiary))
-                .fixedSize(horizontal: false, vertical: true)
             HStack(spacing: CGFloat(Design.Spacing.step8)) {
                 Pill(key: "draws.object.load", accent: true) { model.open() }
                 Pill(key: "draws.claude.title") { model.assistant = true }
@@ -494,7 +486,6 @@ struct ViewTab: View {
                 }
             }
         }
-        if model.sheet == nil { Note(text: word("draws.view.none")) }
         if model.layout != .presentation, let cell = model.cell(model.selected) { selection(cell) }
         SectionHead(key: "draws.section.sheet", meta: model.template?.pack.format ?? "")
         if model.layout == .presentation {
@@ -610,7 +601,6 @@ struct ExportTab: View {
 
     var body: some View {
         let n = model.missing.count + model.defects.count
-        let pages = model.pdf && model.allPages ? model.pages.count : 1
         SectionHead(key: "draws.export.file")
         Labeled(key: "draws.export.format") {
             Segments(options: [(true, "draws.export.pdf"), (false, "draws.export.svg")], selection: $model.pdf)
@@ -618,15 +608,8 @@ struct ExportTab: View {
         Labeled(key: "draws.export.pages", enabled: model.pdf) {
             Segments(options: [(false, "draws.export.one"), (true, "draws.export.all")], selection: $model.allPages)
         }
-        Note(text: String(format: word(model.pdf ? "draws.export.notePDF" : "draws.export.noteSVG"), model.template?.pack.format ?? "",
-                          pages == 1 ? word("draws.pages.one") : String(format: word("draws.pages.many"), pages)))
         SectionHead(key: "draws.export.check", meta: n == 0 ? "" : (n == 1 ? word("draws.export.oneDefect") : String(format: word("draws.export.defects"), n)),
                     metaTone: \.signal)
-        if model.stuck {
-            Note(text: word("draws.export.overflow"), tone: \.signal)
-        } else {
-            Note(text: word(n == 0 ? "draws.export.clean" : "draws.export.goes"))
-        }
         if let failure = model.failure {
             SectionHead(key: "draws.export.error", metaTone: \.signal)
             Note(text: failure, tone: \.signal)

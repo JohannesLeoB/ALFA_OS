@@ -310,17 +310,6 @@
         }
       }
     },
-    "draws.defects.none": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Mängel. Das Blatt ist bereit für den Export."
-          }
-        }
-      }
-    },
     "draws.defects.field": {
       "extractionState": "manual",
       "localizations": {
@@ -361,17 +350,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Maßstab auto"
-          }
-        }
-      }
-    },
-    "draws.object.empty": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kein Objekt geladen. Unten laden oder Claude ein Foto, PDF oder Text geben."
           }
         }
       }
@@ -717,17 +695,6 @@
         }
       }
     },
-    "draws.empty.text": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lade ein Objekt oder gib Claude ein Foto, ein PDF oder einen Text."
-          }
-        }
-      }
-    },
     "draws.claude.title": {
       "extractionState": "manual",
       "localizations": {
@@ -746,39 +713,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Schließen"
-          }
-        }
-      }
-    },
-    "draws.claude.running": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Claude liest und baut Teile …"
-          }
-        }
-      }
-    },
-    "draws.claude.hintText": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Claude baut daraus Teile mit Maßen."
-          }
-        }
-      }
-    },
-    "draws.claude.hintFile": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Claude erkennt Teile und Maße."
           }
         }
       }
@@ -889,17 +823,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Export"
-          }
-        }
-      }
-    },
-    "draws.view.none": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ohne Objekt bleiben die Ansichten leer."
           }
         }
       }
@@ -1355,28 +1278,6 @@
         }
       }
     },
-    "draws.export.notePDF": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ · %@ · Vektor, Schrift eingebettet"
-          }
-        }
-      }
-    },
-    "draws.export.noteSVG": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ · %@ · eine Datei, aktuelle Seite"
-          }
-        }
-      }
-    },
     "draws.export.check": {
       "extractionState": "manual",
       "localizations": {
@@ -1406,39 +1307,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%d Mängel"
-          }
-        }
-      }
-    },
-    "draws.export.clean": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keine Mängel."
-          }
-        }
-      }
-    },
-    "draws.export.goes": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Export geht trotzdem."
-          }
-        }
-      }
-    },
-    "draws.export.overflow": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Überlauf stoppt den Export. Maßstab auf auto stellen."
           }
         }
       }

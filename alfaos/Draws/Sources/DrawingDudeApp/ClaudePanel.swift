@@ -49,9 +49,7 @@ struct ClaudePanel: View {
     }
 
     private var hint: String {
-        if let failure = model.failure { return failure }
-        if model.designing { return word("draws.claude.running") }
-        return word(model.source == .text ? "draws.claude.hintText" : "draws.claude.hintFile")
+        model.failure ?? ""
     }
 
     private func tile(_ kind: Source) -> some View {
