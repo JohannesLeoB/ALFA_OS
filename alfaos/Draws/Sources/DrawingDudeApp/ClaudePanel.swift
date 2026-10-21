@@ -18,6 +18,8 @@ struct ClaudePanel: View {
             .padding(.leading, CGFloat(Design.Spacing.step12))
             .padding(.trailing, CGFloat(Design.Spacing.step4))
             .frame(height: CGFloat(Design.Size.rowHeight))
+            Segments(options: Approach.allCases.map { ($0, "draws.approach.\($0.rawValue)") }, selection: $model.approach, fill: true)
+                .padding(.horizontal, CGFloat(Design.Spacing.step4))
             HStack(spacing: CGFloat(Design.Spacing.step4)) {
                 ForEach(Source.allCases, id: \.self) { tile($0) }
             }
@@ -36,6 +38,7 @@ struct ClaudePanel: View {
                     }
                 }
             }
+            if model.approach == .live { trail }
             HStack(spacing: CGFloat(Design.Spacing.step8)) {
                 Text(verbatim: hint)
                     .font(style.font(Design.TextSize.small))
@@ -43,8 +46,14 @@ struct ClaudePanel: View {
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Pill(key: model.designing ? "draws.claude.busy" : "draws.claude.run", accent: true) { model.design() }
-                    .opacity(model.designing ? Proto.busy : 1)
+                if model.approach == .live {
+                    Pill(key: model.running ? "draws.live.stop" : "draws.live.run", accent: true) {
+                        if model.running { model.stopLive() } else { model.startLive() }
+                    }
+                } else {
+                    Pill(key: model.designing ? "draws.claude.busy" : "draws.claude.run", accent: true) { model.design() }
+                        .opacity(model.designing ? Proto.busy : 1)
+                }
             }
             .padding(.leading, CGFloat(Design.Spacing.step12))
             .padding(.trailing, CGFloat(Design.Spacing.step4))
@@ -78,7 +87,41 @@ struct ClaudePanel: View {
     }
 
     private var hint: String {
-        model.failure ?? ""
+        if let failure = model.failure { return failure }
+        guard model.approach == .live, !model.running, let ending = model.ending else { return "" }
+        return word("draws.ending.\(ending.rawValue)")
+    }
+
+    @ViewBuilder
+    private var trail: some View {
+        if !model.moves.isEmpty {
+            ScrollView {
+                VStack(spacing: 0) {
+                    ForEach(model.moves) { move in
+                        ListRow(name: word("draws.tool.\(move.tool)"), symbol: move.phase.symbol,
+                                meta: word("draws.move.\(move.phase.rawValue)"),
+                                symbolTone: move.phase == .error ? \.signal : \.inkTertiary)
+                    }
+                }
+            }
+            .scrollIndicators(.hidden)
+            .defaultScrollAnchor(.bottom)
+            .frame(height: CGFloat(Design.Size.rowHeight * Proto.moveRows))
+        }
+        if !model.voice.isEmpty { Note(text: model.voice).lineLimit(Proto.voiceLines) }
+        HStack(spacing: CGFloat(Design.Spacing.step4)) {
+            TextField(text: $model.steer, prompt: say("draws.live.steer")) { EmptyView() }
+                .textFieldStyle(.plain)
+                .font(style.font())
+                .foregroundStyle(style.color(\.ink))
+                .onSubmit { model.send() }
+            SymbolButton(symbol: "arrow.up", tip: word("draws.live.send"), enabled: model.running) { model.send() }
+        }
+        .padding(.leading, CGFloat(Design.Spacing.step12))
+        .padding(.trailing, CGFloat(Design.Spacing.step4))
+        .frame(height: CGFloat(Design.Size.rowHeight))
+        .background(RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row)).fill(style.color(\.well)))
+        .padding(.horizontal, CGFloat(Design.Spacing.step4))
     }
 
     private func tile(_ kind: Source) -> some View {
@@ -120,6 +163,16 @@ struct ClaudePanel: View {
         .dropDestination(for: URL.self) { urls, _ in
             model.attach(urls)
             return true
+        }
+    }
+}
+
+extension Phase {
+    var symbol: String {
+        switch self {
+        case .run: return "ellipsis"
+        case .ok: return "checkmark"
+        case .error: return "exclamationmark.triangle"
         }
     }
 }

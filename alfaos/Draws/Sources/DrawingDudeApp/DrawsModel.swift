@@ -1,4 +1,5 @@
 import AppKit
+import Assist
 import CoreGraphics
 import DrawingKit
 import DrawsAI
@@ -18,6 +19,18 @@ enum Tab: String, CaseIterable { case view, style, export }
 enum Fill: String, CaseIterable { case tone, material }
 
 enum Source: String, CaseIterable { case photo, pdf, text }
+
+enum Approach: String, CaseIterable { case once, live }
+
+enum Phase: String { case run, ok, error }
+
+enum Ending: String { case done, stopped, failed }
+
+struct Move: Identifiable {
+    let id: Int
+    let tool: String
+    var phase: Phase
+}
 
 enum Tone {
     static func hex(_ v: RGB) -> String {
@@ -112,6 +125,12 @@ final class DrawsModel {
     var brief = ""
     var attachments: [Attachment] = []
     var designing = false
+    var approach = Approach.once
+    var running = false
+    var moves: [Move] = []
+    var voice = ""
+    var steer = ""
+    var ending: Ending?
     var assumptions: [String] = []
     var questions: [String] = []
     var variants: [Variant] = []
@@ -131,6 +150,7 @@ final class DrawsModel {
     private var ready = false
     private let designer: Designer
     @ObservationIgnored private var glide: Task<Void, Never>?
+    @ObservationIgnored private var chat: Session?
 
     init() {
         let places = LocalPlaces(root: LocalPlaces.support)
@@ -266,9 +286,14 @@ final class DrawsModel {
         return String(format: word("draws.cell.focus"), base, part.name)
     }
 
-    func preset() -> [Cell] {
-        guard let t = template?.pack, var room = field else { return [] }
+    var room: CGRect? {
+        guard let t = template?.pack, var room = field else { return nil }
         if let deck = t.deck { room.size.height -= deck.captionGap + 2 * deck.captionLeading }
+        return room
+    }
+
+    func preset() -> [Cell] {
+        guard let t = template?.pack, let room else { return [] }
         return Presets.cells(layout, field: room, gap: t.gap, steps: Set(shown.map(\.z)).count)
     }
 
@@ -552,7 +577,7 @@ final class DrawsModel {
     }
 
     func design() {
-        guard !designing else { return }
+        guard !designing, !running else { return }
         let request = Brief(text: brief, attachments: attachments, current: parts,
                             materials: ci.map { Array($0.pack.tints.keys) } ?? [],
                             catalog: material?.pack.materials.map(\.code) ?? [])
@@ -590,6 +615,132 @@ final class DrawsModel {
             } catch {
                 failure = "\(error)"
             }
+        }
+    }
+
+    func draft() -> Draft {
+        Draft(parts: parts, units: units, pose: pose, layout: layout.rawValue, cells: cells, azimuth: azimuth,
+              elevation: elevation, faces: faces, tone: fill == .tone, edge: edge, outline: outline,
+              shadow: shadowOn ? shadow : 0, accent: accent, accentColor: accentColor, dimensions: dimensions)
+    }
+
+    func bench() -> Bench? {
+        guard let ci, let template, let room else { return nil }
+        let gap = template.pack.gap
+        return Bench(ci: ci.pack, template: template.pack, material: material?.pack, fonts: fonts, project: project,
+                     variants: variants, blocks: blocks, kinds: kinds.map(\.rawValue), distance: Proto.perspectiveDistance,
+                     dials: Dials(azimuth: Proto.azimuth.low...Proto.azimuth.high,
+                                  elevation: Proto.elevation.low...Proto.elevation.high,
+                                  edge: Proto.edge.low...Proto.edge.high, outline: Proto.outline.low...Proto.outline.high,
+                                  shadow: Proto.shadow.low...Proto.shadow.high),
+                     dpi: Proto.previewDPI,
+                     preset: { name, list in
+                         Presets.cells(Kind(rawValue: name) ?? .plan, field: room, gap: gap, steps: Set(list.map(\.z)).count)
+                     })
+    }
+
+    func apply(_ next: Draft) {
+        let was = ready
+        ready = false
+        glide?.cancel()
+        parts = next.parts
+        units = next.units
+        pose = next.pose
+        active = nil
+        hidden = hidden.filter { id in next.parts.contains { $0.id == id } }
+        if let kind = Kind(rawValue: next.layout), kind != layout { layout = kind }
+        cells = next.cells
+        azimuth = next.azimuth
+        elevation = next.elevation
+        fill = next.tone ? .tone : .material
+        faces = next.faces
+        edge = next.edge
+        outline = next.outline
+        shadowOn = next.shadow > 0
+        if next.shadow > 0 { shadow = next.shadow }
+        accent = next.accent
+        accentColor = next.accentColor
+        dimensions = next.dimensions
+        ready = was
+        render()
+    }
+
+    func startLive() {
+        guard !running, !designing, let bench = bench() else { return }
+        let packs = Self.root.appendingPathComponent("Packs")
+        let master = try? StyleMaster.load(packs.appendingPathComponent("style/studio.json"))
+        let start = master.map { draft().seeded(by: $0, dials: bench.dials) } ?? draft()
+        let keys = ["motion", "materials"] + (dimensions ? ["dims"] : []) + (layout == .steps ? ["steps"] : [])
+        let toolbox = DrawsToolbox(draft: start, bench: bench) { [weak self] next in self?.apply(next) }
+        let session = Session(credentials: dock.claude.credentials, http: URLSession.shared)
+        let text = brief, attached = attachments
+        chat = session
+        running = true
+        failure = nil
+        moves = []
+        voice = ""
+        ending = nil
+        Task {
+            defer {
+                running = false
+                chat = nil
+            }
+            guard let skills = try? Skillset.load(packs.appendingPathComponent("skills/alfanomy"), keys: keys) else {
+                failure = word("draws.live.skills")
+                ending = .failed
+                return
+            }
+            let media = await Live.media(attached)
+            let events = await session.run(prompt: text, media: media, toolbox: toolbox, skills: skills, style: master,
+                                           budget: Budget(rounds: Proto.liveRounds, tokens: Proto.liveTokens))
+            for await event in events { handle(event) }
+        }
+    }
+
+    func stopLive() {
+        guard let chat else { return }
+        Task { await chat.stop() }
+    }
+
+    func send() {
+        let text = steer.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard running, !text.isEmpty, let chat else { return }
+        steer = ""
+        Task { await chat.say(text) }
+    }
+
+    private func handle(_ event: Event) {
+        switch event {
+        case .toolCall(let name, _):
+            moves.append(Move(id: moves.count, tool: name, phase: .run))
+        case .toolResult(let name, let ok, _):
+            if let index = moves.lastIndex(where: { $0.tool == name && $0.phase == .run }) {
+                moves[index].phase = ok ? .ok : .error
+            }
+        case .text(let text):
+            voice = text
+        case .finished(let done):
+            voice = done.summary
+            assumptions = done.assumptions
+            questions = done.questions
+            ending = .done
+        case .stopped:
+            ending = .stopped
+        case .failed(let fault):
+            failure = Self.reason(fault)
+            ending = .failed
+        case .thinking, .image:
+            break
+        }
+    }
+
+    private static func reason(_ fault: Fault) -> String {
+        switch fault {
+        case .noKey: return word("dock.reason.key")
+        case .noModel: return word("dock.reason.model")
+        case .emptyPrompt: return word("draws.live.empty")
+        case .http(let code, _): return String(format: word("draws.live.http"), code)
+        default: return word("draws.live.failed")
         }
     }
 }

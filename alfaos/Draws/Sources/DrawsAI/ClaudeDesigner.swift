@@ -1,4 +1,5 @@
 import AlfaServices
+import Assist
 import DrawingKit
 import Foundation
 
@@ -7,7 +8,6 @@ public struct ClaudeDesigner: Designer {
     static let schemaErrors = ["output_config", "json_schema", "structured output", "output_format"]
     static let projectKeys = ["lastName", "project", "street", "city", "customer", "date"]
     static let attachmentLimit = 30_000_000
-    static let retries = 2
 
     private let credentials: ClaudeCredentialsStoring
     private let http: ClaudeHTTPClient
@@ -47,7 +47,7 @@ public struct ClaudeDesigner: Designer {
                 return try Self.proposal(from: data, materials: brief.materials, catalog: brief.catalog)
             }
             let detail = String(decoding: data.prefix(400), as: UTF8.self)
-            guard Self.retryable(status), attempt < Self.retries else { throw Self.failure(status, detail, model: model) }
+            guard Self.retryable(status), attempt < Retry.limit else { throw Self.failure(status, detail, model: model) }
             let header = (response as? HTTPURLResponse)?.value(forHTTPHeaderField: "Retry-After")
             await pause(Self.delay(attempt: attempt, retryAfter: header))
             attempt += 1
@@ -60,14 +60,11 @@ public struct ClaudeDesigner: Designer {
     }
 
     static func retryable(_ status: Int) -> Bool {
-        status == 429 || (500...599).contains(status)
+        Retry.retryable(status)
     }
 
     static func delay(attempt: Int, retryAfter: String?) -> Double {
-        if let header = retryAfter, let seconds = Double(header.trimmingCharacters(in: .whitespaces)), seconds >= 0 {
-            return min(seconds, 20)
-        }
-        return attempt == 0 ? 2 : 4
+        Retry.delay(attempt: attempt, retryAfter: retryAfter)
     }
 
     func request(_ brief: Brief, key: String, model: String) throws -> URLRequest {

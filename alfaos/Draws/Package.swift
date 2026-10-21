@@ -8,6 +8,7 @@ let package = Package(
     defaultLocalization: "de",
     platforms: [.macOS("26.0")],
     products: [
+        .library(name: "Assist", targets: ["Assist"]),
         .library(name: "Pages", targets: ["Pages"]),
         .library(name: "DrawingKit", targets: ["DrawingKit"]),
         .library(name: "DrawsAI", targets: ["DrawsAI"]),
@@ -23,9 +24,10 @@ let package = Package(
         .package(url: "https://github.com/weichsel/ZIPFoundation.git", exact: "0.9.20")
     ],
     targets: [
+        .target(name: "Assist", dependencies: [.product(name: "AlfaServices", package: "alpha")], swiftSettings: strict),
         .target(name: "Pages", swiftSettings: strict),
         .target(name: "DrawingKit", dependencies: ["Pages"], swiftSettings: strict),
-        .target(name: "DrawsAI", dependencies: ["DrawingKit", "Intake", .product(name: "AlfaServices", package: "alpha")], resources: [.copy("Resources/designer.md")], swiftSettings: strict),
+        .target(name: "DrawsAI", dependencies: ["Assist", "Pages", "DrawingKit", "Intake", .product(name: "AlfaServices", package: "alpha")], resources: [.copy("Resources/designer.md")], swiftSettings: strict),
         .target(name: "DrawsDock", dependencies: ["DrawingKit", .product(name: "AlfaServices", package: "alpha")], swiftSettings: strict),
         .target(name: "Intake", dependencies: [.product(name: "ZIPFoundation", package: "ZIPFoundation")], swiftSettings: strict),
         .target(name: "Templates", dependencies: ["Pages", "Intake"], swiftSettings: strict),
@@ -34,10 +36,10 @@ let package = Package(
         .executableTarget(name: "drawingdude", dependencies: ["DrawingKit", "DrawsFonts"], swiftSettings: strict),
         .executableTarget(
             name: "DrawingDudeApp",
-            dependencies: ["DrawingKit", "DrawsAI", "DrawsDock", "DrawsFonts", .product(name: "ShellCore", package: "Kit")],
+            dependencies: ["Assist", "DrawingKit", "DrawsAI", "DrawsDock", "DrawsFonts", .product(name: "ShellCore", package: "Kit")],
             resources: [.process("Resources")],
             swiftSettings: strict
         ),
-        .testTarget(name: "DrawsTests", dependencies: ["Pages", "DrawingKit", "DrawsAI", "DrawsDock", "DrawsFonts", "Intake", "Templates"], swiftSettings: strict)
+        .testTarget(name: "DrawsTests", dependencies: ["Assist", "Pages", "DrawingKit", "DrawsAI", "DrawsDock", "DrawsFonts", "Intake", "Templates"], swiftSettings: strict)
     ]
 )

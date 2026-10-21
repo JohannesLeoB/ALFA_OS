@@ -1,0 +1,22 @@
+{
+  "name": "studio",
+  "weights": {
+    "detail": "as built: plinth, carcasses, worktop, wall units, fronts as own parts",
+    "frontThickness": 18,
+    "frontGap": 2,
+    "azimuth": 45,
+    "elevation": 35.264,
+    "camera": "iso",
+    "shade": {"top": 1.0, "side": 0.92, "front": 0.84},
+    "edge": 0.25,
+    "outline": 0.5,
+    "shadow": 12,
+    "accentColor": "#3f3e47",
+    "dims": "given",
+    "fill": "tone",
+    "tints": {"wand": "#f3eee9", "flaeche": "#eeeeee", "vorsatz": "#ffffcc"},
+    "fonts": {"title": "ABC Monument Grotesk Medium", "dimension": "ABC Monument Grotesk Mono Regular"},
+    "scales": [1, 2, 5, 10, 20, 25, 50, 100, 200],
+    "isoScales": [10, 20, 25, 50]
+  }
+}
