@@ -64,10 +64,12 @@ Außerhalb des Repos
 
 ## Bauen und prüfen
 
-- Kit-Test: `cd alfaos/Kit && swift test --scratch-path ../../dist/kit-test`
-- App: `cd alfaos && xcodegen && xcodebuild -project ALFA_OS.xcodeproj -scheme ALFA_OS -derivedDataPath ../dist/dd-app build -quiet`
-- Fundus: `cd fundus/alpha && swift build --scratch-path ../../dist/fundus-test`
-- Scratch-Ordner in `dist/` nach dem Lauf löschen.
+Jede Sitzung arbeitet in genau **einem** Ordner `dist/<sitzung>/` (die Lead: `dist/lead/`; ein Bau-Strang den Ordner, den sein Auftrag nennt) und löscht ihn am Ende selbst (Johannes 21.10., `.claude/memory/ein-ordner-je-sitzung.md`). Pfade immer vollständig angeben, nie unter `alfaos/`.
+
+- Kit-Test: `cd alfaos/Kit && swift test --scratch-path "$PWD/../../dist/<sitzung>/kit"`
+- App: `cd alfaos && xcodegen && xcodebuild -project ALFA_OS.xcodeproj -scheme ALFA_OS -derivedDataPath "$PWD/../dist/<sitzung>/app" build -quiet`
+- Fundus: `cd fundus/alpha && swift build --scratch-path "$PWD/../../dist/<sitzung>/fundus"`
+- Fertige App für Johannes: direkt in `dist/`, nur die zwei neuesten.
 
 ## Commit
 
@@ -79,4 +81,4 @@ Außerhalb des Repos
 
 - Neue Ordner oder Dateien außerhalb dieser Karte nur auf Johannes' Wort; die Karte im selben Commit nachziehen.
 - Entpackter Master nur in `dist/master-latest/`.
-- Build-Zwischenstände: ein gemeinsamer Pfad je Art; eigene Pfade nur bei Parallelarbeit, die Sitzung löscht sie am Ende.
+- `dist/` zeigt sichtbar nur: fertige Apps, `master-latest/` und je laufender Sitzung einen Ordner. Nichts versteckt, keine Berichte; Berichte gehen an Johannes und werden danach gelöscht.
