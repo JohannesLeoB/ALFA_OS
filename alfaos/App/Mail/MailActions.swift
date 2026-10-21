@@ -18,7 +18,6 @@ struct MailDo {
         case .star: Task { await model.setStarred(id, true) }
         case .unstar: Task { await model.setStarred(id, false) }
         case .spam: Task { await model.markSpam(id) }
-        case .toProject: model.mailToProjectFolder(id)
         case .print: model.print(id)
         case .pdf: model.exportPDF(id)
         case .openDraft: Task { _ = await model.editDraft(id) }

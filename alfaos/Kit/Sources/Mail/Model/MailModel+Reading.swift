@@ -145,11 +145,6 @@ extension MailModel {
         commandContinuation.yield(.leadFromMail(MailMessageRef(inlet: inlet, messageID: id), lead))
     }
 
-    public func mailToProjectFolder(_ id: String, project: String? = nil) {
-        guard let inlet = cardInlet(id) ?? selectedInlet, summary(id) != nil else { return }
-        commandContinuation.yield(.mailToProjectFolder(MailMessageRef(inlet: inlet, messageID: id), project: project))
-    }
-
     public func print(_ id: String) {
         guard let inlet = cardInlet(id) ?? selectedInlet, summary(id) != nil else { return }
         commandContinuation.yield(.print(MailMessageRef(inlet: inlet, messageID: id)))

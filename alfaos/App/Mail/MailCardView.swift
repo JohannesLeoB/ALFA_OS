@@ -168,6 +168,7 @@ struct CardFoot: View {
     let commands: MailCommands
     @Binding var formatOn: Bool
     @State private var moreAnchor = AnchorBox()
+    @State private var projectAnchor = AnchorBox()
     @State private var discarding: UUID?
 
     private var run: SlotRun { SlotRun(model: model, link: link, discarding: $discarding, formatOn: $formatOn) }
@@ -198,6 +199,9 @@ struct CardFoot: View {
                 .background(AnchorProbe(box: moreAnchor))
         } else if slot.action == .send, slot.cost > SheetValues.commandIconCost {
             TextButton(label: word("mail.action.send"), kind: .accent, disabled: slot.off, action: { run.perform(.send) }) { Glyph(.send) }
+        } else if let action = slot.action, action == .fromProject || action == .toProject, let glyph = action.glyph {
+            SymbolButton(help: run.help(action), glyph: glyph, disabled: slot.off, hover: .fill) { openProjects() }
+                .background(AnchorProbe(box: projectAnchor))
         } else if let action = slot.action, let glyph = action.glyph {
             SymbolButton(help: run.help(action), glyph: glyph, selected: slot.accent, disabled: slot.off, hover: .fill) {
                 run.perform(action)
@@ -212,6 +216,15 @@ struct CardFoot: View {
             .opacity(0)
             .allowsHitTesting(false)
             .accessibilityHidden(true)
+    }
+
+    private func openProjects() {
+        guard let rect = projectAnchor.screenRect() else { return }
+        switch model.frontRef {
+        case .draft(let id): MailProjectMenu.show(model, draft: id, anchor: rect)
+        case .message(let id): MailProjectMenu.save(model, message: id, anchor: rect)
+        case nil: break
+        }
     }
 
     private func openMore() {

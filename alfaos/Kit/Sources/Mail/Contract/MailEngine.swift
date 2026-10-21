@@ -93,6 +93,11 @@ public protocol MailEngine: AnyObject {
     func revise(_ id: OutboxItem.ID, _ draft: EmailDraft)
     func unreadCount(_ inlet: Inlet.ID) -> Int
     var events: AsyncStream<MailEngineEvent> { get }
+    var hasFiles: Bool { get }
+    func projectFolders() async throws(HubError) -> [ProjectFolderRecord]
+    func listFiles(_ inlet: Inlet.ID, folder: String) async throws(HubError) -> [FileEntry]
+    func readFile(_ inlet: Inlet.ID, fileID: String) async throws(HubError) -> Data
+    func putFile(_ inlet: Inlet.ID, folder: String, name: String, mimeType: String, data: Data) async throws(HubError) -> FileEntry
 }
 
 extension MailEngine {
@@ -104,4 +109,15 @@ extension MailEngine {
     }
     public func resend(_ id: OutboxItem.ID, _ draft: EmailDraft, draftID: String?) async -> SendOutcome? { nil }
     public func revise(_ id: OutboxItem.ID, _ draft: EmailDraft) {}
+    public var hasFiles: Bool { false }
+    public func projectFolders() async throws(HubError) -> [ProjectFolderRecord] { throw HubError.noInlet(.files) }
+    public func listFiles(_ inlet: Inlet.ID, folder: String) async throws(HubError) -> [FileEntry] {
+        throw HubError.capabilityMissing(inlet, .files)
+    }
+    public func readFile(_ inlet: Inlet.ID, fileID: String) async throws(HubError) -> Data {
+        throw HubError.capabilityMissing(inlet, .files)
+    }
+    public func putFile(_ inlet: Inlet.ID, folder: String, name: String, mimeType: String, data: Data) async throws(HubError) -> FileEntry {
+        throw HubError.capabilityMissing(inlet, .files)
+    }
 }

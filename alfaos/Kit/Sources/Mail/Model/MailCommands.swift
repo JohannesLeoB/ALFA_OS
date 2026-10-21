@@ -49,7 +49,7 @@ extension MailModel {
             left = [
                 MailSlot(id: "print", action: .print, priority: 1),
                 MailSlot(id: "pdf", action: .pdf, priority: 2),
-                MailSlot(id: "toProject", action: .toProject, priority: 3)
+                MailSlot(id: "toProject", action: .toProject, priority: 3, off: !engine.hasFiles)
             ]
             right = [MailSlot.more]
         } else if case .draft(let id) = frontRef, let card = draft(id) {
@@ -64,7 +64,7 @@ extension MailModel {
                 ]
                 left = [
                     MailSlot(id: "attachFile", action: .attachFile, priority: 1),
-                    MailSlot(id: "fromProject", action: .fromProject, priority: 4, off: true),
+                    MailSlot(id: "fromProject", action: .fromProject, priority: 4, off: !engine.hasFiles),
                     MailSlot(id: "format", action: .format, priority: 3, accent: formatOn)
                 ]
                 right = [

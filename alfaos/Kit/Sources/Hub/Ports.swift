@@ -3,7 +3,12 @@ import Foundation
 public protocol CapabilityPort: Sendable {}
 public protocol CalendarPort: CapabilityPort {}
 public protocol ContactsPort: CapabilityPort {}
-public protocol FilesPort: CapabilityPort {}
+public protocol FilesPort: CapabilityPort {
+    func projectFolders() async throws -> [FileFolder]
+    func files(in folderID: String) async throws -> [FileEntry]
+    func read(_ fileID: String) async throws -> Data
+    func put(name: String, mimeType: String, data: Data, into folderID: String) async throws -> FileEntry
+}
 public protocol TasksPort: CapabilityPort {}
 public protocol TimePort: CapabilityPort {}
 public protocol DocumentsPort: CapabilityPort {}

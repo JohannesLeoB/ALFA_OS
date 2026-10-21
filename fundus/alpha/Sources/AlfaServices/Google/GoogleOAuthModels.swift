@@ -24,12 +24,11 @@ public enum GoogleOAuthScope: String, CaseIterable, Codable, Sendable {
     case userinfoProfile        = "https://www.googleapis.com/auth/userinfo.profile"
 
     case driveFile              = "https://www.googleapis.com/auth/drive.file"
+    case drive                  = "https://www.googleapis.com/auth/drive"
 
     public static let standardScopes: [GoogleOAuthScope] = [
 
-        .driveReadonly, .driveMetadataReadonly,
-
-        .driveFile,
+        .drive,
         .calendarEventsReadonly, .calendarReadonly, .calendarEvents, .gmailReadonly,
 
         .gmailCompose, .gmailModify,

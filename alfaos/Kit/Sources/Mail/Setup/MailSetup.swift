@@ -58,7 +58,7 @@ public enum MailSetup {
         company.offers += offers(for: providers, owner: .person(person.id)).filter { !known.contains($0.id) }
         let configuration = HubConfiguration(
             person: person, company: company, providers: providers, keychain: keychain, cadence: cadence,
-            cost: cost, catalog: .withMail, database: database, clock: clock
+            cost: cost, catalog: PortCatalog.withMail.withFiles(), database: database, clock: clock
         )
         let core = try Hub.make(configuration)
         let setup = PresetSetup(base: core.setup, rules: core.rules, cadences: cadences)

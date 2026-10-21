@@ -39,6 +39,7 @@ public enum MailToastKind: Equatable, Sendable {
     case draftSaved
     case recipientMissing
     case addressCopied
+    case projectSaved
     case bulkRead(count: Int, read: Bool)
     case bulkArchived(count: Int)
     case bulkTrashed(count: Int)
@@ -52,6 +53,7 @@ public enum MailToastKind: Equatable, Sendable {
         case .draftSaved: "mail.toast.draftSaved"
         case .recipientMissing: "mail.toast.recipientMissing"
         case .addressCopied: "mail.toast.addressCopied"
+        case .projectSaved: "mail.toast.projectSaved"
         case .bulkRead(let count, let read): "mail.toast.bulkRead." + (read ? "read" : "unread") + (count == 1 ? ".one" : ".other")
         case .bulkArchived(let count): "mail.toast.bulkArchived" + (count == 1 ? ".one" : ".other")
         case .bulkTrashed(let count): "mail.toast.bulkTrashed" + (count == 1 ? ".one" : ".other")

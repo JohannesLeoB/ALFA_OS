@@ -151,7 +151,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         var result = InletHealth.online
         for entry in reports[inlet] ?? [] {
             let key = entry.event.rawValue + "|" + (entry.capability?.rawValue ?? "")
-            guard seen.insert(key).inserted, !entry.ok else { continue }
+            guard seen.insert(key).inserted, !entry.ok, entry.capability != .files else { continue }
             if entry.kind == .transient {
                 if result == .online { result = .limited }
             } else {
@@ -317,10 +317,9 @@ final class HubCore: HubAccess, HubSetup, HubRules {
                 for feed in feeds[kind] ?? [] { feed.disturb(failure) }
             }
             logFailure(inletID, .sync, capability: capability, failure)
-            switch classification.kind {
-            case .transient:
+            if capability == .files || classification.kind == .transient {
                 update(inletID, persist: false) { if $0.state == .working { $0.state = previous } }
-            case .signIn, .rejected:
+            } else {
                 update(inletID, persist: true) { $0.state = .failed(failure) }
             }
             emit(.syncFailed(capability, inletID, failure))

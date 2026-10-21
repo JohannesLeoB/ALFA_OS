@@ -239,6 +239,37 @@ public final class MailCore: MailEngine {
         await submit(OutboxItem(inlet: inlet, draft: draft, draftID: draftID))
     }
 
+    public var hasFiles: Bool { !hub.inlets(for: .files).isEmpty }
+
+    public func projectFolders() async throws(HubError) -> [ProjectFolderRecord] {
+        guard hasFiles else { throw HubError.noInlet(.files) }
+        let stock = hub.stock(.files, as: ProjectFolderRecord.self)
+        if stock.items.isEmpty { await stock.refresh() }
+        if stock.items.isEmpty, case .disturbed(let hint) = stock.state { throw HubError.provider(hint) }
+        return stock.items
+    }
+
+    public func listFiles(_ inlet: Inlet.ID, folder: String) async throws(HubError) -> [FileEntry] {
+        try await storage(inlet) { try await $0.files(in: folder) }
+    }
+
+    public func readFile(_ inlet: Inlet.ID, fileID: String) async throws(HubError) -> Data {
+        try await storage(inlet) { try await $0.read(fileID) }
+    }
+
+    public func putFile(_ inlet: Inlet.ID, folder: String, name: String, mimeType: String, data: Data) async throws(HubError) -> FileEntry {
+        try await storage(inlet) { try await $0.put(name: name, mimeType: mimeType, data: data, into: folder) }
+    }
+
+    private func storage<T>(_ inlet: Inlet.ID, _ work: (any FilesPort) async throws -> T) async throws(HubError) -> T {
+        let port = try hub.port((any FilesPort).self, for: inlet)
+        do {
+            return try await work(port)
+        } catch {
+            throw MailFailure.hubError(error, inlet: inlet, hub: hub)
+        }
+    }
+
     private func perform<T>(_ inlet: Inlet.ID, _ work: (any MailTransport) async throws -> T) async throws(HubError) -> T {
         let transport = try transport(inlet)
         do {

@@ -1065,6 +1065,29 @@ final class GoogleProviderTests {
             recordEqual(hint.detail, "HTTP 403")
         }
     }
+    func runTheDriveAdapterNeedsTheFilesCapabilityAndPutsIntoTheFolder() async throws {
+        let provider = GoogleProvider(config: GoogleClientConfig(clientID: "id", clientSecret: ""), openBrowser: { _ in false }, session: GoogleStubNet.session(), projectsRoot: "root")
+        func inlet(_ capabilities: Set<Capability>) -> Inlet { Inlet(id: "g", provider: "google", capabilities: capabilities, owner: .company, title: "g") }
+        XCTAssertThrowsError(try provider.adapter((any FilesPort).self, for: inlet([.mail]), Self.grant, renewal: .ignoring)) {
+            XCTAssertEqual($0 as? HubError, .capabilityMissing("g", .files))
+        }
+        let list = #"{"files":[{"id":"f1","name":"H","mimeType":"application/vnd.google-apps.folder"},{"id":"d","name":"n","mimeType":"application/vnd.google-apps.document"}]}"#
+        GoogleStubNet.install { $0.method == "POST" ? (200, Data(#"{"id":"n","name":"a.pdf","mimeType":"application/pdf"}"#.utf8)) : (200, Data(list.utf8)) }
+        let files = try provider.adapter((any FilesPort).self, for: inlet([.files]), Self.grant, renewal: .ignoring)
+        let folders = try await files.projectFolders().map(\.id), entries = try await files.files(in: "f1").map(\.id)
+        XCTAssertEqual(folders + entries, ["f1", "f1"])
+        _ = try await files.put(name: "a.pdf", mimeType: "application/pdf", data: Data([7]), into: "f1")
+        XCTAssertTrue(String(decoding: try XCTUnwrap(GoogleStubNet.calls.last).body, as: UTF8.self).contains("\"parents\":[\"f1\"]"))
+    }
+    func runAFailingFilesSyncLeavesTheInletAndMailWorking() async throws {
+        let offer = Offer(id: "fake.files", provider: "fake", title: "F", capabilities: [.mail, .files], owner: .person("p1"), way: .signIn)
+        let rig = try ScriptedRig.make(capabilities: [.mail, .files], offer: offer, catalog: PortCatalog.withMail.withFiles())
+        let inlet = try await rig.connect("a@x", offer: offer)
+        await rig.cadence.trigger(inlet.id, .files)
+        XCTAssertTrue(rig.hub.setup.inlets[0].state.isConnected)
+        XCTAssertFalse(rig.hub.setup.report(for: inlet.id).filter { $0.capability == .files }.allSatisfy(\.ok))
+        _ = try rig.hub.access.port(MailTransport.self, for: inlet.id)
+    }
     func runClientConfigLoadsFromFile() throws {
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
@@ -1736,6 +1759,10 @@ final class ModelFakeEngine: MailEngine {
     var pageGates: [String: ScriptedGate] = [:]
     var folderGates: [String: ScriptedGate] = [:]
     var pageCalls: [String] = []
+    var projects: [ProjectFolderRecord] = []
+    var filesError: HubError?
+    var bodyError: HubError?
+    var puts: [(folder: String, data: Data)] = []
     let events: AsyncStream<MailEngineEvent>
     let feed: AsyncStream<MailEngineEvent>.Continuation
     init() {
@@ -1763,6 +1790,7 @@ final class ModelFakeEngine: MailEngine {
     }
     func searchLocal(_ inlet: Inlet.ID, query: String) -> [MailMessageSummary] { mirror.values.flatMap { $0 }.filter { $0.subject.lowercased().contains(query.lowercased()) } }
     func body(_ inlet: Inlet.ID, messageID: String) async throws(HubError) -> MailMessageBody {
+        if let bodyError { throw bodyError }
         return bodies[messageID] ?? MailMessageBody(text: "text of " + messageID)
     }
     func setFlags(_ inlet: Inlet.ID, messageID: String, add: Set<MailFlag>, remove: Set<MailFlag>)
@@ -1815,6 +1843,15 @@ final class ModelFakeEngine: MailEngine {
         return sendOutcome
     }
     func retryOutbox() async {}
+    func projectFolders() async throws(HubError) -> [ProjectFolderRecord] {
+        if let filesError { throw filesError }
+        return projects
+    }
+    func readFile(_ inlet: Inlet.ID, fileID: String) async throws(HubError) -> Data { Data(fileID.utf8) }
+    func putFile(_ inlet: Inlet.ID, folder: String, name: String, mimeType: String, data: Data) async throws(HubError) -> FileEntry {
+        puts.append((folder, data))
+        return FileEntry(id: "n", name: name, mimeType: mimeType)
+    }
     func unreadCount(_ inlet: Inlet.ID) -> Int { unread[inlet] ?? 0 }
     func release() {
         gate?.resume()
@@ -3034,7 +3071,28 @@ final class ModelActionTests {
         recordTrue(model.drafts.isEmpty)
         recordEqual(model.actionFailure(for: "m1"), Hint(text: "mail.hint.failed"))
     }
+    private func stepAProjectFileIsAttachedAndAMailIsPutIntoItsProjectFolder() async throws {
+        let (model, engine) = await make()
+        engine.projects = [ProjectFolderRecord(id: "a/f1", inlet: "a", folderID: "f1", name: "Hansen")]
+        await model.open("m1")
+        let id = newDraft(model)
+        let listed = await model.projectFolders(for: id)
+        let project = try XCTUnwrap(listed.first)
+        await model.attachProjectFile(id, inlet: "a", file: FileEntry(id: "x", name: "plan.pdf", mimeType: "application/pdf"))
+        XCTAssertEqual(model.draft(id)?.draft.attachments.map(\.filename), ["plan.pdf"])
+        await model.mailToProjectFolder("m1", project: project) { _ in Data([7]) }
+        XCTAssertEqual(engine.puts.map(\.folder), ["f1"])
+        XCTAssertEqual(engine.puts.first?.data, Data([7]))
+        engine.bodyError = .provider(Hint(text: "hint.b"))
+        await model.mailToProjectFolder("m1", project: project) { _ in Data([8]) }
+        XCTAssertEqual(engine.puts.count, 1)
+        XCTAssertEqual(model.actionFailure(for: "m1"), Hint(text: "hint.b"))
+        engine.filesError = .capabilityMissing("a", .files)
+        _ = await model.projectFolders(for: id)
+        XCTAssertEqual(model.actionFailure(for: id.uuidString)?.text, MailTextKey.capabilityMissing.rawValue)
+    }
     func runTheModelActions() async throws {
+        try await stepAProjectFileIsAttachedAndAMailIsPutIntoItsProjectFolder()
         await stepArchiveRemovesTheRowClosesTheCardAndCountsAgain()
         await stepArchiveInTheAllFolderKeepsTheRowListed()
         await stepTrashSpamAndMoveEachAskTheEngineAndDropTheRow()
@@ -5381,6 +5439,8 @@ final class WholeAppTests: XCTestCase {
         try await step("GoogleProviderTests.runGoogleProviderDeliversMailTransportAfterGreenProbe") { try await GoogleProviderTests().runGoogleProviderDeliversMailTransportAfterGreenProbe() }
         try await step("GoogleProviderTests.runRedProbeFailsAndLeavesNothingInTheKeychain") { try await GoogleProviderTests().runRedProbeFailsAndLeavesNothingInTheKeychain() }
         try await step("GoogleProviderTests.runRedLabelsProbeNamesTheStatus") { try await GoogleProviderTests().runRedLabelsProbeNamesTheStatus() }
+        try await step("GoogleProviderTests.runTheDriveAdapterNeedsTheFilesCapabilityAndPutsIntoTheFolder") { try await GoogleProviderTests().runTheDriveAdapterNeedsTheFilesCapabilityAndPutsIntoTheFolder() }
+        try await step("GoogleProviderTests.runAFailingFilesSyncLeavesTheInletAndMailWorking") { try await GoogleProviderTests().runAFailingFilesSyncLeavesTheInletAndMailWorking() }
         try await step("GoogleProviderTests.runClientConfigLoadsFromFile") { try GoogleProviderTests().runClientConfigLoadsFromFile() }
         try await step("GoogleRenewalTests.runGreenRenewalWritesTheNewGrantIntoTheSlotsOfThisInlet") { try await GoogleRenewalTests().runGreenRenewalWritesTheNewGrantIntoTheSlotsOfThisInlet() }
         try await step("GoogleRenewalTests.runRedRenewalMarksTheInletExpiredAndPortThrows") { try await GoogleRenewalTests().runRedRenewalMarksTheInletExpiredAndPortThrows() }

@@ -282,8 +282,10 @@ struct ServiceCardBody: View {
         case .syncNow(let capability):
             guard let inlet = reading.inlets.first(where: { $0.capabilities.contains(capability) }) else { return }
             Task {
+                let before = hub.rules.lastSync(inlet.id, capability)
                 await hub.rules.syncNow(inlet.id, capability)
                 revision += 1
+                if hub.rules.lastSync(inlet.id, capability) != before { board.notify("settings.toast.driveSynced") }
             }
         case .clearCache:
             if (try? ProjectCache.clear()) != nil { board.notify("settings.toast.cacheCleared") }

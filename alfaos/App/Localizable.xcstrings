@@ -2197,6 +2197,16 @@
         }
       }
     },
+    "mail.menu.drive" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drive"
+          }
+        }
+      }
+    },
     "mail.overview.back" : {
       "comment" : "roh",
       "localizations" : {
@@ -2996,6 +3006,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Im Papierkorb"
+          }
+        }
+      }
+    },
+    "mail.toast.projectSaved" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als PDF im Projektordner gesichert"
           }
         }
       }
@@ -4916,6 +4936,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "In die Zwischenablage kopiert"
+          }
+        }
+      }
+    },
+    "settings.toast.driveSynced" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drive-Ordner der Projekte · abgeglichen"
           }
         }
       }

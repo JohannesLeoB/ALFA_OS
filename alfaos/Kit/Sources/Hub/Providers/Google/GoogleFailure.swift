@@ -6,6 +6,13 @@ enum GoogleFailure {
         switch error {
         case GoogleGmailError.api(let fault): return gmail(fault)
         case GoogleGmailError.httpError(let status): return gmail(GoogleAPIFault(status: status))
+        case GoogleDriveError.httpError(403):
+            return Classification(kind: .signIn, original: Original(provider: "drive", status: 403))
+        case GoogleDriveError.httpError(let status): return api("drive", GoogleAPIFault(status: status))
+        case GoogleDriveError.notConnected:
+            return Classification(kind: .transient, original: Original(provider: "drive", code: "notConnected"))
+        case GoogleProviderError.projectRootMissing:
+            return Classification(kind: .rejected, original: Original(provider: "drive", code: "projectRootMissing"))
         case GoogleOAuthError.api(let fault): return oauth(fault)
         case GoogleOAuthError.httpError(let status): return oauth(GoogleAPIFault(status: status))
         case GoogleOAuthError.refreshUnavailable, GoogleProviderError.refreshUnavailable:
@@ -16,7 +23,9 @@ enum GoogleFailure {
         }
     }
 
-    static func gmail(_ fault: GoogleAPIFault) -> Classification {
+    static func gmail(_ fault: GoogleAPIFault) -> Classification { api("gmail", fault) }
+
+    static func api(_ provider: String, _ fault: GoogleAPIFault) -> Classification {
         let kind: FailureKind
         if fault.status == 401 {
             kind = .signIn
@@ -25,7 +34,7 @@ enum GoogleFailure {
         } else {
             kind = .rejected
         }
-        return Classification(kind: kind, original: original("gmail", fault))
+        return Classification(kind: kind, original: original(provider, fault))
     }
 
     static func oauth(_ fault: GoogleAPIFault) -> Classification {

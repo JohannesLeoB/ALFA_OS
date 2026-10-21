@@ -52,4 +52,5 @@ public enum GoogleProviderError: Error, Equatable, Sendable {
     case http(Int)
     case network(String)
     case browserFailed
+    case projectRootMissing
 }
