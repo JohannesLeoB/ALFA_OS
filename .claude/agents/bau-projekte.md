@@ -14,13 +14,13 @@ Bestand, nur lesen. Labor = ~/Developer/mykilos-labor/Sources, Fundus = fundus/a
 - Labor MykilosApp/Data/AppState.swift: erzeugeAusFragebogen (ab 1444), reserviereKollisionsfreieNummer (ab 2255), belebeLeadZuVollprojekt (ab 2476); Labor MykilosApp/Data/RegistryStore.swift, LocalDriveRootResolver.swift
 - Fundus AlfaKit/Domain: Project.swift, Projektnummer.swift, ProjectLifecycle.swift, Customer.swift; Fundus AlfaServices: Airtable/, ClickUp/, Google/
 Nie übernehmen: echte Kunden-, Personen- oder Projektnamen (z. B. aus InitialProjectSeed.swift), feste Basis-, Tabellen- oder Ordner-IDs im Code.
-Kein ‚myk‘ in Code, Namen, Tokens oder Metadaten (L8); was aus dem Bestand übernommen wird, bekommt einen englischen Namen ohne Firmennamen.
+Kein ‚myk‘ in Code, Namen, Tokens oder Metadaten (§6); was aus dem Bestand übernommen wird, bekommt einen englischen Namen ohne Firmennamen.
 Vorgehen:
 1. Aufgabe vom Lead lesen. Design-Master-Stelle und Bestandsstelle vollständig lesen.
-2. Fehlt ein Wert, Name oder Verhalten im Master: Lücke nach L3 an den Lead, nicht bauen.
+2. Fehlt ein Wert, Name oder Verhalten im Master: Lücke nach §7 an den Lead, nicht bauen.
 3. Bauen nur mit Werten aus dem Theme, Texten aus Localizable.xcstrings, Logik im Kit.
-4. Strikt bauen nur in dist/: swift build --package-path alfaos/Kit --scratch-path dist/kit; cd alfaos && xcodegen generate; xcodebuild -project alfaos/ALFA_OS.xcodeproj -scheme ALFA_OS -derivedDataPath dist/dd build.
-5. Fehlerfrei → committen und pushen (L4). Dann dem Lead melden.
+4. Strikt bauen nur im Arbeitsordner `dist/<sitzung>/` laut Auftrag, Pfad absolut (AGENTS.md §11): swift build --package-path alfaos/Kit --scratch-path <Arbeitsordner>/kit; cd alfaos && xcodegen generate; xcodebuild -project alfaos/ALFA_OS.xcodeproj -scheme ALFA_OS -derivedDataPath <Arbeitsordner>/dd build.
+5. Fehlerfrei → Bericht an die Lead; committen und pushen tut die Lead (AGENTS.md §3).
 Tests: nur in der einen Testdatei, die der Lead nennt; jede Prüfung vorher per Mutation rot.
 Meldung an den Lead: Commit-Hash; geänderte Dateien; je umgesetzter Design-Stelle Master-Datei:Zeile und Code-Datei:Zeile; offene Lücken mit Suchbeleg. Nie „fertig“ oder „grün“.
 Grenze: nur die genannten Pfade. Braucht die Aufgabe mehr, meldest du es dem Lead und baust nicht.
