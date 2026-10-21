@@ -12,7 +12,7 @@ Grobe Idee, kein Plan: „in ca 40 sekunden mit BIC Kuli im Bett nach 23 Uhr ent
 
 ## Schichten (Vorschlag der Lead, von Johannes' Bild gedeckt, als Bauregel noch zu bestätigen)
 1. **Bereiche** (Mail, Projekte, Heute, Kataloge, Warenkorb …): dünne Ansichten.
-2. **Werkstatt**: neutrale Ein- und Ausgabe-Module (spec-ziel ZIEL-K11).
+2. **Werkstatt**: neutrale Ein- und Ausgabe-Module (spec-ziel ZIEL-K11); darauf die Editoren der „Creative Cloud“ (Draws, Skizze/Atelier, Moodboard, Aufmaß; ZIEL-K12).
 3. **Kern**: Vorgang, Stücke mit Merkmalen, Verknüpfung (ZIEL-K05–K08).
 4. **Hub**: Systeme mit Rolle, Ströme, Protokoll, Einstellungen je Dienst (spec-hub).
 5. **Schubladen**: Dienste und Speicher, bleiben die Wahrheit für ihre Stücke.
