@@ -1,5 +1,6 @@
 import AppKit
 import CoreText
+import DrawsFonts
 import ShellCore
 import SwiftUI
 
@@ -29,15 +30,11 @@ struct Style {
 }
 
 enum Face {
-    private static let ready: Bool = {
-        guard let url = Bundle.module.url(forResource: "Geist-VariableFont_wght", withExtension: "ttf") else { return false }
-        return CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
-    }()
 
     private static let weightAxis = 0x7767_6874
 
     static func font(size: Double, weight: Int) -> NSFont {
-        _ = ready
+        DrawsFonts.register()
         if let family = Design.Family.text.first {
             let variation = NSFontDescriptor.AttributeName(rawValue: kCTFontVariationAttribute as String)
             let descriptor = NSFontDescriptor(fontAttributes: [.family: family, variation: [weightAxis: weight]])

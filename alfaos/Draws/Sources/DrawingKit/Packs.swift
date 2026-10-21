@@ -2,8 +2,6 @@ import Foundation
 
 public struct CIPack: Sendable {
     public var placeholder: Bool
-    public var font: String
-    public var pdfFont: String
     public var ink: String
     public var muted: String
     public var signal: String
@@ -128,7 +126,6 @@ public enum Packs {
         let iso = r.object("iso")
         let pack = CIPack(
             placeholder: r.flag("platzhalter"),
-            font: r.text("font"), pdfFont: r.text("pdfFont"),
             ink: r.color("ink"), muted: r.color("muted"), signal: r.color("signal"), paper: r.color("paper"),
             lineFrame: r.number("lineFrame"), lineBlock: r.number("lineBlock"), lineEdge: r.number("lineEdge"),
             lineDimension: r.number("lineDimension"), lineExtension: r.number("lineExtension"), lineTick: r.number("lineTick"),

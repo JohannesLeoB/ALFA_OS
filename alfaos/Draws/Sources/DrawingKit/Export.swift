@@ -5,7 +5,7 @@ import Foundation
 public enum SheetExporter {
     public static func svg(_ s: Sheet) -> Data {
         var out = ["<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 \(f(s.width)) \(f(s.height))\" "
-                   + "width=\"\(f(s.width))mm\" height=\"\(f(s.height))mm\" font-family=\"\(esc(s.font))\">",
+                   + "width=\"\(f(s.width))mm\" height=\"\(f(s.height))mm\" font-family=\"\(esc(s.fonts.sans))\">",
                    "<rect width=\"\(f(s.width))\" height=\"\(f(s.height))\" fill=\"\(s.paper)\"/>"]
         for item in s.items {
             switch item {
@@ -69,7 +69,7 @@ public enum SheetExporter {
                 if let fill { ctx.addPath(path); ctx.setFillColor(color(fill)); ctx.fillPath() }
                 if let stroke { ctx.addPath(path); ctx.setStrokeColor(color(stroke)); ctx.setLineWidth(width); ctx.strokePath() }
             case let .text(text, at, size, anchor, weight, c, rotation):
-                let font = CTFontCreateWithName(s.pdfFont as CFString, size, nil)
+                let font = CTFontCreateWithName(s.fonts.sans as CFString, size, nil)
                 let face = weight >= 500 ? (CTFontCreateCopyWithSymbolicTraits(font, size, nil, .traitBold, .traitBold) ?? font) : font
                 let attributed = NSAttributedString(string: text, attributes: [
                     NSAttributedString.Key(kCTFontAttributeName as String): face,

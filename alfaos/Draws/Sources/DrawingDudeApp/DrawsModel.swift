@@ -1,6 +1,7 @@
 import AppKit
 import DrawingKit
 import DrawsAI
+import DrawsFonts
 import Foundation
 import Observation
 import UniformTypeIdentifiers
@@ -138,7 +139,8 @@ final class DrawsModel {
         do {
             pages = try DrawingEngine.render(Job(parts: parts, ci: ci.pack, template: template.pack, project: project,
                                                  products: [layout.product], style: style, dimensions: dimensions,
-                                                 material: material?.pack, variants: variants, dims: dimensions ? .given : .none))
+                                                 material: material?.pack, variants: variants, dims: dimensions ? .given : .none,
+                                                 fonts: DrawsFonts.fallback))
             page = min(page, max(0, pages.count - 1))
             failure = nil
         } catch {

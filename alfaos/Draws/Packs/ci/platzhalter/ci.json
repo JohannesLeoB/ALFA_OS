@@ -1,8 +1,6 @@
 {
   "platzhalter": true,
-  "quelle": "Werte aus ref/python/render.py (CI-Dict, Linien und Schriften der SVG-Ausgabe). Kein Studio-CI. iso.top/side/front aus render.py (shade). iso.outline, iso.shadow, iso.spread und accent haben keine Vorlage: Testwerte nach dem Anatomy-Stil, accent = signal.",
-  "font": "Helvetica, Arial, sans-serif",
-  "pdfFont": "Helvetica",
+  "quelle": "Werte aus ref/python/render.py (CI-Dict, Linien und Schriften der SVG-Ausgabe). Kein Studio-CI. iso.top/side/front aus render.py (shade). iso.outline, iso.shadow, iso.spread und accent haben keine Vorlage: Testwerte nach dem Anatomy-Stil, accent = signal. Schriften kommen nicht aus diesem Pack: Upload aus den Einstellungen, sonst ALFA-Standardschrift (Johannes 21.10.).",
   "ink": "#171717",
   "muted": "#6b6b6b",
   "signal": "#b3412e",

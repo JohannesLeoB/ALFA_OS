@@ -1,4 +1,5 @@
 import DrawingKit
+import DrawsFonts
 import Foundation
 
 func fail(_ text: String) -> Never {
@@ -8,7 +9,7 @@ func fail(_ text: String) -> Never {
 
 let args = Array(CommandLine.arguments.dropFirst())
 guard args.first == "render", args.count >= 2 else {
-    fail("usage: drawingdude render object.json --ci <folder> --template <folder> --out <folder> [--material <folder>] [--dims none|given] [--products presentation,plan,iso,perspective,steps,customer] [--distance <mm>]")
+    fail("usage: drawingdude render object.json --ci <folder> --template <folder> --out <folder> [--material <folder>] [--dims none|given] [--fonts <folder>] [--products presentation,plan,iso,perspective,steps,customer] [--distance <mm>]")
 }
 func option(_ name: String) -> String {
     guard let i = args.firstIndex(of: name), i + 1 < args.count else { fail("missing \(name)") }
@@ -37,13 +38,16 @@ do {
     let object = try DrawingObject.load(objectURL)
     let ci = try Packs.loadCI(URL(fileURLWithPath: option("--ci"), isDirectory: true))
     let template = try Packs.loadTemplate(URL(fileURLWithPath: option("--template"), isDirectory: true))
+    let upload = optional("--fonts").map { URL(fileURLWithPath: $0, isDirectory: true) }
+    if let upload, SheetFonts.upload(upload) == nil { fail("no fonts in \(upload.path)") }
     let material = try optional("--material").map { try Packs.loadMaterial(URL(fileURLWithPath: $0, isDirectory: true)) }
     let defects = ci.defects + template.defects + (material?.defects ?? [])
     if !defects.isEmpty { fail("pack defects: " + defects.joined(separator: ", ")) }
     try FileManager.default.createDirectory(at: out, withIntermediateDirectories: true)
     let job = Job(parts: object.parts, ci: ci.pack, template: template.pack,
                   project: object.project ?? [:], products: products,
-                  material: material?.pack, variants: object.variants ?? [], dims: dims)
+                  material: material?.pack, variants: object.variants ?? [], dims: dims,
+                  fonts: DrawsFonts.resolve(upload: upload))
     let sheets = try DrawingEngine.render(job)
     for (index, sheet) in sheets.enumerated() {
         let number = String(format: "%02d", index + 1)

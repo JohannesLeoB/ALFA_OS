@@ -19,8 +19,7 @@ public struct Sheet: Sendable {
     public var width: Double
     public var height: Double
     public var scale: Double
-    public var font: String
-    public var pdfFont: String
+    public var fonts: SheetFonts
     public var paper: String
     public var items: [SheetItem]
     public var dimensions: [PlacedDimension]
@@ -73,13 +72,14 @@ public struct Job: Sendable {
     public var material: MaterialPack?
     public var variants: [Variant]
     public var dims: DimMode
+    public var fonts: SheetFonts
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
                 products: [Product], style: IsoStyle? = nil, dimensions: Bool = true,
-                material: MaterialPack? = nil, variants: [Variant] = [], dims: DimMode = .none) {
+                material: MaterialPack? = nil, variants: [Variant] = [], dims: DimMode = .none, fonts: SheetFonts) {
         self.parts = parts; self.ci = ci; self.template = template; self.project = project
         self.products = products; self.style = style; self.dimensions = dimensions
-        self.material = material; self.variants = variants; self.dims = dims
+        self.material = material; self.variants = variants; self.dims = dims; self.fonts = fonts
     }
 }
 
@@ -92,14 +92,15 @@ public struct Request: Sendable {
     public var iso: ViewSpec
     public var dimensions: Bool
     public var style: IsoStyle?
+    public var fonts: SheetFonts
     var highlight: Set<String> = []
     var fit: [Part]?
     var product = ""
     var step = (0, 0)
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
-                layout: SheetLayout, iso: ViewSpec = ViewSpec(kind: .iso), dimensions: Bool = true, style: IsoStyle? = nil) {
+                layout: SheetLayout, iso: ViewSpec = ViewSpec(kind: .iso), dimensions: Bool = true, style: IsoStyle? = nil, fonts: SheetFonts) {
         self.parts = parts; self.ci = ci; self.template = template; self.project = project
-        self.layout = layout; self.iso = iso; self.dimensions = dimensions; self.style = style
+        self.layout = layout; self.iso = iso; self.dimensions = dimensions; self.style = style; self.fonts = fonts
     }
 }

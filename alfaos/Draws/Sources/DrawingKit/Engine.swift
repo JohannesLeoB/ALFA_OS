@@ -20,7 +20,7 @@ public enum DrawingEngine {
         var out: [Sheet] = []
         for product in job.products {
             var base = Request(parts: job.parts, ci: job.ci, template: job.template, project: job.project,
-                               layout: .iso, dimensions: job.dimensions, style: job.style)
+                               layout: .iso, dimensions: job.dimensions, style: job.style, fonts: job.fonts)
             base.product = product.key
             switch product {
             case .plan:
@@ -111,7 +111,7 @@ struct Composer {
         self.r = r
         let t = r.template, f = t.frame
         field = CGRect(x: f.left, y: f.top, width: t.width - f.left - f.right, height: t.height - f.top - f.bottom)
-        sheet = Sheet(width: t.width, height: t.height, scale: 0, font: r.ci.font, pdfFont: r.ci.pdfFont, paper: r.ci.paper,
+        sheet = Sheet(width: t.width, height: t.height, scale: 0, fonts: r.fonts, paper: r.ci.paper,
                       items: [], dimensions: [], defects: [])
         sheet.items.append(.rect(field, fill: nil, stroke: r.ci.ink, width: r.ci.lineFrame))
     }
