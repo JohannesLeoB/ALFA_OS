@@ -1,4 +1,5 @@
 import AppKit
+import CoreGraphics
 import DrawingKit
 import DrawsAI
 import DrawsFonts
@@ -55,8 +56,9 @@ final class DrawsModel {
             let was = ready
             ready = false
             fill = layout == .customer || layout == .presentation ? .material : .tone
-            fixed = nil
             page = 0
+            selected = nil
+            cells = preset()
             ready = was
             render()
         }
@@ -72,9 +74,21 @@ final class DrawsModel {
     var shadow = 0.0 { didSet { render() } }
     var accent: String? { didSet { render() } }
     var accentColor: String? { didSet { render() } }
-    var fixed: Double? { didSet { render() } }
-    var focus: String? { didSet { render() } }
-    var hidden: Set<String> = [] { didSet { render() } }
+    var cells: [Cell] = [] { didSet { render() } }
+    var selected: String?
+    var grip: Grip?
+    var hidden: Set<String> = [] {
+        didSet {
+            if cells.contains(where: { $0.focus.map(hidden.contains) ?? false }) {
+                cells = cells.map { cell in
+                    var next = cell
+                    if let id = cell.focus, hidden.contains(id) { next.focus = nil }
+                    return next
+                }
+            }
+            render()
+        }
+    }
     var raster = false
     var tab = Tab.view
     var pdf = true
@@ -97,21 +111,81 @@ final class DrawsModel {
     var sheet: Sheet? { pages.indices.contains(page) ? pages[page] : nil }
 
     var shown: [Part] {
-        parts.filter { !hidden.contains($0.id) && (focus == nil || $0.id == focus) }
+        parts.filter { !hidden.contains($0.id) }
     }
+
+    var field: CGRect? {
+        guard let t = template?.pack else { return nil }
+        return CGRect(x: t.frame.left, y: t.frame.top,
+                      width: t.width - t.frame.left - t.frame.right, height: t.height - t.frame.top - t.frame.bottom)
+    }
+
+    var misfits: [Cell] {
+        guard let sheet else { return [] }
+        return cells.filter { cell in sheet.cells.first { $0.id == cell.id }.map { !$0.fits } ?? false }
+    }
+
+    var stuck: Bool { overflow || !misfits.isEmpty }
 
     var missing: [String] {
         Self.fields.filter { (project[$0] ?? "").trimmingCharacters(in: .whitespaces).isEmpty }
     }
 
     var defects: [String] {
-        (ci?.defects ?? []) + (template?.defects ?? []) + (material?.defects ?? []) + (sheet?.defects ?? [])
+        (ci?.defects ?? []) + (template?.defects ?? []) + (material?.defects ?? [])
+            + (sheet?.defects ?? []).filter { !$0.hasPrefix("board.") }
     }
 
-    var scales: [Double] {
+    func cell(_ id: String?) -> Cell? {
+        id.flatMap { id in cells.first { $0.id == id } }
+    }
+
+    func placed(_ id: String) -> Placed? {
+        sheet?.cells.first { $0.id == id }
+    }
+
+    func scales(for cell: Cell) -> [Double] {
         guard let t = template?.pack else { return [] }
-        let list = layout == .plan || layout == .presentation ? t.scales : t.isoScales
-        return list.sorted()
+        return (cell.form == .ortho ? t.scales : t.isoScales).sorted()
+    }
+
+    func edit(_ id: String, _ change: (inout Cell) -> Void) {
+        guard let index = cells.firstIndex(where: { $0.id == id }) else { return }
+        var next = cells[index]
+        change(&next)
+        if next != cells[index] { cells[index] = next }
+    }
+
+    func autoScale() {
+        cells = cells.map { cell in
+            var next = cell
+            next.scale = nil
+            return next
+        }
+    }
+
+    func name(_ cell: Cell) -> String {
+        let base: String
+        switch cell.view {
+        case .iso: base = cell.step > 0 ? String(format: word("draws.page.step"), cell.step) : word("draws.product.iso")
+        case .perspective: base = word("draws.product.perspective")
+        case .front: base = word("draws.cell.front")
+        case .back: base = word("draws.cell.back")
+        case .top: base = word("draws.cell.top")
+        case .left, .right: base = word("draws.cell.side")
+        }
+        guard let id = cell.focus, let part = parts.first(where: { $0.id == id }) else { return base }
+        return String(format: word("draws.cell.focus"), base, part.name)
+    }
+
+    func preset() -> [Cell] {
+        guard let t = template?.pack, let field else { return [] }
+        return Presets.cells(layout, field: field, gap: t.gap, steps: Set(shown.map(\.z)).count)
+    }
+
+    func rebuild() {
+        selected = nil
+        cells = preset()
     }
 
     func turn(_ step: Int) {
@@ -127,6 +201,7 @@ final class DrawsModel {
             template = try Packs.loadTemplate(Self.root.appendingPathComponent("Packs/template/a3-quer"))
             material = try Packs.loadMaterial(Self.root.appendingPathComponent("Packs/material/platzhalter"))
             resetStyle()
+            cells = preset()
             ready = true
             load(Self.root.appendingPathComponent("Examples/kueche.json"))
         } catch {
@@ -160,9 +235,8 @@ final class DrawsModel {
             project = object.project ?? [:]
             variants = object.variants ?? []
             hidden = []
-            focus = nil
             accent = nil
-            fixed = nil
+            rebuild()
             objectName = url.deletingPathExtension().lastPathComponent
             ready = true
             render()
@@ -175,8 +249,8 @@ final class DrawsModel {
         ready = false
         parts = []
         hidden = []
-        focus = nil
         accent = nil
+        rebuild()
         objectName = ""
         ready = true
         render()
@@ -194,18 +268,10 @@ final class DrawsModel {
     }
 
     func product() -> Product {
-        let spec = ViewSpec(kind: .iso, azimuth: azimuth, elevation: elevation)
-        switch layout {
-        case .plan: return .plan
-        case .iso: return .iso(spec)
-        case .steps: return .steps(spec, [])
-        case .customer: return .customer(spec)
-        case .presentation: return .presentation
-        case .perspective:
-            let size = shown.reduce(0.0) { max($0, $1.w, $1.d, $1.h) }
-            return .iso(ViewSpec(kind: .perspective, azimuth: azimuth, elevation: elevation,
-                                 distance: Proto.perspectiveDistance * size))
-        }
+        if layout == .presentation { return .presentation }
+        let size = shown.reduce(0.0) { max($0, $1.w, $1.d, $1.h) }
+        return .board(cells, ViewSpec(kind: .iso, azimuth: azimuth, elevation: elevation,
+                                      distance: Proto.perspectiveDistance * size))
     }
 
     func render() {
@@ -220,7 +286,7 @@ final class DrawsModel {
             pages = try DrawingEngine.render(Job(parts: shown, ci: ci.pack, template: template.pack, project: project,
                                                  products: [product()], style: style(), dimensions: dimensions,
                                                  material: material?.pack, variants: variants, dims: dimensions ? .given : .none,
-                                                 fonts: DrawsFonts.fallback, scale: fixed))
+                                                 fonts: DrawsFonts.fallback))
             page = min(page, max(0, pages.count - 1))
             failure = nil
         } catch DrawingError.overflow {
@@ -303,9 +369,9 @@ final class DrawsModel {
                 questions = proposal.questions
                 objectName = title
                 hidden = []
-                focus = nil
                 accent = nil
                 if let first = proposal.products.first, let kind = Kind(rawValue: first) { layout = kind }
+                rebuild()
                 ready = true
                 assistant = false
                 render()

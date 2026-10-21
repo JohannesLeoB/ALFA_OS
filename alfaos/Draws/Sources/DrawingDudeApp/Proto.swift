@@ -22,6 +22,10 @@ enum Proto {
     static let zoomMax = 4.0
     static let zoomStep = 1.25
     static let perspectiveDistance = 4.5
+    static let snap = 6.0
+    static let minCell = 40.0
+    static let customerShare = 0.64
+    static let stepsRatio = 1.6
     static let glyph = 14.0
     static let chevron = 12.0
     static let emptyWidth = 300.0

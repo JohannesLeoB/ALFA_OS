@@ -56,8 +56,8 @@ struct ProjectLane: View {
 
     @ViewBuilder
     private var defects: some View {
-        let missing = model.missing, packs = model.defects
-        let count = missing.count + packs.count + (model.overflow ? 1 : 0)
+        let missing = model.missing, packs = model.defects, misfits = model.misfits
+        let count = missing.count + packs.count + misfits.count + (model.overflow ? 1 : 0)
         SectionHead(key: "draws.section.defects", meta: count > 0 ? "\(count)" : "", metaTone: \.signal)
         if count == 0 {
             Note(text: word("draws.defects.none"))
@@ -66,9 +66,13 @@ struct ProjectLane: View {
             ListRow(name: String(format: word("draws.defects.field"), word("draws.field.\(key)")), symbol: "exclamationmark.triangle",
                     meta: word("draws.defects.fill"), symbolTone: \.signal)
         }
+        ForEach(misfits) { cell in
+            ListRow(name: String(format: word("draws.defects.cell"), model.name(cell)), symbol: "exclamationmark.triangle",
+                    meta: word("draws.defects.auto"), symbolTone: \.signal) { model.edit(cell.id) { $0.scale = nil } }
+        }
         if model.overflow {
             ListRow(name: word("draws.defects.overflow"), symbol: "exclamationmark.triangle",
-                    meta: word("draws.defects.auto"), symbolTone: \.signal) { model.fixed = nil }
+                    meta: word("draws.defects.auto"), symbolTone: \.signal) { model.autoScale() }
         }
         ForEach(Array(packs.enumerated()), id: \.offset) { _, d in
             ListRow(name: d, symbol: "exclamationmark.triangle", symbolTone: \.signal)
@@ -148,9 +152,13 @@ struct SheetLane: View {
                         .onChanged { zoom = min(Proto.zoomMax, max(Proto.zoomMin, settled * Double($0.magnification))) }
                         .onEnded { _ in settled = zoom })
                     .simultaneousGesture(DragGesture()
-                        .onChanged { pan = CGSize(width: panned.width + $0.translation.width, height: panned.height + $0.translation.height) }
-                        .onEnded { _ in panned = pan })
+                        .onChanged {
+                            guard model.grip == nil else { return }
+                            pan = CGSize(width: panned.width + $0.translation.width, height: panned.height + $0.translation.height)
+                        }
+                        .onEnded { _ in if model.grip == nil { panned = pan } })
                     .onTapGesture(count: 2) { reset() }
+                    .onTapGesture { model.selected = nil }
                     if model.parts.isEmpty && !model.assistant {
                         EmptyCard(model: model)
                     }
@@ -187,12 +195,20 @@ struct SheetLane: View {
         let count = model.pages.count
         let text: String
         var tone: KeyPath<DesignColors, RGB> = \.inkSecondary
-        if model.overflow {
+        if let grip = model.grip, grip.moved, let cell = model.cell(grip.id) {
+            let f = cell.frame
+            text = String(format: word("draws.status.drag"), model.name(cell), Int(f.minX.rounded()), Int(f.minY.rounded()),
+                          Int(f.width.rounded()), Int(f.height.rounded()))
+        } else if model.overflow {
             text = String(format: word("draws.status.overflow"), format); tone = \.signal
         } else if let failure = model.failure {
             text = failure; tone = \.signal
         } else if model.shown.isEmpty {
             text = String(format: word("draws.status.empty"), format)
+        } else if !model.misfits.isEmpty {
+            text = String(format: word("draws.status.nofit"),
+                          model.misfits.map(model.name).formatted(.list(type: .and).locale(Locale(identifier: "de"))))
+            tone = \.signal
         } else {
             text = String(format: word("draws.status.normal"), format,
                           count == 1 ? word("draws.pages.one") : String(format: word("draws.pages.many"), count))
@@ -227,17 +243,13 @@ struct SheetLane: View {
         let pad = Proto.deskPadding
         let fit = max(0.01, min((Double(room.width) - 2 * pad) / sheet.width, (Double(room.height) - 2 * pad) / sheet.height))
         let k = fit * zoom
-        let field = model.template.map { t in
-            CGRect(x: t.pack.frame.left, y: t.pack.frame.top,
-                   width: t.pack.width - t.pack.frame.left - t.pack.frame.right,
-                   height: t.pack.height - t.pack.frame.top - t.pack.frame.bottom)
-        }
+        let field = model.field
         return Canvas { context, _ in
             context.withCGContext { cg in
                 cg.scaleBy(x: k, y: k)
                 SheetExporter.draw(sheet, in: cg)
             }
-            guard model.raster, let field else { return }
+            guard model.raster || model.grip?.moved == true, let field else { return }
             var minor = Path(), major = Path()
             var x = field.minX
             while x <= field.maxX + 0.01 {
@@ -258,9 +270,135 @@ struct SheetLane: View {
             context.stroke(major, with: .color(style.layerColor(c.sheetLineStrong)), lineWidth: CGFloat(Design.Size.hairline))
         }
         .frame(width: CGFloat(sheet.width * k), height: CGFloat(sheet.height * k))
+        .overlay(alignment: .topLeading) {
+            if model.layout != .presentation, let field {
+                BoardOverlay(model: model, sheet: sheet, k: k, field: field)
+            }
+        }
         .background(style.color(\.sheet))
         .shadowed(style, style.shadow(\.floating), Rectangle())
         .offset(pan)
+    }
+}
+
+struct BoardOverlay: View {
+    @Environment(\.style) private var style
+    @Bindable var model: DrawsModel
+    let sheet: Sheet
+    let k: Double
+    let field: CGRect
+    @State private var start: CGRect?
+    @State private var guides: [Guide] = []
+
+    var body: some View {
+        let dash = CGFloat(Design.Spacing.step4)
+        ZStack(alignment: .topLeading) {
+            ForEach(model.cells) { cell in
+                let frame = scaled(cell.frame)
+                Color.clear
+                    .overlay(outline(cell, dash: dash))
+                    .frame(width: frame.width, height: frame.height)
+                    .contentShape(Rectangle())
+                    .offset(x: frame.minX, y: frame.minY)
+                    .gesture(move(cell))
+            }
+            Path { path in
+                for guide in guides {
+                    if guide.vertical {
+                        path.move(to: CGPoint(x: guide.at * k, y: 0))
+                        path.addLine(to: CGPoint(x: guide.at * k, y: sheet.height * k))
+                    } else {
+                        path.move(to: CGPoint(x: 0, y: guide.at * k))
+                        path.addLine(to: CGPoint(x: sheet.width * k, y: guide.at * k))
+                    }
+                }
+            }
+            .stroke(style.color(\.sheetInkTertiary), style: StrokeStyle(lineWidth: CGFloat(Design.Size.hairline), dash: [dash, dash]))
+            .allowsHitTesting(false)
+            if let cell = model.cell(model.selected) {
+                ForEach(Corner.allCases, id: \.self) { handle($0, cell) }
+            }
+        }
+        .frame(width: CGFloat(sheet.width * k), height: CGFloat(sheet.height * k), alignment: .topLeading)
+    }
+
+    private func scaled(_ r: CGRect) -> CGRect {
+        CGRect(x: r.minX * k, y: r.minY * k, width: r.width * k, height: r.height * k)
+    }
+
+    private func outline(_ cell: Cell, dash: CGFloat) -> some View {
+        let fits = model.placed(cell.id)?.fits ?? true
+        return ZStack {
+            if cell.id == model.selected {
+                Rectangle().strokeBorder(style.color(\.sheetInk), lineWidth: CGFloat(Design.Size.hairline))
+            }
+            if !fits {
+                Rectangle().strokeBorder(style.color(\.signal), style: StrokeStyle(lineWidth: CGFloat(Design.Size.hairline), dash: [dash, dash]))
+            }
+        }
+        .allowsHitTesting(false)
+    }
+
+    private func handle(_ corner: Corner, _ cell: Cell) -> some View {
+        let dot = CGFloat(Design.Spacing.statusDot)
+        let frame = scaled(cell.frame)
+        let x = corner.right ? frame.maxX : frame.minX, y = corner.bottom ? frame.maxY : frame.minY
+        return Rectangle()
+            .fill(style.color(\.sheet))
+            .overlay(Rectangle().strokeBorder(style.color(\.sheetInk), lineWidth: CGFloat(Design.Size.hairline)))
+            .frame(width: dot, height: dot)
+            .padding(dot / 2)
+            .contentShape(Rectangle())
+            .offset(x: x - dot, y: y - dot)
+            .gesture(resize(corner, cell))
+    }
+
+    private func reach(_ drag: DragGesture.Value) -> Bool {
+        model.grip?.moved == true || hypot(drag.translation.width, drag.translation.height) >= Proto.snap
+    }
+
+    private func millimeters(_ drag: DragGesture.Value) -> CGSize {
+        CGSize(width: drag.translation.width / k, height: drag.translation.height / k)
+    }
+
+    private func grab(_ cell: Cell) {
+        guard model.grip?.id != cell.id else { return }
+        model.grip = Grip(id: cell.id)
+        start = cell.frame
+    }
+
+    private func release() {
+        model.grip = nil
+        start = nil
+        guides = []
+    }
+
+    private func move(_ cell: Cell) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .global)
+            .onChanged { drag in
+                grab(cell)
+                model.selected = cell.id
+                guard let start, reach(drag) else { return }
+                if model.grip?.moved != true { model.grip?.moved = true }
+                let result = Snap.move(start, by: millimeters(drag), others: model.cells.filter { $0.id != cell.id }.map(\.frame),
+                                       field: field, sheet: CGSize(width: sheet.width, height: sheet.height), reach: Proto.snap / k)
+                guides = result.guides
+                model.edit(cell.id) { $0.frame = result.frame }
+            }
+            .onEnded { _ in release() }
+    }
+
+    private func resize(_ corner: Corner, _ cell: Cell) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .global)
+            .onChanged { drag in
+                grab(cell)
+                guard let start, reach(drag) else { return }
+                if model.grip?.moved != true { model.grip?.moved = true }
+                let frame = Snap.resize(start, corner: corner, by: millimeters(drag), field: field,
+                                        sheet: CGSize(width: sheet.width, height: sheet.height))
+                model.edit(cell.id) { $0.frame = frame }
+            }
+            .onEnded { _ in release() }
     }
 }
 
@@ -323,7 +461,7 @@ struct InspectorLane: View {
             if model.tab == .export {
                 let n = model.missing.count + model.defects.count
                 Compose(key: model.pdf ? "draws.export.savePDF" : "draws.export.saveSVG", symbol: "square.and.arrow.down",
-                        extra: n > 0 && !model.overflow ? String(format: word("draws.export.despite"), n) : "") {
+                        extra: n > 0 && !model.stuck ? String(format: word("draws.export.despite"), n) : "") {
                     model.export()
                 }
                 .opacity(model.sheet == nil ? Proto.disabled : 1)
@@ -337,49 +475,93 @@ struct ViewTab: View {
     @Bindable var model: DrawsModel
 
     var body: some View {
-        SectionHead(key: "draws.section.pages", meta: "\(model.pages.count)")
-        ForEach(Array(model.pages.enumerated()), id: \.offset) { index, sheet in
-            ListRow(name: model.pages.count > 1 ? String(format: word("draws.page.step"), index + 1) : word("draws.product.\(model.layout.rawValue)"),
-                    symbol: symbol, meta: sheet.scale > 0 ? "1:\(Int(sheet.scale))" : "", selected: index == model.page) {
-                model.page = index
+        if model.layout == .presentation {
+            SectionHead(key: "draws.section.pages", meta: "\(model.pages.count)")
+            ForEach(Array(model.pages.enumerated()), id: \.offset) { index, sheet in
+                ListRow(name: model.pages.count > 1 ? String(format: word("draws.page.step"), index + 1) : word("draws.product.presentation"),
+                        symbol: "cube", meta: sheet.scale > 0 ? "1:\(Int(sheet.scale))" : "", selected: index == model.page) {
+                    model.page = index
+                }
+            }
+        } else {
+            SectionHead(key: "draws.section.pages", meta: "\(model.cells.count)")
+            ForEach(model.cells) { cell in
+                let fits = model.placed(cell.id)?.fits ?? true
+                ListRow(name: model.name(cell), symbol: symbol(cell),
+                        meta: model.placed(cell.id).map { "1:\(Int($0.scale))" } ?? "",
+                        selected: cell.id == model.selected, tone: fits ? \.ink : \.signal, metaTone: fits ? \.inkTertiary : \.signal) {
+                    model.selected = cell.id == model.selected ? nil : cell.id
+                }
             }
         }
-        if model.pages.isEmpty { Note(text: word("draws.view.none")) }
-        SectionHead(key: "draws.section.view", meta: word("draws.product.\(model.layout.rawValue)"))
-        Labeled(key: "draws.view.focus") {
-            Choice(value: model.focus.flatMap { id in model.parts.first { $0.id == id }?.name } ?? word("draws.view.whole")) {
-                Button(word("draws.view.whole")) { model.focus = nil }
-                Divider()
-                ForEach(model.parts, id: \.id) { p in Button(p.name) { model.focus = p.id } }
-            }
+        if model.sheet == nil { Note(text: word("draws.view.none")) }
+        if model.layout != .presentation, let cell = model.cell(model.selected) { selection(cell) }
+        SectionHead(key: "draws.section.sheet", meta: model.template?.pack.format ?? "")
+        if model.layout == .presentation {
+            Labeled(key: "draws.views.dimensions") { Switch(on: $model.dimensions) }
         }
-        Labeled(key: "draws.view.scale") {
-            Segments(options: [(false, "draws.scale.auto"), (true, "draws.scale.fixed")], selection: Binding(
-                get: { model.fixed != nil },
-                set: { model.fixed = $0 ? (model.sheet?.scale ?? model.scales.first) : nil }))
-        }
-        Labeled(key: "draws.view.fixed", enabled: model.fixed != nil) {
-            Choice(value: "1:\(Int(model.fixed ?? model.sheet?.scale ?? 0))") {
-                ForEach(model.scales, id: \.self) { n in Button("1:\(Int(n))") { model.fixed = n } }
-            }
-        }
-        Labeled(key: "draws.views.dimensions") { Switch(on: $model.dimensions) }
         Labeled(key: "draws.view.fill") {
             Segments(options: [(Fill.tone, "draws.fill.tone"), (Fill.material, "draws.fill.material")], selection: $model.fill)
         }
-        SectionHead(key: "draws.section.sheet", meta: model.template?.pack.format ?? "")
         Labeled(key: "draws.views.method") {
             Text(verbatim: word(model.template?.pack.method == .third ? "draws.method.third" : "draws.method.first"))
         }
     }
 
-    private var symbol: String {
-        switch model.layout {
-        case .plan: return "rectangle.split.2x1"
-        case .steps: return "stairs"
+    @ViewBuilder
+    private func selection(_ cell: Cell) -> some View {
+        let id = cell.id, ortho = cell.form == .ortho
+        let placed = model.placed(id)
+        let scales = model.scales(for: cell)
+        SectionHead(key: "draws.section.view", meta: model.name(cell), metaTone: placed?.fits == false ? \.signal : \.inkTertiary)
+        Labeled(key: "draws.cell.type") {
+            Segments(options: [(CellForm.ortho, "draws.type.ortho"), (CellForm.iso, "draws.type.iso"),
+                               (CellForm.perspective, "draws.type.perspective")],
+                     selection: Binding(get: { model.cell(id)?.form ?? .ortho },
+                                        set: { next in model.edit(id) { $0.become(next) } }))
+        }
+        Labeled(key: "draws.cell.dir", enabled: ortho) {
+            Segments(options: [(ViewKind.front, "draws.dir.front"), (ViewKind.right, "draws.dir.right"),
+                               (ViewKind.top, "draws.dir.top"), (ViewKind.back, "draws.dir.back")],
+                     selection: Binding(get: { model.cell(id)?.view ?? .front },
+                                        set: { next in model.edit(id) { $0.view = next } }))
+        }
+        Labeled(key: "draws.view.focus") {
+            Choice(value: cell.focus.flatMap { focus in model.parts.first { $0.id == focus }?.name } ?? word("draws.view.whole")) {
+                Button(word("draws.view.whole")) { model.edit(id) { $0.focus = nil } }
+                Divider()
+                ForEach(model.parts, id: \.id) { p in Button(p.name) { model.edit(id) { $0.focus = p.id } } }
+            }
+        }
+        Labeled(key: "draws.cell.steps", enabled: !ortho) {
+            Segments(options: stepOptions(placed?.steps ?? 0),
+                     selection: Binding(get: { model.cell(id)?.step ?? 0 }, set: { next in model.edit(id) { $0.step = next } }),
+                     literal: true)
+        }
+        Labeled(key: "draws.view.scale") {
+            Segments(options: [(false, "draws.scale.auto"), (true, "draws.scale.fixed")], selection: Binding(
+                get: { model.cell(id)?.scale != nil },
+                set: { fixed in model.edit(id) { $0.scale = fixed ? (placed?.scale ?? scales.first) : nil } }))
+        }
+        Labeled(key: "draws.view.fixed", enabled: cell.scale != nil) {
+            Choice(value: "1:\(Int(cell.scale ?? placed?.scale ?? 0))") {
+                ForEach(scales, id: \.self) { n in Button("1:\(Int(n))") { model.edit(id) { $0.scale = n } } }
+            }
+        }
+        Labeled(key: "draws.views.dimensions", enabled: ortho) {
+            Switch(on: Binding(get: { ortho && (model.cell(id)?.dims ?? false) }, set: { on in model.edit(id) { $0.dims = on } }))
+        }
+    }
+
+    private func stepOptions(_ count: Int) -> [(id: Int, key: String)] {
+        [(id: 0, key: word("draws.cell.stepsOff"))] + (0..<count).map { (id: $0 + 1, key: "\($0 + 1)") }
+    }
+
+    private func symbol(_ cell: Cell) -> String {
+        switch cell.form {
+        case .ortho: return "rectangle.split.2x1"
         case .perspective: return "trapezoid.and.line.vertical"
-        case .customer: return "person"
-        default: return "cube"
+        case .iso: return cell.step > 0 ? "stairs" : "cube"
         }
     }
 }
@@ -440,7 +622,7 @@ struct ExportTab: View {
                           pages == 1 ? word("draws.pages.one") : String(format: word("draws.pages.many"), pages)))
         SectionHead(key: "draws.export.check", meta: n == 0 ? "" : (n == 1 ? word("draws.export.oneDefect") : String(format: word("draws.export.defects"), n)),
                     metaTone: \.signal)
-        if model.overflow {
+        if model.stuck {
             Note(text: word("draws.export.overflow"), tone: \.signal)
         } else {
             Note(text: word(n == 0 ? "draws.export.clean" : "draws.export.goes"))

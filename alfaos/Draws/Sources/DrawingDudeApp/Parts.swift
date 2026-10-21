@@ -227,13 +227,14 @@ struct Segments<ID: Hashable>: View {
     let options: [(id: ID, key: String)]
     @Binding var selection: ID
     var fill = false
+    var literal = false
 
     var body: some View {
         let inset = CGFloat(Design.Spacing.step28 - Design.Size.chipHeight) / 2
         HStack(spacing: 0) {
             ForEach(options, id: \.id) { option in
                 let on = option.id == selection
-                say(option.key)
+                (literal ? Text(verbatim: option.key) : say(option.key))
                     .lineLimit(1)
                     .font(style.font(Design.TextSize.small, weight: Design.Weight.medium))
                     .foregroundStyle(style.color(on ? \.onInverse : \.inkSecondary))
