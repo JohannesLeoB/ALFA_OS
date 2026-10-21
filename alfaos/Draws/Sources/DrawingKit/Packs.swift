@@ -61,7 +61,7 @@ public struct TemplatePack: Sendable {
     public var isoScales: [Double]
     public var isoMargin: Insets
     public var viewTitles: [String: String]
-    public var isoTitle: String
+    public var titles: [String: String]
     public var block: TitleBlock
 
     public struct Insets: Codable, Sendable {
@@ -150,7 +150,7 @@ public enum Packs {
             minPaperLength: r.number("minPaperLength"), tick: r.number("tick"), extensionGap: r.number("extensionGap"),
             titleOffset: r.number("titleOffset"),
             scales: r.numbers("scales"), isoScales: r.numbers("isoScales"), isoMargin: insets(iso),
-            viewTitles: r.table("viewTitles"), isoTitle: r.text("isoTitle"), block: block
+            viewTitles: r.table("viewTitles"), titles: r.table("titles"), block: block
         )
         var defects = r.defects + frame.defects + iso.defects + b.defects
         if method == nil, !defects.contains("template.method") { defects.append("template.method") }

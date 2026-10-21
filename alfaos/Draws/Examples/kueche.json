@@ -9,7 +9,11 @@
   "date": "21.10.2026",
   "drawn": "GEZ",
   "layout.threeView": "Küchenzeile Ansichten",
-  "layout.iso": "Küchenzeile Isometrie"
+  "layout.iso": "Küchenzeile Isometrie",
+  "layout.plan": "Küchenzeile Ansichten",
+  "layout.perspective": "Küchenzeile Perspektive",
+  "layout.steps": "Küchenzeile Aufbau",
+  "layout.customer": "Küchenzeile Kundenansicht"
  },
  "parts": [
   {

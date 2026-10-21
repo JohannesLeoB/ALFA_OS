@@ -10,7 +10,54 @@ public enum DrawingEngine {
         case .iso: try c.iso()
         }
         c.titleBlock()
+        c.sheet.product = r.product
         return c.sheet
+    }
+
+    public static func render(_ job: Job) throws -> [Sheet] {
+        try Validate.parts(job.parts)
+        guard !job.products.isEmpty else { throw DrawingError.empty }
+        var out: [Sheet] = []
+        for product in job.products {
+            var base = Request(parts: job.parts, ci: job.ci, template: job.template, project: job.project,
+                               layout: .iso, dimensions: job.dimensions, style: job.style)
+            base.product = product.key
+            switch product {
+            case .plan:
+                base.layout = .threeView
+                out.append(try render(base))
+            case .iso(let view), .customer(let view):
+                base.iso = view
+                out.append(try render(base))
+            case .steps(let view, let groups):
+                base.iso = view
+                base.fit = job.parts
+                let all = try steps(groups, job.parts)
+                for (index, step) in all.enumerated() {
+                    var r = base
+                    r.parts = step.parts
+                    r.highlight = step.added
+                    r.step = (index + 1, all.count)
+                    out.append(try render(r))
+                }
+            }
+        }
+        return out
+    }
+
+    static func steps(_ groups: [[String]], _ parts: [Part]) throws -> [(parts: [Part], added: Set<String>)] {
+        let ids = Set(parts.map(\.id))
+        var resolved = groups
+        if resolved.isEmpty {
+            let levels = Set(parts.map(\.z)).sorted()
+            resolved = levels.map { z in parts.filter { $0.z == z }.map(\.id) }
+        }
+        for id in resolved.joined() where !ids.contains(id) { throw DrawingError.invalidPart(id) }
+        var shown = Set<String>()
+        return resolved.map { group in
+            shown.formUnion(group)
+            return (parts.filter { shown.contains($0.id) }, Set(group))
+        }
     }
 }
 
@@ -148,8 +195,9 @@ struct Composer {
 
     mutating func iso() throws {
         let t = r.template, ci = r.ci, s = r.style ?? ci.iso
-        let faces = try Projection.faces(r.parts, spec: r.iso, shadow: s.shadow > 0 ? s.spread : nil)
-        let xs = faces.flatMap { $0.poly.map { Double($0.x) } }, ys = faces.flatMap { $0.poly.map { Double($0.y) } }
+        let faces = try Projection.faces(r.parts, spec: r.iso, shadow: s.shadow > 0 ? s.spread : nil, around: r.fit)
+        let frame = try r.fit.map { try Projection.faces($0, spec: r.iso, shadow: s.shadow > 0 ? s.spread : nil) } ?? faces
+        let xs = frame.flatMap { $0.poly.map { Double($0.x) } }, ys = frame.flatMap { $0.poly.map { Double($0.y) } }
         guard let x0 = xs.min(), let x1 = xs.max(), let y0 = ys.min(), let y1 = ys.max() else { throw DrawingError.empty }
         let room = CGSize(width: field.width - t.isoMargin.left - t.isoMargin.right,
                           height: field.height - t.isoMargin.top - t.isoMargin.bottom)
@@ -175,10 +223,18 @@ struct Composer {
         }
         for f in solids {
             let shade: Double = f.normal == 5 ? s.top : (f.normal == 2 || f.normal == 3 ? s.side : s.front)
-            let base = f.partID == s.accent ? ci.accent : tint(material[f.partID] ?? "")
+            let lit = f.partID == s.accent || r.highlight.contains(f.partID)
+            let base = lit ? ci.accent : tint(material[f.partID] ?? "")
             sheet.items.append(.polygon(paper(f), fill: base.map { Hex.scale($0, shade) }, stroke: ci.ink, width: s.edge))
         }
-        let title = String(format: t.isoTitle, r.iso.azimuth, r.iso.elevation) + "   1:\(Int(n))"
+        let key = r.product.isEmpty ? "iso" : r.product
+        let pattern = t.titles[key] ?? ""
+        if pattern.isEmpty { sheet.defects.append("template.titles.\(key)") }
+        let title = pattern
+            .replacingOccurrences(of: "{az}", with: String(format: "%.0f", r.iso.azimuth))
+            .replacingOccurrences(of: "{el}", with: String(format: "%.3f", r.iso.elevation))
+            .replacingOccurrences(of: "{n}", with: "\(r.step.0)")
+            .replacingOccurrences(of: "{of}", with: "\(r.step.1)") + "   1:\(Int(n))"
         sheet.items.append(.text(title, at: CGPoint(x: field.minX + t.isoMargin.left, y: field.minY + t.titleOffset),
                                  size: ci.textTitle, anchor: .start, weight: ci.weightTitle, color: ci.ink, rotation: 0))
     }
@@ -199,7 +255,8 @@ struct Composer {
             sheet.items.append(.line(CGPoint(x: x, y: y), CGPoint(x: x + w, y: y), width: ci.lineDimension, color: ci.ink))
             sheet.items.append(.text(row.label, at: CGPoint(x: x + b.inset, y: y + b.labelBaseline), size: ci.textLabel,
                                      anchor: .start, weight: 400, color: ci.muted, rotation: 0))
-            let value = row.key == "layout" ? (values["layout.\(r.layout.rawValue)"] ?? "") : (values[row.key] ?? "")
+            let layout = values["layout.\(r.product)"] ?? values["layout.\(r.layout.rawValue)"] ?? ""
+            let value = row.key == "layout" ? layout : (values[row.key] ?? "")
             sheet.items.append(.text(value, at: CGPoint(x: x + b.inset, y: y + b.valueBaseline), size: ci.textValue,
                                      anchor: .start, weight: ci.weightTitle, color: ci.ink, rotation: 0))
             y += b.rowHeight

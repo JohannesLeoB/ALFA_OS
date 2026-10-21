@@ -29,16 +29,24 @@ public enum SheetExporter {
     }
 
     public static func pdf(_ s: Sheet) -> Data {
+        pdf([s])
+    }
+
+    public static func pdf(_ sheets: [Sheet]) -> Data {
+        guard !sheets.isEmpty else { return Data() }
         let k = 72 / 25.4
         let data = NSMutableData()
-        var box = CGRect(x: 0, y: 0, width: s.width * k, height: s.height * k)
         guard let consumer = CGDataConsumer(data: data as CFMutableData),
-              let ctx = CGContext(consumer: consumer, mediaBox: &box, nil) else { return Data() }
-        ctx.beginPDFPage(nil)
-        ctx.translateBy(x: 0, y: box.height)
-        ctx.scaleBy(x: k, y: -k)
-        draw(s, in: ctx)
-        ctx.endPDFPage()
+              let ctx = CGContext(consumer: consumer, mediaBox: nil, nil) else { return Data() }
+        for s in sheets {
+            var box = CGRect(x: 0, y: 0, width: s.width * k, height: s.height * k)
+            let page = [kCGPDFContextMediaBox as String: NSData(bytes: &box, length: MemoryLayout<CGRect>.size)] as CFDictionary
+            ctx.beginPDFPage(page)
+            ctx.translateBy(x: 0, y: box.height)
+            ctx.scaleBy(x: k, y: -k)
+            draw(s, in: ctx)
+            ctx.endPDFPage()
+        }
         ctx.closePDF()
         return data as Data
     }

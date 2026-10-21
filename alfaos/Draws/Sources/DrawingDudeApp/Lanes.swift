@@ -56,8 +56,15 @@ struct SheetLane: View {
             Head {
                 HeadTitle(key: "draws.lane.sheet")
                 Spacer(minLength: 0)
-                Segments(options: [(SheetLayout.threeView, "draws.layout.threeView"), (SheetLayout.iso, "draws.layout.iso")],
-                         selection: $model.layout)
+                if model.pages.count > 1 {
+                    Pill(key: "draws.page.back") { model.turn(-1) }
+                    Text(verbatim: "\(model.page + 1)/\(model.pages.count)")
+                        .font(style.font(Design.TextSize.small))
+                        .monospacedDigit()
+                        .foregroundStyle(style.color(\.inkSecondary))
+                    Pill(key: "draws.page.next") { model.turn(1) }
+                }
+                Segments(options: Kind.allCases.map { ($0, "draws.product.\($0.rawValue)") }, selection: $model.layout)
             }
             GeometryReader { proxy in
                 ZStack {

@@ -69,12 +69,13 @@ enum Projection {
 
     static let shadowNormal = 6
 
-    static func faces(_ ps: [Part], spec: ViewSpec, shadow spread: Double? = nil) throws -> [Face2D] {
+    static func faces(_ ps: [Part], spec: ViewSpec, shadow spread: Double? = nil, around: [Part]? = nil) throws -> [Face2D] {
         try Validate.parts(ps)
         if let dist = spec.distance { guard dist.isFinite, dist > 0 else { throw DrawingError.invalidCamera } }
         guard spec.azimuth.isFinite, spec.elevation.isFinite else { throw DrawingError.invalidCamera }
         let a = spec.azimuth * .pi / 180, e = spec.elevation * .pi / 180
-        let c = (center(ps, 0), center(ps, 1), center(ps, 2))
+        let hub = around ?? ps
+        let c = (center(hub, 0), center(hub, 1), center(hub, 2))
         let fwd = (sin(a) * cos(e), cos(a) * cos(e), -sin(e))
         let right = (cos(a), -sin(a), 0.0)
         let up = (sin(a) * sin(e), cos(a) * sin(e), cos(e))

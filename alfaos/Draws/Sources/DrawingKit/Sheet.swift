@@ -25,9 +25,42 @@ public struct Sheet: Sendable {
     public var items: [SheetItem]
     public var dimensions: [PlacedDimension]
     public var defects: [String]
+    public var product = ""
 }
 
 public enum SheetLayout: String, Codable, Sendable, CaseIterable { case threeView, iso }
+
+public enum Product: Sendable, Equatable {
+    case plan
+    case iso(ViewSpec)
+    case steps(ViewSpec, [[String]])
+    case customer(ViewSpec)
+
+    public var key: String {
+        switch self {
+        case .plan: return "plan"
+        case .iso(let v): return v.distance == nil ? "iso" : "perspective"
+        case .steps: return "steps"
+        case .customer: return "customer"
+        }
+    }
+}
+
+public struct Job: Sendable {
+    public var parts: [Part]
+    public var ci: CIPack
+    public var template: TemplatePack
+    public var project: [String: String]
+    public var products: [Product]
+    public var style: IsoStyle?
+    public var dimensions: Bool
+
+    public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
+                products: [Product], style: IsoStyle? = nil, dimensions: Bool = true) {
+        self.parts = parts; self.ci = ci; self.template = template; self.project = project
+        self.products = products; self.style = style; self.dimensions = dimensions
+    }
+}
 
 public struct Request: Sendable {
     public var parts: [Part]
@@ -38,6 +71,10 @@ public struct Request: Sendable {
     public var iso: ViewSpec
     public var dimensions: Bool
     public var style: IsoStyle?
+    var highlight: Set<String> = []
+    var fit: [Part]?
+    var product = ""
+    var step = (0, 0)
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
                 layout: SheetLayout, iso: ViewSpec = ViewSpec(kind: .iso), dimensions: Bool = true, style: IsoStyle? = nil) {

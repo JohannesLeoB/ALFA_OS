@@ -145,28 +145,6 @@
         }
       }
     },
-    "draws.layout.threeView": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Drei Ansichten"
-          }
-        }
-      }
-    },
-    "draws.layout.iso": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Isometrie"
-          }
-        }
-      }
-    },
     "draws.views.scale": {
       "extractionState": "manual",
       "localizations": {
@@ -350,6 +328,72 @@
           "stringUnit": {
             "state": "translated",
             "value": "Akzentteil"
+          }
+        }
+      }
+    },
+    "draws.product.plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Werkplan"
+          }
+        }
+      }
+    },
+    "draws.product.iso": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isometrie"
+          }
+        }
+      }
+    },
+    "draws.product.steps": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schritte"
+          }
+        }
+      }
+    },
+    "draws.product.customer": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunde"
+          }
+        }
+      }
+    },
+    "draws.page.back": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "‹"
+          }
+        }
+      }
+    },
+    "draws.page.next": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "›"
           }
         }
       }
