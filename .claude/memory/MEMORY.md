@@ -1,30 +1,20 @@
-- [Stand](stand.md) — Übergabe 21.10. abends: neue AGENTS.md, K1, H2, Brief v12; nächste Schritte Brief v13, App
-- [Artefakte-Karte](artefakte-karte.md) — 56 Artefakte gelesen: nicht lesbar, Quellenrisiko der Karten-Zitate, Funde, Widersprüche
-- [Grundsätze](grundsaetze.md) — 20 Grundsätze mit Zitaten und Datum (Artefakt, Stand 10.10.), überholte Stellen markiert
-- [Stammtisch](stammtisch.md) — Arbeitsform, geltende Antworten, offene Fragen F-01 bis F-22 (Stand 20.10.; seither F-23 bis F-31, siehe stand.md)
-- [Arbeitsweise](arbeitsweise.md) — Ergebnisse statt Worte, alles lesen, nichts ohne Zustimmung schreiben, bauen statt analysieren, Arbeiten des zweiten Entwicklers nie
-- [Lead-Verantwortung](lead-verantwortung.md) — Lead denkt voraus; Schlamperei rieselt in jede Sitzung durch
-- [Strang-Meldungen](strang-meldungen.md) — jeden Strang melden: Start, blockiert, fertig, mit Beleg (20.10.)
+- [Stand](stand.md) — aktueller Stand 21.10.: Regeln, Gebautes, Ungeprüftes, Lücken an Design (Brief v13), Offenes, bekannte Fehler
+- [Arbeitsweise](arbeitsweise.md) — sein Wort zu Ergebnissen, Bauen, Ordnern, Nebensitzungen, Meldungen, Brief an Design, kein mykilos, keine Rechte; Modellregel
+- [Haltung](haltung.md) — blind verlassen können, keine Abkürzung, Lead denkt voraus; Orange statt Grün ohne Abnahme
+- [Fragen](fragen.md) — nur echte Produktentscheidungen fragen, erst seine Transkripte durchsuchen, nie zu Design- oder Fremdtexten
 - [Test-Verständnis](test-verstaendnis.md) — Test heißt: kann rot werden; nie „N Tests grün“ als Maß; Lead managt Tests (20.10.)
-- [Nebensitzungen](nebensitzungen.md) — mit Worktree erlaubt: vorbereitet, Brief von Haiku gegengelesen, danach sofort verräumt (20.10.)
-- [Design-Brief aktuell](design-brief-aktuell.md) — Brief, Nachlieferungen, Arbeitsweise in DESIGN/brief/ auf GitHub, immer aktuell (20.10.)
-- [Verlass ist der Job](verlass-ist-der-job.md) — blind verlassen können; nichts fertig, grün oder geprüft ohne Prüfung Wert für Wert
 - [Design ist das Ziel](design-ist-das-ziel.md) — letzter Design-Master ist einzige Wertquelle; Code ist Funktion, keine Gestaltung; nur Daten gegen Daten
 - [Entscheidung, Wortlaut, Herkunft](entscheidung-wortlaut-herkunft.md) — sein Entscheid, Designs Wortlaut und bloße Herkunft streng trennen
-- [Kein mykilos im Code](kein-mykilos-im-code.md) — Streichliste myk*: nie in Code, Tokens, Metadaten, Schlüsseln; fortlaufend entfernen und neu verdrahten
-- [Keine Rechte im Code](keine-rechte-im-code.md) — angemeldet heißt alles dürfen; nur die Firma sperrt; Rollen später als Einstellung
-- [Reichweite der App](reichweite-der-app.md) — Distribution (App Store, iOS, iPadOS, Web, Abo) ermöglichen, nicht erzwingen
-- [Erst Historie, dann fragen](erst-historie-dann-fragen.md) — vor jeder Frage seine Antworten in allen Transkripten suchen
-- [Bau-Takt](bau-takt.md) — mehr bauen, dann prüfen: große Stücke, Diff einmal Lead, einmal blind durch Worker (21.10.)
-- [Ein Ordner je Sitzung](ein-ordner-je-sitzung.md) — strikt ein Arbeitsordner, Müll selbst wegräumen, dist/ nur nummerierte Apps (21.10.)
 - [Bestand zuerst](bestand-zuerst.md) — Code ist wahr, Geschriebenes nur Hinweis; erst hartnäckig im Bestand suchen (21.10.)
 - [Keine Babysitter-Texte](keine-babysitter-texte.md) — keine erklärenden Hinweis- und Meta-Texte in der UI, nichts davon erfinden oder anfordern (21.10.)
-- [Fragen nur zu seinem Wort](fragen-nur-zu-seinem-wort.md) — nur echte Produktentscheidungen fragen, nie zu Design- oder Fremdtexten (21.10.)
-- [Keine Abkürzung](keine-abkuerzung.md) — Lücke belegen statt füllen, erst lesen dann bauen
-- [App: Vision](app-vision.md) — acht geprüfte Zitate zu Zweck und Richtung der App
-- [App: Ziel](app-ziel.md) — gestuft: Ende November Umfang C ohne Kalkulation, Launch Ende 2026 mit dem Rest
-- [App: Hülle](app-huelle.md) — Blob, Bahnen, Sync, Look: Ist, Soll, Offen
-- [App: Mail](app-mail.md) — Vertrag 155 Funktionen, Konten, Anmeldung je Anbieter, Lücken: Ist, Soll, Offen
+- [Lead delegiert](lead-delegiert.md) — Lead baut nicht; Sonnet/Haiku bauen, Lead beauftragt, prüft, korrigiert Kleinkram (21.10.)
+- [Token zu Code](token-zu-code.md) — Token in Code, nicht in Berichte, MDs, Fragerunden, Prüfhysterie (21.10.)
+- [Worker-Modelle](worker-modelle.md) — Worker nur Sonnet 5.5 oder Haiku, Aufwand angepasst; Token für Qualität, nicht Masse (21.10.)
+- [Reichweite der App](reichweite-der-app.md) — Distribution (App Store, iOS, iPadOS, Web, Abo) ermöglichen, nicht erzwingen
+- [Artefakte](artefakte.md) — Hinweise aus 56 Artefakten und 20 Grundsätze; Zitate teils nicht gefunden, keine Quelle (AGENTS.md §2.4)
+- [App: Ziel](app-ziel.md) — gestuft: Ende November Umfang C ohne Kalkulation, Launch Ende 2026; Reihenfolge; acht Vision-Zitate
+- [App: Hülle](app-huelle.md) — Blob, Bahnen, Sync, Look, Fenster, Icon: Ist, Soll, Offen
+- [App: Mail](app-mail.md) — Vertrag 155 Funktionen, Konten, Anmeldung je Anbieter, gebauter Stand, Freigaben: Ist, Soll, Offen
 - [App: Konten](app-konten.md) — Einstellungen, Hub, Rechte, Integrationen: Ist, Soll, Offen
 - [App: Projekte](app-projekte.md) — Akte, Fragebogen, Provisionierung: Ist, Soll, Offen
 - [App: Heute](app-heute.md) — Widget-Brett, 34 Arten: Ist, Soll, Offen

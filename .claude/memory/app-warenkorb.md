@@ -1,16 +1,13 @@
 ---
 name: app-warenkorb
-description: "Funktionskarte Warenkorb (Checkout, EK-Schutz, Rückweg): Ist, Soll, Offen, Stand 18.10."
+description: "Funktionskarte Warenkorb (Checkout, EK-Schutz, Rückweg): Ist, Soll, Offen, Stand 21.10."
 metadata:
-  node_type: memory
   type: project
-  originSessionId: c2a04c8a-08ac-42dc-b4d2-3f9732b7dd70
-  modified: 2026-10-18T16:58:07.283Z
 ---
 
-Funktionskarte (Stand 18.10.; Ist = Bestand, Soll = sein Wort, Offen = belegte Frage)
+Funktionskarte (Stand 21.10.; Ist = Code, Soll = sein Wort, Offen = belegte Frage)
 Warenkorb
-- Ist: ALPHA: Checkout als sevDesk-Entwurf plus Airtable-Kopie.
+- Ist: ALPHA: Checkout als sevDesk-Entwurf plus Airtable-Kopie. In ALFA_OS kein Code (`alfaos/App` hat nur Mail, Settings, Shell).
 - Soll: „Zwei getrennte Körbe“ (04.10. 17:49 ee8f053d); „Die app selber gibt nie Belegführende Dokumente aus, "entwirft nur"“ (29.08. 20:38 6a6a9365); „Wir müssen STRIKT und GLOBAL verhindern, das jemals EINKAUFSPREISE, MARGEN EK etc aus der APP versehentlich ausgegeben werden“ (27.08. 12:50 6a6a9365); „EK Nie an Kunden, Nie automatisch "firmen-grenzen" verlassen.“ (08.10. 20:24 476f45d7).
 - Altbestand im Bild (Johannes 20.10. gegen 23:14 Berlin, Produkt-Sitzung 3f52450e, sechs Screenshots der laufenden Alt-App „mykilOS Alpha 730“, „mykilOS XY“ und „mykilOS Datan“, Uhrzeiten im Bild 23:06 bis 23:12) dazu: „Stell dich nicht so an - es ist ALLES schonmal gebaut worden: Suche besser - stell dich nicht so an. Die App ist "Hinter der UI" zu vielen Teilen nahezu fertig, nur die Codebase ist KI-Sloppy, die UI udn alles was ICH von der App sehe, die Nutzungswege, Ansichtsbereichs-Zuschnitte udn Funktionscluster nicht gut etc. Aber die App ist voll produktiv“. Im Bild: Dialog „Papers-Checkout — wohin?“ mit dem Satz „Ein Warenkorb, viele Ziele.“ und den Zielen „Musterliste als PDF“ (nach Hersteller gruppiert), „Moodboard“ (Bilder im Moodboard-Editor), „ZIP mit allen Items“, „CSV-Liste“, „Adobe Creative Suite“ (Aufschrift „geplant“) und dem Fußsatz „Jedes Ziel: erst Vorschau, dann Bestätigung – nie Auto-Write.“; im Katalog der Speichern-Dialog „Warenkorb als PDF speichern (Kalkulations-Vorschau, kein offizielles Angebot)“ neben dem Knopf „Checkout“, Zeilen mit VK-Preisen. Berichtigung (Johannes 20.10. gegen 23:20 Berlin): „MOMENT!!!! ES soll NICHTS wieder genau das gleiche gebaut werden! Jeder "Alte Ansichtsbereich" jeder alte Codebausatz, jeder Code Comment, jeder Token, Jede Nomenklatur, Layout, Sprache muss neu auf die neue UI und neue Anordnungen, zuschnitte, module, strikt Codebase design und auf pre shipping level gehoben werden. UMFASSEND.“ Der Altbestand ist also nur Herkunft dafür, was die App kann, nie Vorlage für Aufbau, Zuschnitt oder Namen; ob einzelne Ziele des Checkouts bleiben, hat er nicht gesagt. Die Papers-Leiste dort: Mustertexturen, Textbausteine, Dokumentenvorlagen, Gerätelisten, Ausstattung, Licht, Moodboards.
 - EK in Exporten (Johannes 21.10. gegen 00:15 Berlin, Produkt-Sitzung 3f52450e, Klickfrage Q-A; der Altbestand exportierte CSV und ZIP mit Spalte „EK-Einzel“, die PDF ohne): „Kann von Firma/User in Einstellungen gewählt werden, Auch ist ZIP und CSV für Interne verwendung, während ein Mailentwurd mit PDF vom Assistenten ersten mit EK Preis eher no go ist;) Es ist kein Verbrechen, aber es ist ein Faux Pas wenn Preise an die falschen Enpfänger gehen - andererseits ist immer ein mensch der letzte am drücker, eh schon. udn manchmal muss es auch sein. ALSO nicht hardcodet, User/firmensetup udn zu den jeweiligen Systemen/Integrationen der User/firmen passend einstellbar.“ Nicht „nie EK“, sondern einstellbar je Firma und Nutzer und je System; Mail-Entwurf mit PDF durch den Assistenten mit EK ist Ausschluss-Fall.

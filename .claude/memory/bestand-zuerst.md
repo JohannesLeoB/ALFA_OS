@@ -14,4 +14,4 @@ Dazu 20.10. gegen 23:14 (Produkt-Sitzung 3f52450e): „es ist ALLES schonmal geb
 **How to apply:**
 - Vor jeder Lücke, Spec, Triage oder Frage zuerst im Bestand suchen, mehrfach und weit. Gefundene Funktionen mit Datei:Zeile festhalten.
 - Geschriebenes (Gedächtnis, Zitate, Dokus) gilt nur als Hinweis, bis es am Code belegt ist.
-- Übernommen wird die Funktion, nicht die Form. Siehe [[keine-abkuerzung]], [[erst-historie-dann-fragen]].
+- Übernommen wird die Funktion, nicht die Form. Siehe [[haltung]], [[fragen]].

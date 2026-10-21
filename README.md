@@ -33,13 +33,13 @@ Native macOS-App ALFA (Swift, SwiftUI). Regeln: `AGENTS.md`; sie gehen allem vor
 
 Regeln
 - `~/.claude/CLAUDE.md`: globale Regeln (nur Angegebenes lesen; ALFA folgt `AGENTS.md`).
-- `AGENTS.md`: LAWS AND ORDERS. Lies sie vor jeder Arbeit.
+- `AGENTS.md`: ALFA · Arbeitsregeln. Lies sie vor jeder Arbeit.
 
 Gedächtnis (Inhaltsarchiv)
 - `.claude/memory/MEMORY.md`: Index. Lies ihn zu Beginn jeder Sitzung.
-- `.claude/memory/stand.md`: laufender Stand, offene Punkte, Aufträge. Lies ihn, bevor du etwas für offen oder erledigt erklärst.
+- `.claude/memory/stand.md`: aktueller Stand (Gebautes, Ungeprüftes, Lücken an Design, Offenes, bekannte Fehler). Lies ihn, bevor du etwas für offen oder erledigt erklärst.
 - `.claude/memory/app-*.md`: Funktionskarte je Bereich (Ist, Soll, Offen) mit Johannes' Wort. Lies die Karte des Bereichs, an dem du arbeitest.
-- `.claude/memory/arbeitsweise.md`, `test-verstaendnis.md`, `strang-meldungen.md`, `nebensitzungen.md`, `design-brief-aktuell.md`: wie gearbeitet, geprüft, gemeldet wird.
+- `.claude/memory/arbeitsweise.md` (Bauen, Ordner, Nebensitzungen, Meldungen, Brief an Design, Namen, Rechte), `haltung.md`, `fragen.md`, `test-verstaendnis.md`: wie gearbeitet, geprüft, gemeldet und gefragt wird. `artefakte.md` ist nur Hinweis (AGENTS.md §2.4), keine Quelle.
 - Johannes' Wort im Original: Transkripte unter `~/.claude/projects/-Users-johannesleoberger-Developer-ALFA-OS*/`; Nutzernachrichten und eingereihte Nachrichten (`queue-operation`, `queued_command`) durchsuchen.
 
 Stränge
@@ -48,7 +48,7 @@ Stränge
 Design (einzige Wertquelle)
 - `DESIGN/MANIFEST.json`: welcher Master gilt (Rang `latest`), Prüfsummen.
 - `DESIGN/*.zip`: letzter und vorletzter Master im Original.
-- `DESIGN/brief/BRIEF.txt`: aktueller Brief an Design, mit Schemas und Prüfskripten (`validate.py`, `check_contract.py`, `diff_contract.py`).
+- `DESIGN/brief/BRIEF.txt`: aktueller Brief an Design, mit Schemas und Prüfskripten (`validate.py`, `check_contract.py`, `diff_contract.py`, `check_delivery.py`).
 - `dist/master-latest/`: entpackter Master zum Lesen (lange Zeilen mit `python3` lesen).
 
 Code
@@ -60,13 +60,14 @@ Code
 - `scripts/icon_generate.py --check`: App-Icon (`Assets.xcassets`) gegen den Master prüfen.
 
 Außerhalb des Repos
-- `~/Developer/STAMMTISCH/ALFA Stammtisch.rtf`: Beratung zwischen Lead, Archivar und Produkt.
-- `~/Developer/SKILLS/alfa-bibliothekar/books/`: Bücher je Bereich (Stand nicht garantiert; an der Quelle prüfen).
-- Nur lesend, laut `AGENTS.md` §5: `~/Developer/ARCHIV/mykilos-Alphabet` (Branch `labor/ansicht`, gesichert als `sicherung/labor-*` auf GitHub), `~/Developer/mykilos-labor`, `~/ALPHA`.
+- Von Johannes in Sitzungen als Leseort angegeben, nicht dauerhaft freigegeben (`AGENTS.md` §5; je Sitzung neu klären):
+  - `~/Developer/STAMMTISCH/ALFA Stammtisch.rtf`: Beratung zwischen Lead, Archivar und Produkt.
+  - `~/Developer/SKILLS/alfa-bibliothekar/books/`: Bücher je Bereich (Stand nicht garantiert; an der Quelle prüfen).
+- Dauerhaft nur lesend, laut `AGENTS.md` §5: `~/Developer/ARCHIV/mykilos-Alphabet` (Branch `labor/ansicht`, gesichert als `sicherung/labor-*` auf GitHub), `~/Developer/mykilos-labor`, `~/ALPHA`.
 
 ## Bauen und prüfen
 
-Jede Sitzung arbeitet in genau **einem** Ordner `dist/<sitzung>/` (die Lead: `dist/lead/`; ein Bau-Strang den Ordner, den sein Auftrag nennt) und löscht ihn am Ende selbst (Johannes 21.10., `.claude/memory/ein-ordner-je-sitzung.md`). Pfade immer vollständig angeben, nie unter `alfaos/`.
+Jede Sitzung arbeitet in genau **einem** Ordner `dist/<sitzung>/` (die Lead: `dist/lead/`; ein Bau-Strang den Ordner, den sein Auftrag nennt) und löscht ihn am Ende selbst (Johannes 21.10., `.claude/memory/arbeitsweise.md`, Abschnitt Ordner und Ablage). Pfade immer vollständig angeben, nie unter `alfaos/`.
 
 - Kit-Test: `cd alfaos/Kit && swift test --scratch-path "$PWD/../../dist/<sitzung>/kit"`
 - App: `cd alfaos && xcodegen && xcodebuild -project ALFA_OS.xcodeproj -scheme ALFA_OS -derivedDataPath "$PWD/../dist/<sitzung>/app" build -quiet`
@@ -76,7 +77,7 @@ Jede Sitzung arbeitet in genau **einem** Ordner `dist/<sitzung>/` (die Lead: `di
 ## Commit
 
 - Betreff höchstens 72 Zeichen, Leerzeile, dann höchstens drei Zeilen Text; die letzte ist genau `Designed by Johannes Leo Berger, made with help of Claude`; kein `Co-Authored-By`.
-- Der Hook prüft swiftlint (keine Kommentare, keine Umlaute in Code), Generatoren (`--check`) und Grenzen.
+- Der Hook prüft swiftlint (Regeln in `.swiftlint.yml`, z. B. keine Umlaute in Code), Generatoren (`--check`) und Grenzen. Kommentare nach `AGENTS.md` §6.
 - Nach jedem Commit pushen; lokal und GitHub gleich (`AGENTS.md` §11).
 
 ## Zweige und GitHub-Regeln
