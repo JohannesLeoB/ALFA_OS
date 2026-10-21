@@ -1,5 +1,6 @@
 import AppKit
 import DrawingKit
+import DrawsAI
 import Foundation
 import Observation
 import UniformTypeIdentifiers
@@ -33,6 +34,48 @@ final class DrawsModel {
     var pages: [Sheet] = []
     var page = 0
     var failure: String?
+    var brief = ""
+    var attachments: [Attachment] = []
+    var designing = false
+    var assumptions: [String] = []
+    var questions: [String] = []
+    private let designer: Designer = ClaudeDesigner()
+
+    func attach(_ urls: [URL]) {
+        for url in urls {
+            guard let data = try? Data(contentsOf: url),
+                  let type = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType else { continue }
+            let item = Attachment(name: url.lastPathComponent, data: data, mediaType: type)
+            if item.supported { attachments.append(item) } else { failure = "\(DesignError.unsupported(item.name))" }
+        }
+    }
+
+    func detach(_ name: String) {
+        attachments.removeAll { $0.name == name }
+    }
+
+    func design() {
+        guard !designing else { return }
+        let request = Brief(text: brief, attachments: attachments, current: parts,
+                            materials: ci.map { Array($0.pack.tints.keys) } ?? [])
+        designing = true
+        failure = nil
+        Task {
+            do {
+                let proposal = try await designer.design(request)
+                parts = proposal.parts
+                project.merge(proposal.project) { _, new in new }
+                assumptions = proposal.assumptions
+                questions = proposal.questions
+                objectName = brief.split(separator: "\n").first.map(String.init) ?? objectName
+                if let first = proposal.products.first, let kind = Kind(rawValue: first) { layout = kind }
+                render()
+            } catch {
+                failure = "\(error)"
+            }
+            designing = false
+        }
+    }
 
     var sheet: Sheet? { pages.indices.contains(page) ? pages[page] : nil }
 

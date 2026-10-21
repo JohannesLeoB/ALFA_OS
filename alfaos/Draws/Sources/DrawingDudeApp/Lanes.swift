@@ -11,6 +11,7 @@ struct PacksLane: View {
             Head { HeadTitle(key: "draws.lane.packs"); Spacer(minLength: 0) }
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
+                    BriefPanel(model: model)
                     Caption(key: "draws.section.packs")
                     Row(label: say("draws.pack.ci"), detail: word(name(model.ci?.pack.placeholder)))
                     Row(label: say("draws.pack.template"),

@@ -397,6 +397,94 @@
           }
         }
       }
+    },
+    "draws.section.brief": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entwurf"
+          }
+        }
+      }
+    },
+    "draws.brief.placeholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beschreiben, Skizzen oder PDFs hierher ziehen …"
+          }
+        }
+      }
+    },
+    "draws.brief.add": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datei …"
+          }
+        }
+      }
+    },
+    "draws.brief.run": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entwerfen"
+          }
+        }
+      }
+    },
+    "draws.brief.running": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entwirft …"
+          }
+        }
+      }
+    },
+    "draws.brief.remove": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entfernen"
+          }
+        }
+      }
+    },
+    "draws.section.assumptions": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annahmen"
+          }
+        }
+      }
+    },
+    "draws.section.questions": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rückfragen"
+          }
+        }
+      }
     }
   }
 }
