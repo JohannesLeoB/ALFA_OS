@@ -55,4 +55,5 @@ Vermerk 21.10.: Der frühere Satz „Offen: Modul `MykilosKalkulationsCore` in f
 ## Prototyp-Sitzung DRAWS (Johannes 21.10., Lead-Chat)
 „Die DRAWS ist eine von mit heute gestartete Prototyping session die sich zwar dringend an ALFA_OS und dem was HIER gebaut wird orientieren udn folgen soll, aber kein Anrecht auf "design, token, namens Hoheit hat." sie darf nachmachen, auch bewusst andere Token und Details haben, also in dem was NICHT im aktuellsten Master ist noch "entdecken und entwickeln udn probieren" muss sich aber zwingens allem was Design MASTER jeweils Aktuell Ferstschreibt unterordnen wenn sonst kollidierend.“
 Folge: Was die Draws-Sitzung festlegt oder ins Gedächtnis schreibt, ist für ALFA_OS Hinweis, keine Regel und keine Wertquelle. Bei Kollision gilt der Design-Master.
-
+Ergänzung Johannes 21.10.: „Sie darf solange ich dort nicht den Prototypen Status bewusst aufhebe und damit auch zu ALFA_OS nachzugsmaterial mache gerne immer fragen und nachmachen, aber was „die allgemeine Verfassung“ der Alfa OS und lead Bauarbeiten angeht nicht beeinflussen. Wie so ein kleiner „Putzerfisch“ am Wal „Alfa“ sinnbildlich vielleicht“
+Folge: Draws schreibt nicht in `.claude/memory/`, AGENTS.md, README, `.claude/agents/` oder main; fragen und nachmachen darf sie.
