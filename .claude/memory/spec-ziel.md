@@ -12,6 +12,13 @@ Kürzel der Sitzungen: bc4854d7 (Lead 19./21.10.), 3f52450e (Produkt 18./20.10.)
 ## Ziel
 ALFA ist eine native macOS-App für das Designstudio: ein Betriebssystem der Arbeit mit vielen Apps, das alles kann, was das Studio sonst in getrennten Diensten tut, und besser. Die Oberfläche (UI) ist das Hauptgut. Gebaut wird nach dem Design-Master und Johannes' Wort, funktionierend und sicher (AGENTS §1).
 
+## Kern: der Vorgang
+- **ZIEL-K01**: Die Daten bleiben in ihren Schubladen (Artikel, Medien, Aufgaben, Zeiten, Mails, Dateien, Belege); jede Schublade ist die Wahrheit für ihre Stücke, ALFA spiegelt sie höchstens als Zwischenspeicher. Quelle: J 21.10. bc4854d7 „Es liegt alles in verschiedenen Schubladen - ALFA macht was draus“.
+- **ZIEL-K02**: Wert entsteht erst im Vorgang: Mail, Anfrage, Kontakt, Termin, Entwurf, Aufgaben, Zeit, Arbeit, Leistungen, Artikel, Material und Geld werden zu einem Vorgang verknüpft. ALFA führt selbst die Vorgänge und ihre Verknüpfungen (Verweise auf die Stücke in den Schubladen). Quelle: J 21.10. bc4854d7 (Vorgänge „aka Projekte, aka Tasks, aka Zeit, aka Geld …“).
+- **ZIEL-K03**: Projekt, Aufgaben, Zeit und Geld sind Sichten auf den Vorgang, keine eigenen Inseln; der Hub ist der Stecker zu den Schubladen, der Vorgang der Knoten. Folgerung der Lead aus K01/K02, von Johannes noch zu bestätigen.
+- **ZIEL-K04 Offen bei Johannes**: (a) Beginnt ein Vorgang vor dem Projekt (erste Anfrage), und ist Projekt ein Zustand des Vorgangs? (b) Wer knüpft: Nutzer, ALFA mit Vorschlag zum Bestätigen, oder beides? (c) Wo lebt der Vorgang, damit das Team ihn teilt (eigener Server oder eine Schublade wie Airtable)?
+- Ist: Es gibt keinen Vorgang im Code; `HubRules.truth` hat keinen Aufrufer außerhalb des Hubs (`alfaos/Kit/Sources/Hub/HubCore.swift`, grep).
+
 ## Richtung
 - Stufe 2 (bis Launch Ende 2026): alle übrigen Bereiche, Datan als Modul, 15 Integrationen in voller Tiefe (AGENTS §1).
 - Assistent wird später ein eigener Bereich mit Menüeintrag; heute nur das Mini-Fenster im Blob (siehe spec-huelle).
