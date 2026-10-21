@@ -93,7 +93,15 @@ public struct Dock: Sendable {
     }
 
     public func loadTemplate() throws -> Loaded<TemplatePack>? {
-        try templates.packs(.template).first.map { try Packs.loadTemplate($0.folder) }
+        try templates.packs(.template).first.map(loadTemplate)
+    }
+
+    public func loadTemplate(_ ref: PackRef) throws -> Loaded<TemplatePack> {
+        try Packs.loadTemplate(ref.folder, also: templates.packs(.ci).map(\.folder))
+    }
+
+    public func loadCI(named name: String) throws -> Loaded<CIPack>? {
+        try templates.packs(.ci).first { $0.name == name }.map { try Packs.loadCI($0.folder) }
     }
 
     public func loadMaterial() throws -> Loaded<MaterialPack>? {

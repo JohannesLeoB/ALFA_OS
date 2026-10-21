@@ -21,6 +21,14 @@ public struct CIPack: Sendable {
     public var tints: [String: String]
     public var accent: String
     public var iso: IsoStyle
+    public var colorDimension = ""
+    public var colorRow = ""
+    public var colorCell = ""
+    public var lineRow = 0.0
+    public var lineCell = 0.0
+    public var textMark = 0.0
+    public var textDeck = 0.0
+    public var textCaption = 0.0
 }
 
 public struct IsoStyle: Sendable, Equatable {
@@ -66,6 +74,14 @@ public struct TemplatePack: Sendable {
     public var titles: [String: String]
     public var block: TitleBlock
     public var presentation: Presentation
+    public var ciName = ""
+    public var outer: Insets?
+    public var divider = false
+    public var dim: Dim?
+    public var seal: Seal?
+    public var logo: Logo?
+    public var column: Column?
+    public var deck: Deck?
 
     public struct Presentation: Sendable {
         public var columnGap: Double
@@ -127,7 +143,7 @@ public enum Packs {
     public static func decodeCI(_ data: Data) throws -> Loaded<CIPack> {
         let r = try Reader(data, prefix: "ci")
         let iso = r.object("iso")
-        let pack = CIPack(
+        var pack = CIPack(
             placeholder: r.flag("platzhalter"),
             ink: r.color("ink"), muted: r.color("muted"), signal: r.color("signal"), paper: r.color("paper"),
             lineFrame: r.number("lineFrame"), lineBlock: r.number("lineBlock"), lineEdge: r.number("lineEdge"),
@@ -140,6 +156,14 @@ public enum Packs {
                           edge: iso.number("edge"), outline: iso.number("outline"),
                           shadow: iso.number("shadow"), spread: iso.number("spread"), accent: nil)
         )
+        pack.colorDimension = r.color("colorDimension", or: pack.ink)
+        pack.colorRow = r.color("colorRow", or: pack.ink)
+        pack.colorCell = r.color("colorCell", or: pack.ink)
+        pack.lineRow = r.number("lineRow", or: pack.lineDimension)
+        pack.lineCell = r.number("lineCell", or: pack.lineDimension)
+        pack.textMark = r.number("textMark", or: pack.textTitle)
+        pack.textDeck = r.number("textDeck", or: pack.textTitle)
+        pack.textCaption = r.number("textCaption", or: pack.textDimension)
         return Loaded(pack: pack, defects: r.defects + iso.defects)
     }
 
@@ -158,7 +182,7 @@ public enum Packs {
             stamp: b.text("stamp")
         )
         let method = ProjectionMethod(rawValue: r.text("method"))
-        let pack = TemplatePack(
+        var pack = TemplatePack(
             placeholder: r.flag("platzhalter"), format: r.text("format"),
             width: r.number("width"), height: r.number("height"), frame: insets(frame),
             method: method ?? .first,
@@ -176,6 +200,7 @@ public enum Packs {
         var defects = r.defects + frame.defects + iso.defects + b.defects + pr.defects
         if method == nil, !defects.contains("template.method") { defects.append("template.method") }
         if pack.chainOffset + pack.chainStep >= pack.band, !defects.contains("template.band") { defects.append("template.band") }
+        defects += studio(r, into: &pack)
         return Loaded(pack: pack, defects: defects)
     }
 }
@@ -184,6 +209,9 @@ final class Reader {
     let root: [String: Any]
     let prefix: String
     private(set) var defects: [String] = []
+    private var kids: [Reader] = []
+
+    var deep: [String] { defects + kids.flatMap(\.deep) }
 
     init(_ data: Data, prefix: String) throws {
         guard let root = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
@@ -212,6 +240,54 @@ final class Reader {
     }
 
     func flag(_ key: String) -> Bool { root[key] as? Bool ?? false }
+
+    func flag(_ key: String, or fallback: Bool) -> Bool { root[key] as? Bool ?? fallback }
+
+    func number(_ key: String, or fallback: Double) -> Double {
+        guard let raw = root[key] else { return fallback }
+        guard let v = raw as? Double, v.isFinite else { miss(key); return fallback }
+        return v
+    }
+
+    func text(_ key: String, or fallback: String) -> String {
+        guard let raw = root[key] else { return fallback }
+        guard let v = raw as? String else { miss(key); return fallback }
+        return v
+    }
+
+    func color(_ key: String, or fallback: String) -> String {
+        guard let raw = root[key] else { return fallback }
+        guard let v = raw as? String, Reader.isColour(v) else { miss(key); return fallback }
+        return v
+    }
+
+    func numbers(_ key: String, count: Int) -> [Double] {
+        guard let v = root[key] as? [Double], v.count == count, v.allSatisfy(\.isFinite) else {
+            miss(key)
+            return Array(repeating: 0, count: count)
+        }
+        return v
+    }
+
+    func counts(_ key: String) -> [Int] {
+        guard let raw = root[key] else { return [] }
+        guard let v = raw as? [Double] else { miss(key); return [] }
+        let ints = v.compactMap { Int(exactly: $0) }
+        guard ints.count == v.count else { miss(key); return [] }
+        return ints
+    }
+
+    func count(_ key: String) -> Int {
+        guard let v = root[key] as? Double, let n = Int(exactly: v), n >= 0 else { miss(key); return 0 }
+        return n
+    }
+
+    func maybe(_ key: String) -> Reader? {
+        guard let o = root[key] as? [String: Any] else { return nil }
+        let kid = Reader(o, prefix: "\(prefix).\(key)", missing: false)
+        kids.append(kid)
+        return kid
+    }
 
     func color(_ key: String) -> String {
         guard let v = root[key] as? String, Reader.isColour(v) else { miss(key); return "" }
@@ -255,12 +331,16 @@ final class Reader {
 
     func object(_ key: String) -> Reader {
         let o = root[key] as? [String: Any]
-        return Reader(o, prefix: "\(prefix).\(key)", missing: o == nil)
+        let kid = Reader(o, prefix: "\(prefix).\(key)", missing: o == nil)
+        kids.append(kid)
+        return kid
     }
 
     func list(_ key: String) -> [Reader] {
         guard let v = root[key] as? [[String: Any]] else { miss(key); return [] }
-        return v.enumerated().map { Reader($0.element, prefix: "\(prefix).\(key)[\($0.offset)]", missing: false) }
+        let made = v.enumerated().map { Reader($0.element, prefix: "\(prefix).\(key)[\($0.offset)]", missing: false) }
+        kids += made
+        return made
     }
 }
 

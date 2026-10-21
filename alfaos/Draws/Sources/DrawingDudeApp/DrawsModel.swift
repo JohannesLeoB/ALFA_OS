@@ -10,7 +10,7 @@ import ShellCore
 import UniformTypeIdentifiers
 
 enum Kind: String, CaseIterable {
-    case plan, iso, steps, perspective, customer, presentation
+    case plan, iso, steps, perspective, customer, presentation, cover
 }
 
 enum Tab: String, CaseIterable { case view, style, export }
@@ -111,6 +111,8 @@ final class DrawsModel {
     var assumptions: [String] = []
     var questions: [String] = []
     var variants: [Variant] = []
+    var blocks: [Panel] = []
+    var choice = ""
     private var ready = false
     private let designer: Designer
 
@@ -122,6 +124,13 @@ final class DrawsModel {
     }
 
     var sheet: Sheet? { pages.indices.contains(page) ? pages[page] : nil }
+
+    var templates: [PackRef] { dock.templates.packs(.template) }
+
+    var kinds: [Kind] {
+        let deck = template?.pack.deck != nil
+        return Kind.allCases.filter { deck ? [.presentation, .iso, .perspective, .cover].contains($0) : $0 != .cover }
+    }
 
     var shown: [Part] {
         parts.filter { !hidden.contains($0.id) }
@@ -192,8 +201,9 @@ final class DrawsModel {
     }
 
     func preset() -> [Cell] {
-        guard let t = template?.pack, let field else { return [] }
-        return Presets.cells(layout, field: field, gap: t.gap, steps: Set(shown.map(\.z)).count)
+        guard let t = template?.pack, var room = field else { return [] }
+        if let deck = t.deck { room.size.height -= deck.captionGap + 2 * deck.captionLeading }
+        return Presets.cells(layout, field: room, gap: t.gap, steps: Set(shown.map(\.z)).count)
     }
 
     func rebuild() {
@@ -212,6 +222,7 @@ final class DrawsModel {
         do {
             ci = try dock.loadCI()
             template = try dock.loadTemplate()
+            choice = templates.first?.name ?? ""
             material = try dock.loadMaterial()
             fonts = DrawsFonts.resolve(upload: dock.templates.fonts())
             guard ci != nil, template != nil else {
@@ -222,6 +233,23 @@ final class DrawsModel {
             cells = preset()
             ready = true
             load(Self.root.appendingPathComponent("Examples/kueche.json"))
+        } catch {
+            failure = "\(error)"
+        }
+    }
+
+    func choose(_ ref: PackRef) {
+        do {
+            let next = try dock.loadTemplate(ref)
+            if let paired = try dock.loadCI(named: next.pack.ciName) {
+                ci = paired
+            } else if let first = try dock.loadCI() {
+                ci = first
+            }
+            template = next
+            choice = ref.name
+            resetStyle()
+            layout = kinds.contains(layout) ? layout : (kinds.first ?? .plan)
         } catch {
             failure = "\(error)"
         }
@@ -253,6 +281,7 @@ final class DrawsModel {
             project = object.project ?? [:]
             adopt()
             variants = object.variants ?? []
+            blocks = object.blocks ?? []
             hidden = []
             accent = nil
             rebuild()
@@ -277,6 +306,7 @@ final class DrawsModel {
     func clear() {
         ready = false
         parts = []
+        blocks = []
         hidden = []
         accent = nil
         rebuild()
@@ -298,6 +328,7 @@ final class DrawsModel {
 
     func product() -> Product {
         if layout == .presentation { return .presentation }
+        if layout == .cover { return .cover }
         let size = shown.reduce(0.0) { max($0, $1.w, $1.d, $1.h) }
         return .board(cells, ViewSpec(kind: .iso, azimuth: azimuth, elevation: elevation,
                                       distance: Proto.perspectiveDistance * size))
@@ -315,7 +346,7 @@ final class DrawsModel {
             pages = try DrawingEngine.render(Job(parts: shown, ci: ci.pack, template: template.pack, project: project,
                                                  products: [product()], style: style(), dimensions: dimensions,
                                                  material: material?.pack, variants: variants, dims: dimensions ? .given : .none,
-                                                 fonts: fonts))
+                                                 fonts: fonts, blocks: blocks))
             page = min(page, max(0, pages.count - 1))
             failure = nil
         } catch DrawingError.overflow {

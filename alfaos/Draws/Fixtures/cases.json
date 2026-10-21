@@ -1051,6 +1051,367 @@
     {"id": "c", "view": "iso", "x": 15, "y": 144, "w": 140, "h": 140, "focus": "platte", "step": 3},
     {"id": "d", "view": "perspective", "x": 160, "y": 144, "w": 150, "h": 140}
    ]
+  },
+  {
+   "name": "studio plan",
+   "template": "studio-a3-plan",
+   "parts": [
+    {
+     "id": "sockel",
+     "name": "Sockel",
+     "material": "sockel",
+     "x": 0,
+     "y": 70,
+     "z": 0,
+     "w": 2400,
+     "d": 530,
+     "h": 100
+    },
+    {
+     "id": "u0",
+     "name": "Unterschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u1",
+     "name": "Unterschrank 2",
+     "material": "korpus",
+     "x": 600,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u2",
+     "name": "Unterschrank 3",
+     "material": "korpus",
+     "x": 1200,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u3",
+     "name": "Unterschrank 4",
+     "material": "korpus",
+     "x": 1800,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "platte",
+     "name": "Arbeitsplatte",
+     "material": "platte",
+     "x": 0,
+     "y": 0,
+     "z": 820,
+     "w": 2400,
+     "d": 620,
+     "h": 40
+    },
+    {
+     "id": "o0",
+     "name": "Oberschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    },
+    {
+     "id": "o1",
+     "name": "Oberschrank 2",
+     "material": "korpus",
+     "x": 800,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    },
+    {
+     "id": "o2",
+     "name": "Oberschrank 3",
+     "material": "korpus",
+     "x": 1600,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    }
+   ],
+   "tints": {
+    "korpus": "#eeeeee",
+    "platte": "#f3eee9",
+    "sockel": "#ffffcc"
+   },
+   "project": {
+    "lastName": "Mustermann",
+    "project": "Küche EG",
+    "street": "Beispielweg 1",
+    "city": "20457 Hamburg",
+    "customer": "2026-001",
+    "date": "21.10.2026",
+    "drawn": "GEZ",
+    "status": "vorabzug",
+    "wordmark": "WORDMARK",
+    "layout.board": "Küchenzeile Ansichten",
+    "company.name": "Muster GmbH",
+    "company.mail": "mail@example.test",
+    "company.web": "www.example.test",
+    "company.address": "Musterweg 1, 12345 Musterstadt",
+    "company.phone": "+00 00 000 00 00",
+    "legal.1": "Diese Zeichnung ist Eigentum der Muster GmbH.",
+    "legal.2": "Vervielfältigung und Weiterverwendung sind nicht gestattet.",
+    "legal.3": "Änderungen nur in Absprache mit der Muster GmbH."
+   },
+   "products": [
+    "board"
+   ],
+   "cells": [
+    {
+     "id": "f",
+     "view": "front",
+     "x": 15,
+     "y": 2,
+     "w": 200,
+     "h": 150
+    },
+    {
+     "id": "r",
+     "view": "right",
+     "x": 215,
+     "y": 2,
+     "w": 102,
+     "h": 150
+    },
+    {
+     "id": "t",
+     "view": "top",
+     "x": 15,
+     "y": 152,
+     "w": 200,
+     "h": 90
+    },
+    {
+     "id": "i",
+     "view": "iso",
+     "x": 215,
+     "y": 152,
+     "w": 102,
+     "h": 143
+    }
+   ],
+   "blocks": [
+    {
+     "title": "Geräte",
+     "rows": [
+      {
+       "label": "Kühlschrank",
+       "value": "Kühl-Gefrierkombination, Modell 5170"
+      },
+      {
+       "label": "Kochfeld",
+       "value": "Induktion mit integrierter Muldenlüftung, Serie 3.0, schwarz, Rahmen schmal, Anschluss 400 V"
+      },
+      {
+       "label": "Geschirrspüler",
+       "value": "Vollintegriert, 60 cm"
+      }
+     ]
+    },
+    {
+     "title": "Zubehör",
+     "rows": [
+      {
+       "label": "Armatur",
+       "value": "Einhebelmischer, Messing patiniert"
+      },
+      {
+       "label": "Griffe",
+       "value": "Messing, 160 mm"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "studio deck",
+   "template": "studio-a4-deck",
+   "parts": [
+    {
+     "id": "sockel",
+     "name": "Sockel",
+     "material": "sockel",
+     "x": 0,
+     "y": 70,
+     "z": 0,
+     "w": 2400,
+     "d": 530,
+     "h": 100
+    },
+    {
+     "id": "u0",
+     "name": "Unterschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u1",
+     "name": "Unterschrank 2",
+     "material": "korpus",
+     "x": 600,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u2",
+     "name": "Unterschrank 3",
+     "material": "korpus",
+     "x": 1200,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u3",
+     "name": "Unterschrank 4",
+     "material": "korpus",
+     "x": 1800,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "platte",
+     "name": "Arbeitsplatte",
+     "material": "platte",
+     "x": 0,
+     "y": 0,
+     "z": 820,
+     "w": 2400,
+     "d": 620,
+     "h": 40
+    },
+    {
+     "id": "o0",
+     "name": "Oberschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    },
+    {
+     "id": "o1",
+     "name": "Oberschrank 2",
+     "material": "korpus",
+     "x": 800,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    },
+    {
+     "id": "o2",
+     "name": "Oberschrank 3",
+     "material": "korpus",
+     "x": 1600,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    }
+   ],
+   "tints": {
+    "korpus": "#eeeeee",
+    "platte": "#f3eee9",
+    "sockel": "#ffffcc"
+   },
+   "project": {
+    "title": "Moodboard Küche\nProjektname",
+    "project": "Küche EG",
+    "date": "21. Oktober 2026",
+    "page": "2",
+    "year": "2026",
+    "company.name": "Muster GmbH",
+    "wordmark": "WORDMARK"
+   },
+   "products": [
+    "presentation"
+   ],
+   "variants": [
+    {
+     "id": "a",
+     "name": "Variante A",
+     "slots": {}
+    },
+    {
+     "id": "b",
+     "name": "Variante B",
+     "slots": {
+      "platte": "variante:platte-hell"
+     }
+    }
+   ]
+  },
+  {
+   "name": "studio cover",
+   "template": "studio-a4-deck",
+   "parts": [
+    {
+     "id": "sockel",
+     "name": "Sockel",
+     "material": "sockel",
+     "x": 0,
+     "y": 70,
+     "z": 0,
+     "w": 2400,
+     "d": 530,
+     "h": 100
+    }
+   ],
+   "project": {
+    "title": "Moodboard Küche\nProjektname",
+    "project": "Küche EG",
+    "date": "21. Oktober 2026",
+    "wordmark": "WORDMARK"
+   },
+   "products": [
+    "cover"
+   ]
   }
  ],
  "replies": [

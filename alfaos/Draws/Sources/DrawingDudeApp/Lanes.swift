@@ -113,7 +113,7 @@ struct SheetLane: View {
             Head {
                 HeadTitle(key: "draws.lane.sheet", detail: model.template?.pack.format)
                 Choice(value: word("draws.product.\(model.layout.rawValue)")) {
-                    ForEach(Kind.allCases, id: \.self) { kind in
+                    ForEach(model.kinds, id: \.self) { kind in
                         Toggle(word("draws.product.\(kind.rawValue)"), isOn: Binding(
                             get: { model.layout == kind }, set: { if $0 { model.layout = kind } }))
                     }
@@ -494,6 +494,11 @@ struct ViewTab: View {
         }
         if model.layout != .presentation, let cell = model.cell(model.selected) { selection(cell) }
         SectionHead(key: "draws.section.sheet", meta: model.template?.pack.format ?? "")
+        Labeled(key: "draws.pack.template") {
+            Choice(value: model.choice) {
+                ForEach(model.templates) { ref in Button(ref.name) { model.choose(ref) } }
+            }
+        }
         if model.layout == .presentation {
             Labeled(key: "draws.views.dimensions") { Switch(on: $model.dimensions) }
         }

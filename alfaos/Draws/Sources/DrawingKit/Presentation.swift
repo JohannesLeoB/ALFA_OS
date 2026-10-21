@@ -24,19 +24,28 @@ extension Composer {
             let x0 = field.minX + Double(i) * (column + pr.columnGap) + (column - viewW - side) / 2
             let origin = CGPoint(x: x0, y: y0 + top + band)
             if !v.name.isEmpty {
-                sheet.items.append(.text(v.name, at: CGPoint(x: x0, y: y0 + top / 2), size: ci.textTitle, anchor: .start,
-                                         weight: ci.weightTitle, color: ci.ink, rotation: 0))
+                if t.deck != nil {
+                    put(caps(v.name), at: CGPoint(x: x0, y: y0 + top / 2), size: ci.textCaption, mono: true)
+                } else {
+                    sheet.items.append(.text(v.name, at: CGPoint(x: x0, y: y0 + top / 2), size: ci.textTitle, anchor: .start,
+                                             weight: ci.weightTitle, color: ci.ink, rotation: 0))
+                }
             }
             try face(v, job, origin: origin, extent: e, scale: n)
             var last = -Double.infinity
             for label in roles {
                 let y = max(origin.y + (Double(e.maxY) - label.z) / n + ci.textDimension / 2, last + pr.labelStep)
                 last = y
-                sheet.items.append(.text(label.text, at: CGPoint(x: origin.x + viewW + pr.labelGap, y: y),
-                                         size: ci.textDimension, anchor: .start, weight: 400, color: ci.ink, rotation: 0))
+                if t.deck != nil {
+                    put(label.text, at: CGPoint(x: origin.x + viewW + pr.labelGap, y: y), size: ci.textCaption, mono: true)
+                } else {
+                    sheet.items.append(.text(label.text, at: CGPoint(x: origin.x + viewW + pr.labelGap, y: y),
+                                             size: ci.textDimension, anchor: .start, weight: 400, color: ci.ink, rotation: 0))
+                }
             }
             if job.dims == .given { totals(origin: origin, extent: e, scale: n) }
         }
+        guard t.deck == nil, t.column == nil else { return }
         stamp()
         materialBlock(job, variants)
     }

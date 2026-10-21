@@ -52,7 +52,7 @@ enum Presets {
                  step: step, dims: view != .iso && view != .perspective)
         }
         switch kind {
-        case .presentation:
+        case .presentation, .cover:
             return []
         case .iso:
             return [cell(1, .iso, f.minX, f.minY, f.width, f.height)]

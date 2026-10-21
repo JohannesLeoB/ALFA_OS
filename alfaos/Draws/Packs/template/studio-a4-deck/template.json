@@ -1,0 +1,102 @@
+{
+  "platzhalter": false,
+  "quelle": "Entwurf aus Messung, nicht freigegeben. Quellen: Moodboard-Vorlage, Entwurfspraesentation, Moodboard. Koordinaten in mm, Ursprung links oben, Nennblatt 297 x 210. frame = Inhaltszone (Rand 5, Hilfslinien y 23 bis 202,76). Gemessen: deck.*, logo. Nicht gemessen (wie Platzhalter-Pack): gap, minPaperLength, titleOffset, noScale, scales, isoScales, isoMargin, viewTitles, titles, presentation.columnGap/titleGap/labelGap/labelStep/totalPad. Werte kommen als Schluessel aus dem Projekt (title oder project, date, page, year, wordmark, company.name, caption.<Zelle>).",
+  "ci": "studio",
+  "format": "A4",
+  "width": 297,
+  "height": 210,
+  "frame": {
+    "left": 5,
+    "top": 23,
+    "right": 5,
+    "bottom": 7.24
+  },
+  "method": "first",
+  "band": 24,
+  "gap": 14,
+  "chainOffset": 7.2,
+  "chainStep": 10.9,
+  "minPaperLength": 4,
+  "tick": 3.0,
+  "extensionGap": 2.0,
+  "titleOffset": 9,
+  "noScale": "o. M.",
+  "scales": [1, 2, 5, 10, 20, 25, 50, 100, 200],
+  "isoScales": [10, 20, 25, 50],
+  "isoMargin": {
+    "left": 15,
+    "top": 20,
+    "right": 15,
+    "bottom": 20
+  },
+  "viewTitles": {
+    "front": "Ansicht",
+    "top": "Grundriss",
+    "right": "Ansicht von rechts",
+    "left": "Ansicht von links",
+    "back": "Rückansicht"
+  },
+  "titles": {
+    "iso": "Isometrie {az}° / {el}°",
+    "perspective": "Perspektive {az}° / {el}°",
+    "steps": "Schritt {n} von {of}",
+    "customer": "Ansicht",
+    "presentation": "Entwurf"
+  },
+  "dim": {
+    "tick": 3.0,
+    "overrun": 2.0,
+    "stub": 2.0,
+    "text": 3.45
+  },
+  "logo": {
+    "file": "logo.png",
+    "frame": [224.35, 193.7, 67.65, 11.3],
+    "text": [292.0, 205.0],
+    "size": 15.7,
+    "anchor": "end",
+    "cover": true
+  },
+  "deck": {
+    "caps": true,
+    "title": {"key": "title", "x": 5, "top": 3.73, "width": 240, "height": 20.32, "leading": 10.16},
+    "head": {"x": 292, "base": 7.24},
+    "foot": {
+      "base": 205,
+      "items": [
+        {"x": 5, "text": "{project}"},
+        {"x": 58.5, "text": "{date}"},
+        {"x": 292, "text": "{company.name} {year}", "end": true}
+      ]
+    },
+    "caption": {"leading": 3.39, "gap": 1.3}
+  },
+  "block": {
+    "inset": 0,
+    "notes": [],
+    "notesTop": 0,
+    "notesStep": 0,
+    "rowsTop": 0,
+    "rowHeight": 0,
+    "labelBaseline": 0,
+    "valueBaseline": 0,
+    "rows": [],
+    "footerHeight": 0,
+    "footer": [],
+    "footerStep": 0,
+    "stamp": ""
+  },
+  "presentation": {
+    "columnGap": 14,
+    "titleGap": 9,
+    "labelGap": 6,
+    "labelStep": 3.39,
+    "blockGap": 0,
+    "blockRow": 3.39,
+    "swatch": 3.5,
+    "stamp": "",
+    "stampStatuses": [],
+    "stampSize": 0,
+    "totalPad": 1
+  }
+}

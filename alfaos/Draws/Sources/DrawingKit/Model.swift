@@ -52,8 +52,9 @@ public struct DrawingObject: Codable, Sendable {
     public var parts: [Part]
     public var project: [String: String]?
     public var variants: [Variant]?
-    public init(parts: [Part], project: [String: String]? = nil, variants: [Variant]? = nil) {
-        self.parts = parts; self.project = project; self.variants = variants
+    public var blocks: [Panel]?
+    public init(parts: [Part], project: [String: String]? = nil, variants: [Variant]? = nil, blocks: [Panel]? = nil) {
+        self.parts = parts; self.project = project; self.variants = variants; self.blocks = blocks
     }
 
     public static func load(_ url: URL) throws -> DrawingObject {

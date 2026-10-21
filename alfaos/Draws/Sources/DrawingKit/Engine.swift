@@ -18,11 +18,17 @@ public enum DrawingEngine {
         try Validate.parts(job.parts)
         guard !job.products.isEmpty else { throw DrawingError.empty }
         var out: [Sheet] = []
-        for product in job.products {
+        var panels = job.blocks
+        if let title = job.template.column?.blocks.materials, !title.isEmpty, !panels.contains(where: { $0.title == title }) {
+            panels.append(materials(job, title: title))
+        }
+        for (index, product) in job.products.enumerated() {
             var base = Request(parts: job.parts, ci: job.ci, template: job.template, project: job.project,
                                layout: .iso, dimensions: job.dimensions, style: job.style, fonts: job.fonts)
             base.product = product.key
             base.scale = job.scale
+            base.blocks = panels
+            base.number = index + 1
             switch product {
             case .plan:
                 base.layout = .threeView
@@ -54,9 +60,30 @@ public enum DrawingEngine {
                 c.titleBlock()
                 c.sheet.product = base.product
                 out.append(c.sheet)
+            case .cover:
+                guard job.template.deck != nil else { throw DrawingError.pack(["template.deck"]) }
+                var c = Composer(base)
+                c.furniture(cover: true)
+                c.sheet.product = base.product
+                out.append(c.sheet)
             }
         }
         return out
+    }
+
+    static func materials(_ job: Job, title: String) -> Panel {
+        let variant = job.variants.first ?? Variant(id: "", name: "", slots: [:])
+        var groups: [String: [String]] = [:]
+        for p in job.parts {
+            let keys = [p.role, p.material].compactMap { $0 }
+            let code = keys.lazy.compactMap { variant.slots[$0] }.first ?? keys.lazy.compactMap { job.material?.slots[$0] }.first
+            let role = (p.role ?? p.name).uppercased()
+            if !(groups[code ?? p.material]?.contains(role) ?? false) { groups[code ?? p.material, default: []].append(role) }
+        }
+        let rows = groups.sorted { $0.key < $1.key }.map { key, roles in
+            Entry(label: roles.joined(separator: ", "), value: job.material?.material(key)?.name ?? key)
+        }
+        return Panel(title: title, rows: rows)
     }
 
     static func steps(_ groups: [[String]], _ parts: [Part]) throws -> [(parts: [Part], added: Set<String>)] {
@@ -122,7 +149,17 @@ struct Composer {
         field = CGRect(x: f.left, y: f.top, width: t.width - f.left - f.right, height: t.height - f.top - f.bottom)
         sheet = Sheet(width: t.width, height: t.height, scale: 0, fonts: r.fonts, paper: r.ci.paper,
                       items: [], dimensions: [], defects: [])
-        if frame { sheet.items.append(.rect(field, fill: nil, stroke: r.ci.ink, width: r.ci.lineFrame)) }
+        guard frame, t.deck == nil else { return }
+        if let o = t.outer {
+            let outer = CGRect(x: o.left, y: o.top, width: t.width - o.left - o.right, height: t.height - o.top - o.bottom)
+            sheet.items.append(.rect(outer, fill: nil, stroke: r.ci.ink, width: r.ci.lineFrame))
+            if t.divider {
+                sheet.items.append(.line(CGPoint(x: field.maxX, y: field.minY), CGPoint(x: field.maxX, y: field.maxY),
+                                         width: r.ci.lineFrame, color: r.ci.ink))
+            }
+        } else {
+            sheet.items.append(.rect(field, fill: nil, stroke: r.ci.ink, width: r.ci.lineFrame))
+        }
     }
 
     mutating func tint(_ material: String) -> String? {
@@ -235,6 +272,7 @@ struct Composer {
     }
 
     mutating func dimension(from a: CGPoint, to b: CGPoint, extFrom ea: CGPoint, extFrom2 eb: CGPoint, text: String, rotation: Double) {
+        if let d = r.template.dim { return styled(d, from: a, to: b, extFrom: ea, extFrom2: eb, text: text, rotation: rotation) }
         let ci = r.ci, tk = r.template.tick
         sheet.items.append(.line(a, b, width: ci.lineDimension, color: ci.ink))
         let vertical = rotation != 0
@@ -309,7 +347,27 @@ struct Composer {
         return (n, found != nil)
     }
 
+    mutating func styled(_ d: TemplatePack.Dim, from a: CGPoint, to b: CGPoint, extFrom ea: CGPoint, extFrom2 eb: CGPoint,
+                         text: String, rotation: Double) {
+        let ci = r.ci, ink = ci.colorDimension
+        let length = hypot(b.x - a.x, b.y - a.y)
+        let u = length > 0 ? CGPoint(x: (b.x - a.x) / length, y: (b.y - a.y) / length) : CGPoint(x: 1, y: 0)
+        rule(CGPoint(x: a.x - u.x * d.stub, y: a.y - u.y * d.stub), CGPoint(x: b.x + u.x * d.stub, y: b.y + u.y * d.stub),
+             width: ci.lineDimension, color: ink)
+        let vertical = rotation != 0, half = d.tick / (2 * 2.0.squareRoot())
+        for (end, ext) in [(a, ea), (b, eb)] {
+            let over = vertical ? CGPoint(x: end.x - d.overrun, y: end.y) : CGPoint(x: end.x, y: end.y + d.overrun)
+            rule(ext, over, width: ci.lineExtension, color: ink)
+            rule(CGPoint(x: end.x - half, y: end.y + half), CGPoint(x: end.x + half, y: end.y - half), width: ci.lineTick, color: ink)
+        }
+        let mid = CGPoint(x: (a.x + b.x) / 2, y: (a.y + b.y) / 2)
+        put(text, at: vertical ? CGPoint(x: mid.x - d.text, y: mid.y) : CGPoint(x: mid.x, y: mid.y - d.text),
+            size: ci.textDimension, mono: true, anchor: .middle, color: ink, rotation: rotation)
+    }
+
     mutating func titleBlock() {
+        if r.template.deck != nil { return furniture(cover: false) }
+        if r.template.column != nil { return studioColumn() }
         let t = r.template, b = t.block, ci = r.ci
         let x = field.maxX + b.inset, w = t.frame.right - 2 * b.inset
         sheet.items.append(.rect(CGRect(x: x, y: field.minY, width: w, height: field.height), fill: nil, stroke: ci.ink, width: ci.lineBlock))

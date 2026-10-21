@@ -1,0 +1,206 @@
+{
+  "platzhalter": false,
+  "quelle": "Entwurf aus Messung, nicht freigegeben. Quellen: Planlayouts A3, Aufmass-Template A3, Plansatz, Entwurfspraesentation (Plansaetze). Koordinaten in mm, Ursprung links oben, Nennblatt 420 x 297. Gemessen: frame (Zeichenfeld), outer (Aussenrahmen), column.*, dim, seal, logo. Geschaetzt: band. Nicht gemessen (wie Platzhalter-Pack): gap, minPaperLength, titleOffset, noScale, scales, isoScales, isoMargin, viewTitles, titles, presentation.columnGap/titleGap/labelGap/labelStep/swatch/totalPad. Titelblock-Werte kommen als Schluessel aus dem Projekt (wordmark, lastName, project, street, city oder zip und town, customer, date, drawn, company.name, company.mail, company.web, company.address, company.phone, legal.1 bis legal.3).",
+  "ci": "studio",
+  "format": "A3",
+  "width": 420,
+  "height": 297,
+  "frame": {
+    "left": 15.02,
+    "top": 2.01,
+    "right": 102.73,
+    "bottom": 1.99
+  },
+  "outer": {
+    "left": 15.02,
+    "top": 2.01,
+    "right": 1.98,
+    "bottom": 1.99
+  },
+  "divider": false,
+  "method": "first",
+  "band": 24,
+  "gap": 14,
+  "chainOffset": 7.2,
+  "chainStep": 10.9,
+  "minPaperLength": 4,
+  "tick": 3.0,
+  "extensionGap": 2.0,
+  "titleOffset": 9,
+  "noScale": "o. M.",
+  "scales": [1, 2, 5, 10, 20, 25, 50, 100, 200],
+  "isoScales": [10, 20, 25, 50],
+  "isoMargin": {
+    "left": 15,
+    "top": 20,
+    "right": 15,
+    "bottom": 20
+  },
+  "viewTitles": {
+    "front": "Ansicht",
+    "top": "Grundriss",
+    "right": "Ansicht von rechts",
+    "left": "Ansicht von links",
+    "back": "Rückansicht"
+  },
+  "titles": {
+    "iso": "Isometrie {az}° / {el}°",
+    "perspective": "Perspektive {az}° / {el}°",
+    "steps": "Schritt {n} von {of}",
+    "customer": "Ansicht",
+    "presentation": "Entwurf"
+  },
+  "dim": {
+    "tick": 3.0,
+    "overrun": 2.0,
+    "stub": 2.0,
+    "text": 3.45
+  },
+  "seal": {
+    "angle": 29.98,
+    "width": 40,
+    "height": 14,
+    "x": 298.22,
+    "y": 253.51
+  },
+  "logo": {
+    "file": "logo.png",
+    "frame": [330.45, 227.95, 27.65, 4.65],
+    "text": [331.02, 232.24],
+    "anchor": "start",
+    "cover": false
+  },
+  "column": {
+    "left": 328.02,
+    "width": 90,
+    "inset": 1.94,
+    "blocks": {
+      "top": 8.48,
+      "height": 191.59,
+      "rows": 34,
+      "row": 5.635,
+      "head": 5.635,
+      "headBase": 3.54,
+      "rowBase": 3.48,
+      "glyph": 0.6,
+      "split": [9, 10, 12],
+      "materials": "Materialien"
+    },
+    "notes": {
+      "top": 205.67,
+      "height": 14,
+      "base": 4.4,
+      "step": 3.385,
+      "x": 330.0
+    },
+    "title": {
+      "top": 225.31,
+      "height": 69.7,
+      "bands": [
+        {
+          "h": 10.4,
+          "slots": [
+            {"w": 45, "pieces": []},
+            {"w": 45, "pieces": [{"key": "lastName", "x": 3.0, "base": 6.8, "tier": "title"}]}
+          ]
+        },
+        {
+          "h": 5.64,
+          "heavy": true,
+          "slots": [
+            {"w": 45, "pieces": [{"key": "layout", "x": 3.0, "base": 3.53}]},
+            {"w": 45, "pieces": [{"key": "project", "x": 3.0, "base": 3.53}]}
+          ]
+        },
+        {
+          "h": 5.64,
+          "slots": [
+            {"w": 45, "pieces": [{"label": "Datum:", "key": "date", "x": 3.0, "gap": 25.5, "base": 3.53}]},
+            {"w": 45, "pieces": [{"key": "street", "x": 3.0, "base": 3.53}]}
+          ]
+        },
+        {
+          "h": 5.64,
+          "slots": [
+            {"w": 45, "pieces": [{"label": "Maßstab:", "key": "scale", "x": 3.0, "gap": 25.5, "base": 3.53}]},
+            {"w": 13.61, "pieces": [{"key": "zip", "x": 3.0, "base": 3.53}]},
+            {"w": 31.39, "pieces": [{"key": "town", "x": 3.0, "base": 3.53}]}
+          ]
+        },
+        {
+          "h": 5.64,
+          "slots": [
+            {"w": 45, "pieces": [{"label": "Format:", "key": "format", "x": 3.0, "gap": 25.5, "base": 3.53}]},
+            {"w": 45, "pieces": [{"label": "Kundennr.", "key": "customer", "x": 3.0, "base": 3.53}]}
+          ]
+        },
+        {
+          "h": 7.04,
+          "cut": false,
+          "slots": [
+            {"w": 90, "pieces": [{"text": "Alle Maßangaben in Millimetern. Alle Maße sind am Bau zu prüfen.", "x": 3.0, "base": 4.4}]}
+          ]
+        },
+        {
+          "h": 12.17,
+          "cut": false,
+          "slots": [
+            {"w": 90, "pieces": [
+              {"key": "legal.1", "x": 3.0, "base": 3.3},
+              {"key": "legal.2", "x": 3.0, "base": 6.68},
+              {"key": "legal.3", "x": 3.0, "base": 10.07}
+            ]}
+          ]
+        },
+        {
+          "h": 17.55,
+          "cut": false,
+          "slots": [
+            {"w": 45, "pieces": [
+              {"key": "company.name", "x": 3.0, "base": 4.98},
+              {"key": "company.mail", "x": 3.0, "base": 11.74},
+              {"key": "company.web", "x": 3.0, "base": 15.12}
+            ]},
+            {"w": 45, "pieces": [
+              {"label": "Zeichnung :", "key": "drawn", "x": 3.0, "base": 4.98},
+              {"key": "company.address", "x": 3.0, "base": 12.18},
+              {"key": "company.phone", "x": 3.0, "base": 14.65}
+            ]}
+          ]
+        }
+      ]
+    }
+  },
+  "block": {
+    "inset": 1.94,
+    "notes": [
+      "Alle Maße sind vor Ort zu prüfen bzw. am Bau zu nehmen.",
+      "Unstimmigkeiten sind der Bauleitung unverzüglich mitzuteilen.",
+      "Höhenangaben sind auf OKFF bezogen, sofern nicht anders vermerkt."
+    ],
+    "notesTop": 0,
+    "notesStep": 0,
+    "rowsTop": 0,
+    "rowHeight": 0,
+    "labelBaseline": 0,
+    "valueBaseline": 0,
+    "rows": [],
+    "footerHeight": 0,
+    "footer": [],
+    "footerStep": 0,
+    "stamp": ""
+  },
+  "presentation": {
+    "columnGap": 14,
+    "titleGap": 9,
+    "labelGap": 6,
+    "labelStep": 4,
+    "blockGap": 0,
+    "blockRow": 5.64,
+    "swatch": 3.5,
+    "stamp": "VORABZUG",
+    "stampStatuses": ["vorabzug"],
+    "stampSize": 4.911,
+    "totalPad": 1
+  }
+}

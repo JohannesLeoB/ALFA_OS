@@ -9,9 +9,11 @@ public enum SheetItem: Sendable {
     case rect(CGRect, fill: String?, stroke: String?, width: Double)
     case polygon([CGPoint], fill: String?, stroke: String?, width: Double)
     case text(String, at: CGPoint, size: Double, anchor: TextAnchor, weight: Int, color: String, rotation: Double)
+    case raw(Item)
 
     var item: Item {
         switch self {
+        case let .raw(item): return item
         case let .line(a, b, width, color): return .line(a, b, Paint(stroke: color, width: width))
         case let .rect(r, fill, stroke, width): return .rect(r, Paint(fill: fill, stroke: stroke, width: width))
         case let .polygon(points, fill, stroke, width): return .polygon(points, Paint(fill: fill, stroke: stroke, width: width))
@@ -43,7 +45,7 @@ public struct Sheet: Sendable {
     }
 
     public var faces: [FontFace] {
-        [FontFace(role: .sans, family: fonts.sans)]
+        [FontFace(role: .sans, family: fonts.sans), FontFace(role: .mono, family: fonts.mono)]
     }
 
     public var document: Document {
@@ -82,6 +84,7 @@ public enum Product: Sendable, Equatable {
     case customer(ViewSpec)
     case presentation
     case board([Cell], ViewSpec)
+    case cover
 
     public static func named(_ name: String, distance: Double? = nil) -> Product? {
         switch name {
@@ -91,6 +94,7 @@ public enum Product: Sendable, Equatable {
         case "steps": return .steps(ViewSpec(kind: .iso), [])
         case "customer": return .customer(ViewSpec(kind: .iso))
         case "presentation": return .presentation
+        case "cover": return .cover
         default: return nil
         }
     }
@@ -103,7 +107,27 @@ public enum Product: Sendable, Equatable {
         case .customer: return "customer"
         case .presentation: return "presentation"
         case .board: return "board"
+        case .cover: return "cover"
         }
+    }
+}
+
+public struct Entry: Codable, Sendable, Equatable {
+    public var label: String
+    public var value: String
+
+    public init(label: String, value: String) {
+        self.label = label; self.value = value
+    }
+}
+
+public struct Panel: Codable, Sendable, Equatable {
+    public var title: String
+    public var rows: [Entry]
+    public var quota: Int?
+
+    public init(title: String, rows: [Entry], quota: Int? = nil) {
+        self.title = title; self.rows = rows; self.quota = quota
     }
 }
 
@@ -122,14 +146,16 @@ public struct Job: Sendable {
     public var dims: DimMode
     public var fonts: SheetFonts
     public var scale: Double?
+    public var blocks: [Panel]
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
                 products: [Product], style: IsoStyle? = nil, dimensions: Bool = true,
                 material: MaterialPack? = nil, variants: [Variant] = [], dims: DimMode = .none, fonts: SheetFonts,
-                scale: Double? = nil) {
+                scale: Double? = nil, blocks: [Panel] = []) {
         self.parts = parts; self.ci = ci; self.template = template; self.project = project
         self.products = products; self.style = style; self.dimensions = dimensions
         self.material = material; self.variants = variants; self.dims = dims; self.fonts = fonts; self.scale = scale
+        self.blocks = blocks
     }
 }
 
@@ -148,6 +174,8 @@ public struct Request: Sendable {
     var product = ""
     var scale: Double?
     var step = (0, 0)
+    var blocks: [Panel] = []
+    var number = 1
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
                 layout: SheetLayout, iso: ViewSpec = ViewSpec(kind: .iso), dimensions: Bool = true, style: IsoStyle? = nil, fonts: SheetFonts) {

@@ -15,6 +15,7 @@ extension Composer {
             for defect in sub.sheet.defects where !sheet.defects.contains(defect) { sheet.defects.append(defect) }
             if !fits { sheet.defects.append("board.\(cell.id)") }
             sheet.cells.append(Placed(id: cell.id, scale: scale, fits: fits, steps: count))
+            caption(cell)
             if cell.view != .perspective, !scales.contains(scale) { scales.append(scale) }
         }
         scaleLabel = scales.isEmpty ? r.template.noScale : scales.map { "1:\(Int($0))" }.joined(separator: " · ")

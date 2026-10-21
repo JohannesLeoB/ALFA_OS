@@ -1,0 +1,43 @@
+{
+  "platzhalter": false,
+  "quelle": "Entwurf aus Messung, nicht freigegeben. Farben und Linienstaerken aus Planlayouts, Plansatz, Entwurfspraesentation (A3 und A4), Groessen pt in mm (1 pt = 0,3528 mm). Masse: colorDimension und textDimension nach dem neuesten Satz (6 pt). signal rot nur fuer den VORABZUG-Stempel. textTitle = Namenszelle 12 pt, textLabel/textValue/textNote = 6,96 pt, textMark = 13,92 pt, textDeck = 24 pt, textCaption = 8 pt. iso.* nicht gemessen, Werte wie Platzhalter-Pack. tints: Fuellfarben aus Plansatz (wand, flaeche) und Bad (vorsatz); Materialtoene projektabhaengig. Schriften: ABC Monument Grotesk (Medium) und ABC Monument Grotesk Mono (Regular), geladen aus dem Upload-Ordner.",
+  "ink": "#000000",
+  "muted": "#6b6b6b",
+  "signal": "#ff0000",
+  "paper": "#ffffff",
+  "lineFrame": 0.102,
+  "lineBlock": 0.254,
+  "lineEdge": 0.178,
+  "lineDimension": 0.102,
+  "lineExtension": 0.102,
+  "lineTick": 0.102,
+  "textDimension": 2.117,
+  "textTitle": 4.233,
+  "textLabel": 2.455,
+  "textValue": 2.455,
+  "textNote": 2.455,
+  "weightTitle": 500,
+  "tints": {
+    "wand": "#f3eee9",
+    "flaeche": "#eeeeee",
+    "vorsatz": "#ffffcc"
+  },
+  "accent": "#3f3e47",
+  "iso": {
+    "top": 1.0,
+    "side": 0.92,
+    "front": 0.84,
+    "edge": 0.25,
+    "outline": 0.5,
+    "shadow": 0.12,
+    "spread": 40
+  },
+  "colorDimension": "#3f3e47",
+  "colorRow": "#c0c0c0",
+  "colorCell": "#777777",
+  "lineRow": 0.051,
+  "lineCell": 0.127,
+  "textMark": 4.911,
+  "textDeck": 8.467,
+  "textCaption": 2.822
+}
