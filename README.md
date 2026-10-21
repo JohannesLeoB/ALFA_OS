@@ -7,6 +7,7 @@ Native macOS-App ALFA (Swift, SwiftUI). Regeln: `AGENTS.md`; sie gehen allem vor
 | Pfad | Inhalt | Lebensdauer |
 |---|---|---|
 | `alfaos/App/` | Ansichten (SwiftUI), `Localizable.xcstrings`, Resources | dauerhaft |
+| `alfaos/App/Resources/Assets.xcassets` | App-Icon aus dem Master (erzeugt von `scripts/icon_generate.py`) | dauerhaft |
 | `alfaos/Kit/` | Logik (Swift-Paket: ShellCore, Mail, Hub), Tests | dauerhaft |
 | `alfaos/project.yml` | Xcode-Projekt-Vorlage (xcodegen) | dauerhaft |
 | `alfaos/Config/` | Entitlements, Info.plist, Export-Optionen, Beispielwerte ohne Firmendaten | dauerhaft |
@@ -56,6 +57,7 @@ Code
 - `alfaos/Kit/Tests/WholeAppTests/WholeAppTests.swift`: der eine Test (`testTheWholeApp`), dazu `golden.txt` und `MailWire.txt`.
 - `fundus/alpha/`: Bestand (IMAP, Gmail, DHL u. a.); deutsche Namen und `myk`-Reste werden abgelöst.
 - `scripts/design_generate.py --check`, `scripts/receive_master.py --check`: Master, Manifest und Stempel gegen den Code prüfen.
+- `scripts/icon_generate.py --check`: App-Icon (`Assets.xcassets`) gegen den Master prüfen.
 
 Außerhalb des Repos
 - `~/Developer/STAMMTISCH/ALFA Stammtisch.rtf`: Beratung zwischen Lead, Archivar und Produkt.
