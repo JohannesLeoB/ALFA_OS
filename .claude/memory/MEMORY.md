@@ -1,6 +1,7 @@
 - [Stand](stand.md) — aktueller Stand: Regeln, Gebautes, Ungeprüftes, Lücken an Design, Offenes, bekannte Fehler
 - [Spec-Format](spec-format.md) — wie die Specs geschrieben und gepflegt werden; Zeile neu schreiben statt anhängen
 - [Spec: Arbeit](spec-arbeit.md) — wie an ALFA gearbeitet wird, soweit nicht in AGENTS.md; Rolle der Draws-Sitzung
+- [Spec: Architektur](spec-architektur.md) — Johannes' Bild (Hub+Einstellungen Mitte, Bausteine, Schubladen) und fünf Bauregeln
 - [Spec: Ziel](spec-ziel.md) — Zweck, Stufen, Bereiche mit Rang, Plattform und Reichweite
 - [Spec: Hülle](spec-huelle.md) — Blob, Bahnen, Stapel, Fenster, Sync, Avatar, Look, Icon
 - [Spec: Mail](spec-mail.md) — 59 Funktionen mit Ist-Beleg und Status, 12 rot
