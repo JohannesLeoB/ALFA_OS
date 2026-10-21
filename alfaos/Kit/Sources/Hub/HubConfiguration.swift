@@ -37,11 +37,13 @@ public struct HubConfiguration {
     public var clock: @Sendable () -> Date
     public var deadlines: HubDeadlines
     public var reportLimit: Int
+    public var services: [ServiceInfo]
 
     public init(person: Person, company: CompanySetup, providers: [any Provider], keychain: any KeychainPort,
                 cadence: any CadencePort, cost: any CostPort, catalog: PortCatalog = .standard,
                 database: DatabaseQueue, clock: @escaping @Sendable () -> Date = { Date() },
-                deadlines: HubDeadlines = .standard, reportLimit: Int = 100) {
+                deadlines: HubDeadlines = .standard, reportLimit: Int = 100,
+                services: [ServiceInfo] = ServiceCatalog.all) {
         self.person = person
         self.company = company
         self.providers = providers
@@ -53,6 +55,7 @@ public struct HubConfiguration {
         self.deadlines = deadlines
         self.reportLimit = max(1, reportLimit)
         self.clock = clock
+        self.services = services
     }
 }
 

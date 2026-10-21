@@ -20,6 +20,7 @@ final class HubCore: HubAccess, HubSetup, HubRules {
     @ObservationIgnored private var cadences: [String: Cadence] = [:]
     @ObservationIgnored private var truths: [DataKind: Inlet.ID] = [:]
     @ObservationIgnored private var limits: [Capability: Int]
+    private var serviceValues: [String: ServiceValue] = [:]
     @ObservationIgnored private let watchers: ChangeWatchers
 
     init(_ config: HubConfiguration) throws {
@@ -83,6 +84,11 @@ final class HubCore: HubAccess, HubSetup, HubRules {
                 if let kind = DataKind(rawValue: parts[1]), let value = try? decoder.decode(String.self, from: data) { truths[kind] = value }
             case "limit" where parts.count == 2:
                 if let capability = Capability(rawValue: parts[1]), let value = try? decoder.decode(Int.self, from: data) { limits[capability] = value }
+            case "service" where parts.count == 3:
+                if let value = try? decoder.decode(ServiceValue.self, from: data),
+                   let record = records.first(where: { $0.id == parts[1] }), declaration(of: record, parts[2])?.accepts(value) == true {
+                    serviceValues[parts[1] + "|" + parts[2]] = value
+                }
             default:
                 break
             }
@@ -498,6 +504,8 @@ final class HubCore: HubAccess, HubSetup, HubRules {
         cadences = cadences.filter { !$0.key.hasPrefix(inletID + "|") }
         try store.deleteSettings(withPrefix: "lastsync|\(inletID)|")
         syncedAt = syncedAt.filter { !$0.key.hasPrefix(inletID + "|") }
+        try store.deleteSettings(withPrefix: "service|\(inletID)|")
+        serviceValues = serviceValues.filter { !$0.key.hasPrefix(inletID + "|") }
         for (kind, truth) in truths where truth == inletID {
             truths[kind] = nil
             try store.deleteSettings(withPrefix: "truth|\(kind.rawValue)")
@@ -546,6 +554,29 @@ final class HubCore: HubAccess, HubSetup, HubRules {
     func setLimit(_ capability: Capability, _ value: Int) {
         limits[capability] = value
         persist("limit|" + capability.rawValue, value)
+    }
+
+    func setting(_ inlet: Inlet.ID, _ id: String) -> ServiceValue? {
+        serviceValues[inlet + "|" + id]
+    }
+
+    func setSetting(_ inlet: Inlet.ID, _ id: String, _ value: ServiceValue) throws(SettingError) {
+        guard let record = records.first(where: { $0.id == inlet }) else { throw .unknownInlet(inlet) }
+        guard let declared = declaration(of: record, id) else { throw .unknownSetting(id) }
+        guard declared.accepts(value) else {
+            if case .choice = declared.kind, case .choice = value { throw .notAnOption(id) }
+            throw .wrongKind(id)
+        }
+        do {
+            try store.putSetting("service|" + inlet + "|" + id, JSONEncoder().encode(value))
+        } catch {
+            throw .notStored(id)
+        }
+        serviceValues[inlet + "|" + id] = value
+    }
+
+    private func declaration(of record: Inlet, _ id: String) -> ServiceSetting? {
+        config.services.first { $0.providers.contains(record.provider) }?.settings.first { $0.id == id }
     }
 
     private func renewal(_ inletID: Inlet.ID) -> GrantRenewal {

@@ -548,10 +548,10 @@ final class FakeProvider: Provider, @unchecked Sendable {
 @MainActor
 func hubFixture(_ offers: [Offer], _ providers: [any Provider], limits: [Capability: Int] = CompanySetup().limits, keychain: any KeychainPort = FakeKeychain(),
              cadence: any CadencePort = HandCadence(), catalog: PortCatalog = .withMail, database: DatabaseQueue? = nil, deadlines: HubDeadlines = .standard,
-             reportLimit: Int = 100) throws -> Hub {
+             reportLimit: Int = 100, services: [ServiceInfo] = ServiceCatalog.all) throws -> Hub {
     try Hub.make(HubConfiguration(
         person: Person(id: "p1", name: "P"), company: CompanySetup(offers: offers, limits: limits), providers: providers, keychain: keychain, cadence: cadence,
-        cost: FakeCost(), catalog: catalog, database: database ?? DatabaseQueue(), deadlines: deadlines, reportLimit: reportLimit))
+        cost: FakeCost(), catalog: catalog, database: database ?? DatabaseQueue(), deadlines: deadlines, reportLimit: reportLimit, services: services))
 }
 
 @MainActor
@@ -563,12 +563,12 @@ struct ScriptedRig {
     let database: DatabaseQueue
     static let mailOffer = Offer(id: "fake.mail", provider: "fake", title: "Mail", capabilities: [.mail], owner: .person("p1"), way: .signIn)
     static func make(capabilities: Set<Capability> = [.mail], offer: Offer = ScriptedRig.mailOffer, catalog: PortCatalog = .withMail, database: DatabaseQueue? = nil,
-                     provider: FakeProvider? = nil, keychain: FakeKeychain? = nil) throws -> ScriptedRig {
+                     provider: FakeProvider? = nil, keychain: FakeKeychain? = nil, services: [ServiceInfo] = ServiceCatalog.all) throws -> ScriptedRig {
         let provider = provider ?? FakeProvider(capabilities: capabilities)
         let keychain = keychain ?? FakeKeychain()
         let cadence = HandCadence()
         let database = try database ?? DatabaseQueue()
-        let hub = try hubFixture([offer], [provider], keychain: keychain, cadence: cadence, catalog: catalog, database: database)
+        let hub = try hubFixture([offer], [provider], keychain: keychain, cadence: cadence, catalog: catalog, database: database, services: services)
         return ScriptedRig(hub: hub, provider: provider, keychain: keychain, cadence: cadence, database: database)
     }
     func connect(_ address: String, offer: Offer = ScriptedRig.mailOffer) async throws -> Inlet {
@@ -3264,6 +3264,50 @@ final class HubSweepTests {
     private func waitUntil(_ condition: @MainActor () -> Bool) async {
         for _ in 0..<400 where !condition() { try? await Task.sleep(for: .milliseconds(5)) }
     }
+    func runServiceSettingsAreCheckedStoredAndRemoved() async throws {
+        let base = try XCTUnwrap(ServiceCatalog.all.first)
+        let declared: [(String, ServiceSettingKind, ServiceValue)] = [
+            ("t", .toggle, .toggle(true)), ("c", .choice(["a", "b"]), .choice("b")), ("x", .text, .text("hi")),
+            ("n", .number, .number(2.5)), ("m", .mapping, .mapping(["k": "v"]))]
+        let info = ServiceInfo(id: base.id, group: base.group, access: base.access, companyOwned: base.companyOwned, personOnly: base.personOnly, fields: [], areas: [],
+                               extras: [], hasNote: false, listsAccounts: false, providers: ["fake"], logo: nil,
+                               settings: declared.map { ServiceSetting(id: $0.0, kind: $0.1, owner: .device) })
+        let database = try DatabaseQueue()
+        let keychain = FakeKeychain()
+        let first = try ScriptedRig.make(database: database, keychain: keychain, services: [info])
+        let inlet = try await first.connect("a@x")
+        for (id, _, value) in declared {
+            try first.hub.rules.setSetting(inlet.id, id, value)
+            XCTAssertEqual(first.hub.rules.setting(inlet.id, id), value)
+        }
+        let again = try ScriptedRig.make(database: database, provider: first.provider, keychain: keychain, services: [info])
+        for (id, _, value) in declared { XCTAssertEqual(again.hub.rules.setting(inlet.id, id), value) }
+        let rejected: [(String, ServiceValue, SettingError)] = [("zz", .toggle(true), .unknownSetting("zz")), ("t", .text("x"), .wrongKind("t")), ("c", .choice("q"), .notAnOption("c")),
+                        ("n", .number(.nan), .wrongKind("n")), ("n", .number(.infinity), .wrongKind("n"))]
+        for (id, value, error) in rejected {
+            XCTAssertThrowsError(try again.hub.rules.setSetting(inlet.id, id, value)) { XCTAssertEqual($0 as? SettingError, error) }
+        }
+        XCTAssertEqual(again.hub.rules.setting(inlet.id, "zz"), nil)
+        XCTAssertEqual(again.hub.rules.setting(inlet.id, "t"), .toggle(true))
+        XCTAssertEqual(again.hub.rules.setting(inlet.id, "c"), .choice("b"))
+        XCTAssertEqual(try Store(database).loadSettings().keys.filter { $0.hasPrefix("service|") }.count, 5)
+        let third = try ScriptedRig.make(database: database, provider: first.provider, keychain: keychain, services: [info])
+        XCTAssertEqual(third.hub.rules.setting(inlet.id, "t"), .toggle(true))
+        let seen = Locked(false)
+        withObservationTracking { _ = again.hub.rules.setting(inlet.id, "x") } onChange: { seen.with { $0 = true } }
+        try again.hub.rules.setSetting(inlet.id, "x", .text("new"))
+        XCTAssertTrue(seen.with { $0 })
+        try await database.write { try $0.execute(sql: "CREATE TRIGGER refuse BEFORE INSERT ON setting BEGIN SELECT RAISE(ABORT, 'full'); END") }
+        XCTAssertThrowsError(try again.hub.rules.setSetting(inlet.id, "t", .toggle(false))) { XCTAssertEqual($0 as? SettingError, .notStored("t")) }
+        XCTAssertEqual(again.hub.rules.setting(inlet.id, "t"), .toggle(true))
+        try await database.write { try $0.execute(sql: "DROP TRIGGER refuse") }
+        for (id, value) in [("gone", ServiceValue.toggle(true)), ("c", .choice("q"))] { try Store(database).putSetting("service|\(inlet.id)|\(id)", JSONEncoder().encode(value)) }
+        let fourth = try ScriptedRig.make(database: database, provider: first.provider, keychain: keychain, services: [info])
+        XCTAssertEqual([fourth.hub.rules.setting(inlet.id, "gone"), fourth.hub.rules.setting(inlet.id, "c")], [nil, nil])
+        try await again.hub.setup.remove(inlet.id)
+        XCTAssertEqual(again.hub.rules.setting(inlet.id, "t"), nil)
+        XCTAssertEqual(try Store(database).loadSettings().keys.filter { $0.hasPrefix("service|") }.count, 0)
+    }
     func runTheTruthFollowsItsInletAcrossARestart() async throws {
         let database = try DatabaseQueue()
         let keychain = FakeKeychain()
@@ -5550,6 +5594,7 @@ final class WholeAppTests: XCTestCase {
         try await step("ShellSweepTests.runBlobOverTheWindow") { try ShellSweepTests().runBlobOverTheWindow() }
         try await step("ShellSweepTests.runCardsAndValues") { try ShellSweepTests().runCardsAndValues() }
         try await step("ShellSweepTests.runTheThemeKnowsItsKeys") { try ShellSweepTests().runTheThemeKnowsItsKeys() }
+        try await step("HubSweepTests.runServiceSettingsAreCheckedStoredAndRemoved") { try await HubSweepTests().runServiceSettingsAreCheckedStoredAndRemoved() }
         try await step("HubSweepTests.runTheTruthFollowsItsInletAcrossARestart") { try await HubSweepTests().runTheTruthFollowsItsInletAcrossARestart() }
         try await step("HubSweepTests.runALostKeychainMarksTheInletAndTheStateIsKept") { try await HubSweepTests().runALostKeychainMarksTheInletAndTheStateIsKept() }
         try await step("HubSweepTests.runTheCountedCallsAndBytesOfEveryMailCall") { try await HubSweepTests().runTheCountedCallsAndBytesOfEveryMailCall() }

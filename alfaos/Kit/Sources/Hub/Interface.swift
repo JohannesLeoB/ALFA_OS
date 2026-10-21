@@ -38,6 +38,8 @@ public protocol HubRules: AnyObject {
     func cost(_ inlet: Inlet.ID, _ period: Period) -> Cost
     func limit(_ capability: Capability) -> Int
     func setLimit(_ capability: Capability, _ value: Int)
+    func setting(_ inlet: Inlet.ID, _ id: String) -> ServiceValue?
+    func setSetting(_ inlet: Inlet.ID, _ id: String, _ value: ServiceValue) throws(SettingError)
     var queue: [SyncJob] { get }
     func lastSync(_ inlet: Inlet.ID, _ capability: Capability) -> Date?
     func syncNow(_ inlet: Inlet.ID, _ capability: Capability) async

@@ -64,6 +64,7 @@ public struct ServiceInfo: Identifiable, Equatable, Sendable {
     public let listsAccounts: Bool
     public let providers: [String]
     public let logo: ServiceLogo?
+    public var settings: [ServiceSetting] = []
 
     public var nameKey: String { "settings.service." + id + ".name" }
     public var useKey: String { "settings.service." + id + ".use" }
