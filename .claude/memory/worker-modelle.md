@@ -7,7 +7,7 @@ metadata:
 
 Johannes 21.10.2026: „Agenten/Worker bitte IMMER Sonnett 5.5 oder Haiku - und auch den Aufwand angepasst regeln. EFFIZIENT aber gründlich. TOKEN sind effizient zu nutzen, nicht blind und wild zu verbrennen für "ungewisses"“ und „Token dürfen jedem Anspruch gerecht werden auch "VERBALLERT" werden, wenn es der QUALITÄT dient, nicht der "masse"“.
 
-Quelle: Sitzung „ALFA_OS DRAWS Prototyper“, 21.10. (Johannes bestätigt im Lead-Chat 21.10.); gilt für alle Sitzungen.
+Quelle: gesagt in der Sitzung „ALFA_OS DRAWS Prototyper“, 21.10. Gilt dort. Für andere Sitzungen nur Hinweis, nicht Regel, bis Johannes es selbst dort sagt (Johannes 21.10. im Lead-Chat: „da wäre ich VORSICHTIG mit dem „für alle gelten!““).
 
 **Why:** Unteragenten liefen teils ohne Modellangabe (erben Opus) und mit Aufträgen, deren Nutzen ungewiss war.
 

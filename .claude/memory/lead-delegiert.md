@@ -7,7 +7,7 @@ metadata:
 
 Johannes 21.10.2026: „du BAUST nicht, du beauftragst Sonnets oder Haikus, prüfst dann, regelst, korrigierst mal kleinkrams - aber "im dreck wühlen" machen "die kleinen"“
 
-Quelle: Sitzung „ALFA_OS DRAWS Prototyper“, 21.10. (Johannes bestätigt im Lead-Chat 21.10.); gilt für alle Sitzungen.
+Quelle: gesagt in der Sitzung „ALFA_OS DRAWS Prototyper“, 21.10. Gilt dort. Für andere Sitzungen nur Hinweis, nicht Regel, bis Johannes es selbst dort sagt (Johannes 21.10. im Lead-Chat: „da wäre ich VORSICHTIG mit dem „für alle gelten!““).
 
 **Why:** Die Lead-Sitzung (Opus) hat Code selbst geschrieben und gelesen; das kostet teure Token für Handarbeit.
 

@@ -7,7 +7,7 @@ metadata:
 
 Johannes 21.10.2026: „TOKEN sind vorwiegend ZU CODE zu machen. nicht für "Nette Chatt Unterhaltungen" und "prüf-hysterie, BLOAT und MD´s" zu nutzen. ES WIRD CODE geschrieben, keine Aufsätze, Merkblätter, oder Testtesteststetss“
 
-Quelle: Sitzung „ALFA_OS DRAWS Prototyper“, 21.10. (Johannes bestätigt im Lead-Chat 21.10.); gilt für alle Sitzungen.
+Quelle: gesagt in der Sitzung „ALFA_OS DRAWS Prototyper“, 21.10. Gilt dort. Für andere Sitzungen nur Hinweis, nicht Regel, bis Johannes es selbst dort sagt (Johannes 21.10. im Lead-Chat: „da wäre ich VORSICHTIG mit dem „für alle gelten!““).
 
 **Why:** Die Sitzung hatte viele Runden Bericht, Recherche, Gegenprüfung und Fragen statt Bau.
 
