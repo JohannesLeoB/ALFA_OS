@@ -117,7 +117,10 @@ public struct ClaudeDesigner: Designer {
               let wire = try? JSONDecoder().decode(Wire.self, from: Data(text.utf8)) else {
             throw DesignError.malformed("json")
         }
-        do { try Validate.parts(wire.parts) } catch let e as DrawingError { throw DesignError.invalid(e) }
+        do {
+            try Validate.parts(wire.parts)
+            try Validate.units(wire.units ?? [], parts: wire.parts)
+        } catch let e as DrawingError { throw DesignError.invalid(e) }
         let proposed = try (wire.materials ?? []).map(material)
         if let odd = Dictionary(grouping: proposed, by: \.code).filter({ $0.value.count > 1 }).keys.sorted().first {
             throw DesignError.duplicateMaterial(odd)
@@ -136,7 +139,8 @@ public struct ClaudeDesigner: Designer {
                     slots: Dictionary(variant.slots.map { ($0.role, $0.code) }, uniquingKeysWith: { _, last in last }))
         }
         return Proposal(parts: wire.parts, project: project, products: wire.products.filter { products.contains($0) },
-                        assumptions: wire.assumptions, questions: wire.questions, variants: variants, materials: proposed)
+                        assumptions: wire.assumptions, questions: wire.questions, variants: variants, materials: proposed,
+                        units: wire.units ?? [])
     }
 
     static func material(_ wire: Wire.WireMaterial) throws -> Material {
@@ -169,6 +173,7 @@ public struct ClaudeDesigner: Designer {
         var questions: [String]
         var variants: [WireVariant]
         var materials: [WireMaterial]?
+        var units: [DrawingKit.Unit]?
     }
 
     static var schema: [String: Any] {
@@ -187,7 +192,12 @@ public struct ClaudeDesigner: Designer {
         let slot = object(["role": text(), "code": text()])
         let variant = object(["id": text(), "name": text(), "slots": list(slot)])
         let material = object(["code": text(), "name": text(), "tone": text()])
-        return object(["parts": list(part), "project": list(pair),
+        let motion = object(["type": ["type": "string", "enum": ["slide", "hinge"]],
+                             "dx": number(), "dy": number(), "dz": number(), "px": number(), "py": number(), "pz": number(),
+                             "axis": ["type": "string", "enum": ["x", "y", "z"]], "deg": number()])
+        let unit = object(["id": text(), "kind": ["type": "string", "enum": UnitKind.allCases.map(\.rawValue)],
+                           "front": list(text()), "body": list(text()), "motion": motion])
+        return object(["parts": list(part), "project": list(pair), "units": list(unit),
                        "products": list(["type": "string", "enum": products]),
                        "assumptions": list(text()), "questions": list(text()),
                        "variants": list(variant), "materials": list(material)])

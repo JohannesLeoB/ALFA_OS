@@ -1421,6 +1421,112 @@
    "products": [
     "cover"
    ]
+  },
+  {
+   "name": "kitchen pose 0",
+   "parts": [
+    {"id": "sockel", "name": "Sockel", "material": "sockel", "x": 0, "y": 70, "z": 0, "w": 2400, "d": 530, "h": 100},
+    {"id": "u0", "name": "Unterschrank 1", "material": "korpus", "x": 0, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "u1", "name": "Unterschrank 2", "material": "korpus", "x": 600, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "u2", "name": "Unterschrank 3", "material": "korpus", "x": 1200, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "u3", "name": "Unterschrank 4", "material": "korpus", "x": 1800, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "platte", "name": "Arbeitsplatte", "material": "platte", "x": 0, "y": 0, "z": 820, "w": 2400, "d": 620, "h": 40},
+    {"id": "o0", "name": "Oberschrank 1", "material": "korpus", "x": 0, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
+    {"id": "o1", "name": "Oberschrank 2", "material": "korpus", "x": 800, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
+    {"id": "o2", "name": "Oberschrank 3", "material": "korpus", "x": 1600, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
+    {"id": "fd0", "name": "Schubladenfront unten", "material": "front", "x": 2, "y": 22, "z": 102, "w": 596, "d": 18, "h": 356, "role": "FRONT"},
+    {"id": "fd1", "name": "Schubladenfront oben", "material": "front", "x": 2, "y": 22, "z": 462, "w": 596, "d": 18, "h": 356, "role": "FRONT"},
+    {"id": "fdoor", "name": "Tuerfront", "material": "front", "x": 602, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"},
+    {"id": "fpull", "name": "Auszugfront", "material": "front", "x": 1202, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"},
+    {"id": "f3", "name": "Front Unterschrank 4", "material": "front", "x": 1802, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"}
+   ],
+   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.threeView": "Küchenzeile Ansichten", "layout.iso": "Küchenzeile Isometrie", "layout.plan": "Küchenzeile Ansichten", "layout.perspective": "Küchenzeile Perspektive", "layout.steps": "Küchenzeile Aufbau", "layout.customer": "Küchenzeile Kundenansicht"},
+   "products": ["iso", "perspective"],
+   "distance": 7000,
+   "pose": {"d0": 0, "d1": 0, "door": 0, "pull": 0},
+   "units": [
+    {"id": "d0", "kind": "drawer", "front": ["fd0"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}},
+    {"id": "d1", "kind": "drawer", "front": ["fd1"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}},
+    {"id": "door", "kind": "door", "front": ["fdoor"], "body": [], "motion": {"type": "hinge", "px": 602, "py": 22, "pz": 0, "axis": "z", "deg": -100}},
+    {"id": "pull", "kind": "pullout", "front": ["fpull"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}}
+   ]
+  },
+  {
+   "name": "kitchen pose open",
+   "parts": [
+    {"id": "sockel", "name": "Sockel", "material": "sockel", "x": 0, "y": 70, "z": 0, "w": 2400, "d": 530, "h": 100},
+    {"id": "u0", "name": "Unterschrank 1", "material": "korpus", "x": 0, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "u1", "name": "Unterschrank 2", "material": "korpus", "x": 600, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "u2", "name": "Unterschrank 3", "material": "korpus", "x": 1200, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "u3", "name": "Unterschrank 4", "material": "korpus", "x": 1800, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "platte", "name": "Arbeitsplatte", "material": "platte", "x": 0, "y": 0, "z": 820, "w": 2400, "d": 620, "h": 40},
+    {"id": "o0", "name": "Oberschrank 1", "material": "korpus", "x": 0, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
+    {"id": "o1", "name": "Oberschrank 2", "material": "korpus", "x": 800, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
+    {"id": "o2", "name": "Oberschrank 3", "material": "korpus", "x": 1600, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
+    {"id": "fd0", "name": "Schubladenfront unten", "material": "front", "x": 2, "y": 22, "z": 102, "w": 596, "d": 18, "h": 356, "role": "FRONT"},
+    {"id": "fd1", "name": "Schubladenfront oben", "material": "front", "x": 2, "y": 22, "z": 462, "w": 596, "d": 18, "h": 356, "role": "FRONT"},
+    {"id": "fdoor", "name": "Tuerfront", "material": "front", "x": 602, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"},
+    {"id": "fpull", "name": "Auszugfront", "material": "front", "x": 1202, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"},
+    {"id": "f3", "name": "Front Unterschrank 4", "material": "front", "x": 1802, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"}
+   ],
+   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.threeView": "Küchenzeile Ansichten", "layout.iso": "Küchenzeile Isometrie", "layout.plan": "Küchenzeile Ansichten", "layout.perspective": "Küchenzeile Perspektive", "layout.steps": "Küchenzeile Aufbau", "layout.customer": "Küchenzeile Kundenansicht"},
+   "products": ["iso", "perspective"],
+   "distance": 7000,
+   "pose": {"d0": 1, "d1": 1, "door": 1, "pull": 1},
+   "units": [
+    {"id": "d0", "kind": "drawer", "front": ["fd0"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}},
+    {"id": "d1", "kind": "drawer", "front": ["fd1"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}},
+    {"id": "door", "kind": "door", "front": ["fdoor"], "body": [], "motion": {"type": "hinge", "px": 602, "py": 22, "pz": 0, "axis": "z", "deg": -100}},
+    {"id": "pull", "kind": "pullout", "front": ["fpull"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}}
+   ]
+  },
+  {
+   "name": "hinge door and flap",
+   "parts": [
+    {"id": "cab1", "name": "cab1", "material": "korpus", "x": 0, "y": 40, "z": 0, "w": 600, "d": 500, "h": 700},
+    {"id": "door", "name": "door", "material": "front", "x": 2, "y": 22, "z": 2, "w": 596, "d": 18, "h": 696},
+    {"id": "cab2", "name": "cab2", "material": "korpus", "x": 700, "y": 40, "z": 800, "w": 600, "d": 300, "h": 700},
+    {"id": "flap", "name": "flap", "material": "front", "x": 702, "y": 22, "z": 802, "w": 596, "d": 18, "h": 696}
+   ],
+   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.threeView": "Küchenzeile Ansichten", "layout.iso": "Küchenzeile Isometrie", "layout.plan": "Küchenzeile Ansichten", "layout.perspective": "Küchenzeile Perspektive", "layout.steps": "Küchenzeile Aufbau", "layout.customer": "Küchenzeile Kundenansicht"},
+   "products": ["iso", "presentation"],
+   "pose": {"door": 0.5, "flap": 1},
+   "units": [
+    {"id": "door", "kind": "door", "front": ["door"], "body": [], "motion": {"type": "hinge", "px": 2, "py": 22, "pz": 0, "axis": "z", "deg": -95}},
+    {"id": "flap", "kind": "flap", "front": ["flap"], "body": [], "motion": {"type": "hinge", "px": 0, "py": 22, "pz": 1498, "axis": "x", "deg": -90}}
+   ]
+  },
+  {
+   "name": "unit unknown part",
+   "parts": [
+    {"id": "a", "name": "a", "material": "korpus", "x": 0, "y": 0, "z": 0, "w": 100, "d": 100, "h": 100}
+   ],
+   "products": ["iso"],
+   "units": [
+    {"id": "u", "kind": "drawer", "front": ["nope"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -100, "dz": 0}}
+   ]
+  },
+  {
+   "name": "unit shared part",
+   "parts": [
+    {"id": "a", "name": "a", "material": "korpus", "x": 0, "y": 0, "z": 0, "w": 100, "d": 100, "h": 100},
+    {"id": "b", "name": "b", "material": "korpus", "x": 200, "y": 0, "z": 0, "w": 100, "d": 100, "h": 100}
+   ],
+   "products": ["iso"],
+   "units": [
+    {"id": "u1", "kind": "drawer", "front": ["a"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -100, "dz": 0}},
+    {"id": "u2", "kind": "drawer", "front": ["b"], "body": ["a"], "motion": {"type": "slide", "dx": 0, "dy": -100, "dz": 0}}
+   ]
+  },
+  {
+   "name": "unit travel too large",
+   "parts": [
+    {"id": "a", "name": "a", "material": "korpus", "x": 0, "y": 0, "z": 0, "w": 100, "d": 100, "h": 100}
+   ],
+   "products": ["iso"],
+   "units": [
+    {"id": "u", "kind": "drawer", "front": ["a"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": 1e+300, "dz": 0}}
+   ]
   }
  ],
  "replies": [

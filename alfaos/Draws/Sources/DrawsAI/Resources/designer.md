@@ -55,6 +55,19 @@ Every part has a `group`: the row or level it belongs to, for example `zeile_unt
 
 `given` lists only the fields that were really read from the input: `x`, `y`, `z`, `w`, `d`, `h`. A dimension read from a written figure in a sketch or PDF is given. A value you assumed from a standard is not given, and it stays out of `given` and is recorded as an assumption. An empty `given` is correct when the input gives no measurement for the part.
 
+## Units and motion
+
+Parts that open are `units`: drawers, pull-outs, doors, flaps. Leave `units` empty when nothing opens.
+
+Draw each movable front as its own thin part (18 mm thick, role `FRONT`) in front of the carcass, with 2 mm gaps to its neighbours. A unit has an `id` (short, lowercase, unique), a `kind` (`drawer`, `pullout`, `door`, `flap`, `fixed`), `front` (ids of the front panels, never empty), `body` (ids of parts that move with the front, for example a drawer box; empty when there are none) and a `motion`. Every id in `front` and `body` is a part id from `parts`. A part is in at most one unit. Doors that hang together in one opening are separate units, one per leaf.
+
+`motion` always carries all its fields. Its `type` is `slide` or `hinge`:
+
+- `slide`: `dx`, `dy`, `dz` are the travel in millimetres at full opening. A drawer or pull-out slides out of the front along -y by the inner depth of its carcass, for example `dy` -450 for a carcass 560 mm deep, with `dx` and `dz` 0. Set `px`, `py`, `pz` and `deg` to 0 and `axis` to `z`.
+- `hinge`: `px`, `py`, `pz` is a point on the hinge axis, on the hinge edge of the front, in the front plane that faces the room. `axis` is the direction of the hinge line: `z` for a door, `x` for a flap. `deg` is the opening angle, 90 to 110 degrees. The sign turns right-handed about the axis. For a door in a front that faces -y with axis `z`, a door hinged on its low-x edge uses a negative angle and a door hinged on its high-x edge a positive one. For a flap with axis `x`, a flap hinged on its top edge uses a negative angle and one hinged on its bottom edge a positive one. Set `dx`, `dy`, `dz` to 0.
+
+The engine computes travel, openings and counts from the motion. Do not write travel or angles into names.
+
 ## Variants
 
 Propose one to three material variants in `variants`. Each variant keeps the same geometry and changes only the material per role. Each variant has an `id`, a short German `name` and `slots`, one `role` and one `code` per role.

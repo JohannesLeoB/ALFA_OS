@@ -45,11 +45,13 @@ public struct Proposal: Sendable, Codable, Equatable {
     public var questions: [String]
     public var variants: [Variant]
     public var materials: [Material]
+    public var units: [DrawingKit.Unit]
 
     public init(parts: [Part], project: [String: String], products: [String], assumptions: [String], questions: [String],
-                variants: [Variant] = [], materials: [Material] = []) {
+                variants: [Variant] = [], materials: [Material] = [], units: [DrawingKit.Unit] = []) {
         self.parts = parts; self.project = project; self.products = products
         self.assumptions = assumptions; self.questions = questions; self.variants = variants; self.materials = materials
+        self.units = units
     }
 }
 

@@ -9,7 +9,7 @@ func fail(_ text: String) -> Never {
 
 let args = Array(CommandLine.arguments.dropFirst())
 guard args.first == "render", args.count >= 2 else {
-    fail("usage: drawingdude render object.json --ci <folder> --template <folder> --out <folder> [--material <folder>] [--dims none|given] [--fonts <folder>] [--products presentation,plan,iso,perspective,steps,customer,cover] [--distance <mm>]")
+    fail("usage: drawingdude render object.json --ci <folder> --template <folder> --out <folder> [--material <folder>] [--dims none|given] [--fonts <folder>] [--products presentation,plan,iso,perspective,steps,customer,cover] [--distance <mm>] [--pose unit=0...1,unit=0...1]")
 }
 func option(_ name: String) -> String {
     guard let i = args.firstIndex(of: name), i + 1 < args.count else { fail("missing \(name)") }
@@ -30,6 +30,11 @@ func dimMode(_ name: String) -> DimMode {
     return mode
 }
 let dims = optional("--dims").map(dimMode) ?? .none
+let amounts: [String: Double] = Dictionary((optional("--pose") ?? "").split(separator: ",").map { pair in
+    let kv = pair.split(separator: "=").map(String.init)
+    guard kv.count == 2, let amount = Double(kv[1]) else { fail("bad --pose \(pair)") }
+    return (kv[0], amount)
+}, uniquingKeysWith: { _, last in last })
 let products = (optional("--products") ?? "plan,iso").split(separator: ",").map { product(String($0)) }
 let objectURL = URL(fileURLWithPath: args[1])
 let out = URL(fileURLWithPath: option("--out"), isDirectory: true)
@@ -48,7 +53,8 @@ do {
     let job = Job(parts: object.parts, ci: ci.pack, template: template.pack,
                   project: object.project ?? [:], products: products,
                   material: material?.pack, variants: object.variants ?? [], dims: dims,
-                  fonts: DrawsFonts.resolve(upload: upload), blocks: object.blocks ?? [])
+                  fonts: DrawsFonts.resolve(upload: upload), blocks: object.blocks ?? [],
+                  units: object.units ?? [], pose: amounts)
     let sheets = try DrawingEngine.render(job)
     for (index, sheet) in sheets.enumerated() {
         let number = String(format: "%02d", index + 1)

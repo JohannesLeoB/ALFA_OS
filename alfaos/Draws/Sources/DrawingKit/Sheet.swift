@@ -153,15 +153,17 @@ public struct Job: Sendable {
     public var fonts: SheetFonts
     public var scale: Double?
     public var blocks: [Panel]
+    public var units: [Unit]
+    public var pose: [String: Double]
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
                 products: [Product], style: IsoStyle? = nil, dimensions: Bool = true,
                 material: MaterialPack? = nil, variants: [Variant] = [], dims: DimMode = .none, fonts: SheetFonts,
-                scale: Double? = nil, blocks: [Panel] = []) {
+                scale: Double? = nil, blocks: [Panel] = [], units: [Unit] = [], pose: [String: Double] = [:]) {
         self.parts = parts; self.ci = ci; self.template = template; self.project = project
         self.products = products; self.style = style; self.dimensions = dimensions
         self.material = material; self.variants = variants; self.dims = dims; self.fonts = fonts; self.scale = scale
-        self.blocks = blocks
+        self.blocks = blocks; self.units = units; self.pose = pose
     }
 }
 
@@ -182,6 +184,8 @@ public struct Request: Sendable {
     var step = (0, 0)
     var blocks: [Panel] = []
     var number = 1
+    var units: [Unit] = []
+    var pose: [String: Double] = [:]
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
                 layout: SheetLayout, iso: ViewSpec = ViewSpec(kind: .iso), dimensions: Bool = true, style: IsoStyle? = nil, fonts: SheetFonts) {

@@ -10,6 +10,8 @@ public enum DrawingError: Error, Equatable, Sendable {
     case invalidCamera
     case overflow
     case pack([String])
+    case sharedPart(String)
+    case invalidUnit(String)
 }
 
 public struct Part: Codable, Hashable, Sendable {
@@ -21,13 +23,14 @@ public struct Part: Codable, Hashable, Sendable {
     public var role: String?
     public var group: String?
     public var given: [String]?
+    public var turn: Turn?
 
     public init(id: String, name: String, material: String,
                 x: Double, y: Double, z: Double, w: Double, d: Double, h: Double,
-                role: String? = nil, group: String? = nil, given: [String]? = nil) {
+                role: String? = nil, group: String? = nil, given: [String]? = nil, turn: Turn? = nil) {
         self.id = id; self.name = name; self.material = material
         self.x = x; self.y = y; self.z = z; self.w = w; self.d = d; self.h = h
-        self.role = role; self.group = group; self.given = given
+        self.role = role; self.group = group; self.given = given; self.turn = turn
     }
 
     public func isGiven(_ field: String) -> Bool { given?.contains(field) ?? false }
@@ -36,9 +39,33 @@ public struct Part: Codable, Hashable, Sendable {
     var maxY: Double { y + d }
     var maxZ: Double { z + h }
 
-    func low(_ axis: Int) -> Double { axis == 0 ? x : (axis == 1 ? y : z) }
-    func high(_ axis: Int) -> Double { axis == 0 ? maxX : (axis == 1 ? maxY : maxZ) }
+    var corners: [Vec] {
+        let box = [x, maxX].flatMap { px in [y, maxY].flatMap { py in [z, maxZ].map { pz in (px, py, pz) } } }
+        return turn.map { t in box.map(t.spin) } ?? box
+    }
+
+    func low(_ axis: Int) -> Double {
+        guard turn != nil else { return axis == 0 ? x : (axis == 1 ? y : z) }
+        return corners.map { axisValue($0, axis) }.min() ?? 0
+    }
+
+    func high(_ axis: Int) -> Double {
+        guard turn != nil else { return axis == 0 ? maxX : (axis == 1 ? maxY : maxZ) }
+        return corners.map { axisValue($0, axis) }.max() ?? 0
+    }
+
     func center(_ axis: Int) -> Double { (low(axis) + high(axis)) / 2 }
+}
+
+extension Part: CustomReflectable {
+    public var customMirror: Mirror {
+        var children: [Mirror.Child] = [
+            ("id", id), ("name", name), ("material", material), ("x", x), ("y", y), ("z", z), ("w", w), ("d", d), ("h", h),
+            ("role", role as Any), ("group", group as Any), ("given", given as Any)
+        ]
+        if let turn { children.append(("turn", turn)) }
+        return Mirror(self, children: children, displayStyle: .struct)
+    }
 }
 
 public struct Variant: Codable, Hashable, Sendable {
@@ -53,8 +80,10 @@ public struct DrawingObject: Codable, Sendable {
     public var project: [String: String]?
     public var variants: [Variant]?
     public var blocks: [Panel]?
-    public init(parts: [Part], project: [String: String]? = nil, variants: [Variant]? = nil, blocks: [Panel]? = nil) {
-        self.parts = parts; self.project = project; self.variants = variants; self.blocks = blocks
+    public var units: [Unit]?
+    public init(parts: [Part], project: [String: String]? = nil, variants: [Variant]? = nil, blocks: [Panel]? = nil,
+                units: [Unit]? = nil) {
+        self.parts = parts; self.project = project; self.variants = variants; self.blocks = blocks; self.units = units
     }
 
     public static func load(_ url: URL) throws -> DrawingObject {
@@ -70,7 +99,7 @@ public enum Validate {
         var seen = Set<String>()
         for p in ps {
             if !seen.insert(p.id).inserted { throw DrawingError.duplicateID(p.id) }
-            let values = [p.x, p.y, p.z, p.w, p.d, p.h]
+            let values = [p.x, p.y, p.z, p.w, p.d, p.h] + (p.turn.map { [$0.pivot.x, $0.pivot.y, $0.pivot.z, $0.deg] } ?? [])
             guard values.allSatisfy({ $0.isFinite && abs($0) <= limit }) else { throw DrawingError.tooLarge(p.id) }
             guard p.w > 0, p.d > 0, p.h > 0 else { throw DrawingError.invalidPart(p.id) }
         }

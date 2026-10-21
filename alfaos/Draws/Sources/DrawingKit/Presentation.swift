@@ -53,12 +53,14 @@ extension Composer {
     private mutating func face(_ v: Variant, _ job: Job, origin o: CGPoint, extent e: CGRect, scale n: Double) throws {
         func px(_ u: Double) -> Double { o.x + (u - Double(e.minX)) / n }
         func py(_ w: Double) -> Double { o.y + (Double(e.maxY) - w) / n }
-        let visible = try Projection.visibleRects(r.parts, .front)
+        let shown = pose(r.parts, r.units, amounts: r.pose), open = openFronts(r.units, amounts: r.pose)
+        let visible = try Projection.visibleRects(shown, .front)
         for entry in visible.reversed() {
-            guard !entry.rects.isEmpty, let p = r.parts.first(where: { $0.id == entry.id }) else { continue }
+            guard !entry.rects.isEmpty, let p = shown.first(where: { $0.id == entry.id }) else { continue }
             let rect = Projection.rect(p, .front)
             sheet.items.append(.rect(CGRect(x: px(Double(rect.minX)), y: py(Double(rect.maxY)), width: rect.width / n, height: rect.height / n),
-                                     fill: tone(p, v, job), stroke: nil, width: 0))
+                                     fill: open.contains(p.id) ? (r.style ?? r.ci.iso).accentColor ?? r.ci.accent : tone(p, v, job),
+                                     stroke: nil, width: 0))
             for (a, b) in Composer.outline(entry.rects) {
                 sheet.items.append(.line(CGPoint(x: px(Double(a.x)), y: py(Double(a.y))), CGPoint(x: px(Double(b.x)), y: py(Double(b.y))),
                                          width: r.ci.lineEdge, color: r.ci.ink))

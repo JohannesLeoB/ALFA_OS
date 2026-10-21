@@ -16,6 +16,8 @@ public enum DrawingEngine {
 
     public static func render(_ job: Job) throws -> [Sheet] {
         try Validate.parts(job.parts)
+        try Validate.units(job.units, parts: job.parts)
+        try Validate.pose(job.pose, units: job.units)
         guard !job.products.isEmpty else { throw DrawingError.empty }
         var out: [Sheet] = []
         var panels = job.blocks
@@ -29,6 +31,8 @@ public enum DrawingEngine {
             base.scale = job.scale
             base.blocks = panels
             base.number = index + 1
+            base.units = job.units
+            base.pose = job.pose
             switch product {
             case .plan:
                 base.layout = .threeView
@@ -297,8 +301,10 @@ struct Composer {
 
     mutating func isoDraw(in room: CGRect, title at: CGPoint, scales: [Double], force: Bool) throws -> (scale: Double, fits: Bool) {
         let t = r.template, ci = r.ci, s = r.style ?? ci.iso
-        let faces = try Projection.faces(r.parts, spec: r.iso, shadow: s.shadow > 0 ? s.spread : nil, around: r.fit)
-        let frame = try r.fit.map { try Projection.faces($0, spec: r.iso, shadow: s.shadow > 0 ? s.spread : nil) } ?? faces
+        let shown = pose(r.parts, r.units, amounts: r.pose), fitted = r.fit.map { pose($0, r.units, amounts: r.pose) }
+        let open = openFronts(r.units, amounts: r.pose)
+        let faces = try Projection.faces(shown, spec: r.iso, shadow: s.shadow > 0 ? s.spread : nil, around: fitted)
+        let frame = try fitted.map { try Projection.faces($0, spec: r.iso, shadow: s.shadow > 0 ? s.spread : nil) } ?? faces
         let xs = frame.flatMap { $0.poly.map { Double($0.x) } }, ys = frame.flatMap { $0.poly.map { Double($0.y) } }
         guard let x0 = xs.min(), let x1 = xs.max(), let y0 = ys.min(), let y1 = ys.max() else { throw DrawingError.empty }
         let sorted = scales.sorted()
@@ -324,7 +330,7 @@ struct Composer {
         for f in solids {
             let face = f.normal == 5 ? 0 : (f.normal == 2 || f.normal == 3 ? 1 : 2)
             let shade = [s.top, s.side, s.front][face]
-            let lit = f.partID == s.accent || r.highlight.contains(f.partID)
+            let lit = f.partID == s.accent || r.highlight.contains(f.partID) || open.contains(f.partID)
             let fill: String?
             if lit {
                 fill = Hex.scale(s.accentColor ?? ci.accent, shade)

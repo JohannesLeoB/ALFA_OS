@@ -27,7 +27,7 @@ enum Projection {
     }
 
     static func rect(_ p: Part, _ k: ViewKind) -> CGRect {
-        let a = uv(p.x, p.y, p.z, k), b = uv(p.maxX, p.maxY, p.maxZ, k)
+        let a = uv(p.low(0), p.low(1), p.low(2), k), b = uv(p.high(0), p.high(1), p.high(2), k)
         return CGRect(x: min(a.x, b.x), y: min(a.y, b.y), width: abs(a.x - b.x), height: abs(a.y - b.y))
     }
 
@@ -100,9 +100,9 @@ enum Projection {
                 return CGPoint(x: k.r * s, y: k.u * s)
             }
         }
-        if let spread, spread.isFinite, spread >= 0, let floor = ps.map(\.z).min() {
-            for p in ps.sorted(by: { $0.id < $1.id }) where p.z <= floor + Order.epsilon {
-                let x0 = p.x - spread, x1 = p.maxX + spread, y0 = p.y - spread, y1 = p.maxY + spread
+        if let spread, spread.isFinite, spread >= 0, let floor = ps.map({ $0.low(2) }).min() {
+            for p in ps.sorted(by: { $0.id < $1.id }) where p.low(2) <= floor + Order.epsilon {
+                let x0 = p.low(0) - spread, x1 = p.high(0) + spread, y0 = p.low(1) - spread, y1 = p.high(1) + spread
                 let poly = project([(x0, y0, floor), (x1, y0, floor), (x1, y1, floor), (x0, y1, floor)])
                 if poly.count >= 3 { out.append(Face2D(poly: poly, partID: p.id, normal: shadowNormal)) }
             }
@@ -119,7 +119,7 @@ enum Projection {
                 }
                 guard visible else { continue }
                 let poly = project(quad)
-                if poly.count >= 3 { out.append(Face2D(poly: poly, partID: p.id, normal: index)) }
+                if poly.count >= 3 { out.append(Face2D(poly: poly, partID: p.id, normal: p.turn == nil ? index : slot(n))) }
             }
         }
         return out
@@ -144,9 +144,16 @@ enum Projection {
         return (lo + hi) / 2
     }
 
+    static func slot(_ n: Vec) -> Int {
+        let ax = abs(n.0), ay = abs(n.1), az = abs(n.2)
+        if az >= ax, az >= ay { return n.2 < 0 ? 4 : 5 }
+        if ax >= ay { return n.0 < 0 ? 2 : 3 }
+        return n.1 < 0 ? 0 : 1
+    }
+
     static func quads(_ p: Part) -> [((Double, Double, Double), [(Double, Double, Double)])] {
         let x0 = p.x, x1 = p.maxX, y0 = p.y, y1 = p.maxY, z0 = p.z, z1 = p.maxZ
-        return [
+        let box: [((Double, Double, Double), [(Double, Double, Double)])] = [
             ((0, -1, 0), [(x0, y0, z0), (x1, y0, z0), (x1, y0, z1), (x0, y0, z1)]),
             ((0, 1, 0), [(x1, y1, z0), (x0, y1, z0), (x0, y1, z1), (x1, y1, z1)]),
             ((-1, 0, 0), [(x0, y1, z0), (x0, y0, z0), (x0, y0, z1), (x0, y1, z1)]),
@@ -154,5 +161,7 @@ enum Projection {
             ((0, 0, -1), [(x0, y1, z0), (x1, y1, z0), (x1, y0, z0), (x0, y0, z0)]),
             ((0, 0, 1), [(x0, y0, z1), (x1, y0, z1), (x1, y1, z1), (x0, y1, z1)])
         ]
+        guard let t = p.turn else { return box }
+        return box.map { (t.tilt($0.0), $0.1.map(t.spin)) }
     }
 }

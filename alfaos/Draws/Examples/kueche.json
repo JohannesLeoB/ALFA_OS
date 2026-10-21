@@ -114,6 +114,96 @@
    "w": 800,
    "d": 320,
    "h": 700
+  },
+  {
+   "id": "fd0",
+   "name": "Schubladenfront unten",
+   "material": "front",
+   "x": 2,
+   "y": 22,
+   "z": 102,
+   "w": 596,
+   "d": 18,
+   "h": 356,
+   "role": "FRONT"
+  },
+  {
+   "id": "fd1",
+   "name": "Schubladenfront oben",
+   "material": "front",
+   "x": 2,
+   "y": 22,
+   "z": 462,
+   "w": 596,
+   "d": 18,
+   "h": 356,
+   "role": "FRONT"
+  },
+  {
+   "id": "fdoor",
+   "name": "Tuerfront",
+   "material": "front",
+   "x": 602,
+   "y": 22,
+   "z": 102,
+   "w": 596,
+   "d": 18,
+   "h": 716,
+   "role": "FRONT"
+  },
+  {
+   "id": "fpull",
+   "name": "Auszugfront",
+   "material": "front",
+   "x": 1202,
+   "y": 22,
+   "z": 102,
+   "w": 596,
+   "d": 18,
+   "h": 716,
+   "role": "FRONT"
+  },
+  {
+   "id": "f3",
+   "name": "Front Unterschrank 4",
+   "material": "front",
+   "x": 1802,
+   "y": 22,
+   "z": 102,
+   "w": 596,
+   "d": 18,
+   "h": 716,
+   "role": "FRONT"
+  }
+ ],
+ "units": [
+  {
+   "id": "d0",
+   "kind": "drawer",
+   "front": ["fd0"],
+   "body": [],
+   "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}
+  },
+  {
+   "id": "d1",
+   "kind": "drawer",
+   "front": ["fd1"],
+   "body": [],
+   "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}
+  },
+  {
+   "id": "door",
+   "kind": "door",
+   "front": ["fdoor"],
+   "body": [],
+   "motion": {"type": "hinge", "px": 602, "py": 22, "pz": 0, "axis": "z", "deg": -100}
+  },
+  {
+   "id": "pull",
+   "kind": "pullout",
+   "front": ["fpull"],
+   "body": [],
+   "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}
   }
  ]
 }
