@@ -147,8 +147,8 @@ struct Composer {
     }
 
     mutating func iso() throws {
-        let t = r.template, ci = r.ci
-        let faces = try Projection.faces(r.parts, spec: r.iso)
+        let t = r.template, ci = r.ci, s = r.style ?? ci.iso
+        let faces = try Projection.faces(r.parts, spec: r.iso, shadow: s.shadow > 0 ? s.spread : nil)
         let xs = faces.flatMap { $0.poly.map { Double($0.x) } }, ys = faces.flatMap { $0.poly.map { Double($0.y) } }
         guard let x0 = xs.min(), let x1 = xs.max(), let y0 = ys.min(), let y1 = ys.max() else { throw DrawingError.empty }
         let room = CGSize(width: field.width - t.isoMargin.left - t.isoMargin.right,
@@ -160,11 +160,23 @@ struct Composer {
         let cx = field.minX + t.isoMargin.left + room.width / 2, cy = field.minY + t.isoMargin.top + room.height / 2
         let mx = (x0 + x1) / 2, my = (y0 + y1) / 2
         let material = Dictionary(uniqueKeysWithValues: r.parts.map { ($0.id, $0.material) })
-        for f in faces {
-            let shade: Double = f.normal == 5 ? ci.shades.top : (f.normal == 2 || f.normal == 3 ? ci.shades.side : ci.shades.front)
-            let fill = tint(material[f.partID] ?? "").map { Hex.scale($0, shade) }
-            let pts = f.poly.map { CGPoint(x: cx + (Double($0.x) - mx) / n, y: cy - (Double($0.y) - my) / n) }
-            sheet.items.append(.polygon(pts, fill: fill, stroke: ci.ink, width: ci.lineEdge))
+        func paper(_ f: Face2D) -> [CGPoint] {
+            f.poly.map { CGPoint(x: cx + (Double($0.x) - mx) / n, y: cy - (Double($0.y) - my) / n) }
+        }
+        let shadows = faces.filter { $0.normal == Projection.shadowNormal }
+        let solids = faces.filter { $0.normal != Projection.shadowNormal }
+        for f in shadows {
+            sheet.items.append(.polygon(paper(f), fill: Hex.mix(ci.ink, ci.paper, s.shadow), stroke: nil, width: 0))
+        }
+        if s.outline > 0 {
+            for f in solids {
+                sheet.items.append(.polygon(paper(f), fill: ci.ink, stroke: ci.ink, width: 2 * s.outline))
+            }
+        }
+        for f in solids {
+            let shade: Double = f.normal == 5 ? s.top : (f.normal == 2 || f.normal == 3 ? s.side : s.front)
+            let base = f.partID == s.accent ? ci.accent : tint(material[f.partID] ?? "")
+            sheet.items.append(.polygon(paper(f), fill: base.map { Hex.scale($0, shade) }, stroke: ci.ink, width: s.edge))
         }
         let title = String(format: t.isoTitle, r.iso.azimuth, r.iso.elevation) + "   1:\(Int(n))"
         sheet.items.append(.text(title, at: CGPoint(x: field.minX + t.isoMargin.left, y: field.minY + t.titleOffset),
@@ -217,5 +229,12 @@ enum Hex {
         guard let c = rgb(hex) else { return hex }
         func byte(_ v: Double) -> Int { Int((min(1, max(0, v * k)) * 255).rounded(.down)) }
         return String(format: "#%02x%02x%02x", byte(c.0), byte(c.1), byte(c.2))
+    }
+
+    static func mix(_ a: String, _ b: String, _ k: Double) -> String {
+        guard let x = rgb(a), let y = rgb(b) else { return b }
+        let t = min(1, max(0, k))
+        func byte(_ u: Double, _ v: Double) -> Int { Int(((u * t + v * (1 - t)) * 255).rounded()) }
+        return String(format: "#%02x%02x%02x", byte(x.0, y.0), byte(x.1, y.1), byte(x.2, y.2))
     }
 }

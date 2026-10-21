@@ -18,7 +18,10 @@ struct PacksLane: View {
                     Caption(key: "draws.section.object")
                     Row(label: Text(verbatim: model.objectName), detail: "\(model.parts.count)")
                     ForEach(model.parts, id: \.id) { p in
-                        Row(label: Text(verbatim: p.name), detail: "\(Int(p.w)) × \(Int(p.d)) × \(Int(p.h))")
+                        Row(label: Text(verbatim: p.name), detail: "\(Int(p.w)) × \(Int(p.d)) × \(Int(p.h))",
+                            selected: model.accent == p.id) {
+                            model.accent = model.accent == p.id ? nil : p.id
+                        }
                     }
                     Pill(key: "draws.object.open") { model.open() }
                         .padding(.horizontal, CGFloat(Design.Spacing.step8))
@@ -96,6 +99,24 @@ struct SheetLane: View {
     }
 }
 
+struct SwitchRow: View {
+    @Environment(\.style) private var style
+    let key: String
+    @Binding var on: Bool
+
+    var body: some View {
+        HStack {
+            say(key)
+                .font(style.font(Design.TextSize.body))
+                .foregroundStyle(style.color(\.ink))
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Switch(on: $on)
+        }
+        .padding(.horizontal, CGFloat(Design.Spacing.step8))
+        .frame(height: CGFloat(Design.Size.rowHeight))
+    }
+}
+
 struct ViewsLane: View {
     @Environment(\.style) private var style
     @Bindable var model: DrawsModel
@@ -109,14 +130,12 @@ struct ViewsLane: View {
                 Row(label: say("draws.views.format"), detail: model.template?.pack.format)
                 Row(label: say("draws.views.method"),
                     detail: model.template.map { word($0.pack.method == .first ? "draws.method.first" : "draws.method.third") })
-                HStack {
-                    say("draws.views.dimensions")
-                        .foregroundStyle(style.color(\.ink))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Switch(on: $model.dimensions)
-                }
-                .padding(.horizontal, CGFloat(Design.Spacing.step8))
-                .frame(height: CGFloat(Design.Size.rowHeight))
+                SwitchRow(key: "draws.views.dimensions", on: $model.dimensions)
+                Caption(key: "draws.section.style")
+                SwitchRow(key: "draws.style.outline", on: $model.outline)
+                SwitchRow(key: "draws.style.shadow", on: $model.shadow)
+                Row(label: say("draws.style.accent"),
+                    detail: model.accent.flatMap { id in model.parts.first { $0.id == id }?.name } ?? "–")
                 Caption(key: "draws.section.export")
                 HStack(spacing: CGFloat(Design.Spacing.step8)) {
                     Pill(key: "draws.export.pdf", accent: true) { model.export(pdf: true) }

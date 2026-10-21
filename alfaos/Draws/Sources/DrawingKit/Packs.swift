@@ -21,12 +21,24 @@ public struct CIPack: Sendable {
     public var textNote: Double
     public var weightTitle: Int
     public var tints: [String: String]
-    public var shades: Shades
+    public var accent: String
+    public var iso: IsoStyle
+}
 
-    public struct Shades: Codable, Sendable {
-        public var top: Double
-        public var side: Double
-        public var front: Double
+public struct IsoStyle: Sendable, Equatable {
+    public var top: Double
+    public var side: Double
+    public var front: Double
+    public var edge: Double
+    public var outline: Double
+    public var shadow: Double
+    public var spread: Double
+    public var accent: String?
+
+    public init(top: Double, side: Double, front: Double, edge: Double, outline: Double,
+                shadow: Double, spread: Double, accent: String?) {
+        self.top = top; self.side = side; self.front = front; self.edge = edge
+        self.outline = outline; self.shadow = shadow; self.spread = spread; self.accent = accent
     }
 }
 
@@ -97,7 +109,7 @@ public enum Packs {
 
     public static func decodeCI(_ data: Data) throws -> Loaded<CIPack> {
         let r = try Reader(data, prefix: "ci")
-        let shades = r.object("shades")
+        let iso = r.object("iso")
         let pack = CIPack(
             placeholder: r.flag("platzhalter"),
             font: r.text("font"), pdfFont: r.text("pdfFont"),
@@ -107,10 +119,12 @@ public enum Packs {
             textDimension: r.number("textDimension"), textTitle: r.number("textTitle"), textLabel: r.number("textLabel"),
             textValue: r.number("textValue"), textNote: r.number("textNote"),
             weightTitle: Int(r.number("weightTitle")),
-            tints: r.table("tints"),
-            shades: CIPack.Shades(top: shades.number("top"), side: shades.number("side"), front: shades.number("front"))
+            tints: r.table("tints"), accent: r.text("accent"),
+            iso: IsoStyle(top: iso.number("top"), side: iso.number("side"), front: iso.number("front"),
+                          edge: iso.number("edge"), outline: iso.number("outline"),
+                          shadow: iso.number("shadow"), spread: iso.number("spread"), accent: nil)
         )
-        return Loaded(pack: pack, defects: r.defects + shades.defects)
+        return Loaded(pack: pack, defects: r.defects + iso.defects)
     }
 
     public static func decodeTemplate(_ data: Data) throws -> Loaded<TemplatePack> {

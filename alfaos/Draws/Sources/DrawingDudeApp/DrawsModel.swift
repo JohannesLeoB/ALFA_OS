@@ -14,6 +14,9 @@ final class DrawsModel {
     var template: Loaded<TemplatePack>?
     var layout = SheetLayout.threeView
     var dimensions = true
+    var outline = true { didSet { render() } }
+    var shadow = true { didSet { render() } }
+    var accent: String? { didSet { render() } }
     var sheet: Sheet?
     var failure: String?
 
@@ -48,9 +51,13 @@ final class DrawsModel {
 
     func render() {
         guard let ci, let template else { return }
+        var style = ci.pack.iso
+        if !outline { style.outline = 0 }
+        if !shadow { style.shadow = 0 }
+        style.accent = accent
         do {
             sheet = try DrawingEngine.render(Request(parts: parts, ci: ci.pack, template: template.pack,
-                                                     project: project, layout: layout, dimensions: dimensions))
+                                                     project: project, layout: layout, dimensions: dimensions, style: style))
             failure = nil
         } catch {
             sheet = nil

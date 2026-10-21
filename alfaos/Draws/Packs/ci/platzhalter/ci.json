@@ -1,6 +1,6 @@
 {
   "platzhalter": true,
-  "quelle": "Werte aus ref/python/render.py (CI-Dict, Linien und Schriften der SVG-Ausgabe). Kein Studio-CI.",
+  "quelle": "Werte aus ref/python/render.py (CI-Dict, Linien und Schriften der SVG-Ausgabe). Kein Studio-CI. iso.top/side/front aus render.py (shade). iso.outline, iso.shadow, iso.spread und accent haben keine Vorlage: Testwerte nach dem Anatomy-Stil, accent = signal.",
   "font": "Helvetica, Arial, sans-serif",
   "pdfFont": "Helvetica",
   "ink": "#171717",
@@ -19,6 +19,20 @@
   "textValue": 3.0,
   "textNote": 2.2,
   "weightTitle": 500,
-  "tints": { "korpus": "#ececec", "front": "#f7f7f7", "platte": "#c9c2b6", "sockel": "#9a9a9a" },
-  "shades": { "top": 1.0, "side": 0.92, "front": 0.84 }
+  "tints": {
+    "korpus": "#ececec",
+    "front": "#f7f7f7",
+    "platte": "#c9c2b6",
+    "sockel": "#9a9a9a"
+  },
+  "accent": "#b3412e",
+  "iso": {
+    "top": 1.0,
+    "side": 0.92,
+    "front": 0.84,
+    "edge": 0.25,
+    "outline": 0.5,
+    "shadow": 0.12,
+    "spread": 40
+  }
 }

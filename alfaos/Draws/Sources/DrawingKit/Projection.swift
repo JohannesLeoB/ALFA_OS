@@ -67,7 +67,9 @@ enum Projection {
         return r
     }
 
-    static func faces(_ ps: [Part], spec: ViewSpec) throws -> [Face2D] {
+    static let shadowNormal = 6
+
+    static func faces(_ ps: [Part], spec: ViewSpec, shadow spread: Double? = nil) throws -> [Face2D] {
         try Validate.parts(ps)
         if let dist = spec.distance { guard dist.isFinite, dist > 0 else { throw DrawingError.invalidCamera } }
         guard spec.azimuth.isFinite, spec.elevation.isFinite else { throw DrawingError.invalidCamera }
@@ -86,6 +88,20 @@ enum Projection {
         let eye: (Double, Double, Double)? = spec.distance.map { (c.0 - fwd.0 * $0, c.1 - fwd.1 * $0, c.2 - fwd.2 * $0) }
         let viewer: Order.Viewer = eye.map { .eye($0.0, $0.1, $0.2) } ?? .direction(fwd.0, fwd.1, fwd.2)
         var out: [Face2D] = []
+        func project(_ quad: [(Double, Double, Double)]) -> [CGPoint] {
+            guard let dist = spec.distance else { return quad.map(cam).map { CGPoint(x: $0.r, y: $0.u) } }
+            return clipNear(quad.map(cam), dist: dist, near: near).map { k in
+                let s = dist / (k.f + dist)
+                return CGPoint(x: k.r * s, y: k.u * s)
+            }
+        }
+        if let spread, spread.isFinite, spread >= 0, let floor = ps.map(\.z).min() {
+            for p in ps where p.z <= floor + Order.epsilon {
+                let x0 = p.x - spread, x1 = p.maxX + spread, y0 = p.y - spread, y1 = p.maxY + spread
+                let poly = project([(x0, y0, floor), (x1, y0, floor), (x1, y1, floor), (x0, y1, floor)])
+                if poly.count >= 3 { out.append(Face2D(poly: poly, partID: p.id, normal: shadowNormal)) }
+            }
+        }
         for p in Order.farToNear(ps, viewer) {
             for (index, face) in quads(p).enumerated() {
                 let (n, quad) = face
@@ -97,15 +113,7 @@ enum Projection {
                     visible = n.0 * fwd.0 + n.1 * fwd.1 + n.2 * fwd.2 < -1e-9
                 }
                 guard visible else { continue }
-                let poly: [CGPoint]
-                if let dist = spec.distance {
-                    poly = clipNear(quad.map(cam), dist: dist, near: near).map { k in
-                        let s = dist / (k.f + dist)
-                        return CGPoint(x: k.r * s, y: k.u * s)
-                    }
-                } else {
-                    poly = quad.map(cam).map { CGPoint(x: $0.r, y: $0.u) }
-                }
+                let poly = project(quad)
                 if poly.count >= 3 { out.append(Face2D(poly: poly, partID: p.id, normal: index)) }
             }
         }

@@ -37,10 +37,11 @@ public struct Request: Sendable {
     public var layout: SheetLayout
     public var iso: ViewSpec
     public var dimensions: Bool
+    public var style: IsoStyle?
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
-                layout: SheetLayout, iso: ViewSpec = ViewSpec(kind: .iso), dimensions: Bool = true) {
+                layout: SheetLayout, iso: ViewSpec = ViewSpec(kind: .iso), dimensions: Bool = true, style: IsoStyle? = nil) {
         self.parts = parts; self.ci = ci; self.template = template; self.project = project
-        self.layout = layout; self.iso = iso; self.dimensions = dimensions
+        self.layout = layout; self.iso = iso; self.dimensions = dimensions; self.style = style
     }
 }
