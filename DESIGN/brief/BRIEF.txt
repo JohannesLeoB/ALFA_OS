@@ -1,8 +1,8 @@
-Brief Code → Design · v10 · 20.10.2026
+Brief Code → Design · v11 · 21.10.2026
 
 ZIEL
 Der nächste Export liefert für Mail, Einstellungen und Hülle (ALFA Shell) einen vollständigen Vertrag im Ordner contract/: jeder Wert ein Token, jedes Bauteil und Element mit fester id, jeder sichtbare Text mit Schlüssel, jede Änderung protokolliert. Code liest ihn per Skript und baut daraus.
-Neu in v10: die Arbeitsweise (A1–A7) und sieben Nachlieferungen (N1–N7). T1 bis T8 aus v9 gelten unverändert weiter.
+Neu seit v10: die Arbeitsweise (A1–A7) und die Nachlieferungen N1–N7; neu in v11: N8–N13 aus dem Code-Stand vom 21.10. T1 bis T8 aus v9 gelten unverändert weiter.
 
 GRUNDLAGE
 - Stand: Export "ALFA OS Interface CHEF 1610-handoff 1810.zip", 18.10.2026, sha256 d0ed5abb…3c8d2. Was du seither schon erledigt hast, meldest du in der ABGABE als erledigt.
@@ -95,12 +95,19 @@ N4 Mail zu groß. Gezeichnet sind nur „Nicht gesendet / Der Server hat nicht g
 N5 Sofort-Abgleich. Das Takt-Menü (ALFA Mail.dc.html:744) hat Aus, Manuell und sechs Zeitabstände. Code kann bei IMAP-Konten neue Mail sofort melden (IDLE). Eintrag und Text dafür, oder die Angabe, dass er nicht sichtbar wird.
 N6 KI-Integrationen (Claude und folgende): Modellwahl aus der Modellliste des Anbieters. Zähler „Tokens seit <Datum>, <n> Tage“ (Eingabe und Ausgabe), kumuliert ohne Einzeleinträge, mit Zurücksetzen und Bestätigung. Dazu ein Schätzwert „ca. <Betrag>“ aus Tokens × Preis je Mio. Tokens (Eingabe und Ausgabe); den Preis je Modell trägt der Nutzer in der Detailkarte ein, ohne Preis kein Schätzwert. Kein Guthaben (beim Anbieter nicht abrufbar).
 N7 Fehler und Nachladen in Mail. Gezeichnet sind Fehler nur für Liste (ALFA Mail.dc.html:868), Verbindung (:874), Senden (:935, :1000–1002) und Abgleich (:1077); 33 toastIt-Aufrufe (:530–1086) ohne Fehlertext. Für Archivieren, Verschieben, Papierkorb, Markieren, Lesen, Anhang, Verlauf, Entwurf speichern und einen lokal nicht gespeicherten Postausgang fehlt eine Darstellung samt Text. Nachladen: Der Knopf „Mehr laden“ ist gezeichnet (:121), aber nie aktiv (:844 hasMore: false; loadMore und moreText nicht definiert); das Fenster wächst nur über geladene Zeilen (:877–878). Festlegen: Fehlerdarstellung je Aktion; ob weitere Mails vom Server per Knopf oder beim Scrollen kommen, mit Text.
+N8 App-Icon. Das „B A-Monogramm, vorläufig“ (ALFA Dienste.dc.html, material/icons/app/B_A-Monogramm-komplett.svg) nimmt Code jetzt als Übergangs-Icon. Gesucht: das endgültige Icon als SVG und in den macOS-Größen 16–1024.
+N9 App-Sperre. Der Schalter ist gezeichnet (ALFA Mail.dc.html:763), der gesperrte Zustand nicht. Gesucht: Sperrbildschirm, Entsperren mit Touch ID oder Passwort, Fehlschlag, erneutes Sperren nach der Pause.
+N10 Gesperrte Bilder in einer HTML-Mail. Die Kachel „Bild blockiert“ (ALFA Mail.dc.html:977) braucht Textschlüssel und Maße im Vertrag.
+N11 Doppelte Bilder-Einstellung. INHALT.json führt sie zweimal („Externe Bilder“ :550–551 und „Mail-Bilder“ :576–577). Bitte eine streichen.
+N12 Leerer Betreff. Es gibt nur „Empfänger fehlt“ (ALFA Mail.dc.html:632). Festlegen, ob es einen eigenen Hinweis „Betreff fehlt“ gibt.
+N13 Schrift. Das Token text nennt Geist zuerst, die Blätter nutzen die Systemschrift. Bitte eine festlegen.
 
 ERINNERUNG AUS v9
 - W-05 Dienstzahl und L-010 Signaturen je Postfach sind weiter offen.
+- Die Kachelhöhe der Integrationen ist nach Johannes' Entscheidung vom 19.10. 112, nicht 96 oder 144/176/248.
 
 ABGABE
-Je Schritt T1 bis T8 und N1 bis N7 „erledigt“ oder „offen“, dazu contract/PRUEFUNG.txt mit den Ausgaben von P1, P2, P3.
+Je Schritt T1 bis T8 und N1 bis N13 „erledigt“ oder „offen“, dazu contract/PRUEFUNG.txt mit den Ausgaben von P1, P2, P3.
 
 SPÄTER
 Funktions-Specs B-01 bis B-04 und B-06 bis B-09 (Lead aus Mail, Kontaktblatt, Speichern in Drive, Ablegen per Ziehen, Klartext/HTML, Link öffnen, Mehr laden, Alle Anhänge) folgen gesondert, außer Mehr laden: das steht schon in N7. Projekte, Heute, Kataloge, Warenkorb folgen nach dem Pilot im selben Format.
