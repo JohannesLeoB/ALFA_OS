@@ -18,7 +18,8 @@ struct ALFA_OSApp: App {
                 directory: loaded.directory,
                 geometry: loaded.geometry,
                 window: loaded.geometry.windowMin,
-                snapshot: store.load()
+                snapshot: store.load(),
+                start: StartView.stored(UserDefaults.standard.string(forKey: SettingsKey.startView))
             )
             let store = store
             shell.onChange = { store.save($0) }

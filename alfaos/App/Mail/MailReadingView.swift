@@ -118,6 +118,7 @@ struct PersonRow: View {
 
 struct SheetBody: View {
     @Environment(\.design) private var design
+    @AppStorage(SettingsKey.loadImages) private var loadImages = false
     let model: MailModel
     let card: ReadingCard
 
@@ -139,7 +140,7 @@ struct SheetBody: View {
                     .foregroundStyle(design.color(\.sheetInkTertiary))
                     .padding(.top, CGFloat(Design.Spacing.step4))
             }
-            if card.remoteImagesBlocked {
+            if card.remoteImagesBlocked(loadRemote: loadImages) {
                 Notice(kind: .warning, title: word("mail.read.images.title"), text: word("mail.read.images.text"), onSheet: true,
                        glyph: { Glyph(.alert) },
                        actions: { TextButton(label: word("mail.action.loadImages"), kind: .sheet) { model.allowRemoteImages(card.id) } })

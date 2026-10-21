@@ -83,8 +83,8 @@ public struct ReadingCard: Identifiable, Equatable, Sendable {
     public var threadTexts: [String: String] = [:]
     public var quotesOpen: Set<String> = []
 
-    public var remoteImagesBlocked: Bool {
-        if case .html = content { return !remoteImagesAllowed }
+    public func remoteImagesBlocked(loadRemote: Bool) -> Bool {
+        if case .html = content { return !remoteImagesAllowed && !loadRemote }
         return false
     }
 }

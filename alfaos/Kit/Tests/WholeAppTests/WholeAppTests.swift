@@ -347,6 +347,12 @@ final class ShellModelTests {
         let data = try JSONEncoder().encode(model.snapshot)
         let restored = ShellModel(directory: try Fixture.directory(), geometry: g, window: Fixture.screen, snapshot: try JSONDecoder().decode(ShellSnapshot.self, from: data))
         recordEqual(restored.laneState("mail").preferred[2], 250)
+        for (view, saved, want) in [(StartView.mail, "settings", "mail"), (.settings, "mail", "settings"), (.lastOpen, "settings", "settings"), (.lastOpen, "mail", "mail")] {
+            let seed = ShellModel(directory: try Fixture.directory(), geometry: g, window: Fixture.screen)
+            seed.select(saved)
+            XCTAssertEqual(ShellModel(directory: try Fixture.directory(), geometry: g, window: Fixture.screen, snapshot: seed.snapshot, start: view).currentID, want)
+        }
+        XCTAssertEqual(StartView.stored(nil), .mail)
     }
 }
 
@@ -3733,6 +3739,12 @@ final class GapTests {
         await model.open("m1")
         let card = model.cards[0]
         note("card", "\(card.quoteCollapsed) \(card.signatureCollapsed) \(card.remoteImagesAllowed)")
+        let html = ReadingCard(inlet: card.inlet, summary: card.summary, content: .html("x", inlineImages: [:]))
+        XCTAssertTrue(html.remoteImagesBlocked(loadRemote: false))
+        XCTAssertFalse(html.remoteImagesBlocked(loadRemote: true))
+        var freed = html
+        freed.remoteImagesAllowed = true
+        XCTAssertFalse(freed.remoteImagesBlocked(loadRemote: false))
         note("settled", "\(model.canLoadMore) \(model.listState)")
         engine.pageError = .provider(Hint(text: "hint.x"))
         await model.loadSelection()

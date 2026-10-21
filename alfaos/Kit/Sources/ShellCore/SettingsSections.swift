@@ -78,6 +78,16 @@ public enum StartView: String, CaseIterable, Sendable {
     case lastOpen
 
     public var key: String { "settings.start." + rawValue }
+
+    public var appID: String? {
+        switch self {
+        case .mail: "mail"
+        case .settings: "settings"
+        case .lastOpen: nil
+        }
+    }
+
+    public static func stored(_ raw: String?) -> StartView { raw.flatMap(StartView.init(rawValue:)) ?? .mail }
 }
 
 public enum LockDelay: String, CaseIterable, Sendable {

@@ -46,12 +46,12 @@ public final class ShellModel {
     @ObservationIgnored private var slowTask: Task<Void, Never>?
     @ObservationIgnored public var onChange: (@MainActor (ShellSnapshot) -> Void)?
 
-    public init(directory: AppDirectory, geometry: ShellGeometry, window: Size, snapshot: ShellSnapshot? = nil) {
+    public init(directory: AppDirectory, geometry: ShellGeometry, window: Size, snapshot: ShellSnapshot? = nil, start: StartView = .lastOpen) {
         self.directory = directory
         self.geometry = geometry
         self.window = window
         let valid = snapshot.flatMap { directory.app($0.currentID) != nil ? $0 : nil }
-        currentID = valid?.currentID ?? directory.first?.id ?? ""
+        currentID = start.appID.flatMap { directory.app($0)?.id } ?? valid?.currentID ?? directory.first?.id ?? ""
         lanes = valid?.lanes ?? [:]
         blob = valid?.blob.normalized ?? BlobPlacement.home(geometry: geometry)
         face = .orb
