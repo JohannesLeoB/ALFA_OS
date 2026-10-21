@@ -19,6 +19,7 @@
 - [Ein Ordner je Sitzung](ein-ordner-je-sitzung.md) — strikt ein Arbeitsordner, Müll selbst wegräumen, dist/ nur nummerierte Apps (21.10.)
 - [Bestand zuerst](bestand-zuerst.md) — Code ist wahr, Geschriebenes nur Hinweis; erst hartnäckig im Bestand suchen (21.10.)
 - [Keine Babysitter-Texte](keine-babysitter-texte.md) — keine erklärenden Hinweis- und Meta-Texte in der UI, nichts davon erfinden oder anfordern (21.10.)
+- [Fragen nur zu seinem Wort](fragen-nur-zu-seinem-wort.md) — nur echte Produktentscheidungen fragen, nie zu Design- oder Fremdtexten (21.10.)
 - [Keine Abkürzung](keine-abkuerzung.md) — Lücke belegen statt füllen, erst lesen dann bauen
 - [App: Vision](app-vision.md) — acht geprüfte Zitate zu Zweck und Richtung der App
 - [App: Ziel](app-ziel.md) — gestuft: Ende November Umfang C ohne Kalkulation, Launch Ende 2026 mit dem Rest
