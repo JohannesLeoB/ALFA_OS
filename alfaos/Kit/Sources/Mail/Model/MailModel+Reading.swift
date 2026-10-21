@@ -3,8 +3,6 @@ import Hub
 import enum AlfaServices.MailFlag
 import struct AlfaServices.MailMessageBody
 import struct AlfaServices.MailMessageSummary
-import struct AlfaKit.MailSignatureContact
-import enum AlfaKit.MailSignatureParser
 import enum AlfaKit.MailLeadExtraktor
 
 extension MailModel {
@@ -127,14 +125,6 @@ extension MailModel {
         guard let inlet = cardInlet(id) ?? selectedInlet else { return nil }
         guard let body = try? await engine.body(inlet, messageID: id) else { return nil }
         return body.text ?? body.html.map(MailAddresses.plainText)
-    }
-
-    public func contactFromSignature(_ id: String) async {
-        guard let inlet = cardInlet(id) ?? selectedInlet, let summary = summary(id) else { return }
-        let text = await messageText(id) ?? summary.snippet
-        let sender = MailAddresses.email(summary.fromRaw)
-        let contact = MailSignatureParser.parse(senderHeader: summary.fromRaw, senderEmail: sender, body: text)
-        commandContinuation.yield(.contactFromSignature(MailMessageRef(inlet: inlet, messageID: id), contact))
     }
 
     public func leadFromMail(_ id: String) async {

@@ -29,6 +29,7 @@ public enum SettingsSection: String, CaseIterable, Sendable, Identifiable {
     case templates
     case integrations
     case keyInventory
+    case contacts
     case privacy
     case system
     case imprint
@@ -39,7 +40,7 @@ public enum SettingsSection: String, CaseIterable, Sendable, Identifiable {
         switch self {
         case .identity, .appearance: .me
         case .companyData, .folders, .templates: .company
-        case .integrations, .keyInventory: .connections
+        case .integrations, .keyInventory, .contacts: .connections
         case .privacy, .system, .imprint: .protection
         }
     }
@@ -53,6 +54,7 @@ public enum SettingsSection: String, CaseIterable, Sendable, Identifiable {
         case .templates: "list"
         case .integrations: "plug"
         case .keyInventory: "key"
+        case .contacts: "person"
         case .privacy: "shield"
         case .system: "system"
         case .imprint: "docText"
@@ -168,6 +170,7 @@ public final class SettingsBoard {
     public private(set) var front: String?
     public private(set) var fanned = false
     public private(set) var toast: String?
+    public private(set) var toastName: String?
 
     public init() {}
 
@@ -195,7 +198,10 @@ public final class SettingsBoard {
         fanned.toggle()
     }
 
-    public func notify(_ key: String) { toast = key }
+    public func notify(_ key: String, name: String? = nil) {
+        toast = key
+        toastName = name
+    }
 
     public func stripMarks(_ lane: Lane, height: Double, entries: [String], failed: Set<String>,
                            title: (String) -> String) -> [SettingsStripMark] {
@@ -228,5 +234,8 @@ public final class SettingsBoard {
         }
     }
 
-    public func dismissToast() { toast = nil }
+    public func dismissToast() {
+        toast = nil
+        toastName = nil
+    }
 }

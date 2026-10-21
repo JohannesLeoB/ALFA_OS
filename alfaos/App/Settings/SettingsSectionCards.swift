@@ -1,5 +1,6 @@
 import AppKit
 import Hub
+import Mail
 import ShellCore
 import SwiftUI
 
@@ -22,6 +23,7 @@ struct SettingsCardBody: View {
             case .templates: TemplatesCard()
             case .integrations: EmptyView()
             case .keyInventory: KeyInventoryCard(host: host, hub: hub)
+            case .contacts: ContactsCard(host: host, board: board)
             case .privacy: PrivacyCard()
             case .system: SystemCard(board: board)
             case .imprint: ImprintCard()
@@ -233,6 +235,64 @@ private struct KeyInventoryCard: View {
                         TextButton(label: word("text.settings.action.remove"), kind: .plain, disabled: reading.inlets.isEmpty) {
                             Task { for inlet in reading.inlets { await host.remove(inlet.id) } }
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+extension SettingsBoard {
+    func notify(_ kind: MailToastKind) { notify(kind.key, name: kind.name) }
+}
+
+private struct ContactsCard: View {
+    @Bindable var host: AppHost
+    let board: SettingsBoard
+
+    var body: some View {
+        if let model = host.mail { ContactsList(model: model, board: board) }
+    }
+}
+
+private struct ContactsList: View {
+    let model: MailModel
+    let board: SettingsBoard
+
+    var body: some View {
+        let suggested = model.senderSuggestions
+        VStack(spacing: 0) {
+            if model.contacts.isEmpty { SettingsBlockNote(text: word("settings.contacts.empty")) }
+            ForEach(model.contacts) { contact in
+                if model.contactEdit == contact.id {
+                    SettingsRow(label: word("settings.contacts.name")) {
+                        SettingsValueField(text: Binding(get: { contact.name }, set: { model.editContact(contact.id, name: $0) }),
+                                           labelKey: "settings.contacts.name")
+                    }
+                    SettingsRow(label: word("settings.contacts.address")) {
+                        SettingsValueField(text: Binding(get: { contact.address }, set: { model.editContact(contact.id, address: $0) }),
+                                           labelKey: "settings.contacts.address")
+                    }
+                    SettingsRow(label: Text(verbatim: "")) {
+                        TextButton(label: word("settings.contacts.done"), kind: .accent) { model.contactEdit = nil }
+                        TextButton(label: word("settings.contacts.remove"), kind: .signal) { board.notify(model.removeContact(contact.id)) }
+                    }
+                } else {
+                    SettingsRow(label: contact.name.isEmpty ? word("settings.contacts.unnamed") : Text(verbatim: contact.name),
+                                sub: contact.address.isEmpty ? word("settings.contacts.noAddress") : Text(verbatim: contact.address)) {
+                        TextButton(label: word("settings.contacts.edit")) { model.contactEdit = contact.id }
+                    }
+                }
+            }
+            SettingsRow(label: word("settings.contacts.new"), line: !suggested.isEmpty) {
+                TextButton(label: word("settings.contacts.add")) { model.addContact() }
+            }
+            if !suggested.isEmpty {
+                SettingsBlockNote(text: word("settings.contacts.suggested"))
+                ForEach(Array(suggested.enumerated()), id: \.element.id) { index, item in
+                    SettingsRow(label: Text(verbatim: item.name.isEmpty ? item.address : item.name), sub: Text(verbatim: item.address),
+                                line: index < suggested.count - 1) {
+                        TextButton(label: word("settings.contacts.keep")) { board.notify(model.saveContact(item)) }
                     }
                 }
             }

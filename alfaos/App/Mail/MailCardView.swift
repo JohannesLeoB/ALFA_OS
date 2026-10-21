@@ -41,6 +41,7 @@ struct CardHead: View {
     let ref: CardRef
     let front: Bool
     let ink: Color
+    @Environment(\.mailLaneLink) private var link
     @State private var titleAnchor = AnchorBox()
 
     var body: some View {
@@ -112,10 +113,7 @@ struct CardHead: View {
 
     private func personMenu(id: String, party: (name: String, address: String)) {
         guard let rect = titleAnchor.screenRect() else { return }
-        let actions = MailDo(model: model)
-        let entries = MailMenuLine.entries(MailMenus.person(address: party.address)) { action in
-            actions.person(action, name: party.name, address: party.address, message: id)
-        }
+        let entries = MailDo(model: model, link: link).personEntries(name: party.name, address: party.address, message: id)
         MenuPanel.shared.show(entries: entries, width: Design.Size.menuWidthWide, anchor: .rect(rect), window: NSApp.keyWindow)
     }
 
@@ -142,7 +140,7 @@ struct CardHead: View {
                 line("mail.card.more", MailNames.number(more)).designText(size: Design.TextSize.small).opacity(opacity).lineLimit(1)
             } else {
                 draftMeta(card)
-                    .designText(size: Design.TextSize.small)
+                    .designText(front && card.status?.failed == true ? \.signal : \.ink, size: Design.TextSize.small)
                     .opacity(opacity)
                     .lineLimit(1)
                     .truncationMode(.tail)
@@ -153,12 +151,7 @@ struct CardHead: View {
 
     private func draftMeta(_ card: MailDraftCard) -> Text {
         guard front else { return Text(verbatim: card.draft.subject) }
-        switch card.state {
-        case .saved: return word("mail.draft.saved")
-        case .sending, .queuedInOutbox: return word("mail.draft.sending")
-        case .sendFailed: return word("mail.draft.sendFailed")
-        default: return Text(verbatim: card.draft.subject)
-        }
+        return card.status.map { word($0.key) } ?? Text(verbatim: "")
     }
 }
 

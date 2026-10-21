@@ -2738,18 +2738,42 @@ final class MailModelTests {
         await model.start()
         recordEqual(model.listState, .notConnected("a"))
     }
-    func runContactFromSignatureYieldsCommand() async {
+    func runContactsAreSavedOnceEditedRemovedAndKept() {
+        let suite = "contacts-test-" + UUID().uuidString
+        let defaults = UserDefaults(suiteName: suite)
+        let model = MailModel(engine: ModelFakeEngine(), defaults: defaults)
+        XCTAssertEqual(model.saveContact(name: "Anna", address: "Anna@x.test"), .contactSaved("Anna"))
+        XCTAssertEqual(model.saveContact(name: "Anna B", address: "anna@X.test"), .contactExists("Anna B"))
+        XCTAssertEqual(model.contacts.count, 1)
+        let id = model.contacts[0].id
+        model.editContact(id, name: "Anni", address: "anni@x.test")
+        XCTAssertEqual(MailModel(engine: ModelFakeEngine(), defaults: defaults).contact("ANNI@x.test")?.name, "Anni")
+        model.contactEdit = id
+        XCTAssertEqual(model.removeContact(id), .contactRemoved)
+        XCTAssertTrue(model.contacts.isEmpty && model.contactEdit == nil)
+        defaults?.removePersistentDomain(forName: suite)
+    }
+    func runSenderSuggestionsSkipOwnAndSavedAndStopAtEight() async {
         let (model, engine) = fresh()
-        engine.pages[nil] = MailMessagePage(messages: [fakeMessage("m1")])
-        engine.bodies["m1"] = .init(text: "Hi\n\n--\nAnna Berg\nBerg GmbH\nTel +49 30 1234567\n")
+        engine.pages[nil] = MailMessagePage(messages: [fakeMessage("own", from: "me@x.test")] + (1...10).map { fakeMessage("m\($0)", from: "P\($0) <p\($0)@x.test>") })
         await model.start()
-        await model.contactFromSignature("m1")
-        var iterator = model.commands.makeAsyncIterator()
-        let command = await iterator.next()
-        guard case .contactFromSignature(let ref, let contact) = command else { return XCTFail("no command") }
-        recordEqual(ref, MailMessageRef(inlet: "a", messageID: "m1"))
-        recordEqual(contact.name, "Anna Berg")
-        recordEqual(contact.organisation, "Berg GmbH")
+        _ = model.saveContact(name: "P1", address: "P1@x.test")
+        let found = model.senderSuggestions
+        XCTAssertEqual(found.count, 8)
+        XCTAssertFalse(found.contains { $0.address == "me@x.test" || $0.address.lowercased() == "p1@x.test" })
+        XCTAssertEqual(model.pool(own: "me@x.test").first?.tag, .contact)
+    }
+    func runDraftStatusFollowsTheMasterOrder() {
+        var card = MailDraftCard(id: UUID(), inlet: "a", draft: EmailDraft(subject: "", body: ""), state: .idle)
+        XCTAssertEqual(card.status, .recipientMissing)
+        card.draft.to = "a@x.test"
+        XCTAssertEqual(card.status, .subjectMissing)
+        card.draft.subject = "s"
+        XCTAssertNil(card.status)
+        card.state = .sendFailed(Hint(text: "x"))
+        XCTAssertEqual(card.status, .sendFailed)
+        card.state = .saved(Date())
+        XCTAssertEqual(card.status, .saved)
     }
     func runCardLimitDropsOldest() async {
         let (model, engine) = fresh()
@@ -5511,7 +5535,9 @@ final class WholeAppTests: XCTestCase {
         try await step("MailModelTests.runSendQueuedIsQueuedInOutbox") { await MailModelTests().runSendQueuedIsQueuedInOutbox() }
         try await step("MailModelTests.runUnreadPerAccountAndTotal") { await MailModelTests().runUnreadPerAccountAndTotal() }
         try await step("MailModelTests.runNotConnectedFromAccountState") { await MailModelTests().runNotConnectedFromAccountState() }
-        try await step("MailModelTests.runContactFromSignatureYieldsCommand") { await MailModelTests().runContactFromSignatureYieldsCommand() }
+        try await step("MailModelTests.runContactsAreSavedOnceEditedRemovedAndKept") { MailModelTests().runContactsAreSavedOnceEditedRemovedAndKept() }
+        try await step("MailModelTests.runSenderSuggestionsSkipOwnAndSavedAndStopAtEight") { await MailModelTests().runSenderSuggestionsSkipOwnAndSavedAndStopAtEight() }
+        try await step("MailModelTests.runDraftStatusFollowsTheMasterOrder") { MailModelTests().runDraftStatusFollowsTheMasterOrder() }
         try await step("MailModelTests.runCardLimitDropsOldest") { await MailModelTests().runCardLimitDropsOldest() }
         try await step("MailModelTests.runOpenMarksReadAndFlagFailureKeepsHint") { await MailModelTests().runOpenMarksReadAndFlagFailureKeepsHint() }
         try await step("MailModelTests.runReplyAllBuildsDraft") { await MailModelTests().runReplyAllBuildsDraft() }

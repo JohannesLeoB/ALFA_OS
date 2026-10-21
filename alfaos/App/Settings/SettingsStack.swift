@@ -63,7 +63,7 @@ struct SettingsStackPane: View {
                     }
                 } note: {
                     if let key = board.toast {
-                        Toast(message: word(key), onDismiss: { board.dismissToast() })
+                        Toast(message: board.toastName.map { line(key, $0) } ?? word(key), onDismiss: { board.dismissToast() })
                     }
                 }
             }

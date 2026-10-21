@@ -1,7 +1,6 @@
 import Foundation
 import Hub
 import struct AlfaKit.MailLeadVorschlag
-import struct AlfaKit.MailSignatureContact
 
 public struct MailMessageRef: Equatable, Sendable {
     public let inlet: Inlet.ID
@@ -15,7 +14,6 @@ public struct MailMessageRef: Equatable, Sendable {
 
 public enum MailCommand: Equatable, Sendable {
     case attachmentToProjectFolder(MailMessageRef, attachmentID: String, project: String?)
-    case contactFromSignature(MailMessageRef, MailSignatureContact)
     case leadFromMail(MailMessageRef, MailLeadVorschlag)
     case print(MailMessageRef)
     case exportPDF(MailMessageRef)

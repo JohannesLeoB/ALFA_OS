@@ -1,10 +1,12 @@
 import AppKit
 import Mail
+import ShellCore
 import SwiftUI
 
 @MainActor
 struct MailDo {
     let model: MailModel
+    var link: MailLaneLink?
 
     func message(_ action: MailAction, _ id: String, undoable: Bool = false, fromMenu: Bool = false) {
         switch action {
@@ -23,6 +25,7 @@ struct MailDo {
         case .openDraft: Task { _ = await model.editDraft(id) }
         case .loadImages: model.allowRemoteImages(id)
         case .purge: Task { await model.purge(id) }
+        case .saveContact: if let kind = model.saveContact(from: id) { model.announce(kind) }
         default:
             break
         }
@@ -37,8 +40,18 @@ struct MailDo {
         case .writeMail:
             let entry = name.isEmpty ? address : "\"" + name + "\" <" + address + ">"
             _ = model.compose(to: entry)
-        case .saveContact: Task { await model.contactFromSignature(id) }
+        case .saveContact: model.announce(model.saveContact(name: name, address: address))
+        case .editContact:
+            guard let contact = model.contact(address) else { return }
+            model.contactEdit = contact.id
+            link?.openService(SettingsSection.contacts.rawValue)
         default: break
+        }
+    }
+
+    func personEntries(name: String, address: String, message id: String) -> [MenuEntry] {
+        MailMenuLine.entries(MailMenus.person(address: address, contact: model.contact(address) != nil)) { action in
+            person(action, name: name, address: address, message: id)
         }
     }
 

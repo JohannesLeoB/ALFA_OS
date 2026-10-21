@@ -451,9 +451,6 @@ MailModelTests.runUnreadPerAccountAndTotal eq dict["a":3,"b":4]
 MailModelTests.runUnreadPerAccountAndTotal eq 7
 MailModelTests.runUnreadPerAccountAndTotal eq 9
 MailModelTests.runNotConnectedFromAccountState eq MailListState.notConnected(notConnected="a")
-MailModelTests.runContactFromSignatureYieldsCommand eq MailMessageRef(inlet="a",messageID="m1")
-MailModelTests.runContactFromSignatureYieldsCommand eq "Anna Berg"
-MailModelTests.runContactFromSignatureYieldsCommand eq "Berg GmbH"
 MailModelTests.runCardLimitDropsOldest eq 6
 MailModelTests.runCardLimitDropsOldest eq 6
 MailModelTests.runCardLimitDropsOldest eq "m7"

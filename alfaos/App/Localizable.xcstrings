@@ -844,6 +844,16 @@
         }
       }
     },
+    "mail.action.editContact" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontakt bearbeiten …"
+          }
+        }
+      }
+    },
     "mail.action.foldColumn" : {
       "comment" : "alpha",
       "localizations" : {
@@ -1621,6 +1631,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sendet …"
+          }
+        }
+      }
+    },
+    "mail.draft.subjectMissing" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Betreff fehlt"
           }
         }
       }
@@ -2867,6 +2887,16 @@
         }
       }
     },
+    "mail.suggest.contact" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontakt"
+          }
+        }
+      }
+    },
     "mail.suggest.sender" : {
       "comment" : "alpha",
       "localizations" : {
@@ -2984,6 +3014,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ Mails in den Papierkorb gelegt"
+          }
+        }
+      }
+    },
+    "mail.toast.contactExists" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ist schon Kontakt"
+          }
+        }
+      }
+    },
+    "mail.toast.contactRemoved" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontakt entfernt"
+          }
+        }
+      }
+    },
+    "mail.toast.contactSaved" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ als Kontakt gesichert"
           }
         }
       }
@@ -3456,6 +3516,126 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Web"
+          }
+        }
+      }
+    },
+    "settings.contacts.add" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen"
+          }
+        }
+      }
+    },
+    "settings.contacts.address" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse"
+          }
+        }
+      }
+    },
+    "settings.contacts.done" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        }
+      }
+    },
+    "settings.contacts.edit" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bearbeiten"
+          }
+        }
+      }
+    },
+    "settings.contacts.empty" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Kontakte. Absender erscheinen darunter als Vorschlag und lassen sich mit einem Klick sichern."
+          }
+        }
+      }
+    },
+    "settings.contacts.keep" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sichern"
+          }
+        }
+      }
+    },
+    "settings.contacts.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
+    },
+    "settings.contacts.new" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neuer Kontakt"
+          }
+        }
+      }
+    },
+    "settings.contacts.noAddress" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse fehlt"
+          }
+        }
+      }
+    },
+    "settings.contacts.remove" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen"
+          }
+        }
+      }
+    },
+    "settings.contacts.suggested" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorgeschlagen · aus Absendern"
+          }
+        }
+      }
+    },
+    "settings.contacts.unnamed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Namen"
           }
         }
       }
@@ -4162,6 +4342,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Firma, Anschrift, Kontakt"
+          }
+        }
+      }
+    },
+    "settings.section.contacts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontakte"
+          }
+        }
+      }
+    },
+    "settings.section.contacts.detail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesichert und vorgeschlagen"
           }
         }
       }

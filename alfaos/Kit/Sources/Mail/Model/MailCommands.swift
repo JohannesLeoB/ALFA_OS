@@ -39,6 +39,7 @@ extension MailModel {
             state = .reading
             let hasCopy = !card.summary.ccRaw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             main = [
+                MailSlot(id: "saveContact", action: .saveContact, priority: 6),
                 MailSlot(id: "reply", action: .reply, priority: 1),
                 MailSlot(id: "replyAll", action: .replyAll, priority: 4, off: !hasCopy),
                 MailSlot(id: "forward", action: .forward, priority: 2),

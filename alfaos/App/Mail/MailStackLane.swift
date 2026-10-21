@@ -119,6 +119,7 @@ struct StackArea: View {
 
     private func toastText(_ toast: MailToast) -> Text {
         if let count = toast.kind.count { return line(toast.kind.key, String(count)) }
+        if let name = toast.kind.name { return line(toast.kind.key, name) }
         return word(toast.kind.key)
     }
 }

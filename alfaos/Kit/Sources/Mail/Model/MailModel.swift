@@ -49,6 +49,8 @@ public final class MailModel {
     public internal(set) var searching = false
     public internal(set) var overview = MailOverview()
     public internal(set) var toast: MailToast?
+    public internal(set) var contacts: [MailContact] = [] { didSet { MailContact.store(contacts, in: defaults) } }
+    public var contactEdit: String?
     var toastSerial = 0
     @ObservationIgnored var undoAction: (@MainActor () async -> Void)?
     @ObservationIgnored var sendAfterSave: Set<UUID> = []
@@ -61,13 +63,16 @@ public final class MailModel {
     public let commands: AsyncStream<MailCommand>
 
     let clock: @Sendable () -> Date
+    @ObservationIgnored let defaults: UserDefaults?
 
-    public init(engine: any MailEngine, clock: @escaping @Sendable () -> Date = { Date() }) {
+    public init(engine: any MailEngine, clock: @escaping @Sendable () -> Date = { Date() }, defaults: UserDefaults? = nil) {
         self.engine = engine
         self.clock = clock
+        self.defaults = defaults
         let (stream, continuation) = AsyncStream<MailCommand>.makeStream()
         commands = stream
         commandContinuation = continuation
+        contacts = MailContact.load(from: defaults)
     }
 
     public var now: Date { clock() }

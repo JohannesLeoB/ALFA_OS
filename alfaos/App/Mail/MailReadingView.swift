@@ -86,6 +86,7 @@ struct RecipientHeader: View {
 }
 
 struct PersonRow: View {
+    @Environment(\.mailLaneLink) private var link
     let model: MailModel
     let card: ReadingCard
     let person: MailPerson
@@ -108,10 +109,7 @@ struct PersonRow: View {
 
     private func menu() {
         guard let rect = anchor.screenRect() else { return }
-        let actions = MailDo(model: model)
-        let entries = MailMenuLine.entries(MailMenus.person(address: person.address)) { action in
-            actions.person(action, name: person.name, address: person.address, message: card.id)
-        }
+        let entries = MailDo(model: model, link: link).personEntries(name: person.name, address: person.address, message: card.id)
         MenuPanel.shared.show(entries: entries, width: Design.Size.menuWidthWide, anchor: .rect(rect), window: NSApp.keyWindow)
     }
 }
@@ -165,6 +163,7 @@ struct SheetBody: View {
 }
 
 struct ThreadItemView: View {
+    @Environment(\.mailLaneLink) private var link
     @Environment(\.design) private var design
     @Environment(\.hairline) private var hairline
     @AppStorage(SettingsKey.loadImages) private var loadImages = false
@@ -253,10 +252,7 @@ struct ThreadItemView: View {
 
     private func menu() {
         guard let rect = anchor.screenRect() else { return }
-        let actions = MailDo(model: model)
-        let entries = MailMenuLine.entries(MailMenus.person(address: item.address)) { action in
-            actions.person(action, name: item.name, address: item.address, message: card.id)
-        }
+        let entries = MailDo(model: model, link: link).personEntries(name: item.name, address: item.address, message: card.id)
         MenuPanel.shared.show(entries: entries, width: Design.Size.menuWidthWide, anchor: .rect(rect), window: NSApp.keyWindow)
     }
 }

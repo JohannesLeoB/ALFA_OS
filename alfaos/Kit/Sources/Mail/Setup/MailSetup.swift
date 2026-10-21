@@ -23,11 +23,12 @@ public enum MailSetup {
         cadence: any CadencePort,
         cost: any CostPort,
         cadences: [Capability: Duration] = MailSetup.defaultCadences,
-        clock: @escaping @Sendable () -> Date = { Date() }
+        clock: @escaping @Sendable () -> Date = { Date() },
+        defaults: UserDefaults? = nil
     ) throws -> Assembly {
         let providers = ProviderCatalog.standard(directory: directory, openBrowser: openBrowser)
         return try assemble(person: person, company: company, providers: providers, database: database,
-                            keychain: keychain, cadence: cadence, cost: cost, cadences: cadences, clock: clock)
+                            keychain: keychain, cadence: cadence, cost: cost, cadences: cadences, clock: clock, defaults: defaults)
     }
 
     public static func live(
@@ -39,7 +40,7 @@ public enum MailSetup {
         let database = try HubDatabase.open(in: directory)
         return try make(person: person, company: company, openBrowser: openBrowser, directory: directory,
                         database: database, keychain: KeychainAdapter(), cadence: TimerCadence(),
-                        cost: CountingCost(database))
+                        cost: CountingCost(database), defaults: .standard)
     }
 
     static func assemble(
@@ -51,7 +52,8 @@ public enum MailSetup {
         cadence: any CadencePort,
         cost: any CostPort,
         cadences: [Capability: Duration],
-        clock: @escaping @Sendable () -> Date
+        clock: @escaping @Sendable () -> Date,
+        defaults: UserDefaults? = nil
     ) throws -> Assembly {
         var company = company
         let known = Set(company.offers.map(\.id))
@@ -64,7 +66,7 @@ public enum MailSetup {
         let setup = PresetSetup(base: core.setup, rules: core.rules, cadences: cadences)
         let hub = Hub(access: core.access, setup: setup, rules: core.rules)
         let engine = try MailCore(hub: hub.access, database: database)
-        return Assembly(hub: hub, engine: engine, model: MailModel(engine: engine))
+        return Assembly(hub: hub, engine: engine, model: MailModel(engine: engine, defaults: defaults))
     }
 
     static func offers(for providers: [any Provider], owner: Owner) -> [Offer] {

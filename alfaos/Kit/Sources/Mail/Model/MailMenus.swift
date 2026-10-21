@@ -3,7 +3,7 @@ import ShellCore
 
 public enum MailAction: String, Sendable, CaseIterable {
     case reply, replyAll, forward, archive, trash, markRead, markUnread, star, unstar, move, spam
-    case note, original, print, pdf, toProject, more, openDraft, copyAddress, writeMail, saveContact
+    case note, original, print, pdf, toProject, more, openDraft, copyAddress, writeMail, saveContact, editContact
     case preview, otherProject, saveAs, laterSend, receipt, template, attachFile, fromProject, format
     case saveDraft, discardDraft, send, overview, backToStack, foldColumn, loadImages, purge
 
@@ -22,6 +22,7 @@ public enum MailAction: String, Sendable, CaseIterable {
         case .pdf: .export
         case .toProject, .fromProject: .folder
         case .more: .more
+        case .saveContact: .personAdd
         case .attachFile: .attach
         case .format: .textSize
         case .saveDraft: .save
@@ -56,8 +57,8 @@ public enum MailMenus {
         [.item(.laterSend), .item(.receipt), .item(.template), .separator, .item(.print)]
     }
 
-    public static func person(address: String) -> [MailMenuLine] {
-        [.head(address), .item(.copyAddress), .item(.writeMail), .item(.saveContact)]
+    public static func person(address: String, contact: Bool) -> [MailMenuLine] {
+        [.head(address), .item(.copyAddress), .item(.writeMail), .item(contact ? .editContact : .saveContact)]
     }
 
     public static func attachment() -> [MailMenuLine] {

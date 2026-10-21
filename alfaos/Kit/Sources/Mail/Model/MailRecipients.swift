@@ -36,6 +36,7 @@ public struct MailSuggestion: Identifiable, Equatable, Sendable {
     public var id: String { address.lowercased() }
     public let name: String
     public let address: String
+    public let tag: MailSuggestionTag
 
     public var initials: String { MailNames.initials(name) }
 
@@ -137,22 +138,8 @@ extension MailModel {
         let needle = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !needle.isEmpty, let card = draft(id) else { return [] }
         let have = Set(card.people(field).map { $0.address.lowercased() })
-        let own = engineAccount(card.inlet)
-        var seen = Set<String>()
-        var pool: [MailSuggestion] = []
-        func add(_ raw: String) {
-            let parts = MailNames.display(raw)
-            let address = parts.address.isEmpty ? raw : parts.address
-            let key = address.lowercased()
-            guard !key.isEmpty, key != own, !have.contains(key), seen.insert(key).inserted else { return }
-            pool.append(MailSuggestion(name: parts.name, address: address))
-        }
-        let known = summaries + cards.map(\.summary)
-        for item in known {
-            add(item.fromRaw)
-            for entry in MailAddresses.split(item.toRaw + "," + item.ccRaw) { add(entry) }
-        }
-        return Array(pool.filter { ($0.name + " " + $0.address).lowercased().contains(needle) }
+        return Array(pool(own: engineAccount(card.inlet))
+            .filter { !have.contains($0.address.lowercased()) && ($0.name + " " + $0.address).lowercased().contains(needle) }
             .prefix(Design.Count.contactSuggestions))
     }
 

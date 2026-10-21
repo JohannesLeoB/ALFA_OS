@@ -343,7 +343,7 @@ struct SuggestionRow: View {
                         .frame(height: CGFloat(SheetValues.conversationLine))
                 }
                 Spacer(minLength: 0)
-                word("mail.suggest.sender").designText(\.inkTertiary, size: Design.TextSize.small).lineLimit(1)
+                word(item.tag.key).designText(\.inkTertiary, size: Design.TextSize.small).lineLimit(1)
             }
             .padding(.horizontal, CGFloat(Design.Spacing.step8))
             .frame(height: CGFloat(SheetValues.recipientRowHeight))
