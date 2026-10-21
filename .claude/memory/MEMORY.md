@@ -1,23 +1,13 @@
-- [Stand](stand.md) — aktueller Stand 21.10.: Regeln, Gebautes, Ungeprüftes, Lücken an Design (Brief v13), Offenes, bekannte Fehler
-- [Arbeitsweise](arbeitsweise.md) — sein Wort zu Ergebnissen, Bauen, Ordnern, Nebensitzungen, Meldungen, Brief an Design, kein mykilos, keine Rechte; Modellregel
-- [Haltung](haltung.md) — blind verlassen können, keine Abkürzung, Lead denkt voraus; Orange statt Grün ohne Abnahme
-- [Fragen](fragen.md) — nur echte Produktentscheidungen fragen, erst seine Transkripte durchsuchen, nie zu Design- oder Fremdtexten
-- [Test-Verständnis](test-verstaendnis.md) — Test heißt: kann rot werden; nie „N Tests grün“ als Maß; Lead managt Tests (20.10.)
-- [Design ist das Ziel](design-ist-das-ziel.md) — letzter Design-Master ist einzige Wertquelle; Code ist Funktion, keine Gestaltung; nur Daten gegen Daten
-- [Entscheidung, Wortlaut, Herkunft](entscheidung-wortlaut-herkunft.md) — sein Entscheid, Designs Wortlaut und bloße Herkunft streng trennen
-- [Bestand zuerst](bestand-zuerst.md) — Code ist wahr, Geschriebenes nur Hinweis; erst hartnäckig im Bestand suchen (21.10.)
-- [Keine Babysitter-Texte](keine-babysitter-texte.md) — keine erklärenden Hinweis- und Meta-Texte in der UI, nichts davon erfinden oder anfordern (21.10.)
-- [Lead delegiert](lead-delegiert.md) — aus der Draws-Sitzung (21.10.): Lead baut nicht; für ALFA_OS nur Hinweis
-- [Token zu Code](token-zu-code.md) — aus der Draws-Sitzung (21.10.): Token in Code statt Berichte; für ALFA_OS nur Hinweis
-- [Worker-Modelle](worker-modelle.md) — aus der Draws-Sitzung (21.10.): Worker Sonnet oder Haiku; für ALFA_OS nur Hinweis
-- [Reichweite der App](reichweite-der-app.md) — Distribution (App Store, iOS, iPadOS, Web, Abo) ermöglichen, nicht erzwingen
-- [Artefakte](artefakte.md) — Hinweise aus 56 Artefakten und 20 Grundsätze; Zitate teils nicht gefunden, keine Quelle (AGENTS.md §2.4)
-- [App: Ziel](app-ziel.md) — gestuft: Ende November Umfang C ohne Kalkulation, Launch Ende 2026; Reihenfolge; acht Vision-Zitate
-- [App: Hülle](app-huelle.md) — Blob, Bahnen, Sync, Look, Fenster, Icon: Ist, Soll, Offen
-- [App: Mail](app-mail.md) — Vertrag 155 Funktionen, Konten, Anmeldung je Anbieter, gebauter Stand, Freigaben: Ist, Soll, Offen
-- [App: Konten](app-konten.md) — Einstellungen, Hub, Rechte, Integrationen: Ist, Soll, Offen
-- [App: Projekte](app-projekte.md) — Akte, Fragebogen, Provisionierung: Ist, Soll, Offen
-- [App: Heute](app-heute.md) — Widget-Brett, 34 Arten: Ist, Soll, Offen
-- [App: Kataloge](app-kataloge.md) — Artikel, Datan als Modul: Ist, Soll, Offen
-- [App: Warenkorb](app-warenkorb.md) — Checkout, EK-Schutz, Rückweg: Ist, Soll, Offen
-- [App: Später](app-spaeter.md) — Werkstatt, Assistent, Studio, Kalkulation, ALFAcolor
+- [Stand](stand.md) — aktueller Stand: Regeln, Gebautes, Ungeprüftes, Lücken an Design, Offenes, bekannte Fehler
+- [Spec-Format](spec-format.md) — wie die Specs geschrieben und gepflegt werden; Zeile neu schreiben statt anhängen
+- [Spec: Arbeit](spec-arbeit.md) — wie an ALFA gearbeitet wird, soweit nicht in AGENTS.md; Rolle der Draws-Sitzung
+- [Spec: Ziel](spec-ziel.md) — Zweck, Stufen, Bereiche mit Rang, Plattform und Reichweite
+- [Spec: Hülle](spec-huelle.md) — Blob, Bahnen, Stapel, Fenster, Sync, Avatar, Look, Icon
+- [Spec: Mail](spec-mail.md) — 59 Funktionen mit Ist-Beleg und Status, 12 rot
+- [Spec: Hub](spec-hub.md) — Einstellungen, Konten, Integrationen, Einstellungsbaum, Lücken für Brief v13
+- [Spec: Projekte](spec-projekte.md) — Akte, Fragebogen, Provisionierung; kein Code, Bestand belegt
+- [Spec: Heute](spec-heute.md) — Widget-Brett; kein Code, Bestand belegt
+- [Spec: Kataloge](spec-kataloge.md) — Artikel, Datan; kein Code, Bestand belegt
+- [Spec: Warenkorb](spec-warenkorb.md) — Checkout, EK-Schutz; kein Code, Bestand belegt
+- [Spec: Später](spec-spaeter.md) — Werkstatt, Assistent, Studio, Kalkulation, ALFAcolor
+- [Artefakte](artefakte.md) — Hinweise aus 56 Artefakten; Zitate teils nicht gefunden, keine Quelle

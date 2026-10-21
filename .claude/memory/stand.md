@@ -5,22 +5,22 @@ metadata:
   type: project
 ---
 
-Kein Protokoll: nur, was heute gilt. Verlauf steht in `git log`. Johannes' Wort mit Datum steht in den Dateien des Bereichs (`app-*.md`, `arbeitsweise.md`).
+Kein Protokoll: nur, was heute gilt. Verlauf steht in `git log`. Johannes' Wort mit Datum steht in den Spec-Dateien des Bereichs (`spec-*.md`, Arbeitsweise in `spec-arbeit.md`).
 
 ## Repo und Regeln heute
 - `main` = GitHub. Regeln: `AGENTS.md` §1–§13 seit 95f23ff (Johannes 21.10.: „Ja, AGENTS.md und README so ersetzen“; vorher zur Neufassung „mache ich gleich“). `README.md` ist die Karte. Gedächtnis `.claude/memory/` per Link (§12). Commit-Regeln §11.
 - 13 Stränge in `.claude/agents/`: bau-heute, bau-kataloge, bau-mail, bau-projekte, design-bruecke, figma-spiegel, leser, produkt, pruefer-freund, pruefer-petzer, pruefer-spuerhund, pruefer-waterboarder, sammler. Die Bauaufträge liefen bisher über bau-mail (Hülle, Konten, Hub sitzen in der Hülle; Johannes 19.10.: „Bauen nur noch über die Bau-Stränge mit Sonnet 5.5, Opus nur für den Lead.“).
 - GitHub: `main-protect` (kein Force-Push, kein Löschen, lineare Historie; PR-Pflicht raus, Johannes 21.10.: „Ich habe die PR-Pflicht aus main-protect genommen, alles andere bleibt. Push H1.“). `only-main` erlaubt `main` und `alfa-draws` (Johannes 21.10.: „ich wollte in alfa draws mit einer anderen session einen prototypen einer App Funktion testen“); die Lead fasst `alfa-draws` nicht an, beide Sitzungen pushen als dasselbe Konto. 27 Zweige `sicherung/*` im Repo `mykilos-Alphabet`, Ruleset „Sichi“ aktiv (18.10.). Zweige des zweiten Entwicklers gelöscht.
 - Master (`DESIGN/MANIFEST.json`): letzter `ALFA OS Interface CHEF 1610-handoff 1810.zip` (109 Dateien, 341 Tokens, ABNAHME.md 12 Kriterien offen), vorletzter `ALFA OS Interface CHEF 1610.zip`. Johannes 18.10.: „Ja. Lege beide Master als Original-ZIP mit MANIFEST.json in DESIGN/ ab, entpackt wird nur in dist/.“ Gezeichnet sind Mail und Einstellungen (mit Hülle, Dienste); Projekte, Heute, Kataloge, Warenkorb nur als Textlisten. Fehlen: `bauteile.json`, `mechanik.json` (von Design angekündigt). Widersprüche im Export: RUECKGABE-AN-CODE.md:14 (329/67 Tokens) gegen akte.json (341/78). Ein neuer Export von Design steht aus; der Design-Projektstand vom 18.10. (352 Tokens) gilt nicht als Master (§8).
-- Brief: v12 (b71bea8) in `DESIGN/brief/BRIEF.txt` gilt (Kopf „So arbeitest du“, Lieferschein `LIEFERUNG.json`, Prüfung P4 `check_delivery.py`, N14–N17 Drive; N8–N13 aus v11). Schemas und Prüfskripte im selben Ordner (`validate.py`, `check_contract.py`, `diff_contract.py`, `check_delivery.py`); `scripts/receive_master.py --check` prüft einen Export. Johannes 19.10.: DTCG nutzen, Namensraum `alfa`, unter der UI alles englisch (ASD-STE100), UI-Texte als Sprachsystem DE/EN. Annahme eines Exports: siehe `arbeitsweise.md` (Brief).
+- Brief: v12 (b71bea8) in `DESIGN/brief/BRIEF.txt` gilt (Kopf „So arbeitest du“, Lieferschein `LIEFERUNG.json`, Prüfung P4 `check_delivery.py`, N14–N17 Drive; N8–N13 aus v11). Schemas und Prüfskripte im selben Ordner (`validate.py`, `check_contract.py`, `diff_contract.py`, `check_delivery.py`); `scripts/receive_master.py --check` prüft einen Export. Johannes 19.10.: DTCG nutzen, Namensraum `alfa`, unter der UI alles englisch (ASD-STE100), UI-Texte als Sprachsystem DE/EN. Annahme eines Exports: siehe `spec-arbeit.md` (Brief).
 - Figma-Spiegel (Ausnahme §8): Team ALFA (Starter), Probedatei „ALFA Verlauf · Mail“ (fileKey qIrCnMnRZZl5Fazm4Q7CbT) mit Mail 18.10. aus Master 1810. Johannes 18.10.: „probe auf starter, wenn wir an limits stoßen, sag bescheid. In L1 freigeben“ (L1 = alte Nummer, heute §8). Strang und Automatik nicht freigegeben; ob der Strang die Figma-Werkzeuge mit echten Namen (mcp__…) bekommt, ungeprüft.
 
-## Was gebaut ist (Commit; Einzelheiten in app-*.md)
+## Was gebaut ist (Commit; Einzelheiten in `spec-*.md`)
 - Hülle: c2d585f, Bauteile f69af03, Fenster 896 breit 08d2ca3, Avatar-Kürzel 145e6f3, Icon 443b970. Einstellungen: 9d95f11, mit Wirkung b3977df.
 - Mail: Liste und Karten 7532c78/9226e69/1d790a2 (Verdrahtung ba9f691–cf1ec00); Postausgang und Entwurf A1b–A1e (55bcf5b … eb89ff4); Kein doppeltes Senden e5a5d14; IDLE d612a48; HTML-Mail 92ced80; Kontakte und Statuszeile K1 df16331.
 - Hub: Prüfung beim Anbieter 6668bcd; Abgleich beim Start H1 145e6f3; Einstellungen je Dienst H2 223bc67; Drive-Port D1 f99797f (aus, bis Design die Projekt-Wurzel zeichnet); Kachelraster K1 15eb550.
 - Pipeline: Generator liest `DESIGN/` d485c9d; `receive_master.py`, `validate.py` E1 b1515f4; `scripts/build_app.sh` a7cb288 (`dist/ALFA OS <Nr>.app`, die zwei neuesten).
-- Test: einer, `WholeAppTests.swift` (§10); Fundus-Tests überführt 404342e; ehrlich gemacht b94e0e4; entschlackt ebc9d3a/d213d33. Nicht gebaut: Projekte, Heute, Kataloge, Warenkorb, Datan (`alfaos/App` hat nur Mail, Settings, Shell).
+- Test: zwei Testdateien, `alfaos/Kit/Tests/WholeAppTests/WholeAppTests.swift` und `alfaos/Tests/HullProbeTests.swift` (wird noch überführt, §10); Fundus-Tests überführt 404342e; ehrlich gemacht b94e0e4; entschlackt ebc9d3a/d213d33. Nicht gebaut: Projekte, Heute, Kataloge, Warenkorb, Datan (`alfaos/App` hat nur Mail, Settings, Shell).
 
 ## Ungeprüft oder blind gebaut
 - Niemand hat K1 (df16331), H2 (223bc67), D1, E2 (HTML-Mail), H1, IDLE und „kein doppeltes Senden“ in der laufenden App oder gegen echte Server gesehen. Das gilt auch für den Schutz bei Servern, die SMTP-Mail nicht selbst in „Gesendet“ ablegen.
@@ -28,7 +28,7 @@ Kein Protokoll: nur, was heute gilt. Verlauf steht in `git log`. Johannes' Wort 
 - Nichts davon ist grün (§9): grün erst nach seiner Abnahme. Im Bild prüft nur Johannes (die App startet nur er).
 
 ## Lücken an Design (für Brief v13; Wortlaut vorher Johannes zeigen)
-- Hub-Katalog: Kategorien, Zustand, Seite „Verwalten“ je Dienst mit Einstellungen und Zuordnungen, „versorgt welche Bereiche“; Einstellungsbaum nach seinen vier Entscheidungen (app-konten.md); Mail-Konten mit Signatur je Postfach, Kontakte als Integration; Mitteilungen je Dienst plus global stumm; Dateiorte im Hub; Erst-Setup; Mono-Schriftrolle; „Vorlagen & CI“ und Draws als Bereich nur nach seinem Wort. Erklärsätze im Master streichen (Liste erst zu erheben).
+- Hub-Katalog: Kategorien, Zustand, Seite „Verwalten“ je Dienst mit Einstellungen und Zuordnungen, „versorgt welche Bereiche“; Einstellungsbaum nach seinen vier Entscheidungen (spec-hub.md); Mail-Konten mit Signatur je Postfach, Kontakte als Integration; Mitteilungen je Dienst plus global stumm; Dateiorte im Hub; Erst-Setup; Mono-Schriftrolle; „Vorlagen & CI“ und Draws als Bereich nur nach seinem Wort. Erklärsätze im Master streichen (Liste erst zu erheben).
 - DHL als eine Karte (Master zeichnet zwei, ALFA Dienste.dc.html:102-103); „11 Dienste“ gegen 10; Abmelden-Text nennt 6 Dienste und Warnung davor fehlt; Zustände „Schlüssel gespeichert“ und „Verwaist“ unerreichbar; Laufweiten-Token (0.065 ohne Master-Quelle); Happa-Widget.
 - Takt „Sofort“ (N5); Nachladen, Aktionsfehler und Anzeige unlesbarer Postausgang-Zeilen (N7); kein Text für „zu groß“ und für leeren Betreff; Heute fehlt in „Beim Öffnen“ (N8); App-Sperre ohne gesperrten Zustand; Kachel „Bild blockiert“ ohne Textschlüssel; doppelte Bilder-Einstellung (`bilder`, `mbilder`); Schrift der Mail (Token Geist gegen Systemschrift im nativen Blatt).
 - Drive: Wahl der Projekt-Wurzel (Master :766 zeigt nur den Wert), Leerzustände, Fehleranzeige an der Sync-Zeile, Neu-Anmelden für Dateien, PDF-Aussehen, zweite Menüebene (in v12 als N14–N17).
@@ -46,7 +46,7 @@ Kein Protokoll: nur, was heute gilt. Verlauf steht in `git log`. Johannes' Wort 
 ## Nächste Schritte
 1. Brief v13 an Design (Text erst Johannes zeigen), Inhalt wie unter „Lücken an Design“.
 2. App für Johannes mit `scripts/build_app.sh` (Kontakte, Statuszeile seit dem letzten Build neu); er prüft im Bild.
-3. Erklärsätze in der App streichen, die nicht funktionsbedingt sind (Kontakte-Leerhinweis, Google-Hinweistext), nach Liste (`keine-babysitter-texte.md`).
+3. Erklärsätze in der App streichen, die nicht funktionsbedingt sind (Kontakte-Leerhinweis, Google-Hinweistext), nach Liste (`spec-arbeit.md`).
 4. B Ballast und D Namen/myk (Fundus, siehe unten) nach seinem Entscheid, was weg darf; C Tempo; E2 SheetValues-Quellen (134 Zeilen ohne Fundstelle); H7 Datenspeicher (SQLite/GRDB, eine Tabelle je Datenart, Stock als Sicht, Delta-Sync) wartet auf sein Wort (Entwurf am Stammtisch).
 5. xcodegen erzeugt das Projekt noch in `alfaos/` (`ALFA_OS.xcodeproj`); künftig in `dist/`, dann entfällt `alfaos/*.xcodeproj/` in `.gitignore`.
 6. Danach: Rückgängig über COPYUID statt Message-ID-Suche; MIME-Aufbau streamend; Gmail-Rückgängig aus dem Papierkorb prüfen.
