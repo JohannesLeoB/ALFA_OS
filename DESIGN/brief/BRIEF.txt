@@ -115,7 +115,7 @@ N14 Projektordner wählen. Gezeichnet ist nur die Zeile „Projektordner“ mit 
 N15 Aus Projektordner. Das Menü im Entwurf (ALFA Mail.dc.html:998, Knopf :1037) zeigt drei feste Einträge mit Meta „Drive“ und hängt eine erfundene Datei an. Gesucht: Weg Projekt → Ordner → Datei (eine oder mehrere Ebenen), Leerzustand, Laden, Fehler und die Höchstzahl der Einträge.
 N16 Mail in Projektordner sichern. Gezeichnet sind nur der Eintrag (ALFA Mail.dc.html:972), der Knopf (:1033) und der Toast „Als PDF im Projektordner gesichert“. Gesucht: in welchen Ordner des Projekts, der Dateiname, der Fehlerfall, der Zustand ohne Projektordner und das Aussehen des PDF (Kopf mit Absender, Datum, Betreff; Seitenformat).
 N17 In anderes Projekt. Der Eintrag „In anderes Projekt …“ (ALFA Mail.dc.html:699) führt nirgendwohin. Gesucht: die Auswahl des Projekts und was danach geschieht.
-N18 (entfällt) Johannes 21.10.: keine erklärenden Hinweistexte in der UI („Keine Meta Slopp ‚macht dies das jenes‘ in der UI!“). Zeichne keine neuen Hinweis- oder Erklärsätze, die er nicht selbst gesagt hat.
+N18 (entfällt) Johannes 21.10.: „Es kommt nichts in die UI was nicht Funktionsbedingt ist“. Fehler und Warnungen sind erlaubt; Erklär- und Meta-Sätze, die beschreiben, was ein Knopf oder eine Zeile tut, nicht. Zeichne keine neuen davon.
 
 ERINNERUNG AUS v9
 - W-05 Dienstzahl und L-010 Signaturen je Postfach sind weiter offen.
