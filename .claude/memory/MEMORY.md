@@ -7,9 +7,9 @@
 - [Entscheidung, Wortlaut, Herkunft](entscheidung-wortlaut-herkunft.md) — sein Entscheid, Designs Wortlaut und bloße Herkunft streng trennen
 - [Bestand zuerst](bestand-zuerst.md) — Code ist wahr, Geschriebenes nur Hinweis; erst hartnäckig im Bestand suchen (21.10.)
 - [Keine Babysitter-Texte](keine-babysitter-texte.md) — keine erklärenden Hinweis- und Meta-Texte in der UI, nichts davon erfinden oder anfordern (21.10.)
-- [Lead delegiert](lead-delegiert.md) — Lead baut nicht; Sonnet/Haiku bauen, Lead beauftragt, prüft, korrigiert Kleinkram (21.10.)
-- [Token zu Code](token-zu-code.md) — Token in Code, nicht in Berichte, MDs, Fragerunden, Prüfhysterie (21.10.)
-- [Worker-Modelle](worker-modelle.md) — Worker nur Sonnet 5.5 oder Haiku, Aufwand angepasst; Token für Qualität, nicht Masse (21.10.)
+- [Lead delegiert](lead-delegiert.md) — aus der Draws-Sitzung (21.10.): Lead baut nicht; für ALFA_OS nur Hinweis
+- [Token zu Code](token-zu-code.md) — aus der Draws-Sitzung (21.10.): Token in Code statt Berichte; für ALFA_OS nur Hinweis
+- [Worker-Modelle](worker-modelle.md) — aus der Draws-Sitzung (21.10.): Worker Sonnet oder Haiku; für ALFA_OS nur Hinweis
 - [Reichweite der App](reichweite-der-app.md) — Distribution (App Store, iOS, iPadOS, Web, Abo) ermöglichen, nicht erzwingen
 - [Artefakte](artefakte.md) — Hinweise aus 56 Artefakten und 20 Grundsätze; Zitate teils nicht gefunden, keine Quelle (AGENTS.md §2.4)
 - [App: Ziel](app-ziel.md) — gestuft: Ende November Umfang C ohne Kalkulation, Launch Ende 2026; Reihenfolge; acht Vision-Zitate
