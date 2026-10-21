@@ -113,6 +113,17 @@ final class DrawsModel {
     var variants: [Variant] = []
     var blocks: [Panel] = []
     var choice = ""
+    var presets: [PromptPreset] = []
+    var extra: [Material] = []
+    var underlayShow = false
+    var underlayExport = false
+    private(set) var underlayData: Data?
+    var underlay: String? {
+        didSet {
+            underlayData = underlay.flatMap { name in choices.first { $0.name == name } }
+                .flatMap { Prepare.underlay($0, side: Proto.underlaySide) }
+        }
+    }
     private var ready = false
     private let designer: Designer
 
@@ -130,6 +141,12 @@ final class DrawsModel {
     var kinds: [Kind] {
         let deck = template?.pack.deck != nil
         return Kind.allCases.filter { deck ? [.presentation, .iso, .perspective, .cover].contains($0) : $0 != .cover }
+    }
+
+    static let sheets: [String: Attachment.Role] = ["dxf": .drawing, "idml": .template]
+
+    var choices: [Attachment] {
+        attachments.filter { [.sketch, .drawing, .template].contains($0.role) && $0.mediaType != Attachment.text }
     }
 
     var shown: [Part] {
@@ -229,6 +246,7 @@ final class DrawsModel {
                 failure = word("dock.reason.packs")
                 return
             }
+            presets = PromptPresets.load(Self.root.appendingPathComponent("Packs/presets/default.json"))
             resetStyle()
             cells = preset()
             ready = true
@@ -246,6 +264,7 @@ final class DrawsModel {
             } else if let first = try dock.loadCI() {
                 ci = first
             }
+            for item in extra { ci?.pack.tints[item.code] = item.tone }
             template = next
             choice = ref.name
             resetStyle()
@@ -386,14 +405,14 @@ final class DrawsModel {
         panel.directoryURL = dock.destination(place, project: number)
         guard panel.runModal() == .OK, let url = panel.url else { return }
         let type = pdf ? UTType.pdf : UTType.svg
-        let data = pdf ? SheetExporter.pdf(allPages ? pages : [sheet]) : SheetExporter.svg(sheet)
+        let data = pdf ? SheetExporter.pdf(allPages ? pages.map(exported) : [exported(sheet)]) : SheetExporter.svg(exported(sheet))
         send(Deliverable(name: url.lastPathComponent, mimeType: type.preferredMIMEType ?? "", data: data,
                          folder: url.deletingLastPathComponent()), .save)
     }
 
     func hand(_ handoff: Handoff) {
         guard let sheet else { return }
-        let data = SheetExporter.pdf(allPages ? pages : [sheet])
+        let data = SheetExporter.pdf(allPages ? pages.map(exported) : [exported(sheet)])
         send(Deliverable(name: fileName("pdf"), mimeType: UTType.pdf.preferredMIMEType ?? "", data: data), handoff)
     }
 
@@ -407,14 +426,49 @@ final class DrawsModel {
         }
     }
 
+    func backed(_ sheet: Sheet) -> Sheet {
+        guard let data = underlayData, let field else { return sheet }
+        return sheet.underlaid(data, in: field, opacity: Proto.underlay)
+    }
+
+    func seen(_ sheet: Sheet) -> Sheet {
+        underlayShow ? backed(sheet) : sheet
+    }
+
+    func exported(_ sheet: Sheet) -> Sheet {
+        underlayExport ? backed(sheet) : sheet
+    }
+
+    func absorb(_ list: [Material]) {
+        let old = Set(extra.map(\.code))
+        material?.pack.materials.removeAll { old.contains($0.code) }
+        for code in old { ci?.pack.tints[code] = nil }
+        extra = list.filter { item in material?.pack.material(item.code) == nil && ci?.pack.tints[item.code] == nil }
+        material?.pack.materials += extra
+        for item in extra { ci?.pack.tints[item.code] = item.tone }
+    }
+
     func attach(_ urls: [URL]) {
         for url in urls {
             guard !attachments.contains(where: { $0.name == url.lastPathComponent }) else { continue }
-            guard let data = try? Data(contentsOf: url),
-                  let type = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType else { continue }
-            let item = Attachment(name: url.lastPathComponent, data: data, mediaType: type)
+            guard let data = try? Data(contentsOf: url) else { continue }
+            let ext = url.pathExtension.lowercased()
+            let item: Attachment
+            if let role = Self.sheets[ext] {
+                item = Attachment(name: url.lastPathComponent, data: data, mediaType: Attachment.text, role: role)
+            } else if let type = UTType(filenameExtension: ext)?.preferredMIMEType {
+                item = Attachment(name: url.lastPathComponent, data: data, mediaType: type)
+            } else {
+                continue
+            }
             if item.supported { attachments.append(item) } else { failure = "\(DesignError.unsupported(item.name))" }
         }
+    }
+
+    func role(_ name: String, _ next: Attachment.Role) {
+        guard let index = attachments.firstIndex(where: { $0.name == name }) else { return }
+        attachments[index].role = next
+        if underlay == name, !choices.contains(where: { $0.name == name }) { underlay = nil }
     }
 
     func pick(_ kind: Source) {
@@ -422,12 +476,13 @@ final class DrawsModel {
         guard kind != .text else { return }
         let panel = NSOpenPanel()
         panel.allowsMultipleSelection = true
-        panel.allowedContentTypes = kind == .pdf ? [.pdf] : [.png, .jpeg, .gif, .webP]
+        panel.allowedContentTypes = kind == .pdf ? [.pdf] + Self.sheets.keys.sorted().compactMap { UTType(filenameExtension: $0) } : [.png, .jpeg, .gif, .webP]
         if panel.runModal() == .OK { attach(panel.urls) }
     }
 
     func detach(_ name: String) {
         attachments.removeAll { $0.name == name }
+        if underlay == name { underlay = nil }
     }
 
     func design() {
@@ -452,6 +507,7 @@ final class DrawsModel {
                     project = proposal.project
                 }
                 adopt()
+                absorb(proposal.materials)
                 parts = proposal.parts
                 variants = proposal.variants
                 assumptions = proposal.assumptions

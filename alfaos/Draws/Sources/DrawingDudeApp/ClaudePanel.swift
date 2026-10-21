@@ -22,10 +22,19 @@ struct ClaudePanel: View {
                 ForEach(Source.allCases, id: \.self) { tile($0) }
             }
             .padding(.horizontal, CGFloat(Design.Spacing.step4))
+            if !model.presets.isEmpty { presets }
             editor
             ForEach(model.attachments, id: \.name) { item in
-                ListRow(name: item.name, symbol: item.mediaType == Attachment.document ? "doc.text" : "photo",
-                        end: ("xmark", word("draws.brief.remove"), { model.detach(item.name) }))
+                HStack(spacing: CGFloat(Design.Spacing.step4)) {
+                    ListRow(name: item.name, symbol: symbol(item),
+                            end: ("xmark", word("draws.brief.remove"), { model.detach(item.name) }))
+                    Choice(value: word("draws.role.\(item.role.rawValue)")) {
+                        ForEach(Attachment.Role.allCases, id: \.self) { role in
+                            Toggle(word("draws.role.\(role.rawValue)"), isOn: Binding(
+                                get: { item.role == role }, set: { if $0 { model.role(item.name, role) } }))
+                        }
+                    }
+                }
             }
             HStack(spacing: CGFloat(Design.Spacing.step8)) {
                 Text(verbatim: hint)
@@ -46,6 +55,26 @@ struct ClaudePanel: View {
         .background(shape.fill(style.color(\.menu)))
         .shadowed(style, style.shadow(\.floating), shape)
         .onExitCommand { model.assistant = false }
+    }
+
+    private var presets: some View {
+        HStack(spacing: CGFloat(Design.Spacing.step4)) {
+            Choice(value: word("draws.preset.title")) {
+                ForEach(model.presets) { preset in
+                    Button(word(preset.title)) { model.brief = preset.prompt }
+                }
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, CGFloat(Design.Spacing.step4))
+    }
+
+    private func symbol(_ item: Attachment) -> String {
+        switch item.mediaType {
+        case Attachment.document: return "doc.text"
+        case Attachment.text: return "ruler"
+        default: return "photo"
+        }
     }
 
     private var hint: String {

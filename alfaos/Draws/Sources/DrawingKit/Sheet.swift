@@ -51,6 +51,12 @@ public struct Sheet: Sendable {
     public var document: Document {
         Document(pages: [page], fonts: faces)
     }
+
+    public func underlaid(_ image: Data, in frame: CGRect, opacity: Double) -> Sheet {
+        var next = self
+        next.items.insert(.raw(.image(Picture(data: image, frame: frame, opacity: opacity))), at: 0)
+        return next
+    }
 }
 
 public struct Cell: Sendable, Equatable, Identifiable {

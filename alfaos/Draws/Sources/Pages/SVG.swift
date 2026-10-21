@@ -50,7 +50,8 @@ public struct SVGRenderer: Renderer {
             let frame = picture.frame
             let source = picture.bytes.map { "data:\(mime($0));base64,\($0.base64EncodedString())" } ?? picture.url?.absoluteString ?? ""
             out.append("<image x=\"\(f(frame.minX))\" y=\"\(f(frame.minY))\" width=\"\(f(frame.width))\" "
-                       + "height=\"\(f(frame.height))\" preserveAspectRatio=\"xMidYMid meet\" href=\"\(esc(source))\"/>")
+                       + "height=\"\(f(frame.height))\" preserveAspectRatio=\"xMidYMid meet\"\(picture.opacity == 1 ? "" : " opacity=\"\(f(picture.opacity))\"") "
+                       + "href=\"\(esc(source))\"/>")
         case let .group(transform, items):
             var attributes = ""
             var moves: [String] = []

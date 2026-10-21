@@ -144,7 +144,7 @@ struct SheetLane: View {
                     ZStack {
                         style.color(\.well)
                         if let sheet = model.sheet {
-                            canvas(sheet, room: proxy.size)
+                            canvas(model.seen(sheet), room: proxy.size)
                         }
                     }
                     .contentShape(Rectangle())
@@ -508,6 +508,27 @@ struct ViewTab: View {
         Labeled(key: "draws.views.method") {
             Text(verbatim: word(model.template?.pack.method == .third ? "draws.method.third" : "draws.method.first"))
         }
+        if !model.choices.isEmpty { underlay }
+    }
+
+    @ViewBuilder
+    private var underlay: some View {
+        let chosen = model.underlay != nil
+        SectionHead(key: "draws.section.underlay")
+        Labeled(key: "draws.underlay.source") {
+            Choice(value: model.underlay ?? word("draws.style.none")) {
+                Button(word("draws.style.none")) { model.underlay = nil }
+                Divider()
+                ForEach(model.choices, id: \.name) { item in
+                    Button(item.name) {
+                        model.underlay = item.name
+                        model.underlayShow = true
+                    }
+                }
+            }
+        }
+        Labeled(key: "draws.underlay.show", enabled: chosen) { Switch(on: $model.underlayShow) }
+        Labeled(key: "draws.underlay.export", enabled: chosen) { Switch(on: $model.underlayExport) }
     }
 
     @ViewBuilder

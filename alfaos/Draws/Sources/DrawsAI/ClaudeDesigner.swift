@@ -34,7 +34,8 @@ public struct ClaudeDesigner: Designer {
         guard let key = stored?.apiKey, !key.isEmpty else { throw DesignError.noKey }
         let model = stored?.model.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         guard !model.isEmpty else { throw DesignError.noModel }
-        guard brief.attachments.reduce(0, { $0 + $1.data.count }) <= Self.attachmentLimit else {
+        let brief = await Prepare.brief(brief)
+        guard brief.attachments.reduce(0, { $0 + $1.data.count + $1.note.utf8.count }) <= Self.attachmentLimit else {
             throw DesignError.tooLarge
         }
         let request = try self.request(brief, key: key, model: model)
@@ -74,10 +75,15 @@ public struct ClaudeDesigner: Designer {
         guard !text.isEmpty || !brief.attachments.isEmpty else { throw DesignError.emptyBrief }
         var content: [[String: Any]] = []
         for a in brief.attachments {
-            guard a.supported else { throw DesignError.unsupported(a.name) }
-            let kind = a.mediaType == Attachment.document ? "document" : "image"
-            content.append(["type": kind, "source": ["type": "base64", "media_type": a.mediaType,
-                                                     "data": a.data.base64EncodedString()]])
+            let plain = a.mediaType == Attachment.text
+            guard a.supported, !plain || !a.note.isEmpty else { throw DesignError.unsupported(a.name) }
+            content.append(["type": "text", "text": "Attachment \(a.name), role: \(a.role.rawValue)"])
+            if !plain {
+                let kind = a.mediaType == Attachment.document ? "document" : "image"
+                content.append(["type": kind, "source": ["type": "base64", "media_type": a.mediaType,
+                                                         "data": a.data.base64EncodedString()]])
+            }
+            if !a.note.isEmpty { content.append(["type": "text", "text": "\(a.name):\n\(a.note)"]) }
         }
         var prompt = text
         if !brief.current.isEmpty, let current = try? JSONEncoder().encode(brief.current) {
@@ -112,10 +118,15 @@ public struct ClaudeDesigner: Designer {
             throw DesignError.malformed("json")
         }
         do { try Validate.parts(wire.parts) } catch let e as DrawingError { throw DesignError.invalid(e) }
-        if let odd = wire.parts.first(where: { !materials.contains($0.material) }) {
+        let proposed = try (wire.materials ?? []).map(material)
+        if let odd = Dictionary(grouping: proposed, by: \.code).filter({ $0.value.count > 1 }).keys.sorted().first {
+            throw DesignError.duplicateMaterial(odd)
+        }
+        let own = proposed.map(\.code)
+        if let odd = wire.parts.first(where: { !materials.contains($0.material) && !own.contains($0.material) }) {
             throw DesignError.unknownMaterial(odd.material)
         }
-        if let odd = wire.variants.flatMap(\.slots).first(where: { !catalog.contains($0.code) }) {
+        if let odd = wire.variants.flatMap(\.slots).first(where: { !catalog.contains($0.code) && !own.contains($0.code) }) {
             throw DesignError.unknownMaterial(odd.code)
         }
         let project = Dictionary(wire.project.filter { projectKeys.contains($0.key) }.map { ($0.key, $0.value) },
@@ -125,7 +136,16 @@ public struct ClaudeDesigner: Designer {
                     slots: Dictionary(variant.slots.map { ($0.role, $0.code) }, uniquingKeysWith: { _, last in last }))
         }
         return Proposal(parts: wire.parts, project: project, products: wire.products.filter { products.contains($0) },
-                        assumptions: wire.assumptions, questions: wire.questions, variants: variants)
+                        assumptions: wire.assumptions, questions: wire.questions, variants: variants, materials: proposed)
+    }
+
+    static func material(_ wire: Wire.WireMaterial) throws -> Material {
+        let code = wire.code.trimmingCharacters(in: .whitespacesAndNewlines)
+        let tone = wire.tone.lowercased()
+        guard !code.isEmpty, tone.count == 7, tone.hasPrefix("#"), tone.dropFirst().allSatisfy(\.isHexDigit) else {
+            throw DesignError.invalidMaterial(wire.code)
+        }
+        return Material(code: code, name: wire.name, tone: tone, status: "vorschlag")
     }
 
     struct Reply: Decodable {
@@ -141,12 +161,14 @@ public struct ClaudeDesigner: Designer {
         struct Pair: Decodable { var key: String; var value: String }
         struct Slot: Decodable { var role: String; var code: String }
         struct WireVariant: Decodable { var id: String; var name: String; var slots: [Slot] }
+        struct WireMaterial: Decodable { var code: String; var name: String; var tone: String }
         var parts: [Part]
         var project: [Pair]
         var products: [String]
         var assumptions: [String]
         var questions: [String]
         var variants: [WireVariant]
+        var materials: [WireMaterial]?
     }
 
     static var schema: [String: Any] {
@@ -164,9 +186,10 @@ public struct ClaudeDesigner: Designer {
                            "value": text()])
         let slot = object(["role": text(), "code": text()])
         let variant = object(["id": text(), "name": text(), "slots": list(slot)])
+        let material = object(["code": text(), "name": text(), "tone": text()])
         return object(["parts": list(part), "project": list(pair),
                        "products": list(["type": "string", "enum": products]),
                        "assumptions": list(text()), "questions": list(text()),
-                       "variants": list(variant)])
+                       "variants": list(variant), "materials": list(material)])
     }
 }

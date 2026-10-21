@@ -61,6 +61,7 @@ public enum Painter {
             guard let data = picture.bytes, let source = CGImageSourceCreateWithData(data as CFData, nil),
                   let image = CGImageSourceCreateImageAtIndex(source, 0, nil) else { return }
             let fit = aspect(CGSize(width: image.width, height: image.height), picture.frame)
+            ctx.setAlpha(CGFloat(min(1, max(0, picture.opacity))))
             ctx.translateBy(x: fit.minX, y: fit.maxY)
             ctx.scaleBy(x: 1, y: -1)
             ctx.draw(image, in: CGRect(x: 0, y: 0, width: fit.width, height: fit.height))

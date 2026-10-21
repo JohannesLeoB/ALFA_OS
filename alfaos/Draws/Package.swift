@@ -25,7 +25,7 @@ let package = Package(
     targets: [
         .target(name: "Pages", swiftSettings: strict),
         .target(name: "DrawingKit", dependencies: ["Pages"], swiftSettings: strict),
-        .target(name: "DrawsAI", dependencies: ["DrawingKit", .product(name: "AlfaServices", package: "alpha")], resources: [.copy("Resources/designer.md")], swiftSettings: strict),
+        .target(name: "DrawsAI", dependencies: ["DrawingKit", "Intake", .product(name: "AlfaServices", package: "alpha")], resources: [.copy("Resources/designer.md")], swiftSettings: strict),
         .target(name: "DrawsDock", dependencies: ["DrawingKit", .product(name: "AlfaServices", package: "alpha")], swiftSettings: strict),
         .target(name: "Intake", dependencies: [.product(name: "ZIPFoundation", package: "ZIPFoundation")], swiftSettings: strict),
         .target(name: "Templates", dependencies: ["Pages", "Intake"], swiftSettings: strict),

@@ -1,0 +1,24 @@
+{
+  "presets": [
+    {
+      "id": "kitchen",
+      "title": "draws.preset.kitchen",
+      "prompt": "Küchenzeile nach Skizze und Moodboard. Maße aus der Skizze übernehmen, Materialien und Töne aus dem Moodboard, Fehlendes nach Standard annehmen und als Annahme vermerken."
+    },
+    {
+      "id": "furniture",
+      "title": "draws.preset.furniture",
+      "prompt": "Möbelstück nach Skizze. Teile als Quader von unten nach oben anlegen, alle gelesenen Maße als gegeben führen, zu offenen Punkten Rückfragen stellen."
+    },
+    {
+      "id": "trace",
+      "title": "draws.preset.trace",
+      "prompt": "Linienzeichnung nachbauen. Geometrie und lesbare Maße unverändert übernehmen, Ergänzungen nur als Annahme."
+    },
+    {
+      "id": "variants",
+      "title": "draws.preset.variants",
+      "prompt": "Materialvarianten aus dem Moodboard. Geometrie unverändert lassen, bis zu drei Varianten mit Materialien und Tönen aus dem Moodboard."
+    }
+  ]
+}

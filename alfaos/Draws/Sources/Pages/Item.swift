@@ -64,9 +64,10 @@ public struct Picture: Sendable, Equatable {
     public var data: Data?
     public var url: URL?
     public var frame: CGRect
+    public var opacity: Double
 
-    public init(data: Data? = nil, url: URL? = nil, frame: CGRect) {
-        self.data = data; self.url = url; self.frame = frame
+    public init(data: Data? = nil, url: URL? = nil, frame: CGRect, opacity: Double = 1) {
+        self.data = data; self.url = url; self.frame = frame; self.opacity = opacity
     }
 
     var bytes: Data? {

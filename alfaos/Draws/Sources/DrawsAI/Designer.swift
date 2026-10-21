@@ -2,18 +2,25 @@ import DrawingKit
 import Foundation
 
 public struct Attachment: Sendable, Equatable {
+    public enum Role: String, Sendable, CaseIterable, Codable {
+        case moodboard, template, sketch, drawing, reference
+    }
+
     public var name: String
     public var data: Data
     public var mediaType: String
+    public var role: Role
+    public var note: String
 
-    public init(name: String, data: Data, mediaType: String) {
-        self.name = name; self.data = data; self.mediaType = mediaType
+    public init(name: String, data: Data, mediaType: String, role: Role = .reference, note: String = "") {
+        self.name = name; self.data = data; self.mediaType = mediaType; self.role = role; self.note = note
     }
 
     public static let images = ["image/png", "image/jpeg", "image/gif", "image/webp"]
     public static let document = "application/pdf"
+    public static let text = "text/plain"
 
-    public var supported: Bool { Self.images.contains(mediaType) || mediaType == Self.document }
+    public var supported: Bool { Self.images.contains(mediaType) || mediaType == Self.document || mediaType == Self.text }
 }
 
 public struct Brief: Sendable {
@@ -37,11 +44,12 @@ public struct Proposal: Sendable, Codable, Equatable {
     public var assumptions: [String]
     public var questions: [String]
     public var variants: [Variant]
+    public var materials: [Material]
 
     public init(parts: [Part], project: [String: String], products: [String], assumptions: [String], questions: [String],
-                variants: [Variant] = []) {
+                variants: [Variant] = [], materials: [Material] = []) {
         self.parts = parts; self.project = project; self.products = products
-        self.assumptions = assumptions; self.questions = questions; self.variants = variants
+        self.assumptions = assumptions; self.questions = questions; self.variants = variants; self.materials = materials
     }
 }
 
@@ -55,6 +63,8 @@ public enum DesignError: Error, Equatable, Sendable {
     case malformed(String)
     case invalid(DrawingError)
     case unknownMaterial(String)
+    case invalidMaterial(String)
+    case duplicateMaterial(String)
     case tooLarge
     case stale
     case noModel

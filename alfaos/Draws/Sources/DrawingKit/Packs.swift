@@ -344,11 +344,15 @@ final class Reader {
     }
 }
 
-public struct Material: Sendable, Equatable {
+public struct Material: Sendable, Equatable, Codable {
     public var code: String
     public var name: String
     public var tone: String
     public var status: String
+
+    public init(code: String, name: String, tone: String, status: String) {
+        self.code = code; self.name = name; self.tone = tone; self.status = status
+    }
 }
 
 public struct MaterialPack: Sendable {
