@@ -5,7 +5,7 @@ import Testing
 @testable import DrawsAI
 import DrawsFonts
 
-struct Case: Decodable { var name: String; var parts: [Part]; var project: [String: String]?; var products: [String]; var distance: Double?; var tints: [String: String]?; var variants: [Variant]?; var dims: DimMode? }; struct Fixture: Decodable { var draw: [Case]; var replies: [String]; var packs: [String] }
+struct Case: Decodable { var name: String; var parts: [Part]; var project: [String: String]?; var products: [String]; var distance: Double?; var tints: [String: String]?; var variants: [Variant]?; var dims: DimMode?; var faces: [String]?; var accent: String?; var accentColor: String?; var scale: Double? }; struct Fixture: Decodable { var draw: [Case]; var replies: [String]; var packs: [String] }
 
 @Test func drawsMatchesGolden() throws {
     let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(path: "../..").standardized
@@ -14,7 +14,7 @@ struct Case: Decodable { var name: String; var parts: [Part]; var project: [Stri
     var out = "packs \(ci.defects) \(tpl.defects) \(mat.defects) \(mat.pack.materials.count)\n" + fixture.packs.map { "\((try? Packs.decodeCI(Data($0.utf8)))?.defects ?? []) \((try? Packs.decodeTemplate(Data($0.utf8)))?.defects ?? []) \((try? Packs.decodeMaterial(Data($0.utf8)))?.defects ?? [])" }.joined(separator: "\n") + "\n"
     for c in fixture.draw {
         let pack = c.tints.map { t in var p = ci.pack; p.tints.merge(t) { $1 }; return p } ?? ci.pack
-        let job = Job(parts: c.parts, ci: pack, template: tpl.pack, project: c.project ?? [:], products: c.products.compactMap { Product.named($0, distance: c.distance) }, material: mat.pack, variants: c.variants ?? [], dims: c.dims ?? .none, fonts: DrawsFonts.fallback)
+        let job = Job(parts: c.parts, ci: pack, template: tpl.pack, project: c.project ?? [:], products: c.products.compactMap { Product.named($0, distance: c.distance) }, style: c.faces.map { var s = pack.iso; s.faces = $0; s.accent = c.accent; s.accentColor = c.accentColor; return s }, material: mat.pack, variants: c.variants ?? [], dims: c.dims ?? .none, fonts: DrawsFonts.fallback, scale: c.scale)
         do { let s = try DrawingEngine.render(job); out += "## \(c.name) pages \(CGDataProvider(data: SheetExporter.pdf(s) as CFData).flatMap(CGPDFDocument.init)?.numberOfPages ?? 0)\n" + s.map { "\($0.product) \($0.defects)\n" + String(decoding: SheetExporter.svg($0), as: UTF8.self) }.joined(separator: "\n") + "\n" } catch { out += "## \(c.name) error \(error)\n" }
     }
     let request = try ClaudeDesigner().request(Brief(text: "Kitchen", attachments: [Attachment(name: "a.png", data: Data([1]), mediaType: "image/png"), Attachment(name: "b.pdf", data: Data([2]), mediaType: "application/pdf")], materials: ["platte", "korpus"], catalog: mat.pack.materials.map(\.code)), key: "k", model: "test-model")

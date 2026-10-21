@@ -2734,6 +2734,199 @@ presentation []
 <text x="321.00" y="278.50" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Musterstraße 1, 12345 Musterstadt</text>
 <text x="321.00" y="292.50" font-size="1.80" text-anchor="start" font-weight="400" fill="#b3412e">PLATZHALTER-PACKS · Testlauf</text>
 </svg>
+## faces accent fixed scale pages 2
+iso []
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420.00 297.00" width="420.00mm" height="297.00mm" font-family="Geist">
+<rect width="420.00" height="297.00" fill="#ffffff"/>
+<rect x="15.00" y="2.00" width="302.00" height="292.50" fill="none" stroke="#171717" stroke-width="0.70"/>
+<polygon points="170.33,159.65 173.45,157.85 170.33,156.05 167.21,157.85" fill="#e3e3e3" stroke="none" stroke-width="0.00" stroke-linejoin="round"/>
+<polygon points="169.46,159.15 172.58,157.35 161.67,151.05 158.55,152.85" fill="#e3e3e3" stroke="none" stroke-width="0.00" stroke-linejoin="round"/>
+<polygon points="169.46,158.35 171.20,157.35 171.20,147.35 169.46,148.35" fill="#171717" stroke="#171717" stroke-width="1.00" stroke-linejoin="round"/>
+<polygon points="159.94,152.85 169.46,158.35 169.46,148.35 159.94,142.85" fill="#171717" stroke="#171717" stroke-width="1.00" stroke-linejoin="round"/>
+<polygon points="169.46,148.35 171.20,147.35 161.67,141.85 159.94,142.85" fill="#171717" stroke="#171717" stroke-width="1.00" stroke-linejoin="round"/>
+<polygon points="170.33,158.85 172.06,157.85 172.06,137.85 170.33,138.85" fill="#171717" stroke="#171717" stroke-width="1.00" stroke-linejoin="round"/>
+<polygon points="168.60,157.85 170.33,158.85 170.33,138.85 168.60,137.85" fill="#171717" stroke="#171717" stroke-width="1.00" stroke-linejoin="round"/>
+<polygon points="170.33,138.85 172.06,137.85 170.33,136.85 168.60,137.85" fill="#171717" stroke="#171717" stroke-width="1.00" stroke-linejoin="round"/>
+<polygon points="169.46,158.35 171.20,157.35 171.20,147.35 169.46,148.35" fill="#e8e8e8" stroke="#171717" stroke-width="0.25" stroke-linejoin="round"/>
+<polygon points="159.94,152.85 169.46,158.35 169.46,148.35 159.94,142.85" fill="#d9d9d9" stroke="#171717" stroke-width="0.25" stroke-linejoin="round"/>
+<polygon points="169.46,148.35 171.20,147.35 161.67,141.85 159.94,142.85" fill="#f5f5f5" stroke="#171717" stroke-width="0.25" stroke-linejoin="round"/>
+<polygon points="170.33,158.85 172.06,157.85 172.06,137.85 170.33,138.85" fill="#cc854b" stroke="#171717" stroke-width="0.25" stroke-linejoin="round"/>
+<polygon points="168.60,157.85 170.33,158.85 170.33,138.85 168.60,137.85" fill="#df9252" stroke="#171717" stroke-width="0.25" stroke-linejoin="round"/>
+<polygon points="170.33,138.85 172.06,137.85 170.33,136.85 168.60,137.85" fill="#f39f5a" stroke="#171717" stroke-width="0.25" stroke-linejoin="round"/>
+<text x="30.00" y="11.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Isometrie 45° / 35.264°   1:50</text>
+<rect x="319.00" y="2.00" width="99.00" height="292.50" fill="none" stroke="#171717" stroke-width="0.50"/>
+<text x="321.00" y="11.00" font-size="2.20" text-anchor="start" font-weight="500" fill="#171717">Alle Maßangaben in Millimetern</text>
+<text x="321.00" y="16.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Maße vor Ort prüfen. Höhen ab OKFF.</text>
+<line x1="319.00" y1="27.00" x2="418.00" y2="27.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="30.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Nachname</text>
+<text x="321.00" y="35.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="38.50" x2="418.00" y2="38.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="42.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Projektbezeichnung</text>
+<text x="321.00" y="46.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="50.00" x2="418.00" y2="50.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="53.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Straße Hausnr.</text>
+<text x="321.00" y="58.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="61.50" x2="418.00" y2="61.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="65.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">PLZ Stadt</text>
+<text x="321.00" y="69.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="73.00" x2="418.00" y2="73.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="76.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Kundennr.</text>
+<text x="321.00" y="81.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="84.50" x2="418.00" y2="84.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="88.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Datum</text>
+<text x="321.00" y="92.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="96.00" x2="418.00" y2="96.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="99.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Maßstab</text>
+<text x="321.00" y="104.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">1:50</text>
+<line x1="319.00" y1="107.50" x2="418.00" y2="107.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="111.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Format</text>
+<text x="321.00" y="115.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">A3</text>
+<line x1="319.00" y1="119.00" x2="418.00" y2="119.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="122.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Zeichnung</text>
+<text x="321.00" y="127.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="130.50" x2="418.00" y2="130.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="134.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Layout</text>
+<text x="321.00" y="138.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="268.50" x2="418.00" y2="268.50" stroke="#171717" stroke-width="0.50"/>
+<text x="321.00" y="273.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Musterstudio GmbH</text>
+<text x="321.00" y="278.50" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Musterstraße 1, 12345 Musterstadt</text>
+<text x="321.00" y="292.50" font-size="1.80" text-anchor="start" font-weight="400" fill="#b3412e">PLATZHALTER-PACKS · Testlauf</text>
+</svg>
+plan []
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420.00 297.00" width="420.00mm" height="297.00mm" font-family="Geist">
+<rect width="420.00" height="297.00" fill="#ffffff"/>
+<rect x="15.00" y="2.00" width="302.00" height="292.50" fill="none" stroke="#171717" stroke-width="0.70"/>
+<rect x="194.00" y="109.25" width="2.00" height="20.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="194.00" y1="129.25" x2="196.00" y2="129.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="194.00" y1="109.25" x2="196.00" y2="109.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="194.00" y1="129.25" x2="194.00" y2="109.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="196.00" y1="129.25" x2="196.00" y2="109.25" stroke="#171717" stroke-width="0.25"/>
+<text x="194.00" y="100.25" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Vorderansicht  1:50</text>
+<line x1="194.00" y1="134.25" x2="196.00" y2="134.25" stroke="#171717" stroke-width="0.18"/>
+<line x1="194.00" y1="130.25" x2="194.00" y2="135.85" stroke="#171717" stroke-width="0.12"/>
+<line x1="193.20" y1="135.05" x2="194.80" y2="133.45" stroke="#171717" stroke-width="0.30"/>
+<line x1="196.00" y1="130.25" x2="196.00" y2="135.85" stroke="#171717" stroke-width="0.12"/>
+<line x1="195.20" y1="135.05" x2="196.80" y2="133.45" stroke="#171717" stroke-width="0.30"/>
+<text x="195.00" y="133.45" font-size="2.20" text-anchor="middle" font-weight="400" fill="#171717">100</text>
+<line x1="189.00" y1="129.25" x2="189.00" y2="119.25" stroke="#171717" stroke-width="0.18"/>
+<line x1="193.00" y1="129.25" x2="187.40" y2="129.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="188.20" y1="130.05" x2="189.80" y2="128.45" stroke="#171717" stroke-width="0.30"/>
+<line x1="193.00" y1="119.25" x2="187.40" y2="119.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="188.20" y1="120.05" x2="189.80" y2="118.45" stroke="#171717" stroke-width="0.30"/>
+<text x="188.20" y="124.25" font-size="2.20" text-anchor="middle" font-weight="400" fill="#171717" transform="rotate(-90.00 188.20 124.25)">500</text>
+<line x1="189.00" y1="119.25" x2="189.00" y2="109.25" stroke="#171717" stroke-width="0.18"/>
+<line x1="193.00" y1="119.25" x2="187.40" y2="119.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="188.20" y1="120.05" x2="189.80" y2="118.45" stroke="#171717" stroke-width="0.30"/>
+<line x1="193.00" y1="109.25" x2="187.40" y2="109.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="188.20" y1="110.05" x2="189.80" y2="108.45" stroke="#171717" stroke-width="0.30"/>
+<text x="188.20" y="114.25" font-size="2.20" text-anchor="middle" font-weight="400" fill="#171717" transform="rotate(-90.00 188.20 114.25)">500</text>
+<line x1="182.00" y1="129.25" x2="182.00" y2="109.25" stroke="#171717" stroke-width="0.18"/>
+<line x1="193.00" y1="129.25" x2="180.40" y2="129.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="181.20" y1="130.05" x2="182.80" y2="128.45" stroke="#171717" stroke-width="0.30"/>
+<line x1="193.00" y1="109.25" x2="180.40" y2="109.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="181.20" y1="110.05" x2="182.80" y2="108.45" stroke="#171717" stroke-width="0.30"/>
+<text x="181.20" y="119.25" font-size="2.20" text-anchor="middle" font-weight="400" fill="#171717" transform="rotate(-90.00 181.20 119.25)">1000</text>
+<rect x="194.00" y="175.25" width="2.00" height="11.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="194.00" y1="185.25" x2="196.00" y2="185.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="194.00" y1="175.25" x2="196.00" y2="175.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="194.00" y1="185.25" x2="194.00" y2="175.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="196.00" y1="185.25" x2="196.00" y2="175.25" stroke="#171717" stroke-width="0.25"/>
+<rect x="194.00" y="185.25" width="2.00" height="2.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="194.00" y1="187.25" x2="196.00" y2="187.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="194.00" y1="185.25" x2="196.00" y2="185.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="194.00" y1="187.25" x2="194.00" y2="185.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="196.00" y1="187.25" x2="196.00" y2="185.25" stroke="#171717" stroke-width="0.25"/>
+<text x="194.00" y="166.25" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Draufsicht  1:50</text>
+<line x1="194.00" y1="192.25" x2="196.00" y2="192.25" stroke="#171717" stroke-width="0.18"/>
+<line x1="194.00" y1="188.25" x2="194.00" y2="193.85" stroke="#171717" stroke-width="0.12"/>
+<line x1="193.20" y1="193.05" x2="194.80" y2="191.45" stroke="#171717" stroke-width="0.30"/>
+<line x1="196.00" y1="188.25" x2="196.00" y2="193.85" stroke="#171717" stroke-width="0.12"/>
+<line x1="195.20" y1="193.05" x2="196.80" y2="191.45" stroke="#171717" stroke-width="0.30"/>
+<text x="195.00" y="191.45" font-size="2.20" text-anchor="middle" font-weight="400" fill="#171717">100</text>
+<line x1="189.00" y1="187.25" x2="189.00" y2="175.25" stroke="#171717" stroke-width="0.18"/>
+<line x1="193.00" y1="187.25" x2="187.40" y2="187.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="188.20" y1="188.05" x2="189.80" y2="186.45" stroke="#171717" stroke-width="0.30"/>
+<line x1="193.00" y1="175.25" x2="187.40" y2="175.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="188.20" y1="176.05" x2="189.80" y2="174.45" stroke="#171717" stroke-width="0.30"/>
+<text x="188.20" y="181.25" font-size="2.20" text-anchor="middle" font-weight="400" fill="#171717" transform="rotate(-90.00 188.20 181.25)">600</text>
+<rect x="136.00" y="109.25" width="2.00" height="20.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="137.00" y1="119.25" x2="138.00" y2="119.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="136.00" y1="109.25" x2="138.00" y2="109.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="136.00" y1="119.25" x2="136.00" y2="109.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="138.00" y1="119.25" x2="138.00" y2="109.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="136.00" y1="129.25" x2="137.00" y2="129.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="136.00" y1="129.25" x2="136.00" y2="119.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="137.00" y1="129.25" x2="137.00" y2="119.25" stroke="#171717" stroke-width="0.25"/>
+<rect x="137.00" y="119.25" width="11.00" height="10.00" fill="#ececec" stroke="none" stroke-width="0.00"/>
+<line x1="137.00" y1="129.25" x2="148.00" y2="129.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="137.00" y1="119.25" x2="148.00" y2="119.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="137.00" y1="129.25" x2="137.00" y2="119.25" stroke="#171717" stroke-width="0.25"/>
+<line x1="148.00" y1="129.25" x2="148.00" y2="119.25" stroke="#171717" stroke-width="0.25"/>
+<text x="136.00" y="100.25" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Ansicht von rechts  1:50</text>
+<line x1="136.00" y1="134.25" x2="148.00" y2="134.25" stroke="#171717" stroke-width="0.18"/>
+<line x1="136.00" y1="130.25" x2="136.00" y2="135.85" stroke="#171717" stroke-width="0.12"/>
+<line x1="135.20" y1="135.05" x2="136.80" y2="133.45" stroke="#171717" stroke-width="0.30"/>
+<line x1="148.00" y1="130.25" x2="148.00" y2="135.85" stroke="#171717" stroke-width="0.12"/>
+<line x1="147.20" y1="135.05" x2="148.80" y2="133.45" stroke="#171717" stroke-width="0.30"/>
+<text x="142.00" y="133.45" font-size="2.20" text-anchor="middle" font-weight="400" fill="#171717">600</text>
+<line x1="131.00" y1="129.25" x2="131.00" y2="119.25" stroke="#171717" stroke-width="0.18"/>
+<line x1="135.00" y1="129.25" x2="129.40" y2="129.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="130.20" y1="130.05" x2="131.80" y2="128.45" stroke="#171717" stroke-width="0.30"/>
+<line x1="135.00" y1="119.25" x2="129.40" y2="119.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="130.20" y1="120.05" x2="131.80" y2="118.45" stroke="#171717" stroke-width="0.30"/>
+<text x="130.20" y="124.25" font-size="2.20" text-anchor="middle" font-weight="400" fill="#171717" transform="rotate(-90.00 130.20 124.25)">500</text>
+<line x1="131.00" y1="119.25" x2="131.00" y2="109.25" stroke="#171717" stroke-width="0.18"/>
+<line x1="135.00" y1="119.25" x2="129.40" y2="119.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="130.20" y1="120.05" x2="131.80" y2="118.45" stroke="#171717" stroke-width="0.30"/>
+<line x1="135.00" y1="109.25" x2="129.40" y2="109.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="130.20" y1="110.05" x2="131.80" y2="108.45" stroke="#171717" stroke-width="0.30"/>
+<text x="130.20" y="114.25" font-size="2.20" text-anchor="middle" font-weight="400" fill="#171717" transform="rotate(-90.00 130.20 114.25)">500</text>
+<line x1="124.00" y1="129.25" x2="124.00" y2="109.25" stroke="#171717" stroke-width="0.18"/>
+<line x1="135.00" y1="129.25" x2="122.40" y2="129.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="123.20" y1="130.05" x2="124.80" y2="128.45" stroke="#171717" stroke-width="0.30"/>
+<line x1="135.00" y1="109.25" x2="122.40" y2="109.25" stroke="#171717" stroke-width="0.12"/>
+<line x1="123.20" y1="110.05" x2="124.80" y2="108.45" stroke="#171717" stroke-width="0.30"/>
+<text x="123.20" y="119.25" font-size="2.20" text-anchor="middle" font-weight="400" fill="#171717" transform="rotate(-90.00 123.20 119.25)">1000</text>
+<rect x="319.00" y="2.00" width="99.00" height="292.50" fill="none" stroke="#171717" stroke-width="0.50"/>
+<text x="321.00" y="11.00" font-size="2.20" text-anchor="start" font-weight="500" fill="#171717">Alle Maßangaben in Millimetern</text>
+<text x="321.00" y="16.00" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Maße vor Ort prüfen. Höhen ab OKFF.</text>
+<line x1="319.00" y1="27.00" x2="418.00" y2="27.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="30.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Nachname</text>
+<text x="321.00" y="35.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="38.50" x2="418.00" y2="38.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="42.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Projektbezeichnung</text>
+<text x="321.00" y="46.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="50.00" x2="418.00" y2="50.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="53.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Straße Hausnr.</text>
+<text x="321.00" y="58.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="61.50" x2="418.00" y2="61.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="65.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">PLZ Stadt</text>
+<text x="321.00" y="69.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="73.00" x2="418.00" y2="73.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="76.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Kundennr.</text>
+<text x="321.00" y="81.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="84.50" x2="418.00" y2="84.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="88.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Datum</text>
+<text x="321.00" y="92.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="96.00" x2="418.00" y2="96.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="99.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Maßstab</text>
+<text x="321.00" y="104.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">1:50</text>
+<line x1="319.00" y1="107.50" x2="418.00" y2="107.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="111.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Format</text>
+<text x="321.00" y="115.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">A3</text>
+<line x1="319.00" y1="119.00" x2="418.00" y2="119.00" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="122.60" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Zeichnung</text>
+<text x="321.00" y="127.00" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="130.50" x2="418.00" y2="130.50" stroke="#171717" stroke-width="0.18"/>
+<text x="321.00" y="134.10" font-size="1.80" text-anchor="start" font-weight="400" fill="#6b6b6b">Layout</text>
+<text x="321.00" y="138.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717"></text>
+<line x1="319.00" y1="268.50" x2="418.00" y2="268.50" stroke="#171717" stroke-width="0.50"/>
+<text x="321.00" y="273.50" font-size="3.00" text-anchor="start" font-weight="500" fill="#171717">Musterstudio GmbH</text>
+<text x="321.00" y="278.50" font-size="2.20" text-anchor="start" font-weight="400" fill="#171717">Musterstraße 1, 12345 Musterstadt</text>
+<text x="321.00" y="292.50" font-size="1.80" text-anchor="start" font-weight="400" fill="#b3412e">PLATZHALTER-PACKS · Testlauf</text>
+</svg>
+## fixed scale overflow error overflow
+## presentation fixed scale error overflow
 [(key: "Content-Type", value: "application/json"), (key: "anthropic-version", value: "2023-06-01"), (key: "x-api-key", value: "k")]
 {"max_tokens":16000,"messages":[{"content":[{"source":{"data":"AQ==","media_type":"image\/png","type":"base64"},"type":"image"},{"source":{"data":"Ag==","media_type":"application\/pdf","type":"base64"},"type":"document"},{"text":"Kitchen","type":"text"}],"role":"user"}],"model":"test-model","output_config":{"effort":"high","format":{"schema":{"additionalProperties":false,"properties":{"assumptions":{"items":{"type":"string"},"type":"array"},"parts":{"items":{"additionalProperties":false,"properties":{"d":{"type":"number"},"given":{"items":{"enum":["x","y","z","w","d","h"],"type":"string"},"type":"array"},"group":{"type":"string"},"h":{"type":"number"},"id":{"type":"string"},"material":{"type":"string"},"name":{"type":"string"},"role":{"type":"string"},"w":{"type":"number"},"x":{"type":"number"},"y":{"type":"number"},"z":{"type":"number"}},"required":["d","given","group","h","id","material","name","role","w","x","y","z"],"type":"object"},"type":"array"},"products":{"items":{"enum":["presentation","plan","iso","perspective","steps","customer"],"type":"string"},"type":"array"},"project":{"items":{"additionalProperties":false,"properties":{"key":{"enum":["lastName","project","street","city","customer","date"],"type":"string"},"value":{"type":"string"}},"required":["key","value"],"type":"object"},"type":"array"},"questions":{"items":{"type":"string"},"type":"array"},"variants":{"items":{"additionalProperties":false,"properties":{"id":{"type":"string"},"name":{"type":"string"},"slots":{"items":{"additionalProperties":false,"properties":{"code":{"type":"string"},"role":{"type":"string"}},"required":["code","role"],"type":"object"},"type":"array"}},"required":["id","name","slots"],"type":"object"},"type":"array"}},"required":["assumptions","parts","products","project","questions","variants"],"type":"object"},"type":"json_schema"}},"system":"You design objects for ALFA Draws, the drawing module of the ALFA app. An interior studio uses it to turn sketches, photos, plans and short descriptions into measured drawings: a dimensioned plan, isometric views, a perspective, assembly steps and a customer view. You deliver the object as data. A drawing engine then computes every view, scale and dimension from your data, so your job is the object itself, not the drawing.\n\n## What you receive\n\n- The person's description, in German most of the time.\n- Optional sketches, photos or PDFs. Read every written dimension in them; a handwritten 600 on a cabinet front is the width of that cabinet.\n- Optional current parts. When they are present and the description asks for a change, return the complete updated list, not only the changed parts.\n- The list of materials the studio's pack knows.\n\n## The object\n\nThe object is a set of axis-aligned boxes. Each part has an id, a name, a material and a position and size in millimetres:\n\n- x runs to the right along the front, y runs into the depth away from the viewer, z runs up.\n- The origin is the finished floor level at the front left corner of the object.\n- x, y, z are the low corner; w, d, h are the sizes along x, y, z. Sizes are always greater than zero.\n- Ids are short, lowercase, unique and stable (`sockel`, `u0`, `platte`, `o2`). Keep the ids of current parts when you change them.\n- Names are short and German, as a carpenter would label the part.\n\nBuild the real object from its real parts, the way it is made: plinth, carcasses, worktop, wall units, shelves, side panels, fronts when they are drawn separately. A good proposal has every part that shows in a drawing and nothing that is noise. Each part stands on the floor or on another part, or hangs on the wall; parts touch, they do not pass through each other. List parts from the bottom up, so the assembly steps read in the order the object is built.\n\n## Materials\n\nUse only materials from the given list. When nothing fits, take the closest one and say so in an assumption.\n\n## Dimensions and honesty\n\nTake every dimension you can from the input. When you must fill a gap, use the common standard for the object (for a kitchen, for example, worktop height, cabinet depth and plinth height) and record each such value as an assumption in one short German sentence with the value and the reason. Never present an assumed value as given. When something essential is unclear and no standard answers it, ask: put one short German question per open point into `questions`, and still return your best proposal.\n\n## Project data\n\nFill `project` only with what the input states: last name (`lastName`), project name (`project`), street (`street`), postcode and city (`city`), customer number (`customer`), date (`date`). Leave out what is not given.\n\n## Products\n\nSuggest the drawings that serve the person's purpose, from: `plan` (dimensioned three views for the workshop), `iso`, `perspective`, `steps` (assembly order), `customer` (a calm view for the client). A carpenter's request usually wants `plan`; a client presentation wants `customer` and `perspective`.\n\n## Roles, groups and given dimensions\n\nEvery part has a `role`: a short German label in capitals, as the studio names the part on the plan, for example `SOCKEL`, `UNTERSCHRANK`, `OBERSCHRANK`, `ARBEITSPLATTE`, `FRONT`, `BLENDE`, `STELLSEITE`. The role is also the material slot, so the same role always stands for the same kind of part. Use one role per kind of part; do not invent a new role for each unit.\n\nEvery part has a `group`: the row or level it belongs to, for example `zeile_unten` for the base row and `zeile_oben` for the wall row. Parts in the same row share the group.\n\n`given` lists only the fields that were really read from the input: `x`, `y`, `z`, `w`, `d`, `h`. A dimension read from a written figure in a sketch or PDF is given. A value you assumed from a standard is not given, and it stays out of `given` and is recorded as an assumption. An empty `given` is correct when the input gives no measurement for the part.\n\n## Variants\n\nPropose one to three material variants in `variants`. Each variant keeps the same geometry and changes only the material per role. Each variant has an `id`, a short German `name` and `slots`, one `role` and one `code` per role.\n\nVariant A is the input's own materials. When the input names no materials, take the closest codes from the catalogue and say so in an assumption.\n\nEvery `code` is taken from the catalogue codes given in the request, exactly as written. Never write a code that is not in that list.\n\n## Output\n\nAnswer only with the JSON object the schema describes. No prose outside it.\n\n\nMaterials: korpus, platte\nCatalogue codes: platzhalter:front, platzhalter:korpus, platzhalter:platte, platzhalter:sockel, variante:front-dunkel, variante:platte-hell","thinking":{"type":"adaptive"}}
 [true, true, true, false] [20.0, 4.0] noStructuredOutput("m") http(400, "bad")

@@ -22,6 +22,7 @@ public enum DrawingEngine {
             var base = Request(parts: job.parts, ci: job.ci, template: job.template, project: job.project,
                                layout: .iso, dimensions: job.dimensions, style: job.style, fonts: job.fonts)
             base.product = product.key
+            base.scale = job.scale
             switch product {
             case .plan:
                 base.layout = .threeView
@@ -131,7 +132,7 @@ struct Composer {
             extents[k] = k == .top ? e : e.union(CGRect(x: e.minX, y: 0, width: e.width, height: 0))
         }
         let n = try ScaleSolver.solve(sizes: extents.mapValues(\.size), method: t.method, gap: t.gap, band: t.band,
-                                      field: field.size, steps: t.scales)
+                                      field: field.size, steps: r.scale.map { [$0] } ?? t.scales)
         sheet.scale = n
         func box(_ k: ViewKind) -> ViewBox { ScaleSolver.box(extents[k]?.size, n, t.band) }
         let l = Placement.layout(method: t.method, front: box(.front), top: box(.top), side: box(.right), gap: t.gap)
@@ -248,7 +249,7 @@ struct Composer {
         guard let x0 = xs.min(), let x1 = xs.max(), let y0 = ys.min(), let y1 = ys.max() else { throw DrawingError.empty }
         let room = CGSize(width: field.width - t.isoMargin.left - t.isoMargin.right,
                           height: field.height - t.isoMargin.top - t.isoMargin.bottom)
-        guard let n = t.isoScales.sorted().first(where: { (x1 - x0) / $0 <= room.width && (y1 - y0) / $0 <= room.height }) else {
+        guard let n = (r.scale.map { [$0] } ?? t.isoScales).sorted().first(where: { (x1 - x0) / $0 <= room.width && (y1 - y0) / $0 <= room.height }) else {
             throw DrawingError.overflow
         }
         sheet.scale = n
@@ -269,10 +270,18 @@ struct Composer {
             }
         }
         for f in solids {
-            let shade: Double = f.normal == 5 ? s.top : (f.normal == 2 || f.normal == 3 ? s.side : s.front)
+            let face = f.normal == 5 ? 0 : (f.normal == 2 || f.normal == 3 ? 1 : 2)
+            let shade = [s.top, s.side, s.front][face]
             let lit = f.partID == s.accent || r.highlight.contains(f.partID)
-            let base = lit ? ci.accent : tint(material[f.partID] ?? "")
-            sheet.items.append(.polygon(paper(f), fill: base.map { Hex.scale($0, shade) }, stroke: ci.ink, width: s.edge))
+            let fill: String?
+            if lit {
+                fill = Hex.scale(s.accentColor ?? ci.accent, shade)
+            } else if let tones = s.faces, tones.count == 3 {
+                fill = tones[face]
+            } else {
+                fill = tint(material[f.partID] ?? "").map { Hex.scale($0, shade) }
+            }
+            sheet.items.append(.polygon(paper(f), fill: fill, stroke: ci.ink, width: s.edge))
         }
         let key = r.product.isEmpty ? "iso" : r.product
         let pattern = t.titles[key] ?? ""

@@ -73,13 +73,15 @@ public struct Job: Sendable {
     public var variants: [Variant]
     public var dims: DimMode
     public var fonts: SheetFonts
+    public var scale: Double?
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
                 products: [Product], style: IsoStyle? = nil, dimensions: Bool = true,
-                material: MaterialPack? = nil, variants: [Variant] = [], dims: DimMode = .none, fonts: SheetFonts) {
+                material: MaterialPack? = nil, variants: [Variant] = [], dims: DimMode = .none, fonts: SheetFonts,
+                scale: Double? = nil) {
         self.parts = parts; self.ci = ci; self.template = template; self.project = project
         self.products = products; self.style = style; self.dimensions = dimensions
-        self.material = material; self.variants = variants; self.dims = dims; self.fonts = fonts
+        self.material = material; self.variants = variants; self.dims = dims; self.fonts = fonts; self.scale = scale
     }
 }
 
@@ -96,6 +98,7 @@ public struct Request: Sendable {
     var highlight: Set<String> = []
     var fit: [Part]?
     var product = ""
+    var scale: Double?
     var step = (0, 0)
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],

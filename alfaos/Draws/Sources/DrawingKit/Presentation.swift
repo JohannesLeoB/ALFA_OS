@@ -13,7 +13,7 @@ extension Composer {
         let top = variants.contains { !$0.name.isEmpty } ? pr.titleGap : 0
         let roles = labels()
         let side = roles.isEmpty ? 0 : pr.labelGap + (roles.map { Double($0.text.count) }.max() ?? 0) * ci.textDimension * Composer.glyph
-        guard let n = t.scales.sorted().first(where: { s in
+        guard let n = (r.scale.map { [$0] } ?? t.scales).sorted().first(where: { s in
             Double(e.width) / s <= column - 2 * band - side && Double(e.height) / s <= field.height - top - 2 * band - pr.stampSize
         }) else { throw DrawingError.overflow }
         sheet.scale = n

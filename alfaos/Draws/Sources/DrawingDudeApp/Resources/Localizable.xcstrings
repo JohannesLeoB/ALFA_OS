@@ -2,13 +2,79 @@
   "sourceLanguage": "de",
   "version": "1.0",
   "strings": {
-    "draws.lane.packs": {
+    "draws.area.sheet": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blatt"
+          }
+        }
+      }
+    },
+    "draws.area.packs": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
             "value": "Packs"
+          }
+        }
+      }
+    },
+    "draws.area.views": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ansichten"
+          }
+        }
+      }
+    },
+    "draws.area.claude": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude"
+          }
+        }
+      }
+    },
+    "draws.area.export": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export"
+          }
+        }
+      }
+    },
+    "draws.handle.value": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d pt"
+          }
+        }
+      }
+    },
+    "draws.lane.project": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Projekt"
           }
         }
       }
@@ -24,13 +90,13 @@
         }
       }
     },
-    "draws.lane.views": {
+    "draws.section.project": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ansichten"
+            "value": "Projekt"
           }
         }
       }
@@ -46,6 +112,17 @@
         }
       }
     },
+    "draws.section.defects": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mängel"
+          }
+        }
+      }
+    },
     "draws.section.object": {
       "extractionState": "manual",
       "localizations": {
@@ -57,13 +134,46 @@
         }
       }
     },
-    "draws.section.defects": {
+    "draws.section.assumptions": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mängel"
+            "value": "Annahmen"
+          }
+        }
+      }
+    },
+    "draws.section.questions": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rückfragen"
+          }
+        }
+      }
+    },
+    "draws.section.pages": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ansichten auf dem Blatt"
+          }
+        }
+      }
+    },
+    "draws.section.view": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ansicht"
           }
         }
       }
@@ -79,13 +189,79 @@
         }
       }
     },
-    "draws.section.export": {
+    "draws.field.lastName": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export"
+            "value": "Nachname"
+          }
+        }
+      }
+    },
+    "draws.field.project": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Projekt"
+          }
+        }
+      }
+    },
+    "draws.field.street": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Straße"
+          }
+        }
+      }
+    },
+    "draws.field.city": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PLZ / Ort"
+          }
+        }
+      }
+    },
+    "draws.field.customer": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kundennr."
+          }
+        }
+      }
+    },
+    "draws.field.date": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datum"
+          }
+        }
+      }
+    },
+    "draws.field.missing": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fehlt"
           }
         }
       }
@@ -134,18 +310,623 @@
         }
       }
     },
-    "draws.object.open": {
+    "draws.defects.none": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Objekt laden …"
+            "value": "Keine Mängel. Das Blatt ist bereit für den Export."
           }
         }
       }
     },
-    "draws.views.scale": {
+    "draws.defects.field": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ fehlt"
+          }
+        }
+      }
+    },
+    "draws.defects.fill": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausfüllen"
+          }
+        }
+      }
+    },
+    "draws.defects.overflow": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ansicht passt nicht"
+          }
+        }
+      }
+    },
+    "draws.defects.auto": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maßstab auto"
+          }
+        }
+      }
+    },
+    "draws.object.empty": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Objekt geladen. Unten laden oder Claude ein Foto, PDF oder Text geben."
+          }
+        }
+      }
+    },
+    "draws.object.load": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objekt laden"
+          }
+        }
+      }
+    },
+    "draws.object.file": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datei öffnen …"
+          }
+        }
+      }
+    },
+    "draws.object.claude": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude-Import …"
+          }
+        }
+      }
+    },
+    "draws.object.clear": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objekt leeren"
+          }
+        }
+      }
+    },
+    "draws.object.show": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einblenden"
+          }
+        }
+      }
+    },
+    "draws.object.hide": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausblenden"
+          }
+        }
+      }
+    },
+    "draws.object.accent": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als Akzentteil setzen"
+          }
+        }
+      }
+    },
+    "draws.object.unaccent": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Akzent entfernen"
+          }
+        }
+      }
+    },
+    "draws.product.plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drei Ansichten"
+          }
+        }
+      }
+    },
+    "draws.product.iso": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isometrie"
+          }
+        }
+      }
+    },
+    "draws.product.steps": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iso-Schritte"
+          }
+        }
+      }
+    },
+    "draws.product.perspective": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perspektive"
+          }
+        }
+      }
+    },
+    "draws.product.customer": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunde"
+          }
+        }
+      }
+    },
+    "draws.product.presentation": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Präsentation"
+          }
+        }
+      }
+    },
+    "draws.zoom.out": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Herauszoomen"
+          }
+        }
+      }
+    },
+    "draws.zoom.in": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hineinzoomen"
+          }
+        }
+      }
+    },
+    "draws.zoom.fit": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einpassen (0)"
+          }
+        }
+      }
+    },
+    "draws.zoom.value": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d %%"
+          }
+        }
+      }
+    },
+    "draws.raster": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raster (R)"
+          }
+        }
+      }
+    },
+    "draws.sheet.max": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blatt groß"
+          }
+        }
+      }
+    },
+    "draws.sheet.back": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurück"
+          }
+        }
+      }
+    },
+    "draws.inspector.max": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inspektor groß"
+          }
+        }
+      }
+    },
+    "draws.page.back": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorige Seite"
+          }
+        }
+      }
+    },
+    "draws.page.next": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nächste Seite"
+          }
+        }
+      }
+    },
+    "draws.page.step": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schritt %d"
+          }
+        }
+      }
+    },
+    "draws.pages.one": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Seite"
+          }
+        }
+      }
+    },
+    "draws.pages.many": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d Seiten"
+          }
+        }
+      }
+    },
+    "draws.status.normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@"
+          }
+        }
+      }
+    },
+    "draws.status.empty": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · kein Objekt"
+          }
+        }
+      }
+    },
+    "draws.status.overflow": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Überlauf · passt nicht auf %@"
+          }
+        }
+      }
+    },
+    "draws.empty.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Objekt auf dem Blatt"
+          }
+        }
+      }
+    },
+    "draws.empty.text": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lade ein Objekt oder gib Claude ein Foto, ein PDF oder einen Text."
+          }
+        }
+      }
+    },
+    "draws.claude.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude-Import"
+          }
+        }
+      }
+    },
+    "draws.claude.close": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schließen"
+          }
+        }
+      }
+    },
+    "draws.claude.running": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude liest und baut Teile …"
+          }
+        }
+      }
+    },
+    "draws.claude.hintText": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude baut daraus Teile mit Maßen."
+          }
+        }
+      }
+    },
+    "draws.claude.hintFile": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude erkennt Teile und Maße."
+          }
+        }
+      }
+    },
+    "draws.claude.run": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Objekt erzeugen"
+          }
+        }
+      }
+    },
+    "draws.claude.busy": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Läuft …"
+          }
+        }
+      }
+    },
+    "draws.source.photo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foto"
+          }
+        }
+      }
+    },
+    "draws.source.pdf": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF"
+          }
+        }
+      }
+    },
+    "draws.source.text": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text"
+          }
+        }
+      }
+    },
+    "draws.brief.placeholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beschreiben, Skizzen oder PDFs hierher ziehen …"
+          }
+        }
+      }
+    },
+    "draws.brief.remove": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entfernen"
+          }
+        }
+      }
+    },
+    "draws.tab.view": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ansicht"
+          }
+        }
+      }
+    },
+    "draws.tab.style": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stil"
+          }
+        }
+      }
+    },
+    "draws.tab.export": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export"
+          }
+        }
+      }
+    },
+    "draws.view.none": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ohne Objekt bleiben die Ansichten leer."
+          }
+        }
+      }
+    },
+    "draws.view.focus": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fokus"
+          }
+        }
+      }
+    },
+    "draws.view.whole": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ganzes Objekt"
+          }
+        }
+      }
+    },
+    "draws.view.scale": {
       "extractionState": "manual",
       "localizations": {
         "de": {
@@ -156,24 +937,35 @@
         }
       }
     },
-    "draws.views.format": {
+    "draws.scale.auto": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Format"
+            "value": "auto"
           }
         }
       }
     },
-    "draws.views.method": {
+    "draws.scale.fixed": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Projektion"
+            "value": "fest"
+          }
+        }
+      }
+    },
+    "draws.view.fixed": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fester Maßstab"
           }
         }
       }
@@ -185,6 +977,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bemaßung"
+          }
+        }
+      }
+    },
+    "draws.view.fill": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Füllung"
+          }
+        }
+      }
+    },
+    "draws.fill.tone": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Töne"
+          }
+        }
+      }
+    },
+    "draws.fill.material": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Material"
+          }
+        }
+      }
+    },
+    "draws.views.method": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Projektion"
           }
         }
       }
@@ -211,6 +1047,270 @@
         }
       }
     },
+    "draws.style.look": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blick"
+          }
+        }
+      }
+    },
+    "draws.style.lookMeta": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iso und Perspektive"
+          }
+        }
+      }
+    },
+    "draws.style.azimuth": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Azimut"
+          }
+        }
+      }
+    },
+    "draws.style.elevation": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation"
+          }
+        }
+      }
+    },
+    "draws.style.faces": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flächentöne"
+          }
+        }
+      }
+    },
+    "draws.face.top": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oben"
+          }
+        }
+      }
+    },
+    "draws.face.side": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seite"
+          }
+        }
+      }
+    },
+    "draws.face.front": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Front"
+          }
+        }
+      }
+    },
+    "draws.style.edges": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kanten"
+          }
+        }
+      }
+    },
+    "draws.edge.inner": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Innen"
+          }
+        }
+      }
+    },
+    "draws.edge.outline": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umriss"
+          }
+        }
+      }
+    },
+    "draws.style.shadowHead": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schatten"
+          }
+        }
+      }
+    },
+    "draws.style.shadow": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schatten"
+          }
+        }
+      }
+    },
+    "draws.style.strength": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stärke"
+          }
+        }
+      }
+    },
+    "draws.style.accentHead": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Akzent"
+          }
+        }
+      }
+    },
+    "draws.style.accent": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Akzentteil"
+          }
+        }
+      }
+    },
+    "draws.style.none": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keins"
+          }
+        }
+      }
+    },
+    "draws.style.color": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Farbe"
+          }
+        }
+      }
+    },
+    "draws.style.reset": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stil zurücksetzen"
+          }
+        }
+      }
+    },
+    "draws.unit.degree": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d°"
+          }
+        }
+      }
+    },
+    "draws.unit.mm": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ mm"
+          }
+        }
+      }
+    },
+    "draws.unit.percent": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d %%"
+          }
+        }
+      }
+    },
+    "draws.export.file": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datei"
+          }
+        }
+      }
+    },
+    "draws.export.format": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Format"
+          }
+        }
+      }
+    },
     "draws.export.pdf": {
       "extractionState": "manual",
       "localizations": {
@@ -233,7 +1333,18 @@
         }
       }
     },
-    "draws.area.sheet": {
+    "draws.export.pages": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seiten"
+          }
+        }
+      }
+    },
+    "draws.export.one": {
       "extractionState": "manual",
       "localizations": {
         "de": {
@@ -244,255 +1355,156 @@
         }
       }
     },
-    "draws.area.packs": {
+    "draws.export.all": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Packs"
+            "value": "Je Ansicht"
           }
         }
       }
     },
-    "draws.area.views": {
+    "draws.export.notePDF": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ansichten"
+            "value": "%@ · %@ · Vektor, Schrift eingebettet"
           }
         }
       }
     },
-    "draws.area.export": {
+    "draws.export.noteSVG": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export"
+            "value": "%@ · %@ · eine Datei, aktuelle Seite"
           }
         }
       }
     },
-    "draws.handle.value": {
+    "draws.export.check": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%d pt"
+            "value": "Prüfung"
           }
         }
       }
     },
-    "draws.section.style": {
+    "draws.export.oneDefect": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Iso-Stil"
+            "value": "1 Mangel"
           }
         }
       }
     },
-    "draws.style.outline": {
+    "draws.export.defects": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Umriss"
+            "value": "%d Mängel"
           }
         }
       }
     },
-    "draws.style.shadow": {
+    "draws.export.clean": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schatten"
+            "value": "Keine Mängel."
           }
         }
       }
     },
-    "draws.style.accent": {
+    "draws.export.goes": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Akzentteil"
+            "value": "Export geht trotzdem."
           }
         }
       }
     },
-    "draws.product.plan": {
+    "draws.export.overflow": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Werkplan"
+            "value": "Überlauf stoppt den Export. Maßstab auf auto stellen."
           }
         }
       }
     },
-    "draws.product.iso": {
+    "draws.export.error": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Isometrie"
+            "value": "Fehler"
           }
         }
       }
     },
-    "draws.product.steps": {
+    "draws.export.savePDF": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schritte"
+            "value": "Als PDF sichern"
           }
         }
       }
     },
-    "draws.product.customer": {
+    "draws.export.saveSVG": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kunde"
+            "value": "Als SVG sichern"
           }
         }
       }
     },
-    "draws.page.back": {
+    "draws.export.despite": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "‹"
+            "value": " · trotz %d Mängeln"
           }
         }
       }
     },
-    "draws.page.next": {
+    "draws.status.raster": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "›"
-          }
-        }
-      }
-    },
-    "draws.section.brief": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entwurf"
-          }
-        }
-      }
-    },
-    "draws.brief.placeholder": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Beschreiben, Skizzen oder PDFs hierher ziehen …"
-          }
-        }
-      }
-    },
-    "draws.brief.add": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Datei …"
-          }
-        }
-      }
-    },
-    "draws.brief.run": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entwerfen"
-          }
-        }
-      }
-    },
-    "draws.brief.running": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entwirft …"
-          }
-        }
-      }
-    },
-    "draws.brief.remove": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entfernen"
-          }
-        }
-      }
-    },
-    "draws.section.assumptions": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annahmen"
-          }
-        }
-      }
-    },
-    "draws.section.questions": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rückfragen"
-          }
-        }
-      }
-    },
-    "draws.product.presentation": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Präsentation"
+            "value": " · Raster %d mm"
           }
         }
       }

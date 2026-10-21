@@ -9,7 +9,7 @@ struct ShellScreen: View {
     @Bindable var model: DrawsModel
     @State private var leading = Design.Size.laneRestWidth
     @State private var trailing = Design.Size.laneRestWidth
-    @State private var maximized = false
+    @State private var big: Lane?
     @State private var menu = false
 
     var body: some View {
@@ -41,13 +41,12 @@ struct ShellScreen: View {
         .font(style.font())
         .ignoresSafeArea()
         .onAppear { model.start() }
-        .onChange(of: model.layout) { model.render() }
-        .onChange(of: model.dimensions) { model.render() }
     }
 
     private func widths(available: Double) -> [Double] {
         let fold = Design.Size.foldedWidth
-        if maximized { return [fold, available - 2 * fold, fold] }
+        if big == .center { return [fold, available - 2 * fold, fold] }
+        if big == .trailing { return [fold, fold, available - 2 * fold] }
         func clean(_ v: Double) -> Double { v < Design.Size.foldThreshold ? fold : max(v, Design.Size.laneMinimumLeft) }
         var l = clean(leading), r = clean(trailing)
         let room = available - Design.Size.middleMinimumWidth
@@ -58,22 +57,31 @@ struct ShellScreen: View {
     private func choose(_ key: String) {
         menu = false
         switch key {
-        case "draws.area.sheet": maximized.toggle()
-        case "draws.area.packs", "draws.area.views":
-            maximized = false
+        case "draws.area.sheet": big = big == .center ? nil : .center
+        case "draws.area.packs":
+            big = nil
             leading = Design.Size.laneRestWidth
+        case "draws.area.views", "draws.area.export":
+            big = nil
             trailing = Design.Size.laneRestWidth
-        case "draws.area.export": model.export(pdf: true)
+            model.tab = key == "draws.area.views" ? .view : .export
+        case "draws.area.claude":
+            if big != .center { big = nil }
+            model.assistant = true
         default: break
         }
+    }
+
+    private func grow(_ lane: Lane) -> Binding<Bool> {
+        Binding(get: { big == lane }, set: { big = $0 ? lane : nil })
     }
 
     @ViewBuilder
     private func content(_ lane: Lane) -> some View {
         switch lane {
-        case .leading: PacksLane(model: model)
-        case .center: SheetLane(model: model)
-        case .trailing: ViewsLane(model: model)
+        case .leading: ProjectLane(model: model)
+        case .center: SheetLane(model: model, maximized: grow(.center))
+        case .trailing: InspectorLane(model: model, maximized: grow(.trailing))
         }
     }
 }
@@ -148,7 +156,7 @@ struct Blob: View {
     let choose: (String) -> Void
     @State private var hot: String?
 
-    static let rows = ["draws.area.sheet", "draws.area.packs", "draws.area.views", "draws.area.export"]
+    static let rows = ["draws.area.sheet", "draws.area.packs", "draws.area.views", "draws.area.claude", "draws.area.export"]
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: CGFloat(Design.Radius.blob))

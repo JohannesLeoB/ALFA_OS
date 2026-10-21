@@ -32,11 +32,14 @@ public struct IsoStyle: Sendable, Equatable {
     public var shadow: Double
     public var spread: Double
     public var accent: String?
+    public var faces: [String]?
+    public var accentColor: String?
 
     public init(top: Double, side: Double, front: Double, edge: Double, outline: Double,
-                shadow: Double, spread: Double, accent: String?) {
+                shadow: Double, spread: Double, accent: String?, faces: [String]? = nil, accentColor: String? = nil) {
         self.top = top; self.side = side; self.front = front; self.edge = edge
         self.outline = outline; self.shadow = shadow; self.spread = spread; self.accent = accent
+        self.faces = faces; self.accentColor = accentColor
     }
 }
 
