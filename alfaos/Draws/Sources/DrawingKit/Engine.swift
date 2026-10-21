@@ -47,6 +47,13 @@ public enum DrawingEngine {
                 c.titleBlock()
                 c.sheet.product = base.product
                 out.append(c.sheet)
+            case .board(let cells, let view):
+                base.iso = view
+                var c = Composer(base)
+                try c.board(cells)
+                c.titleBlock()
+                c.sheet.product = base.product
+                out.append(c.sheet)
             }
         }
         return out
@@ -107,14 +114,15 @@ struct Composer {
     let r: Request
     var sheet: Sheet
     let field: CGRect
+    var scaleLabel: String?
 
-    init(_ r: Request) {
+    init(_ r: Request, frame: Bool = true) {
         self.r = r
         let t = r.template, f = t.frame
         field = CGRect(x: f.left, y: f.top, width: t.width - f.left - f.right, height: t.height - f.top - f.bottom)
         sheet = Sheet(width: t.width, height: t.height, scale: 0, fonts: r.fonts, paper: r.ci.paper,
                       items: [], dimensions: [], defects: [])
-        sheet.items.append(.rect(field, fill: nil, stroke: r.ci.ink, width: r.ci.lineFrame))
+        if frame { sheet.items.append(.rect(field, fill: nil, stroke: r.ci.ink, width: r.ci.lineFrame)) }
     }
 
     mutating func tint(_ material: String) -> String? {
@@ -242,18 +250,24 @@ struct Composer {
     }
 
     mutating func iso() throws {
+        let t = r.template, m = t.isoMargin
+        let room = CGRect(x: field.minX + m.left, y: field.minY + m.top,
+                          width: field.width - m.left - m.right, height: field.height - m.top - m.bottom)
+        _ = try isoDraw(in: room, title: CGPoint(x: field.minX + m.left, y: field.minY + t.titleOffset),
+                        scales: r.scale.map { [$0] } ?? t.isoScales, force: false)
+    }
+
+    mutating func isoDraw(in room: CGRect, title at: CGPoint, scales: [Double], force: Bool) throws -> (scale: Double, fits: Bool) {
         let t = r.template, ci = r.ci, s = r.style ?? ci.iso
         let faces = try Projection.faces(r.parts, spec: r.iso, shadow: s.shadow > 0 ? s.spread : nil, around: r.fit)
         let frame = try r.fit.map { try Projection.faces($0, spec: r.iso, shadow: s.shadow > 0 ? s.spread : nil) } ?? faces
         let xs = frame.flatMap { $0.poly.map { Double($0.x) } }, ys = frame.flatMap { $0.poly.map { Double($0.y) } }
         guard let x0 = xs.min(), let x1 = xs.max(), let y0 = ys.min(), let y1 = ys.max() else { throw DrawingError.empty }
-        let room = CGSize(width: field.width - t.isoMargin.left - t.isoMargin.right,
-                          height: field.height - t.isoMargin.top - t.isoMargin.bottom)
-        guard let n = (r.scale.map { [$0] } ?? t.isoScales).sorted().first(where: { (x1 - x0) / $0 <= room.width && (y1 - y0) / $0 <= room.height }) else {
-            throw DrawingError.overflow
-        }
+        let sorted = scales.sorted()
+        let found = sorted.first(where: { (x1 - x0) / $0 <= room.width && (y1 - y0) / $0 <= room.height })
+        guard let n = found ?? (force ? sorted.last : nil) else { throw DrawingError.overflow }
         sheet.scale = n
-        let cx = field.minX + t.isoMargin.left + room.width / 2, cy = field.minY + t.isoMargin.top + room.height / 2
+        let cx = room.minX + room.width / 2, cy = room.minY + room.height / 2
         let mx = (x0 + x1) / 2, my = (y0 + y1) / 2
         let material = Dictionary(uniqueKeysWithValues: r.parts.map { ($0.id, $0.material) })
         func paper(_ f: Face2D) -> [CGPoint] {
@@ -291,8 +305,8 @@ struct Composer {
             .replacingOccurrences(of: "{el}", with: String(format: "%.3f", r.iso.elevation))
             .replacingOccurrences(of: "{n}", with: "\(r.step.0)")
             .replacingOccurrences(of: "{of}", with: "\(r.step.1)") + (r.iso.distance == nil ? "   1:\(Int(n))" : "")
-        sheet.items.append(.text(title, at: CGPoint(x: field.minX + t.isoMargin.left, y: field.minY + t.titleOffset),
-                                 size: ci.textTitle, anchor: .start, weight: ci.weightTitle, color: ci.ink, rotation: 0))
+        sheet.items.append(.text(title, at: at, size: ci.textTitle, anchor: .start, weight: ci.weightTitle, color: ci.ink, rotation: 0))
+        return (n, found != nil)
     }
 
     mutating func titleBlock() {
@@ -304,7 +318,7 @@ struct Composer {
                                      size: ci.textNote, anchor: .start, weight: i == 0 ? ci.weightTitle : 400, color: ci.ink, rotation: 0))
         }
         var values = r.project
-        values["scale"] = r.layout == .iso && r.iso.distance != nil ? t.noScale : "1:\(Int(sheet.scale))"
+        values["scale"] = scaleLabel ?? (r.layout == .iso && r.iso.distance != nil ? t.noScale : "1:\(Int(sheet.scale))")
         values["format"] = values["format"] ?? t.format
         var y = field.minY + b.rowsTop
         for row in b.rows {

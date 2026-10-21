@@ -25,6 +25,29 @@ public struct Sheet: Sendable {
     public var dimensions: [PlacedDimension]
     public var defects: [String]
     public var product = ""
+    public var cells: [Placed] = []
+}
+
+public struct Cell: Sendable, Equatable, Identifiable {
+    public var id: String
+    public var view: ViewKind
+    public var frame: CGRect
+    public var scale: Double?
+    public var focus: String?
+    public var step: Int
+    public var dims: Bool
+
+    public init(id: String, view: ViewKind, frame: CGRect, scale: Double? = nil, focus: String? = nil, step: Int = 0, dims: Bool = true) {
+        self.id = id; self.view = view; self.frame = frame; self.scale = scale
+        self.focus = focus; self.step = step; self.dims = dims
+    }
+}
+
+public struct Placed: Sendable, Equatable {
+    public var id: String
+    public var scale: Double
+    public var fits: Bool
+    public var steps: Int
 }
 
 public enum SheetLayout: String, Codable, Sendable, CaseIterable { case threeView, iso }
@@ -35,6 +58,7 @@ public enum Product: Sendable, Equatable {
     case steps(ViewSpec, [[String]])
     case customer(ViewSpec)
     case presentation
+    case board([Cell], ViewSpec)
 
     public static func named(_ name: String, distance: Double? = nil) -> Product? {
         switch name {
@@ -55,6 +79,7 @@ public enum Product: Sendable, Equatable {
         case .steps: return "steps"
         case .customer: return "customer"
         case .presentation: return "presentation"
+        case .board: return "board"
         }
     }
 }

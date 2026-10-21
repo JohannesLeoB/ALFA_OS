@@ -996,6 +996,61 @@
     "presentation"
    ],
    "scale": 1
+  },
+  {
+   "name": "board kitchen",
+   "parts": [
+    {"id": "sockel", "name": "Sockel", "material": "sockel", "x": 0, "y": 70, "z": 0, "w": 2400, "d": 530, "h": 100},
+    {"id": "u0", "name": "Unterschrank 1", "material": "korpus", "x": 0, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "u1", "name": "Unterschrank 2", "material": "korpus", "x": 600, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "u2", "name": "Unterschrank 3", "material": "korpus", "x": 1200, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "u3", "name": "Unterschrank 4", "material": "korpus", "x": 1800, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "platte", "name": "Arbeitsplatte", "material": "platte", "x": 0, "y": 0, "z": 820, "w": 2400, "d": 620, "h": 40},
+    {"id": "o0", "name": "Oberschrank 1", "material": "korpus", "x": 0, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
+    {"id": "o1", "name": "Oberschrank 2", "material": "korpus", "x": 800, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
+    {"id": "o2", "name": "Oberschrank 3", "material": "korpus", "x": 1600, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700}
+   ],
+   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.threeView": "Küchenzeile Ansichten", "layout.iso": "Küchenzeile Isometrie", "layout.plan": "Küchenzeile Ansichten", "layout.perspective": "Küchenzeile Perspektive", "layout.steps": "Küchenzeile Aufbau", "layout.customer": "Küchenzeile Kundenansicht", "layout.board": "Küchenzeile Board"},
+   "products": ["board"],
+   "cells": [
+    {"id": "f", "view": "front", "x": 15, "y": 2, "w": 160, "h": 140},
+    {"id": "t", "view": "top", "x": 175, "y": 2, "w": 142, "h": 60},
+    {"id": "r", "view": "right", "x": 175, "y": 62, "w": 142, "h": 140},
+    {"id": "i", "view": "iso", "x": 15, "y": 144, "w": 150, "h": 150},
+    {"id": "s", "view": "iso", "x": 175, "y": 202, "w": 142, "h": 92, "step": 2}
+   ]
+  },
+  {
+   "name": "board overflow",
+   "parts": [
+    {"id": "sockel", "name": "Sockel", "material": "sockel", "x": 0, "y": 70, "z": 0, "w": 2400, "d": 530, "h": 100},
+    {"id": "u0", "name": "Unterschrank 1", "material": "korpus", "x": 0, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "platte", "name": "Arbeitsplatte", "material": "platte", "x": 0, "y": 0, "z": 820, "w": 2400, "d": 620, "h": 40}
+   ],
+   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.threeView": "Küchenzeile Ansichten", "layout.iso": "Küchenzeile Isometrie", "layout.plan": "Küchenzeile Ansichten", "layout.perspective": "Küchenzeile Perspektive", "layout.steps": "Küchenzeile Aufbau", "layout.customer": "Küchenzeile Kundenansicht", "layout.board": "Küchenzeile Board"},
+   "products": ["board"],
+   "cells": [
+    {"id": "f", "view": "front", "x": 15, "y": 2, "w": 160, "h": 140, "scale": 1},
+    {"id": "i", "view": "iso", "x": 15, "y": 144, "w": 150, "h": 150, "scale": 5}
+   ]
+  },
+  {
+   "name": "board focus",
+   "parts": [
+    {"id": "u0", "name": "Unterschrank 1", "material": "korpus", "x": 0, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "u1", "name": "Unterschrank 2", "material": "korpus", "x": 600, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "platte", "name": "Arbeitsplatte", "material": "platte", "x": 0, "y": 0, "z": 820, "w": 2400, "d": 620, "h": 40},
+    {"id": "o0", "name": "Oberschrank 1", "material": "korpus", "x": 0, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700}
+   ],
+   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.threeView": "Küchenzeile Ansichten", "layout.iso": "Küchenzeile Isometrie", "layout.plan": "Küchenzeile Ansichten", "layout.perspective": "Küchenzeile Perspektive", "layout.steps": "Küchenzeile Aufbau", "layout.customer": "Küchenzeile Kundenansicht", "layout.board": "Küchenzeile Board"},
+   "products": ["board"],
+   "distance": 7000,
+   "cells": [
+    {"id": "a", "view": "front", "x": 15, "y": 2, "w": 100, "h": 100, "focus": "u1"},
+    {"id": "b", "view": "right", "x": 120, "y": 2, "w": 100, "h": 140, "focus": "o0", "dims": false},
+    {"id": "c", "view": "iso", "x": 15, "y": 144, "w": 140, "h": 140, "focus": "platte", "step": 3},
+    {"id": "d", "view": "perspective", "x": 160, "y": 144, "w": 150, "h": 140}
+   ]
   }
  ],
  "replies": [
