@@ -6,7 +6,7 @@ Gilt zwingend für jede Arbeit an ALFA: jede Sitzung, jedes Konto, jedes Werkzeu
 
 ## 1 Ziel
 
-Eine native macOS-App ALFA, modular wie ein Betriebssystem mit vielen Apps, gebaut nach Design und Johannes' Wort, funktionierend und sicher. Gestuft (Johannes 16.10. und 18.10.): Ende November 2026 sind Mail, Konten, Projekte (Akte, Fragebogen, Provisionierung), Heute, Kataloge und Warenkorb fertig, ohne Kalkulation; bis zum Launch Ende 2026 folgen alle übrigen Bereiche, Datan als Modul und 15 Integrationen in voller Tiefe. Je Bereich: `.claude/memory/app-*.md`.
+Eine native macOS-App ALFA, modular wie ein Betriebssystem mit vielen Apps, gebaut nach Design und Johannes' Wort, funktionierend und sicher. Gestuft (Johannes 16.10. und 18.10.): Ende November 2026 sind Mail, Konten, Projekte (Akte, Fragebogen, Provisionierung), Heute, Kataloge und Warenkorb fertig, ohne Kalkulation; bis zum Launch Ende 2026 folgen alle übrigen Bereiche, Datan als Modul und 15 Integrationen in voller Tiefe. Je Bereich: `.claude/memory/spec-*.md`.
 
 ## 2 Quellen
 
@@ -21,7 +21,7 @@ Was Design, ein Agent oder ein Dokument formuliert hat, ist nicht Johannes' Wort
 
 Keine Rollen mit Entscheidungsrecht; Sitzungen und Stränge sind Arbeitsbereiche.
 - **Lead**: verteilt, liest jeden Diff, lässt blind prüfen, committet und pusht, hält den Brief aktuell, räumt auf.
-- **Stränge** (`.claude/agents/`): bauen oder prüfen genau einen Auftrag in dem Ordner, den er nennt; kein Commit, kein Push. Jeder Strang meldet Start, Blockade und Ende mit Beleg (`strang-meldungen.md`).
+- **Stränge** (`.claude/agents/`): bauen oder prüfen genau einen Auftrag in dem Ordner, den er nennt; kein Commit, kein Push. Jeder Strang meldet Start, Blockade und Ende mit Beleg (`.claude/memory/spec-arbeit.md`).
 - **Nebensitzung**: nur wenn sie der App nützt, mit eigenem Worktree und Zweig und vorher von einem Haiku-Prüfer gegengelesenem Brief; GitHub sperrt neue Zweige, sie braucht vorher Johannes' Ausnahme. Die Lead prüft, führt nach `main` und entfernt danach Worktree, Zweig (lokal und GitHub) und Reste.
 - **Prototyp**: nur auf Zweig `alfa-draws` (`alfaos/Draws`). Was nach `main` soll, führt die Lead nach Johannes' Wort zusammen.
 - **Design-Sitzung**: Aufträge nur über `DESIGN/brief/` (§8).
@@ -44,7 +44,7 @@ Lies zuerst: diese Datei, `.claude/memory/MEMORY.md`, `stand.md`, den Strang und
 - **Takt**: große Stücke, ein Bereich je Auftrag. Aufträge, die löschen, senden, Geheimnisse, GitHub-Regeln oder Wächter berühren, prüft vorher ein Haiku-Prüfer. Danach liest die Lead den Diff mit Auftrag und Master, ein Prüfer liest ihn blind (nur Diff, diese Regeln, Master); höchstens eine Nachbesserung, neu prüfen, Commit. Nach jedem fertigen Bereich eine App mit `scripts/build_app.sh`.
 - **Werte** nur aus dem Master über das Theme: erzeugte Tokens (`DesignTokens.swift`), oder, wo der Master einen Wert ohne Token zeichnet, als benannter Wert in `SheetValues.swift` mit Fundstelle (Datei:Zeile). Nie einen Token nach seinem Zahlenwert wiederverwenden. Was nicht in Werte übersetzbar ist, ist eine Lücke (§7).
 - **Texte** nur aus `Localizable.xcstrings`, wörtlich aus dem Master. In die Oberfläche kommt nur, was die Funktion braucht: Titel, Beschriftungen, Knöpfe, Fehler und Warnungen; keine Sätze, die erklären, was etwas tut (Johannes 21.10.: „Es kommt nichts in die UI was nicht Funktionsbedingt ist“). Solche Sätze im Master werden nicht gebaut, sondern gemeldet.
-- **Logik** in `alfaos/Kit`, ohne Bindung an eine Plattform. **Namen** englisch, kurz, ohne Umlaute; Kommentare nur technisch, Englisch, ASD-STE100.
+- **Logik** in `alfaos/Kit`, ohne Bindung an eine Plattform. **Namen** englisch, kurz, ohne Umlaute; Keine Kommentare im Code (der Hook prüft das).
 - **mykilos** und jede Abwandlung mit `myk` stehen nirgends in Code, Modul- und Paketnamen, Tokens, Schlüsseln, Metadaten, Schemas, Skripten; Funde entfernst du und verdrahtest neu. Bestandsordner nur als Leseort.
 - **Rechte**: angemeldet heißt alles dürfen; sperren kann nur die Firma; keine Rollen- oder Freigabelogik im Code.
 - **Bestand**: Funktion übernehmen, nicht Form; nichts wegwerfen, was den Umbau noch nicht durchlaufen hat. Keine unbestellten Funktionen, keine Provisorien.
