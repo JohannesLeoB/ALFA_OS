@@ -1,14 +1,15 @@
-Brief Code → Design · v12 · 21.10.2026
+Brief Code → Design · v13 · 22.10.2026
 
 SO ARBEITEST DU (fest, gilt vor allem anderen)
 1. Lies nur diesen Brief und die Dateien, die er nennt. Du musst nichts suchen und nichts fragen, was du lesen sollst.
-2. Arbeite T1 bis T8 und dann N1 bis N17 (ohne N12, entfällt) der Reihe nach ab, ohne Unterbrechung. Ein Punkt ist fertig, wenn das Verlangte im Bogen und im Vertrag steht und, wo genannt, sein „Fertig, wenn“ erfüllt ist.
+2. Arbeite T1 bis T8 und dann N1 bis N39 (ohne N12 und N18, entfallen) der Reihe nach ab, ohne Unterbrechung. Ein Punkt ist fertig, wenn das Verlangte im Bogen und im Vertrag steht und, wo genannt, sein „Fertig, wenn“ erfüllt ist.
 3. Kannst du einen Punkt nicht entscheiden, setze ihn im Lieferschein auf "question" mit einer Frage und arbeite mit dem nächsten Punkt weiter. Alle Fragen kommen gesammelt mit der Lieferung, nicht dazwischen.
 4. Jede Änderung steht im Bogen selbst (.dc.html) und im Vertrag (contract/). Ein Wert nur im Chat, nur in einer Notiz oder nur in einer .md gilt als nicht geliefert.
 5. Zuletzt schreibst du contract/PRUEFUNG.txt (Ausgaben von P1 bis P3), dann contract/LIEFERUNG.json, dann läuft P4. Erst danach entsteht die ZIP.
 
 ZIEL
 Der nächste Export liefert für Mail, Einstellungen und Hülle (ALFA Shell) einen vollständigen Vertrag im Ordner contract/: jeder Wert ein Token, jedes Bauteil und Element mit fester id, jeder sichtbare Text mit Schlüssel, jede Änderung protokolliert. Code liest ihn per Skript und baut daraus.
+Neu in v13: N19 bis N39 (Mail, Einstellungen und Hub, Hülle und Assistent), unten nach N18. Zeichne Zustände, Übergänge und Verhalten, keine Erklärsätze; Fehler und Warnungen sind erlaubt. [Wort] = Johannes' Entscheidung, [Befund] = vom Code gefunden.
 Neu in v12: der Kopf „So arbeitest du“, A8 und A9, der Lieferschein (P4, delivery.schema.json, check_delivery.py), N14–N17 zu Dateien über Google Drive; N12 und N18 entfallen. T1 bis T8 und N1 bis N11, N13 gelten unverändert weiter.
 
 GRUNDLAGE
@@ -116,6 +117,28 @@ N15 Aus Projektordner. Das Menü im Entwurf (ALFA Mail.dc.html:998, Knopf :1037)
 N16 Mail in Projektordner sichern. Gezeichnet sind nur der Eintrag (ALFA Mail.dc.html:972), der Knopf (:1033) und der Toast „Als PDF im Projektordner gesichert“. Gesucht: in welchen Ordner des Projekts, der Dateiname, der Fehlerfall, der Zustand ohne Projektordner und das Aussehen des PDF (Kopf mit Absender, Datum, Betreff; Seitenformat).
 N17 In anderes Projekt. Der Eintrag „In anderes Projekt …“ (ALFA Mail.dc.html:699) führt nirgendwohin. Gesucht: die Auswahl des Projekts und was danach geschieht.
 N18 (entfällt) Johannes 21.10.: „Es kommt nichts in die UI was nicht Funktionsbedingt ist“. Fehler und Warnungen sind erlaubt; Erklär- und Meta-Sätze, die beschreiben, was ein Knopf oder eine Zeile tut, nicht. Zeichne keine neuen davon.
+
+N19 [Befund] Entwurf schließen (Mail). ALFA Mail.dc.html:660-669 zeigt nur den Erfolgsweg. Gesucht: (a) Sichern scheitert: bleibt die Karte offen oder schließt sie, wo steht der Fehler, was geschieht mit dem Text; (b) Schließen im Postausgang oder nach gescheitertem Versand; (c) Schließen während das Sichern läuft.
+N20 [Wort 22.10.] Menüeinträge ohne Verhalten und Formatleiste. Zeige je Eintrag einen Vorschlag, was er tun könnte; Johannes entscheidet danach je Fall. Einträge: Verschieben nach …, Notiz anfügen, Original anzeigen, Später senden …, Lesebestätigung anfordern, Als Vorlage sichern, Formatleiste.
+N21 [Wort 22.10.] Bilder in Mails laden: zwei Schalter. Je Mail-Konto im Hub an oder aus; darüber ein Hauptschalter je Nutzer in Datenschutz (aus = alle Konten aus, an = die in Mail eingeschalteten).
+N22 [Wort 19.10., Tendenz] Wähler für bis zu drei Postfächer in der Mailansicht (ALFA Mail.dc.html:830 zeigt eins); Entscheidung nach deiner Zeichnung.
+N23 [Befund] Anhang: Vorschau, Drucken, Als PDF sichern (Aussehen, Ort der Datei); Ziehen und Ablegen mit Zustand beim Loslassen.
+N24 [Wort 20.10.] Regler der lokalen Mailablage: Zeitraum, Anhänge lokal, Obergrenze, eigener Ordner.
+N25 [Befund] Zustände ohne Entwurf: Liste offline, Weitere laden, Konto nicht erreichbar, Nicht gesendet im Ordner Entwürfe.
+N26 [Wort 21.10.] Einstellungsbaum nach Zugehörigkeit (wer besitzt, welcher Bereich nutzt, welcher Dienst trägt), erweiterbar um Gruppen und Abschnitte; Vorlagen gehören zu Speicherorte und Arbeitsordner.
+N27 [Wort 21.10., grobe Richtung] Hub-Katalog: Kategorien, je Dienst Logo, Name, Zustand, Hinzufügen, Verwalten, Neu verbinden, Filter nach Bereichen.
+N28 [Wort 22.10. für ClickUp, sonst Befund] Verwalten-Seite je Dienst mit Zuordnungen: Clockodo (Nutzer, Leistung je Kostenstelle, Kunde, abrechenbar), Airtable (Basen, Tabellen, Felder), DHL (eine Karte mit den Zugangsfeldern, siehe N1). ClickUp nur als Steckertyp, ohne Zuordnungen.
+N29 [Wort 21.10.] Mitteilungen je Dienst und einmal global stumm für gewählte Stunden. Der Code liefert das Lastenheft je Dienst nach.
+N30 [Wort 20.10.] Dateiorte: Ordner auf diesem Mac, Google Drive, Dropbox, Server; Leer- und Fehlerzustände; Ordnerrollen nach Nutzerwahl (ergänzt N14).
+N31 [Wort 12.10.] Detailbericht eines Dienstes (Anbieter, Status, Code, Servertext, Anfragekennung) und die drei Zustandszeichen online, eingeschränkt, Fehler.
+N32 [Befund] Zustände „Schlüssel gespeichert“ und „Verwaist“: Der Code prüft jeden Schlüssel beim Anbieter, beide treten nie auf. Zeichne, wann sie gelten sollen, oder streiche sie.
+N33 [Befund] Kontakte als Integration mit Quelle nach Wahl (Google, Apple, Airtable, lokale Datenbank mit Speicherort); Signatur je Postfach anlegen (ergänzt L-010).
+N34 [Befund] Clockodo-Nutzer-ID steht an zwei Orten: eine Stelle festlegen.
+N35 [Befund] Ebenen-Tokens layer.* (Bahn, Griff, Abgleich, Blob, Sicherheitsstreifen, Toast, Übersicht/Menü) sowie bauteile.json und mechanik.json. Das Toast liegt im Master über dem Blob.
+N36 [Wort 22.10.] Grenzen je Bereich: Wie gibt man pro Bereich Obergrenzen der Bahnen an? Beispiel Mail: Links nicht über 280 ziehbar, Mitte und Rechts frei (falten, ziehen, 50/50). Alles kann, nichts muss.
+N37 [Wort 22.10.] Assistent im Blob (Doppelklick, schneller Helfer): zeichne die Eingabe mit Senden, Antwort, Verlauf, Anhängen. Der volle Assistent-Bereich (gleicher Assistent, größerer Umfang: Dokumente ausgeben, Files, Termine, Notizen, Suche, Kalkulation) folgt später als eigener Bereich.
+N38 [Befund] Blob bei „Assistent ganz aus“: Zustand. Sync-Knopf: Was gleicht er in jedem Bereich ab, was zeigt der Tooltip als Zeit?
+N39 [Befund] Fokusring-Abstand: eine Zahl (2 oder 1); siehe L-015.
 
 ERINNERUNG AUS v9
 - W-05 Dienstzahl und L-010 Signaturen je Postfach sind weiter offen.
