@@ -538,6 +538,25 @@ ModelActionTests.runTheModelActions eq some(MailDraftState.idle())
 ModelActionTests.runTheModelActions nil true
 ModelActionTests.runTheModelActions true some(true)
 ModelActionTests.runTheModelActions eq some(Hint(text="mail.hint.failed",detail=nil,fixIn=nil,kind=nil,original=nil))
+ModelActionTests.runTheModelActions eq ["saveDraft"]
+ModelActionTests.runTheModelActions eq some(MailDraftState.saved(saved=date(5000.0)))
+ModelActionTests.runTheModelActions eq some(MailToastKind.draftSaved())
+ModelActionTests.runTheModelActions false some(false)
+ModelActionTests.runTheModelActions nil true
+ModelActionTests.runTheModelActions eq some(MailDraftState.edited())
+ModelActionTests.runTheModelActions eq some(Hint(text="mail.hint.offline",detail=nil,fixIn=nil,kind=nil,original=nil))
+ModelActionTests.runTheModelActions eq "Plan"
+ModelActionTests.runTheModelActions eq 1
+ModelActionTests.runTheModelActions eq some(MailToastKind.draftSaved())
+ModelActionTests.runTheModelActions eq [nil,"remote-1"]
+ModelActionTests.runTheModelActions eq some(MailDraftState.queuedInOutbox())
+ModelActionTests.runTheModelActions nil true
+ModelActionTests.runTheModelActions false some(false)
+ModelActionTests.runTheModelActions nil true
+ModelActionTests.runTheModelActions true some(true)
+ModelActionTests.runTheModelActions nil true
+ModelActionTests.runTheModelActions nil true
+ModelActionTests.runTheModelActions eq some(MailDraftState.saved(saved=date(5000.0)))
 ShellSweepTests.runLanesAcrossWindowsAndDrags widths "560.0 ["leading=[56.0, 56.0, 392.0]", "max=[392.0, 56.0, 56.0]", "center=[56.0, 56.0, 392.0]", "max=[56.0, 392.0, 56.0]", "trailing=[56.0, 392.0, 56.0]", "max=[56.0, 56.0, 392.0]"] [56.0, 392.0, 56.0]"
 ShellSweepTests.runLanesAcrossWindowsAndDrags widths "640.0 ["leading=[56.0, 56.0, 472.0]", "max=[472.0, 56.0, 56.0]", "center=[56.0, 56.0, 472.0]", "max=[56.0, 472.0, 56.0]", "trailing=[56.0, 472.0, 56.0]", "max=[56.0, 56.0, 472.0]"] [56.0, 472.0, 56.0]"
 ShellSweepTests.runLanesAcrossWindowsAndDrags widths "700.0 ["leading=[56.0, 308.0, 280.0]", "max=[532.0, 56.0, 56.0]", "center=[280.0, 56.0, 308.0]", "max=[56.0, 532.0, 56.0]", "trailing=[280.0, 308.0, 56.0]", "max=[56.0, 56.0, 532.0]"] [280.0, 308.0, 56.0]"

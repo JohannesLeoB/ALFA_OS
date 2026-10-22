@@ -3178,6 +3178,76 @@ final class ModelActionTests {
         await stepASendDuringARunningSaveWaitsForTheSaveAndGoesOutThroughTheDraftItSaved()
         await stepOpeningAStoredDraftMakesACardLinkedToTheServerDraftOnlyOnce()
         await stepAStoredDraftThatCannotBeLoadedMakesNoCardAndShowsTheHint()
+        await stepClosingADraftWithTextSavesItAndTellsAfterTheSaveWorked()
+        await stepClosingADraftWhoseSaveFailsTellsNothingAndKeepsTheDraft()
+        await stepClosingAnUnchangedSavedDraftSavesNothingAgainAndStillTellsSo()
+        await stepClosingADraftInTheOutboxClaimsNoSave()
+        await stepClosingABlankDraftDoesNotSaveAndTellsNothing()
+        await stepClosingWhileASaveRunsTellsNothing()
+    }
+    private func stepClosingWhileASaveRunsTellsNothing() async {
+        let (model, engine) = await make()
+        let id = newDraft(model)
+        engine.holdSave = true
+        let task = Task { await model.save(id) }
+        await Task.yield()
+        await Task.yield()
+        await model.closeDraft(id)
+        recordNil(model.toast)
+        engine.holdSave = false
+        engine.release()
+        await task.value
+        recordEqual(model.draft(id)?.state, .saved(fixed))
+    }
+    private func stepClosingADraftWithTextSavesItAndTellsAfterTheSaveWorked() async {
+        let (model, engine) = await make()
+        let id = newDraft(model)
+        await model.closeDraft(id)
+        recordEqual(engine.actionCalls, ["saveDraft"])
+        recordEqual(model.draft(id)?.state, .saved(fixed))
+        recordEqual(model.toast?.kind, .draftSaved)
+        recordFalse(model.stack.contains(.draft(id)))
+    }
+    private func stepClosingADraftWhoseSaveFailsTellsNothingAndKeepsTheDraft() async {
+        let (model, engine) = await make()
+        let id = newDraft(model)
+        engine.actionError = .provider(Hint(text: "mail.hint.offline"))
+        await model.closeDraft(id)
+        recordNil(model.toast)
+        recordEqual(model.draft(id)?.state, .edited)
+        recordEqual(model.draft(id)?.saveFailure, Hint(text: "mail.hint.offline"))
+        recordEqual(model.draft(id)?.draft.subject, "Plan")
+    }
+    private func stepClosingAnUnchangedSavedDraftSavesNothingAgainAndStillTellsSo() async {
+        let (model, engine) = await make()
+        let id = newDraft(model)
+        await model.save(id)
+        await model.closeDraft(id)
+        recordEqual(engine.savedDrafts.count, 1)
+        recordEqual(model.toast?.kind, .draftSaved)
+        model.edit(id) { $0.body = "more" }
+        await model.closeDraft(id)
+        recordEqual(engine.savedDrafts.map(\.replacing), [nil, "remote-1"])
+    }
+    private func stepClosingADraftInTheOutboxClaimsNoSave() async {
+        let (model, engine) = await make()
+        let item = OutboxItem(inlet: "a", draft: EmailDraft(to: "z@example.test", subject: "Plan", body: ""))
+        engine.outbox = [item]
+        engine.sendOutcome = .queued(item.id)
+        let id = newDraft(model)
+        await model.send(id)
+        recordEqual(model.draft(id)?.state, .queuedInOutbox)
+        await model.closeDraft(id)
+        recordNil(model.toast)
+        recordFalse(engine.actionCalls.contains("saveDraft"))
+    }
+    private func stepClosingABlankDraftDoesNotSaveAndTellsNothing() async {
+        let (model, engine) = await make()
+        let id = model.compose()!
+        await model.closeDraft(id)
+        recordNil(model.toast)
+        recordTrue(engine.actionCalls.isEmpty)
+        recordNil(model.draft(id))
     }
 }
 

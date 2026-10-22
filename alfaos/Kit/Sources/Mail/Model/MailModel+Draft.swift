@@ -46,8 +46,11 @@ extension MailModel {
             if card.remoteID == nil { drafts.removeAll { $0.id == id } }
             return
         }
-        post(.draftSaved)
-        await save(id)
+        switch card.state {
+        case .saved: break
+        default: await save(id)
+        }
+        if case .saved = draft(id)?.state { post(.draftSaved) }
     }
 
     @discardableResult
