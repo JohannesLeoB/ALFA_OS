@@ -113,7 +113,6 @@ struct BlobView: View {
         .contentShape(Rectangle())
         .gesture(drag)
         .pointerStyle(held != nil ? .grabActive : open ? .default : .grabIdle)
-        .help(theme.string("blob.help"))
         .accessibilityElement(children: .contain)
         .accessibilityAddTraits(.isButton)
         .accessibilityLabel(theme.text(model.current?.titleKey ?? ""))

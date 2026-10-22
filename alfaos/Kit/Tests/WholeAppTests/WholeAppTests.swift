@@ -217,7 +217,7 @@ final class SettingsTests {
             "settings.service.google.note", "settings.appearance.foreign.sub", "settings.lock.sub",
             "settings.identity.signOut.sub", "settings.contacts.empty", "settings.accounts.none.text",
             "settings.privacy.assistantOff.sub", "settings.privacy.chatFiles.sub",
-            "settings.privacy.images.on", "settings.privacy.images.off"
+            "settings.privacy.images.on", "settings.privacy.images.off", "blob.help", "lane.handle.help"
         ]
         recordEqual(explaining.intersection(try Fixture.catalogKeys()).sorted(), [])
         recordEqual(Set(SettingsSection.allCases.map(\.group)), Set(SettingsGroup.allCases))

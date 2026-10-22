@@ -111,17 +111,6 @@
         }
       }
     },
-    "blob.help" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Klick: Bereiche · Doppelklick: Assistent"
-          }
-        }
-      }
-    },
     "card.close" : {
       "localizations" : {
         "de" : {
@@ -719,17 +708,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nicht unterstützt"
-          }
-        }
-      }
-    },
-    "lane.handle.help" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ziehen · Doppelklick setzt zurück"
           }
         }
       }

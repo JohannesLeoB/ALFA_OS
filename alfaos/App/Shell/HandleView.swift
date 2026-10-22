@@ -75,7 +75,6 @@ struct HandleView: View {
                 }
         )
         .simultaneousGesture(TapGesture(count: 2).onEnded { model.resetLane(lane) })
-        .help(theme.string("lane.handle.help"))
         .accessibilityElement()
         .accessibilityLabel(theme.text(lane == .leading ? "lane.handle.leading" : "lane.handle.trailing"))
     }

@@ -55,7 +55,7 @@ Hinweis zu `ent:NN`: Das ist der Master `entscheidungen.md`, eine Design-Datei. 
 - **HUELLE-R07 Bahnen werden nicht von der Hülle gesperrt**: Kombinationen wie fold-50/50 oder 300-fold-Rest bleiben möglich. Quelle: J 13.10. ent:84.
 - **HUELLE-R08 Maße gelten wie der Master**: Code hat bei Maßen nichts zu sagen; keine Abweichung ist verhandelbar. Quelle: J 17.10. `RUECKGABE-AN-CODE.md` („Maße: Code übernimmt den Entwurf“); ent:126 (Design-Text, zitiert J 13.10. „Der Entwurf ist die Wahrheit, der Code zieht nach.“).
 - **HUELLE-R09 Radien der Karten wie der Kopf**: 20 oben, 0 unten, bündig; Zeilen 12. Quelle: Design-Text 15.10. ent:178; Huelle:102. Ist: `Core/DesignTokens.swift` (`Radius.card` 20, `cardBottom` 0, `row` 12).
-- **HUELLE-R10 Nur funktionsbedingte Texte**: Erklärsätze werden nicht gebaut, sondern gemeldet. Quelle: J 21.10. („Es kommt nichts in die UI was nicht Funktionsbedingt ist“, AGENTS §6). Kandidaten in der Hülle: `blob.help`, `lane.handle.help`, `assistant.idle` (alle aus dem Master: Shell:53,40,1078).
+- **HUELLE-R10 Nur funktionsbedingte Texte**: Erklärsätze werden nicht gebaut. Die Tooltips am Blob und am Griff sind seit 22.10. gestrichen (der Master zeichnet sie weiter: Shell:53, Shell:40, Brief N40). Der Platzhalter im Assistent-Fenster (`assistant.idle`) bleibt.
 
 ## Lücken
 - **HUELLE-L01 Ebenen-Tokens und Bauteilverzeichnis**: `layer.*` (Bahn 1, Griff 2, Abgleich 9, Blob 10, Sicherheitsstreifen 30, Toast 40, Übersicht/Menü 50) stehen nur im Markup; `bauteile.json` und `mechanik.json` fehlen. Das Toast liegt im Master über dem Blob, im Code unter ihm (Toast sitzt im Stapel, `CardPile.swift:37-42`). Wer liefert: Design. Beleg: `ABNAHME.md` Zeilen 6, 7 und „2d“; Suche nach Ebenen-Tokens in `TOKENBOGEN.json`: kein z-index, die dortigen `layers` sind Schatten der Lack-Fläche.
@@ -66,6 +66,5 @@ Hinweis zu `ent:NN`: Das ist der Master `entscheidungen.md`, eine Design-Datei. 
 - **HUELLE-L06 Grenzen je Ansicht**: J 22.10.: Bahngrenzen gelten je Bereich, alles kann, nichts muss. Mail: Links nicht über 280 ziehbar (Falten, Öffnen, Zurücksetzen bleiben); Mitte und Rechts falten, ziehen und stehen 50/50 frei. Offen: Ob Links zwischen 112 und 280 frei ziehbar ist und wie die Obergrenze je Bereich im Vertrag steht; nicht gezeichnet. Wer liefert: Design, nach Johannes' Klärung der Untergrenze. Beleg: kein Bahn-Sperrzustand in `alfa-shell.js`, `ALFA Shell.dc.html`, `ALFA Mail.dc.html`.
 
 ## Offen bei Johannes
-- Zählen `blob.help` („Klick: Bereiche · Doppelklick: Assistent“) und `lane.handle.help` („Ziehen · Doppelklick setzt zurück“) als Erklärsätze, die entfallen, oder als Bedienhinweis, der bleibt?
 - Blob-Name: Ausrichtung am Gesicht oder rechtsbündig, „Einstellungen“ gekürzt? Das Master-Übergabeblatt führt es als offen (`UEBERGABE-NAECHSTER-CHAT.md`, Abschnitt „Offen“); ob „der BLOB war so freigegeben“ (Design-Wortlaut ent:255, 18.10.; nur in `entscheidungen.md` des Masters) es beantwortet, hat er nicht gesagt.
 - (Beantwortet, J 22.10.) Blob wach: mindestens 124 breit, passt der Name nicht, Stufe 280; gilt wie Master (Huelle:97) und Code (`blobAwakeWidth`).

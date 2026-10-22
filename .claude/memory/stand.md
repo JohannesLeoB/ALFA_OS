@@ -25,7 +25,7 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 
 ## Offen bei Johannes
 - Rote Mail-Funktionen und Formatleiste: Design zeigt Vorschläge, er entscheidet je Fall.
-- Grenzfälle der gestrichenen Erklärsätze (HUB-R02): zurückholen oder weglassen; blob.help und lane.handle.help (HUELLE-R10).
+- Grenzfälle der gestrichenen Erklärsätze (HUB-R02): zurückholen oder weglassen.
 - Mail-Hülle: Untergrenze der Bahn Links (HUELLE-L06).
 - Erst-Setup; Sperre der App; Wächter-Frage. (Kontakte: J 22.10., Hub-Quellen inklusive eigener lokaler Datenbank, siehe HUB-F41; kein UserDefaults.)
 - Draws: Testgrenze bleibt, Patch geparkt; Draws-Master kommt zuerst zu ihm.
