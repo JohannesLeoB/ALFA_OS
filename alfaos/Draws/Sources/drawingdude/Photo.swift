@@ -48,7 +48,8 @@ func runPhoto(_ args: [String]) async {
         let codes = Array(Set(parts.map(\.material)))
         let view = ViewSpec(kind: kind, azimuth: number("--azimuth") ?? 45, elevation: number("--elevation") ?? ViewSpec.isoElevation,
                             distance: number("--distance"))
-        let scene = PhotoScene(parts: parts, surfaces: look.surfaces(images: images, tones: tones, codes: codes), light: look.light, view: view)
+        let scene = PhotoScene(parts: parts, surfaces: look.surfaces(images: images, tones: tones, codes: codes), light: look.light, view: view,
+                           backdrop: args.contains("--backdrop"), margin: number("--margin") ?? Rig.margin)
         let picture = try await Photo.render(scene, width: size[0], height: size[1])
         try Photo.png(picture).write(to: URL(fileURLWithPath: target))
         if let pdf = value("--pdf") { try Photo.pdf(picture).write(to: URL(fileURLWithPath: pdf)) }

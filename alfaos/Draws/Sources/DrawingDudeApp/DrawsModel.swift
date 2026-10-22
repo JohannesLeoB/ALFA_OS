@@ -594,11 +594,12 @@ final class DrawsModel {
         guard !rendering, !shown.isEmpty else { return }
         let running = live, ids = Set(running.map(\.id))
         let posed = DrawingKit.pose(shown, running, amounts: pose.filter { ids.contains($0.key) })
-        let size = posed.reduce(0.0) { max($0, $1.w, $1.d, $1.h) }
-        let view = ViewSpec(kind: .perspective, azimuth: azimuth, elevation: min(elevation, Proto.photoElevation),
-                            distance: Proto.perspectiveDistance * size)
+        let kind = cell(selected)?.view ?? cells.first { $0.view == .iso || $0.view == .perspective }?.view ?? .iso
+        let size = shown.reduce(0.0) { max($0, $1.w, $1.d, $1.h) }
+        let view = ViewSpec(kind: kind, azimuth: azimuth, elevation: elevation, distance: kind == .perspective ? Proto.perspectiveDistance * size : nil)
         let surfaces = look.surfaces(images: images, tones: ci?.pack.tints ?? [:], codes: Array(Set(posed.map(\.material))))
-        let scene = PhotoScene(parts: posed, surfaces: surfaces, light: look.light, view: view)
+        let scene = PhotoScene(parts: posed, surfaces: surfaces, light: look.light, view: view,
+                               backdrop: Proto.photoBackdrop, margin: Proto.photoMargin)
         rendering = true
         photoFailure = nil
         Task {

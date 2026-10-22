@@ -10,7 +10,10 @@ public struct Rig: Sendable, Equatable {
     public var forward: SIMD3<Double>
     public var fov: Double
     public var distance: Double
+    public var ortho = false
+    public var scale = 0.0
 
+    public static let margin = 0.1
     static let parallelFov = 5.0
     static let fovRange = 25.0...50.0
     static let fovDefault = 35.0
@@ -34,7 +37,7 @@ public struct Rig: Sendable, Equatable {
                 SIMD3(sin(a) * cos(e), cos(a) * cos(e), -sin(e)))
     }
 
-    public static func fit(points: [SIMD3<Double>], view: ViewSpec, aspect: Double, margin: Double = 0.08) -> Rig? {
+    public static func fit(points: [SIMD3<Double>], view: ViewSpec, aspect: Double, margin: Double = Rig.margin) -> Rig? {
         guard let first = points.first, aspect > 0, aspect.isFinite else { return nil }
         let (az, el) = angles(view)
         let b = basis(azimuth: az, elevation: el)
@@ -45,10 +48,20 @@ public struct Rig: Sendable, Equatable {
         }
         let radius = simd_length(hi - lo) / 2
         guard radius > 0 else { return nil }
-        var fov = parallelFov
-        if view.kind == .perspective {
-            fov = view.distance.map { min(fovRange.upperBound, max(fovRange.lowerBound, 2 * atan(radius / $0) * 180 / .pi)) } ?? fovDefault
+        if view.kind != .perspective {
+            var lo2 = SIMD2(Double.infinity, Double.infinity), hi2 = -lo2
+            for p in points {
+                let q = SIMD2(simd_dot(p, b.right), simd_dot(p, b.up))
+                lo2 = simd_min(lo2, q); hi2 = simd_max(hi2, q)
+            }
+            let c = (lo + hi) / 2, mid = (lo2 + hi2) / 2
+            let target = c + b.right * (mid.x - simd_dot(c, b.right)) + b.up * (mid.y - simd_dot(c, b.up))
+            let half = max((hi2.y - lo2.y) / 2, (hi2.x - lo2.x) / 2 / aspect) / (1 - margin)
+            let distance = radius * 4
+            return Rig(target: target, eye: target - b.forward * distance, right: b.right, up: b.up, forward: b.forward,
+                       fov: parallelFov, distance: distance, ortho: true, scale: max(half, 1))
         }
+        let fov = view.distance.map { min(fovRange.upperBound, max(fovRange.lowerBound, 2 * atan(radius / $0) * 180 / .pi)) } ?? fovDefault
         let tanV = tan(fov * .pi / 360), tanH = tanV * aspect
         let usable = 1 - margin
         var target = (lo + hi) / 2
@@ -80,6 +93,7 @@ public struct Rig: Sendable, Equatable {
 
     public func project(_ p: SIMD3<Double>, aspect: Double) -> SIMD2<Double> {
         let rel = p - target
+        if ortho { return SIMD2(simd_dot(rel, right) / (scale * aspect), simd_dot(rel, up) / scale) }
         let depth = simd_dot(rel, forward) + distance
         let tanV = tan(fov * .pi / 360)
         return SIMD2(simd_dot(rel, right) / (depth * tanV * aspect), simd_dot(rel, up) / (depth * tanV))

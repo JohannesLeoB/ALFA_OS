@@ -9,7 +9,9 @@ import simd
 enum Tone {
     static let floor = "#a8a49d"
     static let backdrop = "#aca79d"
-    static let fallback = "#cfcac2"
+    static let deck = "#c9c5be"
+    static let wall = "#d2cec7"
+    static let fallback = "#e8e4dc"
 
     static func cg(_ hex: String?) -> CGColor {
         let s = (hex ?? fallback).trimmingCharacters(in: CharacterSet(charactersIn: "#"))
@@ -23,28 +25,31 @@ enum Tone {
 struct Lamps {
     var key: Float
     var fill: Float
+    var rim: Float
     var keyColor: SIMD3<Float>
     var keyOffset: Double
     var keyElevation: Double
     var fillOffset: Double
     var fillElevation: Double
+    var rimOffset: Double
+    var rimElevation: Double
     var ambient: Float
-    var shadow: Float
+    var spread: Double
 
     static func preset(_ p: LightPreset) -> Lamps {
         switch p {
         case .studio:
-            return Lamps(key: 4200, fill: 800, keyColor: SIMD3(1, 0.98, 0.95), keyOffset: -40, keyElevation: 50,
-                         fillOffset: 70, fillElevation: 20, ambient: 0, shadow: 1)
+            return Lamps(key: 4600, fill: 1100, rim: 900, keyColor: SIMD3(1, 0.98, 0.95), keyOffset: -40, keyElevation: 55,
+                         fillOffset: 75, fillElevation: 15, rimOffset: 160, rimElevation: 35, ambient: 0, spread: 3.2)
         case .soft:
-            return Lamps(key: 1800, fill: 1400, keyColor: SIMD3(1, 1, 1), keyOffset: -25, keyElevation: 60,
-                         fillOffset: 55, fillElevation: 30, ambient: 0.3, shadow: 0.7)
+            return Lamps(key: 3500, fill: 1600, rim: 700, keyColor: SIMD3(1, 1, 1), keyOffset: -25, keyElevation: 62,
+                         fillOffset: 55, fillElevation: 25, rimOffset: 165, rimElevation: 40, ambient: 0.6, spread: 6)
         case .warm:
-            return Lamps(key: 3800, fill: 700, keyColor: SIMD3(1, 0.9, 0.78), keyOffset: -45, keyElevation: 40,
-                         fillOffset: 70, fillElevation: 15, ambient: 0, shadow: 1)
+            return Lamps(key: 4200, fill: 600, rim: 800, keyColor: SIMD3(1, 0.9, 0.78), keyOffset: -45, keyElevation: 45,
+                         fillOffset: 70, fillElevation: 15, rimOffset: 155, rimElevation: 30, ambient: 0, spread: 3.6)
         case .hard:
-            return Lamps(key: 5200, fill: 400, keyColor: SIMD3(1, 0.99, 0.97), keyOffset: -55, keyElevation: 35,
-                         fillOffset: 80, fillElevation: 10, ambient: -0.3, shadow: 1)
+            return Lamps(key: 4300, fill: 600, rim: 600, keyColor: SIMD3(1, 0.99, 0.97), keyOffset: -55, keyElevation: 52,
+                         fillOffset: 80, fillElevation: 10, rimOffset: 150, rimElevation: 30, ambient: -0.3, spread: 1.2)
         }
     }
 }
@@ -97,13 +102,29 @@ enum Studio {
         return try? EnvironmentResource(equirectangular: cg)
     }
 
-    static let spread: [(Double, Double)] = [(0, 0), (1.5, 0.5), (-1.5, -0.5), (1, -1.2), (-1, 1.2), (2.5, -0.6), (-2.5, 0.6), (3.2, 0.9), (-3.2, -0.9),
-                                              (0.6, 2), (-0.6, -2)]
+    static let samples = 20
+    static let golden = 2.39996
+    static let shadowReach = 1.1
+    static let wallGap = 1.0
+
+    static func key(_ lamps: Lamps, view: ViewSpec, light: LightSpec) -> (azimuth: Double, elevation: Double) {
+        (light.azimuth ?? (Rig.angles(view).azimuth + lamps.keyOffset), light.elevation ?? lamps.keyElevation)
+    }
+
+    static func shadowPoints(_ points: [SIMD3<Double>], key: (azimuth: Double, elevation: Double), floor: Double,
+                             wall: Double?) -> [SIMD3<Double>] {
+        let d = Rig.basis(azimuth: key.azimuth, elevation: key.elevation).forward
+        guard d.z < -1e-6 else { return [] }
+        return points.compactMap { p in
+            var t = (p.z - floor) / -d.z
+            if let wall, d.y > 1e-6 { t = min(t, (wall - p.y) / d.y) }
+            return t.isFinite && t > 0 ? p + d * t : nil
+        }
+    }
 
     static func lamp(_ lamps: Lamps, view: ViewSpec, light: LightSpec, floor: SIMD3<Double>, reach: Double) -> [Entity] {
         let base = Rig.angles(view).azimuth
-        let az = light.azimuth ?? (base + lamps.keyOffset)
-        let el = light.elevation ?? lamps.keyElevation
+        let (az, el) = key(lamps, view: view, light: light)
         func entity(_ azimuth: Double, _ elevation: Double, _ component: DirectionalLightComponent, shadow: Bool) -> Entity {
             let b = Rig.basis(azimuth: azimuth, elevation: elevation)
             let e = Entity()
@@ -111,16 +132,20 @@ enum Studio {
             e.orientation = Space.orientation(right: b.right, up: b.up, forward: b.forward)
             e.components.set(component)
             if shadow {
-                e.components.set(DirectionalLightComponent.Shadow(shadowProjection: .fixed(zNear: 0.01, zFar: Float(reach * Space.metre * 2), orthographicScale: Float(reach * Space.metre * 0.75)),
+                e.components.set(DirectionalLightComponent.Shadow(shadowProjection: .fixed(zNear: 0.01, zFar: Float(reach * Space.metre * 3),
+                                                                                           orthographicScale: Float(reach * Space.metre * shadowReach)),
                                                                   depthBias: 1))
             }
             return e
         }
         let tint = NSColor(red: CGFloat(lamps.keyColor.x), green: CGFloat(lamps.keyColor.y), blue: CGFloat(lamps.keyColor.z), alpha: 1)
-        let key = DirectionalLightComponent(color: tint, intensity: lamps.key / Float(spread.count))
-        let fill = DirectionalLightComponent(color: .white, intensity: lamps.fill)
-        var out = spread.map { entity(az + $0.0, el + $0.1, key, shadow: lamps.shadow > 0) }
-        out.append(entity(base + lamps.fillOffset, lamps.fillElevation, fill, shadow: false))
+        let key = DirectionalLightComponent(color: tint, intensity: lamps.key / Float(samples))
+        var out: [Entity] = (0..<samples).map { i in
+            let r = lamps.spread * (Double(i) + 0.5).squareRoot() / Double(samples).squareRoot(), t = Double(i) * golden
+            return entity(az + r * cos(t), el + r * sin(t) * 0.7, key, shadow: true)
+        }
+        out.append(entity(base + lamps.fillOffset, lamps.fillElevation, DirectionalLightComponent(color: .white, intensity: lamps.fill), shadow: false))
+        out.append(entity(base + lamps.rimOffset, lamps.rimElevation, DirectionalLightComponent(color: .white, intensity: lamps.rim), shadow: false))
         return out
     }
 

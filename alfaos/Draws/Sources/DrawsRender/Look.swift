@@ -67,10 +67,13 @@ public struct PhotoScene: Sendable {
     public var surfaces: [String: Surface]
     public var light: LightSpec
     public var view: ViewSpec
+    public var backdrop: Bool
+    public var margin: Double
 
     public init(parts: [Part], surfaces: [String: Surface] = [:], light: LightSpec = LightSpec(),
-                view: ViewSpec = ViewSpec(kind: .iso)) {
+                view: ViewSpec = ViewSpec(kind: .iso), backdrop: Bool = false, margin: Double = Rig.margin) {
         self.parts = parts; self.surfaces = surfaces; self.light = light; self.view = view
+        self.backdrop = backdrop; self.margin = min(0.4, max(0, margin))
     }
 }
 
