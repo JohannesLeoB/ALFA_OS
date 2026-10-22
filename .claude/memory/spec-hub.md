@@ -112,7 +112,7 @@ Der Hub ist der „Netzwerkstecker“ der App: Er verbindet Konten, Dienste und 
 - **HUB-L15**: Klartext aus der Anbieter-Doku, was je Dienst mitgeteilt werden kann, liegt nirgends vor (Code liest laut Design-Zitat selbst, `RUECKGABE-AN-CODE.md:58`); Quelle der Doku je Dienst fehlt. Beleg: grep „notif/mitteil“ in `FU` und `~/ALPHA/Sources` findet nur feste Ereignismeldungen (`SignalNotificationDispatcher.swift`), keine Liste je Dienst.
 
 ## Offen bei Johannes
-- ClickUp: Welcher Bereich nimmt Aufgaben ab (Projekte, Heute …)? Seine Rückfrage vom 21.10. steht, die Lead antwortet.
+- ClickUp (J 22.10. f69e689e: „clickup evtl erstmal nur in Hub als ‚steckertyp‘ vorsehen, später voll ‚verkabeln und legen‘“): jetzt nicht wichtig; es bleibt beim Steckertyp im Hub ohne Abnehmer (HUB-F24). Der Altcode benutzt ClickUp für Projekt-Provisionierung und Aufgabenübersichten (Befund, `fundus/alpha/Sources/AlfaServices/ClickUp/`).
 - Firmendienste (Airtable, sevDesk, DHL): trägt jeder Nutzer den Firmenschlüssel selbst ein, oder soll die Firma ihn teilen? Heute liegt er je Mac im Schlüsselbund.
 - Katalog-Satz je Dienst ja oder nein (gefragt, keine Antwort).
 - Hub-Entwürfe A/B/C jenseits der kleinsten Form: Auftrag ja oder nein.

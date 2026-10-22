@@ -29,7 +29,7 @@ ALFA ist eine native macOS-App für das Designstudio: ein Betriebssystem der Arb
 
 ## Richtung
 - Stufe 2 (bis Launch Ende 2026): alle übrigen Bereiche, Datan als Modul, 15 Integrationen in voller Tiefe (AGENTS §1).
-- Assistent wird später ein eigener Bereich mit Menüeintrag; heute nur das Mini-Fenster im Blob (siehe spec-huelle).
+- Assistent ist wichtig und bekommt später einen vollen eigenen Ansichtsbereich als „Claude in App Freund“ (J 22.10. f69e689e: „ja, ist wichtig. Bekommt auch spätter noch einen vollen eigenen Ansichtsbereich als Claude in App Freund.“); Stufe nicht genannt; heute nur das Mini-Fenster im Blob (siehe spec-huelle, HUELLE-L04 Eingabe für Design).
 - Distribution (Mac App Store, iOS, iPadOS, Web, Abo/SaaS) und andere Nutzerstrukturen: später, die Bauweise soll sie nur ermöglichen.
 - Rollen als Einstellung statt im Code: später (siehe spec-arbeit ARBEIT-R19).
 
