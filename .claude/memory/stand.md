@@ -39,6 +39,7 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 - Hub: Trennen bricht halb ab, wenn das Schlüsselbund-Löschen wirft (`Hub/HubCore.swift:493-519`); Schlüssel-Erneuerung ohne Rückfall; `ServiceSetting` ohne Deklarierer; ClickUp ohne Fähigkeit; Claude-Schlüssel im Hub und Fundus unter verschiedenen Namen; Drive 403 gilt als Anmeldefehler; Hub-Fehlerpfade ohne Test.
 - Fundus: 118 Zeilen mit `myk` in 47 Dateien, deutsche Namen, toter Mail-Zweig.
 - Commits `eb89ff4`, `b1c753e` ohne Leerzeile nach dem Betreff (Force-Push verboten).
+- Commit `a5d8e43` trägt einen Spec-Betreff, enthält aber auch die drei App-Dateien (Abmelden mit Halten, Hover-Leiste, Fokusring); vor jedem Commit `git diff --cached --stat` prüfen.
 - Abweichungen vom Master, bewusst: Kachelhöhe 112, Suche über alle Ordner, HTML-Mail zeigt echten Inhalt, Toast „Entwurf gesichert“ nur bei Erfolg.
 
 ## Ablage
