@@ -48,7 +48,8 @@ metadata:
   - „offen“ = nicht gebaut, Vorgabe da.
   - „lücke“ = Vorgabe fehlt.
 - **Ist** nur mit eigenem Beleg: Datei:Zeile selbst gelesen oder per grep gefunden. Ohne Beleg: „ungeprüft“.
-- **Quelle** kurz: Master-Zeile, Datum plus Sitzungskürzel (8 Zeichen) für Johannes' Wort, Bestandspfad. Ein Zitat nur, wenn sein genauer Wortlaut die Entscheidung ist, höchstens 12 Wörter, in Anführungszeichen.
+- **Quelle** kurz: Master-Zeile, Datum für Johannes' Wort (J TT.MM.), Bestandspfad. Keine Zitate: Entscheidungen stehen als Aussage im Funktionsbaum (Funktion, Soll, Ist, Status), das Transkript trägt den Wortlaut.
+- **Stil**: Funktionsbäume und kurze Sätze, keine Erzählung, keine Wiederholung zwischen `stand.md` und Spec; Lücken und Offenes stehen nur in der Spec des Bereichs, `stand.md` verweist darauf.
 - Johannes' Wort geht vor Master, das jüngere vor dem älteren (AGENTS.md §2). Was nur Design, ein Agent oder ein altes Dokument sagt, ist kein Soll; höchstens Lücke oder Frage.
 - Was eine andere Spec-Datei trägt: nur Verweis (`siehe spec-hub HUB-F03`), nicht doppelt.
 - Keine Zahl ohne Beleg. Kein „myk“ in Kürzeln oder Namen.
