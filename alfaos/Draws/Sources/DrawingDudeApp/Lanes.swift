@@ -473,7 +473,7 @@ struct InspectorLane: View {
             .scrollIndicators(.hidden)
             if model.tab == .export {
                 let n = model.missing.count + model.defects.count
-                Compose(key: model.pdf ? "draws.export.savePDF" : "draws.export.saveSVG", symbol: "square.and.arrow.down",
+                Compose(key: model.format.save, symbol: "square.and.arrow.down",
                         extra: n > 0 && !model.stuck ? String(format: word("draws.export.despite"), n) : "") {
                     model.export()
                 }
@@ -666,9 +666,9 @@ struct ExportTab: View {
         let n = model.missing.count + model.defects.count
         SectionHead(key: "draws.export.file")
         Labeled(key: "draws.export.format") {
-            Segments(options: [(true, "draws.export.pdf"), (false, "draws.export.svg")], selection: $model.pdf)
+            Segments(options: Format.allCases.map { ($0, "draws.export.\($0.rawValue)") }, selection: $model.format)
         }
-        Labeled(key: "draws.export.pages", enabled: model.pdf) {
+        Labeled(key: "draws.export.pages", enabled: model.format == .pdf) {
             Segments(options: [(false, "draws.export.one"), (true, "draws.export.all")], selection: $model.allPages)
         }
         HStack(spacing: CGFloat(Design.Spacing.step8)) {

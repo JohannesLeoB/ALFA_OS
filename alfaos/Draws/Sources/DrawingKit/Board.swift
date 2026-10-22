@@ -12,6 +12,7 @@ extension Composer {
             let (scale, fits) = try sub.cellDraw(cell)
             sheet.items += sub.sheet.items
             sheet.dimensions += sub.sheet.dimensions
+            sheet.hits.merge(sub.sheet.hits) { $0 + $1 }
             for defect in sub.sheet.defects where !sheet.defects.contains(defect) { sheet.defects.append(defect) }
             if !fits { sheet.defects.append("board.\(cell.id)") }
             sheet.cells.append(Placed(id: cell.id, scale: scale, fits: fits, steps: count))

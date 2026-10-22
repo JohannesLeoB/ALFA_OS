@@ -33,6 +33,7 @@ public enum DrawingEngine {
             base.number = index + 1
             base.units = job.units
             base.pose = job.pose
+            base.hold = job.hold
             switch product {
             case .plan:
                 base.layout = .threeView
@@ -301,8 +302,9 @@ struct Composer {
 
     mutating func isoDraw(in room: CGRect, title at: CGPoint, scales: [Double], force: Bool) throws -> (scale: Double, fits: Bool) {
         let t = r.template, ci = r.ci, s = r.style ?? ci.iso
-        let shown = pose(r.parts, r.units, amounts: r.pose), fitted = r.fit.map { pose($0, r.units, amounts: r.pose) }
-        let open = openFronts(r.units, amounts: r.pose)
+        let reach = r.hold ? Dictionary(r.units.map { ($0.id, 1.0) }, uniquingKeysWith: { first, _ in first }) : r.pose
+        let shown = pose(r.parts, r.units, amounts: r.pose), fitted = (r.fit ?? (r.hold ? r.parts : nil)).map { pose($0, r.units, amounts: reach) }
+        let open = openFronts(r.units, amounts: r.pose), fronts = Set(r.units.flatMap(\.front))
         let faces = try Projection.faces(shown, spec: r.iso, shadow: s.shadow > 0 ? s.spread : nil, around: fitted)
         let frame = try fitted.map { try Projection.faces($0, spec: r.iso, shadow: s.shadow > 0 ? s.spread : nil) } ?? faces
         let xs = frame.flatMap { $0.poly.map { Double($0.x) } }, ys = frame.flatMap { $0.poly.map { Double($0.y) } }
@@ -339,7 +341,9 @@ struct Composer {
             } else {
                 fill = tint(material[f.partID] ?? "").map { Hex.scale($0, shade) }
             }
-            sheet.items.append(.polygon(paper(f), fill: fill, stroke: ci.ink, width: s.edge))
+            let outline = paper(f)
+            if fronts.contains(f.partID) { sheet.hits[f.partID, default: []].append(outline) }
+            sheet.items.append(.polygon(outline, fill: fill, stroke: ci.ink, width: s.edge))
         }
         let key = r.product.isEmpty ? "iso" : r.product
         let pattern = t.titles[key] ?? ""

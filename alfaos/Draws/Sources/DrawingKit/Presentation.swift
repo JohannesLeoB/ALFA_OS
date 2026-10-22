@@ -54,13 +54,18 @@ extension Composer {
         func px(_ u: Double) -> Double { o.x + (u - Double(e.minX)) / n }
         func py(_ w: Double) -> Double { o.y + (Double(e.maxY) - w) / n }
         let shown = pose(r.parts, r.units, amounts: r.pose), open = openFronts(r.units, amounts: r.pose)
+        let fronts = Set(r.units.flatMap(\.front))
         let visible = try Projection.visibleRects(shown, .front)
         for entry in visible.reversed() {
             guard !entry.rects.isEmpty, let p = shown.first(where: { $0.id == entry.id }) else { continue }
             let rect = Projection.rect(p, .front)
-            sheet.items.append(.rect(CGRect(x: px(Double(rect.minX)), y: py(Double(rect.maxY)), width: rect.width / n, height: rect.height / n),
-                                     fill: open.contains(p.id) ? (r.style ?? r.ci.iso).accentColor ?? r.ci.accent : tone(p, v, job),
+            let box = CGRect(x: px(Double(rect.minX)), y: py(Double(rect.maxY)), width: rect.width / n, height: rect.height / n)
+            sheet.items.append(.rect(box, fill: open.contains(p.id) ? (r.style ?? r.ci.iso).accentColor ?? r.ci.accent : tone(p, v, job),
                                      stroke: nil, width: 0))
+            if fronts.contains(p.id) {
+                sheet.hits[p.id, default: []].append([CGPoint(x: box.minX, y: box.minY), CGPoint(x: box.maxX, y: box.minY),
+                                                      CGPoint(x: box.maxX, y: box.maxY), CGPoint(x: box.minX, y: box.maxY)])
+            }
             for (a, b) in Composer.outline(entry.rects) {
                 sheet.items.append(.line(CGPoint(x: px(Double(a.x)), y: py(Double(a.y))), CGPoint(x: px(Double(b.x)), y: py(Double(b.y))),
                                          width: r.ci.lineEdge, color: r.ci.ink))

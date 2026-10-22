@@ -12,14 +12,22 @@ public struct SVGRenderer: Renderer {
         let w = SVGRenderer.f(page.size.width), h = SVGRenderer.f(page.size.height)
         var out = ["<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 \(w) \(h)\" "
                    + "width=\"\(w)mm\" height=\"\(h)mm\" font-family=\"\(SVGRenderer.esc(FontFace.family(.sans, in: fonts)))\">"]
-        if let background = page.background { out.append("<rect width=\"\(w)\" height=\"\(h)\" fill=\"\(background)\"/>") }
-        var clips = 0
-        for item in page.items { SVGRenderer.emit(item, fonts, &out, &clips) }
+        out += SVGRenderer.elements(page, fonts, scope: "clip")
         out.append("</svg>")
         return out.joined(separator: "\n")
     }
 
-    static func emit(_ item: Item, _ fonts: [FontFace], _ out: inout [String], _ clips: inout Int) {
+    static func elements(_ page: Page, _ fonts: [FontFace], scope: String) -> [String] {
+        var out: [String] = []
+        if let background = page.background {
+            out.append("<rect width=\"\(f(page.size.width))\" height=\"\(f(page.size.height))\" fill=\"\(background)\"/>")
+        }
+        var clips = 0
+        for item in page.items { SVGRenderer.emit(item, fonts, &out, &clips, scope) }
+        return out
+    }
+
+    static func emit(_ item: Item, _ fonts: [FontFace], _ out: inout [String], _ clips: inout Int, _ scope: String) {
         switch item {
         case let .line(a, b, paint):
             out.append("<line x1=\"\(f(a.x))\" y1=\"\(f(a.y))\" x2=\"\(f(b.x))\" y2=\"\(f(b.y))\" stroke=\"\(paint.stroke ?? "none")\" "
@@ -61,11 +69,11 @@ public struct SVGRenderer: Renderer {
             if !moves.isEmpty { attributes += " transform=\"\(moves.joined(separator: " "))\"" }
             if let clip = transform.clip {
                 clips += 1
-                out.append("<clipPath id=\"clip\(clips)\"><rect x=\"\(f(clip.minX))\" y=\"\(f(clip.minY))\" width=\"\(f(clip.width))\" height=\"\(f(clip.height))\"/></clipPath>")
-                attributes += " clip-path=\"url(#clip\(clips))\""
+                out.append("<clipPath id=\"\(scope)\(clips)\"><rect x=\"\(f(clip.minX))\" y=\"\(f(clip.minY))\" width=\"\(f(clip.width))\" height=\"\(f(clip.height))\"/></clipPath>")
+                attributes += " clip-path=\"url(#\(scope)\(clips))\""
             }
             out.append("<g\(attributes)>")
-            for child in items { emit(child, fonts, &out, &clips) }
+            for child in items { emit(child, fonts, &out, &clips, scope) }
             out.append("</g>")
         }
     }

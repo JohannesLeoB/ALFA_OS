@@ -39,6 +39,7 @@ public struct Sheet: Sendable {
     public var defects: [String]
     public var product = ""
     public var cells: [Placed] = []
+    public var hits: [String: [[CGPoint]]] = [:]
 
     public var page: Page {
         Page(size: CGSize(width: width, height: height), background: paper, items: items.map(\.item))
@@ -155,15 +156,16 @@ public struct Job: Sendable {
     public var blocks: [Panel]
     public var units: [Unit]
     public var pose: [String: Double]
+    public var hold: Bool
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
                 products: [Product], style: IsoStyle? = nil, dimensions: Bool = true,
                 material: MaterialPack? = nil, variants: [Variant] = [], dims: DimMode = .none, fonts: SheetFonts,
-                scale: Double? = nil, blocks: [Panel] = [], units: [Unit] = [], pose: [String: Double] = [:]) {
+                scale: Double? = nil, blocks: [Panel] = [], units: [Unit] = [], pose: [String: Double] = [:], hold: Bool = false) {
         self.parts = parts; self.ci = ci; self.template = template; self.project = project
         self.products = products; self.style = style; self.dimensions = dimensions
         self.material = material; self.variants = variants; self.dims = dims; self.fonts = fonts; self.scale = scale
-        self.blocks = blocks; self.units = units; self.pose = pose
+        self.blocks = blocks; self.units = units; self.pose = pose; self.hold = hold
     }
 }
 
@@ -186,6 +188,7 @@ public struct Request: Sendable {
     var number = 1
     var units: [Unit] = []
     var pose: [String: Double] = [:]
+    var hold = false
 
     public init(parts: [Part], ci: CIPack, template: TemplatePack, project: [String: String],
                 layout: SheetLayout, iso: ViewSpec = ViewSpec(kind: .iso), dimensions: Bool = true, style: IsoStyle? = nil, fonts: SheetFonts) {

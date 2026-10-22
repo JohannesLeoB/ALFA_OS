@@ -1527,6 +1527,27 @@
    "units": [
     {"id": "u", "kind": "drawer", "front": ["a"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": 1e+300, "dz": 0}}
    ]
+  },
+  {
+   "name": "board units",
+   "parts": [
+    {"id": "sockel", "name": "Sockel", "material": "sockel", "x": 0, "y": 70, "z": 0, "w": 1200, "d": 530, "h": 100},
+    {"id": "u0", "name": "Unterschrank 1", "material": "korpus", "x": 0, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "u1", "name": "Unterschrank 2", "material": "korpus", "x": 600, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
+    {"id": "platte", "name": "Arbeitsplatte", "material": "platte", "x": 0, "y": 0, "z": 820, "w": 1200, "d": 620, "h": 40},
+    {"id": "fd0", "name": "Schubladenfront", "material": "front", "x": 2, "y": 22, "z": 102, "w": 596, "d": 18, "h": 356, "role": "FRONT"},
+    {"id": "fdoor", "name": "Tuerfront", "material": "front", "x": 602, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"}
+   ],
+   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.board": "Küchenzeile Board"},
+   "products": ["board"],
+   "cells": [
+    {"id": "f", "view": "front", "x": 15, "y": 2, "w": 160, "h": 140},
+    {"id": "i", "view": "iso", "x": 15, "y": 144, "w": 150, "h": 150}
+   ],
+   "units": [
+    {"id": "d0", "kind": "drawer", "front": ["fd0"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}},
+    {"id": "door", "kind": "door", "front": ["fdoor"], "body": [], "motion": {"type": "hinge", "px": 602, "py": 22, "pz": 0, "axis": "z", "deg": -100}}
+   ]
   }
  ],
  "replies": [

@@ -1410,6 +1410,17 @@
         }
       }
     },
+    "draws.export.html": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HTML"
+          }
+        }
+      }
+    },
     "draws.export.pages": {
       "extractionState": "manual",
       "localizations": {
@@ -1505,6 +1516,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Als SVG sichern"
+          }
+        }
+      }
+    },
+    "draws.export.saveHTML": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als HTML sichern"
           }
         }
       }

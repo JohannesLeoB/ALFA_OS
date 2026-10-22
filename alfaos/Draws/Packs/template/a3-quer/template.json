@@ -117,7 +117,16 @@
     "perspective": "Perspektive {az}° / {el}°",
     "steps": "Schritt {n} von {of}",
     "customer": "Ansicht",
-    "presentation": "Entwurf"
+    "presentation": "Entwurf",
+    "readout.width": "{w} mm breit",
+    "readout.fronts": "{n} Fronten",
+    "readout.travel": "Hub {now} / {max} mm",
+    "readout.angle": "Winkel {now}° / {max}°",
+    "readout.idle": "Front anklicken"
+  },
+  "interactive": {
+    "fade": 0.26,
+    "lang": "de"
   },
   "presentation": {
     "quelle": "stamp, stampStatuses, stampSize aus packs-entwurf/ci/platzhalter (Stempel VORABZUG, 6 mm); alle Abstaende Annahme bis inputs/4 (Entwurfspraesentation) vorliegt",

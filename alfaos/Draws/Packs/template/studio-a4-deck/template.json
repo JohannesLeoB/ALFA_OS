@@ -41,7 +41,16 @@
     "perspective": "Perspektive {az}° / {el}°",
     "steps": "Schritt {n} von {of}",
     "customer": "Ansicht",
-    "presentation": "Entwurf"
+    "presentation": "Entwurf",
+    "readout.width": "{w} mm breit",
+    "readout.fronts": "{n} Fronten",
+    "readout.travel": "Hub {now} / {max} mm",
+    "readout.angle": "Winkel {now}° / {max}°",
+    "readout.idle": "Front anklicken"
+  },
+  "interactive": {
+    "fade": 0.26,
+    "lang": "de"
   },
   "dim": {
     "tick": 3.0,

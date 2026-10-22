@@ -9,7 +9,7 @@ func fail(_ text: String) -> Never {
 
 let args = Array(CommandLine.arguments.dropFirst())
 guard args.first == "render", args.count >= 2 else {
-    fail("usage: drawingdude render object.json --ci <folder> --template <folder> --out <folder> [--material <folder>] [--dims none|given] [--fonts <folder>] [--products presentation,plan,iso,perspective,steps,customer,cover] [--distance <mm>] [--pose unit=0...1,unit=0...1]")
+    fail("usage: drawingdude render object.json --ci <folder> --template <folder> --out <folder> [--material <folder>] [--dims none|given] [--fonts <folder>] [--products presentation,plan,iso,perspective,steps,customer,cover] [--distance <mm>] [--pose unit=0...1,unit=0...1] [--html]")
 }
 func option(_ name: String) -> String {
     guard let i = args.firstIndex(of: name), i + 1 < args.count else { fail("missing \(name)") }
@@ -63,6 +63,10 @@ do {
         print("\(number)-\(sheet.product): A\(template.pack.format.dropFirst()) \(Int(sheet.width))x\(Int(sheet.height)) mm, 1:\(Int(sheet.scale))\(note)")
     }
     try SheetExporter.pdf(sheets).write(to: out.appendingPathComponent("set.pdf"))
+    if args.contains("--html") {
+        let page = try SheetExporter.interactive(job: job)
+        try page.write(to: out.appendingPathComponent(objectURL.deletingPathExtension().lastPathComponent + ".html"), atomically: true, encoding: .utf8)
+    }
 } catch let error as DrawingError {
     fail("error: \(error)")
 } catch {

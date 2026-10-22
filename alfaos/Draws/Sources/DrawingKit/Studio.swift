@@ -146,6 +146,11 @@ extension Packs {
             pack.deck = deck(d)
             defects += d.deep
         }
+        if let i = r.maybe("interactive") {
+            pack.fade = i.number("fade", or: 0)
+            pack.language = i.text("lang", or: "")
+            defects += i.deep
+        }
         return defects
     }
 

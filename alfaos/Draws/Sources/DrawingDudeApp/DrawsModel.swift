@@ -18,6 +18,26 @@ enum Tab: String, CaseIterable { case view, style, export }
 
 enum Fill: String, CaseIterable { case tone, material }
 
+enum Format: String, CaseIterable {
+    case pdf, svg, html
+
+    var type: UTType {
+        switch self {
+        case .pdf: .pdf
+        case .svg: .svg
+        case .html: .html
+        }
+    }
+
+    var save: String {
+        switch self {
+        case .pdf: "draws.export.savePDF"
+        case .svg: "draws.export.saveSVG"
+        case .html: "draws.export.saveHTML"
+        }
+    }
+}
+
 enum Source: String, CaseIterable { case photo, pdf, text }
 
 enum Approach: String, CaseIterable { case once, live }
@@ -114,7 +134,7 @@ final class DrawsModel {
     }
     var raster = false
     var tab = Tab.view
-    var pdf = true
+    var format = Format.pdf
     var allPages = true
     var assistant = false
     var source = Source.text
@@ -450,13 +470,8 @@ final class DrawsModel {
             failure = nil
             return
         }
-        let running = live, ids = Set(running.map(\.id))
         do {
-            pages = try DrawingEngine.render(Job(parts: shown, ci: ci.pack, template: template.pack, project: project,
-                                                 products: [product()], style: style(), dimensions: dimensions,
-                                                 material: material?.pack, variants: variants, dims: dimensions ? .given : .none,
-                                                 fonts: fonts, blocks: blocks, units: running,
-                                                 pose: pose.filter { ids.contains($0.key) }))
+            pages = try DrawingEngine.render(makeJob(ci, template))
             page = min(page, max(0, pages.count - 1))
             failure = nil
         } catch DrawingError.overflow {
@@ -467,6 +482,15 @@ final class DrawsModel {
             pages = []
             failure = "\(error)"
         }
+    }
+
+    private func makeJob(_ ci: Loaded<CIPack>, _ template: Loaded<TemplatePack>) -> Job {
+        let running = live, ids = Set(running.map(\.id))
+        return Job(parts: shown, ci: ci.pack, template: template.pack, project: project,
+                   products: [product()], style: style(), dimensions: dimensions,
+                   material: material?.pack, variants: variants, dims: dimensions ? .given : .none,
+                   fonts: fonts, blocks: blocks, units: running,
+                   pose: pose.filter { ids.contains($0.key) })
     }
 
     func open() {
@@ -491,14 +515,29 @@ final class DrawsModel {
     func export() {
         guard let sheet else { return }
         let panel = NSSavePanel()
-        panel.allowedContentTypes = [pdf ? .pdf : .svg]
-        panel.nameFieldStringValue = fileName(pdf ? "pdf" : "svg")
+        panel.allowedContentTypes = [format.type]
+        panel.nameFieldStringValue = fileName(format.rawValue)
         panel.directoryURL = dock.destination(place, project: number)
-        guard panel.runModal() == .OK, let url = panel.url else { return }
-        let type = pdf ? UTType.pdf : UTType.svg
-        let data = pdf ? SheetExporter.pdf(allPages ? pages.map(exported) : [exported(sheet)]) : SheetExporter.svg(exported(sheet))
-        send(Deliverable(name: url.lastPathComponent, mimeType: type.preferredMIMEType ?? "", data: data,
+        guard panel.runModal() == .OK, let url = panel.url, let data = payload(sheet) else { return }
+        send(Deliverable(name: url.lastPathComponent, mimeType: format.type.preferredMIMEType ?? "", data: data,
                          folder: url.deletingLastPathComponent()), .save)
+    }
+
+    private func payload(_ sheet: Sheet) -> Data? {
+        switch format {
+        case .pdf:
+            return SheetExporter.pdf(allPages ? pages.map(exported) : [exported(sheet)])
+        case .svg:
+            return SheetExporter.svg(exported(sheet))
+        case .html:
+            guard let ci, let template else { return nil }
+            do {
+                return Data(try SheetExporter.interactive(job: makeJob(ci, template)).utf8)
+            } catch {
+                failure = "\(error)"
+                return nil
+            }
+        }
     }
 
     func hand(_ handoff: Handoff) {

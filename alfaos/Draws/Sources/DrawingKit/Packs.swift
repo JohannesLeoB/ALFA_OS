@@ -82,6 +82,8 @@ public struct TemplatePack: Sendable {
     public var logo: Logo?
     public var column: Column?
     public var deck: Deck?
+    public var fade = 0.0
+    public var language = ""
 
     public struct Presentation: Sendable {
         public var columnGap: Double
