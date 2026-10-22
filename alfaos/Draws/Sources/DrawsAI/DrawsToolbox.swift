@@ -1,6 +1,7 @@
 import Assist
 import CoreGraphics
 import DrawingKit
+import DrawsRender
 import Foundation
 import Pages
 
@@ -21,13 +22,18 @@ public actor DrawsToolbox: Toolbox {
     public private(set) var draft: Draft
     private let bench: Bench
     private let apply: @MainActor @Sendable (Draft) -> Void
+    private let images: [String: Data]
     private var previewed = false
 
-    public init(draft: Draft, bench: Bench, apply: @escaping @MainActor @Sendable (Draft) -> Void) {
+    public static let photoSize = (width: 800, height: 500)
+
+    public init(draft: Draft, bench: Bench, images: [String: Data] = [:],
+                apply: @escaping @MainActor @Sendable (Draft) -> Void) {
         self.draft = draft
         self.bench = bench
+        self.images = images
         self.apply = apply
-        tools = DrawsTools.all(kinds: bench.kinds)
+        tools = DrawsTools.all(kinds: bench.kinds, images: images.keys.sorted())
     }
 
     public func call(_ name: String, _ input: JSON) async -> ToolResult {
@@ -42,7 +48,11 @@ public actor DrawsToolbox: Toolbox {
             case "set_camera": return try await change { [bench] in try $0.setCamera(input, bench) }
             case "set_style": return try await change { [bench] in try $0.setStyle(input, bench) }
             case "set_layout": return try await change { [bench] in try $0.setLayout(input, bench) }
-            case "render_preview": return try preview(input)
+            case "set_texture": return try await change { [images, codes = materialCodes()] in
+                try $0.setTexture(input, images: Set(images.keys), codes: codes)
+            }
+            case "set_light": return try await change { try $0.setLight(input) }
+            case "render_preview": return input["mode"]?.string == "photo" ? try await photo(input) : try preview(input)
             case "check": return .json(try diagnose())
             case "finish": return try finish(input)
             default: return .error("unknown tool \(name)")
@@ -93,6 +103,34 @@ public actor DrawsToolbox: Toolbox {
             "page": .num(Double(index + 1)), "pages": .num(Double(pages.count)), "scale": .num(sheet.scale),
             "defects": .strings(sheet.defects.filter { !$0.hasPrefix("board.") }), "overflow": false,
             "misfits": .strings(sheet.cells.filter { !$0.fits }.map(\.id)), "readouts": readouts()
+        ]
+        return ToolResult(content: [.png(png), .json(report)])
+    }
+
+    private func materialCodes() -> Set<String> {
+        Set(draft.parts.map(\.material)).union(bench.material?.materials.map(\.code) ?? []).union(bench.ci.tints.keys)
+    }
+
+    private func photo(_ input: JSON) async throws -> ToolResult {
+        guard !draft.parts.isEmpty else { throw Refusal("nothing is built yet") }
+        guard let kind = ViewKind(rawValue: input["view"]?.string ?? ViewKind.perspective.rawValue) else {
+            throw Refusal("view must be one of " + ViewKind.allCases.map(\.rawValue).joined(separator: ", "))
+        }
+        let size = draft.parts.reduce(0.0) { max($0, $1.w, $1.d, $1.h) }
+        let view = ViewSpec(kind: kind, azimuth: draft.azimuth, elevation: min(draft.elevation, 89), distance: bench.distance * size)
+        let posed = pose(draft.parts, draft.units, amounts: draft.pose.filter { entry in draft.units.contains { $0.id == entry.key } })
+        let codes = Array(Set(posed.map(\.material))).sorted()
+        let surfaces = draft.look.surfaces(images: images, tones: bench.ci.tints, codes: codes)
+        let scene = PhotoScene(parts: posed, surfaces: surfaces, light: draft.look.light, view: view)
+        let png: Data
+        do {
+            png = try Photo.png(try await Photo.render(scene, width: Self.photoSize.width, height: Self.photoSize.height))
+        } catch {
+            throw Refusal("render failed: \(error)")
+        }
+        let report: JSON = [
+            "view": .string(kind.rawValue), "light": .string(draft.look.light.preset.rawValue),
+            "untextured": .strings(codes.filter { surfaces[$0]?.color == nil }), "images": .strings(images.keys.sorted())
         ]
         return ToolResult(content: [.png(png), .json(report)])
     }
@@ -153,7 +191,13 @@ public actor DrawsToolbox: Toolbox {
             "camera": ["azimuth": .num(d.azimuth), "elevation": .num(d.elevation)], "style": style,
             "layout": .string(d.layout), "cells": .array(d.cells.map(Words.cell)), "kinds": .strings(bench.kinds), "sheet": sheet,
             "tints": .strings(bench.ci.tints.filter { !$0.value.isEmpty }.keys.sorted()),
-            "materials": .strings(bench.material?.materials.map(\.code) ?? [])
+            "materials": .strings(bench.material?.materials.map(\.code) ?? []),
+            "images": .strings(images.keys.sorted()), "light": .string(d.look.light.preset.rawValue),
+            "textures": .object(d.look.textures.mapValues { texture in
+                let fields: [String: JSON] = ["image": .string(texture.image), "normal": texture.normal.map(JSON.string) ?? .null,
+                                              "tile_mm": .num(texture.tile), "roughness": .num(texture.roughness)]
+                return JSON.object(fields)
+            })
         ]
     }
 }

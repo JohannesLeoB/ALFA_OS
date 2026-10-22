@@ -5,6 +5,7 @@ import DrawingKit
 import DrawsAI
 import DrawsDock
 import DrawsFonts
+import DrawsRender
 import Foundation
 import Observation
 import ShellCore
@@ -14,7 +15,7 @@ enum Kind: String, CaseIterable {
     case plan, iso, steps, perspective, customer, presentation, cover
 }
 
-enum Tab: String, CaseIterable { case view, style, export }
+enum Tab: String, CaseIterable { case view, style, render, export }
 
 enum Fill: String, CaseIterable { case tone, material }
 
@@ -158,6 +159,10 @@ final class DrawsModel {
     var choice = ""
     var presets: [PromptPreset] = []
     var extra: [Material] = []
+    var look = Look()
+    var photo: CGImage?
+    var rendering = false
+    var photoFailure: String?
     var underlayShow = false
     var underlayExport = false
     private(set) var underlayData: Data?
@@ -192,6 +197,31 @@ final class DrawsModel {
 
     var choices: [Attachment] {
         attachments.filter { [.sketch, .drawing, .template].contains($0.role) && $0.mediaType != Attachment.text }
+    }
+
+    var images: [String: Data] {
+        Dictionary(attachments.filter { $0.role == .material && Attachment.images.contains($0.mediaType) }.map { ($0.name, $0.data) },
+                   uniquingKeysWith: { first, _ in first })
+    }
+
+    var codes: [String] {
+        Array(Set(parts.map(\.material)).union(material?.pack.materials.map(\.code) ?? [])).sorted()
+    }
+
+    func materialName(_ code: String) -> String {
+        material?.pack.material(code)?.name ?? code
+    }
+
+    func linked(_ image: String) -> String? {
+        look.textures.sorted { $0.key < $1.key }.first { $0.value.image == image }?.key
+    }
+
+    func link(_ image: String, _ code: String?) {
+        for key in look.textures.filter({ $0.value.image == image }).keys { look.textures[key] = nil }
+        guard let code else { return }
+        var next = look.textures[code] ?? Texture(image: image)
+        next.image = image
+        look.textures[code] = next
     }
 
     var shown: [Part] {
@@ -540,6 +570,53 @@ final class DrawsModel {
         }
     }
 
+    func renderPhoto() {
+        guard !rendering, !shown.isEmpty else { return }
+        let running = live, ids = Set(running.map(\.id))
+        let posed = DrawingKit.pose(shown, running, amounts: pose.filter { ids.contains($0.key) })
+        let size = posed.reduce(0.0) { max($0, $1.w, $1.d, $1.h) }
+        let view = ViewSpec(kind: .perspective, azimuth: azimuth, elevation: min(elevation, Proto.photoElevation),
+                            distance: Proto.perspectiveDistance * size)
+        let surfaces = look.surfaces(images: images, tones: ci?.pack.tints ?? [:], codes: Array(Set(posed.map(\.material))))
+        let scene = PhotoScene(parts: posed, surfaces: surfaces, light: look.light, view: view)
+        rendering = true
+        photoFailure = nil
+        Task {
+            defer { rendering = false }
+            do {
+                photo = try await Photo.render(scene, width: Proto.photoWidth, height: Proto.photoHeight)
+            } catch {
+                photoFailure = word("draws.render.failed")
+            }
+        }
+    }
+
+    func photoName(_ ext: String) -> String {
+        if let name = ExportName.make(project: project, number: number, trade: trade, variants: variants.map(\.name),
+                                      now: Date(), ext: ext) {
+            return name
+        }
+        let base = objectName.components(separatedBy: CharacterSet(charactersIn: "/:")).joined()
+        return (base.isEmpty ? "" : "\(base)-") + "render.\(ext)"
+    }
+
+    func exportPhoto(_ pdf: Bool) {
+        guard let photo else { return }
+        let type: UTType = pdf ? .pdf : .png
+        let panel = NSSavePanel()
+        panel.allowedContentTypes = [type]
+        panel.nameFieldStringValue = photoName(pdf ? "pdf" : "png")
+        panel.directoryURL = dock.destination(place, project: number)
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        do {
+            let data = pdf ? try Photo.pdf(photo) : try Photo.png(photo)
+            send(Deliverable(name: url.lastPathComponent, mimeType: type.preferredMIMEType ?? "", data: data,
+                             folder: url.deletingLastPathComponent()), .save)
+        } catch {
+            failure = "\(error)"
+        }
+    }
+
     func hand(_ handoff: Handoff) {
         guard let sheet else { return }
         let data = SheetExporter.pdf(allPages ? pages.map(exported) : [exported(sheet)])
@@ -598,6 +675,11 @@ final class DrawsModel {
     func role(_ name: String, _ next: Attachment.Role) {
         guard let index = attachments.firstIndex(where: { $0.name == name }) else { return }
         attachments[index].role = next
+        if next == .material, linked(name) == nil, let data = images[name] {
+            let tones = ci?.pack.tints ?? [:]
+            if let code = Prepare.suggest(data, tones: tones, among: Set(parts.map(\.material)).sorted()) { link(name, code) }
+        }
+        if next != .material { link(name, nil) }
         if underlay == name, !choices.contains(where: { $0.name == name }) { underlay = nil }
     }
 
@@ -611,6 +693,7 @@ final class DrawsModel {
     }
 
     func detach(_ name: String) {
+        link(name, nil)
         attachments.removeAll { $0.name == name }
         if underlay == name { underlay = nil }
     }
@@ -658,9 +741,11 @@ final class DrawsModel {
     }
 
     func draft() -> Draft {
-        Draft(parts: parts, units: units, pose: pose, layout: layout.rawValue, cells: cells, azimuth: azimuth,
+        var next = Draft(parts: parts, units: units, pose: pose, layout: layout.rawValue, cells: cells, azimuth: azimuth,
               elevation: elevation, faces: faces, tone: fill == .tone, edge: edge, outline: outline,
               shadow: shadowOn ? shadow : 0, accent: accent, accentColor: accentColor, dimensions: dimensions)
+        next.look = look
+        return next
     }
 
     func bench() -> Bench? {
@@ -700,6 +785,7 @@ final class DrawsModel {
         accent = next.accent
         accentColor = next.accentColor
         dimensions = next.dimensions
+        look = next.look
         ready = was
         render()
     }
@@ -710,7 +796,7 @@ final class DrawsModel {
         let master = try? StyleMaster.load(packs.appendingPathComponent("style/studio.json"))
         let start = master.map { draft().seeded(by: $0, dials: bench.dials) } ?? draft()
         let keys = ["motion", "materials"] + (dimensions ? ["dims"] : []) + (layout == .steps ? ["steps"] : [])
-        let toolbox = DrawsToolbox(draft: start, bench: bench) { [weak self] next in self?.apply(next) }
+        let toolbox = DrawsToolbox(draft: start, bench: bench, images: images) { [weak self] next in self?.apply(next) }
         let session = Session(credentials: dock.claude.credentials, http: URLSession.shared)
         let text = brief, attached = attachments
         chat = session

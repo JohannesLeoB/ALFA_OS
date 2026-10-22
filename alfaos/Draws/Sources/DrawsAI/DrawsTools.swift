@@ -1,5 +1,6 @@
 import Assist
 import DrawingKit
+import DrawsRender
 import Foundation
 
 enum DrawsTools {
@@ -17,8 +18,13 @@ enum DrawsTools {
         ["type": "object", "properties": .object(fields), "required": .array(required.map { JSON.string($0) })]
     }
 
+    static let shape: JSON = object([
+        "kind": choice(["wedge", "taper"]), "slope": choice(["x", "y"]), "start": number, "end": number,
+        "bottomW": number, "bottomD": number, "topW": number, "topD": number
+    ], required: ["kind"])
+
     static let partFields: [String: JSON] = [
-        "id": text, "name": text, "material": text, "role": text, "group": text,
+        "id": text, "name": text, "material": text, "role": text, "group": text, "shape": shape,
         "given": list(choice(["x", "y", "z", "w", "d", "h"])),
         "x": number, "y": number, "z": number, "w": number, "d": number, "h": number
     ]
@@ -33,13 +39,13 @@ enum DrawsTools {
         "scale": number, "focus": text, "step": number, "dims": flag
     ], required: ["id", "view", "x", "y", "w", "h"])
 
-    static func all(kinds: [String]) -> [Tool] {
+    static func all(kinds: [String], images: [String] = []) -> [Tool] {
         [
             Tool(name: "get_state",
                  description: "Read the whole model: parts, units, pose, readouts, camera, style, layout, cells, sheet and catalogue. Call it first and whenever you are unsure what is on the canvas.",
                  schema: object([:])),
             Tool(name: "add_parts",
-                 description: "Add boxes in one batch, listed from the bottom up. Sizes in mm, x right, y into the depth, z up. The whole batch is refused when one part is invalid.",
+                 description: "Add parts in one batch, listed from the bottom up. Sizes in mm, x right, y into the depth, z up. A part is a box unless it has a shape. shape wedge: the top slopes along slope x or y, start and end are the heights at the low and the high side of that axis, the larger one equals h. shape taper: bottomW, bottomD, topW, topD are the footprints at the bottom and the top, centred on the box; the larger of bottom and top equals w and d. The whole batch is refused when one part is invalid.",
                  schema: object(["parts": list(object(partFields, required: ["id", "material", "x", "y", "z", "w", "d", "h"]))], required: ["parts"])),
             Tool(name: "update_part",
                  description: "Change fields of one existing part by id. Only the fields you pass change.",
@@ -65,8 +71,16 @@ enum DrawsTools {
                  description: "Choose the sheet layout. cells is optional; without it the standard cells of the layout are used.",
                  schema: object(["kind": choice(kinds), "cells": list(cell)], required: ["kind"])),
             Tool(name: "render_preview",
-                 description: "Render the current sheet as an image and list defects and overflow. Look at the image. Call it after your changes and before finish.",
-                 schema: object(["page": number])),
+                 description: "Render the current sheet as an image and list defects and overflow. Look at the image. Call it after your changes and before finish. With mode photo it renders the object as a small photoreal picture with the textures and the light, and returns the image; look at it and correct textures, tile sizes, roughness and light until it looks like the real object.",
+                 schema: object(["page": number, "mode": choice(["sheet", "photo"]),
+                                 "view": choice(ViewKind.allCases.map(\.rawValue))])),
+            Tool(name: "set_texture",
+                 description: "Link a material code to a dropped texture image for the photoreal render. Images with the role material are the textures. Look at each image, decide which material it shows and link it. tile_mm is the real size in mm of one repeat of the image, so a wood grain keeps its real size on every part. roughness runs from 0 (mirror) to 1 (matte). normal is an optional second image used as normal map. An empty image removes the link.",
+                 schema: object(["material": text, "image": images.isEmpty ? text : choice(images), "normal": text,
+                                 "tile_mm": number, "roughness": number], required: ["material", "image"])),
+            Tool(name: "set_light",
+                 description: "Set the light of the photoreal render: a preset (studio, soft, warm, hard) and optionally the azimuth and elevation of the key light in degrees. Without angles the key light follows the camera.",
+                 schema: object(["preset": choice(LightPreset.allCases.map(\.rawValue)), "azimuth": number, "elevation": number])),
             Tool(name: "check",
                  description: "Check order cycles, overlapping boxes, cells that overflow and materials without a tint. Fix every finding or record it as an assumption.",
                  schema: object([:])),

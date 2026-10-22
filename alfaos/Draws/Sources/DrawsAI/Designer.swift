@@ -3,7 +3,7 @@ import Foundation
 
 public struct Attachment: Sendable, Equatable {
     public enum Role: String, Sendable, CaseIterable, Codable {
-        case moodboard, template, sketch, drawing, reference
+        case moodboard, template, sketch, drawing, reference, material
     }
 
     public var name: String

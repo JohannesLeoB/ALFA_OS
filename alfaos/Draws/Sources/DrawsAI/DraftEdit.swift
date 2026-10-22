@@ -1,6 +1,7 @@
 import Assist
 import CoreGraphics
 import DrawingKit
+import DrawsRender
 import Foundation
 
 enum Words {
@@ -191,6 +192,42 @@ extension Draft {
         }
         if let on = input["dimensions"]?.bool { dimensions = on }
         return "style set"
+    }
+
+    mutating func setTexture(_ input: JSON, images: Set<String>, codes: Set<String>) throws -> String {
+        guard let code = input["material"]?.string, codes.contains(code) else {
+            throw Refusal("set_texture: material must be one of " + codes.sorted().joined(separator: ", "))
+        }
+        guard let name = input["image"]?.string else { throw Refusal("set_texture: image is required") }
+        if name.isEmpty {
+            look.textures[code] = nil
+            return "texture removed for \(code)"
+        }
+        guard images.contains(name) else { throw Refusal("set_texture: image must be one of " + images.sorted().joined(separator: ", ")) }
+        var texture = look.textures[code] ?? Texture(image: name)
+        texture.image = name
+        if let normal = input["normal"]?.string {
+            guard normal.isEmpty || images.contains(normal) else { throw Refusal("set_texture: normal must be an image name") }
+            texture.normal = normal.isEmpty ? nil : normal
+        }
+        texture.tile = try within(input["tile_mm"]?.number, 20...5000, "tile_mm") ?? texture.tile
+        texture.roughness = try within(input["roughness"]?.number, 0...1, "roughness") ?? texture.roughness
+        look.textures[code] = texture
+        return "texture set for \(code): \(name), tile \(texture.tile) mm, roughness \(texture.roughness)"
+    }
+
+    mutating func setLight(_ input: JSON) throws -> String {
+        var next = look.light
+        if let name = input["preset"]?.string {
+            guard let preset = LightPreset(rawValue: name) else {
+                throw Refusal("preset must be one of " + LightPreset.allCases.map(\.rawValue).joined(separator: ", "))
+            }
+            next = LightSpec(preset: preset)
+        }
+        next.azimuth = try within(input["azimuth"]?.number, 0...360, "azimuth") ?? next.azimuth
+        next.elevation = try within(input["elevation"]?.number, 5...85, "elevation") ?? next.elevation
+        look.light = next
+        return "light \(next.preset.rawValue)"
     }
 
     mutating func setLayout(_ input: JSON, _ bench: Bench) throws -> String {

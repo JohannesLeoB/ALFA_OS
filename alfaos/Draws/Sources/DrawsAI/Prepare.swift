@@ -32,6 +32,7 @@ public enum Prepare {
             case .moodboard: out.note = moodboard(item, a.data)
             case .template: out.note = layout(item)
             case .drawing: out.note = words(item)
+            case .material: out.note = moodboard(item, a.data)
             case .sketch, .reference: break
             }
         default: break
@@ -47,6 +48,24 @@ public enum Prepare {
     public static func underlay(_ a: Attachment, side: Int) -> Data? {
         if Attachment.images.contains(a.mediaType) { return a.data }
         return a.mediaType == Attachment.document ? raster(ofPDF: a.data, page: 0, side: side) : nil
+    }
+
+    public static func suggest(_ data: Data, tones: [String: String], among codes: [String]) -> String? {
+        guard let hex = palette(of: data, count: 1).first, let target = rgb(hex) else { return nil }
+        var best: (code: String, gap: Int)?
+        for code in codes.sorted() {
+            guard let tone = tones[code], let value = rgb(tone) else { continue }
+            let gap = (value.0 - target.0) * (value.0 - target.0) + (value.1 - target.1) * (value.1 - target.1)
+                + (value.2 - target.2) * (value.2 - target.2)
+            if gap < (best?.gap ?? Int.max) { best = (code, gap) }
+        }
+        return best?.code
+    }
+
+    static func rgb(_ hex: String) -> (Int, Int, Int)? {
+        let s = hex.hasPrefix("#") ? String(hex.dropFirst()) : hex
+        guard s.count == 6, let v = Int(s, radix: 16) else { return nil }
+        return ((v >> 16) & 255, (v >> 8) & 255, v & 255)
     }
 
     static func flat(_ text: String) -> String {

@@ -1,5 +1,6 @@
 import DrawingKit
 import DrawsDock
+import DrawsRender
 import ShellCore
 import SwiftUI
 
@@ -465,12 +466,20 @@ struct InspectorLane: View {
                     switch model.tab {
                     case .view: ViewTab(model: model)
                     case .style: StyleTab(model: model)
+                    case .render: RenderTab(model: model)
                     case .export: ExportTab(model: model)
                     }
                 }
                 .padding(CGFloat(Design.Spacing.step8))
             }
             .scrollIndicators(.hidden)
+            if model.tab == .render {
+                Compose(key: model.rendering ? "draws.render.busy" : "draws.render.run", symbol: "camera") {
+                    model.renderPhoto()
+                }
+                .opacity(model.shown.isEmpty || model.rendering ? Proto.disabled : 1)
+                .allowsHitTesting(!model.shown.isEmpty && !model.rendering)
+            }
             if model.tab == .export {
                 let n = model.missing.count + model.defects.count
                 Compose(key: model.format.save, symbol: "square.and.arrow.down",
@@ -651,6 +660,57 @@ struct StyleTab: View {
     }
 }
 
+struct RenderTab: View {
+    @Environment(\.style) private var style
+    @Bindable var model: DrawsModel
+
+    var body: some View {
+        SectionHead(key: "draws.render.title")
+        picture
+        if let failure = model.photoFailure { Note(text: failure, tone: \.signal) }
+        Labeled(key: "draws.render.light") {
+            Choice(value: word("draws.light.\(model.look.light.preset.rawValue)")) {
+                ForEach(LightPreset.allCases, id: \.self) { preset in
+                    Toggle(word("draws.light.\(preset.rawValue)"), isOn: Binding(
+                        get: { model.look.light.preset == preset }, set: { if $0 { model.look.light = LightSpec(preset: preset) } }))
+                }
+            }
+        }
+        let list = model.look.textures.sorted { $0.key < $1.key }
+        SectionHead(key: "draws.render.textures", meta: list.isEmpty ? "" : "\(list.count)")
+        ForEach(list, id: \.key) { code, texture in
+            ListRow(name: model.materialName(code), symbol: "photo", meta: texture.image,
+                    end: ("xmark", word("draws.brief.remove"), { model.look.textures[code] = nil }))
+            SliderRow(key: "draws.render.tile", dial: Proto.tile,
+                      value: Binding(get: { model.look.textures[code]?.tile ?? texture.tile },
+                                     set: { model.look.textures[code]?.tile = $0 }),
+                      text: String(format: word("draws.unit.mm"), "\(Int(texture.tile))"))
+            SliderRow(key: "draws.render.roughness", dial: Proto.roughness,
+                      value: Binding(get: { model.look.textures[code]?.roughness ?? texture.roughness },
+                                     set: { model.look.textures[code]?.roughness = $0 }),
+                      text: String(format: word("draws.unit.percent"), Int((texture.roughness * 100).rounded())))
+        }
+    }
+
+    private var picture: some View {
+        let shape = RoundedRectangle(cornerRadius: CGFloat(Design.Radius.row))
+        return Group {
+            if let image = model.photo {
+                Image(decorative: image, scale: 1).resizable().aspectRatio(contentMode: .fit)
+            } else {
+                Color.clear.aspectRatio(CGFloat(Proto.photoWidth) / CGFloat(Proto.photoHeight), contentMode: .fit)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .background(style.color(\.well))
+        .clipShape(shape)
+        .overlay(shape.strokeBorder(style.color(\.lineStrong), lineWidth: CGFloat(Design.Size.hairline)))
+        .opacity(model.rendering ? Proto.busy : 1)
+        .padding(.horizontal, CGFloat(Design.Spacing.step8))
+        .padding(.bottom, CGFloat(Design.Spacing.step8))
+    }
+}
+
 struct ExportTab: View {
     @Bindable var model: DrawsModel
 
@@ -679,6 +739,15 @@ struct ExportTab: View {
         .padding(.vertical, CGFloat(Design.Spacing.step4))
         .opacity(model.sheet == nil ? Proto.disabled : 1)
         .allowsHitTesting(model.sheet != nil)
+        SectionHead(key: "draws.export.render")
+        HStack(spacing: CGFloat(Design.Spacing.step8)) {
+            Pill(key: "draws.export.png") { model.exportPhoto(false) }
+            Pill(key: "draws.export.pdf") { model.exportPhoto(true) }
+        }
+        .padding(.horizontal, CGFloat(Design.Spacing.step8))
+        .padding(.vertical, CGFloat(Design.Spacing.step4))
+        .opacity(model.photo == nil ? Proto.disabled : 1)
+        .allowsHitTesting(model.photo != nil)
         SectionHead(key: "draws.export.check", meta: n == 0 ? "" : (n == 1 ? word("draws.export.oneDefect") : String(format: word("draws.export.defects"), n)),
                     metaTone: \.signal)
         if let failure = model.failure {

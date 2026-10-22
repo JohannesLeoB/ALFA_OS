@@ -44,6 +44,11 @@ enum Proto {
     static let shadow = Dial(low: 0, high: 60, step: 2)
     static let pose = Dial(low: 0, high: 1, step: 0.02)
     static let glideSteps = 8
+    static let photoWidth = 1600
+    static let photoHeight = 1000
+    static let photoElevation = 89.0
+    static let tile = Dial(low: 50, high: 2000, step: 50)
+    static let roughness = Dial(low: 0, high: 1, step: 0.05)
     static let previewDPI = 80.0
     static let liveRounds = 40
     static let liveTokens = 150_000

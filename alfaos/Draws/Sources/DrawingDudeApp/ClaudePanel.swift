@@ -1,4 +1,5 @@
 import DrawsAI
+import DrawsRender
 import ShellCore
 import SwiftUI
 
@@ -34,6 +35,15 @@ struct ClaudePanel: View {
                         ForEach(Attachment.Role.allCases, id: \.self) { role in
                             Toggle(word("draws.role.\(role.rawValue)"), isOn: Binding(
                                 get: { item.role == role }, set: { if $0 { model.role(item.name, role) } }))
+                        }
+                    }
+                    if item.role == .material {
+                        Choice(value: model.linked(item.name).map(model.materialName) ?? word("draws.style.none")) {
+                            Button(word("draws.style.none")) { model.link(item.name, nil) }
+                            Divider()
+                            ForEach(model.codes, id: \.self) { code in
+                                Button(model.materialName(code)) { model.link(item.name, code) }
+                            }
                         }
                     }
                 }

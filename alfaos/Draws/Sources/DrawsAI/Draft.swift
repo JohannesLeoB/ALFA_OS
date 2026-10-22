@@ -1,6 +1,7 @@
 import Assist
 import CoreGraphics
 import DrawingKit
+import DrawsRender
 import Foundation
 
 public struct Dials: Sendable, Equatable {
@@ -55,6 +56,7 @@ public struct Draft: Sendable, Equatable {
     public var accent: String?
     public var accentColor: String?
     public var dimensions: Bool
+    public var look = Look()
 
     public init(parts: [Part], units: [DrawingKit.Unit], pose: [String: Double], layout: String, cells: [Cell],
                 azimuth: Double, elevation: Double, faces: [String], tone: Bool, edge: Double, outline: Double,
