@@ -30,6 +30,11 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 - Erst-Setup; Sperre der App; Wächter-Frage. (Kontakte: J 22.10., Hub-Quellen inklusive eigener lokaler Datenbank, siehe HUB-F41; kein UserDefaults.)
 - Draws: Testgrenze bleibt, Patch geparkt; Draws-Master kommt zuerst zu ihm.
 
+## Mutationslauf 22.10. (Prüfungen schrumpfen statt Grenze anheben, Johannes 14.10./17.10.)
+- 150 automatische Mutanten über das Kit (`dist/lead2/runner.py`, Worktree `dist/lead2/wt`, Ergebnis `dist/lead2/mutants.json`, `dist/lead2/nocatch.json`): 67 gefangen, 83 überlebt (55 %). Von 280 Prüfschritten (`run*`/`step*`, 3962 Zeilen) fingen nur 50 (880 Zeilen) mindestens einen Mutanten; 230 (3082 Zeilen) keinen. Das sind Kandidaten, kein Beweis (Stichprobe, manche Mutanten gleichwertig).
+- Nächster Schritt: gezielte Mutanten je Kandidat-Schritt; gestrichen wird nur, was kein Mutant rot macht oder was eine andere Prüfung schon fängt; je gestrichener Prüfung den Mutanten nennen. Danach `git worktree remove dist/lead2/wt` und `dist/lead2` löschen.
+- Regel dazu (Johannes): keine neuen Prüfzeilen für Stücke ohne Fehlerweg; Grenze `testLines` bleibt 5895 (steht bei 5869); Stück 5 (Kontakte als lokale Hub-Quelle) wartet darauf.
+
 ## Nächste Schritte
 1. Design-Prompt (Mail, Hub, Hülle) nach seiner Freigabe an Design.
 2. (erledigt 22.10.) Erklärsätze gestrichen; Grenzfälle siehe spec-hub HUB-R02; App noch nicht neu gebaut.
