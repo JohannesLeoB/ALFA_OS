@@ -27,6 +27,11 @@ Prototyp auf `alfa-draws` (Clone `~/Developer/ALFA_DRAWS`, Konto bergerjohannesl
 
 Packs: `ci/studio`, `template/studio-a3-plan`, `template/studio-a4-deck` (gemessen), `skills/alfanomy`, `style/studio.json`, `presets/default.json`.
 
+## Specs
+- `specs/family.md`: ALFA Creative Family (Editoren, Rückgrat, verbindende Typen, Editor-Vertrag, Reihenfolge, offene Fragen).
+- `specs/aufmass.md`: Aufmaß aus Johannes' Bildern und der Altcode-Inventur.
+- 22.10.: „wir bleiben aber baulich erstmal bei draws“.
+
 ## Offen
 - Fragen an die Lead (22.10.): Claude-Schlüssel über Hub, Assist als Assistent aller Bereiche, Packs als Bundle oder Einstellungen „Vorlagen“, Ort des Tests, ungenutzte Fähigkeiten behalten, ZIPFoundation in Kit.
 - Aufräumen in Draws: Farb-Helfer vereinen, toten Code löschen, Test in Abschnitte je Modul.
