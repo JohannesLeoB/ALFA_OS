@@ -2026,8 +2026,27 @@ final class CoreTests {
         _ = await core.send("one", draft())
         one.sendError = nil
         await core.retryOutbox()
-        one.checkError = MailTransportError.folderNotFound("sent"); one.sendError = MailTransportError.timeout; _ = await core.send("one", draft())
-        one.sendError = nil; await core.retryOutbox(); recordEqual(one.sent.count, 2)
+        one.checkError = MailTransportError.folderNotFound("sent")
+        one.sendError = MailTransportError.timeout
+        _ = await core.send("one", draft())
+        one.sendError = nil
+        await core.retryOutbox()
+        recordEqual(one.sent.count, 1)
+        let stuck = try XCTUnwrap(core.outbox.first)
+        guard case .failed = stuck.state else { return XCTFail("state") }
+        _ = await core.resend(stuck.id, draft(), draftID: nil)
+        recordEqual(one.sent.count, 2)
+        recordTrue(core.outbox.isEmpty)
+        one.sendError = MailTransportError.timeout
+        _ = await core.send("one", draft())
+        one.sendError = nil
+        await core.retryOutbox()
+        let found = try XCTUnwrap(core.outbox.first)
+        one.checkError = nil
+        one.foundIDs = [found.messageID]
+        _ = await core.resend(found.id, draft(), draftID: nil)
+        recordEqual(one.sent.count, 2)
+        recordTrue(core.outbox.isEmpty)
     }
     func runOutboxSurvivesAReopenedDatabase() async throws {
         let database = try DatabaseQueue()

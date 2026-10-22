@@ -35,7 +35,7 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 3. Aufräumen: Fundus (`myk`-Reste, deutsche Namen); SheetValues-Quellen; Datenspeicher (wartet auf Johannes).
 
 ## Bekannte Fehler
-- Mail: doppeltes Senden möglich, wenn die Sendeprüfung scheitert (`Mail/Core/MailCore.swift:387-395`); wartende Mail geht bei Konto-Entfernen verloren, die Karte zeigt „gesendet“ (ungeprüft); `loadMore` ohne Aufrufer; `actionFailures`/`saveFailure` von der App nie gelesen; Befehle `leadFromMail`, `attachmentToProjectFolder` ohne Leser; Kontakte schreiben bei jeder Änderung nach UserDefaults.
+- Mail: Doppelsenden bei gescheiterter Sendeprüfung ist seit 22.10. geschlossen (MAIL-R03), offen: `MailModel+Draft.swift:205-210` Rückfall auf send; wartende Mail geht bei Konto-Entfernen verloren, die Karte zeigt „gesendet“ (ungeprüft); `loadMore` ohne Aufrufer; `actionFailures`/`saveFailure` von der App nie gelesen; Befehle `leadFromMail`, `attachmentToProjectFolder` ohne Leser; Kontakte schreiben bei jeder Änderung nach UserDefaults.
 - Hub: Trennen ist seit 22.10. ganz oder gar nicht (Schlüsselbund-Fehler rollt zurück), offen: Datenbankfehler nach dem Löschen der Schlüssel; Schlüssel-Erneuerung ohne Rückfall; `ServiceSetting` ohne Deklarierer; ClickUp ohne Fähigkeit; Claude-Schlüssel im Hub und Fundus unter verschiedenen Namen; Drive 403 gilt als Anmeldefehler; Hub-Fehlerpfade ohne Test.
 - Fundus: 118 Zeilen mit `myk` in 47 Dateien, deutsche Namen, toter Mail-Zweig.
 - Commits `eb89ff4`, `b1c753e` ohne Leerzeile nach dem Betreff (Force-Push verboten).

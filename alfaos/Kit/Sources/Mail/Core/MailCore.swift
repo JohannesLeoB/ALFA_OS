@@ -324,7 +324,7 @@ public final class MailCore: MailEngine {
         let old = items[index]
         items[index] = OutboxItem(id: id, inlet: old.inlet, draft: draft, messageID: old.messageID,
                                   draftID: draftID ?? old.draftID, state: .waiting, attempts: old.attempts)
-        await retry(id)
+        await retry(id, byUser: true)
         return items.contains { $0.id == id } ? .queued(id) : .sent
     }
 
@@ -377,7 +377,7 @@ public final class MailCore: MailEngine {
         case rejected(Hint)
     }
 
-    private func deliver(_ item: inout OutboxItem, verify: Bool = false) async -> Delivery {
+    private func deliver(_ item: inout OutboxItem, verify: Bool = false, byUser: Bool = false) async -> Delivery {
         let transport: any MailTransport
         do {
             transport = try self.transport(item.inlet)
@@ -390,6 +390,7 @@ public final class MailCore: MailEngine {
             } catch {
                 let failure = MailFailure.classify(error, inlet: item.inlet, hub: hub)
                 if failure.isTransient { return .transient(failure.hint) }
+                if !byUser { return .rejected(failure.hint) }
             }
         }
         var outgoing = item.draft
@@ -411,12 +412,12 @@ public final class MailCore: MailEngine {
         }
     }
 
-    private func retry(_ id: OutboxItem.ID) async {
+    private func retry(_ id: OutboxItem.ID, byUser: Bool = false) async {
         guard let index = items.firstIndex(where: { $0.id == id }), items[index].state == .waiting else { return }
         items[index].startSending()
         var item = items[index]
         emit(.outboxChanged)
-        let result = await deliver(&item, verify: true)
+        let result = await deliver(&item, verify: true, byUser: byUser)
         guard let current = items.firstIndex(where: { $0.id == id }) else { return }
         items[current].draftID = item.draftID
         switch result {
