@@ -20,8 +20,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../Kit"),
-        .package(path: "../../fundus/alpha"),
-        .package(url: "https://github.com/weichsel/ZIPFoundation.git", exact: "0.9.20")
+        .package(path: "../../fundus/alpha")
     ],
     targets: [
         .target(name: "Assist", dependencies: [.product(name: "AlfaServices", package: "alpha")], swiftSettings: strict),
@@ -29,7 +28,7 @@ let package = Package(
         .target(name: "DrawingKit", dependencies: ["Pages"], swiftSettings: strict),
         .target(name: "DrawsAI", dependencies: ["Assist", "Pages", "DrawingKit", "Intake", .product(name: "AlfaServices", package: "alpha")], resources: [.copy("Resources/designer.md")], swiftSettings: strict),
         .target(name: "DrawsDock", dependencies: ["DrawingKit", .product(name: "AlfaServices", package: "alpha")], swiftSettings: strict),
-        .target(name: "Intake", dependencies: [.product(name: "ZIPFoundation", package: "ZIPFoundation")], swiftSettings: strict),
+        .target(name: "Intake", swiftSettings: strict),
         .target(name: "Templates", dependencies: ["Pages", "Intake"], swiftSettings: strict),
         .target(name: "DrawsFonts", dependencies: ["DrawingKit", .product(name: "ShellCore", package: "Kit")],
                 resources: [.copy("Resources/Geist-VariableFont_wght.ttf")], swiftSettings: strict),

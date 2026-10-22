@@ -1,6 +1,5 @@
 import Foundation
 import UniformTypeIdentifiers
-import ZIPFoundation
 
 enum Sniff {
     static let brands: Set<String> = ["heic", "heix", "hevc", "hevx", "heim", "heis", "mif1", "msf1"]
@@ -29,9 +28,9 @@ enum Sniff {
     }
 
     static func package(_ data: Data) -> Kind {
-        guard let archive = try? Archive(data: data, accessMode: .read, pathEncoding: nil) else { return .unknown }
-        if archive["xl/workbook.xml"] != nil { return .xlsx }
-        if archive["designmap.xml"] != nil { return .idml }
+        guard let zip = Zip.open(data) else { return .unknown }
+        if zip.names.contains("xl/workbook.xml") { return .xlsx }
+        if zip.names.contains("designmap.xml") { return .idml }
         return .unknown
     }
 

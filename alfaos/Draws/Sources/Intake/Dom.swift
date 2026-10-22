@@ -1,5 +1,4 @@
 import Foundation
-import ZIPFoundation
 
 final class Node {
     let name: String
@@ -49,15 +48,51 @@ final class Dom: NSObject, XMLParserDelegate {
     }
 }
 
-enum Zip {
-    static let cap: UInt64 = 64 << 20
+final class Zip {
+    static let cap = 64 << 20
+    private static let tool = URL(fileURLWithPath: "/usr/bin/unzip")
 
-    static func open(_ data: Data) -> Archive? { try? Archive(data: data, accessMode: .read, pathEncoding: nil) }
+    private let url: URL
+    let names: Set<String>
 
-    static func file(_ archive: Archive, _ path: String) -> Data? {
-        guard let entry = archive[path], entry.uncompressedSize <= cap else { return nil }
-        var out = Data()
-        guard (try? archive.extract(entry, consumer: { out.append($0) })) != nil else { return nil }
-        return out
+    private init(url: URL, names: Set<String>) {
+        self.url = url; self.names = names
+    }
+
+    deinit { try? FileManager.default.removeItem(at: url) }
+
+    static func open(_ data: Data) -> Zip? {
+        let url = FileManager.default.temporaryDirectory.appending(path: "zip-\(UUID().uuidString)")
+        guard (try? data.write(to: url)) != nil else { return nil }
+        guard let listing = run(["-Z1", url.path], limit: cap), let text = String(data: listing, encoding: .utf8) else {
+            try? FileManager.default.removeItem(at: url)
+            return nil
+        }
+        return Zip(url: url, names: Set(text.split(whereSeparator: \.isNewline).map(String.init)))
+    }
+
+    static func file(_ zip: Zip, _ path: String) -> Data? {
+        guard zip.names.contains(path) else { return nil }
+        let pattern = path.reduce(into: "") { $0 += "\\[]*?".contains($1) ? "\\\($1)" : String($1) }
+        return run(["-p", zip.url.path, pattern], limit: cap)
+    }
+
+    private static func run(_ arguments: [String], limit: Int) -> Data? {
+        let process = Process(), pipe = Pipe()
+        process.executableURL = tool
+        process.arguments = arguments
+        process.standardOutput = pipe
+        process.standardError = FileHandle.nullDevice
+        process.standardInput = FileHandle.nullDevice
+        guard (try? process.run()) != nil else { return nil }
+        var out = Data(), over = false
+        while true {
+            let chunk = pipe.fileHandleForReading.availableData
+            if chunk.isEmpty { break }
+            if out.count + chunk.count > limit { over = true; process.terminate(); break }
+            out.append(chunk)
+        }
+        process.waitUntilExit()
+        return !over && process.terminationStatus == 0 ? out : nil
     }
 }
