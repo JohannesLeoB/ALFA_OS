@@ -39,8 +39,9 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 - Hub: Trennen bricht halb ab, wenn das Schlüsselbund-Löschen wirft (`Hub/HubCore.swift:493-519`); Schlüssel-Erneuerung ohne Rückfall; `ServiceSetting` ohne Deklarierer; ClickUp ohne Fähigkeit; Claude-Schlüssel im Hub und Fundus unter verschiedenen Namen; Drive 403 gilt als Anmeldefehler; Hub-Fehlerpfade ohne Test.
 - Fundus: 118 Zeilen mit `myk` in 47 Dateien, deutsche Namen, toter Mail-Zweig.
 - Commits `eb89ff4`, `b1c753e` ohne Leerzeile nach dem Betreff (Force-Push verboten).
+- Offen (klein): `pointerFocus` in `HandleView.swift` auch in `onKeyPress` zurücksetzen, damit der Ring nach Ziehen und Pfeiltasten erscheint; Abmelden-Pille zeigt dieselbe Frage wie das Zeilenlabel (Master zeichnet keine eigene Frage, Lücke bei Design, N2).
 - Commit `a5d8e43` trägt einen Spec-Betreff, enthält aber auch die drei App-Dateien (Abmelden mit Halten, Hover-Leiste, Fokusring); vor jedem Commit `git diff --cached --stat` prüfen.
-- Abweichungen vom Master, bewusst: Kachelhöhe 112, Suche über alle Ordner, HTML-Mail zeigt echten Inhalt, Toast „Entwurf gesichert“ nur bei Erfolg.
+- Abweichungen vom Master, bewusst: Kachelhöhe 112, Suche über alle Ordner, HTML-Mail zeigt echten Inhalt. Toast „Entwurf gesichert“ steht wie im Master nur bei Inhalt; das Scheitern des Sicherns ist nicht gezeichnet (Lücke MAIL-L13).
 
 ## Ablage
 - Draws: Clone `~/Developer/ALFA_DRAWS`, Zweig `alfa-draws`, Konto `bergerjohannesleo-dot`; arbeitet nur dort.
