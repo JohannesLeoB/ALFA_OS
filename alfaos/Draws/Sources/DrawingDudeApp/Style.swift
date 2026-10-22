@@ -55,12 +55,29 @@ extension EnvironmentValues {
     }
 }
 
+enum Catalog {
+    static let words: [String: String] = {
+        guard let url = Bundle.module.url(forResource: "Localizable", withExtension: "xcstrings"),
+              let data = try? Data(contentsOf: url),
+              let root = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let strings = root["strings"] as? [String: Any] else { return [:] }
+        let language = root["sourceLanguage"] as? String ?? ""
+        var out: [String: String] = [:]
+        for (key, entry) in strings {
+            let units = (entry as? [String: Any])?["localizations"] as? [String: Any]
+            let unit = (units?[language] as? [String: Any])?["stringUnit"] as? [String: Any]
+            if let value = unit?["value"] as? String { out[key] = value }
+        }
+        return out
+    }()
+}
+
 func say(_ key: String) -> Text {
-    Text(LocalizedStringKey(key), bundle: .module)
+    Text(verbatim: word(key))
 }
 
 func word(_ key: String) -> String {
-    String(localized: String.LocalizationValue(key), bundle: .module)
+    Catalog.words[key] ?? String(localized: String.LocalizationValue(key), bundle: .module)
 }
 
 struct Shadowed<S: InsettableShape>: ViewModifier {
