@@ -17,21 +17,21 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 ## Gebaut (Details in den Specs)
 - Hülle, Einstellungen, Mail (Liste, Lesen, Verfassen, Postausgang, Kontakte, HTML), Hub (Anbieter-Prüfung, Abgleich beim Start, Einstellungen je Dienst, Drive-Port aus), Pipeline (Generator, `receive_master.py`, `build_app.sh`).
 - Nicht gebaut: Projekte, Heute, Kataloge, Warenkorb, Datan.
-- Test: eine große Testdatei plus `HullProbeTests.swift` (zu überführen); `testLines` 5885/5895.
+- Test: eine große Testdatei plus `HullProbeTests.swift` (zu überführen); `testLines` 5892/5895 (drei Zeilen Luft).
 
 ## Ungeprüft
 - K1, H2, D1, HTML-Mail, H1, IDLE, kein doppeltes Senden, F32: nicht in der laufenden App oder gegen echte Server gesehen. Nichts ist grün; Abnahme nur durch Johannes. Letzte App: `dist/ALFA OS 943.app` (ohne F32).
 
 ## Offen bei Johannes
 - Rote Mail-Funktionen und Formatleiste: Design zeigt Vorschläge, er entscheidet je Fall.
-- Erklärsätze in der App streichen (Liste siehe spec-hub HUB-R02, spec-huelle HUELLE-R10).
+- Grenzfälle der gestrichenen Erklärsätze (HUB-R02): zurückholen oder weglassen; blob.help und lane.handle.help (HUELLE-R10).
 - Mail-Hülle: Untergrenze der Bahn Links (HUELLE-L06).
 - Ort der Kontakte; Erst-Setup; Sperre der App; Wächter-Frage.
 - Draws: Testgrenze bleibt, Patch geparkt; Draws-Master kommt zuerst zu ihm.
 
 ## Nächste Schritte
 1. Design-Prompt (Mail, Hub, Hülle) nach seiner Freigabe an Design.
-2. Erklärsätze streichen.
+2. (erledigt 22.10.) Erklärsätze gestrichen; Grenzfälle siehe spec-hub HUB-R02; App noch nicht neu gebaut.
 3. Aufräumen: `HullProbeTests` überführen; Fundus (`myk`-Reste, deutsche Namen); SheetValues-Quellen; Datenspeicher (wartet auf Johannes).
 
 ## Bekannte Fehler

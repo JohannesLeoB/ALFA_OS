@@ -12,7 +12,7 @@ struct Notice<Glyph: View, Actions: View>: View {
     @Environment(\.design) private var design
     let kind: NoticeKind
     let title: Text
-    let text: Text
+    let text: Text?
     var onSheet = false
     @ViewBuilder let glyph: Glyph
     @ViewBuilder let actions: Actions
@@ -39,10 +39,12 @@ struct Notice<Glyph: View, Actions: View>: View {
                           : .face(Design.TextSize.body, weight: Design.Weight.medium))
                     .foregroundStyle(design.color(onSheet ? \.sheetInk : \.ink))
                     .lineHeight(Design.LineHeight.notice, size: Design.TextSize.body, sheet: onSheet)
-                text
-                    .font(onSheet ? Font(Typeface.sheet(size: Design.TextSize.body)) : .face(Design.TextSize.body))
-                    .foregroundStyle(design.color(onSheet ? \.sheetInkTertiary : \.inkTertiary))
-                    .lineHeight(Design.LineHeight.notice, size: Design.TextSize.body, sheet: onSheet)
+                if let text {
+                    text
+                        .font(onSheet ? Font(Typeface.sheet(size: Design.TextSize.body)) : .face(Design.TextSize.body))
+                        .foregroundStyle(design.color(onSheet ? \.sheetInkTertiary : \.inkTertiary))
+                        .lineHeight(Design.LineHeight.notice, size: Design.TextSize.body, sheet: onSheet)
+                }
                 HStack(spacing: CGFloat(Design.Spacing.step8)) { actions }
                     .padding(.top, CGFloat(Design.Spacing.step8))
             }

@@ -101,7 +101,7 @@ private struct IdentityCard: View {
                 ToggleSwitch(isOn: $birthdays, labelKey: "settings.identity.birthdays")
             }
             SettingsBlockHead(key: "settings.identity.account")
-            SettingsRow(label: word("settings.identity.signOut"), sub: word("settings.identity.signOut.sub"), line: false) {
+            SettingsRow(label: word("settings.identity.signOut"), line: false) {
                 TextButton(label: word("settings.identity.signOut.action"), kind: .signal) { signOut() }
             }
         }
@@ -138,13 +138,13 @@ private struct AppearanceCard: View {
                         selection: Binding(get: { AppearanceChoice(rawValue: appearance) ?? .system }, set: { appearance = $0.rawValue }))
                 }
             }
-            SettingsRow(label: word("settings.appearance.foreign"), sub: word("settings.appearance.foreign.sub")) {
+            SettingsRow(label: word("settings.appearance.foreign")) {
                 SettingsValue(text: word("settings.appearance.foreign.value"))
             }
             SettingsChoiceRow(
                 labelKey: "settings.start.label", current: StartView(rawValue: start) ?? .mail, choices: StartView.allCases,
                 key: { $0.key }, pick: { start = $0.rawValue })
-            SettingsRow(label: word("settings.lock.label"), sub: word("settings.lock.sub")) {
+            SettingsRow(label: word("settings.lock.label")) {
                 ToggleSwitch(isOn: $lockOn, labelKey: "settings.lock.label")
             }
             SettingsChoiceRow(
@@ -262,7 +262,6 @@ private struct ContactsList: View {
     var body: some View {
         let suggested = model.senderSuggestions
         VStack(spacing: 0) {
-            if model.contacts.isEmpty { SettingsBlockNote(text: word("settings.contacts.empty")) }
             ForEach(model.contacts) { contact in
                 if model.contactEdit == contact.id {
                     SettingsRow(label: word("settings.contacts.name")) {
@@ -307,13 +306,13 @@ private struct PrivacyCard: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            SettingsRow(label: word("settings.privacy.images"), sub: word(images ? "settings.privacy.images.on" : "settings.privacy.images.off")) {
+            SettingsRow(label: word("settings.privacy.images")) {
                 ToggleSwitch(isOn: $images, labelKey: "settings.privacy.images")
             }
-            SettingsRow(label: word("settings.privacy.assistantOff"), sub: word("settings.privacy.assistantOff.sub")) {
+            SettingsRow(label: word("settings.privacy.assistantOff")) {
                 ToggleSwitch(isOn: $assistantOff, labelKey: "settings.privacy.assistantOff")
             }
-            SettingsRow(label: word("settings.privacy.chatFiles"), sub: word("settings.privacy.chatFiles.sub")) {
+            SettingsRow(label: word("settings.privacy.chatFiles")) {
                 ToggleSwitch(isOn: $chatFiles, labelKey: "settings.privacy.chatFiles")
             }
             SettingsRow(label: word("settings.privacy.export"), line: false) {

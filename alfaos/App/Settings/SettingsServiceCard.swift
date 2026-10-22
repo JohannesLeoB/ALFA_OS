@@ -35,7 +35,7 @@ struct SettingsBlockNote: View {
 struct SettingsBlockNotice<Actions: View>: View {
     let kind: NoticeKind
     let title: Text
-    let text: Text
+    var text: Text?
     @ViewBuilder let actions: Actions
 
     var body: some View {
@@ -91,7 +91,6 @@ struct ServiceCardBody: View {
                     }
                 }
             }
-            if info.hasNote { SettingsBlockNote(text: word(info.noteKey)) }
             if reading.state != .notConnected {
                 areas(reading)
                 ForEach(info.extras, id: \.id) { extra in
@@ -187,7 +186,7 @@ struct ServiceCardBody: View {
             if let offer = host.form, info.providers.contains(offer.provider) {
                 SettingsAddForm(host: host, offer: offer)
             } else if reading.inlets.isEmpty {
-                SettingsBlockNotice(kind: .info, title: word("settings.accounts.none.title"), text: word("settings.accounts.none.text")) {
+                SettingsBlockNotice(kind: .info, title: word("settings.accounts.none.title")) {
                     addAccount(reading, kind: .accent)
                 }
             } else {

@@ -3267,16 +3267,6 @@
         }
       }
     },
-    "settings.accounts.none.text" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jeder Anbieter über IMAP und SMTP."
-          }
-        }
-      }
-    },
     "settings.accounts.none.title" : {
       "localizations" : {
         "de" : {
@@ -3344,16 +3334,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fremde Inhalte"
-          }
-        }
-      }
-    },
-    "settings.appearance.foreign.sub" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mails und Dokumente bleiben auf Weiß, auch im Dunkeln."
           }
         }
       }
@@ -3566,16 +3546,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bearbeiten"
-          }
-        }
-      }
-    },
-    "settings.contacts.empty" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Noch keine Kontakte. Absender erscheinen darunter als Vorschlag und lassen sich mit einem Klick sichern."
           }
         }
       }
@@ -3903,16 +3873,6 @@
         }
       }
     },
-    "settings.identity.signOut.sub" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Trennt Google, Clockodo, ClickUp, sevDesk, Airtable und Claude und startet die App neu."
-          }
-        }
-      }
-    },
     "settings.imprint.row.author" : {
       "localizations" : {
         "de" : {
@@ -4125,16 +4085,6 @@
         }
       }
     },
-    "settings.lock.sub" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mit Touch ID oder Passwort."
-          }
-        }
-      }
-    },
     "settings.note.checked" : {
       "localizations" : {
         "de" : {
@@ -4215,32 +4165,12 @@
         }
       }
     },
-    "settings.privacy.assistantOff.sub" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stoppt jeden Aufruf an den Assistenten."
-          }
-        }
-      }
-    },
     "settings.privacy.chatFiles" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dateien im Chat"
-          }
-        }
-      }
-    },
-    "settings.privacy.chatFiles.sub" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Der Assistent darf angehängte Dateien lesen."
           }
         }
       }
@@ -4271,26 +4201,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bilder in Mails laden"
-          }
-        }
-      }
-    },
-    "settings.privacy.images.off" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bilder werden nicht geladen. Der Absender erfährt nicht, wann du die Mail geöffnet hast."
-          }
-        }
-      }
-    },
-    "settings.privacy.images.on" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bilder werden geladen. Zählpixel melden dem Absender damit, wann du die Mail geöffnet hast."
           }
         }
       }
@@ -4834,16 +4744,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Google"
-          }
-        }
-      }
-    },
-    "settings.service.google.note" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Liest und schreibt Mail, Dateien, Kalender und Kontakte. Die Anmeldung über Google ist zugleich der Eingang in die App."
           }
         }
       }

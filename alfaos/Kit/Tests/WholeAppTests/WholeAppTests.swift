@@ -213,6 +213,13 @@ final class SettingsTests {
         keys += AppearanceChoice.allCases.map(\.key)
         keys += SettingsLabel.allCases.map(\.key)
         recordEqual(Set(keys).subtracting(try Fixture.catalogKeys()).sorted(), [])
+        let explaining: Set<String> = [
+            "settings.service.google.note", "settings.appearance.foreign.sub", "settings.lock.sub",
+            "settings.identity.signOut.sub", "settings.contacts.empty", "settings.accounts.none.text",
+            "settings.privacy.assistantOff.sub", "settings.privacy.chatFiles.sub",
+            "settings.privacy.images.on", "settings.privacy.images.off"
+        ]
+        recordEqual(explaining.intersection(try Fixture.catalogKeys()).sorted(), [])
         recordEqual(Set(SettingsSection.allCases.map(\.group)), Set(SettingsGroup.allCases))
         for value in [TokenStamp.delivery, TokenStamp.deliveredAt, TokenStamp.adoptedAt, TokenStamp.state] {
             recordFalse(value.isEmpty)
@@ -3384,7 +3391,7 @@ final class HubSweepTests {
             ("t", .toggle, .toggle(true)), ("c", .choice(["a", "b"]), .choice("b")), ("x", .text, .text("hi")),
             ("n", .number, .number(2.5)), ("m", .mapping, .mapping(["k": "v"]))]
         let info = ServiceInfo(id: base.id, group: base.group, access: base.access, companyOwned: base.companyOwned, personOnly: base.personOnly, fields: [], areas: [],
-                               extras: [], hasNote: false, listsAccounts: false, providers: ["fake"], logo: nil,
+                               extras: [], listsAccounts: false, providers: ["fake"], logo: nil,
                                settings: declared.map { ServiceSetting(id: $0.0, kind: $0.1, owner: .device) })
         let database = try DatabaseQueue()
         let keychain = FakeKeychain()
@@ -3942,7 +3949,7 @@ final class GapTests {
         recordNil(old.hub.setup.inlets[0].state.probed)
         let base = try XCTUnwrap(ServiceCatalog.all.first)
         let info = ServiceInfo(id: base.id, group: base.group, access: base.access, companyOwned: base.companyOwned, personOnly: base.personOnly,
-                               fields: base.fields, areas: base.areas, extras: base.extras, hasNote: base.hasNote,
+                               fields: base.fields, areas: base.areas, extras: base.extras,
                                listsAccounts: base.listsAccounts, providers: ["fake"], logo: base.logo)
         recordEqual(ServiceReader.read(info, setup: old.hub.setup, rules: old.hub.rules).note, .unchecked)
     }

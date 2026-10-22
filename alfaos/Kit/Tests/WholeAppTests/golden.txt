@@ -20,6 +20,7 @@ ThemeTests.runShellMeasuresComeFromTheDataFile gt some(true)
 ThemeTests.runShellMeasuresComeFromTheDataFile gt some(true)
 ThemeTests.runMissingMeasureFailsLoading throws "DecodingError.keyNotFound: Key 'menu-group-padding' not found in keyed decoding container. Path: measures. Debug description: menu-group-padding"
 SettingsTests.runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp eq []
+SettingsTests.runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp eq []
 SettingsTests.runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp eq set[SettingsGroup.company(),SettingsGroup.connections(),SettingsGroup.me(),SettingsGroup.protection()]
 SettingsTests.runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp false some(false)
 SettingsTests.runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp false some(false)
