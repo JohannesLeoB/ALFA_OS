@@ -33,7 +33,7 @@ Ein Projekt ist eine Akte: alles, was im Dateiort zum Projekt liegt, plus die Da
 - **PROJ-F11 Mail und Projekt**: Soll: Mail legt in den Projektordner ab, hängt Dateien aus ihm an, macht aus Mail einen Lead; der Ordner heißt in Mail „Projektordner“ oder „Accountingordner“ nach Nutzerwahl. Ist/Status/Quelle: siehe spec-mail MAIL-F28, MAIL-F51, MAIL-L07 und spec-hub HUB-F39.
 
 ## Regeln
-- **PROJ-R01**: Projekt anlegen und Lead anlegen schreiben erst nach sichtbarer Vorschau und Bestätigung des Nutzers. Quelle: J 20.10. 3f52450e Q9 · Bestand `labor:App/CheckoutZieleSheet.swift:93` zeigt dasselbe Muster für den Checkout.
+- **PROJ-R01**: Projekt anlegen und Lead anlegen: Vorschau und Bestätigung des Nutzers (J 20.10.); nach seinem jüngeren Wort ist das eine Einstellung mit dieser Vorgabe, keine Pflicht im Code (HUB-R12, J 22.10.). Quelle: J 20.10. 3f52450e Q9 · Bestand `labor:App/CheckoutZieleSheet.swift:93` zeigt dasselbe Muster für den Checkout.
 - **PROJ-R02**: Ziele des Anlegens (Dateiort, Datensatz, Aufgabenliste, Kontakte) wählen Firma oder Nutzer im Hub; Google Drive ist nur ein Ort unter mehreren (Ordner auf dem Mac, Dropbox, Server, iCloud). Quelle: J 20.10. 3f52450e.
 - **PROJ-R03**: Die Aufgabenliste wird nur angelegt, wenn eine Aufgaben-Integration aktiv ist; sonst bleibt das Projekt ohne sie. Quelle: J 04.10. ee8f053d „wenn Aktiviert“.
 - **PROJ-R04**: Keine Firmendaten, IDs oder Ordnernamen fest im Code; sie kommen aus Einstellungen, Erst-Setup oder Presets. Bestand verletzt das (feste Listen-, Ordner- und Feld-IDs `labor:App/Data/AppState.swift:2195-2199`, Dateiname mit Firmennamen `FolderSchema.swift:55`). Quelle: J 26.09. ffde6a84 „Fest verdrahtetes STRIKT raus aus dem Code“.
