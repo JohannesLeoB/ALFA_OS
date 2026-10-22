@@ -11,7 +11,6 @@ Native macOS-App ALFA (Swift, SwiftUI). Regeln: `AGENTS.md`; sie gehen allem vor
 | `alfaos/Kit/` | Logik (Swift-Paket: ShellCore, Mail, Hub), Tests | dauerhaft |
 | `alfaos/project.yml` | Xcode-Projekt-Vorlage (xcodegen) | dauerhaft |
 | `alfaos/Config/` | Entitlements, Info.plist, Export-Optionen, Beispielwerte ohne Firmendaten | dauerhaft |
-| `alfaos/Tests/` | App-Test `HullProbeTests.swift`; geht in den einen Test über (`AGENTS.md` §10) | bis überführt |
 | `fundus/alpha/` | Bestandscode, eingebunden als `AlfaKit`, `AlfaServices`, `AlfaCalculation` | bis abgelöst |
 | `DESIGN/` | letzter und vorletzter Design-Master (ZIP), `MANIFEST.json` | nach `AGENTS.md` §8 |
 | `DESIGN/brief/` | aktueller Brief an Design mit Schemas, Prüfskripten, Beispielen | nur der letzte |

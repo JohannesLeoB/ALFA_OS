@@ -17,7 +17,7 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 ## Gebaut (Details in den Specs)
 - Hülle, Einstellungen, Mail (Liste, Lesen, Verfassen, Postausgang, Kontakte, HTML), Hub (Anbieter-Prüfung, Abgleich beim Start, Einstellungen je Dienst, Drive-Port aus), Pipeline (Generator, `receive_master.py`, `build_app.sh`).
 - Nicht gebaut: Projekte, Heute, Kataloge, Warenkorb, Datan.
-- Test: eine große Testdatei plus `HullProbeTests.swift` (zu überführen); `testLines` 5892/5895 (drei Zeilen Luft).
+- Test: genau eine Testdatei, `WholeAppTests.swift` (HullProbeTests am 22.10. nach Johannes' Wort gestrichen, Ziel-Test ALFA_OSTests aus `project.yml` entfernt); `testLines` siehe Hook-Ausgabe.
 
 ## Ungeprüft
 - Abmelden mit Halten, Hover-Leiste öffnet die Mail nicht mehr, Fokusring am Griff nur bei Tastatur (gebaut ohne Test, Randfälle in HandleView offen), K1, H2, D1, HTML-Mail, H1, IDLE, kein doppeltes Senden, F32: nicht in der laufenden App oder gegen echte Server gesehen. Nichts ist grün; Abnahme nur durch Johannes. Letzte App: `dist/ALFA OS 943.app` (ohne F32).
@@ -32,7 +32,7 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 ## Nächste Schritte
 1. Design-Prompt (Mail, Hub, Hülle) nach seiner Freigabe an Design.
 2. (erledigt 22.10.) Erklärsätze gestrichen; Grenzfälle siehe spec-hub HUB-R02; App noch nicht neu gebaut.
-3. Aufräumen: `HullProbeTests` überführen; Fundus (`myk`-Reste, deutsche Namen); SheetValues-Quellen; Datenspeicher (wartet auf Johannes).
+3. Aufräumen: Fundus (`myk`-Reste, deutsche Namen); SheetValues-Quellen; Datenspeicher (wartet auf Johannes).
 
 ## Bekannte Fehler
 - Mail: doppeltes Senden möglich, wenn die Sendeprüfung scheitert (`Mail/Core/MailCore.swift:387-395`); wartende Mail geht bei Konto-Entfernen verloren, die Karte zeigt „gesendet“ (ungeprüft); `loadMore` ohne Aufrufer; `actionFailures`/`saveFailure` von der App nie gelesen; Befehle `leadFromMail`, `attachmentToProjectFolder` ohne Leser; Kontakte schreiben bei jeder Änderung nach UserDefaults.

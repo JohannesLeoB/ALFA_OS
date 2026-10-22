@@ -77,28 +77,3 @@ targets:
         ENABLE_APP_SANDBOX: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ENABLE_OUTGOING_NETWORK_CONNECTIONS: YES
-
-  ALFA_OSTests:
-    type: bundle.unit-test
-    platform: macOS
-    sources:
-      - path: Tests
-      - path: App
-        excludes:
-          - Resources/**
-          - ALFA_OSApp.swift
-      - path: App/Resources
-        buildPhase: resources
-      - path: ../gestaltung/alfa-interface/tokens.json
-        buildPhase: resources
-    dependencies:
-      - package: AlfaKit
-        product: ShellCore
-      - package: AlfaKit
-        product: Hub
-      - package: AlfaKit
-        product: Mail
-    settings:
-      base:
-        GENERATE_INFOPLIST_FILE: YES
-        PRODUCT_BUNDLE_IDENTIFIER: com.johannesleoberger.alfaos.tests
