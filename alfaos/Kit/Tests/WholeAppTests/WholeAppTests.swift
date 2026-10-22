@@ -3178,14 +3178,14 @@ final class ModelActionTests {
         await stepASendDuringARunningSaveWaitsForTheSaveAndGoesOutThroughTheDraftItSaved()
         await stepOpeningAStoredDraftMakesACardLinkedToTheServerDraftOnlyOnce()
         await stepAStoredDraftThatCannotBeLoadedMakesNoCardAndShowsTheHint()
-        await stepClosingADraftWithTextSavesItAndTellsAfterTheSaveWorked()
-        await stepClosingADraftWhoseSaveFailsTellsNothingAndKeepsTheDraft()
-        await stepClosingAnUnchangedSavedDraftSavesNothingAgainAndStillTellsSo()
-        await stepClosingADraftInTheOutboxClaimsNoSave()
-        await stepClosingABlankDraftDoesNotSaveAndTellsNothing()
-        await stepClosingWhileASaveRunsTellsNothing()
+        await stepCloseSavesAndToasts()
+        await stepCloseFailedSaveSilent()
+        await stepCloseSavedSkipsSave()
+        await stepCloseQueuedSilent()
+        await stepCloseBlankNothing()
+        await stepCloseWhileSavingSilent()
     }
-    private func stepClosingWhileASaveRunsTellsNothing() async {
+    private func stepCloseWhileSavingSilent() async {
         let (model, engine) = await make()
         let id = newDraft(model)
         engine.holdSave = true
@@ -3199,7 +3199,7 @@ final class ModelActionTests {
         await task.value
         recordEqual(model.draft(id)?.state, .saved(fixed))
     }
-    private func stepClosingADraftWithTextSavesItAndTellsAfterTheSaveWorked() async {
+    private func stepCloseSavesAndToasts() async {
         let (model, engine) = await make()
         let id = newDraft(model)
         await model.closeDraft(id)
@@ -3208,7 +3208,7 @@ final class ModelActionTests {
         recordEqual(model.toast?.kind, .draftSaved)
         recordFalse(model.stack.contains(.draft(id)))
     }
-    private func stepClosingADraftWhoseSaveFailsTellsNothingAndKeepsTheDraft() async {
+    private func stepCloseFailedSaveSilent() async {
         let (model, engine) = await make()
         let id = newDraft(model)
         engine.actionError = .provider(Hint(text: "mail.hint.offline"))
@@ -3218,7 +3218,7 @@ final class ModelActionTests {
         recordEqual(model.draft(id)?.saveFailure, Hint(text: "mail.hint.offline"))
         recordEqual(model.draft(id)?.draft.subject, "Plan")
     }
-    private func stepClosingAnUnchangedSavedDraftSavesNothingAgainAndStillTellsSo() async {
+    private func stepCloseSavedSkipsSave() async {
         let (model, engine) = await make()
         let id = newDraft(model)
         await model.save(id)
@@ -3229,7 +3229,7 @@ final class ModelActionTests {
         await model.closeDraft(id)
         recordEqual(engine.savedDrafts.map(\.replacing), [nil, "remote-1"])
     }
-    private func stepClosingADraftInTheOutboxClaimsNoSave() async {
+    private func stepCloseQueuedSilent() async {
         let (model, engine) = await make()
         let item = OutboxItem(inlet: "a", draft: EmailDraft(to: "z@example.test", subject: "Plan", body: ""))
         engine.outbox = [item]
@@ -3241,7 +3241,7 @@ final class ModelActionTests {
         recordNil(model.toast)
         recordFalse(engine.actionCalls.contains("saveDraft"))
     }
-    private func stepClosingABlankDraftDoesNotSaveAndTellsNothing() async {
+    private func stepCloseBlankNothing() async {
         let (model, engine) = await make()
         let id = model.compose()!
         await model.closeDraft(id)
