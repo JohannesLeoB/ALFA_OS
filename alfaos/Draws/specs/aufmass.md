@@ -2,9 +2,8 @@
 
 Stand 22.10.2026 · Sammlung der Draws-Sitzung aus Johannes' Bildern (Altcode-App, 7 Bilder + Hub-Entwürfe) und der Altcode-Inventur. Nicht gebaut; gebaut wird vorerst nur Draws.
 
-## Johannes' Wort
-- 22.10.: „Ich mache auf baustelle ein foto von wand. habe einen laser entfernungsmesser am macbook gekoppelt. mache ein foto. lade es in alfa OS Aufmaß und kann in foto mit maus und linienwerkzeugen point to point linien in das foto setzen und maße dazu selber notieren oder vom laser einsetzen lassen per bt.“
-- 22.10.: „aufmaß ist auch nur zeichnen mit nem zollstock in der anderen hand“.
+## Ablauf
+Foto der Wand auf der Baustelle → in Aufmaß laden → mit Maus und Linienwerkzeug Punkt-zu-Punkt-Linien ins Foto setzen → Maß von Hand eintragen oder per Bluetooth vom Laser übernehmen. Aufmaß ist Zeichnen mit Maß, kein CAD.
 
 ## Funktion (aus dem Altcode übernehmen, Form nicht)
 | Bereich | Soll | Altcode-Beleg (labor/ansicht) |
