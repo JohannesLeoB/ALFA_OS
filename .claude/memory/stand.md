@@ -44,6 +44,6 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 - Abweichungen vom Master, bewusst: Kachelhöhe 112, Suche über alle Ordner, HTML-Mail zeigt echten Inhalt. Toast „Entwurf gesichert“ steht wie im Master nur bei Inhalt; das Scheitern des Sicherns ist nicht gezeichnet (Lücke MAIL-L13).
 
 ## Ablage
-- Draws (leitend und bauend, Johannes 22.10.): Sitzung „11_ALFA_OS DRAWS 02 BAU“, Clone `~/Developer/ALFA_DRAWS`, Zweig `alfa-draws`, Konto `bergerjohannesleo-dot`; Nachrichten dorthin, Texte vorher Johannes zeigen. Sitzung „10_ALFA_OS DRAWS 01“ ist inaktiv; ihr Worktree `dist/wt-drawing` (Zweig `drawing`, nur lokal) und die `drawing`-Ordner in `dist/` räumt die Lead nach Johannes' Ja auf.
-- Fremde Ordner in `dist/`: `anatomy-map`, `farbe`, `hotline-quotes`, `review`, `kit-drawing`, Worktree `wt-drawing` (Zweig `drawing`, nur lokal); löschen nur auf Johannes' Wort. `dist/lead` gehört dem Pate.
+- Draws (leitend und bauend, Johannes 22.10.): Sitzung „11_ALFA_OS DRAWS 02 BAU“, Clone `~/Developer/ALFA_DRAWS`, Zweig `alfa-draws`, Konto `bergerjohannesleo-dot`; Nachrichten dorthin, Texte vorher Johannes zeigen. Sitzung „10_ALFA_OS DRAWS 01“ ist inaktiv; ihre Reste (Worktree, Zweig `drawing`, `drawing`-Ordner in `dist/`) sind am 22.10. nach Johannes' Wort und Draws' Antwort gelöscht.
+- Fremde Ordner in `dist/`: `anatomy-kitchen`, `anatomy-map`, `farbe`, `hotline-quotes`, `review`; löschen nur auf Johannes' Wort. `dist/lead` gehört dem Pate.
 - Zitat-Triage-Sitzung wartet auf Johannes (`dist/lead/inventur/ZITATE-TRIAGE.md`).
