@@ -2,14 +2,14 @@ Brief Code → Design · v13 · 22.10.2026
 
 SO ARBEITEST DU (fest, gilt vor allem anderen)
 1. Lies nur diesen Brief und die Dateien, die er nennt. Du musst nichts suchen und nichts fragen, was du lesen sollst.
-2. Arbeite T1 bis T8 und dann N1 bis N39 (ohne N12 und N18, entfallen) der Reihe nach ab, ohne Unterbrechung. Ein Punkt ist fertig, wenn das Verlangte im Bogen und im Vertrag steht und, wo genannt, sein „Fertig, wenn“ erfüllt ist.
+2. Arbeite T1 bis T8 und dann N1 bis N40 (ohne N12 und N18, entfallen) der Reihe nach ab, ohne Unterbrechung. Ein Punkt ist fertig, wenn das Verlangte im Bogen und im Vertrag steht und, wo genannt, sein „Fertig, wenn“ erfüllt ist.
 3. Kannst du einen Punkt nicht entscheiden, setze ihn im Lieferschein auf "question" mit einer Frage und arbeite mit dem nächsten Punkt weiter. Alle Fragen kommen gesammelt mit der Lieferung, nicht dazwischen.
 4. Jede Änderung steht im Bogen selbst (.dc.html) und im Vertrag (contract/). Ein Wert nur im Chat, nur in einer Notiz oder nur in einer .md gilt als nicht geliefert.
 5. Zuletzt schreibst du contract/PRUEFUNG.txt (Ausgaben von P1 bis P3), dann contract/LIEFERUNG.json, dann läuft P4. Erst danach entsteht die ZIP.
 
 ZIEL
 Der nächste Export liefert für Mail, Einstellungen und Hülle (ALFA Shell) einen vollständigen Vertrag im Ordner contract/: jeder Wert ein Token, jedes Bauteil und Element mit fester id, jeder sichtbare Text mit Schlüssel, jede Änderung protokolliert. Code liest ihn per Skript und baut daraus.
-Neu in v13: N19 bis N39 (Mail, Einstellungen und Hub, Hülle und Assistent), unten nach N18. Zeichne Zustände, Übergänge und Verhalten, keine Erklärsätze; Fehler und Warnungen sind erlaubt. [Wort] = Johannes' Entscheidung, [Befund] = vom Code gefunden.
+Neu in v13: N19 bis N40 (Mail, Einstellungen und Hub, Hülle und Assistent), unten nach N18. Zeichne Zustände, Übergänge und Verhalten, keine Erklärsätze; Fehler und Warnungen sind erlaubt. [Wort] = Johannes' Entscheidung, [Befund] = vom Code gefunden.
 Neu in v12: der Kopf „So arbeitest du“, A8 und A9, der Lieferschein (P4, delivery.schema.json, check_delivery.py), N14–N17 zu Dateien über Google Drive; N12 und N18 entfallen. T1 bis T8 und N1 bis N11, N13 gelten unverändert weiter.
 
 GRUNDLAGE
@@ -139,6 +139,7 @@ N36 [Wort 22.10.] Grenzen je Bereich: Wie gibt man pro Bereich Obergrenzen der B
 N37 [Wort 22.10.] Assistent im Blob (Doppelklick, schneller Helfer): zeichne die Eingabe mit Senden, Antwort, Verlauf, Anhängen. Der volle Assistent-Bereich (gleicher Assistent, größerer Umfang: Dokumente ausgeben, Files, Termine, Notizen, Suche, Kalkulation) folgt später als eigener Bereich.
 N38 [Befund] Blob bei „Assistent ganz aus“: Zustand. Sync-Knopf: Was gleicht er in jedem Bereich ab, was zeigt der Tooltip als Zeit?
 N39 [Befund] Fokusring-Abstand: eine Zahl (2 oder 1); siehe L-015.
+N40 [Wort 21.10.] Erklärsätze nicht mehr zeichnen. Die App zeigt sie nicht mehr (Fehler und Warnungen bleiben). Entferne aus den Bögen: ALFA Mail.dc.html:392 (Hinweis bei Google), :737 (Text bei „Noch kein Mail-Konto“, der Titel bleibt), :758 (Text unter „Auf diesem Mac abmelden“), :760 (Texte unter „Assistent ganz aus“, „Dateien im Chat“, „Bilder in Mails laden“), :761 (Text unter „Fremde Inhalte“), :763 (Text unter „App-Sperre“). Bis Johannes entscheidet, bleiben unverändert: :753 (Leerzustand Kontakte), die Warnung zu Zählpixeln, der Zugriffsumfang bei Google, die Folgenangabe beim Abmelden (siehe N2), ALFA Shell.dc.html:40 und :53 (Hilfetexte am Griff und am Blob), ALFA Mail.dc.html:1078 (Text im Assistent-Fenster).
 
 ERINNERUNG AUS v9
 - W-05 Dienstzahl und L-010 Signaturen je Postfach sind weiter offen.
