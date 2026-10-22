@@ -28,7 +28,8 @@ Prototyp auf `alfa-draws` (Clone `~/Developer/ALFA_DRAWS`). Status Orange: kein 
 | Templates | neutral | Mustache mit Meldung unbekannter Variablen, Canvas aus JSON/IDML |
 | Assist | neutral | Claude-Werkzeug-Schleife, Skillset, Style Master; Zugang vom Gastmodul |
 | DrawingKit | Draws | Modell (Quader, Keil, konisches Bein), Projektion, Ordnung, Maße, Packs, Board, Studio-Blätter, Einheiten/Posen |
-| DrawsAI | Draws | Einmal-Entwurf, Live-Werkzeuge (12), Vorbereitung über Intake, Rollen |
+| DrawsRender | Draws | Foto-Render mit RealityKit: Körper, Texturen als PBR-Material, Studiolicht, Schatten; PNG/PDF |
+| DrawsAI | Draws | Einmal-Entwurf, Live-Werkzeuge (inkl. Textur, Licht, Foto-Vorschau, Keil/Konus), Vorbereitung über Intake, Rollen inkl. Material |
 | DrawsDock | Draws | 7 Ports mit lokalen Adaptern, Typen feldgleich mit Hub |
 | DrawingDudeApp | Draws | Oberfläche nach Sketch 1610 auf Master-Tokens, Werte sonst in Proto.swift |
 
@@ -37,10 +38,8 @@ Packs: `ci/studio`, `template/studio-a3-plan`, `template/studio-a4-deck`, `skill
 Specs: `specs/family.md` (Creative Family), `specs/aufmass.md` (Aufmaß), `specs/hub-needs.md` (Bedarf am Hub).
 
 ## Offen
-- Darstellung: gezeichnet aus dem Modell, oder zusätzlich Fotorealismus über einen Bildgenerator (Entscheid Johannes).
-- Texturen aus dem Materialbündel auf Flächen.
+- Foto-Render: Schattenkante leicht gestuft, Maserrichtung nicht je Teil, App rendert nur Perspektive, kein USDZ (macOS 26 ohne öffentliche Schnittstelle).
 - Ablauf „reinziehen, ein Satz“ in der Oberfläche.
 - MP4-Ausgabe.
-- Keil und konisches Bein in den Claude-Werkzeugen.
 - Hub-Ports: wer baut, Reihenfolge (offen bei Johannes und Lead).
 - Nie gegen die echte Claude-API und nie in der echten App geprüft.
