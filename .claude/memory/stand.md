@@ -17,6 +17,7 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 ## Gebaut (Details in den Specs)
 - Hülle, Einstellungen, Mail (Liste, Lesen, Verfassen, Postausgang, Kontakte, HTML), Hub (Anbieter-Prüfung, Abgleich beim Start, Einstellungen je Dienst, Drive-Port aus), Pipeline (Generator, `receive_master.py`, `build_app.sh`).
 - Nicht gebaut: Projekte, Heute, Kataloge, Warenkorb, Datan.
+- Testplatz: `testLines` 5869 von 5895; der wiederholte Aufbau lässt sich nur um 30–50 Zeilen kürzen (gemessen); Stück 5 braucht rund 40: Anheben der Grenze liegt bei Johannes.
 - Test: genau eine Testdatei, `WholeAppTests.swift` (HullProbeTests am 22.10. nach Johannes' Wort gestrichen, Ziel-Test ALFA_OSTests aus `project.yml` entfernt); `testLines` siehe Hook-Ausgabe.
 
 ## Ungeprüft
@@ -35,7 +36,7 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 3. Aufräumen: Fundus (`myk`-Reste, deutsche Namen); SheetValues-Quellen; Datenspeicher (wartet auf Johannes).
 
 ## Bekannte Fehler
-- Mail: Doppelsenden bei gescheiterter Sendeprüfung ist seit 22.10. geschlossen (MAIL-R03), offen: `MailModel+Draft.swift:205-210` Rückfall auf send; wartende Mail geht bei Konto-Entfernen verloren, die Karte zeigt „gesendet“ (ungeprüft); `loadMore` ohne Aufrufer; `actionFailures`/`saveFailure` von der App nie gelesen; Befehle `leadFromMail`, `attachmentToProjectFolder` ohne Leser; Kontakte schreiben bei jeder Änderung nach UserDefaults.
+- Mail: Doppelsenden bei gescheiterter Sendeprüfung ist seit 22.10. geschlossen (MAIL-R03), offen (Prüferfund, praktisch nicht erreichbar): `MailModel+Draft.swift:205-210` fällt auf send zurück, wenn `resend` nil liefert, auch bei vorhandener `outboxID`; Schutz und Prüfung sobald Testplatz da ist; wartende Mail geht bei Konto-Entfernen verloren, die Karte zeigt „gesendet“ (ungeprüft); `loadMore` ohne Aufrufer; `actionFailures`/`saveFailure` von der App nie gelesen; Befehle `leadFromMail`, `attachmentToProjectFolder` ohne Leser; Kontakte schreiben bei jeder Änderung nach UserDefaults.
 - Hub: Trennen ist seit 22.10. ganz oder gar nicht (Schlüsselbund-Fehler rollt zurück), offen: Datenbankfehler nach dem Löschen der Schlüssel; Schlüssel-Erneuerung ohne Rückfall; `ServiceSetting` ohne Deklarierer; ClickUp ohne Fähigkeit; Claude-Schlüssel im Hub und Fundus unter verschiedenen Namen; Drive 403 gilt als Anmeldefehler; Hub-Fehlerpfade ohne Test.
 - Fundus: 118 Zeilen mit `myk` in 47 Dateien, deutsche Namen, toter Mail-Zweig.
 - Commits `eb89ff4`, `b1c753e` ohne Leerzeile nach dem Betreff (Force-Push verboten).

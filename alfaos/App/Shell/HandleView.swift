@@ -56,7 +56,10 @@ struct HandleView: View {
         .focused($focused)
         .onChange(of: focused) { _, now in if !now { pointerFocus = false } }
         .focusEffectDisabled()
-        .onKeyPress(keys: [.leftArrow, .rightArrow, .return]) { press in key(press) }
+        .onKeyPress(keys: [.leftArrow, .rightArrow, .return]) { press in
+            pointerFocus = false
+            return key(press)
+        }
         .gesture(
             DragGesture(minimumDistance: 0, coordinateSpace: .global)
                 .onChanged { value in
