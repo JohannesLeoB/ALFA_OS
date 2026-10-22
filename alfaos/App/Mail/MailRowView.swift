@@ -49,10 +49,10 @@ struct MailRowView: View {
             preview
             chips
         }
-        .overlay(alignment: .topTrailing) { rowActions }
         .contentShape(shape)
         .simultaneousGesture(SpatialTapGesture(count: 2).onEnded { if !onMark($0.location) { open(pin: true) } })
         .simultaneousGesture(SpatialTapGesture().onEnded { if !onMark($0.location) { open(pin: false) } })
+        .overlay(alignment: .topTrailing) { rowActions }
         .overlay { RightClick { point in contextMenu(at: point) } }
         .onHover { hovering = $0 }
         .animation(ComponentMotion(reduced: reduced).curve(Design.Duration.hover), value: hovering)

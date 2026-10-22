@@ -20,7 +20,7 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 - Test: eine große Testdatei plus `HullProbeTests.swift` (zu überführen); `testLines` 5892/5895 (drei Zeilen Luft).
 
 ## Ungeprüft
-- K1, H2, D1, HTML-Mail, H1, IDLE, kein doppeltes Senden, F32: nicht in der laufenden App oder gegen echte Server gesehen. Nichts ist grün; Abnahme nur durch Johannes. Letzte App: `dist/ALFA OS 943.app` (ohne F32).
+- Abmelden mit Halten, Hover-Leiste öffnet die Mail nicht mehr, Fokusring am Griff nur bei Tastatur (gebaut ohne Test, Randfälle in HandleView offen), K1, H2, D1, HTML-Mail, H1, IDLE, kein doppeltes Senden, F32: nicht in der laufenden App oder gegen echte Server gesehen. Nichts ist grün; Abnahme nur durch Johannes. Letzte App: `dist/ALFA OS 943.app` (ohne F32).
 
 ## Offen bei Johannes
 - Rote Mail-Funktionen und Formatleiste: Design zeigt Vorschläge, er entscheidet je Fall.

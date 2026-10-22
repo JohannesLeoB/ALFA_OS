@@ -9,6 +9,7 @@ struct HandleView: View {
     @State private var startWidth: Double?
     @State private var hovering = false
     @FocusState private var focused: Bool
+    @State private var pointerFocus = false
 
     private var active: Bool { hovering || startWidth != nil }
 
@@ -41,7 +42,7 @@ struct HandleView: View {
             }
         }
         .overlay {
-            if focused {
+            if focused && !pointerFocus {
                 Rectangle()
                     .strokeBorder(theme.design(\.focus), lineWidth: CGFloat(Design.Size.focusRingWidth))
                     .padding(-CGFloat(Design.Size.focusRingOffset + Design.Size.focusRingWidth))
@@ -53,11 +54,13 @@ struct HandleView: View {
         .onHover { hovering = $0 }
         .focusable()
         .focused($focused)
+        .onChange(of: focused) { _, now in if !now { pointerFocus = false } }
         .focusEffectDisabled()
         .onKeyPress(keys: [.leftArrow, .rightArrow, .return]) { press in key(press) }
         .gesture(
             DragGesture(minimumDistance: 0, coordinateSpace: .global)
                 .onChanged { value in
+                    pointerFocus = true
                     let start = startWidth ?? width
                     startWidth = start
                     let direction: Double = lane == .leading ? 1 : -1

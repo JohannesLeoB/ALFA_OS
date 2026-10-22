@@ -102,7 +102,15 @@ private struct IdentityCard: View {
             }
             SettingsBlockHead(key: "settings.identity.account")
             SettingsRow(label: word("settings.identity.signOut"), line: false) {
-                TextButton(label: word("settings.identity.signOut.action"), kind: .signal) { signOut() }
+                ConfirmPill(
+                    label: word("settings.identity.signOut.action"),
+                    question: word("settings.identity.signOut"),
+                    yes: word("settings.identity.signOut.action"),
+                    no: word("confirm.no"),
+                    holdHint: Text(verbatim: SettingsFormat.text("mail.confirm.hold", String(localized: "settings.identity.signOut.action"))),
+                    showsProgress: false,
+                    onYes: { signOut() }
+                )
             }
         }
     }
