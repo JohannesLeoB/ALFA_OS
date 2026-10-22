@@ -89,6 +89,17 @@ HubTests.runCadenceRunsOnePairOnceAndCountsTheCall eq ["Inbox"]
 HubTests.runRemoveKeepsTheKeysOfTheOtherInlet eq set["fake-<uuid>","fake-<uuid>"]
 HubTests.runRemoveKeepsTheKeysOfTheOtherInlet eq ["fake-<uuid>"]
 HubTests.runRemoveKeepsTheKeysOfTheOtherInlet eq ["fake-<uuid>"]
+HubTests.runRemoveIsAllOrNothing eq 2
+HubTests.runRemoveIsAllOrNothing true some(true)
+HubTests.runRemoveIsAllOrNothing eq 2
+HubTests.runRemoveIsAllOrNothing eq "1"
+HubTests.runRemoveIsAllOrNothing eq "2"
+HubTests.runRemoveIsAllOrNothing eq ["fake-<uuid>"]
+HubTests.runRemoveIsAllOrNothing ne some(Cadence.manual())
+HubTests.runRemoveIsAllOrNothing eq 0
+HubTests.runRemoveIsAllOrNothing eq []
+HubTests.runRemoveWorksWhenTheKeysCannotBeRead eq []
+HubTests.runRemoveWorksWhenTheKeysCannotBeRead eq 0
 HubTests.runRemoveTurnsTheCadenceOfTheInletOff ne some(Cadence.manual())
 HubTests.runRemoveTurnsTheCadenceOfTheInletOff eq some(Cadence.off())
 SetupFlowTests.runCancelDuringTheProbe eq some(SetupError.cancelled())

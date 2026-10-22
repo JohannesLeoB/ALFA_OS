@@ -492,12 +492,27 @@ final class HubCore: HubAccess, HubSetup, HubRules {
 
     func remove(_ inletID: Inlet.ID) async throws {
         guard let inlet = records.first(where: { $0.id == inletID }) else { return }
+        let names = try store.slots(of: inletID)
+        var saved: [String: String] = [:]
+        for name in names {
+            if let value = (try? config.keychain.get(KeySlot(inlet: inletID, name: name))) ?? nil { saved[name] = value }
+        }
+        var attempted: [String] = []
+        for name in names {
+            attempted.append(name)
+            do {
+                try config.keychain.delete(KeySlot(inlet: inletID, name: name))
+            } catch {
+                for done in attempted {
+                    if let value = saved[done] { try? config.keychain.put(value, at: KeySlot(inlet: inletID, name: done)) }
+                }
+                throw error
+            }
+        }
         for capability in inlet.capabilities {
             config.cadence.plan(inletID, capability, .off)
             watchers.stop(inletID + "|" + capability.rawValue)
         }
-        let names = try store.slots(of: inletID)
-        for name in names { try config.keychain.delete(KeySlot(inlet: inletID, name: name)) }
         if let provider = providers[inlet.provider] { try? await provider.signIn.signOut(inlet) }
         try store.delete(inletID)
         try store.deleteSettings(withPrefix: "cadence|\(inletID)|")

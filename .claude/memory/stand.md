@@ -36,7 +36,7 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 
 ## Bekannte Fehler
 - Mail: doppeltes Senden möglich, wenn die Sendeprüfung scheitert (`Mail/Core/MailCore.swift:387-395`); wartende Mail geht bei Konto-Entfernen verloren, die Karte zeigt „gesendet“ (ungeprüft); `loadMore` ohne Aufrufer; `actionFailures`/`saveFailure` von der App nie gelesen; Befehle `leadFromMail`, `attachmentToProjectFolder` ohne Leser; Kontakte schreiben bei jeder Änderung nach UserDefaults.
-- Hub: Trennen bricht halb ab, wenn das Schlüsselbund-Löschen wirft (`Hub/HubCore.swift:493-519`); Schlüssel-Erneuerung ohne Rückfall; `ServiceSetting` ohne Deklarierer; ClickUp ohne Fähigkeit; Claude-Schlüssel im Hub und Fundus unter verschiedenen Namen; Drive 403 gilt als Anmeldefehler; Hub-Fehlerpfade ohne Test.
+- Hub: Trennen ist seit 22.10. ganz oder gar nicht (Schlüsselbund-Fehler rollt zurück), offen: Datenbankfehler nach dem Löschen der Schlüssel; Schlüssel-Erneuerung ohne Rückfall; `ServiceSetting` ohne Deklarierer; ClickUp ohne Fähigkeit; Claude-Schlüssel im Hub und Fundus unter verschiedenen Namen; Drive 403 gilt als Anmeldefehler; Hub-Fehlerpfade ohne Test.
 - Fundus: 118 Zeilen mit `myk` in 47 Dateien, deutsche Namen, toter Mail-Zweig.
 - Commits `eb89ff4`, `b1c753e` ohne Leerzeile nach dem Betreff (Force-Push verboten).
 - Offen (klein): `pointerFocus` in `HandleView.swift` auch in `onKeyPress` zurücksetzen, damit der Ring nach Ziehen und Pfeiltasten erscheint; Abmelden-Pille zeigt dieselbe Frage wie das Zeilenlabel (Master zeichnet keine eigene Frage, Lücke bei Design, N2).

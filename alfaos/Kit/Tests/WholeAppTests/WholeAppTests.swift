@@ -452,8 +452,24 @@ final class FakeKeychain: KeychainPort, @unchecked Sendable {
         if failing.with({ $0 }) { throw TestTimedOut() }
         entries.with { $0[slot] = value }
     }
-    func get(_ slot: KeySlot) throws -> String? { entries.with { $0[slot] } }
-    func delete(_ slot: KeySlot) throws { entries.with { $0[slot] = nil } }
+    private let unreadable = Locked(false)
+    func setUnreadable(_ value: Bool) { unreadable.with { $0 = value } }
+    func get(_ slot: KeySlot) throws -> String? {
+        if unreadable.with({ $0 }) { throw TestTimedOut() }
+        return entries.with { $0[slot] }
+    }
+    private let deletesLeft = Locked<Int?>(nil)
+    func failDeletes(after count: Int?) { deletesLeft.with { $0 = count } }
+    func delete(_ slot: KeySlot) throws {
+        if let left = deletesLeft.with({ $0 }) {
+            if left == 0 {
+                entries.with { $0[slot] = nil }
+                throw TestTimedOut()
+            }
+            deletesLeft.with { $0 = left - 1 }
+        }
+        entries.with { $0[slot] = nil }
+    }
 }
 
 final class HandCadence: CadencePort, @unchecked Sendable {
@@ -760,6 +776,35 @@ final class HubTests {
         recordEqual(rig.keychain.slots.map(\.inlet), [b.id])
         recordEqual(rig.hub.setup.inlets.map(\.id), [b.id])
         _ = try rig.hub.access.port(MailTransport.self, for: b.id)
+    }
+    func runRemoveIsAllOrNothing() async throws {
+        let grant = Grant(values: ["a": "1", "b": "2"])
+        let provider = FakeProvider(capabilities: [.mail], signIn: GivenSignIn(grant: grant))
+        let rig = try ScriptedRig.make(provider: provider)
+        let inlet = try await rig.connect("a@x")
+        recordEqual(rig.keychain.slots.count, 2)
+        rig.keychain.failDeletes(after: 1)
+        var failed = false
+        do { try await rig.hub.setup.remove(inlet.id) } catch { failed = true }
+        recordTrue(failed)
+        recordEqual(rig.keychain.slots.count, 2)
+        recordEqual(try rig.keychain.get(KeySlot(inlet: inlet.id, name: "a")), "1")
+        recordEqual(try rig.keychain.get(KeySlot(inlet: inlet.id, name: "b")), "2")
+        recordEqual(rig.hub.setup.inlets.map(\.id), [inlet.id])
+        recordNotEqual(rig.cadence.planned(inlet.id, .mail), .off)
+        rig.keychain.failDeletes(after: nil)
+        try await rig.hub.setup.remove(inlet.id)
+        recordEqual(rig.keychain.slots.count, 0)
+        recordEqual(rig.hub.setup.inlets, [])
+    }
+    func runRemoveWorksWhenTheKeysCannotBeRead() async throws {
+        let rig = try rig()
+        let inlet = try await rig.connect("a@x")
+        rig.keychain.setUnreadable(true)
+        try await rig.hub.setup.remove(inlet.id)
+        recordEqual(rig.hub.setup.inlets, [])
+        rig.keychain.setUnreadable(false)
+        recordEqual(rig.keychain.slots.count, 0)
     }
     func runRemoveTurnsTheCadenceOfTheInletOff() async throws {
         let rig = try rig(capabilities: [.mail])
@@ -5610,6 +5655,8 @@ final class WholeAppTests: XCTestCase {
         try await step("HubTests.runFourthMailAccountNeedsALargerLimit") { try await HubTests().runFourthMailAccountNeedsALargerLimit() }
         try await step("HubTests.runCadenceRunsOnePairOnceAndCountsTheCall") { try await HubTests().runCadenceRunsOnePairOnceAndCountsTheCall() }
         try await step("HubTests.runRemoveKeepsTheKeysOfTheOtherInlet") { try await HubTests().runRemoveKeepsTheKeysOfTheOtherInlet() }
+        try await step("HubTests.runRemoveIsAllOrNothing") { try await HubTests().runRemoveIsAllOrNothing() }
+        try await step("HubTests.runRemoveWorksWhenTheKeysCannotBeRead") { try await HubTests().runRemoveWorksWhenTheKeysCannotBeRead() }
         try await step("HubTests.runRemoveTurnsTheCadenceOfTheInletOff") { try await HubTests().runRemoveTurnsTheCadenceOfTheInletOff() }
         try await step("SetupFlowTests.runCancelDuringTheProbe") { try await SetupFlowTests().runCancelDuringTheProbe() }
         try await step("SetupFlowTests.runInletOfAMissingProvider") { try await SetupFlowTests().runInletOfAMissingProvider() }
