@@ -17,7 +17,7 @@ Der Hub ist der „Netzwerkstecker“ der App: Er verbindet Konten, Dienste und 
 - Später: 15 Integrationen in voller Tiefe (AGENTS.md §1); Datan als Modul mit Airtable als eine Route unter mehreren (siehe `spec-kataloge.md`).
 - Später: Rollen und Firmensperren als Einstellung; wie sie greifen, entscheidet er später.
 - Später: Mitteilungsoptionen je Dienst aus der Doku des Dienstes ablesen (Design-Text zitiert ihn, `RUECKGABE-AN-CODE.md:58`).
-- Andock-Bedarf der Editoren (Draws, Figur „Andocken“ 22.10., Artifact EdQqVsepCJ39UhLsRD7D7h): sieben Stecker Projekt, Ablage, Vorlagen, Claude, Ausgabe, Katalog, Dateien; im Hub passt heute nur Dateien (FilesPort). Gegenstücke: Projekt → Vorgang (spec-ziel K01–K08), Ablage und Vorlagen → Speicherorte (F05, F39), Claude → ein Schlüssel im Hub und Assistenten-Stecker (F27), Ausgabe → Werkstatt (ZIEL-K11), Katalog → spec-kataloge.
+- Andock-Bedarf der Editoren (Draws, Figur „Andocken“ 22.10., Artifact EdQqVsepCJ39UhLsRD7D7h): sieben Stecker Projekt, Ablage, Vorlagen, Claude, Ausgabe, Katalog, Dateien; im Hub passt heute nur Dateien (FilesPort). Gegenstücke: Projekt → Vorgang (spec-ziel K01–K08), Ablage und Vorlagen → Speicherorte (F05, F39), Claude → ein Schlüssel im Hub und Assistenten-Stecker (F27), Ausgabe → Werkstatt erzeugt, Hub gibt weiter (speichern, teilen, senden; ZIEL-K11), Katalog → spec-kataloge.
 - Offen, nicht beauftragt: Hub-Entwürfe A/B/C der Produkt-Sitzung über die kleinste Form hinaus („NOCH KEINEN AUFTRAG“ 19.10.).
 
 ## Entscheidungen Johannes 21.10. (bc4854d7, Antworten auf vier Fragen der Lead)
