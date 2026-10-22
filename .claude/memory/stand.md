@@ -31,8 +31,8 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 - Draws: Testgrenze bleibt, Patch geparkt; Draws-Master kommt zuerst zu ihm.
 
 ## Mutationslauf 22.10. (Prüfungen schrumpfen statt Grenze anheben, Johannes 14.10./17.10.)
-- 150 automatische Mutanten über das Kit (`dist/lead2/runner.py`, Worktree `dist/lead2/wt`, Ergebnis `dist/lead2/mutants.json`, `dist/lead2/nocatch.json`): 67 gefangen, 83 überlebt (55 %). Von 280 Prüfschritten (`run*`/`step*`, 3962 Zeilen) fingen nur 50 (880 Zeilen) mindestens einen Mutanten; 230 (3082 Zeilen) keinen. Das sind Kandidaten, kein Beweis (Stichprobe, manche Mutanten gleichwertig).
-- Nächster Schritt: gezielte Mutanten je Kandidat-Schritt; gestrichen wird nur, was kein Mutant rot macht oder was eine andere Prüfung schon fängt; je gestrichener Prüfung den Mutanten nennen. Danach `git worktree remove dist/lead2/wt` und `dist/lead2` löschen.
+- 150 automatische Mutanten über das Kit (Operatoren aus `scripts/mutate.py`, je Mutant `swift test` in einem eigenen Worktree unter `dist/`, mit den fehlgeschlagenen Prüfzeilen als Ausgabe; die Dateien sind gelöscht, der Lauf dauert unter einer Stunde und lässt sich wiederholen): 67 gefangen, 83 überlebt (55 %). Von 280 Prüfschritten (`run*`/`step*`, 3962 Zeilen) fingen nur 50 (880 Zeilen) mindestens einen Mutanten; 230 (3082 Zeilen) keinen. Das sind Kandidaten, kein Beweis (Stichprobe, manche Mutanten gleichwertig).
+- Nächster Schritt: gezielte Mutanten je Kandidat-Schritt; gestrichen wird nur, was kein Mutant rot macht oder was eine andere Prüfung schon fängt; je gestrichener Prüfung den Mutanten nennen. Worktree und Arbeitsordner am Ende löschen.
 - Regel dazu (Johannes): keine neuen Prüfzeilen für Stücke ohne Fehlerweg; Grenze `testLines` bleibt 5895 (steht bei 5869); Stück 5 (Kontakte als lokale Hub-Quelle) wartet darauf.
 
 ## Nächste Schritte
