@@ -12,6 +12,7 @@ Prototyp auf `alfa-draws` (Clone `~/Developer/ALFA_DRAWS`, Konto bergerjohannesl
 - 22.10.: „DRAWS hat den SKILL LIVE, es wird IN der APP live gebaut“; Skillset „alfanomy“ aus Anatomy, „motion addon skill“; „teilmechanisch und claude flexibel, mit skillset und nach user Style master gewichtet … Claude in der ALFA_OS als Creative Assistant“.
 - 22.10.: Claude-API und Daten „zentral als Integration aus dem Alfa OS Hub/Einstellungen gezapft“, nicht Draws-eigen.
 - 22.10.: „DRAWS ist in ALFA_OS, als eine der Funktionsengines der creative cloud, also den Editoren“ (neben Skizze/Atelier, Moodboard, Aufmaß).
+- 22.10. zu D2: „NEIN. DRAWS hat eigentlich "kaum was selber an Bord" Weil DRWAS nur ein In App Modul der ALFA_OS wird und sich voll in dessen Infrasturuktur integriert udn die dort über den Hub/Einstellungen gegebenen Integrations, API, Anbindungen, Datenquellen udn Speicher etc versorgt.“ Folge: Pages, Intake, Templates, Assist und die Dock-Ports sind Vorarbeit für die ALFA-Infrastruktur, nicht Draws-eigen; Draws behält Zeichenkern, Werkzeuge für Claude, Skills und Oberfläche.
 
 ## Module (Commit 53e793c)
 | Ziel | Art | Inhalt |
