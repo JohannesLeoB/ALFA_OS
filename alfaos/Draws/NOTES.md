@@ -30,6 +30,7 @@ Packs: `ci/studio`, `template/studio-a3-plan`, `template/studio-a4-deck` (gemess
 ## Specs
 - `specs/family.md`: ALFA Creative Family (Editoren, Rückgrat, verbindende Typen, Editor-Vertrag, Reihenfolge, offene Fragen).
 - `specs/aufmass.md`: Aufmaß aus Johannes' Bildern und der Altcode-Inventur.
+- `specs/hub-needs.md`: was Draws vom Hub braucht (Eingang/Ausgang, FilesPort, Ports, Ereignisse).
 - 22.10.: „wir bleiben aber baulich erstmal bei draws“.
 
 ## Offen
