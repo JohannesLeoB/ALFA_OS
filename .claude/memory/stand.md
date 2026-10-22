@@ -36,6 +36,7 @@ Kein Protokoll: nur, was heute gilt. Verlauf steht in `git log`. Johannes' Wort 
 
 ## Offen bei Johannes
 - Katalog-Satz je Dienst ja/nein (gefragt, keine Antwort); Draws-Wünsche 2/3 in v13 (gefragt); Lastenheft je Bereich für Design (gefragt, Stand unklar).
+- Draws-Prototyper (22.10., an die Lead-Übergabe): (2) Grenze `testLines` 5895 ist erreicht, Draws hat 29 Zeilen Test-Aufräumpatch geparkt (`dist/parked/cleanup-2026-10-22.patch`, in `~/Developer/ALFA_DRAWS`); Anheben der Grenze nur durch Johannes, Wächterdatei. (3) Architekturfragen a–f (ein Claude-Schlüssel, Assistenten-Transport, Packs als Bundle, Templates, ZIPFoundation und Hub-Abhängigkeit, Doppeltes gegenüber main): Entscheidung Johannes. (4) Draws-Master für Design kommt erst zu ihm.
 - Zweig `drawing` nur lokal (Worktree `dist/wt-drawing`, fremde Sitzung); fremde Ordner in `dist/` (Prototyp-Sitzung u. a.).
 - Zitat-Triage-Sitzung `local_e43a39c0` wartet auf sein Wort zur Rohfassung (ihre Zahlen „8.492“ sind falsch); die 10 Widersprüche aus der Triage: `dist/lead/inventur/ZITATE-TRIAGE.md`.
 - Google-Client-ID: Ort nicht entschieden (Standardweg: ID im Paket). Microsoft 365: nicht bis Ende November.
