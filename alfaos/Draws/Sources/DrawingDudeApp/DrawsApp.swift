@@ -18,5 +18,17 @@ struct DrawsApp: App {
         }
         .windowStyle(.hiddenTitleBar)
         .defaultSize(width: 1512, height: 982)
+        .commands {
+            CommandGroup(after: .newItem) {
+                Button(word("draws.doc.open")) { model.open() }
+                    .keyboardShortcut("o")
+            }
+            CommandGroup(replacing: .saveItem) {
+                Button(word("draws.doc.save")) { model.save() }
+                    .keyboardShortcut("s")
+                Button(word("draws.doc.saveAs")) { model.saveAs() }
+                    .keyboardShortcut("s", modifiers: [.command, .shift])
+            }
+        }
     }
 }

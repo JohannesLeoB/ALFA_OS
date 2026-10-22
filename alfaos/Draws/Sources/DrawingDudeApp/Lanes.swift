@@ -127,7 +127,7 @@ struct SheetLane: View {
     var body: some View {
         VStack(spacing: 0) {
             Head {
-                HeadTitle(key: "draws.lane.sheet", detail: model.template?.pack.format)
+                HeadTitle(key: "draws.lane.sheet", detail: model.fileLabel ?? model.template?.pack.format)
                 Choice(value: word("draws.product.\(model.layout.rawValue)")) {
                     ForEach(model.kinds, id: \.self) { kind in
                         Toggle(word("draws.product.\(kind.rawValue)"), isOn: Binding(

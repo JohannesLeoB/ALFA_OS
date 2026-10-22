@@ -10,6 +10,10 @@ Prototyp auf `alfa-draws` (Clone `~/Developer/ALFA_DRAWS`). Status Orange: kein 
 - Maße: Stufe 1 keine, Stufe 2 nur gegebene, Stufe 3 („ca.“) später.
 - Kein Schwerpunkt auf Mechanik (Fronten, Schubladen öffnen).
 
+## Arbeitsdatei
+- Ein Blatt = eine `.svg`: sichtbar die Zeichnung, im `<metadata>` (`draws:doc`, Namensraum `https://alfa.app/draws`, Schema 1) das ganze Modell samt Eingängen und Texturen. Draws öffnet sie bearbeitbar; fremdes SVG wird Unterlage.
+- Offen: Rückgängig, „Zurück zur gesicherten Fassung“, Nachfrage beim Schließen ungesicherter Fenster.
+
 ## Ausgabe
 - Hauptformat PDF nach Vorlage (A3-Plan, A4-Deck); Schriften aus den Einstellungen, Fallback ALFA-Schrift.
 - Mit Bewegung oder Ansichtswahl: muss als Mailanhang ohne Einladung und Freigabe mit Bordmitteln aufgehen (HTML-Einzeldatei offline, MP4).
@@ -27,7 +31,7 @@ Prototyp auf `alfa-draws` (Clone `~/Developer/ALFA_DRAWS`). Status Orange: kein 
 | Intake | neutral | PDF+OCR, Bild, CSV, xlsx, IDML, DXF; DWG nur erkannt; zip über `/usr/bin/unzip` |
 | Templates | neutral | Mustache mit Meldung unbekannter Variablen, Canvas aus JSON/IDML |
 | Assist | neutral | Claude-Werkzeug-Schleife, Skillset, Style Master; Zugang vom Gastmodul |
-| DrawingKit | Draws | Modell (Quader, Keil, konisches Bein), Projektion, Ordnung, Maße, Packs, Board, Studio-Blätter, Einheiten/Posen |
+| DrawingKit | Draws | Arbeitsdatei `DrawsDoc` als SVG, Modell (Quader, Keil, konisches Bein), Projektion, Ordnung, Maße, Packs, Board, Studio-Blätter, Einheiten/Posen |
 | DrawsRender | Draws | Foto-Render mit RealityKit: Körper, Texturen als PBR-Material, Studiolicht, Schatten; PNG/PDF |
 | DrawsAI | Draws | Einmal-Entwurf, Live-Werkzeuge (inkl. Textur, Licht, Foto-Vorschau, Keil/Konus), Vorbereitung über Intake, Rollen inkl. Material |
 | DrawsDock | Draws | 7 Ports mit lokalen Adaptern, Typen feldgleich mit Hub |

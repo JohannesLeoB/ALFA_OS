@@ -40,6 +40,11 @@ struct ShellScreen: View {
         .environment(\.style, style)
         .font(style.font())
         .ignoresSafeArea()
+        .navigationTitle(model.windowTitle)
+        .dropDestination(for: URL.self) { urls, _ in
+            model.drop(urls)
+            return true
+        }
         .onAppear { model.start() }
     }
 

@@ -12,6 +12,10 @@ if args.first == "--render" {
     await runPhoto(args)
     exit(0)
 }
+if args.first == "--doc" || args.first == "--open" {
+    runDoc(args)
+    exit(0)
+}
 guard args.first == "render", args.count >= 2 else {
     fail("usage: drawingdude render object.json --ci <folder> --template <folder> --out <folder> [--material <folder>] [--dims none|given] [--fonts <folder>] [--products presentation,plan,iso,perspective,steps,customer,cover] [--distance <mm>] [--pose unit=0...1,unit=0...1] [--html]")
 }

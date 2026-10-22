@@ -5581,3 +5581,7 @@ line 10,10 to 0,0 length 14.1
 line 0,0 to 10,0 length 10
 line 10,0 to 10,10 length 10
 text "Kitchen 1" at 1,2 height 3.5
+doc kitchen plan 32661 adfa6fb10703e5f6130b786610345c47b6ffe62eb468570af2a70b3dfbdac063 true
+doc kitchen iso posed texture 21401 248030bb7ca0ecac36db41a8eaaad355ee9020347433c907abe0321e8984fb8f true
+doc board cells and hidden 18565 47e85abaf2db80746ebb50abfce8df77f5ba6a8494caa96be7a96a1e3fd0a137 true
+doc probe success(true) failure(DrawingKit.DocError.newer(2)) failure(DrawingKit.DocError.corrupt)

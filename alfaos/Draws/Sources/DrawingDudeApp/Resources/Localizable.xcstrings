@@ -2718,6 +2718,94 @@
           }
         }
       }
+    },
+    "draws.doc.open": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffnen …"
+          }
+        }
+      }
+    },
+    "draws.doc.save": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sichern"
+          }
+        }
+      }
+    },
+    "draws.doc.saveAs": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sichern unter …"
+          }
+        }
+      }
+    },
+    "draws.doc.error.empty": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es gibt nichts zu sichern."
+          }
+        }
+      }
+    },
+    "draws.doc.error.write": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Datei lässt sich nicht sichern."
+          }
+        }
+      }
+    },
+    "draws.doc.error.read": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Datei lässt sich nicht lesen."
+          }
+        }
+      }
+    },
+    "draws.doc.error.newer": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Datei stammt aus einer neueren Fassung."
+          }
+        }
+      }
+    },
+    "draws.doc.error.pack": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Paket der Datei fehlt."
+          }
+        }
+      }
     }
   }
 }

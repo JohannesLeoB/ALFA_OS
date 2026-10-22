@@ -144,7 +144,7 @@ final class DrawsModel {
     var failure: String?
     var overflow = false
     var brief = ""
-    var attachments: [Attachment] = []
+    var attachments: [Attachment] = [] { didSet { touch() } }
     var designing = false
     var approach = Approach.once
     var running = false
@@ -159,20 +159,26 @@ final class DrawsModel {
     var choice = ""
     var presets: [PromptPreset] = []
     var extra: [Material] = []
-    var look = Look()
+    var look = Look() { didSet { touch() } }
     var photo: CGImage?
     var rendering = false
     var photoFailure: String?
-    var underlayShow = false
-    var underlayExport = false
+    var underlayShow = false { didSet { touch() } }
+    var underlayExport = false { didSet { touch() } }
     private(set) var underlayData: Data?
     var underlay: String? {
         didSet {
             underlayData = underlay.flatMap { name in choices.first { $0.name == name } }
                 .flatMap { Prepare.underlay($0, side: Proto.underlaySide) }
+            touch()
         }
     }
-    private var ready = false
+    var ready = false
+    var fileURL: URL?
+    var dirty = false { didSet { NSApplication.shared.windows.first?.isDocumentEdited = dirty } }
+    var ciID = ""
+    var materialID = ""
+    var styleID = "studio"
     private let designer: Designer
     @ObservationIgnored private var glide: Task<Void, Never>?
     @ObservationIgnored private var chat: Session?
@@ -287,7 +293,7 @@ final class DrawsModel {
         pose[id] = min(1, max(0, value))
     }
 
-    private func replace(units next: [DrawingKit.Unit]) {
+    func replace(units next: [DrawingKit.Unit]) {
         glide?.cancel()
         pose = [:]
         active = nil
@@ -365,6 +371,8 @@ final class DrawsModel {
             template = try dock.loadTemplate()
             choice = templates.first?.name ?? ""
             material = try dock.loadMaterial()
+            ciID = dock.templates.packs(.ci).first?.name ?? ""
+            materialID = dock.templates.packs(.material).first?.name ?? ""
             fonts = DrawsFonts.resolve(upload: dock.templates.fonts())
             guard ci != nil, template != nil else {
                 failure = word("dock.reason.packs")
@@ -380,9 +388,15 @@ final class DrawsModel {
         }
     }
 
+    func touch() {
+        if ready { dirty = true }
+    }
+
     func choose(_ ref: PackRef) {
         do {
             let next = try dock.loadTemplate(ref)
+            let cis = dock.templates.packs(.ci)
+            ciID = (cis.first { $0.name == next.pack.ciName } ?? cis.first)?.name ?? ""
             if let paired = try dock.loadCI(named: next.pack.ciName) {
                 ci = paired
             } else if let first = try dock.loadCI() {
@@ -431,8 +445,10 @@ final class DrawsModel {
             accent = nil
             rebuild()
             objectName = url.deletingPathExtension().lastPathComponent
+            fileURL = nil
             ready = true
             render()
+            dirty = false
         } catch {
             failure = "\(error)"
         }
@@ -469,8 +485,10 @@ final class DrawsModel {
         accent = nil
         rebuild()
         objectName = ""
+        fileURL = nil
         ready = true
         render()
+        dirty = false
     }
 
     func style() -> IsoStyle? {
@@ -493,6 +511,7 @@ final class DrawsModel {
     }
 
     func render() {
+        touch()
         guard ready, let ci, let template else { return }
         overflow = false
         guard !shown.isEmpty else {
@@ -525,8 +544,9 @@ final class DrawsModel {
 
     func open() {
         let panel = NSOpenPanel()
-        panel.allowedContentTypes = [.json]
-        if panel.runModal() == .OK, let url = panel.url { load(url) }
+        panel.allowedContentTypes = [.svg, .json]
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        if url.pathExtension.lowercased() == "json" { load(url) } else { drop([url]) }
     }
 
     var place: Place {
@@ -793,7 +813,7 @@ final class DrawsModel {
     func startLive() {
         guard !running, !designing, let bench = bench() else { return }
         let packs = Self.root.appendingPathComponent("Packs")
-        let master = try? StyleMaster.load(packs.appendingPathComponent("style/studio.json"))
+        let master = try? StyleMaster.load(packs.appendingPathComponent("style/\(styleID).json"))
         let start = master.map { draft().seeded(by: $0, dials: bench.dials) } ?? draft()
         let keys = ["motion", "materials"] + (dimensions ? ["dims"] : []) + (layout == .steps ? ["steps"] : [])
         let toolbox = DrawsToolbox(draft: start, bench: bench, images: images) { [weak self] next in self?.apply(next) }

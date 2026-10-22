@@ -1009,56 +1009,352 @@
   {
    "name": "board kitchen",
    "parts": [
-    {"id": "sockel", "name": "Sockel", "material": "sockel", "x": 0, "y": 70, "z": 0, "w": 2400, "d": 530, "h": 100},
-    {"id": "u0", "name": "Unterschrank 1", "material": "korpus", "x": 0, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "u1", "name": "Unterschrank 2", "material": "korpus", "x": 600, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "u2", "name": "Unterschrank 3", "material": "korpus", "x": 1200, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "u3", "name": "Unterschrank 4", "material": "korpus", "x": 1800, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "platte", "name": "Arbeitsplatte", "material": "platte", "x": 0, "y": 0, "z": 820, "w": 2400, "d": 620, "h": 40},
-    {"id": "o0", "name": "Oberschrank 1", "material": "korpus", "x": 0, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
-    {"id": "o1", "name": "Oberschrank 2", "material": "korpus", "x": 800, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
-    {"id": "o2", "name": "Oberschrank 3", "material": "korpus", "x": 1600, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700}
+    {
+     "id": "sockel",
+     "name": "Sockel",
+     "material": "sockel",
+     "x": 0,
+     "y": 70,
+     "z": 0,
+     "w": 2400,
+     "d": 530,
+     "h": 100
+    },
+    {
+     "id": "u0",
+     "name": "Unterschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u1",
+     "name": "Unterschrank 2",
+     "material": "korpus",
+     "x": 600,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u2",
+     "name": "Unterschrank 3",
+     "material": "korpus",
+     "x": 1200,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u3",
+     "name": "Unterschrank 4",
+     "material": "korpus",
+     "x": 1800,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "platte",
+     "name": "Arbeitsplatte",
+     "material": "platte",
+     "x": 0,
+     "y": 0,
+     "z": 820,
+     "w": 2400,
+     "d": 620,
+     "h": 40
+    },
+    {
+     "id": "o0",
+     "name": "Oberschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    },
+    {
+     "id": "o1",
+     "name": "Oberschrank 2",
+     "material": "korpus",
+     "x": 800,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    },
+    {
+     "id": "o2",
+     "name": "Oberschrank 3",
+     "material": "korpus",
+     "x": 1600,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    }
    ],
-   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.threeView": "Küchenzeile Ansichten", "layout.iso": "Küchenzeile Isometrie", "layout.plan": "Küchenzeile Ansichten", "layout.perspective": "Küchenzeile Perspektive", "layout.steps": "Küchenzeile Aufbau", "layout.customer": "Küchenzeile Kundenansicht", "layout.board": "Küchenzeile Board"},
-   "products": ["board"],
+   "project": {
+    "lastName": "Mustermann",
+    "project": "Küche EG",
+    "street": "Beispielweg 1",
+    "city": "20457 Hamburg",
+    "customer": "2026-001",
+    "date": "21.10.2026",
+    "drawn": "GEZ",
+    "layout.threeView": "Küchenzeile Ansichten",
+    "layout.iso": "Küchenzeile Isometrie",
+    "layout.plan": "Küchenzeile Ansichten",
+    "layout.perspective": "Küchenzeile Perspektive",
+    "layout.steps": "Küchenzeile Aufbau",
+    "layout.customer": "Küchenzeile Kundenansicht",
+    "layout.board": "Küchenzeile Board"
+   },
+   "products": [
+    "board"
+   ],
    "cells": [
-    {"id": "f", "view": "front", "x": 15, "y": 2, "w": 160, "h": 140},
-    {"id": "t", "view": "top", "x": 175, "y": 2, "w": 142, "h": 60},
-    {"id": "r", "view": "right", "x": 175, "y": 62, "w": 142, "h": 140},
-    {"id": "i", "view": "iso", "x": 15, "y": 144, "w": 150, "h": 150},
-    {"id": "s", "view": "iso", "x": 175, "y": 202, "w": 142, "h": 92, "step": 2}
+    {
+     "id": "f",
+     "view": "front",
+     "x": 15,
+     "y": 2,
+     "w": 160,
+     "h": 140
+    },
+    {
+     "id": "t",
+     "view": "top",
+     "x": 175,
+     "y": 2,
+     "w": 142,
+     "h": 60
+    },
+    {
+     "id": "r",
+     "view": "right",
+     "x": 175,
+     "y": 62,
+     "w": 142,
+     "h": 140
+    },
+    {
+     "id": "i",
+     "view": "iso",
+     "x": 15,
+     "y": 144,
+     "w": 150,
+     "h": 150
+    },
+    {
+     "id": "s",
+     "view": "iso",
+     "x": 175,
+     "y": 202,
+     "w": 142,
+     "h": 92,
+     "step": 2
+    }
    ]
   },
   {
    "name": "board overflow",
    "parts": [
-    {"id": "sockel", "name": "Sockel", "material": "sockel", "x": 0, "y": 70, "z": 0, "w": 2400, "d": 530, "h": 100},
-    {"id": "u0", "name": "Unterschrank 1", "material": "korpus", "x": 0, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "platte", "name": "Arbeitsplatte", "material": "platte", "x": 0, "y": 0, "z": 820, "w": 2400, "d": 620, "h": 40}
+    {
+     "id": "sockel",
+     "name": "Sockel",
+     "material": "sockel",
+     "x": 0,
+     "y": 70,
+     "z": 0,
+     "w": 2400,
+     "d": 530,
+     "h": 100
+    },
+    {
+     "id": "u0",
+     "name": "Unterschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "platte",
+     "name": "Arbeitsplatte",
+     "material": "platte",
+     "x": 0,
+     "y": 0,
+     "z": 820,
+     "w": 2400,
+     "d": 620,
+     "h": 40
+    }
    ],
-   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.threeView": "Küchenzeile Ansichten", "layout.iso": "Küchenzeile Isometrie", "layout.plan": "Küchenzeile Ansichten", "layout.perspective": "Küchenzeile Perspektive", "layout.steps": "Küchenzeile Aufbau", "layout.customer": "Küchenzeile Kundenansicht", "layout.board": "Küchenzeile Board"},
-   "products": ["board"],
+   "project": {
+    "lastName": "Mustermann",
+    "project": "Küche EG",
+    "street": "Beispielweg 1",
+    "city": "20457 Hamburg",
+    "customer": "2026-001",
+    "date": "21.10.2026",
+    "drawn": "GEZ",
+    "layout.threeView": "Küchenzeile Ansichten",
+    "layout.iso": "Küchenzeile Isometrie",
+    "layout.plan": "Küchenzeile Ansichten",
+    "layout.perspective": "Küchenzeile Perspektive",
+    "layout.steps": "Küchenzeile Aufbau",
+    "layout.customer": "Küchenzeile Kundenansicht",
+    "layout.board": "Küchenzeile Board"
+   },
+   "products": [
+    "board"
+   ],
    "cells": [
-    {"id": "f", "view": "front", "x": 15, "y": 2, "w": 160, "h": 140, "scale": 1},
-    {"id": "i", "view": "iso", "x": 15, "y": 144, "w": 150, "h": 150, "scale": 5}
+    {
+     "id": "f",
+     "view": "front",
+     "x": 15,
+     "y": 2,
+     "w": 160,
+     "h": 140,
+     "scale": 1
+    },
+    {
+     "id": "i",
+     "view": "iso",
+     "x": 15,
+     "y": 144,
+     "w": 150,
+     "h": 150,
+     "scale": 5
+    }
    ]
   },
   {
    "name": "board focus",
    "parts": [
-    {"id": "u0", "name": "Unterschrank 1", "material": "korpus", "x": 0, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "u1", "name": "Unterschrank 2", "material": "korpus", "x": 600, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "platte", "name": "Arbeitsplatte", "material": "platte", "x": 0, "y": 0, "z": 820, "w": 2400, "d": 620, "h": 40},
-    {"id": "o0", "name": "Oberschrank 1", "material": "korpus", "x": 0, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700}
+    {
+     "id": "u0",
+     "name": "Unterschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u1",
+     "name": "Unterschrank 2",
+     "material": "korpus",
+     "x": 600,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "platte",
+     "name": "Arbeitsplatte",
+     "material": "platte",
+     "x": 0,
+     "y": 0,
+     "z": 820,
+     "w": 2400,
+     "d": 620,
+     "h": 40
+    },
+    {
+     "id": "o0",
+     "name": "Oberschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    }
    ],
-   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.threeView": "Küchenzeile Ansichten", "layout.iso": "Küchenzeile Isometrie", "layout.plan": "Küchenzeile Ansichten", "layout.perspective": "Küchenzeile Perspektive", "layout.steps": "Küchenzeile Aufbau", "layout.customer": "Küchenzeile Kundenansicht", "layout.board": "Küchenzeile Board"},
-   "products": ["board"],
+   "project": {
+    "lastName": "Mustermann",
+    "project": "Küche EG",
+    "street": "Beispielweg 1",
+    "city": "20457 Hamburg",
+    "customer": "2026-001",
+    "date": "21.10.2026",
+    "drawn": "GEZ",
+    "layout.threeView": "Küchenzeile Ansichten",
+    "layout.iso": "Küchenzeile Isometrie",
+    "layout.plan": "Küchenzeile Ansichten",
+    "layout.perspective": "Küchenzeile Perspektive",
+    "layout.steps": "Küchenzeile Aufbau",
+    "layout.customer": "Küchenzeile Kundenansicht",
+    "layout.board": "Küchenzeile Board"
+   },
+   "products": [
+    "board"
+   ],
    "distance": 7000,
    "cells": [
-    {"id": "a", "view": "front", "x": 15, "y": 2, "w": 100, "h": 100, "focus": "u1"},
-    {"id": "b", "view": "right", "x": 120, "y": 2, "w": 100, "h": 140, "focus": "o0", "dims": false},
-    {"id": "c", "view": "iso", "x": 15, "y": 144, "w": 140, "h": 140, "focus": "platte", "step": 3},
-    {"id": "d", "view": "perspective", "x": 160, "y": 144, "w": 150, "h": 140}
+    {
+     "id": "a",
+     "view": "front",
+     "x": 15,
+     "y": 2,
+     "w": 100,
+     "h": 100,
+     "focus": "u1"
+    },
+    {
+     "id": "b",
+     "view": "right",
+     "x": 120,
+     "y": 2,
+     "w": 100,
+     "h": 140,
+     "focus": "o0",
+     "dims": false
+    },
+    {
+     "id": "c",
+     "view": "iso",
+     "x": 15,
+     "y": 144,
+     "w": 140,
+     "h": 140,
+     "focus": "platte",
+     "step": 3
+    },
+    {
+     "id": "d",
+     "view": "perspective",
+     "x": 160,
+     "y": 144,
+     "w": 150,
+     "h": 140
+    }
    ]
   },
   {
@@ -1425,128 +1721,875 @@
   {
    "name": "kitchen pose 0",
    "parts": [
-    {"id": "sockel", "name": "Sockel", "material": "sockel", "x": 0, "y": 70, "z": 0, "w": 2400, "d": 530, "h": 100},
-    {"id": "u0", "name": "Unterschrank 1", "material": "korpus", "x": 0, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "u1", "name": "Unterschrank 2", "material": "korpus", "x": 600, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "u2", "name": "Unterschrank 3", "material": "korpus", "x": 1200, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "u3", "name": "Unterschrank 4", "material": "korpus", "x": 1800, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "platte", "name": "Arbeitsplatte", "material": "platte", "x": 0, "y": 0, "z": 820, "w": 2400, "d": 620, "h": 40},
-    {"id": "o0", "name": "Oberschrank 1", "material": "korpus", "x": 0, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
-    {"id": "o1", "name": "Oberschrank 2", "material": "korpus", "x": 800, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
-    {"id": "o2", "name": "Oberschrank 3", "material": "korpus", "x": 1600, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
-    {"id": "fd0", "name": "Schubladenfront unten", "material": "front", "x": 2, "y": 22, "z": 102, "w": 596, "d": 18, "h": 356, "role": "FRONT"},
-    {"id": "fd1", "name": "Schubladenfront oben", "material": "front", "x": 2, "y": 22, "z": 462, "w": 596, "d": 18, "h": 356, "role": "FRONT"},
-    {"id": "fdoor", "name": "Tuerfront", "material": "front", "x": 602, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"},
-    {"id": "fpull", "name": "Auszugfront", "material": "front", "x": 1202, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"},
-    {"id": "f3", "name": "Front Unterschrank 4", "material": "front", "x": 1802, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"}
+    {
+     "id": "sockel",
+     "name": "Sockel",
+     "material": "sockel",
+     "x": 0,
+     "y": 70,
+     "z": 0,
+     "w": 2400,
+     "d": 530,
+     "h": 100
+    },
+    {
+     "id": "u0",
+     "name": "Unterschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u1",
+     "name": "Unterschrank 2",
+     "material": "korpus",
+     "x": 600,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u2",
+     "name": "Unterschrank 3",
+     "material": "korpus",
+     "x": 1200,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u3",
+     "name": "Unterschrank 4",
+     "material": "korpus",
+     "x": 1800,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "platte",
+     "name": "Arbeitsplatte",
+     "material": "platte",
+     "x": 0,
+     "y": 0,
+     "z": 820,
+     "w": 2400,
+     "d": 620,
+     "h": 40
+    },
+    {
+     "id": "o0",
+     "name": "Oberschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    },
+    {
+     "id": "o1",
+     "name": "Oberschrank 2",
+     "material": "korpus",
+     "x": 800,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    },
+    {
+     "id": "o2",
+     "name": "Oberschrank 3",
+     "material": "korpus",
+     "x": 1600,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    },
+    {
+     "id": "fd0",
+     "name": "Schubladenfront unten",
+     "material": "front",
+     "x": 2,
+     "y": 22,
+     "z": 102,
+     "w": 596,
+     "d": 18,
+     "h": 356,
+     "role": "FRONT"
+    },
+    {
+     "id": "fd1",
+     "name": "Schubladenfront oben",
+     "material": "front",
+     "x": 2,
+     "y": 22,
+     "z": 462,
+     "w": 596,
+     "d": 18,
+     "h": 356,
+     "role": "FRONT"
+    },
+    {
+     "id": "fdoor",
+     "name": "Tuerfront",
+     "material": "front",
+     "x": 602,
+     "y": 22,
+     "z": 102,
+     "w": 596,
+     "d": 18,
+     "h": 716,
+     "role": "FRONT"
+    },
+    {
+     "id": "fpull",
+     "name": "Auszugfront",
+     "material": "front",
+     "x": 1202,
+     "y": 22,
+     "z": 102,
+     "w": 596,
+     "d": 18,
+     "h": 716,
+     "role": "FRONT"
+    },
+    {
+     "id": "f3",
+     "name": "Front Unterschrank 4",
+     "material": "front",
+     "x": 1802,
+     "y": 22,
+     "z": 102,
+     "w": 596,
+     "d": 18,
+     "h": 716,
+     "role": "FRONT"
+    }
    ],
-   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.threeView": "Küchenzeile Ansichten", "layout.iso": "Küchenzeile Isometrie", "layout.plan": "Küchenzeile Ansichten", "layout.perspective": "Küchenzeile Perspektive", "layout.steps": "Küchenzeile Aufbau", "layout.customer": "Küchenzeile Kundenansicht"},
-   "products": ["iso", "perspective"],
+   "project": {
+    "lastName": "Mustermann",
+    "project": "Küche EG",
+    "street": "Beispielweg 1",
+    "city": "20457 Hamburg",
+    "customer": "2026-001",
+    "date": "21.10.2026",
+    "drawn": "GEZ",
+    "layout.threeView": "Küchenzeile Ansichten",
+    "layout.iso": "Küchenzeile Isometrie",
+    "layout.plan": "Küchenzeile Ansichten",
+    "layout.perspective": "Küchenzeile Perspektive",
+    "layout.steps": "Küchenzeile Aufbau",
+    "layout.customer": "Küchenzeile Kundenansicht"
+   },
+   "products": [
+    "iso",
+    "perspective"
+   ],
    "distance": 7000,
-   "pose": {"d0": 0, "d1": 0, "door": 0, "pull": 0},
+   "pose": {
+    "d0": 0,
+    "d1": 0,
+    "door": 0,
+    "pull": 0
+   },
    "units": [
-    {"id": "d0", "kind": "drawer", "front": ["fd0"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}},
-    {"id": "d1", "kind": "drawer", "front": ["fd1"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}},
-    {"id": "door", "kind": "door", "front": ["fdoor"], "body": [], "motion": {"type": "hinge", "px": 602, "py": 22, "pz": 0, "axis": "z", "deg": -100}},
-    {"id": "pull", "kind": "pullout", "front": ["fpull"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}}
+    {
+     "id": "d0",
+     "kind": "drawer",
+     "front": [
+      "fd0"
+     ],
+     "body": [],
+     "motion": {
+      "type": "slide",
+      "dx": 0,
+      "dy": -450,
+      "dz": 0
+     }
+    },
+    {
+     "id": "d1",
+     "kind": "drawer",
+     "front": [
+      "fd1"
+     ],
+     "body": [],
+     "motion": {
+      "type": "slide",
+      "dx": 0,
+      "dy": -450,
+      "dz": 0
+     }
+    },
+    {
+     "id": "door",
+     "kind": "door",
+     "front": [
+      "fdoor"
+     ],
+     "body": [],
+     "motion": {
+      "type": "hinge",
+      "px": 602,
+      "py": 22,
+      "pz": 0,
+      "axis": "z",
+      "deg": -100
+     }
+    },
+    {
+     "id": "pull",
+     "kind": "pullout",
+     "front": [
+      "fpull"
+     ],
+     "body": [],
+     "motion": {
+      "type": "slide",
+      "dx": 0,
+      "dy": -450,
+      "dz": 0
+     }
+    }
    ]
   },
   {
    "name": "kitchen pose open",
    "parts": [
-    {"id": "sockel", "name": "Sockel", "material": "sockel", "x": 0, "y": 70, "z": 0, "w": 2400, "d": 530, "h": 100},
-    {"id": "u0", "name": "Unterschrank 1", "material": "korpus", "x": 0, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "u1", "name": "Unterschrank 2", "material": "korpus", "x": 600, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "u2", "name": "Unterschrank 3", "material": "korpus", "x": 1200, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "u3", "name": "Unterschrank 4", "material": "korpus", "x": 1800, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "platte", "name": "Arbeitsplatte", "material": "platte", "x": 0, "y": 0, "z": 820, "w": 2400, "d": 620, "h": 40},
-    {"id": "o0", "name": "Oberschrank 1", "material": "korpus", "x": 0, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
-    {"id": "o1", "name": "Oberschrank 2", "material": "korpus", "x": 800, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
-    {"id": "o2", "name": "Oberschrank 3", "material": "korpus", "x": 1600, "y": 280, "z": 1400, "w": 800, "d": 320, "h": 700},
-    {"id": "fd0", "name": "Schubladenfront unten", "material": "front", "x": 2, "y": 22, "z": 102, "w": 596, "d": 18, "h": 356, "role": "FRONT"},
-    {"id": "fd1", "name": "Schubladenfront oben", "material": "front", "x": 2, "y": 22, "z": 462, "w": 596, "d": 18, "h": 356, "role": "FRONT"},
-    {"id": "fdoor", "name": "Tuerfront", "material": "front", "x": 602, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"},
-    {"id": "fpull", "name": "Auszugfront", "material": "front", "x": 1202, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"},
-    {"id": "f3", "name": "Front Unterschrank 4", "material": "front", "x": 1802, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"}
+    {
+     "id": "sockel",
+     "name": "Sockel",
+     "material": "sockel",
+     "x": 0,
+     "y": 70,
+     "z": 0,
+     "w": 2400,
+     "d": 530,
+     "h": 100
+    },
+    {
+     "id": "u0",
+     "name": "Unterschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u1",
+     "name": "Unterschrank 2",
+     "material": "korpus",
+     "x": 600,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u2",
+     "name": "Unterschrank 3",
+     "material": "korpus",
+     "x": 1200,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u3",
+     "name": "Unterschrank 4",
+     "material": "korpus",
+     "x": 1800,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "platte",
+     "name": "Arbeitsplatte",
+     "material": "platte",
+     "x": 0,
+     "y": 0,
+     "z": 820,
+     "w": 2400,
+     "d": 620,
+     "h": 40
+    },
+    {
+     "id": "o0",
+     "name": "Oberschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    },
+    {
+     "id": "o1",
+     "name": "Oberschrank 2",
+     "material": "korpus",
+     "x": 800,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    },
+    {
+     "id": "o2",
+     "name": "Oberschrank 3",
+     "material": "korpus",
+     "x": 1600,
+     "y": 280,
+     "z": 1400,
+     "w": 800,
+     "d": 320,
+     "h": 700
+    },
+    {
+     "id": "fd0",
+     "name": "Schubladenfront unten",
+     "material": "front",
+     "x": 2,
+     "y": 22,
+     "z": 102,
+     "w": 596,
+     "d": 18,
+     "h": 356,
+     "role": "FRONT"
+    },
+    {
+     "id": "fd1",
+     "name": "Schubladenfront oben",
+     "material": "front",
+     "x": 2,
+     "y": 22,
+     "z": 462,
+     "w": 596,
+     "d": 18,
+     "h": 356,
+     "role": "FRONT"
+    },
+    {
+     "id": "fdoor",
+     "name": "Tuerfront",
+     "material": "front",
+     "x": 602,
+     "y": 22,
+     "z": 102,
+     "w": 596,
+     "d": 18,
+     "h": 716,
+     "role": "FRONT"
+    },
+    {
+     "id": "fpull",
+     "name": "Auszugfront",
+     "material": "front",
+     "x": 1202,
+     "y": 22,
+     "z": 102,
+     "w": 596,
+     "d": 18,
+     "h": 716,
+     "role": "FRONT"
+    },
+    {
+     "id": "f3",
+     "name": "Front Unterschrank 4",
+     "material": "front",
+     "x": 1802,
+     "y": 22,
+     "z": 102,
+     "w": 596,
+     "d": 18,
+     "h": 716,
+     "role": "FRONT"
+    }
    ],
-   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.threeView": "Küchenzeile Ansichten", "layout.iso": "Küchenzeile Isometrie", "layout.plan": "Küchenzeile Ansichten", "layout.perspective": "Küchenzeile Perspektive", "layout.steps": "Küchenzeile Aufbau", "layout.customer": "Küchenzeile Kundenansicht"},
-   "products": ["iso", "perspective"],
+   "project": {
+    "lastName": "Mustermann",
+    "project": "Küche EG",
+    "street": "Beispielweg 1",
+    "city": "20457 Hamburg",
+    "customer": "2026-001",
+    "date": "21.10.2026",
+    "drawn": "GEZ",
+    "layout.threeView": "Küchenzeile Ansichten",
+    "layout.iso": "Küchenzeile Isometrie",
+    "layout.plan": "Küchenzeile Ansichten",
+    "layout.perspective": "Küchenzeile Perspektive",
+    "layout.steps": "Küchenzeile Aufbau",
+    "layout.customer": "Küchenzeile Kundenansicht"
+   },
+   "products": [
+    "iso",
+    "perspective"
+   ],
    "distance": 7000,
-   "pose": {"d0": 1, "d1": 1, "door": 1, "pull": 1},
+   "pose": {
+    "d0": 1,
+    "d1": 1,
+    "door": 1,
+    "pull": 1
+   },
    "units": [
-    {"id": "d0", "kind": "drawer", "front": ["fd0"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}},
-    {"id": "d1", "kind": "drawer", "front": ["fd1"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}},
-    {"id": "door", "kind": "door", "front": ["fdoor"], "body": [], "motion": {"type": "hinge", "px": 602, "py": 22, "pz": 0, "axis": "z", "deg": -100}},
-    {"id": "pull", "kind": "pullout", "front": ["fpull"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}}
+    {
+     "id": "d0",
+     "kind": "drawer",
+     "front": [
+      "fd0"
+     ],
+     "body": [],
+     "motion": {
+      "type": "slide",
+      "dx": 0,
+      "dy": -450,
+      "dz": 0
+     }
+    },
+    {
+     "id": "d1",
+     "kind": "drawer",
+     "front": [
+      "fd1"
+     ],
+     "body": [],
+     "motion": {
+      "type": "slide",
+      "dx": 0,
+      "dy": -450,
+      "dz": 0
+     }
+    },
+    {
+     "id": "door",
+     "kind": "door",
+     "front": [
+      "fdoor"
+     ],
+     "body": [],
+     "motion": {
+      "type": "hinge",
+      "px": 602,
+      "py": 22,
+      "pz": 0,
+      "axis": "z",
+      "deg": -100
+     }
+    },
+    {
+     "id": "pull",
+     "kind": "pullout",
+     "front": [
+      "fpull"
+     ],
+     "body": [],
+     "motion": {
+      "type": "slide",
+      "dx": 0,
+      "dy": -450,
+      "dz": 0
+     }
+    }
    ]
   },
   {
    "name": "hinge door and flap",
    "parts": [
-    {"id": "cab1", "name": "cab1", "material": "korpus", "x": 0, "y": 40, "z": 0, "w": 600, "d": 500, "h": 700},
-    {"id": "door", "name": "door", "material": "front", "x": 2, "y": 22, "z": 2, "w": 596, "d": 18, "h": 696},
-    {"id": "cab2", "name": "cab2", "material": "korpus", "x": 700, "y": 40, "z": 800, "w": 600, "d": 300, "h": 700},
-    {"id": "flap", "name": "flap", "material": "front", "x": 702, "y": 22, "z": 802, "w": 596, "d": 18, "h": 696}
+    {
+     "id": "cab1",
+     "name": "cab1",
+     "material": "korpus",
+     "x": 0,
+     "y": 40,
+     "z": 0,
+     "w": 600,
+     "d": 500,
+     "h": 700
+    },
+    {
+     "id": "door",
+     "name": "door",
+     "material": "front",
+     "x": 2,
+     "y": 22,
+     "z": 2,
+     "w": 596,
+     "d": 18,
+     "h": 696
+    },
+    {
+     "id": "cab2",
+     "name": "cab2",
+     "material": "korpus",
+     "x": 700,
+     "y": 40,
+     "z": 800,
+     "w": 600,
+     "d": 300,
+     "h": 700
+    },
+    {
+     "id": "flap",
+     "name": "flap",
+     "material": "front",
+     "x": 702,
+     "y": 22,
+     "z": 802,
+     "w": 596,
+     "d": 18,
+     "h": 696
+    }
    ],
-   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.threeView": "Küchenzeile Ansichten", "layout.iso": "Küchenzeile Isometrie", "layout.plan": "Küchenzeile Ansichten", "layout.perspective": "Küchenzeile Perspektive", "layout.steps": "Küchenzeile Aufbau", "layout.customer": "Küchenzeile Kundenansicht"},
-   "products": ["iso", "presentation"],
-   "pose": {"door": 0.5, "flap": 1},
+   "project": {
+    "lastName": "Mustermann",
+    "project": "Küche EG",
+    "street": "Beispielweg 1",
+    "city": "20457 Hamburg",
+    "customer": "2026-001",
+    "date": "21.10.2026",
+    "drawn": "GEZ",
+    "layout.threeView": "Küchenzeile Ansichten",
+    "layout.iso": "Küchenzeile Isometrie",
+    "layout.plan": "Küchenzeile Ansichten",
+    "layout.perspective": "Küchenzeile Perspektive",
+    "layout.steps": "Küchenzeile Aufbau",
+    "layout.customer": "Küchenzeile Kundenansicht"
+   },
+   "products": [
+    "iso",
+    "presentation"
+   ],
+   "pose": {
+    "door": 0.5,
+    "flap": 1
+   },
    "units": [
-    {"id": "door", "kind": "door", "front": ["door"], "body": [], "motion": {"type": "hinge", "px": 2, "py": 22, "pz": 0, "axis": "z", "deg": -95}},
-    {"id": "flap", "kind": "flap", "front": ["flap"], "body": [], "motion": {"type": "hinge", "px": 0, "py": 22, "pz": 1498, "axis": "x", "deg": -90}}
+    {
+     "id": "door",
+     "kind": "door",
+     "front": [
+      "door"
+     ],
+     "body": [],
+     "motion": {
+      "type": "hinge",
+      "px": 2,
+      "py": 22,
+      "pz": 0,
+      "axis": "z",
+      "deg": -95
+     }
+    },
+    {
+     "id": "flap",
+     "kind": "flap",
+     "front": [
+      "flap"
+     ],
+     "body": [],
+     "motion": {
+      "type": "hinge",
+      "px": 0,
+      "py": 22,
+      "pz": 1498,
+      "axis": "x",
+      "deg": -90
+     }
+    }
    ]
   },
   {
    "name": "unit unknown part",
    "parts": [
-    {"id": "a", "name": "a", "material": "korpus", "x": 0, "y": 0, "z": 0, "w": 100, "d": 100, "h": 100}
+    {
+     "id": "a",
+     "name": "a",
+     "material": "korpus",
+     "x": 0,
+     "y": 0,
+     "z": 0,
+     "w": 100,
+     "d": 100,
+     "h": 100
+    }
    ],
-   "products": ["iso"],
+   "products": [
+    "iso"
+   ],
    "units": [
-    {"id": "u", "kind": "drawer", "front": ["nope"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -100, "dz": 0}}
+    {
+     "id": "u",
+     "kind": "drawer",
+     "front": [
+      "nope"
+     ],
+     "body": [],
+     "motion": {
+      "type": "slide",
+      "dx": 0,
+      "dy": -100,
+      "dz": 0
+     }
+    }
    ]
   },
   {
    "name": "unit shared part",
    "parts": [
-    {"id": "a", "name": "a", "material": "korpus", "x": 0, "y": 0, "z": 0, "w": 100, "d": 100, "h": 100},
-    {"id": "b", "name": "b", "material": "korpus", "x": 200, "y": 0, "z": 0, "w": 100, "d": 100, "h": 100}
+    {
+     "id": "a",
+     "name": "a",
+     "material": "korpus",
+     "x": 0,
+     "y": 0,
+     "z": 0,
+     "w": 100,
+     "d": 100,
+     "h": 100
+    },
+    {
+     "id": "b",
+     "name": "b",
+     "material": "korpus",
+     "x": 200,
+     "y": 0,
+     "z": 0,
+     "w": 100,
+     "d": 100,
+     "h": 100
+    }
    ],
-   "products": ["iso"],
+   "products": [
+    "iso"
+   ],
    "units": [
-    {"id": "u1", "kind": "drawer", "front": ["a"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -100, "dz": 0}},
-    {"id": "u2", "kind": "drawer", "front": ["b"], "body": ["a"], "motion": {"type": "slide", "dx": 0, "dy": -100, "dz": 0}}
+    {
+     "id": "u1",
+     "kind": "drawer",
+     "front": [
+      "a"
+     ],
+     "body": [],
+     "motion": {
+      "type": "slide",
+      "dx": 0,
+      "dy": -100,
+      "dz": 0
+     }
+    },
+    {
+     "id": "u2",
+     "kind": "drawer",
+     "front": [
+      "b"
+     ],
+     "body": [
+      "a"
+     ],
+     "motion": {
+      "type": "slide",
+      "dx": 0,
+      "dy": -100,
+      "dz": 0
+     }
+    }
    ]
   },
   {
    "name": "unit travel too large",
    "parts": [
-    {"id": "a", "name": "a", "material": "korpus", "x": 0, "y": 0, "z": 0, "w": 100, "d": 100, "h": 100}
+    {
+     "id": "a",
+     "name": "a",
+     "material": "korpus",
+     "x": 0,
+     "y": 0,
+     "z": 0,
+     "w": 100,
+     "d": 100,
+     "h": 100
+    }
    ],
-   "products": ["iso"],
+   "products": [
+    "iso"
+   ],
    "units": [
-    {"id": "u", "kind": "drawer", "front": ["a"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": 1e+300, "dz": 0}}
+    {
+     "id": "u",
+     "kind": "drawer",
+     "front": [
+      "a"
+     ],
+     "body": [],
+     "motion": {
+      "type": "slide",
+      "dx": 0,
+      "dy": 1e+300,
+      "dz": 0
+     }
+    }
    ]
   },
   {
    "name": "board units",
    "parts": [
-    {"id": "sockel", "name": "Sockel", "material": "sockel", "x": 0, "y": 70, "z": 0, "w": 1200, "d": 530, "h": 100},
-    {"id": "u0", "name": "Unterschrank 1", "material": "korpus", "x": 0, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "u1", "name": "Unterschrank 2", "material": "korpus", "x": 600, "y": 40, "z": 100, "w": 600, "d": 560, "h": 720},
-    {"id": "platte", "name": "Arbeitsplatte", "material": "platte", "x": 0, "y": 0, "z": 820, "w": 1200, "d": 620, "h": 40},
-    {"id": "fd0", "name": "Schubladenfront", "material": "front", "x": 2, "y": 22, "z": 102, "w": 596, "d": 18, "h": 356, "role": "FRONT"},
-    {"id": "fdoor", "name": "Tuerfront", "material": "front", "x": 602, "y": 22, "z": 102, "w": 596, "d": 18, "h": 716, "role": "FRONT"}
+    {
+     "id": "sockel",
+     "name": "Sockel",
+     "material": "sockel",
+     "x": 0,
+     "y": 70,
+     "z": 0,
+     "w": 1200,
+     "d": 530,
+     "h": 100
+    },
+    {
+     "id": "u0",
+     "name": "Unterschrank 1",
+     "material": "korpus",
+     "x": 0,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "u1",
+     "name": "Unterschrank 2",
+     "material": "korpus",
+     "x": 600,
+     "y": 40,
+     "z": 100,
+     "w": 600,
+     "d": 560,
+     "h": 720
+    },
+    {
+     "id": "platte",
+     "name": "Arbeitsplatte",
+     "material": "platte",
+     "x": 0,
+     "y": 0,
+     "z": 820,
+     "w": 1200,
+     "d": 620,
+     "h": 40
+    },
+    {
+     "id": "fd0",
+     "name": "Schubladenfront",
+     "material": "front",
+     "x": 2,
+     "y": 22,
+     "z": 102,
+     "w": 596,
+     "d": 18,
+     "h": 356,
+     "role": "FRONT"
+    },
+    {
+     "id": "fdoor",
+     "name": "Tuerfront",
+     "material": "front",
+     "x": 602,
+     "y": 22,
+     "z": 102,
+     "w": 596,
+     "d": 18,
+     "h": 716,
+     "role": "FRONT"
+    }
    ],
-   "project": {"lastName": "Mustermann", "project": "Küche EG", "street": "Beispielweg 1", "city": "20457 Hamburg", "customer": "2026-001", "date": "21.10.2026", "drawn": "GEZ", "layout.board": "Küchenzeile Board"},
-   "products": ["board"],
+   "project": {
+    "lastName": "Mustermann",
+    "project": "Küche EG",
+    "street": "Beispielweg 1",
+    "city": "20457 Hamburg",
+    "customer": "2026-001",
+    "date": "21.10.2026",
+    "drawn": "GEZ",
+    "layout.board": "Küchenzeile Board"
+   },
+   "products": [
+    "board"
+   ],
    "cells": [
-    {"id": "f", "view": "front", "x": 15, "y": 2, "w": 160, "h": 140},
-    {"id": "i", "view": "iso", "x": 15, "y": 144, "w": 150, "h": 150}
+    {
+     "id": "f",
+     "view": "front",
+     "x": 15,
+     "y": 2,
+     "w": 160,
+     "h": 140
+    },
+    {
+     "id": "i",
+     "view": "iso",
+     "x": 15,
+     "y": 144,
+     "w": 150,
+     "h": 150
+    }
    ],
    "units": [
-    {"id": "d0", "kind": "drawer", "front": ["fd0"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}},
-    {"id": "door", "kind": "door", "front": ["fdoor"], "body": [], "motion": {"type": "hinge", "px": 602, "py": 22, "pz": 0, "axis": "z", "deg": -100}}
+    {
+     "id": "d0",
+     "kind": "drawer",
+     "front": [
+      "fd0"
+     ],
+     "body": [],
+     "motion": {
+      "type": "slide",
+      "dx": 0,
+      "dy": -450,
+      "dz": 0
+     }
+    },
+    {
+     "id": "door",
+     "kind": "door",
+     "front": [
+      "fdoor"
+     ],
+     "body": [],
+     "motion": {
+      "type": "hinge",
+      "px": 602,
+      "py": 22,
+      "pz": 0,
+      "axis": "z",
+      "deg": -100
+     }
+    }
    ]
   },
   {
@@ -1715,5 +2758,598 @@
   "{}",
   "{\"platzhalter\": true, \"quelle\": \"Werte aus ref/python/render.py (CI-Dict, Linien und Schriften der SVG-Ausgabe). Kein Studio-CI. iso.top/side/front aus render.py (shade). iso.outline, iso.shadow, iso.spread und accent haben keine Vorlage: Testwerte nach dem Anatomy-Stil, accent = signal.\", \"font\": \"Helvetica, Arial, sans-serif\", \"pdfFont\": \"Helvetica\", \"ink\": \"#171717\", \"muted\": \"#6b6b6b\", \"signal\": \"#b3412e\", \"paper\": \"#ffffff\", \"lineFrame\": 0.7, \"lineBlock\": 0.5, \"lineEdge\": 0.25, \"lineDimension\": 0.18, \"lineExtension\": 0.12, \"lineTick\": 0.3, \"textDimension\": 2.2, \"textTitle\": 3.0, \"textLabel\": 1.8, \"textValue\": 3.0, \"textNote\": 2.2, \"weightTitle\": 1000, \"tints\": {\"korpus\": \"#ececec\", \"front\": \"#f7f7f7\", \"platte\": \"#c9c2b6\", \"sockel\": \"#9a9a9a\"}, \"accent\": \"#b3412e\", \"iso\": {\"top\": 1.0, \"side\": 0.92, \"front\": 0.84, \"edge\": 0.25, \"outline\": 0.5, \"shadow\": 0.12, \"spread\": 40}}",
   "{\"pack\": {\"id\": \"material/beispiel-snapshot\", \"version\": \"0.0.1\", \"schema_version\": \"0.1\", \"engine_min\": \"0.1.0\", \"approved_by\": null, \"changelog\": [\"2026-10-21 Ger\\u00fcst aus Konzept v3\"]}, \"platzhalter\": true, \"hinweis\": \"Platzhalter-T\\u00f6ne aus render.py. Echte Eintr\\u00e4ge aus Airtable 'Papers' (inputs/7). Herstellert\\u00f6ne bleiben herstellertreu. Zusatz 21.10.: Eintraege 'variante:*' sind Testtoene fuer Varianten (Annahme, kein Hersteller).\", \"fetched_at\": null, \"source\": \"Airtable appQA2RdJN39Zo8HA / Katalogpositionen (noch nicht abgerufen)\", \"materials\": [{\"code\": \"platzhalter:korpus\", \"name\": \"Korpus\", \"tone\": {\"srgb\": \"#ececec\"}, \"hatch_bw\": \"leer\", \"status\": \"platzhalter\"}, {\"code\": \"platzhalter:front\", \"name\": \"Front\", \"tone\": {\"srgb\": \"#f7f7f7\"}, \"hatch_bw\": \"leer\", \"status\": \"platzhalter\"}, {\"code\": \"platzhalter:platte\", \"name\": \"Arbeitsplatte\", \"tone\": {\"srgb\": \"#c9c2b6\"}, \"hatch_bw\": \"punkte\", \"status\": \"platzhalter\"}, {\"code\": \"platzhalter:sockel\", \"name\": \"Sockel\", \"tone\": {\"srgb\": \"#9a9a9a\"}, \"hatch_bw\": \"schraeg\", \"status\": \"platzhalter\"}, {\"code\": \"variante:front-dunkel\", \"name\": \"Front dunkel\", \"tone\": {\"srgb\": \"#5b6670\"}, \"hatch_bw\": \"leer\", \"status\": \"platzhalter\"}, {\"code\": \"variante:platte-hell\", \"name\": \"Arbeitsplatte hell\", \"tone\": {\"srgb\": \"#e4dfd6\"}, \"hatch_bw\": \"punkte\", \"status\": \"platzhalter\"}, {\"code\": \"platzhalter:korpus\", \"name\": \"Korpus\", \"tone\": {\"srgb\": \"#ececec\"}, \"hatch_bw\": \"leer\", \"status\": \"platzhalter\"}, {\"code\": \"x\", \"name\": \"X\", \"tone\": {\"srgb\": \"blau\"}, \"status\": \"?\"}], \"slots\": {\"korpus\": \"platzhalter:korpus\", \"front\": \"fehlt\", \"platte\": \"platzhalter:platte\", \"sockel\": \"platzhalter:sockel\"}}"
+ ],
+ "doc": [
+  {
+   "name": "kitchen plan",
+   "doc": {
+    "parts": [
+     {
+      "id": "sockel",
+      "name": "Sockel",
+      "material": "sockel",
+      "x": 0,
+      "y": 70,
+      "z": 0,
+      "w": 2400,
+      "d": 530,
+      "h": 100
+     },
+     {
+      "id": "u0",
+      "name": "Unterschrank 1",
+      "material": "korpus",
+      "x": 0,
+      "y": 40,
+      "z": 100,
+      "w": 600,
+      "d": 560,
+      "h": 720
+     },
+     {
+      "id": "u1",
+      "name": "Unterschrank 2",
+      "material": "korpus",
+      "x": 600,
+      "y": 40,
+      "z": 100,
+      "w": 600,
+      "d": 560,
+      "h": 720
+     },
+     {
+      "id": "u2",
+      "name": "Unterschrank 3",
+      "material": "korpus",
+      "x": 1200,
+      "y": 40,
+      "z": 100,
+      "w": 600,
+      "d": 560,
+      "h": 720
+     },
+     {
+      "id": "u3",
+      "name": "Unterschrank 4",
+      "material": "korpus",
+      "x": 1800,
+      "y": 40,
+      "z": 100,
+      "w": 600,
+      "d": 560,
+      "h": 720
+     },
+     {
+      "id": "platte",
+      "name": "Arbeitsplatte",
+      "material": "platte",
+      "x": 0,
+      "y": 0,
+      "z": 820,
+      "w": 2400,
+      "d": 620,
+      "h": 40
+     },
+     {
+      "id": "o0",
+      "name": "Oberschrank 1",
+      "material": "korpus",
+      "x": 0,
+      "y": 280,
+      "z": 1400,
+      "w": 800,
+      "d": 320,
+      "h": 700
+     },
+     {
+      "id": "o1",
+      "name": "Oberschrank 2",
+      "material": "korpus",
+      "x": 800,
+      "y": 280,
+      "z": 1400,
+      "w": 800,
+      "d": 320,
+      "h": 700
+     },
+     {
+      "id": "o2",
+      "name": "Oberschrank 3",
+      "material": "korpus",
+      "x": 1600,
+      "y": 280,
+      "z": 1400,
+      "w": 800,
+      "d": 320,
+      "h": 700
+     }
+    ],
+    "project": {
+     "lastName": "Mustermann",
+     "project": "Küche EG",
+     "street": "Beispielweg 1",
+     "city": "20457 Hamburg",
+     "customer": "2026-001",
+     "date": "21.10.2026",
+     "drawn": "GEZ",
+     "layout.threeView": "Küchenzeile Ansichten",
+     "layout.iso": "Küchenzeile Isometrie",
+     "layout.plan": "Küchenzeile Ansichten",
+     "layout.perspective": "Küchenzeile Perspektive",
+     "layout.steps": "Küchenzeile Aufbau",
+     "layout.customer": "Küchenzeile Kundenansicht"
+    },
+    "packs": {
+     "ci": "platzhalter",
+     "template": "a3-quer",
+     "material": "platzhalter"
+    },
+    "render": {
+     "layout": "plan"
+    }
+   }
+  },
+  {
+   "name": "kitchen iso posed texture",
+   "doc": {
+    "parts": [
+     {
+      "id": "sockel",
+      "name": "Sockel",
+      "material": "sockel",
+      "x": 0,
+      "y": 70,
+      "z": 0,
+      "w": 2400,
+      "d": 530,
+      "h": 100
+     },
+     {
+      "id": "u0",
+      "name": "Unterschrank 1",
+      "material": "korpus",
+      "x": 0,
+      "y": 40,
+      "z": 100,
+      "w": 600,
+      "d": 560,
+      "h": 720
+     },
+     {
+      "id": "u1",
+      "name": "Unterschrank 2",
+      "material": "korpus",
+      "x": 600,
+      "y": 40,
+      "z": 100,
+      "w": 600,
+      "d": 560,
+      "h": 720
+     },
+     {
+      "id": "u2",
+      "name": "Unterschrank 3",
+      "material": "korpus",
+      "x": 1200,
+      "y": 40,
+      "z": 100,
+      "w": 600,
+      "d": 560,
+      "h": 720
+     },
+     {
+      "id": "u3",
+      "name": "Unterschrank 4",
+      "material": "korpus",
+      "x": 1800,
+      "y": 40,
+      "z": 100,
+      "w": 600,
+      "d": 560,
+      "h": 720
+     },
+     {
+      "id": "platte",
+      "name": "Arbeitsplatte",
+      "material": "platte",
+      "x": 0,
+      "y": 0,
+      "z": 820,
+      "w": 2400,
+      "d": 620,
+      "h": 40
+     },
+     {
+      "id": "o0",
+      "name": "Oberschrank 1",
+      "material": "korpus",
+      "x": 0,
+      "y": 280,
+      "z": 1400,
+      "w": 800,
+      "d": 320,
+      "h": 700
+     },
+     {
+      "id": "o1",
+      "name": "Oberschrank 2",
+      "material": "korpus",
+      "x": 800,
+      "y": 280,
+      "z": 1400,
+      "w": 800,
+      "d": 320,
+      "h": 700
+     },
+     {
+      "id": "o2",
+      "name": "Oberschrank 3",
+      "material": "korpus",
+      "x": 1600,
+      "y": 280,
+      "z": 1400,
+      "w": 800,
+      "d": 320,
+      "h": 700
+     },
+     {
+      "id": "fd0",
+      "name": "Schubladenfront unten",
+      "material": "front",
+      "x": 2,
+      "y": 22,
+      "z": 102,
+      "w": 596,
+      "d": 18,
+      "h": 356,
+      "role": "FRONT"
+     },
+     {
+      "id": "fd1",
+      "name": "Schubladenfront oben",
+      "material": "front",
+      "x": 2,
+      "y": 22,
+      "z": 462,
+      "w": 596,
+      "d": 18,
+      "h": 356,
+      "role": "FRONT"
+     },
+     {
+      "id": "fdoor",
+      "name": "Tuerfront",
+      "material": "front",
+      "x": 602,
+      "y": 22,
+      "z": 102,
+      "w": 596,
+      "d": 18,
+      "h": 716,
+      "role": "FRONT"
+     },
+     {
+      "id": "fpull",
+      "name": "Auszugfront",
+      "material": "front",
+      "x": 1202,
+      "y": 22,
+      "z": 102,
+      "w": 596,
+      "d": 18,
+      "h": 716,
+      "role": "FRONT"
+     },
+     {
+      "id": "f3",
+      "name": "Front Unterschrank 4",
+      "material": "front",
+      "x": 1802,
+      "y": 22,
+      "z": 102,
+      "w": 596,
+      "d": 18,
+      "h": 716,
+      "role": "FRONT"
+     }
+    ],
+    "units": [
+     {
+      "id": "d0",
+      "kind": "drawer",
+      "front": [
+       "fd0"
+      ],
+      "body": [],
+      "motion": {
+       "type": "slide",
+       "dx": 0,
+       "dy": -450,
+       "dz": 0
+      }
+     },
+     {
+      "id": "d1",
+      "kind": "drawer",
+      "front": [
+       "fd1"
+      ],
+      "body": [],
+      "motion": {
+       "type": "slide",
+       "dx": 0,
+       "dy": -450,
+       "dz": 0
+      }
+     },
+     {
+      "id": "door",
+      "kind": "door",
+      "front": [
+       "fdoor"
+      ],
+      "body": [],
+      "motion": {
+       "type": "hinge",
+       "px": 602,
+       "py": 22,
+       "pz": 0,
+       "axis": "z",
+       "deg": -100
+      }
+     },
+     {
+      "id": "pull",
+      "kind": "pullout",
+      "front": [
+       "fpull"
+      ],
+      "body": [],
+      "motion": {
+       "type": "slide",
+       "dx": 0,
+       "dy": -450,
+       "dz": 0
+      }
+     }
+    ],
+    "pose": {
+     "d0": 1,
+     "d1": 1,
+     "door": 1,
+     "pull": 1
+    },
+    "project": {
+     "lastName": "Mustermann",
+     "project": "Küche EG",
+     "street": "Beispielweg 1",
+     "city": "20457 Hamburg",
+     "customer": "2026-001",
+     "date": "21.10.2026",
+     "drawn": "GEZ",
+     "layout.threeView": "Küchenzeile Ansichten",
+     "layout.iso": "Küchenzeile Isometrie",
+     "layout.plan": "Küchenzeile Ansichten",
+     "layout.perspective": "Küchenzeile Perspektive",
+     "layout.steps": "Küchenzeile Aufbau",
+     "layout.customer": "Küchenzeile Kundenansicht"
+    },
+    "packs": {
+     "ci": "platzhalter",
+     "template": "a3-quer",
+     "material": "platzhalter",
+     "style": "studio"
+    },
+    "inputs": [
+     {
+      "name": "oak.png",
+      "role": "material",
+      "mediaType": "image/png",
+      "note": "",
+      "data": "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAACWklEQVR4nA3LZeDYQwCA4RMnbjhx4oYTZ9zYicNOHHPi2P7DNK+JjWmmu6a7N13TpmNimk2N6Y7p7m6/5/sjhGB2ycKKZTVrGIZYtnfs7Tk6cFbkisRtmUcKL1SmNr7vQUwnmEviFctr1jJsYtnBsZ/n2MC5kasSd2YeL7xc+ajxUxdmEMwjWVzRX9MMm1t2chzoOSEwJnJtYnxmUuG1yqeNX7sws8BK+ipW1gw0bGXZ1XGI5+TAhZEbEvdlni68Wfmi8UcXZhEsIOmnKJrBhqGWPRyHe04LXBK5KfFAZnLhncrXjb+7oAULSZZRDNBsaNjOMtJxlOfMwOWRWxMPZ6YU3q981/ivC3MKFpUkxZqajQ3DLfs6jvGcExgbuSPxWOalwoeVHxvTdmFuQR/Jiop1NJsZRlgOcBzvGR24JnJ3YmLm1cInlV8asgvzCYJkJcV6mi0Nu1gOdpzkuSBwfeTexFOZNwqfV35vzNSF+QVLSVZV9Gi2NuxuOcxxqufiwLjIhMSzmbcLX1X+avTqghMsLVldsYFmW8NeliMdZ3guC9wSeSjxfOa9wreVfxuzdWERwXKSqthIM8ywj2WU42zPlYHbI48mXsx8UPihMk1jji4sJlhBsrZiU82Ohv0txznO81wduCvyROKVzMeFnyvTN0wXlhBkybqKLTQ7Gw6ynOg433Nd4J7Ik4nXM58VfqvM2Ji3C0sKVpEMUqDZzXCo5RTHRZ4bA/dHnkm8lfmy8GdFNXp3IQpWk6yv2Eazp+EIy+mOSz03Bx6MPJd4N/NN4Z/KrI0Fe/gfjJ//AR7mgTUAAAAASUVORK5CYII="
+     }
+    ],
+    "textures": {
+     "korpus": {
+      "image": "oak.png",
+      "tile": 450,
+      "roughness": 0.3
+     }
+    },
+    "light": {
+     "preset": "warm",
+     "azimuth": 30,
+     "elevation": 40
+    },
+    "render": {
+     "layout": "iso",
+     "azimuth": 60,
+     "elevation": 30,
+     "edge": 0.4,
+     "outline": 0.5,
+     "shadow": 20,
+     "accent": "o0",
+     "accentColor": "#e07a5f",
+     "dimensions": false
+    }
+   }
+  },
+  {
+   "name": "board cells and hidden",
+   "doc": {
+    "parts": [
+     {
+      "id": "sockel",
+      "name": "Sockel",
+      "material": "sockel",
+      "x": 0,
+      "y": 70,
+      "z": 0,
+      "w": 2400,
+      "d": 530,
+      "h": 100
+     },
+     {
+      "id": "u0",
+      "name": "Unterschrank 1",
+      "material": "korpus",
+      "x": 0,
+      "y": 40,
+      "z": 100,
+      "w": 600,
+      "d": 560,
+      "h": 720
+     },
+     {
+      "id": "u1",
+      "name": "Unterschrank 2",
+      "material": "korpus",
+      "x": 600,
+      "y": 40,
+      "z": 100,
+      "w": 600,
+      "d": 560,
+      "h": 720
+     },
+     {
+      "id": "u2",
+      "name": "Unterschrank 3",
+      "material": "korpus",
+      "x": 1200,
+      "y": 40,
+      "z": 100,
+      "w": 600,
+      "d": 560,
+      "h": 720
+     },
+     {
+      "id": "u3",
+      "name": "Unterschrank 4",
+      "material": "korpus",
+      "x": 1800,
+      "y": 40,
+      "z": 100,
+      "w": 600,
+      "d": 560,
+      "h": 720
+     },
+     {
+      "id": "platte",
+      "name": "Arbeitsplatte",
+      "material": "platte",
+      "x": 0,
+      "y": 0,
+      "z": 820,
+      "w": 2400,
+      "d": 620,
+      "h": 40
+     },
+     {
+      "id": "o0",
+      "name": "Oberschrank 1",
+      "material": "korpus",
+      "x": 0,
+      "y": 280,
+      "z": 1400,
+      "w": 800,
+      "d": 320,
+      "h": 700
+     },
+     {
+      "id": "o1",
+      "name": "Oberschrank 2",
+      "material": "korpus",
+      "x": 800,
+      "y": 280,
+      "z": 1400,
+      "w": 800,
+      "d": 320,
+      "h": 700
+     },
+     {
+      "id": "o2",
+      "name": "Oberschrank 3",
+      "material": "korpus",
+      "x": 1600,
+      "y": 280,
+      "z": 1400,
+      "w": 800,
+      "d": 320,
+      "h": 700
+     }
+    ],
+    "hidden": [
+     "sockel"
+    ],
+    "project": {
+     "lastName": "Mustermann",
+     "project": "Küche ]]> <EG> & \"Ü\"",
+     "street": "Beispielweg 1",
+     "city": "20457 Hamburg",
+     "customer": "2026-001",
+     "date": "21.10.2026",
+     "drawn": "GEZ",
+     "layout.threeView": "Küchenzeile Ansichten",
+     "layout.iso": "Küchenzeile Isometrie",
+     "layout.plan": "Küchenzeile Ansichten",
+     "layout.perspective": "Küchenzeile Perspektive",
+     "layout.steps": "Küchenzeile Aufbau",
+     "layout.customer": "Küchenzeile Kundenansicht"
+    },
+    "packs": {
+     "ci": "platzhalter",
+     "template": "a3-quer",
+     "material": "platzhalter"
+    },
+    "variants": [
+     {
+      "id": "a",
+      "name": "A",
+      "slots": {
+       "korpus": "korpus"
+      }
+     }
+    ],
+    "blocks": [
+     {
+      "title": "Notiz",
+      "rows": [
+       {
+        "label": "Zeile",
+        "value": "1"
+       }
+      ]
+     }
+    ],
+    "cells": [
+     {
+      "id": "v1",
+      "view": "front",
+      "x": 20,
+      "y": 20,
+      "w": 180,
+      "h": 120,
+      "step": 0,
+      "dims": true
+     },
+     {
+      "id": "v2",
+      "view": "iso",
+      "x": 210,
+      "y": 20,
+      "w": 180,
+      "h": 120,
+      "scale": 50,
+      "focus": "platte",
+      "step": 0,
+      "dims": false
+     }
+    ],
+    "render": {
+     "layout": "plan",
+     "page": 0
+    }
+   }
+  }
  ]
 }
