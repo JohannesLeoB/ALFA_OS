@@ -55,6 +55,16 @@ extension Composer {
         func py(_ w: Double) -> Double { o.y + (Double(e.maxY) - w) / n }
         let shown = pose(r.parts, r.units, amounts: r.pose), open = openFronts(r.units, amounts: r.pose)
         let fronts = Set(r.units.flatMap(\.front))
+        if Projection.hulls(shown) {
+            for f in try Projection.faces(shown, spec: Projection.spec(.front), flat: true) {
+                guard let p = shown.first(where: { $0.id == f.partID }) else { continue }
+                let poly = f.poly.map { CGPoint(x: px(Double($0.x)), y: py(Double($0.y))) }
+                sheet.items.append(.polygon(poly, fill: open.contains(p.id) ? (r.style ?? r.ci.iso).accentColor ?? r.ci.accent : tone(p, v, job),
+                                            stroke: r.ci.ink, width: r.ci.lineEdge))
+                if fronts.contains(p.id) { sheet.hits[p.id, default: []].append(poly) }
+            }
+            return
+        }
         let visible = try Projection.visibleRects(shown, .front)
         for entry in visible.reversed() {
             guard !entry.rects.isEmpty, let p = shown.first(where: { $0.id == entry.id }) else { continue }

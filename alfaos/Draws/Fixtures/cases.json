@@ -1548,6 +1548,146 @@
     {"id": "d0", "kind": "drawer", "front": ["fd0"], "body": [], "motion": {"type": "slide", "dx": 0, "dy": -450, "dz": 0}},
     {"id": "door", "kind": "door", "front": ["fdoor"], "body": [], "motion": {"type": "hinge", "px": 602, "py": 22, "pz": 0, "axis": "z", "deg": -100}}
    ]
+  },
+  {
+   "name": "wedge seat",
+   "parts": [
+    {
+     "id": "base",
+     "name": "Base",
+     "material": "korpus",
+     "x": 0,
+     "y": 0,
+     "z": 0,
+     "w": 600,
+     "d": 500,
+     "h": 300
+    },
+    {
+     "id": "seat",
+     "name": "Seat",
+     "material": "platte",
+     "x": 0,
+     "y": 0,
+     "z": 300,
+     "w": 600,
+     "d": 500,
+     "h": 100,
+     "shape": {
+      "kind": "wedge",
+      "slope": "y",
+      "start": 40,
+      "end": 100
+     }
+    },
+    {
+     "id": "back",
+     "name": "Back",
+     "material": "korpus",
+     "x": 0,
+     "y": 450,
+     "z": 400,
+     "w": 600,
+     "d": 50,
+     "h": 300
+    }
+   ],
+   "products": [
+    "plan",
+    "iso"
+   ]
+  },
+  {
+   "name": "tapered legs table",
+   "parts": [
+    {
+     "id": "top",
+     "name": "Top",
+     "material": "platte",
+     "x": 0,
+     "y": 0,
+     "z": 710,
+     "w": 1200,
+     "d": 700,
+     "h": 40
+    },
+    {
+     "id": "leg0",
+     "name": "Leg 1",
+     "material": "sockel",
+     "x": 40,
+     "y": 40,
+     "z": 0,
+     "w": 60,
+     "d": 60,
+     "h": 710,
+     "shape": {
+      "kind": "taper",
+      "bottomW": 40,
+      "bottomD": 40,
+      "topW": 60,
+      "topD": 60
+     }
+    },
+    {
+     "id": "leg1",
+     "name": "Leg 2",
+     "material": "sockel",
+     "x": 1100,
+     "y": 40,
+     "z": 0,
+     "w": 60,
+     "d": 60,
+     "h": 710,
+     "shape": {
+      "kind": "taper",
+      "bottomW": 40,
+      "bottomD": 40,
+      "topW": 60,
+      "topD": 60
+     }
+    },
+    {
+     "id": "leg2",
+     "name": "Leg 3",
+     "material": "sockel",
+     "x": 40,
+     "y": 600,
+     "z": 0,
+     "w": 60,
+     "d": 60,
+     "h": 710,
+     "shape": {
+      "kind": "taper",
+      "bottomW": 40,
+      "bottomD": 40,
+      "topW": 60,
+      "topD": 60
+     }
+    },
+    {
+     "id": "leg3",
+     "name": "Leg 4",
+     "material": "sockel",
+     "x": 1100,
+     "y": 600,
+     "z": 0,
+     "w": 60,
+     "d": 60,
+     "h": 710,
+     "shape": {
+      "kind": "taper",
+      "bottomW": 40,
+      "bottomD": 40,
+      "topW": 60,
+      "topD": 60
+     }
+    }
+   ],
+   "products": [
+    "plan",
+    "iso"
+   ]
   }
  ],
  "replies": [

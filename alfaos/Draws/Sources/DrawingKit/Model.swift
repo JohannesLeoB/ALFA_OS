@@ -24,13 +24,15 @@ public struct Part: Codable, Hashable, Sendable {
     public var group: String?
     public var given: [String]?
     public var turn: Turn?
+    public var shape: Shape?
 
     public init(id: String, name: String, material: String,
                 x: Double, y: Double, z: Double, w: Double, d: Double, h: Double,
-                role: String? = nil, group: String? = nil, given: [String]? = nil, turn: Turn? = nil) {
+                role: String? = nil, group: String? = nil, given: [String]? = nil, turn: Turn? = nil,
+                shape: Shape? = nil) {
         self.id = id; self.name = name; self.material = material
         self.x = x; self.y = y; self.z = z; self.w = w; self.d = d; self.h = h
-        self.role = role; self.group = group; self.given = given; self.turn = turn
+        self.role = role; self.group = group; self.given = given; self.turn = turn; self.shape = shape
     }
 
     public func isGiven(_ field: String) -> Bool { given?.contains(field) ?? false }
@@ -40,7 +42,7 @@ public struct Part: Codable, Hashable, Sendable {
     var maxZ: Double { z + h }
 
     var corners: [Vec] {
-        let box = [x, maxX].flatMap { px in [y, maxY].flatMap { py in [z, maxZ].map { pz in (px, py, pz) } } }
+        let box = shape?.grid(self) ?? [x, maxX].flatMap { px in [y, maxY].flatMap { py in [z, maxZ].map { pz in (px, py, pz) } } }
         return turn.map { t in box.map(t.spin) } ?? box
     }
 
@@ -64,6 +66,7 @@ extension Part: CustomReflectable {
             ("role", role as Any), ("group", group as Any), ("given", given as Any)
         ]
         if let turn { children.append(("turn", turn)) }
+        if let shape { children.append(("shape", shape)) }
         return Mirror(self, children: children, displayStyle: .struct)
     }
 }
@@ -100,8 +103,9 @@ public enum Validate {
         for p in ps {
             if !seen.insert(p.id).inserted { throw DrawingError.duplicateID(p.id) }
             let values = [p.x, p.y, p.z, p.w, p.d, p.h] + (p.turn.map { [$0.pivot.x, $0.pivot.y, $0.pivot.z, $0.deg] } ?? [])
+                + (p.shape?.numbers ?? [])
             guard values.allSatisfy({ $0.isFinite && abs($0) <= limit }) else { throw DrawingError.tooLarge(p.id) }
-            guard p.w > 0, p.d > 0, p.h > 0 else { throw DrawingError.invalidPart(p.id) }
+            guard p.w > 0, p.d > 0, p.h > 0, p.shape?.fits(w: p.w, d: p.d, h: p.h) ?? true else { throw DrawingError.invalidPart(p.id) }
         }
     }
 }

@@ -69,14 +69,27 @@ enum Projection {
 
     static let shadowNormal = 6
 
-    static func faces(_ ps: [Part], spec: ViewSpec, shadow spread: Double? = nil, around: [Part]? = nil) throws -> [Face2D] {
+    static func spec(_ k: ViewKind) -> ViewSpec {
+        switch k {
+        case .back: return ViewSpec(kind: k, azimuth: 180, elevation: 0)
+        case .top: return ViewSpec(kind: k, azimuth: 0, elevation: 90)
+        case .left: return ViewSpec(kind: k, azimuth: 90, elevation: 0)
+        case .right: return ViewSpec(kind: k, azimuth: 270, elevation: 0)
+        default: return ViewSpec(kind: k, azimuth: 0, elevation: 0)
+        }
+    }
+
+    static func hulls(_ ps: [Part]) -> Bool { ps.contains { $0.shape != nil } }
+
+    static func faces(_ ps: [Part], spec: ViewSpec, shadow spread: Double? = nil, around: [Part]? = nil,
+                      flat: Bool = false) throws -> [Face2D] {
         try Validate.parts(ps)
         if let dist = spec.distance { guard dist.isFinite, dist > 0 else { throw DrawingError.invalidCamera } }
-        guard spec.azimuth.isFinite, spec.elevation.isFinite, abs(spec.elevation) < 90 else { throw DrawingError.invalidCamera }
+        guard spec.azimuth.isFinite, spec.elevation.isFinite, (flat ? abs(spec.elevation) <= 90 : abs(spec.elevation) < 90) else { throw DrawingError.invalidCamera }
         if spec.kind == .perspective, spec.distance == nil { throw DrawingError.invalidCamera }
         let a = spec.azimuth * .pi / 180, e = spec.elevation * .pi / 180
         let hub = around ?? ps
-        let c = (center(hub, 0), center(hub, 1), center(hub, 2))
+        let c = flat ? (0.0, 0.0, 0.0) : (center(hub, 0), center(hub, 1), center(hub, 2))
         let fwd = (sin(a) * cos(e), cos(a) * cos(e), -sin(e))
         let right = (cos(a), -sin(a), 0.0)
         let up = (sin(a) * sin(e), cos(a) * sin(e), cos(e))
@@ -92,7 +105,7 @@ enum Projection {
         var out: [Face2D] = []
         func project(_ quad: [(Double, Double, Double)]) -> [CGPoint] {
             guard let dist = spec.distance else {
-                let k = 1 / cos(e)
+                let k = flat ? 1 : 1 / cos(e)
                 return quad.map(cam).map { CGPoint(x: $0.r * k, y: $0.u * k) }
             }
             return clipNear(quad.map(cam), dist: dist, near: near).map { k in
@@ -119,7 +132,7 @@ enum Projection {
                 }
                 guard visible else { continue }
                 let poly = project(quad)
-                if poly.count >= 3 { out.append(Face2D(poly: poly, partID: p.id, normal: p.turn == nil ? index : slot(n))) }
+                if poly.count >= 3 { out.append(Face2D(poly: poly, partID: p.id, normal: p.turn == nil && p.shape == nil ? index : slot(n))) }
             }
         }
         return out
@@ -152,6 +165,11 @@ enum Projection {
     }
 
     static func quads(_ p: Part) -> [((Double, Double, Double), [(Double, Double, Double)])] {
+        if let shape = p.shape {
+            let faces = shape.faces(p)
+            guard let t = p.turn else { return faces }
+            return faces.map { (t.tilt($0.0), $0.1.map(t.spin)) }
+        }
         let x0 = p.x, x1 = p.maxX, y0 = p.y, y1 = p.maxY, z0 = p.z, z1 = p.maxZ
         let box: [((Double, Double, Double), [(Double, Double, Double)])] = [
             ((0, -1, 0), [(x0, y0, z0), (x1, y0, z0), (x1, y0, z1), (x0, y0, z1)]),

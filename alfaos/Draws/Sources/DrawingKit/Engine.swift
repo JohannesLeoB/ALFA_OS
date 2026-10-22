@@ -201,16 +201,22 @@ struct Composer {
         func paper(_ rect: CGRect) -> CGRect {
             CGRect(x: px(rect.minX), y: py(rect.maxY), width: rect.width / n, height: rect.height / n)
         }
-        let visible = try Projection.visibleRects(r.parts, k)
         let material = Dictionary(uniqueKeysWithValues: r.parts.map { ($0.id, $0.material) })
-        for entry in visible.reversed() {
-            let fill = tint(material[entry.id] ?? "")
-            if !entry.rects.isEmpty, let p = r.parts.first(where: { $0.id == entry.id }) {
-                sheet.items.append(.rect(paper(Projection.rect(p, k)), fill: fill, stroke: nil, width: 0))
+        if Projection.hulls(r.parts) {
+            for f in try Projection.faces(r.parts, spec: Projection.spec(k), flat: true) {
+                let poly = f.poly.map { CGPoint(x: px(Double($0.x)), y: py(Double($0.y))) }
+                sheet.items.append(.polygon(poly, fill: tint(material[f.partID] ?? ""), stroke: ci.ink, width: ci.lineEdge))
             }
-            for (a, b) in Composer.outline(entry.rects) {
-                sheet.items.append(.line(CGPoint(x: px(Double(a.x)), y: py(Double(a.y))),
-                                         CGPoint(x: px(Double(b.x)), y: py(Double(b.y))), width: ci.lineEdge, color: ci.ink))
+        } else {
+            for entry in try Projection.visibleRects(r.parts, k).reversed() {
+                let fill = tint(material[entry.id] ?? "")
+                if !entry.rects.isEmpty, let p = r.parts.first(where: { $0.id == entry.id }) {
+                    sheet.items.append(.rect(paper(Projection.rect(p, k)), fill: fill, stroke: nil, width: 0))
+                }
+                for (a, b) in Composer.outline(entry.rects) {
+                    sheet.items.append(.line(CGPoint(x: px(Double(a.x)), y: py(Double(a.y))),
+                                             CGPoint(x: px(Double(b.x)), y: py(Double(b.y))), width: ci.lineEdge, color: ci.ink))
+                }
             }
         }
         let title = t.viewTitles[k.rawValue] ?? ""
