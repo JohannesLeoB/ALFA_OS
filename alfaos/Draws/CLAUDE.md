@@ -13,6 +13,7 @@ Gilt für jede Sitzung in `alfaos/Draws` auf Zweig `alfa-draws`, zusätzlich zu 
 | `NOTES.md` | Was Draws ist, Ausgabe, Grenze zu ALFA, Module, Offenes | 22.10. |
 | `specs/hub-needs.md` | Bedarf am Hub: Ein- und Ausgänge, FilesPort-Methoden, Ports, Ereignisse | 22.10. |
 | `specs/family.md` | Creative Family: Editoren, gemeinsames Rückgrat, Editor-Vertrag, Reihenfolge | 22.10. |
+| `specs/design-needs.md` | Draws gegen ALFA-Tokens, -Komponenten, -Namen: Umverdrahten, Design-Bedarf, Risiko Masterwechsel | 23.10. |
 | `specs/aufmass.md` | Aufmaß: Ablauf, Funktionen mit Altcode-Beleg, Laser, Prüfung | 22.10. |
 
 ## Laufzeit-Texte (von Claude in der App gelesen, keine Doku)
