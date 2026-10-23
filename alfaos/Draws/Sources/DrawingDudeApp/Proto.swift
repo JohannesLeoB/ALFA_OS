@@ -28,6 +28,8 @@ enum Proto {
     static let stepsRatio = 1.6
     static let emptyWidth = 300.0
     static let assistantWidth = 340.0
+    static let editorWidth = 240.0
+    static let editorInset = 8.0
     static let tileHeight = 56.0
     static let hidden = 0.45
     static let busy = 0.6

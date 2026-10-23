@@ -12,6 +12,10 @@ if args.first == "--render" {
     await runPhoto(args)
     exit(0)
 }
+if args.first == "--kitchen" {
+    await runKitchen(args)
+    exit(0)
+}
 if args.first == "--doc" || args.first == "--open" {
     runDoc(args)
     exit(0)

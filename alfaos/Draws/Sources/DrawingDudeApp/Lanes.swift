@@ -173,8 +173,15 @@ struct SheetLane: View {
                             pan = CGSize(width: panned.width + $0.translation.width, height: panned.height + $0.translation.height)
                         }
                         .onEnded { _ in if model.grip == nil { panned = pan } })
-                    .onTapGesture(count: 2) { reset() }
+                    .gesture(SpatialTapGesture(count: 2).onEnded { open(at: $0.location, room: proxy.size) })
                     .onTapGesture { model.selected = nil }
+                    if let editing = model.editing {
+                        InlineEditor(model: model, editing: editing)
+                            .position(x: min(max(editing.anchor.x + CGFloat(Proto.editorWidth) / 2, CGFloat(Proto.editorWidth) / 2 + CGFloat(Proto.editorInset)),
+                                             proxy.size.width - CGFloat(Proto.editorWidth) / 2 - CGFloat(Proto.editorInset)),
+                                      y: min(max(editing.anchor.y + CGFloat(Design.Size.rowHeight) * 3, CGFloat(Design.Size.rowHeight) * 3),
+                                             proxy.size.height - CGFloat(Design.Size.rowHeight) * 3))
+                    }
                     if model.parts.isEmpty && !model.assistant {
                         EmptyCard(model: model)
                     }
@@ -204,6 +211,17 @@ struct SheetLane: View {
 
     private func reset() {
         zoom = 1; settled = 1; pan = .zero; panned = .zero
+    }
+
+    private func open(at point: CGPoint, room: CGSize) {
+        guard let sheet = model.sheet else { return reset() }
+        let pad = Proto.deskPadding
+        let fit = max(0.01, min((Double(room.width) - 2 * pad) / sheet.width, (Double(room.height) - 2 * pad) / sheet.height))
+        let k = fit * zoom
+        let origin = CGPoint(x: Double(room.width) / 2 - sheet.width * k / 2 + Double(pan.width),
+                             y: Double(room.height) / 2 - sheet.height * k / 2 + Double(pan.height))
+        let spot = CGPoint(x: (Double(point.x) - origin.x) / k, y: (Double(point.y) - origin.y) / k)
+        if !model.begin(at: spot, sheet: sheet, anchor: point) { reset() }
     }
 
     private var status: some View {

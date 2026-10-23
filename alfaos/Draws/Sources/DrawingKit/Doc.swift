@@ -152,20 +152,22 @@ public struct DrawsDoc: Codable, Equatable, Sendable {
     public var light: DocLight
     public var render: DocRender
     public var underlay: DocUnderlay?
+    public var kitchen: KitchenSpec?
 
     public init(parts: [Part], packs: DocPacks, units: [Unit] = [], pose: [String: Double] = [:], cells: [DocCell] = [],
                 textures: [String: DocTexture] = [:], inputs: [DocInput] = [], project: [String: String] = [:],
                 variants: [Variant] = [], blocks: [Panel] = [], extra: [Material] = [], hidden: [String] = [],
-                light: DocLight = DocLight(), render: DocRender = DocRender(), underlay: DocUnderlay? = nil) {
+                light: DocLight = DocLight(), render: DocRender = DocRender(), underlay: DocUnderlay? = nil,
+                kitchen: KitchenSpec? = nil) {
         schema = DrawsDoc.schema
         self.parts = parts; self.units = units; self.pose = pose; self.cells = cells; self.packs = packs
         self.textures = textures; self.inputs = inputs; self.project = project; self.variants = variants
         self.blocks = blocks; self.extra = extra; self.hidden = hidden; self.light = light; self.render = render
-        self.underlay = underlay
+        self.underlay = underlay; self.kitchen = kitchen
     }
 
     enum CodingKeys: String, CodingKey {
-        case schema, parts, units, pose, cells, packs, textures, inputs, project, variants, blocks, extra, hidden, light, render, underlay
+        case schema, parts, units, pose, cells, packs, textures, inputs, project, variants, blocks, extra, hidden, light, render, underlay, kitchen
     }
 
     public init(from decoder: Decoder) throws {
@@ -184,7 +186,8 @@ public struct DrawsDoc: Codable, Equatable, Sendable {
                   hidden: try c.decodeIfPresent([String].self, forKey: .hidden) ?? [],
                   light: try c.decodeIfPresent(DocLight.self, forKey: .light) ?? DocLight(),
                   render: try c.decodeIfPresent(DocRender.self, forKey: .render) ?? DocRender(),
-                  underlay: try c.decodeIfPresent(DocUnderlay.self, forKey: .underlay))
+                  underlay: try c.decodeIfPresent(DocUnderlay.self, forKey: .underlay),
+                  kitchen: try c.decodeIfPresent(KitchenSpec.self, forKey: .kitchen))
         schema = try c.decodeIfPresent(Int.self, forKey: .schema) ?? DrawsDoc.schema
     }
 

@@ -39,6 +39,21 @@ enum DrawsTools {
         "scale": number, "focus": text, "step": number, "dims": flag
     ], required: ["id", "view", "x", "y", "w", "h"])
 
+    static let kitchenFront: JSON = object([
+        "type": choice(FrontType.allCases.map(\.rawValue)), "side": choice(["left", "right", "pair"]), "drawers": list(text), "count": number,
+        "appliance": choice(["oven", "dishwasher", "fridge", "hob", "sink"]), "height": number, "material": text
+    ], required: ["type"])
+
+    static let kitchenCabinet: JSON = object([
+        "kind": choice(CabinetKind.allCases.map(\.rawValue)), "width": number, "height": number, "depth": number,
+        "fronts": list(kitchenFront), "material": text, "frontMaterial": text
+    ], required: ["kind"])
+
+    static let kitchenRun: JSON = object([
+        "origin": object(["x": number, "y": number], required: ["x", "y"]), "turn": choice(["0", "90", "180", "270"]),
+        "items": list(kitchenCabinet)
+    ], required: ["items"])
+
     static func all(kinds: [String], images: [String] = []) -> [Tool] {
         [
             Tool(name: "get_state",
@@ -47,6 +62,10 @@ enum DrawsTools {
             Tool(name: "add_parts",
                  description: "Add parts in one batch, listed from the bottom up. Sizes in mm, x right, y into the depth, z up. A part is a box unless it has a shape. shape wedge: the top slopes along slope x or y, start and end are the heights at the low and the high side of that axis, the larger one equals h. shape taper: bottomW, bottomD, topW, topD are the footprints at the bottom and the top, centred on the box; the larger of bottom and top equals w and d. The whole batch is refused when one part is invalid.",
                  schema: object(["parts": list(object(partFields, required: ["id", "material", "x", "y", "z", "w", "d", "h"]))], required: ["parts"])),
+            Tool(name: "add_kitchen",
+                 description: "Build a kitchen from cabinets instead of boxes. runs are rows of cabinets placed left to right seen from the front; origin is the front left floor point in mm and turn 0, 90, 180 or 270 degrees; a run without origin continues after the corner cabinet that ends the previous run. Any positive width, height and depth is valid; omitted sizes take the standard. fronts list from top to bottom: door (side left, right or pair names the hinge side), drawers (drawers such as low, mid, high, or count), appliance (oven, dishwasher, fridge, hob, sink; hob and sink are inlays in the worktop), open, glass. A top cabinet sits on the cabinet before it. wall, worktop and plinth switch those parts off. Parts and units of an earlier kitchen with the same prefix are replaced. Returns counts, run lengths and the materials used.",
+                 schema: object(["runs": list(kitchenRun), "island": kitchenRun, "worktop": flag, "plinth": flag, "wall": flag, "prefix": text],
+                                required: ["runs"])),
             Tool(name: "update_part",
                  description: "Change fields of one existing part by id. Only the fields you pass change.",
                  schema: object(partFields, required: ["id"])),

@@ -120,6 +120,10 @@ final class DrawsModel {
     var active: String?
     var claudeModel: String?
     var selected: String?
+    var kitchen: KitchenSpec?
+    var kitchenPack: KitchenPack?
+    var editing: Editing?
+    var toolbox: DrawsToolbox?
     var grip: Grip?
     var hidden: Set<String> = [] {
         didSet {
@@ -379,6 +383,7 @@ final class DrawsModel {
                 return
             }
             presets = PromptPresets.load(Self.root.appendingPathComponent("Packs/presets/default.json"))
+            kitchenPack = try? KitchenPack.load(Self.root.appendingPathComponent("Packs/presets/carcass.json"))
             resetStyle()
             cells = preset()
             ready = true
@@ -435,6 +440,7 @@ final class DrawsModel {
             try Validate.parts(object.parts)
             try Validate.units(object.units ?? [], parts: object.parts)
             ready = false
+            kitchen = nil
             parts = object.parts
             replace(units: object.units ?? [])
             project = object.project ?? [:]
@@ -478,6 +484,7 @@ final class DrawsModel {
 
     func clear() {
         ready = false
+        kitchen = nil
         parts = []
         replace(units: [])
         blocks = []
@@ -742,6 +749,7 @@ final class DrawsModel {
                 }
                 adopt()
                 absorb(proposal.materials)
+                kitchen = nil
                 parts = proposal.parts
                 replace(units: proposal.units)
                 variants = proposal.variants
@@ -766,13 +774,14 @@ final class DrawsModel {
               elevation: elevation, faces: faces, tone: fill == .tone, edge: edge, outline: outline,
               shadow: shadowOn ? shadow : 0, accent: accent, accentColor: accentColor, dimensions: dimensions)
         next.look = look
+        next.kitchen = kitchen
         return next
     }
 
     func bench() -> Bench? {
         guard let ci, let template, let room else { return nil }
         let gap = template.pack.gap
-        return Bench(ci: ci.pack, template: template.pack, material: material?.pack, fonts: fonts, project: project,
+        var bench = Bench(ci: ci.pack, template: template.pack, material: material?.pack, fonts: fonts, project: project,
                      variants: variants, blocks: blocks, kinds: kinds.map(\.rawValue), distance: Proto.perspectiveDistance,
                      dials: Dials(azimuth: Proto.azimuth.low...Proto.azimuth.high,
                                   elevation: Proto.elevation.low...Proto.elevation.high,
@@ -782,6 +791,8 @@ final class DrawsModel {
                      preset: { name, list in
                          Presets.cells(Kind(rawValue: name) ?? .plan, field: room, gap: gap, steps: Set(list.map(\.z)).count)
                      })
+        bench.kitchen = kitchenPack
+        return bench
     }
 
     func apply(_ next: Draft) {
@@ -807,6 +818,7 @@ final class DrawsModel {
         accentColor = next.accentColor
         dimensions = next.dimensions
         look = next.look
+        kitchen = next.kitchen
         ready = was
         render()
     }
@@ -818,6 +830,8 @@ final class DrawsModel {
         let start = master.map { draft().seeded(by: $0, dials: bench.dials) } ?? draft()
         let keys = ["motion", "materials", "carcass"] + (dimensions ? ["dims"] : []) + (layout == .steps ? ["steps"] : [])
         let toolbox = DrawsToolbox(draft: start, bench: bench, images: images) { [weak self] next in self?.apply(next) }
+        self.toolbox = toolbox
+        editing = nil
         let session = Session(credentials: dock.claude.credentials, http: URLSession.shared)
         let text = brief, attached = attachments
         chat = session
@@ -830,6 +844,7 @@ final class DrawsModel {
             defer {
                 running = false
                 chat = nil
+                self.toolbox = nil
             }
             guard let skills = try? Skillset.load(packs.appendingPathComponent("skills/alfanomy"), keys: keys) else {
                 failure = word("draws.live.skills")

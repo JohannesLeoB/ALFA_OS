@@ -4,12 +4,13 @@ import DrawingKit
 import DrawsRender
 import Foundation
 
-enum Words {
-    static func message(_ error: Error) -> String {
+public enum Words {
+    public static func message(_ error: Error) -> String {
         switch error {
         case let e as Refusal: return e.message
         case let e as DrawingError: return describe(e)
         case let e as DecodingError: return describe(e)
+        case let e as KitchenError: return describe(e)
         default: return "\(error)"
         }
     }
@@ -26,6 +27,20 @@ enum Words {
         case .pack(let list): return "pack: " + list.joined(separator: ", ")
         case .sharedPart(let id): return "part \(id) belongs to two units"
         case .invalidUnit(let id): return "unit \(id): needs a front, a sound motion, known ids and amounts from 0 to 1"
+        }
+    }
+
+    static func describe(_ error: KitchenError) -> String {
+        switch error {
+        case .empty: return "kitchen: runs and every run need cabinets"
+        case .turn(let n): return "kitchen: turn \(n) is not 0, 90, 180 or 270, or does not fit the corner it joins"
+        case .join(let i): return "kitchen: run \(i) has no origin, so the run before it must end with a corner cabinet"
+        case .size(let id, let field): return "\(id): \(field) must be above zero"
+        case .host(let id): return "\(id): a top cabinet needs a tall or housing cabinet right before it"
+        case .unknown(let id, let name): return "\(id): unknown \(name)"
+        case .split(let id, let why): return "\(id): the fronts do not fit, \(why)"
+        case .fit(let id, let what): return "\(id): \(what) does not fit into the cabinet"
+        case .overlap(let a, let b): return "kitchen: \(a) and \(b) overlap; move a run or change its origin"
         }
     }
 
@@ -80,6 +95,35 @@ extension Draft {
         guard let list = input["parts"]?.array, !list.isEmpty else { throw Refusal("parts: a non-empty list is required") }
         for item in list { parts.append(try part(item.object ?? [:])) }
         return "added \(list.count), parts now \(parts.count)"
+    }
+
+    mutating func addKitchen(_ input: JSON, pack: KitchenPack?) throws -> String {
+        guard let pack else { throw Refusal("add_kitchen: the cabinet pack is not loaded") }
+        let spec: KitchenSpec
+        do {
+            spec = try input.decode(KitchenSpec.self)
+        } catch {
+            throw Refusal("add_kitchen: " + Words.message(error))
+        }
+        return try build(spec, pack: pack)
+    }
+
+    @discardableResult
+    public mutating func build(_ spec: KitchenSpec, pack: KitchenPack) throws -> String {
+        let made = try Kitchen.generate(spec, pack: pack)
+        let prefix = spec.prefix ?? ""
+        let gone = Set(parts.map(\.id).filter { Kitchen.owns($0, prefix: prefix) })
+        parts.removeAll { gone.contains($0.id) }
+        let dropped = Set(units.map(\.id).filter { Kitchen.owns($0, prefix: prefix) })
+        units.removeAll { dropped.contains($0.id) }
+        pose = pose.filter { entry in !dropped.contains(entry.key) || made.units.contains { $0.id == entry.key } }
+        if let a = accent, gone.contains(a), !made.parts.contains(where: { $0.id == a }) { accent = nil }
+        parts += made.parts
+        units += made.units
+        kitchen = spec
+        return "kitchen: \(made.parts.count) parts, \(made.units.count) units; runs "
+            + made.runs.map { "r\($0.run) \(String(format: "%g", $0.length)) mm, \($0.cabinets) cabinets" }.joined(separator: "; ")
+            + "; materials " + made.materials.joined(separator: ", ")
     }
 
     mutating func updatePart(_ input: JSON) throws -> String {

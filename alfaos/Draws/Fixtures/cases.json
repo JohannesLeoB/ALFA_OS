@@ -2731,6 +2731,154 @@
     "plan",
     "iso"
    ]
+  },
+  {
+   "name": "kitchen L spec",
+   "parts": [],
+   "products": [
+    "iso",
+    "plan"
+   ],
+   "kitchen": {
+    "runs": [
+     {
+      "origin": {
+       "x": 0,
+       "y": 0
+      },
+      "turn": 0,
+      "items": [
+       {
+        "kind": "base",
+        "width": 600,
+        "fronts": [
+         {
+          "type": "appliance",
+          "appliance": "dishwasher"
+         }
+        ]
+       },
+       {
+        "kind": "base",
+        "width": 800,
+        "fronts": [
+         {
+          "type": "appliance",
+          "appliance": "sink"
+         },
+         {
+          "type": "door",
+          "side": "pair"
+         }
+        ]
+       },
+       {
+        "kind": "base",
+        "width": 600,
+        "fronts": [
+         {
+          "type": "appliance",
+          "appliance": "hob"
+         },
+         {
+          "type": "drawers",
+          "drawers": [
+           "low",
+           "mid",
+           "high"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "cornerBase",
+        "width": 880
+       }
+      ]
+     },
+     {
+      "items": [
+       {
+        "kind": "housing",
+        "width": 600,
+        "fronts": [
+         {
+          "type": "appliance",
+          "appliance": "fridge",
+          "side": "left"
+         }
+        ]
+       },
+       {
+        "kind": "top",
+        "height": 400
+       },
+       {
+        "kind": "tall",
+        "width": 600,
+        "fronts": [
+         {
+          "type": "door",
+          "side": "right"
+         },
+         {
+          "type": "appliance",
+          "appliance": "oven"
+         },
+         {
+          "type": "drawers",
+          "count": 1,
+          "height": 700
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "origin": {
+       "x": 205,
+       "y": 0
+      },
+      "turn": 0,
+      "items": [
+       {
+        "kind": "wall",
+        "width": 600,
+        "fronts": [
+         {
+          "type": "glass",
+          "side": "left"
+         }
+        ]
+       },
+       {
+        "kind": "wall",
+        "width": 800,
+        "height": 600
+       },
+       {
+        "kind": "wall",
+        "width": 600
+       },
+       {
+        "kind": "cornerWall"
+       }
+      ]
+     }
+    ],
+    "worktop": true,
+    "plinth": true,
+    "wall": true
+   },
+   "pose": {
+    "r0c2u0": 0.5,
+    "r0c2u1": 0.5,
+    "r0c2u2": 0.5,
+    "r0c1u0a": 1,
+    "r0c1u0b": 1,
+    "r1c2u1": 1,
+    "r1c0u0": 0.5
+   }
   }
  ],
  "replies": [

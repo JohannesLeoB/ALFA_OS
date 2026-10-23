@@ -206,12 +206,15 @@ struct Composer {
             for f in try Projection.faces(r.parts, spec: Projection.spec(k), flat: true) {
                 let poly = f.poly.map { CGPoint(x: px(Double($0.x)), y: py(Double($0.y))) }
                 sheet.items.append(.polygon(poly, fill: tint(material[f.partID] ?? ""), stroke: ci.ink, width: ci.lineEdge))
+                sheet.picks.append(Pick(id: f.partID, polygon: poly))
             }
         } else {
             for entry in try Projection.visibleRects(r.parts, k).reversed() {
                 let fill = tint(material[entry.id] ?? "")
                 if !entry.rects.isEmpty, let p = r.parts.first(where: { $0.id == entry.id }) {
-                    sheet.items.append(.rect(paper(Projection.rect(p, k)), fill: fill, stroke: nil, width: 0))
+                    let box = paper(Projection.rect(p, k))
+                    sheet.items.append(.rect(box, fill: fill, stroke: nil, width: 0))
+                    sheet.picks.append(Pick(id: p.id, polygon: [CGPoint(x: box.minX, y: box.minY), CGPoint(x: box.maxX, y: box.minY), CGPoint(x: box.maxX, y: box.maxY), CGPoint(x: box.minX, y: box.maxY)]))
                 }
                 for (a, b) in Composer.outline(entry.rects) {
                     sheet.items.append(.line(CGPoint(x: px(Double(a.x)), y: py(Double(a.y))),
@@ -349,6 +352,7 @@ struct Composer {
             }
             let outline = paper(f)
             if fronts.contains(f.partID) { sheet.hits[f.partID, default: []].append(outline) }
+            sheet.picks.append(Pick(id: f.partID, polygon: outline))
             sheet.items.append(.polygon(outline, fill: fill, stroke: ci.ink, width: s.edge))
         }
         let key = r.product.isEmpty ? "iso" : r.product

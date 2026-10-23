@@ -28,6 +28,23 @@ public struct PlacedDimension: Sendable {
     public var dimension: Dimension
 }
 
+public struct Pick: Sendable, Equatable {
+    public var id: String
+    public var polygon: [CGPoint]
+    public init(id: String, polygon: [CGPoint]) { self.id = id; self.polygon = polygon }
+
+    public func contains(_ p: CGPoint) -> Bool {
+        var odd = false
+        var j = polygon.count - 1
+        for i in polygon.indices {
+            let a = polygon[i], b = polygon[j]
+            if (a.y > p.y) != (b.y > p.y), p.x < (b.x - a.x) * (p.y - a.y) / (b.y - a.y) + a.x { odd.toggle() }
+            j = i
+        }
+        return odd
+    }
+}
+
 public struct Sheet: Sendable {
     public var width: Double
     public var height: Double
@@ -40,6 +57,9 @@ public struct Sheet: Sendable {
     public var product = ""
     public var cells: [Placed] = []
     public var hits: [String: [[CGPoint]]] = [:]
+    public var picks: [Pick] = []
+
+    public func pick(at p: CGPoint) -> String? { picks.last { $0.contains(p) }?.id }
 
     public var page: Page {
         Page(size: CGSize(width: width, height: height), background: paper, items: items.map(\.item))

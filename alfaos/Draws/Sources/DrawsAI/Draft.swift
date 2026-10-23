@@ -30,6 +30,7 @@ public struct Bench: Sendable {
     public var dials: Dials
     public var dpi: Double
     public var preset: @Sendable (String, [Part]) -> [Cell]
+    public var kitchen: KitchenPack?
 
     public init(ci: CIPack, template: TemplatePack, material: MaterialPack?, fonts: SheetFonts, project: [String: String],
                 variants: [Variant], blocks: [Panel], kinds: [String], distance: Double, dials: Dials, dpi: Double,
@@ -57,6 +58,7 @@ public struct Draft: Sendable, Equatable {
     public var accentColor: String?
     public var dimensions: Bool
     public var look = Look()
+    public var kitchen: KitchenSpec?
 
     public init(parts: [Part], units: [DrawingKit.Unit], pose: [String: Double], layout: String, cells: [Cell],
                 azimuth: Double, elevation: Double, faces: [String], tone: Bool, edge: Double, outline: Double,

@@ -13,3 +13,6 @@ Common modular kitchen sizes. Use them to fill gaps when the input gives no size
 - Open shelf units: 200 wide, 370 deep, heights 400, 600, 800.
 - Fronts sit in front of the carcass, about 20 thick; drawer fronts split a base front in low, mid and high drawers.
 - Layouts: single row, two rows, L, U, island; keep about 1200 between an island and the other cabinets.
+- Prefer add_kitchen for cabinets: describe runs of cabinets with kind, fronts and the sizes the person gave; the generator builds carcasses, plinth, worktop, fronts and the units that open. Use add_parts only for special pieces.
+- Widths, heights and depths are free: any positive size is valid. The grid above only fills a size that is omitted; never refuse or round a size the person gave.
+- Fronts list from top to bottom: door (side left, right or pair), drawers (drawers like low, mid, high, or count), appliance (oven, dishwasher, fridge, hob, sink), open, glass. A run after a corner cabinet joins it when it has no origin.

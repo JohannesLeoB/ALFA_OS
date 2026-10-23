@@ -32,7 +32,7 @@ extension DrawsModel {
         return DrawsDoc(parts: parts, packs: packs, units: units, pose: pose, cells: cells.map(DocCell.init), textures: textures,
                         inputs: inputs, project: project, variants: variants, blocks: blocks, extra: extra,
                         hidden: hidden.sorted(), light: light, render: render,
-                        underlay: underlay.map { DocUnderlay(name: $0, show: underlayShow, export: underlayExport) })
+                        underlay: underlay.map { DocUnderlay(name: $0, show: underlayShow, export: underlayExport) }, kitchen: kitchen)
     }
 
     func save() {
@@ -139,6 +139,7 @@ extension DrawsModel {
             }
             styleID = doc.packs.style ?? styleID
             absorb(doc.extra)
+            kitchen = doc.kitchen
             parts = doc.parts
             replace(units: doc.units)
             pose = doc.pose

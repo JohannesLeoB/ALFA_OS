@@ -41,6 +41,7 @@ public actor DrawsToolbox: Toolbox {
             switch name {
             case "get_state": return .json(state())
             case "add_parts": return try await change { try $0.addParts(input) }
+            case "add_kitchen": return try await change { [pack = bench.kitchen] in try $0.addKitchen(input, pack: pack) }
             case "update_part": return try await change { try $0.updatePart(input) }
             case "remove_part": return try await change { try $0.removePart(input) }
             case "add_unit": return try await change { try $0.addUnit(input) }
@@ -60,6 +61,11 @@ public actor DrawsToolbox: Toolbox {
         } catch {
             return .error(Words.message(error))
         }
+    }
+
+    public func adopt(_ next: Draft) {
+        draft = next
+        previewed = false
     }
 
     private func change(_ edit: (inout Draft) throws -> String) async throws -> ToolResult {
@@ -186,7 +192,7 @@ public actor DrawsToolbox: Toolbox {
         ]
         let units = d.units.compactMap { try? JSON(encoding: $0) }
         return [
-            "parts": .array(d.parts.compactMap { try? JSON(encoding: $0) }), "units": .array(units),
+            "parts": .array(d.parts.compactMap { try? JSON(encoding: $0) }), "kitchen": (try? d.kitchen.map { try JSON(encoding: $0) }) ?? .null, "units": .array(units),
             "pose": .object(d.pose.mapValues { JSON.num($0) }), "readouts": readouts(),
             "camera": ["azimuth": .num(d.azimuth), "elevation": .num(d.elevation)], "style": style,
             "layout": .string(d.layout), "cells": .array(d.cells.map(Words.cell)), "kinds": .strings(bench.kinds), "sheet": sheet,

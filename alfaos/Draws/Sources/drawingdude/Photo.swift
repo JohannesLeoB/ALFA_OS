@@ -3,7 +3,7 @@ import DrawsRender
 import Foundation
 
 @MainActor
-func runPhoto(_ args: [String]) async {
+func runPhoto(_ args: [String], kitchen: (object: DrawingObject, tones: [String: String])? = nil) async {
     func value(_ name: String) -> String? {
         guard let i = args.firstIndex(of: name), i + 1 < args.count else { return nil }
         return args[i + 1]
@@ -13,7 +13,7 @@ func runPhoto(_ args: [String]) async {
         guard let n = Double(text), n.isFinite else { fail("bad \(name) \(text)") }
         return n
     }
-    guard let source = value("--render"), let target = value("--out") else { fail("usage: drawingdude --render case.json --out x.png") }
+    guard let target = value("--out"), kitchen != nil || value("--render") != nil else { fail("usage: drawingdude --render case.json --out x.png") }
     let size = (value("--size") ?? "1600x1000").split(separator: "x").compactMap { Int($0) }
     guard size.count == 2 else { fail("bad --size") }
     guard let kind = ViewKind(rawValue: value("--view") ?? "iso") else { fail("unknown --view") }
@@ -24,12 +24,12 @@ func runPhoto(_ args: [String]) async {
         return (kv[0], amount)
     }, uniquingKeysWith: { _, last in last })
     do {
-        let object = try DrawingObject.load(URL(fileURLWithPath: source))
+        let object = try kitchen?.object ?? DrawingObject.load(URL(fileURLWithPath: value("--render") ?? ""))
         try Validate.parts(object.parts)
         try Validate.units(object.units ?? [], parts: object.parts)
         try Validate.pose(amounts, units: object.units ?? [])
-        var tones: [String: String] = [:]
-        if let folder = value("--ci") { tones = try Packs.loadCI(URL(fileURLWithPath: folder, isDirectory: true)).pack.tints }
+        var tones: [String: String] = kitchen?.tones ?? [:]
+        if let folder = value("--ci") { tones.merge(try Packs.loadCI(URL(fileURLWithPath: folder, isDirectory: true)).pack.tints) { mine, _ in mine } }
         var look = Look(light: LightSpec(preset: preset, azimuth: number("--light-az"), elevation: number("--light-el")))
         var images: [String: Data] = [:]
         for (index, arg) in args.enumerated() where arg == "--tex" && index + 1 < args.count {

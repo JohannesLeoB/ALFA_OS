@@ -13,6 +13,7 @@ extension Composer {
             sheet.items += sub.sheet.items
             sheet.dimensions += sub.sheet.dimensions
             sheet.hits.merge(sub.sheet.hits) { $0 + $1 }
+            sheet.picks += sub.sheet.picks
             for defect in sub.sheet.defects where !sheet.defects.contains(defect) { sheet.defects.append(defect) }
             if !fits { sheet.defects.append("board.\(cell.id)") }
             sheet.cells.append(Placed(id: cell.id, scale: scale, fits: fits, steps: count))

@@ -1,0 +1,39 @@
+{
+  "heights": { "plinth": 80, "carcass": 800, "worktop": 40 },
+  "front": { "thickness": 18, "gap": 2 },
+  "panel": 19,
+  "back": 8,
+  "shelf": 300,
+  "overhang": 20,
+  "wallGap": 600,
+  "plinthSetback": 50,
+  "door": { "pairFrom": 800, "angle": 100, "flap": 90, "side": "right" },
+  "drawer": {
+    "split": { "low": 0.2, "mid": 0.3, "high": 0.5 },
+    "counts": { "1": ["high"], "2": ["low", "high"], "3": ["low", "mid", "high"], "4": ["low", "low", "mid", "high"] },
+    "min": 100,
+    "reserve": 150
+  },
+  "kinds": {
+    "base": { "mount": "floor", "worktop": true, "widths": [200, 300, 400, 600, 800], "heights": [800], "depths": [600, 370], "width": 600, "height": 800, "depth": 600, "name": "Unterschrank", "front": "door" },
+    "wall": { "mount": "wall", "widths": [200, 300, 400, 600, 800], "heights": [400, 600, 800, 1000], "depths": [370], "width": 600, "height": 800, "depth": 370, "name": "Oberschrank", "front": "door" },
+    "tall": { "mount": "floor", "carries": true, "widths": [400, 600, 800], "heights": [1400, 2000, 2200], "depths": [600, 370], "width": 600, "height": 2000, "depth": 600, "name": "Hochschrank", "front": "door" },
+    "housing": { "mount": "floor", "carries": true, "widths": [600], "heights": [1400, 2000, 2200], "depths": [600], "width": 600, "height": 2000, "depth": 600, "name": "Geräteschrank", "front": "fridge" },
+    "top": { "mount": "stack", "widths": [400, 600], "heights": [400, 600], "depths": [600], "width": 600, "height": 400, "depth": 600, "name": "Aufsatzschrank", "front": "door" },
+    "cornerBase": { "mount": "floor", "worktop": true, "widths": [880, 1280], "heights": [800], "depths": [880, 680], "width": 880, "height": 800, "depth": 880, "name": "Eckunterschrank", "front": "door", "cornerDepths": { "880": 880, "1280": 680 } },
+    "cornerWall": { "mount": "wall", "widths": [675], "heights": [600, 800, 1000], "depths": [675], "width": 675, "height": 800, "depth": 675, "name": "Eckoberschrank", "front": "door", "cornerDepths": { "675": 675 } },
+    "open": { "mount": "wall", "widths": [200], "heights": [400, 600, 800], "depths": [370], "width": 200, "height": 600, "depth": 370, "name": "Regal", "front": "none" }
+  },
+  "appliance": {
+    "oven": { "name": "Backofen", "material": "ofen", "height": 600, "motion": "flap" },
+    "dishwasher": { "name": "Geschirrspüler", "material": "geschirrspueler", "height": 0, "motion": "flap" },
+    "fridge": { "name": "Kühlschrank", "material": "kuehlschrank", "height": 0, "motion": "door" },
+    "hob": { "name": "Kochfeld", "material": "kochfeld", "height": 0, "motion": "none", "inlay": { "w": 560, "d": 490, "h": 4, "fromFront": 60 } },
+    "sink": { "name": "Spüle", "material": "spuele", "height": 0, "motion": "none", "inlay": { "w": 500, "d": 400, "h": 4, "fromFront": 80 } }
+  },
+  "materials": { "carcass": "korpus", "front": "front", "worktop": "platte", "plinth": "sockel", "glass": "glas" },
+  "words": { "drawer": "Schublade", "door": "Tür", "glass": "Glastür", "flap": "Klappe", "worktop": "Arbeitsplatte", "plinth": "Sockel", "side": "Seite", "bottom": "Boden", "top": "Deckel", "back": "Rückwand", "shelf": "Einlegeboden" },
+  "roles": { "carcass": "KORPUS", "front": "FRONT", "worktop": "PLATTE", "plinth": "SOCKEL", "inlay": "EINBAU" },
+  "groups": { "floor": "zeile_unten", "wall": "zeile_oben", "stack": "zeile_oben" },
+  "tints": { "ofen": "#8c9298", "geschirrspueler": "#a3a8ad", "kuehlschrank": "#b4b9bd", "kochfeld": "#3a3d40", "spuele": "#7f858a", "glas": "#cfdde3" }
+}
