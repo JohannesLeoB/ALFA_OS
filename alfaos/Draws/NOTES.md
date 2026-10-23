@@ -42,7 +42,7 @@ Packs: `ci/studio`, `template/studio-a3-plan`, `template/studio-a4-deck`, `skill
 Specs: `specs/family.md` (Creative Family), `specs/aufmass.md` (Aufmaß), `specs/hub-needs.md` (Bedarf am Hub).
 
 ## Offen
-- Foto-Render: Schattenkante leicht gestuft, Maserrichtung nicht je Teil, App rendert nur Perspektive, kein USDZ (macOS 26 ohne öffentliche Schnittstelle).
+- Foto-Render: Maserrichtung nicht je Teil; USDZ möglich über SceneKit `SCNScene.write` oder `MDLUtility.convertToUSDZ`, noch nicht gebaut; Befunde Gegenprüfer offen (SVG ab ca. 7,5 MB Textur, xlsx-Speicher, Render auf Hauptthread, Bahn bei 840).
 - Ablauf „reinziehen, ein Satz“ in der Oberfläche.
 - MP4-Ausgabe.
 - Hub-Ports: wer baut, Reihenfolge (offen bei Johannes und Lead).
