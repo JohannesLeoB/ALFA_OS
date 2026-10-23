@@ -1,0 +1,582 @@
+{
+ "runs": [
+  {
+   "origin": {
+    "x": 0,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "base",
+     "name": "Unterschrank, Tür",
+     "width": 300,
+     "fronts": [
+      {
+       "type": "door",
+       "side": "left"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 3000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "base",
+     "name": "Unterschrank, Tür",
+     "width": 400,
+     "fronts": [
+      {
+       "type": "door",
+       "side": "right"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 6000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "base",
+     "name": "Unterschrank, Tür",
+     "width": 600
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 9000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "base",
+     "name": "Unterschrank, Türpaar",
+     "width": 800
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 12000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "base",
+     "name": "Unterschrank, 3 Schubladen",
+     "width": 600,
+     "fronts": [
+      {
+       "type": "drawers",
+       "drawers": [
+        "low",
+        "mid",
+        "high"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 15000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "base",
+     "name": "Unterschrank, 2 Schubladen",
+     "width": 800,
+     "fronts": [
+      {
+       "type": "drawers",
+       "count": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 18000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "base",
+     "name": "Unterschrank, 4 Schubladen",
+     "width": 400,
+     "fronts": [
+      {
+       "type": "drawers",
+       "count": 4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 21000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "base",
+     "name": "Spülenschrank",
+     "width": 800,
+     "fronts": [
+      {
+       "type": "appliance",
+       "appliance": "sink"
+      },
+      {
+       "type": "door",
+       "side": "pair"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 24000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "base",
+     "name": "Kochfeldschrank",
+     "width": 600,
+     "fronts": [
+      {
+       "type": "appliance",
+       "appliance": "hob"
+      },
+      {
+       "type": "drawers",
+       "count": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 27000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "base",
+     "name": "Backofenschrank",
+     "width": 600,
+     "fronts": [
+      {
+       "type": "appliance",
+       "appliance": "oven"
+      },
+      {
+       "type": "drawers",
+       "count": 1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 30000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "base",
+     "name": "Geschirrspüler",
+     "width": 600,
+     "fronts": [
+      {
+       "type": "appliance",
+       "appliance": "dishwasher"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 33000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "cornerBase",
+     "name": "Eckunterschrank, L",
+     "width": 880
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 36000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "cornerBase",
+     "name": "Eckunterschrank, blind",
+     "width": 1280
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 39000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "wall",
+     "name": "Wandschrank, Tür",
+     "width": 400,
+     "height": 400
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 42000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "wall",
+     "name": "Wandschrank, Tür",
+     "width": 600,
+     "height": 600
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 45000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "wall",
+     "name": "Wandschrank, Türpaar",
+     "width": 800,
+     "height": 800
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 48000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "wall",
+     "name": "Wandschrank, Glastür",
+     "width": 600,
+     "height": 800,
+     "fronts": [
+      {
+       "type": "glass",
+       "side": "left"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 51000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "wall",
+     "name": "Wandschrank, Glastürpaar",
+     "width": 800,
+     "height": 600,
+     "fronts": [
+      {
+       "type": "glass",
+       "side": "pair"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 54000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "wall",
+     "name": "Wandschrank, Klappe",
+     "width": 600,
+     "height": 400,
+     "fronts": [
+      {
+       "type": "appliance",
+       "appliance": "dishwasher"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 57000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "wall",
+     "name": "Wandschrank, offen",
+     "width": 600,
+     "height": 800,
+     "fronts": [
+      {
+       "type": "open"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 60000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "cornerWall",
+     "name": "Eckwandschrank",
+     "width": 675,
+     "height": 800
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 63000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "wall",
+     "name": "Hängeschrank, Dunstabzug",
+     "width": 800,
+     "height": 500,
+     "fronts": [
+      {
+       "type": "appliance",
+       "appliance": "dishwasher"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 66000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "tall",
+     "name": "Hochschrank, Tür",
+     "width": 600,
+     "height": 2000
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 69000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "tall",
+     "name": "Hochschrank, Türpaar",
+     "width": 800,
+     "height": 2200
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 72000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "housing",
+     "name": "Kühlschrankhochschrank",
+     "width": 600,
+     "height": 2200,
+     "fronts": [
+      {
+       "type": "appliance",
+       "appliance": "fridge"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 75000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "housing",
+     "name": "Backofenhochschrank",
+     "width": 600,
+     "height": 2200,
+     "fronts": [
+      {
+       "type": "door"
+      },
+      {
+       "type": "appliance",
+       "appliance": "oven"
+      },
+      {
+       "type": "drawers",
+       "count": 2,
+       "height": 500
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 78000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "tall",
+     "name": "Vorratsschrank, Schubladen",
+     "width": 400,
+     "height": 2000,
+     "fronts": [
+      {
+       "type": "door"
+      },
+      {
+       "type": "drawers",
+       "drawers": [
+        "low",
+        "mid",
+        "high"
+       ],
+       "height": 900
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 81000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "tall",
+     "width": 600,
+     "height": 1400
+    },
+    {
+     "kind": "top",
+     "name": "Aufsatzschrank",
+     "width": 600,
+     "height": 400
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 84000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "open",
+     "name": "Regal",
+     "width": 200,
+     "height": 800
+    }
+   ]
+  },
+  {
+   "origin": {
+    "x": 87000,
+    "y": 0
+   },
+   "turn": 0,
+   "items": [
+    {
+     "kind": "tall",
+     "name": "Halbhochschrank",
+     "width": 800,
+     "height": 1400
+    }
+   ]
+  }
+ ],
+ "worktop": false,
+ "plinth": true,
+ "wall": true
+}

@@ -40,11 +40,12 @@ public struct Cabinet: Codable, Hashable, Sendable {
     public var fronts: [Front]?
     public var material: String?
     public var frontMaterial: String?
+    public var name: String?
 
     public init(kind: CabinetKind, width: Double? = nil, height: Double? = nil, depth: Double? = nil, fronts: [Front]? = nil,
-                material: String? = nil, frontMaterial: String? = nil) {
+                material: String? = nil, frontMaterial: String? = nil, name: String? = nil) {
         self.kind = kind; self.width = width; self.height = height; self.depth = depth; self.fronts = fronts
-        self.material = material; self.frontMaterial = frontMaterial
+        self.material = material; self.frontMaterial = frontMaterial; self.name = name
     }
 }
 
