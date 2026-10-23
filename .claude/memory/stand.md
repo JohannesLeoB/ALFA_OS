@@ -37,6 +37,17 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 - Gesamtmission gemessen: Kit nutzt 78 von 1144 öffentlichen Fundus-Typen (8,9 k von 53,4 k Zeilen); größter Hebel: diese 78 Typen in ein eigenes kleines Paket, Tests schrumpfen (Mutationslauf unten), leere Hub-Ports erst mit Abnehmer.
 - Johannes will kürzere, einfache Antworten ohne Technikdeutsch, keine Umgehungen, Perfektion statt Bloat.
 
+## Funde des Pate 23.10. (vom Pate am Code belegt, von mir nicht einzeln nachgeprüft; nach Schwere, im Takt nach §6)
+1. Endgültig löschen behauptet Falsches: ohne UIDPLUS wird nur `\Deleted` gesetzt (`fundus/…/IMAPSMTPMailTransport.swift:178-179`), `canPurge` ist fest true (`Hub/Providers/MailBinding.swift:11`), der Mirror entfernt die Mail (`MailCore.swift:216`), der Toast meldet „gelöscht“; soll: nur anbieten, wenn der Server es kann.
+2. `canPurge` wird bei jedem Zeichnen jeder Papierkorb-Zeile gerufen (`MailRowView.swift:189` → `MailCore.swift:207-208` → `HubCore.resolve`, baut jedes Mal einen Transport; fehlt der Zugang, setzt es mitten im Zeichnen `.keychainUnreadable`).
+3. Ohne Funktion: Entwurfsmenü „Drucken“ (`MailStackLane.swift:69`), `commands` ohne Leser (`leadFromMail`, „In anderen Projektordner“); nach MAIL-R10 Verhalten oder Johannes fragen.
+4. Kontakte: leerer Kontakt wird sofort gespeichert, `editContact` erlaubt doppelte Adressen, jede Taste schreibt die ganze Liste (`MailContacts.swift:36,51-66`, `MailModel.swift:52`); gehört zu Stück 5.
+5. PDF: `mailDocument` lädt den Text neu (`MailModel+Files.swift:47`), `MailPDF.render` läuft auf dem Hauptakteur; Seitenlayout fehlt im Master (Lücke §7, nie gemeldet).
+6. Weiterleiten lädt Anhänge nacheinander, ein Fehler bricht alles ab (`MailModel+Draft.swift:102-105`).
+7. SheetValues ohne Fundstellen. Korrektur von mir: `orbSpot` steht im Master (`ALFA Shell.dc.html:54`, `:89` als 58 %); `releaseSpan` und `pointerStep` weiter nicht gefunden.
+8. Klein: deutscher Typname `MailLeadVorschlag`; zwei `purge` mit anderer Bedeutung; Schlüsselbund-Eintrag „sandbox“ bleibt; Postfach endet bei 50.
+- Gegenprüfer 23.10. gegen meine Arbeit: Stück 4 (nie doppelt senden) lässt Mails unsichtbar hängen (die App hat keine Postausgang-Ansicht, IMAP legt nichts in „Gesendet“ ab); Vorschlag: `fd5c9b1` zurücknehmen, bis Design „gescheitert“ zeichnet (N42), wartet auf Johannes' Ja. „Trennen ganz oder gar nicht“ gilt nur für die Schlüssel, nicht für die Datenbank. Kleinkram: `attempted` in `HubCore.remove` überflüssig, Test wartet mit zwei `Task.yield()`.
+
 ## Mutationslauf 22.10. (Prüfungen schrumpfen statt Grenze anheben, Johannes 14.10./17.10.)
 - 150 automatische Mutanten über das Kit (Operatoren aus `scripts/mutate.py`, je Mutant `swift test` in einem eigenen Worktree unter `dist/`, mit den fehlgeschlagenen Prüfzeilen als Ausgabe; die Dateien sind gelöscht, der Lauf dauert unter einer Stunde und lässt sich wiederholen): 67 gefangen, 83 überlebt (55 %). Von 280 Prüfschritten (`run*`/`step*`, 3962 Zeilen) fingen nur 50 (880 Zeilen) mindestens einen Mutanten; 230 (3082 Zeilen) keinen. Das sind Kandidaten, kein Beweis (Stichprobe, manche Mutanten gleichwertig).
 - Nächster Schritt: gezielte Mutanten je Kandidat-Schritt; gestrichen wird nur, was kein Mutant rot macht oder was eine andere Prüfung schon fängt; je gestrichener Prüfung den Mutanten nennen. Worktree und Arbeitsordner am Ende löschen.
