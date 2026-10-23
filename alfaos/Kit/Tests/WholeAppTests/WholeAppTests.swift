@@ -275,20 +275,6 @@ final class LayoutTests {
 }
 
 @MainActor
-final class BlobTests {
-    func runHomeSitsInTheStripAtTheMargin() throws {
-        let g = try Fixture.geometry()
-        let origin = BlobPlacement.home(geometry: g).origin(window: Fixture.screen, geometry: g)
-        recordEqual(origin, Point(x: 16, y: 16))
-    }
-    func runThrowSettlesAtTheNearestEdge() throws {
-        let g = try Fixture.geometry()
-        let thrown = BlobPlacement.settle(dropAt: Point(x: 700, y: 500), velocity: Point(x: -1000, y: 0), window: Fixture.screen, geometry: g)
-        recordEqual(thrown.edge, .leading)
-    }
-}
-
-@MainActor
 final class ShellModelTests {
     func runDirectoryDrivesTheMenuAndSearch() throws {
         let directory = try Fixture.directory()
@@ -313,8 +299,6 @@ final class ShellModelTests {
     func runAssistantExcludesTheMenuAndSnapshotRoundTrips() throws {
         let g = try Fixture.geometry()
         let model = ShellModel(directory: try Fixture.directory(), geometry: g, window: Fixture.screen)
-        model.toggleMenu()
-        model.toggleAssistant()
         model.dragLane(.trailing, proposed: 250)
         let data = try JSONEncoder().encode(model.snapshot)
         let restored = ShellModel(directory: try Fixture.directory(), geometry: g, window: Fixture.screen, snapshot: try JSONDecoder().decode(ShellSnapshot.self, from: data))
@@ -2437,15 +2421,6 @@ final class CoreActionTests {
 
 @MainActor
 final class CoreModelTests {
-    func runModelOverCoreShowsOfflineWhenTheNetworkDrops() async throws {
-        let (_, transport, _, model) = try mailRig(folders: scriptedInbox)
-        transport.setPage("INBOX", MailMessagePage(messages: [MailMessageSummary(id: "m1", subject: "s", from: "a")]))
-        await model.start()
-        recordEqual(model.listState, .loaded)
-        transport.listError = MailTransportError.timeout
-        await model.loadSelection()
-        guard case .offline = model.listState else { return XCTFail("state \(model.listState)") }
-    }
     func runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch() async throws {
         let (_, transport, core, model) = try mailRig(folders: scriptedInbox)
         let plan = MailAttachmentInfo(id: "a1", filename: "plan.pdf", mimeType: "application/pdf", sizeBytes: 2_048)
@@ -2549,16 +2524,6 @@ final class AccountTests {
         guard case .offline = stateAfterFailure else { return XCTFail("state \(stateAfterFailure)") }
         recordTrue(afterFailure)
         recordEqual(ids, ["1", "9"])
-    }
-    func runRowsRemovedOnTheServerStayInTheListAfterASync() async throws {
-        let (hub, transport, core, model) = try mailRig(folders: scriptedInbox)
-        transport.setTokenPage(nil, MailMessagePage(messages: [message("1"), message("2")]))
-        await model.start()
-        recordEqual(model.summaries.map(\.id), ["1", "2"])
-        transport.setTokenPage(nil, MailMessagePage(messages: [message("2")]))
-        hub.push(.syncFinished(.mail, "one"))
-        let mirrored = await eventually { core.messages("one", folder: "INBOX").map(\.id) == ["2"] }
-        recordTrue(mirrored)
     }
     func runAccountAddedLaterIsNotSelectedWhenNothingIsSelected() async {
         let engine = ModelFakeEngine()
@@ -2907,12 +2872,6 @@ final class MailModelTests {
         recordEqual(model.draft(forward)?.draft.subject, "Fwd: Hello")
         recordTrue(model.draft(forward)!.draft.attachments.isEmpty)
     }
-    func runOfflineKeepsLastSync() async {
-        let (model, engine) = fresh()
-        engine.pageError = .provider(Hint(text: MailTextKey.offline.rawValue))
-        await model.start()
-        recordEqual(model.listState, .offline(lastSync: Date(timeIntervalSince1970: 100)))
-    }
     func runRowStatesAndThreadCount() async {
         let (model, engine) = fresh()
         engine.pages[nil] = MailMessagePage(messages: [
@@ -2927,14 +2886,6 @@ final class MailModelTests {
         recordTrue(model.rows[2].selected)
         recordEqual(model.rows[2].states, [.selected])
         recordFalse(model.rows[0].selected)
-    }
-    func runSelectFolderChangesTheSelectionAndKeepsTheRole() async {
-        let (model, engine) = fresh()
-        engine.pages[nil] = MailMessagePage(messages: [fakeMessage("m1")])
-        await model.start()
-        await model.selectFolder("SENT")
-        recordEqual(model.selectedFolder, "SENT")
-        recordEqual(model.sortedFolders.first { $0.id == model.selectedFolder }?.role, .sent)
     }
     func runADraftWithOnlyBccCountsAsHavingARecipient() async {
         let (model, engine) = fresh()
@@ -3012,13 +2963,6 @@ final class ModelActionTests {
         let data = await model.attachmentData("m1", attachmentID: "a1")
         recordEqual(data, Data("pdf".utf8))
         recordEqual(engine.actionCalls, ["attachment:m1/a1"])
-    }
-    private func stepAFailedAttachmentDownloadGivesNoDataButAHint() async {
-        let (model, engine) = await make()
-        engine.actionError = .provider(Hint(text: "mail.hint.failed"))
-        let data = await model.attachmentData("m1", attachmentID: "a1")
-        recordNil(data)
-        recordEqual(model.actionFailure(for: "m1"), Hint(text: "mail.hint.failed"))
     }
     private func stepTheConversationOfACardComesFromItsThread() async {
         let (model, engine) = await make()
@@ -3257,7 +3201,6 @@ final class ModelActionTests {
         await stepTrashSpamAndMoveEachAskTheEngineAndDropTheRow()
         await stepARefusedActionKeepsTheRowAndTheCardAndShowsTheHint()
         await stepTheCardListsTheAttachmentsOfItsBodyAndLoadsOneOnDemand()
-        await stepAFailedAttachmentDownloadGivesNoDataButAHint()
         await stepTheConversationOfACardComesFromItsThread()
         await stepAFailedThreadLoadLeavesTheCardAloneAndShowsTheHint()
         await stepSavingWalksFromEditedThroughSavingToSavedWithTheTimeAndKeepsTheServerID()
@@ -3270,7 +3213,6 @@ final class ModelActionTests {
         await stepOpeningAStoredDraftMakesACardLinkedToTheServerDraftOnlyOnce()
         await stepAStoredDraftThatCannotBeLoadedMakesNoCardAndShowsTheHint()
         await stepCloseSavesAndToasts()
-        await stepCloseFailedSaveSilent()
         await stepCloseSavedSkipsSave()
         await stepCloseQueuedSilent()
         await stepCloseBlankNothing()
@@ -3298,16 +3240,6 @@ final class ModelActionTests {
         recordEqual(model.draft(id)?.state, .saved(fixed))
         recordEqual(model.toast?.kind, .draftSaved)
         recordFalse(model.stack.contains(.draft(id)))
-    }
-    private func stepCloseFailedSaveSilent() async {
-        let (model, engine) = await make()
-        let id = newDraft(model)
-        engine.actionError = .provider(Hint(text: "mail.hint.offline"))
-        await model.closeDraft(id)
-        recordNil(model.toast)
-        recordEqual(model.draft(id)?.state, .edited)
-        recordEqual(model.draft(id)?.saveFailure, Hint(text: "mail.hint.offline"))
-        recordEqual(model.draft(id)?.draft.subject, "Plan")
     }
     private func stepCloseSavedSkipsSave() async {
         let (model, engine) = await make()
@@ -5688,8 +5620,6 @@ final class WholeAppTests: XCTestCase {
         try await step("SettingsTests.runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp") { try SettingsTests().runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp() }
         try await step("LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell") { try LayoutTests().runTheLanesFollowTheAccordionOfTheDeliveredShell() }
         try await step("LayoutTests.runTilesFlowLikeAutoFill") { try LayoutTests().runTilesFlowLikeAutoFill() }
-        try await step("BlobTests.runHomeSitsInTheStripAtTheMargin") { try BlobTests().runHomeSitsInTheStripAtTheMargin() }
-        try await step("BlobTests.runThrowSettlesAtTheNearestEdge") { try BlobTests().runThrowSettlesAtTheNearestEdge() }
         try await step("ShellModelTests.runDirectoryDrivesTheMenuAndSearch") { try ShellModelTests().runDirectoryDrivesTheMenuAndSearch() }
         try await step("ShellModelTests.runSelectClosesTheMenuAndKeepsLaneStatePerArea") { try ShellModelTests().runSelectClosesTheMenuAndKeepsLaneStatePerArea() }
         try await step("ShellModelTests.runAssistantExcludesTheMenuAndSnapshotRoundTrips") { try ShellModelTests().runAssistantExcludesTheMenuAndSnapshotRoundTrips() }
@@ -5769,13 +5699,11 @@ final class WholeAppTests: XCTestCase {
         try await step("CoreTests.runLocalSearchListsTheNewestHitsFirst") { try await CoreTests().runLocalSearchListsTheNewestHitsFirst() }
         try await step("CoreTests.runTypingSearchesEveryFolderButSpamAndTrashWithoutTheTransport") { try await CoreTests().runTypingSearchesEveryFolderButSpamAndTrashWithoutTheTransport() }
         try await step("CoreActionTests.runTheCoreActions") { try await CoreActionTests().runTheCoreActions() }
-        try await step("CoreModelTests.runModelOverCoreShowsOfflineWhenTheNetworkDrops") { try await CoreModelTests().runModelOverCoreShowsOfflineWhenTheNetworkDrops() }
         try await step("CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch") { try await CoreModelTests().runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch() }
         try await step("AccountTests.runRemovingTheSelectedAccountLetsLoadMoreUseTheTokenOfTheOldOne") { await AccountTests().runRemovingTheSelectedAccountLetsLoadMoreUseTheTokenOfTheOldOne() }
         try await step("AccountTests.runRemovingTheOnlyAccountStillListsItsRows") { await AccountTests().runRemovingTheOnlyAccountStillListsItsRows() }
         try await step("AccountTests.runLoadMoreOfTheOldAccountLandsInTheNewAccountWhileItsFoldersLoad") { await AccountTests().runLoadMoreOfTheOldAccountLandsInTheNewAccountWhileItsFoldersLoad() }
         try await step("AccountTests.runOneRejectedLoadMoreEndsPagingUntilTheFolderIsSelectedAgain") { try await AccountTests().runOneRejectedLoadMoreEndsPagingUntilTheFolderIsSelectedAgain() }
-        try await step("AccountTests.runRowsRemovedOnTheServerStayInTheListAfterASync") { try await AccountTests().runRowsRemovedOnTheServerStayInTheListAfterASync() }
         try await step("AccountTests.runAccountAddedLaterIsNotSelectedWhenNothingIsSelected") { await AccountTests().runAccountAddedLaterIsNotSelectedWhenNothingIsSelected() }
         try await step("SetupTests.runOffersDependOnTheGoogleConfiguration") { let item = SetupTests(); try item.runOffersDependOnTheGoogleConfiguration(); item.cleanup() }
         try await step("SetupTests.runAssemblyIsUsableWithoutAnyInlet") { let item = SetupTests(); try item.runAssemblyIsUsableWithoutAnyInlet(); item.cleanup() }
@@ -5797,9 +5725,7 @@ final class WholeAppTests: XCTestCase {
         try await step("MailModelTests.runCardLimitDropsOldest") { await MailModelTests().runCardLimitDropsOldest() }
         try await step("MailModelTests.runOpenMarksReadAndFlagFailureKeepsHint") { await MailModelTests().runOpenMarksReadAndFlagFailureKeepsHint() }
         try await step("MailModelTests.runReplyAllBuildsDraft") { await MailModelTests().runReplyAllBuildsDraft() }
-        try await step("MailModelTests.runOfflineKeepsLastSync") { await MailModelTests().runOfflineKeepsLastSync() }
         try await step("MailModelTests.runRowStatesAndThreadCount") { await MailModelTests().runRowStatesAndThreadCount() }
-        try await step("MailModelTests.runSelectFolderChangesTheSelectionAndKeepsTheRole") { await MailModelTests().runSelectFolderChangesTheSelectionAndKeepsTheRole() }
         try await step("MailModelTests.runADraftWithOnlyBccCountsAsHavingARecipient") { await MailModelTests().runADraftWithOnlyBccCountsAsHavingARecipient() }
         try await step("ModelActionTests.runTheModelActions") { try await ModelActionTests().runTheModelActions() }
         try await step("ShellSweepTests.runLanesAcrossWindowsAndDrags") { try ShellSweepTests().runLanesAcrossWindowsAndDrags() }

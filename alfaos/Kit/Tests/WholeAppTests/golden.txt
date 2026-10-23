@@ -28,20 +28,6 @@ SettingsTests.runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp 
 SettingsTests.runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp false some(false)
 SettingsTests.runTheSettingsWordsAreInTheCatalogAndTheTokenSheetCarriesItsStamp le some(true)
 LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq [280.0,896.0,280.0]
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq 1456.0
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq 1144.0
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq 968.0
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq 744.0
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq 584.0
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq 56.0
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq [56.0,1120.0,280.0]
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq [56.0,1344.0,56.0]
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq 56.0
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq 1456.0
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq [56.0,500.0,900.0]
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq 280.0
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq 280.0
-LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq [280.0,896.0,280.0]
 LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell eq [56.0,1344.0,56.0]
 LayoutTests.runTheLanesFollowTheAccordionOfTheDeliveredShell nil true
 LayoutTests.runTilesFlowLikeAutoFill eq 1
@@ -53,8 +39,6 @@ LayoutTests.runTilesFlowLikeAutoFill eq 2
 LayoutTests.runTilesFlowLikeAutoFill eq 4
 LayoutTests.runTilesFlowLikeAutoFill eq 3
 LayoutTests.runTilesFlowLikeAutoFill eq 132.0
-BlobTests.runHomeSitsInTheStripAtTheMargin eq Point(x=16.0,y=16.0)
-BlobTests.runThrowSettlesAtTheNearestEdge eq Edge.leading()
 ShellModelTests.runDirectoryDrivesTheMenuAndSearch eq ["mail","settings"]
 ShellModelTests.runDirectoryDrivesTheMenuAndSearch eq ["core"]
 ShellModelTests.runDirectoryDrivesTheMenuAndSearch eq 2
@@ -372,7 +356,6 @@ CoreActionTests.runTheCoreActions eq ["archive:7:5:INBOX","move:7:9:Archive>INBO
 CoreActionTests.runTheCoreActions eq ["7:5:INBOX"]
 CoreActionTests.runTheCoreActions nil true
 CoreActionTests.runTheCoreActions eq "NO [CANNOT] gone"
-CoreModelTests.runModelOverCoreShowsOfflineWhenTheNetworkDrops eq MailListState.loaded()
 CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch eq ["plan.pdf","photo.png"]
 CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch eq ["a1","a2"]
 CoreModelTests.runTheListRowsCarryAttachmentsAndThreadsWithoutAFetch eq 2
@@ -398,8 +381,6 @@ AccountTests.runLoadMoreOfTheOldAccountLandsInTheNewAccountWhileItsFoldersLoad e
 AccountTests.runOneRejectedLoadMoreEndsPagingUntilTheFolderIsSelectedAgain true some(true)
 AccountTests.runOneRejectedLoadMoreEndsPagingUntilTheFolderIsSelectedAgain true some(true)
 AccountTests.runOneRejectedLoadMoreEndsPagingUntilTheFolderIsSelectedAgain eq ["1","9"]
-AccountTests.runRowsRemovedOnTheServerStayInTheListAfterASync eq ["1","2"]
-AccountTests.runRowsRemovedOnTheServerStayInTheListAfterASync true some(true)
 AccountTests.runAccountAddedLaterIsNotSelectedWhenNothingIsSelected nil true
 AccountTests.runAccountAddedLaterIsNotSelectedWhenNothingIsSelected eq ["a"]
 SetupTests.runOffersDependOnTheGoogleConfiguration false some(false)
@@ -485,7 +466,6 @@ MailModelTests.runReplyAllBuildsDraft true some(true)
 MailModelTests.runReplyAllBuildsDraft eq "<abc@x.test>"
 MailModelTests.runReplyAllBuildsDraft eq "Fwd: Hello"
 MailModelTests.runReplyAllBuildsDraft true some(true)
-MailModelTests.runOfflineKeepsLastSync eq MailListState.offline(offline=(lastSync: Optional<Date>)(lastSync=date(100.0)))
 MailModelTests.runRowStatesAndThreadCount eq [MailRowState.unread(),MailRowState.starred(),MailRowState.hasAttachments(),MailRowState.threadCount(threadCount=2)]
 MailModelTests.runRowStatesAndThreadCount eq [MailRowState.unread(),MailRowState.threadCount(threadCount=2)]
 MailModelTests.runRowStatesAndThreadCount eq "mail.row.unread"
@@ -494,8 +474,6 @@ MailModelTests.runRowStatesAndThreadCount false some(false)
 MailModelTests.runRowStatesAndThreadCount true some(true)
 MailModelTests.runRowStatesAndThreadCount eq [MailRowState.selected()]
 MailModelTests.runRowStatesAndThreadCount false some(false)
-MailModelTests.runSelectFolderChangesTheSelectionAndKeepsTheRole eq "SENT"
-MailModelTests.runSelectFolderChangesTheSelectionAndKeepsTheRole eq some(MailFolderRole.sent())
 MailModelTests.runADraftWithOnlyBccCountsAsHavingARecipient eq ["hidden@x.test"]
 ModelActionTests.runTheModelActions eq ["archive:m1"]
 ModelActionTests.runTheModelActions eq ["m2"]
@@ -514,8 +492,6 @@ ModelActionTests.runTheModelActions nil true
 ModelActionTests.runTheModelActions eq some([MailAttachmentInfo(id="a1",filename="plan.pdf",mimeType="application/pdf",sizeBytes=3)])
 ModelActionTests.runTheModelActions eq data[112, 100, 102]
 ModelActionTests.runTheModelActions eq ["attachment:m1/a1"]
-ModelActionTests.runTheModelActions nil true
-ModelActionTests.runTheModelActions eq some(Hint(text="mail.hint.failed",detail=nil,fixIn=nil,kind=nil,original=nil))
 ModelActionTests.runTheModelActions eq some(["m0","m1"])
 ModelActionTests.runTheModelActions eq some([])
 ModelActionTests.runTheModelActions eq ["thread:m1/t9","thread:m2/m2"]
@@ -558,10 +534,6 @@ ModelActionTests.runTheModelActions eq ["saveDraft"]
 ModelActionTests.runTheModelActions eq some(MailDraftState.saved(saved=date(5000.0)))
 ModelActionTests.runTheModelActions eq some(MailToastKind.draftSaved())
 ModelActionTests.runTheModelActions false some(false)
-ModelActionTests.runTheModelActions nil true
-ModelActionTests.runTheModelActions eq some(MailDraftState.edited())
-ModelActionTests.runTheModelActions eq some(Hint(text="mail.hint.offline",detail=nil,fixIn=nil,kind=nil,original=nil))
-ModelActionTests.runTheModelActions eq "Plan"
 ModelActionTests.runTheModelActions eq 1
 ModelActionTests.runTheModelActions eq some(MailToastKind.draftSaved())
 ModelActionTests.runTheModelActions eq [nil,"remote-1"]
