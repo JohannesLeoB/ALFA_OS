@@ -11,7 +11,7 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 - `main` = GitHub. Regeln `AGENTS.md` §1–§13, Karte `README.md`, Gedächtnis per Link (§12). Commit-Nachricht vor dem Commit mit `git log -1 --format=%B | cat -vet` prüfen.
 - 13 Stränge in `.claude/agents/`; gebaut wird über die Bau-Stränge (Sonnet 5.5), die Lead (Opus) prüft, liest den Diff und besitzt die Tests (ARBEIT-R24 gilt bis ARBEIT-O02).
 - GitHub: `main-protect` (kein Force-Push, kein Löschen, lineare Historie), `only-main` erlaubt `main` und `alfa-draws`.
-- Master: `ALFA OS Interface CHEF 1610-handoff 1810.zip` (Rang latest), vorletzter `…CHEF 1610.zip`; gezeichnet nur Mail, Einstellungen, Hülle. Brief v12 (b71bea8) gilt, 24 Punkte. Neuer Export von Design steht aus.
+- Master: `ALFA OS Interface CHEF 1610-handoff 1810.zip` (Rang latest), vorletzter `…CHEF 1610.zip`; gezeichnet nur Mail, Einstellungen, Hülle. Brief v14 gilt (N1 bis N43, Teil 2 führt die Entscheidungen). Neuer Export von Design steht aus.
 - Figma-Spiegel: Probedatei „ALFA Verlauf · Mail“ (Team ALFA, Starter); Strang und Automatik nicht freigegeben.
 
 ## Gebaut (Details in den Specs)
