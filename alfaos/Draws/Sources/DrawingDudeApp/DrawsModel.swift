@@ -816,7 +816,7 @@ final class DrawsModel {
         let packs = Self.root.appendingPathComponent("Packs")
         let master = try? StyleMaster.load(packs.appendingPathComponent("style/\(styleID).json"))
         let start = master.map { draft().seeded(by: $0, dials: bench.dials) } ?? draft()
-        let keys = ["motion", "materials"] + (dimensions ? ["dims"] : []) + (layout == .steps ? ["steps"] : [])
+        let keys = ["motion", "materials", "carcass"] + (dimensions ? ["dims"] : []) + (layout == .steps ? ["steps"] : [])
         let toolbox = DrawsToolbox(draft: start, bench: bench, images: images) { [weak self] next in self?.apply(next) }
         let session = Session(credentials: dock.claude.credentials, http: URLSession.shared)
         let text = brief, attached = attachments

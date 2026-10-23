@@ -20,4 +20,4 @@ Gilt für jede Sitzung in `alfaos/Draws` auf Zweig `alfa-draws`, zusätzlich zu 
 | Datei | Inhalt |
 |---|---|
 | `Sources/DrawsAI/Resources/designer.md` | Auftrag an Claude für den Einmal-Entwurf |
-| `Packs/skills/alfanomy/*.md` | Skillset `alfanomy`: core, dims, materials, motion, steps; Liste in `manifest.json` |
+| `Packs/skills/alfanomy/*.md` | Skillset `alfanomy`: core, dims, materials, motion, steps, carcass (Korpus-Raster); Liste in `manifest.json` |
