@@ -26,9 +26,10 @@ Merkwort cabinetclaude = Küchen-Korpus-System von Draws: specs/cabinetclaude/, 
 | `specs/cabinetclaude/geraete.md` | Geräte, Nischen, Einbauregeln | 23.10. |
 | `specs/cabinetclaude/lastenheft-generator.md` | G-01…: Generator, Stufe 1, mit Status | 23.10. |
 | `specs/cabinetclaude/lastenheft-katalog.md` | K-01…: Küchenfabrik, Stufe 2, offen | 23.10. |
+| `specs/cabinetclaude/bemassung.md` | Z-01…: Bemaßung, Plansatz, Ansichtsbeschriftung, mit Status | 23.10. |
 
 ## Laufzeit-Texte (von Claude in der App gelesen, keine Doku)
 | Datei | Inhalt |
 |---|---|
 | `Sources/DrawsAI/Resources/designer.md` | Auftrag an Claude für den Einmal-Entwurf |
-| `Packs/skills/alfanomy/*.md` | Skillset `alfanomy`: core, dims, materials, motion, steps, carcass (Korpus-Raster); Liste in `manifest.json` |
+| `Packs/skills/alfanomy/*.md` | Skillset `alfanomy`: core, dims, materials, motion, steps, carcass (Korpus-Raster), plans (Plansatz, Bemaßung); Liste in `manifest.json` |
