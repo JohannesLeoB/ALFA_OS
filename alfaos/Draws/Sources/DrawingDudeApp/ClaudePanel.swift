@@ -14,7 +14,7 @@ struct ClaudePanel: View {
                 say("draws.claude.title").font(style.font(Design.TextSize.body, weight: Design.Weight.medium))
                     .foregroundStyle(style.color(\.ink))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                SymbolButton(symbol: "xmark", tip: word("draws.claude.close"), ring: false) { model.assistant = false }
+                SymbolButton(symbol: "xmark", tip: word("card.close"), ring: false) { model.assistant = false }
             }
             .padding(.leading, CGFloat(Design.Spacing.step12))
             .padding(.trailing, CGFloat(Design.Spacing.step4))

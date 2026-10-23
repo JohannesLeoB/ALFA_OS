@@ -6,9 +6,10 @@ struct Head<Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        HStack(spacing: CGFloat(stack ? Design.Size.headGapStack : Design.Size.headGapList)) { content }
-            .padding(.leading, CGFloat(stack ? Design.Size.headPadLeftStack : Design.Size.headPadLeftList))
-            .padding(.trailing, CGFloat(Design.Size.headPadRight))
+        let lane: Lane = stack ? .trailing : .leading
+        HStack(spacing: CGFloat(lane.headGap)) { content }
+            .padding(.leading, CGFloat(lane.headLeading))
+            .padding(.trailing, CGFloat(lane.headTrailing))
             .frame(height: CGFloat(Design.Size.headerHeight))
             .frame(maxWidth: .infinity)
             .overlay(alignment: .bottom) { Line() }
@@ -45,7 +46,7 @@ struct HeadTitle: View {
 
 struct Glyph: View {
     let name: String
-    var size = Proto.glyph
+    var size = SheetValues.iconSize
 
     var body: some View {
         Image(systemName: name).font(.system(size: CGFloat(size)))
@@ -68,7 +69,7 @@ struct SymbolButton: View {
             .frame(width: CGFloat(Design.Size.symbolSize), height: CGFloat(Design.Size.symbolSize))
             .background(Circle().fill(on ? style.color(\.ink) : (hovering && !ring ? style.color(\.hover) : Color.clear)))
             .overlay(Circle().strokeBorder(ring && !on ? style.color(\.lineStrong) : Color.clear, lineWidth: CGFloat(Design.Size.hairline)))
-            .opacity(enabled ? 1 : Proto.disabled)
+            .opacity(enabled ? 1 : SheetValues.disabledOpacity)
             .contentShape(Circle())
             .onHover { hovering = $0 }
             .onTapGesture { if enabled { action() } }
@@ -225,7 +226,7 @@ struct Labeled<Content: View>: View {
         }
         .padding(.horizontal, CGFloat(Design.Spacing.step8))
         .frame(height: CGFloat(Design.Size.rowHeight))
-        .opacity(enabled ? 1 : Proto.disabled)
+        .opacity(enabled ? 1 : SheetValues.disabledOpacity)
         .allowsHitTesting(enabled)
     }
 }
@@ -295,7 +296,7 @@ struct Choice<Items: View>: View {
         } label: {
             HStack(spacing: CGFloat(Design.Spacing.step8)) {
                 Text(verbatim: value).lineLimit(1)
-                Glyph(name: "chevron.down", size: Proto.chevron)
+                Glyph(name: "chevron.down", size: SheetValues.smallIcon)
             }
             .font(style.font(Design.TextSize.small, weight: Design.Weight.medium))
             .foregroundStyle(style.color(\.ink))
@@ -374,7 +375,7 @@ struct SliderRow: View {
         .padding(.horizontal, CGFloat(Design.Spacing.step8))
         .padding(.top, CGFloat(Design.Spacing.step8))
         .padding(.bottom, CGFloat(Design.Spacing.step4))
-        .opacity(enabled ? 1 : Proto.disabled)
+        .opacity(enabled ? 1 : SheetValues.disabledOpacity)
         .allowsHitTesting(enabled)
     }
 }
@@ -430,7 +431,7 @@ struct Compose: View {
         .frame(height: CGFloat(Design.Size.rowHeight))
         .background(shape.fill(inverse ? style.color(\.inverse) : Color.clear))
         .overlay(shape.strokeBorder(inverse ? Color.clear : style.color(\.lineStrong), lineWidth: CGFloat(Design.Size.hairline)))
-        .opacity(hovering ? Proto.pressed : 1)
+        .opacity(hovering ? SheetValues.hoverRowOpacity : 1)
         .contentShape(shape)
         .onHover { hovering = $0 }
         .onTapGesture(perform: action)

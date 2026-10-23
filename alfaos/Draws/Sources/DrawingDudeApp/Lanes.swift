@@ -153,7 +153,7 @@ struct SheetLane: View {
                 Divide()
                 SymbolButton(symbol: "grid", tip: word("draws.raster"), on: model.raster) { model.raster.toggle() }
                 SymbolButton(symbol: maximized ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right",
-                             tip: word(maximized ? "draws.sheet.back" : "draws.sheet.max")) { maximized.toggle() }
+                             tip: word(maximized ? "mail.lane.back" : "draws.sheet.max")) { maximized.toggle() }
             }
             GeometryReader { proxy in
                 ZStack {
@@ -281,9 +281,8 @@ struct SheetLane: View {
                 if step % Int(Proto.gridMajor / Proto.grid) == 0 { major.addPath(line) } else { minor.addPath(line) }
                 y += Proto.grid
             }
-            let c = DesignColors.light
-            context.stroke(minor, with: .color(style.layerColor(c.sheetLine)), lineWidth: CGFloat(Design.Size.hairline))
-            context.stroke(major, with: .color(style.layerColor(c.sheetLineStrong)), lineWidth: CGFloat(Design.Size.hairline))
+            context.stroke(minor, with: .color(style.color(\.sheetLine)), lineWidth: CGFloat(Design.Size.hairline))
+            context.stroke(major, with: .color(style.color(\.sheetLineStrong)), lineWidth: CGFloat(Design.Size.hairline))
         }
         .frame(width: CGFloat(sheet.width * k), height: CGFloat(sheet.height * k))
         .overlay(alignment: .topLeading) {
@@ -459,7 +458,7 @@ struct InspectorLane: View {
             Head(stack: true) {
                 Segments(options: Tab.allCases.map { ($0, "draws.tab.\($0.rawValue)") }, selection: $model.tab, fill: true)
                 SymbolButton(symbol: maximized ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right",
-                             tip: word(maximized ? "draws.sheet.back" : "draws.inspector.max")) { maximized.toggle() }
+                             tip: word(maximized ? "mail.lane.back" : "draws.inspector.max")) { maximized.toggle() }
             }
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
@@ -477,7 +476,7 @@ struct InspectorLane: View {
                 Compose(key: model.rendering ? "draws.render.busy" : "draws.render.run", symbol: "camera") {
                     model.renderPhoto()
                 }
-                .opacity(model.shown.isEmpty || model.rendering ? Proto.disabled : 1)
+                .opacity(model.shown.isEmpty || model.rendering ? SheetValues.disabledOpacity : 1)
                 .allowsHitTesting(!model.shown.isEmpty && !model.rendering)
             }
             if model.tab == .export {
@@ -486,7 +485,7 @@ struct InspectorLane: View {
                         extra: n > 0 && !model.stuck ? String(format: word("draws.export.despite"), n) : "") {
                     model.export()
                 }
-                .opacity(model.sheet == nil ? Proto.disabled : 1)
+                .opacity(model.sheet == nil ? SheetValues.disabledOpacity : 1)
                 .allowsHitTesting(model.sheet != nil)
             }
         }
@@ -737,7 +736,7 @@ struct ExportTab: View {
         }
         .padding(.horizontal, CGFloat(Design.Spacing.step8))
         .padding(.vertical, CGFloat(Design.Spacing.step4))
-        .opacity(model.sheet == nil ? Proto.disabled : 1)
+        .opacity(model.sheet == nil ? SheetValues.disabledOpacity : 1)
         .allowsHitTesting(model.sheet != nil)
         SectionHead(key: "draws.export.render")
         HStack(spacing: CGFloat(Design.Spacing.step8)) {
@@ -746,7 +745,7 @@ struct ExportTab: View {
         }
         .padding(.horizontal, CGFloat(Design.Spacing.step8))
         .padding(.vertical, CGFloat(Design.Spacing.step4))
-        .opacity(model.photo == nil ? Proto.disabled : 1)
+        .opacity(model.photo == nil ? SheetValues.disabledOpacity : 1)
         .allowsHitTesting(model.photo != nil)
         SectionHead(key: "draws.export.check", meta: n == 0 ? "" : (n == 1 ? word("draws.export.oneDefect") : String(format: word("draws.export.defects"), n)),
                     metaTone: \.signal)

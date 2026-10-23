@@ -3,6 +3,7 @@ import DrawingKit
 import DrawsAI
 import DrawsRender
 import Foundation
+import ShellCore
 import UniformTypeIdentifiers
 
 extension DrawsModel {
@@ -107,9 +108,10 @@ extension DrawsModel {
                                          hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0,
                                          bitsPerPixel: 0),
               let context = NSGraphicsContext(bitmapImageRep: rep) else { return nil }
+        let paper = DesignColors.light.sheet
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = context
-        NSColor.white.setFill()
+        NSColor(srgbRed: CGFloat(paper.red), green: CGFloat(paper.green), blue: CGFloat(paper.blue), alpha: CGFloat(paper.alpha)).setFill()
         NSRect(x: 0, y: 0, width: w, height: h).fill()
         image.draw(in: NSRect(x: 0, y: 0, width: w, height: h))
         NSGraphicsContext.restoreGraphicsState()

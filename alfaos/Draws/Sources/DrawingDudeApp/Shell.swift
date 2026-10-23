@@ -2,15 +2,13 @@ import DrawingKit
 import ShellCore
 import SwiftUI
 
-enum Lane: Int, CaseIterable { case leading, center, trailing }
-
 struct ShellScreen: View {
     @Environment(\.colorScheme) private var scheme
     @Bindable var model: DrawsModel
-    @State private var leading = Design.Size.laneRestWidth
-    @State private var trailing = Design.Size.laneRestWidth
-    @State private var big: Lane?
+    @State private var lanes = LaneState(rest: Design.Size.laneRestWidth)
+    @State private var dragStart: [Double]?
     @State private var menu = false
+    private let geometry = ShellGeometry()
 
     var body: some View {
         let style = Style(dark: scheme == .dark)
@@ -20,18 +18,26 @@ struct ShellScreen: View {
             let top = Design.Size.safeAreaTop + m
             let laneTop = top + Design.Size.blobHeight + gap
             let laneHeight = max(0, h - laneTop - m)
-            let widths = widths(available: w - 2 * m - 2 * gap)
-            let lefts = [m, m + widths[0] + gap, m + widths[0] + widths[1] + 2 * gap]
+            let widths = LaneLayout.widths(windowWidth: w, state: lanes, geometry: geometry, rules: rules)
+            let lefts = [m, m + widths.leading + gap, m + widths.leading + widths.center + 2 * gap]
             ZStack(alignment: .topLeading) {
                 style.color(\.ground)
                 ForEach(Lane.allCases, id: \.self) { lane in
-                    LaneBox(width: widths[lane.rawValue], height: laneHeight) { content(lane) }
-                        .offset(x: CGFloat(lefts[lane.rawValue]), y: CGFloat(laneTop))
+                    LaneBox(width: widths.width(lane), height: laneHeight) { content(lane) }
+                        .offset(x: CGFloat(lefts[lane.index]), y: CGFloat(laneTop))
                 }
-                Handle(height: laneHeight, value: $leading, sign: 1)
-                    .offset(x: CGFloat(lefts[0] + widths[0]), y: CGFloat(laneTop))
-                Handle(height: laneHeight, value: $trailing, sign: -1)
-                    .offset(x: CGFloat(lefts[1] + widths[1]), y: CGFloat(laneTop))
+                ForEach([Lane.leading, Lane.trailing], id: \.self) { lane in
+                    Handle(
+                        height: laneHeight,
+                        width: widths.width(lane),
+                        sign: lane == .leading ? 1 : -1,
+                        drag: { drag(lane, proposed: $0, current: widths) },
+                        end: { dragStart = nil },
+                        step: { drag(lane, proposed: widths.width(lane) + $0, current: widths, keep: true) },
+                        reset: { lanes = LaneLayout.reset(rest: geometry.laneRest) }
+                    )
+                    .offset(x: CGFloat(lefts[lane.index] + widths.width(lane)), y: CGFloat(laneTop))
+                }
                 Blob(open: $menu, choose: choose)
                     .offset(x: CGFloat(m), y: CGFloat(top))
             }
@@ -48,37 +54,37 @@ struct ShellScreen: View {
         .onAppear { model.start() }
     }
 
-    private func widths(available: Double) -> [Double] {
-        let fold = Design.Size.foldedWidth
-        if big == .center { return [fold, available - 2 * fold, fold] }
-        if big == .trailing { return [fold, fold, available - 2 * fold] }
-        func clean(_ v: Double) -> Double { v < Design.Size.foldThreshold ? fold : max(v, Design.Size.laneMinimumLeft) }
-        var l = clean(leading), r = clean(trailing)
-        let room = available - Design.Size.middleMinimumWidth
-        if l + r > room { r = fold; if l > room - r { l = fold } }
-        return [l, available - l - r, r]
+    private var rules: AreaRules { AreaRules.rules(for: "draws", geometry: geometry) }
+
+    private func drag(_ lane: Lane, proposed: Double, current: LaneWidths, keep: Bool = false) {
+        let start = keep ? current.all : (dragStart ?? current.all)
+        if !keep { dragStart = start }
+        lanes = LaneLayout.drag(lane: lane, proposed: proposed, start: start, state: lanes, geometry: geometry, rules: rules)
     }
 
     private func choose(_ key: String) {
         menu = false
         switch key {
-        case "draws.area.sheet": big = big == .center ? nil : .center
-        case "draws.area.packs":
-            big = nil
-            leading = Design.Size.laneRestWidth
+        case "draws.area.sheet": lanes = LaneLayout.toggleMaximize(lane: .center, state: lanes)
+        case "draws.area.packs": open(.leading)
         case "draws.area.views", "draws.area.export":
-            big = nil
-            trailing = Design.Size.laneRestWidth
+            open(.trailing)
             model.tab = key == "draws.area.views" ? .view : .export
         case "draws.area.claude":
-            if big != .center { big = nil }
+            if lanes.maximized != .center { lanes.maximized = nil }
             model.assistant = true
         default: break
         }
     }
 
+    private func open(_ lane: Lane) {
+        lanes.maximized = nil
+        lanes.folded[lane.index] = false
+        lanes.preferred[lane.index] = geometry.laneRest
+    }
+
     private func grow(_ lane: Lane) -> Binding<Bool> {
-        Binding(get: { big == lane }, set: { big = $0 ? lane : nil })
+        Binding(get: { lanes.maximized == lane }, set: { lanes.maximized = $0 ? lane : nil })
     }
 
     @ViewBuilder
@@ -115,43 +121,85 @@ struct LaneBox<Content: View>: View {
 struct Handle: View {
     @Environment(\.style) private var style
     let height: Double
-    @Binding var value: Double
+    let width: Double
     let sign: Double
-    @State private var start: Double?
+    let drag: (Double) -> Void
+    let end: () -> Void
+    let step: (Double) -> Void
+    let reset: () -> Void
+    @State private var startWidth: Double?
     @State private var hovering = false
+    @FocusState private var focused: Bool
+    @State private var pointerFocus = false
 
     var body: some View {
-        let active = hovering || start != nil
-        RoundedRectangle(cornerRadius: CGFloat(Design.Radius.stroke))
-            .fill(style.color(active ? \.ink : \.inkTertiary))
-            .frame(width: CGFloat(active ? Design.Size.handleThicknessActive : Design.Size.hairline),
-                   height: CGFloat(active ? Design.Size.handleLengthActive : Design.Size.handleLength))
-            .animation(style.ease(Design.Duration.short), value: active)
-            .frame(width: CGFloat(Design.Size.gutter), height: CGFloat(height))
-            .overlay(alignment: .top) {
-                if start != nil {
-                    Text(verbatim: String(format: word("draws.handle.value"), Int(value.rounded())))
-                        .font(style.font(Design.TextSize.small))
-                        .monospacedDigit()
-                        .fixedSize()
-                        .padding(.horizontal, CGFloat(Design.Size.menuRowPadding))
-                        .frame(height: CGFloat(Design.Size.chipHeight))
-                        .foregroundStyle(style.color(\.onInverse))
-                        .background(Capsule().fill(style.color(\.inverse)))
-                        .padding(.top, CGFloat(Design.Spacing.step12))
-                }
+        let active = hovering || startWidth != nil
+        let thick = CGFloat(active ? Design.Size.handleThicknessActive : Design.Size.hairline)
+        let long = CGFloat(active ? Design.Size.handleLengthActive : Design.Size.handleLength)
+        let tone = style.color(active ? \.ink : \.inkTertiary)
+        let plain = style.ease(Design.Duration.short, SheetValues.gripCurve)
+        ZStack {
+            RoundedRectangle(cornerRadius: CGFloat(Design.Radius.stroke))
+                .animation(plain) { $0.foregroundStyle(tone) }
+                .animation(plain) { $0.frame(width: thick) }
+                .animation(style.ease(Design.Duration.short)) { $0.frame(height: long) }
+        }
+        .frame(width: CGFloat(Design.Size.gutter), height: CGFloat(height))
+        .overlay(alignment: .top) {
+            if startWidth != nil {
+                Text(verbatim: String(format: word("lane.handle.value"), Int(width.rounded())))
+                    .font(style.font(Design.TextSize.small))
+                    .monospacedDigit()
+                    .fixedSize()
+                    .padding(.horizontal, CGFloat(Design.Size.menuRowPadding))
+                    .frame(height: CGFloat(Design.Size.chipHeight))
+                    .foregroundStyle(style.color(\.onInverse))
+                    .background(Capsule().fill(style.color(\.inverse)))
+                    .padding(.top, CGFloat(Design.Spacing.step12))
+                    .allowsHitTesting(false)
             }
-            .contentShape(Rectangle())
-            .pointerStyle(.columnResize)
-            .onHover { hovering = $0 }
-            .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global)
-                .onChanged { drag in
-                    let s = start ?? value
-                    start = s
-                    value = max(Design.Size.foldedWidth, s + Double(drag.translation.width) * sign)
-                }
-                .onEnded { _ in start = nil })
-            .onTapGesture(count: 2) { value = Design.Size.laneRestWidth }
+        }
+        .overlay {
+            if focused && !pointerFocus {
+                Rectangle()
+                    .strokeBorder(style.color(\.focus), lineWidth: CGFloat(Design.Size.focusRingWidth))
+                    .padding(-CGFloat(Design.Size.focusRingOffset + Design.Size.focusRingWidth))
+                    .allowsHitTesting(false)
+            }
+        }
+        .contentShape(Rectangle())
+        .pointerStyle(.columnResize)
+        .onHover { hovering = $0 }
+        .focusable()
+        .focused($focused)
+        .onChange(of: focused) { _, now in if !now { pointerFocus = false } }
+        .focusEffectDisabled()
+        .onKeyPress(keys: [.leftArrow, .rightArrow, .return]) { press in
+            pointerFocus = false
+            return key(press)
+        }
+        .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global)
+            .onChanged { value in
+                pointerFocus = true
+                let start = startWidth ?? width
+                startWidth = start
+                drag(start + Double(value.translation.width) * sign)
+            }
+            .onEnded { _ in
+                startWidth = nil
+                end()
+            })
+        .simultaneousGesture(TapGesture(count: 2).onEnded { reset() })
+    }
+
+    private func key(_ press: KeyPress) -> KeyPress.Result {
+        if press.key == .return {
+            reset()
+            return .handled
+        }
+        let amount = press.modifiers.contains(.shift) ? SheetValues.laneShiftStep : Design.Size.foldedWidth
+        step(amount * (press.key == .leftArrow ? -1 : 1) * sign)
+        return .handled
     }
 }
 

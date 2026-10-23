@@ -26,17 +26,13 @@ enum Proto {
     static let minCell = 40.0
     static let customerShare = 0.64
     static let stepsRatio = 1.6
-    static let glyph = 14.0
-    static let chevron = 12.0
     static let emptyWidth = 300.0
     static let assistantWidth = 340.0
     static let tileHeight = 56.0
-    static let disabled = 0.4
     static let hidden = 0.45
     static let busy = 0.6
     static let underlay = 0.35
     static let underlaySide = 2400
-    static let pressed = 0.88
     static let azimuth = Dial(low: 0, high: 355, step: 5)
     static let elevation = Dial(low: 0, high: 90, step: 5)
     static let edge = Dial(low: 0, high: 1, step: 0.02)

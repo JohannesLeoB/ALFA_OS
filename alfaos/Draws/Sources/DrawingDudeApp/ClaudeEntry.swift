@@ -40,7 +40,7 @@ struct ClaudeEntry: View {
                         editing = false
                     }
                 }
-                .opacity(ready ? 1 : Proto.disabled)
+                .opacity(ready ? 1 : SheetValues.disabledOpacity)
                 .allowsHitTesting(ready)
             }
             .padding(.horizontal, CGFloat(Design.Spacing.step8))

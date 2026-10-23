@@ -6,21 +6,7 @@ Kit-Lag: Kit auf `alfa-draws` steht auf Merge-Base b1fbf02 (2026-10-21), main is
 Kürzel: `A/` = `alfaos/Draws/Sources/DrawingDudeApp/`. `main:` = `origin/main:`. Grenze: Komponenten in `main:alfaos/App/Components/` und `main:alfaos/App/Theme/` liegen im App-Ziel; Draws kann sie nicht importieren. Nur `ShellCore` (Kit) ist von Draws aus erreichbar.
 
 ## Umverdrahten jetzt (Draws → ALFA-Token oder -Komponente, die auf main schon existiert)
-- `Proto.glyph` 14 → `SheetValues.iconSize` (14): A/Proto.swift:29, benutzt A/Parts.swift:48
-- `Proto.chevron` 12 → `SheetValues.smallIcon` (12): A/Proto.swift:30, benutzt A/Parts.swift:298
-- `Proto.disabled` 0.4 → `SheetValues.disabledOpacity` (0.4): A/Proto.swift:34; A/Parts.swift:71,228,377; A/Lanes.swift:480,489,740,749; A/ClaudeEntry.swift:43
-- `Proto.pressed` 0.88 (heißt pressed, wirkt als Hover der Inverse-Zeile) → `SheetValues.hoverRowOpacity` (0.88): A/Proto.swift:39, benutzt A/Parts.swift:433
-- Handle-Easing für Farbe und Dicke: Standard-Kurve → `SheetValues.gripCurve` (main:HandleView.swift, `theme.ease(Duration.short, SheetValues.gripCurve)`): A/Shell.swift:129
-- Handle-Fokusring und Tastatur (Pfeile, Return) fehlen; Tokens `Design.Size.focusRingWidth`, `focusRingOffset`, `DesignColors.focus`, `SheetValues.laneShiftStep` existieren: A/Shell.swift:115-156
-- Eigenes `enum Lane` verdeckt `ShellCore.Lane` (`leading/center/trailing`, `index`, `headLeading`, `headTrailing`, `headGap`): A/Shell.swift:5 → entfernen, `ShellCore.Lane` nutzen
-- `Head(stack:)` rechnet `headGapStack/List`, `headPadLeftStack/List`, `headPadRight` selbst nach → `Lane.headGap`, `Lane.headLeading`, `Lane.headTrailing` (ShellCore/LaneLayout.swift): A/Parts.swift:4-16
-- Breitenlogik (Falten, Mindestbreite, Platz) nachgebaut → `LaneLayout.widths(windowWidth:state:geometry:rules:)`, `LaneWidths`, `LaneState`, `AreaRules` (ShellCore/LaneLayout.swift): A/Shell.swift:51-60, A/Shell.swift:10-11
-- Sheet-Raster fest auf `DesignColors.light` verdrahtet → `style.color(\.sheetLine)` und `\.sheetLineStrong`: A/Lanes.swift:284-286
-- Underlay-Rasterhintergrund `NSColor.white` → `DesignColors.light.sheet` (Token `sheet`, Weiß): A/DocFiles.swift:112
 - Schriftachse `0x7767_6874` und Fallback-Gewichtung doppelt zu `Typeface` (main:Theme/Theme.swift, dort `private`) → Kit-Verschiebung nötig, dann ein Ort: A/Style.swift:34-44
-- Stringschlüssel `draws.handle.value` → `lane.handle.value`; Formatzeichen `%d` mit `Int` → `%lld` wie ALFA: A/Shell.swift:133, Localizable.xcstrings (Draws)
-- Stringschlüssel `draws.sheet.back` ('Zurück') → `mail.lane.back` (gleicher Zweck, Lane wieder verkleinern, main:LaneView.swift): A/Lanes.swift:156,462
-- Stringschlüssel `draws.claude.close` ('Schließen') → `card.close`: A/ClaudePanel.swift:17
 - Zeilenabstand `Design.LineHeight.small - Design.TextSize.small` von Hand → `lineHeight(Design.LineHeight.small, size:)` (main:ComponentStyle.swift, App-Ziel, nach Kit-Verschiebung): A/Parts.swift:121
 
 ## Design-Bedarf Draws (fehlt in ALFA: Zweck, Fundstelle, heutiger Wert als Hinweis)
@@ -80,7 +66,7 @@ Zahlen und Formate in der Oberfläche ohne Katalogschlüssel (ALFA-Regel: Texte 
 - `Labeled` → `SettingsRow` (nur teilweise gleich): A/Parts.swift:211-231
 - `SectionHead` → kein ALFA-Teil (Listenkopf nur lokal in MailFolderLane): A/Parts.swift:94-111
 - `LaneBox` → `LaneView` (Falt-Streifen, Marken, Schatten `lane`, Barrierefreiheit, Umgebung `laneFill`/`hairline`): A/Shell.swift:94-113
-- `Handle` → `HandleView`: A/Shell.swift:115-156. Fehlt: Fokus, Pfeiltasten, Rückgabe, Barrierefreiheit, `ShellModel`-Anbindung
+- `Handle` → `HandleView`: A/Shell.swift. Fehlt: Barrierefreiheit, `ShellModel`-Anbindung
 - `Blob` → `BlobView` und `BlobMenu` (Augen folgen, Wecken, Flug, Suche, Rolle): A/Shell.swift:158-215. Draws: starre Zeilen, kein Suchfeld, keine Bewegung. Augen/Gesicht mit denselben Tokens
 - `ShellScreen` → `ShellView`: A/Shell.swift:7-92
 - `ClaudePanel` → kein ALFA-Teil; ALFA kennt `assistant.*`-Schlüssel (Assistent), Fläche `Radius.contextMenu`, `menu`, Schatten `floating` wie `AnchoredMenu`: A/ClaudePanel.swift:6-77
@@ -94,11 +80,11 @@ Stringschlüssel:
 - ALFA-Schema: `<bereich>.<gruppe>.<name>`, camelCase im letzten Teil, Bereiche mail, settings, assistant, lane, menu, card, hint, field, overview, sync, app, text, group, confirm, error, offer, stack (main:Localizable.xcstrings, 488 Schlüssel). Draws: 234 Schlüssel `draws.*` plus 21 `dock.*` (Localizable.xcstrings, 255)
 - `draws.*` folgt `draws.<gruppe>.<name>` (gleiches Schema); Ausnahme zweiteilig ohne Gruppe: `draws.raster` (Draws Localizable.xcstrings, benutzt A/Lanes.swift:154) → `draws.sheet.raster`
 - Bereichsname `draws` statt Lane-/Modulname: ALFA benennt nach Bereich (`mail`, `settings`); `draws` ist der Bereichsname von Draws, bleibt. `dock.*` ist ein zweiter Bereichsname in Draws (Ports, Gründe, Zustände): A/ClaudeEntry.swift:13 (`dock.state.connected`), A/DrawsModel.swift:378,652,885-886
-- Gleichlautende Texte unter anderem Schlüssel: `draws.handle.value` ↔ `lane.handle.value`; `draws.sheet.back` ↔ `mail.lane.back`; `draws.claude.close` ↔ `card.close`; `draws.claude.key` ↔ `settings.access.key`; `dock.state.connected` ↔ `settings.link.connected`; `draws.brief.remove`/`draws.tool.remove_part` ↔ `mail.compose.remove`; `draws.export.print` ↔ `mail.action.print`; `draws.export.savePDF` ↔ `mail.action.pdf`; `draws.cell.stepsOff` ↔ `settings.cadence.off`; `draws.claude.model` ↔ `settings.service.claude.field.model`. Nur bei gleichem Zweck zusammenlegen
+- Gleichlautende Texte unter anderem Schlüssel: `draws.claude.key` ↔ `settings.access.key`; `dock.state.connected` ↔ `settings.link.connected`; `draws.brief.remove`/`draws.tool.remove_part` ↔ `mail.compose.remove`; `draws.export.print` ↔ `mail.action.print`; `draws.export.savePDF` ↔ `mail.action.pdf`; `draws.cell.stepsOff` ↔ `settings.cadence.off`; `draws.claude.model` ↔ `settings.service.claude.field.model`. Nur bei gleichem Zweck zusammenlegen
 - Mischformen: `draws.tool.render_preview`, `draws.tool.remove_part` mit Unterstrich (Werkzeugnamen der KI) gegen camelCase überall sonst: Draws Localizable.xcstrings, A/ClaudePanel.swift:111
 - `word(_:)` liefert in Draws `String`, in ALFA `Text` (main:Host/AppHost.swift:182); `words(_:_:)` liefert `String` (main:Mail/MailKit.swift:55); `say(_:)` liefert `Text`. Gleicher Name, anderer Typ: A/Style.swift:75-81
 Typ- und Viewnamen (Draws ↔ ALFA, gleicher Begriff):
-- Lane: Draws `Lane` (Int-Enum, leading/center/trailing) A/Shell.swift:5 ↔ ALFA `Lane` (ShellCore); Draws-Spuren `ProjectLane`, `SheetLane`, `InspectorLane` A/Lanes.swift:7,118,452 ↔ ALFA `MailListLane`, `MailFolderLane`, `MailStackLane`, `SettingsLaneView`
+- Lane: Draws-Spuren `ProjectLane`, `SheetLane`, `InspectorLane` A/Lanes.swift:7,118,452 ↔ ALFA `MailListLane`, `MailFolderLane`, `MailStackLane`, `SettingsLaneView`
 - Fläche: `LaneBox` ↔ `LaneView`; `ShellScreen` ↔ `ShellView`; `Blob` ↔ `BlobView`/`BlobMenu`; `Handle` ↔ `HandleView`
 - Kopf: `Head` ↔ `LaneHead`; `HeadTitle` ↔ `HeaderTitle`; `Line` ↔ `Hairline`
 - Zeile: `ListRow` ↔ `LaneRow`; `Labeled` ↔ `SettingsRow`; `FieldRow` ↔ `InputField` (anderer Aufbau)
