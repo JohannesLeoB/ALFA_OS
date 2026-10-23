@@ -2,6 +2,8 @@
 
 Gilt für jede Sitzung in `alfaos/Draws` auf Zweig `alfa-draws`, zusätzlich zu `AGENTS.md`.
 
+Merkwort cabinetclaude = Küchen-Korpus-System von Draws: specs/cabinetclaude/, Generator, Werkzeug add_kitchen, Pack presets/carcass.json.
+
 ## Pflege
 - Jedes Dokument in `alfaos/Draws` steht in dieser Tabelle. Ein Dokument ohne Zeile wird eingetragen oder gelöscht.
 - Bei jeder Arbeit: betroffene Dokumente nachziehen, Veraltetes löschen, kürzen statt anhängen.
@@ -15,6 +17,15 @@ Gilt für jede Sitzung in `alfaos/Draws` auf Zweig `alfa-draws`, zusätzlich zu 
 | `specs/family.md` | Creative Family: Editoren, gemeinsames Rückgrat, Editor-Vertrag, Reihenfolge | 22.10. |
 | `specs/design-needs.md` | Draws gegen ALFA-Tokens, -Komponenten, -Namen: Umverdrahten, Design-Bedarf, Risiko Masterwechsel | 23.10. |
 | `specs/aufmass.md` | Aufmaß: Ablauf, Funktionen mit Altcode-Beleg, Laser, Prüfung | 22.10. |
+| `specs/cabinetclaude/README.md` | Karte, Datenfluss, Status | 23.10. |
+| `specs/cabinetclaude/system.md` | Koordinaten, Höhenlagen, Raster, Zeilen, Fugen | 23.10. |
+| `specs/cabinetclaude/korpus.md` | Standardschränke als Tabelle | 23.10. |
+| `specs/cabinetclaude/fronten.md` | Frontarten, Teilung, Griffe | 23.10. |
+| `specs/cabinetclaude/bauteile.md` | Sockel, Platte, Blenden, Leisten, Böden | 23.10. |
+| `specs/cabinetclaude/ausstattung.md` | Innenleben: sichtbar, Part/Unit/Metadatum | 23.10. |
+| `specs/cabinetclaude/geraete.md` | Geräte, Nischen, Einbauregeln | 23.10. |
+| `specs/cabinetclaude/lastenheft-generator.md` | G-01…: Generator, Stufe 1, mit Status | 23.10. |
+| `specs/cabinetclaude/lastenheft-katalog.md` | K-01…: Küchenfabrik, Stufe 2, offen | 23.10. |
 
 ## Laufzeit-Texte (von Claude in der App gelesen, keine Doku)
 | Datei | Inhalt |

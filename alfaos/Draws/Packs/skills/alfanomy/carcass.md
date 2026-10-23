@@ -11,7 +11,7 @@ Common modular kitchen sizes. Use them to fill gaps when the input gives no size
 - Tall cabinet: heights 1400, 2000, 2200 on plinth 80. Depth 600, shallow 370. Widths 400, 600, 800. Fridge and oven housings 600 × 600, ventilated.
 - Top cabinet over a tall cabinet or fridge: 400 or 600 high, 600 deep, 400 or 600 wide.
 - Open shelf units: 200 wide, 370 deep, heights 400, 600, 800.
-- Fronts sit in front of the carcass, about 20 thick; drawer fronts split a base front in low, mid and high drawers.
+- Fronts sit in front of the carcass, 18 thick with a 2 gap; drawer fronts split a base front in low, mid and high drawers.
 - Layouts: single row, two rows, L, U, island; keep about 1200 between an island and the other cabinets.
 - Prefer add_kitchen for cabinets: describe runs of cabinets with kind, fronts and the sizes the person gave; the generator builds carcasses, plinth, worktop, fronts and the units that open. Use add_parts only for special pieces.
 - Widths, heights and depths are free: any positive size is valid. The grid above only fills a size that is omitted; never refuse or round a size the person gave.
