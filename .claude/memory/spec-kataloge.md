@@ -7,6 +7,8 @@ metadata:
 
 # Kataloge · Spec
 
+Eingetragen: 23.10.2026 · Verfasser: Claude (Sonnet 5.5, Lead-Bau) für Johannes Leo Berger · Stand gegen Code-Commit e9893b1 · Quelle im Code: fundus/alpha/Sources (Bestand, nicht in alfaos)
+
 Artikel, Dienstleistungen und Positionen für Angebote und Warenkörbe: durchsuchbar, mit Preisen und Beleg der Herkunft. Stufe 1, fertig Ende November 2026; Datan als Modul in Stufe 2.
 
 F01 = KAT-F01. AUSSEHEN: Master zeichnet Kataloge nicht (Brief v14 Teil 6); Texte ohne Zeichnung in `INHALT.json`. Bestand = `fundus/alpha/Sources/`.

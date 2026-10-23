@@ -7,6 +7,8 @@ metadata:
 
 # Mail · Spec
 
+Eingetragen: 23.10.2026 · Verfasser: Claude (Sonnet 5.5, Lead-Bau) für Johannes Leo Berger · Stand gegen Code-Commit e9893b1 · Quelle im Code: alfaos/App/Mail, alfaos/Kit/Sources/Mail, alfaos/Kit/Sources/Hub/Providers/MailBinding.swift
+
 Mail-Client für bis zu drei Postfächer (Gmail, IMAP). Stufe 1, fertig Ende November 2026.
 
 F01 = MAIL-F01. AUSSEHEN: Zeile in `ALFA Mail.dc.html`. Dateien ohne Pfad: `alfaos/App/Mail/`, `alfaos/Kit/Sources/Mail/`; `App/` = `alfaos/App/`; `Hub/`, `ShellCore/` in `alfaos/Kit/Sources/`; IMAP = `fundus/alpha/Sources/AlfaServices/Mail/IMAPSMTPMailTransport.swift`. Brief v14.

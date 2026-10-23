@@ -7,6 +7,8 @@ metadata:
 
 # Ziel · Spec
 
+Eingetragen: 23.10.2026 · Verfasser: Claude (Sonnet 5.5, Lead-Bau) für Johannes Leo Berger · Stand gegen Code-Commit e9893b1 · Quelle im Code: alfaos/project.yml, alfaos/Kit/Sources, alfaos/App
+
 Native macOS-App ALFA für Studios, Handwerk und Projektarbeit: ein Betriebssystem der Arbeit mit vielen Bereichen. Erste Nutzer: Designstudio in Hamburg, sechs Personen, Küchen, Interiors, Licht, Bäder; Händler vieler Marken; Google Workspace trägt Mail, Kontakte, Kalender, Dateien.
 
 F01 = ZIEL-F01. AUSSEHEN: Zeile im Master (`ALFA Huelle.dc.html`, `ALFA Mail.dc.html`, `alfa-shell.js`). `App/` = `alfaos/App/`; `Kit/` = `alfaos/Kit/`. Brief v14.

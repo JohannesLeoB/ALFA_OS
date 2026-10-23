@@ -7,6 +7,8 @@ metadata:
 
 # Projekte · Spec
 
+Eingetragen: 23.10.2026 · Verfasser: Claude (Sonnet 5.5, Lead-Bau) für Johannes Leo Berger · Stand gegen Code-Commit e9893b1 · Quelle im Code: fundus/alpha/Sources (Bestand, nicht in alfaos)
+
 Projekt als Akte: alles im Dateiort zum Projekt plus Aufgaben, Zeiten, Geld. Anlegen mit Fragebogen und Provisionierung. Stufe 1, fertig Ende November 2026.
 
 F01 = PROJ-F01. AUSSEHEN: Master zeichnet Projekte nicht (Brief v14 Teil 6). Bestand = `fundus/alpha/Sources/`; Hub = `alfaos/Kit/Sources/Hub/`.

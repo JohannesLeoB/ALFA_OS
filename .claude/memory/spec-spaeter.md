@@ -7,6 +7,8 @@ metadata:
 
 # Später · Spec
 
+Eingetragen: 23.10.2026 · Verfasser: Claude (Sonnet 5.5, Lead-Bau) für Johannes Leo Berger · Stand gegen Code-Commit e9893b1 · Quelle im Code: fundus/alpha/Sources (Bestand, nicht in alfaos)
+
 Bereiche nach Stufe 1, bis Launch Ende 2026: Werkstatt mit den Editoren, Assistent als Bereich, Studio, Kalender, Kalkulation.
 
 F01 = SPAET-F01. AUSSEHEN: Master zeichnet keinen dieser Bereiche, nur Namen (INHALT.json:828). Bestand = `fundus/alpha/Sources/`; Hub = `alfaos/Kit/Sources/Hub/`.

@@ -7,6 +7,8 @@ metadata:
 
 Eine Spec beschreibt, was die App tut, nicht wer was wann gesagt hat. Der Verlauf liegt in Git.
 
+Kopfzeile unter dem Titel: Eingetragen (Datum), Verfasser, Stand gegen Code-Commit (Hash), Quelle im Code (Pfade). Bei jeder Änderung neu setzen.
+
 Aufbau: Kopf (ein Satz), Regeln (ohne Herkunft), Gruppen mit Funktionen, Später. Arbeitsregeln der Entwicklung gehören in AGENTS.md (nur mit Johannes' Freigabe), offene Fragen an Johannes in stand.md.
 
 Je Funktion fünf Angaben:

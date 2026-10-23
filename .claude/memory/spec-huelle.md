@@ -7,6 +7,8 @@ metadata:
 
 # Hülle · Spec
 
+Eingetragen: 23.10.2026 · Verfasser: Claude (Sonnet 5.5, Lead-Bau) für Johannes Leo Berger · Stand gegen Code-Commit e9893b1 · Quelle im Code: alfaos/App/Shell, alfaos/Kit/Sources/ShellCore
+
 Die eine Schablone für jeden Bereich: Fenster, drei Bahnen mit Griffen, Blob mit Menü und Assistent, Sync-Knopf mit Avatar, Kartenstapel. Stufe 1, fertig Ende November 2026.
 
 F01 = HUELLE-F01. AUSSEHEN: Shell = `ALFA Shell.dc.html`, js = `alfa-shell.js`, Huelle = `ALFA Huelle.dc.html`, Mail = `ALFA Mail.dc.html`, css = `alfa-theme.css`. Dateien ohne Pfad: `alfaos/App/Shell/`; `Comp/` = `alfaos/App/Components/`; `Core/` = `alfaos/Kit/Sources/ShellCore/`; `App/` = `alfaos/App/`. Brief v14.

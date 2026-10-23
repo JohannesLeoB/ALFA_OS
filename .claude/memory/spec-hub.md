@@ -7,6 +7,8 @@ metadata:
 
 # Hub · Spec
 
+Eingetragen: 23.10.2026 · Verfasser: Claude (Sonnet 5.5, Lead-Bau) für Johannes Leo Berger · Stand gegen Code-Commit e9893b1 · Quelle im Code: alfaos/Kit/Sources/Hub, alfaos/App/Settings, alfaos/Kit/Sources/ShellCore/SettingsSections.swift
+
 Einstellungen, Konten und Dienste in einem Knoten; verbindet Konten, Dienste und Speicherorte mit den Bereichen. Stufe 1, fertig Ende November 2026.
 
 F01 = HUB-F01. AUSSEHEN: Zeile in `ALFA Mail.dc.html`; Dienste: = `ALFA Dienste.dc.html`. Dateien ohne Pfad: `alfaos/Kit/Sources/Hub/`; `S/` = `alfaos/App/Settings/`; `App/` = `alfaos/App/`; SS = `alfaos/Kit/Sources/ShellCore/SettingsSections.swift`; FU = `fundus/alpha/Sources/`. Berührt Mail: F12 = MAIL-F14, F41 = MAIL-F54, F42 = MAIL-F30. Brief v14.

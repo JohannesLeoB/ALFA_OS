@@ -7,6 +7,8 @@ metadata:
 
 # Warenkorb · Spec
 
+Eingetragen: 23.10.2026 · Verfasser: Claude (Sonnet 5.5, Lead-Bau) für Johannes Leo Berger · Stand gegen Code-Commit e9893b1 · Quelle im Code: fundus/alpha/Sources (Bestand, nicht in alfaos)
+
 Körbe aus Katalogen, Positionen und Bündeln; Checkout an das Ziel, das Nutzer oder Firma wählen. Stufe 1, fertig Ende November 2026.
 
 F01 = KORB-F01. AUSSEHEN: Master zeichnet Warenkorb nicht (Brief v14 Teil 6); Texte ohne Zeichnung in `INHALT.json`. Bestand = `fundus/alpha/Sources/`; Hub = `alfaos/Kit/Sources/Hub/`.
