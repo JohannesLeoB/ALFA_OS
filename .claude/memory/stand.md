@@ -24,6 +24,8 @@ Nur, was heute gilt. Verlauf: `git log`. Funktionen, Lücken, Entscheidungen von
 - Abmelden mit Halten, Hover-Leiste öffnet die Mail nicht mehr, Fokusring am Griff nur bei Tastatur (gebaut ohne Test, Randfälle in HandleView offen), K1, H2, D1, HTML-Mail, H1, IDLE, kein doppeltes Senden, F32: nicht in der laufenden App oder gegen echte Server gesehen. Nichts ist grün; Abnahme nur durch Johannes. Letzte App: `dist/ALFA OS 943.app` (ohne F32).
 
 ## Offen bei Johannes
+- Konfigurator: eigener Bereich (spec-spaeter F04) oder Teil von Draws (Zweig alfa-draws, specs/family.md:19)?
+- Master 2210 (in Arbeit): Pfad der ZIP, dann Prüfung und Wechsel.
 - Rote Mail-Funktionen und Formatleiste: Design zeigt Vorschläge, er entscheidet je Fall.
 - Grenzfälle der gestrichenen Erklärsätze (HUB-R02): zurückholen oder weglassen.
 - Mail-Hülle: Untergrenze der Bahn Links (HUELLE-L06).

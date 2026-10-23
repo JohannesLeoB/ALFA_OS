@@ -171,6 +171,13 @@ WARUM: Fehler fällt auf.
 AUSSEHEN: Mail:711.  
 STAND: gebaut, nicht abgenommen (App/Host/AppHost.swift:38-46, App/Shell/BlobMenuView.swift:198).
 
+**F47 Dateien und Daten für die Editoren**  
+WAS: Editor-Module (Draws) holen Dateien, Vorlagen, Firmendaten, Projektfelder, Material und den Claude-Zugang über Hub-Ports.  
+WO: Hub › Ports.  
+WARUM: Editoren kennen weder Schlüssel noch Speicherorte.  
+AUSSEHEN: kein Bogen nötig.  
+STAND: fehlt. Dateiport hat vier Methoden und lädt alles in den Speicher (Hub/Ports.swift); Unterordner, Ordner anlegen, Metadaten, große Dateien, Suche fehlen. Ports Dokumente, Assistent, Projekte, Material ohne Methoden. Bedarf: `alfaos/Draws/specs/hub-needs.md` (Zweig alfa-draws), darin Material- und Medienkatalog mit rund 23.000 Bildern, nur lesend.
+
 ## Je Dienst
 **F20 Google Mail**  
 WAS: Anmeldung im Browser, persönlich.  
