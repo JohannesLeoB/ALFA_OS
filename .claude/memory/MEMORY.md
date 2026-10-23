@@ -12,3 +12,5 @@
 - [Spec: Warenkorb](spec-warenkorb.md) — Checkout, EK-Schutz; kein Code, Bestand belegt
 - [Spec: Später](spec-spaeter.md) — Werkstatt, Assistent, Studio, Kalkulation, ALFAcolor
 - [Artefakte](artefakte.md) — Hinweise aus 56 Artefakten; Zitate teils nicht gefunden, keine Quelle
+- [Kein Rechner-Durchsuchen](feedback-kein-rechner-durchsuchen.md) — nur lesen, was Johannes nennt; bei fehlender Datei nach Pfad fragen
+- [Keine Zitate](feedback-keine-zitate-nur-architektur.md) — Johannes nicht zitieren; Architektur, Specs, Richtlinien festhalten
