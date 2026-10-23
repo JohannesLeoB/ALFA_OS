@@ -1,119 +1,353 @@
 ---
 name: spec-hub
-description: Hub, Einstellungen, Konten und Integrationen: Baum und Karten sind gebaut, aber nichts abgenommen; von den Diensten ist nur der Zugang (Anmelden, Prüfen, Trennen) verdrahtet, Abgleich, Zuordnungen, Mitteilungen, Dateiorte und Erst-Setup fehlen.
+description: Hub und Einstellungen: Funktionen als Baum (was, wo, warum, Aussehen, Stand), Regeln, Lücken bei Design
 metadata:
   type: project
 ---
 
-# HUB · Spec (Stand 21.10.)
+# Hub · Spec
 
-Pfade: `H/` = `alfaos/Kit/Sources/Hub/`, `S/` = `alfaos/App/Settings/`, `SS` = `alfaos/Kit/Sources/ShellCore/SettingsSections.swift`, `M:` = Master 1810 `ALFA Mail.dc.html`, `MJ` = Master `lieferung-an-code/settings-sections.json`, `BR` = `DESIGN/brief/BRIEF.txt` (v12), `FU` = `fundus/alpha/Sources/`.
+Einstellungen, Konten und Dienste in einem Knoten; verbindet Konten, Dienste und Speicherorte mit den Bereichen. Stufe 1, fertig Ende November 2026.
 
-## Ziel
-Der Hub ist der „Netzwerkstecker“ der App: Er verbindet Konten, Dienste und Speicherorte mit den Bereichen und regelt je Verbindung Zugang, Besitz, Fähigkeiten, Abgleich, Einstellungen und Mitteilungen. Einstellungen und Integrationen sind ein Knoten; jeder Dienst folgt demselben Schema (links Auswahl, Mitte Kachel, rechts Karte). Die App kann zuerst alles, Zudrehen kommt später als Einstellung.
-
-## Richtung
-- Später: Hub-Katalog wie bei Slack/ClickUp gesehen (Kategorien, Zustand, Hinzufügen/Verwalten, Filter „Kompatibel mit“ nach Bereichen), nur grobe Richtung, Gestaltung macht Design.
-- Später: 15 Integrationen in voller Tiefe (AGENTS.md §1); Datan als Modul mit Airtable als eine Route unter mehreren (siehe `spec-kataloge.md`).
-- Später: Rollen und Firmensperren als Einstellung; wie sie greifen, entscheidet er später.
-- Später: Mitteilungsoptionen je Dienst aus der Doku des Dienstes ablesen (Design-Text zitiert ihn, `RUECKGABE-AN-CODE.md:58`).
-- Andock-Bedarf der Editoren (Draws, Figur „Andocken“ 22.10., Artifact EdQqVsepCJ39UhLsRD7D7h): sieben Stecker Projekt, Ablage, Vorlagen, Claude, Ausgabe, Katalog, Dateien; im Hub passt heute nur Dateien (FilesPort). Gegenstücke: Projekt → Vorgang (spec-ziel K01–K08), Ablage und Vorlagen → Speicherorte (F05, F39), Claude → ein Schlüssel im Hub und Assistenten-Stecker (F27), Ausgabe → Werkstatt erzeugt, Hub gibt weiter (speichern, teilen, senden; ZIEL-K11), Katalog → spec-kataloge.
-- Offen, nicht beauftragt: Hub-Entwürfe A/B/C der Produkt-Sitzung über die kleinste Form hinaus („NOCH KEINEN AUFTRAG“ 19.10.).
-
-## Entscheidungen Johannes 21.10. (bc4854d7, Antworten auf vier Fragen der Lead)
-1. Gliederung (vier Master-Gruppen oder eigene Ebene je Bereich?): „weder noch - ggf mehr Gruppen … also "erweiterbar" bauen.“ → HUB-F02.
-2. Tastenkürzel und Mitteilungen: zeigen, was es geben sollte, von Design entworfen; „was "NUR SO TUT als TÄTE es was" vermeiden.“ → HUB-F04.
-3. Vorlagen: Teil von „speicherorte, Arbeitsordner, Filesystem und so weiter“. → HUB-F05.
-4. Kleinste Hub-Form bauen: „JA! aber wohin willst du clickup verdrahten?“ → HUB-F37 (gebaut), HUB-F24 (ClickUp offen, ohne Abnehmer).
-
-## Funktionen
-### Baum und Rahmen
-- **HUB-F01 Vier Gruppen, elf Abschnitte**: Soll: Links Ich, Firma, Verbindungen, Schutz und System; Mitte Abschnitte (in Verbindungen Kacheln); rechts Karte im Stapel. Ist: `SS:4-67`, `S/SettingsLaneView.swift:77-141`; zusätzlich `.contacts` (`SS:32`, nicht im Master, siehe F41); `.integrations` ohne Inhalt (`S/SettingsSectionCards.swift:24`). Status: orange. Quelle: M:389,410 · MJ:1-101.
-- **HUB-F02 Baum erweiterbar**: Soll: Gruppen und Abschnitte neu hinzufügbar, ohne den Baum umzubauen. Ist: festes `enum` (`SS:4,24`). Status: offen. Quelle: J 21.10. bc4854d7 „„erweiterbar“ bauen“.
-- **HUB-F03 Baum nach Zugehörigkeit**: Soll: Gliederung nach „wer besitzt, welcher Bereich nutzt, welcher Dienst trägt“, mit Schaltern und Funktionsclustern je Knoten. Ist: Master hat nur vier Gruppen ohne Zuordnung zu Bereichen. Status: lücke. Quelle: J 21.10. bc4854d7 („Stecker ist quasi noch falsch verkabelt“) · M:410.
-- **HUB-F04 Tastenkürzel und Mitteilungen im Baum**: Soll: zeigen, was es geben sollte, von Design entworfen und platziert; nichts, was nur so tut. Ist: nicht gebaut (`MJ` notBuilt); Master zeichnet Zeilen M:764-765. Status: lücke. Quelle: J 21.10. bc4854d7 (2) · J 16.10. „Dummy-Abschnitte nicht bauen“ (älter).
-- **HUB-F05 Speicherorte, Arbeitsordner, Material mit Vorlagen**: Soll: Vorlagen sind Teil des einen Bereichs Speicherorte/Arbeitsordner/Filesystem, nicht eigener Abschnitt. Ist: getrennte Abschnitte Dateiordner und Vorlagen mit leeren Werten (`S/SettingsSectionCards.swift:195-221`). Status: offen. Quelle: J 21.10. bc4854d7 (3) · M:407,772.
-### Ich, Firma, Schutz, System
-- **HUB-F06 Identität**: Soll: Name, Rolle, Kürzel, Telefon, Geburtstag-Schalter. Ist: `S/SettingsSectionCards.swift:75-108` (UserDefaults); wirkt nur Name/Kürzel (`App/Mail/MailComposeView.swift:138`, `App/Components/SyncButton.swift:8-9`). Status: orange. Quelle: M:758. Absendername gehört zum Postfach, nicht zur Identität: siehe `spec-mail`.
-- **HUB-F07 Darstellung**: Soll: Erscheinung Hell/Dunkel/Automatisch; „Fremde Inhalte“ bleiben hell. Ist: wirkt (`App/ALFA_OSApp.swift:35`); Zeile „Fremde Inhalte“ ist nur Text (`S/SettingsSectionCards.swift:141-143`). Status: orange. Quelle: M:761.
-- **HUB-F08 Startansicht**: Soll: „Beim Öffnen“ wählt, was die App zeigt. Ist: Mail, Einstellungen, Zuletzt offen (`SS:77-93`), wirkt (`App/ALFA_OSApp.swift:22`); Heute fehlt in der Auswahl. Status: orange. Quelle: M:762.
-- **HUB-F09 App-Sperre**: Soll: Sperre mit Touch ID oder Passwort nach Pause. Ist: Schalter und Verzögerung gespeichert (`S/SettingsSectionCards.swift:125,147-152`), nichts sperrt (kein `LocalAuthentication` im Repo-Code, grep). Status: rot. Quelle: M:763 · BR N9.
-- **HUB-F10 Firmendaten**: Soll: Firma, Anschrift, Telefon, Web, Mail trägt der Nutzer ein. Ist: Eingabe in UserDefaults (`S/SettingsSectionCards.swift:157-165`), kein Abnehmer im Code. Status: orange. Quelle: J 19.10. 3f52450e „Nutzer trägt ein“ (aus dem früheren Gedächtnis, Wortlaut nicht gegengelesen) · M:771.
-- **HUB-F11 Impressum**: Soll: Urheber, Rechte, Signatur trägt der Nutzer ein. Ist: wie F10 (`S/SettingsSectionCards.swift:167-175`). Status: orange. Quelle: wie F10 · M:773.
-- **HUB-F12 Bilder in Mails laden**: Soll: Schalter je Mail-Konto im Hub (an/aus) und ein Hauptschalter je Nutzer in Datenschutz (aus = alle Konten aus, an = die in Mail eingeschalteten); Vorgabe aus. Ist: ein globaler Schalter unter Datenschutz (`S/SettingsSectionCards.swift:304`), wirkt (`App/Mail/MailReadingView.swift:119,141,199`). Status: orange. Quelle: J 22.10.; M:760.
-- **HUB-F13 Zeilen ohne Funktion**: Soll: nichts, was nur so tut. Ist: Rolle, Telefon, Geburtstag (F06), App-Sperre (F09), „Assistent ganz aus“, „Dateien im Chat“ ohne Abnehmer; deaktivierte Knöpfe „Eigene Daten exportieren“, „Vorlage anlegen“, „Einrichtung erneut“ (`S/SettingsSectionCards.swift:207,218,320`). Status: rot. Quelle: J 21.10. bc4854d7 (2).
-- **HUB-F14 System**: Soll: Version, Zweig, Datenbank, Diagnose kopieren. Ist: `S/SettingsSectionCards.swift:326-370`. Status: orange. Quelle: M:767.
-- **HUB-F15 Abmelden**: Soll: Einstellungs- und Hub-Sache, nicht Mail. Zwei Ebenen: alle Dienste auf einmal abmelden, aufgezählt und gezählt aus den tatsächlich verbundenen Diensten; oder jeden Dienst einzeln trennen (Dienstkarte). Warnung und Umgang mit ungesendeten Mails: offen bei Johannes (das frühere „lets go“ ist erfunden, J 21.10. 3f52450e). Ist: `S/SettingsSectionCards.swift:110-118` trennt alle und startet neu; Text nennt fest sechs Dienste (xcstrings `settings.identity.signOut.sub`), es gibt zehn; einzelnes Trennen auf der Karte (`S/SettingsServiceCard.swift`); Google-Token wird beim Anbieter nicht widerrufen (`H/Providers/Google/GoogleSignIn.swift:61`); laut Archivar 21.10. gehen ungesendete Mails ohne Warnung verloren (nicht nachgeprüft). Status: rot (fester Text statt verbundener Dienste). Quelle: J 21.10. bc4854d7 („in den Einstellungen alle … abgemeldet werden und ebenda gezählt, oder auch nur jeder einzelne“) · M:758 · BR N2.
-### Dienste (Rahmen)
-- **HUB-F16 Kachel und Dienstkarte**: Soll: je Dienst Kachel (Logo, Name, Zustand) und Karte mit Zustand, Anmeldung, Feldern, Abgleich, Extras. Ist: `S/SettingsLaneView.swift:188-242`, `S/SettingsServiceCard.swift:52-305`; Logos nur Clockodo und DHL (`S/Logos/`). Status: orange. Quelle: M:391-401,727-747 · BR L-011.
-- **HUB-F17 Acht Zustandswörter**: Soll: Verbunden, Schlüssel gespeichert, Verbindet, Gleicht ab, Nicht verbunden, Fehler, Schlüsselbund nicht lesbar, Verwaist. Ist: `H/LinkState.swift:3-26`; „Schlüssel gespeichert“ (`.signedIn` wird nie gespeichert, `H/HubCore.swift:367-368`) und „Verwaist“ (`.orphaned` nie gesetzt) treten nie auf. Status: rot (zwei der acht Zustände nie erreichbar). Quelle: M:704-716.
-- **HUB-F18 Verbinden, Prüfen, Trennen**: Soll: Anmeldung beim Anbieter, Prüfung dort, Erneuern, Trennen mit Bestätigung. Ist: `H/HubCore.swift:346-519`; Schlüsselfelder-Prüfung für sechs Dienste (`H/Providers/Keys/KeyProviders.swift:10-58`). Status: orange. Quelle: M:733-737 · J 12.10. 20:23 7cc894d9 (Prüfung beim Dienst, Original des Anbieters).
-- **HUB-F19 Drei Zustände und Detailbericht**: Soll: in der Oberfläche nur online, eingeschränkt, Fehler als drei Zeichen; die Detailkarte zeigt über „Detail“ den vollständigen Bericht (Anbieter, Status, Code, Servertext, Anfragekennung). Ist: `health(of:)` ohne Aufrufer in `alfaos/App` (`H/HubCore.swift:149`); Berichtsdaten da (`H/Failure.swift:9-35`), UI zeigt nur Hinweistext und Status (`S/SettingsServiceCard.swift:176-181`). Status: offen. Quelle: J 12.10. 20:23 7cc894d9.
-### Dienste (je Dienst)
-- **HUB-F20 Google (Mail)**: Soll: Anmeldung im Browser, persönlich, Mail. Ist: PKCE-Anmeldung und Prüfung (`H/Providers/Google/GoogleSignIn.swift`, `GoogleProbe.swift`); ohne Datei `google-client.json` gibt es keinen Google-Anbieter (`H/Providers/ProviderCatalog.swift:6-8`) und keinen Verbinden-Knopf (`H/ServiceReader.swift:53,42`). Status: orange. Quelle: M:392 · J 20.10. 22:33 3f52450e (eigene Nutzer, eigene Anmeldung).
-- **HUB-F21 Google Kalender, Kontakte, Dateien**: Soll: Bereiche Kontakte und Dateien mit Takt, „Drive-Ordner der Projekte“. Ist: Angebot hat nur `.mail` (`Kit/Sources/Mail/Setup/MailSetup.swift:78`), daher erscheinen die Bereiche nie; Adapter für Kalender und Kontakte fehlen (`H/Providers/Google/GoogleProvider.swift:42-43`); Drive-Port gebaut, aus, solange keine Projekt-Wurzel gewählt ist (`H/Providers/Google/GoogleDriveFiles.swift:8-12`); Berechtigung `drive` angefordert (`FU AlfaServices/Google/GoogleOAuthModels.swift:29-37`). Status: offen. Quelle: M:392 · BR N14 · J 21.10. „JA!“ (volle Drive-Berechtigung; aus dem früheren Gedächtnis, Wortlaut nicht gegengelesen).
-- **HUB-F22 Mail-Konten**: Soll: weitere Postfächer über IMAP/SMTP aus Anbietervorlagen, bis zu drei Konten, Konto prüfen und entfernen. Ist: `H/Providers/IMAP/IMAPProvider.swift:24-57`, `S/SettingsServiceCard.swift:183-217`, Grenze drei (`H/HubConfiguration.swift:8`). Status: orange. Quelle: M:393 · J 12.10. 14:43 a9bb817c (bis zu 3 Konten) · Design-Text 15.10. (zitiert Johannes; eigene Nachricht nicht gefunden) (Mail-Konten sind Integration, Design-Text `entscheidungen.md:220`).
-- **HUB-F23 ClickUp Zugang**: Soll: Schlüssel eintragen, beim Anbieter prüfen. Ist: `H/Providers/Keys/KeyProviders.swift:12-16`. Status: orange. Quelle: M:394.
-- **HUB-F24 ClickUp Abgleich und Zuordnungen**: Soll: Phasen und Aufgabenfelder abgleichen; Zuordnung von Workspace, Projektordner, Liste je Projekt, Aufgabenvorlage, Feldern, sieben Phasen, Team. Ist: Fähigkeit leer (`H/Providers/Keys/KeyProvider.swift:87`), Port ohne Methoden (`H/Ports.swift:12`), Bereiche erscheinen nie (`H/ServiceReader.swift:79`); Bestand hat sechs Routing-Zeilen und sieben feste Phasen (`FU AlfaKit/Domain/ClickUpRouting.swift:30`, `FU AlfaServices/ClickUp/ClickUpProjectPhase.swift`). Status: offen. Quelle: M:394 · J 21.10. bc4854d7 „wohin willst du clickup verdrahten?“ (Rückfrage, unbeantwortet).
-- **HUB-F25 Clockodo Zugang**: Soll: E-Mail, Schlüssel, Nutzer; nur persönlich. Ist: `H/Providers/Keys/KeyProviders.swift:17-26`, Nutzer-ID optional; Flag `personOnly` ohne Wirkung (nur `H/ServiceCatalog.swift`, grep). Status: orange. Quelle: M:395.
-- **HUB-F26 Clockodo Zuordnungen**: Soll: Leistung je Kostenstelle, Kunde je Projekt, abrechenbar-Vorgabe, Nutzer-ID. Ist: Bestand hat zehn Kostenstellen mit festen Leistungs-IDs im Code (`FU AlfaKit/Domain/TimeTracking.swift:15`); im Hub nichts. Status: offen. Quelle: J 26.09. ffde6a84 „Fest verdrahtetes STRIKT raus aus dem Code“ · `INHALT.json` (Kostenstellen mit Clockodo-Leistung).
-- **HUB-F27 Claude**: Soll: Schlüssel, Modell (Standard), Prüfung; der Hub ist alleinige Quelle des Schlüssels, Fundus und Assist lesen ihn über einen Hub-Port (J 22.10.). Ist: `H/Providers/Keys/KeyProviders.swift:27-33`; Standardmodell fest im Bestand (`FU AlfaServices/Claude/ClaudeAuthService.swift:61`); Fundus liest andere Kontonamen (`apiKey`), Umsetzung offen. Status: orange. Quelle: M:396; J 22.10.
-- **HUB-F28 Airtable Zugang**: Soll: Base und Schlüssel, Prüfung, Zwischenspeicher leeren. Ist: `H/Providers/Keys/KeyProviders.swift:34-41` mit Formatregel „app“ plus 15–22 Zeichen (Zeile 36), die ALPHA am 05.10. als erfunden strich (`~/ALPHA/BAUSTELLEN.tsv`, Zeile B36); Leeren wirkt (`S/SettingsServiceCard.swift:290`). Status: orange. Quelle: M:397.
-- **HUB-F29 Airtable Abgleich und Zuordnungen**: Soll: Bereich „Projekte“ mit Takt; Basen, Tabellen, Felder aus der Einrichtung. Ist: Bereich ohne Fähigkeit, erscheint nie (`H/ServiceCatalog.swift:105`, `H/ServiceReader.swift:79`); Firmenwerte stehen nur in einer Datei `company.json` ohne Oberfläche (`alfaos/Config/company.example.json`: 16 Basen, 26 Tabellen, 12 Felder). Status: offen. Quelle: M:397 · J 26.09. ffde6a84.
-- **HUB-F30 sevDesk**: Soll: Schlüssel, Prüfung; Belege und Angebote später. Ist: Zugang `H/Providers/Keys/KeyProviders.swift:42-46`; keine Fähigkeit. Status: orange. Quelle: M:398.
-- **HUB-F31 DHL als eine Integration**: Soll: eine Karte für Sendungsverfolgung und Versand, ohne Sandbox. Ist: zwei Einträge (`H/ServiceCatalog.swift:111-118`); `dhlship` hat keine Prüfung und lässt sich nicht verbinden (`KeyProviders.swift` ohne Eintrag); Versand braucht Schlüssel, Secret, Benutzer, Passwort, Abrechnungsnummer, Absender (`FU AlfaServices/Sendungen/DHLVersandCredentials.swift:5-23`); Sandbox-Zugang am 21.10. aus dem Fundus entfernt (S1, e976390). Status: rot. Quelle: J 20.10. bc4854d7 „EIN Integrations Item“ und „SANDBOX Raus“ · M:399-400 · BR N1.
-- **HUB-F32 Happa Happa**: Soll: Karte mit Zugang. Ist: nur Katalogeintrag, keine Prüfung, nicht verbindbar (`H/ServiceCatalog.swift:119-121`); Bestand ist ein Kantinen-Dienst mit Basic-Zugang und Client in `~/ALPHA` (Datei `KonkaappsClient.swift`), nicht im Fundus. Status: offen. Quelle: M:401.
-### Hub-Mechanik
-- **HUB-F33 Besitz persönlich oder Firma**: Soll: Verbindung gehört einer Person oder der Firma; einfach halten. Ist: `Inlet.owner` (`H/Model.swift:208-216`), Anzeige „· persönlich / · für die Firma“ (`S/SettingsServiceCard.swift:117-120`); Person fest `"local"` (`App/Host/AppHost.swift:67`); Schlüssel liegen im lokalen Schlüsselbund dieses Macs, auch bei Firmenbesitz (`H/Adapters/KeychainAdapter.swift:14-16`); `ServiceInfo.group` ungenutzt. Status: orange. Quelle: J 18.10. 23:52 3f52450e.
-- **HUB-F34 Firma sperrt einen Dienst**: Soll: einzige Sperre, nur durch die Firma, je Dienst. Ist: Zustand `.locked` vorhanden (`H/Model.swift:198`), wird nie gesetzt, keine Einstellung. Status: offen. Quelle: J 12.10. (Wortlaut nur als Weitergabe durch eine Entwickler-Sitzung, siehe R01) · J 13.10. 97326b1d „das machen wir Später“.
-- **HUB-F35 Fähigkeiten und Datenarten**: Soll: Dienst nennt seine Fähigkeiten; Bereiche holen Daten über Ports. Ist: neun Fähigkeiten, zehn Datenarten (`H/Model.swift:3-23`); Ports Mail und Dateien gebaut, sieben Ports ohne Methoden (`H/Ports.swift:4-16`); alle Schlüsseldienste mit leeren Fähigkeiten. Status: offen. Quelle: J 20.10. 03:06 bc4854d7 „Wurzelwerk“ · AGENTS.md §1.
-- **HUB-F36 Takt und Jetzt abgleichen**: Soll: je Datenart Aus, Manuell, 30 s, 1 min, 5, 15, 30 min, 1 h; „Jetzt abgleichen“ mit Rückmeldung. Ist: `H/CadenceChoice.swift:3-32`, `S/SettingsServiceCard.swift:230-265`; Rückmeldung nur für Drive; Eintrag „Sofort“ fehlt. Status: orange. Quelle: M:744 · BR L-012, N5.
-- **HUB-F37 Einstellungen je Dienst (Mechanik)**: Soll: Schalter, Auswahl, Text, Zahl, Zuordnung je Verbindung, Besitz Person/Firma/Gerät, beim Trennen gelöscht. Ist: `H/ServiceSetting.swift`, `H/HubCore.swift:559-579`; kein echter Dienst deklariert, kein Aufrufer in `alfaos/App`. Status: orange. Quelle: J 21.10. bc4854d7 (4) „JA!“ (kleinste Form).
-- **HUB-F38 Mitteilungen je Dienst, global stumm**: Soll: je Verbindung Art, Takt, Stumm; einmal global an/aus/stumm für gewählte Stunden. Ist: fehlt in `alfaos` (keine Mitteilungs-API, grep); Bestand hat feste Ereignismeldungen ohne Einstellung je Dienst (`FU AlfaServices/SignalNotificationDispatcher.swift:20-30`, `TaskAlarmScheduler.swift`). Status: offen. Quelle: J 06.10. 22:38 ALPHA cb019c1c · M:764 (nur Hinweis und ein Schalter).
-- **HUB-F39 Dateiorte**: Soll: Nutzer oder Firma wählen Orte: Ordner auf diesem Mac, Google Drive, Dropbox, Server (WebDAV, SMB); „Mail in Projektordner“ läuft über den Hub; Ordnerrollen (Projekt, Accounting …) nach Nutzerwahl. Ist: nur Drive-Port, aus (F21); Entitlements ohne Ordnerwahl (`alfaos/Config/ALFA_OS.entitlements`). Status: offen. Quelle: J 20.10. 22:17, 22:21, 22:37 3f52450e.
-- **HUB-F40 Hub-Katalog**: Soll (Richtung): Kategorien, je Dienst Logo/Name/Zustand und Hinzufügen/Verwalten/Neu verbinden, Verwalten-Seite, „versorgt welche Bereiche“, Filter nach Bereichen. Ist: Kacheln ohne Kategorien und Filter (`S/SettingsLaneView.swift:188-242`). Status: lücke. Quelle: J 21.10. bc4854d7 „grobe grobe Richtung“.
-- **HUB-F41 Kontakte als Integration**: Soll: Kontakte sind eine oder mehrere Datenquellen am Hub: Google Contacts, iCloud, andere Kontakt-Apps, Kundenkarteien aus Tabellen und anderen Anwendungen (über Hub-Integrationen) und eine eigene lokale Datenbank der App; mehrere Quellen gleichzeitig. Ist: eigener Abschnitt mit lokaler Liste in UserDefaults (`SS:32,43`, `S/SettingsSectionCards.swift:249-301`), nicht als Integration, nur von Mail aus geöffnet (`App/Mail/MailActions.swift:47`). Status: rot. Quelle: Spec 22.10.; MJ hinweis.
-- **HUB-F42 Signatur je Postfach**: Soll: in den Einstellungen je Mail-Konto anlegen, in Mail nur wählen. Ist: fehlt. Status: lücke. Quelle: `RUECKGABE-AN-CODE.md:54` (Design zitiert ihn) · BR L-010.
-- **HUB-F43 Schlüssel-Inventar**: Soll: nur Zustand, keine Werte; Waisen erkennen. Ist: Liste der neun Dienste mit Zustand und Entfernen (`S/SettingsSectionCards.swift:224-243`); Waisenerkennung nur im Bestand (`FU AlfaServices/Keychain/KeychainInventory.swift`), nicht angebunden. Status: orange. Quelle: M:408,774.
-- **HUB-F44 Erst-Setup**: Soll: geführte Einrichtung (Presets, Onboarding) statt Dateien von Hand. Ist: fehlt; `google-client.json` (`H/Providers/Google/GoogleClientConfig.swift:12-21`) und `company.json` (`FU AlfaKit/Setup/CompanySetup.swift:25`) liegen von Hand in Application Support. Status: lücke. Quelle: J 26.09. ffde6a84 · M:440,766 (Zustand „Erststart“, Zeile „Einrichtung“ ohne Schritte).
-- **HUB-F45 Kosten und KI-Preis**: Soll: Kosten je Dienst sehen; KI-Preis als Schätzwert in 0,50-Schritten. Ist: Zähler für Aufrufe, Bytes, Token (`H/Adapters/CountingCost.swift`, `H/HubCore.swift:550`), keine Anzeige, kein Preis. Status: offen. Quelle: J 20.10. 22:51 3f52450e.
-- **HUB-F47 Dateien und Daten für die Editoren (Draws-Bedarf)**: Soll: Draws-Module beziehen Dateien und Daten über Hub-Ports. FilesPort braucht zusätzlich: Unterordner listen, Ordner anlegen, Metadaten (Größe, Änderung, Elternordner), Laden und Hochladen großer Dateien ohne alles im Speicher, Suche im Ordner; Löschen und Verschieben nicht. Weitere Ports: Assistant (Zugang plus HTTP), Documents (Vorlagen, Schriften, Logo, Firmendaten), Projects (aktuelles Projekt mit Feldern und Ordner; Kontakte nur darüber), Mail-Entwurf mit Anhang. Ereignisse: neue Dateien im Vorlagenordner, Änderung der Verbindung für den Claude-Zugang; sonst nur holen auf Anforderung. Größen: üblich 1–8 MB, Proben bis 17 MB, CAD-Exporte bis 130 MB; Assist-Bilder bis 30 MB je Lauf. Ist: FilesPort mit vier Methoden (`Ports.swift`), `read` lädt alles in den Speicher; Documents, Assistant, Contacts ohne Methoden; Projects nur als Datenart. Status: offen. Quelle: Vorschlag der Draws-Sitzung 11 vom 22.10. (`alfaos/Draws/specs/hub-needs.md` auf `alfa-draws`, von der Lead nicht gelesen).
-- **HUB-F46 Fehlerpunkt am Blob**: Soll: fehlerhafte Dienste zeigen sich außerhalb der Einstellungen. Ist: `App/Host/AppHost.swift:38-46`, `App/Shell/BlobMenuView.swift:198,276`. Status: orange. Quelle: M:711.
+F01 = HUB-F01. AUSSEHEN: Zeile in `ALFA Mail.dc.html`; Dienste: = `ALFA Dienste.dc.html`. Dateien ohne Pfad: `alfaos/Kit/Sources/Hub/`; `S/` = `alfaos/App/Settings/`; `App/` = `alfaos/App/`; SS = `alfaos/Kit/Sources/ShellCore/SettingsSections.swift`; FU = `fundus/alpha/Sources/`. Berührt Mail: F12 = MAIL-F14, F41 = MAIL-F54, F42 = MAIL-F30. Brief v14.
 
 ## Regeln
-- **HUB-R01 Keine Rechtelogik**: Angemeldet heißt alles dürfen; nur die Firma sperrt einen Dienst; keine Rollen oder Freigaben im Code. Quelle: J 12.10. (Wortlaut „FIRMA (Admin) sperrt“ steht nur als Zitat in einer Weitergabe der Sitzung `local_25ccd45b`, Transkript 7cc894d9; eigene Nachricht nicht gefunden) · J 13.10. 97326b1d · AGENTS.md §6.
-- **HUB-R02 Texte nur, was funktionsbedingt ist**: Fehler und Warnungen ja, Erklärsätze nein. Ist (22.10.): zehn Erklärsätze gestrichen (Google-Hinweis, Darstellung, Sperre, Abmelden, Kontakte leer, Konten leer, Datenschutz-Zeilen, Bilder an/aus); offen als Grenzfälle: Leerzustand Kontakte, Hinweis zu Zählpixeln, Folgenangabe beim Abmelden (N2), Zugriffsumfang bei Google; `settings.failed.body` nennt den Assistenten bei jedem fehlerhaften Dienst (`S/SettingsServiceCard.swift:159`). Quelle: J 21.10.; `spec-arbeit.md`.
-- **HUB-R03 Nichts fest verdrahtet**: Basen, Tabellen, Feldnamen, Phasen, Kostenstellen mit Leistungs-IDs, Modell kommen aus Einstellungen, Onboarding, Presets. Quelle: J 26.09. ffde6a84.
-- **HUB-R04 Keine Sandbox-Zugänge im Code**. Quelle: J 20.10. bc4854d7.
-- **HUB-R05 Ein Schema je Dienst**: Dienste sind Daten (`ServiceInfo`), nicht eigene Ansichten. Quelle: J 12.10. 18:44 (aus dem früheren Gedächtnis, Wortlaut nicht gegengelesen).
-- **HUB-R06 Schlüssel nur im Schlüsselbund**: Datenbank hält nur Slot-Namen, Oberfläche maskiert geheime Felder. Ist: `H/Store.swift:12` (Tabelle `key_slot` mit Slot-Namen), `S/SettingsServiceCard.swift:111`. Quelle: M:408.
-- **HUB-R07 Eine Verbindung je Konto**: gleiche Kennung erneuert statt zu verdoppeln; Grenze je Besitzer und Fähigkeit (Vorgabe Mail 3). Ist: `H/HubCore.swift:387-399`. Quelle: J 12.10. 14:43 a9bb817c.
-- **HUB-R08 Trennen räumt auf, ganz oder gar nicht**: wirft das Löschen eines Schlüssels, bleibt die Verbindung vollständig (Schlüssel zurückgeschrieben, Takt und Beobachter laufen, Fehler wird gemeldet); ein unlesbarer Schlüssel verhindert das Entfernen nicht (22.10.). Offene Restlücke: Ein Schlüssel, der nicht lesbar war und dessen Löschen schon gelang, kommt beim Zurückrollen nicht zurück. Schlüssel, Einstellungen, Abgleichstand, Berichte, gelieferte Daten der Verbindung. Ist: `H/HubCore.swift:493-519`. Quelle: J 20.10. 22:08 3f52450e.
-- **HUB-R09 Dienstzustand folgt Integration und Mitteilungsoptionen des Nutzers**. Quelle: Design-Text 15.10. (zitiert Johannes; eigene Nachricht nicht gefunden) (Design-Text `entscheidungen.md:223`).
-- **HUB-R10 Register, Ströme, Protokoll**: Der Hub hält als Daten drei Dinge: (a) **Systeme** mit Rolle (nur lesen · schreiben mit Bestätigung · geplant · zurückgestellt) und Status; (b) **Ströme** je System mit Kennung, Richtung (lesen, schreiben, beides), Quelle und Ziel; (c) **Protokoll** je Lauf (Start, Erfolg, Fehler, gelesene und geschriebene Datensätze, Status des Anbieters). Ist: (c) im Ansatz als Bericht je Verbindung (`H/Failure.swift`, `H/HubCore.swift` Berichte), Takt je Fähigkeit; (a) Rolle und (b) Ströme fehlen. Quelle: J 21.10. bc4854d7, Bilder der Alt-Base (Tabellen „Externe Systeme“, „Datenstrom-Handbuch“ mit 55 Strömen, „Datenstrom-Log“); Bestand ist Ansatz, nicht Vorbild („veraltet, sloppy quick dirty, aber im Ansatz haltbar und ausbaubar“).
-- **HUB-R11 Vorgangs-Speicher ist ein Stecker**: Wo Vorgänge, Kunden, Projekte und ihre Verknüpfungen liegen, ist austauschbar; Airtable war nur die erste Wahl und ist eine Möglichkeit unter vielen (anderer Dienst, eigener Speicher). Siehe spec-ziel ZIEL-K01–K04. Quelle: J 21.10. bc4854d7 „könnte genauso gut eine x beliebige andere App / Integration / Service / Store am "Hub" sein“.
-- **HUB-R13 Jedes Stück trägt seine Merkmale**: Was ein Strom liefert, trägt mindestens System, Kennung beim Anbieter, Zeit, Richtung und die erkennbaren Bezüge (Projektnummer, Anfrage, Personen, Orte, Gegenstand), damit Vorgänge daraus geknüpft werden können (spec-ziel ZIEL-K06). Ist: Datensätze nur für Postfach und Projektordner (`H/Model.swift:287-299`, `H/Files.swift:27-39`) ohne Bezugsfelder. Quelle: J 21.10. bc4854d7.
-- **HUB-R12 Bestätigen ist Einstellung, keine Mauer**: Ob vor dem Schreiben (Senden, Speichern, Teilen, Anlegen) gefragt wird, ist je System, Strom oder Nutzer eine Einstellung; der Code erzwingt keine Rückfrage. Die App ist produktiv und wird von geschulten Menschen bedient; sie fragt nicht mehrfach. Die Vorgaben legt Johannes fest, nicht die Sitzungen. Quelle: J 22.10. bc4854d7 „DAS ist jeweils einstellungssache und nicht mauer … muss nicht acht mal fragen ob ne mail raus soll“ und „ich entscheide das, nicht ihr“. Überholt: die frühere Folgerung „schreiben nur mit Bestätigung“ aus den Rollen der Alt-Base.
+- R01 Angemeldet heißt alles dürfen; sperren kann nur die Firma; keine Rollen im Code.
+- R02 Nichts fest verdrahtet: Basen, Tabellen, Felder, Phasen, Kostenstellen, Modell kommen aus Einstellungen oder Einrichtung.
+- R03 Keine Sandbox-Zugänge.
+- R04 Schlüssel nur im Schlüsselbund; die Oberfläche zeigt nur Zustand.
+- R05 Eine Verbindung je Konto; gleiches Konto erneuert statt doppelt.
+- R06 Trennen entfernt alles der Verbindung, ganz oder gar nicht.
+- R07 Rückfrage vor dem Schreiben ist Einstellung, keine Pflicht; nie mehrfach fragen.
+- R08 Der Speicher für Vorgänge ist austauschbar.
+- R09 Der Hub hält Systeme mit Rolle, Ströme mit Richtung, Protokoll je Lauf.
+- R10 Jedes gelieferte Stück trägt System, Kennung, Zeit, Richtung, Bezüge.
+- R11 Keine Zeile ohne Wirkung; keine erklärenden Sätze.
 
-## Lücken
-- **HUB-L01**: Einstellungsbaum nach Zugehörigkeit mit Schaltern und Clustern je Knoten (F03), Design. Beleg: M:389-410 hat nur Gruppen; J 21.10. bc4854d7.
-- **HUB-L02**: Hub-Katalog: Kategorien, Zustand, Verwalten-Seite je Dienst, „versorgt welche Bereiche“, Filter (F40), Design. Beleg: M:391-401, `ALFA Dienste.dc.html:94-116` zeigen nur Kacheln.
-- **HUB-L03**: Verwalten-Seite mit Zuordnungen: ClickUp (Workspace, Projektordner, Liste, Aufgabenvorlage, Felder, Phasen, Team), Clockodo (Nutzer, Leistung, Kunde, abrechenbar), Airtable (Basen, Tabellen, Felder), DHL (Zugangsfelder), Design. Beleg: M:394,395,397 zeichnen nur „Phasen, Aufgabenfelder, Projekte“ und Felder.
-- **HUB-L04**: DHL als eine Karte mit Feldern (BR N1) und Abmelden-Warnung (BR N2) fehlen weiter im Master. Beleg: `ALFA Dienste.dc.html:102-103`, M:399-400,758.
-- **HUB-L05**: Mitteilungen je Dienst und global stumm (F38): Design, Code liefert Lastenheft (was meldet welcher Dienst). Beleg: M:764 nur ein Schalter „Neue Mail“.
-- **HUB-L06**: Dateiorte (F39): Ordnerwahl, Drive/Dropbox/Server, Leer- und Fehlerzustände, Ordnerrollen; BR N14 deckt nur Drive. Beleg: M:766.
-- **HUB-L07**: Erst-Setup (F44), Design, mit Johannes. Beleg: M:440,766.
-- **HUB-L08**: Detailbericht und die drei Zustandszeichen (F19), Design. Beleg: Master kennt nur acht Zustandswörter (M:704-716).
-- **HUB-L09**: Auslöser für „Schlüssel gespeichert“ und „Verwaist“ (F17): Master trennt „geprüft“ von „nur gespeichert“, der Code prüft jeden Schlüsseldienst beim Anbieter. Beleg: M:731 gegen `H/Providers/Keys/KeyProvider.swift:38-69`.
-- **HUB-L10**: Kontakte als Integration zeichnen (F41); Signatur je Postfach anlegen (F42, BR L-010). Beleg: M:752,759.
-- **HUB-L11**: Zwei Schalter „Bilder in Mails laden“ zeichnen (Konto im Hub, Hauptschalter in Datenschutz, F12); zudem doppelt in `INHALT.json` (BR N11), Design. Beleg: `entscheidungen.md:221`.
-- **HUB-L12**: Clockodo-Nutzer-ID steht im Master an zwei Orten (Dienstkarte M:395, Identität `INHALT.json` felder_je_abschnitt.identitaet); eine Stelle festlegen, Design. Beleg: beide Dateien.
-- **HUB-L13**: Gesperrter Zustand der App-Sperre (BR N9) und „Heute“ in „Beim Öffnen“ (M:762). Beleg: M:763.
-- **HUB-L14**: Erklärsätze im Master streichen: M:392 (note), M:733, M:740, M:760-763. Liste vorher Johannes zeigen. Beleg: `spec-arbeit.md`.
-- **HUB-L15**: Klartext aus der Anbieter-Doku, was je Dienst mitgeteilt werden kann, liegt nirgends vor (Code liest laut Design-Zitat selbst, `RUECKGABE-AN-CODE.md:58`); Quelle der Doku je Dienst fehlt. Beleg: grep „notif/mitteil“ in `FU` und `~/ALPHA/Sources` findet nur feste Ereignismeldungen (`SignalNotificationDispatcher.swift`), keine Liste je Dienst.
+## Baum
+**F01 Gruppen und Abschnitte**  
+WAS: Ich, Firma, Verbindungen, Schutz und System; rechts Kartenstapel.  
+WO: Einstellungen.  
+WARUM: jede Einstellung an fester Stelle.  
+AUSSEHEN: Mail:389, :403-410.  
+STAND: teilweise; Kontakte zusätzlich, Integrationen leer (SS:24-46, S/SettingsSectionCards.swift:24).
 
-## Offen bei Johannes
-- ClickUp (Vorschlag von Johannes 22.10. als Frage, nicht bestätigt): vorerst nur Steckertyp im Hub, später voll verdrahten (HUB-F24); bis zur Bestätigung wird nichts gebaut. Altcode nutzt ClickUp für Projekt-Provisionierung und Aufgabenübersichten (`fundus/alpha/Sources/AlfaServices/ClickUp/`).
-- Firmendienste (Airtable, sevDesk, DHL): trägt jeder Nutzer den Firmenschlüssel selbst ein, oder soll die Firma ihn teilen? Heute liegt er je Mac im Schlüsselbund.
-- Katalog-Satz je Dienst ja oder nein (gefragt, keine Antwort).
-- Hub-Entwürfe A/B/C jenseits der kleinsten Form: Auftrag ja oder nein.
+**F02 Erweiterbar**  
+WAS: neue Gruppen und Abschnitte ohne Umbau.  
+WO: Einstellungen.  
+WARUM: weitere Bereiche, Dienste.  
+AUSSEHEN: nicht gezeichnet (Brief N26).  
+STAND: fehlt; feste Aufzählung (SS:4-46).
+
+**F03 Nach Zugehörigkeit**  
+WAS: Besitzer, nutzender Bereich, tragender Dienst; Schalter je Knoten.  
+WO: Einstellungen.  
+WARUM: Verbindung steht, wo sie wirkt.  
+AUSSEHEN: nicht gezeichnet (Brief N26).  
+STAND: Lücke.
+
+**F04 Tastenkürzel, Mitteilungen**  
+WAS: zeigt, was es gibt; nichts ohne Wirkung.  
+WO: Einstellungen.  
+WARUM: Überblick.  
+AUSSEHEN: Mail:406, :764-765; Mitteilungen Brief N29.  
+STAND: fehlt (SS:24-35).
+
+**F05 Speicherorte mit Vorlagen**  
+WAS: Dateiordner, Arbeitsordner, Vorlagen in einem Abschnitt.  
+WO: Einstellungen › Firma.  
+WARUM: alle Ablagen an einer Stelle.  
+AUSSEHEN: Mail:766, :772; Brief N26.  
+STAND: teilweise; zwei Abschnitte, leer, Knöpfe aus (S/SettingsSectionCards.swift:203-230).
+
+## Ich
+**F06 Identität**  
+WAS: Name, Rolle, Kürzel, Telefon, Geburtstage.  
+WO: Ich › Identität.  
+WARUM: Name und Kürzel im Team.  
+AUSSEHEN: Mail:758.  
+STAND: teilweise; nur Name, Kürzel wirken (App/Mail/MailComposeView.swift:138, App/Components/SyncButton.swift:8-9).
+
+**F07 Darstellung**  
+WAS: Hell, Dunkel, Automatisch; fremde Inhalte hell.  
+WO: Ich › Darstellung.  
+WARUM: lesbar bei jedem Licht.  
+AUSSEHEN: Mail:761.  
+STAND: teilweise; Fremde Inhalte nur Anzeige (App/ALFA_OSApp.swift:35, S/SettingsSectionCards.swift:149-151).
+
+**F08 Startansicht**  
+WAS: Mail, Einstellungen, Zuletzt offen.  
+WO: Ich › Darstellung.  
+WARUM: App öffnet, wo man arbeitet.  
+AUSSEHEN: Mail:762.  
+STAND: gebaut, nicht abgenommen (SS:77-93, App/ALFA_OSApp.swift:22).
+
+**F09 App-Sperre**  
+WAS: Touch ID oder Passwort nach Pause.  
+WO: Ich › Darstellung.  
+WARUM: Schutz am offenen Mac.  
+AUSSEHEN: Mail:763; Sperre Brief N9.  
+STAND: teilweise; gespeichert, nichts sperrt (S/SettingsSectionCards.swift:155-160).
+
+**F15 Abmelden**  
+WAS: alle verbundenen Dienste, aufgezählt und gezählt; einzeln auf der Dienstkarte.  
+WO: Ich › Identität.  
+WARUM: Mac sauber freigeben.  
+AUSSEHEN: Mail:758; Brief N2, N41.  
+STAND: teilweise; trennt alle mit Halten, ohne Aufzählung, startet neu (S/SettingsSectionCards.swift:104-126); Google-Zugang nicht widerrufen (GoogleSignIn.swift:61).
+
+## Firma
+**F10 Firmendaten**  
+WAS: Firma, Anschrift, Telefon, Web, Mail; Nutzer trägt ein.  
+WO: Firma.  
+WARUM: Angaben für Dokumente.  
+AUSSEHEN: Mail:771.  
+STAND: teilweise; gespeichert, nirgends genutzt (S/SettingsSectionCards.swift:165-173).
+
+**F11 Impressum**  
+WAS: Urheber, Rechte, Signatur.  
+WO: Schutz und System.  
+WARUM: Rechte festhalten.  
+AUSSEHEN: Mail:773.  
+STAND: teilweise; wie F10 (S/SettingsSectionCards.swift:175-183).
+
+## Schutz und System
+**F12 Bilder in Mails**  
+WAS: Schalter je Mail-Konto, Hauptschalter je Nutzer; Vorgabe aus.  
+WO: Dienstkarte; Datenschutz.  
+WARUM: Schutz vor Zählpixeln.  
+AUSSEHEN: Mail:760; Brief N21.  
+STAND: teilweise; ein Schalter (S/SettingsSectionCards.swift:317-319, App/Mail/MailReadingView.swift:141).
+
+**F13 Datenschutz, übrige**  
+WAS: Assistent ganz aus, Dateien im Chat, Daten exportieren.  
+WO: Datenschutz.  
+WARUM: Kontrolle über Daten.  
+AUSSEHEN: Mail:760.  
+STAND: teilweise; ohne Wirkung, Export aus (S/SettingsSectionCards.swift:320-328).
+
+**F14 System**  
+WAS: Version, Zweig, Datenbank, Diagnose kopieren.  
+WO: System.  
+WARUM: Fehler melden.  
+AUSSEHEN: Mail:767.  
+STAND: gebaut, nicht abgenommen (S/SettingsSectionCards.swift:333-377).
+
+## Dienste
+**F16 Kachel und Karte**  
+WAS: Kachel mit Logo, Name, Zustand; Karte mit Zustand, Anmeldung, Feldern, Abgleich, Extras.  
+WO: Verbindungen.  
+WARUM: jeder Dienst gleich bedient.  
+AUSSEHEN: Mail:391-401, :727-747; Logos Brief L-011.  
+STAND: gebaut, nicht abgenommen (S/SettingsLaneView.swift:188-242, S/SettingsServiceCard.swift:71-106); Logos nur Clockodo, DHL (ServiceCatalog.swift:96, :112).
+
+**F17 Zustandswörter**  
+WAS: acht Wörter von Verbunden bis Verwaist.  
+WO: Kachel, Karte.  
+WARUM: Lage auf einen Blick.  
+AUSSEHEN: Mail:704-716; Brief N32.  
+STAND: teilweise; Schlüssel gespeichert, Verwaist nie (HubCore.swift:367-368).
+
+**F18 Verbinden, Prüfen, Trennen**  
+WAS: Anmeldung, Prüfung beim Anbieter, Erneuern, Trennen mit Halten.  
+WO: Karte.  
+WARUM: Zugang verlässlich.  
+AUSSEHEN: Mail:733-737.  
+STAND: gebaut, nicht abgenommen (HubCore.swift:346-534, S/SettingsStack.swift:192-211); ganz oder gar nicht nur für Schlüssel (:504-522).
+
+**F19 Drei Zeichen, Bericht**  
+WAS: online, eingeschränkt, Fehler; Bericht mit Anbieter, Status, Code, Servertext, Anfragekennung.  
+WO: Karte.  
+WARUM: Fehler genau benennen.  
+AUSSEHEN: nicht gezeichnet (Brief N31).  
+STAND: teilweise; berechnet, nie gezeigt (HubCore.swift:149-168); Karte zeigt Grund, Status (S/SettingsServiceCard.swift:155-180).
+
+**F46 Fehlerpunkt**  
+WAS: fehlerhafte Dienste außerhalb der Karte.  
+WO: Hülle › Blob; Gruppe Verbindungen.  
+WARUM: Fehler fällt auf.  
+AUSSEHEN: Mail:711.  
+STAND: gebaut, nicht abgenommen (App/Host/AppHost.swift:38-46, App/Shell/BlobMenuView.swift:198).
+
+## Je Dienst
+**F20 Google Mail**  
+WAS: Anmeldung im Browser, persönlich.  
+WO: Karte Google.  
+WARUM: Gmail-Postfach.  
+AUSSEHEN: Mail:392.  
+STAND: teilweise; nur mit Datei google-client.json (ProviderCatalog.swift:6-8).
+
+**F21 Google Kontakte, Dateien, Kalender**  
+WAS: Bereiche mit Takt; Drive-Ordner der Projekte.  
+WO: Karte Google.  
+WARUM: eine Anmeldung für alles.  
+AUSSEHEN: Mail:392; Drive Brief N30.  
+STAND: teilweise; Angebot nur Mail (alfaos/Kit/Sources/Mail/Setup/MailSetup.swift:78), Kalender, Kontakte ohne Adapter (GoogleProvider.swift:36-44), Drive ohne Projektwurzel (ProviderCatalog.swift:7); 403 gilt als Anmeldefehler (GoogleFailure.swift:9-10).
+
+**F22 Mail-Konten**  
+WAS: IMAP, SMTP mit Anbietervorlagen; bis drei; prüfen, entfernen.  
+WO: Karte Mail-Konten.  
+WARUM: weitere Postfächer.  
+AUSSEHEN: Mail:393, :737; Brief L-008, L-013.  
+STAND: gebaut, nicht abgenommen (IMAPProvider.swift:24-57, S/SettingsServiceCard.swift:182-216, HubConfiguration.swift:8).
+
+**F23 ClickUp Zugang**  
+WAS: Schlüssel, Prüfung.  
+WO: Karte ClickUp.  
+WARUM: Aufgaben.  
+AUSSEHEN: Mail:394.  
+STAND: gebaut, nicht abgenommen (KeyProviders.swift:12-16).
+
+**F24 ClickUp Abgleich**  
+WAS: Phasen, Aufgabenfelder.  
+WO: Karte ClickUp.  
+WARUM: Aufgaben im Vorgang.  
+AUSSEHEN: Mail:394.  
+STAND: fehlt; keine Fähigkeit (KeyProvider.swift:87, ServiceReader.swift:79).
+
+**F25 Clockodo Zugang**  
+WAS: E-Mail, Schlüssel, Nutzer; nur persönlich.  
+WO: Karte Clockodo.  
+WARUM: Zeiten.  
+AUSSEHEN: Mail:395; Nutzer-ID Brief N28.  
+STAND: teilweise; nur persönlich ohne Wirkung (KeyProviders.swift:17-26, ServiceCatalog.swift:92).
+
+**F26 Clockodo Zuordnungen**  
+WAS: Leistung je Kostenstelle, Kunde, abrechenbar.  
+WO: Karte Clockodo.  
+WARUM: Zeiten richtig gebucht.  
+AUSSEHEN: nicht gezeichnet (Brief N28).  
+STAND: fehlt; Kostenstellen fest im Bestand (FU/AlfaKit/Domain/TimeTracking.swift:15-25).
+
+**F27 Claude**  
+WAS: Schlüssel, Modell, Prüfung; Hub einzige Quelle des Schlüssels.  
+WO: Karte Claude.  
+WARUM: Assistent.  
+AUSSEHEN: Mail:396; Modell Brief N6.  
+STAND: teilweise; Standardmodell fest (KeyProviders.swift:27-33, FU/AlfaServices/Claude/ClaudeAuthService.swift:61).
+
+**F28 Airtable Zugang**  
+WAS: Base, Schlüssel, Prüfung, Zwischenspeicher leeren.  
+WO: Karte Airtable.  
+WARUM: Projekte, Kunden.  
+AUSSEHEN: Mail:397.  
+STAND: gebaut, nicht abgenommen (KeyProviders.swift:34-41, S/SettingsServiceCard.swift:289-290); Format der Base fest (KeyProviders.swift:36).
+
+**F29 Airtable Abgleich**  
+WAS: Projekte mit Takt; Basen, Tabellen, Felder.  
+WO: Karte Airtable.  
+WARUM: Projektdaten im Vorgang.  
+AUSSEHEN: Mail:397; Zuordnung Brief N28.  
+STAND: fehlt; Bereich ohne Fähigkeit (ServiceCatalog.swift:103), Werte nur in Datei (alfaos/Config/company.example.json).
+
+**F30 sevDesk**  
+WAS: Schlüssel, Prüfung.  
+WO: Karte sevDesk.  
+WARUM: Belege, Angebote.  
+AUSSEHEN: Mail:398.  
+STAND: gebaut, nicht abgenommen (KeyProviders.swift:42-46).
+
+**F31 DHL**  
+WAS: eine Karte für Verfolgen und Versand.  
+WO: Verbindungen.  
+WARUM: Sendungen.  
+AUSSEHEN: Mail:399-400; Brief N1.  
+STAND: teilweise; zwei Einträge, Versand nicht verbindbar (ServiceCatalog.swift:109-116, :132-134).
+
+**F32 Happa Happa**  
+WAS: Karte mit Zugang.  
+WO: Verbindungen.  
+WARUM: Speiseplan.  
+AUSSEHEN: Mail:401.  
+STAND: fehlt; nicht verbindbar (ServiceCatalog.swift:117-119).
+
+## Mechanik
+**F33 Besitz**  
+WAS: Verbindung gehört Person oder Firma.  
+WO: Karte, Anmeldung.  
+WARUM: Firmendienste für alle.  
+AUSSEHEN: Mail:738.  
+STAND: teilweise; Person fest (App/Host/AppHost.swift:67), Firmenschlüssel nur auf diesem Mac (KeychainAdapter.swift:14-16).
+
+**F35 Fähigkeiten, Ports**  
+WAS: Dienst nennt Fähigkeiten; Bereiche holen Daten über Ports.  
+WO: Hintergrund.  
+WARUM: Bereiche ohne Wissen über Dienste.  
+AUSSEHEN: ohne Oberfläche.  
+STAND: teilweise; Mail, Dateien gebaut, sieben Ports leer (Ports.swift:4-16).
+
+**F36 Takt**  
+WAS: Aus, Manuell, 30 s bis 1 h; Jetzt abgleichen mit Rückmeldung.  
+WO: Karte, Abgleich.  
+WARUM: Daten aktuell.  
+AUSSEHEN: Mail:744; Brief L-012, N5.  
+STAND: teilweise; Rückmeldung nur Drive (CadenceChoice.swift:3-26, S/SettingsServiceCard.swift:279-288).
+
+**F37 Einstellungen je Dienst**  
+WAS: Schalter, Auswahl, Text, Zahl, Zuordnung; Person, Firma, Gerät.  
+WO: Karte.  
+WARUM: Dienste je Firma einstellen.  
+AUSSEHEN: Zuordnungen Brief N28.  
+STAND: teilweise; Mechanik da, kein Dienst nutzt sie (ServiceSetting.swift, HubCore.swift:574-595).
+
+**F38 Mitteilungen**  
+WAS: je Dienst Art, Takt, stumm; global stumm für Stunden.  
+WO: Einstellungen.  
+WARUM: Ruhe nach Wahl.  
+AUSSEHEN: Mail:764; Brief N29.  
+STAND: fehlt.
+
+**F39 Dateiorte**  
+WAS: Mac, Google Drive, Dropbox, Server; Ordnerrollen nach Wahl.  
+WO: Einstellungen, Hub.  
+WARUM: Ablage je Firma.  
+AUSSEHEN: Mail:766; Brief N30.  
+STAND: fehlt; nur Drive-Port, aus (F21).
+
+**F40 Katalog**  
+WAS: Kategorien, Hinzufügen, Verwalten, versorgte Bereiche, Filter.  
+WO: Verbindungen.  
+WARUM: viele Dienste überschaubar.  
+AUSSEHEN: Mail:391-401, Dienste:94-116; Brief N27.  
+STAND: Lücke.
+
+**F41 Kontakte am Hub**  
+WAS: mehrere Quellen zugleich, auch eigene lokale Datenbank.  
+WO: Verbindungen.  
+WARUM: eine Adressquelle.  
+AUSSEHEN: Mail:752-757; Brief N33.  
+STAND: teilweise; lokale Liste in UserDefaults (SS:32, :43, alfaos/Kit/Sources/Mail/Model/MailContacts.swift:16-18).
+
+**F42 Signatur je Postfach**  
+WAS: je Mail-Konto anlegen.  
+WO: Einstellungen.  
+WARUM: einheitlicher Auftritt.  
+AUSSEHEN: Mail:759; Brief L-010.  
+STAND: Lücke.
+
+**F43 Schlüssel-Inventar**  
+WAS: Zustand je Dienst, Entfernen; Waisen erkennen.  
+WO: Verbindungen.  
+WARUM: Ordnung im Schlüsselbund.  
+AUSSEHEN: Mail:408, :774.  
+STAND: teilweise; Waisen nie erkannt (S/SettingsSectionCards.swift:232-251).
+
+**F44 Einrichtung**  
+WAS: geführt statt Dateien von Hand.  
+WO: erster Start.  
+WARUM: neue Firma ohne Technik.  
+AUSSEHEN: Mail:440, :766; Ablauf nicht gezeichnet.  
+STAND: fehlt; Dateien von Hand (GoogleClientConfig.swift:12-21, KeyProviders.swift:38).
+
+**F45 Kosten**  
+WAS: Aufrufe, Daten, Token je Dienst; KI als Schätzwert in 0,50-Schritten.  
+WO: Karte.  
+WARUM: Kosten sehen.  
+AUSSEHEN: nicht gezeichnet (Brief N6).  
+STAND: teilweise; gezählt, nie gezeigt (Adapters/CountingCost.swift, HubCore.swift:565).
+
+## Später
+- Firma sperrt einen Dienst: fehlt (Model.swift:198).
+- Rollen als Einstellung: fehlt.
+- 15 Integrationen in voller Tiefe, Datan als Modul.
+- ClickUp über den Zugang hinaus: nicht beauftragt.

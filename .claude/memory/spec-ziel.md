@@ -1,71 +1,113 @@
 ---
 name: spec-ziel
-description: Zweck, Stufen, Bereiche mit Rang, Plattform und Reichweite der ganzen App ALFA; Ist heute nur Hülle, Mail und Hub/Einstellungen, alles übrige fehlt.
+description: Ziel, Stufen, Plattform und Architektur der App: Regeln und Funktionsbaum mit Stand
 metadata:
   type: project
 ---
 
-# Ziel · Spec (Stand 21.10.)
+# Ziel · Spec
 
-Kürzel der Sitzungen: bc4854d7 (Lead 19./21.10.), 3f52450e (Produkt 18./20.10.), c2a04c8a (Lead 16.–18.10.), 97326b1d (16.10.), a9bb817c (12.10.), 055e95fd (08.10.). Ist = `Datei:Zeile` am 21.10. gelesen oder per grep gefunden. Alle Bereiche heute orange oder fehlend; Johannes hat keinen Bereich abgenommen.
+Native macOS-App ALFA für Studios, Handwerk und Projektarbeit: ein Betriebssystem der Arbeit mit vielen Bereichen. Erste Nutzer: Designstudio in Hamburg, sechs Personen, Küchen, Interiors, Licht, Bäder; Händler vieler Marken; Google Workspace trägt Mail, Kontakte, Kalender, Dateien.
 
-## Ziel
-ALFA ist eine native macOS-App für das Designstudio: ein Betriebssystem der Arbeit mit vielen Apps, das alles kann, was das Studio sonst in getrennten Diensten tut, und besser. Die Oberfläche (UI) ist das Hauptgut. Gebaut wird nach dem Design-Master und Johannes' Wort, funktionierend und sicher (AGENTS §1).
-
-## Kern: der Vorgang
-- **ZIEL-K01**: Die Daten bleiben in ihren Schubladen (Artikel, Medien, Aufgaben, Zeiten, Mails, Dateien, Belege); jede Schublade ist die Wahrheit für ihre Stücke, ALFA spiegelt sie höchstens als Zwischenspeicher. Quelle: J 21.10. bc4854d7 „Es liegt alles in verschiedenen Schubladen - ALFA macht was draus“.
-- **ZIEL-K02**: Wert entsteht erst im Vorgang: Mail, Anfrage, Kontakt, Termin, Entwurf, Aufgaben, Zeit, Arbeit, Leistungen, Artikel, Material und Geld werden zu einem Vorgang verknüpft. ALFA führt selbst die Vorgänge und ihre Verknüpfungen (Verweise auf die Stücke in den Schubladen). Quelle: J 21.10. bc4854d7 (Vorgänge „aka Projekte, aka Tasks, aka Zeit, aka Geld …“).
-- **ZIEL-K03**: Projekt, Aufgaben, Zeit und Geld sind Sichten auf den Vorgang, keine eigenen Inseln; der Hub ist der Stecker zu den Schubladen, der Vorgang der Knoten. Folgerung der Lead aus K01/K02, von Johannes noch zu bestätigen.
-- **ZIEL-K05 Start eines Vorgangs**: Ein Vorgang entsteht in ALFA, entweder vom Nutzer angelegt („initiiert“) oder durch ein Ereignis ausgelöst („getriggert“, z. B. eine eingehende Anfrage aus einer Schublade). Er entsteht nicht in einer Schublade. Quelle: J 21.10. bc4854d7 „Der Vorgang wird in der App „initiiert“ oder auch getriggert“.
-- **ZIEL-K06 Knüpfen**: Das Bindeglied ist nutzerabhängig: der Nutzer entscheidet, was zu einem Vorgang gehört. Grundlage sind die Merkmale, die jedes fließende Stück schon trägt: Kennung, Quelle, Zeit, Richtung und ein Bezug (Projektnummer, Anfrage, Pitch o. ä.); die Kombination aus Wer, Was, Wie, Wo, Woraus, Womit, Wann, Wegen, Weil, Wem bildet bereits einen Schlüssel. ALFA kann daraus Verknüpfungen erkennen und vorschlagen; ob automatisch oder nur als Vorschlag, entscheidet die Einstellung des Nutzers (Einstellung, HUB-R12). Quelle: J 21.10. bc4854d7 „Bindeglied ist User abhängig … ist ja schon ein „Schlüssel“ aus Kombi“.
-- **ZIEL-K07 Was ein Vorgang wird**: Ein Vorgang beginnt, wenn ein Nutzer (nicht ausgeschlossen: ein Dienst oder Auslöser) ihn auslöst. Er wächst entlang einer Kette: Anruf („braucht Küche“) → Gespräch über die erste Anfrage → Termin → Entwurf, Zeit usw.; auch ein späterer Service-Anruf eines Kunden mit vorhandener Küche kann Vorgang werden. Alles kann Vorgang werden, sobald eine kritische Menge zusammenhängender Stücke entsteht. Projekt ist damit eine Stufe auf dieser Kette, kein Anfang. Quelle: J 21.10. bc4854d7 „Alles kann Vorgang werden, wenn es eine "kritische Menge X aus allem bedeutet.“
-- **ZIEL-K08 Kritische Menge ist Einstellung**: „wenn zwei (drei, vier …) zusammenkommen, wird … draus“; die Regel, ab wann Stücke einen Vorgang bilden, ist Einstellungs- und Hub-Sache, nicht fest im Code. Quelle: J 21.10. bc4854d7.
-- **ZIEL-K09 Erste Nutzer (Alpha)**: Kleines, sehr exklusives Designstudio in Hamburg, Team 6, Johannes ist Chef. Schwerpunkt hochindividuelle Küchen, Interiors, Beleuchtung, Bäder. Händler vieler Marken (z. B. Miele, Armac Martin, hunderte weitere), arbeitet mit Dienstleistern (Tischler, Fertiger, Service) und Partnern. Stoff der Vorgänge: Kunden, Projekte, Budgets, Aufgaben, Orte, Projektbeteiligte, Dateien, Kommunikation, Geld, Zeit, Entwürfe, Angebote. **Google Workspace ist der Hauptträger** („Datendampfer“): Mail, Kontakte, Kalender, Dateien, Verzeichnisse, Bibliotheken, Projektordner. Folge für den Bau: Google Kalender und Kontakte (heute ohne Adapter, spec-hub HUB-F21) und Drive (aus bis zur Wurzelwahl) sind vorrangige Stecker. Quelle: J 21.10. bc4854d7.
-- **ZIEL-K10 Zielgruppe über das Alpha-Studio hinaus**: ALFA wird ein vollumfassendes Werkzeug für Design, Handwerk, Projektarbeit, Entwurf, Dokumentation, Information, Kalkulation und Situation, für Tischlereien, Küchenstudios, Designer, Generalunternehmer, Bauunternehmer, Architekten, Interior, Gewerke, Händler und Freelancer. Folge: Branchenwerte (Phasen, Ordnerschemata, Kostenstellen, Marken, Vorgangsstufen) sind Einstellungen und Presets je Firma, nie fest im Code (verträglich mit HUB-R03, ZIEL-K08). Quelle: J 21.10. bc4854d7.
-- **ZIEL-K11 Ein- und Ausgabe als Module**: Dateien kommen über neutrale Eingabe-Module herein (PDF erkennen, Text erkennen, Vorlagendateien als HTML/Mustache, DWG, IDML, CSV, Excel u. a.) und gehen über neutrale Ausgabe-Module hinaus (Dokumentmodell → PDF, SVG, Druck; Musterseiten mit Feldern; Canvas aus Vorlage). „Ausgabe“ hat zwei Hälften: Erzeugen (Datei aus Zeichnung, Aufmaß, Moodboard, Katalog, Mail; Werkstatt) und Weitergeben (speichern in Ablage, teilen, als Mail senden, nach Drive oder Projektordner, in der App und aus ihr heraus; Hub als schreibender Strom; ob vorher gefragt wird, ist Einstellung, HUB-R12) (J 22.10. bc4854d7). Jeder Bereich und der Assistent nutzt sie und reicht über den Hub weiter (z. B. PDF im Chat einlesen → nach Drive; Mail-Anhang → Drive; Bilder → Moodboard aus Vorlage → PDF oder Mail). Erste Bausteine entstehen in der Draws-Sitzung als neutrale Module; nach Kit nur auf Johannes' Wort und mit Master. Quelle: J 21.10. bc4854d7.
-- **ZIEL-K12 Creative Cloud: die Editoren**: Draws gehört in ALFA als eine der Funktions-Engines der „Creative Cloud“, der Editoren (Sinnbild Photoshop, Illustrator). Dazu zählen: Skizze/Atelier (perspektivisches Scribbeln, Linien- und Pinselwerkzeuge, Marker-Skizzen auf Fotos oder Papierunterlagen, über Vorlagen zu Druck und PDF); Entwurfsskizzen von Raumsituationen und Grundriss-Anmerkungen auf PDF (Tusche, Füllungen, Farbtopf, Farbwähler, Farbbibliotheken); Materialtexturen und Medien aus dem Hub; Moodboard-Editor (wie InDesign, Canva, Figma, Notion, Keynote); Aufmaß (Foto der Wand, Linien Punkt zu Punkt setzen, Maße selbst notieren oder per Bluetooth vom Laser-Entfernungsmesser übernehmen). Im Altcode reich, funktional, aber „sloppy“: Funktion übernehmen, nicht Form. Gemeinsamer Unterbau sind die neutralen Ein-/Ausgabe-Module (ZIEL-K11). Stufe: nicht genannt. Quelle: J 22.10. (bestätigt: Draws ist der Bereich der Editoren, Bild-, Foto- und Datenbearbeitung, Creative Cloud).
-- **ZIEL-K04 Offen bei Johannes**: (a) Welche Stufen die Kette kennt und ab wann die kritische Menge erreicht ist (vom Nutzer gesetzt oder von ALFA vorgeschlagen). (c) Wo lebt der Vorgang, damit das Team ihn teilt? Teilantwort J 21.10.: der Ort ist ein austauschbarer Stecker am Hub (siehe spec-hub HUB-R11); welcher zuerst, ist offen.
-- Ist: Es gibt keinen Vorgang im Code; `HubRules.truth` hat keinen Aufrufer außerhalb des Hubs (`alfaos/Kit/Sources/Hub/HubCore.swift`, grep).
-
-## Richtung
-- Stufe 2 (bis Launch Ende 2026): alle übrigen Bereiche, Datan als Modul, 15 Integrationen in voller Tiefe (AGENTS §1).
-- Assistent in drei Formen (J 22.10.): Blob-Menü per Doppelklick als schneller Helfer; eigener voller Ansichtsbereich als derselbe Assistent mit größerem Umfang (Dokumente ausgeben, Files suchen, Termine, Notizen, Suche, Erklären, Kalkulieren); Draws als Künstler. Gemeinsamer Kern offen (Draws' Assist.Session als Kandidat). Wichtig; Stufe nicht genannt; heute nur das Mini-Fenster im Blob (siehe spec-huelle, HUELLE-L04 Eingabe für Design).
-- Distribution (Mac App Store, iOS, iPadOS, Web, Abo/SaaS) und andere Nutzerstrukturen: später, die Bauweise soll sie nur ermöglichen.
-- Rollen als Einstellung statt im Code: später (siehe spec-arbeit ARBEIT-R19).
-
-## Funktionen
-Eine Funktion ist hier ein Bereich der App; die Inhalte trägt die jeweilige Spec.
-
-- **ZIEL-F01 Native macOS-App**: Soll: ALFA ist eine SwiftUI-App für macOS 26 mit Sandbox. Ist: `alfaos/project.yml:6-9` (Ziel macOS 26.0), `:64-78` (Sandbox an), `alfaos/App/ALFA_OSApp.swift:5-43` (WindowGroup). Status: orange. Quelle: AGENTS §1; J 12.10. a9bb817c.
-- **ZIEL-F02 Modular wie ein Betriebssystem**: Soll: jeder Bereich ist eine App im Bereichsverzeichnis; das Blob-Menü führt zwischen ihnen. Ist: Verzeichnis `alfaos/App/Resources/apps.json` mit 2 Einträgen (mail, settings); Bereichsinhalt ist je Bereich fest verdrahtet (`alfaos/App/Shell/LaneView.swift:104-113`, `ShellView.swift:50-56`), also noch nicht allein über das Verzeichnis erweiterbar. Status: orange. Quelle: AGENTS §1; Master `alfa-shell.js:5-8` (AREA nur Mail, Einstellungen).
-- **ZIEL-F03 Plattformneutraler Kern**: Soll: Logik liegt im Paket Kit ohne Oberflächenbindung, die Oberfläche bleibt dünn. Ist: `alfaos/Kit/Package.swift:8` (macOS 26 und iOS 26), Pakete ShellCore, Hub, Mail (`Kit/Package.swift:10-12`); grep nach `import AppKit|SwiftUI|UIKit` in `Kit/Sources` ohne Treffer; aber Hub und Mail hängen über `Kit/Package.swift:15, :23, :33-34` von `fundus/alpha` (AlfaServices, AlfaKit) ab, und dort importieren `fundus/alpha/Sources/AlfaServices/Database/WorkBasketStore.swift:3` und `WidgetBoardStore.swift:3` SwiftUI, `Google/GoogleAuthService.swift:5, :7` AppKit bzw. UIKit (hinter `#if canImport`). Der Kern ist also nur im eigenen Code, nicht über seine Abhängigkeit frei von Oberflächenbindung. Status: orange. Quelle: AGENTS §6; J 12.10. a9bb817c; J 08.10. 055e95fd (nach Gedächtnis `spec-arbeit.md`, nicht im Transkript gegengelesen).
-- **ZIEL-F04 Hülle**: Soll: die gemeinsame Schablone für jeden Bereich. Ist: siehe spec-huelle. Status: orange. Quelle: Master `ALFA Huelle.dc.html`; J 13.10. (Master `entscheidungen.md:144`).
-- **ZIEL-F05 Mail**: Soll: Stufe 1, Rang 1. Ist: siehe spec-mail. Status: orange. Quelle: J 20.10. 3f52450e.
-- **ZIEL-F06 Hub und Einstellungen (mit Konten)**: Soll: Stufe 1, Rang 1; Mail-Konten und Kontakte sind Integrationen. Ist: siehe spec-hub; `alfaos/App/Settings/`, `alfaos/Kit/Sources/Hub/`. Status: orange. Quelle: J 20.10. 3f52450e; Design-Text 15.10. (zitiert Johannes; eigene Nachricht nicht gefunden) (Master `INHALT.json` Hinweis „Mail Konten … EINE Integration“).
-- **ZIEL-F07 Projekte (Akte, Fragebogen, Provisionierung)**: Soll: Stufe 1. Ist: fehlt (`alfaos/App` hat nur Components, Host, Mail, Resources, Settings, Shell, Theme; `apps.json` ohne Eintrag). Siehe `spec-projekte.md`. Status: offen. Quelle: AGENTS §1; J 18.10. c2a04c8a.
-- **ZIEL-F08 Heute**: Soll: Stufe 1; Dashboard- und Widget-Startansicht, Mittelbahn als Widgetbrett. Ist: fehlt (`apps.json`). Siehe spec-heute. Status: offen. Quelle: J 20.10. 3f52450e; AGENTS §1.
-- **ZIEL-F09 Kataloge**: Soll: Stufe 1. Ist: fehlt (grep `datan` und `kalkul` in `App`, `Kit/Sources`: kein Treffer). Siehe `spec-kataloge.md`. Status: offen. Quelle: AGENTS §1.
-- **ZIEL-F10 Warenkorb**: Soll: Stufe 1. Ist: fehlt. Siehe `spec-warenkorb.md`. Status: offen. Quelle: AGENTS §1.
-- **ZIEL-F11 Übrige Bereiche, Datan als Modul, 15 Integrationen**: Soll: Stufe 2 bis Launch Ende 2026. Ist: Dienstkatalog hat 10 Einträge (`alfaos/Kit/Sources/Hub/ServiceCatalog.swift:82-120`, 10 × `ServiceInfo(id:`), kein Datan-Code. Siehe `spec-spaeter.md`, `spec-hub.md`. Status: offen. Quelle: AGENTS §1; J 16.10. 97326b1d (Datan als Modul, Klickantwort, Wortlaut in `spec-kataloge.md`).
+F01 = ZIEL-F01. AUSSEHEN: Zeile im Master (`ALFA Huelle.dc.html`, `ALFA Mail.dc.html`, `alfa-shell.js`). `App/` = `alfaos/App/`; `Kit/` = `alfaos/Kit/`. Brief v14.
 
 ## Regeln
-- **ZIEL-R01 Zwei Stufen**: Ende November 2026 sind Mail, Konten, Projekte (Akte, Fragebogen, Provisionierung), Heute, Kataloge und Warenkorb fertig, ohne Kalkulation; Launch Ende 2026 mit dem Rest. Auf die Frage „Zwei Ziele stehen gegeneinander“ antwortete Johannes mit der Klickantwort „Beides, gestuft“. Quelle: J 18.10. c2a04c8a; J 16.10. 97326b1d („Abgabe Ende November“, Klick).
-- **ZIEL-R02 Kalkulation ist nicht in Stufe 1**: Quelle: J 18.10. c2a04c8a „c - aber noch ohne Kalkulation“ (Freitext auf Claudes Liste A/B/C; „c“ = Auslegung, nicht sein Wortlaut). In `alfaos` gibt es keinen Kalkulationscode (grep).
-- **ZIEL-R03 Reihenfolge**: Hub/Einstellungen und Mail zuerst und weiter heben, alle Funktionen beleben; der Code liefert das Lastenheft der Funktionen. Die Reihenfolge der übrigen Stufe-1-Bereiche hat Johannes nicht genannt. Quelle: J 20.10. 3f52450e.
-- **ZIEL-R04 Termine gleiten, Umfang und Qualität nicht**: Quelle: J 16.10. 97326b1d (Klick auf Claudes Empfehlung „Termin gleitet, Umfang und Qualität bleiben“; Wortlaut ist Claudes).
-- **ZIEL-R05 Mac zuerst, mobil später und abgespeckt**: iOS, iPadOS und Web folgen später; die Struktur der App muss sie vorsehen; die Mac-App wird nicht 1:1 auf das iPhone gepresst. Quelle: J 12.10. a9bb817c.
-- **ZIEL-R06 Distribution ermöglichen, nicht erzwingen**: Die App soll in Distribution gehen (App Store, iOS, iPadOS, evtl. Web, Abo); heute wird nichts davon gebaut, nur nichts verbaut. Quelle: J 12.10. a9bb817c „Sondern in Distribution gehen“; J 08.10. 055e95fd (Gedächtnis `spec-arbeit.md`).
-- **ZIEL-R07 Funktion übernehmen, Form neu**: ALFA entsteht aus dem Bestand (ALPHA, Alphabet, Datan); der Bestand liefert Funktion, nicht Oberfläche. Quelle: J 11.10. 7cc894d9 („es muss nur richtig ALFA werden“); AGENTS §6 Bestand.
-- **ZIEL-R08 Nur gezeichnete Bereiche werden gebaut**: Der Master 1810 zeichnet nur Mail und Einstellungen (mit Hülle); für Projekte, Heute, Kataloge, Warenkorb gibt es keine Zeichnung, bis Design liefert. Quelle: Master `alfa-shell.js:5-8`, `INHALT.json` `gruppen`; AGENTS §7.
-- **ZIEL-R09 Überholte Zielworte**: „Widgets sind JETZT kein thema.“ (J 11.10.) ist durch J 20.10. 3f52450e (Heute als Widgetbrett) überholt; „Projekte etc definiere ICH später“ (19.10., bc4854d7) steht nur als eingereihte Nachricht, nicht als Nutzerzeile, und ist durch seine Definition von Heute, Projekten, Kontakten am 20.10. überholt. Quelle: Transkriptsuche 21.10.
-- **ZIEL-R10 Erwachsene Arbeits-App**: ALFA verhält sich so normal wie jede erwachsene Arbeits-App: von geschulten Menschen produktiv bedient, keine Bevormundung, keine Erklärsätze (HUB-R02), Rückfragen nur, wo sie in solchen Apps üblich sind oder der Nutzer sie einstellt (HUB-R12); Rückgängig ist der Normalfall statt einer Frage vorher. Quelle: J 22.10. bc4854d7 „also so "normal" wie jede "erwachsene" arbeits app eben auch“.
+- R01 Stufe 1, fertig Ende November 2026: Mail, Konten, Projekte (Akte, Fragebogen, Provisionierung), Heute, Kataloge, Warenkorb; ohne Kalkulation.
+- R02 Stufe 2, bis Launch Ende 2026: alle übrigen Bereiche, Datan als Modul, 15 Integrationen in voller Tiefe.
+- R03 Termine gleiten, Umfang und Qualität nicht.
+- R04 Hub, Einstellungen und Mail zuerst; danach Projekte und Aufgaben, dann Kalender.
+- R05 Mac zuerst; iOS, iPadOS, Web später und abgespeckt; die Bauweise sieht sie vor.
+- R06 Vertrieb (App Store, Abo) wird ermöglicht, nicht gebaut.
+- R07 Hub und Einstellungen in der Mitte; ringsum die Bausteine eines Vorgangs (Projekte, Aufgaben, Team, Zeit, Geld, Mail, Artikel, Daten); darunter die Schubladen; alles über den Hub verbunden.
+- R08 Jede Schublade (Dienst, Speicher) ist die Wahrheit für ihre Stücke; ALFA spiegelt höchstens.
+- R09 ALFA führt die Vorgänge und ihre Verknüpfungen; Mail, Anfrage, Termin, Entwurf, Aufgabe, Zeit, Artikel, Geld werden zu einem Vorgang.
+- R10 Ein Vorgang entsteht in ALFA: vom Nutzer angelegt oder durch ein Ereignis ausgelöst.
+- R11 Der Nutzer entscheidet, was zu einem Vorgang gehört; ALFA schlägt aus Kennung, Quelle, Zeit, Richtung und Bezug vor; ob automatisch, ist Einstellung.
+- R12 Alles kann Vorgang werden; ab wie vielen Stücken, ist Einstellung.
+- R13 Branchenwerte (Phasen, Ordner, Kostenstellen, Marken, Stufen) und Firmendaten sind Einstellungen oder Vorlagen je Firma, nie fest im Code.
+- R14 Dateien kommen über neutrale Eingabe-Module herein und gehen über neutrale Ausgabe-Module hinaus (erzeugen, weitergeben); jeder Bereich nutzt sie über den Hub.
+- R15 Angemeldet heißt alles dürfen; sperren kann nur die Firma.
+- R16 Erwachsene Arbeits-App: keine Erklärsätze, Rückfragen nur wo üblich oder eingestellt, Rückgängig statt Frage.
+- R17 Keine Farbwelten, kein ALFAcolor; nur das ALFA-Interface.
 
-## Lücken
-- **ZIEL-L01 Zeichnungen für Projekte, Heute, Kataloge, Warenkorb**: fehlen; liefert Design. Beleg: `alfa-shell.js:5-8` (AREA hat Mail und Einstellungen), `INHALT.json` `gruppen` (Kommunikation: Mail; Kern: Einstellungen), `ALFA Mail.dc.html:386` (GROUPS nur zwei Bereiche).
-- **ZIEL-L02 Welche 15 Integrationen**: der Master zeichnet 10 Dienste, DHL als zwei Karten (`ALFA Dienste.dc.html:102-103`); die Liste der 15 steht in keiner Lieferung. Wer liefert: Johannes. Beleg: Suche in `ALFA Dienste.dc.html`, `INHALT.json`, AGENTS §1; Ist 10 in `ServiceCatalog.swift`.
-- **ZIEL-L03 Verbindliche Form von „Datan als Modul“**: Merge-Form und Umfang für Stufe 2 nicht gezeichnet, nicht entschieden. Wer liefert: Design nach Johannes. Beleg: grep `datan` in `alfaos` ohne Treffer; Gedächtnis `spec-kataloge.md` nennt nur das Wort vom 16.10.
+## Plattform
+**F01 Native macOS-App**  
+WAS: SwiftUI-App für macOS 26 mit Sandbox.  
+WO: ganze App.  
+WARUM: eine App auf dem Mac.  
+AUSSEHEN: entfällt.  
+STAND: gebaut, nicht abgenommen (`alfaos/project.yml:6`, `:67`, `:77`; App/ALFA_OSApp.swift:31).
 
-## Offen bei Johannes
-- Fällt Kalkulation unter „alle übrigen Bereiche“ bis Launch Ende 2026 oder darüber hinaus?
-- In welcher Reihenfolge folgen Heute, Projekte, Kataloge, Warenkorb nach Mail und Hub?
-- Vertriebsweg und Sandbox: Mac App Store, Developer ID oder beides (heute: Sandbox an, `alfaos/project.yml:77`, `alfaos/Config/ExportOptions-DeveloperID.plist` vorhanden)?
+**F02 Bereiche wie Apps**  
+WAS: jeder Bereich ein Eintrag im Verzeichnis; der Blob führt zwischen ihnen.  
+WO: Hülle › Blob.  
+WARUM: neue Bereiche ohne Umbau.  
+AUSSEHEN: alfa-shell.js:5-8 (nur Mail, Einstellungen).  
+STAND: teilweise; Verzeichnis mit mail und settings (App/Resources/apps.json), Inhalt je Bereich fest verdrahtet (App/Shell/LaneView.swift:15-26).
+
+**F03 Kern ohne Oberfläche**  
+WAS: Logik im Paket Kit für macOS und iOS.  
+WO: `Kit/Sources`.  
+WARUM: später iPad, iPhone, Web.  
+AUSSEHEN: entfällt.  
+STAND: teilweise; Kit ohne SwiftUI (`Kit/Package.swift:8`), hängt am Fundus (`:15`), dort SwiftUI (`fundus/alpha/Sources/AlfaServices/Database/WorkBasketStore.swift:3`, `WidgetBoardStore.swift:3`).
+
+**F04 Vorgang**  
+WAS: Vorgang mit Stücken und Verknüpfungen (R09–R12).  
+WO: Kern.  
+WARUM: Wert entsteht im Vorgang.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt.
+
+## Stufe 1
+**F05 Hülle**  
+WAS: gemeinsame Schablone jedes Bereichs.  
+WO: ganze App.  
+WARUM: ein Aussehen, ein Verhalten.  
+AUSSEHEN: `ALFA Huelle.dc.html`, `ALFA Shell.dc.html`.  
+STAND: gebaut, nicht abgenommen (spec-huelle).
+
+**F06 Mail**  
+WAS: Mail-Client für bis zu drei Postfächer.  
+WO: Bereich Mail.  
+WARUM: Rang 1.  
+AUSSEHEN: `ALFA Mail.dc.html`.  
+STAND: teilweise (spec-mail).
+
+**F07 Hub, Einstellungen, Konten**  
+WAS: Dienste verbinden, Einstellungen; Mail-Konten und Kontakte sind Integrationen.  
+WO: Bereich Einstellungen.  
+WARUM: Rang 1, Stecker zu den Schubladen.  
+AUSSEHEN: `ALFA Mail.dc.html` (Einstellungen), `ALFA Dienste.dc.html`.  
+STAND: teilweise (spec-hub; `Kit/Sources/Hub/`).
+
+**F08 Projekte**  
+WAS: Akte, Fragebogen, Provisionierung.  
+WO: eigener Bereich.  
+AUSSEHEN: nicht gezeichnet (Brief v14 Teil 6).  
+STAND: fehlt (spec-projekte).
+
+**F09 Heute**  
+WAS: Startansicht mit Widgetbrett.  
+WO: eigener Bereich.  
+AUSSEHEN: nicht gezeichnet (Brief v14 Teil 6).  
+STAND: fehlt (spec-heute).
+
+**F10 Kataloge**  
+WAS: Artikel, Positionen, Preise mit Beleg.  
+WO: eigener Bereich.  
+AUSSEHEN: nicht gezeichnet (Brief v14 Teil 6).  
+STAND: fehlt (spec-kataloge).
+
+**F11 Warenkorb**  
+WAS: Körbe und Checkout mit EK-Schutz.  
+WO: eigener Bereich.  
+AUSSEHEN: nicht gezeichnet (Brief v14 Teil 6).  
+STAND: fehlt (spec-warenkorb).
+
+## Stufe 2
+**F12 Übrige Bereiche, Datan, 15 Integrationen**  
+WAS: Werkstatt, Assistent, Studio, Kalender, Kalkulation; Datan als Modul; 15 Integrationen.  
+WO: eigene Bereiche, Hub.  
+AUSSEHEN: nicht gezeichnet; Datan-Form Lücke.  
+STAND: fehlt; Dienstkatalog hat 10 Einträge (`Kit/Sources/Hub/ServiceCatalog.swift:80-117`) (spec-spaeter).

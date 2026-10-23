@@ -1,57 +1,103 @@
 ---
 name: spec-projekte
-description: Projekte (Akte, Fragebogen, Provisionierung): Ziel gesetzt, in ALFA nichts gebaut, im Master nicht gezeichnet; Johannes hat Anlegen, Hub-Routen und Akte-Inhalt gesagt, Fragebogen und Phasen sind Lücke.
+description: Projekte (Akte, Fragebogen, Provisionierung): Funktionsbaum, Bestand im Fundus, kein Code in alfaos
 metadata:
   type: project
 ---
 
-# Projekte · Spec (Stand 21.10.)
+# Projekte · Spec
 
-Pfadkürzel: `fundus:` = `fundus/alpha/Sources/`; `labor:` = `~/Developer/mykilos-labor/Sources/` (Unterordner App, Kit, Services, Widgets heißen dort mit Präfix des Altnamens). Bestand ist nur Herkunft der Fähigkeit, nie Vorlage für Aufbau oder Namen (J 20.10. 3f52450e).
+Projekt als Akte: alles im Dateiort zum Projekt plus Aufgaben, Zeiten, Geld. Anlegen mit Fragebogen und Provisionierung. Stufe 1, fertig Ende November 2026.
 
-## Ziel
-Ein Projekt ist eine Akte: alles, was im Dateiort zum Projekt liegt, plus die Daten dazu (Aufgaben, Zeiten, Geld). „Neues Projekt“ legt Ordnerbaum, Datensatz und Aufgabenliste zusammen an, an den Orten, die Firma oder Nutzer im Hub gewählt haben. Bereich gehört zum Ziel Ende November (`AGENTS.md:9`). In ALFA gebaut ist nichts: `alfaos/App/Resources/apps.json` führt nur mail und settings; der Master zeichnet keine Projektansicht (`INHALT.json:64-92` Gruppen nur Mail und Einstellungen; Textliste ohne Zeichnung `INHALT.json:828,853`).
-
-## Richtung
-- Projektübersicht als Dashboard im Drei-Spalten-Blob-Layout (später, nach Zeichnung).
-- Reihenfolge nach Mail und Einstellungen: Projekte und Aufgaben, dann Kalender.
-- Cash, Service und Akte werden Teil von Projekte statt eigener Bereiche.
-- Akte ohne die vielen Reiter des Bestands.
-- Kontakte und Lead über dieselben Hub-Routen wie Projekt anlegen (Kontakte: siehe spec-hub HUB-F41).
-
-## Funktionen
-- **PROJ-F01 Projekt anlegen, echt schreiben**: Soll: Der Nutzer startet „Neues Projekt“. Vor dem Schreiben zeigt die App, was angelegt wird (Projektnummer, Ordner, Datensatz, Liste). Geschrieben wird erst nach seiner Bestätigung, wirklich (kein Probemodus). Ist: fehlt in ALFA; Bestand schreibt nur im Probemodus, `fundus:AlfaServices/ProjektProvisioningService.swift:57` (`guard mode == .test`) und `fundus:AlfaServices/ProvisioningMode.swift:43` (PROD wirft `prodLocked`). Vorschau und Bestätigung sind nirgends gezeichnet. Status: offen. Quelle: J 20.10. 3f52450e Klickfrage Q9 „Ja, echt, mit Vorschau und Bestätigung“ · Master: keine Zeichnung (PROJ-L01) · Bestand `labor:App/Data/AppState.swift:2201-2227`.
-- **PROJ-F02 Ordnerbaum, Datensatz, Aufgabenliste zusammen anlegen**: Soll: Ein „Neues Projekt“ legt alle drei zusammen an; Datensatz und Liste gehen an das System, das Firma oder Nutzer im Hub gewählt haben; die Aufgabenliste nur, wenn eine Aufgaben-Integration aktiv ist. Ist: fehlt; Bestand hat die drei Schritte mit Wiederaufnahme: Drive `ProjektProvisioningService.swift:65-70`, Airtable `:72-78`, ClickUp `:80-85`, Ledger `fundus:AlfaServices/ProvisioningLedger.swift:74`, Schlüssel je Projekt `fundus:AlfaKit/Domain/Provisioning.swift:24`. Hub-Ports Aufgaben und Dateien: `alfaos/Kit/Sources/Hub/Ports.swift:6-12` (nur `FilesPort` hat Methoden, `TasksPort` ist leer). Status: offen. Quelle: J 04.10. ee8f053d „Legt ihn immer zusammen mit airtable und clickup Liste an“ · J 04.10. ee8f053d Klick „Zum Projekt und wenn Aktiviert, dann auch mit ClickUP“ · J 20.10. 3f52450e (Routen im Hub) · Bestand `fundus:AlfaServices/ProjektProvisioningService.swift`.
-- **PROJ-F03 Lead anlegen**: Soll: Lead anlegen läuft wie Projekt anlegen über den Hub, mit den Routen, die Firma oder Nutzer vorgeben (einmal beim Einrichten oder später in den Einstellungen). Ist: fehlt; Bestand legt „nur als Lead“ einen Rumpf-Ordner unter `_LEADS` an (`fundus:AlfaKit/Domain/GefuehrterAblauf.swift:62`), belebt ihn später zum Projekt (`fundus:AlfaServices/Google/ProjektLeadBeleber.swift:3`) und rüstet die Aufgabenliste nach (`fundus:AlfaKit/Domain/ClickUpListenPflicht.swift:3`). Status: offen. Quelle: J 20.10. 3f52450e · J 04.10. ee8f053d (Lead-Belebung und Nachrüstung „Zum Projekt“) · Bestand wie genannt.
-- **PROJ-F04 Fragebogen**: Soll: lücke (Inhalt, Fragen, ob Pflicht, ob einziger Weg zum Projekt). Ist: fehlt; Bestand hat einen Fragebogen für Küchen (`labor:App/Intake/FragebogenModel.swift:5-80`, Ansicht `FragebogenView.swift:7`), der Antworten nach Drive „07 Fragebogen“ (`fundus:AlfaKit/Domain/FolderSchema.swift:41`) und in den Datensatz schreibt. „Der Fragebogen ist der einzige Geburtskanal“ steht nur im Bestandstext `GefuehrterAblauf.swift:57-59`, nicht in Johannes' Wort. Status: lücke. Quelle: AGENTS.md:9 nennt den Fragebogen als Teil von Projekte · Bestand wie genannt.
-- **PROJ-F05 Projektnummer**: Soll: lücke (Format, Vergabe, Zählung). Ist: fehlt; Bestand vergibt `JJJJ-NNN` (`fundus:AlfaKit/Domain/Projektnummer.swift:25`), nächste Nummer je Jahr (`:34`), lokal fortlaufend gespeichert (`fundus:AlfaServices/LocalSequentialAuthority.swift:17`), Ordnername `JJJJ_NNN_Kunde_STR-Nr` (`FolderSchema.swift:32`, `labor:App/Data/AppState.swift:2217`). Status: lücke. Quelle: Bestand · Regel PROJ-R05.
-- **PROJ-F06 Ordnerbaum und Erst-Setup „Projektordner anlegen“**: Soll: Der Projektordnerbaum ist auf Admin-Ebene der App definiert; das Erst-Setup fragt, wo Projektdaten, Datenbanken, Bilder und Vorlagen liegen, mit Wahl von Ort und Pfad. Ist: fehlt; Bestand hat zwei feste Schemata `FolderSchema.swift:30` (v1) und `:58` (v2 mit „00 EINGANG“). Master zeichnet unter Einstellungen › Dateiordner: Ordnerschema, Rollen der Ordner, Kostenstellen, Nummern, Bereitstellung, Einrichtung (`INHALT.json:478-515`, Demo `ALFA Mail.dc.html:766`); ob das zu Projekte gehört, ist nicht belegt. Status: offen (Setup-Wort da, Zeichnung fehlt). Quelle: J 04.10. ee8f053d · J 20.10. 3f52450e (Dateiorte im Hub) · siehe spec-hub HUB-F39, HUB-L06.
-- **PROJ-F07 Projektgalerie**: Soll: Die Galerie aller Projekte (Karten, Pipeline, Tabelle) gehört zu Projekte. Aussehen: lücke. Ist: fehlt; Bestand hat Karten, Tabelle und Pipeline, `labor:App/Gallery/ProjectGalleryView.swift:246-275`, Pipeline mit Stufenwechsel und Wahrscheinlichkeit `ProjectPipelineView.swift`. Status: offen. Quelle: J 04.10. ee8f053d Klick „Zu Projekte“ · Bestand wie genannt.
-- **PROJ-F08 Akte**: Soll: Die Akte zeigt alles, was zum Projekt an Dateien, Sammlungen, Dokumenten und Infos im Dateiort liegt, dazu Aufgaben, Zeiten und Geld; Cash und Service sind Teil davon; die vielen Reiter des Bestands entfallen. Ist: fehlt; Bestand hat 9 Reiter (`labor:App/Detail/ProjectDetailView.swift:738-748`) in 5 Gruppen (`:773-780`). Status: offen. Quelle: J 04.10. ee8f053d (Akte, „Teil von Projekte“) · J 30.08. 6a6a9365 „die projektakten von ihren 14 taps befreien“ (Wortlaut nur aus Auszug).
-- **PROJ-F09 Projektübersicht als Dashboard**: Soll: Eine Projektübersicht als Dashboard im Drei-Spalten-Blob-Layout. Ist: fehlt; Bestand ersetzt das Widget-Brett der Akte durch eine Übersicht (`labor:App/Detail/ProjektDashboard.swift:6-8`, Kommentar zitiert J 21.09.; Original nicht geprüft). Status: offen. Quelle: J 07.10. 055e95fd · Bestand wie genannt.
-- **PROJ-F10 Phasen und Aufgabenfelder**: Soll: lücke (Phasen, Reihenfolge, Zuordnung zur Aufgaben-Integration). Ist: fehlt; Bestand kennt 7 Stufen Briefing bis Service (`fundus:AlfaKit/Domain/ProjectLifecycle.swift:3-10`) und 8 Standardaufgaben (`fundus:AlfaKit/Domain/ClickUpProjectTemplate.swift:4-13`). Master zeichnet an der ClickUp-Karte nur die Abgleichzeilen „Phasen“ und „Aufgabenfelder“ (`ALFA Mail.dc.html:394`). Status: lücke. Quelle: Master wie genannt · Bestand.
-- **PROJ-F11 Mail und Projekt**: Soll: Mail legt in den Projektordner ab, hängt Dateien aus ihm an, macht aus Mail einen Lead; der Ordner heißt in Mail „Projektordner“ oder „Accountingordner“ nach Nutzerwahl. Ist/Status/Quelle: siehe spec-mail MAIL-F28, MAIL-F51, MAIL-L07 und spec-hub HUB-F39.
+F01 = PROJ-F01. AUSSEHEN: Master zeichnet Projekte nicht (Brief v14 Teil 6). Bestand = `fundus/alpha/Sources/`; Hub = `alfaos/Kit/Sources/Hub/`.
 
 ## Regeln
-- **PROJ-R01**: Projekt anlegen und Lead anlegen: Vorschau und Bestätigung des Nutzers (J 20.10.); nach seinem jüngeren Wort ist das eine Einstellung mit dieser Vorgabe, keine Pflicht im Code (HUB-R12, J 22.10.). Quelle: J 20.10. 3f52450e Q9 · Bestand `labor:App/CheckoutZieleSheet.swift:93` zeigt dasselbe Muster für den Checkout.
-- **PROJ-R02**: Ziele des Anlegens (Dateiort, Datensatz, Aufgabenliste, Kontakte) wählen Firma oder Nutzer im Hub; Google Drive ist nur ein Ort unter mehreren (Ordner auf dem Mac, Dropbox, Server, iCloud). Quelle: J 20.10. 3f52450e.
-- **PROJ-R03**: Die Aufgabenliste wird nur angelegt, wenn eine Aufgaben-Integration aktiv ist; sonst bleibt das Projekt ohne sie. Quelle: J 04.10. ee8f053d „wenn Aktiviert“.
-- **PROJ-R04**: Keine Firmendaten, IDs oder Ordnernamen fest im Code; sie kommen aus Einstellungen, Erst-Setup oder Presets. Bestand verletzt das (feste Listen-, Ordner- und Feld-IDs `labor:App/Data/AppState.swift:2195-2199`, Dateiname mit Firmennamen `FolderSchema.swift:55`). Quelle: J 26.09. ffde6a84 „Fest verdrahtetes STRIKT raus aus dem Code“.
-- **PROJ-R05**: Projektnummern werden nicht an Mails geschrieben. Quelle: J 12.10. Master `entscheidungen.md:61` „Projektnummern an Mails hatten wir verworfen.“
-- **PROJ-R06**: Bestand wird nur in Funktion übernommen, nicht in Form, Namen, Zuschnitt oder Texten. Quelle: J 20.10. 3f52450e „ES soll NICHTS wieder genau das gleiche gebaut werden“.
-- **PROJ-R07**: Wer angemeldet ist, darf; sperren kann nur die Firma. Bestand-Rollenprüfung (`labor:App/Gallery/ProjectGalleryView.swift:255,266` `darfFinanzdatenSehen`) wird nicht übernommen. Quelle: AGENTS.md:49 · J 13.10. 97326b1d „WIE die rollen gegated sind etc - das machen wir Später!!!“
-- **PROJ-R08**: Es gibt immer mindestens einen lokalen Speicherordner, den der Nutzer beim ersten Einrichten nennt; er ist der Anker, wenn Teams Online-Orte (Google Drive, iCloud, Server) nutzen, und wird dann von dem „immer geupdateten“ Netzwerk der App getragen. Quelle: J 04.10. ee8f053d 16:35 und 16:38 (Dateiorte im Hub: siehe spec-hub HUB-F39).
+- R01 Neues Projekt legt Ordnerbaum, Datensatz und Aufgabenliste zusammen an.
+- R02 Ziele des Anlegens (Dateiort, Datensatz, Aufgaben, Kontakte) wählen Firma oder Nutzer im Hub; Drive ist ein Ort unter mehreren (Mac, Dropbox, Server, iCloud).
+- R03 Aufgabenliste nur, wenn eine Aufgaben-Integration aktiv ist.
+- R04 Echt schreiben, kein Probemodus; Vorschau und Bestätigung sind Einstellung mit dieser Vorgabe.
+- R05 Lead anlegen läuft über dieselben Hub-Routen wie Projekt.
+- R06 Projektnummern werden nicht an Mails geschrieben.
+- R07 Immer mindestens ein lokaler Speicherordner, beim ersten Einrichten genannt.
+- R08 Cash, Service und Akte sind Teil von Projekte, keine eigenen Bereiche.
+- R09 Die Akte hat nicht die vielen Reiter des Bestands.
 
-## Lücken
-- **PROJ-L01**: Keine Zeichnung für Projekte: Galerie, Akte, Anlegen mit Vorschau und Bestätigung, Fragebogen, Zustände (leer, Fehler, teilweise angelegt). Liefert: Design. Beleg: Master hat 10 Entwurfsdateien (`*.dc.html`) ohne Projektansicht; Projekt kommt nur als Menüeintrag, Demo-Zeile und Icon-Platz vor (`ALFA Mail.dc.html:699,766,972`, `ALFA Dienste.dc.html:127`) und als Textliste `INHALT.json:828,853`; Brief `DESIGN/brief/BRIEF.txt:128` kündigt „Projekte … nach dem Pilot“ an.
-- **PROJ-L02**: Was ein Projekt ist (Felder, Typen, Status Lead/laufend/ruhend/archiviert) und welche Phasen es gibt. Liefert: Johannes. Beleg: kein Wort dazu in `spec-projekte.md`, `entscheidungen.md`, Transkripten ab 04.10.; nur Bestand `ProjectLifecycle.swift:3`, `labor:App/Gallery/ProjektZustand.swift:4-22`.
-- **PROJ-L03**: Inhalt des Fragebogens (Fragen, Reihenfolge, firmenneutral oder Küche) und seine Rolle im Anlegen. Liefert: Johannes. Beleg: Suche „Fragebogen“ in seinen Nachrichten (Transkripte ALFA-OS*, ALPHA, ab 01.09.) findet nur 2d5f6332 „Ja, schreib den Fragebogen für Design“ (03.10.) und Bestand `FragebogenModel.swift`.
-- **PROJ-L04**: Welches System die Wahrheit über Projektdaten trägt, wenn der Nutzer kein Airtable wählt (eigener Datenspeicher, Form). Liefert: Johannes. Beleg: J 04.10. ee8f053d 16:34 „Airtable-Projekt-Hub ist die Wahrheit“ und zugleich andere Datenbanksysteme vorsehen; J 20.10. 3f52450e nennt Airtable als eine Route unter mehreren; `stand.md` „H7 Datenspeicher wartet auf sein Wort“.
-- **PROJ-L05**: Dublettenschutz und Kunden-Identität beim Anlegen. Liefert: Johannes. Beleg: Bestandstext `GefuehrterAblauf.swift:52-54,68-69` (Dublettenregel über Kundennummer, Mail, Telefon); Suche „dublett“ in seinen Nachrichten (Transkripte ALFA-OS*, ALPHA, ab 01.09.) findet keine Aussage dazu.
-- **PROJ-L06**: Ob Ordnerschema, Kostenstellen und Nummern (Master Einstellungen › Dateiordner) zu Projekte gehören und gebaut werden. Liefert: Johannes. Beleg: `INHALT.json:478-515`; `spec-hub.md` „gehören nicht belegt zu Projekte“.
+## Anlegen
+**F01 Projekt anlegen**  
+WAS: zeigt, was angelegt wird, schreibt nach Bestätigung.  
+WO: Projekte.  
+WARUM: Projekt mit einem Griff.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaServices/ProjektProvisioningService.swift:57 (nur Probemodus), AlfaServices/ProvisioningMode.swift:43.
 
-## Offen bei Johannes
-- Was gehört in die Akte und in welcher Gliederung, nachdem die Reiter entfallen?
-- Bleibt der Fragebogen der einzige Weg zu einem Projekt, oder gibt es auch „leer anlegen“?
-- Welche Phasen und Status hat ein Projekt, und wer darf sie ändern?
-- Welches System trägt die Projektdaten, wenn ein Nutzer kein Airtable hat?
+**F02 Ordner, Datensatz, Liste**  
+WAS: drei Schritte mit Wiederaufnahme.  
+WO: Hintergrund.  
+WARUM: nichts halb angelegt.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: ProjektProvisioningService.swift:65-85, AlfaServices/ProvisioningLedger.swift, AlfaKit/Domain/Provisioning.swift; Hub: nur FilesPort mit Methoden, TasksPort leer (Ports.swift:6-12).
+
+**F03 Lead anlegen**  
+WAS: Lead als Vorstufe, später zum Projekt beleben.  
+WO: Projekte; aus Mail.  
+WARUM: Anfrage früh festhalten.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaKit/Domain/GefuehrterAblauf.swift:62-64, AlfaServices/Google/ProjektLeadBeleber.swift, AlfaKit/Domain/ClickUpListenPflicht.swift.
+
+**F04 Fragebogen**  
+WAS: Fragen zum Projekt; Antworten in Dateiort und Datensatz.  
+WO: Anlegen.  
+WARUM: Eckdaten des Kunden.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: Ordner „07 Fragebogen“ (AlfaKit/Domain/FolderSchema.swift:41), Ablauf GefuehrterAblauf.swift:55-59; Fragebogen-Ansicht im Fundus nicht gefunden.
+
+**F05 Projektnummer**  
+WAS: Nummer je Jahr, fortlaufend.  
+WO: Anlegen.  
+WARUM: eindeutige Ablage.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaKit/Domain/Projektnummer.swift:24-36, AlfaServices/LocalSequentialAuthority.swift.
+
+**F06 Ordnerbaum**  
+WAS: Baum für jedes Projekt; Erst-Setup fragt Orte für Daten, Datenbanken, Bilder, Vorlagen.  
+WO: Einstellungen › Dateiordner.  
+WARUM: gleiche Ablage überall.  
+AUSSEHEN: Mail:766 (Projektordner); Wahl der Orte nicht gezeichnet (Brief N30).  
+STAND: fehlt; Bestand: FolderSchema.swift:30, :58 (fest, R13 in spec-ziel).
+
+## Akte
+**F07 Projektgalerie**  
+WAS: alle Projekte als Karten, Pipeline, Tabelle.  
+WO: Projekte.  
+WARUM: Überblick.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand im Fundus nicht gefunden.
+
+**F08 Akte**  
+WAS: Dateien, Dokumente, Infos des Projekts; Aufgaben, Zeiten, Geld; Cash, Service.  
+WO: Projekte.  
+WARUM: alles zum Projekt an einer Stelle.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand im Fundus nicht gefunden.
+
+**F09 Projektübersicht**  
+WAS: Übersicht als Dashboard in drei Bahnen.  
+WO: Projekte.  
+WARUM: Stand auf einen Blick.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand im Fundus nicht gefunden.
+
+**F10 Phasen, Aufgabenfelder**  
+WAS: Phasen des Projekts, Abgleich mit der Aufgaben-Integration.  
+WO: Akte; Hub › ClickUp.  
+WARUM: Fortschritt sehen.  
+AUSSEHEN: Mail:394 (nur Abgleichzeilen).  
+STAND: fehlt; Bestand: AlfaKit/Domain/ProjectLifecycle.swift:3-10, AlfaKit/Domain/ClickUpProjectTemplate.swift:4-13.
+
+## Mail und Projekt
+**F11 Ablage aus Mail**  
+WAS: Mail und Anhang in den Projektordner, Datei aus ihm anhängen, Lead aus Mail.  
+WO: Mail.  
+WARUM: Anfrage gehört zum Projekt.  
+AUSSEHEN: Mail:699, :998, :1033; nicht gezeichnet (Brief N15, N16, N17).  
+STAND: teilweise (spec-mail F28, F48, F51).

@@ -1,125 +1,454 @@
 ---
 name: spec-mail
-description: Bereich Mail (Liste, Lesen mit Konversation, HTML, Verfassen, Entwürfe, Postausgang, Anhänge, Suche, Aktionen, Kontakte, Abgleich, mehrere Postfächer); gebaut und orange, mit sieben toten oder halben Funktionen (Status rot, Stand 22.10. nach F32).
+description: Mail: 59 Funktionen als Baum (was, wo, warum, Aussehen, Stand), Regeln, Lücken bei Design
 metadata:
   type: project
 ---
 
-# Mail · Spec (Stand 22.10.)
+# Mail · Spec
 
-Kürzel der Sitzungen: bc4854d7 (Lead), 3f52450e (Produkt 20.10.), a9bb817c (12.10.), 7cc894d9 (12.10.). Master = `dist/master-latest/alfa-os-interface-chef-1610/project/ALFA Mail.dc.html` (Zeilen `M:nnn`). Ist = `alfaos/…` am 21.10. gelesen oder per grep gefunden; Pfade kurz: Model = `Kit/Sources/Mail/Model/`, Core = `Kit/Sources/Mail/Core/`, App = `App/Mail/`. Johannes hat nichts abgenommen; kein Status ist grün.
+Mail-Client für bis zu drei Postfächer (Gmail, IMAP). Stufe 1, fertig Ende November 2026.
 
-## Ziel
-Mail ist ein eingebauter Mail-Client wie macOS Mail: bis zu 3 Postfächer (Gmail und Workspace per Anmeldung, übrige Anbieter per IMAP/SMTP), Lesen mit Konversation, Verfassen, Senden ohne Verlust und ohne Doppelversand, Anhänge, Suche, Aufräumen mit Rückgängig, Ablage von Mails und Anhängen in Projektordner. Postfächer werden in den Einstellungen verbunden, nicht in der Mailansicht. Stufe 1, fertig bis Ende November 2026 (AGENTS §1).
-
-## Richtung
-- Später: Einladungen und Kalender in der Mailansicht, wählbar je Postfach (J 16.10., `lieferung-an-code/decisions.json` Eintrag C4); Google-Kalender fehlt im Code (`GoogleProvider.swift`, Kalender wirft `capabilityMissing`).
-- Später: Mail zu Lead oder Projekt und Kontakte über Hub-Routen nach Wahl von Firma oder Nutzer (J 20.10. 3f52450e); Code hat dafür nur den toten Befehl `leadFromMail` (`Model/MailModel+Reading.swift:130-136`).
-- Später: lokale Mailablage mit Reglern Zeitraum, Anhänge lokal, Obergrenze, eigener Ordner (J 20.10. 3f52450e, Gedächtnis `spec-mail.md`); Ist: Spiegel hält nur Kopfdaten, Vorschau, Anhangliste (`Core/MailMirror.swift:23-30`).
-- Später: Microsoft 365 über OAuth; J 20.10. „nicht sooo relevant“, nicht bis Ende November.
-
-## Funktionen
-**Liste und Ordner**
-- **MAIL-F01 Ordnerleiste**: Soll: Eingang, Markiert, Gesendet, Entwürfe, Alle, Archiv, Spam, Papierkorb mit Zähler (Eingang ungelesen, Entwürfe Anzahl). Ist: `App/MailFolderLane.swift:33-40`, `Model/MailPresentation.swift:51-58, 66-73` (Entwürfe-Zähler zählt nur Karten im Speicher, nicht Server-Entwürfe, ungeprüft). Status: orange. Quelle: M:387, :831-832.
-- **MAIL-F02 Labels**: Soll: Labels unter den Ordnern, Klick zeigt die Mails des Labels. Ist: Ordner mit Rolle „other“ als Zeilen (`App/MailFolderLane.swift:51-66`, `MailPresentation.swift:60-64`). Status: orange. Quelle: M:388, :833-834. Anlegen oder Zuweisen zeichnet der Master nicht.
-- **MAIL-F03 Mailzeile**: Soll: Marke (Kürzel oder Person), Absender (bei Gesendet „An …“), Thread-Zähler, Stern, Datum, Betreff, Vorschau 2 Zeilen, Anhang-Chips mit „+n“, Ungelesen-Stil. Ist: `App/MailRowView.swift:44-175`, `MailPresentation.swift:111-139`. Status: orange. Quelle: M:80-104.
-- **MAIL-F04 Liste nachladen**: Soll: ältere Mails erreichbar (Knopf „Mehr laden“ M:121 oder Scrollen). Ist: Seitengröße 50 (`Core/MailCore.swift:17`); `MailModel.loadMore` (`Model/MailModel.swift:320`) hat keinen Aufrufer in `alfaos/App` und `Kit/Sources`, nur der Test ruft sie (`alfaos/Kit/Tests/WholeAppTests/WholeAppTests.swift:2413, :2445, :2465, :2468, :2696`); das Fenster der Liste wächst nur über schon geladene Zeilen (`App/MailListLane.swift:190-194`). Status: rot. Quelle: M:121, :844, :877-878; Brief N7.
-- **MAIL-F05 Filter**: Soll: Alle, Ungelesen, Mit Anhang; Kapsel zeigt den Namen ab Breite. Ist: `App/MailListLane.swift:55-96`, `Model/MailStates.swift:7-19` (wirkt nur auf die geladenen Zeilen). Status: orange. Quelle: M:850-852.
-- **MAIL-F06 Suche**: Soll: Lupe öffnet Feld; Bereich „Nur <Ordner>“ oder „Überall“ (ohne Spam und Papierkorb); Tippen filtert sofort, Enter fragt den Server; Escape schließt; Zeile „n Treffer in allen Ordnern“; leere Treffer mit „Suche leeren“. Ist: `App/MailListLane.swift:123-142, 171-177`, `Model/MailModel.swift:236-279`, `Core/MailMirror.swift:107-133`. Status: orange. Quelle: M:599-601, :846-847, :870, :897. Ungeprüft: ob die Server-Suche bei „Überall“ alle Ordner abdeckt (`MailModel.swift:331-354` fragt nur den gewählten Ordner).
-- **MAIL-F07 Mehrfachauswahl**: Soll: Klick auf die Marke wählt; Kopf zeigt „n gewählt“ mit Alle wählen, Gelesen/ungelesen, Archivieren, Papierkorb, Aufheben; Archiv und Papierkorb mit Rückgängig. Ist: `App/MailRowView.swift:78-93`, `App/MailListLane.swift:98-107`, `Model/MailModel+Selection.swift:12-79`. Status: orange. Quelle: M:608-624, :855-863.
-- **MAIL-F08 Schnellaktionen der Zeile**: Soll: bei Hover Markieren, Gelesen/Ungelesen, Archivieren, Papierkorb (im Papierkorb: Pille „Endgültig löschen?“). Ist: `App/MailRowView.swift:176-211`. Status: orange. Quelle: M:887-890.
-- **MAIL-F09 Kontextmenü der Zeile**: Soll: Antworten, Weiterleiten, Archivieren (mit Rückgängig), Gelesen/Ungelesen, Verschieben nach …, Papierkorb; Entwurf: nur „Entwurf öffnen“. Ist: `Model/MailMenus.swift:45-49`, `App/MailRowView.swift:213-220`. Status: orange (Eintrag „Verschieben“ siehe MAIL-F43). Quelle: M:525-536.
-- **MAIL-F10 Zustände der Liste**: Soll: lädt, leer, keine Treffer, kein Filtertreffer, Fehler mit „Erneut versuchen“, nicht verbunden mit „Postfach verbinden“, Anmeldung abgelaufen mit Hinweis. Ist: `Model/MailModel.swift:124-152`, `App/MailListLane.swift:144-154, 197-219`. Status: orange. Quelle: M:866-875. Der Zustand „offline“ hat keine Darstellung (`MailPresentation.swift:107` liefert nil), siehe MAIL-L06.
-
-**Lesen**
-- **MAIL-F11 Lesekarte, Kopf und Empfänger**: Soll: Absendername (Klick öffnet Personenmenü), Adresse, Zeile „An …“ mit „und n weitere“, aufklappbar mit An/Cc. Ist: `App/MailCardView.swift:89-156`, `App/MailReadingView.swift:25-115`. Status: orange. Quelle: M:152-160, :965-969.
-- **MAIL-F12 Konversation**: Soll: „n Nachrichten in dieser Unterhaltung“; je Nachricht Name, Datum, Text; Zitat ausklappbar mit Zeilenzahl; Anhänge an der letzten Nachricht. Ist: `App/MailReadingView.swift:128-258`, `Model/MailReading.swift:71-146`, `Model/MailModel+Actions.swift:92-102`. Status: orange. Quelle: M:161-198, :974-979.
-- **MAIL-F13 HTML-Mail**: Soll: Mail zeigt ihren echten Inhalt auf hellem Blatt, auch im Dunkeln; kein JavaScript; Links im Browser; Inline-Bilder (cid) laden. Ist: `Model/MailHTML.swift:38-103`, `App/MailHTMLView.swift:64-189` (JavaScript aus :66, Fremdes per Regelliste :106-124). Status: orange. Quelle: J 21.10. bc4854d7 „Ja, HTML-Mails zeigen ihren echten Inhalt auf hellem Blatt“; M:761. Der Master zeichnet nur Text und Kacheln (M:976-977). Ungeprüft: schlägt die Regelliste fehl, lädt die Mail gar nicht (`MailHTMLView.swift:110-115`).
-- **MAIL-F14 Externe Bilder**: Soll: standardmäßig gesperrt; Warnung „Externe Bilder blockiert“ mit Knopf „Bilder laden“; Einstellung „Bilder in Mails laden“ (Vorgabe aus). Ist: `App/MailReadingView.swift:119, 141-147`, `Model/MailModel+Reading.swift:68-70`. Status: orange. Quelle: M:164-169, :760, :969.
-- **MAIL-F15 Lesestatus beim Öffnen**: Soll: Öffnen setzt „gelesen“; Stern und Gelesen/Ungelesen jederzeit änderbar; Zähler folgt. Ist: `Model/MailModel+Reading.swift:33, 89-108`. Status: orange. Quelle: M:648.
-- **MAIL-F16 Kartenstapel**: Soll: Klick zeigt die Mail als Vorschau-Karte, die von der nächsten ersetzt wird; Doppelklick oder „Anheften“ behält sie; höchstens 6 Nachrichtenkarten; Schließen. Ist: `Model/MailModel+Reading.swift:19-44`, `Model/MailModel+Stack.swift:33-55`, `App/MailRowView.swift:54-55`, `Kit/Sources/ShellCore/DesignTokens.swift:213`. Status: orange. Quelle: M:643-650; J 12.10. (Master `entscheidungen.md:110`).
-- **MAIL-F17 Übersicht der Karten**: Soll: Modus „Stapel · n“ oder „<Ordner> · n“, Größen Klein/Mittel/Groß, Karte wählen, Schnellaktionen. Ist: `App/MailOverviewView.swift:5-103`, `Model/MailModel+Stack.swift:57-76`. Status: orange. Quelle: M:310-335, :952-960.
-- **MAIL-F18 Befehlskopf**: Soll: Lesen: Antworten, Allen antworten (aus ohne Cc), Weiterleiten | Archivieren, Papierkorb; Rest läuft in „Mehr“; Übersicht und Spalte falten am Ende. Ist: `Model/MailCommands.swift:38-55`, `App/MailStackLane.swift:32-47`. Status: orange. Abweichung: zusätzlicher Platz „Als Kontakt sichern“ (`MailCommands.swift:42`), im Master nicht in der Kopfleiste (M:1029-1030). Quelle: M:1019-1061.
-- **MAIL-F19 Fußleiste Lesen**: Soll: Drucken, Als PDF sichern, In Projektordner sichern; rechts Mehr. Ist: `Model/MailCommands.swift:50-55`, `App/MailCardView.swift:158-233`. Status: orange (Einträge siehe MAIL-F49, F50, F51; Mehr-Menü F42, F43, F44). Quelle: M:1033.
-
-**Verfassen und Senden**
-- **MAIL-F20 Neue Mail**: Soll: ⌘N und Knopf legen eine leere Karte an; ist schon eine leere Karte offen, wird sie wieder nach vorn geholt. Ist: `Model/MailModel+Draft.swift:21-38`, `App/Components/ComposeButton.swift:31`. Status: orange. Quelle: M:631, :652-658. Ungeprüft: ⌘N wirkt nur, solange der Ordnerbereich sichtbar ist.
-- **MAIL-F21 Antworten, Allen antworten**: Soll: Karte mit Empfänger, „Re:“ vor dem Betreff, Zitat, Antwort-Kopf mit Message-ID. Ist: `Model/MailModel+Draft.swift:52-70, 222-228`. Status: orange. Abweichung: Zitatkopf „<Name>, <ISO-Datum>“ und „> “ statt „Am … schrieb …:“ (M:683); die Lesesicht trennt Zitate nur mit „schrieb“ oder „wrote“ im Kopf (`Model/MailReading.swift:82-84`). Quelle: M:681-685.
-- **MAIL-F22 Weiterleiten**: Soll: „Fwd:“, Zitat, die Anhänge der Mail hängen an. Ist: `forward` lädt die Anhänge über die Engine und hängt sie an (`Model/MailModel+Draft.swift`, M2 7f6124d); Ladefehler setzt den Hinweis, kein Entwurf, die Karte wird wieder gelöst. Status: orange. Quelle: M:607, :970.
-- **MAIL-F23 Absender wählen**: Soll: „Von“ zeigt Name und Adresse; Menü wählt das Postfach. Ist: `App/MailComposeView.swift:133-165`, `Model/MailRecipients.swift:146-151`. Status: orange. Quelle: M:213-215, :991 (Signatur-Einträge siehe MAIL-F29).
-- **MAIL-F24 Empfängerfelder**: Soll: An, Cc, Bcc (Umschalter); Chips mit Entfernen; Vorschläge aus Kontakten und Absendern; Komma oder Enter übernimmt; Löschtaste entfernt den letzten; ab 3 Empfängern eingeklappt mit „und n weitere“. Ist: `App/MailComposeView.swift:167-325`, `Model/MailRecipients.swift:101-144`, `Model/MailContacts.swift:74-90`. Status: orange. Quelle: M:217-234, :986-990.
-- **MAIL-F25 Betreff und Text**: Soll: Betreffzeile, Textfeld auf hellem Blatt. Ist: `App/MailComposeView.swift:56-82` (Klartext). Status: orange. Quelle: M:235-248.
-- **MAIL-F26 Formatleiste**: Soll: Fett, Kursiv, Unterstrichen, Aufzählung, Nummerierung, Link formatieren den Text. Ist: Knöpfe mit leerer Aktion (`App/MailComposeView.swift:103`); der Text bleibt Klartext (`:69`). Status: rot. Quelle: M:255-259, :995-996 (der Master gibt den Knöpfen ebenfalls keine Wirkung), siehe MAIL-L09; verstößt gegen MAIL-R10.
-- **MAIL-F27 Datei anhängen**: Soll: Auswahl mehrerer Dateien, Chips mit Name und Größe, Entfernen. Ist: `App/MailStackLane.swift:75-88`, `App/MailComposeView.swift:84-98`, `Model/MailRecipients.swift:154-165` (Datei ganz im Speicher). Status: orange. Fehlt: Ziehen und Ablegen. Quelle: M:249-253, :997.
-- **MAIL-F28 Aus Projektordner anhängen**: Soll: Menü Projekt → Ordner → Datei hängt die Datei an. Ist: `App/MailProjectMenu.swift:9-53`, `Model/MailModel+Files.swift:6-33`; der Platz ist aus ohne Dateiort (`MailCommands.swift:68`, `Core/MailCore.swift:242`); `projectsRoot` wird nie gesetzt (`Kit/Sources/Hub/Providers/ProviderCatalog.swift:7`), das Angebot trägt nur „mail“ (`Setup/MailSetup.swift:78`, ungeprüft ob je ein Dateiort entsteht). Status: offen. Quelle: M:998; J 20.10. 3f52450e; Brief N14, N15.
-- **MAIL-F29 Signatur anwenden**: Soll: eine Signatur je Postfach steht unter dem Text (neue Mails, Antworten, Weiterleitungen), im Von-Menü ein- und ausschaltbar. Ist: fehlt (grep „signature“ in `App/` und `Kit/Sources/Mail` ohne Treffer). Status: offen. Quelle: M:243-247, :759, :991; J 13.10. (Master `entscheidungen.md:142`); Bestand `~/ALPHA/Sources/…/Mail/MailSignatureStore.swift` (Signatur je Konto).
-- **MAIL-F30 Signatur anlegen**: Soll: je Postfach anlegen, wählen, bearbeiten in den Einstellungen. Ist: fehlt. Status: lücke. Quelle: J 13.10. (Master `entscheidungen.md:142`); Brief L-010; siehe MAIL-L02.
-- **MAIL-F31 Entwurf sichern**: Soll: Knopf und ⌘S legen den Entwurf beim Anbieter ab; Kopf der Karte zeigt „Entwurf gesichert“, „Sendet …“, „Nicht gesendet“, „Empfänger fehlt“, „Betreff fehlt“. Ist: `Model/MailModel+Draft.swift:95-120`, `Model/MailContacts.swift:93-123`, `App/MailCardView.swift:136-155`. Status: orange. Quelle: M:626, :633, :1000-1001. Hinweis: M:1000 wird im Master nie gezeichnet (`DB.status` ohne Verwendung in der Vorlage); der Kopf zeigt dort Phase oder Betreff (M:935).
-- **MAIL-F32 Entwurf beim Schließen sichern**: Soll: Schließen einer Karte mit Inhalt sichert den Entwurf; „Entwurf gesichert“ nur, wenn er danach gesichert ist. Ist: `Model/MailModel+Draft.swift:42-54` (kein erneutes Sichern eines unveränderten, gesicherten Entwurfs; Toast nur bei Zustand `.saved`; fünf Prüfschritte in `WholeAppTests.swift`, vier Mutanten rot). Offen: Scheitert das Sichern, bleibt nur `saveFailure` und `.edited` (`:144-145`, von der App nie gelesen), die Karte ist weg (MAIL-L13); bei `sendFailed` überschreibt Sichern den Zustand (Befund). Status: orange. Quelle: M:660-669 (Master toastet bei Inhalt, nur Erfolgsweg).
-- **MAIL-F33 Entwurf öffnen**: Soll: Zeile im Ordner Entwürfe öffnet den Entwurf zum Bearbeiten. Ist: `Model/MailModel+Draft.swift:137-155`, `App/MailRowView.swift:71-73`. Status: orange. Quelle: M:651, :893.
-- **MAIL-F34 Entwurf verwerfen**: Soll: Pille „Entwurf verwerfen?“ mit gehaltener Bestätigung; löscht auch beim Anbieter. Ist: `App/MailStackLane.swift:38-46`, `Model/MailModel+Draft.swift:122-135`. Status: orange. Quelle: M:671, :1035; J 17.10. (`decisions.json` Eintrag confirmHold).
-- **MAIL-F35 Mehr-Menü des Entwurfs**: Soll: Später senden …, Lesebestätigung anfordern, Als Vorlage sichern, Drucken. Ist: Einträge da (`Model/MailMenus.swift:56-58`), kein Zweig in `App/MailStackLane.swift:57-70` für Entwurf und diese Aktionen. Status: rot; verstößt gegen MAIL-R10. Quelle: M:1040 (Master: „Später senden …“ und „Lesebestätigung anfordern“ ohne Handler; „Als Vorlage sichern“ und „Drucken“ täuscht der Master per Toast „Als Vorlage gesichert“ und „Druckdialog“ vor, ohne Verhalten), siehe MAIL-L08.
-- **MAIL-F36 Senden**: Soll: ⌘Enter und Knopf; Knopf aus ohne Empfänger und Betreff; Toast „Empfänger fehlt“; die Karte verschwindet nach dem Senden. Ist: `Model/MailModel+Draft.swift:157-193`, `Model/MailRecipients.swift:82-88`, `App/MailCardView.swift:206-212`, `Model/MailModel+Stack.swift:6-11`. Status: orange. Quelle: M:632, :672-680. Abweichung: `send` nimmt auch nur Cc oder Bcc an, der Knopf verlangt An.
-- **MAIL-F37 Postausgang**: Soll: Senden ohne Verbindung wartet und geht beim nächsten Abgleich hinaus; ein Eintrag geht nie doppelt hinaus (feste Message-ID, vor dem Wiederholen Suche in „Gesendet“); „Erneut senden“ nimmt den aktuellen Text. Ist: `Core/MailCore.swift:286-420`, `Core/MailMirror.swift:203-254`, `Model/MailModel+Draft.swift:175-208`. Status: orange. Quelle: J 20.10. bc4854d7 (Freigaben „Ja. A1c …“ 20:59 UTC, „Ja. A1d …“ 21:21, „Ja. A1e …“ 22:04; Freigabe A1b nicht belegt); M:874. Kein Ordner „Postausgang“; unlesbare Zeilen unsichtbar (Brief N7).
-- **MAIL-F38 Sendehinweise**: Soll: Notice „Nicht gesendet“ mit „Erneut senden“; Notice „Senden braucht die Schreibfreigabe“ mit „Einstellungen öffnen“. Ist: `App/MailComposeView.swift:20-32`, `Model/MailRecipients.swift:90-99`. Status: orange. Quelle: M:1002-1003. Befund: Text „Der Entwurf liegt sicher in den Entwürfen“ stimmt nur nach Sichern; ein frischer Entwurf liegt im Postausgang (`MailModel+Draft.swift:217-219`).
-
-**Aufräumen**
-- **MAIL-F39 Archivieren**: Soll: aus Kopf, Zeile, Taste „E“ ohne Rückgängig, aus Kontextmenü und Sammelaktion mit Rückgängig. Ist: `Model/MailModel+Actions.swift:13, 38-78`, `App/MailActions.swift:16`, `App/MailStackLane.swift:170-172`. Status: orange. Quelle: M:530, :625, :640, :889.
-- **MAIL-F40 Papierkorb und Rückgängig**: Soll: Papierkorb mit Toast „In den Papierkorb gelegt“ und Knopf „Rückgängig“ (4 s, ohne Rückgängig 1,8 s); Taste Entf oder Rücktaste. Ist: `Model/MailModel+Actions.swift:15-17, 60-78`, `Model/MailModel+Toast.swift`, `App/Components/Toast.swift:12`, `App/MailStackLane.swift:173-175`. Status: orange. Quelle: M:557, :559, :639. Dauer in Code ungeprüft.
-- **MAIL-F41 Endgültig löschen**: Soll: im Papierkorb Pille „Endgültig löschen?“, danach Toast „Endgültig gelöscht“. Ist: IMAP löscht endgültig über `IMAPSMTPMailTransport.purge` (Fundus, \Deleted + UID EXPUNGE; ohne UIDPLUS nur markiert); der Spiegel wird erst nach Erfolg bereinigt; Gmail bietet den Eintrag nicht an, weil die Berechtigung ohne volle Mail-Berechtigung ist (M2 7f6124d, nach J 21.10.: anbieterabhängig). Nicht gegen einen echten Server geprüft. Status: orange. Quelle: M:558, :890 · J 21.10. bc4854d7.
-- **MAIL-F42 Markieren, Gelesen, Spam**: Soll: Stern, Gelesen/Ungelesen, „Als Spam melden“. Ist: `Model/MailModel+Reading.swift:89-108`, `Model/MailModel+Actions.swift:19`, `App/MailActions.swift:18-22` (Spam ohne Toast und ohne Rückgängig). Status: orange. Quelle: M:972, :1031-1032.
-- **MAIL-F43 Verschieben nach …**: Soll: Eintrag in Zeilen- und Mehr-Menü wählt einen Zielordner. Ist: Eintrag da (`Model/MailMenus.swift:47, 52`), `App/MailActions.swift:29` fängt `.move` mit `break`; `MailModel.move` (`MailModel+Actions.swift:21`) hat keinen Aufrufer. Status: rot; verstößt gegen MAIL-R10. Quelle: M:532, :972, :1031 (Master: Eintrag ohne Handler), siehe MAIL-L08.
-- **MAIL-F44 Notiz anfügen, Original anzeigen**: Soll: Einträge im Mehr-Menü der Lesekarte. Ist: Einträge da (`Model/MailMenus.swift:53`), keine Wirkung (`App/MailActions.swift:29`). Status: rot; verstößt gegen MAIL-R10. Quelle: M:1032 (Master: „Original anzeigen“ ohne Handler; „Notiz anfügen“ täuscht der Master per Toast „Notiz an … · nur intern“ vor, ohne Verhalten), siehe MAIL-L08.
-- **MAIL-F45 Aktionsfehler anzeigen**: Soll: scheitert Archivieren, Verschieben, Papierkorb, Markieren, Lesen, Anhang, Verlauf oder Sichern, sieht der Nutzer es. Ist: `actionFailures` wird an 28 Stellen gesetzt (`Kit/Sources/Mail`), in `App/` liest niemand es. Status: lücke. Quelle: Brief N7; siehe MAIL-L04.
-
-**Anhänge, Drucken, Projektordner**
-- **MAIL-F46 Anhang öffnen: Sichern unter**: Soll: Klick auf den Anhang öffnet das Menü; „Sichern unter …“ speichert die Datei. Ist: `App/MailReadingView.swift:260-303`, `App/MailActions.swift:61-68`. Status: orange. Quelle: M:697-701.
-- **MAIL-F47 Anhang: Vorschau**: Soll: Eintrag „Vorschau“ zeigt den Anhang. Ist: Eintrag da (`Model/MailMenus.swift:65`), `App/MailActions.swift:69` ohne Zweig. Status: rot; verstößt gegen MAIL-R10. Quelle: M:698 (Master: Eintrag ohne Handler); Bestand `~/ALPHA/Sources/…/Mail/AttachmentPreview.swift`; siehe MAIL-L10.
-- **MAIL-F48 Anhang: In anderes Projekt …**: Soll: Auswahl des Projekts, Anhang dorthin. Ist: `App/MailActions.swift:60` sendet `.attachmentToProjectFolder` in `MailModel.commands`, das niemand liest. Status: rot; verstößt gegen MAIL-R10. Quelle: M:699 (Master: Eintrag ohne Handler); Brief N17.
-- **MAIL-F49 Drucken**: Soll: Knopf im Fuß, ⌘P. Ist: Druckdialog über PDFKit (`App/Mail/MailPrinting.swift`), PDF-Daten aus dem Kit (`mailDocument`), auch über ⌘P (M2 7f6124d); kein Toast „Druckdialog“ (im Master Attrappe). Drucken im Entwurf-Menü (`MailMenus.draftMore`) tut weiter nichts. Status: orange. Quelle: M:634, :1033; Bestand `~/ALPHA/Sources/…/Mail/MailClientView.swift:815`.
-- **MAIL-F50 Als PDF sichern**: Soll: Knopf im Fuß speichert die Mail als PDF. Ist: Sichern-Dialog (NSSavePanel), Dateiname aus dem Betreff, Toast „Als PDF gesichert“ nach Erfolg (M2 7f6124d); ein PDF-Weg für Drucken, Sichern und Projektordner (`Model/MailModel+Files.swift`). Status: orange. Quelle: M:1033; Bestand `…/Mail/MailPDFExporter.swift`, `MailClientView.swift:783`.
-- **MAIL-F51 Mail in Projektordner sichern**: Soll: Mail als PDF in den gewählten Projektordner; Toast „Als PDF im Projektordner gesichert“. Ist: `App/MailProjectMenu.swift:22-36`, `Model/MailModel+Files.swift:35-63`; Platz aus ohne Dateiort wie MAIL-F28. Status: offen. Quelle: M:972, :1033; J 20.10. 3f52450e; Brief N14, N16.
-
-**Personen und Kontakte**
-- **MAIL-F52 Personenmenü**: Soll: Klick auf Absender, Empfänger, Konversationsname: Adresse kopieren, Mail schreiben, Als Kontakt sichern oder Kontakt bearbeiten. Ist: `App/MailActions.swift:34-56`, `Model/MailMenus.swift:60-62`. Status: orange. Quelle: M:694-696.
-- **MAIL-F53 Kontakte**: Soll: sichern, bearbeiten, entfernen, neu anlegen; Vorschläge aus Absendern mit „Sichern“. Ist: `App/Settings/SettingsSectionCards.swift:254-300`, `Model/MailContacts.swift:29-72`; Speicher: UserDefaults, bei jeder Änderung die ganze Liste (`Model/MailModel.swift:52`, `MailContacts.swift:16-19`). Status: orange. Quelle: M:752-757; Design-Text 15.10. (zitiert Johannes; eigene Nachricht nicht gefunden) (Master `entscheidungen.md:224`).
-- **MAIL-F54 Kontakte als Integration**: Soll: wie HUB-F41: Kontakte kommen aus einer oder mehreren Hub-Quellen (Google, iCloud, andere Apps, Kundenkarteien aus Tabellen, eigene lokale Datenbank). Ist: eigener Abschnitt `.contacts` in der Gruppe Verbindungen (`Kit/Sources/ShellCore/SettingsSections.swift:32, 43`), nur lokale Liste in UserDefaults; Googles Kontakte werfen `capabilityMissing`. Status: offen. Quelle: Spec 22.10.; siehe spec-hub HUB-F41.
-
-**Tasten, Abgleich, Postfächer**
-- **MAIL-F55 Tastenkürzel**: Soll: ⌘N Neue Mail, ⌘R Antworten, ⌘⇧R Allen antworten, ⌘⇧F Weiterleiten, ⌘S Sichern, ⌘Enter Senden, ⌘P Drucken, E Archivieren, Entf oder Rücktaste Papierkorb; nicht bei offenem Blob, nicht beim Tippen. Ist: `App/MailKit.swift:32-41`, `App/MailCardView.swift:202, 208`, `App/MailStackLane.swift:164-179`, `ComposeButton.swift:31`; ⌘R, ⌘⇧R, ⌘⇧F, ⌘S, ⌘P, ⌘Enter hängen an sichtbaren Knöpfen (ungeprüft, ob sie auch wirken, wenn der Knopf im „Mehr“ steckt). Status: orange (⌘P siehe MAIL-F49). Quelle: M:627-641. Die Liste in den Einstellungen (M:765) ist laut Design-Text 15.10./16.10. (Johannes' eigene Nachricht nicht gefunden) Dummy und wird nicht gebaut (Master `entscheidungen.md:217`; `lieferung-an-code/settings-sections.json:101-108`).
-- **MAIL-F56 Abgleich**: Soll: Standardtakt Mail alle 5 Minuten; erster Abgleich beim Start; „Neu laden“ am Blob gleicht von Hand ab; nach gutem Abgleich verschwindet der Fehlerzustand. Ist: `Setup/MailSetup.swift:8`, `App/Host/AppHost.swift:55-61, 63-76`, `Model/MailModel.swift:373-413`. Status: orange. Quelle: M:392, :1077; Freigabe H1 (Gedächtnis `spec-mail.md`). Takt „Sofort“ fehlt im Master (Brief N5).
-- **MAIL-F57 IMAP-Sofortmeldung (IDLE)**: Soll: neue Mail im Eingang eines IMAP-Postfachs löst sofort einen Abgleich aus; Gmail bleibt beim Takt. Ist: `fundus/alpha/Sources/AlfaServices/Mail/IMAPSMTPMailTransport.swift:330-346` (nur INBOX), `Kit/Sources/Hub/HubCore.swift:58-71` (nur bei Takt „alle …“ oder Push), `Kit/Sources/Hub/Providers/IMAP/IMAPProvider.swift:95-99`; Google liefert keinen Änderungsstrom (`GoogleProvider.swift:51-59`). Status: orange; nie gegen einen echten Server gesehen. Quelle: Brief N5; Freigabe 20.10. (Gedächtnis `spec-mail.md`).
-- **MAIL-F58 Ungelesen-Zähler**: Soll: Zähler am Eingang, am Blob-Eintrag „Mail“, Punkt am Blob bei Ungelesenem oder Abgleichfehler. Ist: `Model/MailModel.swift:367-371`, `App/Shell/BlobMenuView.swift:195-197`, `App/Shell/BlobView.swift:86`. Status: orange. Quelle: M:831, :1074; Dock-Zähler: kein Soll belegt (M:764 gehört zu „Mitteilungen“, nach J 16.10. nicht bauen, `settings-sections.json:106`).
-- **MAIL-F59 Mehrere Postfächer**: Soll: bis zu 3 Postfächer, wählbar in der Mailansicht, je Postfach Ordner, Zähler und Absender. Ist: `App/MailAccountPicker.swift:10-26` (Zeilen über den Ordnern ab 2 Konten), `Model/MailModel.swift:193-204`, Grenze `Kit/Sources/Hub/HubConfiguration.swift:8`. Status: orange. Quelle: J 12.10. 14:43 a9bb817c; J 16.10. (`decisions.json` Eintrag C4); J 19.10. (Gedächtnis `spec-mail.md`: „Tendenziell Wähler“, Übergangsbauteil erlaubt). Der Master zeichnet keinen Wähler (M:830), siehe MAIL-L01.
+F01 = MAIL-F01. AUSSEHEN: Zeile in `ALFA Mail.dc.html`. Dateien ohne Pfad: `alfaos/App/Mail/`, `alfaos/Kit/Sources/Mail/`; `App/` = `alfaos/App/`; `Hub/`, `ShellCore/` in `alfaos/Kit/Sources/`; IMAP = `fundus/alpha/Sources/AlfaServices/Mail/IMAPSMTPMailTransport.swift`. Brief v14.
 
 ## Regeln
-- **MAIL-R01**: Postfächer werden in den Einstellungen und im Hub verbunden, nie in der Mailansicht; die Mailansicht verweist dorthin („Postfach verbinden“). Quelle: J 12.10. 18:48 7cc894d9; Ist `App/MailListLane.swift:205`.
-- **MAIL-R02**: Höchstens 3 Mail-Verbindungen je Person über alle Anbieter. Quelle: J 12.10. 14:43 a9bb817c; Ist `Kit/Sources/Hub/HubConfiguration.swift:8`.
-- **MAIL-R03**: Eine Mail geht nur auf Klick hinaus und nie doppelt (22.10.: scheitert die Sendeprüfung bei einer automatischen Wiederholung, wird nicht gesendet, der Eintrag geht auf „gescheitert“; „Erneut senden“ prüft zuerst und sendet bei Prüffehler auf Nutzerwunsch): jeder Eintrag im Postausgang trägt eine feste Message-ID, vor jeder Wiederholung wird „Gesendet“ geprüft. Quelle: Freigabe 20.10. (Gedächtnis `spec-mail.md`); Ist `Core/MailCore.swift:365-379`.
-- **MAIL-R04**: Fremde Inhalte (Mailtext, HTML) stehen immer auf hellem Blatt, auch im dunklen Modus. Quelle: M:761; J 21.10. bc4854d7.
-- **MAIL-R05**: Externe Bilder bleiben gesperrt, bis Nutzer sie je Mail oder in den Einstellungen erlauben; Seiten-JavaScript ist aus; Links öffnen im Systembrowser. Quelle: M:164-169, :969; Ist `App/MailHTMLView.swift:66, 141-150`.
-- **MAIL-R06**: Endgültiges Löschen gibt es nur im Papierkorb und nur mit gehaltener Bestätigung; Verwerfen eines Entwurfs ebenso. Quelle: M:890, :1035; J 17.10. (`decisions.json` Eintrag confirmHold, 1000 ms).
-- **MAIL-R07**: Suche „Überall“ schließt Spam und Papierkorb aus. Quelle: M:599-600, :846.
-- **MAIL-R08**: Tasten wirken nur, wenn kein Blob offen ist und kein Textfeld den Fokus hat. Quelle: M:629, :638; Ist `App/MailStackLane.swift:165-167`.
-- **MAIL-R09**: In die Oberfläche kommen nur Funktionstexte, Fehler und Warnungen; keine Sätze, die erklären, was etwas tut. Quelle: J 21.10. bc4854d7 (Gedächtnis `spec-arbeit.md`).
-- **MAIL-R10**: Was der Master ohne Verhalten zeichnet (Eintrag oder Knopf ohne Handler), wird erst gebaut, wenn Design oder Johannes das Verhalten liefert. Quelle: AGENTS §7; M:532, :698-699, :995-996, :1032, :1040-1041.
+- R01 Postfächer werden in Einstellungen und Hub verbunden, nie in Mail.
+- R02 Höchstens drei Mail-Verbindungen je Person.
+- R03 Senden nur auf Klick, nie doppelt; vor jeder Wiederholung Prüfung in Gesendet.
+- R04 Mailinhalt, auch HTML, echt auf hellem Blatt.
+- R05 Externe Bilder gesperrt bis zur Erlaubnis; kein JavaScript.
+- R06 Endgültig löschen und Entwurf verwerfen nur mit Halten.
+- R07 Suche „Überall“ ohne Spam und Papierkorb.
+- R08 Tasten ruhen bei offenem Blob und beim Tippen.
+- R09 Keine erklärenden Sätze in der Oberfläche.
 
-## Lücken
-- **MAIL-L01**: Wähler für bis zu 3 Postfächer in der Mailansicht nicht gezeichnet (Kopf zeigt ein Postfach, M:830); Design. Beleg: Brief T5 L-009; `decisions.json` C4.
-- **MAIL-L02**: Signatur anlegen, bearbeiten, je Postfach wählen; Design. Beleg: M:759 zeigt nur Konto-Auswahl, Vorschau und Schalter; Brief L-010.
-- **MAIL-L03**: Nachladen älterer Mails (Knopf oder Scrollen) und Text dazu; Design. Beleg: M:121 und :844 (`hasMore: false`, `loadMore` nicht definiert); Brief N7.
-- **MAIL-L04**: Fehlerdarstellung je Aktion und für nicht lesbare oder nicht gespeicherte Postausgang-Zeilen; Design. Beleg: Brief N7 (33 Toasts ohne Fehlertext); `App/` liest `actionFailures`/`saveFailure` nicht.
-- **MAIL-L05**: Hinweis und Text, wenn eine Mail die Größengrenze des Anbieters überschreitet; Design. Beleg: Brief N4; M:1002-1003.
-- **MAIL-L06**: Zustände ohne Entwurf: Liste offline, „Weitere laden“, Konto nicht erreichbar, „Nicht gesendet · im Ordner Entwürfe“; Design. Beleg: `INHALT.json` `vertrag_abdeckung.fehlen_im_entwurf`; `MailPresentation.swift:107`.
-- **MAIL-L07**: Projektordner wählen, Aus Projektordner, Mail in Projektordner (Ordner, Dateiname, PDF-Aussehen), In anderes Projekt; Design. Beleg: Brief N14 bis N17; M:766, :998.
-- **MAIL-L08**: Verhalten von Verschieben nach …, Notiz anfügen, Original anzeigen, Später senden …, Lesebestätigung anfordern, Als Vorlage sichern; Design oder Johannes. Beleg: M:532, :972, :1031-1032, :1040 ohne Handler oder nur mit Toast-Attrappe (Notiz anfügen M:1032, Als Vorlage sichern M:1040); kein Wort von Johannes dazu: Suche in seinen Chatnachrichten (Transkripte `-Users-johannesleoberger-Developer-ALFA-OS*`, nur Nachrichten bis 2500 Zeichen, ohne Klickantworten) nach „notiz anf“, „original anzeigen“, „später senden“, „lesebestätigung“, „verschieben nach“, „als vorlage“ ergab 0 Treffer zum Mail-Verhalten.
-- **MAIL-L09**: Wirkung der Formatleiste und Versandform formatierter Mail (Klartext, HTML); Design oder Johannes. Beleg: M:255-259, :995-996.
-- **MAIL-L10**: Anhang-Vorschau, Drucken und „Als PDF sichern“ (Aussehen, Ort der Datei); Design. Beleg: M:634, :698, :1033 nur Toast oder Menüeintrag; Brief N16 deckt nur das PDF im Projektordner.
-- **MAIL-L11**: Ziehen und Ablegen von Anhängen und Zustand „Loslassen hängt an“; Design. Beleg: `INHALT.json` `fehlen_im_entwurf` („Ablegen per Ziehen“); Bestand-Vertrag `~/ALPHA/Design/BOGEN-MAIL.json` Aktion `dropAttachment`.
-- **MAIL-L12**: Regler der lokalen Mailablage (Zeitraum, Anhänge lokal, Obergrenze, eigener Ordner); Design. Beleg: J 20.10. 22:41 3f52450e (Gedächtnis `spec-mail.md`); kein Regler im Master.
-- **MAIL-L13**: Verhalten, wenn das Sichern beim Schließen scheitert (Karte bleibt offen oder schließt; Anzeige, Text), und beim Schließen eines Entwurfs im Postausgang oder mit Versandfehler; Design oder Johannes. Beleg: M:660-669 hat nur den Erfolgspfad; `MailModel+Draft.swift:144-145`; `App/` liest `saveFailure` nicht (grep).
+## Liste
+**F01 Ordnerleiste**  
+WAS: Standardordner mit Zähler.  
+WO: linke Bahn.  
+WARUM: jeder Ordner mit einem Klick.  
+AUSSEHEN: Mail:387, :831.  
+STAND: teilweise; Entwürfe-Zähler nur dieser Sitzung (MailPresentation.swift:66-73).
 
-## Offen bei Johannes
-- Sollen die Menüeinträge ohne Verhalten (MAIL-L08) im Master und in der App stehen bleiben oder entfallen, bis sie Verhalten haben?
-- Bleiben Fehler- und Warnsätze mit erklärendem Anteil (M:846 Such-Hinweis, M:874 „Gesendetes wartet im Postausgang“, M:1002 „liegt sicher in den Entwürfen“) im Bau oder fallen sie unter MAIL-R09?
-- Wo liegen die Kontakte, solange keine Hub-Quelle gewählt ist (MAIL-F54): in der App-Datenbank oder in UserDefaults wie heute?
+**F02 Labels**  
+WAS: eigene Ordner, Klick öffnet sie.  
+WO: linke Bahn.  
+WARUM: Mails je Kunde finden.  
+AUSSEHEN: Mail:388, :833.  
+STAND: gebaut, nicht abgenommen (MailFolderLane.swift:51-66).
+
+**F03 Mailzeile**  
+WAS: Absender, Betreff, Vorschau, Datum, Stern, Anhänge, Unterhaltung.  
+WO: Liste.  
+WARUM: Mail erkennen ohne Öffnen.  
+AUSSEHEN: Mail:80-104.  
+STAND: gebaut, nicht abgenommen (MailRowView.swift:43-174).
+
+**F04 Nachladen**  
+WAS: holt Mails über die ersten 50 hinaus.  
+WO: Liste, Ende.  
+WARUM: alte Vorgänge finden.  
+AUSSEHEN: Mail:121; Zustand nicht gezeichnet (Brief N7).  
+STAND: teilweise; Modell kann es (MailModel.swift:323-332), die Liste ruft es nie.
+
+**F05 Filter**  
+WAS: Alle, Ungelesen, Mit Anhang.  
+WO: Liste, Kopf.  
+WARUM: Offenes abarbeiten.  
+AUSSEHEN: Mail:850-852.  
+STAND: gebaut, nicht abgenommen (MailListLane.swift:55-96); nur geladene Mails.
+
+**F07 Mehrfachauswahl**  
+WAS: mehrere Mails lesen, archivieren, löschen, mit Rückgängig.  
+WO: Liste, Kopf.  
+WARUM: viel auf einmal aufräumen.  
+AUSSEHEN: Mail:608-624, :855-863.  
+STAND: gebaut, nicht abgenommen (MailModel+Selection.swift:32-78).
+
+**F08 Schnellaktionen**  
+WAS: bei Hover Markieren, Gelesen, Archiv, Papierkorb.  
+WO: Liste, Zeile.  
+WARUM: aufräumen ohne Öffnen.  
+AUSSEHEN: Mail:887-890.  
+STAND: gebaut, nicht abgenommen (MailRowView.swift:176-206).
+
+**F09 Kontextmenü**  
+WAS: Antworten, Weiterleiten, Archiv, Gelesen, Verschieben, Papierkorb.  
+WO: Liste, Rechtsklick.  
+WARUM: alles an einer Stelle.  
+AUSSEHEN: Mail:525-536.  
+STAND: teilweise; Verschieben ohne Wirkung (F43).
+
+**F10 Zustände**  
+WAS: lädt, leer, keine Treffer, Fehler, nicht verbunden.  
+WO: Liste.  
+WARUM: sehen, warum nichts da ist.  
+AUSSEHEN: Mail:866-875; offline nicht gezeichnet (Brief N7).  
+STAND: teilweise; offline ohne Anzeige (MailPresentation.swift:107).
+
+## Suche
+**F06 Suche**  
+WAS: Tippen filtert, Enter fragt den Server.  
+WO: Liste, Kopf.  
+WARUM: Mail zu jedem Vorgang finden.  
+AUSSEHEN: Mail:599-601, :846-847.  
+STAND: teilweise; Server nur im gewählten Ordner (MailModel.swift:251).
+
+## Lesen
+**F11 Kopf und Empfänger**  
+WAS: Absender, Adresse, Empfänger aufklappbar.  
+WO: Lesekarte, Kopf.  
+WARUM: sehen, wer beteiligt ist.  
+AUSSEHEN: Mail:152-160.  
+STAND: gebaut, nicht abgenommen (MailReadingView.swift:25-115).
+
+**F12 Unterhaltung**  
+WAS: alle Nachrichten mit Name, Datum, Text, Zitat.  
+WO: Lesekarte.  
+WARUM: ganzer Vorgang auf einen Blick.  
+AUSSEHEN: Mail:161-198.  
+STAND: gebaut, nicht abgenommen (MailReadingView.swift:128-258).
+
+**F13 HTML-Mail**  
+WAS: zeigt HTML mit eingebetteten Bildern.  
+WO: Lesekarte.  
+WARUM: Mail wie gesendet.  
+AUSSEHEN: nicht gezeichnet (Brief N10).  
+STAND: gebaut, nicht abgenommen (MailHTMLView.swift:64-175); ohne Sperrliste bleibt sie leer (:110-115).
+
+**F14 Externe Bilder**  
+WAS: Warnung mit Bilder laden; Einstellung dazu.  
+WO: Lesekarte; Einstellungen › Datenschutz.  
+WARUM: Schutz vor Zählpixeln.  
+AUSSEHEN: Mail:164-169, :760; je Konto Brief N21.  
+STAND: teilweise; ein Schalter (MailReadingView.swift:141-147), je Konto fehlt.
+
+**F15 Gelesen beim Öffnen**  
+WAS: Öffnen setzt gelesen.  
+WO: Liste, Lesekarte.  
+WARUM: Zähler zeigt Offenes.  
+AUSSEHEN: Mail:648.  
+STAND: gebaut, nicht abgenommen (MailModel+Reading.swift:33).
+
+**F16 Kartenstapel**  
+WAS: Klick zeigt Vorschau, Doppelklick behält; höchstens 6.  
+WO: rechte Bahn.  
+WARUM: mehrere Mails zugleich.  
+AUSSEHEN: Mail:643-650.  
+STAND: gebaut, nicht abgenommen (MailModel+Reading.swift:19-44).
+
+**F17 Übersicht**  
+WAS: Karten als Kacheln in drei Größen.  
+WO: rechte Bahn.  
+WARUM: schnell springen.  
+AUSSEHEN: Mail:310-335, :952.  
+STAND: gebaut, nicht abgenommen (MailOverviewView.swift:11-101).
+
+**F18 Befehlskopf**  
+WAS: Antworten, Allen antworten, Weiterleiten, Archiv, Papierkorb.  
+WO: rechte Bahn, Kopf.  
+WARUM: häufigste Handgriffe.  
+AUSSEHEN: Mail:1029-1030.  
+STAND: teilweise; zusätzlich Als Kontakt sichern (MailCommands.swift:42).
+
+**F19 Fuß und Mehr-Menü**  
+WAS: Drucken, PDF, Projektordner, Mehr.  
+WO: Lesekarte, Fuß.  
+WARUM: Ablage und Ausgabe.  
+AUSSEHEN: Mail:1031-1033.  
+STAND: teilweise; F43, F44 ohne Wirkung (MailMenus.swift:51-54).
+
+## Aufräumen
+**F39 Archivieren**  
+WAS: ins Archiv, aus Menü mit Rückgängig; Taste E.  
+WO: Kopf, Zeile, Menü.  
+WARUM: Eingang leer, nichts verloren.  
+AUSSEHEN: Mail:530, :889.  
+STAND: gebaut, nicht abgenommen (MailModel+Actions.swift:50-90).
+
+**F40 Papierkorb**  
+WAS: Toast mit Rückgängig 4 s, sonst 1,8 s; Entf.  
+WO: Kopf, Zeile, Menü.  
+WARUM: Fehlgriffe zurücknehmen.  
+AUSSEHEN: Mail:557, :559.  
+STAND: gebaut, nicht abgenommen (ShellCore/DesignTokens.swift:177, :180).
+
+**F41 Endgültig löschen**  
+WAS: löscht im Papierkorb; nur angeboten, wenn der Server es kann.  
+WO: Papierkorb, Zeile.  
+WARUM: Speicher, Datenschutz.  
+AUSSEHEN: Mail:558, :890.  
+STAND: gebaut, nicht abgenommen; nur IMAP mit UIDPLUS (MailCore.swift:208-230, IMAP:320-322).
+
+**F42 Markieren, Spam**  
+WAS: Stern, gelesen, ungelesen, Spam melden.  
+WO: Zeile, Mehr-Menü.  
+WARUM: Wichtiges halten, Werbung los.  
+AUSSEHEN: Mail:1031-1032.  
+STAND: gebaut, nicht abgenommen (MailModel+Reading.swift:89-108).
+
+**F43 Verschieben**  
+WAS: Mail in gewählten Ordner.  
+WO: Kontextmenü, Mehr-Menü.  
+WARUM: Ablage je Kunde.  
+AUSSEHEN: Mail:532; Verhalten nicht gezeichnet (Brief N20).  
+STAND: Lücke; ohne Wirkung (MailActions.swift:29).
+
+**F44 Notiz, Original**  
+WAS: interne Notiz; Quelltext.  
+WO: Mehr-Menü.  
+WARUM: Wissen im Team; Herkunft prüfen.  
+AUSSEHEN: Mail:1032; nicht gezeichnet (Brief N20).  
+STAND: Lücke; ohne Wirkung (MailActions.swift:29).
+
+**F45 Aktionsfehler**  
+WAS: Scheitern einer Aktion wird sichtbar.  
+WO: Liste, Lesekarte.  
+WARUM: nichts geht still verloren.  
+AUSSEHEN: nicht gezeichnet (Brief N7).  
+STAND: Lücke; gemerkt (MailModel.swift:43), nirgends gezeigt.
+
+## Verfassen
+**F20 Neue Mail**  
+WAS: ⌘N oder Knopf öffnet leere Karte.  
+WO: linke Bahn.  
+WARUM: sofort schreiben.  
+AUSSEHEN: Mail:652-658.  
+STAND: gebaut, nicht abgenommen (MailModel+Draft.swift:22-33).
+
+**F21 Antworten**  
+WAS: Karte mit Re: und Zitat, auch an alle.  
+WO: Lesekarte, Kopf.  
+WARUM: Vorgang bleibt eine Unterhaltung.  
+AUSSEHEN: Mail:681-685.  
+STAND: teilweise; Zitatkopf weicht ab (MailModel+Draft.swift:252-258).
+
+**F22 Weiterleiten**  
+WAS: Fwd:, Zitat, Anhänge hängen an.  
+WO: Lesekarte, Kopf.  
+WARUM: Vorgang weitergeben.  
+AUSSEHEN: Mail:970.  
+STAND: gebaut, nicht abgenommen (MailModel+Draft.swift:77-108).
+
+**F23 Absender**  
+WAS: Menü wählt das Postfach.  
+WO: Entwurf, Von.  
+WARUM: richtiges Postfach.  
+AUSSEHEN: Mail:213-215.  
+STAND: gebaut, nicht abgenommen (MailComposeView.swift:133-165).
+
+**F24 Empfänger**  
+WAS: An, Cc, Bcc als Chips mit Vorschlägen.  
+WO: Entwurf.  
+WARUM: richtige Adressen.  
+AUSSEHEN: Mail:217-234.  
+STAND: gebaut, nicht abgenommen (MailComposeView.swift:167-325).
+
+**F25 Betreff und Text**  
+WAS: Betreff, Text auf hellem Blatt.  
+WO: Entwurf.  
+WARUM: die Nachricht.  
+AUSSEHEN: Mail:235-248.  
+STAND: gebaut, nicht abgenommen (MailComposeView.swift:56-82); Klartext.
+
+**F26 Formatleiste**  
+WAS: Fett, Kursiv, Listen, Link.  
+WO: Entwurf, Fuß.  
+WARUM: gegliederte Angebote.  
+AUSSEHEN: Mail:255-259; Wirkung nicht gezeichnet (Brief N20).  
+STAND: Lücke; ohne Wirkung (MailComposeView.swift:103).
+
+**F27 Datei anhängen**  
+WAS: Dateien wählen, Chips mit Entfernen.  
+WO: Entwurf, Fuß.  
+WARUM: Pläne mitschicken.  
+AUSSEHEN: Mail:249-253; Ziehen nicht gezeichnet (Brief N23).  
+STAND: teilweise; Ziehen fehlt (MailStackLane.swift:75-88).
+
+**F28 Aus Projektordner**  
+WAS: Projekt › Ordner › Datei hängt an.  
+WO: Entwurf, Fuß.  
+WARUM: Unterlagen ohne Suchen.  
+AUSSEHEN: Mail:998; nicht gezeichnet (Brief N15, N30).  
+STAND: teilweise; Knopf aus, kein Dateiort (Setup/MailSetup.swift:78-83).
+
+**F29 Signatur anwenden**  
+WAS: Signatur des Postfachs unter jeder Mail.  
+WO: Entwurf.  
+WARUM: einheitlicher Auftritt.  
+AUSSEHEN: Mail:243-247.  
+STAND: fehlt.
+
+**F30 Signatur anlegen**  
+WAS: je Postfach anlegen und wählen.  
+WO: Einstellungen › Signatur.  
+WARUM: wie F29.  
+AUSSEHEN: Mail:759; Anlegen nicht gezeichnet (Brief L-010).  
+STAND: Lücke.
+
+**F31 Entwurf sichern**  
+WAS: ⌘S sichert beim Anbieter; Kopf zeigt den Zustand.  
+WO: Entwurf.  
+WARUM: nichts geht verloren.  
+AUSSEHEN: Mail:626, :1000.  
+STAND: gebaut, nicht abgenommen (MailModel+Draft.swift:125-150).
+
+**F32 Sichern beim Schließen**  
+WAS: Schließen mit Inhalt sichert.  
+WO: Entwurf.  
+WARUM: kein Text geht verloren.  
+AUSSEHEN: Mail:660-669; Scheitern nicht gezeichnet (Brief N19).  
+STAND: teilweise; Scheitern unsichtbar (MailModel+Draft.swift:142-146).
+
+**F33 Entwurf öffnen**  
+WAS: Zeile in Entwürfe öffnet ihn.  
+WO: Entwürfe.  
+WARUM: Angefangenes beenden.  
+AUSSEHEN: Mail:651.  
+STAND: gebaut, nicht abgenommen (MailModel+Draft.swift:167-185).
+
+**F34 Entwurf verwerfen**  
+WAS: löscht nach Halten, auch beim Anbieter.  
+WO: Entwurf, Kopf.  
+WARUM: Ordnung.  
+AUSSEHEN: Mail:671, :1035.  
+STAND: gebaut, nicht abgenommen (MailModel+Draft.swift:152-165).
+
+**F35 Mehr-Menü Entwurf**  
+WAS: Später senden, Lesebestätigung, Vorlage, Drucken.  
+WO: Entwurf, Mehr.  
+WARUM: Versand planen, Vorlagen.  
+AUSSEHEN: Mail:1040; nicht gezeichnet (Brief N20).  
+STAND: Lücke; ohne Wirkung (MailStackLane.swift:57-71).
+
+**F36 Senden**  
+WAS: ⌘Enter oder Knopf; aus ohne Empfänger oder Betreff.  
+WO: Entwurf, Fuß.  
+WARUM: Mail kommt an.  
+AUSSEHEN: Mail:672-680.  
+STAND: gebaut, nicht abgenommen (MailModel+Draft.swift:187-223).
+
+## Postausgang
+**F37 Postausgang**  
+WAS: ohne Netz wartet die Mail bis zum Abgleich.  
+WO: Hintergrund.  
+WARUM: nichts verloren, nichts doppelt.  
+AUSSEHEN: Mail:874; Ansicht nicht gezeichnet (Brief N7).  
+STAND: teilweise; keine Ansicht (MailCore.swift:312-447), IMAP-Versand legt keine Kopie in Gesendet ab (IMAP:119-132); bei Gmail legt Google sie selbst ab, bei anderen IMAP-Anbietern entscheidet der Server, ungeprüft.
+
+**F38 Sendehinweise**  
+WAS: Nicht gesendet; fehlende Schreibfreigabe.  
+WO: Entwurf, oben.  
+WARUM: Nutzer weiß, was tun.  
+AUSSEHEN: Mail:1002-1003; zu große Mail Brief N4.  
+STAND: gebaut, nicht abgenommen (MailComposeView.swift:20-32).
+
+## Anhänge
+**F46 Sichern unter**  
+WAS: speichert den Anhang.  
+WO: Lesekarte, Anhang.  
+WARUM: Unterlagen weiterverwenden.  
+AUSSEHEN: Mail:697-701.  
+STAND: gebaut, nicht abgenommen (MailActions.swift:61-68).
+
+**F47 Vorschau**  
+WAS: zeigt den Anhang.  
+WO: Anhang-Menü.  
+WARUM: schnell prüfen.  
+AUSSEHEN: Mail:698; nicht gezeichnet (Brief N23).  
+STAND: Lücke; ohne Wirkung (MailActions.swift:69).
+
+**F48 In anderes Projekt**  
+WAS: Anhang in gewählten Projektordner.  
+WO: Anhang-Menü.  
+WARUM: Unterlagen in die Akte.  
+AUSSEHEN: Mail:699; nicht gezeichnet (Brief N17).  
+STAND: Lücke; ohne Empfänger (MailModel+Reading.swift:138-142).
+
+## Drucken, PDF, Projektordner
+**F49 Drucken**  
+WAS: ⌘P öffnet den Druckdialog.  
+WO: Lesekarte, Fuß.  
+WARUM: Mail auf Papier.  
+AUSSEHEN: Mail:1033; Seite nicht gezeichnet (Brief N16).  
+STAND: gebaut, nicht abgenommen (MailPrinting.swift:13-26).
+
+**F50 Als PDF**  
+WAS: speichert die Mail als PDF.  
+WO: Lesekarte, Fuß.  
+WARUM: ablegen, weitergeben.  
+AUSSEHEN: Mail:1033; Seite nicht gezeichnet (Brief N16).  
+STAND: gebaut, nicht abgenommen (MailPrinting.swift:28-41).
+
+**F51 In Projektordner**  
+WAS: Mail als PDF in den Projektordner.  
+WO: Lesekarte, Fuß.  
+WARUM: Anfrage gehört zum Projekt.  
+AUSSEHEN: Mail:1033; nicht gezeichnet (Brief N16, N30).  
+STAND: teilweise; Knopf aus ohne Dateiort (MailCommands.swift:53).
+
+## Kontakte
+**F52 Personenmenü**  
+WAS: Adresse kopieren, Mail schreiben, Kontakt sichern.  
+WO: Lesekarte, Namen.  
+WARUM: Adressen ohne Abtippen.  
+AUSSEHEN: Mail:694-696.  
+STAND: gebaut, nicht abgenommen (MailActions.swift:34-56).
+
+**F53 Kontakte pflegen**  
+WAS: sichern, bearbeiten, entfernen, anlegen.  
+WO: Einstellungen › Kontakte.  
+WARUM: Kundenadressen an einer Stelle.  
+AUSSEHEN: Mail:752-757.  
+STAND: gebaut, nicht abgenommen (App/Settings/SettingsSectionCards.swift:257-307); nur dieses Gerät.
+
+**F54 Kontakte aus Diensten**  
+WAS: Kontakte aus Google, iCloud, Karteien.  
+WO: Einstellungen › Hub.  
+WARUM: eine Adressquelle.  
+AUSSEHEN: nicht gezeichnet (Brief N33).  
+STAND: Lücke.
+
+## Konten
+**F59 Mehrere Postfächer**  
+WAS: bis zu drei, je Postfach Ordner und Zähler.  
+WO: linke Bahn.  
+WARUM: alle Postfächer in einer App.  
+AUSSEHEN: Mail:830; Wähler nicht gezeichnet (Brief N22).  
+STAND: teilweise; einfache Liste (MailAccountPicker.swift:10-26).
+
+## Abgleich
+**F56 Abgleich**  
+WAS: alle 5 Minuten, beim Start, von Hand.  
+WO: Hülle › Sync-Knopf.  
+WARUM: Eingang aktuell.  
+AUSSEHEN: Mail:1077; Sofort nicht gezeichnet (Brief N5).  
+STAND: gebaut, nicht abgenommen (App/Host/AppHost.swift:55-61).
+
+**F57 Sofortmeldung IMAP**  
+WAS: neue IMAP-Mail löst sofort Abgleich aus.  
+WO: Hintergrund.  
+WARUM: Anfragen ohne Wartezeit.  
+AUSSEHEN: nicht gezeichnet (Brief N5).  
+STAND: gebaut, nicht abgenommen (IMAP:341-352).
+
+**F58 Ungelesen-Zähler**  
+WAS: Zahl am Eingang und Blob; Punkt bei Neuem.  
+WO: linke Bahn; Hülle › Blob.  
+WARUM: Neues fällt auf.  
+AUSSEHEN: Mail:831, :1074.  
+STAND: gebaut, nicht abgenommen (App/Shell/BlobView.swift:86).
+
+## Tasten
+**F55 Tastenkürzel**  
+WAS: ⌘N, ⌘R, ⌘⇧R, ⌘⇧F, ⌘S, ⌘Enter, ⌘P, E, Entf.  
+WO: ganz Mail.  
+WARUM: schnell arbeiten.  
+AUSSEHEN: Mail:627-641.  
+STAND: gebaut, nicht abgenommen (MailKit.swift:32-41).
+
+## Später
+- Kalender in Mail: fehlt.
+- Mail wird Lead oder Projekt: fehlt.
+- Lokale Mailablage: Lücke (Brief N24).
+- Microsoft 365: nicht in Stufe 1.

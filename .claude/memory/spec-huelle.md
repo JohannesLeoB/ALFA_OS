@@ -1,70 +1,232 @@
 ---
 name: spec-huelle
-description: Die Hülle von ALFA (Fenster, drei Bahnen, Griffe, Blob mit Menü und Assistent, Sync-Knopf, Kartenstapel, Look, Icon, Startansicht); gebaut nach Master 1810, nichts abgenommen, einzelne Lücken bei Design.
+description: Hülle (Blob, Bahnen, Stapel, Fenster, Sync, Look, Assistent im Blob): Funktionen als Baum mit Stand
 metadata:
   type: project
 ---
 
-# Hülle · Spec (Stand 21.10.)
+# Hülle · Spec
 
-Soll-Quelle ist der Master `dist/master-latest/alfa-os-interface-chef-1610/project/` (Export 18.10.): `ALFA Shell.dc.html` (Shell:NN), `alfa-shell.js` (K = Konstanten, layout, grow, ebb), `ALFA Huelle.dc.html` (Huelle:NN, Register Entwurf gegen Code), Stapel in `ALFA Mail.dc.html` (Mail:NN), Johannes' Worte in `entscheidungen.md` (ent:NN). Ist-Pfade relativ zu `alfaos/`: `App/Shell` (Shell), `App/Components`, `Kit/Sources/ShellCore` (Core). Alle Hülle-Ist-Zeilen am 21.10. gelesen; im Bild hat sie nur Johannes gesehen (die App startet nur er); nichts ist grün.
+Die eine Schablone für jeden Bereich: Fenster, drei Bahnen mit Griffen, Blob mit Menü und Assistent, Sync-Knopf mit Avatar, Kartenstapel. Stufe 1, fertig Ende November 2026.
 
-## Ziel
-Die Hülle ist die eine Schablone, in der jeder Bereich sitzt: ein Blob als Navigation, drei Bahnen mit Griffen, ein Stapel von Karten rechts, ein Sync-Knopf mit Avatar. Mail und Einstellungen laufen in derselben Hülle (Master-Regel). Sie ist auf Vollbild ausgelegt und wird mit der Maus bedient.
-
-## Richtung
-- Sperre einzelner Bahnen je Ansicht („locked oder nicht“): entscheidet Johannes später, gebaut wird die freie Hülle (ent:84, ent:190).
-- Assistent wird ein eigener Bereich mit Menüeintrag; bis dahin Mini-Fenster im Blob (ent:184; siehe `spec-spaeter.md`).
-- Heute (Widgetbrett) nimmt die Hülle mit entfernten oder veränderten Seitenbahnen auf (J 20.10. 3f52450e; siehe spec-heute).
-- Weitere Bereiche (Projekte, Kataloge, Warenkorb) erben Bahnen, Blob, Stapel unverändert (ent:144, ent:145).
-- iOS, iPadOS, Web: abgespeckt später (siehe spec-ziel).
-
-Hinweis zu `ent:NN`: Das ist der Master `entscheidungen.md`, eine Design-Datei. Was dort als Johannes' Wort steht, ist Designs Wortlaut, bis es in seinen Nachrichten gefunden ist (AGENTS §2).
-
-## Funktionen
-- **HUELLE-F01 Fenster und Mindestgröße**: Soll: Mindestbreite 896 (= 2×16 + 2×12 + 3×280), Mindesthöhe im Seitenverhältnis des Bildschirms; Vollbild ist der Normalfall. Ist: `Core/ShellMetrics.swift:87-90` (Höhe = Breite × Bildschirmhöhe / Bildschirmbreite, aufgerundet), `App/ALFA_OSApp.swift:36,42,45-48` (Mindestmaß, `contentMinSize`); Titelleiste bleibt, Titel versteckt (`ALFA_OSApp.swift:65-79`). Status: orange. Quelle: J 19.10. bc4854d7 (11:55 „640x480 … sehr sehr klein“, 12:08 Höhe nach Aspect Ratio); Design-Wortlaut ent:185 (16.10.); Huelle:77.
-- **HUELLE-F02 Rand, Fuge, Leiste**: Soll: Rand 16, Fuge 12, Leiste über den Bahnen 40 (Blob) + 12, Bahnen ab Oberkante + 68, Bahnhöhe = Fensterhöhe − 68 − 16; Blob hat oben denselben Abstand zum Sichtbereich wie links. Ist: `Core/ShellMetrics.swift:64-70,97-99`; Bahnen `Shell/ShellView.swift:69-83`; Oberkante: Systembereich bleibt, nur Seiten und Unterkante laufen darunter (`ShellView.swift:47`). Status: orange; Verhalten unter Kamera-Aussparung (Master zeichnet 32 Sicherheitsstreifen, Shell:21) im Bild ungeprüft. Quelle: Huelle:32,74-76; ent:23 (Design-Text, zitiert J 11.10.).
-- **HUELLE-F03 Drei Bahnen, Breiten, Akkordeon**: Soll: Ruhebreite links und rechts 280, Mitte nimmt den Rest (bei 1512: 280 / 896 / 280), Mindestbreite jeder Bahn 280; bei Platzmangel faltet zuerst die linke, dann die mittlere, dann die rechte Bahn. Ist: `Core/LaneLayout.swift:63-131` (`widths`, Reihenfolge `yield [0,1,2]` in `:27`), Regel gilt für jeden Bereich gleich (`:32-34`); geprüft in `Kit/Tests/WholeAppTests/WholeAppTests.swift:232-247`. Status: orange. Quelle: alfa-shell.js:5-8,32-52; Huelle:83-87; Design-Wortlaut ent:171 (15.10.) und ent:190 (17.10. „280 … abgehakt“; nur in `entscheidungen.md` des Masters, nicht als Johannes' Chatnachricht gefunden).
-- **HUELLE-F04 Falten, Streifen, Maximieren**: Soll: Bahn unter 112 Breite wird 56 breit gefaltet und zeigt nur runde 28er Zeichen (kein Drehtext); Klick auf die gefaltete Bahn öffnet sie; im Kopf falten (nur wenn mehr als eine offen) und die Mitte „groß“/„zurück“ (andere Bahnen 56). Ist: `Shell/LaneView.swift:34-60` (Streifen, Klick `openStrip`), `:90-101` (Knöpfe, nur Einstellungen; Mail eigener Kopf `App/Mail/MailListLane.swift:118`), `Core/ShellModel.swift:228-247`, `Core/LaneLayout.swift:71-75,196-206`, Zeichen `Components/StripMark.swift:27-58`. Status: orange. Quelle: Shell:24-35; alfa-shell.js:23; ent:69 (Design-Text, zitiert J 13.10. „Lass den Scheiß“ gegen Drehtext).
-- **HUELLE-F05 Griff**: Soll: Fuge 12 breit; Strich Haarlinie 1×64 grau, bei Hover oder Ziehen 2×96 dunkel; Ziehen setzt die Breite (Snap an die Gegenbahn bei 12, Hysterese 64, Falten unter 112); Doppelklick und Enter setzen zurück; Pfeiltasten ±56, mit Shift ±8; beim Ziehen steht „NNN pt“ als Kapsel über dem Griff; Mauszeiger Spaltenbreite. Ist: `Shell/HandleView.swift:15-86`, `Core/LaneLayout.swift:133-190`, `Core/ShellModel.swift:204-226`; Text „NNN pt“ in `Localizable.xcstrings` `lane.handle.value`. Status: orange. Quelle: Shell:39-43,199-204; Huelle:90; ent:190 („Griff Haarlinie … abgehakt“).
-- **HUELLE-F06 Kopf der Bahn**: Soll: Höhe 44; Innenrand rechts 8, links 16 (Listenbahnen) oder 8 (Stapel); Abstand der Elemente 8 (Liste) oder 4 (Stapel); Symbolknopf 28 rund; Haarlinie unter dem Kopf erst beim Scrollen. Ist: `Components/LaneHead.swift:4-25`, `Core/LaneLayout.swift:16-20`, `Components/SymbolButton.swift:42-64`. Status: orange. Quelle: alfa-shell.js:5 (`headPad`, `headGap`); Huelle:91-94; ent:81 (Design-Text, zitiert J 13.10.: rechts keine Einrückung unter dem Kopf).
-- **HUELLE-F07 Ebbe**: Soll: ist der Stapel leer, faltet die rechte Bahn nach 420 ms; Übergang 900 ms langsam (Kurve .65,0,.25,1); kommt eine Karte, öffnet sie wieder. Ist: `Core/ShellModel.swift:249-270` (`stack(empty:still:)`), `:87-89` (`foldTrailing`), Aufruf `Shell/ShellView.swift:46,50-56` (Mail aus `host.stackEmpty`, Einstellungen aus `SettingsShared.board.cards`), Animation `ShellView.swift:58-61`. Status: orange. Quelle: alfa-shell.js:68-76; Mail:506.
-- **HUELLE-F08 Zustand merken**: Soll: Breiten, Falten und Maximieren je Bereich; Blob-Ort bleibt erhalten („position is remembered“ nach ALPHA-Notiz, Hinweis). Ist: `Core/ShellModel.swift:28,101-103` (`lanes` je Bereich, `ShellSnapshot`), Ablage UserDefaults `shell.snapshot` (`App/ALFA_OSApp.swift:51-63`), Laden `ShellModel.init:49-58`. Status: orange; ob Johannes Wiederherstellen über den Neustart verlangt hat: ungeprüft. Quelle: Mail:540 (`setMem`, je Bereich im Speicher); Hinweis ALPHA-Zusammenfassung `docking.remember` (nicht gegengelesen).
-- **HUELLE-F09 Blob in Ruhe und wach**: Soll: Ruhe 56×40, Radius 20, invertiert (hell auf dunkel), 28er Augenring mit Augen 4×8, Abstand 4, in Ruhe halb geschlossen; wach (Zeiger unter 212 Abstand, nicht bei schneller Bewegung über 900/s und über 48 Abstand): Breite mindestens 124, passt der Bereichsname nicht, Stufe 280; Bereichsname erscheint (Verzögerung 80 ms), Augen folgen dem Zeiger (Reichweite 200, Weg 2 / 1,6), Blinzeln alle 3–6 s. Ist: `Shell/BlobView.swift:83-120,187-215`, `Core/BlobPlacement.swift:97-100`, `Core/ShellModel.swift:73-77,148-153`; Breite des Namens gemessen in `ShellView.swift:43-45`. Status: orange. Quelle: Shell:52-59,135-139,158-164,228-229; Huelle:96-100; Design-Text 17.10. (ent:231 „Wach - immer mindestens 124 breit …“).
-- **HUELLE-F10 Blob ziehen und andocken**: Soll: Ziehen ab 3 pt, leichte Dehnung (max 0,16) und Druck-Skalierung 0,96; nach Loslassen fliegt er mit Trägheit (Verzögerung 0,998): ist das Ziel unter Bahnbeginn oder unter 200 vom Ausgangsort, kehrt er heim; sonst dockt er links oder rechts an (36 breit, bei Hover +4, Rundung nur auf der Innenseite); Höhe bleibt zwischen Bahnbeginn und Fensterunterkante begrenzt. Ist: `Shell/BlobView.swift:131-175`, `:241-286` (Dehnung), `Core/BlobPlacement.swift:36-78`, `Core/ShellModel.swift:190-202`. Status: orange. Quelle: Shell:143-175,206-211; ent:198 (Design-Text, zitiert J 17.10. „BLOB kann nicht mehr angeheftet werden?“).
-- **HUELLE-F11 Blob-Menü (Bereichsnavigation)**: Soll: Klick auf das Gesicht öffnet das Menü (Breite 280, nach unten, bei Blob in der unteren Fensterhälfte nach oben); Suchfeld „Finden“ mit ausfahrendem Messband (480 ms) und Lupe; Gruppen mit Trennlinie; Zeile 28 hoch, aktueller Bereich fett (600), rechts Zahl (Mail: ungelesen, Einstellungen: fehlerhafte Dienste); Walzen-Einblendung (60°, Perspektive 600, Staffel 40 ms, höchstens 14); Hover markiert nach 160 ms; Pfeile, Enter (ohne Markierung erste Zeile), Esc und Klick daneben schließen; leer: „Nichts gefunden“. Ist: `Shell/BlobMenuView.swift:4-72,103-217`, `Core/ShellModel.swift:119-188`, `Core/AppDirectory.swift:40-62`, Schließen `Shell/ShellView.swift:32,42`; Bereichsliste `App/Resources/apps.json` (nur Mail, Einstellungen). Status: orange. Quelle: Shell:46-93,176-182,213-217,233-234; Design-Text 11.10. (ent:26-27: Menü ist Hauptnavigation, Unterfunktionen sekundär); Gedächtnis: Schnitt 600 „übernehmen“ (J 18.10., nicht gegengelesen; Master ABNAHME.md Zeile 2c nennt ihn offen).
-- **HUELLE-F12 Assistent im Blob**: Soll: Doppelklick öffnet das Mini-Fenster (Breite 280, Augen zwinkern 1,7 s): Blob wird Thinking-Orb mit „Assistent“ im Kopf, darunter Text und ein Feld „Frage stellen …“; Zeile „Claude antwortet gerade nicht …“ bei ausgefallenem Dienst, „Keine Nachricht offen.“ bei leerem Mailstapel. Ist: `Shell/BlobView.swift:177-185`, `Shell/BlobMenuView.swift:240-278`, Orb `BlobView.swift:427-473`, Gesicht fest `.orb` (`Core/ShellModel.swift:57`); das Feld ist Text, keine Eingabe (`BlobMenuView.swift:261-266`), kein Chat dahinter. Status: orange (Fenster nach Master; Funktion fehlt, siehe `spec-spaeter.md`). Quelle: Shell:53-59,86-93,178,230; Design-Wortlaut ent:261 (18.10. „JA - ORB im Blob ist so freigegeben!“; nur in `entscheidungen.md` des Masters, nicht als Johannes' Chatnachricht gefunden), Design-Wortlaut ent:184 (16.10.).
-- **HUELLE-F13 Hinweispunkt am Blob**: Soll: pulsierender Punkt 4 pt oben rechts im Blob (Ruhe oder wach, nicht angedockt), wenn ungelesene Mails oder ein Abgleichfehler vorliegen. Ist: `Shell/BlobView.swift:86,110-112,393-425`, Quelle der Zahlen `App/Host/AppHost.swift:36,48-53`. Status: orange. Quelle: Shell:67; Mail:1074 (`shDot`).
-- **HUELLE-F14 Sync-Knopf mit Avatar**: Soll: fest rechts oben (Rand 16), 56×40 Kapsel invertiert, 28er Ring mit Kürzel (9 pt, Laufweite .08 em); Klick gleicht ab, Ring dreht 2 s um 720°, Knopf sperrt während des Abgleichs; Fehler: Ring auf 25 % rot und roter Punkt 8 oben links; Tooltips „Neu laden · Gerade abgeglichen“ / „Gleicht ab …“ / „Abgleich fehlgeschlagen. Zum Wiederholen drücken.“ Ist: `Components/SyncButton.swift:4-60`, `Shell/ShellView.swift:26-27`, Abgleich `App/Host/AppHost.swift:55-61` (gleicht nur das Postfach ab: `refreshFolders`, `loadSelection`). Status: orange. Quelle: Shell:46-51,183-187,236; J 04.10. ee8f053d (Sync klein, fest, rechts oben; nach Gedächtnis `spec-huelle.md`, Wortlaut nicht gegengelesen).
-- **HUELLE-F15 Avatar-Kürzel**: Soll: das eigene Kürzel (Einstellungen › Identität) zeigt der Ring; ist keins gesetzt, zwei Initialen aus Vor- und letztem Namen, ohne Titel/Zusätze und kleine Namensteile (II, Jr., von, de …); „An “ vor Name wird ignoriert. Ist: `Core/Initials.swift:3-36`, Nutzung `Components/SyncButton.swift:8-13`. Status: orange. Quelle: Mail:577 (`ini`, Initialenregel); J 21.10. bc4854d7 (H1-Freigabe „Avatar-Kürzel aus Einstellungen/Name statt fest JB“; „Kürzel gewinnt“ als Wortlaut nicht gefunden).
-- **HUELLE-F16 Kartenstapel**: Soll: Karten liegen gestaffelt wie leicht verschobene Skatkarten: erste Karte oben bei 8, jede hintere zeigt ihren Kopf (Schritt 44; bei mehr als drei dahinter Schritt 8), vorne die offene Karte voll; Radien oben 20, unten 0; Grautreppe in 5 Stufen hell und dunkel; Hover hebt eine hintere Karte um 4; Klick holt sie nach vorn; höchstens 6 Karten; leer: eine „Leere Karte“; Bewegung 520 ms (Kurve .22,1.08,.36,1); Fläche flach. Ist: `Core/CardStack.swift:1-15`, `Components/CardPile.swift:4-153`, Stufen `Core/DesignTokens.swift:353-354`, Grenze 6 `Kit/Sources/Mail/Model/MailModel.swift:41`, `Core/SettingsSections.swift:179`. Status: orange; Varianten Lack, Glas, „Turm“ nicht gebaut (`cardSurface` wird nie auf `.lacquer` gesetzt, grep `App`). Quelle: Mail:919-951; ent:178 (Design-Text 15.10. „ALLE wie der Kopf“, eigene Nachricht nicht gefunden); ent:62 (Design-Text, zitiert J 12.10. Stapelton grau, Kartenturm 13a/13b ohne Wahl); `RUECKGABE-AN-CODE.md` (Vorgabe Fläche „flach“, B19).
-- **HUELLE-F17 Übersicht (Fächern)**: Soll: die Übersicht ersetzt den Stapel durch ein Kachelraster in drei Größen (Höhe 144/176/248, Mindestbreite 200/232/320, Zeilen 3/4/8) mit Kopf 44. Ist: `Components/CardPile.swift:210-363`, `Core/CardStack.swift:17-45`. Status: orange; Inhalte der Kacheln siehe spec-mail. Quelle: Mail:952; ent:180 (Design-Text, zitiert J 15.10. „Fächern“ ist langweilig, Carousell oder Fold/fold/full Grid gewünscht).
-- **HUELLE-F18 Startansicht**: Soll: Einstellungen › Darstellung wählt, was die App beim Öffnen zeigt: Mail, Einstellungen oder zuletzt offen; Vorgabe Mail. Ist: `Core/SettingsSections.swift:77-92`, `App/Settings/SettingsSectionCards.swift:124,145-146`, Anwendung `App/ALFA_OSApp.swift:17-23`, `Core/ShellModel.swift:49-54`. Status: orange; Heute fehlt in der Auswahl, weil der Bereich fehlt. Quelle: Mail:762 (Zeile „Beim Öffnen“); Master `INHALT.json` `einstellungen_abschnitte`.
-- **HUELLE-F19 Look**: Soll: ein ALFA-Look: Grund weiß, Bahnen weiß mit Haarlinie 1 px, Blob und Knöpfe invertiert; dunkel mit Grund #0d0d0d und Bahn #141414; Erscheinung Hell, Dunkel oder System; Schrift Geist lokal (400/500/600). Ist: `Core/DesignTokens.swift:318-319` (Farben), `Shell/LaneView.swift:61-67`, Erscheinung `App/ALFA_OSApp.swift:10,35`, `Core/SettingsSections.swift:68-75`, Schrift `App/Theme/Theme.swift:45-64`, `App/Resources/Fonts/`; Varianten hellgrau, Griff „fein/grau“, Schrift „System“ nicht gebaut (`lightGray` ohne Nutzer, grep). Status: orange. Quelle: ent:62 (Design-Text, zitiert J 12.10. „Grund weiß … Schrift Geist“); alfa-theme.css:3-5; Gedächtnis „keine Farbwelten“ (J 10.10., nicht gegengelesen).
-- **HUELLE-F20 Bewegung**: Soll: Kurven und Dauern aus den Tokens; bei „Bewegung reduzieren“ keine Animationen und keine Dehnung. Ist: `App/Theme/Theme.swift:32-34` (`ease` liefert bei `still` nichts), `Shell/ShellView.swift:10,16`, `Shell/BlobView.swift:152`. Status: orange. Quelle: Shell:103 (`still`); ent:186 (Design-Text, zitiert J 16.10. „DRINGEND prüfen … APPLE SWIFT“; Apple-Abgleich der Federn offen laut Master ABNAHME.md Zeile 9).
-- **HUELLE-F21 App-Icon**: Soll: vorläufig das A-Monogramm „B“ als Dock- und Distributions-Icon; endgültige Entwürfe liegen bei Design. Ist: `App/Resources/Assets.xcassets/AppIcon.appiconset/` (16–1024 px), erzeugt aus `material/icons/app/B_A-Monogramm-komplett.svg` des Masters durch `scripts/icon_generate.py` (Commit 443b970), `project.yml:78`; volles Quadrat ohne eigene Maske, Aussehen im Dock ungeprüft. Status: orange. Quelle: ent:66 (Design-Text, zitiert J 13.10. „App Icon B : A-Monogramm … vorläufiges“); J 21.10. bc4854d7 („es gibt bereits icon entwürfe, diese gebe ich der design session.“).
-- **HUELLE-F22 Werte der Hülle**: Soll: Maße, Dauern, Farben aus den erzeugten Tokens, Sonderwerte benannt mit Fundstelle. Ist: Tokens `Core/DesignTokens.swift`, Sonderwerte `Core/SheetValues.swift:5-127` ohne Fundstelle (z. B. `dockHoverGrow` `:33` = Shell:209); `tokens.json` und `shell.json` werden beim Start geladen (`App/Theme/Resources.swift:13-23`), aber `ShellGeometry.init(theme:metrics:)` ignoriert sie (`Core/ShellMetrics.swift:93-95`) und `ShellMetrics.measure` hat keinen Aufrufer (grep); fehlen die Dateien, zeigt die App nur „Die Gestaltungswerte fehlen im Bau“ (`ALFA_OSApp.swift:38-39`). Status: orange. Quelle: AGENTS §6; Huelle:48 (Quelle Code).
+F01 = HUELLE-F01. AUSSEHEN: Shell = `ALFA Shell.dc.html`, js = `alfa-shell.js`, Huelle = `ALFA Huelle.dc.html`, Mail = `ALFA Mail.dc.html`, css = `alfa-theme.css`. Dateien ohne Pfad: `alfaos/App/Shell/`; `Comp/` = `alfaos/App/Components/`; `Core/` = `alfaos/Kit/Sources/ShellCore/`; `App/` = `alfaos/App/`. Brief v14.
 
 ## Regeln
-- **HUELLE-R01 Kein Dock, keine Kopfleiste**: Bereiche wechselt man nur über den Blob. Quelle: J 03.10. ee8f053d „Dockbar entfällt“ (ALPHA `ASSUMPTIONS.tsv:199`). Ist: grep `AreaDock|dockbar|DockItem` in `App`, `Kit/Sources` ohne Treffer.
-- **HUELLE-R02 Blob im Vordergrund**: Blob, Menü und Assistent liegen über Bahnen, Griffen und Sync-Knopf, auch angedockt. Quelle: J 17.10. ent:196 („nicht immer im absoluten Vordergrund“). Ist: `ShellView.swift:22-29` (Blob zuletzt im Stapel).
-- **HUELLE-R03 Menü ist Hauptnavigation**: Unterfunktionen der Bereiche stören die Navigation nicht; Hover verdrängt, was man nicht meint, aber lässt das Gemeinte nicht wegrutschen. Quelle: J 11.10. ent:26-27. Ist: Menü zeigt nur Bereiche (`apps.json`).
-- **HUELLE-R04 Maus statt Tastenkürzel**: Die Hülle trägt keine beschrifteten Tastenkürzel; Bedienung kommt hauptsächlich aus der Maus. Quelle: J 13.10. ent:82; J 09.10. 7ac4d629 (Gedächtnis `spec-huelle.md`, nicht gegengelesen). Tasten in der Hülle heute nur: Esc, Pfeile und Enter im Menü, Pfeile und Enter am Griff.
-- **HUELLE-R05 Verworfen**: kein Langdruck am Blob, kein Mini-Modus per Langdruck, keine ⌘K-Suche. Quelle: J 11.10. ent:47 „verworfen!“ (überholt „3 Sekunden PRESS“ vom 04.10.). Ist: `BlobView.tap` kennt nur Klick und Doppelklick (`:177-185`).
-- **HUELLE-R06 Mail und Einstellungen exakt gleich**: Hülle, Abstände, Icons, Blob gibt es einmal. Quelle: J 13.10. ent:91. Ist: eine `ShellView` für beide (`Shell/ShellView.swift`), Regeln gelten für jeden Bereich gleich (`Core/LaneLayout.swift:32-34`).
-- **HUELLE-R07 Bahnen werden nicht von der Hülle gesperrt**: Kombinationen wie fold-50/50 oder 300-fold-Rest bleiben möglich. Quelle: J 13.10. ent:84.
-- **HUELLE-R08 Maße gelten wie der Master**: Code hat bei Maßen nichts zu sagen; keine Abweichung ist verhandelbar. Quelle: J 17.10. `RUECKGABE-AN-CODE.md` („Maße: Code übernimmt den Entwurf“); ent:126 (Design-Text, zitiert J 13.10. „Der Entwurf ist die Wahrheit, der Code zieht nach.“).
-- **HUELLE-R09 Radien der Karten wie der Kopf**: 20 oben, 0 unten, bündig; Zeilen 12. Quelle: Design-Text 15.10. ent:178; Huelle:102. Ist: `Core/DesignTokens.swift` (`Radius.card` 20, `cardBottom` 0, `row` 12).
-- **HUELLE-R10 Nur funktionsbedingte Texte**: Erklärsätze werden nicht gebaut. Die Tooltips am Blob und am Griff sind seit 22.10. gestrichen (der Master zeichnet sie weiter: Shell:53, Shell:40, Brief N40). Der Platzhalter im Assistent-Fenster (`assistant.idle`) bleibt.
+- R01 Kein Dock, keine Kopfleiste; Bereiche wechselt man nur über den Blob.
+- R02 Eine Hülle für alle Bereiche; Mail und Einstellungen gleich.
+- R03 Das Blob-Menü ist die Hauptnavigation; es zeigt nur Bereiche.
+- R04 Blob, Menü und Assistent liegen über allem.
+- R05 Kein Langdruck am Blob, keine ⌘K-Suche.
+- R06 Bahngrenzen gelten je Bereich; alles kann, nichts muss.
+- R07 Maße wie der Master.
+- R08 Karten wie der Kopf: oben 20, unten 0.
+- R09 Ein ALFA-Look, keine Farbwelten.
+- R10 Keine erklärenden Sätze, keine Tooltips an Blob und Griff.
 
-## Lücken
-- **HUELLE-L01 Ebenen-Tokens und Bauteilverzeichnis**: `layer.*` (Bahn 1, Griff 2, Abgleich 9, Blob 10, Sicherheitsstreifen 30, Toast 40, Übersicht/Menü 50) stehen nur im Markup; `bauteile.json` und `mechanik.json` fehlen. Das Toast liegt im Master über dem Blob, im Code unter ihm (Toast sitzt im Stapel, `CardPile.swift:37-42`). Wer liefert: Design. Beleg: `ABNAHME.md` Zeilen 6, 7 und „2d“; Suche nach Ebenen-Tokens in `TOKENBOGEN.json`: kein z-index, die dortigen `layers` sind Schatten der Lack-Fläche.
-- **HUELLE-L02 Abstand des Fokusrings**: Master nennt 2 (`alfa-theme.css:6`) und 1 (`ALFA Bestaetigen.dc.html:20,28,29,39`); Code nimmt 2 (`HandleView.swift:47`). Wer liefert: Design (Johannes: „Design entscheidet“, nach Gedächtnis `spec-huelle.md`, nicht gegengelesen). Beleg: `ABNAHME.md` Zeile 2c.
-- **HUELLE-L03 Blob bei „Assistent aus“**: die Einstellung „Stoppt jeden Aufruf an den Assistenten“ (Mail:760) hat im Master keinen Blob-Zustand; im Code liest nur die Einstellungszeile den Schlüssel (`SettingsKey.assistantOff`, grep `App`, `Kit/Sources`). Wer liefert: Design. Beleg: Mail:487,760.
-- **HUELLE-L04 Assistent-Eingabe**: Senden, Antwort, Verlauf, Anhänge des Mini-Fensters sind nicht gezeichnet (das Feld ist ein Textblock, Shell:91). Wer liefert: Design nach Johannes. Beleg: Shell:86-93 ohne Eingabeelement.
-- **HUELLE-L05 Umfang des Sync-Knopfs**: der Master gleicht per Zeitgeber ab (Mail:551-554), nennt aber nicht, was im Bereich Einstellungen abgeglichen wird; Code gleicht nur Mail (`AppHost.swift:55-61`); „Gerade abgeglichen“ im Tooltip ist ein fester Text ohne Zeit. Wer liefert: Design. Beleg: Mail:1077.
-- **HUELLE-L06 Grenzen je Ansicht**: J 22.10.: Bahngrenzen gelten je Bereich, alles kann, nichts muss. Mail: Links nicht über 280 ziehbar (Falten, Öffnen, Zurücksetzen bleiben); Mitte und Rechts falten, ziehen und stehen 50/50 frei. Offen: Ob Links zwischen 112 und 280 frei ziehbar ist und wie die Obergrenze je Bereich im Vertrag steht; nicht gezeichnet. Wer liefert: Design, nach Johannes' Klärung der Untergrenze. Beleg: kein Bahn-Sperrzustand in `alfa-shell.js`, `ALFA Shell.dc.html`, `ALFA Mail.dc.html`.
+## Fenster
+**F01 Mindestgröße**  
+WAS: Mindestbreite aus den Tokens (2 Ränder, 2 Rinnen, 3 Bahnen); Höhe im Seitenverhältnis des Bildschirms; Titel verborgen.  
+WO: Fenster.  
+WARUM: drei Bahnen passen immer.  
+AUSSEHEN: Mindestgröße im Master offen (Huelle:77).  
+STAND: gebaut, nicht abgenommen; der Master nennt keinen Wert (Core/ShellMetrics.swift:87-90, App/ALFA_OSApp.swift:36-48, :65-79).
 
-## Offen bei Johannes
-- Blob-Name: Ausrichtung am Gesicht oder rechtsbündig, „Einstellungen“ gekürzt? Das Master-Übergabeblatt führt es als offen (`UEBERGABE-NAECHSTER-CHAT.md`, Abschnitt „Offen“); ob „der BLOB war so freigegeben“ (Design-Wortlaut ent:255, 18.10.; nur in `entscheidungen.md` des Masters) es beantwortet, hat er nicht gesagt.
-- (Beantwortet, J 22.10.) Blob wach: mindestens 124 breit, passt der Name nicht, Stufe 280; gilt wie Master (Huelle:97) und Code (`blobAwakeWidth`).
+**F02 Rand, Fuge, Leiste**  
+WAS: Rand 16, Fuge 12, Blob-Leiste 40 plus 12; Bahnen bis 16 über der Unterkante.  
+WO: Fenster.  
+WARUM: feste Ordnung in jedem Bereich.  
+AUSSEHEN: js:4, :14-16; Huelle:31-32.  
+STAND: gebaut, nicht abgenommen (Core/ShellMetrics.swift:64-70, :97-99; ShellView.swift:69-83); oben bleibt der Systembereich (ShellView.swift:47).
+
+## Bahnen
+**F03 Drei Bahnen**  
+WAS: Ruhe 280, Mitte Rest, 280; Mindestbreite je Bahn aus dem Token (Master nennt 280, Huelle:84 in der Code-Spalte 240); bei Platzmangel falten links, Mitte, rechts.  
+WO: Fenster.  
+WARUM: Liste, Inhalt, Stapel nebeneinander.  
+AUSSEHEN: js:5-8, :19-44.  
+STAND: gebaut, nicht abgenommen (Core/LaneLayout.swift:63-131).
+
+**F04 Falten, Maximieren**  
+WAS: unter 112 wird die Bahn 56 breit mit runden Zeichen; Klick öffnet; im Kopf Falten und Mitte groß.  
+WO: Bahn, Kopf.  
+WARUM: Platz für das Wichtige.  
+AUSSEHEN: Shell:24-35; js:21.  
+STAND: gebaut, nicht abgenommen (LaneView.swift:34-60, :90-102; App/Mail/MailListLane.swift:110-121; Core/ShellModel.swift:228-247).
+
+**F05 Griff**  
+WAS: Strich 1×64, aktiv 2×96; Ziehen rastet bei 12 ein, Hysterese 64; Doppelklick, Enter zurück; Pfeile ±56, mit Shift ±8; Wert in pt beim Ziehen; Fokusring nur per Tastatur.  
+WO: Fuge.  
+WARUM: Breiten frei einstellen.  
+AUSSEHEN: Shell:39-42, :196-204.  
+STAND: gebaut, nicht abgenommen (HandleView.swift:16-91, Core/LaneLayout.swift:133-190).
+
+**F06 Kopf der Bahn**  
+WAS: 44 hoch; Innenrand rechts 8, links 16 oder 8 im Stapel; Abstand 8 oder 4; Knopf 28 rund; Linie erst beim Scrollen.  
+WO: Bahn, oben.  
+WARUM: gleiche Köpfe überall.  
+AUSSEHEN: js:4; Huelle:80, :92-94.  
+STAND: gebaut, nicht abgenommen (Comp/LaneHead.swift:13-24, Core/LaneLayout.swift:16-20).
+
+**F07 Ebbe**  
+WAS: leerer Stapel faltet rechts nach 420 ms, langsam in 720 ms; neue Karte öffnet.  
+WO: rechte Bahn.  
+WARUM: kein leerer Platz.  
+AUSSEHEN: js:67-74; Shell:223; Mail:506.  
+STAND: gebaut, nicht abgenommen (Core/ShellModel.swift:249-270, ShellView.swift:46-61).
+
+**F08 Zustand merken**  
+WAS: Breiten, Falten, Maximieren je Bereich und Blob-Ort, auch nach Neustart.  
+WO: Hintergrund.  
+WARUM: Arbeitsplatz bleibt.  
+AUSSEHEN: Mail:540.  
+STAND: gebaut, nicht abgenommen (Core/ShellModel.swift:14-19, :101-105; App/ALFA_OSApp.swift:51-63).
+
+**F09 Grenzen je Bereich**  
+WAS: Mail: Links nicht über 280; Mitte und Rechts frei.  
+WO: Bahnen.  
+WARUM: jede Ansicht passend.  
+AUSSEHEN: nicht gezeichnet (Brief N36).  
+STAND: Lücke; eine Regel für alle (Core/LaneLayout.swift:32-34).
+
+## Blob
+**F10 Ruhe und wach**  
+WAS: Ruhe 56×40 mit Augen; nah am Zeiger wach: 124 breit, sonst 280, mit Bereichsname; Augen folgen, blinzeln.  
+WO: oben links.  
+WARUM: Navigation immer greifbar.  
+AUSSEHEN: Shell:52-59, :158-163, :228-229; Huelle:96-97.  
+STAND: gebaut, nicht abgenommen (BlobView.swift:83-119, :186-214; Core/BlobPlacement.swift:97-100).
+
+**F11 Ziehen, Andocken**  
+WAS: Ziehen ab 3 pt mit Dehnung; fliegt mit Schwung; nahe Heim oder über den Bahnen kehrt er heim, sonst dockt er links oder rechts an, 36 breit.  
+WO: ganzes Fenster.  
+WARUM: Blob aus dem Weg.  
+AUSSEHEN: Shell:143-175, :206-211.  
+STAND: gebaut, nicht abgenommen (BlobView.swift:130-174; Core/BlobPlacement.swift:55-78; Core/ShellModel.swift:190-202).
+
+**F12 Menü**  
+WAS: Klick öffnet, 280 breit, in der unteren Hälfte nach oben; Finden; Gruppen; aktueller Bereich fett; Zahl rechts; Pfeile, Enter, Esc, Klick daneben; Nichts gefunden.  
+WO: Blob.  
+WARUM: Bereich wechseln.  
+AUSSEHEN: Shell:60-85, :176-182, :212-217, :231-234.  
+STAND: gebaut, nicht abgenommen (BlobMenuView.swift:4-217; Core/ShellModel.swift:119-188; ShellView.swift:32, :42); nur Mail, Einstellungen (App/Resources/apps.json).
+
+**F13 Hinweispunkt**  
+WAS: pulsierender Punkt bei Ungelesenem oder Abgleichfehler.  
+WO: Blob, oben rechts.  
+WARUM: Neues fällt auf.  
+AUSSEHEN: Shell:67, :124; Mail:1074.  
+STAND: gebaut, nicht abgenommen (BlobView.swift:86, :110-112, :392-424; App/Host/AppHost.swift:36, :48-53).
+
+## Assistent im Blob
+**F14 Mini-Fenster**  
+WAS: Doppelklick öffnet; Augen zwinkern; Orb mit Titel; Text bei Dienstausfall oder leerem Mailstapel; Feld.  
+WO: Blob.  
+WARUM: schneller Helfer.  
+AUSSEHEN: Shell:86-93, :178, :229-230.  
+STAND: gebaut, nicht abgenommen (BlobView.swift:176-180, :426-473; BlobMenuView.swift:240-278).
+
+**F15 Eingabe**  
+WAS: Frage senden, Antwort, Verlauf, Anhänge.  
+WO: Mini-Fenster.  
+WARUM: mit dem Assistenten arbeiten.  
+AUSSEHEN: nicht gezeichnet (Brief N37).  
+STAND: Lücke; Feld ohne Eingabe (BlobMenuView.swift:261-266).
+
+**F16 Assistent aus**  
+WAS: Blob bei ausgeschaltetem Assistenten.  
+WO: Blob.  
+WARUM: Einstellung sichtbar wirksam.  
+AUSSEHEN: Mail:760; Zustand nicht gezeichnet (Brief N38).  
+STAND: Lücke; nur der Schalter liest ihn (App/Settings/SettingsSectionCards.swift:312-321).
+
+## Sync und Avatar
+**F17 Sync-Knopf**  
+WAS: Klick gleicht ab; Ring dreht 720°; gesperrt während des Abgleichs; Fehler: Ring 25 % rot, roter Punkt.  
+WO: oben rechts.  
+WARUM: Daten aktuell.  
+AUSSEHEN: Shell:46-50, :183-187, :236; Mail:1077; Umfang und Zeit nicht gezeichnet (Brief N38).  
+STAND: teilweise; nur Mail (App/Host/AppHost.swift:55-61; Comp/SyncButton.swift:11-59).
+
+**F18 Avatar-Kürzel**  
+WAS: eigenes Kürzel, sonst Initialen aus Vor- und Nachname ohne Zusätze.  
+WO: Sync-Knopf.  
+WARUM: eigene Person erkennbar.  
+AUSSEHEN: Shell:47; Mail:577.  
+STAND: gebaut, nicht abgenommen (Core/Initials.swift:3-36, Comp/SyncButton.swift:8-13).
+
+## Stapel
+**F19 Kartenstapel**  
+WAS: gestaffelte Karten, Köpfe sichtbar; Grautreppe; Hover hebt, Klick holt nach vorn; höchstens 6; leere Karte.  
+WO: rechte Bahn.  
+WARUM: mehrere Vorgänge zugleich.  
+AUSSEHEN: Mail:919-951; Huelle:102, :104.  
+STAND: teilweise; Turm und Wahl dazu fehlen (Mail:921), Lack nie gesetzt (App/Theme/DesignStyle.swift:28-30); Comp/CardPile.swift:4-153, Core/CardStack.swift:1-15, Core/DesignTokens.swift:213.
+
+**F20 Übersicht**  
+WAS: Kacheln in drei Größen statt Stapel.  
+WO: rechte Bahn.  
+WARUM: schnell springen.  
+AUSSEHEN: Mail:952.  
+STAND: gebaut, nicht abgenommen (Comp/CardPile.swift:210-363, Core/CardStack.swift:17-45).
+
+## Look
+**F21 Startansicht**  
+WAS: Mail, Einstellungen oder zuletzt offen; Vorgabe Mail.  
+WO: Einstellungen › Darstellung.  
+WARUM: App öffnet, wo man arbeitet.  
+AUSSEHEN: Mail:762.  
+STAND: gebaut, nicht abgenommen (Core/SettingsSections.swift:77-92; App/Settings/SettingsSectionCards.swift:151-153; App/ALFA_OSApp.swift:17-23).
+
+**F22 Farben, Erscheinung**  
+WAS: Grund weiß, Bahn weiß mit Haarlinie, Blob invertiert; dunkel; Hell, Dunkel, System.  
+WO: ganze App.  
+WARUM: ein Look.  
+AUSSEHEN: css:3-5.  
+STAND: gebaut, nicht abgenommen (Core/DesignTokens.swift:318-319; App/ALFA_OSApp.swift:10, :35).
+
+**F23 Schrift**  
+WAS: Geist, lokal.  
+WO: ganze App.  
+WARUM: ein Look.  
+AUSSEHEN: Shell:221; Wahl offen (Brief N13).  
+STAND: teilweise; Geist mit Ersatz System (App/Theme/Theme.swift:45-63).
+
+**F24 Bewegung reduzieren**  
+WAS: keine Animation, keine Dehnung.  
+WO: ganze Hülle.  
+WARUM: Systemeinstellung gilt.  
+AUSSEHEN: Shell:103.  
+STAND: gebaut, nicht abgenommen (App/Theme/Theme.swift:32-34, ShellView.swift:10, :16).
+
+**F25 Werte**  
+WAS: Maße, Dauern, Farben aus Tokens; Sonderwerte mit Fundstelle.  
+WO: Code.  
+WARUM: Master ist das Soll.  
+AUSSEHEN: Fundstellen nicht gezeichnet (Brief N43).  
+STAND: teilweise; geladene Werte unbenutzt (Core/ShellMetrics.swift:93-95), Sonderwerte ohne Fundstelle (Core/SheetValues.swift).
+
+**F26 Ebenen**  
+WAS: feste Reihenfolge von Bahn bis Menü; Toast über dem Blob.  
+WO: Fenster.  
+WARUM: nichts verdeckt Falsches.  
+AUSSEHEN: nur im Markup (Brief N35).  
+STAND: Lücke; Toast unter dem Blob (Comp/CardPile.swift:37-42).
+
+**F27 Fokusring**  
+WAS: Ring bei Tastatur.  
+WO: Griff, Knöpfe.  
+WARUM: Bedienung ohne Maus sichtbar.  
+AUSSEHEN: Abstand 2 (css:6) oder 1 (`ALFA Bestaetigen.dc.html`:20); Brief N39.  
+STAND: Lücke; Code nimmt 2 (HandleView.swift:44-51, Core/DesignTokens.swift:99).
+
+## Icon
+**F28 App-Icon**  
+WAS: vorläufig A-Monogramm in 16–1024.  
+WO: Dock.  
+WARUM: App erkennbar.  
+AUSSEHEN: `material/icons/app/B_A-Monogramm-komplett.svg`; endgültig Brief N8.  
+STAND: teilweise; vorläufig (App/Resources/Assets.xcassets/AppIcon.appiconset/, alfaos/project.yml:78).
+
+## Später
+- Assistent als eigener Bereich mit Menüeintrag: fehlt.
+- Weitere Bereiche in der Hülle: fehlt (App/Resources/apps.json).

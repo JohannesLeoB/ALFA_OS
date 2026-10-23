@@ -1,51 +1,73 @@
 ---
 name: spec-kataloge
-description: Kataloge (Artikel, Preisprüfung, Papers) und Datan als Modul: Ziel und Datan-Richtung von Johannes belegt, Zuschnitt der Katalog-Bereiche offen, in ALFA nichts gebaut, im Master nicht gezeichnet.
+description: Kataloge (Artikel, Datan): Funktionsbaum, Bestand im Fundus, kein Code in alfaos
 metadata:
   type: project
 ---
 
-# Kataloge · Spec (Stand 21.10.)
+# Kataloge · Spec
 
-Pfadkürzel: `fundus:` = `fundus/alpha/Sources/`; `labor:` = `~/Developer/mykilos-labor/Sources/` (Unterordner App, Kit, Services, Widgets tragen dort das Präfix des Altnamens). Bestand ist nur Herkunft der Fähigkeit, nie Vorlage für Aufbau oder Namen (J 20.10. 3f52450e). Datan-Quellen habe ich für diese Spec nicht gelesen; Datan-Angaben stammen aus dem Gedächtnis und sind ungeprüft; `spec-hub.md:17` trägt davon nur „Datan als Modul, Airtable eine Route unter mehreren“, die übrigen Angaben (10 Module, Kern ohne SwiftUI, Schreiben nach Airtable aus, EK im Klartext) stehen in keiner Memory-Datei mehr.
+Artikel, Dienstleistungen und Positionen für Angebote und Warenkörbe: durchsuchbar, mit Preisen und Beleg der Herkunft. Stufe 1, fertig Ende November 2026; Datan als Modul in Stufe 2.
 
-## Ziel
-Kataloge hält die Artikel, Dienstleistungen und Positionen, aus denen Angebote und Warenkörbe entstehen: durchsuchbar, mit Preisen und mit Beleg, woher ein Wert kommt. Datan, bisher eigene App für das Einlesen von Preislisten, wird Modul darin. Kataloge gehört zum Ziel Ende November, Datan zum Launch Ende 2026 (`AGENTS.md:9`). In ALFA gebaut ist nichts (`alfaos/App/Resources/apps.json` führt nur mail und settings); der Master zeichnet Kataloge nicht, nur Textlisten (`INHALT.json:1158-1213`).
-
-## Richtung
-- Datan: der Kern (Preislisten lesen, belegen, prüfen) wird Modul von ALFA und schreibt in den ALFA-Datenspeicher; Airtable ist nur eine Hub-Route unter mehreren; Beginn erst nach dem Design-Nachzug.
-- Eigene, saubere, kontrollierte und für den Nutzer sichtbare Datenbanken statt Airtable als Pflichtquelle; Airtable wird später nach Bedarf neu aufgesetzt.
-- Katalog-Bereiche entzerren: was nicht Katalog ist (Kontakte, Zeichnungen, Aufgaben, Notizen), zieht in andere Bereiche.
-- Hersteller-Kataloge und weitere Quellen kommen als Hub-Integrationen (Wunsch, nicht entschieden).
-
-## Funktionen
-- **KAT-F01 Artikel durchsuchen**: Soll: Der Nutzer durchsucht den Artikelkatalog (Handelsartikel für Angebote, rund 42.000 laut seinem Wort, mit Bildern) und legt Positionen in den Warenkorb. Weitere Funktionen: lücke. Ist: fehlt in ALFA; Bestand: Reiter „Artikel / Shop“ (`labor:App/KatalogeView.swift:6-8`), Speicher aus Airtable (`fundus:AlfaServices/Airtable/ArtikelKatalogStore.swift:6`) mit lokalem Cache (`fundus:AlfaServices/Database/ArtikelKatalogGRDBCache.swift`), Suche mit Synonymen und Oberkategorien (`fundus:AlfaKit/Domain/ArticleSearch.swift:3`), Artikelfelder inkl. EK und VK (`fundus:AlfaKit/Domain/ArtikelItem.swift:3`). Master-Wortlaute ohne Zeichnung: „Keine Artikel für diese Wahl.“, „Kein Begriff im Katalog.“, „Erst eine Oberkategorie wählen — oder direkt suchen.“ (`INHALT.json:1158,1173,1178`). Status: offen. Quelle: J 04.10. ee8f053d 16:27 „Fachhändler von abertausenden Produkten“ · J 17.09. 0db45317 „alle bislang knapp 42000 Artikel“, „alles aus den Listen in den Warenkorb gepackt werden kann“ (Wortlaut aus Zitat-Index, Original nicht geprüft) · J 19.09. 0db45317 „zehntausende Handelsartikel“ (ebenso) · AGENTS.md:9.
-- **KAT-F02 Zuschnitt der Katalog-Bereiche**: Soll: lücke. Johannes will die Kataloge „entzerren“; Kontakte, Zeichnungen, Aufgaben und Notizen gehören nicht in sie. Ist: fehlt; Bestand hat fünf Reiter Artikel, Eigene Positionen, Lager, Warenkörbe, Preis-Wissen (`labor:App/KatalogeView.swift:7`, `labor:App/Kataloge/EigenePositionenTab.swift:48`, `fundus:AlfaKit/Domain/LagerItem.swift:3`). Status: lücke. Quelle: J 17.09. 0db45317 „Kataloge entzerren fürs SOLL“ (Zitat-Index) · J 20.09. 0db45317 (Kontakte, Zeichnungen, Aufgaben, Notizen nicht bei Katalogen; Zitat-Index).
-- **KAT-F03 Eigene Positionen**: Soll: lücke (ob und wie der Nutzer eigene Positionen oder Kataloge anlegt). Ist: fehlt; Bestand `labor:App/Kataloge/EigenkatalogAnlageSheet.swift:7`, `fundus:AlfaServices/Airtable/EigenkatalogPort.swift`. Status: lücke. Quelle: Bestand.
-- **KAT-F04 Preis beanstanden oder verifizieren**: Soll: Der Nutzer kann einen Preis beanstanden oder verifizieren; wird ein Preis einer Liste beanstandet, sinkt die Konfidenz aller anderen Auslesungen derselben Liste, und umgekehrt. Ist: fehlt; Bestand hat Status ungeprüft, verifiziert, beanstandet mit Konfidenz, Quell-Beleg und Fundstelle (`fundus:AlfaKit/Domain/ArtikelReview.swift:3-30`), Rückschreiben (`fundus:AlfaServices/Airtable/ArtikelReviewVerdiktPort.swift`), Ansicht (`labor:App/ArtikelReviewAbgleich.swift`, `labor:App/Detail/PriceKnowledgeReviewView.swift`). Master-Wortlaut „Ohne Quell-Beleg“ ohne Zeichnung (`INHALT.json:1193`). Status: offen. Quelle: J 29.08. 6a6a9365 „Konfidenz betrifft ganze Liste“ (Zitat-Index) · Bestand wie genannt.
-- **KAT-F05 Produktbilder und Mediathek**: Soll: Artikel tragen Bilder (verlinkt aus dem Dateiort); Herkunft und Zuordnung: lücke. Ist: fehlt; Bestand `fundus:AlfaServices/Airtable/MediathekAssetIndex.swift`, `fundus:AlfaKit/Domain/PapersAssetAbgleich.swift`, `fundus:AlfaKit/Domain/ProduktbildDateiname.swift`. Status: lücke. Quelle: J 29.08. 6a6a9365 „Bilder werden auch für die Artikel genutzt“ (Zitat-Index) · J 17.09. 0db45317 „bebildert mit verlinkten Google Drive Bildern“ (ebenso).
-- **KAT-F06 Papers**: Soll: Papers sind der Medienbestand der Firma (Bilder, Texturen, Muster-Fotos, Vorlagedateien, PDF-Blanks) im Dateiort, mit Metadaten in einer Datenbank und mit Verknüpfung der Bilder zum Artikel; Moodboard, Atelier und Konfigurator nutzen ihn als „Creative Cloud“-Datenbank; sauberer aufbauen. Ob Papers im Katalog-Bereich liegen: lücke. Ist: fehlt; Bestand `labor:App/Papers/PapersCatalog.swift:3-12` (9 Kategorien: Mustermaterialien, Mustertexturen, Textbausteine, Dokumentenvorlagen, Gerätelisten, Ausstattung, Licht, Moodboards, Arbeitsstände), `labor:App/Papers/PapersPageView.swift`, `fundus:AlfaServices/Airtable/PapersKatalogStore.swift`. Status: offen. Quelle: J 04.10. ee8f053d 16:29 „Papers“ als Name eines Medien-Ordners · J 22.09. 0db45317 „Kreativdatenbank“ (Zitat-Index) · J 12.09. 996a804f „sauberer aufbauen“ (ebenso).
-- **KAT-F07 Datan als Modul**: Soll: Preislisten (CSV, PDF u. a.) einlesen, belegen und prüfen innerhalb von ALFA; Ergebnis liegt im ALFA-Datenspeicher; Airtable nur als Route unter mehreren; Beginn erst nach dem Design-Nachzug. Lücken statt falscher Einträge (KAT-R01). Ist: fehlt in ALFA; die App `~/Developer/ALFA Datan` habe ich nicht gelesen (ungeprüft: 10 Module, Kern ohne SwiftUI, Schreiben nach Airtable standardmäßig aus; Quelle in keiner Memory-Datei mehr, `spec-hub.md:17` trägt nur Modul und Airtable-Route). Aus ALPHA stammt das Auslesen von Angebots-PDF-Positionen: `fundus:AlfaCalculation/OfferPositionExtractor.swift`, `fundus:AlfaServices/Kalkulation/OfferPositionPDFReader.swift`. Status: offen. Quelle: J 16.10. 97326b1d Klick „ALFA Datan … zum Modul in ALFA_OS“ und Q10 „Erst nach dem Design-Nachzug“ · J 20.10. 3f52450e Klick „Stimmt“ · J 29.08. 6a6a9365 „Datan ist vor allem Datensammler“ (Zitat-Index).
-- **KAT-F08 Preisliste als Eingabe**: Soll: Preislisten kommen in unzähligen Formaten, Aufbauten und Preisarten (EK, VK, netto, brutto, Marge); eine Liste führt u. a. Jahr und Gültigkeit, EK und VK, Steuer, Konditionen, Marge, Modelle, Links, EAN, Maße, Farben; Listen folgen einer Ordnung. Ist: fehlt (liegt in Datan, ungeprüft). Status: offen. Quelle: J 08.10., 13.10., 15.10. 476f45d7 (Zitat-Index, Wortlaut gekürzt, Original nicht geprüft).
+F01 = KAT-F01. AUSSEHEN: Master zeichnet Kataloge nicht (Brief v14 Teil 6); Texte ohne Zeichnung in `INHALT.json`. Bestand = `fundus/alpha/Sources/`.
 
 ## Regeln
-- **KAT-R01**: Lücken sind besser als falsche Einträge: ein fehlender Wert bleibt leer, er wird nicht abgeleitet, gerundet oder erfunden. Quelle: J 14.10. 476f45d7 „Lücken sind IMMER besser als falsche Einträge“ (Wortlaut aus Agenten-Auszug, Original nicht geprüft) · AGENTS.md:5.
-- **KAT-R02**: Katalogdaten liegen zuerst in sauberen, kontrollierten, für den Nutzer sichtbaren eigenen Datenbanken; Airtable wird erst nach Bedarf und Vorgabe neu oder optimiert aufgesetzt. Quelle: J 15.10. 476f45d7 „Airtable erstmal garnicht“ (Zitat-Index) · J 20.10. 3f52450e (Airtable nur eine Hub-Route).
-- **KAT-R03**: Datan beginnt als Modul erst nach dem Design-Nachzug. Quelle: J 16.10. 97326b1d Q10.
-- **KAT-R04**: Kontakte, Zeichnungen, Aufgaben und Notizen gehören nicht in die Katalog-Reiter. Quelle: J 20.09. 0db45317 (Zitat-Index).
-- **KAT-R05**: Ob EK im Katalog zu sehen und in Exporten enthalten ist, ist Einstellung je Firma und Nutzer, nicht fest im Code (siehe spec-warenkorb KORB-R01).
-- **KAT-R06**: Bestand wird in Funktion übernommen, nicht in Form, Namen oder Texten; Altcode-Kommentare, Tokens und Namen ziehen nicht um. Quelle: J 20.10. 3f52450e „ES soll NICHTS wieder genau das gleiche gebaut werden“.
-- **KAT-R07**: Keine Firmen-IDs (Basis, Tabelle, Feld) fest im Code. Bestand hat sie über `CompanySetup` (`fundus:AlfaServices/Airtable/ArtikelKatalogStore.swift:30-32,43`) und Feldnamen mit Firmennamen (`:39`). Quelle: J 26.09. ffde6a84 „Fest verdrahtetes STRIKT raus aus dem Code“.
+- R01 Ein fehlender Wert bleibt leer; nie abgeleitet, gerundet oder erfunden.
+- R02 Katalogdaten liegen in eigenen, sichtbaren Datenbanken; Airtable ist eine Hub-Route unter mehreren.
+- R03 Kontakte, Zeichnungen, Aufgaben und Notizen gehören nicht in Kataloge.
+- R04 Ob EK sichtbar ist, ist Einstellung je Firma und Nutzer.
+- R05 Keine Firmen-IDs (Basis, Tabelle, Feld) fest im Code.
+- R06 Datan beginnt erst nach dem Design-Nachzug.
+- R07 Wird ein Preis einer Liste beanstandet, sinkt die Konfidenz aller Werte dieser Liste; umgekehrt steigt sie.
 
-## Lücken
-- **KAT-L01**: Keine Zeichnung für Kataloge: Liste, Suche, Filter (Oberkategorien), Detail, Korb-Zähler, Spalten, leere und gestörte Zustände. Liefert: Design. Beleg: Master hat 10 `*.dc.html` ohne Katalogansicht; nur Textliste `INHALT.json:1158-1213`; Bestand-Bogen `~/ALPHA/Design/BOGEN-KATALOG.json:3-4` ist Version 1.5.2 „proposal“ und gilt nicht.
-- **KAT-L02**: Zuschnitt der Katalog-Bereiche (welche Reiter, ob Papers, Lager, Preis-Wissen, Eigene Positionen dazugehören). Liefert: Johannes. Beleg: `spec-kataloge.md` hält dazu nur Datan und Datenquelle; sein Wort „entzerren“ (J 17.09.) nennt kein Ergebnis.
-- **KAT-L03**: Form des ALFA-Datenspeichers (Tabellen je Datenart, Sync). Liefert: Johannes. Beleg: `stand.md` „H7 Datenspeicher wartet auf sein Wort“; im Code keine Katalogtabelle (`alfaos/Kit/Sources` hat Hub, Mail, ShellCore).
-- **KAT-L04**: Wie die rund 42.000 Bestandsartikel aus Airtable und Drive in den ALFA-Datenspeicher kommen und wann. Liefert: Johannes. Beleg: Bestand liest sie aus Airtable (`ArtikelKatalogStore.swift:30-45`); sein Wort 15.10. (KAT-R02) beantwortet nur die Richtung.
-- **KAT-L05**: Wer EK im Katalog sieht (Anzeige, nicht Export). Liefert: Johannes. Beleg: sein Wort 20.10. gilt dem Warenkorb-Export; Datan-Bestandsansicht zeigt EK im Klartext (ungeprüft; `spec-hub.md:17` sagt dazu nichts).
-- **KAT-L06**: Zeitpunkt des „Design-Nachzugs“, der den Datan-Beginn auslöst. Liefert: Johannes. Beleg: J 16.10. 97326b1d Q10 nennt keinen Termin.
+## Artikel
+**F01 Artikel durchsuchen**  
+WAS: Suche, Oberkategorien, Positionen in den Korb.  
+WO: Kataloge.  
+WARUM: Artikel für Angebote finden.  
+AUSSEHEN: INHALT.json:1158, :1173, :1178 (Text); nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaKit/Domain/ArticleSearch.swift, AlfaKit/Domain/ArtikelItem.swift, AlfaServices/Airtable/ArtikelKatalogStore.swift, AlfaServices/Database/ArtikelKatalogGRDBCache.swift.
 
-## Offen bei Johannes
-- Welche Bereiche bleiben in Kataloge, und gehören Papers dazu?
-- Ziehen die rund 42.000 Bestandsartikel um, und aus welcher Quelle?
-- Wer darf EK im Katalog sehen?
+**F02 Eigene Positionen**  
+WAS: eigene Positionen und Kataloge anlegen.  
+WO: Kataloge.  
+WARUM: Leistungen ohne Herstellerliste.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaServices/Airtable/EigenkatalogPort.swift.
+
+**F03 Lager**  
+WAS: Artikel auf Lager.  
+WO: Kataloge.  
+WARUM: Vorhandenes zuerst.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaKit/Domain/LagerItem.swift, AlfaServices/Airtable/LagerlisteStore.swift.
+
+**F04 Produktbilder**  
+WAS: Bilder aus dem Dateiort am Artikel.  
+WO: Kataloge.  
+WARUM: Artikel erkennen.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaServices/Airtable/MediathekAssetIndex.swift, AlfaKit/Domain/ProduktbildDateiname.swift.
+
+## Preise
+**F05 Preis prüfen**  
+WAS: ungeprüft, verifiziert, beanstandet; Konfidenz, Quell-Beleg (R07).  
+WO: Kataloge, Artikel.  
+WARUM: Preisen trauen.  
+AUSSEHEN: INHALT.json:1193 (Text); nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaKit/Domain/ArtikelReview.swift:3-30, AlfaServices/Airtable/ArtikelReviewVerdiktPort.swift.
+
+**F06 Datan als Modul**  
+WAS: Preislisten (CSV, PDF u. a.) einlesen, belegen, prüfen; Ergebnis im eigenen Datenspeicher.  
+WO: Kataloge.  
+WARUM: Preise aus Lieferantenlisten.  
+AUSSEHEN: nicht gezeichnet; Form Lücke.  
+STAND: fehlt; Bestand: AlfaCalculation/OfferPositionExtractor.swift, AlfaServices/Kalkulation/OfferPositionPDFReader.swift.
+
+## Medien
+**F07 Papers**  
+WAS: Medien der Firma (Bilder, Texturen, Muster, Vorlagen) mit Metadaten, verknüpft mit Artikeln.  
+WO: offen.  
+WARUM: Quelle für Moodboard, Atelier, Konfigurator.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaServices/Airtable/PapersKatalogStore.swift, AlfaKit/Domain/PapersAssetAbgleich.swift.

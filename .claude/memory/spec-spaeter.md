@@ -1,55 +1,89 @@
 ---
 name: spec-spaeter
-description: Bereiche nach dem ersten Ziel (Werkstatt, Assistent als Ansichtsbereich, Studio, Kalender, Kalkulation) und was ausdrücklich entfällt (ALFAcolor, Farbwelten): wenig Wort von Johannes, in ALFA nichts gebaut, im Master nicht gezeichnet.
+description: Später (Werkstatt, Assistent, Studio, Kalkulation): Funktionsbaum, nicht im ersten Ziel
 metadata:
   type: project
 ---
 
-# Später · Spec (Stand 21.10.)
+# Später · Spec
 
-Pfadkürzel: `fundus:` = `fundus/alpha/Sources/`; `labor:` = `~/Developer/mykilos-labor/Sources/` (Unterordner App, Kit, Services, Widgets tragen dort das Präfix des Altnamens). Bestand ist nur Herkunft der Fähigkeit, nie Vorlage für Aufbau oder Namen (J 20.10. 3f52450e).
+Bereiche nach Stufe 1, bis Launch Ende 2026: Werkstatt mit den Editoren, Assistent als Bereich, Studio, Kalender, Kalkulation.
 
-## Ziel
-Diese Bereiche folgen auf Mail, Konten, Projekte, Heute, Kataloge und Warenkorb (Ende November, ohne Kalkulation); bis zum Launch Ende 2026 kommen alle übrigen Bereiche (`AGENTS.md:9`). Gemeint sind: Werkstatt (Aufmaß, Plan, Konfigurator, Atelier, Moodboard, Planvergleich), der Assistent als eigener Ansichtsbereich, Studio, Kalender und Kalkulation. In ALFA gebaut ist davon nichts außer der Assistenten-Karte am Blob (`alfaos/App/Shell/BlobView.swift:176-181`, `alfaos/App/Shell/BlobMenuView.swift:240`; siehe spec-huelle HUELLE-F12, HUELLE-L04); `alfaos/App/Resources/apps.json` führt nur mail und settings. Der Master zeichnet keinen dieser Bereiche, nur die Namen der Bereiche als Textzeile (`INHALT.json:828`).
-
-## Richtung
-- Nach Mail und Einstellungen: Projekte und Aufgaben, dann Kalender.
-- Assistent bekommt später einen eigenen vollen Ansichtsbereich mit Menüeintrag als Navigations-Item.
-- Jedes Werkstatt-Werkzeug ist ein eigener Bereich.
-- Kalkulation erst nach dem Umfang Ende November.
-- Funktionen entstehen aus dem Lastenheft, das Code an Design liefert; Design entwirft mit Johannes.
-
-## Funktionen
-- **SPAET-F01 Werkstatt-Werkzeuge als eigene Bereiche**: Soll: Aufmaß, Plan, Konfigurator, Atelier, Moodboard und Planvergleich erscheinen in der App je als eigener Bereich. Ist: fehlt in ALFA; Bestand: ein Bereich „Werkstatt“ mit sechs Modi (`labor:App/Werkstatt/WerkstattView.swift:14-15,193-204`) und je einem Eintrag in der Registry (`labor:App/Registry/AppRegistry.swift:34-49`). Status: offen. Quelle: J 04.10. ee8f053d Klick „Jedes eigener Bereich“ · J 04.10. ee8f053d 16:27 (Beschreibung der Werkzeuge, siehe F02 bis F05) · Bestand wie genannt · Zuschnitt strittig (SPAET-L02).
-- **SPAET-F02 Aufmaß**: Soll: Das Aufmaß-Werkzeug trägt im Projekt in Fotos der Situation Maße und Details ein; weitere Einzelheiten: lücke. Ist: fehlt; Bestand `labor:App/Aufmass/AufmassCanvasView.swift` (2686 Zeilen), Kantenerkennung `labor:App/Aufmass/AufmassKantenErkennung.swift`, Blatt `labor:App/Aufmass/AufmassCIDocumentRenderer.swift`, Laser über Bluetooth `fundus:AlfaServices/Aufmass/LeicaDistoBluetoothAdapter.swift`, Ablauf (Foto laden, kalibrieren, messen, exportieren) `fundus:AlfaKit/Domain/GefuehrterAblauf.swift:123-147`. Status: offen. Quelle: J 04.10. ee8f053d 16:27 „Aufmaß-Tool um beim Projekt in Fotos der Situation Maße und Details einzutragen“ · J 29.08. 6a6a9365 „voll funktional“ (Wortlaut aus Auszug).
-- **SPAET-F03 Plan, Planvergleich, Konfigurator, Moodboard**: Soll: Moodboards dienen dem Pitch; der Konfigurator ist ein interner Küchenkonfigurator („IKEA Metod“), mit dem man schnell etwas aufzieht, visualisiert und kalkuliert; der Planvergleich vergleicht Zeichnungen und untersucht Elektro- und Sanitärpläne auf Änderungen; Plan-Werkzeug: lücke. Ist: fehlt; Bestand Plan `labor:App/Planwerkzeug/PlanEditorView.swift` (481 Zeilen), Planvergleich `labor:App/Scanner/ScannerView.swift`, Konfigurator `labor:App/Konfigurator/KonfigEditorView.swift` (545 Zeilen), Moodboard `labor:App/Papers/MoodboardEditorView.swift` (1442 Zeilen). Status: offen (Moodboard, Konfigurator, Planvergleich), lücke (Plan). Quelle: J 04.10. ee8f053d 16:27 · Bestand wie genannt.
-- **SPAET-F04 Atelier (Skizze)**: Soll: Das Atelier skizziert perspektivisch (Designsketching) und kann einen Renderprompt für Gemini, Adobe u. a. ausgeben. Ist: fehlt; Bestand `labor:App/Atelier/AtelierView.swift` (759 Zeilen), `labor:App/Atelier/SkizzeRenderer.swift`. Status: offen. Quelle: J 04.10. ee8f053d 16:27 „Skizzen/Atelier im perspectibisch zu skizzieren“ · Gegenwort älter: J 29.08. 6a6a9365 „noch nie real genutzt“ (Auszug; das jüngere Wort gilt).
-- **SPAET-F05 Assistent als Ansichtsbereich**: Soll: Der Assistent bekommt später einen vollen Ansichtsbereich wie Mail, mit Menüeintrag als Navigations-Item; bis dahin nur im Blob. Ist: fehlt; ALFA hat die Karte am Blob mit Eingabefeld-Text und ohne Antwortlogik (`alfaos/App/Shell/BlobMenuView.swift:240-285`); Hub-Port `AssistantPort` ist leer (`alfaos/Kit/Sources/Hub/Ports.swift:15`). Status: offen. Quelle: J 11.10. 7cc894d9 „Nur in den blob.“ und später ein eigener voller Ansichtsbereich · J 16.10. Master `entscheidungen.md:184,202` · Master `RUECKGABE-AN-CODE.md:29`.
-- **SPAET-F06 Assistent-Funktionen**: Soll: Funktionsbaum und Schalter (Kategorien, „ganz aus“, Tagebuch) entwirft Design mit Johannes; Code liefert das Lastenheft später. Ist: fehlt; Bestand hat zehn Freigabe-Kategorien für Werkzeuge (`fundus:AlfaServices/ConversationEngine.swift:252-290`, `fundus:AlfaServices/AssistantToolManifest.swift`), Chat-Ansicht `labor:Widgets/AssistantChatView.swift`. Status: lücke. Quelle: J 20.10. 3f52450e Klick Q-C „Design Entwirft mit mir, lstenheft oder Funktions-Baum muss an Design dann später“ · Einstellungen zum Assistenten: siehe spec-hub HUB-F13.
-- **SPAET-F07 Studio**: Soll: Notizen und Aufgaben des Assistenten gehören dem Studio; weiterer Inhalt: lücke. Ist: fehlt; Bestand hat acht Ansichten Kontakte, Aufgaben, Auslastung, Wer macht was, Termine, Zeiten, Verlauf (Meilensteine, Zeitstrahl, Gantt), Notizen (`labor:App/Shell/StudioBereichView.swift:10-50,128-136`). Zeiten buchen im Studio mit Clockodo steht dort als Kommentar von J 21.09. (`:132-136`, Original nicht geprüft). Status: lücke. Quelle: J 04.10. ee8f053d Klick „Dem Studio“ · Bestand.
-- **SPAET-F08 Kalender (und Aufgaben)**: Soll: lücke (Inhalt, Ansichten, Quelle). Reihenfolge: Projekte und Aufgaben zuerst, dann Kalender. Ist: fehlt; Bestand hat Google-Kalender-Anbindung (`fundus:AlfaServices/Google/GoogleCalendarClient.swift`) und ein Teamkalender-Widget (`labor:Widgets/Kinds/TeamkalenderWidget.swift`); Hub-Port `CalendarPort` ist leer (`alfaos/Kit/Sources/Hub/Ports.swift:4`; Kalender-Anbindung: siehe spec-hub HUB-F21). Status: lücke. Quelle: J 16.10. 97326b1d Klick Q16 „Projekte und Aufgaben, dann Kalender“.
-- **SPAET-F09 Kalkulation**: Soll: Kalkulation ist nicht Teil von Ende November („c - aber noch ohne Kalkulation“); Umfang und Zeitpunkt danach: lücke; der Konfigurator soll nach seinem Wort auch kalkulieren können. Ist: fehlt; Bestand hat einen Schätzer aus Preisankern (`fundus:AlfaCalculation/Estimation.swift:7`), eine Engine (`fundus:AlfaServices/Kalkulation/KalkulationsEngine.swift`), Lernen aus Angeboten (`fundus:AlfaServices/Kalkulation/LearningStore.swift`, `fundus:AlfaCalculation/OfferPositionExtractor.swift`), Werkstattfaktoren (`fundus:AlfaCalculation/WorkshopFactors.swift:3`) und die Widget-Art `kalkulation` (`fundus:AlfaKit/Domain/WidgetFoundation.swift:16`). Master führt „Werkstattfaktoren“ unter System als „Feineinstellung für Entwickler“ (`INHALT.json:626-629`). Status: lücke. Quelle: J 18.10. c2a04c8a (13:11 UTC, Wahl von Umfang C ohne Kalkulation) · J 04.10. ee8f053d 16:27 (Konfigurator „kalkulieren“).
+F01 = SPAET-F01. AUSSEHEN: Master zeichnet keinen dieser Bereiche, nur Namen (INHALT.json:828). Bestand = `fundus/alpha/Sources/`; Hub = `alfaos/Kit/Sources/Hub/`.
 
 ## Regeln
-- **SPAET-R01**: Keine Farbwelten und kein ALFAcolor: nur das ALFA-Interface; Johannes nennt ALFAcolor den Versuch, das App-Design zu zementieren. Der Bestandsordner ist seit 19.10. aus dem Repo entfernt (Commit `5db61b8`). Quelle: J 10.10. 7cc894d9 Klick „Nur das ALFA-Interface, keine Farbwelten“ · J 10.10. 7cc894d9 „der Versuch, das App Design zu zementieren“.
-- **SPAET-R02**: Kalkulation ist im Umfang Ende November nicht enthalten und wird bis dahin weder gebaut noch vorgeschlagen. Quelle: J 18.10. c2a04c8a · AGENTS.md:9.
-- **SPAET-R03**: Der Assistent erscheint bis zum eigenen Ansichtsbereich nur im Blob; der Menüeintrag kommt später. Quelle: J 11.10. 7cc894d9 · J 16.10. Master `entscheidungen.md:184`.
-- **SPAET-R04**: Werkstatt-Werkzeuge sind je ein eigener Bereich; ein Bereich „Werkstatt“ mit Unterwerkzeugen aus Entwurfsartefakten ist kein Soll. Quelle: J 04.10. ee8f053d (Artefakt „Werkstatt Vollbild-Konzepte“ widerspricht, laut `artefakte.md`, nur Hinweis).
-- **SPAET-R05**: Bestand wird in Funktion übernommen, nicht in Form, Namen oder Zuschnitt; nichts wird weggeworfen, was den Umbau noch nicht durchlaufen hat. Quelle: J 20.10. 3f52450e · AGENTS.md:50.
-- **SPAET-R06**: Angemeldet heißt alles dürfen; keine Rollen- oder Freigabelogik im neuen Code (Bestand hat sie, `labor:App/Gallery/ProjectGalleryView.swift:255`). Quelle: AGENTS.md:49 · J 13.10. 97326b1d („WIE die rollen gegated sind … Später“).
+- R01 Jedes Werkstatt-Werkzeug ist ein eigener Bereich.
+- R02 Die Editoren bauen auf den neutralen Ein- und Ausgabe-Modulen auf.
+- R03 Assistent in drei Formen: schneller Helfer per Doppelklick auf den Blob; eigener Bereich mit Menüeintrag; Draws als Editor.
+- R04 Bis zum eigenen Bereich erscheint der Assistent nur im Blob.
+- R05 Notizen und Aufgaben des Assistenten gehören dem Studio.
+- R06 Kalkulation ist nicht in Stufe 1.
+- R07 Nach Projekten und Aufgaben kommt der Kalender.
 
-## Lücken
-- **SPAET-L01**: Keine Zeichnung für Werkstatt (sechs Werkzeuge), Assistent-Ansichtsbereich, Studio, Kalender, Kalkulation. Liefert: Design, nach Johannes' Reihenfolge. Beleg: Master hat 10 `*.dc.html` ohne diese Bereiche; Namen nur in `INHALT.json:828`; Brief `DESIGN/brief/BRIEF.txt:128` nennt nur Projekte, Heute, Kataloge, Warenkorb als nächste.
-- **SPAET-L02**: Zuschnitt der Werkstatt: sechs eigene Bereiche (sein Wort 04.10.) oder ein Bereich mit Werkzeugen (Artefakt 16.10.). Liefert: Johannes. Beleg: `artefakte.md` Abschnitt „Weitere Funde“.
-- **SPAET-L03**: Renderprompt-Ausgabe des Ateliers: welche Ziele (Gemini, Adobe, weitere), wie sie erreicht werden (Hub-Integration oder Zwischenablage). Liefert: Johannes. Beleg: J 04.10. nennt „Gemini/Adobe etc.“ ohne Weg; Suche „atelier“ in seinen Nachrichten (Transkripte ALFA-OS*, ALPHA, ab 01.10.) findet nur 04.10. 16:27 und 16:29.
-- **SPAET-L04**: Funktionsbaum und Lastenheft des Assistenten. Liefert: Code (Lastenheft) und Design mit Johannes. Beleg: J 20.10. 3f52450e Q-C.
-- **SPAET-L05**: Inhalt und Zuschnitt des Studios (welche der acht Ansichten bleiben; Kontakte sind Hub-Integration, siehe spec-hub HUB-F41). Liefert: Johannes. Beleg: kein Wort zum Studio außer „Dem Studio“ (J 04.10.) in `spec-spaeter.md` und ASSUMPTIONS.tsv.
-- **SPAET-L06**: Kalkulation: Zeitpunkt, Umfang, Form (Bereich oder Werkzeug des Assistenten). Liefert: Johannes. Beleg: nur J 18.10.; Artefakt „Projektkarte“ (14.10.) sagt „nur Assistent-Werkzeug“, laut `artefakte.md` Hinweis ohne Wort von ihm.
-- **SPAET-L07**: Kalender-Bereich: Inhalt, Quelle (Google, Apple, Teamkalender) und Verhältnis zum Hub. Liefert: Johannes. Beleg: J 16.10. Q16 nennt nur die Reihenfolge.
-- **SPAET-L08**: Reihenfolge der übrigen Bereiche bis Launch Ende 2026. Liefert: Johannes. Beleg: `AGENTS.md:9` („alle übrigen Bereiche“), J 16.10. nennt nur Aufgaben und Kalender.
+## Werkstatt
+**F01 Aufmaß**  
+WAS: Maße und Details in Fotos der Situation; Laser per Bluetooth.  
+WO: eigener Bereich.  
+WARUM: Aufmaß im Projekt.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaKit/Domain/AufmassModell.swift, AlfaServices/Aufmass/LeicaDistoBluetoothAdapter.swift, AlfaKit/Domain/GefuehrterAblauf.swift:123-147.
 
-## Offen bei Johannes
-- Sechs eigene Werkstatt-Bereiche oder ein Bereich mit Werkzeugen?
-- Was gehört ins Studio, was in Heute und Projekte?
-- Wann und in welcher Form kommt die Kalkulation (Bereich oder Werkzeug des Assistenten)?
-- Was ist der Kalender-Bereich?
+**F02 Atelier**  
+WAS: perspektivisch skizzieren, auf Fotos und PDF; Renderprompt ausgeben.  
+WO: eigener Bereich.  
+WARUM: Entwurf schnell zeigen.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaKit/Domain/Skizze/SkizzenModell.swift, Skizze/PromptKompilierer.swift, Skizze/RenderCheckout.swift.
+
+**F03 Moodboard**  
+WAS: Bilder und Medien zu Tafeln für den Pitch, aus Vorlage zu PDF.  
+WO: eigener Bereich.  
+WARUM: Pitch.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand im Fundus nicht gefunden.
+
+**F04 Konfigurator**  
+WAS: Küche schnell aufziehen, zeigen, kalkulieren.  
+WO: eigener Bereich.  
+WARUM: erstes Angebot ohne CAD.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaKit/Domain/Konfigurator/KonfigModell.swift, Konfigurator/KonfigRegeln.swift.
+
+**F05 Plan, Planvergleich**  
+WAS: Plan bearbeiten; Zeichnungen und Elektro-, Sanitärpläne auf Änderungen vergleichen.  
+WO: eigener Bereich.  
+WARUM: Änderungen nicht übersehen.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: Plan AlfaKit/Domain/PlanDokument.swift:70; Planvergleich im Fundus nicht gefunden.
+
+## Assistent
+**F06 Assistent als Bereich**  
+WAS: voller Bereich: Dokumente ausgeben, Dateien suchen, Termine, Notizen, erklären, kalkulieren.  
+WO: eigener Bereich; Blob.  
+WARUM: Hilfe bei jeder Arbeit.  
+AUSSEHEN: nicht gezeichnet; Blob-Fenster Shell:86-93, Eingabe Brief N37.  
+STAND: teilweise; Karte im Blob ohne Antwort (`alfaos/App/Shell/BlobMenuView.swift:240-264`), AssistantPort leer (Ports.swift:15); Bestand: AlfaServices/ConversationEngine.swift:252-290 (Freigaben je Datenart).
+
+## Studio
+**F07 Studio**  
+WAS: Notizen, Aufgaben, Kontakte, Auslastung, Termine, Zeiten des Teams.  
+WO: eigener Bereich.  
+WARUM: Team im Blick.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaKit/Domain/StudioContact.swift, AlfaServices/Brain/StudioBrain.swift.
+
+## Kalender
+**F08 Kalender**  
+WAS: Termine aus den Kalendern am Hub.  
+WO: eigener Bereich.  
+WARUM: Termine zum Vorgang.  
+AUSSEHEN: nicht gezeichnet.  
+STAND: fehlt; Bestand: AlfaServices/Google/GoogleCalendarClient.swift; CalendarPort leer (Ports.swift:4).
+
+## Kalkulation
+**F09 Kalkulation**  
+WAS: Schätzen aus Preisankern, Lernen aus Angeboten, Werkstattfaktoren.  
+WO: offen.  
+WARUM: Preise ohne Rechnen von Hand.  
+AUSSEHEN: nicht gezeichnet; Werkstattfaktoren INHALT.json:626-629 (Text).  
+STAND: fehlt; Bestand: AlfaCalculation/Estimation.swift, AlfaServices/Kalkulation/KalkulationsEngine.swift, Kalkulation/LearningStore.swift, AlfaCalculation/WorkshopFactors.swift.
