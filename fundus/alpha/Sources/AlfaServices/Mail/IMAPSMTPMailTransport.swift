@@ -317,6 +317,10 @@ public struct IMAPSMTPMailTransport: MailTransport {
         }
     }
 
+    public func supportsPurge() async throws -> Bool {
+        try await withIncoming { await $0.has("UIDPLUS") }
+    }
+
     public func sendDraft(id: String) async throws {
         let stored = try await fetchDraft(messageID: id)
         try await send(stored.draft)

@@ -1709,7 +1709,13 @@ final class TransportDouble: MailTransport, @unchecked Sendable {
     var foundIDs: Set<String> = []
     var checkError: Error?
     func wasSent(messageID: String) async throws -> Bool { if let checkError { throw checkError }; return foundIDs.contains(messageID) }
-    var canPurge = false
+    var expunges: Bool?
+    var checks = 0
+    func supportsPurge() async throws -> Bool {
+        checks += 1
+        guard let expunges else { throw MailTransportError.accountIncomplete("incoming") }
+        return expunges
+    }
     func purge(messageID: String) async throws { try record("purge:" + messageID) }
 }
 
@@ -1745,7 +1751,9 @@ final class HubDouble: HubAccess {
     func configured(for capability: Capability) -> [Inlet] {
         capability == .mail ? mailInlets : []
     }
+    var ports = 0
     func port<P>(_ port: P.Type, for inlet: Inlet.ID) throws(HubError) -> P {
+        ports += 1
         guard let known = mailInlets.first(where: { $0.id == inlet }), known.state.isConnected, let transport = transports[inlet] as? P else { throw .notConnected(inlet) }
         return transport
     }
@@ -3216,21 +3224,33 @@ final class ModelActionTests {
         XCTAssertEqual(document?.name, "Hello.pdf")
         XCTAssertTrue(PDFDocument(data: document?.data ?? Data())?.string?.contains("Hello") == true)
     }
-    private func stepPurgingNeedsATransportThatCanDoIt() async throws {
-        let rig = try mailRig()
-        XCTAssertFalse(rig.core.canPurge("one"))
-        try? await rig.core.purge("one", messageID: "m1")
-        XCTAssertEqual(rig.transport.calls, [])
-        rig.transport.canPurge = true
-        XCTAssertTrue(rig.core.canPurge("one"))
+    private func stepPurgingIsOfferedOnlyAfterTheServerWasSeenToExpunge() async throws {
+        let rig = try mailRig(folders: [MailFolder(id: "INBOX", name: "Inbox", role: .inbox), MailFolder(id: "T", name: "Trash", role: .trash)])
+        rig.transport.setPage("T", MailMessagePage(messages: [message("m1"), message("m2")]))
+        _ = rig.hub.add("two")
+        await rig.model.start()
+        await rig.model.selectFolder("T")
+        XCTAssertFalse(rig.model.canPurge("m1"))
+        rig.transport.expunges = true
+        await rig.model.selectFolder("T")
+        let before = [rig.transport.checks, rig.hub.ports]
+        XCTAssertTrue(rig.model.canPurge("m1") && rig.core.canPurge("one") && !rig.core.canPurge("two"))
+        XCTAssertEqual([rig.transport.checks, rig.hub.ports], before)
         try await rig.core.purge("one", messageID: "m1")
+        rig.transport.expunges = false
+        rig.hub.push(.inletChanged("one"))
+        _ = await eventually { !rig.core.canPurge("one") }
+        await rig.model.selectFolder("T")
+        XCTAssertEqual(rig.transport.checks, before[0] + 1)
+        try? await rig.core.purge("one", messageID: "m2")
         XCTAssertEqual(rig.transport.calls, ["purge:m1"])
+        XCTAssertEqual(rig.core.messages("one", folder: "T").map(\.id), ["m1", "m2"])
     }
     func runTheModelActions() async throws {
         await stepForwardingKeepsTheAttachmentsOfTheOriginal()
         await stepAFailedAttachmentDownloadStopsTheForwardAndUnpinsTheMail()
         await stepThePdfOfAMailHoldsItsSubject()
-        try await stepPurgingNeedsATransportThatCanDoIt()
+        try await stepPurgingIsOfferedOnlyAfterTheServerWasSeenToExpunge()
         try await stepAProjectFileIsAttachedAndAMailIsPutIntoItsProjectFolder()
         await stepArchiveRemovesTheRowClosesTheCardAndCountsAgain()
         await stepArchiveInTheAllFolderKeepsTheRowListed()
@@ -4728,10 +4748,15 @@ final class IMAPActionTests {
         XCTAssertFalse(smtp.commands.contains("DATA"))
     }
 
-    private func stepDeletingADraftFlagsItDeletedAndExpunges() async throws {
+    private func stepRemovingAMessageFlagsItDeletedAndExpungesAndOnlyUIDPLUSAllowsAPurge() async throws {
         let server = ActionFixture.server(capabilities: "IMAP4rev1 UIDPLUS")
-        try await ActionFixture.transport(StreamQueue([server])).deleteDraft(id: "7:20:Drafts")
-        XCTAssertEqual(commands(server), ["SELECT \"Drafts\"", "UID STORE 20 +FLAGS.SILENT (\\Deleted)", "UID EXPUNGE 20"])
+        let transport = ActionFixture.transport(StreamQueue([server]))
+        try await transport.deleteDraft(id: "7:20:Drafts")
+        try await transport.purge(messageID: "7:21:Trash")
+        let seen = try await [transport.supportsPurge(), ActionFixture.transport(StreamQueue([ActionFixture.server(capabilities: "IMAP4rev1")])).supportsPurge()]
+        XCTAssertEqual(seen, [true, false])
+        XCTAssertEqual(commands(server), ["SELECT \"Drafts\"", "UID STORE 20 +FLAGS.SILENT (\\Deleted)", "UID EXPUNGE 20",
+                                          "SELECT \"Trash\"", "UID STORE 21 +FLAGS.SILENT (\\Deleted)", "UID EXPUNGE 21"])
     }
 
     private func stepIdleYieldsPushedChangesEndsWithDoneAndLeavesTheSessionUsable() async throws {
@@ -4814,7 +4839,7 @@ final class IMAPActionTests {
         try await stepSendingAStoredDraftSendsItThenRemovesIt()
         await stepAFailedSendKeepsTheStoredDraft()
         await stepASendLargerThanTheDeclaredSizeIsRefusedBeforeUpload()
-        try await stepDeletingADraftFlagsItDeletedAndExpunges()
+        try await stepRemovingAMessageFlagsItDeletedAndExpungesAndOnlyUIDPLUSAllowsAPurge()
     }
 }
 

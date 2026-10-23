@@ -47,6 +47,7 @@ public final class MailModel {
     public internal(set) var picked: [String] = []
     public internal(set) var searchScope = MailSearchScope.all
     public internal(set) var searching = false
+    public internal(set) var purgeChecks = 0
     public internal(set) var overview = MailOverview()
     public internal(set) var toast: MailToast?
     public internal(set) var contacts: [MailContact] = [] { didSet { MailContact.store(contacts, in: defaults) } }
@@ -313,6 +314,8 @@ public final class MailModel {
         nextPageToken = nil
         if query.isEmpty { summaries = engine.messages(inlet, folder: folder) }
         phase = .loading
+        await checkPurge()
+        guard mine == generation else { return }
         await fetch(inlet: inlet, folder: folder, query: query.isEmpty ? nil : query, token: nil,
                     generation: mine, replace: true)
     }
@@ -382,6 +385,7 @@ public final class MailModel {
             } else if !reachable, selectedAccount?.state.isConnected == true {
                 await loadSelection()
             }
+            await checkPurge()
         case .foldersChanged(let inlet):
             if inlet == selectedInlet { loadFoldersFromEngine() }
         case .messagesChanged(let inlet, let folder):

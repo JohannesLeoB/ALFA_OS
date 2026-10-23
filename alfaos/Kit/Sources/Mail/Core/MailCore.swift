@@ -24,6 +24,7 @@ public final class MailCore: MailEngine {
     private var unremoved: Set<OutboxItem.ID> = []
     private var listeners: [UUID: AsyncStream<MailEngineEvent>.Continuation] = [:]
     private var watcher: Task<Void, Never>?
+    private var expunging: [Inlet.ID: Bool] = [:]
 
     public init(hub: any HubAccess, database: DatabaseQueue, now: @escaping @Sendable () -> Date = { Date() }) throws {
         self.hub = hub
@@ -205,7 +206,17 @@ public final class MailCore: MailEngine {
     }
 
     public func canPurge(_ inlet: Inlet.ID) -> Bool {
-        ((try? transport(inlet)) as? any MailPurging)?.canPurge ?? false
+        expunging[inlet] ?? false
+    }
+
+    public func checkPurge(_ inlet: Inlet.ID) async {
+        guard expunging[inlet] == nil, isConnected(inlet), let purging = (try? transport(inlet)) as? any MailPurging,
+              let found = try? await purging.supportsPurge() else { return }
+        expunging[inlet] = found
+    }
+
+    private func isConnected(_ inlet: Inlet.ID) -> Bool {
+        accounts.first { $0.id == inlet }?.state.isConnected ?? false
     }
 
     public func purge(_ inlet: Inlet.ID, messageID: String) async throws(HubError) {
@@ -447,9 +458,11 @@ public final class MailCore: MailEngine {
 
     private func handle(_ event: HubEvent) async {
         switch event {
-        case .inletChanged:
+        case .inletChanged(let inlet):
+            expunging[inlet] = nil
             emit(.accountsChanged)
         case .inletRemoved(let inlet):
+            expunging[inlet] = nil
             purge(inlet)
         case .syncFinished(.mail, let inlet):
             await sync(inlet)

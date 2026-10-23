@@ -3,13 +3,11 @@ import AlfaKit
 import AlfaServices
 
 public protocol MailPurging: Sendable {
-    var canPurge: Bool { get }
+    func supportsPurge() async throws -> Bool
     func purge(messageID: String) async throws
 }
 
-extension IMAPSMTPMailTransport: MailPurging {
-    public var canPurge: Bool { true }
-}
+extension IMAPSMTPMailTransport: MailPurging {}
 
 struct CountingMailTransport: MailTransport, MailPurging {
     let base: any MailTransport
@@ -99,10 +97,14 @@ struct CountingMailTransport: MailTransport, MailPurging {
         return try await base.wasSent(messageID: messageID)
     }
 
-    var canPurge: Bool { (base as? any MailPurging)?.canPurge ?? false }
+    func supportsPurge() async throws -> Bool {
+        guard let base = base as? any MailPurging else { return false }
+        meter.record()
+        return try await base.supportsPurge()
+    }
 
     func purge(messageID: String) async throws {
-        guard let base = base as? any MailPurging, base.canPurge else { throw MailTransportError.unsupportedCapability("purge") }
+        guard let base = base as? any MailPurging else { throw MailTransportError.unsupportedCapability("purge") }
         meter.record()
         try await base.purge(messageID: messageID)
     }
