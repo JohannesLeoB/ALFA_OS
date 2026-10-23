@@ -1,6 +1,6 @@
 # Appliances
 
-Niche and cut-out sizes in mm, all ca. start values; the joiner takes the niche from the data sheet. Never name a brand.
+Niche and cut-out sizes in mm, all ca. start values; the joiner takes the niche from the data sheet. Name no brand or product.
 
 | Appliance | Niche or cut-out | Where |
 |---|---|---|

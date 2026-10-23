@@ -5,7 +5,7 @@ Offer variants A, B and C when the client has not decided, or when asked.
 ## Method
 
 1. Build the brief version first and keep it as A.
-2. Change exactly one axis per variant; never two at once.
+2. Default: change one axis per variant; change when the person asks for more.
 3. Keep the room, the work triangle (sink, hob, fridge) and the clearances.
 4. Rebuild with add_kitchen under the same prefix (it replaces the earlier kitchen), render_preview, then the next variant.
 5. Name each variant in one line in finish: `B: handleless, rest as A`.
@@ -22,4 +22,4 @@ Offer variants A, B and C when the client has not decided, or when asked.
 
 - Material variants use the variants of the project (role to code); other axes use add_kitchen.
 - A variant that breaks the triangle or a clearance is not a variant: fix it or drop it.
-- Mark which variant you recommend and why in one sentence.
+- Default: mark which variant you recommend and why in one sentence.

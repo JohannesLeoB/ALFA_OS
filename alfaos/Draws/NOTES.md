@@ -1,4 +1,4 @@
-# Draws · Stand 22.10.2026
+# Draws · Stand 23.10.2026
 
 Prototyp auf `alfa-draws` (Clone `~/Developer/ALFA_DRAWS`). Status Orange: kein Design-Master für Draws, keine Abnahme. Nichts davon in `main` ohne Johannes.
 
@@ -7,8 +7,8 @@ Prototyp auf `alfa-draws` (Clone `~/Developer/ALFA_DRAWS`). Status Orange: kein 
 - Nutzer zieht Material rein und schreibt einen Satz; keine Parameter, kein JSON.
 - Eingang mit Rollen: Skizze, Plan/Unterlage, Perspektiv-Entwurf, Clay-Screenshot, Materialbündel (Texturen), Beispielbilder.
 - Claude baut die Szene live im Canvas über Draws-Werkzeuge, Skillset `alfanomy`, gewichtet nach Style-Master; Korrektur per Satz.
-- Maße: Stufe 1 keine, Stufe 2 nur gegebene, Stufe 3 („ca.“) später.
-- Kein Schwerpunkt auf Mechanik (Fronten, Schubladen öffnen).
+- Maße: Stufe 1 keine, Stufe 2 nur gegebene, Stufe 3 („ca.“) später. Entwurfsstufe: ca. Werte, keine Fertigungsplanung.
+- Mechanik: Schwerpunkt ist die Visualisierung. Einheiten (Öffnen, Posen) und interaktives HTML sind gebaut, aber geparkt bis zu Johannes' Entscheid.
 
 ## Arbeitsdatei
 - Ein Blatt = eine `.svg`: sichtbar die Zeichnung, im `<metadata>` (`draws:doc`, Namensraum `https://alfa.app/draws`, Schema 1) das ganze Modell samt Eingängen und Texturen. Draws öffnet sie bearbeitbar; fremdes SVG wird Unterlage.
@@ -16,11 +16,11 @@ Prototyp auf `alfa-draws` (Clone `~/Developer/ALFA_DRAWS`). Status Orange: kein 
 
 ## Ausgabe
 - Hauptformat PDF nach Vorlage (A3-Plan, A4-Deck); Schriften aus den Einstellungen, Fallback ALFA-Schrift.
-- Mit Bewegung oder Ansichtswahl: muss als Mailanhang ohne Einladung und Freigabe mit Bordmitteln aufgehen (HTML-Einzeldatei offline, MP4).
+- Mit Bewegung oder Ansichtswahl: muss als Mailanhang ohne Einladung und Freigabe mit Bordmitteln aufgehen (HTML-Einzeldatei offline).
 
 ## Abgrenzung zu ALFA
 - Draws hat kaum eigene Infrastruktur. Claude-Zugang, Dateien, Vorlagen, Projektdaten, Speicher und Versand kommen über Hub und Einstellungen.
-- Pages, Intake, Templates, Assist und die Dock-Ports sind Vorarbeit für Kit/Hub; was übernommen wird, entscheidet Johannes.
+- Pages, Intake, Templates, Assist und die Dock-Ports sind Vorarbeit für Kit/Hub; Übernahme offen.
 - Draws-eigen bleiben: Zeichenkern, Claude-Werkzeuge und Skills, Oberfläche.
 - Claude-Modell aus dem gespeicherten Zugang, Schlüssel nur im Hub.
 
@@ -44,6 +44,5 @@ Specs: `specs/family.md` (Creative Family), `specs/aufmass.md` (Aufmaß), `specs
 ## Offen
 - Foto-Render: Maserrichtung nicht je Teil; USDZ möglich über SceneKit `SCNScene.write` oder `MDLUtility.convertToUSDZ`, noch nicht gebaut; Befunde Gegenprüfer offen (SVG ab ca. 7,5 MB Textur, xlsx-Speicher, Render auf Hauptthread, Bahn bei 840).
 - Ablauf „reinziehen, ein Satz“ in der Oberfläche.
-- MP4-Ausgabe.
 - Hub-Ports: wer baut, Reihenfolge (offen bei Johannes und Lead).
 - Nie gegen die echte Claude-API und nie in der echten App geprüft.

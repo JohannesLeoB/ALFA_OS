@@ -23,8 +23,8 @@ Cabinet types with typical start values in mm, ca. A type is a kind (add_kitchen
 | Filler (Passstück) | base or wall | 100 | as neighbour | as neighbour |
 | End panel (Wange) | open | 19 | as neighbour | as neighbour |
 
-- Any width, height and depth is valid for every type; never refuse, round or snap a size the person gave.
-- Heights add up: plinth + carcass + worktop = worktop height (start values 80 + 800 + 40 = 920, studio practice 100 + 810 + 20 = 930).
+- Any width, height and depth is valid for every type; by default take a size the person gave as given, without rounding or snapping; change when the person asks.
+- Heights add up: plinth + carcass + worktop = worktop height (start values 80 + 800 + 40 = 920, studio values 100 + 810 + 20 = 930, measured from studio drawings, to be confirmed).
 - Fill the run length with the widths the person prefers; put the odd rest in one filler at a wall end.
 - Tall, fridge and top stack: a top cabinet (kind top) sits on the cabinet before it.
 - Corner wall 675 closes an L run above corner L 880; a blind corner needs one door-width neighbour.

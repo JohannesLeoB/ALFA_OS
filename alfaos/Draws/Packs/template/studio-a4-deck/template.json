@@ -45,8 +45,7 @@
     "readout.width": "{w} mm breit",
     "readout.fronts": "{n} Fronten",
     "readout.travel": "Hub {now} / {max} mm",
-    "readout.angle": "Winkel {now}° / {max}°",
-    "readout.idle": "Front anklicken"
+    "readout.angle": "Winkel {now}° / {max}°"
   },
   "interactive": {
     "fade": 0.26,

@@ -1,6 +1,6 @@
 # Spec · Aufmaß
 
-Stand 22.10.2026 · Sammlung der Draws-Sitzung aus Johannes' Bildern (Altcode-App, 7 Bilder + Hub-Entwürfe) und der Altcode-Inventur. Nicht gebaut; gebaut wird vorerst nur Draws.
+Stand 22.10.2026 · Entwurf aus Altcode-Inventur und Hub-Entwürfen. Nicht gebaut.
 
 ## Ablauf
 Foto der Wand auf der Baustelle → in Aufmaß laden → mit Maus und Linienwerkzeug Punkt-zu-Punkt-Linien ins Foto setzen → Maß von Hand eintragen oder per Bluetooth vom Laser übernehmen. Aufmaß ist Zeichnen mit Maß, kein CAD.
@@ -21,22 +21,22 @@ Foto der Wand auf der Baustelle → in Aufmaß laden → mit Maus und Linienwerk
 | Export | CI-PDF mit Plankopf, flaches PDF, PNG; Ablegen in Projektordner `01 INFOS/01 Pläne`, sonst Ordner frei | Bild 4–5, :1942-1970 |
 | Stände | Werkstatt-Ablage mit Papierkorb | ArbeitsstandAblage.swift |
 
-## Laser (Leica DISTO D110, unbelegt an Hardware)
-- CoreBluetooth; Name enthält „disto“; Service `3AB10100-F831-4395-B29D-570977D5BF94`, Messwert-Characteristic `3AB10101-…` (LaserGeraeteProfil.swift:31-38).
+## Laser (Bluetooth-Entfernungsmesser, unbelegt an Hardware)
+- CoreBluetooth; Name enthält die Gerätekennung des Altcodes; Service `3AB10100-F831-4395-B29D-570977D5BF94`, Messwert-Characteristic `3AB10101-…` (LaserGeraeteProfil.swift:31-38).
 - Wert: erste 4 Bytes IEEE754 float32 little-endian = Meter, endlich, ≥ 0 (LeicaDistoStatusReducer :144-150).
 - Fehler im Altcode: Service/Characteristic mit `.first` statt UUID (:112, :117), kein Neuverbinden, Streams enden nie.
 - Erst Diagnose am echten Gerät, dann Profil festschreiben.
 
-## Aus Johannes' Bildern
-1. Blatt: Foto klein mittig, viel Leerraum; rechte Spalte leer bis aufs Schriftfeld; Maßstab 1:100 beim Foto sinnlos; Firmendaten und Zeichner fest.
-2. Export über den Standard-Sichern-Dialog („…CI-Dokument (A3 quer)“, Name `Neues-Aufmaß-Aufmass-A3`).
-3. Dialog „Plankopf“ vor dem Export: Kunde, Projekt, Straße, PLZ/Stadt, Kundennr., Datum, Maßstab, Zeichner, Mail; Live-Vorschau des Blatts.
-4. Exportmenü: CI-Aufmaß-PDF (Plankopf), flaches PDF, PNG.
+## Anforderungen an Blatt und Export
+1. Blatt: Foto füllt das Zeichenfeld; Maßstab „o. M.“ beim Foto; Firmendaten und Zeichner aus dem Hub.
+2. Export über den Standard-Sichern-Dialog.
+3. Plankopf vor dem Export: Kunde, Projekt, Straße, PLZ/Stadt, Kundennr., Datum, Maßstab, Zeichner, Mail; Live-Vorschau des Blatts.
+4. Exportformate: CI-PDF (Plankopf), flaches PDF, PNG.
 5. „Ablegen“ in den Projektordner, daneben „Anderswo speichern“.
-6. Messen mit Lupe, Stil „Dünn“, Einrasten/Fadenkreuz; leere Maßliste zeigt einen Erklärsatz (fällt weg); Summe unten.
-7. PDF-Metadaten leer (Titel, Verfasser, Stichwörter), PDF 1.3 Quartz, ohne Tags, 419,8 × 296,7 statt 420 × 297.
-8. Drive „Vorlagen“: 03_AUFMASS, 04_MOODBOARD, VECTORWORKS PLÄNE (DWG A0–A3, Elektro/Sanitär; DWG_DXF; PDF Planlayouts), MOODBOARD TEMPLATES, Aufmaß-Vorlage/-Template. Kommt in ALFA per Pfad über die Einstellungen.
-9. Hub-Entwürfe: Einstellungen Firma → Firmendaten (Fuß des Schriftfelds), Dateiordner (Projektordner im geteilten Drive, Projektdaten Airtable), Vorlagen (noch leer).
+6. Messen mit Lupe, Einrasten, Fadenkreuz; Maßliste mit Summe.
+7. PDF-Metadaten gefüllt (Titel, Verfasser, Stichwörter), Seitengröße genau 420 × 297.
+8. Vorlagen (Aufmaß, Moodboard, Pläne) kommen per Pfad über die Einstellungen.
+9. Hub: Firma → Firmendaten (Fuß des Schriftfelds), Dateiordner (Projektordner, Projektdaten), Vorlagen.
 
 ## Prüfung (eine, die rot werden kann)
 Kalibrierung (Strecke → mm/px), Maß aus zwei Punkten, Entzerrung (4 Punkte → bekanntes Rechteck), Laser-Dekodierung (Bytes → Meter, ungültige Werte abgelehnt), Maßliste mit Summe und Herkunft, Blatt-Golden.

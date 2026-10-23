@@ -31,3 +31,16 @@ Pack liefert Startwerte; Eingabe überschreibt; Startwerte füllen nur Auslassun
 | gebaut | Code vorhanden, Beleg Datei:Zeile |
 | Daten | im Pack/Skill als Wert, ohne Logik |
 | offen | nur als Anforderung |
+
+## Zu bestätigen
+Werte, die Claude gewählt hat; Status je Zeile: Claude-Wahl, offen.
+- Sockelrücksprung 50 → Generator, Pack `presets/carcass.json`, Skill core → Claude-Wahl, offen
+- Rückwand 8, Seite 19, Fachbodenraster 300 → Generator, Pack carcass, Skill splits → Claude-Wahl, offen
+- Schubladenteilung 20/30/50 % → Generator, Skill splits → Claude-Wahl, offen
+- Einlagen Kochfeld 560 × 490 bei 60, Spüle 500 × 400 bei 80 → Generator, Skill appliances → Claude-Wahl, offen
+- Gerätetöne → Pack carcass, Render → Claude-Wahl, offen
+- Studio-Werte 100/810/20 und Studio-Plan, -Deck, CI → Skill core/types/plans, `Packs/template/studio-*` → Claude-Wahl, offen
+- Lichtpresets Studio, Weich, Warm, Hart → Foto-Render (DrawsRender) → Claude-Wahl, offen
+- A4-Deck-Vorlage → `Packs/template/studio-a4-deck` → Claude-Wahl, offen
+- ExportName-Muster → DrawsDock → Claude-Wahl, offen
+- Intake xlsx und CSV → Intake → Claude-Wahl, offen

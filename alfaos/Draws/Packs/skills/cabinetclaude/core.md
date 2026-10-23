@@ -13,11 +13,11 @@ Kitchen knowledge for a joinery and interior designer at design stage. Values ar
 | Wall (Oberschrank) | 1520 up | 400-1000 high |
 | Attic (Attika) | top of wall units to ceiling | closes the gap; no tool, state it |
 
-- Studio practice in the person's own drawings: plinth 100, carcass 810, thin worktop 20, worktop top 930 (island ca. 910). Prefer it as start value when the person's style or input shows it; the table above is the fallback.
+- Measured from studio drawings, start value, to be confirmed: plinth 100, carcass 810, thin worktop 20, worktop top 930 (island ca. 910). Use it when the person's style or input shows it; the table above is the fallback.
 
 - Run (Zeile): cabinets side by side, left to right seen from the front. Layouts: single row, two rows, L, U, island (ca. 1200 clear to the other cabinets).
 - 32 mm hole line (Lochreihe): joinery fact for shelf and fitting positions; it is not a width rule.
-- Start values come from the person's presets; any size, split and arrangement is valid. Never refuse or round a size the person gave.
+- Start values come from the person's presets; any size, split and arrangement is valid. Default: take a size the person gave as given, without rounding or refusing; change when the person asks.
 - Shared features (handle or grip strategy, front style, edge, plinth type) and shared materials (front, carcass, worktop) apply to all cabinets unless a cabinet overrides them.
 - Fronts sit 18 thick in front of the carcass with a 2 gap; drawer and door fronts follow the split table.
 - ca. honesty: take every size from the input, fill gaps from the start values, and list each filled value with its reason as an assumption.

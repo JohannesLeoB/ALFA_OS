@@ -1,6 +1,6 @@
 # Plan sets
 
-Conventions of design-stage kitchen sets. Presentation drawings, not production plans: a few mm do not matter, walls are crooked.
+Conventions seen in studio drawings, used as defaults Claude may change when the person asks. Design stage, not production planning: ca. values are allowed, a few mm do not matter, walls are crooked.
 
 ## Set structure
 - Sheet: A3 landscape, one frame. One scale per sheet, written in the title block.
@@ -16,14 +16,14 @@ Conventions of design-stage kitchen sets. Presentation drawings, not production 
 - Scale: kitchens 1:20 or 1:25, furniture 1:10, room overview 1:50.
 
 ## Dimensioning
-- Whole mm, no unit, no "ca.". Text small and mono, vertical text rotated 90 degrees.
+- Whole mm, no unit; ca. values and tbd are allowed at design stage. Text small and mono, vertical text rotated 90 degrees.
 - Ticks at 45 degrees on the chain ends, no arrowheads. Short extension lines with a small overrun.
-- At most 3 chain levels: modules, block total, wall total. Parts and total run parallel.
+- Usually up to 3 chain levels: modules, block total, wall total. Parts and total run parallel.
 - Chains sit outside the body: widths below an elevation and outside a plan, heights as one chain from the finished floor on one side. Never inside the body.
-- Height chain, base to top: plinth 100, carcass, worktop 20 or 40. Mark the worktop top with a small triangle and "APL OK".
-- Add small end dimensions for side panels, gaps and fillers (19, 22, 30, 70). Never drop them.
-- Odd edge modules (364, 656, 779) absorb the wall deviation. Keep the grid module elsewhere, put the remainder at the edge.
-- Open points: write tbd. Never guess, never "ca.".
+- Height chain, base to top: plinth 100 (studio value, to be confirmed), carcass, worktop 20 or 40. Mark the worktop top with a small triangle and "APL OK".
+- Add small end dimensions for side panels, gaps and fillers (19, 22, 30, 70). Keep them.
+- Odd edge modules (364, 656, 779) absorb the wall deviation. Keep the usual module width elsewhere, put the remainder at the edge.
+- Open points: write tbd or a ca. value.
 - Survey values (room, wall, window) are lighter grey than planned ones. Planned values are strong.
 - Do not dimension at design stage: handles, socket heights, plumbing, lights, niche internals, drawer heights. Do it only when the person asks.
 
@@ -45,4 +45,4 @@ Conventions of design-stage kitchen sets. Presentation drawings, not production 
 ## Stage logic
 - Early stage: perspectives, a rough plan, 3 to 6 overall dimensions, appliance names. Elevations without dimensions or texts.
 - Next stage: full chains, function texts, opening marks, wall hatch, variants, legend filled, window and door in the plan.
-- Never mix stages on one sheet. Say in finish which stage you drew.
+- Default: one stage per sheet. Say in finish which stage you drew.

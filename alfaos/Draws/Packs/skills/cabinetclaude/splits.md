@@ -36,4 +36,4 @@ Front notation, top to bottom, joined by ` / `: `left|right|pair` door, `n` or `
 | Broom cupboard (Besenschrank) | `left` | 400-600 | one door, tall |
 
 - Fixed heights come first, the rest is shared by the other fronts; fixed heights above the cabinet height fail with a split error.
-- Fewer, larger fronts look calmer; match the drawer lines across neighbouring bases.
+- Default: prefer fewer, larger fronts and matching drawer lines across neighbouring bases; change when the person asks.

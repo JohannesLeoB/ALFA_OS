@@ -1,22 +1,23 @@
 # Spec · ALFA Creative Family
 
-Stand 22.10.2026 · Entwurf der Draws-Sitzung, keine Entscheidung. Gebaut wird vorerst nur Draws (Johannes 22.10.: „wir bleiben aber baulich erstmal bei draws“).
+Stand 22.10.2026 · Entwurf, nicht beschlossen.
 
-## Johannes' Wort
-- 22.10.: „DRAWS ist in ALFA_OS, als eine der Funktionsengines der creative cloud, also den Editoren“ – Skizze/Atelier (Linien, Pinsel, Marker, Tusche, Füllungen, Farbwähler, Farbbibliotheken auf Foto oder Papiervorlage), Entwurfsskizzen mit Annotationen auf PDFs, Moodboard (wie InDesign, Canva, Figma, Notion, Keynote), Aufmaß (Foto, Laser per Bluetooth, Punkt-zu-Punkt-Linien, Maße von Hand oder vom Laser), Materialtexturen und Medien aus Hub und Integrationen.
-- 22.10.: die Editoren wie Adobe-Produkte gedacht (Photoshop, Illustrator, InDesign, Bridge), „eine family mit eigenen und verbindenden File- und Funktionstypen und immer auch einem rein und raus in sehr ähnlicher Form“.
-- 22.10.: Claude, Dateien, Vorlagen kommen zentral über Hub und Einstellungen.
+## Umfang
+- Draws ist ein Editor der ALFA Creative Cloud. Weitere Editoren: Skizze (Linien, Pinsel, Füllungen, Farbbibliotheken auf Foto oder Papier, Annotationen auf PDF), Moodboard, Aufmaß (Foto, Punkt-zu-Punkt-Linien, Maß von Hand oder Laser).
+- Gemeinsam: eigene und verbindende Dateitypen, Ein- und Ausgang in ähnlicher Form.
+- Claude, Dateien, Vorlagen, Materialtexturen und Medien kommen über Hub und Einstellungen.
+- Gebaut wird vorerst nur Draws.
 
 ## Familie
-| Editor | Sinnbild | eigene Engine | Werk |
-|---|---|---|---|
-| Draws | Illustrator + Dimension | Teile, Einheiten, Projektion → Blätter | Entwurf |
-| Skizze | Photoshop / Fresco | Pinsel, Marker, Füllung auf Foto/Papier | Skizze |
-| Aufmaß | Messwerkzeug | Kalibrieren, Entzerren, Messen, Laser | Aufmaß (spec `aufmass.md`) |
-| Moodboard | InDesign / Canva | Seiten-Layout, Bildzonen, Beschriftung | Board |
-| Planvergleich | Acrobat Vergleichen | zwei PDF-Sätze abgleichen | Vergleich |
-| Konfigurator | Konfigurator | Regeln → Teile | geht als Regel-Generator in Draws auf |
-| Ablage | Bridge | Werke je Projekt, Stände, Verknüpfungen | – |
+| Editor | eigene Engine | Werk |
+|---|---|---|
+| Draws | Teile, Einheiten, Projektion → Blätter | Entwurf |
+| Skizze | Pinsel, Marker, Füllung auf Foto/Papier | Skizze |
+| Aufmaß | Kalibrieren, Entzerren, Messen, Laser | Aufmaß (spec `aufmass.md`) |
+| Moodboard | Seiten-Layout, Bildzonen, Beschriftung | Board |
+| Planvergleich | zwei PDF-Sätze abgleichen | Vergleich |
+| Konfigurator | Regeln → Teile | geht als Regel-Generator in Draws auf |
+| Ablage | Werke je Projekt, Stände, Verknüpfungen | – |
 
 ## Rückgrat (neutral, typisiert, je Bauteil eine Prüfung, die rot werden kann)
 | Bauteil | Schnittstelle | Stand |
@@ -62,13 +63,13 @@ Ablage und Assistent arbeiten nur gegen diesen Vertrag; Editoren kennen einander
 4. Skizze, 5. Moodboard, 6. Planvergleich (Altcode-Engine fast 1:1), 7. Konfigurator in Draws
 
 ## Altcode-Befund (labor/ansicht, Inventur 22.10.)
-- Atelier ist kein Pinsel-Skizzenbuch: Foto + Polylinie/Rechteck/Freihand + 6 feste Füllfarben + Render-Übergabe (Firefly von Hand). Platzierte Bilder gehen beim Sichern verloren.
+- Atelier ist kein Pinsel-Skizzenbuch: Foto + Polylinie/Rechteck/Freihand + 6 feste Füllfarben + Render-Übergabe (KI-Render von Hand). Platzierte Bilder gehen beim Sichern verloren.
 - Jeder Editor baut neu: Ansicht/Zoom 6×, Rückgängig 5×, Ebenen-Typ 3×, Treffertest 5×, Punkt-Typ 5×, Export 5 Wege, Plankopf-HTML 3×, Kalibrierung/Einheiten 4×.
 - Moodboard speichert Bilder mit absoluten lokalen Pfaden (bricht im geteilten Drive).
 - Planvergleich (FFT, log-polar, Funde, 6 Ansichten) ist solide und in sich geschlossen.
 - Werkstatt-Ablage `<Kunde>/<Projekt>/<Editor>/<Werk>/<yy-MM-dd_KÜRZEL>/` mit Papierkorb statt Löschen: Funktion übernehmen.
 
-## Offen für Johannes und die Lead
+## Offen
 1. Werk-Format: Paket (Ordner mit Manifest + Assets) im Projekt-Drive oder Datenbank + Dateien?
 2. Wahrheit: Werke im Drive oder in der ALFA-Datenbank mit Drive als Ablage?
 3. Ablage/Bridge: eigener Bereich oder Teil von Projekte/Akte?
