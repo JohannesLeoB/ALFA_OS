@@ -11,3 +11,5 @@ Specs, Briefe, Stand und Meldungen zitieren Johannes nicht ("J dd.mm. …", Wort
 **How to apply:** Jede Spec-Zeile beschreibt Soll und Ist als Funktion; Herkunft höchstens als Datum und Bereich, kein Wortlaut. Beim Berichtigen der Specs und beim Brief v14 keine Anführungszeichen um seine Sätze. Siehe [[feedback-kein-rechner-durchsuchen]] und spec-format.
 
 Quellen: nur die aktuelle, wahre App-Dokumentation im Repo (Specs, Master, Code). Keine Session-Transkripte lesen (Johannes 23.10.); was nur dort steht, gilt nicht als belegt und kommt nicht in Specs oder Brief.
+
+Keine erfundenen Fragen: Eine Frage kommt nur in Stand oder Spec, wenn Johannes Anlass dazu gegeben hat. Widersprüche zwischen Dokumenten (auch zwischen Zweigen) sind kein Anlass; sie werden nur gespeichert, wenn er sie will (Johannes 23.10.).
