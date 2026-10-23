@@ -34,3 +34,12 @@ func find(_ query: String, in folderID: String?) async throws -> [FileEntry]
 
 ## d · Ereignisse
 Nur holen auf Anforderung. Ausnahmen, die helfen würden: `newItems(.files)` für den Vorlagen-Ordner (neue Vorlagen erscheinen ohne Neustart) und `inletChanged` für den Claude-Zugang (Live-Panel zeigt verbunden oder nicht).
+
+## e · Material- und Medienkatalog
+Quelle: Medienbibliothek der Firma (tabellenbasiert) und Medienkatalog im Cloud-Laufwerk (ca. 23 000 Bilder); beide im Hub verbunden. Draws liest nur.
+- Port `Materials`: `list(group: front|carcass|worktop?, tags: [String], query: String?, page: Int, size: Int) -> Page<MaterialRef>`; Seitenweise ist Pflicht (ca. 23 000 Bilder).
+- `MaterialRef { code, name, group, swatch: ImageRef, tile: (mm, mm), roughness }`.
+- Suche und Filter nach Gruppe und Tags.
+- `image(_ ref, size) -> Data`: Bild oder Textur erst auf Anforderung holen, mit Cache (Größe begrenzt, Neuladen bei Änderung).
+- Bedarf aus lastenheft-konfigurator.md (KF-21).
+

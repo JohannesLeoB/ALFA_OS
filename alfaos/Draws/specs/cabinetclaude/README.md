@@ -7,22 +7,23 @@ Maße kommen vom Schreiner; Spezifikation ist allgemein (keine Marken, Serien, A
 ```
 specs/cabinetclaude/
   README.md              Karte
-  system.md              Koordinaten, Höhenlagen, Raster, Zeilen, Fugen
-  korpus.md              Standardschränke (Tabelle)
+  system.md              Koordinaten, Höhenlagen, Startwerte, Zeilen, Fugen
+  korpus.md              Typen mit Startwerten (Tabelle)
   fronten.md             Frontarten, Teilung, Griffvarianten
   bauteile.md            Sockel, Platte, Blenden, Leisten, Böden
   ausstattung.md         Innenleben, Sichtbarkeit, Modellform
   geraete.md             Geräte, Nischen, Einbauregeln
   lastenheft-generator.md  G-01…  Generator (Stufe 1)
   lastenheft-katalog.md    K-01…  Küchenfabrik (Stufe 2)
+  lastenheft-konfigurator.md  KF-01…  Konfigurator im Canvas
 Packs/presets/carcass.json         Daten (Pack)
-Packs/skills/cabinetclaude/        Skill für Claude (core, grid, splits, appliances, variants); eine Quelle der Maße im Prompt
+Packs/skills/cabinetclaude/        Skill für Claude (core, types, splits, appliances, variants); eine Quelle der Maße im Prompt
 Sources/DrawingKit/KitchenSpec.swift, Cabinets.swift   Generator
 ```
 
 ## Datenfluss
 KitchenSpec (Doc.kitchen) -> Kitchen.generate(spec, pack) -> Parts + Units (stabile Ids) -> Ansichten, Render, SVG.
-Pack liefert Standards; Eingabe überschreibt; Raster füllt nur Auslassungen.
+Pack liefert Startwerte; Eingabe überschreibt; Startwerte füllen nur Auslassungen.
 
 ## Status
 | Wert | Bedeutung |

@@ -18,6 +18,11 @@ struct Editing: Equatable {
     var material = ""
     var first = Kitchen.Size(width: 0, height: 0, depth: 0)
     var firstFronts = ""
+
+    var rows: Int {
+        if case .cabinet = target { return 13 }
+        return 4
+    }
 }
 
 extension DrawsModel {
@@ -26,17 +31,22 @@ extension DrawsModel {
     func begin(at point: CGPoint, sheet: Sheet, anchor: CGPoint) -> Bool {
         guard let id = sheet.pick(at: point), let part = parts.first(where: { $0.id == id }) else { return false }
         selected = nil
-        if let spec = kitchen, let pack = kitchenPack, let slot = Kitchen.slot(id, prefix: spec.prefix ?? ""), let item = slot.item,
-           let sizes = try? Kitchen.sizes(spec, pack: pack), sizes.indices.contains(slot.run), sizes[slot.run].indices.contains(item) {
-            let cab = spec.all[slot.run].items[item]
-            let size = sizes[slot.run][item]
-            let shown = cab.fronts.map(Notation.format) ?? (pack.kinds[cab.kind.rawValue]?.front ?? "")
-            editing = Editing(target: .cabinet(run: slot.run, item: item), anchor: anchor, width: Self.text(size.width),
-                              height: Self.text(size.height), depth: Self.text(size.depth), fronts: shown, first: size, firstFronts: shown)
-        } else {
-            editing = Editing(target: .part(id), anchor: anchor, width: Self.text(part.w), height: Self.text(part.h),
-                              depth: Self.text(part.d), material: part.material)
-        }
+        if let spot = Locus(id: id, prefix: prefix), beginCabinet(spot, anchor: anchor) { return true }
+        editing = Editing(target: .part(id), anchor: anchor, width: Self.text(part.w), height: Self.text(part.h),
+                          depth: Self.text(part.d), material: part.material)
+        return true
+    }
+
+    @discardableResult
+    func beginCabinet(_ spot: Locus, anchor: CGPoint) -> Bool {
+        guard let spec = kitchen, let pack = kitchenPack, let sizes = try? Kitchen.sizes(spec, pack: pack),
+              sizes.indices.contains(spot.run), sizes[spot.run].indices.contains(spot.item) else { return false }
+        if !chosen.contains(spot) { chosen = [spot] }
+        let cab = spec.all[spot.run].items[spot.item]
+        let size = sizes[spot.run][spot.item]
+        let shown = cab.fronts.map(Notation.format) ?? (pack.kinds[cab.kind.rawValue]?.front ?? "")
+        editing = Editing(target: .cabinet(run: spot.run, item: spot.item), anchor: anchor, width: Self.text(size.width),
+                          height: Self.text(size.height), depth: Self.text(size.depth), fronts: shown, first: size, firstFronts: shown)
         return true
     }
 
@@ -55,7 +65,7 @@ extension DrawsModel {
         }
         switch edit.target {
         case let .cabinet(run, item):
-            guard let spec = kitchen, let pack = kitchenPack else { return }
+            guard let spec = kitchen else { return }
             var fronts: [Front]?
             var changed = false
             if edit.fronts != edit.firstFronts {
@@ -76,14 +86,11 @@ extension DrawsModel {
                 if d != edit.first.depth || cab.depth != nil { cab.depth = d }
                 if changed { cab.fronts = fronts }
             }
-            var draft = draft()
-            do {
-                try draft.build(next, pack: pack)
-            } catch {
-                failure = Words.message(error)
-                return
+            var final = next
+            if h != edit.first.height {
+                for other in chosen where other != Locus(run: run, item: item) { final = (try? final.set(other, height: h)) ?? final }
             }
-            apply(draft)
+            guard commit(final) else { return }
         case let .part(id):
             guard let index = parts.firstIndex(where: { $0.id == id }) else { return }
             var part = parts[index]
@@ -111,8 +118,9 @@ struct InlineEditor: View {
             FieldRow(label: word("draws.edit.width"), value: bind(\.width), needed: false)
             FieldRow(label: word("draws.edit.height"), value: bind(\.height), needed: false)
             FieldRow(label: word("draws.edit.depth"), value: bind(\.depth), needed: false)
-            if case .cabinet = editing.target {
+            if case let .cabinet(run, item) = editing.target {
                 FieldRow(label: word("draws.edit.fronts"), value: bind(\.fronts), needed: false)
+                rows(Locus(run: run, item: item))
             } else {
                 FieldRow(label: word("draws.edit.material"), value: bind(\.material), needed: false)
             }
@@ -129,6 +137,55 @@ struct InlineEditor: View {
         .onKeyPress(.return) { model.commitEdit(); return .handled }
         .onKeyPress(.escape) { model.cancelEdit(); return .handled }
         .onExitCommand { model.cancelEdit() }
+    }
+
+    @ViewBuilder
+    private func rows(_ spot: Locus) -> some View {
+        let now = model.resolved(spot)
+        let kind = (try? model.kitchen?.cabinet(spot).kind) ?? .base
+        Labeled(key: "draws.edit.type") {
+            Choice(value: word("draws.cabinet.\(kind.rawValue)")) {
+                ForEach(CabinetKind.allCases, id: \.self) { item in
+                    Button(word("draws.cabinet.\(item.rawValue)")) { model.retype(item) }
+                }
+            }
+        }
+        Labeled(key: "draws.edit.grip") {
+            Choice(value: word("draws.grip.\((now?.grip ?? .push).rawValue)")) {
+                ForEach(GripStyle.allCases, id: \.self) { item in
+                    Button(word("draws.grip.\(item.rawValue)")) { model.apply(.grip(item)) }
+                }
+            }
+        }
+        Labeled(key: "draws.edit.style") {
+            Choice(value: word("draws.style.\((now?.style ?? .flat).rawValue)")) {
+                ForEach(FrontStyle.allCases, id: \.self) { item in
+                    Button(word("draws.style.\(item.rawValue)")) { model.apply(.style(item)) }
+                }
+            }
+        }
+        Labeled(key: "draws.edit.plinth") {
+            Choice(value: word("draws.plinth.\((now?.plinth ?? .panel).rawValue)")) {
+                ForEach(PlinthStyle.allCases, id: \.self) { item in
+                    Button(word("draws.plinth.\(item.rawValue)")) { model.apply(.plinth(item)) }
+                }
+            }
+        }
+        Labeled(key: "draws.edit.edge") {
+            Switch(on: Binding(get: { now?.edge ?? false }, set: { model.apply(.edge($0)) }))
+        }
+        material("draws.edit.front", now?.front) { model.apply(.front($0)) }
+        material("draws.edit.carcass", now?.carcass) { model.apply(.carcass($0)) }
+        material("draws.edit.worktop", now?.worktop) { model.apply(.worktop($0)) }
+        material("draws.edit.plinthMaterial", now?.plinthMaterial) { model.apply(.plinthMaterial($0)) }
+    }
+
+    private func material(_ key: String, _ code: String?, _ pick: @escaping (String) -> Void) -> some View {
+        Labeled(key: key) {
+            Choice(value: model.materialName(code ?? "")) {
+                ForEach(model.codes, id: \.self) { item in Button(model.materialName(item)) { pick(item) } }
+            }
+        }
     }
 
     private func bind(_ path: WritableKeyPath<Editing, String>) -> Binding<String> {

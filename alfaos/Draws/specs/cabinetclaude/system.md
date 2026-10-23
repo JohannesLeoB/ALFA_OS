@@ -8,7 +8,7 @@
 | z | nach oben, Ursprung = Fertigfußboden | gebaut |
 Einheit mm. Zeilen drehen um z in 0/90/180/270 (turn).
 
-## Höhenlagen (z, mm, Standard)
+## Höhenlagen (z, mm, Startwerte)
 | Lage | von | bis | Quelle |
 |---|---|---|---|
 | Sockel | 0 | 80 | Daten plinth |
@@ -20,13 +20,13 @@ Einheit mm. Zeilen drehen um z in 0/90/180/270 (turn).
 | Decke | Raumhöhe | | offen |
 Lage-Namen sind Merkwörter, kein Datenfeld; Sockel-/Plattenhöhe je Küche änderbar: offen (nur Pack).
 
-## Raster
-| Raster | Wert | Status |
+## Startwerte
+| Startwert | Wert | Status |
 |---|---|---|
 | Lochreihe | 32 mm | offen (Ausstattung) |
-| Breitenstufen | 200 300 400 600 800 (Eck 675 880 1280) | Daten |
-| Höhenraster | Parameter (Unter 800; Wand 400-1000; Hoch 1400-2200) | Daten |
-Maße frei: jede positive Größe gilt; Raster füllt nur Fehlendes (gebaut, Cabinets.swift:106).
+| Startbreiten | 200 300 400 600 800 (Eck 675 880 1280), später aus Voreinstellungen | Daten |
+| Starthöhen | Parameter (Unter 800; Wand 400-1000; Hoch 1400-2200) | Daten |
+Maße frei: jede positive Größe gilt; Startwerte füllen nur Fehlendes (gebaut, Cabinets.swift:106).
 
 ## Zeilen
 | Form | Regel | Status |

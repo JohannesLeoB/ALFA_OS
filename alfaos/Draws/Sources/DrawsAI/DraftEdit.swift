@@ -41,6 +41,7 @@ public enum Words {
         case .split(let id, let why): return "\(id): the fronts do not fit, \(why)"
         case .fit(let id, let what): return "\(id): \(what) does not fit into the cabinet"
         case .overlap(let a, let b): return "kitchen: \(a) and \(b) overlap; move a run or change its origin"
+        case .edit(let id, let why): return "\(id): \(why)"
         }
     }
 
@@ -104,6 +105,66 @@ extension Draft {
             spec = try input.decode(KitchenSpec.self)
         } catch {
             throw Refusal("add_kitchen: " + Words.message(error))
+        }
+        return try build(spec, pack: pack)
+    }
+
+    mutating func editCabinet(_ input: JSON, pack: KitchenPack?) throws -> String {
+        guard let pack else { throw Refusal("edit_cabinet: the cabinet pack is not loaded") }
+        guard var spec = kitchen else { throw Refusal("edit_cabinet: build a kitchen with add_kitchen first") }
+        guard let op = input["op"]?.string else { throw Refusal("edit_cabinet: op is required") }
+        let prefix = spec.prefix ?? ""
+        var names = (input["ids"]?.array ?? []).compactMap(\.string)
+        if let one = input["id"]?.string { names.append(one) }
+        var spots: [Locus] = []
+        for name in names {
+            guard let spot = Locus(id: name, prefix: prefix) else { throw Refusal("edit_cabinet: \(name) is not a cabinet id") }
+            spots.append(spot)
+        }
+        let number = { (key: String) in input[key]?.number }
+        let text = { (key: String) in input[key]?.string }
+        let kind = text("kind").flatMap(CabinetKind.init(rawValue:))
+        let growing = ["insert", "duplicate", "remove"].contains(op)
+        let order = growing ? spots.sorted { ($0.run, $0.item) > ($1.run, $1.item) } : spots
+        if op == "override", input["shared"]?.bool == true {
+            guard let field = text("field").flatMap(Field.init(rawValue:)), let setting = Setting.make(field, text("value") ?? "") else {
+                throw Refusal("edit_cabinet: override needs a valid field and value")
+            }
+            spec = try spec.sharing(setting)
+        } else {
+            guard !order.isEmpty else { throw Refusal("edit_cabinet: id or ids is required") }
+            for spot in order {
+                do {
+                    switch op {
+                    case "resize":
+                        guard let axis = text("axis").flatMap(Extent.init(rawValue:)), let delta = number("delta") else { throw Refusal("resize needs axis and delta") }
+                        spec = try spec.resize(spot, axis, by: delta, pack: pack)
+                    case "set": spec = try spec.set(spot, width: number("width"), height: number("height"), depth: number("depth"))
+                    case "insert":
+                        guard let kind else { throw Refusal("insert needs kind") }
+                        spec = try spec.insert(kind, at: spot, text("side") == "before" ? .before : .after)
+                    case "duplicate": spec = try spec.duplicate(spot)
+                    case "remove": spec = try spec.remove(spot)
+                    case "move": spec = try spec.move(spot, text("step") == "left" ? .left : .right)
+                    case "flip": spec = try spec.flipHinge(spot, pack: pack)
+                    case "split":
+                        guard let split = text("split").flatMap(Split.init(name:)) else { throw Refusal("split is not known") }
+                        spec = try spec.setSplit(spot, split, pack: pack)
+                    case "type":
+                        guard let kind else { throw Refusal("type needs kind") }
+                        spec = try spec.setType(spot, kind, pack: pack)
+                    case "override":
+                        guard let field = text("field").flatMap(Field.init(rawValue:)), let setting = Setting.make(field, text("value") ?? "") else {
+                            throw Refusal("override needs a valid field and value")
+                        }
+                        spec = try spec.overriding(spot, setting)
+                    case "reset": spec = try spec.resetToShared(spot, text("field").flatMap(Field.init(rawValue:)))
+                    default: throw Refusal("op \(op) is not known")
+                    }
+                } catch let refusal as Refusal {
+                    throw Refusal("edit_cabinet: " + refusal.message)
+                }
+            }
         }
         return try build(spec, pack: pack)
     }

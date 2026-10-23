@@ -1,3 +1,4 @@
+import AppKit
 import DrawingKit
 import DrawsDock
 import DrawsRender
@@ -123,6 +124,7 @@ struct SheetLane: View {
     @State private var settled = 1.0
     @State private var pan = CGSize.zero
     @State private var panned = CGSize.zero
+    @FocusState private var focused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -174,13 +176,15 @@ struct SheetLane: View {
                         }
                         .onEnded { _ in if model.grip == nil { panned = pan } })
                     .gesture(SpatialTapGesture(count: 2).onEnded { open(at: $0.location, room: proxy.size) })
-                    .onTapGesture { model.selected = nil }
+                    .onTapGesture { point in click(at: point, room: proxy.size) }
+                    .overlay(SecondaryClick { point, view in menu(at: point, in: view, room: proxy.size) })
                     if let editing = model.editing {
                         InlineEditor(model: model, editing: editing)
                             .position(x: min(max(editing.anchor.x + CGFloat(Proto.editorWidth) / 2, CGFloat(Proto.editorWidth) / 2 + CGFloat(Proto.editorInset)),
                                              proxy.size.width - CGFloat(Proto.editorWidth) / 2 - CGFloat(Proto.editorInset)),
-                                      y: min(max(editing.anchor.y + CGFloat(Design.Size.rowHeight) * 3, CGFloat(Design.Size.rowHeight) * 3),
-                                             proxy.size.height - CGFloat(Design.Size.rowHeight) * 3))
+                                      y: min(max(editing.anchor.y + CGFloat(Design.Size.rowHeight) * CGFloat(editing.rows) / 2,
+                                                 CGFloat(Design.Size.rowHeight) * CGFloat(editing.rows) / 2),
+                                             proxy.size.height - CGFloat(Design.Size.rowHeight) * CGFloat(editing.rows) / 2))
                     }
                     if model.parts.isEmpty && !model.assistant {
                         EmptyCard(model: model)
@@ -200,6 +204,13 @@ struct SheetLane: View {
                     .padding(CGFloat(Design.Spacing.step12))
                 }
                 .clipped()
+                .focusable()
+                .focusEffectDisabled()
+                .focused($focused)
+                .onKeyPress(phases: [.down, .repeat]) { press in
+                    model.key(press) { spot in open(spot, room: proxy.size) }
+                }
+                .onChange(of: model.editing == nil) { _, closed in if closed { focused = true } }
             }
         }
     }
@@ -213,15 +224,46 @@ struct SheetLane: View {
         zoom = 1; settled = 1; pan = .zero; panned = .zero
     }
 
-    private func open(at point: CGPoint, room: CGSize) {
-        guard let sheet = model.sheet else { return reset() }
+    private func frame(_ sheet: Sheet, room: CGSize) -> (k: Double, origin: CGPoint) {
         let pad = Proto.deskPadding
         let fit = max(0.01, min((Double(room.width) - 2 * pad) / sheet.width, (Double(room.height) - 2 * pad) / sheet.height))
         let k = fit * zoom
-        let origin = CGPoint(x: Double(room.width) / 2 - sheet.width * k / 2 + Double(pan.width),
-                             y: Double(room.height) / 2 - sheet.height * k / 2 + Double(pan.height))
-        let spot = CGPoint(x: (Double(point.x) - origin.x) / k, y: (Double(point.y) - origin.y) / k)
-        if !model.begin(at: spot, sheet: sheet, anchor: point) { reset() }
+        return (k, CGPoint(x: Double(room.width) / 2 - sheet.width * k / 2 + Double(pan.width),
+                           y: Double(room.height) / 2 - sheet.height * k / 2 + Double(pan.height)))
+    }
+
+    private func spot(_ point: CGPoint, sheet: Sheet, room: CGSize) -> CGPoint {
+        let f = frame(sheet, room: room)
+        return CGPoint(x: (Double(point.x) - f.origin.x) / f.k, y: (Double(point.y) - f.origin.y) / f.k)
+    }
+
+    private func open(at point: CGPoint, room: CGSize) {
+        guard let sheet = model.sheet else { return reset() }
+        focused = true
+        if !model.begin(at: spot(point, sheet: sheet, room: room), sheet: sheet, anchor: point) { reset() }
+    }
+
+    private func open(_ target: Locus, room: CGSize) {
+        guard let sheet = model.sheet else { return }
+        let f = frame(sheet, room: room)
+        let ring = model.rings(in: sheet).first
+        let anchor = ring.map { CGPoint(x: f.origin.x + $0.maxX * f.k, y: f.origin.y + $0.minY * f.k) } ?? CGPoint(x: room.width / 2, y: room.height / 2)
+        model.beginCabinet(target, anchor: anchor)
+    }
+
+    private func click(at point: CGPoint, room: CGSize) {
+        focused = true
+        guard let sheet = model.sheet else { return }
+        model.click(spot(point, sheet: sheet, room: room), sheet: sheet, add: NSEvent.modifierFlags.contains(.shift))
+    }
+
+    private func menu(at point: CGPoint, in view: NSView, room: CGSize) {
+        guard let sheet = model.sheet, model.kitchen != nil else { return }
+        focused = true
+        let hit = model.sheet?.pick(at: spot(point, sheet: sheet, room: room)).flatMap { Locus(id: $0, prefix: model.prefix) }
+        guard let hit, model.live(hit) else { return }
+        if !model.chosen.contains(hit) { model.chosen = [hit] }
+        CabinetMenu.build(model)?.popUp(positioning: nil, at: point, in: view)
     }
 
     private var status: some View {
@@ -307,6 +349,17 @@ struct SheetLane: View {
             if model.layout != .presentation, let field {
                 BoardOverlay(model: model, sheet: sheet, k: k, field: field)
             }
+        }
+        .overlay(alignment: .topLeading) {
+            ZStack(alignment: .topLeading) {
+                ForEach(Array(model.rings(in: sheet).enumerated()), id: \.offset) { _, ring in
+                    Rectangle()
+                        .strokeBorder(style.color(\.focus), lineWidth: CGFloat(Design.Size.focusRingWidth))
+                        .frame(width: ring.width * k, height: ring.height * k)
+                        .offset(x: ring.minX * k, y: ring.minY * k)
+                }
+            }
+            .allowsHitTesting(false)
         }
         .background(style.color(\.sheet))
         .shadowed(style, style.shadow(\.floating), Rectangle())
@@ -551,6 +604,40 @@ struct ViewTab: View {
             Text(verbatim: word(model.template?.pack.method == .third ? "draws.method.third" : "draws.method.first"))
         }
         if !model.choices.isEmpty { underlay }
+        if model.kitchen != nil { shared }
+    }
+
+    @ViewBuilder
+    private var shared: some View {
+        let now = model.resolved()
+        SectionHead(key: "draws.section.shared")
+        Labeled(key: "draws.edit.grip") {
+            Segments(options: GripStyle.allCases.map { ($0, "draws.grip.\($0.rawValue)") },
+                     selection: Binding(get: { now?.grip ?? .push }, set: { model.share(.grip($0)) }))
+        }
+        Labeled(key: "draws.edit.style") {
+            Segments(options: FrontStyle.allCases.map { ($0, "draws.style.\($0.rawValue)") },
+                     selection: Binding(get: { now?.style ?? .flat }, set: { model.share(.style($0)) }))
+        }
+        Labeled(key: "draws.edit.plinth") {
+            Segments(options: PlinthStyle.allCases.map { ($0, "draws.plinth.\($0.rawValue)") },
+                     selection: Binding(get: { now?.plinth ?? .panel }, set: { model.share(.plinth($0)) }))
+        }
+        Labeled(key: "draws.edit.edge") {
+            Switch(on: Binding(get: { now?.edge ?? false }, set: { model.share(.edge($0)) }))
+        }
+        sharedMaterial("draws.edit.front", now?.front) { model.share(.front($0)) }
+        sharedMaterial("draws.edit.carcass", now?.carcass) { model.share(.carcass($0)) }
+        sharedMaterial("draws.edit.worktop", now?.worktop) { model.share(.worktop($0)) }
+        sharedMaterial("draws.edit.plinthMaterial", now?.plinthMaterial) { model.share(.plinthMaterial($0)) }
+    }
+
+    private func sharedMaterial(_ key: String, _ code: String?, _ pick: @escaping (String) -> Void) -> some View {
+        Labeled(key: key) {
+            Choice(value: model.materialName(code ?? "")) {
+                ForEach(model.codes, id: \.self) { item in Button(model.materialName(item)) { pick(item) } }
+            }
+        }
     }
 
     @ViewBuilder
@@ -722,7 +809,7 @@ struct RenderTab: View {
         .background(style.color(\.well))
         .clipShape(shape)
         .overlay(shape.strokeBorder(style.color(\.lineStrong), lineWidth: CGFloat(Design.Size.hairline)))
-        .opacity(model.rendering ? Proto.busy : 1)
+        .opacity(model.rendering ? Proto.busy : (model.photoStale && model.photo != nil ? Proto.stale : 1))
         .padding(.horizontal, CGFloat(Design.Spacing.step8))
         .padding(.bottom, CGFloat(Design.Spacing.step8))
     }

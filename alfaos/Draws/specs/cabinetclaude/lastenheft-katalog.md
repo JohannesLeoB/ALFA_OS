@@ -5,7 +5,7 @@ Status aller Punkte: offen. Alles als Daten-Pack, nicht als Code.
 ## Schrankbibliothek
 | Nr | Anforderung |
 |---|---|
-| K-01 | Benannte Standardschränke als Datenpaket (Name, Art, Maße, Front, Ausstattung); allgemein, ohne Hersteller |
+| K-01 | Benannte Typen mit Startwerten als Datenpaket (Name, Art, Maße, Front, Ausstattung); allgemein, ohne Hersteller |
 | K-02 | Pakete laden, mischen, überschreiben; Version im Paket |
 | K-03 | Schrank ändern: Variante wählen, Maße frei lassen |
 | K-04 | Eigene Schränke des Schreiners als Paket speichern |

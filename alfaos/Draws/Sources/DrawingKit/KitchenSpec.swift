@@ -14,7 +14,7 @@ public enum FrontType: String, Codable, CaseIterable, Sendable { case door, draw
 
 public enum HingeSide: String, Codable, Sendable { case left, right, pair }
 
-public enum Appliance: String, Codable, Sendable { case oven, dishwasher, fridge, hob, sink }
+public enum Appliance: String, Codable, CaseIterable, Sendable { case oven, dishwasher, fridge, hob, sink }
 
 public struct Front: Codable, Hashable, Sendable {
     public var type: FrontType
@@ -41,11 +41,15 @@ public struct Cabinet: Codable, Hashable, Sendable {
     public var material: String?
     public var frontMaterial: String?
     public var name: String?
+    public var features: Features?
+    public var materials: Materials?
 
     public init(kind: CabinetKind, width: Double? = nil, height: Double? = nil, depth: Double? = nil, fronts: [Front]? = nil,
-                material: String? = nil, frontMaterial: String? = nil, name: String? = nil) {
+                material: String? = nil, frontMaterial: String? = nil, name: String? = nil,
+                features: Features? = nil, materials: Materials? = nil) {
         self.kind = kind; self.width = width; self.height = height; self.depth = depth; self.fronts = fronts
         self.material = material; self.frontMaterial = frontMaterial; self.name = name
+        self.features = features; self.materials = materials
     }
 }
 
@@ -66,13 +70,16 @@ public struct KitchenSpec: Codable, Hashable, Sendable {
     public var plinth: Bool
     public var wall: Bool
     public var prefix: String?
+    public var features: Features?
+    public var materials: Materials?
 
-    public init(runs: [KitchenRun], island: KitchenRun? = nil, worktop: Bool = true, plinth: Bool = true, wall: Bool = true, prefix: String? = nil) {
+    public init(runs: [KitchenRun], island: KitchenRun? = nil, worktop: Bool = true, plinth: Bool = true, wall: Bool = true,
+                prefix: String? = nil, features: Features? = nil, materials: Materials? = nil) {
         self.runs = runs; self.island = island; self.worktop = worktop; self.plinth = plinth; self.wall = wall
-        self.prefix = prefix
+        self.prefix = prefix; self.features = features; self.materials = materials
     }
 
-    enum CodingKeys: String, CodingKey { case runs, island, worktop, plinth, wall, prefix }
+    enum CodingKeys: String, CodingKey { case runs, island, worktop, plinth, wall, prefix, features, materials }
 
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -81,7 +88,9 @@ public struct KitchenSpec: Codable, Hashable, Sendable {
                   worktop: try c.decodeIfPresent(Bool.self, forKey: .worktop) ?? true,
                   plinth: try c.decodeIfPresent(Bool.self, forKey: .plinth) ?? true,
                   wall: try c.decodeIfPresent(Bool.self, forKey: .wall) ?? true,
-                  prefix: try c.decodeIfPresent(String.self, forKey: .prefix))
+                  prefix: try c.decodeIfPresent(String.self, forKey: .prefix),
+                  features: try c.decodeIfPresent(Features.self, forKey: .features),
+                  materials: try c.decodeIfPresent(Materials.self, forKey: .materials))
     }
 
     public var all: [KitchenRun] { runs + (island.map { [$0] } ?? []) }
@@ -109,6 +118,7 @@ public enum KitchenError: Error, Equatable, Sendable {
     case split(String, String)
     case fit(String, String)
     case overlap(String, String)
+    case edit(String, String)
 }
 
 public struct KitchenPack: Codable, Sendable, Equatable {
@@ -129,6 +139,14 @@ public struct KitchenPack: Codable, Sendable, Equatable {
         public var name: String
         public var front: String
         public var cornerDepths: [String: Double]?
+    }
+    public struct StartPack: Codable, Sendable, Equatable {
+        public var grip: GripStyle, style: FrontStyle, plinth: PlinthStyle, edge: Bool
+        public var handleLength: Double, handleWidth: Double, handleReach: Double, handleInset: Double
+        public var channel: Double, rail: Double, railReach: Double, leg: Double, legInset: Double, edgeWidth: Double
+        public static let standard = StartPack(grip: .push, style: .flat, plinth: .panel, edge: false, handleLength: 128,
+                                               handleWidth: 12, handleReach: 20, handleInset: 40, channel: 20, rail: 50,
+                                               railReach: 4, leg: 40, legInset: 30, edgeWidth: 4)
     }
     public struct Inlay: Codable, Sendable, Equatable { public var w: Double, d: Double, h: Double, fromFront: Double }
     public struct AppliancePack: Codable, Sendable, Equatable {
@@ -153,6 +171,7 @@ public struct KitchenPack: Codable, Sendable, Equatable {
     public var roles: [String: String]
     public var groups: [String: String]
     public var tints: [String: String]
+    public var start: StartPack?
 
     public static func decode(_ data: Data) throws -> KitchenPack { try JSONDecoder().decode(KitchenPack.self, from: data) }
 

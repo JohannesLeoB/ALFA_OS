@@ -42,6 +42,7 @@ public actor DrawsToolbox: Toolbox {
             case "get_state": return .json(state())
             case "add_parts": return try await change { try $0.addParts(input) }
             case "add_kitchen": return try await change { [pack = bench.kitchen] in try $0.addKitchen(input, pack: pack) }
+            case "edit_cabinet": return try await change { [pack = bench.kitchen] in try $0.editCabinet(input, pack: pack) }
             case "update_part": return try await change { try $0.updatePart(input) }
             case "remove_part": return try await change { try $0.removePart(input) }
             case "add_unit": return try await change { try $0.addUnit(input) }

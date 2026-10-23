@@ -140,6 +140,7 @@ extension DrawsModel {
             styleID = doc.packs.style ?? styleID
             absorb(doc.extra)
             kitchen = doc.kitchen
+            forgetCabinets()
             parts = doc.parts
             replace(units: doc.units)
             pose = doc.pose

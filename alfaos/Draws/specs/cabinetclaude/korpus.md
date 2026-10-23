@@ -1,9 +1,9 @@
 # Korpus
 
-Maße mm. Breite/Höhe/Tiefe wählbar aus Liste, Fett = Standard (Pack). Jede positive Größe zulässig.
+Nur Typen. Maße mm. Breite/Höhe/Tiefe frei; die Liste nennt Startwerte, Fett = Startwert (Pack, später aus Voreinstellungen). Jede positive Größe zulässig.
 Status: Typ im Pack = Daten; ohne Zeile in Pack = offen.
 
-| Art | Pack-Kind | Breiten | Höhen | Tiefen | Standardfront | Hinweis | Status |
+| Art | Pack-Kind | Breiten | Höhen | Tiefen | Startfront | Hinweis | Status |
 |---|---|---|---|---|---|---|---|
 | Unter | base | 200 300 400 **600** 800 | **800** | **600**, 370 | Tür (ab 800 Paar) | Platte, Sockel | gebaut |
 | Spüle | base | 600, 800 | 800 | 600 | Tür/Auszug + Einlass sink | Einlass in Platte | gebaut |
@@ -24,6 +24,6 @@ Status: Typ im Pack = Daten; ohne Zeile in Pack = offen.
 | Halbhoch | kein | 400-800 | 1000-1400 | 600 | Tür | | offen |
 
 Hinweise
-- Standardfront Hoch-Kühl/Geräte: Pack kinds.housing.front = fridge.
+- Startfront Hoch-Kühl/Geräte: Pack kinds.housing.front = fridge.
 - Eck Blind: Tiefe über cornerDepths je Breite (gebaut, :125).
 - Aufsatz ohne tragenden Vorgänger = Fehler host (gebaut, :120).

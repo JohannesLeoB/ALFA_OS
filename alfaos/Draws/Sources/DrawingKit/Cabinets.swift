@@ -151,7 +151,7 @@ public struct Kitchen: Sendable {
         }
     }
 
-    static func make(_ f: String) -> Front? {
+    public static func make(_ f: String) -> Front? {
         if let type = FrontType(rawValue: f) { return Front(type: type) }
         return Appliance(rawValue: f).map { Front(type: .appliance, appliance: $0) }
     }
@@ -224,8 +224,9 @@ public struct Kitchen: Sendable {
             let group = tag(slot.kind.mount)
             let vb = V - slot.d, vf = vb - ft
             let z1 = slot.z0 + slot.h
-            let carcass = cab.material ?? pack.materials["carcass"] ?? ""
-            let frontMaterial = cab.frontMaterial ?? pack.materials["front"] ?? ""
+            let res = spec.resolve(cab, pack: pack)
+            let carcass = res.carcass
+            let frontMaterial = res.front
             var stack = cab.fronts ?? (make(slot.kind.front).map { [$0] } ?? [])
             let inlays = stack.filter { $0.type == .appliance && $0.appliance.flatMap { pack.appliance[$0.rawValue]?.inlay } != nil }
             stack.removeAll { front in inlays.contains(front) }
@@ -252,7 +253,7 @@ public struct Kitchen: Sendable {
             }
             for leaf in try leaves(slot, id: id, stack: stack, pack: pack) where leaf.front.type != .open {
                 try front(leaf, slot: slot, id: id, material: leaf.front.material ?? frontMaterial, group: group, vf: vf,
-                          frame: f, pack: pack, box: box, into: &out)
+                          frame: f, pack: pack, res: res, box: box, into: &out)
             }
             for (k, inlay) in inlays.enumerated() {
                 guard let a = inlay.appliance, let own = pack.appliance[a.rawValue], let spot = own.inlay else { continue }
@@ -272,67 +273,133 @@ public struct Kitchen: Sendable {
             let end = last.index == slots.last(where: { !$0.stacked })?.index
             let name = tag(first.kind.mount)
             let vf = V - first.d - ft
+            let res = spec.resolve(first.cab, pack: pack)
+            let st = pack.start ?? .standard
             if first.kind.worktop == true, spec.worktop {
                 let near = base && !joined && !first.corner ? pack.overhang : 0
                 let far = end && !last.corner ? pack.overhang : 0
                 let front = first.corner ? 0 : pack.overhang
-                out.parts.append(box("r\(run)w\(worktops)", pack.words["worktop"] ?? "", pack.materials["worktop"] ?? "",
-                                     pack.roles["worktop"] ?? "", name, first.u0 - near, last.u1 + far, vf - front, V,
+                let edgeWidth = res.edge && !first.corner ? st.edgeWidth : 0
+                out.parts.append(box("r\(run)w\(worktops)", pack.words["worktop"] ?? "", res.worktop,
+                                     pack.roles["worktop"] ?? "", name, first.u0 - near, last.u1 + far, vf - front + edgeWidth, V,
                                      h.plinth + h.carcass, h.plinth + h.carcass + h.worktop))
+                if edgeWidth > 0 {
+                    out.parts.append(box("r\(run)w\(worktops)e", pack.words["edge"] ?? "", res.front,
+                                         pack.roles["worktop"] ?? "", name, first.u0 - near, last.u1 + far, vf - front,
+                                         vf - front + edgeWidth, h.plinth + h.carcass, h.plinth + h.carcass + h.worktop))
+                }
                 worktops += 1
             }
             if spec.plinth, first.kind.mount == "floor" {
-                out.parts.append(box("r\(run)p\(plinths)", pack.words["plinth"] ?? "", pack.materials["plinth"] ?? "",
-                                     pack.roles["plinth"] ?? "", name, first.u0, last.u1, vf + pack.plinthSetback, V, 0, h.plinth))
+                if res.plinth == .legs {
+                    let size = st.leg
+                    var xs = [first.u0 + st.legInset]
+                    xs += group.dropLast().map { $0.u1 - size / 2 }
+                    xs.append(last.u1 - st.legInset - size)
+                    let rows = [vf + pack.plinthSetback, V - st.legInset - size]
+                    for (k, u) in xs.enumerated() {
+                        for (j, v) in rows.enumerated() {
+                            out.parts.append(box("r\(run)p\(plinths)l\(k)_\(j)", pack.words["leg"] ?? "", res.plinthMaterial,
+                                                 pack.roles["plinth"] ?? "", name, u, u + size, v, v + size, 0, h.plinth))
+                        }
+                    }
+                } else {
+                    out.parts.append(box("r\(run)p\(plinths)", pack.words["plinth"] ?? "", res.plinthMaterial,
+                                         pack.roles["plinth"] ?? "", name, first.u0, last.u1, vf + pack.plinthSetback, V, 0, h.plinth))
+                }
                 plinths += 1
             }
         }
         for slot in slots where !slot.stacked && (spec.wall || slot.kind.mount == "floor") {
             if slot.kind.mount != "floor" { close(); continue }
-            if let last = group.last, last.d != slot.d || (last.kind.worktop == true) != (slot.kind.worktop == true) { close() }
+            if let last = group.last {
+                let a = spec.resolve(last.cab, pack: pack), b = spec.resolve(slot.cab, pack: pack)
+                if last.d != slot.d || (last.kind.worktop == true) != (slot.kind.worktop == true)
+                    || a.plinth != b.plinth || a.plinthMaterial != b.plinthMaterial || a.worktop != b.worktop || a.edge != b.edge
+                    || a.front != b.front && a.edge { close() }
+            }
             group.append(slot)
         }
         close()
     }
 
     static func front(_ leaf: Leaf, slot: Slot, id: String, material: String, group: String, vf: Double, frame f: Frame,
-                      pack: KitchenPack, box: (String, String, String, String, String, Double, Double, Double, Double, Double, Double) -> Part,
+                      pack: KitchenPack, res: Resolved,
+                      box: (String, String, String, String, String, Double, Double, Double, Double, Double, Double) -> Part,
                       into out: inout Kitchen) throws {
         let gap = pack.front.gap, ft = pack.front.thickness
         let kind = leaf.front.type
         let own = leaf.front.appliance.flatMap { pack.appliance[$0.rawValue] }
         let role = pack.roles["front"] ?? ""
-        let paint = kind == .appliance ? (own?.material ?? material) : (kind == .glass ? (pack.materials["glass"] ?? material) : material)
+        let st = pack.start ?? .standard
+        let glassy = kind == .glass || (kind == .door && res.style == .glass)
+        let paint = kind == .appliance ? (own?.material ?? material) : (glassy ? (pack.materials["glass"] ?? material) : material)
+        let dressed = kind != .appliance
+        let cut = dressed && res.grip == .channel && st.channel < leaf.height / 2 ? st.channel : 0
+        let low = slot.kind.mount == "wall"
+        let reach = dressed && res.style == .frame ? st.railReach : 0
         let word = kind == .drawers ? "drawer" : (kind == .glass ? "glass" : "door")
         let motion = own?.motion ?? (kind == .drawers ? "slide" : "door")
         let lo = leaf.top - leaf.height
         let mid = leaf.index
         func leafBox(_ suffix: String, _ u0: Double, _ u1: Double, _ name: String) -> Part {
-            box(id + "f\(mid)" + suffix, name, paint, role, group, u0, u1, vf, vf + ft, lo, leaf.top)
+            box(id + "f\(mid)" + suffix, name, paint, role, group, u0, u1, vf, vf + ft, lo + (low ? cut : 0), leaf.top - (low ? 0 : cut))
         }
-        func unit(_ suffix: String, _ type: UnitKind, _ motion: Motion) {
-            out.units.append(Unit(id: id + "u\(mid)" + suffix, kind: type, front: [id + "f\(mid)" + suffix], motion: motion))
+        func dress(_ suffix: String, _ a: Double, _ b: Double, _ hinge: HingeSide?) -> [String] {
+            guard dressed else { return [] }
+            var made: [Part] = []
+            let key = id + "f\(mid)" + suffix
+            let top = leaf.top - (low ? 0 : cut), bottom = lo + (low ? cut : 0)
+            if res.style == .frame {
+                let r = min(st.rail, (b - a) / 3, (top - bottom) / 3)
+                let rails = [(a, a + r, bottom, top), (b - r, b, bottom, top), (a + r, b - r, top - r, top), (a + r, b - r, bottom, bottom + r)]
+                for (k, rail) in rails.enumerated() {
+                    made.append(box(key + "r\(k)", pack.words["frame"] ?? "", paint, role, group, rail.0, rail.1, vf - reach, vf, rail.2, rail.3))
+                }
+            }
+            if res.grip == .handle {
+                let nearV = vf - reach - st.handleReach, farV = vf - reach
+                if kind == .drawers {
+                    let length = min(st.handleLength, (b - a) * 0.6), mid = (a + b) / 2
+                    let z1 = max(bottom + st.handleWidth, top - st.handleInset)
+                    made.append(box(key + "g", pack.words["handle"] ?? "", material, role, group, mid - length / 2, mid + length / 2,
+                                    nearV, farV, z1 - st.handleWidth, z1))
+                } else {
+                    let length = min(st.handleLength, (top - bottom) * 0.6)
+                    let u = hinge == .left ? b - st.handleInset - st.handleWidth : a + st.handleInset
+                    let z0 = low ? bottom + st.handleInset : max(bottom, top - st.handleInset - length)
+                    made.append(box(key + "g", pack.words["handle"] ?? "", material, role, group, u, u + st.handleWidth,
+                                    nearV, farV, z0, z0 + length))
+                }
+            }
+            out.parts += made
+            return made.map(\.id)
         }
-        func hinged(_ suffix: String, _ edge: Double, _ side: HingeSide) {
+        func unit(_ suffix: String, _ type: UnitKind, _ motion: Motion, _ body: [String]) {
+            out.units.append(Unit(id: id + "u\(mid)" + suffix, kind: type, front: [id + "f\(mid)" + suffix], body: body, motion: motion))
+        }
+        func hinged(_ suffix: String, _ edge: Double, _ side: HingeSide, _ body: [String]) {
             let p = f.point(edge, vf)
             let angle = side == .left ? -pack.door.angle : pack.door.angle
-            unit(suffix, .door, .hinge(pivot: Point3(x: p.x, y: p.y, z: lo), axis: .z, degrees: angle))
+            unit(suffix, .door, .hinge(pivot: Point3(x: p.x, y: p.y, z: lo), axis: .z, degrees: angle), body)
         }
         let name = own?.name ?? pack.words[word] ?? ""
         let u0 = slot.u0 + gap / 2, u1 = slot.u1 - gap / 2
         if kind == .drawers {
             out.parts.append(leafBox("", u0, u1, name))
+            let extra = dress("", u0, u1, nil)
             let travel = slot.d - pack.drawer.reserve
             guard travel > 0 else { throw KitchenError.fit(id, "drawer") }
-            unit("", .drawer, .slide(dx: f.s * travel, dy: -f.c * travel, dz: 0))
+            unit("", .drawer, .slide(dx: f.s * travel, dy: -f.c * travel, dz: 0), extra)
             return
         }
         if motion == "flap" {
             out.parts.append(leafBox("", u0, u1, own?.name ?? pack.words["flap"] ?? name))
+            let extra = dress("", u0, u1, nil)
             let p = f.point((u0 + u1) / 2, vf)
             let axis: TurnAxis = f.c != 0 ? .x : .y
             let sign = f.c != 0 ? f.c : f.s
-            unit("", .flap, .hinge(pivot: Point3(x: p.x, y: p.y, z: lo), axis: axis, degrees: pack.door.flap * sign))
+            unit("", .flap, .hinge(pivot: Point3(x: p.x, y: p.y, z: lo), axis: axis, degrees: pack.door.flap * sign), extra)
             return
         }
         let swing = motion == "none" ? false : true
@@ -341,11 +408,13 @@ public struct Kitchen: Sendable {
             let parts = [("a", u0, u0 + leafW, HingeSide.left), ("b", u1 - leafW, u1, HingeSide.right)]
             for (suffix, a, b, hinge) in parts {
                 out.parts.append(leafBox(suffix, a, b, name))
-                if swing { hinged(suffix, hinge == .left ? a : b, hinge) }
+                let extra = dress(suffix, a, b, hinge)
+                if swing { hinged(suffix, hinge == .left ? a : b, hinge, extra) }
             }
         } else {
             out.parts.append(leafBox("", u0, u1, name))
-            if swing { hinged("", leaf.side == .left ? u0 : u1, leaf.side) }
+            let extra = dress("", u0, u1, leaf.side)
+            if swing { hinged("", leaf.side == .left ? u0 : u1, leaf.side, extra) }
         }
     }
 }

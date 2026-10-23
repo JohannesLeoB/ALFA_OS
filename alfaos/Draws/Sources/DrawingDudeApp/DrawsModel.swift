@@ -121,6 +121,10 @@ final class DrawsModel {
     var claudeModel: String?
     var selected: String?
     var kitchen: KitchenSpec?
+    var chosen: [Locus] = []
+    var history: [KitchenSpec] = []
+    var future: [KitchenSpec] = []
+    var photoStale = false
     var kitchenPack: KitchenPack?
     var editing: Editing?
     var toolbox: DrawsToolbox?
@@ -441,6 +445,7 @@ final class DrawsModel {
             try Validate.units(object.units ?? [], parts: object.parts)
             ready = false
             kitchen = nil
+            forgetCabinets()
             parts = object.parts
             replace(units: object.units ?? [])
             project = object.project ?? [:]
@@ -485,6 +490,7 @@ final class DrawsModel {
     func clear() {
         ready = false
         kitchen = nil
+        forgetCabinets()
         parts = []
         replace(units: [])
         blocks = []
@@ -613,6 +619,7 @@ final class DrawsModel {
             defer { rendering = false }
             do {
                 photo = try await Photo.render(scene, width: Proto.photoWidth, height: Proto.photoHeight)
+                photoStale = false
             } catch {
                 photoFailure = word("draws.render.failed")
             }
@@ -750,6 +757,7 @@ final class DrawsModel {
                 adopt()
                 absorb(proposal.materials)
                 kitchen = nil
+            forgetCabinets()
                 parts = proposal.parts
                 replace(units: proposal.units)
                 variants = proposal.variants
@@ -819,6 +827,8 @@ final class DrawsModel {
         dimensions = next.dimensions
         look = next.look
         kitchen = next.kitchen
+        chosen = chosen.filter(live)
+        photoStale = true
         ready = was
         render()
     }
@@ -847,7 +857,7 @@ final class DrawsModel {
                 self.toolbox = nil
             }
             let folder = { (name: String, keys: [String]) in try? Skillset.load(packs.appendingPathComponent("skills/" + name), keys: keys) }
-            guard let base = folder("alfanomy", keys), let cabinet = folder("cabinetclaude", ["grid", "splits", "appliances", "variants"]) else {
+            guard let base = folder("alfanomy", keys), let cabinet = folder("cabinetclaude", ["types", "splits", "appliances", "variants"]) else {
                 failure = word("draws.live.skills")
                 ending = .failed
                 return

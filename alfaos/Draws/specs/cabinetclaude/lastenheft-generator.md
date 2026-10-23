@@ -2,13 +2,13 @@
 
 Status: gebaut (Datei:Zeile) / Daten / offen. Stand 23.10.
 
-## Eingabe und Standards
+## Eingabe und Startwerte
 | Nr | Anforderung | Status |
 |---|---|---|
 | G-01 | Eingabe KitchenSpec: runs[], island, worktop, plinth, wall, prefix | gebaut KitchenSpec.swift:71 |
 | G-02 | Schrank: kind, width, height, depth, fronts, material, frontMaterial | gebaut KitchenSpec.swift:35 |
-| G-03 | Standards aus Pack presets/carcass.json, nie im Code | gebaut Cabinets.swift:112, Daten |
-| G-04 | Freie Maße: jede positive endliche Größe gilt; Raster füllt nur Auslassungen | gebaut Cabinets.swift:106 |
+| G-03 | Startwerte aus Pack presets/carcass.json, nie im Code | gebaut Cabinets.swift:112, Daten |
+| G-04 | Freie Maße: jede positive endliche Größe gilt; Startwerte füllen nur Auslassungen | gebaut Cabinets.swift:106 |
 | G-05 | Zeilen: origin + turn; ohne origin setzt die Zeile am Eckschrank an | gebaut Cabinets.swift:77 |
 | G-06 | Insel als eigene Zeile | gebaut Cabinets.swift:69 |
 | G-07 | Aufsatzschrank sitzt auf tragendem Vorgänger | gebaut Cabinets.swift:119 |
@@ -46,6 +46,6 @@ Status: gebaut (Datei:Zeile) / Daten / offen. Stand 23.10.
 |---|---|---|
 | G-40 | Spec im SVG-Arbeitsfile als Doc.kitchen | gebaut Doc.swift:155 |
 | G-41 | Claude-Werkzeug add_kitchen mit Schema und Rückgabe (Zahlen, Zeilenlängen, Materialien) | gebaut DrawsTools.swift:65 |
-| G-42 | Skill cabinetclaude als Raster für Claude | Daten Packs/skills/cabinetclaude/ |
+| G-42 | Skill cabinetclaude für Claude (Typen, Startwerte) | Daten Packs/skills/cabinetclaude/ |
 | G-43 | Werkzeug edit_kitchen (einen Schrank ändern) | offen |
 | G-44 | Test je Anforderung mit Mutant | offen |

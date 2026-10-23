@@ -23,6 +23,12 @@ struct DrawsApp: App {
                 Button(word("draws.doc.open")) { model.open() }
                     .keyboardShortcut("o")
             }
+            CommandGroup(replacing: .undoRedo) {
+                Button(word("draws.menu.undo")) { model.undo() }
+                    .keyboardShortcut("z")
+                Button(word("draws.menu.redo")) { model.redo() }
+                    .keyboardShortcut("z", modifiers: [.command, .shift])
+            }
             CommandGroup(replacing: .saveItem) {
                 Button(word("draws.doc.save")) { model.save() }
                     .keyboardShortcut("s")

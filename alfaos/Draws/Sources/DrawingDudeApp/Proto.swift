@@ -53,4 +53,9 @@ enum Proto {
     static let liveTokens = 150_000
     static let moveRows = 4.0
     static let voiceLines = 4
+    static let stepCoarse = 50.0
+    static let stepFine = 10.0
+    static let undoDepth = 100
+    static let ringInset = 4.0
+    static let stale = 0.5
 }

@@ -32,8 +32,9 @@
     "sink": { "name": "Spüle", "material": "spuele", "height": 0, "motion": "none", "inlay": { "w": 500, "d": 400, "h": 4, "fromFront": 80 } }
   },
   "materials": { "carcass": "korpus", "front": "front", "worktop": "platte", "plinth": "sockel", "glass": "glas" },
-  "words": { "drawer": "Schublade", "door": "Tür", "glass": "Glastür", "flap": "Klappe", "worktop": "Arbeitsplatte", "plinth": "Sockel", "side": "Seite", "bottom": "Boden", "top": "Deckel", "back": "Rückwand", "shelf": "Einlegeboden" },
+  "words": { "frame": "Rahmen", "handle": "Griff", "leg": "Fuß", "edge": "Kante", "drawer": "Schublade", "door": "Tür", "glass": "Glastür", "flap": "Klappe", "worktop": "Arbeitsplatte", "plinth": "Sockel", "side": "Seite", "bottom": "Boden", "top": "Deckel", "back": "Rückwand", "shelf": "Einlegeboden" },
   "roles": { "carcass": "KORPUS", "front": "FRONT", "worktop": "PLATTE", "plinth": "SOCKEL", "inlay": "EINBAU" },
   "groups": { "floor": "zeile_unten", "wall": "zeile_oben", "stack": "zeile_oben" },
+  "start": { "grip": "push", "style": "flat", "plinth": "panel", "edge": false, "handleLength": 128, "handleWidth": 12, "handleReach": 20, "handleInset": 40, "channel": 20, "rail": 50, "railReach": 4, "leg": 40, "legInset": 30, "edgeWidth": 4 },
   "tints": { "ofen": "#8c9298", "geschirrspueler": "#a3a8ad", "kuehlschrank": "#b4b9bd", "kochfeld": "#3a3d40", "spuele": "#7f858a", "glas": "#cfdde3" }
 }

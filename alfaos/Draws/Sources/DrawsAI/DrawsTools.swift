@@ -44,9 +44,17 @@ enum DrawsTools {
         "appliance": choice(["oven", "dishwasher", "fridge", "hob", "sink"]), "height": number, "material": text
     ], required: ["type"])
 
+    static let kitchenFeatures: JSON = object([
+        "grip": choice(GripStyle.allCases.map(\.rawValue)), "style": choice(FrontStyle.allCases.map(\.rawValue)),
+        "plinth": choice(PlinthStyle.allCases.map(\.rawValue)), "edge": flag
+    ])
+
+    static let kitchenMaterials: JSON = object(["front": text, "carcass": text, "worktop": text, "plinth": text])
+
     static let kitchenCabinet: JSON = object([
         "kind": choice(CabinetKind.allCases.map(\.rawValue)), "width": number, "height": number, "depth": number,
-        "fronts": list(kitchenFront), "material": text, "frontMaterial": text
+        "fronts": list(kitchenFront), "material": text, "frontMaterial": text,
+        "features": kitchenFeatures, "materials": kitchenMaterials
     ], required: ["kind"])
 
     static let kitchenRun: JSON = object([
@@ -64,8 +72,17 @@ enum DrawsTools {
                  schema: object(["parts": list(object(partFields, required: ["id", "material", "x", "y", "z", "w", "d", "h"]))], required: ["parts"])),
             Tool(name: "add_kitchen",
                  description: "Build a kitchen from cabinets instead of boxes. runs are rows of cabinets placed left to right seen from the front; origin is the front left floor point in mm and turn 0, 90, 180 or 270 degrees; a run without origin continues after the corner cabinet that ends the previous run. Any positive width, height and depth is valid; omitted sizes take the standard. fronts list from top to bottom: door (side left, right or pair names the hinge side), drawers (drawers such as low, mid, high, or count), appliance (oven, dishwasher, fridge, hob, sink; hob and sink are inlays in the worktop), open, glass. A top cabinet sits on the cabinet before it. wall, worktop and plinth switch those parts off. Parts and units of an earlier kitchen with the same prefix are replaced. Returns counts, run lengths and the materials used.",
-                 schema: object(["runs": list(kitchenRun), "island": kitchenRun, "worktop": flag, "plinth": flag, "wall": flag, "prefix": text],
+                 schema: object(["runs": list(kitchenRun), "island": kitchenRun, "worktop": flag, "plinth": flag, "wall": flag, "prefix": text,
+                                 "features": kitchenFeatures, "materials": kitchenMaterials],
                                 required: ["runs"])),
+            Tool(name: "edit_cabinet",
+                 description: "Edit one or more cabinets of the kitchen by id (r0c3 is run 0, cabinet 3; with a kitchen prefix the id starts with it). Sizes are free, never rounded. op: resize (axis, delta in mm), set (width, height, depth), insert (kind, side before or after), duplicate, remove, move (step left or right within the run; a top cabinet travels with its host), flip (hinge side of single doors), split (door, pair, drawers2, drawers3, drawers4, drawerdoor, oven, dishwasher, fridge, hob, sink, open, glass), type (kind), override (field and value on the cabinets; shared true sets it for the whole kitchen instead), reset (cabinets back to the shared values, optionally one field). Grip handle, channel or push; style flat, frame or glass; plinth panel or legs; edge true or false; front, carcass, worktop and plinthMaterial take a material code. The same operations the user has in the editor; the kitchen is rebuilt after each call.",
+                 schema: object(["op": choice(["resize", "set", "insert", "duplicate", "remove", "move", "flip", "split", "type", "override", "reset"]),
+                                 "id": text, "ids": list(text), "axis": choice(Extent.allCases.map(\.rawValue)), "delta": number,
+                                 "width": number, "height": number, "depth": number, "kind": choice(CabinetKind.allCases.map(\.rawValue)),
+                                 "side": choice(["before", "after"]), "step": choice(["left", "right"]), "split": text,
+                                 "field": choice(Field.allCases.map(\.rawValue)), "value": text, "shared": flag],
+                                required: ["op"])),
             Tool(name: "update_part",
                  description: "Change fields of one existing part by id. Only the fields you pass change.",
                  schema: object(partFields, required: ["id"])),
