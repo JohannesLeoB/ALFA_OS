@@ -2,7 +2,7 @@
 
 Gilt für jede Sitzung in `alfaos/Draws` auf Zweig `alfa-draws`, zusätzlich zu `AGENTS.md`.
 
-Merkwort cabinetclaude = Küchen-Korpus-System von Draws: specs/cabinetclaude/, Generator, Werkzeug add_kitchen, Pack presets/carcass.json.
+Merkwort cabinetclaude = Küchen-Korpus-System von Draws: specs/cabinetclaude/, Generator, Werkzeug add_kitchen, Pack presets/carcass.json, Skill Packs/skills/cabinetclaude/.
 
 ## Pflege
 - Jedes Dokument in `alfaos/Draws` steht in dieser Tabelle. Ein Dokument ohne Zeile wird eingetragen oder gelöscht.
@@ -32,4 +32,5 @@ Merkwort cabinetclaude = Küchen-Korpus-System von Draws: specs/cabinetclaude/, 
 | Datei | Inhalt |
 |---|---|
 | `Sources/DrawsAI/Resources/designer.md` | Auftrag an Claude für den Einmal-Entwurf |
-| `Packs/skills/alfanomy/*.md` | Skillset `alfanomy`: core, dims, materials, motion, steps, carcass (Korpus-Raster), plans (Plansatz, Bemaßung); Liste in `manifest.json` |
+| `Packs/skills/alfanomy/*.md` | Skillset `alfanomy`: core, dims, materials, motion, steps, plans (Plansatz, Bemaßung); Liste in `manifest.json` |
+| `Packs/skills/cabinetclaude/*.md` | Skillset `cabinetclaude`, mit alfanomy zusammengeführt: core, grid (Korpus-Raster), splits, appliances, variants; alle Addons immer geladen |

@@ -37,7 +37,7 @@ Prototyp auf `alfa-draws` (Clone `~/Developer/ALFA_DRAWS`). Status Orange: kein 
 | DrawsDock | Draws | 7 Ports mit lokalen Adaptern, Typen feldgleich mit Hub |
 | DrawingDudeApp | Draws | Oberfläche nach Sketch 1610 auf Master-Tokens, Werte sonst in Proto.swift |
 
-Packs: `ci/studio`, `template/studio-a3-plan`, `template/studio-a4-deck`, `skills/alfanomy`, `style/studio.json`, `presets/default.json`.
+Packs: `ci/studio`, `template/studio-a3-plan`, `template/studio-a4-deck`, `skills/alfanomy`, `skills/cabinetclaude`, `presets/carcass.json`, `style/studio.json`, `presets/default.json`.
 
 Specs: `specs/family.md` (Creative Family), `specs/aufmass.md` (Aufmaß), `specs/hub-needs.md` (Bedarf am Hub).
 

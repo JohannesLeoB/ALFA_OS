@@ -50,6 +50,17 @@ public struct Skillset: Sendable, Equatable {
         return Skillset(manifest: manifest, files: files, keys: keys)
     }
 
+    public func merging(_ other: Skillset) -> Skillset {
+        let id = other.manifest.id
+        let tag = { (name: String) in id + "/" + name }
+        var merged = files
+        for (name, text) in other.files { merged[tag(name)] = text }
+        let core = Entry(key: id, file: tag(other.manifest.core))
+        let addons = other.manifest.addons.map { Entry(key: id + "." + $0.key, file: tag($0.file)) }
+        let next = Manifest(id: manifest.id + "+" + id, core: manifest.core, addons: [core] + manifest.addons + addons)
+        return Skillset(manifest: next, files: merged, keys: keys + [id] + other.keys.map { id + "." + $0 })
+    }
+
     public func selecting(_ keys: [String]) -> Skillset {
         var next = self
         next.keys = keys

@@ -828,7 +828,7 @@ final class DrawsModel {
         let packs = Self.root.appendingPathComponent("Packs")
         let master = try? StyleMaster.load(packs.appendingPathComponent("style/\(styleID).json"))
         let start = master.map { draft().seeded(by: $0, dials: bench.dials) } ?? draft()
-        let keys = ["motion", "materials", "carcass"] + (dimensions ? ["dims"] : []) + (dimensions || layout == .plan || layout == .steps ? ["plans"] : []) + (layout == .steps ? ["steps"] : [])
+        let keys = ["motion", "materials"] + (dimensions ? ["dims"] : []) + (dimensions || layout == .plan || layout == .steps ? ["plans"] : []) + (layout == .steps ? ["steps"] : [])
         let toolbox = DrawsToolbox(draft: start, bench: bench, images: images) { [weak self] next in self?.apply(next) }
         self.toolbox = toolbox
         editing = nil
@@ -846,11 +846,13 @@ final class DrawsModel {
                 chat = nil
                 self.toolbox = nil
             }
-            guard let skills = try? Skillset.load(packs.appendingPathComponent("skills/alfanomy"), keys: keys) else {
+            let folder = { (name: String, keys: [String]) in try? Skillset.load(packs.appendingPathComponent("skills/" + name), keys: keys) }
+            guard let base = folder("alfanomy", keys), let cabinet = folder("cabinetclaude", ["grid", "splits", "appliances", "variants"]) else {
                 failure = word("draws.live.skills")
                 ending = .failed
                 return
             }
+            let skills = base.merging(cabinet)
             let media = await Live.media(attached)
             let events = await session.run(prompt: text, media: media, toolbox: toolbox, skills: skills, style: master,
                                            budget: Budget(rounds: Proto.liveRounds, tokens: Proto.liveTokens))

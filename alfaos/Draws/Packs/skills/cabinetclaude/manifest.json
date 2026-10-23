@@ -1,0 +1,10 @@
+{
+  "id": "cabinetclaude",
+  "core": "core.md",
+  "addons": [
+    {"key": "grid", "file": "grid.md"},
+    {"key": "splits", "file": "splits.md"},
+    {"key": "appliances", "file": "appliances.md"},
+    {"key": "variants", "file": "variants.md"}
+  ]
+}

@@ -6,7 +6,6 @@
     {"key": "dims", "file": "dims.md"},
     {"key": "materials", "file": "materials.md"},
     {"key": "steps", "file": "steps.md"},
-    {"key": "carcass", "file": "carcass.md"},
     {"key": "plans", "file": "plans.md"}
   ]
 }

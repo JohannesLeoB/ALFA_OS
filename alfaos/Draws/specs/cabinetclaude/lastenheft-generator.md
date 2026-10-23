@@ -46,6 +46,6 @@ Status: gebaut (Datei:Zeile) / Daten / offen. Stand 23.10.
 |---|---|---|
 | G-40 | Spec im SVG-Arbeitsfile als Doc.kitchen | gebaut Doc.swift:155 |
 | G-41 | Claude-Werkzeug add_kitchen mit Schema und Rückgabe (Zahlen, Zeilenlängen, Materialien) | gebaut DrawsTools.swift:65 |
-| G-42 | Skill carcass.md als Raster für Claude | Daten Packs/skills/alfanomy/carcass.md |
+| G-42 | Skill cabinetclaude als Raster für Claude | Daten Packs/skills/cabinetclaude/ |
 | G-43 | Werkzeug edit_kitchen (einen Schrank ändern) | offen |
 | G-44 | Test je Anforderung mit Mutant | offen |

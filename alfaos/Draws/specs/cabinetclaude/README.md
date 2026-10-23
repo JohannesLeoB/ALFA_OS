@@ -16,7 +16,7 @@ specs/cabinetclaude/
   lastenheft-generator.md  G-01…  Generator (Stufe 1)
   lastenheft-katalog.md    K-01…  Küchenfabrik (Stufe 2)
 Packs/presets/carcass.json         Daten (Pack)
-Packs/skills/alfanomy/carcass.md   Raster-Skill für Claude
+Packs/skills/cabinetclaude/        Skill für Claude (core, grid, splits, appliances, variants); eine Quelle der Maße im Prompt
 Sources/DrawingKit/KitchenSpec.swift, Cabinets.swift   Generator
 ```
 
