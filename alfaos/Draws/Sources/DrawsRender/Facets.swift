@@ -25,8 +25,15 @@ enum Facets {
         Solids.faces(part).flatMap(\.points)
     }
 
-    @MainActor
-    static func mesh(_ part: Part, tile: Double) throws -> MeshResource {
+    struct Buffers: Sendable {
+        var id: String
+        var positions: [SIMD3<Float>]
+        var normals: [SIMD3<Float>]
+        var uvs: [SIMD2<Float>]
+        var indices: [UInt32]
+    }
+
+    static func buffers(_ part: Part, tile: Double) throws -> Buffers {
         let faces = Solids.faces(part)
         let all = faces.flatMap(\.points)
         guard !all.isEmpty else { throw PhotoError.empty }
@@ -53,11 +60,16 @@ enum Facets {
                 indices += flip ? [base, base + UInt32(i + 1), base + UInt32(i)] : [base, base + UInt32(i), base + UInt32(i + 1)]
             }
         }
-        var d = MeshDescriptor(name: part.id)
-        d.positions = MeshBuffers.Positions(positions)
-        d.normals = MeshBuffers.Normals(normals)
-        d.textureCoordinates = MeshBuffers.TextureCoordinates(uvs)
-        d.primitives = .triangles(indices)
+        return Buffers(id: part.id, positions: positions, normals: normals, uvs: uvs, indices: indices)
+    }
+
+    @MainActor
+    static func mesh(_ b: Buffers) throws -> MeshResource {
+        var d = MeshDescriptor(name: b.id)
+        d.positions = MeshBuffers.Positions(b.positions)
+        d.normals = MeshBuffers.Normals(b.normals)
+        d.textureCoordinates = MeshBuffers.TextureCoordinates(b.uvs)
+        d.primitives = .triangles(b.indices)
         return try MeshResource.generate(from: [d])
     }
 }

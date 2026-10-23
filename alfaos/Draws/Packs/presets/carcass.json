@@ -15,14 +15,14 @@
     "reserve": 150
   },
   "kinds": {
-    "base": { "mount": "floor", "worktop": true, "widths": [200, 300, 400, 600, 800], "heights": [800], "depths": [600, 370], "width": 600, "height": 800, "depth": 600, "name": "Unterschrank", "front": "door" },
-    "wall": { "mount": "wall", "widths": [200, 300, 400, 600, 800], "heights": [400, 600, 800, 1000], "depths": [370], "width": 600, "height": 800, "depth": 370, "name": "Oberschrank", "front": "door" },
-    "tall": { "mount": "floor", "carries": true, "widths": [400, 600, 800], "heights": [1400, 2000, 2200], "depths": [600, 370], "width": 600, "height": 2000, "depth": 600, "name": "Hochschrank", "front": "door" },
-    "housing": { "mount": "floor", "carries": true, "widths": [600], "heights": [1400, 2000, 2200], "depths": [600], "width": 600, "height": 2000, "depth": 600, "name": "Geräteschrank", "front": "fridge" },
-    "top": { "mount": "stack", "widths": [400, 600], "heights": [400, 600], "depths": [600], "width": 600, "height": 400, "depth": 600, "name": "Aufsatzschrank", "front": "door" },
-    "cornerBase": { "mount": "floor", "worktop": true, "widths": [880, 1280], "heights": [800], "depths": [880, 680], "width": 880, "height": 800, "depth": 880, "name": "Eckunterschrank", "front": "door", "cornerDepths": { "880": 880, "1280": 680 } },
-    "cornerWall": { "mount": "wall", "widths": [675], "heights": [600, 800, 1000], "depths": [675], "width": 675, "height": 800, "depth": 675, "name": "Eckoberschrank", "front": "door", "cornerDepths": { "675": 675 } },
-    "open": { "mount": "wall", "widths": [200], "heights": [400, 600, 800], "depths": [370], "width": 200, "height": 600, "depth": 370, "name": "Regal", "front": "none" }
+    "base": { "mount": "floor", "worktop": true, "width": 600, "height": 800, "depth": 600, "name": "Unterschrank", "front": "door" },
+    "wall": { "mount": "wall", "width": 600, "height": 800, "depth": 370, "name": "Oberschrank", "front": "door" },
+    "tall": { "mount": "floor", "carries": true, "width": 600, "height": 2000, "depth": 600, "name": "Hochschrank", "front": "door" },
+    "housing": { "mount": "floor", "carries": true, "width": 600, "height": 2000, "depth": 600, "name": "Geräteschrank", "front": "fridge" },
+    "top": { "mount": "stack", "width": 600, "height": 400, "depth": 600, "name": "Aufsatzschrank", "front": "door" },
+    "cornerBase": { "mount": "floor", "worktop": true, "width": 880, "height": 800, "depth": 880, "name": "Eckunterschrank", "front": "door", "cornerDepths": { "880": 880, "1280": 680 } },
+    "cornerWall": { "mount": "wall", "width": 675, "height": 800, "depth": 675, "name": "Eckoberschrank", "front": "door", "cornerDepths": { "675": 675 } },
+    "open": { "mount": "wall", "width": 200, "height": 600, "depth": 370, "name": "Regal", "front": "none" }
   },
   "appliance": {
     "oven": { "name": "Backofen", "material": "ofen", "height": 600, "motion": "flap" },

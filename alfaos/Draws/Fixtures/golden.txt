@@ -4963,7 +4963,7 @@ board []
 </svg>
 readout board units d0 drawer 596 1 mm 0/450 1/2
 readout board units door door 596 1 deg 0/100 2/2
-interactive 61516 2 12 fe56fd814ddbb23078de31890efcfd29d7d4855a
+interactive 61486 2 12 039cb6cd393a189680454b4ed61cdd003f668eab
 ## wedge seat pages 2
 plan []
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420.00 297.00" width="420.00mm" height="297.00mm" font-family="Geist">
@@ -6731,5 +6731,5 @@ line 10,0 to 10,10 length 10
 text "Kitchen 1" at 1,2 height 3.5
 doc kitchen plan 32661 adfa6fb10703e5f6130b786610345c47b6ffe62eb468570af2a70b3dfbdac063 true
 doc kitchen iso posed texture 21401 248030bb7ca0ecac36db41a8eaaad355ee9020347433c907abe0321e8984fb8f true
-doc board cells and hidden 18565 47e85abaf2db80746ebb50abfce8df77f5ba6a8494caa96be7a96a1e3fd0a137 true
+doc board cells and hidden 18570 2d8e76c2c253e47e8b7a61969d045992cc2f4b3447d983b57724af119b9d678b true
 doc probe success(true) failure(DrawingKit.DocError.newer(2)) failure(DrawingKit.DocError.corrupt)

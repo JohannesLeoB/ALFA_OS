@@ -13,7 +13,7 @@ struct DrawsApp: App {
     var body: some Scene {
         WindowGroup {
             ShellScreen(model: model)
-                .frame(minWidth: CGFloat(Design.Size.laneMinimumLeft * 3), minHeight: CGFloat(Design.Size.blobMenuMinHeight * 3))
+                .frame(minWidth: CGFloat(ShellGeometry().windowMin.width), minHeight: CGFloat(Design.Size.blobMenuMinHeight * 3))
                 .onAppear { NSApplication.shared.activate() }
         }
         .windowStyle(.hiddenTitleBar)

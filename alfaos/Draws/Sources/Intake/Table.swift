@@ -54,6 +54,7 @@ enum Csv {
 enum Xlsx {
     static let rowCap = 200_000
     static let colCap = 16_384
+    static let cellCap = 2_000_000
 
     static func read(_ data: Data, _ r: inout Ingested) throws {
         guard let zip = Zip.open(data), let book = Dom.parse(Zip.file(zip, "xl/workbook.xml")) else { throw Failure.damaged(.xlsx) }
@@ -88,7 +89,7 @@ enum Xlsx {
     }
 
     static func grid(_ doc: Node, _ shared: [String], _ r: inout Ingested) -> [[String]] {
-        var rows: [[String]] = [], width = 0
+        var rows: [[String]] = [], width = 0, total = 0, full = false
         for (rowAt, row) in (doc.first("sheetData")?.kids ?? []).filter({ $0.name == "row" }).enumerated() {
             let number = (Int(row.attrs["r"] ?? "") ?? rowAt + 1) - 1
             guard number >= 0, number < rowCap else { r.note("xlsx.truncated"); continue }
@@ -99,11 +100,18 @@ enum Xlsx {
                 if cell.first("f") != nil { r.note("xlsx.formula") }
                 cells[col] = value(cell, shared)
             }
-            while rows.count <= number { rows.append([]) }
             let used = (cells.keys.max() ?? -1) + 1
+            if total + used > cellCap {
+                r.note("xlsx.truncated")
+                full = true
+                break
+            }
+            while rows.count <= number { rows.append([]) }
+            total += used - rows[number].count
             width = max(width, used)
             rows[number] = (0..<used).map { cells[$0] ?? "" }
         }
+        if full || rows.count * width > cellCap { return rows }
         return rows.map { $0 + Array(repeating: "", count: width - $0.count) }
     }
 

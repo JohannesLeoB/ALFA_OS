@@ -49,12 +49,11 @@ struct ShellScreen: View {
         .navigationTitle(model.windowTitle)
         .dropDestination(for: URL.self) { urls, _ in
             model.drop(urls)
-            return true
         }
         .onAppear { model.start() }
     }
 
-    private var rules: AreaRules { AreaRules.rules(for: "draws", geometry: geometry) }
+    private var rules: AreaRules { AreaRules(minimum: geometry.minimum, yield: [Lane.trailing.index, Lane.leading.index, Lane.center.index]) }
 
     private func drag(_ lane: Lane, proposed: Double, current: LaneWidths, keep: Bool = false) {
         let start = keep ? current.all : (dragStart ?? current.all)

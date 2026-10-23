@@ -125,6 +125,7 @@ final class DrawsModel {
     var history: [KitchenSpec] = []
     var future: [KitchenSpec] = []
     var photoStale = false
+    var generation = 0
     var kitchenPack: KitchenPack?
     var editing: Editing?
     var toolbox: DrawsToolbox?
@@ -398,6 +399,7 @@ final class DrawsModel {
     }
 
     func touch() {
+        generation += 1
         if ready { dirty = true }
     }
 
@@ -609,16 +611,19 @@ final class DrawsModel {
         let posed = DrawingKit.pose(shown, running, amounts: pose.filter { ids.contains($0.key) })
         let kind = cell(selected)?.view ?? cells.first { $0.view == .iso || $0.view == .perspective }?.view ?? .iso
         let size = shown.reduce(0.0) { max($0, $1.w, $1.d, $1.h) }
-        let view = ViewSpec(kind: kind, azimuth: azimuth, elevation: elevation, distance: kind == .perspective ? Proto.perspectiveDistance * size : nil)
+        let view = Photo.view(kind, azimuth: azimuth, elevation: elevation, size: size, reach: Proto.perspectiveDistance)
         let surfaces = look.surfaces(images: images, tones: ci?.pack.tints ?? [:], codes: Array(Set(posed.map(\.material))))
         let scene = PhotoScene(parts: posed, surfaces: surfaces, light: look.light, view: view,
                                backdrop: Proto.photoBackdrop, margin: Proto.photoMargin)
         rendering = true
         photoFailure = nil
+        let mine = generation
         Task {
             defer { rendering = false }
             do {
-                photo = try await Photo.render(scene, width: Proto.photoWidth, height: Proto.photoHeight)
+                let image = try await Photo.render(scene, width: Proto.photoWidth, height: Proto.photoHeight)
+                guard mine == generation else { return }
+                photo = image
                 photoStale = false
             } catch {
                 photoFailure = word("draws.render.failed")

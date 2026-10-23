@@ -105,6 +105,10 @@ public struct SVGRenderer: Renderer {
     static func f(_ v: CGFloat) -> String { f(Double(v)) }
 
     static func esc(_ t: String) -> String {
-        t.replacingOccurrences(of: "&", with: "&amp;").replacingOccurrences(of: "<", with: "&lt;").replacingOccurrences(of: "\"", with: "&quot;")
+        String(String.UnicodeScalarView(t.unicodeScalars.filter(xml))).replacingOccurrences(of: "&", with: "&amp;").replacingOccurrences(of: "<", with: "&lt;").replacingOccurrences(of: "\"", with: "&quot;")
+    }
+
+    static func xml(_ c: Unicode.Scalar) -> Bool {
+        c.value >= 0x20 ? c.value != 0xFFFE && c.value != 0xFFFF : c == "\t" || c == "\n" || c == "\r"
     }
 }

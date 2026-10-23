@@ -69,23 +69,42 @@ extension DrawsModel {
         }
     }
 
-    func drop(_ urls: [URL]) {
-        for url in urls where url.pathExtension.lowercased() == "svg" {
-            guard let data = try? Data(contentsOf: url) else {
-                failure = word("draws.doc.error.read")
-                continue
+    @discardableResult
+    func drop(_ urls: [URL]) -> Bool {
+        let files = urls.filter { $0.isFileURL && $0.pathExtension.lowercased() == "svg" }
+        guard !files.isEmpty else { return false }
+        Task {
+            for url in files {
+                let opened = await Task.detached { Self.read(url) }.value
+                take(opened, from: url)
             }
-            do {
-                if let doc = try DocFile.read(data) {
-                    restore(doc, from: url)
-                } else {
-                    underlaid(data, named: url.lastPathComponent)
-                }
-            } catch DocError.newer {
-                failure = word("draws.doc.error.newer")
-            } catch {
-                failure = word("draws.doc.error.read")
-            }
+        }
+        return true
+    }
+
+    enum Opened: Sendable {
+        case doc(DrawsDoc)
+        case foreign(Data)
+        case failed(String)
+    }
+
+    nonisolated static func read(_ url: URL) -> Opened {
+        guard let data = try? Data(contentsOf: url) else { return .failed("draws.doc.error.read") }
+        do {
+            if let doc = try DocFile.read(data) { return .doc(doc) }
+            return .foreign(data)
+        } catch DocError.newer {
+            return .failed("draws.doc.error.newer")
+        } catch {
+            return .failed("draws.doc.error.read")
+        }
+    }
+
+    private func take(_ opened: Opened, from url: URL) {
+        switch opened {
+        case .doc(let doc): restore(doc, from: url)
+        case .foreign(let data): underlaid(data, named: url.lastPathComponent)
+        case .failed(let key): failure = word(key)
         }
     }
 

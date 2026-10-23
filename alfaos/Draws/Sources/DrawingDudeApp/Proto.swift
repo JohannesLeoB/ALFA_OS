@@ -1,3 +1,4 @@
+import DrawsRender
 import Foundation
 
 struct Dial: Sendable {
@@ -44,8 +45,8 @@ enum Proto {
     static let glideSteps = 8
     static let photoWidth = 1600
     static let photoHeight = 1000
-    static let photoBackdrop = true
-    static let photoMargin = 0.1
+    static let photoBackdrop = Photo.backdrop
+    static let photoMargin = Rig.margin
     static let tile = Dial(low: 50, high: 2000, step: 50)
     static let roughness = Dial(low: 0, high: 1, step: 0.05)
     static let previewDPI = 80.0

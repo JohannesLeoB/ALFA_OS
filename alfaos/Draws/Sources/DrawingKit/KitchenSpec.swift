@@ -134,7 +134,6 @@ public struct KitchenPack: Codable, Sendable, Equatable {
         public var mount: String
         public var worktop: Bool?
         public var carries: Bool?
-        public var widths: [Double], heights: [Double], depths: [Double]
         public var width: Double, height: Double, depth: Double
         public var name: String
         public var front: String

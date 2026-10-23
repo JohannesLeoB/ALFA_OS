@@ -7,6 +7,43 @@ import Pages
 import RealityKit
 import simd
 
+final class Once<T: Sendable>: @unchecked Sendable {
+    private let lock = NSLock()
+    private var cont: CheckedContinuation<T, Error>?
+    var work: Task<Void, Never>?
+    var timer: Task<Void, Never>?
+
+    init(_ cont: CheckedContinuation<T, Error>) { self.cont = cont }
+
+    @discardableResult
+    func finish(_ result: Result<T, Error>) -> Bool {
+        lock.lock()
+        let held = cont
+        cont = nil
+        lock.unlock()
+        guard let held else { return false }
+        held.resume(with: result)
+        work?.cancel()
+        timer?.cancel()
+        return true
+    }
+}
+
+enum Race {
+    static func within<T: Sendable>(_ seconds: Double, _ job: @escaping @Sendable () async throws -> T) async throws -> T {
+        try await withCheckedThrowingContinuation { (cont: CheckedContinuation<T, Error>) in
+            let once = Once(cont)
+            once.work = Task {
+                do { once.finish(.success(try await job())) } catch { once.finish(.failure(error)) }
+            }
+            once.timer = Task {
+                try? await Task.sleep(for: .seconds(seconds))
+                once.finish(.failure(PhotoError.render("timeout")))
+            }
+        }
+    }
+}
+
 public enum Photo {
     public static let frames = 4
     public static let idFrames = 2
@@ -14,12 +51,37 @@ public enum Photo {
     static let groundSpan = 40.0
     static let backdropSpan = 14.0
 
-    @MainActor
+    public static let longSide = 4096
+    public static let limit = 90.0
+    public static let backdrop = true
+
+    public static func view(_ kind: ViewKind, azimuth: Double, elevation: Double, size: Double, reach: Double) -> ViewSpec {
+        ViewSpec(kind: kind, azimuth: azimuth, elevation: min(elevation, 89), distance: kind == .perspective ? reach * size : nil)
+    }
+
     public static func render(_ scene: PhotoScene, width: Int, height: Int) async throws -> CGImage {
         guard !scene.parts.isEmpty else { throw PhotoError.empty }
         try Validate.parts(scene.parts)
-        guard width >= 16, height >= 16, width <= 8192, height <= 8192 else { throw PhotoError.render("size") }
-        let aspect = Double(width) / Double(height)
+        guard width >= 16, height >= 16, width <= longSide, height <= longSide else { throw PhotoError.render("size") }
+        return try await Race.within(limit) { try await build(scene, width: width, height: height) }
+    }
+
+    struct Plan: Sendable {
+        var rig: Rig
+        var lamps: Lamps
+        var mid: SIMD3<Double>
+        var reach: Double
+        var floor: Double
+        var wallY: Double
+        var wallOn: Bool
+        var deck: String
+        var buffers: [Facets.Buffers]
+        var maps: [String: Maps]
+        var contact: Studio.Contact?
+        var environment: CGImage?
+    }
+
+    static func plan(_ scene: PhotoScene, aspect: Double) throws -> Plan {
         let all = scene.parts.flatMap(Facets.points)
         let lamps = Lamps.preset(scene.light.preset)
         let key = Studio.key(lamps, view: scene.view, light: scene.light)
@@ -32,18 +94,39 @@ public enum Photo {
         let wallY = hi.y + Studio.wallGap
         let framing = all + Studio.shadowPoints(all, key: key, floor: floor, wall: wallOn ? wallY : nil)
         guard let rig = Rig.fit(points: framing, view: scene.view, aspect: aspect, margin: scene.margin) else { throw PhotoError.empty }
-        let mid = (lo + hi) / 2
-        let reach = simd_length(hi - lo)
-
-        var made: [String: PhysicallyBasedMaterial] = [:]
-        var meshes: [MeshResource] = []
+        var maps: [String: Maps] = [:]
+        var buffers: [Facets.Buffers] = []
         for part in scene.parts {
             let surface = scene.surfaces[part.material]
-            if made[part.material] == nil { made[part.material] = try Studio.material(surface) }
-            meshes.append(try Facets.mesh(part, tile: surface?.tile ?? Texture.tile))
+            if maps[part.material] == nil {
+                maps[part.material] = Maps(color: try surface?.color.map(Decoded.shared.map), normal: try surface?.normal.map(Decoded.shared.map))
+            }
+            buffers.append(try Facets.buffers(part, tile: surface?.tile ?? Texture.tile))
         }
-        let contact = try Studio.contact(scene.parts, floor: floor)
-        let deck = scene.backdrop ? Tone.deck : Tone.floor
+        return Plan(rig: rig, lamps: lamps, mid: (lo + hi) / 2, reach: simd_length(hi - lo), floor: floor, wallY: wallY, wallOn: wallOn,
+                    deck: scene.backdrop ? Tone.deck : Tone.floor, buffers: buffers, maps: maps,
+                    contact: Studio.contact(scene.parts, floor: floor), environment: Studio.environmentImage())
+    }
+
+    static func build(_ scene: PhotoScene, width: Int, height: Int) async throws -> CGImage {
+        let plan = try plan(scene, aspect: Double(width) / Double(height))
+        let shots = try await shoot(scene, plan, width: width, height: height)
+        var lit = shots.lit
+        if let ids = shots.ids { Occlusion.apply(&lit, ids: ids, width: width, height: height) }
+        return try image(lit, width: width, height: height)
+    }
+
+    @MainActor
+    static func shoot(_ scene: PhotoScene, _ plan: Plan, width: Int, height: Int) async throws -> (lit: [UInt8], ids: [UInt8]?) {
+        let rig = plan.rig, lamps = plan.lamps, mid = plan.mid, reach = plan.reach, floor = plan.floor
+        var made: [String: PhysicallyBasedMaterial] = [:]
+        var meshes: [MeshResource] = []
+        for (index, part) in scene.parts.enumerated() {
+            if made[part.material] == nil { made[part.material] = try Studio.material(scene.surfaces[part.material], maps: plan.maps[part.material] ?? Maps()) }
+            meshes.append(try Facets.mesh(plan.buffers[index]))
+        }
+        let contact = try plan.contact.map(Studio.contactEntity)
+        let environment = Studio.environment(plan.environment)
 
         func stage(ids: Bool) -> (Entity, Entity) {
             let root = Entity()
@@ -62,14 +145,14 @@ public enum Photo {
                 root.addChild(model)
             }
             let size = Float(reach * Space.metre * (scene.backdrop ? backdropSpan : groundSpan))
-            let ground: any RealityKit.Material = ids ? flat(0) : paint(deck)
-            let plane = ModelEntity(mesh: .generatePlane(width: size, depth: size), materials: [ground])
-            plane.position = Space.point(SIMD3(mid.x, mid.y, floor))
-            root.addChild(plane)
-            if wallOn {
+            let ground: any RealityKit.Material = ids ? flat(0) : paint(plan.deck)
+            let planeEntity = ModelEntity(mesh: .generatePlane(width: size, depth: size), materials: [ground])
+            planeEntity.position = Space.point(SIMD3(mid.x, mid.y, floor))
+            root.addChild(planeEntity)
+            if plan.wallOn {
                 let material: any RealityKit.Material = ids ? flat(0) : paint(Tone.wall)
                 let wall = ModelEntity(mesh: .generatePlane(width: size, height: size), materials: [material])
-                wall.position = Space.point(SIMD3(mid.x, wallY, floor)) + SIMD3(0, size / 2, 0)
+                wall.position = Space.point(SIMD3(mid.x, plan.wallY, floor)) + SIMD3(0, size / 2, 0)
                 root.addChild(wall)
             }
             if !ids {
@@ -105,8 +188,8 @@ public enum Photo {
                 renderer.cameraSettings.colorBackground = .color(Tone.cg(scene.backdrop ? Tone.wall : Tone.backdrop))
                 renderer.cameraSettings.antialiasing = .multisample4X
                 renderer.cameraSettings.isToneMappingEnabled = true
-                if let env = Studio.environment() {
-                    renderer.lighting.resource = env
+                if let environment {
+                    renderer.lighting.resource = environment
                     renderer.lighting.intensityExponent = lamps.ambient - 1.4
                 }
             }
@@ -117,16 +200,13 @@ public enum Photo {
             let output = try RealityRenderer.CameraOutput(.singleProjection(colorTexture: target))
             for frame in 0..<(ids ? idFrames : frames) {
                 try await draw(renderer, output, delta: frame == 0 ? 0.0 : pause)
-                try await Task.sleep(for: .seconds(pause))
             }
             return bytes(target)
         }
 
-        var lit = try await capture(ids: false)
-        if scene.parts.count <= Occlusion.capacity {
-            Occlusion.apply(&lit, ids: try await capture(ids: true), width: width, height: height)
-        }
-        return try image(lit, width: width, height: height)
+        let lit = try await capture(ids: false)
+        let ids = scene.parts.count <= Occlusion.capacity ? try await capture(ids: true) : nil
+        return (lit, ids)
     }
 
     @MainActor

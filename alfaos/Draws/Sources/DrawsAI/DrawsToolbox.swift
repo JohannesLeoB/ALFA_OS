@@ -124,11 +124,12 @@ public actor DrawsToolbox: Toolbox {
             throw Refusal("view must be one of " + ViewKind.allCases.map(\.rawValue).joined(separator: ", "))
         }
         let size = draft.parts.reduce(0.0) { max($0, $1.w, $1.d, $1.h) }
-        let view = ViewSpec(kind: kind, azimuth: draft.azimuth, elevation: min(draft.elevation, 89), distance: bench.distance * size)
+        let view = Photo.view(kind, azimuth: draft.azimuth, elevation: draft.elevation, size: size, reach: bench.distance)
         let posed = pose(draft.parts, draft.units, amounts: draft.pose.filter { entry in draft.units.contains { $0.id == entry.key } })
         let codes = Array(Set(posed.map(\.material))).sorted()
         let surfaces = draft.look.surfaces(images: images, tones: bench.ci.tints, codes: codes)
-        let scene = PhotoScene(parts: posed, surfaces: surfaces, light: draft.look.light, view: view)
+        let scene = PhotoScene(parts: posed, surfaces: surfaces, light: draft.look.light, view: view,
+                               backdrop: Photo.backdrop, margin: Rig.margin)
         let png: Data
         do {
             png = try Photo.png(try await Photo.render(scene, width: Self.photoSize.width, height: Self.photoSize.height))

@@ -86,7 +86,8 @@ public actor Session {
         guard media.reduce(0, { $0 + $1.data.count + $1.note.utf8.count }) <= Self.attachmentLimit else { throw Fault.tooLarge }
         var messages: [JSON] = [try Self.opening(prompt, media)]
         let system = ([skills.prompt] + (style.map { [$0.block] } ?? [])).filter { !$0.isEmpty }.joined(separator: "\n\n")
-        let tools = JSON.array(toolbox.tools.map(\.wire))
+        let tools = JSON.array(Self.cached(toolbox.tools.map(\.wire)))
+        let marked: JSON = system.isEmpty ? .string(system) : .array([["type": "text", "text": .string(system), "cache_control": Self.mark]])
         var used = 0
         var round = 0
         while true {
@@ -108,12 +109,12 @@ public actor Session {
                 "max_tokens": .number(Double(min(Self.requestLimit, budget.tokens - used))),
                 "thinking": ["type": "adaptive"],
                 "output_config": ["effort": .string(effort)],
-                "system": .string(system),
+                "system": marked,
                 "tools": tools,
                 "messages": .array(messages)
             ]
             let reply = try await exchange(try body.data(), key: key)
-            used += Int(reply["usage"]?["output_tokens"]?.number ?? 0)
+            used += Self.spent(reply["usage"])
             let content = reply["content"]?.array ?? []
             for block in content {
                 switch block["type"]?.string {
@@ -189,6 +190,19 @@ public actor Session {
             await pause(Retry.delay(attempt: attempt, retryAfter: reply.value(forHTTPHeaderField: "Retry-After")))
             attempt += 1
         }
+    }
+
+    static let mark: JSON = ["type": "ephemeral"]
+
+    static func cached(_ tools: [JSON]) -> [JSON] {
+        guard var last = tools.last?.object else { return tools }
+        last["cache_control"] = mark
+        return Array(tools.dropLast()) + [.object(last)]
+    }
+
+    static func spent(_ usage: JSON?) -> Int {
+        ["input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens"]
+            .reduce(0) { $0 + Int(usage?[$1]?.number ?? 0) }
     }
 
     static func textBlock(_ text: String) -> JSON {

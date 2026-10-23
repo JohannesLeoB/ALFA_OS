@@ -1,4 +1,5 @@
 import AppKit
+import CryptoKit
 import CoreGraphics
 import DrawingKit
 import Foundation
@@ -54,18 +55,56 @@ struct Lamps {
     }
 }
 
-@MainActor
+struct Map: Sendable {
+    var key: String
+    var image: CGImage
+}
+
+final class Decoded: @unchecked Sendable {
+    static let shared = Decoded()
+    static let capacity = 32
+    private let lock = NSLock()
+    private var images: [String: CGImage] = [:]
+
+    func map(_ data: Data) throws -> Map {
+        let key = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+        lock.lock()
+        let hit = images[key]
+        lock.unlock()
+        if let hit { return Map(key: key, image: hit) }
+        guard let cg = Studio.image(data) else { throw PhotoError.texture("image") }
+        lock.lock()
+        if images.count >= Self.capacity { images.removeAll() }
+        images[key] = cg
+        lock.unlock()
+        return Map(key: key, image: cg)
+    }
+}
+
+struct Maps: Sendable {
+    var color: Map?
+    var normal: Map?
+}
+
 enum Studio {
     static func image(_ data: Data) -> CGImage? {
         CGImageSourceCreateWithData(data as CFData, nil).flatMap { CGImageSourceCreateImageAtIndex($0, 0, nil) }
     }
 
-    static func texture(_ data: Data, normal: Bool) throws -> TextureResource {
-        guard let cg = image(data) else { throw PhotoError.texture("image") }
-        return try TextureResource(image: cg, options: .init(semantic: normal ? .normal : .color))
+    @MainActor static var resources: [String: TextureResource] = [:]
+
+    @MainActor
+    static func texture(_ map: Map, normal: Bool) throws -> TextureResource {
+        let key = map.key + (normal ? "n" : "c")
+        if let hit = resources[key] { return hit }
+        let made = try TextureResource(image: map.image, options: .init(semantic: normal ? .normal : .color))
+        if resources.count >= Decoded.capacity { resources.removeAll() }
+        resources[key] = made
+        return made
     }
 
-    static func material(_ surface: Surface?) throws -> PhysicallyBasedMaterial {
+    @MainActor
+    static func material(_ surface: Surface?, maps: Maps) throws -> PhysicallyBasedMaterial {
         var m = PhysicallyBasedMaterial()
         let rough = Float(min(1, max(0.02, surface?.roughness ?? Texture.roughness)))
         m.roughness = .init(floatLiteral: rough)
@@ -74,16 +113,16 @@ enum Studio {
             m.clearcoat = .init(floatLiteral: 0.7)
             m.clearcoatRoughness = .init(floatLiteral: rough)
         }
-        if let data = surface?.color {
-            m.baseColor = .init(tint: .white, texture: .init(try texture(data, normal: false)))
+        if let map = maps.color {
+            m.baseColor = .init(tint: .white, texture: .init(try texture(map, normal: false)))
         } else {
             m.baseColor = .init(tint: NSColor(cgColor: Tone.cg(surface?.tone)) ?? .gray)
         }
-        if let data = surface?.normal { m.normal = .init(texture: .init(try texture(data, normal: true))) }
+        if let map = maps.normal { m.normal = .init(texture: .init(try texture(map, normal: true))) }
         return m
     }
 
-    static func environment() -> EnvironmentResource? {
+    static func environmentImage() -> CGImage? {
         let w = 512, h = 256
         guard let space = CGColorSpace(name: CGColorSpace.sRGB),
               let ctx = CGContext(data: nil, width: w, height: h, bitsPerComponent: 8, bytesPerRow: 0, space: space,
@@ -98,8 +137,12 @@ enum Studio {
         ctx.fill(CGRect(x: 330, y: 130, width: 90, height: 70))
         ctx.setFillColor(CGColor(srgbRed: 1, green: 0.96, blue: 0.9, alpha: 1))
         ctx.fill(CGRect(x: 180, y: 190, width: 60, height: 40))
-        guard let cg = ctx.makeImage() else { return nil }
-        return try? EnvironmentResource(equirectangular: cg)
+        return ctx.makeImage()
+    }
+
+    @MainActor
+    static func environment(_ image: CGImage?) -> EnvironmentResource? {
+        image.flatMap { try? EnvironmentResource(equirectangular: $0) }
     }
 
     static let samples = 20
@@ -122,6 +165,7 @@ enum Studio {
         }
     }
 
+    @MainActor
     static func lamp(_ lamps: Lamps, view: ViewSpec, light: LightSpec, floor: SIMD3<Double>, reach: Double) -> [Entity] {
         let base = Rig.angles(view).azimuth
         let (az, el) = key(lamps, view: view, light: light)
@@ -149,7 +193,14 @@ enum Studio {
         return out
     }
 
-    static func contact(_ parts: [Part], floor: Double) throws -> ModelEntity? {
+    struct Contact: Sendable {
+        var image: CGImage
+        var lo: SIMD2<Double>
+        var hi: SIMD2<Double>
+        var floor: Double
+    }
+
+    static func contact(_ parts: [Part], floor: Double) -> Contact? {
         var lo = SIMD2<Double>(.infinity, .infinity), hi = SIMD2<Double>(-.infinity, -.infinity)
         var rects: [(SIMD2<Double>, SIMD2<Double>)] = []
         for part in parts {
@@ -189,7 +240,13 @@ enum Studio {
               let cg = CGImage(width: side, height: side, bitsPerComponent: 8, bitsPerPixel: 32, bytesPerRow: side * 4, space: space,
                                bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue), provider: provider,
                                decode: nil, shouldInterpolate: true, intent: .defaultIntent) else { return nil }
-        let tex = try TextureResource(image: cg, options: .init(semantic: .color))
+        return Contact(image: cg, lo: lo, hi: hi, floor: floor)
+    }
+
+    @MainActor
+    static func contactEntity(_ c: Contact) throws -> ModelEntity {
+        let lo = c.lo, hi = c.hi, size = hi - lo
+        let tex = try TextureResource(image: c.image, options: .init(semantic: .color))
         var m = PhysicallyBasedMaterial()
         m.baseColor = .init(tint: .black, texture: .init(tex))
         m.roughness = .init(floatLiteral: 1)
@@ -197,7 +254,7 @@ enum Studio {
         m.blending = .transparent(opacity: .init(scale: 1, texture: .init(tex)))
         let plane = MeshResource.generatePlane(width: Float(size.x * Space.metre), depth: Float(size.y * Space.metre))
         let e = ModelEntity(mesh: plane, materials: [m])
-        e.position = Space.point(SIMD3((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, floor + 0.3))
+        e.position = Space.point(SIMD3((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, c.floor + 0.3))
         return e
     }
 
