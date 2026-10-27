@@ -55,8 +55,8 @@ public enum Tokens {
         public static let composeSheetMinHeight = 192.0
         public static let composeTextMinHeight = 120.0
         public static let composeColumnMinWidth = 96.0
-        public static let settingsTileHeight = 96.0
-        public static let settingsTileMinWidth = 132.0
+        public static let settingsTileHeight = 112.0
+        public static let settingsTileMinWidth = 112.0
         public static let toggleKnobOffsetOn = 14.0
         public static let toggleKnobOffsetOff = 2.0
         public static let selectionRingWidth = 2.0
@@ -76,13 +76,6 @@ public enum Tokens {
         public static let blobMenuMinHeight = 160.0
         public static let laneSnap = 12.0
         public static let laneHysteresis = 64.0
-        public static let menuWidthNarrow = 200.0
-        public static let menuWidthCompact = 220.0
-        public static let menuWidthRow = 232.0
-        public static let menuWidthDefault = 240.0
-        public static let menuWidthWide = 260.0
-        public static let menuWidthAttach = 280.0
-        public static let menuWidthPerson = 300.0
         public static let breakpointStack = 440.0
         public static let breakpointFilterLabel = 340.0
         public static let breakpointAttachments = 560.0
@@ -96,15 +89,53 @@ public enum Tokens {
         public static let safeAreaTop = 32.0
         public static let tileLogoSize = 18.0
         public static let focusRingWidth = 2.0
-        public static let focusRingOffset = 2.0
+        public static let focusRingOffset = 1.0
         public static let quoteBarWidth = 2.0
         public static let markSeparatorRing = 2.0
         public static let spinnerStroke = 1.5
         public static let tileHoverLift = 1.0
         public static let recipientLabelColumn = 40.0
         public static let recipientMarkColumn = 24.0
+        public static let menuWidthStep = 56.0
+        public static let menuMinWidth = 168.0
+        public static let menuMaxWidth = 280.0
+        public static let reelTopOffset = 8.0
+        public static let accountFanWidth = 220.0
+        public static let accountClosedWidth = 260.0
+        public static let cardStateTextMaxWidth = 320.0
+        public static let confirmPillWidth = 96.0
+        public static let confirmPillOffset = 3.0
+        public static let fieldLabelMinWidth = 96.0
+        public static let signatureEditorMinHeight = 144.0
+        public static let lockMarkSize = 56.0
+        public static let lockFieldWidth = 240.0
+        public static let imageTileStripe = 8.0
+        public static let hintRadius = 7.0
+        public static let stackDropOffset = 8.0
+        public static let stackDropBlur = 16.0
+        public static let stackDropSpread = -12.0
+        public static let stackFlatDropOffset = 6.0
+        public static let stackFlatDropBlur = 16.0
+        public static let stackFlatDropSpread = -10.0
+        public static let stackFlatFrontOffset = 8.0
+        public static let stackFlatFrontBlur = 24.0
+        public static let stackFlatFrontSpread = -12.0
+        public static let overviewTileEnter = 10.0
+        public static let mailLaneMaximumLeft = 280.0
+        public static let previewWindowWidth = 1512.0
+        public static let previewWindowHeight = 982.0
+        public static let previewMinWidth = 640.0
+        public static let previewMinHeight = 480.0
+        public static let menuWidthNarrow = 200.0
+        public static let menuWidthCompact = 220.0
+        public static let menuWidthRow = 232.0
+        public static let menuWidthDefault = 240.0
+        public static let menuWidthWide = 260.0
+        public static let menuWidthAttach = 280.0
+        public static let menuWidthPerson = 300.0
     }
     public enum Spacing {
+        public static let step2 = 2.0
         public static let step4 = 4.0
         public static let step8 = 8.0
         public static let step12 = 12.0
@@ -178,6 +209,15 @@ public enum Tokens {
         public static let searchFocusDelay = 0.04
         public static let confirmDoneDelay = 0.9
         public static let toastUndo = 4.0
+        public static let scrollLineIn = 0.32
+        public static let scrollLineRest = 0.42
+        public static let scrollLineOut = 0.9
+        public static let toastFail = 6.0
+        public static let switchIn = 0.36
+        public static let switchOut = 0.76
+        public static let hintDwell = 3.0
+        public static let deckClose = 0.38
+        public static let switchLift = 0.62
     }
     public enum Easing {
         public static let standard = CubicBezier(x1: 0.2, y1: 0.8, x2: 0.2, y2: 1.0)
@@ -205,6 +245,7 @@ public enum Tokens {
         public static let mailBody = 1.6
         public static let counter = 1.0
         public static let control = 18.0
+        public static let heading = 24.0
     }
     public enum Family {
         public static let text = ["Geist", "SF Pro Text", "system-ui"]
@@ -220,10 +261,13 @@ public enum Tokens {
         public static let attachmentsWide = 3
         public static let stackHeads = 3
         public static let menuStaggerMax = 14
+        public static let projectFilesMax = 8
     }
     public enum Opacity {
         public static let ringOnColor = 0.3
         public static let ringOnMark = 0.22
+        public static let cardMeta = 0.72
+        public static let cardMetaDeep = 0.95
     }
     public enum Confirm {
         public static let eraseEdge = 0.2
