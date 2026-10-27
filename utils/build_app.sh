@@ -10,12 +10,11 @@ WORK="$OUT/build"
 LOG="$WORK/build.log"
 TARGET="$OUT/$NAME-$VERSION.app"
 
-rm -rf "$WORK"
 mkdir -p "$WORK"
-trap 'rm -rf "$WORK"' EXIT
+: >"$LOG"
 
 cd "$ROOT"
-xcodegen generate >"$LOG" 2>&1 || { tail -n 30 "$LOG" >&2; exit 1; }
+xcodegen generate >>"$LOG" 2>&1 || { tail -n 30 "$LOG" >&2; exit 1; }
 xcodebuild -project "$NAME.xcodeproj" -scheme "$NAME" -configuration Debug \
   -derivedDataPath "$WORK" CURRENT_PROJECT_VERSION="$BUILD" build -quiet >>"$LOG" 2>&1 || { tail -n 30 "$LOG" >&2; exit 1; }
 
