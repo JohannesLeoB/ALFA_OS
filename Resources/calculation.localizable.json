@@ -1,0 +1,507 @@
+{
+ "_rule": "Arguments that start with 'calc.' are Localizable keys and are resolved before formatting; other arguments are literal values. Numbers are neutral digits and are formatted by the presenter. Markers size_estimated and size_implausible are flags, never shown.",
+ "keys": {
+  "calc.componentType.base_cabinet_run": {
+   "de": "Küchenzeile/Unterschränke"
+  },
+  "calc.componentType.island": {
+   "de": "Insel/Block"
+  },
+  "calc.componentType.tall_cabinet_block": {
+   "de": "Hochschrankblock"
+  },
+  "calc.componentType.wall_cabinets": {
+   "de": "Hängeschränke"
+  },
+  "calc.componentType.stone_countertop": {
+   "de": "Arbeitsplatte/Stein"
+  },
+  "calc.componentType.worktop_scope": {
+   "de": "Arbeitsplatten-Scope"
+  },
+  "calc.componentType.appliance_scope": {
+   "de": "Geräte-Scope"
+  },
+  "calc.componentType.drawer_addon": {
+   "de": "Schubkästen/Beschläge"
+  },
+  "calc.componentType.delivery": {
+   "de": "Lieferung"
+  },
+  "calc.componentType.installation": {
+   "de": "Montage"
+  },
+  "calc.componentType.project_logistics": {
+   "de": "Projektlogistik"
+  },
+  "calc.componentType.aggregate_kitchen": {
+   "de": "Gesamtküche"
+  },
+  "calc.componentType.other": {
+   "de": "Sonstiges"
+  },
+  "calc.front.melamin": {
+   "de": "Dekorspan/Melamin"
+  },
+  "calc.front.linoleum": {
+   "de": "Linoleum auf MDF/Träger"
+  },
+  "calc.front.furnier": {
+   "de": "Furnier"
+  },
+  "calc.front.lack": {
+   "de": "Lack"
+  },
+  "calc.front.edelstahl": {
+   "de": "Edelstahl"
+  },
+  "calc.front.massivholz": {
+   "de": "Massivholz"
+  },
+  "calc.front.glas": {
+   "de": "Glas"
+  },
+  "calc.front.unbekannt": {
+   "de": "unbekannt"
+  },
+  "calc.reason.material_underestimated": {
+   "de": "Material unterschätzt"
+  },
+  "calc.reason.execution_complexity": {
+   "de": "Ausführungskomplexität"
+  },
+  "calc.reason.supplier_level": {
+   "de": "Lieferantenniveau"
+  },
+  "calc.reason.market_price": {
+   "de": "Marktpreis"
+  },
+  "calc.reason.logistics": {
+   "de": "Logistik"
+  },
+  "calc.reason.gut_feeling": {
+   "de": "Bauchgefühl"
+  },
+  "calc.reason.real_offer_received": {
+   "de": "Echtes Angebot erhalten"
+  },
+  "calc.reason.final_invoice_received": {
+   "de": "Schlussrechnung erhalten"
+  },
+  "calc.reason.correction_error": {
+   "de": "Korrekturfehler"
+  },
+  "calc.target.whole_estimate": {
+   "de": "Gesamtschätzung"
+  },
+  "calc.target.kitchen_run": {
+   "de": "Küchenzeile"
+  },
+  "calc.target.island": {
+   "de": "Insel"
+  },
+  "calc.target.tall_cabinet_block": {
+   "de": "Hochschrankblock"
+  },
+  "calc.target.drawers": {
+   "de": "Schubkästen"
+  },
+  "calc.target.fronts": {
+   "de": "Fronten"
+  },
+  "calc.target.worktop": {
+   "de": "Arbeitsplatte"
+  },
+  "calc.target.logistics": {
+   "de": "Logistik"
+  },
+  "calc.stage.preparation": {
+   "de": "AV/Aufmaß"
+  },
+  "calc.stage.cutting": {
+   "de": "Zuschnitt"
+  },
+  "calc.stage.edging": {
+   "de": "Kante"
+  },
+  "calc.stage.cnc": {
+   "de": "CNC/BHX"
+  },
+  "calc.stage.bench": {
+   "de": "Bankraum"
+  },
+  "calc.stage.stock": {
+   "de": "Lager"
+  },
+  "calc.stage.loading": {
+   "de": "Laden"
+  },
+  "calc.stage.installation": {
+   "de": "Anliefern/Montage"
+  },
+  "calc.frontMaterial.veneer": {
+   "de": "Furnierspan"
+  },
+  "calc.frontMaterial.lacquer": {
+   "de": "Fertiglackiert/PM"
+  },
+  "calc.frontMaterial.linoleum": {
+   "de": "Linoleum auf MDF"
+  },
+  "calc.frontMaterial.mdf": {
+   "de": "MDF"
+  },
+  "calc.frontMaterial.decor": {
+   "de": "Dekor"
+  },
+  "calc.carcassTarget.fixkosten_sockel": {
+   "de": "Fixkosten-Sockel"
+  },
+  "calc.carcassTarget.variabel_pro_korpus": {
+   "de": "€/Korpus (Baseline)"
+  },
+  "calc.carcassTarget.montage_stundensatz_default": {
+   "de": "Montage-Stundensatz"
+  },
+  "calc.carcassTarget.schub_holz_eur": {
+   "de": "Schub Holz-massiv"
+  },
+  "calc.carcassTarget.schub_legrabox_eur": {
+   "de": "Schub Legrabox"
+  },
+  "calc.carcassTarget.anfahrt_pro_km": {
+   "de": "Anfahrt €/km"
+  },
+  "calc.carcassTarget.werkstatt_faktor": {
+   "de": "Werkstatt-Faktor"
+  },
+  "calc.carcassTarget.front_faktor_melamin": {
+   "de": "Front-Faktor Dekorspan/Melamin"
+  },
+  "calc.carcassTarget.front_faktor_linoleum": {
+   "de": "Front-Faktor Linoleum auf MDF/Träger"
+  },
+  "calc.carcassTarget.front_faktor_furnier": {
+   "de": "Front-Faktor Furnier"
+  },
+  "calc.carcassTarget.front_faktor_lack": {
+   "de": "Front-Faktor Lack"
+  },
+  "calc.carcassTarget.front_faktor_edelstahl": {
+   "de": "Front-Faktor Edelstahl"
+  },
+  "calc.carcassTarget.front_faktor_massivholz": {
+   "de": "Front-Faktor Massivholz"
+  },
+  "calc.carcassTarget.front_faktor_glas": {
+   "de": "Front-Faktor Glas"
+  },
+  "calc.carcassTarget.front_faktor_unbekannt": {
+   "de": "Front-Faktor unbekannt"
+  },
+  "calc.exclude.worktop": {
+   "de": "Arbeitsplatte (separate Achse: Steinmetz/Stadler-Edelstahl/Tischler, je m²×Material)"
+  },
+  "calc.exclude.appliances": {
+   "de": "Geräte (Artikel-DB-Lookup, kein Schätzproblem)"
+  },
+  "calc.exclude.margin": {
+   "de": "Marge (getrennte, projektvariable Ebene)"
+  },
+  "calc.exclude.worktop.label": {
+   "de": "Arbeitsplatte"
+  },
+  "calc.exclude.appliances.label": {
+   "de": "Geräte"
+  },
+  "calc.exclude.margin.label": {
+   "de": "Marge"
+  },
+  "calc.hint.excluded.worktop": {
+   "de": "Nicht enthalten: Arbeitsplatte (separate Achse: Steinmetz/Stadler-Edelstahl/Tischler, je m²×Material)"
+  },
+  "calc.hint.excluded.appliances": {
+   "de": "Nicht enthalten: Geräte (Artikel-DB-Lookup, kein Schätzproblem)"
+  },
+  "calc.hint.excluded.margin": {
+   "de": "Nicht enthalten: Marge (getrennte, projektvariable Ebene)"
+  },
+  "calc.field.carcassCount": {
+   "de": "Korpusanzahl"
+  },
+  "calc.field.frontExecution": {
+   "de": "Ausführung der Fronten"
+  },
+  "calc.field.workshop": {
+   "de": "Werkstatt"
+  },
+  "calc.hint.openFields": {
+   "de": "Ohne Angabe geschätzt: {*} — eine Rückfrage dazu verengt die Spanne spürbar.",
+   "args": [
+    "all arguments (field keys), joined with comma"
+   ]
+  },
+  "calc.hint.sizeMissing": {
+   "de": "⚠️ Größe fehlt — als typische mittlere Küche (~7 Korpen) angenommen. Bitte Laufmeter oder Korpuszahl nennen für eine belastbare Schätzung."
+  },
+  "calc.line.furniture": {
+   "de": "Möbel ohne Montage (Tischler-EK)"
+  },
+  "calc.line.installation": {
+   "de": "Montage und Anfahrt"
+  },
+  "calc.model.carcass": {
+   "de": "Korpus-BOM-Modell"
+  },
+  "calc.direction.higher": {
+   "de": "höher"
+  },
+  "calc.direction.cheaper": {
+   "de": "günstiger"
+  },
+  "calc.audit.adjusted": {
+   "de": "Schätzung {1} % {2} angepasst ({3})",
+   "args": [
+    "percent",
+    "direction key",
+    "ground"
+   ]
+  },
+  "calc.audit.promoted": {
+   "de": "Kalibrierung übernommen: {1} · {2} · {3} % {4} (n={5})",
+   "args": [
+    "reason key",
+    "target key",
+    "percent",
+    "direction key",
+    "sample count"
+   ]
+  },
+  "calc.audit.carcassCorrected": {
+   "de": "Korpus-Modell {1} {2} {3} % {4} korrigiert ({5})",
+   "args": [
+    "carcass target key",
+    "workshop name or empty",
+    "percent",
+    "direction key",
+    "note or reason key"
+   ]
+  },
+  "calc.note.runMissing": {
+   "de": "Laufmeter fehlt; als ~4 lfm geschätzt — bitte präzisieren."
+  },
+  "calc.note.tallWidthMissing": {
+   "de": "Hochschrank-Breite unbekannt; konservativ als 1 lfm angesetzt."
+  },
+  "calc.note.sizeImplausible": {
+   "de": "Unrealistische Größe ({1} {2}); auf {3} gekappt — bitte prüfen.",
+   "args": [
+    "measured",
+    "unit",
+    "cap"
+   ]
+  },
+  "calc.note.drawerFromText": {
+   "de": "Aus Freitext als separate Schubkasten-/Beschlagsposition erkannt."
+  },
+  "calc.note.logisticsSeparate": {
+   "de": "Lieferung/Montage als separate Position; prüfen, ob enthalten oder bauseits."
+  },
+  "calc.note.candidate": {
+   "de": "{1} ähnliche Adjustments, gewichtet nach Verlässlichkeit des Grundes.",
+   "args": [
+    "count"
+   ]
+  },
+  "calc.note.carcassCandidate": {
+   "de": "{1} Korrekturen für {2}, gewichtet nach Grund-Verlässlichkeit.",
+   "args": [
+    "count",
+    "parameter key"
+   ]
+  },
+  "calc.note.promoted": {
+   "de": "Zum aktiven Faktor {1} übernommen.",
+   "args": [
+    "factor id"
+   ]
+  },
+  "calc.scope.appliancesExcluded": {
+   "de": "Geräte ausgeschlossen."
+  },
+  "calc.scope.worktopExcluded": {
+   "de": "Arbeitsplatte ausgeschlossen."
+  },
+  "calc.scope.stoneExcluded": {
+   "de": "Stein/Dekton ausgeschlossen."
+  },
+  "calc.scope.deliveryIncluded": {
+   "de": "Lieferung enthalten oder angefragt."
+  },
+  "calc.scope.installationIncluded": {
+   "de": "Montage enthalten oder angefragt."
+  },
+  "calc.scope.unmapped": {
+   "de": "Freitext konnte keinem Standardbauteil sicher zugeordnet werden."
+  },
+  "calc.scope.default": {
+   "de": "Geräte, Arbeitsplatte, Lieferung und Montage werden getrennt bewertet oder ausdrücklich ausgeschlossen."
+  },
+  "calc.gap.evidenceShort": {
+   "de": "Nur {1} von {2} benötigten Preisankern für {3}.",
+   "args": [
+    "found",
+    "needed",
+    "component type key"
+   ]
+  },
+  "calc.gap.sizeImplausible": {
+   "de": "Unrealistische Größe bei {1} — Schätzung gekappt, bitte prüfen.",
+   "args": [
+    "component type key"
+   ]
+  },
+  "calc.gap.missingComponents": {
+   "de": "{1} Komponente(n) ohne Beleg — Gesamtschätzung unvollständig (wahrscheinlich zu niedrig).",
+   "args": [
+    "count"
+   ]
+  },
+  "calc.gap.belowFloor": {
+   "de": "Schätzung liegt unter dem Material+Lohn-Bodenpreis ({1} €) — möglicherweise zu niedrig; Umfang prüfen.",
+   "args": [
+    "floor in EUR"
+   ]
+  },
+  "calc.excluded.atomic": {
+   "de": "Atomare Anfragen verwenden keine Pantry/Gesamtküche/Einbauschrank/Hochschrankblock/Insel-Aggregate."
+  },
+  "calc.excluded.carryover": {
+   "de": "Übertrag"
+  },
+  "calc.excluded.netTotal": {
+   "de": "Nettobetrag/Gesamtbetrag"
+  },
+  "calc.excluded.vat": {
+   "de": "MwSt/Bruttobetrag"
+  },
+  "calc.excluded.alternative": {
+   "de": "Alternative/Mehrpreis nicht im Hauptschätzer"
+  },
+  "calc.rationale": {
+   "de": "Eligible: {1}. Ausgeschlossen: {2}. Evidence: {3}.",
+   "args": [
+    "allowed classes",
+    "forbidden classes",
+    "evidence count"
+   ]
+  },
+  "calc.risk.noSums": {
+   "de": "Keine produktive Nutzung von Summen, MwSt.-Zeilen, Überträgen oder verbotenen Komponentenklassen."
+  },
+  "calc.carcass.calibration": {
+   "de": "AFFIN kalibriert auf 20 reale eingehende Angebots-Positionen (Leave-one-out ~19 % Median-Fehler)."
+  },
+  "calc.carcass.fixedBase": {
+   "de": "Fixkosten-Sockel {1} € (Planung/Rüsten/Basis-Montage) — NICHT linear, trägt jede Küche voll.",
+   "args": [
+    "amount"
+   ]
+  },
+  "calc.carcass.variable": {
+   "de": "Variabel {1} €/Korpus × {2} Korpen × Front-Faktor {3} ({4}).",
+   "args": [
+    "amount",
+    "carcass count",
+    "factor",
+    "front key"
+   ]
+  },
+  "calc.carcass.allIn": {
+   "de": "Ergebnis all-in = geliefert + montiert. Montage-Basis Hinweis: {1}.",
+   "args": [
+    "installation basis raw value"
+   ]
+  },
+  "calc.carcass.drawers": {
+   "de": "Schubkästen: {1}× Legrabox à {2} € + {3}× Holz-massiv à {4} €.",
+   "args": [
+    "legrabox count",
+    "legrabox price",
+    "solid count",
+    "solid price"
+   ]
+  },
+  "calc.carcass.travel": {
+   "de": "Anfahrt {1} € ({2} km, jenseits {3} km Nahbereich × {4} €/km) — Prior.",
+   "args": [
+    "amount",
+    "km",
+    "free km",
+    "price per km"
+   ]
+  },
+  "calc.carcass.thinPrior": {
+   "de": "Front-Faktor {1} ist ein Prior (n=1 in den Daten) → bewusst breiteres Band.",
+   "args": [
+    "front key"
+   ]
+  },
+  "calc.carcass.workshopFactor": {
+   "de": "Werkstatt-Faktor ×{1} ({2}) auf den Möbelanteil — Faktor 1,0 als günstiger Pol.",
+   "args": [
+    "factor",
+    "workshop"
+   ]
+  },
+  "calc.carcass.workshopUnknown": {
+   "de": "Werkstatt unbekannt → kein Werkstatt-Faktor; Spanne deckt den Werkstatt-Spread (~1,0–1,3×) mit ab."
+  },
+  "calc.carcass.installationShare": {
+   "de": "Montageanteil {1} € ({2} Korpen × {3} h × {4} €/h + Anfahrt) → Küche OHNE Montage ≈ {5} €.",
+   "args": [
+    "amount",
+    "carcass count",
+    "hours",
+    "hourly rate",
+    "furniture without installation"
+   ]
+  },
+  "calc.bottomUp.carcassEquivalent": {
+   "de": "Korpus-Äquivalent = Laufmeter / {1} m (Referenz S600).",
+   "args": [
+    "width"
+   ]
+  },
+  "calc.bottomUp.labor": {
+   "de": "Lohn {1} € je Korpus (Stundensätze × hinterlegte Gewerkszeiten).",
+   "args": [
+    "amount"
+   ]
+  },
+  "calc.bottomUp.carcassMaterial": {
+   "de": "Korpus-Material {1} m²/Korpus × Dekorspan {2} €/m².",
+   "args": [
+    "surface",
+    "price"
+   ]
+  },
+  "calc.bottomUp.front": {
+   "de": "Frontmaterial: {1} {2} €/m² × {3} m² Frontfläche.",
+   "args": [
+    "front material key",
+    "price",
+    "area"
+   ]
+  },
+  "calc.bottomUp.floor": {
+   "de": "Bodenpreis = Material + Lohn (ohne Arbeitsplatte, Geräte, Beschläge, Marge)."
+  },
+  "calc.seed.supplier": {
+   "de": "Eigene Regel (Seed-Anker)"
+  },
+  "calc.pdf.supplier": {
+   "de": "Lokal extrahiert"
+  }
+ }
+}

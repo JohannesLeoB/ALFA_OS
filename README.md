@@ -1,90 +1,70 @@
-# ALFA_OS
+# ALFA
 
-Native macOS-App ALFA (Swift, SwiftUI). Regeln: `AGENTS.md`; sie gehen allem vor. Hier steht Nachschlagwissen, auf das `AGENTS.md` verweist. Diese Datei ist die Karte: jeder Ordner im Repo steht hier mit Zweck und Lebensdauer.
+ALFA is a macOS app (bundle `com.johannesleoberger.alfaos`, SwiftUI, App Sandbox on). It contains a mail client (IMAP/SMTP and Gmail), a settings area, an accounts hub that stores connections and credentials, and a Claude assistant with a calculation engine and tools for Google, Airtable, ClickUp, sevDesk, Clockodo and DHL shipping. The window shows two panes: Mail and Settings. The assistant engine and its tools are built and tested but have no view yet (see [ARCHITECTURE.md](ARCHITECTURE.md)).
 
-## Karte
+## Requirements
 
-| Pfad | Inhalt | Lebensdauer |
-|---|---|---|
-| `alfaos/App/` | Ansichten (SwiftUI), `Localizable.xcstrings`, Resources | dauerhaft |
-| `alfaos/App/Resources/Assets.xcassets` | App-Icon aus dem Master (erzeugt von `scripts/icon_generate.py`) | dauerhaft |
-| `alfaos/Kit/` | Logik (Swift-Paket: ShellCore, Mail, Hub), Tests | dauerhaft |
-| `alfaos/project.yml` | Xcode-Projekt-Vorlage (xcodegen) | dauerhaft |
-| `alfaos/Config/` | Entitlements, Info.plist, Export-Optionen, Beispielwerte ohne Firmendaten | dauerhaft |
-| `fundus/alpha/` | Bestandscode, eingebunden als `AlfaKit`, `AlfaServices`, `AlfaCalculation` | bis abgelöst |
-| `DESIGN/` | letzter und vorletzter Design-Master (ZIP), `MANIFEST.json` | nach `AGENTS.md` §8 |
-| `DESIGN/brief/` | aktueller Brief an Design mit Schemas, Prüfskripten, Beispielen | nur der letzte |
-| `gestaltung/alfa-interface/` | `tokens.json`, `tokens.css` (altes Theme), `quarantine.json` (Alt-Tokens ohne Rolle), `design.stamp.json` (Stempel des Masters) | bis abgelöst |
-| `scripts/` | Generatoren mit `--check`, `mutate.py`, `lizenzen.txt`; Prüf- und Hook-Dateien (Wächter) | dauerhaft |
-| `.githooks/`, `.github/workflows/` | Commit-Hook, GitHub-Prüflauf (Wächter) | dauerhaft |
-| `.claude/agents/` | Stränge (Arbeitsbereiche der Sitzungen) | dauerhaft |
-| `.claude/memory/` | Gedächtnis | dauerhaft |
-| `dist/` | Gebautes und Abgeleitetes; nicht in Git; jederzeit löschbar | flüchtig |
-| Wurzel | `AGENTS.md` (Regeln), `CLAUDE.md` (verweist auf AGENTS.md), `README.md` (Karte), `.gitignore`, `.swiftlint.yml` | dauerhaft |
+- macOS 26 and Xcode 26 (Swift tools 6.2, Swift language mode 6)
+- `xcodegen` to generate the Xcode project from `project.yml`
+- `python3` (standard library only) and `zsh` for the checks
+- Network access on the first build: Swift Package Manager fetches GRDB 6.29.3
 
-## Einstieg für Agenten
+## Build, test, run
 
-1. `AGENTS.md` (Regeln), dann `.claude/memory/MEMORY.md` (Stand, Johannes' Wort).
-2. Der Strang zur Aufgabe in `.claude/agents/`.
-3. Werte nur aus dem Master: `DESIGN/MANIFEST.json`, Rang `latest`; `scripts/design_generate.py` erzeugt daraus `alfaos/Kit/Sources/ShellCore/DesignTokens.swift`.
+```
+swift build
+swift test
+python3 -I utils/check.py
+zsh utils/check_modules.sh
+xcodegen generate
+xcodebuild -project ALFA_OS.xcodeproj -scheme ALFA_OS -destination 'platform=macOS' build
+zsh utils/build_app.sh
+```
 
-## Wegweiser: welche Datei wofür
+- `swift build` and `swift test` build and test all modules in `Package.swift`.
+- `python3 -I utils/check.py` checks the code schema, the Markdown files, the generated tokens and the text catalog.
+- `zsh utils/check_modules.sh [Module ...]` compiles each module with `swiftc` and runs its test class; with `App` it also typechecks the app. It needs no Swift Package Manager run.
+- `zsh utils/build_app.sh` runs xcodegen and xcodebuild and writes the app to `dist/ALFA_OS/ALFA_OS-<version>.app`; the version comes from `project.yml`. Open that file to run the app.
+- `git config core.hooksPath .githooks` activates the pre-commit and commit-msg hooks.
+- `python3 -I utils/generate_tokens.py` regenerates `Sources/Design/Model` from `Resources/tokens.json`; `python3 -I utils/merge_strings.py` regenerates `Resources/Localizable.xcstrings` from the `*.localizable.json` files.
 
-Regeln
-- `~/.claude/CLAUDE.md`: globale Regeln (nur Angegebenes lesen; ALFA folgt `AGENTS.md`).
-- `AGENTS.md`: ALFA · Arbeitsregeln. Lies sie vor jeder Arbeit.
+## Folder map
 
-Gedächtnis (Inhaltsarchiv)
-- `.claude/memory/MEMORY.md`: Index. Lies ihn zu Beginn jeder Sitzung.
-- `.claude/memory/stand.md`: aktueller Stand (Gebautes, Ungeprüftes, Lücken an Design, Offenes, bekannte Fehler). Lies ihn, bevor du etwas für offen oder erledigt erklärst.
-- `.claude/memory/spec-*.md`: Spec je Bereich (Ziel, Funktionen mit Ist-Beleg und Status, Regeln, Lücken); `spec-format.md` sagt, wie sie gepflegt werden; `spec-arbeit.md` ergänzt AGENTS.md um die Arbeitsweise; `spec-architektur.md` ist das Bild der App. `artefakte.md` ist nur Hinweis (AGENTS.md §2.4), keine Quelle.
-- Johannes' Wort im Original: Transkripte unter `~/.claude/projects/-Users-johannesleoberger-Developer-ALFA-OS*/`; Nutzernachrichten und eingereihte Nachrichten (`queue-operation`, `queued_command`) durchsuchen.
+| Folder | Content |
+|---|---|
+| `App` | the macOS target, SwiftUI views only |
+| `App/Shell` | app entry, window frame, blob, lanes, `AppSession`, `Assembly` (composition root), `ToolShelf` |
+| `App/Mail` | views of the mail pane |
+| `App/Settings` | views of the settings pane |
+| `App/Components` | shared view components |
+| `App/Design` | appearance environment, typeface, view modifiers, `SheetValues` |
+| `Sources` | Swift package modules, no UI |
+| `Sources/Core` | pure building blocks: app identity, company values, CSV, number and address parsing, logging |
+| `Sources/Design` | generated design tokens, colours, moods, shadows, ink sets |
+| `Sources/Shell` | desk state, blob placement, lane layout, card stack and command bar logic, app directory |
+| `Sources/Storage` | SQLite database (GRDB), migrations, audit and integration log |
+| `Sources/Hub` | accounts (inlets), providers, credentials in the Keychain, sign-in, sync, costs, settings, legacy import |
+| `Sources/Mail` | IMAP/SMTP clients, MIME, mailbox and outbox stores, inbox state |
+| `Sources/Calculation` | cost estimation: anchors, carcass and component engines, learning |
+| `Sources/Assistant` | Claude client, conversation engine, model router, tools, chat, notes, todos, journal, memory, privacy |
+| `Sources/Integrations/Google` | OAuth, Gmail, Calendar, Contacts, Drive |
+| `Sources/Integrations/Airtable` | Airtable client, catalog, stock, anchor rows, write allowlist |
+| `Sources/Integrations/ClickUp` | ClickUp client and task board |
+| `Sources/Integrations/Sevdesk` | sevDesk client and receipts |
+| `Sources/Integrations/Clockodo` | Clockodo client, time entries, bookings |
+| `Sources/Integrations/Shipping` | DHL tracking and label requests |
+| `Tests` | one `<Module>Tests` folder per module with one test class |
+| `Resources` | `tokens.json`, `*.localizable.json`, `Localizable.xcstrings`, `apps.json`, `company.example.json`, fonts, asset catalog, `Info.plist`, entitlements |
+| `utils` | checks, generators, build script |
+| `.githooks` | pre-commit and commit-msg hooks |
+| `.github/workflows` | CI workflow |
 
-Stränge
-- `.claude/agents/*.md`: Wissen über Bestand und Code je Arbeitsbereich (bau-mail, bau-heute, bau-projekte, bau-kataloge, design-bruecke, figma-spiegel, produkt, leser, sammler, vier Prüfer).
+## Configuration files
 
-Design (einzige Wertquelle)
-- `DESIGN/MANIFEST.json`: welcher Master gilt (Rang `latest`), Prüfsummen.
-- `DESIGN/*.zip`: letzter und vorletzter Master im Original.
-- `DESIGN/brief/BRIEF.txt`: aktueller Brief an Design, mit Schemas und Prüfskripten (`validate.py`, `check_contract.py`, `diff_contract.py`, `check_delivery.py`).
-- `dist/master-latest/`: entpackter Master zum Lesen; fehlt er, neu entpacken: `unzip -q "DESIGN/ALFA OS Interface CHEF 1610-handoff 1810.zip" -d dist/master-latest` (Name der ZIP nach `DESIGN/MANIFEST.json`, Rang latest) (lange Zeilen mit `python3` lesen).
+Three JSON files are read from the Application Support folder `ALFA_OS` of the app. With the sandbox on, that folder is inside the app container. A missing file leaves the dependent feature inert.
 
-Code
-- `alfaos/App/`: Ansichten. `alfaos/App/Localizable.xcstrings`: alle sichtbaren Texte.
-- `alfaos/Kit/Sources/`: Logik (ShellCore, Hub, Mail). `ShellCore/DesignTokens.swift` ist erzeugt; `ShellCore/SheetValues.swift` hält Werte ohne Token.
-- `alfaos/Kit/Tests/WholeAppTests/WholeAppTests.swift`: der eine Test (`testTheWholeApp`), dazu `golden.txt` und `MailWire.txt`.
-- `fundus/alpha/`: Bestand (IMAP, Gmail, DHL u. a.); deutsche Namen und `myk`-Reste werden abgelöst.
-- `scripts/design_generate.py --check`, `scripts/receive_master.py --check`: Master, Manifest und Stempel gegen den Code prüfen.
-- `scripts/icon_generate.py --check`: App-Icon (`Assets.xcassets`) gegen den Master prüfen.
+- `~/Library/Application Support/ALFA_OS/company.json`: a flat object of string values, read by `CompanyValues`. `Resources/company.example.json` lists every key. Keys read by code: `company.address`, `company.phone`, `company.web`, `company.mail.projects` (written once into the company settings when those are empty), and the Airtable names `airtable.base.*`, `airtable.table.*` and `airtable.field.sale_price` (base and table names for the write allowlist, the catalog and the estimation model).
+- `~/Library/Application Support/ALFA_OS/google-client.json`: the Google OAuth client, read by `ClientConfigStore`. Keys: `clientID` (required), `clientSecret` (optional). Without it the Google provider is not offered.
+- `~/Library/Application Support/ALFA_OS/google-drive.json`: Drive layout, decoded as `DriveConfig`. Keys: `projectsRoot` (folder id), `forbiddenFolderIDs` (array of folder ids that are never written), `offers` with `incomingFolderKeyword`, `outgoingFolderKeyword`, `purchaseOrderFolderKeyword`, `invoiceFolderKeyword`, `offerFolderKeyword`, `orderFolderKeyword`, `prefixes` (object from file name prefix to `OfferDocumentType` raw value), `documentNumberPattern`, `customerNumberPattern`, `versionPattern`.
 
-Außerhalb des Repos
-- Von Johannes in Sitzungen als Leseort angegeben, nicht dauerhaft freigegeben (`AGENTS.md` §5; je Sitzung neu klären):
-  - `~/Developer/STAMMTISCH/ALFA Stammtisch.rtf`: Beratung zwischen Lead, Archivar und Produkt.
-  - `~/Developer/SKILLS/alfa-bibliothekar/books/`: Bücher je Bereich (Stand nicht garantiert; an der Quelle prüfen).
-- Dauerhaft nur lesend, laut `AGENTS.md` §5: `~/Developer/ARCHIV/mykilos-Alphabet` (Branch `labor/ansicht`, gesichert als `sicherung/labor-*` auf GitHub), `~/Developer/mykilos-labor`, `~/ALPHA`.
-
-## Bauen und prüfen
-
-Jede Sitzung arbeitet in genau **einem** Ordner `dist/<sitzung>/` (die Lead den Ordner, den ihr Startprompt nennt; ein Bau-Strang den Ordner, den sein Auftrag nennt) und löscht ihn am Ende selbst (Johannes 21.10., `.claude/memory/spec-arbeit.md`). Pfade immer vollständig angeben, nie unter `alfaos/`.
-
-- Kit-Test: `cd alfaos/Kit && swift test --scratch-path "$PWD/../../dist/<sitzung>/kit"`
-- App: `cd alfaos && xcodegen && xcodebuild -project ALFA_OS.xcodeproj -scheme ALFA_OS -derivedDataPath "$PWD/../dist/<sitzung>/app" build -quiet`
-- Fundus: `cd fundus/alpha && swift build --scratch-path "$PWD/../../dist/<sitzung>/fundus"`
-- Fertige App: `scripts/build_app.sh --keep-running` (nummeriert `dist/ALFA OS <Nr>.app`, nur die zwei neuesten; ohne das Flag beendet das Skript die laufende App, die App startet nur Johannes)
-
-## Commit
-
-- Betreff höchstens 72 Zeichen, Leerzeile, dann höchstens drei Zeilen Text; die letzte ist genau `Designed by Johannes Leo Berger, made with help of Claude`; kein `Co-Authored-By`.
-- Der Hook prüft swiftlint (Regeln in `.swiftlint.yml`, z. B. keine Umlaute in Code), Generatoren (`--check`) und Grenzen. Kommentare nach `AGENTS.md` §6.
-- Nach jedem Commit pushen; lokal und GitHub gleich (`AGENTS.md` §11).
-
-## Zweige und GitHub-Regeln
-
-- `main`: Arbeitszweig. Regel `main-protect`: kein Force-Push, kein Löschen, lineare Historie.
-- `alfa-draws`: Zweig der Prototyp-Sitzung (`alfaos/Draws`). Regel `only-main` sperrt alle anderen Zweige; eine Nebensitzung mit eigenem Zweig braucht vorher Johannes' Ausnahme.
-
-## Ablage
-
-- Neue Ordner oder Dateien außerhalb dieser Karte nur auf Johannes' Wort; die Karte im selben Commit nachziehen.
-- Entpackter Master nur in `dist/master-latest/`.
-- `dist/` zeigt sichtbar nur: fertige Apps, `master-latest/`, den Zwischenordner `build/` von `build_app.sh` und je laufender Sitzung einen Ordner. Worktrees von Nebensitzungen liegen als eigener Ordner in `dist/` und werden mit ihrem Zweig entfernt. Nichts versteckt, keine Berichte; Berichte gehen an Johannes und werden danach gelöscht.
+API keys and passwords are not stored in these files; they live in the Keychain.

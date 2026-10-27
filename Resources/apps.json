@@ -1,0 +1,31 @@
+{
+  "groups": [
+    {
+      "id": "communication",
+      "titleKey": "group.communication",
+      "apps": [
+        {
+          "id": "mail",
+          "titleKey": "app.mail",
+          "lanes": {
+            "leadingKey": "app.mail.lane.leading"
+          }
+        }
+      ]
+    },
+    {
+      "id": "core",
+      "titleKey": "group.core",
+      "apps": [
+        {
+          "id": "settings",
+          "titleKey": "app.settings",
+          "lanes": {
+            "leadingKey": "app.settings.lane.leading",
+            "trailingKey": "app.settings.lane.trailing"
+          }
+        }
+      ]
+    }
+  ]
+}

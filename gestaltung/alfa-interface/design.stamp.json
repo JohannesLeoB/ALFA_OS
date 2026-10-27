@@ -1,8 +1,0 @@
-{
- "delivery": "ALFA OS Interface CHEF 1610-handoff 1810.zip, dated 2026-10-18 in DESIGN/MANIFEST.json (rank latest), file TOKENBOGEN.json, Stand 18.10.2026 21:18 MESZ, not yet final polished (ABNAHME.md rows open)",
- "deliveredAt": "2026-10-18T21:18",
- "adoptedAt": "2026-10-19T01:00",
- "state": "Generated from TOKENBOGEN.json of the latest master: size, spacing, radius, motion duration, easing and misc, type size, weight and line height, count, opacity, confirm numbers, component references, colors light, dark and lightGray, color moods, shadows, stack, lacquer and glass surfaces. Not generated: confirm.tooltip, surface.lightFillRule, surface.flat, surface notes. Code that reads the new values is not yet built.",
- "zipSha256": "d0ed5abbb39fc9c7ea69fc16af51f317d2f761ae7269e3a0a3bc4a903623c8d2",
- "content": "658ae36360b4d0a835d097ce4665b47c2ad17953219caa751a477c9dcd83a902"
-}

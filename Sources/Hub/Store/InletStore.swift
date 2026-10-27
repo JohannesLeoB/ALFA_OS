@@ -1,0 +1,89 @@
+import Foundation
+import GRDB
+import Storage
+
+final class InletStore: Sendable {
+    private let database: SQLiteStore
+
+    init(database: SQLiteStore) {
+        self.database = database
+    }
+
+    func load() throws -> [Inlet] {
+        try database.read { db in
+            try Row.fetchAll(db, sql: "SELECT json FROM inlet ORDER BY rowid").compactMap { row in
+                let data: Data = row["json"]
+                guard var inlet = try? JSONDecoder().decode(Inlet.self, from: data) else { return nil }
+                inlet.state = Self.durable(inlet.state)
+                return inlet
+            }
+        }
+    }
+
+    static func durable(_ state: InletState) -> InletState {
+        switch state {
+        case .working: .connected(probed: .distantPast)
+        case .connecting: .created
+        default: state
+        }
+    }
+
+    func save(_ inlet: Inlet, slots: [String]? = nil) throws {
+        try database.write { db in
+            var row = inlet
+            if row.state != Self.durable(row.state) {
+                let old = try Data.fetchOne(db, sql: "SELECT json FROM inlet WHERE id = ?", arguments: [inlet.id])
+                let stored = old.flatMap { try? JSONDecoder().decode(Inlet.self, from: $0) }
+                row.state = Self.durable(stored?.state ?? row.state)
+            }
+            let data = try JSONEncoder().encode(row)
+            try db.execute(sql: "INSERT INTO inlet (id, json) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET json = excluded.json",
+                           arguments: [inlet.id, data])
+            if let slots {
+                for name in slots {
+                    try db.execute(sql: "INSERT OR REPLACE INTO key_slot (inlet, name) VALUES (?, ?)",
+                                   arguments: [inlet.id, name])
+                }
+            }
+        }
+    }
+
+    func loadReports() throws -> [Inlet.ID: [ReportEntry]] {
+        try database.read { db in
+            var result: [Inlet.ID: [ReportEntry]] = [:]
+            for row in try Row.fetchAll(db, sql: "SELECT json FROM inlet_report ORDER BY seq DESC") {
+                let data: Data = row["json"]
+                if let entry = try? JSONDecoder().decode(ReportEntry.self, from: data) {
+                    result[entry.inlet, default: []].append(entry)
+                }
+            }
+            return result
+        }
+    }
+
+    func append(_ entry: ReportEntry, limit: Int) throws {
+        let data = try JSONEncoder().encode(entry)
+        try database.write { db in
+            try db.execute(sql: "INSERT INTO inlet_report (inlet, at, json) VALUES (?, ?, ?)",
+                           arguments: [entry.inlet, entry.at.timeIntervalSince1970, data])
+            try db.execute(sql: """
+                DELETE FROM inlet_report WHERE inlet = ? AND seq NOT IN
+                (SELECT seq FROM inlet_report WHERE inlet = ? ORDER BY seq DESC LIMIT ?)
+                """, arguments: [entry.inlet, entry.inlet, limit])
+        }
+    }
+
+    func slots(of inlet: Inlet.ID) throws -> [String] {
+        try database.read { db in
+            try String.fetchAll(db, sql: "SELECT name FROM key_slot WHERE inlet = ? ORDER BY name", arguments: [inlet])
+        }
+    }
+
+    func delete(_ inlet: Inlet.ID) throws {
+        try database.write { db in
+            try db.execute(sql: "DELETE FROM inlet_report WHERE inlet = ?", arguments: [inlet])
+            try db.execute(sql: "DELETE FROM key_slot WHERE inlet = ?", arguments: [inlet])
+            try db.execute(sql: "DELETE FROM inlet WHERE id = ?", arguments: [inlet])
+        }
+    }
+}

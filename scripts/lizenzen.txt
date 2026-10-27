@@ -1,4 +1,0 @@
-# Lizenzen · ALFA · fremde Abhängigkeiten, geprüft am 2026-10-19
-# Quelle der Liste: fundus/alpha/Package.resolved; Lizenztext gelesen im Checkout des Pakets.
-# Format: Paket | Lizenz (SPDX) | Quelle | Version | geprüft am
-grdb.swift | MIT | https://github.com/groue/GRDB.swift | 6.29.3 | 2026-10-19

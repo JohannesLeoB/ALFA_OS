@@ -1,0 +1,414 @@
+import Core
+import Foundation
+
+struct IMAPSMTPClient: MailTransportPort, PurgePort {
+    typealias PasswordSource = @Sendable () async throws -> String
+
+    private static let summaryItems = ["UID", "FLAGS", "INTERNALDATE", "RFC822.SIZE", "ENVELOPE", "BODYSTRUCTURE",
+                                       "BODY.PEEK[HEADER.FIELDS (REFERENCES)]"]
+    private static let threadLimit = 20
+    private static let inlineImageLimit = 2_097_152
+    private static let inlineImageBudget = 8_388_608
+
+    let account: Account
+    private let password: PasswordSource
+    private let opener: StreamOpener
+    private let channel: IMAPChannel
+
+    init(account: Account, password: @escaping PasswordSource, channel: IMAPChannel = IMAPChannel(),
+         opener: @escaping StreamOpener = StreamRouter.open) {
+        self.account = account
+        self.password = password
+        self.channel = channel
+        self.opener = opener
+    }
+
+    func listFolders() async throws -> [Folder] {
+        try await withIncoming { session in
+            try await session.listFolders().filter(\.isSelectable).map {
+                Folder(id: $0.path, name: $0.displayName, role: $0.role)
+            }
+        }
+    }
+
+    func listMessages(folderID: String, query: String?, pageToken: String?, maxResults: Int) async throws -> MessagePage {
+        let limit = max(1, maxResults)
+        return try await withIncoming { session in
+            let selection = try await session.select(folderID, readOnly: true)
+            var criteria: [IMAPArgument] = []
+            if let pageToken, let before = Int(pageToken) {
+                guard before > 1 else { return MessagePage(messages: []) }
+                criteria.append(.raw("UID 1:\(before - 1)"))
+            }
+            let text = query?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            criteria.append(.raw("UNDELETED"))
+            if !text.isEmpty {
+                if text.unicodeScalars.contains(where: { $0.value > 126 }) {
+                    criteria.insert(contentsOf: [.raw("CHARSET"), .raw("UTF-8")], at: 0)
+                }
+                criteria += [.raw("TEXT"), .string(text)]
+            }
+            let found = try await session.searchUIDs(criteria)
+            let pageUIDs = Array(found.suffix(limit))
+            let more = found.count > pageUIDs.count
+            let fetched = try await session.fetch(uids: pageUIDs, items: Self.summaryItems)
+            let messages = fetched.reversed().compactMap { entry -> MessageSummary? in
+                guard let uid = entry.uid else { return nil }
+                return Self.summary(entry, uid: uid, folder: folderID, uidValidity: selection.uidValidity)
+            }
+            return MessagePage(messages: messages, nextPageToken: more ? pageUIDs.first.map(String.init) : nil)
+        }
+    }
+
+    func fetchBody(messageID: String) async throws -> MessageBody {
+        let reference = try IMAPMessageReference.decode(messageID)
+        return try await withIncoming { session in
+            let selection = try await session.select(reference.folder, readOnly: true)
+            guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
+            guard let fetched = try await session.fetch(uids: [reference.uid], items: ["UID", "BODYSTRUCTURE"]).first,
+                  let structure = fetched.structure else {
+                throw MailFailure.messageNotFound(messageID)
+            }
+            var body = MessageBody()
+            if let part = structure.firstPlainText {
+                body.text = try await Self.decodedText(part, session: session, uid: reference.uid)
+            }
+            if let part = structure.firstHTML {
+                body.html = try await Self.decodedText(part, session: session, uid: reference.uid)
+            }
+            var budget = Self.inlineImageBudget
+            for part in structure.inlineImages {
+                guard let contentID = part.contentID, !contentID.isEmpty,
+                      part.size <= budget, part.size <= Self.inlineImageLimit else { continue }
+                let raw = try await session.fetchSection(uid: reference.uid, section: part.section)
+                let decoded = MIME.decodeTransfer(raw, encoding: part.encoding)
+                budget -= decoded.count
+                body.inlineImages[contentID] = "data:\(part.mimeType);base64,\(decoded.base64EncodedString())"
+            }
+            body.attachments = structure.attachments.map(Self.info)
+            return body
+        }
+    }
+
+    func fetchAttachment(messageID: String, attachmentID section: String) async throws -> Data {
+        let reference = try IMAPMessageReference.decode(messageID)
+        return try await withIncoming { session in
+            let selection = try await session.select(reference.folder, readOnly: true)
+            guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
+            guard let fetched = try await session.fetch(uids: [reference.uid], items: ["UID", "BODYSTRUCTURE"]).first,
+                  let part = fetched.structure?.leaves.first(where: { $0.section == section }) else {
+                throw MailFailure.messageNotFound(messageID)
+            }
+            let raw = try await session.fetchSection(uid: reference.uid, section: section)
+            return MIME.decodeTransfer(raw, encoding: part.encoding)
+        }
+    }
+
+    func send(_ draft: Draft) async throws {
+        let outgoing = try MessageEngine.build(draft, account: account,
+                                               messageID: draft.messageID ?? UUID().uuidString.lowercased())
+        guard account.outgoing.isComplete else { throw MailFailure.accountIncomplete("outgoing") }
+        let secret = try await secret()
+        let session = try await SMTPSession.open(settings: account.outgoing, opener: opener)
+        do {
+            try await session.authenticate(user: user(for: account.outgoing), secret: secret)
+            try await session.send(from: outgoing.sender, recipients: outgoing.recipients, message: outgoing.data)
+        } catch {
+            await session.close()
+            throw error
+        }
+        await session.quit()
+    }
+
+    func setFlags(messageID: String, add: Set<Flag>, remove: Set<Flag>) async throws {
+        let reference = try IMAPMessageReference.decode(messageID)
+        let moveToTrash = add.contains(.deleted)
+        let adding = Self.flagNames(add.subtracting([.deleted]))
+        let removing = Self.flagNames(remove)
+        guard moveToTrash || !adding.isEmpty || !removing.isEmpty else { return }
+        try await withIncoming { session in
+            let selection = try await session.select(reference.folder, readOnly: false)
+            guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
+            try await session.store(uid: reference.uid, flags: adding, adding: true)
+            try await session.store(uid: reference.uid, flags: removing, adding: false)
+            if moveToTrash { try await Self.discard(reference, session: session) }
+        }
+    }
+
+    private static func discard(_ reference: IMAPMessageReference, session: IMAPClient) async throws {
+        let folders = try await session.listFolders()
+        guard let trash = folders.first(where: { $0.role == .trash && $0.isSelectable }),
+              trash.path != reference.folder else {
+            try await session.store(uid: reference.uid, flags: [Flag.deleted.imapName], adding: true)
+            return
+        }
+        try await relocate(reference, to: trash.path, session: session)
+    }
+
+    private static func relocate(_ reference: IMAPMessageReference, to path: String, session: IMAPClient) async throws {
+        if await session.has("MOVE") {
+            try await session.move(uid: reference.uid, to: path)
+        } else if await session.has("UIDPLUS") {
+            try await session.copy(uid: reference.uid, to: path)
+            try await session.store(uid: reference.uid, flags: [Flag.deleted.imapName], adding: true)
+            try await session.expunge(uid: reference.uid)
+        } else {
+            try await session.copy(uid: reference.uid, to: path)
+            try await session.store(uid: reference.uid, flags: [Flag.deleted.imapName], adding: true)
+        }
+    }
+
+    private static func removeMessage(_ reference: IMAPMessageReference, session: IMAPClient) async throws {
+        let selection = try await session.select(reference.folder, readOnly: false)
+        guard selection.uidValidity == reference.uidValidity else {
+            throw MailFailure.messageNotFound(reference.encoded)
+        }
+        try await session.store(uid: reference.uid, flags: [Flag.deleted.imapName], adding: true)
+        if await session.has("UIDPLUS") { try await session.expunge(uid: reference.uid) }
+    }
+
+    private enum Destination: Sendable {
+        case role(FolderRole)
+        case path(String)
+    }
+
+    private func relocate(_ messageID: String, to destination: Destination) async throws {
+        let reference = try IMAPMessageReference.decode(messageID)
+        try await withIncoming { session in
+            let selection = try await session.select(reference.folder, readOnly: false)
+            guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
+            let folders = try await session.listFolders().filter(\.isSelectable)
+            let target: IMAPListEntry?
+            let name: String
+            switch destination {
+            case .role(let role):
+                target = folders.first { $0.role == role }
+                name = role.rawValue
+            case .path(let path):
+                target = folders.first { $0.path == path }
+                name = path
+            }
+            guard let target else { throw MailFailure.folderNotFound(name) }
+            guard target.path != reference.folder else { return }
+            try await Self.relocate(reference, to: target.path, session: session)
+        }
+    }
+
+    func archive(messageID: String) async throws {
+        try await relocate(messageID, to: .role(.archive))
+    }
+
+    func move(messageID: String, toFolderID: String) async throws {
+        try await relocate(messageID, to: .path(toFolderID))
+    }
+
+    func markSpam(messageID: String) async throws {
+        try await relocate(messageID, to: .role(.spam))
+    }
+
+    func trash(messageID: String) async throws {
+        let reference = try IMAPMessageReference.decode(messageID)
+        try await withIncoming { session in
+            let selection = try await session.select(reference.folder, readOnly: false)
+            guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
+            try await Self.discard(reference, session: session)
+        }
+    }
+
+    func fetchThread(messageID: String, threadID: String) async throws -> [MessageSummary] {
+        let reference = try IMAPMessageReference.decode(messageID)
+        return try await withIncoming { session in
+            let selection = try await session.select(reference.folder, readOnly: true)
+            guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
+            var uids = [reference.uid]
+            if threadID != messageID, (try? IMAPMessageReference.decode(threadID)) == nil {
+                let id = IMAPArgument.string(threadID)
+                let found = try await session.searchUIDs(
+                    [.raw("UNDELETED"), .raw("OR"), .raw("OR"), .raw("HEADER"), .raw("MESSAGE-ID"), id,
+                     .raw("HEADER"), .raw("REFERENCES"), id, .raw("HEADER"), .raw("IN-REPLY-TO"), id])
+                uids = Array(Set(found + [reference.uid])).sorted()
+            }
+            let fetched = try await session.fetch(uids: Array(uids.suffix(Self.threadLimit)), items: Self.summaryItems)
+            return fetched.compactMap { entry -> MessageSummary? in
+                guard let uid = entry.uid else { return nil }
+                return Self.summary(entry, uid: uid, folder: reference.folder, uidValidity: selection.uidValidity)
+            }
+        }
+    }
+
+    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> String {
+        let token = draft.messageID ?? UUID().uuidString.lowercased()
+        let message = try MessageEngine.build(draft, account: account, messageID: token, asDraft: true)
+        let replaced = try draftID.map(IMAPMessageReference.decode)
+        return try await withIncoming(retry: false) { session in
+            let folders = try await session.listFolders()
+            guard let drafts = folders.first(where: { $0.role == .drafts && $0.isSelectable }) else {
+                throw MailFailure.folderNotFound(FolderRole.drafts.rawValue)
+            }
+            let result = try await session.append(to: drafts.path, flags: [Flag.draft.imapName], message: message.data)
+            let created: IMAPMessageReference
+            if let code = result.code, code.name == "APPENDUID", code.values.count >= 2,
+               let validity = code.values[0].int, let uid = code.values[1].int {
+                created = IMAPMessageReference(folder: drafts.path, uidValidity: validity, uid: uid)
+            } else {
+                let selection = try await session.select(drafts.path, readOnly: true)
+                let found = try await session.searchUIDs([.raw("HEADER"), .raw("MESSAGE-ID"), .string(token)])
+                guard let uid = found.last else { throw MailFailure.messageNotFound(token) }
+                created = IMAPMessageReference(folder: drafts.path, uidValidity: selection.uidValidity, uid: uid)
+            }
+            if let replaced { try? await Self.removeMessage(replaced, session: session) }
+            return created.encoded
+        }
+    }
+
+    func fetchDraft(messageID: String) async throws -> StoredDraft {
+        let reference = try IMAPMessageReference.decode(messageID)
+        return try await withIncoming { session in
+            let selection = try await session.select(reference.folder, readOnly: true)
+            guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
+            guard let fetched = try await session.fetch(uids: [reference.uid], items: ["UID", "ENVELOPE", "BODYSTRUCTURE"]).first,
+                  let structure = fetched.structure else {
+                throw MailFailure.messageNotFound(messageID)
+            }
+            let envelope = fetched.envelope
+            let join: ([IMAPAddress]) -> String? = { $0.isEmpty ? nil : $0.map(\.raw).joined(separator: ", ") }
+            var draft = Draft(to: join(envelope?.to ?? []), cc: join(envelope?.cc ?? []), bcc: join(envelope?.bcc ?? []),
+                              subject: envelope?.subject ?? "", body: "", inReplyTo: envelope?.inReplyTo,
+                              messageID: Self.localPart(envelope?.messageID))
+            if let part = structure.firstPlainText {
+                draft.body = try await Self.decodedText(part, session: session, uid: reference.uid)
+            }
+            if let part = structure.firstHTML {
+                draft.bodyHTML = try await Self.decodedText(part, session: session, uid: reference.uid)
+            }
+            for part in structure.attachments {
+                let raw = try await session.fetchSection(uid: reference.uid, section: part.section)
+                draft.attachments.append(Attachment(
+                    filename: part.filename ?? part.section, mimeType: part.mimeType,
+                    data: MIME.decodeTransfer(raw, encoding: part.encoding)))
+            }
+            return StoredDraft(id: messageID, draft: draft)
+        }
+    }
+
+    func deleteDraft(id: String) async throws {
+        let reference = try IMAPMessageReference.decode(id)
+        try await withIncoming { session in
+            try await Self.removeMessage(reference, session: session)
+        }
+    }
+
+    func purge(messageID: String) async throws {
+        let reference = try IMAPMessageReference.decode(messageID)
+        try await withIncoming { session in
+            try await Self.removeMessage(reference, session: session)
+        }
+    }
+
+    func supportsPurge() async throws -> Bool {
+        try await withIncoming { await $0.has("UIDPLUS") }
+    }
+
+    func sendDraft(id: String) async throws {
+        let stored = try await fetchDraft(messageID: id)
+        try await send(stored.draft)
+        try? await deleteDraft(id: id)
+    }
+
+    func wasSent(messageID: String) async throws -> Bool {
+        try await withIncoming { session in
+            guard let sent = try await session.listFolders().first(where: { $0.role == .sent && $0.isSelectable }) else {
+                throw MailFailure.folderNotFound(FolderRole.sent.rawValue)
+            }
+            _ = try await session.select(sent.path, readOnly: true)
+            let found = try await session.searchUIDs([.raw("HEADER"), .raw("MESSAGE-ID"), .string(messageID)])
+            return !found.isEmpty
+        }
+    }
+
+    func changes() -> AsyncThrowingStream<Void, any Error> {
+        let (stream, continuation) = AsyncThrowingStream<Void, any Error>.makeStream()
+        let task = Task {
+            var live: IMAPClient?
+            do {
+                guard account.incoming.isComplete else { throw MailFailure.accountIncomplete("incoming") }
+                let session = try await openIncoming()
+                live = session
+                for try await _ in try await session.idle(in: "INBOX") { continuation.yield() }
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
+            }
+            await live?.close()
+        }
+        continuation.onTermination = { _ in task.cancel() }
+        return stream
+    }
+
+    private static func localPart(_ header: String?) -> String? {
+        guard let header else { return nil }
+        let bare = header.trimmingCharacters(in: CharacterSet(charactersIn: "<> "))
+        return bare.split(separator: "@", maxSplits: 1).first.map(String.init)
+    }
+
+    private static func decodedText(_ part: IMAPBodyPart, session: IMAPClient, uid: Int) async throws -> String {
+        let raw = try await session.fetchSection(uid: uid, section: part.section)
+        return MIME.string(from: MIME.decodeTransfer(raw, encoding: part.encoding), charset: part.charset)
+    }
+
+    private static func flagNames(_ flags: Set<Flag>) -> [String] {
+        flags.sorted { $0.rawValue < $1.rawValue }.map(\.imapName)
+    }
+
+    private static func info(_ part: IMAPBodyPart) -> AttachmentInfo {
+        AttachmentInfo(id: part.section, filename: part.filename ?? part.section, mimeType: part.mimeType, sizeBytes: part.size)
+    }
+
+    private static func summary(_ entry: IMAPFetched, uid: Int, folder: String, uidValidity: Int) -> MessageSummary {
+        let envelope = entry.envelope
+        let flags = Set(entry.flags.compactMap { Flag(imapName: $0) })
+        let id = IMAPMessageReference(folder: folder, uidValidity: uidValidity, uid: uid).encoded
+        let references = entry.sections["HEADER.FIELDS (REFERENCES)"].map(MIME.parseHeaders)?
+            .first { $0.name.lowercased() == "references" }?.value
+            .split(separator: " ").first.map(String.init)
+        let thread = references ?? envelope?.inReplyTo ?? envelope?.messageID ?? id
+        let sender = envelope?.from.first ?? envelope?.sender.first
+        let attachments = (entry.structure?.attachments ?? []).map(info)
+        return MessageSummary(
+            id: id, threadID: thread, subject: envelope?.subject ?? "", from: sender?.display ?? "",
+            fromRaw: (envelope?.from ?? []).map(\.raw).joined(separator: ", "),
+            toRaw: (envelope?.to ?? []).map(\.raw).joined(separator: ", "),
+            ccRaw: (envelope?.cc ?? []).map(\.raw).joined(separator: ", "),
+            snippet: "",
+            receivedAt: entry.internalDate ?? envelope?.date.flatMap(DateEngine.parseMessageDate),
+            flags: flags, folderIDs: [folder], attachmentCount: attachments.count,
+            attachments: attachments, messageIDHeader: envelope?.messageID ?? "")
+    }
+
+    private func withIncoming<T: Sendable>(retry: Bool = true, _ body: @Sendable (IMAPClient) async throws -> T) async throws -> T {
+        guard account.incoming.isComplete else { throw MailFailure.accountIncomplete("incoming") }
+        return try await channel.perform(retry: retry, open: { try await openIncoming() }, body: body)
+    }
+
+    private func openIncoming() async throws -> IMAPClient {
+        let secret = try await secret()
+        let session = try await IMAPClient.open(settings: account.incoming, opener: opener)
+        do {
+            try await session.authenticate(user: user(for: account.incoming), secret: secret)
+        } catch {
+            await session.close()
+            throw error
+        }
+        return session
+    }
+
+    private func user(for settings: ServerSettings) -> String {
+        settings.username.isEmpty ? account.address : settings.username
+    }
+
+    private func secret() async throws -> String {
+        let value = try await password()
+        guard !value.isEmpty else { throw MailFailure.credentialsMissing }
+        return value
+    }
+}

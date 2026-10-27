@@ -1,0 +1,692 @@
+{
+ "_rule": "Keys used by the Mail module; text is resolved by the app.",
+ "keys": {
+  "text.settings.provider.other": {
+   "de": "Andere"
+  },
+  "field.imap.address": {
+   "de": "Adresse"
+  },
+  "field.imap.incomingHost": {
+   "de": "IMAP-Server"
+  },
+  "field.imap.incomingPort": {
+   "de": "IMAP-Port"
+  },
+  "field.imap.incomingSecurity": {
+   "de": "IMAP-Sicherheit"
+  },
+  "field.imap.name": {
+   "de": "imap.name"
+  },
+  "field.imap.outgoingHost": {
+   "de": "SMTP-Server"
+  },
+  "field.imap.outgoingPort": {
+   "de": "SMTP-Port"
+  },
+  "field.imap.outgoingSecurity": {
+   "de": "SMTP-Sicherheit"
+  },
+  "field.imap.password": {
+   "de": "App-Passwort"
+  },
+  "field.imap.username": {
+   "de": "Benutzername"
+  },
+  "hint.imap.connection.closed": {
+   "de": "Verbindung beendet"
+  },
+  "hint.imap.connection.failed": {
+   "de": "Keine Verbindung"
+  },
+  "hint.imap.connection.timeout": {
+   "de": "Zeitüberschreitung"
+  },
+  "hint.imap.failed": {
+   "de": "Fehler"
+  },
+  "hint.imap.fields.invalid": {
+   "de": "Angaben ungültig"
+  },
+  "hint.imap.login.rejected": {
+   "de": "Login abgelehnt"
+  },
+  "hint.imap.malformed": {
+   "de": "Antwort ungültig"
+  },
+  "hint.imap.refused": {
+   "de": "Abgelehnt"
+  },
+  "hint.imap.tls": {
+   "de": "TLS fehlt"
+  },
+  "hint.imap.unsupported": {
+   "de": "Nicht unterstützt"
+  },
+  "hint.mail.capabilityMissing": {
+   "de": "Funktion fehlt"
+  },
+  "hint.mail.noInlet": {
+   "de": "Kein Konto"
+  },
+  "hint.mail.notConnected": {
+   "de": "Nicht verbunden"
+  },
+  "hint.smtp.auth.rejected": {
+   "de": "Login abgelehnt"
+  },
+  "hint.smtp.connection.closed": {
+   "de": "Verbindung beendet"
+  },
+  "hint.smtp.connection.failed": {
+   "de": "Keine Verbindung"
+  },
+  "hint.smtp.connection.timeout": {
+   "de": "Zeitüberschreitung"
+  },
+  "hint.smtp.failed": {
+   "de": "Fehler"
+  },
+  "hint.smtp.fields.invalid": {
+   "de": "Angaben ungültig"
+  },
+  "hint.smtp.malformed": {
+   "de": "Antwort ungültig"
+  },
+  "hint.smtp.refused": {
+   "de": "Abgelehnt"
+  },
+  "hint.smtp.tls": {
+   "de": "TLS fehlt"
+  },
+  "hint.smtp.unsupported": {
+   "de": "Nicht unterstützt"
+  },
+  "mail.accounts.none": {
+   "de": "Kein Konto"
+  },
+  "mail.action.archive": {
+   "de": "Archivieren"
+  },
+  "mail.action.attachFile": {
+   "de": "Datei anhängen"
+  },
+  "mail.action.backToStack": {
+   "de": "Zurück zum Stapel"
+  },
+  "mail.action.compose": {
+   "de": "Neue Mail"
+  },
+  "mail.action.copyAddress": {
+   "de": "Adresse kopieren"
+  },
+  "mail.action.discardDraft": {
+   "de": "Entwurf verwerfen"
+  },
+  "mail.action.editContact": {
+   "de": "Kontakt bearbeiten …"
+  },
+  "mail.action.foldColumn": {
+   "de": "Spalte falten"
+  },
+  "mail.action.forward": {
+   "de": "Weiterleiten"
+  },
+  "mail.action.fromProject": {
+   "de": "Aus Projektordner"
+  },
+  "mail.action.loadImages": {
+   "de": "Bilder laden"
+  },
+  "mail.action.markRead": {
+   "de": "Als gelesen markieren"
+  },
+  "mail.action.markUnread": {
+   "de": "Als ungelesen markieren"
+  },
+  "mail.action.more": {
+   "de": "Mehr"
+  },
+  "mail.action.openDraft": {
+   "de": "Entwurf öffnen"
+  },
+  "mail.action.overview": {
+   "de": "Übersicht"
+  },
+  "mail.action.pdf": {
+   "de": "Als PDF sichern"
+  },
+  "mail.action.print": {
+   "de": "Drucken"
+  },
+  "mail.action.purge": {
+   "de": "Endgültig löschen"
+  },
+  "mail.action.reply": {
+   "de": "Antworten"
+  },
+  "mail.action.replyAll": {
+   "de": "Allen antworten"
+  },
+  "mail.action.saveAs": {
+   "de": "Sichern unter …"
+  },
+  "mail.action.saveContact": {
+   "de": "Als Kontakt sichern"
+  },
+  "mail.action.saveDraft": {
+   "de": "Entwurf sichern"
+  },
+  "mail.action.send": {
+   "de": "Senden"
+  },
+  "mail.action.spam": {
+   "de": "Als Spam melden"
+  },
+  "mail.action.star": {
+   "de": "Markieren"
+  },
+  "mail.action.toProject": {
+   "de": "In Projektordner sichern"
+  },
+  "mail.action.trash": {
+   "de": "In den Papierkorb"
+  },
+  "mail.action.unstar": {
+   "de": "Markierung entfernen"
+  },
+  "mail.action.writeMail": {
+   "de": "Mail schreiben"
+  },
+  "mail.card.more": {
+   "de": "und %@ weitere"
+  },
+  "mail.card.pin.tip": {
+   "de": "Anheften · bleibt im Stapel"
+  },
+  "mail.compose.add": {
+   "de": "Empfänger hinzufügen"
+  },
+  "mail.compose.bcc": {
+   "de": "Bcc"
+  },
+  "mail.compose.bcc.placeholder": {
+   "de": "Blindkopie"
+  },
+  "mail.compose.body": {
+   "de": "Text"
+  },
+  "mail.compose.cc": {
+   "de": "Cc"
+  },
+  "mail.compose.cc.placeholder": {
+   "de": "Kopie"
+  },
+  "mail.compose.copy": {
+   "de": "Cc und Bcc"
+  },
+  "mail.compose.from": {
+   "de": "Von"
+  },
+  "mail.compose.remove": {
+   "de": "Entfernen"
+  },
+  "mail.compose.showAll": {
+   "de": "Alle %@ Empfänger zeigen"
+  },
+  "mail.compose.subject": {
+   "de": "Betreff"
+  },
+  "mail.compose.to": {
+   "de": "An"
+  },
+  "mail.compose.to.placeholder": {
+   "de": "Name oder Adresse"
+  },
+  "mail.confirm.discard.question": {
+   "de": "Entwurf verwerfen?"
+  },
+  "mail.confirm.discard.yes": {
+   "de": "Verwerfen"
+  },
+  "mail.confirm.hold": {
+   "de": "Halten zum %@"
+  },
+  "mail.confirm.purge.question": {
+   "de": "Endgültig löschen?"
+  },
+  "mail.confirm.purge.yes": {
+   "de": "Löschen"
+  },
+  "mail.date.draft": {
+   "de": "Entwurf"
+  },
+  "mail.date.today": {
+   "de": "Heute"
+  },
+  "mail.date.yesterday": {
+   "de": "Gestern"
+  },
+  "mail.draft.failed.act": {
+   "de": "Erneut senden"
+  },
+  "mail.draft.failed.text": {
+   "de": "Der Server hat nicht geantwortet. Der Entwurf liegt sicher in den Entwürfen."
+  },
+  "mail.draft.grant.act": {
+   "de": "Einstellungen öffnen"
+  },
+  "mail.draft.grant.text": {
+   "de": "Einmal neu anmelden, dann geht der Entwurf raus."
+  },
+  "mail.draft.grant.title": {
+   "de": "Senden braucht die Schreibfreigabe"
+  },
+  "mail.draft.queuedInOutbox": {
+   "de": "Sendet …"
+  },
+  "mail.draft.saved": {
+   "de": "Entwurf gesichert"
+  },
+  "mail.draft.sendFailed": {
+   "de": "Nicht gesendet"
+  },
+  "mail.draft.sending": {
+   "de": "Sendet …"
+  },
+  "mail.draft.subjectMissing": {
+   "de": "Betreff fehlt"
+  },
+  "mail.error.cancelled": {
+   "de": "Abgebrochen"
+  },
+  "mail.error.duplicate": {
+   "de": "Doppelt"
+  },
+  "mail.error.keychain": {
+   "de": "Schlüsselbund"
+  },
+  "mail.error.limit": {
+   "de": "Limit erreicht"
+  },
+  "mail.filter": {
+   "de": "Filter"
+  },
+  "mail.filter.all": {
+   "de": "Alle"
+  },
+  "mail.filter.attachments": {
+   "de": "Mit Anhang"
+  },
+  "mail.filter.named": {
+   "de": "Filter: %@"
+  },
+  "mail.filter.unread": {
+   "de": "Ungelesen"
+  },
+  "mail.fold.named": {
+   "de": "%@ falten"
+  },
+  "mail.footer.more": {
+   "de": "Mehr"
+  },
+  "mail.footer.project": {
+   "de": "In Projektordner sichern"
+  },
+  "mail.footer.spam": {
+   "de": "Als Spam melden"
+  },
+  "mail.footer.star": {
+   "de": "Markieren"
+  },
+  "mail.footer.unread": {
+   "de": "Als ungelesen markieren"
+  },
+  "mail.footer.unstar": {
+   "de": "Markierung entfernen"
+  },
+  "mail.grow.named": {
+   "de": "%@ groß"
+  },
+  "mail.hint.failed": {
+   "de": "Fehler"
+  },
+  "mail.hint.offline": {
+   "de": "Offline"
+  },
+  "mail.hint.rejected": {
+   "de": "Abgelehnt"
+  },
+  "mail.lane.back": {
+   "de": "Zurück"
+  },
+  "mail.lane.detail.none": {
+   "de": "Kein Postfach verbunden"
+  },
+  "mail.lane.detail.unreachable": {
+   "de": "nicht erreichbar"
+  },
+  "mail.lane.fold": {
+   "de": "Postfach falten"
+  },
+  "mail.lane.labels": {
+   "de": "Labels"
+  },
+  "mail.lane.title": {
+   "de": "Postfach"
+  },
+  "mail.list.empty": {
+   "de": "Keine Nachrichten in %@."
+  },
+  "mail.list.empty.act": {
+   "de": "Verfassen"
+  },
+  "mail.list.emptySearch": {
+   "de": "Keine Treffer für „%@“ in %@."
+  },
+  "mail.list.emptySearch.act": {
+   "de": "Suche leeren"
+  },
+  "mail.list.failed": {
+   "de": "Nachrichten konnten nicht geladen werden"
+  },
+  "mail.list.failed.act": {
+   "de": "Erneut versuchen"
+  },
+  "mail.list.failed.last": {
+   "de": "Zuletzt geladen %@."
+  },
+  "mail.list.failed.text": {
+   "de": "Der Server hat nicht geantwortet."
+  },
+  "mail.list.loading": {
+   "de": "Nachrichten werden geladen"
+  },
+  "mail.list.loadingMore": {
+   "de": "Lädt"
+  },
+  "mail.list.noFilterMatch": {
+   "de": "Keine Treffer für diesen Filter."
+  },
+  "mail.list.noFilterMatch.act": {
+   "de": "Alle zeigen"
+  },
+  "mail.list.notConnected": {
+   "de": "Kein Postfach verbunden"
+  },
+  "mail.list.notConnected.act": {
+   "de": "Postfach verbinden"
+  },
+  "mail.list.notConnected.text": {
+   "de": "Verbinde ein Postfach, um Mails hier zu lesen und zu schreiben."
+  },
+  "mail.list.offline": {
+   "de": "Offline"
+  },
+  "mail.list.signInExpired": {
+   "de": "%@ ist nicht erreichbar"
+  },
+  "mail.list.signInExpired.act": {
+   "de": "Erneut verbinden"
+  },
+  "mail.list.signInExpired.text": {
+   "de": "Anmeldung abgelaufen. Die zuletzt geladenen Mails bleiben lesbar; Gesendetes wartet im Postausgang."
+  },
+  "mail.menu.check": {
+   "de": "✓"
+  },
+  "mail.menu.drive": {
+   "de": "Drive"
+  },
+  "mail.overview.back": {
+   "de": "Zurück zum Stapel"
+  },
+  "mail.overview.folder": {
+   "de": "%@ · %@"
+  },
+  "mail.overview.open": {
+   "de": "Übersicht"
+  },
+  "mail.overview.stack": {
+   "de": "Stapel · %@"
+  },
+  "mail.overview.tip": {
+   "de": "Übersicht · %@ Karten"
+  },
+  "mail.pick.add": {
+   "de": "Auswählen"
+  },
+  "mail.pick.all": {
+   "de": "Alle wählen"
+  },
+  "mail.pick.clear": {
+   "de": "Auswahl aufheben"
+  },
+  "mail.pick.count": {
+   "de": "%@ gewählt"
+  },
+  "mail.pick.none": {
+   "de": "Auswahl leeren"
+  },
+  "mail.pick.read": {
+   "de": "Gelesen / ungelesen"
+  },
+  "mail.pick.remove": {
+   "de": "Auswahl entfernen"
+  },
+  "mail.quote.hide": {
+   "de": "Zitat ausblenden"
+  },
+  "mail.quote.show": {
+   "de": "Zitat zeigen · %lld Zeilen"
+  },
+  "mail.read.all": {
+   "de": "Alle Empfänger zeigen"
+  },
+  "mail.read.cc": {
+   "de": "Cc"
+  },
+  "mail.read.conversation": {
+   "de": "%lld Nachrichten in dieser Unterhaltung"
+  },
+  "mail.read.count": {
+   "de": "%@ Empfänger"
+  },
+  "mail.read.images.text": {
+   "de": "Beim Laden erfährt der Absender, dass die Mail geöffnet wurde."
+  },
+  "mail.read.images.title": {
+   "de": "Externe Bilder blockiert"
+  },
+  "mail.read.less": {
+   "de": "Weniger zeigen"
+  },
+  "mail.read.more": {
+   "de": "und %@ weitere"
+  },
+  "mail.read.to": {
+   "de": "An"
+  },
+  "mail.role.all": {
+   "de": "Alle"
+  },
+  "mail.role.archive": {
+   "de": "Archiv"
+  },
+  "mail.role.drafts": {
+   "de": "Entwürfe"
+  },
+  "mail.role.inbox": {
+   "de": "Eingang"
+  },
+  "mail.role.sent": {
+   "de": "Gesendet"
+  },
+  "mail.role.spam": {
+   "de": "Spam"
+  },
+  "mail.role.starred": {
+   "de": "Markiert"
+  },
+  "mail.role.trash": {
+   "de": "Papierkorb"
+  },
+  "mail.row.hasAttachments": {
+   "de": "Mit Anhang"
+  },
+  "mail.row.moreAttachments": {
+   "de": "Weitere Anhänge"
+  },
+  "mail.row.newMessage": {
+   "de": "Neue Nachricht"
+  },
+  "mail.row.noSubject": {
+   "de": "Kein Betreff"
+  },
+  "mail.row.noText": {
+   "de": "Kein Text"
+  },
+  "mail.row.starred": {
+   "de": "Markiert"
+  },
+  "mail.row.thread": {
+   "de": "Nachrichten in dieser Unterhaltung"
+  },
+  "mail.row.threadCount": {
+   "de": "Nachrichten in dieser Unterhaltung"
+  },
+  "mail.row.to": {
+   "de": "An %@"
+  },
+  "mail.row.unknown": {
+   "de": "Unbekannt"
+  },
+  "mail.row.unread": {
+   "de": "Ungelesen"
+  },
+  "mail.search.close": {
+   "de": "Suche schließen"
+  },
+  "mail.search.label": {
+   "de": "Liste durchsuchen"
+  },
+  "mail.search.open": {
+   "de": "In der Liste suchen"
+  },
+  "mail.search.placeholder.all": {
+   "de": "In allen Ordnern suchen"
+  },
+  "mail.search.placeholder.here": {
+   "de": "In %@ suchen"
+  },
+  "mail.search.results": {
+   "de": "%@ Treffer in allen Ordnern"
+  },
+  "mail.search.scope.all": {
+   "de": "Überall"
+  },
+  "mail.search.scope.here": {
+   "de": "Nur %@"
+  },
+  "mail.search.tip.all": {
+   "de": "Sucht in allen Ordnern außer Spam und Papierkorb. Klicken: nur in %@"
+  },
+  "mail.search.tip.here": {
+   "de": "Sucht nur in %@. Klicken: überall suchen"
+  },
+  "mail.state.connected": {
+   "de": "Verbunden"
+  },
+  "mail.state.created": {
+   "de": "Nicht verbunden"
+  },
+  "mail.state.failed": {
+   "de": "Fehler"
+  },
+  "mail.state.keychain": {
+   "de": "Schlüsselbund"
+  },
+  "mail.state.loading": {
+   "de": "Lädt"
+  },
+  "mail.state.locked": {
+   "de": "Gesperrt"
+  },
+  "mail.state.orphaned": {
+   "de": "Verwaist"
+  },
+  "mail.state.signedIn": {
+   "de": "Angemeldet"
+  },
+  "mail.suggest.contact": {
+   "de": "Kontakt"
+  },
+  "mail.suggest.sender": {
+   "de": "Absender"
+  },
+  "mail.toast.addressCopied": {
+   "de": "Adresse kopiert"
+  },
+  "mail.toast.archived": {
+   "de": "Archiviert"
+  },
+  "mail.toast.bulkArchived.one": {
+   "de": "1 Mail archiviert"
+  },
+  "mail.toast.bulkArchived.other": {
+   "de": "%@ Mails archiviert"
+  },
+  "mail.toast.bulkRead.read.one": {
+   "de": "1 Mail gelesen"
+  },
+  "mail.toast.bulkRead.read.other": {
+   "de": "%@ Mails gelesen"
+  },
+  "mail.toast.bulkRead.unread.one": {
+   "de": "1 Mail ungelesen"
+  },
+  "mail.toast.bulkRead.unread.other": {
+   "de": "%@ Mails ungelesen"
+  },
+  "mail.toast.bulkTrashed.one": {
+   "de": "1 Mail in den Papierkorb gelegt"
+  },
+  "mail.toast.bulkTrashed.other": {
+   "de": "%@ Mails in den Papierkorb gelegt"
+  },
+  "mail.toast.contactExists": {
+   "de": "%@ ist schon Kontakt"
+  },
+  "mail.toast.contactRemoved": {
+   "de": "Kontakt entfernt"
+  },
+  "mail.toast.contactSaved": {
+   "de": "%@ als Kontakt gesichert"
+  },
+  "mail.toast.draftSaved": {
+   "de": "Entwurf gesichert"
+  },
+  "mail.toast.inTrash": {
+   "de": "Im Papierkorb"
+  },
+  "mail.toast.pdfSaved": {
+   "de": "Als PDF gesichert"
+  },
+  "mail.toast.projectSaved": {
+   "de": "Als PDF im Projektordner gesichert"
+  },
+  "mail.toast.purged": {
+   "de": "Endgültig gelöscht"
+  },
+  "mail.toast.recipientMissing": {
+   "de": "Empfänger fehlt"
+  },
+  "mail.toast.trashed": {
+   "de": "In den Papierkorb gelegt"
+  },
+  "mail.toast.undo": {
+   "de": "Rückgängig"
+  }
+ }
+}

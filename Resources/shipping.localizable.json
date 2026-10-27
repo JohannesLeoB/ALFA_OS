@@ -1,0 +1,59 @@
+{
+ "_rule": "Keys used by the Shipping module; text is resolved by the app.",
+ "keys": {
+  "settings.service.dhlship.field.billing": {
+   "de": "Abrechnungsnummer"
+  },
+  "settings.service.dhlship.field.password": {
+   "de": "Passwort"
+  },
+  "settings.service.dhlship.field.secret": {
+   "de": "Geheimnis"
+  },
+  "settings.service.dhlship.field.sender": {
+   "de": "Absender"
+  },
+  "settings.service.dhlship.field.user": {
+   "de": "Benutzer"
+  },
+  "shipping.issue.billingNumber": {
+   "de": "Abrechnungsnummer muss 14-stellig sein"
+  },
+  "shipping.issue.recipientCity": {
+   "de": "Empfänger-Ort fehlt"
+  },
+  "shipping.issue.recipientName": {
+   "de": "Empfänger-Name fehlt"
+  },
+  "shipping.issue.recipientPostalCode": {
+   "de": "Empfänger-PLZ fehlt oder ungültig"
+  },
+  "shipping.issue.recipientStreet": {
+   "de": "Empfänger-Straße fehlt"
+  },
+  "shipping.issue.senderIncomplete": {
+   "de": "Absender-Adresse unvollständig"
+  },
+  "shipping.issue.weight": {
+   "de": "Gewicht muss größer als 0 sein"
+  },
+  "shipping.status.delivered": {
+   "de": "Zugestellt"
+  },
+  "shipping.status.exception": {
+   "de": "Problem"
+  },
+  "shipping.status.inTransit": {
+   "de": "Im Transport"
+  },
+  "shipping.status.outForDelivery": {
+   "de": "In Zustellung"
+  },
+  "shipping.status.registered": {
+   "de": "Erfasst"
+  },
+  "shipping.status.unknown": {
+   "de": "Unbekannt"
+  }
+ }
+}

@@ -1,4 +1,6 @@
 dist/
 .DS_Store
-alfaos/*.xcodeproj/
-scripts/__pycache__/
+*.xcodeproj/
+__pycache__/
+.build/
+.claude/

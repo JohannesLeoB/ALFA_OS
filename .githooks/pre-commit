@@ -1,3 +1,4 @@
 #!/bin/sh
 cd "$(git rev-parse --show-toplevel)" || exit 1
-exec python3 scripts/check.py
+python3 -I utils/check.py || exit 1
+exec zsh utils/check_modules.sh

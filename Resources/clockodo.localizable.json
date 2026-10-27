@@ -1,0 +1,32 @@
+{
+ "_rule": "Keys used by the Clockodo module; text is resolved by the app.",
+ "keys": {
+  "clockodo.booking.costCenterWithoutServiceID": {
+   "de": "Leistung ohne Clockodo-ID (nicht buchbar): {1}"
+  },
+  "clockodo.booking.customerNotFound": {
+   "de": "Kunde nicht gefunden: {1}"
+  },
+  "clockodo.booking.customerWithoutClockodoID": {
+   "de": "Kunde ohne Clockodo-ID (nicht gemappt): {1}"
+  },
+  "clockodo.booking.projectNotFound": {
+   "de": "Projekt nicht gefunden: {1}"
+  },
+  "clockodo.booking.projectWithoutCustomer": {
+   "de": "Projekt ohne Kundennummer: {1}"
+  },
+  "clockodo.booking.unknownCostCenter": {
+   "de": "Unbekannte Kostenstelle/Leistung: {1}"
+  },
+  "clockodo.table.endBeforeStart": {
+   "de": "Ende muss nach Start liegen."
+  },
+  "clockodo.table.selectionMissing": {
+   "de": "Kunde und Leistung müssen ausgewählt sein."
+  },
+  "clockodo.write.unconfirmed": {
+   "de": "Zeiten werden an Clockodo nur nach ausdrücklicher Bestätigung gebucht — nie automatisch, nie als Nebeneffekt."
+  }
+ }
+}

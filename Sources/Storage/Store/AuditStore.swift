@@ -1,0 +1,77 @@
+import Foundation
+import GRDB
+
+public enum AuditAction: String, Sendable {
+    case estimateAdjusted
+    case calibrationPromoted
+}
+
+public struct AuditEntry: Sendable {
+    let id: UUID
+    let timestamp: Date
+    let actorUserID: String
+    public let projectID: String
+    let action: AuditAction
+    public let summary: String
+
+    public init(id: UUID = UUID(), timestamp: Date = Date(), actorUserID: String,
+                projectID: String, action: AuditAction, summary: String) {
+        self.id = id
+        self.timestamp = timestamp
+        self.actorUserID = actorUserID
+        self.projectID = projectID
+        self.action = action
+        self.summary = summary
+    }
+}
+
+private struct AuditRecord: Codable, FetchableRecord, PersistableRecord {
+    static var databaseTableName: String { "auditEntries" }
+
+    var id: String
+    var timestamp: Double
+    var actorUserID: String
+    var projectID: String
+    var action: String
+    var summary: String
+
+    init(_ entry: AuditEntry) {
+        id = entry.id.uuidString
+        timestamp = entry.timestamp.timeIntervalSince1970
+        actorUserID = entry.actorUserID
+        projectID = entry.projectID
+        action = entry.action.rawValue
+        summary = entry.summary
+    }
+
+    var entry: AuditEntry? {
+        guard let id = UUID(uuidString: id), let action = AuditAction(rawValue: action) else { return nil }
+        return AuditEntry(id: id, timestamp: Date(timeIntervalSince1970: timestamp), actorUserID: actorUserID,
+                          projectID: projectID, action: action, summary: summary)
+    }
+}
+
+@MainActor
+public final class AuditStore {
+    public private(set) var entries: [AuditEntry] = []
+
+    private let database: SQLiteStore
+
+    public init(database: SQLiteStore) {
+        self.database = database
+    }
+
+    public func load() throws {
+        let records = try database.read { db in
+            try AuditRecord.order(Column("timestamp").desc).fetchAll(db)
+        }
+        entries = records.compactMap(\.entry)
+    }
+
+    public func append(_ entry: AuditEntry) throws {
+        try database.write { db in
+            try AuditRecord(entry).insert(db)
+        }
+        entries.insert(entry, at: 0)
+    }
+}
