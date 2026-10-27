@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DOCUMENTS = ("README.md", "ARCHITECTURE.md", "AGENTS.md")
+DOCUMENTS = ("README.md", "ARCHITECTURE.md", "AGENTS.md", "CLAUDE.md")
 MODULES = {"Core", "Design", "Shell", "Storage", "Hub", "Assistant", "Mail", "Calculation", "Catalog", "Project", "Today", "Survey"}
 INTEGRATIONS = {"Airtable", "ClickUp", "Sevdesk", "Clockodo", "Shipping", "Google"}
 FOLDERS = {"Model", "Logic", "Port", "Adapter", "State", "Store", "Tool"}

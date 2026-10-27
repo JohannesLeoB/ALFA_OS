@@ -96,7 +96,7 @@ utils/                   checks, generators, build script
 - No prose in code: user-facing text exists only as keys in `Resources/Localizable.xcstrings`; every key used in code has a value (check).
 - No literal colours or numbers in `App` views except 0, 1 and 2; sizes, spacing, radii, durations and every other value come from `Design` tokens or `App/Design/SheetValues.swift` (check).
 - The company name never appears in `Sources`, `App`, `Tests` or `utils` (check). Company values reach the app only through the company configuration file (see [README.md](README.md)).
-- Markdown: exactly `README.md`, `ARCHITECTURE.md`, `AGENTS.md`; every link and repository path in them exists (check).
+- Markdown: exactly `README.md`, `ARCHITECTURE.md`, `AGENTS.md`, `CLAUDE.md`; every link and repository path in them exists (check).
 - Generated files match their generators (check).
 - Access: `internal` by default, `public` only across module boundaries. Every `public` member has a caller outside its module. No stubs, no provisional code. These three rules are reviewed, not checked.
 

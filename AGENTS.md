@@ -15,7 +15,7 @@ Rules for every change to this repository. The schema lives in [ARCHITECTURE.md]
 - Code carries no comments and no prose. User-facing text is a key in a `Resources/*.localizable.json` file, merged into `Resources/Localizable.xcstrings` by `utils/merge_strings.py`.
 - Views take every colour, size, spacing, radius and duration from `Design` tokens or `App/Design/SheetValues.swift`; the only literals are 0, 1 and 2. Token values change in `Resources/tokens.json`, then `utils/generate_tokens.py` regenerates `Sources/Design/Model`.
 - The company name and company values stay out of code; they come from the company configuration file described in [README.md](README.md).
-- The Markdown files are `README.md`, `ARCHITECTURE.md`, `AGENTS.md`. Each statement in them is checkable in the code.
+- The Markdown files are `README.md`, `ARCHITECTURE.md`, `AGENTS.md`, `CLAUDE.md`. Each statement in the first three is checkable in the code; `CLAUDE.md` is the session start and carries status, decisions and next tasks, kept current with every change of them.
 
 ## Workflow
 
