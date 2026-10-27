@@ -7,15 +7,20 @@ import XCTest
 
 private final class Script: @unchecked Sendable {
     private let lock = NSLock()
-    private var replies: [(Int, String)]
+    private var replies: [(path: String?, status: Int, body: String)]
     private var sent: [URLRequest] = []
 
-    init(_ replies: [(Int, String)]) { self.replies = replies }
+    init(_ replies: [(Int, String)]) { self.replies = replies.map { (nil, $0.0, $0.1) } }
+
+    init(routes: [(String, Int, String)]) { replies = routes.map { ($0.0, $0.1, $0.2) } }
 
     func next(_ request: URLRequest) -> (Int, String) {
         lock.lock(); defer { lock.unlock() }
         sent.append(request)
-        return replies.isEmpty ? (200, "{}") : replies.removeFirst()
+        let path = request.url?.lastPathComponent
+        guard let index = replies.firstIndex(where: { $0.path == nil || $0.path == path }) else { return (200, "{}") }
+        let reply = replies.remove(at: index)
+        return (reply.status, reply.body)
     }
 
     var requests: [URLRequest] {
@@ -28,6 +33,8 @@ private struct FakeHttp: HttpPort {
     let script: Script
 
     init(_ replies: [(Int, String)] = []) { script = Script(replies) }
+
+    init(routes: [(String, Int, String)]) { script = Script(routes: routes) }
 
     func data(for request: URLRequest) async throws -> (Data, URLResponse) {
         let (status, body) = script.next(request)
@@ -97,8 +104,11 @@ private struct FakeMasterData: MasterDataPort {
 
 private let now = Date(timeIntervalSince1970: 1_700_000_000)
 
-private func client(_ replies: [(Int, String)] = [], userID: Int? = nil, credentials: FakeCredentials = FakeCredentials()) -> (ClockodoClient, Script) {
-    let http = FakeHttp(replies)
+private func client(
+    _ replies: [(Int, String)] = [], routes: [(String, Int, String)] = [], userID: Int? = nil,
+    credentials: FakeCredentials = FakeCredentials()
+) -> (ClockodoClient, Script) {
+    let http = routes.isEmpty ? FakeHttp(replies) : FakeHttp(routes: routes)
     return (ClockodoClient(credentials: credentials, http: http, userID: userID, clock: { now }), http.script)
 }
 
@@ -222,10 +232,10 @@ final class ClockodoTests: XCTestCase {
     }
 
     func testReportNamesCustomersAndSortsNewestFirst() async {
-        let (api, script) = client([
-            (200, page("customers", [#"{"id":1,"name":"Ann"}"#, #"{"id":2,"name":"Off","active":false}"#])),
-            (200, page("services", [#"{"id":9,"name":"Plan"}"#])),
-            (200, page("entries", [
+        let (api, script) = client(routes: [
+            ("customers", 200, page("customers", [#"{"id":1,"name":"Ann"}"#, #"{"id":2,"name":"Off","active":false}"#])),
+            ("services", 200, page("services", [#"{"id":9,"name":"Plan"}"#])),
+            ("entries", 200, page("entries", [
                 entryJSON(1, since: "2023-11-14T08:00:00Z", duration: 1800),
                 entryJSON(2, customer: 2, activity: 77, since: "2023-11-14T12:00:00Z", duration: 600, text: "n"),
             ])),
@@ -242,14 +252,18 @@ final class ClockodoTests: XCTestCase {
     }
 
     func testReportFailureOnlyShowsWhenNothingToList() async {
-        let failing = await client([(500, ""), (500, ""), (500, "")]).0.report(period: .today)
+        let failing = await client(routes: [("customers", 500, ""), ("services", 500, ""), ("entries", 500, "")]).0
+            .report(period: .today)
         XCTAssertEqual(failing.entries, [])
         XCTAssertEqual(failing.error, "http 500")
 
-        let masterOnly = await client([(500, ""), (500, ""), (200, page("entries", []))]).0.report(period: .today)
+        let masterOnly = await client(routes: [("customers", 500, ""), ("services", 500, ""), ("entries", 200, page("entries", []))]).0
+            .report(period: .today)
         XCTAssertEqual(masterOnly.error, "http 500")
 
-        let withEntries = await client([(500, ""), (500, ""), (200, page("entries", [entryJSON(1)]))]).0.report(period: .today)
+        let withEntries = await client(
+            routes: [("customers", 500, ""), ("services", 500, ""), ("entries", 200, page("entries", [entryJSON(1)]))]
+        ).0.report(period: .today)
         XCTAssertNil(withEntries.error)
         XCTAssertEqual(withEntries.entries.count, 1)
     }
