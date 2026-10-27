@@ -9,18 +9,23 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RESOURCES = os.path.join(ROOT, "Resources")
 OUTPUT = os.path.join(RESOURCES, "Localizable.xcstrings")
 LANGUAGE = "de"
+LANGUAGES = ("de", "en")
 BODY = r'[a-z][A-Za-z0-9]*(?:\.[A-Za-z0-9_]+)+'
 CALL = re.compile(r'(?:\b(?:string|text|format|key|LocalizedStringKey|LocalizationValue)\(\s*|\b(?:title|label|action|text|hint|message|help|placeholder)Key\s*[:=]\s*)"(%s)"' % BODY)
 BRANCH = re.compile(r'\?\s*"(%s)"\s*:\s*"(%s)"' % (BODY, BODY))
 CODE_DIRS = ("App", "Sources")
 
 
-def entry(value):
-    return {"localizations": {LANGUAGE: {"stringUnit": {"state": "translated", "value": value}}}}
+def unit(value):
+    return {"stringUnit": {"state": "translated", "value": value}}
 
 
-def value_of(item):
-    return item.get("localizations", {}).get(LANGUAGE, {}).get("stringUnit", {}).get("value")
+def entry(texts):
+    return {"localizations": {language: unit(texts[language]) for language in LANGUAGES if language in texts}}
+
+
+def value_of(item, language=LANGUAGE):
+    return item.get("localizations", {}).get(language, {}).get("stringUnit", {}).get("value")
 
 
 def read_catalog(path):
@@ -34,24 +39,31 @@ def read_modules():
         with open(path, encoding="utf-8") as handle:
             keys = json.load(handle)["keys"]
         for key, item in keys.items():
-            text = item.get(LANGUAGE)
-            if text is None:
+            if item.get(LANGUAGE) is None:
                 continue
-            if key in merged and merged[key] != text:
+            texts = {language: item[language] for language in LANGUAGES if language in item}
+            if key in merged and merged[key] != texts:
                 print("conflict between modules: %s (%s, %s)" % (key, owner[key], os.path.basename(path)), file=sys.stderr)
                 continue
-            merged[key] = text
+            merged[key] = texts
             owner[key] = os.path.basename(path)
     return merged
 
 
 def merge(base, modules):
     strings = dict(base)
-    for key, text in modules.items():
+    for key, texts in modules.items():
         if key not in strings:
-            strings[key] = entry(text)
-        elif value_of(strings[key]) != text:
-            print("kept existing text for %s" % key, file=sys.stderr)
+            strings[key] = entry(texts)
+            continue
+        for language, text in texts.items():
+            current = value_of(strings[key], language)
+            if current is None:
+                item = dict(strings[key])
+                item["localizations"] = dict(item.get("localizations", {}), **{language: unit(text)})
+                strings[key] = item
+            elif current != text:
+                print("kept existing %s text for %s" % (language, key), file=sys.stderr)
     return strings
 
 

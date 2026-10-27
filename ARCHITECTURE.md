@@ -133,7 +133,7 @@ Logic -> Model
 
 ## Texts
 
-Each module that has user-facing text owns `Resources/<name>.localizable.json`: keys with a `de` value. `utils/merge_strings.py` merges these files into `Resources/Localizable.xcstrings` (source language `de`) and keeps existing catalog values. `--check` fails when the catalog is stale; it also lists keys used in code (`string(`, `text(`, `format(`, `key(`, `LocalizedStringKey(`, `LocalizationValue(`, and `...Key:` arguments) that have no value. Views resolve text through `Appearance`; engines resolve text through `TextPort`, implemented by `TextStore` in `App/Shell/Assembly.swift`.
+Each module that has user-facing text owns `Resources/<name>.localizable.json`: keys with a `de` value and, where translated, an `en` value. `utils/merge_strings.py` merges these files into `Resources/Localizable.xcstrings` (source language `de`), keeps existing catalog values and adds missing `en` values. `--check` fails when the catalog is stale; it also lists keys used in code (`string(`, `text(`, `format(`, `key(`, `LocalizedStringKey(`, `LocalizationValue(`, and `...Key:` arguments) that have no value. Views resolve text through `Appearance`; engines resolve text through `TextPort`, implemented by `TextStore` in `App/Shell/Assembly.swift`.
 
 ## Assistant
 

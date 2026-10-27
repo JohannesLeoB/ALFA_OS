@@ -9,6 +9,12 @@
             "state" : "translated",
             "value" : "Mail"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
+          }
         }
       }
     },
@@ -19,6 +25,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Postfach"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mailbox"
           }
         }
       }
@@ -31,6 +43,12 @@
             "state" : "translated",
             "value" : "Einstellungen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
         }
       }
     },
@@ -41,6 +59,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
           }
         }
       }
@@ -1505,6 +1529,12 @@
             "state" : "translated",
             "value" : "Frage stellen …"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ask a question …"
+          }
         }
       }
     },
@@ -1544,6 +1574,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Telefon"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phone"
           }
         }
       }
@@ -1866,6 +1902,12 @@
             "state" : "translated",
             "value" : "Entwürfe"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drafts"
+          }
         }
       }
     },
@@ -1886,6 +1928,12 @@
             "state" : "translated",
             "value" : "Gesendet"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sent"
+          }
         }
       }
     },
@@ -1896,6 +1944,12 @@
             "state" : "translated",
             "value" : "Spam"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Junk"
+          }
         }
       }
     },
@@ -1905,6 +1959,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Papierkorb"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trash"
           }
         }
       }
@@ -6128,6 +6188,12 @@
             "state" : "translated",
             "value" : "Schließen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
         }
       }
     },
@@ -6419,6 +6485,12 @@
             "state" : "translated",
             "value" : "Nein"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
         }
       }
     },
@@ -6440,6 +6512,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Adresse"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address"
           }
         }
       }
@@ -6569,6 +6647,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ordner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder"
           }
         }
       }
@@ -6787,6 +6871,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keine Verbindung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No connection"
           }
         }
       }
@@ -7082,6 +7172,12 @@
             "state" : "translated",
             "value" : "Keine Verbindung"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No connection"
+          }
         }
       }
     },
@@ -7214,6 +7310,12 @@
             "state" : "translated",
             "value" : "Archivieren"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archive"
+          }
         }
       }
     },
@@ -7224,6 +7326,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Datei anhängen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attach File"
           }
         }
       }
@@ -7247,6 +7355,12 @@
             "state" : "translated",
             "value" : "Neue Mail"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Message"
+          }
         }
       }
     },
@@ -7257,6 +7371,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Adresse kopieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Address"
           }
         }
       }
@@ -7269,6 +7389,12 @@
             "state" : "translated",
             "value" : "Entwurf verwerfen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard Draft"
+          }
         }
       }
     },
@@ -7278,6 +7404,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kontakt bearbeiten …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Contact …"
           }
         }
       }
@@ -7290,6 +7422,12 @@
             "state" : "translated",
             "value" : "Spalte falten"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collapse Column"
+          }
         }
       }
     },
@@ -7297,6 +7435,12 @@
       "comment" : "alpha",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Format"
@@ -7312,6 +7456,12 @@
             "state" : "translated",
             "value" : "Weiterleiten"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forward"
+          }
         }
       }
     },
@@ -7322,6 +7472,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aus Projektordner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From Project Folder"
           }
         }
       }
@@ -7334,6 +7490,12 @@
             "state" : "translated",
             "value" : "Später senden …"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send Later …"
+          }
         }
       }
     },
@@ -7344,6 +7506,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bilder laden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load Images"
           }
         }
       }
@@ -7367,6 +7535,12 @@
             "state" : "translated",
             "value" : "Als ungelesen markieren"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark as Unread"
+          }
         }
       }
     },
@@ -7377,6 +7551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mehr"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More"
           }
         }
       }
@@ -7389,6 +7569,12 @@
             "state" : "translated",
             "value" : "Verschieben nach …"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move to …"
+          }
         }
       }
     },
@@ -7399,6 +7585,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Notiz anfügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Note"
           }
         }
       }
@@ -7411,6 +7603,12 @@
             "state" : "translated",
             "value" : "Entwurf öffnen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Draft"
+          }
         }
       }
     },
@@ -7422,6 +7620,12 @@
             "state" : "translated",
             "value" : "Original anzeigen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Original"
+          }
         }
       }
     },
@@ -7432,6 +7636,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "In anderes Projekt …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move to Another Project …"
           }
         }
       }
@@ -7455,6 +7665,12 @@
             "state" : "translated",
             "value" : "Als PDF sichern"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save as PDF"
+          }
         }
       }
     },
@@ -7466,6 +7682,12 @@
             "state" : "translated",
             "value" : "Vorschau"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick Look"
+          }
         }
       }
     },
@@ -7476,6 +7698,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Drucken"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Print"
           }
         }
       }
@@ -7499,6 +7727,12 @@
             "state" : "translated",
             "value" : "Lesebestätigung anfordern"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Request Read Receipt"
+          }
         }
       }
     },
@@ -7509,6 +7743,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Antworten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reply"
           }
         }
       }
@@ -7521,6 +7761,12 @@
             "state" : "translated",
             "value" : "Allen antworten"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reply All"
+          }
         }
       }
     },
@@ -7531,6 +7777,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sichern unter …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save As …"
           }
         }
       }
@@ -7543,6 +7795,12 @@
             "state" : "translated",
             "value" : "Als Kontakt sichern"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to Contacts"
+          }
         }
       }
     },
@@ -7553,6 +7811,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entwurf sichern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save Draft"
           }
         }
       }
@@ -7565,6 +7829,12 @@
             "state" : "translated",
             "value" : "Senden"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send"
+          }
         }
       }
     },
@@ -7575,6 +7845,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Als Spam melden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report as Junk"
           }
         }
       }
@@ -7598,6 +7874,12 @@
             "state" : "translated",
             "value" : "Als Vorlage sichern"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save as Template"
+          }
         }
       }
     },
@@ -7609,6 +7891,12 @@
             "state" : "translated",
             "value" : "In Projektordner sichern"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save to Project Folder"
+          }
         }
       }
     },
@@ -7619,6 +7907,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "In den Papierkorb"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move to Trash"
           }
         }
       }
@@ -7642,6 +7936,12 @@
             "state" : "translated",
             "value" : "Mail schreiben"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Message"
+          }
         }
       }
     },
@@ -7664,6 +7964,12 @@
             "state" : "translated",
             "value" : "Anheften · bleibt im Stapel"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pin · stays in the stack"
+          }
         }
       }
     },
@@ -7674,6 +7980,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Empfänger hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add recipient"
           }
         }
       }
@@ -7708,6 +8020,12 @@
             "state" : "translated",
             "value" : "Text"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Message"
+          }
         }
       }
     },
@@ -7741,6 +8059,12 @@
             "state" : "translated",
             "value" : "Cc und Bcc"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cc and Bcc"
+          }
         }
       }
     },
@@ -7752,6 +8076,12 @@
             "state" : "translated",
             "value" : "Von"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From"
+          }
         }
       }
     },
@@ -7762,6 +8092,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
           }
         }
       }
@@ -7785,6 +8121,12 @@
             "state" : "translated",
             "value" : "Betreff"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subject"
+          }
         }
       }
     },
@@ -7795,6 +8137,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "An"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To"
           }
         }
       }
@@ -7818,6 +8166,12 @@
             "state" : "translated",
             "value" : "Entwurf verwerfen?"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard draft?"
+          }
         }
       }
     },
@@ -7828,6 +8182,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verwerfen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard"
           }
         }
       }
@@ -7851,6 +8211,12 @@
             "state" : "translated",
             "value" : "Endgültig löschen?"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete permanently?"
+          }
         }
       }
     },
@@ -7861,6 +8227,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Löschen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
           }
         }
       }
@@ -7906,6 +8278,12 @@
             "state" : "translated",
             "value" : "Erneut senden"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send Again"
+          }
         }
       }
     },
@@ -7916,6 +8294,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Der Server hat nicht geantwortet. Der Entwurf liegt sicher in den Entwürfen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The server didn’t respond. The draft is safe in Drafts."
           }
         }
       }
@@ -7928,6 +8312,12 @@
             "state" : "translated",
             "value" : "Einstellungen öffnen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
+          }
         }
       }
     },
@@ -7938,6 +8328,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einmal neu anmelden, dann geht der Entwurf raus."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in once more, then the draft goes out."
           }
         }
       }
@@ -7950,6 +8346,12 @@
             "state" : "translated",
             "value" : "Senden braucht die Schreibfreigabe"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sending needs write access"
+          }
         }
       }
     },
@@ -7960,6 +8362,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sendet …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sending …"
           }
         }
       }
@@ -7972,6 +8380,12 @@
             "state" : "translated",
             "value" : "Entwurf gesichert"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Draft saved"
+          }
         }
       }
     },
@@ -7983,6 +8397,12 @@
             "state" : "translated",
             "value" : "Nicht gesendet"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not sent"
+          }
         }
       }
     },
@@ -7993,6 +8413,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sendet …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sending …"
           }
         }
       }
@@ -8070,6 +8496,12 @@
             "state" : "translated",
             "value" : "Alle"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All"
+          }
         }
       }
     },
@@ -8080,6 +8512,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mit Anhang"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With Attachments"
           }
         }
       }
@@ -8103,6 +8541,12 @@
             "state" : "translated",
             "value" : "Ungelesen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unread"
+          }
         }
       }
     },
@@ -8125,6 +8569,12 @@
             "state" : "translated",
             "value" : "Mehr"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More"
+          }
         }
       }
     },
@@ -8136,6 +8586,12 @@
             "state" : "translated",
             "value" : "In Projektordner sichern"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save to Project Folder"
+          }
         }
       }
     },
@@ -8146,6 +8602,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Als Spam melden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report as Junk"
           }
         }
       }
@@ -8168,6 +8630,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Als ungelesen markieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mark as Unread"
           }
         }
       }
@@ -8312,6 +8780,12 @@
             "state" : "translated",
             "value" : "Kein Postfach verbunden"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No mailbox connected"
+          }
         }
       }
     },
@@ -8345,6 +8819,12 @@
             "state" : "translated",
             "value" : "Labels"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Labels"
+          }
         }
       }
     },
@@ -8355,6 +8835,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Postfach"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mailbox"
           }
         }
       }
@@ -8378,6 +8864,12 @@
             "state" : "translated",
             "value" : "Verfassen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compose"
+          }
         }
       }
     },
@@ -8400,6 +8892,12 @@
             "state" : "translated",
             "value" : "Suche leeren"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear Search"
+          }
         }
       }
     },
@@ -8411,6 +8909,12 @@
             "state" : "translated",
             "value" : "Nachrichten konnten nicht geladen werden"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t load messages"
+          }
         }
       }
     },
@@ -8421,6 +8925,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erneut versuchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try Again"
           }
         }
       }
@@ -8477,6 +8987,12 @@
             "state" : "translated",
             "value" : "Keine Treffer für diesen Filter."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No results for this filter."
+          }
         }
       }
     },
@@ -8487,6 +9003,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle zeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show All"
           }
         }
       }
@@ -8499,6 +9021,12 @@
             "state" : "translated",
             "value" : "Kein Postfach verbunden"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No mailbox connected"
+          }
         }
       }
     },
@@ -8510,6 +9038,12 @@
             "state" : "translated",
             "value" : "Postfach verbinden"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connect Mailbox"
+          }
         }
       }
     },
@@ -8520,6 +9054,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verbinde ein Postfach, um Mails hier zu lesen und zu schreiben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connect a mailbox to read and write mail here."
           }
         }
       }
@@ -8553,6 +9093,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erneut verbinden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reconnect"
           }
         }
       }
@@ -8674,6 +9220,12 @@
             "state" : "translated",
             "value" : "Auswahl aufheben"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deselect"
+          }
         }
       }
     },
@@ -8706,6 +9258,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gelesen / ungelesen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read / unread"
           }
         }
       }
@@ -8751,6 +9309,12 @@
             "state" : "translated",
             "value" : "Alle Empfänger zeigen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show all recipients"
+          }
         }
       }
     },
@@ -8795,6 +9359,12 @@
             "state" : "translated",
             "value" : "Beim Laden erfährt der Absender, dass die Mail geöffnet wurde."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading them tells the sender that you opened this message."
+          }
         }
       }
     },
@@ -8806,6 +9376,12 @@
             "state" : "translated",
             "value" : "Externe Bilder blockiert"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remote images blocked"
+          }
         }
       }
     },
@@ -8816,6 +9392,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Weniger zeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show less"
           }
         }
       }
@@ -8839,6 +9421,12 @@
             "state" : "translated",
             "value" : "An"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To"
+          }
         }
       }
     },
@@ -8849,6 +9437,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All"
           }
         }
       }
@@ -8861,6 +9455,12 @@
             "state" : "translated",
             "value" : "Archiv"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archive"
+          }
         }
       }
     },
@@ -8871,6 +9471,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entwürfe"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drafts"
           }
         }
       }
@@ -8883,6 +9489,12 @@
             "state" : "translated",
             "value" : "Eingang"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inbox"
+          }
         }
       }
     },
@@ -8893,6 +9505,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Gesendet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sent"
           }
         }
       }
@@ -8905,6 +9523,12 @@
             "state" : "translated",
             "value" : "Spam"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Junk"
+          }
         }
       }
     },
@@ -8915,6 +9539,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Markiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flagged"
           }
         }
       }
@@ -8927,6 +9557,12 @@
             "state" : "translated",
             "value" : "Papierkorb"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trash"
+          }
         }
       }
     },
@@ -8938,6 +9574,12 @@
             "state" : "translated",
             "value" : "Mit Anhang"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With Attachments"
+          }
         }
       }
     },
@@ -8948,6 +9590,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Weitere Anhänge"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More attachments"
           }
         }
       }
@@ -8993,6 +9641,12 @@
             "state" : "translated",
             "value" : "Markiert"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flagged"
+          }
         }
       }
     },
@@ -9004,6 +9658,12 @@
             "state" : "translated",
             "value" : "Nachrichten in dieser Unterhaltung"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Messages in this conversation"
+          }
         }
       }
     },
@@ -9014,6 +9674,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nachrichten in dieser Unterhaltung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Messages in this conversation"
           }
         }
       }
@@ -9048,6 +9714,12 @@
             "state" : "translated",
             "value" : "Ungelesen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unread"
+          }
         }
       }
     },
@@ -9069,6 +9741,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Liste durchsuchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search list"
           }
         }
       }
@@ -9278,6 +9956,12 @@
             "state" : "translated",
             "value" : "Adresse kopiert"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address copied"
+          }
         }
       }
     },
@@ -9288,6 +9972,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Archiviert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archived"
           }
         }
       }
@@ -9418,6 +10108,12 @@
             "state" : "translated",
             "value" : "Entwurf gesichert"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Draft saved"
+          }
         }
       }
     },
@@ -9429,6 +10125,12 @@
             "state" : "translated",
             "value" : "Im Papierkorb"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Trash"
+          }
         }
       }
     },
@@ -9439,6 +10141,12 @@
             "state" : "translated",
             "value" : "Als PDF gesichert"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved as PDF"
+          }
         }
       }
     },
@@ -9448,6 +10156,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Als PDF im Projektordner gesichert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved as PDF to project folder"
           }
         }
       }
@@ -9460,6 +10174,12 @@
             "state" : "translated",
             "value" : "Endgültig gelöscht"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permanently deleted"
+          }
         }
       }
     },
@@ -9470,6 +10190,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Empfänger fehlt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recipient missing"
           }
         }
       }
@@ -9482,6 +10208,12 @@
             "state" : "translated",
             "value" : "In den Papierkorb gelegt"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moved to Trash"
+          }
         }
       }
     },
@@ -9492,6 +10224,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rückgängig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Undo"
           }
         }
       }
@@ -9504,6 +10242,12 @@
             "state" : "translated",
             "value" : "Nichts gefunden"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing found"
+          }
         }
       }
     },
@@ -9514,6 +10258,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Finden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Find"
           }
         }
       }
@@ -9536,6 +10286,12 @@
             "state" : "translated",
             "value" : "Groß"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Large"
+          }
         }
       }
     },
@@ -9546,6 +10302,12 @@
             "state" : "translated",
             "value" : "Mittel"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medium"
+          }
         }
       }
     },
@@ -9555,6 +10317,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Klein"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Small"
           }
         }
       }
@@ -9596,6 +10364,12 @@
             "state" : "translated",
             "value" : "Schlüssel"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keys"
+          }
         }
       }
     },
@@ -9626,6 +10400,12 @@
             "state" : "translated",
             "value" : "Postfächer"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mailboxes"
+          }
         }
       }
     },
@@ -9635,6 +10415,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Noch kein Mail-Konto."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No mail account yet."
           }
         }
       }
@@ -9667,6 +10453,12 @@
             "state" : "translated",
             "value" : "Trennen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disconnect"
+          }
         }
       }
     },
@@ -9677,6 +10469,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spalte falten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collapse Column"
           }
         }
       }
@@ -9689,6 +10487,12 @@
             "state" : "translated",
             "value" : "Mehr"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More"
+          }
         }
       }
     },
@@ -9699,6 +10503,12 @@
             "state" : "translated",
             "value" : "Erneut verbinden"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reconnect"
+          }
         }
       }
     },
@@ -9708,6 +10518,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Neu eintragen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter Again"
           }
         }
       }
@@ -9720,6 +10536,12 @@
             "state" : "translated",
             "value" : "Dunkel"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
+          }
         }
       }
     },
@@ -9729,6 +10551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fremde Inhalte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remote content"
           }
         }
       }
@@ -9749,6 +10577,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erscheinung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
           }
         }
       }
@@ -9862,6 +10696,12 @@
             "state" : "translated",
             "value" : "Anschrift"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address"
+          }
         }
       }
     },
@@ -9871,6 +10711,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email"
           }
         }
       }
@@ -9882,6 +10728,12 @@
             "state" : "translated",
             "value" : "Firma"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Company"
+          }
         }
       }
     },
@@ -9892,12 +10744,24 @@
             "state" : "translated",
             "value" : "Telefon"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phone"
+          }
         }
       }
     },
     "settings.company.row.web" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Web"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Web"
@@ -9932,6 +10796,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Adresse"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address"
           }
         }
       }
@@ -9973,6 +10843,12 @@
             "state" : "translated",
             "value" : "Name"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
         }
       }
     },
@@ -10002,6 +10878,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
           }
         }
       }
@@ -10094,6 +10976,12 @@
             "state" : "translated",
             "value" : "Projektdaten"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project data"
+          }
         }
       }
     },
@@ -10103,6 +10991,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Projektordner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project folder"
           }
         }
       }
@@ -10114,6 +11008,12 @@
             "state" : "translated",
             "value" : "Vorlagen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Templates"
+          }
         }
       }
     },
@@ -10123,6 +11023,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Firma"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Company"
           }
         }
       }
@@ -10186,6 +11092,12 @@
             "state" : "translated",
             "value" : "Konto"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account"
+          }
         }
       }
     },
@@ -10195,6 +11107,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geburtstag im Team zeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show team birthdays"
           }
         }
       }
@@ -10206,12 +11124,24 @@
             "state" : "translated",
             "value" : "Kürzel"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initials"
+          }
         }
       }
     },
     "settings.identity.name" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Name"
@@ -10226,6 +11156,12 @@
             "state" : "translated",
             "value" : "Telefon"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Phone"
+          }
         }
       }
     },
@@ -10235,6 +11171,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rolle"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Role"
           }
         }
       }
@@ -10246,6 +11188,12 @@
             "state" : "translated",
             "value" : "Auf diesem Mac abmelden"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign out on this Mac"
+          }
         }
       }
     },
@@ -10255,6 +11203,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abmelden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign Out"
           }
         }
       }
@@ -10266,6 +11220,12 @@
             "state" : "translated",
             "value" : "Urheber"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Author"
+          }
         }
       }
     },
@@ -10276,6 +11236,12 @@
             "state" : "translated",
             "value" : "Rechte"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rights"
+          }
         }
       }
     },
@@ -10285,6 +11251,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Signatur"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signature"
           }
         }
       }
@@ -10297,6 +11269,12 @@
             "state" : "translated",
             "value" : "Zweig"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Branch"
+          }
         }
       }
     },
@@ -10306,6 +11284,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Datenbank"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Database"
           }
         }
       }
@@ -10317,6 +11301,12 @@
             "state" : "translated",
             "value" : "Diagnose"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnostics"
+          }
         }
       }
     },
@@ -10324,6 +11314,12 @@
       "comment" : "roh",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Version"
@@ -10418,6 +11414,12 @@
             "state" : "translated",
             "value" : "Sperren nach"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lock after"
+          }
         }
       }
     },
@@ -10467,6 +11469,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "App-Sperre"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App lock"
           }
         }
       }
@@ -10570,6 +11578,12 @@
             "state" : "translated",
             "value" : "Assistent ganz aus"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn off assistant completely"
+          }
         }
       }
     },
@@ -10658,6 +11672,12 @@
             "state" : "translated",
             "value" : "Mail"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
+          }
         }
       }
     },
@@ -10712,6 +11732,12 @@
             "state" : "translated",
             "value" : "Dateien im Chat"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Files in chat"
+          }
         }
       }
     },
@@ -10721,6 +11747,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bilder in Mails laden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load images in messages"
           }
         }
       }
@@ -10732,6 +11764,12 @@
             "state" : "translated",
             "value" : "Anmeldung"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign-in"
+          }
         }
       }
     },
@@ -10741,6 +11779,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zustand"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
           }
         }
       }
@@ -10763,6 +11807,12 @@
             "state" : "translated",
             "value" : "Erscheinung, Startansicht, App-Sperre"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance, start view, app lock"
+          }
         }
       }
     },
@@ -10782,6 +11832,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Firma, Anschrift, Kontakt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Company, address, contact"
           }
         }
       }
@@ -10803,6 +11859,12 @@
             "state" : "translated",
             "value" : "Gesichert und vorgeschlagen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved and suggested"
+          }
         }
       }
     },
@@ -10813,6 +11875,12 @@
             "state" : "translated",
             "value" : "Dateiordner"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File folders"
+          }
         }
       }
     },
@@ -10822,6 +11890,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ordnerschema, Einrichtung im geteilten Drive"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder scheme, setup in the shared Drive"
           }
         }
       }
@@ -10863,6 +11937,12 @@
             "state" : "translated",
             "value" : "Urheber, Rechte, Signatur"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Author, rights, signature"
+          }
         }
       }
     },
@@ -10873,6 +11953,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Integrationen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Integrations"
           }
         }
       }
@@ -10914,6 +12000,12 @@
             "state" : "translated",
             "value" : "Was die App lädt und teilt"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What the app loads and shares"
+          }
         }
       }
     },
@@ -10935,6 +12027,12 @@
             "state" : "translated",
             "value" : "Version, Build, Datenbank"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version, build, database"
+          }
         }
       }
     },
@@ -10945,6 +12043,12 @@
             "state" : "translated",
             "value" : "Vorlagen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Templates"
+          }
         }
       }
     },
@@ -10954,6 +12058,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Noch keine Vorlage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No template yet"
           }
         }
       }
@@ -11025,6 +12135,12 @@
             "state" : "translated",
             "value" : "Schlüssel"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keys"
+          }
         }
       }
     },
@@ -11034,6 +12150,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Modell"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Model"
           }
         }
       }
@@ -11125,6 +12247,12 @@
             "state" : "translated",
             "value" : "Schlüssel"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keys"
+          }
         }
       }
     },
@@ -11164,6 +12292,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schlüssel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keys"
           }
         }
       }
@@ -11205,6 +12339,12 @@
             "state" : "translated",
             "value" : "Schlüssel"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keys"
+          }
         }
       }
     },
@@ -11214,6 +12354,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Passwort"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password"
           }
         }
       }
@@ -11295,6 +12441,12 @@
             "state" : "translated",
             "value" : "Mail"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
+          }
         }
       }
     },
@@ -11335,6 +12487,12 @@
             "state" : "translated",
             "value" : "Firma"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Company"
+          }
         }
       }
     },
@@ -11354,6 +12512,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schlüssel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keys"
           }
         }
       }
@@ -11446,6 +12610,12 @@
             "state" : "translated",
             "value" : "Beim Öffnen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On launch"
+          }
         }
       }
     },
@@ -11456,12 +12626,24 @@
             "state" : "translated",
             "value" : "Zuletzt offen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last Opened"
+          }
         }
       }
     },
     "settings.start.mail" : {
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mail"
@@ -11476,6 +12658,12 @@
             "state" : "translated",
             "value" : "Einstellungen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
         }
       }
     },
@@ -11485,6 +12673,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Abgleich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync"
           }
         }
       }
@@ -11537,6 +12731,12 @@
             "state" : "translated",
             "value" : "Kopieren"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy"
+          }
         }
       }
     },
@@ -11557,6 +12757,12 @@
             "state" : "translated",
             "value" : "Noch keine Vorlage."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No template yet."
+          }
         }
       }
     },
@@ -11566,6 +12772,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Integrationen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Integrations"
           }
         }
       }
@@ -11577,6 +12789,12 @@
             "state" : "translated",
             "value" : "Schlüssel"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keys"
+          }
         }
       }
     },
@@ -11586,6 +12804,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "In die Zwischenablage kopiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copied to clipboard"
           }
         }
       }
@@ -11607,6 +12831,12 @@
             "state" : "translated",
             "value" : "Der Schlüssel ist gespeichert, die App kommt nicht an ihn heran. Einmal neu eintragen."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The key is stored, but the app can’t access it. Enter it once more."
+          }
         }
       }
     },
@@ -11617,6 +12847,12 @@
             "state" : "translated",
             "value" : "Der Schlüsselbund kann nicht gelesen werden."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The keychain can’t be read."
+          }
         }
       }
     },
@@ -11626,6 +12862,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Standard"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default"
           }
         }
       }
@@ -11887,6 +13129,12 @@
             "state" : "translated",
             "value" : "Leere Karte"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empty card"
+          }
         }
       }
     },
@@ -11932,6 +13180,12 @@
             "state" : "translated",
             "value" : "Abbrechen"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
         }
       }
     },
@@ -11943,6 +13197,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Konto hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Account"
           }
         }
       }
@@ -11967,6 +13227,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
           }
         }
       }

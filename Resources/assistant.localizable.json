@@ -440,7 +440,8 @@
    "de": "E-Mail"
   },
   "assistant.field.phone": {
-   "de": "Telefon"
+   "de": "Telefon",
+   "en": "Phone"
   },
   "assistant.field.to": {
    "de": "Empfänger (An)"
@@ -533,19 +534,23 @@
    "de": "Kategorie {1}"
   },
   "assistant.mail.label.draft": {
-   "de": "Entwürfe"
+   "de": "Entwürfe",
+   "en": "Drafts"
   },
   "assistant.mail.label.inbox": {
    "de": "Posteingang"
   },
   "assistant.mail.label.sent": {
-   "de": "Gesendet"
+   "de": "Gesendet",
+   "en": "Sent"
   },
   "assistant.mail.label.spam": {
-   "de": "Spam"
+   "de": "Spam",
+   "en": "Junk"
   },
   "assistant.mail.label.trash": {
-   "de": "Papierkorb"
+   "de": "Papierkorb",
+   "en": "Trash"
   },
   "assistant.mail.noBody": {
    "de": "(kein lesbarer Text-Body)"

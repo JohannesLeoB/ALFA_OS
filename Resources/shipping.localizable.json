@@ -5,7 +5,8 @@
    "de": "Abrechnungsnummer"
   },
   "settings.service.dhlship.field.password": {
-   "de": "Passwort"
+   "de": "Passwort",
+   "en": "Password"
   },
   "settings.service.dhlship.field.secret": {
    "de": "Geheimnis"
