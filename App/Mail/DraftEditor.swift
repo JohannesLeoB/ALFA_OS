@@ -140,6 +140,6 @@ struct FromButton: View {
             MenuEntry.row(MenuItem(id: inlet.id, label: Text(verbatim: inlet.account.isEmpty ? inlet.title : inlet.account),
                                    check: inlet.id == card.inlet ? appearance.text("mail.menu.check") : nil) { inbox.setFrom(card.id, inlet: inlet.id) })
         }
-        anchor.showMenu(entries, width: Tokens.Size.menuWidthWide)
+        anchor.showMenu(entries)
     }
 }

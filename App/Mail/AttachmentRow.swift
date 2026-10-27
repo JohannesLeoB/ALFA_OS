@@ -43,7 +43,7 @@ struct AttachmentRow: View {
         let entries = MenuLine.entries(MenuEngine.attachment(), appearance: appearance) { action in
             if action == .saveAs { save() }
         }
-        anchor.showMenu(entries, width: Tokens.Size.menuWidthPerson)
+        anchor.showMenu(entries)
     }
 
     private func save() {

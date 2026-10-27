@@ -95,7 +95,6 @@ struct TextMenuButton: View {
     let label: Text
     var kind = TextButtonKind.neutral
     var disabled = false
-    var width = Tokens.Size.menuWidthRow
     let entries: () -> [MenuEntry]
     @State private var anchor = AnchorBox()
 
@@ -105,6 +104,6 @@ struct TextMenuButton: View {
     }
 
     private func open() {
-        anchor.showMenu(entries(), width: width)
+        anchor.showMenu(entries())
     }
 }

@@ -75,7 +75,7 @@ extension MessageCard {
             guard case .message(let id) = inbox.frontRef else { return }
             let lines = MenuEngine.readingMore(starred: inbox.card(id)?.summary.flags.contains(.flagged) ?? false)
             let entries = MenuLine.entries(lines, appearance: appearance) { perform($0) }
-            moreAnchor.showMenu(entries, width: Tokens.Size.menuWidthWide)
+            moreAnchor.showMenu(entries)
         }
     }
 }

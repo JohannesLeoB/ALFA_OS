@@ -84,7 +84,7 @@ extension MessageCard {
 
         private func personMenu(party: (name: String, address: String)) {
             let entries = session.personEntries(name: party.name, address: party.address, appearance: appearance)
-            titleAnchor.showMenu(entries, width: Tokens.Size.menuWidthWide)
+            titleAnchor.showMenu(entries)
         }
 
         @ViewBuilder

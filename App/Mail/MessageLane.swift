@@ -96,7 +96,7 @@ struct MessageLane: View {
             MenuEntry.row(MenuItem(id: filterName(option), label: Text(verbatim: filterName(option)),
                                    check: inbox.filter == option ? appearance.text("mail.menu.check") : nil) { inbox.setFilter(option) })
         }
-        filterAnchor.showMenu(entries, width: Tokens.Size.menuWidthNarrow)
+        filterAnchor.showMenu(entries)
     }
 
     private var pickTools: some View {

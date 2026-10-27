@@ -5,7 +5,7 @@ import SwiftUI
 
 struct AnchoredMenu: View {
     @Environment(\.appearance) private var appearance
-    var width = Tokens.Size.menuWidthRow
+    var width: Double?
     let entries: [MenuEntry]
     var dismiss: () -> Void = {}
 
@@ -21,7 +21,8 @@ struct AnchoredMenu: View {
             }
         }
         .padding(CGFloat(Tokens.Spacing.step4))
-        .frame(width: CGFloat(width))
+        .frame(width: width.map { CGFloat($0) })
+        .fixedSize(horizontal: width == nil, vertical: false)
         .background(shape.fill(appearance.color(\.menu)))
         .shadowLayers(shape)
         .eventMonitor([.leftMouseDown, .rightMouseDown, .keyDown]) { sample in

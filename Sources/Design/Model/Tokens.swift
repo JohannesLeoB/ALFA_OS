@@ -126,13 +126,6 @@ public enum Tokens {
         public static let previewWindowHeight = 982.0
         public static let previewMinWidth = 640.0
         public static let previewMinHeight = 480.0
-        public static let menuWidthNarrow = 200.0
-        public static let menuWidthCompact = 220.0
-        public static let menuWidthRow = 232.0
-        public static let menuWidthDefault = 240.0
-        public static let menuWidthWide = 260.0
-        public static let menuWidthAttach = 280.0
-        public static let menuWidthPerson = 300.0
     }
     public enum Spacing {
         public static let step2 = 2.0

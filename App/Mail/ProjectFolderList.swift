@@ -52,6 +52,6 @@ enum ProjectFolderList {
     }
 
     private static func present(_ entries: [MenuEntry], anchor: NSRect) {
-        MenuPanel.shared.show(entries: entries, width: Tokens.Size.menuWidthAttach, anchor: .rect(anchor), window: NSApp.keyWindow)
+        MenuPanel.shared.show(entries: entries, anchor: .rect(anchor), window: NSApp.keyWindow)
     }
 }

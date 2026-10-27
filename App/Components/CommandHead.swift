@@ -61,6 +61,6 @@ struct CommandHead<Action: Equatable & Sendable, Slot: View>: View {
     private func openMore() {
         guard let rect = moreAnchor.screenRect() else { return }
         let entries = more(plan.overflow.compactMap(\.action))
-        MenuPanel.shared.show(entries: entries, width: Tokens.Size.menuWidthWide, anchor: .rect(rect), window: NSApp.keyWindow)
+        MenuPanel.shared.show(entries: entries, anchor: .rect(rect), window: NSApp.keyWindow)
     }
 }

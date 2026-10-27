@@ -90,6 +90,6 @@ struct PersonRow: View {
 
     private func menu() {
         let entries = session.personEntries(name: person.name, address: person.address, appearance: appearance)
-        anchor.showMenu(entries, width: Tokens.Size.menuWidthWide)
+        anchor.showMenu(entries)
     }
 }

@@ -205,7 +205,7 @@ struct InboxRow: View {
             session.perform(action, message: item.id, undoable: true, fromMenu: true)
         }
         menuOpen = true
-        MenuPanel.shared.show(entries: entries, width: Tokens.Size.menuWidthRow, anchor: .point(point), window: NSApp.keyWindow) {
+        MenuPanel.shared.show(entries: entries, anchor: .point(point), window: NSApp.keyWindow) {
             menuOpen = false
         }
     }

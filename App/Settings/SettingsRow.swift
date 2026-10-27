@@ -109,7 +109,6 @@ struct SettingsValue: View {
 struct ChoiceButton: View {
     @Environment(\.appearance) private var appearance
     let label: Text
-    var width = Tokens.Size.menuWidthNarrow
     let entries: () -> [MenuEntry]
     @State private var anchor = AnchorBox()
 
@@ -133,6 +132,6 @@ struct ChoiceButton: View {
     }
 
     private func open() {
-        anchor.showMenu(entries(), width: width)
+        anchor.showMenu(entries())
     }
 }

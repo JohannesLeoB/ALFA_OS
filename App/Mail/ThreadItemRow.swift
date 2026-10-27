@@ -93,7 +93,7 @@ struct ThreadItemRow: View {
 
     private func menu() {
         let entries = session.personEntries(name: item.name, address: item.address, appearance: appearance)
-        anchor.showMenu(entries, width: Tokens.Size.menuWidthWide)
+        anchor.showMenu(entries)
     }
 }
 

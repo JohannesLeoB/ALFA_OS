@@ -15,7 +15,7 @@ final class MenuPanel {
     private var panel: NSPanel?
     private var closing: () -> Void = {}
 
-    func show(entries: [MenuEntry], width: Double, anchor: MenuAnchor, window: NSWindow?, onClose: @escaping () -> Void = {}) {
+    func show(entries: [MenuEntry], anchor: MenuAnchor, window: NSWindow?, onClose: @escaping () -> Void = {}) {
         close()
         closing = onClose
         guard let window = window ?? NSApp.keyWindow else { return }
@@ -28,6 +28,8 @@ final class MenuPanel {
                 row.action()
             })
         }
+        let natural = NSHostingView(rootView: AnchoredMenu(entries: wrapped).environment(\.appearance, appearance)).fittingSize.width
+        let width = MenuWidthEngine.width(fitting: Double(natural))
         let root = AnchoredMenu(width: width, entries: wrapped, dismiss: { [weak self] in self?.close() })
             .padding(margin)
             .environment(\.appearance, appearance)

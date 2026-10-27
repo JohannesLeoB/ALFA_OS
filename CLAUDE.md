@@ -21,7 +21,7 @@ Binding: the rules in [AGENTS.md](AGENTS.md) (loaded above) and the schema in [A
 - On first launch `LegacyImportStore` (Sources/Hub/Store) imports the old Hub database and the old app settings once; the old data is never changed.
 - The Airtable sale-price column name comes only from the company configuration (key `airtable.field.sale_price`, see `Resources/company.example.json`).
 - The settings tile is 112 × 112 px minimum (`settingsTileHeight`, `settingsTileMinWidth`; 2 × 56 as in master 23.10., decided by Johannes on 27.10.).
-- `Resources/tokens.json` is converted from the master's `contract/` files (base, theme-light, theme-dark, ground-lightGray); `constants` and the seven `size.menuWidth*` tokens stay from code until the menus use `menuMinWidth`, `menuMaxWidth` and `menuWidthStep`.
+- `Resources/tokens.json` is converted from the master's `contract/` files (base, theme-light, theme-dark, ground-lightGray); `constants` stay from code. Menus size to their longest entry on the 56 grid (`MenuWidthEngine`, 168 to 280).
 
 ## Sandbox (Claude Code)
 - `swift build` and `xcodegen` do not run in the Claude sandbox; Johannes runs them in his own terminal.
@@ -31,7 +31,7 @@ Binding: the rules in [AGENTS.md](AGENTS.md) (loaded above) and the schema in [A
 ## Next tasks
 1. Launch the app and check: legacy import (accounts, appearance, privacy carried over), Mail fetch and send, Settings, sign-in for Google and IMAP. Turn findings into tasks.
 2. Check the CI on GitHub (`.github/workflows/check.yml`); fix it if it is red.
-3. Finish design master 23.10.: tokens are in; still open are the 427 texts with `de` and `en` from `contract/texts.json` (needs `en` in `utils/merge_strings.py`), menu widths on the 56 grid, and the delivery's open points and questions (T5, T6, N15, N20, N26 to N38, N43).
+3. Finish design master 23.10.: tokens, menu widths and `en` texts (211 keys matched from `contract/texts.json`) are in; still open are the delivery's open points and questions (T5, T6, N15, N20, N26 to N38, N43).
 4. Small open points for Johannes to decide:
    - Wording of `text.settings.provider.other` ("Andere") and of `calc.seed.supplier`.
    - Mapping of 9 assistant tools onto existing privacy switches: time → Clockodo, documents/file → Drive, stock/cart/shipment → catalog, projects/sampling → studio knowledge, appointment → calendar.

@@ -35,6 +35,13 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(measure.laneHeight(BlobSize(width: 1512, height: 982)), 898)
     }
 
+    func testMenuWidthSnapsToTheGrid() {
+        XCTAssertEqual(MenuWidthEngine.width(fitting: 40), 168)
+        XCTAssertEqual(MenuWidthEngine.width(fitting: 169), 224)
+        XCTAssertEqual(MenuWidthEngine.width(fitting: 224), 224)
+        XCTAssertEqual(MenuWidthEngine.width(fitting: 600), 280)
+    }
+
     func testLanesFollowTheAccordion() {
         let rest = LaneMode(rest: measure.laneRest)
         let avail = LaneLayoutEngine.available(1512, measure)
