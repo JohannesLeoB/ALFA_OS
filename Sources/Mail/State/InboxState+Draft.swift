@@ -12,6 +12,7 @@ extension InboxState {
             if case .draft(let id) = ref { return draft(id) }
             return nil
         }).first(where: { $0.state == .idle && $0.remoteID == nil && Self.blank($0.draft) }) {
+            setFrom(open.id, inlet: inlet)
             bring(.draft(open.id))
             return open.id
         }

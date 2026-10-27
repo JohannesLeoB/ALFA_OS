@@ -542,6 +542,22 @@ final class MailTests: XCTestCase {
     }
 
     @MainActor
+    func testComposeReusesABlankDraftFromTheOpenMailbox() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        let first = try XCTUnwrap(state.accounts.first)
+        var second = first
+        second.id = first.id + ".second"
+        state.accounts.append(second)
+        let id = try XCTUnwrap(state.compose())
+        XCTAssertEqual(state.draft(id)?.inlet, first.id)
+        state.selectedInlet = second.id
+        XCTAssertEqual(state.compose(), id)
+        XCTAssertEqual(state.draft(id)?.inlet, second.id)
+    }
+
+    @MainActor
     func testInboxStateArchiveGivesUndoToast() async throws {
         let rig = try Rig()
         let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
