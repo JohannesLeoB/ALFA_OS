@@ -20,6 +20,7 @@ Binding: the rules in [AGENTS.md](AGENTS.md) (loaded above) and the schema in [A
 - The assistant chat UI waits for the next design master (23.10.).
 - On first launch `LegacyImportStore` (Sources/Hub/Store) imports the old Hub database and the old app settings once; the old data is never changed.
 - The Airtable sale-price column name comes only from the company configuration (key `airtable.field.sale_price`, see `Resources/company.example.json`).
+- The settings tile is 96 px high (`settingsTileHeight`, decided by Johannes on 27.10., not 84 from the decision sheet of 18.10.).
 
 ## Sandbox (Claude Code)
 - `swift build` and `xcodegen` do not run in the Claude sandbox; Johannes runs them in his own terminal.
@@ -31,7 +32,6 @@ Binding: the rules in [AGENTS.md](AGENTS.md) (loaded above) and the schema in [A
 2. Check the CI on GitHub (`.github/workflows/check.yml`); fix it if it is red.
 3. Bring in design master 23.10.: update `Resources/tokens.json` from the master's TOKENBOGEN, run `python3 -I utils/generate_tokens.py`, review the diff, then build the assistant chat from the master.
 4. Small open points for Johannes to decide:
-   - Settings tile 96 px (TOKENBOGEN) vs. 84 px in the decision sheet of master 18.10.
    - Wording of `text.settings.provider.other` ("Andere") and of `calc.seed.supplier`.
    - Mapping of 9 assistant tools onto existing privacy switches: time → Clockodo, documents/file → Drive, stock/cart/shipment → catalog, projects/sampling → studio knowledge, appointment → calendar.
    - Contact toasts in Settings still use `mail.toast.contact*` keys.
