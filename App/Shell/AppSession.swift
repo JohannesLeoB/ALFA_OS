@@ -14,6 +14,7 @@ final class AppSession {
     let desk: DeskState
     var panes: [String: any Pane] = [:]
     private(set) var syncing = false
+    var assistantUnseen = false
     @ObservationIgnored private var watcher: Task<Void, Never>?
     @ObservationIgnored private var shelved: Set<Inlet.ID> = []
 
@@ -45,8 +46,6 @@ final class AppSession {
 
     var inbox: InboxState { assembly.inbox }
 
-    var unread: Int { inbox.totalUnread }
-
     var syncFailed: Bool {
         switch inbox.listState {
         case .failed, .offline, .signInExpired: true
@@ -54,7 +53,7 @@ final class AppSession {
         }
     }
 
-    var attention: Bool { unread > 0 || syncFailed }
+    var attention: Bool { assistantUnseen }
 
     var stackEmpty: Bool { panes[desk.currentID]?.stackEmpty ?? false }
 

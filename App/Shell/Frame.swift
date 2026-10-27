@@ -86,8 +86,10 @@ struct Frame: View {
         let x = lefts()
         return ZStack(alignment: .topLeading) {
             LaneHandle(desk: desk, lane: .leading, height: height)
+                .dwellHint("shell.handle.down.tooltip")
                 .offset(x: CGFloat(x[0] + widths.leading), y: CGFloat(measure.strip))
             LaneHandle(desk: desk, lane: .trailing, height: height)
+                .dwellHint("shell.handle.down.tooltip")
                 .offset(x: CGFloat(x[1] + widths.center), y: CGFloat(measure.strip))
         }
         .animation(laneAnimation(appearance), value: widths)

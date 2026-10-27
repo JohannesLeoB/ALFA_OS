@@ -12992,6 +12992,38 @@
         }
       }
     },
+    "shell.blobFace.tooltip" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klick: Bereiche · Doppelklick: Assistent"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Click: areas · Double-click: assistant"
+          }
+        }
+      }
+    },
+    "shell.handle.down.tooltip" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziehen · Doppelklick setzt zurück"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drag · double-click to reset"
+          }
+        }
+      }
+    },
     "shipping.issue.billingNumber" : {
       "localizations" : {
         "de" : {

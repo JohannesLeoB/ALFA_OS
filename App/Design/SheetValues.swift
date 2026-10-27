@@ -107,4 +107,6 @@ enum SheetValues {
     static let pressScaleChip = 0.92
     static let recipientInputHeight = 36.0
     static let suggestionColumnGap = 12.0
+    static let hintTick = 0.1
+    static let hintMaxWidth = 240.0
 }

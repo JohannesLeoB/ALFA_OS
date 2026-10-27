@@ -111,6 +111,7 @@ struct Blob: View {
             if dot { NoticeDot().padding(CGFloat(Tokens.Spacing.step8)) }
         }
         .contentShape(Rectangle())
+        .dwellHint("shell.blobFace.tooltip")
         .blobPress(desk: desk, held: $held, stretch: $stretch, squeezed: $squeezed, pressing: $pressing, tap: tap)
         .pointerStyle(held != nil ? .grabActive : open ? .default : .grabIdle)
         .accessibilityElement(children: .contain)
