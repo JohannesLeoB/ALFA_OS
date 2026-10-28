@@ -28,7 +28,7 @@ public enum MessageEngine {
         if asDraft, !bcc.isEmpty { head.append("Bcc: \(bcc.map(render).joined(separator: ", "))") }
         head.append("Subject: \(encodeHeader(clean(draft.subject)))")
         head.append("Message-ID: <\(messageID)@\(domain)>")
-        head += threading(draft)
+        head += threading(draft) + receipt(draft)
         let data = assemble(draft, head: head, boundaryBase: boundaryBase(messageID))
         return OutgoingMessage(data: data, sender: sender.address, recipients: recipients)
     }
@@ -42,12 +42,22 @@ public enum MessageEngine {
         }
         head.append("Subject: \(encodeHeader(clean(draft.subject)))")
         if let id = draft.messageID { head.append("Message-ID: <\(id)@\(domain)>") }
-        head += threading(draft)
+        head += threading(draft) + receipt(draft)
         return assemble(draft, head: head, boundaryBase: boundaryBase(draft.messageID ?? UUID().uuidString.lowercased()))
     }
 
     private static func boundaryBase(_ messageID: String) -> String {
         messageID.replacingOccurrences(of: "-", with: "")
+    }
+
+    private static func receipt(_ draft: Draft) -> [String] {
+        guard let address = draft.receiptTo?.trimmingCharacters(in: .whitespacesAndNewlines), !address.isEmpty else { return [] }
+        return ["Disposition-Notification-To: <\(clean(address))>"]
+    }
+
+    public static func receiptAddress(_ header: String?) -> String? {
+        let address = header?.trimmingCharacters(in: CharacterSet(charactersIn: "<> ").union(.whitespacesAndNewlines))
+        return address?.isEmpty == false ? address : nil
     }
 
     private static func threading(_ draft: Draft) -> [String] {

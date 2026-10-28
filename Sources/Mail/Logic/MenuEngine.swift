@@ -9,6 +9,10 @@ public enum MenuEngine {
         [.item(starred ? .unstar : .star), .item(.markUnread), .item(.move), .separator] + (original ? [.item(.original)] : []) + [.item(.spam)]
     }
 
+    public static func draftMore(receipt: Bool) -> [MenuLine] {
+        [.item(.receipt, checked: receipt)]
+    }
+
     public static func person(address: String, contact: Bool) -> [MenuLine] {
         [.head(address), .item(.copyAddress), .item(.writeMail), .item(contact ? .editContact : .saveContact)]
     }

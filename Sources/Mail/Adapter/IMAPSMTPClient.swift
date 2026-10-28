@@ -6,6 +6,8 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
 
     private static let summaryItems = ["UID", "FLAGS", "INTERNALDATE", "RFC822.SIZE", "ENVELOPE", "BODYSTRUCTURE",
                                        "BODY.PEEK[HEADER.FIELDS (REFERENCES)]"]
+    private static let receiptSection = "HEADER.FIELDS (DISPOSITION-NOTIFICATION-TO)"
+    private static let receiptItem = "BODY.PEEK[" + receiptSection + "]"
     private static let threadLimit = 20
     private static let inlineImageLimit = 2_097_152
     private static let inlineImageBudget = 8_388_608
@@ -277,7 +279,7 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
         return try await withIncoming { session in
             let selection = try await session.select(reference.folder, readOnly: true)
             guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
-            guard let fetched = try await session.fetch(uids: [reference.uid], items: ["UID", "ENVELOPE", "BODYSTRUCTURE"]).first,
+            guard let fetched = try await session.fetch(uids: [reference.uid], items: ["UID", "ENVELOPE", "BODYSTRUCTURE", Self.receiptItem]).first,
                   let structure = fetched.structure else {
                 throw MailFailure.messageNotFound(messageID)
             }
@@ -285,7 +287,9 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
             let join: ([IMAPAddress]) -> String? = { $0.isEmpty ? nil : $0.map(\.raw).joined(separator: ", ") }
             var draft = Draft(to: join(envelope?.to ?? []), cc: join(envelope?.cc ?? []), bcc: join(envelope?.bcc ?? []),
                               subject: envelope?.subject ?? "", body: "", inReplyTo: envelope?.inReplyTo,
-                              messageID: Self.localPart(envelope?.messageID))
+                              messageID: Self.localPart(envelope?.messageID),
+                              receiptTo: MessageEngine.receiptAddress(fetched.sections[Self.receiptSection].map(MIME.parseHeaders)?
+                                  .first { $0.name.lowercased() == "disposition-notification-to" }?.value))
             if let part = structure.firstPlainText {
                 draft.body = try await Self.decodedText(part, session: session, uid: reference.uid)
             }

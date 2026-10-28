@@ -179,6 +179,10 @@
   "mail.action.purge": {
    "de": "Endgültig löschen"
   },
+  "mail.action.receipt": {
+   "de": "Lesebestätigung anfordern",
+   "en": "Request Read Receipt"
+  },
   "mail.action.reply": {
    "de": "Antworten",
    "en": "Reply"

@@ -37,10 +37,8 @@ extension MessageCard {
         @ViewBuilder
         private func slotView(_ slot: Slot) -> some View {
             if slot.kind == .more {
-                if case .message = inbox.frontRef {
-                    SymbolButton(help: appearance.string("mail.action.more"), glyph: .more, hover: .fill) { openMore() }
-                        .background(AnchorMarker(box: moreAnchor))
-                }
+                SymbolButton(help: appearance.string("mail.action.more"), glyph: .more, hover: .fill) { openMore() }
+                    .background(AnchorMarker(box: moreAnchor))
             } else if slot.action == .send, slot.cost > ShellValues.commandIconCost {
                 TextButton(label: appearance.text("mail.action.send"), kind: .accent, disabled: slot.off, action: { perform(.send) }) { Glyph(.send) }
             } else if let action = slot.action, action == .fromProject || action == .toProject, let glyph = action.glyph {
@@ -71,6 +69,12 @@ extension MessageCard {
         }
 
         private func openMore() {
+            if case .draft(let id) = inbox.frontRef {
+                moreAnchor.showMenu(MenuLine.entries(MenuEngine.draftMore(receipt: inbox.asksReceipt(id)), appearance: appearance) { _ in
+                    inbox.toggleReceipt(id)
+                })
+                return
+            }
             guard case .message(let id) = inbox.frontRef else { return }
             let lines = MenuEngine.readingMore(starred: inbox.card(id)?.summary.flags.contains(.flagged) ?? false, original: inbox.offersOriginal)
             let entries = MenuLine.entries(lines, appearance: appearance) { action in

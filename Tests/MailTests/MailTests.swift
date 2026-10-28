@@ -225,6 +225,37 @@ final class MailTests: XCTestCase {
         XCTAssertFalse(text.contains("From:"))
     }
 
+    func testReadReceiptHeaderOnlyWhenAsked() throws {
+        let account = Account(id: "a", displayName: "Me", address: "me@example.com", incoming: ServerSettings(), outgoing: ServerSettings())
+        let plain = Draft(to: "x@example.com", subject: "s", body: "b")
+        var asked = plain
+        asked.receiptTo = "me@example.com"
+        let header = "Disposition-Notification-To: <me@example.com>"
+        XCTAssertFalse(String(decoding: try MessageEngine.build(plain, account: account).data, as: UTF8.self).contains("Disposition"))
+        XCTAssertTrue(String(decoding: try MessageEngine.build(asked, account: account).data, as: UTF8.self).contains(header))
+        XCTAssertTrue(String(decoding: MessageEngine.buildRaw(asked, domain: "d"), as: UTF8.self).contains(header))
+        XCTAssertFalse(String(decoding: MessageEngine.buildRaw(plain, domain: "d"), as: UTF8.self).contains("Disposition"))
+        XCTAssertEqual(MessageEngine.receiptAddress(" <me@example.com> "), "me@example.com")
+        XCTAssertNil(MessageEngine.receiptAddress("<>"))
+        XCTAssertNil(MessageEngine.receiptAddress(nil))
+        XCTAssertEqual(try JSONDecoder().decode(Draft.self, from: JSONEncoder().encode(asked)).receiptTo, "me@example.com")
+    }
+
+    @MainActor
+    func testReceiptToggleUsesTheDraftMailbox() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        XCTAssertFalse(state.asksReceipt(id))
+        state.toggleReceipt(id)
+        XCTAssertTrue(state.asksReceipt(id))
+        XCTAssertEqual(state.drafts.first { $0.id == id }?.draft.receiptTo, state.selectedAccount?.account)
+        XCTAssertEqual(MenuEngine.draftMore(receipt: true), [.item(.receipt, checked: true)])
+        state.toggleReceipt(id)
+        XCTAssertFalse(state.asksReceipt(id))
+    }
+
     func testBuilderRejectsMissingRecipientsExceptForDrafts() throws {
         let account = Account(id: "a", displayName: "", address: "me@example.com", incoming: ServerSettings(), outgoing: ServerSettings())
         XCTAssertThrowsError(try MessageEngine.build(Draft(subject: "s", body: "b"), account: account)) {
@@ -397,7 +428,7 @@ final class MailTests: XCTestCase {
     }
 
     func testMenusOfferOnlyHandledActions() {
-        let removed = ["note", "laterSend", "receipt", "template", "preview", "otherProject", "format"]
+        let removed = ["note", "laterSend", "template", "preview", "otherProject", "format"]
         XCTAssertTrue(Set(Action.allCases.map(\.rawValue)).isDisjoint(with: removed))
         let lines = MenuEngine.row(unread: true, draft: false) + MenuEngine.readingMore(starred: false, original: true)
             + MenuEngine.attachment()

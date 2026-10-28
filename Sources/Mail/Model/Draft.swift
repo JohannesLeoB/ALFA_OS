@@ -11,10 +11,11 @@ public struct Draft: Codable, Sendable, Equatable {
     public var threadID: String?
     var bodyHTML: String?
     var messageID: String?
+    public var receiptTo: String?
 
     public init(to: String? = nil, cc: String? = nil, bcc: String? = nil, subject: String, body: String,
                 attachments: [Attachment] = [], inReplyTo: String? = nil, threadID: String? = nil,
-                bodyHTML: String? = nil, messageID: String? = nil) {
+                bodyHTML: String? = nil, messageID: String? = nil, receiptTo: String? = nil) {
         self.to = to
         self.cc = cc
         self.bcc = bcc
@@ -25,10 +26,11 @@ public struct Draft: Codable, Sendable, Equatable {
         self.threadID = threadID
         self.bodyHTML = bodyHTML
         self.messageID = messageID
+        self.receiptTo = receiptTo
     }
 
     private enum CodingKeys: String, CodingKey {
-        case to, cc, bcc, subject, body, attachments, inReplyTo, threadID, bodyHTML, messageID
+        case to, cc, bcc, subject, body, attachments, inReplyTo, threadID, bodyHTML, messageID, receiptTo
     }
 
     public init(from decoder: any Decoder) throws {
@@ -43,6 +45,7 @@ public struct Draft: Codable, Sendable, Equatable {
         threadID = try container.decodeIfPresent(String.self, forKey: .threadID)
         bodyHTML = try container.decodeIfPresent(String.self, forKey: .bodyHTML)
         messageID = try container.decodeIfPresent(String.self, forKey: .messageID)
+        receiptTo = try container.decodeIfPresent(String.self, forKey: .receiptTo)
     }
 }
 

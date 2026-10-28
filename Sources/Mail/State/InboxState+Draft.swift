@@ -92,6 +92,16 @@ extension InboxState {
         return loaded
     }
 
+    public func asksReceipt(_ id: UUID) -> Bool {
+        drafts.first { $0.id == id }?.draft.receiptTo != nil
+    }
+
+    public func toggleReceipt(_ id: UUID) {
+        guard let card = drafts.first(where: { $0.id == id }) else { return }
+        let sender = accounts.first { $0.id == card.inlet }?.account
+        edit(id) { $0.receiptTo = $0.receiptTo == nil ? sender : nil }
+    }
+
     public func edit(_ id: UUID, _ change: (inout Draft) -> Void) {
         guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
         if drafts[index].state == .sent { return }
