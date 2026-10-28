@@ -43,7 +43,7 @@ final class ShellTests: XCTestCase {
             LaneLayoutEngine.drag(lane: .leading, proposed: proposed, start: start, mode: rest, measure: self.measure, rules: rules).preferred[0]
         }
         XCTAssertEqual(drag(400, mail), 280)
-        XCTAssertEqual(drag(200, mail), 224)
+        XCTAssertEqual(drag(200, mail), 200)
         XCTAssertEqual(drag(250, mail), 250)
         XCTAssertEqual(drag(400, AreaRules.area("settings", measure: measure)), 400)
     }

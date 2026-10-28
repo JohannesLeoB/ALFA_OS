@@ -82,9 +82,9 @@ enum LaneLayoutEngine {
             return next
         }
         var v = proposed
-        if let top = rules.maximum[o] { v = min(max(v, limit[o]), top) }
         let opposite = 2 - o
         if start[opposite] > fold && abs(v - start[opposite]) < Tokens.Size.laneSnap { v = start[opposite] }
+        if let top = rules.maximum[o] { v = min(v, top) }
         let order = rules.yield.filter { $0 != o }
         var w = start
         var f = start.map { $0 <= fold }
