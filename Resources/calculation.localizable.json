@@ -259,6 +259,9 @@
   "calc.direction.cheaper": {
    "de": "günstiger"
   },
+  "calc.direction.unchanged": {
+   "de": "unverändert"
+  },
   "calc.audit.adjusted": {
    "de": "Schätzung {1} % {2} angepasst ({3})",
    "args": [

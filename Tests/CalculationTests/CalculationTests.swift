@@ -665,6 +665,11 @@ final class CalculationTests: XCTestCase {
         let notice = try XCTUnwrap(Notice(json: summaries[0].1))
         XCTAssertEqual(notice.key, "calc.audit.adjusted")
         XCTAssertEqual(notice.arguments, ["10", "calc.direction.cheaper", "weil"])
+        XCTAssertEqual(EstimationEngine.directionKey(0), "calc.direction.unchanged")
+        XCTAssertEqual(EstimationEngine.directionKey(0.4), "calc.direction.unchanged")
+        XCTAssertEqual(EstimationEngine.directionKey(-0.4), "calc.direction.unchanged")
+        XCTAssertEqual(EstimationEngine.directionKey(0.6), "calc.direction.higher")
+        XCTAssertEqual(EstimationEngine.directionKey(-0.6), "calc.direction.cheaper")
     }
 
     func testIsKitchenDetection() {

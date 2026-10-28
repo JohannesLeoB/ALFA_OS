@@ -176,8 +176,9 @@ public actor EstimationEngine: EstimationPort {
             actorUserID: actorUserID, projectID: projectID, action: .estimateAdjusted, summary: summary.json))
     }
 
-    private static func directionKey(_ percentDelta: Double) -> String {
-        percentDelta >= 0 ? "calc.direction.higher" : "calc.direction.cheaper"
+    static func directionKey(_ percentDelta: Double) -> String {
+        if abs(percentDelta).rounded() == 0 { return "calc.direction.unchanged" }
+        return percentDelta > 0 ? "calc.direction.higher" : "calc.direction.cheaper"
     }
 
     static func map(_ result: EstimateResult, estimateID: String, projectID: String, maxEvidence: Int) -> CostEstimate {

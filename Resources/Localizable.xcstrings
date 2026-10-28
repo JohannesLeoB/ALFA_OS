@@ -5306,6 +5306,16 @@
         }
       }
     },
+    "calc.direction.unchanged" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "unverändert"
+          }
+        }
+      }
+    },
     "calc.exclude.appliances" : {
       "localizations" : {
         "de" : {
