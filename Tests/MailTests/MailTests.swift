@@ -558,6 +558,24 @@ final class MailTests: XCTestCase {
     }
 
     @MainActor
+    func testEachMailboxKeepsItsOwnStack() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        let first = try XCTUnwrap(state.accounts.first)
+        var second = first
+        second.id = first.id + ".second"
+        state.accounts.append(second)
+        let id = try XCTUnwrap(state.compose())
+        await state.selectAccount(second.id)
+        XCTAssertEqual(state.stackCount, 0)
+        await state.selectAccount(first.id)
+        XCTAssertEqual(state.stackCount, 1)
+        XCTAssertEqual(state.frontRef, .draft(id))
+        XCTAssertEqual(state.selectedFolder, "INBOX")
+    }
+
+    @MainActor
     func testInboxStateArchiveGivesUndoToast() async throws {
         let rig = try Rig()
         let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())

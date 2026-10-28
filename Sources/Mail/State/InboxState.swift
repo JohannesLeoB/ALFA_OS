@@ -28,6 +28,7 @@ public final class InboxState {
     var drafts: [OpenDraft] = []
     var stack: [CardRef] = []
     var front: CardRef?
+    var parked: [Inlet.ID: ParkedDesk] = [:]
     var picked: [String] = []
     public var searchScope = SearchScope.all
     public var searching = false
@@ -141,6 +142,7 @@ public final class InboxState {
 
     func refreshAccounts() {
         accounts = mailbox.accounts
+        parked = parked.filter { key, _ in accounts.contains { $0.id == key } }
         if let selectedInlet, !accounts.contains(where: { $0.id == selectedInlet }) {
             generation += 1
             self.selectedInlet = accounts.first?.id
@@ -156,12 +158,19 @@ public final class InboxState {
 
     public func selectAccount(_ id: Inlet.ID) async {
         guard accounts.contains(where: { $0.id == id }) else { return }
+        if let current = selectedInlet, current != id {
+            parked[current] = ParkedDesk(stack: stack, front: front, folder: selectedFolder, message: selectedMessage)
+        }
+        let restored = id == selectedInlet ? ParkedDesk(stack: stack, front: front) : parked.removeValue(forKey: id) ?? ParkedDesk()
         selectedInlet = id
-        selectedFolder = nil
+        stack = restored.stack
+        front = restored.front
+        picked = []
+        selectedFolder = restored.folder
         query = ""
         typed = ""
         summaries = []
-        selectedMessage = nil
+        selectedMessage = restored.message
         loadFoldersFromMailbox()
         await loadSelection()
     }
