@@ -68,6 +68,29 @@ private final class ScriptedProvider: ConversationPort, @unchecked Sendable {
     var count: Int { requests.count }
 }
 
+private final class FlakyProvider: ConversationPort, @unchecked Sendable {
+    private let failures: Box<Int>
+
+    init(failures: Int) { self.failures = Box(failures) }
+
+    func respond(_ request: ChatRequest) async throws -> Reply {
+        Reply(text: "ok", toolUses: [], stopReason: nil)
+    }
+
+    func stream(_ request: ChatRequest) -> AsyncThrowingStream<String, any Error> {
+        let fail = failures.value > 0
+        if fail { failures.value -= 1 }
+        return AsyncThrowingStream { continuation in
+            if fail {
+                continuation.finish(throwing: ClaudeFailure.overloaded)
+            } else {
+                continuation.yield("Antwort")
+                continuation.finish()
+            }
+        }
+    }
+}
+
 private final class FakeAlarm: AlarmPort, @unchecked Sendable {
     let scheduled = Box<[Todo]>([])
     let cancelled = Box<[String]>([])
@@ -522,5 +545,111 @@ final class AssistantTests: XCTestCase {
         ]
         let data = try JSONEncoder().encode(blocks)
         XCTAssertEqual(try JSONDecoder().decode([ContentBlock].self, from: data), blocks)
+    }
+
+    func testThreadEngineMapsTurnStatesAndBlocks() {
+        let ref = AttachmentRef(fileName: "plan.pdf", mimeType: "application/pdf", byteCount: 1, relativePath: "x", sha256: "s")
+        let question = Message(role: .user, blocks: [.text("Frage"), .document(ref)])
+        let answer = Message(role: .assistant, blocks: [
+            .toolActivity(label: "Mail gelesen", isError: false), .toolUse(id: "1", name: "n", inputJSON: Data()),
+            .mailDraft(MailDraft(to: "vogt@example.com", subject: "Aufmass", body: "b")), .text("Fertig"), .unreadable,
+        ])
+        let streaming = Message(role: .assistant, blocks: [.text("")], status: .streaming)
+        let failed = Message(role: .assistant, blocks: [.text("kaputt")], status: .failed("kaputt"))
+        let turns = ThreadEngine.turns([question, answer, streaming, failed])
+        XCTAssertEqual(turns.map(\.kind), [.user, .assistant, .streaming, .failed])
+        XCTAssertEqual(turns[0].blocks, [.file("plan.pdf"), .text("Frage")])
+        XCTAssertEqual(turns[1].blocks, [
+            .activity(label: "Mail gelesen", failed: false),
+            .draft(DraftSummary(kind: .mail, title: "Aufmass", line: "vogt@example.com")), .text("Fertig"), .unreadable,
+        ])
+        XCTAssertTrue(turns[2].blocks.isEmpty)
+        XCTAssertTrue(turns[3].blocks.isEmpty)
+        XCTAssertEqual(ThreadEngine.attachments(question), [ref])
+        XCTAssertEqual(ThreadEngine.blocks(.estimate(estimateID: "e", projectID: "p", minNet: 1, maxNet: 2, midNet: 1.5,
+                                                     confidence: 0.4, evidenceCount: 1)), [.estimate(minNet: 1, maxNet: 2)])
+        XCTAssertEqual(ThreadEngine.blocks(.driveFiles([DriveLink(id: "d", name: "a.pdf", mimeType: "m")])), [.file("a.pdf")])
+    }
+
+    func testChatStoreRemoveKeepsOrderAfterReload() async throws {
+        let database = try SQLiteStore.inMemory()
+        let order: [String] = try await MainActor.run {
+            let chat = ChatStore(database: database, userID: "u")
+            let messages = ["a", "b", "c", "d"].map { Message.text($0, role: .user) }
+            for message in messages { try chat.append(message, to: .home) }
+            try chat.remove([messages[1].id], from: .home)
+            try chat.append(Message.text("e", role: .user), to: .home)
+            let reloaded = ChatStore(database: database, userID: "u")
+            try reloaded.loadIfNeeded(.home)
+            return reloaded.messages(for: .home).map(\.text)
+        }
+        XCTAssertEqual(order, ["a", "c", "d", "e"])
+    }
+
+    func testChatStateRetriesFailedTurnAndClearsWithUndo() async throws {
+        let database = try SQLiteStore.inMemory()
+        let state = await MainActor.run {
+            let chat = ChatStore(database: database, userID: "u")
+            let engine = ConversationEngine(chat: chat, provider: FlakyProvider(failures: 1), registry: ToolRegistry(tools: []), text: KeyText())
+            let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+            return ChatState(chat: chat, engine: engine, attachments: AttachmentStore(root: root), privacy: PrivacyStore(database: database))
+        }
+        await MainActor.run { state.draft = "Frage" }
+        let firstDone = await state.send(choices: PrivacyChoices())
+        XCTAssertFalse(firstDone)
+        let failedKinds = await MainActor.run { state.turns.map(\.kind) }
+        XCTAssertEqual(failedKinds, [.user, .failed])
+        let retried = await state.retry(choices: PrivacyChoices())
+        XCTAssertTrue(retried)
+        let after: ([ChatTurn.Kind], [TurnBlock]) = await MainActor.run { (state.turns.map(\.kind), state.turns.last?.blocks ?? []) }
+        XCTAssertEqual(after.0, [.user, .assistant])
+        XCTAssertEqual(after.1, [.text("Antwort")])
+        let cleared: (Int, ChatState.Note?) = await MainActor.run {
+            state.clear()
+            return (state.turns.count, state.note)
+        }
+        XCTAssertEqual(cleared.0, 0)
+        XCTAssertEqual(cleared.1, .cleared)
+        let restored = await MainActor.run {
+            state.undo()
+            return (state.turns.map(\.kind), state.note)
+        }
+        XCTAssertEqual(restored.0, [.user, .assistant])
+        XCTAssertNil(restored.1)
+    }
+
+    func testChatStateRejectsOversizedTextAttachment() async throws {
+        let database = try SQLiteStore.inMemory()
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let big = Attachment(filename: "lang.txt", mimeType: "text/plain",
+                             data: Data(String(repeating: "a", count: AttachmentStore.textCharacterLimit + 1).utf8))
+        XCTAssertThrowsError(try AttachmentStore(root: root).save(big)) { error in
+            XCTAssertEqual(error as? AttachmentStore.Failure, .tooLarge("lang.txt"))
+        }
+        let note = await MainActor.run {
+            let chat = ChatStore(database: database, userID: "u")
+            let engine = ConversationEngine(chat: chat, provider: ScriptedProvider([]), registry: ToolRegistry(tools: []), text: KeyText())
+            let state = ChatState(chat: chat, engine: engine, attachments: AttachmentStore(root: root), privacy: PrivacyStore(database: database))
+            state.attach([Attachment(filename: "x.bin", mimeType: "application/octet-stream", data: Data([1]))])
+            return (state.note, state.pending.isEmpty, state.canSend)
+        }
+        XCTAssertEqual(note.0, .rejected(.unsupported("x.bin")))
+        XCTAssertTrue(note.1)
+        XCTAssertFalse(note.2)
+    }
+
+    func testEngineLabelsADisabledCategoryAsOff() async throws {
+        let database = try SQLiteStore.inMemory()
+        let tools = try makeTools(database: database)
+        let call = ToolUse(id: "u1", name: "create_task", inputJSON: Data(#"{"titel":"x"}"#.utf8))
+        let provider = ScriptedProvider([
+            Reply(text: "", toolUses: [call], stopReason: "tool_use"),
+            Reply(text: "ok", toolUses: [], stopReason: "end_turn"),
+        ])
+        let chat = await MainActor.run { ChatStore(database: database, userID: "u") }
+        let engine = await MainActor.run { ConversationEngine(chat: chat, provider: provider, registry: ToolRegistry(tools: tools), text: KeyText()) }
+        await engine.send("hallo", scope: .home, privacy: PrivacySnapshot(settings: PrivacySettings(disabled: [.tasks])))
+        let blocks = await MainActor.run { chat.messages(for: .home).last?.blocks ?? [] }
+        XCTAssertTrue(blocks.contains(.toolActivity(label: "assistant.activity.categoryOff|settings.privacy.category.tasks", isError: true)))
     }
 }

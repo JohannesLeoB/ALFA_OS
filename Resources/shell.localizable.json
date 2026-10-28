@@ -1,13 +1,141 @@
 {
  "_rule": "Keys used by the shell views in App/Shell; text is resolved by the app.",
  "keys": {
+  "assistant.failed": {
+   "de": "Claude antwortet gerade nicht. In den Einstellungen neu verbinden.",
+   "en": "Claude isn’t responding right now. Reconnect in Settings."
+  },
+  "assistant.field": {
+   "de": "Frage stellen …",
+   "en": "Ask a question …"
+  },
+  "assistant.idle": {
+   "de": "Füge Text, Dateien oder Links ein.",
+   "en": "Add text, files or links."
+  },
+  "assistant.noMessage": {
+   "de": "Keine Nachricht offen.",
+   "en": "No message open."
+  },
+  "assistant.title": {
+   "de": "Assistent",
+   "en": "Assistant"
+  },
+  "shell.assistantAttachment.tooLarge": {
+   "de": "%@ ist zu groß",
+   "en": "%@ is too large"
+  },
+  "shell.assistantAttachment.unreadable": {
+   "de": "%@ ist nicht lesbar",
+   "en": "%@ can’t be read"
+  },
+  "shell.assistantAttachment.unsupported": {
+   "de": "%@ wird nicht unterstützt",
+   "en": "%@ isn’t supported"
+  },
+  "shell.assistantCard.breakdownLines": {
+   "de": "%@ Positionen",
+   "en": "%@ items"
+  },
+  "shell.assistantCard.estimateRange": {
+   "de": "%@ – %@ € netto",
+   "en": "%@ – %@ € net"
+  },
+  "shell.assistantCard.kind.appointment": {
+   "de": "Termin",
+   "en": "Appointment"
+  },
+  "shell.assistantCard.kind.calendar": {
+   "de": "Kalender",
+   "en": "Calendar"
+  },
+  "shell.assistantCard.kind.cart": {
+   "de": "Warenkorb",
+   "en": "Cart"
+  },
+  "shell.assistantCard.kind.contact": {
+   "de": "Kontakt",
+   "en": "Contact"
+  },
+  "shell.assistantCard.kind.estimate": {
+   "de": "Schätzung",
+   "en": "Estimate"
+  },
+  "shell.assistantCard.kind.file": {
+   "de": "Datei",
+   "en": "File"
+  },
+  "shell.assistantCard.kind.mail": {
+   "de": "Mail",
+   "en": "Mail"
+  },
+  "shell.assistantCard.kind.task": {
+   "de": "Aufgabe",
+   "en": "Task"
+  },
+  "shell.assistantCard.mailTo": {
+   "de": "An %@",
+   "en": "To %@"
+  },
+  "shell.assistantCard.off": {
+   "de": "Der Assistent ist ausgeschaltet.",
+   "en": "The assistant is turned off."
+  },
+  "shell.assistantCard.unreadable": {
+   "de": "Nicht lesbar",
+   "en": "Unreadable"
+  },
+  "shell.assistantMessage.failed": {
+   "de": "Nicht beantwortet",
+   "en": "No answer"
+  },
+  "shell.assistantMessage.thinking": {
+   "de": "Denkt nach …",
+   "en": "Thinking …"
+  },
+  "shell.assistantScope.home": {
+   "de": "Ohne Projekt",
+   "en": "No project"
+  },
+  "shell.assistantThread.cleared": {
+   "de": "Verlauf gelöscht",
+   "en": "History cleared"
+  },
   "shell.blobFace.tooltip": {
    "de": "Klick: Bereiche · Doppelklick: Assistent",
    "en": "Click: areas · Double-click: assistant"
   },
+  "shell.chipRemove.assistant.tooltip": {
+   "de": "Entfernen",
+   "en": "Remove"
+  },
   "shell.handle.down.tooltip": {
    "de": "Ziehen · Doppelklick setzt zurück",
    "en": "Drag · double-click to reset"
+  },
+  "shell.symbolButton.assistantAttach.tooltip": {
+   "de": "Datei anhängen",
+   "en": "Attach File"
+  },
+  "shell.symbolButton.assistantAttachOff.tooltip": {
+   "de": "Dateien im Chat sind aus",
+   "en": "Files in chat are off"
+  },
+  "shell.symbolButton.assistantClear.tooltip": {
+   "de": "Verlauf löschen",
+   "en": "Clear History"
+  },
+  "shell.symbolButton.assistantSend.tooltip": {
+   "de": "Senden",
+   "en": "Send"
+  },
+  "shell.textButton.assistantOff.text": {
+   "de": "Einstellungen öffnen",
+   "en": "Open Settings"
+  },
+  "shell.textButton.assistantRetry.text": {
+   "de": "Erneut versuchen",
+   "en": "Try Again"
   }
  }
 }

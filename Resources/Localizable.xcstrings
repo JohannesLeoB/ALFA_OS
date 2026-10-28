@@ -80,6 +80,22 @@
         }
       }
     },
+    "assistant.activity.categoryOff" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{1} ist für den Assistenten aus"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{1} is off for the assistant"
+          }
+        }
+      }
+    },
     "assistant.activity.create_airtable_kontakt" : {
       "localizations" : {
         "de" : {
@@ -1458,6 +1474,12 @@
             "state" : "translated",
             "value" : "Claude antwortet gerade nicht. In den Einstellungen neu verbinden."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude isn’t responding right now. Reconnect in Settings."
+          }
         }
       }
     },
@@ -1802,6 +1824,12 @@
             "state" : "translated",
             "value" : "Füge Text, Dateien oder Links ein."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add text, files or links."
+          }
         }
       }
     },
@@ -2126,6 +2154,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keine Nachricht offen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No message open."
           }
         }
       }
@@ -3197,6 +3231,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Assistent"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assistant"
           }
         }
       }
@@ -13130,6 +13170,326 @@
         }
       }
     },
+    "shell.assistantAttachment.tooLarge" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ist zu groß"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ is too large"
+          }
+        }
+      }
+    },
+    "shell.assistantAttachment.unreadable" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ist nicht lesbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ can’t be read"
+          }
+        }
+      }
+    },
+    "shell.assistantAttachment.unsupported" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ wird nicht unterstützt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ isn’t supported"
+          }
+        }
+      }
+    },
+    "shell.assistantCard.breakdownLines" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Positionen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ items"
+          }
+        }
+      }
+    },
+    "shell.assistantCard.estimateRange" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ – %@ € netto"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ – %@ € net"
+          }
+        }
+      }
+    },
+    "shell.assistantCard.kind.appointment" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Termin"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appointment"
+          }
+        }
+      }
+    },
+    "shell.assistantCard.kind.calendar" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalender"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar"
+          }
+        }
+      }
+    },
+    "shell.assistantCard.kind.cart" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warenkorb"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cart"
+          }
+        }
+      }
+    },
+    "shell.assistantCard.kind.contact" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontakt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact"
+          }
+        }
+      }
+    },
+    "shell.assistantCard.kind.estimate" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schätzung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimate"
+          }
+        }
+      }
+    },
+    "shell.assistantCard.kind.file" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datei"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File"
+          }
+        }
+      }
+    },
+    "shell.assistantCard.kind.mail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
+          }
+        }
+      }
+    },
+    "shell.assistantCard.kind.task" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufgabe"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Task"
+          }
+        }
+      }
+    },
+    "shell.assistantCard.mailTo" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To %@"
+          }
+        }
+      }
+    },
+    "shell.assistantCard.off" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Assistent ist ausgeschaltet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The assistant is turned off."
+          }
+        }
+      }
+    },
+    "shell.assistantCard.unreadable" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht lesbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unreadable"
+          }
+        }
+      }
+    },
+    "shell.assistantMessage.failed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht beantwortet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No answer"
+          }
+        }
+      }
+    },
+    "shell.assistantMessage.thinking" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Denkt nach …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thinking …"
+          }
+        }
+      }
+    },
+    "shell.assistantScope.home" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Projekt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No project"
+          }
+        }
+      }
+    },
+    "shell.assistantThread.cleared" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlauf gelöscht"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History cleared"
+          }
+        }
+      }
+    },
     "shell.blobFace.tooltip" : {
       "localizations" : {
         "de" : {
@@ -13146,6 +13506,22 @@
         }
       }
     },
+    "shell.chipRemove.assistant.tooltip" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
+          }
+        }
+      }
+    },
     "shell.handle.down.tooltip" : {
       "localizations" : {
         "de" : {
@@ -13158,6 +13534,102 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Drag · double-click to reset"
+          }
+        }
+      }
+    },
+    "shell.symbolButton.assistantAttach.tooltip" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datei anhängen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attach File"
+          }
+        }
+      }
+    },
+    "shell.symbolButton.assistantAttachOff.tooltip" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien im Chat sind aus"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Files in chat are off"
+          }
+        }
+      }
+    },
+    "shell.symbolButton.assistantClear.tooltip" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlauf löschen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear History"
+          }
+        }
+      }
+    },
+    "shell.symbolButton.assistantSend.tooltip" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send"
+          }
+        }
+      }
+    },
+    "shell.textButton.assistantOff.text" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen öffnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
+          }
+        }
+      }
+    },
+    "shell.textButton.assistantRetry.text" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut versuchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try Again"
           }
         }
       }

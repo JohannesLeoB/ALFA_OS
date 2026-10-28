@@ -1,6 +1,10 @@
 {
  "_rule": "Keys of the Assistant module. Placeholders {1}.. are 1-based arguments. Arguments are literal data; keys that start with 'calc.' are resolved by the presenter.",
  "keys": {
+  "assistant.activity.categoryOff": {
+   "de": "{1} ist für den Assistenten aus",
+   "en": "{1} is off for the assistant"
+  },
   "assistant.activity.create_airtable_kontakt": {
    "de": "Kontakt-Vorschlag erstellt"
   },

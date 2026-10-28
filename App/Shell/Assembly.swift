@@ -35,6 +35,7 @@ final class Assembly {
     let chat: ChatStore
     let privacy: PrivacyStore
     let engine: ConversationEngine
+    let conversation: ChatState
     let shelf: ToolShelf
 
     init(openBrowser: @escaping @Sendable (URL) async -> Bool) throws {
@@ -92,11 +93,14 @@ final class Assembly {
         self.inbox = inbox
         self.receipts = receipts
         self.chat = chat
-        self.privacy = PrivacyStore(database: database)
+        let privacy = PrivacyStore(database: database)
+        self.privacy = privacy
         self.shelf = shelf
-        engine = ConversationEngine(
+        let engine = ConversationEngine(
             chat: chat, provider: claude, registry: shelf.registry(), text: text,
             memory: MemoryStore(database: database, userID: person.id), log: IntegrationLogStore(database: database))
+        self.engine = engine
+        conversation = ChatState(chat: chat, engine: engine, attachments: attachments, privacy: privacy)
     }
 
     func reshelve() {

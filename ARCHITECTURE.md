@@ -117,7 +117,7 @@ Logic -> Model
 
 ## Composition root
 
-`App/Shell/Assembly.swift` builds every dependency once: it opens the database, runs the legacy import, creates the stores, the provider list (`ProviderPort`), `Connections`, `InboxState`, `ChatStore`, `ToolShelf` and `ConversationEngine`. `App/Shell/AppSession.swift` owns the `Assembly` and the desk state, creates the panes (`mail`, `settings`) and starts mail sync. `App/Shell/AlfaApp.swift` creates the session with `AppSession.live()`. No other file constructs a client or store. `ToolShelf` creates the assistant tools for the integrations whose inlet is connected; `Assembly.reshelve()` rebuilds the registry when inlets change.
+`App/Shell/Assembly.swift` builds every dependency once: it opens the database, runs the legacy import, creates the stores, the provider list (`ProviderPort`), `Connections`, `InboxState`, `ChatStore`, `ToolShelf`, `ConversationEngine` and `ChatState`. `App/Shell/AppSession.swift` owns the `Assembly` and the desk state, creates the panes (`mail`, `settings`) and starts mail sync. `App/Shell/AlfaApp.swift` creates the session with `AppSession.live()`. No other file constructs a client or store. `ToolShelf` creates the assistant tools for the integrations whose inlet is connected; `Assembly.reshelve()` rebuilds the registry when inlets change.
 
 ## Data
 
@@ -146,7 +146,7 @@ Each module that has user-facing text owns `Resources/<name>.localizable.json`: 
 
 ## Not wired
 
-- The assistant has no view. `Assembly` builds `ConversationEngine`, `ChatStore` and `PrivacyStore`, and the privacy choices appear in settings, but no file in `App` starts a conversation. The chat view is added when its design exists.
+- The assistant chat (`App/Shell/AssistantPanel.swift`, driven by `ChatState`) opens in the blob. Drafts, estimates and calendar links show as one generic card, files as chips; the design has no own form for them yet. The scope row has no project source and always shows the home scope.
 - These tools exist and are tested but `ToolShelf` does not register them: `FindOffersTool`, `ListProjectsTool`, `ListSamplesTool`, `LookupCustomerTool`, `ProposeContactTool`, `ProposeFileTool`, `ReadFileTool`, `SearchContactsTool`, `StudioKnowledgeTool`.
 - The modules Catalog, Project, Today and Survey do not exist yet.
 - `apps.json` lists two apps, Mail and Settings; panes exist for exactly those.

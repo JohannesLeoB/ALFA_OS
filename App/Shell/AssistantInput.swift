@@ -1,0 +1,56 @@
+import Assistant
+import Design
+import SwiftUI
+
+struct AssistantInput: View {
+    @Environment(\.appearance) private var appearance
+    @Bindable var conversation: ChatState
+    let off: Bool
+    let files: Bool
+    let attach: () -> Void
+    let send: () -> Void
+    let close: () -> Void
+    @FocusState private var focused: Bool
+
+    private var ready: Bool { !off && conversation.canSend }
+
+    var body: some View {
+        HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
+            BlobSymbolButton(help: appearance.string(files ? "shell.symbolButton.assistantAttach.tooltip" : "shell.symbolButton.assistantAttachOff.tooltip"),
+                             glyph: .attach, dimmed: !files) { if files { attach() } }
+            ZStack(alignment: .leading) {
+                if conversation.draft.isEmpty {
+                    appearance.text("assistant.field")
+                        .lineLimit(1)
+                        .opacity(SheetValues.placeholderOpacity)
+                        .allowsHitTesting(false)
+                }
+                TextField("", text: $conversation.draft)
+                    .textFieldStyle(.plain)
+                    .focused($focused)
+                    .disabled(off)
+                    .onSubmit { send() }
+                    .onKeyPress(.escape) {
+                        close()
+                        return .handled
+                    }
+                    .accessibilityLabel(appearance.text("assistant.field"))
+            }
+            .padding(.horizontal, CGFloat(Tokens.Spacing.step4))
+            .frame(maxWidth: .infinity)
+            BlobSymbolButton(help: appearance.string("shell.symbolButton.assistantSend.tooltip"), glyph: .send,
+                             plate: ready ? \.onInverse : nil, tone: ready ? \.inverse : \.onInverseTertiary, hovers: false) {
+                if ready { send() }
+            }
+        }
+        .padding(.leading, CGFloat(Tokens.Spacing.step4))
+        .padding(.trailing, CGFloat(Tokens.Spacing.step8))
+        .frame(height: CGFloat(Tokens.Size.assistantFieldHeight))
+        .background(RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row)).fill(appearance.color(\.inverseField)))
+        .opacity(off ? Tokens.Opacity.disabled : 1)
+        .task {
+            try? await Task.sleep(for: .seconds(Tokens.Duration.toggle))
+            focused = true
+        }
+    }
+}

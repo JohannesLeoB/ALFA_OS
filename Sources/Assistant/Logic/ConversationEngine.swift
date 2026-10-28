@@ -89,7 +89,7 @@ public final class ConversationEngine {
         let turn = Turn(
             convo: prepared.convo, system: system, definitions: definitions, allowed: Set(allowedTools.map(\.name)),
             model: model, scope: context.scope, actor: context.actorUserID, placeholderID: placeholder.id,
-            conversation: scope)
+            conversation: scope, disabled: privacy.settings.disabled)
 
         let task = Task { [weak self] in
             guard let self else { return }
@@ -121,6 +121,7 @@ public final class ConversationEngine {
         let actor: String
         let placeholderID: UUID
         let conversation: ConversationScope
+        let disabled: Set<PrivacyCategory>
     }
 
     struct Outcome {
@@ -205,7 +206,7 @@ public final class ConversationEngine {
                 let key = Self.callKey(name: use.name, inputJSON: use.inputJSON)
                 let isRepeat = seen.contains(key)
                 seen.insert(key)
-                let label = activityLabel(name: use.name, inputJSON: use.inputJSON)
+                let label = blockedLabel(name: use.name, turn: turn) ?? activityLabel(name: use.name, inputJSON: use.inputJSON)
                 let result: ToolResult
                 if isRepeat {
                     repeated = true
@@ -317,6 +318,12 @@ public final class ConversationEngine {
         let query = ToolInput(json: inputJSON).text("query")
         let base = registry.tool(named: name).map { text.text($0.activityKey, []) } ?? name
         return query.isEmpty ? base : "\(base) \u{00B7} \(query)"
+    }
+
+    func blockedLabel(name: String, turn: Turn) -> String? {
+        guard turn.allowed.contains(name) == false, let tool = registry.tool(named: name),
+              turn.disabled.contains(tool.privacy) else { return nil }
+        return say("assistant.activity.categoryOff", say("settings.privacy.category." + tool.privacy.rawValue))
     }
 
     func describe(_ error: any Error) -> String {

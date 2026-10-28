@@ -1,4 +1,5 @@
 import Design
+import Shell
 import SwiftUI
 
 struct ToastView: View {
@@ -6,14 +7,20 @@ struct ToastView: View {
     let message: Text
     var undoLabel: Text?
     var onUndo: (() -> Void)?
+    var failed = false
     let onDismiss: () -> Void
 
     private var stay: Double {
-        onUndo == nil ? Tokens.Duration.toast : Tokens.Duration.toastUndo
+        if failed { return Tokens.Duration.toastFail }
+        return onUndo == nil ? Tokens.Duration.toast : Tokens.Duration.toastUndo
     }
 
     var body: some View {
         HStack(spacing: CGFloat(Tokens.Spacing.step12)) {
+            if failed {
+                Glyph(.alert)
+                    .padding(.leading, -CGFloat(Tokens.Spacing.step4))
+            }
             message.lineLimit(1)
             if let undoLabel, let onUndo {
                 Button(action: onUndo) {

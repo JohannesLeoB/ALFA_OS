@@ -123,6 +123,8 @@ struct Blob: View {
     private func content(up: Bool) -> some View {
         if desk.menuOpen {
             BlobMenu(session: session, up: up)
+        } else if desk.assistantOpen {
+            AssistantPanel(session: session)
         }
     }
 

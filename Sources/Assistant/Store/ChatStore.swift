@@ -129,6 +129,33 @@ public final class ChatStore {
         }
     }
 
+    func remove(_ ids: Set<UUID>, from scope: ConversationScope) throws {
+        try loadIfNeeded(scope)
+        let key = scope.rawKey
+        let owner = userID
+        let names = ids.map(\.uuidString)
+        let remaining = (byScope[key] ?? []).filter { ids.contains($0.id) == false }
+        saveState = .saving
+        do {
+            try database.write { db in
+                _ = try StoredMessage
+                    .filter(names.contains(Column("id")))
+                    .filter(Column("threadScopeKey") == key)
+                    .filter(Column("userID") == owner)
+                    .deleteAll(db)
+                for (index, message) in remaining.enumerated() {
+                    try db.execute(sql: "UPDATE chatMessages SET sequence = ? WHERE id = ?",
+                                   arguments: [index, message.id.uuidString])
+                }
+            }
+            byScope[key] = remaining
+            saveState = .saved(Date())
+        } catch {
+            saveState = .failed(error.localizedDescription)
+            throw error
+        }
+    }
+
     public func clear(_ scope: ConversationScope) throws {
         let key = scope.rawKey
         let owner = userID

@@ -50,7 +50,8 @@ public struct AttachmentStore: Sendable {
         case .pdf:
             if data.count > Self.documentByteLimit { throw Failure.tooLarge(file.filename) }
         case .text:
-            guard String(data: data, encoding: .utf8) != nil else { throw Failure.unreadable(file.filename) }
+            guard let text = String(data: data, encoding: .utf8) else { throw Failure.unreadable(file.filename) }
+            if text.count > Self.textCharacterLimit { throw Failure.tooLarge(file.filename) }
         }
         let digest = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
         let ext = mime == file.mimeType ? (file.filename as NSString).pathExtension : "jpg"

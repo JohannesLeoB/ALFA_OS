@@ -93,7 +93,13 @@ struct Frame: View {
         let x = lefts()
         return ZStack(alignment: .topLeading) {
             ForEach(LaneKind.allCases, id: \.self) { lane in
-                if let toast = pane?.toast(lane) {
+                if lane == .trailing && session.conversation.note != nil {
+                    AssistantToast(conversation: session.conversation)
+                        .fixedSize(horizontal: true, vertical: false)
+                        .padding(.bottom, CGFloat(Tokens.Size.footerHeight + Tokens.Spacing.step8))
+                        .frame(width: CGFloat(widths.width(lane)), height: height, alignment: .bottom)
+                        .offset(x: CGFloat(x[lane.index]), y: CGFloat(measure.strip))
+                } else if let toast = pane?.toast(lane) {
                     toast
                         .fixedSize(horizontal: true, vertical: false)
                         .padding(.bottom, CGFloat(Tokens.Size.footerHeight + Tokens.Spacing.step8))
