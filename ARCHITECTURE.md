@@ -13,7 +13,7 @@
 | Hub | Core, Design, Storage, GRDB |
 | Mail | Core, Design, Shell, Storage, Hub, GRDB |
 | Calculation | Core, Storage, GRDB |
-| Assistant | Core, Storage, Hub, Calculation, GRDB |
+| Assistant | Core, Design, Storage, Hub, Calculation, GRDB |
 | Google | Core, Hub, Mail, Assistant |
 | Airtable | Core, Hub, Assistant, Calculation |
 | ClickUp | Hub, Assistant |
@@ -28,7 +28,7 @@ Storage -> Core
 Hub -> Storage, Design
 Mail -> Hub, Shell, Storage
 Calculation -> Storage
-Assistant -> Hub, Calculation
+Assistant -> Hub, Calculation, Design
 Google -> Mail, Assistant
 Airtable -> Assistant, Calculation
 ClickUp, Sevdesk, Clockodo, Shipping -> Assistant

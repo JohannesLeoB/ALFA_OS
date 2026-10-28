@@ -1,5 +1,6 @@
 import CryptoKit
 import Core
+import Design
 import Foundation
 import ImageIO
 import UniformTypeIdentifiers
@@ -15,9 +16,9 @@ public struct AttachmentStore: Sendable {
 
     static let imageLongEdge = 1568
     static let imageByteLimit = 4_000_000
-    static let documentByteLimit = 20_000_000
+    static let documentByteLimit = Tokens.Count.chatDocumentByteLimit
     static let wireImageTypes: Set<String> = ["image/jpeg", "image/png", "image/gif", "image/webp"]
-    static let textCharacterLimit = 120_000
+    static let textCharacterLimit = Tokens.Count.chatTextCharacterLimit
 
     private let root: URL
 

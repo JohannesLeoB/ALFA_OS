@@ -58,7 +58,7 @@ let package = Package(
         ),
         .target(
             name: "Assistant",
-            dependencies: ["Core", "Storage", "Hub", "Calculation", .product(name: "GRDB", package: "GRDB.swift")],
+            dependencies: ["Core", "Design", "Storage", "Hub", "Calculation", .product(name: "GRDB", package: "GRDB.swift")],
             path: "Sources/Assistant",
             swiftSettings: strict
         ),
