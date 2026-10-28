@@ -34,7 +34,11 @@ struct MessageLane: View {
                 content(width: proxy.size.width)
             }
         }
-        .onChange(of: inbox.selectedFolder) { text = "" }
+        .onChange(of: inbox.selectedFolder) {
+            text = ""
+            window = SheetValues.listWindow
+        }
+        .onChange(of: inbox.selectedInlet) { window = SheetValues.listWindow }
         .onChange(of: inbox.searching) { _, on in if !on { text = "" } }
         .onChange(of: text) { Task { await inbox.type(text) } }
     }
@@ -203,11 +207,11 @@ struct MessageLane: View {
         }
         .scrollIndicators(.automatic)
         .scrolledSignal($scrolled)
-        .onScrollGeometryChange(for: Double.self) { geometry in
+        .onScrollGeometryChange(for: Bool.self) { geometry in
             ListWindowEngine.remaining(content: Double(geometry.contentSize.height), offset: Double(geometry.contentOffset.y),
-                                       container: Double(geometry.containerSize.height), spacer: spacer)
-        } action: { _, left in
-            if left < SheetValues.listLoadAhead, window < items.count { window += SheetValues.listWindowStep }
+                                       container: Double(geometry.containerSize.height), spacer: spacer) < SheetValues.listLoadAhead
+        } action: { was, near in
+            if !was, near, window < items.count { window += SheetValues.listWindowStep }
         }
     }
 

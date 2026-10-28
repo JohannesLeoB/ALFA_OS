@@ -16,7 +16,7 @@ struct SettingsPane: Pane {
     func title(_ lane: LaneKind) -> PaneTitle? {
         guard lane == .center else { return nil }
         let state = context.state
-        return .key(state.group == .connections ? state.tileGroup ?? IntegrationList.integrations : state.group.key)
+        return .key(state.group == .connections ? (context.tiles.group ?? .integrations).key : state.group.key)
     }
 
     func name(_ lane: LaneKind) -> PaneTitle? {
@@ -44,7 +44,8 @@ extension SettingsPane {
         let flow = AccountFlow(setup: assembly.connections.setup, added: { await inbox.selectAccount($0) })
         return SettingsPane(context: SettingsContext(
             state: assembly.settings, catalog: assembly.catalog, setup: assembly.connections.setup, rules: assembly.connections.rules,
-            keychain: assembly.keychain, flow: flow, privacy: AssistantPrivacy(store: assembly.privacy), inbox: inbox, desk: desk))
+            keychain: assembly.keychain, flow: flow, privacy: AssistantPrivacy(store: assembly.privacyStore), inbox: inbox, desk: desk,
+            conversation: assembly.conversation, tiles: TileFocus()))
     }
 }
 

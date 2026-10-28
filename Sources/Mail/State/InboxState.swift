@@ -28,7 +28,7 @@ public final class InboxState {
     var drafts: [OpenDraft] = []
     var stack: [CardRef] = []
     var front: CardRef?
-    var parked: [Inlet.ID: ParkedDesk] = [:]
+    var parked: [Inlet.ID: ParkedMailbox] = [:]
     var picked: [String] = []
     public var searchScope = SearchScope.all
     public var searching = false
@@ -58,7 +58,9 @@ public final class InboxState {
 
     public var totalUnread: Int { unread.values.reduce(0, +) }
 
-    var selectedAccount: Inlet? { accounts.first { $0.id == selectedInlet } }
+    public var selectedAccount: Inlet? { accounts.first { $0.id == selectedInlet } }
+
+    public func hasUnread(_ id: Inlet.ID) -> Bool { (unread[id] ?? 0) > 0 }
 
     var sortedFolders: [Folder] {
         folders.enumerated().sorted { left, right in
@@ -123,7 +125,7 @@ public final class InboxState {
     }
 
     public func start() async {
-        refreshAccounts()
+        await refreshAccounts()
         if selectedInlet == nil { selectedInlet = accounts.first?.id }
         loadFoldersFromMailbox()
         refreshCounts()
@@ -140,38 +142,74 @@ public final class InboxState {
         await loadSelection()
     }
 
-    func refreshAccounts() {
+    func refreshAccounts() async {
         accounts = mailbox.accounts
-        parked = parked.filter { key, _ in accounts.contains { $0.id == key } }
-        if let selectedInlet, !accounts.contains(where: { $0.id == selectedInlet }) {
-            generation += 1
-            self.selectedInlet = accounts.first?.id
-            selectedFolder = nil
-            selectedMessage = nil
-            query = ""
-            typed = ""
-            summaries = []
-            phase = .settled
-            loadFoldersFromMailbox()
+        let known = Set(accounts.map(\.id))
+        var dropped = parked.filter { !known.contains($0.key) }.values.flatMap(\.stack)
+        parked = parked.filter { known.contains($0.key) }
+        if let current = selectedInlet, !known.contains(current) {
+            dropped += stack
+            enter(accounts.first?.id, parking: false)
         }
+        await prune(dropped)
     }
 
-    public func selectAccount(_ id: Inlet.ID) async {
-        guard accounts.contains(where: { $0.id == id }) else { return }
-        if let current = selectedInlet, current != id {
-            parked[current] = ParkedDesk(stack: stack, front: front, folder: selectedFolder, message: selectedMessage)
+    func prune(_ dropped: [CardRef]) async {
+        let known = Set(accounts.map(\.id))
+        let gone = Set(dropped.compactMap { ref -> UUID? in
+            if case .draft(let id) = ref { return id }
+            return nil
+        })
+        let doomed = drafts.filter { gone.contains($0.id) || !known.contains($0.inlet) }.map(\.id)
+        for id in doomed {
+            detach(.draft(id))
+            for key in parked.keys {
+                parked[key]?.stack.removeAll { $0 == .draft(id) }
+                if parked[key]?.front == .draft(id) { parked[key]?.front = parked[key]?.stack.last }
+            }
         }
-        let restored = id == selectedInlet ? ParkedDesk(stack: stack, front: front) : parked.removeValue(forKey: id) ?? ParkedDesk()
+        cards.removeAll { !known.contains($0.inlet) }
+        for id in doomed where draft(id)?.state == .edited { await save(id) }
+        drafts.removeAll { doomed.contains($0.id) }
+    }
+
+    func enter(_ id: Inlet.ID?, parking: Bool) {
+        if parking, let current = selectedInlet {
+            parked[current] = ParkedMailbox(stack: stack, front: front, message: selectedMessage)
+        }
+        let restored = id.flatMap { parked.removeValue(forKey: $0) } ?? ParkedMailbox()
+        searchTask?.cancel()
+        generation += 1
+        typeGeneration += 1
         selectedInlet = id
         stack = restored.stack
         front = restored.front
+        selectedMessage = restored.message
         picked = []
-        selectedFolder = restored.folder
+        selectedFolder = nil
         query = ""
         typed = ""
+        searching = false
+        crossHits = []
+        crossInlet = nil
+        crossQuery = ""
+        overview.open = false
+        overview.hot = nil
         summaries = []
-        selectedMessage = restored.message
+        phase = .settled
         loadFoldersFromMailbox()
+        if let id, let folder = selectedFolder { summaries = mailbox.messages(id, folder: folder) }
+    }
+
+    @discardableResult
+    public func swapAccount(_ id: Inlet.ID) -> Bool {
+        guard id != selectedInlet, accounts.contains(where: { $0.id == id }) else { return false }
+        enter(id, parking: true)
+        return true
+    }
+
+    public func selectAccount(_ id: Inlet.ID) async {
+        guard swapAccount(id) else { return }
         await loadSelection()
     }
 
@@ -323,7 +361,7 @@ public final class InboxState {
         case .accountsChanged:
             let before = selectedInlet
             let reachable = selectedAccount?.state.isConnected ?? true
-            refreshAccounts()
+            await refreshAccounts()
             refreshCounts()
             if selectedInlet != before, selectedInlet != nil {
                 await loadSelection()
@@ -335,6 +373,7 @@ public final class InboxState {
             if inlet == selectedInlet { loadFoldersFromMailbox() }
         case .messagesChanged(let inlet, let folder):
             mergeMirror(inlet: inlet, folder: folder)
+            refreshCards(inlet: inlet, folder: folder)
             refreshCounts()
         case .newMail(let inlet, _):
             if let folder = selectedFolder, inlet == selectedInlet,
@@ -369,6 +408,14 @@ public final class InboxState {
         let fresh = mirror.filter { byID[$0.id] != nil }
         merged.insert(contentsOf: fresh, at: 0)
         summaries = merged
+    }
+
+    func refreshCards(inlet: Inlet.ID, folder: String) {
+        guard cards.contains(where: { $0.inlet == inlet }) else { return }
+        let mirror = Dictionary(mailbox.messages(inlet, folder: folder).map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        for index in cards.indices where cards[index].inlet == inlet {
+            if let fresh = mirror[cards[index].id] { cards[index].summary = fresh }
+        }
     }
 
     static func hint(_ error: HubFailure) -> Hint {

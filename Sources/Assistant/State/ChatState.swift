@@ -1,4 +1,3 @@
-import Core
 import Foundation
 import Hub
 import Observation
@@ -10,19 +9,24 @@ public final class ChatState {
         case rejected(AttachmentStore.Failure)
     }
 
+    public struct Pending: Identifiable, Equatable, Sendable {
+        public let id: UUID
+        public let file: AttachmentRef
+    }
+
     public var draft = ""
     public private(set) var scope = ConversationScope.home
-    public private(set) var pending: [AttachmentRef] = []
-    public private(set) var busy = false
+    public private(set) var pending: [Pending] = []
+    private(set) var busy = false
     public private(set) var note: Note?
     public private(set) var noteSerial = 0
     @ObservationIgnored private var cleared: [Message] = []
-    @ObservationIgnored private let chat: ChatStore
+    @ObservationIgnored private let chat: any ChatPort
     @ObservationIgnored private let engine: ConversationEngine
-    @ObservationIgnored private let attachments: AttachmentStore
-    @ObservationIgnored private let privacy: PrivacyStore
+    @ObservationIgnored private let attachments: any AttachmentPort
+    @ObservationIgnored private let privacy: any PrivacyPort
 
-    public init(chat: ChatStore, engine: ConversationEngine, attachments: AttachmentStore, privacy: PrivacyStore) {
+    public init(chat: any ChatPort, engine: ConversationEngine, attachments: any AttachmentPort, privacy: any PrivacyPort) {
         self.chat = chat
         self.engine = engine
         self.attachments = attachments
@@ -41,33 +45,33 @@ public final class ChatState {
         try? chat.loadIfNeeded(scope)
     }
 
-    public func attach(_ files: [Attachment]) {
-        for file in files {
+    public func attach(_ urls: [URL]) async {
+        for url in urls {
             do {
-                pending.append(try attachments.save(file))
+                let file = try await attachments.save(url)
+                pending.append(Pending(id: UUID(), file: file))
             } catch let failure as AttachmentStore.Failure {
                 show(.rejected(failure))
             } catch {
-                show(.rejected(.unreadable(file.filename)))
+                show(.rejected(.unreadable(url.lastPathComponent)))
             }
         }
     }
 
-    public func refuse(_ fileName: String) {
-        show(.rejected(.unreadable(fileName)))
-    }
-
-    public func removePending(at index: Int) {
-        guard pending.indices.contains(index) else { return }
-        pending.remove(at: index)
+    public func removePending(_ id: Pending.ID) {
+        pending.removeAll { $0.id == id }
+        sweep()
     }
 
     public func send(choices: PrivacyChoices) async -> Bool {
         guard canSend else { return false }
+        closeUndo()
         let text = draft
-        let files = pending
+        let files = choices.chatFiles ? pending.map(\.file) : []
         draft = ""
         pending = []
+        if choices.chatFiles == false { sweep() }
+        guard text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false || files.isEmpty == false else { return false }
         return await run(text, files: files, choices: choices)
     }
 
@@ -86,6 +90,10 @@ public final class ChatState {
         return await run(question.text, files: ThreadEngine.attachments(question), choices: choices)
     }
 
+    public func stop() {
+        engine.cancel()
+    }
+
     public func clear() {
         load()
         let messages = chat.messages(for: scope)
@@ -102,20 +110,37 @@ public final class ChatState {
     }
 
     public func undo() {
+        guard note == .cleared else { return }
         let restore = cleared
         cleared = []
-        dismiss()
-        for message in restore { try? chat.append(message, to: scope) }
+        note = nil
+        if chat.messages(for: scope).isEmpty {
+            for message in restore { try? chat.append(message, to: scope) }
+        }
+        sweep()
     }
 
     public func dismiss() {
-        if note == .cleared { cleared = [] }
+        let closing = note == .cleared
+        if closing { cleared = [] }
         note = nil
+        if closing { sweep() }
+    }
+
+    private func closeUndo() {
+        if note == .cleared { dismiss() }
     }
 
     private func show(_ next: Note) {
+        if next != .cleared { closeUndo() }
         note = next
         noteSerial += 1
+    }
+
+    private func sweep() {
+        guard let stored = try? chat.attachmentPaths() else { return }
+        let held = cleared.flatMap(ThreadEngine.attachments) + pending.map(\.file)
+        attachments.sweep(keeping: stored.union(held.map(\.relativePath)))
     }
 
     private func run(_ text: String, files: [AttachmentRef], choices: PrivacyChoices) async -> Bool {
@@ -131,6 +156,7 @@ public final class ChatState {
     static func settled(_ message: Message) -> Message {
         guard message.status == .streaming else { return message }
         var copy = message
+        copy.id = UUID()
         copy.status = .failed("")
         return copy
     }

@@ -46,8 +46,9 @@ extension AppSession {
         withAnimation(appearance.ease(Tokens.Duration.switchIn, Tokens.Easing.glassIn)) { mailboxSwitching = true }
         Task {
             try? await Task.sleep(for: .seconds(Tokens.Duration.switchIn + Tokens.Duration.glassDelay))
-            await inbox.selectAccount(id)
+            let swapped = inbox.swapAccount(id)
             withAnimation(appearance.ease(Tokens.Duration.switchOut, Tokens.Easing.glassOut)) { mailboxSwitching = false }
+            if swapped { await inbox.loadSelection() }
         }
     }
 

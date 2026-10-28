@@ -51,10 +51,10 @@ extension InboxState {
     public func run(_ mark: StripMark.Run) async {
         switch mark {
         case .folder(let id): await selectFolder(id)
-        case .compose: _ = compose()
+        case .compose: compose()
         case .row(let id): await open(id)
-        case .reply(let id): _ = await reply(to: id)
-        case .forward(let id): _ = await forward(id)
+        case .reply(let id): await reply(to: id)
+        case .forward(let id): await forward(id)
         case .card(let ref): bring(ref)
         }
     }

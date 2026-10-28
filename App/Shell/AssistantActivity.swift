@@ -12,6 +12,7 @@ struct AssistantActivity: View {
             Circle()
                 .fill(.foreground)
                 .frame(width: dot, height: dot)
+                .accessibilityHidden(true)
             Text(verbatim: label)
                 .fixedSize(horizontal: false, vertical: true)
         }

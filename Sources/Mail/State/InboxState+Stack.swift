@@ -48,8 +48,9 @@ extension InboxState {
     }
 
     func dropPreviews() {
-        let gone = cards.filter { !$0.pinned }.map(\.id)
-        cards.removeAll { !$0.pinned }
+        let inlet = selectedInlet
+        let gone = cards.filter { $0.inlet == inlet && !$0.pinned }.map(\.id)
+        cards.removeAll { $0.inlet == inlet && !$0.pinned }
         for id in gone { detach(.message(id)) }
     }
 
@@ -71,7 +72,11 @@ extension InboxState {
     }
 
     func trimCards() {
-        while cards.count > Tokens.Count.stackMaxCards { detach(.message(cards.removeFirst().id)) }
+        let inlet = selectedInlet
+        while cards.filter({ $0.inlet == inlet }).count > Tokens.Count.stackMaxCards,
+              let index = cards.firstIndex(where: { $0.inlet == inlet }) {
+            detach(.message(cards.remove(at: index).id))
+        }
     }
 
     public func commands(confirmDiscard: Bool, canFold: Bool, sendLabelled: Bool) -> CommandSet {

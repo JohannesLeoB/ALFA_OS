@@ -1,6 +1,5 @@
 import AppKit
 import Core
-import Design
 import Hub
 import SwiftUI
 
@@ -42,8 +41,7 @@ struct IdentityCard: View {
                     showsProgress: false,
                     onYes: { signOut() }
                 )
-                .frame(width: CGFloat(Tokens.Size.confirmPillWidth), alignment: .trailing)
-                .padding(.trailing, -CGFloat(Tokens.Size.confirmPillOffset))
+                .rowPill()
             }
         }
     }

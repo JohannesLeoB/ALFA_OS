@@ -17,10 +17,10 @@ struct AssistantInput: View {
     var body: some View {
         HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
             BlobSymbolButton(help: appearance.string(files ? "shell.symbolButton.assistantAttach.tooltip" : "shell.symbolButton.assistantAttachOff.tooltip"),
-                             glyph: .attach, dimmed: !files) { if files { attach() } }
+                             glyph: .attach, dimmed: !files, enabled: files, action: attach)
             ZStack(alignment: .leading) {
                 if conversation.draft.isEmpty {
-                    appearance.text("assistant.field")
+                    appearance.text("shell.assistantInput.field")
                         .lineLimit(1)
                         .opacity(SheetValues.placeholderOpacity)
                         .allowsHitTesting(false)
@@ -34,18 +34,17 @@ struct AssistantInput: View {
                         close()
                         return .handled
                     }
-                    .accessibilityLabel(appearance.text("assistant.field"))
+                    .accessibilityLabel(appearance.text("shell.assistantInput.field"))
             }
             .padding(.horizontal, CGFloat(Tokens.Spacing.step4))
             .frame(maxWidth: .infinity)
             BlobSymbolButton(help: appearance.string("shell.symbolButton.assistantSend.tooltip"), glyph: .send,
-                             plate: ready ? \.onInverse : nil, tone: ready ? \.inverse : \.onInverseTertiary, hovers: false) {
-                if ready { send() }
-            }
+                             plate: ready ? \.onInverse : nil, tone: ready ? \.inverse : \.onInverseTertiary, hovers: false,
+                             enabled: ready, action: send)
         }
         .padding(.leading, CGFloat(Tokens.Spacing.step4))
         .padding(.trailing, CGFloat(Tokens.Spacing.step8))
-        .frame(height: CGFloat(Tokens.Size.assistantFieldHeight))
+        .frame(height: CGFloat(Tokens.Spacing.step40))
         .background(RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row)).fill(appearance.color(\.inverseField)))
         .opacity(off ? Tokens.Opacity.disabled : 1)
         .task {

@@ -59,7 +59,6 @@ enum SheetValues {
     static let quarterTurn = 90.0
     static let orbCount = 3
     static let mailSyncSeconds = 300
-    static let hoverRowOpacity = 0.88
     static let rowTextLine = 20.0
     static let previewLines = 2
     static let attachmentChipNameLimit = 26
@@ -86,7 +85,7 @@ enum SheetValues {
     static let hintTick = 0.1
     static let hintMaxWidth = 240.0
     static let deckLift = 0.32
-    static let stackGlossLightFrom = 0.75
+    static let stackGlossLightFrom = 0.7529
     static let ghostStart = 0.02
     static let ghostLife = 1.2
     static let envelopeBox = 20.0

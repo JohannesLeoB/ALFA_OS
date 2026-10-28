@@ -9,7 +9,7 @@ struct AssistantToast: View {
         if let note = conversation.note {
             switch note {
             case .cleared:
-                ToastView(message: appearance.text("shell.assistantThread.cleared"), undoLabel: appearance.text("mail.toast.undo"),
+                ToastView(message: appearance.text("shell.assistantThread.cleared"), undoLabel: appearance.text("shell.confirmUndo.undo.text"),
                           onUndo: conversation.undo, onDismiss: conversation.dismiss)
                     .id(conversation.noteSerial)
             case .rejected(let failure):

@@ -1,26 +1,6 @@
 {
  "_rule": "Keys used by the shell views in App/Shell; text is resolved by the app.",
  "keys": {
-  "assistant.failed": {
-   "de": "Claude antwortet gerade nicht. In den Einstellungen neu verbinden.",
-   "en": "Claude isn’t responding right now. Reconnect in Settings."
-  },
-  "assistant.field": {
-   "de": "Frage stellen …",
-   "en": "Ask a question …"
-  },
-  "assistant.idle": {
-   "de": "Füge Text, Dateien oder Links ein.",
-   "en": "Add text, files or links."
-  },
-  "assistant.noMessage": {
-   "de": "Keine Nachricht offen.",
-   "en": "No message open."
-  },
-  "assistant.title": {
-   "de": "Assistent",
-   "en": "Assistant"
-  },
   "shell.assistantAttachment.tooLarge": {
    "de": "%@ ist zu groß",
    "en": "%@ is too large"
@@ -85,6 +65,14 @@
    "de": "Nicht lesbar",
    "en": "Unreadable"
   },
+  "shell.assistantInput.field": {
+   "de": "Frage stellen …",
+   "en": "Ask a question …"
+  },
+  "shell.assistantMessage.assistant": {
+   "de": "Antwort des Assistenten",
+   "en": "Assistant’s answer"
+  },
   "shell.assistantMessage.failed": {
    "de": "Nicht beantwortet",
    "en": "No answer"
@@ -92,6 +80,22 @@
   "shell.assistantMessage.thinking": {
    "de": "Denkt nach …",
    "en": "Thinking …"
+  },
+  "shell.assistantMessage.user": {
+   "de": "Deine Nachricht",
+   "en": "Your message"
+  },
+  "shell.assistantPanel.failed": {
+   "de": "Claude antwortet gerade nicht. In den Einstellungen neu verbinden.",
+   "en": "Claude isn’t responding right now. Reconnect in Settings."
+  },
+  "shell.assistantPanel.idle": {
+   "de": "Füge Text, Dateien oder Links ein.",
+   "en": "Add text, files or links."
+  },
+  "shell.assistantPanel.noMessage": {
+   "de": "Keine Nachricht offen.",
+   "en": "No message open."
   },
   "shell.assistantScope.home": {
    "de": "Ohne Projekt",
@@ -101,6 +105,10 @@
    "de": "Verlauf gelöscht",
    "en": "History cleared"
   },
+  "shell.blobFace.assistant": {
+   "de": "Assistent",
+   "en": "Assistant"
+  },
   "shell.blobFace.tooltip": {
    "de": "Klick: Bereiche · Doppelklick: Assistent",
    "en": "Click: areas · Double-click: assistant"
@@ -108,6 +116,10 @@
   "shell.chipRemove.assistant.tooltip": {
    "de": "Entfernen",
    "en": "Remove"
+  },
+  "shell.confirmUndo.undo.text": {
+   "de": "Rückgängig",
+   "en": "Undo"
   },
   "shell.handle.down.tooltip": {
    "de": "Ziehen · Doppelklick setzt zurück",

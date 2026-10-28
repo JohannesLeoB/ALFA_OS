@@ -23,12 +23,13 @@ struct ThreadItemRow: View {
     }
 
     var body: some View {
+        let style = Tokens.TextStyle.mailBody
         VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step8)) {
             HStack(alignment: .firstTextBaseline, spacing: CGFloat(Tokens.Spacing.step8)) {
                 AddressButton(action: menu) {
                     Text(verbatim: item.name)
-                        .font(sheet(Tokens.TextSize.body, .medium))
-                        .lineHeight(Tokens.LineHeight.mailBody * Tokens.TextSize.body, size: Tokens.TextSize.body, sheet: true)
+                        .font(sheet(style.size, .medium))
+                        .lineHeight(style.lineHeight * style.size, size: style.size, sheet: true)
                 }
                 .background(AnchorMarker(box: anchor))
                 Spacer(minLength: 0)
@@ -39,8 +40,8 @@ struct ThreadItemRow: View {
                          allowRemote: !card.remoteImagesBlocked(loadRemote: loadImages))
             } else {
                 Text(verbatim: item.text)
-                    .font(sheet(Tokens.TextStyle.mailBody.size))
-                    .lineHeight(Tokens.TextStyle.mailBody.lineHeight * Tokens.TextStyle.mailBody.size, size: Tokens.TextStyle.mailBody.size, sheet: true)
+                    .font(sheet(style.size))
+                    .lineHeight(style.lineHeight * style.size, size: style.size, sheet: true)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             if let quote = item.quote, !showsHTML {

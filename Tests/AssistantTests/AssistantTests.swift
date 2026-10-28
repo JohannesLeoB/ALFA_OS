@@ -91,6 +91,69 @@ private final class FlakyProvider: ConversationPort, @unchecked Sendable {
     }
 }
 
+private struct HangingProvider: ConversationPort {
+    func respond(_ request: ChatRequest) async throws -> Reply {
+        try await Task.sleep(for: .seconds(30))
+        return Reply(text: "", toolUses: [], stopReason: nil)
+    }
+
+    func stream(_ request: ChatRequest) -> AsyncThrowingStream<String, any Error> {
+        AsyncThrowingStream { continuation in
+            let task = Task {
+                try? await Task.sleep(for: .seconds(30))
+                continuation.finish()
+            }
+            continuation.onTermination = { _ in task.cancel() }
+        }
+    }
+}
+
+@MainActor
+private func until(_ condition: @MainActor () -> Bool) async -> Bool {
+    for _ in 0..<400 {
+        if condition() { return true }
+        try? await Task.sleep(for: .milliseconds(5))
+    }
+    return condition()
+}
+
+private func scratch() -> URL {
+    let base = ProcessInfo.processInfo.environment["TMPDIR"].map { URL(fileURLWithPath: $0, isDirectory: true) }
+    return (base ?? FileManager.default.temporaryDirectory).appendingPathComponent(UUID().uuidString, isDirectory: true)
+}
+
+private func file(_ name: String, _ text: String, in folder: URL) throws -> URL {
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    let url = folder.appendingPathComponent(name)
+    try Data(text.utf8).write(to: url)
+    return url
+}
+
+private func stored(_ store: AttachmentStore) -> [String] {
+    ((try? FileManager.default.contentsOfDirectory(atPath: store.directory.path)) ?? []).sorted()
+}
+
+private struct CopyAttachments: AttachmentPort {
+    let store: AttachmentStore
+
+    func save(_ url: URL) async throws -> AttachmentRef {
+        let data = try Data(contentsOf: url)
+        let name = UUID().uuidString + "." + url.pathExtension
+        try FileManager.default.createDirectory(at: store.directory, withIntermediateDirectories: true)
+        try data.write(to: store.directory.appendingPathComponent(name))
+        return AttachmentRef(fileName: url.lastPathComponent, mimeType: AttachmentStore.mimeType(of: url), byteCount: data.count,
+                             relativePath: name, sha256: name)
+    }
+
+    func sweep(keeping paths: Set<String>) {
+        store.sweep(keeping: paths)
+    }
+}
+
+private func body(_ request: URLRequest) -> String {
+    String(decoding: request.httpBody ?? Data(), as: UTF8.self)
+}
+
 private final class FakeAlarm: AlarmPort, @unchecked Sendable {
     let scheduled = Box<[Todo]>([])
     let cancelled = Box<[String]>([])
@@ -618,24 +681,193 @@ final class AssistantTests: XCTestCase {
         XCTAssertNil(restored.1)
     }
 
-    func testChatStateRejectsOversizedTextAttachment() async throws {
+    @MainActor
+    func testAttachRejectsUnsupportedAndOversizedFilesFromDisk() async throws {
         let database = try SQLiteStore.inMemory()
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let folder = scratch()
+        let store = AttachmentStore(root: scratch())
         let big = Attachment(filename: "lang.txt", mimeType: "text/plain",
                              data: Data(String(repeating: "a", count: AttachmentStore.textCharacterLimit + 1).utf8))
-        XCTAssertThrowsError(try AttachmentStore(root: root).save(big)) { error in
+        XCTAssertThrowsError(try store.save(big)) { error in
             XCTAssertEqual(error as? AttachmentStore.Failure, .tooLarge("lang.txt"))
         }
-        let note = await MainActor.run {
-            let chat = ChatStore(database: database, userID: "u")
-            let engine = ConversationEngine(chat: chat, provider: ScriptedProvider([]), registry: ToolRegistry(tools: []), text: KeyText())
-            let state = ChatState(chat: chat, engine: engine, attachments: AttachmentStore(root: root), privacy: PrivacyStore(database: database))
-            state.attach([Attachment(filename: "x.bin", mimeType: "application/octet-stream", data: Data([1]))])
-            return (state.note, state.pending.isEmpty, state.canSend)
+        let chat = ChatStore(database: database, userID: "u")
+        let engine = ConversationEngine(chat: chat, provider: ScriptedProvider([]), registry: ToolRegistry(tools: []), text: KeyText())
+        let state = ChatState(chat: chat, engine: engine, attachments: store, privacy: PrivacyStore(database: database))
+        await state.attach([try file("x.bin", "1", in: folder)])
+        XCTAssertEqual(state.note, .rejected(.unsupported("x.bin")))
+        await state.attach([try file("lang.txt", String(repeating: "a", count: AttachmentStore.textCharacterLimit + 1), in: folder)])
+        XCTAssertEqual(state.note, .rejected(.tooLarge("lang.txt")))
+        await state.attach([folder.appendingPathComponent("fehlt.txt")])
+        XCTAssertEqual(state.note, .rejected(.unreadable("fehlt.txt")))
+        XCTAssertTrue(state.pending.isEmpty)
+        XCTAssertFalse(state.canSend)
+        XCTAssertEqual(stored(store), [])
+    }
+
+    @MainActor
+    func testChatFilesOffSendsNoFileDataAndDropsThePendingFile() async throws {
+        let database = try SQLiteStore.inMemory()
+        let store = AttachmentStore(root: scratch())
+        let sent = Box<[URLRequest]>([])
+        let client = ClaudeClient(keys: FakeKeys(), http: FakeHttp(sent: sent, streamLines: [
+            #"data: {"type":"content_block_delta","delta":{"type":"text_delta","text":"ok"}}"#,
+        ]), attachments: store)
+        let chat = ChatStore(database: database, userID: "u")
+        let engine = ConversationEngine(chat: chat, provider: client, registry: ToolRegistry(tools: []), text: KeyText())
+        let state = ChatState(chat: chat, engine: engine, attachments: CopyAttachments(store: store), privacy: PrivacyStore(database: database))
+        await state.attach([try file("plan.txt", "GEHEIM", in: scratch())])
+        XCTAssertEqual(state.pending.map(\.file.fileName), ["plan.txt"])
+        state.draft = "Lies das"
+        let answered = await state.send(choices: PrivacyChoices(chatFiles: false))
+        XCTAssertTrue(answered)
+        XCTAssertTrue(state.pending.isEmpty)
+        XCTAssertEqual(state.turns.first?.blocks, [.text("Lies das")])
+        XCTAssertEqual(sent.value.count, 1)
+        XCTAssertFalse(body(try XCTUnwrap(sent.value.first)).contains("GEHEIM"))
+        XCTAssertEqual(stored(store), [])
+
+        let ref = try await CopyAttachments(store: store).save(try file("plan.txt", "GEHEIM", in: scratch()))
+        let question = Message(role: .user, blocks: [.text("Nochmal"), .document(ref)])
+        let retried = try client.build(ChatRequest(messages: [question], system: "s", maxTokens: 5, sharesFiles: false),
+                                       key: ClaudeKey(apiKey: "k"), stream: true)
+        XCTAssertFalse(body(retried).contains("GEHEIM"))
+        XCTAssertTrue(body(retried).contains("[attachment: plan.txt]"))
+        XCTAssertEqual(retried.timeoutInterval, ClaudeClient.plainTimeout)
+    }
+
+    func testOnlyTheCurrentQuestionCarriesFileData() async throws {
+        let store = AttachmentStore(root: scratch())
+        let client = ClaudeClient(keys: FakeKeys(), http: FakeHttp(sent: Box([]), streamLines: []), attachments: store)
+        let ref = try await CopyAttachments(store: store).save(try file("plan.txt", "GEHEIM", in: scratch()))
+        let question = Message(role: .user, blocks: [.text("Lies"), .document(ref)])
+        func request(_ messages: [Message]) throws -> URLRequest {
+            try client.build(ChatRequest(messages: messages, system: "s", maxTokens: 5, sharesFiles: true),
+                             key: ClaudeKey(apiKey: "k"), stream: false)
         }
-        XCTAssertEqual(note.0, .rejected(.unsupported("x.bin")))
-        XCTAssertTrue(note.1)
-        XCTAssertFalse(note.2)
+        let current = try request([question])
+        XCTAssertTrue(body(current).contains("GEHEIM"))
+        XCTAssertEqual(current.timeoutInterval, ClaudeClient.attachmentTimeout)
+        let toolRound = try request([
+            question,
+            Message(role: .assistant, blocks: [.toolUse(id: "1", name: "n", inputJSON: Data("{}".utf8))]),
+            Message(role: .user, blocks: [.toolResult(toolUseID: "1", summary: "ok", isError: false)]),
+        ])
+        XCTAssertTrue(body(toolRound).contains("GEHEIM"))
+        let later = try request([question, .text("Gelesen", role: .assistant), .text("Und jetzt?", role: .user)])
+        XCTAssertFalse(body(later).contains("GEHEIM"))
+        XCTAssertTrue(body(later).contains("[attachment: plan.txt]"))
+        XCTAssertEqual(later.timeoutInterval, ClaudeClient.plainTimeout)
+    }
+
+    @MainActor
+    func testClearedFilesLeaveTheDiskOnlyWhenTheUndoWindowCloses() async throws {
+        let database = try SQLiteStore.inMemory()
+        let folder = scratch()
+        let store = AttachmentStore(root: scratch())
+        let chat = ChatStore(database: database, userID: "u")
+        let engine = ConversationEngine(chat: chat, provider: FlakyProvider(failures: 0), registry: ToolRegistry(tools: []), text: KeyText())
+        let state = ChatState(chat: chat, engine: engine, attachments: CopyAttachments(store: store), privacy: PrivacyStore(database: database))
+        await state.attach([try file("a.txt", "eins", in: folder)])
+        state.draft = "Lies"
+        let answered = await state.send(choices: PrivacyChoices())
+        XCTAssertTrue(answered)
+        XCTAssertEqual(stored(store).count, 1)
+        await state.attach([try file("b.txt", "zwei", in: folder)])
+        XCTAssertEqual(stored(store).count, 2)
+        state.clear()
+        XCTAssertTrue(state.pending.isEmpty)
+        XCTAssertEqual(stored(store).count, 2)
+        state.undo()
+        XCTAssertEqual(state.turns.map(\.kind), [.user, .assistant])
+        XCTAssertEqual(state.turns.first?.blocks, [.file("a.txt"), .text("Lies")])
+        XCTAssertEqual(stored(store).count, 1)
+        state.clear()
+        state.dismiss()
+        XCTAssertTrue(state.turns.isEmpty)
+        XCTAssertEqual(stored(store), [])
+    }
+
+    @MainActor
+    func testUndoAfterANewMessageKeepsTheNewThread() async throws {
+        let database = try SQLiteStore.inMemory()
+        let chat = ChatStore(database: database, userID: "u")
+        let engine = ConversationEngine(chat: chat, provider: FlakyProvider(failures: 0), registry: ToolRegistry(tools: []), text: KeyText())
+        let state = ChatState(chat: chat, engine: engine, attachments: AttachmentStore(root: scratch()), privacy: PrivacyStore(database: database))
+        state.draft = "alt"
+        _ = await state.send(choices: PrivacyChoices())
+        state.clear()
+        XCTAssertEqual(state.note, .cleared)
+        state.draft = "neu"
+        _ = await state.send(choices: PrivacyChoices())
+        XCTAssertNil(state.note)
+        state.undo()
+        let texts = chat.messages(for: .home).map(\.text)
+        XCTAssertEqual(texts, ["neu", "Antwort"])
+        let reloaded = ChatStore(database: database, userID: "u")
+        try reloaded.loadIfNeeded(.home)
+        XCTAssertEqual(reloaded.messages(for: .home).map(\.text), ["neu", "Antwort"])
+    }
+
+    @MainActor
+    func testARejectedFileEndsTheUndoWindow() async throws {
+        let database = try SQLiteStore.inMemory()
+        let chat = ChatStore(database: database, userID: "u")
+        let engine = ConversationEngine(chat: chat, provider: FlakyProvider(failures: 0), registry: ToolRegistry(tools: []), text: KeyText())
+        let state = ChatState(chat: chat, engine: engine, attachments: AttachmentStore(root: scratch()), privacy: PrivacyStore(database: database))
+        state.draft = "alt"
+        _ = await state.send(choices: PrivacyChoices())
+        state.clear()
+        await state.attach([try file("x.bin", "1", in: scratch())])
+        XCTAssertEqual(state.note, .rejected(.unsupported("x.bin")))
+        state.undo()
+        XCTAssertTrue(state.turns.isEmpty)
+    }
+
+    @MainActor
+    func testClearDuringAStreamLeavesTheRestoredTurnSettled() async throws {
+        let database = try SQLiteStore.inMemory()
+        let chat = ChatStore(database: database, userID: "u")
+        let engine = ConversationEngine(chat: chat, provider: HangingProvider(), registry: ToolRegistry(tools: []), text: KeyText())
+        let state = ChatState(chat: chat, engine: engine, attachments: AttachmentStore(root: scratch()), privacy: PrivacyStore(database: database))
+        state.draft = "Frage"
+        let turn = Task { await state.send(choices: PrivacyChoices()) }
+        let streaming = await until { state.turns.last?.kind == .streaming }
+        XCTAssertTrue(streaming)
+        state.clear()
+        state.undo()
+        let answered = await turn.value
+        XCTAssertFalse(answered)
+        XCTAssertEqual(state.turns.map(\.kind), [.user, .failed])
+        let reloaded = ChatStore(database: database, userID: "u")
+        try reloaded.loadIfNeeded(.home)
+        XCTAssertEqual(reloaded.messages(for: .home).map(\.status), [.complete, .failed("")])
+    }
+
+    @MainActor
+    func testStopEndsARunningTurnAsCancelled() async throws {
+        let database = try SQLiteStore.inMemory()
+        let chat = ChatStore(database: database, userID: "u")
+        let engine = ConversationEngine(chat: chat, provider: HangingProvider(), registry: ToolRegistry(tools: []), text: KeyText())
+        let state = ChatState(chat: chat, engine: engine, attachments: AttachmentStore(root: scratch()), privacy: PrivacyStore(database: database))
+        state.draft = "Frage"
+        let turn = Task { await state.send(choices: PrivacyChoices()) }
+        let streaming = await until { state.turns.last?.kind == .streaming }
+        XCTAssertTrue(streaming)
+        state.stop()
+        _ = await turn.value
+        XCTAssertEqual(chat.messages(for: .home).last?.text, "assistant.engine.cancelled")
+        XCTAssertFalse(state.busy)
+    }
+
+    func testPrivacyCategoryKeysExistInTheCatalog() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        let data = try Data(contentsOf: root.appendingPathComponent("Resources/Localizable.xcstrings"))
+        let strings = try XCTUnwrap((try JSONSerialization.jsonObject(with: data) as? [String: Any])?["strings"] as? [String: Any])
+        for category in PrivacyCategory.allCases {
+            XCTAssertNotNil(strings[category.key], category.key)
+            XCTAssertTrue(category.key.hasSuffix("." + category.rawValue), category.key)
+        }
     }
 
     func testEngineLabelsADisabledCategoryAsOff() async throws {

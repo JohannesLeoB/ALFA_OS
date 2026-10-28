@@ -54,7 +54,7 @@ struct Frame: View {
         .onChange(of: session.stackEmpty, initial: true) { _, empty in desk.stack(empty: empty, still: appearance.still) }
         .onChange(of: session.conversation.noteSerial) { replaceToasts(keeping: .assistant) }
         .onChange(of: session.inbox.toast?.serial) { _, serial in if serial != nil { replaceToasts(keeping: .mail) } }
-        .onChange(of: session.settings.toast) { _, key in if key != nil { replaceToasts(keeping: .settings) } }
+        .onChange(of: session.settings.toastSerial) { replaceToasts(keeping: .settings) }
         .onAppear { MenuPanel.shared.desk = desk }
         .ignoresSafeArea(edges: [.horizontal, .bottom])
         .environment(\.appearance, appearance)

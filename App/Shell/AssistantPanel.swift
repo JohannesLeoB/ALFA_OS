@@ -36,8 +36,8 @@ struct AssistantPanel: View {
             AssistantScope(scope: conversation.scope, clearable: !turns.isEmpty, clear: conversation.clear)
             if !conversation.pending.isEmpty {
                 ChipWrapLayout(gap: CGFloat(Tokens.Spacing.step8)) {
-                    ForEach(Array(conversation.pending.enumerated()), id: \.offset) { index, file in
-                        AssistantAttachment(name: file.fileName) { conversation.removePending(at: index) }
+                    ForEach(conversation.pending) { pending in
+                        AssistantAttachment(name: pending.file.fileName) { conversation.removePending(pending.id) }
                     }
                 }
                 .padding(.horizontal, CGFloat(Tokens.Spacing.step4))

@@ -45,7 +45,7 @@ struct IntegrationCard: View {
             }
             if reading.state != .notConnected {
                 if !info.listsAccounts {
-                    ForEach(reading.inlets.filter(shows)) { inlet in
+                    ForEach(reading.inlets.filter(hasMailbox)) { inlet in
                         MailboxDisplayRow(state: context.state, inlet: inlet)
                     }
                 }
@@ -151,7 +151,7 @@ struct IntegrationCard: View {
                 ForEach(reading.inlets) { inlet in
                     SettingsRow(label: inlet.account.isEmpty ? appearance.text(inlet.title) : Text(verbatim: inlet.account),
                                 sub: inlet.account.isEmpty ? nil : appearance.text(inlet.title),
-                                line: !shows(inlet)) {
+                                line: !hasMailbox(inlet)) {
                         ConnectionStatus(state: LinkState(inlet.state).connection, label: appearance.text(LinkState(inlet.state).key))
                         TextButton(label: appearance.text("text.settings.action.check"), kind: .plain, disabled: flow.busy) {
                             started = true
@@ -166,10 +166,9 @@ struct IntegrationCard: View {
                             showsProgress: false,
                             onYes: { Task { await flow.remove([inlet.id]) } }
                         )
-                        .frame(width: CGFloat(Tokens.Size.confirmPillWidth), alignment: .trailing)
-                        .padding(.trailing, -CGFloat(Tokens.Size.confirmPillOffset))
+                        .rowPill()
                     }
-                    if shows(inlet) { MailboxDisplayRow(state: context.state, inlet: inlet) }
+                    if hasMailbox(inlet) { MailboxDisplayRow(state: context.state, inlet: inlet) }
                 }
                 SettingsRow(label: appearance.text("text.settings.action.addAccount")) {
                     addAccount(reading, kind: .neutral)
@@ -178,7 +177,7 @@ struct IntegrationCard: View {
         }
     }
 
-    private func shows(_ inlet: Inlet) -> Bool {
+    private func hasMailbox(_ inlet: Inlet) -> Bool {
         inlet.capabilities.contains(.mail)
     }
 

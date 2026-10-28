@@ -5,8 +5,8 @@ import Foundation
 import ImageIO
 import UniformTypeIdentifiers
 
-public struct AttachmentStore: Sendable {
-    public enum Kind: Equatable, Sendable { case image, pdf, text }
+public struct AttachmentStore: AttachmentPort {
+    enum Kind: Equatable, Sendable { case image, pdf, text }
 
     public enum Failure: Error, Equatable {
         case unsupported(String)
@@ -26,16 +26,37 @@ public struct AttachmentStore: Sendable {
         self.root = root
     }
 
-    public static func kind(forMimeType mime: String) -> Kind? {
+    static func kind(forMimeType mime: String) -> Kind? {
         if mime.hasPrefix("image/") { return .image }
         if mime == "application/pdf" { return .pdf }
         if mime.hasPrefix("text/") || mime == "application/json" { return .text }
         return nil
     }
 
+    static func mimeType(of url: URL) -> String {
+        UTType(filenameExtension: url.pathExtension)?.preferredMIMEType ?? "application/octet-stream"
+    }
+
     var directory: URL { root.appendingPathComponent("chat-attachments", isDirectory: true) }
 
-    public func save(_ file: Attachment) throws -> AttachmentRef {
+    public func save(_ url: URL) async throws -> AttachmentRef {
+        let name = url.lastPathComponent
+        let mime = Self.mimeType(of: url)
+        guard let kind = Self.kind(forMimeType: mime) else { throw Failure.unsupported(name) }
+        let size = (try? url.resourceValues(forKeys: [.fileSizeKey]))?.fileSize
+        if kind == .pdf, let size, size > Self.documentByteLimit { throw Failure.tooLarge(name) }
+        guard let data = try? Data(contentsOf: url) else { throw Failure.unreadable(name) }
+        return try save(Attachment(filename: name, mimeType: mime, data: data))
+    }
+
+    public func sweep(keeping paths: Set<String>) {
+        let files = (try? FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)) ?? []
+        for file in files where paths.contains(file.lastPathComponent) == false {
+            try? FileManager.default.removeItem(at: file)
+        }
+    }
+
+    func save(_ file: Attachment) throws -> AttachmentRef {
         guard let kind = Self.kind(forMimeType: file.mimeType) else { throw Failure.unsupported(file.filename) }
         var mime = file.mimeType
         var data = file.data
@@ -62,7 +83,7 @@ public struct AttachmentStore: Sendable {
         return AttachmentRef(fileName: file.filename, mimeType: mime, byteCount: data.count, relativePath: name, sha256: digest)
     }
 
-    public func data(for ref: AttachmentRef) -> Data? {
+    func data(for ref: AttachmentRef) -> Data? {
         try? Data(contentsOf: directory.appendingPathComponent(ref.relativePath))
     }
 

@@ -106,9 +106,6 @@
   "hint.smtp.unsupported": {
    "de": "Nicht unterstützt"
   },
-  "mail.accounts.none": {
-   "de": "Kein Konto"
-  },
   "mail.action.archive": {
    "de": "Archivieren",
    "en": "Archive"
@@ -328,10 +325,6 @@
    "de": "Senden braucht die Schreibfreigabe",
    "en": "Sending needs write access"
   },
-  "mail.draft.queuedInOutbox": {
-   "de": "Sendet …",
-   "en": "Sending …"
-  },
   "mail.draft.saved": {
    "de": "Entwurf gesichert",
    "en": "Draft saved"
@@ -346,18 +339,6 @@
   },
   "mail.draft.subjectMissing": {
    "de": "Betreff fehlt"
-  },
-  "mail.error.cancelled": {
-   "de": "Abgebrochen"
-  },
-  "mail.error.duplicate": {
-   "de": "Doppelt"
-  },
-  "mail.error.keychain": {
-   "de": "Schlüsselbund"
-  },
-  "mail.error.limit": {
-   "de": "Limit erreicht"
   },
   "mail.filter": {
    "de": "Filter"
@@ -379,28 +360,6 @@
   },
   "mail.fold.named": {
    "de": "%@ falten"
-  },
-  "mail.footer.more": {
-   "de": "Mehr",
-   "en": "More"
-  },
-  "mail.footer.project": {
-   "de": "In Projektordner sichern",
-   "en": "Save to Project Folder"
-  },
-  "mail.footer.spam": {
-   "de": "Als Spam melden",
-   "en": "Report as Junk"
-  },
-  "mail.footer.star": {
-   "de": "Markieren"
-  },
-  "mail.footer.unread": {
-   "de": "Als ungelesen markieren",
-   "en": "Mark as Unread"
-  },
-  "mail.footer.unstar": {
-   "de": "Markierung entfernen"
   },
   "mail.grow.named": {
    "de": "%@ groß"
@@ -490,9 +449,6 @@
   "mail.list.loading": {
    "de": "Nachrichten werden geladen"
   },
-  "mail.list.loadingMore": {
-   "de": "Lädt"
-  },
   "mail.list.noFilterMatch": {
    "de": "Keine Treffer für diesen Filter.",
    "en": "No results for this filter."
@@ -513,9 +469,6 @@
    "de": "Verbinde ein Postfach, um Mails hier zu lesen und zu schreiben.",
    "en": "Connect a mailbox to read and write mail here."
   },
-  "mail.list.offline": {
-   "de": "Offline"
-  },
   "mail.list.signInExpired": {
    "de": "%@ ist nicht erreichbar"
   },
@@ -533,16 +486,11 @@
    "de": "Drive"
   },
   "mail.menu.projectMore": {
-   "de": "%@ weitere im Projektordner"
-  },
-  "mail.overview.back": {
-   "de": "Zurück zum Stapel"
+   "de": "%@ weitere im Projektordner",
+   "en": "%@ more in the project folder"
   },
   "mail.overview.folder": {
    "de": "%@ · %@"
-  },
-  "mail.overview.open": {
-   "de": "Übersicht"
   },
   "mail.overview.stack": {
    "de": "Stapel · %@"
@@ -639,10 +587,6 @@
    "de": "Papierkorb",
    "en": "Trash"
   },
-  "mail.row.hasAttachments": {
-   "de": "Mit Anhang",
-   "en": "With Attachments"
-  },
   "mail.row.moreAttachments": {
    "de": "Weitere Anhänge",
    "en": "More attachments"
@@ -656,15 +600,7 @@
   "mail.row.noText": {
    "de": "Kein Text"
   },
-  "mail.row.starred": {
-   "de": "Markiert",
-   "en": "Flagged"
-  },
   "mail.row.thread": {
-   "de": "Nachrichten in dieser Unterhaltung",
-   "en": "Messages in this conversation"
-  },
-  "mail.row.threadCount": {
    "de": "Nachrichten in dieser Unterhaltung",
    "en": "Messages in this conversation"
   },
@@ -708,30 +644,6 @@
   },
   "mail.search.tip.here": {
    "de": "Sucht nur in %@. Klicken: überall suchen"
-  },
-  "mail.state.connected": {
-   "de": "Verbunden"
-  },
-  "mail.state.created": {
-   "de": "Nicht verbunden"
-  },
-  "mail.state.failed": {
-   "de": "Fehler"
-  },
-  "mail.state.keychain": {
-   "de": "Schlüsselbund"
-  },
-  "mail.state.loading": {
-   "de": "Lädt"
-  },
-  "mail.state.locked": {
-   "de": "Gesperrt"
-  },
-  "mail.state.orphaned": {
-   "de": "Verwaist"
-  },
-  "mail.state.signedIn": {
-   "de": "Angemeldet"
   },
   "mail.suggest.contact": {
    "de": "Kontakt"

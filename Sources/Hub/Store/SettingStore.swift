@@ -36,6 +36,12 @@ public final class SettingStore: Sendable {
         try put(key, JSONEncoder().encode(value))
     }
 
+    func remove(key: String) throws {
+        try database.write { db in
+            try db.execute(sql: "DELETE FROM setting WHERE key = ?", arguments: [key])
+        }
+    }
+
     func remove(withPrefix prefix: String) throws {
         try database.write { db in
             try db.execute(sql: "DELETE FROM setting WHERE instr(key, ?) = 1", arguments: [prefix])

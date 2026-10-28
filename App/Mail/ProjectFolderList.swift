@@ -50,7 +50,7 @@ enum ProjectFolderList {
                 })
             }
             let more = hidden > 0
-                ? [MenuEntry.row(MenuItem(id: "more", label: Text(verbatim: appearance.format("mail.menu.projectMore", Format.number(hidden)))) {})]
+                ? [MenuEntry.head(id: "more", label: Text(verbatim: appearance.format("mail.menu.projectMore", Format.number(hidden))))]
                 : []
             present([.head(id: "head", label: Text(verbatim: title))] + rows + more, anchor: anchor)
         }

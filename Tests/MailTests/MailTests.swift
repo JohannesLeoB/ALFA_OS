@@ -1,4 +1,5 @@
 import Core
+import Design
 import Foundation
 @testable import Hub
 import Shell
@@ -55,6 +56,11 @@ private final class TransportDouble: MailTransportPort, PurgePort, @unchecked Se
     let failure = Locked<(any Error)?>(nil)
     let wasSentAnswer = Locked(false)
     let drafts = Locked<[String: Draft]>([:])
+    let prefix: String
+
+    init(prefix: String = "1") {
+        self.prefix = prefix
+    }
 
     private func note(_ name: String) throws {
         calls.with { $0.append(name) }
@@ -69,7 +75,7 @@ private final class TransportDouble: MailTransportPort, PurgePort, @unchecked Se
 
     func listMessages(folderID: String, query: String?, pageToken: String?, maxResults: Int) async throws -> MessagePage {
         try note("listMessages")
-        let message = MessageSummary(id: "1:1:" + folderID, threadID: "t", subject: "Hello", from: "Anna",
+        let message = MessageSummary(id: prefix + ":1:" + folderID, threadID: "t", subject: "Hello", from: "Anna",
                                      fromRaw: "Anna <anna@example.com>", toRaw: "me@example.com",
                                      snippet: "snippet", flags: [], folderIDs: [folderID], messageIDHeader: "<h1@x>")
         return MessagePage(messages: [message])
@@ -91,8 +97,9 @@ private final class TransportDouble: MailTransportPort, PurgePort, @unchecked Se
 
     func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> String {
         try note("saveDraft")
-        drafts.with { $0["1:9:Drafts"] = draft }
-        return "1:9:Drafts"
+        let id = prefix + ":9:Drafts"
+        drafts.with { $0[id] = draft }
+        return id
     }
 
     func fetchDraft(messageID: String) async throws -> StoredDraft {
@@ -110,6 +117,7 @@ private final class TransportDouble: MailTransportPort, PurgePort, @unchecked Se
 @MainActor
 private final class FakeAccess: AccessPort {
     var transport: (any MailTransportPort)?
+    var transports: [Inlet.ID: any MailTransportPort] = [:]
     var connected = true
     var records = [Inlet(id: "a", provider: "imap", capabilities: [.mail], owner: .company, title: "A",
                          account: "me@example.com", state: .connected(probed: Date()))]
@@ -125,7 +133,7 @@ private final class FakeAccess: AccessPort {
     }
 
     func port<P>(_ port: P.Type, for inlet: Inlet.ID) throws(HubFailure) -> P {
-        guard connected, let typed = transport as? P else { throw .notConnected(inlet) }
+        guard connected, let typed = (transports[inlet] ?? transport) as? P else { throw .notConnected(inlet) }
         return typed
     }
 
@@ -156,6 +164,14 @@ private struct Rig {
         access.transport = transport
         outbox = OutboxStore(access: access, database: database, events: events)
         mailbox = MailboxStore(access: access, database: database, outbox: outbox, events: events)
+    }
+
+    func addMailbox(_ id: Inlet.ID, prefix: String) -> TransportDouble {
+        let other = TransportDouble(prefix: prefix)
+        access.transports[id] = other
+        access.records.append(Inlet(id: id, provider: "imap", capabilities: [.mail], owner: .company, title: id.uppercased(),
+                                    account: id + "@example.com", state: .connected(probed: Date())))
+        return other
     }
 }
 
@@ -542,37 +558,102 @@ final class MailTests: XCTestCase {
     }
 
     @MainActor
-    func testComposeReusesABlankDraftFromTheOpenMailbox() async throws {
+    func testComposeReusesOnlyABlankDraftOfTheOpenMailbox() async throws {
         let rig = try Rig()
+        _ = rig.addMailbox("b", prefix: "2")
         let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
         await state.start()
-        let first = try XCTUnwrap(state.accounts.first)
-        var second = first
-        second.id = first.id + ".second"
-        state.accounts.append(second)
         let id = try XCTUnwrap(state.compose())
-        XCTAssertEqual(state.draft(id)?.inlet, first.id)
-        state.selectedInlet = second.id
+        XCTAssertEqual(state.draft(id)?.inlet, "a")
         XCTAssertEqual(state.compose(), id)
-        XCTAssertEqual(state.draft(id)?.inlet, second.id)
+        state.setFrom(id, inlet: "b")
+        let other = try XCTUnwrap(state.compose())
+        XCTAssertNotEqual(other, id)
+        XCTAssertEqual(state.draft(id)?.inlet, "b")
+        XCTAssertEqual(state.draft(other)?.inlet, "a")
     }
 
     @MainActor
-    func testEachMailboxKeepsItsOwnStack() async throws {
+    func testSwitchingMailboxParksItsStackAndStartsInTheInbox() async throws {
         let rig = try Rig()
+        _ = rig.addMailbox("b", prefix: "2")
         let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
         await state.start()
-        let first = try XCTUnwrap(state.accounts.first)
-        var second = first
-        second.id = first.id + ".second"
-        state.accounts.append(second)
+        await state.open("1:1:INBOX")
         let id = try XCTUnwrap(state.compose())
-        await state.selectAccount(second.id)
+        await state.selectFolder("Archive")
+        await state.setSearching(true)
+        state.openOverview(true)
+        await state.selectAccount("a")
+        XCTAssertEqual(state.selectedFolder, "Archive")
+        XCTAssertTrue(state.searching)
+        await state.selectAccount("b")
+        XCTAssertEqual(state.selectedInlet, "b")
         XCTAssertEqual(state.stackCount, 0)
-        await state.selectAccount(first.id)
+        XCTAssertEqual(state.selectedFolder, "INBOX")
+        XCTAssertFalse(state.searching)
+        XCTAssertFalse(state.overview.open)
+        XCTAssertEqual(state.rows.map(\.id), ["2:1:INBOX"])
+        await state.open("2:1:INBOX")
         XCTAssertEqual(state.stackCount, 1)
+        XCTAssertNotNil(state.cards.first { $0.inlet == "a" && $0.id == "1:1:INBOX" })
+        state.close("2:1:INBOX")
+        XCTAssertNil(state.selectedMessage)
+        await state.selectAccount("a")
+        XCTAssertEqual(state.stackCount, 2)
         XCTAssertEqual(state.frontRef, .draft(id))
         XCTAssertEqual(state.selectedFolder, "INBOX")
+        XCTAssertEqual(state.selectedMessage, "1:1:INBOX")
+    }
+
+    @MainActor
+    func testTrimmingAndPreviewsLeaveParkedMailboxesAlone() async throws {
+        let rig = try Rig()
+        _ = rig.addMailbox("b", prefix: "2")
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        let parked = (0..<Tokens.Count.stackMaxCards).map { index in
+            OpenMessage(inlet: "b", summary: MessageSummary(id: "2:\(index):INBOX", subject: "S", from: "B"), content: .text(""))
+        }
+        state.cards = parked
+        state.parked["b"] = ParkedMailbox(stack: parked.map { .message($0.id) })
+        await state.open("1:1:INBOX")
+        XCTAssertEqual(state.cards.filter { $0.inlet == "b" }.count, Tokens.Count.stackMaxCards)
+        XCTAssertEqual(state.stackOrder, [.message("1:1:INBOX")])
+        await state.selectAccount("b")
+        XCTAssertEqual(state.stackCount, Tokens.Count.stackMaxCards)
+    }
+
+    @MainActor
+    func testRemovingTheOpenMailboxRestoresTheNextAndDropsItsCards() async throws {
+        let rig = try Rig()
+        let second = rig.addMailbox("b", prefix: "2")
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        await state.open("1:1:INBOX", pin: true)
+        await state.selectAccount("b")
+        await state.open("2:1:INBOX")
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.subject = "Kept" }
+        rig.access.records.removeAll { $0.id == "b" }
+        await state.refreshAccounts()
+        XCTAssertEqual(state.selectedInlet, "a")
+        XCTAssertEqual(state.stackOrder, [.message("1:1:INBOX")])
+        XCTAssertTrue(state.cards.allSatisfy { $0.inlet == "a" })
+        XCTAssertNil(state.draft(id))
+        XCTAssertTrue(second.calls.with { $0.contains("saveDraft") })
+        XCTAssertTrue(state.parked.isEmpty)
+    }
+
+    func testMailboxInitialsComeFromTheAddress() {
+        let inlet = { (title: String, account: String) in
+            Inlet(id: "x", provider: "imap", capabilities: [.mail], owner: .company, title: title, account: account, state: .created)
+        }
+        XCTAssertEqual(inlet("Arbeit", "info@brenner.de").mailboxInitials, "IB")
+        XCTAssertEqual(inlet("", "plain").mailboxInitials, "P")
+        XCTAssertEqual(inlet(" Werk ", "").mailboxInitials, "W")
+        XCTAssertEqual(inlet("", "").mailboxInitials, "")
+        XCTAssertEqual(inlet(" Werk ", "").ownName, "Werk")
     }
 
     @MainActor
@@ -607,7 +688,7 @@ final class MailTests: XCTestCase {
     }
 
     func testListWindowHoldsPlaceForRowsNotLoaded() {
-        XCTAssertEqual(ListWindowEngine.spacer(count: 200, window: 60), 140 * 88)
+        XCTAssertEqual(ListWindowEngine.spacer(count: 200, window: 60), 140 * Tokens.Size.mailRowEstimate)
         XCTAssertEqual(ListWindowEngine.spacer(count: 40, window: 60), 0)
         XCTAssertEqual(ListWindowEngine.spacer(count: 60, window: 60), 0)
         XCTAssertEqual(ListWindowEngine.remaining(content: 10_000, offset: 1_000, container: 600, spacer: 4_000), 4_400)

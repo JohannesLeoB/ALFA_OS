@@ -15,6 +15,16 @@ public enum MailboxDisplay: String, CaseIterable, Sendable {
         }
     }
 
+    public func choice(title: String, account: String) -> String? {
+        switch self {
+        case .ownName:
+            let name = title.trimmingCharacters(in: .whitespaces)
+            return name.isEmpty ? nil : name
+        case .localPart: return Self.local(account)
+        case .domain: return Self.domain(account)
+        }
+    }
+
     public static func local(_ account: String) -> String {
         let part = account.split(separator: "@", omittingEmptySubsequences: false).first.map(String.init) ?? ""
         return (part.isEmpty ? account : part) + "@"

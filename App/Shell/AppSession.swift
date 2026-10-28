@@ -68,7 +68,10 @@ final class AppSession {
         watcher = Task { [weak self] in
             for await event in access.events {
                 switch event {
-                case .inletChanged, .inletRemoved: self?.reshelveIfChanged()
+                case .inletChanged: self?.reshelveIfChanged()
+                case .inletRemoved(let id):
+                    self?.settings.forget(id)
+                    self?.reshelveIfChanged()
                 default: break
                 }
             }

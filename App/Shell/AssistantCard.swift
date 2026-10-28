@@ -7,6 +7,7 @@ struct AssistantCard: View {
     let kindKey: String
     let title: String
     let line: String?
+    var addressed = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step4)) {
@@ -17,7 +18,7 @@ struct AssistantCard: View {
                 .typeStyle(Tokens.TextStyle.bodyEmphasis)
                 .fixedSize(horizontal: false, vertical: true)
             if let line {
-                Text(verbatim: line)
+                Text(verbatim: addressed ? appearance.format("shell.assistantCard.mailTo", line) : line)
                     .typeStyle(Tokens.TextStyle.caption)
                     .foregroundStyle(appearance.color(\.onInverseTertiary))
                     .fixedSize(horizontal: false, vertical: true)
@@ -31,9 +32,19 @@ struct AssistantCard: View {
 }
 
 extension AssistantCard {
-    init(draft: DraftSummary, appearance: Appearance) {
-        kindKey = "shell.assistantCard.kind." + draft.kind.rawValue
-        title = draft.title
-        line = draft.line.map { draft.kind == .mail ? appearance.format("shell.assistantCard.mailTo", $0) : $0 }
+    init(draft: DraftSummary) {
+        self.init(kindKey: Self.kindKey(draft.kind), title: draft.title, line: draft.line, addressed: draft.kind == .mail)
+    }
+
+    private static func kindKey(_ kind: DraftSummary.Kind) -> String {
+        switch kind {
+        case .mail: "shell.assistantCard.kind.mail"
+        case .contact: "shell.assistantCard.kind.contact"
+        case .task: "shell.assistantCard.kind.task"
+        case .appointment: "shell.assistantCard.kind.appointment"
+        case .cart: "shell.assistantCard.kind.cart"
+        case .file: "shell.assistantCard.kind.file"
+        case .calendar: "shell.assistantCard.kind.calendar"
+        }
     }
 }

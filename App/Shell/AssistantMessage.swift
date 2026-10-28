@@ -30,6 +30,8 @@ struct AssistantMessage: View {
         }
         .frame(maxWidth: .infinity, alignment: user ? .trailing : .leading)
         .padding(.leading, user ? CGFloat(Tokens.Spacing.step28) : 0)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(appearance.text(user ? "shell.assistantMessage.user" : "shell.assistantMessage.assistant"))
     }
 
     private var blocks: some View {
@@ -52,7 +54,7 @@ struct AssistantMessage: View {
             Text(verbatim: value)
                 .fixedSize(horizontal: false, vertical: true)
         case .draft(let draft):
-            AssistantCard(draft: draft, appearance: appearance)
+            AssistantCard(draft: draft)
         case .estimate(let minNet, let maxNet):
             AssistantCard(kindKey: "shell.assistantCard.kind.estimate",
                           title: appearance.format("shell.assistantCard.estimateRange", amount(minNet), amount(maxNet)), line: nil)

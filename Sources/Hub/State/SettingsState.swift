@@ -5,12 +5,12 @@ import Observation
 @MainActor @Observable
 public final class SettingsState {
     public var group: SettingsGroup = .connections
-    public var tileGroup: String?
     public private(set) var cards: [String] = []
     public private(set) var front: String?
     public private(set) var fanned = false
     public private(set) var toast: String?
     public private(set) var toastName: String?
+    public private(set) var toastSerial = 0
     public private(set) var appearance: AppearanceChoice = .system
     public private(set) var destination: StartDestination = .mail
     public private(set) var lockOn = true
@@ -104,6 +104,11 @@ public final class SettingsState {
         save(SettingsKey.mailboxDisplay(inlet), value.rawValue)
     }
 
+    public func forget(_ inlet: Inlet.ID) {
+        mailboxDisplays[inlet] = nil
+        try? settings.remove(key: SettingsKey.mailboxDisplay(inlet))
+    }
+
     public func open(_ id: String) {
         var next = cards.contains(id) ? cards : cards + [id]
         if next.count > Tokens.Count.stackMaxCards { next = Array(next.suffix(Tokens.Count.stackMaxCards)) }
@@ -131,6 +136,7 @@ public final class SettingsState {
     public func notify(_ key: String, name: String? = nil) {
         toast = key
         toastName = name
+        toastSerial += 1
     }
 
     public func dismissToast() {

@@ -101,7 +101,7 @@ struct Blob: View {
             } else {
                 BlobEyes(ring: !docked, open: desk.awake || open || pressing, follow: eyes, lid: lid)
             }
-            appearance.text(orbFace ? "assistant.title" : desk.current?.titleKey ?? "")
+            appearance.text(orbFace ? "shell.blobFace.assistant" : desk.current?.titleKey ?? "")
                 .font(.face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
                 .lineLimit(1)
                 .fixedSize()

@@ -26,7 +26,7 @@ extension InboxState {
     public func close(_ id: String) {
         cards.removeAll { $0.id == id }
         detach(.message(id))
-        if selectedMessage == id { selectedMessage = cards.last?.id }
+        if selectedMessage == id { selectedMessage = cards.last { $0.inlet == selectedInlet }?.id }
     }
 
     func loadBody(_ id: String) async {

@@ -21,11 +21,6 @@ struct MailboxDisplayRow: View {
     }
 
     private func label(_ option: MailboxDisplay) -> Text {
-        let own = inlet.title.trimmingCharacters(in: .whitespaces)
-        switch option {
-        case .ownName: return own.isEmpty ? appearance.text("settings.account.show.own") : Text(verbatim: own)
-        case .localPart: return Text(verbatim: MailboxDisplay.local(inlet.account))
-        case .domain: return Text(verbatim: MailboxDisplay.domain(inlet.account))
-        }
+        option.choice(title: inlet.title, account: inlet.account).map { Text(verbatim: $0) } ?? appearance.text("settings.account.show.own")
     }
 }

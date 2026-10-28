@@ -32,9 +32,9 @@ final class Assembly {
     let connections: Connections
     let inbox: InboxState
     let receipts: ReceiptStore
-    let chat: ChatStore
-    let privacy: PrivacyStore
-    let engine: ConversationEngine
+    let chatStore: ChatStore
+    let privacyStore: PrivacyStore
+    let conversationEngine: ConversationEngine
     let conversation: ChatState
     let shelf: ToolShelf
 
@@ -75,7 +75,7 @@ final class Assembly {
         let credential = ClaudeCredential(setup: connections.setup, keychain: keychain)
         let attachments = AttachmentStore(root: directory.appendingPathComponent(Self.attachmentsFolder, isDirectory: true))
         let claude = ClaudeClient(keys: ClaudeKeyStore(credential: credential), http: http, attachments: attachments)
-        let chat = ChatStore(database: database, userID: person.id)
+        let chatStore = ChatStore(database: database, userID: person.id)
         let shelf = ToolShelf(
             access: connections.access, setup: connections.setup, keychain: keychain, http: http, text: text,
             notes: NoteStore(database: database, userID: person.id), todos: TodoStore(database: database, userID: person.id),
@@ -92,19 +92,19 @@ final class Assembly {
         self.connections = connections
         self.inbox = inbox
         self.receipts = receipts
-        self.chat = chat
-        let privacy = PrivacyStore(database: database)
-        self.privacy = privacy
+        self.chatStore = chatStore
+        let privacyStore = PrivacyStore(database: database)
+        self.privacyStore = privacyStore
         self.shelf = shelf
-        let engine = ConversationEngine(
-            chat: chat, provider: claude, registry: shelf.registry(), text: text,
+        let conversationEngine = ConversationEngine(
+            chat: chatStore, provider: claude, registry: shelf.registry(), text: text,
             memory: MemoryStore(database: database, userID: person.id), log: IntegrationLogStore(database: database))
-        self.engine = engine
-        conversation = ChatState(chat: chat, engine: engine, attachments: attachments, privacy: privacy)
+        self.conversationEngine = conversationEngine
+        conversation = ChatState(chat: chatStore, engine: conversationEngine, attachments: attachments, privacy: privacyStore)
     }
 
     func reshelve() {
-        engine.update(registry: shelf.registry())
+        conversationEngine.update(registry: shelf.registry())
     }
 
     private static func providers(directory: URL, catalog: IntegrationCatalogStore, http: URLSession,

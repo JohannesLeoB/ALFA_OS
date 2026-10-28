@@ -9,6 +9,7 @@ struct AssistantAttachment: View {
     var body: some View {
         HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
             Glyph(.doc)
+                .accessibilityHidden(true)
             Text(verbatim: name)
                 .lineLimit(1)
                 .truncationMode(.tail)
@@ -19,7 +20,7 @@ struct AssistantAttachment: View {
         }
         .padding(.leading, CGFloat(Tokens.Spacing.step8))
         .padding(.trailing, CGFloat(onRemove == nil ? Tokens.Spacing.step12 : Tokens.Spacing.step4))
-        .frame(height: CGFloat(Tokens.Size.menuRowHeight))
+        .frame(height: CGFloat(Tokens.Spacing.step28))
         .background(Capsule().fill(appearance.color(\.inverseField)))
         .help(Text(verbatim: name))
     }

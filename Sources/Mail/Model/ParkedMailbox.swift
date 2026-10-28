@@ -1,6 +1,5 @@
-struct ParkedDesk: Equatable {
+struct ParkedMailbox {
     var stack: [CardRef] = []
     var front: CardRef?
-    var folder: String?
     var message: String?
 }

@@ -11,7 +11,6 @@ private struct SwitchGlass: ViewModifier {
                 .fill(appearance.color(\.lane).opacity(Tokens.Opacity.switchGlass))
                 .opacity(on ? 1 : 0)
                 .allowsHitTesting(false)
-                .zIndex(Double(Tokens.Layer.switchGlass))
         }
     }
 }

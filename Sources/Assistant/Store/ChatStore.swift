@@ -39,8 +39,8 @@ private struct StoredMessage: Codable, FetchableRecord, PersistableRecord {
 }
 
 @MainActor @Observable
-public final class ChatStore {
-    public private(set) var saveState: SaveState = .idle
+public final class ChatStore: ChatPort {
+    private(set) var saveState: SaveState = .idle
 
     @ObservationIgnored private let database: SQLiteStore
     @ObservationIgnored private let userID: String?
@@ -56,7 +56,7 @@ public final class ChatStore {
         byScope[scope.rawKey] ?? []
     }
 
-    func loadIfNeeded(_ scope: ConversationScope) throws {
+    public func loadIfNeeded(_ scope: ConversationScope) throws {
         let key = scope.rawKey
         guard loadedScopes.contains(key) == false else { return }
         let owner = userID
@@ -129,7 +129,7 @@ public final class ChatStore {
         }
     }
 
-    func remove(_ ids: Set<UUID>, from scope: ConversationScope) throws {
+    public func remove(_ ids: Set<UUID>, from scope: ConversationScope) throws {
         try loadIfNeeded(scope)
         let key = scope.rawKey
         let owner = userID
@@ -174,5 +174,21 @@ public final class ChatStore {
             saveState = .failed(error.localizedDescription)
             throw error
         }
+    }
+
+    public func attachmentPaths() throws -> Set<String> {
+        let stored = try database.read { db in
+            try Data.fetchAll(db, sql: "SELECT blocksJSON FROM chatMessages")
+        }
+        var paths = Set<String>()
+        for data in stored {
+            for block in (try? JSONDecoder().decode([ContentBlock].self, from: data)) ?? [] {
+                switch block {
+                case .image(let ref), .document(let ref): paths.insert(ref.relativePath)
+                default: break
+                }
+            }
+        }
+        return paths
     }
 }

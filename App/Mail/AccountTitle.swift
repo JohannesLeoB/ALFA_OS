@@ -1,5 +1,6 @@
 import Design
 import Hub
+import Mail
 import SwiftUI
 
 struct AccountTitle: View {
@@ -7,6 +8,7 @@ struct AccountTitle: View {
     let account: Inlet
     let display: MailboxDisplay
     let choose: (MailboxDisplay) -> Void
+    @State private var anchor = AnchorBox()
 
     var body: some View {
         Text(verbatim: account.mailboxName(display))
@@ -16,8 +18,12 @@ struct AccountTitle: View {
             .help(Text(verbatim: account.account))
             .overlay {
                 RightClickOverlay { point in
-                    MailboxDisplay.showMenu(for: account, current: display, at: point, appearance: appearance, choose: choose)
+                    MailboxMenu.show(for: account, current: display, at: point, appearance: appearance, choose: choose)
                 }
+            }
+            .background(AnchorMarker(box: anchor))
+            .accessibilityAction(named: appearance.text("mail.account.show")) {
+                anchor.showMenu(MailboxMenu.entries(for: account, current: display, appearance: appearance, choose: choose))
             }
     }
 }

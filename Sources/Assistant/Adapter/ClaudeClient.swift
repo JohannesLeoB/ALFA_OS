@@ -62,7 +62,7 @@ public struct ClaudeClient: ConversationPort {
         let payload = WirePayload(
             model: request.model ?? key.model, maxTokens: request.maxTokens,
             system: Self.systemBlocks(from: request.system),
-            messages: Self.sanitize(wire(request.messages)),
+            messages: Self.sanitize(wire(request.messages, sharesFiles: request.sharesFiles)),
             tools: tools.isEmpty ? nil : tools,
             stream: stream ? true : nil)
         var urlRequest = URLRequest(url: baseURL)
@@ -73,7 +73,8 @@ public struct ClaudeClient: ConversationPort {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         urlRequest.httpBody = try encoder.encode(payload)
-        urlRequest.timeoutInterval = Self.attachmentCarrier(in: request.messages) == nil ? Self.plainTimeout : Self.attachmentTimeout
+        let carrier = Self.attachmentCarrier(in: request.messages, sharesFiles: request.sharesFiles)
+        urlRequest.timeoutInterval = carrier == nil ? Self.plainTimeout : Self.attachmentTimeout
         return urlRequest
     }
 
@@ -86,12 +87,18 @@ public struct ClaudeClient: ConversationPort {
         }
     }
 
-    static func attachmentCarrier(in messages: [Message]) -> UUID? {
-        messages.last { $0.role == .user && hasAttachment($0) }?.id
+    static func carriesToolResults(_ message: Message) -> Bool {
+        message.blocks.contains { if case .toolResult = $0 { true } else { false } }
     }
 
-    func wire(_ messages: [Message]) -> [WireMessage] {
-        let carrier = Self.attachmentCarrier(in: messages)
+    static func attachmentCarrier(in messages: [Message], sharesFiles: Bool) -> UUID? {
+        guard sharesFiles, let question = messages.last(where: { $0.role == .user && carriesToolResults($0) == false }),
+              hasAttachment(question) else { return nil }
+        return question.id
+    }
+
+    func wire(_ messages: [Message], sharesFiles: Bool) -> [WireMessage] {
+        let carrier = Self.attachmentCarrier(in: messages, sharesFiles: sharesFiles)
         return messages.map { wire($0, withAttachmentData: $0.id == carrier) }
     }
 

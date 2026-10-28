@@ -9,60 +9,44 @@ struct AccountCard: View {
     let level: Int
     let last: Bool
     let alert: Bool
+    let named: Bool
     let choose: (MailboxDisplay) -> Void
     let action: () -> Void
     @State private var hovering = false
+    @State private var anchor = AnchorBox()
 
-    private var step: StackStep {
-        let steps = appearance.dark ? Tokens.stackDark : Tokens.stackLight
-        return steps[min(level, steps.count - 1)]
-    }
+    private var step: StackStep { Deck.step(level, dark: appearance.dark) }
 
     private var gloss: KeyPath<Colors, ColorValue> {
         step.surface.red >= SheetValues.stackGlossLightFrom ? \.stackGlossLight : \.stackGlossDark
     }
 
-    private var shape: UnevenRoundedRectangle {
-        let radius = CGFloat(Tokens.Radius.card)
-        return UnevenRoundedRectangle(topLeadingRadius: 0, bottomLeadingRadius: radius, bottomTrailingRadius: radius, topTrailingRadius: 0)
-    }
-
     var body: some View {
         let ink = appearance.paint(step.ink)
-        let side = CGFloat(Tokens.Size.symbolSize)
-        HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
-            Text(verbatim: account.mailboxInitials)
-                .typeStyle(Tokens.TextStyle.mark)
-                .lineLimit(1)
-                .frame(width: side, height: side)
-                .ring(Circle(), ink.opacity(Tokens.Opacity.ringOnMark))
-                .overlay(alignment: .topTrailing) { if alert { AccountAlert() } }
-                .padding(.trailing, CGFloat(Tokens.Spacing.step12))
-            Text(verbatim: account.mailboxName(display))
-                .typeStyle(Tokens.TextStyle.bodyEmphasis)
-                .lineLimit(1)
-                .truncationMode(.tail)
-                .frame(maxWidth: .infinity, alignment: .leading)
+        let shape = Deck.bottomRounded(Tokens.Radius.card)
+        Button(action: action) {
+            MailboxRow(account: account, display: display, ink: ink, alert: alert, named: named)
+                .foregroundStyle(ink)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                .background(appearance.paint(step.surface).animation(appearance.ease(Tokens.Duration.stackBackground, Tokens.Easing.stack), value: level))
+                .lacquer(shape, gloss: gloss, seam: \.stackSeamBack, drop: !last)
+                .contentShape(shape)
         }
-        .foregroundStyle(ink)
-        .padding(.leading, CGFloat(Tokens.Radius.card - Tokens.Size.symbolSize / 2))
-        .padding(.trailing, CGFloat(Tokens.Spacing.step28 + Tokens.Spacing.step20))
-        .frame(height: CGFloat(Tokens.Spacing.step44))
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-        .background(appearance.paint(step.surface).animation(appearance.ease(Tokens.Duration.stackBackground, Tokens.Easing.stack), value: level))
-        .lacquer(shape, gloss: gloss, seam: \.stackSeamBack, drop: !last)
-        .contentShape(shape)
+        .buttonStyle(.plain)
         .overlay {
             RightClickOverlay { point in
-                MailboxDisplay.showMenu(for: account, current: display, at: point, appearance: appearance, choose: choose)
+                MailboxMenu.show(for: account, current: display, at: point, appearance: appearance, choose: choose)
             }
         }
+        .background(AnchorMarker(box: anchor))
         .offset(y: !last && hovering ? CGFloat(SheetValues.stackHoverLift) : 0)
         .onHover { hovering = $0 }
-        .onTapGesture(perform: action)
         .help(Text(verbatim: account.account))
-        .accessibilityElement(children: .combine)
-        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel(Text(verbatim: account.account))
+        .accessibilityValue(alert ? appearance.text("mail.row.unread") : Text(verbatim: ""))
+        .accessibilityAction(named: appearance.text("mail.account.show")) {
+            anchor.showMenu(MailboxMenu.entries(for: account, current: display, appearance: appearance, choose: choose))
+        }
         .animation(appearance.ease(SheetValues.deckLift, Tokens.Easing.envelopeSpring), value: hovering)
     }
 }

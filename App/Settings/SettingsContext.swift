@@ -1,3 +1,4 @@
+import Assistant
 import Hub
 import Mail
 import Shell
@@ -13,6 +14,8 @@ struct SettingsContext {
     let privacy: AssistantPrivacy
     let inbox: InboxState
     let desk: DeskState
+    let conversation: ChatState
+    let tiles: TileFocus
 
     var readings: [IntegrationReading] { IntegrationReadEngine.readAll(catalog, setup: setup, rules: rules) }
 

@@ -22,7 +22,7 @@ struct AssistantScope: View {
         .foregroundStyle(appearance.color(\.onInverseTertiary))
         .padding(.leading, CGFloat(Tokens.Spacing.step12))
         .padding(.trailing, CGFloat(Tokens.Spacing.step4))
-        .frame(height: CGFloat(Tokens.Size.menuRowHeight))
+        .frame(height: CGFloat(Tokens.Spacing.step28))
     }
 
     private var label: Text {

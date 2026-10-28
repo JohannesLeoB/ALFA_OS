@@ -20,8 +20,8 @@ public final class ConversationEngine {
     private var registry: ToolRegistry
     private var activeTask: Task<Void, Never>?
 
-    public private(set) var isResponding = false
-    public private(set) var lastRoutedModel: String?
+    private(set) var isResponding = false
+    private(set) var lastRoutedModel: String?
 
     public init(chat: ChatStore, provider: any ConversationPort, registry: ToolRegistry, text: any TextPort,
                 memory: MemoryStore? = nil, log: IntegrationLogStore? = nil,
@@ -40,11 +40,11 @@ public final class ConversationEngine {
         self.registry = registry
     }
 
-    public func cancel() {
+    func cancel() {
         activeTask?.cancel()
     }
 
-    public func send(_ message: String, scope: ConversationScope, context: ConversationContext = ConversationContext(),
+    func send(_ message: String, scope: ConversationScope, context: ConversationContext = ConversationContext(),
                      privacy: PrivacySnapshot = PrivacySnapshot(), attachments: [AttachmentRef] = [],
                      toolsEnabled: Bool = true, now: Date = Date()) async {
         let trimmed = message.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -89,7 +89,7 @@ public final class ConversationEngine {
         let turn = Turn(
             convo: prepared.convo, system: system, definitions: definitions, allowed: Set(allowedTools.map(\.name)),
             model: model, scope: context.scope, actor: context.actorUserID, placeholderID: placeholder.id,
-            conversation: scope, disabled: privacy.settings.disabled)
+            conversation: scope, disabled: privacy.settings.disabled, sharesFiles: privacy.chatFiles)
 
         let task = Task { [weak self] in
             guard let self else { return }
@@ -122,6 +122,7 @@ public final class ConversationEngine {
         let placeholderID: UUID
         let conversation: ConversationScope
         let disabled: Set<PrivacyCategory>
+        let sharesFiles: Bool
     }
 
     struct Outcome {
@@ -181,7 +182,8 @@ public final class ConversationEngine {
             rounds += 1
             if Date() >= deadline { return Outcome(answer: say("assistant.engine.deadline"), activities: activities) }
             let reply = try await provider.respond(ChatRequest(
-                messages: convo, system: turn.system, tools: turn.definitions, maxTokens: Self.answerTokens, model: turn.model))
+                messages: convo, system: turn.system, tools: turn.definitions, maxTokens: Self.answerTokens, model: turn.model,
+                sharesFiles: turn.sharesFiles))
             report(reply.usage, model: turn.model, toolCount: turn.definitions.count)
 
             if reply.toolUses.isEmpty {
@@ -273,12 +275,14 @@ public final class ConversationEngine {
 
     private func streamingAnswer(_ turn: Turn) async throws -> String {
         let stream = provider.stream(ChatRequest(
-            messages: turn.convo, system: turn.system, tools: [], maxTokens: Self.answerTokens, model: turn.model))
+            messages: turn.convo, system: turn.system, tools: [], maxTokens: Self.answerTokens, model: turn.model,
+            sharesFiles: turn.sharesFiles))
         var accumulated = ""
         for try await delta in stream {
             accumulated += delta
             chat.updateStreamingText(id: turn.placeholderID, text: accumulated, in: turn.conversation)
         }
+        try Task.checkCancellation()
         let trimmed = accumulated.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed.isEmpty ? say("assistant.engine.noAnswer") : accumulated
     }
@@ -323,7 +327,7 @@ public final class ConversationEngine {
     func blockedLabel(name: String, turn: Turn) -> String? {
         guard turn.allowed.contains(name) == false, let tool = registry.tool(named: name),
               turn.disabled.contains(tool.privacy) else { return nil }
-        return say("assistant.activity.categoryOff", say("settings.privacy.category." + tool.privacy.rawValue))
+        return say("assistant.activity.categoryOff", say(tool.privacy.key))
     }
 
     func describe(_ error: any Error) -> String {

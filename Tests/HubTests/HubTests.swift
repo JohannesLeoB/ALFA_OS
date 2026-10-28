@@ -543,11 +543,15 @@ final class HubTests: XCTestCase {
         let a = try await rig.connect("a@x")
         rig.connections.rules.setCadence(a.id, .mail, .every(.seconds(60)))
         XCTAssertNotEqual(rig.cadence.planned(a.id, .mail), .off)
+        let settings = SettingStore(database: rig.database)
+        let sibling = SettingsKey.mailboxDisplay(a.id + "x")
+        try settings.store(MailboxDisplay.domain.rawValue, forKey: SettingsKey.mailboxDisplay(a.id))
+        try settings.store(MailboxDisplay.domain.rawValue, forKey: sibling)
         try await rig.connections.setup.remove(a.id)
         XCTAssertEqual(rig.cadence.planned(a.id, .mail), .off)
         XCTAssertEqual(rig.connections.rules.cadence(a.id, .mail), .manual)
-        let remaining = try rig.database.read { db in try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM setting WHERE instr(key, ?) > 0", arguments: [a.id]) }
-        XCTAssertEqual(remaining, 0)
+        let remaining = try rig.database.read { db in try String.fetchAll(db, sql: "SELECT key FROM setting WHERE instr(key, ?) > 0", arguments: [a.id]) }
+        XCTAssertEqual(remaining, [sibling])
     }
 
     @MainActor
@@ -1251,6 +1255,15 @@ final class HubTests: XCTestCase {
                            arguments: [Data("garbage".utf8), SettingsKey.mailboxDisplay("gmail-a")])
         }
         XCTAssertEqual(try SettingsState(settings: SettingStore(database: database)).display("gmail-a"), .ownName)
+        state.setDisplay(.domain, for: "gmail-a")
+        state.setDisplay(.domain, for: "gmail-ab")
+        state.forget("gmail-a")
+        XCTAssertEqual(state.display("gmail-a"), .ownName)
+        XCTAssertEqual(state.display("gmail-ab"), .domain)
+        let reloaded = try SettingsState(settings: SettingStore(database: database))
+        XCTAssertEqual(reloaded.display("gmail-a"), .ownName)
+        XCTAssertEqual(reloaded.display("gmail-ab"), .domain)
+        XCTAssertEqual(reloaded.display("imap-b"), .localPart)
     }
 
     func testMailboxDisplayShowsNameOrAddressPart() {
@@ -1261,6 +1274,10 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(MailboxDisplay.local("plain"), "plain@")
         XCTAssertEqual(MailboxDisplay.domain("plain"), "@plain")
         XCTAssertEqual(MailboxDisplay.allCases, [.ownName, .localPart, .domain])
+        XCTAssertEqual(MailboxDisplay.ownName.choice(title: " Arbeit ", account: "info@example.com"), "Arbeit")
+        XCTAssertNil(MailboxDisplay.ownName.choice(title: "  ", account: "info@example.com"))
+        XCTAssertEqual(MailboxDisplay.localPart.choice(title: "Arbeit", account: "info@example.com"), "info@")
+        XCTAssertEqual(MailboxDisplay.domain.choice(title: "Arbeit", account: "info@example.com"), "@example.com")
     }
 
     @MainActor
@@ -1287,6 +1304,9 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(state.cards, [])
         state.notify("settings.toast.copied", name: "n")
         XCTAssertEqual([state.toast, state.toastName], ["settings.toast.copied", "n"])
+        let serial = state.toastSerial
+        state.notify("settings.toast.copied", name: "n")
+        XCTAssertEqual(state.toastSerial, serial + 1)
         state.dismissToast()
         XCTAssertNil(state.toast)
         XCTAssertNil(state.toastName)
@@ -1438,6 +1458,9 @@ final class HubTests: XCTestCase {
         try store.remove(withPrefix: "a_")
         XCTAssertEqual(Set(try store.all().keys), ["axb|1", "a%|2", "a%c|3", "z"])
         try store.remove(withPrefix: "a%")
+        XCTAssertEqual(Set(try store.all().keys), ["axb|1", "z"])
+        try store.put("ax", Data([1]))
+        try store.remove(key: "ax")
         XCTAssertEqual(Set(try store.all().keys), ["axb|1", "z"])
         try store.store(5, forKey: "n")
         XCTAssertEqual(SettingStore.decoded(try store.all()["n"], as: Int.self), 5)

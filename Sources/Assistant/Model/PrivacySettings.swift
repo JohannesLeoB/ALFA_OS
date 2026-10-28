@@ -12,6 +12,22 @@ public enum PrivacyCategory: String, CaseIterable, Codable, Sendable, Equatable 
     case studioKnowledge
     case chat
     case time
+
+    public var key: String {
+        switch self {
+        case .mail: "settings.privacy.category.mail"
+        case .calendar: "settings.privacy.category.calendar"
+        case .contacts: "settings.privacy.category.contacts"
+        case .drive: "settings.privacy.category.drive"
+        case .clickUp: "settings.privacy.category.clickUp"
+        case .notes: "settings.privacy.category.notes"
+        case .tasks: "settings.privacy.category.tasks"
+        case .catalogCalculation: "settings.privacy.category.catalogCalculation"
+        case .studioKnowledge: "settings.privacy.category.studioKnowledge"
+        case .chat: "settings.privacy.category.chat"
+        case .time: "settings.privacy.category.time"
+        }
+    }
 }
 
 public struct PrivacySettings: Codable, Equatable, Sendable {

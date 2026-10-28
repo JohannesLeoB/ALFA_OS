@@ -1,8 +1,6 @@
 import AppKit
 import Assistant
-import Core
 import Hub
-import UniformTypeIdentifiers
 
 extension AppSession {
     var conversation: ChatState { assembly.conversation }
@@ -16,9 +14,9 @@ extension AppSession {
     }
 
     var assistantHintKey: String {
-        if claudeFailed { return "assistant.failed" }
-        if panes[desk.currentID] is InboxPane && stackEmpty { return "assistant.noMessage" }
-        return "assistant.idle"
+        if claudeFailed { return "shell.assistantPanel.failed" }
+        if panes[desk.currentID] is InboxPane && stackEmpty { return "shell.assistantPanel.noMessage" }
+        return "shell.assistantPanel.idle"
     }
 
     var assistantOffersSettings: Bool { !(panes[desk.currentID] is SettingsPane) }
@@ -48,17 +46,14 @@ extension AppSession {
         panel.allowsMultipleSelection = true
         panel.canChooseDirectories = false
         guard panel.runModal() == .OK else { return }
-        for url in panel.urls {
-            guard let data = try? Data(contentsOf: url) else {
-                conversation.refuse(url.lastPathComponent)
-                continue
-            }
-            let mime = UTType(filenameExtension: url.pathExtension)?.preferredMIMEType ?? "application/octet-stream"
-            conversation.attach([Attachment(filename: url.lastPathComponent, mimeType: mime, data: data)])
-        }
+        let conversation = conversation
+        let urls = panel.urls
+        Task { await conversation.attach(urls) }
     }
 
     func openAssistantSettings() {
+        settings.group = .protection
+        settings.open(SettingsSection.privacy.rawValue)
         desk.select("settings")
     }
 

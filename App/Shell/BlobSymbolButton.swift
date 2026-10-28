@@ -12,6 +12,7 @@ struct BlobSymbolButton: View {
     var plate: KeyPath<Colors, ColorValue>?
     var tone: KeyPath<Colors, ColorValue>?
     var hovers = true
+    var enabled = true
     let action: () -> Void
     @State private var hovering = false
 
@@ -29,7 +30,8 @@ struct BlobSymbolButton: View {
                 .contentShape(Circle())
                 .opacity(dimmed ? Tokens.Opacity.disabled : 1)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressScaleButtonStyle(scale: 1))
+        .disabled(!enabled)
         .help(Text(verbatim: help))
         .accessibilityLabel(Text(verbatim: help))
         .onHover { hovering = $0 }

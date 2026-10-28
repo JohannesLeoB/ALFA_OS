@@ -20,7 +20,7 @@ struct SettingsDetail: View {
             case .integrations: EmptyView()
             case .keyInventory: KeyCard(context: context)
             case .contacts: ContactCard(context: context)
-            case .privacy: PrivacyCard(state: context.state, privacy: context.privacy)
+            case .privacy: PrivacyCard(state: context.state, privacy: context.privacy, conversation: context.conversation)
             case .system: SystemCard(state: context.state)
             case .imprint: ImprintCard(state: context.state)
             }
@@ -113,6 +113,7 @@ struct PrivacyCard: View {
     @Environment(\.appearance) private var appearance
     let state: SettingsState
     let privacy: AssistantPrivacy
+    let conversation: ChatState
 
     var body: some View {
         VStack(spacing: 0) {
@@ -121,7 +122,7 @@ struct PrivacyCard: View {
                              labelKey: "settings.privacy.images")
             }
             SettingsRow(label: appearance.text("settings.privacy.assistantOff")) {
-                ToggleSwitch(isOn: Binding(get: { state.privacy.assistantOff }, set: { value in state.updatePrivacy { $0.assistantOff = value } }),
+                ToggleSwitch(isOn: Binding(get: { state.privacy.assistantOff }, set: { value in turnAssistant(off: value) }),
                              labelKey: "settings.privacy.assistantOff")
             }
             SettingsRow(label: appearance.text("settings.privacy.chatFiles")) {
@@ -130,13 +131,16 @@ struct PrivacyCard: View {
             }
             BlockHead(key: "settings.privacy.categories")
             ForEach(Array(PrivacyCategory.allCases.enumerated()), id: \.element) { index, category in
-                SettingsRow(label: appearance.text(Self.key(category)), line: index < PrivacyCategory.allCases.count - 1) {
+                SettingsRow(label: appearance.text(category.key), line: index < PrivacyCategory.allCases.count - 1) {
                     ToggleSwitch(isOn: Binding(get: { privacy.shares(category) }, set: { privacy.set(category, shares: $0) }),
-                                 labelKey: Self.key(category))
+                                 labelKey: category.key)
                 }
             }
         }
     }
 
-    static func key(_ category: PrivacyCategory) -> String { "settings.privacy.category." + category.rawValue }
+    private func turnAssistant(off: Bool) {
+        state.updatePrivacy { $0.assistantOff = off }
+        if off { conversation.stop() }
+    }
 }

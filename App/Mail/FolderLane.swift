@@ -14,7 +14,7 @@ struct FolderLane: View {
 
     private var desk: DeskState { session.desk }
 
-    private var current: Inlet? { inbox.accounts.first { $0.id == inbox.selectedInlet } }
+    private var current: Inlet? { inbox.selectedAccount }
 
     private var detail: (text: String, failing: Bool)? {
         switch inbox.listState {

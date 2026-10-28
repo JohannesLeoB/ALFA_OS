@@ -2,7 +2,7 @@ import Foundation
 import GRDB
 import Storage
 
-public struct PrivacyStore: Sendable {
+public struct PrivacyStore: PrivacyPort {
     static let rowID = "local"
 
     private let database: SQLiteStore

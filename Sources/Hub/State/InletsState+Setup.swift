@@ -179,7 +179,7 @@ extension InletsState: SetupPort {
         cadences = cadences.filter { !$0.key.hasPrefix(inletID + "|") }
         try settingStore.remove(withPrefix: Self.lastSyncPrefix + inletID + "|")
         syncedAt = syncedAt.filter { !$0.key.hasPrefix(inletID + "|") }
-        try settingStore.remove(withPrefix: SettingsKey.mailboxDisplay(inletID))
+        try settingStore.remove(key: SettingsKey.mailboxDisplay(inletID))
         grants[inletID] = nil
         reports[inletID] = nil
         for kind in delivered.keys { delivered[kind]?[inletID] = nil }

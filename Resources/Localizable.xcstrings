@@ -1466,23 +1466,6 @@
         }
       }
     },
-    "assistant.failed" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude antwortet gerade nicht. In den Einstellungen neu verbinden."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude isn’t responding right now. Reconnect in Settings."
-          }
-        }
-      }
-    },
     "assistant.failure.generic" : {
       "localizations" : {
         "de" : {
@@ -1539,23 +1522,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zu viele Anfragen — bitte kurz warten und erneut versuchen."
-          }
-        }
-      }
-    },
-    "assistant.field" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Frage stellen …"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ask a question …"
           }
         }
       }
@@ -1812,23 +1778,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entwurf zurückgehalten — nicht belegte Angabe: {1}. Quelle nennen oder nachschlagen."
-          }
-        }
-      }
-    },
-    "assistant.idle" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Füge Text, Dateien oder Links ein."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add text, files or links."
           }
         }
       }
@@ -2143,23 +2092,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "BISHERIGE ZUSAMMENFASSUNG:\n{1}\n\nNEUE NACHRICHTEN SEIT DER LETZTEN ZUSAMMENFASSUNG:\n{2}"
-          }
-        }
-      }
-    },
-    "assistant.noMessage" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keine Nachricht offen."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No message open."
           }
         }
       }
@@ -3220,23 +3152,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Für diesen Zeitraum ({1}) sind keine Zeiten gebucht."
-          }
-        }
-      }
-    },
-    "assistant.title" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Assistent"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Assistant"
           }
         }
       }
@@ -7379,17 +7294,6 @@
         }
       }
     },
-    "mail.accounts.none" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kein Konto"
-          }
-        }
-      }
-    },
     "mail.action.archive" : {
       "comment" : "roh",
       "localizations" : {
@@ -8491,23 +8395,6 @@
         }
       }
     },
-    "mail.draft.queuedInOutbox" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sendet …"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sending …"
-          }
-        }
-      }
-    },
     "mail.draft.saved" : {
       "comment" : "roh",
       "localizations" : {
@@ -8565,50 +8452,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Betreff fehlt"
-          }
-        }
-      }
-    },
-    "mail.error.cancelled" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abgebrochen"
-          }
-        }
-      }
-    },
-    "mail.error.duplicate" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Doppelt"
-          }
-        }
-      }
-    },
-    "mail.error.keychain" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schlüsselbund"
-          }
-        }
-      }
-    },
-    "mail.error.limit" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Limit erreicht"
           }
         }
       }
@@ -8693,96 +8536,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ falten"
-          }
-        }
-      }
-    },
-    "mail.footer.more" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mehr"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "More"
-          }
-        }
-      }
-    },
-    "mail.footer.project" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In Projektordner sichern"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Save to Project Folder"
-          }
-        }
-      }
-    },
-    "mail.footer.spam" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Als Spam melden"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Report as Junk"
-          }
-        }
-      }
-    },
-    "mail.footer.star" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Markieren"
-          }
-        }
-      }
-    },
-    "mail.footer.unread" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Als ungelesen markieren"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mark as Unread"
-          }
-        }
-      }
-    },
-    "mail.footer.unstar" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Markierung entfernen"
           }
         }
       }
@@ -9104,17 +8857,6 @@
         }
       }
     },
-    "mail.list.loadingMore" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lädt"
-          }
-        }
-      }
-    },
     "mail.list.noFilterMatch" : {
       "comment" : "roh",
       "localizations" : {
@@ -9200,17 +8942,6 @@
         }
       }
     },
-    "mail.list.offline" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Offline"
-          }
-        }
-      }
-    },
     "mail.list.signInExpired" : {
       "comment" : "roh",
       "localizations" : {
@@ -9278,16 +9009,11 @@
             "state" : "translated",
             "value" : "%@ weitere im Projektordner"
           }
-        }
-      }
-    },
-    "mail.overview.back" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zurück zum Stapel"
+            "value" : "%@ more in the project folder"
           }
         }
       }
@@ -9299,17 +9025,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ · %@"
-          }
-        }
-      }
-    },
-    "mail.overview.open" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Übersicht"
           }
         }
       }
@@ -9695,23 +9410,6 @@
         }
       }
     },
-    "mail.row.hasAttachments" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mit Anhang"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "With Attachments"
-          }
-        }
-      }
-    },
     "mail.row.moreAttachments" : {
       "comment" : "alpha",
       "localizations" : {
@@ -9762,42 +9460,8 @@
         }
       }
     },
-    "mail.row.starred" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Markiert"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Flagged"
-          }
-        }
-      }
-    },
     "mail.row.thread" : {
       "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nachrichten in dieser Unterhaltung"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Messages in this conversation"
-          }
-        }
-      }
-    },
-    "mail.row.threadCount" : {
-      "comment" : "roh",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9964,94 +9628,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sucht nur in %@. Klicken: überall suchen"
-          }
-        }
-      }
-    },
-    "mail.state.connected" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbunden"
-          }
-        }
-      }
-    },
-    "mail.state.created" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nicht verbunden"
-          }
-        }
-      }
-    },
-    "mail.state.failed" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fehler"
-          }
-        }
-      }
-    },
-    "mail.state.keychain" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schlüsselbund"
-          }
-        }
-      }
-    },
-    "mail.state.loading" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lädt"
-          }
-        }
-      }
-    },
-    "mail.state.locked" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gesperrt"
-          }
-        }
-      }
-    },
-    "mail.state.orphaned" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verwaist"
-          }
-        }
-      }
-    },
-    "mail.state.signedIn" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Angemeldet"
           }
         }
       }
@@ -13409,6 +12985,38 @@
         }
       }
     },
+    "shell.assistantInput.field" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frage stellen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ask a question …"
+          }
+        }
+      }
+    },
+    "shell.assistantMessage.assistant" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antwort des Assistenten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assistant’s answer"
+          }
+        }
+      }
+    },
     "shell.assistantMessage.failed" : {
       "localizations" : {
         "de" : {
@@ -13437,6 +13045,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Thinking …"
+          }
+        }
+      }
+    },
+    "shell.assistantMessage.user" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Nachricht"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your message"
+          }
+        }
+      }
+    },
+    "shell.assistantPanel.failed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude antwortet gerade nicht. In den Einstellungen neu verbinden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Claude isn’t responding right now. Reconnect in Settings."
+          }
+        }
+      }
+    },
+    "shell.assistantPanel.idle" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Füge Text, Dateien oder Links ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add text, files or links."
+          }
+        }
+      }
+    },
+    "shell.assistantPanel.noMessage" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Nachricht offen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No message open."
           }
         }
       }
@@ -13473,6 +13145,22 @@
         }
       }
     },
+    "shell.blobFace.assistant" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assistent"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assistant"
+          }
+        }
+      }
+    },
     "shell.blobFace.tooltip" : {
       "localizations" : {
         "de" : {
@@ -13501,6 +13189,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove"
+          }
+        }
+      }
+    },
+    "shell.confirmUndo.undo.text" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rückgängig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Undo"
           }
         }
       }

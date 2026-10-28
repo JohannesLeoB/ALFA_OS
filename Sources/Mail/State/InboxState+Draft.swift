@@ -11,8 +11,7 @@ extension InboxState {
         if to == nil, let open = stack.compactMap({ ref -> OpenDraft? in
             if case .draft(let id) = ref { return draft(id) }
             return nil
-        }).first(where: { $0.state == .idle && $0.remoteID == nil && Self.blank($0.draft) }) {
-            setFrom(open.id, inlet: inlet)
+        }).first(where: { $0.inlet == inlet && $0.state == .idle && $0.remoteID == nil && Self.blank($0.draft) }) {
             bring(.draft(open.id))
             return open.id
         }
