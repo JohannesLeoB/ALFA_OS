@@ -11,6 +11,7 @@ struct DraftEditor: View {
     let card: OpenDraft
     @State private var showCopy = false
     @State private var expanded = false
+    @State private var box = TextBox()
 
     private var inbox: InboxState { session.inbox }
 
@@ -42,6 +43,7 @@ struct DraftEditor: View {
                 subjectRow
                 bodySheet
                 if !card.draft.attachments.isEmpty { attachments }
+                if inbox.formatting { FormatRow(box: box) }
             }
         }
         .scrollIndicators(.automatic)
@@ -59,13 +61,9 @@ struct DraftEditor: View {
     }
 
     private var bodySheet: some View {
-        let binding = Binding(get: { card.draft.body }, set: { value in inbox.edit(card.id) { $0.body = value } })
-        let style = Tokens.TextStyle.mailBody
-        return TextEditor(text: binding)
-            .font(Font(Typeface.sheet(size: style.size)))
-            .lineSpacing(Typeface.sheetSpacing(size: style.size, line: style.lineHeight))
-            .scrollContentBackground(.hidden)
-            .foregroundStyle(appearance.color(\.sheetInk))
+        BodyEditor(text: card.draft.body, html: card.draft.bodyHTML, box: box) { text, html in
+            inbox.setBody(card.id, text: text, html: html)
+        }
             .frame(minHeight: CGFloat(Tokens.Size.composeTextMinHeight))
             .padding(.top, CGFloat(Tokens.Spacing.step16))
             .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
@@ -74,7 +72,6 @@ struct DraftEditor: View {
             .background(RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row)).fill(appearance.color(\.sheet)))
             .environment(\.colorScheme, .light)
             .padding(CGFloat(Tokens.Spacing.step8))
-            .accessibilityLabel(appearance.text("mail.compose.body"))
     }
 
     private var attachments: some View {

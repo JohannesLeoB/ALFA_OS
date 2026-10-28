@@ -7,7 +7,7 @@ enum CommandEngine {
     }
 
     static func commands(front: Front?, stackCount: Int, fanned: Bool, hasFiles: Bool, confirmDiscard: Bool,
-                                canFold: Bool, sendLabelled: Bool) -> CommandSet {
+                                canFold: Bool, sendLabelled: Bool, formatting: Bool = false) -> CommandSet {
         var state = HeadState.empty
         var main: [Slot] = []
         var tail: [Slot] = []
@@ -44,7 +44,8 @@ enum CommandEngine {
                 ]
                 left = [
                     Slot(id: "attachFile", action: .attachFile, priority: 1),
-                    Slot(id: "fromProject", action: .fromProject, priority: 4, off: !hasFiles)
+                    Slot(id: "fromProject", action: .fromProject, priority: 4, off: !hasFiles),
+                    Slot(id: "format", action: .format, priority: 3, accent: formatting)
                 ]
                 right = [
                     Slot.more,

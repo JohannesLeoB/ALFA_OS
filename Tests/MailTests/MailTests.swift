@@ -225,6 +225,29 @@ final class MailTests: XCTestCase {
         XCTAssertFalse(text.contains("From:"))
     }
 
+    func testRichTextBecomesHTMLOnlyWhenFormatted() {
+        XCTAssertNil(RichTextEngine.html([RichParagraph(runs: [RichRun("plain")]), RichParagraph(runs: [])]))
+        let html = RichTextEngine.html([
+            RichParagraph(runs: [RichRun("a<b", bold: true), RichRun(" & "), RichRun("x", italic: true, underline: true)]),
+            RichParagraph(runs: []),
+            RichParagraph(list: .bullet, runs: [RichRun("one")]),
+            RichParagraph(list: .bullet, runs: [RichRun("site", link: "https://x.de/?a=1&b=\"2\"")]),
+            RichParagraph(list: .number, runs: [RichRun("first")]),
+            RichParagraph(runs: [RichRun("end")]),
+        ])
+        XCTAssertEqual(html, "<div><b>a&lt;b</b> &amp; <i><u>x</u></i></div><div><br></div><ul><li>one</li>"
+            + "<li><a href=\"https://x.de/?a=1&amp;b=&quot;2&quot;\">site</a></li></ul><ol><li>first</li></ol><div>end</div>")
+        XCTAssertEqual(RichTextEngine.html([RichParagraph(list: .number, runs: [RichRun("x")])]), "<ol><li>x</li></ol>")
+        XCTAssertEqual(RichTextEngine.marker(.bullet, position: 3), "\u{2022} ")
+        XCTAssertEqual(RichTextEngine.marker(.number, position: 3), "3. ")
+        let draft = CommandEngine.commands(front: .draft(canSend: true), stackCount: 1, fanned: false, hasFiles: true, confirmDiscard: false,
+                                           canFold: false, sendLabelled: false, formatting: true)
+        XCTAssertEqual(draft.footLeft.map(\.id), ["attachFile", "fromProject", "format"])
+        XCTAssertEqual(draft.footLeft.last?.accent, true)
+        XCTAssertEqual(SlotRouter.route(.format, front: .draft(UUID())), .toggleFormat)
+        XCTAssertNil(SlotRouter.route(.format, front: nil))
+    }
+
     func testReadReceiptHeaderOnlyWhenAsked() throws {
         let account = Account(id: "a", displayName: "Me", address: "me@example.com", incoming: ServerSettings(), outgoing: ServerSettings())
         let plain = Draft(to: "x@example.com", subject: "s", body: "b")
@@ -479,7 +502,7 @@ final class MailTests: XCTestCase {
     }
 
     func testMenusOfferOnlyHandledActions() {
-        let removed = ["note", "laterSend", "template", "preview", "otherProject", "format"]
+        let removed = ["note", "laterSend", "template", "preview", "otherProject"]
         XCTAssertTrue(Set(Action.allCases.map(\.rawValue)).isDisjoint(with: removed))
         let lines = MenuEngine.row(unread: true, draft: false) + MenuEngine.readingMore(starred: false, original: true)
             + MenuEngine.attachment()
@@ -503,7 +526,7 @@ final class MailTests: XCTestCase {
         XCTAssertTrue(confirm.fold.isEmpty && confirm.fan.isEmpty)
         let draft = CommandEngine.commands(front: .draft(canSend: false), stackCount: 1, fanned: false, hasFiles: true,
                                            confirmDiscard: false, canFold: false, sendLabelled: true)
-        XCTAssertEqual(draft.footLeft.map(\.id), ["attachFile", "fromProject"])
+        XCTAssertEqual(draft.footLeft.map(\.id), ["attachFile", "fromProject", "format"])
         XCTAssertTrue(draft.footRight.last?.off == true)
     }
 

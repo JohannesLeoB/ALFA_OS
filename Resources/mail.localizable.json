@@ -737,6 +737,46 @@
    "de": "Rückgängig",
    "en": "Undo"
   },
+  "mail.action.format": {
+   "de": "Format",
+   "en": "Format"
+  },
+  "mail.format.bold": {
+   "de": "Fett",
+   "en": "Bold"
+  },
+  "mail.format.italic": {
+   "de": "Kursiv",
+   "en": "Italic"
+  },
+  "mail.format.link": {
+   "de": "Link",
+   "en": "Link"
+  },
+  "mail.format.linkApply": {
+   "de": "Übernehmen",
+   "en": "Apply"
+  },
+  "mail.format.linkCancel": {
+   "de": "Abbrechen",
+   "en": "Cancel"
+  },
+  "mail.format.linkPlaceholder": {
+   "de": "https://",
+   "en": "https://"
+  },
+  "mail.format.list": {
+   "de": "Aufzählung",
+   "en": "Bulleted List"
+  },
+  "mail.format.numbered": {
+   "de": "Nummerierung",
+   "en": "Numbered List"
+  },
+  "mail.format.underline": {
+   "de": "Unterstrichen",
+   "en": "Underline"
+  },
   "mail.list.offline": {
    "de": "Offline",
    "en": "Offline"

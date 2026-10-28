@@ -16,6 +16,7 @@ public final class InboxState {
     var summaries: [MessageSummary] = []
     var selectedMessage: String?
     public var filter: InboxFilter = .all
+    public var formatting = false
     var query = ""
     public var typed = ""
     var crossHits: [MessageSummary] = []

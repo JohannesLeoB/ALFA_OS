@@ -70,6 +70,7 @@ enum SheetValues {
     static let suggestionColumnGap = 12.0
     static let hintTick = 0.1
     static let hintMaxWidth = 240.0
+    static let linkFieldWidth = 240.0
     static let deckLift = 0.32
     static let stackGlossLightFrom = 0.7529
     static let ghostStart = 0.02

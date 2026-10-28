@@ -92,6 +92,13 @@ extension InboxState {
         return loaded
     }
 
+    public func setBody(_ id: UUID, text: String, html: String?) {
+        edit(id) {
+            $0.body = text
+            $0.bodyHTML = html
+        }
+    }
+
     public func asksReceipt(_ id: UUID) -> Bool {
         drafts.first { $0.id == id }?.draft.receiptTo != nil
     }

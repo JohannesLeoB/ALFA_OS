@@ -72,6 +72,7 @@ struct StackLane: View {
         case .discardDraft(let id): discarding = id
         case .send(let id): Task { await inbox.send(id) }
         case .attachFile(let id): session.attachFiles(to: id)
+        case .toggleFormat: inbox.formatting.toggle()
         case .message(let routed, let id): session.perform(routed, message: id)
         case nil: break
         }

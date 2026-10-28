@@ -9,7 +9,7 @@ public struct Draft: Codable, Sendable, Equatable {
     public var attachments: [Attachment]
     public var inReplyTo: String?
     public var threadID: String?
-    var bodyHTML: String?
+    public var bodyHTML: String?
     var messageID: String?
     public var receiptTo: String?
 
