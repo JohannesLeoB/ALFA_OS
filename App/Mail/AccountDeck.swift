@@ -7,6 +7,9 @@ struct AccountDeck: View {
     let session: AppSession
     @Environment(\.appearance) private var appearance
     @State private var shut = false
+    @State private var ghost: (account: Inlet, level: Int)?
+    @State private var lifted = false
+    @State private var arrived = true
 
     private var inbox: InboxState { session.inbox }
 
@@ -36,13 +39,14 @@ struct AccountDeck: View {
             ForEach(Array(others.enumerated()), id: \.element.id) { level, account in
                 AccountCard(account: account, level: level, last: level == count - 1,
                             alert: (inbox.unread[account.id] ?? 0) > 0) {
-                    session.switchMailbox(account.id, appearance: appearance)
+                    pick(account, level: level)
                 }
                 .frame(height: foot + foot * CGFloat(open ? level + 1 : 0))
                 .animation(cardMotion(level, count: count), value: open)
                 .zIndex(Double(count - level))
             }
             ComposeHead(account: current) { _ = inbox.compose() }
+                .opacity(arrived ? 1 : 0)
                 .background(appearance.color(\.lane))
                 .lacquer(footShape, gloss: \.stackGlossFront, seam: \.stackSeamFront, drop: true, shown: open)
                 .overlay(alignment: .topTrailing) {
@@ -52,11 +56,32 @@ struct AccountDeck: View {
                     }
                 }
                 .zIndex(Double(count + 1))
+            if let ghost {
+                MailboxGhost(account: ghost.account, level: ghost.level, lifted: lifted, faded: lifted)
+                    .zIndex(Double(count + 2))
+            }
         }
         .frame(height: foot + foot * CGFloat(open ? count : 0), alignment: .top)
         .frame(maxWidth: .infinity)
         .animation(open ? appearance.ease(SheetValues.deckOpen, SheetValues.deckOpenCurve)
                         : appearance.ease(Tokens.Duration.deckClose, SheetValues.deckCloseCurve), value: open)
+    }
+
+    private func pick(_ account: Inlet, level: Int) {
+        guard !session.mailboxSwitching, ghost == nil else { return }
+        session.switchMailbox(account.id, appearance: appearance)
+        guard !appearance.still else { return }
+        lifted = false
+        arrived = false
+        ghost = (account, level)
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(SheetValues.ghostStart))
+            lifted = true
+            withAnimation(appearance.ease(SheetValues.ghostArrive, SheetValues.switchOutCurve, delay: SheetValues.ghostHold)) { arrived = true }
+            try? await Task.sleep(for: .seconds(SheetValues.ghostLife))
+            ghost = nil
+            lifted = false
+        }
     }
 
     private func cardMotion(_ level: Int, count: Int) -> Animation? {

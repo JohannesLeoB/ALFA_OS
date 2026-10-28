@@ -120,6 +120,12 @@ enum SheetValues {
     static let switchInCurve = CubicBezier(x1: 0.37, y1: 0, x2: 0.63, y2: 1)
     static let switchOutCurve = CubicBezier(x1: 0.33, y1: 0, x2: 0.15, y2: 1)
     static let switchSettle = 0.04
+    static let ghostStart = 0.02
+    static let ghostShade = 0.42
+    static let ghostFade = 0.32
+    static let ghostHold = 0.42
+    static let ghostArrive = 0.52
+    static let ghostLife = 1.2
     static let envelopeBox = 20.0
     static let envelopeWidth = 14.0
     static let envelopeHeight = 10.0
