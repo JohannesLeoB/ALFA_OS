@@ -76,7 +76,7 @@ public final class DeskState {
     }
 
     var rules: AreaRules {
-        AreaRules(minimum: measure.minimum)
+        AreaRules.area(currentID, measure: measure)
     }
 
     public var widths: LaneWidths {

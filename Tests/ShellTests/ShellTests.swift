@@ -35,6 +35,19 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(measure.laneHeight(BlobSize(width: 1512, height: 982)), 898)
     }
 
+    func testMailLeftLaneDragsBetweenItsLimits() {
+        let rest = LaneMode(rest: measure.laneRest)
+        let start = widths(1512, rest)
+        let mail = AreaRules.area("mail", measure: measure)
+        let drag = { (proposed: Double, rules: AreaRules) in
+            LaneLayoutEngine.drag(lane: .leading, proposed: proposed, start: start, mode: rest, measure: self.measure, rules: rules).preferred[0]
+        }
+        XCTAssertEqual(drag(400, mail), 280)
+        XCTAssertEqual(drag(200, mail), 224)
+        XCTAssertEqual(drag(250, mail), 250)
+        XCTAssertEqual(drag(400, AreaRules.area("settings", measure: measure)), 400)
+    }
+
     func testMenuWidthSnapsToTheGrid() {
         XCTAssertEqual(MenuWidthEngine.width(fitting: 40), 168)
         XCTAssertEqual(MenuWidthEngine.width(fitting: 169), 224)
@@ -237,7 +250,9 @@ final class ShellTests: XCTestCase {
         model.resetLane()
         XCTAssertEqual(model.widths.all, [280, 896, 280])
         model.stepLane(.leading, by: 40)
-        XCTAssertEqual(model.widths.all, [320, 856, 280])
+        XCTAssertEqual(model.widths.all, [280, 896, 280])
+        model.stepLane(.leading, by: -40)
+        XCTAssertEqual(model.widths.all, [240, 936, 280])
         model.toggleMaximize(.center)
         XCTAssertNotNil(model.laneMode("mail").maximized)
         model.openStrip(.leading)

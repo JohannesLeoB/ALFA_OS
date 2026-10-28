@@ -21,6 +21,8 @@ Binding: the rules in [AGENTS.md](AGENTS.md) (loaded above) and the schema in [A
 - On first launch `LegacyImportStore` (Sources/Hub/Store) imports the old Hub database and the old app settings once; the old data is never changed.
 - The Airtable sale-price column name comes only from the company configuration (key `airtable.field.sale_price`, see `Resources/company.example.json`).
 - The settings tile is 112 × 112 px minimum (`settingsTileHeight`, `settingsTileMinWidth`; 2 × 56 as in master 23.10., decided by Johannes on 27.10.).
+- Mail's left lane drags between 224 and 280 (`mailLaneMinimumLeft`, `mailLaneMaximumLeft`, `AreaRules.area`); other areas have no maximum (MAIL-G01, Johannes 28.10.).
+- Mailboxes (Johannes 28.10.): footer as card head (mock default), lacquer material, right stack and drafts kept per mailbox.
 - `Resources/tokens.json` is converted from the master's `contract/` files (base, theme-light, theme-dark, ground-lightGray); `constants` stay from code. Menus size to their longest entry on the 56 grid (`MenuWidthEngine`, 168 to 280).
 
 ## Sandbox (Claude Code)

@@ -122,6 +122,7 @@ public enum Tokens {
         public static let stackFlatFrontSpread = -12.0
         public static let overviewTileEnter = 10.0
         public static let mailLaneMaximumLeft = 280.0
+        public static let mailLaneMinimumLeft = 224.0
         public static let previewWindowWidth = 1512.0
         public static let previewWindowHeight = 982.0
         public static let previewMinWidth = 640.0

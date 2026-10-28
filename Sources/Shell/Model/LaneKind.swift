@@ -22,11 +22,20 @@ public enum LaneKind: String, Sendable, Codable, CaseIterable {
 
 struct AreaRules: Sendable, Equatable {
     let minimum: [Double]
+    let maximum: [Double?]
     let yield: [Int]
 
-    init(minimum: [Double], yield: [Int] = [0, 1, 2]) {
+    init(minimum: [Double], maximum: [Double?] = [nil, nil, nil], yield: [Int] = [0, 1, 2]) {
         self.minimum = minimum
+        self.maximum = maximum
         self.yield = yield
+    }
+
+    static func area(_ id: String, measure: Measure) -> AreaRules {
+        guard id == "mail" else { return AreaRules(minimum: measure.minimum) }
+        var minimum = measure.minimum
+        minimum[LaneKind.leading.index] = Tokens.Size.mailLaneMinimumLeft
+        return AreaRules(minimum: minimum, maximum: [Tokens.Size.mailLaneMaximumLeft, nil, nil])
     }
 }
 
