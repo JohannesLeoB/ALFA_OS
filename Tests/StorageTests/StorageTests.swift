@@ -1,6 +1,7 @@
 import Foundation
 import GRDB
 import XCTest
+import Core
 @testable import Storage
 
 final class StorageTests: XCTestCase {
@@ -60,6 +61,29 @@ final class StorageTests: XCTestCase {
         }
         XCTAssertEqual(seq, 1)
         XCTAssertEqual(messageID, "")
+    }
+
+    func testAssistantTablesStartWithTheirDefaults() throws {
+        let store = try SQLiteStore.inMemory()
+        try store.write { db in
+            try db.execute(sql: "INSERT INTO privacyPreferences (id, updatedAt) VALUES ('p', 0)")
+            try db.execute(sql: "INSERT INTO assistantTasks (id, title, createdAt, updatedAt) VALUES ('t', 'x', 0, 0)")
+            try db.execute(sql: "INSERT INTO articleCatalogSync (id) VALUES (1)")
+        }
+        let shares = ["shareMail", "shareCalendar", "shareContacts", "shareDrive", "shareClickUp", "shareNotes", "shareTasks",
+                      "shareCatalogCalculation", "shareStudioKnowledge", "shareChat", "shareClockodo"]
+        let values = try store.read { db in
+            try (shares + ["assistantDisabled"]).map { try Bool.fetchOne(db, sql: "SELECT \($0) FROM privacyPreferences") }
+                + ["done", "alarmActive"].map { try Bool.fetchOne(db, sql: "SELECT \($0) FROM assistantTasks") }
+        }
+        XCTAssertEqual(values, shares.map { _ in true } + [false, false, false])
+        XCTAssertThrowsError(try store.write { db in try db.execute(sql: "INSERT INTO articleCatalogSync (id) VALUES (2)") })
+    }
+
+    func testDatabaseDirectoryIsTheAppFolder() {
+        let directory = DatabaseStore.directory()
+        XCTAssertTrue(directory.hasDirectoryPath)
+        XCTAssertEqual(directory.lastPathComponent, AppIdentity.name)
     }
 
     func testArticleCatalogFullTextSearch() throws {
