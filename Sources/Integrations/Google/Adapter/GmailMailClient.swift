@@ -1,7 +1,7 @@
 import Foundation
 import Mail
 
-struct GmailMailClient: GmailPort {
+struct GmailMailClient: GmailPort, SourcePort {
     typealias Backend = GmailFetchPort & GmailWritePort & GmailDraftPort & GmailLabelPort
 
     static let allMail = "ALL"
@@ -80,6 +80,12 @@ struct GmailMailClient: GmailPort {
 
     func markSpam(messageID: String) async throws {
         try await gmail.markSpam(messageID: messageID)
+    }
+
+    var offersSource: Bool { true }
+
+    func fetchSource(messageID: String) async throws -> Data {
+        try await gmail.fetchRaw(messageID: messageID)
     }
 
     func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data {

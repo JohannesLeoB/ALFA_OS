@@ -203,6 +203,14 @@
    "de": "Senden",
    "en": "Send"
   },
+  "mail.action.move": {
+   "de": "Verschieben nach …",
+   "en": "Move to …"
+  },
+  "mail.action.original": {
+   "de": "Original anzeigen",
+   "en": "Show Original"
+  },
   "mail.action.spam": {
    "de": "Als Spam melden",
    "en": "Report as Junk"
@@ -712,6 +720,10 @@
   "mail.toast.recipientMissing": {
    "de": "Empfänger fehlt",
    "en": "Recipient missing"
+  },
+  "mail.toast.moved": {
+   "de": "Verschoben",
+   "en": "Moved"
   },
   "mail.toast.trashed": {
    "de": "In den Papierkorb gelegt",

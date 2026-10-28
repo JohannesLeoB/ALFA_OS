@@ -1,7 +1,7 @@
 import Foundation
 import Hub
 
-struct MeteredMail: MailTransportPort, PurgePort {
+struct MeteredMail: MailTransportPort, PurgePort, SourcePort {
     let base: any MailTransportPort
     let meter: CostMeter
 
@@ -87,6 +87,14 @@ struct MeteredMail: MailTransportPort, PurgePort {
     func wasSent(messageID: String) async throws -> Bool {
         meter.record()
         return try await base.wasSent(messageID: messageID)
+    }
+
+    var offersSource: Bool { (base as? any SourcePort)?.offersSource ?? false }
+
+    func fetchSource(messageID: String) async throws -> Data {
+        guard let base = base as? any SourcePort else { throw MailFailure.unsupportedCapability("source") }
+        meter.record()
+        return try await base.fetchSource(messageID: messageID)
     }
 
     func supportsPurge() async throws -> Bool {

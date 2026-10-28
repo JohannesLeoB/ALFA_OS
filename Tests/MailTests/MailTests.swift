@@ -397,9 +397,9 @@ final class MailTests: XCTestCase {
     }
 
     func testMenusOfferOnlyHandledActions() {
-        let removed = ["move", "note", "original", "laterSend", "receipt", "template", "preview", "otherProject", "format"]
+        let removed = ["note", "laterSend", "receipt", "template", "preview", "otherProject", "format"]
         XCTAssertTrue(Set(Action.allCases.map(\.rawValue)).isDisjoint(with: removed))
-        let lines = MenuEngine.row(unread: true, draft: false) + MenuEngine.readingMore(starred: false)
+        let lines = MenuEngine.row(unread: true, draft: false) + MenuEngine.readingMore(starred: false, original: true)
             + MenuEngine.attachment()
         XCTAssertFalse(lines.isEmpty)
         let router = SlotRouter.route(.send, front: .draft(UUID(uuidString: "00000000-0000-0000-0000-000000000001")!))
@@ -696,6 +696,22 @@ final class MailTests: XCTestCase {
         await state.undoToast()
         XCTAssertNil(state.toast)
         XCTAssertTrue(rig.transport.calls.with { $0.contains("move") })
+    }
+
+    @MainActor
+    func testMoveOffersOtherMailFoldersAndUndoes() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        XCTAssertEqual(state.moveTargets("1:1:INBOX").map(\.id), ["Archive", "Trash"])
+        XCTAssertFalse(state.offersOriginal)
+        await state.move("1:1:INBOX", to: "Archive")
+        XCTAssertTrue(state.rows.isEmpty)
+        XCTAssertEqual(state.toast?.kind, .moved)
+        XCTAssertEqual(state.toast?.undoable, true)
+        XCTAssertTrue(MenuEngine.readingMore(starred: false, original: false).contains(.item(.move)))
+        XCTAssertFalse(MenuEngine.readingMore(starred: false, original: false).contains(.item(.original)))
+        XCTAssertTrue(MenuEngine.readingMore(starred: false, original: true).contains(.item(.original)))
     }
 
     @MainActor

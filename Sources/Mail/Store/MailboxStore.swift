@@ -214,6 +214,17 @@ public final class MailboxStore: MailboxPort {
         return page.messages.first { $0.messageIDHeader == header }?.id
     }
 
+    public func offersSource(_ inlet: Inlet.ID) -> Bool {
+        ((try? transport(inlet)) as? any SourcePort)?.offersSource ?? false
+    }
+
+    public func source(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> Data {
+        try await perform(inlet) { transport in
+            guard let source = transport as? any SourcePort else { throw MailFailure.unsupportedCapability("source") }
+            return try await source.fetchSource(messageID: messageID)
+        }
+    }
+
     public func canPurge(_ inlet: Inlet.ID) -> Bool {
         expunging[inlet] ?? false
     }

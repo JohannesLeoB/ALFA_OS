@@ -28,6 +28,10 @@ public struct ActionRouter {
         return true
     }
 
+    public func move(_ id: String, to folder: String) {
+        Task { await state.move(id, to: folder) }
+    }
+
     @discardableResult
     public func person(_ action: Action, name: String, address: String) -> Bool {
         switch action {

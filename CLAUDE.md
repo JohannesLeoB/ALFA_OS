@@ -16,7 +16,7 @@ Binding: the rules in [AGENTS.md](AGENTS.md) (loaded above) and the schema in [A
 - Mail and Hub were rewritten without legacy code; integrations were adopted file by file.
 - The Claude assistant (37 tools) and the calculation it drives are kept; calculation numbers and model routing stay unchanged.
 - Finished but unwired parts stay `internal` and are not deleted: 9 assistant tools, the calculation learning path, DHL labels, the Clockodo time table.
-- Mail menu entries and the format bar without a function are left out until they work.
+- N20 (Johannes 28.10.): every common mail function is built and shown only when the mailbox can do it technically, never greyed out. Built: move to folder, show original. Open: read receipt, save as template, format bar; send later stays off.
 - The assistant chat follows the delivery of 28.10. (ALFA Shell.dc.html from line 89); `App/Shell/AssistantPanel.swift` with `ChatState` in Sources/Assistant/State. The blob dot (F10) lights when an answer finishes while the assistant is closed.
 - On first launch `LegacyImportStore` (Sources/Hub/Store) imports the old Hub database and the old app settings once; the old data is never changed.
 - The Airtable sale-price column name comes only from the company configuration (key `airtable.field.sale_price`, see `Resources/company.example.json`).

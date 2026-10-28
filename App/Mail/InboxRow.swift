@@ -202,7 +202,13 @@ struct InboxRow: View {
     private func contextMenu(at point: NSPoint) {
         let lines = MenuEngine.row(unread: item.unread, draft: item.draft)
         let entries = MenuLine.entries(lines, appearance: appearance) { action in
-            session.perform(action, message: item.id, undoable: true, fromMenu: true)
+            if action == .move {
+                menuOpen = true
+                MenuPanel.shared.show(entries: MoveFolderList.entries(session.inbox, appearance: appearance, message: item.id), anchor: .point(point),
+                                      window: NSApp.keyWindow) { menuOpen = false }
+            } else {
+                session.perform(action, message: item.id, undoable: true, fromMenu: true)
+            }
         }
         menuOpen = true
         MenuPanel.shared.show(entries: entries, anchor: .point(point), window: NSApp.keyWindow) {

@@ -542,6 +542,22 @@ final class GoogleTests: XCTestCase {
         }
     }
 
+    func testOriginalIsTheRawMessageDecoded() async throws {
+        let http = FakeHttp { _ in (200, #"{"raw":"RnJvbTogYQ0KDQpoaQ"}"#) }
+        let client = mailClient(http)
+        XCTAssertTrue(client.offersSource)
+        let data = try await client.fetchSource(messageID: "m1")
+        XCTAssertEqual(data, Data("From: a\r\n\r\nhi".utf8))
+        XCTAssertEqual(http.calls.first?.path, "/gmail/v1/users/me/messages/m1")
+        XCTAssertEqual(http.calls.first?.query, "format=raw")
+        do {
+            _ = try await mailClient(FakeHttp { _ in (200, "{}") }).fetchSource(messageID: "m")
+            XCTFail("must throw")
+        } catch {
+            XCTAssertEqual(error as? GoogleFailure, .decodingFailed)
+        }
+    }
+
     func testBodyCarriesTextHtmlInlineImagesAndAttachments() async throws {
         let parts = #"""
         [{"mimeType":"text/plain","body":{"data":"aGk="}},

@@ -4,7 +4,7 @@ import Hub
 import Shell
 
 extension InboxState {
-    func folderName(_ id: String?) -> FolderName {
+    public func folderName(_ id: String?) -> FolderName {
         guard let folder = folders.first(where: { $0.id == id }) else { return FolderName(key: nil, text: "") }
         if folder.role == .other { return FolderName(key: nil, text: folder.name) }
         return FolderName(key: "mail.role." + folder.role.rawValue, text: folder.name)

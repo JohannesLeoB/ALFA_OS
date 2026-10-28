@@ -9795,6 +9795,22 @@
         }
       }
     },
+    "mail.toast.moved" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschoben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moved"
+          }
+        }
+      }
+    },
     "mail.toast.pdfSaved" : {
       "localizations" : {
         "de" : {

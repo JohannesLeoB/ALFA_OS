@@ -4,6 +4,7 @@ protocol GmailFetchPort: Sendable {
     func listMessages(query: String, maxResults: Int, pageToken: String?) async throws -> GmailPage
     func fetchMailBody(messageID: String) async throws -> GmailMailBody
     func fetchBody(messageID: String) async throws -> String
+    func fetchRaw(messageID: String) async throws -> Data
     func fetchThread(threadID: String, maxMessages: Int) async throws -> [GmailMessage]
     func downloadAttachment(messageID: String, attachmentID: String) async throws -> Data
 }

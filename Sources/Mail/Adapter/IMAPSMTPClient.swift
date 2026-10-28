@@ -1,7 +1,7 @@
 import Core
 import Foundation
 
-struct IMAPSMTPClient: MailTransportPort, PurgePort {
+struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
     typealias PasswordSource = @Sendable () async throws -> String
 
     private static let summaryItems = ["UID", "FLAGS", "INTERNALDATE", "RFC822.SIZE", "ENVELOPE", "BODYSTRUCTURE",
@@ -87,6 +87,17 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort {
             }
             body.attachments = structure.attachments.map(Self.info)
             return body
+        }
+    }
+
+    var offersSource: Bool { true }
+
+    func fetchSource(messageID: String) async throws -> Data {
+        let reference = try IMAPMessageReference.decode(messageID)
+        return try await withIncoming { session in
+            let selection = try await session.select(reference.folder, readOnly: true)
+            guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
+            return try await session.fetchSection(uid: reference.uid, section: "")
         }
     }
 

@@ -1,6 +1,7 @@
 public enum ToastKind: Equatable, Sendable {
     case archived
     case trashed
+    case moved
     case inTrash
     case purged
     case draftSaved
@@ -19,6 +20,7 @@ public enum ToastKind: Equatable, Sendable {
         switch self {
         case .archived: "mail.toast.archived"
         case .trashed: "mail.toast.trashed"
+        case .moved: "mail.toast.moved"
         case .inTrash: "mail.toast.inTrash"
         case .purged: "mail.toast.purged"
         case .draftSaved: "mail.toast.draftSaved"

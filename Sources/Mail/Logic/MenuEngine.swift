@@ -2,11 +2,11 @@ public enum MenuEngine {
     public static func row(unread: Bool, draft: Bool) -> [MenuLine] {
         if draft { return [.item(.openDraft)] }
         return [.item(.reply), .item(.forward), .separator, .item(.archive),
-                .item(unread ? .markRead : .markUnread), .separator, .item(.trash)]
+                .item(unread ? .markRead : .markUnread), .item(.move), .separator, .item(.trash)]
     }
 
-    public static func readingMore(starred: Bool) -> [MenuLine] {
-        [.item(starred ? .unstar : .star), .item(.markUnread), .separator, .item(.spam)]
+    public static func readingMore(starred: Bool, original: Bool) -> [MenuLine] {
+        [.item(starred ? .unstar : .star), .item(.markUnread), .item(.move), .separator] + (original ? [.item(.original)] : []) + [.item(.spam)]
     }
 
     public static func person(address: String, contact: Bool) -> [MenuLine] {

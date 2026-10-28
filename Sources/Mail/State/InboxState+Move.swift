@@ -68,6 +68,41 @@ extension InboxState {
         }
     }
 
+    public var offersOriginal: Bool {
+        selectedInlet.map { mailbox.offersSource($0) } ?? false
+    }
+
+    public func original(_ id: String) async -> String? {
+        guard let inlet = selectedInlet, let data = try? await mailbox.source(inlet, messageID: id) else { return nil }
+        return String(data: data, encoding: .utf8) ?? String(data: data, encoding: .isoLatin1)
+    }
+
+    public func moveTargets(_ id: String) -> [Folder] {
+        let current = Set(summary(id)?.folderIDs ?? []).union([selectedFolder].compactMap { $0 })
+        return sortedFolders.filter { !current.contains($0.id) && !Self.fixedRoles.contains($0.role) }
+    }
+
+    func move(_ id: String, to folder: String) async {
+        guard let inlet = selectedInlet else { return }
+        let origin = selectedFolder
+        let landed: String?
+        do {
+            landed = try await mailbox.move(inlet, messageID: id, toFolder: folder)
+        } catch {
+            return
+        }
+        if selectedInlet == inlet { summaries.removeAll { $0.id == id } }
+        drop(id, in: inlet)
+        refreshCounts()
+        var undo: (@MainActor () async -> Void)?
+        if let landed, let origin {
+            undo = { [weak self] in await self?.restore([(id, landed, inlet)], to: origin) }
+        }
+        post(.moved, undo: undo)
+    }
+
+    private static let fixedRoles: Set<FolderRole> = [.drafts, .sent, .starred, .all]
+
     func restore(_ moved: [(id: String, landed: String?, inlet: Inlet.ID)], to origin: String) async {
         for entry in moved {
             guard let landed = entry.landed else { continue }

@@ -72,8 +72,16 @@ extension MessageCard {
 
         private func openMore() {
             guard case .message(let id) = inbox.frontRef else { return }
-            let lines = MenuEngine.readingMore(starred: inbox.card(id)?.summary.flags.contains(.flagged) ?? false)
-            let entries = MenuLine.entries(lines, appearance: appearance) { perform($0) }
+            let lines = MenuEngine.readingMore(starred: inbox.card(id)?.summary.flags.contains(.flagged) ?? false, original: inbox.offersOriginal)
+            let entries = MenuLine.entries(lines, appearance: appearance) { action in
+                if action == .move {
+                    moreAnchor.showMenu(MoveFolderList.entries(inbox, appearance: appearance, message: id))
+                } else if action == .original {
+                    SourceWindow.show(inbox, message: id, appearance: appearance)
+                } else {
+                    perform(action)
+                }
+            }
             moreAnchor.showMenu(entries)
         }
     }
