@@ -56,6 +56,6 @@ struct AccountCard: View {
         .help(Text(verbatim: account.account))
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(.isButton)
-        .animation(appearance.ease(SheetValues.deckLift, SheetValues.deckSpring), value: hovering)
+        .animation(appearance.ease(SheetValues.deckLift, Tokens.Easing.envelopeSpring), value: hovering)
     }
 }

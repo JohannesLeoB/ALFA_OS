@@ -12,7 +12,7 @@ struct EnvelopeStack: View {
                 envelope(flap: index == 0)
                     .offset(x: CGFloat((open ? SheetValues.envelopeOpenX : SheetValues.envelopeShutX)[index]),
                             y: CGFloat((open ? SheetValues.envelopeOpenY : SheetValues.envelopeShutY)[index]))
-                    .animation(appearance.ease(SheetValues.envelopeTimes[index], SheetValues.deckSpring,
+                    .animation(appearance.ease(SheetValues.envelopeTimes[index], Tokens.Easing.envelopeSpring,
                                                delay: (open ? SheetValues.envelopeOpenDelays : SheetValues.envelopeShutDelays)[index]),
                                value: open)
             }
@@ -21,7 +21,7 @@ struct EnvelopeStack: View {
     }
 
     private var stroke: StrokeStyle {
-        StrokeStyle(lineWidth: CGFloat(SheetValues.envelopeStroke), lineCap: .round, lineJoin: .round)
+        StrokeStyle(lineWidth: CGFloat(Tokens.Size.envelopeStroke), lineCap: .round, lineJoin: .round)
     }
 
     private func envelope(flap: Bool) -> some View {
@@ -37,8 +37,8 @@ struct EnvelopeStack: View {
                     .scaleEffect(x: 1, y: open ? -1 : 1, anchor: .top)
                     .offset(x: inset, y: CGFloat(SheetValues.envelopeFlapTop))
                     .animation(open
-                               ? appearance.ease(SheetValues.envelopeFlapOpen, SheetValues.deckSpring, delay: SheetValues.envelopeFlapOpenDelay)
-                               : appearance.ease(SheetValues.envelopeFlapShut, SheetValues.deckCloseCurve),
+                               ? appearance.ease(Tokens.Duration.flapOpen, Tokens.Easing.envelopeSpring, delay: Tokens.Duration.flapOpenDelay)
+                               : appearance.ease(Tokens.Duration.flapClose, Tokens.Easing.deckClose),
                                value: open)
             }
         }

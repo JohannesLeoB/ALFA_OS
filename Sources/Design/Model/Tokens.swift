@@ -51,7 +51,6 @@ public enum Tokens {
         public static let fieldLabelWidth = 48.0
         public static let recipientListMaxHeight = 308.0
         public static let recipientInputMinWidth = 64.0
-        public static let recipientPaddingOpen = 8.0
         public static let composeSheetMinHeight = 192.0
         public static let composeTextMinHeight = 120.0
         public static let composeColumnMinWidth = 96.0
@@ -122,11 +121,15 @@ public enum Tokens {
         public static let stackFlatFrontSpread = -12.0
         public static let overviewTileEnter = 10.0
         public static let mailLaneMaximumLeft = 280.0
-        public static let mailLaneMinimumLeft = 224.0
         public static let previewWindowWidth = 1512.0
         public static let previewWindowHeight = 982.0
         public static let previewMinWidth = 640.0
         public static let previewMinHeight = 480.0
+        public static let ghostShadowOffset = 8.0
+        public static let ghostShadowBlur = 24.0
+        public static let ghostShadowSpread = -12.0
+        public static let envelopeStroke = 1.15
+        public static let mailLaneMinimumLeft = 224.0
     }
     public enum Spacing {
         public static let step2 = 2.0
@@ -212,12 +215,33 @@ public enum Tokens {
         public static let hintDwell = 3.0
         public static let deckClose = 0.38
         public static let switchLift = 0.62
+        public static let deckOpen = 0.56
+        public static let deckOpenStagger = 0.045
+        public static let deckCloseStagger = 0.03
+        public static let envelopeFirst = 0.42
+        public static let envelopeSecond = 0.48
+        public static let envelopeThird = 0.54
+        public static let envelopeSecondDelayOpen = 0.04
+        public static let envelopeThirdDelayOpen = 0.08
+        public static let envelopeSecondDelayClose = 0.02
+        public static let flapOpen = 0.52
+        public static let flapOpenDelay = 0.12
+        public static let flapClose = 0.26
+        public static let switchFade = 0.42
+        public static let switchGhostFade = 0.32
+        public static let switchContentFade = 0.52
+        public static let glassDelay = 0.04
     }
     public enum Easing {
         public static let standard = CubicBezier(x1: 0.2, y1: 0.8, x2: 0.2, y2: 1.0)
         public static let blobFlight = CubicBezier(x1: 0.2, y1: 1.15, x2: 0.3, y2: 1.0)
         public static let stack = CubicBezier(x1: 0.22, y1: 1.08, x2: 0.36, y2: 1.0)
         public static let fold = CubicBezier(x1: 0.65, y1: 0.0, x2: 0.25, y2: 1.0)
+        public static let deckOpen = CubicBezier(x1: 0.3, y1: 1.32, x2: 0.5, y2: 1.0)
+        public static let deckClose = CubicBezier(x1: 0.4, y1: 0.0, x2: 0.2, y2: 1.0)
+        public static let envelopeSpring = CubicBezier(x1: 0.34, y1: 1.56, x2: 0.64, y2: 1.0)
+        public static let glassIn = CubicBezier(x1: 0.37, y1: 0.0, x2: 0.63, y2: 1.0)
+        public static let glassOut = CubicBezier(x1: 0.33, y1: 0.0, x2: 0.15, y2: 1.0)
     }
     public enum TextSize {
         public static let small = 11.5
@@ -256,12 +280,16 @@ public enum Tokens {
         public static let stackHeads = 3
         public static let menuStaggerMax = 14
         public static let projectFilesMax = 8
+        public static let chatDocumentByteLimit = 20000000
+        public static let chatTextCharacterLimit = 120000
     }
     public enum Opacity {
         public static let ringOnColor = 0.3
         public static let ringOnMark = 0.22
         public static let cardMeta = 0.72
         public static let cardMetaDeep = 0.95
+        public static let switchGlass = 0.72
+        public static let disabled = 0.4
     }
     public enum Confirm {
         public static let eraseEdge = 0.2
@@ -316,6 +344,8 @@ public enum Tokens {
         public static let blobFlight = Timing(duration: 0.416, delay: 0.0, easing: CubicBezier(x1: 0.2, y1: 1.15, x2: 0.3, y2: 1.0))
         public static let stack = Timing(duration: 0.52, delay: 0.0, easing: CubicBezier(x1: 0.22, y1: 1.08, x2: 0.36, y2: 1.0))
         public static let fold = Timing(duration: 0.72, delay: 0.0, easing: CubicBezier(x1: 0.65, y1: 0.0, x2: 0.25, y2: 1.0))
+        public static let deckClose = Timing(duration: 0.38, delay: 0.0, easing: CubicBezier(x1: 0.4, y1: 0.0, x2: 0.2, y2: 1.0))
+        public static let deckOpen = Timing(duration: 0.56, delay: 0.0, easing: CubicBezier(x1: 0.3, y1: 1.32, x2: 0.5, y2: 1.0))
     }
     public enum Component {
         public static let laneRadius = Radius.lane

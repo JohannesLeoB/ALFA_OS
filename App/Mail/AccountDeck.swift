@@ -63,8 +63,8 @@ struct AccountDeck: View {
         }
         .frame(height: foot + foot * CGFloat(open ? count : 0), alignment: .top)
         .frame(maxWidth: .infinity)
-        .animation(open ? appearance.ease(SheetValues.deckOpen, SheetValues.deckOpenCurve)
-                        : appearance.ease(Tokens.Duration.deckClose, SheetValues.deckCloseCurve), value: open)
+        .animation(open ? appearance.ease(Tokens.Duration.deckOpen, Tokens.Easing.deckOpen)
+                        : appearance.ease(Tokens.Duration.deckClose, Tokens.Easing.deckClose), value: open)
     }
 
     private func pick(_ account: Inlet, level: Int) {
@@ -77,7 +77,7 @@ struct AccountDeck: View {
         Task { @MainActor in
             try? await Task.sleep(for: .seconds(SheetValues.ghostStart))
             lifted = true
-            withAnimation(appearance.ease(SheetValues.ghostArrive, SheetValues.switchOutCurve, delay: SheetValues.ghostHold)) { arrived = true }
+            withAnimation(appearance.ease(Tokens.Duration.switchContentFade, Tokens.Easing.glassOut, delay: Tokens.Duration.switchFade)) { arrived = true }
             try? await Task.sleep(for: .seconds(SheetValues.ghostLife))
             ghost = nil
             lifted = false
@@ -86,7 +86,7 @@ struct AccountDeck: View {
 
     private func cardMotion(_ level: Int, count: Int) -> Animation? {
         open
-            ? appearance.ease(SheetValues.deckOpen, SheetValues.deckOpenCurve, delay: Double(level) * SheetValues.deckOpenStagger)
-            : appearance.ease(Tokens.Duration.deckClose, SheetValues.deckCloseCurve, delay: Double(count - 1 - level) * SheetValues.deckCloseStagger)
+            ? appearance.ease(Tokens.Duration.deckOpen, Tokens.Easing.deckOpen, delay: Double(level) * Tokens.Duration.deckOpenStagger)
+            : appearance.ease(Tokens.Duration.deckClose, Tokens.Easing.deckClose, delay: Double(count - 1 - level) * Tokens.Duration.deckCloseStagger)
     }
 }

@@ -53,7 +53,7 @@ struct SymbolButton: View {
                 .background(Circle().fill(fill))
                 .ring(Circle(), ring)
                 .contentShape(Circle())
-                .opacity(disabled ? SheetValues.disabledOpacity : 1)
+                .opacity(disabled ? Tokens.Opacity.disabled : 1)
         }
         .buttonStyle(PressScaleButtonStyle(scale: disabled || !pressed ? 1 : SheetValues.pressScale))
         .help(Text(verbatim: help))

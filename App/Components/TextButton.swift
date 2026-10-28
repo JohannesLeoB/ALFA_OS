@@ -75,7 +75,7 @@ struct TextButton<Glyph: View>: View {
             .background(Capsule().fill(fill))
             .ring(Pill(), ringColor)
             .contentShape(Capsule())
-            .opacity(disabled ? SheetValues.disabledOpacity : 1)
+            .opacity(disabled ? Tokens.Opacity.disabled : 1)
         }
         .buttonStyle(PressScaleButtonStyle(scale: disabled || !pressed ? 1 : SheetValues.pressScale))
         .allowsHitTesting(!disabled)

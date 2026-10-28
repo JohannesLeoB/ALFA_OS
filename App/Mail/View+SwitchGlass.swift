@@ -8,7 +8,7 @@ private struct SwitchGlass: ViewModifier {
     func body(content: Content) -> some View {
         content.overlay {
             Rectangle()
-                .fill(appearance.color(\.lane).opacity(SheetValues.switchGlassOpacity))
+                .fill(appearance.color(\.lane).opacity(Tokens.Opacity.switchGlass))
                 .opacity(on ? 1 : 0)
                 .allowsHitTesting(false)
                 .zIndex(Double(Tokens.Layer.switchGlass))

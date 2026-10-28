@@ -43,11 +43,11 @@ extension AppSession {
             Task { await inbox.selectAccount(id) }
             return
         }
-        withAnimation(appearance.ease(Tokens.Duration.switchIn, SheetValues.switchInCurve)) { mailboxSwitching = true }
+        withAnimation(appearance.ease(Tokens.Duration.switchIn, Tokens.Easing.glassIn)) { mailboxSwitching = true }
         Task {
-            try? await Task.sleep(for: .seconds(Tokens.Duration.switchIn + SheetValues.switchSettle))
+            try? await Task.sleep(for: .seconds(Tokens.Duration.switchIn + Tokens.Duration.glassDelay))
             await inbox.selectAccount(id)
-            withAnimation(appearance.ease(Tokens.Duration.switchOut, SheetValues.switchOutCurve)) { mailboxSwitching = false }
+            withAnimation(appearance.ease(Tokens.Duration.switchOut, Tokens.Easing.glassOut)) { mailboxSwitching = false }
         }
     }
 

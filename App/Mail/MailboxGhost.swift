@@ -37,17 +37,22 @@ struct MailboxGhost: View {
         .padding(.trailing, CGFloat(Tokens.Spacing.step28 + Tokens.Spacing.step20))
         .frame(height: foot)
         .frame(maxWidth: .infinity)
-        .animation(appearance.ease(SheetValues.ghostShade, SheetValues.switchInCurve)) {
+        .animation(appearance.ease(Tokens.Duration.switchFade, Tokens.Easing.glassIn)) {
             $0.background(lifted ? appearance.color(\.lane) : appearance.paint(step.surface), in: shape)
         }
-        .animation(appearance.ease(SheetValues.ghostShade, SheetValues.switchInCurve)) {
-            $0.shadow(color: lifted ? appearance.color(\.stackFlatFront) : Color.clear,
-                      radius: CGFloat(Tokens.Size.stackFlatFrontBlur / 2), y: CGFloat(Tokens.Size.stackFlatFrontOffset))
+        .animation(appearance.ease(Tokens.Duration.switchFade, Tokens.Easing.glassIn)) {
+            $0.ring(shape, appearance.color(lifted ? \.line : \.ghostRing))
+                .background {
+                    shape.inset(by: CGFloat(-Tokens.Size.ghostShadowSpread))
+                        .fill(lifted ? appearance.color(\.ghostShadow) : Color.clear)
+                        .blur(radius: CGFloat(Tokens.Size.ghostShadowBlur / 2))
+                        .offset(y: CGFloat(Tokens.Size.ghostShadowOffset))
+                }
         }
-        .animation(appearance.ease(Tokens.Duration.switchLift, SheetValues.switchOutCurve)) {
+        .animation(appearance.ease(Tokens.Duration.switchLift, Tokens.Easing.glassOut)) {
             $0.offset(y: lifted ? 0 : foot + foot * CGFloat(level))
         }
-        .animation(appearance.ease(SheetValues.ghostFade, SheetValues.switchInCurve, delay: SheetValues.ghostHold)) {
+        .animation(appearance.ease(Tokens.Duration.switchGhostFade, Tokens.Easing.glassIn, delay: Tokens.Duration.switchFade)) {
             $0.opacity(faded ? 0 : 1)
         }
         .allowsHitTesting(false)
