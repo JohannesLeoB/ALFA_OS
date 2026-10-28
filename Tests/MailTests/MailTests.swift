@@ -284,6 +284,7 @@ final class MailTests: XCTestCase {
         let literal = try fetched("* 1 FETCH (BODY[TEXT] {11}\r\nHello World UID 4)")
         XCTAssertEqual(literal.sections["TEXT"], Data("Hello World".utf8))
         XCTAssertEqual(literal.uid, 4)
+        XCTAssertEqual(try fetched("* 1 FETCH (BODY[TEXT] {9}\r\nHello Wor UID 5)").sections["TEXT"], Data("Hello Wor".utf8))
     }
 
     func testEnvelopeAndBodyStructure() throws {
@@ -297,14 +298,17 @@ final class MailTests: XCTestCase {
         let nested = "* 3 FETCH (BODYSTRUCTURE ((\"TEXT\" \"HTML\" (\"CHARSET\" \"utf-8\") NIL NIL \"QUOTED-PRINTABLE\" 20 1 NIL NIL NIL)(\"APPLICATION\" \"PDF\" (\"NAME\" \"a.pdf\") NIL NIL \"BASE64\" 100 NIL (\"ATTACHMENT\" (\"FILENAME\" \"a.pdf\")) NIL) \"MIXED\" (\"BOUNDARY\" \"x\") NIL NIL))"
         let structure = try XCTUnwrap(try fetched(nested).structure)
         XCTAssertEqual(structure.firstHTML?.section, "1")
+        XCTAssertNil(structure.firstPlainText)
         XCTAssertEqual(structure.attachments.first?.filename, "a.pdf")
         let single = try XCTUnwrap(try fetched("* 1 FETCH (BODYSTRUCTURE (\"TEXT\" \"PLAIN\" (\"CHARSET\" \"UTF-8\") NIL NIL \"7BIT\" 3028 92))").structure)
         XCTAssertEqual(single.section, "1")
+        XCTAssertEqual(single.firstPlainText?.section, "1")
     }
 
     func testFolderNamesAndEncodedWords() {
         XCTAssertEqual(IMAPFolderNameCodec.decode("~peter/mail/&U,BTFw-/&ZeVnLIqe-"), "~peter/mail/\u{53F0}\u{5317}/\u{65E5}\u{672C}\u{8A9E}")
         XCTAssertEqual(IMAPFolderNameCodec.encode("Entw\u{FC}rfe & mehr"), "Entw&APw-rfe &- mehr")
+        XCTAssertEqual(IMAPFolderNameCodec.encode("~ peter"), "~ peter")
         XCTAssertEqual(MIME.decodeEncodedWords("=?ISO-8859-1?Q?a?= b"), "a b")
         XCTAssertEqual(MIME.decodeEncodedWords("=?UTF-8?Q?Keld_J=C3=B8rn_Simonsen?= <keld@dkuug.dk>"), "Keld J\u{F8}rn Simonsen <keld@dkuug.dk>")
         XCTAssertEqual(String(decoding: MIME.decodeQuotedPrintable(Data("Caf=C3=A9 =\r\nzu".utf8)), as: UTF8.self), "Caf\u{E9} zu")
@@ -382,6 +386,53 @@ final class MailTests: XCTestCase {
         let session = try await IMAPClient.open(settings: settings, opener: { _, _, _ in stream })
         let capability = await session.has("AUTH=PLAIN")
         XCTAssertTrue(capability)
+    }
+
+    private func scriptedServer(_ answer: @escaping @Sendable (String, String) -> [String]?) -> ScriptedStream {
+        let last = Locked("")
+        return ScriptedStream(greeting: ["* OK ready"]) { line in
+            let tag = line.split(separator: " ").first.map(String.init) ?? ""
+            if !line.contains(" ") { return [last.with { $0 } + " OK done"] }
+            last.with { $0 = tag }
+            if line.contains("AUTHENTICATE") { return ["+ "] }
+            if line.hasSuffix("CAPABILITY") { return ["* CAPABILITY IMAP4rev1 AUTH=PLAIN UIDPLUS", "\(tag) OK done"] }
+            return answer(tag, line) ?? ["\(tag) OK done"]
+        }
+    }
+
+    func testIMAPSessionAsksForCapabilitiesAndAnswersTheContinuation() async throws {
+        let stream = scriptedServer { _, _ in nil }
+        let settings = ServerSettings(host: "h", port: 993, security: .ssl, username: "u")
+        let session = try await IMAPClient.open(settings: settings, opener: { _, _, _ in stream })
+        let plain = await session.has("AUTH=PLAIN")
+        XCTAssertTrue(plain)
+        try await session.authenticate(user: "u", secret: "s")
+        let uidplus = await session.has("UIDPLUS")
+        XCTAssertTrue(uidplus)
+        let wire = stream.sent.with { $0.map { String(decoding: $0, as: UTF8.self) }.joined() }
+        XCTAssertTrue(wire.contains(Data("\0u\0s".utf8).base64EncodedString()))
+    }
+
+    func testWasSentLooksInTheFirstSentFolder() async throws {
+        let selected = Locked("")
+        let stream = scriptedServer { tag, line in
+            if line.contains("LIST") {
+                return ["* LIST (\\Sent) \"/\" \"Sent\"", "* LIST (\\Sent) \"/\" \"Old\"", "\(tag) OK done"]
+            }
+            if line.contains("EXAMINE") {
+                selected.with { $0 = line }
+                return ["* OK [UIDVALIDITY 7] ok", "\(tag) OK done"]
+            }
+            if line.contains("SEARCH") {
+                return [selected.with { $0.hasSuffix("\"Sent\"") } ? "* SEARCH 5" : "* SEARCH", "\(tag) OK done"]
+            }
+            return nil
+        }
+        let settings = ServerSettings(host: "h", port: 993, security: .ssl, username: "u")
+        let account = Account(id: "a", displayName: "Me", address: "me@example.com", incoming: settings, outgoing: settings)
+        let client = IMAPSMTPClient(account: account, password: { "s" }, opener: { _, _, _ in stream })
+        let sent = try await client.wasSent(messageID: "<m@x>")
+        XCTAssertTrue(sent)
     }
 
     func testSMTPSessionSendsWithDotStuffing() async throws {
@@ -602,6 +653,95 @@ final class MailTests: XCTestCase {
         XCTAssertNotEqual(other, id)
         XCTAssertEqual(state.draft(id)?.inlet, "b")
         XCTAssertEqual(state.draft(other)?.inlet, "a")
+    }
+
+    @MainActor
+    func testSwapAccountRefusesTheOpenAndUnknownMailbox() async throws {
+        let rig = try Rig()
+        _ = rig.addMailbox("b", prefix: "2")
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        XCTAssertFalse(state.swapAccount("a"))
+        XCTAssertFalse(state.swapAccount("z"))
+        XCTAssertEqual(state.selectedInlet, "a")
+        XCTAssertTrue(state.swapAccount("b"))
+        XCTAssertEqual(state.selectedInlet, "b")
+    }
+
+    @MainActor
+    func testRecipientsSkipBlankEntriesAndSavedDraftsSettle() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.addRecipient(id, .to, entry: "  ")
+        XCTAssertEqual(state.draft(id)?.people(.to).count, 0)
+        state.addRecipient(id, .to, entry: "a@x.de")
+        XCTAssertEqual(state.draft(id)?.people(.to).map(\.address), ["a@x.de"])
+        await state.save(id)
+        guard case .saved = state.draft(id)?.state else { return XCTFail() }
+    }
+
+    @MainActor
+    func testQueuedDraftTurnsSentWhenTheOutboxDelivers() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.to = "x@y.de"; $0.subject = "s" }
+        rig.transport.failure.with { $0 = MailFailure.connectionClosed }
+        await state.send(id)
+        XCTAssertEqual(state.draft(id)?.state, .queuedInOutbox)
+        rig.transport.failure.with { $0 = nil }
+        await rig.outbox.pass("a")
+        for _ in 0..<50 where state.draft(id)?.state != .sent { try await Task.sleep(for: .milliseconds(20)) }
+        XCTAssertEqual(state.draft(id)?.state, .sent)
+    }
+
+    @MainActor
+    func testNewMailMergesOnlyIntoTheOpenInbox() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        try await Task.sleep(for: .milliseconds(100))
+        state.summaries = []
+        rig.events.emit(.newMail("a", count: 1))
+        for _ in 0..<50 where state.rows.isEmpty { try await Task.sleep(for: .milliseconds(20)) }
+        XCTAssertEqual(state.rows.map(\.id), ["1:1:INBOX"])
+        await state.selectFolder("Archive")
+        try await Task.sleep(for: .milliseconds(100))
+        state.summaries = []
+        rig.events.emit(.newMail("a", count: 1))
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertTrue(state.rows.isEmpty)
+    }
+
+    @MainActor
+    func testCrossSearchLeavesOutTrashAndSpam() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        _ = try await rig.mailbox.loadPage("a", folder: "Archive", query: nil, pageToken: nil)
+        _ = try await rig.mailbox.loadPage("a", folder: "Trash", query: nil, pageToken: nil)
+        await state.type("Hello")
+        XCTAssertEqual(Set(state.crossHits.map(\.id)), ["1:1:INBOX", "1:1:Archive"])
+    }
+
+    @MainActor
+    func testRepeatedInboxLoadAnnouncesNoNewMail() async throws {
+        let rig = try Rig()
+        let events = rig.events.stream
+        try await rig.mailbox.refreshFolders("a")
+        _ = try await rig.mailbox.loadPage("a", folder: "INBOX", query: nil, pageToken: nil)
+        _ = try await rig.mailbox.loadPage("a", folder: "INBOX", query: nil, pageToken: nil)
+        rig.events.emit(.syncFinished("end"))
+        var seen: [MailboxEvent] = []
+        for await event in events {
+            if event == .syncFinished("end") { break }
+            seen.append(event)
+        }
+        XCTAssertFalse(seen.contains { if case .newMail = $0 { true } else { false } })
+        XCTAssertEqual(seen.filter { $0 == .messagesChanged("a", folder: "INBOX") }.count, 2)
     }
 
     @MainActor
