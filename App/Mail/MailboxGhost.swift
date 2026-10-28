@@ -5,6 +5,7 @@ import SwiftUI
 struct MailboxGhost: View {
     @Environment(\.appearance) private var appearance
     let account: Inlet
+    let display: MailboxDisplay
     let level: Int
     let lifted: Bool
     let faded: Bool
@@ -26,7 +27,7 @@ struct MailboxGhost: View {
                 .frame(width: side, height: side)
                 .ring(Circle(), ink.opacity(Tokens.Opacity.ringOnMark))
                 .padding(.trailing, CGFloat(Tokens.Spacing.step12))
-            Text(verbatim: account.mailboxName)
+            Text(verbatim: account.mailboxName(display))
                 .typeStyle(Tokens.TextStyle.bodyEmphasis)
                 .lineLimit(1)
                 .truncationMode(.tail)

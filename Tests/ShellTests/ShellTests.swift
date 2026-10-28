@@ -313,6 +313,8 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(CardStackEngine.tops(count: 0), [])
         XCTAssertEqual(CardStackEngine.tops(count: 3), [8, 52, 96])
         XCTAssertEqual(CardStackEngine.tops(count: 5), [8, 16, 60, 104, 148])
+        XCTAssertEqual(CardStackEngine.fannedTops(count: 0), [])
+        XCTAssertEqual(CardStackEngine.fannedTops(count: 4), [0, 52, 104, 156])
         XCTAssertEqual(CardStackEngine.levelIndex(depth: 0), -1)
         XCTAssertEqual(CardStackEngine.levelIndex(depth: 2), 1)
         XCTAssertEqual(CardStackEngine.levelIndex(depth: 9), 4)
@@ -376,5 +378,15 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(TileGrid.columns(width: .infinity, minimum: 132, gap: 8), 1)
         XCTAssertEqual(TileGrid.columns(width: 500, minimum: 0, gap: 8), 1)
         XCTAssertEqual(TileGrid.columnWidth(width: 272, count: 2, gap: 8), 132)
+        XCTAssertEqual(TileGrid.rowTops(top: 40, count: 5, columns: 2, height: 96, gap: 8), [40, 144, 248])
+        XCTAssertEqual(TileGrid.rowTops(top: 40, count: 0, columns: 2, height: 96, gap: 8), [])
+        XCTAssertEqual(TileGrid.rowTops(top: 40, count: 3, columns: 0, height: 96, gap: 8), [])
+        let rows = [40.0, 144, 248]
+        XCTAssertEqual(TileGrid.snap(10, rows: rows, inset: 8, limit: 500), 0)
+        XCTAssertEqual(TileGrid.snap(25, rows: rows, inset: 8, limit: 500), 32)
+        XCTAssertEqual(TileGrid.snap(120, rows: rows, inset: 8, limit: 500), 136)
+        XCTAssertEqual(TileGrid.snap(400, rows: rows, inset: 8, limit: 500), 240)
+        XCTAssertEqual(TileGrid.snap(400, rows: rows, inset: 8, limit: 200), 200)
+        XCTAssertEqual(TileGrid.snap(-30, rows: [], inset: 8, limit: -5), 0)
     }
 }

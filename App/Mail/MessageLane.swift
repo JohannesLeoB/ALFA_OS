@@ -178,6 +178,7 @@ struct MessageLane: View {
         let items = inbox.rowPresentations
         let trash = inbox.currentFolder?.role == .trash
         let picking = inbox.picking
+        let spacer = ListWindowEngine.spacer(count: items.count, window: window)
         return ScrollView {
             LazyVStack(spacing: 0) {
                 if !inbox.typed.isEmpty, !items.isEmpty {
@@ -194,15 +195,19 @@ struct MessageLane: View {
                              wide: width >= Tokens.Size.breakpointAttachments,
                              inTrash: trash, picking: picking)
                 }
+                Color.clear
+                    .frame(height: CGFloat(spacer))
+                    .accessibilityHidden(true)
             }
             .padding(CGFloat(Tokens.Spacing.step8))
         }
         .scrollIndicators(.automatic)
         .scrolledSignal($scrolled)
-        .onScrollGeometryChange(for: Bool.self) { geometry in
-            geometry.contentSize.height - geometry.contentOffset.y - geometry.containerSize.height < SheetValues.listLoadAhead
-        } action: { _, near in
-            if near, window < items.count { window += SheetValues.listWindowStep }
+        .onScrollGeometryChange(for: Double.self) { geometry in
+            ListWindowEngine.remaining(content: Double(geometry.contentSize.height), offset: Double(geometry.contentOffset.y),
+                                       container: Double(geometry.containerSize.height), spacer: spacer)
+        } action: { _, left in
+            if left < SheetValues.listLoadAhead, window < items.count { window += SheetValues.listWindowStep }
         }
     }
 

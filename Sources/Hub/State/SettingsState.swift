@@ -18,6 +18,7 @@ public final class SettingsState {
     public private(set) var profile = UserProfile()
     public private(set) var company: [String: String] = [:]
     public private(set) var imprint: [String: String] = [:]
+    private(set) var mailboxDisplays: [Inlet.ID: MailboxDisplay] = [:]
 
     @ObservationIgnored private let settings: SettingStore
 
@@ -40,6 +41,11 @@ public final class SettingsState {
             birthdays: flag(SettingsKey.birthdays) ?? false)
         for entry in CompanyEntry.allCases { company[entry.rawValue] = text(entry.storageKey) ?? "" }
         for entry in ImprintEntry.allCases { imprint[entry.rawValue] = text(entry.storageKey) ?? "" }
+        for key in stored.keys where key.hasPrefix(SettingsKey.mailboxDisplayPrefix) {
+            if let display = text(key).flatMap(MailboxDisplay.init(rawValue:)) {
+                mailboxDisplays[String(key.dropFirst(SettingsKey.mailboxDisplayPrefix.count))] = display
+            }
+        }
     }
 
     public func setAppearance(_ value: AppearanceChoice) {
@@ -86,6 +92,15 @@ public final class SettingsState {
     public func setImprint(_ entry: ImprintEntry, _ text: String) {
         imprint[entry.rawValue] = text
         save(entry.storageKey, text)
+    }
+
+    public func display(_ inlet: Inlet.ID) -> MailboxDisplay {
+        mailboxDisplays[inlet] ?? .ownName
+    }
+
+    public func setDisplay(_ value: MailboxDisplay, for inlet: Inlet.ID) {
+        mailboxDisplays[inlet] = value
+        save(SettingsKey.mailboxDisplay(inlet), value.rawValue)
     }
 
     public func open(_ id: String) {

@@ -29,6 +29,8 @@ struct Frame: View {
                 SyncButton(session: session)
                     .offset(x: proxy.size.width - CGFloat(measure.margin + measure.blobWidth), y: CGFloat(measure.blobTop))
                     .zIndex(Double(Tokens.Layer.syncButton))
+                toasts(appearance)
+                    .zIndex(Double(Tokens.Layer.toast))
                 Blob(session: session, pointer: pointer, frame: $blobFrame)
                     .zIndex(Double(Tokens.Layer.blob))
             }
@@ -78,6 +80,26 @@ struct Frame: View {
             ForEach(LaneKind.allCases, id: \.self) { lane in
                 Lane(session: session, lane: lane, titleKey: keys[lane.index], size: CGSize(width: widths.width(lane), height: height))
                     .offset(x: CGFloat(x[lane.index]), y: CGFloat(measure.strip))
+            }
+        }
+        .animation(laneAnimation(appearance), value: widths)
+    }
+
+    private func toasts(_ appearance: Appearance) -> some View {
+        let widths = desk.widths
+        let measure = desk.measure
+        let height = CGFloat(measure.laneHeight(desk.window))
+        let pane = session.panes[desk.currentID]
+        let x = lefts()
+        return ZStack(alignment: .topLeading) {
+            ForEach(LaneKind.allCases, id: \.self) { lane in
+                if let toast = pane?.toast(lane) {
+                    toast
+                        .fixedSize(horizontal: true, vertical: false)
+                        .padding(.bottom, CGFloat(Tokens.Size.footerHeight + Tokens.Spacing.step8))
+                        .frame(width: CGFloat(widths.width(lane)), height: height, alignment: .bottom)
+                        .offset(x: CGFloat(x[lane.index]), y: CGFloat(measure.strip))
+                }
             }
         }
         .animation(laneAnimation(appearance), value: widths)

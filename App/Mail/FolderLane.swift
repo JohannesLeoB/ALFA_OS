@@ -42,7 +42,9 @@ struct FolderLane: View {
     private var head: some View {
         LaneHead(scrolled: scrolled, lane: .leading) {
             if let current {
-                AccountTitle(account: current)
+                AccountTitle(account: current, display: session.settings.display(current.id)) {
+                    session.settings.setDisplay($0, for: current.id)
+                }
             } else {
                 HeaderTitle(text: appearance.text("mail.lane.title"))
             }

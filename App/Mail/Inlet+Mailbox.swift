@@ -1,10 +1,8 @@
 import Hub
 
 extension Inlet {
-    var mailboxName: String {
-        let name = title.trimmingCharacters(in: .whitespaces)
-        if !name.isEmpty { return name }
-        return account.split(separator: "@", omittingEmptySubsequences: false).first.map(String.init) ?? account
+    func mailboxName(_ display: MailboxDisplay) -> String {
+        display.text(title: title, account: account)
     }
 
     var mailboxInitials: String {
@@ -12,6 +10,6 @@ extension Inlet {
         let local = parts.first?.first.map(String.init) ?? ""
         let domain = parts.count > 1 ? parts[1].first.map(String.init) ?? "" : ""
         let initials = local + domain
-        return (initials.isEmpty ? String(mailboxName.prefix(1)) : initials).uppercased()
+        return (initials.isEmpty ? String(mailboxName(.ownName).prefix(1)) : initials).uppercased()
     }
 }

@@ -24,6 +24,10 @@ struct SettingsPane: Pane {
     func content(_ lane: LaneKind) -> AnyView {
         AnyView(SettingsLane(context: context, lane: lane))
     }
+
+    func toast(_ lane: LaneKind) -> AnyView? {
+        lane == .trailing ? AnyView(SettingsToast(state: context.state)) : nil
+    }
 }
 
 extension SettingsPane {

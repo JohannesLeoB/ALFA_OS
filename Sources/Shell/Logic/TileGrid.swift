@@ -9,4 +9,15 @@ public enum TileGrid {
     public static func columnWidth(width: Double, count: Int, gap: Double) -> Double {
         (width - Double(count - 1) * gap) / Double(count)
     }
+
+    public static func rowTops(top: Double, count: Int, columns: Int, height: Double, gap: Double) -> [Double] {
+        let rows = columns > 0 ? (max(0, count) + columns - 1) / columns : 0
+        return (0..<rows).map { top + Double($0) * (height + gap) }
+    }
+
+    public static func snap(_ proposed: Double, rows: [Double], inset: Double, limit: Double) -> Double {
+        let ceiling = max(0, limit)
+        let points = [0] + rows.map { min(ceiling, max(0, $0 - inset)) }
+        return points.min { abs($0 - proposed) < abs($1 - proposed) } ?? proposed
+    }
 }

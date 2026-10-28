@@ -16,6 +16,10 @@ enum SettingsKey {
     static func companyEntry(_ id: String) -> String { "settings.company." + id }
 
     static func imprintEntry(_ id: String) -> String { "settings.imprint." + id }
+
+    static let mailboxDisplayPrefix = "settings.mailbox.display."
+
+    static func mailboxDisplay(_ inlet: String) -> String { mailboxDisplayPrefix + inlet }
 }
 
 public enum CompanyEntry: String, CaseIterable, Sendable {

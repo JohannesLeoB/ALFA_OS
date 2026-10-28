@@ -447,6 +447,18 @@
    "de": "Postfächer zeigen · neue Mail in %@",
    "en": "Show mailboxes · new mail in %@"
   },
+  "mail.account.show": {
+   "de": "Angezeigt als",
+   "en": "Shown as"
+  },
+  "mail.account.show.own": {
+   "de": "Eigener Name",
+   "en": "Own name"
+  },
+  "mail.account.show.inSettings": {
+   "de": "in Einstellungen",
+   "en": "in Settings"
+  },
   "mail.list.empty": {
    "de": "Keine Nachrichten in %@."
   },

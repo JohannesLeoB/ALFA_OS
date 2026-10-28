@@ -493,7 +493,13 @@ final class HubTests: XCTestCase {
         let a = try await rig.connect("a@x")
         let b = try await rig.connect("b@x")
         XCTAssertEqual(Set(rig.keychain.slots.map(\.inlet)), [a.id, b.id])
+        let settings = try SettingsState(settings: SettingStore(database: rig.database))
+        settings.setDisplay(.domain, for: a.id)
+        settings.setDisplay(.localPart, for: b.id)
         try await rig.connections.setup.remove(a.id)
+        let after = try SettingsState(settings: SettingStore(database: rig.database))
+        XCTAssertEqual(after.display(a.id), .ownName)
+        XCTAssertEqual(after.display(b.id), .localPart)
         XCTAssertEqual(rig.keychain.slots.map(\.inlet), [b.id])
         XCTAssertEqual(rig.connections.setup.inlets.map(\.id), [b.id])
         _ = try rig.connections.access.port((any PingPort).self, for: b.id)
@@ -1227,6 +1233,34 @@ final class HubTests: XCTestCase {
             try db.execute(sql: "UPDATE setting SET value = ? WHERE key = ?", arguments: [Data("garbage".utf8), SettingsKey.appearance])
         }
         XCTAssertEqual(try SettingsState(settings: SettingStore(database: database)).appearance, .system)
+    }
+
+    @MainActor
+    func testMailboxDisplayIsStoredPerMailbox() throws {
+        let database = try SQLiteStore.inMemory()
+        let state = try SettingsState(settings: SettingStore(database: database))
+        XCTAssertEqual(state.display("gmail-a"), .ownName)
+        state.setDisplay(.domain, for: "gmail-a")
+        state.setDisplay(.localPart, for: "imap-b")
+        let again = try SettingsState(settings: SettingStore(database: database))
+        XCTAssertEqual(again.display("gmail-a"), .domain)
+        XCTAssertEqual(again.display("imap-b"), .localPart)
+        XCTAssertEqual(again.display("other"), .ownName)
+        try database.write { db in
+            try db.execute(sql: "UPDATE setting SET value = ? WHERE key = ?",
+                           arguments: [Data("garbage".utf8), SettingsKey.mailboxDisplay("gmail-a")])
+        }
+        XCTAssertEqual(try SettingsState(settings: SettingStore(database: database)).display("gmail-a"), .ownName)
+    }
+
+    func testMailboxDisplayShowsNameOrAddressPart() {
+        XCTAssertEqual(MailboxDisplay.ownName.text(title: " Arbeit ", account: "info@example.com"), "Arbeit")
+        XCTAssertEqual(MailboxDisplay.ownName.text(title: "  ", account: "info@example.com"), "info@")
+        XCTAssertEqual(MailboxDisplay.localPart.text(title: "Arbeit", account: "info@example.com"), "info@")
+        XCTAssertEqual(MailboxDisplay.domain.text(title: "Arbeit", account: "info@example.com"), "@example.com")
+        XCTAssertEqual(MailboxDisplay.local("plain"), "plain@")
+        XCTAssertEqual(MailboxDisplay.domain("plain"), "@plain")
+        XCTAssertEqual(MailboxDisplay.allCases, [.ownName, .localPart, .domain])
     }
 
     @MainActor

@@ -5,6 +5,7 @@ import SwiftUI
 struct ComposeHead: View {
     @Environment(\.appearance) private var appearance
     let account: Inlet?
+    let display: MailboxDisplay
     let action: () -> Void
     @State private var hovering = false
 
@@ -22,7 +23,7 @@ struct ComposeHead: View {
                     .lineLimit(1)
                     .layoutPriority(1)
                 if let account {
-                    Text(verbatim: account.mailboxName)
+                    Text(verbatim: account.mailboxName(display))
                         .font(.face(Tokens.TextSize.small))
                         .opacity(Tokens.Opacity.cardMeta)
                         .lineLimit(1)

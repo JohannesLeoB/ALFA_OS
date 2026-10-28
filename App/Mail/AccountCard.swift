@@ -5,9 +5,11 @@ import SwiftUI
 struct AccountCard: View {
     @Environment(\.appearance) private var appearance
     let account: Inlet
+    let display: MailboxDisplay
     let level: Int
     let last: Bool
     let alert: Bool
+    let choose: (MailboxDisplay) -> Void
     let action: () -> Void
     @State private var hovering = false
 
@@ -36,7 +38,7 @@ struct AccountCard: View {
                 .ring(Circle(), ink.opacity(Tokens.Opacity.ringOnMark))
                 .overlay(alignment: .topTrailing) { if alert { AccountAlert() } }
                 .padding(.trailing, CGFloat(Tokens.Spacing.step12))
-            Text(verbatim: account.mailboxName)
+            Text(verbatim: account.mailboxName(display))
                 .typeStyle(Tokens.TextStyle.bodyEmphasis)
                 .lineLimit(1)
                 .truncationMode(.tail)
@@ -50,6 +52,11 @@ struct AccountCard: View {
         .background(appearance.paint(step.surface).animation(appearance.ease(Tokens.Duration.stackBackground, Tokens.Easing.stack), value: level))
         .lacquer(shape, gloss: gloss, seam: \.stackSeamBack, drop: !last)
         .contentShape(shape)
+        .overlay {
+            RightClickOverlay { point in
+                MailboxDisplay.showMenu(for: account, current: display, at: point, appearance: appearance, choose: choose)
+            }
+        }
         .offset(y: !last && hovering ? CGFloat(SheetValues.stackHoverLift) : 0)
         .onHover { hovering = $0 }
         .onTapGesture(perform: action)

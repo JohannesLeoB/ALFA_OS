@@ -7291,6 +7291,54 @@
         }
       }
     },
+    "mail.account.show" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angezeigt als"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shown as"
+          }
+        }
+      }
+    },
+    "mail.account.show.inSettings" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "in Einstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "in Settings"
+          }
+        }
+      }
+    },
+    "mail.account.show.own" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigener Name"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Own name"
+          }
+        }
+      }
+    },
     "mail.accounts.none" : {
       "comment" : "roh",
       "localizations" : {

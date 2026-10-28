@@ -29,6 +29,7 @@ protocol Pane {
     func hidesTitle(_ lane: LaneKind) -> Bool
     func marks(_ lane: LaneKind, height: Double) -> AnyView?
     func content(_ lane: LaneKind) -> AnyView
+    func toast(_ lane: LaneKind) -> AnyView?
 }
 
 extension Pane {
@@ -43,4 +44,6 @@ extension Pane {
     func hidesTitle(_ lane: LaneKind) -> Bool { false }
 
     func marks(_ lane: LaneKind, height: Double) -> AnyView? { nil }
+
+    func toast(_ lane: LaneKind) -> AnyView? { nil }
 }

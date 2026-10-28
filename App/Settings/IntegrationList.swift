@@ -7,14 +7,23 @@ import SwiftUI
 struct IntegrationList: View {
     @Environment(\.appearance) private var appearance
     let context: SettingsContext
+    @State private var grids: [String: CGRect] = [:]
+    @State private var viewport = 0.0
 
     private var state: SettingsState { context.state }
 
+    nonisolated private static let space = "tiles"
+
+    private static let integrations = "settings.tiles.integrations"
+
+    private static let keys = "settings.tiles.keys"
+
     var body: some View {
         let readings = context.readings
+        let counts = [Self.integrations: readings.count, Self.keys: 1]
         ScrollView {
             VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step16)) {
-                tileGroup("settings.tiles.integrations") {
+                tileGroup(Self.integrations) {
                     ForEach(readings) { reading in
                         SettingsTile(
                             name: LocalizedStringKey(reading.info.nameKey),
@@ -26,7 +35,7 @@ struct IntegrationList: View {
                             action: { state.open(reading.info.id) })
                     }
                 }
-                tileGroup("settings.tiles.keys") {
+                tileGroup(Self.keys, last: true) {
                     let section = SettingsSection.keyInventory
                     SettingsTile(
                         name: LocalizedStringKey(section.key),
@@ -39,10 +48,22 @@ struct IntegrationList: View {
                 }
             }
             .padding(.horizontal, CGFloat(Tokens.Spacing.step16))
-            .padding(.top, CGFloat(Tokens.Spacing.step8))
-            .padding(.bottom, CGFloat(Tokens.Spacing.step16))
+            .padding(.vertical, CGFloat(Tokens.Spacing.step8))
+            .coordinateSpace(name: Self.space)
         }
         .scrollIndicators(.never)
+        .scrollTargetBehavior(TileScrollTargetBehavior(rows: rows(counts)))
+        .onScrollGeometryChange(for: Double.self) { Double($0.containerSize.height) } action: { _, height in viewport = height }
+    }
+
+    private func rows(_ counts: [String: Int]) -> [Double] {
+        grids.flatMap { entry -> [Double] in
+            let frame = entry.value
+            let columns = TileGrid.columns(width: Double(frame.width), minimum: Tokens.Size.settingsTileMinWidth, gap: Tokens.Spacing.step8)
+            return TileGrid.rowTops(top: Double(frame.minY), count: counts[entry.key] ?? 0, columns: columns,
+                                    height: Tokens.Size.settingsTileHeight, gap: Tokens.Spacing.step8)
+        }
+        .sorted()
     }
 
     private func image(_ logo: IntegrationLogo?) -> NSImage? {
@@ -50,7 +71,7 @@ struct IntegrationList: View {
         return NSImage(contentsOf: url)
     }
 
-    private func tileGroup<Content: View>(_ key: String, @ViewBuilder content: () -> Content) -> some View {
+    private func tileGroup<Content: View>(_ key: String, last: Bool = false, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step8)) {
             appearance.text(key)
                 .designText(\.inkTertiary, size: Tokens.TextSize.small)
@@ -60,7 +81,9 @@ struct IntegrationList: View {
                 content()
             }
             .transaction { $0.animation = nil }
+            .onGeometryChange(for: CGRect.self) { $0.frame(in: .named(Self.space)) } action: { grids[key] = $0 }
         }
+        .frame(minHeight: last ? CGFloat(max(0, viewport - 2 * Tokens.Spacing.step8 + Tokens.Spacing.step32)) : nil, alignment: .top)
     }
 }
 

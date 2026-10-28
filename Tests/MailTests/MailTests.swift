@@ -605,4 +605,12 @@ final class MailTests: XCTestCase {
         let registry = PortRegistry().withMail()
         XCTAssertNotNil(registry.spec(for: (any MailTransportPort).self))
     }
+
+    func testListWindowHoldsPlaceForRowsNotLoaded() {
+        XCTAssertEqual(ListWindowEngine.spacer(count: 200, window: 60), 140 * 88)
+        XCTAssertEqual(ListWindowEngine.spacer(count: 40, window: 60), 0)
+        XCTAssertEqual(ListWindowEngine.spacer(count: 60, window: 60), 0)
+        XCTAssertEqual(ListWindowEngine.remaining(content: 10_000, offset: 1_000, container: 600, spacer: 4_000), 4_400)
+        XCTAssertLessThan(ListWindowEngine.remaining(content: 10_000, offset: 9_400, container: 600, spacer: 4_000), 0)
+    }
 }

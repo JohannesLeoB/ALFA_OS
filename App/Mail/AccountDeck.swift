@@ -13,6 +13,8 @@ struct AccountDeck: View {
 
     private var inbox: InboxState { session.inbox }
 
+    private var settings: SettingsState { session.settings }
+
     private var current: Inlet? { inbox.accounts.first { $0.id == inbox.selectedInlet } }
 
     private var others: [Inlet] { inbox.accounts.filter { $0.id != inbox.selectedInlet } }
@@ -23,7 +25,7 @@ struct AccountDeck: View {
 
     private var toggleHelp: String {
         if open { return appearance.string("mail.deck.hide") }
-        let names = waiting.map(\.mailboxName)
+        let names = waiting.map { $0.mailboxName(settings.display($0.id)) }
         return names.isEmpty ? appearance.string("mail.deck.show") : appearance.format("mail.deck.showUnread", names.joined(separator: ", "))
     }
 
@@ -37,15 +39,15 @@ struct AccountDeck: View {
         let count = others.count
         ZStack(alignment: .top) {
             ForEach(Array(others.enumerated()), id: \.element.id) { level, account in
-                AccountCard(account: account, level: level, last: level == count - 1,
-                            alert: (inbox.unread[account.id] ?? 0) > 0) {
+                AccountCard(account: account, display: settings.display(account.id), level: level, last: level == count - 1,
+                            alert: (inbox.unread[account.id] ?? 0) > 0, choose: { settings.setDisplay($0, for: account.id) }) {
                     pick(account, level: level)
                 }
                 .frame(height: foot + foot * CGFloat(open ? level + 1 : 0))
                 .animation(cardMotion(level, count: count), value: open)
                 .zIndex(Double(count - level))
             }
-            ComposeHead(account: current) { _ = inbox.compose() }
+            ComposeHead(account: current, display: current.map { settings.display($0.id) } ?? .ownName) { _ = inbox.compose() }
                 .opacity(arrived ? 1 : 0)
                 .background(appearance.color(\.lane))
                 .lacquer(footShape, gloss: \.stackGlossFront, seam: \.stackSeamFront, drop: true, shown: open)
@@ -57,7 +59,8 @@ struct AccountDeck: View {
                 }
                 .zIndex(Double(count + 1))
             if let ghost {
-                MailboxGhost(account: ghost.account, level: ghost.level, lifted: lifted, faded: lifted)
+                MailboxGhost(account: ghost.account, display: settings.display(ghost.account.id), level: ghost.level,
+                             lifted: lifted, faded: lifted)
                     .zIndex(Double(count + 2))
             }
         }

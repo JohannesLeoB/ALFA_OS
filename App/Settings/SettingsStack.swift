@@ -19,7 +19,7 @@ struct SettingsStack: View {
         GeometryReader { proxy in
             VStack(spacing: 0) {
                 SettingsCommandHead(context: context, readings: readings, width: proxy.size.width, disconnecting: $disconnecting)
-                CardStack(order: order, fanned: state.fanned) { id, depth in
+                CardStack(order: order, fanned: state.fanned, fans: true) { id, depth in
                     StackCard(context: context, face: SettingsFace(id: id, readings: readings, appearance: appearance), depth: depth,
                               disconnecting: disconnecting)
                         .environment(\.narrowCard, proxy.size.width < Tokens.Size.breakpointNarrowCard)
@@ -29,10 +29,7 @@ struct SettingsStack: View {
                         EmptyView()
                     }
                 } note: {
-                    if let key = state.toast {
-                        ToastView(message: state.toastName.map { Text(verbatim: appearance.format(key, $0)) } ?? appearance.text(key),
-                                  onDismiss: { state.dismissToast() })
-                    }
+                    EmptyView()
                 }
             }
         }
