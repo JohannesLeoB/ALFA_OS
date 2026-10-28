@@ -480,3 +480,23 @@ final class ClickUpTests: XCTestCase {
 private enum WriteKindNone {
     static let value = CustomField.WriteKind.none
 }
+
+extension ClickUpTests {
+    func testCommentWithoutResolvedFlagIsOpen() async throws {
+        let (api, _) = client([(200, #"{"comments":[{"id":"c1","comment_text":"x"}]}"#)])
+        let comments = try await api.comments(taskID: "T")
+        XCTAssertEqual(comments.map(\.resolved), [false])
+    }
+
+    func testFindOrCreateListTakesTheFirstListWithTheName() async throws {
+        let lists = #"{"lists":[{"id":"l1","name":"Beta"},{"id":"l2","name":"Beta"}]}"#
+        let (api, script) = client([(200, lists)])
+        let id = try await api.findOrCreateList(folderID: "F", name: "Beta", content: nil)
+        XCTAssertEqual(id, "l1")
+        XCTAssertEqual(script.requests.count, 1)
+    }
+
+    func testTaskIsNotUrgentByDefault() {
+        XCTAssertFalse(ClickUpTask(id: "1", name: "n", status: "s").isUrgent)
+    }
+}

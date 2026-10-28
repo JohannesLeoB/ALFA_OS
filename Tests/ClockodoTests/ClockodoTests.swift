@@ -466,3 +466,46 @@ final class ClockodoTests: XCTestCase {
         XCTAssertEqual(CostCenter(name: "x").id, "x")
     }
 }
+
+extension ClockodoTests {
+    func testReportKeepsTiesInListOrderAndTakesTheFirstNameForAnID() async {
+        let (api, _) = client(routes: [
+            ("customers", 200, page("customers", [#"{"id":1,"name":"Ann"}"#, #"{"id":1,"name":"Bob"}"#])),
+            ("services", 200, page("services", [#"{"id":9,"name":"Plan"}"#, #"{"id":9,"name":"Build"}"#])),
+            ("entries", 200, page("entries", [
+                entryJSON(1, duration: 100, text: "a"),
+                entryJSON(2, duration: 200, text: "b"),
+                entryJSON(3, duration: 300, text: "c"),
+            ])),
+        ])
+        let report = await api.report(period: .week)
+        XCTAssertEqual(report.entries.map(\.note), ["a", "b", "c"])
+        XCTAssertEqual(report.entries[0].customer, "Ann")
+        XCTAssertEqual(report.entries[0].service, "Plan")
+    }
+
+    @MainActor
+    func testStateKeepsTiesInListOrderAndTakesTheFirstNameForAnID() async throws {
+        let start = Date(timeIntervalSince1970: 1)
+        var master = FakeMasterData()
+        master.customersResult = [TimeCustomer(id: 1, name: "Ann"), TimeCustomer(id: 1, name: "Bob")]
+        master.activitiesResult = [TimeActivity(id: 9, name: "Build"), TimeActivity(id: 9, name: "Plan")]
+        master.entriesResult = [1, 2, 3].map {
+            TimeEntry(id: $0, customerID: 1, projectID: nil, activityID: 9, text: nil, start: start, seconds: 5)
+        }
+        let table = try state(master: master)
+        await table.loadMasterData()
+        await table.loadEntries(now: now)
+        XCTAssertEqual(table.entries.map(\.id), [1, 2, 3])
+        XCTAssertEqual(table.label(for: table.entries[0]).customer, "Ann")
+        XCTAssertEqual(table.label(for: table.entries[0]).activity, "Build")
+    }
+
+    @MainActor
+    func testNewRowsAreBillableByDefault() throws {
+        XCTAssertTrue(TimeSlice().billable)
+        let table = try state()
+        table.addManualRow()
+        XCTAssertTrue(table.manualRows[0].billable)
+    }
+}

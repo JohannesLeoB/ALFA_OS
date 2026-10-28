@@ -270,3 +270,33 @@ extension SevdeskTests {
         XCTAssertEqual(store.all().count, 2)
     }
 }
+
+extension SevdeskTests {
+    func testReceiptStoreMergeStoresAStatusStepWithoutPdf() throws {
+        let store = ReceiptStore(database: try SQLiteStore.inMemory())
+        try store.merge(receipt("a"))
+        var remote = receipt("a", status: 200)
+        remote.lastUpdate = "u1"
+        try store.merge(remote)
+        XCTAssertEqual(store.all()[0].lastStatus, 200)
+        XCTAssertEqual(store.all()[0].lastUpdate, "u1")
+        XCTAssertFalse(store.all()[0].pdfStored)
+    }
+
+    func testReceiptStoreMergeKeepsTheUpdateOnEqualStatus() throws {
+        let store = ReceiptStore(database: try SQLiteStore.inMemory())
+        var first = receipt("a", status: 200)
+        first.lastUpdate = "u1"
+        try store.merge(first)
+        var same = receipt("a", status: 200)
+        same.lastUpdate = "u2"
+        try store.merge(same)
+        XCTAssertEqual(store.all()[0].lastUpdate, "u1")
+    }
+
+    func testNextNumberReadsTheFirstNonEmptyListEntry() {
+        XCTAssertEqual(ResponseParser.nextNumber(from: Data(#"{"objects":["AN-3","AN-4"]}"#.utf8)), "AN-3")
+        XCTAssertNil(ResponseParser.nextNumber(from: Data(#"{"objects":[""]}"#.utf8)))
+        XCTAssertNil(ResponseParser.nextNumber(from: Data(#"{"objects":[]}"#.utf8)))
+    }
+}

@@ -449,3 +449,18 @@ final class AirtableTests: XCTestCase {
         XCTAssertEqual(AirtableFailure.writeNotAllowed(baseID: "b", table: "t").detail, "writeNotAllowed t@b")
     }
 }
+
+extension AirtableTests {
+    func testCreateRecordReturnsTheFirstCreatedID() async throws {
+        let http = FakeHttp([(200, #"{"records":[{"id":"recA"},{"id":"recB"}]}"#)])
+        let client = AirtableClient(credentials: FakeCredentials(), http: http, allowlist: writable)
+        let id = try await client.createRecord(baseID: "appBase", table: "Table", fields: [:])
+        XCTAssertEqual(id, "recA")
+    }
+
+    func testFailureFallsBackToTheErrorType() {
+        XCTAssertEqual(AirtableClient.failure(status: 404, body: Data(#"{"error":{"type":"NOT_FOUND"}}"#.utf8)), .rejected(404, "NOT_FOUND"))
+        XCTAssertEqual(AirtableClient.failure(status: 404, body: Data(#"{"error":{"type":"","message":""}}"#.utf8)), .http(404))
+        XCTAssertEqual(AirtableClient.failure(status: 404, body: Data(#"{"error":{"message":"gone","type":"X"}}"#.utf8)), .rejected(404, "gone"))
+    }
+}

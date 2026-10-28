@@ -1211,3 +1211,64 @@ private struct BlankDrive: Google.DrivePort {
     func findOrCreateSubfolder(parentID: String, name: String) async throws -> String { "" }
     func uploadFile(name: String, mimeType: String, data: Data, parentFolderID: String) async throws -> DriveFile { file("", "") }
 }
+
+extension GoogleTests {
+    func testSubfolderLookupTakesTheFirstMatch() async throws {
+        let found = FakeHttp { _ in (200, #"{"files":[{"id":"one","name":"X"},{"id":"two","name":"X"}]}"#) }
+        let existing = try await drive(found).findOrCreateSubfolder(parentID: "p", name: "X")
+        XCTAssertEqual(existing, "one")
+    }
+
+    func testRedirectCodeIsReadOnlyFromTheRedirectItself() throws {
+        let oauth = OAuthClient(config: ClientConfig(clientID: "cid", clientSecret: ""), http: FakeHttp())
+        let base = try XCTUnwrap(URL(string: "http://127.0.0.1:5/?code=abc&state=s"))
+        let relative = try XCTUnwrap(URL(string: "#top", relativeTo: base))
+        XCTAssertNil(oauth.code(from: relative, expectedState: "s"))
+    }
+
+    func testFindFileDoesNotListBelowTheDepthLimit() async throws {
+        let tree: [String: [DriveFile]] = [
+            "root": [file("a", "A", folder)],
+            "a": [file("b", "B", folder)],
+            "b": [file("c", "C", folder)],
+            "c": [file("d", "D", folder)],
+            "d": [file("e", "E", folder)],
+            "e": [file("hit", "needle.pdf")],
+        ]
+        let found = try await DriveTextClient(drive: FakeDrive(tree: tree)).findFile(named: "needle", in: "root")
+        XCTAssertNil(found)
+        let near = try await DriveTextClient(drive: FakeDrive(tree: tree.merging(["d": [file("hit", "needle.pdf")]]) { $1 }))
+            .findFile(named: "needle", in: "root")
+        XCTAssertEqual(near?.id, "hit")
+    }
+
+    func testContactTakesTheFirstOrganization() throws {
+        let data = Data(#"{"results":[{"person":{"resourceName":"people/1","organizations":[{"name":"First"},{"name":"Second"}]}}]}"#.utf8)
+        XCTAssertEqual(try ContactParser.contacts(from: data).first?.organization, "First")
+    }
+
+    func testEntitiesUpToEightCharactersAreDecoded() {
+        XCTAssertEqual(MessageParser.decodeEntities("a&#0000038;b"), "a&b")
+        XCTAssertEqual(MessageParser.decodeEntities("a&#00000038;b"), "a&#00000038;b")
+    }
+
+    func testInlineImageUsesTheFirstContentID() async throws {
+        let parts = #"""
+        [{"mimeType":"image/png","headers":[{"name":"Content-ID","value":"<one>"},{"name":"content-id","value":"<two>"}],"body":{"attachmentId":"img1","size":3}}]
+        """#
+        let http = FakeHttp { _ in (200, "{\"id\":\"m1\",\"payload\":{\"mimeType\":\"multipart/mixed\",\"parts\":\(parts)}}") }
+        let body = try await mailClient(http).fetchBody(messageID: "m1")
+        XCTAssertEqual(body.inlineImages, ["one": "img1"])
+    }
+
+    func testOfferScanDoesNotSearchInsideTheFoundIncomingFolder() async throws {
+        let tree: [String: [DriveFile]] = [
+            "root": [file("i", "incoming", folder)],
+            "i": [file("o", "outgoing", folder), file("c", "BE-9.pdf")],
+            "o": [file("a", "AN-2026-0001.pdf")],
+        ]
+        let result = try await OfferScanEngine.load(rootFolderID: "root", drive: FakeDrive(tree: tree), convention: convention)
+        XCTAssertEqual(result.incoming.map(\.file.id), ["c", "a"])
+        XCTAssertEqual(result.outgoing, [])
+    }
+}
