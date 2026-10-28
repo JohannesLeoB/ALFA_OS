@@ -15,6 +15,8 @@ struct Lane: View {
 
     private var title: PaneTitle { pane?.title(lane) ?? .key(titleKey) }
 
+    private var name: PaneTitle { pane?.name(lane) ?? .key(titleKey) }
+
     private var ownsHead: Bool { pane?.ownsHead(lane) ?? false }
 
     var body: some View {
@@ -76,7 +78,7 @@ struct Lane: View {
     @ViewBuilder
     private var tools: some View {
         let open = desk.widths.all.filter { $0 > desk.measure.laneFolded }.count
-        let name = title.string(appearance)
+        let name = self.name.string(appearance)
         if open > 1 {
             SymbolButton(help: appearance.format("mail.fold.named", name), glyph: .minus, pressed: lane != .center) { desk.toggleFold(lane) }
         }

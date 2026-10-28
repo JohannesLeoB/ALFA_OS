@@ -12,6 +12,7 @@ enum MenuAnchor {
 final class MenuPanel {
     static let shared = MenuPanel()
 
+    weak var desk: DeskState?
     private var panel: NSPanel?
     private var closing: () -> Void = {}
 
@@ -44,7 +45,12 @@ final class MenuPanel {
         var top: CGFloat
         switch anchor {
         case .rect(let rect):
-            left = rect.minX
+            if let desk {
+                left = bounds.minX + CGFloat(MenuAlignEngine.left(anchor: Double(rect.minX - bounds.minX), anchorWidth: Double(rect.width), width: Double(menuWidth),
+                                                                  lanes: desk.widths, measure: desk.measure, windowWidth: Double(bounds.width)))
+            } else {
+                left = rect.minX
+            }
             top = rect.minY - gap
             if top - menuHeight < bounds.minY + edge { top = rect.maxY + gap + menuHeight }
         case .point(let point):

@@ -43,7 +43,7 @@ enum SheetValues {
     static let overviewOtherOpacity = 0.55
     static let overviewHoverScale = 1.012
     static let overviewOtherScale = 0.988
-    static let overviewEnterScale = 0.97
+    static let overviewStaggerCap = 8
     static let overviewTilePadBottom = 44.0
     static let overviewTileTextLine = 1.5
     static let overviewTitleLines = 2

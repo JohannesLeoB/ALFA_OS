@@ -149,7 +149,8 @@ struct IntegrationCard: View {
                 }
             } else {
                 ForEach(reading.inlets) { inlet in
-                    SettingsRow(label: appearance.text(inlet.title), sub: inlet.account.isEmpty ? nil : Text(verbatim: inlet.account),
+                    SettingsRow(label: inlet.account.isEmpty ? appearance.text(inlet.title) : Text(verbatim: inlet.account),
+                                sub: inlet.account.isEmpty ? nil : appearance.text(inlet.title),
                                 line: !shows(inlet)) {
                         ConnectionStatus(state: LinkState(inlet.state).connection, label: appearance.text(LinkState(inlet.state).key))
                         TextButton(label: appearance.text("text.settings.action.check"), kind: .plain, disabled: flow.busy) {

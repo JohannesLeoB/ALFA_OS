@@ -26,6 +26,7 @@ protocol Pane {
     var badge: Int { get }
     func ownsHead(_ lane: LaneKind) -> Bool
     func title(_ lane: LaneKind) -> PaneTitle?
+    func name(_ lane: LaneKind) -> PaneTitle?
     func hidesTitle(_ lane: LaneKind) -> Bool
     func marks(_ lane: LaneKind, height: Double) -> AnyView?
     func content(_ lane: LaneKind) -> AnyView
@@ -40,6 +41,8 @@ extension Pane {
     func ownsHead(_ lane: LaneKind) -> Bool { false }
 
     func title(_ lane: LaneKind) -> PaneTitle? { nil }
+
+    func name(_ lane: LaneKind) -> PaneTitle? { title(lane) }
 
     func hidesTitle(_ lane: LaneKind) -> Bool { false }
 

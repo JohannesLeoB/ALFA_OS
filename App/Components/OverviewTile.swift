@@ -48,11 +48,11 @@ struct OverviewTile: View {
             }
         }
         .opacity(entered ? (dimmed ? SheetValues.overviewOtherOpacity : 1) : 0)
-        .scaleEffect(entered ? (hot ? SheetValues.overviewHoverScale : dimmed ? SheetValues.overviewOtherScale : 1) : SheetValues.overviewEnterScale)
+        .scaleEffect(entered ? (hot ? SheetValues.overviewHoverScale : dimmed ? SheetValues.overviewOtherScale : 1) : 1)
         .offset(y: entered ? (hot ? -Tokens.Size.overviewHoverLift : 0) : Tokens.Size.overviewTileEnter)
         .onAppear {
-            let delay = Tokens.Duration.overviewDelay + Double(index) * Tokens.Duration.overviewStagger
-            withAnimation(appearance.ease(Tokens.Duration.overviewEnter, delay: delay)) { entered = true }
+            let delay = Tokens.Duration.overviewDelay + Double(min(index, SheetValues.overviewStaggerCap)) * Tokens.Duration.overviewStagger
+            withAnimation(appearance.ease(Tokens.Duration.overviewEnter, Tokens.Easing.glassOut, delay: delay)) { entered = true }
         }
         .onHover { inside in
             if inside { aim(entry.id) } else if hot { aim(nil) }

@@ -16,6 +16,8 @@ struct Blob: View {
     @State private var sample: PointerSample?
     @State private var lid = LidMotion.idle
     @State private var anchor = BlobAnchor(up: false, right: false)
+    @FocusState private var faceFocused: Bool
+    @State private var facePointer = false
 
     private var desk: DeskState { session.desk }
 
@@ -42,6 +44,15 @@ struct Blob: View {
         .background(appearance.color(\.inverse))
         .animation(resize) { $0.clipShape(shape) }
         .shadowLayers(shape)
+        .overlay(alignment: up ? .bottom : .top) {
+            if faceFocused && !facePointer {
+                Rectangle()
+                    .strokeBorder(appearance.color(\.focus), lineWidth: CGFloat(Tokens.Size.focusRingWidth))
+                    .frame(height: CGFloat(measure.blobHeight))
+                    .padding(-CGFloat(Tokens.Size.focusRingOffset + Tokens.Size.focusRingWidth))
+                    .allowsHitTesting(false)
+            }
+        }
         .blobStretch(stretch, squeeze: squeezed ? SheetValues.pressScale : 1)
         .onHover { desk.setHovering($0) }
         .onGeometryChange(for: CGRect.self) { $0.frame(in: .named(Frame.space)) } action: { frame = $0 }
@@ -111,7 +122,12 @@ struct Blob: View {
             if dot { NoticeDot().padding(CGFloat(Tokens.Spacing.step8)) }
         }
         .contentShape(Rectangle())
-        .dwellHint("shell.blobFace.tooltip")
+        .focusable()
+        .focused($faceFocused)
+        .focusEffectDisabled()
+        .onChange(of: faceFocused) { _, now in if !now { facePointer = false } }
+        .onChange(of: pressing) { _, now in if now { facePointer = true } }
+        .dwellHint("shell.blobFace.tooltip", focused: faceFocused && !facePointer)
         .blobPress(desk: desk, held: $held, stretch: $stretch, squeezed: $squeezed, pressing: $pressing, tap: tap)
         .pointerStyle(held != nil ? .grabActive : open ? .default : .grabIdle)
         .accessibilityElement(children: .contain)

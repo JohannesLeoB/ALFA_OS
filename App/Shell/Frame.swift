@@ -34,6 +34,7 @@ struct Frame: View {
                 Blob(session: session, pointer: pointer, frame: $blobFrame)
                     .zIndex(Double(Tokens.Layer.blob))
             }
+            .dwellHintLayer()
             .coordinateSpace(name: Self.space)
             .frame(width: proxy.size.width, height: proxy.size.height, alignment: .topLeading)
             .clickAway(active: desk.mode != nil, inside: blobFrame) { desk.close() }
@@ -51,12 +52,28 @@ struct Frame: View {
             desk.labelWidth = Typeface.width(appearance.string(desk.current?.titleKey ?? ""), size: Tokens.TextSize.body, weight: Tokens.Weight.medium)
         }
         .onChange(of: session.stackEmpty, initial: true) { _, empty in desk.stack(empty: empty, still: appearance.still) }
+        .onChange(of: session.conversation.noteSerial) { replaceToasts(keeping: .assistant) }
+        .onChange(of: session.inbox.toast?.serial) { _, serial in if serial != nil { replaceToasts(keeping: .mail) } }
+        .onChange(of: session.settings.toast) { _, key in if key != nil { replaceToasts(keeping: .settings) } }
+        .onAppear { MenuPanel.shared.desk = desk }
         .ignoresSafeArea(edges: [.horizontal, .bottom])
         .environment(\.appearance, appearance)
         .environment(\.session, session)
     }
 
     nonisolated static let space = "shell"
+
+    private enum ToastSource {
+        case assistant
+        case mail
+        case settings
+    }
+
+    private func replaceToasts(keeping source: ToastSource) {
+        if source != .assistant, session.conversation.note != nil { session.conversation.dismiss() }
+        if source != .mail, let toast = session.inbox.toast { session.inbox.dismissToast(toast.serial) }
+        if source != .settings, session.settings.toast != nil { session.settings.dismissToast() }
+    }
 
     private func laneAnimation(_ appearance: Appearance) -> Animation? {
         if desk.laneDragging { return nil }
@@ -118,10 +135,8 @@ struct Frame: View {
         let x = lefts()
         return ZStack(alignment: .topLeading) {
             LaneHandle(desk: desk, lane: .leading, height: height)
-                .dwellHint("shell.handle.down.tooltip")
                 .offset(x: CGFloat(x[0] + widths.leading), y: CGFloat(measure.strip))
             LaneHandle(desk: desk, lane: .trailing, height: height)
-                .dwellHint("shell.handle.down.tooltip")
                 .offset(x: CGFloat(x[1] + widths.center), y: CGFloat(measure.strip))
         }
         .animation(laneAnimation(appearance), value: widths)

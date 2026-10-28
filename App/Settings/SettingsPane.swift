@@ -19,6 +19,10 @@ struct SettingsPane: Pane {
         return .key(state.group == .connections ? state.tileGroup ?? IntegrationList.integrations : state.group.key)
     }
 
+    func name(_ lane: LaneKind) -> PaneTitle? {
+        lane == .center ? .key(context.state.group.key) : nil
+    }
+
     func hidesTitle(_ lane: LaneKind) -> Bool { lane == .leading }
 
     func marks(_ lane: LaneKind, height: Double) -> AnyView? {

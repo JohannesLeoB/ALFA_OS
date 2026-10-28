@@ -78,6 +78,7 @@ struct LaneHandle: View {
         .simultaneousGesture(TapGesture(count: 2).onEnded { desk.resetLane() })
         .accessibilityElement()
         .accessibilityLabel(appearance.text(lane == .leading ? "lane.handle.leading" : "lane.handle.trailing"))
+        .dwellHint("shell.handle.down.tooltip", focused: focused && !pointerFocus)
     }
 
     private func key(_ press: KeyPress) -> KeyPress.Result {

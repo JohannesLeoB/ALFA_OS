@@ -55,6 +55,21 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(MenuWidthEngine.width(fitting: 600), 280)
     }
 
+    func testMenuAlignsByPositionInTheLane() {
+        let lanes = LaneWidths(leading: 280, center: 896, trailing: 280)
+        func left(_ anchor: Double, _ anchorWidth: Double, _ width: Double) -> Double {
+            MenuAlignEngine.left(anchor: anchor, anchorWidth: anchorWidth, width: width, lanes: lanes, measure: measure, windowWidth: 1512)
+        }
+        XCTAssertEqual(left(40, 28, 224), 40)
+        XCTAssertEqual(left(260, 28, 224), 64)
+        XCTAssertEqual(left(320, 28, 168), 320)
+        XCTAssertEqual(left(1180, 28, 224), 980)
+        XCTAssertEqual(left(1220, 28, 224), 1220)
+        XCTAssertEqual(left(1460, 28, 224), 1264)
+        XCTAssertEqual(left(1440, 28, 280), 1216)
+        XCTAssertEqual(left(4, 28, 224), 16)
+    }
+
     func testLanesFollowTheAccordion() {
         let rest = LaneMode(rest: measure.laneRest)
         let avail = LaneLayoutEngine.available(1512, measure)
