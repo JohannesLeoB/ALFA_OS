@@ -80,6 +80,12 @@ exit(suite.testRun!.hasSucceeded ? 0 : 1)" > $OUT/$module/main.swift
   exit_code=$?
   set -e
   tail -n 4 $log
+  started=$(grep -c "^Test Case '.*' started" $log || true)
+  ended=$(grep -cE "^Test Case '.*' (passed|failed)" $log || true)
+  if (( exit_code > 1 )) || (( started != ended )); then
+    echo "check_modules: $module test run crashed"
+    exit 1
+  fi
   if (( exit_code != 0 )); then
     failed=(${(f)"$(sed -n "s/^Test Case '-\[run_$module\.$test_class \(.*\)\]' failed.*/\1/p" $log)"})
     if (( ${#failed} == 0 )); then

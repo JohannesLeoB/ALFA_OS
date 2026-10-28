@@ -188,7 +188,12 @@ private struct Stub: MailSearchPort, CalendarPort, DrivePort, GoogleContactsPort
     func render(title: String, rows: [[String]]) async throws -> Data { Data("pdf".utf8) }
 }
 
-private final class FakeEstimation: EstimationPort, @unchecked Sendable {
+private struct FixedStock: StockPort {
+    let state: StockListState
+    func current() async -> StockListState { state }
+}
+
+private final class FakeEstimation:EstimationPort, @unchecked Sendable {
     let overrides = Box<[EstimateOverride]>([])
     func estimate(projectID: String?, text: String, override: EstimateOverride) async throws -> CostEstimate {
         overrides.value.append(override)
@@ -883,5 +888,134 @@ final class AssistantTests: XCTestCase {
         await engine.send("hallo", scope: .home, privacy: PrivacySnapshot(settings: PrivacySettings(disabled: [.tasks])))
         let blocks = await MainActor.run { chat.messages(for: .home).last?.blocks ?? [] }
         XCTAssertTrue(blocks.contains(.toolActivity(label: "assistant.activity.categoryOff|settings.privacy.category.tasks", isError: true)))
+    }
+
+    func testEngineGroundsADraftOnASuccessfulToolResult() async throws {
+        let database = try SQLiteStore.inMemory()
+        let tools: [any ToolPort] = [SearchMailTool(mail: Stub()), ProposeMailDraftTool()]
+        let search = ToolUse(id: "1", name: "search_gmail", inputJSON: Data(#"{"query":"Angebot"}"#.utf8))
+        let draft = ToolUse(id: "2", name: "create_draft", inputJSON: Data(#"{"betreff":"S","text":"T","an":"a@b.de"}"#.utf8))
+        let provider = ScriptedProvider([
+            Reply(text: "", toolUses: [search], stopReason: nil),
+            Reply(text: "", toolUses: [draft], stopReason: nil),
+            Reply(text: "fertig", toolUses: [], stopReason: nil),
+        ])
+        let chat = await MainActor.run { ChatStore(database: database, userID: "u") }
+        let engine = await MainActor.run { ConversationEngine(chat: chat, provider: provider, registry: ToolRegistry(tools: tools), text: KeyText()) }
+        await engine.send("schreib dem Absender", scope: .home)
+        let blocks = await MainActor.run { chat.messages(for: .home).last?.blocks ?? [] }
+        XCTAssertTrue(blocks.contains { if case .mailDraft = $0 { true } else { false } })
+        XCTAssertFalse(blocks.contains { if case .toolActivity(let label, true) = $0 { label.hasPrefix("assistant.gate.warn") } else { false } })
+    }
+
+    func testEngineStopsAtTheToolRoundLimit() async throws {
+        let database = try SQLiteStore.inMemory()
+        let tools: [any ToolPort] = [SearchMailTool(mail: Stub())]
+        let limit = await MainActor.run { ConversationEngine.maxToolRounds }
+        let replies = (0...limit).map { round in
+            Reply(text: "", toolUses: [ToolUse(id: "u\(round)", name: "search_gmail", inputJSON: Data(#"{"query":"q\#(round)"}"#.utf8))],
+                  stopReason: "tool_use")
+        }
+        let provider = ScriptedProvider(replies)
+        let chat = await MainActor.run { ChatStore(database: database, userID: "u") }
+        let engine = await MainActor.run { ConversationEngine(chat: chat, provider: provider, registry: ToolRegistry(tools: tools), text: KeyText()) }
+        await engine.send("hallo", scope: .home)
+        XCTAssertEqual(provider.count, limit)
+        let last = await MainActor.run { chat.messages(for: .home).last?.text }
+        XCTAssertEqual(last, "assistant.engine.tooManySteps")
+    }
+
+    @MainActor
+    func testStreamingTextReplacesTheTextBlockAndKeepsActivities() throws {
+        let chat = ChatStore(database: try SQLiteStore.inMemory(), userID: "u")
+        let placeholder = Message(role: .assistant, blocks: [.text("")], status: .streaming)
+        try chat.append(placeholder, to: .home)
+        chat.updateStreamingActivities(id: placeholder.id, activities: [.toolActivity(label: "a", isError: false)], in: .home)
+        chat.updateStreamingText(id: placeholder.id, text: "x", in: .home)
+        XCTAssertEqual(chat.messages(for: .home).last?.blocks, [.toolActivity(label: "a", isError: false), .text("x")])
+    }
+
+    func testCacheSplitsTheSystemPromptAtTheVolatileMarker() {
+        let split = ClaudeClient.systemBlocks(from: "a" + ClaudeClient.volatileMarker + "b")
+        XCTAssertEqual(split.map(\.text), ["a", "b"])
+        XCTAssertEqual(split.map { $0.cacheControl != nil }, [true, false])
+    }
+
+    func testSystemBlocksStayWholeWithoutASecondPart() {
+        let whole = ClaudeClient.systemBlocks(from: "ab")
+        XCTAssertEqual(whole.map(\.text), ["ab"])
+        XCTAssertNotNil(whole[0].cacheControl)
+        let trailing = ClaudeClient.systemBlocks(from: "a" + ClaudeClient.volatileMarker)
+        XCTAssertEqual(trailing.count, 1)
+    }
+
+    func testCustomerRowCountsProjectsInSingularAndPlural() {
+        let engine = CustomerSearchEngine(customers: [], projectCounts: ["K1": 1, "K2": 3])
+        let one = engine.describe(CustomerEntry(number: "K1", name: "Anna")).render(KeyText())
+        let many = engine.describe(CustomerEntry(number: "K2", name: "Bernd")).render(KeyText())
+        let none = engine.describe(CustomerEntry(number: "K3", name: "Cora")).render(KeyText())
+        XCTAssertTrue(one.contains("assistant.customers.projectOne|1"), one)
+        XCTAssertTrue(many.contains("assistant.customers.projectMany|3"), many)
+        XCTAssertEqual(none, "assistant.customers.row|Cora|K3")
+    }
+
+    func testContactListOmitsIDsThatTheSearchShows() async {
+        let tool = SearchContactsTool(directory: ContactSearchEngine(contacts: [Contact(id: "rec1", name: "Anna Muster", project: "P1")]))
+        let list = await tool.run(ToolInput(), scope: ToolScope()).render(KeyText())
+        XCTAssertTrue(list.contains("Anna Muster"), list)
+        XCTAssertFalse(list.contains("ID:"), list)
+        XCTAssertFalse(list.contains("assistant.contacts.project"), list)
+    }
+
+    func testStockRowsShowOnlyNonEmptyArticleNumbers() async {
+        let stock = FixedStock(state: .items([
+            StockItem(id: "1", label: "Griff", articleNumber: "A-1"), StockItem(id: "2", label: "Leiste", articleNumber: ""),
+        ]))
+        let text = await ListStockTool(stock: stock).run(ToolInput(), scope: ToolScope()).render(KeyText())
+        XCTAssertTrue(text.contains("assistant.catalog.article|A-1"), text)
+        XCTAssertEqual(text.components(separatedBy: "assistant.catalog.article").count - 1, 1, text)
+    }
+
+    func testOffersListIncomingSection() {
+        let offer = OfferListing.Offer(file: DriveEntry(id: "i1", name: "Eingang.pdf"), typeLabel: "PDF")
+        let result = FindOffersTool.result(OfferListing(incoming: [offer]), label: nil)
+        let text = result.render(KeyText())
+        XCTAssertTrue(text.contains("assistant.offers.incomingHeader|1"), text)
+        XCTAssertTrue(text.contains("Eingang.pdf [PDF]"), text)
+        XCTAssertFalse(text.contains("assistant.offers.outgoingHeader"), text)
+        XCTAssertEqual(result.cards.count, 1)
+    }
+
+    func testTaskOverviewNamesNoMoreListsWhenAllFit() async {
+        let tasks = ListTasksTool(board: Stub(), lists: [ProjectTaskList(projectNumber: "1", title: "Haus", listID: "L1")])
+        let overview = await tasks.run(ToolInput(["alle": "true"]), scope: ToolScope()).render(KeyText())
+        XCTAssertFalse(overview.contains("assistant.tasks.moreLists"), overview)
+    }
+
+    func testCreateNoteSchemaRequiresText() throws {
+        let tool = CreateNoteTool(notes: NoteStore(database: try SQLiteStore.inMemory(), userID: "u"))
+        XCTAssertEqual(ToolDefinition(tool: tool, text: KeyText()).inputSchema.required, ["text"])
+    }
+
+    func testEventLinkDatesNeedEightDigits() {
+        XCTAssertEqual(SuggestEventLinkTool.dates(from: "2031-01-02"), "20310102/20310102")
+        XCTAssertEqual(SuggestEventLinkTool.dates(from: "2031-01-02 10:30"), "20310102T103000/20310102T103000")
+        XCTAssertNil(SuggestEventLinkTool.dates(from: "2031-01-0"))
+    }
+
+    func testListingClipAddsMoreOnlyBeyondTheRows() {
+        let rows: [Phrase] = [.raw("a"), .raw("b")]
+        XCTAssertEqual(ListingEngine.clip(rows, total: 2).map { $0.render(KeyText()) }, ["a", "b"])
+        XCTAssertEqual(ListingEngine.clip(rows, total: 5).map { $0.render(KeyText()) }, ["a", "b", "assistant.list.more|3"])
+    }
+
+    func testAirtableContactDraftWarnsOnlyAboutDuplicates() async {
+        let tool = ProposeContactTool(directory: ContactSearchEngine(contacts: [Contact(id: "rec1", name: "Anna Muster")]))
+        let duplicate = await tool.run(ToolInput(["name": "Anna Muster"]), scope: ToolScope()).render(KeyText())
+        XCTAssertTrue(duplicate.contains("assistant.duplicate.name|Anna Muster"), duplicate)
+        XCTAssertTrue(duplicate.contains("assistant.contactDraft.duplicateAsk"), duplicate)
+        let fresh = await tool.run(ToolInput(["name": "Zora Neu"]), scope: ToolScope()).render(KeyText())
+        XCTAssertFalse(fresh.contains("assistant.contactDraft.duplicate"), fresh)
+        XCTAssertTrue(fresh.contains("assistant.contactDraft.airtableReady"), fresh)
     }
 }
