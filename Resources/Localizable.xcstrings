@@ -10499,6 +10499,38 @@
         }
       }
     },
+    "settings.account.show" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angezeigt als"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shown as"
+          }
+        }
+      }
+    },
+    "settings.account.show.own" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigener Name"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Own name"
+          }
+        }
+      }
+    },
     "settings.accounts.head" : {
       "localizations" : {
         "de" : {

@@ -13,7 +13,11 @@ struct SettingsPane: Pane {
 
     func ownsHead(_ lane: LaneKind) -> Bool { lane == .trailing }
 
-    func title(_ lane: LaneKind) -> PaneTitle? { lane == .center ? .key(context.state.group.key) : nil }
+    func title(_ lane: LaneKind) -> PaneTitle? {
+        guard lane == .center else { return nil }
+        let state = context.state
+        return .key(state.group == .connections ? state.tileGroup ?? IntegrationList.integrations : state.group.key)
+    }
 
     func hidesTitle(_ lane: LaneKind) -> Bool { lane == .leading }
 

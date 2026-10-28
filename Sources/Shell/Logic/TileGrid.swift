@@ -20,4 +20,10 @@ public enum TileGrid {
         let points = [0] + rows.map { min(ceiling, max(0, $0 - inset)) }
         return points.min { abs($0 - proposed) < abs($1 - proposed) } ?? proposed
     }
+
+    public static func active(tops: [Double], offset: Double, reach: Double, viewport: Double, content: Double) -> Int {
+        guard !tops.isEmpty else { return 0 }
+        if offset > 0, offset + viewport >= content - 2 { return tops.count - 1 }
+        return tops.lastIndex { $0 - offset <= reach } ?? 0
+    }
 }

@@ -5,6 +5,7 @@ import Observation
 @MainActor @Observable
 public final class SettingsState {
     public var group: SettingsGroup = .connections
+    public var tileGroup: String?
     public private(set) var cards: [String] = []
     public private(set) var front: String?
     public private(set) var fanned = false

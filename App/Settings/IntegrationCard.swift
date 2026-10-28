@@ -44,6 +44,11 @@ struct IntegrationCard: View {
                 }
             }
             if reading.state != .notConnected {
+                if !info.listsAccounts {
+                    ForEach(reading.inlets.filter(shows)) { inlet in
+                        MailboxDisplayRow(state: context.state, inlet: inlet)
+                    }
+                }
                 areas(reading)
                 ForEach(info.extras, id: \.id) { extra in
                     SettingsRow(label: appearance.text(info.extraKey(extra))) {
@@ -144,7 +149,8 @@ struct IntegrationCard: View {
                 }
             } else {
                 ForEach(reading.inlets) { inlet in
-                    SettingsRow(label: appearance.text(inlet.title), sub: inlet.account.isEmpty ? nil : Text(verbatim: inlet.account)) {
+                    SettingsRow(label: appearance.text(inlet.title), sub: inlet.account.isEmpty ? nil : Text(verbatim: inlet.account),
+                                line: !shows(inlet)) {
                         ConnectionStatus(state: LinkState(inlet.state).connection, label: appearance.text(LinkState(inlet.state).key))
                         TextButton(label: appearance.text("text.settings.action.check"), kind: .plain, disabled: flow.busy) {
                             started = true
@@ -162,12 +168,17 @@ struct IntegrationCard: View {
                         .frame(width: CGFloat(Tokens.Size.confirmPillWidth), alignment: .trailing)
                         .padding(.trailing, -CGFloat(Tokens.Size.confirmPillOffset))
                     }
+                    if shows(inlet) { MailboxDisplayRow(state: context.state, inlet: inlet) }
                 }
                 SettingsRow(label: appearance.text("text.settings.action.addAccount")) {
                     addAccount(reading, kind: .neutral)
                 }
             }
         }
+    }
+
+    private func shows(_ inlet: Inlet) -> Bool {
+        inlet.capabilities.contains(.mail)
     }
 
     private func addAccount(_ reading: IntegrationReading, kind: TextButtonKind) -> some View {

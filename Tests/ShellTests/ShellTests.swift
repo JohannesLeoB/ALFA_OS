@@ -390,4 +390,15 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(TileGrid.snap(400, rows: rows, inset: 8, limit: 200), 200)
         XCTAssertEqual(TileGrid.snap(-30, rows: [], inset: 8, limit: -5), 0)
     }
+
+    func testTileGridActiveGroupFollowsTheHead() {
+        let tops = [8.0, 640]
+        XCTAssertEqual(TileGrid.active(tops: tops, offset: 0, reach: 32, viewport: 400, content: 1200), 0)
+        XCTAssertEqual(TileGrid.active(tops: tops, offset: 607, reach: 32, viewport: 400, content: 1200), 0)
+        XCTAssertEqual(TileGrid.active(tops: tops, offset: 608, reach: 32, viewport: 400, content: 1200), 1)
+        XCTAssertEqual(TileGrid.active(tops: tops, offset: 500, reach: 32, viewport: 400, content: 902), 1)
+        XCTAssertEqual(TileGrid.active(tops: tops, offset: 0, reach: 32, viewport: 400, content: 300), 0)
+        XCTAssertEqual(TileGrid.active(tops: [.infinity, .infinity], offset: 0, reach: 32, viewport: 400, content: 1200), 0)
+        XCTAssertEqual(TileGrid.active(tops: [], offset: 50, reach: 32, viewport: 400, content: 100), 0)
+    }
 }

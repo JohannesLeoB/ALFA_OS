@@ -1,6 +1,7 @@
 import AppKit
 import Core
 import Design
+import Hub
 import Mail
 import SwiftUI
 
@@ -119,8 +120,9 @@ struct FromButton: View {
     @State private var anchor = AnchorBox()
 
     private var inbox: InboxState { session.inbox }
-    private var name: String { session.settings.profile.name }
-    private var address: String { inbox.accounts.first { $0.id == card.inlet }?.account ?? "" }
+    private var sender: Inlet? { inbox.accounts.first { $0.id == card.inlet } }
+    private var name: String { sender.map { $0.mailboxName(session.settings.display($0.id)) } ?? "" }
+    private var address: String { sender?.account ?? "" }
 
     var body: some View {
         AddressButton(capsule: true, action: open) {

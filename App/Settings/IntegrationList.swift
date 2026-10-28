@@ -8,22 +8,25 @@ struct IntegrationList: View {
     @Environment(\.appearance) private var appearance
     let context: SettingsContext
     @State private var grids: [String: CGRect] = [:]
-    @State private var viewport = 0.0
+    @State private var scroll = ScrollReading()
 
     private var state: SettingsState { context.state }
 
     nonisolated private static let space = "tiles"
 
-    private static let integrations = "settings.tiles.integrations"
+    static let integrations = "settings.tiles.integrations"
 
     private static let keys = "settings.tiles.keys"
+
+    private static let order = [integrations, keys]
 
     var body: some View {
         let readings = context.readings
         let counts = [Self.integrations: readings.count, Self.keys: 1]
+        let current = active
         ScrollView {
             VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step12)) {
-                tileGroup(Self.integrations) {
+                tileGroup(Self.integrations, active: current, first: true) {
                     ForEach(readings) { reading in
                         SettingsTile(
                             name: LocalizedStringKey(reading.info.nameKey),
@@ -35,7 +38,7 @@ struct IntegrationList: View {
                             action: { state.open(reading.info.id) })
                     }
                 }
-                tileGroup(Self.keys, last: true) {
+                tileGroup(Self.keys, active: current, last: true) {
                     let section = SettingsSection.keyInventory
                     SettingsTile(
                         name: LocalizedStringKey(section.key),
@@ -52,7 +55,19 @@ struct IntegrationList: View {
         }
         .scrollIndicators(.never)
         .scrollTargetBehavior(TileScrollTargetBehavior(rows: rows(counts)))
-        .onScrollGeometryChange(for: Double.self) { Double($0.containerSize.height) } action: { _, height in viewport = height }
+        .onScrollGeometryChange(for: ScrollReading.self) { geometry in
+            ScrollReading(offset: Double(geometry.contentOffset.y + geometry.contentInsets.top),
+                          viewport: Double(geometry.containerSize.height), content: Double(geometry.contentSize.height))
+        } action: { _, reading in scroll = reading }
+        .onChange(of: active, initial: true) { _, key in state.tileGroup = key }
+        .onDisappear { state.tileGroup = nil }
+    }
+
+    private var active: String {
+        let tops = Self.order.map { key in grids[key].map { Double($0.minY) } ?? .infinity }
+        let index = TileGrid.active(tops: tops, offset: scroll.offset, reach: Tokens.Spacing.step8 + Tokens.Spacing.step24,
+                                    viewport: scroll.viewport, content: scroll.content)
+        return Self.order[index]
     }
 
     private func rows(_ counts: [String: Int]) -> [Double] {
@@ -70,20 +85,31 @@ struct IntegrationList: View {
         return NSImage(contentsOf: url)
     }
 
-    private func tileGroup<Content: View>(_ key: String, last: Bool = false, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step8)) {
-            appearance.text(key)
-                .designText(\.inkTertiary, size: Tokens.TextSize.small)
-                .padding(.horizontal, CGFloat(Tokens.Spacing.step4))
-                .frame(height: CGFloat(Tokens.Spacing.step24), alignment: .bottomLeading)
+    private func tileGroup<Content: View>(_ key: String, active: String, first: Bool = false, last: Bool = false,
+                                          @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: first ? 0 : CGFloat(Tokens.Spacing.step8)) {
+            if !first {
+                appearance.text(key)
+                    .designText(\.inkTertiary, size: Tokens.TextSize.small)
+                    .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+                    .frame(height: CGFloat(Tokens.Spacing.step24), alignment: .bottomLeading)
+                    .opacity(key == active ? 0 : 1)
+                    .animation(appearance.ease(Tokens.Duration.hover), value: key == active)
+            }
             TileFlowLayout(minimum: Tokens.Size.settingsTileMinWidth, gap: Tokens.Spacing.step8, height: Tokens.Size.settingsTileHeight) {
                 content()
             }
             .transaction { $0.animation = nil }
             .onGeometryChange(for: CGRect.self) { $0.frame(in: .named(Self.space)) } action: { grids[key] = $0 }
         }
-        .frame(minHeight: last ? CGFloat(max(0, viewport - 2 * Tokens.Spacing.step8 + Tokens.Spacing.step32)) : nil, alignment: .top)
+        .frame(minHeight: last ? CGFloat(max(0, scroll.viewport - 2 * Tokens.Spacing.step8 + Tokens.Spacing.step32)) : nil, alignment: .top)
     }
+}
+
+private struct ScrollReading: Equatable {
+    var offset = 0.0
+    var viewport = 0.0
+    var content = 0.0
 }
 
 struct TileFlowLayout: Layout {
