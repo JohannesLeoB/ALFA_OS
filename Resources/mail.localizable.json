@@ -592,10 +592,6 @@
   "mail.read.count": {
    "de": "%@ Empfänger"
   },
-  "mail.read.images.text": {
-   "de": "Beim Laden erfährt der Absender, dass die Mail geöffnet wurde.",
-   "en": "Loading them tells the sender that you opened this message."
-  },
   "mail.read.images.title": {
    "de": "Externe Bilder blockiert",
    "en": "Remote images blocked"

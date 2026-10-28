@@ -46,7 +46,7 @@ struct Blob: View {
         .shadowLayers(shape)
         .overlay(alignment: up ? .bottom : .top) {
             if faceFocused && !facePointer {
-                Rectangle()
+                RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.blob + Tokens.Size.focusRingOffset + Tokens.Size.focusRingWidth))
                     .strokeBorder(appearance.color(\.focus), lineWidth: CGFloat(Tokens.Size.focusRingWidth))
                     .frame(height: CGFloat(measure.blobHeight))
                     .padding(-CGFloat(Tokens.Size.focusRingOffset + Tokens.Size.focusRingWidth))
@@ -125,7 +125,7 @@ struct Blob: View {
         .focusable()
         .focused($faceFocused)
         .focusEffectDisabled()
-        .onChange(of: faceFocused) { _, now in if !now { facePointer = false } }
+        .onChange(of: faceFocused) { _, now in facePointer = now && NSApp.currentEvent?.type != .keyDown }
         .onChange(of: pressing) { _, now in if now { facePointer = true } }
         .dwellHint("shell.blobFace.tooltip", focused: faceFocused && !facePointer)
         .blobPress(desk: desk, held: $held, stretch: $stretch, squeezed: $squeezed, pressing: $pressing, tap: tap)

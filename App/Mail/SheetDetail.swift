@@ -25,7 +25,7 @@ struct SheetDetail: View {
                     .padding(.top, CGFloat(Tokens.Spacing.step4))
             }
             if card.remoteImagesBlocked(loadRemote: loadImages) {
-                Notice(kind: .warning, title: appearance.text("mail.read.images.title"), text: appearance.text("mail.read.images.text"), onSheet: true,
+                Notice(kind: .warning, title: appearance.text("mail.read.images.title"), text: nil, onSheet: true,
                        glyph: { Glyph(.alert) },
                        actions: { TextButton(label: appearance.text("mail.action.loadImages"), kind: .sheet) { session.inbox.allowRemoteImages(card.id) } })
                     .padding(.horizontal, -CGFloat(SheetValues.bodyPadSide))

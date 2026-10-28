@@ -1,3 +1,4 @@
+import AppKit
 import Design
 import Shell
 import SwiftUI
@@ -55,7 +56,7 @@ struct LaneHandle: View {
         .onHover { hovering = $0 }
         .focusable()
         .focused($focused)
-        .onChange(of: focused) { _, now in if !now { pointerFocus = false } }
+        .onChange(of: focused) { _, now in pointerFocus = now && NSApp.currentEvent?.type != .keyDown }
         .focusEffectDisabled()
         .onKeyPress(keys: [.leftArrow, .rightArrow, .return]) { press in
             pointerFocus = false

@@ -9497,23 +9497,6 @@
         }
       }
     },
-    "mail.read.images.text" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Beim Laden erfährt der Absender, dass die Mail geöffnet wurde."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loading them tells the sender that you opened this message."
-          }
-        }
-      }
-    },
     "mail.read.images.title" : {
       "comment" : "alpha",
       "localizations" : {

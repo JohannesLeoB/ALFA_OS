@@ -188,9 +188,9 @@ struct InboxRow: View {
                 }
             }
             .padding(.leading, CGFloat(Tokens.Spacing.step8))
-            .padding(.top, CGFloat(SheetValues.rowPadding))
-            .padding(.trailing, CGFloat(Tokens.Spacing.step8))
             .background(selected ? appearance.color(\.ink) : appearance.color(\.lane))
+            .padding(.top, CGFloat(Tokens.Spacing.step12))
+            .padding(.trailing, CGFloat(Tokens.Spacing.step8))
         }
     }
 
