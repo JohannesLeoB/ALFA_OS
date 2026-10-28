@@ -80,7 +80,7 @@ struct StackCard: View {
                 .font(.face(Tokens.TextSize.small))
                 .monospacedDigit()
                 .lineLimit(1)
-                .opacity(SheetValues.metaOpacity)
+                .opacity(Tokens.Opacity.cardMeta)
                 .frame(maxWidth: .infinity, alignment: .leading)
         } trailing: {
             CardHeadButton(help: appearance.string("card.close"), glyph: .close, ink: ink, fills: false) { context.state.close(face.id) }

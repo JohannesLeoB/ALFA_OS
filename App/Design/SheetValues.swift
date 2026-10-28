@@ -29,7 +29,6 @@ enum SheetValues {
     static let syncArcStart = -90.0
     static let syncSweep = 720.0
     static let syncErrorArc = 0.25
-    static let initialsTracking = 0.08
     static let closeOpacity = 0.7
     static let disabledOpacity = 0.4
     static let gripCurve = CubicBezier(x1: 0.25, y1: 0.1, x2: 0.25, y2: 1)
@@ -50,7 +49,6 @@ enum SheetValues {
     static let overviewEnterScale = 0.97
     static let overviewTilePadBottom = 44.0
     static let overviewTileTextLine = 1.5
-    static let overviewTileTitleLine = 1.35
     static let overviewTitleLines = 2
     static let stackHoverLift = 4.0
     static let toastBottom = 16.0
@@ -59,18 +57,7 @@ enum SheetValues {
     static let statusArcBox = 12.0
     static let statusArc = 0.3
     static let menuMargin = 16.0
-    static let cardFlatCast = 0.22
-    static let cardFlatBackRing = 0.06
-    static let cardFlatBackCast = 0.18
-    static let cardFlatFrontSpread = -12.0
-    static let cardFlatFrontBlur = 24.0
-    static let cardFlatFrontY = -8.0
-    static let cardFlatBackSpread = -10.0
-    static let cardFlatBackBlur = 16.0
-    static let cardFlatBackY = -6.0
     static let unreadDotShift = 2.0
-    static let markTracking = 0.06
-    static let stateTextWidth = 320.0
     static let dashedLine = [2.0, 2.0]
     static let fullTurn = 360.0
     static let halfTurn = 180.0
@@ -89,10 +76,8 @@ enum SheetValues {
     static let recipientRowHeight = 44.0
     static let cardTitleLimit = 34
     static let cardAddressLimit = 36
-    static let metaOpacity = 0.72
     static let fieldLabelWidthRead = 40.0
     static let fieldRowHeightRead = 36.0
-    static let subjectTracking = -0.02
     static let bodyPadSide = 8.0
     static let bodyPadTop = 16.0
     static let bodyPadBottom = 24.0

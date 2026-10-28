@@ -19,7 +19,7 @@ struct SyncButton: View {
             ZStack {
                 Text(verbatim: face)
                     .font(.face(Tokens.TextSize.blobFace, weight: Tokens.Weight.medium))
-                    .tracking(CGFloat(SheetValues.initialsTracking * Tokens.TextSize.blobFace))
+                    .tracking(CGFloat(Tokens.Tracking.mark * Tokens.TextSize.blobFace))
                 Circle()
                     .strokeBorder(.foreground, lineWidth: line)
                     .opacity(Tokens.Opacity.ringOnColor)

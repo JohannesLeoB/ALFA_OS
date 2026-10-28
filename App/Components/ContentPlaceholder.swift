@@ -32,13 +32,13 @@ struct ContentPlaceholder<Glyph: View, Action: View>: View {
                     .font(.face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
                     .foregroundStyle(appearance.color(\.ink))
                     .lineHeight(Tokens.LineHeight.body * Tokens.TextSize.body, size: Tokens.TextSize.body)
-                    .frame(maxWidth: CGFloat(SheetValues.stateTextWidth))
+                    .frame(maxWidth: CGFloat(Tokens.Size.cardStateTextMaxWidth))
             }
             text
                 .font(.face(Tokens.TextSize.body))
                 .foregroundStyle(appearance.color(\.inkTertiary))
                 .lineHeight(Tokens.LineHeight.body * Tokens.TextSize.body, size: Tokens.TextSize.body)
-                .frame(maxWidth: CGFloat(SheetValues.stateTextWidth))
+                .frame(maxWidth: CGFloat(Tokens.Size.cardStateTextMaxWidth))
             action
         }
         .multilineTextAlignment(.center)

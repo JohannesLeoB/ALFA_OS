@@ -15,7 +15,7 @@ struct SheetDetail: View {
         VStack(alignment: .leading, spacing: 0) {
             Text(verbatim: card.summary.subject.isEmpty ? appearance.string("mail.row.noSubject") : card.summary.subject)
                 .font(Font(Typeface.sheet(size: Tokens.TextSize.title, weight: .medium)))
-                .tracking(CGFloat(SheetValues.subjectTracking * Tokens.TextSize.title))
+                .tracking(CGFloat(Tokens.Tracking.title * Tokens.TextSize.title))
                 .lineHeight(Tokens.LineHeight.title * Tokens.TextSize.title, size: Tokens.TextSize.title, sheet: true)
                 .fixedSize(horizontal: false, vertical: true)
             if card.hasConversation {

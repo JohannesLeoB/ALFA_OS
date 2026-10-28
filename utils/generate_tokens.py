@@ -109,6 +109,51 @@ def numeric_block(title, node, whole=False):
     return lines
 
 
+def flatten(node, prefix=""):
+    items = []
+    for key, leaf in children(node):
+        name = prefix + cap(key) if prefix else key
+        if is_leaf(leaf):
+            items.append((name, leaf))
+        elif isinstance(leaf, dict):
+            items += flatten(leaf, name)
+    return items
+
+
+def flat_block(title, node, whole=False):
+    lines = ["%spublic enum %s {" % (INDENT, title)]
+    for key, leaf in flatten(node):
+        text = str(int(leaf["$value"])) if whole else number(leaf["$value"])
+        lines.append("%s%spublic static let %s = %s" % (INDENT, INDENT, ident(key), text))
+    lines.append("%s}" % INDENT)
+    return lines
+
+
+def value_of(source, value):
+    return resolve(source, value)["$value"] if isinstance(value, str) else value
+
+
+def text_style(source, value):
+    tracking = value_of(source, value.get("letterSpacing", 0))
+    return "TypeStyle(family: %s, size: %s, weight: %d, tracking: %s, lineHeight: %s)" % (
+        json.dumps(value_of(source, value["fontFamily"])), num(dimension(value_of(source, value["fontSize"]))),
+        int(value_of(source, value["fontWeight"])), num(dimension(tracking)), num(dimension(value_of(source, value["lineHeight"]))))
+
+
+def transition(source, value):
+    curve = value_of(source, value["timingFunction"])
+    return "Timing(duration: %s, delay: %s, easing: CubicBezier(x1: %s, y1: %s, x2: %s, y2: %s))" % (
+        (num(seconds(value_of(source, value["duration"]))), num(seconds(value_of(source, value["delay"])))) + tuple(num(v) for v in curve))
+
+
+def surface_file(source):
+    out = ["public enum Surface {"]
+    for key, leaf in flatten(source["surface"]):
+        out.append("%spublic static let %s: [ShadowLayer] = %s" % (INDENT, ident(key), shadow_expr(source, leaf["$value"])))
+    out.append("}")
+    return out
+
+
 def component_block(node):
     lines = ["%spublic enum Component {" % INDENT]
     for key, leaf in children(node):
@@ -135,8 +180,19 @@ def tokens_file(source):
     out += numeric_block("Opacity", source["opacity"])
     out += numeric_block("Confirm", source["confirm"])
     out += numeric_block("Motion", source["motion"])
+    out += flat_block("Layer", source["layer"], whole=True)
+    out += numeric_block("Tracking", source["typography"]["tracking"])
+    out += numeric_block("Scale", source["scale"])
+    out += numeric_block("Ratio", source["ratio"])
+    out += scalar_block("TextStyle", source["typography"]["textStyle"], lambda l: text_style(source, l["$value"]))
+    out += scalar_block("Transition", source["motion"]["transition"], lambda l: transition(source, l["$value"]))
     out += component_block(source["component"])
     out.append("}")
+    out += ["", "public struct TypeStyle: Sendable, Equatable {", "%spublic let family: [String]" % INDENT,
+            "%spublic let size: Double" % INDENT, "%spublic let weight: Int" % INDENT,
+            "%spublic let tracking: Double" % INDENT, "%spublic let lineHeight: Double" % INDENT, "}"]
+    out += ["", "public struct Timing: Sendable, Equatable {", "%spublic let duration: Double" % INDENT,
+            "%spublic let delay: Double" % INDENT, "%spublic let easing: CubicBezier" % INDENT, "}"]
     out += ["", "public struct StackStep: Sendable, Equatable {", "%spublic let surface: ColorValue" % INDENT,
             "%spublic let ink: ColorValue" % INDENT, "}", "", "public extension Tokens {"]
     for mode in ("light", "dark"):
@@ -229,6 +285,7 @@ def build(source):
         "Moods.swift": render(moods_file(source["color"]["mood"])),
         "Shadows.swift": render(shadows_file(source)),
         "InkSet.swift": render(ink_file(source, color_keys)),
+        "Surface.swift": render(surface_file(source)),
     }
 
 

@@ -21,7 +21,7 @@ struct OverviewTile: View {
                 Text(verbatim: entry.subject)
                     .designText(\.ink, size: Tokens.TextSize.body, weight: .medium)
                     .lineLimit(SheetValues.overviewTitleLines)
-                    .lineHeight(SheetValues.overviewTileTitleLine * Tokens.TextSize.body, size: Tokens.TextSize.body)
+                    .lineHeight(Tokens.LineHeight.body * Tokens.TextSize.body, size: Tokens.TextSize.body)
                 Text(verbatim: entry.preview)
                     .designText(\.inkSecondary, size: Tokens.TextSize.body)
                     .lineLimit(size.lines)

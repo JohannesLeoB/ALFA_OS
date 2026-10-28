@@ -20,8 +20,6 @@ struct CardFace<Head: View, Content: View>: View {
 
     private var fill: Color { step.map { appearance.paint($0.surface) } ?? appearance.color(\.lane) }
     private var ink: Color { step.map { appearance.paint($0.ink) } ?? appearance.color(\.ink) }
-    private var shade: Color { appearance.color(\.safeArea) }
-
     private var shape: UnevenRoundedRectangle {
         let top = CGFloat(Tokens.Radius.card)
         let bottom = CGFloat(Tokens.Radius.cardBottom)
@@ -53,19 +51,19 @@ struct CardFace<Head: View, Content: View>: View {
         return ZStack {
             shape.fill(appearance.color(\.line)).padding(-line)
             if front {
-                soft(spread: SheetValues.cardFlatFrontSpread, blur: SheetValues.cardFlatFrontBlur, y: SheetValues.cardFlatFrontY,
-                     alpha: SheetValues.cardFlatCast)
+                soft(spread: Tokens.Size.stackFlatFrontSpread, blur: Tokens.Size.stackFlatFrontBlur,
+                     y: -Tokens.Size.stackFlatFrontOffset, color: \.stackFlatFront)
             } else {
-                shape.fill(shade.opacity(SheetValues.cardFlatBackRing)).padding(-line)
-                soft(spread: SheetValues.cardFlatBackSpread, blur: SheetValues.cardFlatBackBlur, y: SheetValues.cardFlatBackY,
-                     alpha: SheetValues.cardFlatBackCast)
+                shape.fill(appearance.color(\.stackRing)).padding(-line)
+                soft(spread: Tokens.Size.stackFlatDropSpread, blur: Tokens.Size.stackFlatDropBlur,
+                     y: -Tokens.Size.stackFlatDropOffset, color: \.stackFlatDrop)
             }
         }
     }
 
-    private func soft(spread: Double, blur: Double, y: Double, alpha: Double) -> some View {
+    private func soft(spread: Double, blur: Double, y: Double, color: KeyPath<Colors, ColorValue>) -> some View {
         shape.inset(by: CGFloat(-spread))
-            .fill(shade.opacity(alpha))
+            .fill(appearance.color(color))
             .blur(radius: CGFloat(blur / 2))
             .offset(y: CGFloat(y))
     }

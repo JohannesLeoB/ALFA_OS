@@ -276,6 +276,47 @@ public enum Tokens {
         public static let menuReelTilt = 60.0
         public static let blobFlingSpeed = 900.0
     }
+    public enum Layer {
+        public static let lane = 1
+        public static let handle = 2
+        public static let syncButton = 3
+        public static let toast = 4
+        public static let menu = 5
+        public static let blob = 6
+        public static let safeArea = 7
+        public static let inLaneOverview = 2
+        public static let inLaneToast = 3
+        public static let switchGlass = 30
+        public static let hint = 40
+        public static let lockScreen = 40
+    }
+    public enum Tracking {
+        public static let control = 0.01
+        public static let mark = 0.06
+        public static let title = -0.02
+    }
+    public enum Scale {
+        public static let pressTile = 0.98
+    }
+    public enum Ratio {
+        public static let imageTile = 1.3333
+    }
+    public enum TextStyle {
+        public static let body = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 13.0, weight: 400, tracking: 0.0, lineHeight: 1.35)
+        public static let bodyEmphasis = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 13.0, weight: 500, tracking: 0.0, lineHeight: 1.35)
+        public static let caption = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 11.5, weight: 400, tracking: 0.0, lineHeight: 16.0)
+        public static let captionEmphasis = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 11.5, weight: 500, tracking: 0.0, lineHeight: 16.0)
+        public static let control = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 11.5, weight: 500, tracking: 0.01, lineHeight: 16.0)
+        public static let mark = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 11.5, weight: 500, tracking: 0.06, lineHeight: 1.0)
+        public static let markSmall = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 9.0, weight: 500, tracking: 0.06, lineHeight: 1.0)
+        public static let title = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 18.0, weight: 500, tracking: -0.02, lineHeight: 1.25)
+        public static let mailBody = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 13.0, weight: 400, tracking: 0.0, lineHeight: 1.6)
+    }
+    public enum Transition {
+        public static let blobFlight = Timing(duration: 0.416, delay: 0.0, easing: CubicBezier(x1: 0.2, y1: 1.15, x2: 0.3, y2: 1.0))
+        public static let stack = Timing(duration: 0.52, delay: 0.0, easing: CubicBezier(x1: 0.22, y1: 1.08, x2: 0.36, y2: 1.0))
+        public static let fold = Timing(duration: 0.72, delay: 0.0, easing: CubicBezier(x1: 0.65, y1: 0.0, x2: 0.25, y2: 1.0))
+    }
     public enum Component {
         public static let laneRadius = Radius.lane
         public static let laneEdge = Size.edge
@@ -311,6 +352,20 @@ public enum Tokens {
         public static let overviewTileHeightMedium = Size.overviewTileHeightMedium
         public static let overviewTileMinWidthMedium = Size.overviewTileMinWidthMedium
     }
+}
+
+public struct TypeStyle: Sendable, Equatable {
+    public let family: [String]
+    public let size: Double
+    public let weight: Int
+    public let tracking: Double
+    public let lineHeight: Double
+}
+
+public struct Timing: Sendable, Equatable {
+    public let duration: Double
+    public let delay: Double
+    public let easing: CubicBezier
 }
 
 public struct StackStep: Sendable, Equatable {

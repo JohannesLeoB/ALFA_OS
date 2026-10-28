@@ -31,7 +31,7 @@ struct AccountCard: View {
         HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
             Text(verbatim: account.mailboxInitials)
                 .font(.face(Tokens.TextSize.small, weight: Tokens.Weight.medium))
-                .tracking(CGFloat(SheetValues.markTracking * Tokens.TextSize.small))
+                .tracking(CGFloat(Tokens.Tracking.mark * Tokens.TextSize.small))
                 .lineLimit(1)
                 .frame(width: side, height: side)
                 .ring(Circle(), ink.opacity(Tokens.Opacity.ringOnMark))

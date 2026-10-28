@@ -89,7 +89,7 @@ extension MessageCard {
 
         @ViewBuilder
         private var metaView: some View {
-            let opacity = SheetValues.metaOpacity
+            let opacity = Tokens.Opacity.cardMeta
             if case .message(let id) = ref, let card = inbox.card(id), let party {
                 if front {
                     Text(verbatim: party.name.isEmpty ? "" : PersonName.middle(party.address, limit: SheetValues.cardAddressLimit))

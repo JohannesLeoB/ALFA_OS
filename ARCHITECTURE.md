@@ -129,7 +129,7 @@ Logic -> Model
 
 ## Design tokens
 
-`Resources/tokens.json` is the single source for colours, sizes, spacing, radii, motion, typography and shadows. `utils/generate_tokens.py` reads it and writes `Tokens.swift`, `Colors.swift`, `Moods.swift`, `Shadows.swift` and `InkSet.swift` into `Sources/Design/Model`. `python3 -I utils/generate_tokens.py --check` fails when a generated file differs; `utils/check.py` runs it. Views read tokens through `Tokens`, `Colors`, `Moods`, `Shadows` and `InkSet`; `App/Design/Appearance.swift` selects light or dark values.
+`Resources/tokens.json` is the single source for colours, sizes, spacing, radii, motion, typography, layers, shadows and surfaces. `utils/generate_tokens.py` reads it and writes `Tokens.swift` (including `Layer`, `Tracking`, `Scale`, `Ratio`, `TextStyle` and `Transition`), `Colors.swift`, `Moods.swift`, `Shadows.swift`, `Surface.swift` and `InkSet.swift` into `Sources/Design/Model`. `python3 -I utils/generate_tokens.py --check` fails when a generated file differs; `utils/check.py` runs it. Views read tokens through `Tokens`, `Colors`, `Moods`, `Shadows`, `Surface` and `InkSet`; `App/Design/Appearance.swift` selects light or dark values.
 
 ## Texts
 
