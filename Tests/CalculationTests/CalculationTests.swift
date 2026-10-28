@@ -222,6 +222,14 @@ final class CalculationTests: XCTestCase {
         XCTAssertEqual(unknown.scope.notes, [Notice("calc.scope.unmapped")])
     }
 
+    func testParserSingleKeywordsTriggerComponentsAndScope() {
+        let parser = EstimateRequestParser()
+        XCTAssertEqual(parser.parse("gesamtkuche").components.map(\.type), [.aggregateKitchen])
+        XCTAssertTrue(parser.parse("ohne anschlüsse").scope.excludesAppliances)
+        XCTAssertEqual(parser.parse("4 lfm Küchenzeile mit Montage").components.map(\.type), [.baseCabinetRun, .installation])
+        XCTAssertEqual(CandidateReleaseDecision.classify(component: "Transport", trade: "", title: "", evidenceQuote: "", proposedStatus: ""), .logistics)
+    }
+
     func testAnchorLengthReadsMetersButNotMillimeters() {
         func anchor(_ title: String, _ quote: String = "") -> CandidateReleaseDecision {
             CandidateReleaseDecision(candidateID: "A", sourceFile: "f", page: 1, supplier: "s", project: "p", component: "c", trade: "t", priceNetGuess: 1000, confidence: 0.5, duplicateCount: 0, currentStatus: "x", proposedStatus: "release_x", supersededBy: nil, decisionScore: 0.5, decisionReason: "", helpNeeded: "", title: title, evidenceQuote: quote, carryforwardRuleStatus: "", ruleSafePriceNet: nil, ruleNotes: "")
@@ -241,6 +249,8 @@ final class CalculationTests: XCTestCase {
         XCTAssertEqual(lexicon.materialCanonicals(in: "wrichenfurnier"), ["eiche", "furnier"])
         XCTAssertTrue(lexicon.mentionsWorktopSurface(in: "granit arbeitsplatte"))
         XCTAssertFalse(lexicon.mentionsWorktopSurface(in: "eiche fronten"))
+        XCTAssertTrue(lexicon.mentionsWorktopSurface(in: "granit"))
+        XCTAssertTrue(lexicon.mentionsWorktopSurface(in: "fenix"))
         let names = lexicon.entries.map(\.canonical)
         XCTAssertEqual(Set(names).count, names.count)
         XCTAssertFalse(names.contains { $0.hasSuffix("_extra") })
@@ -272,6 +282,8 @@ final class CalculationTests: XCTestCase {
     func testAnchorInflationFactorsAndYearParsing() {
         XCTAssertEqual(AnchorInflation.year(from: "12.03.2021"), 2021)
         XCTAssertNil(AnchorInflation.year(from: "12.03.1850"))
+        XCTAssertEqual(AnchorInflation.year(from: "01.01.2100"), 2100)
+        XCTAssertNil(AnchorInflation.year(from: "01.01.2101"))
         XCTAssertNil(AnchorInflation.year(from: nil))
         XCTAssertEqual(numeric(AnchorInflation.factor(offerYear: 2020, referenceYear: 2026)), pow(1.04, 6), accuracy: 1e-9)
         XCTAssertEqual(numeric(AnchorInflation.factor(offerYear: 2010, referenceYear: 2026)), pow(1.04, 6), accuracy: 1e-9)
@@ -373,6 +385,48 @@ final class CalculationTests: XCTestCase {
         XCTAssertEqual(requirements[1].component.quantity, 6)
         XCTAssertEqual(requirements[3].allowedComponentClasses, [.logistics])
         XCTAssertEqual(requirements[3].component.unit, "scope")
+    }
+
+    func testResolverTurnsShortRunIntoUnitAndKeepsDrawerMaterials() {
+        let short = ComponentResolveEngine().resolve(EstimateRequestParser().parse("1 lfm Küchenzeile"))
+        XCTAssertEqual(short.count, 1)
+        XCTAssertEqual(short[0].component.unit, "piece")
+        XCTAssertEqual(short[0].component.componentClass, .baseUnit)
+        let drawers = ComponentResolveEngine().resolve(EstimateRequestParser().parse("Küche 4 lfm Eiche Linoleum mit 6 Schubkästen"))
+        XCTAssertEqual(drawers[1].component.type, .drawerAddon)
+        XCTAssertEqual(drawers[1].component.materials, ["eiche"])
+    }
+
+    private func offer(_ id: String, title: String, score: Double, confidence: Double = 0.5, price: Decimal = 1000, density: EquipmentDensity = .unknown) -> CandidateReleaseDecision {
+        CandidateReleaseDecision(candidateID: id, sourceFile: "f", page: 1, supplier: "s", project: "p", component: "", trade: "", priceNetGuess: price, confidence: confidence, duplicateCount: 0, currentStatus: "x", proposedStatus: "release_x", supersededBy: nil, decisionScore: score, decisionReason: "", helpNeeded: "", title: title, evidenceQuote: "", carryforwardRuleStatus: "", ruleSafePriceNet: nil, ruleNotes: "", componentClass: .kitchenRun, equipmentDensity: density)
+    }
+
+    private func runRequirement(quantity: Double, drawers: Int = 0) -> ComponentRequirement {
+        let run = EstimateComponent(type: .baseCabinetRun, quantity: quantity, unit: "lfm", drawerCount: drawers, componentClass: .kitchenRun)
+        return ComponentRequirement(component: run, allowedComponentClasses: [.kitchenRun], forbiddenComponentClasses: [], minEvidenceCount: 2, maxScaleFactor: 1.8)
+    }
+
+    func testCandidateSelectionScoresDensityAndDropsZeroScores() {
+        let engine = ComponentEstimateEngine()
+        let ranked = engine.selectCandidates(for: runRequirement(quantity: 4), anchors: [
+            offer("A", title: "60cm Zeile", score: 0.2),
+            offer("B", title: "Zeile", score: 0.5),
+            offer("Z", title: "Zeile", score: 0, confidence: 0),
+        ])
+        XCTAssertEqual(ranked.map(\.candidateID), ["B", "A"])
+        let dense = engine.selectCandidates(for: runRequirement(quantity: 2, drawers: 6), anchors: [
+            offer("N", title: "Zeile", score: 0.5, density: .none),
+            offer("M", title: "Zeile", score: 0.5, density: .medium),
+        ])
+        XCTAssertEqual(dense.map(\.candidateID), ["M"])
+    }
+
+    func testOfferPriceScalesByLengthWithinBounds() {
+        let engine = ComponentEstimateEngine()
+        let source = [offer("L", title: "Zeile 2 m", score: 0.5)]
+        XCTAssertEqual(numeric(engine.price(requirement: runRequirement(quantity: 3), candidates: source)), 1500, accuracy: 1e-6)
+        XCTAssertEqual(numeric(engine.price(requirement: runRequirement(quantity: 10), candidates: source)), 1800, accuracy: 1e-6)
+        XCTAssertEqual(numeric(engine.price(requirement: runRequirement(quantity: 0.5), candidates: source)), 350, accuracy: 1e-6)
     }
 
     func testSeedAnchorsAreTheSixRuleBasedBaselines() throws {
@@ -483,6 +537,10 @@ final class CalculationTests: XCTestCase {
         let assumed = try await engine.estimate(projectID: nil, text: "Küche")
         XCTAssertEqual(assumed.hints.first, Notice("calc.hint.sizeMissing"))
         XCTAssertEqual(assumed.midNet, 11295, accuracy: 1e-6)
+        let plain = try await engine.estimate(projectID: nil, text: "Küche 6 lfm Linoleum")
+        let zero = try await engine.estimate(projectID: nil, text: "Küche 6 lfm Linoleum", override: EstimateOverride(carcassCount: 0))
+        XCTAssertEqual(zero.midNet, plain.midNet, accuracy: 1e-6)
+        XCTAssertFalse(zero.hints.contains(Notice("calc.hint.sizeMissing")))
     }
 
     func testEngineEvidencePathLearningLoopAppliesPromotedFactor() async throws {
