@@ -48,7 +48,6 @@ enum SheetValues {
     static let overviewTileTextLine = 1.5
     static let overviewTitleLines = 2
     static let stackHoverLift = 4.0
-    static let toastBottom = 16.0
     static let spinnerArc = 0.22
     static let confirmSpinnerArc = 0.25
     static let statusArcBox = 12.0

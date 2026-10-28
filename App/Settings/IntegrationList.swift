@@ -22,7 +22,7 @@ struct IntegrationList: View {
         let readings = context.readings
         let counts = [Self.integrations: readings.count, Self.keys: 1]
         ScrollView {
-            VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step16)) {
+            VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step12)) {
                 tileGroup(Self.integrations) {
                     ForEach(readings) { reading in
                         SettingsTile(
@@ -47,8 +47,7 @@ struct IntegrationList: View {
                         action: { state.open(section.rawValue) })
                 }
             }
-            .padding(.horizontal, CGFloat(Tokens.Spacing.step16))
-            .padding(.vertical, CGFloat(Tokens.Spacing.step8))
+            .padding(CGFloat(Tokens.Spacing.step8))
             .coordinateSpace(name: Self.space)
         }
         .scrollIndicators(.never)

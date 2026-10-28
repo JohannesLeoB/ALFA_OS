@@ -7,6 +7,7 @@ struct CardStack<Item: Hashable, Card: View, Over: View, Note: View>: View {
     let order: [Item]
     let fanned: Bool
     var fans = false
+    var top = Tokens.Spacing.step8
     @ViewBuilder let card: (Item, Int) -> Card
     @ViewBuilder let overview: () -> Over
     @ViewBuilder let note: () -> Note
@@ -14,7 +15,7 @@ struct CardStack<Item: Hashable, Card: View, Over: View, Note: View>: View {
     var body: some View {
         GeometryReader { proxy in
             let spread = fans && fanned
-            let tops = spread ? CardStackEngine.fannedTops(count: order.count) : CardStackEngine.tops(count: order.count)
+            let tops = spread ? CardStackEngine.fannedTops(count: order.count) : CardStackEngine.tops(count: order.count, start: top)
             let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.card))
             ZStack(alignment: .top) {
                 if order.isEmpty {
@@ -44,7 +45,7 @@ struct CardStack<Item: Hashable, Card: View, Over: View, Note: View>: View {
                 VStack {
                     Spacer(minLength: 0)
                     note()
-                        .padding(.bottom, CGFloat(SheetValues.toastBottom))
+                        .padding(.bottom, CGFloat(Tokens.Size.footerHeight + Tokens.Spacing.step8))
                 }
                 .zIndex(Double(Tokens.Layer.inLaneToast))
             }
