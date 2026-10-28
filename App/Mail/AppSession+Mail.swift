@@ -1,4 +1,5 @@
 import AppKit
+import Design
 import Hub
 import Mail
 import SwiftUI
@@ -32,6 +33,21 @@ extension AppSession {
     func personEntries(name: String, address: String, appearance: Appearance) -> [MenuEntry] {
         MenuLine.entries(MenuEngine.person(address: address, contact: inbox.contact(address) != nil), appearance: appearance) { action in
             self.perform(action, name: name, address: address)
+        }
+    }
+
+    func switchMailbox(_ id: Inlet.ID, appearance: Appearance) {
+        guard id != inbox.selectedInlet, !mailboxSwitching else { return }
+        let inbox = self.inbox
+        guard !appearance.still else {
+            Task { await inbox.selectAccount(id) }
+            return
+        }
+        withAnimation(appearance.ease(Tokens.Duration.switchIn, SheetValues.switchInCurve)) { mailboxSwitching = true }
+        Task {
+            try? await Task.sleep(for: .seconds(Tokens.Duration.switchIn + SheetValues.switchSettle))
+            await inbox.selectAccount(id)
+            withAnimation(appearance.ease(Tokens.Duration.switchOut, SheetValues.switchOutCurve)) { mailboxSwitching = false }
         }
     }
 

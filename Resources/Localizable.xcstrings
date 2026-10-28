@@ -8270,6 +8270,54 @@
         }
       }
     },
+    "mail.deck.hide" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postfächer ausblenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide mailboxes"
+          }
+        }
+      }
+    },
+    "mail.deck.show" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postfächer zeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show mailboxes"
+          }
+        }
+      }
+    },
+    "mail.deck.showUnread" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postfächer zeigen · neue Mail in %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show mailboxes · new mail in %@"
+          }
+        }
+      }
+    },
     "mail.draft.failed.act" : {
       "comment" : "alpha",
       "localizations" : {

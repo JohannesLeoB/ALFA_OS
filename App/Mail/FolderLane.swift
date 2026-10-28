@@ -1,5 +1,6 @@
 import Core
 import Design
+import Hub
 import Mail
 import Shell
 import SwiftUI
@@ -13,11 +14,13 @@ struct FolderLane: View {
 
     private var desk: DeskState { session.desk }
 
-    private var detail: (text: String, failing: Bool) {
+    private var current: Inlet? { inbox.accounts.first { $0.id == inbox.selectedInlet } }
+
+    private var detail: (text: String, failing: Bool)? {
         switch inbox.listState {
         case .notConnected: (appearance.string("mail.lane.detail.none"), false)
         case .signInExpired: (appearance.string("mail.lane.detail.unreachable"), true)
-        default: (PersonName.middle(inbox.address, limit: SheetValues.headerAddressLimit), false)
+        default: nil
         }
     }
 
@@ -26,36 +29,53 @@ struct FolderLane: View {
     }
 
     var body: some View {
-        let state = detail
         VStack(spacing: 0) {
-            LaneHead(scrolled: scrolled, lane: .leading) {
-                HeaderTitle(text: appearance.text("mail.lane.title"))
-                SmallText(text: Text(verbatim: state.text), tone: state.failing ? \.signal : \.inkTertiary)
-                    .help(Text(verbatim: state.text))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                if openLanes > 1 {
-                    SymbolButton(help: appearance.string("mail.lane.fold"), glyph: .minus) { desk.toggleFold(.leading) }
-                }
+            VStack(spacing: 0) {
+                head
+                list
             }
-            ScrollView {
-                VStack(spacing: 0) {
-                    AccountList(inbox: inbox)
-                    ForEach(inbox.folderRows) { row in
-                        let live = inbox.accountReachable && inbox.listState != .loading
-                        LaneRow(glyph: row.glyph, label: name(row), selected: row.selected,
-                                count: live && row.count > 0 ? Format.number(row.count) : nil,
-                                countTone: row.selected ? \.onInverseSecondary : \.inkTertiary) {
-                            Task { await inbox.selectFolder(row.folder.id) }
-                        }
-                    }
-                    labels
-                }
-                .padding(CGFloat(Tokens.Spacing.step8))
-            }
-            .scrollIndicators(.hidden)
-            .scrolledSignal($scrolled)
-            ComposeButton { inbox.compose() }
+            .switchGlass(session.mailboxSwitching)
+            AccountDeck(session: session)
         }
+    }
+
+    private var head: some View {
+        LaneHead(scrolled: scrolled, lane: .leading) {
+            if let current {
+                AccountTitle(account: current)
+            } else {
+                HeaderTitle(text: appearance.text("mail.lane.title"))
+            }
+            Group {
+                if let state = detail {
+                    SmallText(text: Text(verbatim: state.text), tone: state.failing ? \.signal : \.inkTertiary)
+                        .help(Text(verbatim: state.text))
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            if openLanes > 1 {
+                SymbolButton(help: appearance.string("mail.lane.fold"), glyph: .minus) { desk.toggleFold(.leading) }
+            }
+        }
+    }
+
+    private var list: some View {
+        ScrollView {
+            VStack(spacing: 0) {
+                ForEach(inbox.folderRows) { row in
+                    let live = inbox.accountReachable && inbox.listState != .loading
+                    LaneRow(glyph: row.glyph, label: name(row), selected: row.selected,
+                            count: live && row.count > 0 ? Format.number(row.count) : nil,
+                            countTone: row.selected ? \.onInverseSecondary : \.inkTertiary) {
+                        Task { await inbox.selectFolder(row.folder.id) }
+                    }
+                }
+                labels
+            }
+            .padding(CGFloat(Tokens.Spacing.step8))
+        }
+        .scrollIndicators(.hidden)
+        .scrolledSignal($scrolled)
     }
 
     @ViewBuilder
@@ -77,39 +97,5 @@ struct FolderLane: View {
 
     private func name(_ row: FolderEntry) -> Text {
         row.folder.role == .other ? Text(verbatim: row.folder.name) : appearance.text("mail.role." + row.folder.role.rawValue)
-    }
-}
-
-struct ComposeButton: View {
-    @Environment(\.appearance) private var appearance
-    let action: () -> Void
-    @State private var hovering = false
-
-    var body: some View {
-        let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row))
-        Button(action: action) {
-            HStack(spacing: CGFloat(SheetValues.rowSpacing)) {
-                Glyph(.compose)
-                    .foregroundStyle(appearance.color(\.onInverse))
-                    .frame(width: CGFloat(Tokens.Size.symbolSize), height: CGFloat(Tokens.Size.symbolSize))
-                    .overlay(Circle().strokeBorder(appearance.color(\.onInverse).opacity(Tokens.Opacity.ringOnColor), lineWidth: CGFloat(Tokens.Size.hairline)))
-                appearance.text("mail.action.compose")
-                    .designText(\.onInverse, size: Tokens.TextSize.body)
-                    .lineLimit(1)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(.leading, CGFloat(Tokens.Spacing.step8))
-            .padding(.trailing, CGFloat(Tokens.Spacing.step12))
-            .frame(height: CGFloat(Tokens.Size.rowHeight))
-            .background(shape.fill(appearance.color(\.inverse)))
-            .opacity(hovering ? SheetValues.hoverRowOpacity : 1)
-            .contentShape(shape)
-        }
-        .buttonStyle(PressScaleButtonStyle(scale: SheetValues.pressScaleCompose))
-        .keyboardShortcut("n", modifiers: .command)
-        .help(appearance.text("mail.action.compose"))
-        .padding(CGFloat(Tokens.Spacing.step8))
-        .onHover { hovering = $0 }
-        .animation(appearance.ease(Tokens.Duration.hover), value: hovering)
     }
 }

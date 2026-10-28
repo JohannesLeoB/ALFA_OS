@@ -15,6 +15,7 @@ final class AppSession {
     var panes: [String: any Pane] = [:]
     private(set) var syncing = false
     var assistantUnseen = false
+    var mailboxSwitching = false
     @ObservationIgnored private var watcher: Task<Void, Never>?
     @ObservationIgnored private var shelved: Set<Inlet.ID> = []
 

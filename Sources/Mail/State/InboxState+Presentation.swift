@@ -36,7 +36,7 @@ extension InboxState {
         }.count
     }
 
-    public var address: String { selectedAccount?.account ?? "" }
+    var address: String { selectedAccount?.account ?? "" }
 
     public var accountReachable: Bool {
         switch listState {
