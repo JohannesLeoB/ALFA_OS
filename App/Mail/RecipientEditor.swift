@@ -125,14 +125,7 @@ struct RecipientEditor: View {
                 ForEach(people) { person in
                     RecipientRow(label: Text(verbatim: ""), initials: person.initials, title: person.label, detail: person.detail,
                                  help: person.full) {
-                        Button { inbox.removeRecipient(card.id, field, at: person.id) } label: {
-                            Glyph.tiny(.close)
-                                .foregroundStyle(appearance.color(\.inkTertiary))
-                                .frame(width: CGFloat(SheetValues.removeRowSize), height: CGFloat(SheetValues.removeRowSize))
-                                .contentShape(Circle())
-                        }
-                        .buttonStyle(PressScaleButtonStyle(scale: SheetValues.pressScaleChip))
-                        .help(appearance.text("mail.compose.remove"))
+                        RowRemove { inbox.removeRecipient(card.id, field, at: person.id) }
                     }
                 }
                 HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
@@ -158,5 +151,24 @@ struct RecipientEditor: View {
         }
         .frame(maxHeight: CGFloat(Tokens.Size.recipientListMaxHeight))
         .fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+private struct RowRemove: View {
+    @Environment(\.appearance) private var appearance
+    let action: () -> Void
+    @State private var hovering = false
+
+    var body: some View {
+        Button(action: action) {
+            Glyph.tiny(.close)
+                .foregroundStyle(appearance.color(hovering ? \.ink : \.inkTertiary))
+                .frame(width: CGFloat(SheetValues.removeRowSize), height: CGFloat(SheetValues.removeRowSize))
+                .background(Circle().fill(hovering ? appearance.color(\.selection) : Color.clear))
+                .contentShape(Circle())
+        }
+        .buttonStyle(PressScaleButtonStyle(scale: SheetValues.pressScaleChip))
+        .help(appearance.text("mail.compose.remove"))
+        .onHover { hovering = $0 }
     }
 }

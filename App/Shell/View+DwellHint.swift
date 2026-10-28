@@ -42,6 +42,7 @@ private struct DwellHint: ViewModifier {
                         .offset(x: shown.x + CGFloat(Tokens.Spacing.step12), y: shown.y + CGFloat(Tokens.Spacing.step16))
                         .allowsHitTesting(false)
                         .transition(.opacity)
+                        .zIndex(Double(Tokens.Layer.hint))
                 }
             }
             .animation(appearance.ease(Tokens.Duration.hover), value: shown != nil)

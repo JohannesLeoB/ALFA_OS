@@ -18,4 +18,8 @@ extension View {
     func designText(_ tone: KeyPath<Colors, ColorValue> = \.ink, size: Double = Tokens.TextSize.body, weight: Font.Weight = .regular) -> some View {
         modifier(DesignText(tone: tone, size: size, weight: weight))
     }
+
+    func typeStyle(_ style: TypeStyle) -> some View {
+        font(.face(style)).tracking(CGFloat(style.tracking * style.size))
+    }
 }

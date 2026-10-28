@@ -2,6 +2,7 @@ import AppKit
 import Core
 import Design
 import Mail
+import Shell
 import SwiftUI
 
 extension MessageCard {
@@ -9,11 +10,13 @@ extension MessageCard {
         @Environment(\.appearance) private var appearance
         let session: AppSession
         let ref: CardRef
-        let front: Bool
+        let depth: Int
         let ink: Color
         @State private var titleAnchor = AnchorBox()
 
         private var inbox: InboxState { session.inbox }
+
+        private var front: Bool { depth == 0 }
 
         var body: some View {
             CardHeader(front: front, ink: ink) {
@@ -89,7 +92,7 @@ extension MessageCard {
 
         @ViewBuilder
         private var metaView: some View {
-            let opacity = Tokens.Opacity.cardMeta
+            let opacity = CardStackEngine.metaOpacity(depth: depth)
             if case .message(let id) = ref, let card = inbox.card(id), let party {
                 if front {
                     Text(verbatim: party.name.isEmpty ? "" : PersonName.middle(party.address, limit: SheetValues.cardAddressLimit))

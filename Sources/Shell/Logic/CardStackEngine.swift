@@ -6,13 +6,17 @@ public enum CardStackEngine {
         var next = Tokens.Spacing.step8
         for index in 0..<count {
             result.append(next)
-            next += (count - 1 - index) > 3 ? Tokens.Spacing.step8 : Tokens.Size.headerHeight
+            next += (count - 1 - index) > Tokens.Count.stackHeads ? Tokens.Spacing.step8 : Tokens.Size.headerHeight
         }
         return result
     }
 
     public static func levelIndex(depth: Int) -> Int {
         min(depth, 5) - 1
+    }
+
+    public static func metaOpacity(depth: Int) -> Double {
+        depth >= 4 ? Tokens.Opacity.cardMetaDeep : Tokens.Opacity.cardMeta
     }
 }
 

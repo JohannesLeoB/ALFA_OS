@@ -30,12 +30,12 @@ struct HTMLBody: View {
     let html: String
     let inlineImages: [String: String]
     let allowRemote: Bool
-    @State private var height = Tokens.TextSize.body * Tokens.LineHeight.mailBody
+    @State private var height = Tokens.TextStyle.mailBody.size * Tokens.TextStyle.mailBody.lineHeight
 
     private var theme: HTMLTheme {
         let colors = Colors.light
         return HTMLTheme(text: colors.sheetInk, secondary: colors.sheetInkTertiary, line: colors.sheetLine, background: colors.sheet,
-                         fontSize: Tokens.TextSize.body, lineHeight: Tokens.LineHeight.mailBody, quoteBar: Tokens.Size.quoteBarWidth,
+                         fontSize: Tokens.TextStyle.mailBody.size, lineHeight: Tokens.TextStyle.mailBody.lineHeight, quoteBar: Tokens.Size.quoteBarWidth,
                          quoteGap: Tokens.Spacing.step12)
     }
 

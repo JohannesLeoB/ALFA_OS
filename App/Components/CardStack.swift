@@ -23,7 +23,8 @@ struct CardStack<Item: Hashable, Card: View, Over: View, Note: View>: View {
                 }
                 ForEach(Array(order.enumerated()), id: \.element) { index, item in
                     card(item, order.count - 1 - index)
-                        .frame(width: proxy.size.width, height: max(0, proxy.size.height - CGFloat(tops[index])))
+                        .frame(width: max(0, proxy.size.width - 2 * CGFloat(Tokens.Size.cardInset)),
+                               height: max(0, proxy.size.height - CGFloat(tops[index])))
                         .offset(y: CGFloat(tops[index]))
                         .zIndex(Double(index))
                         .opacity(fanned ? 0 : 1)
@@ -41,7 +42,7 @@ struct CardStack<Item: Hashable, Card: View, Over: View, Note: View>: View {
                 .zIndex(Double(order.count + 2))
             }
             .frame(width: proxy.size.width, height: proxy.size.height, alignment: .top)
-            .animation(appearance.ease(Tokens.Duration.stack, Tokens.Easing.stack), value: order)
+            .animation(appearance.ease(Tokens.Transition.stack), value: order)
         }
     }
 }

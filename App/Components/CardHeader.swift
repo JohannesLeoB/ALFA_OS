@@ -13,7 +13,7 @@ struct CardHeader<Mark: View, Title: View, Meta: View, Trailing: View>: View {
         let side = CGFloat(Tokens.Size.symbolSize)
         HStack(spacing: CGFloat(Tokens.Size.headGapList)) {
             mark
-                .font(.face(Tokens.TextSize.small, weight: Tokens.Weight.medium))
+                .typeStyle(Tokens.TextStyle.mark)
                 .lineLimit(1)
                 .frame(width: side, height: side)
                 .overlay(Circle().strokeBorder(ink.opacity(Tokens.Opacity.ringOnMark), lineWidth: CGFloat(Tokens.Size.hairline)))

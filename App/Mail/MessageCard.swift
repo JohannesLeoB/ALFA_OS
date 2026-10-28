@@ -10,7 +10,7 @@ struct MessageCard: View {
 
     var body: some View {
         CardFace(depth: depth, bring: { session.inbox.bring(ref) }) { ink in
-            Head(session: session, ref: ref, front: depth == 0, ink: ink)
+            Head(session: session, ref: ref, depth: depth, ink: ink)
         } content: {
             content
             if commands.hasFooter {

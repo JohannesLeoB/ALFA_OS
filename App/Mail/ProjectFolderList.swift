@@ -1,4 +1,5 @@
 import AppKit
+import Core
 import Design
 import Hub
 import Mail
@@ -38,7 +39,8 @@ enum ProjectFolderList {
         Task {
             let files = await inbox.projectFiles(inlet, folder: folder)
             guard !files.isEmpty else { return }
-            let rows = files.map { file in
+            let hidden = files.count - Tokens.Count.projectFilesMax
+            let rows = files.prefix(Tokens.Count.projectFilesMax).map { file in
                 MenuEntry.row(MenuItem(id: file.id, label: Text(verbatim: file.name), meta: appearance.text("mail.menu.drive")) {
                     if file.isFolder {
                         open(inbox, appearance: appearance, draft: draft, anchor: anchor, inlet: inlet, folder: file.id, title: file.name)
@@ -47,7 +49,10 @@ enum ProjectFolderList {
                     }
                 })
             }
-            present([.head(id: "head", label: Text(verbatim: title))] + rows, anchor: anchor)
+            let more = hidden > 0
+                ? [MenuEntry.row(MenuItem(id: "more", label: Text(verbatim: appearance.format("mail.menu.projectMore", Format.number(hidden)))) {})]
+                : []
+            present([.head(id: "head", label: Text(verbatim: title))] + rows + more, anchor: anchor)
         }
     }
 

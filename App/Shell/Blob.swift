@@ -30,7 +30,7 @@ struct Blob: View {
         let width = CGFloat(desk.blobWidth)
         let shape = UnevenRoundedRectangle(cornerRadii: radii(docked: docked, right: desk.blob.edge == .trailing))
         let resize = appearance.ease(Tokens.Duration.blobWidth)
-        let flight = appearance.still || held != nil || place != anchor ? nil : appearance.ease(Tokens.Duration.blobFlight, Tokens.Easing.blobFlight)
+        let flight = appearance.still || held != nil || place != anchor ? nil : appearance.ease(Tokens.Transition.blobFlight)
 
         VStack(spacing: 0) {
             if up { content(up: up) }

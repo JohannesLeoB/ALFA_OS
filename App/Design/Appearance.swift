@@ -34,6 +34,10 @@ struct Appearance: Equatable {
         still ? nil : Animation.timingCurve(curve.x1, curve.y1, curve.x2, curve.y2, duration: seconds).delay(delay)
     }
 
+    func ease(_ timing: Timing) -> Animation? {
+        ease(timing.duration, timing.easing, delay: timing.delay)
+    }
+
     func text(_ key: String) -> Text {
         Text(LocalizedStringKey(key), bundle: bundle)
     }

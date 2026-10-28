@@ -17,7 +17,7 @@ struct ToggleSwitch: View {
                     .frame(width: CGFloat(knob), height: CGFloat(knob))
                     .offset(
                         x: CGFloat(isOn ? Tokens.Size.toggleKnobOffsetOn : Tokens.Size.toggleKnobOffsetOff),
-                        y: CGFloat(height - knob) / 2
+                        y: CGFloat(Tokens.Spacing.step2)
                     )
             }
             .frame(width: CGFloat(Tokens.Spacing.step32), height: CGFloat(height))

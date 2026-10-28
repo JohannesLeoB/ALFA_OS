@@ -21,9 +21,9 @@ struct BlockNote: View {
 
     var body: some View {
         text
-            .font(.face(Tokens.TextSize.small))
+            .typeStyle(Tokens.TextStyle.caption)
             .foregroundStyle(appearance.color(\.inkTertiary))
-            .lineHeight(Tokens.LineHeight.small, size: Tokens.TextSize.small)
+            .lineHeight(Tokens.TextStyle.caption.lineHeight, size: Tokens.TextStyle.caption.size)
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, CGFloat(Tokens.Spacing.step16))
             .padding(.vertical, CGFloat(Tokens.Spacing.step8))

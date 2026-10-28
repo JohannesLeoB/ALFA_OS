@@ -39,8 +39,8 @@ struct ThreadItemRow: View {
                          allowRemote: !card.remoteImagesBlocked(loadRemote: loadImages))
             } else {
                 Text(verbatim: item.text)
-                    .font(sheet(Tokens.TextSize.body))
-                    .lineHeight(Tokens.LineHeight.mailBody * Tokens.TextSize.body, size: Tokens.TextSize.body, sheet: true)
+                    .font(sheet(Tokens.TextStyle.mailBody.size))
+                    .lineHeight(Tokens.TextStyle.mailBody.lineHeight * Tokens.TextStyle.mailBody.size, size: Tokens.TextStyle.mailBody.size, sheet: true)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             if let quote = item.quote, !showsHTML {

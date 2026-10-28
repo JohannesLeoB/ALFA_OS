@@ -49,7 +49,7 @@ struct OverviewTile: View {
         }
         .opacity(entered ? (dimmed ? SheetValues.overviewOtherOpacity : 1) : 0)
         .scaleEffect(entered ? (hot ? SheetValues.overviewHoverScale : dimmed ? SheetValues.overviewOtherScale : 1) : SheetValues.overviewEnterScale)
-        .offset(y: entered ? (hot ? -Tokens.Size.overviewHoverLift : 0) : SheetValues.overviewEnterLift)
+        .offset(y: entered ? (hot ? -Tokens.Size.overviewHoverLift : 0) : Tokens.Size.overviewTileEnter)
         .onAppear {
             let delay = Tokens.Duration.overviewDelay + Double(index) * Tokens.Duration.overviewStagger
             withAnimation(appearance.ease(Tokens.Duration.overviewEnter, delay: delay)) { entered = true }
@@ -78,7 +78,7 @@ struct OverviewTile: View {
                     Circle().fill(appearance.color(\.ink))
                         .frame(width: CGFloat(Tokens.Spacing.statusDot), height: CGFloat(Tokens.Spacing.statusDot))
                         .background(Circle().fill(appearance.color(\.well)).padding(-CGFloat(Tokens.Size.markSeparatorRing)))
-                        .offset(x: CGFloat(SheetValues.unreadDotShift), y: -CGFloat(SheetValues.unreadDotShift))
+                        .offset(x: CGFloat(Tokens.Spacing.step2), y: -CGFloat(Tokens.Spacing.step2))
                 }
             }
             .padding(.trailing, CGFloat(Tokens.Spacing.step4))

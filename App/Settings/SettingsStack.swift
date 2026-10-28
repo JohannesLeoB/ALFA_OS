@@ -73,14 +73,14 @@ struct StackCard: View {
             Text(verbatim: face.mark)
         } title: {
             Text(verbatim: face.title)
-                .font(.face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
+                .typeStyle(Tokens.TextStyle.bodyEmphasis)
                 .lineLimit(1)
         } meta: {
             Text(verbatim: face.meta)
                 .font(.face(Tokens.TextSize.small))
                 .monospacedDigit()
                 .lineLimit(1)
-                .opacity(Tokens.Opacity.cardMeta)
+                .opacity(CardStackEngine.metaOpacity(depth: depth))
                 .frame(maxWidth: .infinity, alignment: .leading)
         } trailing: {
             CardHeadButton(help: appearance.string("card.close"), glyph: .close, ink: ink, fills: false) { context.state.close(face.id) }

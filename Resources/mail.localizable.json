@@ -520,6 +520,9 @@
   "mail.menu.drive": {
    "de": "Drive"
   },
+  "mail.menu.projectMore": {
+   "de": "%@ weitere im Projektordner"
+  },
   "mail.overview.back": {
    "de": "Zurück zum Stapel"
   },

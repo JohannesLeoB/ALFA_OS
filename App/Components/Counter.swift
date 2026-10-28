@@ -11,7 +11,8 @@ struct Counter: View {
         let ringed = ringTone != nil
         let side = CGFloat(ringed ? Tokens.Size.chipHeight : Tokens.Spacing.step20)
         Text(verbatim: value)
-            .font(.face(Tokens.TextSize.small))
+            .typeStyle(Tokens.TextStyle.caption)
+            .lineHeight(Tokens.LineHeight.counter * Tokens.TextStyle.caption.size, size: Tokens.TextStyle.caption.size)
             .monospacedDigit()
             .lineLimit(1)
             .foregroundStyle(appearance.color(tone))

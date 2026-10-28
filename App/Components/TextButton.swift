@@ -66,8 +66,8 @@ struct TextButton<Glyph: View>: View {
                 label.lineLimit(1)
             }
             .fixedSize(horizontal: true, vertical: false)
-            .font(kind == .sheet ? Font(Typeface.sheet(size: Tokens.TextSize.small, weight: .medium))
-                  : .face(Tokens.TextSize.small, weight: Tokens.Weight.medium))
+            .font(kind == .sheet ? Font(Typeface.sheet(size: Tokens.TextStyle.control.size, weight: .medium)) : .face(Tokens.TextStyle.control))
+            .tracking(CGFloat(Tokens.Tracking.control * Tokens.TextStyle.control.size))
             .foregroundStyle(foreground)
             .padding(.leading, CGFloat(Glyph.self == EmptyView.self ? Tokens.Spacing.step12 : Tokens.Spacing.step8))
             .padding(.trailing, CGFloat(Tokens.Spacing.step12))

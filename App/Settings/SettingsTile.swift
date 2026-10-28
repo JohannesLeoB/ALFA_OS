@@ -21,7 +21,7 @@ struct SettingsTile: View {
             VStack(alignment: .leading, spacing: 0) {
                 badge
                 Spacer(minLength: 0)
-                VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step4) / 2) {
+                VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step2)) {
                     Text(name, bundle: appearance.bundle)
                         .lineLimit(1)
                         .font(.face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
@@ -39,7 +39,7 @@ struct SettingsTile: View {
             .offset(y: -lift)
             .contentShape(shape)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressScaleButtonStyle(scale: Tokens.Scale.pressTile))
         .onHover { hovering = $0 }
         .animation(appearance.ease(Tokens.Duration.hover), value: hovering)
         .accessibilityAddTraits(selected ? .isSelected : [])
@@ -56,7 +56,7 @@ struct SettingsTile: View {
                     .frame(width: CGFloat(Tokens.Size.tileLogoSize), height: CGFloat(Tokens.Size.tileLogoSize))
             } else {
                 Text(verbatim: initial)
-                    .font(.face(Tokens.TextSize.small, weight: Tokens.Weight.medium))
+                    .typeStyle(Tokens.TextStyle.mark)
                     .foregroundStyle(appearance.color(selected ? \.lane : \.ink))
             }
         }

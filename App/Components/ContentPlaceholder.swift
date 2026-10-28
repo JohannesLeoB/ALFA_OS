@@ -29,15 +29,15 @@ struct ContentPlaceholder<Glyph: View, Action: View>: View {
             .ring(Circle(), appearance.color(\.lineStrong))
             if let title {
                 title
-                    .font(.face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
+                    .typeStyle(Tokens.TextStyle.bodyEmphasis)
                     .foregroundStyle(appearance.color(\.ink))
-                    .lineHeight(Tokens.LineHeight.body * Tokens.TextSize.body, size: Tokens.TextSize.body)
+                    .lineHeight(Tokens.TextStyle.bodyEmphasis.lineHeight * Tokens.TextStyle.bodyEmphasis.size, size: Tokens.TextStyle.bodyEmphasis.size)
                     .frame(maxWidth: CGFloat(Tokens.Size.cardStateTextMaxWidth))
             }
             text
-                .font(.face(Tokens.TextSize.body))
+                .typeStyle(Tokens.TextStyle.body)
                 .foregroundStyle(appearance.color(\.inkTertiary))
-                .lineHeight(Tokens.LineHeight.body * Tokens.TextSize.body, size: Tokens.TextSize.body)
+                .lineHeight(Tokens.TextStyle.body.lineHeight * Tokens.TextStyle.body.size, size: Tokens.TextStyle.body.size)
                 .frame(maxWidth: CGFloat(Tokens.Size.cardStateTextMaxWidth))
             action
         }

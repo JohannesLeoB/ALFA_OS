@@ -26,7 +26,7 @@ struct MessageRow<Mark: View, Content: View>: View {
         .overlay(alignment: .bottom) {
             if separated {
                 Hairline()
-                    .padding(.leading, CGFloat(SheetValues.rowSeparatorInset))
+                    .padding(.leading, CGFloat(Tokens.Spacing.step56))
                     .padding(.trailing, CGFloat(Tokens.Spacing.step8))
             }
         }

@@ -34,7 +34,6 @@ enum SheetValues {
     static let gripCurve = CubicBezier(x1: 0.25, y1: 0.1, x2: 0.25, y2: 1)
     static let laneStep = 56.0
     static let valueMaxShare = 0.6
-    static let rowSeparatorInset = 56.0
     static let rowSpacing = 20.0
     static let rowPadding = 12.0
     static let smallIcon = 12.0
@@ -45,7 +44,6 @@ enum SheetValues {
     static let overviewOtherOpacity = 0.55
     static let overviewHoverScale = 1.012
     static let overviewOtherScale = 0.988
-    static let overviewEnterLift = 18.0
     static let overviewEnterScale = 0.97
     static let overviewTilePadBottom = 44.0
     static let overviewTileTextLine = 1.5
@@ -57,7 +55,6 @@ enum SheetValues {
     static let statusArcBox = 12.0
     static let statusArc = 0.3
     static let menuMargin = 16.0
-    static let unreadDotShift = 2.0
     static let dashedLine = [2.0, 2.0]
     static let fullTurn = 360.0
     static let halfTurn = 180.0
@@ -65,7 +62,6 @@ enum SheetValues {
     static let orbCount = 3
     static let mailSyncSeconds = 300
     static let hoverRowOpacity = 0.88
-    static let pressScaleCompose = 0.98
     static let rowTextLine = 20.0
     static let previewLines = 2
     static let attachmentChipNameLimit = 26
@@ -76,7 +72,6 @@ enum SheetValues {
     static let recipientRowHeight = 44.0
     static let cardTitleLimit = 34
     static let cardAddressLimit = 36
-    static let fieldLabelWidthRead = 40.0
     static let fieldRowHeightRead = 36.0
     static let bodyPadSide = 8.0
     static let bodyPadTop = 16.0
@@ -85,7 +80,6 @@ enum SheetValues {
     static let bodyMargin = 8.0
     static let attachmentGap = 12.0
     static let attachmentMarkRadius = 8.0
-    static let attachmentRowHeight = 40.0
     static let fieldRowHeight = 44.0
     static let removeRowSize = 24.0
     static let pressScaleChip = 0.92

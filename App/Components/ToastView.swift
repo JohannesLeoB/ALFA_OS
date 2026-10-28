@@ -19,7 +19,7 @@ struct ToastView: View {
                 Button(action: onUndo) {
                     undoLabel
                         .lineLimit(1)
-                        .font(.face(Tokens.TextSize.small, weight: Tokens.Weight.medium))
+                        .typeStyle(Tokens.TextStyle.control)
                         .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
                         .frame(height: CGFloat(Tokens.Spacing.step20))
                         .ring(Pill(), appearance.color(\.onInverse))

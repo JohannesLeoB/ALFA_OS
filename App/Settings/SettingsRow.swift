@@ -12,18 +12,18 @@ struct SettingsRow<Trailing: View>: View {
 
     var body: some View {
         SettingsRowLayout(gap: CGFloat(Tokens.Spacing.step12), stackedGap: CGFloat(Tokens.Spacing.step8),
-                          minimum: CGFloat(Tokens.Size.composeColumnMinWidth)) {
+                          minimum: CGFloat(Tokens.Size.fieldLabelMinWidth)) {
             VStack(alignment: .leading, spacing: 0) {
                 label
                     .lineLimit(1)
-                    .font(.face(Tokens.TextSize.body))
+                    .typeStyle(Tokens.TextStyle.body)
                     .foregroundStyle(appearance.color(\.ink))
                 if let sub {
                     sub
-                        .font(.face(Tokens.TextSize.small))
+                        .typeStyle(Tokens.TextStyle.caption)
                         .monospacedDigit()
                         .foregroundStyle(appearance.color(\.inkTertiary))
-                        .lineHeight(Tokens.LineHeight.small, size: Tokens.TextSize.small)
+                        .lineHeight(Tokens.TextStyle.caption.lineHeight, size: Tokens.TextStyle.caption.size)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }

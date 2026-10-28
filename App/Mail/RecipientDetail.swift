@@ -21,7 +21,7 @@ struct RecipientDetail: View {
                         appearance.text("mail.read.to").designText(\.inkTertiary, size: Tokens.TextSize.small)
                     }
                 }
-                .frame(width: CGFloat(SheetValues.fieldLabelWidthRead), alignment: .leading)
+                .frame(width: CGFloat(Tokens.Spacing.step40), alignment: .leading)
                 Disclosure(open: open, help: appearance.string(open ? "mail.read.less" : "mail.read.all")) {
                     if open {
                         SmallText(text: Text(verbatim: appearance.format("mail.read.count", Format.number(people.all.count))))

@@ -23,10 +23,14 @@ struct Frame: View {
             ZStack(alignment: .topLeading) {
                 appearance.color(\.ground)
                 lanes(appearance)
+                    .zIndex(Double(Tokens.Layer.lane))
                 handles(appearance)
+                    .zIndex(Double(Tokens.Layer.handle))
                 SyncButton(session: session)
                     .offset(x: proxy.size.width - CGFloat(measure.margin + measure.blobWidth), y: CGFloat(measure.blobTop))
+                    .zIndex(Double(Tokens.Layer.syncButton))
                 Blob(session: session, pointer: pointer, frame: $blobFrame)
+                    .zIndex(Double(Tokens.Layer.blob))
             }
             .coordinateSpace(name: Self.space)
             .frame(width: proxy.size.width, height: proxy.size.height, alignment: .topLeading)
@@ -54,7 +58,7 @@ struct Frame: View {
 
     private func laneAnimation(_ appearance: Appearance) -> Animation? {
         if desk.laneDragging { return nil }
-        return desk.slowLane ? appearance.ease(Tokens.Duration.fold, Tokens.Easing.fold) : appearance.ease(Tokens.Duration.lane)
+        return desk.slowLane ? appearance.ease(Tokens.Transition.fold) : appearance.ease(Tokens.Duration.lane)
     }
 
     private func lefts() -> [Double] {

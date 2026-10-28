@@ -32,7 +32,7 @@ struct Notice<Glyph: View, Actions: View>: View {
                 .foregroundStyle(appearance.color(symbolTone))
                 .frame(width: symbol, height: symbol)
                 .ring(Circle(), appearance.color(onSheet ? \.sheetLineStrong : symbolTone))
-            VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step2)) {
                 title
                     .font(onSheet ? Font(Typeface.sheet(size: Tokens.TextSize.body, weight: .medium))
                           : .face(Tokens.TextSize.body, weight: Tokens.Weight.medium))

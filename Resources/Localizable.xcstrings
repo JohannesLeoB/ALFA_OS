@@ -9183,6 +9183,16 @@
         }
       }
     },
+    "mail.menu.projectMore" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ weitere im Projektordner"
+          }
+        }
+      }
+    },
     "mail.overview.back" : {
       "comment" : "roh",
       "localizations" : {

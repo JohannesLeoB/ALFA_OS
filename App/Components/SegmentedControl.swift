@@ -12,7 +12,6 @@ struct SegmentedControl<ID: Hashable>: View {
     @Binding var selection: ID
 
     var body: some View {
-        let inset = CGFloat(Tokens.Spacing.step28 - Tokens.Size.chipHeight) / 2
         HStack(spacing: 0) {
             ForEach(options) { option in
                 let on = option.id == selection
@@ -30,7 +29,7 @@ struct SegmentedControl<ID: Hashable>: View {
                 .accessibilityAddTraits(on ? .isSelected : [])
             }
         }
-        .padding(inset)
+        .padding(CGFloat(Tokens.Spacing.step2))
         .ring(Pill(), appearance.color(\.lineStrong))
     }
 }

@@ -159,6 +159,8 @@ struct IntegrationCard: View {
                             showsProgress: false,
                             onYes: { Task { await flow.remove([inlet.id]) } }
                         )
+                        .frame(width: CGFloat(Tokens.Size.confirmPillWidth), alignment: .trailing)
+                        .padding(.trailing, -CGFloat(Tokens.Size.confirmPillOffset))
                     }
                 }
                 SettingsRow(label: appearance.text("text.settings.action.addAccount")) {

@@ -28,7 +28,7 @@ struct SuggestionRow: View {
                 appearance.text(item.tag.key).designText(\.inkTertiary, size: Tokens.TextSize.small).lineLimit(1)
             }
             .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
-            .frame(height: CGFloat(SheetValues.recipientRowHeight))
+            .frame(height: CGFloat(Tokens.Size.suggestionRowHeight))
             .background(RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.field)).fill(hovering ? appearance.color(\.hover) : Color.clear))
             .contentShape(Rectangle())
         }

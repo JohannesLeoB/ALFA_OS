@@ -18,8 +18,7 @@ struct SyncButton: View {
         Button(action: run) {
             ZStack {
                 Text(verbatim: face)
-                    .font(.face(Tokens.TextSize.blobFace, weight: Tokens.Weight.medium))
-                    .tracking(CGFloat(Tokens.Tracking.mark * Tokens.TextSize.blobFace))
+                    .typeStyle(Tokens.TextStyle.markSmall)
                 Circle()
                     .strokeBorder(.foreground, lineWidth: line)
                     .opacity(Tokens.Opacity.ringOnColor)
@@ -31,7 +30,7 @@ struct SyncButton: View {
             }
             .frame(width: ring, height: ring)
             .padding(.horizontal, CGFloat(Tokens.Spacing.blobInset))
-            .frame(width: CGFloat(Tokens.Size.blobWidth), height: CGFloat(Tokens.Size.blobHeight), alignment: .trailing)
+            .frame(width: CGFloat(Tokens.Spacing.step56), height: CGFloat(Tokens.Spacing.step40), alignment: .trailing)
             .foregroundStyle(appearance.color(\.onInverse))
             .background(Capsule().fill(appearance.color(\.inverse)))
             .overlay(alignment: .topLeading) {

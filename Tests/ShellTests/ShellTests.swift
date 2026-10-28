@@ -316,6 +316,8 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(CardStackEngine.levelIndex(depth: 0), -1)
         XCTAssertEqual(CardStackEngine.levelIndex(depth: 2), 1)
         XCTAssertEqual(CardStackEngine.levelIndex(depth: 9), 4)
+        XCTAssertEqual(CardStackEngine.metaOpacity(depth: 3), 0.72)
+        XCTAssertEqual(CardStackEngine.metaOpacity(depth: 4), 0.95)
         XCTAssertEqual(OverviewSize.allCases.map(\.tileHeight), [144, 176, 248])
         XCTAssertEqual(OverviewSize.allCases.map(\.tileMinWidth), [200, 232, 320])
         XCTAssertEqual(OverviewSize.allCases.map(\.lines), [3, 4, 8])

@@ -33,7 +33,7 @@ struct CardFace<Head: View, Content: View>: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .foregroundStyle(ink)
-        .background(fill)
+        .background(fill.animation(appearance.ease(Tokens.Duration.stackBackground), value: depth))
         .overlay(alignment: .top) {
             Rectangle().fill(appearance.color(\.glaze)).frame(height: CGFloat(Tokens.Size.hairline))
         }

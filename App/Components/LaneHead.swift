@@ -18,7 +18,7 @@ struct LaneHead<Content: View>: View {
             .overlay(alignment: .bottom) {
                 Rectangle().fill(scrolled ? appearance.color(\.line) : Color.clear).frame(height: CGFloat(Tokens.Size.hairline))
             }
-            .animation(appearance.ease(Tokens.Duration.hover), value: scrolled)
+            .animation(appearance.ease(scrolled ? Tokens.Duration.scrollLineIn : Tokens.Duration.scrollLineOut), value: scrolled)
     }
 }
 

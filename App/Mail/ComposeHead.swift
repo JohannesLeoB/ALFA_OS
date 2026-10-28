@@ -18,7 +18,7 @@ struct ComposeHead: View {
                     .ring(Circle(), hovering ? appearance.color(\.inkTertiary) : appearance.color(\.ink).opacity(Tokens.Opacity.ringOnMark))
                     .padding(.trailing, CGFloat(Tokens.Spacing.step12))
                 appearance.text("mail.action.compose")
-                    .font(.face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
+                    .typeStyle(Tokens.TextStyle.bodyEmphasis)
                     .lineLimit(1)
                     .layoutPriority(1)
                 if let account {
@@ -36,7 +36,7 @@ struct ComposeHead: View {
                    alignment: .leading)
             .contentShape(Rectangle())
         }
-        .buttonStyle(PressScaleButtonStyle(scale: SheetValues.pressScaleCompose))
+        .buttonStyle(PressScaleButtonStyle(scale: Tokens.Scale.pressTile))
         .keyboardShortcut("n", modifiers: .command)
         .help(appearance.text("mail.action.compose"))
         .onHover { hovering = $0 }

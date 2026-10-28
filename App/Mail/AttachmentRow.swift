@@ -30,7 +30,7 @@ struct AttachmentRow: View {
             Glyph.small(.chevron).foregroundStyle(appearance.color(\.sheetInkTertiary))
         }
         .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
-        .frame(height: CGFloat(SheetValues.attachmentRowHeight))
+        .frame(height: CGFloat(Tokens.Spacing.step40))
         .background(Capsule().fill(hovering ? appearance.color(\.sheetWell) : Color.clear))
         .contentShape(Capsule())
         .help(Text(verbatim: row.name))

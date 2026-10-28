@@ -59,11 +59,13 @@ struct DraftEditor: View {
 
     private var bodySheet: some View {
         let binding = Binding(get: { card.draft.body }, set: { value in inbox.edit(card.id) { $0.body = value } })
+        let style = Tokens.TextStyle.mailBody
         return TextEditor(text: binding)
-            .font(Font(Typeface.sheet(size: Tokens.TextSize.body)))
-            .lineSpacing(Typeface.sheetSpacing(size: Tokens.TextSize.body, line: Tokens.LineHeight.mailBody * Tokens.TextSize.body))
+            .font(Font(Typeface.sheet(size: style.size)))
+            .lineSpacing(Typeface.sheetSpacing(size: style.size, line: style.lineHeight * style.size))
             .scrollContentBackground(.hidden)
             .foregroundStyle(appearance.color(\.sheetInk))
+            .frame(minHeight: CGFloat(Tokens.Size.composeTextMinHeight))
             .padding(.top, CGFloat(SheetValues.bodyPadTop))
             .padding(.horizontal, CGFloat(SheetValues.bodyPadSide))
             .padding(.bottom, CGFloat(Tokens.Spacing.step8))

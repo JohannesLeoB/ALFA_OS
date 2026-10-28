@@ -56,6 +56,7 @@ struct ConfirmPill<Glyph: View>: View {
             }
         }
         .font(.face(Tokens.TextSize.body))
+        .lineHeight(Tokens.LineHeight.control, size: Tokens.TextSize.body)
         .foregroundStyle(appearance.color(\.ink))
         .padding(CGFloat(Tokens.Spacing.step4))
         .frame(height: CGFloat(Tokens.Spacing.step28))
@@ -88,7 +89,7 @@ struct ConfirmPill<Glyph: View>: View {
         TimelineView(.animation(paused: hold == nil)) { context in
             let fill = hold?.fill(at: context.date) ?? 0
             sized(yes)
-                .font(.face(Tokens.TextSize.small, weight: Tokens.Weight.medium))
+                .typeStyle(Tokens.TextStyle.captionEmphasis)
                 .foregroundStyle(appearance.color(\.signal))
                 .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
                 .frame(height: CGFloat(Tokens.Spacing.step20))
@@ -118,7 +119,7 @@ struct ConfirmPill<Glyph: View>: View {
                     duration: Tokens.Duration.spinner, tone: \.ink, track: \.lineStrong)
             if let running { running }
         }
-        .font(.face(Tokens.TextSize.small, weight: Tokens.Weight.medium))
+        .typeStyle(Tokens.TextStyle.captionEmphasis)
         .foregroundStyle(appearance.color(\.inkSecondary))
         .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
     }
@@ -130,7 +131,7 @@ struct ConfirmPill<Glyph: View>: View {
                 InnerButton(action: revert) { undo }
             }
         }
-        .font(.face(Tokens.TextSize.small, weight: Tokens.Weight.medium))
+        .typeStyle(Tokens.TextStyle.captionEmphasis)
         .padding(.leading, CGFloat(Tokens.Spacing.step8))
         .padding(.trailing, CGFloat(Tokens.Spacing.step4))
     }
@@ -221,7 +222,7 @@ private struct InnerButton<Label: View>: View {
     var body: some View {
         Button(action: action) {
             label
-                .font(.face(Tokens.TextSize.small, weight: Tokens.Weight.medium))
+                .typeStyle(Tokens.TextStyle.captionEmphasis)
                 .foregroundStyle(appearance.color(hovering ? \.ink : \.inkSecondary))
                 .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
                 .frame(height: CGFloat(Tokens.Spacing.step20))
