@@ -54,15 +54,15 @@ struct MaterialLexicon: Sendable {
 
     private static func allEntries() -> [Entry] {
         woodEntries()
-            + dekorLinoleumEntries()
-            + lackEntries()
+            + decorLinoleumEntries()
+            + lacquerEntries()
             + naturalStoneEntries()
             + mineralSurfaceEntries()
             + worktopEntries()
-            + metallGlasEntries()
+            + metalGlassEntries()
             + handleHardwareEntries()
-            + komponenteEntries()
-            + einheitEntries()
+            + componentEntries()
+            + unitEntries()
     }
 
     private static func woodEntries() -> [Entry] { [
@@ -85,7 +85,7 @@ struct MaterialLexicon: Sendable {
         Entry(canonical: "staebchenplatte", category: "solid_wood", emit: "staebchenplatte", surfaces: ["stabchenplatte", "stabsperrholz", "staebchenplatte", "stebchenplatte", "stäbchen", "stäbchen-korpus", "stäbchen-platte", "stäbchenpaltte", "stäbchenplate", "stäbchenplatte", "stäbchenplattenkorpus", "tischler-platte", "tischlerpaltte", "tischlerplate", "tischlerplatte", "tischlerplattenkorpus"]),
     ] }
 
-    private static func dekorLinoleumEntries() -> [Entry] { [
+    private static func decorLinoleumEntries() -> [Entry] { [
         Entry(canonical: "melamin", category: "decor_laminate", emit: "dekorspan", surfaces: ["mealmin", "melamiin", "melamim", "melamin", "melamin beschichtete spanplatte", "melamin-beschichtet", "melamin-front", "melamin-platte", "melaminbeschichtet", "melaminbeschichtung", "melamine", "melaminfront", "melaminharz", "melaminharz-beschichtet", "melaminharzbeschichtet", "melaminharzplatte", "melaminkorpus", "melaminn", "melaminplatte", "melaminplatten", "melamn", "mellamin", "mfc"]),
         Entry(canonical: "egger", category: "decor_laminate", emit: "dekorspan", surfaces: ["eger", "egga", "eggar", "egger", "egger dekor", "egger dekr", "egger eurodekor", "egger feelwood", "egger h-dekor", "egger melamin", "egger platte", "egger spanplatte", "egger u-dekor", "egger w-dekor", "egger-dekor", "egger-dekore", "egger-dekoren", "egger-dekorplatte", "egger-dekr", "egger-platte", "egger-platten", "eggerdekor", "eggerdekore", "eggerplatten", "eggr"]),
         Entry(canonical: "dekorspan", category: "decor_laminate", emit: "dekorspan", surfaces: ["beschichtete spanplatte", "decorspan", "dekor beschichtete spanplatte", "dekor span", "dekor span platte", "dekor-platte", "dekor-spanplatte", "dekor-spanplatten", "dekorbeschichtet", "dekorierte spanplatte", "dekorplatte", "dekorplatten", "dekorspan", "dekorspan platte", "dekorspan-korpus", "dekorspan-platte", "dekorspankorpus", "dekorspann", "dekorspanplate", "dekorspanplatte", "dekorspanplatten", "dekrospan"]),
@@ -106,7 +106,7 @@ struct MaterialLexicon: Sendable {
         Entry(canonical: "desktop", category: "linoleum", emit: "linoleum", surfaces: ["desctop", "desktop", "desktop linoleum", "desktop-front", "desktop-linoleum", "desktopfront", "desktopoberfläche", "destop", "forbo desktop", "forbo desktop linoleum", "mit desktop"]),
     ] }
 
-    private static func lackEntries() -> [Entry] { [
+    private static func lacquerEntries() -> [Entry] { [
         Entry(canonical: "lack", category: "lacquer", emit: "lack", surfaces: ["ablackiert", "deckend lackiert", "dekend lackierd", "endlackiert", "endlackierung", "farbig lackiert", "farblos lackiert", "front lackiert", "fronten lackiert", "klar lackiert", "klar matt lackiert", "lack", "lack-front", "lackfläche", "lackfront", "lackfronten", "lackierd", "lackieren", "lackiert", "lackierte", "lackierte front", "lackierte fronten", "lackierten", "lackierung", "lackiret", "lackirt", "lackmuster", "lackoberflaeche", "lackoberfläche", "lackton", "lacquer", "lakiert", "matt lackiert", "mdf lackiert", "ncs lackiert", "ral lackiert", "seidenmatt lackiert", "stumpfmatt lackiert"]),
         Entry(canonical: "hochglanzlack", category: "lacquer", emit: "lack", surfaces: ["glanzlack", "glänzend", "hochglaenzend", "hochglanz", "hochglanz lackiert", "hochglanz-front", "hochglanzd", "hochglanzfront", "hochglanzfronten", "hochglanzlack", "hochglanzlackiert", "hochglanzlak", "hochglanzoberfläche", "hochglanzt", "hochglnz", "hochglänzend", "in hochglanz", "klavierlack", "klavierlackfront", "klavierlackiert", "klavierlak", "perfectsense gloss", "pianolack"]),
         Entry(canonical: "seidenmatt", category: "lacquer", emit: "lack", surfaces: ["in seidenmatt", "satiniert", "seidemmatt", "seidenglanz", "seidenmat", "seidenmatd", "seidenmatt", "seidenmatt geölt", "seidenmatt lackiert", "seidenmatt-front", "seidenmatte fronten", "seidenmatte oberfläche", "seidenmattfront", "seidenmmatt"]),
@@ -172,7 +172,7 @@ struct MaterialLexicon: Sendable {
         Entry(canonical: "nischenrückwand", category: "component_worktop", emit: nil, surfaces: ["küchennische", "nischen rückwand", "nischen-rückwand", "nischenrueckwaende", "nischenrueckwand", "nischenrueckwant", "nischenrukwand", "nischenrückwand", "nischenrückwant", "nischenrückwände", "nischenwand"]),
     ] }
 
-    private static func metallGlasEntries() -> [Entry] { [
+    private static func metalGlassEntries() -> [Entry] { [
         Entry(canonical: "spiegel", category: "glass", emit: "spiegel", surfaces: ["speigel", "spiegel", "spiegel-apl", "spiegel-rückwand", "spiegelflaeche", "spiegelglas", "spiegell", "spiegelplatte", "spiegl", "spigel", "altspiegel", "antikspiegel", "bronzespiegel", "grauspiegel", "mirror", "rauchspiegel", "rauchspiegelglas", "spegel", "spiegelblende", "spiegelfront", "spiegelfronten", "spiegelrueckwand", "spiegeltuer", "spieggel", "spiehgel"]),
         Entry(canonical: "glas", category: "glass", emit: "glas", surfaces: ["echtglas", "gals", "galss", "glaas", "glaeser", "glas", "glas-apl", "glas-rückwand", "glasfront", "glasplatte", "glasplatten", "glasrückwand", "glass", "lacobel", "esg", "floatglas", "gkas", "glaesern", "glasapl", "glasblende", "glaseinsatz", "glasfronten", "glasrahmen", "glasrueckwand", "glastuer", "glastueren", "glasvitrine", "glasz", "glaß", "klarglas", "sicherheitsglas", "vsg", "weissglas"]),
         Entry(canonical: "edelstahl", category: "metal", emit: "edelstahl", surfaces: ["1.4301", "1.4404", "chromstahl", "cns", "cns-front", "edelstaal", "edelstaehle", "edelstah", "edelstahel", "edelstahl", "edelstahl-apl", "edelstahlapl", "edelstahlblende", "edelstahlfront", "edelstahlfronten", "edelstahlkorpus", "edelstahll", "edelstahloberflaeche", "edelstahlplatte", "edelstahlrahmen", "edelstahlsockel", "edelstal", "edelsthal", "edestahl", "inox", "niro", "nirosta", "rostfrei", "rostfreier stahl", "v 2a", "v2 a", "v2a", "v2a-front", "v4a"]),
@@ -208,7 +208,7 @@ struct MaterialLexicon: Sendable {
         Entry(canonical: "korpusverbinder", category: "fitting", emit: nil, surfaces: ["exenter", "exzenter", "exzenterverbinder", "exzentr", "korpus-verbinder", "korpusverbinder", "korpusverbinder-set", "korpusverbindr", "korpusverbnder", "moebelverbinder", "rastecks", "rastex", "schrankverbinder", "topfverbinder", "vb-beschlag", "verbinder"]),
     ] }
 
-    private static func komponenteEntries() -> [Entry] { [
+    private static func componentEntries() -> [Entry] { [
         Entry(canonical: "korpus", category: "component_base_unit", emit: nil, surfaces: ["body", "kopien", "korpen", "korpi", "korpie", "korpius", "korpos", "korpus", "korpus-", "korpusausführung", "korpusfront", "korpuskörper", "korpusmaterial", "korpuss", "korpusse", "korups", "kropus", "möbelkorpus", "schrankkorpus", "schrankkörper"]),
         Entry(canonical: "schrank", category: "component_base_unit", emit: nil, surfaces: ["body", "cabinet", "einbauschrank", "element", "möbel", "schraenke", "schrak", "schrank", "schrank-", "schrankblock", "schrankkorpus", "schrankwand", "schrnak", "schränke", "schänke", "wandschrank"]),
         Entry(canonical: "möbel", category: "component_base_unit", emit: nil, surfaces: ["einbaumöbel", "element", "korpusmöbel", "mobel", "moebel", "möbel", "möbel-", "möbelelement", "möbelkorpus", "möbelstück", "möbl"]),
@@ -224,7 +224,7 @@ struct MaterialLexicon: Sendable {
         Entry(canonical: "vitrine", category: "component_base_unit", emit: nil, surfaces: ["glaselement", "glasvitrine", "highboard", "kommode", "lowboard", "sideboard", "vitirne", "vitriene", "vitrine", "vitrine-", "vitrinen", "vitrinenschrank", "vitrne"]),
     ] }
 
-    private static func einheitEntries() -> [Entry] { [
+    private static func unitEntries() -> [Entry] { [
         Entry(canonical: "laufmeter", category: "unit", emit: nil, surfaces: ["9lfm", "laufende meter", "laufender meter", "laufmeer", "laufmeeter", "laufmeter", "laufmeter.", "laufmetern", "laufmetr", "lfd m", "lfd. m", "lfd.m", "lfdm", "lfdm.", "lfm", "lfm-preis", "lfm.", "lm", "running meter"]),
         Entry(canonical: "meter", category: "unit", emit: nil, surfaces: ["laufmeter", "lfd. m", "lfdm", "m.", "meeter", "meter", "metern", "metr", "quadratmeter"]),
         Entry(canonical: "zentimeter", category: "unit", emit: nil, surfaces: ["60cm", "60er", "80cm", "cm", "cm.", "zentimeter", "zentimter", "ztm"]),
