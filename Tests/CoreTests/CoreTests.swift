@@ -4,7 +4,7 @@ import XCTest
 
 final class CoreTests: XCTestCase {
     func testInitialsFollowNameRules() {
-        let cases = [("Anna Berg", "AB"), ("Anna", "A"), ("Anna von Berg", "AB"), ("An Ida Cruz", "IC"), ("  ", ""), ("élodie de la Cruz Jr.", "ÉC")]
+        let cases = [("Anna Berg", "AB"), ("Anna", "A"), ("Anna von Berg", "AB"), ("An Ida Cruz", "IC"), ("  ", ""), ("élodie de la Cruz Jr.", "ÉC"), ("(Anna) Berg", "AB"), ("Anna Berg 42", "AB")]
         for (name, expected) in cases {
             XCTAssertEqual(Initials.from(name), expected)
         }
@@ -47,6 +47,14 @@ final class CoreTests: XCTestCase {
         XCTAssertEqual(AddressSplitParser.parse("Weg 10 - 12"), .init(street: "Weg 10 - 12", houseNumber: nil, unclear: true))
         XCTAssertEqual(AddressSplitParser.parse("c/o Müller 5"), .init(street: "c/o Müller 5", houseNumber: nil, unclear: true))
         XCTAssertEqual(AddressSplitParser.parse("Hauptstraße 12345"), .init(street: "Hauptstraße 12345", houseNumber: nil, unclear: true))
+        XCTAssertEqual(AddressSplitParser.parse("Hinterhaus Hauptstr. 5"), .init(street: "Hinterhaus Hauptstr. 5", houseNumber: nil, unclear: true))
+        XCTAssertEqual(AddressSplitParser.parse("Hof-Weg 3"), .init(street: "Hof-Weg", houseNumber: "3"))
+        XCTAssertEqual(AddressSplitParser.parse("Weg – 12"), .init(street: "Weg – 12", houseNumber: nil, unclear: true))
+        XCTAssertEqual(AddressSplitParser.parse("Weg - 12"), .init(street: "Weg - 12", houseNumber: nil, unclear: true))
+        XCTAssertEqual(AddressSplitParser.parse("/ 5"), .init(street: "/ 5", houseNumber: nil, unclear: true))
+        XCTAssertTrue(AddressSplitParser.hasExtra("Weg 5 OG"))
+        XCTAssertFalse(AddressSplitParser.hasExtra("Weg 5 og2"))
+        XCTAssertFalse(AddressSplitParser.hasExtra("Hof-Weg 3"))
     }
 
     func testHouseNumberRules() {
@@ -55,6 +63,7 @@ final class CoreTests: XCTestCase {
         XCTAssertFalse(AddressSplitParser.isHouseNumber("10115"))
         XCTAssertFalse(AddressSplitParser.isHouseNumber("5abcd"))
         XCTAssertFalse(AddressSplitParser.isHouseNumber("a5"))
+        XCTAssertFalse(AddressSplitParser.isHouseNumber("5ä"))
     }
 
     func testNumberAndByteFormats() {

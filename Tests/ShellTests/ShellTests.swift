@@ -88,6 +88,7 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(widths(1512, bothFolded), [56, avail - 112, 56])
         let middleFolded = LaneLayoutEngine.toggleFold(lane: .center, mode: rest)
         XCTAssertEqual(widths(1512, middleFolded)[1], measure.laneFolded)
+        XCTAssertEqual(widths(1512, middleFolded)[0], 280)
         XCTAssertEqual(widths(1512, middleFolded).reduce(0, +), avail)
         let wide = LaneLayoutEngine.drag(lane: .trailing, proposed: 900, start: [280, 896, 280], mode: rest, measure: measure, rules: rules)
         XCTAssertEqual(widths(1512, wide), [56, 500, 900])
@@ -368,6 +369,11 @@ final class ShellTests: XCTestCase {
     @MainActor
     func testEmptyStackFoldsTrailingLaneAfterEbb() throws {
         let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        XCTAssertFalse(model.ebb)
+        model.stack(empty: true, still: false)
+        XCTAssertFalse(model.ebb)
+        XCTAssertEqual(model.widths.trailing, 280)
+        model.stack(empty: false, still: true)
         model.stack(empty: true, still: true)
         XCTAssertTrue(model.ebb)
         XCTAssertEqual(model.widths.trailing, measure.laneFolded)
@@ -399,6 +405,7 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(Icon.plus.path.segments, [.move(x: 8, y: 3), .line(x: 8, y: 13), .move(x: 3, y: 8), .line(x: 13, y: 8)])
         XCTAssertEqual(IconPath(data: "M1 1h2v3z").segments, [.move(x: 1, y: 1), .line(x: 3, y: 1), .line(x: 3, y: 4), .close])
         XCTAssertEqual(IconPath(data: "M0 0 1 1").segments, [.move(x: 0, y: 0), .line(x: 1, y: 1)])
+        XCTAssertEqual(IconPath(data: "M+1 -2").segments, [.move(x: 1, y: -2)])
         XCTAssertEqual(IconPath(data: "M0,0C1 1 2 2 3 3S5 5 6 6").segments.count, 3)
         XCTAssertEqual(IconPath(data: "M0 0A0 0 0 0 1 4 4").segments, [.move(x: 0, y: 0), .line(x: 4, y: 4)])
         let arc = IconPath(data: "M0 0a2 2 0 0 1 4 0").segments
