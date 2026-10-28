@@ -596,6 +596,35 @@ final class HubTests: XCTestCase {
         XCTAssertThrowsError(try restarted.connections.access.port((any PingPort).self, for: connected.id))
         XCTAssertEqual(restarted.connections.access.configured(for: .mail).count, 2)
         XCTAssertEqual(restarted.connections.access.inlets(for: .mail).count, 1)
+        let again = try Rig.make(database: database, keychain: keychain)
+        guard case .connected(let probed)? = again.connections.setup.inlets.first(where: { $0.id == connected.id })?.state else {
+            return XCTFail("connected inlet must stay connected across a restart")
+        }
+        XCTAssertNotEqual(probed, .distantPast)
+        try await Task.sleep(for: .milliseconds(5))
+        _ = try await again.connections.setup.probe(connected.id)
+        guard case .connected(let reprobed)? = again.connections.setup.inlets.first(where: { $0.id == connected.id })?.state else {
+            return XCTFail("probe keeps the inlet connected")
+        }
+        XCTAssertGreaterThan(reprobed, probed)
+        let third = try Rig.make(database: database, keychain: keychain)
+        guard case .connected(let stored)? = third.connections.setup.inlets.first(where: { $0.id == connected.id })?.state else {
+            return XCTFail("reprobed inlet must stay connected")
+        }
+        XCTAssertEqual(stored.timeIntervalSince1970, reprobed.timeIntervalSince1970, accuracy: 0.001)
+    }
+
+    @MainActor
+    func testIntegrationReadingLeadsWithTheFirstInletOfTheCombinedState() async throws {
+        let info = IntegrationInfo(id: "fake", access: .password, companyOwned: false, fields: [], areas: [], extras: [],
+                                   listsAccounts: true, providers: ["fake"], logo: nil)
+        let rig = try Rig.make()
+        let first = try await rig.connect("a@x")
+        try await Task.sleep(for: .milliseconds(5))
+        _ = try await rig.connect("b@x")
+        guard case .connected(let probed) = first.state else { return XCTFail("state \(first.state)") }
+        let reading = IntegrationReadEngine.read(info, setup: rig.connections.setup, rules: rig.connections.rules)
+        XCTAssertEqual(reading.note, .checked(probed))
     }
 
     @MainActor
@@ -1185,6 +1214,11 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(catalog.info("google")?.extras.first.map { catalog.info("google")?.extraKey($0) }, "settings.service.google.extra.driveFolders")
         XCTAssertEqual(catalog.info("claude")?.fields.last?.fallbackKey, "settings.value.default")
         XCTAssertEqual(IntegrationAccess.emailKey.key, "settings.access.emailKey")
+        let secrets: Set<String> = ["key", "password", "secret", "token"]
+        for entry in catalog.entries {
+            for field in entry.fields { XCTAssertEqual(field.secret, secrets.contains(field.id), entry.id + "." + field.id) }
+        }
+        XCTAssertEqual(catalog.entries.filter(\.companyOwned).map(\.id), ["airtable", "sevdesk", "dhl", "dhlship"])
     }
 
     func testSettingsVocabularyCoversEveryGroupWithUniqueKeys() {
@@ -1273,6 +1307,7 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(MailboxDisplay.domain.text(title: "Arbeit", account: "info@example.com"), "@example.com")
         XCTAssertEqual(MailboxDisplay.local("plain"), "plain@")
         XCTAssertEqual(MailboxDisplay.domain("plain"), "@plain")
+        XCTAssertEqual(MailboxDisplay.domain("@example.com"), "@example.com")
         XCTAssertEqual(MailboxDisplay.allCases, [.ownName, .localPart, .domain])
         XCTAssertEqual(MailboxDisplay.ownName.choice(title: " Arbeit ", account: "info@example.com"), "Arbeit")
         XCTAssertNil(MailboxDisplay.ownName.choice(title: "  ", account: "info@example.com"))
