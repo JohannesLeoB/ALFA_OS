@@ -28,13 +28,16 @@ public final class DeskState {
     public private(set) var currentID: String
     public private(set) var window: BlobSize
     private(set) var lanes: [String: LaneMode]
+    private var limits: [String: AreaLimits] = [:]
     @ObservationIgnored private var dragStart: [Double]?
+    @ObservationIgnored private var dragMoved = false
+    @ObservationIgnored private var laid: (key: LayoutKey, widths: LaneWidths)?
     public private(set) var blob: BlobPlacement
     public private(set) var mode: BlobMode?
     public private(set) var awake = false
     private(set) var hovering = false
     private(set) var dragging = false
-    public private(set) var laneDragging = false
+    public private(set) var draggedLane: LaneKind?
     public private(set) var hot = -1
     private(set) var ebb = false
     public private(set) var slowLane = false
@@ -76,11 +79,23 @@ public final class DeskState {
     }
 
     var rules: AreaRules {
-        AreaRules.area(currentID, measure: measure)
+        AreaRules(measure: measure, limits: limits[currentID] ?? AreaLimits())
     }
 
+    public var minimum: [Double] { rules.minimum }
+
+    public var laneDragging: Bool { draggedLane != nil }
+
     public var widths: LaneWidths {
-        LaneLayoutEngine.widths(windowWidth: window.width, mode: laneMode(currentID), measure: measure, rules: rules, foldTrailing: stackEmpty == true && ebb)
+        let key = LayoutKey(window: window.width, mode: laneMode(currentID), rules: rules, foldTrailing: stackEmpty == true && ebb)
+        if let laid, laid.key == key { return laid.widths }
+        let next = LaneLayoutEngine.widths(windowWidth: key.window, mode: key.mode, measure: measure, rules: key.rules, foldTrailing: key.foldTrailing)
+        laid = (key, next)
+        return next
+    }
+
+    public func limit(_ id: String, _ value: AreaLimits) {
+        limits[id] = value
     }
 
     public var blobOrigin: BlobPoint {
@@ -169,17 +184,34 @@ public final class DeskState {
         changed()
     }
 
-    public func dragLane(_ lane: LaneKind, proposed: Double) {
-        let start = dragStart ?? widths.all
-        dragStart = start
-        laneDragging = true
-        lanes[currentID] = LaneLayoutEngine.drag(lane: lane, proposed: proposed, start: start, mode: laneMode(currentID), measure: measure, rules: rules)
+    public func dragLane(_ lane: LaneKind, translation offset: Double) {
+        guard lane != .center else { return }
+        guard let start = dragStart else {
+            dragStart = widths.all
+            draggedLane = lane
+            dragMoved = false
+            var state = laneMode(currentID)
+            if state.maximized != nil {
+                state.maximized = nil
+                lanes[currentID] = state
+                changed()
+            }
+            if offset != 0 { dragLane(lane, translation: offset) }
+            return
+        }
+        guard offset != 0 || dragMoved, draggedLane == lane else { return }
+        dragMoved = true
+        let direction: Double = lane == .leading ? 1 : -1
+        lanes[currentID] = LaneLayoutEngine.drag(lane: lane, proposed: start[lane.index] + offset * direction, start: start,
+                                                 mode: laneMode(currentID), measure: measure, rules: rules)
     }
 
     public func endLaneDrag() {
+        guard dragStart != nil else { return }
         dragStart = nil
-        laneDragging = false
-        changed()
+        draggedLane = nil
+        if dragMoved { changed() }
+        dragMoved = false
     }
 
     public func stepLane(_ lane: LaneKind, by delta: Double) {
@@ -206,6 +238,15 @@ public final class DeskState {
             state.folded[lane.index] = false
         }
         lanes[currentID] = state
+        changed()
+    }
+
+    public func reveal(_ lane: LaneKind, in id: String? = nil) {
+        let area = id ?? currentID
+        var state = laneMode(area)
+        guard state.folded[lane.index] else { return }
+        state.folded[lane.index] = false
+        lanes[area] = state
         changed()
     }
 
@@ -244,4 +285,11 @@ public final class DeskState {
             work(self)
         }
     }
+}
+
+private struct LayoutKey: Equatable {
+    let window: Double
+    let mode: LaneMode
+    let rules: AreaRules
+    let foldTrailing: Bool
 }

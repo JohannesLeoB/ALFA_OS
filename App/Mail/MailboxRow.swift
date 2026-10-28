@@ -4,6 +4,7 @@ import Mail
 import SwiftUI
 
 struct MailboxRow: View {
+    @Environment(\.appearance) private var appearance
     let account: Inlet
     let display: MailboxDisplay
     let ink: Color
@@ -21,7 +22,7 @@ struct MailboxRow: View {
                 .ring(Circle(), ink.opacity(Tokens.Opacity.ringOnMark))
                 .overlay(alignment: .topTrailing) { if alert { AccountAlert() } }
         } label: {
-            Text(verbatim: account.mailboxName(display))
+            Text(verbatim: account.shownName(display, appearance: appearance))
                 .typeStyle(Tokens.TextStyle.bodyEmphasis)
                 .lineLimit(1)
                 .truncationMode(.tail)

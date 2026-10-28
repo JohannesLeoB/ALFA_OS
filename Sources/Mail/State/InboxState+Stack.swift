@@ -1,4 +1,5 @@
 import Design
+import Hub
 import Shell
 
 extension InboxState {
@@ -34,12 +35,17 @@ extension InboxState {
     }
 
     public func card(_ id: String) -> OpenMessage? {
-        cards.first { $0.id == id }
+        cardIndex(id, in: selectedInlet).map { cards[$0] }
+    }
+
+    func cardIndex(_ id: String, in inlet: Inlet.ID?) -> Int? {
+        cards.firstIndex { $0.id == id && $0.inlet == inlet }
     }
 
     func attach(_ ref: CardRef) {
         if !stack.contains(ref) { stack.append(ref) }
         front = ref
+        opened += 1
     }
 
     func detach(_ ref: CardRef) {

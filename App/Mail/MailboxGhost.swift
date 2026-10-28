@@ -16,7 +16,7 @@ struct MailboxGhost: View {
             .foregroundStyle(ink)
             .frame(maxWidth: .infinity)
             .animation(appearance.ease(Tokens.Duration.switchFade, Tokens.Easing.glassIn)) {
-                $0.background(lifted ? appearance.color(\.lane) : appearance.paint(Deck.step(level, dark: appearance.dark).surface), in: shape)
+                $0.background(lifted ? appearance.color(\.lane) : appearance.paint(appearance.stackStep(level).surface), in: shape)
             }
             .animation(appearance.ease(Tokens.Duration.switchFade, Tokens.Easing.glassIn)) {
                 $0.ring(shape, appearance.color(lifted ? \.line : \.ghostRing))

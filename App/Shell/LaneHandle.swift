@@ -8,15 +8,18 @@ struct LaneHandle: View {
     let lane: LaneKind
     let height: CGFloat
     @Environment(\.appearance) private var appearance
-    @State private var startWidth: Double?
+    @GestureState private var pressing = false
     @State private var hovering = false
     @FocusState private var focused: Bool
     @State private var pointerFocus = false
 
-    private var active: Bool { hovering || startWidth != nil }
+    private var dragging: Bool { desk.draggedLane == lane }
+
+    private var active: Bool { hovering || dragging }
 
     var body: some View {
         let width = desk.widths.width(lane)
+        let value = appearance.format("lane.handle.value", Int(width.rounded()))
         let thick = CGFloat(active ? Tokens.Size.handleThicknessActive : Tokens.Size.hairline)
         let long = CGFloat(active ? Tokens.Size.handleLengthActive : Tokens.Size.handleLength)
         let tone = appearance.color(active ? \.ink : \.inkTertiary)
@@ -29,14 +32,14 @@ struct LaneHandle: View {
         }
         .frame(width: CGFloat(Tokens.Size.gutter), height: height)
         .overlay(alignment: .top) {
-            if startWidth != nil {
-                Text(verbatim: appearance.format("lane.handle.value", Int(width.rounded())))
+            if dragging {
+                Text(verbatim: value)
                     .font(.face(Tokens.TextSize.small))
                     .monospacedDigit()
                     .lineLimit(1)
                     .fixedSize()
-                    .padding(.horizontal, CGFloat(Tokens.Size.menuRowPadding))
-                    .frame(height: CGFloat(Tokens.Size.chipHeight))
+                    .padding(.horizontal, CGFloat(Tokens.Spacing.step12))
+                    .frame(height: CGFloat(Tokens.Spacing.step24))
                     .foregroundStyle(appearance.color(\.onInverse))
                     .background(Capsule().fill(appearance.color(\.inverse)))
                     .padding(.top, CGFloat(Tokens.Spacing.step12))
@@ -64,21 +67,25 @@ struct LaneHandle: View {
         }
         .gesture(
             DragGesture(minimumDistance: 0, coordinateSpace: .global)
-                .onChanged { value in
+                .updating($pressing) { _, state, _ in state = true }
+                .onChanged { drag in
                     pointerFocus = true
-                    let start = startWidth ?? width
-                    startWidth = start
-                    let direction: Double = lane == .leading ? 1 : -1
-                    desk.dragLane(lane, proposed: start + Double(value.translation.width) * direction)
-                }
-                .onEnded { _ in
-                    startWidth = nil
-                    desk.endLaneDrag()
+                    desk.dragLane(lane, translation: Double(drag.translation.width))
                 }
         )
         .simultaneousGesture(TapGesture(count: 2).onEnded { desk.resetLane() })
+        .onChange(of: pressing) { _, now in if !now { desk.endLaneDrag() } }
+        .onDisappear { desk.endLaneDrag() }
         .accessibilityElement()
         .accessibilityLabel(appearance.text(lane == .leading ? "lane.handle.leading" : "lane.handle.trailing"))
+        .accessibilityValue(Text(verbatim: value))
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment: step(by: 1)
+            case .decrement: step(by: -1)
+            @unknown default: break
+            }
+        }
         .dwellHint("shell.handle.down.tooltip", focused: focused && !pointerFocus)
     }
 
@@ -87,9 +94,13 @@ struct LaneHandle: View {
             desk.resetLane()
             return .handled
         }
-        let step = press.modifiers.contains(.shift) ? SheetValues.laneShiftStep : SheetValues.laneStep
+        let size = press.modifiers.contains(.shift) ? SheetValues.laneShiftStep : desk.measure.laneFolded
         let direction: Double = press.key == .leftArrow ? -1 : 1
-        desk.stepLane(lane, by: step * direction * (lane == .leading ? 1 : -1))
+        desk.stepLane(lane, by: size * direction * (lane == .leading ? 1 : -1))
         return .handled
+    }
+
+    private func step(by sign: Double) {
+        desk.stepLane(lane, by: desk.measure.laneFolded * sign)
     }
 }

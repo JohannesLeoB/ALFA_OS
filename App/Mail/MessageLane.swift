@@ -31,6 +31,7 @@ struct MessageLane: View {
             VStack(spacing: 0) {
                 header(width: proxy.size.width)
                 if let address = inbox.expiredAddress { expired(address) }
+                if case .offline(let last) = inbox.listState { offline(last) }
                 content(width: proxy.size.width)
             }
         }
@@ -156,6 +157,13 @@ struct MessageLane: View {
         }
     }
 
+    private func offline(_ last: Date?) -> some View {
+        SmallText(text: Text(verbatim: last.map { appearance.format("mail.list.offline.since", SettingsDates.relative($0)) } ?? appearance.string("mail.list.offline")))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, CGFloat(Tokens.Spacing.step16))
+            .padding(.top, CGFloat(Tokens.Spacing.step8))
+    }
+
     private func expired(_ address: String) -> some View {
         Notice(kind: .failure, title: Text(verbatim: appearance.format("mail.list.signInExpired", address)),
                text: appearance.text("mail.list.signInExpired.text"),
@@ -198,6 +206,11 @@ struct MessageLane: View {
                              separated: next != nil && !item.selected && next?.selected != true,
                              wide: width >= Tokens.Size.breakpointAttachments,
                              inTrash: trash, picking: picking)
+                }
+                if inbox.listState == .loadingMore {
+                    Spinner()
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, CGFloat(Tokens.Spacing.step12))
                 }
                 Color.clear
                     .frame(height: CGFloat(spacer))

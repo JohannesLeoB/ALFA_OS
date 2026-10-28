@@ -63,17 +63,17 @@ struct DraftEditor: View {
         let style = Tokens.TextStyle.mailBody
         return TextEditor(text: binding)
             .font(Font(Typeface.sheet(size: style.size)))
-            .lineSpacing(Typeface.sheetSpacing(size: style.size, line: style.lineHeight * style.size))
+            .lineSpacing(Typeface.sheetSpacing(size: style.size, line: style.lineHeight))
             .scrollContentBackground(.hidden)
             .foregroundStyle(appearance.color(\.sheetInk))
             .frame(minHeight: CGFloat(Tokens.Size.composeTextMinHeight))
-            .padding(.top, CGFloat(SheetValues.bodyPadTop))
-            .padding(.horizontal, CGFloat(SheetValues.bodyPadSide))
+            .padding(.top, CGFloat(Tokens.Spacing.step16))
+            .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
             .padding(.bottom, CGFloat(Tokens.Spacing.step8))
             .frame(maxWidth: .infinity, minHeight: CGFloat(Tokens.Size.composeSheetMinHeight), alignment: .topLeading)
-            .background(RoundedRectangle(cornerRadius: CGFloat(SheetValues.bodyRadius)).fill(appearance.color(\.sheet)))
+            .background(RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row)).fill(appearance.color(\.sheet)))
             .environment(\.colorScheme, .light)
-            .padding(CGFloat(SheetValues.bodyMargin))
+            .padding(CGFloat(Tokens.Spacing.step8))
             .accessibilityLabel(appearance.text("mail.compose.body"))
     }
 
@@ -106,7 +106,7 @@ struct FieldRow<Content: View>: View {
         }
         .padding(.leading, CGFloat(Tokens.Size.edge))
         .padding(.trailing, CGFloat(Tokens.Spacing.step8))
-        .frame(height: CGFloat(SheetValues.fieldRowHeight))
+        .frame(height: CGFloat(Tokens.Spacing.step44))
         .overlay(alignment: .bottom) {
             Hairline().padding(.horizontal, CGFloat(Tokens.Size.edge))
         }
@@ -121,7 +121,7 @@ struct FromButton: View {
 
     private var inbox: InboxState { session.inbox }
     private var sender: Inlet? { inbox.accounts.first { $0.id == card.inlet } }
-    private var name: String { sender.map { $0.mailboxName(session.settings.display($0.id)) } ?? "" }
+    private var name: String { sender.map { $0.shownName(session.settings.display($0.id), appearance: appearance) } ?? "" }
     private var address: String { sender?.account ?? "" }
 
     var body: some View {
@@ -141,7 +141,7 @@ struct FromButton: View {
 
     private func open() {
         let entries = inbox.fromChoices.map { inlet in
-            MenuEntry.row(MenuItem(id: inlet.id, label: Text(verbatim: inlet.account.isEmpty ? inlet.title : inlet.account),
+            MenuEntry.row(MenuItem(id: inlet.id, label: Text(verbatim: inlet.account.isEmpty ? inlet.shownTitle(appearance) : inlet.account),
                                    check: inlet.id == card.inlet ? appearance.text("mail.menu.check") : nil) { inbox.setFrom(card.id, inlet: inlet.id) })
         }
         anchor.showMenu(entries)

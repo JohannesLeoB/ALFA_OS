@@ -94,7 +94,7 @@ struct Blob: View {
     private func face(open: Bool, docked: Bool) -> some View {
         let orbFace = desk.assistantOpen && desk.face == .orb
         let label = (desk.awake && !open && !docked) || orbFace
-        let dot = !open && !docked && session.attention
+        let dot = !open && !docked && session.assistantUnseen
         return HStack(spacing: 0) {
             if orbFace {
                 ThinkingOrb(size: Tokens.Size.symbolSize)
@@ -130,9 +130,15 @@ struct Blob: View {
         .dwellHint("shell.blobFace.tooltip", focused: faceFocused && !facePointer)
         .blobPress(desk: desk, held: $held, stretch: $stretch, squeezed: $squeezed, pressing: $pressing, tap: tap)
         .pointerStyle(held != nil ? .grabActive : open ? .default : .grabIdle)
+        .onKeyPress(keys: [.return, .space]) { _ in
+            tap(count: 1)
+            return .handled
+        }
         .accessibilityElement(children: .contain)
         .accessibilityAddTraits(.isButton)
         .accessibilityLabel(appearance.text(desk.current?.titleKey ?? ""))
+        .accessibilityAction { tap(count: 1) }
+        .accessibilityAction(named: appearance.text("shell.blobFace.assistant")) { tap(count: 2) }
     }
 
     @ViewBuilder

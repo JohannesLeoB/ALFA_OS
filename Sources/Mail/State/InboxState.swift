@@ -28,6 +28,7 @@ public final class InboxState {
     var drafts: [OpenDraft] = []
     var stack: [CardRef] = []
     var front: CardRef?
+    public internal(set) var opened = 0
     var parked: [Inlet.ID: ParkedMailbox] = [:]
     var picked: [String] = []
     public var searchScope = SearchScope.all

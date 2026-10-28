@@ -60,6 +60,9 @@ struct OverviewTile: View {
         .animation(appearance.ease(Tokens.Duration.tileHover), value: hot)
         .animation(appearance.ease(Tokens.Duration.tileHover), value: dimmed)
         .onTapGesture { entry.choose() }
+        .accessibilityElement(children: .contain)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityAction { entry.choose() }
     }
 
     private var head: some View {
@@ -70,13 +73,14 @@ struct OverviewTile: View {
                 case .icon(let icon): Glyph(icon)
                 }
             }
-            .designText(size: Tokens.TextSize.small, weight: .medium)
+            .typeStyle(Tokens.TextStyle.mark)
+            .foregroundStyle(appearance.color(\.ink))
             .frame(width: CGFloat(Tokens.Size.symbolSize), height: CGFloat(Tokens.Size.symbolSize))
             .overlay(Circle().strokeBorder(appearance.color(\.ink).opacity(Tokens.Opacity.ringOnMark), lineWidth: CGFloat(Tokens.Size.hairline)))
             .overlay(alignment: .topTrailing) {
                 if entry.unread {
                     Circle().fill(appearance.color(\.ink))
-                        .frame(width: CGFloat(Tokens.Spacing.statusDot), height: CGFloat(Tokens.Spacing.statusDot))
+                        .frame(width: CGFloat(Tokens.Spacing.step8), height: CGFloat(Tokens.Spacing.step8))
                         .background(Circle().fill(appearance.color(\.well)).padding(-CGFloat(Tokens.Size.markSeparatorRing)))
                         .offset(x: CGFloat(Tokens.Spacing.step2), y: -CGFloat(Tokens.Spacing.step2))
                 }

@@ -24,19 +24,27 @@ enum PaneTitle {
 protocol Pane {
     var stackEmpty: Bool { get }
     var badge: Int { get }
+    var opened: Int { get }
+    var limits: AreaLimits { get }
+    var toast: AnyView? { get }
     func ownsHead(_ lane: LaneKind) -> Bool
     func title(_ lane: LaneKind) -> PaneTitle?
     func name(_ lane: LaneKind) -> PaneTitle?
     func hidesTitle(_ lane: LaneKind) -> Bool
     func marks(_ lane: LaneKind, height: Double) -> AnyView?
     func content(_ lane: LaneKind) -> AnyView
-    func toast(_ lane: LaneKind) -> AnyView?
 }
 
 extension Pane {
     var stackEmpty: Bool { false }
 
     var badge: Int { 0 }
+
+    var opened: Int { 0 }
+
+    var limits: AreaLimits { AreaLimits() }
+
+    var toast: AnyView? { nil }
 
     func ownsHead(_ lane: LaneKind) -> Bool { false }
 
@@ -47,6 +55,4 @@ extension Pane {
     func hidesTitle(_ lane: LaneKind) -> Bool { false }
 
     func marks(_ lane: LaneKind, height: Double) -> AnyView? { nil }
-
-    func toast(_ lane: LaneKind) -> AnyView? { nil }
 }

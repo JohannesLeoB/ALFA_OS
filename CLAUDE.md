@@ -7,7 +7,7 @@ Binding: the rules in [AGENTS.md](AGENTS.md) (loaded above) and the schema in [A
 ## Status
 - `main` is the rebuild from commit `34c7366` on: 14 modules plus app, schema-checked by `utils/check.py`.
 - The old stand (legacy code, old docs, old agents and memory notes) is fully in tag `archive/before-rebuild`. Read with `git show archive/before-rebuild:<path>`.
-- Verified on the Mac: `swift build`, `swift test` (343 tests, 0 failures), `utils/build_app.sh` (app in the dist folder).
+- Verified on the Mac: `swift build`, `swift test` (343 tests at the rebuild; not rerun since), `utils/build_app.sh` (28.10.: builds without warnings, app launched once). `utils/check_modules.sh` runs all module tests in the sandbox.
 - Not yet verified: launching the app and the first run with the one-time legacy import, the first CI run on GitHub.
 - `main` on GitHub is protected. Johannes' account pushes past it as "Bypassed rule violations"; another account may be rejected. Then adjust the rule in the GitHub settings or work via a pull request.
 
@@ -21,6 +21,7 @@ Binding: the rules in [AGENTS.md](AGENTS.md) (loaded above) and the schema in [A
 - On first launch `LegacyImportStore` (Sources/Hub/Store) imports the old Hub database and the old app settings once; the old data is never changed.
 - The Airtable sale-price column name comes only from the company configuration (key `airtable.field.sale_price`, see `Resources/company.example.json`).
 - The settings tile is 112 × 112 px minimum (`settingsTileHeight`, `settingsTileMinWidth`; 2 × 56 as in master 23.10., decided by Johannes on 27.10.).
+- Lane drag follows the accordion of `alfa-shell.js` grow() exactly (Johannes 16.10.); the least important lane yields first.
 - Mail's left lane drags between 224 and 280 (`mailLaneMinimumLeft`, `mailLaneMaximumLeft`, `AreaRules.area`); other areas have no maximum (MAIL-G01, Johannes 28.10.).
 - Mailboxes (Johannes 28.10.): footer as card head (mock default), lacquer material, right stack and drafts kept per mailbox.
 - `Resources/tokens.json` is converted from the `contract/` files of the delivery of 28.10. (base, theme-light, theme-dark, ground-lightGray); `constants` stay from code. Every delivered token is read by its view or has no counterpart in the app yet (lock screen, preview window, image tile, signature editor, service hero, glass and upward lacquer). Menus size to their longest entry on the 56 grid (`MenuWidthEngine`, 168 to 280).

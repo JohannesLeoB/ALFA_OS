@@ -29,7 +29,7 @@ struct ThreadItemRow: View {
                 AddressButton(action: menu) {
                     Text(verbatim: item.name)
                         .font(sheet(style.size, .medium))
-                        .lineHeight(style.lineHeight * style.size, size: style.size, sheet: true)
+                        .lineHeight(style.lineHeight, size: style.size, sheet: true)
                 }
                 .background(AnchorMarker(box: anchor))
                 Spacer(minLength: 0)
@@ -41,7 +41,7 @@ struct ThreadItemRow: View {
             } else {
                 Text(verbatim: item.text)
                     .font(sheet(style.size))
-                    .lineHeight(style.lineHeight * style.size, size: style.size, sheet: true)
+                    .lineHeight(style.lineHeight, size: style.size, sheet: true)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             if let quote = item.quote, !showsHTML {
@@ -68,11 +68,11 @@ struct ThreadItemRow: View {
                 .padding(.top, CGFloat(Tokens.Spacing.step4))
             }
         }
-        .padding(.top, CGFloat(first ? 0 : SheetValues.bodyPadTop))
+        .padding(.top, CGFloat(first ? 0 : Tokens.Spacing.step16))
         .overlay(alignment: .top) {
             if !first { Rectangle().fill(appearance.color(\.sheetLine)).frame(height: CGFloat(Tokens.Size.hairline)) }
         }
-        .padding(.top, CGFloat(SheetValues.bodyPadTop))
+        .padding(.top, CGFloat(Tokens.Spacing.step16))
     }
 
     @ViewBuilder

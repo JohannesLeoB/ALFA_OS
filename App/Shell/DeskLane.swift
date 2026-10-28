@@ -2,7 +2,7 @@ import Design
 import Shell
 import SwiftUI
 
-struct Lane: View {
+struct DeskLane: View {
     let session: AppSession
     let lane: LaneKind
     let titleKey: String
@@ -24,7 +24,7 @@ struct Lane: View {
         let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.lane))
         let folded = Double(size.width) <= measure.laneFolded
         let strip = Double(size.width) < measure.foldAt
-        let inner = max(size.width, CGFloat(measure.minimum[lane.index]))
+        let inner = max(size.width, CGFloat(desk.minimum[lane.index]))
         let fade = appearance.ease(Tokens.Duration.hover)
         ZStack(alignment: .topLeading) {
             if folded {

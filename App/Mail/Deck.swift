@@ -10,11 +10,6 @@ enum Deck {
 
     static func height(_ rows: Int) -> CGFloat { row + row * CGFloat(rows) }
 
-    static func step(_ level: Int, dark: Bool) -> StackStep {
-        let steps = dark ? Tokens.stackDark : Tokens.stackLight
-        return steps[min(level, steps.count - 1)]
-    }
-
     static func bottomRounded(_ radius: Double) -> UnevenRoundedRectangle {
         UnevenRoundedRectangle(topLeadingRadius: 0, bottomLeadingRadius: CGFloat(radius), bottomTrailingRadius: CGFloat(radius),
                                topTrailingRadius: 0)

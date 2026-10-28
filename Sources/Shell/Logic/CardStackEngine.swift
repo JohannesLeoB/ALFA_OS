@@ -11,16 +11,16 @@ public enum CardStackEngine {
         return result
     }
 
-    public static func fannedTops(count: Int) -> [Double] {
+    public static func spreadTops(count: Int) -> [Double] {
         (0..<max(0, count)).map { Double($0) * Tokens.Size.stackFanStep }
     }
 
     public static func levelIndex(depth: Int) -> Int {
-        min(depth, 5) - 1
+        min(depth, Tokens.stackLight.count) - 1
     }
 
     public static func metaOpacity(depth: Int) -> Double {
-        depth >= 4 ? Tokens.Opacity.cardMetaDeep : Tokens.Opacity.cardMeta
+        levelIndex(depth: depth) >= Tokens.stackLight.count - 2 ? Tokens.Opacity.cardMetaDeep : Tokens.Opacity.cardMeta
     }
 }
 

@@ -11,7 +11,7 @@ struct MessageRow<Mark: View, Content: View>: View {
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row))
-        HStack(alignment: .top, spacing: CGFloat(SheetValues.rowSpacing)) {
+        HStack(alignment: .top, spacing: CGFloat(Tokens.Spacing.step20)) {
             mark
             VStack(alignment: .leading, spacing: 0) {
                 content
@@ -19,7 +19,7 @@ struct MessageRow<Mark: View, Content: View>: View {
             .padding(.top, CGFloat(Tokens.Spacing.step4))
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(.vertical, CGFloat(SheetValues.rowPadding))
+        .padding(.vertical, CGFloat(Tokens.Spacing.step12))
         .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
         .background(shape.fill(fill))
         .ring(shape, ring)

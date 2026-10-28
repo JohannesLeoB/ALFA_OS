@@ -35,6 +35,15 @@ public struct Measure: Sendable, Equatable {
         Self.windowMin(margin: margin, gap: gap, minimum: minimum, screen: screen)
     }
 
+    public func lefts(_ widths: LaneWidths) -> [Double] {
+        [margin, margin + widths.leading + gap, margin + widths.leading + widths.center + 2 * gap]
+    }
+
+    public func lane(at x: Double, _ widths: LaneWidths) -> LaneKind {
+        let lefts = lefts(widths)
+        return LaneKind.allCases.last { x >= lefts[$0.index] } ?? .leading
+    }
+
     public func laneHeight(_ window: BlobSize) -> Double {
         window.height - strip - margin
     }

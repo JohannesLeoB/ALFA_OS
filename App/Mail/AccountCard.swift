@@ -15,7 +15,7 @@ struct AccountCard: View {
     @State private var hovering = false
     @State private var anchor = AnchorBox()
 
-    private var step: StackStep { Deck.step(level, dark: appearance.dark) }
+    private var step: StackStep { appearance.stackStep(level) }
 
     private var gloss: KeyPath<Colors, ColorValue> {
         step.surface.red >= SheetValues.stackGlossLightFrom ? \.stackGlossLight : \.stackGlossDark

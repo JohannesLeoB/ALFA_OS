@@ -12,15 +12,14 @@ enum MenuAnchor {
 final class MenuPanel {
     static let shared = MenuPanel()
 
-    weak var desk: DeskState?
     private var panel: NSPanel?
     private var closing: () -> Void = {}
 
-    func show(entries: [MenuEntry], anchor: MenuAnchor, window: NSWindow?, onClose: @escaping () -> Void = {}) {
+    func show(entries: [MenuEntry], anchor: MenuAnchor, window: NSWindow?, desk: DeskState? = nil, onClose: @escaping () -> Void = {}) {
         close()
         closing = onClose
         guard let window = window ?? NSApp.keyWindow else { return }
-        let appearance = Appearance(dark: window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua, still: false)
+        let appearance = Appearance(dark: window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua, still: NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
         let margin = CGFloat(ShadowLayer.reach(appearance.shadows.floating))
         let wrapped = entries.map { entry -> MenuEntry in
             guard case .row(let row) = entry else { return entry }

@@ -31,7 +31,7 @@ struct RecipientRow<Trailing: View>: View {
         }
         .padding(.leading, CGFloat(Tokens.Spacing.step8))
         .padding(.trailing, CGFloat(Tokens.Spacing.step4))
-        .frame(height: CGFloat(SheetValues.recipientRowHeight))
+        .frame(height: CGFloat(Tokens.Spacing.step44))
         .background(RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.field)).fill(hovering ? appearance.color(\.hover) : Color.clear))
         .contentShape(Rectangle())
         .help(Text(verbatim: help))

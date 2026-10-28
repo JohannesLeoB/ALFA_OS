@@ -39,7 +39,7 @@ struct RecipientDetail: View {
             }
             .padding(.leading, CGFloat(Tokens.Size.edge))
             .padding(.trailing, CGFloat(Tokens.Spacing.step8))
-            .frame(height: CGFloat(SheetValues.fieldRowHeightRead))
+            .frame(height: CGFloat(Tokens.Spacing.step36))
             if open {
                 ScrollView {
                     VStack(spacing: 0) {

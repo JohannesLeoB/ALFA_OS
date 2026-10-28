@@ -20,6 +20,10 @@ extension View {
     }
 
     func typeStyle(_ style: TypeStyle) -> some View {
-        font(.face(style)).tracking(CGFloat(style.tracking * style.size))
+        let face = Typeface.font(size: style.size, weight: style.weight)
+        let natural = face.ascender - face.descender + face.leading
+        return font(.face(style))
+            .tracking(CGFloat(style.tracking * style.size))
+            .lineSpacing(max(0, CGFloat(style.lineHeight) - natural))
     }
 }

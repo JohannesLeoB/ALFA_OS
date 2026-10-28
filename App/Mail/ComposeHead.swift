@@ -35,7 +35,7 @@ struct ComposeHead: View {
             .onHover { hovering = $0 }
             .layoutPriority(1)
             if let account {
-                Text(verbatim: account.mailboxName(display))
+                Text(verbatim: account.shownName(display, appearance: appearance))
                     .typeStyle(Tokens.TextStyle.caption)
                     .foregroundStyle(ink)
                     .lineLimit(1)

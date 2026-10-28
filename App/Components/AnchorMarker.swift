@@ -1,9 +1,11 @@
 import AppKit
+import Shell
 import SwiftUI
 
 @MainActor
 final class AnchorBox {
     weak var view: NSView?
+    weak var desk: DeskState?
 
     func screenRect() -> NSRect? {
         guard let view, let window = view.window else { return nil }
@@ -12,21 +14,24 @@ final class AnchorBox {
 
     func showMenu(_ entries: [MenuEntry]) {
         guard let rect = screenRect() else { return }
-        MenuPanel.shared.show(entries: entries, anchor: .rect(rect), window: NSApp.keyWindow)
+        MenuPanel.shared.show(entries: entries, anchor: .rect(rect), window: view?.window ?? NSApp.keyWindow, desk: desk)
     }
 }
 
 struct AnchorMarker: NSViewRepresentable {
     let box: AnchorBox
+    @Environment(\.session) private var session
 
     func makeNSView(context: Context) -> NSView {
         let view = MarkerView()
         box.view = view
+        box.desk = session?.desk
         return view
     }
 
     func updateNSView(_ view: NSView, context: Context) {
         box.view = view
+        box.desk = session?.desk
     }
 }
 

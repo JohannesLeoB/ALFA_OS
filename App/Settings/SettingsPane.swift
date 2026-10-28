@@ -33,9 +33,9 @@ struct SettingsPane: Pane {
         AnyView(SettingsLane(context: context, lane: lane))
     }
 
-    func toast(_ lane: LaneKind) -> AnyView? {
-        lane == .trailing ? AnyView(SettingsToast(state: context.state)) : nil
-    }
+    var opened: Int { context.state.opened }
+
+    var toast: AnyView? { AnyView(SettingsToast(state: context.state)) }
 }
 
 extension SettingsPane {

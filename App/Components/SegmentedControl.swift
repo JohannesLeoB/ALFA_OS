@@ -18,10 +18,10 @@ struct SegmentedControl<ID: Hashable>: View {
                 Button(action: { selection = option.id }) {
                     option.label
                         .lineLimit(1)
-                        .font(.face(Tokens.TextSize.small, weight: Tokens.Weight.medium))
+                        .typeStyle(Tokens.TextStyle.control)
                         .foregroundStyle(appearance.color(on ? \.onInverse : \.inkSecondary))
                         .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
-                        .frame(height: CGFloat(Tokens.Size.chipHeight))
+                        .frame(height: CGFloat(Tokens.Spacing.step24))
                         .background(Capsule().fill(on ? appearance.color(\.inverse) : Color.clear))
                         .contentShape(Capsule())
                 }

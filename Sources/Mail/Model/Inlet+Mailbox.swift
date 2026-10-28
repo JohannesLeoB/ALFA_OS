@@ -4,10 +4,6 @@ import Hub
 extension Inlet {
     public var ownName: String { title.trimmingCharacters(in: .whitespaces) }
 
-    public func mailboxName(_ display: MailboxDisplay) -> String {
-        display.text(title: title, account: account)
-    }
-
     public var mailboxInitials: String {
         let address = account.trimmingCharacters(in: .whitespaces)
         let parts = address.split(separator: "@", maxSplits: 1, omittingEmptySubsequences: false)

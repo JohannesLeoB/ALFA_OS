@@ -97,18 +97,6 @@ def number(value):
     return None
 
 
-def numeric_block(title, node, whole=False):
-    lines = ["%spublic enum %s {" % (INDENT, title)]
-    for key, leaf in children(node):
-        if not is_leaf(leaf):
-            continue
-        text = str(int(leaf["$value"])) if whole else number(leaf["$value"])
-        if text is not None:
-            lines.append("%s%spublic static let %s = %s" % (INDENT, INDENT, ident(key), text))
-    lines.append("%s}" % INDENT)
-    return lines
-
-
 def flatten(node, prefix=""):
     items = []
     for key, leaf in children(node):
@@ -120,30 +108,51 @@ def flatten(node, prefix=""):
     return items
 
 
-def flat_block(title, node, whole=False):
+def numeric_block(title, node, whole=False, nested=False):
     lines = ["%spublic enum %s {" % (INDENT, title)]
-    for key, leaf in flatten(node):
+    leaves = flatten(node) if nested else [(key, leaf) for key, leaf in children(node) if is_leaf(leaf)]
+    for key, leaf in leaves:
         text = str(int(leaf["$value"])) if whole else number(leaf["$value"])
-        lines.append("%s%spublic static let %s = %s" % (INDENT, INDENT, ident(key), text))
+        if text is not None:
+            lines.append("%s%spublic static let %s = %s" % (INDENT, INDENT, ident(key), text))
     lines.append("%s}" % INDENT)
     return lines
+
+
+REFERENCES = {"typography.size": "TextSize", "typography.weight": "Weight", "typography.lineHeight": "LineHeight",
+              "typography.tracking": "Tracking", "motion.duration": "Duration", "motion.easing": "Easing"}
 
 
 def value_of(source, value):
     return resolve(source, value)["$value"] if isinstance(value, str) else value
 
 
+def reference(source, value, render):
+    if isinstance(value, str):
+        parts = value.strip("{}").split(".")
+        group = REFERENCES.get(".".join(parts[:-1]))
+        if group:
+            return "%s.%s" % (group, ident(parts[-1]))
+    return render(value_of(source, value))
+
+
 def text_style(source, value):
-    tracking = value_of(source, value.get("letterSpacing", 0))
-    return "TypeStyle(family: %s, size: %s, weight: %d, tracking: %s, lineHeight: %s)" % (
-        json.dumps(value_of(source, value["fontFamily"])), num(dimension(value_of(source, value["fontSize"]))),
-        int(value_of(source, value["fontWeight"])), num(dimension(tracking)), num(dimension(value_of(source, value["lineHeight"]))))
+    size = reference(source, value["fontSize"], lambda v: num(dimension(v)))
+    weight = reference(source, value["fontWeight"], lambda v: str(int(v)))
+    tracking = reference(source, value.get("letterSpacing", 0), lambda v: num(dimension(v)))
+    line = value["lineHeight"]
+    line_type = resolve(source, line).get("$type") if isinstance(line, str) else None
+    height = reference(source, line, lambda v: num(dimension(v)))
+    if line_type == "number":
+        height = "%s * %s" % (height, size)
+    return "TypeStyle(size: %s, weight: %s, tracking: %s, lineHeight: %s)" % (size, weight, tracking, height)
 
 
 def transition(source, value):
-    curve = value_of(source, value["timingFunction"])
-    return "Timing(duration: %s, delay: %s, easing: CubicBezier(x1: %s, y1: %s, x2: %s, y2: %s))" % (
-        (num(seconds(value_of(source, value["duration"]))), num(seconds(value_of(source, value["delay"])))) + tuple(num(v) for v in curve))
+    seconds_of = lambda v: num(seconds(v))
+    return "Timing(duration: %s, delay: %s, easing: %s)" % (
+        reference(source, value["duration"], seconds_of), reference(source, value["delay"], seconds_of),
+        reference(source, value["timingFunction"], lambda v: "CubicBezier(x1: %s, y1: %s, x2: %s, y2: %s)" % tuple(num(c) for c in v)))
 
 
 def surface_file(source):
@@ -180,7 +189,7 @@ def tokens_file(source):
     out += numeric_block("Opacity", source["opacity"])
     out += numeric_block("Confirm", source["confirm"])
     out += numeric_block("Motion", source["motion"])
-    out += flat_block("Layer", source["layer"], whole=True)
+    out += numeric_block("Layer", source["layer"], whole=True, nested=True)
     out += numeric_block("Tracking", source["typography"]["tracking"])
     out += numeric_block("Scale", source["scale"])
     out += numeric_block("Ratio", source["ratio"])
@@ -188,8 +197,7 @@ def tokens_file(source):
     out += scalar_block("Transition", source["motion"]["transition"], lambda l: transition(source, l["$value"]))
     out += component_block(source["component"])
     out.append("}")
-    out += ["", "public struct TypeStyle: Sendable, Equatable {", "%spublic let family: [String]" % INDENT,
-            "%spublic let size: Double" % INDENT, "%spublic let weight: Int" % INDENT,
+    out += ["", "public struct TypeStyle: Sendable, Equatable {", "%spublic let size: Double" % INDENT, "%spublic let weight: Int" % INDENT,
             "%spublic let tracking: Double" % INDENT, "%spublic let lineHeight: Double" % INDENT, "}"]
     out += ["", "public struct Timing: Sendable, Equatable {", "%spublic let duration: Double" % INDENT,
             "%spublic let delay: Double" % INDENT, "%spublic let easing: CubicBezier" % INDENT, "}"]

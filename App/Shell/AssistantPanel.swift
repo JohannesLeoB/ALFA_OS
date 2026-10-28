@@ -58,7 +58,8 @@ struct AssistantPanel: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
             if session.assistantOffersSettings {
-                BlobTextButton(label: appearance.text("shell.textButton.assistantOff.text"), plate: \.inverseHot, action: session.openAssistantSettings)
+                TextButton(label: appearance.text("shell.textButton.assistantOff.text"), kind: .inverse, plate: \.inverseHot,
+                           action: session.openAssistantSettings)
             }
         }
         .padding(.vertical, CGFloat(Tokens.Spacing.step8))

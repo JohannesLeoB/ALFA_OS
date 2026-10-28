@@ -1,7 +1,7 @@
 import Design
 
 public enum ShellValues {
-    static let previewScreen = BlobSize(width: 1512, height: 982)
+    static let previewScreen = BlobSize(width: Tokens.Size.previewWindowWidth, height: Tokens.Size.previewWindowHeight)
     public static let pointerStep = 0.001
     static let stretchPerSpeed = 0.00012
     static let dockHoverGrow = 4.0

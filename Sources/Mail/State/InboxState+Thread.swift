@@ -25,13 +25,13 @@ extension InboxState {
     }
 
     public func loadThreadTexts(_ id: String) async {
+        guard let inlet = selectedInlet else { return }
         await loadThread(id)
-        guard let card = card(id) else { return }
-        for item in card.conversation where item.id != id {
-            guard let inlet = cardInlet(id) ?? selectedInlet,
-                  let body = try? await mailbox.body(inlet, messageID: item.id) else { continue }
+        guard let index = cardIndex(id, in: inlet) else { return }
+        for item in cards[index].conversation where item.id != id {
+            guard let body = try? await mailbox.body(inlet, messageID: item.id) else { continue }
             let text = body.text ?? body.html.map(HTMLEngine.plain) ?? item.snippet
-            update(id) { $0.threadTexts[item.id] = text }
+            update(id, in: inlet) { $0.threadTexts[item.id] = text }
         }
     }
 }

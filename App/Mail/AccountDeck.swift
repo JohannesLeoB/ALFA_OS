@@ -26,8 +26,7 @@ struct AccountDeck: View {
 
     private var toggleHelp: String {
         if open { return appearance.string("mail.deck.hide") }
-        let names = waiting.map { $0.mailboxName(settings.display($0.id)) }
-        return names.isEmpty ? appearance.string("mail.deck.show") : appearance.format("mail.deck.showUnread", names.joined(separator: ", "))
+        return appearance.string("mail.deck.show")
     }
 
     var body: some View {

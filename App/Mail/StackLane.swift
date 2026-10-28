@@ -103,23 +103,10 @@ struct StackDetail: View {
     private var inbox: InboxState { session.inbox }
 
     var body: some View {
-        CardStack(order: inbox.stackOrder, fanned: inbox.overview.open) { ref, depth in
+        CardStack(order: inbox.stackOrder, overviewOpen: inbox.overview.open) { ref, depth in
             MessageCard(session: session, ref: ref, depth: depth, commands: commands, perform: perform)
         } overview: {
             OverviewList(session: session)
-        } note: {
-            if let toast = inbox.toast {
-                ToastView(message: toastText(toast), undoLabel: toast.undoable ? appearance.text("mail.toast.undo") : nil,
-                          onUndo: toast.undoable ? { Task { await inbox.undoToast() } } : nil,
-                          onDismiss: { inbox.dismissToast(toast.serial) })
-                    .id(toast.serial)
-            }
         }
-    }
-
-    private func toastText(_ toast: Toast) -> Text {
-        if let count = toast.kind.count { return Text(verbatim: appearance.format(toast.kind.key, String(count))) }
-        if let name = toast.kind.name { return Text(verbatim: appearance.format(toast.kind.key, name)) }
-        return appearance.text(toast.kind.key)
     }
 }

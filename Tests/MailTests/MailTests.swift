@@ -607,6 +607,34 @@ final class MailTests: XCTestCase {
     }
 
     @MainActor
+    func testSameMessageIDInTwoMailboxesStaysApart() async throws {
+        let rig = try Rig()
+        _ = rig.addMailbox("b", prefix: "1")
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        await state.open("1:1:INBOX", pin: true)
+        XCTAssertEqual(state.card("1:1:INBOX")?.inlet, "a")
+        await state.selectAccount("b")
+        XCTAssertNil(state.card("1:1:INBOX"))
+        await state.open("1:1:INBOX")
+        XCTAssertEqual(state.card("1:1:INBOX")?.inlet, "b")
+        XCTAssertEqual(state.cards.filter { $0.id == "1:1:INBOX" }.map(\.inlet).sorted(), ["a", "b"])
+        XCTAssertEqual(state.card("1:1:INBOX")?.content, .text("plain text"))
+        state.toggleRecipients("1:1:INBOX")
+        XCTAssertEqual(state.card("1:1:INBOX")?.recipientsExpanded, true)
+        XCTAssertEqual(state.cards.first { $0.inlet == "a" }?.recipientsExpanded, false)
+        state.close("1:1:INBOX")
+        XCTAssertNil(state.card("1:1:INBOX"))
+        XCTAssertEqual(state.cards.map(\.inlet), ["a"])
+        await state.selectAccount("a")
+        XCTAssertEqual(state.card("1:1:INBOX")?.inlet, "a")
+        XCTAssertEqual(state.frontRef, .message("1:1:INBOX"))
+        state.drop("1:1:INBOX", in: "b")
+        XCTAssertEqual(state.card("1:1:INBOX")?.inlet, "a")
+        XCTAssertEqual(state.stackCount, 1)
+    }
+
+    @MainActor
     func testTrimmingAndPreviewsLeaveParkedMailboxesAlone() async throws {
         let rig = try Rig()
         _ = rig.addMailbox("b", prefix: "2")

@@ -11,7 +11,7 @@ struct CardHeader<Mark: View, Title: View, Meta: View, Trailing: View>: View {
 
     var body: some View {
         let side = CGFloat(Tokens.Size.symbolSize)
-        HStack(spacing: CGFloat(Tokens.Size.headGapList)) {
+        HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
             mark
                 .typeStyle(Tokens.TextStyle.mark)
                 .lineLimit(1)
@@ -22,8 +22,8 @@ struct CardHeader<Mark: View, Title: View, Meta: View, Trailing: View>: View {
             meta
             trailing
         }
-        .padding(.horizontal, CGFloat(Tokens.Size.headPadRight))
-        .frame(height: CGFloat(Tokens.Size.headerHeight))
+        .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+        .frame(height: CGFloat(Tokens.Spacing.step44))
         .overlay(alignment: .bottom) {
             if front { Hairline() }
         }

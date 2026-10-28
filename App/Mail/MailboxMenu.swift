@@ -7,7 +7,7 @@ import SwiftUI
 enum MailboxMenu {
     static func entries(for account: Inlet, current: MailboxDisplay, appearance: Appearance,
                         choose: @escaping (MailboxDisplay) -> Void) -> [MenuEntry] {
-        let own = account.ownName
+        let own = account.shownTitle(appearance)
         return [.head(id: "mailbox.display", label: appearance.text("mail.account.show"))] + MailboxDisplay.allCases.map { option in
             let label: Text
             var meta: Text?

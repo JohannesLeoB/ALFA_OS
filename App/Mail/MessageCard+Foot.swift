@@ -63,10 +63,9 @@ extension MessageCard {
         }
 
         private func openProjects() {
-            guard let rect = projectAnchor.screenRect() else { return }
             switch inbox.frontRef {
-            case .draft(let id): ProjectFolderList.show(inbox, appearance: appearance, draft: id, anchor: rect)
-            case .message(let id): ProjectFolderList.save(inbox, appearance: appearance, message: id, anchor: rect)
+            case .draft(let id): ProjectFolderList.show(inbox, appearance: appearance, draft: id, anchor: projectAnchor)
+            case .message(let id): ProjectFolderList.save(inbox, appearance: appearance, message: id, anchor: projectAnchor)
             case nil: break
             }
         }

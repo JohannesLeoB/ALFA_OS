@@ -12,11 +12,11 @@ struct AttachmentRow: View {
     @State private var anchor = AnchorBox()
 
     var body: some View {
-        HStack(spacing: CGFloat(SheetValues.attachmentGap)) {
+        HStack(spacing: CGFloat(Tokens.Spacing.step12)) {
             Glyph(.doc)
                 .foregroundStyle(appearance.color(\.sheetInkTertiary))
                 .frame(width: CGFloat(Tokens.Size.symbolSize), height: CGFloat(Tokens.Size.symbolSize))
-                .overlay(RoundedRectangle(cornerRadius: CGFloat(SheetValues.attachmentMarkRadius))
+                .overlay(RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.notice))
                     .strokeBorder(appearance.color(\.sheetLineStrong), lineWidth: CGFloat(Tokens.Size.hairline)))
             Text(verbatim: row.name)
                 .font(Font(Typeface.sheet(size: Tokens.TextSize.body, weight: .medium)))

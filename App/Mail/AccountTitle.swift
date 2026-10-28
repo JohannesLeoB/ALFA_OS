@@ -11,7 +11,7 @@ struct AccountTitle: View {
     @State private var anchor = AnchorBox()
 
     var body: some View {
-        Text(verbatim: account.mailboxName(display))
+        Text(verbatim: account.shownName(display, appearance: appearance))
             .designText(\.ink, size: Tokens.TextSize.body, weight: .medium)
             .lineLimit(1)
             .truncationMode(.tail)

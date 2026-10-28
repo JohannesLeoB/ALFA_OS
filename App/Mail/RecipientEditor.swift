@@ -45,7 +45,7 @@ struct RecipientEditor: View {
             }
             .padding(.leading, CGFloat(Tokens.Size.edge))
             .padding(.trailing, CGFloat(Tokens.Spacing.step8))
-            .frame(minHeight: CGFloat(SheetValues.fieldRowHeight))
+            .frame(minHeight: CGFloat(Tokens.Spacing.step44))
             if !found.isEmpty { suggestions(found) }
             if !inline && expanded { list }
         }
@@ -163,7 +163,7 @@ private struct RowRemove: View {
         Button(action: action) {
             Glyph.tiny(.close)
                 .foregroundStyle(appearance.color(hovering ? \.ink : \.inkTertiary))
-                .frame(width: CGFloat(SheetValues.removeRowSize), height: CGFloat(SheetValues.removeRowSize))
+                .frame(width: CGFloat(Tokens.Spacing.step24), height: CGFloat(Tokens.Spacing.step24))
                 .background(Circle().fill(hovering ? appearance.color(\.selection) : Color.clear))
                 .contentShape(Circle())
         }

@@ -4,20 +4,18 @@ struct ChipWrapLayout: Layout {
     let gap: CGFloat
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        let width = proposal.width ?? .infinity
-        let rows = arrange(subviews, width: width)
+        let limit = proposal.width.flatMap { $0.isFinite ? $0 : nil }
+        let rows = arrange(subviews, width: limit ?? .infinity)
         let height = rows.last.map { $0.y + $0.height } ?? 0
-        let used = rows.map(\.width).max() ?? 0
-        return CGSize(width: proposal.width ?? used, height: height)
+        return CGSize(width: limit ?? rows.map(\.width).max() ?? 0, height: height)
     }
 
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         for row in arrange(subviews, width: bounds.width) {
             var x = bounds.minX
-            for index in row.items {
-                let size = fitted(subviews[index], width: bounds.width)
-                subviews[index].place(at: CGPoint(x: x, y: bounds.minY + row.y), proposal: ProposedViewSize(size))
-                x += size.width + gap
+            for item in row.items {
+                subviews[item.index].place(at: CGPoint(x: x, y: bounds.minY + row.y), proposal: ProposedViewSize(item.size))
+                x += item.size.width + gap
             }
         }
     }
@@ -39,16 +37,21 @@ struct ChipWrapLayout: Layout {
             }
             current.width = current.items.isEmpty ? size.width : current.width + gap + size.width
             current.height = max(current.height, size.height)
-            current.items.append(index)
+            current.items.append(WrapItem(index: index, size: size))
         }
         if !current.items.isEmpty { rows.append(current) }
         return rows
     }
 }
 
+private struct WrapItem {
+    let index: Int
+    let size: CGSize
+}
+
 private struct WrapRow {
     let y: CGFloat
     var width: CGFloat = 0
     var height: CGFloat = 0
-    var items: [Int] = []
+    var items: [WrapItem] = []
 }

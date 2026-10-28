@@ -14,8 +14,9 @@ struct AssistantAttachment: View {
                 .lineLimit(1)
                 .truncationMode(.tail)
             if let onRemove {
-                BlobSymbolButton(help: appearance.string("shell.chipRemove.assistant.tooltip"), glyph: .close,
-                                 side: Tokens.Spacing.step20, size: SheetValues.smallIcon, action: onRemove)
+                SymbolButton(help: appearance.string("shell.chipRemove.assistant.tooltip"), glyph: .close, side: Tokens.Spacing.step20,
+                             glyphSize: SheetValues.smallIcon, tone: nil, hoverTone: nil, ringed: false, hover: .fill, hoverFill: \.inverseHot,
+                             pressed: false, action: onRemove)
             }
         }
         .padding(.leading, CGFloat(Tokens.Spacing.step8))

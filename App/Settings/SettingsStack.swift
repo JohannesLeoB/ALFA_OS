@@ -19,7 +19,7 @@ struct SettingsStack: View {
         GeometryReader { proxy in
             VStack(spacing: 0) {
                 SettingsCommandHead(context: context, readings: readings, width: proxy.size.width, disconnecting: $disconnecting)
-                CardStack(order: order, fanned: state.fanned, fans: true, top: 0) { id, depth in
+                CardStack(order: order, overviewOpen: state.fanned, spreads: true, top: 0) { id, depth in
                     StackCard(context: context, face: SettingsFace(id: id, readings: readings, appearance: appearance), depth: depth,
                               disconnecting: disconnecting)
                         .environment(\.narrowCard, proxy.size.width < Tokens.Size.breakpointNarrowCard)
@@ -28,8 +28,6 @@ struct SettingsStack: View {
                                  size: size, resize: { size = $0 }, hot: hot, aim: { hot = $0 }) {
                         EmptyView()
                     }
-                } note: {
-                    EmptyView()
                 }
             }
         }

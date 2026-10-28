@@ -14,8 +14,7 @@ struct CardFace<Head: View, Content: View>: View {
 
     private var step: StackStep? {
         guard depth > 0 else { return nil }
-        let steps = appearance.dark ? Tokens.stackDark : Tokens.stackLight
-        return steps[min(CardStackEngine.levelIndex(depth: depth), steps.count - 1)]
+        return appearance.stackStep(CardStackEngine.levelIndex(depth: depth))
     }
 
     private var fill: Color { step.map { appearance.paint($0.surface) } ?? appearance.color(\.lane) }
@@ -43,6 +42,9 @@ struct CardFace<Head: View, Content: View>: View {
         .offset(y: !front && hovering ? -CGFloat(SheetValues.stackHoverLift) : 0)
         .onHover { hovering = $0 }
         .onTapGesture { if !front { bring() } }
+        .accessibilityElement(children: .contain)
+        .accessibilityAddTraits(front ? [] : .isButton)
+        .accessibilityAction { if !front { bring() } }
         .animation(appearance.ease(Tokens.Duration.stackLift), value: hovering)
     }
 

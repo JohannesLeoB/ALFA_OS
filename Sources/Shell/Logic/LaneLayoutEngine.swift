@@ -66,7 +66,9 @@ enum LaneLayoutEngine {
             return r
         }
 
-        let w = solve([mode.folded[0], mode.folded[1], mode.folded[2] || foldTrailing])
+        var folded = [mode.folded[0], mode.folded[1], mode.folded[2] || foldTrailing]
+        if !folded.contains(false) { folded[LaneKind.center.index] = false }
+        let w = solve(folded)
         return LaneWidths(leading: w[0], center: w[1], trailing: w[2])
     }
 
@@ -121,7 +123,6 @@ enum LaneLayoutEngine {
                 }
             }
         }
-        next.pinned = true
         for k in 0..<3 {
             next.preferred[k] = f[k] ? (start[k] > fold ? start[k] : limit[k]) : w[k].rounded()
             next.folded[k] = f[k]

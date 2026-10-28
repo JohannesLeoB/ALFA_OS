@@ -101,6 +101,7 @@ struct ConfirmPill<Glyph: View>: View {
         }
         .help(holdHint)
         .accessibilityAddTraits(.isButton)
+        .accessibilityAction { confirm() }
         .gesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in press() }

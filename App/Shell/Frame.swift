@@ -7,6 +7,7 @@ struct Frame: View {
     let session: AppSession
     @Environment(\.colorScheme) private var scheme
     @Environment(\.accessibilityReduceMotion) private var reduce
+    @Environment(\.locale) private var locale
     @State private var pointer: CGPoint?
     @State private var blobFrame = CGRect.zero
 
@@ -35,6 +36,10 @@ struct Frame: View {
                     .zIndex(Double(Tokens.Layer.blob))
             }
             .dwellHintLayer()
+            .eventMonitor([.leftMouseDown, .rightMouseDown]) { sample in
+                if let point = sample.local { session.act(at: Double(point.x)) }
+                return false
+            }
             .coordinateSpace(name: Self.space)
             .frame(width: proxy.size.width, height: proxy.size.height, alignment: .topLeading)
             .clickAway(active: desk.mode != nil, inside: blobFrame) { desk.close() }
@@ -48,14 +53,15 @@ struct Frame: View {
             .onChange(of: proxy.size) { _, size in desk.resize(BlobSize(width: size.width, height: size.height)) }
         }
         .onExitCommand { desk.close() }
-        .onChange(of: desk.currentID, initial: true) {
-            desk.labelWidth = Typeface.width(appearance.string(desk.current?.titleKey ?? ""), size: Tokens.TextSize.body, weight: Tokens.Weight.medium)
-        }
+        .onChange(of: desk.currentID, initial: true) { measureLabel(appearance) }
+        .onChange(of: locale) { measureLabel(appearance) }
         .onChange(of: session.stackEmpty, initial: true) { _, empty in desk.stack(empty: empty, still: appearance.still) }
-        .onChange(of: session.conversation.noteSerial) { replaceToasts(keeping: .assistant) }
-        .onChange(of: session.inbox.toast?.serial) { _, serial in if serial != nil { replaceToasts(keeping: .mail) } }
-        .onChange(of: session.settings.toastSerial) { replaceToasts(keeping: .settings) }
-        .onAppear { MenuPanel.shared.desk = desk }
+        .onChange(of: session.panes.mapValues(\.opened)) { old, new in
+            for (id, count) in new where old[id] != count { desk.reveal(.trailing, in: id) }
+        }
+        .onChange(of: session.conversation.noteSerial) { session.toastArrived(.assistant) }
+        .onChange(of: session.inbox.toast?.serial) { _, serial in if serial != nil { session.toastArrived(.mail) } }
+        .onChange(of: session.settings.toastSerial) { session.toastArrived(.settings) }
         .ignoresSafeArea(edges: [.horizontal, .bottom])
         .environment(\.appearance, appearance)
         .environment(\.session, session)
@@ -63,27 +69,13 @@ struct Frame: View {
 
     nonisolated static let space = "shell"
 
-    private enum ToastSource {
-        case assistant
-        case mail
-        case settings
-    }
-
-    private func replaceToasts(keeping source: ToastSource) {
-        if source != .assistant, session.conversation.note != nil { session.conversation.dismiss() }
-        if source != .mail, let toast = session.inbox.toast { session.inbox.dismissToast(toast.serial) }
-        if source != .settings, session.settings.toast != nil { session.settings.dismissToast() }
+    private func measureLabel(_ appearance: Appearance) {
+        desk.labelWidth = Typeface.width(appearance.string(desk.current?.titleKey ?? ""), size: Tokens.TextSize.body, weight: Tokens.Weight.medium)
     }
 
     private func laneAnimation(_ appearance: Appearance) -> Animation? {
         if desk.laneDragging { return nil }
         return desk.slowLane ? appearance.ease(Tokens.Transition.fold) : appearance.ease(Tokens.Duration.lane)
-    }
-
-    private func lefts() -> [Double] {
-        let w = desk.widths
-        let m = desk.measure
-        return [m.margin, m.margin + w.leading + m.gap, m.margin + w.leading + w.center + 2 * m.gap]
     }
 
     private func lanes(_ appearance: Appearance) -> some View {
@@ -92,10 +84,10 @@ struct Frame: View {
         let height = CGFloat(measure.laneHeight(desk.window))
         let entry = desk.current
         let keys = [entry?.lanes.leadingKey ?? "", "", entry?.lanes.trailingKey ?? ""]
-        let x = lefts()
+        let x = measure.lefts(widths)
         return ZStack(alignment: .topLeading) {
             ForEach(LaneKind.allCases, id: \.self) { lane in
-                Lane(session: session, lane: lane, titleKey: keys[lane.index], size: CGSize(width: widths.width(lane), height: height))
+                DeskLane(session: session, lane: lane, titleKey: keys[lane.index], size: CGSize(width: widths.width(lane), height: height))
                     .offset(x: CGFloat(x[lane.index]), y: CGFloat(measure.strip))
             }
         }
@@ -105,25 +97,14 @@ struct Frame: View {
     private func toasts(_ appearance: Appearance) -> some View {
         let widths = desk.widths
         let measure = desk.measure
-        let height = CGFloat(measure.laneHeight(desk.window))
-        let pane = session.panes[desk.currentID]
-        let x = lefts()
+        let lane = session.toastLane
+        let width = CGFloat(widths.width(lane))
         return ZStack(alignment: .topLeading) {
-            ForEach(LaneKind.allCases, id: \.self) { lane in
-                if lane == .trailing && session.conversation.note != nil {
-                    AssistantToast(conversation: session.conversation)
-                        .fixedSize(horizontal: true, vertical: false)
-                        .padding(.bottom, CGFloat(Tokens.Size.footerHeight + Tokens.Spacing.step8))
-                        .frame(width: CGFloat(widths.width(lane)), height: height, alignment: .bottom)
-                        .offset(x: CGFloat(x[lane.index]), y: CGFloat(measure.strip))
-                } else if let toast = pane?.toast(lane) {
-                    toast
-                        .fixedSize(horizontal: true, vertical: false)
-                        .padding(.bottom, CGFloat(Tokens.Size.footerHeight + Tokens.Spacing.step8))
-                        .frame(width: CGFloat(widths.width(lane)), height: height, alignment: .bottom)
-                        .offset(x: CGFloat(x[lane.index]), y: CGFloat(measure.strip))
-                }
-            }
+            session.toast
+                .frame(maxWidth: max(0, width - CGFloat(Tokens.Spacing.step16)))
+                .padding(.bottom, CGFloat(Tokens.Size.footerHeight + Tokens.Spacing.step8))
+                .frame(width: width, height: CGFloat(measure.laneHeight(desk.window)), alignment: .bottom)
+                .offset(x: CGFloat(measure.lefts(widths)[lane.index]), y: CGFloat(measure.strip))
         }
         .animation(laneAnimation(appearance), value: widths)
     }
@@ -132,7 +113,7 @@ struct Frame: View {
         let widths = desk.widths
         let measure = desk.measure
         let height = CGFloat(measure.laneHeight(desk.window))
-        let x = lefts()
+        let x = measure.lefts(widths)
         return ZStack(alignment: .topLeading) {
             LaneHandle(desk: desk, lane: .leading, height: height)
                 .offset(x: CGFloat(x[0] + widths.leading), y: CGFloat(measure.strip))

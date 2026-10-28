@@ -17,8 +17,7 @@ public enum TileGrid {
 
     public static func snap(_ proposed: Double, rows: [Double], inset: Double, limit: Double) -> Double {
         let ceiling = max(0, limit)
-        let points = [0] + rows.map { min(ceiling, max(0, $0 - inset)) }
-        return points.min { abs($0 - proposed) < abs($1 - proposed) } ?? proposed
+        return rows.map { min(ceiling, max(0, $0 - inset)) }.reduce(0) { abs($1 - proposed) < abs($0 - proposed) ? $1 : $0 }
     }
 
     public static func active(tops: [Double], offset: Double, reach: Double, viewport: Double, content: Double) -> Int {

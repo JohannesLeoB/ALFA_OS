@@ -23,7 +23,7 @@ struct AssistantMessage: View {
                 HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
                     appearance.text("shell.assistantMessage.failed")
                         .lineLimit(1)
-                    BlobTextButton(label: appearance.text("shell.textButton.assistantRetry.text"), hoverPlate: \.inverseHot, action: retry)
+                    TextButton(label: appearance.text("shell.textButton.assistantRetry.text"), kind: .inverse, action: retry)
                 }
                 .padding(.horizontal, CGFloat(Tokens.Spacing.step12))
             }

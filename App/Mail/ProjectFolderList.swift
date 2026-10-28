@@ -1,4 +1,3 @@
-import AppKit
 import Core
 import Design
 import Hub
@@ -7,7 +6,7 @@ import SwiftUI
 
 @MainActor
 enum ProjectFolderList {
-    static func show(_ inbox: InboxState, appearance: Appearance, draft: UUID, anchor: NSRect) {
+    static func show(_ inbox: InboxState, appearance: Appearance, draft: UUID, anchor: AnchorBox) {
         Task {
             let projects = await inbox.projectFolders(for: draft)
             guard !projects.isEmpty else { return }
@@ -21,7 +20,7 @@ enum ProjectFolderList {
         }
     }
 
-    static func save(_ inbox: InboxState, appearance: Appearance, message id: String, anchor: NSRect) {
+    static func save(_ inbox: InboxState, appearance: Appearance, message id: String, anchor: AnchorBox) {
         Task {
             let projects = await inbox.projectFolders(forMessage: id)
             guard !projects.isEmpty else { return }
@@ -34,7 +33,7 @@ enum ProjectFolderList {
         }
     }
 
-    private static func open(_ inbox: InboxState, appearance: Appearance, draft: UUID, anchor: NSRect, inlet: String, folder: String,
+    private static func open(_ inbox: InboxState, appearance: Appearance, draft: UUID, anchor: AnchorBox, inlet: String, folder: String,
                              title: String) {
         Task {
             let files = await inbox.projectFiles(inlet, folder: folder)
@@ -56,7 +55,7 @@ enum ProjectFolderList {
         }
     }
 
-    private static func present(_ entries: [MenuEntry], anchor: NSRect) {
-        MenuPanel.shared.show(entries: entries, anchor: .rect(anchor), window: NSApp.keyWindow)
+    private static func present(_ entries: [MenuEntry], anchor: AnchorBox) {
+        anchor.showMenu(entries)
     }
 }

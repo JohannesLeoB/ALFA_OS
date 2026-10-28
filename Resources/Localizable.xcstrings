@@ -6516,7 +6516,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "imap.name"
+            "value" : "Anzeigename"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display name"
           }
         }
       }
@@ -8294,22 +8300,6 @@
         }
       }
     },
-    "mail.deck.showUnread" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Postfächer zeigen · neue Mail in %@"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show mailboxes · new mail in %@"
-          }
-        }
-      }
-    },
     "mail.draft.failed.act" : {
       "comment" : "alpha",
       "localizations" : {
@@ -8536,72 +8526,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ falten"
-          }
-        }
-      }
-    },
-    "mail.format.bold" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fett"
-          }
-        }
-      }
-    },
-    "mail.format.italic" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kursiv"
-          }
-        }
-      }
-    },
-    "mail.format.link" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Link"
-          }
-        }
-      }
-    },
-    "mail.format.list" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aufzählung"
-          }
-        }
-      }
-    },
-    "mail.format.numbered" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nummerierung"
-          }
-        }
-      }
-    },
-    "mail.format.underline" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unterstrichen"
           }
         }
       }
@@ -8938,6 +8862,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Connect a mailbox to read and write mail here."
+          }
+        }
+      }
+    },
+    "mail.list.offline" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline"
+          }
+        }
+      }
+    },
+    "mail.list.offline.since" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline · zuletzt abgeglichen %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline · last synced %@"
           }
         }
       }
@@ -10662,16 +10618,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die App nutzt %@ danach nicht mehr."
-          }
-        }
-      }
-    },
-    "settings.extra.clear" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leeren"
           }
         }
       }

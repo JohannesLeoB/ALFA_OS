@@ -15,7 +15,8 @@ struct AssistantScope: View {
                 .truncationMode(.tail)
                 .frame(maxWidth: .infinity, alignment: .leading)
             if clearable {
-                BlobSymbolButton(help: appearance.string("shell.symbolButton.assistantClear.tooltip"), glyph: .trash, action: clear)
+                SymbolButton(help: appearance.string("shell.symbolButton.assistantClear.tooltip"), glyph: .trash, tone: nil, hoverTone: nil, ringed: false,
+                             hover: .fill, hoverFill: \.inverseHot, pressed: false, action: clear)
             }
         }
         .typeStyle(Tokens.TextStyle.caption)

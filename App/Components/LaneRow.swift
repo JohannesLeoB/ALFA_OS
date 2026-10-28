@@ -15,7 +15,7 @@ struct LaneRow: View {
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row))
         Button(action: action) {
-            HStack(spacing: CGFloat(SheetValues.rowSpacing)) {
+            HStack(spacing: CGFloat(Tokens.Spacing.step20)) {
                 Mark(inverted: selected, tone: selected ? \.lane : \.inkTertiary) { Glyph(glyph) }
                 label
                     .designText(selected ? \.lane : \.ink, size: Tokens.TextSize.body, weight: selected ? .medium : .regular)

@@ -330,22 +330,22 @@ public enum Tokens {
         public static let imageTile = 1.3333
     }
     public enum TextStyle {
-        public static let body = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 13.0, weight: 400, tracking: 0.0, lineHeight: 1.35)
-        public static let bodyEmphasis = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 13.0, weight: 500, tracking: 0.0, lineHeight: 1.35)
-        public static let caption = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 11.5, weight: 400, tracking: 0.0, lineHeight: 16.0)
-        public static let captionEmphasis = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 11.5, weight: 500, tracking: 0.0, lineHeight: 16.0)
-        public static let control = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 11.5, weight: 500, tracking: 0.01, lineHeight: 16.0)
-        public static let mark = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 11.5, weight: 500, tracking: 0.06, lineHeight: 1.0)
-        public static let markSmall = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 9.0, weight: 500, tracking: 0.06, lineHeight: 1.0)
-        public static let title = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 18.0, weight: 500, tracking: -0.02, lineHeight: 1.25)
-        public static let mailBody = TypeStyle(family: ["Geist", "SF Pro Text", "system-ui"], size: 13.0, weight: 400, tracking: 0.0, lineHeight: 1.6)
+        public static let body = TypeStyle(size: TextSize.body, weight: Weight.regular, tracking: 0.0, lineHeight: LineHeight.body * TextSize.body)
+        public static let bodyEmphasis = TypeStyle(size: TextSize.body, weight: Weight.medium, tracking: 0.0, lineHeight: LineHeight.body * TextSize.body)
+        public static let caption = TypeStyle(size: TextSize.small, weight: Weight.regular, tracking: 0.0, lineHeight: LineHeight.small)
+        public static let captionEmphasis = TypeStyle(size: TextSize.small, weight: Weight.medium, tracking: 0.0, lineHeight: LineHeight.small)
+        public static let control = TypeStyle(size: TextSize.small, weight: Weight.medium, tracking: Tracking.control, lineHeight: LineHeight.small)
+        public static let mark = TypeStyle(size: TextSize.small, weight: Weight.medium, tracking: Tracking.mark, lineHeight: LineHeight.counter * TextSize.small)
+        public static let markSmall = TypeStyle(size: TextSize.blobFace, weight: Weight.medium, tracking: Tracking.mark, lineHeight: LineHeight.counter * TextSize.blobFace)
+        public static let title = TypeStyle(size: TextSize.title, weight: Weight.medium, tracking: Tracking.title, lineHeight: LineHeight.title * TextSize.title)
+        public static let mailBody = TypeStyle(size: TextSize.body, weight: Weight.regular, tracking: 0.0, lineHeight: LineHeight.mailBody * TextSize.body)
     }
     public enum Transition {
-        public static let blobFlight = Timing(duration: 0.416, delay: 0.0, easing: CubicBezier(x1: 0.2, y1: 1.15, x2: 0.3, y2: 1.0))
-        public static let stack = Timing(duration: 0.52, delay: 0.0, easing: CubicBezier(x1: 0.22, y1: 1.08, x2: 0.36, y2: 1.0))
-        public static let fold = Timing(duration: 0.72, delay: 0.0, easing: CubicBezier(x1: 0.65, y1: 0.0, x2: 0.25, y2: 1.0))
-        public static let deckClose = Timing(duration: 0.38, delay: 0.0, easing: CubicBezier(x1: 0.4, y1: 0.0, x2: 0.2, y2: 1.0))
-        public static let deckOpen = Timing(duration: 0.56, delay: 0.0, easing: CubicBezier(x1: 0.3, y1: 1.32, x2: 0.5, y2: 1.0))
+        public static let blobFlight = Timing(duration: Duration.blobFlight, delay: 0.0, easing: Easing.blobFlight)
+        public static let stack = Timing(duration: Duration.stack, delay: 0.0, easing: Easing.stack)
+        public static let fold = Timing(duration: Duration.fold, delay: 0.0, easing: Easing.fold)
+        public static let deckClose = Timing(duration: Duration.deckClose, delay: 0.0, easing: Easing.deckClose)
+        public static let deckOpen = Timing(duration: Duration.deckOpen, delay: 0.0, easing: Easing.deckOpen)
     }
     public enum Component {
         public static let laneRadius = Radius.lane
@@ -385,7 +385,6 @@ public enum Tokens {
 }
 
 public struct TypeStyle: Sendable, Equatable {
-    public let family: [String]
     public let size: Double
     public let weight: Int
     public let tracking: Double

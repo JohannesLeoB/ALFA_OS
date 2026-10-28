@@ -52,8 +52,6 @@ extension AppSession {
     }
 
     func openAssistantSettings() {
-        settings.group = .protection
-        settings.open(SettingsSection.privacy.rawValue)
         desk.select("settings")
     }
 

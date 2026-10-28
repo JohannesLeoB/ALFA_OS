@@ -21,6 +21,6 @@ struct MailboxDisplayRow: View {
     }
 
     private func label(_ option: MailboxDisplay) -> Text {
-        option.choice(title: inlet.title, account: inlet.account).map { Text(verbatim: $0) } ?? appearance.text("settings.account.show.own")
+        option.choice(title: inlet.shownTitle(appearance), account: inlet.account).map { Text(verbatim: $0) } ?? appearance.text("settings.account.show.own")
     }
 }

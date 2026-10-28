@@ -1,3 +1,4 @@
+import Design
 import Mail
 import Shell
 import SwiftUI
@@ -30,6 +31,14 @@ struct InboxPane: Pane {
     var stackEmpty: Bool { inbox.stackCount == 0 }
 
     var badge: Int { inbox.totalUnread }
+
+    var opened: Int { inbox.opened }
+
+    var limits: AreaLimits {
+        AreaLimits(minimum: [.leading: Tokens.Size.mailLaneMinimumLeft], maximum: [.leading: Tokens.Size.mailLaneMaximumLeft])
+    }
+
+    var toast: AnyView? { AnyView(MailToast(inbox: inbox)) }
 
     func ownsHead(_ lane: LaneKind) -> Bool { true }
 

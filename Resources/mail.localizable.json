@@ -18,7 +18,8 @@
    "de": "IMAP-Sicherheit"
   },
   "field.imap.name": {
-   "de": "imap.name"
+   "de": "Anzeigename",
+   "en": "Display name"
   },
   "field.imap.outgoingHost": {
    "de": "SMTP-Server"
@@ -402,10 +403,6 @@
    "de": "Postfächer zeigen",
    "en": "Show mailboxes"
   },
-  "mail.deck.showUnread": {
-   "de": "Postfächer zeigen · neue Mail in %@",
-   "en": "Show mailboxes · new mail in %@"
-  },
   "mail.account.show": {
    "de": "Angezeigt als",
    "en": "Shown as"
@@ -723,6 +720,14 @@
   "mail.toast.undo": {
    "de": "Rückgängig",
    "en": "Undo"
+  },
+  "mail.list.offline": {
+   "de": "Offline",
+   "en": "Offline"
+  },
+  "mail.list.offline.since": {
+   "de": "Offline · zuletzt abgeglichen %@",
+   "en": "Offline · last synced %@"
   }
  }
 }

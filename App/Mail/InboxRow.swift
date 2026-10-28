@@ -49,7 +49,7 @@ struct InboxRow: View {
     }
 
     private func onMark(_ point: CGPoint) -> Bool {
-        CGRect(x: Tokens.Spacing.step8, y: SheetValues.rowPadding, width: Tokens.Size.symbolSize, height: Tokens.Size.symbolSize)
+        CGRect(x: Tokens.Spacing.step8, y: Tokens.Spacing.step12, width: Tokens.Size.symbolSize, height: Tokens.Size.symbolSize)
             .contains(point)
     }
 

@@ -16,8 +16,9 @@ struct AssistantInput: View {
 
     var body: some View {
         HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
-            BlobSymbolButton(help: appearance.string(files ? "shell.symbolButton.assistantAttach.tooltip" : "shell.symbolButton.assistantAttachOff.tooltip"),
-                             glyph: .attach, dimmed: !files, enabled: files, action: attach)
+            SymbolButton(help: appearance.string(files ? "shell.symbolButton.assistantAttach.tooltip" : "shell.symbolButton.assistantAttachOff.tooltip"),
+                         glyph: .attach, dimmed: !files, tone: nil, hoverTone: nil, ringed: false, hover: .fill, hoverFill: \.inverseHot, pressed: false,
+                         action: attach)
             ZStack(alignment: .leading) {
                 if conversation.draft.isEmpty {
                     appearance.text("shell.assistantInput.field")
@@ -38,9 +39,9 @@ struct AssistantInput: View {
             }
             .padding(.horizontal, CGFloat(Tokens.Spacing.step4))
             .frame(maxWidth: .infinity)
-            BlobSymbolButton(help: appearance.string("shell.symbolButton.assistantSend.tooltip"), glyph: .send,
-                             plate: ready ? \.onInverse : nil, tone: ready ? \.inverse : \.onInverseTertiary, hovers: false,
-                             enabled: ready, action: send)
+            SymbolButton(help: appearance.string("shell.symbolButton.assistantSend.tooltip"), glyph: .send, disabled: !ready, dimmed: false,
+                         tone: ready ? \.inverse : \.onInverseTertiary, hoverTone: nil, ringed: false, plate: ready ? \.onInverse : nil, hover: .none,
+                         pressed: false, action: send)
         }
         .padding(.leading, CGFloat(Tokens.Spacing.step4))
         .padding(.trailing, CGFloat(Tokens.Spacing.step8))

@@ -31,13 +31,13 @@ struct ContentPlaceholder<Glyph: View, Action: View>: View {
                 title
                     .typeStyle(Tokens.TextStyle.bodyEmphasis)
                     .foregroundStyle(appearance.color(\.ink))
-                    .lineHeight(Tokens.TextStyle.bodyEmphasis.lineHeight * Tokens.TextStyle.bodyEmphasis.size, size: Tokens.TextStyle.bodyEmphasis.size)
+                    .lineHeight(Tokens.TextStyle.bodyEmphasis.lineHeight, size: Tokens.TextStyle.bodyEmphasis.size)
                     .frame(maxWidth: CGFloat(Tokens.Size.cardStateTextMaxWidth))
             }
             text
                 .typeStyle(Tokens.TextStyle.body)
                 .foregroundStyle(appearance.color(\.inkTertiary))
-                .lineHeight(Tokens.TextStyle.body.lineHeight * Tokens.TextStyle.body.size, size: Tokens.TextStyle.body.size)
+                .lineHeight(Tokens.TextStyle.body.lineHeight, size: Tokens.TextStyle.body.size)
                 .frame(maxWidth: CGFloat(Tokens.Size.cardStateTextMaxWidth))
             action
         }

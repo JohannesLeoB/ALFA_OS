@@ -16,6 +16,8 @@ final class AppSession {
     private(set) var syncing = false
     var assistantUnseen = false
     var mailboxSwitching = false
+    private(set) var toastLane = LaneKind.trailing
+    @ObservationIgnored private var actionLane = LaneKind.trailing
     @ObservationIgnored private var watcher: Task<Void, Never>?
     @ObservationIgnored private var shelved: Set<Inlet.ID> = []
 
@@ -31,6 +33,7 @@ final class AppSession {
         shelved = connectedInlets
         panes["mail"] = InboxPane(session: self)
         panes["settings"] = SettingsPane.make(assembly: assembly, desk: desk)
+        for (id, pane) in panes { desk.limit(id, pane.limits) }
     }
 
     static func live() throws -> AppSession {
@@ -54,9 +57,23 @@ final class AppSession {
         }
     }
 
-    var attention: Bool { assistantUnseen }
-
     var stackEmpty: Bool { panes[desk.currentID]?.stackEmpty ?? false }
+
+    var toast: AnyView? {
+        if conversation.note != nil { return AnyView(AssistantToast(conversation: conversation)) }
+        return panes[desk.currentID]?.toast
+    }
+
+    func act(at x: Double) {
+        actionLane = desk.measure.lane(at: x, desk.widths)
+    }
+
+    func toastArrived(_ source: ToastSource) {
+        toastLane = actionLane
+        if source != .assistant, conversation.note != nil { conversation.dismiss() }
+        if source != .mail, let toast = inbox.toast { inbox.dismissToast(toast.serial) }
+        if source != .settings, settings.toast != nil { settings.dismissToast() }
+    }
 
     private var connectedInlets: Set<Inlet.ID> {
         Set(assembly.connections.setup.inlets.filter { $0.state.isConnected }.map(\.id))

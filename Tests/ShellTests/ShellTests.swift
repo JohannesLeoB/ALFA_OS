@@ -20,6 +20,7 @@ private func loadDirectory() throws -> AppDirectory {
 final class ShellTests: XCTestCase {
     private let measure = Measure()
     private let screen = ShellValues.previewScreen
+    private let mailLimits = AreaLimits(minimum: [.leading: Tokens.Size.mailLaneMinimumLeft], maximum: [.leading: Tokens.Size.mailLaneMaximumLeft])
 
     private func widths(_ window: Double, _ mode: LaneMode) -> [Double] {
         LaneLayoutEngine.widths(windowWidth: window, mode: mode, measure: measure, rules: AreaRules(minimum: measure.minimum)).all
@@ -38,14 +39,16 @@ final class ShellTests: XCTestCase {
     func testMailLeftLaneDragsBetweenItsLimits() {
         let rest = LaneMode(rest: measure.laneRest)
         let start = widths(1512, rest)
-        let mail = AreaRules.area("mail", measure: measure)
+        let mail = AreaRules(measure: measure, limits: mailLimits)
         let drag = { (proposed: Double, rules: AreaRules) in
             LaneLayoutEngine.drag(lane: .leading, proposed: proposed, start: start, mode: rest, measure: self.measure, rules: rules).preferred[0]
         }
         XCTAssertEqual(drag(400, mail), 280)
         XCTAssertEqual(drag(200, mail), 200)
         XCTAssertEqual(drag(250, mail), 250)
-        XCTAssertEqual(drag(400, AreaRules.area("settings", measure: measure)), 400)
+        XCTAssertEqual(drag(400, AreaRules(measure: measure, limits: AreaLimits())), 400)
+        XCTAssertEqual(mail.minimum, [Tokens.Size.mailLaneMinimumLeft, measure.minimum[1], measure.minimum[2]])
+        XCTAssertEqual(mail.maximum, [Tokens.Size.mailLaneMaximumLeft, nil, nil])
     }
 
     func testMenuWidthSnapsToTheGrid() {
@@ -89,7 +92,6 @@ final class ShellTests: XCTestCase {
         let wide = LaneLayoutEngine.drag(lane: .trailing, proposed: 900, start: [280, 896, 280], mode: rest, measure: measure, rules: rules)
         XCTAssertEqual(widths(1512, wide), [56, 500, 900])
         XCTAssertEqual(wide.preferred[1], 0)
-        XCTAssertTrue(wide.pinned)
         XCTAssertEqual(LaneLayoutEngine.drag(lane: .center, proposed: 100, start: [280, 896, 280], mode: rest, measure: measure, rules: rules), rest)
         for lane in [LaneKind.leading, .trailing] {
             let held = LaneLayoutEngine.drag(lane: lane, proposed: 150, start: [280, 896, 280], mode: rest, measure: measure, rules: rules)
@@ -256,8 +258,10 @@ final class ShellTests: XCTestCase {
     @MainActor
     func testLaneDragStepResetAndStrip() throws {
         let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        model.limit("mail", mailLimits)
         XCTAssertEqual(model.widths.all, [280, 896, 280])
-        model.dragLane(.trailing, proposed: 900)
+        model.dragLane(.trailing, translation: 0)
+        model.dragLane(.trailing, translation: -620)
         XCTAssertTrue(model.laneDragging)
         XCTAssertEqual(model.widths.all, [56, 500, 900])
         model.endLaneDrag()
@@ -278,6 +282,87 @@ final class ShellTests: XCTestCase {
         XCTAssertFalse(model.laneMode("mail").folded[0])
         model.resize(BlobSize(width: 1200, height: 800))
         XCTAssertEqual(model.window.width, 1200)
+    }
+
+    @MainActor
+    func testHandleClickWithoutMovementKeepsTheLayout() throws {
+        let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        var saved = 0
+        model.onChange = { _ in saved += 1 }
+        let before = model.laneMode("mail")
+        model.dragLane(.leading, translation: 0)
+        XCTAssertEqual(model.draggedLane, .leading)
+        model.endLaneDrag()
+        model.endLaneDrag()
+        XCTAssertEqual(model.laneMode("mail"), before)
+        XCTAssertFalse(model.laneDragging)
+        XCTAssertEqual(saved, 0)
+        model.dragLane(.leading, translation: 0)
+        model.dragLane(.leading, translation: 40)
+        model.dragLane(.trailing, translation: 40)
+        model.endLaneDrag()
+        XCTAssertEqual(model.widths.all, [320, 856, 280])
+        XCTAssertEqual(saved, 1)
+    }
+
+    @MainActor
+    func testHandleDownEndsMaximizeLikeTheDesign() throws {
+        let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        let avail = LaneLayoutEngine.available(screen.width, measure)
+        model.toggleMaximize(.center)
+        model.dragLane(.leading, translation: 0)
+        XCTAssertNil(model.laneMode("mail").maximized)
+        model.dragLane(.leading, translation: 200)
+        model.endLaneDrag()
+        XCTAssertEqual(model.widths.all, [measure.minimum[0], avail - measure.minimum[0] - measure.laneFolded, measure.laneFolded])
+    }
+
+    @MainActor
+    func testDragFromEbbKeepsTrailingFoldedUntilACardOpens() throws {
+        let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        model.stack(empty: true, still: true)
+        model.dragLane(.leading, translation: 0)
+        model.dragLane(.leading, translation: 40)
+        model.endLaneDrag()
+        model.stack(empty: false, still: true)
+        XCTAssertTrue(model.laneMode("mail").folded[2])
+        XCTAssertEqual(model.widths.trailing, measure.laneFolded)
+        model.reveal(.trailing)
+        XCTAssertFalse(model.laneMode("mail").folded[2])
+        XCTAssertEqual(model.widths.all, [320, 856, 280])
+        model.stack(empty: true, still: true)
+        model.reveal(.trailing)
+        model.stepLane(.leading, by: measure.laneFolded)
+        XCTAssertTrue(model.laneMode("mail").folded[2])
+    }
+
+    @MainActor
+    func testAreaLimitsComeFromThePane() throws {
+        let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        XCTAssertEqual(model.minimum, measure.minimum)
+        model.limit("mail", mailLimits)
+        XCTAssertEqual(model.minimum[0], Tokens.Size.mailLaneMinimumLeft)
+        model.dragLane(.leading, translation: 0)
+        model.dragLane(.leading, translation: -40)
+        model.endLaneDrag()
+        XCTAssertEqual(model.widths.leading, 240)
+        model.dragLane(.leading, translation: 0)
+        model.dragLane(.leading, translation: 200)
+        model.endLaneDrag()
+        XCTAssertEqual(model.widths.leading, Tokens.Size.mailLaneMaximumLeft)
+        model.select("settings")
+        XCTAssertEqual(model.minimum, measure.minimum)
+    }
+
+    @MainActor
+    func testWidthsFollowWindowAndNeverFoldAllThree() throws {
+        let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        XCTAssertEqual(model.widths, model.widths)
+        model.resize(BlobSize(width: 1200, height: 800))
+        XCTAssertEqual(model.widths.all.reduce(0, +), LaneLayoutEngine.available(1200, measure))
+        var all = LaneMode(rest: measure.laneRest)
+        all.folded = [true, true, true]
+        XCTAssertEqual(widths(1512, all), [56, LaneLayoutEngine.available(1512, measure) - 112, 56])
     }
 
     @MainActor
@@ -329,8 +414,8 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(CardStackEngine.tops(count: 3), [8, 52, 96])
         XCTAssertEqual(CardStackEngine.tops(count: 5), [8, 16, 60, 104, 148])
         XCTAssertEqual(CardStackEngine.tops(count: 2, start: 0), [0, 44])
-        XCTAssertEqual(CardStackEngine.fannedTops(count: 0), [])
-        XCTAssertEqual(CardStackEngine.fannedTops(count: 4), [0, 52, 104, 156])
+        XCTAssertEqual(CardStackEngine.spreadTops(count: 0), [])
+        XCTAssertEqual(CardStackEngine.spreadTops(count: 4), [0, 52, 104, 156])
         XCTAssertEqual(CardStackEngine.levelIndex(depth: 0), -1)
         XCTAssertEqual(CardStackEngine.levelIndex(depth: 2), 1)
         XCTAssertEqual(CardStackEngine.levelIndex(depth: 9), 4)

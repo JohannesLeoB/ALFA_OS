@@ -2,19 +2,6 @@ import AppKit
 import Design
 import SwiftUI
 
-private struct HintValue: Equatable {
-    let key: String
-    let point: CGPoint
-}
-
-private struct HintPreference: PreferenceKey {
-    static let defaultValue: HintValue? = nil
-
-    static func reduce(value: inout HintValue?, nextValue: () -> HintValue?) {
-        value = value ?? nextValue()
-    }
-}
-
 private struct DwellHint: ViewModifier {
     let key: String
     let focused: Bool
@@ -37,7 +24,7 @@ private struct DwellHint: ViewModifier {
                 case .ended: reset(nil)
                 }
             }
-            .eventMonitor([.leftMouseDown, .rightMouseDown, .keyDown, .scrollWheel], active: pointer != nil || shown != nil) { _ in
+            .eventMonitor([.leftMouseDown, .leftMouseDragged, .rightMouseDown, .keyDown, .scrollWheel], active: pointer != nil || shown != nil) { _ in
                 reset(pointer)
                 return false
             }
@@ -47,7 +34,7 @@ private struct DwellHint: ViewModifier {
                     step()
                 }
             }
-            .preference(key: HintPreference.self, value: shown.map { HintValue(key: key, point: CGPoint(x: place.minX + $0.x, y: place.minY + $0.y)) })
+            .preference(key: HintPreference.self, value: shown.map { HintPreference.Hint(key: key, point: CGPoint(x: place.minX + $0.x, y: place.minY + $0.y)) })
     }
 
     private func step() {
@@ -69,39 +56,8 @@ private struct DwellHint: ViewModifier {
     }
 }
 
-private struct HintLayer: ViewModifier {
-    @Environment(\.appearance) private var appearance
-
-    func body(content: Content) -> some View {
-        content.overlayPreferenceValue(HintPreference.self, alignment: .topLeading) { hint in
-            ZStack(alignment: .topLeading) {
-                if let hint {
-                    appearance.text(hint.key)
-                        .font(.face(Tokens.TextSize.small))
-                        .foregroundStyle(appearance.color(\.onInverse))
-                        .frame(maxWidth: CGFloat(SheetValues.hintMaxWidth), alignment: .leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.vertical, CGFloat(Tokens.Spacing.step4))
-                        .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
-                        .background(RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.field)).fill(appearance.color(\.inverse)))
-                        .fixedSize()
-                        .offset(x: hint.point.x, y: hint.point.y)
-                        .transition(.opacity)
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .allowsHitTesting(false)
-            .animation(appearance.ease(Tokens.Duration.hover), value: hint != nil)
-        }
-    }
-}
-
 extension View {
     func dwellHint(_ key: String, focused: Bool = false) -> some View {
         modifier(DwellHint(key: key, focused: focused))
-    }
-
-    func dwellHintLayer() -> some View {
-        modifier(HintLayer())
     }
 }

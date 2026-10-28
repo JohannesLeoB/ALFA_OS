@@ -14,6 +14,7 @@ BODY = r'[a-z][A-Za-z0-9]*(?:\.[A-Za-z0-9_]+)+'
 CALL = re.compile(r'(?:\b(?:string|text|format|key|LocalizedStringKey|LocalizationValue)\(\s*|\b(?:title|label|action|text|hint|message|help|placeholder)Key\s*[:=]\s*)"(%s)"' % BODY)
 BRANCH = re.compile(r'\?\s*"(%s)"\s*:\s*"(%s)"' % (BODY, BODY))
 CODE_DIRS = ("App", "Sources")
+LITERAL = re.compile(r'"((?:[^"\\\n]|\\.)*)"')
 
 
 def unit(value):
@@ -50,20 +51,26 @@ def read_modules():
     return merged
 
 
-def merge(base, modules):
-    strings = dict(base)
+def merge(base, modules, used):
+    strings = {}
+    for key, item in base.items():
+        if key in modules or key in used:
+            strings[key] = item
+        else:
+            print("pruned %s" % key, file=sys.stderr)
     for key, texts in modules.items():
         if key not in strings:
             strings[key] = entry(texts)
             continue
         for language, text in texts.items():
             current = value_of(strings[key], language)
-            if current is None:
-                item = dict(strings[key])
-                item["localizations"] = dict(item.get("localizations", {}), **{language: unit(text)})
-                strings[key] = item
-            elif current != text:
-                print("kept existing %s text for %s" % (language, key), file=sys.stderr)
+            if current == text:
+                continue
+            if current is not None:
+                print("changed %s text for %s: %s -> %s" % (language, key, current, text), file=sys.stderr)
+            item = dict(strings[key])
+            item["localizations"] = dict(item.get("localizations", {}), **{language: unit(text)})
+            strings[key] = item
     return strings
 
 
@@ -82,6 +89,28 @@ def referenced():
             for key in keys:
                 found.setdefault(key, set()).add(os.path.relpath(path, ROOT))
     return found
+
+
+def literals():
+    exact, prefixes = set(), set()
+    paths = [path for folder in CODE_DIRS for path in glob.glob(os.path.join(ROOT, folder, "**", "*.swift"), recursive=True)]
+    for path in paths + glob.glob(os.path.join(RESOURCES, "*.json")):
+        if path.endswith(".localizable.json"):
+            continue
+        with open(path, encoding="utf-8") as handle:
+            for text in LITERAL.findall(handle.read()):
+                if "\\(" in text:
+                    prefixes.add(text.split("\\(")[0])
+                else:
+                    exact.add(text)
+                    if text.endswith("."):
+                        prefixes.add(text)
+    return exact, {prefix for prefix in prefixes if "." in prefix}
+
+
+def used_keys(base):
+    exact, prefixes = literals()
+    return {key for key in base if key in exact or any(key.startswith(prefix) for prefix in prefixes)}
 
 
 def missing(strings):
@@ -103,7 +132,7 @@ def main(argv):
     options = parser.parse_args(argv)
     base_path = options.legacy or (OUTPUT if os.path.exists(OUTPUT) else None)
     base = read_catalog(base_path) if base_path else {}
-    strings = merge(base, read_modules())
+    strings = merge(base, read_modules(), used_keys(base))
     data = render(strings)
     if options.check:
         current = open(OUTPUT, "rb").read() if os.path.exists(OUTPUT) else b""

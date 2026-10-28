@@ -27,14 +27,15 @@ extension InboxState {
         switch kind {
         case .read:
             let anyUnread = list.contains { !$0.flags.contains(.seen) }
-            for item in list { await setFlag(item.id, .seen, on: anyUnread) }
+            let inlet = selectedInlet
+            for item in list { await setFlag(item.id, .seen, on: anyUnread, in: inlet) }
             picked = []
             post(.bulkRead(count: list.count, read: anyUnread))
         case .archive, .trash:
             let origin = selectedFolder
             var moved: [(id: String, landed: String?, inlet: Inlet.ID)] = []
+            guard let inlet = selectedInlet else { return }
             for item in list {
-                guard let inlet = cardInlet(item.id) ?? selectedInlet else { continue }
                 do {
                     let landed: String?
                     if kind == .archive {
@@ -48,8 +49,8 @@ extension InboxState {
                 }
             }
             let gone = Set(moved.map(\.id))
-            summaries.removeAll { gone.contains($0.id) }
-            for id in gone { close(id) }
+            if selectedInlet == inlet { summaries.removeAll { gone.contains($0.id) } }
+            for id in gone { drop(id, in: inlet) }
             picked = []
             refreshCounts()
             let entries = moved

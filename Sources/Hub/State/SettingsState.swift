@@ -8,6 +8,7 @@ public final class SettingsState {
     public private(set) var cards: [String] = []
     public private(set) var front: String?
     public private(set) var fanned = false
+    public private(set) var opened = 0
     public private(set) var toast: String?
     public private(set) var toastName: String?
     public private(set) var toastSerial = 0
@@ -115,6 +116,7 @@ public final class SettingsState {
         cards = next
         front = id
         fanned = false
+        opened += 1
     }
 
     public func close(_ id: String) {

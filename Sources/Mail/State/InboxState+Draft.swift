@@ -41,7 +41,7 @@ extension InboxState {
 
     @discardableResult
     func reply(to messageID: String, all: Bool = false) async -> UUID? {
-        guard let inlet = cardInlet(messageID) ?? selectedInlet, let summary = summary(messageID) else { return nil }
+        guard let inlet = selectedInlet, let summary = summary(messageID) else { return nil }
         let own = accountAddress(inlet)
         let fromOwn = !own.isEmpty && AddressEngine.email(summary.fromRaw) == own
         let to = fromOwn ? summary.toRaw : summary.fromRaw
@@ -62,7 +62,7 @@ extension InboxState {
 
     @discardableResult
     func forward(_ messageID: String) async -> UUID? {
-        guard let inlet = cardInlet(messageID) ?? selectedInlet, let summary = summary(messageID) else { return nil }
+        guard let inlet = selectedInlet, let summary = summary(messageID) else { return nil }
         let wasPinned = card(messageID)?.pinned ?? false
         pin(messageID)
         guard let attachments = await originalAttachments(messageID, inlet: inlet) else {
@@ -151,7 +151,7 @@ extension InboxState {
 
     @discardableResult
     public func editDraft(_ messageID: String) async -> UUID? {
-        guard let inlet = cardInlet(messageID) ?? selectedInlet else { return nil }
+        guard let inlet = selectedInlet else { return nil }
         let stored: StoredDraft
         do {
             stored = try await outboxPort.loadDraft(inlet, messageID: messageID)
