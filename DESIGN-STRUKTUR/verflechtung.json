@@ -1,0 +1,367 @@
+{
+ "stand": "2026-10-29",
+ "ergebnis": "ungeprüft",
+ "quellen": "E1 = DESIGNCHANNEL e08e524 ‚Design Vollexport 2910 Transfer - Etappe I/‘; BR = brief-werkstatt-2910.zip; Code = ALFA_OS main f22d7bcc",
+ "eintraege": [
+  {
+   "von": "Einstellungen",
+   "an": "Mail",
+   "art": "einstellung",
+   "was": "Ladebereich je Postfach (30 Tage bis alle)",
+   "design": "fehlt (in E1 kein „Laden“ in ALFA Einstellungen.dc.html)",
+   "code": "App/Settings/MailboxRangeRow.swift:12"
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Mail",
+   "art": "einstellung",
+   "was": "Signatur je Postfach",
+   "design": "E1:ALFA Einstellungen.dc.html:254",
+   "code": "fehlt (kein Treffer „signature“ in App/Settings)"
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Mail",
+   "art": "daten",
+   "was": "Kontakte aus Mail in Einstellungen",
+   "design": "E1:ALFA Einstellungen.dc.html:234",
+   "code": "App/Settings/ContactCard.swift:8"
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Assistent",
+   "art": "einstellung",
+   "was": "Datenschutz-Schalter je Kategorie",
+   "design": "E1:ALFA Einstellungen.dc.html:234",
+   "code": "App/Settings/AssistantPrivacy.swift:7"
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Assistent",
+   "art": "daten",
+   "was": "Tagebuch des Assistenten",
+   "design": "E1:ALFA Einstellungen.dc.html:238",
+   "code": "fehlt (kein Treffer „journal“ in App/Settings)"
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Assistent",
+   "art": "daten",
+   "was": "Einstellungen hält Chat-Zustand",
+   "design": "fehlt",
+   "code": "App/Settings/SettingsContext.swift:17"
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Hülle",
+   "art": "einstellung",
+   "was": "Startansicht, App-Sperre, Darstellung",
+   "design": "E1:ALFA Einstellungen.dc.html:235",
+   "code": "App/Settings/AppearanceCard.swift:27"
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Hülle",
+   "art": "daten",
+   "was": "Einstellungen hält Desk-Zustand der Hülle",
+   "design": "fehlt",
+   "code": "App/Settings/SettingsContext.swift:16"
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Hub",
+   "art": "einstellung",
+   "was": "Dienste: Anmeldung, Schlüssel, Abgleich je Bereich",
+   "design": "E1:ALFA Einstellungen.dc.html:314",
+   "code": "App/Settings/SettingsContext.swift:20"
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Hub",
+   "art": "aktion",
+   "was": "Jetzt abgleichen je Dienst und Fähigkeit",
+   "design": "E1:ALFA Einstellungen.dc.html:322",
+   "code": "App/Settings/SettingsContext.swift:22"
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Projekte",
+   "art": "einstellung",
+   "was": "Ordnerschema, Projektordner, Projektdaten-Ziel",
+   "design": "E1:ALFA Einstellungen.dc.html:338",
+   "code": "main:Sources/Hub/Model/SettingsSection.swift:5"
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Projekte",
+   "art": "einstellung",
+   "was": "Firmendaten und Vorlagen als Firmenwerte",
+   "design": "E1:ALFA Einstellungen.dc.html:237",
+   "code": "main:Sources/Hub/Model/SettingsSection.swift:6"
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Werkstatt",
+   "art": "einstellung",
+   "was": "Werkstattfaktoren",
+   "design": "E1:ALFA Einstellungen.dc.html:238",
+   "code": "fehlt (kein Treffer in App/Settings)"
+  },
+  {
+   "von": "Hub",
+   "an": "Mail",
+   "art": "route",
+   "was": "Google: Mail, Kontakte, Dateien mit Abgleich-Takt",
+   "design": "E1:alfa-bausteine.js:37",
+   "code": "main:Sources/Hub/Model/Capability.swift:10"
+  },
+  {
+   "von": "Hub",
+   "an": "Mail",
+   "art": "route",
+   "was": "Mail-Konten (IMAP) als eigener Dienst",
+   "design": "E1:alfa-bausteine.js:38",
+   "code": "main:Sources/Mail/Port/MailboxPort.swift:37"
+  },
+  {
+   "von": "Hub",
+   "an": "Projekte",
+   "art": "route",
+   "was": "Drive-Ordner der Projekte",
+   "design": "E1:ALFA Einstellungen.dc.html:324",
+   "code": "main:Sources/Hub/Port/FilesPort.swift:4"
+  },
+  {
+   "von": "Hub",
+   "an": "Projekte",
+   "art": "route",
+   "was": "Airtable: Projekte",
+   "design": "E1:alfa-bausteine.js:42",
+   "code": "main:Sources/Hub/Model/Capability.swift:14 (projects ohne Fähigkeit)"
+  },
+  {
+   "von": "Hub",
+   "an": "Projekte",
+   "art": "route",
+   "was": "ClickUp: Phasen, Aufgabenfelder",
+   "design": "E1:alfa-bausteine.js:39",
+   "code": "fehlt (kein Projekt-Modul)"
+  },
+  {
+   "von": "Hub",
+   "an": "Assistent",
+   "art": "route",
+   "was": "Claude-Schlüssel",
+   "design": "E1:alfa-bausteine.js:41",
+   "code": "ARCHITECTURE.md:140"
+  },
+  {
+   "von": "Hub",
+   "an": "Assistent",
+   "art": "route",
+   "was": "Werkzeuge nur für verbundene Dienste",
+   "design": "fehlt",
+   "code": "main:App/Shell/ToolShelf.swift:51"
+  },
+  {
+   "von": "Hub",
+   "an": "Assistent",
+   "art": "route",
+   "was": "Mail-Suche über Google",
+   "design": "fehlt",
+   "code": "main:App/Shell/Assembly.swift:137"
+  },
+  {
+   "von": "Hub",
+   "an": "Assistent",
+   "art": "route",
+   "was": "Kalender, Kontakte, Dateien",
+   "design": "fehlt",
+   "code": "main:App/Shell/Assembly.swift:138"
+  },
+  {
+   "von": "Mail",
+   "an": "Hub",
+   "art": "daten",
+   "was": "Postfächer sind Inlets des Hub (12 Dateien in App/Mail, 30 Imports in Sources/Mail)",
+   "design": "fehlt",
+   "code": "main:App/Mail/ProjectFolderList.swift:3"
+  },
+  {
+   "von": "Mail",
+   "an": "Projekte",
+   "art": "aktion",
+   "was": "Mail in Projektordner ablegen",
+   "design": "E1:ALFA Mail.dc.html:829",
+   "code": "main:Sources/Mail/State/InboxState+Files.swift:46"
+  },
+  {
+   "von": "Mail",
+   "an": "Projekte",
+   "art": "aktion",
+   "was": "Datei aus Projekt anhängen",
+   "design": "E1:ALFA Mail.dc.html:890",
+   "code": "main:App/Mail/ProjectFolderList.swift:9"
+  },
+  {
+   "von": "Mail",
+   "an": "Einstellungen",
+   "art": "aktion",
+   "was": "Sprung: Dienste stehen in den Einstellungen",
+   "design": "E1:ALFA Mail.dc.html:380",
+   "code": "fehlt"
+  },
+  {
+   "von": "Hülle",
+   "an": "Mail",
+   "art": "vorgabe",
+   "was": "Hülle per dc-import",
+   "design": "E1:ALFA Mail.dc.html:13",
+   "code": "ARCHITECTURE.md:120"
+  },
+  {
+   "von": "Hülle",
+   "an": "Einstellungen",
+   "art": "vorgabe",
+   "was": "Hülle per dc-import",
+   "design": "E1:ALFA Einstellungen.dc.html:13",
+   "code": "ARCHITECTURE.md:120"
+  },
+  {
+   "von": "Hülle",
+   "an": "Assistent",
+   "art": "vorgabe",
+   "was": "Assistent im Blob",
+   "design": "E1:ALFA Shell.dc.html:89",
+   "code": "main:CLAUDE.md:24"
+  },
+  {
+   "von": "Hülle",
+   "an": "Mail",
+   "art": "vorgabe",
+   "was": "Bestätigen-Bauteil",
+   "design": "E1:ALFA Mail.dc.html:116",
+   "code": "fehlt"
+  },
+  {
+   "von": "Hülle",
+   "an": "Einstellungen",
+   "art": "vorgabe",
+   "was": "Bestätigen-Bauteil",
+   "design": "E1:ALFA Einstellungen.dc.html:87",
+   "code": "fehlt"
+  },
+  {
+   "von": "Grundlage",
+   "an": "Mail",
+   "art": "vorgabe",
+   "was": "Bauteile gemeinsam mit Einstellungen (18) bzw. mit allen (4)",
+   "design": "E1:contract/components.json",
+   "code": "main:App/Components (Shell×22 Imports)"
+  },
+  {
+   "von": "Grundlage",
+   "an": "Einstellungen",
+   "art": "vorgabe",
+   "was": "Bauteile gemeinsam mit Mail (18) bzw. mit allen (4)",
+   "design": "E1:contract/components.json",
+   "code": "main:App/Components"
+  },
+  {
+   "von": "Grundlage",
+   "an": "Hülle",
+   "art": "vorgabe",
+   "was": "Tokens aus contract/ → Resources/tokens.json",
+   "design": "E1:contract/base.tokens.json",
+   "code": "ARCHITECTURE.md:132"
+  },
+  {
+   "von": "Projekte",
+   "an": "Hub",
+   "art": "route",
+   "was": "Ziele Dateiort und Datensatz wählt Firma/Person im Hub",
+   "design": "BR:01-projekte.md:11",
+   "code": "main:CLAUDE.md:25"
+  },
+  {
+   "von": "Projekte",
+   "an": "Mail",
+   "art": "daten",
+   "was": "Mail, Kontakte, Termine des Projekts",
+   "design": "BR:01-projekte.md:98",
+   "code": "fehlt"
+  },
+  {
+   "von": "Projekte",
+   "an": "Mail",
+   "art": "aktion",
+   "was": "Lead aus Mail anlegen (offen)",
+   "design": "BR:01-projekte.md:145",
+   "code": "fehlt"
+  },
+  {
+   "von": "Projekte",
+   "an": "Einstellungen",
+   "art": "einstellung",
+   "was": "Vorschau vor dem Schreiben als Einstellung",
+   "design": "BR:01-projekte.md:86",
+   "code": "fehlt"
+  },
+  {
+   "von": "Projekte",
+   "an": "Einstellungen",
+   "art": "einstellung",
+   "was": "Ordnername und Ordnerbaum als Firmenwert",
+   "design": "BR:01-projekte.md:76",
+   "code": "fehlt"
+  },
+  {
+   "von": "Werkstatt",
+   "an": "Projekte",
+   "art": "daten",
+   "was": "Aufmaß, Atelier, Konfigurator, Bemusterung, Moodboard hängen an einem Projekt",
+   "design": "BR:00-LIES-MICH.md:74",
+   "code": "fehlt"
+  },
+  {
+   "von": "Werkstatt",
+   "an": "Hub",
+   "art": "route",
+   "was": "Aufmaß: Foto aus Projektordner, Ablage unter 01 INFOS/01 Pläne",
+   "design": "BR:03-aufmass.md:96",
+   "code": "fehlt"
+  },
+  {
+   "von": "Werkstatt",
+   "an": "Projekte",
+   "art": "aktion",
+   "was": "Bemusterung: Checkout als Muster-Entwurf ins Projekt",
+   "design": "BR:02-bemusterung.md:48",
+   "code": "fehlt"
+  },
+  {
+   "von": "Werkstatt",
+   "an": "Hub",
+   "art": "route",
+   "was": "Moodboard: Papers-Katalog aus Airtable, Ordner 03 PRÄSENTATION",
+   "design": "BR:07-moodboard.md:14",
+   "code": "fehlt"
+  },
+  {
+   "von": "Werkstatt",
+   "an": "Projekte",
+   "art": "daten",
+   "was": "Plan: Projekt optional",
+   "design": "BR:06-plan.md:9",
+   "code": "fehlt"
+  },
+  {
+   "von": "Werkstatt",
+   "an": "Einstellungen",
+   "art": "einstellung",
+   "was": "Firmenwerte (Ordnernamen, Materialpalette, Vorlagen) kommen aus Firmenkonfiguration",
+   "design": "BR:00-LIES-MICH.md:68",
+   "code": "fehlt"
+  }
+ ]
+}
