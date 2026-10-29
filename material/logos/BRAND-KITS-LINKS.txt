@@ -1,0 +1,33 @@
+BRAND-KITS für T5 (Logos statt Kürzel im Ring) · 28.10.2026
+Ablage nach dem Download: uploads/logos/<dienst>/ (ZIP so lassen, Design entpackt)
+Gebraucht je Dienst: das Zeichen allein (Symbol, quadratisch), möglichst SVG, hell und dunkel.
+
+1 GOOGLE (Gmail, Google Drive, Google Kalender, Google Kontakte, Anmeldung)
+  Logos und Icons (offiziell): https://about.google/brand-resource-center/logos-list/
+  dort einzeln: Gmail, Google Drive, Google Calendar, G
+  Hinweis: Google hat im Mai 2026 neue Workspace-Icons eingeführt
+  (https://workspaceupdates.googleblog.com/2026/05/introducing-fresh-visual-identity-for-Google-Workspace-app-icons.html).
+  Bitte die neuen nehmen, wenn die Seite sie schon anbietet.
+
+2 CLICKUP
+  Brand Kit (offiziell): https://clickup.com/brand  → „Brand Kit“ herunterladen
+
+3 AIRTABLE
+  Newsroom → Brand assets (offiziell): https://www.airtable.com/newsroom
+  Regeln zur Nutzung: https://www.airtable.com/company/trademark-guidelines
+
+4 SEVDESK
+  Presse → Pressekit (offiziell): https://sevdesk.de/presse/
+
+5 CLAUDE / ANTHROPIC
+  Newsroom → Media assets → „Download press kit“: https://www.anthropic.com/news
+  Gleicher Satz bei Anthropic: https://brandfolder.com/anthropic/newsroom
+
+6 HAPPA HAPPA (Speiseplan, Konkaapps-API)
+  Kein Brand Kit gefunden. Die Konkaapps-App heißt im Play Store „Mein Mittagstisch“
+  (https://play.google.com/store/apps/details?id=de.konkaapps.mittagstisch.stan).
+  Ob „Happa Happa“ der Name der Kantine ist: Logo bitte vom Betreiber der Kantine.
+
+SCHON IM PROJEKT (material/icons/, in Dienste/Einstellungen/Widgets eingebaut)
+  Clockodo (clockodo.png), DHL (dhl.svg), monday (monday.svg).
+  Herkunft der Dateien unbekannt; wer sicher gehen will, auch hier das Original vom Anbieter.

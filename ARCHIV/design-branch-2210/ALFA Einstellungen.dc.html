@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="alfa-export" content="2026-10-19">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+<dc-import name="ALFA Shell" area="{{ area }}" appearance="{{ licht }}" ground="{{ shGrund }}" typeface="{{ shSchrift }}" lock="{{ appLock }}" handle="{{ shGriff }}" window="{{ fenster }}" window-width="{{ breite }}" window-height="{{ hoehe }}" w="{{ wArr }}" lanes="{{ lanes }}" slow="{{ slow }}" maxed="{{ maxed }}" groups="{{ groups }}" badges="{{ badges }}" dot="{{ shDot }}" sync-state="{{ syncState }}" sync-title="{{ syncTitle }}" sync-err="{{ syncErr }}" me-ini="{{ meIni }}" assist-text="{{ assistText }}" assistant-face="{{ shAssistFace }}" search-path="{{ searchD }}" visible-lanes="{{ laneSet }}" on-choose="{{ onChoose }}" on-mode="{{ onMode }}" on-mem="{{ onMem }}" on-grow="{{ onGrow }}" on-sync="{{ onSync }}" on-root-down="{{ rootDown }}" hint-size="100%,100%">
+<div data-slot="0" style="display:contents">
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ false }}">
+<header data-part="lane-header" data-id="settings.lane-header" style="position:relative;z-index:1;flex:none;height:var(--spacing-step44);display:flex;align-items:center;gap:var(--spacing-step8);padding:0 var(--spacing-step8) 0 var(--spacing-step16);box-sizing:border-box;min-width:0"><i data-part="scroll-line" data-id="settings.scroll-line" style="position:absolute;left:0;right:0;bottom:0;height:var(--size-hairline);background:var(--c-line);opacity:{{ L.edgeOp }};transition:{{ L.edgeTr }};pointer-events:none"></i>
+<sc-if value="{{ L.hasTitle }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font-weight:var(--typography-weight-medium);white-space:nowrap">{{ L.title }}</span></sc-if>
+<span title="{{ L.detail }}" style="flex:1;min-width:0;font-size:var(--typography-size-small);color:{{ L.detailFg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ L.detail }}</span>
+<sc-for list="{{ L.buttons }}" as="x" hint-placeholder-count="1"><button data-part="symbol-button" data-id="settings.symbol-button" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:var(--radius-capsule);display:grid;place-items:center;gap:var(--spacing-step8);background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:{{ iconRing }};transition:color var(--motion-duration-hover),box-shadow var(--motion-duration-hover)" style-hover="color:var(--c-ink);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-ink-3)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</header>
+<div data-part="lane-content" data-id="settings.lane-content" onScroll="{{ L.onScroll }}" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding:var(--spacing-step8);display:flex;flex-direction:column;scrollbar-width:none">
+<sc-for list="{{ L.rows }}" as="r" hint-placeholder-count="8">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" data-id="settings.list-section-header" style="flex:none;height:var(--spacing-step32);display:flex;align-items:flex-end;padding:0 var(--spacing-step8) var(--spacing-step8);box-sizing:border-box;font-size:var(--typography-size-small);color:var(--c-ink-3)">{{ r.name }}</div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="list-row" data-id="settings.list-row" data-state="{{ r.state }}" onClick="{{ r.go }}" title="{{ r.name }}" style="flex:none;height:var(--spacing-step36);display:flex;align-items:center;gap:var(--spacing-step20);padding:0 var(--spacing-step8);border-radius:var(--radius-row);cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};transition:background var(--motion-duration-hover)" style-hover="box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)">
+<span data-part="mark" data-id="settings.mark" style="flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:50%;display:grid;place-items:center;color:{{ r.symFg }};background:{{ r.symBg }};box-shadow:{{ r.symRing }};font:var(--typography-weight-medium) var(--typography-size-small)/1 var(--typography-family-text);letter-spacing:var(--typography-tracking-mark)"><sc-if value="{{ r.isSym }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.d }}"></path></svg></sc-if><sc-if value="{{ r.isMood }}" hint-placeholder-val="{{ false }}">{{ r.moodT }}</sc-if></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.weight }}">{{ r.name }}</span>
+<sc-if value="{{ r.hasN }}" hint-placeholder-val="{{ false }}"><span data-part="counter" data-id="settings.counter" style="flex:none;min-width:var(--spacing-step20);height:var(--spacing-step20);box-sizing:border-box;padding:0 var(--spacing-step4);border-radius:var(--radius-capsule);display:inline-grid;place-items:center;font-size:var(--typography-size-small);line-height:1;font-variant-numeric:tabular-nums;color:{{ r.nFg }}">{{ r.n }}</span></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<div data-slot="1" style="display:contents">
+<sc-if value="{{ isMain }}" hint-placeholder-val="{{ false }}">
+<header data-part="lane-header" data-id="settings.lane-header-2" style="position:relative;z-index:1;flex:none;height:var(--spacing-step44);display:flex;align-items:center;gap:var(--spacing-step8);padding:0 var(--spacing-step8) 0 var(--spacing-step16);box-sizing:border-box;min-width:0"><i data-part="scroll-line" data-id="settings.scroll-line-2" style="position:absolute;left:0;right:0;bottom:0;height:var(--size-hairline);background:var(--c-line);opacity:{{ C.edgeOp }};transition:{{ C.edgeTr }};pointer-events:none"></i>
+<sc-if value="{{ C.searchClosed }}" hint-placeholder-val="{{ true }}">
+<span style="flex:none;font-weight:var(--typography-weight-medium);white-space:nowrap">{{ C.title }}</span>
+<sc-if value="{{ C.hasCount }}" hint-placeholder-val="{{ false }}"><span data-part="counter" data-id="settings.counter-2" style="flex:none;min-width:var(--spacing-step20);height:var(--spacing-step20);box-sizing:border-box;padding:0 var(--spacing-step4);border-radius:var(--radius-capsule);display:inline-grid;place-items:center;font-size:var(--typography-size-small);line-height:1;font-variant-numeric:tabular-nums;color:var(--c-ink-3)">{{ C.count }}</span></sc-if>
+<span style="flex:1"></span>
+</sc-if>
+<sc-for list="{{ C.tools }}" as="x" hint-placeholder-count="2">
+<button data-part="{{ x.part }}" data-state="{{ x.state }}" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:var(--spacing-step28);min-width:var(--spacing-step28);padding:{{ x.pad }};border-radius:var(--radius-capsule);display:flex;align-items:center;justify-content:center;gap:var(--spacing-step8);font:inherit;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;white-space:nowrap"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.text }}</span></sc-if></button>
+</sc-for>
+</header>
+<sc-if value="{{ C.tilesOn }}" hint-placeholder-val="{{ false }}"><div data-part="settings-tiles" data-id="settings.settings-tiles" onScroll="{{ C.onTilesScroll }}" style="flex:1;min-height:0;overflow-y:auto;container-type:size;scroll-snap-type:y mandatory;scroll-padding-top:var(--spacing-step8);padding:var(--spacing-step8);display:flex;flex-direction:column;gap:var(--spacing-step12);scrollbar-width:thin"><sc-for list="{{ C.tileGroups }}" as="g" hint-placeholder-count="4"><div data-part="tile-group" data-id="settings.tile-group" data-name="{{ g.name }}" style="display:flex;flex-direction:column;gap:{{ g.gapV }};flex:none;min-height:{{ g.minH }}"><div style="height:{{ g.labelH }};overflow:hidden;display:flex;align-items:flex-end;padding:0 var(--spacing-step8);font-size:var(--typography-size-small);color:var(--c-ink-3);opacity:{{ g.labelOp }};transition:opacity var(--motion-duration-hover) var(--motion-easing-standard)">{{ g.name }}</div><div data-part="tile-grid" data-id="settings.tile-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--size-settingsTileMinWidth),1fr));gap:var(--spacing-step8)"><sc-for list="{{ g.tiles }}" as="t" hint-placeholder-count="3"><div data-part="settings-tile" data-id="settings.settings-tile" data-state="{{ t.state }}" onClick="{{ t.go }}" title="{{ t.name }}" style="scroll-snap-align:start;height:var(--size-settingsTileHeight);box-sizing:border-box;padding:var(--spacing-step8);border-radius:var(--radius-row);display:flex;flex-direction:column;justify-content:space-between;background:{{ t.bg }};color:{{ t.fg }};cursor:pointer;transition:box-shadow var(--motion-duration-hover) var(--motion-easing-standard),transform var(--motion-duration-hover) var(--motion-easing-standard)" style-hover="box-shadow:var(--sh-overviewHover);transform:translateY(calc(var(--size-tileHoverLift) * -1))" style-active="transform:scale(.98)"><span style="width:var(--spacing-step28);height:var(--spacing-step28);border-radius:50%;display:grid;place-items:center;overflow:hidden;background:{{ t.markBg }};box-shadow:inset 0 0 0 var(--size-hairline) {{ t.markRing }};font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-mark)"><sc-if value="{{ t.hasLogo }}" hint-placeholder-val="{{ false }}"><i role="img" aria-label="{{ t.name }}" style="display:block;width:var(--size-tileLogoSize);height:var(--size-tileLogoSize);background-position:center;background-size:contain;background-repeat:no-repeat;background-image:{{ t.logoUrl }}"></i></sc-if><sc-if value="{{ t.noLogo }}" hint-placeholder-val="{{ true }}">{{ t.ini }}</sc-if></span><span style="display:flex;flex-direction:column;gap:var(--spacing-step2);min-width:0"><span style="font-weight:var(--typography-weight-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.name }}</span><span style="font-size:var(--typography-size-small);color:{{ t.subFg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.sub }}</span></span></div></sc-for></div></div></sc-for></div></sc-if>
+<sc-if value="{{ C.hasRows }}" hint-placeholder-val="{{ true }}">
+<div data-part="lane-content" data-id="settings.lane-content-2" onScroll="{{ C.onScroll }}" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding:var(--spacing-step8);display:flex;flex-direction:column;scrollbar-width:thin">
+<sc-if value="{{ C.hasProfile }}" hint-placeholder-val="{{ false }}"><div data-part="profile-tile" data-id="settings.profile-tile" data-state="{{ C.profile.state }}" onClick="{{ C.profile.go }}" style="flex:none;margin-bottom:var(--spacing-step8);padding:var(--spacing-step16);border-radius:var(--radius-row);background:{{ C.profile.bg }};color:{{ C.profile.fg }};display:flex;flex-direction:column;gap:var(--spacing-step16);cursor:pointer" style-active="transform:scale(.99)">
+<div style="display:flex;align-items:center;gap:var(--spacing-step16);min-width:0"><span data-part="mark" data-id="settings.profile-mark" style="flex:none;width:var(--spacing-step56);height:var(--spacing-step56);border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 var(--size-hairline) {{ C.profile.ring }};font-size:var(--typography-size-title);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-mark)">{{ C.profile.ini }}</span><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--spacing-step2)"><span style="font-size:var(--typography-size-title);line-height:var(--typography-lineHeight-heading);font-weight:var(--typography-weight-medium);overflow-wrap:anywhere">{{ C.profile.name }}</span><span style="color:{{ C.profile.fg3 }}">{{ C.profile.role }}</span></span><button data-part="text-button" data-id="settings.text-button.profile-pick" onClick="{{ C.profile.pick }}" style="appearance:none;border:0;flex:none;height:var(--spacing-step28);padding:0 var(--spacing-step12);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);background:transparent;color:inherit;box-shadow:inset 0 0 0 var(--size-hairline) {{ C.profile.ring }};cursor:pointer">Bild wählen</button></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:var(--spacing-step12) var(--spacing-step16)"><sc-for list="{{ C.profile.facts }}" as="f" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:var(--spacing-step2);min-width:0"><span style="font-size:var(--typography-size-small);color:{{ C.profile.fg3 }}">{{ f.k }}</span><span style="overflow-wrap:anywhere">{{ f.v }}</span></div></sc-for></div>
+<div style="display:flex;flex-direction:column;gap:var(--spacing-step2);min-width:0"><span style="font-size:var(--typography-size-small);color:{{ C.profile.fg3 }}">Adressen</span><sc-for list="{{ C.profile.adr }}" as="a" hint-placeholder-count="1"><span style="overflow-wrap:anywhere">{{ a }}</span></sc-for></div>
+</div></sc-if>
+<sc-for list="{{ C.rows }}" as="r" hint-placeholder-count="6">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" data-id="settings.list-section-header-2" style="flex:none;height:var(--spacing-step32);display:flex;align-items:flex-end;padding:0 var(--spacing-step8) var(--spacing-step8);box-sizing:border-box;font-size:var(--typography-size-small);color:var(--c-ink-3)">{{ r.name }}</div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="message-row" data-id="settings.message-row" data-state="{{ r.state }}" onClick="{{ r.go }}" onDoubleClick="{{ r.dbl }}" onContextMenu="{{ r.ctx }}" onPointerEnter="{{ r.enter }}" onPointerLeave="{{ r.leave }}" style="position:relative;flex:none;display:flex;gap:var(--spacing-step20);padding:var(--spacing-step12) var(--spacing-step8);border-radius:var(--radius-row);cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};box-shadow:{{ r.ring }};transition:background var(--motion-duration-hover),box-shadow var(--motion-duration-hover)">
+<span data-part="mark" data-id="settings.mark.mark-go" data-state="{{ r.markState }}" title="{{ r.markTip }}" onClick="{{ r.markGo }}" style="flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:50%;display:grid;place-items:center;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);font-family:inherit;letter-spacing:var(--typography-tracking-mark);background:{{ r.mBg }};color:{{ r.mFg }};box-shadow:{{ r.mRing }};transition:background var(--motion-duration-hover),color var(--motion-duration-hover),box-shadow var(--motion-duration-hover)"><sc-if value="{{ r.picked }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"></path></svg></sc-if><sc-if value="{{ r.markSym }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ personD }}"></path></svg></sc-if><sc-if value="{{ r.markText }}" hint-placeholder-val="{{ true }}">{{ r.mark }}</sc-if></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;padding-top:var(--spacing-step4);line-height:var(--typography-lineHeight-notice)">
+<div style="display:flex;align-items:center;gap:var(--spacing-step8);height:var(--spacing-step20);min-width:0">
+<span dir="auto" title="{{ r.addr }}" style="min-width:0;font-weight:{{ r.wS }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.sender }}</span>
+<span style="flex:1"></span>
+<sc-if value="{{ r.hasCs }}" hint-placeholder-val="{{ false }}">
+<span data-part="connection-status" data-id="settings.connection-status" data-state="{{ r.cs.state }}" style="flex:none;display:flex;align-items:center;gap:var(--spacing-step8);font-size:var(--typography-size-small);color:{{ r.cs.fg }};white-space:nowrap">
+<span style="position:relative;flex:none;width:var(--spacing-step8);height:var(--spacing-step8);border-radius:50%;box-sizing:border-box;background:{{ r.cs.fill }};border:{{ r.cs.border }}"><sc-if value="{{ r.cs.spin }}" hint-placeholder-val="{{ false }}"><svg data-spin="1" width="14" height="14" viewBox="0 0 14 14" style="position:absolute;left:calc(var(--spacing-step4) * -1);top:calc(var(--spacing-step4) * -1)"><circle cx="7" cy="7" r="6" fill="none" stroke="currentColor" stroke-width="1.3" pathLength="1" stroke-dasharray=".3 .7" stroke-linecap="round"></circle></svg></sc-if></span>
+<span>{{ r.cs.text }}</span>
+</span>
+</sc-if>
+<span style="flex:none;font-size:var(--typography-size-small);color:{{ r.c3 }};font-variant-numeric:tabular-nums;white-space:nowrap;opacity:{{ r.dateOp }}">{{ r.date }}</span>
+</div>
+<div dir="auto" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:{{ r.subFg }};font-weight:{{ r.wSub }}">{{ r.subject }}</div>
+</div>
+<sc-if value="{{ r.sep }}" hint-placeholder-val="{{ true }}"><i style="position:absolute;left:var(--spacing-step56);right:var(--spacing-step8);bottom:0;height:var(--size-hairline);background:var(--c-line)"></i></sc-if>
+</div>
+</sc-if>
+</sc-for>
+<div aria-hidden="true" style="flex:none;height:{{ C.spacerH }}"></div>
+<sc-if value="{{ C.hasMore }}" hint-placeholder-val="{{ false }}"><div style="flex:none;display:flex;justify-content:center;padding:var(--spacing-step16) 0 var(--spacing-step8)"><button data-part="text-button" data-id="settings.text-button.load-more" style-active="transform:scale(.96)" onClick="{{ C.loadMore }}" style="appearance:none;border:0;height:var(--spacing-step28);padding:0 var(--spacing-step12);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-control);background:transparent;color:var(--c-ink-2);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong);cursor:pointer">{{ C.moreText }}</button></div></sc-if>
+</div>
+</sc-if>
+</sc-if>
+</div>
+<div data-slot="2" style="display:contents">
+<sc-if value="{{ isStack }}" hint-placeholder-val="{{ false }}">
+<header data-part="lane-header" data-id="settings.lane-header-3" data-state="{{ HB.state }}" style="flex:none;height:var(--spacing-step44);display:flex;align-items:center;gap:var(--spacing-step4);padding:0 var(--spacing-step8);box-shadow:inset 0 calc(var(--size-hairline) * -1) 0 transparent;box-sizing:border-box;min-width:0">
+<div data-part="command-group" data-id="settings.command-group" style="flex:none;display:flex;align-items:center;gap:var(--spacing-step4)"><sc-for list="{{ HB.main }}" as="x" hint-placeholder-count="0"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" data-id="settings.divider" style="flex:none;width:var(--size-hairline);height:var(--spacing-step20);margin:0 var(--spacing-step4);background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:var(--spacing-step28);width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:var(--radius-capsule);display:flex;align-items:center;justify-content:center;gap:var(--spacing-step8);font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background var(--motion-duration-hover),color var(--motion-duration-hover)" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if><sc-if value="{{ x.isPill }}" hint-placeholder-val="{{ false }}"><dc-import name="ALFA Bestaetigen" start="frage" d="{{ x.d }}" label="{{ x.label }}" question="{{ x.frage }}" confirm-label="{{ x.ja }}" progress="{{ false }}" on-confirm="{{ x.onJa }}" on-cancel="{{ x.onNein }}" hint-size="260px,28px"></dc-import></sc-if></sc-for></div>
+<span style="flex:1;min-width:0;padding:0 var(--spacing-step4);font-size:var(--typography-size-small);color:{{ HB.hintFg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ HB.hint }}</span>
+<div data-part="command-group" data-id="settings.command-group-2" style="flex:none;display:flex;align-items:center;gap:var(--spacing-step4)"><sc-for list="{{ HB.end }}" as="x" hint-placeholder-count="0"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" data-id="settings.divider-2" style="flex:none;width:var(--size-hairline);height:var(--spacing-step20);margin:0 var(--spacing-step4);background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:var(--spacing-step28);width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:var(--radius-capsule);display:flex;align-items:center;justify-content:center;gap:var(--spacing-step8);font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background var(--motion-duration-hover),color var(--motion-duration-hover)" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if><sc-if value="{{ x.isPill }}" hint-placeholder-val="{{ false }}"><dc-import name="ALFA Bestaetigen" start="frage" d="{{ x.d }}" label="{{ x.label }}" question="{{ x.frage }}" confirm-label="{{ x.ja }}" progress="{{ false }}" on-confirm="{{ x.onJa }}" on-cancel="{{ x.onNein }}" hint-size="260px,28px"></dc-import></sc-if></sc-for></div>
+</header>
+<div data-part="card-stack" data-id="settings.card-stack" data-state="{{ S.state }}" style="position:relative;flex:1;min-height:0">
+<sc-if value="{{ HB.empty }}" hint-placeholder-val="{{ false }}"><div data-part="card" data-id="settings.card" data-state="empty" aria-label="Leere Karte" style="position:absolute;inset:0;border-radius:var(--radius-card);background:var(--c-lane);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line)"></div></sc-if>
+<sc-for list="{{ S.cards }}" as="c" hint-placeholder-count="3">
+<article data-part="card" data-id="settings.card-2" data-state="{{ c.state }}" onClick="{{ c.go }}" onPointerEnter="{{ c.enter }}" onPointerLeave="{{ c.leave }}" style="position:absolute;left:{{ c.inset }};right:{{ c.inset }};top:{{ c.top }};height:{{ c.h }};z-index:{{ c.z }};transform:{{ c.tf }};background-color:{{ c.bg }};background-image:{{ c.sheen }};backdrop-filter:{{ c.blur }};-webkit-backdrop-filter:{{ c.blur }};opacity:{{ c.vis }};pointer-events:{{ c.pe }};color:{{ c.fg }};border-radius:0;box-shadow:{{ c.sh }};overflow:hidden;display:flex;flex-direction:column;transition:{{ stackTrans }};cursor:{{ c.cursor }}">
+
+
+<sc-if value="{{ c.isSet }}" hint-placeholder-val="{{ false }}">
+<div data-part="card-content" data-id="settings.card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;display:flex;flex-direction:column;padding:var(--spacing-step4) 0 var(--spacing-step8);scrollbar-width:thin">
+<sc-for list="{{ SB.blocks }}" as="b" hint-placeholder-count="5">
+<sc-if value="{{ b.isHero }}" hint-placeholder-val="{{ false }}"><div data-part="service-hero" data-id="settings.service-hero" style="flex:none;display:flex;align-items:center;gap:var(--spacing-step16);padding:var(--spacing-step4) var(--spacing-step16) var(--spacing-step12)"><span style="flex:none;width:var(--spacing-step56);height:var(--spacing-step56);border-radius:var(--radius-contextMenu);display:grid;place-items:center;overflow:hidden;background:{{ b.bg }};box-shadow:{{ b.ring }};font-size:var(--typography-size-title);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-title)"><sc-if value="{{ b.hasLogo }}" hint-placeholder-val="{{ false }}"><span role="img" aria-label="{{ b.name }}" style="display:block;width:{{ b.lw }};height:{{ b.lw }};background-image:{{ b.logoUrl }};background-size:contain;background-repeat:no-repeat;background-position:center"></span></sc-if><sc-if value="{{ b.noLogo }}" hint-placeholder-val="{{ true }}">{{ b.ini }}</sc-if></span><span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--spacing-step2)"><span style="font-size:var(--typography-size-title);line-height:var(--typography-lineHeight-heading);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-title);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.name }}</span><span style="font-size:var(--typography-size-small);line-height:var(--typography-lineHeight-small);color:var(--c-ink-3);text-wrap:pretty">{{ b.use }}</span></span></div></sc-if>
+<sc-if value="{{ b.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" data-id="settings.list-section-header-3" style="flex:none;height:var(--spacing-step36);display:flex;align-items:flex-end;padding:0 var(--spacing-step16) var(--spacing-step8);box-sizing:border-box;font-size:var(--typography-size-small);color:var(--c-ink-3)">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isNote }}" hint-placeholder-val="{{ false }}"><div style="flex:none;padding:var(--spacing-step8) var(--spacing-step16);font-size:var(--typography-size-small);line-height:var(--typography-lineHeight-small);color:var(--c-ink-3);text-wrap:pretty">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isNotice }}" hint-placeholder-val="{{ false }}">
+<div data-part="card-notice" data-id="settings.card-notice" data-state="{{ b.kind }}" style="flex:none;display:flex;gap:var(--spacing-step20);margin:var(--spacing-step4) var(--spacing-step8);padding:var(--spacing-step8);border-radius:var(--radius-notice);background:var(--c-well)">
+<span style="flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:50%;display:grid;place-items:center;color:{{ b.fg }};box-shadow:inset 0 0 0 var(--size-hairline) {{ b.fg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ b.d }}"></path></svg></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--spacing-step2);padding-top:var(--spacing-step4);line-height:var(--typography-lineHeight-notice)"><span style="font-weight:var(--typography-weight-medium);text-wrap:pretty">{{ b.title }}</span><span style="color:var(--c-ink-3);text-wrap:pretty">{{ b.text }}</span>
+<sc-if value="{{ b.hasBtns }}" hint-placeholder-val="{{ false }}"><span style="display:flex;gap:var(--spacing-step8);margin-top:var(--spacing-step8)"><sc-for list="{{ b.btns }}" as="x" hint-placeholder-count="1"><button data-part="text-button" data-id="settings.text-button" style-active="transform:scale(.96)" data-state="{{ x.state }}" onClick="{{ x.go }}" style="appearance:none;border:0;height:var(--spacing-step28);padding:0 var(--spacing-step12);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-control);background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;white-space:nowrap">{{ x.label }}</button></sc-for></span></sc-if>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ b.isArea }}" hint-placeholder-val="{{ false }}"><div data-part="signature-editor" style="flex:none;padding:var(--spacing-step4) var(--spacing-step16) var(--spacing-step8)"><textarea aria-label="{{ b.label }}" value="{{ b.val }}" onChange="{{ b.onIn }}" spellcheck="false" style="display:block;width:100%;box-sizing:border-box;min-height:var(--size-signatureEditorMinHeight);resize:vertical;border:0;outline:none;border-radius:var(--radius-notice);padding:var(--spacing-step8) var(--spacing-step12);background:var(--c-well);color:var(--c-ink);font:inherit;line-height:var(--typography-lineHeight-notice)"></textarea></div></sc-if>
+<sc-if value="{{ b.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="field-row" data-id="settings.field-row" data-state="{{ b.state }}" style="position:relative;flex:none;min-height:var(--spacing-step44);display:flex;align-items:center;gap:var(--spacing-step12);padding:var(--spacing-step8) var(--spacing-step8) var(--spacing-step8) var(--spacing-step16);box-sizing:border-box">
+<div style="flex:1 1 0;min-width:var(--size-fieldLabelMinWidth);display:flex;flex-direction:column">
+<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.label }}</span>
+<sc-if value="{{ b.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:var(--typography-size-small);line-height:var(--typography-lineHeight-small);color:var(--c-ink-3);text-wrap:pretty;font-variant-numeric:tabular-nums">{{ b.sub }}</span></sc-if>
+</div>
+<sc-if value="{{ b.hasCs }}" hint-placeholder-val="{{ false }}">
+<span data-part="connection-status" data-id="settings.connection-status-2" data-state="{{ b.cs.state }}" style="flex:none;display:flex;align-items:center;gap:var(--spacing-step8);font-size:var(--typography-size-small);color:{{ b.cs.fg }};white-space:nowrap">
+<span style="position:relative;flex:none;width:var(--spacing-step8);height:var(--spacing-step8);border-radius:50%;box-sizing:border-box;background:{{ b.cs.fill }};border:{{ b.cs.border }}"><sc-if value="{{ b.cs.spin }}" hint-placeholder-val="{{ false }}"><svg data-spin="1" width="14" height="14" viewBox="0 0 14 14" style="position:absolute;left:calc(var(--spacing-step4) * -1);top:calc(var(--spacing-step4) * -1)"><circle cx="7" cy="7" r="6" fill="none" stroke="currentColor" stroke-width="1.3" pathLength="1" stroke-dasharray=".3 .7" stroke-linecap="round"></circle></svg></sc-if></span>
+<span style="padding-right:var(--spacing-step12)">{{ b.cs.text }}</span>
+</span>
+</sc-if>
+<sc-if value="{{ b.hasInput }}" hint-placeholder-val="{{ false }}"><input type="{{ b.inType }}" value="{{ b.inVal }}" placeholder="{{ b.ph }}" onChange="{{ b.onIn }}" aria-label="{{ b.label }}" autocomplete="off" spellcheck="false" style="flex:1 1 0;min-width:0;max-width:60%;height:var(--spacing-step28);border:0;outline:none;background:transparent;color:var(--c-ink);font:inherit;text-align:right;padding:0 var(--spacing-step12) 0 0"></input></sc-if>
+<sc-if value="{{ b.hasVal }}" hint-placeholder-val="{{ false }}"><span style="flex:0 1 auto;min-width:0;max-width:60%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:var(--spacing-step12);color:{{ b.vFg }};font-family:{{ b.vFont }};font-size:{{ b.vSize }}">{{ b.val }}</span></sc-if>
+<sc-if value="{{ b.hasKeys }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:var(--spacing-step4)"><sc-for list="{{ b.keys }}" as="k" hint-placeholder-count="2"><kbd style="min-width:var(--spacing-step20);height:var(--spacing-step20);box-sizing:border-box;padding:0 var(--spacing-step4);border-radius:var(--radius-field);display:inline-grid;place-items:center;font:var(--typography-weight-medium) var(--typography-size-small)/1 inherit;color:var(--c-ink-2);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)">{{ k.k }}</kbd></sc-for></span></sc-if>
+<sc-if value="{{ b.hasPill }}" hint-placeholder-val="{{ false }}"><button data-part="choice" data-id="settings.choice.pill-go" onClick="{{ b.pillGo }}" title="{{ b.pill }}" style="appearance:none;border:0;flex:0 1 auto;min-width:0;max-width:60%;height:var(--spacing-step28);padding:0 var(--spacing-step8) 0 var(--spacing-step12);border-radius:var(--radius-capsule);display:flex;align-items:center;gap:var(--spacing-step8);font:inherit;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong);cursor:pointer;white-space:nowrap"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis">{{ b.pill }}</span><svg style="flex:none" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+<sc-if value="{{ b.hasSeg }}" hint-placeholder-val="{{ false }}"><div data-part="segmented-control" data-id="settings.segmented-control" style="flex:none;display:flex;padding:var(--spacing-step2);border-radius:var(--radius-capsule);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)"><sc-for list="{{ b.seg }}" as="o" hint-placeholder-count="3"><button data-part="option" data-id="settings.option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:var(--spacing-step24);padding:0 var(--spacing-step8);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-control);background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap">{{ o.n }}</button></sc-for></div></sc-if>
+<sc-if value="{{ b.hasConfirm }}" hint-placeholder-val="{{ false }}"><span style="position:relative;flex:none;width:var(--size-confirmPillWidth);height:var(--spacing-step28);display:block;margin-right:calc(var(--size-confirmPillOffset) * -1)"><dc-import name="ALFA Bestaetigen" d="{{ b.cd }}" label="{{ b.cl }}" question="{{ b.cq }}" confirm-label="{{ b.cl }}" progress="{{ false }}" on-confirm="{{ b.onCq }}" on-cancel="{{ b.onCn }}" hint-size="96px,28px"></dc-import></span></sc-if><sc-if value="{{ b.hasToggle }}" hint-placeholder-val="{{ false }}"><button data-part="toggle" data-id="settings.toggle.toggle" data-state="{{ b.tState }}" aria-label="{{ b.label }}" onClick="{{ b.toggle }}" style="appearance:none;border:0;padding:0;flex:none;position:relative;width:var(--spacing-step32);height:var(--spacing-step20);border-radius:var(--radius-capsule);background:{{ b.tBg }};box-shadow:{{ b.tRing }};cursor:pointer;transition:background var(--motion-duration-toggle)"><i style="position:absolute;top:var(--spacing-step2);left:{{ b.tX }};width:var(--spacing-step16);height:var(--spacing-step16);border-radius:50%;background:{{ b.kBg }};transition:left var(--motion-duration-toggle) var(--motion-easing-standard)"></i></button></sc-if>
+<sc-if value="{{ b.hasBtns }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:var(--spacing-step8)"><sc-for list="{{ b.btns }}" as="x" hint-placeholder-count="1"><button data-part="text-button" data-id="settings.text-button-2" style-active="transform:scale(.96)" data-state="{{ x.state }}" onClick="{{ x.go }}" style="appearance:none;border:0;height:var(--spacing-step28);padding:0 var(--spacing-step12);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-control);background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;opacity:{{ x.op }};white-space:nowrap">{{ x.label }}</button></sc-for></span></sc-if>
+<sc-if value="{{ b.line }}" hint-placeholder-val="{{ true }}"><i style="position:absolute;left:var(--spacing-step16);right:var(--spacing-step16);bottom:0;height:var(--size-hairline);background:var(--c-line)"></i></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+</sc-if>
+</article>
+</sc-for>
+<sc-if value="{{ S.overview }}" hint-placeholder-val="{{ false }}">
+<div data-part="card-overview" data-id="settings.card-overview" style="position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;background:var(--c-lane)">
+<div style="flex:none;height:var(--spacing-step44);display:flex;align-items:center;gap:var(--spacing-step8);padding:0 var(--spacing-step8);box-sizing:border-box;box-shadow:inset 0 calc(var(--size-hairline) * -1) 0 var(--c-line)">
+<sc-if value="{{ S.ovCtl.hasModes }}" hint-placeholder-val="{{ true }}"><div data-part="segmented-control" data-id="settings.segmented-control-2" style="flex:none;display:flex;padding:var(--spacing-step2);border-radius:var(--radius-capsule);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)"><sc-for list="{{ S.ovCtl.modes }}" as="o" hint-placeholder-count="3"><button data-part="option" data-id="settings.option-2" onClick="{{ o.on }}" style="appearance:none;border:0;height:var(--spacing-step24);padding:0 var(--spacing-step8);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-control);background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;transition:background var(--motion-duration-chevron),color var(--motion-duration-chevron)">{{ o.t }}</button></sc-for></div></sc-if>
+<span style="flex:1;min-width:0"></span>
+<div data-part="segmented-control" data-id="settings.segmented-control-3" style="flex:none;display:flex;padding:var(--spacing-step2);border-radius:var(--radius-capsule);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)"><sc-for list="{{ S.ovCtl.sizes }}" as="o" hint-placeholder-count="3"><button data-part="option" data-id="settings.option-3" onClick="{{ o.on }}" style="appearance:none;border:0;height:var(--spacing-step24);padding:0 var(--spacing-step8);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-control);background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;transition:background var(--motion-duration-chevron),color var(--motion-duration-chevron)">{{ o.t }}</button></sc-for></div>
+</div>
+<div style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;padding:var(--spacing-step8);display:grid;grid-template-columns:repeat(auto-fill,minmax({{ S.ovMin }},1fr));grid-auto-rows:min-content;align-content:start;gap:var(--spacing-step8)">
+<sc-for list="{{ S.ov }}" as="t" hint-placeholder-count="3">
+<div data-part="overview-tile" data-id="settings.overview-tile" data-state="{{ t.state }}" onClick="{{ t.go }}" onPointerEnter="{{ t.enter }}" onPointerLeave="{{ t.leave }}" style="position:relative;height:{{ S.ovH }};display:flex;flex-direction:column;overflow:hidden;border-radius:var(--radius-row);background:var(--c-well);box-shadow:{{ t.ring }}, {{ t.sh }};opacity:{{ t.op }};transform:{{ t.tf }};cursor:pointer;transition:transform var(--motion-duration-tileHover) var(--motion-easing-standard),opacity var(--motion-duration-tileHover),box-shadow var(--motion-duration-tileHover)">
+<div style="flex:none;height:var(--spacing-step44);display:flex;align-items:center;gap:var(--spacing-step8);padding:0 var(--spacing-step8);box-sizing:border-box;min-width:0">
+<span data-part="mark" data-id="settings.mark-3" style="position:relative;flex:none;margin-right:var(--spacing-step4);width:var(--spacing-step28);height:var(--spacing-step28);border-radius:50%;display:grid;place-items:center;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-mark);box-shadow:inset 0 0 0 var(--size-hairline) color-mix(in srgb, currentColor 22%, transparent)"><sc-if value="{{ t.markSym }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.markD }}"></path></svg></sc-if><sc-if value="{{ t.markText }}" hint-placeholder-val="{{ true }}">{{ t.mark }}</sc-if><sc-if value="{{ t.unread }}" hint-placeholder-val="{{ false }}"><i style="position:absolute;top:calc(var(--spacing-step2) * -1);right:calc(var(--spacing-step2) * -1);width:var(--spacing-step8);height:var(--spacing-step8);border-radius:50%;background:var(--c-ink);box-shadow:0 0 0 var(--size-markSeparatorRing) var(--c-well)"></i></sc-if></span>
+<span style="flex:1;min-width:0;font-weight:var(--typography-weight-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.title }}</span>
+<span style="flex:none;font-size:var(--typography-size-small);color:var(--c-ink-3);font-variant-numeric:tabular-nums;white-space:nowrap">{{ t.date }}</span>
+<sc-if value="{{ t.hasClose }}" hint-placeholder-val="{{ true }}"><button data-part="symbol-button" data-id="settings.symbol-button.close-2" title="Schließen" aria-label="Schließen" onClick="{{ t.close }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:var(--radius-capsule);display:grid;place-items:center;background:transparent;color:inherit;opacity:.7;cursor:pointer" style-hover="opacity:1;background:var(--c-hover)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ closeD }}"></path></svg></button></sc-if>
+</div>
+<div style="flex:1;min-height:0;padding:var(--spacing-step4) var(--spacing-step16) var(--spacing-step44);display:flex;flex-direction:column;gap:var(--spacing-step4);overflow:hidden">
+<span style="font-weight:var(--typography-weight-medium);line-height:1.35;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;text-wrap:pretty">{{ t.sub }}</span>
+<span style="color:var(--c-ink-2);line-height:1.5;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:{{ S.ovLines }};overflow:hidden;text-wrap:pretty;white-space:pre-line">{{ t.pv }}</span>
+</div>
+<div data-part="command-group" data-id="settings.command-group-3" style="position:absolute;right:var(--spacing-step8);bottom:var(--spacing-step8);display:flex;gap:var(--spacing-step4);opacity:{{ t.aO }};transform:translateY({{ t.aY }}px);pointer-events:{{ t.aP }};transition:opacity var(--motion-duration-chevron),transform var(--motion-duration-tileHover) var(--motion-easing-standard)"><sc-for list="{{ t.acts }}" as="x" hint-placeholder-count="0"><button data-part="symbol-button" data-id="settings.symbol-button-3" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style-active="transform:scale(.96)" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:var(--radius-capsule);display:grid;place-items:center;background:var(--c-lane);color:{{ x.fg }};cursor:pointer;box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)" style-hover="background:var(--c-hover)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for></div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+<div data-slot="over" ref="{{ winRef }}" style="display:contents">
+
+<sc-if value="{{ hasToastS }}" hint-placeholder-val="{{ false }}"><div data-part="toast" data-id="settings.toast" style="position:absolute;left:{{ toastX }};top:{{ toastY }};transform:translateX(-50%);z-index:4;height:var(--spacing-step28);padding:0 var(--spacing-step12);border-radius:var(--radius-capsule);background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;font-size:var(--typography-size-small);white-space:nowrap;box-shadow:var(--sh-float);gap:var(--spacing-step12);box-sizing:border-box;max-width:calc(100% - var(--spacing-step16))"><sc-if value="{{ hasFail }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-left:calc(var(--spacing-step4) * -1)"><path d="{{ alertD }}"></path></svg></sc-if><span style="min-width:0;overflow:hidden;text-overflow:ellipsis">{{ toast }}</span><sc-if value="{{ hasUndo }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" data-id="settings.text-button.undo" style-active="transform:scale(.96)" onClick="{{ undo }}" style="appearance:none;border:0;height:var(--spacing-step20);margin-right:calc(var(--spacing-step8) * -1);padding:0 var(--spacing-step8);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-control);font-weight:var(--typography-weight-medium);background:transparent;color:inherit;box-shadow:inset 0 0 0 var(--size-hairline) currentColor;cursor:pointer">Rückgängig</button></sc-if><sc-if value="{{ hasRetry }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" data-id="settings.text-button.retry" style-active="transform:scale(.96)" onClick="{{ undo }}" style="appearance:none;border:0;height:var(--spacing-step20);margin-right:calc(var(--spacing-step8) * -1);padding:0 var(--spacing-step8);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-control);background:transparent;color:inherit;box-shadow:inset 0 0 0 var(--size-hairline) currentColor;cursor:pointer">{{ toastAct }}</button></sc-if></div></sc-if>
+</div>
+<div data-slot="top" style="display:contents">
+<sc-if value="{{ hasMenu }}" hint-placeholder-val="{{ false }}">
+<div data-part="anchored-menu" data-id="settings.anchored-menu" onPointerDown="{{ stop }}" style="position:absolute;left:{{ menu.x }};top:{{ menu.y }};width:{{ menu.w }};padding:var(--spacing-step4);box-sizing:border-box;border-radius:var(--radius-contextMenu);background:var(--c-menu);color:var(--c-ink);box-shadow:var(--sh-float);z-index:5;display:flex;flex-direction:column">
+<sc-for list="{{ menu.items }}" as="it" hint-placeholder-count="3">
+<sc-if value="{{ it.sep }}" hint-placeholder-val="{{ false }}"><div style="height:var(--size-hairline);margin:var(--spacing-step4) var(--spacing-step12);background:var(--c-line)"></div></sc-if>
+<sc-if value="{{ it.head }}" hint-placeholder-val="{{ false }}"><div style="height:var(--spacing-step24);display:flex;align-items:flex-end;padding:0 var(--spacing-step12) var(--spacing-step4);font-size:var(--typography-size-small);color:var(--c-ink-3)">{{ it.label }}</div></sc-if>
+<sc-if value="{{ it.item }}" hint-placeholder-val="{{ true }}"><div data-part="menu-row" data-id="settings.menu-row" onClick="{{ it.go }}" style="height:var(--spacing-step28);display:flex;align-items:center;gap:var(--spacing-step8);padding:0 var(--spacing-step12);border-radius:var(--radius-row);cursor:pointer;color:{{ it.fg }};white-space:nowrap" style-hover="background:var(--c-hover)"><span style="flex:none;width:var(--spacing-step12);font-size:var(--typography-size-small)">{{ it.check }}</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">{{ it.label }}</span><span style="flex:none;font-size:var(--typography-size-small);color:var(--c-ink-3)">{{ it.meta }}</span></div></sc-if>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</dc-import>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;surface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;lacquer&quot;,&quot;glass&quot;,&quot;flat&quot;],&quot;default&quot;:&quot;flat&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;appearance&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;ground&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;lightGray&quot;,&quot;white&quot;],&quot;default&quot;:&quot;white&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;typeface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Geist&quot;],&quot;default&quot;:&quot;Geist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;appLock&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;aus&quot;,&quot;gesperrt&quot;,&quot;Touch ID&quot;,&quot;Fehlschlag&quot;,&quot;Passwort&quot;,&quot;Passwort falsch&quot;],&quot;default&quot;:&quot;aus&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;App-Sperre&quot;},&quot;projectRoot&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;gewählt&quot;,&quot;nicht gewählt&quot;],&quot;default&quot;:&quot;gewählt&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Dateien&quot;},&quot;failure&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;keine&quot;,&quot;Projektordner&quot;],&quot;default&quot;:&quot;keine&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fehler&quot;},&quot;aiPrice&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;gesetzt&quot;,&quot;leer&quot;],&quot;default&quot;:&quot;gesetzt&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;KI&quot;},&quot;highlight&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;stack&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;8a gestaffelt&quot;,&quot;8b Turm&quot;],&quot;default&quot;:&quot;8a gestaffelt&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Teile&quot;},&quot;handle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hairline&quot;,&quot;fine&quot;,&quot;grau&quot;],&quot;default&quot;:&quot;hairline&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Teile&quot;},&quot;symbols&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Ring&quot;,&quot;frei&quot;],&quot;default&quot;:&quot;Ring&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Teile&quot;},&quot;settingsGroup&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Ich&quot;,&quot;Firma&quot;,&quot;Verbindungen&quot;,&quot;Schutz und System&quot;],&quot;default&quot;:&quot;Verbindungen&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Einstellungen&quot;},&quot;services&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;gemischt&quot;,&quot;Erststart&quot;],&quot;default&quot;:&quot;gemischt&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Einstellungen&quot;},&quot;assistantFace&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Augen&quot;,&quot;Orb&quot;],&quot;default&quot;:&quot;Orb&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Teile&quot;},&quot;dataset&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Demo&quot;,&quot;Schlimmster Fall&quot;],&quot;default&quot;:&quot;Demo&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Crashtest&quot;}}">
+class Component extends DCLogic {
+  AREA = "Einstellungen"; CARDS = "scards"; FANNED = "sfanned";
+  fromProps(p) {
+    this._daten = p.dataset ?? "Demo";
+    if (this._daten === "Schlimmster Fall" && this.SVC) {
+      this.ME = ["Aleksandra Wiśniewska-Kowalczyk", "aleksandra.wisniewska-kowalczyk@innenausbau-wisniewska-kowalczyk.example.com"];
+      this.SVC = this.SVC.map(x => x.id === "claude" ? Object.assign({}, x, { reason: "Die Anfrage wurde mit 401 abgelehnt: Der Schlüssel ist abgelaufen oder gehört zu einer anderen Organisation (org_9f8e7d6c5b4a)." }) : x.id === "clockodo" ? Object.assign({}, x, { fields: [["E-Mail", "first.last+zeiterfassung-benachrichtigungen@example.com"], ["Schlüssel", "secret"], ["Clockodo-Nutzer", "1048216"]] }) : x.id === "airtable" ? Object.assign({}, x, { fields: [["Base", "app9f8e7d6c5b4a4c3d8e2f1a0b9c8d7e6f"], ["Zugriffsschlüssel", "secret"]] }) : x);
+      this.SET = Object.assign({}, this.SET, { profil: ["Identität", "Name, Rolle, Kürzel im Team", "Aleksandra Wiśniewska-Kowalczyk"] });
+    }
+    const dienste = p.services ?? "gemischt", cat = p.settingsGroup ?? "Verbindungen";
+    const by = { Integrationen: dienste === "Erststart" ? ["mailkonten", "google"] : ["airtable", "claude", "google"], Person: ["datenschutz", "profil"], Ansicht: ["kuerzel", "darstellung"], System: ["diagnose", "backups"] };
+    const sc = by[cat] || by.Integrationen;
+    return { area: "Einstellungen", cat, scards: sc.slice(-1), sfront: sc[sc.length - 1], sfanned: false, svc: this.svcStates ? this.svcStates(dienste) : {}, ovSize: "m", ovHot: null, look: null, menu: null, confirmDisc: null };
+  }
+  initial() { return Object.assign({ mem: {}, blobOpen: false, syncing: false, hoverRow: null, toast: null, syncRun: {}, lastSync: {}, toggles: { bilder: false, assistentAus: false, chatDateien: true, sperre: true }, accounts: [], addAcc: null, sigs: {}, templates: [], reload: false }, this.fromProps(this.props || {})); }
+  state = this.initial();
+  winRef = React.createRef();
+  pkey() { const p = this.props || {}; return ["services", "settingsGroup", "dataset"].map(k => p[k]).join("|"); }
+  ensureShell() {
+    if (this._mixed) return;
+    const load = src => { const m = window.__alfaLoad || (window.__alfaLoad = {}); return m[src] || (m[src] = new Promise(r => { if (src === "alfa-shell.js" ? window.AlfaShell : window.AlfaBausteine) return r(); const s = document.createElement("script"); s.src = src; s.onload = r; document.head.appendChild(s); })); };
+    Promise.all([load("alfa-shell.js"), load("alfa-bausteine.js")]).then(() => { if (this._mixed) return; const B = window.AlfaBausteine; B.mixInto(Object.getPrototypeOf(this)); this.SVC = B.SVC.map(x => Object.assign({}, x)); this.ME = B.ME.slice(); this._mixed = true; this.setState(this.fromProps(this.props || {}), () => this.booted()); });
+  }
+  booted() { this._nc = this.noCards(); if (this._nc) this.setState({ ebb: true }); setTimeout(() => this.mark(), 0); this._pk = this.pkey(); this._lk = (this.props || {}).appearance; this.anim(); }
+  componentDidMount() { this.ensureShell(); this._rs = () => { if (!this.props.windowWidth && this.props.window !== "1512 × 982") this.forceUpdate(); }; window.addEventListener("resize", this._rs);
+    this.onKey = e => { if (e.key === "Escape" && this.state.menu) this.setState({ menu: null }); };
+    document.addEventListener("keydown", this.onKey);
+  }
+  componentWillUnmount() { window.removeEventListener("resize", this._rs); document.removeEventListener("keydown", this.onKey);
+    [this.tt, this.rt, this.pt2, this._ebT, this._ebT2].forEach(clearTimeout);
+  }
+  componentDidUpdate() { if (!this._mixed) return; this.anim(); this.mark(); this.ovAnim();
+    if (this._tc !== this.state.cat) { this._tc = this.state.cat; if (this.state.tileGroup) this.setState({ tileGroup: null, cScrolled: false }); }
+    if (window.AlfaShell) window.AlfaShell.ebb(this, this.noCards(), this.still());
+    const k = this.pkey(); if (k !== this._pk) { this._pk = k; this.setState(this.fromProps(this.props || {})); }
+    const lk = (this.props || {}).appearance; if (lk !== this._lk) { this._lk = lk; if (this.state.look) this.setState({ look: null }); }
+    this.anim();
+  }
+  choose(name, sub) {
+    if (name !== this.AREA) { this.setState({ menu: null }); return; }
+    const p = { menu: null };
+    if (sub) p.cat = sub;
+    this.setState(p);
+  }
+  CATS = [["Ich", "person"], ["Firma", "building"], ["Dateiordner", "folder"], ["Verbindungen", "plug"], ["Schutz und System", "system"]];
+  SET = {
+    profil: ["Identität", "Name, Rolle, Kürzel im Team", ""], signatur: ["Signatur", "Unter jeder Mail, je Konto", ""], kontakte: ["Kontakte", "Gesichert und vorgeschlagen", ""], datenschutz: ["Datenschutz", "Was die App lädt und teilt", ""],
+    darstellung: ["Darstellung", "Erscheinung, Startansicht, App-Sperre", ""], start: ["Startansicht", "Was die App beim Öffnen zeigt", "Mail"], sperre: ["App-Sperre", "Sperrt auch nach einer Pause", ""],
+    mitteilungen: ["Mitteilungen", "Kehren mit ihren Bereichen zurück", ""], kuerzel: ["Tastenkürzel", "Global anpassbar", "13"],
+    einrichtung: ["Ordnerschema", "Einrichtung im geteilten Drive", ""], diagnose: ["System", "Version, Build, Datenbank", ""], firma: ["Firmendaten", "Firma, Anschrift, Kontakt", ""], vorlagen: ["Vorlagen", "Noch keine Vorlage", ""], impressum: ["Impressum", "Urheber, Rechte, Signatur", ""], backups: ["Backups", "Sichern und wiederherstellen", "Heute, 09:00"],
+    tagebuch: ["Tagebuch des Assistenten", "Nur lesen", ""], werkstatt: ["Werkstattfaktoren", "Zuschläge der Werkstatt", ""], schluessel: ["Schlüssel-Inventar", "Nur Zustand, keine Werte", "8"]
+  };
+  CATSET = { Ich: ["profil", "darstellung"], Firma: ["firma"], Dateiordner: ["einrichtung", "vorlagen"], Verbindungen: ["schluessel"], "Schutz und System": ["datenschutz", "diagnose", "impressum"] };
+  setEntries(cat) {
+    if (cat === "Verbindungen") { const out = [{ head: "Integrationen" }]; ["Persönlich", "Firma"].forEach(g => { this.SVC.filter(x => x.g === g).forEach(x => out.push({ id: x.id })); }); out.push({ head: "Schlüssel" }, { id: "schluessel" }); return out; }
+    return (this.CATSET[cat] || []).map(id => ({ id }));
+  }
+  setTitle(id) { const x = this.svc(id); return x ? x.n : (this.SET[id] || [id])[0]; }
+  closeSet(id) { this.setState(st => { const sc = st.scards.filter(x => x !== id); return { scards: sc, sfront: st.sfront === id ? sc[sc.length - 1] || null : st.sfront, confirmDisc: null }; }); }
+  setSvc(id, v) { this.setState(st => ({ svc: Object.assign({}, st.svc, { [id]: v }) })); }
+  connect(id) { const x = this.svc(id); this.setSvc(id, "connecting"); setTimeout(() => this.setSvc(id, x.checks ? "connected" : "stored"), 1400); }
+  syncNow(id, a) { const k = id + a; this.setState(st => ({ syncRun: Object.assign({}, st.syncRun, { [k]: true }) })); setTimeout(() => this.setState(st => ({ syncRun: Object.assign({}, st.syncRun, { [k]: false }), lastSync: Object.assign({}, st.lastSync, { [k]: "gerade eben" }) })), 1600); }
+  tog(k) { this.setState(st => ({ toggles: Object.assign({}, st.toggles, { [k]: !st.toggles[k] }) })); }
+  openSet(id) { this.setState(st => { const sc = [id]; return { scards: sc, sfront: id, sfanned: false, confirmDisc: null, mem: Object.assign({}, st.mem, { Einstellungen: Object.assign({}, st.mem.Einstellungen || {}, { Rf: false }) }) }; }); }
+  sigBlock(out, key, who) {
+    const s = this.state, txt = s.sigs[key], setSig = v => this.setState(st => ({ sigs: Object.assign({}, st.sigs, { [key]: v }) }));
+    out.push({ isHead: true, text: "Signatur · " + who });
+    if (txt == null) { out.push({ isNote: true, text: "Für dieses Postfach gibt es keine Signatur." }, this.row("", { btns: [this.tb("Signatur anlegen", "accent", () => setSig(key === this.ME[1] ? "Jonas Brenner\nStudio Brenner · Innenarchitektur und Möbel" : ""))], line: false })); return; }
+    out.push({ isArea: true, label: "Signatur " + who, val: txt, onIn: e => setSig(e.target.value) }, this.toggleRow("Unter neue Mails setzen", "sig" + key, "Antworten und Weiterleitungen eingeschlossen"), this.toggleRow("Über zitiertem Text setzen", "sigq" + key), this.row("", { btns: [this.tb("Signatur entfernen", "plain", () => this.setState(st => { const n = Object.assign({}, st.sigs); delete n[key]; return { sigs: n }; }))], line: false }));
+  }
+  storeBlock(out) {
+    const s = this.state, A = s.abl || {}, z = A.z || "Alles", mx = A.m || "Keine", o = A.o || "Standard", set = p => this.setState(st => ({ abl: Object.assign({}, st.abl || {}, p) })), menu = (ev, list, cur, key) => this.openMenu(ev, list.map(v => this.mi(v, () => set({ [key]: v }), { check: v === cur })), 220);
+    out.push({ isHead: true, text: "Lokale Ablage" });
+    out.push(this.row("Zeitraum", { pill: z, pillGo: ev => menu(ev, ["30 Tage", "90 Tage", "1 Jahr", "Alles"], z, "z") }));
+    out.push(this.toggleRow("Anhänge lokal", "ablageAnh"));
+    out.push(this.row("Obergrenze", { pill: mx, pillGo: ev => menu(ev, ["1 GB", "5 GB", "10 GB", "25 GB", "Keine"], mx, "m") }));
+    out.push(this.row("Ordner", { pill: o, pillGo: ev => menu(ev, ["Standard", "Eigener Ordner"], o, "o"), line: false }));
+  }
+  accountBlocks(out) {
+    const s = this.state, A = s.addAcc, FIELDS = ["Anbieter", "Anzeigename", "Server Eingang", "Port", "Verschlüsselung", "Server Ausgang", "Passwort", "Passwort Ausgang"];
+    const open = () => this.setState({ addAcc: { f: { Verschlüsselung: "SSL/TLS" }, result: null } });
+    out.push({ isHead: true, text: "Postfächer" });
+    s.accounts.forEach(a => { out.push(this.row(a.name, { sub: a.provider, cs: this.csOf("connected"), line: false })); this.sigBlock(out, a.name, a.name); out.push(this.row("Konto entfernen", { cq: "Konto entfernen?", cl: "Entfernen", onCq: () => this.removeAccount(a.id), onCn: () => {} })); });
+    if (!A) { if (!s.accounts.length) out.push(this.notice("info", "Noch kein Mail-Konto.", "", [this.tb("Konto hinzufügen", "accent", open)])); else out.push(this.row("", { btns: [this.tb("Konto hinzufügen", "neutral", open)], line: false })); return; }
+    const f = A.f, set = (k, v) => this.setState(st => ({ addAcc: Object.assign({}, st.addAcc, { f: Object.assign({}, st.addAcc.f, { [k]: v }), result: null }) }));
+    FIELDS.forEach(k => { if (k === "Anbieter") out.push(this.row(k, { pill: f[k] || "Wählen", pillGo: e => this.openMenu(e, ["Gmail", "GMX", "IONOS"].map(v => this.mi(v, () => set(k, v), { check: f[k] === v })), 200) })); else if (k === "Verschlüsselung") out.push(this.row(k, { pill: f[k], pillGo: e => this.openMenu(e, ["Keine", "SSL/TLS"].map(v => this.mi(v, () => set(k, v), { check: f[k] === v })), 200) })); else out.push(this.row(k, Object.assign({ onIn: e => set(k, e.target.value), inVal: f[k] || "" }, /^Passwort/.test(k) ? { inType: "password" } : {}))); });
+    if (A.result) out.push(this.notice(A.result.kind, A.result.title, A.result.text));
+    out.push(this.row("", { btns: [this.tb("Konto hinzufügen", "accent", () => this.addAccount()), this.tb("Abbrechen", "plain", () => this.setState({ addAcc: null }))], line: false }));
+  }
+  addAccount() {
+    const A = this.state.addAcc, f = A.f, need = ["Server Eingang", "Server Ausgang", "Passwort", "Passwort Ausgang"].filter(k => !(f[k] || "").trim());
+    if (need.length) { this.setState({ addAcc: Object.assign({}, A, { result: { kind: "failure", title: "Prüfung", text: "Es fehlen: " + need.join(", ") + "." } }) }); return; }
+    this.setState(st => ({ accounts: st.accounts.concat([{ id: "k" + (st.accounts.length + 1), name: f.Anzeigename || f.Anbieter || f["Server Eingang"], provider: f.Anbieter || f["Server Eingang"] }]), addAcc: null }));
+    this.setSvc("mailkonten", "connected");
+    this.toastIt("Eingang und Ausgang erreichbar.");
+  }
+  aiRows(out) { const S = this.state, pr = S.aiPrice || (this.props.aiPrice === "leer" ? { in: "", out: "" } : { in: "3,00", out: "15,00" }), use = S.aiUse || { in: 1200000, out: 310000, since: "12. Okt.", days: 9 };
+    const nf = n => n >= 1e6 ? (n / 1e6).toFixed(1).replace(".", ",") + " Mio." : Math.round(n / 1e3) + " Tsd.", num = p => parseFloat(String(p).replace(",", ".")), set = (k, v) => this.setState(st => ({ aiPrice: Object.assign({}, st.aiPrice || pr, { [k]: v }) }));
+    out.push({ isHead: true, text: "Verbrauch" });
+    out.push(this.row("Tokens seit " + use.since + " · " + use.days + (use.days === 1 ? " Tag" : " Tage"), { val: "Eingabe " + nf(use.in) + " · Ausgabe " + nf(use.out) }));
+    out.push(this.row("Preis je Mio. Tokens · Eingabe", { onIn: ev => set("in", ev.target.value), inVal: pr.in, inType: "text" }));
+    out.push(this.row("Preis je Mio. Tokens · Ausgabe", { onIn: ev => set("out", ev.target.value), inVal: pr.out, inType: "text" }));
+    const pi = num(pr.in), po = num(pr.out);
+    if (pi > 0 && po > 0) { const c = Math.round((use.in / 1e6 * pi + use.out / 1e6 * po) * 2) / 2; out.push(this.row("Geschätzt", { val: "ca. " + c.toFixed(2).replace(".", ",") + " €" })); }
+    out.push(this.row("Zähler", { cq: "Zurücksetzen?", cl: "Zurücksetzen", onCq: () => this.setState({ aiUse: { in: 0, out: 0, since: "21. Okt.", days: 0 } }), onCn: () => {}, line: false })); }
+  fin(label, ph, line) { const fd = this.state.fd || {}; return this.row(label, { onIn: ev => { const v = ev.target.value; this.setState(st => ({ fd: Object.assign({}, st.fd || {}, { [label]: v }) })); }, inVal: fd[label] || "", ph, line: line !== false }); }
+  signOutSub() { const s = this.state, on = this.SVC.filter(v => ["connected", "stored", "working", "failed", "connecting"].includes(s.svc[v.id])).map(v => v.n), n = on.length; return n ? "Trennt " + (n === 1 ? "1 Dienst" : n + " Dienste") + " · " + on.join(", ") : "Keine Dienste verbunden"; }
+  removeAccount(id) { this.setState(st => ({ accounts: st.accounts.filter(a => a.id !== id) }), () => { if (!this.state.accounts.length) this.setSvc("mailkonten", "notConnected"); }); }
+  blocks(id) {
+    const s = this.state, P = this.P, x = this.svc(id), out = [];
+    if (x) {
+      const st = s.svc[id], cs = this.csOf(st);
+      const sub = { connected: "Beim Anbieter geprüft · vor 2 Minuten", stored: "Nicht beim Anbieter geprüft", failed: "Letzter Fehler vor 3 Minuten · letzter Erfolg 9. Okt.", connecting: "Anmeldung läuft", working: "Projekte 412 von 1.280" }[st] || "";
+      const HL = { dhl: ["#ffcb01", "none", "56px"], clockodo: ["#ffffff", "inset 0 0 0 1px var(--c-line)", "56px"] }[id], LG = { clockodo: "material/icons/clockodo.png", dhl: "material/icons/dhl.svg" }[id];
+      out.push({ isHero: true, name: x.n, use: x.use, ini: x.n[0], hasLogo: !!LG, noLogo: !LG, logo: LG || "", logoUrl: LG ? "url(\"" + LG + "\")" : "none", lw: id === "dhl" ? "48px" : "56px", bg: HL ? HL[0] : "var(--c-well)", ring: HL ? HL[1] : "none" });
+      out.push(this.row("Zustand", { cs, sub }));
+      if (st === "failed") out.push(this.notice("failure", "Fehler · " + (x.reason || "Keine Antwort"), "Der Assistent bleibt aus, bis die Verbindung wieder steht.", [this.tb("Erneut verbinden", "accent", () => this.connect(id))]));
+      if (st === "unreadable") out.push(this.notice("failure", "Der Schlüsselbund kann nicht gelesen werden.", "Der Schlüssel ist gespeichert, die App kommt nicht an ihn heran. Einmal neu eintragen.", [this.tb("Neu eintragen", "neutral", () => this.setSvc(id, "notConnected"))]));
+      if (s.confirmDisc === id) out.push(this.notice("warning", x.n + " trennen?", "Die App nutzt " + x.n + " danach nicht mehr.", [this.tb("Trennen", "signal", () => this.setState({ confirmDisc: null }, () => this.setSvc(id, "notConnected"))), this.tb("Abbrechen", "plain", () => this.setState({ confirmDisc: null }))]));
+      if (x.accounts) this.accountBlocks(out);
+      if (x.accounts && st !== "notConnected") this.storeBlock(out);
+      out.push(this.row("Anmeldung", { val: x.access + (x.firma ? " · für die Firma" : " · persönlich") }));
+      x.fields.forEach(f => { if (x.ai && f[0] === "Modell" && st !== "notConnected") { const cur = this.state.aiModel || "Standard"; out.push(this.row("Modell", { pill: cur, pillGo: ev => this.openMenu(ev, ["Standard", "Sonnet", "Haiku", "Opus"].map(v => this.mi(v, () => this.setState({ aiModel: v }), { check: cur === v })), 220) })); return; } if (f[1] === "toggle") { out.push(this.toggleRow(f[0], id + f[0], f[2])); return; } const empty = f[1] === "empty" || st === "notConnected"; out.push(this.row(f[0], { val: empty ? "Nicht eingetragen" : f[1] === "secret" ? "••••••••••••" : f[1], vFg: empty ? "var(--c-ink-3)" : "var(--c-ink-2)", vFont: f[1] === "secret" || /^app/.test(f[1]) ? "inherit" : "inherit", vSize: f[1] === "secret" ? "12px" : "13px" })); });
+      if (x.ai && st !== "notConnected") this.aiRows(out);
+      if (x.note) out.push({ isNote: true, text: x.note });
+      if (id === "google" && st !== "notConnected") this.sigBlock(out, this.ME[1], this.ME[1]);
+      if (x.areas && st !== "notConnected") {
+        out.push({ isHead: true, text: "Abgleich" });
+        x.areas.forEach(a => { const k = id + a[0], run = !!s.syncRun[k], last = s.lastSync[k] || a[1];
+          out.push(this.row(a[0], { sub: run ? "Gleicht ab …" : /^Noch/.test(last) ? last : (st === "failed" ? "Fehler: " + (x.reason || "keine Antwort") + ". " : "Verbindung steht. ") + "Letzter Abgleich " + last, pill: a[2], pillItems: () => ["Aus", "Manuell", "Alle 30 Sekunden", "Jede Minute", "Alle 5 Minuten", "Alle 15 Minuten", "Alle 30 Minuten", "Jede Stunde"].map(v => this.mi(v, null, { check: v === a[2] })), pillGo: e => this.openMenu(e, ["Aus", "Manuell", "Alle 30 Sekunden", "Jede Minute", "Alle 5 Minuten", "Alle 15 Minuten", "Alle 30 Minuten", "Jede Stunde"].map(v => this.mi(v, null, { check: v === a[2] })), 200), btns: [this.tb(run ? "Gleicht ab …" : "Jetzt abgleichen", "neutral", () => this.syncNow(id, a[0]), { off: run })] })); });
+      }
+      if (x.extras && st !== "notConnected") x.extras.forEach(e => { if (e[0] === "Drive-Ordner der Projekte") { const root = this.projRoot(); out.push(this.row("Projektordner", { pill: root || "Wählen", pillGo: ev => this.pickRoot(ev) })); if (root) out.push(this.row(e[0], { btns: [this.tb(e[1], "neutral", () => (this.props.failure === "Projektordner" ? this.failIt("Abgleich fehlgeschlagen · Projektordner nicht erreichbar", () => {}) : this.toastIt("Projektordner abgeglichen · gerade eben")))] })); } else out.push(this.row(e[0], { btns: [this.tb(e[1], "neutral", () => this.toastIt(e[0] + " · " + (e[1] === "Leeren" ? "geleert" : "abgeglichen")))] })); });
+      return out;
+    }
+    const T = s.toggles, look = s.look || "Automatisch";
+    const seg = (opts, cur, fn) => opts.map(n => ({ n, state: n === cur ? "selected" : "rest", bg: n === cur ? "var(--c-inv)" : "transparent", fg: n === cur ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { e.stopPropagation(); fn(n); } }));
+    const B = {
+      profil: () => [this.row("Name", { val: this.ME[0] }), this.row("Rolle", { val: "Gestaltung, Leitung" }), this.row("Kürzel", { val: this.ini(this.ME[0]), vFont: "inherit" }), this.row("Telefon", { val: "Nicht eingetragen", vFg: "var(--c-ink-3)" }), this.toggleRow("Geburtstag im Team zeigen", "geb"), { isHead: true, text: "Konto" }, this.row("Auf diesem Mac abmelden", { sub: this.signOutSub(), cq: "Abmelden?", cl: "Abmelden", onCq: () => this.toastIt("Abgemeldet · die App startet neu"), onCn: () => {}, line: false })],
+      signatur: () => { const accts = [this.ME[1]].concat(s.accounts.map(a => a.name)), cur = s.sigAcct || accts[0], txt = s.sigs[cur]; const o = [this.row("Konto", { pill: cur, pillGo: e => this.openMenu(e, accts.map(a => this.mi(a, () => this.setState({ sigAcct: a }), { check: a === cur })), 260) })]; if (txt == null) o.push({ isNote: true, text: "Signatur fehlt." }, this.row("", { btns: [this.tb("Signatur anlegen", "accent", () => this.setState(st => ({ sigs: Object.assign({}, st.sigs, { [cur]: cur === this.ME[1] ? "Jonas Brenner\nStudio Brenner · Innenarchitektur und Möbel" : "" }) })))], line: false })); else { const ln = (txt || "").split("\n"), setLn = (i, v) => this.setState(st => { const a = (st.sigs[cur] || "").split("\n"); a[i] = v; return { sigs: Object.assign({}, st.sigs, { [cur]: a.join("\n").replace(/\n+$/, "") }) }; }); o.push(this.row("Zeile 1", { onIn: e => setLn(0, e.target.value), inVal: ln[0] || "" }), this.row("Zeile 2", { onIn: e => setLn(1, e.target.value), inVal: ln[1] || "" }), this.row("", { btns: [this.tb("Signatur entfernen", "plain", () => this.setState(st => { const n = Object.assign({}, st.sigs); delete n[cur]; return { sigs: n }; }))], line: false })); } o.push(this.toggleRow("Unter neue Mails setzen", "sig", "Antworten und Weiterleitungen eingeschlossen")); return o; },
+      datenschutz: () => [this.toggleRow("Bilder in Mails laden", "bilder", T.bilder ? "Bilder werden geladen. Zählpixel melden dem Absender damit, wann du die Mail geöffnet hast." : "Bilder werden nicht geladen. Der Absender erfährt nicht, wann du die Mail geöffnet hast."), this.toggleRow("Assistent ganz aus", "assistentAus"), this.toggleRow("Dateien im Chat", "chatDateien"), this.row("Eigene Daten exportieren", { btns: [this.tb("Exportieren", "neutral", () => this.toastIt("Export gespeichert."))], line: false })],
+      darstellung: () => [this.row("Erscheinung", { seg: seg(["Hell", "Dunkel", "Automatisch"], look, n => this.setState({ look: n === "Automatisch" ? null : n })) }), this.row("Fremde Inhalte", { val: "Immer hell", line: false })],
+      start: () => [this.row("Beim Öffnen", { pill: "Mail", pillGo: e => this.openMenu(e, [this.mi("Mail", null, { check: true }), this.mi("Einstellungen"), this.mi("Zuletzt offen")], 200), line: false })],
+      sperre: () => [this.toggleRow("App-Sperre", "sperre"), this.row("Sperren nach", { pill: "5 Minuten Pause", pillGo: e => this.openMenu(e, ["Sofort", "1 Minute", "5 Minuten Pause", "15 Minuten Pause"].map(v => this.mi(v, null, { check: v === "5 Minuten Pause" })), 200), line: false })],
+      mitteilungen: () => [{ isNote: true, text: "Die Regler für Alarm, Ton und Nachfassen kehren mit ihren Bereichen zurück. Heute meldet nur Mail neue Nachrichten." }, this.toggleRow("Neue Mail", "neueMail", "Zähler am Blob und im Dock.")],
+      kuerzel: () => [["Neue Nachricht", ["⌘", "N"]], ["Antworten", ["⌘", "R"]], ["Allen antworten", ["⌘", "⇧", "R"]], ["Weiterleiten", ["⌘", "⇧", "F"]], ["In der Liste suchen", ["⌘", "⌥", "F"]], ["Gelesen / ungelesen", ["⌘", "⇧", "U"]], ["Entwurf sichern", ["⌘", "S"]], ["Drucken", ["⌘", "P"]], ["Mail öffnen", ["⌘", "6"]], ["Fett", ["⌘", "B"]], ["Kursiv", ["⌘", "I"]], ["Unterstrichen", ["⌘", "U"]], ["Link einfügen", ["⌘", "K"]]].map(r => this.row(r[0], { keys: r[1].map(k => ({ k })) })).concat([this.row("Alle Kürzel", { btns: [this.tb("Zurücksetzen", "plain")], line: false })]),
+      einrichtung: () => [this.row("Fortschritt", { val: "4 von 7" }), this.row("Projektordner", { val: "Geteiltes Drive · Projekte" }), this.row("Projektdaten", { val: "Airtable" }), this.row("Vorlagen", { val: "Noch keine Vorlage.", vFg: "var(--c-ink-3)" }), this.row("Einrichtung", { btns: [this.tb("Erneut durchgehen", "neutral")], line: false })],
+      diagnose: () => [this.row("Version", { val: "0.4.2 (118)", vFont: "inherit", vSize: "12px" }), this.row("Zweig", { val: "main · 4f2c9e1", vFont: "inherit", vSize: "12px" }), this.row("Datenbank", { val: "24,6 MB" }), this.row("Diagnose", { btns: [this.tb("Kopieren", "neutral", () => this.toastIt("In die Zwischenablage kopiert"))], line: false })],
+      backups: () => [this.row("Heute, 09:00", { sub: "Automatisch · 18,2 MB", btns: [this.tb("Wiederherstellen", "plain")] }), this.row("Gestern, 09:00", { sub: "Automatisch · 18,1 MB", btns: [this.tb("Wiederherstellen", "plain")] }), this.row("8. Okt., 17:42", { sub: "Von Hand · 17,9 MB", btns: [this.tb("Wiederherstellen", "plain")] }), { isNote: true, text: "Eine Wiederherstellung greift beim nächsten Start." }],
+      tagebuch: () => [this.notice("failure", "Tagebuch konnte nicht geladen werden.", "Die Datei ist gerade gesperrt.", [this.tb("Erneut versuchen", "neutral")])],
+      werkstatt: () => [this.row("Zuschlag Montage", { val: "18 %" }), this.row("Zuschlag Material", { val: "12 %" }), this.row("Stundensatz Werkstatt", { val: "78,00 €", line: false })],
+      firma: () => [this.fin("Firma", "Name der Firma"), this.fin("Anschrift", "Straße, PLZ Ort"), this.fin("Telefon", "Nummer"), this.fin("Web", "Adresse"), this.fin("Mail", "Adresse", false)],
+      vorlagen: () => { const o = []; if (!s.templates.length) o.push({ isNote: true, text: "Noch keine Vorlage." }); s.templates.forEach(v => o.push(this.row(v.name, { cq: "Vorlage entfernen?", cl: "Entfernen", onCq: () => this.setState(st => ({ templates: st.templates.filter(x => x.id !== v.id) })), onCn: () => {} }))); o.push(this.row("Vorlage anlegen", { btns: [this.tb("Anlegen", "neutral", () => this.setState(st => ({ templates: st.templates.concat([{ id: "v" + (st.templates.length + 1), name: "Vorlage " + (st.templates.length + 1) }]) })))], line: false })); return o; },
+      impressum: () => [this.fin("Urheber", "Name"), this.fin("Rechte", "Rechteinhaber"), this.fin("Signatur", "Zeile unter dem Impressum", false)],
+      schluessel: () => this.SVC.filter(v => v.id !== "mailkonten").map(v => this.row(v.n, { cs: this.csOf(s.svc[v.id]), btns: s.svc[v.id] === "notConnected" ? [] : [this.tb("Entfernen", "plain")] }))
+    };
+    const D0 = B.darstellung, Y0 = B.diagnose, E0 = B.einrichtung; B.darstellung = () => D0().concat(B.start(), B.sperre()); B.diagnose = () => Y0(); B.einrichtung = () => E0().filter(r => !r || r.label !== "Fortschritt");
+    return (B[id] || (() => []))();
+  }
+  renderVals() {
+    if (!window.AlfaShell || !this._mixed) return { ready: false };
+    const still = this.still(), ease = "cubic-bezier(.2,.8,.2,1)";
+    const s = this.state, K = this.K, P = this.P, g = this.geo(), rM = this.mem(), w = this.lay();
+    const licht = s.look === "Dunkel" ? "dark" : s.look === "Hell" ? "light" : (this.props.appearance ?? "light");
+    const geist = (this.props.typeface ?? "Geist") === "Geist", ring = (this.props.symbols ?? "Ring") === "Ring";
+    const iconRing = ring ? "inset 0 0 0 1px var(--c-line-strong)" : "none";
+    const dk = licht === "dark";
+    const inkSel = ["var(--c-on-inv)", "var(--c-on-inv-2)", "var(--c-on-inv-3)", "var(--c-on-inv-line)"];
+    const tone = sel => sel ? { fg: inkSel[0], c2: inkSel[1], c3: inkSel[2], cLs: inkSel[3] } : { fg: "var(--c-ink)", c2: "var(--c-ink-2)", c3: "var(--c-ink-3)", cLs: "var(--c-line-strong)" };
+    const lefts = [K.m, K.m + w[0] + K.gap, K.m + w[0] + w[1] + 2 * K.gap], nc = this.noCards();
+    const openCount = w.filter(x => x > K.fold).length;
+    const unread = window.AlfaBausteine.mailUnread(this.props.dataset ?? "Demo");
+    const mk = (sel, o) => Object.assign({ state: sel ? "selected" : "rest", bg: sel ? "var(--c-inv)" : "transparent", fg: sel ? "var(--c-on-inv)" : "var(--c-ink-2)", ring: sel ? "none" : "inset 0 0 0 1px var(--c-line-strong)", isSym: false, isText: false, dot: false }, o);
+    const stop = e => e.stopPropagation();
+
+    // strips
+    const marksFor = i => {
+      if (i === 0) return this.CATS.map(c => [c[0], c[1], s.cat === c[0], () => this.setState({ cat: c[0] })])
+        .map(m => mk(m[2], { isSym: true, d: P[m[1]], label: m[0], go: e => { stop(e); m[3](); this.setMem({ Mf: false, max: -1 }); } }));
+      if (i === 1) {
+        const n = Math.max(1, Math.floor((g.lh - 24 - 96) / 36));
+        const items = this.setEntries(s.cat).filter(e => e.id).map(e => [this.setTitle(e.id)[0], this.setTitle(e.id), s.sfront === e.id, s.svc[e.id] === "failed", () => { this.openSet(e.id); this.setMem({ Rf: false, max: -1 }); }]);
+        return items.slice(0, n).map(m => mk(m[2], { isText: true, t: m[0], label: m[1], dot: m[3], go: e => { stop(e); m[4](); } }));
+      }
+      return s.scards.map(id => { const t = this.setTitle(id)[0];
+        return mk(false, { isText: !!t, isSym: !t, d: P.compose, t, label: this.setTitle(id), go: e => { stop(e); this.setMem({ Rf: false, max: -1 }); this.setState({ sfront: id, sfanned: false }); } }); });
+    };
+    const titles = ["Einstellungen", s.cat, "Offen"];
+    const lanes = [0, 1, 2].map(i => {
+      const folded = w[i] <= K.fold, stack = i === 2 && !folded;
+      return { title: titles[i], hasStripTitle: i !== 0, left: lefts[i] + "px", width: w[i] + "px", folded, isList: i === 0 && !folded, isMain: i === 1 && !folded, isStack: stack,
+        state: rM.max === i ? "maximized" : folded ? "collapsed" : "open", cursor: folded ? "pointer" : "default", bg: "var(--c-lane)", ring: "var(--sh-lane)", ovf: "hidden",
+        marks: marksFor(i),
+        onStrip: folded ? () => { this._unf = { i, t: performance.now() }; if (rM.max >= 0) this.setMem({ max: -1 }); else this.setMem({ [["Lf", "Mf", "Rf"][i]]: false }); } : undefined,
+        onRest: () => { const u = this._unf; if (!folded && !(u && u.i === i && performance.now() - u.t < 600)) return; this._unf = null; const d = window.AlfaShell.D0(s.area), nm = ["L", "M", "R"][i], onlyOne = i !== 1 && [0, 1, 2].every(j => j === i || w[j] <= K.fold || rM.max >= 0); this.setMem(Object.assign({ max: -1, [["Lf", "Mf", "Rf"][i]]: false, [nm]: d[nm] }, onlyOne ? { Mf: false } : {})); } };
+    });
+
+    // left lane
+    const L = {
+      title: "Einstellungen", detail: "", detailFg: "var(--c-ink-3)",
+      rows: this.CATS.map(c => { const sel = s.cat === c[0], bad = c[0] === "Verbindungen" ? this.SVC.filter(x => ["failed", "unreadable"].includes(s.svc[x.id])).length : 0;
+        return { isRow: true, isHead: false, name: c[0], d: P[c[1]], state: sel ? "selected" : "rest", bg: sel ? "var(--c-inv)" : "transparent", fg: sel ? "var(--c-on-inv)" : "var(--c-ink)", weight: sel ? 500 : 400, symFg: sel ? "var(--c-on-inv)" : "var(--c-ink-3)", symRing: sel ? "inset 0 0 0 1px " + tone(true).cLs : iconRing, isSym: true, isMood: false, moodT: "", symBg: "transparent", hasN: bad > 0, n: bad, nFg: sel ? "var(--c-lane)" : "var(--c-signal)", go: () => this.setState({ cat: c[0] }) }; })
+    };
+    L.buttons = openCount > 1 ? [{ label: titles[0] + " falten", d: P.minus, go: e => { stop(e); this.setMem({ Lf: true, max: -1 }); } }] : [];
+
+    // center lane
+    const C = { title: titles[1], query: "", searchOpen: false, searchClosed: true, hasNotice: false, hasState: false, hasRows: true, hasMore: false, rows: [], tools: [], spacerH: "0px", edgeOp: s.cScrolled && s.cEdge ? 1 : 0, edgeTr: this.edgeTr(!!s.cEdge), onScroll: e => { const sc = e.currentTarget.scrollTop > 0; if (sc) this.edgePulse("c"); if (sc !== !!this.state.cScrolled) this.setState({ cScrolled: sc }); } };
+    const tool = (o) => Object.assign({ part: "symbol-button", state: "rest", pad: "0", bg: "transparent", fg: "var(--c-ink-3)", ring: iconRing, showLabel: false }, o);
+    {
+      C.hasCount = false;
+      const ents = this.setEntries(s.cat);
+      if (s.cat === "Verbindungen") { const LOGO = { clockodo: "material/icons/clockodo.png", dhl: "material/icons/dhl.svg" };
+        const tile = (id, name, sub, bad) => { const on = s.sfront === id && !s.sfanned; return { name, ini: name.slice(0, 1), logo: LOGO[id] || "", logoUrl: LOGO[id] ? "url(\"" + LOGO[id] + "\")" : "none", hasLogo: !!LOGO[id], noLogo: !LOGO[id], sub, state: on ? "selected" : bad ? "error" : "rest", bg: on ? "var(--c-ink)" : "var(--c-well)", fg: on ? "var(--c-lane)" : "var(--c-ink)", subFg: on ? "var(--c-lane)" : bad ? "var(--c-signal)" : "var(--c-ink-3)", markBg: LOGO[id] ? "#ffffff" : "transparent", markRing: on ? "var(--c-lane)" : "var(--c-line-strong)", go: () => this.openSet(id) }; };
+        C.tilesOn = true; C.tileGroups = [{ name: "Integrationen", tiles: this.SVC.map(x => { const st = s.svc[x.id], cs = this.csOf(st); return tile(x.id, x.n, cs.label || cs.text || "", st === "failed" || st === "unreadable"); }) }, { name: "Schlüssel", tiles: [tile("schluessel", this.setTitle("schluessel"), this.SET.schluessel[1], false)] }];
+        const tg = s.tileGroup && C.tileGroups.some(g => g.name === s.tileGroup) ? s.tileGroup : C.tileGroups[0].name;
+        C.tileGroups.forEach((g, i) => { g.labelOp = g.name === tg ? 0 : 1; g.minH = "0"; g.labelH = i ? "24px" : "0px"; g.gapV = i ? "8px" : "0px"; }); C.tileGroups[C.tileGroups.length - 1].minH = "calc(100cqh + 32px)"; C.title = tg;
+        C.onTilesScroll = e => { const c = e.currentTarget, top = c.getBoundingClientRect().top + 8 + 24, gs = [...c.querySelectorAll('[data-part="tile-group"]')]; let act = gs[0]; for (const g of gs) if (g.querySelector('[data-part="tile-grid"]').getBoundingClientRect().top <= top) act = g; if (c.scrollTop + c.clientHeight >= c.scrollHeight - 2 && c.scrollTop > 0) act = gs[gs.length - 1]; const sc = c.scrollTop > 0, nm = act && act.getAttribute("data-name"); if (sc) this.edgePulse("c"); if (nm !== this.state.tileGroup || sc !== !!this.state.cScrolled) this.setState({ tileGroup: nm, cScrolled: sc }); }; }
+      C.rows = ents.map((e, i) => {
+        if (e.head) return { isHead: true, isRow: false, name: e.head };
+        const x = this.svc(e.id), meta = this.SET[e.id], sel = s.sfront === e.id && !s.sfanned, hov = s.hoverRow === e.id, st = x ? s.svc[e.id] : null, bad = st === "failed" || st === "unreadable";
+        const nx = ents[i + 1], nextSel = nx && nx.id && s.sfront === nx.id;
+        const val = !x ? (e.id === "darstellung" ? (s.look || "Automatisch") : e.id === "sperre" ? (s.toggles.sperre ? "An" : "Aus") : meta[2]) : "";
+        const T = tone(sel), cs0 = x ? this.csOf(st) : {}, cs = sel && x ? Object.assign({}, cs0, { fg: cs0.fg.indexOf("signal") > 0 ? cs0.fg : T.c2, fill: String(cs0.fill).split("var(--c-ink)").join(T.fg), border: String(cs0.border).split("var(--c-ink-3)").join(T.c3).split("var(--c-ink)").join(T.fg).split("var(--c-line-strong)").join(T.cLs) }) : cs0;
+        return { isRow: true, isHead: false, state: sel ? "selected" : bad ? "unread" : "rest", actBg: sel ? "var(--c-inv)" : "var(--c-lane)", bg: sel ? "var(--c-inv)" : hov ? "var(--c-lane)" : "transparent", ring: hov && !sel ? "inset 0 0 0 1px var(--c-line-strong)" : "none", fg: T.fg, c2: T.c2, c3: T.c3, cLs: T.cLs, hasProj: false, mark: this.setTitle(e.id)[0], markText: true, markSym: false, mBg: bad ? "var(--c-signal)" : "transparent", mFg: bad ? "var(--c-on-signal)" : T.c2, mRing: bad ? "none" : "inset 0 0 0 1px " + T.cLs,
+          sender: this.setTitle(e.id), wS: 500, hasThread: false, star: false, dateOp: 1, date: val, hasCs: !!x, cs, subject: x ? x.use : meta[1], subFg: T.c3, wSub: 400, hasPre: false, hasAtt: false, att: [], hasMore: false, showAct: false, confirm: false,
+          sep: nx && !nx.head && !sel && !nextSel, go: () => this.openSet(e.id), dbl: () => { this.setMem({ Rf: false, max: -1 }); this.openSet(e.id); }, enter: () => this.setState({ hoverRow: e.id }), leave: () => this.setState(st2 => st2.hoverRow === e.id ? { hoverRow: null } : null) };
+      });
+      C.hasProfile = s.cat === "Ich"; if (C.hasProfile) { C.rows = C.rows.filter((r, k) => ents[k].id !== "profil"); const psel = s.sfront === "profil" && !s.sfanned, adr = [this.ME[1]].concat(s.accounts.map(a => a.name)); C.profile = { go: () => this.openSet("profil"), state: psel ? "selected" : "rest", bg: psel ? "var(--c-inv)" : "var(--c-well)", fg: psel ? "var(--c-on-inv)" : "var(--c-ink)", fg3: psel ? "var(--c-on-inv-3)" : "var(--c-ink-3)", ring: psel ? "var(--c-on-inv-line)" : "var(--c-line-strong)", ini: this.ini(this.ME[0]), name: this.ME[0], role: "Gestaltung, Leitung", pick: e => { e.stopPropagation(); this.toastIt("Bild wählen"); }, facts: [["Kürzel", this.ini(this.ME[0])], ["Telefon", "Nicht eingetragen"], ["Teams", "Nicht eingetragen"]].map(([k, v]) => ({ k, v, empty: v === "Nicht eingetragen" })), adr }; }
+      C.cs = {};
+    }
+    if (openCount > 1) C.tools.push(tool({ label: titles[1] + " falten", d: P.minus, go: e => { stop(e); this.setMem({ Mf: true, max: -1 }); } }));
+    C.tools.push(tool({ label: rM.max === 1 ? "Zurück" : titles[1] + " groß", d: rM.max === 1 ? P.shrink : P.expand, go: e => { stop(e); this.setMem({ max: rM.max === 1 ? -1 : 1 }); } }));
+
+    // stack
+    const cl = s.scards.map(id => ({ id, kind: "setting" })), frontId = s.sfront, fanned = s.sfanned;
+    const SH = g.lh - 44, turm = (this.props.stack ?? "8a gestaffelt") === "8b Turm", ton = "grau", lv = this.LEVELS.grau[licht];
+    const order = fanned ? cl : cl.filter(c => c.id !== frontId).concat(cl.filter(c => c.id === frontId)), b = order.length - 1;
+    let acc = 0; const tops = order.map((c, i) => { const t = acc; if (!fanned) acc += (b - i) > 3 ? 8 : 44; else acc += 52; return t; });
+    const glaze = "inset 0 1px 0 var(--c-glaze)", ofl = this.props.surface ?? "flat", dkS = licht === "dark";
+    const lack = (front, lvl, first) => {
+      const lite = !lvl || /^#(?:[c-f])/i.test(lvl[0]);
+      const spec = front ? (dkS ? "rgba(255,255,255,.14)" : "rgba(255,255,255,1)") : lite ? "rgba(255,255,255,.9)" : "rgba(255,255,255,.22)";
+      const seam = dkS ? "rgba(0,0,0,.7)" : front ? "rgba(0,0,0,.14)" : "rgba(0,0,0,.2)";
+      return ["inset 0 1px 0 " + spec, "0 -1px 0 " + seam].concat(first ? [] : ["0 -8px 16px -12px rgba(0,0,0," + (dkS ? ".55" : ".16") + ")"]).join(", "); };
+    const glas = front => ["inset 0 0 0 1px rgba(255,255,255," + (dkS ? ".12" : ".7") + ")", "inset 0 1px 0 rgba(255,255,255," + (dkS ? ".18" : ".9") + ")", "0 -8px 24px -14px rgba(0,0,0," + (dkS ? ".6" : ".22") + ")", "0 0 0 1px rgba(0,0,0," + (dkS ? ".35" : ".04") + ")"].join(", ");
+    const cards = order.map((c, i) => {
+      const d = fanned ? 0 : b - i, front = !fanned && d === 0;
+      const lvl = d > 0 ? lv[Math.min(d, 5) - 1] : null, inset = 0;
+      const title = this.setTitle(c.id), metaT = this.svc(c.id) ? this.csOf(s.svc[c.id]).text : (this.SET[c.id] || [])[1] || "";
+      const x = this.svc(c.id), acts = [];
+      return { id: c.id, metaOp: d >= 4 ? 0.95 : 0.72, tf: !front && s.hoverCard === c.id ? "translateY(-4px)" : "none", enter: () => { if (!front) this.setState({ hoverCard: c.id }); }, leave: () => this.setState(st => st.hoverCard === c.id ? { hoverCard: null } : null), state: front ? "open" : fanned ? "fanned" : "stacked", top: tops[i] + "px", h: fanned ? "44px" : (SH - tops[i]) + "px", z: i + 1, inset: inset + "px",
+        bg: ofl === "glass" ? "color-mix(in srgb, " + (lvl ? lvl[0] : "var(--c-lane)") + " " + (front ? 86 : 64) + "%, transparent)" : lvl ? lvl[0] : "var(--c-lane)", fg: lvl ? lvl[1] : "var(--c-ink)", sh: "none", shUnused: ofl === "lacquer" ? lack(front, lvl, i === 0) : ofl === "glass" ? glas(front) : front ? glaze + ", var(--sh-lane), 0 -8px 24px -12px rgba(0,0,0,.22)" : glaze + ", 0 0 0 1px rgba(0,0,0,.06), 0 -6px 16px -10px rgba(0,0,0,.18)",
+        sheen: ofl === "lacquer" ? "none" : ofl === "x" ? (front ? "linear-gradient(180deg, rgba(255,255,255," + (dkS ? ".035" : ".0") + ") 0, rgba(0,0,0,0) 120px)" : "linear-gradient(180deg, rgba(255,255,255," + (dkS ? ".06" : ".16") + ") 0, rgba(255,255,255,0) 24px, rgba(0,0,0,0) 60%, rgba(0,0,0," + (dkS ? ".18" : ".05") + ") 100%)") : ofl === "glass" ? "linear-gradient(160deg, rgba(255,255,255," + (dkS ? ".08" : ".55") + "), rgba(255,255,255,0) 55%)" : "none",
+        blur: ofl === "glass" ? "blur(22px) saturate(1.4)" : "none",
+        hLine: front ? "var(--c-line)" : "transparent", mLine: "color-mix(in srgb, currentColor 22%, transparent)", closeRing: "none",
+        markSym: false, markText: true, markD: P.person, mark: this.setTitle(c.id)[0], title, meta: metaT, metaTip: "", metaFlex: "1 1 0", metaMl: "0", lock: !!(x && x.firma) || (x && x.privat), acts,
+        confirm: false,
+        close: e => { stop(e); this.closeSet(c.id); }, cursor: front ? "default" : "pointer",
+        go: front ? undefined : () => this.setState({ sfront: c.id, sfanned: false }),
+        isSet: front, vis: fanned ? 0 : 1, pe: fanned ? "none" : "auto",
+        isPreview: false, tStyle: "normal",
+        titleGo: undefined, titleTip: "", titleCur: "inherit" };
+    });
+    const S = { state: fanned ? "fanned" : "stacked", cards, overview: fanned };
+    const OZ = { s: { h: 144, min: 200, lines: 3 }, m: { h: 176, min: 232, lines: 4 }, l: { h: 248, min: 320, lines: 8 } }[s.ovSize || "m"] || { h: 176, min: 232, lines: 4 };
+
+    const dressT = (o, id) => { const hot = s.ovHot === id, other = s.ovHot && !hot; return Object.assign(o, { id, ring: o.cur ? "inset 0 0 0 1px var(--c-ink-3)" : "inset 0 0 0 1px var(--c-line)", op: other ? .55 : 1, tf: hot ? "translateY(calc(var(--size-overviewHoverLift) * -1)) scale(1.012)" : other ? "scale(.988)" : "none", sh: hot ? "var(--sh-overviewHover)" : "0 0 0 transparent", aO: hot ? 1 : 0, aY: hot ? 0 : 6, aP: hot ? "auto" : "none", enter: () => this.setState({ ovHot: id }), leave: () => this.setState(st => st.ovHot === id ? { ovHot: null } : null) }); };
+    S.ovH = OZ.h + "px"; S.ovMin = OZ.min + "px"; S.ovLines = OZ.lines;
+    S.ovCtl = { modes: [], hasModes: false };
+    S.ovCtl.sizes = [["s", "Klein"], ["m", "Mittel"], ["l", "Groß"]].map(x => ({ t: x[1], on: () => this.setState({ ovSize: x[0] }), bg: (s.ovSize || "m") === x[0] ? "var(--c-inv)" : "transparent", fg: (s.ovSize || "m") === x[0] ? "var(--c-on-inv)" : "var(--c-ink-2)" }));
+    S.ov = !fanned ? [] : order.map((c, i) => { const k = cards[i], cur = c.id === frontId;
+      return dressT({ cur, state: cur ? "current" : "rest", markSym: k.markSym, markText: k.markText, markD: k.markD, mark: k.mark, title: k.title, date: "", unread: false, sub: this.svc(c.id) ? this.svc(c.id).use : (this.SET[c.id] || [])[1] || "", pv: this.svc(c.id) ? this.csOf(s.svc[c.id]).text : "", hasClose: true, close: k.close, acts: [], go: k.go || (() => this.setState({ sfanned: false })) }, c.id); });
+
+    // settings body
+    const fk = { stopPropagation() {}, preventDefault() {} }, sNarrow = w[2] < 480;
+    const fold = b => { if (!sNarrow || !b.isRow) return b;
+      if (b.hasSeg) { const cur = b.seg.find(o => o.state === "selected"); return Object.assign({}, b, { hasSeg: false, hasPill: true, pill: cur ? cur.n : b.seg[0].n, pillGo: e => this.openMenu(e, b.seg.map(o => this.mi(o.n, () => o.go(fk), { check: o.state === "selected" })), 200) }); }
+      if (b.hasPill && b.hasBtns && b.pillItems) return Object.assign({}, b, { hasBtns: false, pillGo: e => this.openMenu(e, b.pillItems().concat([{ sep: true }], b.btns.map(x => this.mi(x.label, () => x.go(fk)))), 220) });
+      if (b.hasBtns && b.btns.length > 1) return Object.assign({}, b, { hasBtns: false, hasPill: true, pill: "Aktionen", pillGo: e => this.openMenu(e, b.btns.map(x => this.mi(x.label, () => x.go(fk))), 220) });
+      return b; };
+    const SB = { blocks: frontId ? this.blocks(frontId).map(fold) : [] };
+
+    // action bar
+    const narrowBar = w[2] < 480;
+    // stack head = command panel for the front card; fixed slots, overflow into Mehr
+    const fc = S.cards.find(c => c.state === "open"), cw = w[2] - 16;
+    const hb = (label, d, go, kind, o) => { o = o || {}; const v = kind === "accent" || kind === "on" ? ["var(--c-inv)", "var(--c-on-inv)", "var(--c-inv)", "var(--c-on-inv)"] : kind === "signal" ? ["transparent", "var(--c-signal)", "var(--c-hover)", "var(--c-signal)"] : ["transparent", "var(--c-ink-2)", "var(--c-hover)", "var(--c-ink)"];
+      const lab = !!o.label;
+      return { isBtn: true, isSep: false, part: lab ? "text-button" : "symbol-button", label, tip: label, d, prio: o.prio || 0, run: go, state: o.off ? "disabled" : kind || "neutral", showLabel: lab, w: lab ? "auto" : "28px", pad: lab ? "0 12px 0 8px" : "0", cost: lab ? (o.lw || 84) : 28,
+        bg: v[0], fg: v[1], hbg: o.off ? v[0] : v[2], hfg: o.off ? v[1] : v[3], ring: kind === "accent" || kind === "on" ? "none" : iconRing, op: o.off ? .4 : 1, cur: o.off ? "default" : "pointer", off: !!o.off,
+        go: e => { stop(e); if (!o.off) go(e); } }; };
+    const SEP = { isSep: true, isBtn: false, cost: 9 };
+    let main = [], tail = [], more = [], footL = [], footR = [], hint = "", hintFg = "var(--c-ink-3)";
+    const mm = (x) => this.mi(x.label, () => x.run({ stopPropagation() {}, currentTarget: null }), null);
+    if (!fanned && fc) {
+      const x = this.svc(frontId), st = x ? s.svc[frontId] : null;
+      if (x && !x.accounts) main.push(hb(["connected", "stored", "working"].includes(st) ? "Erneut verbinden" : "Verbinden", P.link, () => this.connect(frontId), null, { off: st === "connecting" }));
+      if (x && ["connected", "stored", "working", "failed"].includes(st)) main.push(hb("Trennen", P.close, () => this.setState({ confirmDisc: frontId }), "signal"));
+      if (frontId === "backups") main.push(hb("Jetzt sichern", P.save, () => this.toastIt("Backup erstellt")));
+    }
+    if (fanned || !fc) hint = "";
+    const n = S.cards.length, conf = false, canFold = openCount > 1 && !conf;
+    const fanB = [];
+    const foldB = canFold ? [hb("Spalte falten", P.minus, () => this.setMem({ Rf: true, max: -1 }))] : [];
+    const sum = arr => arr.reduce((t, x) => t + x.cost, 0) + Math.max(0, arr.length - 1) * 4;
+    const endOf = (extra) => tail.concat(extra.length || more.length ? [hb("Mehr", P.more, e => this.openMenu(e, extra.concat(extra.length && more.length ? [{ sep: true }] : []).concat(more), 260))] : []).concat(fanB.length || foldB.length ? [SEP] : []).concat(fanB, foldB);
+    let hidden = [], end = endOf([]);
+    const fit = () => sum(main) + (main.length ? 4 : 0) + sum(end) + 12 <= cw;
+    while (!fit() && main.some(x => x.isBtn)) {
+      const cand = main.filter(x => x.isBtn).sort((p, q) => q.prio - p.prio)[0]; hidden.push(cand); main = main.filter(x => x !== cand);
+      main = main.filter((x, i, arr) => !(x.isSep && (i === 0 || i === arr.length - 1 || arr[i - 1].isSep)));
+      end = endOf(hidden.slice().sort((p, q) => p.prio - q.prio).filter(x => !x.off).map(mm));
+    }
+    S.cards.forEach(c => { c.acts = []; c.confirm = false; c.hasFoot = false; c.foot = { l: [], r: [] }; });
+    if (fc && !fanned && (footL.length || footR.length)) { fc.hasFoot = true; fc.foot = { l: footL, r: footR }; }
+    const HB = { state: fanned ? "fanned" : fc ? "reading" : "empty", main, end, hint, hintFg, empty: !n };
+
+
+    const syncErr = false;
+
+    if (C.tilesOn) C.hasRows = false;
+    if (C.rows) C.rows.forEach(r => { if (r.acts) r.acts = r.acts.map(a => a.isPill ? a : Object.assign({ plain: true }, a)); });
+    return {
+      ready: true, licht, area: s.area, winRef: this.winRef, shGrund: this.props.ground ?? "white", shSchrift: this.props.typeface ?? "Geist", appLock: this.props.appLock ?? "aus", shGriff: this.props.handle ?? "hairline", shAssistFace: this.props.assistantFace ?? "Orb", fenster: this.props.window, breite: this.props.windowWidth, hoehe: this.props.windowHeight,
+      wArr: w, maxed: rM.max >= 0, slow: !!this.state.slowLane, groups: this.GROUPS, badges: { Mail: unread, Einstellungen: this.SVC.filter(v => s.svc[v.id] === "failed").length }, shDot: unread > 0 || syncErr,
+      isList: lanes[0].isList, isMain: lanes[1].isMain, isStack: lanes[2].isStack, kStrip: i => { if (lanes[i].onStrip) lanes[i].onStrip(); },
+      onChoose: (n, sub) => this.choose(n, sub), onMode: o => this.setState({ blobOpen: o }), onMem: p => this.setMem(p), onGrow: (side, v, w0) => this.grow(side, v, w0), onSync: () => this.sync(),
+      syncState: s.syncing ? "syncing" : syncErr ? "error" : "fresh", syncErr, syncTitle: s.syncing ? "Gleicht ab …" : syncErr ? "Abgleich fehlgeschlagen. Zum Wiederholen drücken." : "Neu laden · Gerade abgeglichen",
+      assistText: s.svc.claude === "failed" ? "Claude antwortet gerade nicht. In den Einstellungen neu verbinden." : "Füge Text, Dateien oder Links ein.",
+      stackTrans: still ? "none" : "top 520ms cubic-bezier(.22,1.08,.36,1), height 520ms cubic-bezier(.22,1.08,.36,1), left 520ms cubic-bezier(.22,1.08,.36,1), right 520ms cubic-bezier(.22,1.08,.36,1), opacity 200ms ease, background 320ms " + ease + ", transform 420ms " + ease,
+      lanes, L: Object.assign(L, { edgeOp: this.state.lScrolled && this.state.lEdge ? 1 : 0, edgeTr: this.edgeTr(!!this.state.lEdge), onScroll: e => this.onLScroll(e) }), C, S, SB, HB, personD: P.person, meIni: this.ini(this.ME[0]), iconRing, fanD: P.fan, pinD: P.pin,
+      flagD: P.flag, docD: P.doc, closeD: P.close, composeD: P.compose, chevronD: P.chevron, lockD: P.lock, alertD: P.alert, peopleD: P.people, textSizeD: P.textSize, attachD: P.attach, folderD: P.folder, searchD: P.search,
+      hasToastS: !!s.toast, toastX: (lefts[2] + w[2] / 2) + "px", toastY: (g.lt + g.lh - 44 - 8 - 28) + "px", toast: s.toast || "", hasUndo: !!s.toastUndo && !s.toastFail, hasRetry: !!s.toastUndo && !!s.toastFail, hasFail: !!s.toastFail, toastAct: s.toastAct || "Erneut versuchen", undo: () => { const u = this.state.toastUndo; clearTimeout(this.tt); this.setState({ toast: null, toastUndo: null }); if (u) u(); },
+      hasMenu: !!s.menu, menu: s.menu ? { x: s.menu.x + "px", y: s.menu.y + "px", w: s.menu.w + "px", items: s.menu.items.map(it => Object.assign({ sep: false, head: false, item: false }, it)) } : { items: [] },
+      rootDown: () => { if (s.menu) this.setState({ menu: null }); }, stop,
+      laneSet: true, kW: g.W, kH: g.H, kBahnen: w.join(","), kTop: g.lt, nutzung: this.props.nutzung ?? "allein",
+      kToast: t => this.toastIt(t), kLook: s.look || "Automatisch", kLookGo: n => this.setState({ look: n === "Automatisch" ? null : n }), kAbschnitt: { Verbindungen: "integrationen", Ich: "identitaet", Ansicht: "darstellung", System: "system" }[s.cat] || "integrationen",
+    };
+  }
+}
+</script>
+</body>
+</html>

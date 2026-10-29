@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="lieferung-an-code/fonts/geist.css">
+<meta name="design_doc_mode" content="canvas">
+<style>html,body{margin:0;padding:0;background:#e6e6e6}a{color:#2c2c2e}a:hover{color:#636366}</style>
+</helmet>
+<div data-alfa-sperre="gesperrt" style="position:fixed;left:0;top:0;right:0;bottom:0;z-index:2147483000;pointer-events:none;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(230,230,230,.28)"><div style="transform:rotate(-24deg);border:1.4vw solid #e10600;outline:.5vw solid #e10600;outline-offset:-2.6vw;padding:2.4vw 4vw 2vw;display:flex;flex-direction:column;align-items:center;gap:1.2vw;background:rgba(236,236,236,.5);color:#e10600;font-family:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;text-transform:uppercase"><div style="font-size:11vw;font-weight:800;letter-spacing:.28em;line-height:1;margin-right:-.28em">Gesperrt</div><div style="font-size:3.4vw;font-weight:700;letter-spacing:.06em;line-height:1">21.10.2026 · nicht abgenommen</div></div></div>
+
+<section data-screen-label="Hinweis" style="padding:32px 64px 0;font-family:'Geist',-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;font-size:13px;line-height:1.35;color:#2c2c2e"><span style="display:inline-flex;align-items:center;gap:12px;height:28px;padding:0 12px;border-radius:999px;box-shadow:inset 0 0 0 1px #aeaeb2;font-weight:500">Exploration, ruht · Export gesperrt bis auf Widerruf · nicht baurelevant · nicht im Tokenbogen · Stand 21.10.2026</span></section>
+<section data-screen-label="Farbleiter 2" style="padding:64px 64px 0;display:flex;gap:48px;align-items:flex-start;font-family:'Geist',-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;font-size:13px;line-height:1.35;color:#2c2c2e;width:2600px;box-sizing:border-box">
+<sc-for list="{{ options2 }}" as="o" hint-placeholder-count="3">
+<div id="{{ o.id }}" style="width:800px;flex:none;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:center;gap:12px"><span style="height:24px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;background:#2c2c2e;color:#fff;font-weight:500;letter-spacing:.06em">{{ o.id }}</span><span style="font-size:18px;line-height:1.25;font-weight:500;letter-spacing:-.02em">{{ o.name }}</span><span style="color:#636366">{{ o.src }}</span></div>
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.06em;color:#636366">BOLDFARBEN · MATT, OHNE BLAU</span>
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
+<sc-for list="{{ o.bold }}" as="b" hint-placeholder-count="5"><div style="display:flex;flex-direction:column;gap:8px"><div style="height:96px;border-radius:12px;background:{{ b.hex }};color:{{ b.fg }};display:flex;align-items:flex-end;padding:8px;box-sizing:border-box;font-weight:500">{{ b.n }}</div><span style="display:flex;flex-direction:column;gap:2px;font-size:11.5px;line-height:16px;color:#636366"><span style="color:#2c2c2e">{{ b.role }}</span><span>{{ b.hex }} · {{ b.ratio }}:1 mit {{ b.fgName }}</span></span></div></sc-for>
+</div></div>
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.06em;color:#636366">LIQUID GLASS · HELL UND DUNKEL ÜBER BLOCKFARBEN</span>
+<div style="position:relative;height:420px;border-radius:20px;overflow:hidden;background:#f2f2f7;box-shadow:0 0 0 1px #e5e5ea">
+<div style="position:absolute;left:0;top:0;width:46%;height:100%;background:{{ o.c1 }}"></div>
+<div style="position:absolute;left:46%;top:0;right:0;height:58%;background:{{ o.c2 }}"></div>
+<div style="position:absolute;left:46%;top:58%;right:0;bottom:0;background:{{ o.c3 }}"></div>
+<div data-part="glass-light" style="position:absolute;left:16px;top:16px;bottom:16px;width:280px;border-radius:20px;overflow:hidden;display:flex;flex-direction:column;background:rgba(255,255,255,.75);backdrop-filter:blur(24px) saturate(1.6);-webkit-backdrop-filter:blur(24px) saturate(1.6);box-shadow:inset 0px 0px 0px 1px rgba(255,255,255,0.7),inset 0px 1px 0px 0px rgba(255,255,255,0.9),0px -8px 24px -14px rgba(0,0,0,0.22),0px 0px 0px 1px rgba(0,0,0,0.04)">
+<div style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px"><span style="flex:1;font-weight:500">Eingang</span><span style="height:28px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.01em;box-shadow:inset 0 0 0 1px rgba(60,60,67,.3)">Filter</span></div>
+<div style="flex:none;height:88px;display:flex;gap:12px;padding:12px 16px 0 8px;box-sizing:border-box;position:relative"><span style="flex:none;width:28px;height:28px;border-radius:50%;margin-top:4px;display:grid;place-items:center;font-size:11.5px;font-weight:500;letter-spacing:.06em;box-shadow:inset 0 0 0 1px rgba(60,60,67,.3)">DK</span><span style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:20px"><span style="display:flex;gap:8px"><span style="flex:1;min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Daniel Klapsing</span><span style="font-size:11.5px;color:#48484a">17:42</span></span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Aw: W-Bank RS76 München</span><span style="color:#48484a;font-size:11.5px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Sehr geehrter Herr Firo, ich wollte Sie kurz …</span></span><i style="position:absolute;left:16px;right:16px;bottom:0;height:1px;background:rgba(60,60,67,.18)"></i></div><div style="flex:none;height:88px;display:flex;gap:12px;padding:12px 16px 0 8px;box-sizing:border-box;position:relative"><span style="flex:none;width:28px;height:28px;border-radius:50%;margin-top:4px;display:grid;place-items:center;font-size:11.5px;font-weight:500;letter-spacing:.06em;box-shadow:inset 0 0 0 1px rgba(60,60,67,.3)">SR</span><span style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:20px"><span style="display:flex;gap:8px"><span style="flex:1;min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">S Roos &amp; F Fudickar</span><span style="font-size:11.5px;color:#48484a">15:09</span></span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Anfrage Veredelung Waschtischfüße</span><span style="color:#48484a;font-size:11.5px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Sehr geehrter Herr Firo, ich wollte Sie kurz …</span></span><i style="position:absolute;left:16px;right:16px;bottom:0;height:1px;background:rgba(60,60,67,.18)"></i></div>
+</div>
+<div data-part="glass-dark" style="position:absolute;right:16px;bottom:16px;width:280px;box-sizing:border-box;padding:16px;border-radius:20px;display:flex;flex-direction:column;gap:12px;background:rgba(20,20,20,.62);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4);color:#fff;box-shadow:inset 0px 0px 0px 1px rgba(255,255,255,0.12),inset 0px 1px 0px 0px rgba(255,255,255,0.18),0px -8px 24px -14px rgba(0,0,0,0.6),0px 0px 0px 1px rgba(0,0,0,0.35)">
+<span style="font-size:18px;line-height:24px;font-weight:500;letter-spacing:-.02em">Mail senden?</span>
+<span style="color:rgba(255,255,255,.8);text-wrap:pretty;line-height:20px">Die Nachricht geht an 2 Empfänger.</span>
+<span style="display:flex;gap:8px;justify-content:flex-end"><span style="height:28px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.01em">Abbrechen</span><span style="height:28px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;background:rgba(255,255,255,.2);font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.01em">Senden</span></span>
+</div>
+</div>
+<span style="font-size:11.5px;line-height:16px;color:#636366">Glas wie TOKENBOGEN surface.glass, Radius 20, Bahn 280 breit, Rand 16, Kopf 44, Zeile 88, Marke 28, Knöpfe 28. Tinte auf hellem Glas über dem dunkelsten Block: {{ o.glassRatio }}:1. Weiß auf dunklem Glas über dem hellsten Block: {{ o.darkGlassRatio }}:1.</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.06em;color:#636366">SIGNALE UND SCHRIFT</span>
+<div style="display:flex;flex-direction:column;gap:12px;padding:24px;border-radius:20px;background:#fff;box-shadow:0 0 0 1px #e5e5ea">
+<span style="font-size:18px;line-height:1.25;font-weight:500;letter-spacing:-.02em">Einstellungen</span>
+<span style="color:#48484a;text-wrap:pretty">Mails und Dokumente bleiben auf Weiß, auch im Dunkeln.</span>
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+<span style="display:flex;align-items:center;gap:8px"><span style="width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ o.err }};box-shadow:inset 0 0 0 1px {{ o.err }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5l6 11H2ZM8 6.5v3M8 11.5v.25"></path></svg></span>Fehler</span>
+<span style="display:flex;align-items:center;gap:8px"><span style="width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ o.warn }};box-shadow:inset 0 0 0 1px {{ o.warn }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5l6 11H2ZM8 6.5v3M8 11.5v.25"></path></svg></span>Warnung</span>
+<span style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:{{ o.ok }}"></span>Verbunden</span>
+<span style="display:flex;align-items:center;gap:8px;color:#636366"><span style="width:8px;height:8px;border-radius:50%;box-shadow:inset 0 0 0 1px #aeaeb2"></span>Nicht verbunden</span>
+<span style="height:28px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;color:{{ o.sel }};box-shadow:inset 0 0 0 1px {{ o.sel }};font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.01em">Ausgewählt</span>
+</div></div></div>
+</div>
+</sc-for>
+</section>
+<section data-screen-label="Farbleiter" style="padding:64px;display:flex;gap:48px;flex-wrap:wrap;align-items:flex-start;font-family:'Geist',-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;font-size:13px;line-height:1.35;color:#2c2c2e;width:1720px;box-sizing:border-box">
+<sc-for list="{{ options }}" as="o" hint-placeholder-count="2">
+<div id="{{ o.id }}" style="width:800px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:center;gap:12px"><span style="height:24px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;background:#2c2c2e;color:#fff;font-weight:500;letter-spacing:.06em">{{ o.id }}</span><span style="font-size:18px;line-height:1.25;font-weight:500;letter-spacing:-.02em">{{ o.name }}</span><span style="color:#636366">{{ o.src }}</span></div>
+
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.06em;color:#636366">LEITER · WEISS BIS SCHWARZ</span>
+<div style="display:flex;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 1px #e5e5ea">
+<sc-for list="{{ ladder }}" as="l" hint-placeholder-count="13"><div style="flex:1;height:72px;background:{{ l.hex }};display:flex;align-items:flex-end;padding:4px"><span style="font-size:9px;line-height:1;color:{{ l.fg }}">{{ l.n }}</span></div></sc-for>
+</div></div>
+
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.06em;color:#636366">BOLDFARBEN · MATT, FÜNF</span>
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
+<sc-for list="{{ o.bold }}" as="b" hint-placeholder-count="5"><div style="display:flex;flex-direction:column;gap:8px"><div style="height:96px;border-radius:12px;background:{{ b.hex }};color:{{ b.fg }};display:flex;align-items:flex-end;padding:8px;box-sizing:border-box;font-weight:500">{{ b.n }}</div><span style="display:flex;flex-direction:column;gap:2px;font-size:11.5px;line-height:16px;color:#636366"><span style="color:#2c2c2e">{{ b.role }}</span><span>{{ b.hex }} · {{ b.ratio }}:1 mit {{ b.fgName }}</span></span></div></sc-for>
+</div></div>
+
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.06em;color:#636366">VORSCHAU · HELL</span>
+<div style="display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:20px;background:#fff;box-shadow:0 0 0 1px #e5e5ea">
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+<span style="height:40px;padding:0 4px 0 16px;border-radius:999px;display:inline-flex;align-items:center;gap:12px;background:{{ o.inv }};color:#fff;font-weight:500">Mail<span style="width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;letter-spacing:.06em;box-shadow:inset 0 0 0 1px rgba(255,255,255,.6)">JB</span></span>
+<span style="height:32px;padding:0 16px;border-radius:999px;display:inline-flex;align-items:center;background:{{ o.inv }};color:#fff;font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.01em">Senden</span>
+<span style="height:32px;padding:0 16px;border-radius:999px;display:inline-flex;align-items:center;color:#2c2c2e;box-shadow:inset 0 0 0 1px #d1d1d6;font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.01em">Abbrechen</span>
+<span style="height:28px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;background:{{ o.sel }};color:#fff;font:500 11.5px/1 Geist,system-ui,sans-serif">Ausgewählt</span>
+</div>
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+<span style="display:flex;align-items:center;gap:8px"><span style="width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ o.err }};box-shadow:inset 0 0 0 1px {{ o.err }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5l6 11H2ZM8 6.5v3M8 11.5v.25"></path></svg></span>Fehler</span>
+<span style="display:flex;align-items:center;gap:8px"><span style="width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ o.warnInk }};box-shadow:inset 0 0 0 1px {{ o.warn }};background:{{ o.warn }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5l6 11H2ZM8 6.5v3M8 11.5v.25"></path></svg></span>Warnung</span>
+<span style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:{{ o.sel }}"></span>Verbunden</span>
+<span style="display:flex;align-items:center;gap:8px;color:#636366"><span style="width:8px;height:8px;border-radius:50%;box-shadow:inset 0 0 0 1px #aeaeb2"></span>Nicht verbunden</span>
+</div>
+<div style="display:flex;flex-direction:column;border-radius:12px;background:#f2f2f7;padding:4px 0">
+<div style="display:flex;align-items:center;gap:12px;padding:8px 16px"><span style="width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:500;letter-spacing:.06em;box-shadow:inset 0 0 0 1px #d1d1d6;background:#fff">DK</span><span style="flex:1;display:flex;flex-direction:column"><span style="font-weight:500">Daniel Klapsing</span><span style="color:#636366;font-size:11.5px;line-height:16px">Aw: Enquiry Project Neuhaus</span></span><span style="font-size:11.5px;color:#636366">16:42</span></div>
+</div>
+</div></div>
+
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font:500 11.5px/1 Geist,system-ui,sans-serif;letter-spacing:.06em;color:#636366">ROLLEN · ALT → NEU (HELL)</span>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 24px">
+<sc-for list="{{ o.map }}" as="m" hint-placeholder-count="12"><div style="display:flex;align-items:center;gap:8px;min-height:28px"><span style="flex:none;width:120px">{{ m.k }}</span><span style="flex:none;width:16px;height:16px;border-radius:50%;background:{{ m.from }};box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)"></span><span style="color:#636366;font-size:11.5px">→</span><span style="flex:none;width:16px;height:16px;border-radius:50%;background:{{ m.to }};box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)"></span><span style="color:#636366;font-size:11.5px">{{ m.to }}</span></div></sc-for>
+</div></div>
+</div>
+</sc-for>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  lum(h) { const c = [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255).map(v => v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4)); return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]; }
+  cr(a, b) { const x = this.lum(a), y = this.lum(b), hi = Math.max(x, y), lo = Math.min(x, y); return (hi + .05) / (lo + .05); }
+  renderVals() {
+    const ink = "#2c2c2e", cr = (a, b) => this.cr(a, b);
+    const fgOf = h => cr(h, "#ffffff") >= cr(h, "#1c1c1e") ? ["#ffffff", "Weiß"] : ["#1c1c1e", "Tinte"];
+    const ladder = [["0", "#ffffff"], ["50", "#f2f2f7"], ["100", "#e5e5ea"], ["150", "#d1d1d6"], ["200", "#c7c7cc"], ["300", "#aeaeb2"], ["400", "#8e8e93"], ["500", "#636366"], ["600", "#48484a"], ["700", "#3a3a3c"], ["800", "#2c2c2e"], ["900", "#1c1c1e"], ["1000", "#000000"]].map(l => ({ n: l[0], hex: l[1], fg: this.lum(l[1]) > .3 ? "#2c2c2e" : "#ffffff" }));
+    const mk = arr => arr.map(b => { const f = fgOf(b[1]); return { n: b[0], hex: b[1], role: b[2], fg: f[0], fgName: f[1], ratio: cr(b[1], f[0]).toFixed(1) }; });
+    const rows = (inv, sel, err) => [["ground", "#ffffff", "#ffffff"], ["well", "#f5f5f5", "#f2f2f7"], ["line", "#e8e8e8", "#e5e5ea"], ["lineStrong", "#d9d9d9", "#d1d1d6"], ["ink", "#171717", ink], ["inkSecondary", "#4d4d4d", "#48484a"], ["inkTertiary", "#6b6b6b", "#636366"], ["mark", "#8a8a8a", "#8e8e93"], ["handle", "#a3a3a3", "#aeaeb2"], ["inverse", "#3d3d3d", inv], ["focus", "#6b6b6b", sel], ["signal", "#b3412e", err]].map(r => ({ k: r[0], from: r[1], to: r[2] }));
+    const A = { id: "1a", name: "Barragán · warm", src: "Muster UB55, UB53, UB16, UB-navy, UB-stahl und das ocker Plakat", inv: "#042433", sel: "#294d6d", err: "#9c3e17", warn: "#c58a00", bold: mk([["Nacht", "#042433", "Tiefe Blockfarbe"], ["Stahl", "#294d6d", "Auswahl, Fokus, verbunden"], ["Rost", "#9c3e17", "Fehler"], ["Ocker", "#c58a00", "Warnung"], ["Wein", "#7e2b33", "Akzent, kritisch tief"]]) };
+    const B = { id: "1b", name: "Dämmerung · kühl", src: "Foto 1 (Berg und Hütte) und Foto 6 (Patio)", inv: "#161c2c", sel: "#51678c", err: "#bc4942", warn: "#d98c23", bold: mk([["Nacht", "#161c2c", "Tiefe Blockfarbe"], ["Hangblau", "#51678c", "Auswahl, Fokus, verbunden"], ["Ziegel", "#bc4942", "Fehler"], ["Ocker", "#d98c23", "Warnung"], ["Lavendel", "#a097ac", "Akzent, matt"]]) };
+    const options = [A, B].map(o => Object.assign({}, o, { warnInk: fgOf(o.warn)[0], map: rows(o.inv, o.sel, o.err) }));
+    const rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+    const hexOf = c => "#" + c.map(v => Math.round(v).toString(16).padStart(2, "0")).join("");
+    const mix = (h, w, a) => hexOf(rgb(h).map(v => v * (1 - a) + w * a));
+    const mk2 = (id, name, src, bold, roles, bl) => {
+      const by = n => bold.find(b => b[0] === n)[1], [inv, sel, err, warn, ok] = [by(roles.inv), by(roles.sel), by(roles.err), by(roles.warn), by(roles.ok)];
+      const c = [bl[0], bl[1], bl[2]].map(by), dark = c.slice().sort((a, b) => this.lum(a) - this.lum(b))[0], light = c.slice().sort((a, b) => this.lum(b) - this.lum(a))[0];
+      return { id, name, src, bold: mk(bold), inv, sel, err, warn, ok, c1: c[0], c2: c[1], c3: c[2], errFg: fgOf(err)[0], warnFg: fgOf(warn)[0], selFg: fgOf(sel)[0], invGlass: "rgba(" + rgb(inv).join(",") + ",.72)", glassRatio: cr(mix(dark, 255, .58), ink).toFixed(1), darkGlassRatio: cr(hexOf(rgb(light).map((v, i) => v * .34 + [28, 28, 30][i] * .66)), "#ffffff").toFixed(1) };
+    };
+    const options2 = [
+      mk2("2a", "Erde · Oxblut", "Muster UB78, UB55, UB53, UB16, UB80", [["Oxblut", "#420f0e", "Tiefe Blockfarbe"], ["Wein", "#7e2b33", "Auswahl, Fokus"], ["Rost", "#9c3e17", "Fehler"], ["Ocker", "#c58a00", "Warnung"], ["Haut", "#bc927a", "Akzent, matt"]], { inv: "Oxblut", sel: "Wein", err: "Rost", warn: "Ocker", ok: "Oxblut" }, ["Rost", "Haut", "Ocker"]),
+      mk2("2b", "Zypresse · Terrakotta", "Muster UB76, UB18, UB-sand und die Zypresse aus Foto 6", [["Zypresse", "#263e16", "Tiefe Blockfarbe, verbunden"], ["Backstein", "#71382d", "Auswahl, Fokus"], ["Terrakotta", "#955341", "Fehler"], ["Ocker", "#b36924", "Warnung"], ["Sand", "#ccae72", "Akzent, matt"]], { inv: "Zypresse", sel: "Backstein", err: "Terrakotta", warn: "Ocker", ok: "Zypresse" }, ["Terrakotta", "Sand", "Ocker"]),
+      mk2("2c", "Mauve · Kakao", "Muster UB79, UB16, UB77, UB18, UB80", [["Kakao", "#76453c", "Tiefe Blockfarbe"], ["Wein", "#7e2b33", "Auswahl, Fokus"], ["Terrakotta", "#9c3e17", "Fehler"], ["Ocker", "#b36924", "Warnung"], ["Mauve", "#a08e9c", "Akzent, matt"]], { inv: "Kakao", sel: "Wein", err: "Terrakotta", warn: "Ocker", ok: "Kakao" }, ["Mauve", "Wein", "Ocker"])
+    ];
+    return { options, ladder, options2 };
+  }
+}
+</script>
+</body>
+</html>

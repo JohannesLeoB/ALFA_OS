@@ -1,0 +1,224 @@
+{
+ "export": "2026-10-27",
+ "quelle": "alfa-bausteine.js:7 (Objekt P), Darstellung wie ALFA Mail.dc.html (<svg width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">, 24 Stellen)",
+ "viewBox": "0 0 16 16",
+ "drawSize": 14,
+ "stroke": {
+  "width": 1.3,
+  "lineCap": "round",
+  "lineJoin": "round",
+  "color": "currentColor"
+ },
+ "fill": "none",
+ "hinweis": "Form der Zeichen, keine Tokens (wie Briefumschlag, Johannes 27.10. „ist okay so.“). Ob Code sie als eigene Zeichen oder als SF Symbols baut, ist offen (OFFEN-AN-CODE-2710.md H).",
+ "symbols": [
+  {
+   "name": "search",
+   "d": "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5"
+  },
+  {
+   "name": "filter",
+   "d": "M2.5 3.5h11l-4.25 5v4.5l-2.5-1.25V8.5Z"
+  },
+  {
+   "name": "compose",
+   "d": "M11 2.5l2.5 2.5L6 12.5H3.5V10ZM9.5 4l2.5 2.5"
+  },
+  {
+   "name": "inbox",
+   "d": "M2.5 9.5l1.5-6h8l1.5 6v3.5h-11ZM2.5 9.5h3l1 1.5h3l1-1.5h3"
+  },
+  {
+   "name": "flag",
+   "d": "M4 14V2.5M4 3h7.5l-1.5 2.75L11.5 8.5H4"
+  },
+  {
+   "name": "sent",
+   "d": "M14 2L7 9M14 2l-4.5 12-2.5-5-5-2.5Z"
+  },
+  {
+   "name": "allMail",
+   "d": "M2.5 6.5h11v6h-11ZM4 4.5h8M5.5 2.5h5"
+  },
+  {
+   "name": "archive",
+   "d": "M2.5 3.5h11v3h-11ZM3.5 6.5v6h9v-6M6.5 9h3"
+  },
+  {
+   "name": "junk",
+   "d": "M5.5 2.5h5l3 3v5l-3 3h-5l-3-3v-5ZM8 5.5v3M8 10.75v.5"
+  },
+  {
+   "name": "trash",
+   "d": "M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9"
+  },
+  {
+   "name": "tag",
+   "d": "M2.5 2.5h5.5l5.5 5.5-5.5 5.5-5.5-5.5ZM5.5 5.25v.5"
+  },
+  {
+   "name": "reply",
+   "d": "M6.5 4L2.5 8l4 4M2.5 8h7a4 4 0 0 1 4 4v.5"
+  },
+  {
+   "name": "replyAll",
+   "d": "M9 4L5 8l4 4M5 8h4.5a4 4 0 0 1 4 4v.5M5.5 4l-4 4 4 4"
+  },
+  {
+   "name": "forward",
+   "d": "M9.5 4l4 4-4 4M13.5 8h-7a4 4 0 0 0-4 4v.5"
+  },
+  {
+   "name": "fan",
+   "d": "M4.5 5.5h7v8h-7ZM5.5 3.5h5M6.5 1.5h3"
+  },
+  {
+   "name": "send",
+   "d": "M8 13V3.5M4 7.5l4-4 4 4"
+  },
+  {
+   "name": "close",
+   "d": "M4.5 4.5l7 7M11.5 4.5l-7 7"
+  },
+  {
+   "name": "pin",
+   "d": "M8 10.5V14.5M5 10.5h6M5.75 10.5l.75-5h3l.75 5M6 2.5h4"
+  },
+  {
+   "name": "more",
+   "d": "M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM13 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
+  },
+  {
+   "name": "gridS",
+   "d": "M2.5 2.5h3v3h-3ZM6.5 2.5h3v3h-3ZM10.5 2.5h3v3h-3ZM2.5 6.5h3v3h-3ZM6.5 6.5h3v3h-3ZM10.5 6.5h3v3h-3ZM2.5 10.5h3v3h-3ZM6.5 10.5h3v3h-3ZM10.5 10.5h3v3h-3Z"
+  },
+  {
+   "name": "gridL",
+   "d": "M2.5 2.5h11v11h-11Z"
+  },
+  {
+   "name": "grid",
+   "d": "M2.5 2.5h4.5v4.5h-4.5ZM9 2.5h4.5v4.5H9ZM2.5 9h4.5v4.5h-4.5ZM9 9h4.5v4.5H9Z"
+  },
+  {
+   "name": "print",
+   "d": "M4.5 5.5v-3h7v3M4.5 11.5h-2v-5h11v5h-2M4.5 9h7v4.5h-7Z"
+  },
+  {
+   "name": "export",
+   "d": "M8 2.5V10M4.5 6.5L8 10l3.5-3.5M3 13h10"
+  },
+  {
+   "name": "attach",
+   "d": "M12.5 7.5l-4.75 4.75a3 3 0 0 1-4.25-4.25L8.5 3a2 2 0 0 1 2.83 2.83L6.5 10.66a1 1 0 0 1-1.41-1.41L9.5 4.83"
+  },
+  {
+   "name": "folder",
+   "d": "M2.5 4.5h4l1.5 1.5h5.5v6.5h-11Z"
+  },
+  {
+   "name": "person",
+   "d": "M8 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM3 13.5c.5-2.75 2.5-4 5-4s4.5 1.25 5 4"
+  },
+  {
+   "name": "personAdd",
+   "d": "M6.5 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM2 13.5c.5-2.5 2.25-3.75 4.5-3.75s4 1.25 4.5 3.75M12.5 4.5v4M10.5 6.5h4"
+  },
+  {
+   "name": "people",
+   "d": "M6 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM2.5 12.5c.4-2 1.75-3 3.5-3s3.1 1 3.5 3M10.5 7a2 2 0 1 0 0-4M11.5 9.6c1.2.3 2 1.2 2.25 2.9"
+  },
+  {
+   "name": "bold",
+   "d": "M5 3h3.5a2.5 2.5 0 0 1 0 5H5ZM5 8h4a2.5 2.5 0 0 1 0 5H5Z"
+  },
+  {
+   "name": "italic",
+   "d": "M7 3h5M4 13h5M10 3L6 13"
+  },
+  {
+   "name": "underline",
+   "d": "M4.5 2.5v5a3.5 3.5 0 0 0 7 0v-5M3.5 13.5h9"
+  },
+  {
+   "name": "list",
+   "d": "M6 4.5h7.5M6 8h7.5M6 11.5h7.5M2.5 4.5h1M2.5 8h1M2.5 11.5h1"
+  },
+  {
+   "name": "numbered",
+   "d": "M6.5 4.5h7M6.5 8h7M6.5 11.5h7M2.5 3.5l1-.5v3"
+  },
+  {
+   "name": "link",
+   "d": "M7 9a2.5 2.5 0 0 0 3.5 0l2-2A2.5 2.5 0 0 0 9 3.5l-.7.7M9 7a2.5 2.5 0 0 0-3.5 0l-2 2A2.5 2.5 0 0 0 7 12.5l.7-.7"
+  },
+  {
+   "name": "textSize",
+   "d": "M2 12.5l3-8 3 8M3 10h4M10.5 12.5V9.5a1.75 1.75 0 0 1 3.5 0v3M10.5 11h3.5"
+  },
+  {
+   "name": "save",
+   "d": "M8 2.5v7M5 6.5l3 3 3-3M2.5 10.5v3h11v-3"
+  },
+  {
+   "name": "expand",
+   "d": "M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5L9 7M2.5 13.5L7 9"
+  },
+  {
+   "name": "shrink",
+   "d": "M13.5 2.5L10 6M10 3v3h3M2.5 13.5L6 10M6 13v-3H3"
+  },
+  {
+   "name": "minus",
+   "d": "M4 8h8"
+  },
+  {
+   "name": "check",
+   "d": "M3.5 8.5l3 3 6-7"
+  },
+  {
+   "name": "building",
+   "d": "M3.5 13.5V2.5h6v11M9.5 6.5h3v7M2.5 13.5h11M5.5 5h2M5.5 8h2M5.5 11h2"
+  },
+  {
+   "name": "docText",
+   "d": "M4 2h5l3 3v9H4ZM9 2v3h3M6.5 8h3M6.5 10.5h3"
+  },
+  {
+   "name": "chevron",
+   "d": "M4.5 6.5L8 10l3.5-3.5"
+  },
+  {
+   "name": "lock",
+   "d": "M4.5 7.5h7v6h-7ZM6 7.5V5.5a2 2 0 0 1 4 0v2"
+  },
+  {
+   "name": "plug",
+   "d": "M5.5 2.5v3M10.5 2.5v3M4 5.5h8v2.5a4 4 0 0 1-8 0ZM8 12v1.5"
+  },
+  {
+   "name": "contrast",
+   "d": "M8 13.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM8 2.5v11"
+  },
+  {
+   "name": "system",
+   "d": "M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4"
+  },
+  {
+   "name": "envelope",
+   "d": "M2.5 4h11v8h-11ZM2.5 4.5L8 9l5.5-4.5"
+  },
+  {
+   "name": "doc",
+   "d": "M4 2h5l3 3v9H4ZM9 2v3h3"
+  },
+  {
+   "name": "alert",
+   "d": "M8 2.5l6 11H2ZM8 6.5v3M8 11.5v.25"
+  },
+  {
+   "name": "key",
+   "d": "M5.5 10.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM8.5 7.5h5v2M11.5 7.5v2"
+  }
+ ]
+}

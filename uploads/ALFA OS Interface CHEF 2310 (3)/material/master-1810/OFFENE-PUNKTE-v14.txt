@@ -1,0 +1,48 @@
+Offene Punkte zum Entwurf Brief v14 (23.10.2026), nur für die Lead
+
+A Verbleib jeder Nummer aus v13
+N1 erhalten; Felder des Versands als Befund ergänzt (spec-hub HUB-F31, fundus DHLVersandCredentials.swift:5-23).
+N2 erhalten; Satz zu Warnung und ungesendeten Mails nach Teil 4.
+N3, N4, N5, N9, N10, N13, N15, N17, N19, N24, N26, N27, N31, N32, N37 erhalten (gekürzt).
+N6 erhalten; „Schritte von 0,50“ ergänzt (HUB-F45, J 20.10.). Nicht aufgenommen: „Kosten je Dienst sehen“ (HUB-F45), weil kein Auftrag in v13.
+N7 erhalten, N25 darin aufgegangen.
+N8 erhalten; Quelle [Befund], das Wort vom 21.10. (Entwürfe) steht in Teil 2.
+N11 gestrichen: N21 (zwei Schalter, J 22.10.) ersetzt „eine der beiden streichen“; der Aufräumpunkt INHALT.json steht in N21.
+N12, N18 wie in v13 entfallen.
+N14 in N30 aufgegangen.
+N16 erhalten, PDF-Teil von N23 darin aufgegangen.
+N20 erhalten; „Drucken im Entwurf (:1040)“ ergänzt (spec-mail MAIL-F35, stand.md:43).
+N21 erhalten, N11 darin.
+N22 erhalten, L-009 darin (T5 zeigt nur noch den Verweis).
+N23 erhalten ohne PDF-Teil.
+N28 erhalten, N34 darin; DHL nur noch Verweis auf N1; ClickUp nach Teil 4 (siehe B2).
+N29 erhalten; Datum geändert (siehe B1).
+N30 erhalten, N14 darin.
+N33 erhalten ohne Signatur; Signatur in T5 L-010 (dort „je Postfach“ ergänzt).
+N35 erhalten; Code-Lage des Toasts ergänzt (CardPile.swift:37-42).
+N36 erhalten; Untergrenze nach Teil 4.
+N38 erhalten; Befund AppHost.swift:55-61 ergänzt.
+N39 erhalten, L-015 darin; Code-Wert DesignTokens.swift:99 ergänzt.
+N40 geändert: Shell:40 und :53 aufgenommen; Mail:758 bleibt in der Liste (Erklärsatz), die Folgenangabe nach Teil 4; Mail:392 und :760 aufgeteilt (siehe B4).
+Neu: N41 (stand.md:34, :66; SettingsSectionCards.swift:104-113; Mail:758), N43 (stand.md:36, :47; SheetValues.swift:7-8; BlobView.swift:198, :235, :257). N42 nicht vergeben (stand.md:34, :49).
+
+B Nicht belegt oder widersprüchlich
+1. N29 Datum: v13 sagt [Wort 21.10.], spec-hub HUB-F38 sagt J 06.10. (ALPHA cb019c1c). Ich nahm 06.10.; im Transkript prüfen.
+2. ClickUp: v13 N28 sagt [Wort 22.10.], spec-hub „Offen bei Johannes“ sagt Vorschlag als Frage, nicht bestätigt. Darum Teil 4, nicht Teil 2.
+3. Shell:40 und :53 (Hilfetexte): belegt sind nur die allgemeine Regel J 21.10. und HUELLE-R10 (Code streicht sie seit 22.10.). stand.md:34 führt die Briefänderung als offen bei Johannes. Ein eigenes Wort zu diesen zwei Stellen fand ich nicht; aufgenommen nach Auftrag der Lead.
+4. v13 N40 war in sich widersprüchlich: Mail:392 entfernen und zugleich den Zugriffsumfang bei Google behalten (beides in derselben Notiz); „Texte unter Bilder in Mails laden“ entfernen und zugleich die Zählpixel-Warnung behalten (sie ist Teil dieses Textes). Aufgelöst: zweiter Satz der Google-Notiz weg, erster bleibt; beim Bilder-Text bleibt nur die Warnung. Deutung von mir, nicht belegt.
+5. Halten-Bestätigung 1000 ms (MAIL-R06, J 17.10.): Quelle ist decisions.json, eine Design-Datei. Nicht in Teil 2.
+6. Signatur je Postfach als Johannes' Wort: nur über entscheidungen.md:142 und RUECKGABE-AN-CODE.md:54 (Design-Dateien). L-010 ohne Wort-Marke.
+7. Werte der Hülle (Mindestbreite 896, Ruhebreite 280, Langdruck und ⌘K verworfen, Maße wie Master): Quellen nur entscheidungen.md oder RUECKGABE (Design-Text). Nicht in Teil 2.
+8. „Vorgabe aus“ bei Bilder in Mails (HUB-F12): Herkunft (Master oder Johannes) unklar. Weggelassen.
+9. App-Sperre: stand.md:30 nennt „Sperre der App“ offen bei Johannes, ohne Inhalt. N9 bleibt Auftrag; nicht in Teil 4.
+10. stand.md:68 „Suche über alle Ordner“ als bewusste Abweichung: passt nicht zu MAIL-F06 (Master hat „Überall“; Server-Suche über alle Ordner ungeprüft). Nicht in Teil 5.
+11. Belegte Lücken ohne Nummer, nicht aufgenommen (Auftrag: nur N41 und N43 neu): „Heute“ in „Beim Öffnen“ (HUB-L13, HEUTE-L02), Erst-Setup als Zeichnung (HUB-L07).
+12. Entscheidungen zu Heute, Projekten, Katalogen, Warenkorb nicht in Teil 2, weil diese Bereiche noch nicht gezeichnet werden; Teil 6 wie v13.
+13. stand.md:14 nennt noch Brief v12 als geltend; im Repo liegt v13.
+
+C Änderungen am Verfahrensteil (Teil 1)
+Punkt 2 auf „Punkte unter 3 AUFTRÄGE“ umgestellt (die alte Nummernliste passte nicht mehr). Satz „Neu in v12“ entfernt, „Neu in v13“ durch „Neu in v14“ ersetzt. T5 L-009 und T6 L-015 nur noch Verweis; T5 L-010 um „je Postfach“ ergänzt; T6-Satz „Entschieden“ verweist auf Teil 2. ABGABE steht jetzt nach T8. „ERINNERUNG AUS v9“ entfernt (doppelt zu W-05, L-010, Kachelhöhe). Kurzform Mail:nnn usw. in Teil 3 eingeführt, um unter 25 KB zu bleiben.
+
+D Nicht geprüft
+Master-Zeilen nur als Stichprobe gegen dist/master-latest gelesen (Mail:392, :737, :753, :758, :760, :761, :763, :830, :1078; Shell:40, :53); alle anderen Zeilen aus v13 und den Specs übernommen. Code-Zeilen geprüft: SettingsSectionCards.swift:104-121, SheetValues.swift:7-8, BlobView.swift:198/235/257, DesignTokens.swift:99, HandleView.swift:48, CardPile.swift:37-42, AppHost.swift:55-61, MailAccountPicker.swift:10-26, MailCommands.swift:42, SettingsSections.swift:32/43, Commit 7db61fe. Kein Haiku-Prüfer, kein Lauf von check_delivery.py gegen einen Export; geprüft nur, dass das Muster von check_delivery.py (Zeilen mit T/N am Anfang) 44 Punkte findet und keine Zeile doppelt steht. Größe 24 990 Byte.

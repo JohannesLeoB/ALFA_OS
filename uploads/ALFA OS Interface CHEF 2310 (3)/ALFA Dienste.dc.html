@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="alfa-export" content="2026-10-18">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="lieferung-an-code/fonts/geist.css">
+<link rel="stylesheet" href="alfa-theme.css">
+<meta name="design_doc_mode" content="canvas">
+<style>html,body{margin:0;padding:0;background:#e6e6e6}a{color:#171717}a:hover{color:#4d4d4d}</style>
+</helmet>
+<div data-alfa-sperre="gesperrt" style="position:fixed;left:0;top:0;right:0;bottom:0;z-index:2147483000;pointer-events:none;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(230,230,230,.28)"><div style="transform:rotate(-24deg);border:1.4vw solid #e10600;outline:.5vw solid #e10600;outline-offset:-2.6vw;padding:2.4vw 4vw 2vw;display:flex;flex-direction:column;align-items:center;gap:1.2vw;background:rgba(236,236,236,.5);color:#e10600;font-family:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;text-transform:uppercase"><div style="font-size:11vw;font-weight:800;letter-spacing:.28em;line-height:1;margin-right:-.28em">Gesperrt</div><div style="font-size:3.4vw;font-weight:700;letter-spacing:var(--typography-tracking-mark);line-height:1">21.10.2026 · nicht abgenommen</div></div></div>
+
+<section data-screen-label="Dienste" data-appearance="light" style="padding:64px;display:flex;flex-direction:column;gap:48px;font-family:var(--typography-family-text);font-size:var(--typography-size-body);line-height:1.35;color:var(--c-ink);width:1600px;box-sizing:border-box">
+<div style="display:flex;flex-direction:column;gap:var(--spacing-step8);max-width:820px">
+<div style="font-size:28px;line-height:1.05;font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-title)">ALFA Dienste · Bibliothek · Export 18.10.2026</div>
+<div style="color:var(--c-ink-2);line-height:1.6;text-wrap:pretty">Stand 17.10.2026. Jeder Dienst aus ALFA Mail (SVC) mit Zeichen, Zweck, Zugang und Zustand, in den drei Größen, in denen er vorkommt: Kachel 40, Zeile 28, Leiste 20. Clockodo und DHL kommen aus dem Ordner ICONS. Die anderen Dienste behalten ihr Kürzel aus dem Code, bis Logos vorliegen. Zustandswörter wie in ALFA Mail. Farbe nur für Fehler (Signalrot), sonst Tinte und Grau. Die Gruppen folgen den Abschnitten in den Einstellungen.</div>
+</div>
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;gap:var(--spacing-step12)">
+<div style="display:flex;align-items:baseline;gap:var(--spacing-step12)"><span style="font-size:var(--typography-size-title);line-height:1.25;font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-title)">{{ g.name }}</span><span style="color:var(--c-ink-3)">{{ g.note }}</span></div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--spacing-step12)">
+<sc-for list="{{ g.items }}" as="s" hint-placeholder-count="6">
+<div data-part="dienst" data-state="{{ s.st }}" style="display:flex;flex-direction:column;gap:var(--spacing-step12);padding:var(--spacing-step12);border-radius:var(--radius-card);background:var(--c-lane);box-shadow:0 0 0 var(--size-hairline) var(--c-line)">
+<div style="display:flex;align-items:center;gap:var(--spacing-step12)">
+<span data-part="tile-icon" style="flex:none;width:var(--spacing-step40);height:var(--spacing-step40);border-radius:var(--radius-row);display:grid;place-items:center;overflow:hidden;background:{{ s.bg }};color:{{ s.fg }};box-shadow:inset 0 0 0 var(--size-hairline) {{ s.ring }};font:var(--typography-weight-medium) var(--typography-size-body)/1 var(--typography-family-text);letter-spacing:var(--typography-tracking-mark)"><sc-if value="{{ s.hasLogo }}" hint-placeholder-val="{{ false }}"><img src="{{ s.logo }}" alt="{{ s.n }}" style="width:{{ s.lw }};height:{{ s.lw }};object-fit:contain"></sc-if><sc-if value="{{ s.noLogo }}" hint-placeholder-val="{{ true }}">{{ s.mono }}</sc-if></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--spacing-step2)"><span style="font-weight:var(--typography-weight-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.n }}</span><span style="font-size:var(--typography-size-small);color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.use }}</span></span>
+<span data-part="status-badge" title="{{ s.stText }}" style="flex:none;height:var(--spacing-step20);padding:0 var(--spacing-step8);border-radius:var(--radius-capsule);display:inline-flex;align-items:center;gap:var(--spacing-step8);font-size:var(--typography-size-small);color:{{ s.sFg }};box-shadow:inset 0 0 0 var(--size-hairline) {{ s.sRing }};background:{{ s.sBg }}"><i style="width:var(--spacing-step8);height:var(--spacing-step8);border-radius:50%;background:{{ s.dot }}"></i>{{ s.stText }}</span>
+</div>
+<div style="display:flex;align-items:center;gap:var(--spacing-step16);padding:var(--spacing-step8) 0 0;border-top:var(--size-hairline) solid #f0f0f0">
+<span style="flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:var(--radius-capsule);display:grid;place-items:center;overflow:hidden;background:{{ s.bg }};color:{{ s.fg }};box-shadow:inset 0 0 0 var(--size-hairline) {{ s.ring }};font:var(--typography-weight-medium) var(--typography-size-blobFace)/1 var(--typography-family-text)"><sc-if value="{{ s.hasLogo }}" hint-placeholder-val="{{ false }}"><img src="{{ s.logo }}" alt="" style="width:var(--spacing-step20);height:var(--spacing-step20);object-fit:contain"></sc-if><sc-if value="{{ s.noLogo }}" hint-placeholder-val="{{ true }}">{{ s.mono }}</sc-if></span>
+<span style="flex:none;width:var(--spacing-step20);height:var(--spacing-step20);border-radius:var(--radius-capsule);display:grid;place-items:center;overflow:hidden;background:{{ s.bg }};color:{{ s.fg }};box-shadow:inset 0 0 0 var(--size-hairline) {{ s.ring }};font:500 8px/1 var(--typography-family-text)"><sc-if value="{{ s.hasLogo }}" hint-placeholder-val="{{ false }}"><img src="{{ s.logo }}" alt="" style="width:var(--spacing-step12);height:var(--spacing-step12);object-fit:contain"></sc-if><sc-if value="{{ s.noLogo }}" hint-placeholder-val="{{ true }}">{{ s.mono1 }}</sc-if></span>
+<span style="flex:1;min-width:0;font-size:var(--typography-size-small);color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.access }}</span>
+<span style="flex:none;font:var(--typography-weight-regular) var(--typography-size-small)/1 var(--typography-family-text);color:#a3a3a3">{{ s.id }}</span>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+<div style="display:flex;flex-direction:column;gap:var(--spacing-step12);max-width:1100px">
+<div style="font-size:var(--typography-size-title);line-height:1.25;font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-title)">Logos ohne Eintrag im Code</div>
+<div style="display:flex;gap:var(--spacing-step12);align-items:center"><span style="width:var(--spacing-step40);height:var(--spacing-step40);border-radius:var(--radius-row);background:var(--c-lane);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line);display:grid;place-items:center"><img src="material/icons/monday.svg" alt="monday" style="width:var(--spacing-step32);height:var(--spacing-step32);object-fit:contain"></span><span style="color:var(--c-ink-2)">monday liegt im Ordner ICONS, im Code gibt es diesen Dienst nicht. Er bleibt in der Bibliothek, bis du ihn brauchst oder streichst.</span></div>
+</div>
+<div id="app-icon" style="display:flex;flex-direction:column;gap:var(--spacing-step16)">
+<div style="display:flex;flex-direction:column;gap:var(--spacing-step8);max-width:820px">
+<div style="font-size:var(--typography-size-title);line-height:1.25;font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-title)">App-Icon · B A-Monogramm, vorläufig</div>
+<div style="color:var(--c-ink-2);line-height:1.6;text-wrap:pretty">Vorläufiges Icon für das macOS-Dock und die Auslieferung (Johannes, 13.10.). Gezeigt in den Größen, die macOS braucht. Die Form ist ein Squircle mit 22,4 %, so wie das Dock sie selbst zeichnet.</div>
+</div>
+<div data-part="app-icon-sizes" style="display:flex;align-items:flex-end;gap:var(--spacing-step24);padding:var(--spacing-step24);border-radius:var(--radius-card);background:var(--c-lane);box-shadow:0 0 0 var(--size-hairline) var(--c-line);width:max-content">
+<sc-for list="{{ sizes }}" as="z" hint-placeholder-count="7"><div style="display:flex;flex-direction:column;align-items:center;gap:var(--spacing-step8)"><img src="material/icons/app/ALFA-App-Icon-4b.svg" alt="ALFA" style="width:{{ z.px }};height:{{ z.px }};border-radius:22.4%;display:block;box-shadow:0 0 0 var(--size-hairline) rgba(0,0,0,.06)"><span style="font:var(--typography-weight-regular) var(--typography-size-small)/1 var(--typography-family-text);color:var(--c-ink-3)">{{ z.n }}</span></div></sc-for>
+</div>
+<div style="display:flex;gap:var(--spacing-step12);flex-wrap:wrap">
+<div style="display:flex;align-items:center;gap:var(--spacing-step12);height:80px;padding:0 var(--spacing-step16);border-radius:var(--radius-card);background:#d9d9d9"><img src="material/icons/app/ALFA-App-Icon-4b.svg" alt="" style="width:64px;height:64px;border-radius:22.4%"><span style="color:var(--c-ink-2)">Dock, hell</span></div>
+<div style="display:flex;align-items:center;gap:var(--spacing-step12);height:80px;padding:0 var(--spacing-step16);border-radius:var(--radius-card);background:#1f1f1f"><img src="material/icons/app/ALFA-App-Icon-4b-dark.svg" alt="" style="width:64px;height:64px;border-radius:22.4%"><span style="color:#d4d4d4">Dock, dunkel</span></div>
+<div style="display:flex;align-items:center;gap:var(--spacing-step12);height:80px;padding:0 var(--spacing-step16);border-radius:var(--radius-card);background:var(--c-lane);box-shadow:0 0 0 var(--size-hairline) var(--c-line)"><img src="material/icons/app/ALFA-App-Icon-4b.svg" alt="" style="width:var(--spacing-step32);height:var(--spacing-step32);border-radius:22.4%"><span style="display:flex;flex-direction:column;gap:var(--spacing-step2)"><span style="font-weight:var(--typography-weight-medium)">ALFA.dmg</span><span style="font-size:var(--typography-size-small);color:var(--c-ink-3)">Auslieferung, Finder</span></span></div>
+</div>
+</div>
+<div id="in-app-icons" style="display:flex;flex-direction:column;gap:var(--spacing-step16)">
+<div style="display:flex;flex-direction:column;gap:var(--spacing-step8);max-width:820px">
+<div style="font-size:var(--typography-size-title);line-height:1.25;font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-title)">In-App-Icons · alle Entwürfe</div>
+<div style="color:var(--c-ink-2);line-height:1.6;text-wrap:pretty">Alle fünf Entwürfe bleiben. Jedes Zeichen bekommt einen Ort in der App, der zu seinem Bild passt. Die Zuordnung ist ein Vorschlag, noch kein „so“. Die gestrichelten Felder sind Plätze für Zeichen, die es noch nicht gibt. Sie werden erst gezeichnet, wenn ein Bereich sie braucht.</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--spacing-step12)">
+<sc-for list="{{ icons }}" as="ic" hint-placeholder-count="5">
+<div data-part="app-icon" data-state="{{ ic.state }}" style="display:flex;flex-direction:column;gap:var(--spacing-step12);padding:var(--spacing-step16);border-radius:var(--radius-card);background:var(--c-lane);box-shadow:{{ ic.ring }}">
+<div style="display:flex;align-items:baseline;gap:var(--spacing-step8)"><span style="font:var(--typography-weight-medium) var(--typography-size-small)/1 var(--typography-family-text);letter-spacing:var(--typography-tracking-mark);color:var(--c-ink-3)">{{ ic.k }}</span><span style="font-weight:var(--typography-weight-medium)">{{ ic.n }}</span><span style="flex:1"></span><span style="font-size:var(--typography-size-small);color:{{ ic.roleFg }}">{{ ic.role }}</span></div>
+<sc-if value="{{ ic.hasSrc }}" hint-placeholder-val="{{ false }}"><img src="{{ ic.src }}" alt="{{ ic.n }}" style="width:100%;aspect-ratio:1;border-radius:22.4%;display:block;box-shadow:0 0 0 var(--size-hairline) rgba(0,0,0,.06)"></sc-if>
+<div style="display:flex;align-items:center;gap:var(--spacing-step12);height:var(--spacing-step56);padding:0 var(--spacing-step12);border-radius:var(--radius-contextMenu);background:#0d0d0d">
+<span style="width:var(--spacing-step56);height:var(--spacing-step40);border-radius:var(--radius-card);background:var(--c-inv);box-shadow:0 0 0 var(--size-hairline) rgba(255,255,255,.12);display:grid;place-items:center"><sc-if value="{{ ic.hasSrc }}" hint-placeholder-val="{{ false }}"><img src="{{ ic.src }}" alt="" style="width:var(--spacing-step28);height:var(--spacing-step28);border-radius:var(--radius-capsule)"></sc-if></span>
+<sc-if value="{{ ic.hasSrc }}" hint-placeholder-val="{{ false }}"><img src="{{ ic.src }}" alt="" style="width:var(--spacing-step20);height:var(--spacing-step20);border-radius:var(--radius-field)"></sc-if>
+<span style="font-size:var(--typography-size-small);color:#a3a3a3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ ic.place }}</span>
+</div>
+<div style="display:flex;height:var(--spacing-step12);border-radius:var(--radius-capsule);overflow:hidden"><sc-for list="{{ ladder }}" as="c" hint-placeholder-count="8"><i style="flex:1;background:{{ c }}"></i></sc-for></div>
+<div style="font-size:var(--typography-size-small);color:var(--c-ink-3);line-height:1.45;text-wrap:pretty">{{ ic.note }}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--spacing-step12)">
+<sc-for list="{{ more }}" as="m" hint-placeholder-count="6">
+<div data-part="icon-slot" style="display:flex;flex-direction:column;gap:var(--spacing-step12);padding:var(--spacing-step16);border-radius:var(--radius-card);background:transparent;box-shadow:inset 0 0 0 var(--size-hairline) #cfcfcf">
+<span style="width:var(--spacing-step56);height:var(--spacing-step56);border-radius:22.4%;border:var(--size-hairline) dashed #a3a3a3;box-sizing:border-box;display:grid;place-items:center;font:var(--typography-weight-medium) var(--typography-size-small)/1 var(--typography-family-text);color:var(--c-ink-3)">{{ m.k }}</span>
+<span style="display:flex;flex-direction:column;gap:var(--spacing-step4)"><span style="font-weight:var(--typography-weight-medium)">{{ m.n }}</span><span style="font-size:var(--typography-size-small);color:var(--c-ink-3);line-height:1.45;text-wrap:pretty">{{ m.idea }}</span></span>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  SVC = [
+    ["google", "Google", "Mail, Dateien, Kalender, Kontakte", "Anmeldung im Browser", "connected", "G", null, ["int", "kon"]],
+    ["mailkonten", "Mail-Konten", "Weitere Postfächer über IMAP und SMTP", "Benutzer und Passwort", "notConnected", "MK", null, ["int", "kon"]],
+    ["clickup", "ClickUp", "Aufgaben", "Schlüssel", "connecting", "CU", null, ["int", "key"]],
+    ["clockodo", "Clockodo", "Zeiten", "E-Mail und Schlüssel", "working", "Co", "material/icons/clockodo.png", ["int", "kon", "key"]],
+    ["claude", "Claude", "Assistent", "Schlüssel", "failed", "Cl", null, ["int", "key"]],
+    ["airtable", "Airtable", "Projekte und Kunden", "Schlüssel", "stored", "At", null, ["int", "key"]],
+    ["sevdesk", "sevDesk", "Belege und Angebote", "Schlüssel", "notConnected", "sD", null, ["int", "key"]],
+    ["dhl", "DHL", "Sendungen verfolgen, Etiketten kaufen", "Schlüssel", "stored", "DH", "material/icons/dhl.svg", ["int", "key"]],
+    ["happa", "Happa Happa", "Speiseplan", "Schlüssel", "connected", "HH", null, ["int", "key"]]
+  ];
+  ST = { connected: ["Verbunden", "#171717"], working: ["Gleicht ab …", "#4d4d4d"], connecting: ["Verbindet …", "#d9d9d9"], notConnected: ["Nicht verbunden", "#d9d9d9"], failed: ["Fehler", "#b3412e"], stored: ["Schlüssel gespeichert", "#6b6b6b"], unreadable: ["Schlüsselbund nicht lesbar", "#b3412e"] };
+  renderVals() {
+    const mk = s => { const st = this.ST[s[4]], bad = st[1] === "#b3412e", logo = !!s[6];
+      return { id: s[0], n: s[1], use: s[2], access: s[3], st: s[4], mono: s[5], mono1: s[5][0], hasLogo: logo, noLogo: !logo, logo: s[6] || "", lw: s[0] === "clockodo" ? "40px" : "32px",
+        bg: logo ? "#ffffff" : "#ffffff", fg: "#171717", ring: "#e0e0e0", stText: st[0], dot: st[1], sFg: bad ? "#b3412e" : "#4d4d4d", sRing: bad ? "rgba(179,65,46,.35)" : "#e8e8e8", sBg: "transparent" }; };
+    const pick = k => this.SVC.filter(s => s[7].includes(k)).map(mk);
+    const groups = [
+      { name: "Integrationen", note: "alle Dienste, die ALFA anspricht", items: pick("int") },
+      { name: "Konten", note: "Dienste mit eigener Anmeldung einer Person", items: pick("kon") },
+      { name: "Schlüssel", note: "Dienste mit gespeichertem Zugangsschlüssel", items: pick("key") }
+    ];
+    const icons = [
+      ["A", "Fächer", "A_Faecher", "Sammlung", "Farbsammlung, Paletten", "Viele Blätter, eines oben. Passt zu Bereichen, die sammeln und ordnen."],
+      ["B", "A-Monogramm", "B_A-Monogramm", "App-Icon", "Dock, Auslieferung, Über ALFA", "Das A-Monogramm für Stellen, an denen die App sich selbst meint."],
+      ["C", "Pipette", "C_Pipette", "Farbe", "Farbe aufnehmen, Werkbank", "Farbe ziehen. Erst ab 28 gut lesbar, darum nur an großen Stellen."],
+      ["D", "Licht", "D_Licht", "Assistent", "Blob-Gesicht, Assistent", "Drei Kreise im Kreis. Liegt am ruhigsten im Ring 28 des Blobs."],
+      ["E", "Bögen", "E_Boegen", "Abgleich", "Abgleich, Dienste", "Bögen, die ausstrahlen. Erzählt Verbindung, nah am Abgleich oben rechts."]
+    ].map(i => ({ k: i[0], n: i[1], src: "material/icons/app/" + i[2] + "-komplett.svg", hasSrc: true, role: i[3], place: i[4], note: i[5], state: i[0] === "B" ? "app" : "in-app", ring: i[0] === "B" ? "0 0 0 2px #171717" : "0 0 0 1px #e8e8e8", roleFg: i[0] === "B" ? "#171717" : "#6b6b6b" }));
+    const sizes = [16, 32, 64, 128].map(n => ({ n: n + "", px: n + "px" })).concat([{ n: "256 · 512 · 1024, hier in 256", px: "256px" }]);
+    const more = [
+      ["F", "Mail", "Umschlag aus derselben Linie wie die Bögen."],
+      ["G", "Projekt", "Ordner mit Lasche, Form wie der Fächer, nur ein Blatt."],
+      ["H", "Zeiten", "Uhr als Ring mit einem Zeiger, Ring wie beim Blob."],
+      ["I", "Sendung", "Kiste mit Bogen, für DHL."],
+      ["J", "Einstellungen", "Drei Regler, Knöpfe als Kreise der Lichtfamilie."],
+      ["K", "Speiseplan", "Teller als Kreis, für Happa Happa."]
+    ].map(m => ({ k: m[0], n: m[1], idea: m[2] }));
+    return { groups, icons, sizes, more, ladder: ["#f4ead8", "#efd39a", "#e8b04a", "#de8a2e", "#cc5f30", "#a84230", "#7a2f2a", "#43271f"] };
+  }
+}
+</script>
+</body>
+</html>

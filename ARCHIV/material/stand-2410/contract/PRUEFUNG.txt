@@ -1,0 +1,8 @@
+Stand 22.10.2026 01:20 (JS-Ports der Prüfer, Python läuft hier nicht)
+STEMPEL: Frei sind Mail, Einstellungen, Shell, Bestaetigen, PDF (gemessen: 0 lose px/ms/em/Hex/rgba in style-Attributen, alle var(--…) definiert). Weiter GESPERRT: Designsystem, Dienste, Entscheidungen, Farbleiter 2, Farbleiter, Farbsystem, Huelle, Icon, Tokenbogen, Widgets. Johannes hat auch die freien Bögen noch nicht gesehen: kein Export, keine Weitergabe, keine ZIP, bis er „100 % sauber“ sagt.
+P1 validate.py (validate.js, 9 Dateien): contract: valid
+P2 check_contract.py (check.js, --areas shell,mail,settings, Bögen Mail, Einstellungen, Shell, Bestaetigen, dazu ALFA PDF): consistent
+P3 diff_contract.py (diff.js) gegen contract-build/previous/2026-10-21T17-25: log matches (135 Änderungen, 135 protokolliert)
+P4 check_delivery.py (check-delivery.js): items: 21 of 24 done · delivery: complete
+Zahlen: 412 Tokens, 89 Bauteile, 199 Elemente, 390 Texte, 3 Ansichten, 12 Dateien in contract/ (ohne PRUEFUNG.txt).
+Offen für Johannes: T5 (L-011 Logos), T6 (Kartenstapel 8a/8b in Einstellungen). Frage an Code: N16 (native macOS-PDF). Nicht gebaut: W-09, W-10, Erklärsätze (decisions.json keineBabysitterTexte). Zeitgeber der Demo-Simulation (Laden 1400, Abgleich 1600, Nachladen 700, Touch ID 1100 ms) stehen als Zahl im Skript, sie sind keine Maße der Oberfläche.

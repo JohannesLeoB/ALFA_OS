@@ -1,0 +1,381 @@
+{
+  "brief": "v14",
+  "export": "2026-10-29T16:00",
+  "items": [
+    {
+      "id": "T1",
+      "status": "done",
+      "where": [
+        "ALFA Shell.dc.html:17"
+      ]
+    },
+    {
+      "id": "T2",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:169",
+        "ALFA Shell.dc.html:28"
+      ]
+    },
+    {
+      "id": "T3",
+      "status": "done",
+      "where": [
+        "ALFA Shell.dc.html:21"
+      ]
+    },
+    {
+      "id": "T4",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:115",
+        "ALFA Shell.dc.html:126"
+      ]
+    },
+    {
+      "id": "T5",
+      "status": "done",
+      "where": [
+        "ALFA Dienste.dc.html:100",
+        "ALFA Einstellungen.dc.html:297"
+      ]
+    },
+    {
+      "id": "T6",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:302",
+        "ALFA Shell.dc.html:77",
+        "ALFA Einstellungen.dc.html:332"
+      ]
+    },
+    {
+      "id": "T7",
+      "status": "done",
+      "where": [
+        "ALFA Dienste.dc.html:56"
+      ]
+    },
+    {
+      "id": "T8",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:289"
+      ]
+    },
+    {
+      "id": "N1",
+      "status": "done",
+      "where": [
+        "ALFA Dienste.dc.html:105"
+      ]
+    },
+    {
+      "id": "N2",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:295",
+        "ALFA Einstellungen.dc.html:327"
+      ]
+    },
+    {
+      "id": "N3",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:17",
+        "ALFA Shell.dc.html:28"
+      ]
+    },
+    {
+      "id": "N4",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:760",
+        "ALFA Mail.dc.html:857"
+      ]
+    },
+    {
+      "id": "N5",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:311"
+      ]
+    },
+    {
+      "id": "N6",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:278"
+      ]
+    },
+    {
+      "id": "N7",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:449",
+        "ALFA Mail.dc.html:738",
+        "ALFA Mail.dc.html:652",
+        "ALFA Mail.dc.html:651",
+        "ALFA Mail.dc.html:447"
+      ]
+    },
+    {
+      "id": "N8",
+      "status": "done",
+      "where": [
+        "ALFA Dienste.dc.html:60"
+      ]
+    },
+    {
+      "id": "N9",
+      "status": "done",
+      "where": [
+        "ALFA Shell.dc.html:124",
+        "ALFA Shell.dc.html:129"
+      ]
+    },
+    {
+      "id": "N10",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:169"
+      ]
+    },
+    {
+      "id": "N13",
+      "status": "done",
+      "where": [
+        "ALFA Shell.dc.html:266"
+      ]
+    },
+    {
+      "id": "N15",
+      "status": "question",
+      "where": [
+        "ALFA Mail.dc.html:759"
+      ],
+      "question": "Aus Projektordner: Menü im Bogen ist Demo (Labels Mail:379, erfundene Datei Mail:883). Johannes 23.10.: Funktion ist von Code zu specen (spec-mail F28, spec-projekte F11). Bitte Quelle der Projekte, Ebenen, Höchstzahl, Fehlertexte; Design zeichnet danach Leer, Laden, Fehler."
+    },
+    {
+      "id": "N16",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:620",
+        "ALFA Mail.dc.html:881",
+        "ALFA Mail.dc.html:510"
+      ]
+    },
+    {
+      "id": "N17",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:560"
+      ]
+    },
+    {
+      "id": "N19",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:412",
+        "ALFA Mail.dc.html:512"
+      ]
+    },
+    {
+      "id": "N20",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:880",
+        "ALFA Mail.dc.html:888",
+        "ALFA Mail.dc.html:848"
+      ]
+    },
+    {
+      "id": "N21",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:269",
+        "ALFA Einstellungen.dc.html:309",
+        "ALFA Einstellungen.dc.html:329",
+        "ALFA Einstellungen.dc.html:321"
+      ]
+    },
+    {
+      "id": "N22",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:17",
+        "ALFA Mail.dc.html:32",
+        "ALFA Mail.dc.html:33"
+      ]
+    },
+    {
+      "id": "N23",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:560",
+        "ALFA Mail.dc.html:198"
+      ]
+    },
+    {
+      "id": "N24",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:257"
+      ]
+    },
+    {
+      "id": "N26",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:231"
+      ]
+    },
+    {
+      "id": "N27",
+      "status": "open",
+      "question": "Nicht gezeichnet: Kategorien und Filter im Hub-Katalog; Satz je Dienst ist offen bei Johannes (Teil 4). Gezeichnet ist die Kachel mit Logo/Kürzel, Name, Zustand (Mail:391–401, alfa-bausteine.js:36–44)."
+    },
+    {
+      "id": "N28",
+      "status": "open",
+      "where": [],
+      "question": "Nicht gezeichnet: Verwalten-Seite (Clockodo: Nutzer, Leistung je Kostenstelle, Kunde, abrechenbar; Airtable: Basen, Tabellen, Felder). Die Daten je Dienst liefert Code; ClickUp nichts zeichnen (Teil 4)."
+    },
+    {
+      "id": "N29",
+      "status": "open",
+      "question": "Nicht gezeichnet: Mitteilungen je Dienst (Art, Takt, stumm) und global stumm für gewählte Stunden. Was je Dienst meldbar ist, liefert Code nach (Brief N29)."
+    },
+    {
+      "id": "N30",
+      "status": "open",
+      "where": [
+        "ALFA Einstellungen.dc.html:313"
+      ]
+    },
+    {
+      "id": "N31",
+      "status": "open",
+      "question": "Nicht gezeichnet: Detailbericht (online, eingeschränkt, Fehler; Anbieter, Status, Code, Servertext, Anfragekennung). Felder liefert Code (Wort 12.10.)."
+    },
+    {
+      "id": "N32",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:247",
+        "ALFA Einstellungen.dc.html:301"
+      ]
+    },
+    {
+      "id": "N33",
+      "status": "open",
+      "question": "Nicht gezeichnet: Quellenwahl Kontakte am Hub (Google Contacts, iCloud, Kontakt-Apps, Kundenkarteien, eigene lokale Datenbank; mehrere zugleich). Quellen und Zustände liefert Code (spec-hub F41); Bogen zeigt nur die lokale Liste (alfa-bausteine.js:36)."
+    },
+    {
+      "id": "N35",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:314"
+      ]
+    },
+    {
+      "id": "N36",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:920"
+      ]
+    },
+    {
+      "id": "N37",
+      "status": "done",
+      "where": [
+        "ALFA Shell.dc.html:90",
+        "ALFA Shell.dc.html:94",
+        "ALFA Shell.dc.html:115"
+      ]
+    },
+    {
+      "id": "N38",
+      "status": "done",
+      "where": [
+        "ALFA Shell.dc.html:112",
+        "ALFA Einstellungen.dc.html:318",
+        "ALFA Mail.dc.html:921"
+      ]
+    },
+    {
+      "id": "N39",
+      "status": "done",
+      "where": [
+        "ALFA Bestaetigen.dc.html:21"
+      ],
+      "tokens": [
+        "size.focusRingOffset"
+      ]
+    },
+    {
+      "id": "N40",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:270",
+        "ALFA Einstellungen.dc.html:327",
+        "ALFA Einstellungen.dc.html:329",
+        "ALFA Einstellungen.dc.html:330",
+        "ALFA Einstellungen.dc.html:332",
+        "ALFA Einstellungen.dc.html:234"
+      ]
+    },
+    {
+      "id": "N41",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:327"
+      ]
+    },
+    {
+      "id": "N43",
+      "status": "done",
+      "where": [
+        "ALFA Shell.dc.html:55"
+      ]
+    }
+  ],
+  "drafts": [
+    {
+      "file": "ALFA Bestaetigen.dc.html",
+      "sha256": "52264c0ccd13941ffee0dc1fa6863d130658c8f5bc839a8f8a06d7be3b12415c"
+    },
+    {
+      "file": "ALFA Designsystem.dc.html",
+      "sha256": "56c8991ec6028c08076e123c0f04308361ec75e4216cf960404a04774c7d0e19"
+    },
+    {
+      "file": "ALFA Dienste.dc.html",
+      "sha256": "bb14980f60f9ed25f713643c7b6c7504cc70a425ae3905327ad07433e2158b45"
+    },
+    {
+      "file": "ALFA Einstellungen.dc.html",
+      "sha256": "776e8b9b541d3423548dbe09099d2b46eb7069b47eb042ec3ba79ed439af0e83"
+    },
+    {
+      "file": "ALFA Icon.dc.html",
+      "sha256": "3b718f34598331b2f3f48fe01a66341b94f99acb83bd191e2e29a440288dc249"
+    },
+    {
+      "file": "ALFA Mail.dc.html",
+      "sha256": "87cb6a24d6aa08cd8daafe7262800335cb255eaef1193897c534a8270725469d"
+    },
+    {
+      "file": "ALFA Shell.dc.html",
+      "sha256": "ff093cd3a119231bd3b36007c5397f7e018f871f9f581298c5baad8cbf90e89b"
+    },
+    {
+      "file": "ALFA Tokenbogen.dc.html",
+      "sha256": "a0347c614a99d3b550ec32cd86048a6e83048224da6b590ca80653d4c7fe62c5"
+    },
+    {
+      "file": "ALFA Widgets.dc.html",
+      "sha256": "a044bfd82b5d5c6ecc37c498f57d350aadd34decb6367f95b4a3a6b1fb0a93d2"
+    }
+  ]
+}

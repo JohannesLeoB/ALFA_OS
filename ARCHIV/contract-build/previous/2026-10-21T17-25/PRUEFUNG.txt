@@ -1,0 +1,5 @@
+Zwischenstand 21.10.2026 16:45, Brief v12 nicht erledigt (siehe HANDOFF.md).
+P1 validate (JS-Port contract-build/validate.js): contract: valid (alle Dateien)
+P2 check_contract (JS-Port check.js, vier Bögen Mail, Einstellungen, Shell, Bestaetigen): consistent
+P3 diff_contract (JS-Port diff.js) gegen contract-build/previous/2026-10-21T16-30: log matches (214 Änderungen, 214 protokolliert)
+P4 check_delivery: nicht gelaufen, contract/LIEFERUNG.json fehlt (Punkte N1 bis N17 offen; N12 und N18 entfallen).

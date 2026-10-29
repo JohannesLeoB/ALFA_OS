@@ -1,0 +1,1074 @@
+[
+  {
+    "item": "A1a",
+    "answer": 280,
+    "beleg": "Johannes 16.10., Frage Mittelspalte: „280, rechte Bahn wächst“; Kommentar: „Die mitte kann auch wachsen, alles ist je ansicht „locked“ oder nicht. ENTSCHEIDE ICH SPÄTER, bauen.“",
+    "note": "Sperre je Ansicht als Schalter vorsehen, Standard offen."
+  },
+  {
+    "item": "A1b",
+    "answer": {
+      "visible": 1,
+      "hit": 12
+    },
+    "beleg": "Johannes 16.10.: „Griff Haarlinie (12 Trefferfläche)“ bestätigt"
+  },
+  {
+    "item": "A1e",
+    "answer": true,
+    "beleg": "Johannes 16.10.: „4 × 8, Abstand 4“"
+  },
+  {
+    "item": "A1f",
+    "answer": null,
+    "beleg": "Johannes 16.10.: „best Practice … hauptsache es funktioniert“, Fullscreen-Nutzung, 960 soll nicht dauernd Thema sein. Der Chat-Satz „960“ davor gilt nicht. Code entscheidet nach Apple-Praxis (SwiftUI: frame(minWidth:minHeight:) + windowResizability(.contentMinSize) + defaultSize)."
+  },
+  {
+    "item": "C4",
+    "answer": {
+      "hub": true,
+      "accountsNote": "bis zu drei wählbar. auch dann inkl. „kalender, Einladungen etc“ in Mailansicht switchbar."
+    },
+    "beleg": "Johannes 16.10.: Hub „Ja, versuchs doch einfach mal!“; Kommentar zu den Mail-Konten wörtlich übernommen. Gestapelt oder Wähler: nicht entschieden."
+  },
+  {
+    "item": "A1c",
+    "answer": null,
+    "beleg": "keine Antwort von Johannes, Standard von Code gilt"
+  },
+  {
+    "item": "A1d",
+    "answer": null,
+    "beleg": "keine Antwort von Johannes, Standard von Code gilt"
+  },
+  {
+    "item": "assistant",
+    "answer": {
+      "later": true,
+      "menuEntry": "later, as navigation item",
+      "today": "mini chat on double click of the blob"
+    },
+    "beleg": "Johannes 16.10.: „Assistent ist SPÄTER ein voller Ansichtsbereich, wie MAIL etc. … Menüeintrag ja, aber später und als navigations-Item“"
+  },
+  {
+    "item": "laneMinimum",
+    "answer": {
+      "left": 280,
+      "middle": 280,
+      "right": 280
+    },
+    "beleg": "Johannes 15.10.: „Bitte vereinheitlichen auf 280“; Rückgabe 16.10. Punkt 2 „280 · abgehakt“; 17.10.: „ICH HABE NIEMALS EINE 224 … ENTSCHIEDEN“, 112 „NEIN“"
+  },
+  {
+    "item": "blobAwakeWidth",
+    "answer": {
+      "min": 124,
+      "step": 280,
+      "rule": "124 if the area name fits, else 280"
+    },
+    "beleg": "Johannes 17.10.: „Wach - immer mindestens 124 breit, wenn Text nicht passt maximal und als Step 280 breit - also so breit wie die Spalte darunter in 5*56er zustand“"
+  },
+  {
+    "item": "codeAdoptsDesign",
+    "answer": true,
+    "beleg": "Johannes 17.10.: „CODE HAT NICHTS ZU SAGEN WAS MAßE ANGEHT!!!!! ER MUSS UNSERE ÜBERNEHMEN!!!!“"
+  },
+  {
+    "item": "confirmHold",
+    "answer": {
+      "holdMs": 1000,
+      "visual": "erase from left, shake towards end",
+      "tooltip": "system title",
+      "clickMode": false
+    },
+    "beleg": "Johannes 17.10.: „in 1sek … zittern“, „wegradiert“, „Button sollte immer die selbe Größe behalten“, „dumbest user sache schmeißen wir wieder raus“, „Komplett wie bei MacOS machen“"
+  },
+  {
+    "item": "set-by-designValues",
+    "answer": {
+      "approved": true,
+      "provisional": true,
+      "values": [
+        "confirm.eraseEdge 0.2",
+        "confirm.eraseBlur 0.6px",
+        "confirm.shakeFrom 0.7",
+        "confirm.shakeAmplitude 1.5px",
+        "motion.duration.confirmRelease 180ms",
+        "color.dark.onSignal #0d0d0d",
+        "confirm hold 1000ms",
+        "size.trailingTextInset 12px"
+      ],
+      "status": "approved-provisional"
+    },
+    "beleg": "Johannes 17.10. zu „2 · Von Design gesetzt“: „Ist soweit OK, fürs erste und bis weitere Farbsysteme und feintuning einziehen so gestattet.“ · Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen. kann so in die dokumente geführt werden, bis später andere Optionen ausgearbeitet werden.“"
+  },
+  {
+    "item": "dhlEinItem",
+    "answer": {
+      "one": true,
+      "sandbox": false,
+      "live": true,
+      "fields": [
+        "Tracking-Schlüssel",
+        "Versand-Schlüssel",
+        "Secret",
+        "Benutzer",
+        "Passwort",
+        "Abrechnungsnummer"
+      ],
+      "use": [
+        "Sendungen verfolgen",
+        "Etikett kaufen"
+      ],
+      "widgetForToday": true
+    },
+    "beleg": "Johannes 20.10.: „DHL Karte OHNE Sandbox! Das ist Live, soll zum Versandlabel Kauf, Tracking etc über die DHL API laufen. Ist in der alten App schon funktional, muss nur richtig umgesetzt und neu designed werden.“ · „DHL wird höchstwahrscheinlich ein Widget für die noch zu entwerfende Heute Ansicht werden.“",
+    "note": "Gebaut: alfa-bausteine.js (eine Karte, ohne Sandbox), ALFA Dienste, ALFA Widgets (Verfolgen, Etikett kaufen)."
+  },
+  {
+    "item": "widgetsNurBeiVerbindung",
+    "answer": {
+      "rule": "Widget wählbar nur, wenn der Dienst erfolgreich verbunden ist",
+      "notConnectedOrNoKey": "kein Widget"
+    },
+    "beleg": "Johannes 20.10.: „Wenn DHL nicht Verbunden oder Kein Schlüssel eingetragen ist, wird auch kein Widget benötigt. Widgets hier nur wählbar, wenn die Dienste auch erfolgreich verbunden sind.“",
+    "note": "Entwurf der Wahl in ALFA Widgets › Widgets wählen. Ansicht „Heute“ selbst noch nicht entworfen."
+  },
+  {
+    "item": "widgetKeineStatusanzeige",
+    "answer": {
+      "statusWhenOk": false,
+      "problemMark": "Hairline-Ring mit ! in Signalfarbe (wie card-notice)",
+      "uiMetaTexts": false
+    },
+    "beleg": "Johannes 20.10.: „Auf dem Widget muss keine Statusanzeige sichtbar sein, wenn alles läuft. Nur vllt ein Hairline Ring mit ! in einer Farbe“ · „keine auf UI!“ · „Keine Meta Slop Texte in meiner UI!“ · „META SLOP - lass den kram sein, das brauche ich nirgends“",
+    "note": "Gilt für alle Widgets. Keine Erklär- oder Hinweistexte in der UI."
+  },
+  {
+    "item": "dhlLogoRing",
+    "answer": {
+      "ringFill": "#ffcb01",
+      "logo": "vergrößert, fit to frame, kleiner Abstand",
+      "scope": "Widgets"
+    },
+    "beleg": "Johannes 20.10.: „Logo bitte vergrößern, DHL quasi als fit to frame mit kleinem mini abstand, ring vollständig in CI farbe füllen.“",
+    "note": "In ALFA Widgets umgesetzt (26 px im 28er Ring). Dienste und Einstellungen: Frage an Johannes offen."
+  },
+  {
+    "item": "zahlDerDienste",
+    "answer": {
+      "show": false
+    },
+    "beleg": "Johannes 20.10.: „Wir haben alle noch keine Ahnung, wieviele Dienste die App später anspricht. Ist also eher irrelevant, oder?“",
+    "note": "Zähler aus ALFA Dienste entfernt. settings-sections.json:4 nennt noch eine Zahl, sie fällt weg."
+  },
+  {
+    "item": "abmeldenText",
+    "answer": {
+      "text": "Trennt alle verbundenen Dienste und startet die App neu.",
+      "disconnects": "alle Dienste, mit denen der Nutzer verbunden ist oder war"
+    },
+    "beleg": "Johannes 20.10.: „Text ist dann wohl eher trennt alle Dienste oder ähnlich … Und trennt dann auch ALLE Dienste, mit denen der User eben verbunden ist/war“",
+    "note": "Code: settings.identity.signOut.sub in Localizable.xcstrings:3734 nennt noch sechs Namen. signOut() in SettingsSectionCards.swift:108 entfernt schon alle Zugänge des Hubs. Neustart gehört zur Funktion."
+  },
+  {
+    "item": "zustandVerwaistGestrichen",
+    "answer": {
+      "remove": [
+        "orphaned",
+        "Verwaist",
+        "Verwaister Schlüssel"
+      ]
+    },
+    "beleg": "Johannes 20.10.: „Ja, ganz raus.“ (auf die Frage, ob „Verwaist“ bleibt)",
+    "note": "Entfernt aus alfa-bausteine.js, ALFA Dienste, ALFA Einstellungen, INHALT.json. Noch in contract/texts.json (settings.title.s003, settings.label.s052) und im Swift-Code zu streichen."
+  },
+  {
+    "item": "signaturJeKonto",
+    "answer": {
+      "perAccount": true,
+      "placement": "Konto-Detailkarte (Mail-Einstellungen)",
+      "examples": [
+        "johannes@",
+        "accounting@",
+        "info@"
+      ],
+      "fields": [
+        "Text mehrzeilig",
+        "Unter neue Mails setzen",
+        "Über zitiertem Text setzen"
+      ]
+    },
+    "beleg": "Johannes 20.10.: „Eine Signatur muss auch immer pro einzelnem Email-Konto eingerichtet werden können … brauche ich individuelle Signaturen pro Account. Evtl also eher zu den Mail-Einstellungen legen? zu jeder Konto/Account Detailkarte?“ · Referenz: 15 Bildschirmfotos macOS Mail (Signaturen, Accounts) vom 20.10.",
+    "note": "Gebaut in ALFA Einstellungen: Block „Signatur · Konto“ in der Google- und in jeder Mail-Konto-Karte; Abschnitt Ich › Signatur entfällt. Wahl der Signatur im Entwurf in ALFA Mail unverändert."
+  },
+  {
+    "item": "happaHappaWidget",
+    "answer": {
+      "period": "Woche",
+      "entry": [
+        "Gericht",
+        "Preis"
+      ],
+      "detail": [
+        "Foto",
+        "Mitarbeiter",
+        "Gäste",
+        "Nährwerte",
+        "Allergene"
+      ],
+      "refresh": true,
+      "style": "eigener ALFA-Stil, nicht der Look der alten App"
+    },
+    "beleg": "Johannes 20.10.: Auswahl „Woche“; Inhalt „Gericht, Beschreibung, Preis“; „siehe code - rtl koonkaaps etc, kantine nebenan“ · „Das neue HAPPAHAPPA soll natürlich viel schöner und in unserem Stil werden!“ · Screenshots der offiziellen iOS-App und des Widgets der alten Alpha.",
+    "note": "Gezeichnet in ALFA Widgets. Offen: Beschreibung (Modell Gericht hat keine), welcher Preis in der Liste (Mitarbeiter oder Gäste, im Screenshot beide), Woche = Mo bis Fr."
+  },
+  {
+    "item": "laufweitenSichtbar",
+    "answer": {
+      "where": "ALFA Tokenbogen › Laufweite"
+    },
+    "beleg": "Johannes 20.10.: „wo sehe ich das real? im Tokenbogen Page von dir hier ist das nicht visuell aufbereitet.“",
+    "note": "Fünf Tokens typography.tracking (TOKENBOGEN.json:3931) mit Probe je Rolle. Offen: ALFA Dienste (.02em, −.035em) auf Tokens umstellen?"
+  },
+  {
+    "item": "processEntscheidungenInUebergabe",
+    "answer": true,
+    "beleg": "Johannes 20.10.: „Bitte dringend immer auch alle meine Entscheidungen, die ich hierbei/mit dir treffe, DRINGEND in die Übergabe Files an Code schreiben!!!“",
+    "note": "Jede Ansage von Johannes wird in decisions.json und entscheidungen.md geführt, im selben Zug."
+  },
+  {
+    "item": "laufweiteInitialenEinheitlich",
+    "answer": {
+      "token": "typography.tracking.mark",
+      "value": 0.06,
+      "replaces": [
+        "markSmall 0.04",
+        "orbInitials 0.08"
+      ]
+    },
+    "beleg": "Johannes 20.10. (zu den Initialen in Marke, Abgleich-Knopf und Konto-Marken): „Was spricht dagegen, die einheitlich zu machen?“ Gegen die Vereinheitlichung belegt nichts: markSmall und orbInitials stammen von Design (status set-by-design), kein Zitat von Johannes begründet .04 oder .08.",
+    "note": "Umgesetzt: ALFA Shell (.08 → .06), ALFA Mail und ALFA Einstellungen (.04 → .06). TOKENBOGEN.json ohne markSmall und orbInitials. contract/base.tokens.json und contract/components.json müssen neu erzeugt werden."
+  },
+  {
+    "item": "happaDatenFotoPreis",
+    "answer": {
+      "source": "API (Bilder und alle Daten)",
+      "photos": "erst ab ca. 11 Uhr, davor Platzhalter",
+      "guestPrice": false,
+      "description": true,
+      "photo": true,
+      "fullSheet": "nicht dringend"
+    },
+    "beleg": "Johannes 20.10.: „die Bilder und alle Daten kommen per API. Auch sind Bilder der jeweiligen Tagesgerichte immer ‚nach dem Kochen geknipst‘, heißt es gibt die Fotos immer erst ab ca 11 Uhr eines jeden Tages, sonst Platzhalter. Gästepreis kann weg. Beschreibung und Foto bleibt, ‚Sheet Vollansicht‘ muss nicht dringend sein…“",
+    "note": "ALFA Widgets: Liste vor 11 Uhr (Platzhalter-Kachel), ab 11 Uhr (Foto-Kachel), Woche; nur ein Preis, Detail ohne Gästepreis. Die Beschreibung ist der lange Gerichtstext aus den Screenshots, ein eigenes Feld nach dem Modell Gericht (Speiseplan.swift) gibt es nicht. Wie der Platzhalter vor 11 Uhr aussehen soll, ist von Design vorgeschlagen (Teller-Ring), nicht belegt."
+  },
+  {
+    "item": "initialenMarkeEinheitlich",
+    "answer": {
+      "size": "11.5px",
+      "weight": 500,
+      "tracking": "typography.tracking.mark 0.06em",
+      "diameter": 28,
+      "scope": [
+        "ALFA Mail",
+        "ALFA Einstellungen",
+        "ALFA Shell",
+        "ALFA Widgets"
+      ]
+    },
+    "beleg": "Johannes 20.10.: „Aber die Schriftgröße/Gewicht ist noch unterschiedlich, oder?“ Befund: Gewicht überall 500; Größe 9 px (Zeilenmarke in Mail und Einstellungen, Initialen im Abgleich-Knopf, HH in Widgets) gegen 11,5 px (alle anderen 28er Marken); Laufweite fehlte in ALFA Shell (Marke) und Einstellungen (Kachel-Marke).",
+    "note": "Alle Initialen in 28er Marken jetzt 11,5 px / 500 / 0,06 em. Offen: ALFA Dienste (Kürzel 9 px auf 28, 8 px auf 20, 13 px/.02em auf 40) und die 24er Marken (11,5 px) und 20er Marken."
+  },
+  {
+    "item": "kontrastAufloesen",
+    "answer": {
+      "goal": "Schwarz/Weiß auflockern, Kontrast weniger hart",
+      "method": "Tokenfarben auf eine Leiter Weiß–Grau–Schwarz abstufen",
+      "status": "wartet auf weitere Farben von Johannes"
+    },
+    "beleg": "Johannes 20.10. (Kommentar an die Marke „Mail“ in ALFA Mail): „Diesen ‚schwarzen‘ Token müssen wir ersetzen – alle die so ‚heavy Contrast‘ sind – das B/W muss aufgelockert werden, der Kontrast ist zu augenfeindlich. Tokenfarben auf eine White-Grey-Black-Leiter Abstufung bringen. Ich gebe gleich mehr Farben.“",
+    "note": "Noch nichts geändert. Betroffen: die Tinte (color.*.ink, inv) und alles, was Reinschwarz oder Reinweiß nutzt. Kontrastwerte aus SPEC.md bleiben Untergrenze (Text 4,5:1)."
+  },
+  {
+    "item": "farbpaletteVorgabe",
+    "answer": {
+      "boldColors": "maximal 4 bis 6, matt, kräftig, konsistent und komplementär, signalisierend",
+      "neutral": "Leiter von reinem Weiß bis Schwarz, abgestuft nach macOS 26 Richtlinien oder Best of Industry",
+      "source": "uploads/ALFA FARBENum 17.19.39.png (Muster UB) und Fotos 1, 2, 6, 7",
+      "status": "Entwurf in ALFA Farbleiter (1a, 1b), Auswahl offen"
+    },
+    "beleg": "Johannes 20.10.: „max 4-6 BOLDFARBEN, sonst Leiter in abgestuften MacOS 26 Guidelines oder Best of Industry von Pure White zu Black … Nimm aus dem Sample anbei entweder eine konsistente aber in sich auch komplementäre, signalisierendere Farbauswahl. Blockfarben kräftig natürlich matt“",
+    "note": "Noch nicht in TOKENBOGEN.json oder alfa-theme.css übernommen. Hex aus den Bildern gemessen (Mittelwert 6×6 px)."
+  },
+  {
+    "item": "farbpaletteFavorit",
+    "answer": {
+      "favorite": "1b Dämmerung · kühl",
+      "bold": [
+        "Nacht #161c2c",
+        "Hangblau #51678c",
+        "Ziegel #bc4942",
+        "Ocker #d98c23",
+        "Lavendel #a097ac"
+      ],
+      "status": "Favorit, noch nicht in die Tokens übernommen"
+    },
+    "beleg": "Johannes 20.10., Kommentar an Entwurf 1b in ALFA Farbleiter: „schön.“",
+    "note": "Übernahme in TOKENBOGEN.json, alfa-theme.css und alle Bögen wartet auf Bestätigung (auch dunkler Modus)."
+  },
+  {
+    "item": "farbpaletteOhneBlau",
+    "answer": {
+      "rule": "initial ohne Blau, neu entworfen",
+      "consider": [
+        "Typo",
+        "Inhalte",
+        "Überlagerungen",
+        "Liquid Glass"
+      ],
+      "options": [
+        "2a Erde · Oxblut",
+        "2b Zypresse · Terrakotta",
+        "2c Mauve · Kakao"
+      ],
+      "status": "Entwurf in ALFA Farbleiter, Auswahl offen; 1a und 1b (mit Blau) verworfen"
+    },
+    "beleg": "Johannes 20.10.: „Bitte initial OHNE Blaue, bitte neu! Und trotz kreativer Freiheit auch ein bisschen an die Typo, Inhalte und Überlagerungen und LIQUID glass denken.“",
+    "note": "Vorschau je Option: Liquid Glass hell und dunkel über Blockfarben, Schrift, Signale. Kontrastwerte stehen an den Farben und unter der Glasprobe."
+  },
+  {
+    "item": "glasNeutralKeineVollfarbButtons",
+    "answer": {
+      "liquidGlass": "neutral, nie selbst farbig",
+      "buttons": "keine vollfarbigen Knöpfe auf neutralen Flächen; Farbe nur als Ring, Punkt, Schrift oder Block",
+      "inverseCapsule": "bleibt neutral, nicht in einer Boldfarbe"
+    },
+    "beleg": "Johannes 20.10.: „Liquid Glass ist nicht selber farbig. Und bitte auch keine ‚Vollfarb Buttons‘ auf neutralen Farben“",
+    "note": "Umgesetzt in ALFA Farbleiter Runde 2: Glas hell und dunkel neutral, Knöpfe neutral, Auswahl als Ring in Farbe."
+  },
+  {
+    "item": "farbprobeEtablierteWerte",
+    "answer": {
+      "glass": "TOKENBOGEN surface.glass (hell/dunkel), Radius 20, nicht Apple 34",
+      "layout": "Bahn 280 (laneRestWidth), Rand 16, Kopf 44, Zeile 88, Marke 28, Textknopf 28, Abstand 8/12",
+      "note": "glasWerteApple (Figma-Werte) zurückgenommen"
+    },
+    "beleg": "Johannes 21.10., Kommentar an die Glasprobe in ALFA Farbleiter: „Bitte mehr Mühe geben und auch unsere bereits etablierten Werte beachten. Radien, Platzierung etc…“",
+    "note": "Werte aus TOKENBOGEN.json: radius.lane/card 20, size.laneRestWidth 280, edge 16, headerHeight 44, mailRowEstimate 88, symbolSize 28, surface.glass."
+  },
+  {
+    "item": "farbleiterExplorationRuht",
+    "answer": {
+      "status": "Exploration, ruht",
+      "inMasterExport": false,
+      "inTokenbogen": false,
+      "inLieferungAnCode": false,
+      "file": "ALFA Farbleiter.dc.html",
+      "state": "Runde 1 (1a, 1b mit Blau, verworfen), Runde 2 (2a Erde·Oxblut, 2b Zypresse·Terrakotta, 2c Mauve·Kakao, ohne Blau), Glasprobe nach surface.glass; keine Auswahl",
+      "exportGesperrt": true,
+      "baurelevant": false,
+      "bisWiderruf": true
+    },
+    "beleg": "Johannes 21.10.: „Wir lassen das erstmal ruhen. Bitte den Stand der ‚Farbleiter‘ festhalten, aber klar als Exploration noch ohne Master Export Rechte oder Tokenbogen Eingang.“ · Johannes 21.10.: „ist erstmal bis auf Widerruf export gesperrt und auch nicht baurelevant z.Z.“",
+    "note": "Export gesperrt bis auf Widerruf. Nicht baurelevant. Code darf aus ALFA Farbleiter nichts übernehmen. TOKENBOGEN.json, alfa-theme.css und alle Bögen bleiben unverändert. Zugehörige Einträge (farbpaletteVorgabe, farbpaletteFavorit, farbpaletteOhneBlau, glasNeutralKeineVollfarbButtons, farbprobeEtablierteWerte, kontrastAufloesen) sind Vorgaben von Johannes, aber ohne Wirkung auf die Tokens. Offen: Wahl 2a, 2b oder 2c. Memo für spätere Sitzungen: SPEC.md (Abschnitt 7)."
+  },
+  {
+    "item": "blobTokenZurueck",
+    "answer": {
+      "token": "color.light.inverse (--c-inv)",
+      "value": "#171717",
+      "replaces": "#3d3d3d",
+      "scope": "Syncblob, Blob, alle Flächen mit inverse",
+      "unchanged": [
+        "orb #0d0d0d",
+        "dark.inverse #f5f5f5",
+        "onInverse"
+      ]
+    },
+    "beleg": "Johannes 21.10.: „Bitte meine letzte ‚spontane Farbänderung‘ am Blob und dem Tiefschwarz wieder zurück auf den Master 1810 Stand. Nur das BLOB/Syncblob Token wieder auf das was es ‚war‘.“ Beleg für den Wert: contract-build/previous/2026-10-19T16-55 bis 19-45 theme-light.tokens.json (inverse #171717) und lieferung-an-code/werte-abgleich.json (ALFA Mail Zeile 411, #171717 → color.light.inverse).",
+    "note": "Geändert in TOKENBOGEN.json und alfa-theme.css (--c-inv). contract/ neu erzeugen. alfa-theme.css dunkel führt --c-inv:#2e2e2e, TOKENBOGEN dunkel inverse #f5f5f5: Abweichung besteht schon, nicht angefasst, Klärung offen."
+  },
+  {
+    "item": "initialenSyncBlobSchrift",
+    "answer": {
+      "cause": "Button ohne font:inherit, Initialen im Syncblob liefen in Arial",
+      "fix": "font:inherit am sync-button in ALFA Shell",
+      "result": "alle Initialen Geist 11.5 / 500 / .06em"
+    },
+    "beleg": "Johannes 21.10.: „die Initialen in den Hairline Ringen haben nicht das gleiche Gewicht, Spacing und Look, das ist schade. Bitte solche kleinen Details … heftig doll beachten!“",
+    "note": "Gemessen im gerenderten DOM (computed style): JB im Syncblob Arial, alle anderen Geist. Prüfung aller button-Tags in Shell, Mail, Einstellungen, Widgets siehe Chat."
+  },
+  {
+    "item": "auswahlZeileZurueck",
+    "answer": {
+      "selectedFill": "var(--c-inv) (#171717 hell, #f5f5f5 dunkel)",
+      "selectedInk": "on-inv, on-inv-2, on-inv-3, on-inv-line",
+      "wrong": "graue Fläche color.line #e8e8e8 mit Tinte",
+      "scope": [
+        "Mail: Bahn, Kartenzeile, Faltleiste",
+        "Einstellungen: Bahn, Zeile, Faltleiste"
+      ]
+    },
+    "beleg": "Johannes 21.10.: „Das graue habe ich nicht gewollt, oder?“ · „Das kann nicht sein! Such nochmal, das war nie grau und war was anderes in den Übergaben!“ Belege für die dunkle Auswahl: SPEC.md Zeile 22 („Text blieb in der Farbe der gewählten Zeile (Weiß hell, #0d0d0d dunkel)“ = onInverse), Bildschirmfoto 2026-10-19 um 22.28.31 (gewählte Zeile „Eingang“ schwarz), Reste im Code (nFg und symFg der gewählten Zeile auf var(--c-lane), Einstellungen Zeile 368).",
+    "note": "Wer die graue Fläche und inkSel auf Tinte gesetzt hat, ist nirgends protokolliert (screenshots/sel-tonal*.png zeigen einen früheren Versuch). Zurückgesetzt in ALFA Mail und ALFA Einstellungen. Kontrast der gewählten Zeile neu messen. contract/ neu erzeugen."
+  },
+  {
+    "item": "stapelUebersichtUebergang",
+    "answer": {
+      "problem": "Wechsel Stapel ↔ Übersicht visuell anstrengend",
+      "cause": "Stapelkarten sprangen auf neue Positionen (Federkurve mit Überschwingen 1,08) und blendeten in 200 ms aus, die Übersicht erschien ohne Übergang (sc-if) mit ganzer Fläche",
+      "fix": "Positionen der Stapelkarten bleiben beim Wechsel, nur Überblendung (200/300 ms) mit 8 px Absenken; Übersicht immer eingehängt, Überblendung 240/180 ms; Kacheln steigen 10 px mit 24 ms Staffel",
+      "tokens": "neu verwendete Werte vorläufig, nicht in motion.duration geführt"
+    },
+    "beleg": "Johannes 21.10.: „von ‚gefächert‘ per Klick auf Mail oder Antworten und dann zurück zu dem Stapelkartenview ist seeeeeehr sehr anstrengend visuell – das müssen wir besser machen. Feile daran.“",
+    "note": "Gemessen im Render (Deckkraft über Zeit): kein Sprung der Positionen, Überblendung ohne leeren Frame. Bewegungswerte 200/240/300 ms, 8/10 px, 24 ms Staffel stammen von Design und stehen nicht im Tokenbogen. contract/ neu erzeugen."
+  },
+  {
+    "item": "uebersichtKopfSteuerung",
+    "answer": {
+      "placement": "im Kopf der rechten Bahn, als Symbolknöpfe",
+      "modes": [
+        "Stapel (fan)",
+        "Ordner (inbox)"
+      ],
+      "sizes": [
+        "Klein (gridS, 3×3)",
+        "Mittel (grid, 2×2)",
+        "Groß (gridL, 1)"
+      ],
+      "close": "Übersicht schließen (close, gefüllt)",
+      "barInOverview": "entfällt",
+      "breakpoints": "Modi ab Bahnbreite 300, Größen ab 420"
+    },
+    "beleg": "Johannes 21.10.: „nach oben – und wir haben dafür schöneres bereits an Bord“ · „Platzierung oben im Kopf. Schönere Icons, haben wir da nicht besseres?“",
+    "note": "Symbolknöpfe wie alle Kopfknöpfe (hb), gleiche Formen wie fan/grid. gridS und gridL sind neu gezeichnet in alfa-bausteine.js (Linie 1,3, 16er Raster). Das Zeichen für „Übersicht schließen“ ist jetzt close statt fan. Offen: Johannes bestätigt Zeichen."
+  },
+  {
+    "item": "einstellungenKeineKartenstapel",
+    "answer": {
+      "statement": "Kartenstapel sind als Bauteil für Einstellungen nicht gut geeignet",
+      "replacement": null,
+      "status": "Ersatz offen, nichts geändert"
+    },
+    "beleg": "Johannes 21.10., Kommentar an ALFA Einstellungen: „Cardstacks sind nicht gut geeignet hier als Bauteil.“",
+    "note": "Nur vermerkt. Welche Form stattdessen gilt, hat Johannes nicht gesagt."
+  },
+  {
+    "item": "briefV10Gelesen",
+    "answer": {
+      "erledigt": [
+        "N1 DHL eine Karte",
+        "N3 Laufweiten im Tokenbogen",
+        "L-010 Signatur je Postfach",
+        "W-05 Dienstzahl entfällt",
+        "Abmelden-Text"
+      ],
+      "offen": [
+        "N2 Warnung mit Zahl ungesendeter Mails",
+        "N4 Mail zu groß",
+        "N5 Sofort-Abgleich",
+        "N6 KI-Karte",
+        "N7 Fehler je Aktion und Nachladen",
+        "L-011 Logos",
+        "T1 bis T8 Vertrag auf Stand 20./21.10."
+      ]
+    },
+    "beleg": "Sync 20.10. 23:05 UTC: DESIGN/brief/BRIEF.txt v10 (20.10.2026), NACHLIEFERUNGEN N1 bis N7, ARBEITSWEISE A1 bis A7; .claude/memory/stand.md (Stand abends nach e5a5d14).",
+    "note": "Nichts neu gebaut. N2 bis N7 warten auf Johannes' Ansage."
+  },
+  {
+    "item": "abmeldenN2Quelle",
+    "answer": {
+      "status": "nicht von Johannes belegt als Entscheidung für Design",
+      "warnung": "offen",
+      "loeschen": "offen"
+    },
+    "beleg": "Quelle nur Code-Gedächtnis: .claude/memory/app-konten.md Zeile 17 („Abmelden (Johannes 20.10. 22:08 Berlin, Produkt-Sitzung 3f52450e): auf die Frage, ob ‚Auf diesem Mac abmelden‘ alle Verbindungen trennt und deren lokale Daten löscht, auch ungesendete Mails im Postausgang, mit Warnung davor (Zahl der ungesendeten Mails) und ohne Löschen von Name, Firmendaten, Darstellung, antwortet er ‚lets go‘.“) und .claude/memory/stand.md Zeile 62. Die Frage ist von Code formuliert; ihr Wortlaut und Johannes' Antwort im Original (Sitzung 3f52450e) liegen Design nicht vor. Im selben Eintrag steht als IST: SettingsSectionCards.swift:108-115 entfernt alle Verbindungen, MailCore.swift:358-365 löscht ihre Mails samt Postausgang, Neustart.",
+    "note": "DESIGN/brief/BRIEF.txt:92 kürzt das zu „Johannes 20.10. auf die Frage …: ‚lets go‘“ ohne Sitzung, Uhrzeit, ohne den Hinweis, dass die Frage von Code stammt, und ohne das IST. Das Löschen ungesendeter Mails ist Code-Verhalten heute, keine Anweisung von Johannes. Nichts gezeichnet, bis Johannes den Wortlaut bestätigt."
+  },
+  {
+    "item": "syncCode2110",
+    "answer": {
+      "designUnveraendert": true,
+      "briefV10": true,
+      "neuImCodeGedaechtnis": [
+        "Assistent-Schalter: Design entwirft mit Johannes",
+        "Absendername je Postfach",
+        "stand.md:59: Widgets gestrichen (11.10.)"
+      ]
+    },
+    "beleg": "Sync 21.10.2026 00:56 UTC: DESIGN/brief/BRIEF.txt und MANIFEST.json unverändert; .claude/memory/app-konten.md:17, 24–28, stand.md:59.",
+    "note": "Nichts gebaut. Widerspruch Widgets 11.10. gegen 20.10. an Johannes."
+  },
+  {
+    "item": "einstellungenEineKarte",
+    "answer": {
+      "stack": false,
+      "overviewButton": false,
+      "behavior": "Ein Eintrag öffnet genau eine Karte in der rechten Bahn und ersetzt die vorige",
+      "closing": "Schließen leert die Bahn",
+      "tilesAndList": "unverändert"
+    },
+    "beleg": "Johannes 21.10., Kommentare an ALFA Einstellungen: „Cardstacks sind nicht gut geeignet hier als Bauteil.“ · „keine cardstaks hier“",
+    "note": "Umsetzung ist meine Lesart (eine Karte statt Stapel); Johannes hat keine Form genannt. Mail behält den Stapel. Übersicht und gestaffelte Karten in Einstellungen entfallen."
+  },
+  {
+    "item": "einstellungenKarteOhneKopf",
+    "answer": {
+      "cardHeader": false,
+      "dropped": [
+        "Titel",
+        "Marke",
+        "Schloss „Nur Verwaltende ändern das“",
+        "Schließen-Knopf",
+        "Kartenaktionen"
+      ],
+      "note": "Auswahl links zeigt, welche Karte offen ist"
+    },
+    "beleg": "Johannes 21.10., Kommentar am Kartenkopf in ALFA Einstellungen: „kann doch weg? nur die Karte/n?“",
+    "note": "Lesart: Kartenkopf entfällt, nur der Inhalt bleibt. Das Schloss für Verwaltende ist damit nicht mehr sichtbar, Wiedereinbau offen."
+  },
+  {
+    "item": "dienstKarteKopfblock",
+    "answer": {
+      "block": "Dienst-Kopfblock oben in der Karte: Zeichen 56 (Radius 16), Name 18, Zweck 11,5",
+      "icon": "Logo des Dienstes, wo vorhanden (Clockodo, DHL)",
+      "ciColor": "nur belegt: DHL Gelb #ffcb01 aus dhl.svg; Clockodo weiß mit Haarring",
+      "others": "Initial auf neutraler Fläche, bis Logos und CI-Farben von Johannes vorliegen"
+    },
+    "beleg": "Johannes 21.10., Kommentar an die Dienstkarte in ALFA Einstellungen: „gekonnter, klarer, einladender, übersichtlicher Design, ICON der Apps verwenden, CI Farben der Apps nutzen“",
+    "note": "CI-Farben der übrigen Dienste (Google, ClickUp, Airtable, sevDesk, Claude) habe ich nicht belegt und nicht erfunden. Material fehlt (Brief v10 L-011). Rest der Karte (Zustand, Anmeldung, Felder, Abgleich) unverändert."
+  },
+  {
+    "item": "einstellungenKarteBuendig",
+    "answer": {
+      "gapToHeader": 0,
+      "left": 0,
+      "radius": 0,
+      "shadow": "none",
+      "heroInset": 16,
+      "labelInset": 16,
+      "headerButtonInset": 8,
+      "lane": "280"
+    },
+    "beleg": "Johannes 21.10., Kommentar an die Dienstkarte in ALFA Einstellungen: „fluchtlinien und raster beachten. auch breite R spalte denken“",
+    "note": "Gemessen bei 280 breiter rechter Bahn: Karte schließt bündig an den Kopf (Abstand 0), Zeichen und Zeilentext stehen auf 16, Kopfknöpfe auf 8 wie im Raster. Breite rechte Bahn (über 280) nicht gemessen, offen."
+  },
+  {
+    "item": "codeLueckenStand2110",
+    "answer": {
+      "luecken": [
+        "App-Sperre ohne gesperrten Zustand",
+        "Text für Bild blockiert und Betreff leer",
+        "INHALT.json bilder und mbilder doppelt",
+        "Mailschrift Geist oder Systemschrift"
+      ],
+      "bestaetigt": [
+        "Startansicht",
+        "Bilder in Mails laden, Vorgabe aus",
+        "HTML-Mail auf hellem Blatt"
+      ]
+    },
+    "beleg": "ALFA_OS/.claude/memory/stand.md:97-110 (E1 b3977df, E2 92ced80); Johannes 21.10. ~11:15: „Ja, HTML-Mails zeigen ihren echten Inhalt auf hellem Blatt.“",
+    "note": "Nur gelesen und in SPEC.md Abschnitt 11 übernommen, nichts gezeichnet. Brief v11 erst nach Johannes' Wort."
+  },
+  {
+    "item": "standGanzGelesen",
+    "answer": {
+      "gelesen": "ALFA_OS/.claude/memory/stand.md, alle 134 Zeilen",
+      "ergebnis": "SPEC.md Abschnitt 11 neu geschrieben"
+    },
+    "beleg": "Johannes 21.10.: „STAND voll lesen. Es werden keine Docs NICHTS gelesen. das ist fahrlässig.“",
+    "note": "Vorher nur Suchtreffer gelesen. Noch ungelesen: die anderen Dateien in .claude/memory (app-*.md, design-brief-aktuell.md u. a.), BRIEF-Beilagen, tokens-gegen-schema.txt, Schemas, Prüfskripte, AN-DESIGN-LIEFERUNG-15.md."
+  },
+  {
+    "item": "gedaechtnisVollGelesen",
+    "answer": {
+      "gelesen": "alle 30 Dateien in ALFA_OS/.claude/memory (stand, MEMORY, design-brief-aktuell, app-*, grundsaetze, stammtisch, artefakte-karte, arbeitsweise, bestand-zuerst, u. a.)",
+      "ergebnis": "SPEC.md Abschnitt 12 neu, Abmelden und Heute in Abschnitt 4 und 6 berichtigt"
+    },
+    "beleg": "Johannes 21.10.: „dringend alles lesen!“",
+    "note": "Zitate in den app-*.md sind laut artefakte-karte.md zu 21 von 44 im Korpus nicht gefunden. Nicht gelesen: BRIEF.txt gegen SPEC.md Zeile für Zeile, tokens-gegen-schema.txt, Schemas, Prüfskripte, AN-DESIGN-LIEFERUNG-15.md."
+  },
+  {
+    "item": "briefV10Abgleich",
+    "answer": {
+      "gelesen": [
+        "DESIGN/brief/BRIEF.txt",
+        "tokens-gegen-schema.txt",
+        "alfa.tokens.schema.json",
+        "components.schema.json",
+        "views.schema.json",
+        "texts.schema.json",
+        "changes.schema.json",
+        "alfa.resolver.schema.json",
+        "validate.py",
+        "check_contract.py",
+        "diff_contract.py",
+        "uploads/AN-DESIGN-LIEFERUNG-15.md"
+      ],
+      "befund": [
+        "TOKENBOGEN 370 Tokens, 189 ohne Status und Quelle",
+        "Vertrag führt markSmall und orbInitials, Tokenbogen nicht",
+        "P1 bis P3 nicht ausgeführt",
+        "W-05 entfällt (Johannes 20.10.: Zahl nicht anzeigen)"
+      ]
+    },
+    "beleg": "Johannes 21.10.: „frage nicht was du als nächstes lesen sollst … ARBEITE“; BRIEF.txt Zeilen 8, 13–19, 55–60, 78–105",
+    "note": "SPEC.md Abschnitt 13 neu, Offen jetzt Abschnitt 14."
+  },
+  {
+    "item": "codeAnfrage2110",
+    "answer": {
+      "lieferung": "nicht freigegeben, CLAUDE.md: keine ZIP vor Johannes' 100 %",
+      "p1": "valid",
+      "p2": "75 Funde",
+      "p3": "offen"
+    },
+    "beleg": "Nachricht von Code 21.10.2026 „Code wartet auf deine nächste Lieferung“; CLAUDE.md Abschnitt „Keine ZIPs“",
+    "note": "Sechs neue Punkte in SPEC.md Abschnitt 14."
+  },
+  {
+    "item": "betreffFehltHinweis",
+    "answer": {
+      "eigenerHinweis": true
+    },
+    "beleg": "Johannes 21.10. auf Frage 1 (leerer Betreff, eigener Hinweis „Betreff fehlt“): „1 ja.“",
+    "note": "Zeichnen: Hinweis und Textschlüssel für leeren Betreff, neben „Empfänger fehlt“ (ALFA Mail.dc.html:632)."
+  },
+  {
+    "item": "schriftGeist",
+    "answer": {
+      "font": "Geist",
+      "mailSheet": "Geist wie das Token, nicht Systemschrift"
+    },
+    "beleg": "Johannes 21.10. auf Frage 2 (Geist oder Systemschrift): „Bereits gesagt, such selber.“ Gefunden: SPEC.md Abschnitt 8 „Die Schrift ist Geist, lokal (300, 400, 500, 600 über die Variable Datei). Keine Monoschrift.“ (Rückgabe 17.10.); Code stand.md:109 „Die Schrift der Mail kommt aus dem Token (Geist zuerst)“.",
+    "note": "Gilt auch für das Blatt der HTML-Mail, soweit der Inhalt keine eigene Schrift setzt."
+  },
+  {
+    "item": "appIconImDock",
+    "answer": {
+      "anspruch": "gleiche Qualität wie die übrigen Dock-Icons",
+      "dock": "soll sich farblich und gestalterisch abheben",
+      "ort": "endgültiges App-Icon"
+    },
+    "beleg": "Johannes 21.10., mit Bildschirmfoto 15.04.19 (Dock mit meist dunklen Icons): „da muss das später rein und darf den andren Icons in nichts nachstehen qualitativ und es sollte sich auch im Dock farblich und gestalterisch etwas abheben“",
+    "note": "ALFA Icon.dc.html zeigt die fünf Entwürfe im Dock neben Platzhalterflächen, hell und dunkel. Wahl steht aus."
+  },
+  {
+    "item": "ikonFaecherNeu",
+    "answer": {
+      "befund": "1a: Pin mit Ring und Mittelkarte ergab ein Auge",
+      "neu": [
+        "2a Farbkarten: weiße Frostkarten mit Farbmuster, Balken, kleine Lochung",
+        "2b Gefächerte Schenkel: je Schenkel drei gefächerte Streifen, Balken, heller Grund"
+      ]
+    },
+    "beleg": "Johannes 21.10. am Pin von 1a: „Sieht seltsam wie ein Auge aus, bitte das ganze Icon nochmal mit richtig viel Brain und skill neu denken und richtig geili machen!“",
+    "note": "1a bleibt unverändert stehen. Wahl und Dock-Vergleich der neuen Entwürfe stehen aus."
+  },
+  {
+    "item": "ikonInspo3",
+    "answer": {
+      "runde3": [
+        "3a Farbfächer: 17 Streifen von Creme über Pfirsich, Flieder, Rosa, Koralle bis Rot, weiße Karte mit A, Metallschraube",
+        "3b Papierstufen: sechs gestufte Bögen Creme bis Rot, A auf dem roten Bogen"
+      ]
+    },
+    "beleg": "Johannes 21.10., zwei Bildschirmfotos (15.07.23 gestufte Farbbögen LW 01–06, 15.07.37 Farbfächer mit Karte und Schraube): „Inspo“",
+    "note": "Runde 1 und 2 bleiben stehen. Dock-Vergleich nicht aktualisiert. Wahl steht aus."
+  },
+  {
+    "item": "ikonFaecherEchterAufbau",
+    "answer": {
+      "regel": "Echter Farbfächer: viele breite Karten mit einem Drehpunkt nahe dem Ende, Karten überlappen stark, sichtbar bleibt nur ein schmaler Streifen am freien Ende, Deckkarte oben, eine Schraube",
+      "umgesetzt": "3a neu: 38 Karten (Breite 120, Schritt 7,5°), Randlicht und Schatten je Karte, Deckkarte mit A, Metallschraube mit Schlitz"
+    },
+    "beleg": "Johannes 21.10.: „Und bitte überlege gründlich: wie sieht ein Fächer aus, wie funktioniert er. Deine Streifen mit Niete sind ziemlich schlechte Fächer im realen Leben;)“",
+    "note": "Die ersten 3a-Streifen waren schmaler als ihr Abstand und lagen nebeneinander wie Strahlen, nicht überlappend."
+  },
+  {
+    "item": "ikon3aFixpunkt",
+    "answer": {
+      "schraube": "entfällt, stilisiert als schlichter Fixpunkt (flache Scheibe, Randlicht)",
+      "karten": "alle Fächerkarten und die Deckkarte gleich groß (120 × 400)"
+    },
+    "beleg": "Johannes 21.10. am Fächer 3a: „Schon nicht schlecht. Bitte die Schraube nicht voll ausgestalten, stilisieren als Fixpunkt außerdem auch die Fächer-Swatches gleich groß.“",
+    "note": "Das A sitzt jetzt klein auf der Deckkarte (Breite etwa 80)."
+  },
+  {
+    "item": "ikonFinalisten",
+    "answer": {
+      "finalisten": [
+        "4a Farbfächer (3a)",
+        "4b Papierstufen verfeinert (3b)"
+      ],
+      "verfeinerung4b": "doppelte S-Schulter wie in der Vorlage, Randlicht nur an der Schulter, Verlauf je Bogen, Schatten nach links, A mittig auf dem roten Bogen, Staffel x 170 und y 45 gleichmäßig"
+    },
+    "beleg": "Johannes 21.10. am Entwurf 3b: „auch sehr geil – bitte diesen Entwurf als zweiten ins Rennen schicken und auch nochmal mit richtig vielen Token und richtig viel Hirnschmalz und kunstvollem Designgespür polieren und feintunen.“",
+    "note": "Wahl zwischen 4a und 4b steht aus. Dock-Vergleich zeigt noch die Runden 1 bis 3."
+  },
+  {
+    "item": "ikon4bAGross",
+    "answer": {
+      "a": "fett, etwa 390 × 494 von 1024, weiß mit Glanz und Schatten, über den Bögen Rosa bis Rot",
+      "grund": "Das Icon wird etwa so groß wie ein 20-Cent-Stück gesehen, das A muss poppen"
+    },
+    "beleg": "Johannes 21.10. an 4b: „das A etwas prägnanter setzen bitte, auch größer – das Icon ist nachher ca so groß wie ein 20 Cent Stück, es muss poppen“",
+    "note": "Alle Entwürfe mit A (1b, 2a, 3a, 4a) sind nicht angepasst."
+  },
+  {
+    "item": "ikonGewaehlt4b",
+    "answer": {
+      "wahl": "4b Papierstufen",
+      "glaskanten": "runder, Randlicht konzentriert (feine helle Linie mit Verlauf nach unten und weicher Schein)",
+      "hintergrund": "dunkel, warm, nicht blau (#31272a nach #171113, dunkel #1e1618 nach #0c0809)",
+      "a": "weiß mit innerer Haarlinie in Rot"
+    },
+    "beleg": "Johannes 21.10. am Icon 4b: „jo, nehmen wir. Aber die Glaskanten deutlich schöner rund konzentrierter zeichnen, den Hintergrund bitte eher Dunkel, nicht blau. das A evtl mit hairline?“",
+    "note": "Abnahme des Feintunings steht aus. Der Farbwert des Hintergrunds ist von mir gewählt, nicht von Johannes."
+  },
+  {
+    "item": "ikon4bSauberkeit",
+    "answer": {
+      "fehler": [
+        "Randlicht brach mitten auf der Oberkante ab",
+        "weicher grauer Schein wirkte schmutzig",
+        "diagonale Kurve des ersten Bogens am linken Rand",
+        "Schatten zu grau und zu breit"
+      ],
+      "behoben": [
+        "Randlicht läuft bis unter den nächsten Bogen, ohne Abbruch",
+        "Schein entfernt, dafür scharfe helle Linie mit feiner Kontaktlinie darunter",
+        "erster Bogen beginnt außerhalb, Rand zeigt nur die Oberkante",
+        "Schatten enger und warm statt grau"
+      ]
+    },
+    "beleg": "Johannes 21.10. mit Bildschirmfoto 15.36.11 (Ausschnitt oben links von 4b): „das ist sloppy!!!!“",
+    "note": "Im Bild geprüft (screenshots/icon-4b-3.png): linke Kante sauber, Randlicht ohne Abbruch, A-Haarlinie als echte Innenkontur (Abstand 15, Strich 2,4 in Rot). Der Filter-Ansatz für die Haarlinie wurde verworfen, weil er im Render fehlte."
+  },
+  {
+    "item": "ikon4bHaarlinienA",
+    "answer": {
+      "a": "nur ultrafeine schwarze Outline, keine Füllung, kein Schatten (Strich 2,4 von 1024)",
+      "glanzlinien": "fünf Lagen je Bogen: scharfe helle Randlinie über die ganze linke und obere Kante mit Verlauf nach unten, zweite Linie 5 Einheiten innen, weiches inneres Randlicht, Eckglanz an der Schulter, Kontaktlinie außen"
+    },
+    "beleg": "Johannes 21.10. an 4b: „A nur ultrafeine schwarze outline hairline. Die weißen Highlights-Glanzlinien aus den Farbkarten bitte ENDLICH SAUBER UND GRÜNDLICH IM GANZEN ICON hochdetailiert und sauber gepixelt und gezeichnet bauen!“",
+    "note": "Im Bild geprüft (screenshots/icon-4b-5.png). Vorher brach die helle Randlinie auf der Oberkante früh ab (Linie endete bei x+210, der nächste Bogen deckt erst später); jetzt läuft sie bis unter den nächsten Bogen und über die ganze linke Kante. Eckglanz, Innenversatzlinie entfernt (wirkte nass). A ohne Füllung wirkt schwächer als das gefüllte; er hatte zuvor „muss poppen“ gesagt. Gegenprüfung in 32 und 16 Pixel steht aus."
+  },
+  {
+    "item": "ikon4bAGefuellt",
+    "answer": {
+      "a": "weiß gefüllt mit Glanz und Schatten, dazu die schwarze Haarlinie (2,4 von 1024) als Kontur"
+    },
+    "beleg": "Johannes 21.10. an 4b: „A bitte wieder Füllen!“",
+    "note": "Haarlinie behalten, weil sein Wort davor „ultrafeine schwarze Outline Hairline“ war und er nur die Füllung zurückwollte. Gegenprüfung in 32 und 16 Pixel steht aus."
+  },
+  {
+    "item": "ikon4bOrangeFreigegeben",
+    "answer": {
+      "status": "approved-provisional",
+      "gegenstand": "App-Icon 4b Papierstufen (N8)"
+    },
+    "beleg": "Johannes 21.10., Kommentar an der Karte 4b in ALFA Icon.dc.html: „ORANGE freigegeben.“",
+    "note": "Gelesen als Status „freigabe-orange“ (nach Brief v12 T1: approved-provisional) für das Icon. Kein Export, keine ZIP: CLAUDE.md verlangt sein Wort „100 % sauber“. Falls er die Farbe Orange meinte, bitte melden."
+  },
+  {
+    "item": "handoffNeueSitzung",
+    "answer": {
+      "datei": "HANDOFF.md",
+      "inhalt": "Auftrag, Regeln, Pflichtlektüre, Dateikarte, Vertragsstand, Entscheidungsindex, Brief v12 Punkt für Punkt, offene Fragen, Fallen, Reihenfolge"
+    },
+    "beleg": "Johannes 21.10.: „dein Handoff an eine neue Sitzung muss aber dann so dermaßen fein und gründlich verfasst sein, dass es vollkommen alles offene abdeckt. Du hast selber schon Stau übernommen, hinterlässt Stau und es wird immer schlimmer.“",
+    "note": "Zeilen aus älteren Chatteilen (DHL, Signatur, Widgets) habe ich nicht neu gegen die Bögen geprüft; im Handoff als „prüfen vor done“ markiert."
+  },
+  {
+    "item": "vertragNeuErzeugt2110",
+    "answer": {
+      "p1": "valid",
+      "p2": "consistent (vier Bögen)",
+      "p3": "log matches, 214 Änderungen",
+      "zahlen": {
+        "tokens": 397,
+        "bauteile": 81,
+        "elemente": 183,
+        "texte": 298
+      },
+      "p4": "nicht lauffähig, LIEFERUNG.json fehlt"
+    },
+    "beleg": "Johannes 21.10. mit Bildschirmfotos der Projektdateien (CLAUDE.md 3 Tage, contract 1 Tag, TOKENBOGEN 15 h): „weil alles nahezu ALLES in deiner Projektakte schon sehr sehr alt ist und du NICHTS nachgepflegt hast!“ und „das ist extrem kritisch! es gefährdet das gesamte Projekt!“",
+    "note": "Vertrag, akte.json, PRUEFUNG.txt, README und HANDOFF.md neu. Nicht nachgepflegt: werte-abgleich.json, views.json, TOKENBOGEN-Erzeugung aus contract/, CLAUDE.md, INHALT.json (N11), bauteile.json und mechanik.json (2 und 1 Tage alt), die N-Punkte."
+  },
+  {
+    "item": "berichtigungBriefStand",
+    "answer": {
+      "falsch": [
+        "Brief v10 nicht abgearbeitet",
+        "P3 nie gelaufen",
+        "L-015 und L-016 offen"
+      ],
+      "richtig": [
+        "N1, N3, L-010, W-05, Abmelden-Text in den Bögen erledigt (entscheidungen.md:340)",
+        "P1 bis P3 am 19.10. grün (entscheidungen.md:312)",
+        "L-015: Abstand 1; L-016: 12 und 12, umgesetzt (entscheidungen.md:309, :310)"
+      ],
+      "unbelegt": "Ob weitere Briefe (v7, v8, v11) bei Design ankamen; Verlauf vor der Kürzung liegt nur als Zusammenfassung vor"
+    },
+    "beleg": "Johannes 21.10.: „100 % sicher und garantiert, dass es nur das hier ist?“ Prüfung per grep in entscheidungen.md und decisions.json.",
+    "note": "HANDOFF.md Abschnitt 7 berichtigt."
+  },
+  {
+    "item": "luftUndLuecken",
+    "answer": {
+      "ort": "HANDOFF.md Abschnitt 9a",
+      "gemessen": {
+        "loseMasse": {
+          "Mail": 590,
+          "Einstellungen": 339,
+          "Shell": 99,
+          "Bestaetigen": 59,
+          "Dienste": 141,
+          "Widgets": 293
+        },
+        "hexLiterale": {
+          "Dienste": 34,
+          "Widgets": 19,
+          "Icon": 171
+        },
+        "DiensteVar": 0
+      }
+    },
+    "beleg": "Johannes 21.10.: „wirklich alles alles alles im Handoff? meine Entscheidungen, Details, deine Lücken, wo hast du Token vergessen, wo hast du nur ‚in die Luft‘ entworfen?“ und „es ist enorm wichtig JEDES Fitzelchen das fehlt nachzuholen von 0 an quasi“",
+    "note": "Messung per Skript über style-Attribute; JS-Logik der Bögen nicht gemessen, dort können weitere lose Werte stehen."
+  },
+  {
+    "item": "keineBabysitterTexte",
+    "answer": {
+      "allowed": [
+        "Fehlertexte",
+        "Warntexte"
+      ],
+      "notAllowed": "Erklär- und Meta-Sätze unter Knöpfen, Zeilen oder Karten, die beschreiben, was etwas tut",
+      "rule": "Es kommt nichts in die UI, was nicht funktionsbedingt ist",
+      "brief": "N18 (Drive-Freigabe-Hinweis) entfällt"
+    },
+    "beleg": "Johannes 21.10. (Lead-Sitzung bc4854d7, laut Code-Gedächtnis ALFA_OS/.claude/memory/keine-babysitter-texte.md Zeile 8 und 10): „WENN ES FEHLER oder WARNINGS sind, dann okay. ABER nicht irgendwo unter Buttons schreiben \"schickt an airtable, wird nie geschrieben\" oder blödsinn wie in alten mykilOS apps. Es kommt nichts in die UI was nicht Funktionsbedingt ist dabei“ · BRIEF.txt (Stand 21.10. 15:10 UTC) N18 (entfällt).",
+    "note": "BERICHTIGUNG 21.10. 17:45: Meine frühere Angabe „keine Treffer in Bögen und INHALT.json“ war falsch. Der Grep auf alfa-bausteine.js traf, ich habe den Treffer als Zweckangabe gelesen; im Render von ALFA Einstellungen (Google-Karte) steht der Satz tatsächlich. Kandidaten für Erklär- oder Meta-Sätze (nach texts.json, Länge/Satzende, und Render): alfa-bausteine.js (Google-Dienstkarte): „Liest und schreibt Mail, Dateien, Kalender und Kontakte. Die Anmeldung über Google ist zugleich der Eingang in die App.“ (steht nicht in texts.json) · settings.label.s046 „Stoppt jeden Aufruf an den Assistenten.“ · settings.label.s048 „Der Assistent darf angehängte Dateien lesen.“ · settings.label.s050 „Mit Touch ID oder Passwort.“ · settings.label.s052 „Zähler am Blob und im Dock.“ · settings.label.s053 „Jeder Anbieter über IMAP und SMTP.“ · settings.label.s063 „Mails und Dokumente bleiben auf Weiß, auch im Dunkeln.“ · settings.label.s064 „Die Regler für Alarm, Ton und Nachfassen kehren mit ihren Bereichen zurück. Heute meldet nur Mail neue Nachrichten.“ · settings.label.s068 „Eine Wiederherstellung greift beim nächsten Start.“ · mail.cardNotice2.text2 „Beim Laden erfährt der Absender, dass die Mail geöffnet wurde.“ (Warnung?) · mail.label.s042 „Einmal neu anmelden, dann geht der Entwurf raus.“ (Warnung?). Nichts geändert: Funde Johannes zeigen, nicht still ändern (Code-Gedächtnis keine-babysitter-texte.md). → Lieferschein question. Lücke T4: texts.json (298 Texte) enthält Texte aus alfa-bausteine.js nicht."
+  },
+  {
+    "item": "sperreStempel",
+    "answer": {
+      "rule": "Nichts gilt, was Johannes nicht auf allen verwendenden Bögen live gesehen hat; Token, Bauteile, Nomenklatur, Blöcke, Maße müssen zugleich in allen Bögen, im Tokenbogen und im Vertrag stehen",
+      "ungueltig": [
+        "alle Pages",
+        "JSONs",
+        "Tokenbögen",
+        "MDs",
+        "Archive",
+        "alte Verträge und Lieferungen"
+      ],
+      "stempel": "jede Seite, die nicht vollständig aktuell und von Johannes gesehen ist (14), trägt in jeder Ansicht einen fett roten, diagonalen Stempel GESPERRT",
+      "sperre": "Export und Weitergabe gesperrt, bis Johannes aufhebt",
+      "umgesetzt": "data-alfa-sperre=\"gesperrt\" in allen 14 .dc.html (nach </helmet>), Register contract-build/sperre.json"
+    },
+    "beleg": "Johannes 21.10. (Chat, Anhang uploads/Bildschirmfoto 2026-10-21 um 20.20.13.png): Wieso sind n3-N17 nicht erledigt, P4 nicht gelaufen? … Es geht nichts raus was ich nicht gesehen habe und es GEHT nichts raus, was nicht in ALLEN verwendenden HTML Ansichtsbereichsentwürfen auch eingebaut und visualisiert ist. HABE ICH ES NICHT GESEHEN, ist es non Existent. Entwurfsbögen MÜSSEN bedingungslos und ausnahmslos geupdatet werden. Alles was es an \"Pages, Jsons, Tokenbögen, MD´s und auch Archiven und alten Verträgen und Lieferungen gibt ist SOFORT und vollständig UNGÜLTIG wenn das was ICH sehe als Pages nicht vollständig neu und vollständig geupdatet wurde. ES KANN KEINERLEI TOKEN existieren, den ich nicht auf allen Blättern/Entwurfsbögen/Htmls zeitgleich und in der aktuellsten Form auch im Einsatz gesehen habe. Ist etwas NICHT auf den HTML´s aktualisiert, im aktuellsten Tokenbogen und Vertrag vollständig erfasst und einmalig, ist es TIEFROT und von jedem EXPORT, WEITERGABE und Verwendung gesperrt. JEDES HTML Page (14 aktuell) das nicht dem aktuellsten Stand entspricht, nicht alle Bauteile, Token, Nomenklatur, Blocks und Maße etc auch nach geforderten Schema trägt - MUSS AB SOFORT FETT ROT UND IN JEDER ANSICHT UNMISSVERSTÄNDLICH DIAGONAL \"GESPERRT\" überstempelt sein.“ (Anhang: Stempel-Foto „GESPERRT“, rot, mit Rahmen, Datum, Feld „Name“)"
+  },
+  {
+    "item": "designFestlegungenBrief12",
+    "answer": {
+      "N2": "Abmelden mit Bestätigen-Pille; die Zeile nennt Zahl und Namen der tatsächlich verbundenen Dienste; keine Zahl ungesendeter Mails, keine Warnung (BRIEF.txt N2 Stand 22.10.)",
+      "N4": "Zustand tooLarge: Hinweis „Mail zu groß“ mit Knopf „Anhänge ändern“",
+      "N5": "kein Eintrag „Sofort“ im Takt-Menü; IMAP-Konten melden neue Mail sofort, solange der Takt nicht „Aus“ ist",
+      "N6": "Claude: Modellwahl, Zähler „Tokens seit <Datum> · <n> Tage“, Preis je Mio. Tokens (Eingabe, Ausgabe) von der Person, Schätzwert „ca.“ in 50-Cent-Schritten nur mit beiden Preisen, Zurücksetzen mit Bestätigen",
+      "N7": "Fehler je Aktion als Fehler-Toast „<Aktion> fehlgeschlagen“ mit „Erneut versuchen“; Postausgang nicht gesichert als Hinweis in der Liste; Nachladen: nicht gezeichnet (siehe Lieferschein)",
+      "N9": "Sperrbildschirm in der Hülle: Marke, Name, „Mit Touch ID entsperren“, „Passwort eingeben“, Fehler „Touch ID nicht erkannt“ / „Passwort falsch“",
+      "N10": "Kachel Bild blockiert: Zustände blocked/loaded, Seitenverhältnis 4:3 als Token",
+      "N11": "Mail-Bilder gestrichen, Externe Bilder bleibt",
+      "N13": "Schrift Geist, Token typography.family.text; alle Bögen lesen ihn",
+      "N14": "Projektordner: Laufwerk, dann Ordner; ohne Wahl „Wählen“ und kein Abgleichknopf",
+      "N15": "Aus Projektordner: Projekt, Ordner, Datei; Lädt, Keine Dateien, Ordner nicht geladen, höchstens 8 Dateien, dann „n weitere im Projektordner“",
+      "N16": "Mail sichern: Ordner Korrespondenz im Projekt der Mail, Dateiname „<Datum> <Betreff>.pdf“, PDF A4 mit Kopf, Text, Anhängen, Fuß (ALFA PDF.dc.html)",
+      "N17": "In anderes Projekt: Projektwahl, Kopie in Ordner Anhänge, Rückgängig",
+      "L-014": "Firmendaten und Impressum: Felder ohne Werte mit Bezeichnung und Platzhalter"
+    },
+    "beleg": "Brief v12 (DESIGN/brief/BRIEF.txt, Stand 21.10. 15:10 UTC), Punkte wie genannt: Gestaltung von Design gesetzt, nicht von Johannes entschieden; Johannes hat nichts davon gesehen (Bögen GESPERRT, decisions.json sperreStempel)."
+  },
+  {
+    "item": "pdfFrageAnCode",
+    "answer": {
+      "rule": "Mail-PDF: erst Code fragen, ob die native macOS-Ausgabe reicht; ist sie „gratis onboard“, entfällt ein eigenes PDF-Layout",
+      "status": "N16 im Lieferschein auf question; ALFA PDF.dc.html bleibt als Entwurf, bis Code antwortet"
+    },
+    "beleg": "Johannes 22.10. (Chat): Ist das nicht eh durch \"print to pdf\" macOS und HTML der Mails gegeben? … Stelle das zu \"PDF\" bitte einfach als FRAGE zurück an Code, wenn das nativ MacOS26 und quasi \"gratis onboard\" ist, umso besser."
+  },
+  {
+    "item": "briefN2Neu2210",
+    "answer": {
+      "aenderung": "BRIEF.txt N2 neu gefasst: Zeile „alle abmelden“ mit Aufzählung und Zahl der verbundenen Dienste; Warnung und Umgang mit ungesendeten Mails entscheidet Johannes, bis dahin nichts zeichnen",
+      "gebaut": "signOutSub in ALFA Einstellungen.dc.html:280, Texte settings.signOut.detail/detailOne/detailNone im Vertrag, Warnzahl entfernt"
+    },
+    "beleg": "github.com/JohannesLeoB/ALFA_OS DESIGN/brief/BRIEF.txt @19bff55bd144 (Sync 2026-10-22T01:01Z), Zeile N2; stand.md: „Brief N2 85d19a7“, „Erfundenes Wort: lets go … hat Johannes nie gesagt“",
+    "note": "Kein neues Wort von Johannes in diesem Chat. Zahl der Dienste in der Zeile folgt dem Brief; Johannes 20.10. „eher irrelevant“ betraf die Anzeige in ALFA Dienste und bleibt dort entfernt. Frage an Johannes: Zahl ja oder nein."
+  },
+  {
+    "item": "nachtragMail2210",
+    "answer": {
+      "L13": "a Karte bleibt offen, Hinweis „Entwurf nicht gesichert“ mit Erneut sichern/verbinden; b Postausgang und Versandfehler sichern nicht, Toast „Im Postausgang“ bzw. „Nicht gesendet · im Ordner Entwürfe“; c „Sichert …“, Knopf und Felder gesperrt",
+      "LA": "Wähler (Johannes 19.10.), gebaut",
+      "LB": "nativ (Quick Look, Druck, Sichern-Dialog), Menüeinträge und Toasts gezeichnet",
+      "LC": "Zone „Loslassen hängt an“ auf der Entwurfskarte",
+      "LD": "Block „Lokale Ablage“ in der Mail-Konten-Karte, Werte von Design",
+      "LE": "Liste offline als Warnung"
+    },
+    "beleg": "Brief Code → Design Nachtrag zu v12, 22.10.2026; spec-mail.md MAIL-L13, L06, L10, L11, L12; Johannes 22.10. „Stelle das zu \"PDF\" bitte einfach als FRAGE zurück an Code, wenn das nativ MacOS26 … ist“ (entscheidungen.md, letzte Zeile)",
+    "note": "Design-Festlegungen, kein Wort von Johannes, nicht gesehen. Details und Fragen an Code: lieferung-an-code/ANTWORT-NACHTRAG-2210.md. Menüeinträge ohne Verhalten und Formatleiste unberührt (erst Johannes)."
+  },
+  {
+    "item": "farbe2210",
+    "answer": [
+      {
+        "wo": "Icon 3b, Kommentar",
+        "zitat": "Diese 6 Farben und den Hintergrund des Icons mit einer WHITE-Black Farbleiter zu einem Versochs - Farbsystem entwerfen. Hintergründe, große Flächen und Inhalte sollten Weiß-Schwarz geleitert sein, die 6(7) COLOURS im exakten ton wie hier als \"Cardstack - Heads\" zum beispiel einsetzen. Immer VOLLE Farben. keine Verläufe auf ebenen Flächen. Material semi glossy.",
+        "folge": "ALFA Farbsystem Versuch.dc.html (Leiter N0–N13, Töne aus Icon G-l1–G-l6, bgCL)"
+      },
+      {
+        "wo": "Farbsystem Versuch, Kommentar",
+        "zitat": "Ohne die Hellen Kanten, einfach vollfarbflächen. Keine \"s cuts\" sondern unsere nocmalen radien an den ecken. Bitte einmal mit Schriften, Kontrasten, Hell/Dunkel System MacOS einstellungen vollständig durchentwerfen und alle Zustände abfolgen bedenken und prüfen. eine MAIL COLOR Entwurfsbogen in 1:1 format bitte entwerfen.",
+        "folge": "ALFA Mail Color.dc.html (Kopie ALFA Mail), alfa-theme-farbe.css, ground farbe/farbe-plus/system, appearance system"
+      },
+      {
+        "wo": "Mail Color, Kommentar Karte",
+        "zitat": "Da die Farben ja mitnehmen!",
+        "folge": "Farbe je Karte fest, vordere Karte zeigt sie im Kopf"
+      },
+      {
+        "wo": "Mail Color, Bildschirmfotos",
+        "zitat": "Bitte dieses \"Schwarz\" durch eine andere Farbe ersetzen. keine crazy Farbe, elegant",
+        "folge": "überholt durch „Schwarz ganz raus“"
+      },
+      {
+        "wo": "Mail Color, Bildschirmfoto 16.42",
+        "zitat": "Könntest du da 8 Stunden am Tag mit arbeiten?  → auf meinen Vorschlag: „jo!“",
+        "folge": "Auswahl neutral, Karmin nur Signal, Karmin aus dem Stapel"
+      },
+      {
+        "wo": "Chat",
+        "zitat": "Ich finde schwarz zu heavy. Ganz raus bitte. Entwerfe dazu eine neue Farbsystematik. Die 6 COLORS als \"Theme\" Farben … Theme im Sinne von \" 6 Colours\" als ein \"Farbthema\" und es könnten später noch aweitere 6er Farbgruppen als weitere \"themes\" zu den Neutralen kommen … Nur die schwarzen Flächen (Neue Mail, Blob, JB, Marken)----YES, schriften bleiben wie gehabt",
+        "folge": "ALFA Farbsystematik.dc.html; Theme = sechs Plätze t1–t6 + Papier"
+      },
+      {
+        "wo": "Chat",
+        "zitat": "BLOB, AVATAR, und das andere was \"vorher schwarz war\" bitte anders als durch die COLOURS betonen - denke dir was anderes auch bitte",
+        "folge": "Relief: neutrale Fläche N0/N9 mit Ring (Design)"
+      },
+      {
+        "wo": "Chat",
+        "zitat": "das \"taxigelb\" nur als \"UntersteKarte im Cardstack\" rechts nutzen, Auswahl farbe auch \"nicht farbig\"",
+        "folge": "Creme nur auf einer Karte (Tweak cremeCard, Vorgabe vorderste = Deutung Design), Auswahl N2"
+      },
+      {
+        "wo": "Mail Color, Kommentar Kartenfuß",
+        "zitat": "auch in der jeweiligen Card farbe bitte",
+        "folge": "Fuß der vorderen Karte in Kartenfarbe"
+      },
+      {
+        "wo": "Mail Color, Kommentar Karteninhalt",
+        "zitat": "Schmaler farbiger Rand, rechts und links, mit feinen Innenradien",
+        "folge": "Inhalt 4 px eingerückt, Radius 8 (radius.notice)"
+      },
+      {
+        "wo": "Mail Color, Kommentar Bahnkopf rechts",
+        "zitat": "Auch farbe!",
+        "folge": "Bahnkopf rechts in Farbe der vorderen Karte"
+      },
+      {
+        "wo": "Mail Color, Kommentar Stapel",
+        "zitat": "diesen weißen rand bitte noch weg",
+        "folge": "Stapel ohne Abstand oben"
+      },
+      {
+        "wo": "ALFA Mail, Kommentar Kopfleiste",
+        "zitat": "Die drei \"grüßen\" können weg - wir haben ja eine macimale anzahl an \"offenen Mails\" und die passen ja hier als preview",
+        "folge": "Klein/Mittel/Groß in der Übersicht entfernt, ALFA Mail und ALFA Mail Color"
+      },
+      {
+        "wo": "ALFA Mail, Kommentar Konto-Marken",
+        "zitat": "Die \"Coins\" gefallen mir leider gaaaarnicht",
+        "folge": "Ersatz siehe nächste Zeile"
+      },
+      {
+        "wo": "Chat",
+        "zitat": "Andere idee: Wir nehmen das \"motiv\" der Cardstacks nochmal auf - ABER andersrum - UNTEN sind die \"überlappenden Cards\" zum wählen, und so kann das Konto gewählt werden!? … Eher so quasi;) (Bildschirmfoto 19.14.37, Stapel auf den Kopf gestellt)",
+        "folge": "Postfach-Stapel unten in der linken Bahn (mail.account-deck), nur ALFA Mail Color"
+      },
+      {
+        "wo": "Mail Color, Kommentar gefaltete Bahn",
+        "zitat": "Die Farben sollten in allen Zuständen der Stacks / Spalten gegeben sein...",
+        "folge": "Spaltenfarbe über lanes[i].bg; Hülle liest m.bg (ALFA Shell)"
+      },
+      {
+        "wo": "Johannes, Kommentare Mail Color",
+        "zitat": "Icone unterschiedlich? · Icons unterschiedliuch?? · Inhalt bricht / Betreff bricht · Feiner Farbrahmen, feine Radien,wie die Cardstacks. · Inhalt ist \"sein eigener Hintergrund",
+        "folge": "Ringe einheitlich, Kachel mit Rahmen, Betreff einzeilig"
+      },
+      {
+        "wo": "Chat, Bildschirmfoto 19.23.53 (Dunkel, Kontrast erhöhen)",
+        "zitat": "ich glaube ich bewege mich hier in eine laslsche Richtugn",
+        "folge": "Stand gesichert als ALFA Mail Color v1.dc.html + alfa-theme-farbe-v1.css"
+      },
+      {
+        "wo": "Chat, Bildschirmfoto 19.48.35",
+        "zitat": "das Element finde ich eigentlich ganz schön, lass uns mal nur den rechten Cardstack als \"farbhighlight \" nehmen, den Rest also mitte und Links wieder auch die neutralen farben, Hintergrund des Gesamtfensters bitte Weiß",
+        "folge": "Farbe nur im rechten Stapel; links neutral; Grund hell #ffffff"
+      },
+      {
+        "wo": "Mail Color, Kommentar Blob",
+        "zitat": "den \"schatten\" oder was das ist bitte weg, beim avatar genauso. … der hat aber noch nen anderen look als die \"spalten\"",
+        "folge": "Blob/Personenmarke ohne Schatten, Haarlinie wie Spalten"
+      },
+      {
+        "wo": "Mail Color, Kommentar Bahnkopf links",
+        "zitat": "Avatar des jeweiligen \"offenen\" kontos bitte Oben · Avatar ist nicht sauber platziert",
+        "folge": "eine Marke des offenen Kontos im Kopf, Achse wie Zeilensymbole"
+      },
+      {
+        "wo": "Johannes, Kommentare Mail Color",
+        "zitat": "Was machen die Buttons? · \"neue Mail\" sollte uahc in der gefoldeten Spalte unten sein wie auch im offenen Zustand, Als Icon ... · Icons ungleichmäßig · Weißer Hintergrund, nur der \"selbe Feine farbige Rahmen\" wie die anderen Karten · Augen waren im \"restmode doch die Striche, oder nciht? · \"footer\" ohne avatar und name bei Oberster Karte, stattdessen dort \" Neue Mail\"",
+        "folge": "Neue Mail im Streifen unten (Hülle: margin-top je Marke), Kachel weiß mit 4-px-Rahmen, vorderste Postfachkarte = Neue Mail; Augen: Frage offen (Hülle: Ruhe = scaleY .45)"
+      },
+      {
+        "wo": "Chat",
+        "zitat": "Wenn du wirklich ehrlich, gründlich, picky, pedantisch … was würdest du machen … → ja mach das bitte. 1-2. dann auch den rest bitte. der bau braucht auch mal wieder frische Designs!",
+        "folge": "Protokoll, Entscheidungsblatt Farbe, dann Tokens, Zustandsbogen, Vermessung, Hülle, Code-Brief"
+      },
+      {
+        "wo": "Kommentar an ALFA Mail Color v1",
+        "zitat": "BOGEN LÖSCHEN bitte",
+        "folge": "Bogen und alfa-theme-farbe-v1.css gelöscht"
+      },
+      {
+        "wo": "Kommentar an ALFA Farbsystem Versuch",
+        "zitat": "Bogen löschen",
+        "folge": "Bogen gelöscht"
+      }
+    ],
+    "beleg": "Johannes 22.10.2026, Chat und Kommentare in ALFA Icon, ALFA Farbsystem Versuch, ALFA Mail, ALFA Mail Color (wörtlich, Tippfehler belassen)",
+    "note": "Alle Folgen sind Design-Umsetzungen in Explorationsbögen, nicht im Vertrag, nicht im Tokenbogen. Nachgetragen am 22.10. abends, Regel processEntscheidungen (20.10.) war den Tag über nicht eingehalten."
+  },
+  {
+    "item": "farbsystematikNichtAnCode",
+    "answer": {
+      "rule": "ALFA Farbsystematik.dc.html bleibt im Projekt, geht nicht an Code und nicht in TOKENBOGEN.json oder contract/, bis Johannes es deutlich freigibt"
+    },
+    "beleg": "Johannes 22.10.2026, Kommentar an ALFA Farbsystematik: „Bogen behalten, nicht an Code geben bis ich das deutlich sagen, nicht in TOKENMASTER übernehmen !“"
+  },
+  {
+    "item": "iconDunkelGlas2210",
+    "answer": {
+      "zeichnung": "ALFA Icon.dc.html Runde 5 (5a, 5b)"
+    },
+    "beleg": "Johannes 22.10.2026, Kommentar an ALFA Dienste „Dock, dunkel“: „suboptimal, Liquid Glass evtl??“",
+    "note": "offen, Wahl durch Johannes"
+  }
+]

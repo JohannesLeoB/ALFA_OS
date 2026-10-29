@@ -1,0 +1,3693 @@
+{
+  "blocks": [
+    {
+      "export": "2026-10-19T16:55",
+      "previous": "none",
+      "changes": []
+    },
+    {
+      "export": "2026-10-19T18:30",
+      "previous": "2026-10-19T16:55",
+      "changes": [
+        {
+          "kind": "component",
+          "id": "address-button",
+          "op": "change",
+          "reason": "Bauteil geändert (Brief T2)"
+        },
+        {
+          "kind": "component",
+          "id": "symbol-button",
+          "op": "change",
+          "reason": "Bauteil geändert (Brief T2)"
+        },
+        {
+          "kind": "component",
+          "id": "tile-grid",
+          "op": "change",
+          "reason": "Bauteil geändert (Brief T2)"
+        },
+        {
+          "kind": "component",
+          "id": "tile-group",
+          "op": "change",
+          "reason": "Bauteil geändert (Brief T2)"
+        },
+        {
+          "kind": "element",
+          "id": "mail.address-button.account",
+          "op": "add",
+          "reason": "Element mit data-id (Brief T2, L-008 bis L-013)"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s014",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s015",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s016",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s017",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s018",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s019",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s020",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s021",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s022",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s023",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s024",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s025",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s026",
+          "op": "add",
+          "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s001",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s002",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s003",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s004",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s005",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s006",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s008",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s009",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s010",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s011",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s012",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s013",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s014",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s015",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s016",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s017",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s018",
+          "op": "add",
+          "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+        },
+        {
+          "kind": "text",
+          "id": "settings.feedback.s001",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s001",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s002",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s003",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s004",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s005",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s006",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s007",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s008",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s009",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s010",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s011",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s012",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s013",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s014",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s015",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s016",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s017",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s018",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s019",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s020",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s021",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s022",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s023",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s024",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s025",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s026",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s027",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s028",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s029",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s030",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s031",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s032",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s033",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s034",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s035",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s036",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s037",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s038",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s039",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s040",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s041",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s042",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s043",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s044",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s045",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s046",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s047",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s048",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s049",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s050",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s051",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s052",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s053",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s054",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s055",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s056",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s057",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s058",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s059",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s060",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s061",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s062",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s063",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s064",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s065",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s066",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s067",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s068",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s069",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s070",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s071",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s072",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s073",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s074",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s075",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s076",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s077",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s078",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s079",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s080",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s081",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s082",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s083",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s084",
+          "op": "add",
+          "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s085",
+          "op": "add",
+          "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s086",
+          "op": "add",
+          "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s087",
+          "op": "add",
+          "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s088",
+          "op": "add",
+          "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+        },
+        {
+          "kind": "text",
+          "id": "settings.title.s001",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.title.s002",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.title.s003",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.title.s005",
+          "op": "change",
+          "reason": "Text geändert"
+        },
+        {
+          "kind": "text",
+          "id": "settings.title.s006",
+          "op": "add",
+          "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+        },
+        {
+          "kind": "token",
+          "id": "motion.transition.blobFlight",
+          "op": "add",
+          "reason": "Übergang als Typ transition (Brief T1)"
+        },
+        {
+          "kind": "token",
+          "id": "motion.transition.fold",
+          "op": "add",
+          "reason": "Übergang als Typ transition (Brief T1)"
+        },
+        {
+          "kind": "token",
+          "id": "motion.transition.stack",
+          "op": "add",
+          "reason": "Übergang als Typ transition (Brief T1)"
+        },
+        {
+          "kind": "view",
+          "id": "mail",
+          "op": "change",
+          "reason": "Ansicht ergänzt (Brief T3)"
+        },
+        {
+          "kind": "view",
+          "id": "settings",
+          "op": "change",
+          "reason": "Ansicht ergänzt (Brief T3)"
+        }
+      ]
+    },
+    {
+      "export": "2026-10-19T19:20",
+      "previous": "2026-10-19T18:30",
+      "changes": [
+        {
+          "kind": "view",
+          "id": "mail",
+          "op": "change",
+          "reason": "Konto-Wähler als temporäres Bauteil gekennzeichnet (Johannes 19.10.)"
+        }
+      ]
+    },
+    {
+      "export": "2026-10-19T19:45",
+      "previous": "2026-10-19T19:20",
+      "changes": [
+        {
+          "kind": "view",
+          "id": "mail",
+          "op": "change",
+          "reason": "Konto-Wähler: Code hat das Bauteil nicht, Design entwirft es"
+        }
+      ]
+    },
+    {
+      "export": "2026-10-19T20:10",
+      "previous": "2026-10-19T19:45",
+      "changes": [
+        {
+          "kind": "component",
+          "id": "account-mark",
+          "op": "add",
+          "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+        },
+        {
+          "kind": "component",
+          "id": "account-switch",
+          "op": "add",
+          "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+        },
+        {
+          "kind": "component",
+          "id": "address-button",
+          "op": "change",
+          "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+        },
+        {
+          "kind": "component",
+          "id": "filter-capsule",
+          "op": "change",
+          "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+        },
+        {
+          "kind": "component",
+          "id": "symbol-button",
+          "op": "change",
+          "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+        },
+        {
+          "kind": "element",
+          "id": "mail.account-mark",
+          "op": "add",
+          "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+        },
+        {
+          "kind": "element",
+          "id": "mail.account-mark.add",
+          "op": "add",
+          "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+        },
+        {
+          "kind": "element",
+          "id": "mail.account-mark.pick",
+          "op": "add",
+          "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+        },
+        {
+          "kind": "element",
+          "id": "mail.account-switch",
+          "op": "add",
+          "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+        },
+        {
+          "kind": "element",
+          "id": "mail.address-button.account",
+          "op": "remove",
+          "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+        },
+        {
+          "kind": "text",
+          "id": "mail.accountMark.add.tooltip",
+          "op": "add",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s014",
+          "op": "change",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s015",
+          "op": "change",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s016",
+          "op": "change",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s017",
+          "op": "change",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s018",
+          "op": "change",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s019",
+          "op": "change",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s020",
+          "op": "change",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s021",
+          "op": "change",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s022",
+          "op": "change",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s023",
+          "op": "change",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s024",
+          "op": "change",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s025",
+          "op": "change",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s026",
+          "op": "remove",
+          "reason": "Text des Konto-Wählers"
+        },
+        {
+          "kind": "view",
+          "id": "mail",
+          "op": "change",
+          "reason": "Aktion chooseAccount auf neues Element"
+        }
+      ]
+    },
+    {
+      "export": "2026-10-19T21:00",
+      "previous": "2026-10-19T20:10",
+      "changes": [
+        {
+          "kind": "token",
+          "id": "size.accountClosedWidth",
+          "op": "add",
+          "reason": "Breitenwerte des Konto-Wählers als Token"
+        },
+        {
+          "kind": "token",
+          "id": "size.accountFanWidth",
+          "op": "add",
+          "reason": "Breitenwerte des Konto-Wählers als Token"
+        }
+      ]
+    },
+    {
+      "export": "2026-10-21T16:45",
+      "previous": "2026-10-19T21:00",
+      "changes": [
+        {
+          "kind": "component",
+          "id": "account-alert",
+          "op": "add",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "account-mark",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "anchored-menu",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "card-content",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "card-header",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "card-notice",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "card-overview",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "choice",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "command-group",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "connection-status",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "field-row",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "filter-capsule",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "list-section-header",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "mark",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "menu-row",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "option",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "overview-tile",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "segmented-control",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "service-hero",
+          "op": "add",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "signature-editor",
+          "op": "add",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "symbol-button",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "text-button",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "tile-grid",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "tile-group",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "toast",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "component",
+          "id": "toggle",
+          "op": "change",
+          "reason": "Bogen von 21.10. neu eingelesen"
+        },
+        {
+          "kind": "element",
+          "id": "confirm.confirm-no.no",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "confirm.confirm-undo.undo",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.account-alert",
+          "op": "add",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.account-mark",
+          "op": "remove",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.account-mark.add",
+          "op": "remove",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.account-mark.pick",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.anchored-menu",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.card-notice-2",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.command-group-5",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.compose-button.new-go",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.field-row",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.field-row-2",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.field-row-4",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.mail-signature",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.mark-7",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.menu-row",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.option",
+          "op": "remove",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.option-2",
+          "op": "remove",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.overview-tile",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.segmented-control",
+          "op": "remove",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.segmented-control-2",
+          "op": "remove",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.symbol-button-5",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.symbol-button.close-2",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.text-button.do-trash",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.text-button.load-images",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.text-button.undo",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "mail.toast",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.anchored-menu",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.card-content",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.card-header",
+          "op": "remove",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.card-notice",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.card-overview",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.choice.pill-go",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.command-group-3",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.connection-status-2",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.field-row",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.list-section-header-3",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.mark-2",
+          "op": "remove",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.mark-3",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.menu-row",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.option",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.option-2",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.option-3",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.overview-tile",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.segmented-control",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.segmented-control-2",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.segmented-control-3",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.service-hero",
+          "op": "add",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.symbol-button-2",
+          "op": "remove",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.symbol-button-3",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.symbol-button.close",
+          "op": "remove",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.symbol-button.close-2",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.text-button",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.text-button-2",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.text-button.undo",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.toast",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "settings.toggle.toggle",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "shell.assistant-input",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "element",
+          "id": "shell.menu",
+          "op": "change",
+          "reason": "data-id im Bogen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.accountMark.add.tooltip",
+          "op": "remove",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s015",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s016",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s017",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s018",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s019",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s020",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s021",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s022",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s023",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s024",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s025",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s026",
+          "op": "add",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s027",
+          "op": "add",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s028",
+          "op": "add",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s029",
+          "op": "add",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s019",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s020",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s021",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s022",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s023",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s024",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s025",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.s026",
+          "op": "add",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s001",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s002",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s003",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s004",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s005",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s006",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s007",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s008",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s016",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s017",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s018",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s019",
+          "op": "add",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.cardHeader.tooltip",
+          "op": "remove",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s010",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s011",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s012",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s013",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s014",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s015",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s016",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s017",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s018",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s019",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s020",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s021",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s022",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s023",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s024",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s025",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s026",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s027",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s028",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s029",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s030",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s031",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s032",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s033",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s034",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s035",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s036",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s037",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s038",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s039",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s040",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s041",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s042",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s043",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s044",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s045",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s046",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s047",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s048",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s049",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s050",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s051",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s052",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s053",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s054",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s055",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s056",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s057",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s058",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s059",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s060",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s061",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s062",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s063",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s064",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s065",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s066",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s067",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s068",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s069",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s070",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s071",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s072",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s073",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s074",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s075",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s076",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s077",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s078",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s079",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s080",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s081",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s082",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s083",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s084",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s085",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s086",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s087",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s088",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s089",
+          "op": "add",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s090",
+          "op": "add",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s091",
+          "op": "add",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s092",
+          "op": "add",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.symbolButton.close.tooltip",
+          "op": "remove",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.symbolButton.close2.tooltip",
+          "op": "add",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.title.s003",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.title.s004",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.title.s005",
+          "op": "change",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.title.s006",
+          "op": "remove",
+          "reason": "Texte aus den Bögen vom 21.10."
+        },
+        {
+          "kind": "token",
+          "id": "typography.textStyle.markSmall",
+          "op": "change",
+          "reason": "Tokenbogen neu erzeugt (Laufweite, Inverse, 112)"
+        },
+        {
+          "kind": "token",
+          "id": "typography.tracking.markSmall",
+          "op": "remove",
+          "reason": "Tokenbogen neu erzeugt (Laufweite, Inverse, 112)"
+        },
+        {
+          "kind": "token",
+          "id": "typography.tracking.orbInitials",
+          "op": "remove",
+          "reason": "Tokenbogen neu erzeugt (Laufweite, Inverse, 112)"
+        }
+      ]
+    },
+    {
+      "export": "2026-10-22T01:15",
+      "previous": "2026-10-21T16:45",
+      "changes": [
+        {
+          "kind": "component",
+          "id": "image-tile",
+          "op": "add",
+          "reason": "N10 Bild blockiert: Kachel"
+        },
+        {
+          "kind": "component",
+          "id": "lock-error",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "component",
+          "id": "lock-screen",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "component",
+          "id": "pdf-attachments",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "component",
+          "id": "pdf-body",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "component",
+          "id": "pdf-footer",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "component",
+          "id": "pdf-header",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "component",
+          "id": "pdf-page",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "element",
+          "id": "mail.image-tile",
+          "op": "add",
+          "reason": "N10 Bild blockiert: Kachel"
+        },
+        {
+          "kind": "element",
+          "id": "mail.text-button.retry",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "element",
+          "id": "pdf.attachments",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "element",
+          "id": "pdf.body",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "element",
+          "id": "pdf.footer",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "element",
+          "id": "pdf.header",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "element",
+          "id": "pdf.page",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "element",
+          "id": "settings.text-button.retry",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "element",
+          "id": "shell.lock-error",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "element",
+          "id": "shell.lock-mark",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "element",
+          "id": "shell.lock-password",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "element",
+          "id": "shell.lock-screen",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "element",
+          "id": "shell.lock-touch",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "element",
+          "id": "shell.lock-unlock",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "element",
+          "id": "shell.lock-use-password",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "element",
+          "id": "shell.lock-use-touch",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "text",
+          "id": "mail.attachment.copied",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.attachment.copyRemoved",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.attachment.otherProject",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.draftStatus.tooLarge",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.failure.archive",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.failure.attachment",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.failure.delete",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.failure.draft",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.failure.flag",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.failure.loadMore",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.failure.move",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.failure.read",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.failure.thread",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.imageTile.blocked",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "text",
+          "id": "mail.list.loadMore",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.list.loadingMore",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.mailTooLarge.action",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.mailTooLarge.text",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.mailTooLarge.title",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.outboxUnsaved.action",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.outboxUnsaved.text",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.outboxUnsaved.title",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.pdf.attachments",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "text",
+          "id": "mail.pdf.date",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "text",
+          "id": "mail.pdf.fileName",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "text",
+          "id": "mail.pdf.folder",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "text",
+          "id": "mail.pdf.from",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "text",
+          "id": "mail.pdf.page",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "text",
+          "id": "mail.pdf.subject",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "text",
+          "id": "mail.pdf.to",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "text",
+          "id": "mail.projectFiles.chooseRoot",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.projectFiles.empty",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.projectFiles.loadFailed",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.projectFiles.loading",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.projectFiles.more",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.projectFiles.noRoot",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.projectFiles.retry",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "mail.projectFiles.title",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.saveMail.chooseProject",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.saveMail.done",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.saveMail.failed",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.saveMail.menu",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "mail.toast.retry",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.counter",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.estimate",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.estimateValue",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.model",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.modelStandard",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.priceIn",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.priceOut",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.resetConfirm",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.resetQuestion",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.usageHead",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.usageSince",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.usageSinceOne",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.ai.usageValue",
+          "op": "add",
+          "reason": "N6 KI-Integrationen"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.s008",
+          "op": "remove",
+          "reason": "N2 Abmelden mit Bestätigen und Warnung"
+        },
+        {
+          "kind": "text",
+          "id": "settings.company.address",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.company.addressPlaceholder",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.company.mail",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.company.mailPlaceholder",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.company.name",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.company.namePlaceholder",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.company.phone",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.company.phonePlaceholder",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.company.web",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.company.webPlaceholder",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.imprint.author",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.imprint.authorPlaceholder",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.imprint.rights",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.imprint.rightsPlaceholder",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.imprint.signature",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.imprint.signaturePlaceholder",
+          "op": "add",
+          "reason": "L-014 Firmendaten und Impressum"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s061",
+          "op": "remove",
+          "reason": "N2 Abmelden mit Bestätigen und Warnung"
+        },
+        {
+          "kind": "text",
+          "id": "settings.projectRoot.choose",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "settings.projectRoot.drive",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "settings.projectRoot.label",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "settings.projectRoot.selected",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "settings.projectRoot.syncFailed",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "settings.projectRoot.synced",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "text",
+          "id": "settings.signOut.confirm",
+          "op": "add",
+          "reason": "N2 Abmelden mit Bestätigen und Warnung"
+        },
+        {
+          "kind": "text",
+          "id": "settings.signOut.detail",
+          "op": "add",
+          "reason": "N2 Abmelden mit Bestätigen und Warnung"
+        },
+        {
+          "kind": "text",
+          "id": "settings.signOut.detailNone",
+          "op": "add",
+          "reason": "N2 Abmelden mit Bestätigen und Warnung"
+        },
+        {
+          "kind": "text",
+          "id": "settings.signOut.detailOne",
+          "op": "add",
+          "reason": "N2 Abmelden mit Bestätigen und Warnung"
+        },
+        {
+          "kind": "text",
+          "id": "settings.signOut.done",
+          "op": "add",
+          "reason": "N2 Abmelden mit Bestätigen und Warnung"
+        },
+        {
+          "kind": "text",
+          "id": "settings.signOut.label",
+          "op": "add",
+          "reason": "N2 Abmelden mit Bestätigen und Warnung"
+        },
+        {
+          "kind": "text",
+          "id": "settings.signOut.question",
+          "op": "add",
+          "reason": "N2 Abmelden mit Bestätigen und Warnung"
+        },
+        {
+          "kind": "text",
+          "id": "settings.toast.retry",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "text",
+          "id": "shell.lock.passwordPlaceholder",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "text",
+          "id": "shell.lock.passwordWrong",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "text",
+          "id": "shell.lock.touch",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "text",
+          "id": "shell.lock.touchFailed",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "text",
+          "id": "shell.lock.touchWaiting",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "text",
+          "id": "shell.lock.unlock",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "text",
+          "id": "shell.lock.usePassword",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "text",
+          "id": "shell.lock.useTouch",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "token",
+          "id": "count.projectFilesMax",
+          "op": "add",
+          "reason": "N14 bis N17 Dateien über Drive"
+        },
+        {
+          "kind": "token",
+          "id": "motion.duration.toastFail",
+          "op": "add",
+          "reason": "N4/N7 Fehler, Nachladen, Mail zu groß"
+        },
+        {
+          "kind": "token",
+          "id": "ratio.imageTile",
+          "op": "add",
+          "reason": "N10 Bild blockiert: Kachel"
+        },
+        {
+          "kind": "token",
+          "id": "size.cardStateTextMaxWidth",
+          "op": "add",
+          "reason": "A1 Zahl stand inline im Bogen, jetzt Token"
+        },
+        {
+          "kind": "token",
+          "id": "size.confirmPillOffset",
+          "op": "add",
+          "reason": "A1 Zahl stand inline im Bogen, jetzt Token"
+        },
+        {
+          "kind": "token",
+          "id": "size.confirmPillWidth",
+          "op": "add",
+          "reason": "A1 Zahl stand inline im Bogen, jetzt Token"
+        },
+        {
+          "kind": "token",
+          "id": "size.fieldLabelMinWidth",
+          "op": "add",
+          "reason": "A1 Zahl stand inline im Bogen, jetzt Token"
+        },
+        {
+          "kind": "token",
+          "id": "size.imageTileStripe",
+          "op": "add",
+          "reason": "N10 Bild blockiert: Kachel"
+        },
+        {
+          "kind": "token",
+          "id": "size.lockFieldWidth",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "token",
+          "id": "size.lockMarkSize",
+          "op": "add",
+          "reason": "N9 App-Sperre: Sperrbildschirm der Hülle"
+        },
+        {
+          "kind": "token",
+          "id": "size.pdfPageHeight",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "token",
+          "id": "size.pdfPageWidth",
+          "op": "add",
+          "reason": "N16 PDF der gesicherten Mail"
+        },
+        {
+          "kind": "token",
+          "id": "size.signatureEditorMinHeight",
+          "op": "add",
+          "reason": "A1 Zahl stand inline im Bogen, jetzt Token"
+        },
+        {
+          "kind": "token",
+          "id": "spacing.step2",
+          "op": "add",
+          "reason": "A1 Zahl stand inline im Bogen, jetzt Token"
+        },
+        {
+          "kind": "token",
+          "id": "typography.lineHeight.heading",
+          "op": "add",
+          "reason": "A1 Rest: Zeilenhöhe, Schattenname"
+        }
+      ]
+    },
+    {
+      "export": "2026-10-22T01:10",
+      "previous": "2026-10-22T01:15",
+      "changes": [
+        {
+          "kind": "text",
+          "id": "settings.signOut.detail",
+          "op": "change",
+          "reason": "N2 neu gefasst (Brief 22.10.): Zeile nennt Dienste und Zahl, keine Warnung"
+        },
+        {
+          "kind": "text",
+          "id": "settings.signOut.detailNone",
+          "op": "change",
+          "reason": "N2 neu gefasst (Brief 22.10.): Zeile nennt Dienste und Zahl, keine Warnung"
+        },
+        {
+          "kind": "text",
+          "id": "settings.signOut.detailOne",
+          "op": "change",
+          "reason": "N2 neu gefasst (Brief 22.10.): Zeile nennt Dienste und Zahl, keine Warnung"
+        }
+      ]
+    },
+    {
+      "export": "2026-10-22T01:40",
+      "previous": "2026-10-22T01:10",
+      "changes": [
+        {
+          "kind": "component",
+          "id": "card-notice",
+          "op": "change",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "component",
+          "id": "drop-overlay",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "element",
+          "id": "mail.drop-overlay",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.draftList.notSent",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.draftList.outbox",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.draftStatus.notSaved",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.draftStatus.outbox",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.draftStatus.saving",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.drop.over",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.attachment.print",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.menu.attachment.saveAsPdf",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.draftNotSaved.actionReconnect",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.draftNotSaved.actionRetry",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.draftNotSaved.textAuth",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.draftNotSaved.textServer",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.draftNotSaved.title",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.offline.action",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.offline.text",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.notice.offline.title",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.toast.notSentInDrafts",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.toast.outbox",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.toast.pdfFailed",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.toast.pdfSaved",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "mail.toast.resend",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.attachments",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.folder",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.folder.custom",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.folder.default",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.head",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.limit",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.limit.gb1",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.limit.gb10",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.limit.gb25",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.limit.gb5",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.limit.none",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.period",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.period.all",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.period.d30",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.period.d90",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        },
+        {
+          "kind": "text",
+          "id": "settings.mailStore.period.y1",
+          "op": "add",
+          "reason": "Nachtrag Mail: L13 Schließen, L-B Anhang, L-C Ablegen, L-D Ablage, L-E offline"
+        }
+      ]
+    },
+    {
+      "export": "2026-10-22T20:40",
+      "previous": "2026-10-22T01:40",
+      "changes": [
+        {
+          "kind": "text",
+          "id": "mail.button.s016",
+          "op": "remove",
+          "reason": "Johannes 22.10.: Größen Klein/Mittel/Groß in der Übersicht entfernt (ALFA Mail)"
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s017",
+          "op": "remove",
+          "reason": "Johannes 22.10.: Größen Klein/Mittel/Groß in der Übersicht entfernt (ALFA Mail)"
+        },
+        {
+          "kind": "text",
+          "id": "mail.button.s018",
+          "op": "remove",
+          "reason": "Johannes 22.10.: Größen Klein/Mittel/Groß in der Übersicht entfernt (ALFA Mail)"
+        },
+        {
+          "kind": "text",
+          "id": "mail.label.s059",
+          "op": "remove",
+          "reason": "Johannes 22.10.: Größen Klein/Mittel/Groß in der Übersicht entfernt (ALFA Mail)"
+        },
+        {
+          "kind": "text",
+          "id": "mail.label.s060",
+          "op": "remove",
+          "reason": "Johannes 22.10.: Größen Klein/Mittel/Groß in der Übersicht entfernt (ALFA Mail)"
+        },
+        {
+          "kind": "text",
+          "id": "mail.label.s061",
+          "op": "remove",
+          "reason": "Johannes 22.10.: Größen Klein/Mittel/Groß in der Übersicht entfernt (ALFA Mail)"
+        }
+      ]
+    },
+    {
+      "export": "2026-10-22T22:15",
+      "previous": "2026-10-22T20:40",
+      "changes": [
+        {
+          "kind": "component",
+          "id": "profile-tile",
+          "op": "add",
+          "reason": "Johannes 22.10.: Profil-Kachel; Dateiordner eigene Gruppe, Vorlagen darunter"
+        },
+        {
+          "kind": "element",
+          "id": "settings.profile-mark",
+          "op": "add",
+          "reason": "Johannes 22.10.: Profil-Kachel; Dateiordner eigene Gruppe, Vorlagen darunter"
+        },
+        {
+          "kind": "element",
+          "id": "settings.profile-tile",
+          "op": "add",
+          "reason": "Johannes 22.10.: Profil-Kachel; Dateiordner eigene Gruppe, Vorlagen darunter"
+        },
+        {
+          "kind": "element",
+          "id": "settings.text-button.profile-pick",
+          "op": "add",
+          "reason": "Johannes 22.10.: Profil-Kachel; Dateiordner eigene Gruppe, Vorlagen darunter"
+        },
+        {
+          "kind": "text",
+          "id": "settings.button.profilePick",
+          "op": "add",
+          "reason": "Johannes 22.10.: Profil-Kachel; Dateiordner eigene Gruppe, Vorlagen darunter"
+        },
+        {
+          "kind": "text",
+          "id": "settings.entry.folderSchema",
+          "op": "add",
+          "reason": "Johannes 22.10.: Profil-Kachel; Dateiordner eigene Gruppe, Vorlagen darunter"
+        },
+        {
+          "kind": "text",
+          "id": "settings.entry.folderSchemaSub",
+          "op": "add",
+          "reason": "Johannes 22.10.: Profil-Kachel; Dateiordner eigene Gruppe, Vorlagen darunter"
+        },
+        {
+          "kind": "text",
+          "id": "settings.group.files",
+          "op": "add",
+          "reason": "Johannes 22.10.: Profil-Kachel; Dateiordner eigene Gruppe, Vorlagen darunter"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.profileAddresses",
+          "op": "add",
+          "reason": "Johannes 22.10.: Profil-Kachel; Dateiordner eigene Gruppe, Vorlagen darunter"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.profileTeams",
+          "op": "add",
+          "reason": "Johannes 22.10.: Profil-Kachel; Dateiordner eigene Gruppe, Vorlagen darunter"
+        }
+      ]
+    },
+    {
+      "export": "2026-10-22T20:50",
+      "previous": "2026-10-22T22:15",
+      "changes": [
+        {
+          "kind": "text",
+          "id": "settings.label.s046",
+          "op": "remove",
+          "reason": "N40: Erklärsätze gestrichen (Johannes 21.10.)"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s048",
+          "op": "remove",
+          "reason": "N40: Erklärsätze gestrichen (Johannes 21.10.)"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s050",
+          "op": "remove",
+          "reason": "N40: Erklärsätze gestrichen (Johannes 21.10.)"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s053",
+          "op": "remove",
+          "reason": "N40: Erklärsätze gestrichen (Johannes 21.10.)"
+        },
+        {
+          "kind": "text",
+          "id": "settings.label.s063",
+          "op": "remove",
+          "reason": "N40: Erklärsätze gestrichen (Johannes 21.10.)"
+        }
+      ]
+    },
+    {
+      "export": "2026-10-23T20:00",
+      "previous": "2026-10-22T20:50",
+      "changes": [
+        {
+          "kind": "component",
+          "id": "account-title",
+          "op": "add",
+          "reason": "SPEC-NACHTRAG-2310 (MAIL-P, MAIL-W, HUB-A)"
+        },
+        {
+          "kind": "component",
+          "id": "account-deck",
+          "op": "add",
+          "reason": "SPEC-NACHTRAG-2310 (MAIL-P, MAIL-W, HUB-A)"
+        },
+        {
+          "kind": "component",
+          "id": "account-card",
+          "op": "add",
+          "reason": "SPEC-NACHTRAG-2310 (MAIL-P, MAIL-W, HUB-A)"
+        },
+        {
+          "kind": "component",
+          "id": "envelope-stack",
+          "op": "add",
+          "reason": "SPEC-NACHTRAG-2310 (MAIL-P, MAIL-W, HUB-A)"
+        },
+        {
+          "kind": "component",
+          "id": "envelope",
+          "op": "add",
+          "reason": "SPEC-NACHTRAG-2310 (MAIL-P, MAIL-W, HUB-A)"
+        },
+        {
+          "kind": "component",
+          "id": "switch-glass",
+          "op": "add",
+          "reason": "SPEC-NACHTRAG-2310 (MAIL-P, MAIL-W, HUB-A)"
+        },
+        {
+          "kind": "component",
+          "id": "settings-account-name",
+          "op": "add",
+          "reason": "SPEC-NACHTRAG-2310 (MAIL-P, MAIL-W, HUB-A)"
+        },
+        {
+          "kind": "component",
+          "id": "settings-account-show",
+          "op": "add",
+          "reason": "SPEC-NACHTRAG-2310 (MAIL-P, MAIL-W, HUB-A)"
+        },
+        {
+          "kind": "element",
+          "id": "mail.account-alert.deck",
+          "op": "add",
+          "reason": "MAIL-P05"
+        },
+        {
+          "kind": "token",
+          "id": "motion.duration.switchIn",
+          "op": "add",
+          "reason": "SPEC-NACHTRAG-2310"
+        },
+        {
+          "kind": "token",
+          "id": "motion.duration.switchOut",
+          "op": "add",
+          "reason": "SPEC-NACHTRAG-2310"
+        },
+        {
+          "kind": "token",
+          "id": "motion.duration.hintDwell",
+          "op": "add",
+          "reason": "SPEC-NACHTRAG-2310"
+        },
+        {
+          "kind": "token",
+          "id": "size.foldAt",
+          "op": "add",
+          "reason": "SPEC-NACHTRAG-2310"
+        },
+        {
+          "kind": "text",
+          "id": "settings.account.name",
+          "op": "add",
+          "reason": "Bogen 23.10."
+        },
+        {
+          "kind": "text",
+          "id": "settings.account.show",
+          "op": "add",
+          "reason": "Bogen 23.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.draft.noSubject",
+          "op": "add",
+          "reason": "Bogen 23.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.empty.trash",
+          "op": "add",
+          "reason": "Bogen 23.10."
+        },
+        {
+          "kind": "text",
+          "id": "mail.outbox.confirm.yes",
+          "op": "change",
+          "reason": "„Senden“ → „Ja“ (ALFA Bestaetigen)"
+        },
+        {
+          "kind": "token",
+          "id": "size.hintRadius",
+          "op": "add",
+          "reason": "HUELLE-H01"
+        },
+        {
+          "kind": "component",
+          "id": "hint",
+          "op": "add",
+          "reason": "HUELLE-H01 Hilfetext Griff/Blob"
+        },
+        {
+          "kind": "element",
+          "id": "shell.hint",
+          "op": "add",
+          "reason": "HUELLE-H01"
+        },
+        {
+          "kind": "component",
+          "id": "account-card",
+          "op": "change",
+          "reason": "Material 1:1 wie Stapelkarte rechts, gespiegelt (Johannes 22.10. :408, :409)"
+        },
+        {
+          "kind": "component",
+          "id": "account-deck",
+          "op": "change",
+          "reason": "vordere Karte offen: Material wie vordere Stapelkarte, gespiegelt"
+        },
+        {
+          "kind": "component",
+          "id": "account-card",
+          "op": "change",
+          "reason": "Glanzkante unten, voll gespiegelt (Johannes 23.10.)"
+        },
+        {
+          "kind": "element",
+          "id": "shell.notice",
+          "op": "change",
+          "reason": "HUELLE-F10: nur Assistent-Antwort im verdeckten Zustand (Johannes 23.10.)"
+        }
+      ]
+    }
+  ]
+}

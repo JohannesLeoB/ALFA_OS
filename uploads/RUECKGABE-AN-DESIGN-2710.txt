@@ -1,0 +1,52 @@
+Rückgabe Code an Design · 27.10.2026
+Zur Lieferung ALFA-Uebergabe-2710 (Master 23.10., Export 2026-10-27T19:00).
+Bezug auf main ab Commit fefe945. Pfade sind die des Repos ALFA_OS nach dem Neubau;
+CardPile.swift, AppHost.swift und .claude/memory/spec-*.md aus dem alten Stand gibt es nicht mehr.
+
+ÜBERNOMMEN
+- Tokens: contract/base, theme-light, theme-dark, ground-lightGray → Resources/tokens.json (fa32618).
+  Geändert sichtbar: size.settingsTileHeight 112, settingsTileMinWidth 112 (Johannes 27.10. entschieden), size.focusRingOffset 1.
+  Generiert, aber noch von keiner Ansicht gelesen: layer.*, typography.textStyle, typography.tracking, motion.transition, scale, ratio.
+- Menübreiten: Breite = längster Eintrag, aufgerundet auf menuWidthStep 56, zwischen menuMinWidth 168 und menuMaxWidth 280
+  (Sources/Shell/Logic/MenuWidthEngine.swift, App/Components/MenuPanel.swift). Ausrichtung je nach Lage in der Spalte: nicht gebaut.
+- Texte: 211 Schlüssel haben jetzt en (Zuordnung über gleichen de-Text, 1cd2703). Die Schlüssel in contract/texts.json
+  (z. B. mail.counter3.tooltip, mail.fieldRow4.text) gibt es im Code nicht; der Code hat eigene Schlüssel.
+  Bitte künftig die Code-Schlüssel aus Resources/Localizable.xcstrings verwenden.
+  Mehrdeutig, von Code nach Rolle gewählt: „Neue Mail“ → New Message, „Erneut senden“ → Send Again,
+  „Mail“ → Mail (Bereich) / Email (Firmenfeld), „Entwurf nicht gesichert“ → im Code nicht vorhanden.
+  Abweichung: mail.list.loadingMore Code „Lädt“, Bogen „Lädt …“ (Code unverändert).
+  200 Texte aus texts.json haben keinen Text in der App (meist Beispieldaten und nicht gebaute Teile).
+- HUELLE-F10/F11: Blob-Punkt nur noch bei ungesehener Antwort des Assistenten (App/Shell/AppSession.swift assistantUnseen).
+  Vorher: ungelesene Mail oder Abgleichfehler.
+- HUELLE-H01: Hilfetext an Griff und Blob nach 3000 ms, 7 px je 100 ms (App/Shell/View+DwellHint.swift).
+  Tastaturfokus zeigt den Hinweis noch nicht sofort.
+- MAIL-P06: wiederverwendeter leerer Entwurf nimmt das Postfach der obersten Karte (Sources/Mail/State/InboxState+Draft.swift).
+- MAIL-Z01, LIEF-K02, LIEF-K04: übernommen wie geliefert.
+
+ANTWORTEN AUF FRAGEN AN CODE
+- N32 „Schlüssel gespeichert“ / „Verwaist“: LinkState.stored entsteht nur für einen Augenblick zwischen Anmeldung
+  und Prüfung (Sources/Hub/State/InletsState+Setup.swift:29-30). InletState.orphaned wird im Code nirgends gesetzt
+  (Sources/Hub/Model/Inlet.swift:33). Beide Zustände kann Design aus dem Bogen streichen.
+- N43 releaseSpan 0.016 (App/Design/SheetValues.swift:7) und pointerStep 0.001 (Sources/Shell/Model/ShellValues.swift:5):
+  Rechenschutz gegen Teilen durch null, kein Designwert. Bleibt so.
+- LIEF-K03 / Abschnitt B: size.recipientPaddingOpen wird nicht gelesen → streichen.
+  size.composeColumnMinWidth: App/Settings/SettingsRow.swift:15. count.senderSuggestions: Sources/Mail/State/InboxState+Recipients.swift:59.
+- Abschnitt C, Tokens ohne Leser im Code (Stand fefe945): 89 von 283 generierten.
+  Darunter die ganze Gruppe component (33 Verweise, Code liest die Zielwerte direkt).
+  Size: assistantFieldHeight, composeTextMinHeight, selectionRingWidth, breakpointStack, mailRowEstimate, stackFanStep,
+  safeAreaTop, reelTopOffset, accountFanWidth, accountClosedWidth, cardStateTextMaxWidth, confirmPillWidth,
+  confirmPillOffset, fieldLabelMinWidth, signatureEditorMinHeight, lockMarkSize, lockFieldWidth, imageTileStripe,
+  stackDrop*, stackFlat*, overviewTileEnter, mailLaneMaximumLeft, preview*.
+  Spacing: step2, step40, step56. Duration: stackBackground, scrollLine*, toastFail, switchIn, switchOut, deckClose, switchLift.
+  LineHeight: counter, control, heading. Count: stackHeads, projectFilesMax. Opacity: cardMeta, cardMetaDeep. Confirm: originDefault.
+  Ein Teil davon wird mit dem Postfachstapel gebraucht (stack*, switch*, deckClose, mailLaneMaximumLeft).
+- LIEF-T8: where für reine Dateiergebnisse: von Code aus einverstanden, Dateipfad zulassen.
+
+BRAUCHT CODE VON DESIGN
+- N37 Assistent: Eingabe, Senden, Antwort, Verlauf, Anhänge, Antwort-Zustände. Daten: ChatStore und ConversationEngine
+  (Sources/Assistant), Datenschutz-Kategorien PrivacyCategory.
+- Postfachstapel (ALFA Mail.dc.html:32-36): Werte ohne Token: Öffnen 560 ms Kurve (.3,1.32,.5,1), Versatz 45/30 ms,
+  Karten-Feder 320 ms (.34,1.56,.64,1), Geisterschatten 0 8 24 −12 rgba(0,0,0,.22), Geister-Zeiten 420/320/520/1200 ms,
+  Glas 72 % und 40 ms Versatz, Kurven (.37,0,.63,1), (.33,0,.15,1), (.4,0,.2,1), Umschlag-Federn und Strich 1.15.
+  Bitte als Tokens benennen oder als Form des Zeichens freigeben (wie Z01).
+- Die Zeilennummern in contract/components.json liegen um etwa eine Zeile neben dem HTML (z. B. AccountAlert :16, steht :17/:33/:36).

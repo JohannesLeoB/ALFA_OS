@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="alfa-export" content="2026-10-18">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="lieferung-an-code/fonts/geist.css">
+<style>
+html,body{margin:0;padding:0;background:#e8e8e8}
+a{color:#171717}a:hover{color:#4d4d4d}
+</style>
+<link rel="stylesheet" href="alfa-theme.css">
+</helmet>
+
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+<div ref="{{ winRef }}" data-part="area-page" data-id="shell.area-page.root-down" data-appearance="{{ licht }}" data-ground="{{ grund }}" data-state="{{ pageState }}" data-screen-label="{{ screenLabel }}" onPointerDown="{{ rootDown }}" style="position:relative;width:{{ winW }};height:{{ winH }};background:var(--c-ground);color:var(--c-ink);overflow:hidden;font-family:{{ font }};font-size:var(--typography-size-body);line-height:1.35;user-select:none;-webkit-font-smoothing:antialiased">
+<sc-if value="{{ hasSafe }}" hint-placeholder-val="{{ true }}"><div data-part="safe-area" data-id="shell.safe-area" title="Kamera-Aussparung: der Sichtbereich beginnt darunter" style="position:absolute;left:0;top:0;right:0;height:{{ safeH }};background:var(--c-safe);z-index:7"></div></sc-if>
+<sc-if value="{{ laneSet }}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{ lanes }}" as="l" hint-placeholder-count="3">
+<section data-part="lane" data-id="shell.lane.on-strip" data-state="{{ l.state }}" aria-label="{{ l.title }}" onClick="{{ l.onStrip }}" onDoubleClick="{{ l.onRest }}" style="position:absolute;left:{{ l.left }};top:{{ laneTop }};width:{{ l.width }};height:{{ laneH }};background:{{ l.bg }};border-radius:var(--radius-card);box-shadow:{{ l.ring }};overflow:{{ l.ovf }};display:flex;flex-direction:column;transition:{{ laneTrans }};cursor:{{ l.cursor }};z-index:1;isolation:isolate">
+<div data-part="lane-strip" data-id="shell.lane-strip" data-layer="strip" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;gap:var(--spacing-step8);padding:var(--spacing-step8) 0;overflow:hidden">
+<sc-for list="{{ l.marks }}" as="s" hint-placeholder-count="4">
+<span data-part="mark" data-id="shell.mark" data-state="{{ s.state }}" title="{{ s.label }}" onClick="{{ s.go }}" style="position:relative;flex:none;margin-top:{{ s.mt }};margin-bottom:{{ s.mb }};width:var(--spacing-step28);height:var(--spacing-step28);border-radius:50%;display:grid;place-items:center;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-mark);background:{{ s.bg }};color:{{ s.fg }};box-shadow:{{ s.ring }};cursor:pointer">
+<sc-if value="{{ s.isSym }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ s.d }}"></path></svg></sc-if>
+<sc-if value="{{ s.isText }}" hint-placeholder-val="{{ false }}">{{ s.t }}</sc-if>
+<sc-if value="{{ s.dot }}" hint-placeholder-val="{{ false }}"><i style="position:absolute;top:calc(var(--size-hairline) * -1);right:calc(var(--size-hairline) * -1);width:var(--spacing-step8);height:var(--spacing-step8);border-radius:50%;background:var(--c-ink);box-shadow:0 0 0 var(--size-markSeparatorRing) var(--c-lane)"></i></sc-if>
+</span>
+</sc-for>
+
+</div>
+<div data-layer="body" style="position:absolute;left:0;top:0;bottom:0;width:{{ l.bodyW }};display:flex;flex-direction:column">{{ l.slot }}</div>
+</section>
+</sc-for>
+</sc-if>
+<sc-for list="{{ grips }}" as="g" hint-placeholder-count="2">
+<div data-part="handle" data-id="shell.handle.down" data-state="{{ g.state }}" role="separator" aria-orientation="vertical" aria-label="{{ g.label }}" title="Ziehen · Doppelklick setzt zurück" tabindex="0" onPointerDown="{{ g.down }}" onDoubleClick="{{ g.reset }}" onKeyDown="{{ g.key }}" onPointerEnter="{{ g.enter }}" onPointerLeave="{{ g.leave }}" style="position:absolute;left:{{ g.left }};top:{{ laneTop }};width:var(--spacing-step12);height:{{ laneH }};display:grid;place-items:center;cursor:col-resize;touch-action:none;user-select:none;-webkit-user-select:none;outline:none;z-index:2;transition:{{ laneTrans }}">
+<i style="display:block;width:{{ g.w }};height:{{ g.h }};border-radius:var(--radius-stroke);background:{{ g.bg }};box-shadow:{{ g.ring }};transition:height var(--motion-duration-short) var(--motion-easing-standard),width var(--motion-duration-short),background var(--motion-duration-short)"></i>
+<sc-if value="{{ g.showValue }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:var(--spacing-step12);left:50%;transform:translateX(-50%);height:var(--spacing-step24);padding:0 var(--spacing-step12);border-radius:var(--radius-capsule);background:var(--c-inv);color:var(--c-on-inv);font-size:var(--typography-size-small);font-variant-numeric:tabular-nums;display:flex;align-items:center;white-space:nowrap">{{ g.value }}</span></sc-if>
+</div>
+</sc-for>
+{{ over }}
+<button data-part="sync-button" data-id="shell.sync-button.sync" data-state="{{ syncState }}" onClick="{{ sync }}" title="{{ syncTitle }}" aria-label="{{ syncTitle }}" style="position:absolute;right:var(--spacing-step16);top:{{ blobTop }};z-index:3;width:var(--spacing-step56);height:var(--spacing-step40);border:0;padding:0 var(--spacing-blobInset);border-radius:var(--radius-capsule);font:inherit;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;justify-content:flex-end;cursor:pointer;box-shadow:var(--sh-float)">
+<span style="position:relative;width:var(--spacing-step28);height:var(--spacing-step28);display:grid;place-items:center;font-family:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-mark)">{{ meIni }}
+<svg ref="{{ arcRef }}" width="28" height="28" viewBox="0 0 28 28" style="position:absolute;inset:0;transform:rotate(-90deg)"><circle cx="14" cy="14" r="13.5" fill="none" stroke="currentColor" stroke-opacity=".3" stroke-width="1"></circle><circle cx="14" cy="14" r="13.5" fill="none" stroke="{{ arcColor }}" stroke-width="1" pathLength="1" stroke-dasharray="{{ arcDash }}"></circle></svg>
+</span>
+<sc-if value="{{ syncErr }}" hint-placeholder-val="{{ false }}"><i style="position:absolute;top:var(--spacing-blobInset);left:var(--spacing-step12);width:var(--spacing-step8);height:var(--spacing-step8);border-radius:50%;background:var(--c-signal)"></i></sc-if>
+</button>
+<div ref="{{ blobRef }}" data-part="blob" data-id="shell.blob.down" data-state="{{ blobState }}" onPointerDown="{{ down }}" onPointerEnter="{{ enter }}" onPointerLeave="{{ leave }}" style="position:absolute;left:{{ bL }};right:{{ bR }};top:{{ bT }};bottom:{{ bB }};width:{{ bW }};z-index:6;display:flex;flex-direction:{{ bDir }};background:var(--c-inv);color:var(--c-on-inv);border-radius:{{ bRad }};box-shadow:var(--sh-float);transition:{{ bTrans }};cursor:{{ bCursor }};touch-action:none;user-select:none;-webkit-user-select:none">
+<div data-part="blob-face" data-id="shell.blob-face" onClick="{{ click }}" onDoubleClick="{{ dbl }}" title="Klick: Bereiche · Doppelklick: Assistent" style="position:relative;flex:none;height:var(--spacing-step40);display:flex;align-items:center;padding:0 var(--spacing-blobInset);justify-content:{{ headJustify }}">
+<sc-if value="{{ orbFace }}" hint-placeholder-val="{{ false }}"><span ref="{{ orbRef }}" data-part="thinking-orb" data-id="shell.thinking-orb" data-state="face" style="position:relative;flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:50%;overflow:hidden;isolation:isolate;background:var(--c-orb);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-orb-rim)"><i style="position:absolute;left:50%;top:50%;width:58%;height:58%;margin:-29% 0 0 -29%;border-radius:50%;filter:blur(var(--size-orbGlowBlur));mix-blend-mode:screen;background:var(--m-coral)"></i><i style="position:absolute;left:50%;top:50%;width:58%;height:58%;margin:-29% 0 0 -29%;border-radius:50%;filter:blur(var(--size-orbGlowBlur));mix-blend-mode:screen;background:var(--m-apricot)"></i><i style="position:absolute;left:50%;top:50%;width:58%;height:58%;margin:-29% 0 0 -29%;border-radius:50%;filter:blur(var(--size-orbGlowBlur));mix-blend-mode:screen;background:var(--m-rose)"></i><b style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 28%,var(--c-orb-gloss),transparent 45%)"></b></span></sc-if>
+<sc-if value="{{ eyesFace }}" hint-placeholder-val="{{ true }}"><span style="flex:none;width:var(--spacing-step28);height:var(--spacing-step28);box-sizing:border-box;border-radius:50%;border:var(--size-hairline) solid {{ ringColor }};display:flex;align-items:center;justify-content:center">
+<span ref="{{ eyesRef }}" style="display:flex"><span ref="{{ lidsRef }}" style="display:flex;gap:var(--spacing-step4);transform:{{ lids }};transition:transform var(--motion-duration-blobEyes) var(--motion-easing-standard)"><i style="display:block;width:var(--spacing-step4);height:var(--spacing-step8);border-radius:var(--radius-stroke);background:currentColor"></i><i style="display:block;width:var(--spacing-step4);height:var(--spacing-step8);border-radius:var(--radius-stroke);background:currentColor"></i></span></span>
+</span>
+</sc-if>
+<span style="font-weight:var(--typography-weight-medium);white-space:nowrap;overflow:hidden;opacity:{{ labelOp }};max-width:{{ labelMax }};margin-left:{{ labelGap }};transition:opacity var(--motion-duration-toggle) var(--motion-easing-standard) var(--motion-duration-labelDelay),max-width var(--motion-duration-chevron) var(--motion-easing-standard)">{{ faceLabel }}</span>
+<sc-if value="{{ showFind }}" hint-placeholder-val="{{ false }}">
+<span data-part="search-field" data-id="shell.search-field" onClick="{{ stop }}" style="position:relative;flex:1;min-width:0;display:flex;align-items:center;gap:var(--spacing-step8);height:var(--spacing-step28);margin:0 var(--spacing-step16) 0 var(--spacing-step8)">
+<i ref="{{ tapeRef }}" data-part="search-tape" data-id="shell.search-tape" style="position:absolute;left:0;right:0;bottom:0;height:var(--size-hairline);background:currentColor;transform-origin:100% 50%"></i>
+<input ref="{{ findRef }}" value="{{ q }}" onChange="{{ onQ }}" onKeyDown="{{ findKey }}" placeholder="Finden" aria-label="Finden" autocomplete="off" spellcheck="false" style="flex:1;min-width:0;border:0;background:none;outline:none;color:inherit;font:inherit;padding:0"></input>
+<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" style="flex:none;opacity:.8"><path d="{{ searchD }}"></path></svg>
+</span>
+</sc-if>
+<sc-if value="{{ showDot }}" hint-placeholder-val="{{ true }}"><span ref="{{ dotRef }}" data-part="notice" data-id="shell.notice" style="position:absolute;top:var(--spacing-step8);right:var(--spacing-step8);width:var(--spacing-step4);height:var(--spacing-step4);border-radius:50%;background:currentColor"></span></sc-if>
+</div>
+<sc-if value="{{ isMenu }}" hint-placeholder-val="{{ false }}">
+<div data-part="menu" data-id="shell.menu" onMouseLeave="{{ rowsLeave }}" style="display:flex;flex-direction:column;padding:0 var(--spacing-step8) var(--spacing-step8);max-height:{{ bodyMax }};overflow-x:hidden;overflow-y:auto;scrollbar-width:none">
+<div style="flex:none;height:var(--size-hairline);margin:0 var(--spacing-step12) var(--spacing-step8);background:var(--c-inv-line)"></div>
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="3">
+<div style="position:relative;flex:none;opacity:{{ r.op }};transform:{{ r.tf }};transform-origin:{{ reelOrigin }};transition:{{ r.tr }}">
+<sc-if value="{{ r.isSep }}" hint-placeholder-val="{{ false }}"><div style="height:var(--size-hairline);margin:var(--spacing-step4) var(--spacing-step12);background:var(--c-inv-line)"></div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="menu-row" data-id="shell.menu-row" data-state="{{ r.state }}" onPointerEnter="{{ r.aim }}" onClick="{{ r.go }}" style="height:var(--spacing-step28);display:flex;align-items:center;gap:var(--spacing-step8);padding:0 var(--spacing-step12);border-radius:var(--radius-row);cursor:pointer;background:{{ r.bg }};font-weight:{{ r.weight }}">
+<span style="flex:1;white-space:nowrap">{{ r.name }}</span>
+<sc-if value="{{ r.hasN }}" hint-placeholder-val="{{ false }}"><span style="font-size:var(--typography-size-small);font-variant-numeric:tabular-nums;opacity:.6">{{ r.n }}</span></sc-if>
+</div>
+</sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ noHit }}" hint-placeholder-val="{{ false }}"><div style="height:var(--spacing-step28);display:flex;align-items:center;padding:0 var(--spacing-step12);opacity:.6">Nichts gefunden</div></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ isAssist }}" hint-placeholder-val="{{ false }}">
+<div data-part="assistant" data-id="shell.assistant" style="display:flex;flex-direction:column;gap:var(--spacing-step12);padding:0 var(--spacing-step8) var(--spacing-step8)">
+<div style="height:var(--size-hairline);margin:0 var(--spacing-step12);background:var(--c-inv-line)"></div>
+<sc-if value="{{ orbRow }}" hint-placeholder-val="{{ true }}"><div style="display:flex;align-items:center;gap:var(--spacing-step8);padding:0 var(--spacing-step12)"><span ref="{{ orbRef }}" data-part="thinking-orb" data-id="shell.thinking-orb-2" style="position:relative;flex:none;width:var(--spacing-step20);height:var(--spacing-step20);border-radius:50%;overflow:hidden;isolation:isolate;background:var(--c-orb);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-orb-rim)"><i style="position:absolute;left:50%;top:50%;width:58%;height:58%;margin:-29% 0 0 -29%;border-radius:50%;filter:blur(var(--size-orbGlowBlur));mix-blend-mode:screen;background:var(--m-coral)"></i><i style="position:absolute;left:50%;top:50%;width:58%;height:58%;margin:-29% 0 0 -29%;border-radius:50%;filter:blur(var(--size-orbGlowBlur));mix-blend-mode:screen;background:var(--m-apricot)"></i><i style="position:absolute;left:50%;top:50%;width:58%;height:58%;margin:-29% 0 0 -29%;border-radius:50%;filter:blur(var(--size-orbGlowBlur));mix-blend-mode:screen;background:var(--m-rose)"></i><b style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 28%,var(--c-orb-gloss),transparent 45%)"></b></span></div></sc-if>
+<div style="padding:0 var(--spacing-step12);opacity:.6;text-wrap:pretty">{{ assistText }}</div>
+<div data-part="assistant-input" data-id="shell.assistant-input" style="height:var(--spacing-step40);display:flex;align-items:center;padding:0 var(--spacing-step12);border-radius:var(--radius-row);background:var(--c-inv-field);opacity:.8">Frage stellen …</div>
+</div>
+</sc-if>
+</div>
+{{ top }}
+<sc-if value="{{ lockOn }}" hint-placeholder-val="{{ false }}"><div data-part="lock-screen" data-id="shell.lock-screen" data-state="{{ lockState }}" style="position:absolute;left:0;top:0;right:0;bottom:0;z-index:40;box-sizing:border-box;background:var(--c-ground);color:var(--c-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--spacing-step16);padding:var(--spacing-step24)">
+<span data-part="mark" data-id="shell.lock-mark" style="flex:none;width:var(--size-lockMarkSize);height:var(--size-lockMarkSize);border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong);font-size:var(--typography-size-title);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-mark)">{{ meIni }}</span>
+<span style="font-size:var(--typography-size-title);font-weight:var(--typography-weight-medium);letter-spacing:var(--typography-tracking-title)">{{ lockName }}</span>
+<sc-if value="{{ lockTouch }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;align-items:center;gap:var(--spacing-step8)"><button data-part="text-button" data-id="shell.lock-touch" data-state="{{ lockTouchState }}" onClick="{{ lockTouchGo }}" style-active="transform:scale(.96)" style="appearance:none;border:0;height:var(--spacing-step28);padding:0 var(--spacing-step16);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);cursor:pointer;white-space:nowrap;background:var(--c-inv);color:var(--c-on-inv)">{{ lockTouchLabel }}</button><button data-part="text-button" data-id="shell.lock-use-password" data-state="rest" onClick="{{ lockUsePw }}" style-active="transform:scale(.96)" style="appearance:none;border:0;height:var(--spacing-step28);padding:0 var(--spacing-step16);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);cursor:pointer;white-space:nowrap;background:none;color:var(--c-ink-2)">Passwort eingeben</button></div></sc-if>
+<sc-if value="{{ lockPw }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;align-items:center;gap:var(--spacing-step8)"><span data-part="input-field" data-id="shell.lock-password" data-state="{{ lockFieldState }}" style="width:var(--size-lockFieldWidth);height:var(--spacing-step40);box-sizing:border-box;display:flex;align-items:center;padding:0 var(--spacing-step16);border-radius:var(--radius-capsule);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)"><input type="password" value="{{ lockText }}" onChange="{{ lockOnInput }}" onKeyDown="{{ lockKey }}" placeholder="Passwort" aria-label="Passwort" autocomplete="off" style="flex:1;min-width:0;border:0;background:none;outline:none;font:inherit;color:inherit"></span><div style="display:flex;gap:var(--spacing-step8)"><button data-part="text-button" data-id="shell.lock-unlock" data-state="rest" onClick="{{ lockUnlock }}" style-active="transform:scale(.96)" style="appearance:none;border:0;height:var(--spacing-step28);padding:0 var(--spacing-step16);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);cursor:pointer;white-space:nowrap;background:var(--c-inv);color:var(--c-on-inv)">Entsperren</button><button data-part="text-button" data-id="shell.lock-use-touch" data-state="rest" onClick="{{ lockGoTouch }}" style-active="transform:scale(.96)" style="appearance:none;border:0;height:var(--spacing-step28);padding:0 var(--spacing-step16);border-radius:var(--radius-capsule);font:inherit;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);cursor:pointer;white-space:nowrap;background:none;color:var(--c-ink-2)">Touch ID</button></div></div></sc-if>
+<sc-if value="{{ hasLockErr }}" hint-placeholder-val="{{ false }}"><span data-part="lock-error" data-id="shell.lock-error" style="color:var(--c-signal)">{{ lockErr }}</span></sc-if>
+</div></sc-if>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { anchor: { k: "home" }, mode: null, awake: false, bdrag: null, hot: -1, q: "", hover: false, gdrag: null, ghover: -1, reelIn: false };
+  winRef = React.createRef(); blobRef = React.createRef(); eyesRef = React.createRef(); findRef = React.createRef(); arcRef = React.createRef(); dotRef = React.createRef(); orbRef = React.createRef(); tapeRef = React.createRef(); lidsRef = React.createRef();
+  still() { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
+  ensure() { if (window.AlfaShell) return; if (!window.__alfaShellLoad) window.__alfaShellLoad = new Promise(r => { const s = document.createElement("script"); s.src = "alfa-shell.js"; s.onload = r; document.head.appendChild(s); }); window.__alfaShellLoad.then(() => this.forceUpdate()); }
+  componentDidMount() {
+    this.ensure();
+    this._rs = () => { if (!this.props.windowWidth && this.props.window !== "1512 × 982") this.forceUpdate(); }; window.addEventListener("resize", this._rs);
+    this.onMove = e => this.move(e); this.onUp = () => this.up();
+    this.onAway = e => { if (this.state.mode && this.blobRef.current && !this.blobRef.current.contains(e.target)) this.close(); };
+    this.onKey = e => { if (e.key === "Escape") this.close(); };
+    window.addEventListener("pointermove", this.onMove); window.addEventListener("pointerup", this.onUp); window.addEventListener("pointercancel", this.onUp);
+    document.addEventListener("pointerdown", this.onAway); document.addEventListener("keydown", this.onKey);
+    this._open = false; this.blink(); this.anim();
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this._rs);
+    window.removeEventListener("pointermove", this.onMove); window.removeEventListener("pointerup", this.onUp); window.removeEventListener("pointercancel", this.onUp);
+    document.removeEventListener("pointerdown", this.onAway); document.removeEventListener("keydown", this.onKey);
+    [this.bt, this.ct, this.ht, this.st].forEach(clearTimeout);
+  }
+  componentDidUpdate() { const o = !!this.state.mode; if (o !== this._open) { this._open = o; if (this.props.onMode) this.props.onMode(o); } this.anim(); }
+  anim() {
+    const d = this.dotRef.current;
+    if (d && !d._a && d.animate && !this.still()) d._a = d.animate([{ transform: "scale(1)" }, { transform: "scale(2)" }, { transform: "scale(1)" }], { duration: this.tm("pulse"), iterations: Infinity, easing: this.ez("standard") });
+    const o = this.orbRef.current;
+    if (o && !o._a && !this.still()) { o._a = true; ["orbOrbitFirst", "orbOrbitSecond", "orbOrbitThird"].map(k => this.tm(k)).forEach((d, i) => { const el = o.children[i]; if (el && el.animate) el.animate([{ transform: "rotate(0deg) translateX(24%) rotate(0deg)" }, { transform: "rotate(360deg) translateX(24%) rotate(-360deg)" }], { duration: d, iterations: Infinity, direction: i === 1 ? "reverse" : "normal" }); }); }
+    const u = this.tapeRef.current;
+    if (u && !u._a && u.animate && !this.still()) { u._a = u.animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: this.tm("searchUnderline"), easing: this.ez("standard") }); const f = this.findRef.current; if (f && f.animate) f.animate([{ opacity: 0 }, { opacity: 0, offset: .4 }, { opacity: 1 }], { duration: this.tm("searchUnderline") }); }
+  }
+  blink() { this.bt = setTimeout(() => { const e = this.lidsRef.current; if (e && e.animate && !this.still() && (this.state.awake || this.state.mode)) e.animate([{ transform: "scaleY(1)" }, { transform: "scaleY(.1)" }, { transform: "scaleY(1)" }], { duration: this.tm("blobBlinkClose") }); this.blink(); }, this.tm("blobBlinkInterval") + Math.random() * 3000); }
+  geo() { return window.AlfaShell.geo(window.AlfaShell.frame(this.props)); }
+  pt(e) { const r = this.winRef.current.getBoundingClientRect(), k = (r.width / this.geo().W) || 1; return [(e.clientX - r.left) / k, (e.clientY - r.top) / k]; }
+  mem(p) { if (this.props.onMem) this.props.onMem(p); }
+  grow(side, v, w0) { if (this.props.onGrow) this.props.onGrow(side, v, w0); }
+  awakeW() {
+    const c = this._mc || (this._mc = document.createElement("canvas").getContext("2d")), cs = this.blobRef.current ? getComputedStyle(this.blobRef.current) : null;
+    c.font = "500 " + (cs ? cs.fontSize : "13px") + " " + (cs ? cs.fontFamily : "system-ui");
+    const K = window.AlfaShell.K, need = Math.ceil(6 + 28 + 8 + c.measureText(this.props.area || "").width + 22); return need <= K.awake ? K.awake : K.rest;
+  }
+  home() { const g = this.geo(); return [window.AlfaShell.K.m, g.top]; }
+  xy() { const a = this.state.anchor, g = this.geo(), K = window.AlfaShell.K; if (a.k === "L") return [0, a.y]; if (a.k === "R") return [g.W - K.dock, a.y]; return this.home(); }
+  docked() { const k = this.state.anchor.k; return (k === "L" || k === "R") && !this.state.mode && !this.state.bdrag; }
+  move(e) {
+    if (!this.winRef.current || !window.AlfaShell) return;
+    const s = this.state, K = window.AlfaShell.K;
+    if (!s.gdrag && !s.bdrag && !this.winRef.current.matches(":hover")) { if (s.awake) this.setState({ awake: false }); return; }
+    const [px, py] = this.pt(e);
+    if (s.gdrag) { const d = s.gdrag, dx = px - d.x0; this.grow(d.side, d.v0 + (d.side === "L" ? dx : -dx), d.w0); return; }
+    if (s.bdrag) {
+      const d = s.bdrag, dx = px - d.sx, dy = py - d.sy;
+      if (!d.moved && Math.hypot(dx, dy) < 3) return;
+      const hist = d.hist.concat([[px, py, performance.now()]]).slice(-6);
+      this.setState({ bdrag: Object.assign({}, d, { moved: true, x: d.x0 + dx, y: d.y0 + dy, hist }), awake: false, mode: null, hot: -1, q: "" });
+      const b = this.blobRef.current, h2 = hist.slice(-2);
+      if (b && h2.length === 2 && !this.still()) { const vx = (h2[1][0] - h2[0][0]) / Math.max(1, h2[1][2] - h2[0][2]) * 1000, vy = (h2[1][1] - h2[0][1]) / Math.max(1, h2[1][2] - h2[0][2]) * 1000, st = Math.min(.16, Math.hypot(vx, vy) * .00012), a = Math.atan2(vy, vx); b.style.transform = "rotate(" + a.toFixed(3) + "rad) scale(" + (1 + st).toFixed(3) + "," + (1 / (1 + st)).toFixed(3) + ") rotate(" + (-a).toFixed(3) + "rad)"; }
+      return;
+    }
+    const [x, y] = this.xy(), cx = x + K.bw / 2, cy = y + K.bh / 2, dist = Math.hypot(px - cx, py - cy);
+    const now = performance.now(), lp = this.lp || [px, py, now], dtp = Math.max(1, now - lp[2]) / 1000, speed = Math.hypot(px - lp[0], py - lp[1]) / dtp; this.lp = [px, py, now];
+    const near = dist < 212 && !(speed > 900 && dist > 48 && !s.awake) && !s.mode && !this.docked();
+    if (near !== s.awake) this.setState({ awake: near });
+    const eyes = this.eyesRef.current;
+    if (eyes && !this.still()) { const f = dist < 200 ? Math.min(1, dist / 40) : 0, a = Math.atan2(py - cy, px - cx); eyes.style.transform = "translate(" + (Math.cos(a) * 2 * f).toFixed(2) + "px," + (Math.sin(a) * 1.6 * f).toFixed(2) + "px)"; }
+  }
+  up() {
+    const s = this.state, K = window.AlfaShell.K, g = this.geo();
+    if (s.gdrag) { this.setState({ gdrag: null }); return; }
+    const d = s.bdrag; if (!d) return; if (this.blobRef.current) this.blobRef.current.style.transform = "";
+    if (!d.moved) { this.setState({ bdrag: null }); return; }
+    this.justDragged = true; setTimeout(() => { this.justDragged = false; }, 50);
+    const h = d.hist, f = h[0], l = h[h.length - 1], dt = Math.max(16, l[2] - f[2]) / 1000;
+    const pj = .998 / (1 - .998) / 1000, px = d.x + (l[0] - f[0]) / dt * pj, py = d.y + (l[1] - f[1]) / dt * pj, [hx, hy] = this.home();
+    const isHome = py < g.lt || Math.hypot(px - hx, py - hy) < 200;
+    this.setState({ bdrag: null, anchor: isHome ? { k: "home" } : { k: px + K.bw / 2 < g.W / 2 ? "L" : "R", y: Math.max(g.lt, Math.min(g.H - K.bh - K.m, py)) } });
+  }
+  down = e => { if (e.button > 0) return; if (this.state.mode && !(e.target.closest && e.target.closest('[data-part="blob-face"]'))) return; const [px, py] = this.pt(e), [x, y] = this.xy(); this.setState({ bdrag: { sx: px, sy: py, x0: x, y0: y, x, y, moved: false, hist: [[px, py, performance.now()]] } }); if (this.blobRef.current && !this.still()) this.blobRef.current.style.transform = "scale(.96)"; };
+  click = e => { if (this.justDragged || (e && e.detail > 1)) return; this.state.mode === "menu" ? this.close() : this.open("menu"); };
+  dbl = () => { clearTimeout(this.ct); const e = this.lidsRef.current; if (e && e.animate && !this.still()) e.animate([{ transform: "scaleY(1)" }, { transform: "scaleY(.08)", offset: .44 }, { transform: "scaleY(.08)", offset: .68 }, { transform: "scaleY(1)" }], { duration: this.tm("blink"), easing: this.ez("standard") }); this.state.mode === "assist" ? this.close() : this.open("assist"); };
+  open(mode) { this.setState({ mode, awake: false, hot: -1, q: "", reelIn: false }, () => { setTimeout(() => this.setState({ reelIn: true }), this.tm("menuReelDelay")); if (mode === "menu") setTimeout(() => this.findRef.current && this.findRef.current.focus({ preventScroll: true }), this.tm("menuFocusDelay")); }); }
+  close() { clearTimeout(this.ht); clearTimeout(this.st); if (this.state.mode) this.setState({ mode: null, hot: -1, q: "" }); }
+  aim(i) { if (this.state.hot === i) return; clearTimeout(this.ht); this.ht = setTimeout(() => this.setState({ hot: i }), this.tm("menuHoverDelay")); }
+  choose(name, sub) { this.setState({ mode: null, hot: -1, q: "" }); if (this.props.onChoose) this.props.onChoose(name, sub); }
+  sync = () => {
+    if (this.props.syncState === "syncing") return;
+    const a = this.arcRef.current; if (a && a.animate && !this.still()) a.animate([{ transform: "rotate(-90deg)" }, { transform: "rotate(630deg)" }], { duration: this.tm("syncSpin"), easing: this.ez("standard") });
+    if (this.props.onSync) this.props.onSync();
+  };
+  lockPhase() { return this.state.lock ?? this.props.lock ?? "aus"; }
+  lockVals() { const k = this.lockPhase(), pw = k === "Passwort" || k === "Passwort falsch", p = this.props;
+    const go = (lock, ex) => this.setState(Object.assign({ lock }, ex || {})), done = () => { go("aus"); if (p.onLock) p.onLock(false); };
+    const unlock = () => (this.state.lockText || "").trim() ? done() : go("Passwort falsch");
+    return { lockOn: k !== "aus", lockState: { gesperrt: "locked", "Touch ID": "touchId", Fehlschlag: "touchIdFailed", Passwort: "password", "Passwort falsch": "passwordWrong" }[k] || "locked", lockName: p.meName || "Jonas Brenner", lockPw: pw, lockTouch: !pw,
+      lockTouchLabel: k === "Touch ID" ? "Warte auf Touch ID" : "Mit Touch ID entsperren", lockTouchState: k === "Touch ID" ? "waiting" : "rest", lockFieldState: k === "Passwort falsch" ? "failed" : "rest",
+      lockErr: k === "Fehlschlag" ? "Touch ID nicht erkannt" : k === "Passwort falsch" ? "Passwort falsch" : "", hasLockErr: k === "Fehlschlag" || k === "Passwort falsch", lockText: this.state.lockText || "",
+      lockTouchGo: () => { go("Touch ID"); clearTimeout(this._lk); this._lk = setTimeout(done, 1100); }, lockUsePw: () => go("Passwort", { lockText: "" }), lockGoTouch: () => go("gesperrt"),
+      lockOnInput: e => this.setState({ lockText: e.target.value, lock: k === "Passwort falsch" ? "Passwort" : k }), lockKey: e => { if (e.key === "Enter") unlock(); }, lockUnlock: unlock };
+  }
+  tm(n) { return parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--motion-duration-" + n)) || 0; }
+  ez(n) { return getComputedStyle(document.documentElement).getPropertyValue("--motion-easing-" + n).trim() || "ease"; }
+  renderVals() {
+    const AS = window.AlfaShell; if (!AS) return { ready: false };
+    const p = this.props, s = this.state, K = AS.K, g = this.geo(), area = p.area || "Mail", w = p.w || [K.fold, K.fold, K.fold];
+    const still = this.still(), ease = "var(--motion-easing-standard)", fly = "var(--motion-easing-blobFlight)", maxed = !!p.maxed, geist = (p.typeface ?? "Geist") === "Geist";
+    const lefts = [K.m, K.m + w[0] + K.gap, K.m + w[0] + w[1] + 2 * K.gap];
+    const kids = React.Children.toArray(p.children), slot = n => kids.find(c => c && c.props && c.props["data-slot"] === n) || null;
+    const lanes = [0, 1, 2].map(i => { const m = (p.lanes || [])[i] || {}, folded = w[i] <= K.fold;
+      return { title: m.title, left: lefts[i] + "px", width: w[i] + "px", folded, state: m.state, cursor: folded ? "pointer" : "default", bg: m.bg || "var(--c-lane)", ring: "var(--sh-lane)", ovf: "hidden", marks: (m.marks || []).map(x => Object.assign({ mt: "0", mb: "0" }, x)), bodyW: "max(100%, " + AS.AREA[area].min[i] + "px)", onStrip: m.onStrip, onRest: m.onRest, slot: slot(String(i)) }; });
+    const griff = p.handle ?? "hairline";
+    const grips = ["L", "R"].map((side, j) => {
+      const left = j === 0 ? lefts[0] + w[0] : lefts[1] + w[1], active = (s.gdrag && s.gdrag.side === side) || s.ghover === j, cur = side === "L" ? w[0] : w[2];
+      const look = griff === "fine" ? { w: "2px", bg: active ? "var(--c-ink)" : "var(--c-ink-3)", ring: "none" } : griff === "grau" ? { w: "4px", bg: active ? "var(--c-ink)" : "var(--c-grip)", ring: "none" } : { w: active ? "2px" : "1px", bg: active ? "var(--c-ink)" : "var(--c-ink-3)", ring: "none" };
+      return Object.assign({ left: left + "px", h: active ? "96px" : "64px", state: active ? "dragging" : "rest", label: side === "L" ? "Breite der linken Bahn" : "Breite der rechten Bahn", showValue: !!(s.gdrag && s.gdrag.side === side), value: Math.round(cur) + " pt",
+        down: e => { if (maxed) this.mem({ max: -1 }); const [px] = this.pt(e); this.setState({ gdrag: { side, x0: px, v0: cur, w0: w.slice() } }); e.preventDefault(); },
+        reset: () => this.mem(AS.D0(area)),
+        key: e => { if (e.key === "Enter") { this.mem(AS.D0(area)); return; } const d = e.key === "ArrowLeft" ? -1 : e.key === "ArrowRight" ? 1 : 0; if (!d) return; e.preventDefault(); this.grow(side, cur + (e.shiftKey ? 8 : K.fold) * d * (side === "L" ? 1 : -1), w); },
+        enter: () => this.setState({ ghover: j }), leave: () => this.setState({ ghover: -1 }) }, look);
+    });
+    const dock = this.docked(), open = !!s.mode, [x, y] = s.bdrag ? [s.bdrag.x, s.bdrag.y] : this.xy(), right = s.anchor.k === "R", up = open && (y + K.bh / 2 > g.H / 2);
+    let bL = "auto", bR = "auto", bT = "auto", bB = "auto", bW, bRad = "20px";
+    if (open) { const laneW = right ? w[2] : w[0]; bW = K.rest + "px"; if (right) bR = K.m + "px"; else bL = K.m + "px"; if (up) bB = (g.H - y - K.bh) + "px"; else bT = y + "px"; }
+    else if (dock) { bW = (K.dock + (s.hover ? 4 : 0)) + "px"; bT = y + "px"; if (right) { bR = "0px"; bRad = "20px 0 0 20px"; } else { bL = "0px"; bRad = "0 20px 20px 0"; } }
+    else { bW = (s.awake ? this.awakeW() : K.bw) + "px"; bL = x + "px"; bT = y + "px"; }
+    const bTrans = still ? "none" : s.bdrag ? "width var(--motion-duration-blobWidth) " + ease : ["left var(--motion-duration-blobFlight) " + fly, "right var(--motion-duration-blobFlight) " + fly, "top var(--motion-duration-blobFlight) " + fly, "width var(--motion-duration-blobWidth) " + ease, "border-radius var(--motion-duration-blobWidth) " + ease].join(",");
+    const q = s.q.trim().toLowerCase(), rows = [], flat = []; let ix = 0, ri = -1;
+    (p.groups || []).forEach(([gname, items]) => { const hits = items.filter(it => !q || it[0].toLowerCase().includes(q) || gname.toLowerCase().includes(q) || it[1].some(l => l.toLowerCase().includes(q))); if (!hits.length) return; if (rows.length) rows.push({ sep: true, idx: ix++ }); hits.forEach(it => { flat.push(it); rows.push({ it, ri: ++ri, idx: ix++ }); }); });
+    const reel = s.reelIn || still, badges = p.badges || {};
+    const outRows = rows.map(r => { const delay = Math.min(r.idx, 14) * 40, base = { isSep: !!r.sep, isRow: !r.sep, op: reel ? 1 : 0, tf: reel ? "none" : "perspective(600px) rotateX(" + (up ? 60 : -60) + "deg)", tr: still ? "none" : "opacity var(--motion-duration-rowSequence) " + ease + " " + delay + "ms, transform var(--motion-duration-menuReelTransform) " + ease + " " + delay + "ms" };
+      if (r.sep) return base; const it = r.it, hot = s.hot === r.ri, n = badges[it[0]] || 0;
+      return Object.assign(base, { name: it[0], n, hasN: n > 0, bg: hot ? "var(--c-inv-hot)" : "transparent", weight: it[0] === area ? 600 : 400, state: it[0] === area ? "current" : hot ? "hover" : "rest", aim: e => this.aim(r.ri, e.currentTarget), go: () => this.choose(it[0]) }); });
+    const syncErr = !!p.syncErr;
+    return {
+      ready: true, standalone: !p.lanes, winRef: this.winRef, lidsRef: this.lidsRef, blobRef: this.blobRef, eyesRef: this.eyesRef, findRef: this.findRef, arcRef: this.arcRef, dotRef: this.dotRef, orbRef: this.orbRef, tapeRef: this.tapeRef,
+      licht: p.appearance || "light", grund: p.ground ?? "white", font: "var(--typography-family-text)",
+      winW: g.W + "px", winH: g.H + "px", pageState: area + " · " + g.W + "x" + g.H, screenLabel: area + " " + g.W, hasSafe: g.safe > 0, safeH: g.safe + "px",
+      laneTop: g.lt + "px", laneH: g.lh + "px", laneSet: p.visibleLanes !== false, laneTrans: s.gdrag || still ? "none" : p.slow ? "left var(--motion-duration-fold) var(--motion-easing-fold), width var(--motion-duration-fold) var(--motion-easing-fold)" : "left var(--motion-duration-lane) " + ease + ", width var(--motion-duration-lane) " + ease,
+      lanes, grips, over: slot("over"), top: slot("top"), ...this.lockVals(), meIni: p.meIni || "", searchD: p.searchPath || "",
+      rootDown: () => { if (p.onRootDown) p.onRootDown(); }, stop: e => e.stopPropagation(),
+      blobTop: g.top + "px", bL, bR, bT, bB, bW, bRad, bTrans, bDir: up ? "column-reverse" : "column", bCursor: s.bdrag ? "grabbing" : open ? "default" : "grab", headJustify: dock ? "center" : "flex-start", ringColor: dock ? "transparent" : "currentColor",
+      blobState: s.bdrag ? "dragging" : s.mode === "menu" ? "menu" : s.mode === "assist" ? "assistant" : dock ? "docked" : s.awake ? "awake" : "rest",
+      lids: (s.awake || open || s.bdrag) ? "translateY(0px) scaleY(1)" : "translateY(1.4px) scaleY(.45)",
+      labelOp: (s.awake && !open && !dock) || (s.mode === "assist") ? 1 : 0, labelMax: (s.awake && !open && !dock) || (s.mode === "assist") ? "200px" : "0px", labelGap: (s.awake && !open && !dock) || (s.mode === "assist") ? "8px" : "0px", faceLabel: s.mode === "assist" ? "Assistent" : area,
+      showFind: s.mode === "menu", showDot: !open && !dock && !!p.dot, isMenu: s.mode === "menu", isAssist: s.mode === "assist", orbFace: s.mode === "assist" && (p.assistantFace ?? "Orb") === "Orb", eyesFace: !(s.mode === "assist" && (p.assistantFace ?? "Orb") === "Orb"), orbRow: (p.assistantFace ?? "Orb") !== "Orb", area, q: s.q, rows: outRows, noHit: s.mode === "menu" && !flat.length,
+      bodyMax: Math.max(160, (up ? y - g.safe - K.m : g.H - K.m - y - K.bh) - 8) + "px", reelOrigin: up ? "50% 100%" : "50% 0", assistText: p.assistText || "",
+      onQ: e => this.setState({ q: e.target.value, hot: -1 }),
+      findKey: e => { const n = flat.length; if (!n) return; if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); const d = (e.key === "ArrowDown") !== up ? 1 : -1; this.setState({ hot: Math.max(0, Math.min(n - 1, (s.hot < 0 ? (d > 0 ? -1 : n) : s.hot) + d)) }); return; } if (e.key === "Enter") this.choose((flat[s.hot] || flat[0])[0]); },
+      rowsLeave: () => { clearTimeout(this.ht); clearTimeout(this.st); this.setState({ hot: -1 }); },
+      down: this.down, click: this.click, dbl: this.dbl, enter: () => this.setState({ hover: true }), leave: () => this.setState({ hover: false }),
+      sync: this.sync, syncState: p.syncState || "fresh", syncErr, arcColor: syncErr ? "var(--c-signal)" : "currentColor", arcDash: syncErr ? ".25 .75" : "1 0", syncTitle: p.syncTitle || ""
+    };
+  }
+}
+</script>
+</body>
+</html>

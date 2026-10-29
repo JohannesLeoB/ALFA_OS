@@ -1,0 +1,35 @@
+{
+ "_rule": "Keys used by the Sevdesk module; text is resolved by the app.",
+ "keys": {
+  "sevdesk.gap.addressCountryMissing": {
+   "de": "addressCountry (StaticCountry-ID) fehlt im Vorlage-Angebot."
+  },
+  "sevdesk.gap.contactPersonMissing": {
+   "de": "contactPerson (SevUser-ID) fehlt im Vorlage-Angebot."
+  },
+  "sevdesk.gap.nextNumberUnavailable": {
+   "de": "Nächste Belegnummer nicht ermittelbar (Order/Factory/getNextOrderNumber) — sevDesk verlangt aber eine Angebotsnummer. Ohne sie kein Entwurf."
+  },
+  "sevdesk.gap.noOffer": {
+   "de": "sevDesk liefert kein Angebot (orderType „AN“) — ohne Vorlage bleiben contactPerson/addressCountry unbekannt."
+  },
+  "sevdesk.gap.noOfferForNumber": {
+   "de": "Kein Angebot mit dieser Nummer gefunden — Feld leer lassen nimmt das erste vorhandene."
+  },
+  "sevdesk.gap.positionTaxRateMissing": {
+   "de": "Kein Steuersatz in den Positionen lesbar — der Kopf-Wert allein ist in Version 2.0 unzuverlässig (dort steht 0)."
+  },
+  "sevdesk.gap.taxRateMismatch": {
+   "de": "Hinweis: Beleg-Kopf meldet {1} %, die Positionen führen {2} % — für neue Positionen gilt {2} % (in Version 2.0 führt taxRule, nicht der Kopf-Satz)."
+  },
+  "sevdesk.gap.taxRateMissing": {
+   "de": "taxRate fehlt im Vorlage-Angebot."
+  },
+  "sevdesk.gap.unitsMissing": {
+   "de": "Keine Einheit (unity) in den Positionen des Vorlage-Angebots lesbar."
+  },
+  "sevdesk.gap.versionUnreadable": {
+   "de": "Buchhaltungs-Version nicht lesbar — Antwort hatte ein unerwartetes Format."
+  }
+ }
+}

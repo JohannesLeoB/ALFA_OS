@@ -1,0 +1,3 @@
+Du arbeitest im ALFA Design-Branch (Ordner dieser ZIP). Lies zuerst BRIEFING.md ganz und halte die Regeln dort ein. Öffne ALFA Bereich Vorlage.dc.html: das ist der leere Ansichtsbereich in der echten Hülle. Baue jede Exploration als Kopie davon oder als eigenen Bogen auf alfa-theme.css. Ändere ALFA Shell, alfa-theme.css und die IST-Bögen nicht. Werte nur über var(--…). Was du nicht belegen kannst, ist eine Frage an Johannes. Neue Bögen tragen den Stempel GESPERRT. Am Ende gibst du die Bögen und die Liste neuer Tokens, Bauteile und Texte zurück, nichts davon in contract/.
+
+Aufgabe: <hier die Exploration eintragen, z. B. „App-Icon dunkel als Liquid Glass“ oder „Ansichtsbereich Editor“>

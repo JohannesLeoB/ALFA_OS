@@ -1,0 +1,3745 @@
+{
+  "version": "2026-10-21",
+  "components": [
+    {
+      "part": "account-alert",
+      "name": "AccountAlert",
+      "category": "composite",
+      "role": "account alert",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:16"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.account-alert",
+          "part": "account-alert",
+          "where": "ALFA Mail.dc.html:16"
+        },
+        {
+          "id": "mail.account-alert.deck",
+          "part": "account-alert",
+          "where": "ALFA Mail.dc.html:36"
+        }
+      ]
+    },
+    {
+      "part": "address-button",
+      "name": "AddressButton",
+      "category": "composite",
+      "role": "Sender name that opens the person menu",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:164",
+        "ALFA Mail.dc.html:209"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.address-button.menu",
+          "part": "address-button",
+          "where": "ALFA Mail.dc.html:164"
+        },
+        {
+          "id": "mail.address-button.from-menu",
+          "part": "address-button",
+          "where": "ALFA Mail.dc.html:209"
+        }
+      ]
+    },
+    {
+      "part": "anchored-menu",
+      "name": "AnchoredMenu",
+      "category": "pattern",
+      "role": "Context menu anchored to a button, width on the 56 grid",
+      "layer": "{layer.menu}",
+      "measures": {
+        "radius": "{radius.contextMenu}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:297",
+        "ALFA Einstellungen.dc.html:168"
+      ],
+      "status": "set-by-design",
+      "flow": {
+        "states": [
+          "closed",
+          "open"
+        ],
+        "events": [
+          "open",
+          "choose",
+          "dismiss"
+        ],
+        "transitions": [
+          [
+            "closed",
+            "open",
+            "open"
+          ],
+          [
+            "open",
+            "choose",
+            "closed"
+          ],
+          [
+            "open",
+            "dismiss",
+            "closed"
+          ]
+        ]
+      },
+      "elements": [
+        {
+          "id": "mail.anchored-menu",
+          "part": "anchored-menu",
+          "where": "ALFA Mail.dc.html:297"
+        },
+        {
+          "id": "settings.anchored-menu",
+          "part": "anchored-menu",
+          "where": "ALFA Einstellungen.dc.html:168"
+        }
+      ]
+    },
+    {
+      "part": "area-page",
+      "name": "AreaPage",
+      "category": "composite",
+      "role": "Whole page of one area (Hülle root)",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:20"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.area-page.root-down",
+          "part": "area-page",
+          "where": "ALFA Shell.dc.html:20"
+        }
+      ]
+    },
+    {
+      "part": "assistant",
+      "name": "Assistant",
+      "category": "composite",
+      "role": "Mini chat in the blob",
+      "layer": "{layer.blob}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:87"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.assistant",
+          "part": "assistant",
+          "where": "ALFA Shell.dc.html:87"
+        }
+      ]
+    },
+    {
+      "part": "assistant-input",
+      "name": "AssistantInput",
+      "category": "composite",
+      "role": "Input of the mini chat",
+      "layer": "{layer.blob}",
+      "measures": {
+        "height": "{size.assistantFieldHeight}",
+        "radius": "{radius.row}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:91"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.assistant-input",
+          "part": "assistant-input",
+          "where": "ALFA Shell.dc.html:91"
+        }
+      ]
+    },
+    {
+      "part": "attachment-chip",
+      "name": "AttachmentChip",
+      "category": "composite",
+      "role": "Capsule for one attachment",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.chipHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:93",
+        "ALFA Mail.dc.html:178",
+        "ALFA Mail.dc.html:246"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.attachment-chip",
+          "part": "attachment-chip",
+          "where": "ALFA Mail.dc.html:93"
+        },
+        {
+          "id": "mail.attachment-chip.menu",
+          "part": "attachment-chip",
+          "where": "ALFA Mail.dc.html:178"
+        },
+        {
+          "id": "mail.attachment-chip-2",
+          "part": "attachment-chip",
+          "where": "ALFA Mail.dc.html:246"
+        }
+      ]
+    },
+    {
+      "part": "blob",
+      "name": "Blob",
+      "category": "pattern",
+      "role": "The assistant menu pill, always above lanes, menu and toast",
+      "layer": "{layer.blob}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:52"
+      ],
+      "status": "set-by-design",
+      "flow": {
+        "states": [
+          "rest",
+          "awake",
+          "menuOpen",
+          "assistant",
+          "docked",
+          "dragging"
+        ],
+        "events": [
+          "approach",
+          "leave",
+          "click",
+          "doubleClick",
+          "drag",
+          "drop",
+          "close"
+        ],
+        "transitions": [
+          [
+            "rest",
+            "approach",
+            "awake"
+          ],
+          [
+            "awake",
+            "leave",
+            "rest"
+          ],
+          [
+            "awake",
+            "click",
+            "menuOpen"
+          ],
+          [
+            "awake",
+            "doubleClick",
+            "assistant"
+          ],
+          [
+            "menuOpen",
+            "close",
+            "rest"
+          ],
+          [
+            "assistant",
+            "close",
+            "rest"
+          ],
+          [
+            "rest",
+            "drag",
+            "dragging"
+          ],
+          [
+            "dragging",
+            "drop",
+            "docked"
+          ],
+          [
+            "docked",
+            "drag",
+            "dragging"
+          ],
+          [
+            "dragging",
+            "drop",
+            "rest"
+          ]
+        ]
+      },
+      "elements": [
+        {
+          "id": "shell.blob.down",
+          "part": "blob",
+          "where": "ALFA Shell.dc.html:52"
+        }
+      ]
+    },
+    {
+      "part": "blob-face",
+      "name": "BlobFace",
+      "category": "composite",
+      "role": "Face area of the blob: ring, eyes or orb, area name",
+      "layer": "{layer.blob}",
+      "measures": {
+        "height": "{size.blobHeight}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:53",
+        "ALFA Shell.dc.html:176"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.blob-face",
+          "part": "blob-face",
+          "where": "ALFA Shell.dc.html:53"
+        }
+      ]
+    },
+    {
+      "part": "card",
+      "name": "Card",
+      "category": "pattern",
+      "role": "One card, radius 20 top / 0 bottom",
+      "layer": "{layer.lane}",
+      "measures": {
+        "glossFront": "{color.stackGlossFront}",
+        "glossLight": "{color.stackGlossLight}",
+        "glossDark": "{color.stackGlossDark}",
+        "seamFront": "{color.stackSeamFront}",
+        "seamBack": "{color.stackSeamBack}",
+        "drop": "{color.stackDrop}",
+        "edge": "{size.hairline}",
+        "dropOffset": "{size.stackDropOffset}",
+        "dropBlur": "{size.stackDropBlur}",
+        "dropSpread": "{size.stackDropSpread}",
+        "ring": "{color.stackRing}",
+        "flatDrop": "{color.stackFlatDrop}",
+        "flatFront": "{color.stackFlatFront}",
+        "glaze": "{color.glaze}",
+        "flatDropOffset": "{size.stackFlatDropOffset}",
+        "flatDropBlur": "{size.stackFlatDropBlur}",
+        "flatDropSpread": "{size.stackFlatDropSpread}",
+        "flatFrontOffset": "{size.stackFlatFrontOffset}",
+        "flatFrontBlur": "{size.stackFlatFrontBlur}",
+        "flatFrontSpread": "{size.stackFlatFrontSpread}",
+        "lane": "{shadow.lane}"
+      },
+      "states": [
+        {
+          "name": "empty",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:127",
+        "ALFA Mail.dc.html:129",
+        "ALFA Einstellungen.dc.html:86",
+        "ALFA Einstellungen.dc.html:88"
+      ],
+      "status": "set-by-design",
+      "flow": {
+        "states": [
+          "stacked",
+          "open",
+          "fanned"
+        ],
+        "events": [
+          "select",
+          "overview",
+          "back",
+          "close"
+        ],
+        "transitions": [
+          [
+            "stacked",
+            "select",
+            "open"
+          ],
+          [
+            "open",
+            "overview",
+            "fanned"
+          ],
+          [
+            "fanned",
+            "select",
+            "open"
+          ],
+          [
+            "fanned",
+            "back",
+            "stacked"
+          ]
+        ]
+      },
+      "elements": [
+        {
+          "id": "mail.card",
+          "part": "card",
+          "where": "ALFA Mail.dc.html:127"
+        },
+        {
+          "id": "mail.card-2",
+          "part": "card",
+          "where": "ALFA Mail.dc.html:129"
+        },
+        {
+          "id": "settings.card",
+          "part": "card",
+          "where": "ALFA Einstellungen.dc.html:86"
+        },
+        {
+          "id": "settings.card-2",
+          "part": "card",
+          "where": "ALFA Einstellungen.dc.html:88"
+        }
+      ]
+    },
+    {
+      "part": "card-content",
+      "name": "CardContent",
+      "category": "composite",
+      "role": "Scrolling body of a card",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:143",
+        "ALFA Mail.dc.html:195",
+        "ALFA Einstellungen.dc.html:92"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.card-content",
+          "part": "card-content",
+          "where": "ALFA Mail.dc.html:143"
+        },
+        {
+          "id": "mail.card-content-2",
+          "part": "card-content",
+          "where": "ALFA Mail.dc.html:195"
+        },
+        {
+          "id": "settings.card-content",
+          "part": "card-content",
+          "where": "ALFA Einstellungen.dc.html:92"
+        }
+      ]
+    },
+    {
+      "part": "card-footer",
+      "name": "CardFooter",
+      "category": "composite",
+      "role": "Card foot, 44, same as header",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.footerHeight}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:259"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.card-footer",
+          "part": "card-footer",
+          "where": "ALFA Mail.dc.html:259"
+        }
+      ]
+    },
+    {
+      "part": "card-header",
+      "name": "CardHeader",
+      "category": "composite",
+      "role": "Card head, 44, same as lane header",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.headerHeight}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:130"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.card-header",
+          "part": "card-header",
+          "where": "ALFA Mail.dc.html:130"
+        },
+        {
+          "id": "mail.card-header.account",
+          "part": "card-header",
+          "where": "ALFA Mail.dc.html:33"
+        },
+        {
+          "id": "mail.card-header.new-go",
+          "part": "card-header",
+          "where": "ALFA Mail.dc.html:35"
+        }
+      ]
+    },
+    {
+      "part": "card-notice",
+      "name": "CardNotice",
+      "category": "composite",
+      "role": "Inline notice inside a card",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.notice}"
+      },
+      "states": [
+        {
+          "name": "warning",
+          "tokens": {}
+        },
+        {
+          "name": "failure",
+          "tokens": {}
+        },
+        {
+          "name": "closeSaveFailed",
+          "tokens": {}
+        },
+        {
+          "name": "closeSaveAuth",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:54",
+        "ALFA Mail.dc.html:157",
+        "ALFA Mail.dc.html:201",
+        "ALFA Einstellungen.dc.html:98"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.card-notice",
+          "part": "card-notice",
+          "where": "ALFA Mail.dc.html:54"
+        },
+        {
+          "id": "mail.card-notice-2",
+          "part": "card-notice",
+          "where": "ALFA Mail.dc.html:157"
+        },
+        {
+          "id": "mail.card-notice-3",
+          "part": "card-notice",
+          "where": "ALFA Mail.dc.html:201"
+        },
+        {
+          "id": "settings.card-notice",
+          "part": "card-notice",
+          "where": "ALFA Einstellungen.dc.html:98"
+        }
+      ]
+    },
+    {
+      "part": "card-overview",
+      "name": "CardOverview",
+      "category": "composite",
+      "role": "Grid of card previews over the stack",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:268",
+        "ALFA Einstellungen.dc.html:134"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.card-overview",
+          "part": "card-overview",
+          "where": "ALFA Mail.dc.html:268"
+        },
+        {
+          "id": "settings.card-overview",
+          "part": "card-overview",
+          "where": "ALFA Einstellungen.dc.html:134"
+        }
+      ]
+    },
+    {
+      "part": "card-stack",
+      "name": "CardStack",
+      "category": "pattern",
+      "role": "Stack of cards in the right lane",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:126",
+        "ALFA Einstellungen.dc.html:85"
+      ],
+      "status": "set-by-design",
+      "flow": {
+        "states": [
+          "stacked",
+          "fanned"
+        ],
+        "events": [
+          "overview",
+          "back",
+          "select"
+        ],
+        "transitions": [
+          [
+            "stacked",
+            "overview",
+            "fanned"
+          ],
+          [
+            "fanned",
+            "back",
+            "stacked"
+          ],
+          [
+            "fanned",
+            "select",
+            "stacked"
+          ]
+        ]
+      },
+      "elements": [
+        {
+          "id": "mail.card-stack",
+          "part": "card-stack",
+          "where": "ALFA Mail.dc.html:126"
+        },
+        {
+          "id": "settings.card-stack",
+          "part": "card-stack",
+          "where": "ALFA Einstellungen.dc.html:85"
+        }
+      ]
+    },
+    {
+      "part": "chip",
+      "name": "Chip",
+      "category": "composite",
+      "role": "Recipient capsule, 24 high",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.chipHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:217"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.chip",
+          "part": "chip",
+          "where": "ALFA Mail.dc.html:217"
+        }
+      ]
+    },
+    {
+      "part": "chip-remove",
+      "name": "ChipRemove",
+      "category": "composite",
+      "role": "Remove button inside a chip",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:217",
+        "ALFA Mail.dc.html:246"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.chip-remove.remove",
+          "part": "chip-remove",
+          "where": "ALFA Mail.dc.html:217"
+        },
+        {
+          "id": "mail.chip-remove.remove-2",
+          "part": "chip-remove",
+          "where": "ALFA Mail.dc.html:246"
+        }
+      ]
+    },
+    {
+      "part": "choice",
+      "name": "Choice",
+      "category": "primitive",
+      "role": "One option of a segmented control",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Einstellungen.dc.html:121"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "settings.choice.pill-go",
+          "part": "choice",
+          "where": "ALFA Einstellungen.dc.html:121"
+        }
+      ]
+    },
+    {
+      "part": "command-group",
+      "name": "CommandGroup",
+      "category": "composite",
+      "role": "Group of header or footer buttons with dividers",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:122",
+        "ALFA Mail.dc.html:124",
+        "ALFA Mail.dc.html:260",
+        "ALFA Mail.dc.html:262",
+        "ALFA Mail.dc.html:282",
+        "ALFA Einstellungen.dc.html:81",
+        "ALFA Einstellungen.dc.html:83",
+        "ALFA Einstellungen.dc.html:153"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.command-group",
+          "part": "command-group",
+          "where": "ALFA Mail.dc.html:122"
+        },
+        {
+          "id": "mail.command-group-2",
+          "part": "command-group",
+          "where": "ALFA Mail.dc.html:124"
+        },
+        {
+          "id": "mail.command-group-3",
+          "part": "command-group",
+          "where": "ALFA Mail.dc.html:260"
+        },
+        {
+          "id": "mail.command-group-4",
+          "part": "command-group",
+          "where": "ALFA Mail.dc.html:262"
+        },
+        {
+          "id": "mail.command-group-5",
+          "part": "command-group",
+          "where": "ALFA Mail.dc.html:282"
+        },
+        {
+          "id": "settings.command-group",
+          "part": "command-group",
+          "where": "ALFA Einstellungen.dc.html:81"
+        },
+        {
+          "id": "settings.command-group-2",
+          "part": "command-group",
+          "where": "ALFA Einstellungen.dc.html:83"
+        },
+        {
+          "id": "settings.command-group-3",
+          "part": "command-group",
+          "where": "ALFA Einstellungen.dc.html:153"
+        },
+        {
+          "id": "mail.mid-command-group-5",
+          "part": "command-group",
+          "where": "ALFA Mail.dc.html:93"
+        }
+      ]
+    },
+    {
+      "part": "compose-button",
+      "name": "ComposeButton",
+      "category": "composite",
+      "role": "Primary new-message button",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}",
+        "radius": "{radius.row}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:32"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.compose-button.new-go",
+          "part": "compose-button",
+          "where": "ALFA Mail.dc.html:32"
+        }
+      ]
+    },
+    {
+      "part": "confirm",
+      "name": "Confirm",
+      "category": "composite",
+      "role": "Hold-to-confirm wrapper",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Bestaetigen.dc.html:16"
+      ],
+      "status": "approved-provisional",
+      "elements": [
+        {
+          "id": "confirm.confirm",
+          "part": "confirm",
+          "where": "ALFA Bestaetigen.dc.html:16"
+        }
+      ]
+    },
+    {
+      "part": "confirm-no",
+      "name": "ConfirmNo",
+      "category": "composite",
+      "role": "Cancel button of the confirm",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Bestaetigen.dc.html:28"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "confirm.confirm-no.no",
+          "part": "confirm-no",
+          "where": "ALFA Bestaetigen.dc.html:28"
+        }
+      ]
+    },
+    {
+      "part": "confirm-open",
+      "name": "ConfirmOpen",
+      "category": "composite",
+      "role": "Open state of the confirm pill",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Bestaetigen.dc.html:20"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "confirm.confirm-open.open-ask",
+          "part": "confirm-open",
+          "where": "ALFA Bestaetigen.dc.html:20"
+        }
+      ]
+    },
+    {
+      "part": "confirm-pill",
+      "name": "ConfirmPill",
+      "category": "pattern",
+      "role": "Button that erases while held",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Bestaetigen.dc.html:18"
+      ],
+      "status": "approved-provisional",
+      "source": "Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen.“ Tooltip: system title (Johannes 17.10.: „Komplett wie bei MacOS machen“)",
+      "flow": {
+        "states": [
+          "idle",
+          "asking",
+          "erasing",
+          "done"
+        ],
+        "events": [
+          "open",
+          "cancel",
+          "press",
+          "release",
+          "timeout",
+          "undo"
+        ],
+        "transitions": [
+          [
+            "idle",
+            "open",
+            "asking"
+          ],
+          [
+            "asking",
+            "cancel",
+            "idle"
+          ],
+          [
+            "asking",
+            "press",
+            "erasing"
+          ],
+          [
+            "erasing",
+            "release",
+            "asking"
+          ],
+          [
+            "erasing",
+            "timeout",
+            "done"
+          ],
+          [
+            "done",
+            "undo",
+            "idle"
+          ]
+        ]
+      },
+      "elements": [
+        {
+          "id": "confirm.confirm-pill",
+          "part": "confirm-pill",
+          "where": "ALFA Bestaetigen.dc.html:18"
+        }
+      ]
+    },
+    {
+      "part": "confirm-undo",
+      "name": "ConfirmUndo",
+      "category": "composite",
+      "role": "Undo button after confirm",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Bestaetigen.dc.html:39"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "confirm.confirm-undo.undo",
+          "part": "confirm-undo",
+          "where": "ALFA Bestaetigen.dc.html:39"
+        }
+      ]
+    },
+    {
+      "part": "confirm-yes",
+      "name": "ConfirmYes",
+      "category": "composite",
+      "role": "Confirm button",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Bestaetigen.dc.html:29"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "confirm.confirm-yes.down",
+          "part": "confirm-yes",
+          "where": "ALFA Bestaetigen.dc.html:29"
+        }
+      ]
+    },
+    {
+      "part": "connection-status",
+      "name": "ConnectionStatus",
+      "category": "primitive",
+      "role": "Dot plus status word of a service",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Einstellungen.dc.html:59",
+        "ALFA Einstellungen.dc.html:113"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "settings.connection-status",
+          "part": "connection-status",
+          "where": "ALFA Einstellungen.dc.html:59"
+        },
+        {
+          "id": "settings.connection-status-2",
+          "part": "connection-status",
+          "where": "ALFA Einstellungen.dc.html:113"
+        }
+      ]
+    },
+    {
+      "part": "content-state",
+      "name": "ContentState",
+      "category": "composite",
+      "role": "Empty, loading or error state of a lane",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:64"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.content-state",
+          "part": "content-state",
+          "where": "ALFA Mail.dc.html:64"
+        }
+      ]
+    },
+    {
+      "part": "counter",
+      "name": "Counter",
+      "category": "primitive",
+      "role": "Number beside a title or row, no ring",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.chipHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:27",
+        "ALFA Mail.dc.html:46",
+        "ALFA Mail.dc.html:84",
+        "ALFA Mail.dc.html:94",
+        "ALFA Einstellungen.dc.html:27",
+        "ALFA Einstellungen.dc.html:39"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.counter",
+          "part": "counter",
+          "where": "ALFA Mail.dc.html:27"
+        },
+        {
+          "id": "mail.counter-2",
+          "part": "counter",
+          "where": "ALFA Mail.dc.html:46"
+        },
+        {
+          "id": "mail.counter-3",
+          "part": "counter",
+          "where": "ALFA Mail.dc.html:84"
+        },
+        {
+          "id": "mail.counter-4",
+          "part": "counter",
+          "where": "ALFA Mail.dc.html:94"
+        },
+        {
+          "id": "settings.counter",
+          "part": "counter",
+          "where": "ALFA Einstellungen.dc.html:27"
+        },
+        {
+          "id": "settings.counter-2",
+          "part": "counter",
+          "where": "ALFA Einstellungen.dc.html:39"
+        }
+      ]
+    },
+    {
+      "part": "divider",
+      "name": "Divider",
+      "category": "primitive",
+      "role": "Vertical 1 px separator in a command group",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:122",
+        "ALFA Mail.dc.html:124",
+        "ALFA Einstellungen.dc.html:81",
+        "ALFA Einstellungen.dc.html:83"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.divider",
+          "part": "divider",
+          "where": "ALFA Mail.dc.html:122"
+        },
+        {
+          "id": "mail.divider-2",
+          "part": "divider",
+          "where": "ALFA Mail.dc.html:124"
+        },
+        {
+          "id": "settings.divider",
+          "part": "divider",
+          "where": "ALFA Einstellungen.dc.html:81"
+        },
+        {
+          "id": "settings.divider-2",
+          "part": "divider",
+          "where": "ALFA Einstellungen.dc.html:83"
+        }
+      ]
+    },
+    {
+      "part": "field-row",
+      "name": "FieldRow",
+      "category": "composite",
+      "role": "One 44 high row of a form field",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.rowHeight}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:146",
+        "ALFA Mail.dc.html:207",
+        "ALFA Mail.dc.html:214",
+        "ALFA Mail.dc.html:230",
+        "ALFA Einstellungen.dc.html:107"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.field-row",
+          "part": "field-row",
+          "where": "ALFA Mail.dc.html:146"
+        },
+        {
+          "id": "mail.field-row-2",
+          "part": "field-row",
+          "where": "ALFA Mail.dc.html:207"
+        },
+        {
+          "id": "mail.field-row-3",
+          "part": "field-row",
+          "where": "ALFA Mail.dc.html:214"
+        },
+        {
+          "id": "mail.field-row-4",
+          "part": "field-row",
+          "where": "ALFA Mail.dc.html:230"
+        },
+        {
+          "id": "settings.field-row",
+          "part": "field-row",
+          "where": "ALFA Einstellungen.dc.html:107"
+        }
+      ]
+    },
+    {
+      "part": "filter-capsule",
+      "name": "FilterCapsule",
+      "category": "composite",
+      "role": "filter capsule",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:620"
+      ],
+      "status": "set-by-design"
+    },
+    {
+      "part": "formatting-bar",
+      "name": "FormattingBar",
+      "category": "composite",
+      "role": "Text formatting commands of a draft",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.footerHeight}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:251"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.formatting-bar",
+          "part": "formatting-bar",
+          "where": "ALFA Mail.dc.html:251"
+        }
+      ]
+    },
+    {
+      "part": "handle",
+      "name": "Handle",
+      "category": "primitive",
+      "role": "Drag handle between lanes, hairline, 12 hit area",
+      "layer": "{layer.handle}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:40"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.handle.down",
+          "part": "handle",
+          "where": "ALFA Shell.dc.html:40"
+        }
+      ]
+    },
+    {
+      "part": "inline-confirm",
+      "name": "InlineConfirm",
+      "category": "composite",
+      "role": "Hold-to-confirm component in a row",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:104"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.inline-confirm",
+          "part": "inline-confirm",
+          "where": "ALFA Mail.dc.html:104"
+        },
+        {
+          "id": "mail.inline-confirm.outbox",
+          "part": "inline-confirm",
+          "where": "ALFA Mail.dc.html:116"
+        }
+      ]
+    },
+    {
+      "part": "input-field",
+      "name": "InputField",
+      "category": "primitive",
+      "role": "Single-line text input with underline",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}"
+      },
+      "states": [
+        {
+          "name": "focus",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:39"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.input-field",
+          "part": "input-field",
+          "where": "ALFA Mail.dc.html:39"
+        },
+        {
+          "id": "shell.lock-password",
+          "part": "input-field",
+          "where": "ALFA Shell.dc.html:102"
+        }
+      ]
+    },
+    {
+      "part": "lane",
+      "name": "Lane",
+      "category": "pattern",
+      "role": "One of three lanes, radius 20, own stacking context",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:24"
+      ],
+      "status": "set-by-design",
+      "flow": {
+        "states": [
+          "open",
+          "folded",
+          "maximized"
+        ],
+        "events": [
+          "fold",
+          "unfold",
+          "maximize",
+          "restore",
+          "doubleClick"
+        ],
+        "transitions": [
+          [
+            "open",
+            "fold",
+            "folded"
+          ],
+          [
+            "folded",
+            "unfold",
+            "open"
+          ],
+          [
+            "folded",
+            "doubleClick",
+            "open"
+          ],
+          [
+            "open",
+            "maximize",
+            "maximized"
+          ],
+          [
+            "maximized",
+            "restore",
+            "open"
+          ]
+        ]
+      },
+      "elements": [
+        {
+          "id": "shell.lane.on-strip",
+          "part": "lane",
+          "where": "ALFA Shell.dc.html:24"
+        }
+      ]
+    },
+    {
+      "part": "lane-content",
+      "name": "LaneContent",
+      "category": "composite",
+      "role": "Scrolling content area of a lane",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:20",
+        "ALFA Mail.dc.html:75",
+        "ALFA Einstellungen.dc.html:20",
+        "ALFA Einstellungen.dc.html:48"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.lane-content",
+          "part": "lane-content",
+          "where": "ALFA Mail.dc.html:20"
+        },
+        {
+          "id": "mail.lane-content-2",
+          "part": "lane-content",
+          "where": "ALFA Mail.dc.html:75"
+        },
+        {
+          "id": "settings.lane-content",
+          "part": "lane-content",
+          "where": "ALFA Einstellungen.dc.html:20"
+        },
+        {
+          "id": "settings.lane-content-2",
+          "part": "lane-content",
+          "where": "ALFA Einstellungen.dc.html:48"
+        },
+        {
+          "id": "mail.lane-content-tiles",
+          "part": "lane-content",
+          "where": "ALFA Mail.dc.html:80"
+        }
+      ]
+    },
+    {
+      "part": "lane-footer",
+      "name": "LaneFooter",
+      "category": "composite",
+      "role": "Fixed footer of the left lane",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}",
+        "radius": "{radius.row}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:32"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.lane-footer",
+          "part": "lane-footer",
+          "where": "ALFA Mail.dc.html:32"
+        }
+      ]
+    },
+    {
+      "part": "lane-header",
+      "name": "LaneHeader",
+      "category": "composite",
+      "role": "Fixed header of a lane, 44 high, title and commands",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.headerHeight}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:15",
+        "ALFA Mail.dc.html:37",
+        "ALFA Mail.dc.html:121",
+        "ALFA Einstellungen.dc.html:15",
+        "ALFA Einstellungen.dc.html:36",
+        "ALFA Einstellungen.dc.html:80"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.lane-header",
+          "part": "lane-header",
+          "where": "ALFA Mail.dc.html:15"
+        },
+        {
+          "id": "mail.lane-header-2",
+          "part": "lane-header",
+          "where": "ALFA Mail.dc.html:37"
+        },
+        {
+          "id": "mail.lane-header-3",
+          "part": "lane-header",
+          "where": "ALFA Mail.dc.html:121"
+        },
+        {
+          "id": "settings.lane-header",
+          "part": "lane-header",
+          "where": "ALFA Einstellungen.dc.html:15"
+        },
+        {
+          "id": "settings.lane-header-2",
+          "part": "lane-header",
+          "where": "ALFA Einstellungen.dc.html:36"
+        },
+        {
+          "id": "settings.lane-header-3",
+          "part": "lane-header",
+          "where": "ALFA Einstellungen.dc.html:80"
+        }
+      ]
+    },
+    {
+      "part": "lane-strip",
+      "name": "LaneStrip",
+      "category": "composite",
+      "role": "Icon strip shown when a lane is folded",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:25"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.lane-strip",
+          "part": "lane-strip",
+          "where": "ALFA Shell.dc.html:25"
+        }
+      ]
+    },
+    {
+      "part": "list-row",
+      "name": "ListRow",
+      "category": "composite",
+      "role": "Selectable row (mailbox, mail, setting)",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.rowHeight}",
+        "radius": "{radius.row}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:24",
+        "ALFA Einstellungen.dc.html:24"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.list-row",
+          "part": "list-row",
+          "where": "ALFA Mail.dc.html:24"
+        },
+        {
+          "id": "settings.list-row",
+          "part": "list-row",
+          "where": "ALFA Einstellungen.dc.html:24"
+        }
+      ]
+    },
+    {
+      "part": "list-section-header",
+      "name": "ListSectionHeader",
+      "category": "composite",
+      "role": "Group title row inside a list",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.rowHeight}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:22",
+        "ALFA Mail.dc.html:77",
+        "ALFA Einstellungen.dc.html:22",
+        "ALFA Einstellungen.dc.html:50",
+        "ALFA Einstellungen.dc.html:95"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.list-section-header",
+          "part": "list-section-header",
+          "where": "ALFA Mail.dc.html:22"
+        },
+        {
+          "id": "mail.list-section-header-2",
+          "part": "list-section-header",
+          "where": "ALFA Mail.dc.html:77"
+        },
+        {
+          "id": "settings.list-section-header",
+          "part": "list-section-header",
+          "where": "ALFA Einstellungen.dc.html:22"
+        },
+        {
+          "id": "settings.list-section-header-2",
+          "part": "list-section-header",
+          "where": "ALFA Einstellungen.dc.html:50"
+        },
+        {
+          "id": "settings.list-section-header-3",
+          "part": "list-section-header",
+          "where": "ALFA Einstellungen.dc.html:95"
+        }
+      ]
+    },
+    {
+      "part": "mail-signature",
+      "name": "MailSignature",
+      "category": "composite",
+      "role": "Signature block under a draft",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:238"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.mail-signature",
+          "part": "mail-signature",
+          "where": "ALFA Mail.dc.html:238"
+        }
+      ]
+    },
+    {
+      "part": "mark",
+      "name": "Mark",
+      "category": "primitive",
+      "role": "Round 28 initial or icon of a row, card or tile",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.chipHeight}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:25",
+        "ALFA Mail.dc.html:32",
+        "ALFA Mail.dc.html:80",
+        "ALFA Mail.dc.html:131",
+        "ALFA Mail.dc.html:150",
+        "ALFA Mail.dc.html:224",
+        "ALFA Mail.dc.html:226",
+        "ALFA Mail.dc.html:273",
+        "ALFA Einstellungen.dc.html:25",
+        "ALFA Einstellungen.dc.html:53",
+        "ALFA Einstellungen.dc.html:144",
+        "ALFA Shell.dc.html:27"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.mark",
+          "part": "mark",
+          "where": "ALFA Mail.dc.html:25"
+        },
+        {
+          "id": "mail.mark-2",
+          "part": "mark",
+          "where": "ALFA Mail.dc.html:32"
+        },
+        {
+          "id": "mail.mark.mark-go",
+          "part": "mark",
+          "where": "ALFA Mail.dc.html:80"
+        },
+        {
+          "id": "mail.mark-3",
+          "part": "mark",
+          "where": "ALFA Mail.dc.html:131"
+        },
+        {
+          "id": "mail.mark-4",
+          "part": "mark",
+          "where": "ALFA Mail.dc.html:150"
+        },
+        {
+          "id": "mail.mark-5",
+          "part": "mark",
+          "where": "ALFA Mail.dc.html:224"
+        },
+        {
+          "id": "mail.mark-6",
+          "part": "mark",
+          "where": "ALFA Mail.dc.html:226"
+        },
+        {
+          "id": "mail.mark-7",
+          "part": "mark",
+          "where": "ALFA Mail.dc.html:273"
+        },
+        {
+          "id": "settings.mark",
+          "part": "mark",
+          "where": "ALFA Einstellungen.dc.html:25"
+        },
+        {
+          "id": "settings.mark.mark-go",
+          "part": "mark",
+          "where": "ALFA Einstellungen.dc.html:53"
+        },
+        {
+          "id": "settings.mark-3",
+          "part": "mark",
+          "where": "ALFA Einstellungen.dc.html:144"
+        },
+        {
+          "id": "shell.mark",
+          "part": "mark",
+          "where": "ALFA Shell.dc.html:27"
+        },
+        {
+          "id": "shell.lock-mark",
+          "part": "mark",
+          "where": "ALFA Shell.dc.html:99"
+        },
+        {
+          "id": "mail.mark.account-top",
+          "part": "mark",
+          "where": "ALFA Mail.dc.html:17"
+        },
+        {
+          "id": "mail.mark.account",
+          "part": "mark",
+          "where": "ALFA Mail.dc.html:33"
+        },
+        {
+          "id": "mail.mark.new-go",
+          "part": "mark",
+          "where": "ALFA Mail.dc.html:35"
+        },
+        {
+          "id": "mail.mid-mark-7",
+          "part": "mark",
+          "where": "ALFA Mail.dc.html:84"
+        }
+      ]
+    },
+    {
+      "part": "menu",
+      "name": "Menu",
+      "category": "composite",
+      "role": "Area navigation list in the blob",
+      "layer": "{layer.menu}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:70"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.menu",
+          "part": "menu",
+          "where": "ALFA Shell.dc.html:70"
+        }
+      ]
+    },
+    {
+      "part": "menu-row",
+      "name": "MenuRow",
+      "category": "composite",
+      "role": "28 high row of a menu",
+      "layer": "{layer.menu}",
+      "measures": {
+        "height": "{size.menuRowHeight}",
+        "radius": "{radius.notice}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:301",
+        "ALFA Einstellungen.dc.html:172",
+        "ALFA Shell.dc.html:76"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.menu-row",
+          "part": "menu-row",
+          "where": "ALFA Mail.dc.html:301"
+        },
+        {
+          "id": "settings.menu-row",
+          "part": "menu-row",
+          "where": "ALFA Einstellungen.dc.html:172"
+        },
+        {
+          "id": "shell.menu-row",
+          "part": "menu-row",
+          "where": "ALFA Shell.dc.html:76"
+        }
+      ]
+    },
+    {
+      "part": "message-body",
+      "name": "MessageBody",
+      "category": "composite",
+      "role": "Mail body on a white sheet",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.field}"
+      },
+      "states": [
+        {
+          "name": "writing",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:153",
+        "ALFA Mail.dc.html:236"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.message-body",
+          "part": "message-body",
+          "where": "ALFA Mail.dc.html:153"
+        },
+        {
+          "id": "mail.message-body-2",
+          "part": "message-body",
+          "where": "ALFA Mail.dc.html:236"
+        }
+      ]
+    },
+    {
+      "part": "message-header",
+      "name": "MessageHeader",
+      "category": "composite",
+      "role": "Sender, recipients and date of a mail",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:144"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.message-header",
+          "part": "message-header",
+          "where": "ALFA Mail.dc.html:144"
+        }
+      ]
+    },
+    {
+      "part": "message-row",
+      "name": "MessageRow",
+      "category": "composite",
+      "role": "Mail row in the list",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.row}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:79",
+        "ALFA Einstellungen.dc.html:52"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.message-row",
+          "part": "message-row",
+          "where": "ALFA Mail.dc.html:79"
+        },
+        {
+          "id": "settings.message-row",
+          "part": "message-row",
+          "where": "ALFA Einstellungen.dc.html:52"
+        }
+      ]
+    },
+    {
+      "part": "notice",
+      "name": "Notice",
+      "category": "primitive",
+      "role": "Blob dot: assistant answered while the blob was closed; clears when the assistant opens",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:67"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.notice",
+          "part": "notice",
+          "where": "ALFA Shell.dc.html:67"
+        }
+      ]
+    },
+    {
+      "part": "option",
+      "name": "Option",
+      "category": "composite",
+      "role": "Selectable option in a settings row",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.chipHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Einstellungen.dc.html:122",
+        "ALFA Einstellungen.dc.html:136",
+        "ALFA Einstellungen.dc.html:138"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "settings.option",
+          "part": "option",
+          "where": "ALFA Einstellungen.dc.html:122"
+        },
+        {
+          "id": "settings.option-2",
+          "part": "option",
+          "where": "ALFA Einstellungen.dc.html:136"
+        },
+        {
+          "id": "settings.option-3",
+          "part": "option",
+          "where": "ALFA Einstellungen.dc.html:138"
+        }
+      ]
+    },
+    {
+      "part": "overview-tile",
+      "name": "OverviewTile",
+      "category": "composite",
+      "role": "Preview tile in the overview",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.row}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:271",
+        "ALFA Einstellungen.dc.html:142"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.overview-tile",
+          "part": "overview-tile",
+          "where": "ALFA Mail.dc.html:271"
+        },
+        {
+          "id": "settings.overview-tile",
+          "part": "overview-tile",
+          "where": "ALFA Einstellungen.dc.html:142"
+        },
+        {
+          "id": "mail.mid-overview-tile",
+          "part": "overview-tile",
+          "where": "ALFA Mail.dc.html:82"
+        }
+      ]
+    },
+    {
+      "part": "quote-toggle",
+      "name": "QuoteToggle",
+      "category": "composite",
+      "role": "Show or hide quoted text",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.chipHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:172"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.quote-toggle.toggle-q",
+          "part": "quote-toggle",
+          "where": "ALFA Mail.dc.html:172"
+        }
+      ]
+    },
+    {
+      "part": "recipient-field",
+      "name": "RecipientField",
+      "category": "composite",
+      "role": "To, Cc, Bcc field of a draft",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:145",
+        "ALFA Mail.dc.html:213"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.recipient-field",
+          "part": "recipient-field",
+          "where": "ALFA Mail.dc.html:145"
+        },
+        {
+          "id": "mail.recipient-field-2",
+          "part": "recipient-field",
+          "where": "ALFA Mail.dc.html:213"
+        }
+      ]
+    },
+    {
+      "part": "recipient-input-row",
+      "name": "RecipientInputRow",
+      "category": "composite",
+      "role": "Row with chips and input",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.chipHeight}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:226"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.recipient-input-row",
+          "part": "recipient-input-row",
+          "where": "ALFA Mail.dc.html:226"
+        }
+      ]
+    },
+    {
+      "part": "recipient-list",
+      "name": "RecipientList",
+      "category": "composite",
+      "role": "Collapsible list of recipients",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.field}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:150",
+        "ALFA Mail.dc.html:226"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.recipient-list",
+          "part": "recipient-list",
+          "where": "ALFA Mail.dc.html:150"
+        },
+        {
+          "id": "mail.recipient-list-2",
+          "part": "recipient-list",
+          "where": "ALFA Mail.dc.html:226"
+        }
+      ]
+    },
+    {
+      "part": "recipient-row",
+      "name": "RecipientRow",
+      "category": "composite",
+      "role": "One recipient row, 44 high",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.chipHeight}",
+        "radius": "{radius.field}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:150",
+        "ALFA Mail.dc.html:224",
+        "ALFA Mail.dc.html:226"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.recipient-row",
+          "part": "recipient-row",
+          "where": "ALFA Mail.dc.html:150"
+        },
+        {
+          "id": "mail.recipient-row-2",
+          "part": "recipient-row",
+          "where": "ALFA Mail.dc.html:224"
+        },
+        {
+          "id": "mail.recipient-row-3",
+          "part": "recipient-row",
+          "where": "ALFA Mail.dc.html:226"
+        }
+      ]
+    },
+    {
+      "part": "recipients-disclosure",
+      "name": "RecipientsDisclosure",
+      "category": "composite",
+      "role": "Toggle that opens the full recipient list",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "collapsed",
+          "tokens": {}
+        },
+        {
+          "name": "expanded",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:147",
+        "ALFA Mail.dc.html:148",
+        "ALFA Mail.dc.html:218",
+        "ALFA Mail.dc.html:219"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.recipients-disclosure.toggle-r",
+          "part": "recipients-disclosure",
+          "where": "ALFA Mail.dc.html:147"
+        },
+        {
+          "id": "mail.recipients-disclosure.toggle-r-2",
+          "part": "recipients-disclosure",
+          "where": "ALFA Mail.dc.html:148"
+        },
+        {
+          "id": "mail.recipients-disclosure.toggle-all",
+          "part": "recipients-disclosure",
+          "where": "ALFA Mail.dc.html:218"
+        },
+        {
+          "id": "mail.recipients-disclosure.toggle-all-2",
+          "part": "recipients-disclosure",
+          "where": "ALFA Mail.dc.html:219"
+        }
+      ]
+    },
+    {
+      "part": "row-actions",
+      "name": "RowActions",
+      "category": "composite",
+      "role": "Actions that appear on hover of a row",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:99"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.row-actions",
+          "part": "row-actions",
+          "where": "ALFA Mail.dc.html:99"
+        }
+      ]
+    },
+    {
+      "part": "safe-area",
+      "name": "SafeArea",
+      "category": "composite",
+      "role": "Camera cut-out strip at the top",
+      "layer": "{layer.safeArea}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:21"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.safe-area",
+          "part": "safe-area",
+          "where": "ALFA Shell.dc.html:21"
+        }
+      ]
+    },
+    {
+      "part": "scroll-line",
+      "name": "ScrollLine",
+      "category": "primitive",
+      "role": "Hairline under the lane header, visible only while scrolling",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:15",
+        "ALFA Mail.dc.html:37",
+        "ALFA Einstellungen.dc.html:15",
+        "ALFA Einstellungen.dc.html:36"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.scroll-line",
+          "part": "scroll-line",
+          "where": "ALFA Mail.dc.html:15"
+        },
+        {
+          "id": "mail.scroll-line-2",
+          "part": "scroll-line",
+          "where": "ALFA Mail.dc.html:37"
+        },
+        {
+          "id": "settings.scroll-line",
+          "part": "scroll-line",
+          "where": "ALFA Einstellungen.dc.html:15"
+        },
+        {
+          "id": "settings.scroll-line-2",
+          "part": "scroll-line",
+          "where": "ALFA Einstellungen.dc.html:36"
+        }
+      ]
+    },
+    {
+      "part": "search-field",
+      "name": "SearchField",
+      "category": "composite",
+      "role": "Search input in the blob menu",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:61"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.search-field",
+          "part": "search-field",
+          "where": "ALFA Shell.dc.html:61"
+        }
+      ]
+    },
+    {
+      "part": "search-tape",
+      "name": "SearchTape",
+      "category": "composite",
+      "role": "Animated measuring tape of the search",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:62"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.search-tape",
+          "part": "search-tape",
+          "where": "ALFA Shell.dc.html:62"
+        }
+      ]
+    },
+    {
+      "part": "segmented-control",
+      "name": "SegmentedControl",
+      "category": "primitive",
+      "role": "Group of exclusive options",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.chipHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Einstellungen.dc.html:122",
+        "ALFA Einstellungen.dc.html:136",
+        "ALFA Einstellungen.dc.html:138"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "settings.segmented-control",
+          "part": "segmented-control",
+          "where": "ALFA Einstellungen.dc.html:122"
+        },
+        {
+          "id": "settings.segmented-control-2",
+          "part": "segmented-control",
+          "where": "ALFA Einstellungen.dc.html:136"
+        },
+        {
+          "id": "settings.segmented-control-3",
+          "part": "segmented-control",
+          "where": "ALFA Einstellungen.dc.html:138"
+        }
+      ]
+    },
+    {
+      "part": "service-hero",
+      "name": "ServiceHero",
+      "category": "composite",
+      "role": "service hero",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Einstellungen.dc.html:94"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "settings.service-hero",
+          "part": "service-hero",
+          "where": "ALFA Einstellungen.dc.html:94"
+        }
+      ]
+    },
+    {
+      "part": "settings-tile",
+      "name": "SettingsTile",
+      "category": "composite",
+      "role": "Tile of one integration or setting, 112 high, radius 12",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}",
+        "radius": "{radius.row}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Einstellungen.dc.html:46"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "settings.settings-tile",
+          "part": "settings-tile",
+          "where": "ALFA Einstellungen.dc.html:46"
+        }
+      ]
+    },
+    {
+      "part": "settings-tiles",
+      "name": "SettingsTiles",
+      "category": "composite",
+      "role": "Scrolling tile area (integrations), scroll-snap y mandatory",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Einstellungen.dc.html:46"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "settings.settings-tiles",
+          "part": "settings-tiles",
+          "where": "ALFA Einstellungen.dc.html:46"
+        }
+      ]
+    },
+    {
+      "part": "signature-editor",
+      "name": "SignatureEditor",
+      "category": "composite",
+      "role": "signature editor",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Einstellungen.dc.html:105"
+      ],
+      "status": "set-by-design"
+    },
+    {
+      "part": "suggestion-list",
+      "name": "SuggestionList",
+      "category": "composite",
+      "role": "Contact suggestions while typing",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:223"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.suggestion-list",
+          "part": "suggestion-list",
+          "where": "ALFA Mail.dc.html:223"
+        }
+      ]
+    },
+    {
+      "part": "symbol-button",
+      "name": "SymbolButton",
+      "category": "primitive",
+      "role": "Round 28 icon button, ring or filled",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.rowHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "preview",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:18",
+        "ALFA Mail.dc.html:100",
+        "ALFA Mail.dc.html:106",
+        "ALFA Mail.dc.html:137",
+        "ALFA Mail.dc.html:138",
+        "ALFA Mail.dc.html:139",
+        "ALFA Mail.dc.html:221",
+        "ALFA Mail.dc.html:226",
+        "ALFA Mail.dc.html:252",
+        "ALFA Mail.dc.html:276",
+        "ALFA Mail.dc.html:282",
+        "ALFA Mail.dc.html:617",
+        "ALFA Einstellungen.dc.html:18",
+        "ALFA Einstellungen.dc.html:147",
+        "ALFA Einstellungen.dc.html:153",
+        "ALFA Einstellungen.dc.html:375"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.symbol-button",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:18"
+        },
+        {
+          "id": "mail.symbol-button-2",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:100"
+        },
+        {
+          "id": "mail.symbol-button.no-trash",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:106"
+        },
+        {
+          "id": "mail.symbol-button-3",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:137"
+        },
+        {
+          "id": "mail.symbol-button.pin",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:138"
+        },
+        {
+          "id": "mail.symbol-button.close",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:139"
+        },
+        {
+          "id": "mail.symbol-button.toggle-cc",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:221"
+        },
+        {
+          "id": "mail.symbol-button.remove",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:226"
+        },
+        {
+          "id": "mail.symbol-button-4",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:252"
+        },
+        {
+          "id": "mail.symbol-button.close-2",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:276"
+        },
+        {
+          "id": "mail.symbol-button-5",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:282"
+        },
+        {
+          "id": "settings.symbol-button",
+          "part": "symbol-button",
+          "where": "ALFA Einstellungen.dc.html:18"
+        },
+        {
+          "id": "settings.symbol-button.close-2",
+          "part": "symbol-button",
+          "where": "ALFA Einstellungen.dc.html:147"
+        },
+        {
+          "id": "settings.symbol-button-3",
+          "part": "symbol-button",
+          "where": "ALFA Einstellungen.dc.html:153"
+        },
+        {
+          "id": "mail.symbol-button.deck",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:36"
+        },
+        {
+          "id": "mail.mid-symbol-button.close-2",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:87"
+        },
+        {
+          "id": "mail.mid-symbol-button-5",
+          "part": "symbol-button",
+          "where": "ALFA Mail.dc.html:93"
+        }
+      ]
+    },
+    {
+      "part": "sync-button",
+      "name": "SyncButton",
+      "category": "composite",
+      "role": "Sync button top right with progress ring",
+      "layer": "{layer.syncButton}",
+      "measures": {
+        "height": "{size.blobHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:46"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.sync-button.sync",
+          "part": "sync-button",
+          "where": "ALFA Shell.dc.html:46"
+        }
+      ]
+    },
+    {
+      "part": "text-button",
+      "name": "TextButton",
+      "category": "primitive",
+      "role": "Pill text button, 28 high",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.menuRowHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "destructive",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:41",
+        "ALFA Mail.dc.html:59",
+        "ALFA Mail.dc.html:71",
+        "ALFA Mail.dc.html:105",
+        "ALFA Mail.dc.html:114",
+        "ALFA Mail.dc.html:159",
+        "ALFA Mail.dc.html:203",
+        "ALFA Mail.dc.html:288",
+        "ALFA Einstellungen.dc.html:73",
+        "ALFA Einstellungen.dc.html:101",
+        "ALFA Einstellungen.dc.html:124",
+        "ALFA Einstellungen.dc.html:164"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.text-button.toggle-scope",
+          "part": "text-button",
+          "where": "ALFA Mail.dc.html:41"
+        },
+        {
+          "id": "mail.text-button",
+          "part": "text-button",
+          "where": "ALFA Mail.dc.html:59"
+        },
+        {
+          "id": "mail.text-button-2",
+          "part": "text-button",
+          "where": "ALFA Mail.dc.html:71"
+        },
+        {
+          "id": "mail.text-button.do-trash",
+          "part": "text-button",
+          "where": "ALFA Mail.dc.html:105"
+        },
+        {
+          "id": "mail.text-button.load-more",
+          "part": "text-button",
+          "where": "ALFA Mail.dc.html:114"
+        },
+        {
+          "id": "mail.text-button.load-images",
+          "part": "text-button",
+          "where": "ALFA Mail.dc.html:159"
+        },
+        {
+          "id": "mail.text-button-3",
+          "part": "text-button",
+          "where": "ALFA Mail.dc.html:203"
+        },
+        {
+          "id": "mail.text-button.undo",
+          "part": "text-button",
+          "where": "ALFA Mail.dc.html:288"
+        },
+        {
+          "id": "settings.text-button.load-more",
+          "part": "text-button",
+          "where": "ALFA Einstellungen.dc.html:73"
+        },
+        {
+          "id": "settings.text-button",
+          "part": "text-button",
+          "where": "ALFA Einstellungen.dc.html:101"
+        },
+        {
+          "id": "settings.text-button-2",
+          "part": "text-button",
+          "where": "ALFA Einstellungen.dc.html:124"
+        },
+        {
+          "id": "settings.text-button.undo",
+          "part": "text-button",
+          "where": "ALFA Einstellungen.dc.html:164"
+        },
+        {
+          "id": "shell.lock-touch",
+          "part": "text-button",
+          "where": "ALFA Shell.dc.html:101"
+        },
+        {
+          "id": "shell.lock-use-password",
+          "part": "text-button",
+          "where": "ALFA Shell.dc.html:101"
+        },
+        {
+          "id": "shell.lock-unlock",
+          "part": "text-button",
+          "where": "ALFA Shell.dc.html:102"
+        },
+        {
+          "id": "shell.lock-use-touch",
+          "part": "text-button",
+          "where": "ALFA Shell.dc.html:102"
+        },
+        {
+          "id": "mail.text-button.retry",
+          "part": "text-button",
+          "where": "ALFA Mail.dc.html:290"
+        },
+        {
+          "id": "settings.text-button.retry",
+          "part": "text-button",
+          "where": "ALFA Einstellungen.dc.html:166"
+        }
+      ]
+    },
+    {
+      "part": "thinking-orb",
+      "name": "ThinkingOrb",
+      "category": "primitive",
+      "role": "Assistant orb in the blob",
+      "layer": "{layer.blob}",
+      "measures": {
+        "height": "{size.menuRowHeight}"
+      },
+      "states": [
+        {
+          "name": "face",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:54",
+        "ALFA Shell.dc.html:89"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.thinking-orb",
+          "part": "thinking-orb",
+          "where": "ALFA Shell.dc.html:54"
+        },
+        {
+          "id": "shell.thinking-orb-2",
+          "part": "thinking-orb",
+          "where": "ALFA Shell.dc.html:89"
+        }
+      ]
+    },
+    {
+      "part": "tile-grid",
+      "name": "TileGrid",
+      "category": "composite",
+      "role": "Grid of tiles of one group",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.settingsTileHeight}",
+        "radius": "{radius.row}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Einstellungen.dc.html:46",
+        "ALFA Einstellungen.dc.html:384"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "settings.tile-grid",
+          "part": "tile-grid",
+          "where": "ALFA Einstellungen.dc.html:46"
+        }
+      ]
+    },
+    {
+      "part": "tile-group",
+      "name": "TileGroup",
+      "category": "composite",
+      "role": "Group of tiles with a title shown in the head",
+      "layer": "{layer.lane}",
+      "measures": {
+        "height": "{size.settingsTileHeight}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Einstellungen.dc.html:46",
+        "ALFA Einstellungen.dc.html:384"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "settings.tile-group",
+          "part": "tile-group",
+          "where": "ALFA Einstellungen.dc.html:46"
+        }
+      ]
+    },
+    {
+      "part": "toast",
+      "name": "Toast",
+      "category": "pattern",
+      "role": "Short message with optional undo, above the card footer",
+      "layer": "{layer.toast}",
+      "measures": {
+        "height": "{size.menuRowHeight}",
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:288",
+        "ALFA Einstellungen.dc.html:164"
+      ],
+      "status": "set-by-design",
+      "flow": {
+        "states": [
+          "hidden",
+          "shown"
+        ],
+        "events": [
+          "show",
+          "undo",
+          "timeout"
+        ],
+        "transitions": [
+          [
+            "hidden",
+            "show",
+            "shown"
+          ],
+          [
+            "shown",
+            "undo",
+            "hidden"
+          ],
+          [
+            "shown",
+            "timeout",
+            "hidden"
+          ]
+        ]
+      },
+      "elements": [
+        {
+          "id": "mail.toast",
+          "part": "toast",
+          "where": "ALFA Mail.dc.html:288"
+        },
+        {
+          "id": "settings.toast",
+          "part": "toast",
+          "where": "ALFA Einstellungen.dc.html:164"
+        }
+      ]
+    },
+    {
+      "part": "toggle",
+      "name": "Toggle",
+      "category": "primitive",
+      "role": "On/off switch",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.capsule}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Einstellungen.dc.html:123"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "settings.toggle.toggle",
+          "part": "toggle",
+          "where": "ALFA Einstellungen.dc.html:123"
+        }
+      ]
+    },
+    {
+      "part": "lock-screen",
+      "name": "LockScreen",
+      "category": "pattern",
+      "role": "Covers the whole area page while the app is locked",
+      "layer": "{layer.blob}",
+      "measures": {},
+      "states": [
+        {
+          "name": "locked",
+          "tokens": {}
+        },
+        {
+          "name": "touchId",
+          "tokens": {}
+        },
+        {
+          "name": "touchIdFailed",
+          "tokens": {}
+        },
+        {
+          "name": "password",
+          "tokens": {}
+        },
+        {
+          "name": "passwordWrong",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:98"
+      ],
+      "status": "set-by-design",
+      "flow": {
+        "states": [
+          "unlocked",
+          "locked",
+          "touchId",
+          "touchIdFailed",
+          "password",
+          "passwordWrong"
+        ],
+        "events": [
+          "pauseElapsed",
+          "touch",
+          "recognized",
+          "notRecognized",
+          "usePassword",
+          "useTouch",
+          "typePassword",
+          "submitCorrect",
+          "submitWrong"
+        ],
+        "transitions": [
+          [
+            "unlocked",
+            "pauseElapsed",
+            "locked"
+          ],
+          [
+            "locked",
+            "touch",
+            "touchId"
+          ],
+          [
+            "touchId",
+            "recognized",
+            "unlocked"
+          ],
+          [
+            "touchId",
+            "notRecognized",
+            "touchIdFailed"
+          ],
+          [
+            "touchIdFailed",
+            "touch",
+            "touchId"
+          ],
+          [
+            "locked",
+            "usePassword",
+            "password"
+          ],
+          [
+            "touchIdFailed",
+            "usePassword",
+            "password"
+          ],
+          [
+            "password",
+            "submitCorrect",
+            "unlocked"
+          ],
+          [
+            "password",
+            "submitWrong",
+            "passwordWrong"
+          ],
+          [
+            "passwordWrong",
+            "typePassword",
+            "password"
+          ],
+          [
+            "password",
+            "useTouch",
+            "locked"
+          ],
+          [
+            "passwordWrong",
+            "useTouch",
+            "locked"
+          ]
+        ]
+      },
+      "elements": [
+        {
+          "id": "shell.lock-screen",
+          "part": "lock-screen",
+          "where": "ALFA Shell.dc.html:98"
+        }
+      ]
+    },
+    {
+      "part": "lock-error",
+      "name": "LockError",
+      "category": "primitive",
+      "role": "Error line in the lock screen",
+      "layer": "{layer.blob}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:103"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.lock-error",
+          "part": "lock-error",
+          "where": "ALFA Shell.dc.html:103"
+        }
+      ]
+    },
+    {
+      "part": "image-tile",
+      "name": "ImageTile",
+      "category": "primitive",
+      "role": "Placeholder tile for an image in an HTML mail, blocked or loaded",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.notice}"
+      },
+      "states": [
+        {
+          "name": "blocked",
+          "tokens": {}
+        },
+        {
+          "name": "loaded",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:170"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.image-tile",
+          "part": "image-tile",
+          "where": "ALFA Mail.dc.html:170"
+        }
+      ]
+    },
+    {
+      "part": "pdf-page",
+      "name": "PdfPage",
+      "category": "composite",
+      "role": "A4 page of a mail saved as PDF",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA PDF.dc.html:19"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "pdf.page",
+          "part": "pdf-page",
+          "where": "ALFA PDF.dc.html:19"
+        }
+      ]
+    },
+    {
+      "part": "pdf-header",
+      "name": "PdfHeader",
+      "category": "composite",
+      "role": "From, to, date and subject of the saved mail",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA PDF.dc.html:20"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "pdf.header",
+          "part": "pdf-header",
+          "where": "ALFA PDF.dc.html:20"
+        }
+      ]
+    },
+    {
+      "part": "pdf-body",
+      "name": "PdfBody",
+      "category": "composite",
+      "role": "Mail text in the saved PDF",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA PDF.dc.html:24"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "pdf.body",
+          "part": "pdf-body",
+          "where": "ALFA PDF.dc.html:24"
+        }
+      ]
+    },
+    {
+      "part": "pdf-attachments",
+      "name": "PdfAttachments",
+      "category": "composite",
+      "role": "List of attachment names in the saved PDF",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA PDF.dc.html:30"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "pdf.attachments",
+          "part": "pdf-attachments",
+          "where": "ALFA PDF.dc.html:30"
+        }
+      ]
+    },
+    {
+      "part": "pdf-footer",
+      "name": "PdfFooter",
+      "category": "composite",
+      "role": "Project name and page number in the saved PDF",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA PDF.dc.html:31"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "pdf.footer",
+          "part": "pdf-footer",
+          "where": "ALFA PDF.dc.html:31"
+        }
+      ]
+    },
+    {
+      "part": "drop-overlay",
+      "name": "DropOverlay",
+      "category": "composite",
+      "role": "Zone over the draft card while a file is dragged over it",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.notice}",
+        "inset": "{spacing.step8}"
+      },
+      "states": [
+        {
+          "name": "over",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:198"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.drop-overlay",
+          "part": "drop-overlay",
+          "where": "ALFA Mail.dc.html:198"
+        }
+      ]
+    },
+    {
+      "part": "profile-tile",
+      "name": "ProfileTile",
+      "category": "composite",
+      "role": "Profile in Ich: mark 56, name, role, initials, phone, teams, addresses; opens the Identity card",
+      "layer": "{layer.lane}",
+      "measures": {
+        "radius": "{radius.row}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        },
+        {
+          "name": "selected",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Einstellungen.dc.html:50"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "settings.profile-tile",
+          "part": "profile-tile",
+          "where": "ALFA Einstellungen.dc.html:50"
+        },
+        {
+          "id": "settings.profile-mark",
+          "part": "mark",
+          "where": "ALFA Einstellungen.dc.html:50"
+        },
+        {
+          "id": "settings.text-button.profile-pick",
+          "part": "text-button",
+          "where": "ALFA Einstellungen.dc.html:50"
+        }
+      ]
+    },
+    {
+      "part": "account-card",
+      "name": "AccountCard",
+      "category": "composite",
+      "role": "Mailbox card in the mailbox stack (pick, ghost during switch)",
+      "layer": "{layer.lane}",
+      "measures": {
+        "glossFront": "{color.stackGlossFront}",
+        "glossLight": "{color.stackGlossLight}",
+        "glossDark": "{color.stackGlossDark}",
+        "seamFront": "{color.stackSeamFront}",
+        "seamBack": "{color.stackSeamBack}",
+        "drop": "{color.stackDrop}",
+        "edge": "{size.hairline}",
+        "dropOffset": "{size.stackDropOffset}",
+        "dropBlur": "{size.stackDropBlur}",
+        "dropSpread": "{size.stackDropSpread}",
+        "ring": "{color.stackRing}",
+        "flatDrop": "{color.stackFlatDrop}",
+        "flatFront": "{color.stackFlatFront}",
+        "glaze": "{color.glaze}",
+        "flatDropOffset": "{size.stackFlatDropOffset}",
+        "flatDropBlur": "{size.stackFlatDropBlur}",
+        "flatDropSpread": "{size.stackFlatDropSpread}",
+        "flatFrontOffset": "{size.stackFlatFrontOffset}",
+        "flatFrontBlur": "{size.stackFlatFrontBlur}",
+        "flatFrontSpread": "{size.stackFlatFrontSpread}",
+        "lane": "{shadow.lane}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:33",
+        "ALFA Mail.dc.html:34"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.account-card.pick",
+          "part": "account-card",
+          "where": "ALFA Mail.dc.html:33"
+        },
+        {
+          "id": "mail.account-card.ghost",
+          "part": "account-card",
+          "where": "ALFA Mail.dc.html:34"
+        }
+      ],
+      "source": "Johannes 23.10.: Material wie Karte rechter Stapel, voll gespiegelt; dieselben Tokens, Richtung unten statt oben."
+    },
+    {
+      "part": "account-deck",
+      "name": "AccountDeck",
+      "category": "composite",
+      "role": "Mailbox stack at the foot of the left lane",
+      "layer": "{layer.lane}",
+      "measures": {
+        "glossFront": "{color.stackGlossFront}",
+        "glossLight": "{color.stackGlossLight}",
+        "glossDark": "{color.stackGlossDark}",
+        "seamFront": "{color.stackSeamFront}",
+        "seamBack": "{color.stackSeamBack}",
+        "drop": "{color.stackDrop}",
+        "edge": "{size.hairline}",
+        "dropOffset": "{size.stackDropOffset}",
+        "dropBlur": "{size.stackDropBlur}",
+        "dropSpread": "{size.stackDropSpread}",
+        "ring": "{color.stackRing}",
+        "flatDrop": "{color.stackFlatDrop}",
+        "flatFront": "{color.stackFlatFront}",
+        "glaze": "{color.glaze}",
+        "flatDropOffset": "{size.stackFlatDropOffset}",
+        "flatDropBlur": "{size.stackFlatDropBlur}",
+        "flatDropSpread": "{size.stackFlatDropSpread}",
+        "flatFrontOffset": "{size.stackFlatFrontOffset}",
+        "flatFrontBlur": "{size.stackFlatFrontBlur}",
+        "flatFrontSpread": "{size.stackFlatFrontSpread}",
+        "lane": "{shadow.lane}"
+      },
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:32"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.account-deck",
+          "part": "account-deck",
+          "where": "ALFA Mail.dc.html:32"
+        }
+      ],
+      "source": "Johannes 23.10.: Material wie Karte rechter Stapel, voll gespiegelt; dieselben Tokens, Richtung unten statt oben."
+    },
+    {
+      "part": "account-title",
+      "name": "AccountTitle",
+      "category": "composite",
+      "role": "Lane head as button, shows the open mailbox",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:17"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.account-title",
+          "part": "account-title",
+          "where": "ALFA Mail.dc.html:17"
+        }
+      ]
+    },
+    {
+      "part": "envelope",
+      "name": "Envelope",
+      "category": "composite",
+      "role": "Single envelope in the mailbox stack sign",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:36"
+      ],
+      "status": "set-by-design"
+    },
+    {
+      "part": "envelope-stack",
+      "name": "EnvelopeStack",
+      "category": "composite",
+      "role": "Mailbox stack sign (fanned envelopes)",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:36"
+      ],
+      "status": "set-by-design"
+    },
+    {
+      "part": "hint",
+      "name": "Hint",
+      "category": "composite",
+      "role": "Help text at handle and blob after dwell (hover intent)",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Shell.dc.html:18",
+        "ALFA Shell.dc.html:23"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "shell.hint",
+          "part": "hint",
+          "where": "ALFA Shell.dc.html:23"
+        }
+      ]
+    },
+    {
+      "part": "switch-glass",
+      "name": "SwitchGlass",
+      "category": "composite",
+      "role": "Haze over the lanes while the mailbox switches",
+      "layer": "{layer.lane}",
+      "measures": {},
+      "states": [
+        {
+          "name": "rest",
+          "tokens": {}
+        }
+      ],
+      "where": [
+        "ALFA Mail.dc.html:14",
+        "ALFA Mail.dc.html:40",
+        "ALFA Mail.dc.html:145"
+      ],
+      "status": "set-by-design",
+      "elements": [
+        {
+          "id": "mail.switch-glass-0",
+          "part": "switch-glass",
+          "where": "ALFA Mail.dc.html:14"
+        },
+        {
+          "id": "mail.switch-glass-1",
+          "part": "switch-glass",
+          "where": "ALFA Mail.dc.html:40"
+        },
+        {
+          "id": "mail.switch-glass-2",
+          "part": "switch-glass",
+          "where": "ALFA Mail.dc.html:145"
+        }
+      ]
+    }
+  ]
+}

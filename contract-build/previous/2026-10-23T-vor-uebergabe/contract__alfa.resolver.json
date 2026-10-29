@@ -1,0 +1,57 @@
+{
+  "name": "ALFA",
+  "version": "2026-10-19",
+  "description": "base, dann Thema (light, dark), dann Untergrund (white = base, lightGray = Überschreibung). Erzeugt aus TOKENBOGEN.json (Export 18.10.2026 21:18 MESZ + Änderungen vom 19.10.).",
+  "sets": {
+    "base": {
+      "sources": [
+        {
+          "$ref": "base.tokens.json"
+        }
+      ]
+    }
+  },
+  "modifiers": {
+    "theme": {
+      "contexts": {
+        "light": [
+          {
+            "$ref": "theme-light.tokens.json"
+          }
+        ],
+        "dark": [
+          {
+            "$ref": "theme-dark.tokens.json"
+          }
+        ]
+      },
+      "default": "light"
+    },
+    "ground": {
+      "contexts": {
+        "white": [
+          {
+            "$ref": "base.tokens.json"
+          }
+        ],
+        "lightGray": [
+          {
+            "$ref": "ground-lightGray.tokens.json"
+          }
+        ]
+      },
+      "default": "white"
+    }
+  },
+  "resolutionOrder": [
+    {
+      "$ref": "#/sets/base"
+    },
+    {
+      "$ref": "#/modifiers/theme"
+    },
+    {
+      "$ref": "#/modifiers/ground"
+    }
+  ]
+}

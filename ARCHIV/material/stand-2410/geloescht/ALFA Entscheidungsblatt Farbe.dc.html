@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="lieferung-an-code/fonts/geist.css">
+<style>html,body{margin:0;background:#ffffff}a{color:#1d1d1d}a:hover{color:#5d5d5d}button{font:inherit}</style>
+</helmet>
+<div data-alfa-sperre="gesperrt" style="position:fixed;left:0;top:0;right:0;bottom:0;z-index:2147483000;pointer-events:none;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(230,230,230,.28)"><div style="transform:rotate(-24deg);border:1.4vw solid #e10600;outline:.5vw solid #e10600;outline-offset:-2.6vw;padding:2.4vw 4vw 2vw;display:flex;flex-direction:column;align-items:center;gap:1.2vw;background:rgba(236,236,236,.5);color:#e10600;font-family:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;text-transform:uppercase"><div style="font-size:11vw;font-weight:800;letter-spacing:.28em;line-height:1;margin-right:-.28em">Gesperrt</div><div style="font-size:3.4vw;font-weight:700;letter-spacing:.06em;line-height:1">22.10.2026 · nicht abgenommen</div></div></div>
+<div data-screen-label="Entscheidungsblatt Farbe" style="font-family:Geist,-apple-system,system-ui,sans-serif;color:#1d1d1d;padding:48px 40px 72px;box-sizing:border-box">
+<div style="max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5d5d5d">ALFA · Entscheidungsblatt Farbe · 22.10.2026</div>
+<h1 style="margin:0;font-size:30px;line-height:1.15;font-weight:500;letter-spacing:-.01em">Erst was hier „Ja“ trägt, geht in Tokenbogen und Vertrag.</h1>
+<div style="font-size:14px;color:#424242">Zu sehen in <a href="ALFA Mail Color.dc.html">ALFA Mail Color</a> und <a href="ALFA Farbsystematik.dc.html">ALFA Farbsystematik</a>. Wortlaut in entscheidungen.md, 22.10.</div>
+</div>
+<div style="display:flex;flex-direction:column;border-radius:20px;box-shadow:0 0 0 1px #dedede;overflow:hidden">
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="13">
+<div style="display:grid;grid-template-columns:44px minmax(0,1fr) 220px;gap:16px;padding:16px 20px;box-shadow:inset 0 -1px 0 #ebebeb;background:{{ r.bg }}">
+<div style="font-size:13px;font-weight:500;color:#5d5d5d;padding-top:2px">{{ r.id }}</div>
+<div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+<div style="font-size:15px;line-height:1.4;font-weight:500;text-wrap:pretty">{{ r.t }}</div>
+<div style="font-size:13px;line-height:1.45;color:#424242;text-wrap:pretty">{{ r.v }}</div>
+<div style="font-size:12.5px;line-height:1.45;color:#5d5d5d;text-wrap:pretty">{{ r.b }}</div>
+<sc-if value="{{ r.showNote }}" hint-placeholder-val="{{ false }}"><input value="{{ r.note }}" onChange="{{ r.onNote }}" placeholder="Was soll anders sein?" style="height:36px;border-radius:12px;border:0;box-shadow:inset 0 0 0 1px #cacaca;padding:0 12px;font:inherit;font-size:13.5px;color:#1d1d1d;background:#ffffff;outline:none"></sc-if>
+</div>
+<div style="display:flex;gap:6px;align-items:flex-start;justify-content:flex-end">
+<sc-for list="{{ r.opts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.go }}" style="appearance:none;border:0;height:32px;padding:0 12px;border-radius:999px;cursor:pointer;font-size:13px;background:{{ o.bg }};color:{{ o.fg }};box-shadow:inset 0 0 0 1px {{ o.ring }}">{{ o.t }}</button></sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+<div style="font-size:14px;color:#424242">{{ summary }}</div>
+<button onClick="{{ copy }}" style="appearance:none;border:0;height:36px;padding:0 16px;border-radius:999px;cursor:pointer;font-size:13.5px;background:#ffffff;color:#1d1d1d;box-shadow:inset 0 0 0 1px #cacaca">{{ copyLabel }}</button>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { a: {}, n: {}, copied: false };
+  componentDidMount() { try { const s = JSON.parse(localStorage.getItem("alfa-entscheidungsblatt-farbe") || "{}"); this.setState({ a: s.a || {}, n: s.n || {} }); } catch (e) {} }
+  save(st) { try { localStorage.setItem("alfa-entscheidungsblatt-farbe", JSON.stringify({ a: st.a, n: st.n })); } catch (e) {} }
+  ROWS = [
+    ["F1", "Neutrale Leiter N0 bis N13 trägt Grund, Bahnen, Linien und Schrift.", "N0 #FFFFFF · N1 #F5F5F5 · N2 #EBEBEB · N3 #DEDEDE · N4 #CACACA · N5 #B1B1B1 · N6 #959595 · N7 #7A7A7A · N8 #5D5D5D · N9 #424242 · N10 #2E2E2E · N11 #1D1D1D · N12 #0F0F0F · N13 #000000", "„Hintergründe, große Flächen und Inhalte sollten Weiß-Schwarz geleitert sein“ · Stufen selbst: Design"],
+    ["F2", "Schrift bleibt bei den Vertragswerten oder geht auf die Leiter.", "Vertrag heute: #171717 · #4D4D4D · #6B6B6B. Mail Color zeigt N11 #1D1D1D · N9 #424242 · N8 #5D5D5D. „Ja“ = Leiter, „Nein“ = Vertragswerte behalten.", "„schriften bleiben wie gehabt“ · im Bogen bisher nicht eingehalten"],
+    ["F3", "Fenstergrund Weiß, im Dunkelmodus N12.", "Hell #FFFFFF, Spalten nur durch Haarlinie getrennt. Dunkel #0F0F0F (Design).", "„Hintergrund des Gesamtfensters bitte Weiß“"],
+    ["F4", "Farbe nur im rechten Kartenstapel.", "Kartenköpfe, 4-px-Rahmen um den Inhalt (Innenradius 8), Fuß, Bahnkopf und Spaltenhintergrund rechts, gefaltete Marken rechts, Übersichtskacheln weiß mit 4-px-Rahmen. Mitte und links neutral.", "„nur den rechten Cardstack als farbhighlight … den Rest also mitte und Links wieder auch die neutralen farben“"],
+    ["F5", "Theme 1 „Papierstufen“ aus Icon 3b, Kopffolge im Stapel.", "Koralle #EC6A68 · Rosa #F0A0B2 · Flieder #DFBFD2 · Pfirsich #F6C9A8 · Papier #FFFAF2, Creme #F3E6D6 nur auf einer Karte. Farbe bleibt bei der Karte.", "„Da die Farben ja mitnehmen!“ · „das taxigelb nur als UntersteKarte“"],
+    ["F6", "„Unterste Karte“ für Creme heißt die vorderste Karte.", "Vorderste = auf dem Bildschirm ganz unten. Alternative: die hinterste (Tweak cremeCard).", "Deutung Design, Wort „UntersteKarte im Cardstack“"],
+    ["F7", "Karmin ist nur Signal (Fehler, Ungelesen), kein Kopf.", "Hell Karmin #B3162A, dunkel Koralle #EC6A68.", "Design, Folge aus „Könntest du da 8 Stunden am Tag mit arbeiten?“ → „jo!“"],
+    ["F8", "Auswahl neutral.", "Hell N2, Kontrast erhöhen N3, Dunkel N10. Keine Theme-Farbe.", "„Auswahl farbe auch nicht farbig“"],
+    ["F9", "Kein Schwarz als Fläche: Relief statt Schwarz.", "Blob, Personenmarke, Neue Mail, Marken, aktive Schalter: Fläche N0 (dunkel N9), Haarlinie wie Symbolringe, kein Schatten.", "„schwarz zu heavy. Ganz raus“ · „anders als durch die COLOURS betonen“ · „den schatten … bitte weg“"],
+    ["F10", "Postfach-Stapel unten in der linken Bahn.", "Je Postfach eine Karte, neutral (Bahnweiß, N2, N3). Oberste Karte = Neue Mail. Marke des offenen Kontos oben im Bahnkopf. Münzen entfallen.", "„UNTEN sind die überlappenden Cards zum wählen“ · „footer … stattdessen dort Neue Mail“ · „Avatar … bitte Oben“"],
+    ["F11", "macOS-Einstellungen werden befolgt.", "Erscheinungsbild Hell/Dunkel/System, „Kontrast erhöhen“ = farbe-plus (Linien und Schrift eine Stufe stärker). Werte siehe ALFA Farbsystematik, Abschnitt 3.", "„Hell/Dunkel System MacOS einstellungen vollständig durchentwerfen“ · Werte: Design"],
+    ["F12", "Weitere Themes später als 6er-Gruppen, Neutrale und Signal bleiben.", "Bedingungen je Theme: ALFA Farbsystematik, Abschnitt 5.", "„es könnten später noch weitere 6er Farbgruppen als weitere themes zu den Neutralen kommen“"],
+    ["F13", "Augen des Blobs in Ruhe.", "Heute in der Hülle: in Ruhe gestaucht (scaleY .45, wirkt wie Punkte), wach volle Striche 4 × 8. „Ja“ = in Ruhe volle Striche.", "Frage „Augen waren im restmode doch die Striche, oder nicht?“ · kein Beleg im Protokoll"]
+  ];
+  renderVals() {
+    const s = this.state, O = [["ja", "Ja"], ["nein", "Nein"], ["anders", "Anders"]];
+    const set = (id, v) => this.setState(st => { const a = Object.assign({}, st.a, { [id]: st.a[id] === v ? undefined : v }); const ns = { a, n: st.n }; this.save(ns); return { a, copied: false }; });
+    const rows = this.ROWS.map(([id, t, v, b]) => { const cur = s.a[id]; return { id, t, v, b, bg: cur === "ja" ? "#f5f5f5" : "#ffffff", showNote: cur === "anders" || cur === "nein", note: s.n[id] || "", onNote: e => { const val = e.target.value; this.setState(st => { const n = Object.assign({}, st.n, { [id]: val }); this.save({ a: st.a, n }); return { n }; }); }, opts: O.map(([k, l]) => ({ t: l, go: () => set(id, k), bg: cur === k ? "#ebebeb" : "#ffffff", fg: "#1d1d1d", ring: cur === k ? "#424242" : "#cacaca" })) }; });
+    const done = this.ROWS.filter(r => s.a[r[0]]).length;
+    const text = () => this.ROWS.map(([id, t]) => id + " " + (s.a[id] ? { ja: "Ja", nein: "Nein", anders: "Anders" }[s.a[id]] : "offen") + (s.n[id] ? " – " + s.n[id] : "")).join("\n");
+    return { rows, summary: done + " von " + this.ROWS.length + " beantwortet", copyLabel: s.copied ? "Kopiert" : "Antworten kopieren", copy: () => { try { navigator.clipboard.writeText(text()); } catch (e) {} this.setState({ copied: true }); } };
+  }
+}
+</script>
+</body>
+</html>

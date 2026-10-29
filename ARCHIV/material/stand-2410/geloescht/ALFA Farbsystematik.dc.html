@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="lieferung-an-code/fonts/geist.css">
+<style>html,body{margin:0;background:#ebebeb}a{color:#1d1d1d}a:hover{color:#5d5d5d}</style>
+</helmet>
+<div data-alfa-sperre="gesperrt" style="position:fixed;left:0;top:0;right:0;bottom:0;z-index:2147483000;pointer-events:none;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(230,230,230,.28)"><div style="transform:rotate(-24deg);border:1.4vw solid #e10600;outline:.5vw solid #e10600;outline-offset:-2.6vw;padding:2.4vw 4vw 2vw;display:flex;flex-direction:column;align-items:center;gap:1.2vw;background:rgba(236,236,236,.5);color:#e10600;font-family:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;text-transform:uppercase"><div style="font-size:11vw;font-weight:800;letter-spacing:.28em;line-height:1;margin-right:-.28em">Gesperrt</div><div style="font-size:3.4vw;font-weight:700;letter-spacing:.06em;line-height:1">22.10.2026 · Exploration · nicht abgenommen</div></div></div>
+<div data-screen-label="Farbsystematik" style="font-family:Geist,-apple-system,system-ui,sans-serif;color:#1d1d1d;padding:48px 40px 72px;box-sizing:border-box">
+<div style="max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:56px">
+
+<div style="display:flex;flex-direction:column;gap:10px;max-width:720px">
+<div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5d5d5d">ALFA · Farbsystematik · Versuch 22.10.2026 · nicht im Vertrag, nicht entschieden</div>
+<h1 style="margin:0;font-size:34px;line-height:1.1;font-weight:500;letter-spacing:-.015em">Neutrale tragen Fläche und Schrift. Ein Theme aus sechs Farben trägt nur die Köpfe im Stapel.</h1>
+<p style="margin:0;font-size:15px;line-height:1.5;color:#424242;text-wrap:pretty">Kein Schwarz als Fläche. Betonung (Blob, Personenmarke, Neue Mail, Marken, aktive Schalter) ohne Farbe: Relief aus neutraler Fläche, Ring und Schatten. Schrift bleibt neutral. Weitere Themes tauschen nur die sechs Plätze, Neutrale und Signal bleiben. Angewandt in <a href="ALFA Mail Color.dc.html">ALFA Mail Color</a>, Werte in alfa-theme-farbe.css.</p>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+<div style="border-radius:20px;background:#ffffff;padding:20px;display:flex;flex-direction:column;gap:14px">
+<div style="font-size:13px;font-weight:500">Neutrale · N0 bis N13</div>
+<div style="display:grid;grid-template-columns:repeat(14,minmax(0,1fr));height:40px;border-radius:10px;overflow:hidden;box-shadow:0 0 0 1px #dedede"><sc-for list="{{ ladder }}" as="s" hint-placeholder-count="14"><div style="background:{{ s.hex }}"></div></sc-for></div>
+<div style="font-size:12.5px;line-height:1.45;color:#424242">Grund, Bahn, Linien, Hover, Schrift. Gleich in jedem Theme.</div>
+</div>
+<div style="border-radius:20px;background:#ffffff;padding:20px;display:flex;flex-direction:column;gap:14px">
+<div style="font-size:13px;font-weight:500">Theme 1 · Papierstufen · t1 bis t6</div>
+<div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));height:40px;border-radius:10px;overflow:hidden"><sc-for list="{{ slots }}" as="s" hint-placeholder-count="7"><div style="background:{{ s.hex }}"></div></sc-for></div>
+<div style="font-size:12.5px;line-height:1.45;color:#424242">Köpfe im Stapel. Exakter Ton, in Hell und Dunkel gleich.</div>
+</div>
+<div style="border-radius:20px;background:#ffffff;padding:20px;display:flex;flex-direction:column;gap:14px">
+<div style="font-size:13px;font-weight:500">Signal · systemweit</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;height:40px;border-radius:10px;overflow:hidden"><div style="background:#b3162a"></div><div style="background:#ec6a68"></div></div>
+<div style="font-size:12.5px;line-height:1.45;color:#424242">Fehler und Ungelesen. Hell Karmin, Dunkel Koralle. Kein Theme-Platz.</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5d5d5d">1 · Plätze und Rollen im Theme Papierstufen</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px">
+<sc-for list="{{ slots }}" as="t" hint-placeholder-count="7">
+<div style="border-radius:20px;background:{{ t.hex }};color:{{ t.ink }};padding:14px;min-height:132px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px">
+<div style="font-size:12px">{{ t.slot }}</div>
+<div style="margin-top:auto;font-size:15px;font-weight:500">{{ t.name }}</div>
+<div style="font-size:12px;font-family:'Geist Mono',ui-monospace,monospace">{{ t.hexU }} · {{ t.ratio }}:1</div>
+<div style="font-size:12px;font-weight:500">{{ t.role }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5d5d5d">2 · Bausteine in Hell und Dunkel</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:24px">
+<sc-for list="{{ demo }}" as="m" hint-placeholder-count="2">
+<div style="border-radius:28px;background:{{ m.ground }};padding:20px;display:flex;flex-direction:column;gap:16px;font-size:14px">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<div style="height:40px;padding:0 6px;border-radius:20px;background:{{ m.rel }};color:{{ m.ink }};box-shadow:0 0 0 1px {{ m.ring }},{{ m.sh }};display:flex;align-items:center;gap:6px"><span style="width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1px {{ m.ring }};display:grid;place-items:center;font-size:11px;letter-spacing:.04em">••</span><span style="padding-right:8px;font-size:13px">Blob</span></div>
+<div style="height:40px;width:56px;border-radius:20px;background:{{ m.rel }};box-shadow:0 0 0 1px {{ m.ring }},{{ m.sh }};display:grid;place-items:center"><span style="width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1px {{ m.ring }};display:grid;place-items:center;font-size:11px;font-weight:500;color:{{ m.ink }}">JB</span></div>
+</div>
+<div style="border-radius:20px;background:{{ m.lane }};box-shadow:0 0 0 1px {{ m.line }};padding:8px;display:flex;flex-direction:column;gap:2px;color:{{ m.ink }}">
+<div style="height:44px;border-radius:12px;background:{{ m.pick }};display:flex;align-items:center;gap:12px;padding:0 8px;font-weight:500"><span style="width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1px {{ m.pickLine }}"></span>Eingang<span style="margin-left:auto;font-weight:400;color:{{ m.ink2 }}">3</span></div>
+<div style="height:44px;border-radius:12px;background:{{ m.hover }};display:flex;align-items:center;gap:12px;padding:0 8px"><span style="width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1px {{ m.lineS }}"></span>Markiert<span style="margin-left:auto;font-size:12px;color:{{ m.ink3 }}">Hover</span></div>
+<div style="height:56px;border-radius:12px;display:flex;align-items:center;gap:12px;padding:0 8px"><span style="width:28px;height:28px;border-radius:50%;background:{{ m.rel }};color:{{ m.ink }};box-shadow:0 0 0 1px {{ m.ring }},{{ m.sh }};display:grid;place-items:center;font-size:11px;font-weight:600">KL</span><span style="display:flex;flex-direction:column"><span style="font-weight:600">Kai Lindner</span><span style="font-size:12.5px;color:{{ m.ink3 }}">Angebot Einbauschrank Flur</span></span><span style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:{{ m.signal }}"></span></div>
+<div style="height:44px;border-radius:12px;background:{{ m.rel }};color:{{ m.ink }};box-shadow:0 0 0 1px {{ m.ring }},{{ m.sh }};display:flex;align-items:center;gap:12px;padding:0 8px;margin-top:6px"><span style="width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1px {{ m.ring }}"></span>Neue Mail</div>
+</div>
+<div style="position:relative;height:176px">
+<sc-for list="{{ heads }}" as="c" hint-placeholder-count="6"><div style="position:absolute;left:0;right:0;top:{{ c.top }};bottom:0;border-radius:20px 20px 0 0;background:{{ c.hex }};color:{{ c.ink }};height:44px;display:flex;align-items:flex-start;padding:3px 16px 0;font-size:13px;line-height:16px;font-weight:500;box-sizing:border-box">{{ c.name }}</div></sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5d5d5d">3 · Rollen je macOS-Einstellung</div>
+<div style="overflow-x:auto"><div style="min-width:760px;display:grid;grid-template-columns:150px repeat(4,minmax(0,1fr));gap:1px;background:#dedede;border-radius:20px;overflow:hidden;box-shadow:0 0 0 1px #dedede">
+<div style="background:#fff;padding:12px 14px"></div>
+<sc-for list="{{ modes }}" as="m" hint-placeholder-count="4"><div style="background:#fff;padding:12px 14px;font-size:13px;font-weight:500">{{ m.label }}</div></sc-for>
+<sc-for list="{{ roleRows }}" as="r" hint-placeholder-count="14">
+<div style="background:#fff;padding:10px 14px;font-size:13px;color:#424242">{{ r.name }}</div>
+<sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="4"><div style="background:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:12px"><span style="flex:none;width:28px;height:28px;border-radius:8px;background:{{ c.hex }};box-shadow:0 0 0 1px #cacaca"></span><span style="font-family:'Geist Mono',ui-monospace,monospace">{{ c.hexU }}</span><span style="color:#5d5d5d">{{ c.step }}</span></div></sc-for>
+</sc-for>
+</div></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5d5d5d">4 · Kontrastprüfung, gerechnet aus den Rollen</div>
+<div style="font-size:13.5px;line-height:1.5;color:#424242;max-width:760px">Schrift mindestens 4,5:1. Zeichen, Fokus und Linien in Kontrast erhöhen mindestens 3:1.</div>
+<div style="overflow-x:auto"><div style="min-width:760px;display:grid;grid-template-columns:240px repeat(4,minmax(0,1fr));gap:1px;background:#dedede;border-radius:20px;overflow:hidden;box-shadow:0 0 0 1px #dedede">
+<div style="background:#fff;padding:12px 14px;font-size:12px;color:#5d5d5d">Paar · Grenze</div>
+<sc-for list="{{ modes }}" as="m" hint-placeholder-count="4"><div style="background:#fff;padding:12px 14px;font-size:13px;font-weight:500">{{ m.label }}</div></sc-for>
+<sc-for list="{{ checks }}" as="r" hint-placeholder-count="20">
+<div style="background:#fff;padding:9px 14px;font-size:13px;color:#424242">{{ r.name }} <span style="color:#5d5d5d">· {{ r.min }}</span></div>
+<sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="4"><div style="background:{{ c.bg }};padding:9px 14px;font-size:13px;font-family:'Geist Mono',ui-monospace,monospace;color:{{ c.fg }}">{{ c.t }}</div></sc-for>
+</sc-for>
+</div></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:14px;max-width:760px">
+<div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#5d5d5d">5 · Bedingungen für weitere Themes</div>
+<sc-for list="{{ rules }}" as="r" hint-placeholder-count="5"><div style="display:grid;grid-template-columns:28px 1fr;gap:8px;font-size:14px;line-height:1.5"><span style="color:#5d5d5d">{{ r.n }}</span><span style="text-wrap:pretty">{{ r.t }}</span></div></sc-for>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  lum(h) { return [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255).map(v => v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4).reduce((s, v, i) => s + v * [0.2126, 0.7152, 0.0722][i], 0); }
+  cr(a, b) { const x = this.lum(a), y = this.lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  renderVals() {
+    const N = ["#ffffff", "#f5f5f5", "#ebebeb", "#dedede", "#cacaca", "#b1b1b1", "#959595", "#7a7a7a", "#5d5d5d", "#424242", "#2e2e2e", "#1d1d1d", "#0f0f0f", "#000000"];
+    const W = N[0], K = N[13], ink = h => this.cr(h, K) >= this.cr(h, W) ? K : W;
+    const ladder = N.map((hex, i) => ({ n: "N" + i, hex }));
+    const raw = [["t1", "Creme", "#f3e6d6", "nur eine Karte: vorderste"], ["t2", "Pfirsich", "#f6c9a8", "Kopf 4"], ["t3", "Flieder", "#dfbfd2", "Kopf 3"], ["t4", "Rosa", "#f0a0b2", "Kopf 2"], ["t5", "Koralle", "#ec6a68", "Kopf 1"], ["t6", "Karmin", "#b3162a", "kein Kopf, nah am Signal"], ["Papier", "Papier", "#fffaf2", "Kopf 6"]];
+    const slots = raw.map(([slot, name, hex, role]) => { const i = ink(hex); return { slot, name, hex, hexU: hex.toUpperCase(), role, ink: i, ratio: this.cr(hex, i).toFixed(1) }; });
+    const order = ["Creme", "Koralle", "Rosa", "Flieder", "Pfirsich", "Papier"];
+    const heads = order.slice().reverse().map((n, k) => { const s = slots.find(x => x.name === n); return { name: n, hex: s.hex, ink: s.ink, top: k * 22 + "px" }; });
+    const PK = "#ebebeb";
+    const M = [
+      { label: "Hell", r: { ground: 2, lane: 0, line: 3, "line-strong": 4, ink: 11, "ink-2": 9, "ink-3": 8, mark: 7, hover: 1, focus: 8 }, pick: PK, pickI: [11, 9, 8], rel: 0, relI: [11, 9, 8], ring: 4, sig: "#b3162a", onSig: W },
+      { label: "Dunkel", r: { ground: 12, lane: 11, line: 10, "line-strong": 9, ink: 1, "ink-2": 4, "ink-3": 5, mark: 6, hover: 10, focus: 5 }, pick: N[10], pickI: [1, 4, 5], rel: 9, relI: [1, 4, 4], ring: 8, sig: "#ec6a68", onSig: K },
+      { label: "Hell · Kontrast erhöhen", r: { ground: 1, lane: 0, line: 7, "line-strong": 8, ink: 13, "ink-2": 11, "ink-3": 10, mark: 8, hover: 2, focus: 13 }, pick: N[3], pickI: [13, 11, 10], rel: 0, relI: [13, 11, 10], ring: 8, sig: "#b3162a", onSig: W, plus: true },
+      { label: "Dunkel · Kontrast erhöhen", r: { ground: 13, lane: 12, line: 7, "line-strong": 5, ink: 0, "ink-2": 1, "ink-3": 3, mark: 5, hover: 10, focus: 0 }, pick: N[9], pickI: [0, 1, 3], rel: 9, relI: [0, 1, 3], ring: 5, sig: "#ec6a68", onSig: K, plus: true }
+    ];
+    const hx = (m, k) => N[m.r[k]];
+    const nm = h => { const i = N.indexOf(h); if (i >= 0) return "N" + i; const s = slots.find(x => x.hex === h); return s ? s.slot + " " + s.name : ""; };
+    const cell = h => ({ hex: h, hexU: h.toUpperCase(), step: nm(h) });
+    const roles = [["Grund", "ground"], ["Bahn", "lane"], ["Linie", "line"], ["Linie stark", "line-strong"], ["Schrift", "ink"], ["Schrift 2", "ink-2"], ["Schrift 3", "ink-3"], ["Zeichen", "mark"], ["Hover", "hover"], ["Fokus", "focus"]];
+    const roleRows = roles.map(([name, k]) => ({ name, cells: M.map(m => cell(hx(m, k))) }))
+      .concat([{ name: "Auswahl", cells: M.map(m => cell(m.pick)) }, { name: "Relief", cells: M.map(m => cell(N[m.rel])) }, { name: "Relief Ring", cells: M.map(m => cell(N[m.ring])) }, { name: "Signal", cells: M.map(m => cell(m.sig)) }]);
+    const defs = [
+      ["Schrift / Grund", m => [hx(m, "ink"), hx(m, "ground")], 4.5],
+      ["Schrift / Bahn", m => [hx(m, "ink"), hx(m, "lane")], 4.5],
+      ["Schrift 2 / Bahn", m => [hx(m, "ink-2"), hx(m, "lane")], 4.5],
+      ["Schrift 3 / Bahn", m => [hx(m, "ink-3"), hx(m, "lane")], 4.5],
+      ["Schrift 3 / Grund", m => [hx(m, "ink-3"), hx(m, "ground")], 4.5],
+      ["Schrift 3 / Hover", m => [hx(m, "ink-3"), hx(m, "hover")], 4.5],
+      ["Schrift / Auswahl", m => [N[m.pickI[0]], m.pick], 4.5],
+      ["Schrift 3 / Auswahl", m => [N[m.pickI[2]], m.pick], 4.5],
+      ["Schrift / Relief", m => [N[m.relI[0]], N[m.rel]], 4.5],
+      ["Schrift 3 / Relief", m => [N[m.relI[2]], N[m.rel]], 4.5],
+      ["Relief-Ring / Bahn", m => [N[m.ring], hx(m, "lane")], 3, true],
+      ["Signal / Bahn", m => [m.sig, hx(m, "lane")], 4.5],
+      ["Schrift auf Signal", m => [m.onSig, m.sig], 4.5],
+      ["Zeichen / Bahn", m => [hx(m, "mark"), hx(m, "lane")], 3],
+      ["Fokus / Bahn", m => [hx(m, "focus"), hx(m, "lane")], 3],
+      ["Linie / Bahn", m => [hx(m, "line"), hx(m, "lane")], 3, true]
+    ].concat(order.map(n => { const s = slots.find(x => x.name === n); return ["Kopf " + n, () => [s.ink, s.hex], 4.5]; }));
+    const checks = defs.map(([name, f, min, plusOnly]) => ({
+      name, min: String(min).replace(".", ",") + ":1" + (plusOnly ? " in Kontrast erhöhen" : ""),
+      cells: M.map(m => { const [a, b] = f(m), v = this.cr(a, b), na = plusOnly && !m.plus, bad = !na && v < min; return { t: na ? "Hinweis " + v.toFixed(1) : v.toFixed(1) + (bad ? " zu niedrig" : " ok"), bg: bad ? "#b3162a" : "#ffffff", fg: bad ? "#ffffff" : na ? "#5d5d5d" : "#1d1d1d" }; })
+    }));
+    const demo = [
+      { ground: N[2], lane: N[0], line: N[3], lineS: N[4], ink: N[11], ink2: N[9], ink3: N[8], hover: N[1], pick: N[2], pickLine: N[4], signal: "#b3162a", rel: N[0], ring: N[4], sh: "0 1px 2px rgba(0,0,0,.14), 0 6px 16px rgba(0,0,0,.08)" },
+      { ground: N[12], lane: N[11], line: N[10], lineS: N[9], ink: N[1], ink2: N[4], ink3: N[5], hover: N[10], pick: N[10], pickLine: N[8], signal: "#ec6a68", rel: N[9], ring: N[8], sh: "0 1px 2px rgba(0,0,0,.6), 0 6px 16px rgba(0,0,0,.45)" }
+    ];
+    const rules = [
+      { n: "1", t: "Sechs Plätze t1 bis t6, von hell nach kräftig, dazu ein Papierton. Jeder Ton ist eine volle Farbe ohne Verlauf und in Hell und Dunkel gleich." },
+      { n: "2", t: "Betonung trägt kein Theme: Relief aus N0 (Hell) oder N9 (Dunkel), Ring und Schatten, gleich in jedem Theme." },
+      { n: "3", t: "Auswahl ist neutral (N2, N3 oder N10), in keinem Theme farbig." },
+      { n: "4", t: "Jeder Kopf trägt Schwarz oder Weiß mit mindestens 4,5:1." },
+      { n: "5", t: "Kein Platz, der wie das Signal aussieht, wird Kopf." }
+    ];
+    return { ladder, slots, heads, demo, modes: M, roleRows, checks, rules };
+  }
+}
+</script>
+</body>
+</html>

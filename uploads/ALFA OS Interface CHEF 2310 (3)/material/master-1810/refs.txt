@@ -1,0 +1,103 @@
+L-008 Mail:737 | Brief: … | Master: if (x.accounts) { out.push({ isHead: true, text: "Postfächer" }); out.push(this.notice("info", "Noch kein Mail-Konto.", "Jeder Anbieter über IMAP und 
+L-008 Mail:1063 | Brief: …json | Master: S.cards.forEach(c => { c.acts = []; c.confirm = false; c.hasFoot = false; c.foot = { l: [], r: [] }; });
+L-010 Mail:759 | Brief: … | Master: signatur: () => [this.row("Konto", { pill: this.ME[1], pillGo: e => this.openMenu(e, [this.mi(this.ME[1], null, { check: true })], 260) }), { isNote: 
+L-010 Mail:908 | Brief: …json | Master: const val = !x ? (e.id === "darstellung" ? (s.look || "Automatisch") : e.id === "sperre" ? (s.toggles.sperre ? "An" : "Aus") : meta[2]) : "";
+L-011 Mail:391 | Brief: … | Master: SVC = [
+L-012 Mail:744 | Brief: … | Master: out.push(this.row(a[0], { sub: run ? "Gleicht ab …" : /^Noch/.test(last) ? last : "Letzter Abgleich " + last, pill: a[2], pillItems: () => ["Aus", "Ma
+L-012 Mail:928 | Brief: …json | Master: const seam = dkS ? "rgba(0,0,0,.7)" : front ? "rgba(0,0,0,.14)" : "rgba(0,0,0,.2)";
+L-013 Mail:1013 | Brief: …json | Master: return b; };
+L-013 Mail:1023 | Brief: …json:1013,  | Master: bg: v[0], fg: v[1], hbg: o.off ? v[0] : v[2], hfg: o.off ? v[1] : v[3], ring: kind === "accent" || kind === "on" ? "none" : iconRing, op: o.off ? .4 :
+L-016 Shell:76 | Brief: …L-016 menu-row:  | Master: <div data-part="menu-row" data-state="{{ r.state }}" onPointerEnter="{{ r.aim }}" onClick="{{ r.go }}" style="height:28px;display:flex;align-items:cen
+L-016 Mail:350 | Brief: … | Master: <sc-if value="{{ it.item }}" hint-placeholder-val="{{ true }}"><div data-part="menu-row" onClick="{{ it.go }}" style="height:28px;display:flex;align-i
+W-03 Mail:3 | Brief: …json | Master: <head>
+W-03 Mail:77 | Brief: …html | Master: <sc-for list="{{ C.rows }}" as="r" hint-placeholder-count="6">
+W-04 Mail:99 | Brief: …json | Master: <div style="display:flex;gap:8px;margin-top:8px;min-width:0">
+W-05 Mail:4 | Brief: …json | Master: <meta name="alfa-export" content="2026-10-18">
+W-06 Mail:389 | Brief: … | Master: CATS = [["Ich", "person"], ["Firma", "building"], ["Verbindungen", "plug"], ["Schutz und System", "system"]];
+W-06 Mail:93 | Brief: …json | Master: </sc-if>
+W-06 Mail:1223 | Brief: …json:93 und  | Master: <<keine Zeile>>
+W-09 Mail:42 | Brief: …md:  | Master: </label>
+W-09 Mail:137 | Brief: …md | Master: <header data-part="card-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px;box-sizing:border-box;box-shadow:in
+W-09 Mail:72 | Brief: … | Master: </div>
+W-09 Shell:155 | Brief: …:72 →  | Master: if (b && h2.length === 2 && !this.still()) { const vx = (h2[1][0] - h2[0][0]) / Math.max(1, h2[1][2] - h2[0][2]) * 1000, vy = (h2[1][1] - h2[0][1]) / 
+W-09 Shell:160 | Brief: …html:155 und  | Master: const near = dist < 212 && !(speed > 900 && dist > 48 && !s.awake) && !s.mode && !this.docked();
+N4 Mail:1002 | Brief: … | Master: if (ph === "Sendefehler") DB.notice = { kind: "failure", fg: "var(--c-signal)", title: "Nicht gesendet", text: "Der Server hat nicht geantwortet. Der 
+N4 Mail:1003 | Brief: … | Master: if (ph === "Freigabe fehlt") DB.notice = { kind: "warning", fg: "var(--c-ink-2)", title: "Senden braucht die Schreibfreigabe", text: "Einmal neu anmel
+N7 Mail:868 | Brief: … | Master: else if (s.zu === "Fehler") C.cs = { kind: "failed", sym: true, d: P.alert, hasTitle: true, title: "Nachrichten konnten nicht geladen werden", text: "
+N7 Mail:874 | Brief: … | Master: if (failing) { C.hasNotice = true; C.notice = { kind: "failure", fg: "var(--c-signal)", d: P.alert, title: this.ME[1] + " ist nicht erreichbar", text:
+N7 Mail:935 | Brief: … | Master: const metaIsAddr = !!(m && front), metaT = m ? (front ? (m.from ? this.mid(m.addr, 36) : "") : m.date) : dr && toN.length > 1 && !front ? "und " + thi
+N7 Mail:1000 | Brief: …:935,  | Master: status: ph === "sendet" ? "Sendet …" : ph === "gesichert" ? "Entwurf gesichert" : !fd.to.length ? "Empfänger fehlt" : !fd.sub.trim() ? "Betreff fehlt"
+N7 Mail:1077 | Brief: … | Master: syncState: s.syncing ? "syncing" : syncErr ? "error" : "fresh", syncErr, syncTitle: s.syncing ? "Gleicht ab …" : syncErr ? "Abgleich fehlgeschlagen. Z
+N7 Mail:530 | Brief: … | Master: this.mi("Archivieren", () => { this.patchMsg(m.id, { folder: "archive" }); this.closeCard(m.id); this.toastIt("Archiviert", () => this.patchMsg(m.id, 
+N7 Mail:121 | Brief: … | Master: <sc-if value="{{ C.hasMore }}" hint-placeholder-val="{{ false }}"><div style="flex:none;display:flex;justify-content:center;padding:16px 0 8px"><butto
+N7 Mail:844 | Brief: … | Master: const C = { title: titles[1], query: s.query, searchOpen: isMail && s.searching, searchClosed: !(isMail && s.searching), hasNotice: false, hasState: f
+N10 Mail:977 | Brief: … | Master: isHtml: !!fm.html, tiles: s.imgs[fm.id] || s.toggles.bilder ? [{ n: "Leinen 04", bg: "#ebebeb" }, { n: "Leinen 11", bg: "#d9d9d9" }] : [{ n: "Bild blo
+N15 Mail:998 | Brief: … | Master: driveMenu: e => this.openMenu(e, [{ head: true, label: "Aus Projektordner" }].concat(this.LABELS.slice(0, 3).map(l => this.mi(l[1], () => this.patchDr
+N15 Mail:1037 | Brief: …Mail:998, Knopf  | Master: footL = [hb("Datei anhängen", P.attach, () => this.patchDraft(frontId, { att: fd.att.concat([["Skizze_" + (fd.att.length + 1) + ".pdf", "240 KB"]]) })
+N16 Mail:972 | Brief: … | Master: const moreB = { label: "Mehr", d: P.more, fg: "var(--c-ink-2)", go: e => this.openMenu(e, (narrow ? all.map(a => this.mi(a.label, () => a.go({ stopPro
+N16 Mail:634 | Brief: … | Master: if (mod && k === "p") return go(() => this.toastIt("Druckdialog"));
+N16 Mail:1033 | Brief: …:634,  | Master: { const rm = more; footL = [hb("Drucken", P.print, () => this.toastIt("Druckdialog"), null, { prio: 1 }), hb("Als PDF sichern", P.export, () => this.t
+N17 Mail:699 | Brief: … | Master: items.push(this.mi("In anderes Projekt …"), this.mi("Sichern unter …"));
+N19 Mail:660 | Brief: … | Master: closeCard(id) {
+N20 Mail:532 | Brief: … | Master: this.mi("Verschieben nach …"), { sep: true },
+N20 Mail:1031 | Brief: …Mail:532,  | Master: more = [this.mi(fm.star ? "Markierung entfernen" : "Markieren", () => this.patchMsg(fm.id, { star: !fm.star })), this.mi("Als ungelesen markieren", ()
+N20 Mail:1032 | Brief: … | Master: this.mi("Notiz anfügen", () => this.toastIt("Notiz an " + fm.from + " · nur intern")), this.mi("Original anzeigen"), this.mi("Als Spam melden")];
+N20 Mail:1040 | Brief: … | Master: more = [this.mi("Später senden …"), this.mi("Lesebestätigung anfordern"), this.mi("Als Vorlage sichern", () => this.toastIt("Als Vorlage gesichert")),
+N20 Mail:255 | Brief: … | Master: <sc-if value="{{ DB.fmt }}" hint-placeholder-val="{{ false }}">
+N20 Mail:995 | Brief: …:255–259,  | Master: fmt: s.fmt, fmtState: s.fmt ? "selected" : "rest", fmtBg: s.fmt ? "var(--c-inv)" : "transparent", fmtFg: s.fmt ? "var(--c-on-inv)" : "var(--c-ink-3)",
+N22 Mail:830 | Brief: … | Master: title: "Postfach", hasTitle: true, detail: s.zu === "nicht verbunden" ? "Kein Postfach verbunden" : failing ? "nicht erreichbar" : this.mid(this.ME[1]
+N23 Mail:698 | Brief: … | Master: const lab = this.LABELS.find(l => l[0] === m.label), items = [this.mi("Vorschau"), { sep: true }];
+N1 Dienste:102 | Brief: … | Master: ["dhl", "DHL Sendungen", "Sendungen verfolgen", "Schlüssel", "stored", "DS", "material/icons/dhl.svg", ["int", "key"]],
+N1 Dienste:103 | Brief: …Dienste:102,  | Master: ["dhlversand", "DHL Versand", "Etiketten erstellen", "Schlüssel", "unreadable", "DV", "material/icons/dhl.svg", ["int", "key"]],
+N1 Mail:399 | Brief: … | Master: { id: "dhl", n: "DHL Sendungen", g: "Firma", use: "Sendungen verfolgen", access: "Schlüssel", firma: true, fields: [["Schlüssel", "secret"]], mixed: "
+N2 Mail:758 | Brief: … | Master: profil: () => [this.row("Name", { val: this.ME[0] }), this.row("Rolle", { val: "Gestaltung, Leitung" }), this.row("Kürzel", { val: this.ini(this.ME[0]
+N2 Mail:391 | Brief: … | Master: SVC = [
+N2 Mail:733 | Brief: … | Master: if (st === "failed") out.push(this.notice("failure", "Fehler · " + (x.reason || "Keine Antwort"), "Der Assistent bleibt aus, bis die Verbindung wieder
+N41 Mail:758 | Brief: … | Master: profil: () => [this.row("Name", { val: this.ME[0] }), this.row("Rolle", { val: "Gestaltung, Leitung" }), this.row("Kürzel", { val: this.ini(this.ME[0]
+N41 Mail:104 | Brief: …swift | Master: </div>
+N5 Mail:744 | Brief: … | Master: out.push(this.row(a[0], { sub: run ? "Gleicht ab …" : /^Noch/.test(last) ? last : "Letzter Abgleich " + last, pill: a[2], pillItems: () => ["Aus", "Ma
+N9 Mail:763 | Brief: … | Master: sperre: () => [this.toggleRow("App-Sperre", "sperre", "Mit Touch ID oder Passwort."), this.row("Sperren nach", { pill: "5 Minuten Pause", pillGo: e =>
+N21 Mail:760 | Brief: … | Master: datenschutz: () => [this.toggleRow("Bilder in Mails laden", "bilder", T.bilder ? "Bilder werden geladen. Zählpixel melden dem Absender damit, wann du 
+N21 Mail:550 | Brief: … | Master: }
+N21 Mail:576 | Brief: …:550–551,  | Master: draftRows() { const s = this.state; return Object.keys(s.drafts).filter(k => s.drafts[k].saved).map(k => { const d = s.drafts[k], n = d.to.map(p => p[
+N26 Mail:389 | Brief: … | Master: CATS = [["Ich", "person"], ["Firma", "building"], ["Verbindungen", "plug"], ["Schutz und System", "system"]];
+N26 Mail:410 | Brief: …Mail:389,  | Master: CATSET = { Ich: ["profil", "darstellung"], Firma: ["firma", "einrichtung", "vorlagen"], Verbindungen: ["schluessel"], "Schutz und System": ["datenschu
+N27 Mail:391 | Brief: … | Master: SVC = [
+N27 Dienste:94 | Brief: …Mail:391–401,  | Master: SVC = [
+N28 Mail:394 | Brief: … | Master: { id: "clickup", n: "ClickUp", g: "Persönlich", use: "Aufgaben", access: "Schlüssel", fields: [["Zugriffsschlüssel", "secret"]], areas: [["Phasen", "N
+N28 Mail:395 | Brief: …Mail:394,  | Master: { id: "clockodo", n: "Clockodo", g: "Persönlich", use: "Zeiten", access: "E-Mail und Schlüssel", privat: true, fields: [["E-Mail", "jonas@studio-brenn
+N28 Mail:397 | Brief: …Mail:394, :395,  | Master: { id: "airtable", n: "Airtable", g: "Firma", use: "Projekte und Kunden", access: "Schlüssel", firma: true, fields: [["Base", "appR3x9Lm27Kq"], ["Zugri
+N28 Mail:395 | Brief: … | Master: { id: "clockodo", n: "Clockodo", g: "Persönlich", use: "Zeiten", access: "E-Mail und Schlüssel", privat: true, fields: [["E-Mail", "jonas@studio-brenn
+N29 Mail:764 | Brief: … | Master: mitteilungen: () => [{ isNote: true, text: "Die Regler für Alarm, Ton und Nachfassen kehren mit ihren Bereichen zurück. Heute meldet nur Mail neue Nac
+N30 Mail:766 | Brief: … | Master: einrichtung: () => [this.row("Fortschritt", { val: "4 von 7" }), this.row("Projektordner", { val: "Geteiltes Drive · Projekte" }), this.row("Projektda
+N30 Mail:392 | Brief: … | Master: { id: "google", n: "Google", g: "Persönlich", use: "Mail, Dateien, Kalender, Kontakte", access: "Anmeldung im Browser", checks: true, fields: [], area
+N31 Mail:704 | Brief: … | Master: csOf(st) {
+N32 Mail:704 | Brief: … | Master: csOf(st) {
+N32 Mail:731 | Brief: …Mail:704–716,  | Master: const sub = { connected: "Beim Anbieter geprüft · vor 2 Minuten", stored: "Nicht beim Anbieter geprüft", failed: "Letzter Fehler vor 3 Minuten · letzt
+N33 Mail:752 | Brief: … | Master: kontakte: () => { const cs = s.contacts || [], pool = this.cpool().filter(c => c.tag === "Absender").slice(0, 8), out = [];
+N40 Mail:392 | Brief: …Gesucht: entferne  | Master: { id: "google", n: "Google", g: "Persönlich", use: "Mail, Dateien, Kalender, Kontakte", access: "Anmeldung im Browser", checks: true, fields: [], area
+N40 Mail:737 | Brief: …zweiter Satz der Google-Notiz),  | Master: if (x.accounts) { out.push({ isHead: true, text: "Postfächer" }); out.push(this.notice("info", "Noch kein Mail-Konto.", "Jeder Anbieter über IMAP und 
+N40 Mail:758 | Brief: …t bei „Noch kein Mail-Konto“, Titel bleibt),  | Master: profil: () => [this.row("Name", { val: this.ME[0] }), this.row("Rolle", { val: "Gestaltung, Leitung" }), this.row("Kürzel", { val: this.ini(this.ME[0]
+N40 Mail:760 | Brief: …Text unter „Auf diesem Mac abmelden“),  | Master: datenschutz: () => [this.toggleRow("Bilder in Mails laden", "bilder", T.bilder ? "Bilder werden geladen. Zählpixel melden dem Absender damit, wann du 
+N40 Mail:761 | Brief: …s laden“ alles außer der Zählpixel-Warnung),  | Master: darstellung: () => [this.row("Erscheinung", { seg: seg(["Hell", "Dunkel", "Automatisch"], look, n => this.setState({ look: n === "Automatisch" ? null 
+N40 Mail:763 | Brief: …unter „Fremde Inhalte“),  | Master: sperre: () => [this.toggleRow("App-Sperre", "sperre", "Mit Touch ID oder Passwort."), this.row("Sperren nach", { pill: "5 Minuten Pause", pillGo: e =>
+N40 Shell:40 | Brief: …unter „App-Sperre“),  | Master: <div data-part="handle" data-state="{{ g.state }}" role="separator" aria-orientation="vertical" aria-label="{{ g.label }}" title="Ziehen · Doppelklick
+N40 Shell:53 | Brief: …Hilfetext am Griff),  | Master: <div data-part="blob-face" onClick="{{ click }}" onDoubleClick="{{ dbl }}" title="Klick: Bereiche · Doppelklick: Assistent" style="position:relative;f
+N35 Mail:37 | Brief: …swift | Master: <header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 {{
+N37 Shell:86 | Brief: … | Master: <sc-if value="{{ isAssist }}" hint-placeholder-val="{{ false }}">
+N38 Mail:760 | Brief: … | Master: datenschutz: () => [this.toggleRow("Bilder in Mails laden", "bilder", T.bilder ? "Bilder werden geladen. Zählpixel melden dem Absender damit, wann du 
+N38 Mail:55 | Brief: …swift | Master: <span style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ C.notice.fg }};box-shadow:inset 0 0 0 1px {{ 
+N38 Mail:1077 | Brief: … | Master: syncState: s.syncing ? "syncing" : syncErr ? "error" : "fresh", syncErr, syncTitle: s.syncing ? "Gleicht ab …" : syncErr ? "Abgleich fehlgeschlagen. Z
+N3 Shell:47 | Brief: …Mail,  | Master: <span style="position:relative;width:28px;height:28px;display:grid;place-items:center;font-family:inherit;font-size:9px;font-weight:500;letter-spacing
+N3 Dienste:18 | Brief: …Mail, Shell:47,  | Master: <div style="font-size:28px;line-height:1.05;font-weight:500;letter-spacing:-.035em">ALFA Dienste · Bibliothek · Export 18.10.2026</div>
+N3 Dienste:28 | Brief: …Mail, Shell:47, Dienste:18,  | Master: <span data-part="tile-icon" style="flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;overflow:hidden;background:{{ s
+N39 Mail:6 | Brief: …css | Master: <meta name="viewport" content="width=device-width, initial-scale=1">
+N39 Bestaetigen:20 | Brief: …css:6 = 2,  | Master: <button data-part="confirm-open" onClick="{{ openAsk }}" style="all:unset;box-sizing:border-box;height:20px;display:flex;align-items:center;gap:4px;pa
+N39 Bestaetigen:28 | Brief: …css:6 = 2, Bestaetigen:20,  | Master: <button data-part="confirm-no" onClick="{{ no }}" style="all:unset;box-sizing:border-box;height:20px;padding:0 8px;border-radius:999px;cursor:pointer;
+N39 Bestaetigen:29 | Brief: …css:6 = 2, Bestaetigen:20, :28,  | Master: <button data-part="confirm-yes" title="{{ tipText }}" onPointerDown="{{ down }}" onPointerUp="{{ up }}" onPointerLeave="{{ up }}" onPointerCancel="{{ 
+N39 Bestaetigen:39 | Brief: …css:6 = 2, Bestaetigen:20, :28, :29,  | Master: <button data-part="confirm-undo" onClick="{{ undo }}" style="all:unset;box-sizing:border-box;height:20px;padding:0 8px;border-radius:999px;cursor:poin
+N39 Bestaetigen:99 | Brief: …swift | Master: openAsk: this.openAsk, no: this.no, undo: this.undo, down: this.down, up: this.up, key: this.key
+N43 Mail:7 | Brief: …swift | Master: <script src="./support.js"></script>
+N43 Mail:198 | Brief: …swift | Master: </div>
+N43 Mail:235 | Brief: …swift:198,  | Master: <div data-part="field-row" style="position:relative;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px">
+N43 Mail:257 | Brief: …swift:198, :235,  | Master: <sc-for list="{{ DB.fmtItems }}" as="x" hint-placeholder-count="6"><button data-part="symbol-button" style-active="transform:scale(.96)" title="{{ x.l

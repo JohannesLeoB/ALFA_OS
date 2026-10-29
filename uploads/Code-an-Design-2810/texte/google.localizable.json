@@ -1,0 +1,66 @@
+{
+ "_rule": "Keys used by the Google module; text is resolved by the app.",
+ "keys": {
+  "google.drive.type.document": {
+   "de": "Google Doc"
+  },
+  "google.drive.type.file": {
+   "de": "Datei"
+  },
+  "google.drive.type.folder": {
+   "de": "Ordner",
+   "en": "Folder"
+  },
+  "google.drive.type.image": {
+   "de": "Bild"
+  },
+  "google.drive.type.pdf": {
+   "de": "PDF-Dokument"
+  },
+  "google.drive.type.presentation": {
+   "de": "Google Slides"
+  },
+  "google.drive.type.sheet": {
+   "de": "Google Sheets"
+  },
+  "google.oauth.accepted": {
+   "de": "ALFA_OS · Google-Anmeldung übernommen"
+  },
+  "google.oauth.unreadable": {
+   "de": "ALFA_OS · Google-Anmeldung nicht lesbar"
+  },
+  "google.offer.type.depositInvoice": {
+   "de": "Abschlagsrechnungen"
+  },
+  "google.offer.type.finalInvoice": {
+   "de": "Schlussrechnungen"
+  },
+  "google.offer.type.incomingOffer": {
+   "de": "Eingehende Angebote"
+  },
+  "google.offer.type.offer": {
+   "de": "Angebote"
+  },
+  "google.offer.type.orderConfirmation": {
+   "de": "Aufträge"
+  },
+  "google.offer.type.other": {
+   "de": "Sonstige Dokumente"
+  },
+  "google.offer.type.purchaseOrder": {
+   "de": "Bestellungen"
+  },
+  "hint.google.grant": {
+   "de": "Anmeldung fehlgeschlagen"
+  },
+  "hint.google.labels": {
+   "de": "Ordner unlesbar"
+  },
+  "hint.google.token": {
+   "de": "Token Fehler"
+  },
+  "hint.google.userinfo": {
+   "de": "Konto unlesbar"
+  }
+ }
+}

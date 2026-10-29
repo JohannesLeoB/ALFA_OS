@@ -1,0 +1,10 @@
+P1 validate (contract/):
+contract: valid
+
+P2 check (--areas shell,mail,settings; Mail, Einstellungen, Shell, Bestaetigen):
+consistent
+
+P3 diff (Basis contract-build/previous/2026-10-23T-vor-uebergabe, 829 Änderungen, 829 im Protokoll):
+log matches
+
+Lauf 2026-10-29T16:00

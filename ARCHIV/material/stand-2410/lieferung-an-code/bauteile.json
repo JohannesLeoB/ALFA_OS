@@ -1,0 +1,1377 @@
+{
+ "export": "2026-10-18",
+ "stand": "Gerüst aus dem Code erzeugt 18.10.2026; Rolle von Hand (englisch); Maße = Inline-Werte der ersten Fundstelle, nicht im Render gemessen",
+ "nomenklatur": "data-part = englischer Bauteilname (kebab-case); data-state = Zustand",
+ "bauteile": [
+  {
+   "name": "address-button",
+   "role": "Sender name that opens the person menu",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     172,
+     214
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 28"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "anchored-menu",
+   "role": "Context menu anchored to a button, width on the 56 grid",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     346
+    ]
+   },
+   "states": [],
+   "layer": 5,
+   "inlineSizes": [],
+   "radius": [
+    "16px"
+   ]
+  },
+  {
+   "name": "area-page",
+   "role": "Whole page of one area (Hülle root)",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     519
+    ],
+    "ALFA Shell": [
+     20
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "assistant",
+   "role": "Mini chat in the blob",
+   "uses": 1,
+   "where": {
+    "ALFA Shell": [
+     87
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "assistant-input",
+   "role": "Input of the mini chat",
+   "uses": 1,
+   "where": {
+    "ALFA Shell": [
+     91
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 40"
+   ],
+   "radius": [
+    "12px"
+   ]
+  },
+  {
+   "name": "attachment-chip",
+   "role": "Capsule for one attachment",
+   "uses": 3,
+   "where": {
+    "ALFA Mail": [
+     100,
+     186,
+     251
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 24",
+    "height 40"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "blob",
+   "role": "The assistant menu pill, always above lanes, menu and toast",
+   "uses": 1,
+   "where": {
+    "ALFA Shell": [
+     52
+    ]
+   },
+   "states": [],
+   "layer": 6,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "blob-face",
+   "role": "Face area of the blob: ring, eyes or orb, area name",
+   "uses": 2,
+   "where": {
+    "ALFA Shell": [
+     53,
+     176
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 40"
+   ],
+   "radius": []
+  },
+  {
+   "name": "card",
+   "role": "One card, radius 20 top / 0 bottom",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     134,
+     136
+    ]
+   },
+   "states": [
+    "empty"
+   ],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": [
+    "20px",
+    "20px 20px 0 0"
+   ]
+  },
+  {
+   "name": "card-content",
+   "role": "Scrolling body of a card",
+   "uses": 3,
+   "where": {
+    "ALFA Mail": [
+     151,
+     203,
+     264
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "card-footer",
+   "role": "Card foot, 44, same as header",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     302
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 44"
+   ],
+   "radius": []
+  },
+  {
+   "name": "card-header",
+   "role": "Card head, 44, same as lane header",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     137
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 44"
+   ],
+   "radius": []
+  },
+  {
+   "name": "card-notice",
+   "role": "Inline notice inside a card",
+   "uses": 4,
+   "where": {
+    "ALFA Mail": [
+     54,
+     165,
+     206,
+     269
+    ]
+   },
+   "states": [
+    "warning"
+   ],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": [
+    "8px"
+   ]
+  },
+  {
+   "name": "card-overview",
+   "role": "Grid of card previews over the stack",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     311
+    ]
+   },
+   "states": [],
+   "layer": 2,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "card-stack",
+   "role": "Stack of cards in the right lane",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     133
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "chip",
+   "role": "Recipient capsule, 24 high",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     222
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 24",
+    "width 16",
+    "height 16"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "chip-remove",
+   "role": "Remove button inside a chip",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     222,
+     251
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "width 16",
+    "height 16"
+   ],
+   "radius": [
+    "50%"
+   ]
+  },
+  {
+   "name": "choice",
+   "role": "One option of a segmented control",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     291
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 28"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "command-group",
+   "role": "Group of header or footer buttons with dividers",
+   "uses": 5,
+   "where": {
+    "ALFA Mail": [
+     129,
+     131,
+     303,
+     305,
+     330
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "width 1",
+    "height 20",
+    "height 28",
+    "width 28"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "compose-button",
+   "role": "Primary new-message button",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     32
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 36",
+    "width 28",
+    "height 28"
+   ],
+   "radius": [
+    "12px"
+   ]
+  },
+  {
+   "name": "confirm",
+   "role": "Hold-to-confirm wrapper",
+   "uses": 1,
+   "where": {
+    "ALFA Bestaetigen": [
+     16
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 28"
+   ],
+   "radius": []
+  },
+  {
+   "name": "confirm-no",
+   "role": "Cancel button of the confirm",
+   "uses": 1,
+   "where": {
+    "ALFA Bestaetigen": [
+     28
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 20"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "confirm-open",
+   "role": "Open state of the confirm pill",
+   "uses": 1,
+   "where": {
+    "ALFA Bestaetigen": [
+     20
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 20"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "confirm-pill",
+   "role": "Button that erases while held",
+   "uses": 1,
+   "where": {
+    "ALFA Bestaetigen": [
+     18
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 28"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "confirm-undo",
+   "role": "Undo button after confirm",
+   "uses": 1,
+   "where": {
+    "ALFA Bestaetigen": [
+     39
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 20"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "confirm-yes",
+   "role": "Confirm button",
+   "uses": 1,
+   "where": {
+    "ALFA Bestaetigen": [
+     29
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 20"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "connection-status",
+   "role": "Dot plus status word of a service",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     89,
+     283
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "content-state",
+   "role": "Empty, loading or error state of a lane",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     64
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "counter",
+   "role": "Number beside a title or row, no ring",
+   "uses": 4,
+   "where": {
+    "ALFA Mail": [
+     27,
+     46,
+     85,
+     101
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "min-width 20",
+    "height 20",
+    "min-width 24",
+    "height 24"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "divider",
+   "role": "Vertical 1 px separator in a command group",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     129,
+     131
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "width 1",
+    "height 20",
+    "height 28"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "field-row",
+   "role": "One 44 high row of a form field",
+   "uses": 5,
+   "where": {
+    "ALFA Mail": [
+     154,
+     212,
+     219,
+     235,
+     277
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 36",
+    "height 44",
+    "min-height 44"
+   ],
+   "radius": []
+  },
+  {
+   "name": "formatting-bar",
+   "role": "Text formatting commands of a draft",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     256
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 44"
+   ],
+   "radius": []
+  },
+  {
+   "name": "handle",
+   "role": "Drag handle between lanes, hairline, 12 hit area",
+   "uses": 1,
+   "where": {
+    "ALFA Shell": [
+     40
+    ]
+   },
+   "states": [],
+   "layer": 2,
+   "inlineSizes": [
+    "width 12"
+   ],
+   "radius": []
+  },
+  {
+   "name": "inline-confirm",
+   "role": "Hold-to-confirm component in a row",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     111
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "input-field",
+   "role": "Single-line text input with underline",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     39
+    ]
+   },
+   "states": [
+    "focus"
+   ],
+   "layer": null,
+   "inlineSizes": [
+    "height 28"
+   ],
+   "radius": []
+  },
+  {
+   "name": "lane",
+   "role": "One of three lanes, radius 20, own stacking context",
+   "uses": 1,
+   "where": {
+    "ALFA Shell": [
+     24
+    ]
+   },
+   "states": [],
+   "layer": 1,
+   "inlineSizes": [],
+   "radius": [
+    "20px"
+   ]
+  },
+  {
+   "name": "lane-content",
+   "role": "Scrolling content area of a lane",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     20,
+     76
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "lane-footer",
+   "role": "Fixed footer of the left lane",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     32
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 36",
+    "width 28",
+    "height 28"
+   ],
+   "radius": [
+    "12px"
+   ]
+  },
+  {
+   "name": "lane-header",
+   "role": "Fixed header of a lane, 44 high, title and commands",
+   "uses": 3,
+   "where": {
+    "ALFA Mail": [
+     15,
+     37,
+     128
+    ]
+   },
+   "states": [],
+   "layer": 1,
+   "inlineSizes": [
+    "height 44",
+    "height 1"
+   ],
+   "radius": []
+  },
+  {
+   "name": "lane-strip",
+   "role": "Icon strip shown when a lane is folded",
+   "uses": 1,
+   "where": {
+    "ALFA Shell": [
+     25
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "list-row",
+   "role": "Selectable row (mailbox, mail, setting)",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     24
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 36"
+   ],
+   "radius": [
+    "12px"
+   ]
+  },
+  {
+   "name": "list-section-header",
+   "role": "Group title row inside a list",
+   "uses": 3,
+   "where": {
+    "ALFA Mail": [
+     22,
+     78,
+     266
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 32",
+    "height 36"
+   ],
+   "radius": []
+  },
+  {
+   "name": "mail-signature",
+   "role": "Signature block under a draft",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     243
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "mark",
+   "role": "Round 28 initial or icon of a row, card or tile",
+   "uses": 9,
+   "where": {
+    "ALFA Mail": [
+     25,
+     32,
+     81,
+     138,
+     158,
+     229
+    ],
+    "ALFA Shell": [
+     27
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "width 28",
+    "height 28",
+    "width 24",
+    "height 24"
+   ],
+   "radius": [
+    "50%"
+   ]
+  },
+  {
+   "name": "menu",
+   "role": "Area navigation list in the blob",
+   "uses": 1,
+   "where": {
+    "ALFA Shell": [
+     70
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "menu-row",
+   "role": "28 high row of a menu",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     350
+    ],
+    "ALFA Shell": [
+     76
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 28",
+    "width 12"
+   ],
+   "radius": [
+    "8px",
+    "12px"
+   ]
+  },
+  {
+   "name": "message-body",
+   "role": "Mail body on a white sheet",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     161,
+     241
+    ]
+   },
+   "states": [
+    "writing"
+   ],
+   "layer": null,
+   "inlineSizes": [
+    "min-height 192"
+   ],
+   "radius": [
+    "4px"
+   ]
+  },
+  {
+   "name": "message-header",
+   "role": "Sender, recipients and date of a mail",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     152
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "message-row",
+   "role": "Mail row in the list",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     80
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": [
+    "12px"
+   ]
+  },
+  {
+   "name": "notice",
+   "role": "Short notice in the blob menu",
+   "uses": 1,
+   "where": {
+    "ALFA Shell": [
+     67
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "width 4",
+    "height 4"
+   ],
+   "radius": [
+    "50%"
+   ]
+  },
+  {
+   "name": "option",
+   "role": "Selectable option in a settings row",
+   "uses": 3,
+   "where": {
+    "ALFA Mail": [
+     292,
+     313,
+     315
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 24"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "overview-tile",
+   "role": "Preview tile in the overview",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     319,
+     517
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": [
+    "12px"
+   ]
+  },
+  {
+   "name": "quote-toggle",
+   "role": "Show or hide quoted text",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     180
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 24"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "recipient-field",
+   "role": "To, Cc, Bcc field of a draft",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     153,
+     218
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "recipient-input-row",
+   "role": "Row with chips and input",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     231
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 36",
+    "width 24",
+    "height 24"
+   ],
+   "radius": [
+    "50%"
+   ]
+  },
+  {
+   "name": "recipient-list",
+   "role": "Collapsible list of recipients",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     158,
+     231
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 44"
+   ],
+   "radius": [
+    "4px"
+   ]
+  },
+  {
+   "name": "recipient-row",
+   "role": "One recipient row, 44 high",
+   "uses": 3,
+   "where": {
+    "ALFA Mail": [
+     158,
+     229,
+     231
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 44",
+    "width 24",
+    "height 24"
+   ],
+   "radius": [
+    "4px"
+   ]
+  },
+  {
+   "name": "recipients-disclosure",
+   "role": "Toggle that opens the full recipient list",
+   "uses": 4,
+   "where": {
+    "ALFA Mail": [
+     155,
+     156,
+     223,
+     224
+    ]
+   },
+   "states": [
+    "collapsed",
+    "expanded"
+   ],
+   "layer": null,
+   "inlineSizes": [
+    "height 28"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "row-actions",
+   "role": "Actions that appear on hover of a row",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     106
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "safe-area",
+   "role": "Camera cut-out strip at the top",
+   "uses": 1,
+   "where": {
+    "ALFA Shell": [
+     21
+    ]
+   },
+   "states": [],
+   "layer": 7,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "scroll-line",
+   "role": "Hairline under the lane header, visible only while scrolling",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     15,
+     37
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 1"
+   ],
+   "radius": []
+  },
+  {
+   "name": "search-field",
+   "role": "Search input in the blob menu",
+   "uses": 1,
+   "where": {
+    "ALFA Shell": [
+     61
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 28"
+   ],
+   "radius": []
+  },
+  {
+   "name": "search-tape",
+   "role": "Animated measuring tape of the search",
+   "uses": 1,
+   "where": {
+    "ALFA Shell": [
+     62
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 1"
+   ],
+   "radius": []
+  },
+  {
+   "name": "segmented-control",
+   "role": "Group of exclusive options",
+   "uses": 3,
+   "where": {
+    "ALFA Mail": [
+     292,
+     313,
+     315
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 24"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "settings-tile",
+   "role": "Tile of one integration or setting, 112 high, radius 12",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     74
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 112",
+    "width 28",
+    "height 28"
+   ],
+   "radius": [
+    "12px"
+   ]
+  },
+  {
+   "name": "settings-tiles",
+   "role": "Scrolling tile area (integrations), scroll-snap y mandatory",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     74
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "suggestion-list",
+   "role": "Contact suggestions while typing",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     228
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [],
+   "radius": []
+  },
+  {
+   "name": "symbol-button",
+   "role": "Round 28 icon button, ring or filled",
+   "uses": 11,
+   "where": {
+    "ALFA Mail": [
+     18,
+     107,
+     113,
+     145,
+     146,
+     147
+    ]
+   },
+   "states": [
+    "preview"
+   ],
+   "layer": null,
+   "inlineSizes": [
+    "width 28",
+    "height 28",
+    "width 24",
+    "height 24",
+    "height 36"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "sync-button",
+   "role": "Sync button top right with progress ring",
+   "uses": 1,
+   "where": {
+    "ALFA Shell": [
+     46
+    ]
+   },
+   "states": [],
+   "layer": 3,
+   "inlineSizes": [
+    "width 56",
+    "height 40"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "text-button",
+   "role": "Pill text button, 28 high",
+   "uses": 11,
+   "where": {
+    "ALFA Mail": [
+     41,
+     59,
+     71,
+     112,
+     121,
+     167
+    ]
+   },
+   "states": [
+    "destructive"
+   ],
+   "layer": null,
+   "inlineSizes": [
+    "height 24",
+    "height 28",
+    "height 20"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "thinking-orb",
+   "role": "Assistant orb in the blob",
+   "uses": 2,
+   "where": {
+    "ALFA Shell": [
+     54,
+     89
+    ]
+   },
+   "states": [
+    "face"
+   ],
+   "layer": null,
+   "inlineSizes": [
+    "width 28",
+    "height 28",
+    "width 20",
+    "height 20"
+   ],
+   "radius": [
+    "50%"
+   ]
+  },
+  {
+   "name": "tile-grid",
+   "role": "Grid of tiles of one group",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     74,
+     923
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 112"
+   ],
+   "radius": [
+    "12px"
+   ]
+  },
+  {
+   "name": "tile-group",
+   "role": "Group of tiles with a title shown in the head",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     74,
+     923
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "height 112"
+   ],
+   "radius": []
+  },
+  {
+   "name": "toast",
+   "role": "Short message with optional undo, above the card footer",
+   "uses": 2,
+   "where": {
+    "ALFA Mail": [
+     336,
+     342
+    ]
+   },
+   "states": [],
+   "layer": 4,
+   "inlineSizes": [
+    "height 28",
+    "height 20"
+   ],
+   "radius": [
+    "999px"
+   ]
+  },
+  {
+   "name": "toggle",
+   "role": "On/off switch",
+   "uses": 1,
+   "where": {
+    "ALFA Mail": [
+     293
+    ]
+   },
+   "states": [],
+   "layer": null,
+   "inlineSizes": [
+    "width 32",
+    "height 20",
+    "width 16",
+    "height 16"
+   ],
+   "radius": [
+    "999px"
+   ]
+  }
+ ],
+ "ohneRolle": []
+}

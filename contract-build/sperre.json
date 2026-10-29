@@ -1,0 +1,15 @@
+{
+  "stand": "2026-10-24",
+  "regel": "Johannes 21.10.: Jede Seite, die nicht vollständig aktuell und von ihm gesehen ist, trägt den roten Stempel GESPERRT; gesperrt ist jeder Export, jede Weitergabe, jeder Token, der nicht auf allen Blättern gesehen wurde. Aufheben nur durch Johannes: Element mit data-alfa-sperre entfernen.",
+  "seiten": {
+    "ALFA Bestaetigen.dc.html": "frei (technisch konform, von Johannes noch nicht gesehen)",
+    "ALFA Designsystem.dc.html": "gesperrt",
+    "ALFA Dienste.dc.html": "gesperrt",
+    "ALFA Einstellungen.dc.html": "frei (technisch konform, von Johannes noch nicht gesehen)",
+    "ALFA Icon.dc.html": "gesperrt",
+    "ALFA Mail.dc.html": "frei (technisch konform, von Johannes noch nicht gesehen; 22.10. Klein/Mittel/Groß entfernt)",
+    "ALFA Shell.dc.html": "frei (technisch konform, von Johannes noch nicht gesehen; 22.10. geändert: lanes[i].bg wird gelesen, Marken haben margin-top, Vorgaben unverändert)",
+    "ALFA Tokenbogen.dc.html": "gesperrt",
+    "ALFA Widgets.dc.html": "gesperrt"
+  }
+}

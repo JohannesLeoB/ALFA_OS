@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div data-alfa-sperre="gesperrt" style="position:fixed;left:0;top:0;right:0;bottom:0;z-index:2147483000;pointer-events:none;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(230,230,230,.28)"><div style="transform:rotate(-24deg);border:1.4vw solid #e10600;outline:.5vw solid #e10600;outline-offset:-2.6vw;padding:2.4vw 4vw 2vw;display:flex;flex-direction:column;align-items:center;gap:1.2vw;background:rgba(236,236,236,.5);color:#e10600;font-family:'Geist',-apple-system,BlinkMacSystemFont,sans-serif;text-transform:uppercase"><div style="font-size:11vw;font-weight:800;letter-spacing:.28em;line-height:1;margin-right:-.28em">Gesperrt</div><div style="font-size:3.4vw;font-weight:700;letter-spacing:.06em;line-height:1">22.10.2026 · Design-Branch · Vorlage</div></div></div>
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+<dc-import name="ALFA Shell" area="{{ area }}" appearance="{{ licht }}" ground="{{ grund }}" w="{{ wArr }}" lanes="{{ lanes }}" groups="{{ groups }}" sync-state="{{ syncState }}" sync-title="{{ syncTitle }}" me-ini="{{ meIni }}" visible-lanes="{{ true }}" on-mem="{{ onMem }}" on-grow="{{ onGrow }}" hint-size="100%,100%">
+<div data-slot="0" style="display:contents">
+<sc-if value="{{ open0 }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" data-id="vorlage.lane-header" style="position:relative;z-index:1;flex:none;height:var(--spacing-step44);display:flex;align-items:center;gap:var(--spacing-step8);padding:0 var(--spacing-step8) 0 var(--spacing-step16);box-sizing:border-box;min-width:0">
+<span style="flex:1;min-width:0;font-weight:var(--typography-weight-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Bereich</span>
+<button data-part="symbol-button" data-id="vorlage.symbol-button.fold" title="Spalte falten" aria-label="Spalte falten" onClick="{{ fold0 }}" style="appearance:none;border:0;padding:0;flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:var(--radius-capsule);display:grid;place-items:center;background:transparent;color:var(--c-ink-3);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong);cursor:pointer" style-hover="background:var(--c-hover);color:var(--c-ink)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M4 8h8"></path></svg></button>
+</header>
+<div data-part="lane-content" data-id="vorlage.lane-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding:var(--spacing-step8);display:flex;flex-direction:column;gap:var(--spacing-step2);scrollbar-width:none">
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+<div data-part="list-row" data-id="vorlage.list-row" data-state="{{ r.state }}" onClick="{{ r.go }}" style="flex:none;height:var(--spacing-step36);display:flex;align-items:center;gap:var(--spacing-step20);padding:0 var(--spacing-step8);border-radius:var(--radius-row);cursor:pointer;background:{{ r.bg }};color:{{ r.fg }}" style-hover="box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)">
+<span style="flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:50%;box-shadow:inset 0 0 0 var(--size-hairline) {{ r.ring }}"></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</span>
+</div>
+</sc-for>
+</div>
+<div data-part="lane-footer" data-id="vorlage.lane-footer" style="flex:none;padding:var(--spacing-step8)"><div style="height:var(--spacing-step36);border-radius:var(--radius-row);background:var(--c-well)"></div></div>
+</sc-if>
+</div>
+<div data-slot="1" style="display:contents">
+<sc-if value="{{ open1 }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" data-id="vorlage.lane-header-2" style="position:relative;z-index:1;flex:none;height:var(--spacing-step44);display:flex;align-items:center;gap:var(--spacing-step8);padding:0 var(--spacing-step8) 0 var(--spacing-step16);box-sizing:border-box;min-width:0">
+<span style="flex:1;min-width:0;font-weight:var(--typography-weight-medium)">Liste</span>
+<span style="flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:var(--radius-capsule);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)"></span>
+<span style="flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:var(--radius-capsule);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)"></span>
+</header>
+<div data-part="lane-content" data-id="vorlage.lane-content-2" style="flex:1;min-height:0;overflow-y:auto;padding:var(--spacing-step8);display:flex;flex-direction:column;gap:var(--spacing-step8)">
+<sc-for list="{{ blocks }}" as="b" hint-placeholder-count="4"><div data-part="content-block" data-id="vorlage.content-block" style="flex:none;height:{{ b.h }};border-radius:var(--radius-row);background:var(--c-well)"></div></sc-for>
+</div>
+</sc-if>
+</div>
+<div data-slot="2" style="display:contents">
+<sc-if value="{{ open2 }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" data-id="vorlage.lane-header-3" style="flex:none;height:var(--spacing-step44);display:flex;align-items:center;justify-content:flex-end;gap:var(--spacing-step4);padding:0 var(--spacing-step8);box-sizing:border-box">
+<span style="flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:var(--radius-capsule);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)"></span>
+<span style="flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:var(--radius-capsule);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)"></span>
+</header>
+<div data-part="card-stack" data-id="vorlage.card-stack" style="position:relative;flex:1;min-height:0">
+<div data-part="card" data-id="vorlage.card-back" style="position:absolute;left:0;right:0;top:0;bottom:0;border-radius:var(--radius-card) var(--radius-card) 0 0;background:var(--c-well);box-shadow:0 0 0 1px rgba(0,0,0,.06)"><div style="height:var(--spacing-step44);display:flex;align-items:center;padding:0 var(--spacing-step8);gap:var(--spacing-step12)"><span style="width:var(--spacing-step28);height:var(--spacing-step28);border-radius:50%;box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)"></span><span style="color:var(--c-ink-3)">Karte</span></div></div>
+<div data-part="card" data-id="vorlage.card-front" style="position:absolute;left:0;right:0;top:var(--spacing-step44);bottom:0;border-radius:var(--radius-card) var(--radius-card) 0 0;background:var(--c-lane);box-shadow:var(--sh-lane), 0 -8px 24px -12px rgba(0,0,0,.22);display:flex;flex-direction:column">
+<header data-part="card-header" data-id="vorlage.card-header" style="flex:none;height:var(--spacing-step44);display:flex;align-items:center;gap:var(--spacing-step12);padding:0 var(--spacing-step8);box-shadow:inset 0 calc(var(--size-hairline) * -1) 0 var(--c-line)"><span style="width:var(--spacing-step28);height:var(--spacing-step28);border-radius:50%;box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)"></span><span style="font-weight:var(--typography-weight-medium)">Karte</span></header>
+<div data-part="card-content" data-id="vorlage.card-content" style="flex:1;min-height:0;padding:var(--spacing-step16)"></div>
+<footer data-part="card-footer" data-id="vorlage.card-footer" style="flex:none;height:var(--spacing-step44);box-shadow:inset 0 var(--size-hairline) 0 var(--c-line)"></footer>
+</div>
+</div>
+</sc-if>
+</div>
+</dc-import>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;appearance&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;ground&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;white&quot;,&quot;lightGray&quot;],&quot;default&quot;:&quot;white&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;area&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Vorlage&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { mem: null, pick: 0 };
+  componentDidMount() {
+    if (!window.AlfaShell) { const s = document.createElement("script"); s.src = "alfa-shell.js"; s.onload = () => this.forceUpdate(); document.head.appendChild(s); }
+    this._rs = () => this.forceUpdate(); window.addEventListener("resize", this._rs);
+  }
+  componentWillUnmount() { window.removeEventListener("resize", this._rs); }
+  renderVals() {
+    const AS = window.AlfaShell; if (!AS) return { ready: false };
+    const area = this.props.area ?? "Vorlage", K = AS.K, g = AS.geo(AS.frame(this.props));
+    const mem = Object.assign(AS.D0(area), this.state.mem || {}), w = AS.layout(area, mem, g, false);
+    const setMem = p => this.setState(st => ({ mem: Object.assign(AS.D0(area), st.mem || {}, p) }));
+    const fk = ["Lf", "Mf", "Rf"];
+    const lanes = ["Bereich", "Liste", "Offen"].map((title, i) => ({ title, marks: [], onStrip: w[i] <= K.fold ? () => setMem({ [fk[i]]: false, max: -1 }) : undefined }));
+    const rows = [0, 1, 2, 3, 4, 5].map(i => { const on = this.state.pick === i; return { name: "Eintrag " + (i + 1), state: on ? "selected" : "rest", bg: on ? "var(--c-inv)" : "transparent", fg: on ? "var(--c-on-inv)" : "var(--c-ink)", ring: on ? "var(--c-on-inv-line)" : "var(--c-line-strong)", go: () => this.setState({ pick: i }) }; });
+    return {
+      ready: true, area, licht: this.props.appearance ?? "light", grund: this.props.ground ?? "white", wArr: w, lanes,
+      groups: [["Kommunikation", [["Mail", []]]], ["Kern", [["Einstellungen", []], [area, []]]]],
+      syncState: "fresh", syncTitle: "Abgleich", meIni: "JB",
+      onMem: p => setMem(p), onGrow: (side, v, w0) => setMem(AS.grow(area, side, v, w0)), fold0: () => setMem({ Lf: true, max: -1 }),
+      open0: w[0] > K.fold, open1: w[1] > K.fold, open2: w[2] > K.fold, rows,
+      blocks: [{ h: "120px" }, { h: "88px" }, { h: "88px" }, { h: "160px" }]
+    };
+  }
+}
+</script>
+</body>
+</html>

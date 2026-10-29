@@ -1,0 +1,1003 @@
+[
+ {
+  "part": "account-alert",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.signal}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "address-button",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.hover}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "attachment-chip",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.inkSecondary}",
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.sheetWell}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "blob",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}",
+     "shadow": "{shadow.floating}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "card",
+  "states": [
+   {
+    "name": "empty",
+    "tokens": {}
+   },
+   {
+    "name": "open",
+    "tokens": {
+     "foreground": "{color.ink}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "card-footer",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "ring": "{color.line}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "card-header",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.ink}"
+    }
+   },
+   {
+    "name": "pressed",
+    "tokens": {
+     "scale": "{scale.pressTile}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "card-overview",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "stacked",
+    "tokens": {
+     "background": "{color.lane}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "chip-remove",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "hoverOnInverse",
+    "tokens": {
+     "background": "{color.inverseHot}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "choice",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.ink}",
+     "ring": "{color.lineStrong}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "compose-button",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "opacity": "{opacity.hoverDim}"
+    }
+   },
+   {
+    "name": "pressed",
+    "tokens": {
+     "scale": "{scale.pressTile}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "connection-status",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "connected",
+    "tokens": {
+     "foreground": "{color.inkSecondary}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "counter",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "ring": "{color.lineStrong}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "divider",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.line}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "filter-capsule",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.inkTertiary}",
+     "ring": "{color.lineStrong}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "lane",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "open",
+    "tokens": {
+     "background": "{color.lane}",
+     "shadow": "{shadow.lane}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "lane-footer",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.lane}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "list-row",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.ink}"
+    }
+   },
+   {
+    "name": "selected",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "ring": "{color.lineStrong}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "list-section-header",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.inkTertiary}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "mark",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.inkSecondary}",
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "selected",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "action",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.hover}",
+     "ring": "{color.inkTertiary}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "menu-row",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.hover}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "message-body",
+  "states": [
+   {
+    "name": "writing",
+    "tokens": {}
+   },
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.sheet}",
+     "foreground": "{color.sheetInk}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "message-row",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.ink}"
+    }
+   },
+   {
+    "name": "selected",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "unread",
+    "tokens": {
+     "foreground": "{color.ink}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "overview-tile",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.well}",
+     "ring": "{color.line}"
+    }
+   },
+   {
+    "name": "current",
+    "tokens": {
+     "background": "{color.well}",
+     "ring": "{color.line}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "quote-toggle",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.sheetInkSecondary}",
+     "ring": "{color.lineStrong}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "recipient-row",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.hover}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "recipients-disclosure",
+  "states": [
+   {
+    "name": "collapsed",
+    "tokens": {
+     "foreground": "{color.ink}"
+    }
+   },
+   {
+    "name": "expanded",
+    "tokens": {}
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.hover}"
+    }
+   },
+   {
+    "name": "pressed",
+    "tokens": {
+     "scale": "{scale.pressRow}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "scroll-line",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.line}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "settings-tile",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.well}",
+     "foreground": "{color.ink}"
+    }
+   },
+   {
+    "name": "selected",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "error",
+    "tokens": {
+     "background": "{color.well}",
+     "foreground": "{color.ink}"
+    }
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "shadow": "{shadow.overviewHover}",
+     "lift": "{size.tileHoverLift}"
+    }
+   },
+   {
+    "name": "pressed",
+    "tokens": {
+     "scale": "{scale.pressTile}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "symbol-button",
+  "states": [
+   {
+    "name": "preview",
+    "tokens": {}
+   },
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.lane}",
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "neutral",
+    "tokens": {
+     "foreground": "{color.inkSecondary}",
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "signal",
+    "tokens": {
+     "foreground": "{color.signal}",
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.hover}"
+    }
+   },
+   {
+    "name": "pressed",
+    "tokens": {
+     "scale": "{scale.pressButton}"
+    }
+   },
+   {
+    "name": "hoverSelection",
+    "tokens": {
+     "foreground": "{color.ink}",
+     "background": "{color.selection}"
+    }
+   },
+   {
+    "name": "hoverOnInverse",
+    "tokens": {
+     "background": "{color.inverseHot}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "sync-button",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "fresh",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}",
+     "shadow": "{shadow.floating}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "text-button",
+  "states": [
+   {
+    "name": "destructive",
+    "tokens": {}
+   },
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.inkSecondary}",
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "accent",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "neutral",
+    "tokens": {
+     "foreground": "{color.ink}",
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.hover}"
+    }
+   },
+   {
+    "name": "pressed",
+    "tokens": {
+     "scale": "{scale.pressButton}"
+    }
+   },
+   {
+    "name": "hoverOnInverse",
+    "tokens": {
+     "background": "{color.inverseHot}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "toggle",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "off",
+    "tokens": {
+     "ring": "{color.lineStrong}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "profile-tile",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "selected",
+    "tokens": {}
+   },
+   {
+    "name": "pressed",
+    "tokens": {
+     "scale": "{scale.pressRow}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "anchored-menu",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.menu}",
+     "foreground": "{color.ink}",
+     "shadow": "{shadow.floating}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "area-page",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.ground}",
+     "foreground": "{color.ink}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "assistant-input",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.inverseField}"
+    }
+   },
+   {
+    "name": "busy",
+    "tokens": {}
+   },
+   {
+    "name": "disabled",
+    "tokens": {}
+   }
+  ]
+ },
+ {
+  "part": "card-notice",
+  "states": [
+   {
+    "name": "warning",
+    "tokens": {
+     "background": "{color.sheetWell}"
+    }
+   },
+   {
+    "name": "failure",
+    "tokens": {}
+   },
+   {
+    "name": "closeSaveFailed",
+    "tokens": {}
+   },
+   {
+    "name": "closeSaveAuth",
+    "tokens": {}
+   },
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.well}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "chip",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "ring": "{color.lineStrong}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "confirm-no",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.inkSecondary}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "confirm-open",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.inkSecondary}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "confirm-pill",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.ink}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "confirm-undo",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.inkSecondary}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "confirm-yes",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.signal}",
+     "ring": "{color.signal}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "input-field",
+  "states": [
+   {
+    "name": "focus",
+    "tokens": {
+     "ring": "{color.ink}"
+    }
+   },
+   {
+    "name": "rest",
+    "tokens": {
+     "ring": "{color.lineStrong}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "mail-signature",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.sheetInkTertiary}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "safe-area",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.safeArea}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "segmented-control",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "ring": "{color.lineStrong}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "thinking-orb",
+  "states": [
+   {
+    "name": "face",
+    "tokens": {
+     "background": "{color.orb}",
+     "ring": "{color.orbRim}"
+    }
+   },
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.orb}",
+     "ring": "{color.orbRim}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "toast",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}",
+     "shadow": "{shadow.floating}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "lock-screen",
+  "states": [
+   {
+    "name": "locked",
+    "tokens": {}
+   },
+   {
+    "name": "touchId",
+    "tokens": {}
+   },
+   {
+    "name": "touchIdFailed",
+    "tokens": {}
+   },
+   {
+    "name": "password",
+    "tokens": {}
+   },
+   {
+    "name": "passwordWrong",
+    "tokens": {}
+   },
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.ground}",
+     "foreground": "{color.ink}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "lock-error",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.signal}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "image-tile",
+  "states": [
+   {
+    "name": "blocked",
+    "tokens": {}
+   },
+   {
+    "name": "loaded",
+    "tokens": {}
+   },
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.mark}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "drop-overlay",
+  "states": [
+   {
+    "name": "over",
+    "tokens": {
+     "background": "{color.well}",
+     "foreground": "{color.ink}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "account-card",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "moving",
+    "tokens": {
+     "foreground": "{color.ink}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "hint",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "assistant-card",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.inverseField}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "assistant-attachment",
+  "states": [
+   {
+    "name": "sent",
+    "tokens": {
+     "background": "{color.inverseField}"
+    }
+   },
+   {
+    "name": "pending",
+    "tokens": {
+     "background": "{color.inverseField}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "assistant-scope",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.onInverseTertiary}"
+    }
+   }
+  ]
+ }
+]

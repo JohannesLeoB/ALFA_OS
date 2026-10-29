@@ -1,0 +1,453 @@
+{
+ "export": "2026-10-18",
+ "stand": "2026-10-19",
+ "status": "Vorschlag von Design, von Johannes nicht entschieden",
+ "beleg": "Johannes 16.10.: „die federn sollten aber auch unser design erhalten“",
+ "hinweis": {
+  "exact": "SwiftUI: Animation.timingCurve(x1, y1, x2, y2, duration:) gibt unsere Kurve exakt wieder.",
+  "spring": "SwiftUI: Animation.spring(duration:bounce:) wie spring() in alfa-ds-tokens.js. rmsError und maxError: Abweichung zu unserer Kurve in Anteilen des Wegs (0,07 = 7 %).",
+  "fold": "Die Faltkurve (.65, 0, .25, 1) beginnt langsam. Eine Feder kann das nicht, bester Ersatz weicht im Mittel um 22 % ab. Hier timingCurve, keine Feder.",
+  "reduced": "crossfade: bei „Weniger Bewegung“ Überblendung statt Bewegung (Apple). none: Bewegung klein, bleibt."
+ },
+ "tokens": [
+  {
+   "token": "motion.duration.hover",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 160
+   },
+   "spring": {
+    "duration": 0.11,
+    "bounce": 0.01,
+    "rmsError": 0.071,
+    "maxError": 0.166
+   },
+   "reduced": "none"
+  },
+  {
+   "token": "motion.duration.short",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 150
+   },
+   "spring": {
+    "duration": 0.11,
+    "bounce": 0.17,
+    "rmsError": 0.069,
+    "maxError": 0.169
+   },
+   "reduced": "none"
+  },
+  {
+   "token": "motion.duration.toggle",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 200
+   },
+   "spring": {
+    "duration": 0.15,
+    "bounce": 0.2,
+    "rmsError": 0.072,
+    "maxError": 0.174
+   },
+   "reduced": "none"
+  },
+  {
+   "token": "motion.duration.chevron",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 240
+   },
+   "spring": {
+    "duration": 0.17,
+    "bounce": 0.15,
+    "rmsError": 0.064,
+    "maxError": 0.159
+   },
+   "reduced": "none"
+  },
+  {
+   "token": "motion.duration.blobWidth",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 240
+   },
+   "spring": {
+    "duration": 0.17,
+    "bounce": 0.15,
+    "rmsError": 0.064,
+    "maxError": 0.159
+   },
+   "reduced": "none"
+  },
+  {
+   "token": "motion.duration.tileActions",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 240
+   },
+   "spring": {
+    "duration": 0.17,
+    "bounce": 0.15,
+    "rmsError": 0.064,
+    "maxError": 0.159
+   },
+   "reduced": "none"
+  },
+  {
+   "token": "motion.duration.lane",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 260
+   },
+   "spring": {
+    "duration": 0.19,
+    "bounce": 0.21,
+    "rmsError": 0.069,
+    "maxError": 0.164
+   },
+   "reduced": "none"
+  },
+  {
+   "token": "motion.duration.recipientList",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 280
+   },
+   "spring": {
+    "duration": 0.2,
+    "bounce": 0.16,
+    "rmsError": 0.065,
+    "maxError": 0.161
+   },
+   "reduced": "none"
+  },
+  {
+   "token": "motion.duration.blobEyes",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 320
+   },
+   "spring": {
+    "duration": 0.23,
+    "bounce": 0.16,
+    "rmsError": 0.066,
+    "maxError": 0.163
+   },
+   "reduced": "none"
+  },
+  {
+   "token": "motion.duration.stackBackground",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 320
+   },
+   "spring": {
+    "duration": 0.23,
+    "bounce": 0.16,
+    "rmsError": 0.066,
+    "maxError": 0.163
+   },
+   "reduced": "none"
+  },
+  {
+   "token": "motion.duration.tileHover",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 320
+   },
+   "spring": {
+    "duration": 0.23,
+    "bounce": 0.16,
+    "rmsError": 0.066,
+    "maxError": 0.163
+   },
+   "reduced": "none"
+  },
+  {
+   "token": "motion.duration.rowSequence",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 360
+   },
+   "spring": {
+    "duration": 0.26,
+    "bounce": 0.19,
+    "rmsError": 0.067,
+    "maxError": 0.161
+   },
+   "reduced": "none"
+  },
+  {
+   "token": "motion.duration.blobFlight",
+   "easing": "motion.easing.blobFlight",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     1.15,
+     0.3,
+     1
+    ],
+    "durationMs": 416
+   },
+   "spring": {
+    "duration": 0.25,
+    "bounce": 0.31,
+    "rmsError": 0.066,
+    "maxError": 0.176
+   },
+   "reduced": "crossfade"
+  },
+  {
+   "token": "motion.duration.stackLift",
+   "easing": "motion.easing.stack",
+   "exact": {
+    "timingCurve": [
+     0.22,
+     1.08,
+     0.36,
+     1
+    ],
+    "durationMs": 420
+   },
+   "spring": {
+    "duration": 0.27,
+    "bounce": 0.3,
+    "rmsError": 0.065,
+    "maxError": 0.146
+   },
+   "reduced": "crossfade"
+  },
+  {
+   "token": "motion.duration.searchUnderline",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 480
+   },
+   "spring": {
+    "duration": 0.34,
+    "bounce": 0.15,
+    "rmsError": 0.064,
+    "maxError": 0.159
+   },
+   "reduced": "crossfade"
+  },
+  {
+   "token": "motion.duration.stack",
+   "easing": "motion.easing.stack",
+   "exact": {
+    "timingCurve": [
+     0.22,
+     1.08,
+     0.36,
+     1
+    ],
+    "durationMs": 520
+   },
+   "spring": {
+    "duration": 0.33,
+    "bounce": 0.3,
+    "rmsError": 0.065,
+    "maxError": 0.142
+   },
+   "reduced": "crossfade"
+  },
+  {
+   "token": "motion.duration.overviewEnter",
+   "easing": "motion.easing.standard",
+   "exact": {
+    "timingCurve": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "durationMs": 640
+   },
+   "spring": {
+    "duration": 0.46,
+    "bounce": 0.16,
+    "rmsError": 0.066,
+    "maxError": 0.163
+   },
+   "reduced": "crossfade"
+  },
+  {
+   "token": "motion.duration.fold",
+   "easing": "motion.easing.fold",
+   "exact": {
+    "timingCurve": [
+     0.65,
+     0,
+     0.25,
+     1
+    ],
+    "durationMs": 720
+   },
+   "spring": null,
+   "reduced": "crossfade"
+  },
+  {
+   "token": "motion.duration.overviewDelay",
+   "fixed": true,
+   "durationMs": 300,
+   "note": "Wartezeit, keine Bewegung"
+  },
+  {
+   "token": "motion.duration.overviewStagger",
+   "fixed": true,
+   "durationMs": 60,
+   "note": "Versatz je Kachel"
+  },
+  {
+   "token": "motion.duration.labelDelay",
+   "fixed": true,
+   "durationMs": 80,
+   "note": "Wartezeit"
+  },
+  {
+   "token": "motion.duration.reelStagger",
+   "fixed": true,
+   "durationMs": 40,
+   "note": "Versatz je Zeile"
+  },
+  {
+   "token": "motion.duration.thinking",
+   "fixed": true,
+   "durationMs": 1000,
+   "note": "Schleife"
+  },
+  {
+   "token": "motion.duration.pulse",
+   "fixed": true,
+   "durationMs": 1800,
+   "note": "Schleife"
+  },
+  {
+   "token": "motion.duration.blink",
+   "fixed": true,
+   "durationMs": 1700,
+   "note": "Schleife"
+  },
+  {
+   "token": "motion.duration.ebbDelay",
+   "fixed": true,
+   "durationMs": 420,
+   "note": "Wartezeit vor der Ebbe"
+  },
+  {
+   "token": "motion.duration.ebbSlow",
+   "fixed": true,
+   "durationMs": 900,
+   "note": "langsame Ebbe, Kurve fold"
+  },
+  {
+   "token": "motion.duration.confirmHold",
+   "fixed": true,
+   "durationMs": 1000,
+   "note": "linear, keine Feder (Radieren)"
+  },
+  {
+   "token": "motion.duration.confirmRelease",
+   "fixed": true,
+   "durationMs": 180,
+   "note": "Rücklauf nach Loslassen, Kurve standard"
+  }
+ ],
+ "apple": {
+  "geprueft": "19.10.2026 (Websuche), Johannes 16.10.: „DRINGEND prüfen, auch wie das in APPLE SWIFT gehandhabt und beschrieben wird!“",
+  "quellen": [
+   "https://github.com/GetStream/swiftui-spring-animations (Presets smooth/snappy/bouncy, Standarddauer 0,5 s, Parameter duration + bounce)",
+   "https://www.hackingwithswift.com/quick-start/swiftui/how-to-create-basic-animations (seit iOS 17 ist der Standard eine Feder; smooth ohne, snappy mit wenig Bounce)",
+   "https://nilcoalescing.com/blog/AnimationTimingInSwiftUI/ (Presets mit duration und extraBounce)",
+   "https://www.claudemarketplace.net/skills/swiftui-animation (Spring(duration:bounce:) bevorzugt, Reduce Motion beachten)"
+  ],
+  "befund": [
+   "Unsere Federn nutzen die von Apple bevorzugte Form duration + bounce (Spring(duration:bounce:)), nicht die physikalische (mass/stiffness/damping).",
+   "Bounce 0,01–0,2 (Hover, Falten, Zeilen) entspricht der Familie snappy (kleiner Bounce); Bounce 0,3 (blobFlight, stackLift, stack) entspricht bouncy; kein Token braucht smooth (Bounce 0) außer Hover (0,01).",
+   "Dauern: Apples Presets haben Standard 0,5 s; unsere kurzen Tokens (0,11–0,27 s) sind eigene Werte. Das ist in Apples Schnittstelle erlaubt (duration ist Parameter), aber keine Apple-Vorgabe.",
+   "Weniger Bewegung: Apple verlangt Rücksicht; unsere Spalte „reduced“ (crossfade/none) deckt das ab.",
+   "Die Faltkurve .65,0,.25,1 hat keine Feder; Apple-Weg: timingCurve oder easeInOut, wie hier angegeben."
+  ],
+  "vorschlag": "Wo Code Presets bevorzugt: hover/short/toggle/chevron → .snappy(duration: Wert, extraBounce: 0); blobFlight/stackLift/stack → .bouncy(duration: Wert); fold → timingCurve. Die Werte (duration, bounce) bleiben unsere (Johannes 16.10.: „die federn sollten aber auch unser design erhalten“).",
+  "nichtGeprueft": "Apples Dokumentationsseiten selbst (developer.apple.com) wurden nicht abgerufen; die Quellen oben sind Sekundärquellen. Die Standardwerte der Presets (0,5 s; Bounce smooth 0, snappy klein, bouncy groß) sind dort belegt; die genauen Bounce-Zahlen der Presets (0,0 / 0,15 / 0,3) stehen in den Quellen nicht und sind hier NICHT als Beleg verwendet."
+ }
+}

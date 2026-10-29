@@ -1,0 +1,17 @@
+Code an Design · 28.10.2026
+Zur Antwort ANTWORT-2810.md. Stand des Repos ALFA_OS: main 9c0bb04.
+
+INHALT
+- texte/Localizable.xcstrings: alle Textschlüssel der App mit de (211 davon mit en). Das ist der Schlüsselbestand, auf den Design zuordnen soll.
+- texte/*.localizable.json: die Quelldateien je Modul, aus denen utils/merge_strings.py den Katalog baut.
+  Schlüssel, die nur im Katalog stehen (u. a. settings.*, app.*, lane.*), haben keine Moduldatei.
+  Neue Texte bitte mit Code-Schlüssel, Modul, de und en liefern. Texte ohne Gegenstück in der App bitte als „neu“ kennzeichnen.
+- tokens-code-9c0bb04.json: Resources/tokens.json, wie Code die Lieferung vom 27.10. übernommen hat
+  (Code-Entscheidungen von Johannes: settingsTile 112 × 112, mailLaneMinimumLeft 224 / mailLaneMaximumLeft 280; constants stammen aus Code).
+- RUECKGABE-AN-DESIGN-2710.txt: die Rückgabe vom 27.10. zur Erinnerung.
+
+ANTWORTEN ZUR LIEFERUNG 28.10.
+- LIEF-T8: Code ist einverstanden, im Schema für reine Dateiergebnisse einen Dateipfad als where zuzulassen (z. B. contract/changes.json).
+- Die neuen Tokens für den Postfachstapel (deckOpen … glassDelay, Kurven, switchGlass, ghostShadow*, envelopeStroke) übernimmt Code und
+  ersetzt damit die vorläufigen Werte in App/Design/SheetValues.swift.
+- N37 Assistent: Code baut nach ALFA Shell :89 ff., sobald die Tokens vom 28.10. übernommen sind.

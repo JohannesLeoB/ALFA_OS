@@ -1,0 +1,448 @@
+{
+  "brief": "v13",
+  "export": "2026-10-22T22:20",
+  "items": [
+    {
+      "id": "T1",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:57",
+        "ALFA Einstellungen.dc.html:124",
+        "ALFA Shell.dc.html:98"
+      ]
+    },
+    {
+      "id": "T2",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:169",
+        "ALFA Shell.dc.html:97",
+        "ALFA PDF.dc.html:18"
+      ]
+    },
+    {
+      "id": "T3",
+      "status": "done",
+      "where": [
+        "ALFA Shell.dc.html:21"
+      ]
+    },
+    {
+      "id": "T4",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:115",
+        "ALFA Shell.dc.html:100"
+      ]
+    },
+    {
+      "id": "T5",
+      "status": "question",
+      "question": "L-011 Logos: Für Google, Mail-Konten, ClickUp, Claude, Airtable, sevDesk und Happa Happa liegt kein Material vor. Die Karten zeigen weiter das Kürzel im Ring wie DHL ohne Logo. Logos liefern oder Kürzel als Dauerlösung?"
+    },
+    {
+      "id": "T6",
+      "status": "question",
+      "question": "Kartenstapel 8a/8b als Einstellung (Brief: Johannes 19.10. ja) gegen „keine Cardstacks hier“ (21.10., Einstellungen). Heute: Mail-Tweak „Stapel“, Vorgabe 8a; in Einstellungen keine Zeile. Soll die Person 8a/8b dort wählen?",
+      "where": [
+        "ALFA Mail.dc.html:302",
+        "ALFA Shell.dc.html:77",
+        "ALFA Einstellungen.dc.html:332"
+      ]
+    },
+    {
+      "id": "T7",
+      "status": "done",
+      "where": [
+        "ALFA Dienste.dc.html:56"
+      ]
+    },
+    {
+      "id": "T8",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:289"
+      ]
+    },
+    {
+      "id": "N1",
+      "status": "done",
+      "where": [
+        "ALFA Dienste.dc.html:105"
+      ]
+    },
+    {
+      "id": "N2",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:295",
+        "ALFA Einstellungen.dc.html:327"
+      ]
+    },
+    {
+      "id": "N3",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:17",
+        "ALFA Shell.dc.html:28"
+      ]
+    },
+    {
+      "id": "N4",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:758",
+        "ALFA Mail.dc.html:764"
+      ]
+    },
+    {
+      "id": "N5",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:311"
+      ]
+    },
+    {
+      "id": "N6",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:278"
+      ]
+    },
+    {
+      "id": "N7",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:449",
+        "ALFA Mail.dc.html:289",
+        "ALFA Mail.dc.html:650",
+        "ALFA Mail.dc.html:649"
+      ]
+    },
+    {
+      "id": "N8",
+      "status": "done",
+      "where": [
+        "ALFA Dienste.dc.html:60"
+      ]
+    },
+    {
+      "id": "N9",
+      "status": "done",
+      "where": [
+        "ALFA Shell.dc.html:97",
+        "ALFA Shell.dc.html:197"
+      ]
+    },
+    {
+      "id": "N10",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:169"
+      ]
+    },
+    {
+      "id": "N11",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:321"
+      ]
+    },
+    {
+      "id": "N13",
+      "status": "done",
+      "where": [
+        "ALFA Shell.dc.html:241"
+      ]
+    },
+    {
+      "id": "N14",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:313"
+      ]
+    },
+    {
+      "id": "N15",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:757"
+      ]
+    },
+    {
+      "id": "N16",
+      "status": "question",
+      "where": [
+        "ALFA Mail.dc.html:448",
+        "ALFA PDF.dc.html:19"
+      ],
+      "question": "N16: Mail als PDF in den Projektordner sichern. Reicht die native macOS-Ausgabe (Seite aus der WebKit-Mailansicht, System-Papierformat, Kopf mit Von/An/Datum/Betreff wie im Mail-Druck), ohne eigenes Layout? Falls ja, entfällt der Entwurf ALFA PDF.dc.html. Wenn nicht: welche Angaben fehlen im System-PDF? Ordner „Korrespondenz“ und Dateiname „<Datum> <Betreff>.pdf“ sind Design-Vorschlag."
+    },
+    {
+      "id": "N17",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:558"
+      ]
+    },
+    {
+      "id": "N19",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:412",
+        "ALFA Mail.dc.html:510"
+      ]
+    },
+    {
+      "id": "N20",
+      "status": "question",
+      "question": "Vorschläge je Menüeintrag (Verschieben, Notiz, Original, Später senden, Lesebestätigung, Vorlage) und Formatleiste: Johannes entscheidet je Fall; Bogen unverändert bis dahin."
+    },
+    {
+      "id": "N21",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:269",
+        "ALFA Einstellungen.dc.html:309",
+        "ALFA Einstellungen.dc.html:329"
+      ]
+    },
+    {
+      "id": "N22",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:17",
+        "ALFA Mail.dc.html:32",
+        "ALFA Mail.dc.html:33"
+      ]
+    },
+    {
+      "id": "N23",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:558",
+        "ALFA Mail.dc.html:198"
+      ]
+    },
+    {
+      "id": "N24",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:257"
+      ]
+    },
+    {
+      "id": "N25",
+      "status": "done",
+      "where": [
+        "ALFA Mail.dc.html:447"
+      ]
+    },
+    {
+      "id": "N26",
+      "status": "open"
+    },
+    {
+      "id": "N27",
+      "status": "open"
+    },
+    {
+      "id": "N28",
+      "status": "open"
+    },
+    {
+      "id": "N29",
+      "status": "open"
+    },
+    {
+      "id": "N30",
+      "status": "open"
+    },
+    {
+      "id": "N31",
+      "status": "open"
+    },
+    {
+      "id": "N32",
+      "status": "open"
+    },
+    {
+      "id": "N33",
+      "status": "open"
+    },
+    {
+      "id": "N34",
+      "status": "open"
+    },
+    {
+      "id": "N35",
+      "status": "open"
+    },
+    {
+      "id": "N36",
+      "status": "done",
+      "where": [
+        "alfa-shell.js:6",
+        "alfa-shell.js:50"
+      ]
+    },
+    {
+      "id": "N37",
+      "status": "open"
+    },
+    {
+      "id": "N38",
+      "status": "open"
+    },
+    {
+      "id": "N39",
+      "status": "done",
+      "where": [
+        "ALFA Bestaetigen.dc.html:21"
+      ],
+      "tokens": [
+        "size.focusRingOffset"
+      ]
+    },
+    {
+      "id": "N40",
+      "status": "done",
+      "where": [
+        "ALFA Einstellungen.dc.html:270",
+        "ALFA Einstellungen.dc.html:327",
+        "ALFA Einstellungen.dc.html:329",
+        "ALFA Einstellungen.dc.html:330",
+        "ALFA Einstellungen.dc.html:332",
+        "ALFA Einstellungen.dc.html:234"
+      ]
+    }
+  ],
+  "drafts": [
+    {
+      "file": "ALFA Bestaetigen.dc.html",
+      "sha256": "8309f8355b97adf9931aad970e76b279ee723cd7d01265d5486c49af6df2b1b9"
+    },
+    {
+      "file": "ALFA Designsystem.dc.html",
+      "sha256": "7dde127cb21690d74f5740192e867df555c577b19600af4426c2bbcb0213abd2"
+    },
+    {
+      "file": "ALFA Dienste.dc.html",
+      "sha256": "8c4c3347c04bfc901a764b5b8e0738745c7686c7446b695356cc71f77ddfb75a"
+    },
+    {
+      "file": "ALFA Einstellungen.dc.html",
+      "sha256": "5367c0ceb30aee87c60a213511a770c6eb37f482743442db9cd9a180269d4e62"
+    },
+    {
+      "file": "ALFA Entscheidungen.dc.html",
+      "sha256": "75004de70a9f1f79f4d7e67e5a36fa9b3cf7d8025e14114b407cd117889ecdb4"
+    },
+    {
+      "file": "ALFA Entscheidungsblatt Farbe.dc.html",
+      "sha256": "557ccb5585a57b9baa97bf0344f9fe3e842f926baf4162bd3fca2eeb4050d3af"
+    },
+    {
+      "file": "ALFA Farbleiter 2.dc.html",
+      "sha256": "ba253f87934dd4841077f93275233b14325c195e84d2c630a244e1bd4c3cbf44"
+    },
+    {
+      "file": "ALFA Farbleiter.dc.html",
+      "sha256": "8e5842d167053290e0f7983fbe7619d520959b728adc49822c9a477e60ddafd6"
+    },
+    {
+      "file": "ALFA Farbsystem.dc.html",
+      "sha256": "86f2e0472d269373a0287321283826ab69a04f019bb4b96fe2332ee6e6110278"
+    },
+    {
+      "file": "ALFA Farbsystematik.dc.html",
+      "sha256": "dae8c16829f4ccb6a46806e56162a6ee62a8340e6d62bb76e7fc97ca06864b42"
+    },
+    {
+      "file": "ALFA Huelle.dc.html",
+      "sha256": "6cadc8c0917c2a36fa23d4eb72de1b71ee287c5fdc9eee1b18a0fc581b736390"
+    },
+    {
+      "file": "ALFA Icon.dc.html",
+      "sha256": "e238b7e46d99d7cc4cf350c0574f56e07a408fe06003a2626f5d0f94617f89fa"
+    },
+    {
+      "file": "ALFA Mail Color.dc.html",
+      "sha256": "c3fb82e17024f9ec8e441ad127685f1bcb5439c8c39202e67ffe231975d5ce43"
+    },
+    {
+      "file": "ALFA Mail.dc.html",
+      "sha256": "790a97fad59635a178547cd298c3c4d02f8ac7434ddd433c6d64f174785f31c3"
+    },
+    {
+      "file": "ALFA PDF.dc.html",
+      "sha256": "ba5c5456aa653d1d7bb49e388f1a5080bf0f5fbe070fe871a0665a2b6d26dee4"
+    },
+    {
+      "file": "ALFA Shell.dc.html",
+      "sha256": "7d1b98afdeb50e9c9d620071d07c4d61df32f0ccd985713b826e6ad2d04f22f0"
+    },
+    {
+      "file": "ALFA Tokenbogen.dc.html",
+      "sha256": "8a25683849bbb46eed68b1f0b330a6a6aa6bb54cf11c3ada23741b06564aeab2"
+    },
+    {
+      "file": "ALFA Widgets.dc.html",
+      "sha256": "48b87d3edbbabb3103570e061f627e2fe6319fcbf5a822fe757981148eae63fd"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "HUELLE-F10",
+      "date": "2026-10-23",
+      "by": "Johannes",
+      "spec": "Blob-Punkt nur bei Assistent-Antwort im verdeckten Zustand; erlischt beim Öffnen des Assistenten",
+      "where": [
+        "ALFA Shell.dc.html:70"
+      ]
+    },
+    {
+      "id": "HUELLE-H01",
+      "date": "2026-10-23",
+      "by": "Johannes",
+      "spec": "Hilfetext nach 3000 ms Verweilen, 7 px je 100 ms",
+      "where": [
+        "ALFA Shell.dc.html"
+      ]
+    },
+    {
+      "id": "MAIL-G01",
+      "date": "2026-10-23",
+      "by": "Johannes",
+      "spec": "Bahngrenzen je Bereich; Mail links max 280",
+      "where": [
+        "alfa-shell.js:6"
+      ]
+    },
+    {
+      "id": "MAIL-P02",
+      "date": "2026-10-23",
+      "by": "Johannes",
+      "spec": "Postfachkarten Material wie Stapelkarte, voll gespiegelt",
+      "where": [
+        "ALFA Mail.dc.html:33"
+      ]
+    },
+    {
+      "id": "FARBE-00",
+      "date": "2026-10-23",
+      "by": "Johannes",
+      "spec": "Noch keine Farbwelten"
+    },
+    {
+      "id": "HUELLE-F11",
+      "date": "2026-10-23",
+      "by": "Johannes",
+      "spec": "Assistent meldet sich verdeckt auf der Blob-Vorderseite (Blob in Ruhe); Anzeige, Effekt, Verdrahtung später; bis dahin nur Blob-Punkt (F10); Code legt Anschluss an, keine eigene Anzeige",
+      "status": "open-form",
+      "where": [
+        "ALFA Shell.dc.html:70"
+      ]
+    }
+  ]
+}

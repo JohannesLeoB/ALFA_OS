@@ -1,0 +1,480 @@
+[
+ {
+  "part": "lane",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "open",
+    "tokens": {
+     "background": "{color.lane}",
+     "shadow": "{shadow.lane}"
+    }
+   },
+   {
+    "name": "collapsed",
+    "tokens": {
+     "background": "{color.lane}",
+     "shadow": "{shadow.lane}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "mark",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "selected",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "action",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.hover}",
+     "ring": "{color.inkTertiary}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "symbol-button",
+  "states": [
+   {
+    "name": "preview",
+    "tokens": {}
+   },
+   {
+    "name": "rest",
+    "tokens": {
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "neutral",
+    "tokens": {
+     "foreground": "{color.inkSecondary}",
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "signal",
+    "tokens": {
+     "foreground": "{color.signal}",
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.hover}"
+    }
+   },
+   {
+    "name": "pressed",
+    "tokens": {
+     "scale": "{scale.pressButton}"
+    }
+   },
+   {
+    "name": "hoverSelection",
+    "tokens": {
+     "foreground": "{color.ink}",
+     "background": "{color.selection}"
+    }
+   },
+   {
+    "name": "hoverOnInverse",
+    "tokens": {
+     "background": "{color.inverseHot}"
+    }
+   },
+   {
+    "name": "accent",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "on",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "selected",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "busy",
+    "tokens": {
+     "foreground": "{color.onInverseTertiary}"
+    }
+   },
+   {
+    "name": "disabled",
+    "tokens": {
+     "foreground": "{color.inkSecondary}",
+     "ring": "{color.lineStrong}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "card-header",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.ink}",
+     "ring": "{color.line}"
+    }
+   },
+   {
+    "name": "pressed",
+    "tokens": {
+     "scale": "{scale.pressTile}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "text-button",
+  "states": [
+   {
+    "name": "destructive",
+    "tokens": {}
+   },
+   {
+    "name": "rest",
+    "tokens": {
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "accent",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "neutral",
+    "tokens": {
+     "foreground": "{color.ink}",
+     "ring": "{color.lineStrong}"
+    }
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.hover}"
+    }
+   },
+   {
+    "name": "pressed",
+    "tokens": {
+     "scale": "{scale.pressButton}"
+    }
+   },
+   {
+    "name": "hoverOnInverse",
+    "tokens": {
+     "background": "{color.inverseHot}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "card",
+  "states": [
+   {
+    "name": "empty",
+    "tokens": {}
+   },
+   {
+    "name": "open",
+    "tokens": {
+     "foreground": "{color.ink}"
+    }
+   },
+   {
+    "name": "fanned",
+    "tokens": {
+     "foreground": "{color.ink}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "card-notice",
+  "states": [
+   {
+    "name": "warning",
+    "tokens": {
+     "background": "{color.sheetWell}"
+    }
+   },
+   {
+    "name": "failure",
+    "tokens": {
+     "background": "{color.well}"
+    }
+   },
+   {
+    "name": "closeSaveFailed",
+    "tokens": {}
+   },
+   {
+    "name": "closeSaveAuth",
+    "tokens": {}
+   },
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.well}"
+    }
+   },
+   {
+    "name": "info",
+    "tokens": {
+     "background": "{color.well}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "address-button",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.ink}"
+    }
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.hover}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "chip-remove",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.inkTertiary}"
+    }
+   },
+   {
+    "name": "hoverOnInverse",
+    "tokens": {
+     "background": "{color.inverseHot}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "message-body",
+  "states": [
+   {
+    "name": "writing",
+    "tokens": {
+     "background": "{color.sheet}",
+     "foreground": "{color.sheetInk}"
+    }
+   },
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.sheet}",
+     "foreground": "{color.sheetInk}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "card-overview",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "stacked",
+    "tokens": {
+     "background": "{color.lane}"
+    }
+   },
+   {
+    "name": "fanned",
+    "tokens": {
+     "background": "{color.lane}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "sync-button",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "fresh",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}",
+     "shadow": "{shadow.floating}"
+    }
+   },
+   {
+    "name": "error",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}",
+     "shadow": "{shadow.floating}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "blob",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}",
+     "shadow": "{shadow.floating}"
+    }
+   },
+   {
+    "name": "menu",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}",
+     "shadow": "{shadow.floating}"
+    }
+   },
+   {
+    "name": "assistant",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}",
+     "shadow": "{shadow.floating}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "menu-row",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "foreground": "{color.ink}"
+    }
+   },
+   {
+    "name": "hover",
+    "tokens": {
+     "background": "{color.hover}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "assistant-input",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.inverseField}"
+    }
+   },
+   {
+    "name": "busy",
+    "tokens": {
+     "background": "{color.inverseField}"
+    }
+   },
+   {
+    "name": "disabled",
+    "tokens": {}
+   }
+  ]
+ },
+ {
+  "part": "profile-tile",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {
+     "background": "{color.well}",
+     "foreground": "{color.ink}"
+    }
+   },
+   {
+    "name": "selected",
+    "tokens": {
+     "background": "{color.inverse}",
+     "foreground": "{color.onInverse}"
+    }
+   },
+   {
+    "name": "pressed",
+    "tokens": {
+     "scale": "{scale.pressRow}"
+    }
+   }
+  ]
+ },
+ {
+  "part": "connection-status",
+  "states": [
+   {
+    "name": "rest",
+    "tokens": {}
+   },
+   {
+    "name": "connected",
+    "tokens": {
+     "foreground": "{color.inkSecondary}"
+    }
+   },
+   {
+    "name": "notConnected",
+    "tokens": {
+     "foreground": "{color.inkTertiary}"
+    }
+   }
+  ]
+ }
+]

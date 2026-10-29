@@ -1,0 +1,1701 @@
+{
+  "color": {
+    "ground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#ffffff"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-ground",
+          "formerName": "ground",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "line": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9098,
+          0.9098,
+          0.9098
+        ],
+        "alpha": 1,
+        "hex": "#e8e8e8"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-line",
+          "formerName": "line",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "lineStrong": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.851,
+          0.851,
+          0.851
+        ],
+        "alpha": 1,
+        "hex": "#d9d9d9"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-line-strong",
+          "formerName": "line-strong",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "ink": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0902,
+          0.0902,
+          0.0902
+        ],
+        "alpha": 1,
+        "hex": "#171717"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-ink",
+          "formerName": "ink",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "inkSecondary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "alpha": 1,
+        "hex": "#4d4d4d"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-ink-2",
+          "formerName": "ink-2",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "inkTertiary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.4196,
+          0.4196,
+          0.4196
+        ],
+        "alpha": 1,
+        "hex": "#6b6b6b"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-ink-3",
+          "formerName": "ink-3",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "mark": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.5412,
+          0.5412,
+          0.5412
+        ],
+        "alpha": 1,
+        "hex": "#8a8a8a"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-mark",
+          "formerName": "mark",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "well": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9608,
+          0.9608,
+          0.9608
+        ],
+        "alpha": 1,
+        "hex": "#f5f5f5"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-well",
+          "formerName": "well",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.05
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-hover",
+          "formerName": "hover",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "selection": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.05
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-sel",
+          "formerName": "sel",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "focus": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.4196,
+          0.4196,
+          0.4196
+        ],
+        "alpha": 1,
+        "hex": "#6b6b6b"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-focus",
+          "formerName": "focus",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "handle": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6392,
+          0.6392,
+          0.6392
+        ],
+        "alpha": 1,
+        "hex": "#a3a3a3"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-grip",
+          "formerName": "grip",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0902,
+          0.0902,
+          0.0902
+        ],
+        "alpha": 1,
+        "hex": "#171717"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-inv",
+          "formerName": "inv",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "onInverse": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#ffffff"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-on-inv",
+          "formerName": "on-inv",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "inverseHot": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.12
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-inv-hot",
+          "formerName": "inv-hot",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "inverseLine": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.2
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-inv-line",
+          "formerName": "inv-line",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "inverseField": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.08
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-inv-field",
+          "formerName": "inv-field",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "safeArea": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 1,
+        "hex": "#000000"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-safe",
+          "formerName": "safe",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "menu": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#ffffff"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-menu",
+          "formerName": "menu",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "signal": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.702,
+          0.2549,
+          0.1804
+        ],
+        "alpha": 1,
+        "hex": "#b3412e"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-signal",
+          "formerName": "signal",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "sheet": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#ffffff"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-sheet",
+          "formerName": "sheet",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "sheetInk": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0902,
+          0.0902,
+          0.0902
+        ],
+        "alpha": 1,
+        "hex": "#171717"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-sheet-ink",
+          "formerName": "sheet-ink",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "sheetInkSecondary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.302,
+          0.302,
+          0.302
+        ],
+        "alpha": 1,
+        "hex": "#4d4d4d"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-sheet-ink-2",
+          "formerName": "sheet-ink-2",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "sheetInkTertiary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.4196,
+          0.4196,
+          0.4196
+        ],
+        "alpha": 1,
+        "hex": "#6b6b6b"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-sheet-ink-3",
+          "formerName": "sheet-ink-3",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "sheetLine": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9098,
+          0.9098,
+          0.9098
+        ],
+        "alpha": 1,
+        "hex": "#e8e8e8"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-sheet-line",
+          "formerName": "sheet-line",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "glaze": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.75
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-glaze",
+          "formerName": "glaze",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "sheetWell": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9608,
+          0.9608,
+          0.9608
+        ],
+        "alpha": 1,
+        "hex": "#f5f5f5"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-sheet-well",
+          "formerName": "sheet-well",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "sheetLineStrong": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.851,
+          0.851,
+          0.851
+        ],
+        "alpha": 1,
+        "hex": "#d9d9d9"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-sheet-line-strong",
+          "formerName": "sheet-line-strong",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "onSignal": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#ffffff"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-on-signal",
+          "formerName": "on-signal",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "onInverseSecondary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.8
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-on-inv-2",
+          "formerName": "on-inv-2",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "onInverseTertiary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.6
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-on-inv-3",
+          "formerName": "on-inv-3",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "onInverseLine": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.3
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-on-inv-line",
+          "formerName": "on-inv-line",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "orb": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.051,
+          0.051,
+          0.051
+        ],
+        "alpha": 1,
+        "hex": "#0d0d0d"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-orb",
+          "formerName": "orb",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "orbRim": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.12
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-orb-rim",
+          "formerName": "orb-rim",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "orbGloss": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.28
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-orb-gloss",
+          "formerName": "orb-gloss",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "lane": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#ffffff"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-lane",
+          "formerName": "lane",
+          "status": "set-by-design"
+        }
+      },
+      "$description": "Bahn-Hintergrund. Quelle: alfa-theme.css --c-lane (Code A2)."
+    },
+    "stackGlossFront": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1
+      },
+      "$description": "Stapelkarte vorn: Glanzkante",
+      "$extensions": {
+        "alfa": {
+          "css": "--c-stackGlossFront",
+          "status": "set-by-design",
+          "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10."
+        }
+      }
+    },
+    "stackGlossLight": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.9
+      },
+      "$description": "Stapelkarte hinten, helle Stufe: Glanzkante",
+      "$extensions": {
+        "alfa": {
+          "css": "--c-stackGlossLight",
+          "status": "set-by-design",
+          "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10."
+        }
+      }
+    },
+    "stackGlossDark": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.22
+      },
+      "$description": "Stapelkarte hinten, dunkle Stufe: Glanzkante",
+      "$extensions": {
+        "alfa": {
+          "css": "--c-stackGlossDark",
+          "status": "set-by-design",
+          "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10."
+        }
+      }
+    },
+    "stackSeamFront": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.14
+      },
+      "$description": "Stapelkarte vorn: Naht zur überlappten Karte",
+      "$extensions": {
+        "alfa": {
+          "css": "--c-stackSeamFront",
+          "status": "set-by-design",
+          "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10."
+        }
+      }
+    },
+    "stackSeamBack": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.2
+      },
+      "$description": "Stapelkarte hinten: Naht",
+      "$extensions": {
+        "alfa": {
+          "css": "--c-stackSeamBack",
+          "status": "set-by-design",
+          "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10."
+        }
+      }
+    },
+    "stackDrop": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.16
+      },
+      "$description": "Stapelkarte: Schatten auf die überlappte Karte",
+      "$extensions": {
+        "alfa": {
+          "css": "--c-stackDrop",
+          "status": "set-by-design",
+          "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10."
+        }
+      }
+    },
+    "stackRing": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.06
+      },
+      "$description": "Stapelkarte flach, hinten: Ring",
+      "$extensions": {
+        "alfa": {
+          "css": "--c-stackRing",
+          "status": "set-by-design",
+          "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10."
+        }
+      }
+    },
+    "stackFlatDrop": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.18
+      },
+      "$description": "Stapelkarte flach, hinten: Schatten",
+      "$extensions": {
+        "alfa": {
+          "css": "--c-stackFlatDrop",
+          "status": "set-by-design",
+          "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10."
+        }
+      }
+    },
+    "stackFlatFront": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.22
+      },
+      "$description": "Stapelkarte flach, vorn: Schatten",
+      "$extensions": {
+        "alfa": {
+          "css": "--c-stackFlatFront",
+          "status": "set-by-design",
+          "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10."
+        }
+      }
+    },
+    "coral": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9765,
+          0.3608,
+          0.2941
+        ],
+        "alpha": 1,
+        "hex": "#f95c4b"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--m-coral",
+          "source": "Johannes 16.10.: „b16 behalten“ (Rückgabe B16). Werte aus alfa-theme.css. Einsatz: Stapel und Typen, nicht für Aktionen („FARBSYSTEM … NICHT auf ZU anwenden für actions“, „Für STapel und Typen okay.“ 13.10.)"
+        }
+      }
+    },
+    "apricot": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9529,
+          0.6235,
+          0.3529
+        ],
+        "alpha": 1,
+        "hex": "#f39f5a"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--m-apricot",
+          "source": "Johannes 16.10.: „b16 behalten“ (Rückgabe B16). Werte aus alfa-theme.css. Einsatz: Stapel und Typen, nicht für Aktionen („FARBSYSTEM … NICHT auf ZU anwenden für actions“, „Für STapel und Typen okay.“ 13.10.)"
+        }
+      }
+    },
+    "rose": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9098,
+          0.7373,
+          0.7255
+        ],
+        "alpha": 1,
+        "hex": "#e8bcb9"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--m-rose",
+          "source": "Johannes 16.10.: „b16 behalten“ (Rückgabe B16). Werte aus alfa-theme.css. Einsatz: Stapel und Typen, nicht für Aktionen („FARBSYSTEM … NICHT auf ZU anwenden für actions“, „Für STapel und Typen okay.“ 13.10.)"
+        }
+      }
+    }
+  },
+  "shadow": {
+    "lane": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "inset": false,
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1,
+            "unit": "px"
+          },
+          "color": "{color.line}"
+        }
+      ],
+      "$extensions": {
+        "alfa": {
+          "css": "--sh-lane",
+          "formerName": "lane",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "knob": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "inset": false,
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.2
+          }
+        }
+      ],
+      "$extensions": {
+        "alfa": {
+          "css": "--sh-knob",
+          "formerName": "knob",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "segment": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "inset": false,
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 2,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.12
+          }
+        }
+      ],
+      "$extensions": {
+        "alfa": {
+          "css": "--sh-seg",
+          "formerName": "seg",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "floating": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "inset": false,
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1,
+            "unit": "px"
+          },
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.08
+          }
+        },
+        {
+          "inset": false,
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 8,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 24,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.1
+          }
+        }
+      ],
+      "$extensions": {
+        "alfa": {
+          "css": "--sh-float",
+          "formerName": "float",
+          "status": "set-by-design"
+        }
+      }
+    },
+    "overviewHover": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "inset": false,
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 14,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 28,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -18,
+            "unit": "px"
+          },
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.4
+          }
+        }
+      ],
+      "$extensions": {
+        "alfa": {
+          "status": "set-by-design",
+          "where": "ALFA Mail.dc.html:953",
+          "decide": "ALFA Entscheidungen, Abschnitt 6",
+          "css": "--sh-overviewHover"
+        }
+      }
+    },
+    "stackFront": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "inset": false,
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": -8,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 24,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -12,
+            "unit": "px"
+          },
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.22
+          }
+        }
+      ],
+      "$description": "Fläche flach (Vorgabe): Schatten nach oben über der Karte darunter.",
+      "$extensions": {
+        "alfa": {
+          "status": "set-by-design",
+          "where": "ALFA Mail.dc.html:952 (vorne)",
+          "decide": "ALFA Entscheidungen, Abschnitt 6",
+          "leiter": "Weichzeichnung und Versatz von der 4er-Leiter ausgenommen (Johannes 18.10.)"
+        }
+      }
+    },
+    "stackBack": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "inset": false,
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": -6,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 16,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -10,
+            "unit": "px"
+          },
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.18
+          }
+        }
+      ],
+      "$description": "Fläche flach (Vorgabe): Schatten nach oben über der Karte darunter.",
+      "$extensions": {
+        "alfa": {
+          "status": "set-by-design",
+          "where": "ALFA Mail.dc.html:952 (hinten, dazu 0 0 0 1px rgba(0,0,0,.06))",
+          "decide": "ALFA Entscheidungen, Abschnitt 6",
+          "leiter": "Weichzeichnung und Versatz von der 4er-Leiter ausgenommen (Johannes 18.10.)"
+        }
+      }
+    }
+  },
+  "stack": {
+    "depth0": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9608,
+            0.9608,
+            0.9608
+          ],
+          "alpha": 1,
+          "hex": "#f5f5f5"
+        },
+        "$extensions": {
+          "alfa": {
+            "status": "set-by-design"
+          }
+        }
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0902,
+            0.0902,
+            0.0902
+          ],
+          "alpha": 1,
+          "hex": "#171717"
+        },
+        "$extensions": {
+          "alfa": {
+            "status": "set-by-design"
+          }
+        }
+      }
+    },
+    "depth1": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9216,
+            0.9216,
+            0.9216
+          ],
+          "alpha": 1,
+          "hex": "#ebebeb"
+        },
+        "$extensions": {
+          "alfa": {
+            "status": "set-by-design"
+          }
+        }
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0902,
+            0.0902,
+            0.0902
+          ],
+          "alpha": 1,
+          "hex": "#171717"
+        },
+        "$extensions": {
+          "alfa": {
+            "status": "set-by-design"
+          }
+        }
+      }
+    },
+    "depth2": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.851,
+            0.851,
+            0.851
+          ],
+          "alpha": 1,
+          "hex": "#d9d9d9"
+        },
+        "$extensions": {
+          "alfa": {
+            "status": "set-by-design"
+          }
+        }
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0902,
+            0.0902,
+            0.0902
+          ],
+          "alpha": 1,
+          "hex": "#171717"
+        },
+        "$extensions": {
+          "alfa": {
+            "status": "set-by-design"
+          }
+        }
+      }
+    },
+    "depth3": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6392,
+            0.6392,
+            0.6392
+          ],
+          "alpha": 1,
+          "hex": "#a3a3a3"
+        },
+        "$extensions": {
+          "alfa": {
+            "status": "set-by-design"
+          }
+        }
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0902,
+            0.0902,
+            0.0902
+          ],
+          "alpha": 1,
+          "hex": "#171717"
+        },
+        "$extensions": {
+          "alfa": {
+            "status": "set-by-design"
+          }
+        }
+      }
+    },
+    "depth4": {
+      "surface": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.4196,
+            0.4196,
+            0.4196
+          ],
+          "alpha": 1,
+          "hex": "#6b6b6b"
+        },
+        "$extensions": {
+          "alfa": {
+            "status": "set-by-design"
+          }
+        }
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 1,
+          "hex": "#ffffff"
+        },
+        "$extensions": {
+          "alfa": {
+            "status": "set-by-design"
+          }
+        }
+      }
+    }
+  },
+  "surface": {
+    "lacquer": {
+      "topGloss": {
+        "front": {
+          "$type": "shadow",
+          "$value": [
+            {
+              "inset": true,
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "color": {
+                "colorSpace": "srgb",
+                "components": [
+                  1,
+                  1,
+                  1
+                ],
+                "alpha": 1
+              }
+            }
+          ],
+          "$extensions": {
+            "alfa": {
+              "status": "set-by-design"
+            }
+          }
+        }
+      },
+      "topSeam": {
+        "front": {
+          "$type": "shadow",
+          "$value": [
+            {
+              "inset": false,
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": -1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "color": {
+                "colorSpace": "srgb",
+                "components": [
+                  0,
+                  0,
+                  0
+                ],
+                "alpha": 0.14
+              }
+            }
+          ],
+          "$extensions": {
+            "alfa": {
+              "status": "set-by-design"
+            }
+          }
+        },
+        "back": {
+          "$type": "shadow",
+          "$value": [
+            {
+              "inset": false,
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": -1,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 0,
+                "unit": "px"
+              },
+              "color": {
+                "colorSpace": "srgb",
+                "components": [
+                  0,
+                  0,
+                  0
+                ],
+                "alpha": 0.2
+              }
+            }
+          ],
+          "$extensions": {
+            "alfa": {
+              "status": "set-by-design"
+            }
+          }
+        }
+      },
+      "castShadow": {
+        "$description": "nicht an der ersten Karte"
+      }
+    },
+    "glass": {
+      "card": {
+        "$type": "shadow",
+        "$value": [
+          {
+            "inset": true,
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 1,
+              "unit": "px"
+            },
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                1,
+                1,
+                1
+              ],
+              "alpha": 0.7
+            }
+          },
+          {
+            "inset": true,
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 1,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 0,
+              "unit": "px"
+            },
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                1,
+                1,
+                1
+              ],
+              "alpha": 0.9
+            }
+          },
+          {
+            "inset": false,
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": -8,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 24,
+              "unit": "px"
+            },
+            "spread": {
+              "value": -14,
+              "unit": "px"
+            },
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "alpha": 0.22
+            }
+          },
+          {
+            "inset": false,
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 1,
+              "unit": "px"
+            },
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "alpha": 0.04
+            }
+          }
+        ],
+        "$extensions": {
+          "alfa": {
+            "status": "set-by-design"
+          }
+        }
+      },
+      "$description": "Hintergrund der Karte: blur(22px) saturate(1.4), nur bei Glas"
+    },
+    "$description": "Prop oberflaeche: Lack, Glas, flach. Kartenschatten aus Formeln in ALFA Mail (lack(), glas()). flach hat keine. Füllregel hell: Karte gilt als hell, wenn die Füllung mit #c bis #f beginnt (Stufen 0 bis 2 in hell, siehe stack). flach: keine Kartenschatten, nur Haarlinie"
+  }
+}

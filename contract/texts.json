@@ -1,0 +1,3354 @@
+{
+  "version": "2026-10-23",
+  "sourceLanguage": "de",
+  "texts": [
+    {
+      "key": "mail.action.compose",
+      "de": "Neue Mail",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "New Message",
+      "element": "mail.compose-button.new-go",
+      "formerKey": "mail.composeButton.newGo.tooltip, mail.composeButton.newGo.text, mail.label.s019, settings.label.s051"
+    },
+    {
+      "key": "mail.search.label",
+      "de": "Liste durchsuchen",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Search list",
+      "element": "mail.input-field",
+      "formerKey": "mail.inputField.aria"
+    },
+    {
+      "key": "mail.counter3.tooltip",
+      "de": "Nachrichten in dieser Unterhaltung",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Messages in this conversation",
+      "element": "mail.counter-3"
+    },
+    {
+      "key": "mail.row.moreAttachments",
+      "de": "Weitere Anhänge",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "More attachments",
+      "element": "mail.counter-4",
+      "formerKey": "mail.counter4.tooltip"
+    },
+    {
+      "key": "mail.action.trash",
+      "de": "In den Papierkorb",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Move to Trash",
+      "element": "mail.text-button.do-trash",
+      "formerKey": "mail.textButton.doTrash.text, mail.menu.s006, mail.label.s025"
+    },
+    {
+      "key": "text.common.cancel",
+      "de": "Abbrechen",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Cancel",
+      "element": "mail.symbol-button.no-trash",
+      "formerKey": "mail.symbolButton.noTrash.tooltip, settings.button.s004"
+    },
+    {
+      "key": "stack.empty",
+      "de": "Leere Karte",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Empty card",
+      "element": "mail.card",
+      "formerKey": "mail.card.aria, settings.card.aria"
+    },
+    {
+      "key": "mail.card.pin.tip",
+      "de": "Anheften · bleibt im Stapel",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Pin · stays in the stack",
+      "element": "mail.symbol-button.pin",
+      "formerKey": "mail.symbolButton.pin.tooltip"
+    },
+    {
+      "key": "mail.symbolButton.pin.aria",
+      "de": "Anheften",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Pin",
+      "element": "mail.symbol-button.pin"
+    },
+    {
+      "key": "card.close",
+      "de": "Schließen",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Close",
+      "element": "mail.symbol-button.close",
+      "formerKey": "mail.symbolButton.close.tooltip, settings.symbolButton.close2.tooltip"
+    },
+    {
+      "key": "mail.fieldRow.text",
+      "de": "An",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "To",
+      "element": "mail.field-row"
+    },
+    {
+      "key": "mail.read.all",
+      "de": "Alle Empfänger zeigen",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Show all recipients",
+      "element": "mail.recipients-disclosure.toggle-r",
+      "formerKey": "mail.recipientsDisclosure.toggleR.tooltip"
+    },
+    {
+      "key": "mail.read.less",
+      "de": "Weniger zeigen",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Show less",
+      "element": "mail.recipients-disclosure.toggle-r-2",
+      "formerKey": "mail.recipientsDisclosure.toggleR2.tooltip"
+    },
+    {
+      "key": "mail.read.images.title",
+      "de": "Externe Bilder blockiert",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Remote images blocked",
+      "element": "mail.card-notice-2",
+      "formerKey": "mail.cardNotice2.text"
+    },
+    {
+      "key": "mail.read.images.text",
+      "de": "Beim Laden erfährt der Absender, dass die Mail geöffnet wurde.",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Loading them tells the sender that you opened this message.",
+      "element": "mail.card-notice-2",
+      "formerKey": "mail.cardNotice2.text2"
+    },
+    {
+      "key": "mail.action.loadImages",
+      "de": "Bilder laden",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Load Images",
+      "element": "mail.text-button.load-images",
+      "formerKey": "mail.textButton.loadImages.text"
+    },
+    {
+      "key": "mail.compose.from",
+      "de": "Von",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "From",
+      "element": "mail.field-row-2",
+      "formerKey": "mail.fieldRow2.text"
+    },
+    {
+      "key": "mail.compose.remove",
+      "de": "Entfernen",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Remove",
+      "element": "mail.chip-remove.remove",
+      "formerKey": "mail.chipRemove.remove.tooltip"
+    },
+    {
+      "key": "mail.compose.copy",
+      "de": "Cc und Bcc",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Cc and Bcc",
+      "element": "mail.symbol-button.toggle-cc",
+      "formerKey": "mail.symbolButton.toggleCc.tooltip"
+    },
+    {
+      "key": "mail.compose.add",
+      "de": "Empfänger hinzufügen",
+      "area": "mail",
+      "kind": "placeholder",
+      "status": "set-by-design",
+      "en": "Add recipient",
+      "element": "mail.recipient-input-row",
+      "formerKey": "mail.recipientInputRow.placeholder"
+    },
+    {
+      "key": "mail.compose.subject",
+      "de": "Betreff",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Subject",
+      "element": "mail.field-row-4",
+      "formerKey": "mail.fieldRow4.text, mail.fieldRow4.placeholder, mail.fieldRow4.aria"
+    },
+    {
+      "key": "mail.compose.body",
+      "de": "Text",
+      "area": "mail",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Message",
+      "element": "mail.message-body-2",
+      "formerKey": "mail.messageBody2.aria"
+    },
+    {
+      "key": "mail.mailSignature.text",
+      "de": "Jonas Brenner",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Jonas Brenner",
+      "element": "mail.mail-signature"
+    },
+    {
+      "key": "mail.mailSignature.text2",
+      "de": "Studio Brenner · Innenarchitektur und Möbel",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Studio Brenner · Innenarchitektur und Möbel",
+      "element": "mail.mail-signature"
+    },
+    {
+      "key": "mail.toast.undo",
+      "de": "Rückgängig",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Undo",
+      "element": "mail.text-button.undo",
+      "formerKey": "mail.textButton.undo.text, settings.textButton.undo.text, shell.confirmUndo.undo.text"
+    },
+    {
+      "key": "mail.action.openDraft",
+      "de": "Entwurf öffnen",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Open Draft",
+      "formerKey": "mail.menu.s001"
+    },
+    {
+      "key": "mail.action.reply",
+      "de": "Antworten",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Reply",
+      "formerKey": "mail.menu.s002, mail.button.s001, mail.label.s020"
+    },
+    {
+      "key": "mail.action.forward",
+      "de": "Weiterleiten",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Forward",
+      "formerKey": "mail.menu.s003, mail.button.s003, mail.label.s021"
+    },
+    {
+      "key": "mail.action.archive",
+      "de": "Archivieren",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Archive",
+      "formerKey": "mail.menu.s004, mail.button.s004, mail.label.s024"
+    },
+    {
+      "key": "mail.action.move",
+      "de": "Verschieben nach …",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Move to …",
+      "formerKey": "mail.menu.s005"
+    },
+    {
+      "key": "mail.action.copyAddress",
+      "de": "Adresse kopieren",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Copy Address",
+      "formerKey": "mail.menu.s007"
+    },
+    {
+      "key": "mail.action.writeMail",
+      "de": "Mail schreiben",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "New Message",
+      "formerKey": "mail.menu.s008"
+    },
+    {
+      "key": "mail.action.editContact",
+      "de": "Kontakt bearbeiten …",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Edit Contact …",
+      "formerKey": "mail.menu.s009"
+    },
+    {
+      "key": "mail.action.saveContact",
+      "de": "Als Kontakt sichern",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Add to Contacts",
+      "formerKey": "mail.menu.s010, mail.label.s036"
+    },
+    {
+      "key": "mail.action.preview",
+      "de": "Vorschau",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Quick Look",
+      "formerKey": "mail.menu.s011"
+    },
+    {
+      "key": "mail.action.otherProject",
+      "de": "In anderes Projekt …",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Move to Another Project …",
+      "formerKey": "mail.menu.s012, mail.attachment.otherProject"
+    },
+    {
+      "key": "mail.action.saveAs",
+      "de": "Sichern unter …",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Save As …",
+      "formerKey": "mail.menu.s013"
+    },
+    {
+      "key": "mail.action.print",
+      "de": "Drucken",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Print",
+      "formerKey": "mail.menu.s014, mail.button.s005, mail.menu.attachment.print"
+    },
+    {
+      "key": "mail.action.pdf",
+      "de": "Als PDF sichern",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Save as PDF",
+      "formerKey": "mail.menu.s015, mail.button.s006, mail.menu.attachment.saveAsPdf"
+    },
+    {
+      "key": "mail.menu.s016",
+      "de": "Mail in Projektordner sichern",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Save Message to Project Folder"
+    },
+    {
+      "key": "mail.menu.s017",
+      "de": "Als ungelesen markieren",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Mark as Unread"
+    },
+    {
+      "key": "mail.menu.s018",
+      "de": "Als Spam melden",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Report as Junk"
+    },
+    {
+      "key": "mail.menu.s019",
+      "de": "Keine Signatur",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "No Signature"
+    },
+    {
+      "key": "mail.menu.s020",
+      "de": "Jonas Brenner",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Jonas Brenner"
+    },
+    {
+      "key": "mail.menu.s021",
+      "de": "Signaturen bearbeiten …",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Edit Signatures …"
+    },
+    {
+      "key": "mail.action.note",
+      "de": "Notiz anfügen",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Add Note",
+      "formerKey": "mail.menu.s022"
+    },
+    {
+      "key": "mail.action.original",
+      "de": "Original anzeigen",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Show Original",
+      "formerKey": "mail.menu.s023"
+    },
+    {
+      "key": "mail.action.laterSend",
+      "de": "Später senden …",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Send Later …",
+      "formerKey": "mail.menu.s024"
+    },
+    {
+      "key": "mail.action.receipt",
+      "de": "Lesebestätigung anfordern",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Request Read Receipt",
+      "formerKey": "mail.menu.s025"
+    },
+    {
+      "key": "mail.action.template",
+      "de": "Als Vorlage sichern",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Save as Template",
+      "formerKey": "mail.menu.s026"
+    },
+    {
+      "key": "mail.action.replyAll",
+      "de": "Allen antworten",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Reply All",
+      "formerKey": "mail.button.s002, mail.label.s037"
+    },
+    {
+      "key": "mail.button.s007",
+      "de": "In Projektordner sichern",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Save to Project Folder"
+    },
+    {
+      "key": "mail.button.s008",
+      "de": "Mehr",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "More"
+    },
+    {
+      "key": "mail.action.attachFile",
+      "de": "Datei anhängen",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Attach File",
+      "formerKey": "mail.button.s009, shell.symbolButton.assistantAttach.tooltip"
+    },
+    {
+      "key": "mail.action.fromProject",
+      "de": "Aus Projektordner",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "From Project Folder",
+      "formerKey": "mail.button.s010, mail.label.s040, mail.projectFiles.title"
+    },
+    {
+      "key": "mail.action.format",
+      "de": "Format",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Format",
+      "formerKey": "mail.button.s011"
+    },
+    {
+      "key": "mail.action.saveDraft",
+      "de": "Entwurf sichern",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Save Draft",
+      "formerKey": "mail.button.s012, mail.label.s034"
+    },
+    {
+      "key": "mail.action.discardDraft",
+      "de": "Entwurf verwerfen",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Discard Draft",
+      "formerKey": "mail.button.s013, mail.label.s035"
+    },
+    {
+      "key": "mail.action.send",
+      "de": "Senden",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Send",
+      "formerKey": "mail.button.s014, shell.symbolButton.assistantSend.tooltip"
+    },
+    {
+      "key": "mail.button.s015",
+      "de": "Stapel ·",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Stack ·"
+    },
+    {
+      "key": "mail.action.foldColumn",
+      "de": "Spalte falten",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Collapse Column",
+      "formerKey": "mail.button.s019"
+    },
+    {
+      "key": "mail.feedback.s001",
+      "de": "Dienste stehen in den Einstellungen",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Services are in Settings"
+    },
+    {
+      "key": "mail.toast.archived",
+      "de": "Archiviert",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Archived",
+      "formerKey": "mail.feedback.s002"
+    },
+    {
+      "key": "mail.toast.inTrash",
+      "de": "Im Papierkorb",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "In Trash",
+      "formerKey": "mail.feedback.s003"
+    },
+    {
+      "key": "mail.toast.purged",
+      "de": "Endgültig gelöscht",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Permanently deleted",
+      "formerKey": "mail.feedback.s004"
+    },
+    {
+      "key": "mail.toast.trashed",
+      "de": "In den Papierkorb gelegt",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Moved to Trash",
+      "formerKey": "mail.feedback.s005"
+    },
+    {
+      "key": "mail.toast.recipientMissing",
+      "de": "Empfänger fehlt",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Recipient missing",
+      "formerKey": "mail.feedback.s006"
+    },
+    {
+      "key": "mail.feedback.s007",
+      "de": "Druckdialog",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Print dialog"
+    },
+    {
+      "key": "mail.feedback.s008",
+      "de": "Entwurf gesichert",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Draft saved"
+    },
+    {
+      "key": "mail.toast.addressCopied",
+      "de": "Adresse kopiert",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Address copied",
+      "formerKey": "mail.feedback.s009"
+    },
+    {
+      "key": "mail.feedback.s010",
+      "de": "Das steht in den Einstellungen",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "This is in Settings"
+    },
+    {
+      "key": "mail.toast.projectSaved",
+      "de": "Als PDF im Projektordner gesichert",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Saved as PDF to project folder",
+      "formerKey": "mail.feedback.s011"
+    },
+    {
+      "key": "mail.feedback.s012",
+      "de": "Notiz an",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Note added"
+    },
+    {
+      "key": "mail.feedback.s014",
+      "de": "Als Vorlage gesichert",
+      "area": "mail",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Saved as template"
+    },
+    {
+      "key": "mail.label.s001",
+      "de": "Re: Fronten Küche – Muster Eiche geölt",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Re: Fronten Küche – Muster Eiche geölt"
+    },
+    {
+      "key": "mail.label.s002",
+      "de": "Angebot Einbauschrank Flur, Fassung 3",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Angebot Einbauschrank Flur, Fassung 3"
+    },
+    {
+      "key": "mail.label.s003",
+      "de": "Aufmaß Flur – Donnerstag?",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Aufmaß Flur – Donnerstag?"
+    },
+    {
+      "key": "mail.label.s004",
+      "de": "Lieferstatus Bestellung 48817",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Lieferstatus Bestellung 48817"
+    },
+    {
+      "key": "mail.label.s005",
+      "de": "Praxis Kern: Farbe Empfang",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Praxis Kern: Farbe Empfang"
+    },
+    {
+      "key": "mail.label.s006",
+      "de": "Zeiten September abgeschlossen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Zeiten September abgeschlossen"
+    },
+    {
+      "key": "mail.label.s007",
+      "de": "Musterbuch Herbst 2026",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Musterbuch Herbst 2026"
+    },
+    {
+      "key": "mail.label.s008",
+      "de": "Leitungsplan Küche Hansen – Korrektur der Steckdosenhöhen an der Arbeitsplatte und Ergänzung Dunstabzug",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Leitungsplan Küche Hansen – Korrektur der Steckdosenhöhen an der Arbeitsplatte und Ergänzung Dunstabzug"
+    },
+    {
+      "key": "mail.label.s009",
+      "de": "Grundriss EG, Fassung 4",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Grundriss EG, Fassung 4"
+    },
+    {
+      "key": "mail.label.s010",
+      "de": "Fronten Küche – Muster",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Fronten Küche – Muster"
+    },
+    {
+      "key": "mail.label.s011",
+      "de": "Schlüsselübergabe Wohnung Vogt",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Schlüsselübergabe Wohnung Vogt"
+    },
+    {
+      "key": "mail.label.s012",
+      "de": "Ihr Ticket",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Ihr Ticket"
+    },
+    {
+      "key": "mail.label.s013",
+      "de": "Re: AW: Re: Fronten Küche – Muster Eiche geölt hell, Eiche natur und Esche weiß pigmentiert (Fassung 7, nach Abstimmung mit Hausverwaltung und Elektroplanung)",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Re: AW: Re: Fronten Küche – Muster Eiche geölt hell, Eiche natur und Esche weiß pigmentiert (Fassung 7, nach Abstimmung mit Hausverwaltung und Elektroplanung)"
+    },
+    {
+      "key": "mail.label.s014",
+      "de": "Sonderausstattungsbestellungsbestätigung 9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Sonderausstattungsbestellungsbestätigung 9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f"
+    },
+    {
+      "key": "mail.label.s015",
+      "de": "Tủ bếp – mẫu gỗ sồi đã nhận",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Tủ bếp – mẫu gỗ sồi đã nhận"
+    },
+    {
+      "key": "mail.label.s016",
+      "de": "<script>alert(1)<\\/script> & **Muster** geliefert\nZeile zwei",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "<script>alert(1)<\\/script> & **Muster** geliefert\nZeile zwei"
+    },
+    {
+      "key": "mail.label.s017",
+      "de": "Benachrichtigungseinstellungen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Benachrichtigungseinstellungen"
+    },
+    {
+      "key": "mail.label.s018",
+      "de": "Termin",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Termin"
+    },
+    {
+      "key": "mail.lane.title",
+      "de": "Postfach",
+      "area": "mail",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "Mailbox",
+      "formerKey": "mail.title.s001"
+    },
+    {
+      "key": "mail.lane.labels",
+      "de": "Labels",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Labels",
+      "formerKey": "mail.label.s022"
+    },
+    {
+      "key": "mail.pick.read",
+      "de": "Gelesen / ungelesen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Read / unread",
+      "formerKey": "mail.label.s023"
+    },
+    {
+      "key": "mail.pick.clear",
+      "de": "Auswahl aufheben",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Deselect",
+      "formerKey": "mail.label.s026"
+    },
+    {
+      "key": "mail.label.s027",
+      "de": "Nachrichten werden geladen\n12 von 50",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Loading messages\n12 of 50"
+    },
+    {
+      "key": "mail.title.s002",
+      "de": "Kein Postfach verbunden",
+      "area": "mail",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "No mailbox connected"
+    },
+    {
+      "key": "mail.list.notConnected.text",
+      "de": "Verbinde ein Postfach, um Mails hier zu lesen und zu schreiben.",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Connect a mailbox to read and write mail here.",
+      "formerKey": "mail.label.s028"
+    },
+    {
+      "key": "mail.list.notConnected.act",
+      "de": "Postfach verbinden",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Connect Mailbox",
+      "formerKey": "mail.button.s020"
+    },
+    {
+      "key": "mail.list.failed",
+      "de": "Nachrichten konnten nicht geladen werden",
+      "area": "mail",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "Couldn’t load messages",
+      "formerKey": "mail.title.s003"
+    },
+    {
+      "key": "mail.label.s029",
+      "de": "Der Server hat nicht geantwortet. Zuletzt geladen vor 2 Stunden.",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "The server didn’t respond. Last loaded 2 hours ago."
+    },
+    {
+      "key": "mail.list.failed.act",
+      "de": "Erneut versuchen",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Try Again",
+      "formerKey": "mail.button.s021, settings.button.s014, mail.toast.retry, settings.toast.retry, mail.projectFiles.retry, mail.notice.offline.action, shell.textButton.assistantRetry.text"
+    },
+    {
+      "key": "mail.label.s030",
+      "de": "Keine Treffer für „",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "No results for “"
+    },
+    {
+      "key": "mail.list.emptySearch.act",
+      "de": "Suche leeren",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Clear Search",
+      "formerKey": "mail.button.s022"
+    },
+    {
+      "key": "mail.list.noFilterMatch",
+      "de": "Keine Treffer für diesen Filter.",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "No results for this filter.",
+      "formerKey": "mail.label.s031"
+    },
+    {
+      "key": "mail.list.noFilterMatch.act",
+      "de": "Alle zeigen",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Show All",
+      "formerKey": "mail.button.s023"
+    },
+    {
+      "key": "mail.label.s032",
+      "de": "Keine Nachrichten in",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "No messages in"
+    },
+    {
+      "key": "mail.list.empty.act",
+      "de": "Verfassen",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Compose",
+      "formerKey": "mail.button.s024"
+    },
+    {
+      "key": "mail.list.signInExpired.act",
+      "de": "Erneut verbinden",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Reconnect",
+      "formerKey": "mail.button.s025, mail.notice.draftNotSaved.actionReconnect"
+    },
+    {
+      "key": "mail.confirm.purge.question",
+      "de": "Endgültig löschen?",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Delete permanently?",
+      "formerKey": "mail.label.s033"
+    },
+    {
+      "key": "mail.confirm.purge.yes",
+      "de": "Löschen",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Delete",
+      "formerKey": "mail.button.s026"
+    },
+    {
+      "key": "mail.label.s038",
+      "de": "Fwd:",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Fwd:"
+    },
+    {
+      "key": "mail.label.s039",
+      "de": "Mehr",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "More"
+    },
+    {
+      "key": "mail.draft.sendFailed",
+      "de": "Nicht gesendet",
+      "area": "mail",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "Not sent",
+      "formerKey": "mail.title.s004, mail.draftList.notSent"
+    },
+    {
+      "key": "mail.draft.failed.text",
+      "de": "Der Server hat nicht geantwortet. Der Entwurf liegt sicher in den Entwürfen.",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "The server didn’t respond. The draft is safe in Drafts.",
+      "formerKey": "mail.label.s041"
+    },
+    {
+      "key": "mail.draft.failed.act",
+      "de": "Erneut senden",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Send Again",
+      "formerKey": "mail.button.s027, mail.toast.resend, mail.outbox.retry.tooltip"
+    },
+    {
+      "key": "mail.draft.grant.title",
+      "de": "Senden braucht die Schreibfreigabe",
+      "area": "mail",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "Sending needs write access",
+      "formerKey": "mail.title.s005"
+    },
+    {
+      "key": "mail.draft.grant.text",
+      "de": "Einmal neu anmelden, dann geht der Entwurf raus.",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Sign in once more, then the draft goes out.",
+      "formerKey": "mail.label.s042"
+    },
+    {
+      "key": "mail.draft.grant.act",
+      "de": "Einstellungen öffnen",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Open Settings",
+      "formerKey": "mail.button.s028, shell.textButton.assistantOff.text"
+    },
+    {
+      "key": "mail.confirm.discard.question",
+      "de": "Entwurf verwerfen?",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Discard draft?",
+      "formerKey": "mail.label.s043"
+    },
+    {
+      "key": "mail.confirm.discard.yes",
+      "de": "Verwerfen",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Discard",
+      "formerKey": "mail.button.s029"
+    },
+    {
+      "key": "mail.role.inbox",
+      "de": "Eingang",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Inbox",
+      "formerKey": "mail.label.s044"
+    },
+    {
+      "key": "mail.label.s045",
+      "de": "Markiert",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Flagged"
+    },
+    {
+      "key": "mail.role.sent",
+      "de": "Gesendet",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Sent",
+      "formerKey": "mail.label.s046, mail.outbox.toast.sent"
+    },
+    {
+      "key": "mail.role.drafts",
+      "de": "Entwürfe",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Drafts",
+      "formerKey": "mail.label.s047"
+    },
+    {
+      "key": "mail.label.s048",
+      "de": "Alle",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "All"
+    },
+    {
+      "key": "mail.role.archive",
+      "de": "Archiv",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Archive",
+      "formerKey": "mail.label.s049"
+    },
+    {
+      "key": "mail.role.spam",
+      "de": "Spam",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Junk",
+      "formerKey": "mail.label.s050"
+    },
+    {
+      "key": "mail.role.trash",
+      "de": "Papierkorb",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Trash",
+      "formerKey": "mail.label.s051"
+    },
+    {
+      "key": "mail.label.s052",
+      "de": "Küche Hansen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Küche Hansen"
+    },
+    {
+      "key": "mail.label.s053",
+      "de": "Wohnung Vogt",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Wohnung Vogt"
+    },
+    {
+      "key": "mail.label.s054",
+      "de": "Praxis Kern",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Praxis Kern"
+    },
+    {
+      "key": "mail.label.s055",
+      "de": "Lieferanten",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Lieferanten"
+    },
+    {
+      "key": "mail.label.s056",
+      "de": "Mf",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Mf"
+    },
+    {
+      "key": "mail.label.s057",
+      "de": "Ungelesen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Unread"
+    },
+    {
+      "key": "mail.label.s058",
+      "de": "Mit Anhang",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "With Attachments"
+    },
+    {
+      "key": "settings.menu.s001",
+      "de": "Mail",
+      "area": "settings",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Mail"
+    },
+    {
+      "key": "settings.start.settings",
+      "de": "Einstellungen",
+      "area": "settings",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Settings",
+      "formerKey": "settings.menu.s002, settings.title.s005"
+    },
+    {
+      "key": "settings.start.lastOpen",
+      "de": "Zuletzt offen",
+      "area": "settings",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Last Opened",
+      "formerKey": "settings.menu.s003"
+    },
+    {
+      "key": "settings.button.s001",
+      "de": "Signatur anlegen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Add Signature"
+    },
+    {
+      "key": "settings.button.s002",
+      "de": "Signatur entfernen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Remove Signature"
+    },
+    {
+      "key": "text.settings.action.addAccount",
+      "de": "Konto hinzufügen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Add Account",
+      "formerKey": "settings.button.s003"
+    },
+    {
+      "key": "settings.action.reconnect",
+      "de": "Erneut verbinden",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Reconnect",
+      "formerKey": "settings.button.s005"
+    },
+    {
+      "key": "settings.action.reenter",
+      "de": "Neu eintragen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Enter Again",
+      "formerKey": "settings.button.s006"
+    },
+    {
+      "key": "settings.action.disconnect",
+      "de": "Trennen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Disconnect",
+      "formerKey": "settings.button.s007"
+    },
+    {
+      "key": "settings.button.s009",
+      "de": "Exportieren",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Export"
+    },
+    {
+      "key": "settings.button.s010",
+      "de": "Zurücksetzen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Reset"
+    },
+    {
+      "key": "settings.button.s011",
+      "de": "Erneut durchgehen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Go Through Again"
+    },
+    {
+      "key": "settings.system.copy",
+      "de": "Kopieren",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Copy",
+      "formerKey": "settings.button.s012"
+    },
+    {
+      "key": "settings.button.s013",
+      "de": "Wiederherstellen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Restore"
+    },
+    {
+      "key": "settings.button.s015",
+      "de": "Anlegen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Create"
+    },
+    {
+      "key": "settings.contacts.remove",
+      "de": "Entfernen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Remove",
+      "formerKey": "settings.button.s016"
+    },
+    {
+      "key": "settings.button.s017",
+      "de": "Jetzt sichern",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Back Up Now"
+    },
+    {
+      "key": "settings.action.foldColumn",
+      "de": "Spalte falten",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Collapse Column",
+      "formerKey": "settings.button.s018"
+    },
+    {
+      "key": "settings.action.more",
+      "de": "Mehr",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "More",
+      "formerKey": "settings.button.s019"
+    },
+    {
+      "key": "settings.feedback.s001",
+      "de": "Eingang und Ausgang erreichbar.",
+      "area": "settings",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Incoming and outgoing reachable."
+    },
+    {
+      "key": "settings.feedback.s002",
+      "de": "Export gespeichert.",
+      "area": "settings",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Export saved."
+    },
+    {
+      "key": "settings.toast.copied",
+      "de": "In die Zwischenablage kopiert",
+      "area": "settings",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Copied to clipboard",
+      "formerKey": "settings.feedback.s003"
+    },
+    {
+      "key": "settings.feedback.s004",
+      "de": "Backup erstellt",
+      "area": "settings",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "Backup created"
+    },
+    {
+      "key": "settings.label.s001",
+      "de": "Konto entfernen",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Remove Account"
+    },
+    {
+      "key": "settings.row.state",
+      "de": "Zustand",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Status",
+      "formerKey": "settings.label.s002"
+    },
+    {
+      "key": "settings.row.access",
+      "de": "Anmeldung",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Sign-in",
+      "formerKey": "settings.label.s003"
+    },
+    {
+      "key": "settings.label.s004",
+      "de": "Name",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Name"
+    },
+    {
+      "key": "settings.identity.role",
+      "de": "Rolle",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Role",
+      "formerKey": "settings.label.s005"
+    },
+    {
+      "key": "settings.identity.code",
+      "de": "Kürzel",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Initials",
+      "formerKey": "settings.label.s006"
+    },
+    {
+      "key": "settings.label.s007",
+      "de": "Telefon",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Phone"
+    },
+    {
+      "key": "settings.identity.signOut",
+      "de": "Auf diesem Mac abmelden",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Sign out on this Mac",
+      "formerKey": "settings.label.s008, settings.signOut.label"
+    },
+    {
+      "key": "settings.identity.account",
+      "de": "Konto",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Account",
+      "formerKey": "settings.label.s009"
+    },
+    {
+      "key": "settings.label.s010",
+      "de": "Zeile 1",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Line 1"
+    },
+    {
+      "key": "settings.label.s011",
+      "de": "Zeile 2",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Line 2"
+    },
+    {
+      "key": "settings.label.s012",
+      "de": "Eigene Daten exportieren",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Export your data"
+    },
+    {
+      "key": "settings.appearance.label",
+      "de": "Erscheinung",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Appearance",
+      "formerKey": "settings.label.s013"
+    },
+    {
+      "key": "settings.appearance.foreign",
+      "de": "Fremde Inhalte",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Remote content",
+      "formerKey": "settings.label.s014"
+    },
+    {
+      "key": "settings.start.label",
+      "de": "Beim Öffnen",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "On launch",
+      "formerKey": "settings.label.s015"
+    },
+    {
+      "key": "settings.lock.after",
+      "de": "Sperren nach",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Lock after",
+      "formerKey": "settings.label.s016"
+    },
+    {
+      "key": "settings.label.s017",
+      "de": "Alle Kürzel",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "All initials"
+    },
+    {
+      "key": "settings.label.s018",
+      "de": "Fortschritt",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Progress"
+    },
+    {
+      "key": "settings.folders.projects",
+      "de": "Projektordner",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Project folder",
+      "formerKey": "settings.label.s019, settings.projectRoot.label"
+    },
+    {
+      "key": "settings.folders.data",
+      "de": "Projektdaten",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Project data",
+      "formerKey": "settings.label.s020"
+    },
+    {
+      "key": "settings.label.s021",
+      "de": "Vorlagen",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Templates"
+    },
+    {
+      "key": "settings.label.s022",
+      "de": "Einrichtung",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Setup"
+    },
+    {
+      "key": "settings.label.version",
+      "de": "Version",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Version",
+      "formerKey": "settings.label.s023"
+    },
+    {
+      "key": "settings.label.branch",
+      "de": "Zweig",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Branch",
+      "formerKey": "settings.label.s024"
+    },
+    {
+      "key": "settings.label.database",
+      "de": "Datenbank",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Database",
+      "formerKey": "settings.label.s025"
+    },
+    {
+      "key": "settings.label.diagnosis",
+      "de": "Diagnose",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Diagnostics",
+      "formerKey": "settings.label.s026"
+    },
+    {
+      "key": "settings.label.s027",
+      "de": "Heute, 09:00",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Today, 09:00"
+    },
+    {
+      "key": "settings.label.s028",
+      "de": "Gestern, 09:00",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Yesterday, 09:00"
+    },
+    {
+      "key": "settings.label.s029",
+      "de": "Zuschlag Montage",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Installation surcharge"
+    },
+    {
+      "key": "settings.label.s030",
+      "de": "Zuschlag Material",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Material surcharge"
+    },
+    {
+      "key": "settings.label.s031",
+      "de": "Stundensatz Werkstatt",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Workshop hourly rate"
+    },
+    {
+      "key": "settings.label.s032",
+      "de": "Firma",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Company"
+    },
+    {
+      "key": "settings.company.row.address",
+      "de": "Anschrift",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Address",
+      "formerKey": "settings.label.s033, settings.company.address"
+    },
+    {
+      "key": "settings.company.row.web",
+      "de": "Web",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Web",
+      "formerKey": "settings.label.s034, settings.company.web"
+    },
+    {
+      "key": "settings.company.row.mail",
+      "de": "Mail",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Email",
+      "formerKey": "settings.label.s035, settings.company.mail"
+    },
+    {
+      "key": "settings.label.s036",
+      "de": "Vorlage anlegen",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Create template"
+    },
+    {
+      "key": "settings.imprint.row.author",
+      "de": "Urheber",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Author",
+      "formerKey": "settings.label.s037, settings.imprint.author"
+    },
+    {
+      "key": "settings.imprint.row.rights",
+      "de": "Rechte",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Rights",
+      "formerKey": "settings.label.s038, settings.imprint.rights"
+    },
+    {
+      "key": "settings.imprint.row.signature",
+      "de": "Signatur",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Signature",
+      "formerKey": "settings.label.s039, settings.imprint.signature"
+    },
+    {
+      "key": "settings.label.s040",
+      "de": "Unter neue Mails setzen",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Place under new messages"
+    },
+    {
+      "key": "settings.label.s041",
+      "de": "Über zitiertem Text setzen",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Place above quoted text"
+    },
+    {
+      "key": "settings.identity.birthdays",
+      "de": "Geburtstag im Team zeigen",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Show team birthdays",
+      "formerKey": "settings.label.s042"
+    },
+    {
+      "key": "settings.label.s043",
+      "de": "Antworten und Weiterleitungen eingeschlossen",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Including replies and forwards"
+    },
+    {
+      "key": "settings.privacy.images",
+      "de": "Bilder in Mails laden",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Load images in messages",
+      "formerKey": "settings.label.s044"
+    },
+    {
+      "key": "settings.privacy.assistantOff",
+      "de": "Assistent ganz aus",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Turn off assistant completely",
+      "formerKey": "settings.label.s045"
+    },
+    {
+      "key": "settings.privacy.chatFiles",
+      "de": "Dateien im Chat",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Files in chat",
+      "formerKey": "settings.label.s047"
+    },
+    {
+      "key": "settings.lock.label",
+      "de": "App-Sperre",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "App lock",
+      "formerKey": "settings.label.s049"
+    },
+    {
+      "key": "settings.label.s052",
+      "de": "Zähler am Blob und im Dock.",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Badge on the blob and in the Dock."
+    },
+    {
+      "key": "settings.accounts.none.title",
+      "de": "Noch kein Mail-Konto.",
+      "area": "settings",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "No mail account yet.",
+      "formerKey": "settings.title.s001"
+    },
+    {
+      "key": "settings.unreadable.title",
+      "de": "Der Schlüsselbund kann nicht gelesen werden.",
+      "area": "settings",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "The keychain can’t be read.",
+      "formerKey": "settings.title.s002"
+    },
+    {
+      "key": "settings.unreadable.body",
+      "de": "Der Schlüssel ist gespeichert, die App kommt nicht an ihn heran. Einmal neu eintragen.",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "The key is stored, but the app can’t access it. Enter it once more.",
+      "formerKey": "settings.label.s054"
+    },
+    {
+      "key": "settings.title.s003",
+      "de": "Tagebuch konnte nicht geladen werden.",
+      "area": "settings",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "Couldn’t load the log."
+    },
+    {
+      "key": "settings.label.s055",
+      "de": "Die Datei ist gerade gesperrt.",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "The file is locked right now."
+    },
+    {
+      "key": "settings.label.s056",
+      "de": "Signatur ·",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Signature ·"
+    },
+    {
+      "key": "settings.label.s057",
+      "de": "Für dieses Postfach gibt es keine Signatur.",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "This mailbox has no signature."
+    },
+    {
+      "key": "settings.accounts.head",
+      "de": "Postfächer",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Mailboxes",
+      "formerKey": "settings.label.s058"
+    },
+    {
+      "key": "settings.title.s004",
+      "de": "Prüfung",
+      "area": "settings",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "Check"
+    },
+    {
+      "key": "settings.label.s059",
+      "de": "Es fehlen:",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Missing:"
+    },
+    {
+      "key": "settings.sync.head",
+      "de": "Abgleich",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Sync",
+      "formerKey": "settings.label.s060"
+    },
+    {
+      "key": "settings.label.s062",
+      "de": "Signatur fehlt.",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Signature missing."
+    },
+    {
+      "key": "settings.label.s064",
+      "de": "Die Regler für Alarm, Ton und Nachfassen kehren mit ihren Bereichen zurück. Heute meldet nur Mail neue Nachrichten.",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "The controls for alerts, sound and follow-up return with their areas. Today only Mail reports new messages."
+    },
+    {
+      "key": "settings.label.s065",
+      "de": "Automatisch · 18,2 MB",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Automatic · 18.2 MB"
+    },
+    {
+      "key": "settings.label.s066",
+      "de": "Automatisch · 18,1 MB",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Automatic · 18.1 MB"
+    },
+    {
+      "key": "settings.label.s067",
+      "de": "Von Hand · 17,9 MB",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Manual · 17.9 MB"
+    },
+    {
+      "key": "settings.label.s068",
+      "de": "Eine Wiederherstellung greift beim nächsten Start.",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "A restore takes effect on the next launch."
+    },
+    {
+      "key": "settings.templates.none",
+      "de": "Noch keine Vorlage.",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "No template yet.",
+      "formerKey": "settings.label.s069"
+    },
+    {
+      "key": "settings.label.s070",
+      "de": "Vorlage",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Template"
+    },
+    {
+      "key": "settings.label.s071",
+      "de": "Integrationen",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Integrations"
+    },
+    {
+      "key": "settings.label.s072",
+      "de": "Schlüssel",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Keys"
+    },
+    {
+      "key": "settings.label.s073",
+      "de": "Unter jeder Mail, je Konto",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Below every message, per account"
+    },
+    {
+      "key": "settings.section.contacts.detail",
+      "de": "Gesichert und vorgeschlagen",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Saved and suggested",
+      "formerKey": "settings.label.s074"
+    },
+    {
+      "key": "settings.section.privacy.detail",
+      "de": "Was die App lädt und teilt",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "What the app loads and shares",
+      "formerKey": "settings.label.s075"
+    },
+    {
+      "key": "settings.section.appearance.detail",
+      "de": "Erscheinung, Startansicht, App-Sperre",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Appearance, start view, app lock",
+      "formerKey": "settings.label.s076"
+    },
+    {
+      "key": "settings.label.s077",
+      "de": "Was die App beim Öffnen zeigt",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "What the app shows on launch"
+    },
+    {
+      "key": "settings.label.s078",
+      "de": "Kehren mit ihren Bereichen zurück",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Return with their areas"
+    },
+    {
+      "key": "settings.section.folders.detail",
+      "de": "Ordnerschema, Einrichtung im geteilten Drive",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Folder scheme, setup in the shared Drive",
+      "formerKey": "settings.label.s079"
+    },
+    {
+      "key": "settings.section.system.detail",
+      "de": "Version, Build, Datenbank",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Version, build, database",
+      "formerKey": "settings.label.s080"
+    },
+    {
+      "key": "settings.section.companyData.detail",
+      "de": "Firma, Anschrift, Kontakt",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Company, address, contact",
+      "formerKey": "settings.label.s081"
+    },
+    {
+      "key": "settings.section.templates.detail",
+      "de": "Noch keine Vorlage",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "No template yet",
+      "formerKey": "settings.label.s082"
+    },
+    {
+      "key": "settings.section.imprint.detail",
+      "de": "Urheber, Rechte, Signatur",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Author, rights, signature",
+      "formerKey": "settings.label.s083"
+    },
+    {
+      "key": "settings.label.s084",
+      "de": "Sichern und wiederherstellen",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Back up and restore"
+    },
+    {
+      "key": "settings.label.s085",
+      "de": "Zuschläge der Werkstatt",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Workshop surcharges"
+    },
+    {
+      "key": "settings.label.s086",
+      "de": "GMX",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "GMX"
+    },
+    {
+      "key": "settings.label.s087",
+      "de": "SSL/TLS",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "SSL/TLS"
+    },
+    {
+      "key": "settings.appearance.dark",
+      "de": "Dunkel",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Dark",
+      "formerKey": "settings.label.s088"
+    },
+    {
+      "key": "settings.label.s089",
+      "de": "Mf",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Mf"
+    },
+    {
+      "key": "overview.small",
+      "de": "Klein",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Small",
+      "formerKey": "settings.label.s090"
+    },
+    {
+      "key": "overview.medium",
+      "de": "Mittel",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Medium",
+      "formerKey": "settings.label.s091"
+    },
+    {
+      "key": "overview.large",
+      "de": "Groß",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Large",
+      "formerKey": "settings.label.s092"
+    },
+    {
+      "key": "shell.safeArea.tooltip",
+      "de": "Kamera-Aussparung: der Sichtbereich beginnt darunter",
+      "area": "shell",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Camera housing: the visible area starts below",
+      "element": "shell.safe-area"
+    },
+    {
+      "key": "shell.handle.down.tooltip",
+      "de": "Ziehen · Doppelklick setzt zurück",
+      "area": "shell",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Drag · double-click to reset",
+      "element": "shell.handle.down"
+    },
+    {
+      "key": "shell.blobFace.tooltip",
+      "de": "Klick: Bereiche · Doppelklick: Assistent",
+      "area": "shell",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Click: areas · Double-click: assistant",
+      "element": "shell.blob-face"
+    },
+    {
+      "key": "menu.search",
+      "de": "Finden",
+      "area": "shell",
+      "kind": "placeholder",
+      "status": "set-by-design",
+      "en": "Find",
+      "element": "shell.search-field",
+      "formerKey": "shell.searchField.placeholder, shell.searchField.aria"
+    },
+    {
+      "key": "menu.empty",
+      "de": "Nichts gefunden",
+      "area": "shell",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Nothing found",
+      "element": "shell.menu",
+      "formerKey": "shell.menu.text"
+    },
+    {
+      "key": "assistant.field",
+      "de": "Frage stellen …",
+      "area": "shell",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Ask a question …",
+      "element": "shell.assistant-input",
+      "formerKey": "shell.assistantInput.text"
+    },
+    {
+      "key": "confirm.no",
+      "de": "Nein",
+      "area": "shell",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "No",
+      "element": "confirm.confirm-no.no",
+      "formerKey": "shell.confirmNo.no.text"
+    },
+    {
+      "key": "mail.notice.mailTooLarge.title",
+      "de": "Mail zu groß",
+      "area": "mail",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "Message too large",
+      "element": "mail.card-notice-3"
+    },
+    {
+      "key": "mail.notice.mailTooLarge.text",
+      "de": "Mit den Anhängen ist die Mail größer, als das Postfach senden darf.",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "With its attachments, the message is larger than the mailbox can send.",
+      "element": "mail.card-notice-3"
+    },
+    {
+      "key": "mail.notice.mailTooLarge.action",
+      "de": "Anhänge ändern",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Change Attachments",
+      "element": "mail.card-notice-3"
+    },
+    {
+      "key": "mail.draftStatus.tooLarge",
+      "de": "Zu groß",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Too large"
+    },
+    {
+      "key": "settings.signOut.question",
+      "de": "Abmelden?",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Sign out?"
+    },
+    {
+      "key": "settings.identity.signOut.action",
+      "de": "Abmelden",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Sign Out",
+      "formerKey": "settings.signOut.confirm"
+    },
+    {
+      "key": "settings.signOut.detail",
+      "de": "Trennt {count} Dienste · {services}",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Disconnects {count} services · {services}"
+    },
+    {
+      "key": "settings.signOut.detailOne",
+      "de": "Trennt 1 Dienst · {services}",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Disconnects 1 service · {services}"
+    },
+    {
+      "key": "settings.signOut.detailNone",
+      "de": "Keine Dienste verbunden",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "No services connected"
+    },
+    {
+      "key": "settings.signOut.done",
+      "de": "Abgemeldet · die App startet neu",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Signed out · the app restarts"
+    },
+    {
+      "key": "shell.lock.touch",
+      "de": "Mit Touch ID entsperren",
+      "area": "shell",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Unlock with Touch ID",
+      "element": "shell.lock-touch"
+    },
+    {
+      "key": "shell.lock.touchWaiting",
+      "de": "Warte auf Touch ID",
+      "area": "shell",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Waiting for Touch ID",
+      "element": "shell.lock-touch"
+    },
+    {
+      "key": "shell.lock.usePassword",
+      "de": "Passwort eingeben",
+      "area": "shell",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Enter Password",
+      "element": "shell.lock-use-password"
+    },
+    {
+      "key": "settings.service.dhlship.field.password",
+      "de": "Passwort",
+      "area": "shell",
+      "kind": "placeholder",
+      "status": "set-by-design",
+      "en": "Password",
+      "element": "shell.lock-password",
+      "formerKey": "shell.lock.passwordPlaceholder"
+    },
+    {
+      "key": "shell.lock.unlock",
+      "de": "Entsperren",
+      "area": "shell",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Unlock",
+      "element": "shell.lock-unlock"
+    },
+    {
+      "key": "shell.lock.useTouch",
+      "de": "Touch ID",
+      "area": "shell",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Touch ID",
+      "element": "shell.lock-use-touch"
+    },
+    {
+      "key": "shell.lock.touchFailed",
+      "de": "Touch ID nicht erkannt",
+      "area": "shell",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Touch ID not recognized",
+      "element": "shell.lock-error"
+    },
+    {
+      "key": "shell.lock.passwordWrong",
+      "de": "Passwort falsch",
+      "area": "shell",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Incorrect password",
+      "element": "shell.lock-error"
+    },
+    {
+      "key": "mail.imageTile.blocked",
+      "de": "Bild blockiert",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Image blocked",
+      "element": "mail.image-tile"
+    },
+    {
+      "key": "mail.failure.archive",
+      "de": "Archivieren fehlgeschlagen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Couldn’t archive",
+      "element": "mail.toast"
+    },
+    {
+      "key": "mail.failure.move",
+      "de": "Verschieben fehlgeschlagen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Couldn’t move",
+      "element": "mail.toast"
+    },
+    {
+      "key": "mail.failure.delete",
+      "de": "Löschen fehlgeschlagen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Couldn’t delete",
+      "element": "mail.toast"
+    },
+    {
+      "key": "mail.failure.flag",
+      "de": "Markieren fehlgeschlagen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Couldn’t flag",
+      "element": "mail.toast"
+    },
+    {
+      "key": "mail.failure.read",
+      "de": "Nachricht nicht geöffnet",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Couldn’t open message",
+      "element": "mail.toast"
+    },
+    {
+      "key": "mail.failure.attachment",
+      "de": "Anhang nicht geladen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Couldn’t load attachment",
+      "element": "mail.toast"
+    },
+    {
+      "key": "mail.failure.thread",
+      "de": "Verlauf nicht geladen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Couldn’t load conversation",
+      "element": "mail.toast"
+    },
+    {
+      "key": "mail.failure.draft",
+      "de": "Entwurf nicht gesichert",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Couldn’t save draft",
+      "element": "mail.toast"
+    },
+    {
+      "key": "mail.notice.outboxUnsaved.title",
+      "de": "Postausgang nicht gesichert",
+      "area": "mail",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "Outbox not saved",
+      "element": "mail.card-notice"
+    },
+    {
+      "key": "mail.notice.outboxUnsaved.text",
+      "de": "{count} Mails liegen nur im Arbeitsspeicher und gehen beim Beenden verloren.",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "{count} messages exist only in memory and will be lost when you quit.",
+      "element": "mail.card-notice"
+    },
+    {
+      "key": "mail.notice.outboxUnsaved.action",
+      "de": "Erneut sichern",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Save Again",
+      "element": "mail.card-notice"
+    },
+    {
+      "key": "settings.projectRoot.choose",
+      "de": "Wählen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Choose"
+    },
+    {
+      "key": "settings.projectRoot.drive",
+      "de": "Laufwerk",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Drive"
+    },
+    {
+      "key": "settings.projectRoot.selected",
+      "de": "Projektordner · {path}",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Project folder · {path}"
+    },
+    {
+      "key": "settings.projectRoot.synced",
+      "de": "Projektordner abgeglichen · gerade eben",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Project folder synced · just now"
+    },
+    {
+      "key": "settings.projectRoot.syncFailed",
+      "de": "Abgleich fehlgeschlagen · Projektordner nicht erreichbar",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Sync failed · project folder unavailable"
+    },
+    {
+      "key": "mail.projectFiles.noRoot",
+      "de": "Kein Projektordner gewählt",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "No project folder chosen"
+    },
+    {
+      "key": "mail.projectFiles.chooseRoot",
+      "de": "Projektordner wählen …",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Choose Project Folder …"
+    },
+    {
+      "key": "mail.projectFiles.loading",
+      "de": "Lädt …",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Loading …"
+    },
+    {
+      "key": "mail.projectFiles.empty",
+      "de": "Keine Dateien",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "No files"
+    },
+    {
+      "key": "mail.projectFiles.loadFailed",
+      "de": "Ordner nicht geladen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Couldn’t load folder"
+    },
+    {
+      "key": "mail.projectFiles.more",
+      "de": "{count} weitere im Projektordner",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "{count} more in project folder"
+    },
+    {
+      "key": "mail.saveMail.menu",
+      "de": "Mail in Projektordner sichern",
+      "area": "mail",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Save Message to Project Folder"
+    },
+    {
+      "key": "mail.saveMail.chooseProject",
+      "de": "Sichern in Projekt",
+      "area": "mail",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "Save to Project"
+    },
+    {
+      "key": "mail.saveMail.done",
+      "de": "Als PDF gesichert · {project} · Korrespondenz",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Saved as PDF · {project} · Correspondence"
+    },
+    {
+      "key": "mail.saveMail.failed",
+      "de": "Nicht gesichert · Projektordner nicht erreichbar",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Not saved · project folder unavailable"
+    },
+    {
+      "key": "mail.attachment.copied",
+      "de": "Kopiert nach {project} · Anhänge",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Copied to {project} · Attachments"
+    },
+    {
+      "key": "mail.attachment.copyRemoved",
+      "de": "Kopie entfernt",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Copy removed"
+    },
+    {
+      "key": "settings.service.claude.field.model",
+      "de": "Modell",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Model",
+      "formerKey": "settings.ai.model"
+    },
+    {
+      "key": "settings.value.default",
+      "de": "Standard",
+      "area": "settings",
+      "kind": "menu",
+      "status": "set-by-design",
+      "en": "Default",
+      "formerKey": "settings.ai.modelStandard, settings.mailStore.folder.default"
+    },
+    {
+      "key": "settings.ai.usageHead",
+      "de": "Verbrauch",
+      "area": "settings",
+      "kind": "title",
+      "status": "set-by-design",
+      "en": "Usage"
+    },
+    {
+      "key": "settings.ai.usageSince",
+      "de": "Tokens seit {date} · {days} Tage",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Tokens since {date} · {days} days"
+    },
+    {
+      "key": "settings.ai.usageSinceOne",
+      "de": "Tokens seit {date} · 1 Tag",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Tokens since {date} · 1 day"
+    },
+    {
+      "key": "settings.ai.usageValue",
+      "de": "Eingabe {input} · Ausgabe {output}",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Input {input} · Output {output}"
+    },
+    {
+      "key": "settings.ai.priceIn",
+      "de": "Preis je Mio. Tokens · Eingabe",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Price per million tokens · input"
+    },
+    {
+      "key": "settings.ai.priceOut",
+      "de": "Preis je Mio. Tokens · Ausgabe",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Price per million tokens · output"
+    },
+    {
+      "key": "settings.ai.estimate",
+      "de": "Geschätzt",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Estimated"
+    },
+    {
+      "key": "settings.ai.estimateValue",
+      "de": "ca. {amount} €",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "approx. €{amount}"
+    },
+    {
+      "key": "settings.ai.counter",
+      "de": "Zähler",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Counter"
+    },
+    {
+      "key": "settings.ai.resetQuestion",
+      "de": "Zurücksetzen?",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Reset?"
+    },
+    {
+      "key": "settings.ai.resetConfirm",
+      "de": "Zurücksetzen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Reset"
+    },
+    {
+      "key": "settings.company.name",
+      "de": "Firma",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Company"
+    },
+    {
+      "key": "settings.company.namePlaceholder",
+      "de": "Name der Firma",
+      "area": "settings",
+      "kind": "placeholder",
+      "status": "set-by-design",
+      "en": "Company name"
+    },
+    {
+      "key": "settings.company.addressPlaceholder",
+      "de": "Straße, PLZ Ort",
+      "area": "settings",
+      "kind": "placeholder",
+      "status": "set-by-design",
+      "en": "Street, postcode, city"
+    },
+    {
+      "key": "settings.company.phone",
+      "de": "Telefon",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Phone"
+    },
+    {
+      "key": "settings.company.phonePlaceholder",
+      "de": "Nummer",
+      "area": "settings",
+      "kind": "placeholder",
+      "status": "set-by-design",
+      "en": "Number"
+    },
+    {
+      "key": "settings.contacts.address",
+      "de": "Adresse",
+      "area": "settings",
+      "kind": "placeholder",
+      "status": "set-by-design",
+      "en": "Address",
+      "formerKey": "settings.company.webPlaceholder, settings.company.mailPlaceholder"
+    },
+    {
+      "key": "settings.imprint.authorPlaceholder",
+      "de": "Name",
+      "area": "settings",
+      "kind": "placeholder",
+      "status": "set-by-design",
+      "en": "Name"
+    },
+    {
+      "key": "settings.imprint.rightsPlaceholder",
+      "de": "Rechteinhaber",
+      "area": "settings",
+      "kind": "placeholder",
+      "status": "set-by-design",
+      "en": "Rights holder"
+    },
+    {
+      "key": "settings.imprint.signaturePlaceholder",
+      "de": "Zeile unter dem Impressum",
+      "area": "settings",
+      "kind": "placeholder",
+      "status": "set-by-design",
+      "en": "Line below the imprint"
+    },
+    {
+      "key": "mail.list.loadMore",
+      "de": "Mehr laden",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Load More",
+      "element": "mail.text-button.load-more"
+    },
+    {
+      "key": "mail.list.loadingMore",
+      "de": "Lädt …",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Loading …",
+      "element": "mail.text-button.load-more"
+    },
+    {
+      "key": "mail.failure.loadMore",
+      "de": "Weitere Mails nicht geladen",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Couldn’t load more messages",
+      "element": "mail.toast"
+    },
+    {
+      "key": "mail.draftStatus.saving",
+      "de": "Sichert …",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Saving …"
+    },
+    {
+      "key": "mail.draftStatus.notSaved",
+      "de": "Nicht gesichert",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Not saved"
+    },
+    {
+      "key": "mail.draftStatus.outbox",
+      "de": "Im Postausgang",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "In Outbox"
+    },
+    {
+      "key": "mail.notice.draftNotSaved.title",
+      "de": "Entwurf nicht gesichert",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Draft not saved",
+      "element": "mail.card-notice-3"
+    },
+    {
+      "key": "mail.notice.draftNotSaved.textServer",
+      "de": "Der Server ist nicht erreichbar.",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "The server can’t be reached.",
+      "element": "mail.card-notice-3"
+    },
+    {
+      "key": "mail.notice.draftNotSaved.textAuth",
+      "de": "Die Anmeldung ist abgelaufen.",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Your sign-in has expired.",
+      "element": "mail.card-notice-3"
+    },
+    {
+      "key": "mail.notice.draftNotSaved.actionRetry",
+      "de": "Erneut sichern",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Save Again",
+      "element": "mail.card-notice-3"
+    },
+    {
+      "key": "mail.toast.outbox",
+      "de": "Im Postausgang",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "In Outbox",
+      "element": "mail.toast"
+    },
+    {
+      "key": "mail.toast.notSentInDrafts",
+      "de": "Nicht gesendet · im Ordner Entwürfe",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Not sent · in Drafts",
+      "element": "mail.toast"
+    },
+    {
+      "key": "mail.draftList.outbox",
+      "de": "Im Postausgang",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "In Outbox"
+    },
+    {
+      "key": "mail.drop.over",
+      "de": "Loslassen hängt an",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Release to attach",
+      "element": "mail.drop-overlay"
+    },
+    {
+      "key": "mail.toast.pdfSaved",
+      "de": "Als PDF gesichert",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Saved as PDF",
+      "element": "mail.toast",
+      "formerKey": "mail.feedback.s013"
+    },
+    {
+      "key": "mail.toast.pdfFailed",
+      "de": "PDF nicht gesichert",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "PDF not saved",
+      "element": "mail.toast"
+    },
+    {
+      "key": "mail.notice.offline.title",
+      "de": "Keine Verbindung",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "No connection"
+    },
+    {
+      "key": "mail.notice.offline.text",
+      "de": "Die zuletzt geladenen Mails bleiben lesbar.",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "The most recently loaded messages stay readable."
+    },
+    {
+      "key": "settings.mailStore.head",
+      "de": "Lokale Ablage",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Local storage"
+    },
+    {
+      "key": "settings.mailStore.period",
+      "de": "Zeitraum",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Period"
+    },
+    {
+      "key": "settings.mailStore.period.d30",
+      "de": "30 Tage",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "30 days"
+    },
+    {
+      "key": "settings.mailStore.period.d90",
+      "de": "90 Tage",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "90 days"
+    },
+    {
+      "key": "settings.mailStore.period.y1",
+      "de": "1 Jahr",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "1 year"
+    },
+    {
+      "key": "settings.mailStore.period.all",
+      "de": "Alles",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "All"
+    },
+    {
+      "key": "settings.mailStore.attachments",
+      "de": "Anhänge lokal",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Attachments stored locally"
+    },
+    {
+      "key": "settings.mailStore.limit",
+      "de": "Obergrenze",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Limit"
+    },
+    {
+      "key": "settings.mailStore.limit.gb1",
+      "de": "1 GB",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "1 GB"
+    },
+    {
+      "key": "settings.mailStore.limit.gb5",
+      "de": "5 GB",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "5 GB"
+    },
+    {
+      "key": "settings.mailStore.limit.gb10",
+      "de": "10 GB",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "10 GB"
+    },
+    {
+      "key": "settings.mailStore.limit.gb25",
+      "de": "25 GB",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "25 GB"
+    },
+    {
+      "key": "settings.mailStore.limit.none",
+      "de": "Keine",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "None"
+    },
+    {
+      "key": "google.drive.type.folder",
+      "de": "Ordner",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Folder",
+      "formerKey": "settings.mailStore.folder"
+    },
+    {
+      "key": "settings.mailStore.folder.custom",
+      "de": "Eigener Ordner",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Custom folder"
+    },
+    {
+      "key": "settings.button.profilePick",
+      "de": "Bild wählen",
+      "area": "settings",
+      "kind": "button",
+      "status": "set-by-design",
+      "en": "Choose Picture",
+      "element": "settings.text-button.profile-pick"
+    },
+    {
+      "key": "settings.label.profileAddresses",
+      "de": "Adressen",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Addresses",
+      "element": "settings.profile-tile"
+    },
+    {
+      "key": "settings.label.profileTeams",
+      "de": "Teams",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Teams",
+      "element": "settings.profile-tile"
+    },
+    {
+      "key": "settings.section.folders",
+      "de": "Dateiordner",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "File folders",
+      "formerKey": "settings.group.files"
+    },
+    {
+      "key": "settings.entry.folderSchema",
+      "de": "Ordnerschema",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Folder scheme"
+    },
+    {
+      "key": "settings.entry.folderSchemaSub",
+      "de": "Einrichtung im geteilten Drive",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Setup in the shared Drive"
+    },
+    {
+      "key": "mail.folder.outbox",
+      "de": "Postausgang",
+      "en": "Outbox",
+      "area": "mail",
+      "kind": "label",
+      "status": "set-by-design",
+      "element": "mail.message-row"
+    },
+    {
+      "key": "mail.outbox.state.waiting",
+      "de": "Wartet auf Verbindung",
+      "en": "Waiting for connection",
+      "area": "mail",
+      "kind": "state",
+      "status": "set-by-design",
+      "element": "mail.message-row"
+    },
+    {
+      "key": "mail.outbox.state.failed",
+      "de": "Nicht gesendet · Prüfung fehlgeschlagen",
+      "en": "Not sent · check failed",
+      "area": "mail",
+      "kind": "error",
+      "status": "set-by-design",
+      "element": "mail.message-row"
+    },
+    {
+      "key": "mail.outbox.state.checking",
+      "de": "Prüft, ob schon gesendet …",
+      "en": "Checking whether already sent …",
+      "area": "mail",
+      "kind": "state",
+      "status": "set-by-design",
+      "element": "mail.message-row"
+    },
+    {
+      "key": "mail.outbox.state.sending",
+      "de": "Sendet …",
+      "en": "Sending …",
+      "area": "mail",
+      "kind": "state",
+      "status": "set-by-design",
+      "element": "mail.message-row"
+    },
+    {
+      "key": "mail.outbox.confirm.question",
+      "de": "Ungeprüft senden?",
+      "en": "Send unchecked?",
+      "area": "mail",
+      "kind": "confirm",
+      "status": "set-by-design",
+      "element": "mail.message-row"
+    },
+    {
+      "key": "mail.outbox.confirm.yes",
+      "de": "Ja",
+      "en": "Yes",
+      "area": "mail",
+      "kind": "button",
+      "status": "set-by-design",
+      "element": "mail.message-row"
+    },
+    {
+      "key": "settings.account.name",
+      "de": "Name in Mail",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Name in Mail",
+      "element": "settings.field-row"
+    },
+    {
+      "key": "settings.account.show",
+      "de": "Angezeigt als",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Shown as",
+      "element": "settings.field-row"
+    },
+    {
+      "key": "mail.draft.noSubject",
+      "de": "Ohne Betreff",
+      "area": "mail",
+      "kind": "placeholder",
+      "status": "set-by-design",
+      "en": "No subject",
+      "element": "mail.overview-tile"
+    },
+    {
+      "key": "mail.empty.trash",
+      "de": "Der Papierkorb ist leer.",
+      "area": "mail",
+      "kind": "empty",
+      "status": "set-by-design",
+      "en": "Trash is empty.",
+      "element": "mail.list-row"
+    },
+    {
+      "key": "shell.symbolButton.assistantAttachOff.tooltip",
+      "de": "Dateien im Chat sind aus",
+      "area": "shell",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Files in chat are off",
+      "element": "shell.symbol-button.assistant-attach"
+    },
+    {
+      "key": "shell.symbolButton.assistantClear.tooltip",
+      "de": "Verlauf löschen",
+      "area": "shell",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Clear History",
+      "element": "shell.symbol-button.assistant-clear"
+    },
+    {
+      "key": "shell.assistantMessage.failed",
+      "de": "Nicht beantwortet",
+      "area": "shell",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "No answer",
+      "element": "shell.assistant-message"
+    },
+    {
+      "key": "shell.assistantMessage.thinking",
+      "de": "Denkt nach …",
+      "area": "shell",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Thinking …",
+      "element": "shell.assistant-message"
+    },
+    {
+      "key": "shell.assistantCard.off",
+      "de": "Der Assistent ist ausgeschaltet.",
+      "area": "shell",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "The assistant is turned off.",
+      "element": "shell.assistant-card"
+    },
+    {
+      "key": "shell.assistantCard.unreadable",
+      "de": "Nicht lesbar",
+      "area": "shell",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Unreadable",
+      "element": "shell.assistant-message"
+    },
+    {
+      "key": "shell.chipRemove.assistant.tooltip",
+      "de": "Entfernen",
+      "area": "shell",
+      "kind": "tooltip",
+      "status": "set-by-design",
+      "en": "Remove",
+      "element": "shell.chip-remove.assistant"
+    },
+    {
+      "key": "shell.assistantActivity.categoryOff",
+      "de": "{category} ist für den Assistenten aus",
+      "area": "shell",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "{category} is off for the assistant",
+      "element": "shell.assistant-activity"
+    },
+    {
+      "key": "shell.assistantAttachment.unsupported",
+      "de": "{file} wird nicht unterstützt",
+      "area": "shell",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "{file} isn’t supported",
+      "element": "shell.assistant-attachment"
+    },
+    {
+      "key": "shell.assistantAttachment.tooLarge",
+      "de": "{file} ist zu groß",
+      "area": "shell",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "{file} is too large",
+      "element": "shell.assistant-attachment"
+    },
+    {
+      "key": "shell.assistantAttachment.unreadable",
+      "de": "{file} ist nicht lesbar",
+      "area": "shell",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "{file} can’t be read",
+      "element": "shell.assistant-attachment"
+    },
+    {
+      "key": "shell.assistantThread.cleared",
+      "de": "Verlauf gelöscht",
+      "area": "shell",
+      "kind": "feedback",
+      "status": "set-by-design",
+      "en": "History cleared",
+      "element": "shell.assistant-thread"
+    },
+    {
+      "key": "settings.account.senderName",
+      "de": "Absendername",
+      "area": "settings",
+      "kind": "label",
+      "status": "set-by-design",
+      "en": "Sender name"
+    }
+  ]
+}

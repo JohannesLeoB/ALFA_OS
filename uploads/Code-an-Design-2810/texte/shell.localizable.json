@@ -1,0 +1,13 @@
+{
+ "_rule": "Keys used by the shell views in App/Shell; text is resolved by the app.",
+ "keys": {
+  "shell.blobFace.tooltip": {
+   "de": "Klick: Bereiche · Doppelklick: Assistent",
+   "en": "Click: areas · Double-click: assistant"
+  },
+  "shell.handle.down.tooltip": {
+   "de": "Ziehen · Doppelklick setzt zurück",
+   "en": "Drag · double-click to reset"
+  }
+ }
+}

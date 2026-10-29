@@ -1,0 +1,62 @@
+{
+ "_rule": "Keys of the ClickUp module. clickup.template.* are the task names written into a new customer project; the first one is the anchor task name.",
+ "keys": {
+  "clickup.phase.briefing": {
+   "de": "Briefing"
+  },
+  "clickup.phase.completion": {
+   "de": "Abschluss"
+  },
+  "clickup.phase.execution": {
+   "de": "Ausführung"
+  },
+  "clickup.phase.offer": {
+   "de": "Angebot"
+  },
+  "clickup.phase.order": {
+   "de": "Bestellung"
+  },
+  "clickup.phase.planning": {
+   "de": "Planung"
+  },
+  "clickup.phase.service": {
+   "de": "Service"
+  },
+  "clickup.priority.high": {
+   "de": "Hoch"
+  },
+  "clickup.priority.low": {
+   "de": "Niedrig"
+  },
+  "clickup.priority.normal": {
+   "de": "Normal"
+  },
+  "clickup.priority.urgent": {
+   "de": "Dringend"
+  },
+  "clickup.template.agreeInstallation": {
+   "de": "Montagefenster abstimmen"
+  },
+  "clickup.template.checkBriefing": {
+   "de": "Briefing prüfen"
+  },
+  "clickup.template.checkOrder": {
+   "de": "Bestellung prüfen"
+  },
+  "clickup.template.closeAndReview": {
+   "de": "Abschluss / Review"
+  },
+  "clickup.template.prepareMeasurement": {
+   "de": "Aufmaß / Termin vorbereiten"
+  },
+  "clickup.template.prepareOffer": {
+   "de": "Angebot vorbereiten"
+  },
+  "clickup.template.qualifyLead": {
+   "de": "Lead / Anfrage qualifizieren"
+  },
+  "clickup.template.startPlanning": {
+   "de": "Planung starten"
+  }
+ }
+}

@@ -1,0 +1,404 @@
+{
+ "switch-glass": {
+  "where": "ALFA Mail.dc.html:14",
+  "states": {}
+ },
+ "lane-header": {
+  "where": "ALFA Mail.dc.html:16",
+  "states": {}
+ },
+ "scroll-line": {
+  "where": "ALFA Mail.dc.html:16",
+  "states": {}
+ },
+ "account-title": {
+  "where": "ALFA Mail.dc.html:17",
+  "states": {}
+ },
+ "mark": {
+  "where": "ALFA Mail.dc.html:17",
+  "states": {
+   "hover": {
+    "background": "{color.hover}",
+    "ring": "{color.inkTertiary}"
+   }
+  }
+ },
+ "lane-content": {
+  "where": "ALFA Mail.dc.html:20",
+  "states": {
+   "tiles": {}
+  }
+ },
+ "list-section-header": {
+  "where": "ALFA Mail.dc.html:22",
+  "states": {}
+ },
+ "list-row": {
+  "where": "ALFA Mail.dc.html:24",
+  "states": {
+   "hover": {
+    "ring": "{color.lineStrong}"
+   }
+  }
+ },
+ "counter": {
+  "where": "ALFA Mail.dc.html:27",
+  "states": {}
+ },
+ "account-deck": {
+  "where": "ALFA Mail.dc.html:32",
+  "states": {}
+ },
+ "account-card": {
+  "where": "ALFA Mail.dc.html:33",
+  "states": {
+   "rest": {},
+   "hover": {},
+   "moving": {}
+  }
+ },
+ "card-header": {
+  "where": "ALFA Mail.dc.html:33",
+  "states": {
+   "pressed": {}
+  }
+ },
+ "account-alert": {
+  "where": "ALFA Mail.dc.html:33",
+  "states": {}
+ },
+ "lane-footer": {
+  "where": "ALFA Mail.dc.html:35",
+  "states": {}
+ },
+ "compose-button": {
+  "where": "ALFA Mail.dc.html:35",
+  "states": {
+   "hover": {},
+   "pressed": {}
+  }
+ },
+ "envelope-stack": {
+  "where": "ALFA Mail.dc.html:36",
+  "states": {}
+ },
+ "envelope": {
+  "where": "ALFA Mail.dc.html:36",
+  "states": {}
+ },
+ "content-state": {
+  "where": "ALFA Mail.dc.html:69",
+  "states": {}
+ },
+ "overview-tile": {
+  "where": "ALFA Mail.dc.html:82",
+  "states": {}
+ },
+ "command-group": {
+  "where": "ALFA Mail.dc.html:93",
+  "states": {}
+ },
+ "message-row": {
+  "where": "ALFA Mail.dc.html:104",
+  "states": {}
+ },
+ "inline-confirm": {
+  "where": "ALFA Mail.dc.html:116",
+  "states": {}
+ },
+ "attachment-chip": {
+  "where": "ALFA Mail.dc.html:119",
+  "states": {
+   "hover": {
+    "background": "{color.sheetWell}"
+   }
+  }
+ },
+ "row-actions": {
+  "where": "ALFA Mail.dc.html:125",
+  "states": {}
+ },
+ "divider": {
+  "where": "ALFA Mail.dc.html:148",
+  "states": {}
+ },
+ "card-stack": {
+  "where": "ALFA Mail.dc.html:152",
+  "states": {}
+ },
+ "card-content": {
+  "where": "ALFA Mail.dc.html:169",
+  "states": {}
+ },
+ "message-header": {
+  "where": "ALFA Mail.dc.html:170",
+  "states": {}
+ },
+ "recipient-field": {
+  "where": "ALFA Mail.dc.html:171",
+  "states": {}
+ },
+ "field-row": {
+  "where": "ALFA Mail.dc.html:172",
+  "states": {}
+ },
+ "recipient-list": {
+  "where": "ALFA Mail.dc.html:176",
+  "states": {}
+ },
+ "recipient-row": {
+  "where": "ALFA Mail.dc.html:176",
+  "states": {
+   "hover": {
+    "background": "{color.hover}"
+   }
+  }
+ },
+ "address-button": {
+  "where": "ALFA Mail.dc.html:190",
+  "states": {
+   "hover": {
+    "background": "{color.hover}"
+   }
+  }
+ },
+ "quote-toggle": {
+  "where": "ALFA Mail.dc.html:198",
+  "states": {}
+ },
+ "chip": {
+  "where": "ALFA Mail.dc.html:243",
+  "states": {}
+ },
+ "chip-remove": {
+  "where": "ALFA Mail.dc.html:243",
+  "states": {
+   "hover": {
+    "background": "{color.inverseHot}"
+   }
+  }
+ },
+ "suggestion-list": {
+  "where": "ALFA Mail.dc.html:249",
+  "states": {}
+ },
+ "recipient-input-row": {
+  "where": "ALFA Mail.dc.html:252",
+  "states": {}
+ },
+ "mail-signature": {
+  "where": "ALFA Mail.dc.html:264",
+  "states": {}
+ },
+ "formatting-bar": {
+  "where": "ALFA Mail.dc.html:277",
+  "states": {}
+ },
+ "card-footer": {
+  "where": "ALFA Mail.dc.html:285",
+  "states": {}
+ },
+ "card-overview": {
+  "where": "ALFA Mail.dc.html:294",
+  "states": {}
+ },
+ "toast": {
+  "where": "ALFA Mail.dc.html:314",
+  "states": {}
+ },
+ "anchored-menu": {
+  "where": "ALFA Mail.dc.html:323",
+  "states": {}
+ },
+ "menu-row": {
+  "where": "ALFA Mail.dc.html:327",
+  "states": {
+   "hover": {
+    "background": "{color.hover}"
+   }
+  }
+ },
+ "settings-tiles": {
+  "where": "ALFA Einstellungen.dc.html:47",
+  "states": {}
+ },
+ "tile-group": {
+  "where": "ALFA Einstellungen.dc.html:47",
+  "states": {}
+ },
+ "tile-grid": {
+  "where": "ALFA Einstellungen.dc.html:47",
+  "states": {}
+ },
+ "settings-tile": {
+  "where": "ALFA Einstellungen.dc.html:47",
+  "states": {
+   "hover": {
+    "ring": "{shadow.overviewHover}",
+    "transform": "{size.tileHoverLift}"
+   },
+   "pressed": {}
+  }
+ },
+ "connection-status": {
+  "where": "ALFA Einstellungen.dc.html:65",
+  "states": {}
+ },
+ "service-hero": {
+  "where": "ALFA Einstellungen.dc.html:100",
+  "states": {}
+ },
+ "signature-editor": {
+  "where": "ALFA Einstellungen.dc.html:111",
+  "states": {}
+ },
+ "choice": {
+  "where": "ALFA Einstellungen.dc.html:127",
+  "states": {}
+ },
+ "segmented-control": {
+  "where": "ALFA Einstellungen.dc.html:128",
+  "states": {}
+ },
+ "option": {
+  "where": "ALFA Einstellungen.dc.html:128",
+  "states": {}
+ },
+ "toggle": {
+  "where": "ALFA Einstellungen.dc.html:129",
+  "states": {}
+ },
+ "area-page": {
+  "where": "ALFA Shell.dc.html:22",
+  "states": {}
+ },
+ "hint": {
+  "where": "ALFA Shell.dc.html:23",
+  "states": {}
+ },
+ "safe-area": {
+  "where": "ALFA Shell.dc.html:24",
+  "states": {}
+ },
+ "lane": {
+  "where": "ALFA Shell.dc.html:27",
+  "states": {}
+ },
+ "lane-strip": {
+  "where": "ALFA Shell.dc.html:28",
+  "states": {}
+ },
+ "handle": {
+  "where": "ALFA Shell.dc.html:43",
+  "states": {}
+ },
+ "sync-button": {
+  "where": "ALFA Shell.dc.html:49",
+  "states": {}
+ },
+ "blob": {
+  "where": "ALFA Shell.dc.html:55",
+  "states": {}
+ },
+ "blob-face": {
+  "where": "ALFA Shell.dc.html:56",
+  "states": {}
+ },
+ "search-field": {
+  "where": "ALFA Shell.dc.html:64",
+  "states": {}
+ },
+ "search-tape": {
+  "where": "ALFA Shell.dc.html:65",
+  "states": {}
+ },
+ "notice": {
+  "where": "ALFA Shell.dc.html:70",
+  "states": {}
+ },
+ "menu": {
+  "where": "ALFA Shell.dc.html:73",
+  "states": {}
+ },
+ "assistant": {
+  "where": "ALFA Shell.dc.html:90",
+  "states": {}
+ },
+ "assistant-thread": {
+  "where": "ALFA Shell.dc.html:94",
+  "states": {}
+ },
+ "assistant-card": {
+  "where": "ALFA Shell.dc.html:101",
+  "states": {}
+ },
+ "assistant-scope": {
+  "where": "ALFA Shell.dc.html:113",
+  "states": {}
+ },
+ "lock-error": {
+  "where": "ALFA Shell.dc.html:129",
+  "states": {}
+ },
+ "confirm": {
+  "where": "ALFA Bestaetigen.dc.html:17",
+  "states": {}
+ },
+ "confirm-pill": {
+  "where": "ALFA Bestaetigen.dc.html:19",
+  "states": {}
+ },
+ "confirm-open": {
+  "where": "ALFA Bestaetigen.dc.html:21",
+  "states": {
+   "hover": {
+    "background": "{color.hover}",
+    "foreground": "{color.ink}"
+   },
+   "focus": {
+    "focusRing": "{size.focusRingWidth}",
+    "focusRing2": "{color.focus}",
+    "outlineOffset": "{size.focusRingOffset}"
+   }
+  }
+ },
+ "confirm-no": {
+  "where": "ALFA Bestaetigen.dc.html:29",
+  "states": {
+   "hover": {
+    "background": "{color.hover}",
+    "foreground": "{color.ink}"
+   },
+   "focus": {
+    "focusRing": "{size.focusRingWidth}",
+    "focusRing2": "{color.focus}",
+    "outlineOffset": "{size.focusRingOffset}"
+   }
+  }
+ },
+ "confirm-yes": {
+  "where": "ALFA Bestaetigen.dc.html:30",
+  "states": {
+   "focus": {
+    "focusRing": "{size.focusRingWidth}",
+    "focusRing2": "{color.focus}",
+    "outlineOffset": "{size.focusRingOffset}"
+   }
+  }
+ },
+ "confirm-undo": {
+  "where": "ALFA Bestaetigen.dc.html:40",
+  "states": {
+   "hover": {
+    "background": "{color.hover}",
+    "foreground": "{color.ink}"
+   },
+   "focus": {
+    "focusRing": "{size.focusRingWidth}",
+    "focusRing2": "{color.focus}",
+    "outlineOffset": "{size.focusRingOffset}"
+   }
+  }
+ }
+}

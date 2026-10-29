@@ -1,0 +1,1017 @@
+{
+ "blocks": [
+  {
+   "export": "2026-10-19T16:55",
+   "previous": "none",
+   "changes": []
+  },
+  {
+   "export": "2026-10-19T18:30",
+   "previous": "2026-10-19T16:55",
+   "changes": [
+    {
+     "kind": "component",
+     "id": "address-button",
+     "op": "change",
+     "reason": "Bauteil geändert (Brief T2)"
+    },
+    {
+     "kind": "component",
+     "id": "symbol-button",
+     "op": "change",
+     "reason": "Bauteil geändert (Brief T2)"
+    },
+    {
+     "kind": "component",
+     "id": "tile-grid",
+     "op": "change",
+     "reason": "Bauteil geändert (Brief T2)"
+    },
+    {
+     "kind": "component",
+     "id": "tile-group",
+     "op": "change",
+     "reason": "Bauteil geändert (Brief T2)"
+    },
+    {
+     "kind": "element",
+     "id": "mail.address-button.account",
+     "op": "add",
+     "reason": "Element mit data-id (Brief T2, L-008 bis L-013)"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s014",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s015",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s016",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s017",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s018",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s019",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s020",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s021",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s022",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s023",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s024",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s025",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s026",
+     "op": "add",
+     "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s001",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s002",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s003",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s004",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s005",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s006",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s008",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s009",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s010",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s011",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s012",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s013",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s014",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s015",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s016",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s017",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.button.s018",
+     "op": "add",
+     "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+    },
+    {
+     "kind": "text",
+     "id": "settings.feedback.s001",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s001",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s002",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s003",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s004",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s005",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s006",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s007",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s008",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s009",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s010",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s011",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s012",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s013",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s014",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s015",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s016",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s017",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s018",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s019",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s020",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s021",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s022",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s023",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s024",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s025",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s026",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s027",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s028",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s029",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s030",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s031",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s032",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s033",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s034",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s035",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s036",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s037",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s038",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s039",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s040",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s041",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s042",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s043",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s044",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s045",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s046",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s047",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s048",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s049",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s050",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s051",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s052",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s053",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s054",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s055",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s056",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s057",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s058",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s059",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s060",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s061",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s062",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s063",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s064",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s065",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s066",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s067",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s068",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s069",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s070",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s071",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s072",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s073",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s074",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s075",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s076",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s077",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s078",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s079",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s080",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s081",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s082",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s083",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s084",
+     "op": "add",
+     "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s085",
+     "op": "add",
+     "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s086",
+     "op": "add",
+     "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s087",
+     "op": "add",
+     "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+    },
+    {
+     "kind": "text",
+     "id": "settings.label.s088",
+     "op": "add",
+     "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+    },
+    {
+     "kind": "text",
+     "id": "settings.title.s001",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.title.s002",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.title.s003",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.title.s005",
+     "op": "change",
+     "reason": "Text geändert"
+    },
+    {
+     "kind": "text",
+     "id": "settings.title.s006",
+     "op": "add",
+     "reason": "Text neu erfasst (Brief T4, L-008 bis L-013)"
+    },
+    {
+     "kind": "token",
+     "id": "motion.transition.blobFlight",
+     "op": "add",
+     "reason": "Übergang als Typ transition (Brief T1)"
+    },
+    {
+     "kind": "token",
+     "id": "motion.transition.fold",
+     "op": "add",
+     "reason": "Übergang als Typ transition (Brief T1)"
+    },
+    {
+     "kind": "token",
+     "id": "motion.transition.stack",
+     "op": "add",
+     "reason": "Übergang als Typ transition (Brief T1)"
+    },
+    {
+     "kind": "view",
+     "id": "mail",
+     "op": "change",
+     "reason": "Ansicht ergänzt (Brief T3)"
+    },
+    {
+     "kind": "view",
+     "id": "settings",
+     "op": "change",
+     "reason": "Ansicht ergänzt (Brief T3)"
+    }
+   ]
+  },
+  {
+   "export": "2026-10-19T19:20",
+   "previous": "2026-10-19T18:30",
+   "changes": [
+    {
+     "kind": "view",
+     "id": "mail",
+     "op": "change",
+     "reason": "Konto-Wähler als temporäres Bauteil gekennzeichnet (Johannes 19.10.)"
+    }
+   ]
+  },
+  {
+   "export": "2026-10-19T19:45",
+   "previous": "2026-10-19T19:20",
+   "changes": [
+    {
+     "kind": "view",
+     "id": "mail",
+     "op": "change",
+     "reason": "Konto-Wähler: Code hat das Bauteil nicht, Design entwirft es"
+    }
+   ]
+  },
+  {
+   "export": "2026-10-19T20:10",
+   "previous": "2026-10-19T19:45",
+   "changes": [
+    {
+     "kind": "component",
+     "id": "account-mark",
+     "op": "add",
+     "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+    },
+    {
+     "kind": "component",
+     "id": "account-switch",
+     "op": "add",
+     "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+    },
+    {
+     "kind": "component",
+     "id": "address-button",
+     "op": "change",
+     "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+    },
+    {
+     "kind": "component",
+     "id": "filter-capsule",
+     "op": "change",
+     "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+    },
+    {
+     "kind": "component",
+     "id": "symbol-button",
+     "op": "change",
+     "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+    },
+    {
+     "kind": "element",
+     "id": "mail.account-mark",
+     "op": "add",
+     "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+    },
+    {
+     "kind": "element",
+     "id": "mail.account-mark.add",
+     "op": "add",
+     "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+    },
+    {
+     "kind": "element",
+     "id": "mail.account-mark.pick",
+     "op": "add",
+     "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+    },
+    {
+     "kind": "element",
+     "id": "mail.account-switch",
+     "op": "add",
+     "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+    },
+    {
+     "kind": "element",
+     "id": "mail.address-button.account",
+     "op": "remove",
+     "reason": "Konto-Wähler im Kopf der linken Bahn (Johannes 19.10.)"
+    },
+    {
+     "kind": "text",
+     "id": "mail.accountMark.add.tooltip",
+     "op": "add",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s014",
+     "op": "change",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s015",
+     "op": "change",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s016",
+     "op": "change",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s017",
+     "op": "change",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s018",
+     "op": "change",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s019",
+     "op": "change",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s020",
+     "op": "change",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s021",
+     "op": "change",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s022",
+     "op": "change",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s023",
+     "op": "change",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s024",
+     "op": "change",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s025",
+     "op": "change",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "text",
+     "id": "mail.menu.s026",
+     "op": "remove",
+     "reason": "Text des Konto-Wählers"
+    },
+    {
+     "kind": "view",
+     "id": "mail",
+     "op": "change",
+     "reason": "Aktion chooseAccount auf neues Element"
+    }
+   ]
+  },
+  {
+   "export": "2026-10-19T21:00",
+   "previous": "2026-10-19T20:10",
+   "changes": [
+    {
+     "kind": "token",
+     "id": "size.accountClosedWidth",
+     "op": "add",
+     "reason": "Breitenwerte des Konto-Wählers als Token"
+    },
+    {
+     "kind": "token",
+     "id": "size.accountFanWidth",
+     "op": "add",
+     "reason": "Breitenwerte des Konto-Wählers als Token"
+    }
+   ]
+  }
+ ]
+}

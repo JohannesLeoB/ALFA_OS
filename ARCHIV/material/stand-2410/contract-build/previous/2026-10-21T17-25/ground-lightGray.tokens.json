@@ -1,0 +1,67 @@
+{
+  "color": {
+    "ground": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.949,
+          0.949,
+          0.949
+        ],
+        "alpha": 1,
+        "hex": "#f2f2f2"
+      },
+      "$extensions": {
+        "alfa": {
+          "css": "--c-ground",
+          "formerName": "ground",
+          "status": "set-by-design"
+        }
+      }
+    }
+  },
+  "shadow": {
+    "lane": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "inset": false,
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1,
+            "unit": "px"
+          },
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.8902,
+              0.8902,
+              0.8902
+            ],
+            "alpha": 1,
+            "hex": "#e3e3e3"
+          }
+        }
+      ],
+      "$extensions": {
+        "alfa": {
+          "css": "--sh-lane",
+          "formerName": "lane",
+          "status": "set-by-design"
+        }
+      }
+    }
+  }
+}
