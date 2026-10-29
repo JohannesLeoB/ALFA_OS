@@ -1,0 +1,397 @@
+{
+ "namen": [
+  "Assistent",
+  "Mail",
+  "Einstellungen",
+  "Hub",
+  "Hülle",
+  "Kalkulation",
+  "Dienste",
+  "Grundlage",
+  "Design-Laufzeit (Hülle, Bausteine)"
+ ],
+ "matrix": [
+  {
+   "von": "Mail",
+   "an": "Grundlage",
+   "typ_paare": 138,
+   "kanten": {
+    "calls": 174,
+    "references": 62
+   }
+  },
+  {
+   "von": "Mail",
+   "an": "Hub",
+   "typ_paare": 69,
+   "kanten": {
+    "calls": 42,
+    "references": 192,
+    "implements": 4
+   }
+  },
+  {
+   "von": "Dienste",
+   "an": "Hub",
+   "typ_paare": 59,
+   "kanten": {
+    "calls": 14,
+    "references": 52,
+    "implements": 18
+   }
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Grundlage",
+   "typ_paare": 56,
+   "kanten": {
+    "calls": 51,
+    "references": 12
+   }
+  },
+  {
+   "von": "Hülle",
+   "an": "Assistent",
+   "typ_paare": 54,
+   "kanten": {
+    "references": 20,
+    "calls": 44,
+    "implements": 2
+   }
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Hub",
+   "typ_paare": 52,
+   "kanten": {
+    "calls": 36,
+    "references": 70
+   }
+  },
+  {
+   "von": "Dienste",
+   "an": "Assistent",
+   "typ_paare": 47,
+   "kanten": {
+    "references": 56,
+    "calls": 10,
+    "implements": 9
+   }
+  },
+  {
+   "von": "Mail",
+   "an": "Hülle",
+   "typ_paare": 40,
+   "kanten": {
+    "calls": 22,
+    "references": 49,
+    "implements": 1
+   }
+  },
+  {
+   "von": "Hülle",
+   "an": "Hub",
+   "typ_paare": 27,
+   "kanten": {
+    "calls": 16,
+    "references": 25,
+    "implements": 1
+   }
+  },
+  {
+   "von": "Grundlage",
+   "an": "Hülle",
+   "typ_paare": 22,
+   "kanten": {
+    "calls": 11,
+    "references": 21
+   }
+  },
+  {
+   "von": "Dienste",
+   "an": "Mail",
+   "typ_paare": 22,
+   "kanten": {
+    "calls": 6,
+    "references": 25,
+    "implements": 2
+   }
+  },
+  {
+   "von": "Hülle",
+   "an": "Grundlage",
+   "typ_paare": 19,
+   "kanten": {
+    "calls": 18,
+    "references": 16
+   }
+  },
+  {
+   "von": "Assistent",
+   "an": "Grundlage",
+   "typ_paare": 18,
+   "kanten": {
+    "references": 18,
+    "calls": 29
+   }
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Hülle",
+   "typ_paare": 17,
+   "kanten": {
+    "calls": 11,
+    "references": 14,
+    "implements": 1
+   }
+  },
+  {
+   "von": "Hub",
+   "an": "Grundlage",
+   "typ_paare": 15,
+   "kanten": {
+    "references": 25,
+    "calls": 13
+   }
+  },
+  {
+   "von": "Hülle",
+   "an": "Dienste",
+   "typ_paare": 15,
+   "kanten": {
+    "references": 5,
+    "calls": 13
+   }
+  },
+  {
+   "von": "Hülle",
+   "an": "Mail",
+   "typ_paare": 13,
+   "kanten": {
+    "calls": 13,
+    "references": 4,
+    "dispatches_to": 9
+   }
+  },
+  {
+   "von": "Hub",
+   "an": "Dienste",
+   "typ_paare": 13,
+   "kanten": {
+    "references": 4,
+    "dispatches_to": 14,
+    "calls": 3
+   }
+  },
+  {
+   "von": "Dienste",
+   "an": "Grundlage",
+   "typ_paare": 11,
+   "kanten": {
+    "calls": 8,
+    "references": 13
+   }
+  },
+  {
+   "von": "Assistent",
+   "an": "Hub",
+   "typ_paare": 11,
+   "kanten": {
+    "references": 15,
+    "implements": 3
+   }
+  },
+  {
+   "von": "Assistent",
+   "an": "Dienste",
+   "typ_paare": 10,
+   "kanten": {
+    "references": 1,
+    "dispatches_to": 12
+   }
+  },
+  {
+   "von": "Hülle",
+   "an": "Kalkulation",
+   "typ_paare": 10,
+   "kanten": {
+    "references": 3,
+    "calls": 8
+   }
+  },
+  {
+   "von": "Hub",
+   "an": "Mail",
+   "typ_paare": 7,
+   "kanten": {
+    "calls": 5,
+    "dispatches_to": 6
+   }
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Assistent",
+   "typ_paare": 6,
+   "kanten": {
+    "references": 9,
+    "calls": 3
+   }
+  },
+  {
+   "von": "Dienste",
+   "an": "Kalkulation",
+   "typ_paare": 5,
+   "kanten": {
+    "calls": 2,
+    "references": 2,
+    "implements": 3
+   }
+  },
+  {
+   "von": "Assistent",
+   "an": "Kalkulation",
+   "typ_paare": 5,
+   "kanten": {
+    "references": 5,
+    "calls": 3
+   }
+  },
+  {
+   "von": "Kalkulation",
+   "an": "Grundlage",
+   "typ_paare": 5,
+   "kanten": {
+    "references": 4,
+    "calls": 15
+   }
+  },
+  {
+   "von": "Einstellungen",
+   "an": "Mail",
+   "typ_paare": 4,
+   "kanten": {
+    "references": 3,
+    "calls": 4
+   }
+  },
+  {
+   "von": "Assistent",
+   "an": "Hülle",
+   "typ_paare": 4,
+   "kanten": {
+    "references": 3,
+    "calls": 1,
+    "dispatches_to": 2
+   }
+  },
+  {
+   "von": "Hülle",
+   "an": "Einstellungen",
+   "typ_paare": 3,
+   "kanten": {
+    "calls": 2,
+    "dispatches_to": 10
+   }
+  },
+  {
+   "von": "Mail",
+   "an": "Dienste",
+   "typ_paare": 3,
+   "kanten": {
+    "references": 8,
+    "dispatches_to": 1
+   }
+  },
+  {
+   "von": "Mail",
+   "an": "Assistent",
+   "typ_paare": 3,
+   "kanten": {
+    "calls": 7
+   }
+  },
+  {
+   "von": "Kalkulation",
+   "an": "Dienste",
+   "typ_paare": 3,
+   "kanten": {
+    "dispatches_to": 3
+   }
+  },
+  {
+   "von": "Mail",
+   "an": "Einstellungen",
+   "typ_paare": 2,
+   "kanten": {
+    "calls": 2
+   }
+  },
+  {
+   "von": "Grundlage",
+   "an": "Hub",
+   "typ_paare": 2,
+   "kanten": {
+    "references": 1,
+    "calls": 1
+   }
+  },
+  {
+   "von": "Hub",
+   "an": "Hülle",
+   "typ_paare": 2,
+   "kanten": {
+    "dispatches_to": 1,
+    "calls": 2
+   }
+  },
+  {
+   "von": "Hub",
+   "an": "Assistent",
+   "typ_paare": 2,
+   "kanten": {
+    "dispatches_to": 1,
+    "calls": 1
+   }
+  },
+  {
+   "von": "Grundlage",
+   "an": "Einstellungen",
+   "typ_paare": 2,
+   "kanten": {
+    "calls": 3
+   }
+  },
+  {
+   "von": "Grundlage",
+   "an": "Mail",
+   "typ_paare": 2,
+   "kanten": {
+    "calls": 2
+   }
+  },
+  {
+   "von": "Kalkulation",
+   "an": "Assistent",
+   "typ_paare": 2,
+   "kanten": {
+    "calls": 2
+   }
+  },
+  {
+   "von": "Grundlage",
+   "an": "Assistent",
+   "typ_paare": 1,
+   "kanten": {
+    "calls": 1
+   }
+  },
+  {
+   "von": "Dienste",
+   "an": "Hülle",
+   "typ_paare": 1,
+   "kanten": {
+    "calls": 1
+   }
+  }
+ ]
+}
