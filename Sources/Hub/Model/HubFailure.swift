@@ -19,7 +19,6 @@ enum KeychainFailure: Error, Equatable, Sendable {
 public enum SetupFailure: Error, Equatable, Sendable {
     case cancelled
     case probeFailed(Hint)
-    case limitReached(Capability, max: Int)
     case duplicate
     case keychain(Int32)
 
@@ -27,7 +26,6 @@ public enum SetupFailure: Error, Equatable, Sendable {
         switch self {
         case .cancelled: Hint(text: "hub.error.cancelled")
         case .probeFailed(let hint): hint
-        case .limitReached(_, let max): Hint(text: "hub.error.limit", detail: String(max))
         case .duplicate: Hint(text: "hub.error.duplicate")
         case .keychain(let status): Hint(text: "hub.error.keychain", detail: String(status))
         }

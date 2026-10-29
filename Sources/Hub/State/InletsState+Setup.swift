@@ -46,18 +46,16 @@ extension InletsState: SetupPort {
             try? await provider.signIn.signOut(inlet)
             throw .probeFailed(rejection)
         }
-        if let existing = SetupEngine.existing(provider: offer.provider, account: result.account, in: records) {
-            guard existing.state.canRenew else {
+        if let expected = input.expectedAccount, SetupEngine.differs(expected, from: result.account) {
+            try? await provider.signIn.signOut(inlet)
+            throw .probeFailed(Hint(text: HintEngine.accountMismatchText, detail: expected))
+        }
+        if let existing = SetupEngine.existing(offer: offer, account: result.account, in: records) {
+            guard existing.provider == offer.provider, existing.state.canRenew else {
                 try? await provider.signIn.signOut(inlet)
                 throw .duplicate
             }
             return try renew(existing, with: grant)
-        }
-        do {
-            try SetupEngine.checkLimits(offer, inlets: records, company: configuration.company)
-        } catch {
-            try? await provider.signIn.signOut(inlet)
-            throw error
         }
         var written: [KeySlot] = []
         do {

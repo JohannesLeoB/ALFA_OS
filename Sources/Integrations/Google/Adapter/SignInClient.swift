@@ -23,7 +23,8 @@ struct SignInClient: SignInPort {
         let server = makeRedirect()
         do {
             let redirectURI = try await server.start()
-            let params = try oauth.authorization(scopes: scopes, redirectURI: redirectURI)
+            let params = try oauth.authorization(
+                scopes: scopes, redirectURI: redirectURI, loginHint: input[Input.expectedAccountKey])
             guard await openBrowser(params.url) else { throw SignInFailure.browserFailed }
             let callback = try await server.awaitRedirect()
             server.stop()

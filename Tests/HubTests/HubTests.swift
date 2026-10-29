@@ -270,7 +270,7 @@ private struct FakeProbe: ProbePort {
 }
 
 private final class FakeProvider: ProviderPort, @unchecked Sendable {
-    let id = "fake"
+    let id: String
     let capabilities: Set<Capability>
     let form: [Field]
     let presets: [Preset]
@@ -282,7 +282,8 @@ private final class FakeProvider: ProviderPort, @unchecked Sendable {
     private let accepting = Locked(true)
     private let stalling = Locked(false)
 
-    init(capabilities: Set<Capability>, signIn: (any SignInPort)? = nil, form: [Field] = [], presets: [Preset] = []) {
+    init(id: String = "fake", capabilities: Set<Capability>, signIn: (any SignInPort)? = nil, form: [Field] = [], presets: [Preset] = []) {
+        self.id = id
         self.capabilities = capabilities
         self.signIn = signIn ?? FakeSignIn()
         self.form = form
@@ -352,7 +353,7 @@ private struct Rig {
     let database: SQLiteStore
 
     static func make(
-        capabilities: Set<Capability> = [.mail], limits: [Capability: Int] = [.mail: 3], offers: [Offer] = [Rig.offer],
+        capabilities: Set<Capability> = [.mail], offers: [Offer] = [Rig.offer],
         database: SQLiteStore? = nil, provider: FakeProvider? = nil, keychain: FakeKeychain? = nil,
         cadences: [Capability: Duration] = [:], deadlines: Deadlines = .standard, reportLimit: Int = 100,
         providers: [any ProviderPort]? = nil
@@ -363,7 +364,7 @@ private struct Rig {
         let cost = FakeCost()
         let database = try database ?? SQLiteStore.inMemory()
         let configuration = Configuration(
-            person: Person(id: "p1", name: "P"), company: CompanySetup(offers: offers, limits: limits),
+            person: Person(id: "p1", name: "P"), company: CompanySetup(offers: offers),
             providers: providers ?? [provider], keychain: keychain, cadence: cadence, cost: cost, catalog: registry(),
             deadlines: deadlines, reportLimit: reportLimit, cadences: cadences)
         return Rig(connections: try Connections.make(configuration, database: database), provider: provider,
@@ -438,28 +439,90 @@ final class HubTests: XCTestCase {
     }
 
     @MainActor
-    func testLimitBlocksTheFourthAccountButNotTheRenewalOfAFailedOne() async throws {
+    func testAnyNumberOfMailAccountsCanBeConnected() async throws {
         let rig = try Rig.make()
-        for address in ["a@x", "b@x", "c@x"] { _ = try await rig.connect(address) }
+        for address in ["a@x", "b@x", "c@x", "d@x", "e@x"] { _ = try await rig.connect(address) }
+        XCTAssertEqual(rig.connections.setup.inlets.count, 5)
+    }
+
+    @MainActor
+    func testTheSameAddressIsRefusedAcrossProvidersAndCases() async throws {
+        let first = FakeProvider(capabilities: [.mail])
+        let other = FakeProvider(id: "other", capabilities: [.mail])
+        let otherOffer = Offer(
+            id: "other.mail", provider: "other", title: "Other", capabilities: [.mail], owner: .person("p1"),
+            way: .form([Field(id: "address", title: "address", holdsAccount: true)]))
+        let rig = try Rig.make(offers: [Rig.offer, otherOffer], provider: first, providers: [first, other])
+        _ = try await rig.connect("Anna@X.test")
+        for (address, offer) in [("anna@x.test", Rig.offer), ("ANNA@x.test", otherOffer), (" anna@x.test ", otherOffer)] {
+            do {
+                _ = try await rig.connect(address, offer: offer)
+                XCTFail("add must throw")
+            } catch {
+                XCTAssertEqual(error as? SetupFailure, .duplicate)
+            }
+        }
+        XCTAssertEqual(rig.connections.setup.inlets.count, 1)
+        _ = try await rig.connect("berta@x.test", offer: otherOffer)
+        XCTAssertEqual(rig.connections.setup.inlets.count, 2)
+    }
+
+    @MainActor
+    func testAFailedAccountIsNeverRenewedThroughAnotherProvider() async throws {
+        let first = FakeProvider(capabilities: [.mail])
+        let other = FakeProvider(id: "other", capabilities: [.mail])
+        let otherOffer = Offer(
+            id: "other.mail", provider: "other", title: "Other", capabilities: [.mail], owner: .person("p1"),
+            way: .form([Field(id: "address", title: "address", holdsAccount: true)]))
+        let rig = try Rig.make(offers: [Rig.offer, otherOffer], provider: first, providers: [first, other])
+        let inlet = try await rig.connect("a@x")
+        first.setAccepting(false)
+        _ = try? await rig.connections.setup.probe(inlet.id)
+        XCTAssertTrue(rig.connections.setup.inlets[0].state.canRenew)
         do {
-            _ = try await rig.connect("d@x")
+            _ = try await rig.connect("a@x", offer: otherOffer)
             XCTFail("add must throw")
         } catch {
-            XCTAssertEqual(error as? SetupFailure, .limitReached(.mail, max: 3))
+            XCTAssertEqual(error as? SetupFailure, .duplicate)
         }
-        XCTAssertEqual(rig.connections.setup.inlets.count, 3)
+        XCTAssertEqual(rig.connections.setup.inlets.map(\.provider), ["fake"])
+    }
+
+    @MainActor
+    func testRenewalRefusesAnotherAddressAndKeepsTheFailedInlet() async throws {
+        let rig = try Rig.make()
+        let first = try await rig.connect("a@x")
         rig.provider.setAccepting(false)
-        _ = try? await rig.connections.setup.probe(rig.connections.setup.inlets[0].id)
+        _ = try? await rig.connections.setup.probe(first.id)
         rig.provider.setAccepting(true)
-        let renewed = try await rig.connect("a@x")
-        XCTAssertEqual(renewed.id, rig.connections.setup.inlets[0].id)
-        XCTAssertEqual(rig.connections.setup.inlets.count, 3)
-        let wide = try Rig.make(limits: [.mail: 4])
-        for address in ["a@x", "b@x", "c@x", "d@x"] { _ = try await wide.connect(address) }
-        XCTAssertEqual(wide.connections.setup.inlets.count, 4)
-        let unlimited = try Rig.make(limits: [:])
-        for address in ["a@x", "b@x", "c@x", "d@x", "e@x"] { _ = try await unlimited.connect(address) }
-        XCTAssertEqual(unlimited.connections.setup.inlets.count, 5)
+        let renewal = try XCTUnwrap(rig.connections.setup.renewal(of: first.id))
+        XCTAssertEqual(renewal.values[Input.expectedAccountKey], "a@x")
+        var wrong = renewal.values
+        wrong["address"] = "b@x"
+        do {
+            _ = try await rig.connections.setup.add(renewal.offer, input: .fields(wrong))
+            XCTFail("add must throw")
+        } catch {
+            XCTAssertEqual(error, .probeFailed(Hint(text: HintEngine.accountMismatchText, detail: "a@x")))
+        }
+        XCTAssertEqual(rig.connections.setup.inlets.map(\.id), [first.id])
+        XCTAssertTrue(rig.connections.setup.inlets[0].state.canRenew)
+        var right = renewal.values
+        right["address"] = "A@X"
+        let renewed = try await rig.connections.setup.add(renewal.offer, input: .fields(right))
+        XCTAssertEqual(renewed.id, first.id)
+    }
+
+    @MainActor
+    func testRenewalKeepsTheCadenceTheUserChose() async throws {
+        let rig = try Rig.make(cadences: [.mail: .seconds(300)])
+        let first = try await rig.connect("a@x")
+        rig.connections.rules.setCadence(first.id, .mail, .manual)
+        rig.provider.setAccepting(false)
+        _ = try? await rig.connections.setup.probe(first.id)
+        rig.provider.setAccepting(true)
+        _ = try await rig.connect("a@x")
+        XCTAssertEqual(rig.connections.rules.cadence(first.id, .mail), .manual)
     }
 
     @MainActor
@@ -694,7 +757,7 @@ final class HubTests: XCTestCase {
         XCTAssertTrue(rig.connections.setup.inlets[0].state.canRenew)
         let renewal = try XCTUnwrap(rig.connections.setup.renewal(of: first.id))
         XCTAssertEqual(renewal.offer, Rig.offer)
-        XCTAssertEqual(renewal.values, ["address": "a@x"])
+        XCTAssertEqual(renewal.values, ["address": "a@x", Input.expectedAccountKey: "a@x"])
         rig.provider.setAccepting(true)
         let renewed = try await rig.connect("a@x")
         XCTAssertEqual(renewed.id, first.id)
@@ -1010,7 +1073,7 @@ final class HubTests: XCTestCase {
                            state: .failed(Hint(text: "x")))
         let fine = Inlet(id: "j", provider: "fake", capabilities: [.mail], owner: .company, title: "Two", account: "me@x")
         XCTAssertEqual(RenewalEngine.renewal(of: "i", inlets: [failed], offers: [one, two]),
-                       Renewal(offer: two, values: ["host": "h", "user": "me@x"]))
+                       Renewal(offer: two, values: ["host": "h", "user": "me@x", Input.expectedAccountKey: "me@x"]))
         XCTAssertEqual(RenewalEngine.renewal(of: "i", inlets: [Inlet(id: "i", provider: "fake", capabilities: [.mail], owner: .company,
                                                                        title: "Else", account: "q", state: .keychainUnreadable)],
                                             offers: [one, two])?.offer, one)
@@ -1130,6 +1193,28 @@ final class HubTests: XCTestCase {
     }
 
     @MainActor
+    func testIntegrationReadingListsEveryAccountsAreasAndNamesTheLeadAddress() async throws {
+        let info = IntegrationInfo(
+            id: "fake", access: .password, companyOwned: false, fields: [],
+            areas: [IntegrationArea(id: "mail", capability: .mail)], extras: [], listsAccounts: false, providers: ["fake"], logo: nil)
+        let rig = try Rig.make()
+        let first = try await rig.connect("a@x")
+        let second = try await rig.connect("b@x")
+        rig.connections.rules.setCadence(second.id, .mail, .every(.seconds(300)))
+        let reading = IntegrationReadEngine.read(info, setup: rig.connections.setup, rules: rig.connections.rules)
+        XCTAssertEqual(reading.areas.map(\.inlet), [first.id, second.id])
+        XCTAssertEqual(reading.areas.map(\.account), ["a@x", "b@x"])
+        XCTAssertEqual(reading.areas.map(\.choice), [.manual, .minutes5])
+        XCTAssertEqual(Set(reading.areas.map(\.id)).count, 2)
+        XCTAssertEqual(reading.lead?.id, first.id)
+        XCTAssertEqual(reading.leadAddress, "a@x")
+        try await rig.connections.setup.remove(first.id)
+        let remaining = IntegrationReadEngine.read(info, setup: rig.connections.setup, rules: rig.connections.rules)
+        XCTAssertEqual(remaining.leadAddress, "b@x")
+        XCTAssertEqual(remaining.areas.map(\.inlet), [second.id])
+    }
+
+    @MainActor
     func testIntegrationReadingDerivesStateNoteAreasAndStep() async throws {
         let info = IntegrationInfo(
             id: "fake", access: .password, companyOwned: false,
@@ -1150,7 +1235,7 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(reading.step, .check(inlet.id))
         XCTAssertTrue(reading.asksReconnect)
         guard case .checked? = reading.note else { return XCTFail("note \(String(describing: reading.note))") }
-        XCTAssertEqual(reading.areas.map(\.id), ["mail"])
+        XCTAssertEqual(reading.areas.map(\.id), [inlet.id + "|mail"])
         XCTAssertEqual(reading.areas.first?.choice, .minutes5)
         XCTAssertNotNil(reading.areas.first?.lastSync)
         XCTAssertEqual(reading.areas.first?.running, false)
@@ -1578,7 +1663,6 @@ final class HubTests: XCTestCase {
     func testSetupFailuresCarryTheirWordsAndDetails() {
         XCTAssertEqual(SetupFailure.cancelled.hint.text, "hub.error.cancelled")
         XCTAssertEqual(SetupFailure.duplicate.hint.text, "hub.error.duplicate")
-        XCTAssertEqual(SetupFailure.limitReached(.mail, max: 3).hint, Hint(text: "hub.error.limit", detail: "3"))
         XCTAssertEqual(SetupFailure.keychain(-25_300).hint, Hint(text: "hub.error.keychain", detail: "-25300"))
         let rejection = Hint(text: "hint.x")
         XCTAssertEqual(SetupFailure.probeFailed(rejection).hint, rejection)

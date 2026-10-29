@@ -8,10 +8,10 @@ struct OAuthClient: TokenRefreshPort {
     let config: ClientConfig
     let http: any HttpPort
 
-    func authorization(scopes: [OAuthScope], redirectURI: String) throws -> AuthorizationParams {
+    func authorization(scopes: [OAuthScope], redirectURI: String, loginHint: String? = nil) throws -> AuthorizationParams {
         let pkce = PkceChallenge.generate()
         let state = UUID().uuidString
-        let url = try RequestClient.url(Self.authorizationEndpoint, query: [
+        var query = [
             URLQueryItem(name: "client_id", value: config.clientID),
             URLQueryItem(name: "redirect_uri", value: redirectURI),
             URLQueryItem(name: "response_type", value: "code"),
@@ -20,8 +20,10 @@ struct OAuthClient: TokenRefreshPort {
             URLQueryItem(name: "code_challenge_method", value: PkceChallenge.method),
             URLQueryItem(name: "state", value: state),
             URLQueryItem(name: "access_type", value: "offline"),
-            URLQueryItem(name: "prompt", value: "consent"),
-        ])
+            URLQueryItem(name: "prompt", value: "select_account consent"),
+        ]
+        if let loginHint, !loginHint.isEmpty { query.append(URLQueryItem(name: "login_hint", value: loginHint)) }
+        let url = try RequestClient.url(Self.authorizationEndpoint, query: query)
         return AuthorizationParams(url: url, pkce: pkce, state: state, scopes: scopes)
     }
 

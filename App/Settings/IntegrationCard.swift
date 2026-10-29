@@ -28,7 +28,7 @@ struct IntegrationCard: View {
                 ConnectionStatus(state: reading.state.connection, label: appearance.text(reading.state.key), trailingInset: true)
             }
             notices(reading)
-            if disconnecting { BlockNote(text: Text(verbatim: appearance.format("settings.disconnect.text", name))) }
+            if disconnecting { BlockNote(text: Text(verbatim: appearance.format("settings.disconnect.text", reading.leadAddress ?? name))) }
             accounts(reading)
             SettingsRow(label: appearance.text("settings.row.access")) {
                 SettingsValue(text: Text(verbatim: access))
@@ -160,7 +160,7 @@ struct IntegrationCard: View {
                         }
                         ConfirmPill(
                             label: appearance.text("text.settings.action.remove"),
-                            question: Text(verbatim: appearance.format("settings.disconnect.ask", appearance.string(inlet.title))),
+                            question: Text(verbatim: appearance.format("settings.disconnect.ask", inlet.account.isEmpty ? appearance.string(inlet.title) : inlet.account)),
                             yes: appearance.text("text.settings.action.remove"),
                             no: appearance.text("confirm.no"),
                             holdHint: appearance.text("settings.hold.remove"),
@@ -201,7 +201,7 @@ struct IntegrationCard: View {
         if !reading.areas.isEmpty {
             BlockHead(key: "settings.sync.head")
             ForEach(reading.areas) { area in
-                SettingsRow(label: appearance.text(info.areaKey(area.area)), sub: sync(area)) {
+                SettingsRow(label: areaLabel(area, shared: reading.inlets.count > 1), sub: sync(area)) {
                     ChoiceButton(label: appearance.text(area.choice.key)) {
                         var entries: [MenuEntry] = CadenceChoice.allCases.map { choice in
                             .row(MenuItem(id: choice.rawValue, label: appearance.text(choice.key),
@@ -225,6 +225,12 @@ struct IntegrationCard: View {
                 }
             }
         }
+    }
+
+    private func areaLabel(_ area: AreaReading, shared: Bool) -> Text {
+        let name = appearance.string(info.areaKey(area.area))
+        guard shared, !area.account.isEmpty else { return Text(verbatim: name) }
+        return Text(verbatim: name + " · " + area.account)
     }
 
     private func syncNow(_ area: AreaReading) {

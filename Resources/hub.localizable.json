@@ -1,0 +1,17 @@
+{
+ "_rule": "Keys used by the Hub module; text is resolved by the app.",
+ "keys": {
+  "hint.account.mismatch": {
+   "de": "Angemeldet wurde ein anderes Konto. Zum Erneuern bitte mit diesem Konto anmelden:",
+   "en": "A different account was signed in. To renew, please sign in with this account:"
+  },
+  "hub.error.duplicate": {
+   "de": "Diese Adresse ist schon als Konto eingerichtet.",
+   "en": "This address is already set up as an account."
+  },
+  "settings.service.mailaccounts.area.mail": {
+   "de": "Mail",
+   "en": "Mail"
+  }
+ }
+}

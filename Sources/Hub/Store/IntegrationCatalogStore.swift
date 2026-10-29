@@ -19,7 +19,8 @@ public struct IntegrationCatalogStore: Sendable {
             extras: [IntegrationExtra(id: "driveFolders", capability: .files, actionKey: "settings.sync.now")],
             listsAccounts: false, providers: ["google"], logo: nil),
         IntegrationInfo(
-            id: "mailaccounts", access: .password, companyOwned: false, fields: [], areas: [], extras: [],
+            id: "mailaccounts", access: .password, companyOwned: false, fields: [],
+            areas: [IntegrationArea(id: "mail", capability: .mail)], extras: [],
             listsAccounts: true, providers: ["imap"], logo: nil),
         IntegrationInfo(
             id: "clickup", access: .key, companyOwned: false, fields: [IntegrationField(id: "token", secret: true)],

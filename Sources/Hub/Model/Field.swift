@@ -1,3 +1,5 @@
+import Foundation
+
 public struct Field: Identifiable, Equatable, Sendable {
     public typealias ID = String
     public var id: ID
@@ -14,6 +16,8 @@ public struct Field: Identifiable, Equatable, Sendable {
 }
 
 public enum Input: Equatable, Sendable {
+    public static let expectedAccountKey = "expectedAccount"
+
     case none
     case fields([Field.ID: String])
 
@@ -22,5 +26,10 @@ public enum Input: Equatable, Sendable {
         case .none: [:]
         case .fields(let values): values
         }
+    }
+
+    var expectedAccount: String? {
+        let text = (values[Self.expectedAccountKey] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        return text.isEmpty ? nil : text
     }
 }

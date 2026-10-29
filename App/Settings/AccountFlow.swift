@@ -22,7 +22,7 @@ final class AccountFlow {
         failure = nil
         switch offer.way {
         case .signIn:
-            await add(offer, input: .none)
+            await add(offer, input: preset.map { .fields($0) } ?? .none)
         case .form, .key:
             form = offer
             values = preset ?? offer.preset?.values ?? [:]

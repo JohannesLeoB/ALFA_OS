@@ -47,12 +47,8 @@ public struct Deadlines: Equatable, Sendable {
 
 public struct CompanySetup: Sendable {
     var offers: [Offer]
-    var limits: [Capability: Int]
 
-    public init(offers: [Offer] = [], limits: [Capability: Int] = [.mail: 3]) {
+    public init(offers: [Offer] = []) {
         self.offers = offers
-        self.limits = limits
     }
-
-    func limit(_ capability: Capability) -> Int { limits[capability] ?? Int.max }
 }

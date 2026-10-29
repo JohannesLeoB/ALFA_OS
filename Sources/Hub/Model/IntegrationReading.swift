@@ -13,8 +13,15 @@ public struct IntegrationReading: Identifiable, Equatable, Sendable {
 
     public var asksReconnect: Bool { state.isActive }
 
+    public var lead: Inlet? { inlets.first { LinkState($0.state) == state } ?? inlets.first }
+
+    public var leadAddress: String? {
+        guard let lead, lead.capabilities.contains(.mail), !lead.account.isEmpty else { return nil }
+        return lead.account
+    }
+
     public var step: IntegrationStep {
-        let lead = inlets.first { LinkState($0.state) == state } ?? inlets.first
+        let lead = lead
         switch state {
         case .connected, .stored, .working:
             return lead.map { .check($0.id) } ?? .none
@@ -38,10 +45,11 @@ public enum IntegrationStep: Equatable, Sendable {
 public struct AreaReading: Identifiable, Equatable, Sendable {
     public var area: IntegrationArea
     public var inlet: Inlet.ID
+    public var account: String
     public var capability: Capability
     public var choice: CadenceChoice
     public var lastSync: Date?
     public var running: Bool
 
-    public var id: String { area.id }
+    public var id: String { inlet + "|" + area.id }
 }

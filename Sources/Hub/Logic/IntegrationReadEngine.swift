@@ -26,15 +26,15 @@ public enum IntegrationReadEngine {
             }
         }
         var areas: [AreaReading] = []
-        if let lead {
-            let running = Set(rules.queue.map { SyncEngine.key($0.inlet, $0.capability) })
+        let running = Set(rules.queue.map { SyncEngine.key($0.inlet, $0.capability) })
+        for inlet in inlets {
             for area in info.areas {
-                guard let capability = area.capability, lead.capabilities.contains(capability) else { continue }
+                guard let capability = area.capability, inlet.capabilities.contains(capability) else { continue }
                 areas.append(AreaReading(
-                    area: area, inlet: lead.id, capability: capability,
-                    choice: CadenceChoice(rules.cadence(lead.id, capability)) ?? .manual,
-                    lastSync: rules.lastSync(lead.id, capability),
-                    running: running.contains(SyncEngine.key(lead.id, capability))))
+                    area: area, inlet: inlet.id, account: inlet.account, capability: capability,
+                    choice: CadenceChoice(rules.cadence(inlet.id, capability)) ?? .manual,
+                    lastSync: rules.lastSync(inlet.id, capability),
+                    running: running.contains(SyncEngine.key(inlet.id, capability))))
             }
         }
         return IntegrationReading(info: info, state: state, note: note, hint: hint, inlets: inlets, offers: offers, areas: areas)

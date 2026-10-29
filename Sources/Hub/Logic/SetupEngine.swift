@@ -1,18 +1,26 @@
+import Foundation
+
 enum SetupEngine {
     static func newInlet(id: String, offer: Offer) -> Inlet {
         Inlet(id: id, provider: offer.provider, capabilities: offer.capabilities, owner: offer.owner, title: offer.title)
     }
 
-    static func checkLimits(_ offer: Offer, inlets: [Inlet], company: CompanySetup) throws(SetupFailure) {
-        for capability in offer.capabilities {
-            let maximum = company.limit(capability)
-            let used = inlets.filter { $0.owner == offer.owner && $0.capabilities.contains(capability) }.count
-            if used >= maximum { throw .limitReached(capability, max: maximum) }
+    static func existing(offer: Offer, account: String, in inlets: [Inlet]) -> Inlet? {
+        let address = normalized(account)
+        return inlets.first { inlet in
+            guard normalized(inlet.account) == address else { return false }
+            if offer.capabilities.contains(.mail), inlet.capabilities.contains(.mail) { return true }
+            return inlet.provider == offer.provider
         }
     }
 
-    static func existing(provider: String, account: String, in inlets: [Inlet]) -> Inlet? {
-        inlets.first { $0.provider == provider && $0.account == account }
+    static func normalized(_ account: String) -> String {
+        account.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    }
+
+    static func differs(_ expected: String, from account: String) -> Bool {
+        let wanted = normalized(expected)
+        return !wanted.isEmpty && wanted != normalized(account)
     }
 
     static func sorted(_ grant: Grant) -> [(key: String, value: String)] {
@@ -34,6 +42,7 @@ enum RenewalEngine {
         if case .form(let fields) = offer.way {
             for field in fields where field.holdsAccount { values[field.id] = inlet.account }
         }
+        if inlet.capabilities.contains(.mail), !inlet.account.isEmpty { values[Input.expectedAccountKey] = inlet.account }
         return Renewal(offer: offer, values: values)
     }
 }

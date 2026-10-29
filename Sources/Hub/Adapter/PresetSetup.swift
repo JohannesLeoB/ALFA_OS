@@ -15,7 +15,9 @@ final class PresetSetup: SetupPort {
     var offers: [Offer] { wrapped.offers }
 
     func add(_ offer: Offer, input: Input) async throws(SetupFailure) -> Inlet {
+        let known = Set(wrapped.inlets.map(\.id))
         let inlet = try await wrapped.add(offer, input: input)
+        guard !known.contains(inlet.id) else { return inlet }
         for capability in inlet.capabilities {
             if let interval = cadences[capability] { rules.setCadence(inlet.id, capability, .every(interval)) }
         }

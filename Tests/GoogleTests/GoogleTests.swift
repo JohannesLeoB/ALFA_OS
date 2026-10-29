@@ -305,6 +305,8 @@ final class GoogleTests: XCTestCase {
         XCTAssertEqual(items["client_id"], "cid")
         XCTAssertEqual(items["code_challenge_method"], "S256")
         XCTAssertEqual(items["access_type"], "offline")
+        XCTAssertEqual(items["prompt"], "select_account consent")
+        XCTAssertNil(items["login_hint"])
         XCTAssertEqual(items["scope"], "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/drive")
         XCTAssertEqual(items["state"], params.state)
         XCTAssertEqual(items["code_challenge"], params.pkce.challenge)
@@ -376,6 +378,31 @@ final class GoogleTests: XCTestCase {
         XCTAssertEqual(result.values[TokenState.refreshKey], "r")
         XCTAssertEqual(result.values[TokenState.expiryKey], String(grantStart.addingTimeInterval(3600).timeIntervalSince1970))
         XCTAssertTrue(String(decoding: http.calls[0].body, as: UTF8.self).contains("code=the-code"))
+    }
+
+    func testSignInPassesTheExpectedAddressAsLoginHint() async throws {
+        let http = FakeHttp { _ in (200, #"{"access_token":"a","expires_in":3600,"refresh_token":"r"}"#) }
+        let opened = Locked<[URL]>([])
+        let signIn = SignInClient(
+            oauth: OAuthClient(config: ClientConfig(clientID: "id", clientSecret: ""), http: http),
+            openBrowser: { url in
+                opened.with { $0.append(url) }
+                return true
+            },
+            makeRedirect: {
+                FakeRedirect { _ in
+                    let state = URLComponents(url: opened.with { $0 }.last!, resolvingAgainstBaseURL: false)!
+                        .queryItems!.first { $0.name == "state" }!.value!
+                    return URL(string: "http://127.0.0.1:9/?code=c&state=\(state)")!
+                }
+            },
+            clock: { grantStart })
+        _ = try await signIn.signIn(inlet([.mail]), input: [Input.expectedAccountKey: "anna@example.test"])
+        _ = try await signIn.signIn(inlet([.mail]), input: [:])
+        let hints = opened.with { $0 }.map { url in
+            URLComponents(url: url, resolvingAgainstBaseURL: false)!.queryItems!.first { $0.name == "login_hint" }?.value
+        }
+        XCTAssertEqual(hints, ["anna@example.test", nil])
     }
 
     func testSignInFailsWhenTheBrowserDoesNotOpenOrTheStateDiffers() async {

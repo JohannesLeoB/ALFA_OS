@@ -11,6 +11,7 @@ enum HintEngine {
     static let keyFieldsInvalidText = "hint.key.fields.invalid"
     static let keyRejectedText = "hint.key.rejected"
     static let keyFailedText = "hint.key.failed"
+    static let accountMismatchText = "hint.account.mismatch"
 
     static func hint(_ classification: Classification, fixIn: SettingsTarget? = nil) -> Hint {
         let text: String
