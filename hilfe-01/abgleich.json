@@ -1,0 +1,2677 @@
+[
+  {
+    "bereich": "projekte",
+    "kennung": "P1",
+    "titel": "Projektgalerie",
+    "br": {
+      "stelle": "01-projekte.md:55",
+      "daten": [
+        "Karte zeigt: Nummer, Titel, Kunde, Phase, Art, Budget, Wahrscheinlichkeit, Aktivität, Hinweis auf Neues im Ordner, Lücke in der Vollständigkeit (01-projekte.md:64)",
+        "Zustände: leer, lädt, nicht verbunden, Fehler (01-projekte.md:65)"
+      ],
+      "bedienung": [
+        "Umschalter Karten / Pipeline / Tabelle (01-projekte.md:58)",
+        "Sortieren nach Nummer, Name, Datum, Art oder eigener Reihenfolge per Ziehen (:59)",
+        "Suche über Nummer, Titel und Kunde (:60)",
+        "Stern für Favoriten (:61)",
+        "Archivierte ein- und ausblenden (:62)",
+        "„Neues Projekt“ (:63)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "In keinem der sechs maßgeblichen Bögen gezeichnet (Suche nach Projekt, Akte, Ordner, Kunde, Lead, Nachtrag, Phase, Pipeline, Favorit, Archiv, Fragebogen, Drive, ClickUp).",
+        "Nächste Stelle: Linke Bahn gruppiert Einträge je Projekt mit Kopf aus PROJ oder „Ohne Projekt“ (ALFA Atelier.dc.html:629, ALFA Aufmass.dc.html:654, ALFA Konfigurator.dc.html:707). Das ist keine Galerie."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaServices/ProjectSorter.swift:4",
+      "passt": "unklar",
+      "abweichung": "Sortierung belegt: number, name, date, kategorie, eigene (ProjectSorter.swift:5). Favorit belegt als isFavourite für häufigere Prüfung (AlfaServices/Google/DriveProjectFolderWatcher.swift:41–42). Ansichtsumschalter, Suche, Karteninhalt, Zustände und Ausblenden Archivierter: in den genannten Quelldateien nicht gefunden."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "projekte",
+    "kennung": "P2",
+    "titel": "Projekt anlegen (geführt, 4 Schritte)",
+    "br": {
+      "stelle": "01-projekte.md:68",
+      "daten": [
+        "Auftraggeber: bestehender Kunde (Suche nach Name oder Kundennummer) oder neuer Kunde; Dublettenprüfung über Kundennummer, Mail und Telefon (:71)",
+        "Eckdaten: Projektname und Fragebogen (:72)",
+        "Stufe: „Nur als Lead“ (… `_LEADS`, keine Nummer) oder „Projekt mit Ordner“ (:73)",
+        "Vorschau: Nummer, Ordnername `<JJJJ_NNN_Kunde_STR-Nr>`, Ordnerbaum, Felder des Datensatzes, Aufgabenliste mit Vorlage (8 Aufgaben) (:74–79)",
+        "Drei Schritte mit Fortschritt: Ordnerbaum, Datensatz, Aufgabenliste (:81)",
+        "Status: offen, teilweise, vollständig, Fehler (:83)"
+      ],
+      "bedienung": [
+        "Weiter, Zurück, Bestätigen, Fortsetzen; am Ende „Fragebogen öffnen“ (:85)",
+        "Bei Fehler: welcher Schritt, „Fortsetzen“ (:84)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "In keinem der sechs maßgeblichen Bögen gezeichnet (Suche nach Projekt, Akte, Ordner, Kunde, Lead, Nachtrag, Phase, Pipeline, Favorit, Archiv, Fragebogen, Drive, ClickUp).",
+        "Kein Dialog „Neues Projekt“, keine Schritte, keine Vorschau, kein Fortschritt."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/GefuehrterAblauf.swift:44",
+      "passt": "nein",
+      "abweichung": "Gleich: vier Schritte Auftraggeber, Projekt-Eckdaten, Stufe wählen, Bestätigen, Abschluss „Fragebogen öffnen“ (GefuehrterAblauf.swift:50–72); Schritte und Status (AlfaKit/Domain/Provisioning.swift:27–39); erledigte Schritte werden übersprungen (AlfaServices/ProjektProvisioningService.swift:65, :72, :80); Vorlage 8 Aufgaben (AlfaKit/Domain/ClickUpProjectTemplate.swift:4–13); Ordnermuster (AlfaKit/Domain/FolderSchema.swift:32). Abweichend: Eine Vorschau vor dem Schreiben steht im AR nicht; Schritt 4 sagt nur „legt Drive-Ordner + Airtable-Eintrag an“ (GefuehrterAblauf.swift:67–69). Die Einstellung „Vorschau, Vorgabe ja“ aus 01-projekte.md:86 in den genannten Dateien nicht gefunden. Nicht in BR: Anlegen läuft nur im Modus test, sonst Fehler writeGateGesperrt (ProjektProvisioningService.swift:57), Ordner unter „_TEST_PROVISIONING“ (:114)."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "projekte",
+    "kennung": "P3",
+    "titel": "Fragebogen",
+    "br": {
+      "stelle": "01-projekte.md:88",
+      "daten": [
+        "Antworten gehen in den Projektordner (`07 Fragebogen`) und in den Datensatz (:89)",
+        "Genannt sind nur Räume, Stil und Rahmen (:90)"
+      ],
+      "bedienung": []
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "In keinem der sechs maßgeblichen Bögen gezeichnet (Suche nach Projekt, Akte, Ordner, Kunde, Lead, Nachtrag, Phase, Pipeline, Favorit, Archiv, Fragebogen, Drive, ClickUp)."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/GefuehrterAblauf.swift:57",
+      "passt": "ja",
+      "abweichung": "„Fragebogen-Antworten (Räume, Stil, Rahmen)“ (GefuehrterAblauf.swift:57–59); Ordner „07 Fragebogen“ (FolderSchema.swift:41, :106); Herkunft „Fragebogen“ = aus der App (ProjektProvisioningLuecken.swift:33). Fragen selbst: fehlt, wie BR sagt."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "projekte",
+    "kennung": "P4",
+    "titel": "Akte",
+    "br": {
+      "stelle": "01-projekte.md:92",
+      "daten": [
+        "Dateien und Dokumente; Infos; Aufgaben, Zeiten, Geld; Cash, Service; Mail, Kontakte, Termine (:93–98)",
+        "Ordnerbaum Version 2: `00 EINGANG`, `01 INFOS` …, `02 CAD`, `03 PRÄSENTATION` …, Datei Abnahmeprotokoll (:99–104)",
+        "Feste Ziele: Infos, Angebote aus, Angebote ein, Fragebogen, Präsentation-PDF, CAD, Eingang (:105)"
+      ],
+      "bedienung": [
+        "Phase setzen; Wahrscheinlichkeit setzen (mit Verlauf); Nachfassen-Datum; Ordner öffnen; Datei hinzufügen; Neues im Ordner als gelesen markieren; Nachtrag anlegen; Archivieren; Werkzeuge öffnen (Aufmaß, Atelier, Konfigurator, Bemusterung, Moodboard) (:106–115)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "In keinem der sechs maßgeblichen Bögen gezeichnet (Suche nach Projekt, Akte, Ordner, Kunde, Lead, Nachtrag, Phase, Pipeline, Favorit, Archiv, Fragebogen, Drive, ClickUp).",
+        "Nur Bezüge: Label „aus Akte P-2041“ (ALFA Draws.dc.html:429); Menüpunkt „Projektordner (Drive)“ als Fotoquelle (ALFA Atelier.dc.html:631, ALFA Aufmass.dc.html:656); Feld „Projekt“ im Schriftfeld (ALFA Atelier.dc.html:88, ALFA Aufmass.dc.html:87, ALFA Konfigurator.dc.html:88); Projektfelder Nachname, Projekt, Straße, PLZ/Ort, Kundennr., Datum (ALFA Draws.dc.html:142)."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/FolderSchema.swift:58",
+      "passt": "nein",
+      "abweichung": "Gleich: v2 setzt „00 EINGANG“ vorn ein (FolderSchema.swift:58–63); 01 INFOS mit neun Unterordnern (:34–44); Datei „MYKILOS_Abnahmeprotokoll BLANKO.pdf“ (:55); feste Ziele = OrdnerSlot (:77–86); Phase setzen mit Zeitpunkt (AlfaServices/ProjectLifecycleStore.swift:50–58); Wahrscheinlichkeit mit Verlauf (AlfaServices/ProjectWahrscheinlichkeitStore.swift:43–45); Nachfassen (ClickUpProjektMeta.swift:12). Abweichend: „02 CAD“ hat im AR den Unterordner „VectorWorks“ (FolderSchema.swift:45–47), BR nennt ihn nicht. „Als gelesen markieren“ in den genannten Dateien nicht gefunden, nur noteProjectOpened (DriveProjectFolderWatcher.swift:57). „Nachtrag anlegen“: nur Feld parentProjectNumber (Project.swift:51, :59), keine Funktion gefunden. Nicht in BR: ProjectLifecycleDeriver leitet die Phase aus gebuchter Zeit ab (ProjectLifecycle.swift:27–32)."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Draws.dc.html:429",
+        "br": "01-projekte.md:25",
+        "was": "ED zeigt Projektnummer als „P-2041“; BR: „in der App `2026-014`, im Ordnernamen `2026_014`“."
+      },
+      {
+        "ed": "ALFA Planvergleich.dc.html:270",
+        "br": "01-projekte.md:25",
+        "was": "ED zeigt „2026_017“ (Ordnerformat) im Bahnkopf; BR: App-Format ist `2026-014`."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Draws.dc.html:429",
+        "was": "„aus Akte P-2041“; auch in README „Erfunden“ (uebergabe-draws-IN-PROGRESS/README.md:37)",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:142",
+        "was": "Vorgabewerte der Projektfelder „Brandt“, „Küche Nordwand“, „Lindenstraße 14“, „20259 Hamburg“, „K-2041“, „21.10.2026“; auch in README „Erfunden“ (README.md:37)",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:354",
+        "was": "Projekte „Küche Hansen“, „Praxis Kern“ (PROJ)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:367",
+        "was": "Projekte „Küche Hansen“, „Wohnung Vogt“ (PROJ)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:337",
+        "was": "Projekte „Küche Hansen“, „Praxis Kern“ (PROJ)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:629",
+        "was": "Gruppenkopf „Ohne Projekt“ (gleich ALFA Aufmass.dc.html:654, ALFA Konfigurator.dc.html:707)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Planvergleich.dc.html:270",
+        "was": "Bahnkopf-Detail „Junge/Schultzendorff · 2026_017“ (laut BRIEFING_Editoren.md:173 aus Altprototyp eltplan, nicht aus BR oder AR)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:649",
+        "was": "Schriftfeld by „Jonas Brenner“, Datum „19.10.2026“",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "projekte",
+    "kennung": "P5",
+    "titel": "Projektübersicht",
+    "br": {
+      "stelle": "01-projekte.md:118",
+      "daten": [
+        "Übersicht in drei Bahnen; `OverviewTile` gibt es schon (:119)",
+        "Mögliche Kacheln: Phase, Budget, Aktivität, Fokus, Nachfassen, Neues im Ordner, offene Aufgaben, gebuchte Zeit (:120)"
+      ],
+      "bedienung": []
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "In keinem der sechs maßgeblichen Bögen gezeichnet (Suche nach Projekt, Akte, Ordner, Kunde, Lead, Nachtrag, Phase, Pipeline, Favorit, Archiv, Fragebogen, Drive, ClickUp)."
+      ]
+    },
+    "ar": {
+      "stelle": "",
+      "passt": "fehlt",
+      "abweichung": "Keine Kachelliste in den genannten Dateien. Abgeleitete Daten belegt: Aktivität 21 Tage (AlfaKit/Domain/ProjektAktivitaetsPuls.swift:23–24), Fokus ab 20 Minuten (ProjektAktivitaetsPuls.swift:74–75). OverviewTile in NEU: App/Components/OverviewTile.swift:5."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "projekte",
+    "kennung": "P6",
+    "titel": "Archivieren und Zurückholen",
+    "br": {
+      "stelle": "01-projekte.md:122",
+      "daten": [
+        "Phase „Archiviert“, Ordner ins Archiv, Aufgabenliste markiert; nie Löschen (:123)"
+      ],
+      "bedienung": [
+        "im Projektkopf „Archivieren“ (mit Rückgängig); in der Galerie „Wieder aktiv“ (:124)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "In keinem der sechs maßgeblichen Bögen gezeichnet (Suche nach Projekt, Akte, Ordner, Kunde, Lead, Nachtrag, Phase, Pipeline, Favorit, Archiv, Fragebogen, Drive, ClickUp)."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/GefuehrterAblauf.swift:149",
+      "passt": "ja",
+      "abweichung": "Gleich: Airtable-Phase „Archiviert“, Drive-Ordner ins Archiv, ClickUp-Liste markiert, nie Löschen, jederzeit wieder aktiv (GefuehrterAblauf.swift:161–166). „Rückgängig“ steht im AR nicht. Unklar: „Archiviert“ ist keine der 7 Stufen (ProjectLifecycle.swift:3–11, 01-projekte.md:30); ProjectLifecycleDeriver setzt archiviert auf .abschluss (ProjectLifecycle.swift:29)."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "projekte",
+    "kennung": "P7",
+    "titel": "Lead zum Projekt machen",
+    "br": {
+      "stelle": "01-projekte.md:126",
+      "daten": [
+        "Lead-Ordner wandert aus `_LEADS` zu den Projekten (:127)",
+        "Fehler: Lead-Ordner nicht gefunden; mehrere passen (Auswahl); Ziel gibt es schon; Nummer ungültig (:128)"
+      ],
+      "bedienung": [
+        "„Zum Projekt machen“ am Lead (:129)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "In keinem der sechs maßgeblichen Bögen gezeichnet (Suche nach Projekt, Akte, Ordner, Kunde, Lead, Nachtrag, Phase, Pipeline, Favorit, Archiv, Fragebogen, Drive, ClickUp)."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaServices/Google/ProjektLeadBeleber.swift:3",
+      "passt": "nein",
+      "abweichung": "AR kennt fünf Fehler (ProjektLeadBeleber.swift:6–16), BR nennt vier; es fehlt leadsOrdnerNichtVorhanden (:7). Unklar: Der Lead-Ordner wird über das Präfix der Projektnummer gesucht (:36–38, :51); BR P2 sagt „Nur als Lead … keine Nummer“ (01-projekte.md:73)."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "projekte",
+    "kennung": "P8",
+    "titel": "Vollständigkeit",
+    "br": {
+      "stelle": "01-projekte.md:131",
+      "daten": [
+        "Projekte ohne Ordner oder Aufgabenliste, getrennt nach „von Hand angelegt“ und „aus der App, aber unvollständig“ (:132)",
+        "„Kein Drive-Ordner“, „Keine Aufgabenliste“; ein Lead braucht keine Liste (:50)"
+      ],
+      "bedienung": [
+        "Liste mit Sprung ins Projekt; „Anlegen fortsetzen“ (:133)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "In keinem der sechs maßgeblichen Bögen gezeichnet (Suche nach Projekt, Akte, Ordner, Kunde, Lead, Nachtrag, Phase, Pipeline, Favorit, Archiv, Fragebogen, Drive, ClickUp)."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/ProvisioningWaechter.swift:17",
+      "passt": "ja",
+      "abweichung": "Gleich: vonHand / ausDerAppUnvollstaendig (ProvisioningWaechter.swift:17–19); Lücken „Kein Drive-Ordner“, „Keine ClickUp-Liste“, Lead ohne Liste (ProjektProvisioningLuecken.swift:12–13, :37–40). Nicht in BR: geprüft wird erst ab Projektjahr 2026 (ProjektProvisioningLuecken.swift:4, :34); archivierte Projekte werden ausgelassen (ProvisioningWaechter.swift:36)."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "projekte",
+    "kennung": "P9",
+    "titel": "Neu im Projektordner",
+    "br": {
+      "stelle": "01-projekte.md:135",
+      "daten": [
+        "neue Dateien, erkannt als Angebot, Werkzeichnung oder sonstige Datei; aktive Projekte und Favoriten öfter geprüft (:136)"
+      ],
+      "bedienung": [
+        "Hinweis an der Karte und in der Akte, Sprung zur Datei (:137)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "In keinem der sechs maßgeblichen Bögen gezeichnet (Suche nach Projekt, Akte, Ordner, Kunde, Lead, Nachtrag, Phase, Pipeline, Favorit, Archiv, Fragebogen, Drive, ClickUp)."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaServices/Google/DriveProjectFolderWatcher.swift:186",
+      "passt": "ja",
+      "abweichung": "Gleich: offerDetected, drawingDetected, driveFileAdded (DriveProjectFolderWatcher.swift:186–194); Favorit oder in 7 Tagen geöffnet/gefunden = aktiv (:20, :41–48). Nicht in BR: Takte 30 Minuten aktiv, 3 Stunden Hintergrund (:18–19)."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "projekte",
+    "kennung": "P10",
+    "titel": "CAD-Projekt starten",
+    "br": {
+      "stelle": "01-projekte.md:139",
+      "daten": [
+        "Titelblock mit Projekt oder Kunde, Raum (Vorgabe „Küche“), Adresse, Kundennummer, Datum; Geräteliste (Bezeichnung, Artikelnummer, Hersteller, Menge); im Archiv für Vectorworks (:140)"
+      ],
+      "bedienung": [
+        "Vorlage wählen, Raum eingeben, Geräte prüfen, „Starten“ (:141)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "In keinem der sechs maßgeblichen Bögen gezeichnet (Suche nach Projekt, Akte, Ordner, Kunde, Lead, Nachtrag, Phase, Pipeline, Favorit, Archiv, Fragebogen, Drive, ClickUp).",
+        "Kein CAD-Start. Draws hat eigene Projektfelder für sein Schriftfeld (ALFA Draws.dc.html:142, :256)."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/CADProjektStart.swift:22",
+      "passt": "ja",
+      "abweichung": "Gleich: CADGeraet bezeichnung, artikelnummer, hersteller, menge (CADProjektStart.swift:3–10); raum Vorgabe „Küche“ (:43); Titelblock projektKunde, raum, strasse, plz, ort, customerNumber, date (:80–89); vorlageDatei (:27)."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Draws.dc.html:142",
+        "br": "01-projekte.md:140",
+        "was": "Draws-Schriftfeld führt Nachname, Projekt, Straße, PLZ/Ort, Kundennr., Datum (auch :256); BR-Titelblock hat zusätzlich Raum und Geräteliste, Draws hat Nachname getrennt."
+      }
+    ],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "projekte",
+    "kennung": "P11",
+    "titel": "Mail und Projekt (in ALFA schon gebaut)",
+    "br": {
+      "stelle": "01-projekte.md:143",
+      "daten": [
+        "Mail und Anhang in den Projektordner legen, Datei aus dem Projekt anhängen; in Mail schon gebaut (`ProjectFolderList`) (:144)"
+      ],
+      "bedienung": []
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "In keinem der sechs maßgeblichen Bögen gezeichnet (Suche nach Projekt, Akte, Ordner, Kunde, Lead, Nachtrag, Phase, Pipeline, Favorit, Archiv, Fragebogen, Drive, ClickUp)."
+      ]
+    },
+    "ar": {
+      "stelle": "",
+      "passt": "fehlt",
+      "abweichung": "In den genannten AR-Dateien keine Stelle; nur Feld mailQuery (AlfaKit/Domain/Project.swift:22). `ProjectFolderList` liegt nicht unter S/neu (App/Components). NEU-Bezug: Token projectFilesMax „Aus Projektordner“ (Resources/tokens.json:8056–8063)."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "bemusterung",
+    "kennung": "B1",
+    "titel": "Musterliste des Projekts",
+    "br": {
+      "stelle": "02-bemusterung.md:29",
+      "daten": [
+        "Projekt: Projektnummer (Pflicht) (02-bemusterung.md:11)",
+        "Bezeichnung; Hersteller, Kategorie, Artikelnummer optional (02-bemusterung.md:12-13)",
+        "Bild: Pfad oder Adresse des Produktbilds (02-bemusterung.md:14)",
+        "Quelle: manuell, Papers (Medienkatalog), Katalog (Artikel) (02-bemusterung.md:15)",
+        "Entwurf: Name einer Gruppe von Mustern (02-bemusterung.md:16)",
+        "Status: Vorgeschlagen, Gezeigt, Gewählt, Abgelehnt, Bestellt (02-bemusterung.md:17)",
+        "Notiz; Erstellt, geändert (02-bemusterung.md:18-19)",
+        "Liste: nach Kategorie gruppiert, „Ohne Kategorie“ zuletzt; Sortierung Gewählt, Gezeigt, Vorgeschlagen, Bestellt, Abgelehnt (02-bemusterung.md:22)",
+        "Liste der Entwurfsnamen (02-bemusterung.md:23)",
+        "Bilanz „3 gewählt · 2 gezeigt · 4 offen“ (02-bemusterung.md:24)",
+        "Defekte Einträge: gezählt, als Hinweis gezeigt (02-bemusterung.md:25)"
+      ],
+      "bedienung": [
+        "Status je Muster setzen (5 Werte) (02-bemusterung.md:31)",
+        "Notiz bearbeiten (02-bemusterung.md:32)",
+        "Entwurf zuordnen (02-bemusterung.md:33)",
+        "Muster entfernen (mit Rückgängig) (02-bemusterung.md:34)",
+        "Nach Entwurf filtern (02-bemusterung.md:35)",
+        "ZUSTÄNDE: leer, lädt, Fehler, „n Einträge defekt“ (02-bemusterung.md:36)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "fehlt",
+      "fehlt": [
+        "Kein Bemusterungs-Bogen in ED. Gruppe „Kreativ“ nennt Moodboard, Aufmaß, Atelier, Planvergleich, Konfigurator, keine Bemusterung (ALFA Planvergleich.dc.html:148, gleich ALFA Atelier.dc.html:217).",
+        "Suche nach bemuster|muster|swatch|materia|vorgeschlagen|gezeigt|abgelehnt|bestellt in den sechs Bögen: keine Musterliste, keine 5 Status, keine Bilanz, kein Hinweis auf defekte Einträge."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Bemusterung.swift:45",
+      "passt": "nein",
+      "abweichung": "Felder passen (Bemusterung.swift:45-60), Status und Rang passen (Bemusterung.swift:3-28), Bilanz passt (Bemusterung.swift:135-144), defekte Einträge passen (AlfaServices/Database/BemusterungStore.swift:51-67). Abweichend: (1) „Ohne Kategorie“ zuletzt: AR sortiert die Gruppen alphabetisch, „Ohne Kategorie“ ist nicht ans Ende gestellt (Bemusterung.swift:124-127). (2) Rückgängig beim Entfernen steht nicht in AR; AR hat nur loesche(id:) (BemusterungStore.swift:70-72). (3) Filter nach Entwurf: AR hat nur die Liste der Entwurfsnamen drafts() (Bemusterung.swift:130-133), keinen Filter. (4) Bilanz ohne Zählwerte ergibt in AR „n Muster“ (Bemusterung.swift:143); BR nennt das nicht."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "bemusterung",
+    "kennung": "B2",
+    "titel": "Muster hinzufügen (geführt, 3 Schritte)",
+    "br": {
+      "stelle": "02-bemusterung.md:38",
+      "daten": [
+        "1. Projekt wählen; entfällt, wenn aus der Akte geöffnet (02-bemusterung.md:39)",
+        "2. Muster suchen in Katalog und Medienkatalog zugleich, nach Name, Hersteller, Kategorie oder EAN, mit Bildvorschau (02-bemusterung.md:40-43)",
+        "3. Zuordnen: Status „Vorgeschlagen“ (02-bemusterung.md:44)"
+      ],
+      "bedienung": [
+        "Suchfeld, Trefferliste mit Bild, Mehrfachauswahl, „Zuordnen“; daneben „Manuell anlegen“ (02-bemusterung.md:45)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "fehlt",
+      "fehlt": [
+        "Kein Ablauf mit drei Schritten, keine Mustersuche, keine Trefferliste, kein „Zuordnen“, kein „Manuell anlegen“ in den sechs Bögen.",
+        "Nur verwandt, nicht Bemusterung: Menü „Foto holen aus“ mit „Hub · Mediathek“ (ALFA Atelier.dc.html:631, ALFA Aufmass.dc.html:656)."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/GefuehrterAblauf.swift:74",
+      "passt": "nein",
+      "abweichung": "Schritte 1–2 passen (GefuehrterAblauf.swift:81-88: „In Katalog UND Mediathek suchen (Name, Hersteller, Kategorie, EAN)… mit Bild-Vorschau“). Status „Vorgeschlagen“ als Vorgabe: Bemusterung.swift:72 und :97. Nicht in AR: „entfällt, wenn aus der Akte geöffnet“, Mehrfachauswahl, „Manuell anlegen“ als Bedienung. AR Schritt 3 heißt „Zuordnen & ablegen“ und legt in „die Musterliste des Projekts (Papers)“ (GefuehrterAblauf.swift:90-91); AR-Abschluss „Kataloge öffnen“ (GefuehrterAblauf.swift:94) fehlt in BR."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "bemusterung",
+    "kennung": "B3",
+    "titel": "Aus dem Warenkorb",
+    "br": {
+      "stelle": "02-bemusterung.md:47",
+      "daten": [
+        "Checkout-Weg „Als Muster-Entwurf ins Projekt“ legt Materialien und Geräte eines Korbs als Bemusterungs-Entwurf an (02-bemusterung.md:48)",
+        "Der Warenkorb ist selbst noch nicht gezeichnet (02-bemusterung.md:50)"
+      ],
+      "bedienung": [
+        "im Checkout ein Projekt wählen und einen Entwurfsnamen vergeben (02-bemusterung.md:49)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "fehlt",
+      "fehlt": [
+        "Kein Warenkorb, kein Checkout in den sechs Bögen (Suche warenkorb|checkout: kein Treffer)."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/CheckoutZiel.swift:49",
+      "passt": "nein",
+      "abweichung": "Name und Inhalt passen: „Als Muster-Entwurf ins Projekt“, „Projekt wählen → Materialien + Geräte landen als Bemusterungs-Entwurf“ (CheckoutZiel.swift:49-51). Einen Entwurfsnamen vergeben steht in AR nicht. Eine Umsetzung des Ziels „bemusterung-entwurf“ außer CheckoutZiel.swift:49 findet die Suche in AR nicht."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "bemusterung",
+    "kennung": "B4",
+    "titel": "Weitergeben",
+    "br": {
+      "stelle": "02-bemusterung.md:52",
+      "daten": [
+        "Gewählte Muster gehen ins Moodboard, in ein Angebot oder in den Konfigurator (Materialangaben) (02-bemusterung.md:53)",
+        "OFFEN: Die Wege sind im Archiv nur genannt, nicht gebaut (02-bemusterung.md:54)"
+      ],
+      "bedienung": []
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "fehlt",
+      "fehlt": [
+        "Kein Weg von Mustern in Moodboard, Angebot oder Konfigurator.",
+        "Verwandt, nicht aus Bemusterung: Konfigurator „Materialdeklaration“ (ALFA Konfigurator.dc.html:739) mit Notiz „Die Einträge kommen aus der Moodboard-Palette“ (ALFA Konfigurator.dc.html:740); Atelier „Ans Moodboard gegeben · Entwurf“ (ALFA Atelier.dc.html:680); Moodboard „Materialliste ableiten“ (ALFA Moodboard.dc.html:741)."
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/GefuehrterAblauf.swift:91",
+      "passt": "nein",
+      "abweichung": "AR: „Von dort wandern sie in Moodboard, Angebot oder Werkplanung weiter.“ (GefuehrterAblauf.swift:91-92). BR B4 nennt statt Werkplanung den Konfigurator (Materialangaben) (02-bemusterung.md:53); BR Einleitung nennt Werkplanung (02-bemusterung.md:3). Konfigurator als Ziel steht in AR an dieser Stelle nicht. Treffer „nach Bemusterung“ nur als Text in KonfigMaterial.swift:87-134."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Konfigurator.dc.html:740",
+        "br": "02-bemusterung.md:53",
+        "was": "BR: Materialangaben im Konfigurator kommen aus gewählten Mustern. ED: Einträge der Materialdeklaration kommen „aus der Moodboard-Palette; Katalogquelle im Altcode: unbekannt“."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Konfigurator.dc.html:345",
+        "was": "Feste Materialliste MATS „Eiche geölt hell, Esche pigmentiert, Weiß matt, Graphit, Naturstein grau, Edelstahl, Legrabox weiß, Leinen 04“, Vorgaben je Teil ALFA Konfigurator.dc.html:360, Farben MATC :500. Weder in 02-bemusterung.md noch in den gelesenen AR-Dateien zur Bemusterung.",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:359",
+        "was": "Feste Liste MATS für Material-Slots „Aus Katalog“ (ALFA Atelier.dc.html:664): „Eiche geölt hell … Backofen Einbau, Kochfeld Induktion, Stil-Anker Nordisch“. Nicht in BR, nicht in AR Bemusterung.",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:343",
+        "was": "Bild „Leinen 04, Muster“ mit Tags „Leinen, Material“, Quelle „Nordlicht Stoffe“, Datum „2. Sep. 2026“; Lieferantenlogo „Nordlicht“ ALFA Moodboard.dc.html:347. Nicht in BR, nicht in AR.",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:129",
+        "was": "Materialien MATS „Eiche, Nussbaum, Lack weiß, Stahl“. In README Abschnitt „Erfunden“: ja (uebergabe-draws-IN-PROGRESS/README.md:28). HANDOFF §2 Nr. 1 nennt „Demo-Objekt … mit Teilen, Maßen und Materialien“ und „Material- und Akzentfarben“ (HANDOFF_Weiterarbeit_2110.md:39).",
+        "auch_in_handoff_2110": true
+      }
+    ]
+  },
+  {
+    "bereich": "aufmass",
+    "kennung": "Daten",
+    "titel": "Daten: Aufmaß, Foto, Maß, Einheiten, Summen",
+    "br": {
+      "stelle": "03-aufmass.md:10",
+      "daten": [
+        "Aufmaß: Projekt, Titel, Fotos, Maße, Layer, Symbole, Pins (03-aufmass.md:12)",
+        "Foto: Datei, Pixelmaß, Titel, Kalibrierung (03-aufmass.md:14)",
+        "Maß: Bezeichnung, Länge (Meter), Quelle Hand/Laser/Auto, Zeitpunkt, Foto, Linie, Layer, Linienstil (03-aufmass.md:21-27)",
+        "Einheiten mm, cm, m … ohne Tausenderpunkt; m mit 2 Stellen (03-aufmass.md:43)",
+        "Fläche in m², Volumen in m³ (03-aufmass.md:44)",
+        "Summen: gesamt und je Layer (Meter und Anzahl) (03-aufmass.md:46)"
+      ],
+      "bedienung": []
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Aufmass.dc.html:383-394",
+      "fehlt": [
+        "Aufmaß als eigenes Objekt mit Titel: fehlt; Bogen führt nur Fotos mit Projekt-Schlüssel (ALFA Aufmass.dc.html:386-393)",
+        "Zeitpunkt je Maß: fehlt (ALFA Aufmass.dc.html:387-392 ohne Zeitfeld)",
+        "Fläche m², Volumen m³: fehlt",
+        "Gesamtsumme in Metern: fehlt",
+        "Pixelmaß und Datei je Foto: nur Platzhaltertext „Foto-Platzhalter · 4032 × 3024 px“ (ALFA Aufmass.dc.html:608)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/AufmassModell.swift:150",
+      "passt": "ja",
+      "abweichung": "Felder Aufmass (AufmassModell.swift:150-164), AufmassFoto (65-84), AufmassPosition (117-148), Masseinheit.formatiere ohne Gruppierung (20-33), AufmassRechnung m²/m³ (239-265), gesamtMeter/summeMeter/count (226-236) stimmen mit BR."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Aufmass.dc.html:419",
+        "br": "03-aufmass.md:43",
+        "was": "fmtMm nutzt toLocaleString(\"de-DE\") für mm und cm, das setzt Tausenderpunkte; BR: „ohne Tausenderpunkt“."
+      },
+      {
+        "ed": "ALFA Aufmass.dc.html:387",
+        "br": "03-aufmass.md:24",
+        "was": "Quelle „Foto“ als vierter Wert (dazu „Manuell“ statt „Hand“); BR kennt nur Hand, Laser, Auto."
+      },
+      {
+        "ed": "ALFA Aufmass.dc.html:384",
+        "br": "03-aufmass.md:12",
+        "was": "Layer hängen im Bogen je Foto (layers in jedem Foto-Objekt); BR und AR: Layer gehören zum Aufmaß (AufmassModell.swift:160)."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Aufmass.dc.html:367",
+        "was": "Beispielprojekte „Küche Hansen“, „Wohnung Vogt“ und Fotos „Küche · Nordwand“ usw.",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:649",
+        "was": "Bearbeiter „Jonas Brenner“ und Datum „19.10.2026“ im Schriftfeld",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "aufmass",
+    "kennung": "A1",
+    "titel": "Foto oder Plan laden",
+    "br": {
+      "stelle": "03-aufmass.md:50",
+      "daten": [
+        "Foto (Datei, Pixelmaß, Titel)"
+      ],
+      "bedienung": [
+        "Foto hinzufügen (Datei, Projektordner)",
+        "Foto wechseln (mehrere Fotos)",
+        "Titel je Foto"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Aufmass.dc.html:655-656",
+      "fehlt": [
+        "Titel je Foto ändern: fehlt; Name nur angezeigt (ALFA Aufmass.dc.html:57, 654)",
+        "Echtes Foto: nur Platzhalter, Toast „Platzhalter aus … · Foto folgt“ (ALFA Aufmass.dc.html:527)",
+        "Plan/Grundriss als Quelle: nicht unterschieden"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/AufmassModell.swift:65",
+      "passt": "ja",
+      "abweichung": "AufmassFoto mit dateiname, breite, hoehe, titel (AufmassModell.swift:65-84). Quelle „Datei, Projektordner“: im gelesenen Archiv fehlt eine Stelle."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Aufmass.dc.html:656",
+        "br": "03-aufmass.md:51",
+        "was": "Menü „Foto holen aus“: Hub · Mediathek, Projektordner (Drive), Datei wählen, iPhone-Kamera; BR nennt nur Datei und Projektordner."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Aufmass.dc.html:656",
+        "was": "Quelle „iPhone-Kamera“",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:656",
+        "was": "Quelle „Hub · Mediathek“ (00-LIES-MICH.md:115 nennt nur allgemein „Medienkatalog“ als gemeinsamen Eingang)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:653-654",
+        "was": "Fotoliste links nach Projekt gruppiert, Zähler rot bei nicht kalibriert",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "aufmass",
+    "kennung": "A2",
+    "titel": "Kalibrieren",
+    "br": {
+      "stelle": "03-aufmass.md:53",
+      "daten": [
+        "Referenzstrecke mit echtem Wert (isotrop) oder je eine Strecke für Breite und Höhe (03-aufmass.md:17-18)",
+        "Vor dem Kalibrieren gibt es keine Zahl (03-aufmass.md:19)"
+      ],
+      "bedienung": [
+        "Referenzstrecke ziehen, echten Wert eingeben (mit Einheit)",
+        "Wahlweise getrennt für X und Y",
+        "ZUSTAND nicht kalibriert: Maße zeigen keine Zahl, nur die Linie"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Aufmass.dc.html:628",
+      "fehlt": [
+        "Getrennte Kalibrierung X und Y: fehlt (calib hat nur a, b, mm: ALFA Aufmass.dc.html:386, 507)",
+        "Einheitenwahl am Eingabefeld: Feld heißt „Reale Länge mm“ (ALFA Aufmass.dc.html:628); Parser nimmt Suffix mm/cm/m an (ALFA Aufmass.dc.html:421-423)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/AufmassModell.swift:101",
+      "passt": "ja",
+      "abweichung": "isotrop (AufmassModell.swift:101-106) und ausXY (108-114). „Keine Zahl vor Kalibrieren“: archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/GefuehrterAblauf.swift:135-136."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Aufmass.dc.html:506",
+        "br": "03-aufmass.md:55",
+        "was": "Ohne Kalibrierung legt der Bogen ein Maß mit Quelle „Manuell“ an und fordert „Nicht kalibriert · Wert eintragen“; Beispiel f2 zeigt 1600 mm ohne Kalibrierung (ALFA Aufmass.dc.html:392). BR: nicht kalibriert zeigt keine Zahl."
+      },
+      {
+        "ed": "ALFA Aufmass.dc.html:507",
+        "br": "03-aufmass.md:19",
+        "was": "Neue Referenz bekommt Vorgabewert 900 mm, bevor ein Wert eingegeben ist."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Aufmass.dc.html:507",
+        "was": "Vorgabewert 900 mm für die Referenzlänge",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:611",
+        "was": "Statusanzeige „1 px = … mm“ unten links",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:602",
+        "was": "Referenzlinie mit Etikett „Referenz …“ sichtbar nur im Werkzeug K oder Reiter Foto",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "aufmass",
+    "kennung": "A3",
+    "titel": "Maße setzen (Hand)",
+    "br": {
+      "stelle": "03-aufmass.md:57",
+      "daten": [
+        "Maß: Bezeichnung, Länge, Quelle, Zeitpunkt, Layer, Linienstil dünn/normal/gestrichelt/punktiert (03-aufmass.md:21-27)"
+      ],
+      "bedienung": [
+        "Werkzeug „Maß“: Linie ziehen, Bezeichnung eingeben, Layer und Linienstil wählen",
+        "Ein Klick nahe einem Punkt rastet dort ein",
+        "Maß auswählen (Treffer am nächsten Punkt), löschen (mit Rückgängig)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Aufmass.dc.html:491-494",
+      "fehlt": [
+        "Einrasten auf nahe Punkte: fehlt; snapB rastet nur Winkel (ALFA Aufmass.dc.html:431-441)",
+        "Auswahl über nächsten Punkt: fehlt; Treffer über unsichtbaren 16-px-Strich der Linie (ALFA Aufmass.dc.html:104)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/AufmassLayer.swift:171",
+      "passt": "ja",
+      "abweichung": "AufmassTreffer.naechsterPunkt (AufmassLayer.swift:171-183); LinienStil (86-113); AufmassPosition (AufmassModell.swift:117-148). Löschen mit Rückgängig: im gelesenen Archiv keine Stelle."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Aufmass.dc.html:624",
+        "br": "03-aufmass.md:59",
+        "was": "Bezeichnung, Wert, Ebene, Stil in Kontextleiste (ALFA Aufmass.dc.html:624) und Reiter „Auswahl“ (ALFA Aufmass.dc.html:679-683); Wert direkt editierbar setzt Quelle „Manuell“."
+      },
+      {
+        "ed": "ALFA Aufmass.dc.html:451",
+        "br": "03-aufmass.md:61",
+        "was": "Löschen mit Toast „Entfernt“ und Rückgängig: passt."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Aufmass.dc.html:452",
+        "was": "Duplizieren (Menü und ⌥-Ziehen)",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:434",
+        "was": "⇧ rastet auf 45°; ohne ⇧ rastet unter 3° waagerecht/senkrecht (ALFA Aufmass.dc.html:436)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:545-547",
+        "was": "Pfeiltasten verschieben, ⇧ ×10",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:684",
+        "was": "Zeile „Foto-Check“ mit Abweichung Laser/Hand gegen Foto, rot ab max(10 mm, 2 %) (ALFA Aufmass.dc.html:668-669, 703)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:704",
+        "was": "Fußknopf „Maßliste ableiten“",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "aufmass",
+    "kennung": "A3.auto",
+    "titel": "Auto-Maß",
+    "br": {
+      "stelle": "03-aufmass.md:62",
+      "daten": [
+        "Waagrechte und senkrechte Hauptkanten aus Bildpunkten",
+        "Höchstens 8 je Achse; zu nahe Kanten zusammengefasst",
+        "Ergibt Breite und Höhe"
+      ],
+      "bedienung": [
+        "„Auto-Maß“, danach jeden Vorschlag übernehmen oder verwerfen"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Aufmass.dc.html:510-517",
+      "fehlt": [
+        "Mehrere Kanten je Achse (bis 8) und Zusammenfassen: fehlt; Bogen bildet nur Umrissrechteck der Punkte, je Achse höchstens 1 Maß (ALFA Aufmass.dc.html:512-514)",
+        "Übernehmen oder Verwerfen je Vorschlag: fehlt; Maße werden sofort gesetzt, nur Rückgängig (ALFA Aufmass.dc.html:516)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/AufmassAutoBemassung.swift:24",
+      "passt": "unklar",
+      "abweichung": "alleHauptkanten mit mindestSpanne 0.12, maxProAchse 8, Entdoppeln (AufmassAutoBemassung.swift:24-73) und Labels Breite/Höhe (7-12) passen. Übernehmen/Verwerfen je Vorschlag: im gelesenen Archiv keine Stelle."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Aufmass.dc.html:630",
+        "br": "03-aufmass.md:66",
+        "was": "Knopf heißt „Hauptkanten bemaßen“, Werkzeug „Auto-Bemaßung“ (ALFA Aufmass.dc.html:371); BR: „Auto-Maß“."
+      },
+      {
+        "ed": "ALFA Aufmass.dc.html:513",
+        "br": "03-aufmass.md:64",
+        "was": "Mindestspanne 12 % stimmt mit AR (AufmassAutoBemassung.swift:25), Grenze 8 und Zusammenfassen fehlen."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Aufmass.dc.html:630",
+        "was": "Knopf „Zurücksetzen“ für gesetzte Punkte",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "aufmass",
+    "kennung": "A3.laser",
+    "titel": "Laser",
+    "br": {
+      "stelle": "03-aufmass.md:67",
+      "daten": [
+        "Status: getrennt, sucht, gekoppelt (mit Gerätenamen), Fehler (Bluetooth aus, kein Zugriff, nicht unterstützt)",
+        "Unterstütztes Gerät: Leica DISTO D110"
+      ],
+      "bedienung": [
+        "„Laser verbinden“ / „Trennen“",
+        "Letzter Messwert erscheint live und wird dem gewählten Maß zugewiesen",
+        "Diagnose-Ansicht für unbekannte Geräte (Rohdaten je Kennung)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Aufmass.dc.html:710",
+      "fehlt": [
+        "Status „sucht“ und Fehlerzustände: fehlt; nur verbunden/getrennt (ALFA Aufmass.dc.html:398, 634, 710)",
+        "Live-Anzeige des letzten Messwerts: fehlt; Übernahme per Knopf „Messwert übernehmen“ oder L/Enter (ALFA Aufmass.dc.html:549, 634), Wert ist Zufall (ALFA Aufmass.dc.html:521)",
+        "Diagnose-Ansicht: fehlt"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/LaserMeasuring.swift:3",
+      "passt": "ja",
+      "abweichung": "LaserMeasuring und LaserVerbindungsStatus (LaserMeasuring.swift:3-16); Fehlertexte archive/before-rebuild:fundus/alpha/Sources/AlfaServices/Aufmass/LeicaDistoBluetoothAdapter.swift:133-141; Profil D110 archive/before-rebuild:fundus/alpha/Sources/AlfaServices/Aufmass/LaserGeraeteProfil.swift:30-37; Diagnose archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/LaserDiagnose.swift:30-54 und archive/before-rebuild:fundus/alpha/Sources/AlfaServices/Aufmass/LaserDiagnoseScanner.swift:5-162."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Aufmass.dc.html:398",
+        "br": "03-aufmass.md:69",
+        "was": "Laser startet als verbunden (laser: true); BR beginnt bei „getrennt“ und „Laser verbinden“."
+      },
+      {
+        "ed": "ALFA Aufmass.dc.html:710",
+        "br": "03-aufmass.md:68",
+        "was": "Verbinden über Menüeintrag „Leica Disto D110“ statt Knopf „Laser verbinden“."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Aufmass.dc.html:634",
+        "was": "Hinweis „Ziel: … · Enter“ in der Kontextleiste",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "aufmass",
+    "kennung": "A4",
+    "titel": "Perspektive",
+    "br": {
+      "stelle": "03-aufmass.md:74",
+      "daten": [
+        "Fluchtpunkte aus gezogenen Linien, bis zu 3 Gruppen",
+        "Horizont aus 2 Fluchtpunkten",
+        "Leitstrahl vom Fluchtpunkt durch den Zeiger",
+        "Linienende rastet auf Fluchtpunkt unter 7°"
+      ],
+      "bedienung": [
+        "Perspektive an/aus",
+        "Fluchtpunkte zeigen",
+        "Einrasten an/aus"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Aufmass.dc.html:631",
+      "fehlt": [
+        "Horizont: fehlt",
+        "Leitstrahl durch den Zeiger: fehlt; gezeichnet sind nur Verlängerungen der Linien zum FP (ALFA Aufmass.dc.html:599)",
+        "Schalter Perspektive an/aus, Fluchtpunkte zeigen, Einrasten an/aus: fehlen",
+        "Fluchtpunkt aus allen Linien einer Gruppe: Bogen nimmt nur den Schnitt der ersten zwei (ALFA Aufmass.dc.html:427-428)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/AufmassPerspektive.swift:22",
+      "passt": "ja",
+      "abweichung": "fluchtpunkt (23-44), horizont (46-56), leitstrahl (58-72), Einrasten 7° (74-115), clustereFluchtpunkte maxAnzahl 3 (117-197)."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Aufmass.dc.html:631",
+        "br": "03-aufmass.md:76",
+        "was": "Gruppe wird von Hand gewählt (Segment FP 1/2/3); AR ordnet Linien automatisch zu (AufmassPerspektive.swift:117-197)."
+      },
+      {
+        "ed": "ALFA Aufmass.dc.html:437",
+        "br": "03-aufmass.md:79",
+        "was": "Einrasten bei ≤ 7° auf Fluchtpunkt: passt."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Aufmass.dc.html:631",
+        "was": "Knopf „Linien löschen“",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:700",
+        "was": "Zeile „Fluchtpunkte n von 3“ mit „Linien ziehen“ im Reiter Foto",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "aufmass",
+    "kennung": "A5",
+    "titel": "Symbole und Pins",
+    "br": {
+      "stelle": "03-aufmass.md:82",
+      "daten": [
+        "Symbol: Installationstyp, Position, Layer, Notiz; 11 Typen (03-aufmass.md:37-38)",
+        "Pin: Textmarke mit Position und Layer (03-aufmass.md:40)"
+      ],
+      "bedienung": [
+        "Palette mit 11 Installationstypen, ins Bild setzen, Notiz eingeben",
+        "Pin mit Text setzen",
+        "jeweils einem Layer zuordnen"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Aufmass.dc.html:76-81",
+      "fehlt": [
+        "Notiz am Symbol: fehlt (Symbol hat nur t, at, layer: ALFA Aufmass.dc.html:390, 498)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/AufmassLayer.swift:115",
+      "passt": "ja",
+      "abweichung": "InstallationsTyp 11 Fälle (AufmassLayer.swift:115-148), AufmassSymbol mit notiz (150-169), AufmassPin (185-201)."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Aufmass.dc.html:372",
+        "br": "03-aufmass.md:38",
+        "was": "11 Typen vorhanden, aber in drei Gruppen Wasser/Elektro/Technik (Gas unter Wasser, Lautsprecher unter Elektro); BR und AR haben keine Gruppen."
+      },
+      {
+        "ed": "ALFA Aufmass.dc.html:379",
+        "br": "03-aufmass.md:38",
+        "was": "„Anschluss“ nutzt denselben Pfad wie das Werkzeug „Symbol“ (plug, ALFA Aufmass.dc.html:374)."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Aufmass.dc.html:638",
+        "was": "Kategorien Wasser, Elektro, Technik im Flyout",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:498",
+        "was": "Vorgabetext „Notiz“ für neue Pins",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "aufmass",
+    "kennung": "A6",
+    "titel": "Layer",
+    "br": {
+      "stelle": "03-aufmass.md:85",
+      "daten": [
+        "Name, Farbe, sichtbar, Schriftgröße (Vorgabe 9)",
+        "Höchstens 10; Vorgabe Gesamtmaße, Wasser/Installation, Details",
+        "Neuer Layer bekommt nächste freie Farbe",
+        "Gelöschter Layer: Maße bleiben ohne Layer"
+      ],
+      "bedienung": [
+        "Layerliste mit Sichtbarkeit, Farbe (Palette), Schriftgröße, Umbenennen, Neu (max. 10), Löschen",
+        "Summe und Anzahl je Layer"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Aufmass.dc.html:36-49",
+      "fehlt": [
+        "Schriftgröße: fehlt",
+        "Farbe aus Palette wählen: fehlt; nur „Farbe wechseln“ reihum (ALFA Aufmass.dc.html:533); Farbfeld-Baustein (ALFA Aufmass.dc.html:154) wird nicht genutzt",
+        "Summe in Metern je Layer: fehlt; nur Anzahl aller Elemente (ALFA Aufmass.dc.html:658)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/AufmassLayer.swift:4",
+      "passt": "ja",
+      "abweichung": "AufmassLayer mit fontSize 9 (4-21), standardSatz (47-53), farbPalette 10 und maxLayer (55-71), naechsteFreieFarbe (73-76), layerEntfernt (AufmassModell.swift:210-224), summeMeter/count (226-234)."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Aufmass.dc.html:534",
+        "br": "03-aufmass.md:34",
+        "was": "Löschen verschiebt Inhalt auf eine andere Ebene und verbietet das Löschen der letzten; BR und AR: Maße bleiben ohne Layer."
+      },
+      {
+        "ed": "ALFA Aufmass.dc.html:368",
+        "br": "03-aufmass.md:31",
+        "was": "Palette als feste Hex/oklch-Werte; AR nutzt Farbnamen (critical, cash …, AufmassLayer.swift:55-58)."
+      },
+      {
+        "ed": "ALFA Aufmass.dc.html:37",
+        "br": "03-aufmass.md:86",
+        "was": "Liste heißt „Ebenen“, nicht „Layer“."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Aufmass.dc.html:45",
+        "was": "Ebene sperren/entsperren (auch ALFA Aufmass.dc.html:533, 660)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:553",
+        "was": "Ebene wählen mit Tasten 1–9",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "aufmass",
+    "kennung": "A7",
+    "titel": "Ansicht",
+    "br": {
+      "stelle": "03-aufmass.md:88",
+      "daten": [],
+      "bedienung": [
+        "Zoom 1- bis 12-fach (um den Zeiger)",
+        "Verschieben bei Zoom",
+        "Einpassen"
+      ]
+    },
+    "ed": {
+      "stand": "gezeichnet",
+      "stelle": "ALFA Aufmass.dc.html:412",
+      "fehlt": []
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/AufmassViewport.swift:3",
+      "passt": "ja",
+      "abweichung": "minZoom 1, maxZoom 12 (AufmassViewport.swift:12-14), fit (24), Verschieben nur bei zoom > minZoom (47-51)."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Aufmass.dc.html:411",
+        "br": "03-aufmass.md:89",
+        "was": "Verschieben auch bei Zoom 1 möglich (setView ohne Zoom-Bedingung); BR/AR: nur bei Zoom."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Aufmass.dc.html:371",
+        "was": "Werkzeug „Hand“ (H) und Leertaste für Verschieben (ALFA Aufmass.dc.html:538)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:709",
+        "was": "Einstellung Mausrad „Scrollt, ⌥ zoomt“ / „Zoomt, ⌥ scrollt“",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:641",
+        "was": "Zoommenü 200 % bis 1200 %",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:61",
+        "was": "Umschalter Foto/Blatt",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "aufmass",
+    "kennung": "A8",
+    "titel": "Ablegen und Ausgeben",
+    "br": {
+      "stelle": "03-aufmass.md:91",
+      "daten": [
+        "Datei .mykaufmass.json mit Zusammenfassung: Titel, Projekt, Anzahl, Summe, je Maß eine Zeile",
+        "Dateiname Projekt_Aufmaß_Bezeichnung_Datum",
+        "Blatt A3 im Firmenstil",
+        "Ablage 01 INFOS/01 Pläne (Firmenwert)",
+        "Entwürfe lokal mit Foto"
+      ],
+      "bedienung": [
+        "„Ins Projekt ablegen“",
+        "„A3 exportieren“",
+        "Entwurf öffnen"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Aufmass.dc.html:707",
+      "fehlt": [
+        "„Ins Projekt ablegen“: fehlt",
+        "Entwurf öffnen: fehlt",
+        "Dateiname und Ablagepfad: nicht gezeigt",
+        "Alle Ausgaben nur Toast „… · Entwurf“ (ALFA Aufmass.dc.html:707)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/AufmassDokument.swift:3",
+      "passt": "ja",
+      "abweichung": "dateiEndung und Zusammenfassung (AufmassDokument.swift:12, 47-54); Dateiname archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/AufmassDateiname.swift:19-35; Ordner archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/FolderSchema.swift:35 („01 Pläne“ unter „01 INFOS“); Entwurf mit fotoPNG archive/before-rebuild:fundus/alpha/Sources/AlfaServices/Database/AufmassEntwurfStore.swift:4-16; A3 nur genannt archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/GefuehrterAblauf.swift:143. AufmassDokument.fileName (29-35) bildet einen zweiten, anderen Namen „Aufmass_<Nr>_<Titel>“."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Aufmass.dc.html:698",
+        "br": "03-aufmass.md:95",
+        "was": "Format wählbar A4, A3, A2 quer; BR: A3."
+      },
+      {
+        "ed": "ALFA Aufmass.dc.html:86-91",
+        "br": "03-aufmass.md:95",
+        "was": "Schriftfeld mit Projekt, Foto-Aufmaß, Maßstab, Name, Format, Datum; Inhalt des A3-Blatts ist in BR offen (03-aufmass.md:106)."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Aufmass.dc.html:707",
+        "was": "Ausgabe als SVG, DXF, DWG, HTML",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:698",
+        "was": "Formate A4 und A2 quer (Handoff §2 Nr. 1 nennt für Draws „A4 hoch, A4 quer, A2 quer“)",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:699",
+        "was": "Vorlage „Aufmaß quer“, „Eigene Vorlage …“, „DXF / SVG als Untergrund …“",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:697",
+        "was": "Schalter „Blatt zeigen“ mit „Foto auf Vorlage mit Schriftfeld“",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "aufmass",
+    "kennung": "ohne",
+    "titel": "Elemente ohne Funktion im Brief",
+    "br": {
+      "stelle": "fehlt",
+      "daten": [],
+      "bedienung": []
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": []
+    },
+    "ar": {
+      "stelle": "fehlt",
+      "passt": "fehlt",
+      "abweichung": ""
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Aufmass.dc.html:644",
+        "was": "Wiederholen (Redo, ⌘⇧Z ALFA Aufmass.dc.html:539)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:708",
+        "was": "Menü „Kurzbefehle“ mit Tasten V, H, K, M, A, P, S, T, L (ALFA Aufmass.dc.html:371, 552)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:716",
+        "was": "Assistententext „Frag nach Maßen, Abweichungen zwischen Laser und Foto …“ und Sync-Titel „Aufmaße neu lesen“",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:75",
+        "was": "Verschiebbare Werkzeugpalette mit Ziehgriff, Doppelklick dockt an, Lage in localStorage (ALFA Aufmass.dc.html:331-341)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Aufmass.dc.html:15",
+        "was": "Kürzel „JB“ als me-ini",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "atelier",
+    "kennung": "S1",
+    "titel": "Skizzieren",
+    "br": {
+      "stelle": "04-atelier.md:52",
+      "daten": [
+        "Form: Polylinie (offen/geschlossen), Rechteck, Freihand (04-atelier.md:26)",
+        "Strich: Farbe Schwarz, Weiß oder Slot-Farbe; Stärke dünn, mittel, dick (04-atelier.md:27)",
+        "Füllung durch einen Slot (nur geschlossene Formen), Deckkraft, Bezeichnung (04-atelier.md:28)",
+        "Verlauf: Rückgängig und Wiederholen, bis zu 500 Schritte (04-atelier.md:46)"
+      ],
+      "bedienung": [
+        "Werkzeuge: Polylinie, Rechteck, Freihand, Auswählen (04-atelier.md:54)",
+        "Einstellungen: Strichfarbe, Strichstärke, Füllen mit Slot, Deckkraft, Bezeichnung (04-atelier.md:55)",
+        "Einrasten: Winkel auf 7°, Magnet an vorhandene Punkte; Winkelanzeige beim Zeichnen (04-atelier.md:56)",
+        "Objekt löschen, Rückgängig, Wiederholen (04-atelier.md:57)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Atelier.dc.html:363",
+      "fehlt": [
+        "Bezeichnung je Objekt: Objektkarte zeigt Ebene, Strichfarbe, Stärke, Deckkraft, Füllung, Punkte, kein Feld Bezeichnung (ALFA Atelier.dc.html:646-650)",
+        "Magnet an vorhandene Punkte: keine Stelle im Bogen",
+        "Winkelanzeige: Statuszeile zeigt nur „waagerecht“, „senkrecht“, „Fluchtpunkt n“ oder „⇧ 45°-Raster“, keine Gradzahl (ALFA Atelier.dc.html:438-441, 586)",
+        "Verlauf 500 Schritte: Bogen kappt bei 100 (ALFA Atelier.dc.html:403)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Skizze/SkizzenModell.swift:70",
+      "passt": "ja",
+      "abweichung": "Formen SkizzenModell.swift:70-90, Strich :92-130, Objekt mit fuellSlotID, deckkraft, label :132-154; Einrasten 7° SkizzenGeometrie.swift:70-84, Magnet :86-95, Winkelanzeige angleDegrees :97-104; Verlauf maxTiefe 500 Verlaufsstapel.swift:9."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Atelier.dc.html:440",
+        "br": "04-atelier.md:56",
+        "was": "Waagerecht/senkrecht rastet im Bogen unter 3°, nur Fluchtpunkt-Strahlen unter 7° (ALFA Atelier.dc.html:441); ⇧ rastet auf 45° (ALFA Atelier.dc.html:438). BR: „Winkel auf 7°“."
+      },
+      {
+        "ed": "ALFA Atelier.dc.html:403",
+        "br": "04-atelier.md:46",
+        "was": "Verlauf .slice(-100) statt bis zu 500 Schritte."
+      },
+      {
+        "ed": "ALFA Atelier.dc.html:599",
+        "br": "04-atelier.md:55",
+        "was": "Deckkraft nur in drei Stufen 100 %, 60 %, 30 %."
+      },
+      {
+        "ed": "ALFA Atelier.dc.html:363",
+        "br": "04-atelier.md:54",
+        "was": "Freihand heißt im Bogen „Stift“ (Taste P); Füllen ist zusätzlich ein eigenes Werkzeug „Füllung“ (F) mit ⌥-Klick zum Löschen (ALFA Atelier.dc.html:500-505, 608)."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Atelier.dc.html:363",
+        "was": "Werkzeug „Hand“ (H), Leertaste-Pan, Zoom 1–12 mit Zoom-Menü 200–1200 % und Einpassen (ALFA Atelier.dc.html:400, 472, 616)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:506",
+        "was": "Werkzeug „Radierer“ (E), entfernt Striche, Bilder und Notizen (ALFA Atelier.dc.html:363, 609)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:490",
+        "was": "Werkzeug „Notiz“ (T) setzt eine Stecknadel mit Text als eigenes Objekt (ALFA Atelier.dc.html:574-575, 605); AR kennt nur Formen als Objekt (SkizzenModell.swift:132-154)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:450",
+        "was": "Duplizieren über ⌥-Ziehen, Kontextmenü und Fußknopf (ALFA Atelier.dc.html:459, 466, 677). In HANDOFF §2 Nr. 1 steht „Duplizieren“ nur für Draws (HANDOFF_Weiterarbeit_2110.md:39)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:522",
+        "was": "Pfeiltasten verschieben das gewählte Objekt, ⇧ in Zehnerschritten",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:681",
+        "was": "Menü „Kurzbefehle“ und Buchstabentasten V, H, P, L, R, F, E, I, T, G (ALFA Atelier.dc.html:528)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:631",
+        "was": "Foto holen aus „Hub · Mediathek“ und „iPhone-Kamera“; AR FotoQuelle kennt lokal, Drive, eingebettet (SkizzenModell.swift:3-6)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:354",
+        "was": "Beispieldaten: Projekte „Küche Hansen“, „Praxis Kern“, Skizzen „Küche · Ansicht Süd“ u. a., Materialliste „Eiche geölt hell“, „Backofen Einbau“ u. a. (ALFA Atelier.dc.html:359, 376-382)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:87",
+        "was": "Schriftfeld Projekt, Foto-Aufmaß, Maßstab (ausgeblendet, blatt: false, ALFA Atelier.dc.html:624)",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "atelier",
+    "kennung": "S2",
+    "titel": "Layer",
+    "br": {
+      "stelle": "04-atelier.md:59",
+      "daten": [
+        "Vier Arten: Neu, Bestand, Entfernen, Notiz (04-atelier.md:21)",
+        "Je Layer: sichtbar, gesperrt, Deckkraft (04-atelier.md:22)",
+        "Notizen gehen nicht in den Export (04-atelier.md:23)"
+      ],
+      "bedienung": [
+        "Liste der Layer (Art mit Symbol), sichtbar, sperren, Deckkraft, neu, umbenennen (04-atelier.md:60)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Atelier.dc.html:36",
+      "fehlt": [
+        "Art mit Symbol: Zeile zeigt einen Farbpunkt je Art, kein Symbol (ALFA Atelier.dc.html:41, 355, 635)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Skizze/SkizzenLayer.swift:3",
+      "passt": "ja",
+      "abweichung": "LayerArt mit label und symbol :3-25, Layer mit sichtbar, gesperrt, deckkraft :27-47, Standardsatz Neu, Bestand, Entfernen, Notizen :49-56, wirdExportiert :24."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Atelier.dc.html:536",
+        "br": "04-atelier.md:60",
+        "was": "Deckkraft nur über Rechtsklick-Menü in Stufen 100 %, 60 %, 30 %."
+      },
+      {
+        "ed": "ALFA Atelier.dc.html:533",
+        "br": "04-atelier.md:60",
+        "was": "Umbenennen über Doppelklick oder Menü mit Browser-Dialog prompt(); neue Ebene heißt „<Art> n“ (ALFA Atelier.dc.html:532), AR „Layer n“ bei leerem Namen (SkizzenLayer.swift:58-61)."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Atelier.dc.html:537",
+        "was": "Ebene löschen, Inhalt wandert auf eine andere Ebene, Mindestens-eine-Ebene-Regel",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:529",
+        "was": "Ebene wählen mit Ziffertasten 1–9",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:43",
+        "was": "Zähler der Objekte je Ebene in der Ebenenzeile (ALFA Atelier.dc.html:634)",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "atelier",
+    "kennung": "S3",
+    "titel": "Perspektivraster",
+    "br": {
+      "stelle": "04-atelier.md:62",
+      "daten": [
+        "1-, 2- oder 3-Punkt (04-atelier.md:41)",
+        "Horizont, verschiebbare Fluchtpunkte (04-atelier.md:42)",
+        "Strahlen je Punkt: Vorgabe 24, mindestens 4 (04-atelier.md:43)",
+        "Einrasten an/aus (04-atelier.md:44)"
+      ],
+      "bedienung": [
+        "Raster an/aus, 1/2/3-Punkt, Horizont ziehen, Fluchtpunkte ziehen, Strahlenzahl, Einrasten an/aus (04-atelier.md:63)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Atelier.dc.html:612",
+      "fehlt": [
+        "Horizont ziehen: Horizont fest bei y .46 (ALFA Atelier.dc.html:579)",
+        "Fluchtpunkte ziehen: Punkte fest je Art (ALFA Atelier.dc.html:434)",
+        "Strahlenzahl: fest aus 8 Teilungen je Bildkante (ALFA Atelier.dc.html:578), kein Regler",
+        "Einrasten an/aus: kein Schalter, Fang immer aktiv (ALFA Atelier.dc.html:441)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Skizze/PerspektivRaster.swift:32",
+      "passt": "ja",
+      "abweichung": "Arten :12-30, aktiv, horizontY, fluchtpunkte, strahlenProPunkt 24 min 4, snapAn :32-52, setzeHorizont :76-80, Einrasten 7° :117-136."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Atelier.dc.html:643",
+        "br": "04-atelier.md:63",
+        "was": "Raster an/aus und 1/2/3 als ein Segment „aus, 1, 2, 3“ (auch Kontextleiste ALFA Atelier.dc.html:612)."
+      }
+    ],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "atelier",
+    "kennung": "S4",
+    "titel": "Material-Slots",
+    "br": {
+      "stelle": "04-atelier.md:65",
+      "daten": [
+        "6 Slots A–F mit je einer Farbe: Ultramarin, Terracotta, Salbei, Ocker, Graphit, Taube (04-atelier.md:31)",
+        "Material-Arten: Material, Gerät, Stil-Anker, Eigenes Bild; dazu ein Text für den Prompt und ein Bild (04-atelier.md:33)",
+        "Die Konfigurator-Palette kann Material liefern (04-atelier.md:34)"
+      ],
+      "bedienung": [
+        "Sechs Slots mit Farbe (04-atelier.md:67)",
+        "Material zuordnen, aus Palette, Medienkatalog, Gerät oder eigenem Bild (04-atelier.md:68)",
+        "Der Prompt-Text ist bearbeitbar (04-atelier.md:69)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Atelier.dc.html:662",
+      "fehlt": [
+        "Prompt-Text je Material bearbeiten: kein Feld",
+        "Bild je Material: keine Anzeige",
+        "Getrennte Quellen Palette, Medienkatalog: Menü hat nur Kopf „Aus Katalog“ und „Eigenes Bild …“ (ALFA Atelier.dc.html:664)",
+        "Eigenes Bild: nur Toast „Bild wählen · Entwurf“ (ALFA Atelier.dc.html:664)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Skizze/MaterialSlot.swift:3",
+      "passt": "nein",
+      "abweichung": "SlotFarbe :3-16, MaterialArt :18-40, MaterialRef mit promptText und bildRef :42-59, Standardsatz Slot A–F :76-79, Konfigurator-Palette KonfigMaterial.swift:165. „Medienkatalog“ als Materialquelle steht in keiner gelesenen Skizze-Datei."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Atelier.dc.html:356",
+        "br": "04-atelier.md:31",
+        "was": "Farbwerte im Bogen als oklch/Hex; BR nennt nur Namen."
+      }
+    ],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "atelier",
+    "kennung": "S5",
+    "titel": "Bilder platzieren",
+    "br": {
+      "stelle": "04-atelier.md:71",
+      "daten": [
+        "Platziertes Bild: Position, Breite, Höhe, Drehung, gespiegelt, Deckkraft, gesperrt, Ebene (vor/zurück) (04-atelier.md:38)",
+        "Skizze: … platzierte Bilder (04-atelier.md:12)"
+      ],
+      "bedienung": [
+        "Bild einfügen, verschieben, skalieren, drehen, spiegeln, Deckkraft, sperren, nach vorn/hinten (04-atelier.md:72)"
+      ]
+    },
+    "ed": {
+      "stand": "gezeichnet",
+      "stelle": "ALFA Atelier.dc.html:652",
+      "fehlt": [
+        "Höhe: nur Breite in % des Fotos, Höhe fest 0,75 × Breite (ALFA Atelier.dc.html:569)",
+        "echtes Bild: nur gestrichelter Platzhalter (ALFA Atelier.dc.html:99, 610)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Skizze/PlatziertesBild.swift:3",
+      "passt": "nein",
+      "abweichung": "Felder stimmen (PlatziertesBild.swift:3-41, zIndex :23). Aber SkizzenDokument hat kein Feld für platzierte Bilder (SkizzenModell.swift:156-167); Bilder stehen nur in SkizzenSnapshot (Verlaufsstapel.swift:47). Spiegeln in AR nur horizontal (gespiegeltH, PlatziertesBild.swift:18)."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Atelier.dc.html:489",
+        "br": "04-atelier.md:38",
+        "was": "Bild trägt im Bogen eine Ebene (layer) und eine Quelle aus Material/Gerät/Stil-Anker/Eigenes Bild (ALFA Atelier.dc.html:610, 652); AR-Quelle ist FotoQuelle (PlatziertesBild.swift:8)."
+      }
+    ],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "atelier",
+    "kennung": "S6",
+    "titel": "Maßanker",
+    "br": {
+      "stelle": "04-atelier.md:74",
+      "daten": [
+        "Strecke im Bild mit echtem Wert in mm und Bezeichnung (04-atelier.md:36)"
+      ],
+      "bedienung": [
+        "Strecke ziehen, mm-Wert und Bezeichnung eingeben (04-atelier.md:75)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "kein Werkzeug, keine Zeile, kein Datenfeld; Prompt-Block Geometrie nennt keine Maße (ALFA Atelier.dc.html:548)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Skizze/SkizzenMasse.swift:3",
+      "passt": "ja",
+      "abweichung": "MassAnker von, bis, realMillimeter, label :3-16; geht in den Prompt (PromptKompilierer.swift:41-43)."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "atelier",
+    "kennung": "S7",
+    "titel": "Bereitschaft",
+    "br": {
+      "stelle": "04-atelier.md:77",
+      "daten": [
+        "„Kein gefülltes Volumen“ (04-atelier.md:79)",
+        "„Slots ohne Material: …“ (04-atelier.md:80)"
+      ],
+      "bedienung": [
+        "Grün erst ohne offene Punkte (04-atelier.md:81)"
+      ]
+    },
+    "ed": {
+      "stand": "gezeichnet",
+      "stelle": "ALFA Atelier.dc.html:661",
+      "fehlt": []
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Skizze/SkizzenModell.swift:200",
+      "passt": "ja",
+      "abweichung": "substrateOpenPoints und substratGruen :200-212, benutzteSlotIDs nur gefüllte Objekte :196-198."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Atelier.dc.html:586",
+        "br": "04-atelier.md:79",
+        "was": "Wortlaut im Bogen „Substrat: keine Füllung“, „Noch keine gefüllte Form“, „… ohne Material“ (ALFA Atelier.dc.html:661) statt „Kein gefülltes Volumen“, „Slots ohne Material: …“."
+      },
+      {
+        "ed": "ALFA Atelier.dc.html:544",
+        "br": "04-atelier.md:80",
+        "was": "Bogen zählt auch Strichfarbe in Slot-Farbe als genutzten Slot; AR nur Füllung (SkizzenModell.swift:196-198)."
+      },
+      {
+        "ed": "ALFA Atelier.dc.html:678",
+        "br": "04-atelier.md:81",
+        "was": "Knopf „Auftrag senden“ wird ausgegraut (off, Deckkraft .4, ALFA Atelier.dc.html:272), solange nicht bereit."
+      }
+    ],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "atelier",
+    "kennung": "S8",
+    "titel": "Render-Auftrag",
+    "br": {
+      "stelle": "04-atelier.md:83",
+      "daten": [
+        "Prompt in fünf Blöcken: Szene, Geometrie, Materialien, Stil, Verbote; jeder Block einzeln sichtbar und von Hand überschreibbar (04-atelier.md:84)",
+        "Stil: Fotorealistisch, Architektur editorial, Innenarchitektur weiches Licht, Skizzenhaft (04-atelier.md:85)",
+        "Engine: Firefly (manuell) verfügbar; Nano Banana 2 und Pro „noch nicht“ (04-atelier.md:87-88)",
+        "Version: Rezept, Ergebnisbild, Status (Entwurf, Freigegeben, Master, Verworfen), Notiz, Elternversion; genau eine Version ist Master (04-atelier.md:90-91)",
+        "Entwürfe: je Projekt die letzten 10 (04-atelier.md:48)"
+      ],
+      "bedienung": [
+        "Stil wählen, Engine wählen, Prompt kopieren, Ergebnisbild hinzufügen, Status setzen, „Als Master“, Version aus Version ableiten (04-atelier.md:92)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Atelier.dc.html:666",
+      "fehlt": [
+        "Prompt-Blöcke von Hand überschreiben: Blöcke nur als Notizzeilen (ALFA Atelier.dc.html:669)",
+        "Notiz je Version: kein Feld (Version hat n, status, parent, engine, stil, t, ALFA Atelier.dc.html:377)",
+        "Ergebnisbild: „Ergebnis ablegen“ legt Version an, Toast „Bild folgt“ (ALFA Atelier.dc.html:670)",
+        "eigener Knopf „Als Master“: nur über Status-Menü (ALFA Atelier.dc.html:673)",
+        "Version aus Version ableiten: kein eigener Knopf; Elternversion = gerade gezeigte Version beim Ablegen (ALFA Atelier.dc.html:670)",
+        "Entwürfe je Projekt, letzte 10: keine Begrenzung im Bogen"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Skizze/RenderCheckout.swift:3",
+      "passt": "ja",
+      "abweichung": "Engine mit heuteVerfuegbar :3-17, StilPreset :19-49, KompilierterPrompt fünf Blöcke :51-68, RenderRezept mit manuellUeberschrieben :70-87, VersionStatus :89-99, RenderVersion mit elternVersionID, ergebnisBildRef, notiz :101-121, mitMaster :144-155; Blöcke PromptKompilierer.swift:10-22; Entwürfe max 10 je Projekt SkizzeEntwurfStore.swift:33-56."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Atelier.dc.html:360",
+        "br": "04-atelier.md:85",
+        "was": "Stil „Innenraum weiches Licht“ statt „Innenarchitektur weiches Licht“; Kleinschreibung „fotorealistisch“, „skizzenhaft“."
+      },
+      {
+        "ed": "ALFA Atelier.dc.html:548",
+        "br": "04-atelier.md:84",
+        "was": "Block Szene = Skizzenname und Projekt; Block Verbote = „Standardliste (Wortlaut im Altcode: unbekannt)“. AR hat beide Wortlaute (PromptVorlagen.swift:4-13)."
+      },
+      {
+        "ed": "ALFA Atelier.dc.html:361",
+        "br": "04-atelier.md:88",
+        "was": "Nano Banana 2/Pro als „nicht angebunden“, Wahl ergibt Toast (ALFA Atelier.dc.html:668)."
+      },
+      {
+        "ed": "ALFA Atelier.dc.html:676",
+        "br": "04-atelier.md:92",
+        "was": "Bogen hat Ablauf „Auftrag senden“ → „Auftrag offen“ → „Ergebnis ablegen“/„Verwerfen“ (ALFA Atelier.dc.html:670); BR nennt „Ergebnisbild hinzufügen“."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Atelier.dc.html:680",
+        "was": "Menü „Ausgabe“: „Substrat als PNG“, „Skizze als PDF“, „Ins Moodboard legen“, „In Projektordner sichern“ (alle Toast „Entwurf“)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:619",
+        "was": "Umschalter Ansicht „Skizze/Render“ in der Mitte; Render-Ansicht sperrt die Werkzeuge (ALFA Atelier.dc.html:474, 600)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Atelier.dc.html:688",
+        "was": "Assistent-Text „Frag nach Material, Stil oder was für … noch fehlt.“",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "konfigurator",
+    "kennung": "K1",
+    "titel": "Entwurf anlegen",
+    "br": {
+      "stelle": "05-konfigurator.md:64",
+      "daten": [
+        "Projekt: Projektnummer (05-konfigurator.md:13)",
+        "Variantenname „Entwurf A“, „Entwurf B“ … (05-konfigurator.md:14)",
+        "Raumbezug: Aufmaß, Skizze, Foto, freie Maße (B × T × H in mm) oder keiner (05-konfigurator.md:16)",
+        "VORLAGEN … 8 Stück: Hochschrankwand mit Geräteblock … Renovierung: Fronten und Insel-Korpen (05-konfigurator.md:69–77)"
+      ],
+      "bedienung": [
+        "Neuer Entwurf zum Projekt. (05-konfigurator.md:66)",
+        "Raumbezug wählen: Aufmaß oder Skizze des Projekts, Foto, freie Maße. (05-konfigurator.md:67)",
+        "Vorlage wählen oder leer beginnen. (05-konfigurator.md:68)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Konfigurator.dc.html:708",
+      "fehlt": [
+        "Projekt wählen beim Anlegen fehlt; Fuß „Neue Variante“ bietet nur „Kopie“ und „Leer“ (ALFA Konfigurator.dc.html:709)",
+        "Vorlage beim Anlegen fehlt; Vorlagen gibt es nur als „Vorlage einsetzen“ im Zonen-Plus (ALFA Konfigurator.dc.html:711)",
+        "freie Maße B × T × H fehlen; nur „Wand mm“ (ALFA Konfigurator.dc.html:734)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigModell.swift:347",
+      "passt": "ja",
+      "abweichung": "Archetypen archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigArchetypen.swift:137–170 (8 Stück); RaumBezug archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigModell.swift:25–35; projectNumber archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigModell.swift:352."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Konfigurator.dc.html:733",
+        "br": "05-konfigurator.md:67",
+        "was": "Raumbezug-Menü mit festen Beispieltexten „Aufmaß · Küche Nordwand“, „Skizze · Küche Ansicht Süd“, „Foto“, „Freie Maße“, „keiner“; BR: Aufmaß oder Skizze des Projekts."
+      },
+      {
+        "ed": "ALFA Konfigurator.dc.html:565",
+        "br": "05-konfigurator.md:77",
+        "was": "Vorlagenname ED „Renovierung: Fronten + Insel“; BR „Renovierung: Fronten und Insel-Korpen“; AR „Renovierung: Fronten + Insel-Korpen“ (archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigArchetypen.swift:167)."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Konfigurator.dc.html:337",
+        "was": "Beispielprojekte „Küche Hansen“, „Praxis Kern“",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:362",
+        "was": "Beispielentwürfe k1–k3 mit Materialien, Wand 4433, Stand „Heute, 09:20“ (ALFA Konfigurator.dc.html:362–367)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:588",
+        "was": "Variantenvorlagen „einzeilig“, „insel“, voll (Hoch/Zeile/Wand/Insel) im Code, im Menü nicht erreichbar (ALFA Konfigurator.dc.html:709)",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "konfigurator",
+    "kennung": "K2",
+    "titel": "Zonen und Segmente bearbeiten",
+    "br": {
+      "stelle": "05-konfigurator.md:79",
+      "daten": [
+        "Zone: Typ Zeile, Wandschränke, Hochschränke, Insel oder frei benannt (05-konfigurator.md:33)",
+        "Maße: Tiefe, Korpushöhe, Sockel, Höhenbänder (05-konfigurator.md:34)",
+        "Lage im Raum: x, y, Drehung (05-konfigurator.md:35)",
+        "Überstand (Tresen) (05-konfigurator.md:36)",
+        "Segment Breite: Raster 300 … 1200 oder frei zwischen 100 und 2400 (05-konfigurator.md:40)",
+        "Fächer übereinander, jedes mit Höhe und Ausstattung (05-konfigurator.md:41)",
+        "Gerät: 10 Kategorien … Optional ein Artikel aus dem Katalog und das Nischenmaß (05-konfigurator.md:55–56)",
+        "Abgeleitet: Anzahl Korpen …, Schubkästen gesamt, Geräteliste; Gesamtbreite je Zone (05-konfigurator.md:59–60)"
+      ],
+      "bedienung": [
+        "Zone hinzufügen (Typ), umbenennen, Maße setzen, im Raum platzieren und drehen. (05-konfigurator.md:81)",
+        "Segment hinzufügen, Breite aus dem Raster oder frei. (05-konfigurator.md:82)",
+        "Fach hinzufügen, Höhe setzen, Ausstattung wählen. (05-konfigurator.md:83)",
+        "Gerät einem Artikel zuordnen. (05-konfigurator.md:84)",
+        "Löschen mit Rückgängig. (05-konfigurator.md:85)",
+        "KÜRZELZEILE: Ein Eingabefeld je Zone, z. B. `600t 3s sp gs` (05-konfigurator.md:86–87)",
+        "Ohne Breite gelten 600 mm. Nicht verstandene Kürzel werden einzeln angezeigt. Kurzhilfe als Zeile. (05-konfigurator.md:94–96)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Konfigurator.dc.html:711",
+      "fehlt": [
+        "Zonen-Maße (Tiefe, Korpushöhe, Sockel, Höhenbänder) fehlen; Zone hat nur id, kind, name, vis, lock, segs (ALFA Konfigurator.dc.html:361); Höhen fest (ALFA Konfigurator.dc.html:338)",
+        "Platzieren und Drehen im Raum fehlt; Lage wird automatisch gesetzt (ALFA Konfigurator.dc.html:421–428)",
+        "Überstand fehlt",
+        "freie Segmentbreite fehlt; nur Raster (ALFA Konfigurator.dc.html:682, ALFA Konfigurator.dc.html:446), Kürzel rastet auf Raster ein (ALFA Konfigurator.dc.html:355)",
+        "Fachhöhe setzen fehlt; Höhe wird berechnet und nur angezeigt (ALFA Konfigurator.dc.html:504–510, ALFA Konfigurator.dc.html:723)",
+        "Gerät einem Artikel zuordnen fehlt; nur Gerätekategorie (ALFA Konfigurator.dc.html:725)",
+        "Gerätekategorien Weinschrank und sonstiges fehlen; ED hat 8 (ALFA Konfigurator.dc.html:499)",
+        "Kürzelzeile je Zone fehlt; ein Feld für die aktive Zone (ALFA Konfigurator.dc.html:689)",
+        "Nicht verstandene Kürzel einzeln anzeigen fehlt; sie werden still verworfen (ALFA Konfigurator.dc.html:356)",
+        "Anzahl Korpen, Schubkästen gesamt, Geräteliste fehlen; Gesamtbreite je Zone vorhanden (ALFA Konfigurator.dc.html:639, ALFA Konfigurator.dc.html:736)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigModell.swift:253",
+      "passt": "ja",
+      "abweichung": "KonfigZone archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigModell.swift:253–304; KonfigSegment.breitenRaster :216; KonfigKuerzel archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigKuerzel.swift:3–77. AR kennt zusätzlich Kürzel „kk“ für Kühl (archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigKuerzel.swift:19), in BR nicht genannt. „Löschen mit Rückgängig“ steht nicht in den Archivdateien."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Konfigurator.dc.html:342",
+        "br": "05-konfigurator.md:89",
+        "was": "Kürzel weichen ab: ED r (Regal), b (Fachböden), m (Müll), ws (Wärme), ko (Kochfeld), l (leer), g (Gerät); BR or, fa, mu, wm, kf, le. ED ohne kg, ka, 3sh."
+      },
+      {
+        "ed": "ALFA Konfigurator.dc.html:342",
+        "br": "05-konfigurator.md:94",
+        "was": "Ohne Breite: ED sp 800, m 450 mm; BR „Ohne Breite gelten 600 mm“."
+      },
+      {
+        "ed": "ALFA Konfigurator.dc.html:354",
+        "br": "05-konfigurator.md:87",
+        "was": "ED erlaubt Breite nach dem Kürzel („3s800“, ALFA Konfigurator.dc.html:364); BR Beispiel nur Breite davor."
+      },
+      {
+        "ed": "ALFA Konfigurator.dc.html:689",
+        "br": "05-konfigurator.md:96",
+        "was": "Kurzhilfe vorhanden, aber mit ED-Kürzeln „t s r b bl g sp m gs bo ws ko da l“."
+      },
+      {
+        "ed": "ALFA Konfigurator.dc.html:343",
+        "br": "05-konfigurator.md:33",
+        "was": "Zonentypen ED hoch, zeile, wand, insel, frei; BR gleich, aber „frei benannt“ – ED vergibt Namen „frei“ (ALFA Konfigurator.dc.html:486)."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Konfigurator.dc.html:44",
+        "was": "Zone ausblenden und sperren (Auge, Schloss) (ALFA Konfigurator.dc.html:44–45, ALFA Konfigurator.dc.html:490)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:446",
+        "was": "Segment nach links/rechts, Duplizieren, Ziehen sortiert (ALFA Konfigurator.dc.html:329–333, ALFA Konfigurator.dc.html:435–436)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:499",
+        "was": "Gerätemaße B × H × T und Modul („Richtwert“), z. B. Backofen 560 × 595 × 550 (ALFA Konfigurator.dc.html:499, ALFA Konfigurator.dc.html:726)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:735",
+        "was": "„Blenden an Lücken“ bis 150 mm, automatische Passblende (ALFA Konfigurator.dc.html:511, ALFA Konfigurator.dc.html:735)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:697",
+        "was": "Ansicht „Grundriss“ neben „Front“ (ALFA Konfigurator.dc.html:649–671, ALFA Konfigurator.dc.html:697)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:348",
+        "was": "Werkzeugpalette Auswahl V, Hand H, Segment S, Fach-Typ F, Kürzel K mit Flyout (ALFA Konfigurator.dc.html:76–81, ALFA Konfigurator.dc.html:348)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:344",
+        "was": "Zonenfarben je Typ (ALFA Konfigurator.dc.html:344)",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "konfigurator",
+    "kennung": "K3",
+    "titel": "Material festlegen",
+    "br": {
+      "stelle": "05-konfigurator.md:98",
+      "daten": [
+        "Material: sechs Zeilen: Front, Korpus, Sockel, Schubkästen, Griff, Arbeitsplatte (05-konfigurator.md:17)",
+        "Materialzeile: freier Text und optional ein Eintrag der Palette und ein Bild. Die Palette ist ein Firmenwert. (05-konfigurator.md:22)",
+        "Jeder Eintrag kann einen Beschaffungshinweis tragen. (05-konfigurator.md:30)"
+      ],
+      "bedienung": [
+        "sechs Zeilen, je freier Text oder ein Eintrag der Palette, optional ein Musterbild. (05-konfigurator.md:99)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Konfigurator.dc.html:739",
+      "fehlt": [
+        "freier Text fehlt; nur Wahl aus Liste (ALFA Konfigurator.dc.html:739)",
+        "Musterbild fehlt",
+        "Beschaffungshinweis fehlt",
+        "Palette je Zeile fehlt; eine Liste für alle sechs Zeilen (ALFA Konfigurator.dc.html:345)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigMaterial.swift:19",
+      "passt": "ja",
+      "abweichung": "MaterialAngabe text/paletteID/assetRef archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigMaterial.swift:3–17; Palette mit beschaffungshinweis :57–155."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Konfigurator.dc.html:345",
+        "br": "05-konfigurator.md:23",
+        "was": "ED-Liste „Eiche geölt hell“, „Esche pigmentiert“, „Weiß matt“, „Graphit“, „Naturstein grau“, „Edelstahl“, „Legrabox weiß“, „Leinen 04“; BR-Beispiel je Zeile andere Einträge (05-konfigurator.md:23–28)."
+      },
+      {
+        "ed": "ALFA Konfigurator.dc.html:740",
+        "br": "05-konfigurator.md:22",
+        "was": "ED-Notiz: Einträge „kommen aus der Moodboard-Palette“; BR: Palette ist ein Firmenwert."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Konfigurator.dc.html:345",
+        "was": "Materialnamen der Auswahlliste und Darstellungsfarben (ALFA Konfigurator.dc.html:345, ALFA Konfigurator.dc.html:500)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:740",
+        "was": "Aussage „Die Einträge kommen aus der Moodboard-Palette“",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "konfigurator",
+    "kennung": "K4",
+    "titel": "Regeln prüfen",
+    "br": {
+      "stelle": "05-konfigurator.md:101",
+      "daten": [
+        "Hinweise und Warnungen am Entwurf, mit Bezug auf Zone und Segment. Warnungen stehen zuerst. (05-konfigurator.md:102)",
+        "Tabelle 8 Regeln mit Art und belegt/Annahme (05-konfigurator.md:105–114)"
+      ],
+      "bedienung": [
+        "Liste der Hinweise; ein Klick springt zur Stelle. (05-konfigurator.md:116)"
+      ]
+    },
+    "ed": {
+      "stand": "gezeichnet",
+      "stelle": "ALFA Konfigurator.dc.html:741",
+      "fehlt": []
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigRegeln.swift:212",
+      "passt": "ja",
+      "abweichung": "AR hat 7 Regel-IDs; „durchgang-insel“ liefert Hinweis (<1000) und Warnung (<850) (archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigRegeln.swift:153–179), BR führt das als zwei Zeilen. offeneAnnahmen :238."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Konfigurator.dc.html:526",
+        "br": "05-konfigurator.md:111",
+        "was": "Durchgang Insel aus einer Eingabe „Durchgang Insel mm“ (ALFA Konfigurator.dc.html:742); AR rechnet aus Lage der Zonen (archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigRegeln.swift:157–166)."
+      },
+      {
+        "ed": "ALFA Konfigurator.dc.html:527",
+        "br": "05-konfigurator.md:113",
+        "was": "Zone länger als Wand prüft gegen „Wand mm“; AR gegen max(Breite, Tiefe) der freien Maße (archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigRegeln.swift:182–183)."
+      },
+      {
+        "ed": "ALFA Konfigurator.dc.html:513",
+        "br": "05-konfigurator.md:117",
+        "was": "ED zeigt belegt/Annahme in jeder Zeile und dazu dritte Art „Entwurfsidee“; BR: offen, ob Annahmen erkennbar sein sollen."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Konfigurator.dc.html:521",
+        "was": "Regeln „Entwurfsidee“: Fächer brauchen mehr Höhe, Gerät braucht 600er Segment, Zeile ragt in Wand, Lücke/Passblende, Wandschränke ragen über Zeile (ALFA Konfigurator.dc.html:521–522, ALFA Konfigurator.dc.html:529–530); ED-Notiz selbst: „«Entwurfsidee» steht nicht im Altcode“ (ALFA Konfigurator.dc.html:742)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:526",
+        "was": "Erfüllte Regeln als „ok“-Zeilen und Zähler „Prüfung ok“ (ALFA Konfigurator.dc.html:514, ALFA Konfigurator.dc.html:756)",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "konfigurator",
+    "kennung": "K5",
+    "titel": "Varianten",
+    "br": {
+      "stelle": "05-konfigurator.md:119",
+      "daten": [
+        "Variantenname … die nächste freie Variante wird vorgeschlagen (05-konfigurator.md:14)",
+        "Status: Vorplanung, Vorabzug, Final (05-konfigurator.md:15)"
+      ],
+      "bedienung": [
+        "„Als Variante duplizieren“ (nächster Buchstabe), zwischen Varianten wechseln, Status setzen. (05-konfigurator.md:120)"
+      ]
+    },
+    "ed": {
+      "stand": "gezeichnet",
+      "stelle": "ALFA Konfigurator.dc.html:709",
+      "fehlt": []
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigModell.swift:394",
+      "passt": "ja",
+      "abweichung": "dupliziert :394–417, naechsterVariantenName :419–426, KonfigStatus :3–23."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Konfigurator.dc.html:583",
+        "br": "05-konfigurator.md:120",
+        "was": "ED-Buchstabe aus Anzahl aller Entwürfe (65 + n % 26), nicht nächster freier Buchstabe; Menüeintrag heißt „Kopie“, nicht „Als Variante duplizieren“ (ALFA Konfigurator.dc.html:709)."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Konfigurator.dc.html:705",
+        "was": "Linke Bahn gruppiert Varianten nach Projekt mit Segmentzähler (ALFA Konfigurator.dc.html:705–707)",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "konfigurator",
+    "kennung": "K6",
+    "titel": "Ausgaben",
+    "br": {
+      "stelle": "05-konfigurator.md:122",
+      "daten": [
+        "ANFRAGE TISCHLER: Mailtext mit Betreff „Anfrage Kommission …“; Material, Korpus-Beschreibung je Zone, Leistungsumfang, Lieferort, Zeitfenster (05-konfigurator.md:123–127)",
+        "ANFRAGE STEINMETZ: Material, Anzahl der Platten je Zone (05-konfigurator.md:128)",
+        "ZUSTÄNDIGKEIT … Firmenwert (05-konfigurator.md:129)",
+        "KUNDENSET: genannt, Inhalt im Archiv nicht ausgeführt (05-konfigurator.md:130)",
+        "RENDER-PROMPT: fünf Blöcke …, Liste der Referenzbilder (05-konfigurator.md:131)",
+        "STAND DER QUELLEN … „Ausgabe veraltet“ (05-konfigurator.md:132)"
+      ],
+      "bedienung": [
+        "Anfrage erzeugen (Gewerk wählen, Kommission, Anrede, Lieferort). (05-konfigurator.md:134)",
+        "Als Mail-Entwurf öffnen. (05-konfigurator.md:135)",
+        "Prompt kopieren. (05-konfigurator.md:136)",
+        "Ausgaben-Liste mit Stand. (05-konfigurator.md:137)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Konfigurator.dc.html:746",
+      "fehlt": [
+        "Betreff, Anrede, Kommission, Lieferort, Zeitfenster, Leistungsumfang in der Tischler-Anfrage fehlen (ALFA Konfigurator.dc.html:496)",
+        "Anfrage erzeugen mit Gewerk, Kommission, Anrede, Lieferort fehlt",
+        "Als Mail-Entwurf öffnen fehlt; „An Tischler“ zeigt nur Toast (ALFA Konfigurator.dc.html:752)",
+        "Kundenset fehlt",
+        "Render-Prompt in fünf Blöcken und Referenzbilder fehlen; eine Zeile (ALFA Konfigurator.dc.html:496)",
+        "Prompt kopieren fehlt; „Text kopieren“ kopiert nur die Anfragen (ALFA Konfigurator.dc.html:749)",
+        "Ausgaben-Liste mit Stand und „Ausgabe veraltet“ fehlen; nur Block „Quellenstand“ (ALFA Konfigurator.dc.html:746)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigAnfrageText.swift:13",
+      "passt": "unklar",
+      "abweichung": "Tischler :28–73, Steinmetz :75–98, GewerkScope archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigModell.swift:443–455, RenderPrompt archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigRenderPrompt.swift:4–33, QuellenStand/KompilatEintrag archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigModell.swift:306–345. Unklar: AR nennt Anzahl der Plattenzonen nur, wenn mehr als eine (KonfigAnfrageText.swift:87–91), BR „Anzahl der Platten je Zone“. Eine Logik „Ausgabe veraltet“ steht nicht in den gelesenen Archivdateien."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Konfigurator.dc.html:496",
+        "br": "05-konfigurator.md:128",
+        "was": "Steinmetz in ED: Material, „Länge Zeile und Insel zusammen“, „Stärke 40 mm (Annahme)“; BR: Material, Anzahl der Platten je Zone."
+      },
+      {
+        "ed": "ALFA Konfigurator.dc.html:746",
+        "br": "05-konfigurator.md:132",
+        "was": "Quellenstand mit festen Werten „heute 08:52“, „unbekannt“, „Katalog fehlt, daher kein Preis“."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Konfigurator.dc.html:534",
+        "was": "Karte „Teile“: Zuschnittliste mit m², Beschläge, Annahmen Korpus 19, Rückwand 8 … (ALFA Konfigurator.dc.html:534–557, ALFA Konfigurator.dc.html:743–745)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:754",
+        "was": "Menü „Ausgabe“: PDF, SVG, DXF, „Zuschnitt als Tabelle“, „In Projektordner sichern“; Knopf „Als DXF“ (ALFA Konfigurator.dc.html:751, ALFA Konfigurator.dc.html:754)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Konfigurator.dc.html:755",
+        "was": "Menü „Kurzbefehle“ (ALFA Konfigurator.dc.html:755)",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "konfigurator",
+    "kennung": "K7",
+    "titel": "Blatt",
+    "br": {
+      "stelle": "05-konfigurator.md:139",
+      "daten": [
+        "Blatt mit Zonen, Fachbeschriftungen in Großbuchstaben (z. B. „SCHUBKASTEN“, „BACKOFEN“), Materialtabelle und Stempel. (05-konfigurator.md:140)",
+        "Vorplanung und Vorabzug tragen einen Stempel … Final keinen (05-konfigurator.md:15)"
+      ],
+      "bedienung": []
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Konfigurator.dc.html:614",
+      "fehlt": [
+        "Schriftfeld im Markup (ALFA Konfigurator.dc.html:87–92), aber „blatt: false“ und leere Felder (ALFA Konfigurator.dc.html:701)",
+        "Fachbeschriftungen in Großbuchstaben fehlen; Kurztexte wie „Ofen“, „GS“, „Müll“ (ALFA Konfigurator.dc.html:633)",
+        "Materialtabelle auf dem Blatt fehlt",
+        "Stempel auf dem Blatt fehlt; Status nur in der Statuszeile (ALFA Konfigurator.dc.html:674)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigModell.swift:156",
+      "passt": "ja",
+      "abweichung": "Ausstattung.blattLabel :156–168, GeraetKategorie.blattLabel :77–90, KonfigStatus.stempelText :8–14, MaterialDeklaration.blattZeilen archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Konfigurator/KonfigMaterial.swift:41–45."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Konfigurator.dc.html:88",
+        "br": "05-konfigurator.md:141",
+        "was": "Schriftfeld-Spalten „Projekt“, „Foto-Aufmaß“, „Maßstab“ (ALFA Konfigurator.dc.html:88–91); BR: Aufbau des Blatts im Archiv nicht gezeichnet."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Konfigurator.dc.html:646",
+        "was": "Maßketten, „Arbeitshöhe“, Wandlinien „Wand … aus Aufmaß/Eingabe“ (ALFA Konfigurator.dc.html:639, ALFA Konfigurator.dc.html:644–646)",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "plan",
+    "kennung": "L1",
+    "titel": "Zeichnen",
+    "br": {
+      "stelle": "06-plan.md:31",
+      "daten": [
+        "Element: Art Linie, Polylinie, Rechteck, Text, Bemaßung; Punkte in mm (x, y, z), Layer, Text (06-plan.md:19–21)"
+      ],
+      "bedienung": [
+        "Werkzeuge: Linie, Polylinie, Rechteck, Text, Bemaßung. (06-plan.md:33)",
+        "Achsenfang: Das Linienende rastet auf die nächste Achse; in der Ansicht x/y, in der Isometrie x/y/z. (06-plan.md:34)",
+        "Löschen mit Rückgängig. (06-plan.md:35)"
+      ]
+    },
+    "ed": {
+      "stand": "fehlt",
+      "stelle": "",
+      "fehlt": [
+        "Kein Bogen zeichnet einen Plan-Editor mit Werkzeugen Linie, Polylinie, Rechteck, Text, Bemaßung",
+        "Achsenfang fehlt; Draws hat nur Fanglinien beim Verschieben von Ansichten (ALFA Draws.dc.html:316–323)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/PlanDokument.swift:3",
+      "passt": "nein",
+      "abweichung": "PlanElementArt :3–19, PlanElement :21–51, achsenSnap archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/PlanProjektion.swift:83–105 passen. „Löschen mit Rückgängig“ steht nicht in den drei Archivdateien."
+    },
+    "abweichung_ed_br": [],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "plan",
+    "kennung": "L2",
+    "titel": "Projektion",
+    "br": {
+      "stelle": "06-plan.md:37",
+      "daten": [
+        "Elevation (Ansicht): x und y. (06-plan.md:12)",
+        "Isometrie: 30°, mit Tiefe z. (06-plan.md:13)"
+      ],
+      "bedienung": [
+        "Umschalter Elevation / Isometrie. (06-plan.md:38)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Draws.dc.html:452",
+      "fehlt": [
+        "Umschalter für einen Plan fehlt; Draws schaltet den Typ je Ansicht eines Objekts (Ansicht, Iso, Perspektive) (ALFA Draws.dc.html:452)",
+        "Elevation heißt in Draws „Ansicht“ mit Richtung Vorne/Seite/Oben/Hinten (ALFA Draws.dc.html:453)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/PlanProjektion.swift:36",
+      "passt": "ja",
+      "abweichung": "isoWinkel = .pi / 6 (archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/PlanProjektion.swift:59)."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Draws.dc.html:147",
+        "br": "06-plan.md:13",
+        "was": "Draws-Iso mit Azimut 45 und Elevation 30, per Regler 0–355° und 0–90° (ALFA Draws.dc.html:126, ALFA Draws.dc.html:464); BR: Isometrie 30°."
+      },
+      {
+        "ed": "ALFA Draws.dc.html:452",
+        "br": "06-plan.md:38",
+        "was": "Draws hat dritten Typ „Perspektive“ (steht in Draws-Brief m0067, uebergabe-draws-IN-PROGRESS/README.md:19); BR nur Elevation/Isometrie."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Draws.dc.html:135",
+        "was": "Beispielobjekt „Sideboard SB-18“, 6 Teile, Maße, Materialien (ALFA Draws.dc.html:135–141, ALFA Draws.dc.html:280). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:133",
+        "was": "CI-Wahl „Studio, Kunde, Neutral“ (ALFA Draws.dc.html:133). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:270",
+        "was": "Mangel „Kunden-CI ohne Logo“, Studio-Logo „ST“ im Schriftfeld (ALFA Draws.dc.html:260, ALFA Draws.dc.html:270). README „Erfunden“: ja",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:132",
+        "was": "Vorlagen A4 hoch, A4 quer, A2 quer (ALFA Draws.dc.html:132). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:132",
+        "was": "Vorlage „A3 quer“ als Vorgabe (ALFA Draws.dc.html:132, ALFA Draws.dc.html:150). README „Erfunden“: nein (nicht in der Liste, nicht im Draws-Brief)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:128",
+        "was": "Akzentfarben Signal, Apricot, Koralle, Tinte; Materialtöne je Material (ALFA Draws.dc.html:128–130). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:234",
+        "was": "Abdunklung je Fläche top 1, front .9, side .78 (ALFA Draws.dc.html:234). README „Erfunden“: ja",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:143",
+        "was": "Blattsatz Werkstatt, Kunde, Montage (ALFA Draws.dc.html:143). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:428",
+        "was": "„Blatt hinzufügen“ (ALFA Draws.dc.html:178, ALFA Draws.dc.html:428). README „Erfunden“: ja",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:256",
+        "was": "Index A, B, A* im Schriftfeld und Export-Reiter (ALFA Draws.dc.html:256, ALFA Draws.dc.html:484–485). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:390",
+        "was": "Stückliste auf dem Blatt (ALFA Draws.dc.html:390–397, ALFA Draws.dc.html:448). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:144",
+        "was": "Schritt-Texte „Sockel setzen“ … „Platte auflegen“ (ALFA Draws.dc.html:144). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:482",
+        "was": "Export-Seiten „Satz“ (ALFA Draws.dc.html:482). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:429",
+        "was": "„aus Akte P-2041“ (ALFA Draws.dc.html:429). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:142",
+        "was": "Vorgabewerte der Projektfelder „Brandt“, „Lindenstraße 14“ … (ALFA Draws.dc.html:142). README „Erfunden“: ja",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:460",
+        "was": "Duplizieren, Entfernen (ALFA Draws.dc.html:460), Stil zurücksetzen (ALFA Draws.dc.html:477). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:416",
+        "was": "Texte im Claude-Panel, z. B. „Sideboard, 1800 breit …“; Claude-Import nur Zeitschalter (ALFA Draws.dc.html:282–286, ALFA Draws.dc.html:416–417). README „Erfunden“: nein, README „Nicht gebaut“ (README.md:42)",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:163",
+        "was": "Fehlertext „Schrift Geist ließ sich nicht einbetten …“ (ALFA Draws.dc.html:163). README „Erfunden“: nein",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:425",
+        "was": "„Datei öffnen …“ mit „.alfa .step“ (ALFA Draws.dc.html:425). README „Erfunden“: nein",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:459",
+        "was": "Füllung „Töne/Material“ je Ansicht (ALFA Draws.dc.html:459). README „Erfunden“: nein",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "plan",
+    "kennung": "L3",
+    "titel": "Layer",
+    "br": {
+      "stelle": "06-plan.md:40",
+      "daten": [
+        "Name, Farbe, sichtbar. (06-plan.md:16)",
+        "Vorgabe wie im Aufmaß: Gesamtmaße, Wasser/Installation, Details. (06-plan.md:17)"
+      ],
+      "bedienung": [
+        "Liste mit Sichtbarkeit, Farbe, neu, umbenennen. (06-plan.md:41)"
+      ]
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Planvergleich.dc.html:283",
+      "fehlt": [
+        "Farbe je Layer fehlt",
+        "Layer neu fehlt",
+        "Layer umbenennen fehlt",
+        "Nur Sichtbarkeit (Auge) (ALFA Planvergleich.dc.html:102, ALFA Planvergleich.dc.html:286)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/PlanDokument.swift:53",
+      "passt": "ja",
+      "abweichung": "PlanLayer :53–68, standardLayer :91–97. Der Bezug „wie im Aufmaß“ ist unklar: das Aufmaß-Archiv wurde in diesem Teil nicht gelesen."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Planvergleich.dc.html:285",
+        "br": "06-plan.md:17",
+        "was": "Ebenen ED „Wände und Öffnungen“, „Elektro (ELT)“, „Küche (KUE_01)“, „Beschriftung“; BR-Vorgabe Gesamtmaße, Wasser/Installation, Details."
+      }
+    ],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "plan",
+    "kennung": "L4",
+    "titel": "Ansicht",
+    "br": {
+      "stelle": "06-plan.md:43",
+      "daten": [
+        "Papierrahmen: umschließt alle sichtbaren Elemente. (06-plan.md:23)",
+        "Einpassen mit Rand 48. Zoom, Verschieben. (06-plan.md:26–27)"
+      ],
+      "bedienung": [
+        "Einpassen, Zoom, Verschieben. (06-plan.md:44)"
+      ]
+    },
+    "ed": {
+      "stand": "gezeichnet",
+      "stelle": "ALFA Planvergleich.dc.html:251",
+      "fehlt": []
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/PlanTransform.swift:12",
+      "passt": "ja",
+      "abweichung": "rand = 48 (archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/PlanTransform.swift:23); papierRahmen archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/PlanDokument.swift:104–107."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Planvergleich.dc.html:213",
+        "br": "06-plan.md:26",
+        "was": "Planvergleich passt mit Rand 88 ein; BR Rand 48. Draws deskPad 48 (ALFA Draws.dc.html:125)."
+      },
+      {
+        "ed": "ALFA Planvergleich.dc.html:250",
+        "br": "06-plan.md:27",
+        "was": "Zoom in Planvergleich begrenzt auf 0,5–4, in Draws 0,25–4 (ALFA Draws.dc.html:125); BR nennt keine Grenzen."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Draws.dc.html:343",
+        "was": "Kürzel R, 0, +, − (ALFA Draws.dc.html:343). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Draws.dc.html:125",
+        "was": "Maßstäbe 1:1 bis 1:100 (ALFA Draws.dc.html:125, ALFA Draws.dc.html:457). README „Erfunden“: ja",
+        "auch_in_handoff_2110": true
+      },
+      {
+        "stelle": "ALFA Planvergleich.dc.html:253",
+        "was": "Raster 1 m und Fundmarken an/aus in der Palette (ALFA Planvergleich.dc.html:253)",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "plan",
+    "kennung": "L5",
+    "titel": "Planvergleich (Lücke im Archiv)",
+    "br": {
+      "stelle": "06-plan.md:46",
+      "daten": [
+        "WAS laut Spec: Zeichnungen sowie Elektro- und Sanitärpläne auf Änderungen vergleichen. (06-plan.md:47)"
+      ],
+      "bedienung": []
+    },
+    "ed": {
+      "stand": "gezeichnet",
+      "stelle": "ALFA Planvergleich.dc.html:255",
+      "fehlt": [
+        "Echte Dateiwahl fehlt; „Älteren/Neueren Plan wählen …“ nur Toast „Dateiwahl folgt · Beispieldaten“ (ALFA Planvergleich.dc.html:271)",
+        "Sanitärpläne kommen nicht vor; nur ELT und Küche (ALFA Planvergleich.dc.html:285)"
+      ]
+    },
+    "ar": {
+      "stelle": "",
+      "passt": "fehlt",
+      "abweichung": "BR: „Für den Planvergleich gibt es keinen Code.“ (06-plan.md:5)"
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Planvergleich.dc.html:257",
+        "br": "06-plan.md:50",
+        "was": "ED legt fest: Schieber, Überlagern, Änderungen und Fundliste; BR: offen, wie Änderungen gezeigt werden."
+      },
+      {
+        "ed": "ALFA Planvergleich.dc.html:291",
+        "br": "06-plan.md:51",
+        "was": "ED: Ergebnis „Als Excel“, „Als PDF“ (nur Toast); BR: offen, wohin das Ergebnis geht."
+      },
+      {
+        "ed": "ALFA Planvergleich.dc.html:269",
+        "br": "06-plan.md:49",
+        "was": "ED-Kacheln tragen nur „Plan“ als Format; BR: offen, welche Formate (PDF, CAD-Export)."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Planvergleich.dc.html:164",
+        "was": "Beispielvergleiche ELT_EG F3→F4, F2→F3, ELT_EG × KUE_01 mit Funden und Gründen (ALFA Planvergleich.dc.html:158–179); Herkunft laut BRIEFING_Editoren.md:165–173 alte Prototypen",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Planvergleich.dc.html:270",
+        "was": "Projekt „Junge/Schultzendorff · 2026_017“ (ALFA Planvergleich.dc.html:270)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Planvergleich.dc.html:283",
+        "was": "Notiz „Plan 1:50 · DIN A1. Fremdgewerke liegen über den Blatt-Ursprung zur Deckung.“ (ALFA Planvergleich.dc.html:283)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Planvergleich.dc.html:281",
+        "was": "Fund-Status offen/geklärt, „Als geklärt“, „Wieder öffnen“, „Nächster“, Tab springt (ALFA Planvergleich.dc.html:197, ALFA Planvergleich.dc.html:279–281)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Planvergleich.dc.html:176",
+        "was": "Gewerkevergleich mit Fundarten Nähe, Versatz, Überdeckung (ALFA Planvergleich.dc.html:176–178)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Planvergleich.dc.html:289",
+        "was": "Assistent-Text mit „Elektriker“ (ALFA Planvergleich.dc.html:289, ALFA Planvergleich.dc.html:297)",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "moodboard",
+    "kennung": "M1",
+    "titel": "Tafel anlegen",
+    "br": {
+      "stelle": "07-moodboard.md:30",
+      "daten": [
+        "neue Tafel zum Projekt, aus einer Vorlage (07-moodboard.md:31)",
+        "OFFEN: Formate (z. B. A3 quer, Bildschirm) und Vorlagen (07-moodboard.md:32)"
+      ],
+      "bedienung": []
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Moodboard.dc.html:426",
+      "fehlt": [
+        "Begriff Tafel: Bogen kennt nur „Seite“ (ALFA Moodboard.dc.html:726, 728) in einem Dokument (ALFA Moodboard.dc.html:373); ob Seite = Tafel: unklar, BR klärt es nicht",
+        "Projekt wählen: Projektbezug nur als fester Text „Küche Hansen“ (ALFA Moodboard.dc.html:360, 373)",
+        "neues Moodboard-Dokument anlegen: keine Stelle"
+      ]
+    },
+    "ar": {
+      "stelle": "",
+      "passt": "fehlt",
+      "abweichung": "BR sagt selbst: kein Code für das Moodboard (07-moodboard.md:5)."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Moodboard.dc.html:325",
+        "br": "07-moodboard.md:32",
+        "was": "BR: Formate offen. Bogen legt fest: „Studio Brenner · A3 quer“ 420 × 297, „Präsentation · 16:9“ 480 × 270, „Materialblatt · A4 hoch“ 210 × 297; Wahl in Karte Layout (ALFA Moodboard.dc.html:730)."
+      },
+      {
+        "ed": "ALFA Moodboard.dc.html:331",
+        "br": "07-moodboard.md:32",
+        "was": "BR: Vorlagen offen. Bogen legt fest: „Stimmungsseite“, „Materialraster“, „Vollbild mit Titel“, „Leere Seite“ (Aufbau ALFA Moodboard.dc.html:349-356)."
+      }
+    ],
+    "erfunden_ed": []
+  },
+  {
+    "bereich": "moodboard",
+    "kennung": "M2",
+    "titel": "Bilder und Medien legen",
+    "br": {
+      "stelle": "07-moodboard.md:34",
+      "daten": [
+        "Bilder aus Medienkatalog, Bemusterung, Projektordner oder eigener Datei (07-moodboard.md:35)",
+        "Platziertes Bild: Position, Größe, Drehung, Spiegelung, Deckkraft, Sperre und Ebene (07-moodboard.md:36)",
+        "Katalog: Hersteller, Produktlinie, Kategorie, Quell-Webseite, Stand der Quelle, Positionen (07-moodboard.md:16)",
+        "Position: Code, Name, Gruppe, Status, quellgeprüft, Beleg-Adresse (07-moodboard.md:18)",
+        "Zustände beim Laden: lädt, leer, nicht verbunden, Fehler (07-moodboard.md:20)",
+        "Bild-Abgleich: Duplikat; höhere Auflösung ersetzt; niedrigere bleibt alt; sonst von Hand (07-moodboard.md:22-26)",
+        "OFFEN: Raster, Text auf der Tafel, Farbflächen, Beschriftung der Muster (Hersteller, Code) (07-moodboard.md:37)"
+      ],
+      "bedienung": []
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Moodboard.dc.html:400",
+      "fehlt": [
+        "Quellen Medienkatalog, Bemusterung, Projektordner: linke Bahn ist eine eigene „Bibliothek“ mit Beispielbildern und Logos (ALFA Moodboard.dc.html:339-347); nur eigene Datei per Knopf oder Ablegen (ALFA Moodboard.dc.html:55, 431-437, 725)",
+        "Sperre je Objekt: kein Feld im Objekt (ALFA Moodboard.dc.html:337); das Schloss-Symbol schaltet „Proportional“ (ALFA Moodboard.dc.html:602)",
+        "Katalog- und Positionsfelder (Hersteller, Produktlinie, Code, quellgeprüft, Beleg): keine",
+        "Ladezustände lädt, leer, nicht verbunden, Fehler: nur „Nichts gefunden“ (ALFA Moodboard.dc.html:53, 677)",
+        "Bild-Abgleich beim Hinzufügen: keine Prüfung (ALFA Moodboard.dc.html:431-437)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/Skizze/PlatziertesBild.swift:3",
+      "passt": "ja",
+      "abweichung": "Bildfelder PlatziertesBild.swift:3-41; Katalog AlfaServices/Airtable/PapersKatalogStore.swift:4-48, Ladezustände :53-60; Abgleich AlfaKit/Domain/PapersAssetAbgleich.swift:27-53; Bemusterung → Moodboard GefuehrterAblauf.swift:92; Ordner FolderSchema.swift:48-49."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Moodboard.dc.html:731",
+        "br": "07-moodboard.md:37",
+        "was": "BR: Raster offen. Bogen legt 6 oder 12 Spalten, Ränder 15 mm, Rinne 4 mm fest (ALFA Moodboard.dc.html:373), mit Fangen."
+      },
+      {
+        "ed": "ALFA Moodboard.dc.html:94",
+        "br": "07-moodboard.md:37",
+        "was": "BR: Text auf der Tafel offen. Bogen hat Textrahmen mit Schrift, Größe, Zeilenabstand, Laufweite, Schnitt, Satz, Farbe (ALFA Moodboard.dc.html:631-641)."
+      },
+      {
+        "ed": "ALFA Moodboard.dc.html:630",
+        "br": "07-moodboard.md:37",
+        "was": "BR: Farbflächen und Beschriftung der Muster (Hersteller, Code) offen. Bogen hat Fläche mit Farbe und freier „Beschriftung“, ohne Hersteller oder Code."
+      },
+      {
+        "ed": "ALFA Moodboard.dc.html:602",
+        "br": "07-moodboard.md:36",
+        "was": "Bogen spiegelt horizontal und vertikal; AR nur horizontal (PlatziertesBild.swift:18)."
+      },
+      {
+        "ed": "ALFA Moodboard.dc.html:601",
+        "br": "07-moodboard.md:36",
+        "was": "Ebene als „Nach vorn/Nach hinten“ für die Auswahl (ALFA Moodboard.dc.html:559)."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Moodboard.dc.html:621",
+        "was": "Meta je Bild: Pixel, Auflösung in ppi mit Warnung unter 150, Farbraum, Aufnahme, Quelle, Lizenz, Tags, Bewertung 1–5 (ALFA Moodboard.dc.html:622-627, 339)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:344",
+        "was": "Objektart „Logo“ mit Beispielen „Studio Brenner, Wortmarke“, „Nordholz“, „Nordlicht“ (ALFA Moodboard.dc.html:345-347)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:330",
+        "was": "„Moods“: Paletten „Eiche und Leinen“, „Stein und Esche“, „Empfang, Grün“, als Farbstreifen platzierbar (ALFA Moodboard.dc.html:421-425, 669)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:328",
+        "was": "Absatzformate „Titel“ bis „Zitat“ und Schriften „Geist“, „System“ in der Bibliothek (ALFA Moodboard.dc.html:329, 671-673)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:439",
+        "was": "Freistellen per Randfüllung mit Toleranz % (ALFA Moodboard.dc.html:619-620, 713)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:614",
+        "was": "Bildrahmen: Füllen/Einpassen, Zoom %, Versatz X/Y %, Zuschnitt (ALFA Moodboard.dc.html:615-618)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:564",
+        "was": "Ausrichten und Verteilen mit Bezug Auswahl, Ränder, Seite (ALFA Moodboard.dc.html:599-601)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:645",
+        "was": "Radius mm, Kontur mm und Konturfarbe je Rahmen (ALFA Moodboard.dc.html:646-647)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:478",
+        "was": "Hilfslinien und Fangen an Rändern, Spalten und Objekten; Auswahlrechteck (ALFA Moodboard.dc.html:526-529)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:680",
+        "was": "Filter nach Art und Bewertung, Suche in der Bibliothek (ALFA Moodboard.dc.html:681-682)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:733",
+        "was": "Ablage „Auto“ (nächster freier Rasterplatz) oder „Mitte“; volle Seite erzeugt neue Seite (ALFA Moodboard.dc.html:395)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:549",
+        "was": "Werkzeuge Hand und Zoom, Tasten V, T, F, R, H, Z, ⌘D, ⌘A (ALFA Moodboard.dc.html:545-548, 717). In HANDOFF §2 Nr. 1 stehen „Duplizieren“ und Kürzel nur für Draws (HANDOFF_Weiterarbeit_2110.md:39)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:339",
+        "was": "Beispieldaten: Fotografen „Ole Petersen“, „Ida Roth“, „Jonas Brenner“, „Kai Lindner“, Lieferant „Nordlicht Stoffe“, Lizenz „Eigentum Studio Brenner“, Projekte „Hansen“, „Kern“, „Vogt“ (ALFA Moodboard.dc.html:340-347)",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "moodboard",
+    "kennung": "M3",
+    "titel": "Ausgeben",
+    "br": {
+      "stelle": "07-moodboard.md:39",
+      "daten": [
+        "Ausgabe als PDF, laut Checkout auch als PNG. Ablage im Projektordner unter Moodboards (07-moodboard.md:40)",
+        "OFFEN: Firmenkopf auf der Tafel. Firmenname und Logo kommen aus der Firmenkonfiguration, nie fest (07-moodboard.md:41)"
+      ],
+      "bedienung": []
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Moodboard.dc.html:736",
+      "fehlt": [
+        "PNG: keine Stelle",
+        "Ablage im Projektordner unter Moodboards: keine Stelle; „Als PDF sichern“ zeigt nur Toast „PDF · n Seiten gesichert“ (ALFA Moodboard.dc.html:736)"
+      ]
+    },
+    "ar": {
+      "stelle": "archive/before-rebuild:fundus/alpha/Sources/AlfaKit/Domain/CheckoutZiel.swift:61",
+      "passt": "ja",
+      "abweichung": "Ziel „Moodboard“, „Bild-Collage (PNG)“, verfuegbar: false (CheckoutZiel.swift:61-64); Ordner „03 PRÄSENTATION/Moodboards“ (FolderSchema.swift:48-49)."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Moodboard.dc.html:360",
+        "br": "07-moodboard.md:41",
+        "was": "Firmenkopf als feste Texte „Studio Brenner“ auf Musterseite und Seiten (ALFA Moodboard.dc.html:364) und im Formatnamen (ALFA Moodboard.dc.html:325). BR: Firmenname nie fest."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Moodboard.dc.html:741",
+        "was": "Menü „Mehr“: „Materialliste ableiten“, „Seite als PDF“, „Ans Atelier geben“ (alle Toast)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:736",
+        "was": "Knopf „Drucken“ (Toast „Druckdialog“)",
+        "auch_in_handoff_2110": false
+      },
+      {
+        "stelle": "ALFA Moodboard.dc.html:747",
+        "was": "Assistent-Texte „Frag nach Varianten, Farbwerten …“ und „Frag nach einem Layout …“",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  },
+  {
+    "bereich": "moodboard",
+    "kennung": "M4",
+    "titel": "Mehrere Tafeln",
+    "br": {
+      "stelle": "07-moodboard.md:43",
+      "daten": [
+        "OFFEN: ob ein Moodboard aus mehreren Tafeln besteht und wie sie geordnet werden (07-moodboard.md:44)"
+      ],
+      "bedienung": []
+    },
+    "ed": {
+      "stand": "teilweise",
+      "stelle": "ALFA Moodboard.dc.html:728",
+      "fehlt": [
+        "Ordnen der Seiten: kein Verschieben oder Umsortieren; nur hinzufügen, duplizieren, löschen (ALFA Moodboard.dc.html:576-578, 736) und blättern (ALFA Moodboard.dc.html:719)"
+      ]
+    },
+    "ar": {
+      "stelle": "",
+      "passt": "fehlt",
+      "abweichung": "BR sagt selbst: kein Code für das Moodboard (07-moodboard.md:5)."
+    },
+    "abweichung_ed_br": [
+      {
+        "ed": "ALFA Moodboard.dc.html:154",
+        "br": "07-moodboard.md:44",
+        "was": "BR: offen. Bogen legt mehrere Seiten mit Karte „Seiten“ fest (ALFA Moodboard.dc.html:726)."
+      }
+    ],
+    "erfunden_ed": [
+      {
+        "stelle": "ALFA Moodboard.dc.html:727",
+        "was": "„A-Musterseite“, erscheint auf allen Seiten (ALFA Moodboard.dc.html:360, 595)",
+        "auch_in_handoff_2110": false
+      }
+    ]
+  }
+]
