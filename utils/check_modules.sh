@@ -1,7 +1,7 @@
 #!/bin/zsh
 set -eu
 NEW=${0:A:h:h}
-RESTRUCTURE=$NEW/dist/check
+RESTRUCTURE=$NEW/.build/check
 mkdir -p $RESTRUCTURE/tmp
 OUT=$RESTRUCTURE/build/swiftc
 export TMPDIR=$RESTRUCTURE/tmp

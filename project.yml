@@ -71,6 +71,7 @@ targets:
           plist="$TARGET_BUILD_DIR/$INFOPLIST_PATH"
           branch=$(git -C "$SRCROOT" rev-parse --abbrev-ref HEAD 2>/dev/null) || exit 0
           commit=$(git -C "$SRCROOT" rev-parse --short HEAD 2>/dev/null) || exit 0
+          git -C "$SRCROOT" diff --quiet HEAD -- 2>/dev/null || commit="$commit+"
           /usr/libexec/PlistBuddy -c "Delete :ALFABranch" "$plist" >/dev/null 2>&1
           /usr/libexec/PlistBuddy -c "Delete :ALFACommit" "$plist" >/dev/null 2>&1
           /usr/libexec/PlistBuddy -c "Add :ALFABranch string $branch" "$plist"

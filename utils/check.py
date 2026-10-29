@@ -1,4 +1,5 @@
 import bisect
+import hashlib
 import json
 import os
 import re
@@ -322,6 +323,51 @@ def repository_files():
     return names
 
 
+TOP_LEVEL = {"App", "Sources", "Tests", "Resources", "utils", "README.md", "ARCHITECTURE.md", "AGENTS.md", "CLAUDE.md",
+             "Package.swift", "Package.resolved", "project.yml", ".githooks", ".github", ".gitignore", ".git",
+             "ALFA_OS.xcodeproj", "DESIGN", "dist", ".build", ".swiftpm", ".claude", ".DS_Store"}
+
+
+def check_top_level():
+    for name in sorted(os.listdir(ROOT)):
+        if name not in TOP_LEVEL:
+            report(name, None, "not in the top-level map of README.md")
+
+
+def check_design():
+    folder = os.path.join(ROOT, "DESIGN")
+    if not os.path.isdir(folder):
+        report("DESIGN", None, "folder missing")
+        return
+    names = sorted(n for n in os.listdir(folder) if n != ".DS_Store")
+    try:
+        manifest = json.load(open(os.path.join(folder, "MANIFEST.json")))
+        masters = manifest["masters"]
+    except (OSError, ValueError, KeyError):
+        report("DESIGN/MANIFEST.json", None, "missing or unreadable")
+        return
+    expected = sorted(m["zip"] for m in masters) + ["MANIFEST.json"]
+    if names != sorted(expected) or [m["rank"] for m in masters] != ["latest", "previous"]:
+        report("DESIGN", None, "holds exactly MANIFEST.json and the latest and previous master ZIPs it names, found %s" % ", ".join(names))
+    for m in masters:
+        path = os.path.join(folder, m["zip"])
+        if not os.path.isfile(path):
+            continue
+        digest = hashlib.sha256(open(path, "rb").read()).hexdigest()
+        if digest != m.get("sha256") or os.path.getsize(path) != m.get("bytes"):
+            report("DESIGN/" + m["zip"], None, "does not match MANIFEST.json")
+
+
+def check_distribution():
+    folder = os.path.join(ROOT, "dist")
+    if not os.path.isdir(folder):
+        return
+    for name in sorted(os.listdir(folder)):
+        if name == ".DS_Store" or name.endswith(".app") or name.endswith(".dmg"):
+            continue
+        report("dist/" + name, None, "dist holds only .app and .dmg files")
+
+
 def check_documents():
     names = repository_files()
     found = sorted(path for paths in names.values() for path in paths if path.endswith(".md"))
@@ -377,6 +423,9 @@ def main():
     check_layout()
     check_sources()
     check_documents()
+    check_top_level()
+    check_design()
+    check_distribution()
     check_generated()
     for line in findings:
         print(line)

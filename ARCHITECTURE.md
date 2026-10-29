@@ -21,24 +21,11 @@
 | Clockodo | Core, Hub, Assistant, Storage, GRDB |
 | Shipping | Core, Hub, Assistant |
 
-```
-Core, Design                      no dependencies
-Shell -> Design
-Storage -> Core
-Hub -> Storage, Design
-Mail -> Hub, Shell, Storage
-Calculation -> Storage
-Assistant -> Hub, Calculation, Design
-Google -> Mail, Assistant
-Airtable -> Assistant, Calculation
-ClickUp, Sevdesk, Clockodo, Shipping -> Assistant
-```
-
-Integrations never depend on each other; they meet in the app. `App` contains views only and depends on every module.
+The table is the complete edge list. Integrations never depend on each other; they meet in the app. `App` holds the SwiftUI views and the composition root (`Assembly`, `AppSession`, `ToolShelf`) and depends on every module.
 
 ## Schema
 
-`utils/check.py` enforces every rule marked (check).
+`utils/check.py` enforces the rules marked (check) and only those; every other rule is reviewed. Rules marked (check) are enforced only as far as the text says.
 
 ### Layout
 
@@ -49,6 +36,7 @@ Sources/Integrations/<Service>/   Airtable, ClickUp, Sevdesk, Clockodo, Shipping
 Tests/<Module>Tests/<Module>Tests.swift   one test class per module
 Resources/               tokens, text sources, catalog, fonts, assets, plist
 utils/                   checks, generators, build script
+DESIGN/                  latest and previous design master (ZIP) and MANIFEST.json (check)
 ```
 
 - Module names (check): Core, Design, Shell, Storage, Hub, Assistant, Mail, Calculation, Catalog, Project, Today, Survey, and the integrations above. Catalog, Project, Today and Survey are reserved for later; no code exists for them.
@@ -58,17 +46,17 @@ utils/                   checks, generators, build script
 |---|---|---|
 | `Model/` | value types (struct, enum) | no I/O, no state |
 | `Logic/` | pure functions and engines | deterministic, testable without mocks |
-| `Port/` | protocols to the outside world | one protocol per file |
+| `Port/` | protocols to the outside world | one protocol per file (reviewed) |
 | `Adapter/` | implementations of a port: HTTP, IMAP, Keychain, files | the place for I/O |
 | `State/` | `@Observable` state for views | I/O only through ports |
 | `Store/` | persistence, implements a port | the place for database and file access |
-| `Tool/` | assistant tools, Assistant only (check) | one tool per file |
+| `Tool/` | assistant tools, Assistant only (check) | one tool per file (reviewed) |
 
 ### Names
 
-- One main type per file; the file name is the type name (check). A file `Type+Aspect.swift` contains a top-level extension of `Type` (check). Other types in the file are small private or nested companions.
-- English, CamelCase, ASCII identifiers (check). No module prefix; a domain prefix only where a name collides with Swift or SDK names.
-- Forbidden name words: Manager, Helper, Util, Utils, Utility, Utilities, Service, Services, Handler, Impl, Base, Common, Misc, New, Old, version numbers such as V2, and trailing digits (check). `Base64` is the one allowed digit name.
+- One main type per file; the file name is the type name. `utils/check.py` requires only that the file declares some type of that name (check, partial). A file `Type+Aspect.swift` contains a top-level extension of `Type` (check). Other types in the file are small private or nested companions (reviewed).
+- ASCII outside strings and CamelCase file and type names (check). Identifiers are English and carry no module prefix; a domain prefix only where a name collides with Swift or SDK names (reviewed).
+- Forbidden name words: Manager, Helper, Helpers, Util, Utils, Utility, Utilities, Service, Services, Handler, Impl, Base, Common, Misc, New, Old, version numbers such as V2, and trailing digits (check for file names and for struct, class, enum, protocol, actor and typealias names; properties, functions and cases are reviewed). `Base64` is the one allowed digit name.
 - Role suffixes:
 
 | Suffix | Meaning | Folder |
@@ -85,24 +73,24 @@ utils/                   checks, generators, build script
 | `Failure` | error enum of a module | Model |
 | `State` | UI state | State (or Model) |
 
-- Folder placement of Client, Engine, Failure, Parser, Port, Store, Tool and State names is checked; the folders Port, Tool, Store and State accept only their own suffix (check).
+- Folder placement of Client, Engine, Failure, Parser, Port, Store, Tool and State names is checked; the folders Port, Tool (also Registry), Store and State accept only their own suffix; `Type+Aspect.swift` files are exempt (check).
 - View names in `App` are named after the thing, Apple style: `MessageRow`, `DraftEditor`, `InboxLane`, `SettingsCard`. The `View` suffix is used only where a model has the same name. `ButtonStyle`, `ToggleStyle` and `Layout` conformances end in the protocol name. `View+Aspect.swift` holds a private `ViewModifier` and a `View` method.
-- View suffixes (Row, List, Detail, Card, Lane, Button, Editor) are not used in `Sources`; the suffixes Client, Store, Engine, Router, Parser, Registry, Tool, Port and Failure are not used in `App` (check).
+- View suffixes (Row, List, Detail, Card, Lane, Button, Editor, ButtonStyle, ToggleStyle, Layout) are not used in `Sources`; the suffixes Client, Store, Engine, Router, Parser, Registry, Tool, Port and Failure are not used in `App` (check).
 - `Tests` holds one folder `<Module>Tests` per module with exactly the file `<Module>Tests.swift` (check).
 
 ### Content
 
 - No comments of any kind (check).
-- No prose in code: user-facing text exists only as keys in `Resources/Localizable.xcstrings`; every key used in code has a value (check).
-- No literal colours or numbers in `App` views except 0, 1 and 2; sizes, spacing, radii, durations and every other value come from `Design` tokens or `App/Design/SheetValues.swift` (check).
-- The company name never appears in `Sources`, `App`, `Tests` or `utils` (check). Company values reach the app only through the company configuration file (see [README.md](README.md)).
-- Markdown: exactly `README.md`, `ARCHITECTURE.md`, `AGENTS.md`, `CLAUDE.md`; every link and repository path in them exists (check).
+- No prose in code: user-facing text exists only as keys in `Resources/Localizable.xcstrings` (reviewed; a literal sentence in a view is not detected). `utils/merge_strings.py --check` reports a key used through the call patterns listed under Texts that has no value, when its first segment is already a catalog prefix (check, partial).
+- No literal colours or numbers in `App` views except 0, 1 and 2; sizes, spacing, radii, durations and every other value come from `Design` tokens or `App/Design/SheetValues.swift` (check for numeric literals and numeric colour initialisers; `Color.white`, `.black` and named system colours are reviewed).
+- The company name never appears in Swift files of `Sources`, `App`, `Tests` or in `.py`, `.sh` and `.plist` files of `utils` (check); `Resources`, `project.yml`, `.githooks` and `.github` are not scanned. Company values reach the app only through the company configuration file (see [README.md](README.md)).
+- Markdown: exactly `README.md`, `ARCHITECTURE.md`, `AGENTS.md`, `CLAUDE.md`; every link, repository path and file name in them exists (check); identifiers and behaviour claims are not checked.
 - Generated files match their generators (check).
-- Access: `internal` by default, `public` only across module boundaries. Every `public` member has a caller outside its module. No stubs, no provisional code. These three rules are reviewed, not checked.
+- Access: `internal` by default, `public` only across module boundaries. Every `public` member has a caller outside its module. No stubs, no provisional code. These three rules, the Layering rules and the rules for `Model`, `Logic`, `Port`, `State` and `Store` above are reviewed, not checked.
 
 ## Layering
 
-Dependencies point from the outer layers to the inner ones inside a module:
+Dependencies point from the outer layers to the inner ones inside a module (reviewed):
 
 ```
 State, Tool -> Port, Logic, Model
@@ -117,14 +105,15 @@ Logic -> Model
 
 ## Composition root
 
-`App/Shell/Assembly.swift` builds every dependency once: it opens the database, runs the legacy import, creates the stores, the provider list (`ProviderPort`), `Connections`, `InboxState`, `ChatStore`, `ToolShelf`, `ConversationEngine` and `ChatState`. `App/Shell/AppSession.swift` owns the `Assembly` and the desk state, creates the panes (`mail`, `settings`) and starts mail sync. `App/Shell/AlfaApp.swift` creates the session with `AppSession.live()`. No other file constructs a client or store. `ToolShelf` creates the assistant tools for the integrations whose inlet is connected; `Assembly.reshelve()` rebuilds the registry when inlets change.
+`App/Shell/Assembly.swift` builds every dependency once: it opens the database, runs the legacy import, creates the stores, the provider list (`ProviderPort`), `Connections`, `InboxState`, `ChatStore`, `ToolShelf`, `ConversationEngine` and `ChatState`. `App/Shell/AppSession.swift` owns the `Assembly` and the desk state, creates the panes (`mail`, `settings`) and starts mail sync. `App/Shell/AlfaApp.swift` creates the session with `AppSession.live()`. Besides `Assembly`, `ToolShelf` constructs the integration clients and the stores its tools need, and `AppSession` constructs `ShellStore`. `ToolShelf` creates the assistant tools for the integrations whose inlet is connected; `Assembly.reshelve()` rebuilds the registry when inlets change.
 
 ## Data
 
 - One SQLite file `alfa.sqlite` in the Application Support folder `ALFA_OS`, opened by `DatabaseStore` with write-ahead logging and foreign keys on.
-- Migrations are registered in `SQLiteStore+Migrations.swift` and `SQLiteStore+CalculationMigration.swift` under the names hub, mail, audit, assistant, project, catalog, clockodo, sevdesk and calculation, and run when the database opens.
-- Every store takes the `SQLiteStore` through its initializer. Secrets (API keys, passwords) are stored through `KeychainStore`, not in the database.
+- Migrations are registered in `SQLiteStore+Migrations.swift` and `SQLiteStore+CalculationMigration.swift` under the names hub, mail, audit, assistant, project, catalog, clockodo, sevdesk, calculation and mailMirror, and run when the database opens.
+- Every database-backed store takes the `SQLiteStore` through its initializer (`ClientConfigStore`, `ShellStore`, `KeychainStore` and `AttachmentStore` use none). Secrets (API keys, passwords) are stored through `KeychainStore`, not in the database.
 - `LegacyImportStore` runs at every start but imports once: it reads a legacy `hub.sqlite` next to the database and selected `UserDefaults` values, and then sets the setting `import.legacy.done`. `ReceiptStore.adopt(legacy:)` moves the old receipts out of `UserDefaults`.
+- `MailboxStore` mirrors each mail folder into `mail_message` by id sets: `MirrorPort` (a protocol separate from `MailTransportPort`, implemented by `IMAPSMTPClient` and `GmailMailClient`, forwarded by `MeteredMail`) lists ids, fetches summaries and refreshes flags; a transport without it offers no range, and a refresh of it fails with `capabilityMissing`. One pass per inlet and folder runs at a time, `mail_cursor` keeps the Gmail history id and the reach of an extended folder, mail is ordered by `receivedAt` (Gmail: its `internalDate`), then `id`; the refused-wipe marker and the "older" offer persist in `mail_cursor`.
 - Attachments of chat messages are files in the folder `attachments` next to the database.
 
 ## Design tokens
@@ -133,14 +122,14 @@ Logic -> Model
 
 ## Texts
 
-Each module that has user-facing text owns `Resources/<name>.localizable.json`: keys with a `de` value and, where translated, an `en` value. `utils/merge_strings.py` merges these files into `Resources/Localizable.xcstrings` (source language `de`), keeps existing catalog values and adds missing `en` values. `--check` fails when the catalog is stale; it also lists keys used in code (`string(`, `text(`, `format(`, `key(`, `LocalizedStringKey(`, `LocalizationValue(`, and `...Key:` arguments) that have no value. Views resolve text through `Appearance`; engines resolve text through `TextPort`, implemented by `TextStore` in `App/Shell/Assembly.swift`.
+Each module that has user-facing text owns `Resources/<name>.localizable.json`: keys with a `de` value and, where translated, an `en` value. `utils/merge_strings.py` merges these files into `Resources/Localizable.xcstrings` (source language `de`), keeps the catalog entries whose key is in a module file or matches a string literal in `App`, `Sources` or `Resources/*.json`, prunes the others, lets module values overwrite catalog values (printing `changed`) and adds missing `en` values. `--check` fails when the catalog is stale; it also lists keys used in code (`string(`, `text(`, `format(`, `key(`, `LocalizedStringKey(`, `LocalizationValue(`, and `...Key:` arguments) that have no value. Views resolve text through `Appearance`; engines resolve text through `TextPort`, implemented by `TextStore` in `App/Shell/Assembly.swift`.
 
 ## Assistant
 
-- `ClaudeClient` talks to the Anthropic API with the key that `ClaudeCredential` reads from the Keychain slot of the connected `claude` inlet.
+- `ClaudeClient` talks to the Anthropic API with the key that `ClaudeCredential` (Hub) reads from the Keychain slot of the connected `claude` inlet.
 - `ConversationEngine` runs a turn: it checks the privacy choices, prepares the conversation (`Grounding`, `MemoryEngine`), selects tools, calls the model, executes tool calls through `ToolRegistry.run` and stores everything in `ChatStore`.
 - Tools implement `ToolPort` (`Sources/Assistant/Port/ToolPort.swift`): a name, an access level (`read`, `propose`, `write`), a privacy category, parameters and `run`.
-- Privacy categories (`PrivacyCategory`): mail, calendar, contacts, drive, clickUp, notes, tasks, catalogCalculation, studioKnowledge, chat, time. The user disables categories in settings (`PrivacyStore`); `ToolAccessEngine.allowed` removes the tools of a disabled category from the turn. `PrivacyChoices` in Hub adds `assistantOff`, `chatFiles` and `loadImages`.
+- Privacy categories (`PrivacyCategory`): mail, calendar, contacts, drive, clickUp, notes, tasks, catalogCalculation, studioKnowledge, chat, time. The user disables categories in settings (`PrivacyStore`); `ToolAccessEngine.allowed` (declared in `ConversationEngine.swift`) removes the tools of a disabled category from the turn. `PrivacyChoices` in Hub adds `assistantOff`, `chatFiles` and `loadImages`.
 - Model routing (`ModelRouter`): a request that mentions estimation words uses Opus; otherwise a turn with tools enabled uses Sonnet; otherwise a long or analytical request uses Sonnet; everything else uses Haiku. The model ids are constants in `ModelRouter`; the credential's own model setting defaults to `ClaudeKey.defaultModel`.
 - Calculation runs through `CalculationTool`, which wraps `EstimationEngine` from the Calculation module with price anchors (seed, Airtable, learned and PDF-learned).
 

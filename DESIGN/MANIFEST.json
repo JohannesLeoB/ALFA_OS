@@ -1,0 +1,23 @@
+{
+ "rule": "DESIGN holds the latest and the previous design master as ZIP, named 'ALFA Design Master <delivery date>.zip'. Only Johannes delivers a master, as a ZIP in the session chat. The latest is the reference for views, tokens and texts. A new master becomes latest, the former latest becomes previous, the former previous is removed, all in the one commit that adopts it; the sha256 here must match the file.",
+ "masters": [
+  {
+   "rank": "latest",
+   "zip": "ALFA Design Master 2026-10-28.zip",
+   "delivered": "2026-10-28",
+   "deliveredAs": "ALFA-Uebergabe-2810",
+   "bytes": 7470499,
+   "sha256": "b63674a363319cab8e3ac3dff910f18b2a3c05bfe94401af2516a93caf959930",
+   "files": 164
+  },
+  {
+   "rank": "previous",
+   "zip": "ALFA Design Master 2026-10-27.zip",
+   "delivered": "2026-10-27",
+   "deliveredAs": "ALFA-Uebergabe-2710",
+   "bytes": 7450570,
+   "sha256": "d3723d97e9aa81a341490ed32c1e93c233f6b8f2d3266d56f1247530e367cd0c",
+   "files": 161
+  }
+ ]
+}
