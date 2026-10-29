@@ -62,7 +62,8 @@ final class Assembly {
 
         let events = Broadcast<MailboxEvent>()
         let outbox = OutboxStore(access: connections.access, database: database, events: events)
-        let mailbox = MailboxStore(access: connections.access, database: database, outbox: outbox, events: events)
+        let mailbox = MailboxStore(access: connections.access, database: database, outbox: outbox, events: events,
+                                   range: { [settings] inlet in settings.range(inlet) })
         let inbox = InboxState(mailbox: mailbox, outbox: outbox, contacts: ContactState(defaults: defaults))
 
         let receipts = ReceiptStore(database: database)

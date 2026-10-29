@@ -1,4 +1,5 @@
 import Foundation
+import Hub
 import Mail
 
 struct GmailMailClient: GmailPort, SourcePort {
@@ -6,6 +7,9 @@ struct GmailMailClient: GmailPort, SourcePort {
 
     static let allMail = "ALL"
     static let threadLimit = 20
+    static let idPage = 500
+    static let historyFallback = 100
+    static let everywhereScope = "-in:spam -in:trash"
     static let systemFolders: [Folder] = [
         Folder(id: GmailSystemLabel.inbox, name: GmailSystemLabel.inbox, role: .inbox),
         Folder(id: GmailSystemLabel.starred, name: GmailSystemLabel.starred, role: .starred),
@@ -24,10 +28,11 @@ struct GmailMailClient: GmailPort, SourcePort {
     }
 
     func listMessages(folderID: String, query: String?, pageToken: String?, maxResults: Int) async throws -> MessagePage {
-        let scope = try await labelQuery(folderID)
-        let combined = [scope, query].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " ")
-        let page = try await gmail.listMessages(query: combined, maxResults: maxResults, pageToken: pageToken)
-        return MessagePage(messages: page.messages.map(Self.summary), nextPageToken: page.nextPageToken)
+        let combined = Self.join(try await labelQuery(folderID), query)
+        let page = try await gmail.listIDs(query: combined, maxResults: maxResults, pageToken: pageToken)
+        guard !page.ids.isEmpty else { return MessagePage(messages: [], nextPageToken: page.nextPageToken, total: page.estimate) }
+        let found = try await gmail.fetchMetadata(ids: page.ids)
+        return MessagePage(messages: found.map(Self.summary), nextPageToken: page.nextPageToken, total: page.estimate)
     }
 
     func fetchBody(messageID: String) async throws -> MessageBody {
@@ -119,13 +124,25 @@ struct GmailMailClient: GmailPort, SourcePort {
         return try await !gmail.searchMessages(query: query, maxResults: 1).isEmpty
     }
 
-    private func labelQuery(_ folderID: String) async throws -> String {
+    func labelQuery(_ folderID: String) async throws -> String {
         if folderID == Self.allMail { return "" }
         if GmailSystemLabel.all.contains(folderID) { return "label:\(folderID)" }
         guard let label = try await gmail.listLabels().first(where: { $0.id == folderID }) else {
             throw MailFailure.folderNotFound(folderID)
         }
         return "label:\"\(label.name.replacingOccurrences(of: "\"", with: "\\\""))\""
+    }
+
+    static func join(_ parts: String?...) -> String {
+        parts.compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " ")
+    }
+
+    static func flags(_ labels: [String]) -> Set<Flag> {
+        var flags: Set<Flag> = []
+        if !labels.contains(GmailSystemLabel.unread) { flags.insert(.seen) }
+        if labels.contains(GmailSystemLabel.starred) { flags.insert(.flagged) }
+        if labels.contains(GmailSystemLabel.draft) { flags.insert(.draft) }
+        return flags
     }
 
     private static func apply(_ flag: Flag, adding: Bool, to labelsToAdd: inout [String], and labelsToRemove: inout [String]) {
@@ -144,16 +161,12 @@ struct GmailMailClient: GmailPort, SourcePort {
                        sizeBytes: attachment.sizeBytes)
     }
 
-    private static func summary(_ message: GmailMessage) -> MessageSummary {
-        var flags: Set<Flag> = []
-        if !message.labels.contains(GmailSystemLabel.unread) { flags.insert(.seen) }
-        if message.labels.contains(GmailSystemLabel.starred) { flags.insert(.flagged) }
-        if message.labels.contains(GmailSystemLabel.draft) { flags.insert(.draft) }
+    static func summary(_ message: GmailMessage) -> MessageSummary {
         let attachments = message.attachments.map(info)
         return MessageSummary(
             id: message.id, threadID: message.threadID, subject: message.subject, from: message.from,
             fromRaw: message.fromRaw, toRaw: message.toRaw, ccRaw: message.ccRaw, snippet: message.snippet,
-            receivedAt: message.receivedAt, flags: flags, folderIDs: message.labels,
-            attachmentCount: attachments.count, attachments: attachments, messageIDHeader: message.messageIDHeader)
+            receivedAt: message.receivedAt, flags: flags(message.labels), folderIDs: message.labels,
+            attachmentCount: max(attachments.count, message.likelyAttachments ? 1 : 0), attachments: attachments, messageIDHeader: message.messageIDHeader)
     }
 }

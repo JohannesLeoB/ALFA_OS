@@ -183,6 +183,15 @@ extension SQLiteStore {
                     seq INTEGER PRIMARY KEY AUTOINCREMENT, orderID TEXT NOT NULL UNIQUE, json BLOB NOT NULL)
                 """)
         }
+        migrator.registerMigration("mailMirror") { db in
+            try db.execute(sql: """
+                CREATE TABLE mail_cursor (
+                    inlet TEXT NOT NULL, key TEXT NOT NULL, value TEXT NOT NULL, PRIMARY KEY (inlet, key))
+                """)
+            try db.execute(sql: """
+                CREATE INDEX mail_message_order ON mail_message (inlet, folder, receivedAt DESC, id DESC)
+                """)
+        }
         return migrator
     }
 }

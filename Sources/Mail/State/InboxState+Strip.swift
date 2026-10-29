@@ -11,7 +11,7 @@ extension InboxState {
             } + [composeMark]
         case .center:
             let room = max(1, Int((height - Tokens.Size.stripReserveTop - Tokens.Size.stripReserveBottom) / Tokens.Size.rowHeight))
-            return rowPresentations.prefix(room).map { row in
+            return rowWindow(limit: room).items.map { row in
                 StripMark(id: "row." + row.id, face: row.initials.isEmpty ? .glyph(.person) : .text(row.initials),
                           help: FolderName(key: nil, text: row.subject ?? ""), selected: row.selected, dot: row.unread,
                           run: .row(row.id))

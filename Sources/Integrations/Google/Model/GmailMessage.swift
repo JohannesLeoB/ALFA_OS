@@ -13,6 +13,7 @@ struct GmailMessage: Identifiable, Equatable, Sendable {
     var labels: [String] = []
     var attachments: [GmailAttachment] = []
     var messageIDHeader: String = ""
+    var likelyAttachments = false
 }
 
 struct GmailAttachment: Equatable, Sendable {
@@ -27,6 +28,17 @@ struct GmailMailBody: Equatable, Sendable {
     var html: String?
     var inlineImages: [String: String] = [:]
     var attachments: [GmailAttachment] = []
+}
+
+struct GmailIDs: Equatable, Sendable {
+    var ids: [String]
+    var nextPageToken: String?
+    var estimate: Int?
+}
+
+struct GmailChanges: Equatable, Sendable {
+    var ids: Set<String>
+    var historyID: String
 }
 
 struct GmailPage: Equatable, Sendable {

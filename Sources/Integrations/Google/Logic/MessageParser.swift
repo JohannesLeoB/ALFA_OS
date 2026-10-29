@@ -4,6 +4,7 @@ enum MessageParser {
     struct ListPage: Equatable {
         var ids: [String]
         var nextPageToken: String?
+        var estimate: Int?
     }
 
     static func listPage(from data: Data) throws -> ListPage {
@@ -11,9 +12,48 @@ enum MessageParser {
         struct Response: Decodable {
             var messages: [Reference]?
             var nextPageToken: String?
+            var resultSizeEstimate: Int?
         }
         guard let decoded = try? JSONDecoder().decode(Response.self, from: data) else { throw GoogleFailure.decodingFailed }
-        return ListPage(ids: (decoded.messages ?? []).map(\.id), nextPageToken: decoded.nextPageToken)
+        return ListPage(ids: (decoded.messages ?? []).map(\.id), nextPageToken: decoded.nextPageToken,
+                        estimate: decoded.resultSizeEstimate)
+    }
+
+    struct HistoryPage: Equatable {
+        var ids: Set<String>
+        var historyID: String?
+        var nextPageToken: String?
+    }
+
+    static func historyPage(from data: Data) throws -> HistoryPage {
+        struct Reference: Decodable { var id: String }
+        struct Change: Decodable { var message: Reference }
+        struct Record: Decodable {
+            var messages: [Reference]?
+            var labelsAdded: [Change]?
+            var labelsRemoved: [Change]?
+        }
+        struct Response: Decodable {
+            var history: [Record]?
+            var historyId: String?
+            var nextPageToken: String?
+        }
+        guard let decoded = try? JSONDecoder().decode(Response.self, from: data) else { throw GoogleFailure.decodingFailed }
+        var ids = Set<String>()
+        for record in decoded.history ?? [] {
+            ids.formUnion((record.messages ?? []).map(\.id))
+            ids.formUnion((record.labelsAdded ?? []).map(\.message.id))
+            ids.formUnion((record.labelsRemoved ?? []).map(\.message.id))
+        }
+        return HistoryPage(ids: ids, historyID: decoded.historyId, nextPageToken: decoded.nextPageToken)
+    }
+
+    static func profileHistoryID(from data: Data) throws -> String {
+        struct Response: Decodable { var historyId: String? }
+        guard let id = (try? JSONDecoder().decode(Response.self, from: data))?.historyId else {
+            throw GoogleFailure.decodingFailed
+        }
+        return id
     }
 
     static func message(from data: Data) throws -> GmailMessage {
@@ -128,9 +168,10 @@ enum MessageParser {
             toRaw: header("To") ?? "",
             ccRaw: header("Cc") ?? "",
             snippet: decodeEntities(resource.snippet ?? ""),
-            receivedAt: header("Date").flatMap(emailDate) ?? internalDate(resource.internalDate),
+            receivedAt: internalDate(resource.internalDate) ?? header("Date").flatMap(emailDate),
             labels: resource.labelIds ?? [],
             attachments: BodyParser.attachments(in: resource.payload?.parts ?? []),
-            messageIDHeader: header("Message-ID") ?? "")
+            messageIDHeader: header("Message-ID") ?? "",
+            likelyAttachments: (header("Content-Type") ?? "").lowercased().hasPrefix("multipart/mixed"))
     }
 }

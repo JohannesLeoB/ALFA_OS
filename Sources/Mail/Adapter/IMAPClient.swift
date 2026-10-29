@@ -155,9 +155,21 @@ actor IMAPClient {
         return Array(Set(found)).sorted()
     }
 
+    func countMatches(_ criteria: [IMAPArgument]) async throws -> Int {
+        guard has("ESEARCH") else { return try await searchUIDs(criteria).count }
+        let result = try await run([.raw("UID"), .raw("SEARCH"), .raw("RETURN"), .raw("(COUNT)")] + criteria)
+        for row in result.dataRows where row.first?.string?.uppercased() == "ESEARCH" {
+            if let key = row.firstIndex(where: { $0.string?.uppercased() == "COUNT" }), key + 1 < row.count,
+               let count = row[key + 1].int {
+                return count
+            }
+        }
+        return result.dataRows.filter { $0.first?.string?.uppercased() == "SEARCH" }.reduce(0) { $0 + $1.count - 1 }
+    }
+
     func fetch(uids: [Int], items: [String]) async throws -> [IMAPFetched] {
         guard !uids.isEmpty else { return [] }
-        let set = uids.map(String.init).joined(separator: ",")
+        let set = UIDSetEngine.text(uids)
         let result = try await run([.raw("UID"), .raw("FETCH"), .raw(set), .raw("(" + items.joined(separator: " ") + ")")])
         var merged: [Int: IMAPFetched] = [:]
         for row in result.dataRows {

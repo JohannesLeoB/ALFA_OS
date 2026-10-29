@@ -1300,6 +1300,25 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(reloaded.display("imap-b"), .localPart)
     }
 
+    @MainActor
+    func testMailboxRangeIsStoredPerMailboxAndIgnoresOldValues() throws {
+        let database = try SQLiteStore.inMemory()
+        let store = SettingStore(database: database)
+        let state = try SettingsState(settings: store)
+        XCTAssertEqual(state.range("gmail-a"), .days30)
+        state.setRange(.year, for: "gmail-a")
+        state.setRange(.all, for: "gmail-ab")
+        try store.store("latest500", forKey: SettingsKey.mailboxRange("imap-b"))
+        let again = try SettingsState(settings: store)
+        XCTAssertEqual(again.range("gmail-a"), .year)
+        XCTAssertEqual(again.range("gmail-ab"), .all)
+        XCTAssertEqual(again.range("imap-b"), .days30)
+        state.forget("gmail-a")
+        XCTAssertEqual(state.range("gmail-a"), .days30)
+        XCTAssertEqual(try SettingsState(settings: store).range("gmail-ab"), .all)
+        XCTAssertEqual(MailboxRange.year.key, "settings.account.range.year")
+    }
+
     func testMailboxDisplayShowsNameOrAddressPart() {
         XCTAssertEqual(MailboxDisplay.ownName.text(title: " Arbeit ", account: "info@example.com"), "Arbeit")
         XCTAssertEqual(MailboxDisplay.ownName.text(title: "  ", account: "info@example.com"), "info@")

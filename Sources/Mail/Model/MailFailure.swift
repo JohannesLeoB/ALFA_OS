@@ -27,6 +27,7 @@ public enum MailboxEvent: Equatable, Sendable {
     case messagesChanged(Inlet.ID, folder: String)
     case newMail(Inlet.ID, count: Int)
     case outboxChanged
+    case refused(Inlet.ID, folder: String)
     case syncFailed(Inlet.ID, Hint)
     case syncFinished(Inlet.ID)
 }
@@ -35,6 +36,7 @@ enum MessageTextKey: String, Sendable {
     case offline = "mail.hint.offline"
     case rejected = "mail.hint.rejected"
     case failed = "mail.hint.failed"
+    case mirrorRefused = "mail.hint.mirrorRefused"
     case notConnected = "hint.mail.notConnected"
     case noInlet = "hint.mail.noInlet"
     case capabilityMissing = "hint.mail.capabilityMissing"

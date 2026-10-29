@@ -34,6 +34,10 @@ enum DateEngine {
         formatter("d-MMM-yyyy HH:mm:ss Z").date(from: text.trimmingCharacters(in: .whitespaces))
     }
 
+    static func formatSearchDate(_ date: Date) -> String {
+        formatter("d-MMM-yyyy").string(from: date)
+    }
+
     static func formatMessageDate(_ date: Date) -> String {
         formatter(["EEE,", "dd", "MMM", "yyyy", "HH:mm:ss", "Z"].joined(separator: " ")).string(from: date)
     }

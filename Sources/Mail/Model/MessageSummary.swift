@@ -40,10 +40,12 @@ public struct MessageSummary: Identifiable, Equatable, Sendable {
 public struct MessagePage: Equatable, Sendable {
     public var messages: [MessageSummary]
     public var nextPageToken: String?
+    public var total: Int?
 
-    public init(messages: [MessageSummary], nextPageToken: String? = nil) {
+    public init(messages: [MessageSummary], nextPageToken: String? = nil, total: Int? = nil) {
         self.messages = messages
         self.nextPageToken = nextPageToken
+        self.total = total
     }
 }
 

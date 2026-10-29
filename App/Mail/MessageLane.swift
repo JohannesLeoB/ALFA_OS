@@ -137,14 +137,16 @@ struct MessageLane: View {
     }
 
     private var searchField: some View {
-        let here = inbox.searchScope == .here
+        let here = inbox.scope == .here
         let placeholder = here ? appearance.format("mail.search.placeholder.here", title) : appearance.string("mail.search.placeholder.all")
         return InputField(text: $text, placeholder: Text(verbatim: placeholder), labelKey: "mail.search.label", focus: $focused) {
-            TextButton(label: Text(verbatim: here ? appearance.format("mail.search.scope.here", title) : appearance.string("mail.search.scope.all")),
-                       kind: .quiet, size: .compact) {
-                Task { await inbox.toggleScope() }
+            if inbox.offersScope {
+                TextButton(label: Text(verbatim: here ? appearance.format("mail.search.scope.here", title) : appearance.string("mail.search.scope.all")),
+                           kind: .quiet, size: .compact) {
+                    Task { await inbox.toggleScope() }
+                }
+                .help(Text(verbatim: here ? appearance.format("mail.search.tip.here", title) : appearance.format("mail.search.tip.all", title)))
             }
-            .help(Text(verbatim: here ? appearance.format("mail.search.tip.here", title) : appearance.format("mail.search.tip.all", title)))
         }
         .onSubmit { Task { await inbox.submit(text) } }
         .onKeyPress(.escape) {
@@ -187,14 +189,15 @@ struct MessageLane: View {
     }
 
     private func rows(width: Double) -> some View {
-        let items = inbox.rowPresentations
+        let listed = inbox.rowWindow(limit: window + 1)
+        let items = listed.items
         let trash = inbox.currentFolder?.role == .trash
         let picking = inbox.picking
-        let spacer = ListWindowEngine.spacer(count: items.count, window: window)
+        let spacer = ListWindowEngine.spacer(count: listed.total, window: window)
         return ScrollView {
             LazyVStack(spacing: 0) {
-                if !inbox.typed.isEmpty, !items.isEmpty {
-                    Text(verbatim: appearance.format("mail.search.results", Format.number(items.count)))
+                if !inbox.typed.isEmpty, listed.total > 0 {
+                    Text(verbatim: appearance.format("mail.search.results", Format.number(inbox.resultCount(loaded: listed.total))))
                         .designText(\.inkTertiary, size: Tokens.TextSize.small)
                         .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
                         .padding(.bottom, CGFloat(Tokens.Spacing.step8))
@@ -212,6 +215,11 @@ struct MessageLane: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, CGFloat(Tokens.Spacing.step12))
                 }
+                if let tail = inbox.listTail, window >= listed.total {
+                    TextButton(label: appearance.text(tail.key), kind: .quiet) { Task { await inbox.loadTail() } }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, CGFloat(Tokens.Spacing.step12))
+                }
                 Color.clear
                     .frame(height: CGFloat(spacer))
                     .accessibilityHidden(true)
@@ -224,7 +232,12 @@ struct MessageLane: View {
             ListWindowEngine.remaining(content: Double(geometry.contentSize.height), offset: Double(geometry.contentOffset.y),
                                        container: Double(geometry.containerSize.height), spacer: spacer) < SheetValues.listLoadAhead
         } action: { was, near in
-            if !was, near, window < items.count { window += SheetValues.listWindowStep }
+            guard !was, near else { return }
+            if window < listed.total {
+                window += SheetValues.listWindowStep
+            } else if inbox.listTail != nil {
+                Task { await inbox.loadTail() }
+            }
         }
     }
 

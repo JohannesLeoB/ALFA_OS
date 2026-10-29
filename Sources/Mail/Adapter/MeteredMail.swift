@@ -1,7 +1,7 @@
 import Foundation
 import Hub
 
-struct MeteredMail: MailTransportPort, PurgePort, SourcePort {
+struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort {
     let base: any MailTransportPort
     let meter: CostMeter
 
@@ -95,6 +95,42 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort {
         guard let base = base as? any SourcePort else { throw MailFailure.unsupportedCapability("source") }
         meter.record()
         return try await base.fetchSource(messageID: messageID)
+    }
+
+    var ranges: [MailboxRange] { (base as? any MirrorPort)?.ranges ?? [] }
+
+    func startCursor() async throws -> String? {
+        guard let base = base as? any MirrorPort else { throw MailFailure.unsupportedCapability("mirror") }
+        meter.record()
+        return try await base.startCursor()
+    }
+
+    func listIDs(folderID: String, since: Date?, limit: Int?) async throws -> MirrorListing {
+        guard let base = base as? any MirrorPort else { throw MailFailure.unsupportedCapability("mirror") }
+        meter.record()
+        return try await base.listIDs(folderID: folderID, since: since, limit: limit)
+    }
+
+    func fetchSummaries(folderID: String, ids: [String]) async throws -> [MessageSummary] {
+        guard let base = base as? any MirrorPort else { throw MailFailure.unsupportedCapability("mirror") }
+        meter.record(calls: ids.count)
+        return try await base.fetchSummaries(folderID: folderID, ids: ids)
+    }
+
+    func refreshFlags(folderID: String, known: [String], cursor: String?) async throws -> FlagRefresh {
+        guard let base = base as? any MirrorPort else { throw MailFailure.unsupportedCapability("mirror") }
+        meter.record()
+        return try await base.refreshFlags(folderID: folderID, known: known, cursor: cursor)
+    }
+
+    func offersEverywhere(in folders: [Folder]) -> Bool {
+        (base as? any EverywhereSearchPort)?.offersEverywhere(in: folders) ?? false
+    }
+
+    func searchEverywhere(query: String, pageToken: String?, maxResults: Int) async throws -> MessagePage {
+        guard let base = base as? any EverywhereSearchPort else { throw MailFailure.unsupportedCapability("search") }
+        meter.record()
+        return try await base.searchEverywhere(query: query, pageToken: pageToken, maxResults: maxResults)
     }
 
     func supportsPurge() async throws -> Bool {

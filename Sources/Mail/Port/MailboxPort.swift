@@ -8,9 +8,16 @@ public protocol MailboxPort: AnyObject {
     var hasFiles: Bool { get }
     func folders(_ inlet: Inlet.ID) -> [Folder]
     func refreshFolders(_ inlet: Inlet.ID) async throws(HubFailure)
-    func messages(_ inlet: Inlet.ID, folder: String) -> [MessageSummary]
+    func cached(_ inlet: Inlet.ID, folder: String) async -> [MessageSummary]
     func lastSync(_ inlet: Inlet.ID, folder: String) -> Date?
-    func loadPage(_ inlet: Inlet.ID, folder: String, query: String?, pageToken: String?) async throws(HubFailure) -> MessagePage
+    func refresh(_ inlet: Inlet.ID, folder: String) async throws(HubFailure)
+    func ranges(_ inlet: Inlet.ID) -> [MailboxRange]
+    func rangeChanged(_ inlet: Inlet.ID) async
+    func canLoadOlder(_ inlet: Inlet.ID, folder: String) -> Bool
+    func loadOlder(_ inlet: Inlet.ID, folder: String) async throws(HubFailure)
+    func canSearchEverywhere(_ inlet: Inlet.ID) -> Bool
+    func search(_ inlet: Inlet.ID, folder: String, query: String, scope: SearchScope,
+                continuation: SearchContinuation?) async throws(HubFailure) -> SearchPage
     func searchLocal(_ inlet: Inlet.ID, query: String) -> [MessageSummary]
     func searchOpen(_ inlet: Inlet.ID, query: String, excluding folders: Set<String>) async -> [MessageSummary]
     func body(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> MessageBody

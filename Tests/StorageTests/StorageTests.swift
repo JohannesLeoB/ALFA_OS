@@ -15,7 +15,7 @@ final class StorageTests: XCTestCase {
         let store = try SQLiteStore.inMemory()
         let expected: Set<String> = [
             "inlet", "key_slot", "inlet_report", "setting", "cost_day",
-            "mail_folder", "mail_message", "mail_sync", "mail_outbox",
+            "mail_folder", "mail_message", "mail_sync", "mail_outbox", "mail_cursor",
             "auditEntries", "integrationLog", "chatMessages", "chatMemorySummaries",
             "assistantNotes", "assistantTasks", "assistantJournal", "privacyPreferences",
             "samples", "articleCatalog", "articleCatalogFTS", "articleCatalogSync", "bookedRows",
@@ -33,6 +33,44 @@ final class StorageTests: XCTestCase {
         XCTAssertFalse((tables + columns).contains { $0.lowercased().contains(forbidden) })
         XCTAssertFalse(tables.contains("dataFlowLog"))
         XCTAssertFalse(tables.contains("widgetInstances"))
+    }
+
+    func testDatabaseCreatedBeforeTheMirrorMigrationKeepsItsDataAndGainsTheNewTables() throws {
+        let directory = try makeDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let path = directory.appendingPathComponent(DatabaseStore.fileName).path
+        let old = try DatabaseQueue(path: path)
+        try SQLiteStore.migrator().migrate(old, upTo: "calculation")
+        try old.write { db in
+            XCTAssertFalse(try db.tableExists("mail_cursor"))
+            try db.execute(sql: "INSERT INTO setting (key, value) VALUES ('kept', x'01')")
+            try db.execute(sql: "INSERT INTO mail_folder (inlet, id, name, role, position) VALUES ('a', 'INBOX', 'INBOX', 'inbox', 0)")
+            try db.execute(sql: """
+                INSERT INTO mail_message (inlet, folder, id, position, thread, subject, sender, fromRaw, toRaw, ccRaw, snippet, receivedAt,
+                    flags, seen, folderIDs, attachmentCount, messageIDHeader)
+                VALUES ('a', 'INBOX', '7:1:INBOX', 3, 't', 'Old subject', 'Ann', 'Ann <a@x.test>', '', '', '', 1800000000, 'seen', 1, 'INBOX', 0, '<m@x>')
+                """)
+            try db.execute(sql: "INSERT INTO mail_sync (inlet, folder, at) VALUES ('a', 'INBOX', 1800000100)")
+        }
+        let applied = try old.read { db in try String.fetchAll(db, sql: "SELECT identifier FROM grdb_migrations") }
+        XCTAssertFalse(applied.contains("mailMirror"))
+        try old.close()
+        let store = try DatabaseStore.open(in: directory)
+        try store.read { db in
+            XCTAssertTrue(try db.tableExists("mail_cursor"))
+            XCTAssertEqual(try String.fetchOne(db, sql: "SELECT subject FROM mail_message WHERE id = '7:1:INBOX'"), "Old subject")
+            XCTAssertEqual(try Int.fetchOne(db, sql: "SELECT position FROM mail_message WHERE id = '7:1:INBOX'"), 3)
+            XCTAssertEqual(try Double.fetchOne(db, sql: "SELECT at FROM mail_sync WHERE inlet = 'a'"), 1_800_000_100)
+            XCTAssertEqual(try String.fetchOne(db, sql: "SELECT name FROM mail_folder WHERE inlet = 'a'"), "INBOX")
+            XCTAssertEqual(try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM setting WHERE key = 'kept'"), 1)
+            let indexes = try String.fetchAll(db, sql: "SELECT name FROM sqlite_master WHERE type = 'index'")
+            XCTAssertTrue(indexes.contains("mail_message_order"))
+        }
+        try store.write { db in
+            try db.execute(sql: "INSERT INTO mail_cursor (inlet, key, value) VALUES ('a', 'history\nINBOX', '9')")
+        }
+        let again = try DatabaseStore.open(in: directory)
+        XCTAssertEqual(try again.read { db in try String.fetchOne(db, sql: "SELECT value FROM mail_cursor") }, "9")
     }
 
     func testMigrationsRunOnceOnReopen() throws {

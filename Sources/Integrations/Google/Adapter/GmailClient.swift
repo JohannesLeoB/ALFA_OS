@@ -5,6 +5,9 @@ import Mail
 struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPort {
     static let root = "https://gmail.googleapis.com/gmail/v1/users/me"
     static let draftListSize = "100"
+    static let historyPageSize = "500"
+    static let missingStatus = 404
+    static let summaryHeaders = ["From", "To", "Cc", "Subject", "Date", "Message-ID", "Content-Type"]
 
     let requests: RequestClient
     let policy: RequestPolicy
@@ -21,42 +24,91 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
         try RequestClient.url(messages + "/\(messageID)", query: [URLQueryItem(name: "format", value: "full")])
     }
 
+    private func metadataURL(_ messageID: String) throws -> URL {
+        let headers = Self.summaryHeaders.map { URLQueryItem(name: "metadataHeaders", value: $0) }
+        return try RequestClient.url(messages + "/\(messageID)", query: [URLQueryItem(name: "format", value: "metadata")] + headers)
+    }
+
     func listMessages(query: String, maxResults: Int, pageToken: String?) async throws -> GmailPage {
+        let list = try await listIDs(query: query, maxResults: maxResults, pageToken: pageToken)
+        guard !list.ids.isEmpty else { return GmailPage(messages: [], nextPageToken: nil) }
+        let details = try await fetchEach(list.ids, skippingMissing: false, url: detailURL, parse: MessageParser.message)
+        return GmailPage(messages: details.compactMap { $0 }, nextPageToken: list.nextPageToken)
+    }
+
+    func listIDs(query: String, maxResults: Int, pageToken: String?) async throws -> GmailIDs {
         var items = [URLQueryItem(name: "q", value: query), URLQueryItem(name: "maxResults", value: String(maxResults))]
         if let pageToken, !pageToken.isEmpty { items.append(URLQueryItem(name: "pageToken", value: pageToken)) }
         let list = try MessageParser.listPage(from: try await requests.send(RequestClient.url(messages, query: items)))
-        guard !list.ids.isEmpty else { return GmailPage(messages: [], nextPageToken: nil) }
-        let details = try await fetchDetails(list.ids)
-        return GmailPage(messages: details.sorted { $0.0 < $1.0 }.map(\.1), nextPageToken: list.nextPageToken)
+        return GmailIDs(ids: list.ids, nextPageToken: list.nextPageToken, estimate: list.estimate)
     }
 
-    private func fetchDetails(_ ids: [String]) async throws -> [(Int, GmailMessage)] {
-        try await withThrowingTaskGroup(of: (Int, GmailMessage).self) { group in
-            var results: [(Int, GmailMessage)] = []
+    func fetchMetadata(ids: [String]) async throws -> [GmailMessage] {
+        let url: @Sendable (String) throws -> URL = { try metadataURL($0) }
+        return try await fetchEach(ids, skippingMissing: true, url: url, parse: MessageParser.message).compactMap { $0 }
+    }
+
+    func fetchLabels(ids: [String]) async throws -> [String: [String]] {
+        let url: @Sendable (String) throws -> URL = { id in
+            try RequestClient.url(messages + "/\(id)", query: [URLQueryItem(name: "format", value: "minimal")])
+        }
+        let found = try await fetchEach(ids, skippingMissing: true, url: url, parse: MessageParser.message)
+        return Dictionary(found.compactMap { $0 }.map { ($0.id, $0.labels) }, uniquingKeysWith: { first, _ in first })
+    }
+
+    func labelChanges(since historyID: String) async throws -> GmailChanges {
+        var ids = Set<String>()
+        var latest = historyID
+        var token: String?
+        repeat {
+            var items = [
+                URLQueryItem(name: "startHistoryId", value: historyID), URLQueryItem(name: "maxResults", value: Self.historyPageSize),
+                URLQueryItem(name: "historyTypes", value: "labelAdded"), URLQueryItem(name: "historyTypes", value: "labelRemoved"),
+            ]
+            if let token { items.append(URLQueryItem(name: "pageToken", value: token)) }
+            let page = try MessageParser.historyPage(from: try await requests.send(RequestClient.url(Self.root + "/history", query: items)))
+            ids.formUnion(page.ids)
+            latest = page.historyID ?? latest
+            token = page.nextPageToken
+        } while token != nil
+        return GmailChanges(ids: ids, historyID: latest)
+    }
+
+    func currentHistoryID() async throws -> String {
+        try MessageParser.profileHistoryID(from: try await requests.send(RequestClient.url(Self.root + "/profile")))
+    }
+
+    private func fetchEach<T: Sendable>(_ ids: [String], skippingMissing: Bool, url: @escaping @Sendable (String) throws -> URL,
+                                        parse: @escaping @Sendable (Data) throws -> T) async throws -> [T?] {
+        try await withThrowingTaskGroup(of: (Int, T?).self) { group in
+            var results = [T?](repeating: nil, count: ids.count)
             var next = 0
             func launch() {
                 let index = next
                 next += 1
-                group.addTask { (index, try await fetchDetail(ids[index])) }
+                group.addTask { (index, try await fetchOne(ids[index], skippingMissing: skippingMissing, url: url, parse: parse)) }
             }
             while next < ids.count, next < policy.maxConcurrentDetails { launch() }
             while let finished = try await group.next() {
-                results.append(finished)
+                results[finished.0] = finished.1
                 if next < ids.count { launch() }
             }
             return results
         }
     }
 
-    private func fetchDetail(_ id: String) async throws -> GmailMessage {
-        let url = try detailURL(id)
+    private func fetchOne<T: Sendable>(_ id: String, skippingMissing: Bool, url: @Sendable (String) throws -> URL,
+                                       parse: @Sendable (Data) throws -> T) async throws -> T? {
+        let target = try url(id)
         var attempt = 1
         while true {
             do {
-                return try MessageParser.message(from: try await requests.send(url))
+                return try parse(try await requests.send(target))
             } catch GoogleFailure.api(_, let fault) where fault.isRetryable && attempt < policy.maxAttempts {
                 try await Task.sleep(for: policy.delay(afterAttempt: attempt))
                 attempt += 1
+            } catch GoogleFailure.api(_, let fault) where skippingMissing && fault.status == Self.missingStatus {
+                return nil
             }
         }
     }

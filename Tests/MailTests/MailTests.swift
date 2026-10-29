@@ -51,11 +51,28 @@ private final class ScriptedStream: ByteStreamPort, @unchecked Sendable {
     func close() {}
 }
 
-private final class TransportDouble: MailTransportPort, PurgePort, @unchecked Sendable {
+private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, EverywhereSearchPort, @unchecked Sendable {
     let calls = Locked<[String]>([])
     let failure = Locked<(any Error)?>(nil)
     let wasSentAnswer = Locked(false)
     let drafts = Locked<[String: Draft]>([:])
+    let corpus = Locked<[String: [MessageSummary]]>([:])
+    let mirrorRanges = Locked<[MailboxRange]>(MailboxRange.allCases)
+    let startValue = Locked<String?>(nil)
+    let searchTotals = Locked(true)
+    let everywhereFolder = Locked<String?>(nil)
+    let folderList = Locked<[Folder]?>(nil)
+    let failingFolders = Locked<Set<String>>([])
+    let failAfterChunks = Locked<Int?>(nil)
+    let chunks = Locked<[Int]>([])
+    let listings = Locked<[(since: Date?, limit: Int?)]>([])
+    let serverFlags = Locked<[String: Set<Flag>]>([:])
+    let cursors = Locked<[String?]>([])
+    let knowns = Locked<[[String]]>([])
+    let holds = Locked<Set<String>>([])
+    let validity = Locked<String?>(nil)
+    let failListing = Locked(false)
+    let waiting = Locked<[CheckedContinuation<Void, Never>]>([])
     let prefix: String
 
     init(prefix: String = "1") {
@@ -69,16 +86,26 @@ private final class TransportDouble: MailTransportPort, PurgePort, @unchecked Se
 
     func listFolders() async throws -> [Folder] {
         try note("listFolders")
-        return [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "Archive", name: "Archive", role: .archive),
-                Folder(id: "Trash", name: "Trash", role: .trash)]
+        return folderList.with { $0 } ?? [Folder(id: "INBOX", name: "INBOX", role: .inbox),
+                                          Folder(id: "Archive", name: "Archive", role: .archive),
+                                          Folder(id: "Trash", name: "Trash", role: .trash)]
     }
 
     func listMessages(folderID: String, query: String?, pageToken: String?, maxResults: Int) async throws -> MessagePage {
         try note("listMessages")
-        let message = MessageSummary(id: prefix + ":1:" + folderID, threadID: "t", subject: "Hello", from: "Anna",
-                                     fromRaw: "Anna <anna@example.com>", toRaw: "me@example.com",
-                                     snippet: "snippet", flags: [], folderIDs: [folderID], messageIDHeader: "<h1@x>")
-        return MessagePage(messages: [message])
+        if failingFolders.with({ $0.contains(folderID) }) { throw MailFailure.timeout }
+        let all = stored(folderID)
+        let found = query.map { needle in all.filter { $0.subject.localizedCaseInsensitiveContains(needle) } } ?? all
+        let start = pageToken.flatMap(Int.init) ?? 0
+        let end = min(found.count, start + maxResults)
+        return MessagePage(messages: Array(found[start..<end]), nextPageToken: end < found.count ? String(end) : nil,
+                           total: searchTotals.with { $0 } ? found.count : nil)
+    }
+
+    func stored(_ folderID: String) -> [MessageSummary] {
+        corpus.with { $0[folderID] } ?? [MessageSummary(
+            id: prefix + ":1:" + folderID, threadID: "t", subject: "Hello", from: "Anna", fromRaw: "Anna <anna@example.com>",
+            toRaw: "me@example.com", snippet: "snippet", flags: [], folderIDs: [folderID], messageIDHeader: "<h1@x>")]
     }
 
     func fetchBody(messageID: String) async throws -> MessageBody {
@@ -110,6 +137,76 @@ private final class TransportDouble: MailTransportPort, PurgePort, @unchecked Se
     func deleteDraft(id: String) async throws { try note("deleteDraft") }
     func sendDraft(id: String) async throws { try note("sendDraft") }
     func wasSent(messageID: String) async throws -> Bool { try note("wasSent"); return wasSentAnswer.with { $0 } }
+    var ranges: [MailboxRange] { mirrorRanges.with { $0 } }
+
+    func offersEverywhere(in folders: [Folder]) -> Bool {
+        everywhereFolder.with { wanted in wanted.map { id in folders.contains { $0.id == id } } ?? false }
+    }
+
+    func startCursor() async throws -> String? {
+        try note("startCursor")
+        return startValue.with { $0 }
+    }
+
+    func searchEverywhere(query: String, pageToken: String?, maxResults: Int) async throws -> MessagePage {
+        try note("searchEverywhere:" + query + ":" + (pageToken ?? ""))
+        let all = corpus.with { $0.filter { $0.key != "Trash" && $0.key != "Spam" }.values.flatMap { $0 } }
+        let found = MirrorEngine.sorted(all.filter { $0.subject.localizedCaseInsensitiveContains(query) })
+        let start = pageToken.flatMap(Int.init) ?? 0
+        let end = min(found.count, start + maxResults)
+        return MessagePage(messages: Array(found[start..<end]), nextPageToken: end < found.count ? String(end) : nil,
+                           total: found.count)
+    }
+
+    private func hold(_ name: String) async {
+        guard holds.with({ $0.contains(name) }) else { return }
+        await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+            waiting.with { $0.append(continuation) }
+        }
+    }
+
+    func release() {
+        holds.with { $0 = [] }
+        let pending = waiting.with { queue -> [CheckedContinuation<Void, Never>] in
+            defer { queue = [] }
+            return queue
+        }
+        pending.forEach { $0.resume() }
+    }
+
+    func listIDs(folderID: String, since: Date?, limit: Int?) async throws -> MirrorListing {
+        try note("listIDs")
+        if failListing.with({ $0 }) { throw MailFailure.timeout }
+        listings.with { $0.append((since, limit)) }
+        await hold("listIDs")
+        let all = stored(folderID)
+        let inside = all.filter { message in since.map { (message.receivedAt ?? .distantFuture) >= $0 } ?? true }
+        let wanted = limit.map { Array(inside.prefix($0)) } ?? inside
+        return MirrorListing(ids: wanted.map(\.id), hasOlder: wanted.count < all.count, validity: validity.with { $0 })
+    }
+
+    func fetchSummaries(folderID: String, ids: [String]) async throws -> [MessageSummary] {
+        try note("fetchSummaries")
+        await hold("fetchSummaries")
+        let done = chunks.with { list -> Int in
+            list.append(ids.count)
+            return list.count
+        }
+        if let limit = failAfterChunks.with({ $0 }), done > limit { throw MailFailure.timeout }
+        let all = stored(folderID)
+        let wanted = Set(ids)
+        return all.filter { wanted.contains($0.id) }
+    }
+
+    func refreshFlags(folderID: String, known: [String], cursor: String?) async throws -> FlagRefresh {
+        try note("refreshFlags")
+        await hold("refreshFlags")
+        cursors.with { $0.append(cursor) }
+        knowns.with { $0.append(known) }
+        let overrides = serverFlags.with { $0 }
+        return FlagRefresh(flags: overrides.filter { known.contains($0.key) }, cursor: "c\(cursors.with { $0.count })")
+    }
+
     func supportsPurge() async throws -> Bool { true }
     func purge(messageID: String) async throws { try note("purge") }
 }
@@ -158,12 +255,27 @@ private struct Rig {
     let events = Broadcast<MailboxEvent>()
     let outbox: OutboxStore
     let mailbox: MailboxStore
+    let chosen: Locked<MailboxRange>
 
-    init() throws {
+    init(range: MailboxRange = .standard, now: @escaping @Sendable () -> Date = { Date() }) throws {
+        let chosen = Locked(range)
+        self.chosen = chosen
         database = try SQLiteStore.inMemory()
         access.transport = transport
         outbox = OutboxStore(access: access, database: database, events: events)
-        mailbox = MailboxStore(access: access, database: database, outbox: outbox, events: events)
+        mailbox = MailboxStore(access: access, database: database, outbox: outbox, events: events, now: now,
+                               range: { _ in chosen.with { $0 } })
+    }
+
+    func fill(_ folder: String, count: Int, from start: Date, step: TimeInterval = -3_600, subject: String = "Note",
+              flags: Set<Flag> = [.seen]) {
+        let messages = (0..<count).map { index in
+            MessageSummary(id: "1:\(index):" + folder, threadID: "t\(index)", subject: subject + " \(index)", from: "Anna",
+                           fromRaw: "Anna <anna@example.com>", toRaw: "me@example.com", snippet: "s",
+                           receivedAt: start.addingTimeInterval(Double(index) * step), flags: flags, folderIDs: [folder],
+                           messageIDHeader: "<m\(index)@x>")
+        }
+        transport.corpus.with { $0[folder] = messages }
     }
 
     func addMailbox(_ id: Inlet.ID, prefix: String) -> TransportDouble {
@@ -411,14 +523,14 @@ final class MailTests: XCTestCase {
         XCTAssertTrue(capability)
     }
 
-    private func scriptedServer(_ answer: @escaping @Sendable (String, String) -> [String]?) -> ScriptedStream {
+    private func scriptedServer(capabilities: String = "", _ answer: @escaping @Sendable (String, String) -> [String]?) -> ScriptedStream {
         let last = Locked("")
         return ScriptedStream(greeting: ["* OK ready"]) { line in
             let tag = line.split(separator: " ").first.map(String.init) ?? ""
             if !line.contains(" ") { return [last.with { $0 } + " OK done"] }
             last.with { $0 = tag }
             if line.contains("AUTHENTICATE") { return ["+ "] }
-            if line.hasSuffix("CAPABILITY") { return ["* CAPABILITY IMAP4rev1 AUTH=PLAIN UIDPLUS", "\(tag) OK done"] }
+            if line.hasSuffix("CAPABILITY") { return ["* CAPABILITY IMAP4rev1 AUTH=PLAIN UIDPLUS" + capabilities, "\(tag) OK done"] }
             return answer(tag, line) ?? ["\(tag) OK done"]
         }
     }
@@ -535,8 +647,8 @@ final class MailTests: XCTestCase {
         let rig = try Rig()
         try await rig.mailbox.refreshFolders("a")
         XCTAssertEqual(rig.mailbox.folders("a").map(\.id), ["INBOX", "Archive", "Trash"])
-        let page = try await rig.mailbox.loadPage("a", folder: "INBOX", query: nil, pageToken: nil)
-        XCTAssertEqual(page.messages.count, 1)
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 1)
         XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").first?.subject, "Hello")
         XCTAssertEqual(rig.mailbox.unreadCount("a"), 1)
         XCTAssertNotNil(rig.mailbox.lastSync("a", folder: "INBOX"))
@@ -551,7 +663,7 @@ final class MailTests: XCTestCase {
     func testMailboxStoreMapsFailuresAndMovesMessages() async throws {
         let rig = try Rig()
         try await rig.mailbox.refreshFolders("a")
-        _ = try await rig.mailbox.loadPage("a", folder: "INBOX", query: nil, pageToken: nil)
+        try await rig.mailbox.refresh("a", folder: "INBOX")
         let landed = try await rig.mailbox.archive("a", messageID: "1:1:INBOX")
         XCTAssertEqual(landed, "1:1:Archive")
         XCTAssertTrue(rig.mailbox.messages("a", folder: "INBOX").isEmpty)
@@ -614,6 +726,24 @@ final class MailTests: XCTestCase {
         await rig.outbox.pass("a")
         XCTAssertTrue(rig.outbox.outbox.isEmpty)
         XCTAssertFalse(rig.transport.calls.with { $0.contains("send") })
+    }
+
+    @MainActor
+    func testQueuedMailLeavesEvenWhenTheMirrorPassFails() async throws {
+        let rig = try Rig()
+        let stock = rig.access.stock(.mailboxes, as: Mailbox.self)
+        stock.apply(inlet: "a", records: [Mailbox(id: "a/INBOX", inlet: "a", name: "INBOX", role: "inbox")], at: Date())
+        rig.transport.failure.with { $0 = MailFailure.connectionClosed }
+        guard case .queued = await rig.outbox.send("a", Draft(to: "x@y.de", subject: "s", body: "b")) else { return XCTFail() }
+        rig.transport.failure.with { $0 = nil }
+        rig.transport.failListing.with { $0 = true }
+        let events = rig.events.stream
+        rig.access.emit(.syncFinished(.mail, "a"))
+        for await event in events {
+            if case .syncFailed("a", _) = event { break }
+        }
+        XCTAssertTrue(rig.outbox.outbox.isEmpty)
+        XCTAssertTrue(rig.transport.calls.with { $0.contains("send") })
     }
 
     @MainActor
@@ -744,8 +874,8 @@ final class MailTests: XCTestCase {
         let rig = try Rig()
         let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
         await state.start()
-        _ = try await rig.mailbox.loadPage("a", folder: "Archive", query: nil, pageToken: nil)
-        _ = try await rig.mailbox.loadPage("a", folder: "Trash", query: nil, pageToken: nil)
+        try await rig.mailbox.refresh("a", folder: "Archive")
+        try await rig.mailbox.refresh("a", folder: "Trash")
         await state.type("Hello")
         XCTAssertEqual(Set(state.crossHits.map(\.id)), ["1:1:INBOX", "1:1:Archive"])
     }
@@ -755,8 +885,8 @@ final class MailTests: XCTestCase {
         let rig = try Rig()
         let events = rig.events.stream
         try await rig.mailbox.refreshFolders("a")
-        _ = try await rig.mailbox.loadPage("a", folder: "INBOX", query: nil, pageToken: nil)
-        _ = try await rig.mailbox.loadPage("a", folder: "INBOX", query: nil, pageToken: nil)
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        try await rig.mailbox.refresh("a", folder: "INBOX")
         rig.events.emit(.syncFinished("end"))
         var seen: [MailboxEvent] = []
         for await event in events {
@@ -764,7 +894,7 @@ final class MailTests: XCTestCase {
             seen.append(event)
         }
         XCTAssertFalse(seen.contains { if case .newMail = $0 { true } else { false } })
-        XCTAssertEqual(seen.filter { $0 == .messagesChanged("a", folder: "INBOX") }.count, 2)
+        XCTAssertEqual(seen.filter { $0 == .messagesChanged("a", folder: "INBOX") }.count, 3)
     }
 
     @MainActor
@@ -932,4 +1062,1057 @@ final class MailTests: XCTestCase {
         XCTAssertEqual(ListWindowEngine.remaining(content: 10_000, offset: 1_000, container: 600, spacer: 4_000), 4_400)
         XCTAssertLessThan(ListWindowEngine.remaining(content: 10_000, offset: 9_400, container: 600, spacer: 4_000), 0)
     }
+
+    private static let epoch = Date(timeIntervalSince1970: 1_800_000_000)
+
+    @MainActor
+    private func mirrored(_ range: MailboxRange = .days30) throws -> Rig {
+        try Rig(range: range, now: { MailTests.epoch })
+    }
+
+    @MainActor
+    private func started(_ rig: Rig) async -> InboxState {
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        return state
+    }
+
+    @MainActor
+    private func wait(_ condition: () -> Bool) async throws {
+        for _ in 0..<100 where !condition() { try await Task.sleep(for: .milliseconds(20)) }
+    }
+
+    func testRangeHasFourStepsAndResolvesToWhatTheMailboxOffers() {
+        XCTAssertEqual(MailboxRange.allCases, [.days30, .days90, .year, .all])
+        XCTAssertEqual(MailboxRange.standard, .days30)
+        XCTAssertNil(MailboxRange.all.cutoff(from: Self.epoch))
+        XCTAssertEqual(MailboxRange.days90.cutoff(from: Self.epoch), Self.epoch.addingTimeInterval(-90 * 86_400))
+        XCTAssertEqual(MailboxRange.all.resolved(in: [.days30, .year]), .days30)
+        XCTAssertEqual(MailboxRange.year.resolved(in: [.days30, .year]), .year)
+        XCTAssertEqual(MailboxRange.all.resolved(in: [.year, .all]), .all)
+        XCTAssertEqual(MailboxRange.days30.resolved(in: [.year]), .year)
+    }
+
+    func testMirrorEnginePlansByIdsAndOrdersByDateThenId() {
+        let plan = MirrorEngine.plan(stored: ["a", "b", "c"], listed: ["d", "b", "a"])
+        XCTAssertEqual(plan, MirrorEngine.Plan(gone: ["c"], unknown: ["d"], known: ["b", "a"]))
+        func message(_ id: String, _ date: Date?) -> MessageSummary {
+            MessageSummary(id: id, subject: id, from: "", receivedAt: date)
+        }
+        let order = MirrorEngine.sorted([message("a", nil), message("b", Self.epoch), message("c", Self.epoch),
+                                         message("d", Self.epoch.addingTimeInterval(5)), message("e", nil)])
+        XCTAssertEqual(order.map(\.id), ["d", "c", "b", "e", "a"])
+        XCTAssertEqual(MirrorEngine.chunks(Array(0..<5), size: 2), [[0, 1], [2, 3], [4]])
+        XCTAssertEqual(MirrorEngine.cutoff(.days30, reach: Self.epoch.addingTimeInterval(-86_400 * 40), now: Self.epoch),
+                       Self.epoch.addingTimeInterval(-86_400 * 40))
+        XCTAssertNil(MirrorEngine.cutoff(.all, reach: Self.epoch, now: Self.epoch))
+        XCTAssertEqual(UIDSetEngine.text([9, 5, 6, 7, 1, 1]), "1,5:7,9")
+    }
+
+    @MainActor
+    func testPassFetchesTheRangeInChunksAndAnnouncesEachChunk() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 1_000, from: Self.epoch)
+        let events = rig.events.stream
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 721)
+        XCTAssertEqual(rig.transport.chunks.with { $0 }, [200, 200, 200, 121])
+        XCTAssertEqual(rig.transport.listings.with { $0.first?.since }, Self.epoch.addingTimeInterval(-30 * 86_400))
+        rig.events.emit(.syncFinished("end"))
+        var changed = 0
+        for await event in events {
+            if event == .syncFinished("end") { break }
+            if event == .messagesChanged("a", folder: "INBOX") { changed += 1 }
+        }
+        XCTAssertGreaterThanOrEqual(changed, 5)
+        XCTAssertTrue(rig.mailbox.canLoadOlder("a", folder: "INBOX"))
+        let ids = rig.mailbox.messages("a", folder: "INBOX").map(\.id)
+        XCTAssertEqual(ids.first, "1:0:INBOX")
+        XCTAssertEqual(ids.last, "1:720:INBOX")
+    }
+
+    @MainActor
+    func testLaterPassFetchesOnlyUnknownIdsDropsGoneOnesAndKeepsOrder() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 200, from: Self.epoch)
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertFalse(rig.mailbox.canLoadOlder("a", folder: "INBOX"))
+        var current = rig.transport.corpus.with { $0["INBOX"] ?? [] }
+        let fresh = MessageSummary(id: "1:new:INBOX", threadID: "n", subject: "New", from: "Ben", receivedAt: Self.epoch.addingTimeInterval(60),
+                                   flags: [], folderIDs: ["INBOX"])
+        current.insert(fresh, at: 0)
+        current.remove(at: 4)
+        rig.transport.corpus.with { $0["INBOX"] = current }
+        rig.transport.chunks.with { $0 = [] }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let page = rig.mailbox.messages("a", folder: "INBOX")
+        XCTAssertEqual(rig.transport.chunks.with { $0 }, [1])
+        XCTAssertEqual(page.count, 200)
+        XCTAssertEqual(page.first?.id, "1:new:INBOX")
+        XCTAssertFalse(page.contains { $0.id == "1:3:INBOX" })
+        XCTAssertEqual(page.map(\.id), MirrorEngine.sorted(page).map(\.id))
+        try await rig.mailbox.loadOlder("a", folder: "INBOX")
+        XCTAssertEqual(rig.transport.chunks.with { $0 }, [1])
+    }
+
+    @MainActor
+    func testIdsDecideNotDatesTiesNilDatesAndMovedOldMailStay() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        func message(_ id: Int, _ date: Date?) -> MessageSummary {
+            MessageSummary(id: "1:\(id):INBOX", threadID: "t", subject: "S\(id)", from: "A", receivedAt: date, flags: [.seen],
+                           folderIDs: ["INBOX"])
+        }
+        let tie = Self.epoch.addingTimeInterval(-100)
+        rig.transport.corpus.with {
+            $0["INBOX"] = [message(5, tie), message(4, tie), message(3, tie), message(9, Self.epoch.addingTimeInterval(-20 * 86_400)),
+                           message(2, nil)]
+        }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let first = rig.mailbox.messages("a", folder: "INBOX")
+        XCTAssertEqual(first.map(\.id), ["1:5:INBOX", "1:4:INBOX", "1:3:INBOX", "1:9:INBOX", "1:2:INBOX"])
+        rig.transport.chunks.with { $0 = [] }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let second = rig.mailbox.messages("a", folder: "INBOX")
+        XCTAssertEqual(second.map(\.id), first.map(\.id))
+        XCTAssertTrue(rig.transport.chunks.with { $0.isEmpty })
+    }
+
+    @MainActor
+    func testFailedPassKeepsEveryChunkFetchedBeforeTheFailure() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 450, from: Self.epoch)
+        rig.transport.failAfterChunks.with { $0 = 2 }
+        do {
+            try await rig.mailbox.refresh("a", folder: "INBOX")
+            XCTFail("must throw")
+        } catch {
+            guard case .provider = error else { return XCTFail() }
+        }
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 400)
+        XCTAssertNotNil(rig.mailbox.lastSync("a", folder: "INBOX"))
+        rig.transport.failAfterChunks.with { $0 = nil }
+        rig.transport.chunks.with { $0 = [] }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let rest = rig.mailbox.messages("a", folder: "INBOX")
+        XCTAssertEqual(rest.count, 450)
+        XCTAssertEqual(rig.transport.chunks.with { $0 }, [50])
+    }
+
+    @MainActor
+    func testOnePassPerFolderAtATimeAndASecondRequestAwaitsIt() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 10, from: Self.epoch)
+        rig.transport.holds.with { $0 = ["listIDs"] }
+        let one = Task { @MainActor in try await rig.mailbox.refresh("a", folder: "INBOX") }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        let two = Task { @MainActor in try await rig.mailbox.refresh("a", folder: "INBOX") }
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertEqual(rig.transport.listings.with { $0.count }, 1)
+        rig.transport.release()
+        try await one.value
+        try await two.value
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 10)
+        XCTAssertEqual(rig.transport.listings.with { $0.count }, 1)
+    }
+
+    @MainActor
+    func testPassNeverOverwritesChangesMadeWhileItRuns() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 5, from: Self.epoch, flags: [])
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let ids = rig.mailbox.messages("a", folder: "INBOX").map(\.id)
+        rig.transport.serverFlags.with { flags in ids.forEach { flags[$0] = [] } }
+        rig.transport.holds.with { $0 = ["refreshFlags"] }
+        let running = Task { @MainActor in try await rig.mailbox.refresh("a", folder: "INBOX") }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        try await rig.mailbox.setFlags("a", messageID: ids[0], add: [.seen], remove: [])
+        try await rig.mailbox.archive("a", messageID: ids[1])
+        rig.transport.release()
+        _ = try await running.value
+        let after = rig.mailbox.messages("a", folder: "INBOX")
+        XCTAssertEqual(after.count, 4)
+        XCTAssertTrue(try XCTUnwrap(after.first { $0.id == ids[0] }).flags.contains(.seen))
+        XCTAssertFalse(after.contains { $0.id == ids[1] })
+    }
+
+    @MainActor
+    func testFlagRefreshAppliesServerFlagsAndPassesTheStoredCursorBack() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 3, from: Self.epoch, flags: [])
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.unreadCount("a"), 3)
+        rig.transport.serverFlags.with { $0["1:1:INBOX"] = [.seen] }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.unreadCount("a"), 2)
+        XCTAssertEqual(rig.transport.cursors.with { $0 }, [nil, "c1"])
+    }
+
+    @MainActor
+    func testSyncOfOneMailboxDoesNotWaitForALongPassOfAnother() async throws {
+        let rig = try mirrored()
+        let other = rig.addMailbox("b", prefix: "2")
+        rig.fill("INBOX", count: 5, from: Self.epoch)
+        let stock = rig.access.stock(.mailboxes, as: Mailbox.self)
+        stock.apply(inlet: "a", records: [Mailbox(id: "a/INBOX", inlet: "a", name: "INBOX", role: "inbox")], at: Date())
+        stock.apply(inlet: "b", records: [Mailbox(id: "b/INBOX", inlet: "b", name: "INBOX", role: "inbox")], at: Date())
+        try await Task.sleep(for: .milliseconds(100))
+        rig.transport.holds.with { $0 = ["listIDs"] }
+        rig.access.emit(.syncFinished(.mail, "a"))
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        rig.access.emit(.syncFinished(.mail, "b"))
+        try await wait { !rig.mailbox.messages("b", folder: "INBOX").isEmpty }
+        XCTAssertEqual(rig.mailbox.messages("b", folder: "INBOX").count, 1)
+        XCTAssertTrue(rig.mailbox.messages("a", folder: "INBOX").isEmpty)
+        XCTAssertEqual(other.calls.with { $0.filter { $0 == "listIDs" }.count }, 1)
+        rig.transport.release()
+        try await wait { !rig.mailbox.messages("a", folder: "INBOX").isEmpty }
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 5)
+    }
+
+    @MainActor
+    func testOlderExtendsTheMirrorByFiveHundredIdsAndKeepsItOnLaterPasses() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 2_000, from: Self.epoch)
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 721)
+        try await rig.mailbox.loadOlder("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 1_221)
+        XCTAssertEqual(rig.transport.listings.with { $0.last?.limit }, 1_221)
+        XCTAssertTrue(rig.mailbox.canLoadOlder("a", folder: "INBOX"))
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let page = rig.mailbox.messages("a", folder: "INBOX")
+        XCTAssertEqual(page.count, 1_221)
+        XCTAssertEqual(rig.transport.listings.with { $0.last?.since }, Self.epoch.addingTimeInterval(-1_220 * 3_600))
+    }
+
+    @MainActor
+    func testChangingTheRangeStartsANewPassAndPrunesWhatFellOut() async throws {
+        let rig = try mirrored(.year)
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 400, from: Self.epoch, step: -86_400)
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 366)
+        rig.chosen.with { $0 = .days30 }
+        let before = rig.transport.listings.with { $0.count }
+        await rig.mailbox.rangeChanged("a")
+        XCTAssertEqual(rig.transport.listings.with { $0.count }, before + 1)
+        XCTAssertEqual(rig.transport.listings.with { $0.last?.since }, Self.epoch.addingTimeInterval(-30 * 86_400))
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 31)
+        rig.chosen.with { $0 = .all }
+        await rig.mailbox.rangeChanged("a")
+        XCTAssertNil(rig.transport.listings.with { $0.last?.since })
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 400)
+        XCTAssertFalse(rig.mailbox.canLoadOlder("a", folder: "INBOX"))
+    }
+
+    @MainActor
+    func testRangeChangeWaitsForARunningPassAndThenRunsItsOwn() async throws {
+        let rig = try mirrored(.year)
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 400, from: Self.epoch, step: -86_400)
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        rig.transport.holds.with { $0 = ["listIDs"] }
+        let running = Task { @MainActor in try await rig.mailbox.refresh("a", folder: "INBOX") }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        rig.chosen.with { $0 = .days30 }
+        let change = Task { @MainActor in await rig.mailbox.rangeChanged("a") }
+        try await Task.sleep(for: .milliseconds(50))
+        rig.transport.release()
+        _ = try await running.value
+        await change.value
+        XCTAssertEqual(rig.transport.listings.with { $0.last?.since }, Self.epoch.addingTimeInterval(-30 * 86_400))
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 31)
+    }
+
+    @MainActor
+    func testChunkEventsReloadOffTheMainActorAtMostAFewTimesAndPresentOnlyTheWindow() async throws {
+        let rig = try mirrored(.year)
+        rig.fill("INBOX", count: 1_000, from: Self.epoch, step: -60)
+        let events = rig.events.stream
+        let state = await started(rig)
+        try await wait { state.summaries.count == 1_000 && state.reloadTask == nil }
+        XCTAssertEqual(state.summaries.count, 1_000)
+        rig.events.emit(.syncFinished("end"))
+        var changed = 0
+        for await event in events {
+            if event == .syncFinished("end") { break }
+            if event == .messagesChanged("a", folder: "INBOX") { changed += 1 }
+        }
+        XCTAssertGreaterThanOrEqual(changed, 6)
+        XCTAssertGreaterThan(state.mirrorSerial, 0)
+        XCTAssertLessThan(state.mirrorSerial, changed)
+        let off = await rig.mailbox.cached("a", folder: "INBOX")
+        XCTAssertEqual(off.map(\.id), rig.mailbox.messages("a", folder: "INBOX").map(\.id))
+        let window = state.rowWindow(limit: 11)
+        XCTAssertEqual(window.items.count, 11)
+        XCTAssertEqual(window.total, 1_000)
+        XCTAssertEqual(window.items.map(\.id), state.rows.prefix(11).map(\.id))
+        XCTAssertEqual(state.rowWindow(limit: 0).items.count, 0)
+        XCTAssertEqual(state.rowWindow(limit: 0).total, 1_000)
+    }
+
+    @MainActor
+    func testPassDeletesOnlyAfterTheReplacementsAreStoredAndRefusesSuspiciousWipes() async throws {
+        let clock = Locked(Self.epoch)
+        let rig = try Rig(range: .days30, now: { clock.with { $0 } })
+        try await rig.mailbox.refreshFolders("a")
+        func stored() -> Set<String> { Set(rig.mailbox.messages("a", folder: "INBOX").map(\.id)) }
+        func refusals(_ store: MailboxStore) async throws -> Int {
+            let events = rig.events.stream
+            try await store.refresh("a", folder: "INBOX")
+            rig.events.emit(.syncFinished("end"))
+            var count = 0
+            for await event in events {
+                if event == .syncFinished("end") { break }
+                if event == .refused("a", folder: "INBOX") { count += 1 }
+            }
+            return count
+        }
+        rig.fill("INBOX", count: 30, from: Self.epoch)
+        rig.transport.validity.with { $0 = "1" }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let old = stored()
+        XCTAssertEqual(old.count, 30)
+        let replacements = (0..<25).map { index in
+            MessageSummary(id: "2:\(index):INBOX", threadID: "n\(index)", subject: "New", from: "A",
+                           receivedAt: Self.epoch.addingTimeInterval(-Double(index) * 3_600), flags: [.seen], folderIDs: ["INBOX"])
+        }
+        rig.transport.corpus.with { $0["INBOX"] = replacements }
+        rig.transport.validity.with { $0 = "2" }
+        rig.transport.failAfterChunks.with { $0 = 0 }
+        do {
+            try await rig.mailbox.refresh("a", folder: "INBOX")
+            XCTFail("must throw")
+        } catch {
+            guard case .provider = error else { return XCTFail() }
+        }
+        XCTAssertEqual(stored(), old)
+        rig.transport.failAfterChunks.with { $0 = nil }
+        rig.transport.corpus.with { $0["INBOX"] = [] }
+        rig.transport.validity.with { $0 = "3" }
+        let first = try await refusals(rig.mailbox)
+        XCTAssertEqual(first, 1)
+        XCTAssertEqual(stored(), old)
+        let again = try await refusals(rig.mailbox)
+        XCTAssertEqual(again, 0)
+        XCTAssertEqual(stored(), old)
+        rig.transport.corpus.with { $0["INBOX"] = replacements }
+        rig.transport.validity.with { $0 = "2" }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(stored(), Set(replacements.map(\.id)))
+        rig.transport.corpus.with { $0["INBOX"] = [] }
+        let empty = try await refusals(rig.mailbox)
+        XCTAssertEqual(empty, 1)
+        XCTAssertEqual(stored().count, 25)
+        let restarted = MailboxStore(access: rig.access, database: rig.database, outbox: rig.outbox, events: rig.events,
+                                     now: { clock.with { $0 } }, range: { _ in .days30 })
+        let confirmed = try await refusals(restarted)
+        XCTAssertEqual(confirmed, 0)
+        XCTAssertTrue(stored().isEmpty)
+        rig.fill("INBOX", count: 25, from: Self.epoch)
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(stored().count, 25)
+        clock.with { $0 = Self.epoch.addingTimeInterval(2 * 365 * 86_400) }
+        let late = try await refusals(rig.mailbox)
+        XCTAssertEqual(late, 1)
+        XCTAssertEqual(stored().count, 25)
+        clock.with { $0 = Self.epoch }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(stored().count, 25)
+    }
+
+    @MainActor
+    func testRefusedWipeKeepsTheListAndReportsOnce() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 25, from: Self.epoch)
+        let state = await started(rig)
+        XCTAssertEqual(state.summaries.count, 25)
+        rig.transport.corpus.with { $0["INBOX"] = [] }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        try await wait { state.toast?.kind == .mirrorRefused }
+        XCTAssertEqual(state.toast?.kind, .mirrorRefused)
+        XCTAssertEqual(state.summaries.count, 25)
+        XCTAssertEqual(state.listState, .loaded)
+    }
+
+    @MainActor
+    func testOlderOfferSurvivesARestart() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 800, from: Self.epoch)
+        try await rig.mailbox.refreshFolders("a")
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertTrue(rig.mailbox.canLoadOlder("a", folder: "INBOX"))
+        let restarted = MailboxStore(access: rig.access, database: rig.database, outbox: rig.outbox, events: rig.events,
+                                     now: { Self.epoch }, range: { _ in .days30 })
+        XCTAssertTrue(restarted.canLoadOlder("a", folder: "INBOX"))
+        rig.fill("INBOX", count: 10, from: Self.epoch)
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let again = MailboxStore(access: rig.access, database: rig.database, outbox: rig.outbox, events: rig.events,
+                                 now: { Self.epoch }, range: { _ in .days30 })
+        XCTAssertFalse(again.canLoadOlder("a", folder: "INBOX"))
+    }
+
+    @MainActor
+    func testNarrowingTheRangeOnAnIdleFolderDropsTheRowsOutsideItWithoutRefusal() async throws {
+        let rig = try mirrored(.all)
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 30, from: Self.epoch.addingTimeInterval(-90 * 86_400))
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 30)
+        let events = rig.events.stream
+        rig.chosen.with { $0 = .days30 }
+        await rig.mailbox.rangeChanged("a")
+        XCTAssertTrue(rig.mailbox.messages("a", folder: "INBOX").isEmpty)
+        rig.events.emit(.syncFinished("end"))
+        var failed = false
+        for await event in events {
+            if event == .syncFinished("end") { break }
+            if case .syncFailed = event { failed = true }
+        }
+        XCTAssertFalse(failed)
+    }
+
+    @MainActor
+    func testRangeChangeShowsTheLoadingStateAndReportsAFailure() async throws {
+        let rig = try mirrored(.year)
+        rig.fill("INBOX", count: 40, from: Self.epoch, step: -86_400)
+        let state = await started(rig)
+        XCTAssertEqual(state.phase, .settled)
+        let events = rig.events.stream
+        rig.chosen.with { $0 = .days30 }
+        rig.transport.holds.with { $0 = ["listIDs"] }
+        let change = Task { @MainActor in await state.rangeChanged("a") }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        XCTAssertEqual(state.phase, .loading)
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        rig.transport.release()
+        await change.value
+        try await wait { state.phase != .settled }
+        XCTAssertNotEqual(state.phase, .loading)
+        XCTAssertNotEqual(state.phase, .settled)
+        rig.events.emit(.syncFinished("end"))
+        var failed = false
+        for await event in events {
+            if event == .syncFinished("end") { break }
+            if case .syncFailed("a", _) = event { failed = true }
+        }
+        XCTAssertTrue(failed)
+        rig.transport.failure.with { $0 = nil }
+        await state.rangeChanged("a")
+        XCTAssertEqual(state.phase, .settled)
+    }
+
+    @MainActor
+    func testRemovingAMailboxCancelsItsRunningPassBeforePurging() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 450, from: Self.epoch)
+        rig.transport.holds.with { $0 = ["fetchSummaries"] }
+        let running = Task { @MainActor in try await rig.mailbox.refresh("a", folder: "INBOX") }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        rig.access.emit(.inletRemoved("a"))
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertFalse(rig.mailbox.passes.isEmpty)
+        rig.transport.release()
+        _ = try await running.value
+        try await wait { rig.mailbox.passes.isEmpty }
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertTrue(rig.mailbox.messages("a", folder: "INBOX").isEmpty)
+        XCTAssertNil(rig.mailbox.lastSync("a", folder: "INBOX"))
+        XCTAssertEqual(rig.transport.chunks.with { $0.count }, 1)
+    }
+
+    @MainActor
+    func testOfferingFollowsWhatEachTransportCanDo() async throws {
+        let imap = try mirrored()
+        XCTAssertEqual(imap.mailbox.ranges("a"), MailboxRange.allCases)
+        XCTAssertFalse(imap.mailbox.canSearchEverywhere("a"))
+        try await imap.mailbox.refreshFolders("a")
+        XCTAssertTrue(imap.mailbox.canSearchEverywhere("a"))
+        XCTAssertFalse(imap.mailbox.canLoadOlder("a", folder: "INBOX"))
+        imap.fill("INBOX", count: 800, from: Self.epoch)
+        try await imap.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertTrue(imap.mailbox.canLoadOlder("a", folder: "INBOX"))
+        let gmail = try mirrored()
+        gmail.transport.everywhereFolder.with { $0 = "ALL" }
+        gmail.transport.folderList.with { $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox)] }
+        try await gmail.mailbox.refreshFolders("a")
+        XCTAssertFalse(gmail.mailbox.canSearchEverywhere("a"))
+        gmail.transport.folderList.with { $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "ALL", name: "ALL", role: .all)] }
+        try await gmail.mailbox.refreshFolders("a")
+        XCTAssertTrue(gmail.mailbox.canSearchEverywhere("a"))
+        gmail.transport.folderList.with { $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox)] }
+        try await gmail.mailbox.refreshFolders("a")
+        XCTAssertFalse(gmail.mailbox.canSearchEverywhere("a"))
+        let lost = try mirrored()
+        lost.access.connected = false
+        XCTAssertEqual(lost.mailbox.ranges("a"), [])
+        XCTAssertFalse(lost.mailbox.canSearchEverywhere("a"))
+        let bare = try Rig()
+        bare.access.transport = SingleFolderDouble()
+        try await bare.mailbox.refreshFolders("a")
+        XCTAssertEqual(bare.mailbox.ranges("a"), [])
+        XCTAssertFalse(bare.mailbox.canSearchEverywhere("a"))
+        XCTAssertFalse(bare.mailbox.canLoadOlder("a", folder: "INBOX"))
+        do {
+            try await bare.mailbox.refresh("a", folder: "INBOX")
+            XCTFail("must throw")
+        } catch {
+            XCTAssertEqual(error, .capabilityMissing("a", .mail))
+        }
+        let mirror = try mirrored()
+        let state = await started(mirror)
+        XCTAssertTrue(state.offersScope)
+        XCTAssertEqual(state.scope, .all)
+        state.searchScope = .here
+        XCTAssertEqual(state.scope, .here)
+    }
+
+    @MainActor
+    func testMeteredMailForwardsOnlyWhatTheBaseCanDo() async throws {
+        struct NoCost: CostPort { func book(_ item: CostItem) {} }
+        let meter = CostMeter(inlet: "a", capability: .mail, cost: NoCost(), clock: { Date() })
+        let plain = TransportDouble()
+        plain.mirrorRanges.with { $0 = [] }
+        XCTAssertEqual(MeteredMail(base: plain, meter: meter).ranges, [])
+        XCTAssertFalse(MeteredMail(base: plain, meter: meter).offersEverywhere(in: [Folder(id: "Archive", name: "A")]))
+        plain.mirrorRanges.with { $0 = MailboxRange.allCases }
+        plain.everywhereFolder.with { $0 = "Archive" }
+        plain.corpus.with { $0["INBOX"] = [MessageSummary(id: "x", subject: "s", from: "f", receivedAt: Self.epoch)] }
+        let metered = MeteredMail(base: plain, meter: meter)
+        XCTAssertEqual(metered.ranges, MailboxRange.allCases)
+        XCTAssertTrue(metered.offersEverywhere(in: [Folder(id: "Archive", name: "A")]))
+        XCTAssertFalse(metered.offersEverywhere(in: [Folder(id: "INBOX", name: "I")]))
+        let listing = try await metered.listIDs(folderID: "INBOX", since: nil, limit: nil)
+        XCTAssertEqual(listing.ids, ["x"])
+        let summaries = try await metered.fetchSummaries(folderID: "INBOX", ids: ["x"])
+        XCTAssertEqual(summaries.count, 1)
+        let refreshed = try await metered.refreshFlags(folderID: "INBOX", known: ["x"], cursor: nil)
+        XCTAssertEqual(refreshed.cursor, "c1")
+        let hits = try await metered.searchEverywhere(query: "s", pageToken: nil, maxResults: 10)
+        XCTAssertEqual(hits.messages.count, 1)
+        let bare = MeteredMail(base: SingleFolderDouble(), meter: meter)
+        do {
+            _ = try await bare.listIDs(folderID: "INBOX", since: nil, limit: nil)
+            XCTFail("must throw")
+        } catch {
+            XCTAssertEqual(error as? MailFailure, .unsupportedCapability("mirror"))
+        }
+    }
+
+    @MainActor
+    func testInboxFollowsTheMirrorSortedAndDropsWhatItLost() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 4, from: Self.epoch)
+        let state = await started(rig)
+        XCTAssertEqual(state.summaries.map(\.id), ["1:0:INBOX", "1:1:INBOX", "1:2:INBOX", "1:3:INBOX"])
+        var current = rig.transport.corpus.with { $0["INBOX"] ?? [] }
+        current.remove(at: 0)
+        current.insert(MessageSummary(id: "1:old:INBOX", threadID: "o", subject: "Old", from: "A",
+                                      receivedAt: Self.epoch.addingTimeInterval(-90 * 60), flags: [], folderIDs: ["INBOX"]), at: 0)
+        rig.transport.corpus.with { $0["INBOX"] = current }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        try await wait { state.summaries.first?.id != "1:0:INBOX" }
+        XCTAssertEqual(state.summaries.map(\.id), ["1:1:INBOX", "1:old:INBOX", "1:2:INBOX", "1:3:INBOX"])
+    }
+
+    @MainActor
+    func testShortListStillOffersOlderMailAndLoadsIt() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 5, from: Self.epoch)
+        let far = (0..<20).map { index in
+            MessageSummary(id: "1:far\(index):INBOX", threadID: "f", subject: "Far", from: "A",
+                           receivedAt: Self.epoch.addingTimeInterval(-Double(100 + index) * 86_400), flags: [.seen], folderIDs: ["INBOX"])
+        }
+        rig.transport.corpus.with { $0["INBOX", default: []] += far }
+        let state = await started(rig)
+        XCTAssertEqual(state.summaries.count, 5)
+        XCTAssertEqual(state.listTail, .older)
+        await state.loadTail()
+        XCTAssertEqual(state.summaries.count, 25)
+        XCTAssertNil(state.listTail)
+        XCTAssertEqual(state.summaries.map(\.id), MirrorEngine.sorted(state.summaries).map(\.id))
+    }
+
+    @MainActor
+    func testFailingOlderLoadKeepsTheListAndShowsAToast() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 1_000, from: Self.epoch)
+        let state = await started(rig)
+        XCTAssertEqual(state.summaries.count, 721)
+        XCTAssertEqual(state.listTail, .older)
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        await state.loadTail()
+        XCTAssertEqual(state.summaries.count, 721)
+        XCTAssertEqual(state.toast?.kind, .olderFailed)
+        XCTAssertEqual(state.listState, .loaded)
+        rig.transport.failure.with { $0 = nil }
+        await state.loadTail()
+        XCTAssertEqual(state.summaries.count, 1_000)
+        XCTAssertNil(state.listTail)
+    }
+
+    @MainActor
+    func testSearchPagesPerFolderSkipsFailingFoldersAndKeepsScopesApart() async throws {
+        let rig = try Rig()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 150, from: Self.epoch, subject: "Offer")
+        rig.fill("Archive", count: 20, from: Self.epoch.addingTimeInterval(-500_000), subject: "Offer")
+        rig.fill("Trash", count: 5, from: Self.epoch, subject: "Offer")
+        let all = try await rig.mailbox.search("a", folder: "INBOX", query: "offer", scope: .all, continuation: nil)
+        XCTAssertEqual(all.messages.count, 120)
+        XCTAssertFalse(all.messages.contains { $0.folderIDs.contains("Trash") })
+        XCTAssertEqual(all.messages.map(\.id), MirrorEngine.sorted(all.messages).map(\.id))
+        XCTAssertEqual(all.continuation, SearchContinuation(tokens: ["INBOX": "100"]))
+        let rest = try await rig.mailbox.search("a", folder: "INBOX", query: "offer", scope: .all, continuation: all.continuation)
+        XCTAssertEqual(rest.messages.count, 50)
+        XCTAssertNil(rest.continuation)
+        let here = try await rig.mailbox.search("a", folder: "Archive", query: "offer", scope: .here, continuation: all.continuation)
+        XCTAssertEqual(here.messages.count, 20)
+        XCTAssertNil(here.continuation)
+        let hereFirst = try await rig.mailbox.search("a", folder: "INBOX", query: "offer", scope: .here, continuation: nil)
+        XCTAssertEqual(hereFirst.continuation, SearchContinuation(tokens: ["INBOX": "100"]))
+        XCTAssertTrue(rig.mailbox.messages("a", folder: "INBOX").isEmpty)
+        rig.transport.failingFolders.with { $0 = ["Archive"] }
+        let partial = try await rig.mailbox.search("a", folder: "INBOX", query: "offer", scope: .all, continuation: nil)
+        XCTAssertEqual(partial.skipped, ["Archive"])
+        XCTAssertEqual(partial.messages.count, 100)
+        rig.transport.failingFolders.with { $0 = ["Archive", "INBOX"] }
+        do {
+            _ = try await rig.mailbox.search("a", folder: "INBOX", query: "offer", scope: .all, continuation: nil)
+            XCTFail("must throw")
+        } catch {
+            guard case .provider = error else { return XCTFail() }
+        }
+    }
+
+    @MainActor
+    func testSearchEverywhereUsesOneQueryAndItsOwnToken() async throws {
+        let rig = try Rig()
+        rig.transport.everywhereFolder.with { $0 = "Archive" }
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 150, from: Self.epoch, subject: "Offer")
+        rig.fill("Spam", count: 3, from: Self.epoch, subject: "Offer")
+        let first = try await rig.mailbox.search("a", folder: "INBOX", query: "offer", scope: .all, continuation: nil)
+        XCTAssertEqual(first.messages.count, 100)
+        XCTAssertEqual(first.continuation, SearchContinuation(tokens: ["*": "100"]))
+        let second = try await rig.mailbox.search("a", folder: "Archive", query: "offer", scope: .all, continuation: first.continuation)
+        XCTAssertEqual(second.messages.count, 50)
+        XCTAssertNil(second.continuation)
+        XCTAssertEqual(rig.transport.calls.with { $0.filter { $0.hasPrefix("searchEverywhere") } },
+                       ["searchEverywhere:offer:", "searchEverywhere:offer:100"])
+        XCTAssertFalse(rig.transport.calls.with { $0.contains("listMessages") })
+    }
+
+    @MainActor
+    func testSubmittedSearchPagesResultsAndLiveTypingStaysLocal() async throws {
+        let rig = try Rig(range: .year, now: { MailTests.epoch })
+        rig.fill("INBOX", count: 150, from: Self.epoch, subject: "Offer")
+        rig.fill("Archive", count: 3, from: Self.epoch.addingTimeInterval(-9_000_000), subject: "Offer")
+        let state = await started(rig)
+        XCTAssertTrue(state.offersScope)
+        await state.submit("offer")
+        XCTAssertEqual(state.summaries.count, 103)
+        XCTAssertEqual(state.listTail, .moreResults)
+        await state.loadTail()
+        XCTAssertEqual(state.summaries.count, 153)
+        XCTAssertEqual(state.summaries.map(\.id), MirrorEngine.sorted(state.summaries).map(\.id))
+        XCTAssertNil(state.listTail)
+        let before = rig.transport.calls.with { $0.count }
+        await state.type("offer 1")
+        XCTAssertEqual(rig.transport.calls.with { $0.count }, before)
+        XCTAssertFalse(state.crossHits.isEmpty)
+        await state.toggleScope()
+        XCTAssertEqual(state.scope, .here)
+        XCTAssertEqual(state.summaries.count, 100)
+        XCTAssertEqual(state.listTail, .moreResults)
+        rig.transport.failingFolders.with { $0 = ["INBOX"] }
+        await state.loadTail()
+        XCTAssertEqual(state.toast?.kind, .moreFailed)
+        XCTAssertEqual(state.summaries.count, 100)
+    }
+
+    @MainActor
+    func testPartialSearchTellsWhichFoldersWereSkipped() async throws {
+        let rig = try Rig()
+        rig.fill("INBOX", count: 3, from: Self.epoch, subject: "Offer")
+        let state = await started(rig)
+        rig.transport.failingFolders.with { $0 = ["Archive"] }
+        await state.submit("offer")
+        XCTAssertEqual(state.toast?.kind, .searchPartial)
+        XCTAssertEqual(state.summaries.count, 3)
+    }
+
+    func testIMAPListsIdsNewestFirstSinceADateAndKnowsOfOlderMail() async throws {
+        let seen = Locked<[String]>([])
+        let stream = scriptedServer { tag, line in
+            seen.with { $0.append(line) }
+            if line.contains("EXAMINE") { return ["* OK [UIDVALIDITY 7] ok", "\(tag) OK done"] }
+            if line.contains("BEFORE") { return ["* SEARCH 1 2", "\(tag) OK done"] }
+            if line.contains("SEARCH") { return ["* SEARCH 5 6 7", "\(tag) OK done"] }
+            return nil
+        }
+        let client = imapClient(stream)
+        XCTAssertEqual(client.ranges, MailboxRange.allCases)
+        let listing = try await client.listIDs(folderID: "INBOX", since: Self.epoch, limit: nil)
+        XCTAssertEqual(listing.ids, ["7:7:INBOX", "7:6:INBOX", "7:5:INBOX"])
+        XCTAssertTrue(listing.hasOlder)
+        let wire = seen.with { $0.joined(separator: "\n") }
+        XCTAssertTrue(wire.contains("UID SEARCH UNDELETED SINCE 14-Jan-2027"))
+        XCTAssertTrue(wire.contains("UID SEARCH UNDELETED BEFORE 14-Jan-2027"))
+        let limited = try await client.listIDs(folderID: "INBOX", since: nil, limit: 2)
+        XCTAssertEqual(limited.ids, ["7:7:INBOX", "7:6:INBOX"])
+        XCTAssertTrue(limited.hasOlder)
+        let everything = try await client.listIDs(folderID: "INBOX", since: nil, limit: nil)
+        XCTAssertEqual(everything.ids.count, 3)
+        XCTAssertFalse(everything.hasOlder)
+    }
+
+    func testIMAPCountsOlderMailWithESEARCHWhenTheServerHasIt() async throws {
+        let seen = Locked<[String]>([])
+        let stream = scriptedServer(capabilities: " ESEARCH") { tag, line in
+            seen.with { $0.append(line) }
+            if line.contains("EXAMINE") { return ["* OK [UIDVALIDITY 7] ok", "\(tag) OK done"] }
+            if line.contains("RETURN (COUNT)") { return ["* ESEARCH (TAG \"\(tag)\") UID COUNT 0", "\(tag) OK done"] }
+            if line.contains("SEARCH") { return ["* SEARCH 5", "\(tag) OK done"] }
+            return nil
+        }
+        let listing = try await imapClient(stream).listIDs(folderID: "INBOX", since: Self.epoch, limit: nil)
+        XCTAssertEqual(listing.ids, ["7:5:INBOX"])
+        XCTAssertFalse(listing.hasOlder)
+        XCTAssertTrue(seen.with { $0.joined().contains("UID SEARCH RETURN (COUNT) UNDELETED BEFORE 14-Jan-2027") })
+    }
+
+    func testIMAPFetchesSummariesForGivenIdsAndFlagsForKnownOnes() async throws {
+        let seen = Locked<[String]>([])
+        let envelope = "ENVELOPE (\"Wed, 17 Jul 1996 02:23:25 -0700 (PDT)\" \"IMAP4rev1 WG mtg\" ((\"Terry Gray\" NIL \"gray\" \"cac.washington.edu\")) ((\"Terry Gray\" NIL \"gray\" \"cac.washington.edu\")) ((\"Terry Gray\" NIL \"gray\" \"cac.washington.edu\")) ((NIL NIL \"imap\" \"cac.washington.edu\")) NIL NIL NIL \"<B27397@cac.washington.edu>\")"
+        let stream = scriptedServer { tag, line in
+            seen.with { $0.append(line) }
+            if line.contains("EXAMINE") { return ["* OK [UIDVALIDITY 7] ok", "\(tag) OK done"] }
+            if line.contains("FETCH") && line.contains("ENVELOPE") {
+                return ["* 1 FETCH (UID 5 FLAGS (\\Seen) INTERNALDATE \"17-Jul-1996 02:44:25 -0700\" RFC822.SIZE 4286 \(envelope) BODYSTRUCTURE (\"TEXT\" \"PLAIN\" (\"CHARSET\" \"US-ASCII\") NIL NIL \"7BIT\" 10 1))",
+                        "\(tag) OK done"]
+            }
+            if line.contains("FETCH") {
+                return ["* 1 FETCH (UID 5 FLAGS (\\Seen \\Flagged))", "* 2 FETCH (UID 6 FLAGS ())", "\(tag) OK done"]
+            }
+            return nil
+        }
+        let client = imapClient(stream)
+        let found = try await client.fetchSummaries(folderID: "INBOX", ids: ["7:5:INBOX", "7:6:INBOX", "8:9:INBOX"])
+        XCTAssertEqual(found.map(\.id), ["7:5:INBOX"])
+        XCTAssertEqual(found.first?.subject, "IMAP4rev1 WG mtg")
+        let refreshed = try await client.refreshFlags(folderID: "INBOX", known: ["7:5:INBOX", "7:6:INBOX", "7:9:INBOX", "8:1:INBOX"],
+                                                      cursor: "ignored")
+        XCTAssertEqual(refreshed.flags, ["7:5:INBOX": [.seen, .flagged], "7:6:INBOX": []])
+        XCTAssertNil(refreshed.cursor)
+        let wire = seen.with { $0.joined(separator: "\n") }
+        XCTAssertTrue(wire.contains("UID FETCH 5:6 (UID FLAGS INTERNALDATE"))
+        XCTAssertTrue(wire.contains("UID FETCH 5:6,9 (UID FLAGS)"))
+    }
+
+    @MainActor
+    func testBogusDatesNeverBecomeTheReachOrANegativeCutoff() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 800, from: Self.epoch)
+        let bogus = MessageSummary(id: "1:bogus:INBOX", threadID: "b", subject: "Bogus", from: "A",
+                                   receivedAt: Date(timeIntervalSince1970: -5_000), flags: [.seen], folderIDs: ["INBOX"])
+        rig.transport.corpus.with { $0["INBOX", default: []].append(bogus) }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        try await rig.mailbox.loadOlder("a", folder: "INBOX")
+        XCTAssertTrue(rig.mailbox.messages("a", folder: "INBOX").contains { $0.id == "1:bogus:INBOX" })
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let since = try XCTUnwrap(rig.transport.listings.with { $0.last?.since })
+        XCTAssertGreaterThanOrEqual(since, MailboxRange.earliest)
+        XCTAssertEqual(since, Self.epoch.addingTimeInterval(-799 * 3_600))
+        XCTAssertEqual(MirrorEngine.cutoff(.days30, reach: Date(timeIntervalSince1970: -5_000), now: Self.epoch), MailboxRange.earliest)
+    }
+
+    @MainActor
+    func testFlagsAreRefreshedForEveryKnownMessageNotJustTheNewest() async throws {
+        let rig = try mirrored(.year)
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 2_500, from: Self.epoch, flags: [.seen])
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.unreadCount("a"), 0)
+        rig.transport.serverFlags.with { $0["1:2499:INBOX"] = [] }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.unreadCount("a"), 1)
+        XCTAssertEqual(rig.transport.knowns.with { $0.last?.count }, 2_500)
+    }
+
+    @MainActor
+    func testTheHistoryCursorIsReadBeforeTheFirstPassListsAnythingAndCoversFetchedMail() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 5, from: Self.epoch)
+        rig.transport.startValue.with { $0 = "s7" }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let order = rig.transport.calls.with { $0.filter { ["startCursor", "listIDs", "fetchSummaries", "refreshFlags"].contains($0) } }
+        XCTAssertEqual(order, ["startCursor", "listIDs", "fetchSummaries", "refreshFlags"])
+        XCTAssertEqual(rig.transport.cursors.with { $0 }, ["s7"])
+        XCTAssertEqual(rig.transport.knowns.with { $0.first?.count }, 5)
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.transport.cursors.with { $0 }, ["s7", "c1"])
+        XCTAssertEqual(rig.transport.calls.with { $0.filter { $0 == "startCursor" }.count }, 1)
+    }
+
+    @MainActor
+    func testSkippedFoldersAreRetriedWhenMoreResultsAreLoaded() async throws {
+        let rig = try Rig()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 150, from: Self.epoch, subject: "Offer")
+        rig.fill("Archive", count: 20, from: Self.epoch.addingTimeInterval(-500_000), subject: "Offer")
+        rig.transport.failingFolders.with { $0 = ["Archive"] }
+        let first = try await rig.mailbox.search("a", folder: "INBOX", query: "offer", scope: .all, continuation: nil)
+        XCTAssertEqual(first.skipped, ["Archive"])
+        XCTAssertEqual(first.continuation, SearchContinuation(tokens: ["INBOX": "100", "Archive": ""]))
+        XCTAssertNil(first.total)
+        rig.transport.failingFolders.with { $0 = [] }
+        let second = try await rig.mailbox.search("a", folder: "INBOX", query: "offer", scope: .all, continuation: first.continuation)
+        XCTAssertEqual(second.messages.count, 70)
+        XCTAssertTrue(second.skipped.isEmpty)
+        XCTAssertNil(second.continuation)
+    }
+
+    @MainActor
+    func testSearchHeaderCountUsesTheServersTotalWhenTheProviderGivesOne() async throws {
+        let rig = try Rig(range: .year, now: { MailTests.epoch })
+        rig.fill("INBOX", count: 150, from: Self.epoch, subject: "Offer")
+        rig.fill("Archive", count: 3, from: Self.epoch.addingTimeInterval(-9_000_000), subject: "Offer")
+        let state = await started(rig)
+        let direct = try await rig.mailbox.search("a", folder: "INBOX", query: "offer", scope: .all, continuation: nil)
+        XCTAssertEqual(direct.total, 153)
+        XCTAssertEqual(state.resultCount(loaded: 7), 7)
+        await state.submit("offer")
+        XCTAssertEqual(state.summaries.count, 103)
+        XCTAssertEqual(state.resultCount(loaded: state.summaries.count), 153)
+        await state.loadTail()
+        XCTAssertEqual(state.resultCount(loaded: state.summaries.count), 153)
+        state.filter = .unread
+        XCTAssertEqual(state.resultCount(loaded: 4), 4)
+        state.filter = .all
+        await state.type("offer 1")
+        XCTAssertEqual(state.resultCount(loaded: 9), 9)
+        await state.submit("")
+        XCTAssertEqual(state.resultCount(loaded: 5), 5)
+        rig.transport.searchTotals.with { $0 = false }
+        await state.submit("offer")
+        XCTAssertEqual(state.resultCount(loaded: state.summaries.count), state.summaries.count)
+    }
+
+    @MainActor
+    func testEverywhereSearchReportsItsTotal() async throws {
+        let rig = try Rig()
+        rig.transport.everywhereFolder.with { $0 = "Archive" }
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 150, from: Self.epoch, subject: "Offer")
+        let page = try await rig.mailbox.search("a", folder: "INBOX", query: "offer", scope: .all, continuation: nil)
+        XCTAssertEqual(page.total, 150)
+        let next = try await rig.mailbox.search("a", folder: "INBOX", query: "offer", scope: .all, continuation: page.continuation)
+        XCTAssertEqual(next.messages.count, 50)
+    }
+
+    @MainActor
+    func testFolderSwitchAndAccountSwitchShowTheLoadingPlaceholderUntilTheOffMainReadLands() async throws {
+        let rig = try mirrored()
+        let other = rig.addMailbox("b", prefix: "2")
+        rig.fill("INBOX", count: 3, from: Self.epoch)
+        rig.fill("Archive", count: 2, from: Self.epoch)
+        let state = await started(rig)
+        try await rig.mailbox.refreshFolders("b")
+        try await rig.mailbox.refresh("b", folder: "INBOX")
+        try await Task.sleep(for: .milliseconds(300))
+        XCTAssertEqual(other.calls.with { $0.filter { $0 == "listIDs" }.count }, 1)
+        XCTAssertEqual(state.summaries.map(\.id), ["1:0:INBOX", "1:1:INBOX", "1:2:INBOX"])
+        let gate = DispatchSemaphore(value: 0)
+        let held = DispatchSemaphore(value: 0)
+        let database = rig.database
+        try await Task.sleep(for: .milliseconds(300))
+        Thread.detachNewThread {
+            try? database.write { _ in
+                held.signal()
+                _ = gate.wait(timeout: .now() + 5)
+            }
+        }
+        Self.block(on: held)
+        let switching = Task { @MainActor in await state.selectFolder("Archive") }
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertEqual(state.selectedFolder, "Archive")
+        XCTAssertTrue(state.summaries.isEmpty)
+        XCTAssertEqual(state.listState, .loading)
+        gate.signal()
+        await switching.value
+        XCTAssertEqual(state.summaries.map(\.id), ["1:0:Archive", "1:1:Archive"])
+        XCTAssertTrue(state.swapAccount("b"))
+        XCTAssertTrue(state.summaries.isEmpty)
+        XCTAssertEqual(state.phase, .loading)
+        XCTAssertEqual(state.listState, .loading)
+        try await wait { state.phase == .settled }
+        XCTAssertEqual(state.summaries.map(\.id), ["2:1:INBOX"])
+    }
+
+    @MainActor
+    func testThreeThousandMessagesAreReadOffMainAndPresentedInAWindow() async throws {
+        let rig = try mirrored(.all)
+        rig.fill("INBOX", count: 3_000, from: Self.epoch, step: -3_000)
+        let state = await started(rig)
+        try await wait { state.summaries.count == 3_000 && state.reloadTask == nil }
+        XCTAssertEqual(state.summaries.count, 3_000)
+        let began = Date()
+        let direct = rig.mailbox.messages("a", folder: "INBOX")
+        let blocking = Date().timeIntervalSince(began)
+        XCTAssertEqual(direct.count, 3_000)
+        XCTAssertGreaterThan(blocking, 0.005)
+        let ticks = Locked<Double>(0)
+        let running = Locked(true)
+        let ticker = Task { @MainActor in
+            while running.with({ $0 }) {
+                let start = Date()
+                try? await Task.sleep(for: .milliseconds(1))
+                ticks.with { $0 = max($0, Date().timeIntervalSince(start)) }
+            }
+        }
+        try await Task.sleep(for: .milliseconds(20))
+        ticks.with { $0 = 0 }
+        let read = await rig.mailbox.cached("a", folder: "INBOX")
+        running.with { $0 = false }
+        await ticker.value
+        XCTAssertEqual(read.count, 3_000)
+        XCTAssertLessThan(ticks.with { $0 }, blocking * 0.75)
+        let shown = Date()
+        let window = state.rowWindow(limit: 61)
+        let building = Date().timeIntervalSince(shown)
+        XCTAssertEqual(window.items.count, 61)
+        XCTAssertEqual(window.total, 3_000)
+        XCTAssertLessThan(building, 0.1)
+    }
+
+    func testIMAPReadsASearchReplyLargerThanOneMebibyte() async throws {
+        let uids = Array(1...190_000)
+        let reply = "* SEARCH " + uids.map(String.init).joined(separator: " ")
+        XCTAssertGreaterThan(reply.utf8.count, 1_048_576)
+        let stream = scriptedServer { tag, line in
+            if line.contains("EXAMINE") { return ["* OK [UIDVALIDITY 7] ok", "\(tag) OK done"] }
+            if line.contains("SEARCH") { return [reply, "\(tag) OK done"] }
+            return nil
+        }
+        let listing = try await imapClient(stream).listIDs(folderID: "INBOX", since: nil, limit: 3)
+        XCTAssertEqual(listing.ids, ["7:190000:INBOX", "7:189999:INBOX", "7:189998:INBOX"])
+        XCTAssertTrue(listing.hasOlder)
+    }
+
+    func testIMAPSearchFallsBackWithoutCharsetWhenTheServerRefusesIt() async throws {
+        let seen = Locked<[String]>([])
+        let envelope = "ENVELOPE (\"Wed, 17 Jul 1996 02:23:25 -0700 (PDT)\" \"Kaese\" ((\"Terry Gray\" NIL \"gray\" \"cac.washington.edu\")) ((\"Terry Gray\" NIL \"gray\" \"cac.washington.edu\")) ((\"Terry Gray\" NIL \"gray\" \"cac.washington.edu\")) ((NIL NIL \"imap\" \"cac.washington.edu\")) NIL NIL NIL \"<B1@cac.washington.edu>\")"
+        let stream = scriptedServer { tag, line in
+            seen.with { $0.append(line) }
+            if line.contains("EXAMINE") { return ["* OK [UIDVALIDITY 7] ok", "\(tag) OK done"] }
+            if line.contains("SEARCH"), line.contains("CHARSET") { return ["\(tag) NO [BADCHARSET (US-ASCII)] charset not supported"] }
+            if line.contains("SEARCH") { return line.hasSuffix("}") ? ["+ go", "* SEARCH 5 6"] : ["* SEARCH 5 6", "\(tag) OK done"] }
+            if line.contains("FETCH") {
+                return ["* 1 FETCH (UID 5 FLAGS (\\Seen) INTERNALDATE \"17-Jul-1996 02:44:25 -0700\" RFC822.SIZE 1 \(envelope) BODYSTRUCTURE (\"TEXT\" \"PLAIN\" (\"CHARSET\" \"US-ASCII\") NIL NIL \"7BIT\" 10 1))",
+                        "\(tag) OK done"]
+            }
+            return nil
+        }
+        let page = try await imapClient(stream).listMessages(folderID: "INBOX", query: "K\u{E4}se", pageToken: nil, maxResults: 10)
+        XCTAssertEqual(page.total, 2)
+        XCTAssertFalse(page.messages.isEmpty)
+        let searches = seen.with { $0.filter { $0.contains("SEARCH") } }
+        XCTAssertEqual(searches.count, 2)
+        XCTAssertTrue(searches[0].contains("CHARSET UTF-8"))
+        XCTAssertFalse(searches[1].contains("CHARSET"))
+    }
+
+    @MainActor
+    func testUIDValidityChangeEndToEndOverTheScriptedIMAPServer() async throws {
+        let validity = Locked(7)
+        let uids = Locked<[Int]>(Array(1...25))
+        let envelope = { @Sendable (uid: Int) in
+            "ENVELOPE (\"Fri, 15 Jan 2027 08:00:00 +0000\" \"S\(uid)\" ((\"A\" NIL \"a\" \"x.test\")) ((\"A\" NIL \"a\" \"x.test\")) ((\"A\" NIL \"a\" \"x.test\")) ((NIL NIL \"me\" \"x.test\")) NIL NIL NIL \"<m\(uid)@x.test>\")"
+        }
+        let stream = scriptedServer { tag, line in
+            if line.contains("LIST") { return ["* LIST (\\HasNoChildren) \"/\" \"INBOX\"", "\(tag) OK done"] }
+            if line.contains("EXAMINE") { return ["* OK [UIDVALIDITY \(validity.with { $0 })] ok", "\(tag) OK done"] }
+            if line.contains("SEARCH") {
+                if line.contains("BEFORE") { return ["* SEARCH", "\(tag) OK done"] }
+                return ["* SEARCH " + uids.with { $0 }.map(String.init).joined(separator: " "), "\(tag) OK done"]
+            }
+            if line.contains("FETCH") {
+                let listed = uids.with { $0 }
+                if line.contains("ENVELOPE") {
+                    return listed.enumerated().map { index, uid in
+                        "* \(index + 1) FETCH (UID \(uid) FLAGS (\\Seen) INTERNALDATE \"15-Jan-2027 08:00:00 +0000\" RFC822.SIZE 1 \(envelope(uid)) BODYSTRUCTURE (\"TEXT\" \"PLAIN\" (\"CHARSET\" \"US-ASCII\") NIL NIL \"7BIT\" 10 1))"
+                    } + ["\(tag) OK done"]
+                }
+                return listed.enumerated().map { "* \($0.offset + 1) FETCH (UID \($0.element) FLAGS (\\Seen))" } + ["\(tag) OK done"]
+            }
+            return nil
+        }
+        let rig = try Rig(range: .days30, now: { MailTests.epoch })
+        rig.access.transport = imapClient(stream)
+        try await rig.mailbox.refreshFolders("a")
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let first = Set(rig.mailbox.messages("a", folder: "INBOX").map(\.id))
+        XCTAssertEqual(first.count, 25)
+        XCTAssertTrue(first.allSatisfy { $0.hasPrefix("7:") })
+        validity.with { $0 = 8 }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let second = Set(rig.mailbox.messages("a", folder: "INBOX").map(\.id))
+        XCTAssertEqual(second.count, 25)
+        XCTAssertTrue(second.allSatisfy { $0.hasPrefix("8:") })
+        validity.with { $0 = 9 }
+        uids.with { $0 = [] }
+        let events = rig.events.stream
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        rig.events.emit(.syncFinished("end"))
+        var refused = 0
+        for await event in events {
+            if event == .syncFinished("end") { break }
+            if event == .refused("a", folder: "INBOX") { refused += 1 }
+        }
+        XCTAssertEqual(refused, 1)
+        XCTAssertEqual(Set(rig.mailbox.messages("a", folder: "INBOX").map(\.id)), second)
+    }
+
+    private static func block(on semaphore: DispatchSemaphore) {
+        semaphore.wait()
+    }
+
+    private func imapClient(_ stream: ScriptedStream) -> IMAPSMTPClient {
+        let settings = ServerSettings(host: "h", port: 993, security: .ssl, username: "u")
+        let account = Account(id: "a", displayName: "Me", address: "me@example.com", incoming: settings, outgoing: settings)
+        return IMAPSMTPClient(account: account, password: { "s" }, opener: { _, _, _ in stream })
+    }
+}
+
+private final class SingleFolderDouble: MailTransportPort, @unchecked Sendable {
+    func listFolders() async throws -> [Folder] { [Folder(id: "INBOX", name: "INBOX", role: .inbox)] }
+    func listMessages(folderID: String, query: String?, pageToken: String?, maxResults: Int) async throws -> MessagePage {
+        MessagePage(messages: [])
+    }
+    func fetchBody(messageID: String) async throws -> MessageBody { MessageBody(text: nil, html: nil) }
+    func send(_ draft: Draft) async throws {}
+    func setFlags(messageID: String, add: Set<Flag>, remove: Set<Flag>) async throws {}
+    func archive(messageID: String) async throws {}
+    func move(messageID: String, toFolderID: String) async throws {}
+    func trash(messageID: String) async throws {}
+    func markSpam(messageID: String) async throws {}
+    func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data { Data() }
+    func fetchThread(messageID: String, threadID: String) async throws -> [MessageSummary] { [] }
+    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> String { "" }
+    func fetchDraft(messageID: String) async throws -> StoredDraft { StoredDraft(id: messageID, draft: Draft(subject: "", body: "")) }
+    func deleteDraft(id: String) async throws {}
+    func sendDraft(id: String) async throws {}
+    func wasSent(messageID: String) async throws -> Bool { false }
 }

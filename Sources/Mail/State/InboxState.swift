@@ -42,9 +42,15 @@ public final class InboxState {
     @ObservationIgnored var sendAfterSave: Set<UUID> = []
 
     var phase: LoadPhase = .settled
+    var searchContinuation: SearchContinuation?
+    var searchTotal: Int?
+    var mirrorSerial = 0
     var generation = 0
     @ObservationIgnored var eventTask: Task<Void, Never>?
     @ObservationIgnored var searchTask: Task<Void, Never>?
+    @ObservationIgnored var reloadTask: Task<Void, Never>?
+    @ObservationIgnored var pendingReloads: [(inlet: Inlet.ID, folder: String)] = []
+    @ObservationIgnored var readSerials: [String: Int] = [:]
 
     let clock: @Sendable () -> Date
 
@@ -72,13 +78,34 @@ public final class InboxState {
     }
 
     public var rows: [ListEntry] {
+        listed(limit: Int.max).entries
+    }
+
+    func listed(limit: Int) -> (entries: [ListEntry], total: Int) {
         var counts: [String: Int] = [:]
-        for summary in summaries where !summary.threadID.isEmpty { counts[summary.threadID, default: 0] += 1 }
-        let needle = localNeedle
-        return (crossActive ? crossHits : summaries).filter { filter.matches($0) && (needle.isEmpty || Self.contains($0, needle)) }.map {
-            ListEntry(summary: $0, selected: $0.id == selectedMessage,
-                      threadCount: $0.threadID.isEmpty ? 1 : counts[$0.threadID, default: 1])
+        if limit > 0 {
+            for summary in summaries where !summary.threadID.isEmpty { counts[summary.threadID, default: 0] += 1 }
         }
+        let needle = localNeedle
+        var entries: [ListEntry] = []
+        var total = 0
+        for summary in crossActive ? crossHits : summaries where shown(summary, needle) {
+            total += 1
+            if entries.count < limit {
+                entries.append(ListEntry(summary: summary, selected: summary.id == selectedMessage,
+                                         threadCount: summary.threadID.isEmpty ? 1 : counts[summary.threadID, default: 1]))
+            }
+        }
+        return (entries, total)
+    }
+
+    var hasRows: Bool {
+        let needle = localNeedle
+        return (crossActive ? crossHits : summaries).contains { shown($0, needle) }
+    }
+
+    private func shown(_ summary: MessageSummary, _ needle: String) -> Bool {
+        filter.matches(summary) && (needle.isEmpty || Self.contains(summary, needle))
     }
 
     var localNeedle: String {
@@ -87,7 +114,7 @@ public final class InboxState {
 
     var crossActive: Bool {
         let needle = localNeedle
-        return searchScope == .all && !needle.isEmpty && crossInlet == selectedInlet && !crossQuery.isEmpty
+        return scope == .all && !needle.isEmpty && crossInlet == selectedInlet && !crossQuery.isEmpty
             && needle.hasPrefix(crossQuery)
     }
 
@@ -118,11 +145,11 @@ public final class InboxState {
         case .settled: break
         }
         let folder = selectedFolder ?? ""
-        if crossActive { return rows.isEmpty ? .emptySearch(query: typed, folder: folder) : .loaded }
+        if crossActive { return hasRows ? .loaded : .emptySearch(query: typed, folder: folder) }
         if summaries.isEmpty {
             return query.isEmpty ? .empty(folder: folder) : .emptySearch(query: query, folder: folder)
         }
-        if rows.isEmpty { return localNeedle.isEmpty ? .noFilterMatch : .emptySearch(query: typed, folder: folder) }
+        if !hasRows { return localNeedle.isEmpty ? .noFilterMatch : .emptySearch(query: typed, folder: folder) }
         return .loaded
     }
 
@@ -198,9 +225,24 @@ public final class InboxState {
         overview.open = false
         overview.hot = nil
         summaries = []
+        searchContinuation = nil
+        searchTotal = nil
         phase = .settled
         loadFoldersFromMailbox()
-        if let id, let folder = selectedFolder { summaries = mailbox.messages(id, folder: folder) }
+        if let id, let folder = selectedFolder {
+            phase = .loading
+            showCached(inlet: id, folder: folder)
+        }
+    }
+
+    private func showCached(inlet: Inlet.ID, folder: String) {
+        let mine = generation
+        Task { [weak self] in
+            guard let self, let list = await self.read(inlet, folder), mine == self.generation else { return }
+            self.summaries = list
+            self.mirrorSerial += 1
+            if self.phase == .loading { self.phase = .settled }
+        }
     }
 
     @discardableResult
@@ -217,6 +259,7 @@ public final class InboxState {
 
     public func selectFolder(_ id: String) async {
         guard selectedInlet != nil else { return }
+        if id != selectedFolder { summaries = [] }
         selectedFolder = id
         query = ""
         typed = ""
@@ -251,6 +294,8 @@ public final class InboxState {
         }
         generation += 1
         let mine = generation
+        searchContinuation = nil
+        searchTotal = nil
         summaries = scoped(mailbox.searchLocal(inlet, query: trimmed), folder: folder)
         phase = .loading
         await fetch(inlet: inlet, folder: folder, query: trimmed, generation: mine)
@@ -264,7 +309,7 @@ public final class InboxState {
             if !query.isEmpty { await submit("") }
             return
         }
-        guard searchScope == .all, let inlet = selectedInlet else { return }
+        guard scope == .all, let inlet = selectedInlet else { return }
         let needle = typed
         let hidden = Set(folders.filter { $0.role == .spam || $0.role == .trash }.map(\.id))
         let hits = await mailbox.searchOpen(inlet, query: needle, excluding: hidden)
@@ -282,6 +327,70 @@ public final class InboxState {
         }
         searchTask = task
         await task.value
+    }
+
+    public var offersScope: Bool {
+        selectedInlet.map(mailbox.canSearchEverywhere) ?? false
+    }
+
+    public var scope: SearchScope {
+        searchScope == .all && offersScope ? .all : .here
+    }
+
+    public func ranges(_ inlet: Inlet.ID) -> [MailboxRange] {
+        mailbox.ranges(inlet)
+    }
+
+    public func rangeChanged(_ inlet: Inlet.ID) async {
+        let watching = inlet == selectedInlet
+        let mine = generation
+        if watching { phase = .loading }
+        await mailbox.rangeChanged(inlet)
+        guard watching, mine == generation else { return }
+        if phase == .loading { phase = .settled }
+        if let folder = selectedFolder { await reloadNow(inlet: inlet, folder: folder) }
+    }
+
+    public func resultCount(loaded: Int) -> Int {
+        guard let searchTotal, !query.isEmpty, localNeedle.isEmpty, filter == .all else { return loaded }
+        return max(searchTotal, loaded)
+    }
+
+    public var listTail: ListTail? {
+        _ = mirrorSerial
+        guard phase == .settled, let inlet = selectedInlet, let folder = selectedFolder else { return nil }
+        if !query.isEmpty { return searchContinuation == nil ? nil : .moreResults }
+        return mailbox.canLoadOlder(inlet, folder: folder) ? .older : nil
+    }
+
+    public func loadTail() async {
+        guard let tail = listTail, let inlet = selectedInlet, let folder = selectedFolder else { return }
+        let mine = generation
+        phase = .loadingMore
+        switch tail {
+        case .older:
+            do {
+                try await mailbox.loadOlder(inlet, folder: folder)
+            } catch {
+                post(.olderFailed)
+            }
+            await reloadNow(inlet: inlet, folder: folder)
+        case .moreResults:
+            let text = query
+            do {
+                let page = try await mailbox.search(inlet, folder: folder, query: text, scope: scope, continuation: searchContinuation)
+                if mine == generation, text == query {
+                    let known = Set(summaries.map(\.id))
+                    summaries = MirrorEngine.sorted(summaries + page.messages.filter { !known.contains($0.id) })
+                    searchContinuation = page.continuation
+                    if !page.skipped.isEmpty { post(.searchPartial) }
+                }
+            } catch {
+                post(.moreFailed)
+            }
+        }
+        if mine == generation, phase == .loadingMore { phase = .settled }
+        mirrorSerial += 1
     }
 
     func fail(_ error: HubFailure, inlet: Inlet.ID, folder: String) {
@@ -316,8 +425,11 @@ public final class InboxState {
         guard let folder = selectedFolder else { return }
         generation += 1
         let mine = generation
-        if query.isEmpty { summaries = mailbox.messages(inlet, folder: folder) }
         phase = .loading
+        if query.isEmpty, let list = await read(inlet, folder), mine == generation {
+            summaries = list
+            mirrorSerial += 1
+        }
         await checkPurge()
         guard mine == generation else { return }
         await fetch(inlet: inlet, folder: folder, query: query.isEmpty ? nil : query, generation: mine)
@@ -325,14 +437,21 @@ public final class InboxState {
 
     func fetch(inlet: Inlet.ID, folder: String, query: String?, generation mine: Int) async {
         do {
-            let page = try await mailbox.loadPage(inlet, folder: folder, query: query, pageToken: nil)
-            guard mine == generation else { return }
-            if let query, searchScope == .all {
-                let known = Set(page.messages.map(\.id))
-                summaries = page.messages + scoped(mailbox.searchLocal(inlet, query: query), folder: folder)
-                    .filter { !known.contains($0.id) }
-            } else {
+            if let query {
+                let page = try await mailbox.search(inlet, folder: folder, query: query, scope: scope, continuation: nil)
+                guard mine == generation else { return }
                 summaries = page.messages
+                searchContinuation = page.continuation
+                searchTotal = page.total
+                if !page.skipped.isEmpty { post(.searchPartial) }
+            } else {
+                try await mailbox.refresh(inlet, folder: folder)
+                guard mine == generation else { return }
+                let list = await read(inlet, folder)
+                guard mine == generation else { return }
+                if let list { summaries = list }
+                searchContinuation = nil
+                searchTotal = nil
             }
             phase = .settled
         } catch {
@@ -374,18 +493,19 @@ public final class InboxState {
         case .foldersChanged(let inlet):
             if inlet == selectedInlet { loadFoldersFromMailbox() }
         case .messagesChanged(let inlet, let folder):
-            mergeMirror(inlet: inlet, folder: folder)
-            refreshCards(inlet: inlet, folder: folder)
+            scheduleReload(inlet: inlet, folder: folder)
             refreshCounts()
         case .newMail(let inlet, _):
             if let folder = selectedFolder, inlet == selectedInlet,
                folders.first(where: { $0.id == folder })?.role == .inbox {
-                mergeMirror(inlet: inlet, folder: folder)
+                scheduleReload(inlet: inlet, folder: folder)
             }
             refreshCounts()
         case .outboxChanged:
             outbox = outboxPort.outbox
             reconcileDrafts()
+        case .refused(let inlet, _):
+            if inlet == selectedInlet { post(.mirrorRefused) }
         case .syncFailed(let inlet, let hint):
             guard inlet == selectedInlet, phase == .settled else { return }
             if hint.text == MessageTextKey.offline.rawValue, let folder = selectedFolder {
@@ -402,19 +522,53 @@ public final class InboxState {
         }
     }
 
-    func mergeMirror(inlet: Inlet.ID, folder: String) {
-        guard inlet == selectedInlet, folder == selectedFolder, query.isEmpty else { return }
-        let mirror = mailbox.messages(inlet, folder: folder)
-        var byID = Dictionary(mirror.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
-        var merged = summaries.map { byID.removeValue(forKey: $0.id) ?? $0 }
-        let fresh = mirror.filter { byID[$0.id] != nil }
-        merged.insert(contentsOf: fresh, at: 0)
-        summaries = merged
+    func scheduleReload(inlet: Inlet.ID, folder: String) {
+        guard wantsReload(inlet: inlet, folder: folder) else { return }
+        if !pendingReloads.contains(where: { $0.inlet == inlet && $0.folder == folder }) {
+            pendingReloads.append((inlet, folder))
+        }
+        guard reloadTask == nil else { return }
+        reloadTask = Task { [weak self] in await self?.drainReloads() }
     }
 
-    func refreshCards(inlet: Inlet.ID, folder: String) {
+    private func drainReloads() async {
+        while !pendingReloads.isEmpty {
+            let batch = pendingReloads
+            pendingReloads = []
+            for item in batch { await reloadNow(inlet: item.inlet, folder: item.folder) }
+            try? await Task.sleep(for: MirrorEngine.reloadInterval)
+        }
+        reloadTask = nil
+    }
+
+    private func wantsReload(inlet: Inlet.ID, folder: String) -> Bool {
+        showsMirror(inlet: inlet, folder: folder) || cards.contains { $0.inlet == inlet }
+    }
+
+    private func showsMirror(inlet: Inlet.ID, folder: String) -> Bool {
+        inlet == selectedInlet && folder == selectedFolder && query.isEmpty
+    }
+
+    func reloadNow(inlet: Inlet.ID, folder: String) async {
+        guard wantsReload(inlet: inlet, folder: folder), let list = await read(inlet, folder) else { return }
+        if showsMirror(inlet: inlet, folder: folder) {
+            summaries = list
+            mirrorSerial += 1
+        }
+        refreshCards(inlet: inlet, from: list)
+    }
+
+    func read(_ inlet: Inlet.ID, _ folder: String) async -> [MessageSummary]? {
+        let key = inlet + "\n" + folder
+        let mine = (readSerials[key] ?? 0) + 1
+        readSerials[key] = mine
+        let list = await mailbox.cached(inlet, folder: folder)
+        return readSerials[key] == mine ? list : nil
+    }
+
+    func refreshCards(inlet: Inlet.ID, from list: [MessageSummary]) {
         guard cards.contains(where: { $0.inlet == inlet }) else { return }
-        let mirror = Dictionary(mailbox.messages(inlet, folder: folder).map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        let mirror = Dictionary(list.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         for index in cards.indices where cards[index].inlet == inlet {
             if let fresh = mirror[cards[index].id] { cards[index].summary = fresh }
         }
@@ -443,7 +597,7 @@ public final class InboxState {
     }
 
     func scoped(_ list: [MessageSummary], folder: String) -> [MessageSummary] {
-        switch searchScope {
+        switch scope {
         case .here:
             return list.filter { $0.folderIDs.isEmpty || $0.folderIDs.contains(folder) }
         case .all:

@@ -47,6 +47,7 @@ struct IntegrationCard: View {
                 if !info.listsAccounts {
                     ForEach(reading.inlets.filter(hasMailbox)) { inlet in
                         MailboxDisplayRow(state: context.state, inlet: inlet)
+                        MailboxRangeRow(state: context.state, inbox: context.inbox, inlet: inlet)
                     }
                 }
                 areas(reading)
@@ -168,7 +169,10 @@ struct IntegrationCard: View {
                         )
                         .rowPill()
                     }
-                    if hasMailbox(inlet) { MailboxDisplayRow(state: context.state, inlet: inlet) }
+                    if hasMailbox(inlet) {
+                        MailboxDisplayRow(state: context.state, inlet: inlet)
+                        MailboxRangeRow(state: context.state, inbox: context.inbox, inlet: inlet)
+                    }
                 }
                 SettingsRow(label: appearance.text("text.settings.action.addAccount")) {
                     addAccount(reading, kind: .neutral)

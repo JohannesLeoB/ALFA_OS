@@ -4,7 +4,7 @@ import Foundation
 struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
     typealias PasswordSource = @Sendable () async throws -> String
 
-    private static let summaryItems = ["UID", "FLAGS", "INTERNALDATE", "RFC822.SIZE", "ENVELOPE", "BODYSTRUCTURE",
+    static let summaryItems = ["UID", "FLAGS", "INTERNALDATE", "RFC822.SIZE", "ENVELOPE", "BODYSTRUCTURE",
                                        "BODY.PEEK[HEADER.FIELDS (REFERENCES)]"]
     private static let receiptSection = "HEADER.FIELDS (DISPOSITION-NOTIFICATION-TO)"
     private static let receiptItem = "BODY.PEEK[" + receiptSection + "]"
@@ -44,13 +44,8 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
             }
             let text = query?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             criteria.append(.raw("UNDELETED"))
-            if !text.isEmpty {
-                if text.unicodeScalars.contains(where: { $0.value > 126 }) {
-                    criteria.insert(contentsOf: [.raw("CHARSET"), .raw("UTF-8")], at: 0)
-                }
-                criteria += [.raw("TEXT"), .string(text)]
-            }
-            let found = try await session.searchUIDs(criteria)
+            if !text.isEmpty { criteria += [.raw("TEXT"), .string(text)] }
+            let found = try await Self.search(session, criteria, charset: text.unicodeScalars.contains(where: { $0.value > 126 }))
             let pageUIDs = Array(found.suffix(limit))
             let more = found.count > pageUIDs.count
             let fetched = try await session.fetch(uids: pageUIDs, items: Self.summaryItems)
@@ -58,7 +53,16 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
                 guard let uid = entry.uid else { return nil }
                 return Self.summary(entry, uid: uid, folder: folderID, uidValidity: selection.uidValidity)
             }
-            return MessagePage(messages: messages, nextPageToken: more ? pageUIDs.first.map(String.init) : nil)
+            return MessagePage(messages: messages, nextPageToken: more ? pageUIDs.first.map(String.init) : nil, total: found.count)
+        }
+    }
+
+    private static func search(_ session: IMAPClient, _ criteria: [IMAPArgument], charset: Bool) async throws -> [Int] {
+        guard charset else { return try await session.searchUIDs(criteria) }
+        do {
+            return try await session.searchUIDs([.raw("CHARSET"), .raw("UTF-8")] + criteria)
+        } catch MailFailure.serverRejected(let reply) where reply.uppercased().contains("BADCHARSET") {
+            return try await session.searchUIDs(criteria)
         }
     }
 
@@ -379,7 +383,7 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
         AttachmentInfo(id: part.section, filename: part.filename ?? part.section, mimeType: part.mimeType, sizeBytes: part.size)
     }
 
-    private static func summary(_ entry: IMAPFetched, uid: Int, folder: String, uidValidity: Int) -> MessageSummary {
+    static func summary(_ entry: IMAPFetched, uid: Int, folder: String, uidValidity: Int) -> MessageSummary {
         let envelope = entry.envelope
         let flags = Set(entry.flags.compactMap { Flag(imapName: $0) })
         let id = IMAPMessageReference(folder: folder, uidValidity: uidValidity, uid: uid).encoded
@@ -400,7 +404,7 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
             attachments: attachments, messageIDHeader: envelope?.messageID ?? "")
     }
 
-    private func withIncoming<T: Sendable>(retry: Bool = true, _ body: @Sendable (IMAPClient) async throws -> T) async throws -> T {
+    func withIncoming<T: Sendable>(retry: Bool = true, _ body: @Sendable (IMAPClient) async throws -> T) async throws -> T {
         guard account.incoming.isComplete else { throw MailFailure.accountIncomplete("incoming") }
         return try await channel.perform(retry: retry, open: { try await openIncoming() }, body: body)
     }

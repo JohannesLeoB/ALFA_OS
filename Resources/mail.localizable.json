@@ -380,6 +380,10 @@
   "mail.hint.failed": {
    "de": "Fehler"
   },
+  "mail.hint.mirrorRefused": {
+   "de": "Abgleich abgelehnt",
+   "en": "Sync refused"
+  },
   "mail.hint.offline": {
    "de": "Offline"
   },
@@ -784,6 +788,26 @@
   "mail.list.offline.since": {
    "de": "Offline · zuletzt abgeglichen %@",
    "en": "Offline · last synced %@"
+  },
+  "mail.list.older": {
+   "de": "Ältere laden",
+   "en": "Load older"
+  },
+  "mail.list.moreResults": {
+   "de": "Weitere Treffer laden",
+   "en": "Load more results"
+  },
+  "mail.toast.olderFailed": {
+   "de": "Ältere Nachrichten konnten nicht geladen werden",
+   "en": "Older messages could not be loaded"
+  },
+  "mail.toast.moreFailed": {
+   "de": "Weitere Treffer konnten nicht geladen werden",
+   "en": "More results could not be loaded"
+  },
+  "mail.toast.searchPartial": {
+   "de": "Einige Ordner konnten nicht durchsucht werden",
+   "en": "Some folders could not be searched"
   }
  }
 }

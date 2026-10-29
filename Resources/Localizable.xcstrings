@@ -8706,6 +8706,22 @@
         }
       }
     },
+    "mail.hint.mirrorRefused" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgleich abgelehnt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync refused"
+          }
+        }
+      }
+    },
     "mail.hint.offline" : {
       "comment" : "roh",
       "localizations" : {
@@ -8935,6 +8951,22 @@
         }
       }
     },
+    "mail.list.moreResults" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weitere Treffer laden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load more results"
+          }
+        }
+      }
+    },
     "mail.list.noFilterMatch" : {
       "comment" : "roh",
       "localizations" : {
@@ -9048,6 +9080,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Offline · last synced %@"
+          }
+        }
+      }
+    },
+    "mail.list.older" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ältere laden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load older"
           }
         }
       }
@@ -9949,6 +9997,22 @@
         }
       }
     },
+    "mail.toast.moreFailed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weitere Treffer konnten nicht geladen werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More results could not be loaded"
+          }
+        }
+      }
+    },
     "mail.toast.moved" : {
       "localizations" : {
         "de" : {
@@ -9961,6 +10025,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Moved"
+          }
+        }
+      }
+    },
+    "mail.toast.olderFailed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ältere Nachrichten konnten nicht geladen werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Older messages could not be loaded"
           }
         }
       }
@@ -10027,6 +10107,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Recipient missing"
+          }
+        }
+      }
+    },
+    "mail.toast.searchPartial" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einige Ordner konnten nicht durchsucht werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some folders could not be searched"
           }
         }
       }
@@ -10220,6 +10316,86 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ · persönlich"
+          }
+        }
+      }
+    },
+    "settings.account.range" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load"
+          }
+        }
+      }
+    },
+    "settings.account.range.all" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All"
+          }
+        }
+      }
+    },
+    "settings.account.range.days30" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzte 30 Tage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last 30 days"
+          }
+        }
+      }
+    },
+    "settings.account.range.days90" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letzte 90 Tage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last 90 days"
+          }
+        }
+      }
+    },
+    "settings.account.range.year" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Letztes Jahr"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last year"
           }
         }
       }

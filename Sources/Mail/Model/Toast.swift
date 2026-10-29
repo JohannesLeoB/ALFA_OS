@@ -15,6 +15,10 @@ public enum ToastKind: Equatable, Sendable {
     case bulkRead(count: Int, read: Bool)
     case bulkArchived(count: Int)
     case bulkTrashed(count: Int)
+    case olderFailed
+    case moreFailed
+    case searchPartial
+    case mirrorRefused
 
     public var key: String {
         switch self {
@@ -34,6 +38,10 @@ public enum ToastKind: Equatable, Sendable {
         case .bulkRead(let count, let read): "mail.toast.bulkRead." + (read ? "read" : "unread") + Self.plural(count)
         case .bulkArchived(let count): "mail.toast.bulkArchived" + Self.plural(count)
         case .bulkTrashed(let count): "mail.toast.bulkTrashed" + Self.plural(count)
+        case .olderFailed: "mail.toast.olderFailed"
+        case .moreFailed: "mail.toast.moreFailed"
+        case .searchPartial: "mail.toast.searchPartial"
+        case .mirrorRefused: "mail.hint.mirrorRefused"
         }
     }
 

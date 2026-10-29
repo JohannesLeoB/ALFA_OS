@@ -1,27 +1,38 @@
 import Foundation
 
 actor StreamBuffer {
-    static let maxLine = 1_048_576
+    static let maxLine = 16_777_216
     static let maxLiteral = 67_108_864
 
     private let stream: any ByteStreamPort
     private var buffer = Data()
+    private var scanned = 0
 
     init(stream: any ByteStreamPort) {
         self.stream = stream
     }
 
     func readLine(idle: Bool = false) async throws -> Data {
-        let terminator = Data([13, 10])
         while true {
-            if let range = buffer.firstRange(of: terminator) {
-                let line = Data(buffer[buffer.startIndex..<range.lowerBound])
-                buffer = Data(buffer[range.upperBound...])
+            if let end = terminator() {
+                let line = Data(buffer[buffer.startIndex..<buffer.startIndex + end])
+                buffer = Data(buffer[(buffer.startIndex + end + 2)...])
+                scanned = 0
                 return line
             }
             if buffer.count > Self.maxLine { throw MailFailure.malformedResponse("line") }
             buffer.append(try await (idle ? stream.receiveIdle() : stream.receive()))
         }
+    }
+
+    private func terminator() -> Int? {
+        var index = scanned
+        while index + 1 < buffer.count {
+            if buffer[buffer.startIndex + index] == 13, buffer[buffer.startIndex + index + 1] == 10 { return index }
+            index += 1
+        }
+        scanned = max(0, buffer.count - 1)
+        return nil
     }
 
     func readBytes(_ count: Int) async throws -> Data {
@@ -31,6 +42,7 @@ actor StreamBuffer {
         }
         let bytes = Data(buffer[buffer.startIndex..<(buffer.startIndex + count)])
         buffer = Data(buffer[(buffer.startIndex + count)...])
+        scanned = 0
         return bytes
     }
 

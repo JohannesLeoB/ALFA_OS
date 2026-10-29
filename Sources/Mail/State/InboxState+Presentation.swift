@@ -69,11 +69,20 @@ extension InboxState {
     }
 
     public var rowPresentations: [RowPresentation] {
+        presentations(of: rows)
+    }
+
+    public func rowWindow(limit: Int) -> RowWindow {
+        let list = listed(limit: limit)
+        return RowWindow(items: presentations(of: list.entries), total: list.total)
+    }
+
+    private func presentations(of entries: [ListEntry]) -> [RowPresentation] {
         let role = currentFolder?.role
         let outgoing = role == .sent || role == .drafts
         let draftsFolder = role == .drafts
         let now = clock()
-        return rows.map { row in
+        return entries.map { row in
             let item = row.summary
             let party = outgoing ? Self.firstParty(item.toRaw) : Self.sender(item)
             let name = party.name.isEmpty ? party.address : party.name

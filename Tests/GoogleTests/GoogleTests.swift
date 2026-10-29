@@ -661,6 +661,236 @@ final class GoogleTests: XCTestCase {
         XCTAssertEqual(http.calls.count, 1)
     }
 
+    private static let cutoff = Date(timeIntervalSince1970: 1_800_000_000)
+
+    private static func idsJSON(_ range: Range<Int>, next: String? = nil) -> String {
+        let ids = range.map { #"{"id":"m\#($0)"}"# }.joined(separator: ",")
+        return #"{"messages":[\#(ids)]\#(next.map { #","nextPageToken":"\#($0)""# } ?? "")}"#
+    }
+
+    private static func maxResults(_ call: Call) -> Int {
+        call.query.split(separator: "&").first { $0.hasPrefix("maxResults=") }.flatMap { Int($0.dropFirst(11)) } ?? 0
+    }
+
+    private static func metadata(_ call: Call, labels: String = #""INBOX""#, type: String = "multipart/alternative") -> String {
+        let id = String(call.path.split(separator: "/").last ?? "")
+        return #"{"id":"\#(id)","threadId":"t","internalDate":"1000000","labelIds":[\#(labels)],"payload":{"headers":[{"name":"From","value":"A <a@x.test>"},{"name":"Subject","value":"S\#(id)"},{"name":"Content-Type","value":"\#(type)"}]}}"#
+    }
+
+    func testGmailMirrorListsIdsInPagesOf500WithTheLabelAndTheCutoff() async throws {
+        let http = FakeHttp { call in
+            guard call.path.hasSuffix("/messages") else { return (404, "") }
+            if call.query.contains("before:") { return (200, Self.idsJSON(900..<901)) }
+            if call.query.contains("pageToken=p2") {
+                return (200, Self.idsJSON(500..<(500 + Self.maxResults(call)), next: Self.maxResults(call) == 500 ? nil : "p3"))
+            }
+            return (200, Self.idsJSON(0..<500, next: "p2"))
+        }
+        let mail = mailClient(http)
+        XCTAssertEqual(mail.ranges, MailboxRange.allCases)
+        let listing = try await mail.listIDs(folderID: "INBOX", since: Self.cutoff, limit: nil)
+        XCTAssertEqual(listing.ids.count, 1_000)
+        XCTAssertEqual(http.calls.count, 3)
+        XCTAssertTrue(http.calls[0].query.contains("q=label:INBOX%20after:1800000000"))
+        XCTAssertTrue(http.calls[0].query.contains("maxResults=500"))
+        XCTAssertTrue(http.calls[1].query.contains("pageToken=p2"))
+        XCTAssertTrue(http.calls[2].query.contains("q=label:INBOX%20before:1800000000"))
+        XCTAssertTrue(http.calls[2].query.contains("maxResults=1"))
+        XCTAssertTrue(listing.hasOlder)
+        let limited = try await mail.listIDs(folderID: "ALL", since: nil, limit: 550)
+        XCTAssertEqual(limited.ids.count, 550)
+        XCTAssertTrue(limited.hasOlder)
+        let calls = Array(http.calls.suffix(2))
+        XCTAssertTrue(calls[0].query.hasPrefix("q=&") && calls[0].query.contains("maxResults=500"))
+        XCTAssertTrue(calls[1].query.contains("maxResults=50"))
+    }
+
+    func testGmailMirrorKnowsWhenNothingOlderExists() async throws {
+        let http = FakeHttp { _ in (200, #"{"resultSizeEstimate":0}"#) }
+        let listing = try await mailClient(http).listIDs(folderID: "INBOX", since: Self.cutoff, limit: nil)
+        XCTAssertEqual(listing, MirrorListing(ids: [], hasOlder: false))
+        XCTAssertEqual(http.calls.count, 2)
+    }
+
+    func testGmailMirrorFetchesMetadataOnlyAndSkipsMessagesGoneSinceTheListing() async throws {
+        let http = FakeHttp { call in
+            if call.path.hasSuffix("/gone") { return (404, "") }
+            return (200, Self.metadata(call, type: call.path.hasSuffix("/mixed") ? "multipart/mixed; boundary=x" : "text/plain"))
+        }
+        let found = try await mailClient(http).fetchSummaries(folderID: "INBOX", ids: ["plain", "gone", "mixed"])
+        XCTAssertEqual(found.map(\.id), ["plain", "mixed"])
+        let raw = try await gmail(http).fetchMetadata(ids: ["plain", "mixed"])
+        XCTAssertEqual(raw.map(\.likelyAttachments), [false, true])
+        XCTAssertTrue(raw.allSatisfy { $0.attachments.isEmpty })
+        XCTAssertEqual(found[0].subject, "Splain")
+        XCTAssertTrue(http.calls.allSatisfy { $0.query.contains("format=metadata") && !$0.query.contains("format=full") })
+        XCTAssertTrue(http.calls[0].query.contains("metadataHeaders=From"))
+        XCTAssertTrue(http.calls[0].query.contains("metadataHeaders=Content-Type"))
+        XCTAssertEqual(http.calls.count, 5)
+    }
+
+    func testGmailFlagRefreshReadsTheHistoryAndOnlyFetchesChangedKnownMessages() async throws {
+        let http = FakeHttp { call in
+            if call.path.hasSuffix("/history") {
+                return (200, #"{"history":[{"id":"101","messages":[{"id":"a"}],"labelsAdded":[{"message":{"id":"b"},"labelIds":["STARRED"]}]},{"id":"102","labelsRemoved":[{"message":{"id":"z"},"labelIds":["UNREAD"]}]}],"historyId":"250"}"#)
+            }
+            return (200, Self.metadata(call, labels: call.path.hasSuffix("/b") ? #""UNREAD","STARRED""# : #""INBOX""#))
+        }
+        let refresh = try await mailClient(http).refreshFlags(folderID: "INBOX", known: ["a", "b", "c"], cursor: "100")
+        XCTAssertEqual(refresh.flags, ["a": [.seen], "b": [.flagged]])
+        XCTAssertEqual(refresh.cursor, "250")
+        XCTAssertEqual(http.calls.count, 3)
+        let history = http.calls[0]
+        XCTAssertTrue(history.query.contains("startHistoryId=100"))
+        XCTAssertTrue(history.query.contains("historyTypes=labelAdded") && history.query.contains("historyTypes=labelRemoved"))
+        XCTAssertTrue(http.calls.dropFirst().allSatisfy { $0.query.contains("format=minimal") })
+    }
+
+    func testGmailFlagRefreshWithNoChangesFetchesNothingAndMovesTheCursor() async throws {
+        let http = FakeHttp { _ in (200, #"{"historyId":"260"}"#) }
+        let refresh = try await mailClient(http).refreshFlags(folderID: "INBOX", known: ["a"], cursor: "250")
+        XCTAssertEqual(refresh, FlagRefresh(flags: [:], cursor: "260"))
+        XCTAssertEqual(http.calls.count, 1)
+    }
+
+    func testGmailFlagRefreshFallsBackToTheNewestHundredWhenTheCursorIsMissingOrTooOld() async throws {
+        let known = (0..<150).map { "m\($0)" }
+        let tooOld = FakeHttp { call in
+            if call.path.hasSuffix("/history") { return (404, #"{"error":{"code":404,"message":"Requested entity was not found."}}"#) }
+            if call.path.hasSuffix("/profile") { return (200, #"{"historyId":"300"}"#) }
+            return (200, Self.metadata(call, labels: ""))
+        }
+        let refresh = try await mailClient(tooOld).refreshFlags(folderID: "INBOX", known: known, cursor: "5")
+        XCTAssertEqual(refresh.cursor, "300")
+        XCTAssertEqual(refresh.flags.count, 100)
+        XCTAssertEqual(refresh.flags["m0"], [.seen])
+        XCTAssertNil(refresh.flags["m100"])
+        XCTAssertEqual(tooOld.calls.count, 102)
+        let fresh = FakeHttp { call in
+            call.path.hasSuffix("/profile") ? (200, #"{"historyId":"310"}"#) : (200, Self.metadata(call))
+        }
+        let first = try await mailClient(fresh).refreshFlags(folderID: "INBOX", known: ["a", "b"], cursor: nil)
+        XCTAssertEqual(first.cursor, "310")
+        XCTAssertEqual(first.flags.count, 2)
+        XCTAssertEqual(fresh.calls.count, 3)
+        let failing = FakeHttp { _ in (500, "") }
+        do {
+            _ = try await mailClient(failing).refreshFlags(folderID: "INBOX", known: ["a"], cursor: "5")
+            XCTFail("must throw")
+        } catch GoogleFailure.api(.gmail, let fault) {
+            XCTAssertEqual(fault.status, 500)
+        }
+    }
+
+    func testGmailSearchEverywhereIsOneQueryWithoutALabelScope() async throws {
+        let http = FakeHttp { call in
+            call.path.hasSuffix("/messages") ? (200, Self.idsJSON(0..<2, next: "n")) : (200, Self.metadata(call))
+        }
+        let mail = mailClient(http)
+        XCTAssertTrue(mail.offersEverywhere(in: GmailMailClient.systemFolders))
+        let page = try await mail.searchEverywhere(query: "plan", pageToken: "t", maxResults: 100)
+        XCTAssertEqual(page.messages.map(\.id), ["m0", "m1"])
+        XCTAssertEqual(page.nextPageToken, "n")
+        let list = try XCTUnwrap(http.calls.first)
+        XCTAssertTrue(list.query.contains("q=-in:spam%20-in:trash%20plan"))
+        XCTAssertTrue(list.query.contains("pageToken=t") && list.query.contains("maxResults=100"))
+        XCTAssertEqual(http.calls.count, 3)
+    }
+
+    func testGmailRequestCountsOfAFirstAndALaterPass() async throws {
+        let total = 1_107
+        let http = FakeHttp { call in
+            if call.path.hasSuffix("/profile") { return (200, #"{"historyId":"10"}"#) }
+            if call.path.hasSuffix("/history") {
+                return (200, #"{"history":[{"id":"11","messages":[{"id":"m1"},{"id":"m2"},{"id":"m3"}]}],"historyId":"12"}"#)
+            }
+            if call.path.hasSuffix("/messages") {
+                if call.query.contains("before:") { return (200, Self.idsJSON(5_000..<5_001)) }
+                if call.query.contains("pageToken=p2") { return (200, Self.idsJSON(500..<1_000, next: "p3")) }
+                if call.query.contains("pageToken=p3") { return (200, Self.idsJSON(1_000..<total)) }
+                return (200, Self.idsJSON(0..<500, next: "p2"))
+            }
+            return (200, Self.metadata(call))
+        }
+        let mail = mailClient(http)
+        let first = try await mail.listIDs(folderID: "INBOX", since: Self.cutoff, limit: nil)
+        XCTAssertEqual(first.ids.count, total)
+        XCTAssertEqual(http.calls.count, 4)
+        for start in stride(from: 0, to: total, by: 200) {
+            _ = try await mail.fetchSummaries(folderID: "INBOX", ids: Array(first.ids[start..<min(start + 200, total)]))
+        }
+        _ = try await mail.refreshFlags(folderID: "INBOX", known: [], cursor: nil)
+        XCTAssertEqual(http.calls.count, 4 + total + 1)
+        let before = http.calls.count
+        let again = try await mail.listIDs(folderID: "INBOX", since: Self.cutoff, limit: nil)
+        _ = try await mail.fetchSummaries(folderID: "INBOX", ids: Array(again.ids.suffix(7)))
+        _ = try await mail.refreshFlags(folderID: "INBOX", known: again.ids, cursor: "10")
+        XCTAssertEqual(http.calls.count - before, 4 + 7 + 1 + 3)
+    }
+
+    func testGmailReceivedTimeIsTheInternalDateNotTheSendersDateHeader() async throws {
+        let http = FakeHttp { call in
+            let id = String(call.path.split(separator: "/").last ?? "")
+            return (200, #"{"id":"\#(id)","internalDate":"1800000000000","labelIds":["INBOX"],"payload":{"headers":[{"name":"Date","value":"Tue, 5 Jan 1960 10:00:00 +0000"},{"name":"Subject","value":"S"}]}}"#)
+        }
+        let found = try await mailClient(http).fetchSummaries(folderID: "INBOX", ids: ["a"])
+        XCTAssertEqual(found.first?.receivedAt, Date(timeIntervalSince1970: 1_800_000_000))
+        let bare = FakeHttp { call in
+            let id = String(call.path.split(separator: "/").last ?? "")
+            return (200, #"{"id":"\#(id)","labelIds":["INBOX"],"payload":{"headers":[{"name":"Date","value":"Wed, 6 Jan 2027 10:00:00 +0000"}]}}"#)
+        }
+        let fallback = try await mailClient(bare).fetchSummaries(folderID: "INBOX", ids: ["a"])
+        XCTAssertNotNil(fallback.first?.receivedAt)
+    }
+
+    func testGmailNeverSendsANegativeOrPre1990CutoffAndKeepsTheLaterOnes() async throws {
+        let http = FakeHttp { call in
+            call.query.contains("before:") ? (200, Self.idsJSON(0..<1)) : (200, Self.idsJSON(0..<2))
+        }
+        let mail = mailClient(http)
+        _ = try await mail.listIDs(folderID: "INBOX", since: Date(timeIntervalSince1970: -123_456), limit: nil)
+        XCTAssertTrue(http.calls[0].query.contains("q=label:INBOX%20after:631152000"))
+        XCTAssertTrue(http.calls[1].query.contains("q=label:INBOX%20before:631152000"))
+        _ = try await mail.listIDs(folderID: "INBOX", since: Date(timeIntervalSince1970: 900_000_000), limit: nil)
+        XCTAssertTrue(http.calls[2].query.contains("after:900000000"))
+    }
+
+    func testGmailReadsTheHistoryCursorFromTheProfileAndAppliesChangesToEveryKnownMessage() async throws {
+        let known = (0..<3_000).map { "m\($0)" }
+        let http = FakeHttp { call in
+            if call.path.hasSuffix("/profile") { return (200, #"{"historyId":"77"}"#) }
+            if call.path.hasSuffix("/history") {
+                return (200, #"{"history":[{"id":"78","labelsAdded":[{"message":{"id":"m2900"},"labelIds":["STARRED"]}]}],"historyId":"80"}"#)
+            }
+            return (200, Self.metadata(call, labels: #""UNREAD","STARRED""#))
+        }
+        let mail = mailClient(http)
+        let start = try await mail.startCursor()
+        XCTAssertEqual(start, "77")
+        let refresh = try await mail.refreshFlags(folderID: "INBOX", known: known, cursor: start)
+        XCTAssertEqual(refresh.flags, ["m2900": [.flagged]])
+        XCTAssertEqual(refresh.cursor, "80")
+        XCTAssertTrue(http.calls[1].query.contains("startHistoryId=77"))
+        XCTAssertEqual(http.calls.count, 3)
+    }
+
+    func testGmailGivesTheResultSizeEstimateAsTheSearchTotal() async throws {
+        let http = FakeHttp { call in
+            call.path.hasSuffix("/messages")
+                ? (200, #"{"messages":[{"id":"a"}],"resultSizeEstimate":42,"nextPageToken":"n"}"#) : (200, Self.metadata(call))
+        }
+        let page = try await mailClient(http).listMessages(folderID: "INBOX", query: "plan", pageToken: nil, maxResults: 1)
+        XCTAssertEqual(page.total, 42)
+        let everywhere = try await mailClient(http).searchEverywhere(query: "plan", pageToken: nil, maxResults: 1)
+        XCTAssertEqual(everywhere.total, 42)
+    }
+
+    func testGmailOffersTheEverywhereSearchOnlyWithItsAllMailFolder() {
+        let mail = mailClient(FakeHttp())
+        XCTAssertTrue(mail.offersEverywhere(in: GmailMailClient.systemFolders))
+        XCTAssertFalse(mail.offersEverywhere(in: [Folder(id: "INBOX", name: "INBOX", role: .inbox)]))
+    }
+
     func testDraftsAreCreatedUpdatedDeletedAndSent() async throws {
         let http = FakeHttp { _ in (200, #"{"id":"d9"}"#) }
         let mail = mailClient(http)

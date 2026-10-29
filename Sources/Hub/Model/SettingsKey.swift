@@ -20,6 +20,10 @@ enum SettingsKey {
     static let mailboxDisplayPrefix = "settings.mailbox.display."
 
     static func mailboxDisplay(_ inlet: String) -> String { mailboxDisplayPrefix + inlet }
+
+    static let mailboxRangePrefix = "settings.mailbox.range."
+
+    static func mailboxRange(_ inlet: String) -> String { mailboxRangePrefix + inlet }
 }
 
 public enum CompanyEntry: String, CaseIterable, Sendable {

@@ -21,6 +21,7 @@ public final class SettingsState {
     public private(set) var company: [String: String] = [:]
     public private(set) var imprint: [String: String] = [:]
     private(set) var mailboxDisplays: [Inlet.ID: MailboxDisplay] = [:]
+    private(set) var mailboxRanges: [Inlet.ID: MailboxRange] = [:]
 
     @ObservationIgnored private let settings: SettingStore
 
@@ -46,6 +47,11 @@ public final class SettingsState {
         for key in stored.keys where key.hasPrefix(SettingsKey.mailboxDisplayPrefix) {
             if let display = text(key).flatMap(MailboxDisplay.init(rawValue:)) {
                 mailboxDisplays[String(key.dropFirst(SettingsKey.mailboxDisplayPrefix.count))] = display
+            }
+        }
+        for key in stored.keys where key.hasPrefix(SettingsKey.mailboxRangePrefix) {
+            if let range = text(key).flatMap(MailboxRange.init(rawValue:)) {
+                mailboxRanges[String(key.dropFirst(SettingsKey.mailboxRangePrefix.count))] = range
             }
         }
     }
@@ -105,9 +111,20 @@ public final class SettingsState {
         save(SettingsKey.mailboxDisplay(inlet), value.rawValue)
     }
 
+    public func range(_ inlet: Inlet.ID) -> MailboxRange {
+        mailboxRanges[inlet] ?? .standard
+    }
+
+    public func setRange(_ value: MailboxRange, for inlet: Inlet.ID) {
+        mailboxRanges[inlet] = value
+        save(SettingsKey.mailboxRange(inlet), value.rawValue)
+    }
+
     public func forget(_ inlet: Inlet.ID) {
         mailboxDisplays[inlet] = nil
+        mailboxRanges[inlet] = nil
         try? settings.remove(key: SettingsKey.mailboxDisplay(inlet))
+        try? settings.remove(key: SettingsKey.mailboxRange(inlet))
     }
 
     public func open(_ id: String) {

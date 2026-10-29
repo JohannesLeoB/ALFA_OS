@@ -1,0 +1,266 @@
+import Core
+import Foundation
+import GRDB
+import Hub
+import Storage
+
+extension MailboxStore {
+    nonisolated static func key(_ inlet: Inlet.ID, _ folder: String) -> String {
+        inlet + "\n" + folder
+    }
+
+    nonisolated static func historyKey(_ folder: String) -> String {
+        "history\n" + folder
+    }
+
+    nonisolated static func validityKey(_ folder: String) -> String {
+        "validity\n" + folder
+    }
+
+    nonisolated static func reachKey(_ folder: String) -> String {
+        "reach\n" + folder
+    }
+
+    nonisolated static func olderKey(_ folder: String) -> String {
+        "older\n" + folder
+    }
+
+    nonisolated static func refusedKey(_ folder: String) -> String {
+        "refused\n" + folder
+    }
+
+    func offering(_ inlet: Inlet.ID) -> MailOffering? {
+        if let cached = offerings[inlet] { return cached }
+        guard let transport = try? transport(inlet) else { return nil }
+        let everywhere = (transport as? any EverywhereSearchPort)?.offersEverywhere(in: folders(inlet)) ?? false
+        let made = MailOffering(ranges: MirrorEngine.ranges(transport), everywhere: everywhere)
+        offerings[inlet] = made
+        return made
+    }
+
+    public func ranges(_ inlet: Inlet.ID) -> [MailboxRange] {
+        offering(inlet)?.ranges ?? []
+    }
+
+    public func canLoadOlder(_ inlet: Inlet.ID, folder: String) -> Bool {
+        guard !ranges(inlet).isEmpty else { return false }
+        let key = Self.key(inlet, folder)
+        if let known = olderOffered[key] { return known }
+        let stored = cursor(inlet, Self.olderKey(folder)) == "1"
+        olderOffered[key] = stored
+        return stored
+    }
+
+    public func refresh(_ inlet: Inlet.ID, folder: String) async throws(HubFailure) {
+        try await run(inlet, folder, older: false, own: false)
+    }
+
+    public func loadOlder(_ inlet: Inlet.ID, folder: String) async throws(HubFailure) {
+        guard canLoadOlder(inlet, folder: folder) else { return }
+        try await run(inlet, folder, older: true, own: true)
+    }
+
+    public func rangeChanged(_ inlet: Inlet.ID) async {
+        clearRange(inlet)
+        olderOffered = olderOffered.filter { !$0.key.hasPrefix(inlet + "\n") }
+        var failure: HubFailure?
+        for folder in syncedFolders(inlet) {
+            do {
+                try await run(inlet, folder, older: false, own: true, narrowed: true)
+            } catch {
+                failure = failure ?? error
+            }
+        }
+        if let failure { eventBus.emit(.syncFailed(inlet, Self.syncHint(failure, inlet: inlet))) }
+    }
+
+    func run(_ inlet: Inlet.ID, _ folder: String, older: Bool, own: Bool, narrowed: Bool = false) async throws(HubFailure) {
+        let key = Self.key(inlet, folder)
+        while let existing = passes[key] {
+            let result = await existing.value
+            if !older, !own { return try result.get() }
+        }
+        let task = Task { await self.execute(inlet, folder, older: older, narrowed: narrowed) }
+        passes[key] = task
+        try await task.value.get()
+    }
+
+    private func execute(_ inlet: Inlet.ID, _ folder: String, older: Bool, narrowed: Bool) async -> Result<Void, HubFailure> {
+        running[inlet, default: 0] += 1
+        let outcome: Result<Void, HubFailure>
+        do {
+            try await pass(inlet, folder, older: older, narrowed: narrowed)
+            outcome = .success(())
+        } catch {
+            outcome = .failure(error)
+        }
+        running[inlet, default: 1] -= 1
+        if running[inlet] == 0 {
+            running[inlet] = nil
+            dirty[inlet] = nil
+        }
+        passes[Self.key(inlet, folder)] = nil
+        if Task.isCancelled, case .failure = outcome { return .success(()) }
+        return outcome
+    }
+
+    private func pass(_ inlet: Inlet.ID, _ folder: String, older: Bool, narrowed: Bool) async throws(HubFailure) {
+        let transport = try transport(inlet)
+        guard let mirror = transport as? any MirrorPort, !mirror.ranges.isEmpty else {
+            throw HubFailure.capabilityMissing(inlet, .mail)
+        }
+        let wanted = range(inlet).resolved(in: mirror.ranges)
+        let hadSync = lastSync(inlet, folder: folder) != nil
+        let since = older ? nil : MirrorEngine.cutoff(wanted, reach: reach(inlet, folder), now: now())
+        let limit = older ? storedIDs(inlet, folder).count + MirrorEngine.olderStep : nil
+        var history = cursor(inlet, Self.historyKey(folder))
+        if history == nil { history = try await remote(inlet) { try await mirror.startCursor() } }
+        let listing = try await remote(inlet) { try await mirror.listIDs(folderID: folder, since: since, limit: limit) }
+        guard !Task.isCancelled else { return }
+        let stored = storedIDs(inlet, folder)
+        let plan = MirrorEngine.plan(stored: stored, listed: listing.ids)
+        let known = cursor(inlet, Self.validityKey(folder))
+        let changed = known != nil && listing.validity != nil && listing.validity != known
+        let newest = newestDate(inlet, folder)
+        var fresh = 0
+        var added = 0
+        for chunk in MirrorEngine.chunks(plan.unknown, size: MirrorEngine.chunkSize) {
+            let found = try await remote(inlet) { try await mirror.fetchSummaries(folderID: folder, ids: chunk) }
+            guard !Task.isCancelled else { return }
+            let kept = found.filter { !isDirty(inlet, $0.id) }
+            try write(inlet) { try self.upsert(inlet, folder, kept) }
+            added += kept.count
+            fresh += MirrorEngine.newerThan(kept, newest: newest)
+            eventBus.emit(.messagesChanged(inlet, folder: folder))
+        }
+        let marked = cursor(inlet, Self.refusedKey(folder))
+        if let reason = MirrorEngine.refusal(plan: plan, stored: stored.count, added: added, validityChanged: changed,
+                                             narrowed: narrowed, confirmedEmpty: marked == MirrorEngine.Refusal.emptyListing.rawValue) {
+            if marked != reason.rawValue {
+                try write(inlet) { try self.setCursor(inlet, Self.refusedKey(folder), reason.rawValue) }
+                eventBus.emit(.refused(inlet, folder: folder))
+            }
+            return
+        }
+        if marked != nil { try write(inlet) { try self.clearCursor(inlet, Self.refusedKey(folder)) } }
+        guard !Task.isCancelled else { return }
+        if !plan.gone.isEmpty {
+            try write(inlet) { try self.drop(inlet, folder, ids: plan.gone) }
+            eventBus.emit(.messagesChanged(inlet, folder: folder))
+        }
+        if let validity = listing.validity, validity != known {
+            try write(inlet) { try self.setCursor(inlet, Self.validityKey(folder), validity) }
+        }
+        let present = storedIDs(inlet, folder)
+        let flagged = listing.ids.filter { present.contains($0) }
+        let anchor = history
+        let refreshed = try await remote(inlet) { try await mirror.refreshFlags(folderID: folder, known: flagged, cursor: anchor) }
+        guard !Task.isCancelled else { return }
+        try write(inlet) {
+            try self.applyFlags(inlet, folder, refreshed.flags)
+            if let next = refreshed.cursor { try self.setCursor(inlet, Self.historyKey(folder), next) }
+            try self.upsert(inlet, folder, [])
+            try self.setCursor(inlet, Self.olderKey(folder), listing.hasOlder ? "1" : "0")
+        }
+        olderOffered[Self.key(inlet, folder)] = listing.hasOlder
+        if older, wanted != .all, let oldest = oldestDate(inlet, folder) {
+            try write(inlet) { try self.setCursor(inlet, Self.reachKey(folder), String(oldest.timeIntervalSince1970)) }
+        }
+        eventBus.emit(.messagesChanged(inlet, folder: folder))
+        if hadSync, fresh > 0, folder == inboxID(inlet) { eventBus.emit(.newMail(inlet, count: fresh)) }
+    }
+
+    func isDirty(_ inlet: Inlet.ID, _ messageID: String) -> Bool {
+        dirty[inlet]?.contains(messageID) ?? false
+    }
+
+    func storedIDs(_ inlet: Inlet.ID, _ folder: String) -> Set<String> {
+        let ids = (try? database.read { db in
+            try String.fetchAll(db, sql: "SELECT id FROM mail_message WHERE inlet = ? AND folder = ?", arguments: [inlet, folder])
+        }) ?? []
+        return Set(ids)
+    }
+
+    func newestDate(_ inlet: Inlet.ID, _ folder: String) -> Date? {
+        bound("MAX", inlet, folder)
+    }
+
+    func oldestDate(_ inlet: Inlet.ID, _ folder: String) -> Date? {
+        bound("MIN", inlet, folder)
+    }
+
+    private func bound(_ function: String, _ inlet: Inlet.ID, _ folder: String) -> Date? {
+        let value = try? database.read { db in
+            try Double.fetchOne(db, sql: "SELECT \(function)(receivedAt) FROM mail_message WHERE inlet = ? AND folder = ? AND receivedAt >= ?",
+                                arguments: [inlet, folder, MailboxRange.earliest.timeIntervalSince1970])
+        }
+        return value.flatMap { $0 }.map { Date(timeIntervalSince1970: $0) }
+    }
+
+    func syncedFolders(_ inlet: Inlet.ID) -> [String] {
+        let all = (try? database.read { db in
+            try String.fetchAll(db, sql: "SELECT folder FROM mail_sync WHERE inlet = ?", arguments: [inlet])
+        }) ?? []
+        let inbox = inboxID(inlet)
+        return all.filter { $0 == inbox } + all.filter { $0 != inbox }.sorted()
+    }
+
+    func upsert(_ inlet: Inlet.ID, _ folder: String, _ messages: [MessageSummary]) throws {
+        let date = now()
+        try database.write { db in
+            for message in messages { try Self.insert(db, inlet: inlet, folder: folder, message) }
+            try Self.stamp(db, inlet: inlet, folder: folder, at: date)
+        }
+    }
+
+    func drop(_ inlet: Inlet.ID, _ folder: String, ids: Set<String>) throws {
+        try database.write { db in
+            for chunk in MirrorEngine.chunks(ids.sorted(), size: MirrorEngine.dropSize) {
+                let marks = Array(repeating: "?", count: chunk.count).joined(separator: ",")
+                try db.execute(sql: "DELETE FROM mail_message WHERE inlet = ? AND folder = ? AND id IN (\(marks))",
+                               arguments: StatementArguments([inlet, folder] + chunk))
+            }
+        }
+    }
+
+    func applyFlags(_ inlet: Inlet.ID, _ folder: String, _ flags: [String: Set<Flag>]) throws {
+        let current = dirty[inlet] ?? []
+        try database.write { db in
+            for (id, set) in flags where !current.contains(id) {
+                try db.execute(sql: "UPDATE mail_message SET flags = ?, seen = ? WHERE inlet = ? AND folder = ? AND id = ?",
+                               arguments: [Self.encode(set), set.contains(.seen) ? 1 : 0, inlet, folder, id])
+            }
+        }
+    }
+
+    func cursor(_ inlet: Inlet.ID, _ key: String) -> String? {
+        let value = try? database.read { db in
+            try String.fetchOne(db, sql: "SELECT value FROM mail_cursor WHERE inlet = ? AND key = ?", arguments: [inlet, key])
+        }
+        return value.flatMap { $0 }
+    }
+
+    func setCursor(_ inlet: Inlet.ID, _ key: String, _ value: String) throws {
+        try database.write { db in
+            try db.execute(sql: "INSERT OR REPLACE INTO mail_cursor (inlet, key, value) VALUES (?, ?, ?)",
+                           arguments: [inlet, key, value])
+        }
+    }
+
+    func reach(_ inlet: Inlet.ID, _ folder: String) -> Date? {
+        cursor(inlet, Self.reachKey(folder)).flatMap(Double.init).map { Date(timeIntervalSince1970: $0) }
+    }
+
+    func clearCursor(_ inlet: Inlet.ID, _ key: String) throws {
+        try database.write { db in
+            try db.execute(sql: "DELETE FROM mail_cursor WHERE inlet = ? AND key = ?", arguments: [inlet, key])
+        }
+    }
+
+    func clearRange(_ inlet: Inlet.ID) {
+        try? database.write { db in
+            try db.execute(sql: "DELETE FROM mail_cursor WHERE inlet = ? AND (key LIKE ? OR key LIKE ?)",
+                           arguments: [inlet, Self.reachKey("") + "%", Self.olderKey("") + "%"])
+        }
+    }
+}

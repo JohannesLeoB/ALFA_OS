@@ -6,23 +6,31 @@ import Storage
 
 @MainActor
 public final class MailboxStore: MailboxPort {
-    static let pageSize = 50
-
-    private let access: any AccessPort
-    private let database: SQLiteStore
-    private let outboxStore: OutboxStore
-    private let eventBus: Broadcast<MailboxEvent>
-    private let now: @Sendable () -> Date
-    private var watcher: Task<Void, Never>?
-    private var expunging: [Inlet.ID: Bool] = [:]
+    let access: any AccessPort
+    let database: SQLiteStore
+    let outboxStore: OutboxStore
+    let eventBus: Broadcast<MailboxEvent>
+    let now: @Sendable () -> Date
+    let range: @MainActor (Inlet.ID) -> MailboxRange
+    var watcher: Task<Void, Never>?
+    var expunging: [Inlet.ID: Bool] = [:]
+    var passes: [String: Task<Result<Void, HubFailure>, Never>] = [:]
+    var olderOffered: [String: Bool] = [:]
+    var dirty: [Inlet.ID: Set<String>] = [:]
+    var running: [Inlet.ID: Int] = [:]
+    var syncing: Set<Inlet.ID> = []
+    var resync: Set<Inlet.ID> = []
+    var offerings: [Inlet.ID: MailOffering] = [:]
 
     public init(access: any AccessPort, database: SQLiteStore, outbox: OutboxStore, events: Broadcast<MailboxEvent>,
-                now: @escaping @Sendable () -> Date = { Date() }) {
+                now: @escaping @Sendable () -> Date = { Date() },
+                range: @escaping @MainActor (Inlet.ID) -> MailboxRange = { _ in .standard }) {
         self.access = access
         self.database = database
         self.outboxStore = outbox
         self.eventBus = events
         self.now = now
+        self.range = range
         watcher = Task { [weak self] in
             guard let stream = self?.access.events else { return }
             for await event in stream {
@@ -49,10 +57,19 @@ public final class MailboxStore: MailboxPort {
         }) ?? []
     }
 
-    public func messages(_ inlet: Inlet.ID, folder: String) -> [MessageSummary] {
+    func messages(_ inlet: Inlet.ID, folder: String) -> [MessageSummary] {
+        Self.queryMessages(database, inlet: inlet, folder: folder)
+    }
+
+    public func cached(_ inlet: Inlet.ID, folder: String) async -> [MessageSummary] {
+        let database = database
+        return await Task.detached { Self.queryMessages(database, inlet: inlet, folder: folder) }.value
+    }
+
+    nonisolated private static func queryMessages(_ database: SQLiteStore, inlet: Inlet.ID, folder: String) -> [MessageSummary] {
         return (try? database.read { db in
-            try Row.fetchAll(db, sql: "SELECT * FROM mail_message WHERE inlet = ? AND folder = ? ORDER BY position",
-                             arguments: [inlet, folder]).map(Self.summary)
+            try Row.fetchAll(db, sql: "SELECT * FROM mail_message WHERE inlet = ? AND folder = ? ORDER BY receivedAt DESC, id DESC",
+                             arguments: [inlet, folder]).map(summary)
         }) ?? []
     }
 
@@ -68,7 +85,7 @@ public final class MailboxStore: MailboxPort {
         return (try? database.read { db in
             try Row.fetchAll(db, sql: """
                 SELECT * FROM mail_message WHERE inlet = ?1
-                AND (subject LIKE ?2 OR sender LIKE ?2 OR fromRaw LIKE ?2 OR toRaw LIKE ?2 OR snippet LIKE ?2)
+                AND (subject LIKE ?2 OR sender LIKE ?2 OR fromRaw LIKE ?2 OR toRaw LIKE ?2 OR ccRaw LIKE ?2 OR snippet LIKE ?2)
                 GROUP BY id ORDER BY receivedAt DESC
                 """,
                 arguments: [inlet, pattern]).map(Self.summary)
@@ -87,11 +104,11 @@ public final class MailboxStore: MailboxPort {
         return (try? database.read { db in
             try Row.fetchAll(db, sql: """
                 SELECT * FROM mail_message WHERE inlet = ?
-                AND (subject LIKE ? OR sender LIKE ? OR fromRaw LIKE ? OR snippet LIKE ?)
+                AND (subject LIKE ? OR sender LIKE ? OR fromRaw LIKE ? OR toRaw LIKE ? OR ccRaw LIKE ? OR snippet LIKE ?)
                 AND folder NOT IN (\(marks))
                 GROUP BY id ORDER BY receivedAt DESC
                 """,
-                arguments: StatementArguments([inlet, pattern, pattern, pattern, pattern] + folders.sorted()))
+                arguments: StatementArguments([inlet, pattern, pattern, pattern, pattern, pattern, pattern] + folders.sorted()))
                 .map(summary)
         }) ?? []
     }
@@ -116,33 +133,27 @@ public final class MailboxStore: MailboxPort {
         eventBus.emit(.foldersChanged(inlet))
     }
 
-    public func loadPage(_ inlet: Inlet.ID, folder: String, query: String?, pageToken: String?) async throws(HubFailure)
-        -> MessagePage {
-        let transport = try transport(inlet)
-        let page: MessagePage
+    func list(_ transport: any MailTransportPort, inlet: Inlet.ID, folder: String, query: String?, pageToken: String?,
+              size: Int) async throws(HubFailure) -> MessagePage {
+        try await remote(inlet) {
+            try await transport.listMessages(folderID: folder, query: query, pageToken: pageToken, maxResults: size)
+        }
+    }
+
+    func remote<T>(_ inlet: Inlet.ID, _ work: () async throws -> T) async throws(HubFailure) -> T {
         do {
-            page = try await transport.listMessages(folderID: folder, query: query, pageToken: pageToken, maxResults: Self.pageSize)
+            return try await work()
         } catch {
             throw DeliveryEngine.hubFailure(error, inlet: inlet, access: access)
         }
-        guard query == nil else { return page }
-        let known = messageIDs(inlet, folder: folder)
-        let hadSync = lastSync(inlet, folder: folder) != nil
+    }
+
+    func write(_ inlet: Inlet.ID, _ work: () throws -> Void) throws(HubFailure) {
         do {
-            if pageToken == nil {
-                try replaceMessages(inlet, folder: folder, page.messages, at: now())
-            } else {
-                try appendMessages(inlet, folder: folder, page.messages, at: now())
-            }
+            try work()
         } catch {
             throw DeliveryEngine.hubFailure(error, inlet: inlet, access: access)
         }
-        eventBus.emit(.messagesChanged(inlet, folder: folder))
-        if pageToken == nil, hadSync, folder == inboxID(inlet) {
-            let fresh = page.messages.filter { !known.contains($0.id) && !$0.flags.contains(.seen) }.count
-            if fresh > 0 { eventBus.emit(.newMail(inlet, count: fresh)) }
-        }
-        return page
     }
 
     public func body(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> MessageBody {
@@ -208,7 +219,7 @@ public final class MailboxStore: MailboxPort {
         -> String? {
         guard messageID.contains(":") else { return messageID }
         guard let folder, !header.isEmpty,
-              let page = try? await transport.listMessages(folderID: folder, query: nil, pageToken: nil, maxResults: pageSize) else {
+              let page = try? await transport.listMessages(folderID: folder, query: nil, pageToken: nil, maxResults: MirrorEngine.landedSize) else {
             return nil
         }
         return page.messages.first { $0.messageIDHeader == header }?.id
@@ -304,7 +315,7 @@ public final class MailboxStore: MailboxPort {
         }
     }
 
-    private func transport(_ inlet: Inlet.ID) throws(HubFailure) -> any MailTransportPort {
+    func transport(_ inlet: Inlet.ID) throws(HubFailure) -> any MailTransportPort {
         try access.port((any MailTransportPort).self, for: inlet)
     }
 
@@ -316,12 +327,14 @@ public final class MailboxStore: MailboxPort {
         switch event {
         case .inletChanged(let inlet):
             expunging[inlet] = nil
+            offerings[inlet] = nil
             eventBus.emit(.accountsChanged)
         case .inletRemoved(let inlet):
             expunging[inlet] = nil
-            purgeInlet(inlet)
+            offerings[inlet] = nil
+            await purgeInlet(inlet)
         case .syncFinished(.mail, let inlet):
-            await sync(inlet)
+            startSync(inlet)
         case .syncFailed(.mail, let inlet, let hint):
             eventBus.emit(.syncFailed(inlet, hint))
         default:
@@ -329,37 +342,56 @@ public final class MailboxStore: MailboxPort {
         }
     }
 
-    private func purgeInlet(_ inlet: Inlet.ID) {
+    private func purgeInlet(_ inlet: Inlet.ID) async {
+        let prefix = inlet + "\n"
+        let running = passes.filter { $0.key.hasPrefix(prefix) }.map(\.value)
+        running.forEach { $0.cancel() }
+        for task in running { _ = await task.value }
         let deleted: Void? = try? database.write { db in
-            for table in ["mail_message", "mail_folder", "mail_sync", "mail_outbox"] {
+            for table in ["mail_message", "mail_folder", "mail_sync", "mail_cursor", "mail_outbox"] {
                 try db.execute(sql: "DELETE FROM \(table) WHERE inlet = ?", arguments: [inlet])
             }
         }
         guard deleted != nil else { return }
+        olderOffered = olderOffered.filter { !$0.key.hasPrefix(prefix) }
         let changed = outboxStore.forget(inlet)
         eventBus.emit(.foldersChanged(inlet))
         if changed { eventBus.emit(.outboxChanged) }
         eventBus.emit(.accountsChanged)
     }
 
+    private func startSync(_ inlet: Inlet.ID) {
+        guard !syncing.contains(inlet) else {
+            resync.insert(inlet)
+            return
+        }
+        syncing.insert(inlet)
+        Task {
+            repeat {
+                resync.remove(inlet)
+                await sync(inlet)
+            } while resync.contains(inlet)
+            syncing.remove(inlet)
+        }
+    }
+
     private func sync(_ inlet: Inlet.ID) async {
+        await outboxStore.pass(inlet)
         do {
             try mirrorDeliveredFolders(inlet)
             if let inbox = inboxID(inlet) {
-                _ = try await loadPage(inlet, folder: inbox, query: nil, pageToken: nil)
+                try await refresh(inlet, folder: inbox)
             }
         } catch {
-            let hint: Hint
-            if case .provider(let value) = error {
-                hint = value
-            } else {
-                hint = Hint(text: MessageTextKey.offline.rawValue, detail: String(describing: error), fixIn: .inlet(inlet))
-            }
-            eventBus.emit(.syncFailed(inlet, hint))
+            eventBus.emit(.syncFailed(inlet, Self.syncHint(error, inlet: inlet)))
             return
         }
-        await outboxStore.pass(inlet)
         eventBus.emit(.syncFinished(inlet))
+    }
+
+    nonisolated static func syncHint(_ error: HubFailure, inlet: Inlet.ID) -> Hint {
+        if case .provider(let value) = error { return value }
+        return Hint(text: MessageTextKey.offline.rawValue, detail: String(describing: error), fixIn: .inlet(inlet))
     }
 
     private func mirrorDeliveredFolders(_ inlet: Inlet.ID) throws(HubFailure) {
@@ -376,11 +408,11 @@ public final class MailboxStore: MailboxPort {
         eventBus.emit(.foldersChanged(inlet))
     }
 
-    private func inboxID(_ inlet: Inlet.ID) -> String? {
+    func inboxID(_ inlet: Inlet.ID) -> String? {
         folderID(inlet, role: .inbox)
     }
 
-    private func folderID(_ inlet: Inlet.ID, role: FolderRole) -> String? {
+    func folderID(_ inlet: Inlet.ID, role: FolderRole) -> String? {
         folders(inlet).first { $0.role == role }?.id
     }
 
@@ -392,14 +424,8 @@ public final class MailboxStore: MailboxPort {
         return value.flatMap { $0 } ?? ""
     }
 
-    private func messageIDs(_ inlet: Inlet.ID, folder: String) -> Set<String> {
-        let ids = (try? database.read { db in
-            try String.fetchAll(db, sql: "SELECT id FROM mail_message WHERE inlet = ? AND folder = ?", arguments: [inlet, folder])
-        }) ?? []
-        return Set(ids)
-    }
-
     private func replaceFolders(_ inlet: Inlet.ID, _ folders: [Folder]) throws {
+        offerings[inlet] = nil
         try database.write { db in
             try db.execute(sql: "DELETE FROM mail_folder WHERE inlet = ?", arguments: [inlet])
             for (index, folder) in folders.enumerated() {
@@ -409,32 +435,10 @@ public final class MailboxStore: MailboxPort {
         }
     }
 
-    private func replaceMessages(_ inlet: Inlet.ID, folder: String, _ messages: [MessageSummary], at date: Date) throws {
-        try database.write { db in
-            try db.execute(sql: "DELETE FROM mail_message WHERE inlet = ? AND folder = ?", arguments: [inlet, folder])
-            for (index, message) in messages.enumerated() {
-                try Self.insert(db, inlet: inlet, folder: folder, position: index, message)
-            }
-            try Self.stamp(db, inlet: inlet, folder: folder, at: date)
-        }
-    }
-
-    private func appendMessages(_ inlet: Inlet.ID, folder: String, _ messages: [MessageSummary], at date: Date) throws {
-        try database.write { db in
-            let last = try Int.fetchOne(db, sql: "SELECT MAX(position) FROM mail_message WHERE inlet = ? AND folder = ?",
-                                        arguments: [inlet, folder]) ?? -1
-            for (index, message) in messages.enumerated() {
-                try db.execute(sql: "DELETE FROM mail_message WHERE inlet = ? AND folder = ? AND id = ?",
-                               arguments: [inlet, folder, message.id])
-                try Self.insert(db, inlet: inlet, folder: folder, position: last + 1 + index, message)
-            }
-            try Self.stamp(db, inlet: inlet, folder: folder, at: date)
-        }
-    }
-
     @discardableResult
     private func remove(_ inlet: Inlet.ID, messageID: String, folder: String?) throws -> [String] {
-        try database.write { db in
+        markDirty(inlet, messageID)
+        return try database.write { db in
             var sql = "SELECT folder FROM mail_message WHERE inlet = ? AND id = ?"
             var arguments: StatementArguments = [inlet, messageID]
             if let folder {
@@ -447,7 +451,13 @@ public final class MailboxStore: MailboxPort {
         }
     }
 
+    func markDirty(_ inlet: Inlet.ID, _ messageID: String) {
+        guard running[inlet, default: 0] > 0 else { return }
+        dirty[inlet, default: []].insert(messageID)
+    }
+
     private func apply(_ inlet: Inlet.ID, messageID: String, add: Set<Flag>, remove: Set<Flag>) throws {
+        markDirty(inlet, messageID)
         try database.write { db in
             let rows = try Row.fetchAll(db, sql: "SELECT folder, flags FROM mail_message WHERE inlet = ? AND id = ?",
                                         arguments: [inlet, messageID])
@@ -461,24 +471,24 @@ public final class MailboxStore: MailboxPort {
         }
     }
 
-    nonisolated private static func stamp(_ db: Database, inlet: Inlet.ID, folder: String, at date: Date) throws {
+    nonisolated static func stamp(_ db: Database, inlet: Inlet.ID, folder: String, at date: Date) throws {
         try db.execute(sql: "INSERT OR REPLACE INTO mail_sync (inlet, folder, at) VALUES (?, ?, ?)",
                        arguments: [inlet, folder, date.timeIntervalSince1970])
     }
 
-    nonisolated private static func insert(_ db: Database, inlet: Inlet.ID, folder: String, position: Int, _ m: MessageSummary) throws {
+    nonisolated static func insert(_ db: Database, inlet: Inlet.ID, folder: String, _ m: MessageSummary) throws {
         try db.execute(sql: """
             INSERT OR REPLACE INTO mail_message
             (inlet, folder, id, position, thread, subject, sender, fromRaw, toRaw, ccRaw, snippet, receivedAt, flags, seen, folderIDs, attachmentCount, messageIDHeader, attachments)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            arguments: [inlet, folder, m.id, position, m.threadID, m.subject, m.from, m.fromRaw, m.toRaw, m.ccRaw, m.snippet,
+            arguments: [inlet, folder, m.id, m.threadID, m.subject, m.from, m.fromRaw, m.toRaw, m.ccRaw, m.snippet,
                         m.receivedAt?.timeIntervalSince1970, encode(m.flags), m.flags.contains(.seen) ? 1 : 0,
                         m.folderIDs.joined(separator: "\n"), m.attachmentCount, m.messageIDHeader,
                         try JSONEncoder().encode(m.attachments)])
     }
 
-    nonisolated private static func summary(_ row: Row) -> MessageSummary {
+    nonisolated static func summary(_ row: Row) -> MessageSummary {
         let received: Double? = row["receivedAt"]
         let ids: String = row["folderIDs"]
         let stored: Data? = row["attachments"]
@@ -491,11 +501,11 @@ public final class MailboxStore: MailboxPort {
             attachments: attachments, messageIDHeader: row["messageIDHeader"])
     }
 
-    nonisolated private static func encode(_ flags: Set<Flag>) -> String {
+    nonisolated static func encode(_ flags: Set<Flag>) -> String {
         flags.map(\.rawValue).sorted().joined(separator: ",")
     }
 
-    nonisolated private static func flags(_ text: String) -> Set<Flag> {
+    nonisolated static func flags(_ text: String) -> Set<Flag> {
         Set(text.split(separator: ",").compactMap { Flag(rawValue: String($0)) })
     }
 }
