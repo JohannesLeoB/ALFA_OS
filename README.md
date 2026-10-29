@@ -1,6 +1,6 @@
 # ALFA
 
-ALFA is a macOS app (bundle `com.johannesleoberger.alfaos`, SwiftUI, App Sandbox on). It contains a mail client (IMAP/SMTP and Gmail), a settings area, an accounts hub that stores connections and credentials, and a Claude assistant with a calculation engine and tools for Google, Airtable, ClickUp, sevDesk, Clockodo and DHL shipping. The window shows two panes: Mail and Settings. The assistant engine and its tools are built and tested but have no view yet (see [ARCHITECTURE.md](ARCHITECTURE.md)).
+ALFA is a macOS app (bundle `com.johannesleoberger.alfaos`, SwiftUI, App Sandbox on). It contains a mail client (IMAP/SMTP and Gmail), a settings area, an accounts hub that stores connections and credentials, and a Claude assistant with a calculation engine and tools for Google, Airtable, ClickUp, sevDesk, Clockodo and DHL shipping. The window shows two panes: Mail and Settings. The assistant chat opens in the blob (see [ARCHITECTURE.md](ARCHITECTURE.md)).
 
 ## Requirements
 
