@@ -1,0 +1,3317 @@
+{
+ "stand": "2026-10-23",
+ "quelle": "TOKENBOGEN.json (Master 1810, Paket 18.10.2026 21:18)",
+ "bogen": "ALFA Entwurf C Liquid Glass v2.dc.html",
+ "statusLegende": {
+  "approved-provisional": "vorläufig abgenommen (Johannes), bis andere Optionen ausgearbeitet sind",
+  "set-by-design": "von Design gesetzt, Johannes hat nicht entschieden; offen auf ALFA Entscheidungen, Abschnitt 6",
+  "approved": "von Johannes freigegeben (Wortlaut im Feld source)"
+ },
+ "werIstWer": [
+  {
+   "n": "Johannes",
+   "k": "entscheidet, gibt frei",
+   "t": "Schreibt nichts selbst, sieht Bögen. Status approved und approved-provisional kommen nur von ihm."
+  },
+  {
+   "n": "Design-Master",
+   "k": "„ALFA OS Interface CHEF 1610-handoff 1810“",
+   "t": "Quelle für TOKENBOGEN.json, ALFA Shell, alfa-shell.js, alfa-theme.css und Bauteile. „Neuester“ laut ALFA_OS/DESIGN/MANIFEST.json, Rang latest."
+  },
+  {
+   "n": "Design-Session",
+   "k": "„ALFA OS Editoren Sketches 1610“ (dieses Projekt)",
+   "t": "Baut Editor-Bögen und Entwürfe A–D, Draws-Bogen. Werte, die sie setzt, tragen set-by-design und sind offen."
+  },
+  {
+   "n": "Code-Session",
+   "k": "Repo ALFA_OS (Swift, AlfaKit)",
+   "t": "Funktion und Verhalten. Altcode gilt nicht für UI. Code-Rückgaben im Bogen als „Code A2, A3“."
+  },
+  {
+   "n": "Draws-Bau-Session · Projektleiter",
+   "k": "Empfänger der Rückfragen m0073",
+   "t": "Antworten auf FRAGEN-AN-DRAWS-BAU.md stehen aus."
+  },
+  {
+   "n": "Agent (Leser dieses Blatts)",
+   "k": "jede Folgesitzung",
+   "t": "Regeln 1–8 aus NACHFOLGE_PROMPT.md: lesen vor behaupten, Beleg Datei:Zeile, nichts erfinden, sonst „unbekannt“."
+  }
+ ],
+ "werMachtWas": [
+  {
+   "g": "color.* (Neutral)",
+   "m": "Grund, Bahnen, Linien, Schrift ink/ink-2/ink-3, Fokus, Hover",
+   "q": "Master 1810 · ohne Statusvermerk; signal/onSignal dunkel Johannes vorläufig"
+  },
+  {
+   "g": "radius.*",
+   "m": "Bahn 20, Karte 20, Kontextmenü 16, Zeile 12, Hinweis 8, Kapsel 999",
+   "q": "Master · Bahn 20 von Johannes genannt"
+  },
+  {
+   "g": "size.* · spacing.*",
+   "m": "Zeile 36, Kopf 44, Symbol 28, Chip 24, Menüzeile 28, Kante 16, Fuge 12, Knopf-Versatz 2/14, Fokus 2/1",
+   "q": "Master · teils set-by-design"
+  },
+  {
+   "g": "typography.*",
+   "m": "Geist, 13 / 11,5 / 18, Gewicht 400/500, Tracking control 0.01, mark 0.06, title −0.02",
+   "q": "Master · Tracking set-by-design"
+  },
+  {
+   "g": "motion.*",
+   "m": "hover 160, toggle 200, chevron 240, lane 260, stackLift 420, stack 520; Kurven standard und stack",
+   "q": "Master"
+  },
+  {
+   "g": "layer.* · scale.*",
+   "m": "Bahn 1, Toast 4, Menü 5; Druck 0.98",
+   "q": "Master · set-by-design"
+  },
+  {
+   "g": "shadow.floating",
+   "m": "Schatten unter Glas (Menü, Blatt, Toast, Dock)",
+   "q": "Master"
+  },
+  {
+   "g": "Entwurf C: --g --p --s --m --a --x",
+   "m": "Farbsystem-Palette, Blockfüllungen, Akzente",
+   "q": "Design-Session · nicht im Master, offen"
+  },
+  {
+   "g": "Entwurf C: Glas (--fill, --gb, --ga, Dicke)",
+   "m": "Nur oberste Schicht: Menüs, Blatt, Toast, Linse, Dock. Schrift darauf #000 oder #fff",
+   "q": "Johannes m0016, m0027, m0033, m0035 · Widerspruch zum Master offen"
+  }
+ ],
+ "offen": [
+  {
+   "i": "1",
+   "t": "Liquid Glass: Johannes will Glas als oberste Schicht (m0016, m0027); Master-Übergabe sagt „Kein Liquid Glass“. Ungeklärt."
+  },
+  {
+   "i": "2",
+   "t": "Die 32 Töne aus Entwurf C (Kraft, Sekundär, Marker, Attention, Special) stehen nicht im Tokenbogen. Master kennt dafür nur mood.coral, apricot, rose (Stapel und Typen)."
+  },
+  {
+   "i": "3",
+   "t": "Ebenen für Blatt (Sheet), Abdunklung und Linse: kein Token. In v2 auf layer.menu 5 gesetzt."
+  },
+  {
+   "i": "4",
+   "t": "Schalter: Knopfversatz 2/14 aus Token; Knopfgröße und Schalterbreite ohne Token (v2: 20 und 36)."
+  },
+  {
+   "i": "5",
+   "t": "Karten in „Überlagerung“: Reihenfolge innerhalb der Bahn ohne Token (lokal 10–13)."
+  },
+  {
+   "i": "6",
+   "t": "Inversfarben dunkel: alfa-theme.css #2e2e2e gegen Tokenbogen #f5f5f5, Klärung offen."
+  }
+ ],
+ "entwurfCFarben": [
+  {
+   "gruppe": "Neutral",
+   "toene": [
+    {
+     "name": "Weiß",
+     "css": "--g0",
+     "wert": "oklch(0.995 0 0)"
+    },
+    {
+     "name": "Dunst",
+     "css": "--g1",
+     "wert": "oklch(0.955 0 0)"
+    },
+    {
+     "name": "Nebel",
+     "css": "--g2",
+     "wert": "oklch(0.915 0 0)"
+    },
+    {
+     "name": "Silber",
+     "css": "--g3",
+     "wert": "oklch(0.87 0 0)"
+    },
+    {
+     "name": "Hellgrau",
+     "css": "--g4",
+     "wert": "oklch(0.815 0 0)"
+    },
+    {
+     "name": "Grau hell",
+     "css": "--g5",
+     "wert": "oklch(0.75 0 0)"
+    },
+    {
+     "name": "Grau",
+     "css": "--g6",
+     "wert": "oklch(0.67 0 0)"
+    },
+    {
+     "name": "Stein",
+     "css": "--g7",
+     "wert": "oklch(0.57 0 0)"
+    },
+    {
+     "name": "Schiefer",
+     "css": "--g8",
+     "wert": "oklch(0.46 0 0)"
+    },
+    {
+     "name": "Graphit",
+     "css": "--g9",
+     "wert": "oklch(0.36 0 0)"
+    },
+    {
+     "name": "Tinte",
+     "css": "--g10",
+     "wert": "oklch(0.26 0 0)"
+    },
+    {
+     "name": "Schwarz",
+     "css": "--g11",
+     "wert": "oklch(0.14 0 0)"
+    }
+   ]
+  },
+  {
+   "gruppe": "Kraft · Kartenstufen",
+   "toene": [
+    {
+     "name": "Milch",
+     "css": "--p0",
+     "wert": "oklab(0.9784 0.0030 0.0051)"
+    },
+    {
+     "name": "Creme",
+     "css": "--p1",
+     "wert": "oklab(0.9545 0.0070 0.0105)"
+    },
+    {
+     "name": "Puder",
+     "css": "--p2",
+     "wert": "oklab(0.8837 0.0253 0.0208)"
+    },
+    {
+     "name": "Lachs",
+     "css": "--p3",
+     "wert": "oklab(0.7624 0.0618 0.0416)"
+    },
+    {
+     "name": "Terrakotta",
+     "css": "--p4",
+     "wert": "oklab(0.6410 0.0982 0.0625)"
+    },
+    {
+     "name": "Rost",
+     "css": "--p5",
+     "wert": "oklab(0.5264 0.1034 0.0522)"
+    },
+    {
+     "name": "Bordeaux",
+     "css": "--p6",
+     "wert": "oklab(0.4118 0.1085 0.0419)"
+    },
+    {
+     "name": "Nacht",
+     "css": "--p7",
+     "wert": "oklab(0.2000 0.0434 0.0168)"
+    }
+   ]
+  },
+  {
+   "gruppe": "Sekundär",
+   "toene": [
+    {
+     "name": "Sand",
+     "css": "--s0",
+     "wert": "oklch(0.88 0.05 88)"
+    },
+    {
+     "name": "Taubenblau",
+     "css": "--s1",
+     "wert": "oklch(0.8 0.045 235)"
+    },
+    {
+     "name": "Salbei",
+     "css": "--s2",
+     "wert": "oklch(0.76 0.06 150)"
+    },
+    {
+     "name": "Pflaume",
+     "css": "--s3",
+     "wert": "oklch(0.5 0.07 350)"
+    }
+   ]
+  },
+  {
+   "gruppe": "Marker",
+   "toene": [
+    {
+     "name": "Butter",
+     "css": "--m0",
+     "wert": "oklch(0.92 0.08 95)"
+    },
+    {
+     "name": "Minze",
+     "css": "--m1",
+     "wert": "oklch(0.88 0.07 165)"
+    },
+    {
+     "name": "Flieder",
+     "css": "--m2",
+     "wert": "oklch(0.86 0.06 310)"
+    }
+   ]
+  },
+  {
+   "gruppe": "Attention",
+   "toene": [
+    {
+     "name": "Warnrot",
+     "css": "--a0",
+     "wert": "oklch(0.56 0.16 38)"
+    },
+    {
+     "name": "Achtung",
+     "css": "--a1",
+     "wert": "oklch(0.76 0.12 80)"
+    },
+    {
+     "name": "Gut",
+     "css": "--a2",
+     "wert": "oklch(0.58 0.09 155)"
+    }
+   ]
+  },
+  {
+   "gruppe": "Special",
+   "toene": [
+    {
+     "name": "KI Violett",
+     "css": "--x0",
+     "wert": "oklch(0.5 0.1 300)"
+    },
+    {
+     "name": "Live Petrol",
+     "css": "--x1",
+     "wert": "oklch(0.55 0.07 200)"
+    }
+   ]
+  }
+ ],
+ "masterTokens": [
+  {
+   "name": "color.ground",
+   "css": "--c-ground",
+   "hell": "#ffffff",
+   "dunkel": "#0d0d0d",
+   "status": null,
+   "quelle": "hellgrau: #f2f2f2"
+  },
+  {
+   "name": "color.line",
+   "css": "--c-line",
+   "hell": "#e8e8e8",
+   "dunkel": "#2a2a2a",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.lineStrong",
+   "css": "--c-line-strong",
+   "hell": "#d9d9d9",
+   "dunkel": "#3a3a3a",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.ink",
+   "css": "--c-ink",
+   "hell": "#171717",
+   "dunkel": "#fafafa",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.inkSecondary",
+   "css": "--c-ink-2",
+   "hell": "#4d4d4d",
+   "dunkel": "#d9d9d9",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.inkTertiary",
+   "css": "--c-ink-3",
+   "hell": "#6b6b6b",
+   "dunkel": "#a3a3a3",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.mark",
+   "css": "--c-mark",
+   "hell": "#8a8a8a",
+   "dunkel": "#8a8a8a",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.well",
+   "css": "--c-well",
+   "hell": "#f5f5f5",
+   "dunkel": "#1f1f1f",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.hover",
+   "css": "--c-hover",
+   "hell": "rgba(0,0,0,0.05)",
+   "dunkel": "rgba(255,255,255,0.08)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.selection",
+   "css": "--c-sel",
+   "hell": "rgba(0,0,0,0.05)",
+   "dunkel": "rgba(255,255,255,0.08)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.focus",
+   "css": "--c-focus",
+   "hell": "#6b6b6b",
+   "dunkel": "#a3a3a3",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.handle",
+   "css": "--c-grip",
+   "hell": "#a3a3a3",
+   "dunkel": "#6b6b6b",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.inverse",
+   "css": "--c-inv",
+   "hell": "#171717",
+   "dunkel": "#f5f5f5",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.onInverse",
+   "css": "--c-on-inv",
+   "hell": "#ffffff",
+   "dunkel": "#0d0d0d",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.inverseHot",
+   "css": "--c-inv-hot",
+   "hell": "rgba(255,255,255,0.12)",
+   "dunkel": "rgba(0,0,0,0.08)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.inverseLine",
+   "css": "--c-inv-line",
+   "hell": "rgba(255,255,255,0.2)",
+   "dunkel": "rgba(0,0,0,0.14)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.inverseField",
+   "css": "--c-inv-field",
+   "hell": "rgba(255,255,255,0.08)",
+   "dunkel": "rgba(0,0,0,0.05)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.safeArea",
+   "css": "--c-safe",
+   "hell": "#000000",
+   "dunkel": "#000000",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.menu",
+   "css": "--c-menu",
+   "hell": "#ffffff",
+   "dunkel": "#1f1f1f",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.signal",
+   "css": "--c-signal",
+   "hell": "#b3412e",
+   "dunkel": "#e08a74",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.sheet",
+   "css": "--c-sheet",
+   "hell": "#ffffff",
+   "dunkel": "#ffffff",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.sheetInk",
+   "css": "--c-sheet-ink",
+   "hell": "#171717",
+   "dunkel": "#171717",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.sheetInkSecondary",
+   "css": "--c-sheet-ink-2",
+   "hell": "#4d4d4d",
+   "dunkel": "#4d4d4d",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.sheetInkTertiary",
+   "css": "--c-sheet-ink-3",
+   "hell": "#6b6b6b",
+   "dunkel": "#6b6b6b",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.sheetLine",
+   "css": "--c-sheet-line",
+   "hell": "#e8e8e8",
+   "dunkel": "#e8e8e8",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.glaze",
+   "css": "--c-glaze",
+   "hell": "rgba(255,255,255,0.75)",
+   "dunkel": "rgba(255,255,255,0.07)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.sheetWell",
+   "css": "--c-sheet-well",
+   "hell": "#f5f5f5",
+   "dunkel": "#f5f5f5",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.sheetLineStrong",
+   "css": "--c-sheet-line-strong",
+   "hell": "#d9d9d9",
+   "dunkel": "#d9d9d9",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.onSignal",
+   "css": "--c-on-signal",
+   "hell": "#ffffff",
+   "dunkel": "#0d0d0d",
+   "status": "approved-provisional",
+   "quelle": "17.10.: Kontrast Weiß auf #e08a74 nur 2,61:1 (gemessen ALFA Einstellungen dunkel); #0d0d0d ergibt 7,9:1. Mindestkontrast 4,5:1. Johannes 17.10. zu „2 · Von Design gesetzt“: „Ist so"
+  },
+  {
+   "name": "color.onInverseSecondary",
+   "css": "--c-on-inv-2",
+   "hell": "rgba(255,255,255,0.8)",
+   "dunkel": "rgba(0,0,0,0.72)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.onInverseTertiary",
+   "css": "--c-on-inv-3",
+   "hell": "rgba(255,255,255,0.6)",
+   "dunkel": "rgba(0,0,0,0.55)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.onInverseLine",
+   "css": "--c-on-inv-line",
+   "hell": "rgba(255,255,255,0.3)",
+   "dunkel": "rgba(0,0,0,0.22)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.orb",
+   "css": "--c-orb",
+   "hell": "#0d0d0d",
+   "dunkel": "#0d0d0d",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.orbRim",
+   "css": "--c-orb-rim",
+   "hell": "rgba(255,255,255,0.12)",
+   "dunkel": "rgba(255,255,255,0.12)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.orbGloss",
+   "css": "--c-orb-gloss",
+   "hell": "rgba(255,255,255,0.28)",
+   "dunkel": "rgba(255,255,255,0.28)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "color.lane",
+   "css": "--c-lane",
+   "hell": "#ffffff",
+   "dunkel": "#141414",
+   "status": null,
+   "quelle": "Bahn-Hintergrund. Quelle: alfa-theme.css --c-lane (Code A2)."
+  },
+  {
+   "name": "color.mood.coral",
+   "css": "--m-coral",
+   "hell": "#f95c4b",
+   "dunkel": "#f95c4b",
+   "status": null,
+   "quelle": "Johannes 16.10.: „b16 behalten“ (Rückgabe B16). Werte aus alfa-theme.css. Einsatz: Stapel und Typen, nicht für Aktionen („FARBSYSTEM … NICHT auf ZU anwenden für actions“, „Für STap"
+  },
+  {
+   "name": "color.mood.apricot",
+   "css": "--m-apricot",
+   "hell": "#f39f5a",
+   "dunkel": "#f39f5a",
+   "status": null,
+   "quelle": "Johannes 16.10.: „b16 behalten“ (Rückgabe B16). Werte aus alfa-theme.css. Einsatz: Stapel und Typen, nicht für Aktionen („FARBSYSTEM … NICHT auf ZU anwenden für actions“, „Für STap"
+  },
+  {
+   "name": "color.mood.rose",
+   "css": "--m-rose",
+   "hell": "#e8bcb9",
+   "dunkel": "#e8bcb9",
+   "status": null,
+   "quelle": "Johannes 16.10.: „b16 behalten“ (Rückgabe B16). Werte aus alfa-theme.css. Einsatz: Stapel und Typen, nicht für Aktionen („FARBSYSTEM … NICHT auf ZU anwenden für actions“, „Für STap"
+  },
+  {
+   "name": "shadow.lane",
+   "css": "--sh-lane",
+   "hell": "0px 0px 0px 1px {color.light.line}",
+   "dunkel": "0px 0px 0px 1px {color.dark.line}",
+   "status": null,
+   "quelle": "hellgrau: 0px 0px 0px 1px #e3e3e3"
+  },
+  {
+   "name": "shadow.knob",
+   "css": "--sh-knob",
+   "hell": "0px 1px 2px 0px rgba(0,0,0,0.2)",
+   "dunkel": "0px 1px 2px 0px rgba(0,0,0,0.2)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "shadow.segment",
+   "css": "--sh-seg",
+   "hell": "0px 1px 2px 0px rgba(0,0,0,0.12)",
+   "dunkel": "0px 1px 2px 0px rgba(0,0,0,0.12)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "shadow.floating",
+   "css": "--sh-float",
+   "hell": "0px 0px 0px 1px rgba(0,0,0,0.08), 0px 8px 24px 0px rgba(0,0,0,0.1)",
+   "dunkel": "0px 0px 0px 1px rgba(255,255,255,0.1), 0px 8px 24px 0px rgba(0,0,0,0.5)",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "shadow.overviewHover",
+   "css": null,
+   "hell": "0px 14px 28px -18px rgba(0,0,0,0.4)",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:953"
+  },
+  {
+   "name": "shadow.stackFront",
+   "css": null,
+   "hell": "0px -8px 24px -12px rgba(0,0,0,0.22)",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:952 (vorne)"
+  },
+  {
+   "name": "shadow.stackBack",
+   "css": null,
+   "hell": "0px -6px 16px -10px rgba(0,0,0,0.18)",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:952 (hinten, dazu 0 0 0 1px rgba(0,0,0,.06))"
+  },
+  {
+   "name": "size.edge",
+   "css": null,
+   "hell": "16px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "size.gutter",
+   "css": null,
+   "hell": "12px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "size.blobHeight",
+   "css": null,
+   "hell": "40px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "size.blobWidth",
+   "css": null,
+   "hell": "56px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "size.blobAwakeWidth",
+   "css": null,
+   "hell": "124px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 17.10.: „Wach - immer mindestens 124 breit, wenn Text nicht passt maximal und als Step 280 breit - also so breit wie die Spalte darunter in 5*56er zustand“"
+  },
+  {
+   "name": "size.blobDockDistance",
+   "css": null,
+   "hell": "36px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "size.foldedWidth",
+   "css": null,
+   "hell": "56px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "size.foldThreshold",
+   "css": null,
+   "hell": "112px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "size.middleMinimumWidth",
+   "css": null,
+   "hell": "280px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes Rückgabe 16.10. Punkt 2: „280 … · abgehakt“; Mitte kann wachsen, Sperre je Ansicht entscheidet Johannes später"
+  },
+  {
+   "name": "size.headerHeight",
+   "css": null,
+   "hell": "44px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "size.rowHeight",
+   "css": null,
+   "hell": "36px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "size.symbolSize",
+   "css": null,
+   "hell": "28px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "size.cardInset",
+   "css": null,
+   "hell": "0px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Kartenstapel bündig in der Bahn, kein Einzug (Entscheidung Johannes)"
+  },
+  {
+   "name": "size.laneRestWidth",
+   "css": null,
+   "hell": "280px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 15.10.2026: „Ruhe reiten 280“, links und rechts gleich (vorher rechts 560)"
+  },
+  {
+   "name": "size.laneMinimumRight",
+   "css": null,
+   "hell": "280px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 15.10. Kommentar an grid-lane-rest-left: „Wieso Rechts-Links unterschiedlich? Bitte vereinheitlichen auf 280“ → links und rechts gleich in Ruhe und Minimum"
+  },
+  {
+   "name": "size.blobPopupFallbackWidth",
+   "css": null,
+   "hell": "280px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "ALFA Shell: Bahn darunter gefaltet, Menü und Assistent öffnen mit laneRestWidth (vorher 300 und 320)"
+  },
+  {
+   "name": "size.footerHeight",
+   "css": null,
+   "hell": "44px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 15.10.2026: Kartenfuß „genau den gleichen Kopf“"
+  },
+  {
+   "name": "size.blobEyeWidth",
+   "css": null,
+   "hell": "4px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 15.10.2026: „auf 4 bringen?“ (vorher 3,5), Vorschlag"
+  },
+  {
+   "name": "size.blobEyeHeight",
+   "css": null,
+   "hell": "8px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 15.10.2026: „auf 8 heben?“ (vorher 7), Vorschlag"
+  },
+  {
+   "name": "size.blobEyeGap",
+   "css": null,
+   "hell": "4px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "4er Leiter, vorher 3,5"
+  },
+  {
+   "name": "size.suggestionRowHeight",
+   "css": null,
+   "hell": "44px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "wie recipientRow"
+  },
+  {
+   "name": "size.chipHeight",
+   "css": null,
+   "hell": "24px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Mail: Kapsel, Anhang, Suchbereich"
+  },
+  {
+   "name": "size.overviewTileHeightSmall",
+   "css": null,
+   "hell": "144px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Übersicht Klein, Vorschlag"
+  },
+  {
+   "name": "size.overviewTileHeightMedium",
+   "css": null,
+   "hell": "176px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Übersicht Mittel, Vorschlag"
+  },
+  {
+   "name": "size.overviewTileHeightLarge",
+   "css": null,
+   "hell": "248px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Übersicht Groß, Vorschlag"
+  },
+  {
+   "name": "size.overviewTileMinWidthSmall",
+   "css": null,
+   "hell": "200px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Vorschlag"
+  },
+  {
+   "name": "size.overviewTileMinWidthMedium",
+   "css": null,
+   "hell": "232px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Vorschlag"
+  },
+  {
+   "name": "size.overviewTileMinWidthLarge",
+   "css": null,
+   "hell": "320px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Vorschlag"
+  },
+  {
+   "name": "size.headPadRight",
+   "css": null,
+   "hell": "8px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "alfa-shell.js:3 headPad list/main/stack, rechts 8"
+  },
+  {
+   "name": "size.headPadLeftList",
+   "css": null,
+   "hell": "16px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "alfa-shell.js:3 headPad list und main, links 16"
+  },
+  {
+   "name": "size.headPadLeftStack",
+   "css": null,
+   "hell": "8px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "alfa-shell.js:3 headPad stack, links 8"
+  },
+  {
+   "name": "size.headGapList",
+   "css": null,
+   "hell": "8px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "alfa-shell.js:3 headGap list und main 8"
+  },
+  {
+   "name": "size.headGapStack",
+   "css": null,
+   "hell": "4px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "alfa-shell.js:3 headGap stack 4"
+  },
+  {
+   "name": "size.menuEdge",
+   "css": null,
+   "hell": "8px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "ALFA Shell.dc.html:67 padding:0 8px 8px"
+  },
+  {
+   "name": "size.menuRowHeight",
+   "css": null,
+   "hell": "28px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "ALFA Shell.dc.html:73 height:28px"
+  },
+  {
+   "name": "size.menuRowPadding",
+   "css": null,
+   "hell": "12px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "ALFA Shell.dc.html:73 padding:0 12px"
+  },
+  {
+   "name": "size.menuRowGap",
+   "css": null,
+   "hell": "8px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "ALFA Shell.dc.html:73 gap:8px"
+  },
+  {
+   "name": "size.menuSeparatorInset",
+   "css": null,
+   "hell": "12px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "ALFA Shell.dc.html:68 margin:0 12px 8px"
+  },
+  {
+   "name": "size.menuSeparatorSpace",
+   "css": null,
+   "hell": "4px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "ALFA Shell.dc.html:71 margin:4px 12px"
+  },
+  {
+   "name": "size.assistantFieldHeight",
+   "css": null,
+   "hell": "40px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "ALFA Shell.dc.html:88 height:40px"
+  },
+  {
+   "name": "size.blobStretchMax",
+   "css": null,
+   "hell": "0.16",
+   "dunkel": null,
+   "status": null,
+   "quelle": "ALFA Shell.dc.html:152 Math.min(.16, …) Dehnung beim Ziehen"
+  },
+  {
+   "name": "size.blobWakeDistance",
+   "css": null,
+   "hell": "212px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "ALFA Shell.dc.html:157 dist < 212"
+  },
+  {
+   "name": "size.laneMinimumLeft",
+   "css": null,
+   "hell": "280px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 15.10. Kommentar an grid-lane-rest-left: „Wieso Rechts-Links unterschiedlich? Bitte vereinheitlichen auf 280“ → links und rechts gleich in Ruhe und Minimum"
+  },
+  {
+   "name": "size.trailingTextInset",
+   "css": null,
+   "hell": "12px",
+   "dunkel": null,
+   "status": "approved-provisional",
+   "quelle": "Johannes 18.10. am Entscheidungsbogen: „Wieso sind die nicht auf Linie Bündig gesetzt seitlich ??“"
+  },
+  {
+   "name": "size.hairline",
+   "css": null,
+   "hell": "1px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 18.10.: „token für haarlinie anlegen bitte.“; Wert aus Bestand: shadow.*.lane spread 1, Griff Haarlinie 1 × 64 (alfa-shell.js)"
+  },
+  {
+   "name": "size.handleLength",
+   "css": null,
+   "hell": "64px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:197"
+  },
+  {
+   "name": "size.handleLengthActive",
+   "css": null,
+   "hell": "96px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:197"
+  },
+  {
+   "name": "size.handleThicknessActive",
+   "css": null,
+   "hell": "2px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "RUECKGABE-AN-CODE.md, Tabelle „Strich“"
+  },
+  {
+   "name": "size.fieldLabelWidth",
+   "css": null,
+   "hell": "48px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:212"
+  },
+  {
+   "name": "size.recipientListMaxHeight",
+   "css": null,
+   "hell": "308px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:157, :230"
+  },
+  {
+   "name": "size.recipientInputMinWidth",
+   "css": null,
+   "hell": "64px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:221"
+  },
+  {
+   "name": "size.recipientPaddingOpen",
+   "css": null,
+   "hell": "8px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat): „10 auf 8, ring so umschreiben.“"
+  },
+  {
+   "name": "size.composeSheetMinHeight",
+   "css": null,
+   "hell": "192px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:240"
+  },
+  {
+   "name": "size.composeTextMinHeight",
+   "css": null,
+   "hell": "120px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:241"
+  },
+  {
+   "name": "size.composeColumnMinWidth",
+   "css": null,
+   "hell": "96px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:277"
+  },
+  {
+   "name": "size.settingsTileHeight",
+   "css": null,
+   "hell": "112px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Johannes 18.10. (nach 22:01 MESZ): „Die \"Kacheln\" bitte gestalterisch an die \"Stapelkarten\" anpassen, also vom material. Sind die Kacheln um 4er und 56er raster? Die Kacheln auch w"
+  },
+  {
+   "name": "size.settingsTileMinWidth",
+   "css": null,
+   "hell": "112px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Johannes 18.10. (nach 22:01 MESZ): „Die \"Kacheln\" bitte gestalterisch an die \"Stapelkarten\" anpassen, also vom material. Sind die Kacheln um 4er und 56er raster? Die Kacheln auch w"
+  },
+  {
+   "name": "size.toggleKnobOffsetOn",
+   "css": null,
+   "hell": "14px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat), zu Entscheidungen 6 (4er-Leiter): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“"
+  },
+  {
+   "name": "size.toggleKnobOffsetOff",
+   "css": null,
+   "hell": "2px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat), zu Entscheidungen 6 (4er-Leiter): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“"
+  },
+  {
+   "name": "size.selectionRingWidth",
+   "css": null,
+   "hell": "2px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat): „10 auf 8, ring so umschreiben.“"
+  },
+  {
+   "name": "size.overviewHoverLift",
+   "css": null,
+   "hell": "3px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat), zu Entscheidungen 6 (4er-Leiter): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“"
+  },
+  {
+   "name": "size.menuReelPerspective",
+   "css": null,
+   "hell": "600px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:212"
+  },
+  {
+   "name": "size.orbGlowBlur",
+   "css": null,
+   "hell": "2.4px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat): „JA - ORB im Blob ist so freigegeben!“ · Johannes 18.10. (zweiter Chat), zu Entscheidungen 6 (4er-Leiter): „Entscheidungen 6 - nein, weichzeichnung "
+  },
+  {
+   "name": "size.blobLidOffset",
+   "css": null,
+   "hell": "1.4px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat), zur 4er-Leiter: „der BLOB war so freigegeben.“"
+  },
+  {
+   "name": "size.confirmEnterBlur",
+   "css": null,
+   "hell": "3px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat), zu Entscheidungen 6 (4er-Leiter): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“"
+  },
+  {
+   "name": "size.blobDragThreshold",
+   "css": null,
+   "hell": "3px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:150"
+  },
+  {
+   "name": "size.blobFlingMinDistance",
+   "css": null,
+   "hell": "48px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:159"
+  },
+  {
+   "name": "size.blobEyeFollowDistance",
+   "css": null,
+   "hell": "200px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:162"
+  },
+  {
+   "name": "size.blobEyeFollowRamp",
+   "css": null,
+   "hell": "40px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:162"
+  },
+  {
+   "name": "size.blobEyeTravelX",
+   "css": null,
+   "hell": "2px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“"
+  },
+  {
+   "name": "size.blobEyeTravelY",
+   "css": null,
+   "hell": "1.6px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“"
+  },
+  {
+   "name": "size.blobHomeRadius",
+   "css": null,
+   "hell": "200px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:172"
+  },
+  {
+   "name": "size.blobLabelPadding",
+   "css": null,
+   "hell": "22px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:137"
+  },
+  {
+   "name": "size.blobMenuMinHeight",
+   "css": null,
+   "hell": "160px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:230"
+  },
+  {
+   "name": "size.laneSnap",
+   "css": null,
+   "hell": "12px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "alfa-shell.js:48"
+  },
+  {
+   "name": "size.laneHysteresis",
+   "css": null,
+   "hell": "64px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "alfa-shell.js:46"
+  },
+  {
+   "name": "size.breakpointStack",
+   "css": null,
+   "hell": "440px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:580"
+  },
+  {
+   "name": "size.breakpointFilterLabel",
+   "css": null,
+   "hell": "340px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:850"
+  },
+  {
+   "name": "size.breakpointAttachments",
+   "css": null,
+   "hell": "560px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:875"
+  },
+  {
+   "name": "size.breakpointNarrowCard",
+   "css": null,
+   "hell": "480px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:964, :1007, :1016"
+  },
+  {
+   "name": "size.breakpointSendLabel",
+   "css": null,
+   "hell": "300px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:1040"
+  },
+  {
+   "name": "size.mailRowEstimate",
+   "css": null,
+   "hell": "88px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:876"
+  },
+  {
+   "name": "size.stripReserveTop",
+   "css": null,
+   "hell": "24px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:806"
+  },
+  {
+   "name": "size.stripReserveBottom",
+   "css": null,
+   "hell": "96px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:806"
+  },
+  {
+   "name": "size.stackFanStep",
+   "css": null,
+   "hell": "52px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:922"
+  },
+  {
+   "name": "size.overviewActionsOffset",
+   "css": null,
+   "hell": "6px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“"
+  },
+  {
+   "name": "size.safeAreaTop",
+   "css": null,
+   "hell": "32px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "alfa-shell.js:10"
+  },
+  {
+   "name": "size.tileLogoSize",
+   "css": null,
+   "hell": "18px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:73"
+  },
+  {
+   "name": "size.focusRingWidth",
+   "css": null,
+   "hell": "2px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "alfa-theme.css:6, ALFA Bestaetigen.dc.html:19, :27, :28, :38"
+  },
+  {
+   "name": "size.focusRingOffset",
+   "css": null,
+   "hell": "1px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "alfa-theme.css:6, ALFA Bestaetigen.dc.html (style-focus)"
+  },
+  {
+   "name": "size.quoteBarWidth",
+   "css": null,
+   "hell": "2px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:180"
+  },
+  {
+   "name": "size.markSeparatorRing",
+   "css": null,
+   "hell": "2px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:320, ALFA Shell.dc.html:29"
+  },
+  {
+   "name": "size.spinnerStroke",
+   "css": null,
+   "hell": "1.5px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Bestaetigen.dc.html:34"
+  },
+  {
+   "name": "size.tileHoverLift",
+   "css": null,
+   "hell": "1px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“"
+  },
+  {
+   "name": "size.recipientLabelColumn",
+   "css": null,
+   "hell": "40px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:157, :230"
+  },
+  {
+   "name": "size.recipientMarkColumn",
+   "css": null,
+   "hell": "24px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:157, :228, :230"
+  },
+  {
+   "name": "size.menuWidthStep",
+   "css": null,
+   "hell": "56px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 18.10. (zweiter Chat): „bitte menü breiten auch versuchen auf die 56 leiter/rasterung und ausrichtung je nach Lage in der spalte, oder? Da wo das nciht zu kollisionen führ"
+  },
+  {
+   "name": "size.menuMinWidth",
+   "css": null,
+   "hell": "168px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html menuW()"
+  },
+  {
+   "name": "size.menuMaxWidth",
+   "css": null,
+   "hell": "280px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html menuW()"
+  },
+  {
+   "name": "size.menuAlignment",
+   "css": null,
+   "hell": "anchorEdgeInLane",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 18.10. (zweiter Chat): „bitte menü breiten auch versuchen auf die 56 leiter/rasterung und ausrichtung je nach Lage in der spalte, oder? Da wo das nciht zu kollisionen führ"
+  },
+  {
+   "name": "size.reelTopOffset",
+   "css": null,
+   "hell": "8px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Johannes 18.10. (nach 22:24 MESZ): „no - das ist too much. Ich meinte nur auch die \"Kante\" wie bei den Stapelkarten, diese \"tiefe\" die Form war vorher besser. zurück. Und das Snapp"
+  },
+  {
+   "name": "size.accountFanWidth",
+   "css": null,
+   "hell": "220px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html (Kopf linke Bahn, fanW)"
+  },
+  {
+   "name": "size.accountClosedWidth",
+   "css": null,
+   "hell": "260px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html (Kopf linke Bahn, closedW)"
+  },
+  {
+   "name": "radius.lane",
+   "css": null,
+   "hell": "20px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "radius.blob",
+   "css": null,
+   "hell": "20px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "radius.contextMenu",
+   "css": null,
+   "hell": "16px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Zeile 12 + Rand 4"
+  },
+  {
+   "name": "radius.card",
+   "css": null,
+   "hell": "20px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 15.10.2026: „Radien der Karten ALLE wie der Kopf“ · oben 20, unten 0 (cardRadiusBottom)"
+  },
+  {
+   "name": "radius.row",
+   "css": null,
+   "hell": "12px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "radius.notice",
+   "css": null,
+   "hell": "8px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "radius.field",
+   "css": null,
+   "hell": "4px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "radius.stroke",
+   "css": null,
+   "hell": "2px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "radius.capsule",
+   "css": null,
+   "hell": "999px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "radius.cardBottom",
+   "css": null,
+   "hell": "0px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 15.10.2026: Kartenstapel „Skat-Karten“"
+  },
+  {
+   "name": "spacing.step4",
+   "css": null,
+   "hell": "4px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "spacing.step8",
+   "css": null,
+   "hell": "8px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "spacing.step12",
+   "css": null,
+   "hell": "12px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "spacing.step16",
+   "css": null,
+   "hell": "16px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "spacing.step20",
+   "css": null,
+   "hell": "20px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "spacing.step24",
+   "css": null,
+   "hell": "24px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "spacing.step28",
+   "css": null,
+   "hell": "28px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "spacing.step32",
+   "css": null,
+   "hell": "32px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "spacing.step36",
+   "css": null,
+   "hell": "36px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "spacing.step40",
+   "css": null,
+   "hell": "40px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "spacing.step44",
+   "css": null,
+   "hell": "44px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "spacing.step56",
+   "css": null,
+   "hell": "56px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "spacing.statusDot",
+   "css": null,
+   "hell": "8px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 18.10. (zweiter Chat): „spacing dot auf 8 bringen.“"
+  },
+  {
+   "name": "spacing.blobInset",
+   "css": null,
+   "hell": "6px",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat), zur 4er-Leiter: „der BLOB war so freigegeben.“"
+  },
+  {
+   "name": "typography.size.small",
+   "css": null,
+   "hell": "11.5px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "typography.size.body",
+   "css": null,
+   "hell": "13px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "typography.size.title",
+   "css": null,
+   "hell": "18px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "typography.size.blobFace",
+   "css": null,
+   "hell": "9px",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Kürzel in Marken und im Gesicht, Geist (keine Mono, Johannes 15.10.)"
+  },
+  {
+   "name": "typography.weight",
+   "css": null,
+   "hell": "300",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Vorschau, Beschreibung"
+  },
+  {
+   "name": "typography.weight.regular",
+   "css": null,
+   "hell": "400",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "typography.weight.medium",
+   "css": null,
+   "hell": "500",
+   "dunkel": null,
+   "status": null,
+   "quelle": "alles Betonte"
+  },
+  {
+   "name": "typography.weight.semibold",
+   "css": null,
+   "hell": "600",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat): „600 übrnehmen.“"
+  },
+  {
+   "name": "typography.lineHeight.small",
+   "css": null,
+   "hell": "16px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "typography.lineHeight.notice",
+   "css": null,
+   "hell": "20px",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "typography.lineHeight.body",
+   "css": null,
+   "hell": "1.35",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "typography.lineHeight.title",
+   "css": null,
+   "hell": "1.25",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "typography.lineHeight.mailBody",
+   "css": null,
+   "hell": "1.6",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "typography.lineHeight.counter",
+   "css": null,
+   "hell": "1",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "typography.lineHeight.control",
+   "css": null,
+   "hell": "18px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Bestaetigen.dc.html:17"
+  },
+  {
+   "name": "typography.family.text",
+   "css": null,
+   "hell": "[\"Geist\",\"SF Pro Text\",\"system-ui\"]",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 17.10.: Dateien geliefert"
+  },
+  {
+   "name": "typography.tracking.control",
+   "css": null,
+   "hell": "0.01",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html: 14 Stellen (Textknöpfe, font-size 11.5, weight 500)"
+  },
+  {
+   "name": "typography.tracking.mark",
+   "css": null,
+   "hell": "0.06",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:81, :138 u. a. (6 Stellen)"
+  },
+  {
+   "name": "typography.tracking.title",
+   "css": null,
+   "hell": "-0.02",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:162"
+  },
+  {
+   "name": "typography.textStyle.body",
+   "css": null,
+   "hell": "{\"fontFamily\":\"{typography.family.text}\",\"fontSize\":\"{typography.size.body}\",\"fontWeight\":\"{typography.weight.regular}\",\"letterSpacing\":0,\"lineHeight\":\"{typography.lineHeight.body}\"}",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)"
+  },
+  {
+   "name": "typography.textStyle.bodyEmphasis",
+   "css": null,
+   "hell": "{\"fontFamily\":\"{typography.family.text}\",\"fontSize\":\"{typography.size.body}\",\"fontWeight\":\"{typography.weight.medium}\",\"letterSpacing\":0,\"lineHeight\":\"{typography.lineHeight.body}\"}",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)"
+  },
+  {
+   "name": "typography.textStyle.caption",
+   "css": null,
+   "hell": "{\"fontFamily\":\"{typography.family.text}\",\"fontSize\":\"{typography.size.small}\",\"fontWeight\":\"{typography.weight.regular}\",\"letterSpacing\":0,\"lineHeight\":\"{typography.lineHeight.small}\"}",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)"
+  },
+  {
+   "name": "typography.textStyle.captionEmphasis",
+   "css": null,
+   "hell": "{\"fontFamily\":\"{typography.family.text}\",\"fontSize\":\"{typography.size.small}\",\"fontWeight\":\"{typography.weight.medium}\",\"letterSpacing\":0,\"lineHeight\":\"{typography.lineHeight.small}\"}",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)"
+  },
+  {
+   "name": "typography.textStyle.control",
+   "css": null,
+   "hell": "{\"fontFamily\":\"{typography.family.text}\",\"fontSize\":\"{typography.size.small}\",\"fontWeight\":\"{typography.weight.medium}\",\"letterSpacing\":\"{typography.tracking.control}\",\"lineHeight\":\"{typography.lineHeight.small}\"}",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)"
+  },
+  {
+   "name": "typography.textStyle.mark",
+   "css": null,
+   "hell": "{\"fontFamily\":\"{typography.family.text}\",\"fontSize\":\"{typography.size.small}\",\"fontWeight\":\"{typography.weight.medium}\",\"letterSpacing\":\"{typography.tracking.mark}\",\"lineHeight\":\"{typography.lineHeight.counter}\"}",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)"
+  },
+  {
+   "name": "typography.textStyle.markSmall",
+   "css": null,
+   "hell": "{\"fontFamily\":\"{typography.family.text}\",\"fontSize\":\"{typography.size.blobFace}\",\"fontWeight\":\"{typography.weight.medium}\",\"letterSpacing\":\"{typography.tracking.mark}\",\"lineHeight\":\"{typography.lineHeight.counter}\"}",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)"
+  },
+  {
+   "name": "typography.textStyle.title",
+   "css": null,
+   "hell": "{\"fontFamily\":\"{typography.family.text}\",\"fontSize\":\"{typography.size.title}\",\"fontWeight\":\"{typography.weight.medium}\",\"letterSpacing\":\"{typography.tracking.title}\",\"lineHeight\":\"{typography.lineHeight.title}\"}",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)"
+  },
+  {
+   "name": "typography.textStyle.mailBody",
+   "css": null,
+   "hell": "{\"fontFamily\":\"{typography.family.text}\",\"fontSize\":\"{typography.size.body}\",\"fontWeight\":\"{typography.weight.regular}\",\"letterSpacing\":0,\"lineHeight\":\"{typography.lineHeight.mailBody}\"}",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)"
+  },
+  {
+   "name": "motion.duration.hover",
+   "css": null,
+   "hell": "160ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Hintergrund, Rand, Farbe beim Überfahren"
+  },
+  {
+   "name": "motion.duration.short",
+   "css": null,
+   "hell": "150ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Auge-Lid, Fortschritt"
+  },
+  {
+   "name": "motion.duration.toggle",
+   "css": null,
+   "hell": "200ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Umschalter, Hinweis ein/aus, Suchstrich"
+  },
+  {
+   "name": "motion.duration.chevron",
+   "css": null,
+   "hell": "240ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Chevron dreht, Blob-Breite beim Ziehen und Radius"
+  },
+  {
+   "name": "motion.duration.lane",
+   "css": null,
+   "hell": "260ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Bahn: left und width"
+  },
+  {
+   "name": "motion.duration.recipientList",
+   "css": null,
+   "hell": "280ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Empfängerliste: Zeilenhöhe; Deckkraft 200 ms"
+  },
+  {
+   "name": "motion.duration.blobEyes",
+   "css": null,
+   "hell": "320ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Augenlider"
+  },
+  {
+   "name": "motion.duration.stackBackground",
+   "css": null,
+   "hell": "320ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Kartenfarbe"
+  },
+  {
+   "name": "motion.duration.rowSequence",
+   "css": null,
+   "hell": "360ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Zeilen blenden gestaffelt ein (Deckkraft), Bewegung 600 ms, Versatz je Zeile"
+  },
+  {
+   "name": "motion.duration.blobFlight",
+   "css": null,
+   "hell": "416ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Blob left, right, top"
+  },
+  {
+   "name": "motion.duration.stackLift",
+   "css": null,
+   "hell": "420ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Karte hebt sich unter dem Zeiger"
+  },
+  {
+   "name": "motion.duration.stack",
+   "css": null,
+   "hell": "520ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Karten top, height, left, right"
+  },
+  {
+   "name": "motion.duration.searchUnderline",
+   "css": null,
+   "hell": "480ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Suchstrich fährt aus"
+  },
+  {
+   "name": "motion.duration.fold",
+   "css": null,
+   "hell": "720ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Bahn faltet bei leerem Stapel; Start nach 420 ms"
+  },
+  {
+   "name": "motion.duration.thinking",
+   "css": null,
+   "hell": "1000ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Orb dreht (linear)"
+  },
+  {
+   "name": "motion.duration.pulse",
+   "css": null,
+   "hell": "1800ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Blob-Punkt pulsiert"
+  },
+  {
+   "name": "motion.duration.blink",
+   "css": null,
+   "hell": "1700ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Blinzeln, Abstand 3 s plus Zufall; Lid 140 ms"
+  },
+  {
+   "name": "motion.duration.blobWidth",
+   "css": null,
+   "hell": "240ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "ALFA Shell bTrans width, border-radius"
+  },
+  {
+   "name": "motion.duration.overviewDelay",
+   "css": null,
+   "hell": "300ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Übersicht: Kacheln warten, bis die Bahnen gefaltet sind"
+  },
+  {
+   "name": "motion.duration.overviewEnter",
+   "css": null,
+   "hell": "640ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Übersicht: Kachel blendet ein, Vorschlag"
+  },
+  {
+   "name": "motion.duration.overviewStagger",
+   "css": null,
+   "hell": "60ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Übersicht: Versatz je Kachel, Vorschlag"
+  },
+  {
+   "name": "motion.duration.tileHover",
+   "css": null,
+   "hell": "320ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Übersicht: Kachel hebt sich, Vorschlag"
+  },
+  {
+   "name": "motion.duration.tileActions",
+   "css": null,
+   "hell": "240ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Übersicht: Action-Knöpfe, Vorschlag"
+  },
+  {
+   "name": "motion.duration.labelDelay",
+   "css": null,
+   "hell": "80ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Bereichsname im wachen Blob: Deckkraft wartet 80 ms (ALFA Shell.dc.html)"
+  },
+  {
+   "name": "motion.duration.reelStagger",
+   "css": null,
+   "hell": "40ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Menüzeilen des Blobs: Versatz je Zeile, höchstens 14 Zeilen (ALFA Shell.dc.html)"
+  },
+  {
+   "name": "motion.duration.ebbDelay",
+   "css": null,
+   "hell": "420ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "alfa-shell.js K.ebbDelay: Ebbe der rechten Bahn startet nach 420 ms"
+  },
+  {
+   "name": "motion.duration.ebbSlow",
+   "css": null,
+   "hell": "900ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "alfa-shell.js K.ebbSlow: langsame Ebbe 900 ms"
+  },
+  {
+   "name": "motion.duration.confirmHold",
+   "css": null,
+   "hell": "1000ms",
+   "dunkel": null,
+   "status": "approved-provisional",
+   "quelle": "Johannes 17.10.: „in 1sek … wie ein Ladebalken füllen“ → Radieren 1 s, linear (ALFA Bestaetigen.dc.html run())"
+  },
+  {
+   "name": "motion.duration.confirmRelease",
+   "css": null,
+   "hell": "180ms",
+   "dunkel": null,
+   "status": "approved-provisional",
+   "quelle": "ALFA Bestaetigen.dc.html run(): Loslassen holt den Knopf zurück"
+  },
+  {
+   "name": "motion.duration.menuReelTransform",
+   "css": null,
+   "hell": "600ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:212"
+  },
+  {
+   "name": "motion.duration.spinner",
+   "css": null,
+   "hell": "800ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Bestaetigen.dc.html:34"
+  },
+  {
+   "name": "motion.duration.orbOrbitFirst",
+   "css": null,
+   "hell": "7000ms",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat): „JA - ORB im Blob ist so freigegeben!“"
+  },
+  {
+   "name": "motion.duration.orbOrbitSecond",
+   "css": null,
+   "hell": "9000ms",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat): „JA - ORB im Blob ist so freigegeben!“"
+  },
+  {
+   "name": "motion.duration.orbOrbitThird",
+   "css": null,
+   "hell": "11000ms",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "Johannes 18.10. (zweiter Chat): „JA - ORB im Blob ist so freigegeben!“"
+  },
+  {
+   "name": "motion.duration.blobBlinkClose",
+   "css": null,
+   "hell": "140ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:129"
+  },
+  {
+   "name": "motion.duration.blobBlinkInterval",
+   "css": null,
+   "hell": "3000ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:129"
+  },
+  {
+   "name": "motion.duration.syncSpin",
+   "css": null,
+   "hell": "2000ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:184"
+  },
+  {
+   "name": "motion.duration.menuReelDelay",
+   "css": null,
+   "hell": "34ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:178"
+  },
+  {
+   "name": "motion.duration.menuFocusDelay",
+   "css": null,
+   "hell": "80ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:178"
+  },
+  {
+   "name": "motion.duration.menuHoverDelay",
+   "css": null,
+   "hell": "160ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:180"
+  },
+  {
+   "name": "motion.duration.clickGuard",
+   "css": null,
+   "hell": "50ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:169"
+  },
+  {
+   "name": "motion.duration.toast",
+   "css": null,
+   "hell": "1800ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:556"
+  },
+  {
+   "name": "motion.duration.searchFocusDelay",
+   "css": null,
+   "hell": "40ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:853"
+  },
+  {
+   "name": "motion.duration.confirmDoneDelay",
+   "css": null,
+   "hell": "900ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Bestaetigen.dc.html:85"
+  },
+  {
+   "name": "motion.duration.toastUndo",
+   "css": null,
+   "hell": "4000ms",
+   "dunkel": null,
+   "status": null,
+   "quelle": "RUECKGABE-AN-CODE.md B26: „Rückgängig: 4 s, Ziel alter Ordner, bestätigt.“ und A4: „Mails löschen ohne Frage, mit Rückgängig (Toast 4 s).“"
+  },
+  {
+   "name": "motion.duration.scrollLineIn",
+   "css": null,
+   "hell": "320ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Johannes 18.10. (nach 22:30 MESZ): „Ne, ist nicht so gut, zu \"heavy\" und nicht sehr elegant und sleek. wir gehen zurück zu hairline. diese ist aber wenn nciht gescrollt wird \"ausge"
+  },
+  {
+   "name": "motion.duration.scrollLineRest",
+   "css": null,
+   "hell": "420ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Johannes 18.10. (nach 22:30 MESZ): „Ne, ist nicht so gut, zu \"heavy\" und nicht sehr elegant und sleek. wir gehen zurück zu hairline. diese ist aber wenn nciht gescrollt wird \"ausge"
+  },
+  {
+   "name": "motion.duration.scrollLineOut",
+   "css": null,
+   "hell": "900ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Johannes 18.10. (nach 22:30 MESZ): „Ne, ist nicht so gut, zu \"heavy\" und nicht sehr elegant und sleek. wir gehen zurück zu hairline. diese ist aber wenn nciht gescrollt wird \"ausge"
+  },
+  {
+   "name": "motion.easing.standard",
+   "css": null,
+   "hell": "[0.2,0.8,0.2,1]",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Standard: Zeiger, Chevron, Hinweise, Suche"
+  },
+  {
+   "name": "motion.easing.blobFlight",
+   "css": null,
+   "hell": "[0.2,1.15,0.3,1]",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Blob fliegt (416 ms), mit leichtem Überschwingen"
+  },
+  {
+   "name": "motion.easing.stack",
+   "css": null,
+   "hell": "[0.22,1.08,0.36,1]",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Karten im Stapel (520 ms)"
+  },
+  {
+   "name": "motion.easing.fold",
+   "css": null,
+   "hell": "[0.65,0,0.25,1]",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Bahn faltet bei leerem Stapel (720 ms)"
+  },
+  {
+   "name": "motion.deceleration",
+   "css": null,
+   "hell": "0.998",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:171"
+  },
+  {
+   "name": "motion.menuReelTilt",
+   "css": null,
+   "hell": "60",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:214"
+  },
+  {
+   "name": "motion.blobFlingSpeed",
+   "css": null,
+   "hell": "900",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:159"
+  },
+  {
+   "name": "stack.0.surface",
+   "css": null,
+   "hell": "#f5f5f5",
+   "dunkel": "#1f1f1f",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "stack.0.ink",
+   "css": null,
+   "hell": "#171717",
+   "dunkel": "#fafafa",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "stack.1.surface",
+   "css": null,
+   "hell": "#ebebeb",
+   "dunkel": "#2e2e2e",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "stack.1.ink",
+   "css": null,
+   "hell": "#171717",
+   "dunkel": "#fafafa",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "stack.2.surface",
+   "css": null,
+   "hell": "#d9d9d9",
+   "dunkel": "#3a3a3a",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "stack.2.ink",
+   "css": null,
+   "hell": "#171717",
+   "dunkel": "#fafafa",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "stack.3.surface",
+   "css": null,
+   "hell": "#a3a3a3",
+   "dunkel": "#4d4d4d",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "stack.3.ink",
+   "css": null,
+   "hell": "#171717",
+   "dunkel": "#fafafa",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "stack.4.surface",
+   "css": null,
+   "hell": "#6b6b6b",
+   "dunkel": "#6b6b6b",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "stack.4.ink",
+   "css": null,
+   "hell": "#ffffff",
+   "dunkel": "#fafafa",
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.laneRadius",
+   "css": null,
+   "hell": "{radius.lane}",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes: „Bahn: 20 ist component-lane-radius im Tokenbogen.“"
+  },
+  {
+   "name": "component.laneEdge",
+   "css": null,
+   "hell": "{size.edge}",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Fensterrand"
+  },
+  {
+   "name": "component.laneGap",
+   "css": null,
+   "hell": "{size.gutter}",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Fuge zwischen Bahnen"
+  },
+  {
+   "name": "component.laneHeaderHeight",
+   "css": null,
+   "hell": "{size.headerHeight}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.laneFoldedWidth",
+   "css": null,
+   "hell": "{size.foldedWidth}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.laneFoldThreshold",
+   "css": null,
+   "hell": "{size.foldThreshold}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.laneMiddleMinimumWidth",
+   "css": null,
+   "hell": "{size.middleMinimumWidth}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.rowHeight",
+   "css": null,
+   "hell": "{size.rowHeight}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.rowRadius",
+   "css": null,
+   "hell": "{radius.row}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.symbolSize",
+   "css": null,
+   "hell": "{size.symbolSize}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.blobHeight",
+   "css": null,
+   "hell": "{size.blobHeight}",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes: „wie wäre BLOB mit 20er Höhe? also gleichem Radius wie die Spalten ?“ Gebaut: Höhe 40, Radius 20"
+  },
+  {
+   "name": "component.blobWidth",
+   "css": null,
+   "hell": "{size.blobWidth}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.blobAwakeWidth",
+   "css": null,
+   "hell": "{size.blobAwakeWidth}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.blobDockDistance",
+   "css": null,
+   "hell": "{size.blobDockDistance}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.blobRadius",
+   "css": null,
+   "hell": "{radius.blob}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.menuRadius",
+   "css": null,
+   "hell": "{radius.contextMenu}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.cardRadius",
+   "css": null,
+   "hell": "{radius.card}",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Karten im Stapel bündig in der Bahn, ohne Einzug"
+  },
+  {
+   "name": "component.cardInset",
+   "css": null,
+   "hell": "{size.cardInset}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.noticeRadius",
+   "css": null,
+   "hell": "{radius.notice}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.fieldRadius",
+   "css": null,
+   "hell": "{radius.field}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "component.capsuleRadius",
+   "css": null,
+   "hell": "{radius.capsule}",
+   "dunkel": null,
+   "status": null,
+   "quelle": null
+  },
+  {
+   "name": "confirm.eraseEdge",
+   "css": null,
+   "hell": "0.2",
+   "dunkel": null,
+   "status": "approved-provisional",
+   "quelle": "weiche Kante des Radierens, Anteil der Knopfbreite"
+  },
+  {
+   "name": "confirm.eraseBlur",
+   "css": null,
+   "hell": "0.6px",
+   "dunkel": null,
+   "status": "approved-provisional",
+   "quelle": null
+  },
+  {
+   "name": "confirm.shakeFrom",
+   "css": null,
+   "hell": "0.7",
+   "dunkel": null,
+   "status": "approved-provisional",
+   "quelle": "Johannes 17.10.: „zum Ende hin zittern“"
+  },
+  {
+   "name": "confirm.shakeAmplitude",
+   "css": null,
+   "hell": "1.5px",
+   "dunkel": null,
+   "status": "approved-provisional",
+   "quelle": null
+  },
+  {
+   "name": "confirm.tooltip",
+   "css": null,
+   "hell": "system title",
+   "dunkel": null,
+   "status": "approved-provisional",
+   "quelle": "Johannes 17.10.: „Komplett wie bei MacOS machen“"
+  },
+  {
+   "name": "confirm.shakeFrequency",
+   "css": null,
+   "hell": "160",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Bestaetigen.dc.html:97"
+  },
+  {
+   "name": "confirm.originDefault",
+   "css": null,
+   "hell": "40",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Bestaetigen.dc.html:45"
+  },
+  {
+   "name": "count.stackMaxCards",
+   "css": null,
+   "hell": "6",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:646, :717"
+  },
+  {
+   "name": "count.overviewLinesSmall",
+   "css": null,
+   "hell": "3",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:951"
+  },
+  {
+   "name": "count.overviewLinesMedium",
+   "css": null,
+   "hell": "4",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:951"
+  },
+  {
+   "name": "count.overviewLinesLarge",
+   "css": null,
+   "hell": "8",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:951"
+  },
+  {
+   "name": "count.contactSuggestions",
+   "css": null,
+   "hell": "5",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:986"
+  },
+  {
+   "name": "count.senderSuggestions",
+   "css": null,
+   "hell": "8",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:751"
+  },
+  {
+   "name": "count.attachmentsNarrow",
+   "css": null,
+   "hell": "2",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:875"
+  },
+  {
+   "name": "count.attachmentsWide",
+   "css": null,
+   "hell": "3",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:875"
+  },
+  {
+   "name": "count.stackHeads",
+   "css": null,
+   "hell": "3",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:922"
+  },
+  {
+   "name": "count.menuStaggerMax",
+   "css": null,
+   "hell": "14",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:214"
+  },
+  {
+   "name": "opacity.ringOnColor",
+   "css": null,
+   "hell": "0.3",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:31"
+  },
+  {
+   "name": "opacity.ringOnMark",
+   "css": null,
+   "hell": "0.22",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:320"
+  },
+  {
+   "name": "opacity.cardMeta",
+   "css": null,
+   "hell": "0.72",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:136, ALFA Einstellungen.dc.html (Kartenkopf), Logik metaOp"
+  },
+  {
+   "name": "opacity.cardMetaDeep",
+   "css": null,
+   "hell": "0.95",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html und ALFA Einstellungen.dc.html, Logik metaOp (d >= 4)"
+  },
+  {
+   "name": "layer.lane",
+   "css": null,
+   "hell": "1",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:24"
+  },
+  {
+   "name": "layer.handle",
+   "css": null,
+   "hell": "2",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:40"
+  },
+  {
+   "name": "layer.syncButton",
+   "css": null,
+   "hell": "3",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:46"
+  },
+  {
+   "name": "layer.toast",
+   "css": null,
+   "hell": "4",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:342"
+  },
+  {
+   "name": "layer.menu",
+   "css": null,
+   "hell": "5",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:346"
+  },
+  {
+   "name": "layer.blob",
+   "css": null,
+   "hell": "6",
+   "dunkel": null,
+   "status": null,
+   "quelle": "Johannes 18.10. (zweiter Chat): „Blob immer Vordergründig auch wenn seitlich gedocked?“"
+  },
+  {
+   "name": "layer.safeArea",
+   "css": null,
+   "hell": "7",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Shell.dc.html:21"
+  },
+  {
+   "name": "layer.inLane.overview",
+   "css": null,
+   "hell": "2",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:311"
+  },
+  {
+   "name": "layer.inLane.toast",
+   "css": null,
+   "hell": "3",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "ALFA Mail.dc.html:336"
+  },
+  {
+   "name": "scale.pressTile",
+   "css": null,
+   "hell": "0.98",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Johannes 18.10. (nach 22:30 MESZ): „Die linie ist aber noch da, lass dir da mal was optimiertes und natürlich funktionierensed, aber subtil sehr liebevoll überlegt udn mit viel lie"
+  },
+  {
+   "name": "draws.color.desk",
+   "css": "--d-desk",
+   "hell": "#f5f5f5",
+   "dunkel": "#1f1f1f",
+   "status": "set-by-design",
+   "quelle": "= color.well (--c-well) · Tisch hinter dem Blatt · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.grid",
+   "css": "--d-grid",
+   "hell": "#e8e8e8",
+   "dunkel": "#e8e8e8",
+   "status": "set-by-design",
+   "quelle": "= color.sheetLine · Blatt bleibt in dunkel weiß (--c-sheet dunkel #ffffff) · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.gridMajor",
+   "css": "--d-grid-major",
+   "hell": "#d9d9d9",
+   "dunkel": "#d9d9d9",
+   "status": "set-by-design",
+   "quelle": "= color.sheetLineStrong · jede 5. Rasterlinie · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.snap",
+   "css": "--d-snap",
+   "hell": "#6b6b6b",
+   "dunkel": "#6b6b6b",
+   "status": "set-by-design",
+   "quelle": "= color.sheetInkTertiary · Fanglinie gestrichelt · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.selection",
+   "css": "--d-select",
+   "hell": "#171717",
+   "dunkel": "#171717",
+   "status": "set-by-design",
+   "quelle": "= color.sheetInk · Auswahlrahmen, keine Markantfarbe (Johannes 21.10.) · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.handle",
+   "css": "--d-handle",
+   "hell": "#ffffff",
+   "dunkel": "#ffffff",
+   "status": "set-by-design",
+   "quelle": "= color.sheet · Griffe am Auswahlrahmen · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.faceTop",
+   "css": "--d-face-top",
+   "hell": "#f5f5f5",
+   "dunkel": "#f5f5f5",
+   "status": "set-by-design",
+   "quelle": "= color.sheetWell · Vorgabe, im Inspektor einstellbar · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.faceSide",
+   "css": "--d-face-side",
+   "hell": "#d9d9d9",
+   "dunkel": "#d9d9d9",
+   "status": "set-by-design",
+   "quelle": "= color.sheetLineStrong · Vorgabe, einstellbar · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.faceFront",
+   "css": "--d-face-front",
+   "hell": "#e8e8e8",
+   "dunkel": "#e8e8e8",
+   "status": "set-by-design",
+   "quelle": "= color.sheetLine · Vorgabe, einstellbar · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.edge",
+   "css": "--d-edge",
+   "hell": "#171717",
+   "dunkel": "#171717",
+   "status": "set-by-design",
+   "quelle": "= color.sheetInk · Kanten innen und Umriss · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.dimension",
+   "css": "--d-dim",
+   "hell": "#4d4d4d",
+   "dunkel": "#4d4d4d",
+   "status": "set-by-design",
+   "quelle": "= color.sheetInkSecondary · Maßlinien und Maßzahlen · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.shadow",
+   "css": "--d-shadow",
+   "hell": "#171717",
+   "dunkel": "#171717",
+   "status": "set-by-design",
+   "quelle": "= color.sheetInk · Deckkraft aus draws.range.shadowStrength · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.accent",
+   "css": "--d-accent",
+   "hell": "#b3412e",
+   "dunkel": "#b3412e",
+   "status": "set-by-design",
+   "quelle": "= color.light.signal · auf dem Blatt immer der helle Wert · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.defect",
+   "css": "--d-defect",
+   "hell": "#b3412e",
+   "dunkel": "#b3412e",
+   "status": "set-by-design",
+   "quelle": "= color.light.signal · Überlauf-Rahmen auf dem Blatt · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.matOak",
+   "css": "--d-mat-oak",
+   "hell": "#d6b58c",
+   "dunkel": "#d6b58c",
+   "status": "set-by-design",
+   "quelle": "set-by-design · Eiche · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.matWalnut",
+   "css": "--d-mat-walnut",
+   "hell": "#7a5236",
+   "dunkel": "#7a5236",
+   "status": "set-by-design",
+   "quelle": "set-by-design · Nussbaum · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.matLacquer",
+   "css": "--d-mat-lacquer",
+   "hell": "#f2f0eb",
+   "dunkel": "#f2f0eb",
+   "status": "set-by-design",
+   "quelle": "set-by-design · Lack weiß · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.color.matSteel",
+   "css": "--d-mat-steel",
+   "hell": "#9ea3a8",
+   "dunkel": "#9ea3a8",
+   "status": "set-by-design",
+   "quelle": "set-by-design · Stahl · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.gridStep",
+   "css": null,
+   "hell": "10mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Raster auf dem Blatt · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.gridMajorStep",
+   "css": null,
+   "hell": "50mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "jede 5. Linie kräftiger · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.snapDistance",
+   "css": null,
+   "hell": "6px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Fangweite am Bildschirm, = Hälfte spacing.step12 · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.selectionStroke",
+   "css": null,
+   "hell": "1px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Haarlinie, non-scaling · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.handleSize",
+   "css": null,
+   "hell": "8px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "= spacing.statusDot · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.sheetMargin",
+   "css": null,
+   "hell": "10mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Blattrand · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.titleBlockHeight",
+   "css": null,
+   "hell": "18mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Schriftfeld unten · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.viewGap",
+   "css": null,
+   "hell": "8mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Abstand der Ansichten · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.viewPadding",
+   "css": null,
+   "hell": "6mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Innenabstand je Ansicht · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.viewLabelBand",
+   "css": null,
+   "hell": "4mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Zeile unter der Ansicht · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.dimensionOffset",
+   "css": null,
+   "hell": "4mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Maßlinie zum Körper · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.dimensionText",
+   "css": null,
+   "hell": "2.5mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Maßzahl, DIN 406 · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.dimensionStroke",
+   "css": null,
+   "hell": "0.18mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Maßlinie · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.labelText",
+   "css": null,
+   "hell": "2.2mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Ansichtsname · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.titleLabel",
+   "css": null,
+   "hell": "2mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Schriftfeld Bezeichnung · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.titleValue",
+   "css": null,
+   "hell": "3.2mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Schriftfeld Wert · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.titleStroke",
+   "css": null,
+   "hell": "0.35mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Schriftfeld Rahmen · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.minimumViewSize",
+   "css": null,
+   "hell": "40mm",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "kleinste Ansicht beim Aufziehen · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.deskPadding",
+   "css": null,
+   "hell": "48px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Luft um das Blatt bei Zoom 1 · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.sliderTrack",
+   "css": null,
+   "hell": "2px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Reglerbahn = radius.stroke · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.size.sliderKnob",
+   "css": null,
+   "hell": "16px",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Reglerknopf wie toggle-Knopf (Konfigurator) · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.range.azimuth",
+   "css": null,
+   "hell": "45",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.range.elevation",
+   "css": null,
+   "hell": "30",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.range.edgeInner",
+   "css": null,
+   "hell": "0.18",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.range.edgeOutline",
+   "css": null,
+   "hell": "0.5",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.range.shadowStrength",
+   "css": null,
+   "hell": "14",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.range.zoom",
+   "css": null,
+   "hell": "1",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.range.isoSteps",
+   "css": null,
+   "hell": "0",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.range.perspectiveDistance",
+   "css": null,
+   "hell": "4.5",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.range.scales",
+   "css": null,
+   "hell": "[1,2,5,10,20,25,50,100]",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Maßstäbe 1:n, DIN ISO 5455 · auto nimmt den größten, der passt"
+  },
+  {
+   "name": "draws.range.lightVector",
+   "css": null,
+   "hell": "[0.38,0.62]",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Schattenrichtung je mm Höhe (x, y) · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.format.A4",
+   "css": null,
+   "hell": "{\"width\":297,\"height\":210,\"unit\":\"mm\"}",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "ISO 216, quer gemessen"
+  },
+  {
+   "name": "draws.format.A3",
+   "css": null,
+   "hell": "{\"width\":420,\"height\":297,\"unit\":\"mm\"}",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "ISO 216, quer gemessen"
+  },
+  {
+   "name": "draws.format.A2",
+   "css": null,
+   "hell": "{\"width\":594,\"height\":420,\"unit\":\"mm\"}",
+   "dunkel": null,
+   "status": "approved",
+   "quelle": "ISO 216, quer gemessen"
+  },
+  {
+   "name": "draws.tone.faceLadder",
+   "css": null,
+   "hell": "[\"#ffffff\",\"#f5f5f5\",\"#e8e8e8\",\"#d9d9d9\",\"#a3a3a3\"]",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Grauleiter des Blatts (sheet, sheetWell, sheetLine, sheetLineStrong, grip) · Wahl für Flächentöne"
+  },
+  {
+   "name": "draws.tone.accentOptions",
+   "css": null,
+   "hell": "[\"#b3412e\",\"#f39f5a\",\"#f95c4b\",\"#171717\"]",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "signal hell, mood.apricot, mood.coral, sheetInk"
+  },
+  {
+   "name": "draws.tone.materialTones",
+   "css": null,
+   "hell": "{\"oak\":[\"#e6cfae\",\"#d6b58c\",\"#b8915f\"],\"walnut\":[\"#9a6c4c\",\"#7a5236\",\"#553826\"],\"lacquer\":[\"#ffffff\",\"#f2f0eb\",\"#e3dfd6\"],\"steel\":[\"#c4c8cc\",\"#9ea3a8\",\"#6f757b\"]}",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "hell/mittel/dunkel je Material · Brief Draws 21.10.2026 · Entwurf Design"
+  },
+  {
+   "name": "draws.tone.faceShade",
+   "css": null,
+   "hell": "{\"top\":1,\"front\":0.9,\"side\":0.78}",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Abdunklung je Fläche bei Material und Akzent"
+  },
+  {
+   "name": "draws.motion.exportPage",
+   "css": null,
+   "hell": "600ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Takt je Seite in der Vorschau des Exports"
+  },
+  {
+   "name": "draws.motion.claudeImport",
+   "css": null,
+   "hell": "1600ms",
+   "dunkel": null,
+   "status": "set-by-design",
+   "quelle": "Vorschau Claude-Import"
+  }
+ ]
+}

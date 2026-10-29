@@ -1,0 +1,105 @@
+[
+  {
+    "item": "A1a",
+    "answer": 280,
+    "beleg": "Johannes 16.10., Frage Mittelspalte: „280, rechte Bahn wächst“; Kommentar: „Die mitte kann auch wachsen, alles ist je ansicht „locked“ oder nicht. ENTSCHEIDE ICH SPÄTER, bauen.“",
+    "note": "Sperre je Ansicht als Schalter vorsehen, Standard offen."
+  },
+  {
+    "item": "A1b",
+    "answer": {
+      "visible": 1,
+      "hit": 12
+    },
+    "beleg": "Johannes 16.10.: „Griff Haarlinie (12 Trefferfläche)“ bestätigt"
+  },
+  {
+    "item": "A1e",
+    "answer": true,
+    "beleg": "Johannes 16.10.: „4 × 8, Abstand 4“"
+  },
+  {
+    "item": "A1f",
+    "answer": null,
+    "beleg": "Johannes 16.10.: „best Practice … hauptsache es funktioniert“, Fullscreen-Nutzung, 960 soll nicht dauernd Thema sein. Der Chat-Satz „960“ davor gilt nicht. Code entscheidet nach Apple-Praxis (SwiftUI: frame(minWidth:minHeight:) + windowResizability(.contentMinSize) + defaultSize)."
+  },
+  {
+    "item": "C4",
+    "answer": {
+      "hub": true,
+      "accountsNote": "bis zu drei wählbar. auch dann inkl. „kalender, Einladungen etc“ in Mailansicht switchbar."
+    },
+    "beleg": "Johannes 16.10.: Hub „Ja, versuchs doch einfach mal!“; Kommentar zu den Mail-Konten wörtlich übernommen. Gestapelt oder Wähler: nicht entschieden."
+  },
+  {
+    "item": "A1c",
+    "answer": null,
+    "beleg": "keine Antwort von Johannes, Standard von Code gilt"
+  },
+  {
+    "item": "A1d",
+    "answer": null,
+    "beleg": "keine Antwort von Johannes, Standard von Code gilt"
+  },
+  {
+    "item": "assistant",
+    "answer": {
+      "later": true,
+      "menuEntry": "later, as navigation item",
+      "today": "mini chat on double click of the blob"
+    },
+    "beleg": "Johannes 16.10.: „Assistent ist SPÄTER ein voller Ansichtsbereich, wie MAIL etc. … Menüeintrag ja, aber später und als navigations-Item“"
+  },
+  {
+    "item": "laneMinimum",
+    "answer": {
+      "left": 280,
+      "middle": 280,
+      "right": 280
+    },
+    "beleg": "Johannes 15.10.: „Bitte vereinheitlichen auf 280“; Rückgabe 16.10. Punkt 2 „280 · abgehakt“; 17.10.: „ICH HABE NIEMALS EINE 224 … ENTSCHIEDEN“, 112 „NEIN“"
+  },
+  {
+    "item": "blobAwakeWidth",
+    "answer": {
+      "min": 124,
+      "step": 280,
+      "rule": "124 if the area name fits, else 280"
+    },
+    "beleg": "Johannes 17.10.: „Wach - immer mindestens 124 breit, wenn Text nicht passt maximal und als Step 280 breit - also so breit wie die Spalte darunter in 5*56er zustand“"
+  },
+  {
+    "item": "codeAdoptsDesign",
+    "answer": true,
+    "beleg": "Johannes 17.10.: „CODE HAT NICHTS ZU SAGEN WAS MAßE ANGEHT!!!!! ER MUSS UNSERE ÜBERNEHMEN!!!!“"
+  },
+  {
+    "item": "confirmHold",
+    "answer": {
+      "holdMs": 1000,
+      "visual": "erase from left, shake towards end",
+      "tooltip": "system title",
+      "clickMode": false
+    },
+    "beleg": "Johannes 17.10.: „in 1sek … zittern“, „wegradiert“, „Button sollte immer die selbe Größe behalten“, „dumbest user sache schmeißen wir wieder raus“, „Komplett wie bei MacOS machen“"
+  },
+  {
+    "item": "designSetValues",
+    "answer": {
+      "approved": true,
+      "provisional": true,
+      "values": [
+        "confirm.eraseEdge 0.2",
+        "confirm.eraseBlur 0.6px",
+        "confirm.shakeFrom 0.7",
+        "confirm.shakeAmplitude 1.5px",
+        "motion.duration.confirmRelease 180ms",
+        "color.dark.onSignal #0d0d0d",
+        "confirm hold 1000ms",
+        "size.trailingTextInset 14px"
+      ],
+      "status": "freigabe-orange"
+    },
+    "beleg": "Johannes 17.10. zu „2 · Von Design gesetzt“: „Ist soweit OK, fürs erste und bis weitere Farbsysteme und feintuning einziehen so gestattet.“ · Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen. kann so in die dokumente geführt werden, bis später andere Optionen ausgearbeitet werden.“"
+  }
+]

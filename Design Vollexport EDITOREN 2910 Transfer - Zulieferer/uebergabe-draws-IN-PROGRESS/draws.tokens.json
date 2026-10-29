@@ -1,0 +1,1361 @@
+{
+ "$description": "IN PROGRESS · NO MASTER · Auszug TOKENBOGEN.json › draws vom 21.10.2026. Alle Werte status set-by-design, von Design gesetzt, NICHT von Johannes entschieden.",
+ "draws": {
+  "$description": "Bereich Draws (Zeichenblatt). Je Wert hell und dunkel, Quelle in $extensions.alfa.source. Status set-by-design bis Freigabe.",
+  "color": {
+   "light": {
+    "desk": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9608,
+       0.9608,
+       0.9608
+      ],
+      "alpha": 1,
+      "hex": "#f5f5f5"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-desk",
+       "source": "= color.well (--c-well) · Tisch hinter dem Blatt · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "grid": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9098,
+       0.9098,
+       0.9098
+      ],
+      "alpha": 1,
+      "hex": "#e8e8e8"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-grid",
+       "source": "= color.sheetLine · Blatt bleibt in dunkel weiß (--c-sheet dunkel #ffffff) · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "gridMajor": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.851,
+       0.851,
+       0.851
+      ],
+      "alpha": 1,
+      "hex": "#d9d9d9"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-grid-major",
+       "source": "= color.sheetLineStrong · jede 5. Rasterlinie · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "snap": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.4196,
+       0.4196,
+       0.4196
+      ],
+      "alpha": 1,
+      "hex": "#6b6b6b"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-snap",
+       "source": "= color.sheetInkTertiary · Fanglinie gestrichelt · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "selection": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.0902,
+       0.0902,
+       0.0902
+      ],
+      "alpha": 1,
+      "hex": "#171717"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-select",
+       "source": "= color.sheetInk · Auswahlrahmen, keine Markantfarbe (Johannes 21.10.) · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "handle": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       1,
+       1,
+       1
+      ],
+      "alpha": 1,
+      "hex": "#ffffff"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-handle",
+       "source": "= color.sheet · Griffe am Auswahlrahmen · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "faceTop": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9608,
+       0.9608,
+       0.9608
+      ],
+      "alpha": 1,
+      "hex": "#f5f5f5"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-face-top",
+       "source": "= color.sheetWell · Vorgabe, im Inspektor einstellbar · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "faceSide": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.851,
+       0.851,
+       0.851
+      ],
+      "alpha": 1,
+      "hex": "#d9d9d9"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-face-side",
+       "source": "= color.sheetLineStrong · Vorgabe, einstellbar · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "faceFront": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9098,
+       0.9098,
+       0.9098
+      ],
+      "alpha": 1,
+      "hex": "#e8e8e8"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-face-front",
+       "source": "= color.sheetLine · Vorgabe, einstellbar · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "edge": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.0902,
+       0.0902,
+       0.0902
+      ],
+      "alpha": 1,
+      "hex": "#171717"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-edge",
+       "source": "= color.sheetInk · Kanten innen und Umriss · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "dimension": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.302,
+       0.302,
+       0.302
+      ],
+      "alpha": 1,
+      "hex": "#4d4d4d"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-dim",
+       "source": "= color.sheetInkSecondary · Maßlinien und Maßzahlen · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "shadow": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.0902,
+       0.0902,
+       0.0902
+      ],
+      "alpha": 1,
+      "hex": "#171717"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-shadow",
+       "source": "= color.sheetInk · Deckkraft aus draws.range.shadowStrength · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "accent": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.702,
+       0.2549,
+       0.1804
+      ],
+      "alpha": 1,
+      "hex": "#b3412e"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-accent",
+       "source": "= color.light.signal · auf dem Blatt immer der helle Wert · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "defect": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.702,
+       0.2549,
+       0.1804
+      ],
+      "alpha": 1,
+      "hex": "#b3412e"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-defect",
+       "source": "= color.light.signal · Überlauf-Rahmen auf dem Blatt · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "matOak": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.8392,
+       0.7098,
+       0.549
+      ],
+      "alpha": 1,
+      "hex": "#d6b58c"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-mat-oak",
+       "source": "set-by-design · Eiche · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "matWalnut": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.4784,
+       0.3216,
+       0.2118
+      ],
+      "alpha": 1,
+      "hex": "#7a5236"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-mat-walnut",
+       "source": "set-by-design · Nussbaum · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "matLacquer": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.949,
+       0.9412,
+       0.9216
+      ],
+      "alpha": 1,
+      "hex": "#f2f0eb"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-mat-lacquer",
+       "source": "set-by-design · Lack weiß · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "matSteel": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.6196,
+       0.6392,
+       0.6588
+      ],
+      "alpha": 1,
+      "hex": "#9ea3a8"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-mat-steel",
+       "source": "set-by-design · Stahl · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    }
+   },
+   "dark": {
+    "desk": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.1216,
+       0.1216,
+       0.1216
+      ],
+      "alpha": 1,
+      "hex": "#1f1f1f"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-desk",
+       "source": "= color.well (--c-well) · Tisch hinter dem Blatt · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "grid": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9098,
+       0.9098,
+       0.9098
+      ],
+      "alpha": 1,
+      "hex": "#e8e8e8"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-grid",
+       "source": "= color.sheetLine · Blatt bleibt in dunkel weiß (--c-sheet dunkel #ffffff) · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "gridMajor": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.851,
+       0.851,
+       0.851
+      ],
+      "alpha": 1,
+      "hex": "#d9d9d9"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-grid-major",
+       "source": "= color.sheetLineStrong · jede 5. Rasterlinie · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "snap": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.4196,
+       0.4196,
+       0.4196
+      ],
+      "alpha": 1,
+      "hex": "#6b6b6b"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-snap",
+       "source": "= color.sheetInkTertiary · Fanglinie gestrichelt · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "selection": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.0902,
+       0.0902,
+       0.0902
+      ],
+      "alpha": 1,
+      "hex": "#171717"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-select",
+       "source": "= color.sheetInk · Auswahlrahmen, keine Markantfarbe (Johannes 21.10.) · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "handle": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       1,
+       1,
+       1
+      ],
+      "alpha": 1,
+      "hex": "#ffffff"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-handle",
+       "source": "= color.sheet · Griffe am Auswahlrahmen · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "faceTop": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9608,
+       0.9608,
+       0.9608
+      ],
+      "alpha": 1,
+      "hex": "#f5f5f5"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-face-top",
+       "source": "= color.sheetWell · Vorgabe, im Inspektor einstellbar · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "faceSide": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.851,
+       0.851,
+       0.851
+      ],
+      "alpha": 1,
+      "hex": "#d9d9d9"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-face-side",
+       "source": "= color.sheetLineStrong · Vorgabe, einstellbar · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "faceFront": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9098,
+       0.9098,
+       0.9098
+      ],
+      "alpha": 1,
+      "hex": "#e8e8e8"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-face-front",
+       "source": "= color.sheetLine · Vorgabe, einstellbar · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "edge": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.0902,
+       0.0902,
+       0.0902
+      ],
+      "alpha": 1,
+      "hex": "#171717"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-edge",
+       "source": "= color.sheetInk · Kanten innen und Umriss · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "dimension": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.302,
+       0.302,
+       0.302
+      ],
+      "alpha": 1,
+      "hex": "#4d4d4d"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-dim",
+       "source": "= color.sheetInkSecondary · Maßlinien und Maßzahlen · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "shadow": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.0902,
+       0.0902,
+       0.0902
+      ],
+      "alpha": 1,
+      "hex": "#171717"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-shadow",
+       "source": "= color.sheetInk · Deckkraft aus draws.range.shadowStrength · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "accent": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.702,
+       0.2549,
+       0.1804
+      ],
+      "alpha": 1,
+      "hex": "#b3412e"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-accent",
+       "source": "= color.light.signal · auf dem Blatt immer der helle Wert · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "defect": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.702,
+       0.2549,
+       0.1804
+      ],
+      "alpha": 1,
+      "hex": "#b3412e"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-defect",
+       "source": "= color.light.signal · Überlauf-Rahmen auf dem Blatt · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "matOak": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.8392,
+       0.7098,
+       0.549
+      ],
+      "alpha": 1,
+      "hex": "#d6b58c"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-mat-oak",
+       "source": "set-by-design · Eiche · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "matWalnut": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.4784,
+       0.3216,
+       0.2118
+      ],
+      "alpha": 1,
+      "hex": "#7a5236"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-mat-walnut",
+       "source": "set-by-design · Nussbaum · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "matLacquer": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.949,
+       0.9412,
+       0.9216
+      ],
+      "alpha": 1,
+      "hex": "#f2f0eb"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-mat-lacquer",
+       "source": "set-by-design · Lack weiß · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    },
+    "matSteel": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.6196,
+       0.6392,
+       0.6588
+      ],
+      "alpha": 1,
+      "hex": "#9ea3a8"
+     },
+     "$extensions": {
+      "alfa": {
+       "css": "--d-mat-steel",
+       "source": "set-by-design · Stahl · Brief Draws 21.10.2026 · Entwurf Design",
+       "status": "set-by-design"
+      }
+     }
+    }
+   }
+  },
+  "size": {
+   "gridStep": {
+    "$type": "dimension",
+    "$value": {
+     "value": 10,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Raster auf dem Blatt · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 10,
+      "dark": 10
+     }
+    }
+   },
+   "gridMajorStep": {
+    "$type": "dimension",
+    "$value": {
+     "value": 50,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "jede 5. Linie kräftiger · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 50,
+      "dark": 50
+     }
+    }
+   },
+   "snapDistance": {
+    "$type": "dimension",
+    "$value": {
+     "value": 6,
+     "unit": "px"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Fangweite am Bildschirm, = Hälfte spacing.step12 · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 6,
+      "dark": 6
+     }
+    }
+   },
+   "selectionStroke": {
+    "$type": "dimension",
+    "$value": {
+     "value": 1,
+     "unit": "px"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Haarlinie, non-scaling · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 1,
+      "dark": 1
+     }
+    }
+   },
+   "handleSize": {
+    "$type": "dimension",
+    "$value": {
+     "value": 8,
+     "unit": "px"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "= spacing.statusDot · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 8,
+      "dark": 8
+     }
+    }
+   },
+   "sheetMargin": {
+    "$type": "dimension",
+    "$value": {
+     "value": 10,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Blattrand · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 10,
+      "dark": 10
+     }
+    }
+   },
+   "titleBlockHeight": {
+    "$type": "dimension",
+    "$value": {
+     "value": 18,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Schriftfeld unten · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 18,
+      "dark": 18
+     }
+    }
+   },
+   "viewGap": {
+    "$type": "dimension",
+    "$value": {
+     "value": 8,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Abstand der Ansichten · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 8,
+      "dark": 8
+     }
+    }
+   },
+   "viewPadding": {
+    "$type": "dimension",
+    "$value": {
+     "value": 6,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Innenabstand je Ansicht · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 6,
+      "dark": 6
+     }
+    }
+   },
+   "viewLabelBand": {
+    "$type": "dimension",
+    "$value": {
+     "value": 4,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Zeile unter der Ansicht · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 4,
+      "dark": 4
+     }
+    }
+   },
+   "dimensionOffset": {
+    "$type": "dimension",
+    "$value": {
+     "value": 4,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Maßlinie zum Körper · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 4,
+      "dark": 4
+     }
+    }
+   },
+   "dimensionText": {
+    "$type": "dimension",
+    "$value": {
+     "value": 2.5,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Maßzahl, DIN 406 · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 2.5,
+      "dark": 2.5
+     }
+    }
+   },
+   "dimensionStroke": {
+    "$type": "dimension",
+    "$value": {
+     "value": 0.18,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Maßlinie · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 0.18,
+      "dark": 0.18
+     }
+    }
+   },
+   "labelText": {
+    "$type": "dimension",
+    "$value": {
+     "value": 2.2,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Ansichtsname · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 2.2,
+      "dark": 2.2
+     }
+    }
+   },
+   "titleLabel": {
+    "$type": "dimension",
+    "$value": {
+     "value": 2,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Schriftfeld Bezeichnung · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 2,
+      "dark": 2
+     }
+    }
+   },
+   "titleValue": {
+    "$type": "dimension",
+    "$value": {
+     "value": 3.2,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Schriftfeld Wert · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 3.2,
+      "dark": 3.2
+     }
+    }
+   },
+   "titleStroke": {
+    "$type": "dimension",
+    "$value": {
+     "value": 0.35,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Schriftfeld Rahmen · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 0.35,
+      "dark": 0.35
+     }
+    }
+   },
+   "minimumViewSize": {
+    "$type": "dimension",
+    "$value": {
+     "value": 40,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "kleinste Ansicht beim Aufziehen · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 40,
+      "dark": 40
+     }
+    }
+   },
+   "deskPadding": {
+    "$type": "dimension",
+    "$value": {
+     "value": 48,
+     "unit": "px"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Luft um das Blatt bei Zoom 1 · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 48,
+      "dark": 48
+     }
+    }
+   },
+   "sliderTrack": {
+    "$type": "dimension",
+    "$value": {
+     "value": 2,
+     "unit": "px"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Reglerbahn = radius.stroke · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 2,
+      "dark": 2
+     }
+    }
+   },
+   "sliderKnob": {
+    "$type": "dimension",
+    "$value": {
+     "value": 16,
+     "unit": "px"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Reglerknopf wie toggle-Knopf (Konfigurator) · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 16,
+      "dark": 16
+     }
+    }
+   }
+  },
+  "range": {
+   "azimuth": {
+    "$type": "number",
+    "$value": 45,
+    "$extensions": {
+     "alfa": {
+      "min": 0,
+      "max": 355,
+      "step": 5,
+      "unit": "°",
+      "source": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 45,
+      "dark": 45
+     }
+    }
+   },
+   "elevation": {
+    "$type": "number",
+    "$value": 30,
+    "$extensions": {
+     "alfa": {
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "°",
+      "source": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 30,
+      "dark": 30
+     }
+    }
+   },
+   "edgeInner": {
+    "$type": "number",
+    "$value": 0.18,
+    "$extensions": {
+     "alfa": {
+      "min": 0,
+      "max": 1,
+      "step": 0.02,
+      "unit": "mm",
+      "source": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 0.18,
+      "dark": 0.18
+     }
+    }
+   },
+   "edgeOutline": {
+    "$type": "number",
+    "$value": 0.5,
+    "$extensions": {
+     "alfa": {
+      "min": 0,
+      "max": 2,
+      "step": 0.05,
+      "unit": "mm",
+      "source": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 0.5,
+      "dark": 0.5
+     }
+    }
+   },
+   "shadowStrength": {
+    "$type": "number",
+    "$value": 14,
+    "$extensions": {
+     "alfa": {
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "%",
+      "source": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 14,
+      "dark": 14
+     }
+    }
+   },
+   "zoom": {
+    "$type": "number",
+    "$value": 1,
+    "$extensions": {
+     "alfa": {
+      "min": 0.25,
+      "max": 4,
+      "step": 1.25,
+      "unit": "×",
+      "source": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 1,
+      "dark": 1
+     }
+    }
+   },
+   "isoSteps": {
+    "$type": "number",
+    "$value": 0,
+    "$extensions": {
+     "alfa": {
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "",
+      "source": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 0,
+      "dark": 0
+     }
+    }
+   },
+   "perspectiveDistance": {
+    "$type": "number",
+    "$value": 4.5,
+    "$extensions": {
+     "alfa": {
+      "min": 4.5,
+      "max": 4.5,
+      "step": 0,
+      "unit": "× Objektgröße",
+      "source": "Inspektor-Regler · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design",
+      "light": 4.5,
+      "dark": 4.5
+     }
+    }
+   },
+   "scales": {
+    "$type": "number",
+    "$value": [
+     1,
+     2,
+     5,
+     10,
+     20,
+     25,
+     50,
+     100
+    ],
+    "$extensions": {
+     "alfa": {
+      "source": "Maßstäbe 1:n, DIN ISO 5455 · auto nimmt den größten, der passt",
+      "status": "set-by-design"
+     }
+    }
+   },
+   "lightVector": {
+    "$type": "number",
+    "$value": [
+     0.38,
+     0.62
+    ],
+    "$extensions": {
+     "alfa": {
+      "source": "Schattenrichtung je mm Höhe (x, y) · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design"
+     }
+    }
+   }
+  },
+  "format": {
+   "A4": {
+    "$type": "dimension",
+    "$value": {
+     "width": 297,
+     "height": 210,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "ISO 216, quer gemessen",
+      "status": "approved"
+     }
+    }
+   },
+   "A3": {
+    "$type": "dimension",
+    "$value": {
+     "width": 420,
+     "height": 297,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "ISO 216, quer gemessen",
+      "status": "approved"
+     }
+    }
+   },
+   "A2": {
+    "$type": "dimension",
+    "$value": {
+     "width": 594,
+     "height": 420,
+     "unit": "mm"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "ISO 216, quer gemessen",
+      "status": "approved"
+     }
+    }
+   }
+  },
+  "tone": {
+   "faceLadder": {
+    "$type": "color",
+    "$value": [
+     "#ffffff",
+     "#f5f5f5",
+     "#e8e8e8",
+     "#d9d9d9",
+     "#a3a3a3"
+    ],
+    "$extensions": {
+     "alfa": {
+      "source": "Grauleiter des Blatts (sheet, sheetWell, sheetLine, sheetLineStrong, grip) · Wahl für Flächentöne",
+      "status": "set-by-design"
+     }
+    }
+   },
+   "accentOptions": {
+    "$type": "color",
+    "$value": [
+     "#b3412e",
+     "#f39f5a",
+     "#f95c4b",
+     "#171717"
+    ],
+    "$extensions": {
+     "alfa": {
+      "source": "signal hell, mood.apricot, mood.coral, sheetInk",
+      "status": "set-by-design"
+     }
+    }
+   },
+   "materialTones": {
+    "$type": "color",
+    "$value": {
+     "oak": [
+      "#e6cfae",
+      "#d6b58c",
+      "#b8915f"
+     ],
+     "walnut": [
+      "#9a6c4c",
+      "#7a5236",
+      "#553826"
+     ],
+     "lacquer": [
+      "#ffffff",
+      "#f2f0eb",
+      "#e3dfd6"
+     ],
+     "steel": [
+      "#c4c8cc",
+      "#9ea3a8",
+      "#6f757b"
+     ]
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "hell/mittel/dunkel je Material · Brief Draws 21.10.2026 · Entwurf Design",
+      "status": "set-by-design"
+     }
+    }
+   },
+   "faceShade": {
+    "$type": "number",
+    "$value": {
+     "top": 1,
+     "front": 0.9,
+     "side": 0.78
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Abdunklung je Fläche bei Material und Akzent",
+      "status": "set-by-design"
+     }
+    }
+   }
+  },
+  "motion": {
+   "exportPage": {
+    "$type": "duration",
+    "$value": {
+     "value": 600,
+     "unit": "ms"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Takt je Seite in der Vorschau des Exports",
+      "status": "set-by-design"
+     }
+    }
+   },
+   "claudeImport": {
+    "$type": "duration",
+    "$value": {
+     "value": 1600,
+     "unit": "ms"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Vorschau Claude-Import",
+      "status": "set-by-design"
+     }
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,189 @@
+{
+  "export": "2026-10-18",
+  "stand": "2026-10-18T21:18+02:00",
+  "quelleWerte": "TOKENBOGEN.json",
+  "quelleWorte": "entscheidungen.md",
+  "regeln": [
+    "Code übernimmt alle Maße des Entwurfs (Johannes 17.10.)",
+    "Hülle nur einmal (CLAUDE.md)",
+    "Kein ZIP ohne Freigabe (CLAUDE.md)"
+  ],
+  "seiten": [
+    {
+      "datei": "ALFA Mail.dc.html",
+      "rolle": "Logik beider Ansichtsbereiche; Seite Mail (bereich=Mail, Vorgabe). Mehrfachauswahl gebaut.",
+      "importiert": [
+        "ALFA Shell",
+        "ALFA Bestaetigen"
+      ],
+      "bytes": 172459
+    },
+    {
+      "datei": "ALFA Einstellungen.dc.html",
+      "rolle": "Seite Einstellungen: lädt ALFA Mail mit bereich=\"Einstellungen\" (eine Logik für beide Bereiche, 17.10.)",
+      "importiert": [
+        "ALFA Mail"
+      ],
+      "bytes": 182150
+    },
+    {
+      "datei": "ALFA Shell.dc.html",
+      "rolle": "Hülle, einmal; Maße aus alfa-shell.js",
+      "importiert": [],
+      "bytes": 28384
+    },
+    {
+      "datei": "ALFA Bestaetigen.dc.html",
+      "rolle": "Baustein Halten-zum-Bestätigen",
+      "importiert": [],
+      "bytes": 10323
+    },
+    {
+      "datei": "ALFA Huelle.dc.html",
+      "rolle": "Register Entwurf gegen Code (Code zieht nach)",
+      "importiert": [
+        "ALFA Mail"
+      ],
+      "bytes": 11341
+    },
+    {
+      "datei": "ALFA Tokenbogen.dc.html",
+      "rolle": "Ansicht von TOKENBOGEN.json",
+      "importiert": [],
+      "bytes": 7381
+    },
+    {
+      "datei": "ALFA Designsystem.dc.html",
+      "rolle": "Sichtbogen des Tokenbogens: liest TOKENBOGEN.json live (Farbe hell/dunkel, Maße 1:1, Radien, Schatten, Schrift, Bewegung zum Abspielen, Freigabe Orange) und zeigt die echte ALFA Mail bei 1512 × 982. Keine eigenen Werte, keine eigene Mail-Logik (neu gebaut 18.10.).",
+      "importiert": [
+        "ALFA Mail"
+      ],
+      "bytes": 63990
+    },
+    {
+      "datei": "ALFA Dienste.dc.html",
+      "rolle": "Referenzbogen der Dienste (Johannes 13.10.: „Bleibt als Referenzbogen“)",
+      "importiert": [],
+      "bytes": 14780
+    },
+    {
+      "datei": "ALFA Farbsystem.dc.html",
+      "rolle": "Vorschlag, von Johannes nicht entschieden",
+      "importiert": [],
+      "bytes": 14470
+    },
+    {
+      "datei": "ALFA Entscheidungen.dc.html",
+      "rolle": "Ein Bogen für alles, was Johannes entscheidet: 1 Blob wach (entschieden), 2 Freigabe Orange (Bestätigen, onSignal, Einzug), 3 Kacheln bei den Integrationen (gebaut), 5 Mehrfachauswahl und Farbsystem; 6 Von Design gesetzt, offen (24 Tokens aus dem Werteabgleich 18.10., liest TOKENBOGEN.json)",
+      "importiert": [
+        "ALFA Bestaetigen",
+        "ALFA Farbsystem"
+      ]
+    }
+  ],
+  "offen": [
+    "Kacheln nur in „Verbindungen“: 10 Integrationen + Schlüssel-Inventar als Kacheln mit Logo (Clockodo, DHL) oder Initial, Zustand darunter; andere Gruppen bleiben Liste. Nicht abgenommen. Logos fehlen für 8 Dienste.",
+    "Mehrfachauswahl gebaut (ALFA Mail), nicht abgenommen → ALFA Entscheidungen 5",
+    "Farbsystem nicht entschieden → ALFA Entscheidungen 5",
+    "Mail und Einstellungen teilen eine Logikdatei (ALFA Mail, Prop bereich) → in zwei Logiken trennen, Plan: UEBERGABE-NAECHSTER-CHAT.md",
+    "78 Tokens „von-design-gesetzt“ → ALFA Entscheidungen 6 (Werteabgleich px/ms/Hex und Logik, 18.10.). Freigegeben 18.10.: blobLidOffset, orbGlowBlur, confirmEnterBlur, overviewHoverLift, toggleKnobOffsetOn/Off, Orb-Umläufe, recipientPaddingOpen 8, selectionRingWidth, blobEyeTravelX/Y, overviewActionsOffset (Versatz). Widerspruch: typography.weight.semibold 600 (Shell:216, Mail:883) gegen fonts.gebraucht 300/400/500. Nicht auf der 4er-Leiter: size.blobLabelPadding 22",
+    "Assistent: Blob wird zum Denk-Orb (Johannes 18.10. „wie wäre es …“), gebaut als Schalter assistentGesicht Augen|Orb in ALFA Shell, Vorgabe Augen, nicht abgenommen. Orb freigegeben („JA - ORB im Blob ist so freigegeben!“); Vorgabe des Schalters noch Augen",
+    "Widerspruch Fokusring-Abstand: alfa-theme.css:6 = 2, ALFA Bestaetigen = 1 → ALFA Entscheidungen 6 (size.focusRingOffset)"
+  ],
+  "tokens": 341,
+  "lieferung": [
+    "lieferung-an-code/decisions.json",
+    "lieferung-an-code/settings-sections.json",
+    "lieferung-an-code/motion-springs.json",
+    "RUECKGABE-AN-CODE.md",
+    "lieferung-an-code/werte-abgleich.json"
+  ],
+  "audit": "AUDIT.md",
+  "material": {
+    "benutzt": [
+      "material/icons/clockodo.png",
+      "material/icons/dhl.svg",
+      "material/icons/monday.svg",
+      "material/icons/app/*"
+    ],
+    "referenz_unbenutzt": [
+      "material/icons/s1.png … s7.png (Bildschirmfotos fremder Oberflächen, z. B. Clockodo/sevDesk)",
+      "material/icons/entwuerfe-v3.zip (nicht entpackt, nicht gelesen)"
+    ],
+    "hinweis": "Referenzmaterial von Johannes, von keinem Bogen geladen. Nicht Teil der Lieferung an Code."
+  },
+  "laufzeit": "support.js (Laufzeit der Bögen, nicht Entwurf)",
+  "angeglichen_17_10": [
+    "INHALT.json: Gruppe „Mail“ in Integration verschoben, Zustandswörter wie ALFA Mail, Dienste +Mail-Konten +monday",
+    "ALFA Dienste: Zustandswörter und -farben wie ALFA Mail, Mail-Konten ergänzt",
+    "ALFA Mail, ALFA Einstellungen, ALFA Shell: Vorgabe Fläche flach (B19), Schrift Geist lokal (B18, Dateien 17.10.); je Seite nur passende Tweaks",
+    "ALFA Designsystem, design-system/*: Farbleiter „Stahl“ als ersetzt markiert (Johannes 16.10.)",
+    "alfa-theme.css, alfa-shell.js, github.md, CLAUDE.md (Ordnername lieferung-an-code)"
+  ],
+  "fonts": {
+    "ordner": "lieferung-an-code/fonts/",
+    "dateien": [
+      "Geist-VariableFont_wght.ttf (wght 100–900)",
+      "Geist-Light.ttf (300)",
+      "Geist-Regular.ttf (400)",
+      "Geist-Medium.ttf (500)",
+      "OFL.txt",
+      "geist.css (@font-face für die Bögen)"
+    ],
+    "gebraucht": [
+      300,
+      400,
+      500
+    ],
+    "vorgabe": "Geist",
+    "quelle": "Johannes 17.10., Upload uploads/Geist/ (Google-Fonts-Paket), geprüft: Namen, usWeightClass, Achse"
+  },
+  "nicht_gemessen": [
+    "Inline-Werte: px/ms/Hex (nach Wert) und Logik (mit Rolle) abgeglichen 18.10.; offen: rgba() außerhalb Glas/Lack, Grad, Deckkraft, Skalierung in Template-Styles; Rolle der px/ms/Hex-Treffer im Template",
+    "Zustände außer Ausgangszustand (Menüs, Fächern, Übersicht, Schreiben, Fehler), dunkel",
+    "motion-springs.json gegen motion.*",
+    "Halten mit echter Maus"
+  ],
+  "gemessen": [
+    "ALFA Huelle bei 1512 × 982 hell, 17.10. 21:10: Bahnen, Fugen, Köpfe, Fuß, Blob, Augen, Griff, Zeile, Symbolknopf = Entwurf",
+    "ALFA Einstellungen: vier Gruppen und Karten, 17.10. 21:00",
+    "Kontrast Mail und Einstellungen bei 1512 × 982, hell und dunkel, Ausgangszustand, 17.10. 21:25: alle Texte ≥ 4,5:1 (vorher dunkel 3 Stellen < 4,5, behoben: color.dark.onSignal #0d0d0d, Zähler auf gewählter Zeile in Bahnfarbe)",
+    "18.10.: Wortenden rechts in Karten der Einstellungen auf einer Linie (Zustand „Verbunden“ und Textknopf „Jetzt abgleichen“ je 20 vor der Bahnkante); Auswahlkapseln enden an der Zeilenkante",
+    "18.10.: ALFA Designsystem neu, Hülle darin gemessen 280/896/280 bei 1512 (Skalierung 0,58), keine Konsolenfehler",
+    "18.10.: Werteabgleich px/ms/Hex aller Bögen, alfa-shell.js, alfa-theme.css gegen TOKENBOGEN.json (lieferung-an-code/werte-abgleich.json): App-Bögen Mail, Shell, Bestätigen, alfa-theme.css 0 Werte ohne Token (nach 24 neuen Tokens „von-design-gesetzt“); Dienste 22 ohne Token (Referenzbogen, Seitenlayout und Grautöne); Gleichheit nur nach Wert, nicht nach Bedeutung",
+    "18.10.: Logik (Zahlen ohne Einheit) in Mail, Shell, Bestätigen, alfa-shell.js: 0 × „kein Token“, Rolle je Token-Treffer geprüft; Rest klassiert (Dummy-Daten, Simulation, Index, Zeichenzahl, technisch, abgeleitet) – werte-abgleich.json Teil „logik“"
+  ],
+  "entfernt_17_10": [
+    "ALFA Bestaetigen Bogen (in ALFA Entscheidungen)",
+    "ALFA Shell Bogen (doppelt zu ALFA Huelle)",
+    "Mail-Logik-Kopie in ALFA Einstellungen"
+  ],
+  "von_design_gesetzt_freigegeben": {
+    "werte": [
+      "color.dark.onSignal #0d0d0d (Kontrast 2,61 → 7,9:1)",
+      "confirm.eraseEdge 0,2 · eraseBlur 0,6 px · shakeFrom 0,7 · shakeAmplitude 1,5 px · motion.duration.confirmRelease 180 ms",
+      "size.trailingTextInset 12"
+    ],
+    "beleg": "Johannes 17.10. zu „2 · Von Design gesetzt“: „Ist soweit OK, fürs erste und bis weitere Farbsysteme und feintuning einziehen so gestattet.“",
+    "status": "freigabe-orange",
+    "beleg2": "Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen. kann so in die dokumente geführt werden, bis später andere Optionen ausgearbeitet werden.“"
+  },
+  "statusLegende": {
+    "freigabe-orange": "vorläufig abgenommen, bis andere Optionen ausgearbeitet sind",
+    "von-design-gesetzt": "von Design gesetzt, nicht von Johannes entschieden; offen auf ALFA Entscheidungen 6",
+    "freigegeben": "von Johannes freigegeben"
+  },
+  "uebergabe": "UEBERGABE-NAECHSTER-CHAT.md",
+  "angeglichen_18_10": [
+    "ALFA Dienste: Schriftgröße 11 → 11,5 (typography.size.small), 7 Stellen",
+    "ALFA Entscheidungen 3: Kachelbreite 112 → 132 (wie ALFA Mail.dc.html:73)",
+    "spacing.statusDot 6 → 8 (Johannes 18.10.): ALFA Shell:49, ALFA Dienste:29; Mail war schon 8",
+    "recipientPaddingOpen 10 → 8 (ALFA Mail.dc.html:987), selectionRingOuter 3 gelöscht → 2 + size.hairline (ALFA Mail.dc.html:833), Johannes 18.10."
+  ],
+  "plan_uebergabepaket": {
+    "reihenfolge": "1 Werte ohne Einheit · 2 Bedeutung der Tokens · 3 Mail/Einstellungen trennen · 4 mechanik.json · 5 bauteile.json · 6 Bögen aufräumen · 7 Bewegung gegen Apple · 8 Akte schließen, AUDIT-BERICHT.md",
+    "beleg": "Johannes 18.10.: „reihenfolge wie von dir vorgeschlagen.“",
+    "abnahme": "ABNAHME.md"
+  },
+  "zeitangabe": "Deutsche Zeit (MESZ, UTC+2), Johannes 18.10. 21:18: „Timestamp. Deutschland“"
+}

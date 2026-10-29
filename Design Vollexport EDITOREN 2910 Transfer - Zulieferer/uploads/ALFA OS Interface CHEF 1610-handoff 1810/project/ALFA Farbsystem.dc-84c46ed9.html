@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="alfa-export" content="2026-10-18">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="lieferung-an-code/fonts/geist.css">
+<style>html,body{margin:0;background:#fafafa}a{color:#812631}a:hover{color:#9c3e17}button{font:inherit}</style>
+</helmet>
+<div style="font-family:Geist,-apple-system,system-ui,sans-serif;color:#420f0e;background:#fafafa;padding:48px 40px 80px;display:flex;flex-direction:column;gap:56px;max-width:1240px;margin:0 auto;box-sizing:border-box">
+  <header style="display:flex;flex-direction:column;gap:12px">
+    <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#76453c">ALFA · Farbsystem · Vorschlag, von Johannes nicht entschieden · Export 18.10.2026</div>
+    <h1 style="margin:0;font-size:44px;line-height:1.05;font-weight:500;letter-spacing:-.02em;text-wrap:balance">Lack, Gold, Tiefsee, Wald<br>nur als Akzent</h1>
+    <p style="margin:0;max-width:680px;font-size:16px;line-height:1.55;color:#76453c;text-wrap:pretty">Alle 28 Töne stammen aus deinen drei Bildern (Solid Colours 2529 und das Materialbrett). Die Hex-Werte habe ich aus den Bildpunkten gemessen. Drei sind geschätzt und mit „~“ markiert. Grund und Flächen bleiben neutral. Farbe tragen nur Akzent, Zustand und Fokus. Fremdinhalt (Mail, PDF, Bild) wird nie eingefärbt. Die Rollen unten sind meine Zuordnung.</p>
+  </header>
+
+  <section data-screen-label="01 Lesart" style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:32px;align-items:start">
+    <div style="aspect-ratio:4/3;width:100%;border-radius:16px;background:#ebeaea;display:grid;place-items:center;padding:24px;box-sizing:border-box;color:#6b6b6b;font-size:13px;text-align:center;text-wrap:pretty">Materialbrett (roter Lack, rote Crêpe, Rattan, Marmor, gehämmertes Silber, Rinde) · Bild am 17.10. aus uploads/ entfernt</div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <h2 style="margin:0;font-size:22px;font-weight:500">Was die Bilder sagen</h2>
+      <sc-for list="{{ reading }}" as="r" hint-placeholder-count="4">
+        <div style="display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start">
+          <div style="width:44px;height:44px;border-radius:12px;background:{{ r.hex }}"></div>
+          <div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:15px;font-weight:500">{{ r.t }}</div><div style="font-size:13.5px;line-height:1.5;color:#76453c;text-wrap:pretty">{{ r.d }}</div></div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-screen-label="02 Farbleiter" style="display:flex;flex-direction:column;gap:28px">
+    <h2 style="margin:0;font-size:22px;font-weight:500">Farbleiter · 28 gemessene Töne, je Familie von dunkel nach hell</h2>
+    <sc-for list="{{ families }}" as="f" hint-placeholder-count="5">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:12px;align-items:baseline"><div style="font-size:15px;font-weight:600">{{ f.name }}</div><div style="font-size:13px;color:#76453c">{{ f.mood }}</div></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px">
+          <sc-for list="{{ f.steps }}" as="s" hint-placeholder-count="5">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="height:84px;border-radius:12px;background:{{ s.hex }};box-shadow:inset 0 0 0 1px rgba(66,15,14,.12);display:flex;align-items:flex-end;padding:8px"><span style="font-size:12px;font-weight:500;color:{{ s.on }}">{{ s.crTxt }}</span></div>
+              <div style="font-size:13px;font-weight:500">{{ s.code }} · {{ s.token }}</div>
+              <div style="font-size:12.5px;color:#76453c">{{ s.hex }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </section>
+
+  <section data-screen-label="03 Rollen" style="display:flex;flex-direction:column;gap:28px">
+    <h2 style="margin:0;font-size:22px;font-weight:500">Rollen · Hell und Dunkel, Kontrast live gerechnet (Text 4,5 : 1)</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(460px,1fr));gap:24px">
+      <sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+        <div style="background:{{ t.bg }};color:{{ t.ink }};border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:24px;box-shadow:inset 0 0 0 1px {{ t.line }}">
+          <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:{{ t.ink2 }}">{{ t.name }}</div>
+
+          <div style="display:grid;grid-template-columns:280px minmax(0,1fr);gap:16px;align-items:stretch">
+            <div style="background:{{ t.s1 }};border-radius:16px;box-shadow:inset 0 0 0 1px {{ t.line }};display:flex;flex-direction:column;overflow:hidden">
+              <div style="height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;box-shadow:inset 0 -1px 0 {{ t.line }}">
+                <div style="font-size:15px;font-weight:600">Posteingang</div>
+                <div style="width:32px;height:32px;border-radius:16px;background:{{ t.ink }};display:flex;align-items:center;justify-content:center;gap:5px"><span style="width:4px;height:8px;border-radius:2px;background:{{ t.bg }}"></span><span style="width:4px;height:8px;border-radius:2px;background:{{ t.bg }}"></span></div>
+              </div>
+              <div style="display:flex;flex-direction:column;padding:8px;gap:2px">
+                <div style="background:{{ t.sel }};border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px"><div style="font-size:14px;font-weight:600">Angebot Rahmenvertrag</div><div style="font-size:12.5px;color:{{ t.ink2 }}">Anna Keller · 09:14</div></div>
+                <div style="padding:10px 12px;display:flex;flex-direction:column;gap:2px"><div style="font-size:14px;font-weight:500">Termin Donnerstag</div><div style="font-size:12.5px;color:{{ t.ink2 }}">Jonas Weber · gestern</div></div>
+                <div style="padding:10px 12px;display:flex;flex-direction:column;gap:2px"><div style="font-size:14px;font-weight:500">Rechnung 2026-114</div><div style="font-size:12.5px;color:{{ t.ink2 }}">Buchhaltung · Mo</div></div>
+              </div>
+              <div style="padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap;box-shadow:inset 0 1px 0 {{ t.line }}">
+                <span style="padding:6px 12px;border-radius:999px;background:{{ t.accent }};color:{{ t.onAccent }};font-size:13px;font-weight:500">Senden</span>
+                <span style="padding:6px 12px;border-radius:999px;background:{{ t.s2 }};font-size:13px;font-weight:500">Entwurf</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;justify-content:center">
+              <div style="background:{{ t.paper }};color:{{ t.paperInk }};border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px;box-shadow:inset 0 0 0 1px {{ t.line }}"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.6">Fremdinhalt · Mail, PDF, Bild</div><div style="font-size:13px;line-height:1.45">Bleibt Weiß und Schwarz, in Hell wie in Dunkel. Nie eingefärbt.</div></div>
+              <sc-for list="{{ t.status }}" as="c" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;gap:10px;font-size:13.5px"><span style="width:10px;height:10px;border-radius:5px;background:{{ c.hex }}"></span><span style="font-weight:500">{{ c.n }}</span><span style="color:{{ t.ink2 }}">{{ c.crTxt }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <sc-for list="{{ t.rows }}" as="r" hint-placeholder-count="14">
+              <div style="display:grid;grid-template-columns:28px 150px 82px minmax(0,1fr) 64px;gap:12px;align-items:center;padding:7px 0;box-shadow:inset 0 -1px 0 {{ t.line }};font-size:13px">
+                <span style="width:28px;height:20px;border-radius:6px;background:{{ r.hex }};box-shadow:inset 0 0 0 1px {{ t.line }}"></span>
+                <span style="font-weight:500">{{ r.role }}</span>
+                <span style="color:{{ t.ink2 }}">{{ r.hex }}</span>
+                <span style="color:{{ t.ink2 }}">{{ r.src }}</span>
+                <span style="text-align:right;font-weight:500">{{ r.crTxt }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <footer style="font-size:13px;line-height:1.6;color:#76453c;max-width:760px;text-wrap:pretty">„Abgeleitet“ heißt: aus zwei gemessenen Tönen gemischt, kein Wert aus deinen Bildern. Nichts hiervon ist in Mail, Einstellungen, Shell oder den Tokenbogen übernommen. Das passiert erst nach deinem Wort.</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const h2r = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+    const r2h = a => '#' + a.map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+    const mix = (a, b, t) => { const x = h2r(a), y = h2r(b); return r2h(x.map((v, i) => v + (y[i] - v) * t)); };
+    const lum = h => { const [r, g, b] = h2r(h).map(v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * r + .7152 * g + .0722 * b; };
+    const cr = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); };
+    const f1 = n => n.toFixed(1).replace('.', ',') + ' : 1';
+    const P = {
+      UB78: ['#420f0e', 'oxblood-950'], UB79: ['#76453c', 'umber-700'], UB52: ['#9e6f66', 'rose-clay-500'], UB50: ['#9d8480', 'mauve-stone-400'], UB77: ['#a08e9c', 'heather-400'],
+      UB16: ['#812631', 'lacquer-800'], UB55: ['#9c3e17', 'terracotta-700'], UB76: ['#955341', 'rust-600'], UB80: ['#bc927a', 'clay-300'], UB31: ['#d8c1ae', 'sand-100'],
+      UB18: ['#b36924', 'amber-700'], UB53: ['#c58a00', 'gold-600'], UB29: ['#daa639', 'ochre-400'], UB30: ['#ccae72', 'straw-300'],
+      UB02: ['#042433', 'abyss-950'], UB42: ['#00465d', 'petrol-800'], UB62: ['#005e6c', 'teal-700'], UB45: ['#294d6d', 'steel-ink-700'], UB35: ['#3f7189', 'lagoon-500'], UA97: ['#8c9bad', 'fog-300'], UB43: ['#8cb2b1', 'sea-glass-300'],
+      UB65: ['#1e3422', 'pine-950'], UB75: ['#3b4d45', 'moss-800'], UB54: ['#565838', 'olive-700']
+    };
+    const est = { UB35: 1, UB75: 1, UB54: 1 };
+    const paper = '#fafafa';
+    const step = (code, bgOn) => { const [hex, token] = P[code]; const on = cr(hex, paper) >= cr(hex, '#420f0e') ? paper : '#420f0e'; return { code, hex, token, on, crTxt: f1(Math.max(cr(hex, paper), cr(hex, '#420f0e'))).replace(' : 1', '') + (est[code] ? ' ~' : '') }; };
+    const fam = (name, mood, codes) => ({ name, mood, steps: codes.sort((a, b) => lum(P[a][0]) - lum(P[b][0])).map(step) });
+    const families = [
+      fam('Lack & Erde', 'Das Rot des Lacks und der Crêpe, getragen von Umbra und Ton', ['UB78', 'UB79', 'UB16', 'UB55', 'UB76', 'UB52', 'UB80', 'UB31']),
+      fam('Gold & Bernstein', 'Das Licht im Rattan, warm und trocken', ['UB18', 'UB53', 'UB29', 'UB30']),
+      fam('Tiefsee', 'Der kühle Gegenpol: Tinte, Petrol, Dunst', ['UB02', 'UB42', 'UB62', 'UB45', 'UB35', 'UA97', 'UB43']),
+      fam('Wald', 'Ruhe und Erde, nur für Zustände und Schatten', ['UB65', 'UB75', 'UB54']),
+      fam('Heide', 'Eine einzige gedämpfte Violett-Nuance als Fremdton', ['UB77', 'UB50'])
+    ];
+    const reading = [
+      { hex: P.UB16[0], t: 'Lack als Stimme', d: 'Ein einziges tiefes Rot (UB16, UB55) führt. Es glänzt im Bild, darum nur sparsam: Auswahl, Senden, Fokus.' },
+      { hex: P.UB31[0], t: 'Marmor, Rattan, Papier', d: 'Grund und Flächen bleiben neutral (Hell #fafafa, Dunkel #171616). Farbe sitzt nur auf Bedienung und Zustand. Sand (UB31) und Rattan bleiben Referenz.' },
+      { hex: P.UB29[0], t: 'Gold als Wärme', d: 'Ocker bis Bernstein (UB29, UB53, UB18) für Hinweise und das Hervorgehobene im Dunkeln.' },
+      { hex: P.UB02[0], t: 'Tiefsee als Gegengewicht', d: 'Tinte und Petrol (UB02, UB42) nur für Info und Fokus-Töne. Der dunkle Modus selbst bleibt neutral graphit.' }
+    ];
+    const L = { name: 'Hell', bg: '#fafafa', s1: '#f4f3f2', s2: '#ebe9e7', sel: '#e8e5e2', line: '#e2dfdc', ink: '#1d1a19', ink2: '#6b6460', accent: P.UB16[0], onAccent: paper, accent2: P.UB55[0], danger: P.UB16[0], ok: P.UB75[0], warn: P.UB18[0], info: P.UB45[0], focus: P.UB62[0], paper: '#ffffff', paperInk: '#1a1a1a' };
+    const dBg = '#171616';
+    const D = { name: 'Dunkel', bg: dBg, s1: '#1f1e1d', s2: '#2a2827', sel: '#35322f', line: '#34312f', ink: '#f2efec', ink2: '#a8a19b', accent: P.UB29[0], onAccent: dBg, accent2: P.UB80[0], danger: mix(P.UB55[0], paper, .38), ok: P.UB43[0], warn: P.UB30[0], info: P.UB43[0], focus: P.UB29[0], paper: '#ffffff', paperInk: '#1a1a1a' };
+    const src = {
+      bg: 'Grund' , s1: 'Fläche 1', s2: 'Fläche 2', sel: 'Auswahl', line: 'Linie', ink: 'Text', ink2: 'Text leise', accent: 'Akzent', accent2: 'Akzent 2', danger: 'Fehler', ok: 'Erledigt', warn: 'Hinweis', info: 'Info', focus: 'Fokus', paper: 'Fremdinhalt Fläche', paperInk: 'Fremdinhalt Text'
+    };
+    const from = (t, k) => { if (k.startsWith('paper')) return 'Fremdinhalt: nie eingefärbt'; if (['bg','s1','s2','sel','line','ink','ink2'].includes(k)) return 'Neutral, abgeleitet';  const m = Object.entries(P).find(([, v]) => v[0] === t[k]); return m ? m[0] + ' · ' + m[1][1] : (t[k] === paper ? 'Papier · gemessen' : (t[k] === '#f2edea' ? 'Materialbrett · gemessen' : 'abgeleitet')); };
+    const need = { paperInk: 4.5, ink: 4.5, ink2: 4.5, accent: 3, danger: 4.5, ok: 4.5, warn: 3, info: 4.5, focus: 3, accent2: 3 };
+    const mk = t => {
+      const rows = Object.keys(src).map(k => ({ role: 'color.' + k.replace(/([A-Z0-9])/g, '-$1').toLowerCase(), hex: t[k], src: from(t, k), crTxt: need[k] ? f1(cr(t[k], k === 'paperInk' ? t.paper : t.bg)) : '' }));
+      const status = [['danger', 'Fehler'], ['warn', 'Hinweis'], ['ok', 'Erledigt'], ['info', 'Info']].map(([k, n]) => ({ n, hex: t[k], crTxt: f1(cr(t[k], t.bg)) }));
+      return Object.assign({}, t, { rows, status });
+    };
+    return { reading, families, themes: [mk(L), mk(D)] };
+  }
+}
+</script>
+</body>
+</html>

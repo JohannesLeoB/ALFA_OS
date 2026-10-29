@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="lieferung-an-code/fonts/geist.css">
+<style>
+html,body{margin:0;padding:0;background:#e8e8e8}
+a{color:#171717}a:hover{color:#4d4d4d}
+</style>
+<link rel="stylesheet" href="alfa-theme.css">
+</helmet>
+<section id="1a" style="display:inline-flex;flex-direction:column;gap:8px;padding:24px;font-family:Geist,system-ui,sans-serif">
+<div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#171717"><span style="height:20px;padding:0 8px;border-radius:999px;background:#171717;color:#fff;display:inline-grid;place-items:center;font-size:11.5px;font-weight:500">1a</span><span style="font-weight:500">Teiler-Bahnen</span><span style="color:#6b6b6b;font-size:11.5px">Atelier · Bahn = Stapel aus Slots, Teiler frei ziehbar</span></div>
+<div data-part="area-page" data-appearance="light" data-screen-label="Entwurf A" style="position:relative;width:1512px;height:982px;background:var(--c-ground);color:var(--c-ink);overflow:hidden;font-family:Geist,system-ui,sans-serif;font-size:13px;line-height:1.35;-webkit-font-smoothing:antialiased;user-select:none">
+
+<div style="position:absolute;left:16px;top:16px;right:16px;height:40px;display:flex;align-items:center;gap:12px">
+<span style="height:40px;padding:0 16px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;font-weight:500">Atelier</span>
+<span style="font-size:11.5px;color:var(--c-ink-3)">Teiler zwischen Slots ziehen · Kopfzeile klappt ein · Doppelklick zeigt nur diesen Slot · Pfeil schickt den Slot in die andere Bahn</span>
+</div>
+
+<sc-for list="{{ lanes }}" as="l" hint-placeholder-count="2">
+<section data-part="lane" aria-label="{{ l.title }}" style="position:absolute;top:68px;height:898px;left:{{ l.left }}px;width:{{ l.width }}px;background:var(--c-lane);border-radius:20px;box-shadow:var(--sh-lane);overflow:hidden;display:flex;flex-direction:column;isolation:isolate">
+<sc-for list="{{ l.slots }}" as="s" hint-placeholder-count="3">
+<div data-slot-id="{{ s.id }}" style="position:relative;display:flex;flex-direction:column;min-height:0;flex:{{ s.flex }};box-shadow:{{ s.line }}">
+<sc-if value="{{ s.hasDiv }}" hint-placeholder-val="{{ false }}"><div data-part="slot-divider" title="Teiler ziehen" onPointerDown="{{ s.divDown }}" style="position:absolute;left:0;right:0;top:-5px;height:10px;z-index:5;cursor:{{ s.divCur }};touch-action:none" style-hover="background:{{ s.divHot }}"></div></sc-if>
+<header data-part="slot-header" onDoubleClick="{{ s.solo }}" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-sizing:border-box;min-width:0">
+<span style="flex:none;font-weight:500;white-space:nowrap">{{ s.t }}</span>
+<sc-if value="{{ s.hasN }}" hint-placeholder-val="{{ false }}"><span data-part="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:var(--c-ink-3)">{{ s.n }}</span></sc-if>
+<span style="flex:1;min-width:0"></span>
+<button data-part="symbol-button" title="{{ s.moveTip }}" aria-label="{{ s.moveTip }}" onClick="{{ s.move }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer;transition:background 160ms,color 160ms" style-hover="background:var(--c-hover);color:var(--c-ink)" style-active="transform:scale(.96)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ s.moveD }}"></path></svg></button>
+<button data-part="symbol-button" title="{{ s.togTip }}" aria-label="{{ s.togTip }}" onClick="{{ s.toggle }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer;transition:background 160ms,color 160ms" style-hover="background:var(--c-hover);color:var(--c-ink)" style-active="transform:scale(.96)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="transform:{{ s.rot }};transition:transform 160ms"><path d="M4 6l4 4 4-4"></path></svg></button>
+</header>
+<sc-if value="{{ s.open }}" hint-placeholder-val="{{ true }}">
+<div data-part="slot-body" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;padding-bottom:8px">
+<sc-for list="{{ s.segs }}" as="g" hint-placeholder-count="0">
+<div data-part="field-row" style="flex:none;display:flex;align-items:center;gap:12px;padding:6px 8px 6px 16px;min-height:40px;box-sizing:border-box"><span style="flex:none;width:64px;font-size:11.5px;color:var(--c-ink-3)">{{ g.label }}</span><div data-part="segmented-control" style="flex:1;min-width:0;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ g.opts }}" as="o" hint-placeholder-count="3"><button data-part="option" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;transition:background 160ms,color 160ms">{{ o.t }}</button></sc-for></div></div>
+</sc-for>
+<sc-if value="{{ s.hasTiles }}" hint-placeholder-val="{{ false }}"><div style="flex:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 8px;padding:4px 16px 8px"><sc-for list="{{ s.tiles }}" as="q" hint-placeholder-count="4"><button data-part="catalog-tile" onClick="{{ q.go }}" style="appearance:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;min-width:0;cursor:pointer;background:transparent" style-active="transform:scale(.98)"><span style="display:grid;place-items:center;width:100%;aspect-ratio:4 / 3;border-radius:8px;overflow:hidden;background:repeating-linear-gradient(135deg,var(--c-well) 0 6px,var(--c-line) 6px 7px);box-shadow:inset 0 0 0 1px var(--c-line);font-family:'Geist Mono',ui-monospace,monospace;font-size:11.5px;color:var(--c-ink-3)">{{ q.ph }}</span><span style="min-width:0;font-size:11.5px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.n }}</span><span style="min-width:0;margin-top:-4px;font-size:11.5px;line-height:16px;color:var(--c-ink-3)">{{ q.meta }}</span></button></sc-for></div></sc-if>
+<sc-for list="{{ s.rows }}" as="r" hint-placeholder-count="0">
+<div data-part="field-row" onClick="{{ r.go }}" style="flex:none;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 16px;min-height:44px;box-sizing:border-box;cursor:{{ r.cur }};background:{{ r.bg }}" style-hover="background:var(--c-hover)">
+<span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:500;font-variant-numeric:tabular-nums;color:{{ r.mkFg }};background:{{ r.mkBg }};box-shadow:{{ r.mkRing }}">{{ r.mk }}<sc-if value="{{ r.hasMkd }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.mkd }}"></path></svg></sc-if></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.w }};color:{{ r.fg }}">{{ r.t }}</span><sc-if value="{{ r.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;line-height:16px;color:{{ r.subFg }};text-wrap:pretty">{{ r.sub }}</span></sc-if><sc-if value="{{ r.hasBar }}" hint-placeholder-val="{{ false }}"><span style="display:block;height:2px;border-radius:1px;background:var(--c-line);margin-top:4px"><i style="display:block;height:100%;width:{{ r.bar }}%;background:var(--c-ink);border-radius:1px"></i></span></sc-if></div>
+<sc-if value="{{ r.hasRt }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font-size:11.5px;color:{{ r.rtFg }};font-variant-numeric:tabular-nums">{{ r.rt }}</span></sc-if>
+<sc-if value="{{ r.hasBtn }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" onClick="{{ r.btn.go }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ r.btn.bg }};color:{{ r.btn.fg }};box-shadow:{{ r.btn.ring }};cursor:pointer;white-space:nowrap" style-active="transform:scale(.96)">{{ r.btn.label }}</button></sc-if>
+<sc-if value="{{ r.hasEye }}" hint-placeholder-val="{{ false }}"><button data-part="symbol-button" title="Ein- und ausblenden" aria-label="Ein- und ausblenden" onClick="{{ r.eyeGo }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:{{ r.eyeBg }};color:{{ r.eyeFg }};cursor:pointer" style-active="transform:scale(.96)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8zM8 10a2 2 0 100-4 2 2 0 000 4z"></path></svg></button></sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ s.hasCard }}" hint-placeholder-val="{{ false }}">
+<div data-part="block-card" style="flex:none;margin:8px 16px 4px;padding:12px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--c-line-strong);display:flex;flex-direction:column;gap:8px">
+<span style="font-weight:500;color:{{ s.card.tFg }}">{{ s.card.title }}</span>
+<div style="display:flex;flex-direction:column;gap:4px"><sc-for list="{{ s.card.lines }}" as="k" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:12px;font-size:11.5px;line-height:16px"><span style="color:var(--c-ink-3)">{{ k.k }}</span><span style="color:{{ k.fg }};text-align:right;text-wrap:pretty">{{ k.v }}</span></div></sc-for></div>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ s.card.btns }}" as="b" hint-placeholder-count="2"><button data-part="text-button" onClick="{{ b.go }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ b.bg }};color:{{ b.fg }};box-shadow:{{ b.ring }};cursor:pointer;white-space:nowrap" style-active="transform:scale(.96)">{{ b.label }}</button></sc-for></div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</section>
+</sc-for>
+
+<section data-part="lane" aria-label="Skizze" style="position:absolute;top:68px;height:898px;left:308px;width:856px;background:var(--c-lane);border-radius:20px;box-shadow:var(--sh-lane);overflow:hidden;display:flex;flex-direction:column;isolation:isolate">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 var(--c-line)"><span style="font-weight:500">Küche Nord</span><span style="font-size:11.5px;color:var(--c-ink-3)">Skizze v4 · Aufmaßfoto als Unterlage</span></header>
+<div data-part="context-bar" style="flex:none;height:40px;display:flex;align-items:center;gap:12px;padding:0 16px;box-sizing:border-box;box-shadow:inset 0 -1px 0 var(--c-line)">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ ansOpts }}" as="o" hint-placeholder-count="3"><button data-part="option" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;transition:background 160ms,color 160ms">{{ o.t }}</button></sc-for></div>
+<span style="font-size:11.5px;color:var(--c-ink-3)">Zwei-Punkt-Perspektive · Unterlage 55 %</span>
+</div>
+<div data-part="desk" style="flex:1;min-height:0;position:relative;background:var(--c-sheet);color-scheme:light;display:flex;gap:1px;background-image:linear-gradient(var(--c-sheet-line) 1px,transparent 1px),linear-gradient(90deg,var(--c-sheet-line) 1px,transparent 1px);background-size:48px 48px">
+<sc-for list="{{ panels }}" as="p" hint-placeholder-count="2"><div style="flex:1;min-width:0;display:grid;place-items:center;background:repeating-linear-gradient(135deg,transparent 0 10px,rgba(0,0,0,.035) 10px 11px);box-shadow:inset 0 0 0 1px var(--c-sheet-line)"><span style="font-family:'Geist Mono',ui-monospace,monospace;font-size:11.5px;color:var(--c-sheet-ink-3)">{{ p.t }}</span></div></sc-for>
+<div data-part="tool-palette" style="position:absolute;left:16px;top:16px;z-index:6;padding:0 8px 8px;border-radius:12px;background:var(--c-menu);box-shadow:var(--sh-float);display:flex;flex-direction:column;gap:4px"><div style="flex:none;height:16px;margin:0 -8px;display:grid;place-items:center;cursor:grab"><i style="display:block;width:16px;height:4px;background:radial-gradient(circle,var(--c-ink-3) 1px,transparent 1.5px) 0 0/4px 4px"></i></div><sc-for list="{{ tools }}" as="x" hint-placeholder-count="5"><button data-part="symbol-button" title="{{ x.t }}" aria-label="{{ x.t }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for></div>
+<span style="position:absolute;left:16px;bottom:16px;height:24px;padding:0 8px;border-radius:999px;display:flex;align-items:center;gap:8px;background:var(--c-menu);box-shadow:var(--sh-float);font-size:11.5px;color:var(--c-ink-2)">{{ status }}</span>
+</div>
+</section>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div data-part="toast" style="position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:40;height:28px;padding:0 12px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;font-size:11.5px;white-space:nowrap;box-shadow:var(--sh-float);gap:12px"><span>{{ toast }}</span><sc-if value="{{ hasUndo }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" onClick="{{ undo }}" style="appearance:none;border:0;height:20px;margin-right:-8px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px currentColor;cursor:pointer" style-active="transform:scale(.96)">Rückgängig</button></sc-if></div></sc-if>
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { lanes: { L: ['ebenen', 'katalog'], R: ['pipe', 'par', 'fas'] }, closed: {}, wt: { ebenen: 1, katalog: 1.2, pipe: 1.4, par: 1, fas: 1.1 }, stil: 'Skizze', licht: 'Tag', aufl: '4096', ans: 'Beide', vis: { bestand: true, aufmass: true, entwurf: true, bem: true }, mat: false, run: 0, ver: 'v3', master: 'v3', toast: null, undo: null };
+  say(msg, undo) { clearTimeout(this._t); this.setState({ toast: msg, undo: undo || null }); this._t = setTimeout(() => this.setState({ toast: null, undo: null }), 4500); }
+  divDown(lane, i) {
+    return (e) => {
+      e.stopPropagation(); e.preventDefault();
+      const S = this.state, ids = S.lanes[lane], a = ids[i - 1], b = ids[i];
+      if (S.closed[a] || S.closed[b]) return;
+      const wt = Object.assign({}, S.wt); let sc = 1;
+      ids.forEach((id) => { if (!S.closed[id]) { const el = document.querySelector('[data-slot-id="' + id + '"]'); wt[id] = el.offsetHeight; sc = el.getBoundingClientRect().height / el.offsetHeight || 1; } });
+      const y0 = e.clientY, ha = wt[a], hb = wt[b];
+      this.setState({ wt });
+      const mv = (ev) => { const A = Math.max(96, Math.min(ha + hb - 96, ha + (ev.clientY - y0) / sc)); this.setState((s) => ({ wt: Object.assign({}, s.wt, { [a]: A, [b]: ha + hb - A }) })); };
+      const up = () => { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); };
+      window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
+    };
+  }
+  moveSlot(lane, id) {
+    const S = this.state, to = lane === 'L' ? 'R' : 'L';
+    if (S.lanes[lane].length < 2) return this.say('Eine Bahn braucht mindestens einen Slot');
+    this.setState({ lanes: { [lane]: S.lanes[lane].filter((x) => x !== id), [to]: S.lanes[to].concat(id) } });
+  }
+  solo(lane, id) {
+    const S = this.state, ids = S.lanes[lane], only = ids.every((x) => x === id || S.closed[x]), c = {};
+    if (!only) ids.forEach((x) => { if (x !== id) c[x] = true; });
+    this.setState({ closed: Object.assign({}, S.closed, ...ids.map((x) => ({ [x]: !!c[x] }))) });
+  }
+  renderVals() {
+    const S = this.state, RING = 'inset 0 0 0 1px var(--c-line-strong)', SIG = 'var(--c-signal)';
+    const btn = (label, go, pri) => ({ label, go, bg: pri ? 'var(--c-inv)' : 'transparent', fg: pri ? 'var(--c-on-inv)' : 'var(--c-ink)', ring: pri ? 'none' : RING });
+    const row = (o) => Object.assign({ mk: '', mkd: '', mkFg: 'var(--c-ink-3)', mkBg: 'transparent', mkRing: RING, t: '', sub: '', subFg: 'var(--c-ink-3)', rt: '', rtFg: 'var(--c-ink-3)', bar: 0, go: () => {}, cur: 'default', bg: 'transparent', w: 400, fg: 'var(--c-ink)', btn: null, eyeD: '', eyeGo: () => {}, eyeBg: 'transparent', eyeFg: 'var(--c-ink-3)' }, o, { hasMkd: !!o.mkd, hasSub: !!o.sub, hasRt: !!o.rt, hasBar: !!o.bar, hasBtn: !!o.btn, hasEye: !!o.eye });
+    const seg = (label, opts, val, set) => ({ label, opts: opts.map((t) => ({ t, go: () => set(t), bg: t === val ? 'var(--c-inv)' : 'transparent', fg: t === val ? 'var(--c-on-inv)' : 'var(--c-ink-3)' })) });
+    const CHECK = 'M3.5 8.5l3 3 6-7';
+    const set = (k) => (v) => this.setState({ [k]: v });
+    const mat = S.mat, run = S.run;
+    const B = {};
+    const lay = [['bestand', 'Bestand', 'Drive · Grundriss'], ['aufmass', 'Aufmaß', 'A-01 · LAS'], ['entwurf', 'Entwurf', 'lokal'], ['bem', 'Bemaßung', 'aus dem Aufmaß · AUT 82 %']];
+    B.ebenen = { t: 'Ebenen', n: 4, rows: lay.map((x, i) => { const v = S.vis[x[0]]; return row({ mk: String(i + 1), t: x[1], sub: x[2], fg: v ? 'var(--c-ink)' : 'var(--c-ink-3)', bar: x[0] === 'bem' ? 82 : 0, eye: true, eyeBg: v ? 'transparent' : 'var(--c-sel)', eyeFg: v ? 'var(--c-ink-3)' : 'var(--c-ink)', eyeGo: () => this.setState((s) => ({ vis: Object.assign({}, s.vis, { [x[0]]: !s.vis[x[0]] }) })) }); }) };
+    const mats = [['Linoleum 4175', 'Front'], ['Eiche geölt', 'Front'], ['Lack Salbei', 'Korpus'], ['Beton hell', 'Platte']];
+    B.katalog = { t: 'Katalog', n: 4, tiles: mats.map((m) => ({ n: m[0], meta: m[1], ph: 'Muster', go: () => { this.setState({ mat: true }); this.say(m[0] + ' auf Slot Salbei gelegt'); } })) };
+    const st = run ? ['fertig', 'fertig', 'fertig', 'läuft 31 %'] : ['fertig', 'fertig', 'läuft 62 %', 'wartet'];
+    const names = ['Szene lesen', 'Geometrie prüfen', 'Prompt bauen', 'Render rechnen'];
+    const rows = names.map((n, i) => { const done = st[i] === 'fertig', cur = st[i].startsWith('läuft'); return row({ mk: done ? '' : String(i + 1), mkd: done ? CHECK : '', mkFg: cur ? 'var(--c-on-inv)' : 'var(--c-ink-3)', mkBg: cur ? 'var(--c-inv)' : 'transparent', mkRing: cur ? 'none' : RING, t: n, fg: done ? 'var(--c-ink-3)' : 'var(--c-ink)', rt: st[i], rtFg: cur ? 'var(--c-ink)' : 'var(--c-ink-3)', bar: cur ? parseInt(st[i].replace(/\D/g, '')) : 0 }); });
+    const frei = () => { if (!mat) return this.say('Erst Slot Salbei klären'); this.setState({ run: 1 }); this.say('Render v4 gestartet', () => this.setState({ run: 0, toast: null })); };
+    B.pipe = { t: 'Pipeline', rows, card: run ? { title: 'Quittung', tFg: 'var(--c-ink)', lines: [{ k: 'Render', v: 'v4 gestartet', fg: 'var(--c-ink)' }, { k: 'Engine', v: 'Firefly manuell', fg: 'var(--c-ink)' }], btns: [btn('Rückgängig', () => this.setState({ run: 0 }))] } : { title: 'Vor dem Rechnen', tFg: 'var(--c-ink)', lines: [{ k: 'Engine', v: 'Firefly manuell', fg: 'var(--c-ink)' }, { k: 'Slots', v: mat ? '6 von 6 belegt' : '5 von 6 belegt', fg: mat ? 'var(--c-ink)' : SIG }, { k: 'Stil · Licht', v: S.stil + ' · ' + S.licht, fg: 'var(--c-ink)' }, { k: 'Auflösung', v: S.aufl + ' px', fg: 'var(--c-ink)' }], btns: [btn('Freigeben', frei, mat), btn('Ändern', () => this.say('Parameter stehen im Slot darunter'))] } };
+    B.par = { t: 'Parameter', segs: [seg('Stil', ['Skizze', 'Foto', 'Zeichnung'], S.stil, set('stil')), seg('Licht', ['Morgen', 'Tag', 'Abend'], S.licht, set('licht')), seg('Auflösung', ['2048', '4096'], S.aufl, set('aufl'))], rows: [mat ? row({ mkd: CHECK, t: 'Alle Slots belegt', sub: 'Salbei → Lack 4175' }) : row({ mk: '!', mkFg: SIG, mkRing: 'inset 0 0 0 1px ' + SIG, t: 'Slot Salbei ohne Material', sub: 'Der Render würde raten.', subFg: SIG, btn: btn('Material wählen', () => { this.setState({ mat: true }); this.say('Salbei → Lack 4175'); }, true) })] };
+    const vs = { v3: ['v3', 'Eiche geölt', '10:42'], v2: ['v2', 'Linoleum', '09:58'], v1: ['v1', 'Erster Stand', 'gestern'] };
+    const prev = { v3: 'v2', v2: 'v1', v1: null };
+    const diffs = { v3: [['Front', 'Linoleum 4175 → Eiche geölt'], ['Slot Terracotta', 'neu'], ['Perspektive', 'unverändert']], v2: [['Licht', 'Morgen → Tag'], ['Auflösung', '2048 → 4096']], v1: [['Erste Fassung', 'kein Vorgänger']] };
+    B.fas = { t: 'Fassungen', n: 3, rows: Object.keys(vs).map((k) => row({ mk: k.slice(1), t: vs[k][0] + ' · ' + vs[k][1], sub: vs[k][2] + ' · Firefly manuell', rt: S.master === k ? 'Master' : '', rtFg: 'var(--c-ink)', bg: S.ver === k ? 'var(--c-sel)' : 'transparent', cur: 'pointer', go: () => this.setState({ ver: k }) })), card: { title: prev[S.ver] ? S.ver + ' gegen ' + prev[S.ver] : S.ver, tFg: 'var(--c-ink)', lines: diffs[S.ver].map((d) => ({ k: d[0], v: d[1], fg: 'var(--c-ink)' })), btns: [btn('Gegenüberstellen', () => this.setState({ ans: 'Beide' })), S.master !== S.ver ? btn('Zum Master', () => { const o = S.master; this.setState({ master: S.ver }); this.say(S.ver + ' ist Master', () => this.setState({ master: o })); }, true) : null].filter(Boolean) } };
+    const mk = (lane) => S.lanes[lane].map((id, i) => {
+      const b = B[id], open = !S.closed[id], both = i > 0 && open && !S.closed[S.lanes[lane][i - 1]];
+      return Object.assign({ id, open, hasN: !!b.n, n: b.n, segs: b.segs || [], rows: b.rows || [], tiles: b.tiles || [], hasTiles: !!b.tiles, hasCard: !!b.card, card: b.card || { lines: [], btns: [] },
+        flex: open ? (S.wt[id] || 1) + ' 1 0' : '0 0 44px', line: i ? 'inset 0 1px 0 var(--c-line)' : 'none', hasDiv: i > 0, divCur: both ? 'row-resize' : 'default', divHot: both ? 'linear-gradient(var(--c-grip),var(--c-grip)) center/100% 2px no-repeat' : 'transparent', divDown: this.divDown(lane, i),
+        rot: open ? 'rotate(0deg)' : 'rotate(-90deg)', togTip: open ? 'Einklappen' : 'Ausklappen', toggle: () => this.setState((s) => ({ closed: Object.assign({}, s.closed, { [id]: !s.closed[id] }) })), solo: () => this.solo(lane, id),
+        moveTip: lane === 'L' ? 'In die rechte Bahn' : 'In die linke Bahn', moveD: lane === 'L' ? 'M3 8h10M9 4l4 4-4 4' : 'M13 8H3M7 4L3 8l4 4', move: () => this.moveSlot(lane, id) }, { t: b.t });
+    });
+    const ans = S.ans;
+    return {
+      lanes: [{ title: 'Links', left: 16, width: 280, slots: mk('L') }, { title: 'Rechts', left: 1176, width: 320, slots: mk('R') }],
+      ansOpts: ['Skizze', 'Beide', 'Render'].map((t) => ({ t, go: () => this.setState({ ans: t }), bg: t === ans ? 'var(--c-inv)' : 'transparent', fg: t === ans ? 'var(--c-on-inv)' : 'var(--c-ink-3)' })),
+      panels: (ans === 'Beide' ? ['Skizze v4 · Foto + Linien', 'Render ' + S.master] : ans === 'Skizze' ? ['Skizze v4 · Foto + Linien'] : ['Render ' + S.master]).map((t) => ({ t })),
+      tools: [['M3 13l1-3 7-7 2 2-7 7z', 1], ['M3 13L13 3', 0], ['M3 3h10v10H3z', 0], ['M2 11l4 3 8-8-2-2-6 6-2-2z', 0], ['M8 3v10M3 8h10', 0]].map((x, i) => ({ t: ['Stift', 'Linie', 'Fläche', 'Radierer', 'Fluchtlinie'][i], d: x[0], bg: x[1] ? 'var(--c-inv)' : 'transparent', fg: x[1] ? 'var(--c-on-inv)' : 'var(--c-ink-3)' })),
+      status: run ? 'Render v4 läuft · 31 %' : 'Skizze v4 · ungerechnet', hasToast: !!S.toast, toast: S.toast, hasUndo: !!S.undo, undo: () => { const u = S.undo; if (u) u(); this.setState({ toast: null, undo: null }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

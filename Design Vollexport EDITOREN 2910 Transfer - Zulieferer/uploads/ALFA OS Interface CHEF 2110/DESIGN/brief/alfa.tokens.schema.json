@@ -1,0 +1,594 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "alfa.tokens.schema.json",
+  "title": "ALFA token file (DTCG Format Module 2025.10, ALFA profile)",
+  "description": "One token file (*.tokens.json). DTCG 2025.10 with ALFA rules: every token has its own $type (stricter than DTCG, where a group may carry it), every token has $extensions.alfa with source or status, colors in srgb.",
+  "$ref": "#/$defs/group",
+  "$defs": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][A-Za-z0-9]*$"
+    },
+    "alias": {
+      "type": "string",
+      "pattern": "^\\{[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*\\}$"
+    },
+    "group": {
+      "type": "object",
+      "properties": {
+        "$type": {
+          "$ref": "#/$defs/type"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "$extensions": {
+          "type": "object"
+        }
+      },
+      "patternProperties": {
+        "^[a-z][A-Za-z0-9]*$": {
+          "if": {
+            "type": "object",
+            "required": [
+              "$value"
+            ]
+          },
+          "then": {
+            "$ref": "#/$defs/token"
+          },
+          "else": {
+            "$ref": "#/$defs/group"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "type": {
+      "enum": [
+        "color",
+        "dimension",
+        "fontFamily",
+        "fontWeight",
+        "duration",
+        "cubicBezier",
+        "number",
+        "strokeStyle",
+        "border",
+        "transition",
+        "shadow",
+        "gradient",
+        "typography"
+      ]
+    },
+    "alfaExtension": {
+      "type": "object",
+      "required": [
+        "alfa"
+      ],
+      "properties": {
+        "alfa": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "enum": [
+                "approved",
+                "approved-provisional",
+                "set-by-design"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "minLength": 1
+            },
+            "formerName": {
+              "type": "string"
+            },
+            "where": {
+              "type": "string"
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "status"
+              ]
+            },
+            {
+              "required": [
+                "source"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "token": {
+      "type": "object",
+      "required": [
+        "$value",
+        "$type",
+        "$extensions"
+      ],
+      "properties": {
+        "$value": {},
+        "$type": {
+          "$ref": "#/$defs/type"
+        },
+        "$description": {
+          "type": "string"
+        },
+        "$deprecated": {
+          "type": [
+            "boolean",
+            "string"
+          ]
+        },
+        "$extensions": {
+          "$ref": "#/$defs/alfaExtension"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "$type": {
+                "const": "color"
+              }
+            },
+            "required": [
+              "$type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/alias"
+                  },
+                  {
+                    "$ref": "#/$defs/color"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "$type": {
+                "const": "dimension"
+              }
+            },
+            "required": [
+              "$type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/alias"
+                  },
+                  {
+                    "$ref": "#/$defs/dimension"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "$type": {
+                "const": "duration"
+              }
+            },
+            "required": [
+              "$type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/alias"
+                  },
+                  {
+                    "$ref": "#/$defs/duration"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "$type": {
+                "const": "cubicBezier"
+              }
+            },
+            "required": [
+              "$type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/alias"
+                  },
+                  {
+                    "$ref": "#/$defs/cubicBezier"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "$type": {
+                "const": "number"
+              }
+            },
+            "required": [
+              "$type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/alias"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "$type": {
+                "const": "fontWeight"
+              }
+            },
+            "required": [
+              "$type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/alias"
+                  },
+                  {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 1000
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "$type": {
+                "const": "fontFamily"
+              }
+            },
+            "required": [
+              "$type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/alias"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "$type": {
+                "const": "shadow"
+              }
+            },
+            "required": [
+              "$type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/alias"
+                  },
+                  {
+                    "$ref": "#/$defs/shadowLayer"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/alias"
+                        },
+                        {
+                          "$ref": "#/$defs/shadowLayer"
+                        }
+                      ]
+                    },
+                    "minItems": 1
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "$type": {
+                "const": "transition"
+              }
+            },
+            "required": [
+              "$type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "$value": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/alias"
+                  },
+                  {
+                    "$ref": "#/$defs/transition"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "color": {
+      "type": "object",
+      "required": [
+        "colorSpace",
+        "components"
+      ],
+      "properties": {
+        "colorSpace": {
+          "const": "srgb"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "alpha": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "hex": {
+          "type": "string",
+          "pattern": "^#[0-9a-f]{6}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "dimension": {
+      "type": "object",
+      "required": [
+        "value",
+        "unit"
+      ],
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "unit": {
+          "const": "px"
+        }
+      },
+      "additionalProperties": false
+    },
+    "duration": {
+      "type": "object",
+      "required": [
+        "value",
+        "unit"
+      ],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "const": "ms"
+        }
+      },
+      "additionalProperties": false
+    },
+    "cubicBezier": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "shadowLayer": {
+      "type": "object",
+      "required": [
+        "color",
+        "offsetX",
+        "offsetY",
+        "blur",
+        "spread"
+      ],
+      "properties": {
+        "color": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/alias"
+            },
+            {
+              "$ref": "#/$defs/color"
+            }
+          ]
+        },
+        "offsetX": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/alias"
+            },
+            {
+              "$ref": "#/$defs/dimension"
+            }
+          ]
+        },
+        "offsetY": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/alias"
+            },
+            {
+              "$ref": "#/$defs/dimension"
+            }
+          ]
+        },
+        "blur": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/alias"
+            },
+            {
+              "$ref": "#/$defs/dimension"
+            }
+          ]
+        },
+        "spread": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/alias"
+            },
+            {
+              "$ref": "#/$defs/dimension"
+            }
+          ]
+        },
+        "inset": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "transition": {
+      "type": "object",
+      "required": [
+        "duration",
+        "delay",
+        "timingFunction"
+      ],
+      "properties": {
+        "duration": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/alias"
+            },
+            {
+              "$ref": "#/$defs/duration"
+            }
+          ]
+        },
+        "delay": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/alias"
+            },
+            {
+              "$ref": "#/$defs/duration"
+            }
+          ]
+        },
+        "timingFunction": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/alias"
+            },
+            {
+              "$ref": "#/$defs/cubicBezier"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

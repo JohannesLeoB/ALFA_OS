@@ -1,0 +1,1220 @@
+{
+ "$description": "Namen, Listen und Kürzel aus dem Code. Zeilen mit „demo“ sind Beispieldaten, nicht Vertrag.",
+ "ordner": [
+  {
+   "id": "inbox",
+   "name": "Eingang",
+   "symbol": "inbox"
+  },
+  {
+   "id": "starred",
+   "name": "Markiert",
+   "symbol": "flag"
+  },
+  {
+   "id": "sent",
+   "name": "Gesendet",
+   "symbol": "sent"
+  },
+  {
+   "id": "drafts",
+   "name": "Entwürfe",
+   "symbol": "compose"
+  },
+  {
+   "id": "all",
+   "name": "Alle",
+   "symbol": "allMail"
+  },
+  {
+   "id": "archive",
+   "name": "Archiv",
+   "symbol": "archive"
+  },
+  {
+   "id": "spam",
+   "name": "Spam",
+   "symbol": "junk"
+  },
+  {
+   "id": "trash",
+   "name": "Papierkorb",
+   "symbol": "trash"
+  }
+ ],
+ "labels_demo": [
+  {
+   "id": "l1",
+   "name": "Küche Hansen"
+  },
+  {
+   "id": "l2",
+   "name": "Wohnung Vogt"
+  },
+  {
+   "id": "l3",
+   "name": "Praxis Kern"
+  },
+  {
+   "id": "l4",
+   "name": "Lieferanten"
+  }
+ ],
+ "gruppen": [
+  {
+   "gruppe": "Kommunikation",
+   "bereiche": [
+    {
+     "bereich": "Mail",
+     "eintraege": [
+      "Eingang",
+      "Entwürfe",
+      "Gesendet"
+     ]
+    }
+   ]
+  },
+  {
+   "gruppe": "Kern",
+   "bereiche": [
+    {
+     "bereich": "Einstellungen",
+     "eintraege": [
+      "Integrationen",
+      "Person",
+      "Ansicht",
+      "System"
+     ]
+    }
+   ]
+  }
+ ],
+ "kategorien": [
+  {
+   "name": "Integrationen",
+   "symbol": "plug"
+  },
+  {
+   "name": "Person",
+   "symbol": "person"
+  },
+  {
+   "name": "Ansicht",
+   "symbol": "contrast"
+  },
+  {
+   "name": "System",
+   "symbol": "system"
+  }
+ ],
+ "kuerzel": [
+  {
+   "aktion": "Neue Nachricht",
+   "tasten": [
+    "⌘",
+    "N"
+   ]
+  },
+  {
+   "aktion": "Antworten",
+   "tasten": [
+    "⌘",
+    "R"
+   ]
+  },
+  {
+   "aktion": "Allen antworten",
+   "tasten": [
+    "⌘",
+    "⇧",
+    "R"
+   ]
+  },
+  {
+   "aktion": "Weiterleiten",
+   "tasten": [
+    "⌘",
+    "⇧",
+    "F"
+   ]
+  },
+  {
+   "aktion": "In der Liste suchen",
+   "tasten": [
+    "⌘",
+    "⌥",
+    "F"
+   ]
+  },
+  {
+   "aktion": "Gelesen / ungelesen",
+   "tasten": [
+    "⌘",
+    "⇧",
+    "U"
+   ]
+  },
+  {
+   "aktion": "Entwurf sichern",
+   "tasten": [
+    "⌘",
+    "S"
+   ]
+  },
+  {
+   "aktion": "Drucken",
+   "tasten": [
+    "⌘",
+    "P"
+   ]
+  },
+  {
+   "aktion": "Mail öffnen",
+   "tasten": [
+    "⌘",
+    "6"
+   ]
+  },
+  {
+   "aktion": "Fett",
+   "tasten": [
+    "⌘",
+    "B"
+   ]
+  },
+  {
+   "aktion": "Kursiv",
+   "tasten": [
+    "⌘",
+    "I"
+   ]
+  },
+  {
+   "aktion": "Unterstrichen",
+   "tasten": [
+    "⌘",
+    "U"
+   ]
+  },
+  {
+   "aktion": "Link einfügen",
+   "tasten": [
+    "⌘",
+    "K"
+   ]
+  }
+ ],
+ "person_demo": [
+  "Jonas Brenner",
+  "jonas@studio-brenner.de"
+ ],
+ "einstellungen_abschnitte": [
+  {
+   "gruppe": "Ich",
+   "abschnitte": [
+    {
+     "id": "identitaet",
+     "name": "Identität",
+     "symbol": "person"
+    },
+    {
+     "id": "darstellung",
+     "name": "Darstellung",
+     "symbol": "contrast"
+    }
+   ]
+  },
+  {
+   "gruppe": "Mail",
+   "abschnitte": [
+    {
+     "id": "konten",
+     "name": "Mail-Konten",
+     "symbol": "envelope"
+    },
+    {
+     "id": "mail",
+     "name": "Lesen und Schreiben",
+     "symbol": "inbox"
+    }
+   ]
+  },
+  {
+   "gruppe": "Firma",
+   "abschnitte": [
+    {
+     "id": "firma",
+     "name": "Firmendaten",
+     "symbol": "doc"
+    },
+    {
+     "id": "ordner",
+     "name": "Dateiordner",
+     "symbol": "folder"
+    },
+    {
+     "id": "vorlagen",
+     "name": "Vorlagen",
+     "symbol": "list"
+    }
+   ]
+  },
+  {
+   "gruppe": "Verbindungen",
+   "abschnitte": [
+    {
+     "id": "integrationen",
+     "name": "Integrationen",
+     "symbol": "plug"
+    },
+    {
+     "id": "schluessel",
+     "name": "Schlüssel-Inventar",
+     "symbol": "key"
+    }
+   ]
+  },
+  {
+   "gruppe": "Schutz und System",
+   "abschnitte": [
+    {
+     "id": "datenschutz",
+     "name": "Datenschutz",
+     "symbol": "shield"
+    },
+    {
+     "id": "system",
+     "name": "System",
+     "symbol": "system"
+    },
+    {
+     "id": "impressum",
+     "name": "Impressum",
+     "symbol": "doc"
+    }
+   ]
+  }
+ ],
+ "dienste": [
+  {
+   "id": "google",
+   "name": "Google"
+  },
+  {
+   "id": "clickup",
+   "name": "ClickUp"
+  },
+  {
+   "id": "clockodo",
+   "name": "Clockodo"
+  },
+  {
+   "id": "claude",
+   "name": "Claude"
+  },
+  {
+   "id": "airtable",
+   "name": "Airtable"
+  },
+  {
+   "id": "sevdesk",
+   "name": "sevDesk"
+  },
+  {
+   "id": "dhl",
+   "name": "DHL Sendungen"
+  },
+  {
+   "id": "dhlversand",
+   "name": "DHL Versand"
+  },
+  {
+   "id": "happa",
+   "name": "Happa Happa"
+  }
+ ],
+ "status": {
+  "connected": "Verbunden",
+  "working": "Verbunden · prüft",
+  "connecting": "Verbindet …",
+  "notConnected": "Nicht verbunden",
+  "failed": "Fehler",
+  "stored": "Gespeichert, nicht geprüft",
+  "unreadable": "Schlüsselbund nicht lesbar",
+  "orphaned": "Verwaist"
+ },
+ "felder_je_abschnitt": {
+  "identitaet": [
+   {
+    "id": "name",
+    "name": "Name",
+    "symbol": "person",
+    "beschreibung": "Wie du in der App und in Mails heißt"
+   },
+   {
+    "id": "rolle",
+    "name": "Rolle",
+    "symbol": "tag",
+    "beschreibung": "Was du im Büro machst"
+   },
+   {
+    "id": "abteilung",
+    "name": "Abteilung",
+    "symbol": "people",
+    "beschreibung": "Zu welchem Team du gehörst"
+   },
+   {
+    "id": "telefon",
+    "name": "Telefon",
+    "symbol": "phone",
+    "beschreibung": "Unter dieser Nummer erreicht man dich"
+   },
+   {
+    "id": "geburtstag",
+    "name": "Geburtstag",
+    "symbol": "cake",
+    "beschreibung": "Für Glückwünsche im Team"
+   },
+   {
+    "id": "kurz",
+    "name": "Kurzbeschreibung",
+    "symbol": "textSize",
+    "beschreibung": "Ein Satz über dich"
+   },
+   {
+    "id": "clockodoId",
+    "name": "Clockodo-Nutzer-ID",
+    "symbol": "key",
+    "beschreibung": "Dein Zugang zur Zeiterfassung"
+   },
+   {
+    "id": "verzeichnis",
+    "name": "Team-Verzeichnis",
+    "symbol": "people",
+    "beschreibung": "Eintrag ins Team-Verzeichnis"
+   },
+   {
+    "id": "abmelden",
+    "name": "Abmelden",
+    "symbol": "close",
+    "beschreibung": "Trennt alle Dienste"
+   }
+  ],
+  "darstellung": [
+   {
+    "id": "erscheinung",
+    "name": "Erscheinung",
+    "symbol": "contrast",
+    "beschreibung": "Hell, Dunkel oder wie das System"
+   },
+   {
+    "id": "start",
+    "name": "Startansicht",
+    "symbol": "home",
+    "beschreibung": "Was die App beim Öffnen zeigt"
+   },
+   {
+    "id": "sperre",
+    "name": "App-Sperre",
+    "symbol": "lock",
+    "beschreibung": "Sperrt auch nach einer Pause"
+   },
+   {
+    "id": "kuerzel",
+    "name": "Tastenkürzel",
+    "symbol": "keyboard",
+    "beschreibung": "Ändern, Doppelte erkennen, zurücksetzen"
+   }
+  ],
+  "konten": [
+   {
+    "id": "haupt",
+    "name": "jonas@studio-brenner.de",
+    "symbol": "envelope",
+    "beschreibung": "Google · Hauptkonto"
+   },
+   {
+    "id": "neu",
+    "name": "Konto hinzufügen",
+    "symbol": "plus",
+    "beschreibung": "Aus Anbietervorlage"
+   }
+  ],
+  "firma": [
+   {
+    "id": "fname",
+    "name": "Firma",
+    "symbol": "doc",
+    "beschreibung": ""
+   },
+   {
+    "id": "anschrift",
+    "name": "Anschrift",
+    "symbol": "home",
+    "beschreibung": ""
+   },
+   {
+    "id": "ftel",
+    "name": "Telefon",
+    "symbol": "phone",
+    "beschreibung": ""
+   },
+   {
+    "id": "web",
+    "name": "Web",
+    "symbol": "link",
+    "beschreibung": ""
+   },
+   {
+    "id": "fmail",
+    "name": "Mail",
+    "symbol": "envelope",
+    "beschreibung": ""
+   }
+  ],
+  "ordner": [
+   {
+    "id": "schema",
+    "name": "Ordnerschema",
+    "symbol": "folder",
+    "beschreibung": ""
+   },
+   {
+    "id": "rollen",
+    "name": "Rollen der Ordner",
+    "symbol": "folder",
+    "beschreibung": ""
+   },
+   {
+    "id": "kosten",
+    "name": "Kostenstellen",
+    "symbol": "tag",
+    "beschreibung": "Name und Clockodo-Leistung"
+   },
+   {
+    "id": "nummern",
+    "name": "Nummern",
+    "symbol": "list",
+    "beschreibung": "In der App, in Airtable und sevDesk"
+   },
+   {
+    "id": "bereit",
+    "name": "Bereitstellung",
+    "symbol": "save",
+    "beschreibung": ""
+   },
+   {
+    "id": "einrichtung",
+    "name": "Einrichtung",
+    "symbol": "list",
+    "beschreibung": "Im geteilten Drive"
+   }
+  ],
+  "vorlagen": [
+   {
+    "id": "vneu",
+    "name": "Vorlage anlegen",
+    "symbol": "plus",
+    "beschreibung": "Noch keine Vorlage."
+   }
+  ],
+  "mail": [
+   {
+    "id": "abruf",
+    "name": "Abruf",
+    "symbol": "inbox",
+    "beschreibung": ""
+   },
+   {
+    "id": "signatur",
+    "name": "Signatur",
+    "symbol": "pen",
+    "beschreibung": "Je Konto"
+   },
+   {
+    "id": "schrift",
+    "name": "Schrift und Größe",
+    "symbol": "textSize",
+    "beschreibung": ""
+   },
+   {
+    "id": "html",
+    "name": "HTML",
+    "symbol": "doc",
+    "beschreibung": ""
+   },
+   {
+    "id": "bilder",
+    "name": "Externe Bilder",
+    "symbol": "alert",
+    "beschreibung": ""
+   },
+   {
+    "id": "neue",
+    "name": "Neue Mails",
+    "symbol": "flag",
+    "beschreibung": ""
+   }
+  ],
+  "datenschutz": [
+   {
+    "id": "freigabe",
+    "name": "Freigabe je Kategorie",
+    "symbol": "shield",
+    "beschreibung": ""
+   },
+   {
+    "id": "ass",
+    "name": "Assistent ganz aus",
+    "symbol": "alert",
+    "beschreibung": "Stoppt jeden Aufruf"
+   },
+   {
+    "id": "mbilder",
+    "name": "Mail-Bilder",
+    "symbol": "inbox",
+    "beschreibung": ""
+   },
+   {
+    "id": "chat",
+    "name": "Dateien im Chat",
+    "symbol": "attach",
+    "beschreibung": ""
+   },
+   {
+    "id": "export",
+    "name": "Export der eigenen Daten",
+    "symbol": "save",
+    "beschreibung": ""
+   }
+  ],
+  "system": [
+   {
+    "id": "diagnose",
+    "name": "Diagnose",
+    "symbol": "gauge",
+    "beschreibung": "Version, Build, Commit, Zweig, Datenbank"
+   },
+   {
+    "id": "backups",
+    "name": "Backups",
+    "symbol": "save",
+    "beschreibung": "Sichern, Liste, Wiederherstellung"
+   },
+   {
+    "id": "cache",
+    "name": "Zwischenspeicher",
+    "symbol": "trash",
+    "beschreibung": "Gespeicherte Vorschauen entfernen"
+   },
+   {
+    "id": "einr2",
+    "name": "Einrichtung erneut",
+    "symbol": "list",
+    "beschreibung": "Den Erststart noch einmal durchlaufen"
+   },
+   {
+    "id": "tagebuch",
+    "name": "Tagebuch des Assistenten",
+    "symbol": "book",
+    "beschreibung": "Was der Assistent in deinem Namen getan hat"
+   },
+   {
+    "id": "werkstatt",
+    "name": "Werkstattfaktoren",
+    "symbol": "system",
+    "beschreibung": "Feineinstellung für Entwickler"
+   }
+  ],
+  "impressum": [
+   {
+    "id": "urheber",
+    "name": "Urheber",
+    "symbol": "person",
+    "beschreibung": ""
+   },
+   {
+    "id": "rechte",
+    "name": "Rechte",
+    "symbol": "doc",
+    "beschreibung": ""
+   },
+   {
+    "id": "isig",
+    "name": "Signatur",
+    "symbol": "pen",
+    "beschreibung": ""
+   }
+  ]
+ },
+ "symbole": {
+  "$description": "Pfade im 16er-Raster, Strich 1,3, runde Enden und Ecken, keine Füllung. Ring 28 mit Symbol 14.",
+  "viewBox": "0 0 16 16",
+  "strichbreite": 1.3,
+  "pfade": {
+   "search": "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5",
+   "filter": "M2.5 3.5h11l-4.25 5v4.5l-2.5-1.25V8.5Z",
+   "compose": "M11 2.5l2.5 2.5L6 12.5H3.5V10ZM9.5 4l2.5 2.5",
+   "inbox": "M2.5 9.5l1.5-6h8l1.5 6v3.5h-11ZM2.5 9.5h3l1 1.5h3l1-1.5h3",
+   "flag": "M4 14V2.5M4 3h7.5l-1.5 2.75L11.5 8.5H4",
+   "sent": "M14 2L7 9M14 2l-4.5 12-2.5-5-5-2.5Z",
+   "allMail": "M2.5 6.5h11v6h-11ZM4 4.5h8M5.5 2.5h5",
+   "archive": "M2.5 3.5h11v3h-11ZM3.5 6.5v6h9v-6M6.5 9h3",
+   "junk": "M5.5 2.5h5l3 3v5l-3 3h-5l-3-3v-5ZM8 5.5v3M8 10.75v.5",
+   "trash": "M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9",
+   "tag": "M2.5 2.5h5.5l5.5 5.5-5.5 5.5-5.5-5.5ZM5.5 5.25v.5",
+   "reply": "M6.5 4L2.5 8l4 4M2.5 8h7a4 4 0 0 1 4 4v.5",
+   "replyAll": "M9 4L5 8l4 4M5 8h4.5a4 4 0 0 1 4 4v.5M5.5 4l-4 4 4 4",
+   "forward": "M9.5 4l4 4-4 4M13.5 8h-7a4 4 0 0 0-4 4v.5",
+   "fan": "M4.5 5.5h7v8h-7ZM5.5 3.5h5M6.5 1.5h3",
+   "send": "M8 13V3.5M4 7.5l4-4 4 4",
+   "close": "M4.5 4.5l7 7M11.5 4.5l-7 7",
+   "more": "M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM13 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z",
+   "attach": "M12.5 7.5l-4.75 4.75a3 3 0 0 1-4.25-4.25L8.5 3a2 2 0 0 1 2.83 2.83L6.5 10.66a1 1 0 0 1-1.41-1.41L9.5 4.83",
+   "folder": "M2.5 4.5h4l1.5 1.5h5.5v6.5h-11Z",
+   "person": "M8 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM3 13.5c.5-2.75 2.5-4 5-4s4.5 1.25 5 4",
+   "personAdd": "M6.5 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM2 13.5c.5-2.5 2.25-3.75 4.5-3.75s4 1.25 4.5 3.75M12.5 4.5v4M10.5 6.5h4",
+   "people": "M6 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM2.5 12.5c.4-2 1.75-3 3.5-3s3.1 1 3.5 3M10.5 7a2 2 0 1 0 0-4M11.5 9.6c1.2.3 2 1.2 2.25 2.9",
+   "bold": "M5 3h3.5a2.5 2.5 0 0 1 0 5H5ZM5 8h4a2.5 2.5 0 0 1 0 5H5Z",
+   "italic": "M7 3h5M4 13h5M10 3L6 13",
+   "underline": "M4.5 2.5v5a3.5 3.5 0 0 0 7 0v-5M3.5 13.5h9",
+   "list": "M6 4.5h7.5M6 8h7.5M6 11.5h7.5M2.5 4.5h1M2.5 8h1M2.5 11.5h1",
+   "numbered": "M6.5 4.5h7M6.5 8h7M6.5 11.5h7M2.5 3.5l1-.5v3",
+   "link": "M7 9a2.5 2.5 0 0 0 3.5 0l2-2A2.5 2.5 0 0 0 9 3.5l-.7.7M9 7a2.5 2.5 0 0 0-3.5 0l-2 2A2.5 2.5 0 0 0 7 12.5l.7-.7",
+   "textSize": "M2 12.5l3-8 3 8M3 10h4M10.5 12.5V9.5a1.75 1.75 0 0 1 3.5 0v3M10.5 11h3.5",
+   "save": "M8 2.5v7M5 6.5l3 3 3-3M2.5 10.5v3h11v-3",
+   "expand": "M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5L9 7M2.5 13.5L7 9",
+   "shrink": "M13.5 2.5L10 6M10 3v3h3M2.5 13.5L6 10M6 13v-3H3",
+   "minus": "M4 8h8",
+   "chevron": "M4.5 6.5L8 10l3.5-3.5",
+   "lock": "M4.5 7.5h7v6h-7ZM6 7.5V5.5a2 2 0 0 1 4 0v2",
+   "plug": "M5.5 2.5v3M10.5 2.5v3M4 5.5h8v2.5a4 4 0 0 1-8 0ZM8 12v1.5",
+   "contrast": "M8 13.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM8 2.5v11",
+   "system": "M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4",
+   "envelope": "M2.5 4h11v8h-11ZM2.5 4.5L8 9l5.5-4.5",
+   "doc": "M4 2h5l3 3v9H4ZM9 2v3h3",
+   "alert": "M8 2.5l6 11H2ZM8 6.5v3M8 11.5v.25",
+   "key": "M5.5 10.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM8.5 7.5h5v2M11.5 7.5v2",
+   "pin": "M8 10.5V14.5M5 10.5h6M5.75 10.5l.75-5h3l.75 5M6 2.5h4",
+   "check": "M3.5 8.5l3 3 6-7",
+   "plus": "M8 3.5v9M3.5 8h9",
+   "refresh": "M12.5 8a4.5 4.5 0 1 1-1.3-3.2M12.5 3v2.5H10",
+   "bang": "M8 3.5v5.5M8 12v.5",
+   "dash": "M4.5 8h7",
+   "keyboard": "M2 4.5h12v7H2ZM4.5 7h1M7.5 7h1M10.5 7h1M5 9.5h6",
+   "shield": "M8 2l5 2v4c0 3-2.2 5-5 6-2.8-1-5-3-5-6V4Z",
+   "home": "M2.5 7.5L8 3l5.5 4.5V13h-11Z",
+   "pen": "M10.5 2.5l3 3-8 8H2.5v-3Z",
+   "gauge": "M2.5 11a5.5 5.5 0 1 1 11 0M8 11l2.5-3",
+   "book": "M3 3h4a1 1 0 0 1 1 1v9a1 1 0 0 0-1-1H3ZM13 3H9a1 1 0 0 0-1 1v9a1 1 0 0 1 1-1h4Z",
+   "phone": "M4 2.5h2l1 3-1.5 1a7 7 0 0 0 3 3l1-1.5 3 1v2a1.5 1.5 0 0 1-1.5 1.5A10 10 0 0 1 2.5 4 1.5 1.5 0 0 1 4 2.5Z",
+   "cake": "M3 13.5h10v-5H3ZM3 10.5c1.7 1 3.3 1 5 0s3.3-1 5 0M8 8.5v-3M8 3.5v-1"
+  },
+  "nurImInhalt": [
+   "check",
+   "plus",
+   "refresh",
+   "bang",
+   "dash",
+   "keyboard",
+   "shield",
+   "home",
+   "pen",
+   "gauge",
+   "book",
+   "list",
+   "phone",
+   "cake"
+  ],
+  "abweichend": []
+ },
+ "texte": {
+  "$description": "Aus dem Code gezogen, nach Art. Nicht auf Vollständigkeit geprüft. Wörtlich so in der Probe.",
+  "rueckmeldungen": [
+   "In den Papierkorb gelegt",
+   "Archiviert",
+   "Empfänger fehlt",
+   "Druckdialog",
+   "Entwurf gesichert",
+   "Adresse kopiert",
+   "Anbieter wählen …",
+   "Export gespeichert.",
+   "In die Zwischenablage kopiert",
+   "Im Papierkorb",
+   "Als PDF im Projektordner gesichert",
+   "Als PDF gesichert",
+   "Notiz an ",
+   "Als Vorlage gesichert",
+   "Backup erstellt",
+   "Geleert"
+  ],
+  "menue_eintraege": [
+   "Adresse kopieren",
+   "Mail schreiben",
+   "Als Kontakt sichern",
+   "Vorschau",
+   "In anderes Projekt …",
+   "Sichern unter …",
+   "Mail",
+   "Einstellungen",
+   "Zuletzt offen",
+   "Drucken",
+   "Als PDF sichern",
+   "Mail in Projektordner sichern",
+   "Als ungelesen markieren",
+   "Verschieben nach …",
+   "Als Spam melden",
+   "Signatur anhängen",
+   "Signatur bearbeiten …",
+   "In Projektordner sichern",
+   "Notiz anfügen",
+   "Absender als Kontakt sichern",
+   "Original anzeigen",
+   "Signatur",
+   "Später senden …",
+   "Lesebestätigung anfordern",
+   "Als Vorlage sichern"
+  ],
+  "knoepfe": [
+   "Antworten",
+   "Allen antworten",
+   "Weiterleiten",
+   "Archivieren",
+   "In den Papierkorb",
+   "Abbrechen",
+   "Verwerfen",
+   "Datei anhängen",
+   "Aus Projektordner",
+   "Format",
+   "Entwurf sichern",
+   "Entwurf verwerfen",
+   "Senden",
+   "Trennen",
+   "Jetzt sichern",
+   "Spalte falten",
+   "Mehr"
+  ],
+  "abschnittstitel": [
+   "Schlüssel",
+   "Zugang",
+   "In der App",
+   "Abgleich",
+   "Weiteres",
+   "Hilfe und Links"
+  ],
+  "bestaetigungen": [
+   "Entwurf verwerfen?"
+  ],
+  "vertrag_abdeckung": {
+   "$description": "Wortlaute aus bereiche-fuer-design.md, am Anfang (22 Zeichen) gegen den Code geprüft. Platzhalter im Vertrag machen die Probe ungenau. Für Texte gilt der Vertrag, nicht der Entwurf. „art“ ist eine grobe Einordnung durch die Design-Sitzung.",
+   "geprueft": 130,
+   "im_entwurf": 50,
+   "fehlen_im_entwurf": [
+    {
+     "zeile": "Sync älter",
+     "wortlaut": "Zuletzt abgeglichen",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Blob",
+     "wortlaut": "Bereiche / Assistent öffnen / Finden … / Bereiche und Status",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Bereiche",
+     "wortlaut": "Heute, Projekte, Katalog, Werkstatt, Studio, Mail, Assistent, Einstellungen",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Nicht erreichbar (jeder Dienst)",
+     "wortlaut": "ist nicht erreichbar.",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Nicht verbunden (Heute-Fassung)",
+     "wortlaut": "ist nicht verbunden.",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Aktionen",
+     "wortlaut": "Erneut versuchen / Einstellungen öffnen",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Hilfen",
+     "wortlaut": "Schließen / Zuklappen / Aufklappen",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Suche",
+     "wortlaut": "Projekt, Artikel, Kontakt, Datei …",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Widgets",
+     "wortlaut": "Hinzufügen, Hinzugefügt, Fertig, Platz für ein Widget, Widgets bearbeiten, „Wähl",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Leer",
+     "wortlaut": "Keine Nachrichten in .",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Keine Treffer",
+     "wortlaut": "Keine Treffer für „“ in .",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Konto nicht erreichbar",
+     "wortlaut": "· nicht erreichbar —",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Mehr laden",
+     "wortlaut": "Weitere laden ·",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Entwurf ohne Senden",
+     "wortlaut": "Nicht gesendet · im Ordner Entwürfe",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Entwurf ohne Senden",
+     "wortlaut": "Bearbeiten",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Zitat",
+     "wortlaut": "Zitat zeigen ·  Zeile(n)",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Absender nicht erreichbar",
+     "wortlaut": "· nicht erreichbar",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Ablegen per Ziehen",
+     "wortlaut": "Loslassen hängt an",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Signatur fehlt",
+     "wortlaut": "Signatur anlegen",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Stapel",
+     "wortlaut": "Stapel, Lesen, Entwurf, Gefächert",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Stapel",
+     "wortlaut": "Entwurf/Entwürfe",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Verbindung",
+     "wortlaut": "Synchronisiert",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Prüfung",
+     "wortlaut": "Verbindung steht.",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Prüfung",
+     "wortlaut": "Fehler: .",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Prüfung",
+     "wortlaut": "Eingang und Ausgang erreichbar.",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Prüfung",
+     "wortlaut": "Nicht verbunden.",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Prüfung",
+     "wortlaut": "Es fehlen: . (Server Eingang, Server Ausgang, Passwort, Passwort Ausgang)",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Prüfung",
+     "wortlaut": "Es fehlt eine Datei.",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Prüfung",
+     "wortlaut": "Datei gelesen.",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Dienst nicht erreichbar",
+     "wortlaut": "ist nicht erreichbar. / Erneut versuchen",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Leer",
+     "wortlaut": "Noch kein Mail-Konto. / Noch keine Vorlage.",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Gesperrt",
+     "wortlaut": "Nur Verwaltende / Nur Verwaltende ändern das",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Stapel",
+     "wortlaut": "Gefächert / Gesichert / Nur lesen",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Kürzel",
+     "wortlaut": "Kürzel konnte nicht gesetzt werden.",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Schlüsselbund",
+     "wortlaut": "Keine -Zugänge im Schlüsselbund gefunden. / Der Schlüsselbund kann nicht gelesen",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "System",
+     "wortlaut": "Fehlgeschlagen:",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "System",
+     "wortlaut": "Noch keine Backups vorhanden.",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Abgleich",
+     "wortlaut": "Letzter Abgleich:",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Abgleich",
+     "wortlaut": "Intervall: Aus, Manuell, Alle 30 Sekunden … Jede Stunde",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Bestätigungen",
+     "wortlaut": "Konto entfernen? „“ ·  wird aus der App entfernt. Die Mails bleiben beim Anbiete",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Bestätigungen",
+     "wortlaut": "trennen? Die App nutzt  danach nicht mehr.",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Bestätigungen",
+     "wortlaut": "Vorlage entfernen?",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Bestätigungen",
+     "wortlaut": "Ins Team-Verzeichnis eintragen?",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Bestätigungen",
+     "wortlaut": "Dieses Backup beim nächsten Start wiederherstellen?",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Anbieter",
+     "wortlaut": "Airtable Projektdaten",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Anbieter",
+     "wortlaut": "ClickUp Aufgaben",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Anbieter",
+     "wortlaut": "sevDesk Umsatz",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Anbieter",
+     "wortlaut": "Claude Assistent",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Anbieter",
+     "wortlaut": "Clockodo Zeiterfassung",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Konto-Sheet-Felder",
+     "wortlaut": "Anbieter, Anzeigename, Posteingangsserver, Port, Verschlüsselung (Keine, SSL/TLS",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Nicht erreichbar",
+     "wortlaut": "ist nicht erreichbar. / Erneut versuchen",
+     "art": "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert"
+    },
+    {
+     "zeile": "Nicht verbunden",
+     "wortlaut": "ist nicht verbunden. / Einstellungen öffnen (öffnet Einstellungen › Integratione",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Keine Termine",
+     "wortlaut": "Keine Termine mehr heute.",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Nächster Termin",
+     "wortlaut": "Als Nächstes:  um .",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Zeit",
+     "wortlaut": "Läuft",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Zeit",
+     "wortlaut": "Pausiert",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Zeit",
+     "wortlaut": "Wechseln",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Woche",
+     "wortlaut": "KW  ·",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Galerie",
+     "wortlaut": "Widgets",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Galerie",
+     "wortlaut": "Widget suchen",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Galerie",
+     "wortlaut": "Seite",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Galerie",
+     "wortlaut": "Fertig",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Galerie",
+     "wortlaut": "Aufs Brett",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Galerie",
+     "wortlaut": "Auf dem Brett",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Galerie",
+     "wortlaut": "Noch nicht gezeichnet",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Bearbeiten",
+     "wortlaut": "Widgets bearbeiten",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Bearbeiten",
+     "wortlaut": "Vom Brett nehmen",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Bearbeiten",
+     "wortlaut": "Größe ziehen",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Leer",
+     "wortlaut": "Keine Artikel für diese Wahl.",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Kein gesicherter Korb",
+     "wortlaut": "Kein gesicherter Warenkorb.",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Leerer Korb",
+     "wortlaut": "Leer — + in der Liste legt hierher.",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Kein Suchbegriff",
+     "wortlaut": "Kein Begriff im Katalog.",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Sortiment ohne Oberkategorie",
+     "wortlaut": "Erst eine Oberkategorie wählen — oder direkt suchen.",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Fehler",
+     "wortlaut": "ist nicht erreichbar. (Quelle, z. B. Airtable) / Erneut versuchen",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Position im Detail",
+     "wortlaut": "Nicht in den Treffern",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Dokumentstatus",
+     "wortlaut": "Ohne Quell-Beleg",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Korb leeren",
+     "wortlaut": "“ leeren?",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Korb leeren",
+     "wortlaut": "Die Position wird entfernt. / Alle  Positionen werden entfernt.",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Spalten",
+     "wortlaut": "Spalten",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    },
+    {
+     "zeile": "Spalten",
+     "wortlaut": "Spaltenbreiten zurücksetzen",
+     "art": "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)"
+    }
+   ],
+   "einordnung": {
+    "Zustand in Mail oder Einstellungen, nicht gezeigt oder anders formuliert": 40,
+    "anderer Bereich (Heute, Katalog, Werkstatt, Widgets)": 40
+   }
+  }
+ }
+}

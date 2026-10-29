@@ -1,0 +1,109 @@
+{
+ "export": "2026-10-18",
+ "stand": "2026-10-17T21:00+02:00",
+ "hinweis": "Gebaut am 17.10. in ALFA Einstellungen.dc.html (linke Bahn: Ich, Firma, Verbindungen, Schutz und System; Mitte: Abschnitte; rechts: Karte im Stapel). Johannes 16.10.: „Fünf Gruppen aus Inhalt, Dienste dazu, Kacheln als Start, Dummy-Abschnitte nicht bauen“. Vier Gruppen, weil „Mail“ eine Integration ist (Johannes 15.10.). Zuordnung im Bogen: identity=profil, appearance=darstellung+start+sperre, companyData=firma, folders=einrichtung, templates=vorlagen, integrations=SVC (11 Dienste inkl. Mail-Konten), keyInventory=schluessel, privacy=datenschutz, system=diagnose, imprint=impressum. Firmendaten und Impressum ohne Werte (Daten liefert Johannes, Rückgabe 25). Signatur und Kontakte nur über Mail-Konto bzw. Integrationen erreichbar. Kacheln: nur in „Verbindungen“ (17.10.). Johannes 17.10.: „die \"Kacheln\" wären bei den \"integrationen\" eventuell gut, dann mit Icon der jeweiligen Anbindung/App/integration. Bei den anderen Einstellungen aber nicht unbedingt nötig“.",
+ "groups": [
+  {
+   "id": "me",
+   "name": "Ich",
+   "sections": [
+    {
+     "id": "identity",
+     "former": "identitaet",
+     "name": "Identität",
+     "symbol": "person",
+     "source": "hub"
+    },
+    {
+     "id": "appearance",
+     "former": "darstellung",
+     "name": "Darstellung",
+     "symbol": "contrast",
+     "source": "hub"
+    }
+   ]
+  },
+  {
+   "id": "company",
+   "name": "Firma",
+   "sections": [
+    {
+     "id": "companyData",
+     "former": "firma",
+     "name": "Firmendaten",
+     "symbol": "building",
+     "source": "hub"
+    },
+    {
+     "id": "folders",
+     "former": "ordner",
+     "name": "Dateiordner",
+     "symbol": "folder",
+     "source": "hub"
+    },
+    {
+     "id": "templates",
+     "former": "vorlagen",
+     "name": "Vorlagen",
+     "symbol": "list",
+     "source": "hub"
+    }
+   ]
+  },
+  {
+   "id": "connections",
+   "name": "Verbindungen",
+   "sections": [
+    {
+     "id": "integrations",
+     "former": "integrationen",
+     "name": "Integrationen",
+     "symbol": "plug",
+     "source": "hub"
+    },
+    {
+     "id": "keyInventory",
+     "former": "schluessel",
+     "name": "Schlüssel-Inventar",
+     "symbol": "key",
+     "source": "hub"
+    }
+   ]
+  },
+  {
+   "id": "protection",
+   "name": "Schutz und System",
+   "sections": [
+    {
+     "id": "privacy",
+     "former": "datenschutz",
+     "name": "Datenschutz",
+     "symbol": "shield",
+     "source": "hub"
+    },
+    {
+     "id": "system",
+     "former": "system",
+     "name": "System",
+     "symbol": "system",
+     "source": "hub"
+    },
+    {
+     "id": "imprint",
+     "former": "impressum",
+     "name": "Impressum",
+     "symbol": "docText",
+     "source": "hub"
+    }
+   ]
+  }
+ ],
+ "notBuilt": [
+  "Tastenkürzel",
+  "Backups",
+  "Tagebuch",
+  "Werkstattfaktoren",
+  "Mitteilungen (kehren mit ihren Bereichen zurück)"
+ ],
+ "notBuiltBeleg": "Johannes 16.10.: „Dummy-Abschnitte nicht bauen“. Schlüssel-Inventar steht als Abschnitt in SECT, seine Beispieldaten sind nicht bauen."
+}

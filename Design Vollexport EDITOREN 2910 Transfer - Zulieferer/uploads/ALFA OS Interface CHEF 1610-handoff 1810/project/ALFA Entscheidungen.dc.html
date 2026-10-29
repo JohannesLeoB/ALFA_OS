@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="alfa-export" content="2026-10-18">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="lieferung-an-code/fonts/geist.css">
+<link rel="stylesheet" href="alfa-theme.css">
+<style>html,body{margin:0;background:#f2f2f2}a{color:#171717}a:hover{color:#4d4d4d}</style>
+</helmet>
+<div data-screen-label="ALFA Entscheidungen" style="min-height:100vh;box-sizing:border-box;padding:48px;display:flex;flex-direction:column;gap:40px;font-family:Geist,-apple-system,system-ui,sans-serif;font-size:13px;line-height:18px;color:#171717">
+<header style="display:flex;flex-direction:column;gap:8px;max-width:820px"><div style="font-size:11.5px;font-weight:500;letter-spacing:.04em;color:#6b6b6b">ALFA · ENTSCHEIDUNGEN · EXPORT 18.10.2026</div><div style="font-size:28px;line-height:32px;font-weight:500;letter-spacing:-.02em">Alles, was dein Wort braucht, auf einem Bogen</div><div style="color:#4d4d4d;text-wrap:pretty">Nichts hier ist entschieden. Jeder Abschnitt zeigt den heutigen Stand und sagt, was fehlt.</div></header>
+
+<section data-screen-label="1 Wach" style="display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:20px;background:#fff;box-shadow:0 0 0 1px #e8e8e8">
+<div style="font-size:18px;font-weight:500">1 · Blob wach</div>
+<div style="color:#4d4d4d;max-width:760px;text-wrap:pretty">„Wach“ heißt: Die Maus ist näher als 212 px am Blob (ALFA Shell.dc.html:157). Die Augen öffnen sich, der Blob wird breiter und zeigt den Namen des Bereichs. Entschieden 17.10.: 124. Passt der Name nicht, in einem Schritt 280, so breit wie die Bahn darunter in Ruhe (5 × 56). Keine Zwischenbreiten.</div>
+<div style="display:flex;gap:32px;align-items:flex-end;flex-wrap:wrap">
+<sc-for list="{{ blobs }}" as="b" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start"><div style="height:40px;width:{{ b.w }}px;box-sizing:border-box;border-radius:20px;background:#0d0d0d;color:#fff;display:flex;align-items:center;padding-left:14px;gap:8px;font-weight:500"><span style="width:28px;height:28px;flex:none;margin-left:-8px;border-radius:50%;border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;gap:4px"><i style="display:block;width:4px;height:{{ b.eye }}px;border-radius:2px;background:#fff"></i><i style="display:block;width:4px;height:{{ b.eye }}px;border-radius:2px;background:#fff"></i></span><span>{{ b.label }}</span></div><span style="font-size:11.5px;color:#6b6b6b">{{ b.note }}</span></div></sc-for>
+</div>
+</section>
+
+<section data-screen-label="2 Von Design gesetzt" style="display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:20px;background:#fff;box-shadow:0 0 0 1px #e8e8e8">
+<div style="font-size:18px;font-weight:500">2 · Von Design gesetzt · Freigabe Orange 18.10.</div>
+<div style="display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:500;color:#171717"><span style="height:20px;padding:0 10px;border-radius:999px;display:inline-flex;align-items:center;background:#f39f5a;color:#171717">Freigabe Orange</span>vorläufig abgenommen, bis andere Optionen ausgearbeitet sind</div>
+<div style="color:#4d4d4d;max-width:760px">„Ist soweit OK, fürs erste und bis weitere Farbsysteme und feintuning einziehen so gestattet.“</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:24px">
+<sc-for list="{{ modes }}" as="md" hint-placeholder-count="2">
+<div data-licht="{{ md.licht }}" style="display:flex;flex-direction:column;gap:16px;padding:16px;border-radius:20px;background:var(--c-ground);color:var(--c-ink);box-shadow:0 0 0 1px var(--c-line)">
+<div style="font-size:11.5px;font-weight:500;color:var(--c-ink-3)">{{ md.name }}</div>
+<div style="display:flex;flex-direction:column;border-radius:20px;background:var(--c-lane);box-shadow:var(--sh-lane);padding:8px">
+<div style="display:flex;align-items:center;gap:12px;min-height:44px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 var(--c-line)"><span style="flex:1">Google · Dienst</span><dc-import name="ALFA Bestaetigen" label="Trennen" frage="Google trennen?" ja="Trennen" laeuft="Wird getrennt …" fertig="Getrennt" hint-size="76px,28px"></dc-import></div>
+<div style="display:flex;align-items:center;gap:12px;min-height:44px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 var(--c-line)"><span style="flex:1">Entwurf</span><dc-import name="ALFA Bestaetigen" label="Verwerfen" frage="Entwurf verwerfen?" ja="Verwerfen" verlauf="{{ false }}" hint-size="90px,28px"></dc-import></div>
+<div style="display:flex;align-items:center;gap:12px;min-height:44px;padding:0 8px 0 16px"><span style="width:28px;height:28px;flex:none;border-radius:50%;background:var(--c-signal);color:var(--c-on-signal);display:grid;place-items:center;font-weight:500;font-size:11.5px">C</span><span style="flex:1;font-weight:500">Claude</span><span style="font-size:11.5px;font-weight:500;color:var(--c-signal);padding-right:12px">Fehler</span></div>
+</div>
+<div style="font-size:11.5px;color:var(--c-ink-3)">{{ md.note }}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:auto 1fr;gap:4px 16px;color:#4d4d4d;max-width:760px"><sc-for list="{{ confirmVals }}" as="c" hint-placeholder-count="6"><span style="font-weight:500;color:#171717">{{ c.k }}</span><span>{{ c.v }}</span></sc-for></div>
+</section>
+
+<section data-screen-label="3 Kacheln als Start" style="display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:20px;background:#fff;box-shadow:0 0 0 1px #e8e8e8">
+<div style="font-size:18px;font-weight:500">3 · Einstellungen · Kacheln bei den Integrationen</div>
+<div style="color:#4d4d4d;max-width:760px;text-wrap:pretty">Entschieden 17.10.: Kacheln nur bei den Integrationen, mit Icon der Anbindung. Die anderen Gruppen bleiben Liste. Eingebaut in ALFA Einstellungen unter „Verbindungen“. Logos liegen nur für Clockodo und DHL vor, die übrigen zeigen ihr Initial.</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:24px">
+<sc-for list="{{ themes }}" as="th" hint-placeholder-count="2">
+<div data-licht="{{ th.licht }}" style="display:flex;flex-direction:column;gap:16px;padding:16px;border-radius:20px;background:var(--c-lane);color:var(--c-ink);box-shadow:var(--sh-lane)">
+<sc-for list="{{ th.groups }}" as="g" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;gap:8px"><div style="height:24px;display:flex;align-items:flex-end;padding:0 4px;font-size:11.5px;color:var(--c-ink-3)">{{ g.name }}</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px"><sc-for list="{{ g.tiles }}" as="t" hint-placeholder-count="3"><div data-part="settings-tile" data-state="{{ t.state }}" style="height:84px;box-sizing:border-box;padding:12px;border-radius:12px;display:flex;flex-direction:column;justify-content:space-between;background:{{ t.bg }};color:{{ t.fg }};box-shadow:{{ t.ring }};cursor:pointer;transition:box-shadow 160ms cubic-bezier(.2,.8,.2,1),transform 160ms cubic-bezier(.2,.8,.2,1)" style-hover="box-shadow:inset 0 0 0 1px var(--c-ink-3);transform:translateY(-1px)"><span style="width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px {{ t.markRing }};font-size:11.5px;font-weight:500">{{ t.ini }}</span><span style="display:flex;align-items:center;gap:6px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.name }}<sc-if value="{{ t.bad }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;color:{{ t.badFg }}">{{ t.n }}</span></sc-if></span></div></sc-for></div></div></sc-for>
+<div style="font-size:11.5px;color:var(--c-ink-3)">{{ th.note }}</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section data-screen-label="5 Mehrfachauswahl und Farbsystem" style="display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:20px;background:#fff;box-shadow:0 0 0 1px #e8e8e8">
+<div style="font-size:18px;font-weight:500">5 · Mehrfachauswahl und Farbsystem</div>
+<div style="color:#4d4d4d;max-width:760px;text-wrap:pretty">Mehrfachauswahl ist in ALFA Mail gebaut, nicht nur entworfen: Klick auf die Marke einer Zeile wählt aus. Der Kopf der Liste zeigt dann „n gewählt“ mit Alle wählen, Gelesen/ungelesen, Archivieren, In den Papierkorb und Auswahl aufheben, mit Rückgängig. Ob das so bleibt, entscheidest du. Das Farbsystem darunter ist ein Vorschlag.</div>
+<div style="border-radius:16px;box-shadow:0 0 0 1px #e8e8e8"><dc-import name="ALFA Farbsystem" hint-size="100%,900px"></dc-import></div>
+</section>
+
+<section data-screen-label="6 Von Design gesetzt offen" style="display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:20px;background:#fff;box-shadow:0 0 0 1px #e8e8e8">
+<div style="font-size:18px;font-weight:500">6 · Von Design gesetzt · offen (18.10.)</div>
+<div style="color:#4d4d4d;max-width:760px;text-wrap:pretty">Werte, die in den Bögen und in der Logik standen, aber keinen Token hatten (Werteabgleich 18.10., lieferung-an-code/werte-abgleich.json, Teil „werte“ und „logik“). Sie sind jetzt Tokens mit Status „von-design-gesetzt“. Kein Wort von dir dazu. Du entscheidest: so, anderer Wert, oder weg.</div>
+<div style="display:grid;grid-template-columns:auto auto 1fr;gap:4px 16px;color:#4d4d4d;font-size:13px"><sc-for list="{{ vdg }}" as="v" hint-placeholder-count="22"><span style="font-weight:500;color:#171717">{{ v.k }}</span><span style="text-align:right;color:#171717">{{ v.v }}</span><span>{{ v.d }} · {{ v.w }}</span></sc-for></div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { vdg: [] };
+  componentDidMount() {
+    fetch("TOKENBOGEN.json").then(r => r.json()).then(T => { const out = []; const walk = (o, p) => { if (o && typeof o === "object") { if ("$value" in o) { const a = o.$extensions && o.$extensions.alfa; if (a && a.status === "von-design-gesetzt") { const v = o.$value; out.push({ k: p, v: typeof v === "number" ? String(v).replace(".", ",") : v && v.value !== undefined ? String(v.value).replace(".", ",") + " " + v.unit : "Schatten", d: o.$description || "", w: a.where }); } return; } for (const k in o) if (k[0] !== "$") walk(o[k], p ? p + "." + k : k); } }; walk(T, ""); this.setState({ vdg: out }); });
+  }
+  renderVals() {
+    const G = [["Ich", [["Identität", "I"], ["Darstellung", "D"]]], ["Firma", [["Firmendaten", "F"], ["Dateiordner", "D"], ["Vorlagen", "V"]]], ["Verbindungen", [["Integrationen", "In", 2], ["Schlüssel", "S"]]], ["Schutz und System", [["Datenschutz", "D"], ["System", "S"], ["Impressum", "I"]]]];
+    const theme = (licht, sel) => ({ licht, note: licht === "hell" ? "Hell · gewählt: Darstellung · Integrationen mit 2 Fehlern" : "Dunkel · gleiche Zustände", groups: G.map(([name, ts]) => ({ name, tiles: ts.map(([n, ini, bad]) => { const on = n === sel; return { name: n, ini, state: on ? "selected" : bad ? "error" : "rest", bg: on ? "var(--c-ink)" : "var(--c-well)", fg: on ? "var(--c-lane)" : "var(--c-ink)", ring: "none", markRing: on ? "var(--c-lane)" : "var(--c-line-strong)", bad: !!bad, n: bad || "", badFg: on ? "var(--c-lane)" : "var(--c-signal)" }; }) })) });
+    return {
+      blobs: [{ w: 56, eye: 4, label: "", note: "Ruhe · 56 × 40, Augen zu" }, { w: 124, eye: 8, label: "Mail", note: "Wach · 124, Name passt" }, { w: 280, eye: 8, label: "Einstellungen", note: "Wach · Name passt nicht · Schritt 280" }],
+      vdg: this.state.vdg,
+      confirmVals: [{ k: "Halten", v: "1000 ms (dein Wort: „in 1sek“)" }, { k: "Kante", v: "20 % weich" }, { k: "Unschärfe", v: "bis 0,6 px" }, { k: "Zittern", v: "ab 70 %, bis 1,5 px" }, { k: "Loslassen", v: "180 ms zurück" }, { k: "onSignal dunkel", v: "#0d0d0d (Weiß hatte 2,61:1)" }],
+      modes: [{ licht: "hell", name: "HELL · alfa-theme.css [data-licht=hell]", note: "Signal #b3412e, Zeichen #ffffff" }, { licht: "dunkel", name: "DUNKEL · alfa-theme.css [data-licht=dunkel]", note: "Signal #e08a74, Zeichen #0d0d0d (onSignal, 7,9:1)" }],
+      themes: [theme("hell", "Darstellung"), theme("dunkel", "Darstellung")]
+    };
+  }
+}
+</script>
+</body>
+</html>

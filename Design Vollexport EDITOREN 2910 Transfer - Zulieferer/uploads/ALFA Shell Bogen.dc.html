@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;display=swap">
+<link rel="stylesheet" href="alfa-theme.css">
+<style>html,body{margin:0;background:#e8e8e8}a{color:#171717}a:hover{color:#4d4d4d}</style>
+</helmet>
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+<div style="padding:32px;font-family:Geist,system-ui,sans-serif;color:#171717;display:flex;flex-direction:column;gap:24px;width:1512px;box-sizing:border-box">
+<div style="display:flex;align-items:baseline;gap:16px"><h1 style="margin:0;font-size:20px;font-weight:500">ALFA Shell · Schablone</h1><span style="font-size:13px;color:#4d4d4d">Leere Steckplätze, Maße live aus alfa-shell.js. Griffe ziehen, Blob öffnen, Abgleich drücken.</span></div>
+<div style="width:1512px;height:982px;position:relative;box-shadow:0 0 0 1px rgba(0,0,0,.12)">
+<dc-import name="ALFA Shell" bereich="Mail" licht="hell" fenster="1512 × 982" w="{{ wArr }}" lanes="{{ lanes }}" groups="{{ groups }}" me-ini="AB" sync-title="Abgleich" on-choose="{{ noop }}" on-mem="{{ onMem }}" on-grow="{{ onGrow }}" on-sync="{{ noop }}" hint-size="1512px,982px">
+<div data-slot="0" style="display:contents"><div style="flex:1;margin:8px;border:1px dashed var(--c-line-strong);border-radius:12px;padding:12px;font:11.5px Geist,system-ui,sans-serif;color:var(--c-ink-3);overflow:hidden;white-space:nowrap"><span style="display:block">0 · Bahn links<br>{{ w0 }} pt · min 224</span></div></div>
+<div data-slot="1" style="display:contents"><div style="flex:1;margin:8px;border:1px dashed var(--c-line-strong);border-radius:12px;padding:12px;font:11.5px Geist,system-ui,sans-serif;color:var(--c-ink-3);overflow:hidden;white-space:nowrap">1 · Bahn Mitte<br>{{ w1 }} pt · min 280</div></div>
+<div data-slot="2" style="display:contents"><div style="flex:1;margin:8px;border:1px dashed var(--c-line-strong);border-radius:12px;padding:12px;font:11.5px Geist,system-ui,sans-serif;color:var(--c-ink-3);overflow:hidden;white-space:nowrap"><span style="display:block">2 · Bahn rechts<br>{{ w2 }} pt · min 280</span></div></div>
+<div data-slot="over" style="display:contents"><div style="position:absolute;left:50%;bottom:32px;transform:translateX(-50%);z-index:1;border:1px dashed var(--c-line-strong);border-radius:12px;padding:8px 12px;font:11.5px Geist,system-ui,sans-serif;color:var(--c-ink-3);pointer-events:none">over · Kacheln, Toast</div></div>
+</dc-import>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;font-size:13px;line-height:1.35">
+<div><div style="font-weight:500;margin-bottom:8px">Maße (alfa-shell.js)</div>
+<sc-for list="{{ maße }}" as="m" hint-placeholder-count="8"><div style="display:flex;gap:12px;padding:4px 0;border-top:1px solid rgba(0,0,0,.1)"><span style="flex:1">{{ m.n }}</span><span style="font-family:inherit;font-size:11.5px">{{ m.v }}</span></div></sc-for></div>
+<div><div style="font-weight:500;margin-bottom:8px">Ebenen, unten nach oben</div>
+<sc-for list="{{ ebenen }}" as="e" hint-placeholder-count="7"><div style="display:flex;gap:12px;padding:4px 0;border-top:1px solid rgba(0,0,0,.1)"><span style="width:20px;font-family:inherit;font-size:11.5px">{{ e.i }}</span><span style="flex:1">{{ e.n }}</span><span style="font-family:inherit;font-size:11.5px">{{ e.v }}</span></div></sc-for></div>
+</div>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { mem: null };
+  componentDidMount() { if (window.AlfaShell) return; if (!window.__alfaShellLoad) window.__alfaShellLoad = new Promise(r => { const s = document.createElement("script"); s.src = "alfa-shell.js"; s.onload = r; document.head.appendChild(s); }); window.__alfaShellLoad.then(() => this.forceUpdate()); }
+  renderVals() {
+    const AS = window.AlfaShell; if (!AS) return { ready: false };
+    const K = AS.K, g = AS.geo(AS.frame({ fenster: "1512 × 982" })), mem = this.state.mem || AS.D0("Mail");
+    const w = AS.layout("Mail", mem, g, false);
+    const fm = [0, 1, 2].map(i => ({ title: ["Links", "Mitte", "Rechts"][i], state: w[i] <= K.fold ? "folded" : "open", marks: [], onStrip: () => this.setState({ mem: Object.assign({}, mem, { max: -1, [["Lf", "Mf", "Rf"][i]]: false, pin: false }) }) }));
+    const mn = AS.AREA.Mail.min;
+    return {
+      ready: true, wArr: w, lanes: fm, groups: [["Bereiche", [["Mail", []], ["Einstellungen", []]]]],
+      w0: w[0], w1: w[1], w2: w[2], noop: () => {},
+      onMem: p => this.setState(s => ({ mem: Object.assign({}, s.mem || AS.D0("Mail"), p) })),
+      onGrow: (side, v, w0) => this.setState(s => ({ mem: Object.assign({}, s.mem || AS.D0("Mail"), AS.grow("Mail", side, v, w0)) })),
+      maße: [["Rand", K.m], ["Fuge = Griffbreite", K.gap], ["Blob Höhe", K.bh], ["Blob Ruhe / wach / Menü", K.bw + " / " + K.awake + " / Bahn (gefaltet " + K.rest + ")"], ["Bahnen ab y", g.lt + " (Rand " + g.safe + " + 16 + 40 + 12)"], ["Bahnhöhe", g.lh], ["Bahnradius", 20], ["Kopf / gefaltet / Falten unter", K.head + " / " + K.fold + " / " + K.foldAt], ["Kopf Innenrand (Liste, Mitte / Stapel)", "0 8 0 16 / 0 8 0 8 · Abstand " + K.headGap.list + " / " + K.headGap.stack], ["Ebbe (rechte Bahn, leerer Stapel)", "nach " + K.ebbDelay + " ms, langsam " + K.ebbSlow + " ms"], ["Ruhebreite links / rechts", AS.AREA.Mail.L[0] + " / " + AS.AREA.Mail.R[0]], ["Minima links / Mitte / rechts", mn.join(" / ")], ["Akkordeon, zuerst nachgebend", AS.AREA.Mail.yield.join(" → ")], ["Bahn Bewegung", K.laneMs + " ms (Ebbe " + K.laneSlowMs + " ms)"], ["Blob Flug", "416 ms"]].map(a => ({ n: a[0], v: String(a[1]) })),
+      ebenen: [["1", "Fenster", "area-page"], ["2", "Bahnen (Streifen + Inhalt)", "lane"], ["3", "Griffe", "z 2"], ["4", "Steckplatz over", "z 1 / Toast 40"], ["5", "Abgleich / Blob", "z 9 / 10"], ["6", "Steckplatz top", "Menü"], ["7", "Sicherheitsrand", "z 30"]].map(a => ({ i: a[0], n: a[1], v: a[2] }))
+    };
+  }
+}
+</script>
+</body>
+</html>

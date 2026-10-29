@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<!-- Export 21.10.2026 · Nachzug auf Master 2110 -->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./image-slot.js"></script>
+</helmet>
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+<dc-import name="ALFA Shell" area="Moodboard" appearance="{{ licht }}" ground="{{ shGrund }}" typeface="{{ shSchrift }}" handle="hairline" window="{{ fenster }}" w="{{ wArr }}" lanes="{{ lanes }}" slow="{{ slow }}" maxed="{{ maxed }}" groups="{{ groups }}" badges="{{ badges }}" dot="{{ shDot }}" sync-state="{{ syncState }}" sync-title="{{ syncTitle }}" me-ini="JB" assist-text="{{ assistText }}" search-path="{{ searchD }}" visible-lanes="{{ laneSet }}" on-choose="{{ onChoose }}" on-mode="{{ onMode }}" on-mem="{{ onMem }}" on-grow="{{ onGrow }}" on-sync="{{ onSync }}" on-root-down="{{ rootDown }}" hint-size="100%,100%">
+
+<div data-slot="0" style="display:contents">
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 {{ L.hLine }};transition:box-shadow 160ms;box-sizing:border-box;min-width:0">
+<span style="flex:none;font-weight:500;white-space:nowrap">Moodboard</span>
+<span style="flex:1;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ L.detail }}</span>
+<sc-for list="{{ L.buttons }}" as="x" hint-placeholder-count="0"><button data-part="symbol-button" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:{{ iconRing }};transition:color 160ms" style-hover="color:var(--c-ink)" data-id="moodboard.symbol-button.go-4"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</header>
+<div data-part="lane-content" onScroll="{{ L.onScroll }}" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding:8px;display:flex;flex-direction:column;scrollbar-width:none">
+<sc-for list="{{ L.rows }}" as="r" hint-placeholder-count="10">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" style="flex:none;height:32px;display:flex;align-items:flex-end;padding:0 8px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ r.name }}</div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="list-row" data-state="{{ r.state }}" onClick="{{ r.go }}" title="{{ r.tip }}" style="flex:none;height:36px;display:flex;align-items:center;gap:20px;padding:0 8px;border-radius:12px;cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};transition:background 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)" data-id="moodboard.list-row.go-2">
+<span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ r.symFg }};background:{{ r.symBg }};box-shadow:{{ r.symRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.d }}"></path></svg></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.weight }}">{{ r.name }}</span>
+<sc-if value="{{ r.hasN }}" hint-placeholder-val="{{ false }}"><span data-part="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:{{ r.nFg }}">{{ r.n }}</span></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+<div data-part="lane-footer" style="flex:none;padding:8px"><button data-part="compose-button" style-active="transform:scale(.98)" title="Einfügen" onClick="{{ L.insertGo }}" style="appearance:none;border:0;width:100%;height:36px;padding:0 12px 0 8px;box-sizing:border-box;border-radius:12px;display:flex;align-items:center;gap:20px;font:inherit;background:var(--c-inv);color:var(--c-on-inv);cursor:pointer;transition:opacity 160ms" style-hover="opacity:.88" data-id="moodboard.compose-button.insert-go"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px color-mix(in srgb, currentColor 30%, transparent)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ plusD }}"></path></svg></span><span style="flex:1;min-width:0;text-align:left">Einfügen</span></button></div>
+</sc-if>
+</div>
+
+<div data-slot="1" style="display:contents">
+<sc-if value="{{ isMain }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 var(--c-line);box-sizing:border-box;min-width:0">
+<span style="flex:none;font-weight:500;white-space:nowrap">{{ B.name }}</span>
+<span data-part="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:var(--c-ink-3)">{{ B.n }}</span>
+<span style="flex:1;min-width:0"></span>
+<sc-if value="{{ B.wideTools }}" hint-placeholder-val="{{ true }}">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ B.zooms }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;transition:background 240ms,color 240ms" data-id="moodboard.option.go-5">{{ o.t }}</button></sc-for></div>
+</sc-if>
+<sc-for list="{{ B.tools }}" as="x" hint-placeholder-count="3">
+<button data-part="symbol-button" data-state="{{ x.state }}" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;transition:background 160ms,color 160ms" data-id="moodboard.symbol-button.go-5"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button>
+</sc-for>
+</header>
+<div data-part="desk" onPointerDown="{{ B.deskDown }}" style="flex:1;min-height:0;overflow:auto;scrollbar-width:thin;background:var(--c-well);display:flex;align-items:safe center;justify-content:safe center;padding:16px" data-id="moodboard.desk.desk-down-2">
+<div ref="{{ boardRef }}" data-part="board" data-state="{{ B.state }}" style="position:relative;flex:none;width:{{ B.w }};height:{{ B.h }};background:var(--c-sheet);box-shadow:0 0 0 1px var(--c-line),var(--sh-float);border-radius:4px;overflow:hidden;color-scheme:light">
+<sc-if value="{{ B.raster }}" hint-placeholder-val="{{ true }}"><i aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background-image:{{ B.gridImg }};background-size:{{ B.gridSize }}"></i></sc-if>
+<sc-if value="{{ B.hasKopf }}" hint-placeholder-val="{{ false }}"><div data-part="board-header" style="position:absolute;left:{{ B.pad }};right:{{ B.pad }};top:{{ B.pad }};height:{{ B.kopfH }};display:flex;align-items:baseline;gap:8px;pointer-events:none;font-family:Geist,system-ui,sans-serif;color:#171717"><span style="font-weight:500;font-size:{{ B.kopfS }}">{{ B.kopfL }}</span><span style="flex:1"></span><span style="font-size:{{ B.kopfS2 }};color:#6b6b6b">{{ B.kopfR }}</span></div></sc-if>
+<sc-for list="{{ B.items }}" as="it" hint-placeholder-count="5">
+<div data-part="board-item" data-state="{{ it.state }}" data-kind="{{ it.kind }}" onPointerDown="{{ it.down }}" onDoubleClick="{{ it.dbl }}" style="position:absolute;left:{{ it.l }};top:{{ it.t }};width:{{ it.w }};height:{{ it.h }};border-radius:{{ it.r }};background:{{ it.bg }};box-shadow:{{ it.ring }};cursor:{{ it.cur }};display:flex;overflow:hidden;transition:box-shadow 160ms" data-id="moodboard.board-item.down-2">
+<sc-if value="{{ it.isBild }}" hint-placeholder-val="{{ true }}"><image-slot id="{{ it.slot }}" shape="rect" placeholder="{{ it.label }}" style="width:100%;height:100%;pointer-events:{{ it.slotPe }}"></image-slot></sc-if>
+<sc-if value="{{ it.isFlaeche }}" hint-placeholder-val="{{ false }}"><span style="align-self:flex-end;width:100%;padding:{{ it.pad }};box-sizing:border-box;font-family:Geist,system-ui,sans-serif;font-size:{{ it.capS }};color:{{ it.capFg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ it.label }}</span></sc-if>
+<sc-if value="{{ it.isText }}" hint-placeholder-val="{{ false }}"><span style="width:100%;padding:{{ it.pad }};box-sizing:border-box;font-family:Geist,system-ui,sans-serif;font-size:{{ it.fs }};line-height:{{ it.lh }};font-weight:{{ it.fw }};text-align:{{ it.ta }};color:#171717;white-space:pre-wrap;overflow:hidden;text-wrap:pretty">{{ it.text }}</span></sc-if>
+<sc-if value="{{ it.grip }}" hint-placeholder-val="{{ false }}"><span data-part="item-grip" title="Ziehen" onPointerDown="{{ it.dragDown }}" style="position:absolute;left:4px;top:4px;height:20px;padding:0 8px;border-radius:999px;background:#171717;color:#ffffff;display:flex;align-items:center;gap:4px;font:500 11.5px Geist,system-ui,sans-serif;cursor:grab;white-space:nowrap" data-id="moodboard.item-grip.drag-down">{{ it.kindN }}</span></sc-if>
+<sc-if value="{{ it.sel }}" hint-placeholder-val="{{ false }}"><span data-part="resize-handle" title="Größe ziehen" onPointerDown="{{ it.sizeDown }}" style="position:absolute;right:0;bottom:0;width:16px;height:16px;cursor:nwse-resize;background:#171717;clip-path:polygon(100% 0,100% 100%,0 100%)" data-id="moodboard.resize-handle.size-down"></span></sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ B.hasGuide }}" hint-placeholder-val="{{ false }}"><i aria-hidden="true" style="position:absolute;left:{{ B.guideX }};top:0;bottom:0;width:1px;background:#b3412e;pointer-events:none"></i></sc-if>
+</div>
+</div>
+</sc-if>
+</div>
+
+<div data-slot="2" style="display:contents">
+<sc-if value="{{ isStack }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" data-state="{{ HB.state }}" style="flex:none;height:44px;display:flex;align-items:center;gap:4px;padding:0 8px;box-sizing:border-box;min-width:0">
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ HB.main }}" as="x" hint-placeholder-count="4"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+<span style="flex:1;min-width:0;padding:0 4px;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ HB.hint }}</span>
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ HB.end }}" as="x" hint-placeholder-count="2"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+</header>
+<div data-part="card-stack" data-state="stacked" style="position:relative;flex:1;min-height:0">
+<sc-for list="{{ S.cards }}" as="c" hint-placeholder-count="3">
+<article data-part="card" data-state="{{ c.state }}" onClick="{{ c.go }}" onPointerEnter="{{ c.enter }}" onPointerLeave="{{ c.leave }}" style="position:absolute;left:0;right:0;top:{{ c.top }};height:{{ c.h }};z-index:{{ c.z }};transform:{{ c.tf }};background-color:{{ c.bg }};background-image:{{ c.sheen }};backdrop-filter:{{ c.blur }};-webkit-backdrop-filter:{{ c.blur }};color:{{ c.fg }};border-radius:20px 20px 0 0;box-shadow:{{ c.sh }};overflow:hidden;display:flex;flex-direction:column;transition:{{ stackTrans }};cursor:{{ c.cursor }}" data-id="moodboard.card.go-2">
+<header data-part="card-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px;box-sizing:border-box;box-shadow:inset 0 -1px 0 {{ c.hLine }};min-width:0">
+<span data-part="mark" style="flex:none;margin-right:12px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px {{ c.mLine }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ c.markD }}"></path></svg></span>
+<span style="flex:0 1 auto;min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.title }}</span>
+<span style="flex:{{ c.metaFlex }};margin-left:{{ c.metaMl }};min-width:0;font-size:11.5px;opacity:.72;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums">{{ c.meta }}</span>
+<sc-if value="{{ c.hasClose }}" hint-placeholder-val="{{ false }}"><button data-part="symbol-button" style-active="transform:scale(.96)" title="Schließen" aria-label="Schließen" onClick="{{ c.close }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:inherit;opacity:.7;cursor:pointer" style-hover="opacity:1" data-id="moodboard.symbol-button.close"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="{{ closeD }}"></path></svg></button></sc-if>
+</header>
+
+<sc-if value="{{ c.isRows }}" hint-placeholder-val="{{ true }}">
+<div data-part="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;display:flex;flex-direction:column;padding:4px 0 8px;scrollbar-width:thin">
+<sc-for list="{{ c.rows }}" as="b" hint-placeholder-count="5">
+<sc-if value="{{ b.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" style="flex:none;height:36px;display:flex;align-items:flex-end;padding:0 16px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isNote }}" hint-placeholder-val="{{ false }}"><div style="flex:none;padding:8px 16px;font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="field-row" data-state="{{ b.state }}" onClick="{{ b.go }}" style="position:relative;flex:none;min-height:44px;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 16px;box-sizing:border-box;cursor:{{ b.cur }};background:{{ b.bg }}" style-hover="background:{{ b.hbg }}" data-id="moodboard.field-row.go-2">
+<sc-if value="{{ b.hasMark }}" hint-placeholder-val="{{ false }}"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ b.mFg }};background:{{ b.mBg }};box-shadow:{{ b.mRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ b.mD }}"></path></svg></span></sc-if>
+<div style="flex:1 1 0;min-width:72px;display:flex;flex-direction:column">
+<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ b.w }};color:{{ b.fg }}">{{ b.label }}</span>
+<sc-if value="{{ b.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;line-height:16px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums">{{ b.sub }}</span></sc-if>
+</div>
+<sc-if value="{{ b.hasInput }}" hint-placeholder-val="{{ false }}"><input value="{{ b.val }}" onChange="{{ b.onIn }}" aria-label="{{ b.label }}" inputmode="{{ b.mode }}" autocomplete="off" spellcheck="false" style="flex:0 1 auto;min-width:0;width:{{ b.inW }};height:28px;border:0;outline:none;background:transparent;color:var(--c-ink);font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px;border-radius:4px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"></input></sc-if>
+<sc-if value="{{ b.hasVal }}" hint-placeholder-val="{{ false }}"><span style="flex:0 1 auto;min-width:0;max-width:60%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--c-ink-2);font-variant-numeric:tabular-nums">{{ b.val }}</span></sc-if>
+<sc-if value="{{ b.hasSwatch }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:4px"><sc-for list="{{ b.swatches }}" as="sw" hint-placeholder-count="5"><button data-part="swatch" data-state="{{ sw.state }}" title="{{ sw.n }}" aria-label="{{ sw.n }}" onClick="{{ sw.go }}" style="appearance:none;border:0;padding:0;flex:none;width:20px;height:20px;border-radius:50%;background:{{ sw.c }};box-shadow:{{ sw.ring }};cursor:pointer;transition:box-shadow 160ms" style-active="transform:scale(.92)" data-id="moodboard.swatch.go-3"></button></sc-for></span></sc-if>
+<sc-if value="{{ b.hasSeg }}" hint-placeholder-val="{{ false }}"><div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ b.seg }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" title="{{ o.tip }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;min-width:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;display:grid;place-items:center" data-id="moodboard.option.go-6">{{ o.n }}</button></sc-for></div></sc-if>
+<sc-if value="{{ b.hasPill }}" hint-placeholder-val="{{ false }}"><button data-part="choice" onClick="{{ b.pillGo }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" data-id="moodboard.choice.pill-go-2">{{ b.pill }}<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+<sc-if value="{{ b.hasToggle }}" hint-placeholder-val="{{ false }}"><button data-part="toggle" data-state="{{ b.tState }}" aria-label="{{ b.label }}" onClick="{{ b.toggle }}" style="appearance:none;border:0;padding:0;flex:none;position:relative;width:32px;height:20px;border-radius:999px;background:{{ b.tBg }};box-shadow:{{ b.tRing }};cursor:pointer;transition:background 200ms" data-id="moodboard.toggle.toggle-2"><i style="position:absolute;top:2px;left:{{ b.tX }};width:16px;height:16px;border-radius:50%;background:{{ b.kBg }};transition:left 200ms cubic-bezier(.2,.8,.2,1)"></i></button></sc-if>
+<sc-if value="{{ b.hasBtns }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:8px"><sc-for list="{{ b.btns }}" as="x" hint-placeholder-count="1"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ x.go }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;white-space:nowrap" data-id="moodboard.text-button.go-3">{{ x.label }}</button></sc-for></span></sc-if>
+<sc-if value="{{ b.line }}" hint-placeholder-val="{{ true }}"><i style="position:absolute;left:16px;right:16px;bottom:0;height:1px;background:var(--c-line)"></i></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.isKatalog }}" hint-placeholder-val="{{ false }}">
+<div data-part="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;gap:8px;padding:8px">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.kats }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" data-id="moodboard.option.go-7">{{ o.n }}</button></sc-for></div>
+<div style="flex:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(104px,100%),1fr));gap:8px">
+<sc-for list="{{ c.fotos }}" as="f" hint-placeholder-count="6">
+<button data-part="catalog-tile" title="{{ f.tip }}" onClick="{{ f.go }}" style="appearance:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;min-width:0;cursor:pointer;background:transparent" style-active="transform:scale(.98)" data-id="moodboard.catalog-tile.go-2">
+<span style="position:relative;display:block;width:100%;aspect-ratio:4 / 3;border-radius:8px;overflow:hidden;background:var(--c-well);box-shadow:inset 0 0 0 1px var(--c-line)"><image-slot id="{{ f.slot }}" shape="rect" placeholder="{{ f.n }}" style="width:100%;height:100%;pointer-events:none"></image-slot></span>
+<span style="min-width:0;font-size:11.5px;line-height:16px;color:var(--c-ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.n }}</span>
+</button>
+</sc-for>
+</div>
+<div style="flex:none;padding:0 8px 8px;font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty">{{ c.katNote }}</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.hasFoot }}" hint-placeholder-val="{{ false }}">
+<footer data-part="card-footer" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px;box-sizing:border-box;box-shadow:inset 0 1px 0 var(--c-line);min-width:0">
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ c.foot.l }}" as="x" hint-placeholder-count="0"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-for></div>
+<span style="flex:1;min-width:0"></span>
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ c.foot.r }}" as="x" hint-placeholder-count="0"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-for></div>
+</footer>
+</sc-if>
+</article>
+</sc-for>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div data-part="toast" style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:40;height:28px;padding:0 12px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;font-size:11.5px;white-space:nowrap;box-shadow:var(--sh-float);gap:12px"><span>{{ toast }}</span><sc-if value="{{ hasUndo }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ undo }}" style="appearance:none;border:0;height:20px;margin-right:-8px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px currentColor;cursor:pointer" data-id="moodboard.text-button.undo-2">Rückgängig</button></sc-if></div></sc-if>
+</div>
+</sc-if>
+</div>
+
+<div data-slot="over" ref="{{ winRef }}" style="display:contents">
+</div>
+<div data-slot="top" style="display:contents">
+<sc-if value="{{ hasMenu }}" hint-placeholder-val="{{ false }}">
+<div data-part="anchored-menu" onPointerDown="{{ stop }}" style="position:absolute;left:{{ menu.x }};top:{{ menu.y }};width:{{ menu.w }};padding:4px;box-sizing:border-box;border-radius:16px;background:var(--c-menu);color:var(--c-ink);box-shadow:var(--sh-float);z-index:50;display:flex;flex-direction:column" data-id="moodboard.anchored-menu.stop-2">
+<sc-for list="{{ menu.items }}" as="it" hint-placeholder-count="4">
+<sc-if value="{{ it.sep }}" hint-placeholder-val="{{ false }}"><div style="height:1px;margin:4px 8px;background:var(--c-line)"></div></sc-if>
+<sc-if value="{{ it.head }}" hint-placeholder-val="{{ false }}"><div style="height:24px;display:flex;align-items:flex-end;padding:0 8px 4px;font-size:11.5px;color:var(--c-ink-3)">{{ it.label }}</div></sc-if>
+<sc-if value="{{ it.item }}" hint-placeholder-val="{{ true }}"><div data-part="menu-row" onClick="{{ it.go }}" style="height:28px;display:flex;align-items:center;gap:8px;padding:0 8px;border-radius:8px;cursor:pointer;color:{{ it.fg }};white-space:nowrap" style-hover="background:var(--c-hover)" data-id="moodboard.menu-row.go-2"><span style="flex:none;width:12px;font-size:11.5px">{{ it.check }}</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">{{ it.label }}</span><span style="flex:none;font-size:11.5px;color:var(--c-ink-3)">{{ it.meta }}</span></div></sc-if>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</dc-import>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1512,&quot;height&quot;:982},&quot;appearance&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;ground&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;white&quot;,&quot;lightGray&quot;],&quot;default&quot;:&quot;white&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;surface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;lacquer&quot;,&quot;glass&quot;,&quot;flat&quot;],&quot;default&quot;:&quot;lacquer&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;typeface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Geist&quot;,&quot;System&quot;],&quot;default&quot;:&quot;Geist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;window&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1512 × 982&quot;,&quot;Fenster&quot;],&quot;default&quot;:&quot;1512 × 982&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;zoom&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Einpassen&quot;,&quot;50 %&quot;,&quot;100 %&quot;],&quot;default&quot;:&quot;Einpassen&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Moodboard&quot;},&quot;grid&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;an&quot;,&quot;aus&quot;],&quot;default&quot;:&quot;an&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Moodboard&quot;}}">
+class Component extends DCLogic {
+  P = {
+    close: "M4.5 4.5l7 7M11.5 4.5l-7 7", chevron: "M4.5 6.5L8 10l3.5-3.5", more: "M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM13 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z",
+    minus: "M4 8h8", plus: "M8 3.5v9M3.5 8h9", check: "M3.5 8.5l3 3 6-7", trash: "M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9",
+    expand: "M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5L9 7M2.5 13.5L7 9", shrink: "M13.5 2.5L10 6M10 3v3h3M2.5 13.5L6 10M6 13v-3H3",
+    board: "M2.5 2.5h11v11h-11ZM2.5 9.5h11M8 2.5v7", raster: "M2.5 2.5h11v11h-11ZM6 2.5v11M10 2.5v11M2.5 6h11M2.5 10h11",
+    bild: "M2.5 3.5h11v9h-11ZM2.5 10l3-3 2.5 2.5 2-2 3.5 3.5M10.5 6.25v.5", flaeche: "M2.5 5.5h8v8h-8ZM5 5.5V3h8v8h-2.5",
+    text: "M3 4.5V3h10v1.5M8 3v10M6 13h4", katalog: "M2.5 4.5h4l1.5 1.5h5.5v6.5h-11Z", ci: "M3.5 13.5V2.5h9v11M6 5.5h4M6 8h4M6 10.5h2",
+    align: "M2.5 2.5v11M5 5h8M5 8h5M5 11h7", front: "M5.5 5.5h8v8h-8ZM2.5 10.5v-8h8v2", back: "M2.5 2.5h8v8h-8ZM13.5 5.5v8h-8v-2",
+    copy: "M5.5 5.5h8v8h-8ZM3.5 10.5h-1v-8h8v1", print: "M4.5 5.5v-3h7v3M4.5 11.5h-2v-5h11v5h-2M4.5 9h7v4.5h-7Z",
+    export: "M8 2.5V10M4.5 6.5L8 10l3.5-3.5M3 13h10", folder: "M2.5 4.5h4l1.5 1.5h5.5v6.5h-11Z", layers: "M8 2.5l5.5 3-5.5 3-5.5-3ZM2.5 8.5L8 11.5l5.5-3M2.5 11L8 14l5.5-3",
+    search: "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5", eye: "M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8ZM9.5 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+  };
+  get K() { return window.AlfaShell.K; }
+  GROUPS = [["Kommunikation", [["Mail", []]]], ["Kreativ", [["Moodboard", []], ["Aufmaß", []], ["Atelier", []]]], ["Kern", [["Einstellungen", []]]]];
+  PAL = [["Weiß", "#ffffff"], ["Papier", "#f5f5f5"], ["Sand", "#ebebeb"], ["Grau", "#d9d9d9"], ["Stein", "#a3a3a3"], ["Schiefer", "#6b6b6b"], ["Tinte", "#171717"]];
+  CI = {
+    a3: ["Studio Brenner · A3 quer", 1120, 792, 56, true, 28],
+    praes: ["Kundenpräsentation · 16:9", 1120, 630, 56, true, 24],
+    blatt: ["Materialblatt · A4 hoch", 792, 1120, 56, false, 24]
+  };
+  KAT = {
+    projekt: ["Projektbilder", ["Esszimmer, Bestand", "Fensterfront Süd", "Werkbank Detail", "Küche Rohbau", "Flur Vogt", "Empfang Kern"]],
+    material: ["Material", ["Eiche geölt hell", "Eiche geölt natur", "Esche pigmentiert", "Leinen 04", "Leinen 11", "Alu eloxiert"]],
+    lieferant: ["Lieferanten", ["Nordholz Katalog 26", "Nordlicht Stoffe", "Steinbach Leuchten", "Werkhaus Lindner"]]
+  };
+  BOARDS = [["b1", "Küche Hansen · Stimmung", "a3"], ["b2", "Küche Hansen · Material", "blatt"], ["b3", "Praxis Kern · Empfang", "praes"]];
+
+  seed() {
+    return {
+      b1: [
+        { id: "i1", kind: "bild", x: 56, y: 112, w: 488, h: 336, label: "Lichtstimmung Esszimmer" },
+        { id: "i2", kind: "bild", x: 568, y: 112, w: 496, h: 336, label: "Eiche geölt, Detail" },
+        { id: "i3", kind: "flaeche", x: 56, y: 472, w: 216, h: 264, fill: "#d9d9d9", label: "Eiche geölt hell" },
+        { id: "i4", kind: "flaeche", x: 296, y: 472, w: 216, h: 264, fill: "#ebebeb", label: "Leinen 04" },
+        { id: "i5", kind: "text", x: 544, y: 472, w: 520, h: 264, text: "Warm, ruhig, wenig Kontrast.\nKein Hochglanz, keine Griffe.", fs: 28, fw: 400, ta: "left" }
+      ],
+      b2: [
+        { id: "j1", kind: "flaeche", x: 56, y: 56, w: 328, h: 328, fill: "#ebebeb", label: "Eiche geölt hell" },
+        { id: "j2", kind: "flaeche", x: 408, y: 56, w: 328, h: 328, fill: "#d9d9d9", label: "Eiche geölt natur" },
+        { id: "j3", kind: "flaeche", x: 56, y: 408, w: 328, h: 328, fill: "#f5f5f5", label: "Esche pigmentiert" },
+        { id: "j4", kind: "flaeche", x: 408, y: 408, w: 328, h: 328, fill: "#a3a3a3", label: "Naturstein grau" },
+        { id: "j5", kind: "text", x: 56, y: 760, w: 680, h: 112, text: "Freigabe Lena Hansen, 10. Okt.", fs: 20, fw: 400, ta: "left" }
+      ],
+      b3: [
+        { id: "k1", kind: "bild", x: 56, y: 112, w: 1008, h: 296, label: "Empfang, Blick vom Eingang" },
+        { id: "k2", kind: "text", x: 56, y: 432, w: 488, h: 112, text: "Variante B", fs: 40, fw: 500, ta: "left" },
+        { id: "k3", kind: "flaeche", x: 568, y: 432, w: 496, h: 112, fill: "#6b6b6b", label: "Tresen, Farbe in Prüfung" }
+      ]
+    };
+  }
+  initial() {
+    const p = this.props || {};
+    return { mem: {}, blatt: "b1", items: this.seed(), sel: [], zoom: p.zoom ?? "Einpassen", raster: (p.raster ?? "an") === "an", snap: true,
+      ci: { b1: "a3", b2: "blatt", b3: "praes" }, cards: ["blatt", "katalog", "objekt"], front: "objekt", kat: "projekt", menu: null, toast: null, toastUndo: null, drag: null, hoverCard: null, blobOpen: false, syncing: false, ebb: false };
+  }
+  state = this.initial();
+  winRef = React.createRef(); boardRef = React.createRef();
+
+  ensureShell() {
+    if (window.AlfaShell) { this.reg(); return; }
+    if (!window.__alfaShellLoad) window.__alfaShellLoad = new Promise(r => { const s = document.createElement("script"); s.src = "alfa-shell.js"; s.onload = r; document.head.appendChild(s); });
+    window.__alfaShellLoad.then(() => { this.reg(); this.forceUpdate(); });
+  }
+  reg() { const A = window.AlfaShell.AREA; if (!A.Moodboard) A.Moodboard = { L: [280], R: [280], min: [224, 392, 280], yield: [2, 0, 1] }; }
+  componentDidMount() {
+    this.ensureShell();
+    this._rs = () => { if (this.props.window !== "1512 × 982") this.forceUpdate(); };
+    window.addEventListener("resize", this._rs);
+    this.onMove = e => this.move(e); this.onUp = () => this.up();
+    window.addEventListener("pointermove", this.onMove); window.addEventListener("pointerup", this.onUp); window.addEventListener("pointercancel", this.onUp);
+    this.onKey = e => this.key(e);
+    document.addEventListener("keydown", this.onKey);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this._rs); window.removeEventListener("pointermove", this.onMove); window.removeEventListener("pointerup", this.onUp); window.removeEventListener("pointercancel", this.onUp);
+    document.removeEventListener("keydown", this.onKey); clearTimeout(this.tt);
+  }
+  componentDidUpdate() { if (window.AlfaShell) window.AlfaShell.ebb(this, false, this.still()); }
+  still() { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
+  root() { const w = this.winRef.current; return w ? w.closest('[data-part="area-page"]') : null; }
+  geo() { return window.AlfaShell.geo(window.AlfaShell.frame(this.props)); }
+  D0() { return window.AlfaShell.D0("Moodboard"); }
+  mem() { return Object.assign(this.D0(), this.state.mem.Moodboard || {}); }
+  setMem(p) { this.setState(st => ({ mem: Object.assign({}, st.mem, { Moodboard: Object.assign(window.AlfaShell.D0("Moodboard"), st.mem.Moodboard || {}, p) }) })); }
+  lay() { return window.AlfaShell.layout("Moodboard", this.mem(), this.geo(), false); }
+  grow(side, v, w0) { this.setMem(window.AlfaShell.grow("Moodboard", side, v, w0)); }
+  sc() { const r = this.root().getBoundingClientRect(); return { r, k: (r.width / this.geo().W) || 1 }; }
+
+  ciOf() { return this.CI[this.state.ci[this.state.blatt]] || this.CI.a3; }
+  list() { return this.state.items[this.state.blatt] || []; }
+  item(id) { return this.list().find(i => i.id === id); }
+  patch(id, p) { this.setState(st => ({ items: Object.assign({}, st.items, { [st.blatt]: st.items[st.blatt].map(i => i.id === id ? Object.assign({}, i, p) : i) }) })); }
+  setItems(fn) { this.setState(st => ({ items: Object.assign({}, st.items, { [st.blatt]: fn(st.items[st.blatt]) }) })); }
+  select(id, add) { this.setState(st => ({ sel: !id ? [] : add ? (st.sel.includes(id) ? st.sel.filter(x => x !== id) : st.sel.concat(id)) : [id], front: id ? "objekt" : st.front })); }
+  bpx() { const el = this.boardRef.current; if (!el) return 1; const r = el.getBoundingClientRect(); return r.width / this.ciOf()[1]; }
+  bpt(e) { const el = this.boardRef.current, k = this.bpx(), r = el.getBoundingClientRect(); return [(e.clientX - r.left) / k, (e.clientY - r.top) / k]; }
+  snap(v) { return this.state.snap ? Math.round(v / 8) * 8 : Math.round(v); }
+  dragDown(e, it) {
+    e.stopPropagation(); e.preventDefault();
+    const [bx, by] = this.bpt(e), sel = this.state.sel.includes(it.id) ? this.state.sel : [it.id];
+    if (!this.state.sel.includes(it.id)) this.select(it.id, e.shiftKey);
+    this.setState({ drag: { mode: "move", ids: sel, bx, by, start: sel.map(id => { const o = this.item(id); return [id, o.x, o.y]; }) } });
+  }
+  sizeDown(e, it) {
+    e.stopPropagation(); e.preventDefault();
+    const [bx, by] = this.bpt(e);
+    this.setState({ drag: { mode: "size", ids: [it.id], bx, by, start: [[it.id, it.w, it.h]] } });
+  }
+  move(e) {
+    const d = this.state.drag; if (!d) return;
+    const [bx, by] = this.bpt(e), dx = bx - d.bx, dy = by - d.by, ci = this.ciOf();
+    if (d.mode === "move") this.setItems(L => L.map(i => { const s = d.start.find(x => x[0] === i.id); return s ? Object.assign({}, i, { x: Math.max(0, Math.min(ci[1] - i.w, this.snap(s[1] + dx))), y: Math.max(0, Math.min(ci[2] - i.h, this.snap(s[2] + dy))) }) : i; }));
+    else this.setItems(L => L.map(i => { const s = d.start.find(x => x[0] === i.id); return s ? Object.assign({}, i, { w: Math.max(56, Math.min(ci[1] - i.x, this.snap(s[1] + dx))), h: Math.max(56, Math.min(ci[2] - i.y, this.snap(s[2] + dy))) }) : i; }));
+  }
+  up() { if (this.state.drag) this.setState({ drag: null }); }
+  key(e) {
+    const t = e.target, typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable);
+    if (typing || this.state.blobOpen) return;
+    if (e.key === "Escape") { if (this.state.menu) this.setState({ menu: null }); else this.select(null); return; }
+    const sel = this.state.sel; if (!sel.length) return;
+    if (e.key === "Backspace" || e.key === "Delete") { e.preventDefault(); this.remove(); return; }
+    const d = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key]; if (!d) return;
+    e.preventDefault(); const s = e.shiftKey ? 56 : 8, ci = this.ciOf();
+    this.setItems(L => L.map(i => sel.includes(i.id) ? Object.assign({}, i, { x: Math.max(0, Math.min(ci[1] - i.w, i.x + d[0] * s)), y: Math.max(0, Math.min(ci[2] - i.h, i.y + d[1] * s)) }) : i));
+  }
+  remove() {
+    const sel = this.state.sel, gone = this.list().filter(i => sel.includes(i.id));
+    this.setItems(L => L.filter(i => !sel.includes(i.id)));
+    this.setState({ sel: [] });
+    this.toastIt(gone.length === 1 ? "Gelöscht" : gone.length + " gelöscht", () => this.setItems(L => L.concat(gone)));
+  }
+  add(kind, o) {
+    const ci = this.ciOf(), id = "n" + (Date.now() % 100000);
+    const base = { bild: { w: 448, h: 336 }, flaeche: { w: 224, h: 224, fill: "#d9d9d9", label: "Fläche" }, text: { w: 504, h: 112, text: "Text", fs: 28, fw: 400, ta: "left" } }[kind];
+    const it = Object.assign({ id, kind, x: this.snap((ci[1] - base.w) / 2), y: this.snap((ci[2] - base.h) / 2) }, base, o || {});
+    this.setItems(L => L.concat([it])); this.setState({ sel: [id], front: "objekt" });
+  }
+  order(dir) {
+    const sel = this.state.sel;
+    this.setItems(L => { const keep = L.filter(i => !sel.includes(i.id)), moved = L.filter(i => sel.includes(i.id)); return dir > 0 ? keep.concat(moved) : moved.concat(keep); });
+    this.toastIt(dir > 0 ? "Nach vorn" : "Nach hinten");
+  }
+  dupe() {
+    const sel = this.state.sel, src = this.list().filter(i => sel.includes(i.id)), ids = [];
+    const copies = src.map((i, j) => { const id = "n" + (Date.now() % 100000) + j; ids.push(id); return Object.assign({}, i, { id, x: this.snap(i.x + 56), y: this.snap(i.y + 56) }); });
+    this.setItems(L => L.concat(copies)); this.setState({ sel: ids }); this.toastIt("Dupliziert");
+  }
+  align(how) {
+    const sel = this.state.sel, ci = this.ciOf(), items = this.list().filter(i => sel.includes(i.id)); if (!items.length) return;
+    const many = items.length > 1;
+    const L0 = Math.min.apply(null, items.map(i => i.x)), R0 = Math.max.apply(null, items.map(i => i.x + i.w));
+    const T0 = Math.min.apply(null, items.map(i => i.y)), B0 = Math.max.apply(null, items.map(i => i.y + i.h));
+    const bx0 = many ? L0 : 0, bx1 = many ? R0 : ci[1], by0 = many ? T0 : 0, by1 = many ? B0 : ci[2];
+    const f = { links: i => ({ x: bx0 }), mitteX: i => ({ x: Math.round((bx0 + bx1 - i.w) / 2) }), rechts: i => ({ x: bx1 - i.w }),
+      oben: i => ({ y: by0 }), mitteY: i => ({ y: Math.round((by0 + by1 - i.h) / 2) }), unten: i => ({ y: by1 - i.h }) }[how];
+    if (f) { this.setItems(L => L.map(i => sel.includes(i.id) ? Object.assign({}, i, f(i)) : i)); this.toastIt("Ausgerichtet"); return; }
+    if (how === "verteilenX" && items.length > 2) {
+      const sorted = items.slice().sort((a, b) => a.x - b.x), span = (R0 - L0 - sorted.reduce((t, i) => t + i.w, 0)) / (sorted.length - 1);
+      let x = L0; const pos = {}; sorted.forEach(i => { pos[i.id] = Math.round(x); x += i.w + span; });
+      this.setItems(L => L.map(i => pos[i.id] !== undefined ? Object.assign({}, i, { x: pos[i.id] }) : i)); this.toastIt("Verteilt");
+    }
+  }
+  setCi(k) { this.setState(st => ({ ci: Object.assign({}, st.ci, { [st.blatt]: k }) })); this.toastIt(this.CI[k][0] + " angewendet"); }
+  toastIt(t, undo) { clearTimeout(this.tt); this.setState({ toast: t, toastUndo: undo || null }); this.tt = setTimeout(() => this.setState({ toast: null, toastUndo: null }), undo ? 4000 : 1600); }
+  openMenu(e, items, w) {
+    e.stopPropagation(); w = w || 240;
+    const { r, k } = this.sc(), b = e.currentTarget.getBoundingClientRect(), g = this.geo(), h = items.length * 28 + 8;
+    let x = (b.left - r.left) / k, y = (b.bottom - r.top) / k + 4;
+    x = Math.max(16, Math.min(x, g.W - w - 16)); if (y + h > g.H - 16) y = (b.top - r.top) / k - h - 4;
+    this.setState({ menu: { x, y, w, items } });
+  }
+  mi(label, fn, o) { o = o || {}; return { item: true, label, check: o.check ? "✓" : "", meta: o.meta || "", fg: o.danger ? "var(--c-signal)" : "var(--c-ink)", go: e => { e.stopPropagation(); this.setState({ menu: null }); fn && fn(); } }; }
+  row(label, o) { return Object.assign({ isRow: true, isHead: false, isNote: false, label, line: true, w: 400, fg: "var(--c-ink)", cur: "default", bg: "transparent", hbg: "transparent", hasSub: !!(o && o.sub), hasVal: !!(o && o.val != null && !o.hasInput), hasInput: false, hasSwatch: !!(o && o.swatches), hasSeg: !!(o && o.seg), hasPill: !!(o && o.pill), hasToggle: !!(o && o.toggle), hasBtns: !!(o && o.btns), hasMark: !!(o && o.mD) }, o || {}); }
+  numRow(label, v, set) { return this.row(label, { hasInput: true, hasVal: false, val: String(Math.round(v)), mode: "numeric", inW: "72px", onIn: e => { const n = parseInt(String(e.target.value).replace(/[^0-9-]/g, ""), 10); if (!isNaN(n)) set(n); } }); }
+
+  renderVals() {
+    if (!window.AlfaShell) return { ready: false };
+    this.reg();
+    const s = this.state, K = this.K, P = this.P, g = this.geo(), still = this.still(), ease = "cubic-bezier(.2,.8,.2,1)";
+    const licht = this.props.appearance ?? "light", dk = licht === "dark", rM = this.mem(), w = this.lay();
+    const iconRing = "inset 0 0 0 1px var(--c-line-strong)", stop = e => e.stopPropagation();
+    const lefts = [K.m, K.m + w[0] + K.gap, K.m + w[0] + w[1] + 2 * K.gap], openCount = w.filter(x => x > K.fold).length;
+    const ci = this.ciOf(), items = this.list(), sel = s.sel, one = sel.length === 1 ? this.item(sel[0]) : null;
+    const kindN = { bild: "Bild", flaeche: "Fläche", text: "Text" };
+
+    // Arbeitsfläche · Maßstab
+    const availW = w[1] - 32, availH = g.lh - 44 - 32;
+    const fit = Math.min(availW / ci[1], availH / ci[2]);
+    const scale = s.zoom === "100 %" ? 1 : s.zoom === "50 %" ? .5 : fit;
+    const px = v => (v * scale) + "px";
+
+    const mk = (sel0, o) => Object.assign({ state: sel0 ? "selected" : "rest", bg: sel0 ? "var(--c-ink)" : "transparent", fg: sel0 ? "var(--c-lane)" : "var(--c-ink-2)", ring: sel0 ? "none" : iconRing, isSym: true, isText: false, dot: false }, o);
+    const marksFor = i => {
+      if (i === 0) return this.BOARDS.map(b => mk(s.blatt === b[0], { d: P.board, label: b[1], go: e => { stop(e); this.setState({ blatt: b[0], sel: [] }); } }))
+        .concat(Object.keys(this.KAT).map(k => mk(false, { d: P.katalog, label: this.KAT[k][0], go: e => { stop(e); this.setState({ kat: k, front: "katalog" }); } })));
+      if (i === 1) return [mk(s.raster, { d: P.raster, label: "Raster", go: e => { stop(e); this.setState({ raster: !s.raster }); } })];
+      return ["objekt", "katalog", "blatt"].map(k => mk(s.front === k, { d: k === "objekt" ? P.bild : k === "katalog" ? P.katalog : P.ci, label: { objekt: "Objekt", katalog: "Katalog", blatt: "Blatt" }[k], go: e => { stop(e); this.setState({ front: k }); } }));
+    };
+    const titles = ["Moodboard", (this.BOARDS.find(b => b[0] === s.blatt) || [0, ""])[1], "Inspektor"];
+    const lanes = [0, 1, 2].map(i => { const folded = w[i] <= K.fold;
+      return { title: titles[i], left: lefts[i] + "px", width: w[i] + "px", folded, isList: i === 0 && !folded, isMain: i === 1 && !folded, isStack: i === 2 && !folded,
+        state: rM.max === i ? "maximized" : folded ? "collapsed" : "open", cursor: folded ? "pointer" : "default", bg: "var(--c-lane)", ring: "var(--sh-lane)", ovf: "hidden", marks: marksFor(i),
+        onStrip: folded ? () => { if (rM.max >= 0) this.setMem({ max: -1 }); else this.setMem({ [["Lf", "Mf", "Rf"][i]]: false }); } : undefined }; });
+
+    // Bahn links
+    const lrow = (sel0, name, d, o) => Object.assign({ isRow: true, isHead: false, name, d, tip: name, state: sel0 ? "selected" : "rest", bg: sel0 ? "var(--c-ink)" : "transparent", fg: sel0 ? "var(--c-lane)" : "var(--c-ink)", weight: sel0 ? 500 : 400, symFg: sel0 ? "var(--c-lane)" : "var(--c-ink-3)", symBg: "transparent", symRing: sel0 ? "inset 0 0 0 1px var(--c-on-inv-line)" : iconRing, hasN: false, nFg: sel0 ? "var(--c-on-inv-2)" : "var(--c-ink-3)" }, o || {});
+    const insertItems = e => this.openMenu(e, [{ head: true, label: "Einfügen" }, this.mi("Bildrahmen", () => this.add("bild")), this.mi("Fläche", () => this.add("flaeche")), this.mi("Text", () => this.add("text")), { sep: true }, { head: true, label: "Aus Katalog" }].concat(Object.keys(this.KAT).map(k => this.mi(this.KAT[k][0], () => this.setState({ kat: k, front: "katalog" }), { meta: String(this.KAT[k][1].length) }))), 260);
+    const L = { detail: (this.BOARDS.find(b => b[0] === s.blatt) || [0, ""])[1], hLine: s.lScroll ? "var(--c-line)" : "transparent",
+      onScroll: e => { const sc = e.currentTarget.scrollTop > 0; if (sc !== !!s.lScroll) this.setState({ lScroll: sc }); },
+      rows: [{ isHead: true, isRow: false, name: "Blätter" }]
+        .concat(this.BOARDS.map(b => lrow(s.blatt === b[0], b[1], P.board, { hasN: (s.items[b[0]] || []).length > 0, n: (s.items[b[0]] || []).length, go: () => this.setState({ blatt: b[0], sel: [] }) })))
+        .concat([{ isHead: true, isRow: false, name: "Bilderkataloge" }])
+        .concat(Object.keys(this.KAT).map(k => lrow(s.front === "katalog" && s.kat === k, this.KAT[k][0], P.katalog, { hasN: true, n: this.KAT[k][1].length, go: () => this.setState({ kat: k, front: "katalog" }) })))
+        .concat([{ isHead: true, isRow: false, name: "CI-Vorlagen" }])
+        .concat(Object.keys(this.CI).map(k => lrow(s.ci[s.blatt] === k, this.CI[k][0], P.ci, { go: () => this.setCi(k) }))),
+      insertGo: e => { stop(e); insertItems(e); },
+      buttons: openCount > 1 ? [{ label: "Moodboard falten", d: P.minus, go: e => { stop(e); this.setMem({ Lf: true, max: -1 }); } }] : [] };
+
+    // Bahn Mitte · Arbeitsfläche
+    const B = { name: titles[1], n: items.length, w: px(ci[1]), h: px(ci[2]), state: sel.length ? "selection" : "rest", raster: s.raster,
+      gridImg: "linear-gradient(to right, rgba(23,23,23,.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(23,23,23,.07) 1px, transparent 1px)",
+      gridSize: px(ci[3]) + " " + px(ci[3]), hasKopf: ci[4], pad: px(56), kopfH: px(28), kopfS: Math.max(9, Math.round(18 * scale)) + "px", kopfS2: Math.max(8, Math.round(11.5 * scale)) + "px",
+      kopfL: "Studio Brenner", kopfR: titles[1] + " · 16. Okt. 2026", hasGuide: false, guideX: "0px",
+      wideTools: w[1] >= 520,
+      zooms: ["Einpassen", "50 %", "100 %"].map(z => ({ t: z, state: s.zoom === z ? "selected" : "rest", bg: s.zoom === z ? "var(--c-inv)" : "transparent", fg: s.zoom === z ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { stop(e); this.setState({ zoom: z }); } })),
+      tools: [{ label: s.raster ? "Raster aus" : "Raster an", d: P.raster, state: s.raster ? "selected" : "rest", bg: s.raster ? "var(--c-inv)" : "transparent", fg: s.raster ? "var(--c-on-inv)" : "var(--c-ink-3)", ring: s.raster ? "none" : iconRing, go: e => { stop(e); this.setState({ raster: !s.raster }); } },
+        { label: "Ausrichten", d: P.align, state: "rest", bg: "transparent", fg: "var(--c-ink-3)", ring: iconRing, go: e => this.openMenu(e, [{ head: true, label: sel.length > 1 ? "Auswahl zueinander" : "Am Blatt" }, this.mi("Links", () => this.align("links")), this.mi("Mitte waagerecht", () => this.align("mitteX")), this.mi("Rechts", () => this.align("rechts")), { sep: true }, this.mi("Oben", () => this.align("oben")), this.mi("Mitte senkrecht", () => this.align("mitteY")), this.mi("Unten", () => this.align("unten")), { sep: true }, this.mi("Waagerecht verteilen", () => this.align("verteilenX"), { meta: sel.length > 2 ? "" : "3+" })], 240) },
+        { label: openCount > 1 ? "Blatt falten" : "Blatt groß", d: rM.max === 1 ? P.shrink : P.expand, state: "rest", bg: "transparent", fg: "var(--c-ink-3)", ring: iconRing, go: e => { stop(e); this.setMem({ max: rM.max === 1 ? -1 : 1 }); } }],
+      deskDown: e => { if (e.target.closest && e.target.closest('[data-part="board-item"]')) return; this.select(null); },
+      items: items.map(it => { const on = sel.includes(it.id);
+        return { id: it.id, kind: it.kind, kindN: kindN[it.kind], state: on ? "selected" : "rest", sel: on, grip: on,
+          l: px(it.x), t: px(it.y), w: px(it.w), h: px(it.h), r: it.kind === "text" ? "0px" : "2px",
+          bg: it.kind === "flaeche" ? it.fill : it.kind === "text" ? "transparent" : "var(--c-sheet-well)",
+          ring: on ? "0 0 0 2px #171717" : it.kind === "text" ? "none" : "inset 0 0 0 1px rgba(23,23,23,.08)",
+          cur: "default", isBild: it.kind === "bild", isFlaeche: it.kind === "flaeche", isText: it.kind === "text",
+          slot: "mb-" + s.blatt + "-" + it.id, slotPe: on ? "auto" : "none", label: it.label || "", text: it.text || "",
+          pad: px(16), capS: Math.max(8, Math.round(11.5 * scale)) + "px", capFg: /^#(?:[0-6])/.test(String(it.fill)) ? "#ffffff" : "#171717",
+          fs: Math.max(8, Math.round((it.fs || 28) * scale)) + "px", lh: 1.25, fw: it.fw || 400, ta: it.ta || "left",
+          down: e => { if (e.button > 0) return; this.select(it.id, e.shiftKey); },
+          dbl: () => { if (it.kind === "text") this.setState({ sel: [it.id], front: "objekt" }); },
+          dragDown: e => this.dragDown(e, it), sizeDown: e => this.sizeDown(e, it) }; }) };
+
+    // Bahn rechts · Inspektor
+    const seg = (opts, cur, fn) => opts.map(o => ({ n: o[0], tip: o[1] || o[0], state: o[0] === cur ? "selected" : "rest", bg: o[0] === cur ? "var(--c-inv)" : "transparent", fg: o[0] === cur ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { stop(e); fn(o[0]); } }));
+    const swatches = (cur, fn) => this.PAL.map(p => ({ n: p[0], c: p[1], state: cur === p[1] ? "selected" : "rest", ring: cur === p[1] ? "0 0 0 2px var(--c-ink)" : "inset 0 0 0 1px var(--c-line-strong)", go: e => { stop(e); fn(p[1]); } }));
+    const objRows = () => {
+      if (!sel.length) return [{ isNote: true, text: "Nichts gewählt. Ein Objekt anklicken — oder links etwas einfügen." }];
+      if (!one) return [{ isNote: true, text: this.nf ? "" : sel.length + " Objekte gewählt. Ausrichten und Reihenfolge gelten für die ganze Auswahl." },
+        this.row("Auswahl", { val: sel.length + " Objekte" }),
+        this.row("Ausrichten", { btns: [{ label: "Links", bg: "transparent", fg: "var(--c-ink)", ring: iconRing, go: e => { stop(e); this.align("links"); } }, { label: "Oben", bg: "transparent", fg: "var(--c-ink)", ring: iconRing, go: e => { stop(e); this.align("oben"); } }] }),
+        this.row("Verteilen", { btns: [{ label: "Waagerecht", bg: "transparent", fg: "var(--c-ink)", ring: iconRing, go: e => { stop(e); this.align("verteilenX"); } }], line: false })];
+      const it = one, out = [{ isHead: true, text: kindN[it.kind] }];
+      if (it.kind === "text") {
+        out.push(this.row("Text", { sub: it.text.split("\n")[0], btns: [{ label: "Ändern", bg: "transparent", fg: "var(--c-ink)", ring: iconRing, go: e => { stop(e); const t = prompt("Text", it.text); if (t != null) this.patch(it.id, { text: t }); } }] }));
+        out.push({ isHead: true, text: "Schrift" });
+        out.push(this.row("Familie", { pill: "Geist", pillGo: e => this.openMenu(e, [this.mi("Geist", null, { check: true }), this.mi("System", () => this.toastIt("Nur Geist ist eingebunden"))], 200) }));
+        out.push(this.numRow("Größe", it.fs, n => this.patch(it.id, { fs: Math.max(8, Math.min(160, n)) })));
+        out.push(this.row("Schnitt", { seg: seg([["300"], ["400"], ["500"]], String(it.fw), v => this.patch(it.id, { fw: parseInt(v, 10) })) }));
+        out.push(this.row("Satz", { seg: seg([["links", "Linksbündig"], ["mitte", "Zentriert"], ["rechts", "Rechtsbündig"]], it.ta === "center" ? "mitte" : it.ta === "right" ? "rechts" : "links", v => this.patch(it.id, { ta: v === "mitte" ? "center" : v === "rechts" ? "right" : "left" })) }));
+      }
+      if (it.kind === "flaeche") { out.push(this.row("Beschriftung", { sub: it.label, btns: [{ label: "Ändern", bg: "transparent", fg: "var(--c-ink)", ring: iconRing, go: e => { stop(e); const t = prompt("Beschriftung", it.label); if (t != null) this.patch(it.id, { label: t }); } }] }));
+        out.push(this.row("Farbe", { swatches: swatches(it.fill, c => this.patch(it.id, { fill: c })) })); }
+      if (it.kind === "bild") out.push(this.row("Bild", { sub: it.label, val: "Rahmen · Bild hineinziehen" }));
+      out.push({ isHead: true, text: "Maß und Ort" });
+      out.push(this.numRow("Links", it.x, n => this.patch(it.id, { x: Math.max(0, Math.min(ci[1] - it.w, n)) })));
+      out.push(this.numRow("Oben", it.y, n => this.patch(it.id, { y: Math.max(0, Math.min(ci[2] - it.h, n)) })));
+      out.push(this.numRow("Breite", it.w, n => this.patch(it.id, { w: Math.max(56, Math.min(ci[1] - it.x, n)) })));
+      out.push(this.numRow("Höhe", it.h, n => this.patch(it.id, { h: Math.max(56, Math.min(ci[2] - it.y, n)) })));
+      out.push(this.row("Am Raster fangen", { toggle: () => this.setState({ snap: !s.snap }), tState: s.snap ? "on" : "off", tBg: s.snap ? "var(--c-ink)" : "transparent", tRing: s.snap ? "none" : iconRing, tX: s.snap ? "14px" : "2px", kBg: s.snap ? "var(--c-lane)" : "var(--c-ink-3)", sub: "Schritt 8, mit Umschalt 56", line: false }));
+      return out;
+    };
+    const blattRows = () => {
+      const cur = s.ci[s.blatt];
+      return [{ isHead: true, text: "CI-Vorlage" }]
+        .concat(Object.keys(this.CI).map(k => this.row(this.CI[k][0], { sub: this.CI[k][1] + " × " + this.CI[k][2], hasMark: true, mD: P.ci, mBg: cur === k ? "var(--c-ink)" : "transparent", mFg: cur === k ? "var(--c-lane)" : "var(--c-ink-3)", mRing: cur === k ? "none" : iconRing, cur: "pointer", hbg: "var(--c-hover)", w: cur === k ? 500 : 400, go: () => this.setCi(k) })))
+        .concat([{ isHead: true, text: "Raster" },
+          this.row("Raster zeigen", { toggle: () => this.setState({ raster: !s.raster }), tState: s.raster ? "on" : "off", tBg: s.raster ? "var(--c-ink)" : "transparent", tRing: s.raster ? "none" : iconRing, tX: s.raster ? "14px" : "2px", kBg: s.raster ? "var(--c-lane)" : "var(--c-ink-3)" }),
+          this.row("Rasterweite", { val: ci[3] + " pt" }),
+          this.row("Blattrand", { val: "56 pt" }),
+          { isHead: true, text: "Ausgabe" },
+          this.row("Format", { val: ci[1] + " × " + ci[2] }),
+          this.row("Objekte", { val: String(items.length), line: false })]);
+    };
+    const katRows = Object.keys(this.KAT).map(k => ({ n: this.KAT[k][0], state: s.kat === k ? "selected" : "rest", bg: s.kat === k ? "var(--c-inv)" : "transparent", fg: s.kat === k ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { stop(e); this.setState({ kat: k }); } }));
+    const fotos = (this.KAT[s.kat] || this.KAT.projekt)[1].map((n, j) => ({ n, tip: n + " · auf das Blatt legen", slot: "kat-" + s.kat + "-" + j, go: e => { stop(e); this.add("bild", { label: n }); this.toastIt(n + " eingefügt"); } }));
+
+    const SH = g.lh - 44, lv = dk ? [["#1f1f1f", "#fafafa"], ["#2e2e2e", "#fafafa"], ["#3a3a3a", "#fafafa"]] : [["#f5f5f5", "#171717"], ["#ebebeb", "#171717"], ["#d9d9d9", "#171717"]];
+    const ofl = (this.props.surface ?? "lacquer");
+    const defs = { objekt: ["Objekt", P.bild], katalog: [(this.KAT[s.kat] || this.KAT.projekt)[0], P.katalog], blatt: ["Blatt", P.ci] };
+    const order = s.cards.filter(k => k !== s.front).concat([s.front]), b = order.length - 1;
+    let acc = 8; const tops = order.map((c, i) => { const t = acc; acc += 44; return t; });
+    const lack = (front, lvl, first) => { const lite = !lvl || /^#(?:[c-f])/i.test(lvl[0]);
+      const spec = front ? (dk ? "rgba(255,255,255,.14)" : "rgba(255,255,255,1)") : lite ? "rgba(255,255,255,.9)" : "rgba(255,255,255,.22)";
+      const seam = dk ? "rgba(0,0,0,.7)" : front ? "rgba(0,0,0,.14)" : "rgba(0,0,0,.2)";
+      return ["inset 0 1px 0 " + spec, "0 -1px 0 " + seam].concat(first ? [] : ["0 -8px 16px -12px rgba(0,0,0," + (dk ? ".55" : ".16") + ")"]).join(", "); };
+    const cards = order.map((k, i) => {
+      const dep = b - i, front = dep === 0, lvl = dep > 0 ? lv[Math.min(dep, 3) - 1] : null, D = defs[k];
+      return { id: k, state: front ? "open" : "stacked", top: tops[i] + "px", h: (SH - tops[i]) + "px", z: i + 1,
+        tf: !front && s.hoverCard === k ? "translateY(-4px)" : "none", enter: () => { if (!front) this.setState({ hoverCard: k }); }, leave: () => this.setState(st => st.hoverCard === k ? { hoverCard: null } : null),
+        bg: ofl === "glass" ? "color-mix(in srgb, " + (lvl ? lvl[0] : "var(--c-lane)") + " " + (front ? 86 : 64) + "%, transparent)" : lvl ? lvl[0] : "var(--c-lane)", fg: lvl ? lvl[1] : "var(--c-ink)",
+        sh: ofl === "lacquer" ? lack(front, lvl, i === 0) : ofl === "flat" ? (front ? "inset 0 1px 0 var(--c-glaze), var(--sh-lane), 0 -8px 24px -12px rgba(0,0,0,.22)" : "inset 0 1px 0 var(--c-glaze), 0 0 0 1px rgba(0,0,0,.06)") : ["inset 0 0 0 1px rgba(255,255,255," + (dk ? ".12" : ".7") + ")", "0 -8px 24px -14px rgba(0,0,0,.22)"].join(", "),
+        sheen: ofl === "glass" ? "linear-gradient(160deg, rgba(255,255,255," + (dk ? ".08" : ".55") + "), rgba(255,255,255,0) 55%)" : "none", blur: ofl === "glass" ? "blur(22px) saturate(1.4)" : "none",
+        hLine: front ? "var(--c-line)" : "transparent", mLine: "color-mix(in srgb, currentColor 22%, transparent)", markD: D[1], title: D[0],
+        meta: front ? (k === "objekt" ? (sel.length ? (one ? kindN[one.kind] + " · " + Math.round(one.w) + " × " + Math.round(one.h) : sel.length + " gewählt") : "nichts gewählt") : k === "blatt" ? ci[1] + " × " + ci[2] : fotos.length + " Bilder") : "",
+        metaFlex: front ? "1 1 0" : "none", metaMl: front ? "0" : "auto", hasClose: false, cursor: front ? "default" : "pointer",
+        go: front ? undefined : () => this.setState({ front: k }),
+        isRows: front && k !== "katalog", isKatalog: front && k === "katalog", rows: k === "objekt" ? objRows() : k === "blatt" ? blattRows() : [],
+        kats: katRows, fotos, katNote: "Ein Bild anklicken legt einen gefüllten Rahmen mittig aufs Blatt. Eigene Aufnahmen lassen sich in jeden Rahmen ziehen.",
+        hasFoot: front && k === "blatt", foot: { l: [], r: [] } };
+    });
+    const S = { cards };
+    const fc = cards.find(c => c.state === "open");
+    const fb = (label, d, go, kind, o) => { o = o || {};
+      const v = kind === "accent" ? ["var(--c-inv)", "var(--c-on-inv)", "var(--c-inv)", "var(--c-on-inv)"] : kind === "signal" ? ["transparent", "var(--c-signal)", "var(--c-hover)", "var(--c-signal)"] : ["transparent", "var(--c-ink-2)", "var(--c-hover)", "var(--c-ink)"];
+      const lab = !!o.label;
+      return { isBtn: true, isSep: false, part: lab ? "text-button" : "symbol-button", label, tip: o.tip || label, d, state: o.off ? "disabled" : kind || "neutral", showLabel: lab, w: lab ? "auto" : "28px", pad: lab ? "0 12px 0 8px" : "0", cost: lab ? (o.lw || 92) : 28,
+        bg: v[0], fg: v[1], hbg: o.off ? v[0] : v[2], hfg: o.off ? v[1] : v[3], ring: kind === "accent" ? "none" : iconRing, op: o.off ? .4 : 1, cur: o.off ? "default" : "pointer", prio: o.prio || 0, run: go, go: e => { stop(e); if (!o.off) go(e); } }; };
+    if (fc && fc.id === "blatt") fc.foot = { l: [fb("Drucken", P.print, () => this.toastIt("Druckdialog")), fb("Als PDF sichern", P.export, () => this.toastIt("Blatt als PDF gesichert")), fb("In Projektordner", P.folder, () => this.toastIt("Im Projektordner gesichert"))], r: [fb("Alle Blätter als PDF", P.export, () => this.toastIt("3 Blätter als PDF gesichert"), "accent", { label: w[2] >= 340, lw: 150 })] };
+
+    const none = !sel.length;
+    const HB = { state: sel.length ? "selection" : "rest", hint: sel.length ? (one ? kindN[one.kind] : sel.length + " gewählt") : "",
+      main: [fb("Einfügen", P.plus, e => insertItems(e)), fb("Ausrichten", P.align, e => this.openMenu(e, [this.mi("Links", () => this.align("links")), this.mi("Mitte waagerecht", () => this.align("mitteX")), this.mi("Rechts", () => this.align("rechts")), { sep: true }, this.mi("Oben", () => this.align("oben")), this.mi("Mitte senkrecht", () => this.align("mitteY")), this.mi("Unten", () => this.align("unten"))], 240), null, { off: none }),
+        fb("Nach vorn", P.front, () => this.order(1), null, { off: none }), fb("Nach hinten", P.back, () => this.order(-1), null, { off: none }),
+        { isSep: true, isBtn: false, cost: 9 }, fb("Löschen", P.trash, () => this.remove(), "signal", { off: none })],
+      end: [fb("Mehr", P.more, e => this.openMenu(e, [this.mi("Duplizieren", () => this.dupe()), this.mi("Alles wählen", () => this.setState({ sel: items.map(i => i.id) })), this.mi("Auswahl aufheben", () => this.select(null)), { sep: true }, this.mi("Blatt als PDF", () => this.toastIt("Blatt als PDF gesichert"))], 240))]
+        .concat(openCount > 1 ? [{ isSep: true, isBtn: false, cost: 9 }, fb("Spalte falten", P.minus, () => this.setMem({ Rf: true, max: -1 }))] : []) };
+
+    return {
+      ready: true, licht, winRef: this.winRef, boardRef: this.boardRef, shGrund: this.props.ground ?? "white", shSchrift: this.props.typeface ?? "Geist", fenster: this.props.window ?? "1512 × 982",
+      wArr: w, maxed: rM.max >= 0, slow: false, groups: this.GROUPS, badges: {}, shDot: false, laneSet: true, lanes,
+      isList: lanes[0].isList, isMain: lanes[1].isMain, isStack: lanes[2].isStack, L, B, S, HB,
+      stackTrans: still ? "none" : "top 520ms cubic-bezier(.22,1.08,.36,1), height 520ms cubic-bezier(.22,1.08,.36,1), background 320ms " + ease + ", transform 420ms " + ease,
+      iconRing, plusD: P.plus, closeD: P.close, chevronD: P.chevron, searchD: P.search,
+      onChoose: n => { const F = { "Aufmaß": "ALFA Aufmass.dc.html", "Atelier": "ALFA Atelier.dc.html" }; if (F[n]) window.location.href = encodeURI(F[n]); else if (n !== "Moodboard") this.toastIt(n + " liegt in einem anderen Bogen"); }, onMode: o => this.setState({ blobOpen: o }), onMem: p => this.setMem(p), onGrow: (side, v, w0) => this.grow(side, v, w0),
+      onSync: () => { if (s.syncing) return; this.setState({ syncing: true }); setTimeout(() => this.setState({ syncing: false }), still ? 400 : 1600); },
+      syncState: s.syncing ? "syncing" : "fresh", syncTitle: s.syncing ? "Gleicht ab …" : "Kataloge neu lesen",
+      assistText: one ? "Frag nach Varianten, Farbwerten oder einer Bildunterschrift für " + kindN[one.kind] + "." : "Frag nach einer Stimmung, einem Raster oder einem Bild aus dem Katalog.",
+      hasToast: !!s.toast, toast: s.toast || "", hasUndo: !!s.toastUndo, undo: () => { const u = s.toastUndo; clearTimeout(this.tt); this.setState({ toast: null, toastUndo: null }); if (u) u(); },
+      hasMenu: !!s.menu, menu: s.menu ? { x: s.menu.x + "px", y: s.menu.y + "px", w: s.menu.w + "px", items: s.menu.items.map(it => Object.assign({ sep: false, head: false, item: false, check: "", meta: "", fg: "var(--c-ink)" }, it)) } : { items: [] },
+      rootDown: () => { if (s.menu) this.setState({ menu: null }); }, stop
+    };
+  }
+}
+</script>
+</body>
+</html>

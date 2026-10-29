@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+html,body{margin:0;padding:0;background:#e8e8e8}
+a{color:#171717}a:hover{color:#4d4d4d}
+[data-licht="hell"]{color-scheme:light;--c-ground:#ffffff;--c-lane:#ffffff;--c-line:#e8e8e8;--c-line-strong:#d9d9d9;--c-ink:#171717;--c-ink-2:#4d4d4d;--c-ink-3:#6b6b6b;--c-mark:#8a8a8a;--c-well:#f5f5f5;--c-hover:rgba(0,0,0,.05);--c-sel:rgba(0,0,0,.05);--c-focus:#6b6b6b;--c-grip:#a3a3a3;--c-inv:#171717;--c-on-inv:#ffffff;--c-inv-hot:rgba(255,255,255,.12);--c-inv-line:rgba(255,255,255,.2);--c-inv-field:rgba(255,255,255,.08);--c-safe:#000;--c-menu:#ffffff;--c-signal:#b3412e;--c-sheet:#ffffff;--c-sheet-ink:#171717;--c-sheet-ink-2:#4d4d4d;--c-sheet-ink-3:#6b6b6b;--c-sheet-line:#e8e8e8;--c-glaze:rgba(255,255,255,.75);--c-sheet-well:#f5f5f5;--c-sheet-line-strong:#d9d9d9;--c-on-signal:#ffffff;--c-on-inv-2:rgba(255,255,255,.8);--c-on-inv-3:rgba(255,255,255,.6);--c-on-inv-line:rgba(255,255,255,.3);--c-orb:#0d0d0d;--c-orb-rim:rgba(255,255,255,.12);--c-orb-gloss:rgba(255,255,255,.28);--m-coral:#f95c4b;--m-apricot:#f39f5a;--m-rose:#e8bcb9;--sh-knob:0 1px 2px rgba(0,0,0,.2);--sh-seg:0 1px 2px rgba(0,0,0,.12);--sh-lane:0 0 0 1px var(--c-line);--sh-float:0 0 0 1px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.10)}
+[data-licht="hell"][data-grund="hellgrau"]{--c-ground:#f2f2f2;--sh-lane:0 0 0 1px #e3e3e3}
+[data-licht="dunkel"]{color-scheme:dark;--c-ground:#0d0d0d;--c-lane:#141414;--c-line:#2a2a2a;--c-line-strong:#3a3a3a;--c-ink:#fafafa;--c-ink-2:#d9d9d9;--c-ink-3:#a3a3a3;--c-mark:#8a8a8a;--c-well:#1f1f1f;--c-hover:rgba(255,255,255,.08);--c-sel:rgba(255,255,255,.08);--c-focus:#a3a3a3;--c-grip:#6b6b6b;--c-inv:#f5f5f5;--c-on-inv:#0d0d0d;--c-inv-hot:rgba(0,0,0,.08);--c-inv-line:rgba(0,0,0,.14);--c-inv-field:rgba(0,0,0,.05);--c-safe:#000;--c-menu:#1f1f1f;--c-signal:#e08a74;--c-sheet:#ffffff;--c-sheet-ink:#171717;--c-sheet-ink-2:#4d4d4d;--c-sheet-ink-3:#6b6b6b;--c-sheet-line:#e8e8e8;--c-glaze:rgba(255,255,255,.07);--c-sheet-well:#f5f5f5;--c-sheet-line-strong:#d9d9d9;--c-on-signal:#ffffff;--c-on-inv-2:rgba(0,0,0,.72);--c-on-inv-3:rgba(0,0,0,.55);--c-on-inv-line:rgba(0,0,0,.22);--c-orb:#0d0d0d;--c-orb-rim:rgba(255,255,255,.12);--c-orb-gloss:rgba(255,255,255,.28);--m-coral:#f95c4b;--m-apricot:#f39f5a;--m-rose:#e8bcb9;--sh-knob:0 1px 2px rgba(0,0,0,.2);--sh-seg:0 1px 2px rgba(0,0,0,.12);--sh-lane:0 0 0 1px var(--c-line);--sh-float:0 0 0 1px rgba(255,255,255,.10),0 8px 24px rgba(0,0,0,.5)}
+button:focus{outline:none}button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--c-focus);outline-offset:2px}
+input::placeholder,textarea::placeholder{color:inherit;opacity:.45}
+</style>
+<style>@media (prefers-reduced-motion: reduce){*,*::before,*::after{transition-duration:1ms!important;animation-duration:1ms!important}}</style>
+</helmet>
+<div ref="{{ winRef }}" data-teil="area-page" data-licht="{{ licht }}" data-grund="{{ grund }}" data-state="{{ pageState }}" data-screen-label="{{ screenLabel }}" onPointerDown="{{ rootDown }}" style="position:relative;width:{{ winW }};height:{{ winH }};background:var(--c-ground);color:var(--c-ink);overflow:hidden;font-family:{{ font }};font-size:13px;line-height:1.35;user-select:none;-webkit-font-smoothing:antialiased">
+<sc-if value="{{ hasSafe }}" hint-placeholder-val="{{ true }}"><div data-teil="safe-area" title="Kamera-Aussparung: der Sichtbereich beginnt darunter" style="position:absolute;left:0;top:0;right:0;height:{{ safeH }};background:var(--c-safe);z-index:30"></div></sc-if>
+
+<sc-if value="{{ laneSet }}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{ lanes }}" as="l" hint-placeholder-count="3">
+<section data-teil="lane" data-state="{{ l.state }}" aria-label="{{ l.title }}" onClick="{{ l.onStrip }}" style="position:absolute;left:{{ l.left }};top:{{ laneTop }};width:{{ l.width }};height:{{ laneH }};background:{{ l.bg }};border-radius:20px;box-shadow:{{ l.ring }};overflow:{{ l.ovf }};display:flex;flex-direction:column;transition:{{ laneTrans }};cursor:{{ l.cursor }}">
+
+<sc-if value="{{ l.folded }}" hint-placeholder-val="{{ false }}">
+<div data-teil="lane-strip" style="flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 0;overflow:hidden">
+<sc-for list="{{ l.marks }}" as="s" hint-placeholder-count="4">
+<span data-teil="mark" data-state="{{ s.state }}" title="{{ s.label }}" onClick="{{ s.go }}" style="position:relative;flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:500;background:{{ s.bg }};color:{{ s.fg }};box-shadow:{{ s.ring }};cursor:pointer">
+<sc-if value="{{ s.isSym }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ s.d }}"></path></svg></sc-if>
+<sc-if value="{{ s.isText }}" hint-placeholder-val="{{ false }}">{{ s.t }}</sc-if>
+<sc-if value="{{ s.dot }}" hint-placeholder-val="{{ false }}"><i style="position:absolute;top:-1px;right:-1px;width:8px;height:8px;border-radius:50%;background:var(--c-ink);box-shadow:0 0 0 2px var(--c-lane)"></i></sc-if>
+</span>
+</sc-for>
+
+</div>
+</sc-if>
+
+<sc-if value="{{ l.isList }}" hint-placeholder-val="{{ false }}">
+<header data-teil="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;border-bottom:1px solid {{ L.hLine }};transition:border-color 160ms;box-sizing:border-box;min-width:0">
+<sc-if value="{{ L.hasTitle }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font-weight:500;white-space:nowrap">{{ L.title }}</span></sc-if>
+<span title="{{ L.detail }}" style="flex:1;min-width:0;font-size:11.5px;color:{{ L.detailFg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ L.detail }}</span>
+<sc-for list="{{ L.buttons }}" as="x" hint-placeholder-count="1"><button data-teil="symbol-button" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;gap:8px;background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:{{ iconRing }};transition:color 160ms,box-shadow 160ms" style-hover="color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-ink-3)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</header>
+<div data-teil="lane-content" onScroll="{{ L.onScroll }}" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding:8px;display:flex;flex-direction:column;scrollbar-width:none">
+<sc-for list="{{ L.rows }}" as="r" hint-placeholder-count="8">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div data-teil="list-section-header" style="flex:none;height:32px;display:flex;align-items:flex-end;padding:0 8px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ r.name }}</div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-teil="list-row" data-state="{{ r.state }}" onClick="{{ r.go }}" title="{{ r.name }}" style="flex:none;height:36px;display:flex;align-items:center;gap:20px;padding:0 8px;border-radius:12px;cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};transition:background 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)">
+<span data-teil="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ r.symFg }};background:{{ r.symBg }};box-shadow:{{ r.symRing }};font:500 9px/1 'Geist Mono',ui-monospace,Menlo,monospace;letter-spacing:.04em"><sc-if value="{{ r.isSym }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.d }}"></path></svg></sc-if><sc-if value="{{ r.isMood }}" hint-placeholder-val="{{ false }}">{{ r.moodT }}</sc-if></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.weight }}">{{ r.name }}</span>
+<sc-if value="{{ r.hasN }}" hint-placeholder-val="{{ false }}"><span data-teil="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:{{ r.nFg }}">{{ r.n }}</span></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+<sc-if value="{{ L.hasNew }}" hint-placeholder-val="{{ true }}"><div data-teil="lane-footer" style="flex:none;padding:8px"><button data-teil="compose-button" style-active="transform:scale(.98)" title="Neue Mail" onClick="{{ L.newGo }}" style="appearance:none;border:0;width:100%;height:36px;padding:0 12px 0 8px;box-sizing:border-box;border-radius:12px;display:flex;align-items:center;gap:20px;font:inherit;font-weight:400;background:var(--c-inv);color:var(--c-on-inv);cursor:pointer;transition:opacity 160ms" style-hover="opacity:.88"><span data-teil="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px color-mix(in srgb, currentColor 30%, transparent)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ composeD }}"></path></svg></span><span style="flex:1;min-width:0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Neue Mail</span></button></div></sc-if>
+</sc-if>
+
+<sc-if value="{{ l.isMain }}" hint-placeholder-val="{{ false }}">
+<header data-teil="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;border-bottom:1px solid {{ C.hLine }};transition:border-color 160ms;box-sizing:border-box;min-width:0">
+<sc-if value="{{ C.searchOpen }}" hint-placeholder-val="{{ false }}">
+<label data-teil="input-field" data-state="focus" style="flex:1;min-width:0;height:28px;display:flex;align-items:center;gap:8px;box-shadow:inset 0 -1px 0 var(--c-ink)">
+<input ref="{{ searchRef }}" value="{{ C.query }}" onChange="{{ C.onQuery }}" onKeyDown="{{ C.queryKey }}" placeholder="In {{ C.title }} suchen" aria-label="Liste durchsuchen" autocomplete="off" spellcheck="false" style="flex:1;min-width:0;border:0;background:none;outline:none;color:inherit;font:inherit;padding:0"></input>
+</label>
+</sc-if>
+<sc-if value="{{ C.searchClosed }}" hint-placeholder-val="{{ true }}">
+<span style="flex:none;font-weight:500;white-space:nowrap">{{ C.title }}</span>
+<sc-if value="{{ C.hasCount }}" hint-placeholder-val="{{ false }}"><span data-teil="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:var(--c-ink-3)">{{ C.count }}</span></sc-if>
+<span style="flex:1"></span>
+</sc-if>
+<sc-for list="{{ C.tools }}" as="x" hint-placeholder-count="2">
+<button data-teil="{{ x.teil }}" data-state="{{ x.state }}" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;min-width:28px;padding:{{ x.pad }};border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;white-space:nowrap"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.text }}</span></sc-if></button>
+</sc-for>
+</header>
+<sc-if value="{{ C.hasNotice }}" hint-placeholder-val="{{ false }}">
+<div data-teil="card-notice" data-state="{{ C.notice.kind }}" style="flex:none;display:flex;gap:20px;margin:8px 8px 0;padding:8px;border-radius:8px;background:var(--c-well)">
+<span style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ C.notice.fg }};box-shadow:inset 0 0 0 1px {{ C.notice.fg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ C.notice.d }}"></path></svg></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;padding-top:4px;line-height:20px">
+<span style="font-weight:500;text-wrap:pretty">{{ C.notice.title }}</span>
+<span style="color:var(--c-ink-3);text-wrap:pretty">{{ C.notice.text }}</span>
+<span style="display:flex;margin-top:8px"><button data-teil="text-button" style-active="transform:scale(.96)" onClick="{{ C.notice.go }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:var(--c-inv);color:var(--c-on-inv);cursor:pointer;white-space:nowrap">{{ C.notice.act }}</button></span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ C.hasState }}" hint-placeholder-val="{{ false }}">
+<div data-teil="content-state" data-state="{{ C.cs.kind }}" style="flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center">
+<span style="position:relative;flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--c-ink-3);box-shadow:inset 0 0 0 1px var(--c-line-strong)">
+<sc-if value="{{ C.cs.spin }}" hint-placeholder-val="{{ false }}"><svg data-spin="1" width="28" height="28" viewBox="0 0 28 28" style="position:absolute;inset:0"><circle cx="14" cy="14" r="13.5" fill="none" stroke="var(--c-ink)" stroke-width="1" pathLength="1" stroke-dasharray=".22 .78"></circle></svg></sc-if>
+<sc-if value="{{ C.cs.sym }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ C.cs.d }}"></path></svg></sc-if>
+</span>
+<sc-if value="{{ C.cs.hasTitle }}" hint-placeholder-val="{{ false }}"><span style="font-weight:500;max-width:320px;text-wrap:pretty">{{ C.cs.title }}</span></sc-if>
+<span style="max-width:320px;color:var(--c-ink-3);text-wrap:pretty;white-space:pre-line">{{ C.cs.text }}</span>
+<sc-if value="{{ C.cs.hasAct }}" hint-placeholder-val="{{ false }}"><button data-teil="text-button" style-active="transform:scale(.96)" onClick="{{ C.cs.go }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ C.cs.actBg }};color:{{ C.cs.actFg }};box-shadow:{{ C.cs.actRing }};cursor:pointer;white-space:nowrap">{{ C.cs.act }}</button></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ C.hasRows }}" hint-placeholder-val="{{ true }}">
+<div data-teil="lane-content" onScroll="{{ C.onScroll }}" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding:8px;display:flex;flex-direction:column;scrollbar-width:thin">
+<sc-for list="{{ C.rows }}" as="r" hint-placeholder-count="6">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div data-teil="list-section-header" style="flex:none;height:32px;display:flex;align-items:flex-end;padding:0 8px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ r.name }}</div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-teil="message-row" data-state="{{ r.state }}" onClick="{{ r.go }}" onDoubleClick="{{ r.dbl }}" onContextMenu="{{ r.ctx }}" onPointerEnter="{{ r.enter }}" onPointerLeave="{{ r.leave }}" style="position:relative;flex:none;display:flex;gap:20px;padding:12px 8px;border-radius:12px;cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};box-shadow:{{ r.ring }};transition:background 160ms,box-shadow 160ms">
+<span data-teil="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:500;font-family:'Geist Mono','SF Mono',ui-monospace,Menlo,monospace;letter-spacing:.06em;background:{{ r.mBg }};color:{{ r.mFg }};box-shadow:{{ r.mRing }}"><sc-if value="{{ r.markSym }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ personD }}"></path></svg></sc-if><sc-if value="{{ r.markText }}" hint-placeholder-val="{{ true }}">{{ r.mark }}</sc-if></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;padding-top:4px;line-height:20px">
+<div style="display:flex;align-items:center;gap:8px;height:20px;min-width:0">
+<span dir="auto" title="{{ r.addr }}" style="min-width:0;font-weight:{{ r.wS }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.sender }}</span>
+<sc-if value="{{ r.hasThread }}" hint-placeholder-val="{{ false }}"><span data-teil="counter" title="Nachrichten in dieser Unterhaltung" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:{{ r.c3 }}">{{ r.thread }}</span></sc-if>
+<span style="flex:1"></span>
+<sc-if value="{{ r.star }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;color:{{ r.c2 }};opacity:{{ r.dateOp }}"><path d="{{ flagD }}"></path></svg></sc-if>
+<sc-if value="{{ r.hasCs }}" hint-placeholder-val="{{ false }}">
+<span data-teil="connection-status" data-state="{{ r.cs.state }}" style="flex:none;display:flex;align-items:center;gap:8px;font-size:11.5px;color:{{ r.cs.fg }};white-space:nowrap">
+<span style="position:relative;flex:none;width:8px;height:8px;border-radius:50%;box-sizing:border-box;background:{{ r.cs.fill }};border:{{ r.cs.border }}"><sc-if value="{{ r.cs.spin }}" hint-placeholder-val="{{ false }}"><svg data-spin="1" width="14" height="14" viewBox="0 0 14 14" style="position:absolute;left:-4px;top:-4px"><circle cx="7" cy="7" r="6" fill="none" stroke="currentColor" stroke-width="1.3" pathLength="1" stroke-dasharray=".3 .7" stroke-linecap="round"></circle></svg></sc-if></span>
+<span>{{ r.cs.text }}</span>
+</span>
+</sc-if>
+<span style="flex:none;font-size:11.5px;color:{{ r.c3 }};font-variant-numeric:tabular-nums;white-space:nowrap;opacity:{{ r.dateOp }}">{{ r.date }}</span>
+</div>
+<div dir="auto" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:{{ r.subFg }};font-weight:{{ r.wSub }}">{{ r.subject }}</div>
+<sc-if value="{{ r.hasPre }}" hint-placeholder-val="{{ true }}"><div dir="auto" style="color:{{ r.preFg }};font-weight:300;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-wrap:pretty">{{ r.preview }}</div></sc-if>
+<sc-if value="{{ r.hasAtt }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:8px;margin-top:8px;min-width:0">
+<sc-for list="{{ r.att }}" as="a" hint-placeholder-count="2"><span data-teil="attachment-chip" title="{{ a.full }}" style="flex:0 1 auto;min-width:0;height:24px;display:flex;align-items:center;gap:8px;padding:0 8px;border-radius:999px;box-shadow:inset 0 0 0 1px {{ r.cLs }};font-size:11.5px;color:{{ r.c2 }}"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ docD }}"></path></svg><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.n }}</span></span></sc-for>
+<sc-if value="{{ r.hasMore }}" hint-placeholder-val="{{ false }}"><span data-teil="counter" title="Weitere Anhänge" style="flex:none;min-width:24px;height:24px;box-sizing:border-box;padding:0 8px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:{{ r.c3 }};box-shadow:inset 0 0 0 1px {{ r.cLs }}">{{ r.more }}</span></sc-if>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{ r.showAct }}" hint-placeholder-val="{{ false }}">
+<div data-teil="row-actions" style="position:absolute;top:12px;right:8px;display:flex;gap:4px;padding-left:8px;background:{{ r.bg }}">
+<sc-for list="{{ r.acts }}" as="x" hint-placeholder-count="4"><button data-teil="symbol-button" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;gap:8px;background:{{ r.actBg }};color:{{ r.c2 }};cursor:pointer;box-shadow:inset 0 0 0 1px {{ r.cLs }};transition:color 160ms" style-hover="color:{{ r.fg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ r.confirm }}" hint-placeholder-val="{{ false }}">
+<div data-teil="inline-confirm" style="position:absolute;top:12px;right:8px;display:flex;align-items:center;gap:4px;padding-left:8px;background:{{ r.bg }}">
+<button data-teil="text-button" style-active="transform:scale(.96)" data-state="destructive" onClick="{{ r.doTrash }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:var(--c-lane);color:var(--c-signal);box-shadow:inset 0 0 0 1px var(--c-signal);cursor:pointer;white-space:nowrap">In den Papierkorb</button>
+<button data-teil="symbol-button" style-active="transform:scale(.96)" title="Abbrechen" aria-label="Abbrechen" onClick="{{ r.noTrash }}" style="appearance:none;border:0;padding:0;font:inherit;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;gap:8px;background:var(--c-lane);color:var(--c-ink-3);cursor:pointer;box-shadow:{{ iconRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="{{ closeD }}"></path></svg></button>
+</div>
+</sc-if>
+<sc-if value="{{ r.sep }}" hint-placeholder-val="{{ true }}"><i style="position:absolute;left:56px;right:8px;bottom:0;height:1px;background:var(--c-line)"></i></sc-if>
+</div>
+</sc-if>
+</sc-for>
+<div aria-hidden="true" style="flex:none;height:{{ C.spacerH }}"></div>
+<sc-if value="{{ C.hasMore }}" hint-placeholder-val="{{ false }}"><div style="flex:none;display:flex;justify-content:center;padding:16px 0 8px"><button data-teil="text-button" style-active="transform:scale(.96)" onClick="{{ C.loadMore }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:transparent;color:var(--c-ink-2);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer">{{ C.moreText }}</button></div></sc-if>
+</div>
+</sc-if>
+</sc-if>
+
+<sc-if value="{{ l.isStack }}" hint-placeholder-val="{{ false }}">
+<header data-teil="lane-header" data-state="{{ HB.state }}" style="flex:none;height:44px;display:flex;align-items:center;gap:4px;padding:0 8px;border-bottom:1px solid transparent;box-sizing:border-box;min-width:0">
+<div data-teil="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ HB.main }}" as="x" hint-placeholder-count="0"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-teil="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-teil="{{ x.teil }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+<span style="flex:1;min-width:0;padding:0 4px;font-size:11.5px;color:{{ HB.hintFg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ HB.hint }}</span>
+<div data-teil="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ HB.end }}" as="x" hint-placeholder-count="0"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-teil="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-teil="{{ x.teil }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+</header>
+<div data-teil="card-stack" data-state="{{ S.state }}" style="position:relative;flex:1;min-height:0">
+<sc-if value="{{ HB.empty }}" hint-placeholder-val="{{ false }}"><div data-teil="card" data-state="empty" aria-label="Leere Karte" style="position:absolute;inset:0;border-radius:12px;background:var(--c-lane);box-shadow:inset 0 0 0 1px var(--c-line)"></div></sc-if>
+<sc-for list="{{ S.cards }}" as="c" hint-placeholder-count="3">
+<article data-teil="card" data-state="{{ c.state }}" onClick="{{ c.go }}" onPointerEnter="{{ c.enter }}" onPointerLeave="{{ c.leave }}" style="position:absolute;left:{{ c.inset }};right:{{ c.inset }};top:{{ c.top }};height:{{ c.h }};z-index:{{ c.z }};transform:{{ c.tf }};background-color:{{ c.bg }};background-image:{{ c.sheen }};backdrop-filter:{{ c.blur }};-webkit-backdrop-filter:{{ c.blur }};color:{{ c.fg }};border-radius:12px;box-shadow:{{ c.sh }};overflow:hidden;display:flex;flex-direction:column;transition:{{ stackTrans }};cursor:{{ c.cursor }}">
+<header data-teil="card-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px;box-sizing:border-box;border-bottom:1px solid {{ c.hLine }};min-width:0">
+<span data-teil="mark" style="flex:none;margin-right:12px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:500;font-family:'Geist Mono','SF Mono',ui-monospace,Menlo,monospace;letter-spacing:.06em;box-shadow:inset 0 0 0 1px {{ c.mLine }}">
+<sc-if value="{{ c.markSym }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ c.markD }}"></path></svg></sc-if>
+<sc-if value="{{ c.markText }}" hint-placeholder-val="{{ true }}">{{ c.mark }}</sc-if>
+</span>
+<span dir="auto" onClick="{{ c.titleGo }}" title="{{ c.titleTip }}" style="flex:0 1 auto;min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-style:{{ c.tStyle }};cursor:{{ c.titleCur }}">{{ c.title }}</span>
+<span title="{{ c.metaTip }}" style="flex:{{ c.metaFlex }};margin-left:{{ c.metaMl }};min-width:0;font-size:11.5px;opacity:.72;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums">{{ c.meta }}</span>
+<sc-if value="{{ c.lock }}" hint-placeholder-val="{{ false }}"><span title="Nur Verwaltende ändern das" style="flex:none;width:28px;height:28px;display:grid;place-items:center;opacity:.6"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ lockD }}"></path></svg></span></sc-if>
+<sc-for list="{{ c.acts }}" as="x" hint-placeholder-count="0"><button data-teil="symbol-button" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;gap:8px;background:transparent;color:{{ x.fg }};cursor:pointer;box-shadow:{{ iconRing }}" style-hover="background:var(--c-hover)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+<sc-if value="{{ c.isPreview }}" hint-placeholder-val="{{ false }}"><button data-teil="symbol-button" data-state="preview" style-active="transform:scale(.96)" title="Anheften · bleibt im Stapel" aria-label="Anheften" onClick="{{ c.pin }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;gap:8px;background:transparent;color:inherit;opacity:.7;cursor:pointer" style-hover="opacity:1;background:var(--c-hover)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ pinD }}"></path></svg></button></sc-if>
+<button data-teil="symbol-button" style-active="transform:scale(.96)" title="Schließen" aria-label="Schließen" onClick="{{ c.close }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;gap:8px;background:transparent;color:inherit;opacity:.7;cursor:pointer;box-shadow:{{ c.closeRing }}" style-hover="opacity:1"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="{{ closeD }}"></path></svg></button>
+</header>
+
+<sc-if value="{{ c.isMsg }}" hint-placeholder-val="{{ false }}">
+<div data-teil="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;display:flex;flex-direction:column;scrollbar-width:thin">
+<div data-teil="message-header" style="flex:none;display:flex;flex-direction:column;padding:4px 0">
+<div data-teil="recipient-field" data-state="{{ RB.rState }}" style="display:flex;flex-direction:column">
+<div data-teil="field-row" style="height:36px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px">
+<sc-if value="{{ RB.showSum }}" hint-placeholder-val="{{ true }}"><span style="flex:none;width:40px;font-size:11.5px;color:var(--c-ink-3)">An</span><button data-teil="recipients-disclosure" data-state="collapsed" onClick="{{ RB.toggleR }}" title="Alle Empfänger zeigen" style="appearance:none;border:0;font:inherit;flex:0 1 auto;min-width:0;height:28px;margin-left:-8px;padding:0 8px;border-radius:999px;display:flex;align-items:center;gap:8px;background:transparent;color:var(--c-ink);cursor:pointer;text-align:left" style-hover="background:var(--c-hover)" style-active="transform:scale(.99)"><span dir="auto" style="flex:0 1 auto;min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ RB.first }}</span><sc-if value="{{ RB.hasRMore }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;font-variant-numeric:tabular-nums">{{ RB.rMore }}</span></sc-if><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;color:var(--c-ink-3);transform:none;transition:transform 240ms cubic-bezier(.2,.8,.2,1)"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+<sc-if value="{{ RB.showR }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:40px"></span><button data-teil="recipients-disclosure" data-state="expanded" onClick="{{ RB.toggleR }}" title="Weniger zeigen" style="appearance:none;border:0;font:inherit;flex:0 1 auto;min-width:0;height:28px;margin-left:-8px;padding:0 8px;border-radius:999px;display:flex;align-items:center;gap:8px;background:transparent;color:var(--c-ink);cursor:pointer;text-align:left" style-hover="background:var(--c-hover)" style-active="transform:scale(.99)"><span style="flex:none;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;font-variant-numeric:tabular-nums">{{ RB.count }}</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;color:var(--c-ink-3);transform:rotate(180deg);transition:transform 240ms cubic-bezier(.2,.8,.2,1)"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+</div>
+<div data-teil="recipient-list" style="display:grid;grid-template-rows:{{ RB.gRows }};opacity:{{ RB.lOp }};transition:grid-template-rows 280ms cubic-bezier(.2,.8,.2,1),opacity 200ms"><div style="min-height:0;overflow:hidden"><div style="max-height:308px;overflow-x:hidden;overflow-y:auto;padding:0 8px 8px 8px;scrollbar-width:thin"><sc-for list="{{ RB.people }}" as="q" hint-placeholder-count="3"><div data-teil="recipient-row" title="{{ q.full }}" onClick="{{ q.go }}" style="height:44px;display:grid;grid-template-columns:40px 24px minmax(0,1fr);column-gap:8px;align-items:center;padding:0 4px 0 8px;border-radius:4px;cursor:pointer" style-hover="background:var(--c-hover)"><span style="font-size:11.5px;color:var(--c-ink-3)">{{ q.grp }}</span><span data-teil="mark" style="flex:none;position:relative;width:24px;height:24px;box-sizing:border-box;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:500;font-family:'Geist Mono','SF Mono',ui-monospace,Menlo,monospace;letter-spacing:.06em;line-height:1;color:var(--c-ink-2);background:var(--c-lane);box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-if value="{{ q.markSym }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ personD }}"></path></svg></sc-if><sc-if value="{{ q.markText }}" hint-placeholder-val="{{ true }}">{{ q.ini }}</sc-if></span><span style="min-width:0;display:flex;flex-direction:column"><span dir="auto" style="min-width:0;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.name }}</span><sc-if value="{{ q.hasAddr }}" hint-placeholder-val="{{ true }}"><span dir="auto" style="min-width:0;font-size:11.5px;line-height:16px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.addr }}</span></sc-if></span></div></sc-for></div></div></div>
+</div>
+</div>
+<div data-teil="message-body" style="color-scheme:light;flex:none;margin:0 8px 8px;padding:16px 8px 24px;border-radius:4px;background:var(--c-sheet);color:var(--c-sheet-ink);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',system-ui,sans-serif;font-size:13px;line-height:1.6;user-select:text;display:flex;flex-direction:column">
+<div style="font-size:18px;line-height:1.25;font-weight:500;letter-spacing:-.02em;overflow-wrap:anywhere;text-wrap:pretty">{{ RB.subject }}</div>
+<sc-if value="{{ RB.hasConv }}" hint-placeholder-val="{{ false }}"><div style="margin-top:4px;font-size:11.5px;line-height:16px;color:var(--c-sheet-ink-3)">{{ RB.conv }}</div></sc-if>
+<sc-if value="{{ RB.imgBlocked }}" hint-placeholder-val="{{ false }}">
+<div data-teil="card-notice" data-state="warning" style="display:flex;gap:20px;margin:16px -8px 0;padding:8px;border-radius:8px;background:var(--c-sheet-well);font-size:13px;line-height:1.35">
+<span style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--c-sheet-ink-2);box-shadow:inset 0 0 0 1px var(--c-sheet-line-strong)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ alertD }}"></path></svg></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;padding-top:4px;line-height:20px"><span style="font-weight:500">Externe Bilder blockiert</span><span style="color:var(--c-sheet-ink-3);text-wrap:pretty">Beim Laden erfährt der Absender, dass die Mail geöffnet wurde.</span><span style="display:flex;margin-top:8px"><button data-teil="text-button" style-active="transform:scale(.96)" onClick="{{ RB.loadImages }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:var(--c-sheet);color:var(--c-sheet-ink);box-shadow:inset 0 0 0 1px var(--c-sheet-line-strong);cursor:pointer">Bilder laden</button></span></div>
+</div>
+</sc-if>
+<sc-for list="{{ RB.thread }}" as="t" hint-placeholder-count="1">
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:16px;padding-top:{{ t.pt }};border-top:1px solid {{ t.line }}">
+<div style="display:flex;align-items:baseline;gap:8px"><button data-teil="address-button" onClick="{{ t.menu }}" style="appearance:none;border:0;font:inherit;font-weight:500;color:inherit;background:transparent;padding:0;cursor:pointer">{{ t.name }}</button><span style="flex:1"></span><span style="font-size:11.5px;color:var(--c-sheet-ink-3);font-variant-numeric:tabular-nums;white-space:nowrap">{{ t.date }}</span></div>
+<div style="white-space:pre-wrap;text-wrap:pretty">{{ t.text }}</div>
+<sc-if value="{{ t.isHtml }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<sc-for list="{{ t.tiles }}" as="im" hint-placeholder-count="2"><div style="aspect-ratio:4 / 3;border-radius:8px;background:{{ im.bg }};display:grid;place-items:center;font-size:11.5px;color:var(--c-mark)">{{ im.n }}</div></sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ t.hasQuote }}" hint-placeholder-val="{{ false }}">
+<button data-teil="quote-toggle" onClick="{{ t.toggleQ }}" style="align-self:flex-start;appearance:none;border:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:transparent;color:var(--c-sheet-ink-2);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer">{{ t.qLabel }}</button>
+<sc-if value="{{ t.qOpen }}" hint-placeholder-val="{{ false }}"><div style="white-space:pre-wrap;color:var(--c-sheet-ink-3);padding-left:12px;box-shadow:inset 2px 0 0 var(--c-sheet-line)">{{ t.quote }}</div></sc-if>
+</sc-if>
+<sc-if value="{{ t.hasAtt }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;margin:4px -8px 0">
+<sc-for list="{{ t.att }}" as="a" hint-placeholder-count="1">
+<div data-teil="attachment-chip" title="{{ a.n }}" onClick="{{ a.menu }}" style="height:40px;display:flex;align-items:center;gap:12px;padding:0 8px;border-radius:999px;cursor:pointer;font-size:13px;line-height:1.35" style-hover="background:var(--c-sheet-well)">
+<span style="flex:none;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--c-sheet-line-strong);color:var(--c-sheet-ink-3)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ docD }}"></path></svg></span>
+<span style="min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.n }}</span>
+<span style="flex:none;font-size:11.5px;color:var(--c-sheet-ink-3)">{{ a.s }}</span>
+<span style="flex:1"></span>
+<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="var(--c-sheet-ink-3)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ chevronD }}"></path></svg>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.isDraft }}" hint-placeholder-val="{{ false }}">
+<div data-teil="card-content" style="flex:1;min-height:0;display:flex;flex-direction:column">
+<div style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;display:flex;flex-direction:column;scrollbar-width:thin">
+<sc-if value="{{ DB.hasNotice }}" hint-placeholder-val="{{ false }}">
+<div data-teil="card-notice" data-state="{{ DB.notice.kind }}" style="flex:none;display:flex;gap:20px;margin:8px 8px 0;padding:8px;border-radius:8px;background:var(--c-well)">
+<span style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ DB.notice.fg }};box-shadow:inset 0 0 0 1px {{ DB.notice.fg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ alertD }}"></path></svg></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;padding-top:4px;line-height:20px"><span style="font-weight:500;text-wrap:pretty">{{ DB.notice.title }}</span><span style="color:var(--c-ink-3);text-wrap:pretty">{{ DB.notice.text }}</span><span style="display:flex;margin-top:8px"><button data-teil="text-button" style-active="transform:scale(.96)" onClick="{{ DB.notice.go }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:var(--c-inv);color:var(--c-on-inv);cursor:pointer;white-space:nowrap">{{ DB.notice.act }}</button></span></div>
+</div>
+</sc-if>
+<div style="flex:none;display:flex;flex-direction:column">
+<div data-teil="field-row" style="position:relative;height:44px;display:flex;align-items:center;padding:0 8px 0 16px">
+<span style="flex:none;width:48px;font-size:11.5px;color:var(--c-ink-3)">Von</span>
+<button data-teil="address-button" onClick="{{ DB.fromMenu }}" style="appearance:none;border:0;font:inherit;color:var(--c-ink);background:transparent;height:28px;padding:0 8px;margin-left:-8px;border-radius:999px;display:flex;align-items:center;gap:8px;min-width:0;cursor:pointer" style-hover="background:var(--c-hover)"><span style="flex:none;font-weight:500">{{ DB.fromName }}</span><span style="min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ DB.fromAddr }}</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;color:var(--c-ink-3)"><path d="{{ chevronD }}"></path></svg></button>
+<i style="position:absolute;left:16px;right:16px;bottom:0;height:1px;background:var(--c-line)"></i>
+</div>
+<sc-for list="{{ DB.rcptRows }}" as="f" hint-placeholder-count="1">
+<div data-teil="recipient-field" data-state="{{ f.tState }}" style="position:relative;display:flex;flex-direction:column">
+<div data-teil="field-row" style="height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px">
+<span style="flex:none;width:40px;font-size:11.5px;color:var(--c-ink-3)">{{ f.k }}</span>
+<div style="flex:1;min-width:0;height:44px;display:flex;align-items:center;gap:4px">
+<sc-if value="{{ f.showChips }}" hint-placeholder-val="{{ true }}"><sc-for list="{{ f.chips }}" as="p" hint-placeholder-count="1"><span data-teil="chip" title="{{ p.addr }}" style="flex:0 1 auto;min-width:0;height:24px;display:flex;align-items:center;gap:4px;padding:0 4px 0 8px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong);white-space:nowrap"><span dir="auto" style="min-width:0;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</span><button data-teil="chip-remove" title="Entfernen" aria-label="Entfernen" onClick="{{ p.remove }}" style="appearance:none;border:0;padding:0;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="{{ closeD }}"></path></svg></button></span></sc-for></sc-if><sc-if value="{{ f.showChips }}" hint-placeholder-val="{{ true }}"><input value="{{ f.input }}" onChange="{{ f.onInput }}" onKeyDown="{{ f.onKey }}" placeholder="{{ f.ph }}" aria-label="{{ f.k }}" autocomplete="off" spellcheck="false" style="flex:1;min-width:64px;border:0;background:none;outline:none;color:inherit;font:inherit;padding:0 0 0 4px"></input></sc-if>
+<sc-if value="{{ f.showSum }}" hint-placeholder-val="{{ false }}"><button data-teil="recipients-disclosure" data-state="collapsed" onClick="{{ f.toggleAll }}" title="{{ f.tTip }}" style="appearance:none;border:0;font:inherit;flex:0 1 auto;min-width:0;height:28px;margin-left:-8px;padding:0 8px;border-radius:999px;display:flex;align-items:center;gap:8px;background:transparent;color:var(--c-ink);cursor:pointer;text-align:left" style-hover="background:var(--c-hover)" style-active="transform:scale(.99)"><span dir="auto" style="flex:0 1 auto;min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.first }}</span><span style="flex:none;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;font-variant-numeric:tabular-nums">{{ f.more }}</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;color:var(--c-ink-3);transform:none;transition:transform 240ms cubic-bezier(.2,.8,.2,1)"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+<sc-if value="{{ f.showHead }}" hint-placeholder-val="{{ false }}"><button data-teil="recipients-disclosure" data-state="expanded" onClick="{{ f.toggleAll }}" title="{{ f.tTip }}" style="appearance:none;border:0;font:inherit;flex:0 1 auto;min-width:0;height:28px;margin-left:-8px;padding:0 8px;border-radius:999px;display:flex;align-items:center;gap:8px;background:transparent;color:var(--c-ink);cursor:pointer;text-align:left" style-hover="background:var(--c-hover)" style-active="transform:scale(.99)"><span style="flex:none;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;font-variant-numeric:tabular-nums">{{ f.count }}</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;color:var(--c-ink-3);transform:rotate(180deg);transition:transform 240ms cubic-bezier(.2,.8,.2,1)"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+</div>
+<sc-if value="{{ f.hasCc }}" hint-placeholder-val="{{ false }}"><button data-teil="symbol-button" style-active="transform:scale(.96)" data-state="{{ DB.ccState }}" title="Cc und Bcc" aria-label="Cc und Bcc" onClick="{{ DB.toggleCc }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;gap:8px;background:{{ DB.ccBg }};color:{{ DB.ccFg }};cursor:pointer;box-shadow:{{ iconRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ peopleD }}"></path></svg></button></sc-if>
+</div>
+<sc-if value="{{ f.big }}" hint-placeholder-val="{{ false }}"><div data-teil="recipient-list" style="display:grid;grid-template-rows:{{ f.gRows }};opacity:{{ f.lOp }};transition:grid-template-rows 280ms cubic-bezier(.2,.8,.2,1),opacity 200ms"><div style="min-height:0;overflow:hidden"><div style="max-height:308px;overflow-x:hidden;overflow-y:auto;padding:0 8px 8px 8px;scrollbar-width:thin"><sc-for list="{{ f.people }}" as="q" hint-placeholder-count="3"><div data-teil="recipient-row" title="{{ q.full }}" onClick="{{ q.go }}" style="height:44px;display:grid;grid-template-columns:40px 24px minmax(0,1fr) 24px;column-gap:8px;align-items:center;padding:0 4px 0 8px;border-radius:4px;cursor:pointer" style-hover="background:var(--c-hover)"><span style="font-size:11.5px;color:var(--c-ink-3)">{{ q.grp }}</span><span data-teil="mark" style="flex:none;position:relative;width:24px;height:24px;box-sizing:border-box;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:500;font-family:'Geist Mono','SF Mono',ui-monospace,Menlo,monospace;letter-spacing:.06em;line-height:1;color:var(--c-ink-2);background:var(--c-lane);box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-if value="{{ q.markSym }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ personD }}"></path></svg></sc-if><sc-if value="{{ q.markText }}" hint-placeholder-val="{{ true }}">{{ q.ini }}</sc-if></span><span style="min-width:0;display:flex;flex-direction:column"><span dir="auto" style="min-width:0;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.name }}</span><sc-if value="{{ q.hasAddr }}" hint-placeholder-val="{{ true }}"><span dir="auto" style="min-width:0;font-size:11.5px;line-height:16px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.addr }}</span></sc-if></span><button data-teil="symbol-button" title="Entfernen" aria-label="Entfernen" onClick="{{ q.remove }}" style="appearance:none;border:0;padding:0;font:inherit;width:24px;height:24px;border-radius:999px;display:grid;place-items:center;gap:8px;background:transparent;color:var(--c-ink-3);cursor:pointer" style-hover="color:var(--c-ink);background:var(--c-sel)" style-active="transform:scale(.92)"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="{{ closeD }}"></path></svg></button></div></sc-for><div data-teil="recipient-input-row" style="height:36px;display:grid;grid-template-columns:40px 24px minmax(0,1fr);column-gap:8px;align-items:center;padding:0 4px 0 8px"><span></span><span style="width:24px;height:24px;box-sizing:border-box;border-radius:50%;border:1px dashed var(--c-line-strong);display:grid;place-items:center;color:var(--c-ink-3)"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 3v10M3 8h10"></path></svg></span><input value="{{ f.input }}" onChange="{{ f.onInput }}" onKeyDown="{{ f.onKey }}" placeholder="Empfänger hinzufügen" aria-label="{{ f.k }} hinzufügen" autocomplete="off" spellcheck="false" style="min-width:0;border:0;background:none;outline:none;color:inherit;font:inherit;padding:0"></input></div></div></div></div></sc-if>
+<i style="position:absolute;left:16px;right:16px;bottom:0;height:1px;background:var(--c-line)"></i>
+</div>
+</sc-for>
+<div data-teil="field-row" style="position:relative;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px">
+<span style="flex:none;width:40px;font-size:11.5px;color:var(--c-ink-3)">Betreff</span>
+<input value="{{ DB.subject }}" onChange="{{ DB.onSubject }}" placeholder="Betreff" aria-label="Betreff" spellcheck="false" style="flex:1;min-width:0;border:0;background:none;outline:none;color:inherit;font:inherit;font-weight:500;padding:0 0 0 4px"></input>
+<i style="position:absolute;left:16px;right:16px;bottom:0;height:1px;background:var(--c-line)"></i>
+</div>
+</div>
+<div data-teil="message-body" data-state="writing" style="color-scheme:light;flex:1 0 auto;min-height:192px;margin:8px;border-radius:4px;background:var(--c-sheet);color:var(--c-sheet-ink);display:flex;flex-direction:column;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',system-ui,sans-serif">
+<textarea value="{{ DB.body }}" onChange="{{ DB.onBody }}" aria-label="Text" spellcheck="false" style="flex:1;min-height:120px;resize:none;border:0;outline:none;background:transparent;color:inherit;padding:16px 8px 8px;font:13px/1.6 -apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',system-ui,sans-serif;user-select:text"></textarea>
+<div data-teil="mail-signature" style="color-scheme:light;flex:none;padding:8px 8px 16px;display:flex;flex-direction:column;gap:2px;font-size:13px;line-height:1.35;color:var(--c-sheet-ink-3)">
+<i style="display:block;width:24px;height:1px;background:var(--c-sheet-line-strong);margin-bottom:8px"></i>
+<span style="color:var(--c-sheet-ink);font-weight:500">Jonas Brenner</span>
+<span>Studio Brenner · Innenarchitektur und Möbel</span>
+</div>
+</div>
+<sc-if value="{{ DB.hasAtt }}" hint-placeholder-val="{{ false }}">
+<div style="flex:none;display:flex;gap:8px;padding:0 16px 8px;overflow:hidden">
+<sc-for list="{{ DB.att }}" as="a" hint-placeholder-count="1"><span data-teil="attachment-chip" title="{{ a.n }}" style="flex:0 1 auto;min-width:0;height:24px;display:flex;align-items:center;gap:8px;padding:0 4px 0 8px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong);font-size:11.5px;color:var(--c-ink-2)"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ docD }}"></path></svg><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.n }}</span><span style="color:var(--c-ink-3)">{{ a.s }}</span><button data-teil="chip-remove" title="Entfernen" aria-label="Entfernen" onClick="{{ a.remove }}" style="appearance:none;border:0;padding:0;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="{{ closeD }}"></path></svg></button></span></sc-for>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{ DB.fmt }}" hint-placeholder-val="{{ false }}">
+<div data-teil="formatting-bar" style="position:relative;height:44px;display:flex;align-items:center;gap:4px;padding:0 8px;border-top:1px solid var(--c-line)">
+<sc-for list="{{ DB.fmtItems }}" as="x" hint-placeholder-count="6"><button data-teil="symbol-button" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;gap:8px;background:transparent;color:var(--c-ink-2);cursor:pointer;box-shadow:{{ iconRing }}" style-hover="background:var(--c-hover)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.isSet }}" hint-placeholder-val="{{ false }}">
+<div data-teil="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;display:flex;flex-direction:column;padding:4px 0 8px;scrollbar-width:thin">
+<sc-for list="{{ SB.blocks }}" as="b" hint-placeholder-count="5">
+<sc-if value="{{ b.isHead }}" hint-placeholder-val="{{ false }}"><div data-teil="list-section-header" style="flex:none;height:36px;display:flex;align-items:flex-end;padding:0 16px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isNote }}" hint-placeholder-val="{{ false }}"><div style="flex:none;padding:8px 16px;font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isNotice }}" hint-placeholder-val="{{ false }}">
+<div data-teil="card-notice" data-state="{{ b.kind }}" style="flex:none;display:flex;gap:20px;margin:4px 8px;padding:8px;border-radius:8px;background:var(--c-well)">
+<span style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ b.fg }};box-shadow:inset 0 0 0 1px {{ b.fg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ b.d }}"></path></svg></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;padding-top:4px;line-height:20px"><span style="font-weight:500;text-wrap:pretty">{{ b.title }}</span><span style="color:var(--c-ink-3);text-wrap:pretty">{{ b.text }}</span>
+<sc-if value="{{ b.hasBtns }}" hint-placeholder-val="{{ false }}"><span style="display:flex;gap:8px;margin-top:8px"><sc-for list="{{ b.btns }}" as="x" hint-placeholder-count="1"><button data-teil="text-button" style-active="transform:scale(.96)" data-state="{{ x.state }}" onClick="{{ x.go }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;white-space:nowrap">{{ x.label }}</button></sc-for></span></sc-if>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ b.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-teil="field-row" data-state="{{ b.state }}" style="position:relative;flex:none;min-height:44px;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 16px;box-sizing:border-box">
+<div style="flex:1 1 0;min-width:96px;display:flex;flex-direction:column">
+<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.label }}</span>
+<sc-if value="{{ b.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty;font-variant-numeric:tabular-nums">{{ b.sub }}</span></sc-if>
+</div>
+<sc-if value="{{ b.hasCs }}" hint-placeholder-val="{{ false }}">
+<span data-teil="connection-status" data-state="{{ b.cs.state }}" style="flex:none;display:flex;align-items:center;gap:8px;font-size:11.5px;color:{{ b.cs.fg }};white-space:nowrap">
+<span style="position:relative;flex:none;width:8px;height:8px;border-radius:50%;box-sizing:border-box;background:{{ b.cs.fill }};border:{{ b.cs.border }}"><sc-if value="{{ b.cs.spin }}" hint-placeholder-val="{{ false }}"><svg data-spin="1" width="14" height="14" viewBox="0 0 14 14" style="position:absolute;left:-4px;top:-4px"><circle cx="7" cy="7" r="6" fill="none" stroke="currentColor" stroke-width="1.3" pathLength="1" stroke-dasharray=".3 .7" stroke-linecap="round"></circle></svg></sc-if></span>
+<span>{{ b.cs.text }}</span>
+</span>
+</sc-if>
+<sc-if value="{{ b.hasVal }}" hint-placeholder-val="{{ false }}"><span style="flex:0 1 auto;min-width:0;max-width:60%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:{{ b.vFg }};font-family:{{ b.vFont }};font-size:{{ b.vSize }}">{{ b.val }}</span></sc-if>
+<sc-if value="{{ b.hasKeys }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:4px"><sc-for list="{{ b.keys }}" as="k" hint-placeholder-count="2"><kbd style="min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:4px;display:inline-grid;place-items:center;font:500 11.5px/1 inherit;color:var(--c-ink-2);box-shadow:inset 0 0 0 1px var(--c-line-strong)">{{ k.k }}</kbd></sc-for></span></sc-if>
+<sc-if value="{{ b.hasPill }}" hint-placeholder-val="{{ false }}"><button data-teil="choice" onClick="{{ b.pillGo }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap">{{ b.pill }}<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+<sc-if value="{{ b.hasSeg }}" hint-placeholder-val="{{ false }}"><div data-teil="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ b.seg }}" as="o" hint-placeholder-count="3"><button data-teil="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap">{{ o.n }}</button></sc-for></div></sc-if>
+<sc-if value="{{ b.hasToggle }}" hint-placeholder-val="{{ false }}"><button data-teil="toggle" data-state="{{ b.tState }}" aria-label="{{ b.label }}" onClick="{{ b.toggle }}" style="appearance:none;border:0;padding:0;flex:none;position:relative;width:32px;height:20px;border-radius:999px;background:{{ b.tBg }};box-shadow:{{ b.tRing }};cursor:pointer;transition:background 200ms"><i style="position:absolute;top:2px;left:{{ b.tX }};width:16px;height:16px;border-radius:50%;background:{{ b.kBg }};transition:left 200ms cubic-bezier(.2,.8,.2,1)"></i></button></sc-if>
+<sc-if value="{{ b.hasBtns }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:8px"><sc-for list="{{ b.btns }}" as="x" hint-placeholder-count="1"><button data-teil="text-button" style-active="transform:scale(.96)" data-state="{{ x.state }}" onClick="{{ x.go }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;opacity:{{ x.op }};white-space:nowrap">{{ x.label }}</button></sc-for></span></sc-if>
+<sc-if value="{{ b.line }}" hint-placeholder-val="{{ true }}"><i style="position:absolute;left:16px;right:16px;bottom:0;height:1px;background:var(--c-line)"></i></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+</sc-if>
+</article>
+</sc-for>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div data-teil="toast" style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:40;height:28px;padding:0 12px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;font-size:11.5px;white-space:nowrap;box-shadow:var(--sh-float);gap:12px"><span>{{ toast }}</span><sc-if value="{{ hasUndo }}" hint-placeholder-val="{{ false }}"><button data-teil="text-button" style-active="transform:scale(.96)" onClick="{{ undo }}" style="appearance:none;border:0;height:20px;margin-right:-8px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;font-weight:500;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px currentColor;cursor:pointer">Rückgängig</button></sc-if></div></sc-if>
+</div>
+</sc-if>
+</section>
+</sc-for>
+</sc-if>
+<sc-for list="{{ grips }}" as="g" hint-placeholder-count="2">
+<div data-teil="handle" data-state="{{ g.state }}" role="separator" aria-orientation="vertical" aria-label="{{ g.label }}" title="Ziehen · Doppelklick setzt zurück" tabindex="0" onPointerDown="{{ g.down }}" onDoubleClick="{{ g.reset }}" onKeyDown="{{ g.key }}" onPointerEnter="{{ g.enter }}" onPointerLeave="{{ g.leave }}" style="position:absolute;left:{{ g.left }};top:{{ laneTop }};width:12px;height:{{ laneH }};display:grid;place-items:center;cursor:col-resize;touch-action:none;outline:none;z-index:2;transition:{{ laneTrans }}">
+<i style="display:block;width:{{ g.w }};height:{{ g.h }};border-radius:2px;background:{{ g.bg }};box-shadow:{{ g.ring }};transition:height 150ms cubic-bezier(.2,.8,.2,1),width 150ms,background 150ms"></i>
+<sc-if value="{{ g.showValue }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:12px;left:50%;transform:translateX(-50%);height:24px;padding:0 12px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);font-size:11.5px;font-variant-numeric:tabular-nums;display:flex;align-items:center;white-space:nowrap">{{ g.value }}</span></sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ kachelSet }}" hint-placeholder-val="{{ false }}"><div data-teil="settings-tiles" style="position:absolute;inset:0;z-index:1"><dc-import name="ALFA Einstellungen Inhalt" ohne-huelle="{{ true }}" mitte="Kacheln" breite="{{ kW }}" hoehe="{{ kH }}" bahnen="{{ kBahnen }}" bahn-oben="{{ kTop }}" licht="{{ licht }}" nutzung="{{ nutzung }}" abschnitt="{{ kAbschnitt }}" look="{{ kLook }}" on-look="{{ kLookGo }}" on-toast="{{ kToast }}" hint-size="100%,100%"></dc-import></div></sc-if>
+
+<sc-if value="{{ hasToastS }}" hint-placeholder-val="{{ false }}"><div data-teil="toast" style="position:absolute;left:{{ toastX }};top:{{ toastY }};transform:translateX(-50%);z-index:40;height:28px;padding:0 12px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;font-size:11.5px;white-space:nowrap;box-shadow:var(--sh-float);gap:12px"><span>{{ toast }}</span><sc-if value="{{ hasUndo }}" hint-placeholder-val="{{ false }}"><button data-teil="text-button" style-active="transform:scale(.96)" onClick="{{ undo }}" style="appearance:none;border:0;height:20px;margin-right:-8px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;font-weight:500;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px currentColor;cursor:pointer">Rückgängig</button></sc-if></div></sc-if>
+<button data-teil="sync-button" data-state="{{ syncState }}" onClick="{{ sync }}" title="{{ syncTitle }}" aria-label="{{ syncTitle }}" style="position:absolute;right:16px;top:{{ blobTop }};z-index:9;width:56px;height:40px;border:0;padding:0 6px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;justify-content:flex-end;cursor:pointer;box-shadow:var(--sh-float);z-index:9">
+<span style="position:relative;width:28px;height:28px;display:grid;place-items:center;font-family:'Geist Mono',ui-monospace,Menlo,monospace;font-size:9px;font-weight:500;letter-spacing:.08em">{{ meIni }}
+<svg ref="{{ arcRef }}" width="28" height="28" viewBox="0 0 28 28" style="position:absolute;inset:0;transform:rotate(-90deg)"><circle cx="14" cy="14" r="13.5" fill="none" stroke="currentColor" stroke-opacity=".3" stroke-width="1"></circle><circle cx="14" cy="14" r="13.5" fill="none" stroke="{{ arcColor }}" stroke-width="1" pathLength="1" stroke-dasharray="{{ arcDash }}"></circle></svg>
+</span>
+<sc-if value="{{ syncErr }}" hint-placeholder-val="{{ false }}"><i style="position:absolute;top:6px;left:12px;width:6px;height:6px;border-radius:50%;background:var(--c-signal)"></i></sc-if>
+</button>
+
+<div ref="{{ blobRef }}" data-teil="blob" data-state="{{ blobState }}" onPointerDown="{{ down }}" onPointerEnter="{{ enter }}" onPointerLeave="{{ leave }}" style="position:absolute;left:{{ bL }};right:{{ bR }};top:{{ bT }};bottom:{{ bB }};width:{{ bW }};z-index:10;display:flex;flex-direction:{{ bDir }};background:var(--c-inv);color:var(--c-on-inv);border-radius:{{ bRad }};box-shadow:var(--sh-float);transition:{{ bTrans }};cursor:{{ bCursor }};touch-action:none">
+<div data-teil="blob-face" onClick="{{ click }}" onDoubleClick="{{ dbl }}" title="Klick: Bereiche · Doppelklick: Assistent" style="position:relative;flex:none;height:40px;display:flex;align-items:center;padding:0 6px;justify-content:{{ headJustify }}">
+<span style="flex:none;width:28px;height:28px;box-sizing:border-box;border-radius:50%;border:1px solid {{ ringColor }};display:flex;align-items:center;justify-content:center">
+<span ref="{{ eyesRef }}" style="display:flex"><span ref="{{ lidsRef }}" style="display:flex;gap:3.5px;transform:{{ lids }};transition:transform 320ms cubic-bezier(.2,.8,.2,1)"><i style="display:block;width:3.5px;height:7px;border-radius:2px;background:currentColor"></i><i style="display:block;width:3.5px;height:7px;border-radius:2px;background:currentColor"></i></span></span>
+</span>
+<span style="font-weight:500;white-space:nowrap;overflow:hidden;opacity:{{ labelOp }};max-width:{{ labelMax }};margin-left:{{ labelGap }};transition:opacity 200ms cubic-bezier(.2,.8,.2,1) 80ms,max-width 240ms cubic-bezier(.2,.8,.2,1)">{{ area }}</span>
+<sc-if value="{{ showFind }}" hint-placeholder-val="{{ false }}">
+<span data-teil="search-field" onClick="{{ stop }}" style="position:relative;flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:28px;margin:0 16px 0 8px">
+<i ref="{{ tapeRef }}" data-teil="search-tape" style="position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform-origin:100% 50%"></i>
+<input ref="{{ findRef }}" value="{{ q }}" onChange="{{ onQ }}" onKeyDown="{{ findKey }}" placeholder="Finden" aria-label="Finden" autocomplete="off" spellcheck="false" style="flex:1;min-width:0;border:0;background:none;outline:none;color:inherit;font:inherit;padding:0"></input>
+<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" style="flex:none;opacity:.8"><path d="{{ searchD }}"></path></svg>
+</span>
+</sc-if>
+<sc-if value="{{ showDot }}" hint-placeholder-val="{{ true }}"><span ref="{{ dotRef }}" data-teil="notice" style="position:absolute;top:8px;right:8px;width:4px;height:4px;border-radius:50%;background:currentColor"></span></sc-if>
+</div>
+<sc-if value="{{ isMenu }}" hint-placeholder-val="{{ false }}">
+<div data-teil="menu" onMouseLeave="{{ rowsLeave }}" style="display:flex;flex-direction:column;padding:0 8px 8px;max-height:{{ bodyMax }};overflow-x:hidden;overflow-y:auto;scrollbar-width:none">
+<div style="flex:none;height:1px;margin:0 12px 8px;background:var(--c-inv-line)"></div>
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="3">
+<div style="position:relative;flex:none;opacity:{{ r.op }};transform:{{ r.tf }};transform-origin:{{ reelOrigin }};transition:{{ r.tr }}">
+<sc-if value="{{ r.isSep }}" hint-placeholder-val="{{ false }}"><div style="height:1px;margin:4px 12px;background:var(--c-inv-line)"></div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-teil="menu-row" data-state="{{ r.state }}" onPointerEnter="{{ r.aim }}" onClick="{{ r.go }}" style="height:28px;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:12px;cursor:pointer;background:{{ r.bg }};font-weight:{{ r.weight }}">
+<span style="flex:1;white-space:nowrap">{{ r.name }}</span>
+<sc-if value="{{ r.hasN }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;font-variant-numeric:tabular-nums;opacity:.6">{{ r.n }}</span></sc-if>
+</div>
+</sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ noHit }}" hint-placeholder-val="{{ false }}"><div style="height:28px;display:flex;align-items:center;padding:0 12px;opacity:.6">Nichts gefunden</div></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ isAssist }}" hint-placeholder-val="{{ false }}">
+<div data-teil="assistant" style="display:flex;flex-direction:column;gap:12px;padding:0 8px 8px">
+<div style="height:1px;margin:0 12px;background:var(--c-inv-line)"></div>
+<div style="display:flex;align-items:center;gap:8px;padding:0 12px"><span ref="{{ orbRef }}" data-teil="thinking-orb" style="position:relative;flex:none;width:20px;height:20px;border-radius:50%;overflow:hidden;isolation:isolate;background:var(--c-orb);box-shadow:inset 0 0 0 1px var(--c-orb-rim)"><i style="position:absolute;left:50%;top:50%;width:58%;height:58%;margin:-29% 0 0 -29%;border-radius:50%;filter:blur(2.4px);mix-blend-mode:screen;background:var(--m-coral)"></i><i style="position:absolute;left:50%;top:50%;width:58%;height:58%;margin:-29% 0 0 -29%;border-radius:50%;filter:blur(2.4px);mix-blend-mode:screen;background:var(--m-apricot)"></i><i style="position:absolute;left:50%;top:50%;width:58%;height:58%;margin:-29% 0 0 -29%;border-radius:50%;filter:blur(2.4px);mix-blend-mode:screen;background:var(--m-rose)"></i><b style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 28%,var(--c-orb-gloss),transparent 45%)"></b></span><span style="font-weight:500">Assistent</span></div>
+<div style="padding:0 12px;opacity:.6;text-wrap:pretty">{{ assistText }}</div>
+<div data-teil="assistant-input" style="height:40px;display:flex;align-items:center;padding:0 12px;border-radius:12px;background:var(--c-inv-field);opacity:.8">Frage stellen …</div>
+</div>
+</sc-if>
+</div>
+
+<sc-if value="{{ hasMenu }}" hint-placeholder-val="{{ false }}">
+<div data-teil="anchored-menu" onPointerDown="{{ stop }}" style="position:absolute;left:{{ menu.x }};top:{{ menu.y }};width:{{ menu.w }};padding:4px;box-sizing:border-box;border-radius:16px;background:var(--c-menu);color:var(--c-ink);box-shadow:var(--sh-float);z-index:50;display:flex;flex-direction:column">
+<sc-for list="{{ menu.items }}" as="it" hint-placeholder-count="3">
+<sc-if value="{{ it.sep }}" hint-placeholder-val="{{ false }}"><div style="height:1px;margin:4px 8px;background:var(--c-line)"></div></sc-if>
+<sc-if value="{{ it.head }}" hint-placeholder-val="{{ false }}"><div style="height:24px;display:flex;align-items:flex-end;padding:0 8px 4px;font-size:11.5px;color:var(--c-ink-3)">{{ it.label }}</div></sc-if>
+<sc-if value="{{ it.item }}" hint-placeholder-val="{{ true }}"><div data-teil="menu-row" onClick="{{ it.go }}" style="height:28px;display:flex;align-items:center;gap:8px;padding:0 8px;border-radius:8px;cursor:pointer;color:{{ it.fg }};white-space:nowrap" style-hover="background:var(--c-hover)"><span style="flex:none;width:12px;font-size:11.5px">{{ it.check }}</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">{{ it.label }}</span><span style="flex:none;font-size:11.5px;color:var(--c-ink-3)">{{ it.meta }}</span></div></sc-if>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;oberflaeche&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Lack&quot;,&quot;Glas&quot;,&quot;flach&quot;],&quot;default&quot;:&quot;Lack&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;bereich&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Mail&quot;,&quot;Einstellungen&quot;],&quot;default&quot;:&quot;Mail&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;licht&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hell&quot;,&quot;dunkel&quot;],&quot;default&quot;:&quot;hell&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;grund&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hellgrau&quot;,&quot;weiß&quot;],&quot;default&quot;:&quot;weiß&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;schrift&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;System&quot;,&quot;Geist&quot;],&quot;default&quot;:&quot;Geist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;mail&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;geladen&quot;,&quot;lädt&quot;,&quot;leer&quot;,&quot;keine Treffer&quot;,&quot;Fehler&quot;,&quot;nicht verbunden&quot;,&quot;nicht erreichbar&quot;],&quot;default&quot;:&quot;geladen&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Mail&quot;},&quot;vorne&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Lesen&quot;,&quot;Entwurf&quot;,&quot;Ohne Namen&quot;],&quot;default&quot;:&quot;Lesen&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Mail&quot;},&quot;empfaenger&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;zu&quot;,&quot;offen&quot;],&quot;default&quot;:&quot;zu&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Mail&quot;},&quot;entwurf&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;offen&quot;,&quot;gesichert&quot;,&quot;sendet&quot;,&quot;Sendefehler&quot;,&quot;Freigabe fehlt&quot;,&quot;ohne Betreff&quot;],&quot;default&quot;:&quot;offen&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Mail&quot;},&quot;einstellung&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Integrationen&quot;,&quot;Person&quot;,&quot;Ansicht&quot;,&quot;System&quot;],&quot;default&quot;:&quot;Integrationen&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Einstellungen&quot;},&quot;dienste&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;gemischt&quot;,&quot;Erststart&quot;],&quot;default&quot;:&quot;gemischt&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Einstellungen&quot;},&quot;markiere&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;daten&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Demo&quot;,&quot;Schlimmster Fall&quot;,&quot;Eine&quot;,&quot;1.284&quot;],&quot;default&quot;:&quot;Demo&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Crashtest&quot;},&quot;stapel&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;8a gestaffelt&quot;,&quot;8b Turm&quot;],&quot;default&quot;:&quot;8a gestaffelt&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Teile&quot;},&quot;griff&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Haarlinie&quot;,&quot;fein&quot;,&quot;grau&quot;],&quot;default&quot;:&quot;Haarlinie&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Teile&quot;},&quot;symbole&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Ring&quot;,&quot;frei&quot;],&quot;default&quot;:&quot;Ring&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Teile&quot;}}">
+class Component extends DCLogic {
+  P = {
+    search: "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5", filter: "M2.5 3.5h11l-4.25 5v4.5l-2.5-1.25V8.5Z",
+    compose: "M11 2.5l2.5 2.5L6 12.5H3.5V10ZM9.5 4l2.5 2.5", inbox: "M2.5 9.5l1.5-6h8l1.5 6v3.5h-11ZM2.5 9.5h3l1 1.5h3l1-1.5h3",
+    flag: "M4 14V2.5M4 3h7.5l-1.5 2.75L11.5 8.5H4", sent: "M14 2L7 9M14 2l-4.5 12-2.5-5-5-2.5Z", allMail: "M2.5 6.5h11v6h-11ZM4 4.5h8M5.5 2.5h5",
+    archive: "M2.5 3.5h11v3h-11ZM3.5 6.5v6h9v-6M6.5 9h3", junk: "M5.5 2.5h5l3 3v5l-3 3h-5l-3-3v-5ZM8 5.5v3M8 10.75v.5",
+    trash: "M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9", tag: "M2.5 2.5h5.5l5.5 5.5-5.5 5.5-5.5-5.5ZM5.5 5.25v.5",
+    reply: "M6.5 4L2.5 8l4 4M2.5 8h7a4 4 0 0 1 4 4v.5", replyAll: "M9 4L5 8l4 4M5 8h4.5a4 4 0 0 1 4 4v.5M5.5 4l-4 4 4 4",
+    forward: "M9.5 4l4 4-4 4M13.5 8h-7a4 4 0 0 0-4 4v.5", fan: "M4.5 5.5h7v8h-7ZM5.5 3.5h5M6.5 1.5h3", send: "M8 13V3.5M4 7.5l4-4 4 4",
+    close: "M4.5 4.5l7 7M11.5 4.5l-7 7", pin: "M8 10.5V14.5M5 10.5h6M5.75 10.5l.75-5h3l.75 5M6 2.5h4", more: "M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM13 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z",
+    attach: "M12.5 7.5l-4.75 4.75a3 3 0 0 1-4.25-4.25L8.5 3a2 2 0 0 1 2.83 2.83L6.5 10.66a1 1 0 0 1-1.41-1.41L9.5 4.83",
+    folder: "M2.5 4.5h4l1.5 1.5h5.5v6.5h-11Z", person: "M8 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM3 13.5c.5-2.75 2.5-4 5-4s4.5 1.25 5 4",
+    personAdd: "M6.5 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM2 13.5c.5-2.5 2.25-3.75 4.5-3.75s4 1.25 4.5 3.75M12.5 4.5v4M10.5 6.5h4",
+    people: "M6 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM2.5 12.5c.4-2 1.75-3 3.5-3s3.1 1 3.5 3M10.5 7a2 2 0 1 0 0-4M11.5 9.6c1.2.3 2 1.2 2.25 2.9",
+    bold: "M5 3h3.5a2.5 2.5 0 0 1 0 5H5ZM5 8h4a2.5 2.5 0 0 1 0 5H5Z", italic: "M7 3h5M4 13h5M10 3L6 13", underline: "M4.5 2.5v5a3.5 3.5 0 0 0 7 0v-5M3.5 13.5h9",
+    list: "M6 4.5h7.5M6 8h7.5M6 11.5h7.5M2.5 4.5h1M2.5 8h1M2.5 11.5h1", numbered: "M6.5 4.5h7M6.5 8h7M6.5 11.5h7M2.5 3.5l1-.5v3",
+    link: "M7 9a2.5 2.5 0 0 0 3.5 0l2-2A2.5 2.5 0 0 0 9 3.5l-.7.7M9 7a2.5 2.5 0 0 0-3.5 0l-2 2A2.5 2.5 0 0 0 7 12.5l.7-.7",
+    textSize: "M2 12.5l3-8 3 8M3 10h4M10.5 12.5V9.5a1.75 1.75 0 0 1 3.5 0v3M10.5 11h3.5", save: "M8 2.5v7M5 6.5l3 3 3-3M2.5 10.5v3h11v-3",
+    expand: "M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5L9 7M2.5 13.5L7 9", shrink: "M13.5 2.5L10 6M10 3v3h3M2.5 13.5L6 10M6 13v-3H3", minus: "M4 8h8",
+    chevron: "M4.5 6.5L8 10l3.5-3.5", lock: "M4.5 7.5h7v6h-7ZM6 7.5V5.5a2 2 0 0 1 4 0v2", plug: "M5.5 2.5v3M10.5 2.5v3M4 5.5h8v2.5a4 4 0 0 1-8 0ZM8 12v1.5",
+    contrast: "M8 13.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM8 2.5v11",
+    system: "M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4",
+    envelope: "M2.5 4h11v8h-11ZM2.5 4.5L8 9l5.5-4.5", doc: "M4 2h5l3 3v9H4ZM9 2v3h3", alert: "M8 2.5l6 11H2ZM8 6.5v3M8 11.5v.25", key: "M5.5 10.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM8.5 7.5h5v2M11.5 7.5v2"
+  };
+  K = { m: 16, gap: 12, bh: 40, bw: 56, awake: 124, dock: 36, menu: 216, pop: 320, fold: 56, foldAt: 112, center: 480 };
+  AREA = { Mail: { L: [280], R: [560], min: [224, 280, 400], yield: [0, 1, 2] }, Einstellungen: { L: [280], R: [560], min: [224, 280, 400], yield: [0, 1, 2] } };
+  GROUPS = [["Kommunikation", [["Mail", ["Eingang", "Entwürfe", "Gesendet"]]]], ["Kern", [["Einstellungen", ["Integrationen", "Person", "Ansicht", "System"]]]]];
+  FOLDERS = [["inbox", "Eingang", "inbox"], ["starred", "Markiert", "flag"], ["sent", "Gesendet", "sent"], ["drafts", "Entwürfe", "compose"], ["all", "Alle", "allMail"], ["archive", "Archiv", "archive"], ["spam", "Spam", "junk"], ["trash", "Papierkorb", "trash"]];
+  LABELS = [["l1", "Küche Hansen"], ["l2", "Wohnung Vogt"], ["l3", "Praxis Kern"], ["l4", "Lieferanten"]];
+  CATS = [["Integrationen", "plug"], ["Person", "person"], ["Ansicht", "contrast"], ["System", "system"]];
+  ME = ["Jonas Brenner", "jonas@studio-brenner.de"];
+  SVC = [
+    { id: "google", n: "Google", g: "Persönlich", use: "Mail, Dateien, Kalender, Kontakte", access: "Anmeldung im Browser", checks: true, fields: [], areas: [["Mail", "vor 4 Minuten", "Alle 5 Minuten"], ["Kontakte", "vor 1 Stunde", "Jede Stunde"], ["Dateien", "vor 12 Minuten", "Alle 15 Minuten"]], extras: [["Drive-Ordner der Projekte", "Jetzt abgleichen"]], note: "Liest und schreibt Mail, Dateien, Kalender und Kontakte. Die Anmeldung über Google ist zugleich der Eingang in die App.", mixed: "connected" },
+    { id: "mailkonten", n: "Mail-Konten", g: "Persönlich", use: "Weitere Postfächer über IMAP und SMTP", access: "Benutzer und Passwort", fields: [], mixed: "notConnected", accounts: true },
+    { id: "clickup", n: "ClickUp", g: "Persönlich", use: "Aufgaben", access: "Schlüssel", fields: [["Zugriffsschlüssel", "secret"]], areas: [["Phasen", "Noch nicht abgeglichen", "Manuell"], ["Aufgabenfelder", "Noch nicht abgeglichen", "Manuell"]], mixed: "connecting" },
+    { id: "clockodo", n: "Clockodo", g: "Persönlich", use: "Zeiten", access: "E-Mail und Schlüssel", privat: true, fields: [["E-Mail", "jonas@studio-brenner.de"], ["Schlüssel", "secret"], ["Clockodo-Nutzer", "10482"]], mixed: "working" },
+    { id: "claude", n: "Claude", g: "Persönlich", use: "Assistent", access: "Schlüssel", fields: [["Schlüssel", "secret"], ["Modell", "Standard"]], mixed: "failed", reason: "Schlüssel abgelehnt (401)" },
+    { id: "airtable", n: "Airtable", g: "Firma", use: "Projekte und Kunden", access: "Schlüssel", firma: true, fields: [["Base", "appR3x9Lm27Kq"], ["Zugriffsschlüssel", "secret"]], areas: [["Projekte", "vor 2 Stunden", "Manuell"]], extras: [["Zwischenspeicher", "Leeren"]], mixed: "stored" },
+    { id: "sevdesk", n: "sevDesk", g: "Firma", use: "Belege und Angebote", access: "Schlüssel", firma: true, fields: [["Zugriffsschlüssel", "empty"]], mixed: "notConnected" },
+    { id: "dhl", n: "DHL Sendungen", g: "Firma", use: "Sendungen verfolgen", access: "Schlüssel", firma: true, fields: [["Schlüssel", "secret"]], mixed: "stored" },
+    { id: "dhlversand", n: "DHL Versand", g: "Firma", use: "Etiketten erstellen", access: "Schlüssel", firma: true, fields: [["Schlüssel", "secret"]], mixed: "unreadable" },
+    { id: "happa", n: "Happa Happa", g: "Firma", use: "Speiseplan", access: "Schlüssel", firma: true, fields: [["Schlüssel", "secret"]], mixed: "orphaned" }
+  ];
+  SET = {
+    profil: ["Identität", "Name, Rolle, Kürzel im Team", "Jonas Brenner"], signatur: ["Signatur", "Unter jeder Mail, je Konto", ""], datenschutz: ["Datenschutz", "Was die App lädt und teilt", ""],
+    darstellung: ["Darstellung", "Hell, Dunkel oder wie das System", ""], start: ["Startansicht", "Was die App beim Öffnen zeigt", "Mail"], sperre: ["App-Sperre", "Sperrt auch nach einer Pause", ""],
+    mitteilungen: ["Mitteilungen", "Kehren mit ihren Bereichen zurück", ""], kuerzel: ["Tastenkürzel", "Global anpassbar", "13"],
+    einrichtung: ["Einrichtung", "Ordner, Dienste, Vorlagen", "4 von 7"], diagnose: ["Diagnose", "Version, Build, Datenbank", "0.4.2"], backups: ["Backups", "Sichern und wiederherstellen", "Heute, 09:00"],
+    tagebuch: ["Tagebuch des Assistenten", "Nur lesen", ""], werkstatt: ["Werkstattfaktoren", "Zuschläge der Werkstatt", ""], schluessel: ["Schlüssel-Inventar", "Nur Zustand, keine Werte", "9"]
+  };
+  CATSET = { Person: ["profil", "signatur", "datenschutz"], Ansicht: ["darstellung", "start", "sperre", "mitteilungen", "kuerzel"], System: ["einrichtung", "diagnose", "backups", "tagebuch", "werkstatt", "schluessel"] };
+  LEVELS = {
+    grau: { hell: [["#f5f5f5", "#171717"], ["#ebebeb", "#171717"], ["#d9d9d9", "#171717"], ["#a3a3a3", "#171717"], ["#6b6b6b", "#ffffff"]], dunkel: [["#1f1f1f", "#fafafa"], ["#2e2e2e", "#fafafa"], ["#3a3a3a", "#fafafa"], ["#4d4d4d", "#fafafa"], ["#6b6b6b", "#fafafa"]] }
+  };
+
+  seedMsgs() {
+    const att = (...a) => a;
+    return [
+      { id: "m1", folder: "inbox", from: "Lena Hansen", addr: "lena.hansen@posteo.de", ini: "LH", date: "10:41", sub: "Re: Fronten Küche – Muster Eiche geölt", pre: "Hallo Jonas, danke für die Muster. Wir tendieren zur geölten Eiche, die hellere Variante wirkt im Raum ruhiger. Können wir die Griffleiste noch einmal besprechen?", unread: true, star: true, label: "l1", cc: [["Tom Hansen", "tom.hansen@posteo.de"]], att: att(["Fronten_Muster_03.jpg", "2,4 MB"], ["Grundriss_EG_v4.pdf", "860 KB"]),
+        thread: [
+          ["Jonas Brenner", "8. Okt., 16:20", "Hallo Lena,\n\nanbei drei Muster für die Fronten: Eiche geölt hell, Eiche geölt natur und Esche weiß pigmentiert. Am besten bei Tageslicht ansehen, die Unterschiede sind dann deutlicher.\n\nViele Grüße\nJonas"],
+          ["Lena Hansen", "10. Okt., 09:12", "Danke! Wir schauen am Wochenende in Ruhe."],
+          ["Lena Hansen", "Heute, 10:41", "Hallo Jonas,\n\ndanke für die Muster. Wir tendieren zur geölten Eiche, die hellere Variante wirkt im Raum ruhiger. Können wir die Griffleiste noch einmal besprechen? Tom fände eine durchgehende Leiste schöner als einzelne Griffe.\n\nDonnerstag oder Freitag Vormittag würde uns passen.\n\nLiebe Grüße\nLena", "Am 8. Okt. schrieb Jonas Brenner:\n› Hallo Lena,\n› anbei drei Muster für die Fronten: Eiche geölt hell,\n› Eiche geölt natur und Esche weiß pigmentiert.\n› Am besten bei Tageslicht ansehen …\n› Viele Grüße, Jonas", true]
+        ] },
+      { id: "m2", folder: "inbox", from: "Kai Lindner", addr: "kai@werkhaus-lindner.de", ini: "KL", date: "10:05", sub: "Angebot Einbauschrank Flur, Fassung 3", pre: "Anbei die überarbeitete Fassung mit den geänderten Korpusmaßen. Die Lieferzeit bleibt bei sechs Wochen ab Freigabe.", unread: true, label: "l2", att: att(["Angebot_Flur_F3.pdf", "312 KB"]) },
+      { id: "m3", folder: "inbox", from: "Mara Vogt", addr: "mara.vogt@posteo.de", ini: "MV", date: "08:52", sub: "Aufmaß Flur – Donnerstag?", pre: "Passt Donnerstag um 10 Uhr? Der Hausmeister ist ab 9 Uhr da und kann aufschließen.", unread: true, label: "l2" },
+      { id: "m4", folder: "inbox", from: "Steinbach Leuchten", addr: "vertrieb@steinbach-leuchten.de", ini: "SL", date: "07:30", sub: "Lieferstatus Bestellung 48817", pre: "Ihre Bestellung wurde heute an die Spedition übergeben. Die Zustellung ist für Mittwoch geplant.", label: "l4", att: att(["Lieferschein_48817.pdf", "96 KB"]) },
+      { id: "m5", folder: "inbox", from: "Paul Kern", addr: "p.kern@praxis-kern.de", ini: "PK", date: "Gestern", sub: "Praxis Kern: Farbe Empfang", pre: "Wir haben uns die drei Vorschläge angesehen. Variante B gefällt allen am besten, nur das Grün am Tresen ist uns noch zu kräftig.", n: 5, label: "l3" },
+      { id: "m6", folder: "inbox", from: "Ida Roth", addr: "ida@studio-brenner.de", ini: "IR", date: "Gestern", sub: "Zeiten September abgeschlossen", pre: "Die Zeiten für September sind gebucht. Bei Küche Hansen fehlen noch zwei Tage Werkplanung." },
+      { id: "m7", folder: "inbox", from: "Nordlicht Stoffe", addr: "post@nordlicht-stoffe.de", ini: "NS", date: "Montag", sub: "Musterbuch Herbst 2026", pre: "Neue Leinenqualitäten in zwölf Farben und ein Bezugsstoff für stark beanspruchte Sitzmöbel.", html: true },
+      { id: "m8", folder: "inbox", from: "Ole Petersen", addr: "o.petersen@elektro-petersen.de", ini: "OP", date: "Donnerstag", sub: "Leitungsplan Küche Hansen – Korrektur der Steckdosenhöhen an der Arbeitsplatte und Ergänzung Dunstabzug", pre: "Wie besprochen die korrigierte Fassung. Steckdosen über der Arbeitsplatte jetzt auf 1,15 m, der Anschluss für den Dunstabzug sitzt neu in der Decke.", label: "l1", att: att(["Leitungsplan_v2.pdf", "1,1 MB"], ["Detail_A.pdf", "220 KB"], ["Detail_B.pdf", "240 KB"], ["Fotos_Bestand.zip", "18 MB"], ["Stückliste.xlsx", "40 KB"]) },
+      { id: "m9", folder: "inbox", from: "Lena Hansen", addr: "lena.hansen@posteo.de", ini: "LH", date: "7. Okt.", sub: "Grundriss EG, Fassung 4", pre: "Hier noch der Grundriss mit den Maßen vom Wochenende.", label: "l1", att: att(["Grundriss_EG_v4.pdf", "860 KB"]) },
+      { id: "s1", folder: "sent", from: "An Lena Hansen", addr: "lena.hansen@posteo.de", ini: "LH", date: "8. Okt.", sub: "Fronten Küche – Muster", pre: "Anbei drei Muster für die Fronten: Eiche geölt hell, Eiche geölt natur und Esche weiß pigmentiert.", label: "l1" },
+      { id: "a1", folder: "archive", from: "Hausverwaltung Ost", addr: "info@hv-ost.de", ini: "HO", date: "2. Okt.", sub: "Schlüsselübergabe Wohnung Vogt", pre: "Die Schlüssel liegen ab Montag beim Hausmeister bereit.", label: "l2" },
+      { id: "t1", folder: "trash", from: "Messe Nord", addr: "ticket@messe-nord.de", ini: "MN", date: "29. Sep.", sub: "Ihr Ticket", pre: "Vielen Dank für Ihre Registrierung." }
+    ];
+  }
+  seedDrafts(noSubject) {
+    return { d1: { to: [["Kai Lindner", "kai@werkhaus-lindner.de"]], cc: [], bcc: [], sub: noSubject ? "" : "Re: Angebot Einbauschrank Flur, Fassung 3", body: "Hallo Kai,\n\ndanke für die neue Fassung. Zwei Punkte noch:\n\n1. Die Sockelblende bitte 8 cm statt 10 cm.\n2. Können die Fachböden in der Höhe verstellbar bleiben?\n\nViele Grüße\nJonas", att: [["Skizze_Sockel.pdf", "180 KB"]], saved: true, input: { to: "", cc: "", bcc: "" } } };
+  }
+  svcStates(mode) { const o = {}; this.SVC.forEach(x => { o[x.id] = mode === "Erststart" ? "notConnected" : x.mixed; }); return o; }
+
+  worstMsgs() {
+    const long = "aleksandra.wisniewska-kowalczyk@innenausbau-wisniewska-kowalczyk.example.com", bart = "bartholomew.fitzgerald@northwind-industries-holdings.example.com";
+    const url = "https://example.com/projekte/2026/kueche-hansen/fronten/muster/9f8e7d6c5b4a?ansicht=kommentare&filter=offen&sortierung=neueste";
+    const para = "Wir haben die Muster jetzt bei Tageslicht, bei Kunstlicht und am Abend mit der Pendelleuchte über dem Esstisch angesehen. Die helle geölte Eiche wirkt ruhig, kippt aber neben dem Steinboden leicht ins Gelbliche. ";
+    return [
+      { id: "m1", folder: "inbox", from: "Aleksandra Wiśniewska-Kowalczyk", addr: long, ini: "AW", date: "10:41", sub: "Re: AW: Re: Fronten Küche – Muster Eiche geölt hell, Eiche natur und Esche weiß pigmentiert (Fassung 7, nach Abstimmung mit Hausverwaltung und Elektroplanung)", pre: para + para, unread: true, star: true, n: 1284, label: "l1",
+        cc: [["Christopher Alexander Montgomery III", "c.montgomery@example.co.uk"], ["", bart], ["Jo", "jo@b.example"], ["Seán O'Brien-Ó Súilleabháin", "sean.obrien@example.ie"], ["Đặng Thị Ngọc Hân", "ngoc.han@example.org"], ["王秀英", "wang.xiuying@example.com"], ["Hausverwaltung", "first.last+hausverwaltung-benachrichtigungen@example.com"]],
+        att: [["Angebot Einbauschrank Flur — FINAL (überarbeitet) v12 [freigegeben von Hausverwaltung].pdf", "1,2 MB"], ["IMG_20260914_183022_HDR_portrait_edited_edited.HEIC", "14,8 MB"], ["Grundriss_EG_v4.pdf", "860 KB"], ["Detail_A.pdf", "220 KB"], ["Detail_B.pdf", "240 KB"], ["Fotos_Bestand.zip", "1,9 GB"], ["Stückliste.xlsx", "40 KB"], ["a.pdf", "0 KB"], ["Leitungsplan_v2.pdf", "1,1 MB"], ["Muster_03.jpg", "2,4 MB"], ["Muster_04.jpg", "2,3 MB"], ["Muster_05.jpg", "2,5 MB"]],
+        thread: [["Christopher Alexander Montgomery III", "31. Dez. 2025, 23:30", "Hallo,\n\n" + para], ["Aleksandra Wiśniewska-Kowalczyk", "Heute, 10:41", "Hallo Jonas,\n\n" + para + para + para + "\n\nHier der Link zu den Kommentaren: " + url + "\n\nRückfragen gern an " + bart + ".\n\nViele Grüße\nAleksandra", "Am 31. Dez. 2025 schrieb Christopher Alexander Montgomery III:\n› " + para, true]] },
+      { id: "m2", folder: "inbox", from: "Jo", addr: "jo@b.example", ini: "J", date: "10:05", sub: "", pre: "", unread: true },
+      { id: "m3", folder: "inbox", from: "", addr: bart, ini: "", date: "09:58", sub: "Sonderausstattungsbestellungsbestätigung 9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f", pre: "Ihre Bestellung ist eingegangen.", att: [["IMG_20260914_183022_HDR_portrait_edited_edited.HEIC", "14,8 MB"]] },
+      { id: "m4", folder: "inbox", from: "Đặng Thị Ngọc Hân", addr: "ngoc.han@example.org", ini: "ĐH", date: "08:52", sub: "Tủ bếp – mẫu gỗ sồi đã nhận", pre: "Chào anh Jonas, chúng tôi đã nhận được mẫu gỗ.", n: 1 },
+      { id: "m5", folder: "inbox", from: "王秀英", addr: "wang.xiuying@example.com", ini: "王", date: "07:30", sub: "厨房橱柜样品确认与交货时间安排", pre: "您好，样品已收到，我们更喜欢浅色橡木。" },
+      { id: "m6", folder: "inbox", from: "نور الهدى عبد الرحمن", addr: "nour@example.com", ini: "نع", date: "Gestern", sub: "عرض سعر خزانة المطبخ", pre: "مرحباً، شكراً على العينات." },
+      { id: "m7", folder: "inbox", from: "🦊 Fox Möbelwerkstatt", addr: "a@b.co", ini: "🦊", date: "Gestern", sub: "<script>alert(1)<\/script> &amp; **Muster** geliefert\nZeile zwei", pre: "&lt;b&gt;fett&lt;/b&gt; und **Sternchen**", html: true },
+      { id: "m8", folder: "inbox", from: "Christopher Alexander Montgomery III", addr: "c.montgomery@example.co.uk", ini: "CM", date: "31. Dez. 2025", sub: "Benachrichtigungseinstellungen", pre: "Bitte prüfen.", star: true, label: "l4", att: [["Q3.pdf", "1 KB"], ["Q4.pdf", "1 KB"]] },
+      { id: "m9", folder: "inbox", from: "Seán O'Brien-Ó Súilleabháin", addr: "sean.obrien@example.ie", ini: "SS", date: "In 3 Tagen", sub: "Termin", pre: "Passt es Ihnen?" },
+      { id: "s1", folder: "sent", from: "An Aleksandra Wiśniewska-Kowalczyk", addr: long, ini: "AW", date: "8. Okt.", sub: "Fronten Küche – Muster", pre: para }
+    ];
+  }
+  manyMsgs() { const base = this.seedMsgs().filter(m => m.folder === "inbox"), out = []; for (let i = 0; i < 1284; i++) { const b = base[i % base.length]; out.push(Object.assign({}, b, { id: i < base.length ? b.id : "x" + i, unread: i < 1284 * 0.7, date: i < 9 ? b.date : (i % 28 + 1) + ". Sep." })); } return out.concat(this.seedMsgs().filter(m => m.folder !== "inbox")); }
+  dataMsgs() { const d = this._daten; return d === "Schlimmster Fall" ? this.worstMsgs() : d === "1.284" ? this.manyMsgs() : d === "Eine" ? this.seedMsgs().filter(m => m.id === "m1").map(m => Object.assign({}, m, { thread: null, n: 1, cc: [], att: m.att.slice(0, 1) })) : this.seedMsgs(); }
+  dataDrafts(noSubject) {
+    if (this._daten !== "Schlimmster Fall") return this.seedDrafts(noSubject);
+    const bart = "bartholomew.fitzgerald@northwind-industries-holdings.example.com";
+    return { d1: { to: [["Aleksandra Wiśniewska-Kowalczyk", "aleksandra.wisniewska-kowalczyk@innenausbau-wisniewska-kowalczyk.example.com"], ["", bart], ["Jo", "jo@b.example"], ["王秀英", "wang.xiuying@example.com"], ["Christopher Alexander Montgomery III", "c.montgomery@example.co.uk"], ["Seán O'Brien-Ó Súilleabháin", "sean.obrien@example.ie"], ["", "first.last+hausverwaltung-benachrichtigungen@example.com"], ["Đặng Thị Ngọc Hân", "ngoc.han@example.org"], ["Hausverwaltung Ost", "info@hv-ost.example"], ["Ida Roth", "ida@example.com"], ["Tom Hansen", "tom@example.com"], ["Mara Vogt", "mara@example.com"]], cc: [["", bart]], bcc: [],
+      sub: noSubject ? "" : "Re: AW: Re: Fronten Küche – Muster Eiche geölt hell, Eiche natur und Esche weiß pigmentiert (Fassung 7, nach Abstimmung mit Hausverwaltung und Elektroplanung)", body: "Hallo zusammen,\n\nhier der Link: https://example.com/projekte/2026/kueche-hansen/fronten/muster/9f8e7d6c5b4a?ansicht=kommentare&filter=offen&sortierung=neueste\n\nSonderausstattungsbestellungsbestätigungsnummer: 9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f\n\nViele Grüße\nJonas", att: [["Angebot Einbauschrank Flur — FINAL (überarbeitet) v12 [freigegeben von Hausverwaltung].pdf", "1,2 MB"], ["IMG_20260914_183022_HDR_portrait_edited_edited.HEIC", "14,8 MB"]], saved: true, input: { to: "", cc: "", bcc: "" } } };
+  }
+  fromProps(p) {
+    this._daten = p.daten ?? "Demo";
+    if (this._daten === "Schlimmster Fall") {
+      this.ME = ["Aleksandra Wiśniewska-Kowalczyk", "aleksandra.wisniewska-kowalczyk@innenausbau-wisniewska-kowalczyk.example.com"];
+      this.SVC = this.SVC.map(x => x.id === "claude" ? Object.assign({}, x, { reason: "Die Anfrage wurde mit 401 abgelehnt: Der Schlüssel ist abgelaufen oder gehört zu einer anderen Organisation (org_9f8e7d6c5b4a)." }) : x.id === "clockodo" ? Object.assign({}, x, { fields: [["E-Mail", "first.last+zeiterfassung-benachrichtigungen@example.com"], ["Schlüssel", "secret"], ["Clockodo-Nutzer", "1048216"]] }) : x.id === "airtable" ? Object.assign({}, x, { fields: [["Base", "app9f8e7d6c5b4a4c3d8e2f1a0b9c8d7e6f"], ["Zugriffsschlüssel", "secret"]] }) : x);
+      this.SET = Object.assign({}, this.SET, { profil: ["Identität", "Name, Rolle, Kürzel im Team", "Aleksandra Wiśniewska-Kowalczyk"] });
+    }
+    const area = p.bereich ?? "Mail", zu = p.mail ?? "geladen", phase = p.entwurf ?? "offen", vorne = p.vorne ?? "Lesen", offen = (p.empfaenger ?? "zu") === "offen", ohne = vorne === "Ohne Namen" && this._daten === "Schlimmster Fall", dienste = p.dienste ?? "gemischt", cat = p.einstellung ?? "Integrationen";
+    const cards = zu === "nicht verbunden" ? [] : ohne ? [{ id: "d1", kind: "draft" }, { id: "m1", kind: "message", pin: true }, { id: "m3", kind: "message" }] : this._daten === "Eine" ? [{ id: "m1", kind: "message" }] : [{ id: "d1", kind: "draft" }, { id: "m2", kind: "message", pin: true }, { id: "m1", kind: "message" }];
+    const front = cards.length ? (ohne ? "m3" : vorne === "Entwurf" && cards.some(c => c.id === "d1") ? "d1" : "m1") : null;
+    const by = { Integrationen: dienste === "Erststart" ? ["mailkonten", "google"] : ["airtable", "claude", "google"], Person: ["datenschutz", "profil"], Ansicht: ["kuerzel", "darstellung"], System: ["diagnose", "backups"] };
+    const sc = by[cat] || by.Integrationen;
+    return { area, zu, phase, cards, front, fanned: false, selected: ohne ? "m3" : "m1", rcptAll: offen, msgs: this.dataMsgs(), drafts: this.dataDrafts(phase === "ohne Betreff"), cat, scards: sc.slice(), sfront: sc[sc.length - 1], sfanned: false, svc: this.svcStates(dienste),
+      query: zu === "keine Treffer" ? "Spachtelmasse" : "", searching: zu === "keine Treffer", folder: "inbox", label: null, filter: "all", look: null, menu: null, confirmRow: null, confirmDiscard: false, confirmDisc: null, showRcpt: offen };
+  }
+  initial() {
+    return Object.assign({ mem: {}, anchor: { k: "home" }, mode: null, awake: false, bdrag: null, hot: -1, q: "", hover: false, syncing: false, gdrag: null, ghover: -1, reelIn: false,
+      hoverRow: null, quote: {}, imgs: {}, fmt: false, toast: null, syncRun: {}, lastSync: {}, toggles: { bilder: false, assistentAus: false, chatDateien: true, sperre: true }, reload: false }, this.fromProps(this.props || {}));
+  }
+  state = this.initial();
+  winRef = React.createRef(); blobRef = React.createRef(); eyesRef = React.createRef(); findRef = React.createRef(); arcRef = React.createRef(); dotRef = React.createRef(); orbRef = React.createRef(); tapeRef = React.createRef(); lidsRef = React.createRef(); searchRef = React.createRef();
+
+  pkey() { const p = this.props || {}; return ["bereich", "mail", "entwurf", "vorne", "dienste", "einstellung", "daten", "empfaenger"].map(k => p[k]).join("|"); }
+  mark() { const r = this.winRef.current; if (!r) return; r.querySelectorAll("[data-mark]").forEach(e => { e.style.outline = ""; e.style.outlineOffset = ""; e.removeAttribute("data-mark"); }); const sel = this.props.markiere; if (!sel) return; try { r.querySelectorAll(sel).forEach(e => { e.setAttribute("data-mark", "1"); e.style.outline = "2px solid var(--c-focus)"; e.style.outlineOffset = "-2px"; }); } catch (x) {} }
+  componentDidMount() { this._rs = () => { if (!this.props.breite && this.props.fenster !== "1512 × 982") this.forceUpdate(); }; window.addEventListener("resize", this._rs); this._nc = this.noCards(); if (this._nc) this.setState({ ebb: true }); setTimeout(() => this.mark(), 0);
+    this._pk = this.pkey(); this._lk = (this.props || {}).licht;
+    this.onMove = e => this.move(e); this.onUp = () => this.up();
+    this.onAway = e => { if (this.state.mode && this.blobRef.current && !this.blobRef.current.contains(e.target)) this.close(); };
+    this.onKey = e => { this.cmdKey(e); if (e.key === "Escape") { this.close(); if (this.state.menu) this.setState({ menu: null }); } };
+    window.addEventListener("pointermove", this.onMove); window.addEventListener("pointerup", this.onUp); window.addEventListener("pointercancel", this.onUp);
+    document.addEventListener("pointerdown", this.onAway); document.addEventListener("keydown", this.onKey);
+    this.blink(); this.anim();
+  }
+  componentWillUnmount() { window.removeEventListener("resize", this._rs);
+    window.removeEventListener("pointermove", this.onMove); window.removeEventListener("pointerup", this.onUp); window.removeEventListener("pointercancel", this.onUp);
+    document.removeEventListener("pointerdown", this.onAway); document.removeEventListener("keydown", this.onKey);
+    [this.bt, this.ct, this.ht, this.st, this.tt, this.rt, this.pt2, this.et, this.et2].forEach(clearTimeout);
+  }
+  componentDidUpdate() { this.anim(); this.mark();
+    const nc0 = this.noCards();
+    if (nc0 !== this._nc) { this._nc = nc0; clearTimeout(this.et); clearTimeout(this.et2);
+      if (nc0 && !this.still()) this.et = setTimeout(() => { if (this.noCards()) { this.setState({ ebb: true, slowLane: true }); this.et2 = setTimeout(() => this.setState({ slowLane: false }), 900); } }, 420);
+      else if (nc0) this.setState({ ebb: true });
+      else if (this.state.ebb) { this.setState({ ebb: false, slowLane: true }); this.et2 = setTimeout(() => this.setState({ slowLane: false }), 900); } }
+    const k = this.pkey(); if (k !== this._pk) { this._pk = k; this.setState(this.fromProps(this.props || {})); }
+    const lk = (this.props || {}).licht; if (lk !== this._lk) { this._lk = lk; if (this.state.look) this.setState({ look: null }); }
+    this.anim();
+  }
+  still() { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
+  anim() {
+    const d = this.dotRef.current;
+    if (d && !d._a && d.animate && !this.still()) d._a = d.animate([{ transform: "scale(1)" }, { transform: "scale(2)" }, { transform: "scale(1)" }], { duration: 1800, iterations: Infinity, easing: "cubic-bezier(.2,.8,.2,1)" });
+    const o = this.orbRef.current;
+    if (o && !o._a && !this.still()) { o._a = true; [7000, 9000, 11000].forEach((d, i) => { const el = o.children[i]; if (el && el.animate) el.animate([{ transform: "rotate(0deg) translateX(24%) rotate(0deg)" }, { transform: "rotate(360deg) translateX(24%) rotate(-360deg)" }], { duration: d, iterations: Infinity, direction: i === 1 ? "reverse" : "normal" }); }); }
+    const u = this.tapeRef.current;
+    if (u && !u._a && u.animate && !this.still()) { u._a = u.animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], { duration: 480, easing: "cubic-bezier(.2,.8,.2,1)" }); const f = this.findRef.current; if (f && f.animate) f.animate([{ opacity: 0 }, { opacity: 0, offset: .4 }, { opacity: 1 }], { duration: 480 }); }
+    const r = this.winRef.current;
+    if (r && !this.still()) r.querySelectorAll("[data-spin]").forEach(el => { if (!el._a && el.animate) el._a = el.animate([{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }], { duration: 1000, iterations: Infinity }); });
+  }
+  blink() { this.bt = setTimeout(() => { const e = this.lidsRef.current; if (e && e.animate && !this.still() && (this.state.awake || this.state.mode)) e.animate([{ transform: "scaleY(1)" }, { transform: "scaleY(.1)" }, { transform: "scaleY(1)" }], { duration: 140 }); this.blink(); }, 3000 + Math.random() * 3000); }
+
+  frame() { const p = this.props; if (p.breite && p.hoehe) return { W: p.breite, H: p.hoehe, safe: 0 }; if (p.fenster === "1512 × 982") return { W: 1512, H: 982, safe: 32 }; return { W: Math.max(640, window.innerWidth), H: Math.max(480, window.innerHeight), safe: 0 }; }
+  geo() { const f = this.frame(), K = this.K, top = f.safe + K.m; return Object.assign(f, { top, lt: top + K.bh + K.gap, lh: f.H - (top + K.bh + K.gap) - K.m, avail: f.W - 2 * K.m - 2 * K.gap }); }
+  sc() { const r = this.winRef.current.getBoundingClientRect(); return { r, k: (r.width / this.geo().W) || 1 }; }
+  pt(e) { const { r, k } = this.sc(); return [(e.clientX - r.left) / k, (e.clientY - r.top) / k]; }
+  rowMenu(e, m) {
+    e.preventDefault(); e.stopPropagation();
+    const w = 232, g = this.geo(), [px, py] = this.pt(e), undo = m.folder;
+    const items = m.isDraft ? [this.mi("Entwurf öffnen", () => this.openDraft(m.id))] : [
+      this.mi("Antworten", () => this.reply(m)), this.mi("Weiterleiten", () => this.fwd(m)), { sep: true },
+      this.mi("Archivieren", () => { this.patchMsg(m.id, { folder: "archive" }); this.closeCard(m.id); this.toastIt("Archiviert", () => this.patchMsg(m.id, { folder: undo })); }),
+      this.mi(m.unread ? "Als gelesen markieren" : "Als ungelesen markieren", () => this.patchMsg(m.id, { unread: !m.unread })),
+      this.mi("Verschieben nach …"), { sep: true },
+      this.mi("In den Papierkorb", () => { this.patchMsg(m.id, { folder: "trash" }); this.closeCard(m.id); this.toastIt("Im Papierkorb", () => this.patchMsg(m.id, { folder: undo })); }, { danger: true })];
+    const h = items.length * 28 + 8;
+    this.setState({ menu: { x: Math.max(16, Math.min(px, g.W - w - 16)), y: py + h > g.H - 16 ? Math.max(16, py - h) : py, w, items }, ctxRow: m.id });
+  }
+  A() { return this.AREA[this.state.area]; }
+  D0() { const A = this.A(); return { L: A.L[0], M: 0, R: A.R[0], Lf: false, Mf: false, Rf: false, pin: false, max: -1 }; }
+  mem() { return Object.assign(this.D0(), this.state.mem[this.state.area] || {}); }
+  setMem(p) { this.setState(st => ({ mem: Object.assign({}, st.mem, { [st.area]: Object.assign(this.D0(), st.mem[st.area] || {}, p) }) })); }
+  noCards() { return this.state.area === "Mail" ? !this.state.cards.length : !this.state.scards.length; }
+  lay() {
+    const K = this.K, g = this.geo(), s = this.mem(), nc = this.noCards();
+    if (s.max >= 0) { const w = [K.fold, K.fold, K.fold]; w[s.max] = g.avail - 2 * K.fold; return w; }
+    const FL = this.A().min, pref = [s.L, s.M, s.R];
+    const solve = fd => {
+      const open = [0, 1, 2].filter(i => !fd[i]), w = [K.fold, K.fold, K.fold];
+      if (!open.length) return w;
+      const av = g.avail - K.fold * (3 - open.length), flex = open.includes(1) ? 1 : open.includes(2) ? 2 : 0, p = {};
+      let used = 0; open.forEach(i => { if (i !== flex && pref[i] > 0) { p[i] = pref[i]; used += p[i]; } });
+      open.forEach(i => { if (p[i] === undefined) p[i] = Math.max(av - used, FL[i]); });
+      if (s.pin && p[flex] === undefined) p[flex] = av;
+      let free = open.slice(), rem = av;
+      for (let n = 0; n < 4 && free.length; n++) {
+        const f = rem / free.reduce((q, i) => q + p[i], 0); let hit = false;
+        free.slice().forEach(i => { const fl = Math.min(p[i], FL[i]); if (p[i] * f < fl) { w[i] = fl; rem -= fl; free = free.filter(x => x !== i); hit = true; } });
+        if (!hit) { free.forEach(i => { w[i] = p[i] * f; }); free = []; }
+      }
+      if (rem < -.5 && open.length > 1) { const nf = fd.slice(); nf[this.A().yield.find(i => !fd[i])] = true; return solve(nf); }
+      const U = K.fold, r = w.map(Math.round), fx = open.includes(flex) ? flex : open[0];
+      open.forEach(i => { if (i !== fx) r[i] = Math.max(FL[i], r[i]); });
+      r[fx] = g.avail - r.reduce((q, x, i) => q + (i === fx ? 0 : x), 0);
+      if (r[fx] < FL[fx] - .5 && open.length > 1) { const nf = fd.slice(); nf[this.A().yield.find(i => !fd[i])] = true; return solve(nf); }
+      return r;
+    };
+    return solve([s.Lf, s.Mf, s.Rf || (nc && this.state.ebb)]);
+  }
+  grow(side, v, w0) {
+    // accordion by work: the lane that matters least yields first (Mail: Postfächer, then Liste; the stack is the work)
+    const K = this.K, A = this.A(), MIN = A.min, o = side === "L" ? 0 : 2, nm = ["L", "M", "R"], fk = ["Lf", "Mf", "Rf"], HY = 64;
+    if (v < K.foldAt) { this.setMem({ [fk[o]]: true, max: -1 }); return; }
+    const oo = 2 - o; if (w0[oo] > K.fold && Math.abs(v - w0[oo]) < 12) v = w0[oo];
+    const order = A.yield.filter(i => i !== o), w = w0.slice(), f = w0.map(x => x <= K.fold);
+    w[o] = Math.round(v); f[o] = false;
+    let need = w[o] - w0[o];
+    if (need > 0) {
+      for (const i of order) { if (need <= 0) break; if (f[i]) continue;
+        const room = w[i] - MIN[i], take = Math.min(room, need); w[i] -= take; need -= take;
+        if (need > HY) { need -= w[i] - K.fold; w[i] = K.fold; f[i] = true; } else if (need > 0) { w[o] -= need; need = 0; } }
+      if (need > 0) w[o] -= need;
+    } else {
+      let give = -need;
+      for (const i of order.slice().reverse()) { if (!f[i] || i === o) continue; if (give >= MIN[i] - K.fold + HY) { give -= MIN[i] - K.fold; w[i] = MIN[i]; f[i] = false; } }
+    }
+    const p = { pin: true, max: -1 }; [0, 1, 2].forEach(i => { p[nm[i]] = f[i] ? (w0[i] > K.fold ? w0[i] : MIN[i]) : Math.round(w[i]); p[fk[i]] = f[i]; });
+    if (!f[1]) p.M = 0;
+    this.setMem(p);
+  }
+  awakeW() {
+    // face 6+28, label gap 8, label, right inset 22 (clears the 4px dot) (keeps the 4px dot at 8/8 clear)
+    const c = this._mc || (this._mc = document.createElement("canvas").getContext("2d")), cs = this.blobRef.current ? getComputedStyle(this.blobRef.current) : null;
+    c.font = "500 " + (cs ? cs.fontSize : "13px") + " " + (cs ? cs.fontFamily : "system-ui");
+    return Math.max(this.K.awake, Math.ceil(6 + 28 + 8 + c.measureText(this.state.area).width + 22));
+  }
+  home() { const g = this.geo(); return [this.K.m, g.top]; }
+  xy() { const a = this.state.anchor, g = this.geo(); if (a.k === "L") return [0, a.y]; if (a.k === "R") return [g.W - this.K.dock, a.y]; return this.home(); }
+  docked() { const k = this.state.anchor.k; return (k === "L" || k === "R") && !this.state.mode && !this.state.bdrag; }
+
+  move(e) {
+    if (!this.winRef.current) return;
+    const s = this.state, K = this.K;
+    if (!s.gdrag && !s.bdrag && !this.winRef.current.matches(":hover")) { if (s.awake) this.setState({ awake: false }); return; }
+    const [px, py] = this.pt(e);
+    if (s.gdrag) {
+      const d = s.gdrag, dx = px - d.x0; this.grow(d.side, d.v0 + (d.side === "L" ? dx : -dx), d.w0);
+      return;
+    }
+    if (s.bdrag) {
+      const d = s.bdrag, dx = px - d.sx, dy = py - d.sy;
+      if (!d.moved && Math.hypot(dx, dy) < 3) return;
+      const hist = d.hist.concat([[px, py, performance.now()]]).slice(-6);
+      this.setState({ bdrag: Object.assign({}, d, { moved: true, x: d.x0 + dx, y: d.y0 + dy, hist }), awake: false });
+      const b = this.blobRef.current, h2 = hist.slice(-2);
+      if (b && h2.length === 2 && !this.still()) { const vx = (h2[1][0] - h2[0][0]) / Math.max(1, h2[1][2] - h2[0][2]) * 1000, vy = (h2[1][1] - h2[0][1]) / Math.max(1, h2[1][2] - h2[0][2]) * 1000, st = Math.min(.16, Math.hypot(vx, vy) * .00012), a = Math.atan2(vy, vx); b.style.transform = "rotate(" + a.toFixed(3) + "rad) scale(" + (1 + st).toFixed(3) + "," + (1 / (1 + st)).toFixed(3) + ") rotate(" + (-a).toFixed(3) + "rad)"; }
+      return;
+    }
+    const [x, y] = this.xy(), cx = x + K.bw / 2, cy = y + K.bh / 2, dist = Math.hypot(px - cx, py - cy);
+    const now = performance.now(), lp = this.lp || [px, py, now], dtp = Math.max(1, now - lp[2]) / 1000, speed = Math.hypot(px - lp[0], py - lp[1]) / dtp; this.lp = [px, py, now];
+    const near = dist < 212 && !(speed > 900 && dist > 48 && !s.awake) && !s.mode && !this.docked();
+    if (near !== s.awake) this.setState({ awake: near });
+    const eyes = this.eyesRef.current;
+    if (eyes && !this.still()) { const f = dist < 200 ? Math.min(1, dist / 40) : 0, a = Math.atan2(py - cy, px - cx); eyes.style.transform = "translate(" + (Math.cos(a) * 2 * f).toFixed(2) + "px," + (Math.sin(a) * 1.6 * f).toFixed(2) + "px)"; }
+  }
+  up() {
+    const s = this.state, K = this.K, g = this.geo();
+    if (s.gdrag) { this.setState({ gdrag: null }); return; }
+    const d = s.bdrag; if (!d) return; if (this.blobRef.current) this.blobRef.current.style.transform = "";
+    if (!d.moved) { this.setState({ bdrag: null }); return; }
+    this.justDragged = true; setTimeout(() => { this.justDragged = false; }, 50);
+    const h = d.hist, f = h[0], l = h[h.length - 1], dt = Math.max(16, l[2] - f[2]) / 1000;
+    const pj = .998 / (1 - .998) / 1000, px = d.x + (l[0] - f[0]) / dt * pj, py = d.y + (l[1] - f[1]) / dt * pj, [hx, hy] = this.home();
+    const isHome = py < g.lt || Math.hypot(px - hx, py - hy) < 200;
+    this.setState({ bdrag: null, anchor: isHome ? { k: "home" } : { k: px + K.bw / 2 < g.W / 2 ? "L" : "R", y: Math.max(g.lt, Math.min(g.H - K.bh - K.m, py)) } });
+  }
+  down = e => { if (this.state.mode || e.button > 0) return; const [px, py] = this.pt(e), [x, y] = this.xy(); this.setState({ bdrag: { sx: px, sy: py, x0: x, y0: y, x, y, moved: false, hist: [[px, py, performance.now()]] } }); if (this.blobRef.current && !this.still()) this.blobRef.current.style.transform = "scale(.96)"; };
+  click = e => { if (this.justDragged || (e && e.detail > 1)) return; this.state.mode === "menu" ? this.close() : this.open("menu"); };
+  dbl = () => { clearTimeout(this.ct); const e = this.lidsRef.current; if (e && e.animate && !this.still()) e.animate([{ transform: "scaleY(1)" }, { transform: "scaleY(.08)", offset: .44 }, { transform: "scaleY(.08)", offset: .68 }, { transform: "scaleY(1)" }], { duration: 1700, easing: "cubic-bezier(.2,.8,.2,1)" }); this.state.mode === "assist" ? this.close() : this.open("assist"); };
+  open(mode) { this.setState({ mode, awake: false, hot: -1, q: "", reelIn: false, menu: null }, () => { setTimeout(() => this.setState({ reelIn: true }), 34); if (mode === "menu") setTimeout(() => this.findRef.current && this.findRef.current.focus({ preventScroll: true }), 80); }); }
+  close() { clearTimeout(this.ht); clearTimeout(this.st); if (this.state.mode) this.setState({ mode: null, hot: -1, q: "" }); }
+  aim(i) { if (this.state.hot === i) return; clearTimeout(this.ht); this.ht = setTimeout(() => this.setState({ hot: i }), 160); }
+  choose(name, sub) {
+    if (this.props.onBereich && name !== (this.state.area)) { this.setState({ mode: null, hot: -1, q: "", menu: null }); this.props.onBereich(name, sub); return; }
+    const p = { area: name, mode: null, hot: -1, q: "", menu: null };
+    if (name === "Mail" && sub) Object.assign(p, { folder: { Eingang: "inbox", "Entwürfe": "drafts", Gesendet: "sent" }[sub] || "inbox", label: null });
+    if (name === "Einstellungen" && sub) p.cat = sub;
+    this.setState(p);
+  }
+  sync = () => {
+    if (this.state.syncing) return;
+    this.setState({ syncing: true });
+    const a = this.arcRef.current; if (a && a.animate && !this.still()) a.animate([{ transform: "rotate(-90deg)" }, { transform: "rotate(630deg)" }], { duration: 2000, easing: "cubic-bezier(.2,.8,.2,1)" });
+    setTimeout(() => this.setState(st => ({ syncing: false, zu: ["Fehler", "nicht erreichbar"].includes(st.zu) ? "geladen" : st.zu })), this.still() ? 400 : 2000);
+  };
+
+  toastIt(t, undo) { clearTimeout(this.tt); this.setState({ toast: t, toastUndo: undo || null }); this.tt = setTimeout(() => this.setState({ toast: null, toastUndo: null }), undo ? 4000 : 1800); }
+  trashMsg(m) { const was = m.folder, cards0 = this.state.cards, front0 = this.state.front; this.patchMsg(m.id, { folder: "trash" }); this.setState(st => { const cards = st.cards.filter(c => c.id !== m.id); return { cards, front: st.front === m.id ? (cards.slice(-1)[0] || {}).id || null : st.front }; }); this.toastIt("In den Papierkorb gelegt", () => { this.patchMsg(m.id, { folder: was }); this.setState({ cards: cards0, front: front0 }); }); }
+  openMenu(e, items, w) {
+    e.stopPropagation(); w = w || 240;
+    const { r, k } = this.sc(), b = e.currentTarget.getBoundingClientRect(), g = this.geo(), h = items.length * 28 + 8;
+    let x = (b.left - r.left) / k, y = (b.bottom - r.top) / k + 4;
+    x = Math.max(16, Math.min(x, g.W - w - 16)); if (y + h > g.H - 16) y = (b.top - r.top) / k - h - 4;
+    this.setState({ menu: { x, y, w, items } });
+  }
+  mi(label, fn, o) { o = o || {}; return { item: true, label, check: o.check ? "✓" : "", meta: o.meta || "", fg: o.danger ? "var(--c-signal)" : "var(--c-ink)", go: e => { e.stopPropagation(); this.setState({ menu: null }); fn && fn(); } }; }
+  tb(label, kind, go, o) {
+    o = o || {};
+    const v = { accent: ["var(--c-inv)", "var(--c-on-inv)", "none"], neutral: ["transparent", "var(--c-ink)", "inset 0 0 0 1px var(--c-line-strong)"], signal: ["transparent", "var(--c-signal)", "inset 0 0 0 1px var(--c-signal)"], plain: ["transparent", "var(--c-ink-2)", "none"] }[kind || "neutral"];
+    return { label, state: o.off ? "disabled" : kind || "neutral", bg: v[0], fg: v[1], ring: v[2], op: o.off ? .4 : 1, cur: o.off ? "default" : "pointer", go: e => { if (e) e.stopPropagation(); if (!o.off && go) go(); } };
+  }
+
+  // Mail
+  folderName() { const s = this.state; if (s.label) return (this.LABELS.find(l => l[0] === s.label) || [0, ""])[1]; return (this.FOLDERS.find(f => f[0] === s.folder) || [0, "Eingang"])[1]; }
+  draftRows() { const s = this.state; return Object.keys(s.drafts).filter(k => s.drafts[k].saved).map(k => { const d = s.drafts[k], n = d.to.map(p => p[0]).join(", "); return { id: k, isDraft: true, from: n ? "An " + n : "Neue Nachricht", ini: this.ini(d.to[0] ? d.to[0][0] : "?"), date: "Entwurf", sub: d.sub || "Ohne Betreff", pre: d.body.split("\n").filter(Boolean).slice(1, 3).join(" ") }; }); }
+  ini(n) { const w = String(n || "").trim().replace(/^An\s+(?=\S+\s+\S)/, "").split(/\s+/).filter(x => /\p{L}/u.test(x) && !/^(II|III|IV|Jr\.?|Sr\.?|de|la|del|y|von|van|der|den|da|di|du)$/i.test(x)); if (!w.length) return ""; const f = x => (this.gr(x.replace(/^[^\p{L}]+/u, ""))[0] || "").toUpperCase(); return w.length === 1 ? f(w[0]) : f(w[0]) + f(w[w.length - 1]); }
+  gr(s) { try { return Array.from(new Intl.Segmenter("de", { granularity: "grapheme" }).segment(s), x => x.segment); } catch (e) { return Array.from(s); } }
+  rcptView(all, open, rm, grp) {
+    const big = all.length > 2, one = p => { const ini = this.ini(p[0]); return { ini, markSym: !ini, markText: !!ini, name: p[0] || this.mid(p[1], 40), addr: p[0] ? this.mid(p[1], 44) : "", hasAddr: !!p[0], full: p[0] ? p[0] + " · " + p[1] : p[1] }; };
+    return { hasStack: (this.lay()[2] || 0) >= 440, big, showChips: !big, showSum: big && !open, showHead: big && open, gRows: big && open ? "1fr" : "0fr", lOp: big && open ? 1 : 0,
+      stack: all.slice(0, 3).map((p, i) => Object.assign(one(p), { ml: i ? "-6px" : "0", z: 3 - i })), first: (all[0] && all[0][0]) ? all[0][0].trim().split(/\s+/)[0] : this.mid((all[0] || ["", ""])[1], 24), count: this.nf(all.length) + " Empfänger",
+      people: all.map((p, j) => Object.assign(one(p), { grp: grp ? grp(j) : "", go: e => this.personMenu(e, p[0], p[1]), remove: rm ? rm(j) : null })) };
+  }
+  nf(n) { return new Intl.NumberFormat("de-DE").format(n || 0); }
+  mid(s, n) { s = String(s || ""); const g = this.gr(s); if (g.length <= n) return s; const a = Math.ceil((n - 1) * .55), b = n - 1 - a; return g.slice(0, a).join("") + "…" + g.slice(g.length - b).join(""); }
+  dn(m) { return String(m.from || "").trim() || m.addr || "Unbekannt"; }
+  onLScroll = e => { const sc = e.currentTarget.scrollTop > 0; if (sc !== !!this.state.lScrolled) this.setState({ lScrolled: sc }); };
+  mailList() {
+    const s = this.state;
+    if (["lädt", "nicht verbunden", "Fehler"].includes(s.zu)) return [];
+    let L;
+    if (s.label) L = s.msgs.filter(m => m.label === s.label && m.folder !== "trash");
+    else if (s.folder === "drafts") L = this.draftRows();
+    else if (s.folder === "all") L = s.msgs.filter(m => !["spam", "trash"].includes(m.folder));
+    else if (s.folder === "starred") L = s.msgs.filter(m => m.star && m.folder !== "trash");
+    else L = s.msgs.filter(m => m.folder === s.folder);
+    if (s.zu === "leer" && !s.label && s.folder === "inbox") L = [];
+    const q = s.query.trim().toLowerCase();
+    if (q && !s.label) L = s.msgs.filter(m => !["spam", "trash"].includes(m.folder));
+    if (q) L = L.filter(m => (m.from + " " + m.addr + " " + m.sub + " " + m.pre).toLowerCase().includes(q));
+    if (s.filter === "unread") L = L.filter(m => m.unread); else if (s.filter === "attachment") L = L.filter(m => m.att && m.att.length);
+    return L;
+  }
+  unread() { return this.state.msgs.filter(m => m.folder === "inbox" && m.unread).length; }
+  patchMsg(id, p) { this.setState(st => ({ msgs: st.msgs.map(m => m.id === id ? Object.assign({}, m, p) : m) })); }
+  fwd(m) { this.pinCard(m.id); this.newDraft({ sub: m.sub.startsWith("Fwd:") ? m.sub : "Fwd: " + m.sub, body: "\n\n\n— Weitergeleitet —\n" + m.pre, att: (m.att || []).slice() }); }
+  archiveMsg(m) { this.patchMsg(m.id, { folder: "archive" }); this.closeCard(m.id); this.toastIt("Archiviert"); }
+  saveDraft(id) { this.setState(st => ({ phase: "gesichert", drafts: Object.assign({}, st.drafts, { [id]: Object.assign({}, st.drafts[id], { saved: true }) }) })); }
+  cmdKey(e) {
+    const t = e.target, typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable), mod = e.metaKey || e.ctrlKey, k = (e.key || "").toLowerCase(), c = this._cmd || {};
+    if (!this._isMail || this.state.mode) return;
+    const go = f => { e.preventDefault(); f(); };
+    if (mod && k === "n" && !e.shiftKey) return go(() => this.newDraft());
+    if (mod && k === "enter" && c.draft) return go(() => c.ok ? this.send() : this.toastIt("Empfänger fehlt"));
+    if (mod && k === "s" && c.draft) return go(() => this.saveDraft(c.draft));
+    if (mod && k === "p") return go(() => this.toastIt("Druckdialog"));
+    if (!c.fm) return;
+    if (mod && k === "r") return go(() => this.reply(c.fm, e.shiftKey));
+    if (mod && e.shiftKey && k === "f") return go(() => this.fwd(c.fm));
+    if (typing || mod) return;
+    if (k === "backspace" || k === "delete") return go(() => this.trashMsg(c.fm));
+    if (k === "e") return go(() => this.archiveMsg(c.fm));
+  }
+  pinCard(id) { this.setState(st => ({ cards: st.cards.map(c => c.id === id ? Object.assign({}, c, { pin: true }) : c) })); }
+  openMsg(id, pin) {
+    const m = this.state.msgs.find(x => x.id === id); if (!m) return;
+    this.setState(st => {
+      let cards = st.cards.some(c => c.id === id) ? st.cards.map(c => c.id === id && pin ? Object.assign({}, c, { pin: true }) : c) : st.cards.filter(c => c.kind !== "message" || c.pin).concat([{ id, kind: "message", pin: !!pin }]);
+      const ms = cards.filter(c => c.kind === "message"); if (ms.length > 6) cards = cards.filter(c => c.id !== ms[0].id);
+      return { cards, front: id, selected: id, fanned: false, showRcpt: false, confirmRow: null, msgs: st.msgs.map(x => x.id === id ? Object.assign({}, x, { unread: false }) : x), mem: Object.assign({}, st.mem, { Mail: Object.assign({}, st.mem.Mail || {}, { Rf: false }) }) };
+    });
+  }
+  openDraft(id) { this.setState(st => ({ cards: st.cards.some(c => c.id === id) ? st.cards : st.cards.concat([{ id, kind: "draft" }]), front: id, fanned: false, confirmDiscard: false, phase: "offen", mem: Object.assign({}, st.mem, { Mail: Object.assign({}, st.mem.Mail || {}, { Rf: false }) }) })); }
+  newDraft(pre) {
+    const s = this.state, empty = Object.keys(s.drafts).find(k => { const d = s.drafts[k]; return !pre && !d.saved && !d.to.length && !d.sub && !d.body.trim(); });
+    if (empty && s.cards.some(c => c.id === empty)) { this.openDraft(empty); return; }
+    const id = "d" + (Date.now() % 100000);
+    const d = Object.assign({ to: [], cc: [], bcc: [], sub: "", body: "", att: [], saved: false, input: { to: "", cc: "", bcc: "" } }, pre || {});
+    this.setState(st => ({ drafts: Object.assign({}, st.drafts, { [id]: d }) }), () => this.openDraft(id));
+  }
+  patchDraft(id, p) { this.setState(st => ({ drafts: Object.assign({}, st.drafts, { [id]: Object.assign({}, st.drafts[id], p) }), phase: st.phase === "gesichert" ? "offen" : st.phase })); }
+  closeCard(id) {
+    const s = this.state, d = s.drafts[id];
+    const has = d && (d.to.length || d.sub.trim() || d.body.trim() || d.att.length);
+    this.setState(st => {
+      const cards = st.cards.filter(c => c.id !== id), front = st.front === id ? (cards.length ? cards[cards.length - 1].id : null) : st.front;
+      const p = { cards, front, confirmDiscard: false };
+      if (d) p.drafts = has ? Object.assign({}, st.drafts, { [id]: Object.assign({}, d, { saved: true }) }) : (() => { const o = Object.assign({}, st.drafts); if (!d.saved) delete o[id]; return o; })();
+      return p;
+    });
+    if (d && has) this.toastIt("Entwurf gesichert");
+  }
+  discard(id) { this.setState(st => { const cards = st.cards.filter(c => c.id !== id), o = Object.assign({}, st.drafts); delete o[id]; return { cards, drafts: o, front: cards.length ? cards[cards.length - 1].id : null, confirmDiscard: false }; }); }
+  canSend(d) { return d && d.to.length > 0 && d.sub.trim().length > 0 && this.state.phase !== "sendet"; }
+  send() {
+    const s = this.state, id = s.front, d = s.drafts[id]; if (!this.canSend(d)) return;
+    this.setState({ phase: "sendet" });
+    clearTimeout(this.pt2); this.pt2 = setTimeout(() => {
+      this.setState(st => { const cards = st.cards.filter(c => c.id !== id), o = Object.assign({}, st.drafts); delete o[id];
+        return { cards, drafts: o, front: cards.length ? cards[cards.length - 1].id : null, phase: "offen", msgs: [{ id: "s" + Date.now(), folder: "sent", from: "An " + d.to.map(p => p[0]).join(", "), addr: d.to[0][1], ini: this.ini(d.to[0][0]), date: "Jetzt", sub: d.sub, pre: d.body.split("\n").filter(Boolean).slice(1, 3).join(" ") }].concat(st.msgs) }; });
+    }, 1400);
+  }
+  reply(m, all) {
+    this.pinCard(m.id);
+    const quote = "\n\n\nAm " + m.date + " schrieb " + m.from + ":\n› " + m.pre;
+    this.newDraft({ to: [[m.from, m.addr]], cc: all && m.cc ? m.cc.slice() : [], sub: m.sub.startsWith("Re:") ? m.sub : "Re: " + m.sub, body: quote, inReply: m.id });
+  }
+  goSettings(id) { this.setState(st => ({ area: "Einstellungen", cat: "Integrationen", scards: st.scards.filter(x => x !== id).concat([id]), sfront: id, sfanned: false, menu: null })); }
+  retry() { clearTimeout(this.rt); this.setState({ zu: "lädt" }); this.rt = setTimeout(() => this.setState({ zu: "geladen" }), 1400); }
+  personMenu(e, name, addr) {
+    this.openMenu(e, [{ head: true, label: addr }, this.mi("Adresse kopieren", () => this.toastIt("Adresse kopiert")), this.mi("Mail schreiben", () => this.newDraft({ to: [[name, addr]] })), this.mi("Als Kontakt sichern", () => this.toastIt(name + " als Kontakt gesichert"))], 260);
+  }
+  attMenu(e, m, a) {
+    const lab = this.LABELS.find(l => l[0] === m.label), items = [this.mi("Vorschau"), { sep: true }];
+    items.push(this.mi("In anderes Projekt …"), this.mi("Sichern unter …"));
+    this.openMenu(e, items, 300);
+  }
+
+  // Einstellungen
+  csOf(st) {
+    const M = {
+      connected: ["Verbunden", "var(--c-ink)", "1px solid var(--c-ink)", "var(--c-ink-2)"],
+      stored: ["Schlüssel gespeichert", "linear-gradient(90deg,var(--c-ink) 50%,transparent 50%)", "1px solid var(--c-ink)", "var(--c-ink-2)"],
+      connecting: ["Verbindet …", "transparent", "1px solid var(--c-line-strong)", "var(--c-ink-2)", true],
+      working: ["Gleicht ab …", "transparent", "1px solid var(--c-line-strong)", "var(--c-ink-2)", true],
+      notConnected: ["Nicht verbunden", "transparent", "1px solid var(--c-line-strong)", "var(--c-ink-3)"],
+      failed: ["Fehler", "var(--c-signal)", "1px solid var(--c-signal)", "var(--c-signal)"],
+      unreadable: ["Schlüsselbund nicht lesbar", "transparent", "1px solid var(--c-signal)", "var(--c-signal)"],
+      orphaned: ["Verwaist", "transparent", "1px dashed var(--c-ink-3)", "var(--c-ink-3)"]
+    }[st] || ["", "transparent", "none", "var(--c-ink-3)"];
+    return { state: st, text: M[0], fill: M[1], border: M[2], fg: M[3], spin: !!M[4] };
+  }
+  svc(id) { return this.SVC.find(x => x.id === id); }
+  openSet(id) { this.setState(st => { let sc = st.scards.includes(id) ? st.scards : st.scards.concat([id]); if (sc.length > 6) sc = sc.slice(-6); return { scards: sc, sfront: id, sfanned: false, confirmDisc: null, mem: Object.assign({}, st.mem, { Einstellungen: Object.assign({}, st.mem.Einstellungen || {}, { Rf: false }) }) }; }); }
+  closeSet(id) { this.setState(st => { const sc = st.scards.filter(x => x !== id); return { scards: sc, sfront: st.sfront === id ? sc[sc.length - 1] || null : st.sfront, confirmDisc: null }; }); }
+  setSvc(id, v) { this.setState(st => ({ svc: Object.assign({}, st.svc, { [id]: v }) })); }
+  connect(id) { const x = this.svc(id); this.setSvc(id, "connecting"); setTimeout(() => this.setSvc(id, x.checks ? "connected" : "stored"), 1400); }
+  syncNow(id, a) { const k = id + a; this.setState(st => ({ syncRun: Object.assign({}, st.syncRun, { [k]: true }) })); setTimeout(() => this.setState(st => ({ syncRun: Object.assign({}, st.syncRun, { [k]: false }), lastSync: Object.assign({}, st.lastSync, { [k]: "gerade eben" }) })), 1600); }
+  tog(k) { this.setState(st => ({ toggles: Object.assign({}, st.toggles, { [k]: !st.toggles[k] }) })); }
+  row(label, o) { return Object.assign({ isRow: true, label, line: true, state: "rest", hasSub: !!(o && o.sub), hasCs: !!(o && o.cs), hasVal: !!(o && o.val != null && o.val !== ""), vFg: "var(--c-ink-2)", vFont: "inherit", vSize: "13px", hasKeys: !!(o && o.keys), hasPill: !!(o && o.pill), hasSeg: !!(o && o.seg), hasToggle: !!(o && o.toggle), hasBtns: !!(o && o.btns && o.btns.length) }, o || {}); }
+  toggleRow(label, k, sub) { const on = !!this.state.toggles[k]; return this.row(label, { sub, toggle: () => this.tog(k), tState: on ? "on" : "off", tBg: on ? "var(--c-ink)" : "transparent", tRing: on ? "none" : "inset 0 0 0 1px var(--c-line-strong)", tX: on ? "14px" : "2px", kBg: on ? "var(--c-lane)" : "var(--c-ink-3)" }); }
+  notice(kind, title, text, btns) { const fg = kind === "failure" ? "var(--c-signal)" : kind === "success" ? "var(--c-ink)" : "var(--c-ink-2)"; return { isNotice: true, kind, title, text, fg, d: kind === "success" ? this.P.check || "M3.5 8.5l3 3 6-7" : this.P.alert, hasBtns: !!(btns && btns.length), btns: btns || [] }; }
+  blocks(id) {
+    const s = this.state, P = this.P, x = this.svc(id), out = [];
+    if (x) {
+      const st = s.svc[id], cs = this.csOf(st);
+      const sub = { connected: "Beim Anbieter geprüft · vor 2 Minuten", stored: "Nicht beim Anbieter geprüft", failed: "Letzter Fehler vor 3 Minuten · letzter Erfolg 9. Okt.", connecting: "Anmeldung läuft", working: "Projekte 412 von 1.280" }[st] || "";
+      out.push(this.row("Zustand", { cs, sub }));
+      if (st === "failed") out.push(this.notice("failure", "Fehler · " + (x.reason || "Keine Antwort"), "Der Assistent bleibt aus, bis die Verbindung wieder steht.", [this.tb("Erneut verbinden", "accent", () => this.connect(id))]));
+      if (st === "unreadable") out.push(this.notice("failure", "Der Schlüsselbund kann nicht gelesen werden.", "Der Schlüssel ist gespeichert, die App kommt nicht an ihn heran. Einmal neu eintragen.", [this.tb("Neu eintragen", "neutral", () => this.setSvc(id, "notConnected"))]));
+      if (st === "orphaned") out.push(this.notice("warning", "Verwaister Schlüssel", "Er gehört zu einer anderen Kennung und wird von keiner Anmeldung genutzt.", [this.tb("Entfernen", "signal", () => this.setSvc(id, "notConnected"))]));
+      if (s.confirmDisc === id) out.push(this.notice("warning", x.n + " trennen?", "Die App nutzt " + x.n + " danach nicht mehr.", [this.tb("Trennen", "signal", () => this.setState({ confirmDisc: null }, () => this.setSvc(id, "notConnected"))), this.tb("Abbrechen", "plain", () => this.setState({ confirmDisc: null }))]));
+      if (x.accounts) { out.push({ isHead: true, text: "Postfächer" }); out.push(this.notice("info", "Noch kein Mail-Konto.", "Jeder Anbieter über IMAP und SMTP.", [this.tb("Konto hinzufügen", "accent", () => this.toastIt("Anbieter wählen …"))])); }
+      out.push(this.row("Anmeldung", { val: x.access + (x.firma ? " · für die Firma" : " · persönlich") }));
+      x.fields.forEach(f => { const empty = f[1] === "empty" || st === "notConnected"; out.push(this.row(f[0], { val: empty ? "Nicht eingetragen" : f[1] === "secret" ? "••••••••••••" : f[1], vFg: empty ? "var(--c-ink-3)" : "var(--c-ink-2)", vFont: f[1] === "secret" || /^app/.test(f[1]) ? "'Geist Mono',ui-monospace,Menlo,monospace" : "inherit", vSize: f[1] === "secret" ? "12px" : "13px" })); });
+      if (x.note) out.push({ isNote: true, text: x.note });
+      if (x.areas && st !== "notConnected") {
+        out.push({ isHead: true, text: "Abgleich" });
+        x.areas.forEach(a => { const k = id + a[0], run = !!s.syncRun[k], last = s.lastSync[k] || a[1];
+          out.push(this.row(a[0], { sub: run ? "Gleicht ab …" : /^Noch/.test(last) ? last : "Letzter Abgleich " + last, pill: a[2], pillItems: () => ["Aus", "Manuell", "Alle 30 Sekunden", "Jede Minute", "Alle 5 Minuten", "Alle 15 Minuten", "Alle 30 Minuten", "Jede Stunde"].map(v => this.mi(v, null, { check: v === a[2] })), pillGo: e => this.openMenu(e, ["Aus", "Manuell", "Alle 30 Sekunden", "Jede Minute", "Alle 5 Minuten", "Alle 15 Minuten", "Alle 30 Minuten", "Jede Stunde"].map(v => this.mi(v, null, { check: v === a[2] })), 200), btns: [this.tb(run ? "Gleicht ab …" : "Jetzt abgleichen", "neutral", () => this.syncNow(id, a[0]), { off: run })] })); });
+      }
+      if (x.extras && st !== "notConnected") x.extras.forEach(e => out.push(this.row(e[0], { btns: [this.tb(e[1], "neutral", () => this.toastIt(e[0] + " · " + (e[1] === "Leeren" ? "geleert" : "abgeglichen")))] })));
+      return out;
+    }
+    const T = s.toggles, look = s.look || "Automatisch";
+    const seg = (opts, cur, fn) => opts.map(n => ({ n, state: n === cur ? "selected" : "rest", bg: n === cur ? "var(--c-inv)" : "transparent", fg: n === cur ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { e.stopPropagation(); fn(n); } }));
+    const B = {
+      profil: () => [this.row("Name", { val: this.ME[0] }), this.row("Rolle", { val: "Gestaltung, Leitung" }), this.row("Kürzel", { val: this.ini(this.ME[0]), vFont: "'Geist Mono',ui-monospace,Menlo,monospace" }), this.row("Telefon", { val: "Nicht eingetragen", vFg: "var(--c-ink-3)" }), this.toggleRow("Geburtstag im Team zeigen", "geb"), { isHead: true, text: "Konto" }, this.row("Auf diesem Mac abmelden", { sub: "Trennt Google, Clockodo, ClickUp, sevDesk, Airtable und Claude und startet die App neu.", btns: [this.tb("Abmelden", "signal")], line: false })],
+      signatur: () => [this.row("Konto", { pill: this.ME[1], pillGo: e => this.openMenu(e, [this.mi(this.ME[1], null, { check: true })], 260) }), { isNote: true, text: "Jonas Brenner\nStudio Brenner · Innenarchitektur und Möbel" }, this.toggleRow("Unter neue Mails setzen", "sig", "Antworten und Weiterleitungen eingeschlossen")],
+      datenschutz: () => [this.toggleRow("Bilder in Mails laden", "bilder", T.bilder ? "Bilder werden geladen. Zählpixel melden dem Absender damit, wann du die Mail geöffnet hast." : "Bilder werden nicht geladen. Der Absender erfährt nicht, wann du die Mail geöffnet hast."), this.toggleRow("Assistent ganz aus", "assistentAus", "Stoppt jeden Aufruf an den Assistenten."), this.toggleRow("Dateien im Chat", "chatDateien", "Der Assistent darf angehängte Dateien lesen."), this.row("Eigene Daten exportieren", { btns: [this.tb("Exportieren", "neutral", () => this.toastIt("Export gespeichert."))], line: false })],
+      darstellung: () => [this.row("Erscheinung", { seg: seg(["Hell", "Dunkel", "Automatisch"], look, n => this.setState({ look: n === "Automatisch" ? null : n })) }), this.row("Fremde Inhalte", { sub: "Mails und Dokumente bleiben auf Weiß, auch im Dunkeln.", val: "Immer hell" }), this.row("Schrift", { val: (this.props.schrift ?? "Geist") === "Geist" ? "Geist" : "Systemschrift", line: false })],
+      start: () => [this.row("Beim Öffnen", { pill: "Mail", pillGo: e => this.openMenu(e, [this.mi("Mail", null, { check: true }), this.mi("Einstellungen"), this.mi("Zuletzt offen")], 200), line: false })],
+      sperre: () => [this.toggleRow("App-Sperre", "sperre", "Mit Touch ID oder Passwort."), this.row("Sperren nach", { pill: "5 Minuten Pause", pillGo: e => this.openMenu(e, ["Sofort", "1 Minute", "5 Minuten Pause", "15 Minuten Pause"].map(v => this.mi(v, null, { check: v === "5 Minuten Pause" })), 200), line: false })],
+      mitteilungen: () => [{ isNote: true, text: "Die Regler für Alarm, Ton und Nachfassen kehren mit ihren Bereichen zurück. Heute meldet nur Mail neue Nachrichten." }, this.toggleRow("Neue Mail", "neueMail", "Zähler am Blob und im Dock.")],
+      kuerzel: () => [["Neue Nachricht", ["⌘", "N"]], ["Antworten", ["⌘", "R"]], ["Allen antworten", ["⌘", "⇧", "R"]], ["Weiterleiten", ["⌘", "⇧", "F"]], ["In der Liste suchen", ["⌘", "⌥", "F"]], ["Gelesen / ungelesen", ["⌘", "⇧", "U"]], ["Entwurf sichern", ["⌘", "S"]], ["Drucken", ["⌘", "P"]], ["Mail öffnen", ["⌘", "6"]], ["Fett", ["⌘", "B"]], ["Kursiv", ["⌘", "I"]], ["Unterstrichen", ["⌘", "U"]], ["Link einfügen", ["⌘", "K"]]].map(r => this.row(r[0], { keys: r[1].map(k => ({ k })) })).concat([this.row("Alle Kürzel", { btns: [this.tb("Zurücksetzen", "plain")], line: false })]),
+      einrichtung: () => [this.row("Fortschritt", { val: "4 von 7" }), this.row("Projektordner", { val: "Geteiltes Drive · Projekte" }), this.row("Projektdaten", { val: "Airtable" }), this.row("Vorlagen", { val: "Noch keine Vorlage.", vFg: "var(--c-ink-3)" }), this.row("Einrichtung", { btns: [this.tb("Erneut durchgehen", "neutral")], line: false })],
+      diagnose: () => [this.row("Version", { val: "0.4.2 (118)", vFont: "'Geist Mono',ui-monospace,Menlo,monospace", vSize: "12px" }), this.row("Zweig", { val: "main · 4f2c9e1", vFont: "'Geist Mono',ui-monospace,Menlo,monospace", vSize: "12px" }), this.row("Datenbank", { val: "24,6 MB" }), this.row("Diagnose", { btns: [this.tb("Kopieren", "neutral", () => this.toastIt("In die Zwischenablage kopiert"))], line: false })],
+      backups: () => [this.row("Heute, 09:00", { sub: "Automatisch · 18,2 MB", btns: [this.tb("Wiederherstellen", "plain")] }), this.row("Gestern, 09:00", { sub: "Automatisch · 18,1 MB", btns: [this.tb("Wiederherstellen", "plain")] }), this.row("8. Okt., 17:42", { sub: "Von Hand · 17,9 MB", btns: [this.tb("Wiederherstellen", "plain")] }), { isNote: true, text: "Eine Wiederherstellung greift beim nächsten Start." }],
+      tagebuch: () => [this.notice("failure", "Tagebuch konnte nicht geladen werden.", "Die Datei ist gerade gesperrt.", [this.tb("Erneut versuchen", "neutral")])],
+      werkstatt: () => [this.row("Zuschlag Montage", { val: "18 %" }), this.row("Zuschlag Material", { val: "12 %" }), this.row("Stundensatz Werkstatt", { val: "78,00 €", line: false })],
+      schluessel: () => this.SVC.filter(v => v.id !== "mailkonten").map(v => this.row(v.n, { cs: this.csOf(s.svc[v.id]), btns: s.svc[v.id] === "notConnected" ? [] : [this.tb("Entfernen", "plain")] }))
+    };
+    return (B[id] || (() => []))();
+  }
+  setEntries(cat) {
+    if (cat === "Integrationen") { const out = []; ["Persönlich", "Firma"].forEach(g => { out.push({ head: g }); this.SVC.filter(x => x.g === g).forEach(x => out.push({ id: x.id })); }); return out; }
+    return (this.CATSET[cat] || []).map(id => ({ id }));
+  }
+  setTitle(id) { const x = this.svc(id); return x ? x.n : (this.SET[id] || [id])[0]; }
+
+  renderVals() {
+    const s = this.state, K = this.K, P = this.P, g = this.geo(), isMail = s.area === "Mail", rM = this.mem(), w = this.lay();
+    const licht = s.look === "Dunkel" ? "dunkel" : s.look === "Hell" ? "hell" : (this.props.licht ?? "hell");
+    const geist = (this.props.schrift ?? "Geist") === "Geist", ring = (this.props.symbole ?? "Ring") === "Ring";
+    const iconRing = ring ? "inset 0 0 0 1px var(--c-line-strong)" : "none";
+    const dk = licht === "dunkel";
+    const inkSel = ["var(--c-on-inv)", "var(--c-on-inv-2)", "var(--c-on-inv-3)", "var(--c-on-inv-line)"];
+    const tone = sel => sel ? { fg: inkSel[0], c2: inkSel[1], c3: inkSel[2], cLs: inkSel[3] } : { fg: "var(--c-ink)", c2: "var(--c-ink-2)", c3: "var(--c-ink-3)", cLs: "var(--c-line-strong)" };
+    const lefts = [K.m, K.m + w[0] + K.gap, K.m + w[0] + w[1] + 2 * K.gap], nc = this.noCards();
+    const openCount = w.filter(x => x > K.fold).length;
+    const list = isMail ? this.mailList() : [], unread = this.unread();
+    const mk = (sel, o) => Object.assign({ state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink-2)", ring: sel ? "none" : "inset 0 0 0 1px var(--c-line-strong)", isSym: false, isText: false, dot: false }, o);
+    this._isMail = isMail;
+    const stop = e => e.stopPropagation();
+
+    // strips
+    const marksFor = i => {
+      if (i === 0) return (isMail ? this.FOLDERS.map(f => [f[1], f[2], !s.label && s.folder === f[0], () => this.setState({ folder: f[0], label: null })]) : this.CATS.map(c => [c[0], c[1], s.cat === c[0], () => this.setState({ cat: c[0] })]))
+        .map(m => mk(m[2], { isSym: true, d: P[m[1]], label: m[0], go: e => { stop(e); m[3](); } })).concat(isMail ? [mk(false, { isSym: true, d: P.compose, label: "Neue Mail", go: e => { stop(e); this.newDraft(); } })] : []);
+      if (i === 1) {
+        const n = Math.max(1, Math.floor((g.lh - 24 - 96) / 36));
+        const items = isMail ? list.map(m => [m.ini, m.sub, s.selected === m.id, m.unread, () => { m.isDraft ? this.openDraft(m.id) : this.openMsg(m.id); this.setMem({ max: -1 }); }]) : this.setEntries(s.cat).filter(e => e.id).map(e => [this.setTitle(e.id)[0], this.setTitle(e.id), s.sfront === e.id, s.svc[e.id] === "failed", () => { this.openSet(e.id); this.setMem({ max: -1 }); }]);
+        return items.slice(0, n).map(m => mk(m[2], { isText: true, t: m[0], label: m[1], dot: m[3], go: e => { stop(e); m[4](); } }));
+      }
+      const cl = isMail ? s.cards : s.scards.map(id => ({ id, kind: "setting" }));
+      const ff = isMail ? s.msgs.find(x => x.id === s.front && s.cards.some(c => c.id === x.id && c.kind === "message")) : null;
+      const out = !cl.length ? (isMail ? [mk(false, { isSym: true, d: P.compose, label: "Neue Mail", go: e => { stop(e); this.newDraft(); } })] : []) : ff ? [mk(false, { isSym: true, d: P.reply, label: "Antworten", go: e => { stop(e); this.reply(ff); } }), mk(false, { isSym: true, d: P.forward, label: "Weiterleiten", go: e => { stop(e); this.fwd(ff); } })] : [];
+      return out.concat(cl.map(c => { const m = c.kind === "message" ? s.msgs.find(x => x.id === c.id) : null, d = c.kind === "draft" ? s.drafts[c.id] : null;
+        const t = m ? m.ini : d ? (d.to[0] ? this.ini(d.to[0][0]) : "") : this.setTitle(c.id)[0];
+        return mk(false, { isText: !!t, isSym: !t, d: P.compose, t, label: m ? m.sub : d ? (d.sub || "Neue Nachricht") : this.setTitle(c.id), go: e => { stop(e); this.setMem({ Rf: false, max: -1 }); isMail ? this.setState({ front: c.id, fanned: false }) : this.setState({ sfront: c.id, sfanned: false }); } }); }));
+    };
+    const titles = isMail ? ["Postfach", this.folderName(), "Offen"] : ["Einstellungen", s.cat, "Offen"];
+    const lanes = [0, 1, 2].map(i => {
+      const folded = w[i] <= K.fold, stack = i === 2 && !folded;
+      return { title: titles[i], hasStripTitle: i !== 0, left: lefts[i] + "px", width: w[i] + "px", folded, isList: i === 0 && !folded, isMain: i === 1 && !folded, isStack: stack,
+        state: rM.max === i ? "maximized" : folded ? "collapsed" : "open", cursor: folded ? "pointer" : "default", bg: "var(--c-lane)", ring: "var(--sh-lane)", ovf: "hidden",
+        marks: folded ? marksFor(i) : [],
+        onStrip: folded ? () => { if (rM.max >= 0) this.setMem({ max: -1 }); else this.setMem({ [["Lf", "Mf", "Rf"][i]]: false }); } : undefined };
+    });
+
+    // left lane
+    const failing = isMail && s.zu === "nicht erreichbar";
+    const L = isMail ? {
+      title: "Postfach", hasTitle: true, detail: s.zu === "nicht verbunden" ? "Kein Postfach verbunden" : failing ? "nicht erreichbar" : this.mid(this.ME[1], 30), detailFg: failing ? "var(--c-signal)" : "var(--c-ink-3)",
+      rows: this.FOLDERS.map(f => { const sel = !s.label && s.folder === f[0], n = f[0] === "inbox" ? unread : f[0] === "drafts" ? this.draftRows().length : 0, live = !["lädt", "nicht verbunden"].includes(s.zu);
+        return { isRow: true, isHead: false, name: f[1], d: P[f[2]], state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink)", weight: sel ? 500 : 400, symFg: sel ? "var(--c-lane)" : "var(--c-ink-3)", symRing: sel ? "inset 0 0 0 1px " + tone(true).cLs : iconRing, isSym: true, isMood: false, moodT: "", symBg: "transparent", hasN: live && n > 0, n, nFg: sel ? tone(true).c2 : "var(--c-ink-3)", go: () => this.setState({ folder: f[0], label: null, filter: "all", confirmRow: null }) }; })
+        .concat([{ isHead: true, isRow: false, name: "Labels" }])
+        .concat(this.LABELS.map(l => { const sel = s.label === l[0], mo = null; return { isRow: true, isHead: false, name: l[1], d: P.tag, state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink)", weight: sel ? 500 : 400, symFg: sel ? "var(--c-lane)" : "var(--c-ink-3)", symRing: sel ? "inset 0 0 0 1px " + tone(true).cLs : iconRing, isSym: true, isMood: false, moodT: "", symBg: "transparent", hasN: false, go: () => this.setState({ label: l[0], filter: "all", confirmRow: null }), isSym: !mo, isMood: !!mo, moodT: mo ? l[1].slice(5, 8) : "", symBg: mo ? mo[0] : "transparent", symFg: mo ? mo[1] : (sel ? "var(--c-lane)" : "var(--c-ink-3)"), symRing: mo ? (sel ? "0 0 0 2px var(--c-ink), 0 0 0 3px " + tone(true).cLs : "none") : (sel ? "inset 0 0 0 1px " + tone(true).cLs : iconRing) }; }))
+    } : {
+      title: "Einstellungen", detail: "", detailFg: "var(--c-ink-3)",
+      rows: this.CATS.map(c => { const sel = s.cat === c[0], bad = c[0] === "Integrationen" ? this.SVC.filter(x => ["failed", "unreadable"].includes(s.svc[x.id])).length : 0;
+        return { isRow: true, isHead: false, name: c[0], d: P[c[1]], state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink)", weight: sel ? 500 : 400, symFg: sel ? "var(--c-lane)" : "var(--c-ink-3)", symRing: sel ? "inset 0 0 0 1px " + tone(true).cLs : iconRing, isSym: true, isMood: false, moodT: "", symBg: "transparent", hasN: bad > 0, n: bad, nFg: "var(--c-signal)", go: () => this.setState({ cat: c[0] }) }; })
+    };
+    L.hasNew = isMail; L.newGo = e => { stop(e); this.newDraft(); };
+    L.buttons = openCount > 1 ? [{ label: titles[0] + " falten", d: P.minus, go: e => { stop(e); this.setMem({ Lf: true, max: -1 }); } }] : [];
+
+    // center lane
+    const C = { title: titles[1], query: s.query, searchOpen: isMail && s.searching, searchClosed: !(isMail && s.searching), hasNotice: false, hasState: false, hasRows: true, hasMore: false, rows: [], tools: [], spacerH: "0px", hLine: s.cScrolled ? "var(--c-line)" : "transparent", onScroll: e => { const sc = e.currentTarget.scrollTop > 0; if (sc !== !!this.state.cScrolled) this.setState({ cScrolled: sc }); } };
+    C.onQuery = e => this.setState({ query: e.target.value });
+    C.queryKey = e => { if (e.key === "Escape") { e.stopPropagation(); this.setState({ searching: false, query: "" }); } };
+    const tool = (o) => Object.assign({ teil: "symbol-button", state: "rest", pad: "0", bg: "transparent", fg: "var(--c-ink-3)", ring: iconRing, showLabel: false }, o);
+    if (isMail) {
+      const fl = { all: "Alle", unread: "Ungelesen", attachment: "Mit Anhang" }, on = s.filter !== "all";
+      C.tools.push(tool({ teil: "filter-capsule", state: on ? "selected" : "rest", label: on ? "Filter: " + fl[s.filter] : "Filter", text: fl[s.filter], d: P.filter, pad: on && w[1] >= 340 ? "0 12px 0 8px" : "0", bg: on ? "var(--c-inv)" : "transparent", fg: on ? "var(--c-on-inv)" : "var(--c-ink-3)", ring: on ? "none" : iconRing, showLabel: on && w[1] >= 340,
+        go: e => this.openMenu(e, [["all", "Alle"], ["unread", "Ungelesen"], ["attachment", "Mit Anhang"]].map(f => this.mi(f[1], () => this.setState({ filter: f[0] }), { check: s.filter === f[0] })), 200) }));
+      C.tools.push(tool({ label: s.searching ? "Suche schließen" : "In der Liste suchen", d: P.search, state: s.searching ? "selected" : "rest", bg: s.searching ? "var(--c-inv)" : "transparent", fg: s.searching ? "var(--c-on-inv)" : "var(--c-ink-3)", ring: s.searching ? "none" : iconRing,
+        go: e => { stop(e); if (s.searching) this.setState({ searching: false, query: "" }); else this.setState({ searching: true }, () => setTimeout(() => this.searchRef.current && this.searchRef.current.focus(), 40)); } }));
+      const cnt = list.filter(m => m.unread).length; C.hasCount = cnt > 0; C.count = this.nf(cnt);
+      const goConn = () => this.goSettings("google");
+      if (s.zu === "lädt") C.cs = { kind: "loading", spin: true, sym: false, text: "Nachrichten werden geladen\n12 von 50" };
+      else if (s.zu === "nicht verbunden") C.cs = { kind: "permissionRequired", sym: true, d: P.envelope, hasTitle: true, title: "Kein Postfach verbunden", text: "Verbinde ein Postfach, um Mails hier zu lesen und zu schreiben.", hasAct: true, act: "Postfach verbinden", go: goConn, actBg: "var(--c-inv)", actFg: "var(--c-on-inv)", actRing: "none" };
+      else if (s.zu === "Fehler") C.cs = { kind: "failed", sym: true, d: P.alert, hasTitle: true, title: "Nachrichten konnten nicht geladen werden", text: "Der Server hat nicht geantwortet. Zuletzt geladen vor 2 Stunden.", hasAct: true, act: "Erneut versuchen", go: () => this.retry(), actBg: "transparent", actFg: "var(--c-ink)", actRing: "inset 0 0 0 1px var(--c-line-strong)" };
+      else if (!list.length) {
+        if (s.query.trim()) C.cs = { kind: "noResults", sym: true, d: P.search, text: "Keine Treffer für „" + s.query.trim() + "“ in " + this.folderName() + ".", hasAct: true, act: "Suche leeren", go: () => this.setState({ query: "" }), actBg: "transparent", actFg: "var(--c-ink)", actRing: "inset 0 0 0 1px var(--c-line-strong)" };
+        else if (s.filter !== "all") C.cs = { kind: "noResults", sym: true, d: P.filter, text: "Keine Treffer für diesen Filter.", hasAct: true, act: "Alle zeigen", go: () => this.setState({ filter: "all" }), actBg: "transparent", actFg: "var(--c-ink)", actRing: "inset 0 0 0 1px var(--c-line-strong)" };
+        else C.cs = { kind: "empty", sym: true, d: P.inbox, text: "Keine Nachrichten in " + this.folderName() + ".", hasAct: true, act: "Verfassen", go: () => this.newDraft(), actBg: "transparent", actFg: "var(--c-ink)", actRing: "inset 0 0 0 1px var(--c-line-strong)" };
+      }
+      if (failing) { C.hasNotice = true; C.notice = { kind: "failure", fg: "var(--c-signal)", d: P.alert, title: this.ME[1] + " ist nicht erreichbar", text: "Anmeldung abgelaufen. Die zuletzt geladenen Mails bleiben lesbar; Gesendetes wartet im Postausgang.", act: "Erneut verbinden", go: goConn }; }
+      if (C.cs) { C.hasState = true; C.hasRows = false; C.cs = Object.assign({ spin: false, sym: false, hasTitle: false, hasAct: false, title: "", act: "" }, C.cs); }
+      const showAtt = w[1] >= 560 ? 3 : 2, compact = w[1] < 560;
+      const lim = Math.min(list.length, s.lim || 60); C.spacerH = Math.max(0, list.length - lim) * 88 + "px";
+      C.onScroll = e => { const el = e.currentTarget, sc = el.scrollTop > 0, more = el.scrollHeight - el.scrollTop - el.clientHeight < 1200 && lim < list.length; if (sc !== !!this.state.cScrolled || more) this.setState(st => Object.assign({ cScrolled: sc }, more ? { lim: (st.lim || 60) + 120 } : {})); };
+      C.rows = list.slice(0, lim).map((m, i) => {
+        const sel = s.selected === m.id && (s.cards.some(c => c.id === m.id)) || (m.isDraft && s.front === m.id), hov = s.hoverRow === m.id, conf = s.confirmRow === m.id;
+        const T = tone(sel), mo = null, bg = sel ? "var(--c-ink)" : (hov || conf) ? "var(--c-lane)" : "transparent", nextSel = list[i + 1] && (s.selected === list[i + 1].id);
+        const nm = this.ini(m.from), att = (m.att || []).slice(0, showAtt).map(a => ({ n: this.mid(a[0], 26), full: a[0] + " · " + a[1] })), more = (m.att || []).length - att.length;
+        return { isRow: true, isHead: false, state: sel ? "selected" : m.unread ? "unread" : "rest", bg, actBg: sel ? "var(--c-ink)" : "var(--c-lane)", ring: (hov || conf || (s.menu && s.ctxRow === m.id)) && !sel ? "inset 0 0 0 1px var(--c-line-strong)" : "none", fg: T.fg, c2: T.c2, c3: T.c3, cLs: T.cLs, hasProj: !!mo, proj: mo ? (this.LABELS.find(l => l[0] === m.label) || ["", ""])[1].slice(0, 8) : "", pBg: mo ? mo[0] : "", pFg: mo ? mo[1] : "", mark: nm, markSym: !nm, markText: !!nm, addr: m.addr || "", mBg: m.unread ? T.fg : "transparent", mFg: m.unread ? (sel ? "var(--c-ink)" : "var(--c-lane)") : T.c2, mRing: m.unread ? "none" : "inset 0 0 0 1px " + T.cLs,
+          sender: m.from ? this.dn(m) : this.mid(this.dn(m), 40), wS: m.unread ? 600 : 500, hasThread: (m.n || (m.thread && m.thread.length) || 0) > 1, thread: this.nf(m.n || (m.thread && m.thread.length)), star: !!m.star, dateOp: (hov || conf) ? 0 : 1, date: m.date, hasCs: false,
+          subject: m.sub || "Kein Betreff", subFg: !m.sub ? T.c3 : m.unread ? T.fg : T.c2, wSub: m.unread && m.sub ? 500 : 400, hasPre: true, preview: m.pre || "Kein Text", preFg: m.pre ? T.c2 : T.c3, hasAtt: att.length > 0 && !compact || (att.length > 0 && compact), att, hasMore: more > 0, more: "+" + more,
+          showAct: hov && !conf && !m.isDraft, confirm: conf, sep: i < list.length - 1 && !sel && !nextSel,
+          acts: [{ label: m.star ? "Markierung entfernen" : "Markieren", d: P.flag, fg: m.star ? "var(--c-ink)" : "var(--c-ink-3)", go: e => { stop(e); this.patchMsg(m.id, { star: !m.star }); } },
+            { label: m.unread ? "Als gelesen markieren" : "Als ungelesen markieren", d: P.envelope, fg: "var(--c-ink-3)", go: e => { stop(e); this.patchMsg(m.id, { unread: !m.unread }); } },
+            { label: "Archivieren", d: P.archive, fg: "var(--c-ink-3)", go: e => { stop(e); this.patchMsg(m.id, { folder: "archive" }); this.setState(st => ({ cards: st.cards.filter(c => c.id !== m.id), front: st.front === m.id ? (st.cards.filter(c => c.id !== m.id).slice(-1)[0] || {}).id || null : st.front })); this.toastIt("Archiviert"); } },
+            { label: "In den Papierkorb", d: P.trash, fg: "var(--c-ink-3)", go: e => { stop(e); this.trashMsg(m); } }],
+          doTrash: e => { stop(e); this.patchMsg(m.id, { folder: "trash" }); this.setState(st => { const cards = st.cards.filter(c => c.id !== m.id); return { confirmRow: null, cards, front: st.front === m.id ? (cards.slice(-1)[0] || {}).id || null : st.front }; }); },
+          noTrash: e => { stop(e); this.setState({ confirmRow: null }); },
+          go: () => m.isDraft ? this.openDraft(m.id) : this.openMsg(m.id), dbl: () => { this.setMem({ Rf: false, max: -1 }); m.isDraft ? this.openDraft(m.id) : this.openMsg(m.id, true); }, ctx: e => this.rowMenu(e, m),
+          enter: () => this.setState({ hoverRow: m.id }), leave: () => this.setState(st => st.hoverRow === m.id ? { hoverRow: null } : null) };
+      });
+      if (s.query.trim() && list.length) C.rows.unshift({ isHead: true, isRow: false, name: this.nf(list.length) + " Treffer in allen Ordnern" });
+    } else {
+      C.hasCount = false;
+      const ents = this.setEntries(s.cat);
+      C.rows = ents.map((e, i) => {
+        if (e.head) return { isHead: true, isRow: false, name: e.head };
+        const x = this.svc(e.id), meta = this.SET[e.id], sel = s.sfront === e.id && !s.sfanned, hov = s.hoverRow === e.id, st = x ? s.svc[e.id] : null, bad = st === "failed" || st === "unreadable";
+        const nx = ents[i + 1], nextSel = nx && nx.id && s.sfront === nx.id;
+        const val = !x ? (e.id === "darstellung" ? (s.look || "Automatisch") : e.id === "sperre" ? (s.toggles.sperre ? "An" : "Aus") : meta[2]) : "";
+        const T = tone(sel), cs0 = x ? this.csOf(st) : {}, cs = sel && x ? Object.assign({}, cs0, { fg: cs0.fg.indexOf("signal") > 0 ? cs0.fg : T.c2, fill: String(cs0.fill).split("var(--c-ink)").join(T.fg), border: String(cs0.border).split("var(--c-ink-3)").join(T.c3).split("var(--c-ink)").join(T.fg).split("var(--c-line-strong)").join(T.cLs) }) : cs0;
+        return { isRow: true, isHead: false, state: sel ? "selected" : bad ? "unread" : "rest", actBg: sel ? "var(--c-ink)" : "var(--c-lane)", bg: sel ? "var(--c-ink)" : hov ? "var(--c-lane)" : "transparent", ring: hov && !sel ? "inset 0 0 0 1px var(--c-line-strong)" : "none", fg: T.fg, c2: T.c2, c3: T.c3, cLs: T.cLs, hasProj: false, mark: this.setTitle(e.id)[0], markText: true, markSym: false, mBg: bad ? "var(--c-signal)" : "transparent", mFg: bad ? "var(--c-on-signal)" : T.c2, mRing: bad ? "none" : "inset 0 0 0 1px " + T.cLs,
+          sender: this.setTitle(e.id), wS: 500, hasThread: false, star: false, dateOp: 1, date: val, hasCs: !!x, cs, subject: x ? x.use : meta[1], subFg: T.c3, wSub: 400, hasPre: false, hasAtt: false, att: [], hasMore: false, showAct: false, confirm: false,
+          sep: nx && !nx.head && !sel && !nextSel, go: () => this.openSet(e.id), dbl: () => { this.setMem({ Rf: false, max: -1 }); this.openSet(e.id); }, enter: () => this.setState({ hoverRow: e.id }), leave: () => this.setState(st2 => st2.hoverRow === e.id ? { hoverRow: null } : null) };
+      });
+      C.cs = {};
+    }
+    if (openCount > 1) C.tools.push(tool({ label: titles[1] + " falten", d: P.minus, go: e => { stop(e); this.setMem({ Mf: true, max: -1 }); } }));
+    C.tools.push(tool({ label: rM.max === 1 ? "Zurück" : titles[1] + " groß", d: rM.max === 1 ? P.shrink : P.expand, go: e => { stop(e); this.setMem({ max: rM.max === 1 ? -1 : 1 }); } }));
+
+    // stack
+    const cl = isMail ? s.cards : s.scards.map(id => ({ id, kind: "setting" })), frontId = isMail ? s.front : s.sfront, fanned = isMail ? s.fanned : s.sfanned;
+    const SH = g.lh - 44, turm = (this.props.stapel ?? "8a gestaffelt") === "8b Turm", ton = "grau", lv = this.LEVELS.grau[licht];
+    const order = fanned ? cl : cl.filter(c => c.id !== frontId).concat(cl.filter(c => c.id === frontId)), b = order.length - 1;
+    let acc = 0; const tops = order.map((c, i) => { const t = acc; if (!fanned) acc += (b - i) > 3 ? 8 : 44; else acc += 52; return t; });
+    const glaze = "inset 0 1px 0 var(--c-glaze)", ofl = this.props.oberflaeche ?? "Lack", dkS = licht === "dunkel";
+    const lack = (front, lvl, first) => {
+      const lite = !lvl || /^#(?:[c-f])/i.test(lvl[0]);
+      const spec = front ? (dkS ? "rgba(255,255,255,.14)" : "rgba(255,255,255,1)") : lite ? "rgba(255,255,255,.9)" : "rgba(255,255,255,.22)";
+      const seam = dkS ? "rgba(0,0,0,.7)" : front ? "rgba(0,0,0,.14)" : "rgba(0,0,0,.2)";
+      return ["inset 0 1px 0 " + spec, "0 -1px 0 " + seam].concat(first ? [] : ["0 -8px 16px -12px rgba(0,0,0," + (dkS ? ".55" : ".16") + ")"]).join(", "); };
+    const glas = front => ["inset 0 0 0 1px rgba(255,255,255," + (dkS ? ".12" : ".7") + ")", "inset 0 1px 0 rgba(255,255,255," + (dkS ? ".18" : ".9") + ")", "0 -8px 24px -14px rgba(0,0,0," + (dkS ? ".6" : ".22") + ")", "0 0 0 1px rgba(0,0,0," + (dkS ? ".35" : ".04") + ")"].join(", ");
+    const cards = order.map((c, i) => {
+      const d = fanned ? 0 : b - i, front = !fanned && d === 0, m = c.kind === "message" ? s.msgs.find(x => x.id === c.id) : null, dr = c.kind === "draft" ? s.drafts[c.id] : null;
+      const lvl = d > 0 ? lv[Math.min(d, 5) - 1] : null, inset = 0;
+      const toN = dr ? dr.to.map(p => p[0] || p[1]) : [], title = m ? (m.from ? this.dn(m) : this.mid(this.dn(m), 34)) : dr ? (toN.length ? "An " + (toN.length > 1 ? (dr.to[0][0] || this.mid(dr.to[0][1], 24)) : toN[0]) : "Neue Nachricht") : this.setTitle(c.id);
+      const metaIsAddr = !!(m && front), metaT = m ? (front ? (m.from ? this.mid(m.addr, 36) : "") : m.date) : dr && toN.length > 1 && !front ? "und " + this.nf(toN.length - 1) + " weitere" : dr ? (front ? ({ gesichert: "Entwurf gesichert", sendet: "Sendet …", Sendefehler: "Nicht gesendet" }[s.phase] || dr.sub) : dr.sub) : (this.svc(c.id) ? this.csOf(s.svc[c.id]).text : (this.SET[c.id] || [])[1] || "");
+      const x = this.svc(c.id), acts = [];
+      if (front && dr && !s.confirmDiscard) { acts.push({ label: "Entwurf sichern", d: P.save, fg: "var(--c-ink-2)", go: e => { stop(e); this.setState(st => ({ phase: "gesichert", drafts: Object.assign({}, st.drafts, { [c.id]: Object.assign({}, st.drafts[c.id], { saved: true }) }) })); } }, { label: "Entwurf verwerfen", d: P.trash, fg: "var(--c-signal)", go: e => { stop(e); this.setState({ confirmDiscard: true }); } }); }
+      return { id: c.id, tf: !front && s.hoverCard === c.id ? "translateY(-4px)" : "none", enter: () => { if (!front) this.setState({ hoverCard: c.id }); }, leave: () => this.setState(st => st.hoverCard === c.id ? { hoverCard: null } : null), state: front ? "open" : fanned ? "fanned" : "stacked", top: tops[i] + "px", h: fanned ? "44px" : (SH - tops[i]) + "px", z: i + 1, inset: inset + "px",
+        bg: ofl === "Glas" ? "color-mix(in srgb, " + (lvl ? lvl[0] : "var(--c-lane)") + " " + (front ? 86 : 64) + "%, transparent)" : lvl ? lvl[0] : "var(--c-lane)", fg: lvl ? lvl[1] : "var(--c-ink)", sh: ofl === "Lack" ? lack(front, lvl, i === 0) : ofl === "Glas" ? glas(front) : front ? glaze + ", var(--sh-lane), 0 -8px 24px -12px rgba(0,0,0,.22)" : glaze + ", 0 0 0 1px rgba(0,0,0,.06), 0 -6px 16px -10px rgba(0,0,0,.18)",
+        sheen: ofl === "Lack" ? "none" : ofl === "x" ? (front ? "linear-gradient(180deg, rgba(255,255,255," + (dkS ? ".035" : ".0") + ") 0, rgba(0,0,0,0) 120px)" : "linear-gradient(180deg, rgba(255,255,255," + (dkS ? ".06" : ".16") + ") 0, rgba(255,255,255,0) 24px, rgba(0,0,0,0) 60%, rgba(0,0,0," + (dkS ? ".18" : ".05") + ") 100%)") : ofl === "Glas" ? "linear-gradient(160deg, rgba(255,255,255," + (dkS ? ".08" : ".55") + "), rgba(255,255,255,0) 55%)" : "none",
+        blur: ofl === "Glas" ? "blur(22px) saturate(1.4)" : "none",
+        hLine: front ? "var(--c-line)" : "transparent", mLine: "color-mix(in srgb, currentColor 22%, transparent)", closeRing: "none",
+        markSym: !!dr || !!(m && !this.ini(m.from)), markText: !dr && !(m && !this.ini(m.from)), markD: dr ? P.compose : P.person, mark: m ? this.ini(m.from) : this.setTitle(c.id)[0], title, meta: metaT, metaTip: metaIsAddr ? m.addr : "", metaFlex: (m && !front) || (dr && !front && toN.length > 1) ? "none" : "1 1 0", metaMl: (m && !front) || (dr && !front && toN.length > 1) ? "auto" : "0", lock: !!(x && x.firma) || (x && x.privat), acts,
+        confirm: front && !!dr && s.confirmDiscard, doDiscard: e => { stop(e); this.discard(c.id); }, noDiscard: e => { stop(e); this.setState({ confirmDiscard: false }); },
+        close: e => { stop(e); isMail ? this.closeCard(c.id) : this.closeSet(c.id); }, cursor: front ? "default" : "pointer",
+        go: front ? undefined : () => { if (isMail) { this.setState({ front: c.id, fanned: false, confirmDiscard: false }); if (m) this.setState({ selected: m.id }); } else this.setState({ sfront: c.id, sfanned: false }); },
+        isMsg: front && !!m, isDraft: front && !!dr, isSet: front && !m && !dr,
+        isPreview: !!m && !c.pin, tStyle: "normal", pin: e => { stop(e); this.pinCard(c.id); },
+        titleGo: front && m ? e => { stop(e); this.personMenu(e, m.from, m.addr); } : undefined, titleTip: front && m ? m.addr : "", titleCur: front && m ? "pointer" : "inherit" };
+    });
+    const S = { state: fanned ? "fanned" : "stacked", cards };
+
+    // reading body
+    const fm = isMail ? s.msgs.find(x => x.id === frontId) : null, RB = {};
+    if (fm) {
+      const narrow = w[2] < 480, rc = [[this.ME[0], this.ME[1]]].concat(fm.cc || []);
+      Object.assign(RB, { from: fm.from, addr: fm.addr, subject: fm.sub, rcpt: "", hasRMore: rc.length > 2, rMore: "und " + this.nf(rc.length - 1) + " weitere", ...this.rcptView(rc, true, null, j => j === 0 ? "An" : j === 1 ? "Cc" : ""), showSum: !s.showRcpt, gRows: s.showRcpt ? "1fr" : "0fr", lOp: s.showRcpt ? 1 : 0, first: rc.length > 2 ? (rc[0][0] ? rc[0][0].trim().split(/\s+/)[0] : this.mid(rc[0][1], 24)) : rc.map(p => p[0] || this.mid(p[1], 30)).join(", "), showR: s.showRcpt, rState: s.showRcpt ? "expanded" : "collapsed", rTurn: s.showRcpt ? "rotate(180deg)" : "none",
+        toggleR: e => { stop(e); this.setState({ showRcpt: !s.showRcpt }); }, senderMenu: e => this.personMenu(e, fm.from, fm.addr),
+        rlist: [{ k: "An", people: [this.ME] }].concat(fm.cc ? [{ k: "Cc", people: fm.cc }] : []).map((r, i, a) => ({ k: r.k, last: i === a.length - 1, people: r.people.map(p => ({ name: p[0] || this.mid(p[1], 34), addr: p[1], go: e => this.personMenu(e, p[0], p[1]) })) })),
+        hasConv: !!(fm.thread && fm.thread.length > 1), conv: fm.thread ? fm.thread.length + " Nachrichten in dieser Unterhaltung" : "", imgBlocked: !!fm.html && !s.imgs[fm.id] && !s.toggles.bilder, loadImages: e => { stop(e); this.setState(st => ({ imgs: Object.assign({}, st.imgs, { [fm.id]: true }) })); } });
+      const all = [{ label: "Als Kontakt sichern", d: P.personAdd, fg: "var(--c-ink-2)", go: e => { stop(e); this.toastIt(fm.from + " als Kontakt gesichert"); } }, { label: "Allen antworten", d: P.replyAll, fg: "var(--c-ink-2)", go: e => { stop(e); this.reply(fm, true); } }, { label: "Weiterleiten", d: P.forward, fg: "var(--c-ink-2)", go: e => { stop(e); this.newDraft({ sub: "Fwd: " + fm.sub, body: "\n\n\n— Weitergeleitet —\n" + fm.pre, att: (fm.att || []).slice() }); } }, { label: "Archivieren", d: P.archive, fg: "var(--c-ink-2)", go: e => { stop(e); this.patchMsg(fm.id, { folder: "archive" }); this.closeCard(fm.id); this.toastIt("Archiviert"); } }];
+      const trashB = { label: "In den Papierkorb", d: P.trash, fg: "var(--c-signal)", go: e => { stop(e); this.patchMsg(fm.id, { folder: "trash" }); this.closeCard(fm.id); this.toastIt("Im Papierkorb"); } };
+      const moreB = { label: "Mehr", d: P.more, fg: "var(--c-ink-2)", go: e => this.openMenu(e, (narrow ? all.map(a => this.mi(a.label, () => a.go({ stopPropagation() {} }))).concat([{ sep: true }]) : []).concat([this.mi("Drucken", null, null), this.mi("Als PDF sichern"), this.mi("Mail in Projektordner sichern", () => this.toastIt("Als PDF im Projektordner gesichert")), { sep: true }, this.mi(fm.star ? "Markierung entfernen" : "Markieren", () => this.patchMsg(fm.id, { star: !fm.star })), this.mi("Als ungelesen markieren", () => this.patchMsg(fm.id, { unread: true }), null), this.mi("Verschieben nach …"), this.mi("Als Spam melden")]), 260) };
+      RB.acts = (narrow ? [] : all).concat([trashB, moreB]);
+      const th = fm.thread || [[fm.from, fm.date === "Gestern" || /\d\./.test(fm.date) ? fm.date : "Heute, " + fm.date, fm.pre + "\n\nViele Grüße\n" + fm.from.split(" ")[0]]];
+      RB.thread = th.map((t, i) => { const last = i === th.length - 1, qk = fm.id + i;
+        return { name: t[0], date: t[1], text: fm.html ? "Liebe Kundinnen und Kunden,\n\n" + fm.pre : t[2], pt: i ? "16px" : "0", line: i ? "#e8e8e8" : "transparent", menu: e => this.personMenu(e, t[0], t[0] === this.ME[0] ? this.ME[1] : fm.addr),
+          isHtml: !!fm.html, tiles: s.imgs[fm.id] || s.toggles.bilder ? [{ n: "Leinen 04", bg: "#ebebeb" }, { n: "Leinen 11", bg: "#d9d9d9" }] : [{ n: "Bild blockiert", bg: "repeating-linear-gradient(135deg,#f5f5f5 0 8px,#fafafa 8px 16px)" }, { n: "Bild blockiert", bg: "repeating-linear-gradient(135deg,#f5f5f5 0 8px,#fafafa 8px 16px)" }],
+          hasQuote: !!t[4], qOpen: !!s.quote[qk], quote: t[3] || "", qLabel: s.quote[qk] ? "Zitat ausblenden" : "Zitat zeigen · " + ((t[3] || "").split("\n").length) + " Zeilen", toggleQ: e => { stop(e); this.setState(st => ({ quote: Object.assign({}, st.quote, { [qk]: !st.quote[qk] }) })); },
+          hasAtt: last && !!(fm.att && fm.att.length), att: last ? (fm.att || []).map(a => ({ n: a[0], s: a[1], menu: e => this.attMenu(e, fm, a) })) : [] }; });
+    }
+
+    // draft body
+    const fd = isMail ? s.drafts[frontId] : null, DB = {};
+    if (fd) {
+      const id = frontId, ph = s.phase, ok = this.canSend(fd);
+      const rowF = (k, key, ph2, hasCc) => { const all = fd[key], open = s.rcptAll || all.length <= 2; return { k, ...this.rcptView(all, open, j => e => { stop(e); this.patchDraft(id, { [key]: fd[key].filter((_, q) => q !== j) }); }), wrap: open ? "wrap" : "nowrap", padY: open && all.length > 2 ? "10px" : "0", showInput: open, hasToggle: all.length > 2, hasMoreText: !open, tState: open ? "expanded" : "collapsed", tTurn: open ? "rotate(180deg)" : "none", tTip: open ? "Weniger zeigen" : "Alle " + this.nf(all.length) + " Empfänger zeigen", more: "und " + this.nf(all.length - 1) + " weitere", toggleAll: e => { stop(e); this.setState({ rcptAll: !s.rcptAll }); }, chips: (open ? all : all.slice(0, 1)).map((p, j) => ({ name: p[0] || this.mid(p[1], 30), addr: p[1], remove: e => { stop(e); this.patchDraft(id, { [key]: fd[key].filter((_, q) => q !== j) }); } })), input: fd.input[key], ph: ph2, hasCc,
+        onInput: e => this.patchDraft(id, { input: Object.assign({}, fd.input, { [key]: e.target.value }) }),
+        onKey: e => { const v = e.target.value.trim(); if ((e.key === "Enter" || e.key === ",") && v) { e.preventDefault(); this.patchDraft(id, { [key]: fd[key].concat([[v.split("@")[0], v]]), input: Object.assign({}, fd.input, { [key]: "" }) }); } else if (e.key === "Backspace" && !e.target.value && fd[key].length) this.patchDraft(id, { [key]: fd[key].slice(0, -1) }); } }; };
+      Object.assign(DB, { fromName: this.ME[0], fromAddr: this.ME[1], fromMenu: e => this.openMenu(e, [this.mi(this.ME[1], null, { check: true }), { sep: true }, this.mi("Signatur anhängen", null, { check: true }), this.mi("Signatur bearbeiten …", () => { this.setState({ area: "Einstellungen", cat: "Person" }); this.openSet("signatur"); })], 260),
+        rcptRows: [rowF("An", "to", fd.to.length ? "" : "Name oder Adresse", true)].concat(fd.showCc ? [rowF("Cc", "cc", "Kopie", false), rowF("Bcc", "bcc", "Blindkopie", false)] : []),
+        ccState: fd.showCc ? "selected" : "rest", ccBg: fd.showCc ? "var(--c-inv)" : "transparent", ccFg: fd.showCc ? "var(--c-on-inv)" : "var(--c-ink-3)", toggleCc: e => { stop(e); this.patchDraft(id, { showCc: !fd.showCc }); },
+        subject: fd.sub, onSubject: e => this.patchDraft(id, { sub: e.target.value }), body: fd.body, onBody: e => this.patchDraft(id, { body: e.target.value }),
+        fmt: s.fmt, fmtState: s.fmt ? "selected" : "rest", fmtBg: s.fmt ? "var(--c-inv)" : "transparent", fmtFg: s.fmt ? "var(--c-on-inv)" : "var(--c-ink-3)", toggleFmt: e => { stop(e); this.setState({ fmt: !s.fmt }); },
+        fmtItems: [["Fett", "bold"], ["Kursiv", "italic"], ["Unterstrichen", "underline"], ["Aufzählung", "list"], ["Nummerierung", "numbered"], ["Link", "link"]].map(f => ({ label: f[0], d: P[f[1]] })),
+        hasAtt: fd.att.length > 0, att: fd.att.map((a, j) => ({ n: a[0], s: a[1], remove: e => { stop(e); this.patchDraft(id, { att: fd.att.filter((_, q) => q !== j) }); } })),
+        driveMenu: e => this.openMenu(e, [{ head: true, label: "Aus Projektordner" }].concat(this.LABELS.slice(0, 3).map(l => this.mi(l[1], () => this.patchDraft(id, { att: fd.att.concat([["Plan_" + l[1].slice(0, 8) + ".pdf", "1,2 MB"]]) }), { meta: "Drive" }))), 280),
+        spin: ph === "sendet", phaseState: { sendet: "sending", Sendefehler: "sendFailed", "Freigabe fehlt": "permissionRequired", gesichert: "saved", "ohne Betreff": "sendBlocked" }[ph] || "writing",
+        status: ph === "sendet" ? "Sendet …" : ph === "gesichert" ? "Entwurf gesichert" : !fd.to.length ? "Empfänger fehlt" : !fd.sub.trim() ? "Betreff fehlt" : ph === "Sendefehler" ? "Nicht gesendet" : "",
+        stFg: ph === "Sendefehler" ? "var(--c-signal)" : "var(--c-ink-3)", hasNotice: ph === "Sendefehler" || ph === "Freigabe fehlt" });
+      if (ph === "Sendefehler") DB.notice = { kind: "failure", fg: "var(--c-signal)", title: "Nicht gesendet", text: "Der Server hat nicht geantwortet. Der Entwurf liegt sicher in den Entwürfen.", act: "Erneut senden", go: e => { stop(e); this.setState({ phase: "offen" }, () => this.send()); } };
+      if (ph === "Freigabe fehlt") DB.notice = { kind: "warning", fg: "var(--c-ink-2)", title: "Senden braucht die Schreibfreigabe", text: "Einmal neu anmelden, dann geht der Entwurf raus.", act: "Einstellungen öffnen", go: e => { stop(e); this.goSettings("google"); } };
+      DB.ok = ok;
+    }
+
+    // settings body
+    const fk = { stopPropagation() {}, preventDefault() {} }, sNarrow = w[2] < 480;
+    const fold = b => { if (!sNarrow || !b.isRow) return b;
+      if (b.hasSeg) { const cur = b.seg.find(o => o.state === "selected"); return Object.assign({}, b, { hasSeg: false, hasPill: true, pill: cur ? cur.n : b.seg[0].n, pillGo: e => this.openMenu(e, b.seg.map(o => this.mi(o.n, () => o.go(fk), { check: o.state === "selected" })), 200) }); }
+      if (b.hasPill && b.hasBtns && b.pillItems) return Object.assign({}, b, { hasBtns: false, pillGo: e => this.openMenu(e, b.pillItems().concat([{ sep: true }], b.btns.map(x => this.mi(x.label, () => x.go(fk)))), 220) });
+      if (b.hasBtns && b.btns.length > 1) return Object.assign({}, b, { hasBtns: false, hasPill: true, pill: "Aktionen", pillGo: e => this.openMenu(e, b.btns.map(x => this.mi(x.label, () => x.go(fk))), 220) });
+      return b; };
+    const SB = { blocks: !isMail && frontId ? this.blocks(frontId).map(fold) : [] };
+
+    // action bar
+    const narrowBar = w[2] < 480;
+    // stack head = command panel for the front card; fixed slots, overflow into Mehr
+    const fc = S.cards.find(c => c.state === "open"), cw = w[2] - 16;
+    const hb = (label, d, go, kind, o) => { o = o || {}; const v = kind === "accent" || kind === "on" ? ["var(--c-inv)", "var(--c-on-inv)", "var(--c-inv)", "var(--c-on-inv)"] : kind === "signal" ? ["transparent", "var(--c-signal)", "var(--c-hover)", "var(--c-signal)"] : ["transparent", "var(--c-ink-2)", "var(--c-hover)", "var(--c-ink)"];
+      const lab = !!o.label;
+      return { isBtn: true, isSep: false, teil: lab ? "text-button" : "symbol-button", label, tip: label, d, prio: o.prio || 0, run: go, state: o.off ? "disabled" : kind || "neutral", showLabel: lab, w: lab ? "auto" : "28px", pad: lab ? "0 12px 0 8px" : "0", cost: lab ? (o.lw || 84) : 28,
+        bg: v[0], fg: v[1], hbg: o.off ? v[0] : v[2], hfg: o.off ? v[1] : v[3], ring: kind === "accent" || kind === "on" ? "none" : iconRing, op: o.off ? .4 : 1, cur: o.off ? "default" : "pointer", off: !!o.off,
+        go: e => { stop(e); if (!o.off) go(e); } }; };
+    const SEP = { isSep: true, isBtn: false, cost: 9 };
+    let main = [], tail = [], more = [], hint = "", hintFg = "var(--c-ink-3)";
+    const mm = (x) => this.mi(x.label, () => x.run({ stopPropagation() {}, currentTarget: null }), null);
+    if (isMail && !fanned && fc && fc.isMsg && fm) {
+      main = [hb("Antworten", P.reply, () => this.reply(fm), null, { prio: 1 }), hb("Allen antworten", P.replyAll, () => this.reply(fm, true), null, { prio: 4, off: !(fm.cc && fm.cc.length) }), hb("Weiterleiten", P.forward, () => this.fwd(fm), null, { prio: 2 }), SEP,
+        hb("Archivieren", P.archive, () => this.archiveMsg(fm), null, { prio: 5 }), hb("In den Papierkorb", P.trash, () => this.trashMsg(fm), "signal", { prio: 3 })];
+      more = [this.mi(fm.star ? "Markierung entfernen" : "Markieren", () => this.patchMsg(fm.id, { star: !fm.star })), this.mi("Als ungelesen markieren", () => this.patchMsg(fm.id, { unread: true }), null), this.mi("Verschieben nach …"), { sep: true },
+        this.mi("Drucken", () => this.toastIt("Druckdialog"), null), this.mi("Als PDF sichern", () => this.toastIt("Als PDF gesichert")), this.mi("In Projektordner sichern", () => this.toastIt("Als PDF im Projektordner gesichert")), { sep: true },
+        this.mi("Notiz anfügen", () => this.toastIt("Notiz an " + fm.from + " · nur intern")), this.mi("Absender als Kontakt sichern", () => this.toastIt(fm.from + " als Kontakt gesichert")), this.mi("Original anzeigen"), this.mi("Als Spam melden")];
+    } else if (isMail && !fanned && fc && fc.isDraft && fd) {
+      if (s.confirmDiscard) { hint = "Entwurf verwerfen?"; hintFg = "var(--c-ink)"; tail = [hb("Abbrechen", P.close, () => this.setState({ confirmDiscard: false }), null, { label: true, lw: 100 }), hb("Verwerfen", P.trash, () => this.discard(frontId), "signal", { label: true, lw: 100 })]; }
+      else {
+        main = [hb("Datei anhängen", P.attach, () => this.patchDraft(frontId, { att: fd.att.concat([["Skizze_" + (fd.att.length + 1) + ".pdf", "240 KB"]]) }), null, { prio: 1 }), hb("Aus Projektordner", P.folder, e => DB.driveMenu(e), null, { prio: 4 }), hb("Format", P.textSize, e => DB.toggleFmt(e), s.fmt ? "on" : null, { prio: 3 }), SEP,
+          hb("Entwurf sichern", P.save, () => this.saveDraft(frontId), null, { prio: 5 }), hb("Entwurf verwerfen", P.trash, () => this.setState({ confirmDiscard: true }), "signal", { prio: 2 })];
+        more = [this.mi("Signatur", null, { check: true }), this.mi("Später senden …"), this.mi("Lesebestätigung anfordern"), this.mi("Als Vorlage sichern", () => this.toastIt("Als Vorlage gesichert")), { sep: true }, this.mi("Drucken", () => this.toastIt("Druckdialog"), null)];
+        tail = [hb("Senden", P.send, () => this.send(), "accent", { label: cw >= 300, lw: 92, off: !DB.ok })];
+      }
+    } else if (!isMail && !fanned && fc) {
+      const x = this.svc(frontId), st = x ? s.svc[frontId] : null;
+      if (x && !x.accounts) main.push(hb(["connected", "stored", "working"].includes(st) ? "Erneut verbinden" : "Verbinden", P.link, () => this.connect(frontId), null, { off: st === "connecting" }));
+      if (x && ["connected", "stored", "working", "failed"].includes(st)) main.push(hb("Trennen", P.close, () => this.setState({ confirmDisc: frontId }), "signal"));
+      if (frontId === "backups") main.push(hb("Jetzt sichern", P.save, () => this.toastIt("Backup erstellt")));
+    }
+    if (fanned || !fc) hint = "";
+    const n = S.cards.length, conf = isMail && !!(fc && fc.isDraft) && s.confirmDiscard, canFold = openCount > 1 && !conf;
+    const fanB = n > 1 && !conf ? [hb(fanned ? "Stapeln" : "Fächern · " + n + " Karten", P.fan, () => this.setState(isMail ? { fanned: !s.fanned } : { sfanned: !s.sfanned }), fanned ? "on" : null)] : [];
+    const foldB = canFold ? [hb("Spalte falten", P.minus, () => this.setMem({ Rf: true, max: -1 }))] : [];
+    const sum = arr => arr.reduce((t, x) => t + x.cost, 0) + Math.max(0, arr.length - 1) * 4;
+    const endOf = (extra) => tail.concat(extra.length || more.length ? [hb("Mehr", P.more, e => this.openMenu(e, extra.concat(extra.length && more.length ? [{ sep: true }] : []).concat(more), 260))] : []).concat(fanB.length || foldB.length ? [SEP] : []).concat(fanB, foldB);
+    let hidden = [], end = endOf([]);
+    const fit = () => sum(main) + (main.length ? 4 : 0) + sum(end) + 12 <= cw;
+    while (!fit() && main.some(x => x.isBtn)) {
+      const cand = main.filter(x => x.isBtn).sort((p, q) => q.prio - p.prio)[0]; hidden.push(cand); main = main.filter(x => x !== cand);
+      main = main.filter((x, i, arr) => !(x.isSep && (i === 0 || i === arr.length - 1 || arr[i - 1].isSep)));
+      end = endOf(hidden.slice().sort((p, q) => p.prio - q.prio).filter(x => !x.off).map(mm));
+    }
+    this._cmd = { fm: isMail && fc && fc.isMsg ? fm : null, draft: isMail && fc && fc.isDraft ? frontId : null, ok: !!DB.ok };
+    S.cards.forEach(c => { c.acts = []; c.confirm = false; });
+    const HB = { state: fanned ? "fanned" : fc && fc.isDraft ? (s.confirmDiscard ? "confirm" : "draft") : fc ? "reading" : "empty", main, end, hint, hintFg, empty: !n };
+
+    // handles
+    const griff = this.props.griff ?? "Haarlinie";
+    const grips = ["L", "R"].map((side, j) => {
+      const A = this.A(), lim = side === "L" ? A.L : A.R, left = j === 0 ? lefts[0] + w[0] : lefts[1] + w[1], active = (s.gdrag && s.gdrag.side === side) || s.ghover === j, cur = side === "L" ? w[0] : w[2];
+      const look = griff === "fein" ? { w: "2px", bg: active ? "var(--c-ink)" : "var(--c-ink-3)", ring: "none" } : griff === "grau" ? { w: "4px", bg: active ? "var(--c-ink)" : "var(--c-grip)", ring: "none" } : { w: active ? "2px" : "1px", bg: active ? "var(--c-ink)" : "var(--c-ink-3)", ring: "none" };
+      return Object.assign({ left: left + "px", h: active ? "96px" : "64px", state: active ? "dragging" : "rest", label: side === "L" ? "Breite der linken Bahn" : "Breite der rechten Bahn", showValue: !!(s.gdrag && s.gdrag.side === side), value: Math.round(cur) + " pt",
+        down: e => { if (rM.max >= 0) this.setMem({ max: -1 }); const [px] = this.pt(e); this.setState({ gdrag: { side, x0: px, v0: cur, w0: w.slice() } }); e.preventDefault(); },
+        reset: () => this.setMem(this.D0()),
+        key: e => { if (e.key === "Enter") { this.setMem(this.D0()); return; } const d = e.key === "ArrowLeft" ? -1 : e.key === "ArrowRight" ? 1 : 0; if (!d) return; e.preventDefault(); this.grow(side, cur + (e.shiftKey ? 8 : this.K.fold) * d * (side === "L" ? 1 : -1), w); },
+        enter: () => this.setState({ ghover: j }), leave: () => this.setState({ ghover: -1 }) }, look);
+    });
+
+    // blob
+    const dock = this.docked(), open = !!s.mode, [x, y] = s.bdrag ? [s.bdrag.x, s.bdrag.y] : this.xy(), right = s.anchor.k === "R", up = open && (y + K.bh / 2 > g.H / 2);
+    let bL = "auto", bR = "auto", bT = "auto", bB = "auto", bW, bRad = "20px";
+    if (open) { const laneW = right ? w[2] : w[0]; bW = (laneW > K.fold ? laneW : s.mode === "assist" ? K.pop : 300) + "px"; if (right) bR = K.m + "px"; else bL = K.m + "px"; if (up) bB = (g.H - y - K.bh) + "px"; else bT = y + "px"; }
+    else if (dock) { bW = (K.dock + (s.hover ? 4 : 0)) + "px"; bT = y + "px"; if (right) { bR = "0px"; bRad = "20px 0 0 20px"; } else { bL = "0px"; bRad = "0 20px 20px 0"; } }
+    else { bW = (s.awake ? this.awakeW() : K.bw) + "px"; bL = x + "px"; bT = y + "px"; }
+    const ease = "cubic-bezier(.2,.8,.2,1)", fly = "cubic-bezier(.2,1.15,.3,1)", still = this.still();
+    const bTrans = still ? "none" : s.bdrag ? "width 240ms " + ease : ["left 416ms " + fly, "right 416ms " + fly, "top 416ms " + fly, "width 240ms " + ease, "border-radius 240ms " + ease].join(",");
+    const q = s.q.trim().toLowerCase(), rows = [], flat = []; let ix = 0, ri = -1;
+    this.GROUPS.forEach(([gname, items]) => { const hits = items.filter(it => !q || it[0].toLowerCase().includes(q) || gname.toLowerCase().includes(q) || it[1].some(l => l.toLowerCase().includes(q))); if (!hits.length) return; if (rows.length) rows.push({ sep: true, idx: ix++ }); hits.forEach(it => { flat.push(it); rows.push({ it, ri: ++ri, idx: ix++ }); }); });
+    const reel = s.reelIn || still;
+    const outRows = rows.map(r => { const delay = Math.min(r.idx, 14) * 40, base = { isSep: !!r.sep, isRow: !r.sep, op: reel ? 1 : 0, tf: reel ? "none" : "perspective(600px) rotateX(" + (up ? 60 : -60) + "deg)", tr: still ? "none" : "opacity 360ms " + ease + " " + delay + "ms, transform 600ms " + ease + " " + delay + "ms" };
+      if (r.sep) return base; const it = r.it, hot = s.hot === r.ri, n = it[0] === "Mail" ? unread : this.SVC.filter(v => s.svc[v.id] === "failed").length;
+      return Object.assign(base, { name: it[0], n, hasN: n > 0, bg: hot ? "var(--c-inv-hot)" : "transparent", weight: it[0] === s.area ? 600 : 400, state: it[0] === s.area ? "current" : hot ? "hover" : "rest", aim: e => this.aim(r.ri, e.currentTarget), go: () => this.choose(it[0]) }); });
+    const syncErr = isMail && ["Fehler", "nicht erreichbar"].includes(s.zu) && !s.syncing;
+
+    return {
+      winRef: this.winRef, lidsRef: this.lidsRef, blobRef: this.blobRef, eyesRef: this.eyesRef, findRef: this.findRef, arcRef: this.arcRef, dotRef: this.dotRef, orbRef: this.orbRef, tapeRef: this.tapeRef, searchRef: this.searchRef,
+      licht, grund: this.props.grund ?? "weiß", font: geist ? "Geist,-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif" : "-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',system-ui,sans-serif",
+      winW: g.W + "px", winH: g.H + "px", pageState: s.area + " · " + g.W + "x" + g.H, screenLabel: s.area + " " + g.W, hasSafe: g.safe > 0, safeH: g.safe + "px",
+      laneTop: g.lt + "px", laneH: g.lh + "px", laneTrans: s.gdrag || still ? "none" : this.state.slowLane ? "left 720ms cubic-bezier(.65,0,.25,1), width 720ms cubic-bezier(.65,0,.25,1)" : "left 260ms " + ease + ", width 260ms " + ease,
+      stackTrans: still ? "none" : "top 520ms cubic-bezier(.22,1.08,.36,1), height 520ms cubic-bezier(.22,1.08,.36,1), left 520ms cubic-bezier(.22,1.08,.36,1), right 520ms cubic-bezier(.22,1.08,.36,1), background 320ms " + ease + ", transform 420ms " + ease,
+      lanes, L: Object.assign(L, { hLine: this.state.lScrolled ? "var(--c-line)" : "transparent", onScroll: this.onLScroll }), C, S, RB, DB, SB, HB, grips, personD: P.person, meIni: this.ini(this.ME[0]), iconRing, fanD: P.fan, pinD: P.pin,
+      flagD: P.flag, docD: P.doc, closeD: P.close, composeD: P.compose, chevronD: P.chevron, lockD: P.lock, alertD: P.alert, peopleD: P.people, textSizeD: P.textSize, attachD: P.attach, folderD: P.folder, searchD: P.search,
+      hasToast: !!s.toast && isMail, hasToastS: !!s.toast && !isMail, toastX: (lefts[2] + w[2] / 2) + "px", toastY: (g.lt + g.lh - 44) + "px", toast: s.toast || "", hasUndo: !!s.toastUndo, undo: () => { const u = this.state.toastUndo; clearTimeout(this.tt); this.setState({ toast: null, toastUndo: null }); if (u) u(); },
+      hasMenu: !!s.menu, menu: s.menu ? { x: s.menu.x + "px", y: s.menu.y + "px", w: s.menu.w + "px", items: s.menu.items.map(it => Object.assign({ sep: false, head: false, item: false }, it)) } : { items: [] },
+      rootDown: () => { if (s.menu) this.setState({ menu: null }); }, stop,
+      kachelSet: !isMail && this.props.einstellungen === "Kacheln", laneSet: isMail || this.props.einstellungen !== "Kacheln", kW: g.W, kH: g.H, kBahnen: w.join(","), kTop: g.lt, nutzung: this.props.nutzung ?? "allein",
+      kToast: t => this.toastIt(t), kLook: s.look || "Automatisch", kLookGo: n => this.setState({ look: n === "Automatisch" ? null : n }), kAbschnitt: { Integrationen: "integrationen", Person: "identitaet", Ansicht: "darstellung", System: "system" }[s.cat] || "integrationen",
+      blobTop: g.top + "px", bL, bR, bT, bB, bW, bRad, bTrans, bDir: up ? "column-reverse" : "column", bCursor: s.bdrag ? "grabbing" : open ? "default" : "grab", headJustify: dock ? "center" : "flex-start", ringColor: dock ? "transparent" : "currentColor",
+      blobState: s.bdrag ? "dragging" : s.mode === "menu" ? "menu" : s.mode === "assist" ? "assistant" : dock ? "docked" : s.awake ? "awake" : "rest",
+      lids: (s.awake || open || s.bdrag) ? "translateY(0px) scaleY(1)" : "translateY(1.4px) scaleY(.45)",
+      labelOp: s.awake && !open && !dock ? 1 : 0, labelMax: s.awake && !open && !dock ? "200px" : "0px", labelGap: s.awake && !open && !dock ? "8px" : "0px",
+      showFind: s.mode === "menu", showDot: !open && !dock && (unread > 0 || syncErr), isMenu: s.mode === "menu", isAssist: s.mode === "assist", area: s.area, q: s.q, rows: outRows, noHit: s.mode === "menu" && !flat.length,
+      bodyMax: Math.max(160, (up ? y - g.safe - K.m : g.H - K.m - y - K.bh) - 8) + "px", reelOrigin: up ? "50% 100%" : "50% 0",
+      assistText: s.svc.claude === "failed" ? "Claude antwortet gerade nicht. In den Einstellungen neu verbinden." : isMail && !s.cards.length ? "Keine Nachricht offen." : "Füge Text, Dateien oder Links ein.",
+      onQ: e => this.setState({ q: e.target.value, hot: -1 }),
+      findKey: e => { const n = flat.length; if (!n) return; if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); const d = (e.key === "ArrowDown") !== up ? 1 : -1; this.setState({ hot: Math.max(0, Math.min(n - 1, (s.hot < 0 ? (d > 0 ? -1 : n) : s.hot) + d)) }); return; } if (e.key === "Enter") this.choose((flat[s.hot] || flat[0])[0]); },
+      rowsLeave: () => { clearTimeout(this.ht); clearTimeout(this.st); this.setState({ hot: -1 }); },
+      down: this.down, click: this.click, dbl: this.dbl, enter: () => this.setState({ hover: true }), leave: () => this.setState({ hover: false }),
+      sync: this.sync, syncState: s.syncing ? "syncing" : syncErr ? "error" : "fresh", syncErr, arcColor: syncErr ? "var(--c-signal)" : "currentColor", arcDash: syncErr ? ".25 .75" : "1 0",
+      syncTitle: s.syncing ? "Gleicht ab …" : syncErr ? "Abgleich fehlgeschlagen. Zum Wiederholen drücken." : "Neu laden · Gerade abgeglichen"
+    };
+  }
+}
+</script>
+</body>
+</html>

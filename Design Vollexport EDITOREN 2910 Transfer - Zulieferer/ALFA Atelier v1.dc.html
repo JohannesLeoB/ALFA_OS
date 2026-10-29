@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<!-- Export 21.10.2026 · Nachzug auf Master 2110 -->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./image-slot.js"></script>
+</helmet>
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+<dc-import name="ALFA Shell" area="Atelier" appearance="{{ licht }}" ground="{{ shGrund }}" typeface="{{ shSchrift }}" handle="hairline" window="{{ fenster }}" w="{{ wArr }}" lanes="{{ lanes }}" slow="{{ slow }}" maxed="{{ maxed }}" groups="{{ groups }}" badges="{{ badges }}" dot="{{ shDot }}" sync-state="{{ syncState }}" sync-title="{{ syncTitle }}" me-ini="JB" assist-text="{{ assistText }}" search-path="{{ searchD }}" visible-lanes="{{ laneSet }}" on-choose="{{ onChoose }}" on-mode="{{ onMode }}" on-mem="{{ onMem }}" on-grow="{{ onGrow }}" on-sync="{{ onSync }}" on-root-down="{{ rootDown }}" hint-size="100%,100%">
+
+<div data-slot="0" style="display:contents">
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 {{ L.hLine }};transition:box-shadow 160ms;box-sizing:border-box;min-width:0">
+<span style="flex:none;font-weight:500;white-space:nowrap">{{ L.title }}</span>
+<span style="flex:1;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ L.detail }}</span>
+<sc-for list="{{ L.buttons }}" as="x" hint-placeholder-count="0"><button data-part="symbol-button" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:{{ iconRing }};transition:color 160ms" style-hover="color:var(--c-ink)" data-id="atelier.symbol-button.go"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</header>
+<div data-part="lane-content" onScroll="{{ L.onScroll }}" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding:8px;display:flex;flex-direction:column;scrollbar-width:none">
+<sc-for list="{{ L.rows }}" as="r" hint-placeholder-count="10">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" style="flex:none;height:32px;display:flex;align-items:flex-end;padding:0 8px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ r.name }}</div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="list-row" data-state="{{ r.state }}" onClick="{{ r.go }}" title="{{ r.tip }}" style="flex:none;height:36px;display:flex;align-items:center;gap:20px;padding:0 8px;border-radius:12px;cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};transition:background 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)" data-id="atelier.list-row.go">
+<span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ r.symFg }};background:{{ r.symBg }};box-shadow:{{ r.symRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.d }}"></path></svg></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.weight }}">{{ r.name }}</span>
+<sc-if value="{{ r.hasN }}" hint-placeholder-val="{{ false }}"><span data-part="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:{{ r.nFg }}">{{ r.n }}</span></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+<div data-part="lane-footer" style="flex:none;padding:8px"><button data-part="compose-button" style-active="transform:scale(.98)" title="{{ L.insertLabel }}" onClick="{{ L.insertGo }}" style="appearance:none;border:0;width:100%;height:36px;padding:0 12px 0 8px;box-sizing:border-box;border-radius:12px;display:flex;align-items:center;gap:20px;font:inherit;background:var(--c-inv);color:var(--c-on-inv);cursor:pointer;transition:opacity 160ms" style-hover="opacity:.88" data-id="atelier.compose-button.insert-go"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px color-mix(in srgb, currentColor 30%, transparent)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ plusD }}"></path></svg></span><span style="flex:1;min-width:0;text-align:left">{{ L.insertLabel }}</span></button></div>
+</sc-if>
+</div>
+
+<div data-slot="1" style="display:contents">
+<sc-if value="{{ isMain }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 var(--c-line);box-sizing:border-box;min-width:0">
+<span style="flex:none;font-weight:500;white-space:nowrap">{{ B.name }}</span>
+<span style="flex:1;min-width:0"></span>
+<sc-if value="{{ B.wideTools }}" hint-placeholder-val="{{ true }}">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ B.zooms }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;transition:background 240ms,color 240ms" data-id="atelier.option.go">{{ o.t }}</button></sc-for></div>
+</sc-if>
+<sc-for list="{{ B.tools }}" as="x" hint-placeholder-count="3">
+<button data-part="symbol-button" data-state="{{ x.state }}" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;transition:background 160ms,color 160ms" data-id="atelier.symbol-button.go-2"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button>
+</sc-for>
+</header>
+<div data-part="context-bar" style="flex:none;height:40px;display:flex;align-items:center;gap:12px;padding:0 16px;box-sizing:border-box;box-shadow:inset 0 -1px 0 var(--c-line);min-width:0;overflow:hidden"><sc-for list="{{ B.ctx }}" as="c" hint-placeholder-count="2">
+<sc-if value="{{ c.isHint }}" hint-placeholder-val="{{ true }}"><span style="flex:0 1 auto;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.text }}</span></sc-if>
+<sc-if value="{{ c.isSeg }}" hint-placeholder-val="{{ false }}"><div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.seg }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" title="{{ o.tip }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;min-width:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap" data-id="atelier.option.go-2">{{ o.n }}</button></sc-for></div></sc-if>
+<sc-if value="{{ c.isBtn }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" data-state="{{ c.state }}" style-active="transform:scale(.96)" onClick="{{ c.go }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ c.bg }};color:{{ c.fg }};box-shadow:{{ c.ring }};cursor:pointer;white-space:nowrap" data-id="atelier.text-button.go">{{ c.label }}</button></sc-if>
+<sc-if value="{{ c.isPill }}" hint-placeholder-val="{{ false }}"><button data-part="choice" onClick="{{ c.go }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" data-id="atelier.choice.go">{{ c.label }}<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+<sc-if value="{{ c.isSw }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:4px"><sc-for list="{{ c.sw }}" as="sw" hint-placeholder-count="6"><button data-part="swatch" data-state="{{ sw.state }}" title="{{ sw.n }}" aria-label="{{ sw.n }}" onClick="{{ sw.go }}" style="appearance:none;border:0;padding:0;flex:none;width:20px;height:20px;border-radius:50%;background:{{ sw.c }};box-shadow:{{ sw.ring }};cursor:pointer" style-active="transform:scale(.92)" data-id="atelier.swatch.go"></button></sc-for></span></sc-if>
+</sc-for></div>
+<div data-part="tool-palette" ref="{{ palRef }}" style="position:absolute;left:{{ B.palL }};top:{{ B.palT }};z-index:6;padding:0 8px 8px;border-radius:12px;background:var(--c-menu);box-shadow:var(--sh-float);display:flex;flex-direction:column;gap:4px"><div data-part="drag-handle" title="Ziehen verschiebt, Doppelklick dockt an" onPointerDown="{{ B.palDown }}" onDoubleClick="{{ B.palDock }}" style="flex:none;height:16px;margin:0 -8px;display:grid;place-items:center;cursor:grab;touch-action:none" data-id="atelier.drag-handle.pal-down"><i style="display:block;width:16px;height:4px;background:radial-gradient(circle,var(--c-ink-3) 1px,transparent 1.5px) 0 0/4px 4px"></i></div><sc-for list="{{ B.palette }}" as="x" hint-placeholder-count="6"><sc-if value="{{ x.sep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;height:1px;margin:2px 6px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="symbol-button" data-state="{{ x.state }}" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" onPointerDown="{{ x.stop }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }}" style-active="transform:scale(.96)" data-id="atelier.symbol-button.go-3"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-if></sc-for></div>
+<div data-part="desk" onPointerDown="{{ B.deskDown }}" style="flex:1;min-height:0;overflow:auto;scrollbar-width:thin;background:var(--c-well);display:flex;align-items:safe center;justify-content:safe center;gap:8px;padding:16px 16px 16px 56px" data-id="atelier.desk.desk-down">
+<sc-if value="{{ B.showSketch }}" hint-placeholder-val="{{ true }}">
+<div data-part="sketch-panel" style="position:relative;flex:none;width:{{ B.pw }};height:{{ B.ph }};background-color:var(--c-sheet);background-image:{{ B.gridBg }};background-size:{{ B.gridSize }};box-shadow:0 0 0 1px var(--c-line),var(--sh-float);border-radius:4px;overflow:hidden;color-scheme:light">
+<svg ref="{{ svgRef }}" viewBox="0 0 960 640" width="100%" height="100%" onPointerDown="{{ B.down }}" style="display:block;touch-action:none;cursor:{{ B.cursor }}">
+<sc-for list="{{ B.guides }}" as="gd" hint-placeholder-count="0"><line x1="{{ gd.x1 }}" y1="{{ gd.y1 }}" x2="{{ gd.x2 }}" y2="{{ gd.y2 }}" stroke="{{ gd.c }}" stroke-width="1" pointer-events="none"></line></sc-for>
+<sc-for list="{{ B.strokes }}" as="k" hint-placeholder-count="6"><path d="{{ k.d }}" fill="none" stroke="{{ k.c }}" stroke-width="{{ k.w }}" stroke-linecap="round" stroke-linejoin="round"></path></sc-for>
+<sc-if value="{{ B.hasLive }}" hint-placeholder-val="{{ false }}"><path d="{{ B.liveD }}" fill="none" stroke="var(--c-sheet-ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 0"></path></sc-if>
+</svg>
+<span style="position:absolute;left:8px;top:8px;height:20px;padding:0 8px;border-radius:999px;display:flex;align-items:center;background:var(--c-sheet);box-shadow:inset 0 0 0 1px var(--c-sheet-line-strong);font-size:11.5px;color:var(--c-sheet-ink-2);pointer-events:none;white-space:nowrap">{{ B.sketchChip }}</span>
+</div>
+</sc-if>
+<sc-if value="{{ B.showRender }}" hint-placeholder-val="{{ true }}">
+<div data-part="render-panel" style="position:relative;flex:none;width:{{ B.pw }};height:{{ B.ph }};background:var(--c-sheet-well);box-shadow:0 0 0 1px var(--c-line),var(--sh-float);border-radius:4px;overflow:hidden;color-scheme:light">
+<sc-if value="{{ B.hasVersion }}" hint-placeholder-val="{{ false }}"><image-slot id="{{ B.slot }}" shape="rect" placeholder="{{ B.slotPh }}" style="width:100%;height:100%"></image-slot></sc-if>
+<sc-if value="{{ B.running }}" hint-placeholder-val="{{ false }}"><div data-part="content-state" data-state="loading" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;color:var(--c-sheet-ink-2)"><span style="position:relative;width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--c-sheet-line-strong);margin-bottom:4px"><svg data-spin="1" width="28" height="28" viewBox="0 0 28 28" style="position:absolute;inset:0"><circle cx="14" cy="14" r="13.5" fill="none" stroke="var(--c-sheet-ink)" stroke-width="1" pathLength="1" stroke-dasharray=".22 .78"></circle></svg></span><span style="font-size:11.5px;color:var(--c-sheet-ink-3)">{{ B.stageNo }}</span><span style="font-weight:500;color:var(--c-sheet-ink)">{{ B.stageName }}</span><span style="font-size:11.5px;font-variant-numeric:tabular-nums;color:var(--c-sheet-ink-3)">{{ B.stagePct }}</span></div></sc-if>
+<sc-if value="{{ B.noVersion }}" hint-placeholder-val="{{ false }}"><div data-part="content-state" data-state="empty" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px;text-align:center;color:var(--c-sheet-ink-3);text-wrap:pretty"><span>Noch kein Render</span></div></sc-if>
+<span style="position:absolute;left:8px;top:8px;height:20px;padding:0 8px;border-radius:999px;display:flex;align-items:center;background:var(--c-sheet);box-shadow:inset 0 0 0 1px var(--c-sheet-line-strong);font-size:11.5px;color:var(--c-sheet-ink-2);pointer-events:none;white-space:nowrap;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis">{{ B.renderChip }}</span>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+
+<div data-slot="2" style="display:contents">
+<sc-if value="{{ isStack }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" data-state="{{ HB.state }}" style="flex:none;height:44px;display:flex;align-items:center;gap:4px;padding:0 8px;box-sizing:border-box;min-width:0">
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ HB.main }}" as="x" hint-placeholder-count="4"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+<span style="flex:1;min-width:0;padding:0 4px;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ HB.hint }}</span>
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ HB.end }}" as="x" hint-placeholder-count="2"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+</header>
+<div data-part="card-stack" data-state="stacked" style="position:relative;flex:1;min-height:0">
+<sc-for list="{{ S.cards }}" as="c" hint-placeholder-count="3">
+<article data-part="card" data-state="{{ c.state }}" onClick="{{ c.go }}" onPointerEnter="{{ c.enter }}" onPointerLeave="{{ c.leave }}" style="position:absolute;left:0;right:0;top:{{ c.top }};height:{{ c.h }};z-index:{{ c.z }};transform:{{ c.tf }};background-color:{{ c.bg }};background-image:{{ c.sheen }};backdrop-filter:{{ c.blur }};-webkit-backdrop-filter:{{ c.blur }};color:{{ c.fg }};box-shadow:none;overflow:hidden;display:flex;flex-direction:column;transition:{{ stackTrans }};cursor:{{ c.cursor }}" data-id="atelier.card.go">
+<header data-part="card-header" style="flex:none;height:44px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box;min-width:0"><div data-part="segmented-control" style="flex:1;min-width:0;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.tabs }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background 160ms,color 160ms" data-id="atelier.option.go-3">{{ o.n }}</button></sc-for></div></header>
+
+<sc-if value="{{ c.isRows }}" hint-placeholder-val="{{ true }}">
+<div data-part="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;display:flex;flex-direction:column;padding:4px 0 8px;scrollbar-width:thin">
+<sc-for list="{{ c.rows }}" as="b" hint-placeholder-count="5">
+<sc-if value="{{ b.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" style="flex:none;height:36px;display:flex;align-items:flex-end;padding:0 16px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isNote }}" hint-placeholder-val="{{ false }}"><div style="flex:none;padding:8px 16px;font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="field-row" data-state="{{ b.state }}" onClick="{{ b.go }}" style="position:relative;flex:none;min-height:44px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:8px 8px 8px 16px;box-sizing:border-box;cursor:{{ b.cur }};background:{{ b.bg }}" style-hover="background:{{ b.hbg }}" data-id="atelier.field-row.go">
+<sc-if value="{{ b.hasMark }}" hint-placeholder-val="{{ false }}"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ b.mFg }};background:{{ b.mBg }};box-shadow:{{ b.mRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ b.mD }}"></path></svg></span></sc-if>
+<div style="flex:1 1 72px;min-width:72px;display:flex;flex-direction:column">
+<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ b.w }};color:{{ b.fg }}">{{ b.label }}</span>
+<sc-if value="{{ b.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;line-height:16px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums">{{ b.sub }}</span></sc-if>
+</div>
+<sc-if value="{{ b.hasInput }}" hint-placeholder-val="{{ false }}"><input value="{{ b.val }}" onChange="{{ b.onIn }}" aria-label="{{ b.label }}" inputmode="{{ b.mode }}" autocomplete="off" spellcheck="false" style="flex:0 1 auto;min-width:0;width:{{ b.inW }};height:28px;border:0;outline:none;background:transparent;color:var(--c-ink);font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px;border-radius:8px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"></input></sc-if>
+<sc-if value="{{ b.hasVal }}" hint-placeholder-val="{{ false }}"><span style="flex:0 1 auto;min-width:0;max-width:60%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--c-ink-2);font-variant-numeric:tabular-nums">{{ b.val }}</span></sc-if>
+<sc-if value="{{ b.hasSwatch }}" hint-placeholder-val="{{ false }}"><span style="flex:0 1 auto;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;max-width:176px"><sc-for list="{{ b.swatches }}" as="sw" hint-placeholder-count="5"><button data-part="swatch" data-state="{{ sw.state }}" title="{{ sw.n }}" aria-label="{{ sw.n }}" onClick="{{ sw.go }}" style="appearance:none;border:0;padding:0;flex:none;width:20px;height:20px;border-radius:50%;background:{{ sw.c }};box-shadow:{{ sw.ring }};cursor:pointer;transition:box-shadow 160ms" style-active="transform:scale(.92)" data-id="atelier.swatch.go-2"></button></sc-for></span></sc-if>
+<sc-if value="{{ b.hasSeg }}" hint-placeholder-val="{{ false }}"><div data-part="segmented-control" style="flex:none;margin-left:auto;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ b.seg }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" title="{{ o.tip }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;min-width:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;display:grid;place-items:center" data-id="atelier.option.go-4">{{ o.n }}</button></sc-for></div></sc-if>
+<sc-if value="{{ b.hasPill }}" hint-placeholder-val="{{ false }}"><button data-part="choice" onClick="{{ b.pillGo }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" data-id="atelier.choice.pill-go">{{ b.pill }}<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+<sc-if value="{{ b.hasToggle }}" hint-placeholder-val="{{ false }}"><button data-part="toggle" data-state="{{ b.tState }}" aria-label="{{ b.label }}" onClick="{{ b.toggle }}" style="appearance:none;border:0;padding:0;flex:none;position:relative;width:32px;height:20px;border-radius:999px;background:{{ b.tBg }};box-shadow:{{ b.tRing }};cursor:pointer;transition:background 200ms" data-id="atelier.toggle.toggle"><i style="position:absolute;top:2px;left:{{ b.tX }};width:16px;height:16px;border-radius:50%;background:{{ b.kBg }};transition:left 200ms cubic-bezier(.2,.8,.2,1)"></i></button></sc-if>
+<sc-if value="{{ b.hasBtns }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:8px"><sc-for list="{{ b.btns }}" as="x" hint-placeholder-count="1"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ x.go }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;white-space:nowrap" data-id="atelier.text-button.go-2">{{ x.label }}</button></sc-for></span></sc-if>
+<sc-if value="{{ b.line }}" hint-placeholder-val="{{ true }}"><i style="position:absolute;left:16px;right:16px;bottom:0;height:1px;background:var(--c-line)"></i></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.isPipe }}" hint-placeholder-val="{{ false }}">
+<div data-part="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;gap:8px;padding:8px">
+<sc-for list="{{ c.stages }}" as="p" hint-placeholder-count="7">
+<div data-part="accordion-item" data-state="{{ p.state }}" style="flex:none;border-radius:12px;box-shadow:inset 0 0 0 1px {{ p.ring }};overflow:hidden;opacity:{{ p.op }}">
+<button data-part="accordion-trigger" onClick="{{ p.tg }}" style="appearance:none;border:0;font:inherit;color:inherit;width:100%;height:44px;display:flex;align-items:center;gap:12px;padding:0 12px 0 8px;box-sizing:border-box;background:transparent;cursor:pointer;text-align:left" style-hover="background:var(--c-hover)" data-id="atelier.accordion-trigger.tg">
+<span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ p.mFg }};background:{{ p.mBg }};box-shadow:{{ p.mRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ p.d }}"></path></svg></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ p.w }}">{{ p.n }}</span>
+<span style="flex:none;font-size:11.5px;color:var(--c-ink-3);font-variant-numeric:tabular-nums">{{ p.val }}</span>
+<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="var(--c-ink-3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none;transform:{{ p.rot }};transition:transform 200ms cubic-bezier(.2,.8,.2,1)"><path d="{{ chevronD }}"></path></svg>
+</button>
+<sc-if value="{{ p.open }}" hint-placeholder-val="{{ false }}"><div data-part="accordion-content" style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:0 12px 12px 48px;font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty"><span>{{ p.sub }}</span>
+<sc-if value="{{ p.canSkip }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ p.skipGo }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" data-id="atelier.text-button.skip-go">{{ p.skipLabel }}</button></sc-if></div></sc-if>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.isTime }}" hint-placeholder-val="{{ false }}">
+<div data-part="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;padding:8px">
+<sc-if value="{{ c.noVers }}" hint-placeholder-val="{{ true }}"><div data-part="content-state" data-state="empty" style="flex:none;border-radius:12px;box-shadow:inset 0 0 0 1px var(--c-line-strong);padding:24px 16px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;color:var(--c-ink-3);text-wrap:pretty"><span style="color:var(--c-ink);font-weight:500">Noch kein Render</span></div></sc-if>
+<sc-for list="{{ c.vers }}" as="v" hint-placeholder-count="0">
+<div data-part="timeline-item" style="position:relative;flex:none;display:flex;gap:12px;padding:0 8px 16px 8px">
+<span style="position:absolute;left:13.5px;top:20px;bottom:0;width:1px;background:{{ v.rail }}"></span>
+<span style="position:relative;flex:none;width:12px;height:12px;margin:4px 4px 0 0;border-radius:50%;background:{{ v.dotBg }};box-shadow:{{ v.dotRing }}"></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:baseline;gap:8px"><span style="font-weight:{{ v.w }}">{{ v.n }}</span><span style="font-size:11.5px;color:var(--c-ink-3)">{{ v.t }}</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:4px"><sc-for list="{{ v.chips }}" as="x" hint-placeholder-count="4"><span data-part="tag" style="height:20px;padding:0 8px;border-radius:999px;display:inline-flex;align-items:center;font-size:11.5px;color:var(--c-ink-2);box-shadow:inset 0 0 0 1px var(--c-line-strong);white-space:nowrap">{{ x }}</span></sc-for></div>
+<div style="display:flex;gap:8px"><sc-for list="{{ v.btns }}" as="x" hint-placeholder-count="2"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ x.go }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;white-space:nowrap" data-id="atelier.text-button.go-3">{{ x.label }}</button></sc-for></div>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.isKatalog }}" hint-placeholder-val="{{ false }}">
+<div data-part="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;gap:8px;padding:8px">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.kats }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" data-id="atelier.option.go-5">{{ o.n }}</button></sc-for></div>
+<div style="flex:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(104px,100%),1fr));gap:8px">
+<sc-for list="{{ c.fotos }}" as="f" hint-placeholder-count="6">
+<button data-part="catalog-tile" title="{{ f.tip }}" onClick="{{ f.go }}" style="appearance:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;min-width:0;cursor:pointer;background:transparent" style-active="transform:scale(.98)" data-id="atelier.catalog-tile.go">
+<span style="position:relative;display:block;width:100%;aspect-ratio:4 / 3;border-radius:8px;overflow:hidden;background:var(--c-well);box-shadow:inset 0 0 0 1px var(--c-line)"><image-slot id="{{ f.slot }}" shape="rect" placeholder="{{ f.n }}" style="width:100%;height:100%;pointer-events:none"></image-slot></span>
+<span style="min-width:0;font-size:11.5px;line-height:16px;color:var(--c-ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.n }}</span>
+</button>
+</sc-for>
+</div>
+<div style="flex:none;padding:0 8px 8px;font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty">{{ c.katNote }}</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.hasFoot }}" hint-placeholder-val="{{ false }}">
+<footer data-part="card-footer" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px;box-sizing:border-box;box-shadow:inset 0 1px 0 var(--c-line);min-width:0">
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ c.foot.l }}" as="x" hint-placeholder-count="0"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-for></div>
+<span style="flex:1;min-width:0"></span>
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ c.foot.r }}" as="x" hint-placeholder-count="0"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-for></div>
+</footer>
+</sc-if>
+</article>
+</sc-for>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div data-part="toast" style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:40;height:28px;padding:0 12px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;font-size:11.5px;white-space:nowrap;box-shadow:var(--sh-float);gap:12px"><span>{{ toast }}</span><sc-if value="{{ hasUndo }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ undo }}" style="appearance:none;border:0;height:20px;margin-right:-8px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px currentColor;cursor:pointer" data-id="atelier.text-button.undo">Rückgängig</button></sc-if></div></sc-if>
+</div>
+</sc-if>
+</div>
+
+<div data-slot="over" ref="{{ winRef }}" style="display:contents">
+</div>
+<div data-slot="top" style="display:contents">
+<sc-if value="{{ hasMenu }}" hint-placeholder-val="{{ false }}">
+<div data-part="anchored-menu" onPointerDown="{{ stop }}" style="position:absolute;left:{{ menu.x }};top:{{ menu.y }};width:{{ menu.w }};padding:4px;box-sizing:border-box;border-radius:16px;background:var(--c-menu);color:var(--c-ink);box-shadow:var(--sh-float);z-index:50;display:flex;flex-direction:column" data-id="atelier.anchored-menu.stop">
+<sc-for list="{{ menu.items }}" as="it" hint-placeholder-count="4">
+<sc-if value="{{ it.sep }}" hint-placeholder-val="{{ false }}"><div style="height:1px;margin:4px 8px;background:var(--c-line)"></div></sc-if>
+<sc-if value="{{ it.head }}" hint-placeholder-val="{{ false }}"><div style="height:24px;display:flex;align-items:flex-end;padding:0 8px 4px;font-size:11.5px;color:var(--c-ink-3)">{{ it.label }}</div></sc-if>
+<sc-if value="{{ it.item }}" hint-placeholder-val="{{ true }}"><div data-part="menu-row" onClick="{{ it.go }}" style="height:28px;display:flex;align-items:center;gap:8px;padding:0 8px;border-radius:8px;cursor:pointer;color:{{ it.fg }};white-space:nowrap" style-hover="background:var(--c-hover)" data-id="atelier.menu-row.go"><span style="flex:none;width:12px;font-size:11.5px">{{ it.check }}</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">{{ it.label }}</span><span style="flex:none;font-size:11.5px;color:var(--c-ink-3)">{{ it.meta }}</span></div></sc-if>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</dc-import>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1512,&quot;height&quot;:982},&quot;appearance&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;ground&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;white&quot;,&quot;lightGray&quot;],&quot;default&quot;:&quot;white&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;surface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;lacquer&quot;,&quot;glass&quot;,&quot;flat&quot;],&quot;default&quot;:&quot;lacquer&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;typeface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Geist&quot;,&quot;System&quot;],&quot;default&quot;:&quot;Geist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;window&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1512 × 982&quot;,&quot;Fenster&quot;],&quot;default&quot;:&quot;1512 × 982&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Beide&quot;,&quot;Skizze&quot;,&quot;Render&quot;],&quot;default&quot;:&quot;Beide&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Atelier&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;bereit&quot;,&quot;läuft&quot;,&quot;mit Render&quot;],&quot;default&quot;:&quot;bereit&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Atelier&quot;}}">
+class Component extends DCLogic {
+  P = {
+    close: "M4.5 4.5l7 7M11.5 4.5l-7 7", chevron: "M4.5 6.5L8 10l3.5-3.5", more: "M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM13 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z",
+    minus: "M4 8h8", plus: "M8 3.5v9M3.5 8h9", check: "M3.5 8.5l3 3 6-7", trash: "M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9",
+    expand: "M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5L9 7M2.5 13.5L7 9", shrink: "M13.5 2.5L10 6M10 3v3h3M2.5 13.5L6 10M6 13v-3H3",
+    raster: "M2.5 2.5h11v11h-11ZM6 2.5v11M10 2.5v11M2.5 6h11M2.5 10h11", ruler: "M2 9.5l7.5-7.5 4.5 4.5L6.5 14ZM4.5 7l1.5 1.5M6.5 5l1.5 1.5M8.5 3l1.5 1.5",
+    home: "M2.5 8L8 3l5.5 5M4 7v6.5h8V7", door: "M3.5 13.5V2.5h7v11M10.5 2.5l3 1.5v8.5l-3 1", window: "M3 3.5h10v9H3ZM8 3.5v9M3 8h10",
+    prev: "M9.5 4L5.5 8l4 4", next: "M6.5 4l4 4-4 4", export: "M8 2.5V10M4.5 6.5L8 10l3.5-3.5M3 13h10", print: "M4.5 5.5v-3h7v3M4.5 11.5h-2v-5h11v5h-2M4.5 9h7v4.5h-7Z",
+    list: "M6 4.5h7.5M6 8h7.5M6 11.5h7.5M2.5 4.5h1M2.5 8h1M2.5 11.5h1", copy: "M5.5 5.5h8v8h-8ZM3.5 10.5h-1v-8h8v1", search: "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5",
+    pen: "M10.5 2.5l3 3-8 8H2.5v-3Z", line: "M3 13L13 3", rect: "M3 4h10v8H3Z", eraser: "M6.5 13.5h7M3.5 9.5l5-5 4 4-4.5 4.5h-2.5Z", undo: "M5.5 4.5L2.5 7.5l3 3M2.5 7.5h6a4 4 0 0 1 0 8",
+    play: "M5 3.5v9l7-4.5Z", render: "M2.5 3.5h11v9h-11ZM5 10l2.5-3 2 2 1.5-1.5 2 2.5", sun: "M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1",
+    cube: "M8 2l5.5 3v6L8 14 2.5 11V5ZM8 8v6M2.5 5L8 8l5.5-3", board: "M2.5 2.5h11v11h-11ZM2.5 9.5h11M8 2.5v7", folder: "M2.5 4.5h4l1.5 1.5h5.5v6.5h-11Z", layers: "M8 2.5l5.5 3-5.5 3-5.5-3ZM2.5 8.5L8 11.5l5.5-3M2.5 11L8 14l5.5-3"
+  };
+  GROUPS = [["Kommunikation", [["Mail", []]]], ["Kreativ", [["Moodboard", []], ["Aufmaß", []], ["Atelier", []], ["Planvergleich", []]]], ["Kern", [["Einstellungen", []]]]];
+  FILES = { "Moodboard": "ALFA Moodboard.dc.html", "Aufmaß": "ALFA Aufmass.dc.html", "Atelier": "ALFA Atelier.dc.html", "Planvergleich": "ALFA Planvergleich.dc.html" };
+  winRef = React.createRef(); svgRef = React.createRef();
+  get K() { return window.AlfaShell.K; }
+  choose(n) { if (n === this.NAME) return; if (this.FILES[n]) { window.location.href = encodeURI(this.FILES[n]); return; } this.toastIt(n + " liegt in einem anderen Bogen"); }
+  ensureShell() {
+    if (window.AlfaShell) { this.reg(); return; }
+    if (!window.__alfaShellLoad) window.__alfaShellLoad = new Promise(r => { const s = document.createElement("script"); s.src = "alfa-shell.js"; s.onload = r; document.head.appendChild(s); });
+    window.__alfaShellLoad.then(() => { this.reg(); this.forceUpdate(); });
+  }
+  reg() { const A = window.AlfaShell.AREA; if (!A[this.NAME]) A[this.NAME] = { L: [280], R: [280], min: [280, 280, 280], yield: [2, 0, 1] }; }
+  componentDidMount() {
+    this.ensureShell();
+    this._rs = () => { if (this.props.window !== "1512 × 982") this.forceUpdate(); };
+    window.addEventListener("resize", this._rs);
+    this._mv = e => this.move && this.move(e); this._up = () => this.up && this.up();
+    window.addEventListener("pointermove", this._mv); window.addEventListener("pointerup", this._up); window.addEventListener("pointercancel", this._up);
+    this._kd = e => { const t = e.target; if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return; if (e.key === "Escape" && this.state.menu) { this.setState({ menu: null }); return; } this.key && this.key(e); };
+    document.addEventListener("keydown", this._kd);
+    this.anim(); this.mounted && this.mounted();
+  }
+  componentWillUnmount() { window.removeEventListener("resize", this._rs); window.removeEventListener("pointermove", this._mv); window.removeEventListener("pointerup", this._up); window.removeEventListener("pointercancel", this._up); document.removeEventListener("keydown", this._kd); clearTimeout(this.tt); clearInterval(this.rt); }
+  componentDidUpdate() { this.anim(); if (window.AlfaShell) window.AlfaShell.ebb(this, false, this.still()); }
+  still() { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
+  anim() { const r = this.root(); if (r && !this.still()) r.querySelectorAll("[data-spin]").forEach(el => { if (!el._a && el.animate) el._a = el.animate([{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }], { duration: 1000, iterations: Infinity }); }); }
+  root() { const w = this.winRef.current; return w ? w.closest('[data-part="area-page"]') : null; }
+  geo() { return window.AlfaShell.geo(window.AlfaShell.frame(this.props)); }
+  mem() { return Object.assign(window.AlfaShell.D0(this.NAME), this.state.mem[this.NAME] || {}); }
+  setMem(p) { this.setState(st => ({ mem: Object.assign({}, st.mem, { [this.NAME]: Object.assign(window.AlfaShell.D0(this.NAME), st.mem[this.NAME] || {}, p) }) })); }
+  lay() { return window.AlfaShell.layout(this.NAME, this.mem(), this.geo(), false); }
+  grow(side, v, w0) { this.setMem(window.AlfaShell.grow(this.NAME, side, v, w0)); }
+  sc() { const r = this.root().getBoundingClientRect(); return { r, k: (r.width / this.geo().W) || 1 }; }
+  fmt(n) { return Math.round(n).toLocaleString("de-DE"); }
+  toastIt(t, undo) { clearTimeout(this.tt); this.setState({ toast: t, toastUndo: undo || null }); this.tt = setTimeout(() => this.setState({ toast: null, toastUndo: null }), undo ? 4000 : 1800); }
+  openMenu(e, items, w) {
+    e.stopPropagation(); w = w || 240;
+    const { r, k } = this.sc(), b = e.currentTarget.getBoundingClientRect(), g = this.geo(), h = items.length * 28 + 8;
+    let x = (b.left - r.left) / k, y = (b.bottom - r.top) / k + 4;
+    x = Math.max(16, Math.min(x, g.W - w - 16)); if (y + h > g.H - 16) y = (b.top - r.top) / k - h - 4;
+    this.setState({ menu: { x, y, w, items } });
+  }
+  mi(label, fn, o) { o = o || {}; return { item: true, label, check: o.check ? "✓" : "", meta: o.meta || "", fg: o.danger ? "var(--c-signal)" : "var(--c-ink)", go: e => { e.stopPropagation(); this.setState({ menu: null }); fn && fn(); } }; }
+  row(label, o) { return Object.assign({ isRow: true, isHead: false, isNote: false, label, line: true, w: 400, fg: "var(--c-ink)", cur: "default", bg: "transparent", hbg: "transparent", hasSub: !!(o && o.sub), hasVal: !!(o && o.val != null && !o.hasInput), hasInput: false, hasSwatch: !!(o && o.swatches), hasSeg: !!(o && o.seg), hasPill: !!(o && o.pill), hasToggle: !!(o && o.toggle), hasBtns: !!(o && o.btns), hasMark: !!(o && o.mD) }, o || {}); }
+  numRow(label, v, set, o) { return this.row(label, Object.assign({ hasInput: true, hasVal: false, val: String(Math.round(v)), mode: "numeric", inW: "80px", onIn: e => { const n = parseInt(String(e.target.value).replace(/[^0-9-]/g, ""), 10); if (!isNaN(n)) set(n); } }, o || {})); }
+  segOf(opts, cur, fn) { return opts.map(o => ({ n: o[0], tip: o[1] || o[0], state: o[0] === cur ? "selected" : "rest", bg: o[0] === cur ? "var(--c-inv)" : "transparent", fg: o[0] === cur ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { e.stopPropagation(); fn(o[0]); } })); }
+  toggleOf(on, fn) { return { toggle: fn, tState: on ? "on" : "off", tBg: on ? "var(--c-ink)" : "transparent", tRing: on ? "none" : "inset 0 0 0 1px var(--c-line-strong)", tX: on ? "14px" : "2px", kBg: on ? "var(--c-lane)" : "var(--c-ink-3)" }; }
+  tbtn(label, go) { return { label, bg: "transparent", fg: "var(--c-ink)", ring: "inset 0 0 0 1px var(--c-line-strong)", go: e => { e.stopPropagation(); go(e); } }; }
+  mk(sel, o) { return Object.assign({ state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink-2)", ring: sel ? "none" : "inset 0 0 0 1px var(--c-line-strong)", isSym: true, isText: false, dot: false }, o); }
+  lrow(sel, name, d, o) { return Object.assign({ isRow: true, isHead: false, name, d, tip: name, state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink)", weight: sel ? 500 : 400, symFg: sel ? "var(--c-lane)" : "var(--c-ink-3)", symBg: "transparent", symRing: sel ? "inset 0 0 0 1px var(--c-on-inv-line)" : "inset 0 0 0 1px var(--c-line-strong)", hasN: false, nFg: sel ? "var(--c-on-inv-2)" : "var(--c-ink-3)" }, o || {}); }
+  lhead(t) { return { isHead: true, isRow: false, name: t }; }
+  btn(label, d, go, kind, o) {
+    o = o || {}; const stop = e => e.stopPropagation(), ring = "inset 0 0 0 1px var(--c-line-strong)";
+    const v = kind === "accent" ? ["var(--c-inv)", "var(--c-on-inv)", "var(--c-inv)", "var(--c-on-inv)"] : kind === "signal" ? ["transparent", "var(--c-signal)", "var(--c-hover)", "var(--c-signal)"] : kind === "on" ? ["var(--c-ink)", "var(--c-lane)", "var(--c-ink)", "var(--c-lane)"] : ["transparent", "var(--c-ink-2)", "var(--c-hover)", "var(--c-ink)"];
+    const lab = !!o.label;
+    return { isBtn: true, isSep: false, part: lab ? "text-button" : "symbol-button", label, tip: o.tip || label, d, state: o.off ? "disabled" : kind === "on" ? "selected" : kind || "neutral", showLabel: lab, w: lab ? "auto" : "28px", pad: lab ? "0 12px 0 8px" : "0",
+      bg: v[0], fg: v[1], hbg: o.off ? v[0] : v[2], hfg: o.off ? v[1] : v[3], ring: kind === "accent" || kind === "on" ? "none" : ring, op: o.off ? .4 : 1, cur: o.off ? "default" : "pointer", go: e => { stop(e); if (!o.off) go(e); } };
+  }
+  lanesOf(w, rM, titles, marks) {
+    const K = this.K, lefts = [K.m, K.m + w[0] + K.gap, K.m + w[0] + w[1] + 2 * K.gap];
+    return [0, 1, 2].map(i => { const folded = w[i] <= K.fold;
+      return { title: titles[i], left: lefts[i] + "px", width: w[i] + "px", folded, isList: i === 0 && !folded, isMain: i === 1 && !folded, isStack: i === 2 && !folded,
+        state: rM.max === i ? "maximized" : folded ? "collapsed" : "open", cursor: folded ? "pointer" : "default", bg: "var(--c-lane)", ring: "var(--sh-lane)", ovf: "hidden", marks: marks[i],
+        onStrip: folded ? () => { if (rM.max >= 0) this.setMem({ max: -1 }); else this.setMem({ [["Lf", "Mf", "Rf"][i]]: false }); } : undefined }; });
+  }
+  stackCards(defs, order0, front0, bodies, metas, foots, SH) {
+    const all = this.stackCards0(defs, order0, front0, bodies, metas, foots, SH), c = all.filter(x => x.id === front0)[0];
+    const tabs = order0.map(k => ({ n: defs[k][0], state: k === front0 ? "selected" : "rest", bg: k === front0 ? "var(--c-inv)" : "transparent", fg: k === front0 ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { e.stopPropagation(); this.setState({ front: k }); } }));
+    return [Object.assign(c, { top: "0px", h: SH + "px", z: 1, tf: "none", bg: "transparent", sheen: "none", blur: "none", sh: "none", cursor: "default", go: undefined, tabs })];
+  }
+  stackCards0(defs, order0, front0, bodies, metas, foots, SH) {
+    const s = this.state, dk = (this.props.appearance ?? "light") === "dark", ofl = (this.props.surface ?? "lacquer");
+    const lv = dk ? [["#1f1f1f", "#fafafa"], ["#2e2e2e", "#fafafa"], ["#3a3a3a", "#fafafa"]] : [["#f5f5f5", "#171717"], ["#ebebeb", "#171717"], ["#d9d9d9", "#171717"]];
+    const order = order0.filter(k => k !== front0).concat([front0]), b = order.length - 1; let acc = 8; const tops = order.map(() => { const t = acc; acc += 44; return t; });
+    const lack = (front, lvl, first) => { const lite = !lvl || /^#(?:[c-f])/i.test(lvl[0]);
+      const spec = front ? (dk ? "rgba(255,255,255,.14)" : "rgba(255,255,255,1)") : lite ? "rgba(255,255,255,.9)" : "rgba(255,255,255,.22)";
+      const seam = dk ? "rgba(0,0,0,.7)" : front ? "rgba(0,0,0,.14)" : "rgba(0,0,0,.2)";
+      return ["inset 0 1px 0 " + spec, "0 -1px 0 " + seam].concat(first ? [] : ["0 -8px 16px -12px rgba(0,0,0," + (dk ? ".55" : ".16") + ")"]).join(", "); };
+    return order.map((k, i) => {
+      const dep = b - i, front = dep === 0, lvl = dep > 0 ? lv[Math.min(dep, 3) - 1] : null, D = defs[k];
+      return { id: k, state: front ? "open" : "stacked", top: tops[i] + "px", h: (SH - tops[i]) + "px", z: i + 1,
+        tf: !front && s.hoverCard === k ? "translateY(-4px)" : "none", enter: () => { if (!front) this.setState({ hoverCard: k }); }, leave: () => this.setState(st => st.hoverCard === k ? { hoverCard: null } : null),
+        bg: ofl === "glass" ? "color-mix(in srgb, " + (lvl ? lvl[0] : "var(--c-lane)") + " " + (front ? 86 : 64) + "%, transparent)" : lvl ? lvl[0] : "var(--c-lane)", fg: lvl ? lvl[1] : "var(--c-ink)",
+        sh: ofl === "lacquer" ? lack(front, lvl, i === 0) : ofl === "flat" ? (front ? "inset 0 1px 0 var(--c-glaze), var(--sh-lane), 0 -8px 24px -12px rgba(0,0,0,.22)" : "inset 0 1px 0 var(--c-glaze), 0 0 0 1px rgba(0,0,0,.06)") : "inset 0 0 0 1px rgba(255,255,255," + (dk ? ".12" : ".7") + "), 0 -8px 24px -14px rgba(0,0,0,.22)",
+        sheen: ofl === "glass" ? "linear-gradient(160deg, rgba(255,255,255," + (dk ? ".08" : ".55") + "), rgba(255,255,255,0) 55%)" : "none", blur: ofl === "glass" ? "blur(22px) saturate(1.4)" : "none",
+        hLine: front ? "var(--c-line)" : "transparent", mLine: "color-mix(in srgb, currentColor 22%, transparent)", markD: D[1], title: D[0],
+        meta: front ? (metas[k] || "") : "", metaFlex: front ? "1 1 0" : "none", metaMl: front ? "0" : "auto", hasClose: false, cursor: front ? "default" : "pointer", go: front ? undefined : () => this.setState({ front: k }),
+        isRows: front, isKatalog: false, rows: front ? (bodies[k] || []) : [], kats: [], fotos: [], katNote: "", hasFoot: front && !!foots[k], foot: foots[k] || { l: [], r: [] } };
+    });
+  }
+  finish(o) {
+    const s = this.state, still = this.still(), ease = "cubic-bezier(.2,.8,.2,1)", w = o.w, rM = o.rM, lanes = o.lanes;
+    return Object.assign({
+      ready: true, licht: this.props.appearance ?? "light", winRef: this.winRef, shGrund: this.props.ground ?? "white", shSchrift: this.props.typeface ?? "Geist", fenster: this.props.window ?? "1512 × 982",
+      wArr: w, maxed: rM.max >= 0, slow: false, groups: this.GROUPS, badges: {}, shDot: false, laneSet: true, lanes, isList: lanes[0].isList, isMain: lanes[1].isMain, isStack: lanes[2].isStack,
+      stackTrans: still ? "none" : "top 520ms cubic-bezier(.22,1.08,.36,1), height 520ms cubic-bezier(.22,1.08,.36,1), background 320ms " + ease + ", transform 420ms " + ease,
+      iconRing: "inset 0 0 0 1px var(--c-line-strong)", plusD: this.P.plus, closeD: this.P.close, chevronD: this.P.chevron, searchD: this.P.search,
+      onChoose: n => this.choose(n), onMode: v => this.setState({ blobOpen: v }), onMem: p => this.setMem(p), onGrow: (side, v, w0) => this.grow(side, v, w0),
+      onSync: () => { if (s.syncing) return; this.setState({ syncing: true }); setTimeout(() => this.setState({ syncing: false }), still ? 400 : 1600); },
+      syncState: s.syncing ? "syncing" : "fresh", syncTitle: o.syncTitle, assistText: o.assist,
+      hasToast: !!s.toast, toast: s.toast || "", hasUndo: !!s.toastUndo, undo: () => { const u = s.toastUndo; clearTimeout(this.tt); this.setState({ toast: null, toastUndo: null }); if (u) u(); },
+      hasMenu: !!s.menu, menu: s.menu ? { x: s.menu.x + "px", y: s.menu.y + "px", w: s.menu.w + "px", items: s.menu.items.map(it => Object.assign({ sep: false, head: false, item: false, check: "", meta: "", fg: "var(--c-ink)" }, it)) } : { items: [] },
+      rootDown: () => { if (s.menu) this.setState({ menu: null }); }, stop: e => e.stopPropagation()
+    }, o.x);
+  }
+
+  NAME = "Atelier"; palRef = React.createRef();
+  loadPal() { try { const v = JSON.parse(localStorage.getItem("alfa.atelier.pal")); if (v && typeof v.x === "number") return v; } catch (e) {} return null; }
+  palDown(e) { e.stopPropagation(); e.preventDefault(); const el = this.palRef.current; if (!el) return; const r = el.getBoundingClientRect(), k = this.sc().k; this.d = { mode: "pal", offX: (e.clientX - r.left) / k, offY: (e.clientY - r.top) / k }; }
+  palDock() { try { localStorage.removeItem("alfa.atelier.pal"); } catch (e) {} this.setState({ palPos: null }); }
+  palMove(e) {
+    const d = this.d, el = this.palRef.current; if (!el) return; const lr = el.offsetParent.getBoundingClientRect(), k = this.sc().k, lw = lr.width / k, lh = lr.height / k, pw = el.offsetWidth, ph = el.offsetHeight;
+    let px = (e.clientX - lr.left) / k - d.offX, py = (e.clientY - lr.top) / k - d.offY;
+    px = Math.max(0, Math.min(lw - pw, px)); py = Math.max(84, Math.min(lh - ph, py));
+    if (px < 24) px = 12; if (px > lw - pw - 24) px = lw - pw - 12; if (py < 108) py = 96; if (py > lh - ph - 24) py = lh - ph - 12;
+    this.setState({ palPos: { x: Math.round(px), y: Math.round(py) } });
+  }
+  palUp() { this.d = null; try { localStorage.setItem("alfa.atelier.pal", JSON.stringify(this.state.palPos)); } catch (e) {} }
+
+  SCN = [["s1", "Küche Hansen · Ansicht Süd", "Küche Hansen"], ["s2", "Praxis Kern · Tresen", "Praxis Kern"], ["s3", "Skizzenbuch", "Frei"]];
+  MATS = ["Eiche geölt hell", "Eiche geölt natur", "Esche pigmentiert", "Leinen 04", "Alu eloxiert", "Naturstein grau"];
+  PRE = [["v1", "Innenraum · Stimmung", { stil: "Stimmung", licht: "Abend", aufl: "2k", persp: "Zwei-Punkt" }], ["v2", "Möbel · Weißmodell", { stil: "Weißmodell", licht: "Mittag", aufl: "1k", persp: "Axo" }], ["v3", "Schnell · Entwurf", { stil: "Weißmodell", licht: "Mittag", aufl: "1k", persp: "Ein-Punkt" }]];
+  STAGE = [["Skizze prüfen", "check", false], ["Linien klären", "pen", true], ["Tiefe und Perspektive", "cube", true], ["Material zuweisen", "layers", false], ["Licht setzen", "sun", false], ["Rendern", "render", false], ["Nachbearbeiten", "eraser", true]];
+  rc(a, b, c, d) { return [[a, b], [c, b], [c, d], [a, d], [a, b]]; }
+  guides(p) {
+    const out = [], c = "rgba(179,65,46,.3)", ray = (vx, vy, n, a0, a1) => { for (let i = 0; i < n; i++) { const a = (a0 + (a1 - a0) * i / (n - 1)) * Math.PI / 180, L = 1800; out.push({ x1: vx, y1: vy, x2: vx + Math.cos(a) * L, y2: vy + Math.sin(a) * L, c }); } };
+    const hz = 300; out.push({ x1: 0, y1: hz, x2: 960, y2: hz, c: "rgba(179,65,46,.55)" });
+    if (p === "Ein-Punkt") ray(480, hz, 18, 0, 360 - 20);
+    else if (p === "Zwei-Punkt") { ray(-260, hz, 11, -40, 40); ray(1220, hz, 11, 140, 220); for (let x = 120; x <= 840; x += 120) out.push({ x1: x, y1: 0, x2: x, y2: 640, c }); }
+    else if (p === "Drei-Punkt") { ray(-260, hz, 9, -32, 32); ray(1220, hz, 9, 148, 212); ray(480, 1900, 11, 244, 296); }
+    else { for (let k = -12; k <= 12; k++) { const x = 480 + k * 80; out.push({ x1: x, y1: 0, x2: x, y2: 640, c }); } for (let k = -14; k <= 14; k++) { const y = 320 + k * 80 * .5774 * 2, d = 960 * .5774; out.push({ x1: 0, y1: y + d, x2: 960, y2: y - d, c }); out.push({ x1: 0, y1: y - d, x2: 960, y2: y + d, c }); } }
+    return out;
+  }
+  seedStrokes() {
+    const r = (a, b, c, d) => this.rc(a, b, c, d), l = (a, b, c, d) => [[a, b], [c, d]];
+    return { s1: [l(60, 560, 900, 560), r(60, 120, 180, 560), r(180, 400, 380, 560), r(380, 400, 580, 560), r(580, 400, 780, 560), l(170, 392, 790, 392), r(240, 150, 400, 300), r(400, 150, 560, 300), r(560, 150, 720, 300), r(800, 200, 900, 440), l(850, 200, 850, 440)],
+      s2: [l(140, 290, 820, 290), r(160, 290, 800, 560), r(240, 360, 720, 500), l(480, 40, 480, 120), r(440, 120, 520, 160)], s3: [] };
+  }
+  dflt() { return { stil: "Stimmung", licht: "Abend", aufl: "2k", persp: "Zwei-Punkt", mat: "Eiche geölt hell" }; }
+  initial() {
+    const p = this.props || {}, st = this.seedStrokes(), sc = {};
+    this.SCN.forEach(x => { sc[x[0]] = { strokes: st[x[0]], par: this.dflt(), vers: [], skip: {} }; });
+    if ((p.zustand ?? "bereit") === "mit Render") sc.s1.vers = [{ n: 1, stil: "Stimmung", licht: "Abend", aufl: "2k", mat: "Eiche geölt hell", persp: "Zwei-Punkt", t: "Heute, 11:20" }];
+    return { mem: {}, palPos: this.loadPal(), scene: "s1", sc, tool: "stift", view: p.ansicht ?? "Beide", raster: true, fluchtl: true, openSt: 1, front: "pipeline", live: null, drag: null, run: null, showV: null, menu: null, toast: null, toastUndo: null, hoverCard: null, blobOpen: false, syncing: false };
+  }
+  state = this.initial();
+  mounted() { if ((this.props.state ?? "bereit") === "läuft") setTimeout(() => this.startRun(), 400); }
+  cur() { return this.state.sc[this.state.scene]; }
+  setSc(fn) { this.setState(st => ({ sc: Object.assign({}, st.sc, { [st.scene]: fn(st.sc[st.scene]) }) })); }
+  setPar(p) { this.setSc(c => Object.assign({}, c, { par: Object.assign({}, c.par, p) })); }
+  svgPt(e) { const el = this.svgRef.current; if (!el) return null; const r = el.getBoundingClientRect(); return [Math.max(0, Math.min(960, Math.round((e.clientX - r.left) / r.width * 960))), Math.max(0, Math.min(640, Math.round((e.clientY - r.top) / r.height * 640)))]; }
+  down(e) { if (e.button > 0) return; e.preventDefault(); const p = this.svgPt(e); if (!p) return; const t = this.state.tool; if (t === "radierer") { this.erase(p); this.setState({ drag: { mode: "erase" } }); } else this.setState({ drag: { mode: t }, live: [p] }); }
+  move(e) {
+    if (this.d && this.d.mode === "pal") { this.palMove(e); return; }
+    const d = this.state.drag; if (!d) return; const p = this.svgPt(e); if (!p) return;
+    if (d.mode === "erase") this.erase(p);
+    else if (d.mode === "stift") { const L = this.state.live || [], l = L[L.length - 1]; if (l && Math.hypot(p[0] - l[0], p[1] - l[1]) >= 3) this.setState({ live: L.concat([p]) }); }
+    else if (this.state.live) this.setState({ live: [this.state.live[0], p] });
+  }
+  up() {
+    if (this.d && this.d.mode === "pal") { this.palUp(); return; }
+    const d = this.state.drag; if (!d) return; let pts = this.state.live;
+    if (d.mode !== "erase" && pts && pts.length > 1) { if (d.mode === "rechteck") pts = this.rc(pts[0][0], pts[0][1], pts[1][0], pts[1][1]); this.setSc(c => Object.assign({}, c, { strokes: c.strokes.concat([pts]) })); }
+    this.setState({ drag: null, live: null });
+  }
+  hit(S, p) { for (let i = 0; i < S.length - 1; i++) { const a = S[i], b = S[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], L2 = dx * dx + dy * dy || 1; let t = ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L2; t = Math.max(0, Math.min(1, t)); if (Math.hypot(p[0] - (a[0] + t * dx), p[1] - (a[1] + t * dy)) < 10) return true; } return false; }
+  erase(p) { const c = this.cur(); if (c.strokes.some(S => this.hit(S, p))) this.setSc(x => Object.assign({}, x, { strokes: x.strokes.filter(S => !this.hit(S, p)) })); }
+  key(e) { const k = { s: "stift", l: "linie", r: "rechteck", e: "radierer" }[e.key]; if (k) this.setState({ tool: k }); if ((e.metaKey || e.ctrlKey) && e.key === "z") { e.preventDefault(); this.undoStroke(); } }
+  undoStroke() { this.setSc(c => Object.assign({}, c, { strokes: c.strokes.slice(0, -1) })); }
+  clearAll() { const was = this.cur().strokes; this.setSc(c => Object.assign({}, c, { strokes: [] })); this.toastIt("Skizze geleert", () => this.setSc(c => Object.assign({}, c, { strokes: was }))); }
+  startRun() {
+    if (this.state.run) return; const sid = this.state.scene; this.setState({ run: { scene: sid, stage: 0, pct: 0 }, view: this.state.view === "Skizze" ? "Beide" : this.state.view });
+    clearInterval(this.rt);
+    this.rt = setInterval(() => {
+      const r = this.state.run; if (!r) { clearInterval(this.rt); return; }
+      const c = this.state.sc[r.scene]; let stage = r.stage, pct = r.pct + (this.still() ? 100 : 20);
+      if (c.skip[stage] && this.STAGE[stage][2]) pct = 100;
+      if (pct >= 100) { stage++; pct = 0; }
+      if (stage >= this.STAGE.length) {
+        clearInterval(this.rt); const par = c.par, n = c.vers.length + 1;
+        this.setState(st => ({ run: null, showV: n, sc: Object.assign({}, st.sc, { [r.scene]: Object.assign({}, st.sc[r.scene], { vers: st.sc[r.scene].vers.concat([{ n, stil: par.stil, licht: par.licht, aufl: par.aufl, mat: par.mat, persp: par.persp, t: "Gerade eben" }]) }) }) }));
+        this.toastIt("Render v" + n + " fertig"); return;
+      }
+      this.setState({ run: { scene: r.scene, stage, pct } });
+    }, 130);
+  }
+  stopRun() { clearInterval(this.rt); this.setState({ run: null }); this.toastIt("Pipeline abgebrochen"); }
+  renderVals() {
+    if (!window.AlfaShell) return { ready: false };
+    this.reg();
+    const s = this.state, K = this.K, P = this.P, g = this.geo(), rM = this.mem(), w = this.lay(), stop = e => e.stopPropagation();
+    const iconRing = "inset 0 0 0 1px var(--c-line-strong)", openCount = w.filter(x => x > K.fold).length;
+    const sc = this.SCN.find(x => x[0] === s.scene), c = this.cur(), par = c.par, run = s.run && s.run.scene === s.scene ? s.run : null;
+    const vers = c.vers, shown = vers.find(v => v.n === s.showV) || vers[vers.length - 1] || null;
+
+    // Arbeitsfläche
+    const AW = w[1] - 72, AH = g.lh - 84 - 32, view = s.view, showS = view !== "Render", showR = view !== "Skizze", two = showS && showR;
+    let pw = two ? (AW - 8) / 2 : AW, ph = pw * 2 / 3; if (ph > AH) { ph = AH; pw = ph * 1.5; }
+    const strokes = c.strokes.map(S => ({ d: "M" + S.map(p => p[0] + " " + p[1]).join("L"), w: 2.2, c: "var(--c-sheet-ink)" }));
+    const live = s.live && s.live.length > 1 ? (s.drag && s.drag.mode === "rechteck" ? this.rc(s.live[0][0], s.live[0][1], s.live[1][0], s.live[1][1]) : s.live) : null;
+    const tb = (label, d, on, go) => ({ label, d, state: on ? "selected" : "rest", bg: on ? "var(--c-inv)" : "transparent", fg: on ? "var(--c-on-inv)" : "var(--c-ink-3)", ring: on ? "none" : iconRing, go: e => { stop(e); go(e); } });
+    const pb = (label, d, on, go) => ({ isBtn: true, sep: false, label, d, state: on ? "selected" : "rest", bg: on ? "var(--c-inv)" : "transparent", hbg: on ? "var(--c-inv)" : "var(--c-hover)", fg: on ? "var(--c-on-inv)" : "var(--c-ink-2)", stop: e => e.stopPropagation(), go: e => { e.stopPropagation(); go(e); } }), psep = { sep: true, isBtn: false };
+        const cx = o => Object.assign({ isHint: false, isSeg: false, isBtn: false, isPill: false, isSw: false }, o), ctx = [];
+    const hint = tx => ctx.push(cx({ isHint: true, text: tx })), sg = (op, cur, fn) => ctx.push(cx({ isSeg: true, seg: this.segOf(op, cur, fn) }));
+    const bt = (label, go, sig) => ctx.push(cx({ isBtn: true, label, state: "rest", bg: "transparent", fg: sig ? "var(--c-signal)" : "var(--c-ink)", ring: "inset 0 0 0 1px var(--c-line-strong)", go: e => { stop(e); go(e); } }));
+    sg([["Ein-Punkt", "Ein-Punkt-Perspektive"], ["Zwei-Punkt", "Zwei-Punkt-Perspektive"], ["Drei-Punkt", "Drei-Punkt-Perspektive"], ["Axo", "Axonometrie 30°"]], par.persp, v => this.setPar({ persp: v }));
+    ctx.push(cx({ isPill: true, label: par.mat, go: e => this.openMenu(e, [{ head: true, label: "Material" }].concat(this.MATS.map(m => this.mi(m, () => this.setPar({ mat: m }), { check: m === par.mat }))), 240) }));
+    const B = { ctx, palL: s.palPos ? s.palPos.x + "px" : "12px", palT: s.palPos ? s.palPos.y + "px" : "96px", palDown: e => this.palDown(e), palDock: () => this.palDock(), name: sc[1], n: String(c.strokes.length), wideTools: w[1] >= 520, zooms: ["Skizze", "Beide", "Render"].map(z => ({ t: z, state: view === z ? "selected" : "rest", bg: view === z ? "var(--c-inv)" : "transparent", fg: view === z ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { stop(e); this.setState({ view: z }); } })),
+      tools: [tb(rM.max === 1 ? "Zurück" : "Atelier groß", rM.max === 1 ? P.shrink : P.expand, false, () => this.setMem({ max: rM.max === 1 ? -1 : 1 }))],
+      palette: [["stift", "Stift (S)", P.pen], ["linie", "Linie (L)", P.line], ["rechteck", "Rechteck (R)", P.rect], ["radierer", "Radierer (E)", P.eraser]].map(q => pb(q[1], q[2], s.tool === q[0], () => this.setState({ tool: q[0] }))).concat([psep, pb("Fluchtlinien", P.cube, s.fluchtl, () => this.setState({ fluchtl: !s.fluchtl })), pb("Raster", P.raster, s.raster, () => this.setState({ raster: !s.raster }))]), guides: s.fluchtl ? this.guides(par.persp) : [], showSketch: showS, showRender: showR, pw: pw + "px", ph: ph + "px", strokes, hasLive: !!live, liveD: live ? "M" + live.map(p => p[0] + " " + p[1]).join("L") : "", down: e => this.down(e), cursor: s.tool === "radierer" ? "cell" : "crosshair",
+      gridBg: s.raster ? "linear-gradient(to right, rgba(23,23,23,.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(23,23,23,.06) 1px, transparent 1px)" : "none", gridSize: (pw / 24) + "px " + (pw / 24) + "px",
+      sketchChip: "Skizze", renderChip: shown ? "Render v" + shown.n + " · " + shown.stil + " · " + shown.licht + " · " + shown.aufl : "Render",
+      hasVersion: !!shown && !run, slot: "at-" + s.scene + "-v" + (shown ? shown.n : 0), slotPh: "Render v" + (shown ? shown.n : "") + " · Ergebnis hier ablegen",
+      running: !!run, stageNo: "", stageName: run ? this.STAGE[run.stage][0] : "", stagePct: run ? run.pct + " %" : "",
+      noVersion: !shown && !run, deskDown: () => {} };
+
+    // Bahn links
+    const L = { title: "Atelier", insertLabel: "Neue Skizze", detail: sc[2], hLine: s.lScroll ? "var(--c-line)" : "transparent", onScroll: e => { const q = e.currentTarget.scrollTop > 0; if (q !== !!s.lScroll) this.setState({ lScroll: q }); },
+      rows: [this.lhead("Skizzen")].concat(this.SCN.map(x => this.lrow(s.scene === x[0], x[1], P.pen, { go: () => this.setState({ scene: x[0], showV: null }) })))
+        .concat([this.lhead("Pipeline-Vorlagen")]).concat(this.PRE.map(x => this.lrow(false, x[1], P.layers, { go: () => { this.setPar(x[2]); this.toastIt("Vorlage «" + x[1] + "» angewendet"); } }))),
+      insertGo: e => { stop(e); this.toastIt("Neue Skizze angelegt"); },
+      buttons: openCount > 1 ? [{ label: "Atelier falten", d: P.minus, go: e => { stop(e); this.setMem({ Lf: true, max: -1 }); } }] : [] };
+
+    // Stapel
+    const stRows = [{ isHead: true, text: "Ablauf" }].concat(this.STAGE.map((st, i) => {
+      const done = (run ? i < run.stage : vers.length > 0 && !!shown && false), act = run && run.stage === i, skipped = !!c.skip[i] && st[2];
+      const sub = ["Skizze lesen, Linien prüfen", "Linien glätten, Lücken schließen", par.persp, par.mat, par.licht, par.stil + " · " + par.aufl, "Farbton, Schärfe, Rand"][i];
+      return this.row(st[0], Object.assign({ sub, hasMark: true, mD: act ? P.play : done ? P.check : P[st[1]], mBg: done ? "var(--c-ink)" : "transparent", mFg: done ? "var(--c-lane)" : act ? "var(--c-ink)" : "var(--c-ink-3)", mRing: done ? "none" : act ? "inset 0 0 0 1px var(--c-ink)" : iconRing, w: act ? 500 : 400, line: i < this.STAGE.length - 1 },
+        act ? { hasVal: true, val: run.pct + " %" } : st[2] ? this.toggleOf(!skipped, () => this.setSc(x => Object.assign({}, x, { skip: Object.assign({}, x.skip, { [i]: !x.skip[i] }) }))) : {}));
+    })).concat([]);
+    const pRows = [{ isHead: true, text: "Bild" },
+      this.row("Perspektive", { seg: this.segOf([["Ein-Punkt", "Ein-Punkt-Perspektive"], ["Zwei-Punkt", "Zwei-Punkt-Perspektive"], ["Drei-Punkt", "Drei-Punkt-Perspektive"], ["Axo", "Axonometrie 30°"]], par.persp, v => this.setPar({ persp: v })) }),
+      this.row("Stil", { seg: this.segOf([["Weißmodell", "Weißmodell"], ["Stimmung"], ["Foto", "Fotorealistisch"]], par.stil === "Fotorealistisch" ? "Foto" : par.stil, v => this.setPar({ stil: v === "Foto" ? "Fotorealistisch" : v })) }),
+      { isHead: true, text: "Licht und Material" },
+      this.row("Licht", { seg: this.segOf([["Morgen"], ["Mittag"], ["Abend"]], par.licht, v => this.setPar({ licht: v })) }),
+      this.row("Material", { pill: par.mat, pillGo: e => this.openMenu(e, [{ head: true, label: "Aus Katalog «Material»" }].concat(this.MATS.map(m => this.mi(m, () => this.setPar({ mat: m }), { check: m === par.mat }))), 240) }),
+      { isHead: true, text: "Ausgabe" },
+      this.row("Auflösung", { seg: this.segOf([["1k"], ["2k"], ["4k"]], par.aufl, v => this.setPar({ aufl: v })), line: false })];
+    const fRows = [{ isHead: true, text: "Fassungen" }].concat(vers.length ? vers.slice().reverse().map(v => this.row("Render v" + v.n, { sub: v.stil + " · " + v.licht + " · " + v.aufl + " · " + v.mat, w: shown && shown.n === v.n ? 500 : 400, val: v.t, hasVal: false, btns: [this.tbtn("Zeigen", () => this.setState({ showV: v.n, view: s.view === "Skizze" ? "Beide" : s.view })), this.tbtn("Moodboard", () => this.toastIt("Render v" + v.n + " ans Moodboard gegeben"))] })) : []);
+    const SH = g.lh - 44, defs = { pipeline: ["Pipeline", P.play], parameter: ["Parameter", P.sun], fassungen: ["Fassungen", P.layers] };
+    const metas = { pipeline: run ? this.STAGE[run.stage][0] + " · " + run.pct + " %" : "bereit", parameter: par.stil + " · " + par.aufl, fassungen: vers.length + "" };
+    const cw = w[2] - 16;
+    const foots = { pipeline: { l: [this.btn("Zurücksetzen", P.undo, () => { this.setSc(x => Object.assign({}, x, { skip: {}, par: this.dflt() })); this.toastIt("Parameter zurückgesetzt"); }, null, { off: !!run })], r: [run ? this.btn("Abbrechen", P.close, () => this.stopRun(), null, { label: true, lw: 100 }) : this.btn("Pipeline starten", P.play, () => this.startRun(), "accent", { label: cw >= 220, lw: 140 })] } };
+    const ring = "var(--c-line-strong)", mkSt = (i, st) => {
+      const act = !!run && run.stage === i, done = !!run && i < run.stage, skipped = !!c.skip[i] && st[2], open = s.openSt === i;
+      return { n: st[0], sub: ["Skizze lesen, Linien prüfen", "Linien glätten, Lücken schließen", par.persp, par.mat, par.licht, par.stil + " · " + par.aufl, "Farbton, Schärfe, Rand"][i], d: act ? P.play : done ? P.check : P[st[1]], state: act ? "active" : done ? "done" : "todo", ring: act ? "var(--c-ink)" : ring, op: skipped ? .5 : 1, w: act ? 500 : 400,
+        mBg: done ? "var(--c-ink)" : "transparent", mFg: done ? "var(--c-lane)" : act ? "var(--c-ink)" : "var(--c-ink-3)", mRing: done ? "none" : act ? "inset 0 0 0 1px var(--c-ink)" : "inset 0 0 0 1px var(--c-line-strong)", val: act ? run.pct + " %" : skipped ? "übersprungen" : "", open, rot: open ? "rotate(180deg)" : "none", tg: () => this.setState({ openSt: open ? -1 : i }), canSkip: st[2], skipLabel: skipped ? "Wieder aktivieren" : "Überspringen", skipGo: e => { stop(e); this.setSc(x => Object.assign({}, x, { skip: Object.assign({}, x.skip, { [i]: !x.skip[i] }) })); } };
+    };
+    const tl = vers.slice().reverse().map((v, ix, arr) => { const on = !!shown && shown.n === v.n; return { n: "Render v" + v.n, t: v.t, w: on ? 500 : 400, rail: ix < arr.length - 1 ? "var(--c-line-strong)" : "transparent", dotBg: on ? "var(--c-ink)" : "transparent", dotRing: on ? "none" : "inset 0 0 0 1px var(--c-ink-3)", chips: [v.stil, v.licht, v.aufl, v.persp, v.mat],
+      btns: [{ label: on ? "Angezeigt" : "Zeigen", bg: on ? "var(--c-inv)" : "transparent", fg: on ? "var(--c-on-inv)" : "var(--c-ink)", ring: on ? "none" : "inset 0 0 0 1px var(--c-line-strong)", go: e => { stop(e); this.setState({ showV: v.n, view: s.view === "Skizze" ? "Beide" : s.view }); } }, { label: "Ans Moodboard", bg: "transparent", fg: "var(--c-ink)", ring: "inset 0 0 0 1px var(--c-line-strong)", go: e => { stop(e); this.toastIt("Render v" + v.n + " ans Moodboard gegeben"); } }] }; });
+    const cards = this.stackCards(defs, ["pipeline", "parameter", "fassungen"], s.front, { pipeline: stRows, parameter: pRows, fassungen: fRows }, metas, foots, SH);
+    cards.forEach(c0 => { c0.isPipe = c0.state === "open" && c0.id === "pipeline"; c0.isTime = c0.state === "open" && c0.id === "fassungen"; c0.isRows = c0.state === "open" && c0.id === "parameter"; c0.stages = c0.isPipe ? this.STAGE.map((st, i) => mkSt(i, st)) : []; c0.vers = c0.isTime ? tl : []; c0.noVers = c0.isTime && !tl.length; });
+    const tools = [["stift", "Stift (S)", P.pen], ["linie", "Linie (L)", P.line], ["rechteck", "Rechteck (R)", P.rect], ["radierer", "Radierer (E)", P.eraser]];
+    const HB = { state: run ? "running" : "rest", hint: run ? "Pipeline läuft" : "", main: [this.btn("Strich zurück", P.undo, () => this.undoStroke(), null, { off: !c.strokes.length })],
+      end: [this.btn("Mehr", P.more, e => this.openMenu(e, [this.mi("Letzten Strich zurücknehmen", () => this.undoStroke(), { meta: "⌘Z" }), this.mi("Skizze leeren", () => this.clearAll(), { danger: true }), { sep: true }, this.mi("Skizze als PDF", () => this.toastIt("Skizze als PDF gesichert")), this.mi("Ins Moodboard legen", () => this.toastIt("Skizze ans Moodboard gegeben")), this.mi("In Projektordner sichern", () => this.toastIt("Im Projektordner gesichert"))], 240))]
+        .concat(openCount > 1 ? [{ isSep: true, isBtn: false }, this.btn("Spalte falten", P.minus, () => this.setMem({ Rf: true, max: -1 }))] : []).concat([this.btn(rM.max === 2 ? "Zurück" : "Stapel groß", rM.max === 2 ? P.shrink : P.expand, () => this.setMem({ max: rM.max === 2 ? -1 : 2 }))]) };
+    const marks = [this.SCN.map(x => this.mk(s.scene === x[0], { d: P.pen, label: x[1], go: e => { stop(e); this.setState({ scene: x[0], showV: null }); } })),
+      ["Skizze", "Beide", "Render"].map(z => this.mk(view === z, { d: z === "Skizze" ? P.pen : z === "Render" ? P.render : P.board, label: z, go: e => { stop(e); this.setState({ view: z }); } })),
+      ["pipeline", "parameter", "fassungen"].map(k => this.mk(s.front === k, { d: defs[k][1], label: defs[k][0], go: e => { stop(e); this.setState({ front: k }); } }))];
+    const lanes = this.lanesOf(w, rM, ["Atelier", sc[1], "Render-Pipeline"], marks);
+    return this.finish({ w, rM, lanes, syncTitle: "Kataloge neu lesen", assist: "Frag nach einer Perspektive, einem Material oder einem Licht für „" + sc[1] + "“.", x: { L, B, S: { cards }, HB, svgRef: this.svgRef, palRef: this.palRef } });
+  }
+}
+</script>
+</body>
+</html>

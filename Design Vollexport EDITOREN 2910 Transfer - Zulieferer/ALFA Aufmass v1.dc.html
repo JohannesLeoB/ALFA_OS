@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<!-- Export 21.10.2026 · Nachzug auf Master 2110 -->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./image-slot.js"></script>
+</helmet>
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+<dc-import name="ALFA Shell" area="Aufmaß" appearance="{{ licht }}" ground="{{ shGrund }}" typeface="{{ shSchrift }}" handle="hairline" window="{{ fenster }}" w="{{ wArr }}" lanes="{{ lanes }}" slow="{{ slow }}" maxed="{{ maxed }}" groups="{{ groups }}" badges="{{ badges }}" dot="{{ shDot }}" sync-state="{{ syncState }}" sync-title="{{ syncTitle }}" me-ini="JB" assist-text="{{ assistText }}" search-path="{{ searchD }}" visible-lanes="{{ laneSet }}" on-choose="{{ onChoose }}" on-mode="{{ onMode }}" on-mem="{{ onMem }}" on-grow="{{ onGrow }}" on-sync="{{ onSync }}" on-root-down="{{ rootDown }}" hint-size="100%,100%">
+
+<div data-slot="0" style="display:contents">
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 {{ L.hLine }};transition:box-shadow 160ms;box-sizing:border-box;min-width:0">
+<span style="flex:none;font-weight:500;white-space:nowrap">{{ L.title }}</span>
+<span style="flex:1;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ L.detail }}</span>
+<sc-for list="{{ L.buttons }}" as="x" hint-placeholder-count="0"><button data-part="symbol-button" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:{{ iconRing }};transition:color 160ms" style-hover="color:var(--c-ink)" data-id="survey.symbol-button.go"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</header>
+<div data-part="lane-content" onScroll="{{ L.onScroll }}" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding:8px;display:flex;flex-direction:column;scrollbar-width:none">
+<sc-for list="{{ L.rows }}" as="r" hint-placeholder-count="10">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" style="flex:none;height:32px;display:flex;align-items:flex-end;padding:0 8px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ r.name }}</div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="list-row" data-state="{{ r.state }}" onClick="{{ r.go }}" title="{{ r.tip }}" style="flex:none;height:36px;display:flex;align-items:center;gap:20px;padding:0 8px;border-radius:12px;cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};transition:background 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)" data-id="survey.list-row.go">
+<span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ r.symFg }};background:{{ r.symBg }};box-shadow:{{ r.symRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.d }}"></path></svg></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.weight }}">{{ r.name }}</span>
+<sc-if value="{{ r.hasN }}" hint-placeholder-val="{{ false }}"><span data-part="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:{{ r.nFg }}">{{ r.n }}</span></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+<div data-part="lane-footer" style="flex:none;padding:8px"><button data-part="compose-button" style-active="transform:scale(.98)" title="{{ L.insertLabel }}" onClick="{{ L.insertGo }}" style="appearance:none;border:0;width:100%;height:36px;padding:0 12px 0 8px;box-sizing:border-box;border-radius:12px;display:flex;align-items:center;gap:20px;font:inherit;background:var(--c-inv);color:var(--c-on-inv);cursor:pointer;transition:opacity 160ms" style-hover="opacity:.88" data-id="survey.compose-button.insert-go"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px color-mix(in srgb, currentColor 30%, transparent)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ plusD }}"></path></svg></span><span style="flex:1;min-width:0;text-align:left">{{ L.insertLabel }}</span></button></div>
+</sc-if>
+</div>
+
+<div data-slot="1" style="display:contents">
+<sc-if value="{{ isMain }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 var(--c-line);box-sizing:border-box;min-width:0">
+<span style="flex:none;font-weight:500;white-space:nowrap">{{ B.name }}</span>
+<span data-part="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:var(--c-ink-3)">{{ B.n }}</span>
+<span style="flex:1;min-width:0"></span>
+<sc-if value="{{ B.wideTools }}" hint-placeholder-val="{{ true }}">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ B.zooms }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;transition:background 240ms,color 240ms" data-id="survey.option.go">{{ o.t }}</button></sc-for></div>
+</sc-if>
+<sc-for list="{{ B.tools }}" as="x" hint-placeholder-count="3">
+<button data-part="symbol-button" data-state="{{ x.state }}" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;transition:background 160ms,color 160ms" data-id="survey.symbol-button.go-2"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button>
+</sc-for>
+</header>
+<div data-part="context-bar" style="flex:none;height:40px;display:flex;align-items:center;gap:12px;padding:0 16px;box-sizing:border-box;box-shadow:inset 0 -1px 0 var(--c-line);min-width:0;overflow:hidden"><sc-for list="{{ B.ctx }}" as="c" hint-placeholder-count="2">
+<sc-if value="{{ c.isHint }}" hint-placeholder-val="{{ true }}"><span style="flex:0 1 auto;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.text }}</span></sc-if>
+<sc-if value="{{ c.isSeg }}" hint-placeholder-val="{{ false }}"><div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.seg }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" title="{{ o.tip }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;min-width:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap" data-id="survey.option.go-2">{{ o.n }}</button></sc-for></div></sc-if>
+<sc-if value="{{ c.isBtn }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" data-state="{{ c.state }}" style-active="transform:scale(.96)" onClick="{{ c.go }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ c.bg }};color:{{ c.fg }};box-shadow:{{ c.ring }};cursor:pointer;white-space:nowrap" data-id="survey.text-button.go">{{ c.label }}</button></sc-if>
+<sc-if value="{{ c.isPill }}" hint-placeholder-val="{{ false }}"><button data-part="choice" onClick="{{ c.go }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" data-id="survey.choice.go">{{ c.label }}<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+<sc-if value="{{ c.isSw }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:4px"><sc-for list="{{ c.sw }}" as="sw" hint-placeholder-count="6"><button data-part="swatch" data-state="{{ sw.state }}" title="{{ sw.n }}" aria-label="{{ sw.n }}" onClick="{{ sw.go }}" style="appearance:none;border:0;padding:0;flex:none;width:20px;height:20px;border-radius:50%;background:{{ sw.c }};box-shadow:{{ sw.ring }};cursor:pointer" style-active="transform:scale(.92)" data-id="survey.swatch.go"></button></sc-for></span></sc-if>
+</sc-for></div>
+<div data-part="tool-palette" ref="{{ palRef }}" style="position:absolute;left:{{ B.palL }};top:{{ B.palT }};z-index:6;padding:0 8px 8px;border-radius:12px;background:var(--c-menu);box-shadow:var(--sh-float);display:flex;flex-direction:column;gap:4px"><div data-part="drag-handle" title="Ziehen verschiebt, Doppelklick dockt an" onPointerDown="{{ B.palDown }}" onDoubleClick="{{ B.palDock }}" style="flex:none;height:16px;margin:0 -8px;display:grid;place-items:center;cursor:grab;touch-action:none" data-id="survey.drag-handle.pal-down"><i style="display:block;width:16px;height:4px;background:radial-gradient(circle,var(--c-ink-3) 1px,transparent 1.5px) 0 0/4px 4px"></i></div><sc-for list="{{ B.palette }}" as="x" hint-placeholder-count="6"><sc-if value="{{ x.sep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;height:1px;margin:2px 6px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="symbol-button" data-state="{{ x.state }}" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" onPointerDown="{{ x.stop }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }}" style-active="transform:scale(.96)" data-id="survey.symbol-button.go-3"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-if></sc-for></div>
+<div data-part="desk" onPointerDown="{{ B.deskDown }}" style="flex:1;min-height:0;overflow:hidden;position:relative;background-color:var(--c-sheet);background-image:{{ B.gridBg }};background-size:{{ B.gridSize }};background-position:{{ B.gridPos }};color-scheme:light" data-id="survey.desk.desk-down">
+<svg data-part="plan" width="{{ B.W }}" height="{{ B.H }}" style="display:block;position:absolute;left:0;top:0;font-family:Geist,system-ui,sans-serif;font-size:11.5px;font-variant-numeric:tabular-nums">
+<sc-if value="{{ B.isPlan }}" hint-placeholder-val="{{ true }}">
+<polygon points="{{ B.pts }}" fill="var(--c-sheet-well)" stroke="none"></polygon>
+<sc-for list="{{ B.walls }}" as="k" hint-placeholder-count="4"><line x1="{{ k.x1 }}" y1="{{ k.y1 }}" x2="{{ k.x2 }}" y2="{{ k.y2 }}" stroke="{{ k.stroke }}" stroke-width="{{ k.sw }}" stroke-linecap="square"></line></sc-for>
+<sc-for list="{{ B.opens }}" as="o" hint-placeholder-count="0"><line x1="{{ o.ax }}" y1="{{ o.ay }}" x2="{{ o.bx }}" y2="{{ o.by }}" stroke="var(--c-sheet)" stroke-width="8"></line><path d="{{ o.d }}" fill="none" stroke="{{ o.stroke }}" stroke-width="{{ o.sw }}" stroke-linejoin="round"></path><line x1="{{ o.ax }}" y1="{{ o.ay }}" x2="{{ o.bx }}" y2="{{ o.by }}" stroke="transparent" stroke-width="18" onClick="{{ o.go }}" style="cursor:pointer"></line></sc-for>
+<sc-if value="{{ B.hasErr }}" hint-placeholder-val="{{ false }}"><line x1="{{ B.closeSeg.x1 }}" y1="{{ B.closeSeg.y1 }}" x2="{{ B.closeSeg.x2 }}" y2="{{ B.closeSeg.y2 }}" stroke="var(--c-signal)" stroke-width="2" stroke-dasharray="4 3"></line></sc-if>
+<sc-for list="{{ B.vdots }}" as="d" hint-placeholder-count="4"><circle cx="{{ d.x }}" cy="{{ d.y }}" r="2.5" fill="var(--c-sheet-ink-2)"></circle></sc-for>
+<sc-for list="{{ B.walls }}" as="k" hint-placeholder-count="4"><sc-if value="{{ k.show }}" hint-placeholder-val="{{ true }}"></sc-if><line x1="{{ k.x1 }}" y1="{{ k.y1 }}" x2="{{ k.x2 }}" y2="{{ k.y2 }}" stroke="transparent" stroke-width="18" onClick="{{ k.go }}" style="cursor:pointer"></line></sc-for>
+<sc-for list="{{ B.rlab }}" as="t" hint-placeholder-count="2"></sc-for>
+</sc-if>
+<sc-if value="{{ B.isWand }}" hint-placeholder-val="{{ false }}">
+<rect x="{{ B.wr.x }}" y="{{ B.wr.y }}" width="{{ B.wr.w }}" height="{{ B.wr.h }}" fill="var(--c-sheet-well)" stroke="var(--c-sheet-ink-2)" stroke-width="1.3"></rect>
+<sc-for list="{{ B.wr.lines }}" as="l" hint-placeholder-count="0"><line x1="{{ l.x1 }}" y1="{{ l.y1 }}" x2="{{ l.x2 }}" y2="{{ l.y2 }}" stroke="var(--c-sheet-ink-3)" stroke-width="1"></line></sc-for>
+<sc-for list="{{ B.wr.opens }}" as="o" hint-placeholder-count="0"><rect x="{{ o.x }}" y="{{ o.y }}" width="{{ o.w }}" height="{{ o.h }}" fill="{{ o.fill }}" stroke="{{ o.stroke }}" stroke-width="{{ o.sw }}" onClick="{{ o.go }}" style="cursor:pointer"></rect></sc-for>
+<sc-for list="{{ B.wr.texts }}" as="t" hint-placeholder-count="3"></sc-for>
+</sc-if>
+</svg>
+<sc-for list="{{ B.labels }}" as="t" hint-placeholder-count="6"><div style="position:absolute;left:{{ t.x }}px;top:{{ t.y }}px;transform:{{ t.tf }};padding:0 4px;border-radius:4px;background:{{ t.bg }};color:{{ t.c }};font-family:Geist,system-ui,sans-serif;font-size:11.5px;line-height:16px;font-weight:{{ t.w }};font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none">{{ t.t }}</div></sc-for>
+</div>
+</sc-if>
+</div>
+
+<div data-slot="2" style="display:contents">
+<sc-if value="{{ isStack }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" data-state="{{ HB.state }}" style="flex:none;height:44px;display:flex;align-items:center;gap:4px;padding:0 8px;box-sizing:border-box;min-width:0">
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ HB.main }}" as="x" hint-placeholder-count="4"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+<span style="flex:1;min-width:0;padding:0 4px;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ HB.hint }}</span>
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ HB.end }}" as="x" hint-placeholder-count="2"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+</header>
+<div data-part="card-stack" data-state="stacked" style="position:relative;flex:1;min-height:0">
+<sc-for list="{{ S.cards }}" as="c" hint-placeholder-count="3">
+<article data-part="card" data-state="{{ c.state }}" onClick="{{ c.go }}" onPointerEnter="{{ c.enter }}" onPointerLeave="{{ c.leave }}" style="position:absolute;left:0;right:0;top:{{ c.top }};height:{{ c.h }};z-index:{{ c.z }};transform:{{ c.tf }};background-color:{{ c.bg }};background-image:{{ c.sheen }};backdrop-filter:{{ c.blur }};-webkit-backdrop-filter:{{ c.blur }};color:{{ c.fg }};box-shadow:none;overflow:hidden;display:flex;flex-direction:column;transition:{{ stackTrans }};cursor:{{ c.cursor }}" data-id="survey.card.go">
+<header data-part="card-header" style="flex:none;height:44px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box;min-width:0"><div data-part="segmented-control" style="flex:1;min-width:0;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.tabs }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background 160ms,color 160ms" data-id="survey.option.go-3">{{ o.n }}</button></sc-for></div></header>
+
+<sc-if value="{{ c.isRows }}" hint-placeholder-val="{{ true }}">
+<div data-part="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;display:flex;flex-direction:column;padding:4px 0 8px;scrollbar-width:thin">
+<sc-for list="{{ c.rows }}" as="b" hint-placeholder-count="5">
+<sc-if value="{{ b.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" style="flex:none;height:36px;display:flex;align-items:flex-end;padding:0 16px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isNote }}" hint-placeholder-val="{{ false }}"><div style="flex:none;padding:8px 16px;font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="field-row" data-state="{{ b.state }}" onClick="{{ b.go }}" style="position:relative;flex:none;min-height:44px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:8px 8px 8px 16px;box-sizing:border-box;cursor:{{ b.cur }};background:{{ b.bg }}" style-hover="background:{{ b.hbg }}" data-id="survey.field-row.go">
+<sc-if value="{{ b.hasMark }}" hint-placeholder-val="{{ false }}"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ b.mFg }};background:{{ b.mBg }};box-shadow:{{ b.mRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ b.mD }}"></path></svg></span></sc-if>
+<div style="flex:1 1 72px;min-width:72px;display:flex;flex-direction:column">
+<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ b.w }};color:{{ b.fg }}">{{ b.label }}</span>
+<sc-if value="{{ b.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;line-height:16px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums">{{ b.sub }}</span></sc-if>
+</div>
+<sc-if value="{{ b.hasInput }}" hint-placeholder-val="{{ false }}"><input value="{{ b.val }}" onChange="{{ b.onIn }}" aria-label="{{ b.label }}" inputmode="{{ b.mode }}" autocomplete="off" spellcheck="false" style="flex:0 1 auto;min-width:0;width:{{ b.inW }};height:28px;border:0;outline:none;background:transparent;color:var(--c-ink);font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px;border-radius:8px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"></input></sc-if>
+<sc-if value="{{ b.hasVal }}" hint-placeholder-val="{{ false }}"><span style="flex:0 1 auto;min-width:0;max-width:60%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--c-ink-2);font-variant-numeric:tabular-nums">{{ b.val }}</span></sc-if>
+<sc-if value="{{ b.hasSwatch }}" hint-placeholder-val="{{ false }}"><span style="flex:0 1 auto;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;max-width:176px"><sc-for list="{{ b.swatches }}" as="sw" hint-placeholder-count="5"><button data-part="swatch" data-state="{{ sw.state }}" title="{{ sw.n }}" aria-label="{{ sw.n }}" onClick="{{ sw.go }}" style="appearance:none;border:0;padding:0;flex:none;width:20px;height:20px;border-radius:50%;background:{{ sw.c }};box-shadow:{{ sw.ring }};cursor:pointer;transition:box-shadow 160ms" style-active="transform:scale(.92)" data-id="survey.swatch.go-2"></button></sc-for></span></sc-if>
+<sc-if value="{{ b.hasSeg }}" hint-placeholder-val="{{ false }}"><div data-part="segmented-control" style="flex:none;margin-left:auto;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ b.seg }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" title="{{ o.tip }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;min-width:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;display:grid;place-items:center" data-id="survey.option.go-4">{{ o.n }}</button></sc-for></div></sc-if>
+<sc-if value="{{ b.hasPill }}" hint-placeholder-val="{{ false }}"><button data-part="choice" onClick="{{ b.pillGo }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" data-id="survey.choice.pill-go">{{ b.pill }}<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+<sc-if value="{{ b.hasToggle }}" hint-placeholder-val="{{ false }}"><button data-part="toggle" data-state="{{ b.tState }}" aria-label="{{ b.label }}" onClick="{{ b.toggle }}" style="appearance:none;border:0;padding:0;flex:none;position:relative;width:32px;height:20px;border-radius:999px;background:{{ b.tBg }};box-shadow:{{ b.tRing }};cursor:pointer;transition:background 200ms" data-id="survey.toggle.toggle"><i style="position:absolute;top:2px;left:{{ b.tX }};width:16px;height:16px;border-radius:50%;background:{{ b.kBg }};transition:left 200ms cubic-bezier(.2,.8,.2,1)"></i></button></sc-if>
+<sc-if value="{{ b.hasBtns }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:8px"><sc-for list="{{ b.btns }}" as="x" hint-placeholder-count="1"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ x.go }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;white-space:nowrap" data-id="survey.text-button.go-2">{{ x.label }}</button></sc-for></span></sc-if>
+<sc-if value="{{ b.line }}" hint-placeholder-val="{{ true }}"><i style="position:absolute;left:16px;right:16px;bottom:0;height:1px;background:var(--c-line)"></i></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.isKatalog }}" hint-placeholder-val="{{ false }}">
+<div data-part="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;gap:8px;padding:8px">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.kats }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" data-id="survey.option.go-5">{{ o.n }}</button></sc-for></div>
+<div style="flex:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(104px,100%),1fr));gap:8px">
+<sc-for list="{{ c.fotos }}" as="f" hint-placeholder-count="6">
+<button data-part="catalog-tile" title="{{ f.tip }}" onClick="{{ f.go }}" style="appearance:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;min-width:0;cursor:pointer;background:transparent" style-active="transform:scale(.98)" data-id="survey.catalog-tile.go">
+<span style="position:relative;display:block;width:100%;aspect-ratio:4 / 3;border-radius:8px;overflow:hidden;background:var(--c-well);box-shadow:inset 0 0 0 1px var(--c-line)"><image-slot id="{{ f.slot }}" shape="rect" placeholder="{{ f.n }}" style="width:100%;height:100%;pointer-events:none"></image-slot></span>
+<span style="min-width:0;font-size:11.5px;line-height:16px;color:var(--c-ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.n }}</span>
+</button>
+</sc-for>
+</div>
+<div style="flex:none;padding:0 8px 8px;font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty">{{ c.katNote }}</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.hasFoot }}" hint-placeholder-val="{{ false }}">
+<footer data-part="card-footer" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px;box-sizing:border-box;box-shadow:inset 0 1px 0 var(--c-line);min-width:0">
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ c.foot.l }}" as="x" hint-placeholder-count="0"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-for></div>
+<span style="flex:1;min-width:0"></span>
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ c.foot.r }}" as="x" hint-placeholder-count="0"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-for></div>
+</footer>
+</sc-if>
+</article>
+</sc-for>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div data-part="toast" style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:40;height:28px;padding:0 12px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;font-size:11.5px;white-space:nowrap;box-shadow:var(--sh-float);gap:12px"><span>{{ toast }}</span><sc-if value="{{ hasUndo }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ undo }}" style="appearance:none;border:0;height:20px;margin-right:-8px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px currentColor;cursor:pointer" data-id="survey.text-button.undo">Rückgängig</button></sc-if></div></sc-if>
+</div>
+</sc-if>
+</div>
+
+<div data-slot="over" ref="{{ winRef }}" style="display:contents">
+</div>
+<div data-slot="top" style="display:contents">
+<sc-if value="{{ hasMenu }}" hint-placeholder-val="{{ false }}">
+<div data-part="anchored-menu" onPointerDown="{{ stop }}" style="position:absolute;left:{{ menu.x }};top:{{ menu.y }};width:{{ menu.w }};padding:4px;box-sizing:border-box;border-radius:16px;background:var(--c-menu);color:var(--c-ink);box-shadow:var(--sh-float);z-index:50;display:flex;flex-direction:column" data-id="survey.anchored-menu.stop">
+<sc-for list="{{ menu.items }}" as="it" hint-placeholder-count="4">
+<sc-if value="{{ it.sep }}" hint-placeholder-val="{{ false }}"><div style="height:1px;margin:4px 8px;background:var(--c-line)"></div></sc-if>
+<sc-if value="{{ it.head }}" hint-placeholder-val="{{ false }}"><div style="height:24px;display:flex;align-items:flex-end;padding:0 8px 4px;font-size:11.5px;color:var(--c-ink-3)">{{ it.label }}</div></sc-if>
+<sc-if value="{{ it.item }}" hint-placeholder-val="{{ true }}"><div data-part="menu-row" onClick="{{ it.go }}" style="height:28px;display:flex;align-items:center;gap:8px;padding:0 8px;border-radius:8px;cursor:pointer;color:{{ it.fg }};white-space:nowrap" style-hover="background:var(--c-hover)" data-id="survey.menu-row.go"><span style="flex:none;width:12px;font-size:11.5px">{{ it.check }}</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">{{ it.label }}</span><span style="flex:none;font-size:11.5px;color:var(--c-ink-3)">{{ it.meta }}</span></div></sc-if>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</dc-import>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1512,&quot;height&quot;:982},&quot;appearance&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;ground&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;white&quot;,&quot;lightGray&quot;],&quot;default&quot;:&quot;white&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;surface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;lacquer&quot;,&quot;glass&quot;,&quot;flat&quot;],&quot;default&quot;:&quot;lacquer&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;typeface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Geist&quot;,&quot;System&quot;],&quot;default&quot;:&quot;Geist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;window&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1512 × 982&quot;,&quot;Fenster&quot;],&quot;default&quot;:&quot;1512 × 982&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;room&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Flur&quot;,&quot;Garderobennische&quot;,&quot;Abstellraum&quot;,&quot;Küche&quot;],&quot;default&quot;:&quot;Flur&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Aufmaß&quot;},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Grundriss&quot;,&quot;Wand&quot;],&quot;default&quot;:&quot;Grundriss&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Aufmaß&quot;}}">
+class Component extends DCLogic {
+  P = {
+    close: "M4.5 4.5l7 7M11.5 4.5l-7 7", chevron: "M4.5 6.5L8 10l3.5-3.5", more: "M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM13 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z",
+    minus: "M4 8h8", plus: "M8 3.5v9M3.5 8h9", check: "M3.5 8.5l3 3 6-7", trash: "M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9",
+    expand: "M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5L9 7M2.5 13.5L7 9", shrink: "M13.5 2.5L10 6M10 3v3h3M2.5 13.5L6 10M6 13v-3H3",
+    raster: "M2.5 2.5h11v11h-11ZM6 2.5v11M10 2.5v11M2.5 6h11M2.5 10h11", ruler: "M2 9.5l7.5-7.5 4.5 4.5L6.5 14ZM4.5 7l1.5 1.5M6.5 5l1.5 1.5M8.5 3l1.5 1.5",
+    home: "M2.5 8L8 3l5.5 5M4 7v6.5h8V7", lock: "M4.5 7.5h7v6h-7ZM6 7.5V5.5a2 2 0 0 1 4 0v2", door: "M3.5 13.5V2.5h7v11M10.5 2.5l3 1.5v8.5l-3 1", window: "M3 3.5h10v9H3ZM8 3.5v9M3 8h10",
+    prev: "M9.5 4L5.5 8l4 4", next: "M6.5 4l4 4-4 4", export: "M8 2.5V10M4.5 6.5L8 10l3.5-3.5M3 13h10", print: "M4.5 5.5v-3h7v3M4.5 11.5h-2v-5h11v5h-2M4.5 9h7v4.5h-7Z",
+    list: "M6 4.5h7.5M6 8h7.5M6 11.5h7.5M2.5 4.5h1M2.5 8h1M2.5 11.5h1", copy: "M5.5 5.5h8v8h-8ZM3.5 10.5h-1v-8h8v1", search: "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5",
+    pen: "M10.5 2.5l3 3-8 8H2.5v-3Z", line: "M3 13L13 3", rect: "M3 4h10v8H3Z", eraser: "M6.5 13.5h7M3.5 9.5l5-5 4 4-4.5 4.5h-2.5Z", undo: "M5.5 4.5L2.5 7.5l3 3M2.5 7.5h6a4 4 0 0 1 0 8",
+    play: "M5 3.5v9l7-4.5Z", render: "M2.5 3.5h11v9h-11ZM5 10l2.5-3 2 2 1.5-1.5 2 2.5", sun: "M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1",
+    cube: "M8 2l5.5 3v6L8 14 2.5 11V5ZM8 8v6M2.5 5L8 8l5.5-3", board: "M2.5 2.5h11v11h-11ZM2.5 9.5h11M8 2.5v7", folder: "M2.5 4.5h4l1.5 1.5h5.5v6.5h-11Z", layers: "M8 2.5l5.5 3-5.5 3-5.5-3ZM2.5 8.5L8 11.5l5.5-3M2.5 11L8 14l5.5-3"
+  };
+  GROUPS = [["Kommunikation", [["Mail", []]]], ["Kreativ", [["Moodboard", []], ["Aufmaß", []], ["Atelier", []], ["Planvergleich", []]]], ["Kern", [["Einstellungen", []]]]];
+  FILES = { "Moodboard": "ALFA Moodboard.dc.html", "Aufmaß": "ALFA Aufmass.dc.html", "Atelier": "ALFA Atelier.dc.html", "Planvergleich": "ALFA Planvergleich.dc.html" };
+  winRef = React.createRef(); svgRef = React.createRef();
+  get K() { return window.AlfaShell.K; }
+  choose(n) { if (n === this.NAME) return; if (this.FILES[n]) { window.location.href = encodeURI(this.FILES[n]); return; } this.toastIt(n + " liegt in einem anderen Bogen"); }
+  ensureShell() {
+    if (window.AlfaShell) { this.reg(); return; }
+    if (!window.__alfaShellLoad) window.__alfaShellLoad = new Promise(r => { const s = document.createElement("script"); s.src = "alfa-shell.js"; s.onload = r; document.head.appendChild(s); });
+    window.__alfaShellLoad.then(() => { this.reg(); this.forceUpdate(); });
+  }
+  reg() { const A = window.AlfaShell.AREA; if (!A[this.NAME]) A[this.NAME] = { L: [280], R: [280], min: [280, 280, 280], yield: [2, 0, 1] }; }
+  componentDidMount() {
+    this.ensureShell();
+    this._rs = () => { if (this.props.window !== "1512 × 982") this.forceUpdate(); };
+    window.addEventListener("resize", this._rs);
+    this._mv = e => this.move && this.move(e); this._up = () => this.up && this.up();
+    window.addEventListener("pointermove", this._mv); window.addEventListener("pointerup", this._up); window.addEventListener("pointercancel", this._up);
+    this._kd = e => { const t = e.target; if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return; if (e.key === "Escape" && this.state.menu) { this.setState({ menu: null }); return; } this.key && this.key(e); };
+    document.addEventListener("keydown", this._kd);
+    this.anim(); this.mounted && this.mounted();
+  }
+  componentWillUnmount() { window.removeEventListener("resize", this._rs); window.removeEventListener("pointermove", this._mv); window.removeEventListener("pointerup", this._up); window.removeEventListener("pointercancel", this._up); document.removeEventListener("keydown", this._kd); clearTimeout(this.tt); clearInterval(this.rt); }
+  componentDidUpdate() { this.anim(); if (window.AlfaShell) window.AlfaShell.ebb(this, false, this.still()); }
+  still() { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
+  anim() { const r = this.root(); if (r && !this.still()) r.querySelectorAll("[data-spin]").forEach(el => { if (!el._a && el.animate) el._a = el.animate([{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }], { duration: 1000, iterations: Infinity }); }); }
+  root() { const w = this.winRef.current; return w ? w.closest('[data-part="area-page"]') : null; }
+  geo() { return window.AlfaShell.geo(window.AlfaShell.frame(this.props)); }
+  mem() { return Object.assign(window.AlfaShell.D0(this.NAME), this.state.mem[this.NAME] || {}); }
+  setMem(p) { this.setState(st => ({ mem: Object.assign({}, st.mem, { [this.NAME]: Object.assign(window.AlfaShell.D0(this.NAME), st.mem[this.NAME] || {}, p) }) })); }
+  lay() { return window.AlfaShell.layout(this.NAME, this.mem(), this.geo(), false); }
+  grow(side, v, w0) { this.setMem(window.AlfaShell.grow(this.NAME, side, v, w0)); }
+  sc() { const r = this.root().getBoundingClientRect(); return { r, k: (r.width / this.geo().W) || 1 }; }
+  fmt(n) { return Math.round(n).toLocaleString("de-DE"); }
+  toastIt(t, undo) { clearTimeout(this.tt); this.setState({ toast: t, toastUndo: undo || null }); this.tt = setTimeout(() => this.setState({ toast: null, toastUndo: null }), undo ? 4000 : 1800); }
+  openMenu(e, items, w) {
+    e.stopPropagation(); w = w || 240;
+    const { r, k } = this.sc(), b = e.currentTarget.getBoundingClientRect(), g = this.geo(), h = items.length * 28 + 8;
+    let x = (b.left - r.left) / k, y = (b.bottom - r.top) / k + 4;
+    x = Math.max(16, Math.min(x, g.W - w - 16)); if (y + h > g.H - 16) y = (b.top - r.top) / k - h - 4;
+    this.setState({ menu: { x, y, w, items } });
+  }
+  mi(label, fn, o) { o = o || {}; return { item: true, label, check: o.check ? "✓" : "", meta: o.meta || "", fg: o.danger ? "var(--c-signal)" : "var(--c-ink)", go: e => { e.stopPropagation(); this.setState({ menu: null }); fn && fn(); } }; }
+  row(label, o) { return Object.assign({ isRow: true, isHead: false, isNote: false, label, line: true, w: 400, fg: "var(--c-ink)", cur: "default", bg: "transparent", hbg: "transparent", hasSub: !!(o && o.sub), hasVal: !!(o && o.val != null && !o.hasInput), hasInput: false, hasSwatch: !!(o && o.swatches), hasSeg: !!(o && o.seg), hasPill: !!(o && o.pill), hasToggle: !!(o && o.toggle), hasBtns: !!(o && o.btns), hasMark: !!(o && o.mD) }, o || {}); }
+  numRow(label, v, set, o) { return this.row(label, Object.assign({ hasInput: true, hasVal: false, val: String(Math.round(v)), mode: "numeric", inW: "80px", onIn: e => { const n = parseInt(String(e.target.value).replace(/[^0-9-]/g, ""), 10); if (!isNaN(n)) set(n); } }, o || {})); }
+  segOf(opts, cur, fn) { return opts.map(o => ({ n: o[0], tip: o[1] || o[0], state: o[0] === cur ? "selected" : "rest", bg: o[0] === cur ? "var(--c-inv)" : "transparent", fg: o[0] === cur ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { e.stopPropagation(); fn(o[0]); } })); }
+  toggleOf(on, fn) { return { toggle: fn, tState: on ? "on" : "off", tBg: on ? "var(--c-ink)" : "transparent", tRing: on ? "none" : "inset 0 0 0 1px var(--c-line-strong)", tX: on ? "14px" : "2px", kBg: on ? "var(--c-lane)" : "var(--c-ink-3)" }; }
+  tbtn(label, go) { return { label, bg: "transparent", fg: "var(--c-ink)", ring: "inset 0 0 0 1px var(--c-line-strong)", go: e => { e.stopPropagation(); go(e); } }; }
+  mk(sel, o) { return Object.assign({ state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink-2)", ring: sel ? "none" : "inset 0 0 0 1px var(--c-line-strong)", isSym: true, isText: false, dot: false }, o); }
+  lrow(sel, name, d, o) { return Object.assign({ isRow: true, isHead: false, name, d, tip: name, state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink)", weight: sel ? 500 : 400, symFg: sel ? "var(--c-lane)" : "var(--c-ink-3)", symBg: "transparent", symRing: sel ? "inset 0 0 0 1px var(--c-on-inv-line)" : "inset 0 0 0 1px var(--c-line-strong)", hasN: false, nFg: sel ? "var(--c-on-inv-2)" : "var(--c-ink-3)" }, o || {}); }
+  lhead(t) { return { isHead: true, isRow: false, name: t }; }
+  btn(label, d, go, kind, o) {
+    o = o || {}; const stop = e => e.stopPropagation(), ring = "inset 0 0 0 1px var(--c-line-strong)";
+    const v = kind === "accent" ? ["var(--c-inv)", "var(--c-on-inv)", "var(--c-inv)", "var(--c-on-inv)"] : kind === "signal" ? ["transparent", "var(--c-signal)", "var(--c-hover)", "var(--c-signal)"] : kind === "on" ? ["var(--c-ink)", "var(--c-lane)", "var(--c-ink)", "var(--c-lane)"] : ["transparent", "var(--c-ink-2)", "var(--c-hover)", "var(--c-ink)"];
+    const lab = !!o.label;
+    return { isBtn: true, isSep: false, part: lab ? "text-button" : "symbol-button", label, tip: o.tip || label, d, state: o.off ? "disabled" : kind === "on" ? "selected" : kind || "neutral", showLabel: lab, w: lab ? "auto" : "28px", pad: lab ? "0 12px 0 8px" : "0",
+      bg: v[0], fg: v[1], hbg: o.off ? v[0] : v[2], hfg: o.off ? v[1] : v[3], ring: kind === "accent" || kind === "on" ? "none" : ring, op: o.off ? .4 : 1, cur: o.off ? "default" : "pointer", go: e => { stop(e); if (!o.off) go(e); } };
+  }
+  lanesOf(w, rM, titles, marks) {
+    const K = this.K, lefts = [K.m, K.m + w[0] + K.gap, K.m + w[0] + w[1] + 2 * K.gap];
+    return [0, 1, 2].map(i => { const folded = w[i] <= K.fold;
+      return { title: titles[i], left: lefts[i] + "px", width: w[i] + "px", folded, isList: i === 0 && !folded, isMain: i === 1 && !folded, isStack: i === 2 && !folded,
+        state: rM.max === i ? "maximized" : folded ? "collapsed" : "open", cursor: folded ? "pointer" : "default", bg: "var(--c-lane)", ring: "var(--sh-lane)", ovf: "hidden", marks: marks[i],
+        onStrip: folded ? () => { if (rM.max >= 0) this.setMem({ max: -1 }); else this.setMem({ [["Lf", "Mf", "Rf"][i]]: false }); } : undefined }; });
+  }
+  stackCards(defs, order0, front0, bodies, metas, foots, SH) {
+    const all = this.stackCards0(defs, order0, front0, bodies, metas, foots, SH), c = all.filter(x => x.id === front0)[0];
+    const tabs = order0.map(k => ({ n: defs[k][0], state: k === front0 ? "selected" : "rest", bg: k === front0 ? "var(--c-inv)" : "transparent", fg: k === front0 ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { e.stopPropagation(); this.setState({ front: k }); } }));
+    return [Object.assign(c, { top: "0px", h: SH + "px", z: 1, tf: "none", bg: "transparent", sheen: "none", blur: "none", sh: "none", cursor: "default", go: undefined, tabs })];
+  }
+  stackCards0(defs, order0, front0, bodies, metas, foots, SH) {
+    const s = this.state, dk = (this.props.appearance ?? "light") === "dark", ofl = (this.props.surface ?? "lacquer");
+    const lv = dk ? [["#1f1f1f", "#fafafa"], ["#2e2e2e", "#fafafa"], ["#3a3a3a", "#fafafa"]] : [["#f5f5f5", "#171717"], ["#ebebeb", "#171717"], ["#d9d9d9", "#171717"]];
+    const order = order0.filter(k => k !== front0).concat([front0]), b = order.length - 1; let acc = 8; const tops = order.map(() => { const t = acc; acc += 44; return t; });
+    const lack = (front, lvl, first) => { const lite = !lvl || /^#(?:[c-f])/i.test(lvl[0]);
+      const spec = front ? (dk ? "rgba(255,255,255,.14)" : "rgba(255,255,255,1)") : lite ? "rgba(255,255,255,.9)" : "rgba(255,255,255,.22)";
+      const seam = dk ? "rgba(0,0,0,.7)" : front ? "rgba(0,0,0,.14)" : "rgba(0,0,0,.2)";
+      return ["inset 0 1px 0 " + spec, "0 -1px 0 " + seam].concat(first ? [] : ["0 -8px 16px -12px rgba(0,0,0," + (dk ? ".55" : ".16") + ")"]).join(", "); };
+    return order.map((k, i) => {
+      const dep = b - i, front = dep === 0, lvl = dep > 0 ? lv[Math.min(dep, 3) - 1] : null, D = defs[k];
+      return { id: k, state: front ? "open" : "stacked", top: tops[i] + "px", h: (SH - tops[i]) + "px", z: i + 1,
+        tf: !front && s.hoverCard === k ? "translateY(-4px)" : "none", enter: () => { if (!front) this.setState({ hoverCard: k }); }, leave: () => this.setState(st => st.hoverCard === k ? { hoverCard: null } : null),
+        bg: ofl === "glass" ? "color-mix(in srgb, " + (lvl ? lvl[0] : "var(--c-lane)") + " " + (front ? 86 : 64) + "%, transparent)" : lvl ? lvl[0] : "var(--c-lane)", fg: lvl ? lvl[1] : "var(--c-ink)",
+        sh: ofl === "lacquer" ? lack(front, lvl, i === 0) : ofl === "flat" ? (front ? "inset 0 1px 0 var(--c-glaze), var(--sh-lane), 0 -8px 24px -12px rgba(0,0,0,.22)" : "inset 0 1px 0 var(--c-glaze), 0 0 0 1px rgba(0,0,0,.06)") : "inset 0 0 0 1px rgba(255,255,255," + (dk ? ".12" : ".7") + "), 0 -8px 24px -14px rgba(0,0,0,.22)",
+        sheen: ofl === "glass" ? "linear-gradient(160deg, rgba(255,255,255," + (dk ? ".08" : ".55") + "), rgba(255,255,255,0) 55%)" : "none", blur: ofl === "glass" ? "blur(22px) saturate(1.4)" : "none",
+        hLine: front ? "var(--c-line)" : "transparent", mLine: "color-mix(in srgb, currentColor 22%, transparent)", markD: D[1], title: D[0],
+        meta: front ? (metas[k] || "") : "", metaFlex: front ? "1 1 0" : "none", metaMl: front ? "0" : "auto", hasClose: false, cursor: front ? "default" : "pointer", go: front ? undefined : () => this.setState({ front: k }),
+        isRows: front, isKatalog: false, rows: front ? (bodies[k] || []) : [], kats: [], fotos: [], katNote: "", hasFoot: front && !!foots[k], foot: foots[k] || { l: [], r: [] } };
+    });
+  }
+  finish(o) {
+    const s = this.state, still = this.still(), ease = "cubic-bezier(.2,.8,.2,1)", w = o.w, rM = o.rM, lanes = o.lanes;
+    return Object.assign({
+      ready: true, licht: this.props.appearance ?? "light", winRef: this.winRef, shGrund: this.props.ground ?? "white", shSchrift: this.props.typeface ?? "Geist", fenster: this.props.window ?? "1512 × 982",
+      wArr: w, maxed: rM.max >= 0, slow: false, groups: this.GROUPS, badges: {}, shDot: false, laneSet: true, lanes, isList: lanes[0].isList, isMain: lanes[1].isMain, isStack: lanes[2].isStack,
+      stackTrans: still ? "none" : "top 520ms cubic-bezier(.22,1.08,.36,1), height 520ms cubic-bezier(.22,1.08,.36,1), background 320ms " + ease + ", transform 420ms " + ease,
+      iconRing: "inset 0 0 0 1px var(--c-line-strong)", plusD: this.P.plus, closeD: this.P.close, chevronD: this.P.chevron, searchD: this.P.search,
+      onChoose: n => this.choose(n), onMode: v => this.setState({ blobOpen: v }), onMem: p => this.setMem(p), onGrow: (side, v, w0) => this.grow(side, v, w0),
+      onSync: () => { if (s.syncing) return; this.setState({ syncing: true }); setTimeout(() => this.setState({ syncing: false }), still ? 400 : 1600); },
+      syncState: s.syncing ? "syncing" : "fresh", syncTitle: o.syncTitle, assistText: o.assist,
+      hasToast: !!s.toast, toast: s.toast || "", hasUndo: !!s.toastUndo, undo: () => { const u = s.toastUndo; clearTimeout(this.tt); this.setState({ toast: null, toastUndo: null }); if (u) u(); },
+      hasMenu: !!s.menu, menu: s.menu ? { x: s.menu.x + "px", y: s.menu.y + "px", w: s.menu.w + "px", items: s.menu.items.map(it => Object.assign({ sep: false, head: false, item: false, check: "", meta: "", fg: "var(--c-ink)" }, it)) } : { items: [] },
+      rootDown: () => { if (s.menu) this.setState({ menu: null }); }, stop: e => e.stopPropagation()
+    }, o.x);
+  }
+
+  NAME = "Aufmaß"; palRef = React.createRef();
+  loadPal() { try { const v = JSON.parse(localStorage.getItem("alfa.aufmass.pal")); if (v && typeof v.x === "number") return v; } catch (e) {} return null; }
+  palDown(e) { e.stopPropagation(); e.preventDefault(); const el = this.palRef.current; if (!el) return; const r = el.getBoundingClientRect(), k = this.sc().k; this.d = { mode: "pal", offX: (e.clientX - r.left) / k, offY: (e.clientY - r.top) / k }; }
+  palDock() { try { localStorage.removeItem("alfa.aufmass.pal"); } catch (e) {} this.setState({ palPos: null }); }
+  palMove(e) {
+    const d = this.d, el = this.palRef.current; if (!el) return; const lr = el.offsetParent.getBoundingClientRect(), k = this.sc().k, lw = lr.width / k, lh = lr.height / k, pw = el.offsetWidth, ph = el.offsetHeight;
+    let px = (e.clientX - lr.left) / k - d.offX, py = (e.clientY - lr.top) / k - d.offY;
+    px = Math.max(0, Math.min(lw - pw, px)); py = Math.max(84, Math.min(lh - ph, py));
+    if (px < 24) px = 12; if (px > lw - pw - 24) px = lw - pw - 12; if (py < 108) py = 96; if (py > lh - ph - 24) py = lh - ph - 12;
+    this.setState({ palPos: { x: Math.round(px), y: Math.round(py) } });
+  }
+  palUp() { this.d = null; try { localStorage.setItem("alfa.aufmass.pal", JSON.stringify(this.state.palPos)); } catch (e) {} }
+  move(e) { if (this.d && this.d.mode === "pal") this.palMove(e); }
+  up() { if (this.d && this.d.mode === "pal") this.palUp(); }
+
+  DIRS = [[1, 0], [0, 1], [-1, 0], [0, -1]]; SIDE = ["oben", "rechts", "unten", "links"];
+  PROJ = { p2: "Wohnung Vogt", p1: "Küche Hansen" };
+  OT = { tuer: ["Tür", "door"], fenster: ["Fenster", "window"], durchgang: ["Durchgang", "door"] };
+  seedRooms() {
+    const rect = (a, b) => [{ len: a, turn: 0 }, { len: b, turn: 1 }, { len: a, turn: 1 }, { len: b, turn: 1 }];
+    return [
+      { id: "r1", proj: "p2", name: "Flur", h: 2480, walls: rect(4200, 1650), opens: [{ id: "o1", wall: 0, type: "tuer", pos: 350, w: 900, h: 2010, brh: 0 }, { id: "o2", wall: 2, type: "durchgang", pos: 1200, w: 1000, h: 2100, brh: 0 }], note: "Wände nicht lotrecht. Laser, Boden eben.", stand: "Heute, 08:52", von: "Jonas Brenner" },
+      { id: "r2", proj: "p2", name: "Garderobennische", h: 2480, walls: rect(1800, 620), opens: [], note: "Nische offen zum Flur, Steckdose rechts.", stand: "Heute, 08:58", von: "Jonas Brenner" },
+      { id: "r3", proj: "p2", name: "Abstellraum", h: 2360, walls: [{ len: 1950, turn: 0 }, { len: 1100, turn: 1 }, { len: 1962, turn: 1 }, { len: 1100, turn: 1 }], opens: [{ id: "o3", wall: 3, type: "tuer", pos: 100, w: 800, h: 2010, brh: 0 }], note: "Gegenüberliegende Wände weichen 12 mm ab. Nachmessen.", stand: "Gestern", von: "Kai Lindner" },
+      { id: "r4", proj: "p1", name: "Küche", h: 2600, walls: [{ len: 4680, turn: 0 }, { len: 1800, turn: 1 }, { len: 1500, turn: 1 }, { len: 1320, turn: -1 }, { len: 3180, turn: 1 }, { len: 3120, turn: 1 }], opens: [{ id: "o4", wall: 0, type: "fenster", pos: 900, w: 1600, h: 1400, brh: 900 }, { id: "o5", wall: 1, type: "fenster", pos: 500, w: 800, h: 1200, brh: 1000 }, { id: "o6", wall: 5, type: "tuer", pos: 600, w: 1010, h: 2110, brh: 0 }], note: "Altbau, Fensterbank 40 mm tief.", stand: "Mo., 14:10", von: "Ida Roth" }
+    ];
+  }
+  initial() {
+    const p = this.props || {}, id = { "Flur": "r1", "Garderobennische": "r2", "Abstellraum": "r3", "Küche": "r4" }[p.raum ?? "Flur"] || "r1";
+    return { mem: {}, palPos: this.loadPal(), rooms: this.seedRooms(), room: id, wall: 0, open: null, mode: (p.ansicht ?? "Grundriss") === "Wand" ? "wand" : "plan", kette: true, locked: false, raster: false, front: "raum", menu: null, toast: null, toastUndo: null, hoverCard: null, blobOpen: false, syncing: false };
+  }
+  state = this.initial();
+  cur() { return this.state.rooms.find(r => r.id === this.state.room) || this.state.rooms[0]; }
+  upd(id, fn) { if (this.state.locked) { this.toastIt("Aufmaß gesperrt"); return; } this.setState(st => ({ rooms: st.rooms.map(r => r.id === id ? Object.assign({}, r, fn(r)) : r) })); }
+  verts(r) { let d = 0, x = 0, y = 0; const v = [[0, 0, 0]]; r.walls.forEach((w, i) => { d = (d + (i ? w.turn : 0) + 4) % 4; x += this.DIRS[d][0] * w.len; y += this.DIRS[d][1] * w.len; v.push([x, y, d]); }); return v; }
+  area(v, n) { let a = 0; for (let i = 0; i < n; i++) { const p = v[i], q = v[(i + 1) % n]; a += p[0] * q[1] - q[0] * p[1]; } return Math.abs(a) / 2; }
+  m2(a) { return (a / 1e6).toFixed(2).replace(".", ",") + " m²"; }
+  errOf(r) { const v = this.verts(r), n = r.walls.length; return Math.round(Math.hypot(v[n][0] - v[0][0], v[n][1] - v[0][1])); }
+  pickRoom(id) { this.setState({ room: id, wall: 0, open: null }); }
+  addOpen(type) {
+    const r = this.cur(), wl = r.walls[this.state.wall].len, D = { tuer: [900, 2010, 0], fenster: [1200, 1200, 900], durchgang: [1000, 2100, 0] }[type];
+    const w = Math.min(D[0], Math.max(300, wl - 200)), id = "o" + (Date.now() % 100000);
+    this.upd(r.id, x => ({ opens: x.opens.concat([{ id, wall: this.state.wall, type, pos: Math.max(100, Math.round((wl - w) / 20) * 10), w, h: D[1], brh: D[2] }]) }));
+    this.setState({ open: id, front: "oeffnungen" });
+  }
+  addRoom(kind) {
+    const cur = this.cur(), id = "r" + (Date.now() % 100000), rect = (a, b) => [{ len: a, turn: 0 }, { len: b, turn: 1 }, { len: a, turn: 1 }, { len: b, turn: 1 }];
+    const walls = kind === "L" ? [{ len: 4000, turn: 0 }, { len: 1500, turn: 1 }, { len: 1500, turn: 1 }, { len: 1000, turn: -1 }, { len: 2500, turn: 1 }, { len: 2500, turn: 1 }] : rect(3000, 2400);
+    this.setState(st => ({ rooms: st.rooms.concat([{ id, proj: cur.proj, name: kind === "L" ? "Raum L-Form" : "Raum ohne Namen", h: 2500, walls, opens: [], note: "", stand: "Gerade eben", von: "Jonas Brenner" }]), room: id, wall: 0, open: null, front: "raum" }));
+  }
+  key(e) {
+    if (e.key === "Escape") { this.setState({ open: null }); return; }
+    if ((e.key === "Backspace" || e.key === "Delete") && this.state.open) { e.preventDefault(); this.delOpen(); }
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") { const n = this.cur().walls.length; this.setState(st => ({ wall: (st.wall + (e.key === "ArrowRight" ? 1 : n - 1)) % n, open: null })); }
+  }
+  delOpen() {
+    const r = this.cur(), o = r.opens.find(x => x.id === this.state.open); if (!o) return;
+    this.upd(r.id, x => ({ opens: x.opens.filter(y => y.id !== o.id) })); this.setState({ open: null });
+    this.toastIt(this.OT[o.type][0] + " entfernt", () => this.upd(r.id, x => ({ opens: x.opens.concat([o]) })));
+  }
+  renderVals() {
+    if (!window.AlfaShell) return { ready: false };
+    this.reg();
+    const s = this.state, K = this.K, P = this.P, g = this.geo(), rM = this.mem(), w = this.lay(), stop = e => e.stopPropagation();
+    const iconRing = "inset 0 0 0 1px var(--c-line-strong)", openCount = w.filter(x => x > K.fold).length;
+    const room = this.cur(), v = this.verts(room), n = room.walls.length, err = this.errOf(room), area = this.area(v, n), umf = room.walls.reduce((t, x) => t + x.len, 0);
+    const wi = Math.min(s.wall, n - 1), plan = s.mode === "plan";
+    const selOpen = room.opens.find(o => o.id === s.open) || null;
+
+    // Zeichnung
+    const W = w[1], H = g.lh - 84, pad = 88, INK = "var(--c-sheet-ink)", INK2 = "var(--c-sheet-ink-2)", INK3 = "var(--c-sheet-ink-3)", SHEET = "var(--c-sheet)";
+    let pts = "", walls = [], opens = [], closeSeg = null, vdots = [], rlab = [], wr = null;
+    const pickWall = i => e => { stop(e); this.setState({ wall: i, open: null, front: "waende" }); };
+    const pickOpen = o => e => { stop(e); this.setState({ open: o.id, wall: o.wall, front: "oeffnungen" }); };
+    let gridBg = "none", gridSize = "0 0", gridPos = "0 0";
+    if (plan) {
+      const xs = v.map(p => p[0]), ys = v.map(p => p[1]), minx = Math.min.apply(null, xs), maxx = Math.max.apply(null, xs), miny = Math.min.apply(null, ys), maxy = Math.max.apply(null, ys);
+      const bw = maxx - minx || 1, bh = maxy - miny || 1, sc = Math.max(.02, Math.min((W - 2 * pad) / bw, (H - 2 * pad) / bh, .4));
+      const ox = (W - bw * sc) / 2 - minx * sc, oy = (H - bh * sc) / 2 - miny * sc, Q = p => [ox + p[0] * sc, oy + p[1] * sc];
+      pts = v.slice(0, n).map(p => Q(p).map(z => z.toFixed(1)).join(",")).join(" ");
+      walls = room.walls.map((wl, i) => { const a = Q(v[i]), b = Q(v[i + 1]), dv = this.DIRS[v[i + 1][2]], on = i === wi, mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+        return { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: on ? INK : INK2, sw: on ? 5 : 3, go: pickWall(i), lx: mx + dv[1] * 20, ly: my - dv[0] * 20, label: this.fmt(wl.len), tf: on ? INK : INK3, tw: on ? 500 : 400, show: s.kette || on }; });
+      opens = room.opens.map(o => { const i = o.wall, a0 = Q(v[i]), dv = this.DIRS[v[i + 1][2]], nn = [-dv[1], dv[0]], A = [a0[0] + dv[0] * o.pos * sc, a0[1] + dv[1] * o.pos * sc], B = [A[0] + dv[0] * o.w * sc, A[1] + dv[1] * o.w * sc], r = o.w * sc, on = o.id === s.open;
+        let d = ""; const f = z => z.toFixed(1);
+        if (o.type === "tuer") d = "M" + f(A[0]) + " " + f(A[1]) + "L" + f(A[0] + nn[0] * r) + " " + f(A[1] + nn[1] * r) + "A" + f(r) + " " + f(r) + " 0 0 0 " + f(B[0]) + " " + f(B[1]);
+        else if (o.type === "fenster") d = "M" + f(A[0] + nn[0] * 3) + " " + f(A[1] + nn[1] * 3) + "L" + f(B[0] + nn[0] * 3) + " " + f(B[1] + nn[1] * 3) + "M" + f(A[0] - nn[0] * 3) + " " + f(A[1] - nn[1] * 3) + "L" + f(B[0] - nn[0] * 3) + " " + f(B[1] - nn[1] * 3);
+        else d = "M" + f(A[0] - nn[0] * 6) + " " + f(A[1] - nn[1] * 6) + "L" + f(A[0] + nn[0] * 6) + " " + f(A[1] + nn[1] * 6) + "M" + f(B[0] - nn[0] * 6) + " " + f(B[1] - nn[1] * 6) + "L" + f(B[0] + nn[0] * 6) + " " + f(B[1] + nn[1] * 6);
+        return { ax: A[0], ay: A[1], bx: B[0], by: B[1], d, stroke: on ? INK : INK2, sw: on ? 2 : 1.3, go: pickOpen(o) }; });
+      if (err > 0) { const a = Q(v[n]), b = Q(v[0]); closeSeg = { x1: a[0], y1: a[1], x2: b[0], y2: b[1], lx: (a[0] + b[0]) / 2 + 14, ly: (a[1] + b[1]) / 2 - 14, t: "Schließfehler " + err + " mm" }; }
+      vdots = v.slice(0, n).map(p => { const q = Q(p); return { x: q[0], y: q[1] }; });
+      rlab = [{ x: ox + (minx + bw / 2) * sc, y: oy + (miny + bh / 2) * sc - 8, t: room.name, w: 500, c: INK }, { x: ox + (minx + bw / 2) * sc, y: oy + (miny + bh / 2) * sc + 12, t: this.m2(area), w: 400, c: INK3 }];
+      if (s.raster) { gridBg = "linear-gradient(to right, rgba(23,23,23,.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(23,23,23,.06) 1px, transparent 1px)"; gridSize = (1000 * sc) + "px " + (1000 * sc) + "px"; gridPos = ox + "px " + oy + "px"; }
+    } else {
+      const wl = room.walls[wi].len, hh = room.h, s2 = Math.max(.02, Math.min((W - 2 * pad) / wl, (H - 2 * pad) / hh, .4)), rw = wl * s2, rh = hh * s2, x0 = (W - rw) / 2, y0 = (H - rh) / 2 + 8;
+      const tx = (x, y, t, o) => Object.assign({ x, y, t, anchor: "middle", rot: "rotate(0 " + x + " " + y + ")", c: INK3, w: 400 }, o || {});
+      wr = { x: x0, y: y0, w: rw, h: rh, texts: [tx(x0 + rw / 2, y0 - 24, this.fmt(wl) + " mm", { c: INK, w: 500 }), tx(x0 - 24, y0 + rh / 2, this.fmt(hh) + " mm", { rot: "rotate(-90 " + (x0 - 24) + " " + (y0 + rh / 2) + ")" }), tx(x0 + rw / 2, y0 + rh + 28, "Wand " + (wi + 1) + " · " + this.SIDE[v[wi + 1][2]] + ", Ansicht von innen")],
+        lines: [{ x1: x0, y1: y0 - 12, x2: x0 + rw, y2: y0 - 12 }, { x1: x0 - 12, y1: y0, x2: x0 - 12, y2: y0 + rh }, { x1: x0 - 14, y1: y0 - 12, x2: x0 - 10, y2: y0 - 12 }, { x1: x0 + rw + 0, y1: y0 - 16, x2: x0 + rw, y2: y0 - 8 }, { x1: x0, y1: y0 - 16, x2: x0, y2: y0 - 8 }, { x1: x0 - 16, y1: y0, x2: x0 - 8, y2: y0 }, { x1: x0 - 16, y1: y0 + rh, x2: x0 - 8, y2: y0 + rh }],
+        opens: room.opens.filter(o => o.wall === wi).map(o => { const on = o.id === s.open, top = o.type === "fenster" ? rh - (o.brh + o.h) * s2 : rh - o.h * s2;
+          return { x: x0 + o.pos * s2, y: y0 + top, w: o.w * s2, h: o.h * s2, fill: o.type === "fenster" ? "var(--c-sheet-well)" : SHEET, stroke: on ? INK : INK2, sw: on ? 2.2 : 1.3, go: pickOpen(o), tx: x0 + (o.pos + o.w / 2) * s2, ty: y0 + top + o.h * s2 / 2, t: this.OT[o.type][0] + " " + this.fmt(o.w) + " × " + this.fmt(o.h) + (o.type === "fenster" ? " · Br. " + this.fmt(o.brh) : "") }; }) };
+      if (s.raster) { gridBg = "linear-gradient(to right, rgba(23,23,23,.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(23,23,23,.06) 1px, transparent 1px)"; gridSize = (1000 * s2) + "px " + (1000 * s2) + "px"; gridPos = x0 + "px " + (y0 + rh) + "px"; }
+    }
+    const tbt = (label, d, on, go) => ({ label, d, state: on ? "selected" : "rest", bg: on ? "var(--c-inv)" : "transparent", fg: on ? "var(--c-on-inv)" : "var(--c-ink-3)", ring: on ? "none" : iconRing, go: e => { stop(e); go(e); } });
+    const LB = (x, y, tx, o) => Object.assign({ x, y, t: tx, c: INK3, w: 400, bg: "transparent", tf: "translate(-50%,-50%)" }, o || {});
+    const labels = plan ? walls.filter(k => k.show).map(k => LB(k.lx, k.ly, k.label, { c: k.tf, w: k.tw, bg: SHEET })).concat(closeSeg ? [LB(closeSeg.lx, closeSeg.ly, closeSeg.t, { c: "var(--c-signal)", bg: SHEET })] : []).concat(rlab.map(r => LB(r.x, r.y, r.t, { c: r.c, w: r.w }))) : wr.texts.map(r => LB(r.x, r.y, r.t, { c: r.c, w: r.w, tf: "translate(-50%,-50%)" + (r.rot.indexOf("-90") > -1 ? " rotate(-90deg)" : "") })).concat(wr.opens.map(o => LB(o.tx, o.ty, o.t, { c: INK2 })));
+    const nw = room.walls.length;
+    const pb = (label, d, on, go) => ({ isBtn: true, sep: false, label, d, state: on ? "selected" : "rest", bg: on ? "var(--c-inv)" : "transparent", hbg: on ? "var(--c-inv)" : "var(--c-hover)", fg: on ? "var(--c-on-inv)" : "var(--c-ink-2)", stop: e => e.stopPropagation(), go: e => { e.stopPropagation(); go(e); } }), psep = { sep: true, isBtn: false };
+        const cx = o => Object.assign({ isHint: false, isSeg: false, isBtn: false, isPill: false, isSw: false }, o), ctx = [];
+    const hint = tx => ctx.push(cx({ isHint: true, text: tx })), sg = (op, cur, fn) => ctx.push(cx({ isSeg: true, seg: this.segOf(op, cur, fn) }));
+    const bt = (label, go, sig) => ctx.push(cx({ isBtn: true, label, state: "rest", bg: "transparent", fg: sig ? "var(--c-signal)" : "var(--c-ink)", ring: "inset 0 0 0 1px var(--c-line-strong)", go: e => { stop(e); go(e); } }));
+    hint("Wand " + (wi + 1) + " von " + room.walls.length + " · " + this.fmt(room.walls[wi].len) + " mm");
+    if (selOpen) { sg(Object.keys(this.OT).map(k => [this.OT[k][0]]), this.OT[selOpen.type][0], v => { const k = Object.keys(this.OT).find(q => this.OT[q][0] === v); this.upd(room.id, x => ({ opens: x.opens.map(y => y.id === selOpen.id ? Object.assign({}, y, { type: k }) : y) })); }); bt("Entfernen", () => this.delOpen(), true); }
+    else { bt("Tür", () => this.addOpen("tuer")); bt("Fenster", () => this.addOpen("fenster")); bt("Durchgang", () => this.addOpen("durchgang")); }
+    const B = { ctx, palL: s.palPos ? s.palPos.x + "px" : "12px", palT: s.palPos ? s.palPos.y + "px" : "96px", palDown: e => this.palDown(e), palDock: () => this.palDock(), name: room.name, n: this.m2(area), wideTools: w[1] >= 520, zooms: [["Grundriss", "plan"], ["Wand", "wand"]].map(z => ({ t: z[0], state: s.mode === z[1] ? "selected" : "rest", bg: s.mode === z[1] ? "var(--c-inv)" : "transparent", fg: s.mode === z[1] ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { stop(e); this.setState({ mode: z[1] }); } })),
+      tools: (plan ? [] : [tbt("Vorige Wand", P.prev, false, () => this.setState({ wall: (wi + nw - 1) % nw, open: null })), tbt("Nächste Wand", P.next, false, () => this.setState({ wall: (wi + 1) % nw, open: null }))]).concat([tbt(rM.max === 1 ? "Zurück" : "Plan groß", rM.max === 1 ? P.shrink : P.expand, false, () => this.setMem({ max: rM.max === 1 ? -1 : 1 }))]),
+      deskDown: () => { if (s.open) this.setState({ open: null }); },
+      palette: [pb("Tür setzen", P.door, false, () => this.addOpen("tuer")), pb("Fenster setzen", P.window, false, () => this.addOpen("fenster")), pb("Durchgang setzen", P.rect, false, () => this.addOpen("durchgang")), psep, pb("Maßketten", P.ruler, s.kette, () => this.setState({ kette: !s.kette })), pb("Raster 1 m", P.raster, s.raster, () => this.setState({ raster: !s.raster })), pb(s.locked ? "Entsperren" : "Sperren", P.lock, s.locked, () => { this.setState({ locked: !s.locked }); this.toastIt(s.locked ? "Entsperrt" : "Gesperrt"); })], labels, W, H, isPlan: plan, isWand: !plan, pts, walls, opens, hasErr: !!closeSeg, closeSeg: closeSeg || {}, vdots, rlab, wr: wr || { texts: [], lines: [], opens: [] }, gridBg, gridSize, gridPos };
+
+    // Bahn links
+    const byProj = {}; s.rooms.forEach(r => { (byProj[r.proj] = byProj[r.proj] || []).push(r); });
+    const lrows = []; Object.keys(byProj).forEach(pk => { lrows.push(this.lhead(this.PROJ[pk] || "Ohne Projekt")); byProj[pk].forEach(r => { const vv = this.verts(r); lrows.push(this.lrow(s.room === r.id, r.name, P.home, { hasN: true, n: this.m2(this.area(vv, r.walls.length)).replace(" m²", ""), tip: r.name + " · " + this.errOf(r) + " mm Schließfehler", go: () => this.pickRoom(r.id) })); }); });
+    const L = { title: "Aufmaß", insertLabel: "Raum hinzufügen", detail: this.PROJ[room.proj] || "", hLine: s.lScroll ? "var(--c-line)" : "transparent", onScroll: e => { const sc = e.currentTarget.scrollTop > 0; if (sc !== !!s.lScroll) this.setState({ lScroll: sc }); }, rows: lrows,
+      insertGo: e => { stop(e); this.openMenu(e, [{ head: true, label: "Neuer Raum in " + (this.PROJ[room.proj] || "") }, this.mi("Rechteck 3,00 × 2,40", () => this.addRoom("R")), this.mi("L-Form", () => this.addRoom("L"))], 260); },
+      buttons: openCount > 1 ? [{ label: "Aufmaß falten", d: P.minus, go: e => { stop(e); this.setMem({ Lf: true, max: -1 }); } }] : [] };
+
+    // Stapel
+    const wallRows = [{ isHead: true, text: "Wände" }].concat(room.walls.map((wl, i) => this.row("Wand " + (i + 1), { sub: this.SIDE[v[i + 1][2]], hasSub: true, cur: "pointer", bg: i === wi ? "var(--c-hover)" : "transparent", hbg: "var(--c-hover)", w: i === wi ? 500 : 400, go: () => this.setState({ wall: i, open: null }),
+      hasInput: true, hasVal: false, val: String(wl.len), mode: "numeric", inW: "80px", line: i < n - 1, onIn: e => { const q = parseInt(String(e.target.value).replace(/[^0-9]/g, ""), 10); if (!isNaN(q) && q >= 100) this.upd(room.id, x => ({ walls: x.walls.map((y, j) => j === i ? Object.assign({}, y, { len: q }) : y) })); } })))
+      .concat([]);
+    const raumRows = [{ isHead: true, text: "Raum" },
+      this.row("Name", { sub: room.name, btns: [this.tbtn("Ändern", () => { const t = prompt("Raumname", room.name); if (t) this.upd(room.id, () => ({ name: t })); })] }),
+      this.numRow("Raumhöhe", room.h, q => this.upd(room.id, () => ({ h: Math.max(1800, Math.min(6000, q)) }))),
+      this.row("Fläche", { val: this.m2(area) }), this.row("Umfang", { val: (umf / 1000).toFixed(2).replace(".", ",") + " m" }),
+      this.row("Schließfehler", { val: err + " mm", sub: err > 0 ? "Nachmessen" : "", hasSub: err > 0, fg: err > 5 ? "var(--c-signal)" : "var(--c-ink)" }),
+      { isHead: true, text: "Gemessen" }, this.row("Von", { val: room.von, sub: room.stand, hasSub: true }),
+      this.row("Notiz", { sub: room.note || "—", hasSub: true, line: false, btns: [this.tbtn("Ändern", () => { const t = prompt("Notiz", room.note); if (t != null) this.upd(room.id, () => ({ note: t })); })] })];
+    const oRows = [{ isHead: true, text: "Öffnungen" }].concat(room.opens.length ? room.opens.map(o => this.row(this.OT[o.type][0] + " · Wand " + (o.wall + 1), { hasMark: true, mD: P[this.OT[o.type][1]], mBg: o.id === s.open ? "var(--c-ink)" : "transparent", mFg: o.id === s.open ? "var(--c-lane)" : "var(--c-ink-3)", mRing: o.id === s.open ? "none" : iconRing, sub: this.fmt(o.w) + " × " + this.fmt(o.h) + " · ab " + this.fmt(o.pos), cur: "pointer", hbg: "var(--c-hover)", bg: o.id === s.open ? "var(--c-hover)" : "transparent", w: o.id === s.open ? 500 : 400, go: () => this.setState({ open: o.id, wall: o.wall }) })) : []);
+    if (selOpen) {
+      const pu = p => this.upd(room.id, x => ({ opens: x.opens.map(y => y.id === selOpen.id ? Object.assign({}, y, p) : y) })), wl = room.walls[selOpen.wall].len;
+      oRows.push({ isHead: true, text: "Ausgewählt" });
+      oRows.push(this.row("Art", { pill: this.OT[selOpen.type][0], pillGo: e => this.openMenu(e, Object.keys(this.OT).map(k => this.mi(this.OT[k][0], () => pu({ type: k }), { check: k === selOpen.type })), 200) }));
+      oRows.push(this.numRow("Breite", selOpen.w, q => pu({ w: Math.max(300, Math.min(wl - selOpen.pos, q)) })));
+      oRows.push(this.numRow("Höhe", selOpen.h, q => pu({ h: Math.max(300, Math.min(room.h - (selOpen.type === "fenster" ? selOpen.brh : 0), q)) })));
+      oRows.push(this.numRow("Abstand von Wandanfang", selOpen.pos, q => pu({ pos: Math.max(0, Math.min(wl - selOpen.w, q)) })));
+      if (selOpen.type === "fenster") oRows.push(this.numRow("Brüstung", selOpen.brh, q => pu({ brh: Math.max(0, Math.min(room.h - selOpen.h, q)) })));
+      oRows.push(this.row("Entfernen", { btns: [{ label: "Entfernen", bg: "transparent", fg: "var(--c-signal)", ring: iconRing, go: e => { stop(e); this.delOpen(); } }], line: false }));
+    }
+    const SH = g.lh - 44, defs = { raum: ["Raum", P.home], waende: ["Wände", P.ruler], oeffnungen: ["Öffnungen", P.door] };
+    const metas = { raum: this.m2(area) + (err ? " · " + err + " mm offen" : ""), waende: "", oeffnungen: "" };
+    const cw = w[2] - 16;
+    const foots = { raum: { l: [this.btn("Plan als PDF", P.export, () => this.toastIt("Plan als PDF gesichert"))], r: [this.btn("Stückliste ableiten", P.list, () => this.toastIt("Stückliste aus «" + room.name + "» angelegt · Entwurf"), "accent", { label: cw >= 240, lw: 150 })] } };
+    const cards = this.stackCards(defs, ["raum", "waende", "oeffnungen"], s.front, { raum: raumRows, waende: wallRows, oeffnungen: oRows }, metas, foots, SH);
+    const addMenu = e => this.openMenu(e, [{ head: true, label: "An Wand " + (wi + 1) }, this.mi("Tür", () => this.addOpen("tuer")), this.mi("Fenster", () => this.addOpen("fenster")), this.mi("Durchgang", () => this.addOpen("durchgang"))], 220);
+    const check = () => { const bad = s.rooms.filter(r => this.errOf(r) > 5); this.toastIt(bad.length ? "Schließfehler: " + bad.map(r => r.name + " " + this.errOf(r) + " mm").join(", ") : "Alle Pläne schließen"); };
+    const HB = { state: s.open ? "opening" : "rest", hint: s.open ? "Öffnung" : "Wand " + (wi + 1), main: [this.btn("Maße prüfen", P.check, check), { isSep: true, isBtn: false }, this.btn("Öffnung entfernen", P.trash, () => this.delOpen(), "signal", { off: !s.open })],
+      end: [this.btn("Mehr", P.more, e => this.openMenu(e, [this.mi("Raum duplizieren", () => { const id = "r" + (Date.now() % 100000); this.setState(st => ({ rooms: st.rooms.concat([Object.assign({}, room, { id, name: room.name + " (Kopie)", stand: "Gerade eben" })]), room: id })); }), this.mi("Plan als PDF", () => this.toastIt("Plan als PDF gesichert")), this.mi("Stückliste ableiten", () => this.toastIt("Stückliste angelegt"))], 240))]
+        .concat(openCount > 1 ? [{ isSep: true, isBtn: false }, this.btn("Spalte falten", P.minus, () => this.setMem({ Rf: true, max: -1 }))] : []).concat([this.btn(rM.max === 2 ? "Zurück" : "Stapel groß", rM.max === 2 ? P.shrink : P.expand, () => this.setMem({ max: rM.max === 2 ? -1 : 2 }))]) };
+    const marks = [s.rooms.map(r => this.mk(s.room === r.id, { d: P.home, label: r.name, go: e => { stop(e); this.pickRoom(r.id); } })),
+      [this.mk(plan, { d: P.board, label: "Grundriss", go: e => { stop(e); this.setState({ mode: "plan" }); } }), this.mk(!plan, { d: P.door, label: "Wand", go: e => { stop(e); this.setState({ mode: "wand" }); } })],
+      ["raum", "waende", "oeffnungen"].map(k => this.mk(s.front === k, { d: defs[k][1], label: defs[k][0], go: e => { stop(e); this.setState({ front: k }); } }))];
+    const lanes = this.lanesOf(w, rM, ["Aufmaß", room.name, "Maße"], marks);
+    return this.finish({ w, rM, lanes, syncTitle: "Aufmaße neu lesen", assist: "Frag nach Maßen, Abweichungen oder was für " + room.name + " abzuleiten ist.", x: { L, B, S: { cards }, HB, palRef: this.palRef } });
+  }
+}
+</script>
+</body>
+</html>

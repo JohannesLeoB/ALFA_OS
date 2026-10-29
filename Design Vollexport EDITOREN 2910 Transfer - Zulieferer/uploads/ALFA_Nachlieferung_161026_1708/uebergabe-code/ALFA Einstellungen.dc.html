@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>html,body{margin:0;padding:0;overflow:hidden;background:#ffffff}a{color:#171717}a:hover{color:#4d4d4d}</style>
+</helmet>
+<div data-screen-label="ALFA Einstellungen" style="position:fixed;inset:0;overflow:hidden;background:{{ ground }}">
+<dc-import name="ALFA Mail" bereich="Einstellungen" einstellungen="Kacheln" einstellung="{{ einstellung }}" licht="{{ licht }}" nutzung="{{ nutzung }}" oberflaeche="{{ oberflaeche }}" dienste="{{ dienste }}" grund="weiß" hint-size="100%,100%"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;einstellung&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Integrationen&quot;,&quot;Person&quot;,&quot;Ansicht&quot;,&quot;System&quot;],&quot;default&quot;:&quot;Integrationen&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;dienste&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;gemischt&quot;,&quot;Erststart&quot;],&quot;default&quot;:&quot;gemischt&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;licht&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hell&quot;,&quot;dunkel&quot;],&quot;default&quot;:&quot;hell&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;nutzung&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;allein&quot;,&quot;Team&quot;],&quot;default&quot;:&quot;allein&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;oberflaeche&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Lack&quot;,&quot;Glas&quot;,&quot;flach&quot;],&quot;default&quot;:&quot;Lack&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const licht = this.props.licht ?? "hell";
+    return { licht, einstellung: this.props.einstellung ?? "Integrationen", dienste: this.props.dienste ?? "gemischt", nutzung: this.props.nutzung ?? "allein", oberflaeche: this.props.oberflaeche ?? "Lack", ground: licht === "dunkel" ? "#0b0b0b" : "#ffffff" };
+  }
+}
+</script>
+</body>
+</html>

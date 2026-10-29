@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<!-- Export 21.10.2026 · Nachzug auf Master 2110 -->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./image-slot.js"></script>
+</helmet>
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+<dc-import name="ALFA Shell" area="Atelier" appearance="{{ licht }}" ground="{{ shGrund }}" typeface="{{ shSchrift }}" handle="hairline" window="{{ fenster }}" w="{{ wArr }}" lanes="{{ lanes }}" slow="{{ slow }}" maxed="{{ maxed }}" groups="{{ groups }}" badges="{{ badges }}" dot="{{ shDot }}" sync-state="{{ syncState }}" sync-title="{{ syncTitle }}" me-ini="JB" assist-text="{{ assistText }}" search-path="{{ searchD }}" visible-lanes="{{ laneSet }}" on-choose="{{ onChoose }}" on-mode="{{ onMode }}" on-mem="{{ onMem }}" on-grow="{{ onGrow }}" on-sync="{{ onSync }}" on-root-down="{{ rootDown }}" hint-size="100%,100%">
+
+<div data-slot="0" style="display:contents">
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 {{ L.hLine }};transition:box-shadow 160ms;box-sizing:border-box;min-width:0">
+<span style="flex:none;font-weight:500;white-space:nowrap">{{ L.title }}</span>
+<span style="flex:1;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ L.detail }}</span>
+<sc-for list="{{ L.buttons }}" as="x" hint-placeholder-count="0"><button data-part="symbol-button" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:{{ iconRing }};transition:color 160ms,box-shadow 160ms" style-hover="color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-ink-3)" data-id="atelier.symbol-button.go"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</header>
+<div data-part="lane-content" onScroll="{{ L.onScroll }}" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding:8px;display:flex;flex-direction:column;scrollbar-width:none">
+<sc-for list="{{ L.rows }}" as="r" hint-placeholder-count="6">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" style="flex:none;height:32px;display:flex;align-items:flex-end;padding:0 8px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ r.name }}</div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="list-row" data-state="{{ r.state }}" onClick="{{ r.go }}" title="{{ r.tip }}" style="flex:none;height:36px;display:flex;align-items:center;gap:20px;padding:0 8px;border-radius:12px;cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};transition:background 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)" data-id="atelier.list-row.go">
+<span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ r.symFg }};background:{{ r.symBg }};box-shadow:{{ r.symRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.d }}"></path></svg></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.weight }}">{{ r.name }}</span>
+<sc-if value="{{ r.hasN }}" hint-placeholder-val="{{ false }}"><span data-part="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:{{ r.nFg }}">{{ r.n }}</span></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+<div data-part="layers-panel" style="flex:none;max-height:42%;display:flex;flex-direction:column;box-shadow:inset 0 1px 0 var(--c-line)">
+<div data-part="list-section-header" style="flex:none;height:40px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-sizing:border-box"><span style="flex:1;font-size:11.5px;color:var(--c-ink-3)">Ebenen</span><span data-part="counter" style="flex:none;min-width:20px;height:20px;padding:0 4px;box-sizing:border-box;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:var(--c-ink-3)">{{ LY.n }}</span><button data-part="symbol-button" title="Ebene hinzufügen" aria-label="Ebene hinzufügen" onClick="{{ LY.addGo }}" style-active="transform:scale(.96)" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:{{ iconRing }}" style-hover="color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-ink-3)" data-id="atelier.symbol-button.add-go"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ plusD }}"></path></svg></button></div>
+<div style="flex:1;min-height:0;overflow-y:auto;padding:0 8px 8px;display:flex;flex-direction:column;scrollbar-width:none">
+<sc-for list="{{ LY.rows }}" as="y" hint-placeholder-count="3">
+<div data-part="list-row" data-state="{{ y.state }}" onClick="{{ y.go }}" onDoubleClick="{{ y.ren }}" onContextMenu="{{ y.ctx }}" title="{{ y.tip }}" style="flex:none;height:36px;display:flex;align-items:center;gap:8px;padding:0 4px 0 8px;border-radius:12px;cursor:pointer;background:{{ y.bg }};color:{{ y.fg }};transition:background 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)" data-id="atelier.list-row.go-2">
+<span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:{{ y.ring }}"><i style="display:block;width:8px;height:8px;border-radius:50%;background:{{ y.col }};box-shadow:0 0 0 1px rgba(255,255,255,.5)"></i></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:{{ y.op }}">{{ y.name }}</span>
+<span data-part="counter" style="flex:none;min-width:20px;height:20px;padding:0 4px;box-sizing:border-box;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:{{ y.nFg }}">{{ y.n }}</span>
+<button data-part="symbol-button" title="{{ y.eyeT }}" aria-label="{{ y.eyeT }}" onClick="{{ y.eye }}" style-active="transform:scale(.96)" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:{{ y.ic }};cursor:pointer" data-id="atelier.symbol-button.eye"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ y.eyeD }}"></path></svg></button>
+<button data-part="symbol-button" title="{{ y.lockT }}" aria-label="{{ y.lockT }}" onClick="{{ y.lock }}" style-active="transform:scale(.96)" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:{{ y.ic }};cursor:pointer" data-id="atelier.symbol-button.lock"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ y.lockD }}"></path></svg></button>
+</div>
+</sc-for>
+</div>
+</div>
+<div data-part="lane-footer" style="flex:none;padding:8px;box-shadow:inset 0 1px 0 var(--c-line)"><button data-part="compose-button" style-active="transform:scale(.98)" title="{{ L.insertLabel }}" onClick="{{ L.insertGo }}" style="appearance:none;border:0;width:100%;height:36px;padding:0 12px 0 8px;box-sizing:border-box;border-radius:12px;display:flex;align-items:center;gap:20px;font:inherit;background:var(--c-inv);color:var(--c-on-inv);cursor:pointer;transition:opacity 160ms" style-hover="opacity:.88" data-id="atelier.compose-button.insert-go"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px color-mix(in srgb, currentColor 30%, transparent)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ plusD }}"></path></svg></span><span style="flex:1;min-width:0;text-align:left">{{ L.insertLabel }}</span></button></div>
+</sc-if>
+</div>
+
+<div data-slot="1" style="display:contents">
+<sc-if value="{{ isMain }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 var(--c-line);box-sizing:border-box;min-width:0">
+<span style="flex:0 1 auto;min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ B.name }}</span>
+<span data-part="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:var(--c-ink-3)">{{ B.n }}</span>
+<span style="flex:1;min-width:0"></span>
+<sc-if value="{{ B.wideTools }}" hint-placeholder-val="{{ true }}">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ B.zooms }}" as="o" hint-placeholder-count="2"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;transition:background 240ms,color 240ms" data-id="atelier.option.go">{{ o.t }}</button></sc-for></div>
+<button data-part="choice" title="Zoom" onClick="{{ B.zoomGo }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;font-variant-numeric:tabular-nums;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" data-id="atelier.choice.zoom-go">{{ B.zoomLabel }}<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button>
+</sc-if>
+<sc-for list="{{ B.tools }}" as="x" hint-placeholder-count="3">
+<button data-part="symbol-button" data-state="{{ x.state }}" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};opacity:{{ x.op }};cursor:pointer;transition:background 160ms,color 160ms" data-id="atelier.symbol-button.go-2"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button>
+</sc-for>
+</header>
+<div data-part="context-bar" style="flex:none;height:40px;display:flex;align-items:center;gap:12px;padding:0 16px;box-sizing:border-box;box-shadow:inset 0 -1px 0 var(--c-line);min-width:0;overflow:hidden"><sc-for list="{{ B.ctx }}" as="c" hint-placeholder-count="2">
+<sc-if value="{{ c.isHint }}" hint-placeholder-val="{{ true }}"><span style="flex:0 1 auto;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.text }}</span></sc-if>
+<sc-if value="{{ c.isIn }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;align-items:center;gap:8px"><span style="font-size:11.5px;color:var(--c-ink-3);white-space:nowrap">{{ c.lab }}</span><input data-ctx="{{ c.id }}" value="{{ c.val }}" onChange="{{ c.onIn }}" onBlur="{{ c.onBlur }}" aria-label="{{ c.lab }}" autocomplete="off" spellcheck="false" style="flex:none;width:{{ c.w }};height:28px;box-sizing:border-box;border:0;outline:none;background:transparent;color:var(--c-ink);font:inherit;font-variant-numeric:tabular-nums;padding:0 4px;border-radius:0;box-shadow:inset 0 -1px 0 var(--c-line-strong)" style-focus="box-shadow:inset 0 -1px 0 var(--c-ink)"></input></span></sc-if>
+<sc-if value="{{ c.isSeg }}" hint-placeholder-val="{{ false }}"><div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.seg }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" title="{{ o.tip }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;min-width:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap" data-id="atelier.option.go-2">{{ o.n }}</button></sc-for></div></sc-if>
+<sc-if value="{{ c.isSw }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:4px"><sc-for list="{{ c.sw }}" as="q" hint-placeholder-count="8"><button data-part="swatch" data-state="{{ q.state }}" title="{{ q.n }}" aria-label="{{ q.n }}" onClick="{{ q.go }}" style="appearance:none;border:0;padding:0;flex:none;width:20px;height:20px;border-radius:50%;background:{{ q.c }};box-shadow:{{ q.ring }};cursor:pointer" style-active="transform:scale(.92)" data-id="atelier.swatch.go"></button></sc-for></span></sc-if>
+<sc-if value="{{ c.isBtn }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" data-state="{{ c.state }}" style-active="transform:scale(.96)" style-hover="background:var(--c-hover)" onClick="{{ c.go }}" style="appearance:none;border:0;flex:none;height:24px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ c.bg }};color:{{ c.fg }};box-shadow:{{ c.ring }};cursor:pointer;white-space:nowrap;transition:background 160ms" data-id="atelier.text-button.go">{{ c.label }}</button></sc-if>
+<sc-if value="{{ c.isPill }}" hint-placeholder-val="{{ false }}"><button data-part="choice" onClick="{{ c.go }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" data-id="atelier.choice.go">{{ c.label }}<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+</sc-for></div>
+<div data-part="tool-palette" ref="{{ palRef }}" style="position:absolute;left:{{ B.palL }};top:{{ B.palT }};z-index:6;padding:0 8px 8px;border-radius:12px;background:var(--c-menu);box-shadow:var(--sh-float);display:flex;flex-direction:column;gap:4px"><div data-part="drag-handle" title="Ziehen verschiebt, Doppelklick dockt an" onPointerDown="{{ B.palDown }}" onDoubleClick="{{ B.palDock }}" style="flex:none;height:16px;margin:0 -8px;display:grid;place-items:center;cursor:grab;touch-action:none" data-id="atelier.drag-handle.pal-down"><i style="display:block;width:16px;height:4px;background:radial-gradient(circle,var(--c-ink-3) 1px,transparent 1.5px) 0 0/4px 4px"></i></div><sc-for list="{{ B.palette }}" as="x" hint-placeholder-count="9"><sc-if value="{{ x.sep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;height:1px;margin:2px 6px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="symbol-button" data-state="{{ x.state }}" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" onPointerDown="{{ x.stop }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }}" style-active="transform:scale(.96)" data-id="atelier.symbol-button.go-3"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-if></sc-for></div>
+<sc-if value="{{ B.fly.on }}" hint-placeholder-val="{{ false }}">
+<div data-part="tool-flyout" onPointerDown="{{ stop }}" style="position:absolute;left:{{ B.fly.x }}px;top:{{ B.fly.y }}px;z-index:8;width:232px;padding:8px;box-sizing:border-box;border-radius:16px;background:var(--c-menu);color:var(--c-ink);box-shadow:var(--sh-float);display:flex;flex-direction:column;gap:8px" data-id="atelier.tool-flyout.stop">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ B.fly.cats }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap" data-id="atelier.option.go-3">{{ o.n }}</button></sc-for></div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px"><sc-for list="{{ B.fly.tiles }}" as="q" hint-placeholder-count="4"><button data-part="catalog-tile" data-state="{{ q.state }}" onClick="{{ q.go }}" style="appearance:none;border:0;padding:8px 0;font:inherit;color:inherit;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;border-radius:12px;background:transparent;cursor:pointer" style-hover="background:var(--c-hover)" style-active="transform:scale(.97)" data-id="atelier.catalog-tile.go"><span data-part="mark" style="width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:{{ q.bg }};color:{{ q.fg }};box-shadow:{{ q.ring }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ q.d }}"></path></svg></span><span style="max-width:100%;font-size:11.5px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.n }}</span></button></sc-for></div>
+</div>
+</sc-if>
+<div data-part="desk" onPointerDown="{{ B.deskDown }}" onDoubleClick="{{ B.deskDbl }}" onContextMenu="{{ B.deskCtx }}" style="flex:1;min-height:0;overflow:hidden;position:relative;background-color:var(--c-sheet-well);cursor:{{ B.cursor }};touch-action:none;user-select:none;-webkit-user-select:none;color-scheme:light" data-id="atelier.desk.desk-down">
+<div data-part="world" style="position:absolute;left:0;top:0;width:{{ B.world.w }}px;height:{{ B.world.h }}px;transform:{{ B.world.tf }};transform-origin:0 0;pointer-events:none;font-family:Geist,system-ui,sans-serif;color:var(--c-sheet-ink)">
+<sc-if value="{{ B.blatt }}" hint-placeholder-val="{{ true }}">
+<div data-part="sheet" style="position:absolute;left:0;top:0;width:100%;height:100%;background:var(--c-sheet);box-shadow:var(--sh-float)"></div>
+<div data-part="title-block" style="position:absolute;left:50px;top:850px;width:1300px;height:90px;box-sizing:border-box;display:grid;grid-template-columns:2fr 2.2fr 2.4fr 1.6fr;box-shadow:inset 0 0 0 1.5px var(--c-sheet-ink)">
+<div style="padding:14px 18px;display:flex;flex-direction:column;gap:4px"><span style="font-size:15px;color:var(--c-sheet-ink-3)">Projekt</span><span style="font-size:24px;font-weight:500">{{ B.tb.proj }}</span></div>
+<div style="padding:14px 18px;display:flex;flex-direction:column;gap:4px;box-shadow:inset 1.5px 0 0 var(--c-sheet-ink)"><span style="font-size:15px;color:var(--c-sheet-ink-3)">Foto-Aufmaß</span><span style="font-size:24px;font-weight:500">{{ B.tb.foto }}</span></div>
+<div style="padding:14px 18px;display:flex;flex-direction:column;gap:4px;box-shadow:inset 1.5px 0 0 var(--c-sheet-ink)"><span style="font-size:15px;color:var(--c-sheet-ink-3)">Maßstab</span><span style="font-size:24px;font-weight:500">{{ B.tb.scale }}</span></div>
+<div style="padding:14px 18px;display:flex;flex-direction:column;gap:4px;box-shadow:inset 1.5px 0 0 var(--c-sheet-ink)"><span style="font-size:15px;color:var(--c-sheet-ink-3)">{{ B.tb.by }}</span><span style="font-size:24px;font-weight:500">{{ B.tb.fmt }}</span></div>
+</div>
+</sc-if>
+<div data-part="photo" style="position:absolute;left:{{ B.photo.l }}px;top:{{ B.photo.t }}px;width:{{ B.photo.w }}px;height:{{ B.photo.h }}px;background:{{ B.photo.bg }};filter:{{ B.photo.flt }};box-shadow:{{ B.photo.ring }}"></div>
+</div>
+<svg data-part="plan" width="{{ B.W }}" height="{{ B.H }}" style="display:block;position:absolute;left:0;top:0;pointer-events:none;overflow:hidden;font-family:Geist,system-ui,sans-serif;font-size:11.5px">
+<sc-if value="{{ B.hz.on }}" hint-placeholder-val="{{ false }}"><line x1="{{ B.hz.x1 }}" y1="{{ B.hz.y1 }}" x2="{{ B.hz.x2 }}" y2="{{ B.hz.y2 }}" stroke="var(--c-sheet-ink-3)" stroke-width="1" opacity=".7"></line></sc-if>
+<sc-for list="{{ B.rays }}" as="k" hint-placeholder-count="0"><line x1="{{ k.x1 }}" y1="{{ k.y1 }}" x2="{{ k.x2 }}" y2="{{ k.y2 }}" stroke="var(--c-sheet-ink)" stroke-width="1" opacity=".16"></line></sc-for>
+<sc-for list="{{ B.imgs }}" as="k" hint-placeholder-count="0"><rect x="{{ k.x }}" y="{{ k.y }}" width="{{ k.w }}" height="{{ k.h }}" transform="{{ k.tf }}" rx="4" fill="var(--c-sheet-well)" fill-opacity="{{ k.op }}" stroke="var(--c-sheet-ink-3)" stroke-width="1.3" stroke-dasharray="5 4" style="pointer-events:{{ k.pe }};cursor:move" onPointerDown="{{ k.down }}" onDoubleClick="{{ k.dbl }}" onContextMenu="{{ k.ctx }}"></rect></sc-for>
+<sc-for list="{{ B.paths }}" as="k" hint-placeholder-count="3"><g>
+<path d="{{ k.d }}" fill="none" stroke="var(--c-sheet-ink)" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" opacity="{{ k.halo }}"></path>
+<path d="{{ k.d }}" fill="{{ k.fill }}" fill-opacity="{{ k.fo }}" stroke="{{ k.ul }}" stroke-width="{{ k.ulw }}" stroke-linejoin="round" stroke-linecap="round"></path>
+<path d="{{ k.d }}" fill="none" stroke="{{ k.stroke }}" stroke-opacity="{{ k.so }}" stroke-width="{{ k.sw }}" stroke-dasharray="{{ k.dash }}" stroke-linejoin="round" stroke-linecap="round"></path>
+<path d="{{ k.d }}" fill="{{ k.hitFill }}" stroke="transparent" stroke-width="14" style="pointer-events:{{ k.pe }};cursor:move" onPointerDown="{{ k.down }}" onDoubleClick="{{ k.dbl }}" onContextMenu="{{ k.ctx }}"></path>
+</g></sc-for>
+<sc-for list="{{ B.pins }}" as="k" hint-placeholder-count="0"><g>
+<circle cx="{{ k.x }}" cy="{{ k.y }}" r="16" fill="var(--c-sheet-ink)" opacity="{{ k.halo }}"></circle>
+<path d="M8 14s4.5-4 4.5-7.5a4.5 4.5 0 0 0-9 0C3.5 10 8 14 8 14ZM8 8a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" transform="{{ k.tf }}" fill="var(--c-sheet)" stroke="{{ k.col }}" stroke-width="1.1" stroke-linejoin="round"></path>
+<circle cx="{{ k.x }}" cy="{{ k.y }}" r="14" fill="transparent" style="pointer-events:{{ k.pe }};cursor:move" onPointerDown="{{ k.down }}" onDoubleClick="{{ k.dbl }}" onContextMenu="{{ k.ctx }}"></circle>
+</g></sc-for>
+<sc-if value="{{ B.selBox.on }}" hint-placeholder-val="{{ false }}"><rect x="{{ B.selBox.x }}" y="{{ B.selBox.y }}" width="{{ B.selBox.w }}" height="{{ B.selBox.h }}" transform="{{ B.selBox.tf }}" fill="none" stroke="var(--c-sheet-ink)" stroke-width="1" stroke-dasharray="3 3"></rect></sc-if>
+<sc-if value="{{ B.dr.on }}" hint-placeholder-val="{{ false }}"><path d="{{ B.dr.d }}" fill="{{ B.dr.fill }}" fill-opacity=".5" stroke="{{ B.dr.col }}" stroke-width="{{ B.dr.sw }}" stroke-dasharray="{{ B.dr.dash }}" stroke-linejoin="round" stroke-linecap="round"></path></sc-if>
+</svg>
+<sc-for list="{{ B.labels }}" as="t" hint-placeholder-count="4"><div style="position:absolute;left:{{ t.x }}px;top:{{ t.y }}px;transform:{{ t.tf }};padding:0 6px;border-radius:999px;background:{{ t.bg }};box-shadow:{{ t.ring }};color:{{ t.c }};font-family:Geist,system-ui,sans-serif;font-size:11.5px;line-height:20px;font-weight:{{ t.w }};font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none">{{ t.t }}</div></sc-for>
+<div data-part="status" style="position:absolute;left:12px;bottom:12px;height:24px;padding:0 8px;border-radius:999px;background:var(--c-sheet);box-shadow:0 0 0 1px var(--c-sheet-line);display:flex;align-items:center;font-family:Geist,system-ui,sans-serif;font-size:11.5px;font-variant-numeric:tabular-nums;color:{{ B.statusFg }};white-space:nowrap;pointer-events:none">{{ B.status }}</div>
+</div>
+</sc-if>
+</div>
+
+<div data-slot="2" style="display:contents">
+<sc-if value="{{ isStack }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" data-state="{{ HB.state }}" style="flex:none;height:44px;display:flex;align-items:center;gap:4px;padding:0 8px;box-sizing:border-box;min-width:0">
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ HB.main }}" as="x" hint-placeholder-count="4"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+<span style="flex:1;min-width:0;padding:0 4px;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ HB.hint }}</span>
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ HB.end }}" as="x" hint-placeholder-count="2"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+</header>
+<div data-part="card-stack" data-state="stacked" style="position:relative;flex:1;min-height:0">
+<sc-for list="{{ S.cards }}" as="c" hint-placeholder-count="3">
+<article data-part="card" data-state="{{ c.state }}" onClick="{{ c.go }}" onPointerEnter="{{ c.enter }}" onPointerLeave="{{ c.leave }}" style="position:absolute;left:0;right:0;top:{{ c.top }};height:{{ c.h }};z-index:{{ c.z }};transform:{{ c.tf }};background-color:{{ c.bg }};background-image:{{ c.sheen }};backdrop-filter:{{ c.blur }};-webkit-backdrop-filter:{{ c.blur }};color:{{ c.fg }};border-radius:20px 20px 0 0;box-shadow:{{ c.sh }};overflow:hidden;display:flex;flex-direction:column;transition:{{ stackTrans }};cursor:{{ c.cursor }}" data-id="atelier.card.go">
+<header data-part="card-header" style="flex:none;height:44px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box;box-shadow:inset 0 -1px 0 {{ c.hLine }};min-width:0"><div data-part="segmented-control" style="flex:1;min-width:0;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.tabs }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background 160ms,color 160ms" data-id="atelier.option.go-4">{{ o.n }}</button></sc-for></div></header>
+
+<sc-if value="{{ c.isRows }}" hint-placeholder-val="{{ true }}">
+<div data-part="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;display:flex;flex-direction:column;padding:4px 0 8px;scrollbar-width:thin">
+<sc-for list="{{ c.rows }}" as="b" hint-placeholder-count="5">
+<sc-if value="{{ b.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" style="flex:none;height:36px;display:flex;align-items:flex-end;padding:0 16px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isNote }}" hint-placeholder-val="{{ false }}"><div style="flex:none;padding:8px 16px;font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="field-row" data-state="{{ b.state }}" onClick="{{ b.go }}" style="position:relative;flex:none;min-height:44px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:8px 8px 8px 16px;box-sizing:border-box;cursor:{{ b.cur }};background:{{ b.bg }}" style-hover="background:{{ b.hbg }}" data-id="atelier.field-row.go">
+<sc-if value="{{ b.hasMark }}" hint-placeholder-val="{{ false }}"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ b.mFg }};background:{{ b.mBg }};box-shadow:{{ b.mRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ b.mD }}"></path></svg></span></sc-if>
+<div style="flex:1 1 0;min-width:96px;display:flex;flex-direction:column">
+<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ b.w }};color:{{ b.fg }}">{{ b.label }}</span>
+<sc-if value="{{ b.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;line-height:16px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums">{{ b.sub }}</span></sc-if>
+</div>
+<sc-if value="{{ b.hasInput }}" hint-placeholder-val="{{ false }}"><input value="{{ b.val }}" onChange="{{ b.onIn }}" onBlur="{{ b.onBlur }}" aria-label="{{ b.label }}" inputmode="{{ b.mode }}" autocomplete="off" spellcheck="false" style="flex:1 1 0;min-width:0;max-width:60%;height:28px;border:0;outline:none;background:transparent;color:var(--c-ink);font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 12px 0 0;border-radius:0" style-focus="box-shadow:inset 0 -1px 0 var(--c-ink)"></input></sc-if>
+<sc-if value="{{ b.hasVal }}" hint-placeholder-val="{{ false }}"><span style="flex:0 1 auto;min-width:0;max-width:60%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--c-ink-2);font-variant-numeric:tabular-nums">{{ b.val }}</span></sc-if>
+<sc-if value="{{ b.hasSwatch }}" hint-placeholder-val="{{ false }}"><span style="flex:0 1 auto;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;max-width:176px"><sc-for list="{{ b.swatches }}" as="sw" hint-placeholder-count="5"><button data-part="swatch" data-state="{{ sw.state }}" title="{{ sw.n }}" aria-label="{{ sw.n }}" onClick="{{ sw.go }}" style="appearance:none;border:0;padding:0;flex:none;width:20px;height:20px;border-radius:50%;background:{{ sw.c }};box-shadow:{{ sw.ring }};cursor:pointer;transition:box-shadow 160ms" style-active="transform:scale(.92)" data-id="atelier.swatch.go-2"></button></sc-for></span></sc-if>
+<sc-if value="{{ b.hasSeg }}" hint-placeholder-val="{{ false }}"><div data-part="segmented-control" style="flex:none;margin-left:auto;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ b.seg }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" title="{{ o.tip }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;min-width:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;display:grid;place-items:center" data-id="atelier.option.go-5">{{ o.n }}</button></sc-for></div></sc-if>
+<sc-if value="{{ b.hasPill }}" hint-placeholder-val="{{ false }}"><button data-part="choice" onClick="{{ b.pillGo }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" data-id="atelier.choice.pill-go">{{ b.pill }}<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+<sc-if value="{{ b.hasToggle }}" hint-placeholder-val="{{ false }}"><button data-part="toggle" data-state="{{ b.tState }}" aria-label="{{ b.label }}" onClick="{{ b.toggle }}" style="appearance:none;border:0;padding:0;flex:none;position:relative;width:32px;height:20px;border-radius:999px;background:{{ b.tBg }};box-shadow:{{ b.tRing }};cursor:pointer;transition:background 200ms" data-id="atelier.toggle.toggle"><i style="position:absolute;top:2px;left:{{ b.tX }};width:16px;height:16px;border-radius:50%;background:{{ b.kBg }};transition:left 200ms cubic-bezier(.2,.8,.2,1)"></i></button></sc-if>
+<sc-if value="{{ b.hasBtns }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:8px"><sc-for list="{{ b.btns }}" as="x" hint-placeholder-count="1"><button data-part="text-button" style-active="transform:scale(.96)" style-hover="background:var(--c-hover)" onClick="{{ x.go }}" style="appearance:none;border:0;height:24px;transition:background 160ms;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;white-space:nowrap" data-id="atelier.text-button.go-2">{{ x.label }}</button></sc-for></span></sc-if>
+<sc-if value="{{ b.line }}" hint-placeholder-val="{{ true }}"><i style="position:absolute;left:16px;right:16px;bottom:0;height:1px;background:var(--c-line)"></i></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.isKatalog }}" hint-placeholder-val="{{ false }}">
+<div data-part="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;gap:8px;padding:8px">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.kats }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" data-id="atelier.option.go-6">{{ o.n }}</button></sc-for></div>
+<div style="flex:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(112px,100%),1fr));gap:8px">
+<sc-for list="{{ c.fotos }}" as="f" hint-placeholder-count="6">
+<button data-part="catalog-tile" title="{{ f.tip }}" onClick="{{ f.go }}" style="appearance:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;min-width:0;cursor:pointer;background:transparent" style-active="transform:scale(.98)" data-id="atelier.catalog-tile.go-2">
+<span style="position:relative;display:block;width:100%;aspect-ratio:4 / 3;border-radius:8px;overflow:hidden;background:var(--c-well);box-shadow:inset 0 0 0 1px var(--c-line)"><image-slot id="{{ f.slot }}" shape="rect" placeholder="{{ f.n }}" style="width:100%;height:100%;pointer-events:none"></image-slot></span>
+<span style="min-width:0;font-size:11.5px;line-height:16px;color:var(--c-ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.n }}</span>
+</button>
+</sc-for>
+</div>
+<div style="flex:none;padding:0 8px 8px;font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty">{{ c.katNote }}</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.hasFoot }}" hint-placeholder-val="{{ false }}">
+<footer data-part="card-footer" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px;box-sizing:border-box;box-shadow:inset 0 1px 0 var(--c-line);min-width:0">
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ c.foot.l }}" as="x" hint-placeholder-count="0"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-for></div>
+<span style="flex:1;min-width:0"></span>
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ c.foot.r }}" as="x" hint-placeholder-count="0"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-for></div>
+</footer>
+</sc-if>
+</article>
+</sc-for>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div data-part="toast" style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:40;height:28px;padding:0 12px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;font-size:11.5px;white-space:nowrap;box-shadow:var(--sh-float);gap:12px"><span>{{ toast }}</span><sc-if value="{{ hasUndo }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ undo }}" style="appearance:none;border:0;height:20px;margin-right:-8px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px currentColor;cursor:pointer" data-id="atelier.text-button.undo">Rückgängig</button></sc-if></div></sc-if>
+</div>
+</sc-if>
+</div>
+
+<div data-slot="over" ref="{{ winRef }}" style="display:contents">
+</div>
+<div data-slot="top" style="display:contents">
+<sc-if value="{{ hasMenu }}" hint-placeholder-val="{{ false }}">
+<div data-part="anchored-menu" onPointerDown="{{ stop }}" style="position:absolute;left:{{ menu.x }};top:{{ menu.y }};width:{{ menu.w }};padding:4px;box-sizing:border-box;border-radius:16px;background:var(--c-menu);color:var(--c-ink);box-shadow:var(--sh-float);z-index:50;display:flex;flex-direction:column" data-id="atelier.anchored-menu.stop">
+<sc-for list="{{ menu.items }}" as="it" hint-placeholder-count="4">
+<sc-if value="{{ it.sep }}" hint-placeholder-val="{{ false }}"><div style="height:1px;margin:4px 8px;background:var(--c-line)"></div></sc-if>
+<sc-if value="{{ it.head }}" hint-placeholder-val="{{ false }}"><div style="height:24px;display:flex;align-items:flex-end;padding:0 8px 4px;font-size:11.5px;color:var(--c-ink-3)">{{ it.label }}</div></sc-if>
+<sc-if value="{{ it.item }}" hint-placeholder-val="{{ true }}"><div data-part="menu-row" onClick="{{ it.go }}" style="height:28px;display:flex;align-items:center;gap:8px;padding:0 8px;border-radius:8px;cursor:pointer;color:{{ it.fg }};white-space:nowrap" style-hover="background:var(--c-hover)" data-id="atelier.menu-row.go"><span style="flex:none;width:12px;font-size:11.5px">{{ it.check }}</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">{{ it.label }}</span><span style="flex:none;font-size:11.5px;color:var(--c-ink-3)">{{ it.meta }}</span></div></sc-if>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</dc-import>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1512,&quot;height&quot;:982},&quot;appearance&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;ground&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;white&quot;,&quot;lightGray&quot;],&quot;default&quot;:&quot;white&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;surface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;lacquer&quot;,&quot;glass&quot;,&quot;flat&quot;],&quot;default&quot;:&quot;flat&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;typeface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Geist&quot;,&quot;System&quot;],&quot;default&quot;:&quot;Geist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;window&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1512 × 982&quot;,&quot;Fenster&quot;],&quot;default&quot;:&quot;1512 × 982&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;sketch&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Küche · Ansicht Süd&quot;,&quot;Praxis · Tresen&quot;,&quot;Skizzenbuch&quot;],&quot;default&quot;:&quot;Küche · Ansicht Süd&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Atelier&quot;},&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Skizze&quot;,&quot;Render&quot;],&quot;default&quot;:&quot;Skizze&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Atelier&quot;}}">
+class Component extends DCLogic {
+  P = {
+    close: "M4.5 4.5l7 7M11.5 4.5l-7 7", chevron: "M4.5 6.5L8 10l3.5-3.5", more: "M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM13 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z",
+    minus: "M4 8h8", plus: "M8 3.5v9M3.5 8h9", check: "M3.5 8.5l3 3 6-7", trash: "M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9",
+    expand: "M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5L9 7M2.5 13.5L7 9", shrink: "M13.5 2.5L10 6M10 3v3h3M2.5 13.5L6 10M6 13v-3H3",
+    raster: "M2.5 2.5h11v11h-11ZM6 2.5v11M10 2.5v11M2.5 6h11M2.5 10h11", ruler: "M2 9.5l7.5-7.5 4.5 4.5L6.5 14ZM4.5 7l1.5 1.5M6.5 5l1.5 1.5M8.5 3l1.5 1.5",
+    home: "M2.5 8L8 3l5.5 5M4 7v6.5h8V7", lock: "M4.5 7.5h7v6h-7ZM6 7.5V5.5a2 2 0 0 1 4 0v2", door: "M3.5 13.5V2.5h7v11M10.5 2.5l3 1.5v8.5l-3 1", window: "M3 3.5h10v9H3ZM8 3.5v9M3 8h10",
+    prev: "M9.5 4L5.5 8l4 4", next: "M6.5 4l4 4-4 4", export: "M8 2.5V10M4.5 6.5L8 10l3.5-3.5M3 13h10", print: "M4.5 5.5v-3h7v3M4.5 11.5h-2v-5h11v5h-2M4.5 9h7v4.5h-7Z",
+    list: "M6 4.5h7.5M6 8h7.5M6 11.5h7.5M2.5 4.5h1M2.5 8h1M2.5 11.5h1", copy: "M5.5 5.5h8v8h-8ZM3.5 10.5h-1v-8h8v1", search: "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5",
+    pen: "M10.5 2.5l3 3-8 8H2.5v-3Z", line: "M3 13L13 3", rect: "M3 4h10v8H3Z", eraser: "M6.5 13.5h7M3.5 9.5l5-5 4 4-4.5 4.5h-2.5Z", undo: "M5.5 4.5L2.5 7.5l3 3M2.5 7.5h6a4 4 0 0 1 0 8",
+    play: "M5 3.5v9l7-4.5Z", render: "M2.5 3.5h11v9h-11ZM5 10l2.5-3 2 2 1.5-1.5 2 2.5", sun: "M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1",
+    cube: "M8 2l5.5 3v6L8 14 2.5 11V5ZM8 8v6M2.5 5L8 8l5.5-3", board: "M2.5 2.5h11v11h-11ZM2.5 9.5h11M8 2.5v7", folder: "M2.5 4.5h4l1.5 1.5h5.5v6.5h-11Z", layers: "M8 2.5l5.5 3-5.5 3-5.5-3ZM2.5 8.5L8 11.5l5.5-3M2.5 11L8 14l5.5-3"
+  };
+  GROUPS = [["Kommunikation", [["Mail", []]]], ["Kreativ", [["Moodboard", []], ["Aufmaß", []], ["Atelier", []], ["Planvergleich", []], ["Konfigurator", []]]], ["Kern", [["Einstellungen", []]]]];
+  FILES = { "Moodboard": "ALFA Moodboard.dc.html", "Aufmaß": "ALFA Aufmass.dc.html", "Atelier": "ALFA Atelier.dc.html", "Planvergleich": "ALFA Planvergleich.dc.html", "Konfigurator": "ALFA Konfigurator.dc.html" };
+  winRef = React.createRef(); svgRef = React.createRef();
+  get K() { return window.AlfaShell.K; }
+  choose(n) { if (n === this.NAME) return; if (this.FILES[n]) { window.location.href = encodeURI(this.FILES[n]); return; } this.toastIt(n + " liegt in einem anderen Bogen"); }
+  ensureShell() {
+    if (window.AlfaShell) { this.reg(); return; }
+    if (!window.__alfaShellLoad) window.__alfaShellLoad = new Promise(r => { const s = document.createElement("script"); s.src = "alfa-shell.js"; s.onload = r; document.head.appendChild(s); });
+    window.__alfaShellLoad.then(() => { this.reg(); this.forceUpdate(); });
+  }
+  reg() { const A = window.AlfaShell.AREA; if (!A[this.NAME]) A[this.NAME] = { L: [280], R: [280], min: [280, 280, 280], yield: [2, 0, 1] }; }
+  componentDidMount() {
+    this.ensureShell();
+    this._rs = () => { if (this.props.window !== "1512 × 982") this.forceUpdate(); };
+    window.addEventListener("resize", this._rs);
+    this._mv = e => this.move && this.move(e); this._up = () => this.up && this.up();
+    window.addEventListener("pointermove", this._mv); window.addEventListener("pointerup", this._up); window.addEventListener("pointercancel", this._up);
+    this._kd = e => { const t = e.target; if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return; if (e.key === "Escape" && this.state.menu) { this.setState({ menu: null }); return; } this.key && this.key(e); };
+    document.addEventListener("keydown", this._kd);
+    this.anim(); this.mounted && this.mounted();
+  }
+  componentWillUnmount() { window.removeEventListener("resize", this._rs); window.removeEventListener("pointermove", this._mv); window.removeEventListener("pointerup", this._up); window.removeEventListener("pointercancel", this._up); document.removeEventListener("keydown", this._kd); clearTimeout(this.tt); clearInterval(this.rt); }
+  componentDidUpdate() { this.anim(); if (window.AlfaShell) window.AlfaShell.ebb(this, false, this.still()); }
+  still() { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
+  anim() { const r = this.root(); if (r && !this.still()) r.querySelectorAll("[data-spin]").forEach(el => { if (!el._a && el.animate) el._a = el.animate([{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }], { duration: 1000, iterations: Infinity }); }); }
+  root() { const w = this.winRef.current; return w ? w.closest('[data-part="area-page"]') : null; }
+  geo() { return window.AlfaShell.geo(window.AlfaShell.frame(this.props)); }
+  mem() { return Object.assign(window.AlfaShell.D0(this.NAME), this.state.mem[this.NAME] || {}); }
+  setMem(p) { this.setState(st => ({ mem: Object.assign({}, st.mem, { [this.NAME]: Object.assign(window.AlfaShell.D0(this.NAME), st.mem[this.NAME] || {}, p) }) })); }
+  lay() { return window.AlfaShell.layout(this.NAME, this.mem(), this.geo(), false); }
+  grow(side, v, w0) { this.setMem(window.AlfaShell.grow(this.NAME, side, v, w0)); }
+  sc() { const r = this.root().getBoundingClientRect(); return { r, k: (r.width / this.geo().W) || 1 }; }
+  fmt(n) { return Math.round(n).toLocaleString("de-DE"); }
+  toastIt(t, undo) { clearTimeout(this.tt); this.setState({ toast: t, toastUndo: undo || null }); this.tt = setTimeout(() => this.setState({ toast: null, toastUndo: null }), undo ? 4000 : 1800); }
+  openMenu(e, items, w) {
+    e.stopPropagation(); w = Math.max(168, Math.min(280, w || 240));
+    const { r, k } = this.sc(), b = e.currentTarget.getBoundingClientRect(), g = this.geo(), h = items.length * 28 + 8;
+    let x = (b.left - r.left) / k, y = (b.bottom - r.top) / k + 4;
+    x = Math.max(16, Math.min(x, g.W - w - 16)); if (y + h > g.H - 16) y = (b.top - r.top) / k - h - 4;
+    this.setState({ menu: { x, y, w, items } });
+  }
+  mi(label, fn, o) { o = o || {}; return { item: true, label, check: o.check ? "✓" : "", meta: o.meta || "", fg: o.danger ? "var(--c-signal)" : "var(--c-ink)", go: e => { e.stopPropagation(); this.setState({ menu: null }); fn && fn(); } }; }
+  row(label, o) { return Object.assign({ isRow: true, isHead: false, isNote: false, label, line: true, w: 400, fg: "var(--c-ink)", cur: "default", bg: "transparent", hbg: "transparent", hasSub: !!(o && o.sub), hasVal: !!(o && o.val != null && !o.hasInput), hasInput: false, hasSwatch: !!(o && o.swatches), hasSeg: !!(o && o.seg), hasPill: !!(o && o.pill), hasToggle: !!(o && o.toggle), hasBtns: !!(o && o.btns), hasMark: !!(o && o.mD) }, o || {}); }
+  numRow(label, v, set, o) { return this.row(label, Object.assign({ hasInput: true, hasVal: false, val: String(Math.round(v)), mode: "numeric", inW: "80px", onIn: e => { const n = parseInt(String(e.target.value).replace(/[^0-9-]/g, ""), 10); if (!isNaN(n)) set(n); } }, o || {})); }
+  segOf(opts, cur, fn) { return opts.map(o => ({ n: o[0], tip: o[1] || o[0], state: o[0] === cur ? "selected" : "rest", bg: o[0] === cur ? "var(--c-inv)" : "transparent", fg: o[0] === cur ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { e.stopPropagation(); fn(o[0]); } })); }
+  toggleOf(on, fn) { return { toggle: fn, tState: on ? "on" : "off", tBg: on ? "var(--c-ink)" : "transparent", tRing: on ? "none" : "inset 0 0 0 1px var(--c-line-strong)", tX: on ? "14px" : "2px", kBg: on ? "var(--c-lane)" : "var(--c-ink-3)" }; }
+  tbtn(label, go) { return { label, bg: "transparent", fg: "var(--c-ink-2)", ring: "inset 0 0 0 1px var(--c-line-strong)", go: e => { e.stopPropagation(); go(e); } }; }
+  mk(sel, o) { return Object.assign({ state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink-2)", ring: sel ? "none" : "inset 0 0 0 1px var(--c-line-strong)", isSym: true, isText: false, dot: false }, o); }
+  lrow(sel, name, d, o) { return Object.assign({ isRow: true, isHead: false, name, d, tip: name, state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink)", weight: sel ? 500 : 400, symFg: sel ? "var(--c-lane)" : "var(--c-ink-3)", symBg: "transparent", symRing: sel ? "inset 0 0 0 1px var(--c-on-inv-line)" : "inset 0 0 0 1px var(--c-line-strong)", hasN: false, nFg: sel ? "var(--c-on-inv-2)" : "var(--c-ink-3)" }, o || {}); }
+  lhead(t) { return { isHead: true, isRow: false, name: t }; }
+  btn(label, d, go, kind, o) {
+    o = o || {}; const stop = e => e.stopPropagation(), ring = "inset 0 0 0 1px var(--c-line-strong)";
+    const v = kind === "accent" ? ["var(--c-inv)", "var(--c-on-inv)", "var(--c-inv)", "var(--c-on-inv)"] : kind === "signal" ? ["transparent", "var(--c-signal)", "var(--c-hover)", "var(--c-signal)"] : kind === "on" ? ["var(--c-ink)", "var(--c-lane)", "var(--c-ink)", "var(--c-lane)"] : ["transparent", "var(--c-ink-2)", "var(--c-hover)", "var(--c-ink)"];
+    const lab = !!o.label;
+    return { isBtn: true, isSep: false, part: lab ? "text-button" : "symbol-button", label, tip: o.tip || label, d, state: o.off ? "disabled" : kind === "on" ? "selected" : kind || "neutral", showLabel: lab, w: lab ? "auto" : "28px", pad: lab ? "0 12px 0 8px" : "0",
+      bg: v[0], fg: v[1], hbg: o.off ? v[0] : v[2], hfg: o.off ? v[1] : v[3], ring: kind === "accent" || kind === "on" ? "none" : ring, op: o.off ? .4 : 1, cur: o.off ? "default" : "pointer", go: e => { stop(e); if (!o.off) go(e); } };
+  }
+  lanesOf(w, rM, titles, marks) {
+    const K = this.K, lefts = [K.m, K.m + w[0] + K.gap, K.m + w[0] + w[1] + 2 * K.gap];
+    return [0, 1, 2].map(i => { const folded = w[i] <= K.fold;
+      return { title: titles[i], left: lefts[i] + "px", width: w[i] + "px", folded, isList: i === 0 && !folded, isMain: i === 1 && !folded, isStack: i === 2 && !folded,
+        state: rM.max === i ? "maximized" : folded ? "collapsed" : "open", cursor: folded ? "pointer" : "default", bg: "var(--c-lane)", ring: "var(--sh-lane)", ovf: "hidden", marks: marks[i],
+        onStrip: folded ? () => { if (rM.max >= 0) this.setMem({ max: -1 }); else this.setMem({ [["Lf", "Mf", "Rf"][i]]: false }); } : undefined }; });
+  }
+  stackCards(defs, order0, front0, bodies, metas, foots, SH) {
+    const all = this.stackCards0(defs, order0, front0, bodies, metas, foots, SH), c = all.filter(x => x.id === front0)[0];
+    const tabs = order0.map(k => ({ n: defs[k][0], state: k === front0 ? "selected" : "rest", bg: k === front0 ? "var(--c-inv)" : "transparent", fg: k === front0 ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { e.stopPropagation(); this.setState({ front: k }); } }));
+    return [Object.assign(c, { top: "0px", h: SH + "px", z: 1, tf: "none", bg: "transparent", sheen: "none", blur: "none", sh: "none", cursor: "default", go: undefined, tabs })];
+  }
+  stackCards0(defs, order0, front0, bodies, metas, foots, SH) {
+    const s = this.state, dk = (this.props.appearance ?? "light") === "dark", ofl = (this.props.surface ?? "flat");
+    const lv = dk ? [["#1f1f1f", "#fafafa"], ["#2e2e2e", "#fafafa"], ["#3a3a3a", "#fafafa"], ["#4d4d4d", "#fafafa"], ["#6b6b6b", "#fafafa"]] : [["#f5f5f5", "#171717"], ["#ebebeb", "#171717"], ["#d9d9d9", "#171717"], ["#a3a3a3", "#171717"], ["#6b6b6b", "#ffffff"]];
+    const order = order0.filter(k => k !== front0).concat([front0]), b = order.length - 1; let acc = 8; const tops = order.map((k, i) => { const t = acc; acc += (b - i) > 3 ? 8 : 44; return t; });
+    const lack = (front, lvl, first) => { const lite = !lvl || /^#(?:[c-f])/i.test(lvl[0]);
+      const spec = front ? (dk ? "rgba(255,255,255,.14)" : "rgba(255,255,255,1)") : lite ? "rgba(255,255,255,.9)" : "rgba(255,255,255,.22)";
+      const seam = dk ? "rgba(0,0,0,.7)" : front ? "rgba(0,0,0,.14)" : "rgba(0,0,0,.2)";
+      return ["inset 0 1px 0 " + spec, "0 -1px 0 " + seam].concat(first ? [] : ["0 -8px 16px -12px rgba(0,0,0," + (dk ? ".55" : ".16") + ")"]).join(", "); };
+    return order.map((k, i) => {
+      const dep = b - i, front = dep === 0, lvl = dep > 0 ? lv[Math.min(dep, 5) - 1] : null, D = defs[k];
+      return { id: k, state: front ? "open" : "stacked", top: tops[i] + "px", h: (SH - tops[i]) + "px", z: i + 1,
+        tf: !front && s.hoverCard === k ? "translateY(-4px)" : "none", enter: () => { if (!front) this.setState({ hoverCard: k }); }, leave: () => this.setState(st => st.hoverCard === k ? { hoverCard: null } : null),
+        bg: ofl === "glass" ? "color-mix(in srgb, " + (lvl ? lvl[0] : "var(--c-lane)") + " " + (front ? 86 : 64) + "%, transparent)" : lvl ? lvl[0] : "var(--c-lane)", fg: lvl ? lvl[1] : "var(--c-ink)",
+        sh: ofl === "lacquer" ? lack(front, lvl, i === 0) : ofl === "glass" ? ["inset 0 0 0 1px rgba(255,255,255," + (dk ? ".12" : ".7") + ")", "inset 0 1px 0 rgba(255,255,255," + (dk ? ".18" : ".9") + ")", "0 -8px 24px -14px rgba(0,0,0," + (dk ? ".6" : ".22") + ")", "0 0 0 1px rgba(0,0,0," + (dk ? ".35" : ".04") + ")"].join(", ") : front ? "inset 0 1px 0 var(--c-glaze), var(--sh-lane), 0 -8px 24px -12px rgba(0,0,0,.22)" : "inset 0 1px 0 var(--c-glaze), 0 0 0 1px rgba(0,0,0,.06), 0 -6px 16px -10px rgba(0,0,0,.18)",
+        sheen: ofl === "glass" ? "linear-gradient(160deg, rgba(255,255,255," + (dk ? ".08" : ".55") + "), rgba(255,255,255,0) 55%)" : "none", blur: ofl === "glass" ? "blur(22px) saturate(1.4)" : "none",
+        hLine: front ? "var(--c-line)" : "transparent", mLine: "color-mix(in srgb, currentColor 22%, transparent)", markD: D[1], title: D[0],
+        meta: front ? (metas[k] || "") : "", metaFlex: front ? "1 1 0" : "none", metaMl: front ? "0" : "auto", hasClose: false, cursor: front ? "default" : "pointer", go: front ? undefined : () => this.setState({ front: k }),
+        isRows: front, isKatalog: false, rows: front ? (bodies[k] || []) : [], kats: [], fotos: [], katNote: "", hasFoot: front && !!foots[k], foot: foots[k] || { l: [], r: [] } };
+    });
+  }
+  finish(o) {
+    const s = this.state, still = this.still(), ease = "cubic-bezier(.2,.8,.2,1)", w = o.w, rM = o.rM, lanes = o.lanes;
+    return Object.assign({
+      ready: true, licht: this.props.appearance ?? "light", winRef: this.winRef, shGrund: this.props.ground ?? "white", shSchrift: this.props.typeface ?? "Geist", fenster: this.props.window ?? "1512 × 982",
+      wArr: w, maxed: rM.max >= 0, slow: false, groups: this.GROUPS, badges: {}, shDot: false, laneSet: true, lanes, isList: lanes[0].isList, isMain: lanes[1].isMain, isStack: lanes[2].isStack,
+      stackTrans: still ? "none" : "top 520ms cubic-bezier(.22,1.08,.36,1), height 520ms cubic-bezier(.22,1.08,.36,1), left 520ms cubic-bezier(.22,1.08,.36,1), right 520ms cubic-bezier(.22,1.08,.36,1), background 320ms " + ease + ", transform 420ms " + ease,
+      iconRing: "inset 0 0 0 1px var(--c-line-strong)", plusD: this.P.plus, closeD: this.P.close, chevronD: this.P.chevron, searchD: this.P.search,
+      onChoose: n => this.choose(n), onMode: v => this.setState({ blobOpen: v }), onMem: p => this.setMem(p), onGrow: (side, v, w0) => this.grow(side, v, w0),
+      onSync: () => { if (s.syncing) return; this.setState({ syncing: true }); setTimeout(() => this.setState({ syncing: false }), still ? 400 : 1600); },
+      syncState: s.syncing ? "syncing" : "fresh", syncTitle: o.syncTitle, assistText: o.assist,
+      hasToast: !!s.toast, toast: s.toast || "", hasUndo: !!s.toastUndo, undo: () => { const u = s.toastUndo; clearTimeout(this.tt); this.setState({ toast: null, toastUndo: null }); if (u) u(); },
+      hasMenu: !!s.menu, menu: s.menu ? { x: s.menu.x + "px", y: s.menu.y + "px", w: s.menu.w + "px", items: s.menu.items.map(it => Object.assign({ sep: false, head: false, item: false, check: "", meta: "", fg: "var(--c-ink)" }, it)) } : { items: [] },
+      rootDown: () => { if (s.menu) this.setState({ menu: null }); }, stop: e => e.stopPropagation()
+    }, o.x);
+  }
+
+  NAME = "Atelier"; palRef = React.createRef();
+  loadPal() { try { const v = JSON.parse(localStorage.getItem("alfa.atelier.pal")); if (v && typeof v.x === "number") return v; } catch (e) {} return null; }
+  palDown(e) { e.stopPropagation(); e.preventDefault(); const el = this.palRef.current; if (!el) return; const r = el.getBoundingClientRect(), k = this.sc().k; this.d = { mode: "pal", offX: (e.clientX - r.left) / k, offY: (e.clientY - r.top) / k }; }
+  palDock() { try { localStorage.removeItem("alfa.atelier.pal"); } catch (e) {} this.setState({ palPos: null }); }
+  palMove(e) {
+    const d = this.d, el = this.palRef.current; if (!el) return; const lr = el.offsetParent.getBoundingClientRect(), k = this.sc().k, lw = lr.width / k, lh = lr.height / k, pw = el.offsetWidth, ph = el.offsetHeight;
+    let px = (e.clientX - lr.left) / k - d.offX, py = (e.clientY - lr.top) / k - d.offY;
+    px = Math.max(0, Math.min(lw - pw, px)); py = Math.max(84, Math.min(lh - ph, py));
+    if (px < 24) px = 12; if (px > lw - pw - 24) px = lw - pw - 12; if (py < 108) py = 96; if (py > lh - ph - 24) py = lh - ph - 12;
+    this.setState({ palPos: { x: Math.round(px), y: Math.round(py) } });
+  }
+  palUp() { this.d = null; try { localStorage.setItem("alfa.atelier.pal", JSON.stringify(this.state.palPos)); } catch (e) {} }
+  move(e) {
+    const d = this.d, s = this.state;
+    if (d && d.mode === "pal") { this.palMove(e); return; }
+    if (d && d.mode === "pan") { const k = this.sc().k; this.setView({ z: s.view.z, x: d.vx + (e.clientX - d.sx) / k, y: d.vy + (e.clientY - d.sy) / k }); return; }
+    if (d && d.mode === "move") {
+      const V = this.view(), n = this.tn(this.dl(e), V), it = this.ph().items.find(x => x.id === d.id); if (!it) return;
+      if (!d.pushed) { d.pushed = true; this.pushHist(); }
+      const dx = n[0] - d.s[0], dy = n[1] - d.s[1], o = d.o, c = p => [p[0] + dx, p[1] + dy];
+      this.live(p => Object.assign({}, p, { items: p.items.map(x => x.id !== d.id ? x : o.k === "stroke" ? Object.assign({}, x, { pts: o.pts.map(c) }) : Object.assign({}, x, { at: c(o.at) })) })); return;
+    }
+    if (d && d.mode === "erase") { this.eraseAt(this.dl(e)); return; }
+    const dr = s.draft; if (!dr) return;
+    const V = this.view(), n = this.clampN(this.tn(this.dl(e), V)), ph = this.ph();
+    if (dr.kind === "free") { const A = this.ts(dr.pts[dr.pts.length - 1], V), B = this.ts(n, V); if (Math.hypot(B[0] - A[0], B[1] - A[1]) >= 3) this.setState({ draft: Object.assign({}, dr, { pts: dr.pts.concat([n]) }) }); }
+    else if (dr.kind === "rect") this.setState({ draft: Object.assign({}, dr, { b: n }) });
+    else if (dr.kind === "poly") { const r = this.snapB(dr.pts[dr.pts.length - 1], n, e.shiftKey, ph); this.setState({ draft: Object.assign({}, dr, { cur: r.p, note: r.note }) }); }
+  }
+  up() { const d = this.d; if (!d) return; if (d.mode === "pal") { this.palUp(); return; } this.d = null; if (d.mode === "pan" && this.state.panning) this.setState({ panning: false }); if (d.mode === "draw") this.commitDraft(); }
+
+  PW = 4000; PH = 3000;
+  PROJ = { p1: "Küche Hansen", p2: "Praxis Kern" };
+  LCOL = { bestand: "#6b6b6b", neu: "oklch(.5 .12 255)", entfernen: "#f95c4b", notiz: "#f39f5a" };
+  SLOT = [["s1", "Ultramarin", "oklch(.45 .17 265)"], ["s2", "Terracotta", "oklch(.6 .12 40)"], ["s3", "Salbei", "oklch(.7 .06 140)"], ["s4", "Ocker", "oklch(.72 .12 85)"], ["s5", "Graphit", "#3a3a3a"], ["s6", "Taube", "oklch(.72 .02 250)"]];
+  TONE = [["#e8e5e0", "#d3cec6"], ["#e4e7e8", "#cbd0d2"], ["#e9e6df", "#d8d2c4"]];
+  WD = { "dünn": 1.4, "mittel": 2.4, "dick": 4 };
+  MATS = [["Eiche geölt hell", "Material"], ["Esche pigmentiert", "Material"], ["Naturstein grau", "Material"], ["Leinen 04", "Material"], ["Backofen Einbau", "Gerät"], ["Kochfeld Induktion", "Gerät"], ["Stil-Anker Nordisch", "Stil-Anker"]];
+  STILE = [["fotorealistisch"], ["Architektur editorial"], ["Innenraum weiches Licht"], ["skizzenhaft"]];
+  ENG = [["Firefly (manuell)", "heute einzige"], ["Nano Banana 2", "nicht angebunden"], ["Nano Banana Pro", "nicht angebunden"]];
+  STAT = ["Entwurf", "Freigegeben", "Master", "Verworfen"];
+  TOOLS = [["select", "Auswahl", "V", "select"], ["hand", "Hand", "H", "hand"], ["pen", "Stift", "P", "pen"], ["poly", "Polylinie", "L", "line"], ["rect", "Rechteck", "R", "rect"], ["fill", "Füllung", "F", "fillt"], ["erase", "Radierer", "E", "eraser"], ["img", "Bild", "I", "photo"], ["note", "Notiz", "T", "pin"], ["grid", "Perspektivraster", "G", "persp"]];
+  XP = { select: "M4 2.5l8 4.5-3.5 1-1.5 3.5Z", hand: "M5.5 8.5V4.5a1 1 0 0 1 2 0V8M7.5 7.5V3.5a1 1 0 0 1 2 0V8M9.5 8V4.5a1 1 0 0 1 2 0v4a4 4 0 0 1-4 4h-.5a3.5 3.5 0 0 1-2.8-1.4L2.8 9.2a1 1 0 0 1 1.5-1.3l1.2 1.4", fillt: "M3 9l5-5.5 5 5-4.5 4.5a1 1 0 0 1-1.4 0ZM13.5 11.5s1.5 1.8 1.5 2.7a1.5 1.5 0 0 1-3 0c0-.9 1.5-2.7 1.5-2.7Z", persp: "M2.5 13.5L8 6l5.5 7.5M2.5 9L8 6l5.5 3M8 2.5v3", pin: "M8 14s4.5-4 4.5-7.5a4.5 4.5 0 0 0-9 0C3.5 10 8 14 8 14ZM8 8a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z",
+    eye: "M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8ZM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z", eyeoff: "M2.5 2.5l11 11M6.2 4.2A6 6 0 0 1 8 3.5c4 0 6.5 4.5 6.5 4.5a11 11 0 0 1-2 2.5M4 5.5C2.6 6.7 1.5 8 1.5 8s2.5 4.5 6.5 4.5c.8 0 1.5-.2 2.2-.5", unlock: "M4.5 7.5h7v6h-7ZM6 7.5V5.5a2 2 0 0 1 3.8-.9", redo: "M10.5 4.5l3 3-3 3M13.5 7.5h-6a4 4 0 0 0 0 8", help: "M8 13.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM6.3 6.3a1.8 1.8 0 1 1 2.6 1.6c-.6.3-.9.7-.9 1.4M8 11.3v.1", photo: "M2.5 3.5h11v9h-11ZM5 10l2.5-3 2 2 1.5-1.5 2 2.5", dot: "" };
+  ic(k) { return this.XP[k] != null ? this.XP[k] : this.P[k] || this.P.plus; }
+  colOf(c) { return c === "black" ? "#171717" : c === "white" ? "#ffffff" : (this.SLOT.find(q => q[0] === c) || this.SLOT[0])[2]; }
+  colName(c) { return c === "black" ? "Schwarz" : c === "white" ? "Weiß" : (this.SLOT.find(q => q[0] === c) || [0, "?"])[1]; }
+
+  seed() {
+    const lays = () => [["neu", "Neu"], ["bestand", "Bestand"], ["entfernen", "Entfernen"], ["notiz", "Notizen"]].map(q => ({ id: q[0], art: q[0], name: q[1], vis: true, lock: false, op: 100 }));
+    const slots = m => this.SLOT.map(q => ({ id: q[0], mat: m[q[0]] || null }));
+    const R = (id, layer, a, b, c, d, o) => Object.assign({ id, k: "stroke", kind: "rect", closed: true, pts: [[a, b], [c, b], [c, d], [a, d]], layer, col: "black", wd: "mittel", op: 100, fill: null }, o || {});
+    const Ln = (id, layer, pts, o) => Object.assign({ id, k: "stroke", kind: "poly", closed: false, pts, layer, col: "black", wd: "mittel", op: 100, fill: null }, o || {});
+    return [
+      { id: "f1", proj: "p1", name: "Küche · Ansicht Süd", tone: 0, filter: "keiner", grid: "2", layer: "neu", layers: lays(), slots: slots({ s1: { n: "Eiche geölt hell", src: "Material" }, s3: { n: "Naturstein grau", src: "Material" } }), stil: "Innenraum weiches Licht", engine: 0, job: null,
+        vers: [{ n: 1, status: "Verworfen", parent: null, engine: "Firefly", stil: "fotorealistisch", t: "Gestern, 16:40" }, { n: 2, status: "Freigegeben", parent: 1, engine: "Firefly", stil: "Innenraum weiches Licht", t: "Heute, 09:15" }],
+        items: [Ln("a1", "bestand", [[.05, .82], [.95, .82]], { wd: "dick" }), R("a2", "bestand", .08, .30, .30, .82), R("a3", "bestand", .30, .55, .62, .82), R("a4", "entfernen", .62, .30, .78, .82, { col: "black" }),
+          R("a5", "neu", .30, .55, .62, .82, { col: "s1", fill: "s1", op: 100 }), R("a6", "neu", .62, .55, .92, .82, { col: "s2", fill: "s2" }), R("a7", "neu", .30, .20, .50, .46, { col: "s3", fill: "s3" }),
+          { id: "a8", k: "note", at: [.80, .24], lab: "Fenster bleibt", layer: "notiz" }, { id: "a9", k: "img", at: [.80, .44], w: .16, rot: 0, flip: false, op: 1, lock: false, src: "Material", lab: "Eiche geölt hell", layer: "neu" }] },
+      { id: "f2", proj: "p2", name: "Praxis · Tresen", tone: 1, filter: "keiner", grid: "1", layer: "neu", layers: lays(), slots: slots({}), stil: "fotorealistisch", engine: 0, job: null, vers: [], items: [R("b1", "bestand", .15, .45, .85, .82)] },
+      { id: "f3", proj: "p2", name: "Skizzenbuch", tone: 2, filter: "keiner", grid: "aus", layer: "neu", layers: lays(), slots: slots({}), stil: "skizzenhaft", engine: 0, job: null, vers: [], items: [] }];
+  }
+  initial() {
+    const p = this.props || {}, id = { "Küche · Ansicht Süd": "f1", "Praxis · Tresen": "f2", "Skizzenbuch": "f3" }[p.skizze ?? "Küche · Ansicht Süd"] || "f1";
+    let wh = "Scrollen"; try { wh = localStorage.getItem("alfa.aufmass.wheel") || "Scrollen"; } catch (e) {}
+    return { mem: {}, palPos: this.loadPal(), photos: this.seed(), pid: id, hist: [], fut: [], tool: "select", sel: null, view: { z: 1, x: 0, y: 0 }, sheet: false, mode: p.ansicht ?? "Skizze", draft: null, fly: false, flyPos: null, ncol: "black", nwd: "mittel", nop: 100, nfill: "s1", isrc: "Material", noteText: "Notiz", wheel: wh, front: "objekt", edit: null, showV: null, spc: false, panning: false,
+      menu: null, toast: null, toastUndo: null, hoverCard: null, blobOpen: false, syncing: false };
+  }
+  state = this.initial();
+  ph() { return this.state.photos.find(p => p.id === this.state.pid) || this.state.photos[0]; }
+  sgeo(b) { return b ? { SW: 1400, SH: 990, px: 187, py: 50, pw: 1027, ph: 770 } : { SW: 1000, SH: 750, px: 0, py: 0, pw: 1000, ph: 750 }; }
+  view() { const s = this.state, d = this.dim || { W: 800, H: 600 }, sg = this.sgeo(s.sheet), pad = s.sheet ? 48 : 72, fit = Math.min((d.W - 2 * pad) / sg.SW, (d.H - 2 * pad) / sg.SH), S = fit * s.view.z; return { sg, S, fit, W: d.W, H: d.H, ox: (d.W - sg.SW * S) / 2 + s.view.x, oy: (d.H - sg.SH * S) / 2 + s.view.y }; }
+  ts(n, V) { V = V || this.view(); return [V.ox + (V.sg.px + n[0] * V.sg.pw) * V.S, V.oy + (V.sg.py + n[1] * V.sg.ph) * V.S]; }
+  tn(l, V) { V = V || this.view(); return [((l[0] - V.ox) / V.S - V.sg.px) / V.sg.pw, ((l[1] - V.oy) / V.S - V.sg.py) / V.sg.ph]; }
+  clampN(n) { return [Math.max(0, Math.min(1, n[0])), Math.max(0, Math.min(1, n[1]))]; }
+  deskEl() { const r = this.root(); return r ? r.querySelector('[data-part="desk"]') : null; }
+  dl(e) { const el = this.deskEl(), r = el.getBoundingClientRect(), k = this.sc().k; return [(e.clientX - r.left) / k, (e.clientY - r.top) / k]; }
+  setView(v) { const V = this.view(), S = V.fit * v.z, mx = V.sg.SW * S / 2 + V.W / 2 - 120, my = V.sg.SH * S / 2 + V.H / 2 - 120; this.setState({ view: { z: v.z, x: Math.max(-mx, Math.min(mx, v.x)), y: Math.max(-my, Math.min(my, v.y)) } }); }
+  zoomAt(c, f) { const V = this.view(), z0 = this.state.view.z, z2 = Math.max(1, Math.min(12, z0 * f)); if (z2 === z0) return; const S2 = V.fit * z2, wx = (c[0] - V.ox) / V.S, wy = (c[1] - V.oy) / V.S; this.setView({ z: z2, x: c[0] - wx * S2 - (V.W - V.sg.SW * S2) / 2, y: c[1] - wy * S2 - (V.H - V.sg.SH * S2) / 2 }); }
+  zoomTo(z) { const d = this.dim || { W: 800, H: 600 }; this.zoomAt([d.W / 2, d.H / 2], z / this.state.view.z); }
+  fit() { this.setState({ view: { z: 1, x: 0, y: 0 } }); }
+  pushHist() { this.setState(st => ({ hist: st.hist.concat([st.photos]).slice(-100), fut: [] })); }
+  live(fn) { this.setState(st => ({ photos: st.photos.map(p => p.id === st.pid ? fn(p) : p) })); }
+  mut(fn) { this.pushHist(); this.live(fn); }
+  undo() { this.setState(st => st.hist.length ? { photos: st.hist[st.hist.length - 1], hist: st.hist.slice(0, -1), fut: st.fut.concat([st.photos]), draft: null } : null); }
+  redo() { this.setState(st => st.fut.length ? { photos: st.fut[st.fut.length - 1], fut: st.fut.slice(0, -1), hist: st.hist.concat([st.photos]) } : null); }
+  nid() { return "x" + (Date.now() % 1e6).toString(36) + Math.floor(Math.random() * 99); }
+  openMenuAt(cx, cy, items, w) {
+    w = Math.max(168, Math.min(280, w || 220)); const { r, k } = this.sc(), g = this.geo(), h = items.length * 28 + 8; let x = (cx - r.left) / k, y = (cy - r.top) / k;
+    x = Math.max(16, Math.min(x, g.W - w - 16)); y = Math.max(16, Math.min(y, g.H - h - 16)); this.setState({ menu: { x, y, w, items } });
+  }
+  mounted() {
+    if (window.__aufOff) window.__aufOff();
+    const ku = e => { if (e.code === "Space") { this.space = false; this.setState({ spc: false }); } };
+    this._wh = e => {
+      e.preventDefault(); const el = this.deskEl(); if (!el) return; const r = el.getBoundingClientRect(), k = this.sc().k, c = [(e.clientX - r.left) / k, (e.clientY - r.top) / k], cl = (v, m) => Math.max(-m, Math.min(m, v));
+      const zoomMode = (this.state.wheel === "Zoomen") !== !!e.altKey;
+      if (e.ctrlKey || e.metaKey || zoomMode) this.zoomAt(c, Math.exp(-cl(e.deltaY, 24) * (e.ctrlKey ? .01 : .005)));
+      else { const v = this.state.view; this.setView({ z: v.z, x: v.x - cl(e.deltaX, 40), y: v.y - cl(e.deltaY, 40) }); }
+    };
+    const wd = e => { const el = this.deskEl(); if (el && e.target && el.contains(e.target)) this._wh(e); }; document.addEventListener("wheel", wd, { passive: false, capture: true }); document.addEventListener("keyup", ku); window.__aufOff = () => { document.removeEventListener("keyup", ku); document.removeEventListener("wheel", wd, { capture: true }); };
+  }
+  hook() {
+    
+    if (this.focusCtx) { this.focusCtx = false; const r = this.root(), i = r && r.querySelector('[data-ctx="val"]'); if (i) { i.focus(); i.select(); } }
+  }
+  anim() { const r = this.root(); if (r && !this.still()) r.querySelectorAll("[data-spin]").forEach(el => { if (!el._a && el.animate) el._a = el.animate([{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }], { duration: 1000, iterations: Infinity }); }); if (this._wh) this.hook(); }
+
+  inp(key, shown, apply) {
+    const e = this.state.edit;
+    return { val: e && e.key === key ? e.text : shown, onIn: ev => { const t = ev.target.value, c = this.state.edit; if (!c || c.key !== key) this.pushHist(); this.setState({ edit: { key, text: t } }); apply(t); }, onBlur: () => this.setState({ edit: null }) };
+  }
+  vps(ph) { const g = ph.grid, o = []; if (g === "1") o.push({ g: 1, p: [.5, .46] }); if (g === "2") o.push({ g: 1, p: [-.45, .46] }, { g: 2, p: [1.45, .46] }); if (g === "3") o.push({ g: 1, p: [-.45, .46] }, { g: 2, p: [1.45, .46] }, { g: 3, p: [.5, 2.3] }); return o; }
+  snapB(a, b, shift, ph) {
+    const V = this.view(), A = this.ts(a, V), B = this.ts(b, V), dx = B[0] - A[0], dy = B[1] - A[1], len = Math.hypot(dx, dy); if (len < 4) return { p: b, note: "" };
+    const ang = Math.atan2(dy, dx) * 180 / Math.PI; let tgt = null, note = "";
+    if (shift) { tgt = Math.round(ang / 45) * 45; note = "⇧ 45°-Raster"; }
+    else {
+      [0, 90, 180, -90, -180].some(t => { if (Math.abs(ang - t) < 3) { tgt = t; note = Math.abs(t) % 180 === 0 ? "waagerecht" : "senkrecht"; return true; } return false; });
+      if (tgt === null) this.vps(ph).some(v => { const Q = this.ts(v.p, V), da = Math.atan2(Q[1] - A[1], Q[0] - A[0]) * 180 / Math.PI; return [da, da + 180, da - 180].some(t => { if (Math.abs(ang - t) <= 7) { tgt = t; note = "Fluchtpunkt " + v.g; return true; } return false; }); });
+    }
+    if (tgt === null) return { p: b, note: "" };
+    const r = tgt * Math.PI / 180; return { p: this.tn([A[0] + Math.cos(r) * len, A[1] + Math.sin(r) * len], V), note };
+  }
+  segD(p, a, b) { const dx = b[0] - a[0], dy = b[1] - a[1], L2 = dx * dx + dy * dy || 1; let t = ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L2; t = Math.max(0, Math.min(1, t)); return Math.hypot(p[0] - (a[0] + t * dx), p[1] - (a[1] + t * dy)); }
+  updIt(id, patch, keep) { if (!keep) this.pushHist(); this.live(p => Object.assign({}, p, { items: p.items.map(x => x.id === id ? Object.assign({}, x, patch) : x) })); }
+  addIt(it) { this.mut(p => Object.assign({}, p, { items: p.items.concat([it]) })); this.setState({ sel: it.id, front: "objekt" }); }
+  delSel() { const id = this.state.sel; if (!id) return; this.mut(p => Object.assign({}, p, { items: p.items.filter(x => x.id !== id) })); this.setState({ sel: null }); this.toastIt("Entfernt", () => this.undo()); }
+  dup(id) { const it = this.ph().items.find(x => x.id === id); if (!it) return null; const n = Object.assign({}, it, { id: this.nid() }); if (n.k === "stroke") n.pts = n.pts.map(p => [p[0] + .02, p[1] + .02]); else n.at = [n.at[0] + .02, n.at[1] + .02]; this.addIt(n); return n; }
+  setLayer(id) { this.live(p => Object.assign({}, p, { layer: id })); }
+  setTool(t) { this.setState({ tool: t, draft: null }); }
+  patchPh(patch, hist) { if (hist) this.pushHist(); this.live(p => Object.assign({}, p, patch)); }
+  layerPatch(id, patch) { this.pushHist(); this.live(p => Object.assign({}, p, { layers: p.layers.map(l => l.id === id ? Object.assign({}, l, patch) : l) })); }
+  guard(ph) { const ly = ph.layers.find(l => l.id === ph.layer); if (ly.lock || !ly.vis) { this.toastIt("Ebene «" + ly.name + "» ist " + (ly.lock ? "gesperrt" : "ausgeblendet")); return false; } return true; }
+  itemDown(e, id) {
+    if (this.state.tool !== "select" || e.button !== 0) return; e.stopPropagation();
+    let it = this.ph().items.find(x => x.id === id); if (!it) return;
+    if (e.altKey) { it = this.dup(id) || it; id = it.id; } else this.setState({ sel: id, front: "objekt" });
+    this.d = { mode: "move", id, s: this.tn(this.dl(e)), o: JSON.parse(JSON.stringify(it)), pushed: !!e.altKey };
+  }
+  itemDbl(e, id) { e.stopPropagation(); this.setState({ sel: id, front: "objekt" }); }
+  itemMenu(e, id) {
+    e.preventDefault(); e.stopPropagation(); this.setState({ sel: id, front: "objekt" });
+    const ph = this.ph(), it = ph.items.find(x => x.id === id); if (!it) return;
+    const items = [{ head: true, label: "Ebene" }].concat(ph.layers.map(l => this.mi(l.name.split(" ·")[0], () => this.updIt(id, { layer: l.id }), { check: it.layer === l.id })), [{ sep: true }, this.mi("Nach vorn", () => this.order(id, 1)), this.mi("Nach hinten", () => this.order(id, -1)), { sep: true }, this.mi("Duplizieren", () => this.dup(id), { meta: "⌥ ziehen" }), this.mi("Löschen", () => this.delSel(), { danger: true, meta: "⌫" })]);
+    this.openMenuAt(e.clientX, e.clientY, items, 220);
+  }
+  order(id, dir) { this.mut(p => { const a = p.items.slice(), i = a.findIndex(x => x.id === id), j = Math.max(0, Math.min(a.length - 1, i + dir)); const q = a.splice(i, 1)[0]; a.splice(j, 0, q); return Object.assign({}, p, { items: a }); }); }
+  deskDown(e) {
+    const s = this.state, t = s.tool; if (s.menu) this.setState({ menu: null });
+    if (e.button === 1 || (e.button === 0 && (this.space || t === "hand"))) { e.preventDefault(); this.d = { mode: "pan", sx: e.clientX, sy: e.clientY, vx: s.view.x, vy: s.view.y }; this.setState({ panning: true }); return; }
+    if (e.button !== 0) return;
+    if (s.mode === "Render") return;
+    const ph = this.ph(), V = this.view(), n = this.clampN(this.tn(this.dl(e), V)), id = this.nid();
+    if (t === "select") { if (s.sel) this.setState({ sel: null }); this.d = { mode: "pan", sx: e.clientX, sy: e.clientY, vx: s.view.x, vy: s.view.y }; return; }
+    if (t === "grid") return;
+    if (t === "fill") { this.fillAt(n, e.altKey); return; }
+    if (t === "erase") { this.eraseAt(this.dl(e)); this.d = { mode: "erase" }; return; }
+    if (!this.guard(ph)) return;
+    if (t === "pen") { this.setState({ draft: { kind: "free", pts: [n] } }); this.d = { mode: "draw" }; return; }
+    if (t === "rect") { this.setState({ draft: { kind: "rect", a: n, b: n } }); this.d = { mode: "draw" }; return; }
+    if (t === "poly") {
+      const dr = s.draft; if (!dr) { this.setState({ draft: { kind: "poly", pts: [n], cur: n, note: "" } }); return; }
+      const A = this.ts(dr.pts[0], V), B = this.ts(n, V);
+      if (dr.pts.length >= 3 && Math.hypot(A[0] - B[0], A[1] - B[1]) < 10) { this.setState({ draft: Object.assign({}, dr, { closed: true }) }, () => this.commitDraft()); return; }
+      const r = this.snapB(dr.pts[dr.pts.length - 1], n, e.shiftKey, ph); this.setState({ draft: Object.assign({}, dr, { pts: dr.pts.concat([r.p]), cur: r.p }) }); return;
+    }
+    if (t === "img") { this.addIt({ id, k: "img", at: n, w: .2, rot: 0, flip: false, op: 1, lock: false, src: s.isrc, lab: s.isrc, layer: (ph.layers.find(l => l.id === ph.layer) || {}).art === "notiz" ? (ph.layers.find(l => l.art !== "notiz") || ph.layers[0]).id : ph.layer }); return; }
+    if (t === "note") this.addIt({ id, k: "note", at: n, lab: s.noteText || "Notiz", layer: (ph.layers.find(l => l.art === "notiz") || ph.layers[0]).id });
+  }
+  commitDraft() {
+    const s = this.state, dr = s.draft; if (!dr) return; const V = this.view(); let pts = null, closed = false;
+    if (dr.kind === "free") { if (dr.pts.length > 1) pts = dr.pts; }
+    else if (dr.kind === "rect") { const A = this.ts(dr.a, V), B = this.ts(dr.b, V); if (Math.abs(B[0] - A[0]) > 6 && Math.abs(B[1] - A[1]) > 6) { pts = [dr.a, [dr.b[0], dr.a[1]], dr.b, [dr.a[0], dr.b[1]]]; closed = true; } }
+    else { pts = dr.pts.filter((p, i, a) => i === 0 || Math.hypot((p[0] - a[i - 1][0]) * V.sg.pw * V.S, (p[1] - a[i - 1][1]) * V.sg.ph * V.S) > 3); closed = !!dr.closed; }
+    this.setState({ draft: null }); this.d = null;
+    if (pts && pts.length > 1) this.addIt({ id: this.nid(), k: "stroke", kind: dr.kind, pts, closed, layer: this.ph().layer, col: s.ncol, wd: s.nwd, op: s.nop, fill: closed ? s.nfill : null });
+  }
+  fillAt(n, clear) {
+    const ph = this.ph(), inside = (P, q) => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { if ((P[i][1] > q[1]) !== (P[j][1] > q[1]) && q[0] < (P[j][0] - P[i][0]) * (q[1] - P[i][1]) / (P[j][1] - P[i][1]) + P[i][0]) c = !c; } return c; };
+    const it = ph.items.slice().reverse().find(x => { const ly = ph.layers.find(l => l.id === x.layer); return x.k === "stroke" && x.closed && ly.vis && !ly.lock && inside(x.pts, n); });
+    if (!it) { this.toastIt("Keine geschlossene Form an dieser Stelle"); return; }
+    this.updIt(it.id, { fill: clear ? null : this.state.nfill }); this.setState({ sel: it.id });
+  }
+  eraseAt(l) {
+    const V = this.view(), ph = this.ph();
+    const hit = ph.items.slice().reverse().find(it => { const ly = ph.layers.find(q => q.id === it.layer); if (!ly || !ly.vis || ly.lock) return false;
+      if (it.k === "stroke") { const P = it.pts.map(p => this.ts(p, V)); if (it.closed) P.push(P[0]); for (let i = 0; i < P.length - 1; i++) if (this.segD(l, P[i], P[i + 1]) < 8) return true; return false; }
+      const q = this.ts(it.at, V); if (it.k === "img") { const w = it.w * V.sg.pw * V.S; return Math.abs(l[0] - q[0]) < w / 2 && Math.abs(l[1] - q[1]) < w * .375; } return Math.hypot(q[0] - l[0], q[1] - l[1]) < 14; });
+    if (hit) { this.mut(p => Object.assign({}, p, { items: p.items.filter(x => x.id !== hit.id) })); if (this.state.sel === hit.id) this.setState({ sel: null }); }
+  }
+  key(e) {
+    const s = this.state, m = e.metaKey || e.ctrlKey, k = e.key;
+    if (e.code === "Space") { e.preventDefault(); if (!this.space) { this.space = true; this.setState({ spc: true }); } return; }
+    if (m && k.toLowerCase() === "z") { e.preventDefault(); if (e.shiftKey) this.redo(); else this.undo(); return; }
+    if (m && (k === "0" || k === "1")) { e.preventDefault(); this.fit(); return; }
+    if (m) return;
+    if (k === "Escape") { if (s.draft) this.setState({ draft: null }); else this.setState({ sel: null }); return; }
+    if (k === "Enter" && s.draft && s.draft.kind === "poly") { this.commitDraft(); return; }
+    if (k === "Delete" || k === "Backspace") { if (s.sel) { e.preventDefault(); this.delSel(); } return; }
+    if (k.indexOf("Arrow") === 0 && s.sel) {
+      e.preventDefault(); const V = this.view(), st = (e.shiftKey ? 10 : 1) / V.S, dx = (k === "ArrowRight" ? st : k === "ArrowLeft" ? -st : 0) / V.sg.pw, dy = (k === "ArrowDown" ? st : k === "ArrowUp" ? -st : 0) / V.sg.ph, it = this.ph().items.find(x => x.id === s.sel), c = p => [p[0] + dx, p[1] + dy];
+      if (it) this.updIt(it.id, it.k === "stroke" ? { pts: it.pts.map(c) } : { at: c(it.at) }, this._nudge && Date.now() - this._nudge < 600); this._nudge = Date.now(); return;
+    }
+    if (k === "+" || k === "=") { this.zoomTo(Math.min(12, s.view.z * 1.25)); return; }
+    if (k === "-") { this.zoomTo(Math.max(1, s.view.z / 1.25)); return; }
+    const T = { v: "select", h: "hand", p: "pen", l: "poly", r: "rect", f: "fill", e: "erase", i: "img", t: "note", g: "grid" }[k.toLowerCase()]; if (T) { this.setTool(T); return; }
+    if (/^[1-9]$/.test(k)) { const l = this.ph().layers[parseInt(k, 10) - 1]; if (l) this.setLayer(l.id); }
+  }
+  LAB = { bestand: "Bestand", neu: "Neu", entfernen: "Entfernen", notiz: "Notizen" };
+  addLayer(art) { const ph = this.ph(), n = ph.layers.filter(l => l.art === art).length + 1, id = "l" + (Date.now() % 1e6).toString(36); this.mut(p => Object.assign({}, p, { layers: p.layers.concat([{ id, art, name: this.LAB[art] + " " + n, vis: true, lock: false, op: 100 }]), layer: id })); }
+  renameLayer(l) { const t = prompt("Ebenenname", l.name); if (t && t.trim()) this.layerPatch(l.id, { name: t.trim() }); }
+  layerMenu(e, l) {
+    e.preventDefault(); e.stopPropagation(); const ph = this.ph();
+    this.openMenuAt(e.clientX, e.clientY, [this.mi("Umbenennen", () => this.renameLayer(l)), this.mi(l.lock ? "Entsperren" : "Sperren", () => this.layerPatch(l.id, { lock: !l.lock })), { sep: true }, { head: true, label: "Deckkraft" }].concat([100, 60, 30].map(v => this.mi(v + " %", () => this.layerPatch(l.id, { op: v }), { check: (l.op == null ? 100 : l.op) === v })),
+      [{ sep: true }, this.mi("Löschen", () => { if (ph.layers.length < 2) { this.toastIt("Mindestens eine Ebene"); return; } const to = ph.layers.find(x => x.id !== l.id).id; this.mut(p => Object.assign({}, p, { layers: p.layers.filter(x => x.id !== l.id), layer: p.layer === l.id ? to : p.layer, items: p.items.map(it => it.layer === l.id ? Object.assign({}, it, { layer: to }) : it) })); this.toastIt("Ebene gelöscht · Inhalt auf «" + ph.layers.find(x => x.id === to).name + "»", () => this.undo()); }, { danger: true })]), 200);
+  }
+  pickPhoto(id) { this.setState({ pid: id, sel: null, draft: null, showV: null, view: { z: 1, x: 0, y: 0 } }); }
+  addPhoto(src) {
+    const cur = this.ph(), n = this.state.photos.length + 1, base = this.seed()[2], id = "f" + (Date.now() % 100000);
+    this.pushHist(); this.setState(st => ({ photos: st.photos.concat([Object.assign({}, base, { id, proj: cur.proj, name: "Neue Skizze " + n, tone: n % 3, items: [] })]), pid: id, sel: null, view: { z: 1, x: 0, y: 0 } })); this.toastIt("Platzhalter aus " + src + " · Foto folgt");
+  }
+  used(ph) { const u = {}; let vol = false; ph.items.forEach(it => { if (it.k !== "stroke") return; const ly = ph.layers.find(l => l.id === it.layer); if (!ly || ly.art === "notiz" || !ly.vis) return; if (it.fill) { u[it.fill] = (u[it.fill] || 0) + 1; vol = true; } if (it.col !== "black" && it.col !== "white") u[it.col] = (u[it.col] || 0) + 1; }); return { u, vol }; }
+  substrat(ph) { const q = this.used(ph), miss = Object.keys(q.u).filter(id => !(ph.slots.find(s => s.id === id) || {}).mat); return { vol: q.vol, miss, ready: q.vol && !miss.length, u: q.u }; }
+  promptOf(ph) {
+    const st = this.substrat(ph), by = a => ph.items.filter(x => x.k === "stroke" && (ph.layers.find(l => l.id === x.layer) || {}).art === a).length, mats = Object.keys(st.u).map(id => this.colName(id) + ": " + (((ph.slots.find(s => s.id === id) || {}).mat || {}).n || "fehlt"));
+    return [["Szene", ph.name + " · " + (this.PROJ[ph.proj] || "")], ["Geometrie", by("bestand") + " Bestand, " + by("neu") + " Neu, " + by("entfernen") + " Entfernen · Raster " + (ph.grid === "aus" ? "aus" : ph.grid + "-Punkt")], ["Materialien", mats.length ? mats.join(" · ") : "keine Slots genutzt"], ["Stil", ph.stil], ["Verbote", "Standardliste (Wortlaut im Altcode: unbekannt)"]];
+  }
+
+  renderVals() {
+    if (!window.AlfaShell) return { ready: false };
+    this.reg();
+    const s = this.state, K = this.K, P = this.P, g = this.geo(), rM = this.mem(), w = this.lay(), stop = e => e.stopPropagation(), f = n => n.toFixed(1);
+    const iconRing = "inset 0 0 0 1px var(--c-line-strong)", openCount = w.filter(x => x > K.fold).length;
+    const ph = this.ph(), W = w[1], H = g.lh - 84; this.dim = { W, H };
+    const V = this.view(), tool = s.tool, INK = "var(--c-sheet-ink)", SHEET = "var(--c-sheet)", INK3 = "var(--c-sheet-ink-3)", renderView = s.mode === "Render";
+    const lay = id => ph.layers.find(l => l.id === id) || ph.layers[0], selIt = ph.items.find(x => x.id === s.sel) || null, canSel = tool === "select" && !renderView;
+    const vers = ph.vers, shown = vers.find(v => v.n === s.showV) || vers[vers.length - 1] || null, sub = this.substrat(ph), lb = (x, y, t, o) => Object.assign({ x, y, t, c: INK, w: 400, bg: SHEET, ring: "none", tf: "translate(-50%,-50%)" }, o || {});
+    const paths = [], imgs = [], pins = [], labels = [], rays = []; let selBox = { on: false };
+    const T = n => this.ts(n, V);
+    if (!renderView) ph.items.forEach(it => {
+      const ly = lay(it.layer); if (!ly.vis) return; const on = s.sel === it.id, pa = canSel && !ly.lock && !it.lock;
+      if (it.k === "stroke") {
+        const lop = (ly.op == null ? 100 : ly.op) / 100, Q = it.pts.map(T), d = "M" + Q.map(p => f(p[0]) + " " + f(p[1])).join("L") + (it.closed ? "Z" : ""), sw = this.WD[it.wd];
+        paths.push({ d, fill: it.fill ? this.colOf(it.fill) : "none", fo: (it.op / 100) * lop * .72, stroke: this.colOf(it.col), so: it.op / 100 * lop, sw, dash: ly.art === "entfernen" ? "7 5" : "none", halo: on ? .14 : 0, ul: it.col === "white" ? "rgba(0,0,0,.32)" : "none", ulw: sw + 2, hitFill: it.closed ? "transparent" : "none", pe: pa ? "visiblePainted" : "none", down: e => this.itemDown(e, it.id), dbl: e => this.itemDbl(e, it.id), ctx: e => this.itemMenu(e, it.id) });
+        if (on) { const xs = Q.map(p => p[0]), ys = Q.map(p => p[1]); selBox = { on: true, x: Math.min.apply(null, xs) - 6, y: Math.min.apply(null, ys) - 6, w: Math.max.apply(null, xs) - Math.min.apply(null, xs) + 12, h: Math.max.apply(null, ys) - Math.min.apply(null, ys) + 12, tf: "" }; }
+      } else if (it.k === "img") {
+        const A = T(it.at), wd = it.w * V.sg.pw * V.S, hg = wd * .75, tf = "rotate(" + it.rot + " " + f(A[0]) + " " + f(A[1]) + ")";
+        imgs.push({ x: A[0] - wd / 2, y: A[1] - hg / 2, w: wd, h: hg, tf, op: it.op * (ly.op == null ? 100 : ly.op) / 100, pe: pa ? "all" : "none", down: e => this.itemDown(e, it.id), dbl: e => this.itemDbl(e, it.id), ctx: e => this.itemMenu(e, it.id) });
+        labels.push(lb(A[0], A[1], (it.lab || "Bild") + (it.flip ? " ↔" : "") + (it.lock ? " · gesperrt" : ""), { c: INK3 }));
+        if (on) selBox = { on: true, x: A[0] - wd / 2 - 4, y: A[1] - hg / 2 - 4, w: wd + 8, h: hg + 8, tf };
+      } else {
+        const A = T(it.at); pins.push({ x: A[0], y: A[1], col: this.LCOL.notiz, tf: "translate(" + f(A[0]) + " " + f(A[1]) + ") scale(1.25) translate(-8 -14)", halo: on ? .14 : 0, pe: pa ? "all" : "none", down: e => this.itemDown(e, it.id), dbl: e => this.itemDbl(e, it.id), ctx: e => this.itemMenu(e, it.id) });
+        labels.push(lb(A[0] + 14, A[1] - 14, it.lab || "Notiz", { tf: "translate(0,-50%)" }));
+      }
+    });
+    if (!renderView) this.vps(ph).forEach(v => { const Q = T(v.p), tl = T([0, 0]), br = T([1, 1]), tg = []; for (let i = 0; i <= 8; i++) { const a = i / 8; tg.push([tl[0] + (br[0] - tl[0]) * a, tl[1]], [tl[0] + (br[0] - tl[0]) * a, br[1]], [tl[0], tl[1] + (br[1] - tl[1]) * a], [br[0], tl[1] + (br[1] - tl[1]) * a]); } tg.forEach(t => rays.push({ x1: Q[0], y1: Q[1], x2: Q[0] + (t[0] - Q[0]) * 1.25, y2: Q[1] + (t[1] - Q[1]) * 1.25 })); if (Q[0] > -40 && Q[0] < W + 40 && Q[1] > -40 && Q[1] < H + 40) labels.push(lb(Q[0] + 14, Q[1] - 14, "FP " + v.g, { c: INK3 })); });
+    let hz = { on: false }; if (!renderView && ph.grid !== "aus") { const A = T([0, .46]), B = T([1, .46]); hz = { on: true, x1: -4000, y1: A[1], x2: W + 4000, y2: B[1] }; }
+    let dr = { on: false, d: "", fill: "none", dash: "none", col: this.colOf(s.ncol) };
+    if (s.draft) { const q = s.draft; let Q; if (q.kind === "rect") { const a = T(q.a), b = T(q.b); Q = [a, [b[0], a[1]], b, [a[0], b[1]]]; } else Q = q.pts.map(T); if (q.kind === "poly") Q = Q.concat([T(q.cur)]);
+      dr = { on: true, d: "M" + Q.map(p => f(p[0]) + " " + f(p[1])).join("L") + (q.kind === "rect" ? "Z" : ""), fill: q.kind === "rect" && s.nfill ? this.colOf(s.nfill) : "none", dash: q.kind === "poly" ? "5 4" : "none", col: this.colOf(s.ncol), sw: this.WD[s.nwd] }; }
+    const tone = this.TONE[ph.tone % 3], sg = V.sg, tl0 = T([0, 0]);
+    labels.push(lb(tl0[0] + 10, tl0[1] + 12, renderView ? (shown ? "Render v" + shown.n + " · " + shown.status + " · " + shown.engine + " · " + shown.t : "Noch kein Render · Auftrag in «Rezept» senden") : "Foto-Platzhalter · 4032 × 3024 px", { tf: "none", bg: "transparent", c: INK3 }));
+    const note = s.draft && s.draft.note ? s.draft.note : "";
+    const status = (renderView ? "Render" : sub.ready ? "Substrat bereit" : !sub.vol ? "Substrat: keine Füllung" : "Substrat unvollständig · " + sub.miss.map(id => this.colName(id)).join(", ") + " ohne Material") + "  ·  " + Math.round(s.view.z * 100) + " %" + (note ? "  ·  " + note : "");
+    const cursor = s.panning ? "grabbing" : s.spc || tool === "hand" ? "grab" : tool === "select" ? "default" : tool === "erase" ? "cell" : "crosshair";
+
+    // Kontextleiste
+    const cx = o => Object.assign({ isHint: false, isSeg: false, isBtn: false, isPill: false, isSw: false, isIn: false }, o), ctx = [];
+    const hint = t => ctx.push(cx({ isHint: true, text: t })), sg2 = (op, cur, fn) => ctx.push(cx({ isSeg: true, seg: this.segOf(op, cur, fn) }));
+    const bt = (label, go) => ctx.push(cx({ isBtn: true, label, state: "rest", bg: "transparent", fg: "var(--c-ink-2)", ring: iconRing, go: e => { stop(e); go(e); } }));
+    const pill = (label, go) => ctx.push(cx({ isPill: true, label, go: e => { stop(e); go(e); } }));
+    const inn = (id, lab, key, shown2, apply, wd) => { const q = this.inp(key, shown2, apply); ctx.push(cx({ isIn: true, id, lab, val: q.val, onIn: q.onIn, onBlur: q.onBlur, w: wd + "px" })); };
+    const sw = (cur, fn, withBw) => ctx.push(cx({ isSw: true, sw: (withBw ? [["black", "Schwarz", "#171717"], ["white", "Weiß", "#ffffff"]] : []).concat(this.SLOT).map(q => ({ n: q[1], c: q[2], state: q[0] === cur ? "selected" : "rest", ring: q[0] === cur ? "0 0 0 2px var(--c-sheet),0 0 0 3px var(--c-ink)" : "inset 0 0 0 1px var(--c-line-strong)", go: e => { stop(e); fn(q[0]); } })) }));
+    const layMenu = (cur, set) => e => this.openMenu(e, ph.layers.map(l => this.mi(l.name.split(" ·")[0], () => set(l.id), { check: l.id === cur })), 200);
+    const layPill = (cur, set) => pill("Ebene: " + lay(cur).name.split(" ·")[0], layMenu(cur, set));
+    const fillPill = (cur, set) => pill("Füllung: " + (cur ? this.colName(cur) : "ohne"), e => this.openMenu(e, this.SLOT.map(q => this.mi(q[1], () => set(q[0]), { check: q[0] === cur })).concat([{ sep: true }, this.mi("ohne", () => set(null), { check: !cur })]), 200));
+    const wdSeg = (cur, fn) => sg2([["dünn"], ["mittel"], ["dick"]], cur, fn), opSeg = (cur, fn) => sg2([["100 %"], ["60 %"], ["30 %"]], cur + " %", v => fn(parseInt(v, 10)));
+    if (renderView) hint("Render-Ansicht · Skizzenwerkzeuge ruhen. Zurück zu «Skizze» zum Zeichnen.");
+    else if (tool === "select") {
+      if (!selIt) hint("Klicken wählt · Leere Fläche ziehen verschiebt · ⌥-Ziehen dupliziert");
+      else if (selIt.k === "stroke") { sw(selIt.col, c => this.updIt(selIt.id, { col: c }), true); wdSeg(selIt.wd, v => this.updIt(selIt.id, { wd: v })); layPill(selIt.layer, id => this.updIt(selIt.id, { layer: id })); if (selIt.closed) fillPill(selIt.fill, id => this.updIt(selIt.id, { fill: id })); }
+      else if (selIt.k === "img") { inn("val", "Breite %", "iw:" + selIt.id, String(Math.round(selIt.w * 100)), t => { const n = parseInt(t, 10); if (n >= 2 && n <= 100) this.updIt(selIt.id, { w: n / 100 }, true); }, 56); inn("rot", "Drehung °", "ir:" + selIt.id, String(selIt.rot), t => { const n = parseInt(t, 10); if (!isNaN(n)) this.updIt(selIt.id, { rot: n % 360 }, true); }, 56); bt("Spiegeln", () => this.updIt(selIt.id, { flip: !selIt.flip })); bt(selIt.lock ? "Entsperren" : "Sperren", () => this.updIt(selIt.id, { lock: !selIt.lock })); }
+      else inn("val", "Text", "nt:" + selIt.id, selIt.lab || "", t => this.updIt(selIt.id, { lab: t }, true), 220);
+    } else if (tool === "hand") hint("Ziehen verschiebt · Leertaste hält die Hand in jedem Werkzeug · Doppelklick: Einpassen");
+    else if (tool === "pen" || tool === "poly" || tool === "rect") { sw(s.ncol, c => this.setState({ ncol: c }), true); wdSeg(s.nwd, v => this.setState({ nwd: v })); layPill(ph.layer, id => this.setLayer(id)); if (tool !== "pen") fillPill(s.nfill, id => this.setState({ nfill: id })); opSeg(s.nop, v => this.setState({ nop: v })); }
+    else if (tool === "fill") { sw(s.nfill, c => this.setState({ nfill: c }), false); hint("Klick in eine geschlossene Form · ⌥-Klick löscht die Füllung"); }
+    else if (tool === "erase") hint("Klick oder Ziehen entfernt Striche, Bilder und Notizen auf entsperrten Ebenen");
+    else if (tool === "img") { pill("Quelle: " + s.isrc, e => this.openMenu(e, [["Material"], ["Gerät"], ["Stil-Anker"], ["Eigenes Bild"]].map(q => this.mi(q[0], () => this.setState({ isrc: q[0] }), { check: s.isrc === q[0] })), 200)); hint("Klick setzt ein Platzhalterbild · Bild folgt aus Hub oder Datei"); }
+    else if (tool === "note") inn("val", "Text", "note", s.noteText, t => this.setState({ noteText: t }), 220);
+    else if (tool === "grid") { sg2([["aus"], ["1"], ["2"], ["3"]], ph.grid, v => this.patchPh({ grid: v }, true)); hint(ph.grid === "aus" ? "Perspektivraster aus" : ph.grid + "-Punkt-Raster · Linien rasten ≤ 7° ein"); }
+    const pb = (label, d, on, go) => ({ isBtn: true, sep: false, label, d, state: on ? "selected" : "rest", bg: on ? "var(--c-inv)" : "transparent", hbg: on ? "var(--c-inv)" : "var(--c-hover)", fg: on ? "var(--c-on-inv)" : "var(--c-ink-2)", stop: e => e.stopPropagation(), go: e => { e.stopPropagation(); go(e); } }), psep = { sep: true, isBtn: false };
+    const tb = t => { const q = this.TOOLS.find(x => x[0] === t); return pb(q[1] + " (" + q[2] + ")", this.ic(q[3]), tool === t, () => this.setTool(t)); };
+    const tbt = (label, d, on, go, off) => ({ label, d, state: on ? "selected" : "rest", bg: on ? "var(--c-inv)" : "transparent", fg: on ? "var(--c-on-inv)" : "var(--c-ink-3)", ring: on ? "none" : iconRing, op: off ? .35 : 1, go: e => { stop(e); if (!off) go(e); } });
+    const zoomMenu = e => this.openMenu(e, [this.mi("Einpassen", () => this.fit(), {})].concat([2, 4, 8, 12].map(z => this.mi(z * 100 + " %", () => this.zoomTo(z)))), 200);
+    const flt = ph.filter === "Schwarzweiß" ? "grayscale(1)" : ph.filter === "abgedunkelt" ? "brightness(.62)" : "none";
+    const B = { ctx, palL: s.palPos ? s.palPos.x + "px" : "12px", palT: s.palPos ? s.palPos.y + "px" : "96px", palDown: e => this.palDown(e), palDock: () => this.palDock(), name: ph.name, n: ph.items.length, wideTools: W >= 520, zoomLabel: Math.round(s.view.z * 100) + " %", zoomGo: zoomMenu, cursor,
+      zooms: ["Skizze", "Render"].map(z => ({ t: z, state: s.mode === z ? "selected" : "rest", bg: s.mode === z ? "var(--c-inv)" : "transparent", fg: s.mode === z ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { stop(e); this.setState({ mode: z, draft: null }); } })),
+      tools: [tbt("Rückgängig", P.undo, false, () => this.undo(), !s.hist.length), tbt("Wiederholen", this.XP.redo, false, () => this.redo(), !s.fut.length), tbt(rM.max === 1 ? "Zurück" : "Arbeitsfläche groß", rM.max === 1 ? P.shrink : P.expand, false, () => this.setMem({ max: rM.max === 1 ? -1 : 1 }))],
+      palette: [tb("select"), tb("hand"), psep, tb("pen"), tb("poly"), tb("rect"), tb("fill"), tb("erase"), psep, tb("img"), tb("note"), psep, tb("grid")], fly: { on: false, x: 0, y: 0, cats: [], tiles: [] },
+      deskDown: e => this.deskDown(e), deskDbl: e => { if (tool === "poly" && s.draft) this.commitDraft(); else if (tool === "select" || tool === "hand") this.fit(); },
+      deskCtx: e => { e.preventDefault(); this.openMenuAt(e.clientX, e.clientY, [this.mi("Einpassen", () => this.fit(), {}), this.mi("Rückgängig", () => this.undo())], 200); },
+      world: { w: sg.SW, h: sg.SH, tf: "translate(" + f(V.ox) + "px," + f(V.oy) + "px) scale(" + V.S + ")" }, blatt: false, photo: { l: sg.px, t: sg.py, w: sg.pw, h: sg.ph, flt: renderView ? "none" : flt, bg: renderView ? "linear-gradient(160deg,#d9d4ca,#b8b1a4)" : "linear-gradient(to bottom," + tone[0] + " 0 72%," + tone[1] + " 72% 100%)", ring: "0 0 0 1px var(--c-sheet-line)" }, tb: { proj: "", foto: "", scale: "", fmt: "", by: "" },
+      W, H, paths, imgs, pins, labels, rays, hz, dr, selBox, status, statusFg: renderView || sub.ready ? "var(--c-sheet-ink-3)" : "var(--c-signal)" };
+
+    // Bahn links
+    const byProj = {}; s.photos.forEach(p => { (byProj[p.proj] = byProj[p.proj] || []).push(p); });
+    const lrows = []; Object.keys(byProj).forEach(pk => { lrows.push(this.lhead(this.PROJ[pk] || "Ohne Projekt")); byProj[pk].forEach(p => lrows.push(this.lrow(s.pid === p.id, p.name, this.ic("pen"), { hasN: true, n: String(p.vers.length), tip: p.name + " · " + p.vers.length + " Renderfassungen", go: () => this.pickPhoto(p.id) }))); });
+    const L = { title: "Atelier", insertLabel: "Neue Skizze", detail: this.PROJ[ph.proj] || "", hLine: s.lScroll ? "var(--c-line)" : "transparent", onScroll: e => { const sc = e.currentTarget.scrollTop > 0; if (sc !== !!s.lScroll) this.setState({ lScroll: sc }); }, rows: lrows,
+      insertGo: e => { stop(e); this.openMenu(e, [{ head: true, label: "Foto holen aus" }, this.mi("Hub · Mediathek", () => this.addPhoto("Hub")), this.mi("Projektordner (Drive)", () => this.addPhoto("Drive")), this.mi("Datei wählen …", () => this.addPhoto("Datei")), this.mi("iPhone-Kamera", () => this.addPhoto("Kamera"))], 260); },
+      buttons: openCount > 1 ? [{ label: "Atelier falten", d: P.minus, go: e => { stop(e); this.setMem({ Lf: true, max: -1 }); } }] : [] };
+    const LY = { n: ph.layers.length, addGo: e => { stop(e); this.openMenu(e, [{ head: true, label: "Neue Ebene" }].concat(["neu", "bestand", "entfernen", "notiz"].map(a => this.mi(this.LAB[a], () => this.addLayer(a), { meta: a === "notiz" ? "nicht im Export" : "" })), [{ sep: true }, { head: true, label: "Bild einsetzen" }, this.mi("Materialbild", () => this.setState({ tool: "img", isrc: "Material" })), this.mi("Gerät", () => this.setState({ tool: "img", isrc: "Gerät" })), this.mi("Stil-Anker", () => this.setState({ tool: "img", isrc: "Stil-Anker" })), this.mi("Eigenes Bild", () => this.setState({ tool: "img", isrc: "Eigenes Bild" }))]), 260); },
+      rows: ph.layers.map((l, i) => { const on = l.id === ph.layer, c = ph.items.filter(x => x.layer === l.id).length;
+        return { name: l.name + (l.op != null && l.op < 100 ? " · " + l.op + " %" : ""), n: c, state: on ? "selected" : "rest", bg: on ? "var(--c-ink)" : "transparent", fg: on ? "var(--c-lane)" : "var(--c-ink)", ring: on ? "inset 0 0 0 1px var(--c-on-inv-line)" : iconRing, col: this.LCOL[l.art], op: l.vis ? 1 : .5, ic: on ? "var(--c-on-inv-2)" : "var(--c-ink-3)", nFg: on ? "var(--c-on-inv-2)" : "var(--c-ink-3)",
+          eyeD: l.vis ? this.XP.eye : this.XP.eyeoff, lockD: l.lock ? P.lock : this.XP.unlock, eyeT: l.vis ? "Ausblenden" : "Einblenden", lockT: l.lock ? "Entsperren" : "Sperren", tip: l.name + (l.art === "notiz" ? " · nicht im Export" : "") + " · Taste " + (i + 1),
+          go: () => this.setLayer(l.id), eye: e => { stop(e); this.layerPatch(l.id, { vis: !l.vis }); }, lock: e => { stop(e); this.layerPatch(l.id, { lock: !l.lock }); }, ctx: e => this.layerMenu(e, l), ren: e => { stop(e); this.renameLayer(l); } }; }) };
+
+    // Bahn rechts
+    const pl = (label, cur, set) => this.row(label, { pill: lay(cur).name.split(" ·")[0], pillGo: layMenu(cur, set) });
+    const objRows = [];
+    if (!selIt) {
+      objRows.push({ isHead: true, text: "Foto" }, this.row("Filter", { seg: this.segOf([["keiner"], ["Schwarzweiß", "Schwarzweiß"], ["abgedunkelt"]], ph.filter, v => this.patchPh({ filter: v }, true)) }), this.row("Perspektivraster", { seg: this.segOf([["aus"], ["1"], ["2"], ["3"]], ph.grid, v => this.patchPh({ grid: v }, true)) }),
+        { isHead: true, text: "Ebenen" }, { isNote: true, isRow: false, isHead: false, text: "Bestand, Neu, Entfernen und Notiz sind feste Arten. Notizen werden nicht exportiert. Nichts gewählt: Klick auf ein Objekt zeigt seine Werte hier." });
+    } else if (selIt.k === "stroke") {
+      objRows.push({ isHead: true, text: { free: "Freihand", rect: "Rechteck", poly: selIt.closed ? "Fläche" : "Polylinie" }[selIt.kind] }, pl("Ebene", selIt.layer, id => this.updIt(selIt.id, { layer: id })),
+        this.row("Strichfarbe", { pill: this.colName(selIt.col), pillGo: e => this.openMenu(e, [["black"], ["white"]].concat(this.SLOT).map(q => this.mi(this.colName(q[0]), () => this.updIt(selIt.id, { col: q[0] }), { check: q[0] === selIt.col })), 200) }),
+        this.row("Stärke", { seg: this.segOf([["dünn"], ["mittel"], ["dick"]], selIt.wd, v => this.updIt(selIt.id, { wd: v })) }), this.row("Deckkraft", { seg: this.segOf([["100 %"], ["60 %"], ["30 %"]], selIt.op + " %", v => this.updIt(selIt.id, { op: parseInt(v, 10) })) }));
+      if (selIt.closed) objRows.push(this.row("Füllung", { pill: selIt.fill ? this.colName(selIt.fill) : "ohne", pillGo: e => this.openMenu(e, this.SLOT.map(q => this.mi(q[1], () => this.updIt(selIt.id, { fill: q[0] }), { check: q[0] === selIt.fill })).concat([{ sep: true }, this.mi("ohne", () => this.updIt(selIt.id, { fill: null }), { check: !selIt.fill })]), 200) }));
+      objRows.push(this.row("Punkte", { val: String(selIt.pts.length), line: false }));
+    } else if (selIt.k === "img") {
+      objRows.push({ isHead: true, text: "Bild" }, this.row("Quelle", { pill: selIt.src, pillGo: e => this.openMenu(e, [["Material"], ["Gerät"], ["Stil-Anker"], ["Eigenes Bild"]].map(q => this.mi(q[0], () => this.updIt(selIt.id, { src: q[0], lab: q[0] }), { check: selIt.src === q[0] })), 200) }), pl("Ebene", selIt.layer, id => this.updIt(selIt.id, { layer: id })),
+        this.numRow("Breite % des Fotos", selIt.w * 100, n => this.updIt(selIt.id, { w: Math.max(2, Math.min(100, n)) / 100 }, true)), this.numRow("Drehung °", selIt.rot, n => this.updIt(selIt.id, { rot: n % 360 }, true)),
+        this.row("Deckkraft", { seg: this.segOf([["100 %"], ["60 %"], ["30 %"]], Math.round(selIt.op * 100) + " %", v => this.updIt(selIt.id, { op: parseInt(v, 10) / 100 })) }),
+        this.row("Spiegeln", this.toggleOf(selIt.flip, () => this.updIt(selIt.id, { flip: !selIt.flip }))), this.row("Sperren", this.toggleOf(selIt.lock, () => this.updIt(selIt.id, { lock: !selIt.lock }))),
+        this.row("Reihenfolge", { line: false, btns: [this.tbtn("Vor", () => this.order(selIt.id, 1)), this.tbtn("Zurück", () => this.order(selIt.id, -1))] }));
+    } else {
+      const q = this.inp("nt:" + selIt.id, selIt.lab || "", t => this.updIt(selIt.id, { lab: t }, true));
+      objRows.push({ isHead: true, text: "Notiz" }, this.row("Text", Object.assign({ hasInput: true, mode: "text", inW: "160px", line: false }, { val: q.val, onIn: q.onIn, onBlur: q.onBlur })), { isNote: true, isRow: false, isHead: false, text: "Notizen liegen auf der Notiz-Ebene und gehen nicht in Substrat oder Prompt." });
+    }
+    const slotRows = [{ isHead: true, text: "Substrat" }, this.row("Status", { val: sub.ready ? "bereit" : "unvollständig", fg: sub.ready ? "var(--c-ink)" : "var(--c-signal)", hasSub: true, sub: sub.ready ? "Füllung vorhanden, alle genutzten Slots belegt" : !sub.vol ? "Noch keine gefüllte Form" : sub.miss.map(id => this.colName(id)).join(", ") + " ohne Material", line: false }), { isHead: true, text: "Material-Slots" }];
+    ph.slots.forEach((sl, i) => { const cnt = sub.u[sl.id] || 0, missing = cnt > 0 && !sl.mat, c = this.SLOT[i];
+      slotRows.push(this.row("Slot " + "ABCDEF"[i] + " · " + c[1], { hasMark: true, mD: "M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z", mBg: c[2], mFg: c[2], mRing: "inset 0 0 0 1px rgba(0,0,0,.12)", hasSub: true, sub: (sl.mat ? sl.mat.n + " · " + sl.mat.src : "nicht belegt") + (cnt ? " · " + cnt + " Formen" : ""), fg: missing ? "var(--c-signal)" : "var(--c-ink)", line: i < 5,
+        pill: sl.mat ? "Ändern" : "Zuweisen", pillGo: e => this.openMenu(e, [{ head: true, label: "Aus Katalog" }].concat(this.MATS.map(m => this.mi(m[0], () => this.patchPh({ slots: ph.slots.map(x => x.id === sl.id ? { id: x.id, mat: { n: m[0], src: m[1] } } : x) }, true), { check: sl.mat && sl.mat.n === m[0], meta: m[1] })), [this.mi("Eigenes Bild …", () => this.toastIt("Bild wählen · Entwurf"), { meta: "eigenes Bild" })], sl.mat ? [{ sep: true }, this.mi("Zuweisung lösen", () => this.patchPh({ slots: ph.slots.map(x => x.id === sl.id ? { id: x.id, mat: null } : x) }, true), { danger: true })] : []), 260) })); });
+    const pr = this.promptOf(ph), engOk = s.photos && this.ENG[ph.engine];
+    const rezRows = [{ isHead: true, text: "Ablauf" }].concat([["Skizze", ph.items.filter(x => x.k === "stroke").length + " Formen", ph.items.some(x => x.k === "stroke")], ["Prompt", "kompiliert", true], ["Rezept", this.ENG[ph.engine][0] + " · " + ph.stil, true], ["Substrat", sub.ready ? "bereit" : "unvollständig", sub.ready], ["Auftrag", ph.job ? "offen seit " + ph.job.t : "nicht gesendet", !!ph.job]].map((q, i, a) => this.row(q[0], { hasMark: true, mD: q[2] ? P.check : "M4 8h8", mBg: q[2] ? "var(--c-ink)" : "transparent", mFg: q[2] ? "var(--c-lane)" : "var(--c-ink-3)", mRing: q[2] ? "none" : iconRing, hasSub: true, sub: q[1], fg: q[0] === "Substrat" && !q[2] ? "var(--c-signal)" : "var(--c-ink)", line: i < a.length - 1 })))
+      .concat([{ isHead: true, text: "Rezept" }, this.row("Stil", { pill: ph.stil, pillGo: e => this.openMenu(e, this.STILE.map(q => this.mi(q[0], () => this.patchPh({ stil: q[0] }, true), { check: q[0] === ph.stil })), 260) }),
+        this.row("Engine", { pill: this.ENG[ph.engine][0], pillGo: e => this.openMenu(e, this.ENG.map((q, i) => this.mi(q[0], () => { if (i) this.toastIt(q[0] + " ist nicht angebunden · Altcode: nur Firefly manuell"); else this.patchPh({ engine: 0 }, true); }, { check: i === ph.engine, meta: q[1] })), 260), line: false }),
+        { isHead: true, text: "Prompt" }]).concat(pr.map(q => ({ isNote: true, isRow: false, isHead: false, text: q[0] + ": " + q[1] })));
+    const verRows = []; const st = ph.job; if (st) verRows.push({ isHead: true, text: "Offener Auftrag" }, this.row(st.engine, { hasSub: true, sub: "Ergebnis aus Firefly hier ablegen", btns: [this.tbtn("Ergebnis ablegen", () => { const n = ph.vers.length + 1; this.pushHist(); this.live(p => Object.assign({}, p, { job: null, vers: p.vers.concat([{ n, status: "Entwurf", parent: shown ? shown.n : null, engine: "Firefly", stil: p.stil, t: "Gerade eben" }]) })); this.setState({ showV: n, mode: "Render" }); this.toastIt("Version v" + n + " angelegt · Bild folgt"); }), this.tbtn("Verwerfen", () => this.patchPh({ job: null }, true))], line: false }));
+    verRows.push({ isHead: true, text: "Fassungen" }); if (!vers.length) verRows.push({ isNote: true, isRow: false, isHead: false, text: "Noch keine Version. Substrat bereitmachen, in «Rezept» den Auftrag senden." });
+    vers.slice().reverse().forEach((v, i, a) => verRows.push(this.row("v" + v.n, { hasSub: true, sub: v.engine + " · " + v.stil + (v.parent ? " · aus v" + v.parent : "") + " · " + v.t, w: shown && shown.n === v.n ? 500 : 400, cur: "pointer", hbg: "var(--c-hover)", bg: shown && shown.n === v.n ? "var(--c-hover)" : "transparent", go: () => this.setState({ showV: v.n, mode: "Render" }), line: i < a.length - 1,
+      pill: v.status, pillGo: e => this.openMenu(e, this.STAT.map(x => this.mi(x, () => { this.pushHist(); this.live(p => Object.assign({}, p, { vers: p.vers.map(y => y.n === v.n ? Object.assign({}, y, { status: x }) : (x === "Master" && y.status === "Master" ? Object.assign({}, y, { status: "Freigegeben" }) : y)) })); }, { check: v.status === x })), 200) })));
+    const SH = g.lh - 44, defs = { objekt: ["Objekt", this.XP.select], slots: ["Slots", P.layers], rezept: ["Rezept", P.play], versionen: ["Versionen", P.render] }, cw = w[2] - 16;
+    const copyPrompt = () => { const t = pr.map(q => q[0] + ": " + q[1]).join("\n"); try { navigator.clipboard.writeText(t); } catch (x) {} this.toastIt("Prompt kopiert"); };
+    const send = () => { copyPrompt(); this.pushHist(); this.live(p => Object.assign({}, p, { job: { engine: this.ENG[p.engine][0], t: "gerade eben" } })); this.setState({ front: "versionen" }); this.toastIt("Auftrag offen · Prompt kopiert, in Firefly öffnen"); };
+    const foots = { objekt: selIt ? { l: [this.btn("Duplizieren", P.copy, () => this.dup(selIt.id), null, { label: cw >= 300 })], r: [this.btn("Löschen", P.trash, () => this.delSel(), "signal", { label: cw >= 240 })] } : undefined,
+      rezept: { l: [this.btn("Prompt kopieren", P.copy, copyPrompt, null, { label: cw >= 300 })], r: [this.btn(ph.job ? "Auftrag offen" : "Auftrag senden", P.play, send, "accent", { label: cw >= 240, off: !sub.ready || !!ph.job, tip: sub.ready ? "Auftrag senden" : "Substrat unvollständig" })] } };
+    const cards = this.stackCards(defs, ["objekt", "slots", "rezept", "versionen"], s.front, { objekt: objRows, slots: slotRows, rezept: rezRows, versionen: verRows }, {}, foots, SH);
+    const outMenu = e => this.openMenu(e, [{ head: true, label: "Ausgeben" }, this.mi("Substrat als PNG", () => this.toastIt("Substrat ohne Notizen gesichert · Entwurf")), this.mi("Skizze als PDF", () => this.toastIt("PDF gesichert · Entwurf")), this.mi("Ins Moodboard legen", () => this.toastIt("Ans Moodboard gegeben · Entwurf")), this.mi("In Projektordner sichern", () => this.toastIt("Im Projektordner gesichert · Entwurf"))], 260);
+    const keys = e => this.openMenu(e, [{ head: true, label: "Werkzeuge" }].concat(this.TOOLS.map(t => this.mi(t[1], () => this.setTool(t[0]), { meta: t[2], check: tool === t[0] })), [{ sep: true }, { head: true, label: "Maus und Tasten" }, this.mi("Verschieben", () => {}, { meta: "Leertaste + Ziehen" }), this.mi("Zoomen", () => {}, { meta: "⌘ + Rad · Pinch" }), this.mi("Einpassen", () => this.fit(), { meta: "Doppelklick · ⌘0" }), this.mi("Polylinie beenden", () => {}, { meta: "Doppelklick · Enter" }), this.mi("45°-Raster", () => {}, { meta: "⇧" }), this.mi("Duplizieren beim Ziehen", () => {}, { meta: "⌥" }), this.mi("Menü", () => {}, { meta: "Rechtsklick" }), this.mi("Ebene wählen", () => {}, { meta: "1 – 4" }), this.mi("Rückgängig", () => this.undo(), { meta: "⌘Z" })]), 300);
+    const HB = { state: s.sel ? "opening" : "rest", hint: "", main: [this.btn(ph.job ? "Auftrag offen" : "Kein Auftrag", P.play, () => this.setState({ front: ph.job ? "versionen" : "rezept" }), null, { label: cw >= 240 })],
+      end: [this.btn("Ausgabe", P.export, outMenu, null, { label: cw >= 300 }), this.btn("Kurzbefehle", this.XP.help, keys)].concat(openCount > 1 ? [{ isSep: true, isBtn: false }, this.btn("Spalte falten", P.minus, () => this.setMem({ Rf: true, max: -1 }))] : []).concat([this.btn(rM.max === 2 ? "Zurück" : "Stapel groß", rM.max === 2 ? P.shrink : P.expand, () => this.setMem({ max: rM.max === 2 ? -1 : 2 }))]) };
+    const marks = [s.photos.map(p => this.mk(s.pid === p.id, { d: this.ic("pen"), label: p.name, go: e => { stop(e); this.pickPhoto(p.id); } })),
+      ["select", "hand", "pen", "poly", "rect", "fill"].map(t => { const q = this.TOOLS.find(x => x[0] === t); return this.mk(tool === t, { d: this.ic(q[3]), label: q[1], go: e => { stop(e); this.setTool(t); } }); }),
+      ["objekt", "slots", "rezept", "versionen"].map(k => this.mk(s.front === k, { d: defs[k][1], label: defs[k][0], go: e => { stop(e); this.setState({ front: k }); } }))];
+    const lanes = this.lanesOf(w, rM, ["Atelier", ph.name, "Render-Pipeline"], marks);
+    return this.finish({ w, rM, lanes, syncTitle: "Kataloge neu lesen", assist: "Frag nach Material, Stil oder was für " + ph.name + " noch fehlt.", x: { L, LY, B, S: { cards }, HB, palRef: this.palRef } });
+  }
+}
+</script>
+</body>
+</html>

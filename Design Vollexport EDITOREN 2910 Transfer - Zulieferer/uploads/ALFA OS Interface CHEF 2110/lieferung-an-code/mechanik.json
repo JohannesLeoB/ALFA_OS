@@ -1,0 +1,82 @@
+{
+ "export": "2026-10-18",
+ "stand": "18.10.2026, aus dem Code der Bögen zusammengestellt; Werte nur als Token-Verweis, Maße siehe TOKENBOGEN.json; nicht im Render gemessen (Prüf-Fenster ohne Frames)",
+ "nomenklatur": "Zustandsnamen englisch (data-state); Auslöser = Eingabe des Nutzers",
+ "blob": {
+  "states": {
+   "rest": "56 × 40, Augen halb zu, size.blobWidth/blobHeight",
+   "awake": "Maus näher als size.blobWakeDistance 212: Augen offen, Breite size.blobAwakeWidth 124, passt der Name nicht Schritt auf size.laneRestWidth 280",
+   "menu": "Klick: Bereichsliste, Suche, Zeilen rollen aus (motion.duration.rowSequence, menuReelTilt 60°)",
+   "assistant": "Doppelklick: Mini-Chat, Orb im Blob (assistantFace Orb), Name „Assistent“ im Kopf",
+   "docked": "am Rand angedockt size.blobDockDistance 36, wächst beim Überfahren um 4",
+   "dragging": "Ziehen ab size.blobDragThreshold 3; Loslassen: Auslauf motion.deceleration 0,998, Rückkehr zum Platz wenn näher als size.blobHomeRadius 200",
+   "eyesFollow": "Augen folgen der Maus bis size.blobEyeFollowDistance 200, Versatz bis 2 × 1,6 (freigegeben, Blob bleibt fest: Johannes 18.10. „eher 1“)"
+  },
+  "layer": "layer.blob 6, über Menü 5 und Toast 4; nur layer.safeArea 7 darüber",
+  "triggers": {
+   "click": "Menü auf/zu",
+   "doubleClick": "Assistent",
+   "pointerNear": "wach",
+   "drag": "bewegen und andocken"
+  }
+ },
+ "lanes": {
+  "count": 3,
+  "rest": "links 280, rechts 280, Mitte flexibel (Minimum 280)",
+  "states": {
+   "open": "Breite aus alfa-shell.js layout()",
+   "folded": "size.foldedWidth 56, nur Streifen mit Symbolen (lane-strip)",
+   "maximized": "eine Bahn avail − 2 × 56, andere 56",
+   "collapsing": "unter size.foldThreshold 112 nur Streifen"
+  },
+  "accordion": "alfa-shell.js grow(): Reihenfolge Mail yield [0,1,2]; Hysterese laneHysteresis 64; Einrasten auf Gegenbahn laneSnap 12",
+  "handle": "Haarlinie size.hairline, aktiv 2 × size.handleLengthActive 96, Trefferfläche 12, Doppelklick setzt zurück",
+  "foldedInteraction": {
+   "emptyAreaClick": "faltet im zuletzt gesehenen Zustand auf",
+   "doubleClick": "Ruhemaß (D0), ist sonst keine Bahn offen, faltet die Mitte flexibel mit auf",
+   "iconInL": "wählt Postfach/Gruppe, faltet die Mitte auf",
+   "iconInM": "öffnet genau diesen Eintrag, faltet R auf",
+   "iconInR": "Karte nach vorn, faltet R auf"
+  },
+  "source": "Johannes 18.10. zu 7B"
+ },
+ "scroll": {
+  "headerLine": "scroll-line: nur beim Scrollen sichtbar; motion.duration.scrollLineIn 320, scrollLineRest 420, scrollLineOut 900",
+  "tiles": "scroll-snap y mandatory auf jede Kachelreihe, scroll-padding-top 8; Kopf zeigt Gruppentitel; letzte Gruppe min-height 100cqh + 32"
+ },
+ "stack": {
+  "states": {
+   "stacked": "Karten gestaffelt, Kopf 44, hintere 8",
+   "fanned": "Übersicht gefächert als Raster (card-overview)",
+   "front": "oberste Karte voll"
+  },
+  "motion": "motion.duration.stack 520, stackLift 420, Kurve motion.easing.stack",
+  "cards": "stackMaxCards 6"
+ },
+ "menu": {
+  "anchored": "Breite = längster Eintrag, 168/224/280 (56er-Raster), Ausrichtung: Anker in linker Hälfte der Bahn → linke Kante am Anker, sonst rechte; nie näher als 16 am Fensterrand; unten kein Platz → über dem Anker",
+  "blobMenuHover": "Zeile wechselt nach 160 ms Stillstand (motion.duration.menuHoverDelay); „Diagonale Toleranz“ beantwortet 18.10., NICHT gebaut"
+ },
+ "toast": {
+  "position": "8 über dem Kartenfuß (Mail: bottom 52; Einstellungen: Bahnende − 44 − 8 − 28)",
+  "duration": "1800 ms, mit Rückgängig 4000 (toastUndo)",
+  "layer": "layer.toast 4"
+ },
+ "confirm": {
+  "hold": "1000 ms radiert den Knopf von links, Zittern ab 70 %, Loslassen 180 ms",
+  "tooltip": "System-title „Halten zum …“",
+  "status": "approved-provisional"
+ },
+ "tile": {
+  "rest": "Tonfläche, keine Kante",
+  "hover": "1 px Hub, Schatten shadow.light.overviewHover, 160 ms",
+  "press": "scale.pressTile 0,98",
+  "selected": "Tinte invertiert"
+ },
+ "reducedMotion": "alfa-theme.css: Dauer 1 ms bei prefers-reduced-motion; Überblendung statt Bewegung für Feder-Tokens mit crossfade (motion-springs.json)",
+ "notBuilt": [
+  "Menü „Diagonale Toleranz“",
+  "Assistent als voller Ansichtsbereich",
+  "Sperre je Ansicht (Johannes 17.10. entscheidet später)"
+ ]
+}

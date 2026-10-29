@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+html,body{margin:0;padding:0}a{color:inherit}a:hover{color:inherit;opacity:.8}
+button:focus{outline:none}button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--c-focus);outline-offset:2px}
+input::placeholder,textarea::placeholder{color:inherit;opacity:.45}
+</style>
+</helmet>
+<sc-if value="{{ inner }}" hint-placeholder-val="{{ true }}">
+<div data-teil="area-page" data-licht="{{ licht }}" data-grund="{{ grund }}" data-screen-label="Einstellungen {{ fW }}" style="position:relative;width:{{ W }};height:{{ H }};overflow:hidden;background:var(--c-ground);color:var(--c-ink);font-family:'Geist',-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;font-size:13px;line-height:1.35;-webkit-font-smoothing:antialiased">
+<sc-if value="{{ hasSafe }}" hint-placeholder-val="{{ true }}"><div data-teil="safe-area" style="position:absolute;left:0;top:0;right:0;height:32px;background:var(--c-safe)"></div></sc-if>
+
+<div data-teil="lanes" style="position:absolute;left:16px;right:16px;top:{{ laneTop }};bottom:16px;display:flex">
+
+<section data-teil="lane" data-state="{{ navState }}" aria-label="Einstellungen" style="flex:none;width:{{ navW }};border-radius:20px;background:var(--c-lane);box-shadow:var(--sh-lane);overflow:hidden;display:flex;flex-direction:column">
+<sc-if value="{{ navOpen }}" hint-placeholder-val="{{ true }}">
+<header data-teil="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;border-bottom:1px solid transparent;box-sizing:border-box">
+<span style="flex:1;min-width:0;font-weight:500;white-space:nowrap">Einstellungen</span>
+<sc-for list="{{ laneBtns }}" as="x" hint-placeholder-count="2"><button data-teil="symbol-button" title="{{ x.label }}" aria-label="{{ x.label }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;gap:8px;background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:inset 0 0 0 1px var(--c-line-strong)" style-hover="background:var(--c-hover);color:var(--c-ink)" style-active="transform:scale(.96)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</header>
+<div data-teil="lane-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;padding:8px;display:flex;flex-direction:column">
+<sc-for list="{{ nav }}" as="r" hint-placeholder-count="8">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div data-teil="list-section-header" style="flex:none;height:32px;display:flex;align-items:flex-end;padding:0 8px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ r.name }}</div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}"><div data-teil="list-row" data-state="{{ r.state }}" onClick="{{ r.go }}" style="flex:none;height:36px;display:flex;align-items:center;gap:20px;padding:0 8px;border-radius:12px;cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};transition:background 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)">
+<span data-teil="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ r.symFg }};box-shadow:{{ r.ring }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.d }}"></path></svg></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.w }}">{{ r.name }}</span>
+<sc-if value="{{ r.hasAlert }}" hint-placeholder-val="{{ false }}"><span title="{{ r.alertTip }}" style="flex:none;width:6px;height:6px;border-radius:50%;background:var(--c-signal)"></span></sc-if>
+<sc-if value="{{ r.hasN }}" hint-placeholder-val="{{ false }}"><span data-teil="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:{{ r.nFg }}">{{ r.n }}</span></sc-if>
+</div></sc-if>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ navFolded }}" hint-placeholder-val="{{ false }}">
+<div data-teil="lane-strip" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0;overflow-x:hidden;overflow-y:auto;scrollbar-width:none">
+<sc-for list="{{ nav }}" as="r" hint-placeholder-count="8">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><i style="flex:none;width:16px;height:1px;margin:4px 0;background:var(--c-line)"></i></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}"><button data-teil="symbol-button" data-state="{{ r.state }}" title="{{ r.name }}" aria-label="{{ r.name }}" onClick="{{ r.go }}" style="appearance:none;border:0;padding:0;font:inherit;position:relative;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;gap:8px;background:{{ r.bg }};color:{{ r.stripFg }};box-shadow:{{ r.ring }};cursor:pointer" style-active="transform:scale(.96)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.d }}"></path></svg><sc-if value="{{ r.hasAlert }}" hint-placeholder-val="{{ false }}"><i style="position:absolute;right:-1px;top:-1px;width:6px;height:6px;border-radius:50%;background:var(--c-signal);box-shadow:0 0 0 2px var(--c-lane)"></i></sc-if></button></sc-if>
+</sc-for>
+</div>
+</sc-if>
+</section>
+
+<div data-teil="gap" aria-hidden="true" style="flex:none;width:12px;display:grid;place-items:center"><i style="display:block;width:1px;height:64px;border-radius:2px;background:var(--c-ink-3);opacity:{{ hOp }}"></i></div>
+
+<section data-teil="lane" aria-label="{{ secName }}" style="flex:1;min-width:0;border-radius:20px;background:var(--c-lane);box-shadow:var(--sh-lane);overflow:hidden;display:flex;flex-direction:column">
+<header data-teil="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;border-bottom:1px solid transparent;box-sizing:border-box">
+<span style="flex:none;font-weight:500;white-space:nowrap">{{ secName }}</span>
+<span data-teil="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;color:var(--c-ink-3);font-variant-numeric:tabular-nums">{{ count }}</span><sc-if value="{{ hasBad }}" hint-placeholder-val="{{ false }}"><span data-teil="counter" data-state="attention" title="{{ badTip }}" style="flex:none;display:flex;align-items:center;gap:4px;font-size:11.5px;line-height:1;color:var(--c-signal);font-variant-numeric:tabular-nums"><i style="flex:none;width:6px;height:6px;border-radius:50%;background:var(--c-signal)"></i><span>{{ badN }}</span></span></sc-if><span style="flex:1;min-width:0"></span>
+<sc-for list="{{ laneBtns }}" as="x" hint-placeholder-count="2"><button data-teil="symbol-button" title="{{ x.label }}" aria-label="{{ x.label }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;gap:8px;background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:inset 0 0 0 1px var(--c-line-strong)" style-hover="background:var(--c-hover);color:var(--c-ink)" style-active="transform:scale(.96)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</header>
+<div data-teil="lane-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;padding:8px 8px 16px;display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="1">
+<div data-teil="tile-group" style="display:flex;flex-direction:column;gap:4px">
+<sc-if value="{{ g.hasHead }}" hint-placeholder-val="{{ false }}"><div data-teil="list-section-header" style="height:32px;display:flex;align-items:flex-end;gap:8px;padding:0 8px 4px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)"><span>{{ g.name }}</span><span style="font-variant-numeric:tabular-nums">{{ g.n }}</span></div></sc-if>
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div data-teil="tile-grid" data-state="homescreen" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(104px,100%),1fr));gap:4px">
+<sc-for list="{{ g.items }}" as="x" hint-placeholder-count="6"><button data-teil="tile" data-state="{{ x.state }}" title="{{ x.name }}" onClick="{{ x.go }}" style="appearance:none;border:0;font:inherit;color:inherit;background:transparent;min-width:0;padding:16px 8px 12px;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;box-shadow:{{ x.tRing }};transition:box-shadow 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)" style-active="transform:scale(.98)">
+<span data-teil="tile-icon" style="position:relative;flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:{{ x.iBg }};color:{{ x.iFg }};box-shadow:{{ x.iRing }};transition:box-shadow 160ms,background 160ms">
+<sc-if value="{{ x.hasGlyph }}" hint-placeholder-val="{{ true }}"><svg width="22" height="22" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></sc-if>
+<sc-if value="{{ x.hasMono }}" hint-placeholder-val="{{ false }}"><span style="font-size:18px;line-height:1;font-weight:500;letter-spacing:-.02em">{{ x.mono }}</span></sc-if>
+<sc-if value="{{ x.hasBadge }}" hint-placeholder-val="{{ false }}"><span data-teil="status-badge" data-state="{{ x.state }}" title="{{ x.status }}" style="position:absolute;right:-4px;top:-4px;width:20px;height:20px;box-sizing:border-box;border-radius:50%;display:grid;place-items:center;background:{{ x.bBg }};color:{{ x.bFg }};box-shadow:0 0 0 2px var(--c-lane),inset 0 0 0 1px {{ x.bRing }}"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.bD }}"></path></svg></span></sc-if>
+</span>
+<span style="max-width:100%;display:flex;flex-direction:column;align-items:center;gap:2px"><span style="max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ x.w }}">{{ x.name }}</span><span style="max-width:100%;font-size:11.5px;line-height:16px;color:{{ x.subFg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ x.sub }}</span></span>
+</button></sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ isCards }}" hint-placeholder-val="{{ false }}">
+<div data-teil="tile-grid" data-state="cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(272px,100%),1fr));gap:8px">
+<sc-for list="{{ g.items }}" as="x" hint-placeholder-count="4"><button data-teil="tile" data-state="{{ x.state }}" onClick="{{ x.go }}" style="appearance:none;border:0;font:inherit;text-align:left;min-width:0;padding:12px;border-radius:12px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;background:{{ x.cBg }};color:{{ x.cFg }};box-shadow:inset 0 0 0 1px {{ x.cRing }};transition:background 160ms,box-shadow 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)" style-active="transform:scale(.99)">
+<span data-teil="tile-icon" style="flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:{{ x.ciBg }};color:{{ x.ciFg }};box-shadow:inset 0 0 0 1px {{ x.ciRing }}">
+<sc-if value="{{ x.hasGlyph }}" hint-placeholder-val="{{ true }}"><svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></sc-if>
+<sc-if value="{{ x.hasMono }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;line-height:1;font-weight:500;letter-spacing:.005em">{{ x.mono }}</span></sc-if>
+</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;padding-top:2px">
+<span style="display:flex;align-items:center;gap:8px;min-width:0"><span style="min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ x.name }}</span><sc-if value="{{ x.lock }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none;opacity:.6"><path d="{{ ic.lock }}"></path></svg></sc-if></span>
+<span style="color:{{ x.c2 }};display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-wrap:pretty">{{ x.desc }}</span>
+<span style="font-size:11.5px;line-height:16px;color:{{ x.cSub }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ x.sub }}</span>
+</span>
+<sc-if value="{{ x.hasBadge }}" hint-placeholder-val="{{ false }}"><span data-teil="status-badge" data-state="{{ x.state }}" title="{{ x.status }}" style="flex:none;width:24px;height:24px;box-sizing:border-box;border-radius:50%;display:grid;place-items:center;background:{{ x.cbBg }};color:{{ x.cbFg }};box-shadow:inset 0 0 0 1px {{ x.cbRing }}"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.bD }}"></path></svg></span></sc-if>
+</button></sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ isHub }}" hint-placeholder-val="{{ false }}">
+<div data-teil="tile-grid" data-state="hub" style="display:grid;grid-template-columns:repeat({{ hubCols }},minmax(0,1fr));grid-auto-rows:128px;gap:8px">
+<sc-for list="{{ g.items }}" as="x" hint-placeholder-count="5"><button data-teil="tile" data-state="{{ x.state }}" onClick="{{ x.go }}" style="appearance:none;border:0;font:inherit;text-align:left;min-width:0;grid-column:span {{ x.span }};padding:16px;border-radius:12px;display:flex;flex-direction:column;gap:2px;cursor:pointer;background:{{ x.cBg }};color:{{ x.cFg }};box-shadow:inset 0 0 0 1px {{ x.cRing }};transition:background 160ms,box-shadow 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)" style-active="transform:scale(.99)">
+<span style="display:flex;align-items:center;gap:8px;min-width:0;font-size:11.5px;line-height:16px"><span style="flex:1;min-width:0;color:{{ x.c3 }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ x.tag }}</span><sc-if value="{{ x.hasBadge }}" hint-placeholder-val="{{ true }}"><span data-teil="connection-status" style="flex:none;display:flex;align-items:center;gap:8px;color:{{ x.cSub }}"><i style="flex:none;width:6px;height:6px;border-radius:50%;background:{{ x.dotC }}"></i><span>{{ x.status }}</span></span></sc-if><sc-if value="{{ x.lock }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none;color:{{ x.c3 }}"><path d="{{ ic.lock }}"></path></svg></sc-if></span>
+<span style="flex:1"></span>
+<span style="font-size:13px;line-height:1.35;font-weight:500;letter-spacing:.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ x.name }}</span>
+<span style="color:{{ x.c2 }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ x.desc }}</span>
+</button></sc-for>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</section>
+
+<div data-teil="gap" aria-hidden="true" style="flex:none;width:12px;display:grid;place-items:center"><i style="display:block;width:1px;height:64px;border-radius:2px;background:var(--c-ink-3);opacity:{{ hOp }}"></i></div>
+
+<section data-teil="lane" aria-label="{{ D.name }}" style="flex:none;width:{{ detW }};border-radius:20px;background:var(--c-lane);box-shadow:var(--sh-lane);overflow:hidden;display:flex;flex-direction:column">
+<header data-teil="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:4px;padding:0 8px;border-bottom:1px solid transparent;box-sizing:border-box;min-width:0">
+<span style="flex:1;min-width:0;margin-left:8px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ D.kind }}</span>
+<sc-if value="{{ D.lock }}" hint-placeholder-val="{{ false }}"><span title="Nur Verwaltende ändern das" style="flex:none;width:28px;height:28px;display:grid;place-items:center;color:var(--c-ink-3)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ ic.lock }}"></path></svg></span></sc-if>
+<sc-for list="{{ laneBtns }}" as="x" hint-placeholder-count="2"><button data-teil="symbol-button" title="{{ x.label }}" aria-label="{{ x.label }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;gap:8px;background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:inset 0 0 0 1px var(--c-line-strong)" style-hover="background:var(--c-hover);color:var(--c-ink)" style-active="transform:scale(.96)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</header>
+<div data-teil="lane-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column">
+<div data-teil="detail-hero" style="flex:none;display:flex;flex-direction:column;gap:16px;padding:16px 16px 24px">
+<div style="display:flex;align-items:center;gap:16px;min-width:0">
+<span data-teil="tile-icon" style="flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:{{ D.iBg }};color:{{ D.iFg }};box-shadow:{{ D.iRing }}">
+<sc-if value="{{ D.hasGlyph }}" hint-placeholder-val="{{ true }}"><svg width="22" height="22" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="{{ D.d }}"></path></svg></sc-if>
+<sc-if value="{{ D.hasMono }}" hint-placeholder-val="{{ false }}"><span style="font-size:18px;line-height:1;font-weight:500;letter-spacing:-.02em">{{ D.mono }}</span></sc-if>
+</span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<span style="font-size:18px;line-height:1.25;font-weight:500;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ D.name }}</span>
+<sc-if value="{{ D.hasDesc }}" hint-placeholder-val="{{ true }}"><span style="color:var(--c-ink-2);font-weight:300;text-wrap:pretty">{{ D.desc }}</span></sc-if>
+<sc-if value="{{ D.hasStatus }}" hint-placeholder-val="{{ false }}"><span data-teil="connection-status" data-state="{{ D.state }}" style="display:flex;align-items:center;gap:8px;font-size:11.5px;line-height:16px;color:{{ D.stFg }}"><i style="flex:none;width:6px;height:6px;border-radius:50%;background:{{ D.dot }}"></i><span>{{ D.status }}</span></span></sc-if>
+</div>
+</div>
+<sc-if value="{{ D.hasActs }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{ D.acts }}" as="a" hint-placeholder-count="2"><button data-teil="text-button" data-state="{{ a.state }}" onClick="{{ a.go }}" style="appearance:none;border:0;font:inherit;height:28px;padding:0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;background:{{ a.bg }};color:{{ a.fg }};box-shadow:{{ a.ring }};opacity:{{ a.op }};cursor:{{ a.cur }};white-space:nowrap;margin-left:{{ a.ml }}" style-hover="box-shadow:{{ a.hring }}" style-active="transform:scale(.97)">{{ a.label }}</button></sc-for>
+</div></sc-if>
+</div>
+<sc-if value="{{ D.hasNotice }}" hint-placeholder-val="{{ false }}"><div data-teil="card-notice" data-state="failure" style="flex:none;margin:0 8px 8px;padding:12px 8px;border-radius:8px;background:var(--c-well);display:flex;gap:12px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px;color:var(--c-signal)"><path d="{{ ic.alert }}"></path></svg><span style="display:flex;flex-direction:column;gap:2px"><span style="font-weight:500">{{ D.noticeT }}</span><span style="color:var(--c-ink-3);text-wrap:pretty">{{ D.noticeX }}</span></span></div></sc-if>
+<sc-for list="{{ D.cards }}" as="cd" hint-placeholder-count="2"><div data-teil="settings-card" style="flex:none;margin:0 8px 8px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--c-line);display:flex;flex-direction:column">
+<sc-if value="{{ cd.hasHead }}" hint-placeholder-val="{{ true }}"><div data-teil="list-section-header" style="flex:none;display:flex;align-items:center;gap:8px;padding:12px 8px 4px;font-size:11.5px;line-height:16px;color:var(--c-ink-3)"><span style="flex:1;min-width:0">{{ cd.head }}</span><span style="flex:none">{{ cd.aside }}</span></div></sc-if>
+<sc-for list="{{ cd.rows }}" as="r" hint-placeholder-count="3">
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}"><div data-teil="field-row" data-state="{{ r.rs }}" style="position:relative;flex:none;min-height:44px;display:flex;align-items:center;gap:8px;padding:0 8px">
+<span style="display:{{ r.labD }};flex:none;width:{{ labW }};font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.l }}</span>
+<sc-if value="{{ r.isKv }}" hint-placeholder-val="{{ true }}"><span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums">{{ r.v }}</span></sc-if>
+<sc-if value="{{ r.isSecret }}" hint-placeholder-val="{{ false }}"><span style="flex:1;min-width:0;font-family:'Geist Mono',ui-monospace,Menlo,monospace;font-size:11.5px;letter-spacing:.08em;color:var(--c-ink-2)">••••••••••••</span><button data-teil="text-button" style="appearance:none;border:0;font:inherit;flex:none;height:28px;padding:0 12px;border-radius:999px;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;opacity:{{ r.op }}" style-hover="box-shadow:inset 0 0 0 1px var(--c-ink)">Ändern</button></sc-if>
+<sc-if value="{{ r.isInput }}" hint-placeholder-val="{{ false }}"><input placeholder="{{ r.ph }}" aria-label="{{ r.l }}" spellcheck="false" autocomplete="off" style="flex:1;min-width:0;height:28px;box-sizing:border-box;border:0;border-radius:8px;padding:0 8px;margin-left:-8px;background:var(--c-well);color:inherit;font:inherit;outline:none"></input></sc-if>
+<sc-if value="{{ r.isMenu }}" hint-placeholder-val="{{ false }}"><button data-teil="address-button" style="appearance:none;border:0;font:inherit;color:var(--c-ink);background:transparent;height:28px;padding:0 8px;margin-left:-8px;border-radius:999px;display:flex;align-items:center;gap:8px;min-width:0;cursor:pointer" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)"><span style="min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.v }}</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;color:var(--c-ink-3)"><path d="{{ ic.chevron }}"></path></svg></button></sc-if>
+<sc-if value="{{ r.isSync }}" hint-placeholder-val="{{ false }}"><span style="flex:1;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.t }}</span><button data-teil="address-button" onClick="{{ r.go }}" style="appearance:none;border:0;font:inherit;flex:none;color:var(--c-ink);background:transparent;height:28px;padding:0 8px;border-radius:999px;display:flex;align-items:center;gap:8px;cursor:pointer" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)"><span style="white-space:nowrap">{{ r.v }}</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;color:var(--c-ink-3)"><path d="{{ ic.chevron }}"></path></svg></button></sc-if>
+<sc-if value="{{ r.isSeg }}" hint-placeholder-val="{{ false }}"><div data-teil="segmented-control" style="flex:none;margin-left:auto;height:28px;padding:2px;box-sizing:border-box;border-radius:999px;display:flex;gap:2px;background:var(--c-well)"><sc-for list="{{ r.opts }}" as="o" hint-placeholder-count="3"><button data-teil="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;font:inherit;height:24px;padding:0 8px;border-radius:999px;background:{{ o.bg }};color:{{ o.fg }};box-shadow:{{ o.ring }};cursor:pointer;white-space:nowrap;transition:background 200ms,color 200ms">{{ o.label }}</button></sc-for></div></sc-if>
+<sc-if value="{{ r.isToggle }}" hint-placeholder-val="{{ false }}"><span style="flex:1"></span><button data-teil="toggle" data-state="{{ r.tState }}" role="switch" aria-checked="{{ r.on }}" aria-label="{{ r.l }}" onClick="{{ r.go }}" style="appearance:none;border:0;padding:2px;flex:none;width:40px;height:24px;box-sizing:border-box;border-radius:999px;background:{{ r.tBg }};cursor:pointer;display:flex;justify-content:{{ r.tJust }};transition:background 200ms"><i style="width:20px;height:20px;border-radius:50%;background:{{ r.kBg }};box-shadow:var(--sh-knob)"></i></button></sc-if>
+<sc-if value="{{ r.isAction }}" hint-placeholder-val="{{ false }}"><span style="flex:1;min-width:0;color:var(--c-ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.v }}</span><button data-teil="text-button" style="appearance:none;border:0;font:inherit;flex:none;height:28px;padding:0 12px;border-radius:999px;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap;opacity:{{ r.op }}" style-hover="box-shadow:inset 0 0 0 1px var(--c-ink)" style-active="transform:scale(.97)">{{ r.a }}</button></sc-if>
+<sc-if value="{{ r.isProgress }}" hint-placeholder-val="{{ false }}"><span style="flex:1;min-width:0;height:4px;border-radius:2px;background:var(--c-well);overflow:hidden"><i style="display:block;height:100%;width:{{ r.pct }};border-radius:2px;background:var(--c-ink)"></i></span><span style="flex:none;font-size:11.5px;color:var(--c-ink-2);font-variant-numeric:tabular-nums;padding-right:8px">{{ r.v }}</span></sc-if>
+<sc-if value="{{ r.isLink }}" hint-placeholder-val="{{ false }}"><button data-teil="link-row" onClick="{{ r.go }}" style="appearance:none;border:0;font:inherit;color:inherit;background:transparent;flex:1;min-width:0;height:36px;margin:0 -4px;padding:0 4px;border-radius:8px;display:flex;align-items:center;gap:8px;cursor:pointer;text-align:left;opacity:{{ r.op }}" style-hover="background:var(--c-hover)"><span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.v }}</span><span style="flex:none;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap">{{ r.t }}</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none;color:var(--c-ink-3)"><path d="{{ r.arrow }}"></path></svg></button></sc-if>
+<i style="display:{{ r.sepD }};position:absolute;left:8px;right:8px;bottom:0;height:1px;background:var(--c-line)"></i>
+</div></sc-if>
+<sc-if value="{{ r.isBar }}" hint-placeholder-val="{{ false }}"><div data-teil="field-row" data-state="bar" style="flex:none;padding:4px 8px"><button data-teil="value-bar" title="Klick wechselt das Intervall" onClick="{{ r.go }}" style="appearance:none;border:0;font:inherit;color:inherit;position:relative;width:100%;height:44px;padding:0 16px;border-radius:999px;background:var(--c-well);overflow:hidden;display:flex;align-items:center;gap:8px;cursor:pointer;opacity:{{ r.op }}" style-active="transform:scale(.99)"><i style="position:absolute;left:0;top:0;bottom:0;width:{{ r.pct }};background:var(--c-line-strong);transition:width 260ms cubic-bezier(.2,.8,.2,1)"></i><span style="position:relative;flex:none;color:var(--c-ink-2)">{{ r.l }}</span><span style="position:relative;flex:1;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.t }}</span><span style="position:relative;flex:none;font-weight:500;font-variant-numeric:tabular-nums">{{ r.v }}</span></button></div></sc-if>
+<sc-if value="{{ r.isPreview }}" hint-placeholder-val="{{ false }}"><div data-teil="mail-signature" style="color-scheme:light;flex:none;margin:8px;padding:16px;border-radius:12px;background:var(--c-sheet);color:var(--c-sheet-ink);box-shadow:inset 0 0 0 1px var(--c-line);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',system-ui,sans-serif;display:flex;flex-direction:column;gap:2px"><i style="display:block;width:24px;height:1px;background:var(--c-sheet-line-strong);margin-bottom:8px"></i><sc-for list="{{ r.lines }}" as="q" hint-placeholder-count="2"><span style="font-weight:{{ q.w }};color:{{ q.c }}">{{ q.t }}</span></sc-for></div></sc-if>
+<sc-if value="{{ r.isNote }}" hint-placeholder-val="{{ false }}"><p style="flex:none;margin:0;padding:12px 8px;color:var(--c-ink-3);text-wrap:pretty">{{ r.v }}</p></sc-if>
+</sc-for>
+</div></sc-for>
+<i style="flex:none;height:8px"></i>
+</div>
+<sc-if value="{{ D.hasFoot }}" hint-placeholder-val="{{ false }}"><div data-teil="lane-footer" style="flex:none;padding:16px;display:flex;flex-direction:column;gap:8px"><sc-for list="{{ D.foot }}" as="a" hint-placeholder-count="2"><button data-teil="text-button" data-state="{{ a.state }}" onClick="{{ a.go }}" style="appearance:none;border:0;font:inherit;width:100%;height:40px;padding:0 16px;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:500;background:{{ a.bg }};color:{{ a.fg }};box-shadow:{{ a.ring }};opacity:{{ a.op }};cursor:{{ a.cur }};white-space:nowrap;transition:box-shadow 160ms" style-hover="box-shadow:{{ a.hring }}" style-active="transform:scale(.99)">{{ a.label }}</button></sc-for></div></sc-if>
+</section>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ standalone }}" hint-placeholder-val="{{ false }}"><div style="position:fixed;inset:0;display:grid;place-items:center;background:#ffffff;color:#171717;font:13px/20px Geist,system-ui,sans-serif"><a href="ALFA Einstellungen.dc.html" style="text-decoration:underline;text-underline-offset:3px">Dieser Bogen ist ein Teil von ALFA Einstellungen. Dort öffnen.</a></div></sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1512,&quot;height&quot;:982},&quot;mitte&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Homescreen&quot;,&quot;Kacheln&quot;,&quot;Hub&quot;],&quot;default&quot;:&quot;Homescreen&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;rechts&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Liste&quot;,&quot;Regler&quot;],&quot;default&quot;:&quot;Liste&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;nutzung&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;allein&quot;,&quot;Team&quot;],&quot;default&quot;:&quot;allein&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;licht&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hell&quot;,&quot;dunkel&quot;],&quot;default&quot;:&quot;hell&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;grund&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;weiß&quot;,&quot;hellgrau&quot;],&quot;default&quot;:&quot;weiß&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;abschnitt&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;identitaet&quot;,&quot;darstellung&quot;,&quot;konten&quot;,&quot;firma&quot;,&quot;ordner&quot;,&quot;vorlagen&quot;,&quot;integrationen&quot;,&quot;mail&quot;,&quot;datenschutz&quot;,&quot;schluessel&quot;,&quot;system&quot;,&quot;impressum&quot;],&quot;default&quot;:&quot;integrationen&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;auswahl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;google&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  P = {
+    search: "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5", filter: "M2.5 3.5h11l-4.25 5v4.5l-2.5-1.25V8.5Z",
+    compose: "M11 2.5l2.5 2.5L6 12.5H3.5V10ZM9.5 4l2.5 2.5", inbox: "M2.5 9.5l1.5-6h8l1.5 6v3.5h-11ZM2.5 9.5h3l1 1.5h3l1-1.5h3",
+    flag: "M4 14V2.5M4 3h7.5l-1.5 2.75L11.5 8.5H4", sent: "M14 2L7 9M14 2l-4.5 12-2.5-5-5-2.5Z", allMail: "M2.5 6.5h11v6h-11ZM4 4.5h8M5.5 2.5h5",
+    archive: "M2.5 3.5h11v3h-11ZM3.5 6.5v6h9v-6M6.5 9h3", junk: "M5.5 2.5h5l3 3v5l-3 3h-5l-3-3v-5ZM8 5.5v3M8 10.75v.5",
+    trash: "M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9", tag: "M2.5 2.5h5.5l5.5 5.5-5.5 5.5-5.5-5.5ZM5.5 5.25v.5",
+    reply: "M6.5 4L2.5 8l4 4M2.5 8h7a4 4 0 0 1 4 4v.5", replyAll: "M9 4L5 8l4 4M5 8h4.5a4 4 0 0 1 4 4v.5M5.5 4l-4 4 4 4",
+    forward: "M9.5 4l4 4-4 4M13.5 8h-7a4 4 0 0 0-4 4v.5", fan: "M4.5 5.5h7v8h-7ZM5.5 3.5h5M6.5 1.5h3", send: "M8 13V3.5M4 7.5l4-4 4 4",
+    close: "M4.5 4.5l7 7M11.5 4.5l-7 7", more: "M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM13 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z",
+    attach: "M12.5 7.5l-4.75 4.75a3 3 0 0 1-4.25-4.25L8.5 3a2 2 0 0 1 2.83 2.83L6.5 10.66a1 1 0 0 1-1.41-1.41L9.5 4.83",
+    folder: "M2.5 4.5h4l1.5 1.5h5.5v6.5h-11Z", person: "M8 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM3 13.5c.5-2.75 2.5-4 5-4s4.5 1.25 5 4",
+    personAdd: "M6.5 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM2 13.5c.5-2.5 2.25-3.75 4.5-3.75s4 1.25 4.5 3.75M12.5 4.5v4M10.5 6.5h4",
+    people: "M6 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM2.5 12.5c.4-2 1.75-3 3.5-3s3.1 1 3.5 3M10.5 7a2 2 0 1 0 0-4M11.5 9.6c1.2.3 2 1.2 2.25 2.9",
+    bold: "M5 3h3.5a2.5 2.5 0 0 1 0 5H5ZM5 8h4a2.5 2.5 0 0 1 0 5H5Z", italic: "M7 3h5M4 13h5M10 3L6 13", underline: "M4.5 2.5v5a3.5 3.5 0 0 0 7 0v-5M3.5 13.5h9",
+    list: "M6 4.5h7.5M6 8h7.5M6 11.5h7.5M2.5 4.5h1M2.5 8h1M2.5 11.5h1", numbered: "M6.5 4.5h7M6.5 8h7M6.5 11.5h7M2.5 3.5l1-.5v3",
+    link: "M7 9a2.5 2.5 0 0 0 3.5 0l2-2A2.5 2.5 0 0 0 9 3.5l-.7.7M9 7a2.5 2.5 0 0 0-3.5 0l-2 2A2.5 2.5 0 0 0 7 12.5l.7-.7",
+    textSize: "M2 12.5l3-8 3 8M3 10h4M10.5 12.5V9.5a1.75 1.75 0 0 1 3.5 0v3M10.5 11h3.5", save: "M8 2.5v7M5 6.5l3 3 3-3M2.5 10.5v3h11v-3",
+    expand: "M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5L9 7M2.5 13.5L7 9", shrink: "M13.5 2.5L10 6M10 3v3h3M2.5 13.5L6 10M6 13v-3H3", minus: "M4 8h8",
+    chevron: "M4.5 6.5L8 10l3.5-3.5", lock: "M4.5 7.5h7v6h-7ZM6 7.5V5.5a2 2 0 0 1 4 0v2", plug: "M5.5 2.5v3M10.5 2.5v3M4 5.5h8v2.5a4 4 0 0 1-8 0ZM8 12v1.5",
+    contrast: "M8 13.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM8 2.5v11",
+    system: "M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4",
+    envelope: "M2.5 4h11v8h-11ZM2.5 4.5L8 9l5.5-4.5", doc: "M4 2h5l3 3v9H4ZM9 2v3h3", alert: "M8 2.5l6 11H2ZM8 6.5v3M8 11.5v.25", key: "M5.5 10.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM8.5 7.5h5v2M11.5 7.5v2"
+  };
+  X = { check: "M3.5 8.5l3 3 6-7", plus: "M8 3.5v9M3.5 8h9", refresh: "M12.5 8a4.5 4.5 0 1 1-1.3-3.2M12.5 3v2.5H10", bang: "M8 3.5v5.5M8 12v.5", dash: "M4.5 8h7", keyboard: "M2 4.5h12v7H2ZM4.5 7h1M7.5 7h1M10.5 7h1M5 9.5h6", shield: "M8 2l5 2v4c0 3-2.2 5-5 6-2.8-1-5-3-5-6V4Z", home: "M2.5 7.5L8 3l5.5 4.5V13h-11Z", pen: "M10.5 2.5l3 3-8 8H2.5v-3Z", gauge: "M2.5 11a5.5 5.5 0 1 1 11 0M8 11l2.5-3", book: "M3 3h4a1 1 0 0 1 1 1v9a1 1 0 0 0-1-1H3ZM13 3H9a1 1 0 0 0-1 1v9a1 1 0 0 1 1-1h4Z", phone: "M4 2.5h2l1 3-1.5 1a7 7 0 0 0 3 3l1-1.5 3 1v2a1.5 1.5 0 0 1-1.5 1.5A10 10 0 0 1 2.5 4 1.5 1.5 0 0 1 4 2.5Z", cake: "M3 13.5h10v-5H3ZM3 10.5c1.7 1 3.3 1 5 0s3.3-1 5 0M8 8.5v-3M8 3.5v-1" };
+  SECT = [
+    ["Ich", [["identitaet", "Identität", "person"], ["darstellung", "Darstellung", "contrast"]]],
+    ["Mail", [["konten", "Mail-Konten", "envelope"], ["mail", "Lesen und Schreiben", "inbox"]]],
+    ["Firma", [["firma", "Firmendaten", "doc"], ["ordner", "Dateiordner", "folder"], ["vorlagen", "Vorlagen", "list"]]],
+    ["Verbindungen", [["integrationen", "Integrationen", "plug"], ["schluessel", "Schlüssel-Inventar", "key"]]],
+    ["Schutz und System", [["datenschutz", "Datenschutz", "shield"], ["system", "System", "system"], ["impressum", "Impressum", "doc"]]]
+  ];
+  FN = {
+    identitaet: [["name", "Name", "person", "Wie du in der App und in Mails heißt", [{ k: "kv", l: "Name", v: "Jonas Brenner" }]], ["rolle", "Rolle", "tag", "Was du im Büro machst", [{ k: "input", l: "Rolle", ph: "Rolle" }]], ["abteilung", "Abteilung", "people", "Zu welchem Team du gehörst", [{ k: "input", l: "Abteilung", ph: "Abteilung" }], 1], ["telefon", "Telefon", "phone", "Unter dieser Nummer erreicht man dich", [{ k: "input", l: "Telefon", ph: "Nummer" }]], ["geburtstag", "Geburtstag", "cake", "Für Glückwünsche im Team", [{ k: "input", l: "Geburtstag", ph: "TT.MM." }, { k: "toggle", id: "gebTeam", l: "Im Team zeigen", on: false, team: 1 }]], ["kurz", "Kurzbeschreibung", "textSize", "Ein Satz über dich", [{ k: "input", l: "Text", ph: "Ein Satz" }]], ["clockodoId", "Clockodo-Nutzer-ID", "key", "Dein Zugang zur Zeiterfassung", [{ k: "kv", l: "Nutzer-ID", v: "10482" }]], ["verzeichnis", "Team-Verzeichnis", "people", "Eintrag ins Team-Verzeichnis", [{ k: "toggle", id: "verz", l: "Eingetragen", on: true }], 1], ["abmelden", "Abmelden", "close", "Trennt alle Dienste", [], 0, [["Abmelden", "signal"]]]],
+    darstellung: [["erscheinung", "Erscheinung", "contrast", "Hell, Dunkel oder wie das System", [{ k: "seg", id: "licht", l: "Erscheinung", o: ["Hell", "Dunkel", "Automatisch"], v: 2 }]], ["start", "Startansicht", "home", "Was die App beim Öffnen zeigt", [{ k: "menu", l: "Beim Öffnen", v: "Mail" }]], ["sperre", "App-Sperre", "lock", "Sperrt auch nach einer Pause", [{ k: "toggle", id: "sperre", l: "App-Sperre", on: true }, { k: "menu", l: "Nach einer Pause", v: "5 Minuten" }]], ["kuerzel", "Tastenkürzel", "keyboard", "Ändern, Doppelte erkennen, zurücksetzen", [{ k: "kv", l: "Belegt", v: "12" }, { k: "kv", l: "Doppelte", v: "Keine" }], 0, [["Zurücksetzen", "neutral"], ["Anpassen", "accent"]]]],
+    konten: [["haupt", "jonas@studio-brenner.de", "envelope", "Google · Hauptkonto", [{ k: "kv", l: "Anbieter", v: "Google" }, { k: "kv", l: "Anmeldung", v: "Anmeldung im Browser" }, { k: "kv", l: "Hauptkonto", v: "Ja" }], 0, [["Entfernen", "signal"], ["Prüfen", "neutral"]], "connected"], ["neu", "Konto hinzufügen", "plus", "Aus Anbietervorlage", [{ k: "seg", id: "anb", l: "Anbieter", o: ["Google", "Anderer Anbieter"], v: 1 }, { k: "input", l: "Anzeigename", ph: "Name" }, { k: "input", l: "Posteingangsserver", ph: "imap." }, { k: "input", l: "Port", ph: "993" }, { k: "seg", id: "enc", l: "Verschlüsselung", o: ["Keine", "SSL/TLS", "STARTTLS"], v: 1 }, { k: "input", l: "Postausgangsserver", ph: "smtp." }], 0, [["Prüfen", "neutral"], ["Hinzufügen", "accent"]]]],
+    firma: [["fname", "Firma", "doc", "", [{ k: "input", l: "Firma", ph: "Name" }]], ["anschrift", "Anschrift", "home", "", [{ k: "input", l: "Straße", ph: "Straße" }, { k: "input", l: "Ort", ph: "PLZ Ort" }]], ["ftel", "Telefon", "phone", "", [{ k: "input", l: "Telefon", ph: "Nummer" }]], ["web", "Web", "link", "", [{ k: "input", l: "Web", ph: "Adresse" }]], ["fmail", "Mail", "envelope", "", [{ k: "input", l: "Mail", ph: "Adresse" }]]],
+    ordner: [["schema", "Ordnerschema", "folder", "", [], 0, [["Öffnen", "neutral"]]], ["rollen", "Rollen der Ordner", "folder", "", [], 0, [["Öffnen", "neutral"]]], ["kosten", "Kostenstellen", "tag", "Name und Clockodo-Leistung", [], 0, [["Öffnen", "neutral"]]], ["nummern", "Nummern", "list", "In der App, in Airtable und sevDesk", [], 0, [["Öffnen", "neutral"]]], ["bereit", "Bereitstellung", "save", "", [], 0, [["Öffnen", "neutral"]]], ["einrichtung", "Einrichtung", "list", "Im geteilten Drive", [{ k: "progress", l: "Erledigt", v: "4 von 7", pct: "57%" }], 0, [["Fortsetzen", "accent"]]]],
+    vorlagen: [["vneu", "Vorlage anlegen", "plus", "Noch keine Vorlage.", [{ k: "input", l: "Name", ph: "Name" }], 0, [["Anlegen", "accent"]]]],
+    mail: [["abruf", "Abruf", "inbox", "", [{ k: "sync", id: "mailAbruf", l: "Abruf", t: "vor 4 Minuten", v: "Alle 5 Minuten" }], 0, [["Standard", "neutral"]]], ["signatur", "Signatur", "pen", "Je Postfach eine Signatur wählen oder anlegen", [{ k: "menu", l: "Postfach", v: "jonas@studio-brenner.de" }, { k: "menu", l: "Signatur", v: "Standard" }, { k: "toggle", id: "sigAntwort", l: "Auch bei Antworten", on: true }, { k: "preview", lines: [["Jonas Brenner", 500], ["Studio Brenner", 400]] }], 0, [["Neue Signatur", "neutral"], ["Bearbeiten", "neutral"]]], ["schrift", "Schrift und Größe", "textSize", "", [{ k: "menu", l: "Schrift", v: "System" }, { k: "menu", l: "Größe", v: "13" }]], ["html", "HTML", "doc", "", [{ k: "seg", id: "html", l: "Fremdinhalt", o: ["Passt sich an", "Immer hell"], v: 1 }]], ["bilder", "Externe Bilder", "alert", "", [{ k: "toggle", id: "bilder", l: "Laden", on: false }, { k: "note", v: "Bilder werden nicht geladen. Der Absender erfährt nicht, wann du die Mail geöffnet hast." }]], ["neue", "Neue Mails", "flag", "", [{ k: "toggle", id: "neue", l: "Mitteilung", on: true }]]],
+    datenschutz: [["freigabe", "Freigabe je Kategorie", "shield", "", [{ k: "kv", l: "Kategorien", v: "11" }], 0, [["Öffnen", "neutral"]]], ["ass", "Assistent ganz aus", "alert", "Stoppt jeden Aufruf", [{ k: "toggle", id: "ass", l: "Ganz aus", on: false }]], ["mbilder", "Mail-Bilder", "inbox", "", [{ k: "toggle", id: "bilder", l: "Laden", on: false }]], ["chat", "Dateien im Chat", "attach", "", [{ k: "toggle", id: "chat", l: "Erlaubt", on: true }]], ["export", "Export der eigenen Daten", "save", "", [], 0, [["Exportieren", "accent"]]]],
+    system: [["diagnose", "Diagnose", "gauge", "Version, Build, Commit, Zweig, Datenbank", [{ k: "kv", l: "Version", v: "0.4.2" }], 0, [["Kopieren", "neutral"]]], ["backups", "Backups", "save", "Sichern, Liste, Wiederherstellung", [{ k: "kv", l: "Letztes", v: "Heute, 09:00" }], 0, [["Ordner", "neutral"], ["Jetzt sichern", "accent"]]], ["cache", "Zwischenspeicher", "trash", "Gespeicherte Vorschauen entfernen", [], 0, [["Leeren", "neutral"]]], ["einr2", "Einrichtung erneut", "list", "Den Erststart noch einmal durchlaufen", [], 0, [["Starten", "neutral"]]], ["tagebuch", "Tagebuch des Assistenten", "book", "Was der Assistent in deinem Namen getan hat", [], 0, [["Öffnen", "neutral"]]], ["werkstatt", "Werkstattfaktoren", "system", "Feineinstellung für Entwickler", [], 0, [["Öffnen", "neutral"]]]],
+    impressum: [["urheber", "Anbieter", "person", "Wer als Anbieter der App und deiner Mails genannt wird", [{ k: "kv", l: "Name", v: "Jonas Brenner" }, { k: "input", l: "Anschrift", ph: "Straße, Nr., PLZ, Ort" }, { k: "kv", l: "E-Mail", v: "jonas@studio-brenner.de" }, { k: "input", l: "Telefon", ph: "Nummer" }, { k: "input", l: "Firma", ph: "Name und Rechtsform", team: 1 }, { k: "input", l: "Vertreten durch", ph: "Name", team: 1 }, { k: "input", l: "Registergericht und Nummer", ph: "HRB …", team: 1 }, { k: "input", l: "USt-IdNr.", ph: "DE …" }]], ["rechte", "Rechte", "doc", "Urheberhinweis für Exporte und PDFs", [{ k: "input", l: "Urheberhinweis", ph: "© Jahr Name" }, { k: "toggle", id: "urhInPdf", l: "In PDFs zeigen", on: true }]]]
+  };
+  SVC = [
+    { id: "google", n: "Google", mine: 1, use: "Mail, Dateien, Kalender, Kontakte", access: "Anmeldung im Browser", fields: [], areas: [["Mail", "vor 4 Minuten", "Alle 5 Minuten"], ["Kontakte", "vor 1 Stunde", "Jede Stunde"], ["Dateien", "vor 12 Minuten", "Alle 15 Minuten"]], extras: [["Drive-Ordner der Projekte", "Jetzt abgleichen"]], st: "connected", mono: "G" },
+    { id: "clickup", n: "ClickUp", mine: 1, use: "Aufgaben", access: "Schlüssel", fields: [["Zugriffsschlüssel", "secret"]], areas: [["Phasen", "Noch nicht abgeglichen", "Manuell"], ["Aufgabenfelder", "Noch nicht abgeglichen", "Manuell"]], st: "connecting", mono: "CU" },
+    { id: "clockodo", n: "Clockodo", mine: 1, use: "Zeiten", access: "E-Mail und Schlüssel", fields: [["E-Mail", "jonas@studio-brenner.de"], ["Schlüssel", "secret"], ["Clockodo-Nutzer", "10482"]], st: "working", mono: "Co" },
+    { id: "claude", n: "Claude", mine: 1, use: "Assistent", access: "Schlüssel", fields: [["Schlüssel", "secret"], ["Modell", "Standard"]], st: "failed", reason: "Schlüssel abgelehnt (401)", mono: "Cl" },
+    { id: "airtable", n: "Airtable", use: "Projekte und Kunden", access: "Schlüssel", fields: [["Base", "appR3x9Lm27Kq"], ["Zugriffsschlüssel", "secret"]], areas: [["Projekte", "vor 2 Stunden", "Manuell"]], extras: [["Zwischenspeicher", "Leeren"]], st: "stored", mono: "At" },
+    { id: "sevdesk", n: "sevDesk", use: "Belege und Angebote", access: "Schlüssel", fields: [["Zugriffsschlüssel", "empty"]], st: "notConnected", mono: "sD" },
+    { id: "dhl", n: "DHL Sendungen", use: "Sendungen verfolgen", access: "Schlüssel", fields: [["Schlüssel", "secret"]], st: "stored", mono: "DS" },
+    { id: "dhlversand", n: "DHL Versand", use: "Etiketten erstellen", access: "Schlüssel", fields: [["Schlüssel", "secret"]], st: "unreadable", mono: "DV" },
+    { id: "happa", n: "Happa Happa", use: "Speiseplan", access: "Schlüssel", fields: [["Schlüssel", "secret"]], st: "orphaned", mono: "HH" }
+  ];
+  STATUS = { connected: "Verbunden", working: "Verbunden · prüft", connecting: "Verbindet …", notConnected: "Nicht verbunden", failed: "Fehler", stored: "Gespeichert, nicht geprüft", unreadable: "Schlüsselbund nicht lesbar", orphaned: "Verwaist" };
+  KEYST = { stored: "Gespeichert", working: "Gespeichert", connecting: "Gespeichert", failed: "Abgelehnt", unreadable: "Nicht lesbar", orphaned: "Ohne Dienst" };
+  IV = ["Manuell", "Jede Stunde", "Alle 15 Minuten", "Alle 5 Minuten"];
+  state = { sec: null, sel: {}, svc: {}, tog: {}, seg: {}, iv: {}, confirm: null, backing: false, backed: false, chk: null };
+  toastIt(t) { if (this.props.onToast) this.props.onToast(t); }
+  act(id, l) {
+    if (id === "backups" && l === "Jetzt sichern") { if (this.state.backing) return; this.setState({ backing: true }); setTimeout(() => this.setState({ backing: false, backed: true }, () => this.toastIt("Backup erstellt")), 1100); }
+    else if (id === "cache" && l === "Leeren") this.toastIt("Geleert");
+    else if (id === "diagnose" && l === "Kopieren") this.toastIt("In die Zwischenablage kopiert");
+  }
+  ROLE = { google: ["Mail, Kalender, Kontakte, Dateien", "Eingang und Ausgang"], clickup: ["Aufgaben", "Eingang und Ausgang"], clockodo: ["Zeit", "Eingang und Ausgang"], claude: ["Assistent", "Ausgang, Antwort zurück"], airtable: ["Projektwahrheit", "Eingang und Ausgang"], sevdesk: ["Geld", "Eingang und Ausgang"], dhl: ["Sendungen", "Eingang"], dhlversand: ["Sendungen", "Ausgang"], happa: ["Speiseplan", "Eingang"] };
+
+  componentWillUnmount() { clearTimeout(this.tm); }
+  g(n) { return this.P[n] || this.X[n] || ""; }
+  team() { return (this.props.nutzung ?? "allein") === "Team"; }
+  componentDidUpdate(pp) { if (pp.abschnitt !== this.props.abschnitt && this.state.sec) this.setState({ sec: null }); }
+  secNow() { return this.state.sec || this.props.abschnitt || "integrationen"; }
+  secMeta(id) { for (const [gname, l] of this.SECT) for (const x of l) if (x[0] === id) return { group: gname, id, name: x[1], ic: x[2] }; return null; }
+  stOf(x) { return this.state.svc[x.id] || x.st; }
+  keySvc() { return this.SVC.filter(x => x.access !== "Anmeldung im Browser" && x.st !== "notConnected"); }
+  idsOf(sec) {
+    if (sec === "integrationen") return this.SVC.map(x => "s:" + x.id);
+    if (sec === "schluessel") return this.keySvc().map(x => "k:" + x.id);
+    return (this.FN[sec] || []).filter(f => !f[5] || this.team()).map(f => f[0]);
+  }
+  selNow(sec) { const l = this.idsOf(sec), p = this.props.auswahl; const c = this.state.sel[sec] || (p && (l.includes(p) ? p : l.includes("s:" + p) ? "s:" + p : null)); return c && l.includes(c) ? c : l[0]; }
+  connect(id) { const x = this.SVC.find(v => v.id === id), miss = x && /Schlüssel|Passwort/.test(x.access || "") ? (x.fields || []).filter(f => f[1] === "empty").map(f => f[0]) : []; if (miss.length) { this.toastIt("Es fehlt: " + miss.join(", ") + "."); return; } this.setState(s => ({ svc: Object.assign({}, s.svc, { [id]: "connecting" }) })); clearTimeout(this.tm); this.tm = setTimeout(() => this.setState(s => ({ svc: Object.assign({}, s.svc, { [id]: "connected" }) })), 1400); }
+  check(id) {
+    const x = this.SVC.find(v => v.id === id), n = 3;
+    const miss = x && /Schlüssel/.test(x.access || "") ? (x.fields || []).filter(f => f[1] === "empty").map(f => f[0]) : [];
+    if (miss.length) { this.toastIt("Es fehlt: " + miss.join(", ") + "."); return; }
+    const bad = this.state.svc[id] === "failed" && id === "claude";
+    this.setState(s => ({ chk: { id, i: 0, done: false, res: "" }, svc: Object.assign({}, s.svc, { [id]: "connecting" }) }));
+    clearTimeout(this.tk);
+    const step = i => { this.tk = setTimeout(() => { if (i < n) { this.setState(s => ({ chk: Object.assign({}, s.chk, { i: i + 1 }) })); step(i + 1); } else this.setState(s => ({ chk: Object.assign({}, s.chk, { done: true, res: bad ? "Fehler: Schlüssel abgelehnt (401)." : "Verbindung steht." }), svc: Object.assign({}, s.svc, { [id]: bad ? "failed" : "connected" }) })); }, i === 0 ? 350 : 620); };
+    step(0);
+  }
+  badge(st) {
+    const X = this.X;
+    if (st === "connected" || st === "working") return { d: X.check, bg: "var(--c-ink)", fg: "var(--c-lane)", ring: "transparent" };
+    if (st === "failed") return { d: X.bang, bg: "var(--c-signal)", fg: "var(--c-on-signal)", ring: "transparent" };
+    if (st === "unreadable" || st === "orphaned") return { d: X.bang, bg: "var(--c-lane)", fg: "var(--c-signal)", ring: "var(--c-signal)" };
+    if (st === "connecting") return { d: X.refresh, bg: "var(--c-lane)", fg: "var(--c-ink-2)", ring: "var(--c-line-strong)" };
+    if (st === "stored") return { d: X.dash, bg: "var(--c-lane)", fg: "var(--c-ink-3)", ring: "var(--c-line-strong)" };
+    return { d: X.plus, bg: "var(--c-lane)", fg: "var(--c-ink-2)", ring: "var(--c-line-strong)" };
+  }
+  valOf(r) {
+    const s = this.state;
+    if (r.k === "toggle") return (s.tog[r.id] ?? r.on) ? "An" : "Aus";
+    if (r.k === "seg") return r.o[r.id === "licht" && this.props.look ? r.o.indexOf(this.props.look) : (s.seg[r.id] ?? r.v)];
+    if (r.k === "sync") return this.IV[s.iv[r.id] ?? Math.max(0, this.IV.indexOf(r.v))];
+    if (r.k === "input") return "Leer";
+    if (r.k === "progress") return r.v;
+    return r.v || "";
+  }
+
+  renderVals() {
+    const s = this.state, full = !!(this.props.breite && this.props.hoehe), fW = full ? this.props.breite + " × " + this.props.hoehe : this.props.fenster ?? "1512 × 982", small = full ? this.props.breite < 1200 : false, W = full ? this.props.breite : 1512, H = full ? this.props.hoehe : small ? 600 : 982, safe = full ? 0 : small ? 0 : 32;
+    const team = this.team(), mitte = this.props.mitte ?? "Homescreen", regler = (this.props.rechts ?? "Liste") === "Regler", ink = "var(--c-ink)", hubCols = small ? 2 : 3, spanP = small ? [1, 1, 2] : [1, 1, 1, 2, 1, 1, 2];
+    const sec = this.secNow(), meta = this.secMeta(sec) || this.secMeta("integrationen"), sel = this.selNow(meta.id);
+    const badN = this.SVC.filter(x => ["failed", "unreadable", "orphaned"].includes(this.stOf(x))).length;
+    const nav = [];
+    this.SECT.forEach(([gname, l]) => { nav.push({ isHead: true, isRow: false, name: gname });
+      l.forEach(([id, n, ic]) => { const on = id === meta.id, list = id === "integrationen" || id === "konten" || id === "schluessel", alert = id === "integrationen" && badN > 0;
+        nav.push({ isHead: false, isRow: true, name: n, d: this.g(ic), state: on ? "selected" : "rest", bg: on ? ink : "transparent", fg: on ? "var(--c-lane)" : ink, symFg: on ? "var(--c-lane)" : "var(--c-ink-3)", stripFg: on ? "var(--c-lane)" : "var(--c-ink-2)", ring: on ? "inset 0 0 0 1px var(--c-on-inv-line)" : "inset 0 0 0 1px var(--c-line-strong)", w: on ? 500 : 400,
+          hasN: list, n: id === "konten" ? 1 : this.idsOf(id).length, nFg: on ? "var(--c-lane)" : "var(--c-ink-3)", hasAlert: alert, alertTip: badN + " Dienste mit Fehler", go: () => this.setState({ sec: id }) }); }); });
+
+    const tile = (o, on, ix) => {
+      const filled = o.state === "connected" || o.state === "working", bad = ["failed", "unreadable", "orphaned"].includes(o.state);
+      return Object.assign(o, { span: Math.min(spanP[ix % spanP.length], hubCols), w: on ? 500 : 400, go: () => this.setState(st => ({ sel: Object.assign({}, st.sel, { [meta.id]: o.id }) })),
+        tRing: "none", iBg: filled ? ink : "var(--c-well)", iFg: filled ? "var(--c-lane)" : ink, iRing: on ? "0 0 0 2px var(--c-lane),0 0 0 3px var(--c-ink)" : filled ? "none" : "inset 0 0 0 1px var(--c-line)", subFg: bad ? "var(--c-signal)" : "var(--c-ink-3)",
+        cBg: on ? ink : "transparent", cFg: on ? "var(--c-lane)" : ink, cRing: on ? "transparent" : "var(--c-line)", c2: on ? "var(--c-lane)" : "var(--c-ink-2)", c3: on ? "var(--c-on-inv-3)" : "var(--c-ink-3)", cSub: bad ? "var(--c-signal)" : on ? "var(--c-lane)" : "var(--c-ink-3)",
+        ciBg: on ? "transparent" : "var(--c-well)", ciFg: on ? "var(--c-lane)" : ink, ciRing: on ? "var(--c-on-inv-line)" : "var(--c-line)",
+        dotC: bad ? "var(--c-signal)" : filled ? (on ? "var(--c-lane)" : ink) : (on ? "var(--c-on-inv-2)" : "var(--c-ink-3)"),
+        cbBg: on && o.bBg === "var(--c-lane)" ? "transparent" : on && o.bBg === "var(--c-ink)" ? "var(--c-lane)" : o.bBg, cbFg: on && o.bFg === "var(--c-lane)" ? ink : on && o.bFg !== "var(--c-on-signal)" && o.bFg !== "var(--c-signal)" ? "var(--c-lane)" : o.bFg, cbRing: on && o.bRing !== "transparent" && o.bRing !== "var(--c-signal)" ? "var(--c-on-inv-line)" : o.bRing });
+    };
+    const svcTile = (x, kind) => { const st = this.stOf(x), b = this.badge(st), k = kind === "k";
+      return { id: (k ? "k:" : "s:") + x.id, name: x.n, desc: k ? x.access : x.use, sub: k ? this.KEYST[st] || "Gespeichert" : this.STATUS[st], status: k ? this.KEYST[st] || "Gespeichert" : this.STATUS[st], tag: k ? "Schlüssel" : x.access, state: st, hasBadge: true, bD: b.d, bBg: b.bg, bFg: b.fg, bRing: b.ring, lock: team && !x.mine, mono: x.mono, hasMono: true, hasGlyph: false, d: "" }; };
+    const fnTile = f => { const rows = f[4].filter(r => !r.team || team), first = rows.find(r => r.k !== "note" && r.k !== "preview"), st = f[7] || "setting", b = f[7] ? this.badge(f[7]) : null;
+      return { id: f[0], name: f[1], desc: f[3] || (first ? first.l : ""), sub: first ? this.valOf(first) : "", status: f[7] ? this.STATUS[f[7]] : "", tag: first ? this.valOf(first) : "", state: st, hasBadge: !!b, bD: b ? b.d : "", bBg: b ? b.bg : "", bFg: b ? b.fg : "", bRing: b ? b.ring : "", lock: false, mono: "", hasMono: false, hasGlyph: true, d: this.g(f[2]) }; };
+    let groups;
+    if (meta.id === "integrationen") {
+      const mk = l => l.map(x => svcTile(x)), all = this.SVC;
+      groups = team ? [["Für dich", all.filter(x => x.mine)], ["Für alle im Team", all.filter(x => !x.mine)]].map(([n, l]) => ({ name: n, n: l.length, hasHead: true, items: mk(l) })) : [{ name: "", n: 0, hasHead: false, items: mk(all) }];
+    } else if (meta.id === "schluessel") groups = [{ name: "", n: 0, hasHead: false, items: this.keySvc().map(x => svcTile(x, "k")) }];
+    else groups = [{ name: "", n: 0, hasHead: false, items: (this.FN[meta.id] || []).filter(f => !f[5] || team).map(fnTile) }];
+    let ix = 0; groups.forEach(gr => gr.items = gr.items.map(o => tile(o, o.id === sel, ix++)));
+    const count = groups.reduce((a, gr) => a + gr.items.length, 0), hasBad = meta.id === "integrationen" && badN > 0, badTip = badN + (badN === 1 ? " Dienst braucht dich" : " Dienste brauchen dich");
+
+    const D = { rows: [] }, row = r => D.rows.push(Object.assign({ isRow: !["head", "preview", "note", "bar"].includes(r.k), isHead: r.k === "head", isKv: r.k === "kv", isSecret: r.k === "secret", isInput: r.k === "input", isMenu: r.k === "menu", isSync: r.k === "sync", isSeg: r.k === "seg", isToggle: r.k === "toggle", isAction: r.k === "action", isProgress: r.k === "progress", isPreview: r.k === "preview", isNote: r.k === "note", isBar: r.k === "bar", isLink: r.k === "link", labD: r.k === "link" ? "none" : "block", rs: "rest", op: 1, l: "" }, r));
+    const tb = (label, go, kind, off) => ({ label, state: off ? "disabled" : kind, bg: kind === "accent" ? "var(--c-inv)" : kind === "danger" ? "var(--c-signal)" : "transparent", fg: kind === "accent" ? "var(--c-on-inv)" : kind === "danger" ? "var(--c-on-signal)" : kind === "signal" ? "var(--c-signal)" : ink, ring: kind === "accent" || kind === "danger" ? "none" : "inset 0 0 0 1px " + (kind === "signal" ? "var(--c-signal)" : "var(--c-line-strong)"), hring: kind === "accent" || kind === "danger" ? "0 0 0 3px var(--c-line)" : "inset 0 0 0 1px " + (kind === "signal" ? "var(--c-signal)" : ink), op: off ? .4 : 1, cur: off ? "default" : "pointer", go: off ? undefined : go, ml: kind === "signal" || kind === "danger" ? "auto" : "0" });
+    const seg = (r, cur, set) => r.o.map((o, i) => ({ label: o, state: i === cur ? "selected" : "rest", bg: i === cur ? "var(--c-lane)" : "transparent", fg: i === cur ? ink : "var(--c-ink-2)", ring: i === cur ? "var(--sh-seg),inset 0 0 0 1px var(--c-line)" : "none", go: () => set(i) }));
+    const putRow = (r, locked) => {
+      if (r.team && !team) return;
+      if (r.k === "seg") { const lk = r.id === "licht" && !!this.props.onLook, v = lk ? r.o.indexOf(this.props.look || "Automatisch") : (s.seg[r.id] ?? r.v); row(Object.assign({}, r, { opts: seg(r, v, i => lk ? this.props.onLook(r.o[i]) : this.setState(st => ({ seg: Object.assign({}, st.seg, { [r.id]: i }) }))) })); }
+      else if (r.k === "toggle") { const on = s.tog[r.id] ?? r.on, set = v => this.setState(st => ({ tog: Object.assign({}, st.tog, { [r.id]: v }) }));
+        if (regler) row({ k: "seg", l: r.l, opts: seg({ o: ["Aus", "An"] }, on ? 1 : 0, i => set(i === 1)) });
+        else row(Object.assign({}, r, { on: String(on), tState: on ? "on" : "off", tBg: on ? ink : "var(--c-line-strong)", tJust: on ? "flex-end" : "flex-start", kBg: on ? "var(--c-lane)" : "var(--c-sheet)", go: () => set(!on) })); }
+      else if (r.k === "sync") { const i = s.iv[r.id] ?? Math.max(0, this.IV.indexOf(r.v)), go = locked ? undefined : () => this.setState(st => ({ iv: Object.assign({}, st.iv, { [r.id]: (i + 1) % 4 }) }));
+        row(regler ? { k: "bar", l: r.l, t: r.t, v: this.IV[i], pct: Math.round(8 + i / 3 * 92) + "%", op: locked ? .4 : 1, go } : { k: "sync", l: r.l, t: r.t, v: this.IV[i], go }); }
+      else if (r.k === "preview") row(Object.assign({}, r, { lines: r.lines.map(q => ({ t: q[0], w: q[1], c: q[1] === 500 ? "var(--c-sheet-ink)" : "var(--c-sheet-ink-3)" })) }));
+      else row(r);
+    };
+    let acts = [];
+    if (sel.startsWith("s:") || sel.startsWith("k:")) {
+      const keyView = sel.startsWith("k:"), x = this.SVC.find(v => v.id === sel.slice(2)), st = this.stOf(x), filled = st === "connected" || st === "working", locked = team && !x.mine, bad = ["failed", "unreadable", "orphaned"].includes(st);
+      Object.assign(D, { name: x.n, lock: locked, desc: keyView ? "Nur Zustand, keine Werte" : x.use, hasDesc: true, mono: x.mono, hasMono: true, hasGlyph: false, d: "", iBg: filled ? ink : "var(--c-well)", iFg: filled ? "var(--c-lane)" : ink, iRing: filled ? "none" : "inset 0 0 0 1px var(--c-line)",
+        hasStatus: true, state: st, status: keyView ? this.KEYST[st] || "Gespeichert" : this.STATUS[st], stFg: bad ? "var(--c-signal)" : "var(--c-ink-3)", dot: bad ? "var(--c-signal)" : filled ? ink : "var(--c-ink-3)",
+        hasNotice: bad, noticeT: st === "failed" ? x.reason : st === "unreadable" ? "Schlüsselbund nicht lesbar" : "Kein Dienst mehr zugeordnet", noticeX: st === "failed" ? "Schlüssel ändern und erneut verbinden." : st === "unreadable" ? "Schlüssel neu eintragen." : "Eintrag entfernen." });
+      if (keyView) { row({ k: "head", l: "Schlüssel" }); row({ k: "kv", l: "Zustand", v: this.KEYST[st] || "Gespeichert" }); row({ k: "kv", l: "Dienst", v: x.n }); acts = [tb("Entfernen", () => {}, "signal", locked)]; }
+      else {
+        const oauth = x.access === "Anmeldung im Browser", conf = s.confirm === x.id, drop = () => this.setState(s2 => ({ confirm: null, svc: Object.assign({}, s2.svc, { [x.id]: "notConnected" }) }));
+        if (conf && st === "orphaned") { acts = [tb("Abbrechen", () => this.setState({ confirm: null }), "neutral"), tb("Eintrag entfernen", drop, "danger")]; Object.assign(D, { hasNotice: true, noticeT: "Eintrag entfernen?", noticeX: "Der Schlüssel wird aus dem Schlüsselbund gelöscht." }); }
+        else if (conf) { acts = [tb("Abbrechen", () => this.setState({ confirm: null }), "neutral"), tb(x.n + " trennen", drop, "danger")]; Object.assign(D, { hasNotice: true, noticeT: x.n + " trennen?", noticeX: oauth ? "Die App meldet sich bei " + x.n + " ab und gibt den Zugriff zurück. Die Daten beim Anbieter bleiben." : "Der Schlüssel wird aus dem Schlüsselbund gelöscht. Die Daten beim Anbieter bleiben." }); }
+        else if (st === "connecting") { acts.push(tb("Abbrechen", () => { clearTimeout(this.tm); this.setState(s2 => ({ svc: Object.assign({}, s2.svc, { [x.id]: x.st === "connecting" ? "notConnected" : x.st }) })); }, "neutral")); acts.push(tb(oauth ? "Wartet auf den Browser …" : "Prüft beim Anbieter …", null, "accent", true)); }
+        else if (st === "working") acts.push(tb("Prüft …", null, "neutral", true));
+        else if (filled) acts.push(tb("Alles abgleichen", () => this.connect(x.id), "neutral", locked));
+        else if (st === "stored") acts.push(tb("Beim Anbieter prüfen", () => this.check(x.id), "accent", locked));
+        else if (st === "failed" || st === "unreadable") acts.push(tb(oauth ? "Erneut anmelden ↗" : "Schlüssel neu eintragen", () => this.connect(x.id), "accent", locked));
+        else if (st === "orphaned") acts.push(tb("Eintrag entfernen", () => this.setState({ confirm: x.id }), "signal", locked));
+        else acts.push(tb(oauth ? "Im Browser anmelden ↗" : "Verbinden", () => this.connect(x.id), "accent", locked));
+        if (!conf && ["connected", "working", "stored", "failed", "unreadable"].includes(st)) acts.push(tb("Trennen", () => this.setState({ confirm: x.id }), "signal", locked));
+        const ro = this.ROLE[x.id], ext = "M6 4h6v6M12 4l-7.5 7.5", inn = "M6 3.5l4.5 4.5L6 12.5", lk = (v, ex, tt) => row({ k: "link", v, t: tt || "", arrow: ex ? ext : inn, op: 1, go: () => this.toastIt ? this.toastIt(v) : null });
+        if (s.chk && s.chk.id === x.id) { const ST = ["Zugang gelesen", "Anbieter antwortet", "Freigaben stimmen"], ck = s.chk; row({ k: "head", l: "Prüfung", aside: ck.done ? "Fertig" : "Läuft" }); row({ k: "bar", l: ck.done ? ck.res : "Prüft …", t: "", v: "", pct: Math.round(100 * ck.i / ST.length) + "%", op: 1, go: () => {} }); ST.forEach((l, j) => { if (j < ck.i) row({ k: "kv", l, v: ck.done && ck.res.startsWith("Fehler") && j === ST.length - 1 ? "Abgelehnt" : "In Ordnung" }); }); }
+        row({ k: "head", l: "Zugang", aside: oauth ? "OAuth" : "API-Schlüssel" }); row({ k: "kv", l: "Anmeldung", v: x.access });
+        if (oauth) { row({ k: "kv", l: "Konto", v: filled || st === "failed" ? "jonas@studio-brenner.de" : "Noch keins" }); row({ k: "kv", l: "Anmeldung gilt", v: filled ? "Erneuert sich selbst" : "–" }); }
+        x.fields.forEach(f => row(f[1] === "secret" ? { k: "secret", l: f[0], op: locked ? .4 : 1 } : f[1] === "empty" ? { k: "input", l: f[0], ph: "Einfügen" } : { k: "kv", l: f[0], v: f[1] }));
+        if (team) row({ k: "kv", l: "Gilt für", v: x.mine ? "Nur dich" : "Ganze Firma · Verwaltung" });
+        if (ro) { row({ k: "head", l: "In der App" }); row({ k: "kv", l: "Rolle", v: ro[0] }); row({ k: "kv", l: "Richtung", v: ro[1] }); }
+        if (x.areas) { row({ k: "head", l: "Abgleich", aside: filled ? "Automatisch" : "" }); x.areas.forEach(a => putRow({ k: "sync", id: x.id + a[0], l: a[0], t: a[1], v: a[2] }, locked)); }
+        if (x.extras) { row({ k: "head", l: "Weiteres" }); x.extras.forEach(e => row({ k: "action", l: e[0], v: "", a: e[1], op: locked ? .4 : 1 })); }
+        row({ k: "head", l: "Hilfe und Links" });
+        if (oauth) { lk("Konto beim Anbieter öffnen", true); lk("Zugriff beim Anbieter verwalten", true); }
+        else lk("Schlüssel beim Anbieter erzeugen", true);
+        lk("Anleitung für " + x.n, true); lk("Verlauf der Verbindung", false, filled ? "heute" : "");
+        if (locked) row({ k: "note", v: "Nur Verwaltende ändern das" });
+      }
+    } else {
+      const f = (this.FN[meta.id] || []).find(v => v[0] === sel), st = f[7], b = st ? this.badge(st) : null;
+      Object.assign(D, { name: f[1], lock: false, desc: f[3], hasDesc: !!f[3], mono: "", hasMono: false, hasGlyph: true, d: this.g(f[2]), iBg: st === "connected" ? ink : "var(--c-well)", iFg: st === "connected" ? "var(--c-lane)" : ink, iRing: st === "connected" ? "none" : "inset 0 0 0 1px var(--c-line)", hasStatus: !!st, state: st || "", status: st ? this.STATUS[st] : "", stFg: "var(--c-ink-3)", dot: ink, hasNotice: false });
+      const rows = f[4].filter(r => !r.team || team).map(r => f[0] === "backups" && s.backed && r.l === "Letztes" ? Object.assign({}, r, { v: "Gerade eben" }) : r);
+      if (rows.length) { const one = rows.length === 1; rows.forEach(r => putRow((["input", "seg", "menu"].includes(r.k) && (one || r.l === f[1])) || (r.k === "kv" && r.l === f[1]) ? Object.assign({}, r, { labD: "none" }) : r, false)); }
+      acts = (f[6] || []).map(([l, k]) => f[0] === "backups" && l === "Jetzt sichern" && s.backing ? tb("Sichert…", () => {}, k, true) : tb(l, () => this.act(f[0], l), k));
+    }
+    const strong = a => a.state === "accent" || a.state === "danger" || (a.state === "disabled" && a.bg !== "transparent"), ordered = acts.slice().sort((a, b2) => strong(a) - strong(b2));
+    D.hasActs = !regler && acts.length > 0;
+    D.kind = sel.startsWith("s:") ? "Dienst" : sel.startsWith("k:") ? "Schlüssel" : meta.name;
+    D.cards = []; D.rows.forEach(r => { if (r.isHead || !D.cards.length) D.cards.push({ hasHead: !!r.isHead, head: r.isHead ? r.l : "", aside: r.isHead ? (r.aside || "") : "", rows: [] }); if (!r.isHead) D.cards[D.cards.length - 1].rows.push(r); });
+    D.cards = D.cards.filter(c => c.rows.length); D.cards.forEach(c => c.rows.forEach((r, i) => r.sepD = i === c.rows.length - 1 || r.isBar || r.isPreview || r.isNote ? "none" : "block"));
+    D.foot = regler ? ordered : []; const rk = a => a.ml === "auto" ? 2 : strong(a) ? 0 : 1; D.acts = regler ? [] : acts.slice().sort((a, b2) => rk(a) - rk(b2)); D.hasFoot = D.foot.length > 0;
+
+    const bp = String(this.props.bahnen || "").split(",").map(Number), shared = bp.length === 3 && bp.every(x => x > 0), navW = shared ? bp[0] : small ? 56 : 300, detW = shared ? bp[2] : small ? 360 : 380, lt = this.props.bahnOben ? Number(this.props.bahnOben) : (safe + 16 + 40 + 12);
+    return { licht: this.props.licht ?? "hell", grund: this.props.grund ?? "weiß", fW, W: W + "px", H: H + "px", hasSafe: safe > 0, blobTop: (safe + 16) + "px", laneTop: lt + "px", hOp: this.props.ohneHuelle ? 0 : 1,
+      navW: navW + "px", detW: detW + "px", navOpen: navW > 56, navFolded: navW <= 56, navState: navW <= 56 ? "folded" : "open", labW: small ? "104px" : "120px",
+      laneBtns: [{ label: "Falten", d: this.P.minus }, { label: "Groß", d: this.P.expand }],
+      ic: { lock: this.P.lock, alert: this.P.alert, chevron: this.P.chevron },
+      standalone: !this.props.ohneHuelle, inner: !!this.props.ohneHuelle, nav, secName: meta.name, count, hasBad, badTip, badN, groups, isHome: mitte === "Homescreen", isCards: mitte === "Kacheln", isHub: mitte === "Hub", hubCols, D };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+{
+ "version": "2026-10-19",
+ "views": [
+  {
+   "area": "shell",
+   "file": "ALFA Shell.dc.html",
+   "lanes": {
+    "leading": {
+     "header": [],
+     "content": [
+      "lane",
+      "lane-strip"
+     ]
+    },
+    "center": {
+     "header": [],
+     "content": [
+      "lane",
+      "lane-strip"
+     ]
+    },
+    "trailing": {
+     "header": [],
+     "content": [
+      "lane",
+      "lane-strip"
+     ]
+    }
+   },
+   "actions": [
+    {
+     "id": "openMenu",
+     "element": "shell.blob-face",
+     "result": "Opens or closes the area list; double click opens the assistant",
+     "confirm": "none"
+    },
+    {
+     "id": "dragLane",
+     "element": "shell.handle.down",
+     "result": "Resizes the neighbouring lanes, folds below the fold threshold",
+     "confirm": "none"
+    },
+    {
+     "id": "unfoldLane",
+     "element": "shell.lane.on-strip",
+     "result": "Unfolds a folded lane to its last state, double click to rest width",
+     "confirm": "none"
+    },
+    {
+     "id": "syncNow",
+     "element": "shell.sync-button.sync",
+     "result": "Reloads and syncs the connected services",
+     "confirm": "none"
+    }
+   ],
+   "states": [
+    "rest",
+    "awake",
+    "menuOpen",
+    "assistant",
+    "docked",
+    "dragging"
+   ],
+   "textKeys": []
+  },
+  {
+   "area": "mail",
+   "file": "ALFA Mail.dc.html",
+   "lanes": {
+    "leading": {
+     "header": [
+      "mail.lane-header"
+     ],
+     "content": [
+      "list-row",
+      "list-section-header"
+     ],
+     "footer": [
+      "mail.compose-button.new-go"
+     ]
+    },
+    "center": {
+     "header": [
+      "mail.lane-header-2",
+      "mail.input-field",
+      "mail.text-button.toggle-scope"
+     ],
+     "content": [
+      "message-row",
+      "content-state",
+      "list-section-header"
+     ]
+    },
+    "trailing": {
+     "header": [
+      "mail.lane-header-3"
+     ],
+     "content": [
+      "card-stack",
+      "card"
+     ],
+     "footer": [
+      "mail.card-footer"
+     ]
+    }
+   },
+   "actions": [
+    {
+     "id": "composeMail",
+     "element": "mail.compose-button.new-go",
+     "result": "Opens a new draft card in the trailing lane",
+     "confirm": "none"
+    },
+    {
+     "id": "searchScope",
+     "element": "mail.text-button.toggle-scope",
+     "result": "Switches the list search between this folder and all folders",
+     "confirm": "none"
+    },
+    {
+     "id": "loadMore",
+     "element": "mail.text-button.load-more",
+     "result": "Loads the next 120 messages into the list",
+     "confirm": "none"
+    },
+    {
+     "id": "loadImages",
+     "element": "mail.text-button.load-images",
+     "result": "Loads the blocked external images of this message",
+     "confirm": "none"
+    },
+    {
+     "id": "undoLast",
+     "element": "mail.text-button.undo",
+     "result": "Takes back the last archive, trash or move",
+     "confirm": "undo",
+     "feedbackKey": "mail.textButton.undo.text"
+    },
+    {
+     "id": "chooseAccount",
+     "element": "mail.account-switch",
+     "result": "Click on the lane title unfolds the head into account marks (up to three); a mark chooses the account and folds back",
+     "confirm": "none",
+     "source": "Johannes 19.10.: „Ich möchte lieber auf \"Postfach\" klicken und dort auswählen. Ein wirklich \"schmal\" gehaltenes Auswahlelement …“ (ALFA Entscheidungen 8)"
+    }
+   ],
+   "states": [
+    "inbox",
+    "reading",
+    "writing",
+    "loading",
+    "empty",
+    "noResults",
+    "notConnected",
+    "unreachable",
+    "failed",
+    "overview",
+    "multiSelect"
+   ],
+   "textKeys": [
+    "mail.textButton.undo.text"
+   ]
+  },
+  {
+   "area": "settings",
+   "file": "ALFA Einstellungen.dc.html",
+   "lanes": {
+    "leading": {
+     "header": [
+      "settings.lane-header"
+     ],
+     "content": [
+      "list-row"
+     ]
+    },
+    "center": {
+     "header": [
+      "settings.lane-header-2"
+     ],
+     "content": [
+      "settings-tiles",
+      "message-row",
+      "list-section-header"
+     ]
+    },
+    "trailing": {
+     "header": [
+      "settings.lane-header-3"
+     ],
+     "content": [
+      "card-stack",
+      "card",
+      "field-row"
+     ]
+    }
+   },
+   "actions": [
+    {
+     "id": "chooseOption",
+     "element": "settings.choice.pill-go",
+     "result": "Opens the list of choices for this setting",
+     "confirm": "none"
+    },
+    {
+     "id": "switchOption",
+     "element": "settings.toggle.toggle",
+     "result": "Turns the setting on or off",
+     "confirm": "none"
+    },
+    {
+     "id": "loadMore",
+     "element": "settings.text-button.load-more",
+     "result": "Shows more entries of the group",
+     "confirm": "none"
+    },
+    {
+     "id": "undoLast",
+     "element": "settings.text-button.undo",
+     "result": "Takes back the last change",
+     "confirm": "undo"
+    },
+    {
+     "id": "addAccount",
+     "element": "settings.text-button",
+     "result": "Opens the account form, checks the entries and adds the mail account",
+     "confirm": "none"
+    },
+    {
+     "id": "removeAccount",
+     "element": "confirm.confirm-open.open-ask",
+     "result": "Asks to remove the account, removes it on confirm; mails stay with the provider",
+     "confirm": "hold"
+    },
+    {
+     "id": "createSignature",
+     "element": "settings.text-button",
+     "result": "Creates the signature of the selected account",
+     "confirm": "none"
+    },
+    {
+     "id": "createTemplate",
+     "element": "settings.text-button",
+     "result": "Adds a template; removal asks first",
+     "confirm": "hold"
+    }
+   ],
+   "states": [
+    "connections",
+    "identity",
+    "company",
+    "protection",
+    "overview"
+   ],
+   "textKeys": []
+  }
+ ]
+}

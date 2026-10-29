@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="./alfa-draws.css">
+</helmet>
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+<dc-import name="ALFA Shell" area="Draws" appearance="{{ licht }}" ground="{{ shGrund }}" typeface="{{ shSchrift }}" handle="hairline" window="{{ fenster }}" w="{{ wArr }}" lanes="{{ lanes }}" slow="{{ slow }}" maxed="{{ maxed }}" groups="{{ groups }}" badges="{{ badges }}" dot="{{ shDot }}" sync-state="{{ syncState }}" sync-title="{{ syncTitle }}" me-ini="JB" assist-text="{{ assistText }}" search-path="{{ searchD }}" visible-lanes="{{ laneSet }}" on-choose="{{ onChoose }}" on-mode="{{ onMode }}" on-mem="{{ onMem }}" on-grow="{{ onGrow }}" on-sync="{{ onSync }}" on-root-down="{{ rootDown }}" hint-size="100%,100%">
+
+<div data-slot="0" style="display:contents">
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 var(--c-line);box-sizing:border-box;min-width:0">
+<span style="flex:none;font-weight:500;white-space:nowrap">Projekt</span>
+<span style="flex:1;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ L.detail }}</span>
+<sc-for list="{{ L.buttons }}" as="x" hint-placeholder-count="1"><button data-part="symbol-button" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:inset 0 0 0 1px var(--c-line-strong);transition:color 160ms" style-hover="color:var(--c-ink)" data-id="draws.symbol-button.lane-left"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</header>
+<div data-part="lane-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding:8px;display:flex;flex-direction:column;scrollbar-width:none">
+<sc-for list="{{ L.rows }}" as="r" hint-placeholder-count="12">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" style="flex:none;height:32px;display:flex;align-items:flex-end;gap:8px;padding:0 8px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)"><span style="flex:1;min-width:0">{{ r.name }}</span><span style="flex:none;font-variant-numeric:tabular-nums;color:{{ r.metaFg }}">{{ r.meta }}</span></div></sc-if>
+<sc-if value="{{ r.isField }}" hint-placeholder-val="{{ true }}"><label data-part="field-row" data-state="{{ r.state }}" style="flex:none;height:36px;display:flex;align-items:center;gap:12px;padding:0 8px;border-radius:12px;box-sizing:border-box;cursor:text;transition:box-shadow 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)"><span style="flex:none;width:76px;font-size:11.5px;color:{{ r.labelFg }};white-space:nowrap">{{ r.label }}</span><input data-part="text-field" data-field="{{ r.key }}" value="{{ r.value }}" placeholder="{{ r.ph }}" onChange="{{ r.onInput }}" style="flex:1;min-width:0;height:28px;border:0;padding:0;margin:0;background:transparent;font:inherit;color:var(--c-ink);outline:none" data-id="draws.text-field.input"></label></sc-if>
+<sc-if value="{{ r.isNote }}" hint-placeholder-val="{{ false }}"><div style="flex:none;padding:4px 8px 8px;font-size:11.5px;line-height:16px;color:{{ r.fg }};text-wrap:pretty">{{ r.name }}</div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ false }}"><div data-part="list-row" data-state="{{ r.state }}" onClick="{{ r.go }}" title="{{ r.tip }}" style="flex:none;height:36px;display:flex;align-items:center;gap:12px;padding:0 4px 0 8px;border-radius:12px;cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};opacity:{{ r.op }};transition:background 160ms,opacity 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)" data-id="draws.list-row.go"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ r.symFg }};box-shadow:{{ r.symRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.d }}"></path></svg></span><span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.weight }}">{{ r.name }}</span><span style="flex:none;font-size:11.5px;font-variant-numeric:tabular-nums;color:{{ r.metaFg }};white-space:nowrap">{{ r.meta }}</span><sc-if value="{{ r.hasEnd }}" hint-placeholder-val="{{ false }}"><button data-part="symbol-button" style-active="transform:scale(.96)" title="{{ r.endLabel }}" aria-label="{{ r.endLabel }}" onClick="{{ r.endGo }}" style="appearance:none;border:0;padding:0;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:{{ r.metaFg }};cursor:pointer" style-hover="background:var(--c-hover)" data-id="draws.symbol-button.row-end"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.endD }}"></path></svg></button></sc-if></div></sc-if>
+</sc-for>
+</div>
+<div data-part="lane-footer" style="flex:none;padding:8px"><button data-part="compose-button" style-active="transform:scale(.98)" onClick="{{ L.loadGo }}" style="appearance:none;border:0;width:100%;height:36px;padding:0 12px 0 4px;box-sizing:border-box;border-radius:12px;display:flex;align-items:center;gap:12px;font:inherit;background:var(--c-inv);color:var(--c-on-inv);cursor:pointer;transition:opacity 160ms" style-hover="opacity:.88" data-id="draws.compose-button.load"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--c-on-inv-line)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ plusD }}"></path></svg></span><span style="flex:1;min-width:0;text-align:left">Objekt laden</span></button></div>
+</sc-if>
+</div>
+
+<div data-slot="1" style="display:contents">
+<sc-if value="{{ isMain }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 var(--c-line);box-sizing:border-box;min-width:0">
+<span style="flex:none;font-weight:500;white-space:nowrap">Blatt</span>
+<span style="flex:1;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ B.detail }}</span>
+<button data-part="choice" onClick="{{ B.presetGo }}" style-active="transform:scale(.98)" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" style-hover="background:var(--c-hover)" data-id="draws.choice.preset"><span>{{ B.presetName }}</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button>
+<i data-part="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i>
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ B.tools }}" as="x" hint-placeholder-count="5"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" data-state="{{ x.state }}" style-active="transform:scale(.96)" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;min-width:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-size:11.5px;font-variant-numeric:tabular-nums;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}" data-id="draws.symbol-button.main"><sc-if value="{{ x.hasD }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg></sc-if><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+</header>
+<div data-part="desk" ref="{{ deskRef }}" onPointerDown="{{ B.deskDown }}" style="flex:1;min-height:0;overflow:hidden;position:relative;background:var(--d-desk);cursor:{{ B.cursor }};touch-action:none;user-select:none;-webkit-user-select:none;font-family:Geist,system-ui,sans-serif;transition:background 240ms" data-id="draws.desk.pan">
+<div data-part="sheet" style="position:absolute;left:{{ B.sh.l }};top:{{ B.sh.t }};width:{{ B.sh.w }};height:{{ B.sh.h }};background:var(--c-sheet);box-shadow:var(--sh-float)">
+<svg ref="{{ svgRef }}" viewBox="{{ B.sh.vb }}" width="100%" height="100%" style="display:block;overflow:visible">
+<g style="pointer-events:none">
+<sc-for list="{{ B.prims }}" as="p" hint-placeholder-count="0"><path d="{{ p.d }}" strokeWidth="{{ p.sw }}" strokeDasharray="{{ p.dash }}" vectorEffect="{{ p.ve }}" strokeLinejoin="round" strokeLinecap="round" style="fill:{{ p.fill }};stroke:{{ p.stroke }};opacity:{{ p.op }}"></path></sc-for>
+{{ B.textEls }}
+</g>
+<sc-for list="{{ B.hits }}" as="h" hint-placeholder-count="0"><rect data-part="sheet-view" data-state="{{ h.state }}" x="{{ h.x }}" y="{{ h.y }}" width="{{ h.w }}" height="{{ h.h }}" onPointerDown="{{ h.down }}" style="fill:transparent;cursor:move" data-id="draws.sheet-view.drag"></rect></sc-for>
+<g style="pointer-events:none"><sc-for list="{{ B.over }}" as="p" hint-placeholder-count="0"><path d="{{ p.d }}" strokeWidth="{{ p.sw }}" strokeDasharray="{{ p.dash }}" vectorEffect="non-scaling-stroke" style="fill:none;stroke:{{ p.stroke }}"></path></sc-for></g>
+<sc-for list="{{ B.handles }}" as="h" hint-placeholder-count="0"><rect data-part="handle" x="{{ h.x }}" y="{{ h.y }}" width="{{ h.s }}" height="{{ h.s }}" onPointerDown="{{ h.down }}" strokeWidth="1" vectorEffect="non-scaling-stroke" style="fill:var(--d-handle);stroke:var(--d-select);cursor:{{ h.cur }}" data-id="draws.handle.resize"></rect></sc-for>
+</svg>
+</div>
+<sc-if value="{{ B.empty }}" hint-placeholder-val="{{ false }}"><div data-part="content-state" data-state="empty" onPointerDown="{{ stop }}" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-60%);width:300px;padding:16px;box-sizing:border-box;border-radius:16px;background:var(--c-menu);box-shadow:var(--sh-float);display:flex;flex-direction:column;gap:8px;cursor:default"><span style="font-weight:500">Kein Objekt auf dem Blatt</span><span style="font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty">Lade ein Objekt aus dem Konfigurator oder gib Claude ein Foto, ein PDF oder einen Text.</span><div style="display:flex;gap:8px;padding-top:4px"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ B.loadDemo }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:var(--c-inv);color:var(--c-on-inv);cursor:pointer" data-id="draws.text-button.load-demo">Sideboard laden</button><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ B.claudeGo }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer" style-hover="background:var(--c-hover)" data-id="draws.text-button.claude">Claude-Import</button></div></div></sc-if>
+<sc-if value="{{ B.hasClaude }}" hint-placeholder-val="{{ false }}"><div data-part="assistant" onPointerDown="{{ stop }}" style="position:absolute;left:50%;top:16px;transform:translateX(-50%);width:340px;padding:4px;box-sizing:border-box;border-radius:16px;background:var(--c-menu);box-shadow:var(--sh-float);display:flex;flex-direction:column;gap:4px;cursor:default;z-index:5">
+<div style="height:36px;display:flex;align-items:center;gap:8px;padding:0 4px 0 12px"><span style="flex:1;font-weight:500">Claude-Import</span><button data-part="symbol-button" style-active="transform:scale(.96)" aria-label="Schließen" title="Schließen" onClick="{{ B.claude.close }}" style="appearance:none;border:0;padding:0;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer" style-hover="background:var(--c-hover)" data-id="draws.symbol-button.claude-close"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="{{ closeD }}"></path></svg></button></div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:0 4px"><sc-for list="{{ B.claude.srcs }}" as="q" hint-placeholder-count="3"><button data-part="catalog-tile" data-state="{{ q.state }}" onClick="{{ q.go }}" style-active="transform:scale(.98)" style="appearance:none;border:0;height:56px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font:inherit;font-size:11.5px;background:{{ q.bg }};color:{{ q.fg }};box-shadow:{{ q.ring }};cursor:pointer;transition:background 160ms" data-id="draws.catalog-tile.claude-src"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ q.d }}"></path></svg><span>{{ q.n }}</span></button></sc-for></div>
+<textarea data-part="text-field" value="{{ B.claude.text }}" onChange="{{ B.claude.onText }}" placeholder="{{ B.claude.ph }}" style="margin:0 4px;height:72px;resize:none;border:0;padding:8px 12px;box-sizing:border-box;border-radius:12px;background:var(--c-well);font:inherit;font-size:11.5px;line-height:16px;color:var(--c-ink);outline:none" data-id="draws.text-field.claude"></textarea>
+<div style="height:44px;display:flex;align-items:center;gap:8px;padding:0 4px 0 12px"><span style="flex:1;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ B.claude.status }}</span><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ B.claude.run }}" style="appearance:none;border:0;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:var(--c-inv);color:var(--c-on-inv);cursor:pointer;opacity:{{ B.claude.op }}" data-id="draws.text-button.claude-run">{{ B.claude.runLabel }}</button></div>
+</div></sc-if>
+<div data-part="status" style="position:absolute;left:12px;bottom:12px;height:24px;padding:0 12px;border-radius:999px;background:var(--c-lane);box-shadow:var(--sh-lane);display:flex;align-items:center;font-size:11.5px;font-variant-numeric:tabular-nums;color:{{ B.statusFg }};white-space:nowrap;pointer-events:none">{{ B.status }}</div>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div data-part="toast" style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:40;height:28px;padding:0 12px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;gap:12px;font-size:11.5px;white-space:nowrap;box-shadow:var(--sh-float)"><span>{{ toast }}</span><sc-if value="{{ hasUndo }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ undo }}" onPointerDown="{{ stop }}" style="appearance:none;border:0;height:20px;margin-right:-8px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px currentColor;cursor:pointer" data-id="draws.text-button.undo">Rückgängig</button></sc-if></div></sc-if>
+</div>
+</sc-if>
+</div>
+
+<div data-slot="2" style="display:contents">
+<sc-if value="{{ isStack }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:4px;padding:0 8px;box-shadow:inset 0 -1px 0 var(--c-line);box-sizing:border-box;min-width:0">
+<div data-part="segmented-control" style="flex:1;min-width:0;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ R.tabs }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background 160ms,color 160ms" data-id="draws.option.tab">{{ o.n }}</button></sc-for></div>
+<sc-for list="{{ R.end }}" as="x" hint-placeholder-count="1"><button data-part="symbol-button" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-2);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer" style-hover="background:var(--c-hover)" data-id="draws.symbol-button.lane-right"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</header>
+<div data-part="lane-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding:8px;display:flex;flex-direction:column;scrollbar-width:none">
+<sc-for list="{{ R.rows }}" as="r" hint-placeholder-count="10">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" style="flex:none;height:32px;display:flex;align-items:flex-end;gap:8px;padding:0 8px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)"><span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</span><span style="flex:none;color:{{ r.metaFg }}">{{ r.meta }}</span></div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ false }}"><div data-part="list-row" data-state="{{ r.state }}" onClick="{{ r.go }}" title="{{ r.tip }}" style="flex:none;height:36px;display:flex;align-items:center;gap:12px;padding:0 8px;border-radius:12px;cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};opacity:{{ r.op }};transition:background 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)" data-id="draws.list-row.view"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ r.symFg }};box-shadow:{{ r.symRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.d }}"></path></svg></span><span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.weight }}">{{ r.name }}</span><span style="flex:none;font-size:11.5px;font-variant-numeric:tabular-nums;color:{{ r.metaFg }}">{{ r.meta }}</span></div></sc-if>
+<sc-if value="{{ r.isSeg }}" hint-placeholder-val="{{ true }}"><div data-part="field-row" style="flex:none;height:36px;display:flex;align-items:center;gap:12px;padding:0 8px;opacity:{{ r.op }};pointer-events:{{ r.pe }};transition:opacity 160ms"><span style="flex:1 0 auto;min-width:0;color:var(--c-ink-2);white-space:nowrap">{{ r.label }}</span><div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ r.opts }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;min-width:24px;padding:0 6px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;transition:background 160ms,color 160ms" data-id="draws.option.inspector">{{ o.n }}</button></sc-for></div></div></sc-if>
+<sc-if value="{{ r.isTog }}" hint-placeholder-val="{{ false }}"><div data-part="field-row" style="flex:none;height:36px;display:flex;align-items:center;gap:12px;padding:0 8px;opacity:{{ r.op }};pointer-events:{{ r.pe }};transition:opacity 160ms"><span style="flex:1;min-width:0;color:var(--c-ink-2)">{{ r.label }}</span><button data-part="toggle" role="switch" data-state="{{ r.tState }}" aria-label="{{ r.label }}" onClick="{{ r.toggle }}" style="appearance:none;border:0;padding:0;flex:none;position:relative;width:32px;height:20px;border-radius:999px;background:{{ r.tBg }};cursor:pointer;transition:background 200ms" data-id="draws.toggle.inspector"><i style="position:absolute;top:2px;left:{{ r.tX }};width:16px;height:16px;border-radius:50%;background:var(--c-lane);box-shadow:var(--sh-knob);transition:left 200ms cubic-bezier(.2,.8,.2,1)"></i></button></div></sc-if>
+<sc-if value="{{ r.isSld }}" hint-placeholder-val="{{ false }}"><div data-part="field-row" style="flex:none;display:flex;flex-direction:column;gap:4px;padding:8px 8px 4px;opacity:{{ r.op }};pointer-events:{{ r.pe }};transition:opacity 160ms"><div style="display:flex;align-items:center;gap:12px"><span style="flex:1;min-width:0;color:var(--c-ink-2)">{{ r.label }}</span><span style="flex:none;font-size:11.5px;font-variant-numeric:tabular-nums;color:var(--c-ink)">{{ r.val }}</span></div><div data-part="slider" role="slider" tabIndex="0" aria-label="{{ r.label }}" aria-valuetext="{{ r.val }}" onPointerDown="{{ r.down }}" onKeyDown="{{ r.key }}" style="position:relative;height:20px;cursor:pointer;touch-action:none;border-radius:999px" data-id="draws.slider.drag"><i style="position:absolute;left:0;right:0;top:9px;height:2px;border-radius:999px;background:var(--c-line-strong)"></i><i style="position:absolute;left:0;top:9px;height:2px;width:{{ r.pct }};border-radius:999px;background:var(--c-ink)"></i><i style="position:absolute;top:2px;left:calc({{ r.pct }} - 8px);width:16px;height:16px;border-radius:50%;background:var(--c-lane);box-shadow:var(--sh-knob),0 0 0 1px var(--c-line-strong)"></i></div></div></sc-if>
+<sc-if value="{{ r.isSw }}" hint-placeholder-val="{{ false }}"><div data-part="field-row" style="flex:none;height:36px;display:flex;align-items:center;gap:12px;padding:0 8px;opacity:{{ r.op }};pointer-events:{{ r.pe }}"><span style="flex:1;min-width:0;color:var(--c-ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.label }}</span><span style="flex:none;display:flex;gap:8px"><sc-for list="{{ r.sw }}" as="q" hint-placeholder-count="4"><button data-part="swatch" data-state="{{ q.state }}" title="{{ q.n }}" aria-label="{{ q.n }}" onClick="{{ q.go }}" style="appearance:none;border:0;padding:0;flex:none;width:20px;height:20px;border-radius:50%;background:{{ q.c }};box-shadow:{{ q.ring }};cursor:pointer;transition:box-shadow 160ms" style-active="transform:scale(.92)" data-id="draws.swatch.inspector"></button></sc-for></span></div></sc-if>
+<sc-if value="{{ r.isPick }}" hint-placeholder-val="{{ false }}"><div data-part="field-row" style="flex:none;height:36px;display:flex;align-items:center;gap:12px;padding:0 8px;opacity:{{ r.op }};pointer-events:{{ r.pe }}"><span style="flex:1;min-width:0;color:var(--c-ink-2)">{{ r.label }}</span><button data-part="choice" onClick="{{ r.go }}" style-active="transform:scale(.98)" style="appearance:none;border:0;flex:none;max-width:150px;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" style-hover="background:var(--c-hover)" data-id="draws.choice.inspector"><span style="min-width:0;overflow:hidden;text-overflow:ellipsis">{{ r.value }}</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ chevronD }}"></path></svg></button></div></sc-if>
+<sc-if value="{{ r.isNote }}" hint-placeholder-val="{{ false }}"><div style="flex:none;padding:4px 8px 8px;font-size:11.5px;line-height:16px;color:{{ r.fg }};text-wrap:pretty">{{ r.name }}</div></sc-if>
+<sc-if value="{{ r.isProg }}" hint-placeholder-val="{{ false }}"><div data-part="progress" style="flex:none;display:flex;flex-direction:column;gap:8px;padding:8px"><div style="position:relative;height:2px;border-radius:999px;background:var(--c-line-strong);overflow:hidden"><i style="position:absolute;left:0;top:0;bottom:0;width:{{ r.pct }};background:var(--c-ink);transition:width 560ms cubic-bezier(.2,.8,.2,1)"></i></div><span style="font-size:11.5px;font-variant-numeric:tabular-nums;color:var(--c-ink-2)">{{ r.name }}</span></div></sc-if>
+<sc-if value="{{ r.isBtns }}" hint-placeholder-val="{{ false }}"><div style="flex:none;display:flex;flex-wrap:wrap;gap:8px;padding:8px"><sc-for list="{{ r.btns }}" as="q" hint-placeholder-count="2"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ q.go }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:{{ q.fg }};box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" style-hover="background:var(--c-hover)" data-id="draws.text-button.inspector">{{ q.label }}</button></sc-for></div></sc-if>
+</sc-for>
+</div>
+<sc-if value="{{ R.hasFoot }}" hint-placeholder-val="{{ false }}"><div data-part="lane-footer" style="flex:none;padding:8px"><button data-part="compose-button" style-active="transform:scale(.98)" onClick="{{ R.foot.go }}" style="appearance:none;border:0;width:100%;height:36px;padding:0 12px 0 4px;box-sizing:border-box;border-radius:12px;display:flex;align-items:center;gap:12px;font:inherit;background:{{ R.foot.bg }};color:{{ R.foot.fg }};box-shadow:{{ R.foot.ring }};cursor:pointer;transition:opacity 160ms,background 160ms" style-hover="opacity:.88" data-id="draws.compose-button.export"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px color-mix(in srgb, currentColor 30%, transparent)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ R.foot.d }}"></path></svg></span><span style="flex:1;min-width:0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ R.foot.label }}</span></button></div></sc-if>
+</sc-if>
+</div>
+
+<div data-slot="over" ref="{{ winRef }}" style="display:contents"></div>
+<div data-slot="top" style="display:contents">
+<sc-if value="{{ hasMenu }}" hint-placeholder-val="{{ false }}">
+<div data-part="anchored-menu" onPointerDown="{{ stop }}" style="position:absolute;left:{{ menu.x }};top:{{ menu.y }};width:{{ menu.w }};padding:4px;box-sizing:border-box;border-radius:16px;background:var(--c-menu);color:var(--c-ink);box-shadow:var(--sh-float);z-index:50;display:flex;flex-direction:column" data-id="draws.anchored-menu.stop">
+<sc-for list="{{ menu.items }}" as="it" hint-placeholder-count="4">
+<sc-if value="{{ it.sep }}" hint-placeholder-val="{{ false }}"><div style="height:1px;margin:4px 12px;background:var(--c-line)"></div></sc-if>
+<sc-if value="{{ it.head }}" hint-placeholder-val="{{ false }}"><div style="height:24px;display:flex;align-items:flex-end;padding:0 12px 4px;font-size:11.5px;color:var(--c-ink-3)">{{ it.label }}</div></sc-if>
+<sc-if value="{{ it.item }}" hint-placeholder-val="{{ true }}"><div data-part="menu-row" onClick="{{ it.go }}" style="height:28px;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:12px;cursor:pointer;color:{{ it.fg }};white-space:nowrap" style-hover="background:var(--c-hover)" data-id="draws.menu-row.go"><span style="flex:none;width:12px;font-size:11.5px">{{ it.check }}</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">{{ it.label }}</span><span style="flex:none;font-size:11.5px;color:var(--c-ink-3)">{{ it.meta }}</span></div></sc-if>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</dc-import>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1512,&quot;height&quot;:982},&quot;appearance&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;ground&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;white&quot;,&quot;lightGray&quot;],&quot;default&quot;:&quot;white&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;typeface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Geist&quot;,&quot;System&quot;],&quot;default&quot;:&quot;Geist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;window&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1512 × 982&quot;,&quot;Fenster&quot;],&quot;default&quot;:&quot;1512 × 982&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;normal&quot;,&quot;empty&quot;,&quot;defects&quot;,&quot;overflow&quot;,&quot;exporting&quot;,&quot;error&quot;],&quot;default&quot;:&quot;normal&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Draws&quot;},&quot;preset&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Drei Ansichten&quot;,&quot;Isometrie&quot;,&quot;Iso-Schritte&quot;,&quot;Perspektive&quot;,&quot;Kunde&quot;],&quot;default&quot;:&quot;Drei Ansichten&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Draws&quot;},&quot;template&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A3 quer&quot;,&quot;A4 hoch&quot;,&quot;A4 quer&quot;,&quot;A2 quer&quot;],&quot;default&quot;:&quot;A3 quer&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Draws&quot;}}">
+class Component extends DCLogic {
+  NAME = "Draws";
+  P = {
+    close: "M4.5 4.5l7 7M11.5 4.5l-7 7", chevron: "M4.5 6.5L8 10l3.5-3.5", minus: "M4 8h8", plus: "M8 3.5v9M3.5 8h9",
+    expand: "M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5L9 7M2.5 13.5L7 9", shrink: "M13.5 2.5L10 6M10 3v3h3M2.5 13.5L6 10M6 13v-3H3",
+    raster: "M2.5 2.5h11v11h-11ZM6 2.5v11M10 2.5v11M2.5 6h11M2.5 10h11", search: "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5",
+    zin: "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5M7 5v4M5 7h4", zout: "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5M5 7h4",
+    eye: "M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8ZM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z", eyeOff: "M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8ZM2.5 13.5l11-11",
+    cube: "M8 2l5.5 3v6L8 14 2.5 11V5ZM8 8v6M2.5 5L8 8l5.5-3", sheet: "M3.5 2.5h6l3 3v8h-9ZM9.5 2.5v3h3", pack: "M2.5 5L8 2.5 13.5 5v6L8 13.5 2.5 11ZM2.5 5L8 7.5 13.5 5M8 7.5v6",
+    warn: "M8 2.5l6 11H2ZM8 6.5v3M8 11.5v.5", user: "M8 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM3 13.5a5 5 0 0 1 10 0", export: "M8 2.5V10M4.5 6.5L8 10l3.5-3.5M3 13h10",
+    photo: "M2.5 4.5h11v8h-11ZM5 10l2.5-3 2 2 1.5-1.5 2 2.5", pdf: "M3.5 2.5h6l3 3v8h-9ZM5.5 9h5M5.5 11h3", text: "M3 4h10M3 7h10M3 10h7M3 13h5",
+    view: "M2.5 3.5h11v9h-11ZM2.5 9.5h11", iso: "M8 2l5.5 3v6L8 14 2.5 11V5Z", persp: "M2.5 3.5l11 2v5l-11 2Z", steps: "M2.5 13.5h3v-3h3v-3h3v-3h2", style: "M8 13.5a5.5 5.5 0 1 1 0-11c3 0 5.5 2 5.5 4.5 0 1.5-1.2 2.5-2.7 2.5H9.5a1.2 1.2 0 0 0-.9 2c.6.7.1 2-.6 2Z", stop: "M4.5 4.5h7v7h-7Z", retry: "M12.5 8a4.5 4.5 0 1 1-1.3-3.2M12.5 2.5v2.5H10"
+  };
+  GROUPS = [["Draws", [["Blatt", ["Format", "Zoom", "Raster"]], ["Packs", ["CI", "Vorlage", "Mängel"]], ["Ansichten", ["Inspektor", "Iso", "Maßstab"]], ["Claude", ["Import", "Foto", "PDF", "Text"]], ["Export", ["PDF", "SVG", "mehrseitig"]]]], ["Kreativ", [["Moodboard", []], ["Aufmaß", []], ["Atelier", []], ["Planvergleich", []], ["Konfigurator", []]]], ["Kommunikation", [["Mail", []]]]];
+  FILES = { "Moodboard": "ALFA Moodboard.dc.html", "Aufmaß": "ALFA Aufmass.dc.html", "Atelier": "ALFA Atelier.dc.html", "Planvergleich": "ALFA Planvergleich.dc.html", "Konfigurator": "ALFA Konfigurator.dc.html" };
+  // TOKENBOGEN.json › draws
+  T = { grid: 10, gridMajor: 50, snapPx: 6, margin: 10, titleH: 18, gap: 8, pad: 6, label: 4, dimOff: 4, dimText: 2.5, dimStroke: .18, labelText: 2.2, tLabel: 2, tValue: 3.2, tStroke: .35, minCell: 40, deskPad: 48, handle: 8, zoomMin: .25, zoomMax: 4, zoomStep: 1.25, dist: 4.5, light: [.38, .62], scales: [1, 2, 5, 10, 20, 25, 50, 100], pageMs: 600, claudeMs: 1600,
+    rg: { az: [0, 355, 5, "°"], el: [0, 90, 5, "°"], ein: [0, 1, .02, "mm"], eout: [0, 2, .05, "mm"], sh: [0, 60, 2, "%"] } };
+  TONES = [["Weiß", "#ffffff"], ["Grau 1", "#f5f5f5"], ["Grau 2", "#e8e8e8"], ["Grau 3", "#d9d9d9"], ["Grau 4", "#a3a3a3"]];
+  ACCENTS = [["Signal", "#b3412e"], ["Apricot", "#f39f5a"], ["Koralle", "#f95c4b"], ["Tinte", "#171717"]];
+  MATS = { oak: "Eiche", walnut: "Nussbaum", lacquer: "Lack weiß", steel: "Stahl" };
+  MAT_TONES = { oak: ["#e6cfae", "#d6b58c", "#b8915f"], walnut: ["#9a6c4c", "#7a5236", "#553826"], lacquer: ["#ffffff", "#f2f0eb", "#e3dfd6"], steel: ["#c4c8cc", "#9ea3a8", "#6f757b"] };
+  FORMATS = { A4: [297, 210], A3: [420, 297], A2: [594, 420] };
+  TPLS = [{ id: "a3q", n: "A3 quer", f: "A3", q: true }, { id: "a4h", n: "A4 hoch", f: "A4", q: false }, { id: "a4q", n: "A4 quer", f: "A4", q: true }, { id: "a2q", n: "A2 quer", f: "A2", q: true }];
+  CIS = [{ id: "studio", n: "Studio" }, { id: "client", n: "Kunde" }, { id: "neutral", n: "Neutral" }];
+  PRESETS = [["three", "Drei Ansichten"], ["iso", "Isometrie"], ["steps", "Iso-Schritte"], ["persp", "Perspektive"], ["client", "Kunde"]];
+  PARTS = [
+    { id: "base", n: "Sockel", b: [20, 40, 0, 1760, 500, 100], step: 1, mat: "steel" },
+    { id: "body", n: "Korpus", b: [0, 0, 100, 1800, 560, 720], step: 2, mat: "lacquer" },
+    { id: "f1", n: "Front links", b: [2, -19, 104, 596, 19, 712], step: 3, mat: "oak" },
+    { id: "f2", n: "Front Mitte", b: [602, -19, 104, 596, 19, 712], step: 3, mat: "oak" },
+    { id: "f3", n: "Front rechts", b: [1202, -19, 104, 596, 19, 712], step: 3, mat: "oak" },
+    { id: "top", n: "Platte", b: [-10, -30, 820, 1820, 600, 40], step: 4, mat: "walnut" }];
+  FIELDS = [["name", "Nachname", "Brandt"], ["project", "Projekt", "Küche Nordwand"], ["street", "Straße", "Lindenstraße 14"], ["city", "PLZ / Ort", "20259 Hamburg"], ["custNo", "Kundennr.", "K-2041"], ["date", "Datum", "21.10.2026"]];
+  PURPOSES = [["shop", "Werkstatt", "three", "a3q", true], ["client", "Kunde", "client", "a3q", false], ["assembly", "Montage", "steps", "a4q", false]];
+  STEP_TXT = { 1: "Sockel setzen", 2: "Korpus aufsetzen", 3: "Fronten einhängen", 4: "Platte auflegen" };
+  winRef = React.createRef(); deskRef = React.createRef(); svgRef = React.createRef();
+
+  style0() { return { az: 45, el: 30, top: "#f5f5f5", side: "#d9d9d9", front: "#e8e8e8", ein: .18, eout: .5, shadow: true, sh: 14, accent: "", accentC: "#b3412e", mats: { oak: "#d6b58c", walnut: "#7a5236", lacquer: "#f2f0eb", steel: "#9ea3a8" } }; }
+  initial() {
+    const p = this.props || {};
+    const tpl = { "A3 quer": "a3q", "A4 hoch": "a4h", "A4 quer": "a4q", "A2 quer": "a2q" }[p.template ?? "A3 quer"] || "a3q";
+    const pre = { "Drei Ansichten": "three", "Isometrie": "iso", "Iso-Schritte": "steps", "Perspektive": "persp", "Kunde": "client" }[p.preset ?? "Drei Ansichten"] || "three";
+    const proj = {}; this.FIELDS.forEach(f => { proj[f[0]] = f[2]; });
+    const pu = pre === "client" ? "client" : pre === "steps" ? "assembly" : "shop", bom = pu === "shop";
+    const sheets = this.PURPOSES.map((q, i) => ({ id: "s" + (i + 1), n: q[1], purpose: q[0], preset: q[2], tpl: q[3], bom: q[4], views: this.layout(q[2], q[3], q[4]), rev: q[0] === "client" ? "B" : "A", issued: null }));
+    const cur = sheets.find(x => x.purpose === pu);
+    const s = { mem: (this.state && this.state.mem) || {}, proj, ci: "studio", tpl, loaded: true, hidden: {}, preset: pre, views: this.layout(pre, tpl, bom), bom, sheets, cur: cur.id, rev: cur.rev, issued: null, sel: null, tab: "view", zoom: 1, pan: { x: 0, y: 0 }, raster: false, guides: [], drag: false,
+      style: this.style0(), exp: { fmt: "pdf", mode: "one", st: "idle", page: 0, pages: 1, err: "" }, claude: null, menu: null, toast: null, toastUndo: null, blobOpen: false, syncing: false };
+    const st = p.state ?? "normal";
+    if (st === "empty") s.loaded = false;
+    if (st === "defects") { s.proj.custNo = ""; s.proj.date = ""; s.ci = "client"; }
+    if (st === "overflow") { s.views[0] = Object.assign({}, s.views[0], { scaleMode: "fixed", scale: 5 }); s.sel = s.views[0].id; }
+    if (st === "exporting") { s.tab = "export"; s.exp = Object.assign({}, s.exp, { st: "running", page: 1, pages: s.views.length, mode: "views" }); }
+    if (st === "error") { s.tab = "export"; s.exp = Object.assign({}, s.exp, { st: "error", err: "Schrift Geist ließ sich nicht einbetten. Mit Systemschrift erneut versuchen?" }); }
+    return s;
+  }
+  state = this.initial();
+  pk() { const p = this.props || {}; return [p.state, p.preset, p.template].join("|"); }
+
+  sheetDims(tid) { const t = this.TPLS.find(q => q.id === tid) || this.TPLS[0], f = this.FORMATS[t.f]; return t.q ? [f[0], f[1]] : [f[1], f[0]]; }
+  tplOf() { return this.TPLS.find(q => q.id === this.state.tpl) || this.TPLS[0]; }
+  bomW(g) { return Math.round(Math.min(120, (g[0] - 2 * this.T.margin) * .3)); }
+  pages(s) { return s.exp.mode === "views" ? Math.max(1, s.views.length) : s.exp.mode === "set" ? s.sheets.length : 1; }
+  snap(s) { return JSON.stringify([s.views, s.style, s.proj, s.ci, s.tpl, s.bom, s.hidden, s.loaded]); }
+  changed(s) { return s.issued != null && s.issued !== this.snap(s); }
+  nextRev(r) { return String.fromCharCode(r.charCodeAt(0) + 1); }
+  saveCur(st) { return st.sheets.map(x => x.id === st.cur ? Object.assign({}, x, { preset: st.preset, tpl: st.tpl, views: st.views, bom: st.bom, rev: st.rev, issued: st.issued }) : x); }
+  switchSheet(id) { this.setState(st => { if (id === st.cur) return null; const sh = this.saveCur(st), t = sh.find(x => x.id === id); return { sheets: sh, cur: id, preset: t.preset, tpl: t.tpl, views: t.views, bom: t.bom, rev: t.rev, issued: t.issued, sel: null, zoom: 1, pan: { x: 0, y: 0 } }; }); }
+  addSheet(pu) { const q = this.PURPOSES.find(x => x[0] === pu); this.setState(st => { const sh = this.saveCur(st), n = sh.filter(x => x.purpose === pu).length, id = "s" + Date.now(), ns = { id, n: q[1] + (n ? " " + (n + 1) : ""), purpose: pu, preset: q[2], tpl: q[3], bom: q[4], views: this.layout(q[2], q[3], q[4]), rev: "A", issued: null }; return { sheets: sh.concat([ns]), cur: id, preset: ns.preset, tpl: ns.tpl, views: ns.views, bom: ns.bom, rev: "A", issued: null, sel: null, zoom: 1, pan: { x: 0, y: 0 } }; }); this.toastIt(q[1] + "-Blatt angelegt"); }
+  layout(pre, tid, bom) {
+    const g = this.sheetDims(tid), T = this.T, A = { x: T.margin, y: T.margin, w: g[0] - 2 * T.margin, h: g[1] - 2 * T.margin - T.titleH - T.gap }, G = T.gap;
+    if (bom) A.w -= this.bomW(g) + G;
+    const V = (id, type, dir, x, y, w, h, o) => Object.assign({ id, type, dir, focus: "all", steps: 0, scaleMode: "auto", scale: 20, dims: type === "ortho", fill: "tone", x: Math.round(x), y: Math.round(y), w: Math.round(w), h: Math.round(h) }, o || {});
+    const cw = (A.w - G) / 2, ch = (A.h - G) / 2;
+    if (pre === "iso") return [V("v1", "iso", "front", A.x, A.y, A.w, A.h)];
+    if (pre === "persp") return [V("v1", "persp", "front", A.x, A.y, A.w, A.h)];
+    if (pre === "steps") { const row = A.w > A.h * 1.6; return [1, 2, 3, 4].map((n, i) => row ? V("v" + n, "iso", "front", A.x + i * ((A.w - 3 * G) / 4 + G), A.y, (A.w - 3 * G) / 4, A.h, { steps: n }) : V("v" + n, "iso", "front", A.x + (i % 2) * (cw + G), A.y + Math.floor(i / 2) * (ch + G), cw, ch, { steps: n })); }
+    if (pre === "client") { const big = (A.w - G) * .64, rw = A.w - big - G; return [V("v1", "iso", "front", A.x, A.y, big, A.h, { fill: "mat" }), V("v2", "ortho", "front", A.x + big + G, A.y, rw, ch), V("v3", "persp", "front", A.x + big + G, A.y + ch + G, rw, ch, { fill: "mat" })]; }
+    return [V("v1", "ortho", "front", A.x, A.y, cw, ch), V("v2", "ortho", "side", A.x + cw + G, A.y, cw, ch), V("v3", "ortho", "top", A.x, A.y + ch + G, cw, ch), V("v4", "iso", "front", A.x + cw + G, A.y + ch + G, cw, ch)];
+  }
+  vName(v) {
+    const base = v.type === "ortho" ? { front: "Vorderansicht", side: "Seitenansicht", top: "Draufsicht", back: "Rückansicht" }[v.dir] : v.type === "persp" ? "Perspektive" : v.steps > 0 ? "Schritt " + v.steps + " · " + this.STEP_TXT[v.steps] : "Isometrie";
+    const p = v.focus !== "all" ? this.PARTS.find(q => q.id === v.focus) : null; return p ? base + " · " + p.n : base;
+  }
+  cam(v, s) { if (v.type === "ortho") return { a: { front: 0, side: -90, top: 0, back: 180 }[v.dir] || 0, e: v.dir === "top" ? 90 : 0, persp: false }; return { a: s.style.az, e: s.style.el, persp: v.type === "persp" }; }
+  hull(P) {
+    const p = P.map(q => [q[0], q[1]]).sort((a, b) => a[0] - b[0] || a[1] - b[1]); if (p.length < 3) return p;
+    const cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]), lo = [], up = [];
+    p.forEach(q => { while (lo.length >= 2 && cr(lo[lo.length - 2], lo[lo.length - 1], q) <= 0) lo.pop(); lo.push(q); });
+    for (let i = p.length - 1; i >= 0; i--) { const q = p[i]; while (up.length >= 2 && cr(up[up.length - 2], up[up.length - 1], q) <= 0) up.pop(); up.push(q); }
+    return lo.slice(0, -1).concat(up.slice(0, -1));
+  }
+  area(p) { let a = 0; for (let i = 0; i < p.length; i++) { const q = p[i], r = p[(i + 1) % p.length]; a += q[0] * r[1] - r[0] * q[1]; } return a / 2; }
+  shade(hex, k) { const n = parseInt(hex.slice(1), 16), c = [n >> 16, (n >> 8) & 255, n & 255].map(x => Math.max(0, Math.min(255, Math.round(x * k)))); return "#" + c.map(x => x.toString(16).padStart(2, "0")).join(""); }
+  fmt(n) { return Math.round(n).toLocaleString("de-DE"); }
+  place(v, s) {
+    const T = this.T, c = this.cam(v, s), ra = c.a * Math.PI / 180, re = c.e * Math.PI / 180, ca = Math.cos(ra), sa = Math.sin(ra), ce = Math.cos(re), se = Math.sin(re), st = s.style;
+    let parts = this.PARTS.filter(p => !s.hidden[p.id]);
+    if (v.focus !== "all") parts = parts.filter(p => p.id === v.focus);
+    if (v.type !== "ortho" && v.steps > 0) parts = parts.filter(p => p.step <= v.steps);
+    const out = { v, name: this.vName(v), prims: [], texts: [], over: false, n: 0, empty: !parts.length };
+    if (!parts.length) return out;
+    const mn = [1e9, 1e9, 1e9], mx = [-1e9, -1e9, -1e9];
+    parts.forEach(p => { for (let k = 0; k < 3; k++) { mn[k] = Math.min(mn[k], p.b[k]); mx[k] = Math.max(mx[k], p.b[k] + p.b[k + 3]); } });
+    const wc = [0, 1, 2].map(k => (mn[k] + mx[k]) / 2), dist = T.dist * Math.max(mx[0] - mn[0], mx[1] - mn[1], mx[2] - mn[2]);
+    const R = (x, y, z) => { x -= wc[0]; y -= wc[1]; z -= wc[2]; const X = x * ca - y * sa, Y = x * sa + y * ca, D = Y * ce - z * se; let u = X, w = -z * ce - Y * se; if (c.persp) { const f = dist / (dist + D); u *= f; w *= f; } return [u, w, D]; };
+    const corners = b => [0, 1, 2, 3, 4, 5, 6, 7].map(i => [b[0] + (i & 1 ? b[3] : 0), b[1] + (i & 2 ? b[4] : 0), b[2] + (i & 4 ? b[5] : 0)]);
+    const FACES = [[[4, 5, 7, 6], [0, 0, 1], "top"], [[0, 1, 5, 4], [0, -1, 0], "front"], [[2, 3, 7, 6], [0, 1, 0], "front"], [[0, 2, 6, 4], [-1, 0, 0], "side"], [[1, 3, 7, 5], [1, 0, 0], "side"]];
+    const vis = n => (n[0] * sa + n[1] * ca) * ce - n[2] * se < -1e-6;
+    const items = parts.map(p => { const Q = corners(p.b).map(q => R(q[0], q[1], q[2])), m = R(p.b[0] + p.b[3] / 2, p.b[1] + p.b[4] / 2, p.b[2] + p.b[5] / 2); return { p, Q, D: m[2] }; }).sort((a, b) => b.D - a.D);
+    let u0 = 1e9, u1 = -1e9, w0 = 1e9, w1 = -1e9; const ext = q => { u0 = Math.min(u0, q[0]); u1 = Math.max(u1, q[0]); w0 = Math.min(w0, q[1]); w1 = Math.max(w1, q[1]); };
+    items.forEach(it => it.Q.forEach(ext));
+    const realW = u1 - u0, realH = w1 - w0, shadows = [];
+    if (st.shadow && v.type !== "ortho" && c.e > 0) parts.forEach(p => { const H = this.hull(corners(p.b).map(q => [q[0] + (q[2] - mn[2]) * T.light[0], q[1] + (q[2] - mn[2]) * T.light[1]])).map(q => R(q[0], q[1], mn[2])); H.forEach(ext); shadows.push(H); });
+    const bw = u1 - u0, bh = w1 - w0, dimS = v.type === "ortho" && v.dims ? T.dimOff * 2 + 2 : 0;
+    const iw = v.w - 2 * T.pad - dimS, ih = v.h - 2 * T.pad - T.label - dimS;
+    const n = v.scaleMode === "fixed" ? v.scale : (T.scales.find(k => bw / k <= iw && bh / k <= ih) || T.scales[T.scales.length - 1]);
+    out.n = n; out.over = bw / n > iw + .5 || bh / n > ih + .5;
+    const ox = v.x + v.w / 2 - dimS / 2 - (u0 + u1) / 2 / n, oy = v.y + (v.h - T.label) / 2 - dimS / 2 - (w0 + w1) / 2 / n;
+    const S = q => [ox + q[0] / n, oy + q[1] / n], f = x => x.toFixed(2), poly = pts => "M" + pts.map(q => f(q[0]) + " " + f(q[1])).join("L") + "Z";
+    const P = (d, fill, stroke, sw, o) => Object.assign({ d, fill, stroke: sw > 0 ? stroke : "none", sw: sw || 0, op: 1, dash: "none", ve: "none" }, o || {});
+    if (shadows.length) out.prims.push(P(shadows.map(H => poly(H.map(S))).join(""), "var(--d-shadow)", "none", 0, { op: st.sh / 100 }));
+    items.forEach(it => {
+      const p = it.p, acc = p.id === st.accent || (v.steps > 0 && v.type !== "ortho" && p.step === v.steps);
+      const base = acc ? st.accentC : v.fill === "mat" ? st.mats[p.mat] : null, K = { top: 1, front: .9, side: .78 };
+      FACES.forEach(F => { if (!vis(F[1])) return; const pts = F[0].map(i => S(it.Q[i])); if (Math.abs(this.area(pts)) < .02) return; out.prims.push(P(poly(pts), base ? this.shade(base, K[F[2]]) : st[F[2]], "var(--d-edge)", st.ein)); });
+      out.prims.push(P(poly(this.hull(it.Q.map(S))), "none", "var(--d-edge)", st.eout));
+    });
+    const a0 = ox + u0 / n, a1 = ox + u1 / n, b0 = oy + w0 / n, b1 = oy + w1 / n;
+    if (dimS) {
+      const y = b1 + T.dimOff, x = a1 + T.dimOff, t = 1;
+      const d = "M" + f(a0) + " " + f(b1 + 1) + "V" + f(y + 1.5) + "M" + f(a1) + " " + f(b1 + 1) + "V" + f(y + 1.5) + "M" + f(a0 - 1.5) + " " + f(y) + "H" + f(a1 + 1.5) + "M" + f(a0 - t) + " " + f(y + t) + "L" + f(a0 + t) + " " + f(y - t) + "M" + f(a1 - t) + " " + f(y + t) + "L" + f(a1 + t) + " " + f(y - t)
+        + "M" + f(a1 + 1) + " " + f(b0) + "H" + f(x + 1.5) + "M" + f(a1 + 1) + " " + f(b1) + "H" + f(x + 1.5) + "M" + f(x) + " " + f(b0 - 1.5) + "V" + f(b1 + 1.5) + "M" + f(x - t) + " " + f(b0 + t) + "L" + f(x + t) + " " + f(b0 - t) + "M" + f(x - t) + " " + f(b1 + t) + "L" + f(x + t) + " " + f(b1 - t);
+      out.prims.push(P(d, "none", "var(--d-dim)", T.dimStroke));
+      const my = (b0 + b1) / 2;
+      out.texts.push({ x: f((a0 + a1) / 2), y: f(y - .8), t: this.fmt(realW), fs: T.dimText, fw: 400, anc: "middle", tf: "translate(0 0)", fill: "var(--d-dim)" }, { x: f(x - .8), y: f(my), t: this.fmt(realH), fs: T.dimText, fw: 400, anc: "middle", tf: "rotate(-90 " + f(x - .8) + " " + f(my) + ")", fill: "var(--d-dim)" });
+    }
+    out.texts.push({ x: f(v.x + 1), y: f(v.y + v.h - 1), t: out.name + " · 1:" + n + (out.over ? " · passt nicht" : ""), fs: T.labelText, fw: out.over ? 500 : 400, anc: "start", tf: "translate(0 0)", fill: out.over ? "var(--d-defect)" : "var(--c-sheet-ink-3)" });
+    if (out.over) out.prims.push(P("M" + v.x + " " + v.y + "h" + v.w + "v" + v.h + "h" + (-v.w) + "Z", "none", "var(--d-defect)", 1, { ve: "non-scaling-stroke", dash: "4 3" }));
+    return out;
+  }
+  titleBlock(s, G) {
+    const T = this.T, sd = this.sheetDims(s.tpl), x0 = T.margin, y0 = sd[1] - T.margin - T.titleH, W = sd[0] - 2 * T.margin, H = T.titleH, f = x => x.toFixed(2), pr = s.proj;
+    const ns = G.map(g => g.n).filter((x, i, a) => x && a.indexOf(x) === i), sc = !ns.length ? "–" : ns.length === 1 ? "1:" + ns[0] : "1:" + ns.join(" · 1:");
+    const pages = this.pages(s), cols = [];
+    if (s.ci !== "neutral") cols.push({ k: "ci", w: .13 });
+    cols.push({ k: "proj", w: .27, l: "Projekt", v: [pr.name, pr.project].filter(Boolean).join(" · ") }, { k: "addr", w: .25, l: "Adresse", v: pr.street, v2: pr.city }, { k: "no", w: .12, l: "Kundennr.", v: pr.custNo }, { k: "date", w: .11, l: "Datum", v: pr.date }, { k: "sc", w: .07, l: "Maßstab", v: sc }, { k: "rev", w: .05, l: "Index", v: s.rev + (this.changed(s) ? "*" : "") }, { k: "pg", w: .05, l: "Blatt", v: "1/" + pages });
+    const sum = cols.reduce((a, c) => a + c.w, 0), prims = [], texts = [], TX = (x, y, t, fs, fw, fill) => texts.push({ x: f(x), y: f(y), t, fs, fw, anc: "start", tf: "translate(0 0)", fill });
+    let x = x0; let d = "M" + x0 + " " + y0 + "h" + W + "v" + H + "h" + (-W) + "Z";
+    cols.forEach((c, i) => { const cw = W * c.w / sum; if (i) d += "M" + f(x) + " " + y0 + "v" + H;
+      if (c.k === "ci") { if (s.ci === "studio") { prims.push({ d: "M" + f(x + 3) + " " + f(y0 + 4) + "h10v10h-10Z", fill: "var(--c-sheet-ink)", stroke: "none", sw: 0, op: 1, dash: "none", ve: "none" }); texts.push({ x: f(x + 8), y: f(y0 + 10.2), t: "ST", fs: 3.4, fw: 600, anc: "middle", tf: "translate(0 0)", fill: "var(--c-sheet)" }); TX(x + 15, y0 + 8, "ALFA", 2.4, 600, "var(--c-sheet-ink)"); TX(x + 15, y0 + 12, "Studio", 2.4, 400, "var(--c-sheet-ink-3)"); }
+        else { prims.push({ d: "M" + f(x + 3) + " " + f(y0 + 3) + "h" + f(cw - 6) + "v" + (H - 6) + "h" + f(-(cw - 6)) + "Z", fill: "none", stroke: "var(--d-defect)", sw: 1, op: 1, dash: "3 2", ve: "non-scaling-stroke" }); texts.push({ x: f(x + cw / 2), y: f(y0 + H / 2 + .8), t: "Logo fehlt", fs: 2.2, fw: 500, anc: "middle", tf: "translate(0 0)", fill: "var(--d-defect)" }); } }
+      else { TX(x + 2.5, y0 + 5, c.l, T.tLabel, 400, "var(--c-sheet-ink-3)"); const miss = !c.v; TX(x + 2.5, y0 + (c.v2 !== undefined ? 10 : 12), c.v || "–", c.v2 !== undefined ? 2.8 : T.tValue, 500, miss ? "var(--d-defect)" : "var(--c-sheet-ink)"); if (c.v2 !== undefined) TX(x + 2.5, y0 + 14.5, c.v2 || "–", 2.8, 400, c.v2 ? "var(--c-sheet-ink-2)" : "var(--d-defect)"); }
+      x += cw; });
+    prims.unshift({ d, fill: "none", stroke: "var(--c-sheet-ink)", sw: T.tStroke, op: 1, dash: "none", ve: "none" });
+    return { prims, texts };
+  }
+  defects(s, G) {
+    const out = [];
+    this.FIELDS.forEach(([k, l]) => { if (!String(s.proj[k] || "").trim()) out.push({ t: l + " fehlt", fixL: "Ausfüllen", fix: () => this.focusField(k) }); });
+    if (s.ci === "client") out.push({ t: "Kunden-CI ohne Logo", fixL: "Studio", fix: () => this.setState({ ci: "studio" }) });
+    if (!s.loaded) out.push({ t: "Kein Objekt geladen", fixL: "Laden", fix: () => this.loadObj() });
+    G.filter(g => g.over).forEach(g => out.push({ t: g.name + " passt nicht", fixL: "Maßstab auto", over: true, fix: () => this.setView(g.v.id, { scaleMode: "auto" }, true) }));
+    return out;
+  }
+  focusField(k) { this.setMem({ Lf: false, max: -1 }); setTimeout(() => { const r = this.root(), el = r && r.querySelector('[data-field="' + k + '"]'); if (el) el.focus(); }, 60); }
+  setView(id, patch, select) { this.setState(st => ({ views: st.views.map(v => v.id === id ? Object.assign({}, v, patch) : v), sel: select ? id : st.sel })); }
+  setStyle(patch) { this.setState(st => ({ style: Object.assign({}, st.style, patch) })); }
+  setPreset(id) { this.setState(st => ({ preset: id, views: this.layout(id, st.tpl, st.bom), sel: null })); }
+  setTpl(id) { this.setState(st => ({ tpl: id, views: this.layout(st.preset, id, st.bom), sel: null, zoom: 1, pan: { x: 0, y: 0 } })); this.toastIt("Ansichten neu auf " + this.TPLS.find(q => q.id === id).n + " gesetzt"); }
+  loadObj() { this.setState({ loaded: true, hidden: {}, claude: null }); this.toastIt("Sideboard SB-18 aus dem Konfigurator geladen · 6 Teile"); }
+  openClaude(src) { this.setState(st => ({ claude: { src: src || (st.claude && st.claude.src) || "text", text: (st.claude && st.claude.text) || "", st: "idle" } })); }
+  runClaude() {
+    const c = this.state.claude; if (!c || c.st === "running") return; if (c.src === "text" && !c.text.trim()) { this.toastIt("Erst beschreiben, was gebaut werden soll"); return; }
+    this.setState({ claude: Object.assign({}, c, { st: "running" }) });
+    clearTimeout(this.ct); this.ct = setTimeout(() => { this.setState({ loaded: true, hidden: {}, claude: null }); this.toastIt("Claude hat ein Objekt erzeugt · 6 Teile · bitte prüfen"); }, this.still() ? 300 : this.T.claudeMs);
+  }
+  startExport() {
+    const s = this.state, G = s.loaded ? s.views.map(v => this.place(v, s)) : [], bad = G.filter(g => g.over);
+    if (!s.loaded) { this.setState({ exp: Object.assign({}, s.exp, { st: "error", err: "Kein Objekt auf dem Blatt." }) }); return; }
+    if (bad.length) { this.setState({ exp: Object.assign({}, s.exp, { st: "error", err: "Export gestoppt: " + bad.map(g => g.name).join(", ") + " passt nicht auf " + this.tplOf().n + "." }) }); return; }
+    const pages = this.pages(s), rev = this.changed(s) ? this.nextRev(s.rev) : s.rev;
+    this.setState({ rev, exp: Object.assign({}, s.exp, { st: "running", page: 1, pages, err: "" }) }, () => this.tick());
+  }
+  tick() {
+    clearInterval(this.xt);
+    this.xt = setInterval(() => { const e = this.state.exp; if (e.st !== "running") { clearInterval(this.xt); return; }
+      if (e.page >= e.pages) { clearInterval(this.xt); this.setState(st => ({ exp: Object.assign({}, e, { st: "idle", page: 0 }), issued: this.snap(st) })); this.toastIt((e.fmt === "pdf" ? "PDF" : "SVG") + " gesichert · " + e.pages + (e.pages === 1 ? " Seite" : " Seiten") + " · Index " + this.state.rev); return; }
+      this.setState({ exp: Object.assign({}, e, { page: e.page + 1 }) }); }, this.T.pageMs);
+  }
+  cancelExport() { clearInterval(this.xt); this.setState(st => ({ exp: Object.assign({}, st.exp, { st: "idle", page: 0 }) })); this.toastIt("Export abgebrochen"); }
+  dupView() { const s = this.state, v = s.views.find(q => q.id === s.sel); if (!v) return; const sd = this.sheetDims(s.tpl), id = "v" + Date.now(); this.setState({ views: s.views.concat([Object.assign({}, v, { id, x: Math.min(sd[0] - v.w, v.x + 10), y: Math.min(sd[1] - v.h, v.y + 10) })]), sel: id }); }
+  delView() { const s = this.state, v = s.views.find(q => q.id === s.sel); if (!v) return; const prev = s.views; this.setState({ views: prev.filter(q => q.id !== v.id), sel: null }); this.toastIt(this.vName(v) + " entfernt", () => this.setState({ views: prev, sel: v.id })); }
+  mm(e) { const el = this.svgRef.current, sd = this.sheetDims(this.state.tpl); if (!el) return [0, 0]; const r = el.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * sd[0], (e.clientY - r.top) / r.height * sd[1]]; }
+  viewDown(e, id) { e.stopPropagation(); if (e.button) return; const v = this.state.views.find(q => q.id === id); this.d = { mode: "view", id, m0: this.mm(e), x0: v.x, y0: v.y, moved: false }; this.setState({ sel: id, menu: null }); }
+  resizeDown(e, corner) { e.stopPropagation(); const s = this.state, v = s.views.find(q => q.id === s.sel); if (!v) return; this.d = { mode: "resize", id: v.id, corner, m0: this.mm(e), x0: v.x, y0: v.y, w0: v.w, h0: v.h, moved: false }; }
+  deskDown(e) { if (e.button) return; const s = this.state; this.d = { mode: "pan", cx: e.clientX, cy: e.clientY, px: s.pan.x, py: s.pan.y }; if (s.sel || s.menu) this.setState({ sel: null, menu: null }); }
+  sldDown(e, key) { e.preventDefault(); e.stopPropagation(); const r = e.currentTarget.getBoundingClientRect(), g = this.T.rg[key]; this.d = { mode: "sld", rect: r, key, min: g[0], max: g[1], step: g[2] }; this.setSld(key, g[0] + Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * (g[1] - g[0])); e.currentTarget.focus && e.currentTarget.focus({ preventScroll: true }); }
+  setSld(key, v) { const g = this.T.rg[key]; v = Math.round(v / g[2]) * g[2]; this.setStyle({ [key]: +Math.max(g[0], Math.min(g[1], v)).toFixed(3) }); }
+  sldKey(e, key) { const dir = e.key === "ArrowRight" || e.key === "ArrowUp" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowDown" ? -1 : 0; if (!dir) return; e.preventDefault(); e.stopPropagation(); this.setSld(key, this.state.style[key] + dir * this.T.rg[key][2] * (e.shiftKey ? 5 : 1)); }
+  move(e) {
+    const d = this.d; if (!d) return;
+    if (d.mode === "pan") { const k = this.sc().k; this.setState({ pan: { x: d.px + (e.clientX - d.cx) / k, y: d.py + (e.clientY - d.cy) / k } }); return; }
+    if (d.mode === "sld") { const r = d.rect; this.setSld(d.key, d.min + Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * (d.max - d.min)); return; }
+    const s = this.state, v = s.views.find(q => q.id === d.id); if (!v) return;
+    const m = this.mm(e), dx = m[0] - d.m0[0], dy = m[1] - d.m0[1]; if (!d.moved && Math.hypot(dx, dy) < 1) return; d.moved = true;
+    const T = this.T, sd = this.sheetDims(s.tpl), snap = T.snapPx / (this._k || 2), gs = e.altKey ? 1 : T.grid, Rd = x => Math.round(x / gs) * gs, guides = [];
+    let nv;
+    if (d.mode === "view") {
+      let x = Rd(d.x0 + dx), y = Rd(d.y0 + dy); const xs = [T.margin, sd[0] - T.margin, sd[0] / 2], ys = [T.margin, sd[1] - T.margin - T.titleH - T.gap];
+      s.views.forEach(q => { if (q.id === v.id) return; xs.push(q.x, q.x + q.w, q.x + q.w / 2); ys.push(q.y, q.y + q.h, q.y + q.h / 2); });
+      const near = (cands, vals) => { let b = null; vals.forEach(val => cands.forEach(c => { const dd = c - val; if (Math.abs(dd) <= snap && (!b || Math.abs(dd) < Math.abs(b.dd))) b = { dd, at: c }; })); return b; };
+      const bx = near(xs, [x, x + v.w, x + v.w / 2]), by = near(ys, [y, y + v.h, y + v.h / 2]);
+      if (bx) { x += bx.dd; guides.push({ ax: "x", at: bx.at }); } if (by) { y += by.dd; guides.push({ ax: "y", at: by.at }); }
+      nv = { x: Math.max(0, Math.min(sd[0] - v.w, x)), y: Math.max(0, Math.min(sd[1] - v.h, y)) };
+    } else {
+      const c = d.corner; let x0 = d.x0, y0 = d.y0, x1 = d.x0 + d.w0, y1 = d.y0 + d.h0;
+      if (c[0]) x1 = Rd(x1 + dx); else x0 = Rd(x0 + dx); if (c[1]) y1 = Rd(y1 + dy); else y0 = Rd(y0 + dy);
+      if (x1 - x0 < T.minCell) { if (c[0]) x1 = x0 + T.minCell; else x0 = x1 - T.minCell; } if (y1 - y0 < T.minCell) { if (c[1]) y1 = y0 + T.minCell; else y0 = y1 - T.minCell; }
+      nv = { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+    }
+    this.setState({ views: s.views.map(q => q.id === v.id ? Object.assign({}, q, nv) : q), guides, drag: true });
+  }
+  up() { const d = this.d; this.d = null; if (d && (d.mode === "view" || d.mode === "resize") && d.moved) this.setState({ guides: [], drag: false }); }
+  zoomTo(z) { this.setState({ zoom: Math.max(this.T.zoomMin, Math.min(this.T.zoomMax, z)) }); }
+  wheel(e) { const s = this.state; if (e.ctrlKey || e.metaKey) this.zoomTo(s.zoom * Math.exp(-e.deltaY * .01)); else { const k = this.sc().k; this.setState({ pan: { x: s.pan.x - e.deltaX / k, y: s.pan.y - e.deltaY / k } }); } }
+  key(e) {
+    const t = e.target; if (t && t.getAttribute && t.getAttribute("data-part") === "slider") return;
+    const s = this.state, v = s.views.find(q => q.id === s.sel);
+    if (e.key === "Escape") { if (s.claude) this.setState({ claude: null }); else if (s.sel) this.setState({ sel: null }); return; }
+    if (v && (e.key === "Delete" || e.key === "Backspace")) { e.preventDefault(); this.delView(); return; }
+    const A = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+    if (v && A) { e.preventDefault(); const st = e.altKey ? 1 : this.T.grid, sd = this.sheetDims(s.tpl); this.setView(v.id, { x: Math.max(0, Math.min(sd[0] - v.w, v.x + A[0] * st)), y: Math.max(0, Math.min(sd[1] - v.h, v.y + A[1] * st)) }); return; }
+    if (e.key === "+" || e.key === "=") this.zoomTo(s.zoom * this.T.zoomStep); else if (e.key === "-") this.zoomTo(s.zoom / this.T.zoomStep); else if (e.key === "0") this.setState({ zoom: 1, pan: { x: 0, y: 0 } }); else if (e.key === "r" && !e.metaKey && !e.ctrlKey) this.setState({ raster: !s.raster });
+  }
+  R0() { return { isHead: false, isField: false, isRow: false, isNote: false, isSeg: false, isTog: false, isSld: false, isSw: false, isPick: false, isProg: false, isBtns: false, op: 1, pe: "auto", meta: "", metaFg: "var(--c-ink-3)" }; }
+  head(name, meta, metaFg) { return Object.assign(this.R0(), { isHead: true, name, meta: meta || "", metaFg: metaFg || "var(--c-ink-3)" }); }
+  note(name, fg) { return Object.assign(this.R0(), { isNote: true, name, fg: fg || "var(--c-ink-3)" }); }
+  lrow(name, d, go, o) {
+    o = o || {}; const on = !!o.sel;
+    return Object.assign(this.R0(), { isRow: true, name, d, tip: o.tip || name, meta: o.meta || "", state: on ? "selected" : o.state || "rest", bg: on ? "var(--c-ink)" : "transparent", fg: on ? "var(--c-lane)" : o.fg || "var(--c-ink)", metaFg: on ? "var(--c-lane)" : o.metaFg || "var(--c-ink-3)", weight: on || o.bold ? 500 : 400,
+      symFg: on ? "var(--c-lane)" : o.symFg || "var(--c-ink-3)", symRing: on ? "inset 0 0 0 1px var(--c-on-inv-line)" : "inset 0 0 0 1px var(--c-line-strong)", op: o.dim ? .45 : 1, hasEnd: !!o.endD, endD: o.endD || "", endLabel: o.endLabel || "", endGo: e => { e.stopPropagation(); o.endGo && o.endGo(e); }, go: e => { e.stopPropagation(); go && go(e); } });
+  }
+  seg(label, opts, cur, set, off) { return Object.assign(this.R0(), { isSeg: true, label, op: off ? .4 : 1, pe: off ? "none" : "auto", opts: opts.map(([n, v]) => { const on = v === cur; return { n, state: on ? "selected" : "rest", bg: on ? "var(--c-inv)" : "transparent", fg: on ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { e.stopPropagation(); set(v); } }; }) }); }
+  tog(label, on, set, off) { return Object.assign(this.R0(), { isTog: true, label, op: off ? .4 : 1, pe: off ? "none" : "auto", tState: on ? "on" : "off", tBg: on ? "var(--c-ink)" : "var(--c-line-strong)", tX: on ? "14px" : "2px", toggle: e => { e.stopPropagation(); set(!on); } }); }
+  sld(key, label, off) { const g = this.T.rg[key], v = this.state.style[key], pct = ((v - g[0]) / (g[1] - g[0]) * 100).toFixed(1) + "%", txt = g[3] === "mm" ? v.toFixed(2).replace(".", ",") + " mm" : Math.round(v) + (g[3] === "%" ? " %" : "°");
+    return Object.assign(this.R0(), { isSld: true, label, val: txt, pct, op: off ? .4 : 1, pe: off ? "none" : "auto", down: e => this.sldDown(e, key), key: e => this.sldKey(e, key) }); }
+  sw(label, list, cur, set, off) { return Object.assign(this.R0(), { isSw: true, label, op: off ? .4 : 1, pe: off ? "none" : "auto", sw: list.map(([n, c]) => { const on = c === cur; return { n, c, state: on ? "selected" : "rest", ring: on ? "0 0 0 2px var(--c-lane), 0 0 0 3px var(--c-ink)" : "inset 0 0 0 1px rgba(0,0,0,.14)", go: e => { e.stopPropagation(); set(c); } }; }) }); }
+  pick(label, value, go, off) { return Object.assign(this.R0(), { isPick: true, label, value, op: off ? .4 : 1, pe: off ? "none" : "auto", go: e => go(e) }); }
+  btn(label, d, go, kind, o) {
+    o = o || {}; const lab = !!o.label, on = kind === "on";
+    return { isBtn: true, isSep: false, part: lab ? "text-button" : "symbol-button", label, tip: o.tip || label, d: d || "", hasD: !!d, state: o.off ? "disabled" : on ? "selected" : "rest", showLabel: lab, w: lab ? "auto" : "28px", pad: lab ? (d ? "0 12px 0 8px" : "0 8px") : "0",
+      bg: on ? "var(--c-ink)" : "transparent", fg: on ? "var(--c-lane)" : "var(--c-ink-2)", hbg: on ? "var(--c-ink)" : "var(--c-hover)", hfg: on ? "var(--c-lane)" : "var(--c-ink)", ring: on || lab ? "none" : "inset 0 0 0 1px var(--c-line-strong)", op: o.off ? .4 : 1, cur: o.off ? "default" : "pointer", go: e => { e.stopPropagation(); if (!o.off) go(e); } };
+  }
+  mk(sel, o) { return Object.assign({ state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink-2)", ring: sel ? "none" : "inset 0 0 0 1px var(--c-line-strong)", isSym: true, isText: false, dot: false }, o); }
+  mi(label, fn, o) { o = o || {}; return { item: true, label, check: o.check ? "✓" : "", meta: o.meta || "", fg: o.danger ? "var(--c-signal)" : "var(--c-ink)", go: e => { e.stopPropagation(); this.setState({ menu: null }); fn && fn(); } }; }
+  openMenu(e, items, w) {
+    e.stopPropagation(); w = Math.max(168, Math.min(280, w || 220));
+    const { r, k } = this.sc(), b = e.currentTarget.getBoundingClientRect(), g = this.geo(), h = items.length * 28 + 8;
+    let x = (b.left - r.left) / k, y = (b.bottom - r.top) / k + 4;
+    x = Math.max(16, Math.min(x, g.W - w - 16)); if (y + h > g.H - 16) y = (b.top - r.top) / k - h - 4;
+    this.setState({ menu: { x, y, w, items } });
+  }
+  toastIt(t, undo) { clearTimeout(this.tt); this.setState({ toast: t, toastUndo: undo || null }); this.tt = setTimeout(() => this.setState({ toast: null, toastUndo: null }), undo ? 4000 : 1800); }
+
+  renderVals() {
+    if (!window.AlfaShell) return { ready: false };
+    this.reg();
+    const s = this.state, P = this.P, T = this.T, g = this.geo(), rM = this.mem(), w = this.lay(), stop = e => e.stopPropagation(), openCount = w.filter(x => x > this.K.fold).length;
+    const sd = this.sheetDims(s.tpl), tpl = this.tplOf(), G = s.loaded ? s.views.map(v => this.place(v, s)) : [], defs = this.defects(s, G), overN = G.filter(q => q.over).length;
+    const sel = s.views.find(v => v.id === s.sel) || null, selG = G.find(q => q.v.id === s.sel) || null, presetName = (this.PRESETS.find(q => q[0] === s.preset) || this.PRESETS[0])[1];
+    // middle: sheet
+    const Wd = w[1], Hd = Math.max(120, g.lh - 44), fit = Math.max(.1, Math.min((Wd - 2 * T.deskPad) / sd[0], (Hd - 2 * T.deskPad) / sd[1])), k = fit * s.zoom; this._k = k;
+    const shW = sd[0] * k, shH = sd[1] * k, shL = (Wd - shW) / 2 + s.pan.x, shT = (Hd - shH) / 2 + s.pan.y;
+    const prims = [], texts = [], over = [], f = x => x.toFixed(2);
+    if (s.raster || s.drag) { let a = "", b = ""; const x1 = sd[0] - T.margin, y1 = sd[1] - T.margin - T.titleH - T.gap;
+      for (let x = T.margin; x <= x1 + .01; x += T.grid) { const seg = "M" + x + " " + T.margin + "V" + y1; if ((x - T.margin) % T.gridMajor === 0) b += seg; else a += seg; }
+      for (let y = T.margin; y <= y1 + .01; y += T.grid) { const seg = "M" + T.margin + " " + y + "H" + x1; if ((y - T.margin) % T.gridMajor === 0) b += seg; else a += seg; }
+      prims.push({ d: a, fill: "none", stroke: "var(--d-grid)", sw: 1, op: 1, dash: "none", ve: "non-scaling-stroke" }, { d: b, fill: "none", stroke: "var(--d-grid-major)", sw: 1, op: 1, dash: "none", ve: "non-scaling-stroke" }); }
+    G.forEach(q => { q.prims.forEach(p => prims.push(p)); q.texts.forEach(t => texts.push(t)); });
+    if (s.bom && s.loaded) { const bw = this.bomW(sd), bx = sd[0] - T.margin - bw, by = T.margin, rh = 5.5, hh = 6, cx = [0]; [.1, .38, .32, .2].forEach((c, i) => cx.push(cx[i] + c * bw));
+      const parts = this.PARTS.filter(p => !s.hidden[p.id]), H = hh + rh * parts.length; let dd = "M" + f(bx) + " " + f(by + 6) + "h" + f(bw) + "v" + f(H) + "h" + f(-bw) + "Z";
+      for (let i = 0; i < parts.length; i++) dd += "M" + f(bx) + " " + f(by + 6 + hh + i * rh) + "h" + f(bw);
+      prims.push({ d: dd, fill: "none", stroke: "var(--c-sheet-ink)", sw: .18, op: 1, dash: "none", ve: "none" });
+      const TX = (x, y, t, fs, fw, fill) => texts.push({ x: f(x), y: f(y), t, fs, fw, anc: "start", tf: "translate(0 0)", fill });
+      TX(bx, by + 3.5, "Stückliste", 2.6, 600, "var(--c-sheet-ink)");
+      ["Pos.", "Teil", "B × T × H", "Material"].forEach((h, i) => TX(bx + cx[i] + 1.5, by + 10.2, h, 2, 400, "var(--c-sheet-ink-3)"));
+      parts.forEach((p, r) => { const y = by + 6 + hh + r * rh + 3.8; [String(r + 1), p.n, p.b[3] + " × " + p.b[4] + " × " + p.b[5], this.MATS[p.mat]].forEach((t, i) => TX(bx + cx[i] + 1.5, y, t, 2.2, i === 1 ? 500 : 400, "var(--c-sheet-ink)")); }); }
+    const tb = this.titleBlock(s, G); tb.prims.forEach(p => prims.push(p)); tb.texts.forEach(t => texts.push(t));
+    s.guides.forEach(q => over.push({ d: q.ax === "x" ? "M" + f(q.at) + " 0V" + sd[1] : "M0 " + f(q.at) + "H" + sd[0], stroke: "var(--d-snap)", sw: 1, dash: "4 3" }));
+    let handles = [];
+    if (sel && s.loaded) { over.push({ d: "M" + sel.x + " " + sel.y + "h" + sel.w + "v" + sel.h + "h" + (-sel.w) + "Z", stroke: "var(--d-select)", sw: 1, dash: "none" });
+      const hs = T.handle / k; handles = [[0, 0, "nwse-resize"], [1, 0, "nesw-resize"], [0, 1, "nesw-resize"], [1, 1, "nwse-resize"]].map(c => ({ x: f(sel.x + c[0] * sel.w - hs / 2), y: f(sel.y + c[1] * sel.h - hs / 2), s: f(hs), cur: c[2], down: e => this.resizeDown(e, [c[0], c[1]]) })); }
+    const hits = s.loaded ? s.views.map(v => ({ x: v.x, y: v.y, w: v.w, h: v.h, state: v.id === s.sel ? "selected" : "rest", down: e => this.viewDown(e, v.id) })) : [];
+    const zoomPct = Math.round(s.zoom * 100) + " %";
+    const tools = [this.btn("Herauszoomen", P.zout, () => this.zoomTo(s.zoom / T.zoomStep), null, { off: s.zoom <= T.zoomMin }), this.btn(zoomPct, "", () => this.setState({ zoom: 1, pan: { x: 0, y: 0 } }), null, { label: true, tip: "Einpassen (0)" }), this.btn("Hineinzoomen", P.zin, () => this.zoomTo(s.zoom * T.zoomStep), null, { off: s.zoom >= T.zoomMax }), { isSep: true, isBtn: false },
+      this.btn("Raster (R)", P.raster, () => this.setState({ raster: !s.raster }), s.raster ? "on" : null)]
+      .concat(openCount > 1 ? [] : []).concat([this.btn(rM.max === 1 ? "Zurück" : "Blatt groß", rM.max === 1 ? P.shrink : P.expand, () => this.setMem({ max: rM.max === 1 ? -1 : 1 }))]);
+    const ex = s.exp, running = ex.st === "running";
+    let status = tpl.n + " · " + s.views.length + (s.views.length === 1 ? " Ansicht" : " Ansichten") + " · Raster " + T.grid + " mm", statusFg = "var(--c-ink-2)";
+    if (!s.loaded) status = tpl.n + " · kein Objekt";
+    if (s.drag && sel) status = this.vName(sel) + " · x " + this.fmt(sel.x) + " · y " + this.fmt(sel.y) + " · " + this.fmt(sel.w) + " × " + this.fmt(sel.h) + " mm";
+    if (overN) { status = "Überlauf · " + G.filter(q => q.over).map(q => q.name).join(", ") + " passt nicht auf " + tpl.n; statusFg = "var(--c-signal)"; }
+    if (running) { status = (ex.fmt === "pdf" ? "PDF" : "SVG") + " · Seite " + ex.page + " von " + ex.pages; statusFg = "var(--c-ink-2)"; }
+    if (ex.st === "error") { status = "Export fehlgeschlagen"; statusFg = "var(--c-signal)"; }
+    const cl = s.claude, claude = cl ? { srcs: [["photo", "Foto", P.photo], ["pdf", "PDF", P.pdf], ["text", "Text", P.text]].map(q => { const on = cl.src === q[0]; return { n: q[1], d: q[2], state: on ? "selected" : "rest", bg: on ? "var(--c-well)" : "transparent", fg: on ? "var(--c-ink)" : "var(--c-ink-2)", ring: on ? "inset 0 0 0 1px var(--c-ink)" : "inset 0 0 0 1px var(--c-line-strong)", go: e => { e.stopPropagation(); this.setState({ claude: Object.assign({}, cl, { src: q[0] }) }); } }; }),
+      text: cl.text, ph: cl.src === "text" ? "Sideboard, 1800 breit, 860 hoch, drei Fronten Eiche, Platte Nussbaum, Sockel Stahl." : cl.src === "photo" ? "Foto hier ablegen oder kurz sagen, was darauf zu sehen ist." : "PDF hier ablegen (Zeichnung, Angebot, Stückliste).",
+      onText: e => this.setState({ claude: Object.assign({}, cl, { text: e.target.value }) }), status: cl.st === "running" ? "Claude liest und baut Teile …" : cl.src === "text" ? "Claude baut daraus Teile mit Maßen." : "Claude erkennt Teile und Maße.", runLabel: cl.st === "running" ? "Läuft …" : "Objekt erzeugen", op: cl.st === "running" ? .6 : 1,
+      run: e => { e.stopPropagation(); this.runClaude(); }, close: e => { e.stopPropagation(); clearTimeout(this.ct); this.setState({ claude: null }); } } : { srcs: [] };
+    const textEls = React.createElement("g", { key: "tx" }, texts.map((t, i) => React.createElement("text", { key: i, x: t.x, y: t.y, fontSize: t.fs, fontWeight: t.fw, textAnchor: t.anc, transform: t.tf, style: { fill: t.fill, fontVariantNumeric: "tabular-nums" } }, t.t)));
+    const B = { textEls, detail: ((s.sheets.find(x => x.id === s.cur) || {}).n || "") + " · " + tpl.n, presetName, presetGo: e => this.openMenu(e, this.PRESETS.map(q => this.mi(q[1], () => this.setPreset(q[0]), { check: s.preset === q[0] }))), tools,
+      sh: { l: f(shL) + "px", t: f(shT) + "px", w: f(shW) + "px", h: f(shH) + "px", vb: "0 0 " + sd[0] + " " + sd[1] }, prims, texts, over, handles, hits, cursor: this.d && this.d.mode === "pan" ? "grabbing" : "grab",
+      deskDown: e => this.deskDown(e), empty: !s.loaded && !cl, loadDemo: e => { e.stopPropagation(); this.loadObj(); }, claudeGo: e => { e.stopPropagation(); this.openClaude("text"); }, hasClaude: !!cl, claude, status, statusFg };
+    // left lane
+    const L = { detail: [s.proj.name, s.proj.project].filter(Boolean).join(" · "), buttons: openCount > 1 ? [{ label: "Spalte falten", d: P.minus, go: e => { e.stopPropagation(); this.setMem({ Lf: true, max: -1 }); } }] : [],
+      loadGo: e => this.openMenu(e, [this.mi("Aus Konfigurator · Sideboard SB-18", () => this.loadObj(), { meta: "6 Teile" }), this.mi("Datei öffnen …", () => this.toastIt("Dateiwahl öffnet im echten Bogen"), { meta: ".alfa .step" }), this.mi("Claude-Import …", () => this.openClaude("photo")), { sep: true }, this.mi("Objekt leeren", () => this.setState({ loaded: false, sel: null }), { danger: true })], 260), rows: [] };
+    L.rows.push(this.head("Blätter", String(s.sheets.length)));
+    s.sheets.forEach(x => { const on = x.id === s.cur, pre = on ? s.preset : x.preset, rv = on ? s.rev : x.rev, tp = this.TPLS.find(q => q.id === (on ? s.tpl : x.tpl)) || this.TPLS[0]; L.rows.push(this.lrow(x.n, x.purpose === "client" ? P.user : x.purpose === "assembly" ? P.steps : P.view, () => this.switchSheet(x.id), { sel: on, meta: tp.n + " · " + rv, tip: x.n + " · " + ((this.PRESETS.find(q => q[0] === pre) || [])[1] || "") + " · Index " + rv })); });
+    L.rows.push(this.lrow("Blatt hinzufügen", P.plus, e => this.openMenu(e, this.PURPOSES.map(q => this.mi(q[1], () => this.addSheet(q[0]), { meta: (this.PRESETS.find(p => p[0] === q[2]) || [])[1] }))), { fg: "var(--c-ink-2)" }));
+    L.rows.push(this.head("Projekt", "aus Akte P-2041"));
+    this.FIELDS.forEach(([key, label, ph]) => { const v = s.proj[key] || "", miss = !v.trim(); L.rows.push(Object.assign(this.R0(), { isField: true, key, label, value: v, ph: miss ? "fehlt" : ph, state: miss ? "missing" : "filled", labelFg: miss ? "var(--c-signal)" : "var(--c-ink-3)", onInput: e => { const val = e.target.value; this.setState(st => ({ proj: Object.assign({}, st.proj, { [key]: val }) })); } })); });
+    L.rows.push(this.head("Packs"));
+    L.rows.push(this.lrow("CI", P.pack, e => this.openMenu(e, this.CIS.map(q => this.mi(q.n, () => this.setState({ ci: q.id }), { check: s.ci === q.id, meta: q.id === "client" ? "Logo fehlt" : "" }))), { meta: (this.CIS.find(q => q.id === s.ci) || {}).n }));
+    L.rows.push(this.lrow("Vorlage", P.sheet, e => this.openMenu(e, this.TPLS.map(q => this.mi(q.n, () => this.setTpl(q.id), { check: s.tpl === q.id, meta: this.FORMATS[q.f].join(" × ") }))), { meta: tpl.n }));
+    L.rows.push(this.head("Mängel", defs.length ? String(defs.length) : "", defs.length ? "var(--c-signal)" : "var(--c-ink-3)"));
+    if (!defs.length) L.rows.push(this.note("Keine Mängel. Das Blatt ist bereit für den Export."));
+    defs.forEach(q => L.rows.push(this.lrow(q.t, P.warn, () => q.fix(), { meta: q.fixL, symFg: "var(--c-signal)", tip: q.t + " · " + q.fixL })));
+    L.rows.push(this.head("Objekt", s.loaded ? "Sideboard SB-18" : ""));
+    if (!s.loaded) L.rows.push(this.note("Kein Objekt geladen. Unten laden oder Claude ein Foto, PDF oder Text geben."));
+    else this.PARTS.forEach(p => { const hid = !!s.hidden[p.id], acc = s.style.accent === p.id; L.rows.push(this.lrow(p.n, P.cube, () => { this.setStyle({ accent: acc ? "" : p.id }); this.toastIt(acc ? "Akzent entfernt" : p.n + " ist Akzentteil"); }, { meta: p.b[3] + " × " + p.b[4] + " × " + p.b[5], dim: hid, bold: acc, symFg: acc ? s.style.accentC : undefined, tip: acc ? "Akzent entfernen" : "Als Akzentteil setzen", endD: hid ? P.eyeOff : P.eye, endLabel: hid ? "Einblenden" : "Ausblenden", endGo: () => this.setState(st => ({ hidden: Object.assign({}, st.hidden, { [p.id]: !hid }) })) })); });
+    // right lane
+    const tabs = [["Ansicht", "view"], ["Stil", "style"], ["Export", "export"]].map(q => { const on = s.tab === q[1]; return { n: q[0], state: on ? "selected" : "rest", bg: on ? "var(--c-inv)" : "transparent", fg: on ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { e.stopPropagation(); this.setState({ tab: q[1] }); } }; });
+    const rows = [], st = s.style, sv = (patch) => sel && this.setView(sel.id, patch);
+    const ico = v => v.type === "ortho" ? P.view : v.type === "persp" ? P.persp : v.steps ? P.steps : P.iso;
+    if (s.tab === "view") {
+      rows.push(this.head("Ansichten auf dem Blatt", String(s.views.length)));
+      if (!s.loaded) rows.push(this.note("Ohne Objekt bleiben die Ansichten leer."));
+      s.views.forEach(v => { const q = G.find(x => x.v.id === v.id); rows.push(this.lrow(this.vName(v), ico(v), () => this.setState({ sel: v.id === s.sel ? null : v.id }), { sel: v.id === s.sel, meta: q ? "1:" + q.n : "", metaFg: q && q.over ? "var(--c-signal)" : undefined })); });
+      if (!sel) { rows.push(this.note("Ansicht auf dem Blatt anklicken. Ziehen setzt sie aufs Raster, Ecken ziehen ändert die Größe, Alt zieht frei.")); rows.push(this.head("Blatt", tpl.n)); rows.push(this.tog("Stückliste", s.bom, v => this.setState(st => ({ bom: v, views: this.layout(st.preset, st.tpl, v), sel: null })))); rows.push(this.pick("Vorlage", tpl.n, e => this.openMenu(e, this.TPLS.map(q => this.mi(q.n, () => this.setTpl(q.id), { check: s.tpl === q.id }))))); }
+      else {
+        const ortho = sel.type === "ortho", fp = sel.focus === "all" ? "Ganzes Objekt" : (this.PARTS.find(p => p.id === sel.focus) || {}).n;
+        rows.push(this.head(this.vName(sel), selG && selG.over ? "passt nicht" : "", "var(--c-signal)"));
+        rows.push(this.seg("Typ", [["Ansicht", "ortho"], ["Iso", "iso"], ["Perspektive", "persp"]], sel.type, v => sv({ type: v, dims: v === "ortho" ? sel.dims : false })));
+        rows.push(this.seg("Richtung", [["Vorne", "front"], ["Seite", "side"], ["Oben", "top"], ["Hinten", "back"]], sel.dir, v => sv({ dir: v }), !ortho));
+        rows.push(this.pick("Fokus", fp, e => this.openMenu(e, [this.mi("Ganzes Objekt", () => sv({ focus: "all" }), { check: sel.focus === "all" }), { sep: true }].concat(this.PARTS.map(p => this.mi(p.n, () => sv({ focus: p.id }), { check: sel.focus === p.id }))))));
+        rows.push(this.seg("Iso-Schritte", [["Aus", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4]], sel.steps, v => sv({ steps: v }), ortho));
+        rows.push(this.seg("Maßstab", [["auto", "auto"], ["fest", "fixed"]], sel.scaleMode, v => sv({ scaleMode: v, scale: v === "fixed" && selG ? selG.n : sel.scale })));
+        rows.push(this.pick("Fester Maßstab", "1:" + (sel.scaleMode === "fixed" ? sel.scale : selG ? selG.n : sel.scale), e => this.openMenu(e, T.scales.map(n => this.mi("1:" + n, () => sv({ scale: n, scaleMode: "fixed" }), { check: sel.scaleMode === "fixed" && sel.scale === n })), 140), sel.scaleMode !== "fixed"));
+        rows.push(this.tog("Bemaßung", ortho && sel.dims, v => sv({ dims: v }), !ortho));
+        rows.push(this.seg("Füllung", [["Töne", "tone"], ["Material", "mat"]], sel.fill, v => sv({ fill: v })));
+        rows.push(Object.assign(this.R0(), { isBtns: true, btns: [{ label: "Duplizieren", fg: "var(--c-ink)", go: e => { e.stopPropagation(); this.dupView(); } }, { label: "Entfernen", fg: "var(--c-signal)", go: e => { e.stopPropagation(); this.delView(); } }] }));
+      }
+    } else if (s.tab === "style") {
+      rows.push(this.head("Blick", "Iso und Perspektive"));
+      rows.push(this.sld("az", "Azimut"), this.sld("el", "Elevation"));
+      rows.push(this.head("Flächentöne"));
+      rows.push(this.sw("Oben", this.TONES, st.top, c => this.setStyle({ top: c })), this.sw("Seite", this.TONES, st.side, c => this.setStyle({ side: c })), this.sw("Front", this.TONES, st.front, c => this.setStyle({ front: c })));
+      rows.push(this.head("Kanten"));
+      rows.push(this.sld("ein", "Innen"), this.sld("eout", "Umriss"));
+      rows.push(this.head("Schatten"));
+      rows.push(this.tog("Schatten", st.shadow, v => this.setStyle({ shadow: v })), this.sld("sh", "Stärke", !st.shadow));
+      rows.push(this.head("Akzent"));
+      const ap = this.PARTS.find(p => p.id === st.accent);
+      rows.push(this.pick("Akzentteil", ap ? ap.n : "Keins", e => this.openMenu(e, [this.mi("Keins", () => this.setStyle({ accent: "" }), { check: !st.accent }), { sep: true }].concat(this.PARTS.map(p => this.mi(p.n, () => this.setStyle({ accent: p.id }), { check: st.accent === p.id }))))));
+      rows.push(this.sw("Farbe", this.ACCENTS, st.accentC, c => this.setStyle({ accentC: c })));
+      rows.push(this.head("Materialtöne", "Füllung Material"));
+      Object.keys(this.MATS).forEach(m => rows.push(this.sw(this.MATS[m], this.MAT_TONES[m].map((c, i) => [this.MATS[m] + " " + ["hell", "mittel", "dunkel"][i], c]), st.mats[m], c => this.setStyle({ mats: Object.assign({}, st.mats, { [m]: c }) }))));
+      rows.push(Object.assign(this.R0(), { isBtns: true, btns: [{ label: "Stil zurücksetzen", fg: "var(--c-ink)", go: e => { e.stopPropagation(); const old = s.style; this.setState({ style: this.style0() }); this.toastIt("Stil zurückgesetzt", () => this.setState({ style: old })); } }] }));
+    } else {
+      const pages = this.pages(s), ch = this.changed(s);
+      rows.push(this.head("Datei"));
+      rows.push(this.seg("Format", [["PDF", "pdf"], ["SVG", "svg"]], ex.fmt, v => this.setState({ exp: Object.assign({}, ex, { fmt: v }) }), running));
+      rows.push(this.seg("Seiten", [["Blatt", "one"], ["Je Ansicht", "views"], ["Satz", "set"]], ex.mode, v => this.setState({ exp: Object.assign({}, ex, { mode: v }) }), running));
+      rows.push(this.note(tpl.n + " · " + pages + (pages === 1 ? " Seite" : " Seiten") + (ex.fmt === "pdf" ? " · Vektor, Schrift eingebettet" : " · je Seite eine Datei")));
+      rows.push(this.head("Stand", "Index " + s.rev + (ch ? "*" : "")));
+      rows.push(this.note(!s.issued ? "Index " + s.rev + " ist noch nicht ausgegeben. Der Export gibt ihn aus." : ch ? "Seit Ausgabe von Index " + s.rev + " geändert. Der Export setzt Index " + this.nextRev(s.rev) + "." : "Index " + s.rev + " ist ausgegeben und unverändert.", ch ? "var(--c-ink-2)" : "var(--c-ink-3)"));
+      rows.push(this.head("Prüfung", defs.length ? defs.length + (defs.length === 1 ? " Mangel" : " Mängel") : "", "var(--c-signal)"));
+      rows.push(this.note(!defs.length ? "Keine Mängel." : overN ? "Überlauf stoppt den Export. Maßstab auf auto stellen oder die Ansicht größer ziehen." : "Mängel stehen im Schriftfeld. Export geht trotzdem.", overN ? "var(--c-signal)" : "var(--c-ink-3)"));
+      if (running) rows.push(Object.assign(this.R0(), { isProg: true, pct: (ex.page / ex.pages * 100).toFixed(0) + "%", name: "Seite " + ex.page + " von " + ex.pages + " wird gesetzt …" }));
+      if (ex.st === "error") { rows.push(this.head("Fehler", "", "var(--c-signal)")); rows.push(this.note(ex.err, "var(--c-signal)")); }
+    }
+    const foot = running ? { label: "Abbrechen", d: P.stop, bg: "transparent", fg: "var(--c-ink)", ring: "inset 0 0 0 1px var(--c-line-strong)", go: e => { e.stopPropagation(); this.cancelExport(); } }
+      : ex.st === "error" ? { label: "Erneut versuchen", d: P.retry, bg: "var(--c-inv)", fg: "var(--c-on-inv)", ring: "none", go: e => { e.stopPropagation(); this.startExport(); } }
+      : { label: (ex.fmt === "pdf" ? "Als PDF sichern" : "Als SVG sichern") + (defs.length && !overN ? " · trotz " + defs.length + (defs.length === 1 ? " Mangel" : " Mängeln") : ""), d: P.export, bg: "var(--c-inv)", fg: "var(--c-on-inv)", ring: "none", go: e => { e.stopPropagation(); this.startExport(); } };
+    const R = { tabs, rows, hasFoot: s.tab === "export", foot, end: (openCount > 1 ? [{ label: "Spalte falten", d: P.minus, go: e => { e.stopPropagation(); this.setMem({ Rf: true, max: -1 }); } }] : []).concat([{ label: rM.max === 2 ? "Zurück" : "Inspektor groß", d: rM.max === 2 ? P.shrink : P.expand, go: e => { e.stopPropagation(); this.setMem({ max: rM.max === 2 ? -1 : 2 }); } }]) };
+    const marksL = [[["Projekt", P.user], ["Packs", P.pack], ["Objekt", P.cube]].map(q => this.mk(false, { d: q[1], label: q[0], go: e => { stop(e); this.setMem({ Lf: false, max: -1 }); } })),
+      this.PRESETS.map(q => this.mk(s.preset === q[0], { d: q[0] === "three" ? P.view : q[0] === "steps" ? P.steps : q[0] === "persp" ? P.persp : q[0] === "client" ? P.user : P.iso, label: q[1], go: e => { stop(e); this.setPreset(q[0]); } })),
+      [["Ansicht", "view", P.view], ["Stil", "style", P.style], ["Export", "export", P.export]].map(q => this.mk(s.tab === q[1], { d: q[2], label: q[0], go: e => { stop(e); this.setState({ tab: q[1] }); this.setMem({ Rf: false, max: -1 }); } }))];
+    const lanes = this.lanesOf(w, rM, ["Projekt", "Blatt", "Inspektor"], marksL);
+    return this.finish({ w, rM, lanes, syncTitle: "Objekt neu lesen", assist: "Gib mir ein Foto, ein PDF oder einen Text. Ich baue daraus ein Objekt fürs Blatt.", x: { L, B, R, deskRef: this.deskRef, svgRef: this.svgRef } });
+  }
+  lanesOf(w, rM, titles, marks) {
+    const K = this.K, lefts = [K.m, K.m + w[0] + K.gap, K.m + w[0] + w[1] + 2 * K.gap];
+    return [0, 1, 2].map(i => { const folded = w[i] <= K.fold;
+      return { title: titles[i], left: lefts[i] + "px", width: w[i] + "px", folded, isList: i === 0 && !folded, isMain: i === 1 && !folded, isStack: i === 2 && !folded,
+        state: rM.max === i ? "maximized" : folded ? "collapsed" : "open", cursor: folded ? "pointer" : "default", bg: "var(--c-lane)", ring: "var(--sh-lane)", ovf: "hidden", marks: marks[i],
+        onStrip: folded ? () => { if (rM.max >= 0) this.setMem({ max: -1 }); else this.setMem({ [["Lf", "Mf", "Rf"][i]]: false }); } : undefined }; });
+  }
+  finish(o) {
+    const s = this.state, still = this.still(), w = o.w, rM = o.rM, lanes = o.lanes;
+    return Object.assign({
+      ready: true, licht: this.props.appearance ?? "light", winRef: this.winRef, shGrund: this.props.ground ?? "white", shSchrift: this.props.typeface ?? "Geist", fenster: this.props.window ?? "1512 × 982",
+      wArr: w, maxed: rM.max >= 0, slow: false, groups: this.GROUPS, badges: {}, shDot: false, laneSet: true, lanes, isList: lanes[0].isList, isMain: lanes[1].isMain, isStack: lanes[2].isStack,
+      plusD: this.P.plus, closeD: this.P.close, chevronD: this.P.chevron, searchD: this.P.search,
+      onChoose: n => this.choose(n), onMode: v => this.setState({ blobOpen: v }), onMem: p => this.setMem(p), onGrow: (side, v, w0) => this.grow(side, v, w0),
+      onSync: () => { if (s.syncing) return; this.setState({ syncing: true }); setTimeout(() => this.setState({ syncing: false }), still ? 400 : 1600); },
+      syncState: s.syncing ? "syncing" : "fresh", syncTitle: o.syncTitle, assistText: o.assist,
+      hasToast: !!s.toast, toast: s.toast || "", hasUndo: !!s.toastUndo, undo: () => { const u = s.toastUndo; clearTimeout(this.tt); this.setState({ toast: null, toastUndo: null }); if (u) u(); },
+      hasMenu: !!s.menu, menu: s.menu ? { x: s.menu.x + "px", y: s.menu.y + "px", w: s.menu.w + "px", items: s.menu.items.map(it => Object.assign({ sep: false, head: false, item: false, check: "", meta: "", fg: "var(--c-ink)" }, it)) } : { items: [] },
+      rootDown: () => { if (s.menu) this.setState({ menu: null }); }, stop: e => e.stopPropagation()
+    }, o.x);
+  }
+  get K() { return window.AlfaShell.K; }
+  choose(n) {
+    const sub = { Blatt: () => this.setState({ sel: null, zoom: 1, pan: { x: 0, y: 0 } }), Packs: () => { this.setMem({ Lf: false, max: -1 }); this.toastIt("Packs: CI und Vorlage stehen links"); }, Ansichten: () => { this.setMem({ Rf: false, max: -1 }); this.setState({ tab: "view" }); }, Claude: () => this.openClaude(), Export: () => { this.setMem({ Rf: false, max: -1 }); this.setState({ tab: "export" }); } };
+    if (sub[n]) { sub[n](); return; } if (n === this.NAME) return; if (this.FILES[n]) { window.location.href = encodeURI(this.FILES[n]); return; } this.toastIt(n + " liegt in einem anderen Bogen");
+  }
+  ensureShell() {
+    if (window.AlfaShell) { this.reg(); return; }
+    if (!window.__alfaShellLoad) window.__alfaShellLoad = new Promise(r => { const sc = document.createElement("script"); sc.src = "alfa-shell.js"; sc.onload = r; document.head.appendChild(sc); });
+    window.__alfaShellLoad.then(() => { this.reg(); this.forceUpdate(); });
+  }
+  reg() { const A = window.AlfaShell.AREA; if (!A[this.NAME]) A[this.NAME] = { L: [280], R: [280], min: [280, 280, 280], yield: [2, 0, 1] }; }
+  componentDidMount() {
+    this.ensureShell(); this._pk = this.pk();
+    this._rs = () => { if (this.props.window !== "1512 × 982") this.forceUpdate(); }; window.addEventListener("resize", this._rs);
+    this._mv = e => this.move(e); this._up = () => this.up();
+    window.addEventListener("pointermove", this._mv); window.addEventListener("pointerup", this._up); window.addEventListener("pointercancel", this._up);
+    this._kd = e => { const t = e.target; if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return; if (e.key === "Escape" && this.state.menu) { this.setState({ menu: null }); return; } this.key(e); };
+    document.addEventListener("keydown", this._kd);
+    if (window.__drawsOff) window.__drawsOff();
+    const wd = e => { const el = this.deskRef.current; if (el && e.target && el.contains(e.target)) { e.preventDefault(); this.wheel(e); } };
+    document.addEventListener("wheel", wd, { passive: false, capture: true }); window.__drawsOff = () => document.removeEventListener("wheel", wd, { capture: true });
+    if (this.state.exp.st === "running") this.tick();
+  }
+  componentWillUnmount() { window.removeEventListener("resize", this._rs); window.removeEventListener("pointermove", this._mv); window.removeEventListener("pointerup", this._up); window.removeEventListener("pointercancel", this._up); document.removeEventListener("keydown", this._kd); if (window.__drawsOff) window.__drawsOff(); clearTimeout(this.tt); clearTimeout(this.ct); clearInterval(this.xt); }
+  componentDidUpdate() {
+    const key = this.pk(); if (key !== this._pk) { this._pk = key; clearInterval(this.xt); const s0 = this.initial(); this.setState(s0, () => { if (s0.exp.st === "running") this.tick(); }); return; }
+    if (window.AlfaShell) window.AlfaShell.ebb(this, false, this.still());
+  }
+  still() { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
+  root() { const w = this.winRef.current; return w ? w.closest('[data-part="area-page"]') : null; }
+  geo() { return window.AlfaShell.geo(window.AlfaShell.frame(this.props)); }
+  mem() { return Object.assign(window.AlfaShell.D0(this.NAME), this.state.mem[this.NAME] || {}); }
+  setMem(p) { this.setState(st => ({ mem: Object.assign({}, st.mem, { [this.NAME]: Object.assign(window.AlfaShell.D0(this.NAME), st.mem[this.NAME] || {}, p) }) })); }
+  lay() { return window.AlfaShell.layout(this.NAME, this.mem(), this.geo(), false); }
+  grow(side, v, w0) { this.setMem(window.AlfaShell.grow(this.NAME, side, v, w0)); }
+  sc() { const r = this.root(); if (!r) return { r: { left: 0, top: 0, width: 1 }, k: 1 }; const b = r.getBoundingClientRect(); return { r: b, k: (b.width / this.geo().W) || 1 }; }
+}
+</script>
+</body>
+</html>

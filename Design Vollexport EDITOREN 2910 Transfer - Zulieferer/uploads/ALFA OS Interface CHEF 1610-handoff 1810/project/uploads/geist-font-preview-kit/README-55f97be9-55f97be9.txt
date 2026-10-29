@@ -1,0 +1,1 @@
+Open index.html in a browser to view the preview. Edit style.css to change colors, spacing, or layout. Geist-Regular.otf and Geist-Bold.otf are included and referenced locally, so this kit works fully offline. Review LICENSE-OFL.txt before commercial redistribution.

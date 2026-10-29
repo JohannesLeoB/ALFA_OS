@@ -1,0 +1,19 @@
+/* Liquid-Glass-Entwurf · eine Farbleiter W0–W11 (Flächen flach und kräftig, Glas nur obenauf. Palette Bordeaux · Sand · Creme · Taubenblau, dazwischen abgestuft), keine Verläufe. Hell und dunkel teilen dieselbe Leiter. 20.10.2026 */
+[data-glas]{--g0:oklch(0.995 0 0);--g1:oklch(0.955 0 0);--g2:oklch(0.915 0 0);--g3:oklch(0.87 0 0);--g4:oklch(0.815 0 0);--g5:oklch(0.75 0 0);--g6:oklch(0.67 0 0);--g7:oklch(0.57 0 0);--g8:oklch(0.46 0 0);--g9:oklch(0.36 0 0);--g10:oklch(0.26 0 0);--g11:oklch(0.14 0 0);--p0:oklab(0.9784 0.0030 0.0051);--p1:oklab(0.9545 0.0070 0.0105);--p2:oklab(0.8837 0.0253 0.0208);--p3:oklab(0.7624 0.0618 0.0416);--p4:oklab(0.6410 0.0982 0.0625);--p5:oklab(0.5264 0.1034 0.0522);--p6:oklab(0.4118 0.1085 0.0419);--p7:oklab(0.2000 0.0434 0.0168);--s0:oklch(0.88 0.05 88);--s1:oklch(0.8 0.045 235);--s2:oklch(0.76 0.06 150);--s3:oklch(0.5 0.07 350);--m0:oklch(0.92 0.08 95);--m1:oklch(0.88 0.07 165);--m2:oklch(0.86 0.06 310);--a0:oklch(0.56 0.16 38);--a1:oklch(0.76 0.12 80);--a2:oklch(0.58 0.09 155);--x0:oklch(0.5 0.1 300);--x1:oklch(0.55 0.07 200);--w0:var(--g0);--w1:var(--g1);--w2:var(--g2);--w3:var(--g3);--w4:var(--g4);--w5:var(--g5);--w6:var(--g6);--w7:var(--g7);--w8:var(--g8);--w9:var(--g9);--w10:var(--g10);--w11:var(--g11);--k0:var(--p4);--k1:var(--s0);--k2:var(--s1);--k3:var(--s3);--k4:var(--p1);--warn:var(--a0)}
+[data-glas="hell"]{color-scheme:light;--ground:var(--g0);--ink:var(--w11);--ink2:var(--w10);--ink3:color-mix(in oklab,var(--w9) 70%,var(--w11));--on-ink:var(--w0);--ring:rgba(0,0,0,.3);--hi:rgba(255,255,255,.9);--hi2:rgba(255,255,255,.55);--out:rgba(0,0,0,.18);--sh:0 18px 40px -16px rgba(0,0,0,.32);--fill:rgba(255,255,255,var(--ga));--thumb:oklch(.92 0 0);--pane:#fff;--line:oklch(.9 0 0);--selring:var(--w11);--ta:46%;--tk:46%;--bead:rgba(255,255,255,.9)}
+[data-glas="dunkel"]{color-scheme:dark;--ground:var(--g11);--ink:var(--w1);--ink2:var(--w2);--ink3:var(--w3);--on-ink:var(--w11);--ring:rgba(255,255,255,.32);--hi:rgba(255,255,255,.3);--hi2:rgba(255,255,255,.12);--out:rgba(0,0,0,.5);--sh:0 18px 40px -16px rgba(0,0,0,.65);--fill:rgba(30,30,30,calc(var(--ga) + .12));--thumb:oklch(.3 0 0);--pane:oklch(.2 0 0);--line:oklch(.32 0 0);--selring:var(--w1);--ta:30%;--tk:38%;--bead:rgba(255,255,255,.88)}
+[data-dicke="duenn"]{--gb:9px;--ga:.12}
+[data-dicke="fein"]{--gb:24px;--ga:.24}
+[data-dicke="dicht"]{--gb:40px;--ga:.4}
+[data-grain]{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMDAnIGhlaWdodD0nMjAwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nLjknIG51bU9jdGF2ZXM9JzInIHN0aXRjaFRpbGVzPSdzdGl0Y2gnLz48ZmVDb2xvck1hdHJpeCB2YWx1ZXM9JzAgMCAwIDAgLjIgMCAwIDAgMCAuMiAwIDAgMCAwIC4yIDAgMCAwIC41IDAnLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0nMjAwJyBoZWlnaHQ9JzIwMCcgZmlsdGVyPSd1cmwoI24pJy8+PC9zdmc+");mix-blend-mode:multiply;opacity:.3}
+[data-glas="dunkel"] [data-grain]{mix-blend-mode:screen;opacity:.1}
+button:focus{outline:none}button:focus-visible{outline:2px solid var(--ink3);outline-offset:2px}
+input::placeholder{color:inherit;opacity:.5}
+
+/* Block-Füllung kräftig: Schrift wechselt mit der Helligkeit des Blocks (lt = dunkle Schrift, dk = helle Schrift) */
+[data-on="dk"]{--ink:var(--w0);--ink2:oklch(.97 0 0);--ink3:oklch(.95 0 0);--on-ink:var(--w11);--ring:rgba(255,255,255,.55);--thumb:rgba(255,255,255,.28);--bead:rgba(255,255,255,.95)}
+[data-on="lt"]{--ink:var(--w11);--ink2:var(--w11);--ink3:var(--w10);--on-ink:var(--w0);--ring:rgba(0,0,0,.38);--thumb:rgba(255,255,255,.4);--bead:rgba(255,255,255,.95)}
+
+/* Schrift auf Glas: immer reines Schwarz (hell) oder Weiß (dunkel), keine Tönung */
+[data-on="glas"]{--ink:#000;--ink2:#000;--ink3:#000;--on-ink:#fff;--ring:rgba(0,0,0,.4);--bead:rgba(255,255,255,.95)}
+[data-glas="dunkel"] [data-on="glas"]{--ink:#fff;--ink2:#fff;--ink3:#fff;--on-ink:#000;--ring:rgba(255,255,255,.5)}

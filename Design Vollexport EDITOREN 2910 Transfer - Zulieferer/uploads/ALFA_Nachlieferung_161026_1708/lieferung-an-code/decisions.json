@@ -1,0 +1,9 @@
+[
+  {"item": "A1a", "answer": 280, "beleg": "Johannes 16.10., Frage Mittelspalte: „280, rechte Bahn wächst“; Kommentar: „Die mitte kann auch wachsen, alles ist je ansicht „locked“ oder nicht. ENTSCHEIDE ICH SPÄTER, bauen.“", "note": "Sperre je Ansicht als Schalter vorsehen, Standard offen."},
+  {"item": "A1b", "answer": {"visible": 1, "hit": 12}, "beleg": "Johannes 16.10.: „Griff Haarlinie (12 Trefferfläche)“ bestätigt"},
+  {"item": "A1e", "answer": true, "beleg": "Johannes 16.10.: „4 × 8, Abstand 4“"},
+  {"item": "A1f", "answer": {"w": 960, "h": 600}, "beleg": "Johannes 16.10. im Chat: „960“. Ersetzt „Weg damit“ vom 13.10."},
+  {"item": "C4", "answer": {"hub": true, "accountsNote": "bis zu drei wählbar. auch dann inkl. „kalender, Einladungen etc“ in Mailansicht switchbar."}, "beleg": "Johannes 16.10.: Hub „Ja, versuchs doch einfach mal!“; Kommentar zu den Mail-Konten wörtlich übernommen. Gestapelt oder Wähler: nicht entschieden."},
+  {"item": "A1c", "answer": null, "beleg": "keine Antwort von Johannes, Standard von Code gilt"},
+  {"item": "A1d", "answer": null, "beleg": "keine Antwort von Johannes, Standard von Code gilt"}
+]

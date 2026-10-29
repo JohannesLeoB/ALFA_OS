@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<!-- Export 21.10.2026 · Nachzug auf Master 2110 -->
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./image-slot.js"></script>
+</helmet>
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+<dc-import name="ALFA Shell" area="Konfigurator" appearance="{{ licht }}" ground="{{ shGrund }}" typeface="{{ shSchrift }}" handle="hairline" window="{{ fenster }}" w="{{ wArr }}" lanes="{{ lanes }}" slow="{{ slow }}" maxed="{{ maxed }}" groups="{{ groups }}" badges="{{ badges }}" dot="{{ shDot }}" sync-state="{{ syncState }}" sync-title="{{ syncTitle }}" me-ini="JB" assist-text="{{ assistText }}" search-path="{{ searchD }}" visible-lanes="{{ laneSet }}" on-choose="{{ onChoose }}" on-mode="{{ onMode }}" on-mem="{{ onMem }}" on-grow="{{ onGrow }}" on-sync="{{ onSync }}" on-root-down="{{ rootDown }}" hint-size="100%,100%">
+
+<div data-slot="0" style="display:contents">
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 {{ L.hLine }};transition:box-shadow 160ms;box-sizing:border-box;min-width:0">
+<span style="flex:none;font-weight:500;white-space:nowrap">{{ L.title }}</span>
+<span style="flex:1;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ L.detail }}</span>
+<sc-for list="{{ L.buttons }}" as="x" hint-placeholder-count="0"><button data-part="symbol-button" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:{{ iconRing }};transition:color 160ms,box-shadow 160ms" style-hover="color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-ink-3)" data-id="configurator.symbol-button.go"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for>
+</header>
+<div data-part="lane-content" onScroll="{{ L.onScroll }}" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;padding:8px;display:flex;flex-direction:column;scrollbar-width:none">
+<sc-for list="{{ L.rows }}" as="r" hint-placeholder-count="6">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" style="flex:none;height:32px;display:flex;align-items:flex-end;padding:0 8px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ r.name }}</div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="list-row" data-state="{{ r.state }}" onClick="{{ r.go }}" title="{{ r.tip }}" style="flex:none;height:36px;display:flex;align-items:center;gap:20px;padding:0 8px;border-radius:12px;cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};transition:background 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)" data-id="configurator.list-row.go">
+<span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ r.symFg }};background:{{ r.symBg }};box-shadow:{{ r.symRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.d }}"></path></svg></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.weight }}">{{ r.name }}</span>
+<sc-if value="{{ r.hasN }}" hint-placeholder-val="{{ false }}"><span data-part="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:{{ r.nFg }}">{{ r.n }}</span></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+<div data-part="layers-panel" style="flex:none;max-height:42%;display:flex;flex-direction:column;box-shadow:inset 0 1px 0 var(--c-line)">
+<div data-part="list-section-header" style="flex:none;height:40px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-sizing:border-box"><span style="flex:1;font-size:11.5px;color:var(--c-ink-3)">Zonen</span><span data-part="counter" style="flex:none;min-width:20px;height:20px;padding:0 4px;box-sizing:border-box;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:var(--c-ink-3)">{{ LY.n }}</span><button data-part="symbol-button" title="Zone hinzufügen" aria-label="Zone hinzufügen" onClick="{{ LY.addGo }}" style-active="transform:scale(.96)" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer;box-shadow:{{ iconRing }}" style-hover="color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-ink-3)" data-id="configurator.symbol-button.add-go"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ plusD }}"></path></svg></button></div>
+<div style="flex:1;min-height:0;overflow-y:auto;padding:0 8px 8px;display:flex;flex-direction:column;scrollbar-width:none">
+<sc-for list="{{ LY.rows }}" as="y" hint-placeholder-count="3">
+<div data-part="list-row" data-state="{{ y.state }}" onClick="{{ y.go }}" onDoubleClick="{{ y.ren }}" onContextMenu="{{ y.ctx }}" title="{{ y.tip }}" style="flex:none;height:36px;display:flex;align-items:center;gap:8px;padding:0 4px 0 8px;border-radius:12px;cursor:pointer;background:{{ y.bg }};color:{{ y.fg }};transition:background 160ms" style-hover="box-shadow:inset 0 0 0 1px var(--c-line-strong)" data-id="configurator.list-row.go-2">
+<span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:{{ y.ring }}"><i style="display:block;width:8px;height:8px;border-radius:50%;background:{{ y.col }};box-shadow:0 0 0 1px rgba(255,255,255,.5)"></i></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:{{ y.op }}">{{ y.name }}</span>
+<span data-part="counter" style="flex:none;min-width:20px;height:20px;padding:0 4px;box-sizing:border-box;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:{{ y.nFg }}">{{ y.n }}</span>
+<button data-part="symbol-button" title="{{ y.eyeT }}" aria-label="{{ y.eyeT }}" onClick="{{ y.eye }}" style-active="transform:scale(.96)" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:{{ y.ic }};cursor:pointer" data-id="configurator.symbol-button.eye"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ y.eyeD }}"></path></svg></button>
+<button data-part="symbol-button" title="{{ y.lockT }}" aria-label="{{ y.lockT }}" onClick="{{ y.lock }}" style-active="transform:scale(.96)" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:{{ y.ic }};cursor:pointer" data-id="configurator.symbol-button.lock"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ y.lockD }}"></path></svg></button>
+</div>
+</sc-for>
+</div>
+</div>
+<div data-part="lane-footer" style="flex:none;padding:8px;box-shadow:inset 0 1px 0 var(--c-line)"><button data-part="compose-button" style-active="transform:scale(.98)" title="{{ L.insertLabel }}" onClick="{{ L.insertGo }}" style="appearance:none;border:0;width:100%;height:36px;padding:0 12px 0 8px;box-sizing:border-box;border-radius:12px;display:flex;align-items:center;gap:20px;font:inherit;background:var(--c-inv);color:var(--c-on-inv);cursor:pointer;transition:opacity 160ms" style-hover="opacity:.88" data-id="configurator.compose-button.insert-go"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px color-mix(in srgb, currentColor 30%, transparent)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ plusD }}"></path></svg></span><span style="flex:1;min-width:0;text-align:left">{{ L.insertLabel }}</span></button></div>
+</sc-if>
+</div>
+
+<div data-slot="1" style="display:contents">
+<sc-if value="{{ isMain }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 var(--c-line);box-sizing:border-box;min-width:0">
+<span style="flex:0 1 auto;min-width:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ B.name }}</span>
+<span data-part="counter" style="flex:none;min-width:20px;height:20px;box-sizing:border-box;padding:0 4px;border-radius:999px;display:inline-grid;place-items:center;font-size:11.5px;line-height:1;font-variant-numeric:tabular-nums;color:var(--c-ink-3)">{{ B.n }}</span>
+<span style="flex:1;min-width:0"></span>
+<sc-if value="{{ B.wideTools }}" hint-placeholder-val="{{ true }}">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ B.zooms }}" as="o" hint-placeholder-count="2"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;transition:background 240ms,color 240ms" data-id="configurator.option.go">{{ o.t }}</button></sc-for></div>
+<button data-part="choice" title="Zoom" onClick="{{ B.zoomGo }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;font-variant-numeric:tabular-nums;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" data-id="configurator.choice.zoom-go">{{ B.zoomLabel }}<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button>
+</sc-if>
+<sc-for list="{{ B.tools }}" as="x" hint-placeholder-count="3">
+<button data-part="symbol-button" data-state="{{ x.state }}" style-active="transform:scale(.96)" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};opacity:{{ x.op }};cursor:pointer;transition:background 160ms,color 160ms" data-id="configurator.symbol-button.go-2"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button>
+</sc-for>
+</header>
+<div data-part="context-bar" style="flex:none;height:40px;display:flex;align-items:center;gap:12px;padding:0 16px;box-sizing:border-box;box-shadow:inset 0 -1px 0 var(--c-line);min-width:0;overflow:hidden"><sc-for list="{{ B.ctx }}" as="c" hint-placeholder-count="2">
+<sc-if value="{{ c.isHint }}" hint-placeholder-val="{{ true }}"><span style="flex:0 1 auto;min-width:0;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.text }}</span></sc-if>
+<sc-if value="{{ c.isIn }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;align-items:center;gap:8px"><span style="font-size:11.5px;color:var(--c-ink-3);white-space:nowrap">{{ c.lab }}</span><input data-ctx="{{ c.id }}" value="{{ c.val }}" onChange="{{ c.onIn }}" onBlur="{{ c.onBlur }}" aria-label="{{ c.lab }}" autocomplete="off" spellcheck="false" style="flex:none;width:{{ c.w }};height:28px;box-sizing:border-box;border:0;outline:none;background:transparent;color:var(--c-ink);font:inherit;font-variant-numeric:tabular-nums;padding:0 4px;border-radius:0;box-shadow:inset 0 -1px 0 var(--c-line-strong)" style-focus="box-shadow:inset 0 -1px 0 var(--c-ink)"></input></span></sc-if>
+<sc-if value="{{ c.isSeg }}" hint-placeholder-val="{{ false }}"><div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.seg }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" title="{{ o.tip }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;min-width:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap" data-id="configurator.option.go-2">{{ o.n }}</button></sc-for></div></sc-if>
+<sc-if value="{{ c.isSw }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:4px"><sc-for list="{{ c.sw }}" as="q" hint-placeholder-count="8"><button data-part="swatch" data-state="{{ q.state }}" title="{{ q.n }}" aria-label="{{ q.n }}" onClick="{{ q.go }}" style="appearance:none;border:0;padding:0;flex:none;width:20px;height:20px;border-radius:50%;background:{{ q.c }};box-shadow:{{ q.ring }};cursor:pointer" style-active="transform:scale(.92)" data-id="configurator.swatch.go"></button></sc-for></span></sc-if>
+<sc-if value="{{ c.isBtn }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" data-state="{{ c.state }}" style-active="transform:scale(.96)" style-hover="background:var(--c-hover)" onClick="{{ c.go }}" style="appearance:none;border:0;flex:none;height:24px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ c.bg }};color:{{ c.fg }};box-shadow:{{ c.ring }};cursor:pointer;white-space:nowrap;transition:background 160ms" data-id="configurator.text-button.go">{{ c.label }}</button></sc-if>
+<sc-if value="{{ c.isPill }}" hint-placeholder-val="{{ false }}"><button data-part="choice" onClick="{{ c.go }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" data-id="configurator.choice.go">{{ c.label }}<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+</sc-for></div>
+<div data-part="tool-palette" ref="{{ palRef }}" style="position:absolute;left:{{ B.palL }};top:{{ B.palT }};z-index:6;padding:0 8px 8px;border-radius:12px;background:var(--c-menu);box-shadow:var(--sh-float);display:flex;flex-direction:column;gap:4px"><div data-part="drag-handle" title="Ziehen verschiebt, Doppelklick dockt an" onPointerDown="{{ B.palDown }}" onDoubleClick="{{ B.palDock }}" style="flex:none;height:16px;margin:0 -8px;display:grid;place-items:center;cursor:grab;touch-action:none" data-id="configurator.drag-handle.pal-down"><i style="display:block;width:16px;height:4px;background:radial-gradient(circle,var(--c-ink-3) 1px,transparent 1.5px) 0 0/4px 4px"></i></div><sc-for list="{{ B.palette }}" as="x" hint-placeholder-count="9"><sc-if value="{{ x.sep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;height:1px;margin:2px 6px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="symbol-button" data-state="{{ x.state }}" title="{{ x.label }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" onPointerDown="{{ x.stop }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }}" style-active="transform:scale(.96)" data-id="configurator.symbol-button.go-3"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-if></sc-for></div>
+<sc-if value="{{ B.fly.on }}" hint-placeholder-val="{{ false }}">
+<div data-part="tool-flyout" onPointerDown="{{ stop }}" style="position:absolute;left:{{ B.fly.x }}px;top:{{ B.fly.y }}px;z-index:8;width:232px;padding:8px;box-sizing:border-box;border-radius:16px;background:var(--c-menu);color:var(--c-ink);box-shadow:var(--sh-float);display:flex;flex-direction:column;gap:8px" data-id="configurator.tool-flyout.stop">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ B.fly.cats }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap" data-id="configurator.option.go-3">{{ o.n }}</button></sc-for></div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px"><sc-for list="{{ B.fly.tiles }}" as="q" hint-placeholder-count="4"><button data-part="catalog-tile" data-state="{{ q.state }}" onClick="{{ q.go }}" style="appearance:none;border:0;padding:8px 0;font:inherit;color:inherit;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;border-radius:12px;background:transparent;cursor:pointer" style-hover="background:var(--c-hover)" style-active="transform:scale(.97)" data-id="configurator.catalog-tile.go"><span data-part="mark" style="width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:{{ q.bg }};color:{{ q.fg }};box-shadow:{{ q.ring }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ q.d }}"></path></svg></span><span style="max-width:100%;font-size:11.5px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.n }}</span></button></sc-for></div>
+</div>
+</sc-if>
+<div data-part="desk" onPointerDown="{{ B.deskDown }}" onDoubleClick="{{ B.deskDbl }}" onContextMenu="{{ B.deskCtx }}" style="flex:1;min-height:0;overflow:hidden;position:relative;background-color:var(--c-sheet-well);cursor:{{ B.cursor }};touch-action:none;user-select:none;-webkit-user-select:none;color-scheme:light" data-id="configurator.desk.desk-down">
+<div data-part="world" style="position:absolute;left:0;top:0;width:{{ B.world.w }}px;height:{{ B.world.h }}px;transform:{{ B.world.tf }};transform-origin:0 0;pointer-events:none;font-family:Geist,system-ui,sans-serif;color:var(--c-sheet-ink)">
+<sc-if value="{{ B.blatt }}" hint-placeholder-val="{{ true }}">
+<div data-part="sheet" style="position:absolute;left:0;top:0;width:100%;height:100%;background:var(--c-sheet);box-shadow:var(--sh-float)"></div>
+<div data-part="title-block" style="position:absolute;left:50px;top:850px;width:1300px;height:90px;box-sizing:border-box;display:grid;grid-template-columns:2fr 2.2fr 2.4fr 1.6fr;box-shadow:inset 0 0 0 1.5px var(--c-sheet-ink)">
+<div style="padding:14px 18px;display:flex;flex-direction:column;gap:4px"><span style="font-size:15px;color:var(--c-sheet-ink-3)">Projekt</span><span style="font-size:24px;font-weight:500">{{ B.tb.proj }}</span></div>
+<div style="padding:14px 18px;display:flex;flex-direction:column;gap:4px;box-shadow:inset 1.5px 0 0 var(--c-sheet-ink)"><span style="font-size:15px;color:var(--c-sheet-ink-3)">Foto-Aufmaß</span><span style="font-size:24px;font-weight:500">{{ B.tb.foto }}</span></div>
+<div style="padding:14px 18px;display:flex;flex-direction:column;gap:4px;box-shadow:inset 1.5px 0 0 var(--c-sheet-ink)"><span style="font-size:15px;color:var(--c-sheet-ink-3)">Maßstab</span><span style="font-size:24px;font-weight:500">{{ B.tb.scale }}</span></div>
+<div style="padding:14px 18px;display:flex;flex-direction:column;gap:4px;box-shadow:inset 1.5px 0 0 var(--c-sheet-ink)"><span style="font-size:15px;color:var(--c-sheet-ink-3)">{{ B.tb.by }}</span><span style="font-size:24px;font-weight:500">{{ B.tb.fmt }}</span></div>
+</div>
+</sc-if>
+<div data-part="photo" style="position:absolute;left:{{ B.photo.l }}px;top:{{ B.photo.t }}px;width:{{ B.photo.w }}px;height:{{ B.photo.h }}px;background:{{ B.photo.bg }};filter:{{ B.photo.flt }};box-shadow:{{ B.photo.ring }}"></div>
+</div>
+<svg data-part="plan" width="{{ B.W }}" height="{{ B.H }}" style="display:block;position:absolute;left:0;top:0;pointer-events:none;overflow:hidden;font-family:Geist,system-ui,sans-serif;font-size:11.5px">
+<sc-for list="{{ B.zbox }}" as="k" hint-placeholder-count="0"><rect x="{{ k.x }}" y="{{ k.y }}" width="{{ k.w }}" height="{{ k.h }}" fill="none" stroke="var(--c-sheet-ink-3)" stroke-width="1" stroke-dasharray="3 4"></rect></sc-for>
+<sc-for list="{{ B.rects }}" as="k" hint-placeholder-count="6"><rect x="{{ k.x }}" y="{{ k.y }}" width="{{ k.w }}" height="{{ k.h }}" fill="{{ k.fill }}" stroke="{{ k.st }}" stroke-width="{{ k.sw }}" stroke-dasharray="{{ k.dash }}" stroke-linejoin="round"></rect></sc-for>
+<sc-for list="{{ B.lines }}" as="k" hint-placeholder-count="0"><line x1="{{ k.x1 }}" y1="{{ k.y1 }}" x2="{{ k.x2 }}" y2="{{ k.y2 }}" stroke="{{ k.st }}" stroke-width="{{ k.sw }}" stroke-dasharray="{{ k.dash }}" opacity="{{ k.op }}" stroke-linecap="round"></line></sc-for>
+<sc-for list="{{ B.dots }}" as="k" hint-placeholder-count="0"><circle cx="{{ k.x }}" cy="{{ k.y }}" r="{{ k.r }}" fill="var(--c-sheet-ink)"></circle></sc-for>
+<sc-for list="{{ B.chain }}" as="k" hint-placeholder-count="0"><path d="{{ k.d }}" stroke="var(--c-sheet-ink-3)" stroke-width="1" fill="none"></path></sc-for>
+<sc-for list="{{ B.hits }}" as="k" hint-placeholder-count="0"><rect x="{{ k.x }}" y="{{ k.y }}" width="{{ k.w }}" height="{{ k.h }}" fill="transparent" style="pointer-events:{{ k.pe }};cursor:{{ k.cur }}" onPointerDown="{{ k.down }}" onContextMenu="{{ k.ctx }}"></rect></sc-for>
+<sc-if value="{{ B.selBox.on }}" hint-placeholder-val="{{ false }}"><rect x="{{ B.selBox.x }}" y="{{ B.selBox.y }}" width="{{ B.selBox.w }}" height="{{ B.selBox.h }}" fill="none" stroke="var(--c-sheet-ink)" stroke-width="1" stroke-dasharray="3 3"></rect></sc-if>
+</svg>
+<sc-for list="{{ B.labels }}" as="t" hint-placeholder-count="4"><div style="position:absolute;left:{{ t.x }}px;top:{{ t.y }}px;transform:{{ t.tf }};padding:0 6px;border-radius:999px;background:{{ t.bg }};box-shadow:{{ t.ring }};color:{{ t.c }};font-family:Geist,system-ui,sans-serif;font-size:11.5px;line-height:20px;font-weight:{{ t.w }};font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none">{{ t.t }}</div></sc-for>
+<div data-part="status" style="position:absolute;left:12px;bottom:12px;height:24px;padding:0 8px;border-radius:999px;background:var(--c-sheet);box-shadow:0 0 0 1px var(--c-sheet-line);display:flex;align-items:center;font-family:Geist,system-ui,sans-serif;font-size:11.5px;font-variant-numeric:tabular-nums;color:{{ B.statusFg }};white-space:nowrap;pointer-events:none">{{ B.status }}</div>
+</div>
+</sc-if>
+</div>
+
+<div data-slot="2" style="display:contents">
+<sc-if value="{{ isStack }}" hint-placeholder-val="{{ true }}">
+<header data-part="lane-header" data-state="{{ HB.state }}" style="flex:none;height:44px;display:flex;align-items:center;gap:4px;padding:0 8px;box-sizing:border-box;min-width:0">
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ HB.main }}" as="x" hint-placeholder-count="4"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+<span style="flex:1;min-width:0;padding:0 4px;font-size:11.5px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ HB.hint }}</span>
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ HB.end }}" as="x" hint-placeholder-count="2"><sc-if value="{{ x.isSep }}" hint-placeholder-val="{{ false }}"><i data-part="divider" style="flex:none;width:1px;height:20px;margin:0 4px;background:var(--c-line)"></i></sc-if><sc-if value="{{ x.isBtn }}" hint-placeholder-val="{{ true }}"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" data-state="{{ x.state }}" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:{{ x.cur }};opacity:{{ x.op }};box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-if></sc-for></div>
+</header>
+<div data-part="card-stack" data-state="stacked" style="position:relative;flex:1;min-height:0">
+<sc-for list="{{ S.cards }}" as="c" hint-placeholder-count="3">
+<article data-part="card" data-state="{{ c.state }}" onClick="{{ c.go }}" onPointerEnter="{{ c.enter }}" onPointerLeave="{{ c.leave }}" style="position:absolute;left:0;right:0;top:{{ c.top }};height:{{ c.h }};z-index:{{ c.z }};transform:{{ c.tf }};background-color:{{ c.bg }};background-image:{{ c.sheen }};backdrop-filter:{{ c.blur }};-webkit-backdrop-filter:{{ c.blur }};color:{{ c.fg }};border-radius:20px 20px 0 0;box-shadow:{{ c.sh }};overflow:hidden;display:flex;flex-direction:column;transition:{{ stackTrans }};cursor:{{ c.cursor }}" data-id="configurator.card.go">
+<header data-part="card-header" style="flex:none;height:44px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box;box-shadow:inset 0 -1px 0 {{ c.hLine }};min-width:0"><div data-part="segmented-control" style="flex:1;min-width:0;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.tabs }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background 160ms,color 160ms" data-id="configurator.option.go-4">{{ o.n }}</button></sc-for></div></header>
+
+<sc-if value="{{ c.isRows }}" hint-placeholder-val="{{ true }}">
+<div data-part="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;display:flex;flex-direction:column;padding:4px 0 8px;scrollbar-width:thin">
+<sc-for list="{{ c.rows }}" as="b" hint-placeholder-count="5">
+<sc-if value="{{ b.isHead }}" hint-placeholder-val="{{ false }}"><div data-part="list-section-header" style="flex:none;height:36px;display:flex;align-items:flex-end;padding:0 16px 8px;box-sizing:border-box;font-size:11.5px;color:var(--c-ink-3)">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isNote }}" hint-placeholder-val="{{ false }}"><div style="flex:none;padding:8px 16px;font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty">{{ b.text }}</div></sc-if>
+<sc-if value="{{ b.isRow }}" hint-placeholder-val="{{ true }}">
+<div data-part="field-row" data-state="{{ b.state }}" onClick="{{ b.go }}" style="position:relative;flex:none;min-height:44px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:8px 8px 8px 16px;box-sizing:border-box;cursor:{{ b.cur }};background:{{ b.bg }}" style-hover="background:{{ b.hbg }}" data-id="configurator.field-row.go">
+<sc-if value="{{ b.hasMark }}" hint-placeholder-val="{{ false }}"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:{{ b.mFg }};background:{{ b.mBg }};box-shadow:{{ b.mRing }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ b.mD }}"></path></svg></span></sc-if>
+<div style="flex:1 1 0;min-width:96px;display:flex;flex-direction:column">
+<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ b.w }};color:{{ b.fg }}">{{ b.label }}</span>
+<sc-if value="{{ b.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;line-height:16px;color:var(--c-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums">{{ b.sub }}</span></sc-if>
+</div>
+<sc-if value="{{ b.hasInput }}" hint-placeholder-val="{{ false }}"><input value="{{ b.val }}" onChange="{{ b.onIn }}" onBlur="{{ b.onBlur }}" aria-label="{{ b.label }}" inputmode="{{ b.mode }}" autocomplete="off" spellcheck="false" style="flex:1 1 0;min-width:0;max-width:60%;height:28px;border:0;outline:none;background:transparent;color:var(--c-ink);font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 12px 0 0;border-radius:0" style-focus="box-shadow:inset 0 -1px 0 var(--c-ink)"></input></sc-if>
+<sc-if value="{{ b.hasVal }}" hint-placeholder-val="{{ false }}"><span style="flex:0 1 auto;min-width:0;max-width:60%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--c-ink-2);font-variant-numeric:tabular-nums">{{ b.val }}</span></sc-if>
+<sc-if value="{{ b.hasSwatch }}" hint-placeholder-val="{{ false }}"><span style="flex:0 1 auto;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;max-width:176px"><sc-for list="{{ b.swatches }}" as="sw" hint-placeholder-count="5"><button data-part="swatch" data-state="{{ sw.state }}" title="{{ sw.n }}" aria-label="{{ sw.n }}" onClick="{{ sw.go }}" style="appearance:none;border:0;padding:0;flex:none;width:20px;height:20px;border-radius:50%;background:{{ sw.c }};box-shadow:{{ sw.ring }};cursor:pointer;transition:box-shadow 160ms" style-active="transform:scale(.92)" data-id="configurator.swatch.go-2"></button></sc-for></span></sc-if>
+<sc-if value="{{ b.hasSeg }}" hint-placeholder-val="{{ false }}"><div data-part="segmented-control" style="flex:none;margin-left:auto;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ b.seg }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" title="{{ o.tip }}" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;min-width:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;display:grid;place-items:center" data-id="configurator.option.go-5">{{ o.n }}</button></sc-for></div></sc-if>
+<sc-if value="{{ b.hasPill }}" hint-placeholder-val="{{ false }}"><button data-part="choice" onClick="{{ b.pillGo }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap" data-id="configurator.choice.pill-go">{{ b.pill }}<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{ chevronD }}"></path></svg></button></sc-if>
+<sc-if value="{{ b.hasToggle }}" hint-placeholder-val="{{ false }}"><button data-part="toggle" data-state="{{ b.tState }}" aria-label="{{ b.label }}" onClick="{{ b.toggle }}" style="appearance:none;border:0;padding:0;flex:none;position:relative;width:32px;height:20px;border-radius:999px;background:{{ b.tBg }};box-shadow:{{ b.tRing }};cursor:pointer;transition:background 200ms" data-id="configurator.toggle.toggle"><i style="position:absolute;top:2px;left:{{ b.tX }};width:16px;height:16px;border-radius:50%;background:{{ b.kBg }};transition:left 200ms cubic-bezier(.2,.8,.2,1)"></i></button></sc-if>
+<sc-if value="{{ b.hasBtns }}" hint-placeholder-val="{{ false }}"><span style="flex:none;display:flex;gap:8px"><sc-for list="{{ b.btns }}" as="x" hint-placeholder-count="1"><button data-part="text-button" style-active="transform:scale(.96)" style-hover="background:var(--c-hover)" onClick="{{ x.go }}" style="appearance:none;border:0;height:24px;transition:background 160ms;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;letter-spacing:.01em;background:{{ x.bg }};color:{{ x.fg }};box-shadow:{{ x.ring }};cursor:pointer;white-space:nowrap" data-id="configurator.text-button.go-2">{{ x.label }}</button></sc-for></span></sc-if>
+<sc-if value="{{ b.line }}" hint-placeholder-val="{{ true }}"><i style="position:absolute;left:16px;right:16px;bottom:0;height:1px;background:var(--c-line)"></i></sc-if>
+</div>
+</sc-if>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.isKatalog }}" hint-placeholder-val="{{ false }}">
+<div data-part="card-content" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;gap:8px;padding:8px">
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ c.kats }}" as="o" hint-placeholder-count="3"><button data-part="option" data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" data-id="configurator.option.go-6">{{ o.n }}</button></sc-for></div>
+<div style="flex:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(112px,100%),1fr));gap:8px">
+<sc-for list="{{ c.fotos }}" as="f" hint-placeholder-count="6">
+<button data-part="catalog-tile" title="{{ f.tip }}" onClick="{{ f.go }}" style="appearance:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;display:flex;flex-direction:column;gap:4px;min-width:0;cursor:pointer;background:transparent" style-active="transform:scale(.98)" data-id="configurator.catalog-tile.go-2">
+<span style="position:relative;display:block;width:100%;aspect-ratio:4 / 3;border-radius:8px;overflow:hidden;background:var(--c-well);box-shadow:inset 0 0 0 1px var(--c-line)"><image-slot id="{{ f.slot }}" shape="rect" placeholder="{{ f.n }}" style="width:100%;height:100%;pointer-events:none"></image-slot></span>
+<span style="min-width:0;font-size:11.5px;line-height:16px;color:var(--c-ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.n }}</span>
+</button>
+</sc-for>
+</div>
+<div style="flex:none;padding:0 8px 8px;font-size:11.5px;line-height:16px;color:var(--c-ink-3);text-wrap:pretty">{{ c.katNote }}</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ c.hasFoot }}" hint-placeholder-val="{{ false }}">
+<footer data-part="card-footer" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px;box-sizing:border-box;box-shadow:inset 0 1px 0 var(--c-line);min-width:0">
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ c.foot.l }}" as="x" hint-placeholder-count="0"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-for></div>
+<span style="flex:1;min-width:0"></span>
+<div data-part="command-group" style="flex:none;display:flex;align-items:center;gap:4px"><sc-for list="{{ c.foot.r }}" as="x" hint-placeholder-count="0"><button data-part="{{ x.part }}" style-active="transform:scale(.96)" title="{{ x.tip }}" aria-label="{{ x.label }}" onClick="{{ x.go }}" style="appearance:none;border:0;flex:none;height:28px;width:{{ x.w }};padding:{{ x.pad }};box-sizing:border-box;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;white-space:nowrap;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer;box-shadow:{{ x.ring }};transition:background 160ms,color 160ms" style-hover="background:{{ x.hbg }};color:{{ x.hfg }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ x.d }}"></path></svg><sc-if value="{{ x.showLabel }}" hint-placeholder-val="{{ false }}"><span>{{ x.label }}</span></sc-if></button></sc-for></div>
+</footer>
+</sc-if>
+</article>
+</sc-for>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div data-part="toast" style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:40;height:28px;padding:0 12px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;font-size:11.5px;white-space:nowrap;box-shadow:var(--sh-float);gap:12px"><span>{{ toast }}</span><sc-if value="{{ hasUndo }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" style-active="transform:scale(.96)" onClick="{{ undo }}" style="appearance:none;border:0;height:20px;margin-right:-8px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px currentColor;cursor:pointer" data-id="configurator.text-button.undo">Rückgängig</button></sc-if></div></sc-if>
+</div>
+</sc-if>
+</div>
+
+<div data-slot="over" ref="{{ winRef }}" style="display:contents">
+</div>
+<div data-slot="top" style="display:contents">
+<sc-if value="{{ hasMenu }}" hint-placeholder-val="{{ false }}">
+<div data-part="anchored-menu" onPointerDown="{{ stop }}" style="position:absolute;left:{{ menu.x }};top:{{ menu.y }};width:{{ menu.w }};padding:4px;box-sizing:border-box;border-radius:16px;background:var(--c-menu);color:var(--c-ink);box-shadow:var(--sh-float);z-index:50;display:flex;flex-direction:column" data-id="configurator.anchored-menu.stop">
+<sc-for list="{{ menu.items }}" as="it" hint-placeholder-count="4">
+<sc-if value="{{ it.sep }}" hint-placeholder-val="{{ false }}"><div style="height:1px;margin:4px 8px;background:var(--c-line)"></div></sc-if>
+<sc-if value="{{ it.head }}" hint-placeholder-val="{{ false }}"><div style="height:24px;display:flex;align-items:flex-end;padding:0 8px 4px;font-size:11.5px;color:var(--c-ink-3)">{{ it.label }}</div></sc-if>
+<sc-if value="{{ it.item }}" hint-placeholder-val="{{ true }}"><div data-part="menu-row" onClick="{{ it.go }}" style="height:28px;display:flex;align-items:center;gap:8px;padding:0 8px;border-radius:8px;cursor:pointer;color:{{ it.fg }};white-space:nowrap" style-hover="background:var(--c-hover)" data-id="configurator.menu-row.go"><span style="flex:none;width:12px;font-size:11.5px">{{ it.check }}</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">{{ it.label }}</span><span style="flex:none;font-size:11.5px;color:var(--c-ink-3)">{{ it.meta }}</span></div></sc-if>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</dc-import>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1512,&quot;height&quot;:982},&quot;appearance&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;ground&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;white&quot;,&quot;lightGray&quot;],&quot;default&quot;:&quot;white&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;surface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;lacquer&quot;,&quot;glass&quot;,&quot;flat&quot;],&quot;default&quot;:&quot;flat&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;typeface&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Geist&quot;,&quot;System&quot;],&quot;default&quot;:&quot;Geist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;window&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1512 × 982&quot;,&quot;Fenster&quot;],&quot;default&quot;:&quot;1512 × 982&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;draft&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Entwurf A&quot;,&quot;Entwurf B&quot;,&quot;Tresen&quot;],&quot;default&quot;:&quot;Entwurf A&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Konfigurator&quot;}}">
+class Component extends DCLogic {
+  P = {
+    close: "M4.5 4.5l7 7M11.5 4.5l-7 7", chevron: "M4.5 6.5L8 10l3.5-3.5", more: "M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM13 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z",
+    minus: "M4 8h8", plus: "M8 3.5v9M3.5 8h9", check: "M3.5 8.5l3 3 6-7", trash: "M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9",
+    expand: "M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5L9 7M2.5 13.5L7 9", shrink: "M13.5 2.5L10 6M10 3v3h3M2.5 13.5L6 10M6 13v-3H3",
+    raster: "M2.5 2.5h11v11h-11ZM6 2.5v11M10 2.5v11M2.5 6h11M2.5 10h11", ruler: "M2 9.5l7.5-7.5 4.5 4.5L6.5 14ZM4.5 7l1.5 1.5M6.5 5l1.5 1.5M8.5 3l1.5 1.5",
+    home: "M2.5 8L8 3l5.5 5M4 7v6.5h8V7", lock: "M4.5 7.5h7v6h-7ZM6 7.5V5.5a2 2 0 0 1 4 0v2", door: "M3.5 13.5V2.5h7v11M10.5 2.5l3 1.5v8.5l-3 1", window: "M3 3.5h10v9H3ZM8 3.5v9M3 8h10",
+    prev: "M9.5 4L5.5 8l4 4", next: "M6.5 4l4 4-4 4", export: "M8 2.5V10M4.5 6.5L8 10l3.5-3.5M3 13h10", print: "M4.5 5.5v-3h7v3M4.5 11.5h-2v-5h11v5h-2M4.5 9h7v4.5h-7Z",
+    list: "M6 4.5h7.5M6 8h7.5M6 11.5h7.5M2.5 4.5h1M2.5 8h1M2.5 11.5h1", copy: "M5.5 5.5h8v8h-8ZM3.5 10.5h-1v-8h8v1", search: "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5",
+    pen: "M10.5 2.5l3 3-8 8H2.5v-3Z", line: "M3 13L13 3", rect: "M3 4h10v8H3Z", eraser: "M6.5 13.5h7M3.5 9.5l5-5 4 4-4.5 4.5h-2.5Z", undo: "M5.5 4.5L2.5 7.5l3 3M2.5 7.5h6a4 4 0 0 1 0 8",
+    play: "M5 3.5v9l7-4.5Z", render: "M2.5 3.5h11v9h-11ZM5 10l2.5-3 2 2 1.5-1.5 2 2.5", sun: "M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1",
+    cube: "M8 2l5.5 3v6L8 14 2.5 11V5ZM8 8v6M2.5 5L8 8l5.5-3", board: "M2.5 2.5h11v11h-11ZM2.5 9.5h11M8 2.5v7", folder: "M2.5 4.5h4l1.5 1.5h5.5v6.5h-11Z", layers: "M8 2.5l5.5 3-5.5 3-5.5-3ZM2.5 8.5L8 11.5l5.5-3M2.5 11L8 14l5.5-3"
+  };
+  GROUPS = [["Kommunikation", [["Mail", []]]], ["Kreativ", [["Moodboard", []], ["Aufmaß", []], ["Atelier", []], ["Planvergleich", []], ["Konfigurator", []]]], ["Kern", [["Einstellungen", []]]]];
+  FILES = { "Moodboard": "ALFA Moodboard.dc.html", "Aufmaß": "ALFA Aufmass.dc.html", "Atelier": "ALFA Atelier.dc.html", "Planvergleich": "ALFA Planvergleich.dc.html", "Konfigurator": "ALFA Konfigurator.dc.html" };
+  winRef = React.createRef(); svgRef = React.createRef();
+  get K() { return window.AlfaShell.K; }
+  choose(n) { if (n === this.NAME) return; if (this.FILES[n]) { window.location.href = encodeURI(this.FILES[n]); return; } this.toastIt(n + " liegt in einem anderen Bogen"); }
+  ensureShell() {
+    if (window.AlfaShell) { this.reg(); return; }
+    if (!window.__alfaShellLoad) window.__alfaShellLoad = new Promise(r => { const s = document.createElement("script"); s.src = "alfa-shell.js"; s.onload = r; document.head.appendChild(s); });
+    window.__alfaShellLoad.then(() => { this.reg(); this.forceUpdate(); });
+  }
+  reg() { const A = window.AlfaShell.AREA; if (!A[this.NAME]) A[this.NAME] = { L: [280], R: [280], min: [280, 280, 280], yield: [2, 0, 1] }; }
+  componentDidMount() {
+    this.ensureShell();
+    this._rs = () => { if (this.props.window !== "1512 × 982") this.forceUpdate(); };
+    window.addEventListener("resize", this._rs);
+    this._mv = e => this.move && this.move(e); this._up = () => this.up && this.up();
+    window.addEventListener("pointermove", this._mv); window.addEventListener("pointerup", this._up); window.addEventListener("pointercancel", this._up);
+    this._kd = e => { const t = e.target; if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return; if (e.key === "Escape" && this.state.menu) { this.setState({ menu: null }); return; } this.key && this.key(e); };
+    document.addEventListener("keydown", this._kd);
+    this.anim(); this.mounted && this.mounted();
+  }
+  componentWillUnmount() { window.removeEventListener("resize", this._rs); window.removeEventListener("pointermove", this._mv); window.removeEventListener("pointerup", this._up); window.removeEventListener("pointercancel", this._up); document.removeEventListener("keydown", this._kd); clearTimeout(this.tt); clearInterval(this.rt); }
+  componentDidUpdate() { this.anim(); if (window.AlfaShell) window.AlfaShell.ebb(this, false, this.still()); }
+  still() { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
+  anim() { const r = this.root(); if (r && !this.still()) r.querySelectorAll("[data-spin]").forEach(el => { if (!el._a && el.animate) el._a = el.animate([{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }], { duration: 1000, iterations: Infinity }); }); }
+  root() { const w = this.winRef.current; return w ? w.closest('[data-part="area-page"]') : null; }
+  geo() { return window.AlfaShell.geo(window.AlfaShell.frame(this.props)); }
+  mem() { return Object.assign(window.AlfaShell.D0(this.NAME), this.state.mem[this.NAME] || {}); }
+  setMem(p) { this.setState(st => ({ mem: Object.assign({}, st.mem, { [this.NAME]: Object.assign(window.AlfaShell.D0(this.NAME), st.mem[this.NAME] || {}, p) }) })); }
+  lay() { return window.AlfaShell.layout(this.NAME, this.mem(), this.geo(), false); }
+  grow(side, v, w0) { this.setMem(window.AlfaShell.grow(this.NAME, side, v, w0)); }
+  sc() { const r = this.root().getBoundingClientRect(); return { r, k: (r.width / this.geo().W) || 1 }; }
+  fmt(n) { return Math.round(n).toLocaleString("de-DE"); }
+  toastIt(t, undo) { clearTimeout(this.tt); this.setState({ toast: t, toastUndo: undo || null }); this.tt = setTimeout(() => this.setState({ toast: null, toastUndo: null }), undo ? 4000 : 1800); }
+  openMenu(e, items, w) {
+    e.stopPropagation(); w = Math.max(168, Math.min(280, w || 240));
+    const { r, k } = this.sc(), b = e.currentTarget.getBoundingClientRect(), g = this.geo(), h = items.length * 28 + 8;
+    let x = (b.left - r.left) / k, y = (b.bottom - r.top) / k + 4;
+    x = Math.max(16, Math.min(x, g.W - w - 16)); if (y + h > g.H - 16) y = (b.top - r.top) / k - h - 4;
+    this.setState({ menu: { x, y, w, items } });
+  }
+  mi(label, fn, o) { o = o || {}; return { item: true, label, check: o.check ? "✓" : "", meta: o.meta || "", fg: o.danger ? "var(--c-signal)" : "var(--c-ink)", go: e => { e.stopPropagation(); this.setState({ menu: null }); fn && fn(); } }; }
+  row(label, o) { return Object.assign({ isRow: true, isHead: false, isNote: false, label, line: true, w: 400, fg: "var(--c-ink)", cur: "default", bg: "transparent", hbg: "transparent", hasSub: !!(o && o.sub), hasVal: !!(o && o.val != null && !o.hasInput), hasInput: false, hasSwatch: !!(o && o.swatches), hasSeg: !!(o && o.seg), hasPill: !!(o && o.pill), hasToggle: !!(o && o.toggle), hasBtns: !!(o && o.btns), hasMark: !!(o && o.mD) }, o || {}); }
+  numRow(label, v, set, o) { return this.row(label, Object.assign({ hasInput: true, hasVal: false, val: String(Math.round(v)), mode: "numeric", inW: "80px", onIn: e => { const n = parseInt(String(e.target.value).replace(/[^0-9-]/g, ""), 10); if (!isNaN(n)) set(n); } }, o || {})); }
+  segOf(opts, cur, fn) { return opts.map(o => ({ n: o[0], tip: o[1] || o[0], state: o[0] === cur ? "selected" : "rest", bg: o[0] === cur ? "var(--c-inv)" : "transparent", fg: o[0] === cur ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { e.stopPropagation(); fn(o[0]); } })); }
+  toggleOf(on, fn) { return { toggle: fn, tState: on ? "on" : "off", tBg: on ? "var(--c-ink)" : "transparent", tRing: on ? "none" : "inset 0 0 0 1px var(--c-line-strong)", tX: on ? "14px" : "2px", kBg: on ? "var(--c-lane)" : "var(--c-ink-3)" }; }
+  tbtn(label, go) { return { label, bg: "transparent", fg: "var(--c-ink-2)", ring: "inset 0 0 0 1px var(--c-line-strong)", go: e => { e.stopPropagation(); go(e); } }; }
+  mk(sel, o) { return Object.assign({ state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink-2)", ring: sel ? "none" : "inset 0 0 0 1px var(--c-line-strong)", isSym: true, isText: false, dot: false }, o); }
+  lrow(sel, name, d, o) { return Object.assign({ isRow: true, isHead: false, name, d, tip: name, state: sel ? "selected" : "rest", bg: sel ? "var(--c-ink)" : "transparent", fg: sel ? "var(--c-lane)" : "var(--c-ink)", weight: sel ? 500 : 400, symFg: sel ? "var(--c-lane)" : "var(--c-ink-3)", symBg: "transparent", symRing: sel ? "inset 0 0 0 1px var(--c-on-inv-line)" : "inset 0 0 0 1px var(--c-line-strong)", hasN: false, nFg: sel ? "var(--c-on-inv-2)" : "var(--c-ink-3)" }, o || {}); }
+  lhead(t) { return { isHead: true, isRow: false, name: t }; }
+  btn(label, d, go, kind, o) {
+    o = o || {}; const stop = e => e.stopPropagation(), ring = "inset 0 0 0 1px var(--c-line-strong)";
+    const v = kind === "accent" ? ["var(--c-inv)", "var(--c-on-inv)", "var(--c-inv)", "var(--c-on-inv)"] : kind === "signal" ? ["transparent", "var(--c-signal)", "var(--c-hover)", "var(--c-signal)"] : kind === "on" ? ["var(--c-ink)", "var(--c-lane)", "var(--c-ink)", "var(--c-lane)"] : ["transparent", "var(--c-ink-2)", "var(--c-hover)", "var(--c-ink)"];
+    const lab = !!o.label;
+    return { isBtn: true, isSep: false, part: lab ? "text-button" : "symbol-button", label, tip: o.tip || label, d, state: o.off ? "disabled" : kind === "on" ? "selected" : kind || "neutral", showLabel: lab, w: lab ? "auto" : "28px", pad: lab ? "0 12px 0 8px" : "0",
+      bg: v[0], fg: v[1], hbg: o.off ? v[0] : v[2], hfg: o.off ? v[1] : v[3], ring: kind === "accent" || kind === "on" ? "none" : ring, op: o.off ? .4 : 1, cur: o.off ? "default" : "pointer", go: e => { stop(e); if (!o.off) go(e); } };
+  }
+  lanesOf(w, rM, titles, marks) {
+    const K = this.K, lefts = [K.m, K.m + w[0] + K.gap, K.m + w[0] + w[1] + 2 * K.gap];
+    return [0, 1, 2].map(i => { const folded = w[i] <= K.fold;
+      return { title: titles[i], left: lefts[i] + "px", width: w[i] + "px", folded, isList: i === 0 && !folded, isMain: i === 1 && !folded, isStack: i === 2 && !folded,
+        state: rM.max === i ? "maximized" : folded ? "collapsed" : "open", cursor: folded ? "pointer" : "default", bg: "var(--c-lane)", ring: "var(--sh-lane)", ovf: "hidden", marks: marks[i],
+        onStrip: folded ? () => { if (rM.max >= 0) this.setMem({ max: -1 }); else this.setMem({ [["Lf", "Mf", "Rf"][i]]: false }); } : undefined }; });
+  }
+  stackCards(defs, order0, front0, bodies, metas, foots, SH) {
+    const all = this.stackCards0(defs, order0, front0, bodies, metas, foots, SH), c = all.filter(x => x.id === front0)[0];
+    const tabs = order0.map(k => ({ n: defs[k][0], state: k === front0 ? "selected" : "rest", bg: k === front0 ? "var(--c-inv)" : "transparent", fg: k === front0 ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { e.stopPropagation(); this.setState({ front: k }); } }));
+    return [Object.assign(c, { top: "0px", h: SH + "px", z: 1, tf: "none", bg: "transparent", sheen: "none", blur: "none", sh: "none", cursor: "default", go: undefined, tabs })];
+  }
+  stackCards0(defs, order0, front0, bodies, metas, foots, SH) {
+    const s = this.state, dk = (this.props.appearance ?? "light") === "dark", ofl = (this.props.surface ?? "flat");
+    const lv = dk ? [["#1f1f1f", "#fafafa"], ["#2e2e2e", "#fafafa"], ["#3a3a3a", "#fafafa"], ["#4d4d4d", "#fafafa"], ["#6b6b6b", "#fafafa"]] : [["#f5f5f5", "#171717"], ["#ebebeb", "#171717"], ["#d9d9d9", "#171717"], ["#a3a3a3", "#171717"], ["#6b6b6b", "#ffffff"]];
+    const order = order0.filter(k => k !== front0).concat([front0]), b = order.length - 1; let acc = 8; const tops = order.map((k, i) => { const t = acc; acc += (b - i) > 3 ? 8 : 44; return t; });
+    const lack = (front, lvl, first) => { const lite = !lvl || /^#(?:[c-f])/i.test(lvl[0]);
+      const spec = front ? (dk ? "rgba(255,255,255,.14)" : "rgba(255,255,255,1)") : lite ? "rgba(255,255,255,.9)" : "rgba(255,255,255,.22)";
+      const seam = dk ? "rgba(0,0,0,.7)" : front ? "rgba(0,0,0,.14)" : "rgba(0,0,0,.2)";
+      return ["inset 0 1px 0 " + spec, "0 -1px 0 " + seam].concat(first ? [] : ["0 -8px 16px -12px rgba(0,0,0," + (dk ? ".55" : ".16") + ")"]).join(", "); };
+    return order.map((k, i) => {
+      const dep = b - i, front = dep === 0, lvl = dep > 0 ? lv[Math.min(dep, 5) - 1] : null, D = defs[k];
+      return { id: k, state: front ? "open" : "stacked", top: tops[i] + "px", h: (SH - tops[i]) + "px", z: i + 1,
+        tf: !front && s.hoverCard === k ? "translateY(-4px)" : "none", enter: () => { if (!front) this.setState({ hoverCard: k }); }, leave: () => this.setState(st => st.hoverCard === k ? { hoverCard: null } : null),
+        bg: ofl === "glass" ? "color-mix(in srgb, " + (lvl ? lvl[0] : "var(--c-lane)") + " " + (front ? 86 : 64) + "%, transparent)" : lvl ? lvl[0] : "var(--c-lane)", fg: lvl ? lvl[1] : "var(--c-ink)",
+        sh: ofl === "lacquer" ? lack(front, lvl, i === 0) : ofl === "glass" ? ["inset 0 0 0 1px rgba(255,255,255," + (dk ? ".12" : ".7") + ")", "inset 0 1px 0 rgba(255,255,255," + (dk ? ".18" : ".9") + ")", "0 -8px 24px -14px rgba(0,0,0," + (dk ? ".6" : ".22") + ")", "0 0 0 1px rgba(0,0,0," + (dk ? ".35" : ".04") + ")"].join(", ") : front ? "inset 0 1px 0 var(--c-glaze), var(--sh-lane), 0 -8px 24px -12px rgba(0,0,0,.22)" : "inset 0 1px 0 var(--c-glaze), 0 0 0 1px rgba(0,0,0,.06), 0 -6px 16px -10px rgba(0,0,0,.18)",
+        sheen: ofl === "glass" ? "linear-gradient(160deg, rgba(255,255,255," + (dk ? ".08" : ".55") + "), rgba(255,255,255,0) 55%)" : "none", blur: ofl === "glass" ? "blur(22px) saturate(1.4)" : "none",
+        hLine: front ? "var(--c-line)" : "transparent", mLine: "color-mix(in srgb, currentColor 22%, transparent)", markD: D[1], title: D[0],
+        meta: front ? (metas[k] || "") : "", metaFlex: front ? "1 1 0" : "none", metaMl: front ? "0" : "auto", hasClose: false, cursor: front ? "default" : "pointer", go: front ? undefined : () => this.setState({ front: k }),
+        isRows: front, isKatalog: false, rows: front ? (bodies[k] || []) : [], kats: [], fotos: [], katNote: "", hasFoot: front && !!foots[k], foot: foots[k] || { l: [], r: [] } };
+    });
+  }
+  finish(o) {
+    const s = this.state, still = this.still(), ease = "cubic-bezier(.2,.8,.2,1)", w = o.w, rM = o.rM, lanes = o.lanes;
+    return Object.assign({
+      ready: true, licht: this.props.appearance ?? "light", winRef: this.winRef, shGrund: this.props.ground ?? "white", shSchrift: this.props.typeface ?? "Geist", fenster: this.props.window ?? "1512 × 982",
+      wArr: w, maxed: rM.max >= 0, slow: false, groups: this.GROUPS, badges: {}, shDot: false, laneSet: true, lanes, isList: lanes[0].isList, isMain: lanes[1].isMain, isStack: lanes[2].isStack,
+      stackTrans: still ? "none" : "top 520ms cubic-bezier(.22,1.08,.36,1), height 520ms cubic-bezier(.22,1.08,.36,1), left 520ms cubic-bezier(.22,1.08,.36,1), right 520ms cubic-bezier(.22,1.08,.36,1), background 320ms " + ease + ", transform 420ms " + ease,
+      iconRing: "inset 0 0 0 1px var(--c-line-strong)", plusD: this.P.plus, closeD: this.P.close, chevronD: this.P.chevron, searchD: this.P.search,
+      onChoose: n => this.choose(n), onMode: v => this.setState({ blobOpen: v }), onMem: p => this.setMem(p), onGrow: (side, v, w0) => this.grow(side, v, w0),
+      onSync: () => { if (s.syncing) return; this.setState({ syncing: true }); setTimeout(() => this.setState({ syncing: false }), still ? 400 : 1600); },
+      syncState: s.syncing ? "syncing" : "fresh", syncTitle: o.syncTitle, assistText: o.assist,
+      hasToast: !!s.toast, toast: s.toast || "", hasUndo: !!s.toastUndo, undo: () => { const u = s.toastUndo; clearTimeout(this.tt); this.setState({ toast: null, toastUndo: null }); if (u) u(); },
+      hasMenu: !!s.menu, menu: s.menu ? { x: s.menu.x + "px", y: s.menu.y + "px", w: s.menu.w + "px", items: s.menu.items.map(it => Object.assign({ sep: false, head: false, item: false, check: "", meta: "", fg: "var(--c-ink)" }, it)) } : { items: [] },
+      rootDown: () => { if (s.menu) this.setState({ menu: null }); }, stop: e => e.stopPropagation()
+    }, o.x);
+  }
+
+  NAME = "Konfigurator"; palRef = React.createRef();
+  loadPal() { try { const v = JSON.parse(localStorage.getItem("alfa.konfig.pal")); if (v && typeof v.x === "number") return v; } catch (e) {} return null; }
+  palDown(e) { e.stopPropagation(); e.preventDefault(); const el = this.palRef.current; if (!el) return; const r = el.getBoundingClientRect(), k = this.sc().k; this.d = { mode: "pal", offX: (e.clientX - r.left) / k, offY: (e.clientY - r.top) / k }; }
+  palDock() { try { localStorage.removeItem("alfa.konfig.pal"); } catch (e) {} this.setState({ palPos: null }); }
+  palMove(e) {
+    const d = this.d, el = this.palRef.current; if (!el) return; const lr = el.offsetParent.getBoundingClientRect(), k = this.sc().k, lw = lr.width / k, lh = lr.height / k, pw = el.offsetWidth, ph = el.offsetHeight;
+    let px = (e.clientX - lr.left) / k - d.offX, py = (e.clientY - lr.top) / k - d.offY;
+    px = Math.max(0, Math.min(lw - pw, px)); py = Math.max(84, Math.min(lh - ph, py));
+    if (px < 24) px = 12; if (px > lw - pw - 24) px = lw - pw - 12; if (py < 108) py = 96; if (py > lh - ph - 24) py = lh - ph - 12;
+    this.setState({ palPos: { x: Math.round(px), y: Math.round(py) } });
+  }
+  palUp() { this.d = null; try { localStorage.setItem("alfa.konfig.pal", JSON.stringify(this.state.palPos)); } catch (e) {} }
+  move(e) {
+    const d = this.d, s = this.state;
+    if (d && d.mode === "pal") { this.palMove(e); return; }
+    if (d && d.mode === "pan") { const k = this.sc().k; this.setView({ z: s.view.z, x: d.vx + (e.clientX - d.sx) / k, y: d.vy + (e.clientY - d.sy) / k }); return; }
+    if (d && d.mode === "reorder") {
+      const V = this.view(), xmm = this.tn(this.dl(e), V)[0] - 300, ph = this.ph(), z = ph.zones.find(q => q.id === d.zid); if (!z) return;
+      let acc = this.layout(ph).pos[z.id], cnt = 0; z.segs.forEach(q => { if (q.id === d.sid) return; if (xmm > acc + q.w / 2) cnt++; acc += q.w; });
+      const cur = z.segs.findIndex(q => q.id === d.sid); if (cnt !== cur) { if (!d.pushed) { d.pushed = true; this.pushHist(); } this.liveZ(z.id, zz => { const a = zz.segs.slice(), q = a.splice(cur, 1)[0]; a.splice(cnt, 0, q); return Object.assign({}, zz, { segs: a }); }); }
+    }
+  }
+  up() { const d = this.d; if (!d) return; if (d.mode === "pal") { this.palUp(); return; } this.d = null; if (d.mode === "pan" && this.state.panning) this.setState({ panning: false }); }
+
+  PROJ = { p1: "Küche Hansen", p2: "Praxis Kern" };
+  HOCH = 2620; SOCK = 80; KORP = 780; AP = 40; WANDY = 1450; WANDH = 800; GAP = 800;
+  RASTER = [300, 400, 450, 600, 800, 1200];
+  FT = { tuer: "Tür", schub: "Schubkästen", regal: "Offenes Regal", boeden: "Fachböden", blende: "Blende", geraet: "Gerät", spuele: "Spüle", muell: "Müllauszug", leer: "leer" };
+  FTI = { tuer: "M3.5 2.5h9v11h-9ZM10.5 8v1.5", schub: "M3 3h10v3H3ZM3 7h10v3H3ZM3 11h10v2.5H3Z", regal: "M3 2.5v11M13 2.5v11M3 6h10M3 10h10", boeden: "M3 2.5h10v11H3ZM3 6.5h10M3 10h10", blende: "M2.5 6h11v4h-11Z", geraet: "M3.5 2.5h9v11h-9ZM6 5h4v3H6ZM8 11v.1", spuele: "M2.5 7h11v6.5h-11ZM5 7V4.5a2 2 0 0 1 4 0M5 10h6", muell: "M4 4.5h8l-.7 9H4.7ZM3 4.5h10M6.5 4.5V3h3v1.5", leer: "M3.5 3.5h2M7 3.5h2M10.5 3.5h2M3.5 12.5h2M7 12.5h2M10.5 12.5h2M3.5 5v2M3.5 9v2M12.5 5v2M12.5 9v2" };
+  CODES = { t: ["tuer", 600, "Tür"], s: ["schub", 600, "Schubkästen"], r: ["regal", 600, "Regal"], b: ["boeden", 600, "Fachböden"], bl: ["blende", 600, "Blende"], g: ["geraet", 600, "Gerät"], sp: ["spuele", 800, "Spüle"], m: ["muell", 450, "Müllauszug"], gs: ["geraet", 600, "Geschirrspüler"], bo: ["geraet", 600, "Backofen"], ws: ["geraet", 600, "Wärmeschublade"], ko: ["geraet", 600, "Kochfeld"], da: ["geraet", 600, "Dunstabzug"], l: ["leer", 600, "leer"] };
+  ZK = { hoch: "Hochschränke", zeile: "Zeile", wand: "Wandschränke", insel: "Insel", frei: "frei" };
+  ZCOL = { hoch: "#6b6b6b", zeile: "#171717", wand: "oklch(.5 .12 255)", insel: "#f95c4b", frei: "#f39f5a" };
+  MATS = ["Eiche geölt hell", "Esche pigmentiert", "Weiß matt", "Graphit", "Naturstein grau", "Edelstahl", "Legrabox weiß", "Leinen 04"];
+  DECL = [["front", "Front"], ["korpus", "Korpus"], ["sockel", "Sockel"], ["schub", "Schubkästen"], ["griff", "Griff"], ["ap", "Arbeitsplatte"]];
+  STAMP = ["Vorplanung", "Vorabzug", "Final"];
+  TOOLS = [["select", "Auswahl", "V", "select"], ["hand", "Hand", "H", "hand"], ["add", "Segment setzen", "S", "plus"], ["fach", "Fach-Typ setzen", "F", "tuer"], ["kuerzel", "Kürzel", "K", "list"]];
+  XP = { select: "M4 2.5l8 4.5-3.5 1-1.5 3.5Z", hand: "M5.5 8.5V4.5a1 1 0 0 1 2 0V8M7.5 7.5V3.5a1 1 0 0 1 2 0V8M9.5 8V4.5a1 1 0 0 1 2 0v4a4 4 0 0 1-4 4h-.5a3.5 3.5 0 0 1-2.8-1.4L2.8 9.2a1 1 0 0 1 1.5-1.3l1.2 1.4", eye: "M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8ZM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z", eyeoff: "M2.5 2.5l11 11M6.2 4.2A6 6 0 0 1 8 3.5c4 0 6.5 4.5 6.5 4.5a11 11 0 0 1-2 2.5M4 5.5C2.6 6.7 1.5 8 1.5 8s2.5 4.5 6.5 4.5c.8 0 1.5-.2 2.2-.5", unlock: "M4.5 7.5h7v6h-7ZM6 7.5V5.5a2 2 0 0 1 3.8-.9", redo: "M10.5 4.5l3 3-3 3M13.5 7.5h-6a4 4 0 0 0 0 8", help: "M8 13.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM6.3 6.3a1.8 1.8 0 1 1 2.6 1.6c-.6.3-.9.7-.9 1.4M8 11.3v.1", cfg: "M2.5 13.5h11M4 13.5V6h3v7.5M9 13.5V3h3v10.5" };
+  ic(k) { return this.XP[k] != null ? this.XP[k] : this.FTI[k] || this.P[k] || this.P.plus; }
+  sumW(z) { return z.segs.reduce((a, b) => a + b.w, 0); }
+  fmL(mm) { return (mm / 1000).toFixed(2).replace(".", ",") + " m"; }
+  parse(text) {
+    return String(text).trim().split(/[\s,]+/).filter(Boolean).map(tok => { const m = /^(\d+)?([a-zäöü]+)(\d+)?$/i.exec(tok); if (!m) return null; const c = this.CODES[m[2].toLowerCase()]; if (!c) return null; let w = c[1], n = 1;
+      [m[1], m[3]].forEach(x => { if (x) { const v = parseInt(x, 10); if (v >= 100) w = v; else n = Math.max(1, Math.min(6, v)); } }); w = this.RASTER.reduce((a, b) => Math.abs(b - w) < Math.abs(a - w) ? b : a);
+      return { id: this.nid(), w, f: [{ t: c[0], n: c[0] === "schub" ? n : 1, lab: c[2], sys: "Legrabox" }] }; }).filter(Boolean);
+  }
+  seed() {
+    const S = (id, w, f) => ({ id, w, f }), F = (t, o) => Object.assign({ t, n: t === "schub" ? 3 : 1, lab: this.FT[t], sys: "Legrabox" }, o || {});
+    const mats = { front: "Eiche geölt hell", korpus: "Weiß matt", sockel: "Graphit", schub: "Legrabox weiß", griff: "Edelstahl", ap: "Naturstein grau" };
+    const zone = (id, kind, name, segs) => ({ id, kind, name, vis: true, lock: false, segs }), P = t => this.parse(t);
+    return [
+      { id: "k1", proj: "p1", name: "Entwurf A", status: "Vorplanung", room: "Aufmaß · Küche Nordwand", wall: 4433, autoB: true, mats: Object.assign({}, mats), pass: 950, stand: "Heute, 09:20",
+        zones: [zone("z1", "hoch", "Hochschränke", [S("g1", 600, [F("geraet", { lab: "Kühlschrank" }), F("tuer")]), S("g2", 600, [F("geraet", { lab: "Backofen" }), F("geraet", { lab: "Mikrowelle" }), F("schub", { n: 2 })])]), zone("z2", "zeile", "Zeile", P("600t 3s 800sp 600gs 3s")), zone("z3", "wand", "Wandschränke", P("600t 600t 800b 600t")), zone("z4", "insel", "Insel", P("3s800 3s800"))] },
+      { id: "k2", proj: "p1", name: "Entwurf B", status: "Vorabzug", room: "Freie Maße", wall: 2500, autoB: true, mats: Object.assign({}, mats, { front: "Graphit", korpus: "Graphit", sockel: "Graphit", griff: "Edelstahl", ap: "Naturstein grau" }), pass: 1000, stand: "Gestern",
+        zones: [zone("y1", "zeile", "Zeile", P("600t 3s 800sp 450gs")), zone("y2", "wand", "Wandschränke", P("600t 600t 800b"))] },
+      { id: "k3", proj: "p2", name: "Tresen", status: "Vorplanung", room: "keiner", wall: 1800, autoB: true, mats: Object.assign({}, mats, { front: "Esche pigmentiert" }), pass: 1000, stand: "Mo.", zones: [zone("x1", "zeile", "Zeile", P("3s 3s 600t"))] }];
+  }
+  initial() {
+    const p = this.props || {}, id = { "Entwurf A": "k1", "Entwurf B": "k2", "Tresen": "k3" }[p.entwurf ?? "Entwurf A"] || "k1";
+    let wh = "Scrollen"; try { wh = localStorage.getItem("alfa.aufmass.wheel") || "Scrollen"; } catch (e) {}
+    return { mem: {}, palPos: this.loadPal(), photos: this.seed(), pid: id, hist: [], fut: [], tool: "select", sel: null, zid: null, view: { z: 1, x: 0, y: 0 }, sheet: false, ansicht: "Front", fly: false, flyPos: null, nfach: "tuer", nw: 600, kz: "600t 3s sp gs", wheel: wh, front: "segment", edit: null, spc: false, panning: false,
+      menu: null, toast: null, toastUndo: null, hoverCard: null, blobOpen: false, syncing: false };
+  }
+  state = this.initial();
+  ph() { return this.state.photos.find(p => p.id === this.state.pid) || this.state.photos[0]; }
+  sgeo(b) { return b ? { SW: 1400, SH: 990, px: 187, py: 50, pw: 1027, ph: 770 } : { SW: 1000, SH: 750, px: 0, py: 0, pw: 1000, ph: 750 }; }
+  view() { const s = this.state, d = this.dim || { W: 800, H: 600 }, sg = this.sgeo(s.sheet), pad = s.sheet ? 48 : 72, fit = Math.min((d.W - 2 * pad) / sg.SW, (d.H - 2 * pad) / sg.SH), S = fit * s.view.z; return { sg, S, fit, W: d.W, H: d.H, ox: (d.W - sg.SW * S) / 2 + s.view.x, oy: (d.H - sg.SH * S) / 2 + s.view.y }; }
+  ts(n, V) { V = V || this.view(); return [V.ox + (V.sg.px + n[0] * V.sg.pw) * V.S, V.oy + (V.sg.py + n[1] * V.sg.ph) * V.S]; }
+  tn(l, V) { V = V || this.view(); return [((l[0] - V.ox) / V.S - V.sg.px) / V.sg.pw, ((l[1] - V.oy) / V.S - V.sg.py) / V.sg.ph]; }
+  clampN(n) { return [Math.max(0, Math.min(1, n[0])), Math.max(0, Math.min(1, n[1]))]; }
+  deskEl() { const r = this.root(); return r ? r.querySelector('[data-part="desk"]') : null; }
+  dl(e) { const el = this.deskEl(), r = el.getBoundingClientRect(), k = this.sc().k; return [(e.clientX - r.left) / k, (e.clientY - r.top) / k]; }
+  setView(v) { const V = this.view(), S = V.fit * v.z, mx = V.sg.SW * S / 2 + V.W / 2 - 120, my = V.sg.SH * S / 2 + V.H / 2 - 120; this.setState({ view: { z: v.z, x: Math.max(-mx, Math.min(mx, v.x)), y: Math.max(-my, Math.min(my, v.y)) } }); }
+  zoomAt(c, f) { const V = this.view(), z0 = this.state.view.z, z2 = Math.max(1, Math.min(12, z0 * f)); if (z2 === z0) return; const S2 = V.fit * z2, wx = (c[0] - V.ox) / V.S, wy = (c[1] - V.oy) / V.S; this.setView({ z: z2, x: c[0] - wx * S2 - (V.W - V.sg.SW * S2) / 2, y: c[1] - wy * S2 - (V.H - V.sg.SH * S2) / 2 }); }
+  zoomTo(z) { const d = this.dim || { W: 800, H: 600 }; this.zoomAt([d.W / 2, d.H / 2], z / this.state.view.z); }
+  fit() { this.setState({ view: { z: 1, x: 0, y: 0 } }); }
+  pushHist() { this.setState(st => ({ hist: st.hist.concat([st.photos]).slice(-100), fut: [] })); }
+  live(fn) { this.setState(st => ({ photos: st.photos.map(p => p.id === st.pid ? fn(p) : p) })); }
+  mut(fn) { this.pushHist(); this.live(fn); }
+  undo() { this.setState(st => st.hist.length ? { photos: st.hist[st.hist.length - 1], hist: st.hist.slice(0, -1), fut: st.fut.concat([st.photos]), draft: null } : null); }
+  redo() { this.setState(st => st.fut.length ? { photos: st.fut[st.fut.length - 1], fut: st.fut.slice(0, -1), hist: st.hist.concat([st.photos]) } : null); }
+  nid() { return "x" + (Date.now() % 1e6).toString(36) + Math.floor(Math.random() * 99); }
+  inp(key, shown, apply) {
+    const e = this.state.edit;
+    return { val: e && e.key === key ? e.text : shown, onIn: ev => { const t = ev.target.value, c = this.state.edit; if (!c || c.key !== key) this.pushHist(); this.setState({ edit: { key, text: t } }); apply(t); }, onBlur: () => this.setState({ edit: null }) };
+  }
+  openMenuAt(cx, cy, items, w) {
+    w = Math.max(168, Math.min(280, w || 220)); const { r, k } = this.sc(), g = this.geo(), h = items.length * 28 + 8; let x = (cx - r.left) / k, y = (cy - r.top) / k;
+    x = Math.max(16, Math.min(x, g.W - w - 16)); y = Math.max(16, Math.min(y, g.H - h - 16)); this.setState({ menu: { x, y, w, items } });
+  }
+  mounted() {
+    if (window.__aufOff) window.__aufOff();
+    const ku = e => { if (e.code === "Space") { this.space = false; this.setState({ spc: false }); } };
+    this._wh = e => {
+      e.preventDefault(); const el = this.deskEl(); if (!el) return; const r = el.getBoundingClientRect(), k = this.sc().k, c = [(e.clientX - r.left) / k, (e.clientY - r.top) / k], cl = (v, m) => Math.max(-m, Math.min(m, v));
+      const zoomMode = (this.state.wheel === "Zoomen") !== !!e.altKey;
+      if (e.ctrlKey || e.metaKey || zoomMode) this.zoomAt(c, Math.exp(-cl(e.deltaY, 24) * (e.ctrlKey ? .01 : .005)));
+      else { const v = this.state.view; this.setView({ z: v.z, x: v.x - cl(e.deltaX, 40), y: v.y - cl(e.deltaY, 40) }); }
+    };
+    const wd = e => { const el = this.deskEl(); if (el && e.target && el.contains(e.target)) this._wh(e); }; document.addEventListener("wheel", wd, { passive: false, capture: true }); document.addEventListener("keyup", ku); window.__aufOff = () => { document.removeEventListener("keyup", ku); document.removeEventListener("wheel", wd, { capture: true }); };
+  }
+  hook() {
+    
+    if (this.focusCtx) { this.focusCtx = false; const r = this.root(), i = r && r.querySelector('[data-ctx="val"]'); if (i) { i.focus(); i.select(); } }
+  }
+  anim() { const r = this.root(); if (r && !this.still()) r.querySelectorAll("[data-spin]").forEach(el => { if (!el._a && el.animate) el._a = el.animate([{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }], { duration: 1000, iterations: Infinity }); }); if (this._wh) this.hook(); }
+
+  patchPh(patch, hist) { if (hist) this.pushHist(); this.live(p => Object.assign({}, p, patch)); }
+  sgeo() { const e = this.ext || { SW: 4000, SH: 3100 }; return { SW: e.SW, SH: e.SH, px: 0, py: 0, pw: 1, ph: 1 }; }
+  layout(v) {
+    const zs = v.zones, pos = {}; let x = 0;
+    zs.filter(z => z.kind === "hoch").forEach(z => { pos[z.id] = x; x += this.sumW(z); });
+    const sz = x; zs.filter(z => z.kind === "zeile").forEach(z => { pos[z.id] = x; x += this.sumW(z); });
+    let end = x; zs.filter(z => z.kind === "wand").forEach(z => { pos[z.id] = sz; end = Math.max(end, sz + this.sumW(z)); });
+    zs.filter(z => z.kind === "insel" || z.kind === "frei").forEach(z => { end += this.GAP; pos[z.id] = end; end += this.sumW(z); });
+    return { pos, end };
+  }
+  liveZ(zid, fn) { this.live(p => Object.assign({}, p, { zones: p.zones.map(z => z.id === zid ? fn(z) : z) })); }
+  mutZ(zid, fn) { this.pushHist(); this.liveZ(zid, fn); }
+  findSeg(ph, sid) { for (const z of ph.zones) { const i = z.segs.findIndex(q => q.id === sid); if (i > -1) return { z, seg: z.segs[i], i }; } return null; }
+  selectSeg(zid, sid) { this.setState({ zid, sel: sid, front: "segment" }); }
+  setFach(zid, sid, j, t) { this.mutZ(zid, z => Object.assign({}, z, { segs: z.segs.map(q => q.id !== sid ? q : Object.assign({}, q, { f: q.f.map((x, i) => i !== j ? x : { t, n: t === "schub" ? (x.t === "schub" ? x.n : 3) : 1, lab: t === "geraet" && x.t === "geraet" ? x.lab : this.FT[t], sys: x.sys || "Legrabox" }) })) })); }
+  setW(zid, sid, w) { this.mutZ(zid, z => Object.assign({}, z, { segs: z.segs.map(q => q.id === sid ? Object.assign({}, q, { w }) : q) })); }
+  moveSeg(dir) { const ph = this.ph(), r = this.findSeg(ph, this.state.sel); if (!r) return; const j = r.i + dir; if (j < 0 || j >= r.z.segs.length) return; this.mutZ(r.z.id, z => { const a = z.segs.slice(), q = a.splice(r.i, 1)[0]; a.splice(j, 0, q); return Object.assign({}, z, { segs: a }); }); }
+  dupSeg() { const ph = this.ph(), r = this.findSeg(ph, this.state.sel); if (!r) return; const n = Object.assign({}, JSON.parse(JSON.stringify(r.seg)), { id: this.nid() }); this.mutZ(r.z.id, z => { const a = z.segs.slice(); a.splice(r.i + 1, 0, n); return Object.assign({}, z, { segs: a }); }); this.setState({ sel: n.id }); }
+  delSeg() { const ph = this.ph(), r = this.findSeg(ph, this.state.sel); if (!r) return; if (r.z.lock) { this.toastIt("Zone gesperrt"); return; } this.mutZ(r.z.id, z => Object.assign({}, z, { segs: z.segs.filter(q => q.id !== r.seg.id) })); this.setState({ sel: null }); this.toastIt("Segment entfernt", () => this.undo()); }
+  segDown(e, zid, sid, j) {
+    const s = this.state; if (e.button !== 0) return; e.stopPropagation();
+    const z = this.ph().zones.find(q => q.id === zid); if (z.lock) { this.toastIt("Zone «" + z.name + "» ist gesperrt"); return; }
+    if (s.tool === "fach") { this.setFach(zid, sid, j, s.nfach); this.selectSeg(zid, sid); return; }
+    this.selectSeg(zid, sid); this.d = { mode: "reorder", zid, sid, pushed: false };
+  }
+  segMenu(e, zid, sid) {
+    e.preventDefault(); e.stopPropagation(); this.selectSeg(zid, sid);
+    const items = [{ head: true, label: "Breite" }].concat(this.RASTER.map(w => this.mi(w + " mm", () => this.setW(zid, sid, w), { check: this.findSeg(this.ph(), sid).seg.w === w })), [{ sep: true }, this.mi("Nach links", () => this.moveSeg(-1), { meta: "←" }), this.mi("Nach rechts", () => this.moveSeg(1), { meta: "→" }), this.mi("Duplizieren", () => this.dupSeg()), this.mi("Löschen", () => this.delSeg(), { danger: true, meta: "⌫" })]);
+    this.openMenuAt(e.clientX, e.clientY, items, 200);
+  }
+  setTool(t) { this.setState({ tool: t, fly: t === "fach" ? this.state.fly : false }); }
+  toolClick(t, e) {
+    if (t === "fach") { const s = this.state; if (s.tool === "fach" && s.fly) { this.setState({ fly: false }); return; } this.openFly(e); this.setState({ tool: "fach" }); return; }
+    this.setTool(t);
+  }
+  openFly(e) { const el = this.palRef.current; if (!el || !e || !e.currentTarget) { this.setState({ fly: true, flyPos: this.state.flyPos || { x: 64, y: 150 } }); return; } const lr = el.offsetParent.getBoundingClientRect(), b = e.currentTarget.getBoundingClientRect(), k = this.sc().k; this.setState({ fly: true, flyPos: { x: Math.round((b.right - lr.left) / k + 12), y: Math.round((b.top - lr.top) / k - 8) } }); }
+  deskDown(e) {
+    const s = this.state, t = s.tool; if (s.menu) this.setState({ menu: null }); if (s.fly) this.setState({ fly: false });
+    if (e.button === 1 || (e.button === 0 && (this.space || t === "hand"))) { e.preventDefault(); this.d = { mode: "pan", sx: e.clientX, sy: e.clientY, vx: s.view.x, vy: s.view.y }; this.setState({ panning: true }); return; }
+    if (e.button !== 0) return;
+    if (t === "select" || t === "fach" || t === "kuerzel") { if (s.sel) this.setState({ sel: null }); this.d = { mode: "pan", sx: e.clientX, sy: e.clientY, vx: s.view.x, vy: s.view.y }; return; }
+    if (t === "add") this.addSeg();
+  }
+  activeZone(ph) { return ph.zones.find(z => z.id === this.state.zid) || ph.zones.find(z => z.kind === "zeile") || ph.zones[0]; }
+  addSeg() { const ph = this.ph(), z = this.activeZone(ph); if (!z) { this.toastIt("Erst eine Zone anlegen"); return; } if (z.lock) { this.toastIt("Zone «" + z.name + "» ist gesperrt"); return; } const n = { id: this.nid(), w: this.state.nw, f: [{ t: "tuer", n: 1, lab: "Tür", sys: "Legrabox" }] }; this.mutZ(z.id, zz => Object.assign({}, zz, { segs: zz.segs.concat([n]) })); this.setState({ sel: n.id, zid: z.id, front: "segment" }); }
+  applyKz(replace) { const ph = this.ph(), z = this.activeZone(ph); if (!z || z.lock) { this.toastIt("Keine bearbeitbare Zone"); return; } const q = this.parse(this.state.kz); if (!q.length) { this.toastIt("Kürzel nicht lesbar · z. B. 600t 3s sp gs"); return; } this.mutZ(z.id, zz => Object.assign({}, zz, { segs: replace ? q : zz.segs.concat(q) })); this.toastIt(q.length + " Segmente " + (replace ? "ersetzt in " : "angehängt an ") + z.name, () => this.undo()); }
+  key(e) {
+    const s = this.state, m = e.metaKey || e.ctrlKey, k = e.key;
+    if (e.code === "Space") { e.preventDefault(); if (!this.space) { this.space = true; this.setState({ spc: true }); } return; }
+    if (m && k.toLowerCase() === "z") { e.preventDefault(); if (e.shiftKey) this.redo(); else this.undo(); return; }
+    if (m && (k === "0" || k === "1")) { e.preventDefault(); this.fit(); return; }
+    if (m) return;
+    if (k === "Escape") { if (s.fly) this.setState({ fly: false }); else this.setState({ sel: null }); return; }
+    if ((k === "Delete" || k === "Backspace") && s.sel) { e.preventDefault(); this.delSeg(); return; }
+    if (s.sel && (k === "ArrowLeft" || k === "ArrowRight")) { e.preventDefault(); this.moveSeg(k === "ArrowRight" ? 1 : -1); return; }
+    if (s.sel && (k === "ArrowUp" || k === "ArrowDown")) { e.preventDefault(); const r = this.findSeg(this.ph(), s.sel); if (r) { const i = this.RASTER.indexOf(r.seg.w) + (k === "ArrowUp" ? 1 : -1); if (i >= 0 && i < this.RASTER.length) this.setW(r.z.id, r.seg.id, this.RASTER[i]); } return; }
+    if (k === "+" || k === "=") { this.zoomTo(Math.min(12, s.view.z * 1.25)); return; }
+    if (k === "-") { this.zoomTo(Math.max(1, s.view.z / 1.25)); return; }
+    if (k === "1" || k === "2") { this.setState({ ansicht: k === "1" ? "Front" : "Plan", view: { z: 1, x: 0, y: 0 } }); return; }
+    const T = { v: "select", h: "hand", s: "add", f: "fach", k: "kuerzel" }[k.toLowerCase()]; if (T) this.setTool(T);
+  }
+  pickVar(id) { this.setState({ pid: id, sel: null, zid: null, view: { z: 1, x: 0, y: 0 } }); }
+  addVar(copy) {
+    const cur = this.ph(), n = this.state.photos.length, id = "k" + (Date.now() % 100000), L = String.fromCharCode(65 + (n % 26)), base = copy ? JSON.parse(JSON.stringify(cur)) : Object.assign(JSON.parse(JSON.stringify(cur)), { zones: [{ id: "z" + id, kind: "zeile", name: "Zeile", vis: true, lock: false, segs: [] }] });
+    this.pushHist(); this.setState(st => ({ photos: st.photos.concat([Object.assign(base, { id, name: "Entwurf " + L, status: "Vorplanung", stand: "Gerade eben" })]), pid: id, sel: null, zid: null }));
+    this.toastIt(copy ? "Variante aus «" + cur.name + "» kopiert" : "Leere Variante angelegt");
+  }
+  addZone(kind) { const id = "z" + (Date.now() % 100000); this.mut(p => Object.assign({}, p, { zones: p.zones.concat([{ id, kind, name: this.ZK[kind], vis: true, lock: false, segs: [] }]) })); this.setState({ zid: id, tool: "add" }); }
+  zonePatch(id, patch) { this.mutZ(id, z => Object.assign({}, z, patch)); }
+  zoneMenu(e, z) {
+    e.preventDefault(); e.stopPropagation(); const ph = this.ph();
+    this.openMenuAt(e.clientX, e.clientY, [this.mi("Umbenennen", () => { const t = prompt("Zonenname", z.name); if (t) this.zonePatch(z.id, { name: t }); }), this.mi(z.lock ? "Entsperren" : "Sperren", () => this.zonePatch(z.id, { lock: !z.lock })), { sep: true }, this.mi("Löschen", () => { this.mut(p => Object.assign({}, p, { zones: p.zones.filter(q => q.id !== z.id) })); this.setState({ sel: null, zid: null }); this.toastIt("Zone gelöscht", () => this.undo()); }, { danger: true })], 200);
+  }
+  anfrage(ph) {
+    const z = k => ph.zones.filter(q => q.kind === k), seg = q => q.segs.map(x => x.w + " " + (x.f.length > 1 ? "Hochschrank" : x.f[0].t === "schub" ? x.f[0].n + " Schubkästen" : x.f[0].lab || this.FT[x.f[0].t])).join(", ");
+    const tis = ph.zones.filter(q => q.kind !== "frei").map(q => q.name + " (" + this.fmL(this.sumW(q)) + "): " + (seg(q) || "leer"));
+    const lenZ = z("zeile").concat(z("insel")).reduce((a, q) => a + this.sumW(q), 0);
+    return { tisch: ["Entwurf " + ph.name + " · " + ph.status + " · Raum: " + ph.room].concat(["Front " + ph.mats.front + ", Korpus " + ph.mats.korpus + ", Sockel " + ph.mats.sockel + ", Schubkästen " + ph.mats.schub + ", Griff " + ph.mats.griff]).concat(tis), stein: ["Arbeitsplatte " + ph.mats.ap + " · Länge Zeile und Insel zusammen " + this.fmL(lenZ) + " · Stärke " + this.AP + " mm (Annahme)"], render: "Küche, Front " + ph.mats.front + ", Korpus " + ph.mats.korpus + ", Arbeitsplatte " + ph.mats.ap + ", Griff " + ph.mats.griff + ", " + ph.zones.length + " Zonen" };
+  }
+
+  GER = { "Backofen": { b: 560, h: 595, t: 550, mod: 600, boden: false }, "Mikrowelle": { b: 560, h: 380, t: 500, mod: 600, boden: false }, "Kühlschrank": { b: 560, h: 1780, t: 550, mod: 600, boden: true }, "Geschirrspüler": { b: 598, h: 820, t: 570, mod: 600, boden: true }, "Wärmeschublade": { b: null, h: null, t: null, mod: null, boden: false }, "Kaffeevollautomat": { b: null, h: null, t: null, mod: null, boden: false }, "Kochfeld": { b: null, h: null, t: null, mod: null, boden: false }, "Dunstabzug": { b: null, h: null, t: null, mod: null, boden: false } };
+  MATC = { "Eiche geölt hell": "oklch(.84 .06 78)", "Esche pigmentiert": "oklch(.77 .03 68)", "Weiß matt": "#f6f4f0", "Graphit": "#4b4b4d", "Naturstein grau": "oklch(.74 .01 250)", "Edelstahl": "oklch(.84 .005 250)", "Legrabox weiß": "#ffffff", "Leinen 04": "oklch(.86 .03 88)" };
+  MATD = { "Graphit": 1 };
+  KT = { hoch: 650, zeile: 635, wand: 350, insel: 950, frei: 450 };
+  mc(n) { return this.MATC[n] || "#dddddd"; }
+  fachH(z, sg) {
+    const total = z.kind === "hoch" ? this.HOCH : this.KORP, fl = z.kind === "zeile" || z.kind === "insel" ? this.SOCK : 0;
+    const need = sg.f.map(fa => { const gr = fa.t === "geraet" ? this.GER[fa.lab] : null; return gr && gr.h ? gr.h - (gr.boden ? fl : 0) : null; });
+    const fixed = need.reduce((a, v) => a + (v || 0), 0), free = need.filter(v => v == null).length, rest = total - fixed;
+    const hs = need.map(v => v != null ? v : Math.max(60, free ? rest / free : 0)), sum = hs.reduce((a, b) => a + b, 0) || 1;
+    return { total, hs, short: Math.max(0, Math.round(sum - total)), draw: hs.map(h => h * total / sum) };
+  }
+  gapOf(ph) { const row = ph.zones.filter(z => z.kind === "hoch" || z.kind === "zeile").reduce((a, z) => a + this.sumW(z), 0), v = Math.round(ph.wall - row); return { v, row, blende: !!ph.autoB && v > 0 && v <= 150 }; }
+  check(ph) {
+    const it = [], has = (sg, fn) => sg.f.some(fn), isSp = fa => fa.t === "spuele", isG = (fa, l) => fa.t === "geraet" && fa.lab === l, Q = { b: "belegt", a: "Annahme", i: "Entwurfsidee" };
+    const add = (sev, text, sub, q, zid, sid) => it.push({ sev, text, sub: sub + " · " + Q[q], zid, sid }), ok = (text, sub, q) => it.push({ sev: "ok", text, sub: sub + " · " + Q[q] });
+    ph.zones.forEach(z => z.segs.forEach((sg, i) => {
+      const at = z.name + " · Segment " + (i + 1), nb = [i - 1, i + 1].map(k => z.segs[k]).filter(Boolean), near = [i - 1, i, i + 1].map(k => z.segs[k]).filter(Boolean), spIn = z.segs.some(q => has(q, isSp));
+      if (has(sg, fa => isG(fa, "Geschirrspüler")) && !nb.some(q => has(q, isSp))) add("hint", spIn ? "Geschirrspüler ohne Spüle daneben" : "Geschirrspüler, aber keine Spüle in dieser Zone", at, "a", z.id, sg.id);
+      if (has(sg, fa => fa.t === "muell") && !near.some(q => has(q, isSp))) add("hint", "Müllauszug ohne Spülen-Nähe", at, "a", z.id, sg.id);
+      sg.f.forEach((fa, j) => { if (isG(fa, "Wärmeschublade") && !(j > 0 && isG(sg.f[j - 1], "Backofen"))) add("hint", "Wärmeschublade ohne Backofen darüber", at, "b", z.id, sg.id); });
+      if (has(sg, isSp) && sg.w < 450) add("hint", "Spülen-Korpus nur " + sg.w + " mm", at, "a", z.id, sg.id);
+      const fh = this.fachH(z, sg); if (fh.short > 0) add("warn", "Fächer brauchen " + fh.short + " mm mehr Höhe", at, "i", z.id, sg.id);
+      sg.f.forEach(fa => { const gr = fa.t === "geraet" ? this.GER[fa.lab] : null; if (gr && gr.mod && sg.w < gr.mod) add("warn", fa.lab + " braucht ein " + gr.mod + "er Segment", at + " hat " + sg.w + " mm", "i", z.id, sg.id); });
+    }));
+    const fs = ph.zones.reduce((a, z) => a.concat(z.segs.reduce((b, sg) => b.concat(sg.f), [])), []);
+    if (fs.some(fa => isG(fa, "Kochfeld")) && !fs.some(fa => isG(fa, "Dunstabzug"))) add("hint", "Kochfeld ohne Dunstabzug im Entwurf", "Muldenlüfter oder Haube ergänzen", "a");
+    ph.zones.filter(z => z.kind === "insel").forEach(z => { if (ph.pass < 850) add("warn", "Durchgang Insel " + ph.pass + " mm", "unter der harten Grenze 850", "a", z.id); else if (ph.pass < 1000) add("hint", "Durchgang Insel " + ph.pass + " mm", "Studio-Standard ≥ 1000", "a", z.id); else ok("Durchgang Insel " + ph.pass + " mm", "Soll 1000 erfüllt", "a"); });
+    if (ph.room === "Freie Maße") ph.zones.forEach(z => { if (this.sumW(z) > ph.wall) add("warn", z.name + " ist " + this.sumW(z) + " mm breit", "länger als die längste Wand (" + ph.wall + ")", "b", z.id); });
+    const gp = this.gapOf(ph), sum = k => ph.zones.filter(z => z.kind === k).reduce((a, z) => a + this.sumW(z), 0);
+    if (gp.row > 0) { if (gp.v < 0) add("warn", "Zeile ragt " + (-gp.v) + " mm in die Wand", "Wand " + this.fmL(ph.wall) + " · Hoch und Zeile " + this.fmL(gp.row), "i"); else if (gp.v > 0 && gp.v <= 150) { if (ph.autoB) ok("Passblende " + gp.v + " mm", "automatisch, folgt der Front", "i"); else add("hint", "Lücke " + gp.v + " mm ohne Blende", "Blenden an Lücken einschalten", "i"); } else if (gp.v > 150) add("hint", "Lücke zur Wand " + gp.v + " mm", "Segment ergänzen, Blende nur bis 150 mm", "i"); }
+    if (sum("wand") > sum("zeile")) add("hint", "Wandschränke ragen " + (sum("wand") - sum("zeile")) + " mm über die Zeile", "Wand " + this.fmL(sum("wand")) + " · Zeile " + this.fmL(sum("zeile")), "i");
+    const ord = { warn: 0, hint: 1, ok: 2 }; it.sort((x, y) => ord[x.sev] - ord[y.sev]);
+    return { items: it, warn: it.filter(x => x.sev !== "ok").length, hard: it.filter(x => x.sev === "warn").length };
+  }
+  parts(ph) {
+    const raw = [], hw = { aus: 0, griffe: 0 }, T = 19, m = ph.mats, add = (bez, n, l, b, d, mat) => raw.push({ bez, n, l: Math.round(l), b: Math.round(b), d, mat });
+    ph.zones.forEach(z => {
+      const kt = this.KT[z.kind], Hs = z.kind === "hoch" ? this.HOCH : this.KORP, zw = this.sumW(z);
+      z.segs.forEach(sg => {
+        const fh = this.fachH(z, sg).hs;
+        add("Seite", 2, Hs, kt, T, m.korpus); add("Boden / Deckel", 2, sg.w - 2 * T, kt, T, m.korpus); add("Rückwand", 1, Hs - 4, sg.w - 4, 8, m.korpus);
+        if (sg.f.length > 1) add("Zwischenboden", sg.f.length - 1, sg.w - 2 * T, kt - 20, T, m.korpus);
+        sg.f.forEach((fa, j) => { const h = fh[j];
+          if (fa.t === "boeden") add("Fachboden", 3, sg.w - 2 * T - 2, kt - 20, T, m.korpus);
+          if (fa.t === "tuer" || fa.t === "spuele") { const two = sg.w >= 800; add("Front", two ? 2 : 1, h - 3, two ? sg.w / 2 - 3 : sg.w - 3, T, m.front); hw.griffe += two ? 2 : 1; }
+          if (fa.t === "muell") { add("Front", 1, h - 3, sg.w - 3, T, m.front); hw.griffe++; }
+          if (fa.t === "blende") add("Blende", 1, h - 3, sg.w - 3, T, m.front);
+          if (fa.t === "schub") { add("Front (Schub)", fa.n, h / fa.n - 3, sg.w - 3, T, m.front); hw.griffe += fa.n; hw.aus += fa.n; }
+        });
+      });
+      if (zw && z.kind !== "wand") add("Sockelblende", 1, zw, this.SOCK, 16, m.sockel);
+      if (zw && z.kind === "zeile") add("Arbeitsplatte", 1, zw, 655, this.AP, m.ap);
+      if (zw && z.kind === "insel") add("Arbeitsplatte", 1, zw, 970, this.AP, m.ap);
+    });
+    const gp = this.gapOf(ph); if (gp.blende) add("Passblende", 1, this.KORP - 3, gp.v, T, m.front);
+    const map = {}; raw.forEach(p => { const k = [p.bez, p.l, p.b, p.d, p.mat].join("|"); if (map[k]) map[k].n += p.n; else map[k] = Object.assign({}, p); });
+    return { list: Object.keys(map).map(k => map[k]), hw };
+  }
+  setFach(zid, sid, j, t) { this.mutZ(zid, z => Object.assign({}, z, { segs: z.segs.map(q => q.id !== sid ? q : Object.assign({}, q, { f: q.f.map((x, i) => i !== j ? x : { t, n: t === "schub" ? (x.t === "schub" ? x.n : 3) : 1, lab: t === "geraet" ? (x.t === "geraet" ? x.lab : "Backofen") : this.FT[t], sys: x.sys || "Legrabox" }) })) })); }
+  segDown(e, zid, sid, j) {
+    const s = this.state; if (e.button !== 0) return; e.stopPropagation();
+    const z = this.ph().zones.find(q => q.id === zid); if (z.lock) { this.toastIt("Zone «" + z.name + "» ist gesperrt"); return; }
+    if (s.tool === "fach") { this.setFach(zid, sid, j, s.nfach); this.selectSeg(zid, sid); return; }
+    this.selectSeg(zid, sid); if (s.ansicht !== "Plan") this.d = { mode: "reorder", zid, sid, pushed: false };
+  }
+  ARCH = [["hochschrankwand", "Hochschrankwand mit Geräteblock", "4 Segmente"], ["spuelenzeile", "Spülenzeile", "GS, Spüle, Müll, 2× Schub"], ["kochzeile", "Kochzeile", "Backofen-Unterbau"], ["insel-tresen", "Insel mit Tresen", "2× 825"], ["insel-kompakt", "Insel kompakt", "4× 725"], ["wandzeile", "Wandschränke", "3 Segmente"], ["sideboard", "Sideboard", "frei, 3 Segmente"], ["renovation", "Renovierung: Fronten + Insel", "Bestand, neue Fronten"]];
+  archZones(id) {
+    const nid = () => "x" + (Date.now() % 1e6).toString(36) + (this._i = (this._i || 0) + 1), S = (w, f) => ({ id: nid(), w, f }), F = (t, o) => Object.assign({ t, n: t === "schub" ? 3 : 1, lab: this.FT[t], sys: "Legrabox" }, o || {}), G = l => F("geraet", { lab: l }), SC = (n, sys) => F("schub", { n, sys: sys || "Legrabox" }), Z = (kind, name, segs) => ({ id: nid(), kind, name, vis: true, lock: false, segs });
+    const hs = () => [S(600, [SC(2), F("tuer"), F("boeden")]), S(600, [G("Wärmeschublade"), G("Backofen"), G("Kaffeevollautomat"), F("boeden")]), S(759, [G("Kühlschrank"), F("boeden")]), S(1200, [SC(2), F("regal"), F("boeden")])];
+    const M = {
+      hochschrankwand: () => [Z("hoch", "Hochschränke", hs())],
+      spuelenzeile: () => [Z("zeile", "Spülenzeile", [S(600, [G("Geschirrspüler")]), S(600, [F("spuele")]), S(600, [F("muell")]), S(600, [SC(3)]), S(450, [SC(3)])])],
+      kochzeile: () => [Z("zeile", "Kochzeile", [S(600, [SC(3)]), S(600, [G("Backofen")]), S(600, [SC(3)])])],
+      "insel-tresen": () => [Z("insel", "Insel", [S(825, [SC(2)]), S(825, [SC(2)])])],
+      "insel-kompakt": () => [Z("insel", "Insel", [S(725, [F("tuer")]), S(725, [SC(3, "Holz")]), S(725, [SC(3, "Holz")]), S(725, [F("tuer")])])],
+      wandzeile: () => [Z("wand", "Wandschränke", [S(600, [F("tuer")]), S(600, [F("tuer")]), S(600, [F("regal")])])],
+      sideboard: () => [Z("frei", "Sideboard", [S(800, [F("tuer")]), S(800, [SC(2)]), S(800, [F("tuer")])])],
+      renovation: () => [Z("hoch", "Hochschränke (Bestand, neue Fronten)", [S(600, [F("tuer"), F("blende")]), S(600, [F("tuer"), F("blende")])]), Z("insel", "Insel (neue Korpen unter Bestands-Platte)", [S(725, [F("tuer")]), S(725, [SC(3, "Holz")]), S(725, [SC(3, "Holz")]), S(725, [F("tuer")])])]
+    };
+    return M[id]();
+  }
+  addArch(id) { const zs = this.archZones(id), nm = this.ARCH.find(q => q[0] === id)[1]; this.pushHist(); this.live(p => Object.assign({}, p, { zones: p.zones.concat(zs) })); this.setState({ zid: zs[0].id, sel: null }); this.toastIt("Vorlage «" + nm + "» eingesetzt", () => this.undo()); }
+  addVar(kind) {
+    const cur = this.ph(), n = this.state.photos.length, id = "k" + (Date.now() % 100000), L = String.fromCharCode(65 + (n % 26)), Z = (k, name, t) => ({ id: "z" + id + k, kind: k, name, vis: true, lock: false, segs: t ? this.parse(t) : [] });
+    let base, lab;
+    if (kind === "copy") { base = JSON.parse(JSON.stringify(cur)); lab = "Kopie von «" + cur.name + "»"; }
+    else {
+      const ZL = "600t 3s 800sp 600gs 3s", IN = "3s800 3s800";
+      const zs = kind === "leer" ? [Z("zeile", "Zeile")] : kind === "einzeilig" ? [Z("zeile", "Zeile", ZL)] : kind === "insel" ? [Z("zeile", "Zeile", ZL), Z("insel", "Insel", IN)] : [Z("hoch", "Hochschränke", "600t 600t"), Z("zeile", "Zeile", ZL), Z("wand", "Wandschränke", "600t 600t 800b 600t"), Z("insel", "Insel", IN)];
+      base = Object.assign(JSON.parse(JSON.stringify(cur)), { zones: zs, pass: 1000 }); base.wall = zs.filter(z => z.kind === "hoch" || z.kind === "zeile").reduce((a, z) => a + this.sumW(z), 0) || 3000; lab = "Neue Variante";
+    }
+    this.pushHist(); this.setState(st => ({ photos: st.photos.concat([Object.assign(base, { id, name: "Entwurf " + L, status: "Vorplanung", stand: "Gerade eben" })]), pid: id, sel: null, zid: null })); this.toastIt(lab + " angelegt");
+  }
+
+  renderVals() {
+    if (!window.AlfaShell) return { ready: false };
+    this.reg();
+    const s = this.state, K = this.K, P = this.P, g = this.geo(), rM = this.mem(), w = this.lay(), stop = e => e.stopPropagation(), f = n => n.toFixed(1);
+    const iconRing = "inset 0 0 0 1px var(--c-line-strong)", openCount = w.filter(x => x > K.fold).length;
+    const ph = this.ph(), W = w[1], H = g.lh - 84; this.dim = { W, H };
+    const plan = s.ansicht === "Plan", lo = this.layout(ph), chk = this.check(ph), gap = this.gapOf(ph), pr = this.parts(ph);
+    this.ext = { SW: Math.max(2800, 600 + Math.max(lo.end, ph.wall)), SH: plan ? 3300 : 3100 };
+    const V = this.view(), tool = s.tool, INK = "var(--c-sheet-ink)", INK3 = "var(--c-sheet-ink-3)", SHEET = "var(--c-sheet)", WELL = "var(--c-sheet-well)", SIG = "var(--c-signal)";
+    const pt = (x, y) => this.ts([300 + x, 2900 - y], V), pp = (x, y) => this.ts([300 + x, 400 + y], V), selR = s.sel ? this.findSeg(ph, s.sel) : null, az = this.activeZone(ph), lb = (x, y, t, o) => Object.assign({ x, y, t, c: INK, w: 400, bg: SHEET, ring: "none", tf: "translate(-50%,-50%)" }, o || {});
+    const ZY = { hoch: [this.SOCK, this.HOCH], zeile: [this.SOCK, this.KORP], wand: [this.WANDY, this.WANDH], insel: [this.SOCK, this.KORP], frei: [this.SOCK, this.KORP] };
+    const bad = {}; chk.items.forEach(q => { if (q.sev === "warn" && q.sid) bad[q.sid] = 1; });
+    const mats = ph.mats, FR = this.mc(mats.front), KO = this.mc(mats.korpus), HC = this.MATD[mats.front] ? "#ffffff" : INK;
+    const rects = [], lines = [], dots = [], hits = [], labels = [], chain = [], zbox = []; let selBox = { on: false };
+    const R = (x, y, wd, h, fill, sw, dash, st) => rects.push({ x, y, w: Math.max(0, wd), h: Math.max(0, h), fill, sw: sw || 1, dash: dash || "none", st: st || INK });
+    const Ln = (x1, y1, x2, y2, o) => lines.push(Object.assign({ x1, y1, x2, y2, sw: 1, dash: "none", op: 1, st: INK }, o || {}));
+    const hit = (x, y, wd, h, z, sg, j) => hits.push({ x, y, w: wd, h, pe: (tool === "select" || tool === "fach") && !z.lock ? "all" : "none", cur: tool === "fach" ? "copy" : "pointer", down: e => this.segDown(e, z.id, sg.id, j), ctx: e => this.segMenu(e, z.id, sg.id) });
+    const vdim = (xm, y1, y2, t, col) => { const a = pt(xm, y1), b = pt(xm, y2); Ln(a[0], a[1], b[0], b[1], { st: col || INK3 }); Ln(a[0] - 5, a[1], a[0] + 5, a[1], { st: col || INK3 }); Ln(b[0] - 5, b[1], b[0] + 5, b[1], { st: col || INK3 }); labels.push(lb(a[0] - 4, (a[1] + b[1]) / 2, t, { tf: "translate(-100%,-50%)", c: col || INK3 })); };
+    const hdim = (ym, x1, x2, t, col, fn) => { const a = fn(x1, ym), b = fn(x2, ym); Ln(a[0], a[1], b[0], b[1], { st: col || INK3 }); Ln(a[0], a[1] - 5, a[0], a[1] + 5, { st: col || INK3 }); Ln(b[0], b[1] - 5, b[0], b[1] + 5, { st: col || INK3 }); labels.push(lb((a[0] + b[0]) / 2, a[1] - 12, t, { c: col || INK, w: 500 })); };
+    const zl = ph.zones.filter(z => z.kind === "zeile").slice(-1)[0];
+    if (!plan) {
+      ph.zones.forEach(z => {
+        if (!z.vis) return; const x0 = lo.pos[z.id], zw = this.sumW(z), zy = ZY[z.kind], zt = pt(x0, zy[0] + zy[1]); let xx = x0;
+        if (z.kind !== "wand" && zw > 0) { const a = pt(x0, this.SOCK), b = pt(x0 + zw, 0); R(a[0], a[1], b[0] - a[0], b[1] - a[1], this.mc(mats.sockel), 1); }
+        if ((z.kind === "zeile" || z.kind === "insel" || z.kind === "frei") && zw > 0) { const c = pt(x0 - 15, this.SOCK + this.KORP + this.AP), d = pt(x0 + zw + 15, this.SOCK + this.KORP); R(c[0], c[1], d[0] - c[0], d[1] - c[1], this.mc(mats.ap), 1); }
+        if (z.id === az.id && zw > 0 && (tool === "add" || tool === "kuerzel")) { const b = pt(x0 + zw, zy[0]); zbox.push({ x: zt[0] - 6, y: zt[1] - 6, w: b[0] - zt[0] + 12, h: b[1] - zt[1] + 12 }); }
+        z.segs.forEach(sg => {
+          const A = pt(xx, zy[0] + zy[1]), B = pt(xx + sg.w, zy[0]), fx = A[0], fy = A[1], fw = B[0] - A[0], fh = B[1] - A[1], dr = this.fachH(z, sg).draw, tot = zy[1]; let ya = fy;
+          if (s.sel === sg.id) selBox = { on: true, x: fx - 5, y: fy - 5, w: fw + 10, h: fh + 10 };
+          sg.f.forEach((fa, j) => {
+            const y = ya, hh = fh * dr[j] / tot, t = fa.t, cx = fx + fw / 2; ya += hh;
+            if (t === "schub") { const n = fa.n; for (let q = 0; q < n; q++) { const yy = y + hh * q / n, h2 = hh / n; R(fx, yy, fw, h2, FR, 1); Ln(cx - Math.min(26, fw * .2), yy + h2 * .3, cx + Math.min(26, fw * .2), yy + h2 * .3, { sw: 2.4, st: HC }); } }
+            else if (t === "regal") { R(fx, y, fw, hh, KO, 1); R(fx + 6, y + 6, fw - 12, hh - 12, WELL, 1, "5 4"); for (let q = 1; q < 3; q++) Ln(fx + 6, y + hh * q / 3, fx + fw - 6, y + hh * q / 3); }
+            else if (t === "boeden") { R(fx, y, fw, hh, KO, 1); R(fx + 6, y + 6, fw - 12, hh - 12, WELL, 1); for (let q = 1; q < 4; q++) Ln(fx + 6, y + 6 + (hh - 12) * q / 4, fx + fw - 6, y + 6 + (hh - 12) * q / 4, { sw: 1.6 }); }
+            else if (t === "blende") R(fx, y, fw, hh, FR, 1, "4 3");
+            else if (t === "geraet") { R(fx, y, fw, hh, "#d6d6d8", 1); R(fx + fw * .1, y + hh * .14, fw * .8, hh * .62, "#2b2b2e", 1); dots.push({ x: cx, y: y + hh * .88, r: 3 }); }
+            else if (t === "leer") R(fx, y, fw, hh, "none", 1, "4 4");
+            else if ((t === "tuer" || t === "spuele") && sg.w >= 800) { R(fx, y, fw / 2, hh, FR, 1); R(fx + fw / 2, y, fw / 2, hh, FR, 1); const hy = z.kind === "wand" ? y + hh * .85 : y + hh * .14; Ln(cx - 9, hy - Math.min(16, hh * .1), cx - 9, hy + Math.min(16, hh * .1), { sw: 2.4, st: HC }); Ln(cx + 9, hy - Math.min(16, hh * .1), cx + 9, hy + Math.min(16, hh * .1), { sw: 2.4, st: HC }); }
+            else { R(fx, y, fw, hh, FR, 1); const hy = z.kind === "wand" ? y + hh * .85 : y + hh * .14; Ln(fx + fw - 9, hy - Math.min(16, hh * .1), fx + fw - 9, hy + Math.min(16, hh * .1), { sw: 2.4, st: HC }); }
+            if (t === "geraet" || t === "spuele" || t === "muell") { const full = fa.lab || this.FT[t], SHORT = { "Kühlschrank": "Kühl", "Mikrowelle": "MW", "Backofen": "Ofen", "Geschirrspüler": "GS", "Müllauszug": "Müll" }, tx = full.length * 6.8 + 16 <= fw ? full : (SHORT[full] && SHORT[full].length * 6.8 + 16 <= fw ? SHORT[full] : ""); if (tx && hh > 26) labels.push(lb(cx, y + hh / 2, tx, { c: INK3 })); }
+            hit(fx, y, fw, hh, z, sg, j);
+          });
+          R(fx, fy, fw, fh, "none", bad[sg.id] ? 2.6 : 1.6, "none", bad[sg.id] ? SIG : INK);
+          xx += sg.w;
+        });
+        if (zw > 0) { const yy = zt[1] - 26, xa = pt(x0, 0)[0], xb = pt(x0 + zw, 0)[0]; let acc = x0; chain.push({ d: "M" + f(xa) + " " + f(yy) + "L" + f(xb) + " " + f(yy) + [x0].concat(z.segs.map(q => (acc += q.w))).map(x => "M" + f(pt(x, 0)[0]) + " " + f(yy - 5) + "L" + f(pt(x, 0)[0]) + " " + f(yy + 5)).join("") }); acc = x0; z.segs.forEach(q => { if (pt(q.w, 0)[0] - pt(0, 0)[0] >= 26) labels.push(lb(pt(acc + q.w / 2, 0)[0], yy - 12, String(q.w), { bg: "transparent", c: INK3 })); acc += q.w; }); labels.push(lb((xa + xb) / 2, yy - 38, z.name + " · " + this.fmL(zw), { c: INK, w: 500 })); }
+      });
+      if (zl && gap.v !== 0 && gap.row > 0) { const xe = lo.pos[zl.id] + this.sumW(zl), a = pt(xe, this.SOCK + this.KORP), b = pt(xe + Math.abs(gap.v), this.SOCK);
+        if (gap.blende) { R(a[0], a[1], b[0] - a[0], b[1] - a[1], FR, 1, "3 3"); labels.push(lb((a[0] + b[0]) / 2, pt(0, 0)[1] + 50, "Blende " + gap.v, { c: INK3 })); }
+        else if (gap.v > 0) { R(a[0], a[1], b[0] - a[0], b[1] - a[1], "none", 1.6, "6 4", SIG); labels.push(lb((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, "Lücke " + gap.v, { c: SIG, w: 500 })); } }
+      const wl0 = pt(0, 0), wl1 = pt(0, this.HOCH + this.SOCK + 160), wr0 = pt(ph.wall, 0), wr1 = pt(ph.wall, this.HOCH + this.SOCK + 160); Ln(wl0[0], wl0[1], wl1[0], wl1[1], { dash: "6 5", st: INK3 }); Ln(wr0[0], wr0[1], wr1[0], wr1[1], { dash: "6 5", st: INK3 });
+      labels.push(lb((wl0[0] + wr0[0]) / 2, wl0[1] + 24, "Wand " + this.fmL(ph.wall) + " · aus " + (ph.room.indexOf("Aufmaß") === 0 ? "Aufmaß" : "Eingabe"), { c: INK3, bg: "transparent" }));
+      vdim(-120, 0, this.SOCK + this.KORP + this.AP, (this.SOCK + this.KORP + this.AP) + " Arbeitshöhe"); vdim(-240, 0, this.HOCH + this.SOCK, String(this.HOCH + this.SOCK));
+      const fl0 = pt(-200, 0), fl1 = pt(lo.end + 200, 0); Ln(fl0[0], fl0[1], fl1[0], fl1[1], { sw: 2.2 });
+    } else {
+      const px = {}; let x = 0; ph.zones.filter(z => z.kind === "hoch").forEach(z => { px[z.id] = x; x += this.sumW(z); }); const sz = x;
+      ph.zones.filter(z => z.kind === "zeile").forEach(z => { px[z.id] = x; x += this.sumW(z); }); const xe = x;
+      ph.zones.filter(z => z.kind === "wand" || z.kind === "insel").forEach(z => { px[z.id] = sz; });
+      const DP = { hoch: 650, zeile: 635, wand: 350, insel: 950 }, hasI = ph.zones.some(z => z.kind === "insel" && z.vis), y0z = z => z.kind === "insel" ? 635 + ph.pass : 0, roomD = hasI ? 635 + ph.pass + 970 + 300 : 635 + 1100;
+      const wa = pp(0, -70), wb = pp(ph.wall, 0), ra = pp(0, 0), rr = pp(ph.wall, roomD); R(wa[0], wa[1], wb[0] - wa[0], wb[1] - wa[1], INK, 1); R(ra[0], ra[1], rr[0] - ra[0], rr[1] - ra[1], "none", 1, "6 5", INK3);
+      ph.zones.forEach(z => {
+        if (!z.vis || z.kind === "frei") return; const zx = px[z.id], zw = this.sumW(z), dz = DP[z.kind], zy0 = y0z(z); let xx = zx;
+        if (z.kind === "zeile" || z.kind === "insel") { const a = pp(zx, zy0), b = pp(zx + zw, zy0 + (z.kind === "insel" ? 970 : 655)); R(a[0], a[1], b[0] - a[0], b[1] - a[1], this.mc(mats.ap), 1.2); }
+        z.segs.forEach((sg, si) => {
+          const a = pp(xx, zy0), b = pp(xx + sg.w, zy0 + dz);
+          if (z.kind === "hoch") R(a[0], a[1], b[0] - a[0], b[1] - a[1], KO, 1.2); else if (z.kind === "wand") R(a[0], a[1], b[0] - a[0], b[1] - a[1], "none", 1.4, "5 4", "oklch(.5 .12 255)"); else if (si > 0) Ln(a[0], a[1], a[0], pp(0, zy0 + dz)[1], { op: .4 });
+          if (z.kind !== "wand" && sg.f.some(q => q.t === "spuele")) { const c = pp(xx + 90, zy0 + 110), d = pp(xx + sg.w - 90, zy0 + 470); R(c[0], c[1], d[0] - c[0], d[1] - c[1], WELL, 1.2); }
+          if (z.kind !== "wand" && sg.f.some(q => q.t === "geraet" && q.lab === "Geschirrspüler")) labels.push(lb((a[0] + b[0]) / 2, pp(0, zy0 + 460)[1], "GS", { bg: "transparent", c: INK3 }));
+          if (bad[sg.id]) R(a[0], a[1], b[0] - a[0], b[1] - a[1], "none", 2.6, "none", SIG);
+          if (s.sel === sg.id) selBox = { on: true, x: a[0] - 5, y: a[1] - 5, w: b[0] - a[0] + 10, h: b[1] - a[1] + 10 };
+          hit(a[0], a[1], b[0] - a[0], b[1] - a[1], z, sg, 0); xx += sg.w;
+        });
+        if (zw > 0) { const m1 = pp(zx, 0)[0], m2 = pp(zx + zw, 0)[0]; labels.push(lb((m1 + m2) / 2, pp(0, zy0 + (z.kind === "wand" ? 150 : z.kind === "insel" ? 450 : z.kind === "hoch" ? 280 : 450))[1], z.name + " · " + this.fmL(zw), { c: INK, w: 500 })); }
+      });
+      if (zl && gap.v !== 0 && gap.row > 0) { const a = pp(xe, 0), b = pp(xe + Math.abs(gap.v), 635); if (gap.blende) { R(a[0], a[1], b[0] - a[0], b[1] - a[1], FR, 1, "3 3"); labels.push(lb((a[0] + b[0]) / 2, b[1] + 16, "Blende " + gap.v, { c: INK3, bg: "transparent" })); } else if (gap.v > 0) R(a[0], a[1], b[0] - a[0], b[1] - a[1], "none", 1.6, "6 4", SIG); }
+      if (hasI) { const warn = ph.pass < 1000, col = warn ? SIG : INK3, a = pp(sz + 250, 635), b = pp(sz + 250, 635 + ph.pass); Ln(a[0], a[1], b[0], b[1], { st: col, sw: warn ? 1.8 : 1 }); Ln(a[0] - 7, a[1], a[0] + 7, a[1], { st: col }); Ln(b[0] - 7, b[1], b[0] + 7, b[1], { st: col }); labels.push(lb(a[0] + 14, (a[1] + b[1]) / 2, "Durchgang " + ph.pass + (warn ? " · Soll 1000" : ""), { tf: "translate(0,-50%)", c: warn ? SIG : INK, w: 500 })); }
+      hdim(-190, 0, ph.wall, "Wand " + this.fmL(ph.wall), INK3, pp);
+    }
+    const o0 = this.ts([0, 0], V); labels.push(lb(o0[0] + 10, o0[1] + V.sg.SH * V.S - 28, (plan ? "Grundriss" : "Frontansicht") + " · Maße in mm · " + ph.name, { tf: "none", bg: "transparent", c: INK3 }));
+    const nSeg = ph.zones.reduce((a, z) => a + z.segs.length, 0), sumL = k => ph.zones.filter(z => z.kind === k).reduce((a, z) => a + this.sumW(z), 0);
+    const hn = n => n === 1 ? "1 Hinweis" : n + " Hinweise", status = ph.status + "  ·  " + (chk.warn ? hn(chk.warn) : "Prüfung ok") + "  ·  " + Math.round(s.view.z * 100) + " %", cursor = s.panning ? "grabbing" : s.spc || tool === "hand" ? "grab" : "default";
+
+    // Kontextleiste
+    const cx = o => Object.assign({ isHint: false, isSeg: false, isBtn: false, isPill: false, isSw: false, isIn: false }, o), ctx = [];
+    const hint = t => ctx.push(cx({ isHint: true, text: t })), sg2 = (op, cur, fn) => ctx.push(cx({ isSeg: true, seg: this.segOf(op, cur, fn) }));
+    const bt = (label, go, sig) => ctx.push(cx({ isBtn: true, label, state: "rest", bg: "transparent", fg: sig ? "var(--c-signal)" : "var(--c-ink-2)", ring: iconRing, go: e => { stop(e); go(e); } }));
+    const pill = (label, go) => ctx.push(cx({ isPill: true, label, go: e => { stop(e); go(e); } }));
+    const inn = (id, lab, key, shown, apply, wd) => { const q = this.inp(key, shown, apply); ctx.push(cx({ isIn: true, id, lab, val: q.val, onIn: q.onIn, onBlur: q.onBlur, w: wd + "px" })); };
+    const rSeg = [["300"], ["400"], ["450"], ["600"], ["800"], ["1200"]];
+    if (tool === "select") {
+      if (!selR) hint("Segment anklicken · Ziehen sortiert in der Zone · ← → verschieben · ↑ ↓ Breite · 1 Front · 2 Grundriss");
+      else { sg2(rSeg, String(selR.seg.w), v => this.setW(selR.z.id, selR.seg.id, parseInt(v, 10))); bt("Links", () => this.moveSeg(-1)); bt("Rechts", () => this.moveSeg(1)); bt("Duplizieren", () => this.dupSeg()); bt("Löschen", () => this.delSeg(), true); }
+    } else if (tool === "hand") hint("Ziehen verschiebt · Leertaste hält die Hand in jedem Werkzeug · Doppelklick: Einpassen");
+    else if (tool === "add") { sg2(rSeg, String(s.nw), v => this.setState({ nw: parseInt(v, 10) })); pill("Zone: " + (az ? az.name : "—"), e => this.openMenu(e, ph.zones.map(z => this.mi(z.name, () => this.setState({ zid: z.id }), { check: az && z.id === az.id })), 200)); hint("Klick setzt ein Segment ans Ende der Zone"); }
+    else if (tool === "fach") { pill("Fach: " + this.FT[s.nfach], e => this.openFly(e)); hint("Klick auf ein Fach setzt den Typ"); }
+    else if (tool === "kuerzel") { inn("kz", "Kürzel", "kz", s.kz, t => this.setState({ kz: t }), 200); bt("Anhängen", () => this.applyKz(false)); bt("Ersetzen", () => this.applyKz(true)); hint("Zone: " + (az ? az.name : "—") + " · t s r b bl g sp m gs bo ws ko da l, Zahl = Breite oder Anzahl"); }
+    const pb = (label, d, on, go) => ({ isBtn: true, sep: false, label, d, state: on ? "selected" : "rest", bg: on ? "var(--c-inv)" : "transparent", hbg: on ? "var(--c-inv)" : "var(--c-hover)", fg: on ? "var(--c-on-inv)" : "var(--c-ink-2)", stop: e => e.stopPropagation(), go: e => { e.stopPropagation(); go(e); } }), psep = { sep: true, isBtn: false };
+    const tb = t => { const q = this.TOOLS.find(x => x[0] === t); return pb(q[1] + " (" + q[2] + ")", this.ic(q[3]), tool === t, e => this.toolClick(t, e)); };
+    const tbt = (label, d, on, go, off) => ({ label, d, state: on ? "selected" : "rest", bg: on ? "var(--c-inv)" : "transparent", fg: on ? "var(--c-on-inv)" : "var(--c-ink-3)", ring: on ? "none" : iconRing, op: off ? .35 : 1, go: e => { stop(e); if (!off) go(e); } });
+    const zoomMenu = e => this.openMenu(e, [this.mi("Einpassen", () => this.fit(), {})].concat([2, 4, 8, 12].map(z => this.mi(z * 100 + " %", () => this.zoomTo(z)))), 200);
+    const fly = { on: s.fly && tool === "fach", x: (s.flyPos || { x: 64 }).x, y: (s.flyPos || { y: 150 }).y, cats: [{ n: "Fach-Typen", state: "selected", bg: "var(--c-inv)", fg: "var(--c-on-inv)", go: e => stop(e) }],
+      tiles: Object.keys(this.FT).map(k => ({ n: this.FT[k], d: this.ic(k), state: s.nfach === k ? "selected" : "rest", bg: s.nfach === k ? "var(--c-inv)" : "transparent", fg: s.nfach === k ? "var(--c-on-inv)" : "var(--c-ink)", ring: s.nfach === k ? "none" : iconRing, go: e => { stop(e); this.setState({ nfach: k, fly: false }); } })) };
+    const B = { ctx, palL: s.palPos ? s.palPos.x + "px" : "12px", palT: s.palPos ? s.palPos.y + "px" : "96px", palDown: e => this.palDown(e), palDock: () => this.palDock(), name: ph.name, n: nSeg, wideTools: W >= 520, zoomLabel: Math.round(s.view.z * 100) + " %", zoomGo: zoomMenu, cursor,
+      zooms: ["Front", "Plan"].map(z => ({ t: z === "Plan" ? "Grundriss" : "Front", state: s.ansicht === z ? "selected" : "rest", bg: s.ansicht === z ? "var(--c-inv)" : "transparent", fg: s.ansicht === z ? "var(--c-on-inv)" : "var(--c-ink-2)", go: e => { stop(e); this.setState({ ansicht: z, view: { z: 1, x: 0, y: 0 } }); } })),
+      tools: [tbt("Rückgängig", P.undo, false, () => this.undo(), !s.hist.length), tbt("Wiederholen", this.XP.redo, false, () => this.redo(), !s.fut.length), tbt(rM.max === 1 ? "Zurück" : "Arbeitsfläche groß", rM.max === 1 ? P.shrink : P.expand, false, () => this.setMem({ max: rM.max === 1 ? -1 : 1 }))],
+      palette: [tb("select"), tb("hand"), psep, tb("add"), tb("fach"), tb("kuerzel")], fly, deskDown: e => this.deskDown(e), deskDbl: () => { if (tool === "select" || tool === "hand") this.fit(); },
+      deskCtx: e => { e.preventDefault(); this.openMenuAt(e.clientX, e.clientY, [this.mi("Einpassen", () => this.fit(), {}), this.mi("Front", () => this.setState({ ansicht: "Front", view: { z: 1, x: 0, y: 0 } }), { meta: "1", check: !plan }), this.mi("Grundriss", () => this.setState({ ansicht: "Plan", view: { z: 1, x: 0, y: 0 } }), { meta: "2", check: plan }), { sep: true }, this.mi("Rückgängig", () => this.undo())], 200); },
+      world: { w: V.sg.SW, h: V.sg.SH, tf: "translate(" + f(V.ox) + "px," + f(V.oy) + "px) scale(" + V.S + ")" }, blatt: false, photo: { l: 0, t: 0, w: V.sg.SW, h: V.sg.SH, flt: "none", bg: "var(--c-sheet)", ring: "var(--sh-float)" }, tb: { proj: "", foto: "", scale: "", fmt: "", by: "" },
+      W, H, rects, lines, dots, hits, chain, zbox, labels, selBox, status, statusFg: chk.hard ? "var(--c-signal)" : "var(--c-sheet-ink-3)" };
+
+    // Bahn links
+    const byProj = {}; s.photos.forEach(p => { (byProj[p.proj] = byProj[p.proj] || []).push(p); });
+    const segN = p => p.zones.reduce((a, z) => a + z.segs.length, 0);
+    const lrows = []; Object.keys(byProj).forEach(pk => { lrows.push(this.lhead(this.PROJ[pk] || "Ohne Projekt")); byProj[pk].forEach(p => lrows.push(this.lrow(s.pid === p.id, p.name, this.XP.cfg, { hasN: true, n: String(segN(p)), tip: p.name + " · " + p.status, go: () => this.pickVar(p.id) }))); });
+    const L = { title: "Konfigurator", insertLabel: "Neue Variante", detail: this.PROJ[ph.proj] || "", hLine: s.lScroll ? "var(--c-line)" : "transparent", onScroll: e => { const sc = e.currentTarget.scrollTop > 0; if (sc !== !!s.lScroll) this.setState({ lScroll: sc }); }, rows: lrows,
+      insertGo: e => { stop(e); this.openMenu(e, [{ head: true, label: "Von «" + ph.name + "»" }, this.mi("Kopie", () => this.addVar("copy")), { sep: true }, this.mi("Leer", () => this.addVar("leer"))], 300); },
+      buttons: openCount > 1 ? [{ label: "Konfigurator falten", d: P.minus, go: e => { stop(e); this.setMem({ Lf: true, max: -1 }); } }] : [] };
+    const LY = { n: ph.zones.length, addGo: e => { stop(e); this.openMenu(e, [{ head: true, label: "Vorlage einsetzen" }].concat(this.ARCH.map(a => this.mi(a[1], () => this.addArch(a[0]), { meta: a[2] })), [{ sep: true }, { head: true, label: "Leere Zone" }], Object.keys(this.ZK).map(k => this.mi(this.ZK[k], () => this.addZone(k)))), 300); },
+      rows: ph.zones.map(z => { const on = az && z.id === az.id; return { name: z.name, n: z.segs.length, state: on ? "selected" : "rest", bg: on ? "var(--c-ink)" : "transparent", fg: on ? "var(--c-lane)" : "var(--c-ink)", ring: on ? "inset 0 0 0 1px var(--c-on-inv-line)" : iconRing, col: this.ZCOL[z.kind], op: z.vis ? 1 : .5, ic: on ? "var(--c-on-inv-2)" : "var(--c-ink-3)", nFg: on ? "var(--c-on-inv-2)" : "var(--c-ink-3)",
+        eyeD: z.vis ? this.XP.eye : this.XP.eyeoff, lockD: z.lock ? P.lock : this.XP.unlock, eyeT: z.vis ? "Ausblenden" : "Einblenden", lockT: z.lock ? "Entsperren" : "Sperren", tip: z.name + " · " + this.fmL(this.sumW(z)),
+        go: () => this.setState({ zid: z.id }), eye: e => { stop(e); this.zonePatch(z.id, { vis: !z.vis }); }, lock: e => { stop(e); this.zonePatch(z.id, { lock: !z.lock }); }, ctx: e => this.zoneMenu(e, z), ren: e => { stop(e); const t = prompt("Zonenname", z.name); if (t) this.zonePatch(z.id, { name: t }); } }; }) };
+
+    // Bahn rechts
+    const note = t => ({ isNote: true, isRow: false, isHead: false, text: t }), segRows = [];
+    if (selR) {
+      const z = selR.z, sg = selR.seg, fhh = this.fachH(z, sg);
+      segRows.push({ isHead: true, text: "Segment " + (selR.i + 1) + " · " + z.name }, this.row("Breite", { seg: this.segOf(rSeg, String(sg.w), v => this.setW(z.id, sg.id, parseInt(v, 10))) }), { isHead: true, text: "Fächer, oben nach unten" });
+      sg.f.forEach((fa, j) => {
+        const up = patch => this.mutZ(z.id, zz => Object.assign({}, zz, { segs: zz.segs.map(q => q.id !== sg.id ? q : Object.assign({}, q, { f: q.f.map((x, i) => i === j ? Object.assign({}, x, patch) : x) })) })), gr = fa.t === "geraet" ? this.GER[fa.lab] : null;
+        segRows.push(this.row("Fach " + (j + 1), { hasMark: true, mD: this.FTI[fa.t], mBg: "transparent", mFg: "var(--c-ink-3)", mRing: iconRing, hasSub: true, sub: Math.round(fhh.hs[j]) + " mm hoch" + (fa.t === "schub" ? " · " + fa.n + " × " + fa.sys : ""), pill: this.FT[fa.t], pillGo: e => this.openMenu(e, Object.keys(this.FT).map(k => this.mi(this.FT[k], () => this.setFach(z.id, sg.id, j, k), { check: k === fa.t })), 220) }));
+        if (fa.t === "schub") { segRows.push(this.numRow("Anzahl", fa.n, n => up({ n: Math.max(1, Math.min(6, n)) }))); segRows.push(this.row("System", { seg: this.segOf([["Legrabox"], ["Holz"]], fa.sys, v => up({ sys: v })) })); }
+        if (fa.t === "geraet") { segRows.push(this.row("Gerät", { pill: fa.lab, pillGo: e => this.openMenu(e, Object.keys(this.GER).map(k => this.mi(k, () => up({ lab: k }), { check: k === fa.lab, meta: this.GER[k].b ? this.GER[k].b + " × " + this.GER[k].h : "unbekannt" })), 240) }));
+          segRows.push(gr && gr.b ? this.row("Nische B × H × T", { val: gr.b + " × " + gr.h + " × " + gr.t, hasSub: true, sub: sg.w >= gr.mod ? "passt in " + sg.w + " mm · Richtwert" : "braucht " + gr.mod + " mm Segment", fg: sg.w >= gr.mod ? "var(--c-ink)" : "var(--c-signal)" }) : this.row("Nische", { val: "unbekannt", fg: "var(--c-ink-3)" })); }
+      });
+      if (fhh.short > 0) segRows.push(note("Die Fächer brauchen " + fhh.short + " mm mehr Höhe als das Segment hat."));
+      segRows.push(this.row("Fächer", { line: false, btns: [this.tbtn("Hinzufügen", () => this.mutZ(z.id, zz => Object.assign({}, zz, { segs: zz.segs.map(q => q.id === sg.id ? Object.assign({}, q, { f: q.f.concat([{ t: "leer", n: 1, lab: "leer", sys: "Legrabox" }]) }) : q) }))), this.tbtn("Letztes weg", () => { if (sg.f.length > 1) this.mutZ(z.id, zz => Object.assign({}, zz, { segs: zz.segs.map(q => q.id === sg.id ? Object.assign({}, q, { f: q.f.slice(0, -1) }) : q) })); })] }));
+    } else {
+      segRows.push({ isHead: true, text: "Variante" }, this.row("Name", { sub: ph.name, hasSub: true, btns: [this.tbtn("Ändern", () => { const t = prompt("Name der Variante", ph.name); if (t) this.patchPh({ name: t }, true); })] }),
+        this.row("Stempel", { seg: this.segOf(this.STAMP.map(x => [x]), ph.status, v => this.patchPh({ status: v }, true)) }),
+        this.row("Raumbezug", { pill: ph.room, pillGo: e => this.openMenu(e, ["Aufmaß · Küche Nordwand", "Skizze · Küche Ansicht Süd", "Foto", "Freie Maße", "keiner"].map(x => this.mi(x, () => this.patchPh({ room: x }, true), { check: x === ph.room })), 260) }),
+        this.numRow("Wand mm", ph.wall, n => this.patchPh({ wall: Math.max(500, n) }, false)),
+        Object.assign(this.row("Blenden an Lücken", { sub: "bis 150 mm, Material der Front", hasSub: true }), this.toggleOf(!!ph.autoB, () => this.patchPh({ autoB: !ph.autoB }, true))),
+        { isHead: true, text: "Zone" }, this.row("Zone", { pill: az ? az.name : "—", pillGo: e => this.openMenu(e, ph.zones.map(z => this.mi(z.name, () => this.setState({ zid: z.id }), { check: az && z.id === az.id })), 200) }), this.row("Länge", { val: az ? this.fmL(this.sumW(az)) : "—" }), this.row("Segmente", { val: az ? String(az.segs.length) : "0", line: false }),
+        note("Segment anklicken zeigt Breite und Fächer. Kürzel (K) baut ganze Zonen: 600t 3s sp gs."));
+    }
+    const matRows = [{ isHead: true, text: "Materialdeklaration" }].concat(this.DECL.map((q, i) => this.row(q[1], { hasMark: true, mD: "M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z", mBg: this.mc(ph.mats[q[0]]), mFg: this.mc(ph.mats[q[0]]), mRing: "inset 0 0 0 1px rgba(0,0,0,.14)", pill: ph.mats[q[0]], line: i < 5, pillGo: e => this.openMenu(e, this.MATS.map(m => this.mi(m, () => this.patchPh({ mats: Object.assign({}, ph.mats, { [q[0]]: m }) }, true), { check: m === ph.mats[q[0]] })), 220) })))
+      .concat([note("Farben in der Ansicht sind Darstellung. Die Einträge kommen aus der Moodboard-Palette; Katalogquelle im Altcode: unbekannt.")]);
+    const warnD = "M8 2.5l6 10.5H2ZM8 6.5v3M8 11v.1", regRows = [{ isHead: true, text: chk.warn ? hn(chk.warn) : "Prüfung ok" }].concat(chk.items.map((q, i) => this.row(q.text, { hasMark: true, mD: q.sev === "warn" ? warnD : q.sev === "hint" ? "M8 7.5v4M8 4.8v.1" : P.check, mBg: q.sev === "warn" ? "var(--c-signal)" : "transparent", mFg: q.sev === "warn" ? "var(--c-on-inv)" : "var(--c-ink-3)", mRing: q.sev === "warn" ? "none" : iconRing, hasSub: !!q.sub, sub: q.sub, fg: q.sev === "warn" ? "var(--c-signal)" : "var(--c-ink)", line: i < chk.items.length - 1, cur: q.sid ? "pointer" : "default", hbg: q.sid ? "var(--c-hover)" : "transparent", go: () => { if (q.sid) this.setState({ zid: q.zid, sel: q.sid, front: "segment" }); } })))
+      .concat([{ isHead: true, text: "Einstellung" }, this.numRow("Durchgang Insel mm", ph.pass, n => this.patchPh({ pass: n }, false)), note("Sieben Regeln aus dem Altcode: 2 belegt (Wärmeschublade, Zone passt in den Raum), 5 Annahmen. Durchgang Soll 1000, hart 850 mm. «Entwurfsidee» steht nicht im Altcode.")]);
+    const by = {}; pr.list.forEach(p => { (by[p.mat] = by[p.mat] || []).push(p); }); let total = 0; const teile = [];
+    Object.keys(by).forEach(mat => { const Lm = by[mat], area = Lm.reduce((a, p) => a + p.n * p.l * p.b, 0) / 1e6; total += area; teile.push({ isHead: true, text: mat + " · " + area.toFixed(2).replace(".", ",") + " m²" }); Lm.forEach((p, i) => teile.push(this.row(p.bez, { hasSub: true, sub: p.l + " × " + p.b + " × " + p.d, val: "× " + p.n, line: i < Lm.length - 1 }))); });
+    const teileRows = [{ isHead: true, text: "Zuschnitt · " + total.toFixed(2).replace(".", ",") + " m²" }].concat(teile, [{ isHead: true, text: "Beschläge" }, this.row("Auszüge " + (ph.mats.schub), { val: "× " + pr.hw.aus }), this.row("Griffe " + ph.mats.griff, { val: "× " + pr.hw.griffe, line: false }), note("Annahmen: Korpus 19, Rückwand 8, Sockel 16, Tiefe 560 (Wand 320), Platte 600 bzw. Insel 900. Fugen, Kanten, Geräte-Fronten fehlen. Maße in mm.")]);
+    const an = this.anfrage(ph), outRows = [{ isHead: true, text: "Quellenstand" }, this.row("Aufmaß", { val: ph.room.indexOf("Aufmaß") === 0 ? "heute 08:52" : "nicht verknüpft", hasSub: true, sub: ph.room }), this.row("Artikelpreise", { val: "unbekannt", hasSub: true, sub: "Katalog fehlt, daher kein Preis" }), this.row("Moodboard", { val: ph.stand, line: false }), { isHead: true, text: "Anfrage Tischler" }].concat(an.tisch.map(note), [{ isHead: true, text: "Anfrage Steinmetz" }], an.stein.map(note), [{ isHead: true, text: "Render-Prompt" }, note(an.render)]);
+    const SH = g.lh - 44, defs = { segment: ["Segment", this.XP.cfg], material: ["Material", P.layers], regeln: ["Prüfung", P.check], teile: ["Teile", P.list], ausgabe: ["Ausgabe", P.export] }, cw = w[2] - 16;
+    const tsv = () => ["Material\tTeil\tMenge\tL\tB\tD"].concat(pr.list.map(p => [p.mat, p.bez, p.n, p.l, p.b, p.d].join("\t"))).join("\n");
+    const txt = () => an.tisch.join("\n") + "\n" + an.stein.join("\n");
+    const foots = { segment: selR ? { l: [this.btn("Duplizieren", P.copy, () => this.dupSeg(), null, { label: cw >= 300 })], r: [this.btn("Löschen", P.trash, () => this.delSeg(), "signal", { label: cw >= 240 })] } : undefined,
+      teile: { l: [this.btn("Zuschnitt kopieren", P.copy, () => { try { navigator.clipboard.writeText(tsv()); } catch (x) {} this.toastIt("Zuschnitt mit " + pr.list.length + " Zeilen kopiert"); }, null, { label: cw >= 300 })], r: [this.btn("Als DXF", P.export, () => this.toastIt("DXF für die Fräse · Entwurf"), "accent", { label: cw >= 240 })] },
+      ausgabe: { l: [this.btn("Text kopieren", P.copy, () => { try { navigator.clipboard.writeText(txt()); } catch (x) {} this.toastIt("Anfrage kopiert"); }, null, { label: cw >= 300 })], r: [this.btn("An Tischler", P.export, () => this.toastIt("Anfrage an Tischler vorbereitet · Entwurf"), "accent", { label: cw >= 240 })] } };
+    const cards = this.stackCards(defs, ["segment", "material", "regeln", "teile", "ausgabe"], s.front, { segment: segRows, material: matRows, regeln: regRows, teile: teileRows, ausgabe: outRows }, {}, foots, SH);
+    const outMenu = e => this.openMenu(e, [{ head: true, label: "Ausgeben" }, this.mi("Front und Grundriss als PDF", () => this.toastIt("PDF gesichert · Entwurf")), this.mi("SVG", () => this.toastIt("SVG gesichert · Entwurf")), this.mi("DXF", () => this.toastIt("DXF gesichert · Entwurf")), this.mi("Zuschnitt als Tabelle", () => { try { navigator.clipboard.writeText(tsv()); } catch (x) {} this.toastIt("Zuschnitt kopiert"); }), { sep: true }, this.mi("In Projektordner sichern", () => this.toastIt("Im Projektordner gesichert · Entwurf"))], 280);
+    const keys = e => this.openMenu(e, [{ head: true, label: "Werkzeuge" }].concat(this.TOOLS.map(t => this.mi(t[1], () => this.setTool(t[0]), { meta: t[2], check: tool === t[0] })), [{ sep: true }, { head: true, label: "Maus und Tasten" }, this.mi("Ansicht Front / Grundriss", () => {}, { meta: "1 / 2" }), this.mi("Segment sortieren", () => {}, { meta: "Ziehen" }), this.mi("Verschieben", () => {}, { meta: "← →" }), this.mi("Breite", () => {}, { meta: "↑ ↓" }), this.mi("Ansicht verschieben", () => {}, { meta: "Leertaste + Ziehen" }), this.mi("Zoomen", () => {}, { meta: "⌘ + Rad · Pinch" }), this.mi("Einpassen", () => this.fit(), { meta: "Doppelklick · ⌘0" }), this.mi("Menü", () => {}, { meta: "Rechtsklick" }), this.mi("Rückgängig", () => this.undo(), { meta: "⌘Z" })]), 300);
+    const HB = { state: s.sel ? "opening" : "rest", hint: "", main: [this.btn(chk.warn ? hn(chk.warn) : "Prüfung ok", chk.warn ? warnD : P.check, () => this.setState({ front: "regeln" }), chk.hard ? "signal" : null, { label: cw >= 240 })],
+      end: [this.btn("Stempel: " + ph.status, P.play, e => this.openMenu(e, this.STAMP.map(x => this.mi(x, () => this.patchPh({ status: x }, true), { check: x === ph.status })), 200), null, { label: cw >= 330 }), this.btn("Ausgabe", P.export, outMenu, null, { label: cw >= 300 }), this.btn("Kurzbefehle", this.XP.help, keys)].concat(openCount > 1 ? [{ isSep: true, isBtn: false }, this.btn("Spalte falten", P.minus, () => this.setMem({ Rf: true, max: -1 }))] : []).concat([this.btn(rM.max === 2 ? "Zurück" : "Stapel groß", rM.max === 2 ? P.shrink : P.expand, () => this.setMem({ max: rM.max === 2 ? -1 : 2 }))]) };
+    const marks = [s.photos.map(p => this.mk(s.pid === p.id, { d: this.XP.cfg, label: p.name, go: e => { stop(e); this.pickVar(p.id); } })),
+      this.TOOLS.map(q => this.mk(tool === q[0], { d: this.ic(q[3]), label: q[1], go: e => { stop(e); this.setTool(q[0]); } })),
+      ["segment", "material", "regeln", "teile", "ausgabe"].map(k => this.mk(s.front === k, { d: defs[k][1], label: defs[k][0], go: e => { stop(e); this.setState({ front: k }); } }))];
+    const lanes = this.lanesOf(w, rM, ["Konfigurator", ph.name, "Segment"], marks);
+    return this.finish({ w, rM, lanes, syncTitle: "Kataloge neu lesen", assist: "Frag nach Maßen, Hinweisen oder dem Anfragetext für " + ph.name + ".", x: { L, LY, B, S: { cards }, HB, palRef: this.palRef } });
+  }
+}
+</script>
+</body>
+</html>

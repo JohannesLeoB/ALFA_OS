@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;display=swap">
+<link rel="stylesheet" href="design-system/alfa-ds.css">
+<style>html,body{margin:0;background:#ffffff}a{color:#091a2d}a:hover{color:#37506c}input::placeholder{color:inherit;opacity:.55}button{font:inherit}</style>
+</helmet>
+<div data-ds="{{ licht }}" data-ds-motion="{{ motion }}" style="min-height:100vh;background:var(--ds-ground);color:var(--ds-ink);font-family:var(--ds-font);font-size:13px;line-height:1.35;transition:background-color 400ms,color 400ms">
+<div style="max-width:1560px;margin:0 auto;padding:40px 24px 96px;display:flex;flex-direction:column;gap:56px;box-sizing:border-box">
+
+<header style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end">
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="font:500 11.5px var(--ds-font);letter-spacing:.04em;color:var(--ds-ink-3)">ALFA · DESIGNSYSTEM · ARBEITSSTAND</div>
+<h1 style="margin:0;font-size:40px;line-height:1.05;font-weight:500;letter-spacing:-0.02em;text-wrap:balance">Drei Bahnen, ein Blob, eine Leiter.</h1>
+<p style="margin:0;max-width:62ch;color:var(--ds-ink-2);font-size:15px;line-height:1.45;text-wrap:pretty">Unten läuft die echte ALFA Shell: Griffe ziehen. Der Blob wacht beim Annähern auf, Klick öffnet die Bereiche in der Breite der Bahn darunter, Doppelklick den Assistenten. Mails öffnen und schließen; ein leerer Stapel faltet die rechte Bahn. Alle Werte kommen aus <span style="font-family:var(--ds-font);font-size:12px">design-system/alfa-ds-tokens.js</span>, mit Quelle und Stand.</p>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+<sc-for list="{{ toggles }}" as="t" hint-placeholder-count="3">
+<button onClick="{{ t.on }}" style="height:28px;padding:0 12px;border-radius:14px;border:0;background:{{ t.bg }};color:{{ t.fg }};box-shadow:inset 0 0 0 1px var(--ds-line-strong);font-size:11.5px;font-weight:500;cursor:pointer;transition:background-color 200ms,color 200ms">{{ t.label }}</button>
+</sc-for>
+</div>
+</header>
+
+<section data-screen-label="01 Hülle" style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span style="font:500 11.5px var(--ds-font);color:var(--ds-ink-3)">01</span><h2 style="margin:0;font-size:20px;font-weight:500">Hülle · ALFA Shell, 1512 × 982</h2><span style="flex:1"></span>
+<div style="display:flex;gap:2px;padding:2px;border-radius:16px;background:var(--ds-well);box-shadow:inset 0 0 0 1px var(--ds-line)">
+<sc-for list="{{ blobCtl }}" as="b" hint-placeholder-count="3"><button onClick="{{ b.on }}" style="height:28px;padding:0 12px;border:0;border-radius:14px;font-size:11.5px;font-weight:500;cursor:pointer;background:{{ b.bg }};color:{{ b.fg }};box-shadow:{{ b.sh }};transition:background-color 200ms,color 200ms,box-shadow 200ms">{{ b.t }}</button></sc-for>
+</div></div>
+<div ref="{{ fitRef }}" style="width:100%;height:{{ boardH }}px;position:relative;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--ds-line)">
+<div ref="{{ boardRef }}" style="position:absolute;left:0;top:0;width:1512px;height:982px;transform:scale({{ s }});transform-origin:0 0">
+<dc-import name="ALFA Shell" bereich="{{ area }}" licht="{{ shLicht }}" grund="weiß" fenster="1512 × 982" w="{{ wArr }}" lanes="{{ shLanes }}" slow="{{ slowLane }}" groups="{{ shGroups }}" badges="{{ badges }}" dot="{{ shDot }}" sync-state="{{ syncState }}" sync-title="{{ syncTitle }}" me-ini="JB" assist-text="{{ assistText }}" such-pfad="{{ searchD }}" on-choose="{{ onChoose }}" on-mode="{{ onMode }}" on-mem="{{ onMem }}" on-grow="{{ onGrow }}" on-sync="{{ onSync }}" hint-size="1512px,982px">
+<div data-slot="0" style="display:contents">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:4px;padding:0 8px 0 20px;box-shadow:inset 0 -1px 0 var(--ds-line);box-sizing:border-box">
+<span style="flex:1;min-width:0;font-weight:500;white-space:nowrap">{{ L0.title }}</span>
+
+</header>
+<div style="flex:1;min-height:0;padding:8px;display:flex;flex-direction:column;gap:2px">
+<sc-for list="{{ L0.rows }}" as="r" hint-placeholder-count="6">
+<sc-if value="{{ r.sep }}" hint-placeholder-val="{{ false }}"><div style="height:1px;margin:8px 12px;background:var(--ds-line)"></div></sc-if>
+<div onClick="{{ r.on }}" style="height:36px;flex:none;display:flex;align-items:center;gap:12px;padding:0 12px;border-radius:12px;background:{{ r.bg }};cursor:pointer;transition:background-color 160ms" style-hover="background:var(--ds-hover)">
+<sc-if value="{{ r.dot }}" hint-placeholder-val="{{ false }}"><span style="width:16px;height:16px;flex:none;display:grid;place-items:center"><span style="width:8px;height:8px;border-radius:4px;background:{{ r.dotC }}"></span></span></sc-if>
+<sc-if value="{{ r.icon }}" hint-placeholder-val="{{ true }}"><span style="display:grid;color:var(--ds-ink-2)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ r.d }}"></path></svg></span></sc-if>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.fw }}">{{ r.label }}</span>
+<span style="font-size:11.5px;color:var(--ds-ink-3);font-variant-numeric:tabular-nums">{{ r.count }}</span>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ isMail }}" hint-placeholder-val="{{ true }}"><div data-part="lane-footer" style="flex:none;padding:8px"><button data-part="compose-button" title="Neue Mail" onClick="{{ compose }}" style="appearance:none;border:0;width:100%;height:36px;padding:0 12px 0 4px;box-sizing:border-box;border-radius:12px;display:flex;align-items:center;gap:12px;font:inherit;background:var(--ds-inv);color:var(--ds-on-inv);cursor:pointer;transition:opacity 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="opacity:.88" style-active="transform:scale(.98)"><span style="flex:none;width:28px;height:28px;border-radius:14px;display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--ds-on-inv-line)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="{{ composeD }}"></path></svg></span><span style="flex:1;min-width:0;text-align:left;white-space:nowrap">Neue Mail</span></button></div></sc-if>
+</div>
+<div data-slot="1" style="display:contents">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:4px;padding:0 8px 0 20px;box-shadow:inset 0 -1px 0 var(--ds-line);box-sizing:border-box">
+<div style="flex:1;min-width:0;display:flex;align-items:baseline;gap:8px"><span style="font-weight:500;white-space:nowrap">{{ L1.title }}</span><span style="font-size:11.5px;color:var(--ds-ink-3);font-variant-numeric:tabular-nums">{{ L1.count }}</span></div>
+<sc-if value="{{ isMail }}" hint-placeholder-val="{{ true }}"><button title="Suchen" onClick="{{ noop }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ searchD }}"></path></svg></button><button title="Filter" onClick="{{ noop }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ filterD }}"></path></svg></button></sc-if>
+</header>
+<sc-if value="{{ isMail }}" hint-placeholder-val="{{ true }}">
+<div style="flex:1;min-height:0;padding:8px;display:flex;flex-direction:column;gap:2px">
+<sc-for list="{{ inbox }}" as="r" hint-placeholder-count="7">
+<div onClick="{{ r.on }}" style="height:56px;flex:none;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:0 12px;border-radius:12px;background:{{ r.bg }};cursor:pointer;transition:background-color 160ms" style-hover="background:var(--ds-hover)">
+<div style="display:flex;align-items:baseline;gap:12px"><span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.fw }}">{{ r.from }}</span><span style="font-size:11.5px;color:var(--ds-ink-3);white-space:nowrap">{{ r.date }}</span></div>
+<div style="display:flex;align-items:center;gap:8px;color:var(--ds-ink-2)"><span style="width:6px;height:6px;border-radius:3px;flex:none;background:{{ r.labelC }}"></span><span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.sub }}</span></div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;min-height:0;padding:8px;display:flex;flex-direction:column;gap:2px">
+<sc-for list="{{ settingRows }}" as="r" hint-placeholder-count="2">
+<div style="min-height:56px;display:flex;align-items:center;gap:12px;padding:0 12px;border-radius:12px;box-shadow:inset 0 -1px 0 var(--ds-line)">
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-weight:500">{{ r.label }}</span><span style="font-size:11.5px;color:var(--ds-ink-3)">{{ r.hint }}</span></div>
+<div style="display:flex;gap:2px;padding:2px;border-radius:14px;background:var(--ds-well);box-shadow:inset 0 0 0 1px var(--ds-line)">
+<sc-for list="{{ r.opts }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.on }}" style="height:24px;padding:0 12px;border:0;border-radius:12px;font-size:11.5px;font-weight:500;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }};box-shadow:{{ o.sh }};transition:background-color 200ms,color 200ms,box-shadow 200ms">{{ o.t }}</button></sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<div data-slot="2" style="display:contents">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:4px;padding:0 8px;box-shadow:inset 0 -1px 0 var(--ds-line);box-sizing:border-box">
+<button title="Antworten" onClick="{{ doReply }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ replyD }}"></path></svg></button><button title="Allen antworten" onClick="{{ doReplyAll }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ replyAllD }}"></path></svg></button><button title="Weiterleiten" onClick="{{ doForward }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ forwardD }}"></path></svg></button><span style="width:8px;flex:none"></span><button title="Archivieren" onClick="{{ toTrash }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ archiveD }}"></path></svg></button><button title="In den Papierkorb" onClick="{{ toTrash }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{ trashD }}"></path></svg></button>
+</header>
+<div data-part="card-stack" style="flex:1;min-height:0;position:relative;overflow:hidden">
+<sc-for list="{{ cards }}" as="c" hint-placeholder-count="2">
+<article data-part="card" style="position:absolute;left:0;right:0;top:0;height:{{ c.h }}px;display:flex;flex-direction:column;overflow:hidden;border-radius:20px 20px 0 0;background:{{ c.bg }};color:{{ c.ink }};box-shadow:var(--ds-sh-plate);transform:translateY({{ c.y }}px);opacity:{{ c.o }};z-index:{{ c.z }};transition:transform var(--ds-dur-stack) var(--ds-ease-stack),height var(--ds-dur-stack) var(--ds-ease-stack),opacity 240ms,background-color 400ms,color 400ms">
+<header data-part="card-header" onClick="{{ c.front }}" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px;cursor:{{ c.cur }}">
+<span style="width:28px;height:28px;border-radius:14px;flex:none;display:grid;place-items:center;font-size:10px;font-weight:500;box-shadow:inset 0 0 0 1px {{ c.ring }}"><sc-if value="{{ c.isDraft }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="{{ composeD }}"></path></svg></sc-if><sc-if value="{{ c.isMsg }}" hint-placeholder-val="{{ true }}">{{ c.ini }}</sc-if></span>
+<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500">{{ c.from }}</span>
+<span style="font-size:11.5px;opacity:.75;white-space:nowrap">{{ c.date }}</span>
+<button title="Schließen" onClick="{{ c.close }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"></path></svg></button>
+</header>
+<sc-if value="{{ c.isMsg }}" hint-placeholder-val="{{ true }}"><div style="padding:12px 20px 20px;display:flex;flex-direction:column;gap:12px;opacity:{{ c.bodyO }};transition:opacity 240ms">
+<h3 style="margin:0;font-size:20px;line-height:1.2;font-weight:500;letter-spacing:-0.01em;text-wrap:balance">{{ c.sub }}</h3>
+<div style="display:flex;gap:8px;align-items:center;font-size:11.5px;opacity:.8"><span style="width:6px;height:6px;border-radius:3px;background:{{ c.labelC }}"></span><span>{{ c.labelN }}</span><span>·</span><span>{{ c.addr }}</span></div>
+<p style="margin:0;max-width:60ch;font-size:13px;line-height:1.55;text-wrap:pretty;opacity:.88">{{ c.pre }}</p>
+</div>
+<footer data-part="card-footer" style="flex:none;margin-top:auto;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px;box-sizing:border-box;box-shadow:inset 0 1px 0 color-mix(in srgb, currentColor 14%, transparent)"><div style="display:flex;gap:4px"><button title="Drucken" aria-label="Drucken" onClick="{{ noop }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 5.5v-3h7v3M4.5 11.5h-2v-5h11v5h-2M4.5 9h7v4.5h-7Z"></path></svg></button><button title="Als PDF sichern" aria-label="Als PDF sichern" onClick="{{ noop }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5V10M4.5 6.5L8 10l3.5-3.5M3 13h10"></path></svg></button><button title="In Projektordner sichern" aria-label="In Projektordner sichern" onClick="{{ noop }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5h4l1.5 1.5h5.5v6.5h-11Z"></path></svg></button></div><span style="flex:1"></span><div style="display:flex;gap:4px;align-items:center"><button title="Mehr" aria-label="Mehr" onClick="{{ noop }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM13 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg></button></div></footer></sc-if>
+<sc-if value="{{ c.isDraft }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;flex:1;min-height:0;box-shadow:inset 0 1px 0 color-mix(in srgb, currentColor 14%, transparent);opacity:{{ c.bodyO }};transition:opacity 240ms">
+<label data-part="field-row" style="height:44px;flex:none;display:flex;align-items:center;gap:12px;padding:0 8px 0 20px;box-shadow:inset 0 -1px 0 color-mix(in srgb, currentColor 14%, transparent);cursor:text"><span style="width:48px;flex:none;font-size:11.5px;opacity:.7">An</span><input value="{{ c.to }}" onChange="{{ c.onTo }}" placeholder="Name oder Adresse" style="flex:1;min-width:0;height:28px;border:0;outline:none;background:transparent;color:inherit;font:13px var(--ds-font);padding:0"></input></label>
+<label data-part="field-row" style="height:44px;flex:none;display:flex;align-items:center;gap:12px;padding:0 8px 0 20px;box-shadow:inset 0 -1px 0 color-mix(in srgb, currentColor 14%, transparent);cursor:text"><span style="width:48px;flex:none;font-size:11.5px;opacity:.7">Betreff</span><input value="{{ c.subV }}" onChange="{{ c.onSub }}" placeholder="Betreff" style="flex:1;min-width:0;height:28px;border:0;outline:none;background:transparent;color:inherit;font:13px var(--ds-font);padding:0"></input></label>
+<textarea value="{{ c.body }}" onChange="{{ c.onBody }}" placeholder="Nachricht" style="flex:1;min-height:0;resize:none;border:0;outline:none;background:transparent;color:inherit;font:13px/1.55 var(--ds-font);padding:12px 20px;box-sizing:border-box"></textarea>
+<footer data-part="card-footer" style="flex:none;margin-top:auto;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px;box-sizing:border-box;box-shadow:inset 0 1px 0 color-mix(in srgb, currentColor 14%, transparent)"><div style="display:flex;gap:4px"><button title="Datei anhängen" aria-label="Datei anhängen" onClick="{{ noop }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 7.5l-4.75 4.75a3 3 0 0 1-4.25-4.25L8.5 3a2 2 0 0 1 2.83 2.83L6.5 10.66a1 1 0 0 1-1.41-1.41L9.5 4.83"></path></svg></button><button title="Aus Projektordner" aria-label="Aus Projektordner" onClick="{{ noop }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5h4l1.5 1.5h5.5v6.5h-11Z"></path></svg></button></div><span style="flex:1"></span><div style="display:flex;gap:4px;align-items:center"><button title="Mehr" aria-label="Mehr" onClick="{{ noop }}" style="width:28px;height:28px;flex:none;border-radius:14px;border:0;padding:0;display:grid;place-items:center;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px var(--ds-line-strong);cursor:pointer;transition:background-color 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-hover="background:var(--ds-hover)" style-active="transform:scale(.92)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM13 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg></button><button onClick="{{ c.send }}" disabled="{{ c.noSend }}" title="Senden" aria-label="Senden" style="height:28px;padding:0 12px 0 8px;border:0;border-radius:14px;display:flex;align-items:center;gap:8px;font:500 13px var(--ds-font);background:var(--ds-inv);color:var(--ds-on-inv);opacity:{{ c.sendO }};cursor:pointer;transition:opacity 160ms,transform var(--ds-dur-press) var(--ds-ease-press)" style-active="transform:scale(.96)"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3.5M4 7.5l4-4 4 4"></path></svg>Senden</button></div></footer>
+</div>
+</sc-if>
+</article>
+</sc-for>
+</div>
+</div>
+<div data-slot="over" style="display:contents">
+<sc-for list="{{ rasterLanes }}" as="R" hint-placeholder-count="0">
+<div style="position:absolute;left:{{ R.x }}px;top:100px;width:{{ R.w }}px;height:866px;border-radius:20px;pointer-events:none;z-index:3;transition:left var(--ds-dur-lane) var(--ds-ease-lane),width var(--ds-dur-lane) var(--ds-ease-lane);background-image:repeating-linear-gradient(90deg,var(--ds-raster) 0 1px,transparent 1px 56px),repeating-linear-gradient(90deg,var(--ds-raster-fine) 0 1px,transparent 1px 8px),repeating-linear-gradient(0deg,var(--ds-raster-fine) 0 1px,transparent 1px 8px)">
+<span style="position:absolute;right:8px;bottom:8px;font:500 11.5px var(--ds-font);padding:4px 8px;border-radius:8px;background:var(--ds-lane);color:{{ R.fitC }};box-shadow:var(--ds-sh-lane);white-space:nowrap">{{ R.fit }}</span>
+</div>
+</sc-for>
+</div>
+</dc-import>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">
+<sc-for list="{{ live }}" as="m" hint-placeholder-count="5"><div style="padding:12px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--ds-line);display:flex;flex-direction:column;gap:4px"><span style="font:500 15px var(--ds-font);font-variant-numeric:tabular-nums">{{ m.v }}</span><span style="font-size:11.5px;color:var(--ds-ink-3)">{{ m.n }}</span></div></sc-for>
+</div>
+</section>
+
+<section data-screen-label="02 Farbe" style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;gap:12px;align-items:baseline"><span style="font:500 11.5px var(--ds-font);color:var(--ds-ink-3)">02</span><h2 style="margin:0;font-size:20px;font-weight:500">Farbe · aus den Bildern gemessen</h2></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:32px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="font-weight:500">Leiter · sechs Platten</div>
+<div style="position:relative;height:{{ platesH }}px">
+<sc-for list="{{ plates }}" as="p" hint-placeholder-count="6">
+<div onPointerEnter="{{ p.enter }}" onPointerLeave="{{ p.leave }}" style="position:absolute;left:0;right:0;top:{{ p.top }}px;height:140px;border-radius:28px;background:{{ p.hex }};color:{{ p.ink }};box-shadow:var(--ds-sh-plate);z-index:{{ p.z }};transform:translateY({{ p.y }}px);transition:transform var(--ds-dur-fly) var(--ds-ease-fly);display:flex;align-items:flex-start;justify-content:space-between;padding:16px 20px;box-sizing:border-box;font:500 11.5px var(--ds-font);white-space:nowrap;gap:12px"><span>{{ p.name }}</span><span>{{ p.label }}</span></div>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:12px"><div style="font-weight:500">Zwischentöne · an den Plattenkanten gesehen</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px">
+<sc-for list="{{ between }}" as="b" hint-placeholder-count="7"><div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:12px;background:{{ b.hex }};box-shadow:inset 0 0 0 1px rgba(2,4,13,.08)"></div><div style="font:11.5px var(--ds-font);line-height:1.4">{{ b.name }}<br><span style="color:var(--ds-ink-3)">{{ b.hex }}</span></div></div></sc-for>
+</div></div>
+<div style="display:flex;flex-direction:column;gap:12px"><div style="font-weight:500">Typen und Stapel · nie auf Aktionen</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px">
+<sc-for list="{{ types }}" as="b" hint-placeholder-count="6"><div style="display:flex;flex-direction:column;gap:6px"><div style="height:56px;border-radius:12px;background:{{ b.hex }}"></div><div style="font:11.5px var(--ds-font);line-height:1.4">{{ b.name }}<br><span style="color:var(--ds-ink-3)">{{ b.hex }}</span></div></div></sc-for>
+</div></div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px">
+<div style="display:flex;flex-direction:column;gap:8px"><div style="font-weight:500">Signal · nur Destruktives</div><div style="height:112px;border-radius:20px;background:var(--ds-color-signal);color:#ffffff;display:flex;align-items:flex-end;padding:12px 16px;box-sizing:border-box;font:500 11.5px var(--ds-font)">{{ signalC }}</div></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="font-weight:500">Denk-Orb · aus dem Kornverlauf</div><div style="height:112px;border-radius:20px;overflow:hidden;position:relative;background:#050b25">{{ orb }}</div></div>
+</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px">
+<sc-for list="{{ roleSets }}" as="rs" hint-placeholder-count="2">
+<div data-ds="{{ rs.key }}" style="border-radius:20px;background:var(--ds-ground);color:var(--ds-ink);box-shadow:0 0 0 1px var(--ds-line);padding:16px;display:flex;flex-direction:column;gap:8px">
+<div style="font-weight:500">{{ rs.title }}</div>
+<sc-for list="{{ rs.rows }}" as="r" hint-placeholder-count="10"><div style="display:grid;grid-template-columns:24px 112px minmax(0,1fr) auto;gap:12px;align-items:center;min-height:28px;box-shadow:inset 0 -1px 0 var(--ds-line)"><span style="width:20px;height:20px;border-radius:10px;background:{{ r.hex }};box-shadow:inset 0 0 0 1px var(--ds-line-strong)"></span><span style="font:11.5px var(--ds-font)">{{ r.name }}</span><span style="font:11.5px var(--ds-font);color:var(--ds-ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.ref }}</span><span style="font:11.5px var(--ds-font);color:var(--ds-ink-2)">{{ r.c }}</span></div></sc-for>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section data-screen-label="03 Raster" style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:12px;align-items:baseline"><span style="font:500 11.5px var(--ds-font);color:var(--ds-ink-3)">03</span><h2 style="margin:0;font-size:20px;font-weight:500">Raster · 1512 = 27 × 56, Bahnen 1456 = 26 × 56</h2></div>
+<p style="margin:0;max-width:72ch;color:var(--ds-ink-2);text-wrap:pretty">Rand 16 und Fuge 12 fallen genau heraus: 1512 − 2 × 16 − 2 × 12 = 1456 = 26 Module. Die Leiste zeigt die Bahnen von oben live.</p>
+<div style="display:flex;height:72px;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--ds-line)">
+<sc-for list="{{ bar }}" as="b" hint-placeholder-count="7">
+<div style="flex:none;width:{{ b.w }}%;min-width:0;position:relative;box-sizing:border-box;background-color:{{ b.bg }};background-image:{{ b.img }};background-size:{{ b.size }};background-repeat:repeat-x;transition:width var(--ds-dur-lane) var(--ds-ease-lane)"><span style="position:absolute;left:8px;bottom:8px;right:4px;white-space:nowrap;overflow:hidden;font:500 11.5px var(--ds-font);color:{{ b.fg }}">{{ b.t }}</span></div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px">
+<sc-for list="{{ gridT }}" as="t" hint-placeholder-count="10"><div style="padding:12px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--ds-line);display:flex;flex-direction:column;gap:4px"><span style="font:500 20px var(--ds-font);letter-spacing:-0.01em">{{ t.v }}</span><span style="font:11.5px var(--ds-font)">{{ t.name }}</span><span style="font-size:11.5px;color:var(--ds-ink-3)">{{ t.src }}</span></div></sc-for>
+</div>
+</section>
+
+<section data-screen-label="04 Form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:32px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:12px;align-items:baseline"><span style="font:500 11.5px var(--ds-font);color:var(--ds-ink-3)">04</span><h2 style="margin:0;font-size:20px;font-weight:500">Radien verschachteln</h2></div>
+<p style="margin:0;color:var(--ds-ink-2);max-width:56ch">Innen = außen − Abstand. Bahn 20, 8 hinein, Zeile 12, Symbol 28 rund.</p>
+<div style="border-radius:20px;padding:8px;background:var(--ds-lane);box-shadow:var(--ds-sh-lane);display:flex;flex-direction:column;gap:2px">
+<div style="height:44px;display:flex;align-items:center;padding:0 0 0 12px;box-shadow:inset 0 -1px 0 var(--ds-line);margin:-8px -8px 6px;padding-left:20px;font-weight:500">Bahn · 20</div>
+<div style="height:56px;border-radius:12px;background:var(--ds-sel);display:flex;align-items:center;gap:12px;padding:0 12px"><span style="width:28px;height:28px;border-radius:14px;box-shadow:inset 0 0 0 1px var(--ds-line-strong);display:grid;place-items:center;font-size:10px;font-weight:500">14</span><span style="flex:1">Zeile · 12</span><span style="font:11.5px var(--ds-font);color:var(--ds-ink-3)">20 − 8 = 12</span></div>
+<div style="height:56px;border-radius:12px;display:flex;align-items:center;gap:12px;padding:0 12px"><span style="width:28px;height:28px;border-radius:14px;box-shadow:inset 0 0 0 1px var(--ds-line-strong)"></span><span style="flex:1;color:var(--ds-ink-2)">Textflucht 20 = 8 + 12</span></div>
+</div>
+<div style="display:flex;gap:12px;align-items:baseline;margin-top:16px"><span style="font:500 11.5px var(--ds-font);color:var(--ds-ink-3)">04b</span><h2 style="margin:0;font-size:20px;font-weight:500">Mehrfachauswahl</h2></div>
+<p style="margin:0;color:var(--ds-ink-2);max-width:56ch">Die Marke wählt: gefüllter Kreis mit Haken, Zeile mit Ring. Der Kopf zeigt „n gewählt“ mit den Befehlen; der Papierkorb ist signalrot.</p>
+<div data-part="multi-select-demo" style="border-radius:20px;padding:8px;background:var(--ds-lane);box-shadow:var(--ds-sh-lane);display:flex;flex-direction:column;gap:2px">
+<div style="height:44px;display:flex;align-items:center;gap:8px;margin:-8px -8px 6px;padding:0 8px 0 20px;box-shadow:inset 0 -1px 0 var(--ds-line);font-weight:500"><span style="flex:1">2 gewählt</span><span style="width:28px;height:28px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--ds-line-strong);display:grid;place-items:center;color:var(--ds-ink-3)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5h11v3h-11ZM3.5 6.5v6h9v-6M6.5 9h3"></path></svg></span><span style="width:28px;height:28px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--ds-line-strong);display:grid;place-items:center;color:var(--ds-signal)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9"></path></svg></span></div>
+<div style="height:56px;border-radius:12px;display:flex;align-items:center;gap:20px;padding:0 8px;box-shadow:inset 0 0 0 1px var(--ds-ink)"><span style="width:28px;height:28px;border-radius:50%;background:var(--ds-ink);color:var(--ds-lane);display:grid;place-items:center"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"></path></svg></span><span style="flex:1">Gewählt · Ring 1, Marke gefüllt</span></div>
+<div style="height:56px;border-radius:12px;display:flex;align-items:center;gap:20px;padding:0 8px"><span style="width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--ds-line-strong);display:grid;place-items:center;font-size:11.5px;font-weight:500;color:var(--ds-ink-2)">KL</span><span style="flex:1;color:var(--ds-ink-2)">Nicht gewählt · Marke zeigt Initialen</span></div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:12px;align-items:baseline"><span style="font:500 11.5px var(--ds-font);color:var(--ds-ink-3)">05</span><h2 style="margin:0;font-size:20px;font-weight:500">Schrift · Geist</h2></div>
+<sc-for list="{{ typeScale }}" as="t" hint-placeholder-count="5"><div style="display:grid;grid-template-columns:112px minmax(0,1fr);gap:12px;align-items:baseline;padding-bottom:8px;box-shadow:inset 0 -1px 0 var(--ds-line)"><span style="font:11.5px var(--ds-font);color:var(--ds-ink-3);white-space:nowrap">{{ t.v }} · {{ t.st }}</span><span style="font-size:{{ t.v }}px;font-weight:{{ t.w }};letter-spacing:{{ t.ls }};line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.sample }}</span></div></sc-for>
+</div>
+</section>
+
+<section data-screen-label="06 Bewegung" style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:12px;align-items:baseline"><span style="font:500 11.5px var(--ds-font);color:var(--ds-ink-3)">06</span><h2 style="margin:0;font-size:20px;font-weight:500">Bewegung · belegt mit Zeit und Kurve aus der Quelle, Vorschläge als Feder</h2></div>
+<p style="margin:0;max-width:72ch;color:var(--ds-ink-2);text-wrap:pretty">Bestand: 13 Zeiten von 150 bis 720 ms, dazu der Abgleich mit 2000 ms als Dauerlauf. Die ersten vier Karten sind der Vorschlag: vier Stufen, gleiche Kurve. Hover startet die Probe.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">
+<sc-for list="{{ springs }}" as="m" hint-placeholder-count="8">
+<div onPointerEnter="{{ m.enter }}" onPointerLeave="{{ m.leave }}" style="border-radius:20px;padding:16px;background:var(--ds-lane);box-shadow:var(--ds-sh-lane);display:flex;flex-direction:column;gap:12px;cursor:default">
+<div style="display:flex;align-items:baseline;gap:8px"><span style="font-weight:500;flex:1">{{ m.name }}</span><span style="font:11.5px var(--ds-font);color:var(--ds-ink-3)">{{ m.st }}</span></div>
+<svg viewBox="0 0 200 72" width="100%" height="72" preserveAspectRatio="none" style="overflow:visible"><line x1="0" y1="16" x2="200" y2="16" stroke="var(--ds-line)" stroke-width="1" vector-effect="non-scaling-stroke"></line><polyline points="{{ m.pts }}" fill="none" stroke="var(--ds-ink)" stroke-width="1.5" vector-effect="non-scaling-stroke"></polyline></svg>
+<div style="position:relative;height:28px;border-radius:14px;background:var(--ds-well)"><div style="position:absolute;top:2px;left:{{ m.x }};width:24px;height:24px;border-radius:12px;background:var(--ds-inv);transition:left {{ m.ms }}ms {{ m.ease }}"></div></div>
+<div style="font:11.5px var(--ds-font);color:var(--ds-ink-2)">{{ m.ms }} ms · {{ m.easeLabel }}<br>d {{ m.d }} · bounce {{ m.b }}<br><span style="color:var(--ds-ink-3)">{{ m.src }}</span></div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section data-screen-label="07 Tokens" style="display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap"><span style="font:500 11.5px var(--ds-font);color:var(--ds-ink-3)">07</span><h2 style="margin:0;font-size:20px;font-weight:500">Alle Tokens · {{ tokenCount }}</h2><span style="color:var(--ds-ink-3)">{{ tokenSplit }}</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:24px">
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="6">
+<div style="display:flex;flex-direction:column">
+<div style="font-weight:500;padding-bottom:8px">{{ g.name }}</div>
+<sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="6"><div style="display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:8px;align-items:start;padding:6px 0;box-shadow:inset 0 1px 0 var(--ds-line)"><span style="width:12px;height:12px;margin-top:2px;border-radius:6px;background:{{ r.sw }};box-shadow:inset 0 0 0 1px {{ r.swRing }}"></span><span style="min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font:11.5px var(--ds-font)">{{ r.name }}</span><span style="font-size:11.5px;color:var(--ds-ink-3);overflow-wrap:anywhere">{{ r.src }}</span></span><span style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><span style="font:11.5px var(--ds-font);white-space:nowrap">{{ r.v }}</span><span style="font:10px var(--ds-font);color:{{ r.stC }}">{{ r.st }}</span></span></div></sc-for>
+</div>
+</sc-for>
+</div>
+</section>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;licht&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;},&quot;raster&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;stapel&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ladder&quot;,&quot;calm&quot;],&quot;default&quot;:&quot;ladder&quot;,&quot;tsType&quot;:&quot;'ladder'|'calm'&quot;},&quot;motion&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;spring&quot;,&quot;less&quot;],&quot;default&quot;:&quot;spring&quot;,&quot;tsType&quot;:&quot;'spring'|'less'&quot;}}">
+class Component extends DCLogic {
+  state = { mem: null, area: "Mail", folder: "inbox", cat: "Ansicht", stack: ["m5", "m3", "m2"], drafts: {}, dn: 0, sent: 0, s: 0.6, plateHover: -1, springHover: -1, ebb: false, slowLane: false, syncing: false, mode: "rest", licht: null, raster: null, motion: null, stapel: null };
+  fitRef = React.createRef(); boardRef = React.createRef();
+  P = { search: "M7 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM11 11l3.5 3.5", filter: "M2.5 3.5h11l-4.25 5v4.5l-2.5-1.25V8.5Z", compose: "M11 2.5l2.5 2.5L6 12.5H3.5V10ZM9.5 4l2.5 2.5", inbox: "M2.5 9.5l1.5-6h8l1.5 6v3.5h-11ZM2.5 9.5h3l1 1.5h3l1-1.5h3", flag: "M4 14V2.5M4 3h7.5l-1.5 2.75L11.5 8.5H4", sent: "M14 2L7 9M14 2l-4.5 12-2.5-5-5-2.5Z", docText: "M4 2h5l3 3v9H4ZM9 2v3h3M6.5 8h3M6.5 10.5h3", archive: "M2.5 3.5h11v3h-11ZM3.5 6.5v6h9v-6M6.5 9h3", trash: "M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9", reply: "M6.5 4L2.5 8l4 4M2.5 8h7a4 4 0 0 1 4 4v.5", replyAll: "M9 4L5 8l4 4M5 8h4.5a4 4 0 0 1 4 4v.5M5.5 4l-4 4 4 4", forward: "M9.5 4l4 4-4 4M13.5 8h-7a4 4 0 0 0-4 4v.5", person: "M8 7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM3 13.5c.5-2.75 2.5-4 5-4s4.5 1.25 5 4", plug: "M6 2.5v3M10 2.5v3M4.5 5.5h7v2a3.5 3.5 0 0 1-7 0ZM8 11v2.5", contrast: "M8 13.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11ZM8 2.5v11", system: "M2.5 3.5h11v7h-11ZM6 13.5h4M8 10.5v3" };
+  MSG = [
+    { id: "m2", from: "Kai Lindner", addr: "kai@werkhaus-lindner.de", ini: "KL", date: "10:05", sub: "Angebot Einbauschrank Flur, Fassung 3", pre: "Anbei die überarbeitete Fassung mit den geänderten Korpusmaßen. Die Lieferzeit bleibt bei sechs Wochen ab Freigabe.", unread: true, label: "l2" },
+    { id: "m3", from: "Mara Vogt", addr: "mara.vogt@posteo.de", ini: "MV", date: "08:52", sub: "Aufmaß Flur – Donnerstag?", pre: "Passt Donnerstag um 10 Uhr? Der Hausmeister ist ab 9 Uhr da und kann aufschließen.", unread: true, label: "l2" },
+    { id: "m4", from: "Steinbach Leuchten", addr: "vertrieb@steinbach-leuchten.de", ini: "SL", date: "07:30", sub: "Lieferstatus Bestellung 48817", pre: "Ihre Bestellung wurde heute an die Spedition übergeben. Die Zustellung ist für Mittwoch geplant.", label: "l4" },
+    { id: "m5", from: "Paul Kern", addr: "p.kern@praxis-kern.de", ini: "PK", date: "Gestern", sub: "Praxis Kern: Farbe Empfang", pre: "Wir haben uns die drei Vorschläge angesehen. Variante B gefällt allen am besten, nur das Grün am Tresen ist uns noch zu kräftig.", label: "l3" },
+    { id: "m6", from: "Ida Roth", addr: "ida@studio-brenner.de", ini: "IR", date: "Gestern", sub: "Zeiten September abgeschlossen", pre: "Die Zeiten für September sind gebucht. Bei Küche Hansen fehlen noch zwei Tage Werkplanung." },
+    { id: "m7", from: "Nordlicht Stoffe", addr: "post@nordlicht-stoffe.de", ini: "NS", date: "Montag", sub: "Musterbuch Herbst 2026", pre: "Neue Leinenqualitäten in zwölf Farben und ein Bezugsstoff für stark beanspruchte Sitzmöbel." },
+    { id: "m9", from: "Lena Hansen", addr: "lena.hansen@posteo.de", ini: "LH", date: "7. Okt.", sub: "Grundriss EG, Fassung 4", pre: "Hier noch der Grundriss mit den Maßen vom Wochenende.", label: "l1" }
+  ];
+  LABELS = { l1: ["Küche Hansen", "type-blue"], l2: ["Wohnung Vogt", "type-teal"], l3: ["Praxis Kern", "type-violet"], l4: ["Lieferanten", "type-amber"] };
+  FOLDERS = [["inbox", "Eingang", "inbox"], ["starred", "Markiert", "flag"], ["sent", "Gesendet", "sent"], ["drafts", "Entwürfe", "docText"], ["archive", "Archiv", "archive"], ["trash", "Papierkorb", "trash"]];
+  CATS = [["Integrationen", "plug"], ["Person", "person"], ["Ansicht", "contrast"], ["System", "system"]];
+  GROUPS = [["Kommunikation", [["Mail", ["Eingang", "Entwürfe", "Gesendet"]]]], ["Kern", [["Einstellungen", ["Integrationen", "Person", "Ansicht", "System"]]]]];
+  load(src, key) { if (!window[key]) window[key] = new Promise(r => { const s = document.createElement("script"); s.src = src; s.onload = r; document.head.appendChild(s); }); return window[key]; }
+  componentDidMount() {
+    Promise.all([this.load("alfa-shell.js", "__alfaShellLoad"), this.load("design-system/alfa-ds-tokens.js", "__alfaDsLoad")]).then(() => this.forceUpdate());
+    this.fit = () => { const el = this.fitRef.current; if (el) { const s = el.clientWidth / 1512; if (Math.abs(s - this.state.s) > .001) this.setState({ s }); } };
+    this.ro = new ResizeObserver(this.fit); this.observe();
+  }
+  observe() { if (!this.observed && this.fitRef.current && this.ro) { this.ro.observe(this.fitRef.current); this.observed = true; this.fit(); } }
+  componentDidUpdate() { this.observe(); }
+  componentWillUnmount() { this.ro && this.ro.disconnect(); [this._ebT, this._ebT2, this.syT].forEach(clearTimeout); }
+  go(patch) { this.setState(patch, () => { const s = this.state; window.AlfaShell && window.AlfaShell.ebb(this, s.area !== "Mail" || s.stack.length === 0, false); }); }
+  opt(k, d) { return this.state[k] ?? this.props[k] ?? d; }
+  lum(h) { const v = [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255).map(c => c <= .03928 ? c / 12.92 : Math.pow((c + .055) / 1.055, 2.4)); return .2126 * v[0] + .7152 * v[1] + .0722 * v[2]; }
+  cr(a, b) { if (!/^#/.test(a) || !/^#/.test(b)) return ""; const x = this.lum(a), y = this.lum(b); return ((Math.max(x, y) + .05) / (Math.min(x, y) + .05)).toFixed(2).replace(".", ",") + " : 1"; }
+  face() { return this.boardRef.current && this.boardRef.current.querySelector('[data-part="blob-face"]'); }
+  renderVals() {
+    const AS = window.AlfaShell, DS = window.ALFA_DS;
+    const licht = this.opt("licht", "light") === "dark" ? "dark" : "light", raster = !!this.opt("raster", false), motion = this.opt("motion", "spring") === "less" ? "less" : "spring", stapel = this.opt("stapel", "ladder");
+    const st = this.state, P = this.P, area = st.area, isMail = area === "Mail", set = (k, v) => () => this.setState({ [k]: v });
+    const tg = (label, on, active) => ({ label, on, bg: active ? "var(--ds-inv)" : "transparent", fg: active ? "var(--ds-on-inv)" : "var(--ds-ink)" });
+    const base = { licht, motion, raster, s: st.s, boardH: Math.round(982 * st.s), fitRef: this.fitRef, boardRef: this.boardRef, area, isMail, isSettings: !isMail, noop: () => {},
+      toggles: [tg(licht === "light" ? "Hell" : "Dunkel", set("licht", licht === "light" ? "dark" : "light"), licht === "dark"), tg(raster ? "Raster an" : "Raster aus", set("raster", !raster), raster), tg(stapel === "ladder" ? "Stapel Leiter" : "Stapel ruhig", set("stapel", stapel === "ladder" ? "calm" : "ladder"), false), tg(motion === "spring" ? "Bewegung" : "Weniger Bewegung", set("motion", motion === "spring" ? "less" : "spring"), motion === "less")],
+      searchD: P.search, filterD: P.filter, composeD: P.compose, replyD: P.reply, replyAllD: P.replyAll, forwardD: P.forward, archiveD: P.archive, trashD: P.trash };
+    if (!AS || !DS) return Object.assign(base, { shLicht: licht === "dark" ? "dunkel" : "hell", wArr: [280, 896, 280], shLanes: [], shGroups: [], badges: {}, shDot: false, syncState: "fresh", syncTitle: "", assistText: "", slowLane: false, onChoose: base.noop, onMode: base.noop, onMem: base.noop, onGrow: base.noop, onSync: base.noop, toTrash: base.noop, compose: base.noop, doReply: base.noop, doReplyAll: base.noop, doForward: base.noop, L0: { title: "", rows: [] }, L1: { title: "", count: "" }, blobCtl: [], live: [], rasterLanes: [], cards: [], inbox: [], settingRows: [], plates: [], platesH: 0, between: [], types: [], roleSets: [], bar: [], gridT: [], typeScale: [], springs: [], groups: [], signalC: "", orb: null, tokenCount: "", tokenSplit: "" });
+    const T = DS.T, C = k => (T.color[k] ? T.color[k][0] : k);
+    const g = AS.geo({ W: 1512, H: 982, safe: 32 }), mem = st.mem || AS.D0("Mail");
+    const w = AS.layout("Mail", mem, g, st.ebb);
+    const xs = [16, 16 + w[0] + 12, 16 + w[0] + 12 + w[1] + 12];
+    const msgs = this.MSG, byId = {}; msgs.forEach(m => byId[m.id] = m);
+    const lc = id => id ? "var(--ds-color-" + this.LABELS[id][1] + ")" : "var(--ds-line-strong)";
+    const open = id => () => { const k = this.state.stack.filter(x => x !== id); k.push(id); this.go({ stack: k.slice(-5) }); };
+    const D = st.drafts, front = st.stack[st.stack.length - 1], unreadN = msgs.filter(m => m.unread).length;
+    const mark = (o) => Object.assign({ label: "", state: "rest", go: undefined, bg: "transparent", fg: "var(--c-ink-2)", ring: "inset 0 0 0 1px var(--c-line-strong)", isSym: false, d: "", isText: false, t: "", dot: false }, o);
+    const marks0 = isMail ? this.FOLDERS.slice(0, 5).map(f => mark({ label: f[1], isSym: true, d: P[f[2]], dot: f[0] === "inbox" && unreadN > 0 })) : this.CATS.map(c2 => mark({ label: c2[0], isSym: true, d: P[c2[1]] }));
+    const marks1 = isMail ? msgs.map(m => mark({ label: m.from, isText: true, t: m.ini, ring: "inset 0 0 0 1px " + lc(m.label), go: open(m.id) })) : [mark({ label: st.cat, isSym: true, d: P.contrast })];
+    const marks2 = (isMail ? st.stack : []).slice().reverse().map(id => byId[id] ? mark({ label: byId[id].from, isText: true, t: byId[id].ini, ring: "inset 0 0 0 1px " + lc(byId[id].label) }) : mark({ label: "Entwurf", isSym: true, d: P.compose }));
+    const unfold = i => () => this.go({ mem: Object.assign({}, mem, { max: -1, [["Lf", "Mf", "Rf"][i]]: false, pin: false }) });
+    const shLanes = [[isMail ? "Postfach" : "Einstellungen", marks0], [isMail ? "Eingang" : st.cat, marks1], ["Stapel", marks2]].map((l, i) => ({ title: l[0], state: w[i] <= 56 ? "collapsed" : "open", marks: l[1], onStrip: w[i] <= 56 ? (i === 2 && st.ebb ? undefined : unfold(i)) : undefined }));
+    const L0 = isMail ? { title: "Postfach", rows: this.FOLDERS.map(f => ({ icon: true, dot: false, d: P[f[2]], label: f[1], count: f[0] === "inbox" ? String(unreadN) : "", fw: f[0] === st.folder ? 500 : 400, bg: f[0] === st.folder ? "var(--ds-sel)" : "transparent", on: set("folder", f[0]), sep: false })).concat(Object.keys(this.LABELS).map((k, j) => ({ icon: false, dot: true, dotC: lc(k), label: this.LABELS[k][0], count: "", fw: 400, bg: "transparent", on: () => {}, sep: j === 0 }))) }
+      : { title: "Einstellungen", rows: this.CATS.map(c2 => ({ icon: true, dot: false, d: P[c2[1]], label: c2[0], count: "", fw: c2[0] === st.cat ? 500 : 400, bg: c2[0] === st.cat ? "var(--ds-sel)" : "transparent", on: set("cat", c2[0]), sep: false })) };
+    const L1 = isMail ? { title: "Eingang", count: String(unreadN) } : { title: st.cat, count: "" };
+    const n = st.stack.length, dark = licht === "dark";
+    const tintL = ["white", "ladder-2", "ladder-3", "ladder-4", "ladder-5"], tintD = ["ladder-5", "deep", "ladder-4", "edge", "ladder-3"];
+    const items = msgs.concat(Object.keys(D).map(id => Object.assign({ id, isDraft: true }, D[id])));
+    const cards = items.map(m => { const i = isMail ? st.stack.indexOf(m.id) : -1, inS = i >= 0, d = inS ? n - 1 - i : 0, isF = m.id === front;
+      const tk = stapel === "ladder" ? (dark ? tintD : tintL)[Math.min(d, 4)] : (dark ? "ladder-5" : "white"), bg = C(tk), ink = this.lum(bg) > .18 ? C("ladder-5") : C("ladder-1");
+      const upd = k => e2 => { const v = e2.target.value; this.setState(s => ({ drafts: Object.assign({}, s.drafts, { [m.id]: Object.assign({}, s.drafts[m.id], { [k]: v }) }) })); };
+      const ok = !!(m.isDraft && m.to && m.to.trim());
+      return { isDraft: !!m.isDraft, isMsg: !m.isDraft, to: m.to || "", subV: m.sub || "", body: m.body || "", onTo: upd("to"), onSub: upd("sub"), onBody: upd("body"), noSend: !ok, sendO: ok ? 1 : .4, hint: ok ? "Entwurf" : "Empfänger fehlt",
+        send: () => { const k = Object.assign({}, this.state.drafts); delete k[m.id]; this.go({ drafts: k, stack: this.state.stack.filter(x => x !== m.id), sent: this.state.sent + 1 }); },
+        from: m.isDraft ? (m.to && m.to.trim() ? "An " + m.to.trim() : "Neue Mail") : m.from, ini: m.ini, date: m.isDraft ? "Entwurf" : m.date, sub: m.sub, pre: m.pre, addr: m.addr, labelC: lc(m.label), labelN: m.label ? this.LABELS[m.label][0] : "Ohne Projekt", ring: m.label ? lc(m.label) : "currentColor",
+        bg, ink, y: inS ? i * 44 : 900, h: inS ? 822 - i * 44 : 822, o: inS ? 1 : 0, z: inS ? 10 + i : 1, bodyO: isF ? 1 : 0, cur: isF ? "default" : "pointer", front: open(m.id), close: e2 => { e2.stopPropagation(); const k = Object.assign({}, this.state.drafts); if (m.isDraft) delete k[m.id]; this.go({ stack: this.state.stack.filter(x => x !== m.id), drafts: k }); } }; });
+    const newDraft = pre => { const id = "d" + (this.state.dn + 1), k = this.state.stack.filter(x => x !== id).concat([id]).slice(-5); this.go({ dn: this.state.dn + 1, drafts: Object.assign({}, this.state.drafts, { [id]: Object.assign({ to: "", sub: "", body: "" }, pre || {}) }), stack: k, mem: Object.assign({}, this.state.mem || AS.D0("Mail"), { Rf: false }) }); };
+    const fm = byId[front];
+    const inbox = msgs.map(m => ({ from: m.from, date: m.date, sub: m.sub, fw: m.unread ? 500 : 400, labelC: m.label ? lc(m.label) : "transparent", bg: m.id === front ? "var(--ds-sel)" : "transparent", on: open(m.id) }));
+    const seg = (k, cur, opts) => ({ opts: opts.map(o => ({ t: o[1], on: () => this.setState({ [k]: o[2] !== undefined ? o[2] : o[0] }), bg: cur === o[0] ? "var(--ds-lane)" : "transparent", fg: cur === o[0] ? "var(--ds-ink)" : "var(--ds-ink-3)", sh: cur === o[0] ? "0 0 0 1px var(--ds-line), 0 1px 2px rgba(2,4,13,.08)" : "none" })) });
+    const SR = { Ansicht: [Object.assign({ label: "Licht", hint: "Hell oder dunkel, gleiche Leiter" }, seg("licht", licht, [["light", "Hell"], ["dark", "Dunkel"]])), Object.assign({ label: "Stapel", hint: "Platten in der Leiter oder ruhig" }, seg("stapel", stapel, [["ladder", "Leiter"], ["calm", "Ruhig"]]))],
+      System: [Object.assign({ label: "Bewegung", hint: "Wie gebaut oder weniger Bewegung" }, seg("motion", motion, [["spring", "Normal"], ["less", "Weniger"]])), Object.assign({ label: "Raster", hint: "56er Module über den Bahnen" }, seg("raster", raster ? "on" : "off", [["on", "An", true], ["off", "Aus", false]]))],
+      Person: [{ label: "Jonas Brenner", hint: "jonas@studio-brenner.de", opts: [] }], Integrationen: [{ label: "Google", hint: "Persönlich", opts: [] }] };
+    const fit = i => { const r = w[i] % 56; return w[i] <= 56 ? "1 × 56" : r === 0 ? (w[i] / 56) + " × 56" : w[i] + " · Rest " + r; };
+    const fitC = i => (w[i] % 56 === 0 ? "var(--ds-ink-2)" : "var(--ds-signal-ink)");
+    const fireFace = type => { const f = this.face(); if (!f) return; if (type === "click") f.click(); else f.dispatchEvent(new MouseEvent("dblclick", { bubbles: true })); };
+    const ctl = [["rest", "Ruhe"], ["menu", "Bereiche"], ["assist", "Assistent"]].map(c2 => ({ t: c2[1], bg: st.mode === c2[0] ? "var(--ds-lane)" : "transparent", fg: st.mode === c2[0] ? "var(--ds-ink)" : "var(--ds-ink-3)", sh: st.mode === c2[0] ? "0 0 0 1px var(--ds-line), 0 1px 2px rgba(2,4,13,.08)" : "none",
+      on: () => { if (c2[0] === "rest") document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" })); else setTimeout(() => fireFace(c2[0] === "menu" ? "click" : "dbl"), 0); this.setState({ mode: c2[0] }); } }));
+    const menuW = w[0] > 56 ? w[0] : 300;
+    const live = [[menuW + " pt", "Blob-Menü = Breite der Bahn darunter" + (menuW % 56 ? " · nicht im Raster" : " · " + menuW / 56 + " × 56")], [w.join(" · "), "Bahnen links · Mitte · rechts"], [String(w[0] + w[1] + w[2] + 24 + 32), "Summe mit Fugen und Rand = 1512"], [st.ebb ? "gefaltet" : "offen", "Rechte Bahn (faltet bei leerem Stapel nach 420 ms)"], [st.syncing ? "gleicht ab" : "frisch", "Abgleich"], [String(st.sent), "Gesendet in dieser Sitzung"]].map(a => ({ v: a[0], n: a[1] }));
+    const plates = ["1", "2", "3", "4", "5", "6"].map((k, i) => { const hex = C("ladder-" + k), ink = this.lum(hex) > .18 ? C("ladder-5") : C("ladder-1");
+      return { name: "ladder-" + k, hex, label: hex + " · " + this.cr(hex, ink), ink, top: i * 64, z: i + 1, y: st.plateHover === i ? -10 : 0, enter: set("plateHover", i), leave: set("plateHover", -1) }; });
+    const between = ["air", "rim-light", "rim-shade", "edge", "deep", "night-line", "night-well"].map(k => ({ name: k, hex: C(k) }));
+    const types = ["type-blue", "type-indigo", "type-violet", "type-teal", "type-petrol", "type-amber"].map(k => ({ name: k, hex: C(k) }));
+    const roleSets = [["light", "Rollen hell", "role-light", "white"], ["dark", "Rollen dunkel", "role-dark", "ladder-5"]].map(r => ({ key: r[0], title: r[1], rows: Object.keys(T[r[2]]).map(k => { const ref = T[r[2]][k][0], hex = C(ref); return { name: k, ref, hex, c: ["ink", "ink-2", "ink-3", "mark", "focus", "signal-ink"].includes(k) ? this.cr(hex, C(r[3])) : "" }; }) }));
+    const segs = [[16, "16"], [w[0], fit(0)], [12, ""], [w[1], fit(1)], [12, ""], [w[2], fit(2)], [16, "16"]];
+    const bar = segs.map((s2, j) => { const isL = j % 2 === 1; return { w: (s2[0] * 100 / 1512).toFixed(3), t: isL ? s2[1] : "", bg: isL ? "var(--ds-lane)" : "var(--ds-well)", fg: isL && s2[0] % 56 && s2[0] > 56 ? "var(--ds-signal-ink)" : "var(--ds-ink-2)", img: isL ? "linear-gradient(90deg,var(--ds-raster) 0 1px,transparent 1px)" : "none", size: isL && s2[0] > 0 ? (100 * 56 / s2[0]).toFixed(4) + "% 100%" : "auto" }; });
+    const gridT = Object.keys(T.grid).map(k => ({ v: T.grid[k][0], name: "grid-" + k, src: T.grid[k][1] }));
+    const typeScale = [[28, 500, "-0.02em", "Angebot Einbauschrank Flur"], [20, 500, "-0.01em", "Aufmaß Flur – Donnerstag?"], [15, 500, "0", "Praxis Kern: Farbe Empfang"], [13, 400, "0", "Die Zeiten für September sind gebucht. Bei Küche Hansen fehlen noch zwei Tage Werkplanung."], [11.5, 500, "0", "Antworten · Weiterleiten · Archivieren"]].map(t2 => { const key = Object.keys(T.type).find(k => k.startsWith("size") && T.type[k][0] === t2[0]); return { v: t2[0], w: t2[1], ls: t2[2], sample: t2[3], st: key && T.type[key][2] === "belegt" ? "belegt" : "Vorschlag" }; });
+    const springs = Object.keys(T.motion).map((k, j) => { const s2 = DS.motion(k), bel = T.motion[k][2] === "belegt", x2 = T.motion[k][0][1];
+      return { name: "motion-" + k, d: T.motion[k][0][0], b: typeof x2 === "string" ? "fest" : x2, ms: s2.ms, ease: s2.ease, easeLabel: typeof x2 === "string" ? s2.ease : "Feder", src: T.motion[k][1], st: bel ? "belegt" : "Vorschlag", pts: s2.pts.map((p, i) => (i * 5) + "," + (72 - p * 56).toFixed(1)).join(" "), x: st.springHover === j ? "calc(100% - 26px)" : "2px", enter: set("springHover", j), leave: set("springHover", -1) }; });
+    const GN = { color: "Farbe", "role-light": "Rollen hell", "role-dark": "Rollen dunkel", space: "Abstand", grid: "Raster", shell: "Hülle", radius: "Radius", type: "Schrift", stroke: "Strich", elevation: "Tiefe", motion: "Bewegung", z: "Ebenen" };
+    let cnt = 0, bel = 0;
+    const groups = Object.keys(T).map(gk => ({ name: GN[gk] || gk, rows: Object.keys(T[gk]).map(k => { const v = T[gk][k]; cnt++; if (v[2] === "belegt") bel++;
+      const isC = gk === "color" || gk.startsWith("role"), hex = isC ? C(v[0]) : "transparent";
+      const val = gk === "motion" ? Math.round(v[0][0] * 1000) + " ms · " + (typeof v[0][1] === "string" ? v[0][1].replace("cubic-bezier", "") : "bounce " + v[0][1]) : (typeof v[0] === "number" ? String(v[0]).replace(".", ",") : String(v[0])).slice(0, 34);
+      return { name: gk + "-" + k, v: val, src: v[1] || "—", st: v[2] === "belegt" ? "belegt" : "Vorschlag", stC: v[2] === "belegt" ? "var(--ds-ink-3)" : "var(--ds-color-type-blue)", sw: hex, swRing: isC ? "var(--ds-line-strong)" : "transparent" }; }) }));
+    const orb = React.createElement("div", { style: { position: "absolute", inset: "-40%", background: "conic-gradient(from 210deg, " + ["orb-1", "orb-2", "orb-3", "orb-4", "orb-5", "orb-2", "orb-1"].map(C).join(", ") + ")", filter: "blur(28px)", animation: motion === "less" ? "none" : "ds-orb 14s linear infinite" } });
+    return Object.assign(base, {
+      shLicht: dark ? "dunkel" : "hell", wArr: w, shLanes, shGroups: this.GROUPS, badges: { Mail: unreadN }, shDot: unreadN > 0, slowLane: st.slowLane,
+      syncState: st.syncing ? "syncing" : "fresh", syncTitle: st.syncing ? "Gleicht ab …" : "Neu laden",
+      assistText: isMail && !st.stack.length ? "Keine Nachricht offen." : "Füge Text, Dateien oder Links ein.",
+      onChoose: name => this.go({ area: name, mode: "rest" }), onMode: o => { if (!o && this.state.mode !== "rest") this.setState({ mode: "rest" }); },
+      onMem: p => this.go({ mem: Object.assign({}, this.state.mem || AS.D0("Mail"), p) }),
+      onGrow: (side, v, w0) => { this.go({ mem: Object.assign({}, this.state.mem || AS.D0("Mail"), AS.grow("Mail", side, v, w0)) }); },
+      onSync: () => { this.setState({ syncing: true }); clearTimeout(this.syT); this.syT = setTimeout(() => this.setState({ syncing: false }), 2000); },
+      toTrash: () => this.go({ stack: this.state.stack.slice(0, -1) }),
+      compose: () => newDraft(),
+      doReply: () => { if (fm) newDraft({ to: fm.from, sub: fm.sub.startsWith("Re:") ? fm.sub : "Re: " + fm.sub, body: "\n\n\nAm " + fm.date + " schrieb " + fm.from + ":\n› " + fm.pre }); },
+      doReplyAll: () => { if (fm) newDraft({ to: fm.from, sub: fm.sub.startsWith("Re:") ? fm.sub : "Re: " + fm.sub, body: "\n\n\nAm " + fm.date + " schrieb " + fm.from + ":\n› " + fm.pre }); },
+      doForward: () => { if (fm) newDraft({ sub: fm.sub.startsWith("Fwd:") ? fm.sub : "Fwd: " + fm.sub, body: "\n\n\n— Weitergeleitet —\n" + fm.pre }); },
+      L0, L1, cards, inbox, settingRows: SR[st.cat] || [], blobCtl: ctl, live,
+      rasterLanes: raster ? [0, 1, 2].map(i => ({ x: xs[i], w: w[i], fit: fit(i), fitC: fitC(i) })) : [],
+      plates, platesH: 5 * 64 + 140, between, types, signalC: C("signal") + " · " + this.cr(C("signal"), "#ffffff") + " mit Weiß", orb, roleSets, bar, gridT, typeScale, springs, groups, tokenCount: cnt, tokenSplit: bel + " belegt · " + (cnt - bel) + " Vorschlag"
+    });
+  }
+}
+</script>
+</body>
+</html>

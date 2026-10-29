@@ -1,0 +1,26 @@
+{
+  "stand": "2026-10-16",
+  "hinweis": "Arbeitsstand, kein Paket. Abschnitte und Gruppen aus ALFA Einstellungen Inhalt (SECT). Johannes am 16.10.: „Fünf Gruppen aus Inhalt, Dienste dazu, Kacheln als Start, Dummy-Abschnitte nicht bauen“. In SECT stehen heute vier Gruppen, die Gruppe „Mail“ fehlt dort. Welche fünfte Gruppe gilt, ist offen.",
+  "groups": [
+    {"id": "me", "name": "Ich", "sections": [
+      {"id": "identity", "former": "identitaet", "name": "Identität", "symbol": "person", "source": "hub"},
+      {"id": "appearance", "former": "darstellung", "name": "Darstellung", "symbol": "contrast", "source": "hub"}
+    ]},
+    {"id": "company", "name": "Firma", "sections": [
+      {"id": "companyData", "former": "firma", "name": "Firmendaten", "symbol": "building", "source": "hub"},
+      {"id": "folders", "former": "ordner", "name": "Dateiordner", "symbol": "folder", "source": "hub"},
+      {"id": "templates", "former": "vorlagen", "name": "Vorlagen", "symbol": "list", "source": "hub"}
+    ]},
+    {"id": "connections", "name": "Verbindungen", "sections": [
+      {"id": "integrations", "former": "integrationen", "name": "Integrationen", "symbol": "plug", "source": "hub"},
+      {"id": "keyInventory", "former": "schluessel", "name": "Schlüssel-Inventar", "symbol": "key", "source": "hub"}
+    ]},
+    {"id": "protection", "name": "Schutz und System", "sections": [
+      {"id": "privacy", "former": "datenschutz", "name": "Datenschutz", "symbol": "shield", "source": "hub"},
+      {"id": "system", "former": "system", "name": "System", "symbol": "system", "source": "hub"},
+      {"id": "imprint", "former": "impressum", "name": "Impressum", "symbol": "docText", "source": "hub"}
+    ]}
+  ],
+  "notBuilt": ["Tastenkürzel", "Version", "Backups", "Tagebuch", "Werkstattfaktoren", "Schlüssel-Inventar: Beispieldaten"],
+  "notBuiltBeleg": "Johannes 16.10.: „Dummy-Abschnitte nicht bauen“. Schlüssel-Inventar steht als Abschnitt in SECT, seine Beispieldaten sind nicht bauen."
+}

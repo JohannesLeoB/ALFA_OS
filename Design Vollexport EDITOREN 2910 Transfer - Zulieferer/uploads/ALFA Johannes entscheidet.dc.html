@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap">
+<style>html,body{margin:0;padding:0}a{color:inherit}a:hover{color:inherit;opacity:.8}button:focus{outline:none}button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid #111;outline-offset:2px}textarea::placeholder,input::placeholder{color:inherit;opacity:.45}</style>
+</helmet>
+<div data-screen-label="Johannes entscheidet" style="min-height:100vh;background:#f6f6f4;color:#111;font-family:Geist,system-ui,sans-serif;font-size:14px;line-height:1.45">
+<header style="position:sticky;top:0;z-index:5;background:#f6f6f4;box-shadow:inset 0 -1px 0 #0000001f;padding:16px 32px;display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+<div style="flex:1;min-width:260px"><div style="font-size:18px;font-weight:600">Johannes entscheidet</div><div style="color:#555;font-size:12.5px">Rückgabe an Code · aus Codes 34 Punkten gebündelt · 16.10.2026</div></div>
+<div style="display:flex;align-items:center;gap:16px;font-size:12.5px;color:#333"><span>{{ nDone }} von 14 entschieden</span><span style="width:120px;height:4px;border-radius:2px;background:#0000001a;overflow:hidden;display:block"><i style="display:block;height:100%;width:{{ pct }};background:#111"></i></span></div>
+<div style="display:flex;gap:8px">
+<button onClick="{{ copyOut }}" style="appearance:none;border:0;font:inherit;height:36px;padding:0 16px;border-radius:999px;background:#111;color:#fff;cursor:pointer" style-hover="opacity:.85" style-active="transform:scale(.97)">{{ copyLabel }}</button>
+<button onClick="{{ allStd }}" style="appearance:none;border:0;font:inherit;height:36px;padding:0 16px;border-radius:999px;background:transparent;color:#111;cursor:pointer;box-shadow:inset 0 0 0 1px #00000040" style-hover="background:#0000000d" style-active="transform:scale(.97)">Alle offenen: Standard</button>
+</div>
+</header>
+<main style="max-width:880px;margin:0 auto;padding:16px 32px 96px;display:flex;flex-direction:column;gap:16px">
+<sc-for list="{{ items }}" as="it" hint-placeholder-count="6">
+<sc-if value="{{ it.isHead }}" hint-placeholder-val="{{ false }}"><div style="padding:32px 0 0;font-size:12.5px;font-weight:500;color:#555;letter-spacing:.02em">{{ it.title }}</div></sc-if>
+<sc-if value="{{ it.isItem }}" hint-placeholder-val="{{ true }}">
+<section id="p{{ it.n }}" data-state="{{ it.state }}" style="background:#fff;border-radius:20px;padding:24px;box-shadow:{{ it.ring }};display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:16px;align-items:flex-start">
+<span style="flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:12.5px;font-weight:500;background:{{ it.nBg }};color:{{ it.nFg }};box-shadow:inset 0 0 0 1px #0000002e">{{ it.n }}</span>
+<div style="flex:1;min-width:0"><div style="font-weight:500;font-size:15px;text-wrap:pretty">{{ it.q }}</div><div style="color:#555;margin-top:4px;text-wrap:pretty">{{ it.ctx }}</div></div>
+<button title="Abhaken" aria-label="Abhaken" onClick="{{ it.tick }}" style="appearance:none;border:0;padding:0;flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:{{ it.tBg }};color:{{ it.tFg }};box-shadow:inset 0 0 0 1px #00000040" style-active="transform:scale(.94)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"></path></svg></button>
+</div>
+<div style="margin-left:48px;display:flex;flex-direction:column;gap:8px"><div style="padding:12px 16px;border-radius:12px;background:#f0f0ee;color:#222;font-size:13px;text-wrap:pretty"><span style="font-weight:500">Befund · </span>{{ it.befund }}</div><sc-if value="{{ it.hasQuote }}" hint-placeholder-val="{{ false }}"><div style="padding:12px 16px;border-radius:12px;box-shadow:inset 0 0 0 1px #11111133;color:#111;font-size:13px;text-wrap:pretty"><span style="font-weight:500">Dein Wort · </span>{{ it.quote }}</div></sc-if></div>
+<div style="margin-left:48px;display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ it.opts }}" as="o" hint-placeholder-count="3">
+<button data-state="{{ o.state }}" onClick="{{ o.go }}" style="appearance:none;border:0;font:inherit;text-align:left;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }};box-shadow:{{ o.ring }};transition:background 160ms,box-shadow 160ms" style-hover="box-shadow:inset 0 0 0 1px #111" style-active="transform:scale(.995)">
+<span style="flex:none;width:16px;height:16px;border-radius:{{ it.shape }};display:grid;place-items:center;box-shadow:inset 0 0 0 1.5px {{ o.mark }}"><i style="width:8px;height:8px;border-radius:{{ it.shapeIn }};background:{{ o.dot }};display:block"></i></span>
+<span style="flex:1;min-width:0">{{ o.label }}</span>
+<sc-if value="{{ o.isStd }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font-size:11.5px;opacity:.7">Standard von Code</span></sc-if>
+</button>
+</sc-for>
+<input value="{{ it.own }}" onInput="{{ it.setOwn }}" placeholder="Eigene Wahl beschreiben" style="font:inherit;border:0;height:40px;padding:0 16px;border-radius:12px;background:#f6f6f4;color:#111;box-shadow:inset 0 0 0 1px #0000001f;box-sizing:border-box;width:100%">
+<textarea value="{{ it.note }}" onInput="{{ it.setNote }}" placeholder="Kommentar" rows="2" style="font:inherit;border:0;padding:12px 16px;border-radius:12px;background:#f6f6f4;color:#111;box-shadow:inset 0 0 0 1px #0000001f;box-sizing:border-box;width:100%;resize:vertical"></textarea>
+</div>
+</section>
+</sc-if>
+</sc-for>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  KEY = "alfa-johannes-entscheidet-v2";
+  state = { a: {}, copied: false };
+  G = [
+    ["1 · Dein Wort nötig", [
+      ["Liste der Einstellungen (fasst Codes Punkte 1, 2, 3 und 34 zusammen)", "Heute zwei Fassungen: 4 Kategorien (Mail-Entwurf) gegen 12 Abschnitte in 5 Gruppen (Inhalt). Dazu: Hub aus Kacheln als Start, und die Dummy-Abschnitte ohne reale Quelle (Tastenkürzel, Version, Backups, Tagebuch, Werkstattfaktoren, Schlüssel-Inventar).", ["Fünf Gruppen aus Inhalt, Dienste dazu, Kacheln als Start, Dummy-Abschnitte nicht bauen", "Eigene Liste (unten beschreiben)"], "Beschlossen ist nur: fünf Gruppen. Die Gruppe „Mail“ zu streichen (vier Gruppen) steht nur in meinem Abgleich, den du nie abgenommen hast. Die Kacheln als Start habe ich gebaut. Die Wertung „egal“ für die Dummys steht in meinem Abgleich nicht.", undefined, "„Zwölf Abschnitte in fünf Gruppen (Inhalt)“ (13.10., entscheidungen.md:132) · „Ja, versuchs doch einfach mal!“ (16.10.)"],
+      ["Mittelspalte und Griff (Codes Punkte 5, 7, 11)", "Mittelminimum 280 oder 480, Griff Haarlinie, welches Akkordeon. Offen aus OFFEN.md: wächst in Mail die rechte Bahn, oder bleibt die Mitte bei mindestens 480? Und was macht der Doppelklick am Griff (Freitext)?", ["280, rechte Bahn wächst, Akkordeon aus alfa-shell.js, Griff Haarlinie (12 Trefferfläche)", "480, Mitte bleibt breit"], "alfa-shell.js:3 K.center 480, :5 AREA.min [224, 280, 280]. 224 = 4 × 56, 280 = 5 × 56, 480 ist kein Vielfaches von 56. Die 12 als Trefferfläche steht in keiner Quelle, das ist Codes Vorschlag.", undefined, "„Ruhe reiten 280 – 56er Raster, 4er Leiter 1 und 2 als Minima“ (entscheidungen.md:124) · „welches Akkordeon gilt?“ (:104)"],
+      ["Blob-Auge (Codes Punkt 10)", "Tokenbogen: 4 breit, 8 hoch, Abstand 4.", ["4 × 8, Abstand 4", "Bestand 3,5 × 7"], "TOKENBOGEN blobEyeWidth 4, blobEyeHeight 8, blobEyeGap 4. Deine Kommentare waren Fragen, kein Wort.", undefined, "„auf 8 heben?“ · „auf 4 bringen?“ (15.10.)"],
+      ["Löschen und Rückgängig (Codes Punkte 26 und 30)", "Zwei Quellen widersprechen sich: README sagt, der Papierkorb fragt nicht, sondern bietet Rückgängig. Dein Wort sagt, Trennen, Konto löschen und Mails löschen bekommen die Bestätigen-Pille.", ["Pille für Trennen und Konto löschen. Mails löschen: ohne Frage, mit Rückgängig (Toast 4 s)", "Pille auch für Mails löschen"], "Die 4 Sekunden stehen in keiner Quelle, das ist Codes Vorschlag. Offen in meinem Entwurf: Kopfknopf der Lesekarte im Papierkorb.", undefined, "„für destruktives wie trennen, konto löschen oder auch mails löschen – bitte nachbauen nach screenshots“ (entscheidungen.md:155)"]
+    ]],
+    ["2 · Nur bestätigen", [
+      ["Kleinstes Fenster 640 × 480 (Punkt 12)", "", ["640 × 480", "960 × 600"], "alfa-shell.js:11 rechnet mit 640 und 480.", 0, "„Weg damit, die interessiert uns hier nicht.“ (13.10., entscheidungen.md:67)"],
+      ["Ein Tokenstand (Punkte 13 bis 17)", "TOKENBOGEN.json (214 Tokens) gilt. design-system/ wird aufgelöst. Keine Mono, keine Stimmungsfarben Koralle, Aprikose, Rose. Zuordnung der 76 Tokens: TOKENMAP.tsv fehlt im Projekt, Code soll sie nachliefern.", ["Bestätigt", "Anders (unten)"], "Das Schema DTCG gegen Kebab ist in keiner Quelle von dir entschieden.", 0, "„KEINE Mono bitte“ (15.10.) · „Tokenbogen JETZT aktualisieren“ (16.10.) · Koralle, Aprikose, Rose: „Entfernen“ (13.10., entscheidungen.md:136)"],
+      ["Bewegung (Punkte 20 und 21)", "Zeiten unverändert, bei „weniger Bewegung“ ruht alles. Federn schreibt Code für macOS 26.", ["Bestätigt", "Anders (unten)"], "TOKENBOGEN hat 23 Dauer-Tokens, nicht 17.", 0, "„3 – für swift und apple macOS 26“ (13.10., entscheidungen.md:147)"],
+      ["Zustände und Texte (Punkte 22, 23, 24)", "Wörter englisch. Fehlende Zustände und Vertragstexte markiert Code „roh“, bis du sie lieferst.", ["Bestätigt", "Anders (unten)"], "Welches Wort für welchen Zustand, ist nicht entschieden. INHALT.json vertrag_abdeckung: 130 geprüft.", 0, "„alles strikt englisch“ (13.10., entscheidungen.md:146)"],
+      ["Mehrfachauswahl (Punkt 27)", "Dein Wort ist „jetzt“. Gebaut habe ich sie noch nicht, das ist meine offene Schuld.", ["Ich entwerfe sie als Nächstes", "Später"], "Verhalten bei 3.201 Mails und Befehlsliste fehlen noch.", 0, "„4 – jetzt“ (13.10., entscheidungen.md:148)"],
+      ["Signatur (Punkt 28)", "Pro Postfach anlegen, auswählen, erstellen. An die Mail nach Auswahl.", ["Bestätigt", "Anders (unten)"], "Antworten, Vorschau und Bearbeiten sind ohne Wort.", 0, "„Signaturen an jede mail nach auswahl, das ist okay – pro Postfach im Einstellungs Ansichtsbereich eine Signatur anlegen, auswählen, erstellen“ (entscheidungen.md:141)"]
+    ]],
+    ["3 · Später", [
+      ["Fläche Glas für macOS 26 (Punkt 19)", "Flach reicht für den ersten Wurf.", ["Später", "Jetzt klären"], "Kein Wort von dir zu Lack, Glas, flach.", 0],
+      ["Geist-Dateien (Punkt 18)", "Systemschrift, bis Dateien da sind.", ["Später", "Ich liefere die Dateien"], "Token family.text: Geist, dann SF Pro Text, dann system-ui.", 0, "12.10. Tendenz „Schrift Geist“ (entscheidungen.md:61)"],
+      ["„Verschieben nach …“ (Punkt 29)", "Folgt auf die Mehrfachauswahl.", ["Später", "Jetzt klären"], "Kein Wort von dir.", 0],
+      ["Dienste, Mitteilungen, Team, Impressum (Punkte 25, 31, 32, 33)", "Code startet mit den 10 Diensten. Material von dir: logos.zip, „Happa Happa“, monday, Impressum-Daten.", ["Später", "Material liefere ich"], "OFFEN.md:18 bis 20. Teamebene und Mitteilungsoptionen sind meine Konstruktion, ohne Wort von dir.", 0]
+    ]]
+  ];
+  pick(n, x) { const a = this.state.a[n] || {}; return a.pick !== undefined ? a.pick : x.pre; }
+  load() { try { return JSON.parse(localStorage.getItem(this.KEY) || "{}"); } catch (e) { return {}; } }
+  componentDidMount() { this.setState({ a: this.load() }); }
+  put(n, p) { this.setState(st => { const a = Object.assign({}, st.a, { [n]: Object.assign({}, st.a[n], p) }); try { localStorage.setItem(this.KEY, JSON.stringify(a)); } catch (e) {} return { a }; }); }
+  flat() { const out = []; let n = 0; this.G.forEach(([g, l]) => { out.push({ head: g }); l.forEach(x => { n++; out.push({ n, q: x[0], ctx: x[1], opts: x[2], befund: x[3], pre: x[4], quote: x[5] }); }); }); return out; }
+  isDone(n, x) { const a = this.state.a[n] || {}; return a.done || this.pick(n, x) !== undefined || !!a.own; }
+  copyOut() {
+    const L = ["# Rückgabe von Johannes an Code", "", "Stand: " + new Date().toLocaleDateString("de-DE") + ". Antworten zu `an-design-liste.md`.", ""];
+    this.flat().forEach(x => { if (x.head) { L.push("## " + x.head, ""); return; } const a = this.state.a[x.n] || {}; const pk = this.pick(x.n, x), pick = pk !== undefined ? x.opts[pk] : "offen (Standard von Code: " + x.opts[0] + ")";
+      L.push(x.n + ". " + x.q, "   Antwort: " + pick + (a.own ? " · Eigene Wahl: " + a.own : "") + (a.done ? " · abgehakt" : ""), a.note ? "   Kommentar: " + a.note : null, x.quote ? "   Dein Wort: " + x.quote : null, ""); });
+    const t = L.filter(l => l !== null).join("\n");
+    const ok = () => { this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1800); };
+    try { navigator.clipboard.writeText(t).then(ok, () => { window.prompt("Kopieren:", t); }); } catch (e) { window.prompt("Kopieren:", t); }
+  }
+  allStd() { this.setState(st => { const a = Object.assign({}, st.a); this.flat().forEach(x => { if (!x.head && !this.isDone(x.n, x)) a[x.n] = Object.assign({}, a[x.n], { pick: 0 }); }); try { localStorage.setItem(this.KEY, JSON.stringify(a)); } catch (e) {} return { a }; }); }
+  renderVals() {
+    const items = []; let nDone = 0;
+    this.flat().forEach(x => {
+      if (x.head) { items.push({ isHead: true, isItem: false, title: x.head }); return; }
+      const a = this.state.a[x.n] || {}, done = this.isDone(x.n, x), pk = this.pick(x.n, x);
+      if (done) nDone++;
+      const dec = x.pre !== undefined;
+      items.push({ isHead: false, isItem: true, n: x.n, q: x.q, ctx: x.ctx, hasQuote: !!x.quote, quote: x.quote, befund: x.befund, state: done ? "decided" : "open",
+        ring: done ? "inset 0 0 0 1.5px #111" : "inset 0 0 0 1px #0000001f", nBg: done ? "#111" : "#fff", nFg: done ? "#fff" : "#111",
+        tBg: a.done ? "#111" : "transparent", tFg: a.done ? "#fff" : "#555", shape: "50%", shapeIn: "50%", own: a.own || "", note: a.note || "",
+        tick: () => this.put(x.n, { done: !a.done }), setOwn: e => this.put(x.n, { own: e.target.value }), setNote: e => this.put(x.n, { note: e.target.value }),
+        opts: x.opts.map((label, i) => { const on = pk === i; return { label, isStd: i === 0, state: on ? "selected" : "rest", bg: on ? "#111" : "transparent", fg: on ? "#fff" : "#111", ring: on ? "inset 0 0 0 1px #111" : "inset 0 0 0 1px #0000002e", mark: on ? "#fff" : "#00000066", dot: on ? "#fff" : "transparent", go: () => this.put(x.n, { pick: on && x.pre === undefined ? undefined : i }) }; }) });
+    });
+    return { items, nDone, pct: Math.round(nDone / 14 * 100) + "%", copyOut: () => this.copyOut(), allStd: () => this.allStd(), copyLabel: this.state.copied ? "Kopiert" : "Antworten kopieren" };
+  }
+}
+</script>
+</body>
+</html>

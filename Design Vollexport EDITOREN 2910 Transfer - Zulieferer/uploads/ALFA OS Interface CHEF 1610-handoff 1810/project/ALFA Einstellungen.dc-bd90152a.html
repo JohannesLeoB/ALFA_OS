@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="alfa-export" content="2026-10-18">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div data-screen-label="ALFA Einstellungen" style="position:fixed;inset:0">
+<dc-import name="ALFA Mail" bereich="Einstellungen" licht="{{ licht }}" grund="{{ grund }}" schrift="{{ schrift }}" griff="{{ griff }}" symbole="{{ symbole }}" oberflaeche="{{ oberflaeche }}" stapel="{{ stapel }}" einstellung="{{ einstellung }}" dienste="{{ dienste }}" assistent-gesicht="{{ assistentGesicht }}" hint-size="100%,100%" style="position:absolute;inset:0"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;licht&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hell&quot;,&quot;dunkel&quot;],&quot;default&quot;:&quot;hell&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;grund&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hellgrau&quot;,&quot;weiß&quot;],&quot;default&quot;:&quot;weiß&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;schrift&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;System&quot;,&quot;Geist&quot;],&quot;default&quot;:&quot;Geist&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;oberflaeche&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Lack&quot;,&quot;Glas&quot;,&quot;flach&quot;],&quot;default&quot;:&quot;flach&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Fläche&quot;},&quot;einstellung&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Ich&quot;,&quot;Firma&quot;,&quot;Verbindungen&quot;,&quot;Schutz und System&quot;],&quot;default&quot;:&quot;Verbindungen&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Einstellungen&quot;},&quot;dienste&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;gemischt&quot;,&quot;Erststart&quot;],&quot;default&quot;:&quot;gemischt&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Einstellungen&quot;},&quot;stapel&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;8a gestaffelt&quot;,&quot;8b Turm&quot;],&quot;default&quot;:&quot;8a gestaffelt&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hülle&quot;},&quot;griff&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Haarlinie&quot;,&quot;fein&quot;,&quot;grau&quot;],&quot;default&quot;:&quot;Haarlinie&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hülle&quot;},&quot;symbole&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Ring&quot;,&quot;frei&quot;],&quot;default&quot;:&quot;Ring&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hülle&quot;},&quot;assistentGesicht&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Augen&quot;,&quot;Orb&quot;],&quot;default&quot;:&quot;Augen&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Teile&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    return { licht: p.licht ?? "hell", grund: p.grund ?? "weiß", schrift: p.schrift ?? "Geist", griff: p.griff ?? "Haarlinie", symbole: p.symbole ?? "Ring", oberflaeche: p.oberflaeche ?? "flach", stapel: p.stapel ?? "8a gestaffelt", einstellung: p.einstellung ?? "Verbindungen", dienste: p.dienste ?? "gemischt", assistentGesicht: p.assistentGesicht ?? "Augen" };
+  }
+}
+</script>
+</body>
+</html>

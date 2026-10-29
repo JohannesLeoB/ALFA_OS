@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="alfa-export" content="2026-10-18">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="lieferung-an-code/fonts/geist.css">
+<style>html,body{margin:0;background:#fff;color:#171717;font-family:Geist,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;font-size:13px;line-height:18px}a{color:#171717}a:hover{color:#4d4d4d}</style>
+</helmet>
+<div data-screen-label="ALFA Hülle" style="background:#fff;min-height:100vh;padding:48px;max-width:1580px;box-sizing:border-box;display:flex;flex-direction:column;gap:48px">
+<header style="display:flex;flex-direction:column;gap:8px;max-width:820px">
+<div style="font-size:28px;line-height:32px;font-weight:500;letter-spacing:-.035em">ALFA Hülle · Export 18.10.2026</div>
+<div style="color:#4d4d4d;text-wrap:pretty">Die Schablone für jeden Bereich: Blob, drei Bahnen, Köpfe, Griffe, Falten. Links das gerenderte Fenster mit den gemessenen Kanten darüber, rechts die Maße von Entwurf und Code nebeneinander. Kandidat, nichts ist abgenommen. Stand 14.10.2026. Die Hülle steht jetzt einmal in <span style="font-family:Geist,system-ui,sans-serif;font-size:12px">ALFA Shell</span> (Maße und Rechnung in <span style="font-family:Geist,system-ui,sans-serif;font-size:12px">alfa-shell.js</span>); Mail und Einstellungen sitzen darin.</div>
+</header>
+<section data-screen-label="Vermessung" style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:12px;flex:none">
+<div style="font-weight:500">Gerendert bei 1512 × 982, halbe Größe</div>
+<div data-part="measure-frame" style="position:relative;width:756px;height:491px;overflow:hidden;box-shadow:0 0 0 1px #e8e8e8">
+<div style="position:absolute;left:0;top:0;width:1512px;height:982px;transform:scale(.5);transform-origin:0 0"><dc-import name="ALFA Mail" window="1512 × 982" hint-size="1512px,982px"></dc-import></div>
+<sc-for list="{{ guides }}" as="g" hint-placeholder-count="12"><div style="position:absolute;left:{{ g.x }};top:{{ g.y }};width:{{ g.w }};height:{{ g.h }};background:#b3412e;opacity:.55;pointer-events:none"></div></sc-for>
+<sc-for list="{{ tags }}" as="t" hint-placeholder-count="10"><span style="position:absolute;left:{{ t.x }};top:{{ t.y }};padding:1px 4px;border-radius:4px;background:#171717;color:#fff;font:500 9px/12px Geist,system-ui,sans-serif;pointer-events:none;white-space:nowrap">{{ t.t }}</span></sc-for>
+</div>
+<div style="color:#6b6b6b;font-size:11.5px;line-height:16px;text-wrap:pretty">Die roten Linien liegen auf den Kanten, die aus den Maßen des Entwurfs folgen. Liegt eine daneben, stimmt das Maß nicht.</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;flex:1 1 420px;min-width:0;max-width:640px">
+<div style="font-weight:500">Rechnung bei 1512: 16 + Seitenbahn + 12 + Mitte + 12 + Seitenbahn + 16</div>
+<div style="color:#4d4d4d;text-wrap:pretty">Gemessen am Render 17.10.2026, 21:10, 1512 × 982 hell (Vorschau halbe Größe, Werte × 2): Bahnen x 16 / 308 / 1216, Breite 280 / 896 / 280, Fuge 12, ab y 100, Höhe 866, Radius 20. Köpfe 44, Kartenfuß 44. Blob x 16, y 48, 56 × 40, Radius 20; Augen 4 breit, Abstand 4, in Ruhe zu (scaleY .45). Griff 1 × 64. Zeile 36 hoch, Radius 12. Symbolknopf 28, rund. Alle gleich mit der Spalte Entwurf.</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+<sc-for list="{{ sums }}" as="s" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:12px;box-shadow:inset 0 0 0 1px #e8e8e8"><span style="color:#6b6b6b;font-size:11.5px">{{ s.k }}</span><span style="font:500 13px/18px Geist,system-ui,sans-serif;font-variant-numeric:tabular-nums;text-wrap:pretty">{{ s.v }}</span></div></sc-for>
+</div>
+<div style="color:#4d4d4d;text-wrap:pretty">Der Code kennt dieselbe Rechnung (<span style="font-family:Geist,system-ui,sans-serif;font-size:12px">LaneLayout.widths</span>): Fenster minus zweimal Rand minus zweimal Fuge. Beide Seitenbahnen starten dort mit 300, im Entwurf mit 280 und 280. Code zieht nach.</div>
+</div>
+</section>
+<section data-screen-label="Register Entwurf und Code" style="display:flex;flex-direction:column;gap:12px">
+<div style="font-weight:500">Maße: Entwurf gegen Code</div>
+<div data-part="register" style="display:flex;flex-direction:column;border-radius:20px;box-shadow:0 0 0 1px #e8e8e8;padding:8px;gap:0">
+<div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1.5fr) minmax(0,1.5fr) minmax(0,1.5fr) 96px;gap:16px;padding:0 12px;height:32px;align-items:center;color:#6b6b6b;font-size:11.5px"><span>Teil</span><span>Entwurf (gemessen)</span><span>Code (Repo)</span><span>Token im Code</span><span>Stand</span></div>
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="30">
+<sc-if value="{{ r.isHead }}" hint-placeholder-val="{{ false }}"><div style="padding:16px 12px 8px;font-weight:500;border-top:1px solid #e8e8e8">{{ r.part }}</div></sc-if>
+<sc-if value="{{ r.isRow }}" hint-placeholder-val="{{ true }}"><div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1.5fr) minmax(0,1.5fr) minmax(0,1.5fr) 96px;gap:16px;padding:8px 12px;border-radius:12px;align-items:start" style-hover="background:#f5f5f5"><span>{{ r.part }}</span><span style="font-variant-numeric:tabular-nums;text-wrap:pretty">{{ r.mine }}</span><span style="font-variant-numeric:tabular-nums;color:#4d4d4d;text-wrap:pretty">{{ r.code }}</span><span style="font:400 11px/16px Geist,system-ui,sans-serif;color:#6b6b6b;overflow-wrap:anywhere">{{ r.token }}</span><span style="justify-self:start;height:20px;box-sizing:border-box;padding:0 8px;border-radius:10px;display:inline-grid;place-items:center;font-size:11px;line-height:1;background:{{ r.bg }};color:{{ r.fg }};box-shadow:{{ r.ring }}">{{ r.state }}</span></div></sc-if>
+</sc-for>
+</div>
+<div style="color:#6b6b6b;font-size:11.5px;line-height:16px;max-width:900px;text-wrap:pretty">Quelle Code: <span style="font-family:Geist,system-ui,sans-serif">gestaltung/alfa-interface/tokens.json</span>, <span style="font-family:Geist,system-ui,sans-serif">alfaos/App/Resources/shell.json</span>, <span style="font-family:Geist,system-ui,sans-serif">LaneLayout.swift</span> (Branch main, gelesen 13.10.2026). „Abweichung“ heißt nur: Entwurf und Code sind verschieden. Wer nachgibt, entscheidet Johannes.</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const s = .5, px = v => v * s + "px";
+    const W = 1512, H = 982, m = 16, g = 12, safe = 32, top = safe + m, lanesTop = top + 40 + g, bottom = H - m;
+    const L = 280, R = 280, M = W - 2 * m - 2 * g - L - R;
+    const xs = [m, m + L, m + L + g, m + L + g + M, m + L + g + M + g, W - m];
+    const guides = xs.map(x => ({ x: px(x), y: px(lanesTop - 4), w: "1px", h: px(bottom - lanesTop + 8) }))
+      .concat([top, top + 40, lanesTop, bottom].map(y => ({ x: px(m - 4), y: px(y), w: px(W - 2 * m + 8), h: "1px" })));
+    const tags = [[m + L / 2 - 14, top + 14, String(L)], [m + L + g + M / 2 - 14, top + 14, String(M)], [W - m - R / 2 - 14, top + 14, String(R)], [m + L - 6, lanesTop - 22, "12"], [m + L + g + M - 6, lanesTop - 22, "12"], [m + 62, top + 14, "56 × 40"], [W - m - 118, top + 14, "56 × 40"]]
+      .map(a => ({ x: px(a[0]), y: px(a[1]), t: a[2] }));
+    const sums = [
+      { k: "Verfügbar", v: "1512 − 2 × 16 − 2 × 12 = 1456" },
+      { k: "Seitenbahnen links, rechts", v: L + " und " + R },
+      { k: "Mitte (Rest)", v: "1456 − " + L + " − " + R + " = " + M },
+      { k: "Höhe der Bahnen", v: "982 − 32 − 16 − 40 − 12 − 16 = " + (H - safe - m - 40 - g - m) }
+    ];
+    const ok = ["#f5f5f5", "#4d4d4d", "none"], diff = ["#171717", "#ffffff", "none"], open = ["transparent", "#4d4d4d", "inset 0 0 0 1px #d9d9d9"];
+    const R_ = (part, mine, code, token, st) => { const c = st === "gleich" ? ok : st === "Abweichung" ? diff : open; return { isRow: true, isHead: false, part, mine, code, token, state: st, bg: c[0], fg: c[1], ring: c[2] }; };
+    const Hd = part => ({ isHead: true, isRow: false, part });
+    const rows = [
+      Hd("Fenster"),
+      R_("Rand", "16", "16", "layout-window-margin", "gleich"),
+      R_("Fuge = Breite des Griffs", "12", "12", "component-lane-handle-width, layout-region-gap", "gleich"),
+      R_("Leiste über den Bahnen", "Blob 40, dann 12, Bahnen ab 52 unter dem Rand", "strip = 16 + 40 + 12 = 68 (ShellGeometry, ShellMetrics.swift, Repo 18.10.)", "Design.Size.edge, blobHeight, gutter", "gleich"),
+      R_("Kleinstes Fenster", "offen: Code entscheidet nach Apple-Praxis (Johannes 16.10.: „best Practice, hauptsache es funktioniert“)", "960 × 600 (nicht neu gemessen)", "window-min-width, window-min-height (shell.json)", "offen"),
+      Hd("Bahnen"),
+      R_("Radius", "20", "20", "component-lane-radius", "gleich"),
+      R_("Kopf, Höhe", "44", "44", "component-lane-header-height", "gleich"),
+      R_("Gefaltet, Breite", "56", "56", "component-lane-collapsed-width", "gleich"),
+      R_("Falten unter", "112", "foldAt = Design.Size.foldThreshold (ShellMetrics.swift, Repo 18.10.; Wert 112 aus Tokenbogen, Datei DesignTokens.swift nicht gelesen)", "size.foldThreshold", "gleich"),
+      R_("Ruhebreite der Seitenbahnen", "links 280, rechts 280", "beide 280 (Code, 16.10.)", "component-lane-resting-width", "gleich"),
+      R_("Kleinste Seitenbahn", "links 280, rechts 280 („Bitte vereinheitlichen auf 280“, 15.10.)", "minimum = [laneMinimumLeft, middleMinimumWidth, laneMinimumRight] (ShellMetrics.swift, Repo 18.10.)", "size.laneMinimumLeft, size.laneMinimumRight", "gleich"),
+      R_("Kleinste Mitte", "280 (Johannes 16.10.)", "280 (K.center, 16.10.)", "center-min (shell.json)", "gleich"),
+      R_("Größte Seitenbahn", "nicht begrenzt", "keine Obergrenze in LaneLayout.widths (Repo 18.10.)", "–", "gleich"),
+      R_("Akkordeon", "alfa-shell.js, abgehakt (Rückgabe 16.10. Punkt 2); Minima links = rechts = Mitte 280", "LaneLayout.widths und drag: gleiche Rechnung wie alfa-shell.js (Yield [0,1,2], Hysterese, Einrasten, Repo 18.10.)", "LaneLayout.widths", "gleich"),
+      R_("Fläche und Rand", "Weiß, Haarlinie #e8e8e8", "Weiß, Haarlinie #e8e8e8", "shadow-raised", "gleich"),
+      Hd("Griff"),
+      R_("Strich", "Haarlinie 1 × 64, aktiv 2 × 96, Radius 2, #6b6b6b", "4 × 64, aktiv 96, Radius 2, #a3a3a3", "component-lane-handle-thickness, -length, color-control-handle", "Code zieht nach"),
+      Hd("Kopf und Knöpfe"),
+      R_("Symbolknopf", "28, rund", "26 (shell.json), eckig mit Radius 12", "lane-header-button, component-lane-header-button-radius", "Code zieht nach"),
+      R_("Innenrand rechts im Kopf", "8", "10", "lane-header-padding-end", "Code zieht nach"),
+      R_("Innenrand links im Kopf", "16", "16", "space-l", "gleich"),
+      Hd("Blob und Abgleich"),
+      R_("Blob-Auslauf nach dem Werfen", "Auslauf motion.deceleration 0,998 (Rückgabe A3: Wurf 0,12 steht im Entwurf nicht)", "blob-throw 0,12 (shell.json, BlobPlacement.settle, Repo 18.10.)", "motion.deceleration", "Code zieht nach"),
+      R_("Menübreite", "nach Inhalt auf dem 56er-Raster, 168 bis 280 (size.menuMinWidth, menuMaxWidth)", "menuWidth = theme component-menu-width, feste Zahl (ShellGeometry, Repo 18.10.)", "size.menuMinWidth, size.menuMaxWidth, size.menuWidthStep", "Code zieht nach"),
+      R_("Mono-Schrift", "keine (Johannes 15.10.: „KEINE Mono bitte, wo brauchen wir die?“)", "font-mono, text-style mono-detail (GeneratedTokens.swift, Repo 18.10.)", "–", "Code zieht nach"),
+      R_("Blob in Ruhe", "56 × 40, Radius 20", "56 × 36", "component-blob-height", "Code zieht nach"),
+      R_("Blob wach", "124; passt der Name nicht: Schritt auf 280 (Johannes 17.10.)", "124", "component-blob-awake-width", "Code zieht nach"),
+      R_("Menü, Breite", "216", "216", "component-menu-width", "gleich"),
+      R_("Schatten schwebend", "1 px #00000014 und 0 8 24 #0000001a", "gleich", "shadow-floating", "gleich"),
+      R_("Gesicht, Augen", "4 × 8, Abstand 4 (Rückgabe Johannes 16.10.: abgehakt)", "3 × 7, Abstand 5 (nicht neu gemessen)", "face-eye-width, -height, -gap (shell.json)", "Code zieht nach"),
+      Hd("Zeilen und Karten"),
+      R_("Zeile, Karte im Stapel", "Zeile 12; Karte wie der Kopf: 20 oben, 0 unten, bündig (Johannes 15.10.: „ALLE wie der Kopf“)", "Zeile 10, Karte 14", "radius-row, radius-card", "Code zieht nach"),
+      Hd("Bewegung"),
+      R_("Stapel", "520 ms", "320 ms", "motion-duration-stack", "Code zieht nach"),
+      R_("Griff, Drücken", "150 ms", "150 ms", "motion-duration-press", "gleich")
+    ];
+    return { guides, tags, sums, rows };
+  }
+}
+</script>
+</body>
+</html>

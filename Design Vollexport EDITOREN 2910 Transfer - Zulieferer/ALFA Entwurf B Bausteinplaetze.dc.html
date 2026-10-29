@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="lieferung-an-code/fonts/geist.css">
+<style>
+html,body{margin:0;padding:0;background:#e8e8e8}
+a{color:#171717}a:hover{color:#4d4d4d}
+</style>
+<link rel="stylesheet" href="alfa-theme.css">
+</helmet>
+<section id="1b" style="display:inline-flex;flex-direction:column;gap:8px;padding:24px;font-family:Geist,system-ui,sans-serif">
+<div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#171717"><span style="height:20px;padding:0 8px;border-radius:999px;background:#171717;color:#fff;display:inline-grid;place-items:center;font-size:11.5px;font-weight:500">1b</span><span style="font-weight:500">Bausteinplätze + Layout-Sets</span><span style="color:#6b6b6b;font-size:11.5px">Aufmaß · gleich hohe Plätze, Baustein wählbar, Set ordnet alles neu</span></div>
+<div data-part="area-page" data-appearance="light" data-screen-label="Entwurf B" style="position:relative;width:1512px;height:982px;background:var(--c-ground);color:var(--c-ink);overflow:hidden;font-family:Geist,system-ui,sans-serif;font-size:13px;line-height:1.35;-webkit-font-smoothing:antialiased;user-select:none">
+
+<div style="position:absolute;left:16px;top:16px;right:16px;height:40px;display:flex;align-items:center;gap:12px">
+<span style="height:40px;padding:0 16px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;font-weight:500">Aufmaß</span>
+<span style="font-size:11.5px;color:var(--c-ink-3)">Titel eines Platzes anklicken: anderen Baustein wählen (tauscht mit dem Platz, der ihn hält) · + Platz teilt die Bahn · Set oben in der Mitte ordnet neu</span>
+</div>
+
+<sc-for list="{{ lanes }}" as="l" hint-placeholder-count="2">
+<section data-part="lane" aria-label="{{ l.title }}" style="position:absolute;top:68px;height:898px;left:{{ l.left }}px;width:{{ l.width }}px;background:var(--c-lane);border-radius:20px;box-shadow:var(--sh-lane);overflow:hidden;display:flex;flex-direction:column;isolation:isolate">
+<sc-for list="{{ l.plaetze }}" as="s" hint-placeholder-count="3">
+<div data-platz="{{ s.key }}" style="position:relative;z-index:{{ s.z }};display:flex;flex-direction:column;min-height:0;flex:1 1 0;box-shadow:{{ s.line }}">
+<header data-part="slot-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px;box-sizing:border-box;min-width:0">
+<button data-part="choice" title="Baustein wählen" onClick="{{ s.openMenu }}" style="appearance:none;border:0;flex:none;max-width:100%;height:28px;padding:0 8px 0 12px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;font-weight:500;background:{{ s.pillBg }};color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;white-space:nowrap;min-width:0" style-active="transform:scale(.97)"><span style="overflow:hidden;text-overflow:ellipsis">{{ s.t }}</span><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"></path></svg></button>
+<span style="flex:1;min-width:0"></span>
+<sc-if value="{{ s.canRemove }}" hint-placeholder-val="{{ true }}"><button data-part="symbol-button" title="Platz entfernen" aria-label="Platz entfernen" onClick="{{ s.remove }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:transparent;color:var(--c-ink-3);cursor:pointer;transition:background 160ms,color 160ms" style-hover="background:var(--c-hover);color:var(--c-ink)" style-active="transform:scale(.96)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l8 8M12 4l-8 8"></path></svg></button></sc-if>
+</header>
+<div data-part="slot-body" style="flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;display:flex;flex-direction:column;padding-bottom:8px">
+<sc-for list="{{ s.segs }}" as="g" hint-placeholder-count="0">
+<div data-part="field-row" style="flex:none;display:flex;align-items:center;gap:12px;padding:6px 8px 6px 16px;min-height:40px;box-sizing:border-box"><span style="flex:none;font-size:11.5px;color:var(--c-ink-3)">{{ g.label }}</span><div data-part="segmented-control" style="flex:1;min-width:0;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ g.opts }}" as="o" hint-placeholder-count="3"><button data-part="option" onClick="{{ o.go }}" style="appearance:none;border:0;flex:1;min-width:0;height:24px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;white-space:nowrap;transition:background 160ms,color 160ms">{{ o.t }}</button></sc-for></div></div>
+</sc-for>
+<sc-if value="{{ s.hasStats }}" hint-placeholder-val="{{ false }}"><div style="flex:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px;padding:8px 16px 12px"><sc-for list="{{ s.stats }}" as="q" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:11.5px;line-height:16px;color:var(--c-ink-3)">{{ q.k }}</span><span style="font-size:20px;line-height:26px;font-weight:500;font-variant-numeric:tabular-nums;color:{{ q.fg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.v }}</span></div></sc-for></div></sc-if>
+<sc-for list="{{ s.rows }}" as="r" hint-placeholder-count="0">
+<div data-part="field-row" onClick="{{ r.go }}" style="flex:none;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 16px;min-height:44px;box-sizing:border-box;cursor:{{ r.cur }};background:{{ r.bg }}" style-hover="background:var(--c-hover)">
+<sc-if value="{{ r.hasMark }}" hint-placeholder-val="{{ true }}"><span data-part="mark" style="flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;font-weight:500;font-variant-numeric:tabular-nums;color:{{ r.mkFg }};background:{{ r.mkBg }};box-shadow:{{ r.mkRing }}">{{ r.mk }}<sc-if value="{{ r.hasMkd }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ r.mkd }}"></path></svg></sc-if></span></sc-if>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{ r.w }};color:{{ r.fg }}">{{ r.t }}</span><sc-if value="{{ r.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;line-height:16px;color:{{ r.subFg }};text-wrap:pretty">{{ r.sub }}</span></sc-if><sc-if value="{{ r.hasBar }}" hint-placeholder-val="{{ false }}"><span style="display:block;height:2px;border-radius:1px;background:var(--c-line);margin-top:4px"><i style="display:block;height:100%;width:{{ r.bar }}%;background:var(--c-ink);border-radius:1px"></i></span></sc-if></div>
+<sc-if value="{{ r.hasRt }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font-size:11.5px;color:{{ r.rtFg }};font-variant-numeric:tabular-nums">{{ r.rt }}</span></sc-if>
+<sc-if value="{{ r.hasBtn }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" onClick="{{ r.btn.go }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ r.btn.bg }};color:{{ r.btn.fg }};box-shadow:{{ r.btn.ring }};cursor:pointer;white-space:nowrap" style-active="transform:scale(.96)">{{ r.btn.label }}</button></sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ s.hasCard }}" hint-placeholder-val="{{ false }}">
+<div data-part="block-card" style="flex:none;margin:8px 16px 4px;padding:12px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--c-line-strong);display:flex;flex-direction:column;gap:8px">
+<span style="font-weight:500;color:{{ s.card.tFg }}">{{ s.card.title }}</span>
+<div style="display:flex;flex-direction:column;gap:4px"><sc-for list="{{ s.card.lines }}" as="k" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:12px;font-size:11.5px;line-height:16px"><span style="color:var(--c-ink-3)">{{ k.k }}</span><span style="color:{{ k.fg }};text-align:right;text-wrap:pretty">{{ k.v }}</span></div></sc-for></div>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><sc-for list="{{ s.card.btns }}" as="b" hint-placeholder-count="2"><button data-part="text-button" onClick="{{ b.go }}" style="appearance:none;border:0;flex:none;height:28px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ b.bg }};color:{{ b.fg }};box-shadow:{{ b.ring }};cursor:pointer;white-space:nowrap;opacity:{{ b.op }}" style-active="transform:scale(.96)">{{ b.label }}</button></sc-for></div>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{ s.menuOpen }}" hint-placeholder-val="{{ false }}"><div data-part="anchored-menu" style="position:absolute;left:8px;top:40px;right:8px;max-height:252px;overflow:auto;scrollbar-width:thin;z-index:20;padding:4px;box-sizing:border-box;border-radius:16px;background:var(--c-menu);box-shadow:var(--sh-float);display:flex;flex-direction:column"><sc-for list="{{ s.items }}" as="it" hint-placeholder-count="8"><button data-part="menu-row" onClick="{{ it.go }}" style="appearance:none;border:0;flex:none;height:36px;padding:0 12px;border-radius:12px;display:flex;align-items:center;gap:12px;font:inherit;text-align:left;background:{{ it.bg }};color:var(--c-ink);cursor:pointer" style-hover="background:var(--c-hover)"><span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ it.t }}</span><span style="flex:none;font-size:11.5px;color:var(--c-ink-3)">{{ it.where }}</span></button></sc-for></div></sc-if>
+</div>
+</sc-for>
+<footer data-part="lane-footer" style="flex:none;height:44px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box;box-shadow:inset 0 1px 0 var(--c-line)"><button data-part="text-button" onClick="{{ l.add }}" style="appearance:none;border:0;height:28px;padding:0 12px 0 8px;border-radius:999px;display:flex;align-items:center;gap:8px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong);cursor:pointer;opacity:{{ l.addOp }}" style-active="transform:scale(.96)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3 8h10"></path></svg>Platz</button><span style="flex:1"></span><span style="font-size:11.5px;color:var(--c-ink-3)">{{ l.count }}</span></footer>
+</section>
+</sc-for>
+
+<section data-part="lane" aria-label="Aufmaß" style="position:absolute;top:68px;height:898px;left:308px;width:856px;background:var(--c-lane);border-radius:20px;box-shadow:var(--sh-lane);overflow:hidden;display:flex;flex-direction:column;isolation:isolate">
+<header data-part="lane-header" style="flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;box-shadow:inset 0 -1px 0 var(--c-line)"><span style="font-weight:500">Küche Nord</span><span style="font-size:11.5px;color:var(--c-ink-3)">A-01 · Foto-Aufmaß</span></header>
+<div data-part="context-bar" style="flex:none;height:40px;display:flex;align-items:center;gap:12px;padding:0 16px;box-sizing:border-box;box-shadow:inset 0 -1px 0 var(--c-line)">
+<span style="font-size:11.5px;color:var(--c-ink-3)">Set</span>
+<div data-part="segmented-control" style="flex:none;display:flex;padding:2px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--c-line-strong)"><sc-for list="{{ setOpts }}" as="o" hint-placeholder-count="3"><button data-part="option" onClick="{{ o.go }}" style="appearance:none;border:0;height:24px;padding:0 12px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:{{ o.bg }};color:{{ o.fg }};cursor:pointer;transition:background 160ms,color 160ms">{{ o.t }}</button></sc-for></div>
+<span style="font-size:11.5px;color:var(--c-ink-3)">{{ setHint }}</span>
+</div>
+<div data-part="desk" style="flex:1;min-height:0;position:relative;display:grid;place-items:center;background:var(--c-sheet);color-scheme:light;background-image:repeating-linear-gradient(135deg,transparent 0 10px,rgba(0,0,0,.035) 10px 11px)">
+<span style="font-family:'Geist Mono',ui-monospace,monospace;font-size:11.5px;color:var(--c-sheet-ink-3)">Baustellenfoto · Maßlinien · {{ room }}</span>
+<div data-part="tool-palette" style="position:absolute;left:16px;top:16px;z-index:6;padding:0 8px 8px;border-radius:12px;background:var(--c-menu);box-shadow:var(--sh-float);display:flex;flex-direction:column;gap:4px"><div style="flex:none;height:16px;margin:0 -8px;display:grid;place-items:center;cursor:grab"><i style="display:block;width:16px;height:4px;background:radial-gradient(circle,var(--c-ink-3) 1px,transparent 1.5px) 0 0/4px 4px"></i></div><sc-for list="{{ tools }}" as="x" hint-placeholder-count="5"><button data-part="symbol-button" title="{{ x.t }}" aria-label="{{ x.t }}" style="appearance:none;border:0;padding:0;font:inherit;flex:none;width:28px;height:28px;border-radius:999px;display:grid;place-items:center;background:{{ x.bg }};color:{{ x.fg }};cursor:pointer"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="{{ x.d }}"></path></svg></button></sc-for></div>
+<span style="position:absolute;left:16px;bottom:16px;height:24px;padding:0 8px;border-radius:999px;display:flex;align-items:center;background:var(--c-menu);box-shadow:var(--sh-float);font-size:11.5px;color:{{ statusFg }}">{{ status }}</span>
+</div>
+</section>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div data-part="toast" style="position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:40;height:28px;padding:0 12px;border-radius:999px;background:var(--c-inv);color:var(--c-on-inv);display:flex;align-items:center;font-size:11.5px;white-space:nowrap;box-shadow:var(--sh-float);gap:12px"><span>{{ toast }}</span><sc-if value="{{ hasUndo }}" hint-placeholder-val="{{ false }}"><button data-part="text-button" onClick="{{ undo }}" style="appearance:none;border:0;height:20px;margin-right:-8px;padding:0 8px;border-radius:999px;font:inherit;font-size:11.5px;font-weight:500;background:transparent;color:inherit;box-shadow:inset 0 0 0 1px currentColor;cursor:pointer" style-active="transform:scale(.96)">Rückgängig</button></sc-if></div></sc-if>
+</div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { set: 'Prüfen', lay: null, menu: null, room: 'Küche', fmt: 'PDF', cal: false, klar: false, frei: false, log: [['10:31', 'Maß M-03 von Hand', '2178 → 2180'], ['10:12', 'Aufmaß A-01 angelegt', 'Küche Nord']], toast: null, undo: null };
+  static SETS = { Zeichnen: { L: ['raum', 'summe'], R: ['mass', 'kali'] }, Prüfen: { L: ['raum', 'scope'], R: ['kali', 'mass', 'verlauf'] }, Ausgeben: { L: ['summe', 'scope'], R: ['weg', 'ausgabe', 'verlauf'] } };
+  static NAMES = { raum: 'Räume', mass: 'Maße', kali: 'Kalibrierung', summe: 'Summen', scope: 'Gewerk-Scope', weg: 'Weg zur Freigabe', ausgabe: 'Ausgabe', verlauf: 'Verlauf' };
+  getLay() { return this.state.lay || Component.SETS[this.state.set]; }
+  say(msg, undo) { clearTimeout(this._t); this.setState({ toast: msg, undo: undo || null }); this._t = setTimeout(() => this.setState({ toast: null, undo: null }), 4500); }
+  note(a, b) { const n = this.state.log.length; this.setState((s) => ({ log: [['10:' + (44 + n * 2), a, b]].concat(s.log) })); }
+  unnote() { this.setState((s) => ({ log: s.log.slice(1) })); }
+  pick(lane, i, kind) {
+    const lay = JSON.parse(JSON.stringify(this.getLay())), cur = lay[lane][i];
+    ['L', 'R'].forEach((ln) => lay[ln].forEach((k, j) => { if (k === kind) lay[ln][j] = cur; }));
+    lay[lane][i] = kind; this.setState({ lay, menu: null });
+  }
+  renderVals() {
+    const S = this.state, RING = 'inset 0 0 0 1px var(--c-line-strong)', SIG = 'var(--c-signal)', CHECK = 'M3.5 8.5l3 3 6-7';
+    const btn = (label, go, pri, off) => ({ label, go, op: off ? 0.4 : 1, bg: pri ? 'var(--c-inv)' : 'transparent', fg: pri ? 'var(--c-on-inv)' : 'var(--c-ink)', ring: pri ? 'none' : RING });
+    const row = (o) => Object.assign({ mk: '', mkd: '', mkFg: 'var(--c-ink-3)', mkBg: 'transparent', mkRing: RING, t: '', sub: '', subFg: 'var(--c-ink-3)', rt: '', rtFg: 'var(--c-ink-3)', bar: 0, go: () => {}, cur: 'default', bg: 'transparent', w: 400, fg: 'var(--c-ink)', btn: null, hasMark: true }, o, { hasMkd: !!o.mkd, hasSub: !!o.sub, hasRt: !!o.rt, hasBar: !!o.bar, hasBtn: !!o.btn });
+    const seg = (label, opts, val, set) => ({ label, opts: opts.map((t) => ({ t, go: () => set(t), bg: t === val ? 'var(--c-inv)' : 'transparent', fg: t === val ? 'var(--c-on-inv)' : 'var(--c-ink-3)' })) });
+    const ROOMS = { Küche: ['4,20 × 3,10 m', '13,02 m²', '14,60 m', 4], Flur: ['3,00 × 1,20 m', '3,60 m²', '8,40 m', 2], Abstellraum: ['1,80 × 1,50 m', '2,70 m²', '6,60 m', 2] };
+    const MASSE = { Küche: [['M-01', 'Wand Nord', '4180', 'LAS', 0, '± 3', 0], ['M-02', 'Wand Ost', '3100', 'LAS', 0, 'Soll 3112 · −12', 1], ['M-03', 'Fensterbreite', '1210', 'MAN', 0, '± 3', 0], ['M-04', 'Nische', '1480', 'AUT', 82, '± 6', 0]], Flur: [['M-01', 'Länge', '3000', 'LAS', 0, '± 3', 0], ['M-02', 'Breite', '1200', 'LAS', 0, '± 3', 0]], Abstellraum: [['M-01', 'Länge', '1800', 'MAN', 0, '± 6', 0], ['M-02', 'Breite', '1500', 'AUT', 74, '± 6', 0]] };
+    const R = ROOMS[S.room], offen = (S.room === 'Küche' && !S.klar) ? 1 : 0;
+    const ok = S.cal && !offen, B = {};
+    B.raum = { rows: Object.keys(ROOMS).map((k, i) => row({ mk: String(i + 1), t: k, sub: ROOMS[k][0], rt: ROOMS[k][1], bg: S.room === k ? 'var(--c-sel)' : 'transparent', cur: 'pointer', go: () => this.setState({ room: S.room === k ? S.room : k }) })) };
+    B.mass = { rows: MASSE[S.room].map((m) => { const dev = m[6] && !S.klar; return row({ mk: m[3], mkRing: dev ? 'inset 0 0 0 1px ' + SIG : RING, mkFg: dev ? SIG : 'var(--c-ink-3)', t: m[0] + ' · ' + m[1] + ' ' + m[2] + ' mm', sub: m[6] ? (S.klar ? 'Abweichung geklärt' : m[5]) : m[5], subFg: dev ? SIG : 'var(--c-ink-3)', bar: m[4], rt: m[4] ? m[4] + ' %' : '', btn: dev ? btn('Geklärt', () => { this.setState({ klar: true }); this.note('Abweichung M-02', 'geklärt'); this.say('M-02 geklärt', () => { this.setState({ klar: false }); this.unnote(); }); }, true) : null }); }) };
+    B.kali = { card: S.cal ? { title: 'Kalibriert', tFg: 'var(--c-ink)', lines: [{ k: 'Verfahren', v: 'isotrop, eine Referenz', fg: 'var(--c-ink)' }, { k: 'Maßstab', v: '1 px = 2,4 mm', fg: 'var(--c-ink)' }], btns: [btn('Rückgängig', () => { this.setState({ cal: false }); this.unnote(); })] } : { title: 'Nicht kalibriert', tFg: SIG, lines: [{ k: 'Folge', v: 'Maße stehen, gelten aber noch nicht.', fg: 'var(--c-ink)' }, { k: 'Referenz', v: 'Türblatt 2010 mm', fg: 'var(--c-ink)' }], btns: [btn('Strecke setzen', () => { this.setState({ cal: true }); this.note('Kalibriert', 'Türblatt 2010 mm'); this.say('Kalibriert · Türblatt 2010 mm', () => { this.setState({ cal: false }); this.unnote(); }); }, true)] } };
+    B.summe = { stats: [{ k: 'Fläche', v: R[1], fg: 'var(--c-ink)' }, { k: 'Umfang', v: R[2], fg: 'var(--c-ink)' }, { k: 'Maße', v: String(R[3]), fg: 'var(--c-ink)' }, { k: 'Offen', v: String(offen + (S.cal ? 0 : 1)), fg: (offen || !S.cal) ? SIG : 'var(--c-ink)' }] };
+    B.scope = { rows: [['T', 'Tischler', 'Korpusse, Fronten, Sockel, Schubkästen', 'bekommt'], ['S', 'Steinmetz', 'Arbeitsplatte', 'bekommt'], ['M', 'MYKILOS', 'Geräte, Spüle, Armatur, Griffe', 'liefert']].map((x) => row({ mk: x[0], t: x[1], sub: x[2], rt: x[3] })) };
+    const stepS = [S.cal || true ? 'done' : '', S.cal ? 'done' : 'cur', S.cal ? (offen ? 'cur' : 'done') : 'wait', S.frei ? 'done' : ok ? 'cur' : 'wait'];
+    B.weg = { rows: ['Erfassen', 'Kalibrieren', 'Abweichung klären', 'Freigeben'].map((n, i) => { const s = stepS[i]; return row({ mk: s === 'done' ? '' : String(i + 1), mkd: s === 'done' ? CHECK : '', mkFg: s === 'cur' ? 'var(--c-on-inv)' : 'var(--c-ink-3)', mkBg: s === 'cur' ? 'var(--c-inv)' : 'transparent', mkRing: s === 'cur' ? 'none' : RING, t: n, fg: s === 'wait' ? 'var(--c-ink-3)' : 'var(--c-ink)', rt: s === 'done' ? 'fertig' : s === 'cur' ? 'jetzt' : '' }); }) };
+    const frei = () => { if (!ok) return this.say(!S.cal ? 'Erst kalibrieren' : 'Erst Abweichung klären'); this.setState({ frei: true }); this.note('Blatt A-01 freigegeben', 'Stand 4 Maße'); this.say('Blatt A-01 freigegeben', () => { this.setState({ frei: false }); this.unnote(); }); };
+    B.ausgabe = { segs: [seg('Format', ['PDF', 'Excel', 'DXF'], S.fmt, (t) => this.setState({ fmt: t }))], card: S.frei ? { title: 'Quittung', tFg: 'var(--c-ink)', lines: [{ k: 'Blatt', v: 'A-01 freigegeben', fg: 'var(--c-ink)' }], btns: [btn('Als ' + S.fmt + ' ausgeben', () => this.say('Ausgabe folgt · Beispieldaten'), true), btn('Rückgängig', () => { this.setState({ frei: false }); this.unnote(); })] } : { title: 'Freigabe', tFg: 'var(--c-ink)', lines: [{ k: 'Kalibrierung', v: S.cal ? 'ok' : 'fehlt', fg: S.cal ? 'var(--c-ink)' : SIG }, { k: 'Abweichungen', v: offen ? '1 offen' : 'geklärt', fg: offen ? SIG : 'var(--c-ink)' }], btns: [btn('Blatt freigeben', frei, true, !ok), btn('Als ' + S.fmt + ' ausgeben', () => this.say('Ausgabe folgt · Beispieldaten'))] } };
+    B.verlauf = { rows: S.log.slice(0, 5).map((l) => row({ hasMark: false, t: l[1], sub: l[2], rt: l[0] })) };
+    const lay = this.getLay(), N = Component.NAMES, ORDER = Object.keys(N);
+    const lane = (ln, title, left, width) => ({ title, left, width, count: lay[ln].length + ' von 4 Plätzen', addOp: lay[ln].length >= 4 ? 0.4 : 1,
+      add: () => { const free = ORDER.filter((k) => !lay.L.includes(k) && !lay.R.includes(k)); if (lay[ln].length >= 4) return this.say('Mehr als vier Plätze je Bahn passen nicht'); if (!free.length) return this.say('Alle Bausteine liegen schon auf Plätzen'); const n = JSON.parse(JSON.stringify(lay)); n[ln].push(free[0]); this.setState({ lay: n }); },
+      plaetze: lay[ln].map((kind, i) => { const b = B[kind], key = ln + i, open = S.menu === key; return Object.assign({ key, t: N[kind], segs: [], rows: [], stats: [], card: { lines: [], btns: [] }, z: open ? 10 : 1, line: i ? 'inset 0 1px 0 var(--c-line)' : 'none', pillBg: open ? 'var(--c-sel)' : 'transparent', menuOpen: open, canRemove: lay[ln].length > 1,
+        openMenu: () => this.setState({ menu: open ? null : key }),
+        remove: () => { const n = JSON.parse(JSON.stringify(lay)); n[ln].splice(i, 1); this.setState({ lay: n, menu: null }); },
+        items: ORDER.map((k) => { const at = lay.L.includes(k) ? 'links' : lay.R.includes(k) ? 'rechts' : ''; return { t: N[k], where: k === kind ? 'hier' : at, bg: k === kind ? 'var(--c-sel)' : 'transparent', go: () => this.pick(ln, i, k) }; }) },
+        b, { hasStats: !!b.stats, hasCard: !!b.card }); }) });
+    const setHint = S.lay ? 'Eigene Anordnung · Set tippen setzt zurück' : { Zeichnen: 'Räume und Summen links, Maße und Kalibrierung rechts', Prüfen: 'Kalibrierung, Maße und Verlauf rechts', Ausgeben: 'Weg, Ausgabe und Verlauf rechts' }[S.set];
+    return {
+      lanes: [lane('L', 'Links', 16, 280), lane('R', 'Rechts', 1176, 320)], room: S.room,
+      setOpts: ['Zeichnen', 'Prüfen', 'Ausgeben'].map((t) => ({ t, go: () => this.setState({ set: t, lay: null, menu: null }), bg: (!S.lay && t === S.set) ? 'var(--c-inv)' : 'transparent', fg: (!S.lay && t === S.set) ? 'var(--c-on-inv)' : 'var(--c-ink-3)' })), setHint,
+      tools: [['M3 13l1-3 7-7 2 2-7 7z', 0], ['M2 12L12 2', 1], ['M2 5h12v6H2zM5 5v3M8 5v2M11 5v3', 0], ['M8 3v10M3 8h10', 0], ['M3 13h10M8 3v8', 0]].map((x, i) => ({ t: ['Stift', 'Maß', 'Maßkette', 'Marke', 'Kalibrieren'][i], d: x[0], bg: x[1] ? 'var(--c-inv)' : 'transparent', fg: x[1] ? 'var(--c-on-inv)' : 'var(--c-ink-3)' })),
+      status: (S.cal ? 'kalibriert' : 'nicht kalibriert · Maße gelten noch nicht') + ' · ' + R[3] + ' Maße · ' + (offen ? '1 offen' : 'alle geklärt'), statusFg: S.cal ? 'var(--c-ink-2)' : SIG,
+      hasToast: !!S.toast, toast: S.toast, hasUndo: !!S.undo, undo: () => { const u = S.undo; if (u) u(); this.setState({ toast: null, undo: null }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
