@@ -125,7 +125,7 @@ extension MessageCard {
 
         private func draftMeta(_ card: OpenDraft) -> Text {
             guard front else { return Text(verbatim: card.draft.subject) }
-            return card.status.map { appearance.text($0.key) } ?? Text(verbatim: "")
+            return card.status.map { appearance.text($0.key) } ?? Text(verbatim: card.draft.subject)
         }
     }
 }

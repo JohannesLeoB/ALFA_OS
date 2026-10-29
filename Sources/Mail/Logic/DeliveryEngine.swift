@@ -63,9 +63,10 @@ enum DeliveryEngine {
         outgoing.messageID = item.messageID
         do {
             if let draftID = item.draftID {
-                let current = try await transport.saveDraft(outgoing, replacing: draftID)
-                item.draftID = current
-                try await transport.sendDraft(id: current)
+                let saved = try await transport.saveDraft(outgoing, replacing: draftID)
+                item.draftID = saved.id
+                item.mirrorID = saved.mirrorID
+                try await transport.sendDraft(id: saved.id)
             } else {
                 try await transport.send(outgoing)
             }

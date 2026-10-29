@@ -64,7 +64,7 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, Everyw
         return try await base.fetchThread(messageID: messageID, threadID: threadID)
     }
 
-    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> String {
+    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> SavedDraft {
         meter.record()
         return try await base.saveDraft(draft, replacing: draftID)
     }

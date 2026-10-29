@@ -5,6 +5,8 @@ import SwiftUI
 struct CardFace<Head: View, Content: View>: View {
     @Environment(\.appearance) private var appearance
     let depth: Int
+    var lacquered = false
+    var last = false
     let bring: () -> Void
     @ViewBuilder let head: (Color) -> Head
     @ViewBuilder let content: () -> Content
@@ -33,11 +35,7 @@ struct CardFace<Head: View, Content: View>: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .foregroundStyle(ink)
         .background(fill.animation(appearance.ease(Tokens.Duration.stackBackground), value: depth))
-        .overlay(alignment: .top) {
-            Rectangle().fill(appearance.color(\.glaze)).frame(height: CGFloat(Tokens.Size.hairline))
-        }
-        .clipShape(shape)
-        .background { cast }
+        .modifier(CardFinish(lacquered: lacquered, last: last, front: front, step: step, shape: shape))
         .contentShape(shape)
         .offset(y: !front && hovering ? -CGFloat(SheetValues.stackHoverLift) : 0)
         .onHover { hovering = $0 }
@@ -47,10 +45,39 @@ struct CardFace<Head: View, Content: View>: View {
         .accessibilityAction { if !front { bring() } }
         .animation(appearance.ease(Tokens.Duration.stackLift), value: hovering)
     }
+}
 
-    private var cast: some View {
+private struct CardFinish: ViewModifier {
+    @Environment(\.appearance) private var appearance
+    let lacquered: Bool
+    let last: Bool
+    let front: Bool
+    let step: StackStep?
+    let shape: UnevenRoundedRectangle
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if lacquered {
+            content.lacquer(shape, step: step, seam: front ? \.stackSeamFront : \.stackSeamBack, drop: !last, up: true)
+        } else {
+            content
+                .overlay(alignment: .top) {
+                    Rectangle().fill(appearance.color(\.glaze)).frame(height: CGFloat(Tokens.Size.hairline))
+                }
+                .clipShape(shape)
+                .background { CardCast(front: front, shape: shape) }
+        }
+    }
+}
+
+private struct CardCast: View {
+    @Environment(\.appearance) private var appearance
+    let front: Bool
+    let shape: UnevenRoundedRectangle
+
+    var body: some View {
         let line = CGFloat(Tokens.Size.hairline)
-        return ZStack {
+        ZStack {
             shape.fill(appearance.color(\.line)).padding(-line)
             if front {
                 soft(spread: Tokens.Size.stackFlatFrontSpread, blur: Tokens.Size.stackFlatFrontBlur,

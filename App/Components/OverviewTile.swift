@@ -9,8 +9,12 @@ struct OverviewTile: View {
     let size: OverviewSize
     let hot: Bool
     let dimmed: Bool
+    var still = false
     let aim: (String?) -> Void
     @State private var entered = false
+
+    private var shown: Bool { entered || still }
+    private var lift: Double { still ? Tokens.Spacing.step2 : Tokens.Size.overviewHoverLift }
 
     private var shape: RoundedRectangle { RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row)) }
 
@@ -40,24 +44,25 @@ struct OverviewTile: View {
         .clipShape(shape)
         .contentShape(shape)
         .background {
-            if hot, let layer = Shadows.overviewHoverLight.first {
+            if hot, !still, let layer = Shadows.overviewHoverLight.first {
                 shape.inset(by: CGFloat(-layer.spread))
                     .fill(appearance.paint(layer.color))
                     .blur(radius: CGFloat(layer.blur / 2))
                     .offset(x: CGFloat(layer.x), y: CGFloat(layer.y))
             }
         }
-        .opacity(entered ? (dimmed ? SheetValues.overviewOtherOpacity : 1) : 0)
-        .scaleEffect(entered ? (hot ? SheetValues.overviewHoverScale : dimmed ? SheetValues.overviewOtherScale : 1) : 1)
-        .offset(y: entered ? (hot ? -Tokens.Size.overviewHoverLift : 0) : Tokens.Size.overviewTileEnter)
+        .opacity(shown ? (dimmed && !still ? SheetValues.overviewOtherOpacity : 1) : 0)
+        .scaleEffect(shown && !still ? (hot ? SheetValues.overviewHoverScale : dimmed ? SheetValues.overviewOtherScale : 1) : 1)
+        .offset(y: shown ? (hot ? -lift : 0) : Tokens.Size.overviewTileEnter)
         .onAppear {
+            guard !still else { return }
             let delay = Tokens.Duration.overviewDelay + Double(min(index, SheetValues.overviewStaggerCap)) * Tokens.Duration.overviewStagger
             withAnimation(appearance.ease(Tokens.Duration.overviewEnter, Tokens.Easing.glassOut, delay: delay)) { entered = true }
         }
         .onHover { inside in
             if inside { aim(entry.id) } else if hot { aim(nil) }
         }
-        .animation(appearance.ease(Tokens.Duration.tileHover), value: hot)
+        .animation(appearance.ease(still ? Tokens.Duration.rowSequence : Tokens.Duration.tileHover), value: hot)
         .animation(appearance.ease(Tokens.Duration.tileHover), value: dimmed)
         .onTapGesture { entry.choose() }
         .accessibilityElement(children: .contain)

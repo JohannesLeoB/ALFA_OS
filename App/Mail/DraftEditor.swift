@@ -4,6 +4,7 @@ import Design
 import Hub
 import Mail
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct DraftEditor: View {
     @Environment(\.appearance) private var appearance
@@ -12,41 +13,88 @@ struct DraftEditor: View {
     @State private var showCopy = false
     @State private var expanded = false
     @State private var box = TextBox()
+    @State private var dropOver = false
 
     private var inbox: InboxState { session.inbox }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                if card.needsGrant {
-                    Notice(kind: .warning, title: appearance.text("mail.draft.grant.title"), text: appearance.text("mail.draft.grant.text"),
-                           glyph: { Glyph(.alert) },
-                           actions: { TextButton(label: appearance.text("mail.draft.grant.act"), kind: .accent) { session.openMailSettings() } })
-                        .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
-                        .padding(.top, CGFloat(Tokens.Spacing.step8))
-                } else if card.failedToSend {
-                    Notice(kind: .failure, title: appearance.text("mail.draft.sendFailed"), text: appearance.text("mail.draft.failed.text"),
-                           glyph: { Glyph(.alert) },
-                           actions: { TextButton(label: appearance.text("mail.draft.failed.act"), kind: .accent) { Task { await inbox.send(card.id) } } })
-                        .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
-                        .padding(.top, CGFloat(Tokens.Spacing.step8))
-                }
-                FieldRow(label: appearance.text("mail.compose.from"), width: Tokens.Size.fieldLabelWidth) {
-                    FromButton(session: session, card: card)
-                    Spacer(minLength: 0)
-                }
-                RecipientEditor(inbox: inbox, card: card, field: .to, showCopy: $showCopy, expanded: $expanded)
-                if showCopy {
-                    RecipientEditor(inbox: inbox, card: card, field: .cc, showCopy: $showCopy, expanded: $expanded)
-                    RecipientEditor(inbox: inbox, card: card, field: .bcc, showCopy: $showCopy, expanded: $expanded)
-                }
-                subjectRow
-                bodySheet
-                if !card.draft.attachments.isEmpty { attachments }
-                if inbox.formatting { FormatRow(box: box) }
+        VStack(spacing: 0) {
+            ScrollView {
+                fields
             }
+            .scrollIndicators(.automatic)
+            if inbox.formatting { FormatRow(box: box) }
         }
-        .scrollIndicators(.automatic)
+        .onDrop(of: [UTType.fileURL], isTargeted: $dropOver) { providers in
+            for provider in providers {
+                _ = provider.loadObject(ofClass: URL.self) { url, _ in
+                    guard let url else { return }
+                    Task { @MainActor in session.attach(urls: [url], to: card.id) }
+                }
+            }
+            return true
+        }
+        .overlay { if dropOver { dropOverlay } }
+    }
+
+    private var dropOverlay: some View {
+        let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.notice))
+        return HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
+            Glyph(.doc)
+            appearance.text("mail.compose.drop")
+        }
+        .designText(\.ink, size: Tokens.TextSize.body, weight: .medium)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(shape.fill(appearance.color(\.well)))
+        .overlay(shape.strokeBorder(appearance.color(\.inkTertiary),
+                                    style: StrokeStyle(lineWidth: CGFloat(Tokens.Size.hairline),
+                                                       dash: SheetValues.dashedLine.map { CGFloat($0) })))
+        .padding(CGFloat(Tokens.Spacing.step8))
+        .allowsHitTesting(false)
+    }
+
+    private var fields: some View {
+        VStack(spacing: 0) {
+            if card.needsGrant {
+                Notice(kind: .warning, title: appearance.text("mail.draft.grant.title"), text: appearance.text("mail.draft.grant.text"),
+                       glyph: { Glyph(.alert) },
+                       actions: { TextButton(label: appearance.text("mail.draft.grant.act"), kind: .accent) { session.openMailSettings() } })
+                    .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+                    .padding(.top, CGFloat(Tokens.Spacing.step8))
+            } else if card.failedToSend {
+                Notice(kind: .failure, title: appearance.text("mail.draft.sendFailed"), text: appearance.text("mail.draft.failed.text"),
+                       glyph: { Glyph(.alert) },
+                       actions: { TextButton(label: appearance.text("mail.draft.failed.act"), kind: .accent) { Task { await inbox.send(card.id) } } })
+                    .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+                    .padding(.top, CGFloat(Tokens.Spacing.step8))
+            }
+            if card.saveFailure != nil, !card.needsGrant, !card.failedToSend {
+                Notice(kind: .failure, title: appearance.text("mail.draft.saveFailed.title"),
+                       text: appearance.text(card.saveNeedsSignIn ? "mail.draft.saveFailed.auth" : "mail.draft.saveFailed.server"),
+                       glyph: { Glyph(.alert) },
+                       actions: {
+                    if card.saveNeedsSignIn {
+                        TextButton(label: appearance.text("mail.list.signInExpired.act"), kind: .accent) { session.openMailSettings() }
+                    } else {
+                        TextButton(label: appearance.text("mail.draft.saveFailed.retry"), kind: .accent) { Task { await inbox.save(card.id) } }
+                    }
+                })
+                    .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+                    .padding(.top, CGFloat(Tokens.Spacing.step8))
+            }
+            FieldRow(label: appearance.text("mail.compose.from"), width: Tokens.Size.fieldLabelWidth) {
+                FromButton(session: session, card: card)
+                Spacer(minLength: 0)
+            }
+            RecipientEditor(inbox: inbox, card: card, field: .to, showCopy: $showCopy, expanded: $expanded)
+            if showCopy {
+                RecipientEditor(inbox: inbox, card: card, field: .cc, showCopy: $showCopy, expanded: $expanded)
+                RecipientEditor(inbox: inbox, card: card, field: .bcc, showCopy: $showCopy, expanded: $expanded)
+            }
+            subjectRow
+            bodySheet
+            if !card.draft.attachments.isEmpty { attachments }
+        }
     }
 
     private var subjectRow: some View {

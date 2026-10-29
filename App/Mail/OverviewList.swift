@@ -10,26 +10,8 @@ struct OverviewList: View {
 
     private var inbox: InboxState { session.inbox }
 
-    private var title: String { FolderTitle.text(inbox.currentFolderName, localized: appearance.string) }
-
-    private var modes: [SegmentOption<OverviewMode>] {
-        [SegmentOption(id: .stack, label: Text(verbatim: appearance.format("mail.overview.stack", String(inbox.stackCount)))),
-         SegmentOption(id: .folder, label: Text(verbatim: appearance.format("mail.overview.folder", title, String(inbox.rows.count))))]
-    }
-
     private var entries: [(entry: OverviewEntry, ref: CardRef)] {
-        if inbox.overview.mode == .folder {
-            return inbox.rowPresentations.map { row in
-                let entry = OverviewEntry(id: row.id, mark: row.initials.isEmpty ? .icon(row.draft ? .compose : .person) : .text(row.initials),
-                                          title: row.outgoing ? Text(verbatim: appearance.format("mail.row.to", row.sender)) : Text(verbatim: row.sender),
-                                          date: MessageDate.text(row.date, draft: row.draft, appearance: appearance), unread: row.unread,
-                                          subject: row.subject ?? "", preview: row.preview ?? "",
-                                          current: inbox.frontRef == .message(row.id), commands: row.draft ? [] : commands(row.id),
-                                          choose: { if row.draft { openDraft(row.id) } else { open(row.id) } })
-                return (entry, .message(row.id))
-            }
-        }
-        return inbox.stackOrder.compactMap { ref in
+        inbox.stackOrder.compactMap { ref in
             switch ref {
             case .message(let id):
                 guard let card = inbox.card(id) else { return nil }
@@ -39,7 +21,7 @@ struct OverviewList: View {
                 let entry = OverviewEntry(id: ref.id, mark: initials.isEmpty ? .icon(.person) : .text(initials), title: Text(verbatim: name),
                                           date: MessageDate.text(DateLabel.of(card.summary.receivedAt, now: inbox.now), draft: false, appearance: appearance),
                                           unread: !card.summary.flags.contains(.seen), subject: card.summary.subject,
-                                          preview: card.summary.snippet, current: inbox.frontRef == ref, close: { inbox.close(id) },
+                                          preview: inbox.preview(card.summary), current: inbox.frontRef == ref, close: { inbox.close(id) },
                                           commands: commands(id), choose: { choose(ref) })
                 return (entry, ref)
             case .draft(let id):
@@ -70,34 +52,14 @@ struct OverviewList: View {
 
     var body: some View {
         let items = entries
-        CardOverview(entries: items.map(\.entry), size: inbox.overview.size, resize: { inbox.setOverviewSize($0) },
-                     hot: inbox.overview.hot?.id,
-                     aim: { id in inbox.aimOverview(id.flatMap { id in items.first { $0.entry.id == id }?.ref }) }) {
-            SegmentedControl(options: modes, selection: Binding(get: { inbox.overview.mode }, set: { inbox.setOverviewMode($0) }))
-        }
-        .onAppear { grow(true) }
-        .onDisappear { grow(false) }
-    }
-
-    private func grow(_ on: Bool) {
-        let desk = session.desk
-        let maximized = desk.laneMode(desk.currentID).maximized
-        if on, maximized != .trailing { desk.toggleMaximize(.trailing) }
-        if !on, maximized == .trailing { desk.toggleMaximize(.trailing) }
+        OverviewGrid(entries: items.map(\.entry), size: .medium, hot: inbox.overview.hot?.id,
+                     aim: { id in inbox.aimOverview(id.flatMap { id in items.first { $0.entry.id == id }?.ref }) })
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(appearance.color(\.lane))
     }
 
     private func choose(_ ref: CardRef) {
         inbox.bring(ref)
         inbox.openOverview(false)
-    }
-
-    private func open(_ id: String) {
-        inbox.openOverview(false)
-        Task { await inbox.open(id) }
-    }
-
-    private func openDraft(_ id: String) {
-        inbox.openOverview(false)
-        Task { await inbox.editDraft(id) }
     }
 }

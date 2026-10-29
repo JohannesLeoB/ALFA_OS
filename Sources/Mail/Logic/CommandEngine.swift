@@ -18,7 +18,6 @@ enum CommandEngine {
         } else if case .message(let hasCopy) = front {
             state = .reading
             main = [
-                Slot(id: "saveContact", action: .saveContact, priority: 6),
                 Slot(id: "reply", action: .reply, priority: 1),
                 Slot(id: "replyAll", action: .replyAll, priority: 4, off: !hasCopy),
                 Slot(id: "forward", action: .forward, priority: 2),

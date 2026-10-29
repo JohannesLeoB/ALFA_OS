@@ -134,12 +134,14 @@ extension InboxState {
         drafts[index].saveFailure = nil
         let card = drafts[index]
         do {
-            let remoteID = try await outboxPort.saveDraft(card.inlet, card.draft, replacing: card.remoteID)
+            let saved = try await outboxPort.saveDraft(card.inlet, card.draft, replacing: card.remoteID)
             if let now = drafts.firstIndex(where: { $0.id == id }) {
-                drafts[now].remoteID = remoteID
+                if let old = drafts[now].mirrorID, old != saved.mirrorID { goneDrafts[card.inlet, default: []].insert(old) }
+                drafts[now].remoteID = saved.id
+                drafts[now].mirrorID = saved.mirrorID
                 if drafts[now].state == .saving { drafts[now].state = .saved(clock()) }
             } else {
-                try? await outboxPort.deleteDraft(card.inlet, draftID: remoteID)
+                try? await outboxPort.deleteDraft(card.inlet, draftID: saved.id)
             }
         } catch {
             if let now = drafts.firstIndex(where: { $0.id == id }) {
@@ -153,14 +155,18 @@ extension InboxState {
 
     public func deleteDraft(_ id: UUID) async {
         guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
-        if let remoteID = drafts[index].remoteID {
+        let inlet = drafts[index].inlet
+        let remoteID = drafts[index].remoteID
+        let mirrorID = drafts[index].mirrorID
+        if let remoteID {
             do {
-                try await outboxPort.deleteDraft(drafts[index].inlet, draftID: remoteID)
+                try await outboxPort.deleteDraft(inlet, draftID: remoteID)
             } catch {
                 guard let now = drafts.firstIndex(where: { $0.id == id }) else { return }
                 drafts[now].saveFailure = Self.hint(error)
                 return
             }
+            if let mirrorID { goneDrafts[inlet, default: []].insert(mirrorID) }
         }
         drafts.removeAll { $0.id == id }
         detach(.draft(id))
@@ -180,7 +186,10 @@ extension InboxState {
             return open.id
         }
         let id = add(inlet: inlet, stored.draft)
-        if let index = drafts.firstIndex(where: { $0.id == id }) { drafts[index].remoteID = stored.id }
+        if let index = drafts.firstIndex(where: { $0.id == id }) {
+            drafts[index].remoteID = stored.id
+            drafts[index].mirrorID = messageID
+        }
         return id
     }
 
@@ -214,6 +223,7 @@ extension InboxState {
         switch outcome {
         case .sent:
             drafts[now].state = .sent
+            if let mirrorID = card.mirrorID { goneDrafts[card.inlet, default: []].insert(mirrorID) }
         case .queued(let outboxID):
             drafts[now].outboxID = outboxID
             drafts[now].state = .queuedInOutbox
@@ -227,9 +237,14 @@ extension InboxState {
             guard drafts[index].state == .queuedInOutbox, let outboxID = drafts[index].outboxID else { continue }
             guard let item = outbox.first(where: { $0.id == outboxID }) else {
                 drafts[index].state = .sent
+                if let mirrorID = drafts[index].mirrorID { goneDrafts[drafts[index].inlet, default: []].insert(mirrorID) }
                 continue
             }
             if let current = item.draftID { drafts[index].remoteID = current }
+            if let mirror = item.mirrorID, mirror != drafts[index].mirrorID {
+                if let old = drafts[index].mirrorID { goneDrafts[drafts[index].inlet, default: []].insert(old) }
+                drafts[index].mirrorID = mirror
+            }
             switch item.state {
             case .failed(let hint): drafts[index].state = .sendFailed(hint)
             case .waiting, .sending: drafts[index].state = .queuedInOutbox

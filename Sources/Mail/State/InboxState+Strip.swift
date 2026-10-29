@@ -8,7 +8,8 @@ extension InboxState {
             return folderRows.map { row in
                 StripMark(id: "folder." + row.folder.id, face: .glyph(row.glyph), help: folderName(row.folder.id),
                           selected: row.selected, dot: false, run: .folder(row.folder.id))
-            } + [composeMark]
+            } + [StripMark(id: "compose", face: .glyph(.compose), help: FolderName(key: "mail.action.compose", text: ""),
+                           selected: false, dot: false, accent: true, run: .compose)]
         case .center:
             let room = max(1, Int((height - Tokens.Size.stripReserveTop - Tokens.Size.stripReserveBottom) / Tokens.Size.rowHeight))
             return rowWindow(limit: room).items.map { row in

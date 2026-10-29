@@ -54,16 +54,7 @@ struct CardOverview<Lead: View>: View {
             .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
             .frame(height: CGFloat(Tokens.Size.headerHeight))
             .overlay(alignment: .bottom) { Hairline() }
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: CGFloat(size.tileMinWidth)), spacing: CGFloat(Tokens.Spacing.step8), alignment: .top)],
-                          spacing: CGFloat(Tokens.Spacing.step8)) {
-                    ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
-                        OverviewTile(entry: entry, index: index, size: size, hot: hot == entry.id,
-                                     dimmed: hot != nil && hot != entry.id, aim: aim)
-                    }
-                }
-                .padding(CGFloat(Tokens.Spacing.step8))
-            }
+            OverviewGrid(entries: entries, size: size, hot: hot, aim: aim)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(appearance.color(\.lane))

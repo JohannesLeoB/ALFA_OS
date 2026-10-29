@@ -10,14 +10,45 @@ extension InboxState {
         return FolderName(key: "mail.role." + folder.role.rawValue, text: folder.name)
     }
 
+    public var currentFolderGlyph: Icon {
+        guard let role = currentFolder?.role, role != .other else { return .tag }
+        return Self.glyph(role)
+    }
+
+    public var offersCompose: Bool {
+        switch currentFolder?.role {
+        case .inbox, .sent, .drafts, .all: true
+        default: false
+        }
+    }
+
+    public var offersTiles: Bool {
+        emptyKind == nil && hasRows && typed.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
     public var currentFolderName: FolderName { folderName(selectedFolder) }
 
     public var folderRows: [FolderEntry] {
         let count = unread[selectedInlet ?? ""] ?? 0
         return sortedFolders.filter { $0.role != .other }.map { folder in
             FolderEntry(folder: folder, glyph: Self.glyph(folder.role),
-                        count: folder.role == .inbox ? count : folder.role == .drafts ? savedDraftCount : 0,
+                        count: folder.role == .inbox ? count : folder.role == .drafts ? draftBadge(selectedInlet ?? "") : 0,
                         selected: folder.id == selectedFolder)
+        }
+    }
+
+    func draftBadge(_ inlet: Inlet.ID) -> Int {
+        let cards = drafts.filter { $0.inlet == inlet }
+        let leaving = Set(cards.filter { Self.leaves($0.state) }.compactMap(\.mirrorID))
+        let open = Set(cards.filter { !Self.leaves($0.state) }.compactMap(\.mirrorID))
+        let kept = (mirroredDrafts[inlet] ?? []).subtracting(goneDrafts[inlet] ?? []).subtracting(leaving)
+        return kept.union(open).count
+    }
+
+    private static func leaves(_ state: DraftState) -> Bool {
+        switch state {
+        case .sending, .queuedInOutbox, .sent: true
+        default: false
         }
     }
 
@@ -27,13 +58,13 @@ extension InboxState {
         }
     }
 
-    var savedDraftCount: Int {
-        drafts.filter { card in
-            switch card.state {
-            case .sent, .queuedInOutbox, .sending: false
-            default: card.remoteID != nil || { if case .saved = card.state { true } else { false } }()
-            }
-        }.count
+    public var outboxUnsaved: Int {
+        _ = outbox
+        return outboxPort.unsavedCount
+    }
+
+    public func resaveOutbox() {
+        outboxPort.resave()
     }
 
     var address: String { selectedAccount?.account ?? "" }
@@ -86,6 +117,7 @@ extension InboxState {
             let item = row.summary
             let party = outgoing ? Self.firstParty(item.toRaw) : Self.sender(item)
             let name = party.name.isEmpty ? party.address : party.name
+            let preview = PreviewEngine.text(item.snippet)
             return RowPresentation(
                 id: item.id,
                 initials: PersonName.initials(party.name),
@@ -102,9 +134,13 @@ extension InboxState {
                 attachmentTotal: max(item.attachmentCount, item.attachments.count),
                 date: DateLabel.of(item.receivedAt, now: now),
                 subject: item.subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : item.subject,
-                preview: item.snippet.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : item.snippet
+                preview: preview.isEmpty ? nil : preview
             )
         }
+    }
+
+    public func preview(_ item: MessageSummary) -> String {
+        PreviewEngine.text(item.snippet)
     }
 
     public func party(_ item: MessageSummary) -> (name: String, address: String) {

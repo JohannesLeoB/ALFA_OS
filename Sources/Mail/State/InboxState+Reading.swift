@@ -20,7 +20,7 @@ extension InboxState {
         attach(.message(id))
         trimCards()
         await loadBody(id, in: inlet)
-        if !summary.flags.contains(.seen) { await setFlag(id, .seen, on: true, in: inlet) }
+        if !summary.flags.contains(.seen) { await setFlag(id, .seen, on: true, in: inlet, quiet: true) }
     }
 
     public func close(_ id: String) {
@@ -48,6 +48,7 @@ extension InboxState {
         } catch {
             guard let now = cardIndex(id, in: inlet) else { return }
             cards[now].content = .text(cards[now].summary.snippet)
+            post(.readFailed, undo: { [weak self] in await self?.loadBody(id, in: owner) })
         }
     }
 
@@ -78,15 +79,20 @@ extension InboxState {
         await setFlag(id, .flagged, on: starred)
     }
 
-    func setFlag(_ id: String, _ flag: Flag, on: Bool, in owner: Inlet.ID? = nil) async {
-        guard let inlet = owner ?? selectedInlet else { return }
+    @discardableResult
+    func setFlag(_ id: String, _ flag: Flag, on: Bool, in owner: Inlet.ID? = nil, quiet: Bool = false) async -> Bool {
+        guard let inlet = owner ?? selectedInlet else { return false }
         do {
             try await mailbox.setFlags(inlet, messageID: id, add: on ? [flag] : [], remove: on ? [] : [flag])
         } catch {
-            return
+            if !quiet {
+                post(flag == .seen && on ? .readFailed : .flagFailed, undo: { [weak self] in await self?.setFlag(id, flag, on: on, in: owner) })
+            }
+            return false
         }
         apply(id, in: inlet) { if on { $0.flags.insert(flag) } else { $0.flags.remove(flag) } }
         refreshCounts()
+        return true
     }
 
     func apply(_ id: String, in owner: Inlet.ID? = nil, _ change: (inout MessageSummary) -> Void) {

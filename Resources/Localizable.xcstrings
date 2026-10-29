@@ -8076,6 +8076,22 @@
         }
       }
     },
+    "mail.compose.drop" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loslassen hängt an"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Release to attach"
+          }
+        }
+      }
+    },
     "mail.compose.from" : {
       "comment" : "alpha",
       "localizations" : {
@@ -8395,6 +8411,102 @@
         }
       }
     },
+    "mail.draft.notSaved" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht gesichert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not saved"
+          }
+        }
+      }
+    },
+    "mail.draft.outbox" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Postausgang"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Outbox"
+          }
+        }
+      }
+    },
+    "mail.draft.saveFailed.auth" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Anmeldung ist abgelaufen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your sign-in has expired."
+          }
+        }
+      }
+    },
+    "mail.draft.saveFailed.retry" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut sichern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save Again"
+          }
+        }
+      }
+    },
+    "mail.draft.saveFailed.server" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Server ist nicht erreichbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The server can’t be reached."
+          }
+        }
+      }
+    },
+    "mail.draft.saveFailed.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwurf nicht gesichert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Draft not saved"
+          }
+        }
+      }
+    },
     "mail.draft.saved" : {
       "comment" : "roh",
       "localizations" : {
@@ -8408,6 +8520,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Draft saved"
+          }
+        }
+      }
+    },
+    "mail.draft.saving" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sichert …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saving …"
           }
         }
       }
@@ -8446,12 +8574,210 @@
         }
       }
     },
-    "mail.draft.subjectMissing" : {
+    "mail.empty.all" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Betreff fehlt"
+            "value" : "Keine Nachrichten."
+          }
+        }
+      }
+    },
+    "mail.empty.archive" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Nachrichten im Archiv."
+          }
+        }
+      }
+    },
+    "mail.empty.drafts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Entwürfe."
+          }
+        }
+      }
+    },
+    "mail.empty.inbox" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Nachrichten im Eingang."
+          }
+        }
+      }
+    },
+    "mail.empty.label" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Nachrichten mit diesem Label."
+          }
+        }
+      }
+    },
+    "mail.empty.sent" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine gesendeten Nachrichten."
+          }
+        }
+      }
+    },
+    "mail.empty.spam" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Spam."
+          }
+        }
+      }
+    },
+    "mail.empty.starred" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine markierten Nachrichten."
+          }
+        }
+      }
+    },
+    "mail.empty.trash" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Papierkorb ist leer."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trash is empty."
+          }
+        }
+      }
+    },
+    "mail.failure.archive" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archivieren fehlgeschlagen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t archive"
+          }
+        }
+      }
+    },
+    "mail.failure.attachment" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anhang nicht geladen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t load attachment"
+          }
+        }
+      }
+    },
+    "mail.failure.delete" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen fehlgeschlagen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t delete"
+          }
+        }
+      }
+    },
+    "mail.failure.flag" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markieren fehlgeschlagen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t flag"
+          }
+        }
+      }
+    },
+    "mail.failure.move" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschieben fehlgeschlagen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t move"
+          }
+        }
+      }
+    },
+    "mail.failure.read" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nachricht nicht geöffnet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t open message"
+          }
+        }
+      }
+    },
+    "mail.failure.thread" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlauf nicht geladen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t load conversation"
           }
         }
       }
@@ -8755,34 +9081,6 @@
         }
       }
     },
-    "mail.lane.detail.none" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kein Postfach verbunden"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No mailbox connected"
-          }
-        }
-      }
-    },
-    "mail.lane.detail.unreachable" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "nicht erreichbar"
-          }
-        }
-      }
-    },
     "mail.lane.fold" : {
       "comment" : "alpha",
       "localizations" : {
@@ -8824,34 +9122,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mailbox"
-          }
-        }
-      }
-    },
-    "mail.list.empty" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keine Nachrichten in %@."
-          }
-        }
-      }
-    },
-    "mail.list.empty.act" : {
-      "comment" : "alpha",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verfassen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compose"
           }
         }
       }
@@ -8947,6 +9217,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nachrichten werden geladen"
+          }
+        }
+      }
+    },
+    "mail.list.loadingMore" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lädt …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading …"
           }
         }
       }
@@ -9052,50 +9338,18 @@
         }
       }
     },
-    "mail.list.offline" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Offline"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Offline"
-          }
-        }
-      }
-    },
-    "mail.list.offline.since" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Offline · zuletzt abgeglichen %@"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Offline · last synced %@"
-          }
-        }
-      }
-    },
     "mail.list.older" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ältere laden"
+            "value" : "Mehr laden"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Load older"
+            "value" : "Load More"
           }
         }
       }
@@ -9176,24 +9430,82 @@
         }
       }
     },
-    "mail.overview.folder" : {
-      "comment" : "alpha",
+    "mail.notice.offline.text" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ · %@"
+            "value" : "Die zuletzt geladenen Mails bleiben lesbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The most recently loaded messages stay readable."
           }
         }
       }
     },
-    "mail.overview.stack" : {
-      "comment" : "alpha",
+    "mail.notice.offline.title" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stapel · %@"
+            "value" : "Keine Verbindung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No connection"
+          }
+        }
+      }
+    },
+    "mail.notice.outboxUnsaved.act" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut sichern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save Again"
+          }
+        }
+      }
+    },
+    "mail.notice.outboxUnsaved.text" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Mails liegen nur im Arbeitsspeicher und gehen beim Beenden verloren."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ messages exist only in memory and will be lost when you quit."
+          }
+        }
+      }
+    },
+    "mail.notice.outboxUnsaved.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postausgang nicht gesichert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outbox not saved"
           }
         }
       }
@@ -9366,6 +9678,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ Empfänger"
+          }
+        }
+      }
+    },
+    "mail.read.images.text" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim Laden erfährt der Absender, dass die Mail geöffnet wurde."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading them tells the sender that you opened this message."
           }
         }
       }
@@ -9807,6 +10135,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Absender"
+          }
+        }
+      }
+    },
+    "mail.tiles.grid" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Kacheln"
+          }
+        }
+      }
+    },
+    "mail.tiles.list" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Liste"
           }
         }
       }

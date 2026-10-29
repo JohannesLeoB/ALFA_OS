@@ -30,8 +30,13 @@ struct MessageLane: View {
         GeometryReader { proxy in
             VStack(spacing: 0) {
                 header(width: proxy.size.width)
-                if let address = inbox.expiredAddress { expired(address) }
-                if case .offline(let last) = inbox.listState { offline(last) }
+                if inbox.outboxUnsaved > 0 {
+                    unsavedOutbox
+                } else if case .offline = inbox.listState {
+                    offline
+                } else if let address = inbox.expiredAddress {
+                    expired(address)
+                }
                 content(width: proxy.size.width)
             }
         }
@@ -58,7 +63,7 @@ struct MessageLane: View {
                 Spacer(minLength: 0)
                 tools(width: width)
             }
-            laneTools
+            laneTools(width: width)
         }
     }
 
@@ -124,15 +129,26 @@ struct MessageLane: View {
     }
 
     @ViewBuilder
-    private var laneTools: some View {
+    private func laneTools(width: Double) -> some View {
         let open = desk.widths.all.filter { $0 > desk.measure.laneFolded }.count
-        if open > 1 {
-            SymbolButton(help: appearance.format("mail.fold.named", title), glyph: .minus, pressed: false) { desk.toggleFold(.center) }
-        }
         let maxed = desk.laneMode(desk.currentID).maximized == .center
-        SymbolButton(help: maxed ? appearance.string("mail.lane.back") : appearance.format("mail.grow.named", title),
-                     glyph: maxed ? .shrink : .expand, pressed: false) {
-            desk.toggleMaximize(.center)
+        let tilesShown = inbox.offersTiles && (width >= SheetValues.tilesBreakpoint || inbox.tiles)
+        if tilesShown {
+            SymbolButton(help: appearance.string(inbox.tiles ? "mail.tiles.list" : "mail.tiles.grid"), glyph: .grid,
+                         selected: inbox.tiles, hover: .none, pressed: false) {
+                inbox.toggleTiles()
+            }
+        }
+        if !(width < SheetValues.tilesBreakpoint && inbox.tiles && !maxed) {
+            SymbolButton(help: maxed ? appearance.string("mail.lane.back") : appearance.format("mail.grow.named", title),
+                         glyph: maxed ? .shrink : .expand, hover: .none, pressed: false) {
+                desk.toggleMaximize(.center)
+            }
+        }
+        if open > 1 {
+            SymbolButton(help: appearance.format("mail.fold.named", title), glyph: .minus, hover: .none, pressed: false) {
+                desk.toggleFold(.center)
+            }
         }
     }
 
@@ -159,10 +175,20 @@ struct MessageLane: View {
         }
     }
 
-    private func offline(_ last: Date?) -> some View {
-        SmallText(text: Text(verbatim: last.map { appearance.format("mail.list.offline.since", SettingsDates.relative($0)) } ?? appearance.string("mail.list.offline")))
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, CGFloat(Tokens.Spacing.step16))
+    private var offline: some View {
+        Notice(kind: .warning, title: appearance.text("mail.notice.offline.title"), text: appearance.text("mail.notice.offline.text"),
+               glyph: { Glyph(.alert) },
+               actions: { TextButton(label: appearance.text("mail.list.failed.act"), kind: .accent) { Task { await inbox.loadSelection() } } })
+            .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+            .padding(.top, CGFloat(Tokens.Spacing.step8))
+    }
+
+    private var unsavedOutbox: some View {
+        Notice(kind: .failure, title: appearance.text("mail.notice.outboxUnsaved.title"),
+               text: Text(verbatim: appearance.format("mail.notice.outboxUnsaved.text", Format.number(inbox.outboxUnsaved))),
+               glyph: { Glyph(.alert) },
+               actions: { TextButton(label: appearance.text("mail.notice.outboxUnsaved.act"), kind: .accent) { inbox.resaveOutbox() } })
+            .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
             .padding(.top, CGFloat(Tokens.Spacing.step8))
     }
 
@@ -183,6 +209,8 @@ struct MessageLane: View {
     private func content(width: Double) -> some View {
         if let kind = inbox.emptyKind {
             state(kind)
+        } else if inbox.tiles && inbox.offersTiles {
+            MessageTiles(session: session, window: $window)
         } else {
             rows(width: width)
         }
@@ -210,15 +238,14 @@ struct MessageLane: View {
                              wide: width >= Tokens.Size.breakpointAttachments,
                              inTrash: trash, picking: picking)
                 }
-                if inbox.listState == .loadingMore {
-                    Spinner()
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, CGFloat(Tokens.Spacing.step12))
-                }
                 if let tail = inbox.listTail, window >= listed.total {
-                    TextButton(label: appearance.text(tail.key), kind: .quiet) { Task { await inbox.loadTail() } }
+                    let loading = inbox.listState == .loadingMore
+                    TextButton(label: appearance.text(loading ? "mail.list.loadingMore" : tail.key), kind: .quiet) {
+                        if !loading { Task { await inbox.loadTail() } }
+                    }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, CGFloat(Tokens.Spacing.step12))
+                        .padding(.top, CGFloat(Tokens.Spacing.step16))
+                        .padding(.bottom, CGFloat(Tokens.Spacing.step8))
                 }
                 Color.clear
                     .frame(height: CGFloat(spacer))
@@ -228,17 +255,7 @@ struct MessageLane: View {
         }
         .scrollIndicators(.automatic)
         .scrolledSignal($scrolled)
-        .onScrollGeometryChange(for: Bool.self) { geometry in
-            ListWindowEngine.remaining(content: Double(geometry.contentSize.height), offset: Double(geometry.contentOffset.y),
-                                       container: Double(geometry.containerSize.height), spacer: spacer) < SheetValues.listLoadAhead
-        } action: { was, near in
-            guard !was, near else { return }
-            if window < listed.total {
-                window += SheetValues.listWindowStep
-            } else if inbox.listTail != nil {
-                Task { await inbox.loadTail() }
-            }
-        }
+        .loadsAhead(spacer: spacer) { inbox.extend(&window, total: listed.total) }
     }
 
     @ViewBuilder
@@ -262,12 +279,17 @@ struct MessageLane: View {
         case .noFilterMatch:
             ContentPlaceholder(kind: .noResults, text: appearance.text("mail.list.noFilterMatch"), glyph: { Glyph(.filter) },
                                action: { TextButton(label: appearance.text("mail.list.noFilterMatch.act")) { inbox.setFilter(.all) } })
-        case .empty(let folder):
-            ContentPlaceholder(kind: .empty,
-                               text: Text(verbatim: appearance.format("mail.list.empty", FolderTitle.text(folder, localized: appearance.string))),
-                               glyph: { Glyph(.inbox) },
-                               action: { TextButton(label: appearance.text("mail.list.empty.act")) { inbox.compose() } })
+        case .empty:
+            ContentPlaceholder(kind: .empty, text: appearance.text(emptyKey), glyph: { Glyph(inbox.currentFolderGlyph) },
+                               action: {
+                if inbox.offersCompose { TextButton(label: appearance.text("mail.action.compose")) { inbox.compose() } }
+            })
         }
+    }
+
+    private var emptyKey: String {
+        guard let role = inbox.currentFolder?.role, role != .other else { return "mail.empty.label" }
+        return "mail.empty." + role.rawValue
     }
 
     private func failedText(_ last: Date?) -> Text {

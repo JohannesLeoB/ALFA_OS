@@ -350,9 +350,6 @@
    "de": "Sendet …",
    "en": "Sending …"
   },
-  "mail.draft.subjectMissing": {
-   "de": "Betreff fehlt"
-  },
   "mail.filter": {
    "de": "Filter"
   },
@@ -393,13 +390,6 @@
   "mail.lane.back": {
    "de": "Zurück"
   },
-  "mail.lane.detail.none": {
-   "de": "Kein Postfach verbunden",
-   "en": "No mailbox connected"
-  },
-  "mail.lane.detail.unreachable": {
-   "de": "nicht erreichbar"
-  },
   "mail.lane.fold": {
    "de": "Postfach falten"
   },
@@ -430,13 +420,6 @@
   "mail.account.show.inSettings": {
    "de": "in Einstellungen",
    "en": "in Settings"
-  },
-  "mail.list.empty": {
-   "de": "Keine Nachrichten in %@."
-  },
-  "mail.list.empty.act": {
-   "de": "Verfassen",
-   "en": "Compose"
   },
   "mail.list.emptySearch": {
    "de": "Keine Treffer für „%@“ in %@."
@@ -501,12 +484,6 @@
   "mail.menu.projectMore": {
    "de": "%@ weitere im Projektordner",
    "en": "%@ more in the project folder"
-  },
-  "mail.overview.folder": {
-   "de": "%@ · %@"
-  },
-  "mail.overview.stack": {
-   "de": "Stapel · %@"
   },
   "mail.overview.tip": {
    "de": "Übersicht · %@ Karten"
@@ -781,17 +758,9 @@
    "de": "Unterstrichen",
    "en": "Underline"
   },
-  "mail.list.offline": {
-   "de": "Offline",
-   "en": "Offline"
-  },
-  "mail.list.offline.since": {
-   "de": "Offline · zuletzt abgeglichen %@",
-   "en": "Offline · last synced %@"
-  },
   "mail.list.older": {
-   "de": "Ältere laden",
-   "en": "Load older"
+   "de": "Mehr laden",
+   "en": "Load More"
   },
   "mail.list.moreResults": {
    "de": "Weitere Treffer laden",
@@ -808,6 +777,128 @@
   "mail.toast.searchPartial": {
    "de": "Einige Ordner konnten nicht durchsucht werden",
    "en": "Some folders could not be searched"
+  },
+  "mail.tiles.grid": {
+   "de": "Als Kacheln"
+  },
+  "mail.tiles.list": {
+   "de": "Als Liste"
+  },
+  "mail.list.loadingMore": {
+   "de": "Lädt …",
+   "en": "Loading …"
+  },
+  "mail.draft.saving": {
+   "de": "Sichert …",
+   "en": "Saving …"
+  },
+  "mail.draft.outbox": {
+   "de": "Im Postausgang",
+   "en": "In Outbox"
+  },
+  "mail.draft.notSaved": {
+   "de": "Nicht gesichert",
+   "en": "Not saved"
+  },
+  "mail.draft.saveFailed.title": {
+   "de": "Entwurf nicht gesichert",
+   "en": "Draft not saved"
+  },
+  "mail.draft.saveFailed.server": {
+   "de": "Der Server ist nicht erreichbar.",
+   "en": "The server can’t be reached."
+  },
+  "mail.draft.saveFailed.auth": {
+   "de": "Die Anmeldung ist abgelaufen.",
+   "en": "Your sign-in has expired."
+  },
+  "mail.draft.saveFailed.retry": {
+   "de": "Erneut sichern",
+   "en": "Save Again"
+  },
+  "mail.notice.offline.title": {
+   "de": "Keine Verbindung",
+   "en": "No connection"
+  },
+  "mail.notice.offline.text": {
+   "de": "Die zuletzt geladenen Mails bleiben lesbar.",
+   "en": "The most recently loaded messages stay readable."
+  },
+  "mail.notice.outboxUnsaved.title": {
+   "de": "Postausgang nicht gesichert",
+   "en": "Outbox not saved"
+  },
+  "mail.notice.outboxUnsaved.text": {
+   "de": "%@ Mails liegen nur im Arbeitsspeicher und gehen beim Beenden verloren.",
+   "en": "%@ messages exist only in memory and will be lost when you quit."
+  },
+  "mail.notice.outboxUnsaved.act": {
+   "de": "Erneut sichern",
+   "en": "Save Again"
+  },
+  "mail.failure.archive": {
+   "de": "Archivieren fehlgeschlagen",
+   "en": "Couldn’t archive"
+  },
+  "mail.failure.move": {
+   "de": "Verschieben fehlgeschlagen",
+   "en": "Couldn’t move"
+  },
+  "mail.failure.delete": {
+   "de": "Löschen fehlgeschlagen",
+   "en": "Couldn’t delete"
+  },
+  "mail.failure.flag": {
+   "de": "Markieren fehlgeschlagen",
+   "en": "Couldn’t flag"
+  },
+  "mail.failure.read": {
+   "de": "Nachricht nicht geöffnet",
+   "en": "Couldn’t open message"
+  },
+  "mail.failure.attachment": {
+   "de": "Anhang nicht geladen",
+   "en": "Couldn’t load attachment"
+  },
+  "mail.failure.thread": {
+   "de": "Verlauf nicht geladen",
+   "en": "Couldn’t load conversation"
+  },
+  "mail.empty.inbox": {
+   "de": "Keine Nachrichten im Eingang."
+  },
+  "mail.empty.starred": {
+   "de": "Keine markierten Nachrichten."
+  },
+  "mail.empty.sent": {
+   "de": "Keine gesendeten Nachrichten."
+  },
+  "mail.empty.drafts": {
+   "de": "Keine Entwürfe."
+  },
+  "mail.empty.all": {
+   "de": "Keine Nachrichten."
+  },
+  "mail.empty.archive": {
+   "de": "Keine Nachrichten im Archiv."
+  },
+  "mail.empty.spam": {
+   "de": "Kein Spam."
+  },
+  "mail.empty.trash": {
+   "de": "Der Papierkorb ist leer.",
+   "en": "Trash is empty."
+  },
+  "mail.empty.label": {
+   "de": "Keine Nachrichten mit diesem Label."
+  },
+  "mail.compose.drop": {
+   "de": "Loslassen hängt an",
+   "en": "Release to attach"
+  },
+  "mail.read.images.text": {
+   "de": "Beim Laden erfährt der Absender, dass die Mail geöffnet wurde.",
+   "en": "Loading them tells the sender that you opened this message."
   }
  }
 }

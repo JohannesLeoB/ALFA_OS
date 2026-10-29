@@ -63,8 +63,13 @@ enum DraftParser {
         return map
     }
 
-    static func draftID(from data: Data) -> String? {
-        struct Response: Decodable { var id: String? }
-        return (try? JSONDecoder().decode(Response.self, from: data))?.id
+    static func saved(from data: Data) -> SavedDraft? {
+        struct Message: Decodable { var id: String? }
+        struct Response: Decodable {
+            var id: String?
+            var message: Message?
+        }
+        guard let response = try? JSONDecoder().decode(Response.self, from: data), let id = response.id else { return nil }
+        return SavedDraft(id: id, mirrorID: response.message?.id ?? id)
     }
 }

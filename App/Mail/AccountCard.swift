@@ -17,10 +17,6 @@ struct AccountCard: View {
 
     private var step: StackStep { appearance.stackStep(level) }
 
-    private var gloss: KeyPath<Colors, ColorValue> {
-        step.surface.red >= SheetValues.stackGlossLightFrom ? \.stackGlossLight : \.stackGlossDark
-    }
-
     var body: some View {
         let ink = appearance.paint(step.ink)
         let shape = Deck.bottomRounded(Tokens.Radius.card)
@@ -29,7 +25,7 @@ struct AccountCard: View {
                 .foregroundStyle(ink)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 .background(appearance.paint(step.surface).animation(appearance.ease(Tokens.Duration.stackBackground, Tokens.Easing.stack), value: level))
-                .lacquer(shape, gloss: gloss, seam: \.stackSeamBack, drop: !last)
+                .lacquer(shape, step: step, seam: \.stackSeamBack, drop: !last)
                 .contentShape(shape)
         }
         .buttonStyle(.plain)

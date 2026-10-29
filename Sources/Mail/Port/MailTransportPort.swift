@@ -12,7 +12,7 @@ public protocol MailTransportPort: Sendable {
     func markSpam(messageID: String) async throws
     func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data
     func fetchThread(messageID: String, threadID: String) async throws -> [MessageSummary]
-    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> String
+    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> SavedDraft
     func fetchDraft(messageID: String) async throws -> StoredDraft
     func deleteDraft(id: String) async throws
     func sendDraft(id: String) async throws

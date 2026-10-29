@@ -60,6 +60,7 @@ enum SheetValues {
     static let previewLines = 2
     static let attachmentChipNameLimit = 26
     static let listWindow = 60
+    static let tilesBreakpoint = 320.0
     static let listWindowStep = 120
     static let listLoadAhead = 1200.0
     static let conversationLine = 16.0

@@ -65,12 +65,13 @@ extension InboxState {
         if !open { overview.hot = nil }
     }
 
-    public func setOverviewMode(_ mode: OverviewMode) {
-        overview.mode = mode
+    public func toggleTiles() {
+        tiles.toggle()
+        tileHot = nil
     }
 
-    public func setOverviewSize(_ size: OverviewSize) {
-        overview.size = size
+    public func aimTile(_ id: String?) {
+        tileHot = id
     }
 
     public func aimOverview(_ ref: CardRef?) {

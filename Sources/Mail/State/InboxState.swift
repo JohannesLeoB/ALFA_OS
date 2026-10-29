@@ -24,6 +24,8 @@ public final class InboxState {
     var crossQuery = ""
     var typeGeneration = 0
     public var unread: [Inlet.ID: Int] = [:]
+    var mirroredDrafts: [Inlet.ID: Set<String>] = [:]
+    var goneDrafts: [Inlet.ID: Set<String>] = [:]
     var outbox: [OutboxItem] = []
     var cards: [OpenMessage] = []
     var drafts: [OpenDraft] = []
@@ -36,6 +38,8 @@ public final class InboxState {
     public var searching = false
     var purgeChecks = 0
     public var overview = Overview()
+    public var tiles = false
+    public var tileHot: String?
     public var toast: Toast?
     var toastSerial = 0
     @ObservationIgnored var undoAction: (@MainActor () async -> Void)?
@@ -358,13 +362,13 @@ public final class InboxState {
 
     public var listTail: ListTail? {
         _ = mirrorSerial
-        guard phase == .settled, let inlet = selectedInlet, let folder = selectedFolder else { return nil }
+        guard phase == .settled || phase == .loadingMore, let inlet = selectedInlet, let folder = selectedFolder else { return nil }
         if !query.isEmpty { return searchContinuation == nil ? nil : .moreResults }
         return mailbox.canLoadOlder(inlet, folder: folder) ? .older : nil
     }
 
     public func loadTail() async {
-        guard let tail = listTail, let inlet = selectedInlet, let folder = selectedFolder else { return }
+        guard phase == .settled, let tail = listTail, let inlet = selectedInlet, let folder = selectedFolder else { return }
         let mine = generation
         phase = .loadingMore
         switch tail {
@@ -475,6 +479,11 @@ public final class InboxState {
         var counts: [Inlet.ID: Int] = [:]
         for account in accounts { counts[account.id] = mailbox.unreadCount(account.id) }
         unread = counts
+        mirroredDrafts = Dictionary(accounts.map { ($0.id, mailbox.draftIDs($0.id)) }, uniquingKeysWith: { first, _ in first })
+        goneDrafts = goneDrafts.reduce(into: [:]) { result, entry in
+            let kept = entry.value.intersection(mirroredDrafts[entry.key] ?? [])
+            if !kept.isEmpty { result[entry.key] = kept }
+        }
     }
 
     func handle(_ event: MailboxEvent) async {

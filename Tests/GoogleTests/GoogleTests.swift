@@ -892,7 +892,7 @@ final class GoogleTests: XCTestCase {
     }
 
     func testDraftsAreCreatedUpdatedDeletedAndSent() async throws {
-        let http = FakeHttp { _ in (200, #"{"id":"d9"}"#) }
+        let http = FakeHttp { _ in (200, #"{"id":"d9","message":{"id":"m9"}}"#) }
         let mail = mailClient(http)
         let draft = Draft(to: "ann@x.test", subject: "Hi", body: "text", threadID: "t1", messageID: "abc")
         let created = try await mail.saveDraft(draft, replacing: nil)
@@ -900,7 +900,7 @@ final class GoogleTests: XCTestCase {
         try await mail.deleteDraft(id: "d1")
         try await mail.sendDraft(id: "d1")
         try await mail.send(draft)
-        XCTAssertEqual([created, updated], ["d9", "d9"])
+        XCTAssertEqual([created, updated], [SavedDraft(id: "d9", mirrorID: "m9"), SavedDraft(id: "d9", mirrorID: "m9")])
         let drafts = "/gmail/v1/users/me/drafts"
         XCTAssertEqual(http.calls.map { $0.method + " " + $0.path }, [
             "POST \(drafts)", "PUT \(drafts)/d1", "DELETE \(drafts)/d1", "POST \(drafts)/send",
@@ -916,6 +916,15 @@ final class GoogleTests: XCTestCase {
         let direct = try json(http.calls[4])
         XCTAssertEqual(direct["threadId"] as? String, "t1")
         XCTAssertNotNil(direct["raw"])
+    }
+
+    func testASavedDraftWithoutAMessageInTheAnswerIsMirroredUnderItsDraftID() async throws {
+        let http = FakeHttp { _ in (200, #"{"id":"d9"}"#) }
+        let saved = try await mailClient(http).saveDraft(Draft(to: "a@x.test", subject: "S", body: "b"), replacing: nil)
+        XCTAssertEqual(saved, SavedDraft(id: "d9", mirrorID: "d9"))
+        let empty = FakeHttp { _ in (200, "{}") }
+        let kept = try await mailClient(empty).saveDraft(Draft(to: "a@x.test", subject: "S", body: "b"), replacing: "d1")
+        XCTAssertEqual(kept, SavedDraft(id: "d1"))
     }
 
     func testSentMessagesWithoutAThreadOmitTheThreadId() {

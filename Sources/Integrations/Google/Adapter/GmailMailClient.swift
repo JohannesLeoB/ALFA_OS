@@ -101,7 +101,7 @@ struct GmailMailClient: GmailPort, SourcePort {
         try await gmail.fetchThread(threadID: threadID, maxMessages: Self.threadLimit).map(Self.summary)
     }
 
-    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> String {
+    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> SavedDraft {
         if let draftID { return try await gmail.updateDraft(id: draftID, draft: draft) }
         return try await gmail.createDraft(draft)
     }

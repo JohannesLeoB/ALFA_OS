@@ -24,7 +24,7 @@ struct FormatRow: View {
     }
 
     private func item(_ key: String, _ glyph: Icon, _ action: @escaping () -> Void) -> some View {
-        SymbolButton(help: appearance.string(key), glyph: glyph, side: Tokens.Spacing.step28, tone: \.inkSecondary, ringed: false, hover: .fill, action: action)
+        SymbolButton(help: appearance.string(key), glyph: glyph, side: Tokens.Spacing.step28, tone: \.inkSecondary, hover: .fill, action: action)
     }
 
     private func askLink() {

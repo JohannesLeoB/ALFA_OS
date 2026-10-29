@@ -8,6 +8,7 @@ public struct OpenDraft: Identifiable, Equatable, Sendable {
     public var state: DraftState
     public var outboxID: OutboxItem.ID?
     public var remoteID: String?
+    public var mirrorID: String?
     public var saveFailure: Hint?
 
     public func people(_ field: RecipientField) -> [Participant] {
@@ -28,7 +29,15 @@ public struct OpenDraft: Identifiable, Equatable, Sendable {
 
     public var needsGrant: Bool {
         guard case .sendFailed(let hint) = state else { return false }
-        return hint.kind == .signIn || hint.text == Hint.signInExpiredText
+        return Self.asksSignIn(hint)
+    }
+
+    public var saveNeedsSignIn: Bool {
+        saveFailure.map(Self.asksSignIn) ?? false
+    }
+
+    private static func asksSignIn(_ hint: Hint) -> Bool {
+        hint.kind == .signIn || hint.text == Hint.signInExpiredText
     }
 
     public var failedToSend: Bool {
@@ -38,13 +47,14 @@ public struct OpenDraft: Identifiable, Equatable, Sendable {
 
     public var status: DraftStatus? {
         switch state {
-        case .sending, .queuedInOutbox: return .sending
+        case .sending: return .sending
+        case .queuedInOutbox: return .outbox
+        case .saving: return .saving
         case .saved: return .saved
         default: break
         }
-        if people(.to).isEmpty { return .recipientMissing }
-        if draft.subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { return .subjectMissing }
-        return failedToSend ? .sendFailed : nil
+        if failedToSend { return .sendFailed }
+        return saveFailure == nil ? nil : .notSaved
     }
 }
 
@@ -60,21 +70,23 @@ public enum DraftState: Equatable, Sendable {
 }
 
 public enum DraftStatus: Equatable, Sendable {
-    case sending
+    case saving
     case saved
-    case recipientMissing
-    case subjectMissing
+    case sending
+    case outbox
     case sendFailed
+    case notSaved
 
     public var key: String {
         switch self {
-        case .sending: "mail.draft.sending"
+        case .saving: "mail.draft.saving"
         case .saved: "mail.draft.saved"
-        case .recipientMissing: "mail.toast.recipientMissing"
-        case .subjectMissing: "mail.draft.subjectMissing"
+        case .sending: "mail.draft.sending"
+        case .outbox: "mail.draft.outbox"
         case .sendFailed: "mail.draft.sendFailed"
+        case .notSaved: "mail.draft.notSaved"
         }
     }
 
-    public var failed: Bool { self == .sendFailed }
+    public var failed: Bool { self == .sendFailed || self == .notSaved }
 }

@@ -149,10 +149,10 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
         return Base64Engine.decodeURL(raw) ?? Data()
     }
 
-    func createDraft(_ draft: Draft) async throws -> String {
+    func createDraft(_ draft: Draft) async throws -> SavedDraft {
         let data = try await requests.send(RequestClient.url(drafts), method: "POST",
                                            json: ["message": DraftMimeEngine.payload(draft)])
-        return DraftParser.draftID(from: data) ?? ""
+        return DraftParser.saved(from: data) ?? SavedDraft(id: "")
     }
 
     func sendMessage(_ draft: Draft) async throws {
@@ -172,10 +172,10 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
         return content.draft(with: attachments)
     }
 
-    func updateDraft(id: String, draft: Draft) async throws -> String {
+    func updateDraft(id: String, draft: Draft) async throws -> SavedDraft {
         let data = try await requests.send(RequestClient.url(drafts + "/\(id)"), method: "PUT",
                                            json: ["message": DraftMimeEngine.payload(draft)])
-        return DraftParser.draftID(from: data) ?? id
+        return DraftParser.saved(from: data) ?? SavedDraft(id: id)
     }
 
     func sendDraft(id: String) async throws {

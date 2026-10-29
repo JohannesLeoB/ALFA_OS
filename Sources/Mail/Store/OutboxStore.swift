@@ -25,7 +25,14 @@ public final class OutboxStore: OutboxPort {
 
     public var outbox: [OutboxItem] { items }
 
-    public func saveDraft(_ inlet: Inlet.ID, _ draft: Draft, replacing draftID: String?) async throws(HubFailure) -> String {
+    public var unsavedCount: Int { unsaved.count }
+
+    public func resave() {
+        flush()
+        events.emit(.outboxChanged)
+    }
+
+    public func saveDraft(_ inlet: Inlet.ID, _ draft: Draft, replacing draftID: String?) async throws(HubFailure) -> SavedDraft {
         try await perform(inlet) { try await $0.saveDraft(draft, replacing: draftID) }
     }
 
@@ -49,7 +56,8 @@ public final class OutboxStore: OutboxPort {
         guard let index = items.firstIndex(where: { $0.id == id }), case .failed = items[index].state else { return nil }
         let old = items[index]
         items[index] = OutboxItem(id: id, inlet: old.inlet, draft: draft, messageID: old.messageID,
-                                  draftID: draftID ?? old.draftID, state: .waiting, attempts: old.attempts)
+                                  draftID: draftID ?? old.draftID, mirrorID: old.mirrorID, state: .waiting,
+                                  attempts: old.attempts)
         await retry(id, byUser: true)
         return items.contains { $0.id == id } ? .queued(id) : .sent
     }
@@ -58,7 +66,7 @@ public final class OutboxStore: OutboxPort {
         guard let index = items.firstIndex(where: { $0.id == id }), items[index].state == .waiting else { return }
         let old = items[index]
         items[index] = OutboxItem(id: id, inlet: old.inlet, draft: draft, messageID: old.messageID, draftID: old.draftID,
-                                  state: .waiting, attempts: old.attempts)
+                                  mirrorID: old.mirrorID, state: .waiting, attempts: old.attempts)
         persist(id)
     }
 
@@ -109,6 +117,7 @@ public final class OutboxStore: OutboxPort {
         let result = await DeliveryEngine.deliver(&item, verify: true, byUser: byUser, access: access)
         guard let current = items.firstIndex(where: { $0.id == id }) else { return }
         items[current].draftID = item.draftID
+        items[current].mirrorID = item.mirrorID
         switch result {
         case .sent:
             items.remove(at: current)

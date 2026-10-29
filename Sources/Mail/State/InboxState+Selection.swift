@@ -28,9 +28,12 @@ extension InboxState {
         case .read:
             let anyUnread = list.contains { !$0.flags.contains(.seen) }
             let inlet = selectedInlet
-            for item in list { await setFlag(item.id, .seen, on: anyUnread, in: inlet) }
+            var done = 0
+            for item in list {
+                if await setFlag(item.id, .seen, on: anyUnread, in: inlet, quiet: true) { done += 1 }
+            }
             picked = []
-            post(.bulkRead(count: list.count, read: anyUnread))
+            post(done == 0 ? .flagFailed : .bulkRead(count: done, read: anyUnread))
         case .archive, .trash:
             let origin = selectedFolder
             var moved: [(id: String, landed: String?, inlet: Inlet.ID)] = []

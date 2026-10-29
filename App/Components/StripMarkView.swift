@@ -8,6 +8,7 @@ struct StripMarkItem: Identifiable {
     let help: Text
     let selected: Bool
     let dot: Bool
+    var accent = false
     let action: () -> Void
 }
 
@@ -16,7 +17,11 @@ struct StripMarks: View {
 
     var body: some View {
         VStack(spacing: CGFloat(Tokens.Spacing.step8)) {
-            ForEach(items) { item in
+            ForEach(items.filter { !$0.accent }) { item in
+                StripMarkView(item: item)
+            }
+            Spacer(minLength: 0)
+            ForEach(items.filter(\.accent)) { item in
                 StripMarkView(item: item)
             }
         }
@@ -39,10 +44,10 @@ struct StripMarkView: View {
                 case .text(let value): Text(verbatim: value).lineLimit(1)
                 }
             }
-            .designText(item.selected ? \.lane : \.inkSecondary, size: Tokens.TextSize.small, weight: .medium)
+            .designText(item.accent || item.selected ? \.lane : \.inkSecondary, size: Tokens.TextSize.small, weight: .medium)
             .frame(width: side, height: side)
-            .background(Circle().fill(item.selected ? appearance.color(\.ink) : Color.clear))
-            .overlay(Circle().strokeBorder(item.selected ? Color.clear : appearance.color(\.lineStrong), lineWidth: line))
+            .background(Circle().fill(item.accent || item.selected ? appearance.color(\.ink) : Color.clear))
+            .overlay(Circle().strokeBorder(item.accent || item.selected ? Color.clear : appearance.color(\.lineStrong), lineWidth: line))
             .overlay(alignment: .topTrailing) {
                 if item.dot {
                     Circle().fill(appearance.color(\.ink))

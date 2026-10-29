@@ -253,7 +253,7 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
         }
     }
 
-    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> String {
+    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> SavedDraft {
         let token = draft.messageID ?? UUID().uuidString.lowercased()
         let message = try MessageEngine.build(draft, account: account, messageID: token, asDraft: true)
         let replaced = try draftID.map(IMAPMessageReference.decode)
@@ -274,7 +274,7 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
                 created = IMAPMessageReference(folder: drafts.path, uidValidity: selection.uidValidity, uid: uid)
             }
             if let replaced { try? await Self.removeMessage(replaced, session: session) }
-            return created.encoded
+            return SavedDraft(id: created.encoded)
         }
     }
 

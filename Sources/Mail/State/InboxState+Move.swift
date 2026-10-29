@@ -27,12 +27,21 @@ extension InboxState {
         do {
             try await mailbox.purge(inlet, messageID: id)
         } catch {
+            post(.deleteFailed, undo: { [weak self] in await self?.purge(id) })
             return
         }
         if selectedInlet == inlet { summaries.removeAll { $0.id == id } }
         drop(id, in: inlet)
         refreshCounts()
         post(.purged)
+    }
+
+    static func relocateFailure(_ move: MoveTarget) -> ToastKind {
+        switch move {
+        case .archive: .archiveFailed
+        case .trash: .deleteFailed
+        case .spam: .moveFailed
+        }
     }
 
     func relocate(_ id: String, _ move: MoveTarget, undoable: Bool = false, toast: ToastKind = .trashed) async {
@@ -48,6 +57,7 @@ extension InboxState {
                 landed = nil
             }
         } catch {
+            post(Self.relocateFailure(move), undo: { [weak self] in await self?.relocate(id, move, undoable: undoable, toast: toast) })
             return
         }
         let staysListed = move == .archive && folders.first { $0.id == selectedFolder }?.role == .all
@@ -89,6 +99,7 @@ extension InboxState {
         do {
             landed = try await mailbox.move(inlet, messageID: id, toFolder: folder)
         } catch {
+            post(.moveFailed, undo: { [weak self] in await self?.move(id, to: folder) })
             return
         }
         if selectedInlet == inlet { summaries.removeAll { $0.id == id } }
@@ -113,14 +124,22 @@ extension InboxState {
 
     public func attachmentData(_ id: String, attachmentID: String) async -> Data? {
         guard let inlet = selectedInlet else { return nil }
-        return try? await mailbox.attachment(inlet, messageID: id, attachmentID: attachmentID)
+        do {
+            return try await mailbox.attachment(inlet, messageID: id, attachmentID: attachmentID)
+        } catch {
+            post(.attachmentFailed)
+            return nil
+        }
     }
 
     func loadThread(_ id: String) async {
         guard let inlet = selectedInlet, let summary = summary(id) else { return }
         let threadID = summary.threadID.isEmpty ? id : summary.threadID
-        if let messages = try? await mailbox.thread(inlet, messageID: id, threadID: threadID) {
+        do {
+            let messages = try await mailbox.thread(inlet, messageID: id, threadID: threadID)
             update(id, in: inlet) { $0.conversation = messages }
+        } catch {
+            post(.threadFailed, undo: { [weak self] in await self?.loadThread(id) })
         }
     }
 }

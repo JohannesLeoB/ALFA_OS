@@ -13,6 +13,7 @@ public struct OutboxItem: Identifiable, Equatable, Sendable {
     let draft: Draft
     let messageID: String
     var draftID: String?
+    var mirrorID: String?
     private(set) var state: OutboxState
     private(set) var attempts: Int
 
@@ -21,12 +22,14 @@ public struct OutboxItem: Identifiable, Equatable, Sendable {
                   state: .waiting, attempts: 0)
     }
 
-    init(id: UUID, inlet: Inlet.ID, draft: Draft, messageID: String, draftID: String?, state: OutboxState, attempts: Int) {
+    init(id: UUID, inlet: Inlet.ID, draft: Draft, messageID: String, draftID: String?, mirrorID: String? = nil,
+         state: OutboxState, attempts: Int) {
         self.id = id
         self.inlet = inlet
         self.draft = draft
         self.messageID = messageID
         self.draftID = draftID
+        self.mirrorID = mirrorID
         self.state = state
         self.attempts = attempts
     }

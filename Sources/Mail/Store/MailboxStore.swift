@@ -122,6 +122,14 @@ public final class MailboxStore: MailboxPort {
         return count.flatMap { $0 } ?? 0
     }
 
+    public func draftIDs(_ inlet: Inlet.ID) -> Set<String> {
+        guard let drafts = folderID(inlet, role: .drafts) else { return [] }
+        let ids = try? database.read { db in
+            try String.fetchAll(db, sql: "SELECT id FROM mail_message WHERE inlet = ? AND folder = ?", arguments: [inlet, drafts])
+        }
+        return Set(ids ?? [])
+    }
+
     public func refreshFolders(_ inlet: Inlet.ID) async throws(HubFailure) {
         let transport = try transport(inlet)
         do {

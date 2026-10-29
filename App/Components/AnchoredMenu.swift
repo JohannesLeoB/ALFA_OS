@@ -41,7 +41,7 @@ struct AnchoredMenu: View {
             .lineLimit(1)
             .font(.face(Tokens.TextSize.small))
             .foregroundStyle(appearance.color(\.inkTertiary))
-            .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+            .padding(.horizontal, CGFloat(Tokens.Size.menuSeparatorInset))
             .padding(.bottom, CGFloat(Tokens.Spacing.step4))
             .frame(maxWidth: .infinity, minHeight: CGFloat(Tokens.Size.chipHeight), alignment: .bottomLeading)
     }
@@ -51,7 +51,7 @@ struct AnchoredMenu: View {
             .fill(appearance.color(\.line))
             .frame(height: CGFloat(Tokens.Size.hairline))
             .padding(.vertical, CGFloat(Tokens.Spacing.step4))
-            .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+            .padding(.horizontal, CGFloat(Tokens.Size.menuSeparatorInset))
     }
 }
 
@@ -77,10 +77,10 @@ struct MenuRow: View {
                 }
             }
             .foregroundStyle(appearance.color(row.danger ? \.signal : \.ink))
-            .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+            .padding(.horizontal, CGFloat(Tokens.Size.menuRowPadding))
             .frame(height: CGFloat(Tokens.Size.menuRowHeight))
             .background(
-                RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.notice))
+                RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row))
                     .fill(hovering ? appearance.color(\.hover) : Color.clear)
             )
             .contentShape(Rectangle())

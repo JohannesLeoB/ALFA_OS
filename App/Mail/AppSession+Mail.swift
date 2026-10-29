@@ -74,7 +74,10 @@ extension AppSession {
         panel.allowsMultipleSelection = true
         panel.canChooseDirectories = false
         guard panel.runModal() == .OK else { return }
-        let urls = panel.urls
+        attach(urls: panel.urls, to: id)
+    }
+
+    func attach(urls: [URL], to id: UUID) {
         let inbox = self.inbox
         Task {
             for url in urls {

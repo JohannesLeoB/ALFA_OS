@@ -16,14 +16,6 @@ struct FolderLane: View {
 
     private var current: Inlet? { inbox.selectedAccount }
 
-    private var detail: (text: String, failing: Bool)? {
-        switch inbox.listState {
-        case .notConnected: (appearance.string("mail.lane.detail.none"), false)
-        case .signInExpired: (appearance.string("mail.lane.detail.unreachable"), true)
-        default: nil
-        }
-    }
-
     private var openLanes: Int {
         desk.widths.all.filter { $0 > desk.measure.laneFolded }.count
     }
@@ -48,13 +40,7 @@ struct FolderLane: View {
             } else {
                 HeaderTitle(text: appearance.text("mail.lane.title"))
             }
-            Group {
-                if let state = detail {
-                    SmallText(text: Text(verbatim: state.text), tone: state.failing ? \.signal : \.inkTertiary)
-                        .help(Text(verbatim: state.text))
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            Spacer(minLength: 0)
             if openLanes > 1 {
                 SymbolButton(help: appearance.string("mail.lane.fold"), glyph: .minus) { desk.toggleFold(.leading) }
             }

@@ -9,7 +9,8 @@ struct MessageCard: View {
     let perform: (Action) -> Void
 
     var body: some View {
-        CardFace(depth: depth, bring: { session.inbox.bring(ref) }) { ink in
+        CardFace(depth: depth, lacquered: true, last: depth == session.inbox.stackOrder.count - 1,
+                 bring: { session.inbox.bring(ref) }) { ink in
             Head(session: session, ref: ref, depth: depth, ink: ink)
         } content: {
             content

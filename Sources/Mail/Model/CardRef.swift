@@ -13,15 +13,8 @@ public enum CardRef: Hashable, Sendable {
     }
 }
 
-public enum OverviewMode: Equatable, Sendable, CaseIterable {
-    case stack
-    case folder
-}
-
 public struct Overview: Equatable, Sendable {
     public var open = false
-    public var mode = OverviewMode.stack
-    public var size = OverviewSize.medium
     public var hot: CardRef?
 }
 
@@ -40,5 +33,6 @@ public struct StripMark: Identifiable, Equatable, Sendable {
     public let help: FolderName
     public let selected: Bool
     public let dot: Bool
+    public var accent = false
     public let run: Run
 }

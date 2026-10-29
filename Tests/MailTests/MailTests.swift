@@ -1,6 +1,7 @@
 import Core
 import Design
 import Foundation
+import GRDB
 @testable import Hub
 import Shell
 import Storage
@@ -73,6 +74,11 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
     let validity = Locked<String?>(nil)
     let failListing = Locked(false)
     let waiting = Locked<[CheckedContinuation<Void, Never>]>([])
+    let saves = Locked(0)
+    let separateDraftIDs = Locked(false)
+    let mirrorsDrafts = Locked(false)
+    let draftIDs = Locked<[String: String]>([:])
+    let sendDraftFailure = Locked<(any Error)?>(nil)
     let prefix: String
 
     init(prefix: String = "1") {
@@ -122,20 +128,60 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
     func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data { try note("attachment"); return Data([1]) }
     func fetchThread(messageID: String, threadID: String) async throws -> [MessageSummary] { try note("thread"); return [] }
 
-    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> String {
+    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> SavedDraft {
         try note("saveDraft")
-        let id = prefix + ":9:Drafts"
+        let number = saves.with { count -> Int in
+            count += 1
+            return count
+        }
+        let mirrorID = prefix + ":\(8 + number):Drafts"
+        let id = separateDraftIDs.with { $0 } ? (draftID ?? "draft:\(prefix):\(number)") : mirrorID
         drafts.with { $0[id] = draft }
-        return id
+        if mirrorsDrafts.with({ $0 }) {
+            let replaced = draftID.map(mirrorID(ofDraft:))
+            draftIDs.with { map in
+                if let replaced { map[replaced] = nil }
+                map[mirrorID] = id
+            }
+            corpus.with { corpus in
+                var listed = (corpus["Drafts"] ?? []).filter { $0.id != replaced }
+                listed.append(MessageSummary(id: mirrorID, threadID: "t", subject: draft.subject, from: "Me", fromRaw: "me@example.com",
+                                             toRaw: draft.to ?? "", snippet: "s", receivedAt: Date(timeIntervalSince1970: 1_800_000_000),
+                                             flags: [.seen, .draft], folderIDs: ["Drafts"],
+                                             messageIDHeader: "<\(mirrorID)@x>"))
+                corpus["Drafts"] = listed
+            }
+        }
+        return SavedDraft(id: id, mirrorID: mirrorID)
     }
 
     func fetchDraft(messageID: String) async throws -> StoredDraft {
         try note("fetchDraft")
-        return StoredDraft(id: messageID, draft: drafts.with { $0[messageID] } ?? Draft(subject: "", body: ""))
+        let id = draftIDs.with { $0[messageID] } ?? (separateDraftIDs.with { $0 } ? "draft:" + messageID : messageID)
+        return StoredDraft(id: id, draft: drafts.with { $0[id] } ?? Draft(subject: "", body: ""))
     }
 
-    func deleteDraft(id: String) async throws { try note("deleteDraft") }
-    func sendDraft(id: String) async throws { try note("sendDraft") }
+    func deleteDraft(id: String) async throws {
+        try note("deleteDraft")
+        removeServerDraft(id)
+    }
+
+    func sendDraft(id: String) async throws {
+        try note("sendDraft")
+        if let error = sendDraftFailure.with({ $0 }) { throw error }
+        removeServerDraft(id)
+    }
+
+    private func mirrorID(ofDraft id: String) -> String {
+        draftIDs.with { $0.first { $0.value == id }?.key } ?? (id.hasPrefix("draft:") ? String(id.dropFirst("draft:".count)) : id)
+    }
+
+    private func removeServerDraft(_ id: String) {
+        guard mirrorsDrafts.with({ $0 }) else { return }
+        let gone = mirrorID(ofDraft: id)
+        draftIDs.with { $0[gone] = nil }
+        corpus.with { $0["Drafts"]?.removeAll { $0.id == gone } }
+    }
     func wasSent(messageID: String) async throws -> Bool { try note("wasSent"); return wasSentAnswer.with { $0 } }
     var ranges: [MailboxRange] { mirrorRanges.with { $0 } }
 
@@ -1661,6 +1707,71 @@ final class MailTests: XCTestCase {
     }
 
     @MainActor
+    func testOpeningOfflineShowsOneReadToastWithRetryAndRetryLoadsTheBody() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 3, from: Self.epoch, flags: [])
+        let state = await started(rig)
+        let id = "1:0:INBOX"
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        await state.open(id)
+        XCTAssertEqual(state.toast?.kind, .readFailed)
+        XCTAssertEqual(state.toast?.undoable, true)
+        XCTAssertFalse(state.summary(id)?.flags.contains(.seen) ?? true)
+        rig.transport.failure.with { $0 = nil }
+        await state.undoToast()
+        XCTAssertNil(state.toast)
+        XCTAssertEqual(state.card(id)?.content, .text("plain text"))
+    }
+
+    @MainActor
+    func testOpeningOnlineMarksReadWithoutAToast() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 3, from: Self.epoch, flags: [])
+        let state = await started(rig)
+        await state.open("1:0:INBOX")
+        XCTAssertNil(state.toast)
+        XCTAssertTrue(state.summary("1:0:INBOX")?.flags.contains(.seen) ?? false)
+    }
+
+    @MainActor
+    func testExplicitFlagFailuresNameTheirOwnKindAndOfferRetry() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 3, from: Self.epoch, flags: [])
+        let state = await started(rig)
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        await state.setStarred("1:0:INBOX", true)
+        XCTAssertEqual(state.toast?.kind, .flagFailed)
+        XCTAssertEqual(state.toast?.undoable, true)
+        await state.setRead("1:0:INBOX", true)
+        XCTAssertEqual(state.toast?.kind, .readFailed)
+        await state.setRead("1:0:INBOX", false)
+        XCTAssertEqual(state.toast?.kind, .flagFailed)
+        await state.setRead("1:0:INBOX", true)
+        rig.transport.failure.with { $0 = nil }
+        await state.undoToast()
+        XCTAssertTrue(state.summary("1:0:INBOX")?.flags.contains(.seen) ?? false)
+    }
+
+    @MainActor
+    func testBulkReadCountsOnlySuccessesAndNeverReportsSuccessWhenAllFail() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 3, from: Self.epoch, flags: [])
+        let state = await started(rig)
+        let ids = state.summaries.map(\.id)
+        ids.forEach { state.pick($0) }
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        await state.bulk(.read)
+        XCTAssertEqual(state.toast?.kind, .flagFailed)
+        XCTAssertTrue(state.picked.isEmpty)
+        XCTAssertTrue(state.summaries.allSatisfy { !$0.flags.contains(.seen) })
+        rig.transport.failure.with { $0 = nil }
+        ids.forEach { state.pick($0) }
+        await state.bulk(.read)
+        XCTAssertEqual(state.toast?.kind, .bulkRead(count: 3, read: true))
+        XCTAssertTrue(state.summaries.allSatisfy { $0.flags.contains(.seen) })
+    }
+
+    @MainActor
     func testSearchPagesPerFolderSkipsFailingFoldersAndKeepsScopesApart() async throws {
         let rig = try Rig()
         try await rig.mailbox.refreshFolders("a")
@@ -1864,6 +1975,508 @@ final class MailTests: XCTestCase {
         try await rig.mailbox.refresh("a", folder: "INBOX")
         XCTAssertEqual(rig.transport.cursors.with { $0 }, ["s7", "c1"])
         XCTAssertEqual(rig.transport.calls.with { $0.filter { $0 == "startCursor" }.count }, 1)
+    }
+
+    @MainActor
+    func testTheDraftsBadgeCountsEveryDraftOfTheFolderNotJustOpenedOnes() async throws {
+        let rig = try mirrored()
+        rig.transport.folderList.with {
+            $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "Drafts", name: "Drafts", role: .drafts)]
+        }
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("Drafts", count: 14, from: Self.epoch)
+        try await rig.mailbox.refresh("a", folder: "Drafts")
+        XCTAssertEqual(rig.mailbox.draftIDs("a").count, 14)
+        let state = await started(rig)
+        XCTAssertEqual(state.folderRows.first { $0.folder.role == .drafts }?.count, 14)
+    }
+
+    @MainActor
+    func testDraftsBadgeFollowsSavingDeletingAndSendingAtOnceAndKeepsTheMirroredTotal() async throws {
+        let rig = try mirrored()
+        rig.transport.folderList.with {
+            $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "Drafts", name: "Drafts", role: .drafts)]
+        }
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("Drafts", count: 9, from: Self.epoch)
+        try await rig.mailbox.refresh("a", folder: "Drafts")
+        let state = await started(rig)
+        func badge() -> Int? { state.folderRows.first { $0.folder.role == .drafts }?.count }
+        XCTAssertEqual(badge(), 9)
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.subject = "Neu" }
+        await state.save(id)
+        XCTAssertEqual(badge(), 10)
+        state.edit(id) { $0.subject = "Neu 2" }
+        await state.save(id)
+        XCTAssertEqual(badge(), 10)
+        await state.deleteDraft(id)
+        XCTAssertEqual(badge(), 9)
+        let opened = await state.editDraft("1:0:Drafts")
+        let mirroredID = try XCTUnwrap(opened)
+        XCTAssertEqual(badge(), 9)
+        await state.deleteDraft(mirroredID)
+        XCTAssertEqual(badge(), 8)
+        rig.fill("Drafts", count: 8, from: Self.epoch)
+        rig.transport.corpus.with { $0["Drafts"]?.removeAll { $0.id == "1:0:Drafts" } }
+        try await rig.mailbox.refresh("a", folder: "Drafts")
+        state.refreshCounts()
+        XCTAssertEqual(badge(), 7)
+        XCTAssertTrue(state.goneDrafts["a"]?.isEmpty ?? true)
+    }
+
+    @MainActor
+    func testSendingAMirroredDraftTakesItOutOfTheBadge() async throws {
+        let rig = try mirrored()
+        rig.transport.folderList.with {
+            $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "Drafts", name: "Drafts", role: .drafts)]
+        }
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("Drafts", count: 3, from: Self.epoch)
+        try await rig.mailbox.refresh("a", folder: "Drafts")
+        let state = await started(rig)
+        let opened = await state.editDraft("1:0:Drafts")
+        let id = try XCTUnwrap(opened)
+        state.edit(id) {
+            $0.to = "x@y.de"
+            $0.subject = "S"
+        }
+        XCTAssertEqual(state.folderRows.first { $0.folder.role == .drafts }?.count, 3)
+        await state.send(id)
+        XCTAssertEqual(state.draft(id)?.state, .sent)
+        XCTAssertEqual(state.folderRows.first { $0.folder.role == .drafts }?.count, 2)
+    }
+
+    @MainActor
+    private func draftRig(count: Int, separateIDs: Bool) async throws -> (rig: Rig, state: InboxState) {
+        let rig = try mirrored()
+        rig.transport.folderList.with {
+            $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "Drafts", name: "Drafts", role: .drafts)]
+        }
+        rig.transport.separateDraftIDs.with { $0 = separateIDs }
+        rig.transport.mirrorsDrafts.with { $0 = true }
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("Drafts", count: count, from: Self.epoch)
+        try await rig.mailbox.refresh("a", folder: "Drafts")
+        return (rig, await started(rig))
+    }
+
+    @MainActor
+    private func mirrorPass(_ rig: Rig, _ state: InboxState) async throws {
+        try await rig.mailbox.refresh("a", folder: "Drafts")
+        state.refreshCounts()
+    }
+
+    @MainActor
+    private func draftBadge(_ state: InboxState) -> Int? {
+        state.folderRows.first { $0.folder.role == .drafts }?.count
+    }
+
+    @MainActor
+    func testOpeningAMirroredDraftKeepsTheBadgeWhenDraftIDAndMirrorIDDiffer() async throws {
+        for separate in [false, true] {
+            let (_, state) = try await draftRig(count: 9, separateIDs: separate)
+            let editing = await state.editDraft("1:0:Drafts")
+            let opened = try XCTUnwrap(editing)
+            let card = try XCTUnwrap(state.draft(opened))
+            XCTAssertEqual(card.mirrorID, "1:0:Drafts")
+            XCTAssertEqual(card.remoteID, separate ? "draft:1:0:Drafts" : "1:0:Drafts")
+            XCTAssertEqual(draftBadge(state), 9)
+            let again = await state.editDraft("1:0:Drafts")
+            XCTAssertEqual(again, opened)
+            XCTAssertEqual(draftBadge(state), 9)
+        }
+    }
+
+    @MainActor
+    func testSavingANewDraftCountsOnceBeforeAndAfterTheMirrorPassWhenIDsDiffer() async throws {
+        for separate in [false, true] {
+            let (rig, state) = try await draftRig(count: 9, separateIDs: separate)
+            let id = try XCTUnwrap(state.compose())
+            state.edit(id) { $0.subject = "Neu" }
+            await state.save(id)
+            XCTAssertEqual(draftBadge(state), 10)
+            XCTAssertNotEqual(state.draft(id)?.remoteID == state.draft(id)?.mirrorID, separate)
+            try await mirrorPass(rig, state)
+            XCTAssertEqual(rig.mailbox.draftIDs("a").count, 10)
+            XCTAssertEqual(draftBadge(state), 10)
+            state.edit(id) { $0.subject = "Neu 2" }
+            await state.save(id)
+            XCTAssertEqual(draftBadge(state), 10)
+            try await mirrorPass(rig, state)
+            XCTAssertEqual(rig.mailbox.draftIDs("a").count, 10)
+            XCTAssertEqual(draftBadge(state), 10)
+            XCTAssertTrue(state.goneDrafts["a"]?.isEmpty ?? true)
+        }
+    }
+
+    @MainActor
+    func testSavingAgainWithANewIDDropsTheReplacedOneFromTheBadgeAtOnce() async throws {
+        let (rig, state) = try await draftRig(count: 9, separateIDs: false)
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.subject = "Neu" }
+        await state.save(id)
+        let first = try XCTUnwrap(state.draft(id)?.remoteID)
+        try await mirrorPass(rig, state)
+        XCTAssertEqual(draftBadge(state), 10)
+        state.edit(id) { $0.subject = "Neu 2" }
+        await state.save(id)
+        let second = try XCTUnwrap(state.draft(id)?.remoteID)
+        XCTAssertNotEqual(first, second)
+        XCTAssertTrue(rig.mailbox.draftIDs("a").contains(first))
+        XCTAssertEqual(state.goneDrafts["a"], [first])
+        XCTAssertEqual(draftBadge(state), 10)
+        try await mirrorPass(rig, state)
+        XCTAssertEqual(rig.mailbox.draftIDs("a"), Set((0..<9).map { "1:\($0):Drafts" } + [second]))
+        XCTAssertEqual(draftBadge(state), 10)
+        XCTAssertTrue(state.goneDrafts["a"]?.isEmpty ?? true)
+    }
+
+    @MainActor
+    func testDeletingDraftsLeavesTheBadgeRightBeforeAndAfterTheMirrorPassWhenIDsDiffer() async throws {
+        for separate in [false, true] {
+            let (rig, state) = try await draftRig(count: 9, separateIDs: separate)
+            let id = try XCTUnwrap(state.compose())
+            state.edit(id) { $0.subject = "Neu" }
+            await state.save(id)
+            try await mirrorPass(rig, state)
+            XCTAssertEqual(draftBadge(state), 10)
+            await state.deleteDraft(id)
+            XCTAssertEqual(draftBadge(state), 9)
+            try await mirrorPass(rig, state)
+            XCTAssertEqual(draftBadge(state), 9)
+            let editing = await state.editDraft("1:0:Drafts")
+            let opened = try XCTUnwrap(editing)
+            await state.deleteDraft(opened)
+            XCTAssertEqual(draftBadge(state), 8)
+            XCTAssertEqual(state.goneDrafts["a"], ["1:0:Drafts"])
+            try await mirrorPass(rig, state)
+            XCTAssertEqual(draftBadge(state), 8)
+            XCTAssertTrue(state.goneDrafts["a"]?.isEmpty ?? true)
+        }
+    }
+
+    @MainActor
+    func testSendingDraftsLeavesTheBadgeRightBeforeAndAfterTheMirrorPassWhenIDsDiffer() async throws {
+        for separate in [false, true] {
+            let (rig, state) = try await draftRig(count: 3, separateIDs: separate)
+            let fresh = try XCTUnwrap(state.compose())
+            state.edit(fresh) {
+                $0.to = "x@y.de"
+                $0.subject = "Neu"
+            }
+            await state.save(fresh)
+            try await mirrorPass(rig, state)
+            XCTAssertEqual(draftBadge(state), 4)
+            await state.send(fresh)
+            XCTAssertEqual(state.draft(fresh)?.state, .sent)
+            XCTAssertEqual(draftBadge(state), 3)
+            try await mirrorPass(rig, state)
+            XCTAssertEqual(draftBadge(state), 3)
+            let editing = await state.editDraft("1:0:Drafts")
+            let opened = try XCTUnwrap(editing)
+            state.edit(opened) {
+                $0.to = "x@y.de"
+                $0.subject = "S"
+            }
+            XCTAssertEqual(draftBadge(state), 3)
+            await state.send(opened)
+            XCTAssertEqual(draftBadge(state), 2)
+            XCTAssertEqual(state.goneDrafts["a"], ["1:0:Drafts"])
+            try await mirrorPass(rig, state)
+            XCTAssertEqual(draftBadge(state), 2)
+            XCTAssertTrue(state.goneDrafts["a"]?.isEmpty ?? true)
+        }
+    }
+
+    @MainActor
+    func testAFailedSendAfterTheOutboxSavedAgainKeepsTheBadgeRightAfterTheMirrorPass() async throws {
+        for separate in [false, true] {
+            let (rig, state) = try await draftRig(count: 3, separateIDs: separate)
+            let fresh = try XCTUnwrap(state.compose())
+            state.edit(fresh) {
+                $0.to = "x@y.de"
+                $0.subject = "Neu"
+            }
+            await state.save(fresh)
+            try await mirrorPass(rig, state)
+            XCTAssertEqual(draftBadge(state), 4)
+            let before = try XCTUnwrap(state.draft(fresh)?.mirrorID)
+            rig.transport.sendDraftFailure.with { $0 = MailFailure.smtpRejected(550, "no") }
+            await state.send(fresh)
+            guard case .sendFailed = state.draft(fresh)?.state else { return XCTFail() }
+            let after = try XCTUnwrap(state.draft(fresh)?.mirrorID)
+            XCTAssertNotEqual(before, after)
+            XCTAssertEqual(state.goneDrafts["a"], [before])
+            XCTAssertEqual(draftBadge(state), 4)
+            try await mirrorPass(rig, state)
+            XCTAssertEqual(rig.mailbox.draftIDs("a").count, 4)
+            XCTAssertEqual(draftBadge(state), 4)
+            XCTAssertTrue(state.goneDrafts["a"]?.isEmpty ?? true)
+        }
+    }
+
+    @MainActor
+    func testTheDraftsBadgeIgnoresFailedSavesAndDeletesWhileOffline() async throws {
+        for separate in [false, true] {
+            let (rig, state) = try await draftRig(count: 9, separateIDs: separate)
+            let editing = await state.editDraft("1:0:Drafts")
+            let opened = try XCTUnwrap(editing)
+            let fresh = try XCTUnwrap(state.compose())
+            state.edit(fresh) { $0.subject = "Neu" }
+            XCTAssertEqual(draftBadge(state), 9)
+            rig.transport.failure.with { $0 = MailFailure.timeout }
+            await state.save(fresh)
+            XCTAssertNotNil(state.draft(fresh)?.saveFailure)
+            XCTAssertNil(state.draft(fresh)?.mirrorID)
+            XCTAssertEqual(draftBadge(state), 9)
+            await state.deleteDraft(opened)
+            XCTAssertNotNil(state.draft(opened))
+            XCTAssertEqual(draftBadge(state), 9)
+            XCTAssertTrue(state.goneDrafts["a"]?.isEmpty ?? true)
+            rig.transport.failure.with { $0 = nil }
+            await state.save(fresh)
+            XCTAssertEqual(draftBadge(state), 10)
+            try await mirrorPass(rig, state)
+            XCTAssertEqual(draftBadge(state), 10)
+        }
+    }
+
+    @MainActor
+    func testTheDraftsBadgeIsKeptPerMailboxAcrossAnAccountSwitch() async throws {
+        for separate in [false, true] {
+            let (rig, state) = try await draftRig(count: 4, separateIDs: separate)
+            let other = rig.addMailbox("b", prefix: "2")
+            other.separateDraftIDs.with { $0 = separate }
+            other.mirrorsDrafts.with { $0 = true }
+            other.folderList.with {
+                $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "Drafts", name: "Drafts", role: .drafts)]
+            }
+            await state.refreshAccounts()
+            state.refreshCounts()
+            let first = try XCTUnwrap(state.compose())
+            state.edit(first) { $0.subject = "A" }
+            await state.save(first)
+            XCTAssertEqual(state.draftBadge("a"), 5)
+            XCTAssertEqual(state.draftBadge("b"), 0)
+            await state.selectAccount("b")
+            let second = try XCTUnwrap(state.compose())
+            state.edit(second) { $0.subject = "B" }
+            await state.save(second)
+            XCTAssertEqual(state.draftBadge("a"), 5)
+            XCTAssertEqual(state.draftBadge("b"), 1)
+            XCTAssertEqual(state.draft(second)?.inlet, "b")
+            XCTAssertTrue(other.calls.with { $0.contains("saveDraft") })
+            await state.deleteDraft(second)
+            XCTAssertEqual(state.draftBadge("a"), 5)
+            XCTAssertEqual(state.draftBadge("b"), 0)
+            await state.selectAccount("a")
+            try await mirrorPass(rig, state)
+            XCTAssertEqual(draftBadge(state), 5)
+            XCTAssertEqual(state.draftBadge("b"), 0)
+        }
+    }
+
+    @MainActor
+    func testTilesToggleClearsTheHoveredTileAndFollowTheTypedText() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 3, from: Self.epoch)
+        let state = await started(rig)
+        XCTAssertTrue(state.offersTiles)
+        XCTAssertFalse(state.tiles)
+        state.aimTile("1:0:INBOX")
+        XCTAssertEqual(state.tileHot, "1:0:INBOX")
+        state.aimTile(nil)
+        XCTAssertNil(state.tileHot)
+        state.aimTile("1:1:INBOX")
+        state.toggleTiles()
+        XCTAssertTrue(state.tiles)
+        XCTAssertNil(state.tileHot)
+        state.toggleTiles()
+        XCTAssertFalse(state.tiles)
+        await state.type("Note 1")
+        XCTAssertFalse(state.offersTiles)
+        await state.type("")
+        XCTAssertTrue(state.offersTiles)
+    }
+
+    @MainActor
+    func testTilesAreNotOfferedOfflineWithoutRows() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        let state = await started(rig)
+        guard case .offline = state.listState else { return XCTFail() }
+        XCTAssertNil(state.emptyKind)
+        XCTAssertFalse(state.offersTiles)
+    }
+
+    @MainActor
+    func testComposeIsOfferedOnlyWhereMailIsWritten() async throws {
+        let rig = try mirrored()
+        let roles: [(FolderRole, Bool)] = [(.inbox, true), (.sent, true), (.drafts, true), (.all, true), (.archive, false),
+                                           (.trash, false), (.spam, false), (.starred, false), (.other, false)]
+        rig.transport.folderList.with { $0 = roles.map { Folder(id: $0.0.rawValue, name: $0.0.rawValue, role: $0.0) } }
+        let state = await started(rig)
+        for (role, offered) in roles {
+            await state.selectFolder(role.rawValue)
+            XCTAssertEqual(state.offersCompose, offered, role.rawValue)
+        }
+    }
+
+    @MainActor
+    func testEmptyKindNamesWhyTheListIsEmpty() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 0, from: Self.epoch)
+        let state = await started(rig)
+        XCTAssertEqual(state.emptyKind, .empty(folder: state.currentFolderName))
+        rig.fill("INBOX", count: 3, from: Self.epoch)
+        await state.loadSelection()
+        XCTAssertNil(state.emptyKind)
+        state.setFilter(.unread)
+        XCTAssertEqual(state.emptyKind, .noFilterMatch)
+        state.setFilter(.all)
+        await state.submit("zzz")
+        XCTAssertEqual(state.emptyKind, .noResults(query: "zzz", folder: state.currentFolderName))
+    }
+
+    @MainActor
+    func testUnsavedOutboxIsCountedAndSavedAgain() async throws {
+        let rig = try mirrored()
+        let state = await started(rig)
+        XCTAssertEqual(state.outboxUnsaved, 0)
+        try rig.database.write { try $0.execute(sql: "ALTER TABLE mail_outbox RENAME TO mail_outbox_away") }
+        rig.transport.failure.with { $0 = MailFailure.connectionClosed }
+        guard case .queued = await rig.outbox.send("a", Draft(to: "x@y.de", subject: "s", body: "b")) else { return XCTFail() }
+        XCTAssertEqual(state.outboxUnsaved, 1)
+        state.resaveOutbox()
+        XCTAssertEqual(state.outboxUnsaved, 1)
+        try rig.database.write { try $0.execute(sql: "ALTER TABLE mail_outbox_away RENAME TO mail_outbox") }
+        state.resaveOutbox()
+        XCTAssertEqual(state.outboxUnsaved, 0)
+        let saved = try rig.database.read { try Int.fetchOne($0, sql: "SELECT COUNT(*) FROM mail_outbox") }
+        XCTAssertEqual(saved, 1)
+    }
+
+    @MainActor
+    func testFailedMovesPostTheirOwnKindAndRetryFinishesThem() async throws {
+        let rig = try mirrored()
+        rig.transport.folderList.with {
+            $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "Archive", name: "Archive", role: .archive),
+                  Folder(id: "Trash", name: "Trash", role: .trash), Folder(id: "Spam", name: "Spam", role: .spam),
+                  Folder(id: "Work", name: "Work", role: .other)]
+        }
+        rig.fill("INBOX", count: 6, from: Self.epoch, flags: [.seen])
+        let state = await started(rig)
+        let cases: [(ToastKind, (String) async -> Void)] = [
+            (.archiveFailed, { await state.archive($0) }),
+            (.deleteFailed, { await state.trash($0) }),
+            (.moveFailed, { await state.markSpam($0) }),
+            (.moveFailed, { await state.move($0, to: "Work") })
+        ]
+        for (index, entry) in cases.enumerated() {
+            let id = "1:\(index):INBOX"
+            rig.transport.failure.with { $0 = MailFailure.timeout }
+            await entry.1(id)
+            XCTAssertEqual(state.toast?.kind, entry.0)
+            XCTAssertEqual(state.toast?.undoable, true)
+            XCTAssertTrue(state.summaries.contains { $0.id == id })
+            rig.transport.failure.with { $0 = nil }
+            await state.undoToast()
+            XCTAssertFalse(state.summaries.contains { $0.id == id })
+        }
+    }
+
+    @MainActor
+    func testFailedPurgeThreadAndAttachmentPostTheirKinds() async throws {
+        let rig = try mirrored()
+        rig.transport.folderList.with {
+            $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "Trash", name: "Trash", role: .trash)]
+        }
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("Trash", count: 2, from: Self.epoch)
+        await rig.mailbox.checkPurge("a")
+        let state = await started(rig)
+        await state.selectFolder("Trash")
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        await state.purge("1:0:Trash")
+        XCTAssertEqual(state.toast?.kind, .deleteFailed)
+        XCTAssertEqual(state.toast?.undoable, true)
+        rig.transport.failure.with { $0 = nil }
+        await state.undoToast()
+        XCTAssertEqual(state.toast?.kind, .purged)
+        XCTAssertFalse(state.summaries.contains { $0.id == "1:0:Trash" })
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        await state.loadThread("1:1:Trash")
+        XCTAssertEqual(state.toast?.kind, .threadFailed)
+        XCTAssertEqual(state.toast?.undoable, true)
+        rig.transport.failure.with { $0 = nil }
+        rig.transport.calls.with { $0 = [] }
+        await state.undoToast()
+        XCTAssertEqual(rig.transport.calls.with { $0.filter { $0 == "thread" }.count }, 1)
+        XCTAssertNil(state.toast)
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        let data = await state.attachmentData("1:1:Trash", attachmentID: "x")
+        XCTAssertNil(data)
+        XCTAssertEqual(state.toast?.kind, .attachmentFailed)
+        XCTAssertEqual(state.toast?.undoable, false)
+    }
+
+    @MainActor
+    func testLoadingTheTailRunsOnceWhileItIsLoading() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 1_000, from: Self.epoch)
+        let state = await started(rig)
+        XCTAssertEqual(state.listTail, .older)
+        let before = rig.transport.listings.with { $0.count }
+        rig.transport.holds.with { $0 = ["listIDs"] }
+        let first = Task { @MainActor in await state.loadTail() }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        XCTAssertEqual(state.phase, .loadingMore)
+        XCTAssertEqual(state.listTail, .older)
+        let second = Task { @MainActor in await state.loadTail() }
+        await second.value
+        XCTAssertEqual(rig.transport.listings.with { $0.count }, before + 1)
+        rig.transport.release()
+        await first.value
+        XCTAssertEqual(rig.transport.listings.with { $0.count }, before + 1)
+        XCTAssertEqual(state.phase, .settled)
+    }
+
+    func testPreviewTextDropsQuotesSignaturesAndAttributionLines() {
+        XCTAssertEqual(PreviewEngine.text("Danke dir!\n> > alter Text\n> noch mehr"), "Danke dir!")
+        XCTAssertEqual(PreviewEngine.text("Passt so.\n\nAm Mi., 28. Okt. 2026 um 10:00 schrieb Anna <anna@example.com>:\n> Hallo"), "Passt so.")
+        XCTAssertEqual(PreviewEngine.text("Passt so. Am Mi., 28. Okt. 2026 um 10:00 schrieb Anna <a@b.de>: > > > > Hallo"), "Passt so.")
+        XCTAssertEqual(PreviewEngine.text("On Mon, Oct 26, 2026 at 9:00 AM Bob <b@x.com> wrote: > hi"), "")
+        XCTAssertEqual(PreviewEngine.text("Bis morgen\n-- \nMax Muster\nStudio"), "Bis morgen")
+        XCTAssertEqual(PreviewEngine.text("Bis morgen\n--\nMax"), "Bis morgen")
+        XCTAssertEqual(PreviewEngine.text("Bis morgen \u{2014} > > > >"), "Bis morgen")
+        XCTAssertEqual(PreviewEngine.text("Gesendet von meinem iPhone"), "")
+        XCTAssertEqual(PreviewEngine.text("Zeile eins\r\n  Zeile   zwei  "), "Zeile eins Zeile zwei")
+        XCTAssertEqual(PreviewEngine.text("Wir sehen uns am Montag, Anna schrieb nichts"), "Wir sehen uns am Montag, Anna schrieb nichts")
+        XCTAssertEqual(PreviewEngine.text("Am Montag schrieb mir der Kunde: bitte melden Sie sich"), "Am Montag schrieb mir der Kunde: bitte melden Sie sich")
+        XCTAssertEqual(PreviewEngine.text("Gesendet von Anna Muster am Montag"), "Gesendet von Anna Muster am Montag")
+    }
+
+    func testDraftHeaderShowsPhaseStatusAndNeverMissingFieldHints() {
+        var draft = OpenDraft(id: UUID(), inlet: "a", draft: Draft(subject: "", body: ""), state: .idle, outboxID: nil, remoteID: nil, saveFailure: nil)
+        XCTAssertNil(draft.status)
+        draft.state = .saving
+        XCTAssertEqual(draft.status, .saving)
+        draft.state = .saved(Date())
+        XCTAssertEqual(draft.status, .saved)
+        draft.state = .queuedInOutbox
+        XCTAssertEqual(draft.status, .outbox)
+        draft.state = .sending
+        XCTAssertEqual(draft.status, .sending)
+        draft.state = .sendFailed(Hint(text: "x"))
+        XCTAssertEqual(draft.status, .sendFailed)
+        draft.state = .edited
+        draft.saveFailure = Hint(text: "x")
+        XCTAssertEqual(draft.status, .notSaved)
+        XCTAssertFalse(draft.saveNeedsSignIn)
+        draft.saveFailure = Hint(text: Hint.signInExpiredText)
+        XCTAssertTrue(draft.saveNeedsSignIn)
     }
 
     @MainActor
@@ -2110,7 +2723,7 @@ private final class SingleFolderDouble: MailTransportPort, @unchecked Sendable {
     func markSpam(messageID: String) async throws {}
     func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data { Data() }
     func fetchThread(messageID: String, threadID: String) async throws -> [MessageSummary] { [] }
-    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> String { "" }
+    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> SavedDraft { SavedDraft(id: "") }
     func fetchDraft(messageID: String) async throws -> StoredDraft { StoredDraft(id: messageID, draft: Draft(subject: "", body: "")) }
     func deleteDraft(id: String) async throws {}
     func sendDraft(id: String) async throws {}

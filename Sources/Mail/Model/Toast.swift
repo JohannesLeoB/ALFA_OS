@@ -17,6 +17,13 @@ public enum ToastKind: Equatable, Sendable {
     case bulkTrashed(count: Int)
     case olderFailed
     case moreFailed
+    case archiveFailed
+    case moveFailed
+    case deleteFailed
+    case flagFailed
+    case readFailed
+    case attachmentFailed
+    case threadFailed
     case searchPartial
     case mirrorRefused
 
@@ -40,8 +47,23 @@ public enum ToastKind: Equatable, Sendable {
         case .bulkTrashed(let count): "mail.toast.bulkTrashed" + Self.plural(count)
         case .olderFailed: "mail.toast.olderFailed"
         case .moreFailed: "mail.toast.moreFailed"
+        case .archiveFailed: "mail.failure.archive"
+        case .moveFailed: "mail.failure.move"
+        case .deleteFailed: "mail.failure.delete"
+        case .flagFailed: "mail.failure.flag"
+        case .readFailed: "mail.failure.read"
+        case .attachmentFailed: "mail.failure.attachment"
+        case .threadFailed: "mail.failure.thread"
         case .searchPartial: "mail.toast.searchPartial"
         case .mirrorRefused: "mail.hint.mirrorRefused"
+        }
+    }
+
+    public var failed: Bool {
+        switch self {
+        case .olderFailed, .moreFailed, .archiveFailed, .moveFailed, .deleteFailed, .flagFailed, .readFailed, .attachmentFailed,
+             .threadFailed: true
+        default: false
         }
     }
 

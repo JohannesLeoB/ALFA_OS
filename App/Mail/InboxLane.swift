@@ -69,7 +69,7 @@ struct MarkList: View {
         let inbox = session.inbox
         StripMarks(items: inbox.stripMarks(lane, height: height).map { mark in
             StripMarkItem(id: mark.id, face: mark.face, help: Text(verbatim: FolderTitle.text(mark.help, localized: appearance.string)),
-                          selected: mark.selected, dot: mark.dot) { Task { await inbox.run(mark.run) } }
+                          selected: mark.selected, dot: mark.dot, accent: mark.accent) { Task { await inbox.run(mark.run) } }
         })
     }
 }

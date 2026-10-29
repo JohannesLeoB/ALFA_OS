@@ -3,7 +3,9 @@ import Hub
 @MainActor
 public protocol OutboxPort: AnyObject {
     var outbox: [OutboxItem] { get }
-    func saveDraft(_ inlet: Inlet.ID, _ draft: Draft, replacing draftID: String?) async throws(HubFailure) -> String
+    var unsavedCount: Int { get }
+    func resave()
+    func saveDraft(_ inlet: Inlet.ID, _ draft: Draft, replacing draftID: String?) async throws(HubFailure) -> SavedDraft
     func loadDraft(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> StoredDraft
     func deleteDraft(_ inlet: Inlet.ID, draftID: String) async throws(HubFailure)
     func send(_ inlet: Inlet.ID, _ draft: Draft) async -> SendOutcome
