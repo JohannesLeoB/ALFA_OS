@@ -82,7 +82,7 @@ struct DraftEditor: View {
                     .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
                     .padding(.top, CGFloat(Tokens.Spacing.step8))
             }
-            FieldRow(label: appearance.text("mail.compose.from"), width: Tokens.Size.fieldLabelWidth) {
+            FieldRow(label: appearance.text("mail.compose.from"), width: Tokens.Size.fieldLabelWidth, gap: 0) {
                 FromButton(session: session, card: card)
                 Spacer(minLength: 0)
             }
@@ -126,7 +126,7 @@ struct DraftEditor: View {
         ScrollView(.horizontal) {
             HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
                 ForEach(Array(card.draft.attachments.enumerated()), id: \.offset) { index, item in
-                    AttachmentChip(name: PersonName.middle(item.filename, limit: SheetValues.attachmentChipNameLimit), size: item.humanSize,
+                    AttachmentChip(name: PersonName.middle(item.filename, limit: SheetValues.attachmentNameLimit), size: item.humanSize,
                                    detail: item.filename, removeKey: "mail.compose.remove",
                                    onRemove: { inbox.removeAttachment(card.id, at: index) }, glyph: { Glyph.small(.doc) },
                                    removeGlyph: { Glyph.tiny(.close) })
@@ -142,10 +142,11 @@ struct DraftEditor: View {
 struct FieldRow<Content: View>: View {
     let label: Text
     let width: Double
+    var gap = Tokens.Spacing.step8
     @ViewBuilder let content: Content
 
     var body: some View {
-        HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
+        HStack(spacing: CGFloat(gap)) {
             label.designText(\.inkTertiary, size: Tokens.TextSize.small).frame(width: CGFloat(width), alignment: .leading)
             content
         }

@@ -65,7 +65,7 @@ struct RecipientEditor: View {
             }
         } else {
             Disclosure(open: false, help: appearance.format("mail.compose.showAll", Format.number(people.count))) {
-                Text(verbatim: people.first.map { $0.name.isEmpty ? $0.chipLabel : $0.name } ?? "")
+                Text(verbatim: people.first?.first ?? "")
                     .designText(\.ink, size: Tokens.TextSize.body, weight: .medium).lineLimit(1)
                 SmallText(text: Text(verbatim: appearance.format("mail.read.more", Format.number(people.count - 1))))
             } action: { expanded = true }
