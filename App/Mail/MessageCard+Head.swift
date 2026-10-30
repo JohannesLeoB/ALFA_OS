@@ -96,14 +96,20 @@ extension MessageCard {
             if case .message(let id) = ref, let card = inbox.card(id), let party {
                 if front {
                     Text(verbatim: party.name.isEmpty ? "" : PersonName.middle(party.address, limit: SheetValues.cardAddressLimit))
-                        .designText(size: Tokens.TextSize.small)
+                        .font(.face(Tokens.TextSize.small))
+                        .foregroundStyle(ink)
                         .opacity(opacity)
                         .lineLimit(1)
                         .truncationMode(.tail)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
                     Spacer(minLength: 0)
-                    MessageDate(label: DateLabel.of(card.summary.receivedAt, now: inbox.now), tone: \.ink)
+                    MessageDate.text(DateLabel.of(card.summary.receivedAt, now: inbox.now), draft: false, appearance: appearance)
+                        .font(.face(Tokens.TextSize.small))
+                        .foregroundStyle(ink)
+                        .monospacedDigit()
+                        .lineLimit(1)
+                        .fixedSize()
                         .opacity(opacity)
                 }
             } else if case .draft(let id) = ref, let card = inbox.draft(id) {
@@ -111,10 +117,11 @@ extension MessageCard {
                 if !front && more > 0 {
                     Spacer(minLength: 0)
                     Text(verbatim: appearance.format("mail.card.more", Format.number(more)))
-                        .designText(size: Tokens.TextSize.small).opacity(opacity).lineLimit(1)
+                        .font(.face(Tokens.TextSize.small)).foregroundStyle(ink).opacity(opacity).lineLimit(1)
                 } else {
                     draftMeta(card)
-                        .designText(front && card.status?.failed == true ? \.signal : \.ink, size: Tokens.TextSize.small)
+                        .font(.face(Tokens.TextSize.small))
+                        .foregroundStyle(ink)
                         .opacity(opacity)
                         .lineLimit(1)
                         .truncationMode(.tail)

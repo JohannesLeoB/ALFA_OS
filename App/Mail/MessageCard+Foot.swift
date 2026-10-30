@@ -37,15 +37,16 @@ extension MessageCard {
         @ViewBuilder
         private func slotView(_ slot: Slot) -> some View {
             if slot.kind == .more {
-                SymbolButton(help: appearance.string("mail.action.more"), glyph: .more, hover: .fill) { openMore() }
+                SymbolButton(help: appearance.string("mail.action.more"), glyph: .more, tone: \.inkSecondary, hover: .fill) { openMore() }
                     .background(AnchorMarker(box: moreAnchor))
             } else if slot.action == .send, slot.cost > ShellValues.commandIconCost {
                 TextButton(label: appearance.text("mail.action.send"), kind: .accent, disabled: slot.off, action: { perform(.send) }) { Glyph(.send) }
             } else if let action = slot.action, action == .fromProject || action == .toProject, let glyph = action.glyph {
-                SymbolButton(help: session.help(action, appearance: appearance), glyph: glyph, disabled: slot.off, hover: .fill) { openProjects() }
+                SymbolButton(help: session.help(action, appearance: appearance), glyph: glyph, disabled: slot.off, tone: \.inkSecondary, hover: .fill) { openProjects() }
                     .background(AnchorMarker(box: projectAnchor))
             } else if let action = slot.action, let glyph = action.glyph {
-                SymbolButton(help: session.help(action, appearance: appearance), glyph: glyph, selected: slot.accent, disabled: slot.off, hover: .fill) {
+                SymbolButton(help: session.help(action, appearance: appearance), glyph: glyph, selected: slot.accent, disabled: slot.off, tone: \.inkSecondary,
+                             hover: .fill) {
                     perform(action)
                 }
                 .keyboardShortcut(action.shortcut)
