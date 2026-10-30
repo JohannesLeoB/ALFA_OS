@@ -11,6 +11,17 @@ public enum MessageEngine {
 
     typealias Pair = (name: String?, address: String)
 
+    private static let base64Line = 76
+    private static let lineBreak = 2
+
+    public static func encodedSize(_ draft: Draft) -> Int {
+        let text = draft.body.utf8.count + (draft.bodyHTML?.utf8.count ?? 0)
+        return draft.attachments.reduce(text) { total, attachment in
+            let encoded = (attachment.data.count + 2) / 3 * 4
+            return total + encoded + encoded / base64Line * lineBreak
+        }
+    }
+
     static func build(_ draft: Draft, account: Account, messageID: String = UUID().uuidString.lowercased(),
                              date: Date = Date(), asDraft: Bool = false) throws -> OutgoingMessage {
         let sender = try senderPair(draft, account: account)

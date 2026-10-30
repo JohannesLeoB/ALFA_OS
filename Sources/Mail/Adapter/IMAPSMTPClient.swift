@@ -1,7 +1,7 @@
 import Core
 import Foundation
 
-struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
+struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort, SendLimitPort {
     typealias PasswordSource = @Sendable () async throws -> String
     typealias CredentialSource = @Sendable () async throws -> MailCredential
 
@@ -318,6 +318,10 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
 
     func supportsPurge() async throws -> Bool {
         try await withIncoming { await $0.has("UIDPLUS") }
+    }
+
+    func sendLimit() async throws -> Int? {
+        try await SMTPSession.sizeLimit(settings: account.outgoing, opener: opener)
     }
 
     func sendDraft(id: String) async throws {

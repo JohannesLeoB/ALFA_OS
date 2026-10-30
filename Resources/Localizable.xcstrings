@@ -12889,6 +12889,22 @@
         }
       }
     },
+    "mail.draft.tooLarge" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu groß"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Too large"
+          }
+        }
+      }
+    },
     "mail.empty.all" : {
       "localizations" : {
         "de" : {
@@ -14051,6 +14067,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Outbox not saved"
+          }
+        }
+      }
+    },
+    "mail.notice.tooLarge.act" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anhänge ändern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change attachments"
+          }
+        }
+      }
+    },
+    "mail.notice.tooLarge.text" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit den Anhängen ist die Mail größer, als das Postfach senden darf."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With its attachments the mail is larger than the mailbox may send."
+          }
+        }
+      }
+    },
+    "mail.notice.tooLarge.title" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail zu groß"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail too large"
           }
         }
       }

@@ -3,7 +3,7 @@ import Foundation
 import Hub
 import Storage
 
-struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPort, PurgePort {
+struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPort, PurgePort, SendLimitPort {
     static let inboxID = "INBOX"
     static let sentID = "pop:sent"
     static let draftsID = "pop:drafts"
@@ -69,6 +69,10 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
         try await SMTPSession.deliver(outgoing, settings: account.outgoing, user: user(account.outgoing),
                                       credential: .password(try await secret()), opener: opener)
         try? keep(outgoing.data, uid: "sent:" + messageID, folder: Self.sentID, seen: true, onServer: false)
+    }
+
+    func sendLimit() async throws -> Int? {
+        try await SMTPSession.sizeLimit(settings: account.outgoing, opener: opener)
     }
 
     func setFlags(messageID: String, add: Set<Flag>, remove: Set<Flag>) async throws {

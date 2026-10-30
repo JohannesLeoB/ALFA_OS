@@ -10,6 +10,7 @@ public struct OpenDraft: Identifiable, Equatable, Sendable {
     public var remoteID: String?
     public var mirrorID: String?
     public var saveFailure: Hint?
+    public var tooLarge = false
 
     public func people(_ field: RecipientField) -> [Participant] {
         switch field {
@@ -53,6 +54,7 @@ public struct OpenDraft: Identifiable, Equatable, Sendable {
         case .saved: return .saved
         default: break
         }
+        if tooLarge { return .tooLarge }
         if failedToSend { return .sendFailed }
         return saveFailure == nil ? nil : .notSaved
     }
@@ -76,6 +78,7 @@ public enum DraftStatus: Equatable, Sendable {
     case outbox
     case sendFailed
     case notSaved
+    case tooLarge
 
     public var key: String {
         switch self {
@@ -85,8 +88,9 @@ public enum DraftStatus: Equatable, Sendable {
         case .outbox: "mail.draft.outbox"
         case .sendFailed: "mail.draft.sendFailed"
         case .notSaved: "mail.draft.notSaved"
+        case .tooLarge: "mail.draft.tooLarge"
         }
     }
 
-    public var failed: Bool { self == .sendFailed || self == .notSaved }
+    public var failed: Bool { self == .sendFailed || self == .notSaved || self == .tooLarge }
 }

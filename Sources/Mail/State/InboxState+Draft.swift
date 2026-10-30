@@ -131,6 +131,7 @@ extension InboxState {
         guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
         if drafts[index].state == .sent { return }
         change(&drafts[index].draft)
+        drafts[index].tooLarge = false
         switch drafts[index].state {
         case .sendFailed, .sending: return
         case .queuedInOutbox:
@@ -233,6 +234,10 @@ extension InboxState {
         }
         if let refusal = Self.refusal(card.draft) {
             post(refusal)
+            return
+        }
+        if let limit = await mailbox.sendLimit(card.inlet), MessageEngine.encodedSize(card.draft) > limit {
+            if let now = drafts.firstIndex(where: { $0.id == id }) { drafts[now].tooLarge = true }
             return
         }
         guard sendHold > .zero, card.outboxID == nil else {
@@ -374,6 +379,11 @@ extension InboxState {
 
     public func attach(_ id: UUID, filename: String, mimeType: String, data: Data) {
         edit(id) { $0.attachments.append(Attachment(filename: filename, mimeType: mimeType, data: data)) }
+    }
+
+    public func dismissTooLarge(_ id: UUID) {
+        guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
+        drafts[index].tooLarge = false
     }
 
     public func removeAttachment(_ id: UUID, at index: Int) {

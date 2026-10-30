@@ -9,6 +9,7 @@ public protocol MailboxPort: AnyObject {
     func folders(_ inlet: Inlet.ID) -> [Folder]
     func usesLabels(_ inlet: Inlet.ID) -> Bool
     func inboxOnly(_ inlet: Inlet.ID) -> Bool
+    func sendLimit(_ inlet: Inlet.ID) async -> Int?
     func refreshFolders(_ inlet: Inlet.ID) async throws(HubFailure)
     func cached(_ inlet: Inlet.ID, folder: String) async -> [MessageSummary]
     func lastSync(_ inlet: Inlet.ID, folder: String) -> Date?

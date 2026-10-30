@@ -481,6 +481,22 @@
    "de": "Postausgang · Nicht gesendet",
    "en": "Outbox · Not sent"
   },
+  "mail.notice.tooLarge.title": {
+   "de": "Mail zu groß",
+   "en": "Mail too large"
+  },
+  "mail.notice.tooLarge.text": {
+   "de": "Mit den Anhängen ist die Mail größer, als das Postfach senden darf.",
+   "en": "With its attachments the mail is larger than the mailbox may send."
+  },
+  "mail.notice.tooLarge.act": {
+   "de": "Anhänge ändern",
+   "en": "Change attachments"
+  },
+  "mail.draft.tooLarge": {
+   "de": "Zu groß",
+   "en": "Too large"
+  },
   "mail.image.blocked": {
    "de": "Bild blockiert",
    "en": "Image blocked"

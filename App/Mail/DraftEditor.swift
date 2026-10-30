@@ -61,6 +61,12 @@ struct DraftEditor: View {
                        actions: { TextButton(label: appearance.text("mail.draft.grant.act"), kind: .accent) { session.openMailSettings() } })
                     .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
                     .padding(.top, CGFloat(Tokens.Spacing.step8))
+            } else if card.tooLarge {
+                Notice(kind: .failure, title: appearance.text("mail.notice.tooLarge.title"), text: appearance.text("mail.notice.tooLarge.text"),
+                       glyph: { Glyph(.alert) },
+                       actions: { TextButton(label: appearance.text("mail.notice.tooLarge.act"), kind: .accent) { inbox.dismissTooLarge(card.id) } })
+                    .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+                    .padding(.top, CGFloat(Tokens.Spacing.step8))
             } else if card.failedToSend {
                 Notice(kind: .failure, title: appearance.text("mail.draft.sendFailed"), text: appearance.text("mail.draft.failed.text"),
                        glyph: { Glyph(.alert) },

@@ -41,6 +41,14 @@ actor SMTPSession {
         await session.quit()
     }
 
+    static func sizeLimit(settings: ServerSettings, opener: @escaping StreamOpener) async throws -> Int? {
+        guard settings.isComplete else { return nil }
+        let session = try await open(settings: settings, opener: opener)
+        let limit = await session.declaredSize
+        await session.quit()
+        return limit
+    }
+
     private func handshake(security: TransportSecurity) async throws {
         _ = try expect(try await readReply(), [220])
         try await greet()

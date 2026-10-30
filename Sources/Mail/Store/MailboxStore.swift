@@ -23,6 +23,7 @@ public final class MailboxStore: MailboxPort {
     var syncing: Set<Inlet.ID> = []
     var resync: Set<Inlet.ID> = []
     var offerings: [Inlet.ID: MailOffering] = [:]
+    var sendLimits: [Inlet.ID: Int] = [:]
     var progresses: [String: SyncProgress] = [:]
 
     public init(access: any AccessPort, database: SQLiteStore, outbox: OutboxStore, events: Broadcast<MailboxEvent>,
@@ -163,6 +164,13 @@ public final class MailboxStore: MailboxPort {
         return (try? database.read { db in
             try Bool.fetchOne(db, sql: "SELECT EXISTS(SELECT 1 FROM mail_pop WHERE inlet = ?)", arguments: [inlet])
         }) ?? false
+    }
+
+    public func sendLimit(_ inlet: Inlet.ID) async -> Int? {
+        if let known = sendLimits[inlet] { return known }
+        guard let port = (try? transport(inlet)) as? any SendLimitPort, let limit = try? await port.sendLimit() else { return nil }
+        sendLimits[inlet] = limit
+        return limit
     }
 
     public func usesLabels(_ inlet: Inlet.ID) -> Bool {
