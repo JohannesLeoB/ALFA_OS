@@ -2,61 +2,80 @@
  "_rule": "Keys of the ClickUp module. clickup.template.* are the task names written into a new customer project; the first one is the anchor task name.",
  "keys": {
   "clickup.phase.briefing": {
-   "de": "Briefing"
+   "de": "Briefing",
+   "en": "Briefing"
   },
   "clickup.phase.completion": {
-   "de": "Abschluss"
+   "de": "Abschluss",
+   "en": "Completion"
   },
   "clickup.phase.execution": {
-   "de": "Ausführung"
+   "de": "Ausführung",
+   "en": "Execution"
   },
   "clickup.phase.offer": {
-   "de": "Angebot"
+   "de": "Angebot",
+   "en": "Offer"
   },
   "clickup.phase.order": {
-   "de": "Bestellung"
+   "de": "Bestellung",
+   "en": "Order"
   },
   "clickup.phase.planning": {
-   "de": "Planung"
+   "de": "Planung",
+   "en": "Planning"
   },
   "clickup.phase.service": {
-   "de": "Service"
+   "de": "Service",
+   "en": "Service"
   },
   "clickup.priority.high": {
-   "de": "Hoch"
+   "de": "Hoch",
+   "en": "High"
   },
   "clickup.priority.low": {
-   "de": "Niedrig"
+   "de": "Niedrig",
+   "en": "Low"
   },
   "clickup.priority.normal": {
-   "de": "Normal"
+   "de": "Normal",
+   "en": "Normal"
   },
   "clickup.priority.urgent": {
-   "de": "Dringend"
+   "de": "Dringend",
+   "en": "Urgent"
   },
   "clickup.template.agreeInstallation": {
-   "de": "Montagefenster abstimmen"
+   "de": "Montagefenster abstimmen",
+   "en": "Agree installation window"
   },
   "clickup.template.checkBriefing": {
-   "de": "Briefing prüfen"
+   "de": "Briefing prüfen",
+   "en": "Check briefing"
   },
   "clickup.template.checkOrder": {
-   "de": "Bestellung prüfen"
+   "de": "Bestellung prüfen",
+   "en": "Check order"
   },
   "clickup.template.closeAndReview": {
-   "de": "Abschluss / Review"
+   "de": "Abschluss / Review",
+   "en": "Completion / review"
   },
   "clickup.template.prepareMeasurement": {
-   "de": "Aufmaß / Termin vorbereiten"
+   "de": "Aufmaß / Termin vorbereiten",
+   "en": "Prepare measuring / appointment"
   },
   "clickup.template.prepareOffer": {
-   "de": "Angebot vorbereiten"
+   "de": "Angebot vorbereiten",
+   "en": "Prepare offer"
   },
   "clickup.template.qualifyLead": {
-   "de": "Lead / Anfrage qualifizieren"
+   "de": "Lead / Anfrage qualifizieren",
+   "en": "Qualify lead / enquiry"
   },
   "clickup.template.startPlanning": {
-   "de": "Planung starten"
+   "de": "Planung starten",
+   "en": "Start planning"
   }
  }
 }

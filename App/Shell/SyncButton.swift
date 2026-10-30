@@ -46,7 +46,7 @@ struct SyncButton: View {
         }
         .buttonStyle(.plain)
         .shadowLayers(Capsule())
-        .help(appearance.string(title))
+        .dwellHint(title)
         .accessibilityLabel(appearance.text(title))
     }
 

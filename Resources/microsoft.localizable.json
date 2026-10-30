@@ -2,16 +2,20 @@
  "_rule": "Keys used by the Microsoft module; text is resolved by the app.",
  "keys": {
   "hint.microsoft.grant": {
-   "de": "Anmeldung fehlgeschlagen"
+   "de": "Anmeldung fehlgeschlagen",
+   "en": "Sign-in failed"
   },
   "hint.microsoft.token": {
-   "de": "Token Fehler"
+   "de": "Token Fehler",
+   "en": "Token error"
   },
   "microsoft.oauth.accepted": {
-   "de": "ALFA_OS · Microsoft-Anmeldung übernommen"
+   "de": "ALFA_OS · Microsoft-Anmeldung übernommen",
+   "en": "ALFA_OS · Microsoft sign-in accepted"
   },
   "microsoft.oauth.unreadable": {
-   "de": "ALFA_OS · Microsoft-Anmeldung nicht lesbar"
+   "de": "ALFA_OS · Microsoft-Anmeldung nicht lesbar",
+   "en": "ALFA_OS · Microsoft sign-in not readable"
   }
  }
 }

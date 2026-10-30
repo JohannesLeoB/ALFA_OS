@@ -2,59 +2,76 @@
  "_rule": "Keys used by the Shipping module; text is resolved by the app.",
  "keys": {
   "settings.service.dhlship.field.billing": {
-   "de": "Abrechnungsnummer"
+   "de": "Abrechnungsnummer",
+   "en": "Billing number"
   },
   "settings.service.dhlship.field.password": {
    "de": "Passwort",
    "en": "Password"
   },
   "settings.service.dhlship.field.secret": {
-   "de": "Geheimnis"
+   "de": "Geheimnis",
+   "en": "Secret"
   },
   "settings.service.dhlship.field.sender": {
-   "de": "Absender"
+   "de": "Absender",
+   "en": "Sender"
   },
   "settings.service.dhlship.field.user": {
-   "de": "Benutzer"
+   "de": "Benutzer",
+   "en": "User"
   },
   "shipping.issue.billingNumber": {
-   "de": "Abrechnungsnummer muss 14-stellig sein"
+   "de": "Abrechnungsnummer muss 14-stellig sein",
+   "en": "Billing number must be 14 digits"
   },
   "shipping.issue.recipientCity": {
-   "de": "Empfänger-Ort fehlt"
+   "de": "Empfänger-Ort fehlt",
+   "en": "Recipient city is missing"
   },
   "shipping.issue.recipientName": {
-   "de": "Empfänger-Name fehlt"
+   "de": "Empfänger-Name fehlt",
+   "en": "Recipient name is missing"
   },
   "shipping.issue.recipientPostalCode": {
-   "de": "Empfänger-PLZ fehlt oder ungültig"
+   "de": "Empfänger-PLZ fehlt oder ungültig",
+   "en": "Recipient postal code is missing or invalid"
   },
   "shipping.issue.recipientStreet": {
-   "de": "Empfänger-Straße fehlt"
+   "de": "Empfänger-Straße fehlt",
+   "en": "Recipient street is missing"
   },
   "shipping.issue.senderIncomplete": {
-   "de": "Absender-Adresse unvollständig"
+   "de": "Absender-Adresse unvollständig",
+   "en": "Sender address incomplete"
   },
   "shipping.issue.weight": {
-   "de": "Gewicht muss größer als 0 sein"
+   "de": "Gewicht muss größer als 0 sein",
+   "en": "Weight must be greater than 0"
   },
   "shipping.status.delivered": {
-   "de": "Zugestellt"
+   "de": "Zugestellt",
+   "en": "Delivered"
   },
   "shipping.status.exception": {
-   "de": "Problem"
+   "de": "Problem",
+   "en": "Problem"
   },
   "shipping.status.inTransit": {
-   "de": "Im Transport"
+   "de": "Im Transport",
+   "en": "In transit"
   },
   "shipping.status.outForDelivery": {
-   "de": "In Zustellung"
+   "de": "In Zustellung",
+   "en": "Out for delivery"
   },
   "shipping.status.registered": {
-   "de": "Erfasst"
+   "de": "Erfasst",
+   "en": "Registered"
   },
   "shipping.status.unknown": {
-   "de": "Unbekannt"
+   "de": "Unbekannt",
+   "en": "Unknown"
   }
  }
 }

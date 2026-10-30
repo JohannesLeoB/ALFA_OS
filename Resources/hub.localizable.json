@@ -84,6 +84,114 @@
   "settings.service.mailaccounts.area.mail": {
    "de": "Mail",
    "en": "Mail"
+  },
+  "settings.identity.signOut.sub.none": {
+   "de": "Keine Dienste verbunden",
+   "en": "No services connected"
+  },
+  "settings.identity.signOut.sub.one": {
+   "de": "Trennt 1 Dienst · %@",
+   "en": "Disconnects 1 service · %@"
+  },
+  "settings.identity.signOut.sub.other": {
+   "de": "Trennt %@ Dienste · %@",
+   "en": "Disconnects %@ services · %@"
+  },
+  "settings.account.provider": {
+   "de": "Anbieter",
+   "en": "Provider"
+  },
+  "settings.security.ssl": {
+   "de": "SSL/TLS",
+   "en": "SSL/TLS"
+  },
+  "settings.security.starttls": {
+   "de": "STARTTLS",
+   "en": "STARTTLS"
+  },
+  "settings.account.remove": {
+   "de": "Konto entfernen",
+   "en": "Remove account"
+  },
+  "settings.account.remove.ask": {
+   "de": "Konto entfernen?",
+   "en": "Remove account?"
+  },
+  "settings.add.failed.title": {
+   "de": "Prüfung",
+   "en": "Check"
+  },
+  "settings.check.ok.title": {
+   "de": "Verbindung steht.",
+   "en": "Connection is up."
+  },
+  "settings.toast.accountAdded": {
+   "de": "Eingang und Ausgang erreichbar.",
+   "en": "Incoming and outgoing servers reachable."
+  },
+  "settings.toast.syncFailed": {
+   "de": "Abgleich fehlgeschlagen.",
+   "en": "Sync failed."
+  },
+  "settings.setup.unavailable": {
+   "de": "Die Anmeldung ist nicht eingerichtet.",
+   "en": "Sign-in is not set up."
+  },
+  "settings.sync.lastOK": {
+   "de": "Verbindung steht. Letzter Abgleich %@",
+   "en": "Connection is up. Last sync %@"
+  },
+  "settings.sync.lastFailed": {
+   "de": "Fehler: %@. Letzter Abgleich %@",
+   "en": "Error: %@. Last sync %@"
+  },
+  "settings.contacts.saved": {
+   "de": "Eigene Kontakte",
+   "en": "Own contacts"
+  },
+  "settings.contacts.source.airtable": {
+   "de": "Airtable-Kunden",
+   "en": "Airtable customers"
+  },
+  "settings.contacts.source.google": {
+   "de": "Google-Kontakte",
+   "en": "Google contacts"
+  },
+  "settings.contacts.source.mail": {
+   "de": "Adressen aus E-Mails",
+   "en": "Addresses from mail"
+  },
+  "settings.contacts.sources": {
+   "de": "Quellen",
+   "en": "Sources"
+  },
+  "settings.row.projectRoot": {
+   "de": "Projektordner",
+   "en": "Project folder"
+  },
+  "settings.value.choose": {
+   "de": "Wählen",
+   "en": "Choose"
+  },
+  "settings.root.drive": {
+   "de": "Meine Ablage",
+   "en": "My Drive"
+  },
+  "settings.root.none": {
+   "de": "Keine Ordner gefunden",
+   "en": "No folders found"
+  },
+  "settings.toast.rootChosen": {
+   "de": "Projektordner · %@",
+   "en": "Project folder · %@"
+  },
+  "settings.action.clear": {
+   "de": "Leeren",
+   "en": "Clear"
+  },
+  "settings.toast.cacheCleared": {
+   "de": "Zwischenspeicher · geleert",
+   "en": "Cache · cleared"
   }
  }
 }

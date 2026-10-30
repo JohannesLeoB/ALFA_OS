@@ -2,34 +2,44 @@
  "_rule": "Keys used by the Sevdesk module; text is resolved by the app.",
  "keys": {
   "sevdesk.gap.addressCountryMissing": {
-   "de": "addressCountry (StaticCountry-ID) fehlt im Vorlage-Angebot."
+   "de": "addressCountry (StaticCountry-ID) fehlt im Vorlage-Angebot.",
+   "en": "addressCountry (StaticCountry ID) is missing in the template offer."
   },
   "sevdesk.gap.contactPersonMissing": {
-   "de": "contactPerson (SevUser-ID) fehlt im Vorlage-Angebot."
+   "de": "contactPerson (SevUser-ID) fehlt im Vorlage-Angebot.",
+   "en": "contactPerson (SevUser ID) is missing in the template offer."
   },
   "sevdesk.gap.nextNumberUnavailable": {
-   "de": "Nächste Belegnummer nicht ermittelbar (Order/Factory/getNextOrderNumber) — sevDesk verlangt aber eine Angebotsnummer. Ohne sie kein Entwurf."
+   "de": "Nächste Belegnummer nicht ermittelbar (Order/Factory/getNextOrderNumber) — sevDesk verlangt aber eine Angebotsnummer. Ohne sie kein Entwurf.",
+   "en": "Next document number cannot be determined (Order/Factory/getNextOrderNumber) — but sevDesk requires an offer number. Without it, no draft."
   },
   "sevdesk.gap.noOffer": {
-   "de": "sevDesk liefert kein Angebot (orderType „AN“) — ohne Vorlage bleiben contactPerson/addressCountry unbekannt."
+   "de": "sevDesk liefert kein Angebot (orderType „AN“) — ohne Vorlage bleiben contactPerson/addressCountry unbekannt.",
+   "en": "sevDesk returns no offer (orderType “AN”) — without a template contactPerson/addressCountry stay unknown."
   },
   "sevdesk.gap.noOfferForNumber": {
-   "de": "Kein Angebot mit dieser Nummer gefunden — Feld leer lassen nimmt das erste vorhandene."
+   "de": "Kein Angebot mit dieser Nummer gefunden — Feld leer lassen nimmt das erste vorhandene.",
+   "en": "No offer with this number found — leaving the field empty takes the first one available."
   },
   "sevdesk.gap.positionTaxRateMissing": {
-   "de": "Kein Steuersatz in den Positionen lesbar — der Kopf-Wert allein ist in Version 2.0 unzuverlässig (dort steht 0)."
+   "de": "Kein Steuersatz in den Positionen lesbar — der Kopf-Wert allein ist in Version 2.0 unzuverlässig (dort steht 0).",
+   "en": "No tax rate readable in the items — the header value alone is unreliable in version 2.0 (it holds 0)."
   },
   "sevdesk.gap.taxRateMismatch": {
-   "de": "Hinweis: Beleg-Kopf meldet {1} %, die Positionen führen {2} % — für neue Positionen gilt {2} % (in Version 2.0 führt taxRule, nicht der Kopf-Satz)."
+   "de": "Hinweis: Beleg-Kopf meldet {1} %, die Positionen führen {2} % — für neue Positionen gilt {2} % (in Version 2.0 führt taxRule, nicht der Kopf-Satz).",
+   "en": "Note: document header reports {1} %, the items carry {2} % — {2} % applies to new items (in version 2.0 taxRule leads, not the header rate)."
   },
   "sevdesk.gap.taxRateMissing": {
-   "de": "taxRate fehlt im Vorlage-Angebot."
+   "de": "taxRate fehlt im Vorlage-Angebot.",
+   "en": "taxRate is missing in the template offer."
   },
   "sevdesk.gap.unitsMissing": {
-   "de": "Keine Einheit (unity) in den Positionen des Vorlage-Angebots lesbar."
+   "de": "Keine Einheit (unity) in den Positionen des Vorlage-Angebots lesbar.",
+   "en": "No unit (unity) readable in the items of the template offer."
   },
   "sevdesk.gap.versionUnreadable": {
-   "de": "Buchhaltungs-Version nicht lesbar — Antwort hatte ein unerwartetes Format."
+   "de": "Buchhaltungs-Version nicht lesbar — Antwort hatte ein unerwartetes Format.",
+   "en": "Accounting version not readable — the response had an unexpected format."
   }
  }
 }

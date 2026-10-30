@@ -6,543 +6,720 @@
    "en": "{1} is off for the assistant"
   },
   "assistant.activity.create_airtable_kontakt": {
-   "de": "Kontakt-Vorschlag erstellt"
+   "de": "Kontakt-Vorschlag erstellt",
+   "en": "Contact suggestion created"
   },
   "assistant.activity.create_contact": {
-   "de": "Kontakt-Entwurf erstellt"
+   "de": "Kontakt-Entwurf erstellt",
+   "en": "Contact draft created"
   },
   "assistant.activity.create_draft": {
-   "de": "Mail-Entwurf vorbereitet"
+   "de": "Mail-Entwurf vorbereitet",
+   "en": "Mail draft prepared"
   },
   "assistant.activity.erzeuge_datei": {
-   "de": "Datei erzeugt"
+   "de": "Datei erzeugt",
+   "en": "File created"
   },
   "assistant.activity.find_offers": {
-   "de": "Angebote im Drive gesucht"
+   "de": "Angebote im Drive gesucht",
+   "en": "Searched Drive for offers"
   },
   "assistant.activity.list_belege": {
-   "de": "Belege gelesen"
+   "de": "Belege gelesen",
+   "en": "Read receipts"
   },
   "assistant.activity.list_bemusterung": {
-   "de": "Bemusterung gelesen"
+   "de": "Bemusterung gelesen",
+   "en": "Read sampling"
   },
   "assistant.activity.list_calendar_events": {
-   "de": "Kalender gelesen"
+   "de": "Kalender gelesen",
+   "en": "Read calendar"
   },
   "assistant.activity.list_clickup_tasks": {
-   "de": "ClickUp gelesen"
+   "de": "ClickUp gelesen",
+   "en": "Read ClickUp"
   },
   "assistant.activity.list_drive_folder": {
-   "de": "Drive-Ordner gelesen"
+   "de": "Drive-Ordner gelesen",
+   "en": "Read Drive folder"
   },
   "assistant.activity.list_lager": {
-   "de": "Lager gelesen"
+   "de": "Lager gelesen",
+   "en": "Read stock"
   },
   "assistant.activity.list_projects": {
-   "de": "Projekte gelesen"
+   "de": "Projekte gelesen",
+   "en": "Read projects"
   },
   "assistant.activity.list_zeiten": {
-   "de": "Zeiten gelesen"
+   "de": "Zeiten gelesen",
+   "en": "Read times"
   },
   "assistant.activity.log_friction_point": {
-   "de": "Tagebuch-Eintrag"
+   "de": "Tagebuch-Eintrag",
+   "en": "Journal entry"
   },
   "assistant.activity.lookup_kontakt": {
-   "de": "Kontaktverzeichnis gelesen"
+   "de": "Kontaktverzeichnis gelesen",
+   "en": "Read contact directory"
   },
   "assistant.activity.lookup_kunde": {
-   "de": "Kunde nachgeschlagen"
+   "de": "Kunde nachgeschlagen",
+   "en": "Looked up customer"
   },
   "assistant.activity.notes": {
-   "de": "Notizen"
+   "de": "Notizen",
+   "en": "Notes"
   },
   "assistant.activity.propose_clickup_change": {
-   "de": "ClickUp-Änderung vorbereitet"
+   "de": "ClickUp-Änderung vorbereitet",
+   "en": "ClickUp change prepared"
   },
   "assistant.activity.propose_termin": {
-   "de": "Termin vorbereitet"
+   "de": "Termin vorbereitet",
+   "en": "Appointment prepared"
   },
   "assistant.activity.propose_warenkorb": {
-   "de": "Warenkorb-Vorschlag erstellt"
+   "de": "Warenkorb-Vorschlag erstellt",
+   "en": "Cart suggestion created"
   },
   "assistant.activity.query_studio_knowledge": {
-   "de": "Wissensbasis durchsucht"
+   "de": "Wissensbasis durchsucht",
+   "en": "Searched knowledge base"
   },
   "assistant.activity.read_drive_file": {
-   "de": "Datei gelesen"
+   "de": "Datei gelesen",
+   "en": "Read file"
   },
   "assistant.activity.read_email": {
-   "de": "Mail gelesen"
+   "de": "Mail gelesen",
+   "en": "Read mail"
   },
   "assistant.activity.schaetze_projekt": {
-   "de": "Kostenschätzung erstellt"
+   "de": "Kostenschätzung erstellt",
+   "en": "Cost estimate created"
   },
   "assistant.activity.search_contacts": {
-   "de": "Kontakte durchsucht"
+   "de": "Kontakte durchsucht",
+   "en": "Searched contacts"
   },
   "assistant.activity.search_gmail": {
-   "de": "Gmail durchsucht"
+   "de": "Gmail durchsucht",
+   "en": "Searched Gmail"
   },
   "assistant.activity.search_katalog": {
-   "de": "Katalog durchsucht"
+   "de": "Katalog durchsucht",
+   "en": "Searched catalog"
   },
   "assistant.activity.suggest_calendar_event": {
-   "de": "Kalender-Link generiert"
+   "de": "Kalender-Link generiert",
+   "en": "Calendar link generated"
   },
   "assistant.activity.tasks": {
-   "de": "Interne Aufgaben"
+   "de": "Interne Aufgaben",
+   "en": "Internal tasks"
   },
   "assistant.activity.update_airtable_kontakt": {
-   "de": "Kontakt-Änderung vorgeschlagen"
+   "de": "Kontakt-Änderung vorgeschlagen",
+   "en": "Contact change suggested"
   },
   "assistant.activity.verfolge_sendung": {
-   "de": "Sendung verfolgt"
+   "de": "Sendung verfolgt",
+   "en": "Shipment tracked"
   },
   "assistant.alarm.title": {
-   "de": "Aufgabe fällig"
+   "de": "Aufgabe fällig",
+   "en": "Task due"
   },
   "assistant.appointment.badStart": {
-   "de": "Beginn nicht lesbar — erwartet yyyy-MM-dd HH:mm oder yyyy-MM-dd."
+   "de": "Beginn nicht lesbar — erwartet yyyy-MM-dd HH:mm oder yyyy-MM-dd.",
+   "en": "Start not readable — expected yyyy-MM-dd HH:mm or yyyy-MM-dd."
   },
   "assistant.appointment.noTitle": {
-   "de": "Es fehlt der Titel des Termins."
+   "de": "Es fehlt der Titel des Termins.",
+   "en": "The appointment title is missing."
   },
   "assistant.appointment.ready": {
-   "de": "Bestätigungskarte erzeugt: „{1}“. Noch NICHT eingetragen."
+   "de": "Bestätigungskarte erzeugt: „{1}“. Noch NICHT eingetragen.",
+   "en": "Confirmation card created: “{1}”. NOT entered yet."
   },
   "assistant.calendar.allDay": {
-   "de": "ganztägig"
+   "de": "ganztägig",
+   "en": "all day"
   },
   "assistant.calendar.empty": {
-   "de": "Keine anstehenden Termine in den nächsten {1} Tagen gefunden."
+   "de": "Keine anstehenden Termine in den nächsten {1} Tagen gefunden.",
+   "en": "No upcoming appointments found in the next {1} days."
   },
   "assistant.calendar.failed": {
-   "de": "Kalender-Abruf fehlgeschlagen: {1}"
+   "de": "Kalender-Abruf fehlgeschlagen: {1}",
+   "en": "Calendar request failed: {1}"
   },
   "assistant.calendar.notConnected": {
-   "de": "Kalender ist nicht verbunden. Bitte Google in den Einstellungen verbinden."
+   "de": "Kalender ist nicht verbunden. Bitte Google in den Einstellungen verbinden.",
+   "en": "Calendar is not connected. Please connect Google in Settings."
   },
   "assistant.calendar.ownOnly": {
-   "de": "WICHTIG: Es konnte NUR der eigene Kalender gelesen werden — die Team-Kalender nicht (die Kalenderlisten-Freigabe fehlt; in den Einstellungen erneut mit Google verbinden). Sage das dem Nutzer dazu. Behaupte NICHT, es gebe keine weiteren Termine."
+   "de": "WICHTIG: Es konnte NUR der eigene Kalender gelesen werden — die Team-Kalender nicht (die Kalenderlisten-Freigabe fehlt; in den Einstellungen erneut mit Google verbinden). Sage das dem Nutzer dazu. Behaupte NICHT, es gebe keine weiteren Termine.",
+   "en": "IMPORTANT: ONLY the own calendar could be read — not the team calendars (the calendar list permission is missing; connect with Google again in Settings). Tell the user this as well. Do NOT claim there are no further appointments."
   },
   "assistant.cart.ambiguous": {
-   "de": "Mehrere Artikel passen auf \"{1}\": {2}. Bitte genauer benennen."
+   "de": "Mehrere Artikel passen auf \"{1}\": {2}. Bitte genauer benennen.",
+   "en": "Several items match \"{1}\": {2}. Please be more specific."
   },
   "assistant.cart.noArticle": {
-   "de": "Es fehlt der Artikel."
+   "de": "Es fehlt der Artikel.",
+   "en": "The item is missing."
   },
   "assistant.cart.noMatch": {
-   "de": "Kein Artikel passt auf \"{1}\" — weder im Katalog noch im Lager. Es wird nichts vorgeschlagen."
+   "de": "Kein Artikel passt auf \"{1}\" — weder im Katalog noch im Lager. Es wird nichts vorgeschlagen.",
+   "en": "No item matches \"{1}\" — neither in the catalog nor in stock. Nothing is suggested."
   },
   "assistant.cart.readyCatalog": {
-   "de": "Bestätigungskarte erzeugt: {1}× {2}. Noch NICHT im Warenkorb."
+   "de": "Bestätigungskarte erzeugt: {1}× {2}. Noch NICHT im Warenkorb.",
+   "en": "Confirmation card created: {1}× {2}. NOT in the cart yet."
   },
   "assistant.cart.readyStock": {
-   "de": "Bestätigungskarte erzeugt: {1}× {2} aus dem Lager. Noch NICHT im Warenkorb."
+   "de": "Bestätigungskarte erzeugt: {1}× {2} aus dem Lager. Noch NICHT im Warenkorb.",
+   "en": "Confirmation card created: {1}× {2} from stock. NOT in the cart yet."
   },
   "assistant.catalog.article": {
-   "de": " | Art. {1}"
+   "de": " | Art. {1}",
+   "en": " | Item {1}"
   },
   "assistant.catalog.empty": {
-   "de": "Die Artikeldatenbank ist leer."
+   "de": "Die Artikeldatenbank ist leer.",
+   "en": "The item database is empty."
   },
   "assistant.catalog.emptyQuery": {
-   "de": "Bitte einen Suchbegriff angeben (z. B. \"Gaggenau Backofen\" oder \"Blum Scharnier\")."
+   "de": "Bitte einen Suchbegriff angeben (z. B. \"Gaggenau Backofen\" oder \"Blum Scharnier\").",
+   "en": "Please give a search term (e.g. \"Gaggenau oven\" or \"Blum hinge\")."
   },
   "assistant.catalog.failed": {
-   "de": "Artikeldatenbank-Fehler: {1}"
+   "de": "Artikeldatenbank-Fehler: {1}",
+   "en": "Item database error: {1}"
   },
   "assistant.catalog.header": {
-   "de": "Katalog-Treffer für \"{1}\":"
+   "de": "Katalog-Treffer für \"{1}\":",
+   "en": "Catalog hits for \"{1}\":"
   },
   "assistant.catalog.loading": {
-   "de": "Der Artikelkatalog lädt gerade — bitte gleich noch einmal fragen."
+   "de": "Der Artikelkatalog lädt gerade — bitte gleich noch einmal fragen.",
+   "en": "The item catalog is loading — please ask again in a moment."
   },
   "assistant.catalog.loadingCount": {
-   "de": "Der Artikelkatalog lädt gerade ({1} Artikel bisher) — bitte gleich noch einmal fragen."
+   "de": "Der Artikelkatalog lädt gerade ({1} Artikel bisher) — bitte gleich noch einmal fragen.",
+   "en": "The item catalog is loading ({1} items so far) — please ask again in a moment."
   },
   "assistant.catalog.noHits": {
-   "de": "Keine Artikel für \"{1}\" in der Artikeldatenbank gefunden. Tipp: kürzerer Suchbegriff oder Herstellername."
+   "de": "Keine Artikel für \"{1}\" in der Artikeldatenbank gefunden. Tipp: kürzerer Suchbegriff oder Herstellername.",
+   "en": "No items found for \"{1}\" in the item database. Tip: shorter search term or manufacturer name."
   },
   "assistant.catalog.notConnected": {
-   "de": "Keine Verbindung zur Artikeldatenbank. Bitte Verbindung prüfen."
+   "de": "Keine Verbindung zur Artikeldatenbank. Bitte Verbindung prüfen.",
+   "en": "No connection to the item database. Please check the connection."
   },
   "assistant.catalog.purchase": {
-   "de": " | EK {1}"
+   "de": " | EK {1}",
+   "en": " | Cost {1}"
   },
   "assistant.catalog.sale": {
-   "de": " | VK {1}"
+   "de": " | VK {1}",
+   "en": " | Price {1}"
   },
   "assistant.change.assignReady": {
-   "de": "Bestätigungskarte erzeugt: „{1}“ an {2}. Noch NICHT zugewiesen."
+   "de": "Bestätigungskarte erzeugt: „{1}“ an {2}. Noch NICHT zugewiesen.",
+   "en": "Confirmation card created: “{1}” to {2}. NOT assigned yet."
   },
   "assistant.change.badDate": {
-   "de": "Fälligkeit nicht lesbar — erwartet yyyy-MM-dd."
+   "de": "Fälligkeit nicht lesbar — erwartet yyyy-MM-dd.",
+   "en": "Due date not readable — expected yyyy-MM-dd."
   },
   "assistant.change.createReady": {
-   "de": "Bestätigungskarte erzeugt: Aufgabe „{1}“ anlegen. Noch NICHT angelegt."
+   "de": "Bestätigungskarte erzeugt: Aufgabe „{1}“ anlegen. Noch NICHT angelegt.",
+   "en": "Confirmation card created: create task “{1}”. NOT created yet."
   },
   "assistant.change.dueReady": {
-   "de": "Bestätigungskarte erzeugt: „{1}“ fällig {2}. Noch NICHT geändert."
+   "de": "Bestätigungskarte erzeugt: „{1}“ fällig {2}. Noch NICHT geändert.",
+   "en": "Confirmation card created: “{1}” due {2}. NOT changed yet."
   },
   "assistant.change.manyMembers": {
-   "de": "Mehrere passen auf „{1}“: {2}"
+   "de": "Mehrere passen auf „{1}“: {2}",
+   "en": "Several match “{1}”: {2}"
   },
   "assistant.change.manyProjects": {
-   "de": "Mehrere Projekte passen auf „{1}“: {2}"
+   "de": "Mehrere Projekte passen auf „{1}“: {2}",
+   "en": "Several projects match “{1}”: {2}"
   },
   "assistant.change.manyTasks": {
-   "de": "Mehrere Aufgaben passen: {1}"
+   "de": "Mehrere Aufgaben passen: {1}",
+   "en": "Several tasks match: {1}"
   },
   "assistant.change.membersFailed": {
-   "de": "Die Mitglieder der Liste konnten nicht geladen werden: {1}"
+   "de": "Die Mitglieder der Liste konnten nicht geladen werden: {1}",
+   "en": "The list members could not be loaded: {1}"
   },
   "assistant.change.noAssignee": {
-   "de": "Es fehlt der Name, wem zugewiesen werden soll."
+   "de": "Es fehlt der Name, wem zugewiesen werden soll.",
+   "en": "The name of the person to assign to is missing."
   },
   "assistant.change.noDue": {
-   "de": "Es fehlt die Fälligkeit (yyyy-MM-dd)."
+   "de": "Es fehlt die Fälligkeit (yyyy-MM-dd).",
+   "en": "The due date is missing (yyyy-MM-dd)."
   },
   "assistant.change.noList": {
-   "de": "Keine ClickUp-Liste bekannt — nenne das Projekt."
+   "de": "Keine ClickUp-Liste bekannt — nenne das Projekt.",
+   "en": "No ClickUp list known — name the project."
   },
   "assistant.change.noMember": {
-   "de": "Niemand in dieser Liste heißt „{1}“. Bekannt sind: {2}"
+   "de": "Niemand in dieser Liste heißt „{1}“. Bekannt sind: {2}",
+   "en": "Nobody in this list is called “{1}”. Known: {2}"
   },
   "assistant.change.noProject": {
-   "de": "Kein Projekt mit ClickUp-Liste gefunden für „{1}“."
+   "de": "Kein Projekt mit ClickUp-Liste gefunden für „{1}“.",
+   "en": "No project with a ClickUp list found for “{1}”."
   },
   "assistant.change.noStatus": {
-   "de": "Es fehlt der Zielstatus."
+   "de": "Es fehlt der Zielstatus.",
+   "en": "The target status is missing."
   },
   "assistant.change.noTask": {
-   "de": "Keine offene Aufgabe passt auf „{1}“."
+   "de": "Keine offene Aufgabe passt auf „{1}“.",
+   "en": "No open task matches “{1}”."
   },
   "assistant.change.noTaskName": {
-   "de": "Es fehlt der Name der Aufgabe."
+   "de": "Es fehlt der Name der Aufgabe.",
+   "en": "The task name is missing."
   },
   "assistant.change.statusReady": {
-   "de": "Bestätigungskarte erzeugt: „{1}“ auf Status {2}. Noch NICHT geändert."
+   "de": "Bestätigungskarte erzeugt: „{1}“ auf Status {2}. Noch NICHT geändert.",
+   "en": "Confirmation card created: “{1}” to status {2}. NOT changed yet."
   },
   "assistant.change.unknownAction": {
-   "de": "Unbekannte Aktion — erlaubt: anlegen, status, faelligkeit, zuweisen."
+   "de": "Unbekannte Aktion — erlaubt: anlegen, status, faelligkeit, zuweisen.",
+   "en": "Unknown action — allowed: anlegen, status, faelligkeit, zuweisen."
   },
   "assistant.common.emptyQuery": {
-   "de": "Leere Suchabfrage."
+   "de": "Leere Suchabfrage.",
+   "en": "Empty search query."
   },
   "assistant.common.inProject": {
-   "de": " (Projekt {1})"
+   "de": " (Projekt {1})",
+   "en": " (project {1})"
   },
   "assistant.common.noDate": {
-   "de": "ohne Datum"
+   "de": "ohne Datum",
+   "en": "no date"
   },
   "assistant.common.projectTag": {
-   "de": " · Projekt {1}"
+   "de": " · Projekt {1}",
+   "en": " · project {1}"
   },
   "assistant.contactDraft.airtable": {
-   "de": "Airtable-Kontakt-Entwurf: {1}."
+   "de": "Airtable-Kontakt-Entwurf: {1}.",
+   "en": "Airtable contact draft: {1}."
   },
   "assistant.contactDraft.airtableReady": {
-   "de": " Zeige dem Nutzer die Bestätigungskarte — der Kontakt wird erst nach Bestätigung in Airtable angelegt, nicht von dir."
+   "de": " Zeige dem Nutzer die Bestätigungskarte — der Kontakt wird erst nach Bestätigung in Airtable angelegt, nicht von dir.",
+   "en": " Show the user the confirmation card — the contact is only created in Airtable after confirmation, not by you."
   },
   "assistant.contactDraft.change": {
-   "de": "Kontakt-Änderungs-Entwurf für ID {1}: {2}. Zeige dem Nutzer die Bestätigungskarte — die Änderung wird erst nach Bestätigung übernommen."
+   "de": "Kontakt-Änderungs-Entwurf für ID {1}: {2}. Zeige dem Nutzer die Bestätigungskarte — die Änderung wird erst nach Bestätigung übernommen.",
+   "en": "Contact change draft for ID {1}: {2}. Show the user the confirmation card — the change is only applied after confirmation."
   },
   "assistant.contactDraft.changeUnchanged": {
-   "de": "Kontakt-Änderungs-Entwurf für ID {1}: (unverändert). Zeige dem Nutzer die Bestätigungskarte — die Änderung wird erst nach Bestätigung übernommen."
+   "de": "Kontakt-Änderungs-Entwurf für ID {1}: (unverändert). Zeige dem Nutzer die Bestätigungskarte — die Änderung wird erst nach Bestätigung übernommen.",
+   "en": "Contact change draft for ID {1}: (unchanged). Show the user the confirmation card — the change is only applied after confirmation."
   },
   "assistant.contactDraft.duplicate": {
-   "de": " ACHTUNG — möglicher Doppel-Eintrag: "
+   "de": " ACHTUNG — möglicher Doppel-Eintrag: ",
+   "en": " WARNING — possible duplicate: "
   },
   "assistant.contactDraft.duplicateAsk": {
-   "de": ". Frage den Nutzer, ob trotzdem NEU angelegt werden soll, statt ungeprüft zu doppeln."
+   "de": ". Frage den Nutzer, ob trotzdem NEU angelegt werden soll, statt ungeprüft zu doppeln.",
+   "en": ". Ask the user whether to create a NEW one anyway, instead of duplicating unchecked."
   },
   "assistant.contactDraft.google": {
-   "de": "Kontakt-Entwurf: {1}. Zeige dem Nutzer die Bestätigungskarte — der Kontakt wird erst nach Bestätigung angelegt, nicht von dir."
+   "de": "Kontakt-Entwurf: {1}. Zeige dem Nutzer die Bestätigungskarte — der Kontakt wird erst nach Bestätigung angelegt, nicht von dir.",
+   "en": "Contact draft: {1}. Show the user the confirmation card — the contact is only created after confirmation, not by you."
   },
   "assistant.contactDraft.noName": {
-   "de": "Kein Name für den Kontakt angegeben."
+   "de": "Kein Name für den Kontakt angegeben.",
+   "en": "No name given for the contact."
   },
   "assistant.contactDraft.noRecord": {
-   "de": "Keine Record-ID angegeben. Ermittle sie erst mit lookup_kontakt."
+   "de": "Keine Record-ID angegeben. Ermittle sie erst mit lookup_kontakt.",
+   "en": "No record ID given. Find it first with lookup_kontakt."
   },
   "assistant.contacts.google.empty": {
-   "de": "Keine Kontakte für „{1}“ gefunden."
+   "de": "Keine Kontakte für „{1}“ gefunden.",
+   "en": "No contacts found for “{1}”."
   },
   "assistant.contacts.google.failed": {
-   "de": "Kontaktsuche fehlgeschlagen: {1}"
+   "de": "Kontaktsuche fehlgeschlagen: {1}",
+   "en": "Contact search failed: {1}"
   },
   "assistant.contacts.google.notConnected": {
-   "de": "Google ist nicht verbunden. Bitte in den Einstellungen verbinden."
+   "de": "Google ist nicht verbunden. Bitte in den Einstellungen verbinden.",
+   "en": "Google is not connected. Please connect it in Settings."
   },
   "assistant.contacts.listEmpty": {
-   "de": "Keine Kontakte im Verzeichnis gefunden."
+   "de": "Keine Kontakte im Verzeichnis gefunden.",
+   "en": "No contacts found in the directory."
   },
   "assistant.contacts.listEmptyCategory": {
-   "de": "Keine Kontakte im Verzeichnis mit Kategorie '{1}' gefunden."
+   "de": "Keine Kontakte im Verzeichnis mit Kategorie '{1}' gefunden.",
+   "en": "No contacts found in the directory with category '{1}'."
   },
   "assistant.contacts.listHeader": {
-   "de": "Kontaktverzeichnis ({1}):"
+   "de": "Kontaktverzeichnis ({1}):",
+   "en": "Contact directory ({1}):"
   },
   "assistant.contacts.noHits": {
-   "de": "Keine Kontakte für „{1}“ gefunden."
+   "de": "Keine Kontakte für „{1}“ gefunden.",
+   "en": "No contacts found for “{1}”."
   },
   "assistant.contacts.project": {
-   "de": "Projekt {1}"
+   "de": "Projekt {1}",
+   "en": "Project {1}"
   },
   "assistant.customers.examples": {
-   "de": "Beispiele: {1}"
+   "de": "Beispiele: {1}",
+   "en": "Examples: {1}"
   },
   "assistant.customers.noHits": {
-   "de": "Keine Kunden für „{1}“ gefunden. Tipp: Teil des Namens oder Kundennummer."
+   "de": "Keine Kunden für „{1}“ gefunden. Tipp: Teil des Namens oder Kundennummer.",
+   "en": "No customers found for “{1}”. Tip: part of the name or customer number."
   },
   "assistant.customers.overview": {
-   "de": "Kunden-Verzeichnis (lokaler Sync): {1} Kunden."
+   "de": "Kunden-Verzeichnis (lokaler Sync): {1} Kunden.",
+   "en": "Customer directory (local sync): {1} customers."
   },
   "assistant.customers.projectMany": {
-   "de": "· {1} Projekte"
+   "de": "· {1} Projekte",
+   "en": "· {1} projects"
   },
   "assistant.customers.projectOne": {
-   "de": "· {1} Projekt"
+   "de": "· {1} Projekt",
+   "en": "· {1} project"
   },
   "assistant.customers.row": {
-   "de": "• {1} · Kundennr. {2}"
+   "de": "• {1} · Kundennr. {2}",
+   "en": "• {1} · customer no. {2}"
   },
   "assistant.draft.needContent": {
-   "de": "Für einen Entwurf brauche ich mindestens Betreff oder Text."
+   "de": "Für einen Entwurf brauche ich mindestens Betreff oder Text.",
+   "en": "For a draft I need at least a subject or text."
   },
   "assistant.draft.ready": {
-   "de": "Entwurf vorbereitet: {1} · an (kein Empfänger). Zeige dem Nutzer die Bestätigungskarte — der Entwurf wird erst nach Bestätigung in Gmail abgelegt, nicht von dir."
+   "de": "Entwurf vorbereitet: {1} · an (kein Empfänger). Zeige dem Nutzer die Bestätigungskarte — der Entwurf wird erst nach Bestätigung in Gmail abgelegt, nicht von dir.",
+   "en": "Draft prepared: {1} · to (no recipient). Show the user the confirmation card — the draft is only saved in Gmail after confirmation, not by you."
   },
   "assistant.draft.readyTo": {
-   "de": "Entwurf vorbereitet: {1} · an {2}. Zeige dem Nutzer die Bestätigungskarte — der Entwurf wird erst nach Bestätigung in Gmail abgelegt, nicht von dir."
+   "de": "Entwurf vorbereitet: {1} · an {2}. Zeige dem Nutzer die Bestätigungskarte — der Entwurf wird erst nach Bestätigung in Gmail abgelegt, nicht von dir.",
+   "en": "Draft prepared: {1} · to {2}. Show the user the confirmation card — the draft is only saved in Gmail after confirmation, not by you."
   },
   "assistant.drive.emptyRoot": {
-   "de": "Projektordner: leer."
+   "de": "Projektordner: leer.",
+   "en": "Project folder: empty."
   },
   "assistant.drive.emptySub": {
-   "de": "{1}: leer."
+   "de": "{1}: leer.",
+   "en": "{1}: empty."
   },
   "assistant.drive.failed": {
-   "de": "Drive-Abruf fehlgeschlagen: {1}"
+   "de": "Drive-Abruf fehlgeschlagen: {1}",
+   "en": "Drive request failed: {1}"
   },
   "assistant.drive.headerRoot": {
-   "de": "Projektordner ({1} Einträge):"
+   "de": "Projektordner ({1} Einträge):",
+   "en": "Project folder ({1} entries):"
   },
   "assistant.drive.headerSub": {
-   "de": "{1} ({2} Einträge):"
+   "de": "{1} ({2} Einträge):",
+   "en": "{1} ({2} entries):"
   },
   "assistant.drive.more": {
-   "de": "… und {1} weitere."
+   "de": "… und {1} weitere.",
+   "en": "… and {1} more."
   },
   "assistant.drive.noFolder": {
-   "de": "Kein Drive-Ordner für dieses Projekt verknüpft."
+   "de": "Kein Drive-Ordner für dieses Projekt verknüpft.",
+   "en": "No Drive folder linked to this project."
   },
   "assistant.drive.notConnected": {
-   "de": "Google Drive nicht verbunden. In Einstellungen verbinden."
+   "de": "Google Drive nicht verbunden. In Einstellungen verbinden.",
+   "en": "Google Drive is not connected. Connect it in Settings."
   },
   "assistant.drive.subfolderMissing": {
-   "de": "Unterordner '{1}' nicht gefunden. Vorhandene Ordner: {2}"
+   "de": "Unterordner '{1}' nicht gefunden. Vorhandene Ordner: {2}",
+   "en": "Subfolder '{1}' not found. Existing folders: {2}"
   },
   "assistant.duplicate.company": {
-   "de": "Firma „{1}“ existiert bereits"
+   "de": "Firma „{1}“ existiert bereits",
+   "en": "Company “{1}” already exists"
   },
   "assistant.duplicate.email": {
-   "de": "E-Mail {1} ist bereits bei {2} hinterlegt"
+   "de": "E-Mail {1} ist bereits bei {2} hinterlegt",
+   "en": "Email {1} is already stored for {2}"
   },
   "assistant.duplicate.name": {
-   "de": "Kontakt „{1}“ existiert bereits"
+   "de": "Kontakt „{1}“ existiert bereits",
+   "en": "Contact “{1}” already exists"
   },
   "assistant.duplicate.phone": {
-   "de": "Telefon ist bereits bei {1} hinterlegt"
+   "de": "Telefon ist bereits bei {1} hinterlegt",
+   "en": "Phone is already stored for {1}"
   },
   "assistant.engine.assistantOff": {
-   "de": "Der Assistent ist per Datenschutz-Einstellung (KI komplett aus) ausgeschaltet — schalte ihn in den Einstellungen wieder ein, um zu antworten."
+   "de": "Der Assistent ist per Datenschutz-Einstellung (KI komplett aus) ausgeschaltet — schalte ihn in den Einstellungen wieder ein, um zu antworten.",
+   "en": "The assistant is switched off by the privacy setting (AI fully off) — switch it back on in Settings to get answers."
   },
   "assistant.engine.cancelled": {
-   "de": "Abgebrochen."
+   "de": "Abgebrochen.",
+   "en": "Cancelled."
   },
   "assistant.engine.deadline": {
-   "de": "Das dauert gerade zu lange — bitte versuche es erneut oder formuliere die Frage einfacher."
+   "de": "Das dauert gerade zu lange — bitte versuche es erneut oder formuliere die Frage einfacher.",
+   "en": "This is taking too long — please try again or phrase the question more simply."
   },
   "assistant.engine.noAnswer": {
-   "de": "Ich konnte gerade keine Antwort bilden."
+   "de": "Ich konnte gerade keine Antwort bilden.",
+   "en": "I could not form an answer just now."
   },
   "assistant.engine.noNewData": {
-   "de": "Ich konnte dazu keine neuen Daten finden — magst du die Frage anders stellen oder mir mehr Kontext geben?"
+   "de": "Ich konnte dazu keine neuen Daten finden — magst du die Frage anders stellen oder mir mehr Kontext geben?",
+   "en": "I could not find any new data on this — would you like to ask differently or give me more context?"
   },
   "assistant.engine.noResponse": {
-   "de": "Keine Antwort erhalten."
+   "de": "Keine Antwort erhalten.",
+   "en": "No answer received."
   },
   "assistant.engine.repeated": {
-   "de": "Diese Anfrage wurde in diesem Gespräch bereits identisch gestellt — wird nicht wiederholt."
+   "de": "Diese Anfrage wurde in diesem Gespräch bereits identisch gestellt — wird nicht wiederholt.",
+   "en": "This request was already made identically in this conversation — it is not repeated."
   },
   "assistant.engine.roundCut": {
-   "de": "\n\n_(Antwort nach {1} Suchschritten abgebrochen — bitte mit \"weiter\" oder einer präziseren Anfrage nachfassen.)_"
+   "de": "\n\n_(Antwort nach {1} Suchschritten abgebrochen — bitte mit \"weiter\" oder einer präziseren Anfrage nachfassen.)_",
+   "en": "\n\n_(Answer stopped after {1} search steps — please follow up with \"continue\" or a more precise request.)_"
   },
   "assistant.engine.tooManySteps": {
-   "de": "Das dauert gerade zu viele Schritte — bitte formuliere die Frage präziser."
+   "de": "Das dauert gerade zu viele Schritte — bitte formuliere die Frage präziser.",
+   "en": "This is taking too many steps — please phrase the question more precisely."
   },
   "assistant.engine.toolNotAllowed": {
-   "de": "Tool nicht erlaubt oder unbekannt: {1}"
+   "de": "Tool nicht erlaubt oder unbekannt: {1}",
+   "en": "Tool not allowed or unknown: {1}"
   },
   "assistant.engine.toolTimeout": {
-   "de": "Zeitüberschreitung — das Tool hat nicht rechtzeitig geantwortet."
+   "de": "Zeitüberschreitung — das Tool hat nicht rechtzeitig geantwortet.",
+   "en": "Timeout — the tool did not answer in time."
   },
   "assistant.estimate.failed": {
-   "de": "Schätzung fehlgeschlagen: {1}"
+   "de": "Schätzung fehlgeschlagen: {1}",
+   "en": "Estimate failed: {1}"
   },
   "assistant.estimate.header": {
-   "de": "Kostenschätzung: {1}–{2}–{3} € netto ({4} % Konfidenz, {5} Belege)"
+   "de": "Kostenschätzung: {1}–{2}–{3} € netto ({4} % Konfidenz, {5} Belege)",
+   "en": "Cost estimate: {1}–{2}–{3} € net ({4} % confidence, {5} documents)"
   },
   "assistant.estimate.lineAmount": {
-   "de": ": {1} €"
+   "de": ": {1} €",
+   "en": ": {1} €"
   },
   "assistant.estimate.lineOpen": {
-   "de": ": nicht enthalten"
+   "de": ": nicht enthalten",
+   "en": ": not included"
   },
   "assistant.estimate.modelClose": {
-   "de": "): {1}–{2}–{3} € netto — Tischler-Einkaufskosten all-in (geliefert + montiert)."
+   "de": "): {1}–{2}–{3} € netto — Tischler-Einkaufskosten all-in (geliefert + montiert).",
+   "en": "): {1}–{2}–{3} € net — joiner purchase cost all-in (delivered + installed)."
   },
   "assistant.estimate.modelOpen": {
-   "de": "Kostenschätzung ("
+   "de": "Kostenschätzung (",
+   "en": "Cost estimate ("
   },
   "assistant.estimate.noDescription": {
-   "de": "Keine Beschreibung angegeben."
+   "de": "Keine Beschreibung angegeben.",
+   "en": "No description given."
   },
   "assistant.event.linkReady": {
-   "de": "Kalender-Termin vorbereitet: {1}. Die Aktionskarte zum Öffnen erscheint automatisch unter deiner Antwort — verweise darauf und schreibe KEINEN eigenen Link."
+   "de": "Kalender-Termin vorbereitet: {1}. Die Aktionskarte zum Öffnen erscheint automatisch unter deiner Antwort — verweise darauf und schreibe KEINEN eigenen Link.",
+   "en": "Calendar appointment prepared: {1}. The action card to open it appears automatically below your answer — refer to it and do NOT write your own link."
   },
   "assistant.event.noTitle": {
-   "de": "Kein Titel angegeben."
+   "de": "Kein Titel angegeben.",
+   "en": "No title given."
   },
   "assistant.failure.generic": {
-   "de": "Es ist ein Fehler aufgetreten. Bitte erneut versuchen."
+   "de": "Es ist ein Fehler aufgetreten. Bitte erneut versuchen.",
+   "en": "An error occurred. Please try again."
   },
   "assistant.failure.http": {
-   "de": "Die Anfrage ist fehlgeschlagen (Fehler {1})."
+   "de": "Die Anfrage ist fehlgeschlagen (Fehler {1}).",
+   "en": "The request failed (error {1})."
   },
   "assistant.failure.interrupted": {
-   "de": "Die Verbindung wurde unterbrochen — bitte erneut versuchen."
+   "de": "Die Verbindung wurde unterbrochen — bitte erneut versuchen.",
+   "en": "The connection was interrupted — please try again."
   },
   "assistant.failure.notConnected": {
-   "de": "Claude ist nicht verbunden — bitte in den Einstellungen einen API-Key hinterlegen."
+   "de": "Claude ist nicht verbunden — bitte in den Einstellungen einen API-Key hinterlegen.",
+   "en": "Claude is not connected — please store an API key in Settings."
   },
   "assistant.failure.overloaded": {
-   "de": "Der Dienst ist gerade überlastet — bitte gleich erneut versuchen."
+   "de": "Der Dienst ist gerade überlastet — bitte gleich erneut versuchen.",
+   "en": "The service is overloaded right now — please try again shortly."
   },
   "assistant.failure.rateLimited": {
-   "de": "Zu viele Anfragen — bitte kurz warten und erneut versuchen."
+   "de": "Zu viele Anfragen — bitte kurz warten und erneut versuchen.",
+   "en": "Too many requests — please wait briefly and try again."
   },
   "assistant.field.bcc": {
-   "de": "BCC"
+   "de": "BCC",
+   "en": "BCC"
   },
   "assistant.field.cc": {
-   "de": "CC"
+   "de": "CC",
+   "en": "CC"
   },
   "assistant.field.email": {
-   "de": "E-Mail"
+   "de": "E-Mail",
+   "en": "Email"
   },
   "assistant.field.phone": {
    "de": "Telefon",
    "en": "Phone"
   },
   "assistant.field.to": {
-   "de": "Empfänger (An)"
+   "de": "Empfänger (An)",
+   "en": "Recipient (To)"
   },
   "assistant.file.badFormat": {
-   "de": "Unbekanntes Format „{1}“ — erlaubt: text, csv, pdf."
+   "de": "Unbekanntes Format „{1}“ — erlaubt: text, csv, pdf.",
+   "en": "Unknown format “{1}” — allowed: text, csv, pdf."
   },
   "assistant.file.content": {
-   "de": "Inhalt von {1}:"
+   "de": "Inhalt von {1}:",
+   "en": "Content of {1}:"
   },
   "assistant.file.empty": {
-   "de": "Eine leere Datei wird nicht angelegt."
+   "de": "Eine leere Datei wird nicht angelegt.",
+   "en": "An empty file is not created."
   },
   "assistant.file.noAccess": {
-   "de": "Drive-Lesezugriff fehlt. Google in den Einstellungen (neu) verbinden — der drive.readonly-Scope wird für Dateiinhalte gebraucht."
+   "de": "Drive-Lesezugriff fehlt. Google in den Einstellungen (neu) verbinden — der drive.readonly-Scope wird für Dateiinhalte gebraucht.",
+   "en": "Drive read access is missing. Connect Google in Settings (again) — the drive.readonly scope is needed for file contents."
   },
   "assistant.file.noName": {
-   "de": "Es fehlt der Dateiname."
+   "de": "Es fehlt der Dateiname.",
+   "en": "The file name is missing."
   },
   "assistant.file.noPdf": {
-   "de": "PDF-Erzeugung ist nicht angebunden."
+   "de": "PDF-Erzeugung ist nicht angebunden.",
+   "en": "PDF creation is not connected."
   },
   "assistant.file.noProject": {
-   "de": "Kein Projekt im Fokus. Nenne das Projekt (Name/Nummer)."
+   "de": "Kein Projekt im Fokus. Nenne das Projekt (Name/Nummer).",
+   "en": "No project in focus. Name the project (name/number)."
   },
   "assistant.file.noProjectFolder": {
-   "de": "Projekt {1} hat keinen Drive-Ordner hinterlegt — die Datei kann dort nicht abgelegt werden."
+   "de": "Projekt {1} hat keinen Drive-Ordner hinterlegt — die Datei kann dort nicht abgelegt werden.",
+   "en": "Project {1} has no Drive folder stored — the file cannot be saved there."
   },
   "assistant.file.noProjectMatch": {
-   "de": "Kein Projekt passt auf „{1}“ — ohne Projekt kann die Datei nicht abgelegt werden."
+   "de": "Kein Projekt passt auf „{1}“ — ohne Projekt kann die Datei nicht abgelegt werden.",
+   "en": "No project matches “{1}” — without a project the file cannot be saved."
   },
   "assistant.file.noText": {
-   "de": "{1}: kein lesbarer Textinhalt (Bild/Binärformat)."
+   "de": "{1}: kein lesbarer Textinhalt (Bild/Binärformat).",
+   "en": "{1}: no readable text content (image/binary format)."
   },
   "assistant.file.notFound": {
-   "de": "Datei mit {1} im Projektordner nicht gefunden."
+   "de": "Datei mit {1} im Projektordner nicht gefunden.",
+   "en": "File with {1} not found in the project folder."
   },
   "assistant.file.readFailed": {
-   "de": "Datei konnte nicht gelesen werden: {1}"
+   "de": "Datei konnte nicht gelesen werden: {1}",
+   "en": "File could not be read: {1}"
   },
   "assistant.file.saved": {
-   "de": "Datei {1} im Datenordner der App angelegt."
+   "de": "Datei {1} im Datenordner der App angelegt.",
+   "en": "File {1} created in the app data folder."
   },
   "assistant.file.savedProject": {
-   "de": "Datei {1} im Datenordner der App angelegt. Bestätigungskarte für den Drive-Ordner von Projekt {2} erzeugt — noch NICHT im Drive."
+   "de": "Datei {1} im Datenordner der App angelegt. Bestätigungskarte für den Drive-Ordner von Projekt {2} erzeugt — noch NICHT im Drive.",
+   "en": "File {1} created in the app data folder. Confirmation card created for the Drive folder of project {2} — NOT in Drive yet."
   },
   "assistant.file.whichFile": {
-   "de": "Welche Datei? Nenne (einen Teil) des Dateinamens."
+   "de": "Welche Datei? Nenne (einen Teil) des Dateinamens.",
+   "en": "Which file? Give (part of) the file name."
   },
   "assistant.file.writeFailed": {
-   "de": "Datei konnte nicht angelegt werden: {1}"
+   "de": "Datei konnte nicht angelegt werden: {1}",
+   "en": "File could not be created: {1}"
   },
   "assistant.gate.hint": {
-   "de": "[GROUNDING-GATE] Der Entwurf wurde NICHT als Karte angezeigt: folgende Werte sind durch kein Tool-Ergebnis und keine Nutzer-Angabe belegt und dürfen nicht erfunden werden: {1}. Nutze ein Lese-Werkzeug (z. B. search_contacts / lookup_kontakt / search_gmail) für den echten Wert oder frag den Nutzer. Erfinde niemals eine Adresse oder Nummer."
+   "de": "[GROUNDING-GATE] Der Entwurf wurde NICHT als Karte angezeigt: folgende Werte sind durch kein Tool-Ergebnis und keine Nutzer-Angabe belegt und dürfen nicht erfunden werden: {1}. Nutze ein Lese-Werkzeug (z. B. search_contacts / lookup_kontakt / search_gmail) für den echten Wert oder frag den Nutzer. Erfinde niemals eine Adresse oder Nummer.",
+   "en": "[GROUNDING-GATE] The draft was NOT shown as a card: the following values are backed by no tool result and no user statement and must not be invented: {1}. Use a read tool (e.g. search_contacts / lookup_kontakt / search_gmail) for the real value or ask the user. Never invent an address or number."
   },
   "assistant.gate.hintValue": {
-   "de": "{1} „{2}“ (Feld {3})"
+   "de": "{1} „{2}“ (Feld {3})",
+   "en": "{1} “{2}” (field {3})"
   },
   "assistant.gate.proven": {
-   "de": "Belegt: {1}"
+   "de": "Belegt: {1}",
+   "en": "Backed: {1}"
   },
   "assistant.gate.warn": {
-   "de": "Entwurf zurückgehalten — nicht belegte Angabe: {1}. Quelle nennen oder nachschlagen."
+   "de": "Entwurf zurückgehalten — nicht belegte Angabe: {1}. Quelle nennen oder nachschlagen.",
+   "en": "Draft held back — unbacked detail: {1}. Name the source or look it up."
   },
   "assistant.journal.failed": {
-   "de": "Tagebuch-Eintrag konnte nicht gespeichert werden: {1}"
+   "de": "Tagebuch-Eintrag konnte nicht gespeichert werden: {1}",
+   "en": "Journal entry could not be saved: {1}"
   },
   "assistant.journal.logged": {
-   "de": "Im Assistenten-Tagebuch notiert."
+   "de": "Im Assistenten-Tagebuch notiert.",
+   "en": "Noted in the assistant journal."
   },
   "assistant.journal.noText": {
-   "de": "Kein Text für den Tagebuch-Eintrag angegeben."
+   "de": "Kein Text für den Tagebuch-Eintrag angegeben.",
+   "en": "No text given for the journal entry."
   },
   "assistant.list.more": {
-   "de": "… und {1} weitere. Suche eingrenzen."
+   "de": "… und {1} weitere. Suche eingrenzen.",
+   "en": "… and {1} more. Narrow the search."
   },
   "assistant.list.moreContacts": {
-   "de": "… und {1} weitere."
+   "de": "… und {1} weitere.",
+   "en": "… and {1} more."
   },
   "assistant.mail.attachments": {
-   "de": " · Anhänge: {1}"
+   "de": " · Anhänge: {1}",
+   "en": " · attachments: {1}"
   },
   "assistant.mail.empty": {
-   "de": "Keine Mails für „{1}“ gefunden."
+   "de": "Keine Mails für „{1}“ gefunden.",
+   "en": "No mails found for “{1}”."
   },
   "assistant.mail.from": {
-   "de": "von {1}"
+   "de": "von {1}",
+   "en": "from {1}"
   },
   "assistant.mail.label.category": {
-   "de": "Kategorie {1}"
+   "de": "Kategorie {1}",
+   "en": "Category {1}"
   },
   "assistant.mail.label.draft": {
    "de": "Entwürfe",
    "en": "Drafts"
   },
   "assistant.mail.label.inbox": {
-   "de": "Posteingang"
+   "de": "Posteingang",
+   "en": "Inbox"
   },
   "assistant.mail.label.sent": {
    "de": "Gesendet",
@@ -557,868 +734,1220 @@
    "en": "Trash"
   },
   "assistant.mail.noBody": {
-   "de": "(kein lesbarer Text-Body)"
+   "de": "(kein lesbarer Text-Body)",
+   "en": "(no readable text body)"
   },
   "assistant.mail.noSuchHit": {
-   "de": "Nur {1} Treffer — Nummer {2} gibt es nicht."
+   "de": "Nur {1} Treffer — Nummer {2} gibt es nicht.",
+   "en": "Only {1} hits — number {2} does not exist."
   },
   "assistant.mail.notConnected": {
-   "de": "Gmail ist nicht verbunden. Bitte Google in den Einstellungen verbinden."
+   "de": "Gmail ist nicht verbunden. Bitte Google in den Einstellungen verbinden.",
+   "en": "Gmail is not connected. Please connect Google in Settings."
   },
   "assistant.mail.notFound": {
-   "de": "Keine Mail für „{1}“ gefunden."
+   "de": "Keine Mail für „{1}“ gefunden.",
+   "en": "No mail found for “{1}”."
   },
   "assistant.mail.placement": {
-   "de": " · Ablage: "
+   "de": " · Ablage: ",
+   "en": " · filed in: "
   },
   "assistant.mail.readFailed": {
-   "de": "Mail konnte nicht gelesen werden: {1}"
+   "de": "Mail konnte nicht gelesen werden: {1}",
+   "en": "Mail could not be read: {1}"
   },
   "assistant.mail.readFrom": {
-   "de": "Von: {1}"
+   "de": "Von: {1}",
+   "en": "From: {1}"
   },
   "assistant.mail.readSubject": {
-   "de": "Betreff: {1}"
+   "de": "Betreff: {1}",
+   "en": "Subject: {1}"
   },
   "assistant.mail.searchFailed": {
-   "de": "Gmail-Suche fehlgeschlagen: {1}"
+   "de": "Gmail-Suche fehlgeschlagen: {1}",
+   "en": "Gmail search failed: {1}"
   },
   "assistant.mail.truncated": {
-   "de": "… [gekürzt]"
+   "de": "… [gekürzt]",
+   "en": "… [truncated]"
   },
   "assistant.memory.none": {
-   "de": "(noch keine)"
+   "de": "(noch keine)",
+   "en": "(none yet)"
   },
   "assistant.memory.roleAssistant": {
-   "de": "Assistent"
+   "de": "Assistent",
+   "en": "Assistant"
   },
   "assistant.memory.roleUser": {
-   "de": "Nutzer"
+   "de": "Nutzer",
+   "en": "User"
   },
   "assistant.memory.system": {
-   "de": "Du fasst einen Chatverlauf kompakt für ein Assistenten-Gedächtnis zusammen. Du bekommst eine bisherige Zusammenfassung (kann leer sein) und neue Nachrichten seit der letzten Zusammenfassung. Verschmelze beides zu EINER neuen, aktuellen Fassung — häufe nicht an. Widersprüche löst du zugunsten der neueren Information auf. Halte Entscheidungen, offene Punkte, Nutzer-Präferenzen/-Korrekturen und projektrelevante Fakten fest. Antworte NUR mit der neuen Zusammenfassung als Fließtext, maximal 400 Wörter, keine Meta-Kommentare, keine Überschriften."
+   "de": "Du fasst einen Chatverlauf kompakt für ein Assistenten-Gedächtnis zusammen. Du bekommst eine bisherige Zusammenfassung (kann leer sein) und neue Nachrichten seit der letzten Zusammenfassung. Verschmelze beides zu EINER neuen, aktuellen Fassung — häufe nicht an. Widersprüche löst du zugunsten der neueren Information auf. Halte Entscheidungen, offene Punkte, Nutzer-Präferenzen/-Korrekturen und projektrelevante Fakten fest. Antworte NUR mit der neuen Zusammenfassung als Fließtext, maximal 400 Wörter, keine Meta-Kommentare, keine Überschriften.",
+   "en": "You summarise a chat history compactly for an assistant memory. You receive an existing summary (may be empty) and new messages since the last summary. Merge both into ONE new, current version — do not accumulate. Resolve contradictions in favour of the newer information. Keep decisions, open points, user preferences and corrections, and project-relevant facts. Answer ONLY with the new summary as running text, at most 400 words, no meta comments, no headings."
   },
   "assistant.memory.turn": {
-   "de": "BISHERIGE ZUSAMMENFASSUNG:\n{1}\n\nNEUE NACHRICHTEN SEIT DER LETZTEN ZUSAMMENFASSUNG:\n{2}"
+   "de": "BISHERIGE ZUSAMMENFASSUNG:\n{1}\n\nNEUE NACHRICHTEN SEIT DER LETZTEN ZUSAMMENFASSUNG:\n{2}",
+   "en": "EXISTING SUMMARY:\n{1}\n\nNEW MESSAGES SINCE THE LAST SUMMARY:\n{2}"
   },
   "assistant.notes.created": {
-   "de": "Notiz angelegt [{1}]"
+   "de": "Notiz angelegt [{1}]",
+   "en": "Note created [{1}]"
   },
   "assistant.notes.deleteFailed": {
-   "de": "Löschen fehlgeschlagen: {1}"
+   "de": "Löschen fehlgeschlagen: {1}",
+   "en": "Delete failed: {1}"
   },
   "assistant.notes.deleted": {
-   "de": "Notiz gelöscht [{1}]: {2}"
+   "de": "Notiz gelöscht [{1}]: {2}",
+   "en": "Note deleted [{1}]: {2}"
   },
   "assistant.notes.duplicate": {
-   "de": "Nicht angelegt — es gibt schon eine sehr ähnliche Notiz [{1}]: {2}. Zum Ändern update_note mit diesem Kurzbezug, zum bewussten Doppeln trotzdem=true."
+   "de": "Nicht angelegt — es gibt schon eine sehr ähnliche Notiz [{1}]: {2}. Zum Ändern update_note mit diesem Kurzbezug, zum bewussten Doppeln trotzdem=true.",
+   "en": "Not created — a very similar note already exists [{1}]: {2}. To change it use update_note with this short reference; to duplicate deliberately use trotzdem=true."
   },
   "assistant.notes.loadFailed": {
-   "de": "Notizen konnten nicht geladen werden: {1}"
+   "de": "Notizen konnten nicht geladen werden: {1}",
+   "en": "Notes could not be loaded: {1}"
   },
   "assistant.notes.needBoth": {
-   "de": "Notiz-Bezug und neuer Text nötig."
+   "de": "Notiz-Bezug und neuer Text nötig.",
+   "en": "Note reference and new text required."
   },
   "assistant.notes.noText": {
-   "de": "Kein Notiztext angegeben."
+   "de": "Kein Notiztext angegeben.",
+   "en": "No note text given."
   },
   "assistant.notes.none": {
-   "de": "Keine Notizen gespeichert."
+   "de": "Keine Notizen gespeichert.",
+   "en": "No notes saved."
   },
   "assistant.notes.notFound": {
-   "de": "Keine Notiz zu {1} gefunden."
+   "de": "Keine Notiz zu {1} gefunden.",
+   "en": "No note found for {1}."
   },
   "assistant.notes.saveFailed": {
-   "de": "Notiz konnte nicht gespeichert werden: {1}"
+   "de": "Notiz konnte nicht gespeichert werden: {1}",
+   "en": "Note could not be saved: {1}"
   },
   "assistant.notes.updateFailed": {
-   "de": "Aktualisierung fehlgeschlagen: {1}"
+   "de": "Aktualisierung fehlgeschlagen: {1}",
+   "en": "Update failed: {1}"
   },
   "assistant.notes.updated": {
-   "de": "Notiz [{1}] aktualisiert: {2}"
+   "de": "Notiz [{1}] aktualisiert: {2}",
+   "en": "Note [{1}] updated: {2}"
   },
   "assistant.notes.whichNote": {
-   "de": "Welche Notiz? Nenne Kurzbezug oder Textausschnitt."
+   "de": "Welche Notiz? Nenne Kurzbezug oder Textausschnitt.",
+   "en": "Which note? Give the short reference or a text excerpt."
   },
   "assistant.offers.emptyCurrent": {
-   "de": "Keine Angebote/Rechnungen in dem aktuellen Projekt gefunden."
+   "de": "Keine Angebote/Rechnungen in dem aktuellen Projekt gefunden.",
+   "en": "No offers/invoices found in the current project."
   },
   "assistant.offers.emptyNamed": {
-   "de": "Keine Angebote/Rechnungen in {1} gefunden."
+   "de": "Keine Angebote/Rechnungen in {1} gefunden.",
+   "en": "No offers/invoices found in {1}."
   },
   "assistant.offers.failed": {
-   "de": "Angebots-Suche fehlgeschlagen: {1}"
+   "de": "Angebots-Suche fehlgeschlagen: {1}",
+   "en": "Offer search failed: {1}"
   },
   "assistant.offers.headerCurrent": {
-   "de": "Angebote in dem aktuellen Projekt:"
+   "de": "Angebote in dem aktuellen Projekt:",
+   "en": "Offers in the current project:"
   },
   "assistant.offers.headerNamed": {
-   "de": "Angebote in {1}:"
+   "de": "Angebote in {1}:",
+   "en": "Offers in {1}:"
   },
   "assistant.offers.incoming": {
-   "de": "eingehend"
+   "de": "eingehend",
+   "en": "incoming"
   },
   "assistant.offers.incomingHeader": {
-   "de": "Eingehend ({1}):"
+   "de": "Eingehend ({1}):",
+   "en": "Incoming ({1}):"
   },
   "assistant.offers.noFolder": {
-   "de": "Für {1} ({2}) ist kein Drive-Ordner verknüpft."
+   "de": "Für {1} ({2}) ist kein Drive-Ordner verknüpft.",
+   "en": "No Drive folder is linked for {1} ({2})."
   },
   "assistant.offers.outgoing": {
-   "de": "ausgehend"
+   "de": "ausgehend",
+   "en": "outgoing"
   },
   "assistant.offers.outgoingHeader": {
-   "de": "Ausgehend ({1}):"
+   "de": "Ausgehend ({1}):",
+   "en": "Outgoing ({1}):"
   },
   "assistant.offers.projectMissing": {
-   "de": "Projekt {1} nicht gefunden."
+   "de": "Projekt {1} nicht gefunden.",
+   "en": "Project {1} not found."
   },
   "assistant.offers.whichProject": {
-   "de": "Für welches Projekt? Nenne Name, Nummer oder Kunde."
+   "de": "Für welches Projekt? Nenne Name, Nummer oder Kunde.",
+   "en": "For which project? Give name, number or customer."
   },
   "assistant.projects.budget": {
-   "de": " | Budget {1}"
+   "de": " | Budget {1}",
+   "en": " | budget {1}"
   },
   "assistant.projects.noMatch": {
-   "de": "Kein Projekt passt auf \"{1}\"."
+   "de": "Kein Projekt passt auf \"{1}\".",
+   "en": "No project matches \"{1}\"."
   },
   "assistant.projects.none": {
-   "de": "Es sind keine Projekte geladen."
+   "de": "Es sind keine Projekte geladen.",
+   "en": "No projects are loaded."
   },
   "assistant.projects.phase": {
-   "de": " | Phase: {1}"
+   "de": " | Phase: {1}",
+   "en": " | phase: {1}"
   },
   "assistant.prompt.actsFor": {
-   "de": "Du handelst ausschließlich für {1}. "
+   "de": "Du handelst ausschließlich für {1}. ",
+   "en": "You act exclusively for {1}. "
   },
   "assistant.prompt.focus": {
-   "de": "Aktuell im Fokus: {1} ({2})"
+   "de": "Aktuell im Fokus: {1} ({2})",
+   "en": "Currently in focus: {1} ({2})"
   },
   "assistant.prompt.focusPhase": {
-   "de": ", Phase {1}"
+   "de": ", Phase {1}",
+   "en": ", phase {1}"
   },
   "assistant.prompt.identity": {
-   "de": "Du bist der ALFA-Projektassistent für ein Design-/Küchenstudio. "
+   "de": "Du bist der ALFA-Projektassistent für ein Design-/Küchenstudio. ",
+   "en": "You are the ALFA project assistant for a design/kitchen studio. "
   },
   "assistant.prompt.memory": {
-   "de": "Gedächtnis: Du siehst die letzten Nachrichten dieses Gesprächs wörtlich; Älteres aus den letzten ~4 Wochen steht, falls vorhanden, unten als Zusammenfassung. Beides ist lokal gespeichert und überlebt App-Neustarts. Knüpfe daran an. Behaupte nicht, du hättest kein Gedächtnis. Steht etwas weder im Verlauf noch in der Zusammenfassung, sag das schlicht — rekonstruiere es nicht."
+   "de": "Gedächtnis: Du siehst die letzten Nachrichten dieses Gesprächs wörtlich; Älteres aus den letzten ~4 Wochen steht, falls vorhanden, unten als Zusammenfassung. Beides ist lokal gespeichert und überlebt App-Neustarts. Knüpfe daran an. Behaupte nicht, du hättest kein Gedächtnis. Steht etwas weder im Verlauf noch in der Zusammenfassung, sag das schlicht — rekonstruiere es nicht.",
+   "en": "Memory: you see the most recent messages of this conversation verbatim; older content from the last ~4 weeks is, if present, below as a summary. Both are stored locally and survive app restarts. Build on them. Do not claim you have no memory. If something is in neither the history nor the summary, simply say so — do not reconstruct it."
   },
   "assistant.prompt.noImpersonation": {
-   "de": "Sprich nie im Namen anderer Teammitglieder und gib dich nie als jemand anderen aus. "
+   "de": "Sprich nie im Namen anderer Teammitglieder und gib dich nie als jemand anderen aus. ",
+   "en": "Never speak in the name of other team members and never pretend to be someone else. "
   },
   "assistant.prompt.noSignals": {
-   "de": "- keine"
+   "de": "- keine",
+   "en": "- none"
   },
   "assistant.prompt.noTools": {
-   "de": "Wichtig: Erfinde keine Fakten. Du hast in dieser Version KEINE Live-Zugriffe auf Mails, Kalender, Drive oder Aufgaben — beziehe dich nur auf den oben gegebenen Kontext und sage offen, wenn dir Informationen fehlen. Schreibaktionen (Mails, Termine) darfst du nur als Vorschlag formulieren, nie als bereits erledigt darstellen."
+   "de": "Wichtig: Erfinde keine Fakten. Du hast in dieser Version KEINE Live-Zugriffe auf Mails, Kalender, Drive oder Aufgaben — beziehe dich nur auf den oben gegebenen Kontext und sage offen, wenn dir Informationen fehlen. Schreibaktionen (Mails, Termine) darfst du nur als Vorschlag formulieren, nie als bereits erledigt darstellen.",
+   "en": "Important: do not invent facts. In this version you have NO live access to mails, calendar, Drive or tasks — refer only to the context given above and say openly when information is missing. You may only phrase write actions (mails, appointments) as a suggestion, never present them as already done."
   },
   "assistant.prompt.projectsHeader": {
-   "de": "Projekte im Studio:"
+   "de": "Projekte im Studio:",
+   "en": "Projects in the studio:"
   },
   "assistant.prompt.signalsHeader": {
-   "de": "Offene Signale:"
+   "de": "Offene Signale:",
+   "en": "Open signals:"
   },
   "assistant.prompt.style": {
-   "de": "Antworte auf Deutsch — direkt, knapp und sachlich wie ein erfahrener Kollege. Keine Emojis. Keine Ausrufezeichen als Einleitung. Keine Floskeln (nie: 'Gerne!', 'Natürlich!', 'Ich bin bereit', 'Lass uns loslegen', 'Super!'). Kein KI-Selbstbezug (nie: 'Als KI', 'Als Assistent', 'Ich kann dir helfen mit'). Wenn Informationen fehlen: kurz benennen was fehlt — nicht entschuldigen. Form: Vergleiche und Aufstellungen mit mehreren Spalten als Markdown-Tabelle, Aufzählungen als Liste. Liegen nächste Schritte nahe, hänge ganz ans Ende bis zu drei Zeilen, jede beginnend mit „>> “ und so formuliert, wie der Nutzer sie dir sagen würde; sie erscheinen ihm als Knöpfe. Sonst keine solchen Zeilen."
+   "de": "Antworte auf Deutsch — direkt, knapp und sachlich wie ein erfahrener Kollege. Keine Emojis. Keine Ausrufezeichen als Einleitung. Keine Floskeln (nie: 'Gerne!', 'Natürlich!', 'Ich bin bereit', 'Lass uns loslegen', 'Super!'). Kein KI-Selbstbezug (nie: 'Als KI', 'Als Assistent', 'Ich kann dir helfen mit'). Wenn Informationen fehlen: kurz benennen was fehlt — nicht entschuldigen. Form: Vergleiche und Aufstellungen mit mehreren Spalten als Markdown-Tabelle, Aufzählungen als Liste. Liegen nächste Schritte nahe, hänge ganz ans Ende bis zu drei Zeilen, jede beginnend mit „>> “ und so formuliert, wie der Nutzer sie dir sagen würde; sie erscheinen ihm als Knöpfe. Sonst keine solchen Zeilen.",
+   "en": "Answer in German — direct, brief and factual like an experienced colleague. No emojis. No exclamation marks as an opener. No filler phrases (never: 'Gladly!', 'Of course!', 'I am ready', 'Let us get started', 'Great!'). No AI self-reference (never: 'As an AI', 'As an assistant', 'I can help you with'). When information is missing: briefly name what is missing — do not apologise. Form: comparisons and listings with several columns as a Markdown table, enumerations as a list. If next steps are obvious, append up to three lines at the very end, each starting with \">> \" and phrased the way the user would say them to you; they appear to the user as buttons. Otherwise no such lines."
   },
   "assistant.prompt.summaryHeader": {
-   "de": "Zusammenfassung früherer Gespräche (deine eigenen früheren Aussagen, ungeprüft — prüfe jede Tatsache daraus mit einem Werkzeug, bevor du sie wiederholst):"
+   "de": "Zusammenfassung früherer Gespräche (deine eigenen früheren Aussagen, ungeprüft — prüfe jede Tatsache daraus mit einem Werkzeug, bevor du sie wiederholst):",
+   "en": "Summary of earlier conversations (your own earlier statements, unchecked — verify every fact from it with a tool before repeating it):"
   },
   "assistant.prompt.talkingTo": {
-   "de": "Du sprichst mit {1}"
+   "de": "Du sprichst mit {1}",
+   "en": "You are talking to {1}"
   },
   "assistant.prompt.talkingToEnd": {
-   "de": ". "
+   "de": ". ",
+   "en": ". "
   },
   "assistant.prompt.talkingToRole": {
-   "de": " ({1})"
+   "de": " ({1})",
+   "en": " ({1})"
   },
   "assistant.prompt.today": {
-   "de": "Heute ist {1}."
+   "de": "Heute ist {1}.",
+   "en": "Today is {1}."
   },
   "assistant.prompt.tools.draftRule": {
-   "de": "Mails kannst du als ENTWURF vorbereiten (create_draft, mit Bestätigung) — VERSENDEN tust du nie und stellst es nie als erledigt dar."
+   "de": "Mails kannst du als ENTWURF vorbereiten (create_draft, mit Bestätigung) — VERSENDEN tust du nie und stellst es nie als erledigt dar.",
+   "en": "You can prepare mails as a DRAFT (create_draft, with confirmation) — you NEVER SEND them and never present it as done."
   },
   "assistant.prompt.tools.header": {
-   "de": "Wichtig: Erfinde keine Fakten. Du hast LIVE-Lesezugriff auf folgende Werkzeuge — nutze sie statt zu raten. Triff keine Aussage über Termine, Aufgaben, Mails, Dateien, Kontakte oder Preise, ohne in DIESER Antwort das passende Werkzeug aufgerufen zu haben — auch nicht „es gibt keine“. Über deine eigenen Fähigkeiten sagst du nur, was aus dieser Werkzeugliste folgt; "
+   "de": "Wichtig: Erfinde keine Fakten. Du hast LIVE-Lesezugriff auf folgende Werkzeuge — nutze sie statt zu raten. Triff keine Aussage über Termine, Aufgaben, Mails, Dateien, Kontakte oder Preise, ohne in DIESER Antwort das passende Werkzeug aufgerufen zu haben — auch nicht „es gibt keine“. Über deine eigenen Fähigkeiten sagst du nur, was aus dieser Werkzeugliste folgt; ",
+   "en": "Important: do not invent facts. You have LIVE read access to the following tools — use them instead of guessing. Make no statement about appointments, tasks, mails, files, contacts or prices without having called the matching tool in THIS answer — not even \"there are none\". About your own abilities you only say what follows from this tool list; "
   },
   "assistant.prompt.tools.noMatch": {
-   "de": "Wenn für eine Frage kein Werkzeug oben passt (z. B. Rechnungen), sag offen, dass dir der Live-Zugriff fehlt. "
+   "de": "Wenn für eine Frage kein Werkzeug oben passt (z. B. Rechnungen), sag offen, dass dir der Live-Zugriff fehlt. ",
+   "en": "If no tool above fits a question (e.g. invoices), say openly that you lack live access. "
   },
   "assistant.prompt.tools.withFiles": {
-   "de": "Bilder, PDFs und Textdateien, die der Nutzer in den Chat legt, siehst du als Inhalt seiner Nachricht — von älteren Anhängen bleibt dir nur der Dateiname."
+   "de": "Bilder, PDFs und Textdateien, die der Nutzer in den Chat legt, siehst du als Inhalt seiner Nachricht — von älteren Anhängen bleibt dir nur der Dateiname.",
+   "en": "Images, PDFs and text files the user drops into the chat you see as content of their message — of older attachments only the file name remains."
   },
   "assistant.prompt.tools.withoutFiles": {
-   "de": "Bilder und angehängte Dateien siehst du nicht."
+   "de": "Bilder und angehängte Dateien siehst du nicht.",
+   "en": "You do not see images and attached files."
   },
   "assistant.receipts.noMatch": {
-   "de": "Kein Beleg passt auf \"{1}\"."
+   "de": "Kein Beleg passt auf \"{1}\".",
+   "en": "No receipt matches \"{1}\"."
   },
   "assistant.receipts.none": {
-   "de": "Im Belegregister steht noch nichts."
+   "de": "Im Belegregister steht noch nichts.",
+   "en": "The receipt register is still empty."
   },
   "assistant.samples.defective": {
-   "de": "({1} Einträge ließen sich nicht lesen.)"
+   "de": "({1} Einträge ließen sich nicht lesen.)",
+   "en": "({1} entries could not be read.)"
   },
   "assistant.samples.failed": {
-   "de": "Bemusterung konnte nicht gelesen werden: {1}"
+   "de": "Bemusterung konnte nicht gelesen werden: {1}",
+   "en": "Sampling could not be read: {1}"
   },
   "assistant.samples.noProject": {
-   "de": "Bitte eine Projektnummer angeben."
+   "de": "Bitte eine Projektnummer angeben.",
+   "en": "Please give a project number."
   },
   "assistant.samples.none": {
-   "de": "Für Projekt {1} ist noch kein Muster erfasst."
+   "de": "Für Projekt {1} ist noch kein Muster erfasst.",
+   "en": "No sample has been recorded for project {1} yet."
   },
   "assistant.shipment.failed": {
-   "de": "Sendung konnte nicht abgefragt werden: {1}"
+   "de": "Sendung konnte nicht abgefragt werden: {1}",
+   "en": "Shipment could not be queried: {1}"
   },
   "assistant.shipment.noNumber": {
-   "de": "Bitte eine Sendungsnummer angeben."
+   "de": "Bitte eine Sendungsnummer angeben.",
+   "en": "Please give a tracking number."
   },
   "assistant.shipment.notConnected": {
-   "de": "Die Sendungsverfolgung ist nicht angebunden — DHL-Schlüssel fehlt."
+   "de": "Die Sendungsverfolgung ist nicht angebunden — DHL-Schlüssel fehlt.",
+   "en": "Shipment tracking is not connected — DHL key missing."
   },
   "assistant.signal.budgetThresholdCrossed": {
-   "de": "- Budget in {1}: {2} Prozent"
+   "de": "- Budget in {1}: {2} Prozent",
+   "en": "- Budget in {1}: {2} percent"
   },
   "assistant.signal.deadlineNear": {
-   "de": "- Deadline in {1}: {2} Tage"
+   "de": "- Deadline in {1}: {2} Tage",
+   "en": "- Deadline in {1}: {2} days"
   },
   "assistant.signal.drawingDetected": {
-   "de": "- Neue Werkzeichnung in {1}: {2}"
+   "de": "- Neue Werkzeichnung in {1}: {2}",
+   "en": "- New working drawing in {1}: {2}"
   },
   "assistant.signal.driveFileAdded": {
-   "de": "- Drive-Datei in {1}: {2}"
+   "de": "- Drive-Datei in {1}: {2}",
+   "en": "- Drive file in {1}: {2}"
   },
   "assistant.signal.offerDetected": {
-   "de": "- Angebot in {1}: {2}"
+   "de": "- Angebot in {1}: {2}",
+   "en": "- Offer in {1}: {2}"
   },
   "assistant.signal.projectFocused": {
-   "de": "- Projekt fokussiert: {1}"
+   "de": "- Projekt fokussiert: {1}",
+   "en": "- Project focused: {1}"
   },
   "assistant.signal.reviewSuggested": {
-   "de": "- Review-Vorschlag in {1}: {2}"
+   "de": "- Review-Vorschlag in {1}: {2}",
+   "en": "- Review suggestion in {1}: {2}"
   },
   "assistant.signal.taskDueSoon": {
-   "de": "- Eigene Aufgabe in {1}: {2} ({3} Tage)"
+   "de": "- Eigene Aufgabe in {1}: {2} ({3} Tage)",
+   "en": "- Own task in {1}: {2} ({3} days)"
   },
   "assistant.source.userMessage": {
-   "de": "Deine Nachricht"
+   "de": "Deine Nachricht",
+   "en": "Your message"
   },
   "assistant.stock.empty": {
-   "de": "Die Lagerliste ist leer."
+   "de": "Die Lagerliste ist leer.",
+   "en": "The stock list is empty."
   },
   "assistant.stock.failed": {
-   "de": "Lagerliste-Fehler: {1}"
+   "de": "Lagerliste-Fehler: {1}",
+   "en": "Stock list error: {1}"
   },
   "assistant.stock.loading": {
-   "de": "Die Lagerliste lädt gerade — bitte gleich noch einmal fragen."
+   "de": "Die Lagerliste lädt gerade — bitte gleich noch einmal fragen.",
+   "en": "The stock list is loading — please ask again in a moment."
   },
   "assistant.stock.noMatch": {
-   "de": "Nichts im Lager passt auf \"{1}\"."
+   "de": "Nichts im Lager passt auf \"{1}\".",
+   "en": "Nothing in stock matches \"{1}\"."
   },
   "assistant.stock.notConnected": {
-   "de": "Keine Verbindung zur Lagerliste."
+   "de": "Keine Verbindung zur Lagerliste.",
+   "en": "No connection to the stock list."
   },
   "assistant.stock.quantity": {
-   "de": " | Bestand {1}"
+   "de": " | Bestand {1}",
+   "en": " | in stock {1}"
   },
   "assistant.studio.issues": {
-   "de": " · {1} Problem-Signale"
+   "de": " · {1} Problem-Signale",
+   "en": " · {1} problem signals"
   },
   "assistant.studio.last": {
-   "de": " · zuletzt {1}"
+   "de": " · zuletzt {1}",
+   "en": " · last {1}"
   },
   "assistant.studio.maxAmount": {
-   "de": " · max € {1}"
+   "de": " · max € {1}",
+   "en": " · max € {1}"
   },
   "assistant.studio.member": {
-   "de": "• Team: {1} — {2} Nachrichten"
+   "de": "• Team: {1} — {2} Nachrichten",
+   "en": "• Team: {1} — {2} messages"
   },
   "assistant.studio.messages": {
-   "de": " · {1} Nachrichten"
+   "de": " · {1} Nachrichten",
+   "en": " · {1} messages"
   },
   "assistant.studio.noHits": {
-   "de": "Keine Treffer in der Studio-Wissensbasis für „{1}“. Tipp: Kundenname, Ort oder Lieferant."
+   "de": "Keine Treffer in der Studio-Wissensbasis für „{1}“. Tipp: Kundenname, Ort oder Lieferant.",
+   "en": "No hits in the studio knowledge base for “{1}”. Tip: customer name, place or supplier."
   },
   "assistant.studio.overviewHeader": {
-   "de": "Studio-Wissensbasis (Stand {1}):"
+   "de": "Studio-Wissensbasis (Stand {1}):",
+   "en": "Studio knowledge base (as of {1}):"
   },
   "assistant.studio.supplier": {
-   "de": "• Lieferant {1}: {2} Erwähnungen in Projekt-Channels"
+   "de": "• Lieferant {1}: {2} Erwähnungen in Projekt-Channels",
+   "en": "• Supplier {1}: {2} mentions in project channels"
   },
   "assistant.studio.topSuppliers": {
-   "de": "Top-Lieferanten: {1}"
+   "de": "Top-Lieferanten: {1}",
+   "en": "Top suppliers: {1}"
   },
   "assistant.studio.topTeam": {
-   "de": "Aktivste Köpfe: {1}"
+   "de": "Aktivste Köpfe: {1}",
+   "en": "Most active people: {1}"
   },
   "assistant.studio.total.channels": {
-   "de": "Channels: {1}"
+   "de": "Channels: {1}",
+   "en": "Channels: {1}"
   },
   "assistant.studio.total.issue_signals": {
-   "de": "Problem-Signale: {1}"
+   "de": "Problem-Signale: {1}",
+   "en": "Problem signals: {1}"
   },
   "assistant.studio.total.messages": {
-   "de": "Nachrichten: {1}"
+   "de": "Nachrichten: {1}",
+   "en": "Messages: {1}"
   },
   "assistant.studio.total.offer_channels": {
-   "de": "Angebots-Channels: {1}"
+   "de": "Angebots-Channels: {1}",
+   "en": "Offer channels: {1}"
   },
   "assistant.studio.total.price_observations": {
-   "de": "Preis-Beobachtungen: {1}"
+   "de": "Preis-Beobachtungen: {1}",
+   "en": "Price observations: {1}"
   },
   "assistant.studio.total.project_channels": {
-   "de": "Projekt-Channels: {1}"
+   "de": "Projekt-Channels: {1}",
+   "en": "Project channels: {1}"
   },
   "assistant.tasks.due": {
-   "de": " · fällig {1}"
+   "de": " · fällig {1}",
+   "en": " · due {1}"
   },
   "assistant.tasks.failed": {
-   "de": "ClickUp-Abruf fehlgeschlagen: {1}"
+   "de": "ClickUp-Abruf fehlgeschlagen: {1}",
+   "en": "ClickUp request failed: {1}"
   },
   "assistant.tasks.moreLists": {
-   "de": "… {1} weitere Listen nicht geladen (Limit {2})."
+   "de": "… {1} weitere Listen nicht geladen (Limit {2}).",
+   "en": "… {1} more lists not loaded (limit {2})."
   },
   "assistant.tasks.noList": {
-   "de": "Keine ClickUp-Liste für dieses Projekt verknüpft."
+   "de": "Keine ClickUp-Liste für dieses Projekt verknüpft.",
+   "en": "No ClickUp list linked to this project."
   },
   "assistant.tasks.noLists": {
-   "de": "Kein Projekt hat eine verknüpfte ClickUp-Liste."
+   "de": "Kein Projekt hat eine verknüpfte ClickUp-Liste.",
+   "en": "No project has a linked ClickUp list."
   },
   "assistant.tasks.noneInList": {
-   "de": "Keine offenen Aufgaben in dieser Liste."
+   "de": "Keine offenen Aufgaben in dieser Liste.",
+   "en": "No open tasks in this list."
   },
   "assistant.tasks.noneOverall": {
-   "de": "Keine offenen Aufgaben über alle verknüpften Projekte."
+   "de": "Keine offenen Aufgaben über alle verknüpften Projekte.",
+   "en": "No open tasks across all linked projects."
   },
   "assistant.tasks.notConnected": {
-   "de": "ClickUp ist nicht verbunden. Bitte in den Einstellungen verbinden."
+   "de": "ClickUp ist nicht verbunden. Bitte in den Einstellungen verbinden.",
+   "en": "ClickUp is not connected. Please connect it in Settings."
   },
   "assistant.tasks.overviewHeader": {
-   "de": "Offene Aufgaben: {1} über {2} Projekt(e)."
+   "de": "Offene Aufgaben: {1} über {2} Projekt(e).",
+   "en": "Open tasks: {1} across {2} project(s)."
   },
   "assistant.tasks.unreachable": {
-   "de": "{1} Liste(n) nicht erreichbar."
+   "de": "{1} Liste(n) nicht erreichbar.",
+   "en": "{1} list(s) not reachable."
   },
   "assistant.tasks.urgent": {
-   "de": " · DRINGEND"
+   "de": " · DRINGEND",
+   "en": " · URGENT"
   },
   "assistant.time.error": {
-   "de": "Clockodo meldet: {1}"
+   "de": "Clockodo meldet: {1}",
+   "en": "Clockodo reports: {1}"
   },
   "assistant.time.header.month": {
-   "de": "Dieser Monat, gebucht: {1} h"
+   "de": "Dieser Monat, gebucht: {1} h",
+   "en": "This month, booked: {1} h"
   },
   "assistant.time.header.today": {
-   "de": "Heute, gebucht: {1} h"
+   "de": "Heute, gebucht: {1} h",
+   "en": "Today, booked: {1} h"
   },
   "assistant.time.header.week": {
-   "de": "Diese Woche, gebucht: {1} h"
+   "de": "Diese Woche, gebucht: {1} h",
+   "en": "This week, booked: {1} h"
   },
   "assistant.time.none": {
-   "de": "Für diesen Zeitraum ({1}) sind keine Zeiten gebucht."
+   "de": "Für diesen Zeitraum ({1}) sind keine Zeiten gebucht.",
+   "en": "No times booked for this period ({1})."
   },
   "assistant.todos.completed": {
-   "de": "Aufgabe [{1}] erledigt: {2}"
+   "de": "Aufgabe [{1}] erledigt: {2}",
+   "en": "Task [{1}] done: {2}"
   },
   "assistant.todos.created": {
-   "de": "Aufgabe angelegt [{1}]"
+   "de": "Aufgabe angelegt [{1}]",
+   "en": "Task created [{1}]"
   },
   "assistant.todos.deleteFailed": {
-   "de": "Löschen fehlgeschlagen: {1}"
+   "de": "Löschen fehlgeschlagen: {1}",
+   "en": "Delete failed: {1}"
   },
   "assistant.todos.deleted": {
-   "de": "Aufgabe gelöscht [{1}]: {2}"
+   "de": "Aufgabe gelöscht [{1}]: {2}",
+   "en": "Task deleted [{1}]: {2}"
   },
   "assistant.todos.due": {
-   "de": " (fällig {1})"
+   "de": " (fällig {1})",
+   "en": " (due {1})"
   },
   "assistant.todos.loadFailed": {
-   "de": "Aufgaben konnten nicht geladen werden: {1}"
+   "de": "Aufgaben konnten nicht geladen werden: {1}",
+   "en": "Tasks could not be loaded: {1}"
   },
   "assistant.todos.noTitle": {
-   "de": "Kein Aufgabentitel angegeben."
+   "de": "Kein Aufgabentitel angegeben.",
+   "en": "No task title given."
   },
   "assistant.todos.none": {
-   "de": "Keine Aufgaben gespeichert."
+   "de": "Keine Aufgaben gespeichert.",
+   "en": "No tasks saved."
   },
   "assistant.todos.noneOpen": {
-   "de": "Keine offenen Aufgaben."
+   "de": "Keine offenen Aufgaben.",
+   "en": "No open tasks."
   },
   "assistant.todos.notFound": {
-   "de": "Keine Aufgabe zu {1} gefunden."
+   "de": "Keine Aufgabe zu {1} gefunden.",
+   "en": "No task found for {1}."
   },
   "assistant.todos.reopened": {
-   "de": "Aufgabe [{1}] wieder offen: {2}"
+   "de": "Aufgabe [{1}] wieder offen: {2}",
+   "en": "Task [{1}] open again: {2}"
   },
   "assistant.todos.saveFailed": {
-   "de": "Aufgabe konnte nicht gespeichert werden: {1}"
+   "de": "Aufgabe konnte nicht gespeichert werden: {1}",
+   "en": "Task could not be saved: {1}"
   },
   "assistant.todos.updateFailed": {
-   "de": "Aktualisierung fehlgeschlagen: {1}"
+   "de": "Aktualisierung fehlgeschlagen: {1}",
+   "en": "Update failed: {1}"
   },
   "assistant.todos.whichTodo": {
-   "de": "Welche Aufgabe? Nenne Kurzbezug oder Titelausschnitt."
+   "de": "Welche Aufgabe? Nenne Kurzbezug oder Titelausschnitt.",
+   "en": "Which task? Give the short reference or a title excerpt."
   },
   "assistant.tool.complete_task.description": {
-   "de": "Hakt eine Aufgabe als erledigt ab (oder öffnet sie mit erledigt=false wieder). 'aufgabe' = Kurzbezug/ID oder Teil des Titels."
+   "de": "Hakt eine Aufgabe als erledigt ab (oder öffnet sie mit erledigt=false wieder). 'aufgabe' = Kurzbezug/ID oder Teil des Titels.",
+   "en": "Ticks a task off as done (or reopens it with erledigt=false). 'aufgabe' = short reference/ID or part of the title."
   },
   "assistant.tool.complete_task.param.aufgabe": {
-   "de": "Kurzbezug, ID oder Titelausschnitt der Aufgabe"
+   "de": "Kurzbezug, ID oder Titelausschnitt der Aufgabe",
+   "en": "Short reference, ID or title excerpt of the task"
   },
   "assistant.tool.complete_task.param.erledigt": {
-   "de": "true (Standard) = abhaken, false = wieder öffnen"
+   "de": "true (Standard) = abhaken, false = wieder öffnen",
+   "en": "true (default) = tick off, false = reopen"
   },
   "assistant.tool.complete_task.prompt": {
-   "de": "- complete_task: Aufgabe abhaken."
+   "de": "- complete_task: Aufgabe abhaken.",
+   "en": "- complete_task: tick off a task."
   },
   "assistant.tool.create_airtable_kontakt.description": {
-   "de": "Schlägt einen NEUEN Kontakt im Airtable-Verzeichnis vor. Schreibt NICHTS automatisch — der Nutzer bestätigt an einer Karte. Pflichtfeld: Name. KEIN Delete."
+   "de": "Schlägt einen NEUEN Kontakt im Airtable-Verzeichnis vor. Schreibt NICHTS automatisch — der Nutzer bestätigt an einer Karte. Pflichtfeld: Name. KEIN Delete.",
+   "en": "Suggests a NEW contact in the Airtable directory. Writes NOTHING automatically — the user confirms on a card. Required field: name. NO delete."
   },
   "assistant.tool.create_airtable_kontakt.param.adresse": {
-   "de": "Adresse (optional)"
+   "de": "Adresse (optional)",
+   "en": "Address (optional)"
   },
   "assistant.tool.create_airtable_kontakt.param.email": {
-   "de": "E-Mail (optional)"
+   "de": "E-Mail (optional)",
+   "en": "Email (optional)"
   },
   "assistant.tool.create_airtable_kontakt.param.kategorie": {
-   "de": "Kategorie: Projektkunde / Lieferant / Handwerker / Architekt/Planer / Team / Sonstige"
+   "de": "Kategorie: Projektkunde / Lieferant / Handwerker / Architekt/Planer / Team / Sonstige",
+   "en": "Category: project customer / supplier / tradesperson / architect/planner / team / other"
   },
   "assistant.tool.create_airtable_kontakt.param.name": {
-   "de": "Vollständiger Name (Pflicht)"
+   "de": "Vollständiger Name (Pflicht)",
+   "en": "Full name (required)"
   },
   "assistant.tool.create_airtable_kontakt.param.organisation": {
-   "de": "Firma/Organisation (optional)"
+   "de": "Firma/Organisation (optional)",
+   "en": "Company/organisation (optional)"
   },
   "assistant.tool.create_airtable_kontakt.param.telefon": {
-   "de": "Telefon (optional)"
+   "de": "Telefon (optional)",
+   "en": "Phone (optional)"
   },
   "assistant.tool.create_airtable_kontakt.prompt": {
-   "de": "- create_airtable_kontakt: schlägt vor, einen Airtable-Kontakt ANZULEGEN. Du schreibst NICHT selbst — es entsteht eine Bestätigungskarte, der Nutzer bestätigt (+ Audit). KEIN Löschen."
+   "de": "- create_airtable_kontakt: schlägt vor, einen Airtable-Kontakt ANZULEGEN. Du schreibst NICHT selbst — es entsteht eine Bestätigungskarte, der Nutzer bestätigt (+ Audit). KEIN Löschen.",
+   "en": "- create_airtable_kontakt: suggests CREATING an Airtable contact. You do NOT write yourself — a confirmation card is created, the user confirms (+ audit). NO deleting."
   },
   "assistant.tool.create_contact.description": {
-   "de": "Schlägt einen NEUEN Google-Kontakt vor. Schreibt nichts automatisch — der Nutzer bestätigt den Kontakt an einer Karte. Pflichtfeld: Vorname (oder vollständiger Name in 'vorname')."
+   "de": "Schlägt einen NEUEN Google-Kontakt vor. Schreibt nichts automatisch — der Nutzer bestätigt den Kontakt an einer Karte. Pflichtfeld: Vorname (oder vollständiger Name in 'vorname').",
+   "en": "Suggests a NEW Google contact. Writes nothing automatically — the user confirms the contact on a card. Required field: first name (or full name in 'vorname')."
   },
   "assistant.tool.create_contact.param.email": {
-   "de": "E-Mail (optional)"
+   "de": "E-Mail (optional)",
+   "en": "Email (optional)"
   },
   "assistant.tool.create_contact.param.firma": {
-   "de": "Firma/Organisation (optional)"
+   "de": "Firma/Organisation (optional)",
+   "en": "Company/organisation (optional)"
   },
   "assistant.tool.create_contact.param.nachname": {
-   "de": "Nachname (optional)"
+   "de": "Nachname (optional)",
+   "en": "Last name (optional)"
   },
   "assistant.tool.create_contact.param.telefon": {
-   "de": "Telefon (optional)"
+   "de": "Telefon (optional)",
+   "en": "Phone (optional)"
   },
   "assistant.tool.create_contact.param.vorname": {
-   "de": "Vorname (oder vollständiger Name)"
+   "de": "Vorname (oder vollständiger Name)",
+   "en": "First name (or full name)"
   },
   "assistant.tool.create_contact.prompt": {
-   "de": "- create_contact: schlägt einen NEUEN Google-Kontakt vor. Du schreibst NICHT selbst — es entsteht eine Bestätigungskarte, der Nutzer legt den Kontakt an. Nenne die Kontaktdaten, behaupte aber nie, der Kontakt sei schon gespeichert."
+   "de": "- create_contact: schlägt einen NEUEN Google-Kontakt vor. Du schreibst NICHT selbst — es entsteht eine Bestätigungskarte, der Nutzer legt den Kontakt an. Nenne die Kontaktdaten, behaupte aber nie, der Kontakt sei schon gespeichert.",
+   "en": "- create_contact: suggests a NEW Google contact. You do NOT write yourself — a confirmation card is created, the user creates the contact. State the contact details, but never claim the contact is already saved."
   },
   "assistant.tool.create_draft.description": {
-   "de": "Bereitet einen E-Mail-ENTWURF vor (Empfänger optional, Betreff, Text). Du schreibst NICHT selbst und versendest NIE — es entsteht eine Bestätigungskarte, der Nutzer legt den Entwurf in Gmail ab (erscheint dann auch in Apple Mail). Behaupte nie, die Mail sei gesendet oder schon gespeichert."
+   "de": "Bereitet einen E-Mail-ENTWURF vor (Empfänger optional, Betreff, Text). Du schreibst NICHT selbst und versendest NIE — es entsteht eine Bestätigungskarte, der Nutzer legt den Entwurf in Gmail ab (erscheint dann auch in Apple Mail). Behaupte nie, die Mail sei gesendet oder schon gespeichert.",
+   "en": "Prepares an email DRAFT (recipient optional, subject, text). You do NOT write yourself and NEVER send — a confirmation card is created, the user saves the draft in Gmail (it then also appears in Apple Mail). Never claim the mail was sent or already saved."
   },
   "assistant.tool.create_draft.param.an": {
-   "de": "Empfänger-E-Mail (optional)"
+   "de": "Empfänger-E-Mail (optional)",
+   "en": "Recipient email (optional)"
   },
   "assistant.tool.create_draft.param.betreff": {
-   "de": "Betreff der Mail"
+   "de": "Betreff der Mail",
+   "en": "Subject of the mail"
   },
   "assistant.tool.create_draft.param.text": {
-   "de": "Mailtext (Body)"
+   "de": "Mailtext (Body)",
+   "en": "Mail text (body)"
   },
   "assistant.tool.create_draft.prompt": {
-   "de": "- create_draft: bereitet einen E-Mail-ENTWURF vor (Betreff/Text/optional Empfänger). Es entsteht eine Bestätigungskarte; der Nutzer legt den Entwurf in Gmail ab. Du VERSENDEST NIE und behauptest nie, die Mail sei gesendet/gespeichert."
+   "de": "- create_draft: bereitet einen E-Mail-ENTWURF vor (Betreff/Text/optional Empfänger). Es entsteht eine Bestätigungskarte; der Nutzer legt den Entwurf in Gmail ab. Du VERSENDEST NIE und behauptest nie, die Mail sei gesendet/gespeichert.",
+   "en": "- create_draft: prepares an email DRAFT (subject/text/optional recipient). A confirmation card is created; the user saves the draft in Gmail. You NEVER SEND and never claim the mail was sent/saved."
   },
   "assistant.tool.create_note.description": {
-   "de": "Legt eine persistente Notiz/Erinnerung an (lokal gespeichert, überlebt den Chat-/App-Neustart). Nutze es, wenn der Nutzer etwas notieren oder sich erinnern lassen will. Im Projekt-Chat wird die Notiz automatisch diesem Projekt zugeordnet."
+   "de": "Legt eine persistente Notiz/Erinnerung an (lokal gespeichert, überlebt den Chat-/App-Neustart). Nutze es, wenn der Nutzer etwas notieren oder sich erinnern lassen will. Im Projekt-Chat wird die Notiz automatisch diesem Projekt zugeordnet.",
+   "en": "Creates a persistent note/reminder (stored locally, survives chat/app restart). Use it when the user wants to note something or be reminded. In the project chat the note is assigned to this project automatically."
   },
   "assistant.tool.create_note.param.text": {
-   "de": "Der Notiztext"
+   "de": "Der Notiztext",
+   "en": "The note text"
   },
   "assistant.tool.create_note.param.trotzdem": {
-   "de": "true = auch anlegen, wenn es schon eine sehr ähnliche Notiz gibt"
+   "de": "true = auch anlegen, wenn es schon eine sehr ähnliche Notiz gibt",
+   "en": "true = create even if a very similar note already exists"
   },
   "assistant.tool.create_note.prompt": {
-   "de": "- create_note: persistente Notizen & Erinnerungen lokal anlegen. Wenn der Nutzer etwas notieren oder sich erinnern lassen will, lege es mit create_note an (überlebt den Neustart) — KEIN Kalender-Link nötig."
+   "de": "- create_note: persistente Notizen & Erinnerungen lokal anlegen. Wenn der Nutzer etwas notieren oder sich erinnern lassen will, lege es mit create_note an (überlebt den Neustart) — KEIN Kalender-Link nötig.",
+   "en": "- create_note: create persistent notes & reminders locally. When the user wants to note something or be reminded, create it with create_note (survives restart) — NO calendar link needed."
   },
   "assistant.tool.create_task.description": {
-   "de": "Legt eine persistente Aufgabe/Erinnerung an (lokal, überlebt den Neustart). Nutze es für interne Memos und To-dos, die der Nutzer sich selbst setzt. Optionales Fälligkeitsdatum als ISO (yyyy-MM-dd); mit Fälligkeit wird eine Erinnerung ausgelöst. Im Projekt-Chat wird die Aufgabe automatisch diesem Projekt zugeordnet."
+   "de": "Legt eine persistente Aufgabe/Erinnerung an (lokal, überlebt den Neustart). Nutze es für interne Memos und To-dos, die der Nutzer sich selbst setzt. Optionales Fälligkeitsdatum als ISO (yyyy-MM-dd); mit Fälligkeit wird eine Erinnerung ausgelöst. Im Projekt-Chat wird die Aufgabe automatisch diesem Projekt zugeordnet.",
+   "en": "Creates a persistent task/reminder (local, survives restart). Use it for internal memos and to-dos the user sets for themselves. Optional due date as ISO (yyyy-MM-dd); with a due date a reminder is triggered. In the project chat the task is assigned to this project automatically."
   },
   "assistant.tool.create_task.param.faellig": {
-   "de": "Optionales Fälligkeitsdatum (yyyy-MM-dd), sonst leer"
+   "de": "Optionales Fälligkeitsdatum (yyyy-MM-dd), sonst leer",
+   "en": "Optional due date (yyyy-MM-dd), otherwise empty"
   },
   "assistant.tool.create_task.param.titel": {
-   "de": "Worum geht die Aufgabe"
+   "de": "Worum geht die Aufgabe",
+   "en": "What the task is about"
   },
   "assistant.tool.create_task.prompt": {
-   "de": "- create_task: interne Aufgabenliste (To-dos/Erinnerungen) lokal verwalten. Für kleine Memos und Erinnerungen, die der Nutzer sich selbst setzt; optionales Fälligkeitsdatum (yyyy-MM-dd), zu dem eine Erinnerung ausgelöst wird."
+   "de": "- create_task: interne Aufgabenliste (To-dos/Erinnerungen) lokal verwalten. Für kleine Memos und Erinnerungen, die der Nutzer sich selbst setzt; optionales Fälligkeitsdatum (yyyy-MM-dd), zu dem eine Erinnerung ausgelöst wird.",
+   "en": "- create_task: manage the internal task list (to-dos/reminders) locally. For small memos and reminders the user sets for themselves; optional due date (yyyy-MM-dd) at which a reminder is triggered."
   },
   "assistant.tool.delete_note.description": {
-   "de": "Löscht eine Notiz. 'note' = Kurzbezug/ID oder Teil des Textes."
+   "de": "Löscht eine Notiz. 'note' = Kurzbezug/ID oder Teil des Textes.",
+   "en": "Deletes a note. 'note' = short reference/ID or part of the text."
   },
   "assistant.tool.delete_note.param.note": {
-   "de": "Kurzbezug, ID oder Textausschnitt der zu löschenden Notiz"
+   "de": "Kurzbezug, ID oder Textausschnitt der zu löschenden Notiz",
+   "en": "Short reference, ID or text excerpt of the note to delete"
   },
   "assistant.tool.delete_note.prompt": {
-   "de": "- delete_note: eine Notiz löschen."
+   "de": "- delete_note: eine Notiz löschen.",
+   "en": "- delete_note: delete a note."
   },
   "assistant.tool.delete_task.description": {
-   "de": "Löscht eine Aufgabe. 'aufgabe' = Kurzbezug/ID oder Teil des Titels."
+   "de": "Löscht eine Aufgabe. 'aufgabe' = Kurzbezug/ID oder Teil des Titels.",
+   "en": "Deletes a task. 'aufgabe' = short reference/ID or part of the title."
   },
   "assistant.tool.delete_task.param.aufgabe": {
-   "de": "Kurzbezug, ID oder Titelausschnitt der zu löschenden Aufgabe"
+   "de": "Kurzbezug, ID oder Titelausschnitt der zu löschenden Aufgabe",
+   "en": "Short reference, ID or title excerpt of the task to delete"
   },
   "assistant.tool.delete_task.prompt": {
-   "de": "- delete_task: Aufgabe entfernen."
+   "de": "- delete_task: Aufgabe entfernen.",
+   "en": "- delete_task: remove a task."
   },
   "assistant.tool.erzeuge_datei.description": {
-   "de": "Erzeugt eine Datei — Text, Tabelle (CSV) oder PDF — und legt sie im Datenordner der App ab. Mit 'projekt' erscheint zusätzlich eine Bestätigungskarte, erst der Klick des Nutzers legt sie auch in den Drive-Ordner dieses Projekts. Für CSV und für PDF-Tabellen: Spalten mit Semikolon trennen, eine Zeile je Datensatz, die erste Zeile ist die Kopfzeile."
+   "de": "Erzeugt eine Datei — Text, Tabelle (CSV) oder PDF — und legt sie im Datenordner der App ab. Mit 'projekt' erscheint zusätzlich eine Bestätigungskarte, erst der Klick des Nutzers legt sie auch in den Drive-Ordner dieses Projekts. Für CSV und für PDF-Tabellen: Spalten mit Semikolon trennen, eine Zeile je Datensatz, die erste Zeile ist die Kopfzeile.",
+   "en": "Creates a file — text, table (CSV) or PDF — and stores it in the app data folder. With 'projekt' a confirmation card also appears; only the user's click also puts it into this project's Drive folder. For CSV and PDF tables: separate columns with semicolons, one row per record, the first row is the header."
   },
   "assistant.tool.erzeuge_datei.param.dateiname": {
-   "de": "Name ohne Pfad, z. B. Materialliste"
+   "de": "Name ohne Pfad, z. B. Materialliste",
+   "en": "Name without path, e.g. Materialliste"
   },
   "assistant.tool.erzeuge_datei.param.format": {
-   "de": "text | csv | pdf"
+   "de": "text | csv | pdf",
+   "en": "text | csv | pdf"
   },
   "assistant.tool.erzeuge_datei.param.inhalt": {
-   "de": "Der vollständige Inhalt der Datei"
+   "de": "Der vollständige Inhalt der Datei",
+   "en": "The complete content of the file"
   },
   "assistant.tool.erzeuge_datei.param.projekt": {
-   "de": "Projektnummer, wenn die Datei auch ins Projekt soll"
+   "de": "Projektnummer, wenn die Datei auch ins Projekt soll",
+   "en": "Project number, if the file should also go into the project"
   },
   "assistant.tool.erzeuge_datei.param.titel": {
-   "de": "Überschrift im PDF; ohne Angabe der Dateiname"
+   "de": "Überschrift im PDF; ohne Angabe der Dateiname",
+   "en": "Heading in the PDF; without it the file name"
   },
   "assistant.tool.find_offers.description": {
-   "de": "Findet Angebote und Rechnungen im Google-Drive-Projektordner (eingehende UND ausgehende, auch verschachtelt z. B. in '01 INFOS'). Nur lesen. Im Projekt-Chat automatisch fürs offene Projekt; sonst das Projekt über 'projekt' (Name/Nummer/Kunde) angeben."
+   "de": "Findet Angebote und Rechnungen im Google-Drive-Projektordner (eingehende UND ausgehende, auch verschachtelt z. B. in '01 INFOS'). Nur lesen. Im Projekt-Chat automatisch fürs offene Projekt; sonst das Projekt über 'projekt' (Name/Nummer/Kunde) angeben.",
+   "en": "Finds offers and invoices in the Google Drive project folder (incoming AND outgoing, also nested, e.g. in '01 INFOS'). Read only. In the project chat automatically for the open project; otherwise give the project via 'projekt' (name/number/customer)."
   },
   "assistant.tool.find_offers.param.projekt": {
-   "de": "Projekt (Name, Nummer oder Kunde) — nur nötig ohne offenes Projekt"
+   "de": "Projekt (Name, Nummer oder Kunde) — nur nötig ohne offenes Projekt",
+   "en": "Project (name, number or customer) — only needed without an open project"
   },
   "assistant.tool.find_offers.prompt": {
-   "de": "- find_offers: Angebote & Rechnungen im Drive finden (eingehend/ausgehend, auch verschachtelt in '01 INFOS'). Im Projekt-Chat automatisch das offene Projekt; ein anderes per 'projekt' nennen. Nutze DIESES Werkzeug für Angebots-/Rechnungsfragen statt zu sagen, Drive sei außer Reichweite."
+   "de": "- find_offers: Angebote & Rechnungen im Drive finden (eingehend/ausgehend, auch verschachtelt in '01 INFOS'). Im Projekt-Chat automatisch das offene Projekt; ein anderes per 'projekt' nennen. Nutze DIESES Werkzeug für Angebots-/Rechnungsfragen statt zu sagen, Drive sei außer Reichweite.",
+   "en": "- find_offers: find offers & invoices in Drive (incoming/outgoing, also nested in '01 INFOS'). In the project chat automatically the open project; name another one via 'projekt'. Use THIS tool for offer/invoice questions instead of saying Drive is out of reach."
   },
   "assistant.tool.list_belege.description": {
-   "de": "Listet die in sevDesk angelegten Belege mit Belegnummer, Art, Projekt und Kunde. Nutze es bei Fragen nach Angeboten, Rechnungen oder Belegnummern. Nur lesen, legt nichts an."
+   "de": "Listet die in sevDesk angelegten Belege mit Belegnummer, Art, Projekt und Kunde. Nutze es bei Fragen nach Angeboten, Rechnungen oder Belegnummern. Nur lesen, legt nichts an.",
+   "en": "Lists the receipts created in sevDesk with receipt number, kind, project and customer. Use it for questions about offers, invoices or receipt numbers. Read only, creates nothing."
   },
   "assistant.tool.list_belege.param.projekt": {
-   "de": "Optionale Projektnummer oder Kundenname als Filter"
+   "de": "Optionale Projektnummer oder Kundenname als Filter",
+   "en": "Optional project number or customer name as filter"
   },
   "assistant.tool.list_bemusterung.description": {
-   "de": "Listet die Muster eines Projekts: Bezeichnung, Hersteller, Kategorie und Status (vorgeschlagen, freigegeben, verworfen). Nur lesen."
+   "de": "Listet die Muster eines Projekts: Bezeichnung, Hersteller, Kategorie und Status (vorgeschlagen, freigegeben, verworfen). Nur lesen.",
+   "en": "Lists the samples of a project: name, manufacturer, category and status (suggested, approved, discarded). Read only."
   },
   "assistant.tool.list_bemusterung.param.projekt": {
-   "de": "Projektnummer, z. B. 2408-01"
+   "de": "Projektnummer, z. B. 2408-01",
+   "en": "Project number, e.g. 2408-01"
   },
   "assistant.tool.list_calendar_events.description": {
-   "de": "Listet anstehende Kalendertermine des Nutzers (nur lesen) — der eigene Kalender UND alle abonnierten Team-Kalender. Optionaler 'query'-Filter (Freitext über Titel/Ort), 'within_days' begrenzt den Zeitraum (Standard 14)."
+   "de": "Listet anstehende Kalendertermine des Nutzers (nur lesen) — der eigene Kalender UND alle abonnierten Team-Kalender. Optionaler 'query'-Filter (Freitext über Titel/Ort), 'within_days' begrenzt den Zeitraum (Standard 14).",
+   "en": "Lists upcoming calendar appointments of the user (read only) — the own calendar AND all subscribed team calendars. Optional 'query' filter (free text over title/place), 'within_days' limits the period (default 14)."
   },
   "assistant.tool.list_calendar_events.param.query": {
-   "de": "Optionaler Freitext-Filter"
+   "de": "Optionaler Freitext-Filter",
+   "en": "Optional free-text filter"
   },
   "assistant.tool.list_calendar_events.param.within_days": {
-   "de": "Zeitraum in Tagen (Standard 14)"
+   "de": "Zeitraum in Tagen (Standard 14)",
+   "en": "Period in days (default 14)"
   },
   "assistant.tool.list_calendar_events.prompt": {
-   "de": "- list_calendar_events: Termine aus Google Kalender."
+   "de": "- list_calendar_events: Termine aus Google Kalender.",
+   "en": "- list_calendar_events: appointments from Google Calendar."
   },
   "assistant.tool.list_clickup_tasks.description": {
-   "de": "Listet offene ClickUp-Aufgaben (nur lesen) mit Status, Fälligkeit und Zuständigkeit. Ohne Parameter: die Liste des aktuellen Projekts (nur im Projekt-Chat). Mit 'alle=true' oder 'projekt' (Name/Nummer als Filter): projektübergreifende Übersicht aller offenen Aufgaben, gruppiert nach Projekt."
+   "de": "Listet offene ClickUp-Aufgaben (nur lesen) mit Status, Fälligkeit und Zuständigkeit. Ohne Parameter: die Liste des aktuellen Projekts (nur im Projekt-Chat). Mit 'alle=true' oder 'projekt' (Name/Nummer als Filter): projektübergreifende Übersicht aller offenen Aufgaben, gruppiert nach Projekt.",
+   "en": "Lists open ClickUp tasks (read only) with status, due date and assignee. Without parameters: the list of the current project (only in the project chat). With 'alle=true' or 'projekt' (name/number as filter): cross-project overview of all open tasks, grouped by project."
   },
   "assistant.tool.list_clickup_tasks.param.alle": {
-   "de": "true = projektübergreifende Übersicht aller offenen Aufgaben"
+   "de": "true = projektübergreifende Übersicht aller offenen Aufgaben",
+   "en": "true = cross-project overview of all open tasks"
   },
   "assistant.tool.list_clickup_tasks.param.projekt": {
-   "de": "Optionaler Projekt-Filter (Name oder Nummer) für die projektübergreifende Übersicht"
+   "de": "Optionaler Projekt-Filter (Name oder Nummer) für die projektübergreifende Übersicht",
+   "en": "Optional project filter (name or number) for the cross-project overview"
   },
   "assistant.tool.list_clickup_tasks.prompt": {
-   "de": "- list_clickup_tasks: offene ClickUp-Aufgaben (Status, Fälligkeit). Ohne Parameter die Liste des aktuellen Projekts; mit 'alle=true' oder 'projekt' eine PROJEKTÜBERGREIFENDE Übersicht, gruppiert nach Projekt — nutze sie für „Was steht insgesamt/überall offen?“."
+   "de": "- list_clickup_tasks: offene ClickUp-Aufgaben (Status, Fälligkeit). Ohne Parameter die Liste des aktuellen Projekts; mit 'alle=true' oder 'projekt' eine PROJEKTÜBERGREIFENDE Übersicht, gruppiert nach Projekt — nutze sie für „Was steht insgesamt/überall offen?“.",
+   "en": "- list_clickup_tasks: open ClickUp tasks (status, due date). Without parameters the list of the current project; with 'alle=true' or 'projekt' a CROSS-PROJECT overview, grouped by project — use it for \"What is open overall/everywhere?\"."
   },
   "assistant.tool.list_drive_folder.description": {
-   "de": "Listet Dateien und Unterordner im verlinkten Google-Drive-Projektordner. Gibt Name, Typ und Änderungsdatum zurück — liest KEINE Dateiinhalte. Mit 'unterordner' (z. B. '01 ANGEBOTE', '02 CAD') gezielt in einen Unterordner schauen."
+   "de": "Listet Dateien und Unterordner im verlinkten Google-Drive-Projektordner. Gibt Name, Typ und Änderungsdatum zurück — liest KEINE Dateiinhalte. Mit 'unterordner' (z. B. '01 ANGEBOTE', '02 CAD') gezielt in einen Unterordner schauen.",
+   "en": "Lists files and subfolders in the linked Google Drive project folder. Returns name, type and modification date — reads NO file contents. With 'unterordner' (e.g. '01 ANGEBOTE', '02 CAD') look into a subfolder directly."
   },
   "assistant.tool.list_drive_folder.param.unterordner": {
-   "de": "Optionaler Unterordner-Name (z. B. '01 ANGEBOTE'). Leer = Projektordner-Wurzel."
+   "de": "Optionaler Unterordner-Name (z. B. '01 ANGEBOTE'). Leer = Projektordner-Wurzel.",
+   "en": "Optional subfolder name (e.g. '01 ANGEBOTE'). Empty = project folder root."
   },
   "assistant.tool.list_drive_folder.prompt": {
-   "de": "- list_drive_folder: Dateien und Unterordner im verlinkten Drive-Projektordner (nur Metadaten lesen). Mit 'unterordner' gezielt z. B. in '01 INFOS' schauen."
+   "de": "- list_drive_folder: Dateien und Unterordner im verlinkten Drive-Projektordner (nur Metadaten lesen). Mit 'unterordner' gezielt z. B. in '01 INFOS' schauen.",
+   "en": "- list_drive_folder: files and subfolders in the linked Drive project folder (read metadata only). With 'unterordner' look directly into e.g. '01 INFOS'."
   },
   "assistant.tool.list_lager.description": {
-   "de": "Durchsucht die Lagerliste: was vorrätig ist, mit Bestand, Hersteller und Preisen. Nutze es bei Fragen wie \"haben wir das noch da\" oder \"was liegt im Lager\". Nur lesen."
+   "de": "Durchsucht die Lagerliste: was vorrätig ist, mit Bestand, Hersteller und Preisen. Nutze es bei Fragen wie \"haben wir das noch da\" oder \"was liegt im Lager\". Nur lesen.",
+   "en": "Searches the stock list: what is in stock, with quantity, manufacturer and prices. Use it for questions like \"do we still have that\" or \"what is in stock\". Read only."
   },
   "assistant.tool.list_lager.param.suche": {
-   "de": "Optionaler Filter auf Bezeichnung, Hersteller, Kategorie oder Artikelnummer"
+   "de": "Optionaler Filter auf Bezeichnung, Hersteller, Kategorie oder Artikelnummer",
+   "en": "Optional filter on name, manufacturer, category or item number"
   },
   "assistant.tool.list_notes.description": {
-   "de": "Listet gespeicherte Notizen/Erinnerungen (neueste zuerst) mit Kurzbezug. Im Projekt-Chat standardmäßig die Notizen DIESES Projekts plus die globalen; mit alle=true alle Projekte."
+   "de": "Listet gespeicherte Notizen/Erinnerungen (neueste zuerst) mit Kurzbezug. Im Projekt-Chat standardmäßig die Notizen DIESES Projekts plus die globalen; mit alle=true alle Projekte.",
+   "en": "Lists saved notes/reminders (newest first) with short reference. In the project chat by default the notes of THIS project plus the global ones; with alle=true all projects."
   },
   "assistant.tool.list_notes.param.alle": {
-   "de": "true = Notizen aller Projekte, sonst nur das aktuelle + globale"
+   "de": "true = Notizen aller Projekte, sonst nur das aktuelle + globale",
+   "en": "true = notes of all projects, otherwise only the current + global"
   },
   "assistant.tool.list_notes.prompt": {
-   "de": "- list_notes: gespeicherte Notizen auflisten."
+   "de": "- list_notes: gespeicherte Notizen auflisten.",
+   "en": "- list_notes: list saved notes."
   },
   "assistant.tool.list_projects.description": {
-   "de": "Listet die Projekte des Studios mit Nummer, Titel, Kunde und Phase. Nutze es, wenn nach den Projekten gefragt wird, nach dem Stand eines Projekts, oder wenn du zu einem Namen die Projektnummer brauchst. Nur lesen."
+   "de": "Listet die Projekte des Studios mit Nummer, Titel, Kunde und Phase. Nutze es, wenn nach den Projekten gefragt wird, nach dem Stand eines Projekts, oder wenn du zu einem Namen die Projektnummer brauchst. Nur lesen.",
+   "en": "Lists the studio's projects with number, title, customer and phase. Use it when asked about the projects, the state of a project, or when you need the project number for a name. Read only."
   },
   "assistant.tool.list_projects.param.suche": {
-   "de": "Optionaler Filter auf Projektnummer, Titel oder Kundenname"
+   "de": "Optionaler Filter auf Projektnummer, Titel oder Kundenname",
+   "en": "Optional filter on project number, title or customer name"
   },
   "assistant.tool.list_tasks.description": {
-   "de": "Listet Aufgaben/Erinnerungen (offene zuerst, nach Fälligkeit) mit Kurzbezug und Status. Im Projekt-Chat standardmäßig die Aufgaben DIESES Projekts plus globale; mit alle=true alle Projekte."
+   "de": "Listet Aufgaben/Erinnerungen (offene zuerst, nach Fälligkeit) mit Kurzbezug und Status. Im Projekt-Chat standardmäßig die Aufgaben DIESES Projekts plus globale; mit alle=true alle Projekte.",
+   "en": "Lists tasks/reminders (open first, by due date) with short reference and status. In the project chat by default the tasks of THIS project plus global ones; with alle=true all projects."
   },
   "assistant.tool.list_tasks.param.alle": {
-   "de": "true = Aufgaben aller Projekte, sonst nur das aktuelle + globale"
+   "de": "true = Aufgaben aller Projekte, sonst nur das aktuelle + globale",
+   "en": "true = tasks of all projects, otherwise only the current + global"
   },
   "assistant.tool.list_tasks.param.nur_offen": {
-   "de": "true = nur offene Aufgaben, sonst alle"
+   "de": "true = nur offene Aufgaben, sonst alle",
+   "en": "true = only open tasks, otherwise all"
   },
   "assistant.tool.list_tasks.prompt": {
-   "de": "- list_tasks: interne Aufgaben auflisten."
+   "de": "- list_tasks: interne Aufgaben auflisten.",
+   "en": "- list_tasks: list internal tasks."
   },
   "assistant.tool.list_zeiten.description": {
-   "de": "Zeigt die eigenen, in Clockodo gebuchten Zeiten des gewählten Zeitraums mit Kunde, Leistung und Dauer. Nur die eigenen Buchungen, nur lesen."
+   "de": "Zeigt die eigenen, in Clockodo gebuchten Zeiten des gewählten Zeitraums mit Kunde, Leistung und Dauer. Nur die eigenen Buchungen, nur lesen.",
+   "en": "Shows the own times booked in Clockodo for the chosen period with customer, service and duration. Only the own bookings, read only."
   },
   "assistant.tool.list_zeiten.param.zeitraum": {
-   "de": "heute, woche oder monat — Vorgabe: woche"
+   "de": "heute, woche oder monat — Vorgabe: woche",
+   "en": "heute, woche or monat — default: woche"
   },
   "assistant.tool.log_friction_point.description": {
-   "de": "Notiert einen kurzen Friktionspunkt im Assistenten-Tagebuch (append-only, kein Code-/Datei-Zugriff) — z. B. eine Datei, die du nicht lesen konntest, widersprüchliche Daten, oder eine fehlende Information. NICHT für normale Konversation nutzen, nur bei einem echten Hindernis bei der aktuellen Aufgabe."
+   "de": "Notiert einen kurzen Friktionspunkt im Assistenten-Tagebuch (append-only, kein Code-/Datei-Zugriff) — z. B. eine Datei, die du nicht lesen konntest, widersprüchliche Daten, oder eine fehlende Information. NICHT für normale Konversation nutzen, nur bei einem echten Hindernis bei der aktuellen Aufgabe.",
+   "en": "Notes a short friction point in the assistant journal (append-only, no code/file access) — e.g. a file you could not read, contradictory data, or missing information. Do NOT use for normal conversation, only for a real obstacle in the current task."
   },
   "assistant.tool.log_friction_point.param.art": {
-   "de": "Eine von: kann_nicht_lesen, widerspruch, fehlende_info, sonstiges"
+   "de": "Eine von: kann_nicht_lesen, widerspruch, fehlende_info, sonstiges",
+   "en": "One of: kann_nicht_lesen, widerspruch, fehlende_info, sonstiges"
   },
   "assistant.tool.log_friction_point.param.text": {
-   "de": "Kurze, konkrete Beschreibung des Friktionspunkts"
+   "de": "Kurze, konkrete Beschreibung des Friktionspunkts",
+   "en": "Short, concrete description of the friction point"
   },
   "assistant.tool.lookup_kontakt.description": {
-   "de": "Durchsucht das Airtable-Kontaktverzeichnis (Kunden, Lieferanten, Handwerker, Team): liefert Name, Organisation, Telefon, E-Mail, ADRESSE, Kategorie, Projekt und Record-ID. Mit 'query' (Name, Organisation oder Projekt) suchen; ohne 'query' das Verzeichnis auflisten, optional mit 'kategorie' gefiltert. Nur lesen, kein Live-API-Call."
+   "de": "Durchsucht das Airtable-Kontaktverzeichnis (Kunden, Lieferanten, Handwerker, Team): liefert Name, Organisation, Telefon, E-Mail, ADRESSE, Kategorie, Projekt und Record-ID. Mit 'query' (Name, Organisation oder Projekt) suchen; ohne 'query' das Verzeichnis auflisten, optional mit 'kategorie' gefiltert. Nur lesen, kein Live-API-Call.",
+   "en": "Searches the Airtable contact directory (customers, suppliers, tradespeople, team): returns name, organisation, phone, email, ADDRESS, category, project and record ID. Search with 'query' (name, organisation or project); without 'query' list the directory, optionally filtered with 'kategorie'. Read only, no live API call."
   },
   "assistant.tool.lookup_kontakt.param.kategorie": {
-   "de": "Optionaler Kategorie-Filter (z. B. Projektkunde, Lieferant, Handwerker, Team, Sonstige)"
+   "de": "Optionaler Kategorie-Filter (z. B. Projektkunde, Lieferant, Handwerker, Team, Sonstige)",
+   "en": "Optional category filter (e.g. Projektkunde, Lieferant, Handwerker, Team, Sonstige)"
   },
   "assistant.tool.lookup_kontakt.param.query": {
-   "de": "Name, Organisation oder Projekt (leer = Verzeichnis auflisten)"
+   "de": "Name, Organisation oder Projekt (leer = Verzeichnis auflisten)",
+   "en": "Name, organisation or project (empty = list directory)"
   },
   "assistant.tool.lookup_kontakt.prompt": {
-   "de": "- lookup_kontakt: Airtable-Kontaktverzeichnis (Kunden, Lieferanten, Handwerker, Team) mit Telefon, E-Mail und ADRESSE. Mit 'query' suchen, ohne 'query' (optional mit 'kategorie') auflisten. Nutze DIESES Werkzeug für Adress-/Telefon-/E-Mail-Fragen zu Personen (z. B. „Adresse Beispielkunde?“) — es ist lokal verfügbar, du musst dafür nicht auf Google warten. Du HAST also Zugriff auf die Kontakte — behaupte nie das Gegenteil."
+   "de": "- lookup_kontakt: Airtable-Kontaktverzeichnis (Kunden, Lieferanten, Handwerker, Team) mit Telefon, E-Mail und ADRESSE. Mit 'query' suchen, ohne 'query' (optional mit 'kategorie') auflisten. Nutze DIESES Werkzeug für Adress-/Telefon-/E-Mail-Fragen zu Personen (z. B. „Adresse Beispielkunde?“) — es ist lokal verfügbar, du musst dafür nicht auf Google warten. Du HAST also Zugriff auf die Kontakte — behaupte nie das Gegenteil.",
+   "en": "- lookup_kontakt: Airtable contact directory (customers, suppliers, tradespeople, team) with phone, email and ADDRESS. Search with 'query', without 'query' (optionally with 'kategorie') list. Use THIS tool for address/phone/email questions about people (e.g. \"address of sample customer?\") — it is available locally, you do not have to wait for Google. So you HAVE access to the contacts — never claim the opposite."
   },
   "assistant.tool.lookup_kunde.description": {
-   "de": "Durchsucht die lokal synchronisierten Kunden (nur lesen): Kundenname, Kundennummer und Anzahl Projekte. Liefert KEINE E-Mail/Telefon — dafür lookup_kontakt oder search_contacts. Leere Anfrage = Kundenübersicht."
+   "de": "Durchsucht die lokal synchronisierten Kunden (nur lesen): Kundenname, Kundennummer und Anzahl Projekte. Liefert KEINE E-Mail/Telefon — dafür lookup_kontakt oder search_contacts. Leere Anfrage = Kundenübersicht.",
+   "en": "Searches the locally synced customers (read only): customer name, customer number and number of projects. Returns NO email/phone — use lookup_kontakt or search_contacts for that. Empty query = customer overview."
   },
   "assistant.tool.lookup_kunde.param.query": {
-   "de": "Kundenname oder Kundennummer (leer = Übersicht)"
+   "de": "Kundenname oder Kundennummer (leer = Übersicht)",
+   "en": "Customer name or customer number (empty = overview)"
   },
   "assistant.tool.propose_clickup_change.description": {
-   "de": "Schlägt eine Änderung in ClickUp vor: Aufgabe ANLEGEN, STATUS setzen (auch abhaken), FÄLLIGKEIT setzen oder ZUWEISEN. Du schreibst NICHT selbst — es entsteht eine Bestätigungskarte, erst der Klick des Nutzers führt aus. Im Projekt-Chat gilt die Liste des offenen Projekts; sonst 'projekt' (Nummer oder Titel) nennen."
+   "de": "Schlägt eine Änderung in ClickUp vor: Aufgabe ANLEGEN, STATUS setzen (auch abhaken), FÄLLIGKEIT setzen oder ZUWEISEN. Du schreibst NICHT selbst — es entsteht eine Bestätigungskarte, erst der Klick des Nutzers führt aus. Im Projekt-Chat gilt die Liste des offenen Projekts; sonst 'projekt' (Nummer oder Titel) nennen.",
+   "en": "Suggests a change in ClickUp: CREATE a task, set STATUS (also tick off), set DUE DATE or ASSIGN. You do NOT write yourself — a confirmation card is created, only the user's click executes. In the project chat the list of the open project applies; otherwise name 'projekt' (number or title)."
   },
   "assistant.tool.propose_clickup_change.param.aktion": {
-   "de": "anlegen | status | faelligkeit | zuweisen"
+   "de": "anlegen | status | faelligkeit | zuweisen",
+   "en": "anlegen | status | faelligkeit | zuweisen"
   },
   "assistant.tool.propose_clickup_change.param.aufgabe": {
-   "de": "Name der Aufgabe (bei anlegen der neue Name, sonst (Teil des) vorhandenen Namens)"
+   "de": "Name der Aufgabe (bei anlegen der neue Name, sonst (Teil des) vorhandenen Namens)",
+   "en": "Name of the task (for anlegen the new name, otherwise (part of) the existing name)"
   },
   "assistant.tool.propose_clickup_change.param.faellig": {
-   "de": "Fälligkeit als yyyy-MM-dd"
+   "de": "Fälligkeit als yyyy-MM-dd",
+   "en": "Due date as yyyy-MM-dd"
   },
   "assistant.tool.propose_clickup_change.param.projekt": {
-   "de": "Projektnummer oder Titel, wenn kein Projekt offen ist"
+   "de": "Projektnummer oder Titel, wenn kein Projekt offen ist",
+   "en": "Project number or title, if no project is open"
   },
   "assistant.tool.propose_clickup_change.param.status": {
-   "de": "Zielstatus, genau wie er in list_clickup_tasks in eckigen Klammern steht"
+   "de": "Zielstatus, genau wie er in list_clickup_tasks in eckigen Klammern steht",
+   "en": "Target status, exactly as it appears in square brackets in list_clickup_tasks"
   },
   "assistant.tool.propose_clickup_change.param.wem": {
-   "de": "Bei zuweisen: Name des Teammitglieds, wie es in ClickUp heißt"
+   "de": "Bei zuweisen: Name des Teammitglieds, wie es in ClickUp heißt",
+   "en": "For zuweisen: name of the team member as it is called in ClickUp"
   },
   "assistant.tool.propose_clickup_change.prompt": {
-   "de": "- propose_clickup_change: schlägt vor, in ClickUp eine Aufgabe ANZULEGEN, ihren STATUS zu setzen (auch abhaken) oder die FÄLLIGKEIT zu setzen. Du schreibst NICHT selbst — es entsteht eine Bestätigungskarte, erst der Klick des Nutzers führt aus. Behaupte nie, es sei schon geschehen. Statusnamen nimmst du aus list_clickup_tasks."
+   "de": "- propose_clickup_change: schlägt vor, in ClickUp eine Aufgabe ANZULEGEN, ihren STATUS zu setzen (auch abhaken) oder die FÄLLIGKEIT zu setzen. Du schreibst NICHT selbst — es entsteht eine Bestätigungskarte, erst der Klick des Nutzers führt aus. Behaupte nie, es sei schon geschehen. Statusnamen nimmst du aus list_clickup_tasks.",
+   "en": "- propose_clickup_change: suggests CREATING a task in ClickUp, setting its STATUS (also tick off) or setting the DUE DATE. You do NOT write yourself — a confirmation card is created, only the user's click executes. Never claim it has already happened. Take status names from list_clickup_tasks."
   },
   "assistant.tool.propose_termin.description": {
-   "de": "Schlägt einen Termin im Google-Kalender vor. Du legst ihn NICHT selbst an — es entsteht eine Bestätigungskarte, erst der Klick des Nutzers schreibt in den Kalender. Nimm dieses Werkzeug statt suggest_calendar_event, wenn der Termin wirklich eingetragen werden soll."
+   "de": "Schlägt einen Termin im Google-Kalender vor. Du legst ihn NICHT selbst an — es entsteht eine Bestätigungskarte, erst der Klick des Nutzers schreibt in den Kalender. Nimm dieses Werkzeug statt suggest_calendar_event, wenn der Termin wirklich eingetragen werden soll.",
+   "en": "Suggests an appointment in Google Calendar. You do NOT create it yourself — a confirmation card is created, only the user's click writes to the calendar. Use this tool instead of suggest_calendar_event when the appointment is really to be entered."
   },
   "assistant.tool.propose_termin.param.dauer": {
-   "de": "Dauer in Minuten, Vorgabe 60 (bei ganztägig ohne Wirkung)"
+   "de": "Dauer in Minuten, Vorgabe 60 (bei ganztägig ohne Wirkung)",
+   "en": "Duration in minutes, default 60 (no effect for all-day)"
   },
   "assistant.tool.propose_termin.param.gaeste": {
-   "de": "E-Mail-Adressen, mit Komma getrennt"
+   "de": "E-Mail-Adressen, mit Komma getrennt",
+   "en": "Email addresses, separated by commas"
   },
   "assistant.tool.propose_termin.param.notiz": {
-   "de": "Beschreibung"
+   "de": "Beschreibung",
+   "en": "Description"
   },
   "assistant.tool.propose_termin.param.ort": {
-   "de": "Ort des Termins"
+   "de": "Ort des Termins",
+   "en": "Place of the appointment"
   },
   "assistant.tool.propose_termin.param.start": {
-   "de": "Beginn als yyyy-MM-dd HH:mm oder yyyy-MM-dd für ganztägig"
+   "de": "Beginn als yyyy-MM-dd HH:mm oder yyyy-MM-dd für ganztägig",
+   "en": "Start as yyyy-MM-dd HH:mm or yyyy-MM-dd for all-day"
   },
   "assistant.tool.propose_termin.param.titel": {
-   "de": "Titel des Termins"
+   "de": "Titel des Termins",
+   "en": "Title of the appointment"
   },
   "assistant.tool.propose_warenkorb.description": {
-   "de": "Schlägt vor, einen Artikel in den Warenkorb zu legen. Du legst ihn NICHT selbst hinein — es entsteht eine Bestätigungskarte, erst der Klick des Nutzers legt ab. Der Artikel wird zuerst im Katalog, dann im Lager gesucht; ohne Treffer wird nichts vorgeschlagen."
+   "de": "Schlägt vor, einen Artikel in den Warenkorb zu legen. Du legst ihn NICHT selbst hinein — es entsteht eine Bestätigungskarte, erst der Klick des Nutzers legt ab. Der Artikel wird zuerst im Katalog, dann im Lager gesucht; ohne Treffer wird nichts vorgeschlagen.",
+   "en": "Suggests putting an item into the cart. You do NOT put it in yourself — a confirmation card is created, only the user's click places it. The item is searched first in the catalog, then in stock; without a hit nothing is suggested."
   },
   "assistant.tool.propose_warenkorb.param.artikel": {
-   "de": "Artikelnummer oder Bezeichnung, wie in search_katalog oder list_lager gefunden"
+   "de": "Artikelnummer oder Bezeichnung, wie in search_katalog oder list_lager gefunden",
+   "en": "Item number or name, as found in search_katalog or list_lager"
   },
   "assistant.tool.propose_warenkorb.param.menge": {
-   "de": "Stückzahl, Vorgabe 1"
+   "de": "Stückzahl, Vorgabe 1",
+   "en": "Quantity, default 1"
   },
   "assistant.tool.query_studio_knowledge.description": {
-   "de": "Durchsucht die lokale Studio-Wissensbasis aus der Projekthistorie (Projekte mit Phase/Problem-Signalen/Beträgen, Lieferanten, Team). Nutze sie für Fragen zu früheren oder laufenden Projekten, Kunden und Lieferanten. Leere/allgemeine Anfrage gibt eine Gesamtübersicht (Kennzahlen, Top-Köpfe/Lieferanten)."
+   "de": "Durchsucht die lokale Studio-Wissensbasis aus der Projekthistorie (Projekte mit Phase/Problem-Signalen/Beträgen, Lieferanten, Team). Nutze sie für Fragen zu früheren oder laufenden Projekten, Kunden und Lieferanten. Leere/allgemeine Anfrage gibt eine Gesamtübersicht (Kennzahlen, Top-Köpfe/Lieferanten).",
+   "en": "Searches the local studio knowledge base built from the project history (projects with phase/problem signals/amounts, suppliers, team). Use it for questions about past or ongoing projects, customers and suppliers. An empty/general query returns a full overview (figures, top people/suppliers)."
   },
   "assistant.tool.query_studio_knowledge.param.query": {
-   "de": "Kunde, Projekt, Ort oder Lieferant (leer = Übersicht)"
+   "de": "Kunde, Projekt, Ort oder Lieferant (leer = Übersicht)",
+   "en": "Customer, project, place or supplier (empty = overview)"
   },
   "assistant.tool.query_studio_knowledge.prompt": {
-   "de": "- query_studio_knowledge: Studio-Wissensbasis aus der Projekthistorie (Projekte, Lieferanten, Team, Problem-Signale, Preis-Nennungen). Nutze sie für Fragen zu früheren/laufenden Projekten und Lieferanten. Sie ist ein Schnappschuss, nicht live: nenne bei jeder Aussage daraus das Stand-Datum aus der Werkzeug-Ausgabe."
+   "de": "- query_studio_knowledge: Studio-Wissensbasis aus der Projekthistorie (Projekte, Lieferanten, Team, Problem-Signale, Preis-Nennungen). Nutze sie für Fragen zu früheren/laufenden Projekten und Lieferanten. Sie ist ein Schnappschuss, nicht live: nenne bei jeder Aussage daraus das Stand-Datum aus der Werkzeug-Ausgabe.",
+   "en": "- query_studio_knowledge: studio knowledge base from the project history (projects, suppliers, team, problem signals, price mentions). Use it for questions about past/ongoing projects and suppliers. It is a snapshot, not live: with every statement from it, name the as-of date from the tool output."
   },
   "assistant.tool.read_drive_file.description": {
-   "de": "Liest den INHALT einer Datei im Google-Drive-Projektordner (PDF, Google Docs/Sheets/Slides, Textdateien) als Klartext. Nutze es, um z. B. einen Fragebogen, ein Angebot oder eine Notiz im Drive auszuwerten. 'datei' = Dateiname (Teil reicht). Im Projekt-Chat automatisch das offene Projekt; ein anderes Projekt über 'projekt' angeben. Nur lesen."
+   "de": "Liest den INHALT einer Datei im Google-Drive-Projektordner (PDF, Google Docs/Sheets/Slides, Textdateien) als Klartext. Nutze es, um z. B. einen Fragebogen, ein Angebot oder eine Notiz im Drive auszuwerten. 'datei' = Dateiname (Teil reicht). Im Projekt-Chat automatisch das offene Projekt; ein anderes Projekt über 'projekt' angeben. Nur lesen.",
+   "en": "Reads the CONTENT of a file in the Google Drive project folder (PDF, Google Docs/Sheets/Slides, text files) as plain text. Use it to evaluate e.g. a questionnaire, an offer or a note in Drive. 'datei' = file name (part is enough). In the project chat automatically the open project; give another project via 'projekt'. Read only."
   },
   "assistant.tool.read_drive_file.param.datei": {
-   "de": "Dateiname oder Teil davon (z. B. 'Fragebogen')"
+   "de": "Dateiname oder Teil davon (z. B. 'Fragebogen')",
+   "en": "File name or part of it (e.g. 'Fragebogen')"
   },
   "assistant.tool.read_drive_file.param.projekt": {
-   "de": "Projekt (Name/Nummer/Kunde) — leer = das offene Projekt"
+   "de": "Projekt (Name/Nummer/Kunde) — leer = das offene Projekt",
+   "en": "Project (name/number/customer) — empty = the open project"
   },
   "assistant.tool.read_drive_file.prompt": {
-   "de": "- read_drive_file: liest den INHALT einer Drive-Datei (PDF, Google Docs/Sheets/Slides, Text) als Klartext. Nutze es, um z. B. einen Fragebogen oder ein Angebot auszuwerten — du hast also sehr wohl Lesezugriff auf Dateiinhalte, behaupte nicht das Gegenteil. 'datei' = (Teil des) Dateinamens."
+   "de": "- read_drive_file: liest den INHALT einer Drive-Datei (PDF, Google Docs/Sheets/Slides, Text) als Klartext. Nutze es, um z. B. einen Fragebogen oder ein Angebot auszuwerten — du hast also sehr wohl Lesezugriff auf Dateiinhalte, behaupte nicht das Gegenteil. 'datei' = (Teil des) Dateinamens.",
+   "en": "- read_drive_file: reads the CONTENT of a Drive file (PDF, Google Docs/Sheets/Slides, text) as plain text. Use it to evaluate e.g. a questionnaire or an offer — so you do have read access to file contents, do not claim the opposite. 'datei' = (part of the) file name."
   },
   "assistant.tool.read_email.description": {
-   "de": "Liest den VOLLEN Inhalt einer E-Mail (nicht nur die Vorschau). 'query' = Gmail-Suche, die die Mail eindeutig trifft (z. B. 'from:name subject:Leuchten'). Optional 'nummer' = n-ter Treffer (Standard 1). Nutze es, wenn der Nutzer den Mailinhalt wissen will."
+   "de": "Liest den VOLLEN Inhalt einer E-Mail (nicht nur die Vorschau). 'query' = Gmail-Suche, die die Mail eindeutig trifft (z. B. 'from:name subject:Leuchten'). Optional 'nummer' = n-ter Treffer (Standard 1). Nutze es, wenn der Nutzer den Mailinhalt wissen will.",
+   "en": "Reads the FULL content of an email (not just the preview). 'query' = Gmail search that hits the mail unambiguously (e.g. 'from:name subject:Leuchten'). Optional 'nummer' = nth hit (default 1). Use it when the user wants to know the mail content."
   },
   "assistant.tool.read_email.param.nummer": {
-   "de": "n-ter Treffer (Standard 1)"
+   "de": "n-ter Treffer (Standard 1)",
+   "en": "nth hit (default 1)"
   },
   "assistant.tool.read_email.param.query": {
-   "de": "Gmail-Suche, die die Mail trifft"
+   "de": "Gmail-Suche, die die Mail trifft",
+   "en": "Gmail search that hits the mail"
   },
   "assistant.tool.read_email.prompt": {
-   "de": "- read_email: den VOLLEN Inhalt einer gefundenen Mail lesen (nicht nur die Vorschau)."
+   "de": "- read_email: den VOLLEN Inhalt einer gefundenen Mail lesen (nicht nur die Vorschau).",
+   "en": "- read_email: read the FULL content of a found mail (not just the preview)."
   },
   "assistant.tool.schaetze_projekt.description": {
-   "de": "Erstellt eine Kostenschätzung für ein Innenausbau-Projekt (Küche/Beleuchtung/Ausbau) auf Basis einer Freitext-Beschreibung. Gibt Min/Mitte/Max-Netto und Konfidenz zurück und legt dabei eine Lern-Sitzung in der Kalkulationsdatenbank an. Funktioniert auch ohne offenes Projekt (allgemeiner Assistent/Mail) — im Projekt-Chat wird die Schätzung zusätzlich diesem Projekt zugeordnet."
+   "de": "Erstellt eine Kostenschätzung für ein Innenausbau-Projekt (Küche/Beleuchtung/Ausbau) auf Basis einer Freitext-Beschreibung. Gibt Min/Mitte/Max-Netto und Konfidenz zurück und legt dabei eine Lern-Sitzung in der Kalkulationsdatenbank an. Funktioniert auch ohne offenes Projekt (allgemeiner Assistent/Mail) — im Projekt-Chat wird die Schätzung zusätzlich diesem Projekt zugeordnet.",
+   "en": "Creates a cost estimate for an interior fit-out project (kitchen/lighting/fit-out) based on a free-text description. Returns min/mid/max net and confidence and creates a learning session in the calculation database. Also works without an open project (general assistant/mail) — in the project chat the estimate is additionally assigned to this project."
   },
   "assistant.tool.schaetze_projekt.param.beschreibung": {
-   "de": "Freitext-Beschreibung (Raum, Materialien, Größe, Besonderheiten)"
+   "de": "Freitext-Beschreibung (Raum, Materialien, Größe, Besonderheiten)",
+   "en": "Free-text description (room, materials, size, special features)"
   },
   "assistant.tool.schaetze_projekt.param.entfernung_km": {
-   "de": "Entfernung zur Baustelle in Kilometern, für die Anfahrt."
+   "de": "Entfernung zur Baustelle in Kilometern, für die Anfahrt.",
+   "en": "Distance to the site in kilometres, for travel."
   },
   "assistant.tool.schaetze_projekt.param.fronten": {
-   "de": "Ausführung der Fronten: melamin, linoleum, furnier, lack, glas, massivholz oder edelstahl."
+   "de": "Ausführung der Fronten: melamin, linoleum, furnier, lack, glas, massivholz oder edelstahl.",
+   "en": "Front finish: melamin, linoleum, furnier, lack, glas, massivholz or edelstahl."
   },
   "assistant.tool.schaetze_projekt.param.korpusanzahl": {
-   "de": "Anzahl Korpusse, falls bekannt. Grober Anhalt: ein Laufmeter Küche ≈ 1,7 Korpusse. Stärkster Hebel auf die Spanne."
+   "de": "Anzahl Korpusse, falls bekannt. Grober Anhalt: ein Laufmeter Küche ≈ 1,7 Korpusse. Stärkster Hebel auf die Spanne.",
+   "en": "Number of carcasses, if known. Rough guide: one running metre of kitchen ≈ 1.7 carcasses. Strongest lever on the range."
   },
   "assistant.tool.schaetze_projekt.param.schubkaesten_holz": {
-   "de": "Anzahl Schubkästen in Massivholz."
+   "de": "Anzahl Schubkästen in Massivholz.",
+   "en": "Number of solid wood drawers."
   },
   "assistant.tool.schaetze_projekt.param.schubkaesten_legrabox": {
-   "de": "Anzahl Schubkästen mit Serienauszug (Blum Legrabox o. ä.)."
+   "de": "Anzahl Schubkästen mit Serienauszug (Blum Legrabox o. ä.).",
+   "en": "Number of drawers with series runners (Blum Legrabox or similar)."
   },
   "assistant.tool.schaetze_projekt.param.werkstatt": {
-   "de": "Ausführende Werkstatt, falls bekannt."
+   "de": "Ausführende Werkstatt, falls bekannt.",
+   "en": "Executing workshop, if known."
   },
   "assistant.tool.schaetze_projekt.prompt": {
-   "de": "- schaetze_projekt: Kostenschätzung (Min/Mitte/Max-Netto) aus der lokalen Kalkulationsdatenbank. Die Werkzeug-Karte IST die Schätzung: kommentiere ihre Zahlen (Annahmen, Unsicherheit, was fehlt), aber ersetze oder „korrigiere“ sie NIE durch eigene Hausnummern — eigene Beträge nennst du nur, wenn das Werkzeug fehlschlägt, und dann klar als grobe Einordnung markiert.\n  Das Band ist der Tischler-Einkaufspreis für Möbel: OHNE Marge, OHNE Geräte, OHNE Arbeitsplatte. Die Werkzeug-Ausgabe nennt diese Ausschlüsse als offene Zeilen — gib sie weiter, statt sie zu verschweigen. Setze NIE selbst eine Marge an und nenne nie eine Zahl „inklusive allem“, solange diese Zeilen offen sind.\n  Die Marge setzt ein Mensch, nie du. Sie ist bei jedem Projekt anders. Nenne nie einen Endkunden- oder Verkaufspreis und rechne keinen Aufschlag — alles, was du ausgibst, ist Einkauf.\n  Verfeinern statt neu raten: das Werkzeug nimmt korpusanzahl, fronten, schubkaesten_legrabox, schubkaesten_holz, werkstatt und entfernung_km entgegen. Nennt die Ausgabe Felder, die ohne Angabe geschätzt wurden, stelle dazu HÖCHSTENS zwei bis drei kurze Rückfragen und rufe das Werkzeug mit der Antwort erneut auf. Korpusanzahl, Werkstatt und Fronten bewegen die Spanne am stärksten; die Schubkastenzahl kaum."
+   "de": "- schaetze_projekt: Kostenschätzung (Min/Mitte/Max-Netto) aus der lokalen Kalkulationsdatenbank. Die Werkzeug-Karte IST die Schätzung: kommentiere ihre Zahlen (Annahmen, Unsicherheit, was fehlt), aber ersetze oder „korrigiere“ sie NIE durch eigene Hausnummern — eigene Beträge nennst du nur, wenn das Werkzeug fehlschlägt, und dann klar als grobe Einordnung markiert.\n  Das Band ist der Tischler-Einkaufspreis für Möbel: OHNE Marge, OHNE Geräte, OHNE Arbeitsplatte. Die Werkzeug-Ausgabe nennt diese Ausschlüsse als offene Zeilen — gib sie weiter, statt sie zu verschweigen. Setze NIE selbst eine Marge an und nenne nie eine Zahl „inklusive allem“, solange diese Zeilen offen sind.\n  Die Marge setzt ein Mensch, nie du. Sie ist bei jedem Projekt anders. Nenne nie einen Endkunden- oder Verkaufspreis und rechne keinen Aufschlag — alles, was du ausgibst, ist Einkauf.\n  Verfeinern statt neu raten: das Werkzeug nimmt korpusanzahl, fronten, schubkaesten_legrabox, schubkaesten_holz, werkstatt und entfernung_km entgegen. Nennt die Ausgabe Felder, die ohne Angabe geschätzt wurden, stelle dazu HÖCHSTENS zwei bis drei kurze Rückfragen und rufe das Werkzeug mit der Antwort erneut auf. Korpusanzahl, Werkstatt und Fronten bewegen die Spanne am stärksten; die Schubkastenzahl kaum.",
+   "en": "- schaetze_projekt: cost estimate (min/mid/max net) from the local calculation database. The tool card IS the estimate: comment on its numbers (assumptions, uncertainty, what is missing), but NEVER replace or \"correct\" them with your own ballpark figures — you name your own amounts only if the tool fails, and then clearly marked as a rough classification.\n  The band is the joiner's purchase price for furniture: WITHOUT margin, WITHOUT appliances, WITHOUT worktop. The tool output names these exclusions as open lines — pass them on instead of concealing them. NEVER set a margin yourself and never name a figure \"including everything\" while these lines are open.\n  The margin is set by a human, never by you. It differs for every project. Never name an end-customer or sales price and calculate no mark-up — everything you output is purchase cost.\n  Refine instead of guessing anew: the tool accepts korpusanzahl, fronten, schubkaesten_legrabox, schubkaesten_holz, werkstatt and entfernung_km. If the output names fields that were estimated without input, ask AT MOST two to three short follow-up questions and call the tool again with the answer. Carcass count, workshop and fronts move the range most; the drawer count hardly."
   },
   "assistant.tool.schaetze_projekt.prompt.catalog": {
-   "de": "  Geräte, Griffe und Ausstattung sind kein Schätzproblem: sie stehen im Katalog. Frag, ob sie mitgerechnet werden sollen, und schlage sie dann mit search_katalog nach. Nimm STRIKT den EK — das ganze Modell rechnet in Einkaufspreisen. Halte sie als eigene Positionen neben dem Möbelband, rechne sie nie hinein. Steht zu einem Artikel KEIN EK in der Tabelle, sage das und lass die Position offen: erfinde NIEMALS einen Preis, schätze ihn nicht, und leite ihn nicht aus einem VK ab."
+   "de": "  Geräte, Griffe und Ausstattung sind kein Schätzproblem: sie stehen im Katalog. Frag, ob sie mitgerechnet werden sollen, und schlage sie dann mit search_katalog nach. Nimm STRIKT den EK — das ganze Modell rechnet in Einkaufspreisen. Halte sie als eigene Positionen neben dem Möbelband, rechne sie nie hinein. Steht zu einem Artikel KEIN EK in der Tabelle, sage das und lass die Position offen: erfinde NIEMALS einen Preis, schätze ihn nicht, und leite ihn nicht aus einem VK ab.",
+   "en": "  Appliances, handles and fittings are not an estimation problem: they are in the catalog. Ask whether they should be included, then look them up with search_katalog. Take STRICTLY the cost price — the whole model calculates in purchase prices. Keep them as separate items next to the furniture band, never calculate them into it. If an item has NO cost price in the table, say so and leave the item open: NEVER invent a price, do not estimate it, and do not derive it from a sales price."
   },
   "assistant.tool.search_contacts.description": {
-   "de": "Durchsucht die Google-Kontakte des verbundenen Accounts (nur lesen). Gibt Name, E-Mail, Telefon und Organisation passender Kontakte zurück."
+   "de": "Durchsucht die Google-Kontakte des verbundenen Accounts (nur lesen). Gibt Name, E-Mail, Telefon und Organisation passender Kontakte zurück.",
+   "en": "Searches the Google contacts of the connected account (read only). Returns name, email, phone and organisation of matching contacts."
   },
   "assistant.tool.search_contacts.param.query": {
-   "de": "Suchbegriff (Name, Firma, E-Mail-Fragment)"
+   "de": "Suchbegriff (Name, Firma, E-Mail-Fragment)",
+   "en": "Search term (name, company, email fragment)"
   },
   "assistant.tool.search_contacts.prompt": {
-   "de": "- search_contacts: Kontakte des verbundenen Accounts per Freitext suchen."
+   "de": "- search_contacts: Kontakte des verbundenen Accounts per Freitext suchen.",
+   "en": "- search_contacts: search the contacts of the connected account by free text."
   },
   "assistant.tool.search_gmail.description": {
-   "de": "Durchsucht die E-Mails des Nutzers (nur lesen). Verwende Gmail-Suchsyntax im query, z. B. 'from:name', 'to:name subject:Angebot', 'newer_than:30d', 'after:YYYY/MM/DD'. WICHTIG bei Alternativen: 'OR' IMMER großgeschrieben und bei gemischten Bedingungen klammern, z. B. 'from:(häfele OR haefele OR hafele) (Angebot OR Besteckeinsatz)' — NIEMALS unklammertes 'from:x OR y freitext OR z' (wird falsch geparst). Bei Namen mit Umlaut/Schreibvarianten zuerst eine EINFACHE Suche ohne OR probieren (z. B. nur 'from:häfele'), bevor komplexere OR-Ketten versucht werden. Gibt Treffer mit Betreff, Absender und Datum zurück. Für einen Rückblick über mehr Mails 'anzahl' erhöhen (Standard 25, max 100)."
+   "de": "Durchsucht die E-Mails des Nutzers (nur lesen). Verwende Gmail-Suchsyntax im query, z. B. 'from:name', 'to:name subject:Angebot', 'newer_than:30d', 'after:YYYY/MM/DD'. WICHTIG bei Alternativen: 'OR' IMMER großgeschrieben und bei gemischten Bedingungen klammern, z. B. 'from:(häfele OR haefele OR hafele) (Angebot OR Besteckeinsatz)' — NIEMALS unklammertes 'from:x OR y freitext OR z' (wird falsch geparst). Bei Namen mit Umlaut/Schreibvarianten zuerst eine EINFACHE Suche ohne OR probieren (z. B. nur 'from:häfele'), bevor komplexere OR-Ketten versucht werden. Gibt Treffer mit Betreff, Absender und Datum zurück. Für einen Rückblick über mehr Mails 'anzahl' erhöhen (Standard 25, max 100).",
+   "en": "Searches the user's emails (read only). Use Gmail search syntax in query, e.g. 'from:name', 'to:name subject:Angebot', 'newer_than:30d', 'after:YYYY/MM/DD'. IMPORTANT for alternatives: ALWAYS capitalise 'OR' and use parentheses for mixed conditions, e.g. 'from:(häfele OR haefele OR hafele) (Angebot OR Besteckeinsatz)' — NEVER unbracketed 'from:x OR y freitext OR z' (is parsed wrongly). For names with umlauts/spelling variants first try a SIMPLE search without OR (e.g. only 'from:häfele') before trying more complex OR chains. Returns hits with subject, sender and date. For a look back over more mails raise 'anzahl' (default 25, max 100)."
   },
   "assistant.tool.search_gmail.param.anzahl": {
-   "de": "Max. Trefferzahl (Standard 25, max 100)"
+   "de": "Max. Trefferzahl (Standard 25, max 100)",
+   "en": "Max. number of hits (default 25, max 100)"
   },
   "assistant.tool.search_gmail.param.query": {
-   "de": "Gmail-Suchabfrage (Gmail-Operatoren erlaubt)"
+   "de": "Gmail-Suchabfrage (Gmail-Operatoren erlaubt)",
+   "en": "Gmail search query (Gmail operators allowed)"
   },
   "assistant.tool.search_gmail.prompt": {
-   "de": "- search_gmail: Gmail durchsuchen (Betreff/Snippet). Mit 'anzahl' mehr Treffer für Rückblicke; Gmail-Operatoren wie 'after:YYYY/MM/DD' nutzbar. Die Suche umfasst das GANZE Postfach. 'OR' IMMER großgeschrieben + bei gemischten Bedingungen klammern (z. B. 'from:(häfele OR hafele) Angebot'); bei unsicherer Schreibweise erst EINFACH suchen, nicht sofort mehrteilige OR-Ketten bauen."
+   "de": "- search_gmail: Gmail durchsuchen (Betreff/Snippet). Mit 'anzahl' mehr Treffer für Rückblicke; Gmail-Operatoren wie 'after:YYYY/MM/DD' nutzbar. Die Suche umfasst das GANZE Postfach. 'OR' IMMER großgeschrieben + bei gemischten Bedingungen klammern (z. B. 'from:(häfele OR hafele) Angebot'); bei unsicherer Schreibweise erst EINFACH suchen, nicht sofort mehrteilige OR-Ketten bauen.",
+   "en": "- search_gmail: search Gmail (subject/snippet). With 'anzahl' more hits for look-backs; Gmail operators like 'after:YYYY/MM/DD' usable. The search covers the WHOLE mailbox. ALWAYS capitalise 'OR' + use parentheses for mixed conditions (e.g. 'from:(häfele OR hafele) Angebot'); when unsure of the spelling search SIMPLY first, do not build multi-part OR chains right away."
   },
   "assistant.tool.search_katalog.description": {
-   "de": "Sucht Artikel und Geräte in der Artikeldatenbank (Gaggenau, Miele, Blum…). Gibt Hersteller, Bezeichnung, Artikelnummer, Verkaufspreis und Einkaufspreis zurück. Nützlich für Kalkulationsfragen wie \"Was kostet ein Gaggenau Backofen?\". Nur lesen."
+   "de": "Sucht Artikel und Geräte in der Artikeldatenbank (Gaggenau, Miele, Blum…). Gibt Hersteller, Bezeichnung, Artikelnummer, Verkaufspreis und Einkaufspreis zurück. Nützlich für Kalkulationsfragen wie \"Was kostet ein Gaggenau Backofen?\". Nur lesen.",
+   "en": "Searches items and appliances in the item database (Gaggenau, Miele, Blum…). Returns manufacturer, name, item number, sales price and purchase price. Useful for calculation questions like \"What does a Gaggenau oven cost?\". Read only."
   },
   "assistant.tool.search_katalog.param.query": {
-   "de": "Suchbegriff: Hersteller, Kategorie, Artikelnummer oder Produktlabel"
+   "de": "Suchbegriff: Hersteller, Kategorie, Artikelnummer oder Produktlabel",
+   "en": "Search term: manufacturer, category, item number or product label"
   },
   "assistant.tool.search_katalog.prompt": {
-   "de": "- search_katalog: Artikel- und Gerätekatalog durchsuchen (Gaggenau, Miele, Blum, Häfele…). Gibt Hersteller, Beschreibung, Artikelnummer und Verkaufspreis. Nützlich für Preisfragen zu konkreten Geräten."
+   "de": "- search_katalog: Artikel- und Gerätekatalog durchsuchen (Gaggenau, Miele, Blum, Häfele…). Gibt Hersteller, Beschreibung, Artikelnummer und Verkaufspreis. Nützlich für Preisfragen zu konkreten Geräten.",
+   "en": "- search_katalog: search the item and appliance catalog (Gaggenau, Miele, Blum, Häfele…). Returns manufacturer, description, item number and sales price. Useful for price questions about specific appliances."
   },
   "assistant.tool.suggest_calendar_event.description": {
-   "de": "Erstellt einen Google-Kalender-Link, den der Nutzer öffnen kann, um einen Termin direkt im Browser anzulegen. Keine API-Verbindung nötig — reine Link-Generierung. Verwende dieses Tool, wenn der Nutzer explizit einen Termin anlegen möchte oder du eine klare Terminempfehlung hast."
+   "de": "Erstellt einen Google-Kalender-Link, den der Nutzer öffnen kann, um einen Termin direkt im Browser anzulegen. Keine API-Verbindung nötig — reine Link-Generierung. Verwende dieses Tool, wenn der Nutzer explizit einen Termin anlegen möchte oder du eine klare Terminempfehlung hast.",
+   "en": "Creates a Google Calendar link the user can open to create an appointment directly in the browser. No API connection needed — pure link generation. Use this tool when the user explicitly wants to create an appointment or you have a clear appointment recommendation."
   },
   "assistant.tool.suggest_calendar_event.param.date": {
-   "de": "Datum im Format YYYYMMDD oder YYYYMMDDTHHmmss (optional)"
+   "de": "Datum im Format YYYYMMDD oder YYYYMMDDTHHmmss (optional)",
+   "en": "Date in the format YYYYMMDD or YYYYMMDDTHHmmss (optional)"
   },
   "assistant.tool.suggest_calendar_event.param.notes": {
-   "de": "Optionale Beschreibung oder Notizen"
+   "de": "Optionale Beschreibung oder Notizen",
+   "en": "Optional description or notes"
   },
   "assistant.tool.suggest_calendar_event.param.title": {
-   "de": "Titel des Termins (Pflicht)"
+   "de": "Titel des Termins (Pflicht)",
+   "en": "Title of the appointment (required)"
   },
   "assistant.tool.suggest_calendar_event.prompt": {
-   "de": "- suggest_calendar_event: erzeugt einen Kalender-Link (kein API-Write)."
+   "de": "- suggest_calendar_event: erzeugt einen Kalender-Link (kein API-Write).",
+   "en": "- suggest_calendar_event: creates a calendar link (no API write)."
   },
   "assistant.tool.update_airtable_kontakt.description": {
-   "de": "Schlägt eine ÄNDERUNG an einem bestehenden Airtable-Kontakt vor. Schreibt NICHTS automatisch — Bestätigungskarte erforderlich. 'record_id' = Airtable-Record-ID (aus lookup_kontakt ermittelbar). Nur geänderte Felder angeben. KEIN Delete."
+   "de": "Schlägt eine ÄNDERUNG an einem bestehenden Airtable-Kontakt vor. Schreibt NICHTS automatisch — Bestätigungskarte erforderlich. 'record_id' = Airtable-Record-ID (aus lookup_kontakt ermittelbar). Nur geänderte Felder angeben. KEIN Delete.",
+   "en": "Suggests a CHANGE to an existing Airtable contact. Writes NOTHING automatically — confirmation card required. 'record_id' = Airtable record ID (obtainable from lookup_kontakt). Give only changed fields. NO delete."
   },
   "assistant.tool.update_airtable_kontakt.param.adresse": {
-   "de": "Neue Adresse (optional)"
+   "de": "Neue Adresse (optional)",
+   "en": "New address (optional)"
   },
   "assistant.tool.update_airtable_kontakt.param.email": {
-   "de": "Neue E-Mail (optional)"
+   "de": "Neue E-Mail (optional)",
+   "en": "New email (optional)"
   },
   "assistant.tool.update_airtable_kontakt.param.kategorie": {
-   "de": "Neue Kategorie (optional)"
+   "de": "Neue Kategorie (optional)",
+   "en": "New category (optional)"
   },
   "assistant.tool.update_airtable_kontakt.param.name": {
-   "de": "Neuer Name (optional)"
+   "de": "Neuer Name (optional)",
+   "en": "New name (optional)"
   },
   "assistant.tool.update_airtable_kontakt.param.organisation": {
-   "de": "Neue Firma (optional)"
+   "de": "Neue Firma (optional)",
+   "en": "New company (optional)"
   },
   "assistant.tool.update_airtable_kontakt.param.record_id": {
-   "de": "Airtable-Record-ID des Kontakts (rec…)"
+   "de": "Airtable-Record-ID des Kontakts (rec…)",
+   "en": "Airtable record ID of the contact (rec…)"
   },
   "assistant.tool.update_airtable_kontakt.param.telefon": {
-   "de": "Neues Telefon (optional)"
+   "de": "Neues Telefon (optional)",
+   "en": "New phone (optional)"
   },
   "assistant.tool.update_airtable_kontakt.prompt": {
-   "de": "- update_airtable_kontakt: schlägt vor, einen Airtable-Kontakt zu ÄNDERN (record_id aus lookup_kontakt). Du schreibst NICHT selbst — es entsteht eine Bestätigungskarte, der Nutzer bestätigt (+ Audit). KEIN Löschen."
+   "de": "- update_airtable_kontakt: schlägt vor, einen Airtable-Kontakt zu ÄNDERN (record_id aus lookup_kontakt). Du schreibst NICHT selbst — es entsteht eine Bestätigungskarte, der Nutzer bestätigt (+ Audit). KEIN Löschen.",
+   "en": "- update_airtable_kontakt: suggests CHANGING an Airtable contact (record_id from lookup_kontakt). You do NOT write yourself — a confirmation card is created, the user confirms (+ audit). NO deleting."
   },
   "assistant.tool.update_note.description": {
-   "de": "Ändert den Text einer bestehenden Notiz. 'note' = Kurzbezug/ID oder Teil des alten Textes."
+   "de": "Ändert den Text einer bestehenden Notiz. 'note' = Kurzbezug/ID oder Teil des alten Textes.",
+   "en": "Changes the text of an existing note. 'note' = short reference/ID or part of the old text."
   },
   "assistant.tool.update_note.param.note": {
-   "de": "Kurzbezug, ID oder Textausschnitt der Notiz"
+   "de": "Kurzbezug, ID oder Textausschnitt der Notiz",
+   "en": "Short reference, ID or text excerpt of the note"
   },
   "assistant.tool.update_note.param.text": {
-   "de": "Der neue Notiztext"
+   "de": "Der neue Notiztext",
+   "en": "The new note text"
   },
   "assistant.tool.update_note.prompt": {
-   "de": "- update_note: eine Notiz ändern."
+   "de": "- update_note: eine Notiz ändern.",
+   "en": "- update_note: change a note."
   },
   "assistant.tool.verfolge_sendung.description": {
-   "de": "Fragt den Lieferstatus einer DHL-Sendung zu einer Sendungsnummer ab. Nur lesen."
+   "de": "Fragt den Lieferstatus einer DHL-Sendung zu einer Sendungsnummer ab. Nur lesen.",
+   "en": "Queries the delivery status of a DHL shipment by tracking number. Read only."
   },
   "assistant.tool.verfolge_sendung.param.nummer": {
-   "de": "Die Sendungs- oder Trackingnummer"
+   "de": "Die Sendungs- oder Trackingnummer",
+   "en": "The shipment or tracking number"
+  },
+  "settings.usage.head": {
+   "de": "Verbrauch",
+   "en": "Usage"
+  },
+  "settings.usage.tokens": {
+   "de": "Tokens seit {1} · {2}",
+   "en": "Tokens since {1} · {2}"
+  },
+  "settings.usage.tokens.none": {
+   "de": "Tokens in diesem Monat",
+   "en": "Tokens this month"
+  },
+  "settings.usage.tokens.value": {
+   "de": "Eingabe {1} · Ausgabe {2}",
+   "en": "Input {1} · Output {2}"
+  },
+  "settings.usage.day.one": {
+   "de": "{1} Tag",
+   "en": "{1} day"
+  },
+  "settings.usage.day.other": {
+   "de": "{1} Tage",
+   "en": "{1} days"
+  },
+  "settings.usage.million": {
+   "de": "{1} Mio.",
+   "en": "{1} M"
+  },
+  "settings.usage.thousand": {
+   "de": "{1} Tsd.",
+   "en": "{1} K"
+  },
+  "settings.usage.price.input": {
+   "de": "Preis je Mio. Tokens · Eingabe",
+   "en": "Price per million tokens · input"
+  },
+  "settings.usage.price.output": {
+   "de": "Preis je Mio. Tokens · Ausgabe",
+   "en": "Price per million tokens · output"
+  },
+  "settings.usage.estimate": {
+   "de": "Geschätzt",
+   "en": "Estimated"
+  },
+  "settings.usage.estimate.value": {
+   "de": "ca. {1} €",
+   "en": "approx. {1} €"
+  },
+  "settings.usage.prices.missing": {
+   "de": "Preise fehlen. Trage die Preise je Million Tokens ein, dann schätzt ALFA die Kosten.",
+   "en": "Prices are missing. Enter the prices per million tokens and ALFA estimates the cost."
+  },
+  "settings.usage.counter": {
+   "de": "Zähler",
+   "en": "Counter"
+  },
+  "settings.usage.reset": {
+   "de": "Zurücksetzen",
+   "en": "Reset"
+  },
+  "settings.usage.reset.ask": {
+   "de": "Zurücksetzen?",
+   "en": "Reset?"
   }
  }
 }

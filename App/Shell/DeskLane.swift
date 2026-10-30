@@ -31,6 +31,7 @@ struct DeskLane: View {
                 Color.clear
                     .contentShape(Rectangle())
                     .onTapGesture { desk.openStrip(lane) }
+                    .simultaneousGesture(TapGesture(count: 2).onEnded { desk.resetLane() })
                     .pointerStyle(.link)
             }
             marks

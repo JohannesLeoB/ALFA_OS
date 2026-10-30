@@ -110,6 +110,7 @@ final class AppSession {
         syncing = true
         await inbox.refreshFolders()
         await inbox.loadSelection()
+        await inbox.directory.refresh()
         syncing = false
     }
 

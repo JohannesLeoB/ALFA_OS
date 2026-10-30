@@ -24,7 +24,7 @@ public enum BlobMode: String, Sendable, Codable {
 public final class DeskState {
     let directory: AppDirectory
     public let measure: Measure
-    public let face = AssistantFace.orb
+    public private(set) var face: AssistantFace
     public private(set) var currentID: String
     public private(set) var window: BlobSize
     private(set) var lanes: [String: LaneMode]
@@ -58,6 +58,7 @@ public final class DeskState {
         currentID = startID.flatMap { directory.app($0)?.id } ?? valid?.currentID ?? directory.first?.id ?? ""
         lanes = valid?.lanes ?? [:]
         blob = valid?.blob.normalized ?? BlobPlacement.home(measure: measure)
+        face = valid?.face ?? .orb
     }
 
     public var current: AppEntry? { directory.app(currentID) }
@@ -143,6 +144,12 @@ public final class DeskState {
 
     public func toggleAssistant() {
         assistantOpen ? close() : open(.assistant)
+    }
+
+    public func choose(face next: AssistantFace) {
+        guard next != face else { return }
+        face = next
+        changed()
     }
 
     public func setHovering(_ value: Bool) { hovering = value }

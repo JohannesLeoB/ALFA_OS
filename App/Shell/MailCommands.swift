@@ -1,5 +1,7 @@
+import AppKit
 import Mail
 import SwiftUI
+import WebKit
 
 struct MailCommands: Commands {
     let session: AppSession?
@@ -8,6 +10,10 @@ struct MailCommands: Commands {
     var body: some Commands {
         CommandGroup(replacing: .newItem) {
             item(titleKey: "shell.menu.newMessage", shortcut: KeyboardShortcut("n", modifiers: .command), enabled: session != nil) { compose() }
+        }
+        CommandGroup(replacing: .undoRedo) {
+            item(titleKey: "mail.toast.undo", shortcut: KeyboardShortcut("z", modifiers: .command), enabled: session != nil) { undo() }
+            item(titleKey: "shell.menu.redo", shortcut: KeyboardShortcut("z", modifiers: [.command, .shift]), enabled: session != nil) { redo() }
         }
         CommandGroup(replacing: .saveItem) {
             item(titleKey: "mail.action.saveDraft", shortcut: KeyboardShortcut("s", modifiers: .command), enabled: allows(.saveDraft)) { target?.perform(.saveDraft) }
@@ -52,6 +58,29 @@ struct MailCommands: Commands {
         Button(action: action) { Text(LocalizedStringKey(titleKey)) }
             .keyboardShortcut(shortcut)
             .disabled(!enabled)
+    }
+
+    private var editing: Bool {
+        guard let responder = NSApp.keyWindow?.firstResponder else { return false }
+        if responder is NSText { return true }
+        var view = responder as? NSView
+        while let current = view {
+            if current is WKWebView { return true }
+            view = current.superview
+        }
+        return false
+    }
+
+    private func undo() {
+        guard let inbox = session?.inbox, !editing, inbox.toast?.undoable == true, inbox.toast?.kind.failed == false else {
+            NSApp.sendAction(Selector(("undo:")), to: nil, from: nil)
+            return
+        }
+        Task { await inbox.undoToast() }
+    }
+
+    private func redo() {
+        NSApp.sendAction(Selector(("redo:")), to: nil, from: nil)
     }
 
     private func compose() {

@@ -1,6 +1,10 @@
 {
  "_rule": "Keys used by the shell views in App/Shell; text is resolved by the app.",
  "keys": {
+  "shell.assistantActivity.categoryOff": {
+   "de": "%@ ist für den Assistenten aus",
+   "en": "%@ is off for the assistant"
+  },
   "shell.assistantAttachment.tooLarge": {
    "de": "%@ ist zu groß",
    "en": "%@ is too large"
@@ -133,6 +137,38 @@
    "de": "Ziehen · Doppelklick setzt zurück",
    "en": "Drag · double-click to reset"
   },
+  "shell.lock.passwordPlaceholder": {
+   "de": "Passwort",
+   "en": "Password"
+  },
+  "shell.lock.passwordWrong": {
+   "de": "Passwort falsch",
+   "en": "Incorrect password"
+  },
+  "shell.lock.touch": {
+   "de": "Mit Touch ID entsperren",
+   "en": "Unlock with Touch ID"
+  },
+  "shell.lock.touchFailed": {
+   "de": "Touch ID nicht erkannt",
+   "en": "Touch ID not recognized"
+  },
+  "shell.lock.touchWaiting": {
+   "de": "Warte auf Touch ID",
+   "en": "Waiting for Touch ID"
+  },
+  "shell.lock.unlock": {
+   "de": "Entsperren",
+   "en": "Unlock"
+  },
+  "shell.lock.usePassword": {
+   "de": "Passwort eingeben",
+   "en": "Enter Password"
+  },
+  "shell.lock.useTouch": {
+   "de": "Touch ID",
+   "en": "Touch ID"
+  },
   "shell.menu.fetchAll": {
    "de": "Alle Postfächer abfragen",
    "en": "Check All Mailboxes"
@@ -148,6 +184,10 @@
   "shell.menu.newMessage": {
    "de": "Neue E-Mail",
    "en": "New Message"
+  },
+  "shell.safeArea.tooltip": {
+   "de": "Kamera-Aussparung: der Sichtbereich beginnt darunter",
+   "en": "Camera housing: the visible area starts below"
   },
   "shell.symbolButton.assistantAttach.tooltip": {
    "de": "Datei anhängen",
@@ -172,6 +212,10 @@
   "shell.textButton.assistantRetry.text": {
    "de": "Erneut versuchen",
    "en": "Try Again"
+  },
+  "shell.menu.redo": {
+   "de": "Wiederholen",
+   "en": "Redo"
   }
  }
 }

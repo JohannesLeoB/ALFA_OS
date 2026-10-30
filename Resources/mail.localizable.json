@@ -2,110 +2,140 @@
  "_rule": "Keys used by the Mail module; text is resolved by the app.",
  "keys": {
   "text.settings.provider.other": {
-   "de": "Andere"
+   "de": "Andere",
+   "en": "Other"
   },
   "field.imap.address": {
    "de": "Adresse",
    "en": "Address"
   },
   "field.imap.incomingHost": {
-   "de": "IMAP-Server"
+   "de": "IMAP-Server",
+   "en": "IMAP server"
   },
   "field.imap.incomingPort": {
-   "de": "IMAP-Port"
+   "de": "IMAP-Port",
+   "en": "IMAP port"
   },
   "field.imap.incomingSecurity": {
-   "de": "IMAP-Sicherheit"
+   "de": "IMAP-Sicherheit",
+   "en": "IMAP security"
   },
   "field.imap.name": {
    "de": "Anzeigename",
    "en": "Display name"
   },
   "field.imap.outgoingHost": {
-   "de": "SMTP-Server"
+   "de": "SMTP-Server",
+   "en": "SMTP server"
   },
   "field.imap.outgoingPort": {
-   "de": "SMTP-Port"
+   "de": "SMTP-Port",
+   "en": "SMTP port"
   },
   "field.imap.outgoingSecurity": {
-   "de": "SMTP-Sicherheit"
+   "de": "SMTP-Sicherheit",
+   "en": "SMTP security"
   },
   "field.imap.password": {
-   "de": "App-Passwort"
+   "de": "App-Passwort",
+   "en": "App password"
   },
   "field.imap.username": {
-   "de": "Benutzername"
+   "de": "Benutzername",
+   "en": "Username"
   },
   "hint.imap.connection.closed": {
-   "de": "Verbindung beendet"
+   "de": "Verbindung beendet",
+   "en": "Connection closed"
   },
   "hint.imap.connection.failed": {
    "de": "Keine Verbindung",
    "en": "No connection"
   },
   "hint.imap.connection.timeout": {
-   "de": "Zeitüberschreitung"
+   "de": "Zeitüberschreitung",
+   "en": "Timeout"
   },
   "hint.imap.failed": {
-   "de": "Fehler"
+   "de": "Fehler",
+   "en": "Error"
   },
   "hint.imap.fields.invalid": {
-   "de": "Angaben ungültig"
+   "de": "Angaben ungültig",
+   "en": "Details invalid"
   },
   "hint.imap.login.rejected": {
-   "de": "Login abgelehnt"
+   "de": "Login abgelehnt",
+   "en": "Login rejected"
   },
   "hint.imap.malformed": {
-   "de": "Antwort ungültig"
+   "de": "Antwort ungültig",
+   "en": "Response invalid"
   },
   "hint.imap.refused": {
-   "de": "Abgelehnt"
+   "de": "Abgelehnt",
+   "en": "Refused"
   },
   "hint.imap.tls": {
-   "de": "TLS fehlt"
+   "de": "TLS fehlt",
+   "en": "TLS missing"
   },
   "hint.imap.unsupported": {
-   "de": "Nicht unterstützt"
+   "de": "Nicht unterstützt",
+   "en": "Not supported"
   },
   "hint.mail.capabilityMissing": {
-   "de": "Funktion fehlt"
+   "de": "Funktion fehlt",
+   "en": "Function missing"
   },
   "hint.mail.noInlet": {
-   "de": "Kein Konto"
+   "de": "Kein Konto",
+   "en": "No account"
   },
   "hint.mail.notConnected": {
-   "de": "Nicht verbunden"
+   "de": "Nicht verbunden",
+   "en": "Not connected"
   },
   "hint.smtp.auth.rejected": {
-   "de": "Login abgelehnt"
+   "de": "Login abgelehnt",
+   "en": "Login rejected"
   },
   "hint.smtp.connection.closed": {
-   "de": "Verbindung beendet"
+   "de": "Verbindung beendet",
+   "en": "Connection closed"
   },
   "hint.smtp.connection.failed": {
    "de": "Keine Verbindung",
    "en": "No connection"
   },
   "hint.smtp.connection.timeout": {
-   "de": "Zeitüberschreitung"
+   "de": "Zeitüberschreitung",
+   "en": "Timeout"
   },
   "hint.smtp.failed": {
-   "de": "Fehler"
+   "de": "Fehler",
+   "en": "Error"
   },
   "hint.smtp.fields.invalid": {
-   "de": "Angaben ungültig"
+   "de": "Angaben ungültig",
+   "en": "Details invalid"
   },
   "hint.smtp.malformed": {
-   "de": "Antwort ungültig"
+   "de": "Antwort ungültig",
+   "en": "Response invalid"
   },
   "hint.smtp.refused": {
-   "de": "Abgelehnt"
+   "de": "Abgelehnt",
+   "en": "Refused"
   },
   "hint.smtp.tls": {
-   "de": "TLS fehlt"
+   "de": "TLS fehlt",
+   "en": "TLS missing"
   },
   "hint.smtp.unsupported": {
-   "de": "Nicht unterstützt"
+   "de": "Nicht unterstützt",
+   "en": "Not supported"
   },
   "mail.action.archive": {
    "de": "Archivieren",
@@ -116,7 +146,8 @@
    "en": "Attach File"
   },
   "mail.action.backToStack": {
-   "de": "Zurück zum Stapel"
+   "de": "Zurück zum Stapel",
+   "en": "Back to stack"
   },
   "mail.action.compose": {
    "de": "Neue Mail",
@@ -151,7 +182,8 @@
    "en": "Load Images"
   },
   "mail.action.markRead": {
-   "de": "Als gelesen markieren"
+   "de": "Als gelesen markieren",
+   "en": "Mark as read"
   },
   "mail.action.markUnread": {
    "de": "Als ungelesen markieren",
@@ -170,7 +202,8 @@
    "en": "Move to Another Project …"
   },
   "mail.action.overview": {
-   "de": "Übersicht"
+   "de": "Übersicht",
+   "en": "Overview"
   },
   "mail.action.pdf": {
    "de": "Als PDF sichern",
@@ -185,7 +218,8 @@
    "en": "Print"
   },
   "mail.action.purge": {
-   "de": "Endgültig löschen"
+   "de": "Endgültig löschen",
+   "en": "Delete permanently"
   },
   "mail.action.receipt": {
    "de": "Lesebestätigung anfordern",
@@ -228,7 +262,8 @@
    "en": "Report as Junk"
   },
   "mail.action.star": {
-   "de": "Markieren"
+   "de": "Markieren",
+   "en": "Flag"
   },
   "mail.action.toProject": {
    "de": "In Projektordner sichern",
@@ -239,14 +274,16 @@
    "en": "Move to Trash"
   },
   "mail.action.unstar": {
-   "de": "Markierung entfernen"
+   "de": "Markierung entfernen",
+   "en": "Remove flag"
   },
   "mail.action.writeMail": {
    "de": "Mail schreiben",
    "en": "New Message"
   },
   "mail.card.more": {
-   "de": "und %@ weitere"
+   "de": "und %@ weitere",
+   "en": "and %@ more"
   },
   "mail.card.pin.tip": {
    "de": "Anheften · bleibt im Stapel",
@@ -257,20 +294,24 @@
    "en": "Add recipient"
   },
   "mail.compose.bcc": {
-   "de": "Bcc"
+   "de": "Bcc",
+   "en": "Bcc"
   },
   "mail.compose.bcc.placeholder": {
-   "de": "Blindkopie"
+   "de": "Blindkopie",
+   "en": "Blind copy"
   },
   "mail.compose.body": {
    "de": "Text",
    "en": "Message"
   },
   "mail.compose.cc": {
-   "de": "Cc"
+   "de": "Cc",
+   "en": "Cc"
   },
   "mail.compose.cc.placeholder": {
-   "de": "Kopie"
+   "de": "Kopie",
+   "en": "Copy"
   },
   "mail.compose.copy": {
    "de": "Cc und Bcc",
@@ -285,7 +326,8 @@
    "en": "Remove"
   },
   "mail.compose.showAll": {
-   "de": "Alle %@ Empfänger zeigen"
+   "de": "Alle %@ Empfänger zeigen",
+   "en": "Show all %@ recipients"
   },
   "mail.compose.subject": {
    "de": "Betreff",
@@ -296,7 +338,8 @@
    "en": "To"
   },
   "mail.compose.to.placeholder": {
-   "de": "Name oder Adresse"
+   "de": "Name oder Adresse",
+   "en": "Name or address"
   },
   "mail.confirm.discard.question": {
    "de": "Entwurf verwerfen?",
@@ -307,7 +350,8 @@
    "en": "Discard"
   },
   "mail.confirm.hold": {
-   "de": "Halten zum %@"
+   "de": "Halten zum %@",
+   "en": "Hold to %@"
   },
   "mail.confirm.purge.question": {
    "de": "Endgültig löschen?",
@@ -318,13 +362,16 @@
    "en": "Delete"
   },
   "mail.date.draft": {
-   "de": "Entwurf"
+   "de": "Entwurf",
+   "en": "Draft"
   },
   "mail.date.today": {
-   "de": "Heute"
+   "de": "Heute",
+   "en": "Today"
   },
   "mail.date.yesterday": {
-   "de": "Gestern"
+   "de": "Gestern",
+   "en": "Yesterday"
   },
   "mail.draft.failed.act": {
    "de": "Erneut senden",
@@ -359,7 +406,8 @@
    "en": "Sending …"
   },
   "mail.filter": {
-   "de": "Filter"
+   "de": "Filter",
+   "en": "Filter"
   },
   "mail.filter.all": {
    "de": "Alle",
@@ -370,36 +418,44 @@
    "en": "With Attachments"
   },
   "mail.filter.named": {
-   "de": "Filter: %@"
+   "de": "Filter: %@",
+   "en": "Filter: %@"
   },
   "mail.filter.unread": {
    "de": "Ungelesen",
    "en": "Unread"
   },
   "mail.fold.named": {
-   "de": "%@ falten"
+   "de": "%@ falten",
+   "en": "Fold %@"
   },
   "mail.grow.named": {
-   "de": "%@ groß"
+   "de": "%@ groß",
+   "en": "Enlarge %@"
   },
   "mail.hint.failed": {
-   "de": "Fehler"
+   "de": "Fehler",
+   "en": "Error"
   },
   "mail.hint.mirrorRefused": {
    "de": "Abgleich abgelehnt",
    "en": "Sync refused"
   },
   "mail.hint.offline": {
-   "de": "Offline"
+   "de": "Offline",
+   "en": "Offline"
   },
   "mail.hint.rejected": {
-   "de": "Abgelehnt"
+   "de": "Abgelehnt",
+   "en": "Rejected"
   },
   "mail.lane.back": {
-   "de": "Zurück"
+   "de": "Zurück",
+   "en": "Back"
   },
   "mail.lane.fold": {
-   "de": "Postfach falten"
+   "de": "Postfach falten",
+   "en": "Fold mailbox"
   },
   "mail.lane.labels": {
    "de": "Labels",
@@ -482,69 +538,84 @@
    "en": "Connect a mailbox to read and write mail here."
   },
   "mail.list.signInExpired": {
-   "de": "%@ ist nicht erreichbar"
+   "de": "%@ ist nicht erreichbar",
+   "en": "%@ is unreachable"
   },
   "mail.list.signInExpired.act": {
    "de": "Erneut verbinden",
    "en": "Reconnect"
   },
   "mail.list.signInExpired.text": {
-   "de": "Anmeldung abgelaufen. Die zuletzt geladenen Mails bleiben lesbar; Gesendetes wartet im Postausgang."
+   "de": "Anmeldung abgelaufen. Die zuletzt geladenen Mails bleiben lesbar; Gesendetes wartet im Postausgang.",
+   "en": "Sign-in expired. The most recently loaded mails stay readable; sent mail waits in the outbox."
   },
   "mail.menu.check": {
-   "de": "✓"
+   "de": "✓",
+   "en": "✓"
   },
   "mail.menu.drive": {
-   "de": "Drive"
+   "de": "Drive",
+   "en": "Drive"
   },
   "mail.menu.projectMore": {
    "de": "%@ weitere im Projektordner",
    "en": "%@ more in project folder"
   },
   "mail.overview.tip": {
-   "de": "Übersicht · %@ Karten"
+   "de": "Übersicht · %@ Karten",
+   "en": "Overview · %@ cards"
   },
   "mail.pick.add": {
-   "de": "Auswählen"
+   "de": "Auswählen",
+   "en": "Select"
   },
   "mail.pick.all": {
-   "de": "Alle wählen"
+   "de": "Alle wählen",
+   "en": "Select all"
   },
   "mail.pick.clear": {
    "de": "Auswahl aufheben",
    "en": "Deselect"
   },
   "mail.pick.count": {
-   "de": "%@ gewählt"
+   "de": "%@ gewählt",
+   "en": "%@ selected"
   },
   "mail.pick.none": {
-   "de": "Auswahl leeren"
+   "de": "Auswahl leeren",
+   "en": "Clear selection"
   },
   "mail.pick.read": {
    "de": "Gelesen / ungelesen",
    "en": "Read / unread"
   },
   "mail.pick.remove": {
-   "de": "Auswahl entfernen"
+   "de": "Auswahl entfernen",
+   "en": "Remove from selection"
   },
   "mail.quote.hide": {
-   "de": "Zitat ausblenden"
+   "de": "Zitat ausblenden",
+   "en": "Hide quote"
   },
   "mail.quote.show": {
-   "de": "Zitat zeigen · %lld Zeilen"
+   "de": "Zitat zeigen · %lld Zeilen",
+   "en": "Show quote · %lld lines"
   },
   "mail.read.all": {
    "de": "Alle Empfänger zeigen",
    "en": "Show all recipients"
   },
   "mail.read.cc": {
-   "de": "Cc"
+   "de": "Cc",
+   "en": "Cc"
   },
   "mail.read.conversation": {
-   "de": "%lld Nachrichten in dieser Unterhaltung"
+   "de": "%lld Nachrichten in dieser Unterhaltung",
+   "en": "%lld messages in this conversation"
   },
   "mail.read.count": {
-   "de": "%@ Empfänger"
+   "de": "%@ Empfänger",
+   "en": "%@ recipients"
   },
   "mail.read.images.title": {
    "de": "Externe Bilder blockiert",
@@ -555,7 +626,8 @@
    "en": "Show less"
   },
   "mail.read.more": {
-   "de": "und %@ weitere"
+   "de": "und %@ weitere",
+   "en": "and %@ more"
   },
   "mail.read.to": {
    "de": "An",
@@ -598,64 +670,80 @@
    "en": "More attachments"
   },
   "mail.row.newMessage": {
-   "de": "Neue Nachricht"
+   "de": "Neue Nachricht",
+   "en": "New message"
   },
   "mail.row.noSubject": {
-   "de": "Kein Betreff"
+   "de": "Kein Betreff",
+   "en": "No subject"
   },
   "mail.row.noText": {
-   "de": "Kein Text"
+   "de": "Kein Text",
+   "en": "No text"
   },
   "mail.row.thread": {
    "de": "Nachrichten in dieser Unterhaltung",
    "en": "Messages in this conversation"
   },
   "mail.row.to": {
-   "de": "An %@"
+   "de": "An %@",
+   "en": "To %@"
   },
   "mail.row.unknown": {
-   "de": "Unbekannt"
+   "de": "Unbekannt",
+   "en": "Unknown"
   },
   "mail.row.unread": {
    "de": "Ungelesen",
    "en": "Unread"
   },
   "mail.search.close": {
-   "de": "Suche schließen"
+   "de": "Suche schließen",
+   "en": "Close search"
   },
   "mail.search.label": {
    "de": "Liste durchsuchen",
    "en": "Search list"
   },
   "mail.search.open": {
-   "de": "In der Liste suchen"
+   "de": "In der Liste suchen",
+   "en": "Search in the list"
   },
   "mail.search.placeholder.all": {
-   "de": "In allen Ordnern suchen"
+   "de": "In allen Ordnern suchen",
+   "en": "Search in all folders"
   },
   "mail.search.placeholder.here": {
-   "de": "In %@ suchen"
+   "de": "In %@ suchen",
+   "en": "Search in %@"
   },
   "mail.search.results": {
-   "de": "%@ Treffer in allen Ordnern"
+   "de": "%@ Treffer in allen Ordnern",
+   "en": "%@ results in all folders"
   },
   "mail.search.scope.all": {
-   "de": "Überall"
+   "de": "Überall",
+   "en": "Everywhere"
   },
   "mail.search.scope.here": {
-   "de": "Nur %@"
+   "de": "Nur %@",
+   "en": "Only %@"
   },
   "mail.search.tip.all": {
-   "de": "Sucht in allen Ordnern außer Spam und Papierkorb. Klicken: nur in %@"
+   "de": "Sucht in allen Ordnern außer Spam und Papierkorb. Klicken: nur in %@",
+   "en": "Searches all folders except spam and trash. Click: only in %@"
   },
   "mail.search.tip.here": {
-   "de": "Sucht nur in %@. Klicken: überall suchen"
+   "de": "Sucht nur in %@. Klicken: überall suchen",
+   "en": "Searches only in %@. Click: search everywhere"
   },
   "mail.suggest.contact": {
-   "de": "Kontakt"
+   "de": "Kontakt",
+   "en": "Contact"
   },
   "mail.suggest.sender": {
-   "de": "Absender"
+   "de": "Absender",
+   "en": "Sender"
   },
   "mail.toast.addressCopied": {
    "de": "Adresse kopiert",
@@ -666,37 +754,48 @@
    "en": "Archived"
   },
   "mail.toast.bulkArchived.one": {
-   "de": "1 Mail archiviert"
+   "de": "1 Mail archiviert",
+   "en": "1 mail archived"
   },
   "mail.toast.bulkArchived.other": {
-   "de": "%@ Mails archiviert"
+   "de": "%@ Mails archiviert",
+   "en": "%@ mails archived"
   },
   "mail.toast.bulkRead.read.one": {
-   "de": "1 Mail gelesen"
+   "de": "1 Mail gelesen",
+   "en": "1 mail read"
   },
   "mail.toast.bulkRead.read.other": {
-   "de": "%@ Mails gelesen"
+   "de": "%@ Mails gelesen",
+   "en": "%@ mails read"
   },
   "mail.toast.bulkRead.unread.one": {
-   "de": "1 Mail ungelesen"
+   "de": "1 Mail ungelesen",
+   "en": "1 mail unread"
   },
   "mail.toast.bulkRead.unread.other": {
-   "de": "%@ Mails ungelesen"
+   "de": "%@ Mails ungelesen",
+   "en": "%@ mails unread"
   },
   "mail.toast.bulkTrashed.one": {
-   "de": "1 Mail in den Papierkorb gelegt"
+   "de": "1 Mail in den Papierkorb gelegt",
+   "en": "1 mail moved to trash"
   },
   "mail.toast.bulkTrashed.other": {
-   "de": "%@ Mails in den Papierkorb gelegt"
+   "de": "%@ Mails in den Papierkorb gelegt",
+   "en": "%@ mails moved to trash"
   },
   "mail.toast.contactExists": {
-   "de": "%@ ist schon Kontakt"
+   "de": "%@ ist schon Kontakt",
+   "en": "%@ is already a contact"
   },
   "mail.toast.contactRemoved": {
-   "de": "Kontakt entfernt"
+   "de": "Kontakt entfernt",
+   "en": "Contact removed"
   },
   "mail.toast.contactSaved": {
-   "de": "%@ als Kontakt gesichert"
+   "de": "%@ als Kontakt gesichert",
+   "en": "%@ saved as contact"
   },
   "mail.toast.draftSaved": {
    "de": "Entwurf gesichert",
@@ -721,6 +820,10 @@
   "mail.toast.recipientMissing": {
    "de": "Empfänger fehlt",
    "en": "Recipient missing"
+  },
+  "mail.toast.subjectMissing": {
+   "de": "Betreff fehlt",
+   "en": "Subject missing"
   },
   "mail.toast.moved": {
    "de": "Verschoben",
@@ -795,10 +898,12 @@
    "en": "Some folders could not be searched"
   },
   "mail.tiles.grid": {
-   "de": "Als Kacheln"
+   "de": "Als Kacheln",
+   "en": "As tiles"
   },
   "mail.tiles.list": {
-   "de": "Als Liste"
+   "de": "Als Liste",
+   "en": "As list"
   },
   "mail.list.loadingMore": {
    "de": "Lädt …",
@@ -881,32 +986,40 @@
    "en": "Couldn’t load conversation"
   },
   "mail.empty.inbox": {
-   "de": "Keine Nachrichten im Eingang."
+   "de": "Keine Nachrichten im Eingang.",
+   "en": "No messages in the inbox."
   },
   "mail.empty.starred": {
-   "de": "Keine markierten Nachrichten."
+   "de": "Keine markierten Nachrichten.",
+   "en": "No flagged messages."
   },
   "mail.empty.sent": {
-   "de": "Keine gesendeten Nachrichten."
+   "de": "Keine gesendeten Nachrichten.",
+   "en": "No sent messages."
   },
   "mail.empty.drafts": {
-   "de": "Keine Entwürfe."
+   "de": "Keine Entwürfe.",
+   "en": "No drafts."
   },
   "mail.empty.all": {
-   "de": "Keine Nachrichten."
+   "de": "Keine Nachrichten.",
+   "en": "No messages."
   },
   "mail.empty.archive": {
-   "de": "Keine Nachrichten im Archiv."
+   "de": "Keine Nachrichten im Archiv.",
+   "en": "No messages in the archive."
   },
   "mail.empty.spam": {
-   "de": "Kein Spam."
+   "de": "Kein Spam.",
+   "en": "No spam."
   },
   "mail.empty.trash": {
    "de": "Der Papierkorb ist leer.",
    "en": "Trash is empty."
   },
   "mail.empty.label": {
-   "de": "Keine Nachrichten mit diesem Label."
+   "de": "Keine Nachrichten mit diesem Label.",
+   "en": "No messages with this label."
   },
   "mail.compose.drop": {
    "de": "Loslassen hängt an",
@@ -1003,6 +1116,14 @@
   "settings.disconnect.waiting.other": {
    "de": "%@ ungesendete Mails im Postausgang gehen verloren.",
    "en": "%@ unsent mails in the outbox will be lost."
+  },
+  "mail.signature.hide": {
+   "de": "Signatur ausblenden",
+   "en": "Hide signature"
+  },
+  "mail.signature.show": {
+   "de": "Signatur zeigen",
+   "en": "Show signature"
   }
  }
 }

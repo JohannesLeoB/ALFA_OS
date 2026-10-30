@@ -20,10 +20,16 @@ struct AssistantMessage: View {
                     .padding(.horizontal, CGFloat(Tokens.Spacing.step12))
             }
             if turn.kind == .failed {
-                HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
-                    appearance.text("shell.assistantMessage.failed")
-                        .lineLimit(1)
-                    TextButton(label: appearance.text("shell.textButton.assistantRetry.text"), kind: .inverse, action: retry)
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
+                        appearance.text("shell.assistantMessage.failed")
+                        retryButton
+                    }
+                    VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step4)) {
+                        appearance.text("shell.assistantMessage.failed")
+                            .fixedSize(horizontal: false, vertical: true)
+                        retryButton
+                    }
                 }
                 .padding(.horizontal, CGFloat(Tokens.Spacing.step12))
             }
@@ -32,6 +38,10 @@ struct AssistantMessage: View {
         .padding(.leading, user ? CGFloat(Tokens.Spacing.step28) : 0)
         .accessibilityElement(children: .contain)
         .accessibilityLabel(appearance.text(user ? "shell.assistantMessage.user" : "shell.assistantMessage.assistant"))
+    }
+
+    private var retryButton: some View {
+        TextButton(label: appearance.text("shell.textButton.assistantRetry.text"), kind: .inverse, action: retry)
     }
 
     private var blocks: some View {

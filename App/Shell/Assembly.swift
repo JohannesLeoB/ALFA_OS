@@ -57,7 +57,8 @@ final class Assembly {
         let person = Self.localPerson
         let configuration = Configuration(
             person: person, company: CompanySetup(),
-            providers: Self.providers(directory: directory, catalog: catalog, http: http, openBrowser: openBrowser),
+            providers: Self.providers(directory: directory, catalog: catalog, http: http, roots: DriveRootStore(settings: settingStore),
+                                      openBrowser: openBrowser),
             keychain: keychain, cadence: TimerCadence(), cost: CostStore(database: database), catalog: Self.ports(),
             cadences: Self.cadences)
         let connections = try Connections.make(configuration, database: database)
@@ -70,6 +71,7 @@ final class Assembly {
                                        SenderNames(chosen: settings.mailboxName(inlet), profile: settings.profile.name)
                                    })
         let inbox = InboxState(mailbox: mailbox, outbox: outbox, contacts: ContactState(defaults: defaults),
+                               directory: ContactSourceState(settings: settingStore),
                                signatures: { [settings] inlet in settings.signature(inlet) })
 
         let receipts = ReceiptStore(database: database)
@@ -81,7 +83,8 @@ final class Assembly {
         let text = TextStore()
         let credential = ClaudeCredential(setup: connections.setup, keychain: keychain)
         let attachments = AttachmentStore(root: directory.appendingPathComponent(Self.attachmentsFolder, isDirectory: true))
-        let claude = ClaudeClient(keys: ClaudeKeyStore(credential: credential), http: http, attachments: attachments)
+        let usageStore = ClaudeUsageStore(database: database)
+        let claude = ClaudeClient(keys: ClaudeKeyStore(credential: credential), http: http, attachments: attachments, usage: usageStore)
         let chatStore = ChatStore(database: database, userID: person.id)
         let shelf = ToolShelf(
             access: connections.access, setup: connections.setup, keychain: keychain, http: http, text: text,
@@ -108,27 +111,36 @@ final class Assembly {
             chat: chatStore, provider: claude, registry: shelf.registry(), text: text,
             memory: MemoryStore(database: database, userID: person.id), log: IntegrationLogStore(database: database))
         self.conversationEngine = conversationEngine
-        conversation = ChatState(chat: chatStore, engine: conversationEngine, attachments: attachments, privacy: privacyStore)
+        conversation = ChatState(chat: chatStore, engine: conversationEngine, attachments: attachments, privacy: privacyStore,
+                                 usage: UsageState(store: usageStore))
+        refreshContacts()
     }
 
     func reshelve() {
         conversationEngine.update(registry: shelf.registry())
+        refreshContacts()
     }
 
-    private static func providers(directory: URL, catalog: IntegrationCatalogStore, http: URLSession,
+    func refreshContacts() {
+        let directory = inbox.directory
+        directory.configure(shelf.contactFeeds())
+        Task { await directory.refresh() }
+    }
+
+    private static func providers(directory: URL, catalog: IntegrationCatalogStore, http: URLSession, roots: DriveRootStore,
                                   openBrowser: @escaping @Sendable (URL) async -> Bool) -> [any ProviderPort] {
         let checks: [any ConnectionCheckPort] = [
             Airtable.ConnectionCheck(http: http), ClickUp.ConnectionCheck(http: http), Sevdesk.ConnectionCheck(http: http),
             Clockodo.ConnectionCheck(http: http), Shipping.ConnectionCheck(http: http), ClaudeCheck(http: http), LabelCheck(),
         ]
         var providers: [any ProviderPort] = []
-        if let google = google(directory: directory, http: http, openBrowser: openBrowser) { providers.append(google) }
+        if let google = google(directory: directory, http: http, roots: roots, openBrowser: openBrowser) { providers.append(google) }
         if let outlook = outlook(directory: directory, http: http, openBrowser: openBrowser) { providers.append(outlook) }
         providers.append(IMAPAccess())
         return providers + KeyAccess.all(checks: checks, catalog: catalog)
     }
 
-    private static func google(directory: URL, http: URLSession,
+    private static func google(directory: URL, http: URLSession, roots: DriveRootStore,
                                openBrowser: @escaping @Sendable (URL) async -> Bool) -> AccessRouter? {
         guard let config = try? ClientConfigStore(directory: directory).load() else { return nil }
         return AccessRouter(
@@ -137,7 +149,7 @@ final class Assembly {
                 OAuthLoopback(
                     acceptedText: String(localized: String.LocalizationValue("google.oauth.accepted")),
                     unreadableText: String(localized: String.LocalizationValue("google.oauth.unreadable")))
-            })
+            }, roots: roots)
     }
 
     private static func outlook(directory: URL, http: URLSession,

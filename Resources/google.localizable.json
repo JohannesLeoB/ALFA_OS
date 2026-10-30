@@ -2,65 +2,84 @@
  "_rule": "Keys used by the Google module; text is resolved by the app.",
  "keys": {
   "google.drive.type.document": {
-   "de": "Google Doc"
+   "de": "Google Doc",
+   "en": "Google Doc"
   },
   "google.drive.type.file": {
-   "de": "Datei"
+   "de": "Datei",
+   "en": "File"
   },
   "google.drive.type.folder": {
    "de": "Ordner",
    "en": "Folder"
   },
   "google.drive.type.image": {
-   "de": "Bild"
+   "de": "Bild",
+   "en": "Image"
   },
   "google.drive.type.pdf": {
-   "de": "PDF-Dokument"
+   "de": "PDF-Dokument",
+   "en": "PDF document"
   },
   "google.drive.type.presentation": {
-   "de": "Google Slides"
+   "de": "Google Slides",
+   "en": "Google Slides"
   },
   "google.drive.type.sheet": {
-   "de": "Google Sheets"
+   "de": "Google Sheets",
+   "en": "Google Sheets"
   },
   "google.oauth.accepted": {
-   "de": "ALFA_OS · Google-Anmeldung übernommen"
+   "de": "ALFA_OS · Google-Anmeldung übernommen",
+   "en": "ALFA_OS · Google sign-in accepted"
   },
   "google.oauth.unreadable": {
-   "de": "ALFA_OS · Google-Anmeldung nicht lesbar"
+   "de": "ALFA_OS · Google-Anmeldung nicht lesbar",
+   "en": "ALFA_OS · Google sign-in not readable"
   },
   "google.offer.type.depositInvoice": {
-   "de": "Abschlagsrechnungen"
+   "de": "Abschlagsrechnungen",
+   "en": "Deposit invoices"
   },
   "google.offer.type.finalInvoice": {
-   "de": "Schlussrechnungen"
+   "de": "Schlussrechnungen",
+   "en": "Final invoices"
   },
   "google.offer.type.incomingOffer": {
-   "de": "Eingehende Angebote"
+   "de": "Eingehende Angebote",
+   "en": "Incoming offers"
   },
   "google.offer.type.offer": {
-   "de": "Angebote"
+   "de": "Angebote",
+   "en": "Offers"
   },
   "google.offer.type.orderConfirmation": {
-   "de": "Aufträge"
+   "de": "Aufträge",
+   "en": "Orders"
   },
   "google.offer.type.other": {
-   "de": "Sonstige Dokumente"
+   "de": "Sonstige Dokumente",
+   "en": "Other documents"
   },
   "google.offer.type.purchaseOrder": {
-   "de": "Bestellungen"
+   "de": "Bestellungen",
+   "en": "Purchase orders"
   },
   "hint.google.grant": {
-   "de": "Anmeldung fehlgeschlagen"
+   "de": "Anmeldung fehlgeschlagen",
+   "en": "Sign-in failed"
   },
   "hint.google.labels": {
-   "de": "Ordner unlesbar"
+   "de": "Ordner unlesbar",
+   "en": "Folders unreadable"
   },
   "hint.google.token": {
-   "de": "Token Fehler"
+   "de": "Token Fehler",
+   "en": "Token error"
   },
   "hint.google.userinfo": {
-   "de": "Konto unlesbar"
+   "de": "Konto unlesbar",
+   "en": "Account unreadable"
   }
  }
 }

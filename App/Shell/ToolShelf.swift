@@ -30,7 +30,7 @@ struct ToolShelf {
         ToolRegistry(tools: local() + google() + clickUp() + clockodo() + sevdesk() + shipping() + airtable())
     }
 
-    private func inlet(_ provider: String, _ capability: Capability? = nil) -> Inlet? {
+    func inlet(_ provider: String, _ capability: Capability? = nil) -> Inlet? {
         setup.inlets.first { inlet in
             inlet.provider == provider && inlet.state.isConnected && (capability.map { inlet.capabilities.contains($0) } ?? true)
         }
@@ -86,7 +86,7 @@ struct ToolShelf {
         return [TrackShipmentTool(shipments: ShipmentClient(tracking: TrackingClient(apiKey: key, http: http), text: text))]
     }
 
-    private func airtableClient(_ inlet: Inlet?) -> Airtable.AirtableClient? {
+    func airtableClient(_ inlet: Inlet?) -> Airtable.AirtableClient? {
         inlet.map { Airtable.AirtableClient(credentials: Airtable.CredentialsStore(keychain: keychain, inlet: $0.id), http: http) }
     }
 
