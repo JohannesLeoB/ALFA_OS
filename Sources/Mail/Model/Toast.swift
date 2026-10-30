@@ -9,8 +9,11 @@ public enum ToastKind: Equatable, Sendable {
     case recipientMissing
     case subjectMissing
     case addressCopied
-    case projectSaved
+    case projectSaved(String)
+    case attachmentCopied(String)
+    case projectSaveFailed
     case pdfSaved
+    case pdfFailed
     case contactSaved(String)
     case contactExists(String)
     case contactRemoved
@@ -42,7 +45,10 @@ public enum ToastKind: Equatable, Sendable {
         case .subjectMissing: "mail.toast.subjectMissing"
         case .addressCopied: "mail.toast.addressCopied"
         case .projectSaved: "mail.toast.projectSaved"
+        case .attachmentCopied: "mail.toast.attachmentCopied"
+        case .projectSaveFailed: "mail.failure.projectSave"
         case .pdfSaved: "mail.toast.pdfSaved"
+        case .pdfFailed: "mail.failure.pdf"
         case .contactSaved: "mail.toast.contactSaved"
         case .contactExists: "mail.toast.contactExists"
         case .contactRemoved: "mail.toast.contactRemoved"
@@ -66,7 +72,7 @@ public enum ToastKind: Equatable, Sendable {
     public var failed: Bool {
         switch self {
         case .olderFailed, .moreFailed, .archiveFailed, .moveFailed, .deleteFailed, .flagFailed, .readFailed, .attachmentFailed,
-             .threadFailed: true
+             .threadFailed, .projectSaveFailed, .pdfFailed: true
         default: false
         }
     }
@@ -77,7 +83,7 @@ public enum ToastKind: Equatable, Sendable {
 
     public var name: String? {
         switch self {
-        case .contactSaved(let name), .contactExists(let name): name
+        case .contactSaved(let name), .contactExists(let name), .projectSaved(let name), .attachmentCopied(let name): name
         default: nil
         }
     }

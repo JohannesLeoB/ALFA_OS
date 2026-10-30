@@ -810,8 +810,20 @@
    "en": "Saved as PDF"
   },
   "mail.toast.projectSaved": {
-   "de": "Als PDF im Projektordner gesichert",
-   "en": "Saved as PDF to project folder"
+   "de": "Als PDF gesichert · %@",
+   "en": "Saved as PDF · %@"
+  },
+  "mail.toast.attachmentCopied": {
+   "de": "Kopiert nach %@",
+   "en": "Copied to %@"
+  },
+  "mail.failure.projectSave": {
+   "de": "Nicht gesichert · Projektordner nicht erreichbar",
+   "en": "Not saved · project folder unreachable"
+  },
+  "mail.failure.pdf": {
+   "de": "PDF nicht gesichert",
+   "en": "PDF not saved"
   },
   "mail.toast.purged": {
    "de": "Endgültig gelöscht",

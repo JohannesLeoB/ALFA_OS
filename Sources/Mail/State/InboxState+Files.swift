@@ -43,17 +43,19 @@ extension InboxState {
     }
 
     public func documentFailed(_ id: String) {
+        post(.pdfFailed)
     }
 
-    public func mailToProjectFolder(_ id: String, project: ProjectFolder, render: (OpenMessage) -> Data?) async {
+    public func mailToProjectFolder(_ id: String, project: ProjectFolder, render: @escaping (OpenMessage) -> Data?) async {
         guard let document = await mailDocument(id, render: render) else { return }
         do {
             _ = try await mailbox.putFile(project.inlet, folder: project.folder.id, name: document.name,
                                           mimeType: "application/pdf", data: document.data)
         } catch {
+            post(.projectSaveFailed, undo: { [weak self] in await self?.mailToProjectFolder(id, project: project, render: render) })
             return
         }
-        post(.projectSaved)
+        post(.projectSaved(project.folder.name))
     }
 
     public func attachmentToProjectFolder(_ id: String, attachmentID: String, name: String, project: ProjectFolder) async {
@@ -62,9 +64,12 @@ extension InboxState {
         do {
             _ = try await mailbox.putFile(project.inlet, folder: project.folder.id, name: name, mimeType: mimeType, data: data)
         } catch {
+            post(.projectSaveFailed, undo: { [weak self] in
+                await self?.attachmentToProjectFolder(id, attachmentID: attachmentID, name: name, project: project)
+            })
             return
         }
-        post(.projectSaved)
+        post(.attachmentCopied(project.folder.name))
     }
 
     private func projects(key: String) async -> [ProjectFolder] {
