@@ -365,9 +365,9 @@
    "de": "Entwurf",
    "en": "Draft"
   },
-  "mail.date.today": {
-   "de": "Heute",
-   "en": "Today"
+  "mail.date.todayAt": {
+   "de": "Heute, %@",
+   "en": "Today, %@"
   },
   "mail.date.yesterday": {
    "de": "Gestern",

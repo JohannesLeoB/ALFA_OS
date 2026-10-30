@@ -12544,19 +12544,18 @@
         }
       }
     },
-    "mail.date.today" : {
-      "comment" : "alpha",
+    "mail.date.todayAt" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Heute"
+            "value" : "Heute, %@"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Today"
+            "value" : "Today, %@"
           }
         }
       }

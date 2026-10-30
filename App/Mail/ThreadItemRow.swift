@@ -145,7 +145,7 @@ struct ThreadItemRow: View {
         Group {
             switch date {
             case .today(let value):
-                Text(verbatim: appearance.string("mail.date.today") + ", " + value.formatted(.dateTime.hour().minute()))
+                Text(verbatim: appearance.format("mail.date.todayAt", value.formatted(.dateTime.hour().minute())))
             case .dated(let value, let withYear):
                 withYear ? Text(value, format: .dateTime.day().month(.abbreviated).year().hour().minute())
                     : Text(value, format: .dateTime.day().month(.abbreviated).hour().minute())
