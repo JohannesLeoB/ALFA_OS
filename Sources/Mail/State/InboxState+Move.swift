@@ -61,9 +61,7 @@ extension InboxState {
             switch move {
             case .archive: landed = try await mailbox.archive(inlet, messageID: id)
             case .trash: landed = try await mailbox.trash(inlet, messageID: id)
-            case .spam:
-                try await mailbox.markSpam(inlet, messageID: id)
-                landed = nil
+            case .spam: landed = try await mailbox.markSpam(inlet, messageID: id)
             }
         } catch {
             putBack(lifted.entries, in: inlet, folder: selectedFolder)
@@ -79,7 +77,7 @@ extension InboxState {
         switch move {
         case .archive: post(.archived, undo: undo)
         case .trash: post(toast, undo: undo)
-        case .spam: break
+        case .spam: post(.moved, undo: undo)
         }
         await opening?.value
     }

@@ -71,7 +71,7 @@ struct GmailMailClient: GmailPort, SourcePort, LabelPort, SenderPort {
         case Self.allMail:
             try await archive(messageID: messageID, folderID: nil)
         case GmailSystemLabel.inbox:
-            try await gmail.modifyLabels(messageID: messageID, add: [GmailSystemLabel.inbox], remove: [])
+            try await gmail.modifyLabels(messageID: messageID, add: [GmailSystemLabel.inbox], remove: [GmailSystemLabel.spam])
         case GmailSystemLabel.starred, GmailSystemLabel.sent, GmailSystemLabel.draft:
             throw MailFailure.folderNotFound(toFolderID)
         default:

@@ -325,13 +325,17 @@ public final class MailboxStore: MailboxPort {
         announce(inlet, touched)
     }
 
-    public func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) {
+    @discardableResult
+    public func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> String? {
+        let header = header(inlet, messageID: messageID)
         let target = folderID(inlet, role: .spam)
-        let touched = try await perform(inlet) { transport in
+        let (touched, landed) = try await perform(inlet) { transport in
             try await transport.markSpam(messageID: messageID, folderID: target)
-            return try self.remove(inlet, messageID: messageID, folder: nil)
+            let touched = try self.remove(inlet, messageID: messageID, folder: nil)
+            return (touched, await Self.landed(transport, messageID, header: header, folder: target))
         }
         announce(inlet, touched)
+        return landed
     }
 
     public func attachment(_ inlet: Inlet.ID, messageID: String, attachmentID: String) async throws(HubFailure) -> Data {
