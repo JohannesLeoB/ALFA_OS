@@ -199,7 +199,7 @@ struct InboxRow: View {
         if let state = item.outbox, state.offersRowActions {
             HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
                 if case .failed = state {
-                    rowAction("mail.outbox.retry.tooltip", glyph: .send, tone: tone.secondary) {
+                    rowAction("mail.outbox.retry.tooltip", glyph: .send) {
                         Task { await inbox.resendQueued(item.id) }
                     }
                 }
@@ -223,14 +223,14 @@ struct InboxRow: View {
             queuedActions
         } else if hovering && !picking && !item.draft {
             HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
-                rowAction(item.starred ? "mail.action.unstar" : "mail.action.star", glyph: .flag, tone: tone.secondary) {
+                rowAction(item.starred ? "mail.action.unstar" : "mail.action.star", glyph: .flag) {
                     session.perform(item.starred ? .unstar : .star, message: item.id)
                 }
-                rowAction(item.unread ? "mail.action.markRead" : "mail.action.markUnread", glyph: .envelope, tone: tone.secondary) {
+                rowAction(item.unread ? "mail.action.markRead" : "mail.action.markUnread", glyph: .envelope) {
                     session.perform(item.unread ? .markRead : .markUnread, message: item.id)
                 }
                 if inbox.folderActions {
-                    rowAction("mail.action.archive", glyph: .archive, tone: tone.secondary) {
+                    rowAction("mail.action.archive", glyph: .archive) {
                         session.perform(.archive, message: item.id)
                     }
                 }
@@ -242,7 +242,7 @@ struct InboxRow: View {
                         Glyph(.trash)
                     }
                 } else if !inTrash {
-                    rowAction("mail.action.trash", glyph: .trash, tone: tone.secondary) {
+                    rowAction("mail.action.trash", glyph: .trash) {
                         session.perform(.trash, message: item.id)
                     }
                 }
@@ -254,8 +254,8 @@ struct InboxRow: View {
         }
     }
 
-    private func rowAction(_ key: String, glyph: Icon, tone: KeyPath<Colors, ColorValue>, action: @escaping () -> Void) -> some View {
-        SymbolButton(help: appearance.string(key), glyph: glyph, tone: tone, hoverTone: selected ? \.onInverse : \.ink, plate: selected ? \.inverse : \.lane,
+    private func rowAction(_ key: String, glyph: Icon, action: @escaping () -> Void) -> some View {
+        SymbolButton(help: appearance.string(key), glyph: glyph, tone: tone.secondary, hoverTone: selected ? \.onInverse : \.ink, plate: selected ? \.inverse : \.lane,
                      ringTone: selected ? \.onInverseLine : \.lineStrong, hover: .tint, action: action)
     }
 

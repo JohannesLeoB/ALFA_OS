@@ -31,10 +31,12 @@ extension InboxState {
         do {
             body = try await mailbox.body(card.inlet, messageID: id)
         } catch {
+            post(.pdfFailed)
             return nil
         }
         card.content = content(for: body, fallback: "")
         guard body.text != nil || body.html != nil, let data = render(card) else {
+            post(.pdfFailed)
             return nil
         }
         let title = card.summary.subject.isEmpty ? card.id : card.summary.subject

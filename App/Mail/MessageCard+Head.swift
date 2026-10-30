@@ -30,6 +30,9 @@ extension MessageCard {
                 titleView
             } meta: {
                 metaView
+                    .font(.face(Tokens.TextSize.small))
+                    .foregroundStyle(ink)
+                    .opacity(CardStackEngine.metaOpacity(depth: depth))
             } trailing: {
                 if case .message(let id) = ref, inbox.card(id)?.pinned == false {
                     CardHeadButton(help: appearance.string("mail.card.pin.tip"), glyph: .pin, ink: ink) { inbox.pin(id) }
@@ -97,37 +100,27 @@ extension MessageCard {
 
         @ViewBuilder
         private var metaView: some View {
-            let opacity = CardStackEngine.metaOpacity(depth: depth)
             if case .message(let id) = ref, let card = inbox.card(id), let party {
                 if front {
                     Text(verbatim: party.name.isEmpty ? "" : PersonName.middle(party.address, limit: SheetValues.cardAddressLimit))
-                        .font(.face(Tokens.TextSize.small))
-                        .foregroundStyle(ink)
-                        .opacity(opacity)
                         .lineLimit(1)
                         .truncationMode(.tail)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
                     Spacer(minLength: 0)
                     MessageDate.text(DateLabel.of(card.summary.receivedAt, now: inbox.now), draft: false, appearance: appearance)
-                        .font(.face(Tokens.TextSize.small))
-                        .foregroundStyle(ink)
                         .monospacedDigit()
                         .lineLimit(1)
                         .fixedSize()
-                        .opacity(opacity)
                 }
             } else if case .draft(let id) = ref, let card = inbox.draft(id) {
                 let more = max(0, draftPeople.count - 1)
                 if !front && more > 0 {
                     Spacer(minLength: 0)
                     Text(verbatim: appearance.format("mail.card.more", Format.number(more)))
-                        .font(.face(Tokens.TextSize.small)).foregroundStyle(ink).opacity(opacity).lineLimit(1)
+                        .lineLimit(1)
                 } else {
                     draftMeta(card)
-                        .font(.face(Tokens.TextSize.small))
-                        .foregroundStyle(ink)
-                        .opacity(opacity)
                         .lineLimit(1)
                         .truncationMode(.tail)
                         .frame(maxWidth: .infinity, alignment: .leading)

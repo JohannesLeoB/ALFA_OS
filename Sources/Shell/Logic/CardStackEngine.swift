@@ -1,9 +1,9 @@
 import Design
 
 public enum CardStackEngine {
-    public static func tops(count: Int, start: Double = Tokens.Spacing.step8) -> [Double] {
+    public static func tops(count: Int) -> [Double] {
         var result: [Double] = []
-        var next = start
+        var next = Tokens.Spacing.step8
         for index in 0..<count {
             result.append(next)
             next += (count - 1 - index) > Tokens.Count.stackHeads ? Tokens.Spacing.step8 : Tokens.Size.headerHeight
