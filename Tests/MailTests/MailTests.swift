@@ -1108,6 +1108,15 @@ final class MailTests: XCTestCase {
         XCTAssertTrue(wire(stream).contains("AUTHENTICATE XOAUTH2"))
     }
 
+    func testSizeRejectionsBecomeTooLarge() {
+        XCTAssertTrue(DeliveryEngine.tooLarge(Original(provider: "smtp", status: 552, code: "5.3.4")))
+        XCTAssertTrue(DeliveryEngine.tooLarge(Original(provider: "smtp", status: 550, code: "5.2.3")))
+        XCTAssertTrue(DeliveryEngine.tooLarge(Original(provider: "gmail", status: 413)))
+        XCTAssertFalse(DeliveryEngine.tooLarge(Original(provider: "smtp", status: 550, code: "5.1.1")))
+        let attachment = Attachment(filename: "a", mimeType: "application/pdf", data: Data(count: 300))
+        XCTAssertEqual(MessageEngine.encodedSize(Draft(subject: "", body: "ab", attachments: [attachment])), 2 + 400 + 10)
+    }
+
     func testHTMLEngine() {
         let blocked = HTMLEngine.blockingImages(#"<p>a</p><IMG alt="x" src="https://t.co/p.png"><img src="cid:logo"><img src='http://x/y.gif'>"#,
                                                 label: "Bild <blockiert>")

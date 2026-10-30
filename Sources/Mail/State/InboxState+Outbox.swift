@@ -51,7 +51,8 @@ extension InboxState {
             return
         }
         let card = OpenDraft(id: UUID(), inlet: inlet, draft: item.draft, state: .sendFailed(hint), outboxID: item.id,
-                             remoteID: item.draftID, mirrorID: item.mirrorID, saveFailure: nil)
+                             remoteID: item.draftID, mirrorID: item.mirrorID, saveFailure: nil,
+                             tooLarge: hint.text == MessageTextKey.tooLarge.rawValue)
         drafts.append(card)
         attach(.draft(card.id))
     }

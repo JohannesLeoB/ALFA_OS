@@ -3,6 +3,9 @@ import Hub
 
 @MainActor
 enum DeliveryEngine {
+    nonisolated private static let sizeReplies: Set<Int> = [552, 413]
+    nonisolated private static let sizeCodes: Set<String> = ["5.3.4", "5.2.3"]
+
     enum Failure {
         case transient(Hint)
         case rejected(Hint)
@@ -34,9 +37,16 @@ enum DeliveryEngine {
         case .signIn:
             return .rejected(Hint(text: Hint.signInExpiredText, classification: classification, fixIn: .inlet(inlet)))
         case .rejected:
+            if tooLarge(classification.original) {
+                return .rejected(Hint(text: MessageTextKey.tooLarge.rawValue, classification: classification))
+            }
             let text = classification.original.provider == "unknown" ? MessageTextKey.failed.rawValue : MessageTextKey.rejected.rawValue
             return .rejected(Hint(text: text, classification: classification))
         }
+    }
+
+    nonisolated static func tooLarge(_ original: Original) -> Bool {
+        original.status.map(sizeReplies.contains) == true || original.code.map(sizeCodes.contains) == true
     }
 
     static func hubFailure(_ error: Error, inlet: Inlet.ID, access: any AccessPort) -> HubFailure {

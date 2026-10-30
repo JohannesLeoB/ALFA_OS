@@ -41,4 +41,5 @@ enum MessageTextKey: String, Sendable {
     case notConnected = "hint.mail.notConnected"
     case noInlet = "hint.mail.noInlet"
     case capabilityMissing = "hint.mail.capabilityMissing"
+    case tooLarge = "mail.notice.tooLarge.title"
 }
