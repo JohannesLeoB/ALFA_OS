@@ -75,6 +75,7 @@ extension InboxState {
         drafts[now].saveFailure = nil
         drafts[now].state = .edited
         drafts[now].draft.from = chosen
+        drafts[now].draft.resign(to: signatures(inlet))
         if drafts[now].draft.receiptTo != nil { drafts[now].draft.receiptTo = chosen.address }
         keepLocal(id)
         scheduleAutosave(id)

@@ -23,6 +23,9 @@ public final class SettingsState {
     private(set) var mailboxDisplays: [Inlet.ID: MailboxDisplay] = [:]
     private(set) var mailboxRanges: [Inlet.ID: MailboxRange] = [:]
     private(set) var mailboxNames: [Inlet.ID: String] = [:]
+    private(set) var mailboxSignatures: [Inlet.ID: String] = [:]
+    private(set) var signaturesOnNew: [Inlet.ID: Bool] = [:]
+    private(set) var signaturesAbove: [Inlet.ID: Bool] = [:]
 
     @ObservationIgnored private let settings: SettingStore
 
@@ -55,6 +58,21 @@ public final class SettingsState {
         for key in stored.keys where key.hasPrefix(SettingsKey.mailboxNamePrefix) {
             if let name = text(key) {
                 mailboxNames[String(key.dropFirst(SettingsKey.mailboxNamePrefix.count))] = name
+            }
+        }
+        for key in stored.keys where key.hasPrefix(SettingsKey.mailboxSignaturePrefix) {
+            if let signature = text(key) {
+                mailboxSignatures[String(key.dropFirst(SettingsKey.mailboxSignaturePrefix.count))] = signature
+            }
+        }
+        for key in stored.keys where key.hasPrefix(SettingsKey.mailboxSignatureNewPrefix) {
+            if let value = flag(key) {
+                signaturesOnNew[String(key.dropFirst(SettingsKey.mailboxSignatureNewPrefix.count))] = value
+            }
+        }
+        for key in stored.keys where key.hasPrefix(SettingsKey.mailboxSignatureAbovePrefix) {
+            if let value = flag(key) {
+                signaturesAbove[String(key.dropFirst(SettingsKey.mailboxSignatureAbovePrefix.count))] = value
             }
         }
         for key in stored.keys where key.hasPrefix(SettingsKey.mailboxRangePrefix) {
@@ -128,6 +146,40 @@ public final class SettingsState {
         save(SettingsKey.mailboxName(inlet), value)
     }
 
+    public func signature(_ inlet: Inlet.ID) -> MailboxSignature? {
+        mailboxSignatures[inlet].map {
+            MailboxSignature(text: $0, onNew: signaturesOnNew[inlet] ?? true, aboveQuote: signaturesAbove[inlet] ?? false)
+        }
+    }
+
+    public func setSignature(_ value: String, for inlet: Inlet.ID) {
+        mailboxSignatures[inlet] = value
+        save(SettingsKey.mailboxSignature(inlet), value)
+    }
+
+    public func setSignatureOnNew(_ value: Bool, for inlet: Inlet.ID) {
+        signaturesOnNew[inlet] = value
+        save(SettingsKey.mailboxSignatureNew(inlet), value)
+    }
+
+    public func setSignatureAboveQuote(_ value: Bool, for inlet: Inlet.ID) {
+        signaturesAbove[inlet] = value
+        save(SettingsKey.mailboxSignatureAbove(inlet), value)
+    }
+
+    public func removeSignature(for inlet: Inlet.ID) {
+        clearSignature(inlet)
+    }
+
+    private func clearSignature(_ inlet: Inlet.ID) {
+        mailboxSignatures[inlet] = nil
+        signaturesOnNew[inlet] = nil
+        signaturesAbove[inlet] = nil
+        try? settings.remove(key: SettingsKey.mailboxSignature(inlet))
+        try? settings.remove(key: SettingsKey.mailboxSignatureNew(inlet))
+        try? settings.remove(key: SettingsKey.mailboxSignatureAbove(inlet))
+    }
+
     public func range(_ inlet: Inlet.ID) -> MailboxRange {
         mailboxRanges[inlet] ?? .standard
     }
@@ -144,6 +196,7 @@ public final class SettingsState {
         try? settings.remove(key: SettingsKey.mailboxName(inlet))
         try? settings.remove(key: SettingsKey.mailboxDisplay(inlet))
         try? settings.remove(key: SettingsKey.mailboxRange(inlet))
+        clearSignature(inlet)
     }
 
     public func select(_ next: SettingsGroup) {

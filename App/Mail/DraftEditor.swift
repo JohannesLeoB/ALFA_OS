@@ -185,14 +185,36 @@ struct FromButton: View {
     }
 
     private func open() {
-        let entries = inbox.senderChoices.map { choice in
+        var entries = inbox.senderChoices.map { choice in
             MenuEntry.row(MenuItem(id: choice.id, label: Text(verbatim: choice.sender.address),
                                    check: isCurrent(choice) ? appearance.text("mail.menu.check") : nil) {
                 Task { await inbox.setFrom(card.id, inlet: choice.inlet, sender: choice.sender) }
             })
         }
+        entries.append(contentsOf: signatureEntries())
         anchor.showMenu(entries)
         Task { await inbox.refreshSenders() }
+    }
+
+    private func signatureEntries() -> [MenuEntry] {
+        let applied = inbox.signatureApplied(card.id)
+        var entries: [MenuEntry] = [
+            .separator(id: "signature.separator"),
+            .row(MenuItem(id: "signature.none", label: appearance.text("mail.compose.signature.none"),
+                          check: applied ? nil : appearance.text("mail.menu.check")) { inbox.useSignature(card.id, false) }),
+        ]
+        if let name = inbox.signatureName(card.id) {
+            entries.append(.row(MenuItem(id: "signature.use", label: Text(verbatim: name),
+                                         check: applied ? appearance.text("mail.menu.check") : nil) { inbox.useSignature(card.id, true) }))
+        }
+        entries.append(.row(MenuItem(id: "signature.edit", label: appearance.text("mail.compose.signature.edit")) {
+            guard let service = sender.flatMap({ session.assembly.catalog.info(forProvider: $0.provider)?.id }) else {
+                session.openMailSettings()
+                return
+            }
+            session.openMailService(service)
+        }))
+        return entries
     }
 
     private func isCurrent(_ choice: SenderChoice) -> Bool {

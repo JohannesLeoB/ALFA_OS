@@ -28,6 +28,18 @@ enum SettingsKey {
     static let mailboxRangePrefix = "settings.mailbox.range."
 
     static func mailboxRange(_ inlet: String) -> String { mailboxRangePrefix + inlet }
+
+    static let mailboxSignaturePrefix = "settings.mailbox.signature."
+
+    static func mailboxSignature(_ inlet: String) -> String { mailboxSignaturePrefix + inlet }
+
+    static let mailboxSignatureNewPrefix = "settings.mailbox.signatureNew."
+
+    static func mailboxSignatureNew(_ inlet: String) -> String { mailboxSignatureNewPrefix + inlet }
+
+    static let mailboxSignatureAbovePrefix = "settings.mailbox.signatureAbove."
+
+    static func mailboxSignatureAbove(_ inlet: String) -> String { mailboxSignatureAbovePrefix + inlet }
 }
 
 public enum CompanyEntry: String, CaseIterable, Sendable {

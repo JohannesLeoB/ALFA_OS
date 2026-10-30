@@ -35,7 +35,7 @@ struct BodyEditor: NSViewRepresentable {
         context.coordinator.change = change
         guard let view = scroll.documentView as? NSTextView else { return }
         box.view = view
-        if view.string != text { view.textStorage?.setAttributedString(content(html: nil)) }
+        if view.string != text { view.textStorage?.setAttributedString(content(html: html)) }
     }
 
     private var base: [NSAttributedString.Key: Any] {

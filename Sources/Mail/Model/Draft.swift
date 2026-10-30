@@ -13,10 +13,13 @@ public struct Draft: Codable, Sendable, Equatable {
     var messageID: String?
     public var receiptTo: String?
     public var from: Participant?
+    var signed: String?
+    var signatureOff = false
 
     public init(to: String? = nil, cc: String? = nil, bcc: String? = nil, subject: String, body: String,
                 attachments: [Attachment] = [], inReplyTo: String? = nil, threadID: String? = nil,
-                bodyHTML: String? = nil, messageID: String? = nil, receiptTo: String? = nil, from: Participant? = nil) {
+                bodyHTML: String? = nil, messageID: String? = nil, receiptTo: String? = nil, from: Participant? = nil,
+                signed: String? = nil, signatureOff: Bool = false) {
         self.to = to
         self.cc = cc
         self.bcc = bcc
@@ -29,10 +32,12 @@ public struct Draft: Codable, Sendable, Equatable {
         self.messageID = messageID
         self.receiptTo = receiptTo
         self.from = from
+        self.signed = signed
+        self.signatureOff = signatureOff
     }
 
     private enum CodingKeys: String, CodingKey {
-        case to, cc, bcc, subject, body, attachments, inReplyTo, threadID, bodyHTML, messageID, receiptTo, from
+        case to, cc, bcc, subject, body, attachments, inReplyTo, threadID, bodyHTML, messageID, receiptTo, from, signed, signatureOff
     }
 
     public init(from decoder: any Decoder) throws {
@@ -49,6 +54,8 @@ public struct Draft: Codable, Sendable, Equatable {
         messageID = try container.decodeIfPresent(String.self, forKey: .messageID)
         receiptTo = try container.decodeIfPresent(String.self, forKey: .receiptTo)
         from = try container.decodeIfPresent(Participant.self, forKey: .from)
+        signed = try container.decodeIfPresent(String.self, forKey: .signed)
+        signatureOff = try container.decodeIfPresent(Bool.self, forKey: .signatureOff) ?? false
     }
 }
 

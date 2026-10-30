@@ -15,13 +15,13 @@ extension InboxState {
             bring(.draft(open.id))
             return open.id
         }
-        return add(inlet: inlet, Draft(to: to, subject: "", body: ""))
+        return add(inlet: inlet, Draft(to: to, subject: "", body: ""), signing: true)
     }
 
     static func blank(_ draft: Draft) -> Bool {
         (draft.to ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             && draft.subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            && draft.body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            && draft.unsignedBody.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             && draft.attachments.isEmpty
     }
 
@@ -65,7 +65,7 @@ extension InboxState {
         let draft = Draft(to: to.isEmpty ? nil : to, cc: cc, subject: Self.prefixed("Re:", summary.subject),
                           body: quote, inReplyTo: summary.messageIDHeader.isEmpty ? nil : summary.messageIDHeader,
                           threadID: summary.threadID.isEmpty ? nil : summary.threadID, from: chosen)
-        return add(inlet: inlet, draft)
+        return add(inlet: inlet, draft, signing: true)
     }
 
     @discardableResult
@@ -80,7 +80,7 @@ extension InboxState {
         let quote = await quoted(messageID, summary: summary)
         let chosen = SenderEngine.receiving(mailbox.knownSenders(inlet), headers: [summary.toRaw, summary.ccRaw])
         return add(inlet: inlet, Draft(subject: Self.prefixed("Fwd:", summary.subject), body: quote, attachments: attachments,
-                                       from: chosen))
+                                       from: chosen), signing: true)
     }
 
     private func originalAttachments(_ messageID: String, inlet: Inlet.ID) async -> [Attachment]? {
@@ -271,9 +271,10 @@ extension InboxState {
         }
     }
 
-    func add(inlet: Inlet.ID, _ draft: Draft) -> UUID {
+    func add(inlet: Inlet.ID, _ draft: Draft, signing: Bool = false) -> UUID {
         var draft = draft
         if draft.from == nil { draft.from = mailbox.sender(inlet) }
+        if signing { draft.resign(to: signatures(inlet)) }
         let card = OpenDraft(id: UUID(), inlet: inlet, draft: draft, state: .idle, outboxID: nil, remoteID: nil,
                              saveFailure: nil)
         drafts.append(card)
