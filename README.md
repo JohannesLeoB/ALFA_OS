@@ -1,6 +1,6 @@
 # ALFA
 
-ALFA is a macOS app (bundle `com.johannesleoberger.alfaos`, SwiftUI, App Sandbox on). It contains a mail client (IMAP/SMTP and Gmail), a settings area, an accounts hub that stores connections and credentials, and a Claude assistant with a calculation engine and tools for Google, Airtable, ClickUp, sevDesk, Clockodo and DHL shipping. The window shows two panes: Mail and Settings. The assistant chat opens in the blob (see [ARCHITECTURE.md](ARCHITECTURE.md)).
+ALFA is a macOS app (bundle `com.johannesleoberger.alfaos`, SwiftUI, App Sandbox on). It contains a mail client (IMAP/SMTP, Gmail and Outlook), a settings area, an accounts hub that stores connections and credentials, and a Claude assistant with a calculation engine and tools for Google, Airtable, ClickUp, sevDesk, Clockodo and DHL shipping. The window shows two panes: Mail and Settings. The assistant chat opens in the blob (see [ARCHITECTURE.md](ARCHITECTURE.md)).
 
 ## Requirements
 
@@ -65,6 +65,7 @@ The top level holds exactly these entries; `utils/check.py` fails on any other.
 | `Sources/Calculation` | cost estimation: anchors, carcass and component engines, learning |
 | `Sources/Assistant` | Claude client, conversation engine, model router, tools, chat, notes, todos, journal, memory, privacy |
 | `Sources/Integrations/Google` | OAuth, Gmail, Calendar, Contacts, Drive |
+| `Sources/Integrations/Microsoft` | Outlook.com and Microsoft 365 sign-in (OAuth with PKCE), token refresh, IMAP and SMTP with XOAUTH2 |
 | `Sources/Integrations/Airtable` | Airtable client, catalog, stock, anchor rows, write allowlist |
 | `Sources/Integrations/ClickUp` | ClickUp client and task board |
 | `Sources/Integrations/Sevdesk` | sevDesk client and receipts |
@@ -79,10 +80,11 @@ The top level holds exactly these entries; `utils/check.py` fails on any other.
 
 ## Configuration files
 
-Three JSON files are read from the Application Support folder `ALFA_OS` of the app. With the sandbox on, that folder is inside the app container. A missing file leaves the dependent feature inert.
+Four JSON files are read from the Application Support folder `ALFA_OS` of the app. With the sandbox on, that folder is inside the app container. A missing file leaves the dependent feature inert.
 
 - `~/Library/Application Support/ALFA_OS/company.json`: a flat object of string values, read by `CompanyValues`. `Resources/company.example.json` lists 59 keys, 29 of which appear as a literal nowhere in code. Keys read by code: `company.address`, `company.phone`, `company.web`, `company.mail.projects` (written once into the company settings when those are empty), and the Airtable names `airtable.base.*`, `airtable.table.*` and `airtable.field.sale_price` (base and table names for the write allowlist, the catalog and the estimation model).
 - `~/Library/Application Support/ALFA_OS/google-client.json`: the Google OAuth client, read by `ClientConfigStore`. Keys: `clientID` (required), `clientSecret` (optional). Without it the Google provider is not offered.
+- `~/Library/Application Support/ALFA_OS/microsoft-client.json`: the Microsoft app registration, read by `RegistrationStore`. Key: `clientID` (required). Without it the Outlook provider is not offered.
 - `~/Library/Application Support/ALFA_OS/google-drive.json`: Drive layout, decoded as `DriveConfig`. Keys: `projectsRoot` (folder id), `forbiddenFolderIDs` (array of folder ids that are never written), `offers` with `incomingFolderKeyword`, `outgoingFolderKeyword`, `purchaseOrderFolderKeyword`, `invoiceFolderKeyword`, `offerFolderKeyword`, `orderFolderKeyword`, `prefixes` (object from file name prefix to `OfferDocumentType` raw value), `documentNumberPattern`, `customerNumberPattern`, `versionPattern`.
 
 API keys and passwords are not stored in these files; they live in the Keychain.

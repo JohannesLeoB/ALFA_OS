@@ -61,7 +61,28 @@ actor SMTPSession {
     }
 
     func authenticate(user: String, secret: String) async throws {
+        try await authenticate(user: user, credential: .password(secret))
+    }
+
+    func authenticate(user: String, credential: MailCredential) async throws {
         let mechanisms = authMechanisms
+        switch credential {
+        case .accessToken(let token): try await authenticateOAuth(user: user, token: token, mechanisms: mechanisms)
+        case .password(let secret): try await authenticate(user: user, secret: secret, mechanisms: mechanisms)
+        }
+    }
+
+    private func authenticateOAuth(user: String, token: String, mechanisms: Set<String>) async throws {
+        guard mechanisms.contains(XOAuth2Engine.mechanism) else {
+            throw MailFailure.unsupportedAuthentication(mechanisms.sorted().joined(separator: " "))
+        }
+        let payload = XOAuth2Engine.initialResponse(user: user, token: token)
+        var reply = try await command(Self.line("AUTH", XOAuth2Engine.mechanism, payload), expect: [])
+        if reply.code == 334 { reply = try await command("", expect: []) }
+        try ensureAuthenticated(reply)
+    }
+
+    private func authenticate(user: String, secret: String, mechanisms: Set<String>) async throws {
         if mechanisms.contains("PLAIN") {
             let payload = Data("\0\(user)\0\(secret)".utf8).base64EncodedString()
             try ensureAuthenticated(try await command(Self.line("AUTH", "PLAIN", payload), expect: []))

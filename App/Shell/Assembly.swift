@@ -8,6 +8,7 @@ import Foundation
 import Google
 import Hub
 import Mail
+import Microsoft
 import Sevdesk
 import Shipping
 import Storage
@@ -121,6 +122,7 @@ final class Assembly {
         ]
         var providers: [any ProviderPort] = []
         if let google = google(directory: directory, http: http, openBrowser: openBrowser) { providers.append(google) }
+        if let outlook = outlook(directory: directory, http: http, openBrowser: openBrowser) { providers.append(outlook) }
         providers.append(IMAPAccess())
         return providers + KeyAccess.all(checks: checks, catalog: catalog)
     }
@@ -135,6 +137,15 @@ final class Assembly {
                     acceptedText: String(localized: String.LocalizationValue("google.oauth.accepted")),
                     unreadableText: String(localized: String.LocalizationValue("google.oauth.unreadable")))
             })
+    }
+
+    private static func outlook(directory: URL, http: URLSession,
+                                openBrowser: @escaping @Sendable (URL) async -> Bool) -> OutlookAccess? {
+        guard let registration = try? RegistrationStore(directory: directory).load() else { return nil }
+        return OutlookAccess(
+            registration: registration, http: http, openBrowser: openBrowser,
+            acceptedText: String(localized: String.LocalizationValue("microsoft.oauth.accepted")),
+            unreadableText: String(localized: String.LocalizationValue("microsoft.oauth.unreadable")))
     }
 
     private static func ports() -> PortRegistry {

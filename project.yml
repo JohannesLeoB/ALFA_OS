@@ -53,6 +53,8 @@ targets:
       - package: ALFA
         product: Google
       - package: ALFA
+        product: Microsoft
+      - package: ALFA
         product: Airtable
       - package: ALFA
         product: ClickUp

@@ -7052,6 +7052,26 @@
         }
       }
     },
+    "hint.microsoft.grant" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anmeldung fehlgeschlagen"
+          }
+        }
+      }
+    },
+    "hint.microsoft.token" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Token Fehler"
+          }
+        }
+      }
+    },
     "hint.port.unknown" : {
       "comment" : "roh",
       "localizations" : {
@@ -10703,6 +10723,26 @@
         }
       }
     },
+    "microsoft.oauth.accepted" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ALFA_OS · Microsoft-Anmeldung übernommen"
+          }
+        }
+      }
+    },
+    "microsoft.oauth.unreadable" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ALFA_OS · Microsoft-Anmeldung nicht lesbar"
+          }
+        }
+      }
+    },
     "offer.gmail" : {
       "localizations" : {
         "de" : {
@@ -10732,6 +10772,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Google"
+          }
+        }
+      }
+    },
+    "offer.microsoft" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outlook"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outlook"
           }
         }
       }

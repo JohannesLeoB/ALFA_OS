@@ -17,10 +17,10 @@ sandbox_probe[testKeychainStoreRoundTripsAndForgets]=keychain
 sandbox_probe[testArtifactStoreWritesAtomicallyWithSafeName]=atomic
 sandbox_probe[testProposeFileWritesThroughArtifactStoreAtomically]=atomic
 cd $NEW
-names=(Core Design Shell Storage Hub Calculation Mail Assistant Airtable ClickUp Google Sevdesk Clockodo Shipping)
+names=(Core Design Shell Storage Hub Calculation Mail Assistant Airtable ClickUp Google Sevdesk Clockodo Shipping Microsoft)
 if (( $# )); then names=(${@:#App}); fi
 needs_grdb=0
-for module in $names; do [[ $module == Storage || $module == Hub || $module == Calculation || $module == Mail || $module == Assistant || $module == Google ]] && needs_grdb=1; done
+for module in $names; do [[ $module == Storage || $module == Hub || $module == Calculation || $module == Mail || $module == Assistant || $module == Google || $module == Microsoft ]] && needs_grdb=1; done
 if (( needs_grdb )); then
   if [[ ! -d $GRDB_SRC/GRDB ]]; then
     CLONE=$TMPDIR/grdb-clone

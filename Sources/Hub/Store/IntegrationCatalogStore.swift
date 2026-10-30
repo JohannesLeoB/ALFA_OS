@@ -21,7 +21,7 @@ public struct IntegrationCatalogStore: Sendable {
         IntegrationInfo(
             id: "mailaccounts", access: .password, companyOwned: false, fields: [],
             areas: [IntegrationArea(id: "mail", capability: .mail)], extras: [],
-            listsAccounts: true, providers: ["imap"], logo: nil),
+            listsAccounts: true, providers: ["imap", "microsoft"], logo: nil),
         IntegrationInfo(
             id: "clickup", access: .key, companyOwned: false, fields: [IntegrationField(id: "token", secret: true)],
             areas: [IntegrationArea(id: "phases", capability: .tasks), IntegrationArea(id: "taskFields", capability: .tasks)],

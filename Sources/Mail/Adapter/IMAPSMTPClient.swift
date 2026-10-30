@@ -3,6 +3,7 @@ import Foundation
 
 struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
     typealias PasswordSource = @Sendable () async throws -> String
+    typealias CredentialSource = @Sendable () async throws -> MailCredential
 
     static let summaryItems = ["UID", "FLAGS", "INTERNALDATE", "RFC822.SIZE", "ENVELOPE", "BODYSTRUCTURE",
                                        "BODY.PEEK[HEADER.FIELDS (REFERENCES)]"]
@@ -13,14 +14,19 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
     private static let inlineImageBudget = 8_388_608
 
     let account: Account
-    private let password: PasswordSource
+    private let credential: CredentialSource
     private let opener: StreamOpener
     private let channel: IMAPChannel
 
     init(account: Account, password: @escaping PasswordSource, channel: IMAPChannel = IMAPChannel(),
          opener: @escaping StreamOpener = StreamRouter.open) {
+        self.init(account: account, credential: { .password(try await password()) }, channel: channel, opener: opener)
+    }
+
+    init(account: Account, credential: @escaping CredentialSource, channel: IMAPChannel = IMAPChannel(),
+         opener: @escaping StreamOpener = StreamRouter.open) {
         self.account = account
-        self.password = password
+        self.credential = credential
         self.channel = channel
         self.opener = opener
     }
@@ -127,10 +133,10 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
         let outgoing = try MessageEngine.build(draft, account: account,
                                                messageID: draft.messageID ?? UUID().uuidString.lowercased())
         guard account.outgoing.isComplete else { throw MailFailure.accountIncomplete("outgoing") }
-        let secret = try await secret()
+        let secret = try await currentCredential()
         let session = try await SMTPSession.open(settings: account.outgoing, opener: opener)
         do {
-            try await session.authenticate(user: user(for: account.outgoing), secret: secret)
+            try await session.authenticate(user: user(for: account.outgoing), credential: secret)
             try await session.send(from: outgoing.sender, recipients: outgoing.recipients, message: outgoing.data)
         } catch {
             await session.close()
@@ -412,10 +418,10 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
     }
 
     private func openIncoming() async throws -> IMAPClient {
-        let secret = try await secret()
+        let secret = try await currentCredential()
         let session = try await IMAPClient.open(settings: account.incoming, opener: opener)
         do {
-            try await session.authenticate(user: user(for: account.incoming), secret: secret)
+            try await session.authenticate(user: user(for: account.incoming), credential: secret)
         } catch {
             await session.close()
             throw error
@@ -427,8 +433,8 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
         settings.username.isEmpty ? account.address : settings.username
     }
 
-    private func secret() async throws -> String {
-        let value = try await password()
+    private func currentCredential() async throws -> MailCredential {
+        let value = try await credential()
         guard !value.isEmpty else { throw MailFailure.credentialsMissing }
         return value
     }

@@ -820,6 +820,171 @@ final class MailTests: XCTestCase {
         XCTAssertTrue(wire.contains("..x"))
     }
 
+    private func oauthIMAP(capabilities: String, continuation: Bool = false, fail: Bool = false) -> ScriptedStream {
+        let last = Locked("")
+        let payload = XOAuth2Engine.initialResponse(user: "u@x", token: "tok")
+        return ScriptedStream(greeting: ["* OK ready"]) { line in
+            let tag = line.split(separator: " ").first.map(String.init) ?? ""
+            if line == payload {
+                let tagged = last.with { $0 }
+                return fail ? ["+ eyJzdGF0dXMiOiI0MDEifQ==", "\(tagged) NO AUTHENTICATE failed"] : ["\(tagged) OK done"]
+            }
+            last.with { $0 = tag }
+            if line.hasSuffix("CAPABILITY") { return ["* CAPABILITY IMAP4rev1 " + capabilities, "\(tag) OK done"] }
+            if line.contains("AUTHENTICATE XOAUTH2 ") { return fail ? ["+ err", "\(tag) NO AUTHENTICATE failed"] : ["\(tag) OK done"] }
+            if line.contains("AUTHENTICATE XOAUTH2") { return ["+ "] }
+            return ["\(tag) OK done"]
+        }
+    }
+
+    private func wire(_ stream: ScriptedStream) -> String {
+        stream.sent.with { $0.map { String(decoding: $0, as: UTF8.self) }.joined() }
+    }
+
+    func testXOAuth2PayloadHoldsTheUserAndTheBearerToken() {
+        let decoded = Data(base64Encoded: XOAuth2Engine.initialResponse(user: "me@outlook.com", token: "abc"))
+        XCTAssertEqual(decoded.map { String(decoding: $0, as: UTF8.self) }, "user=me@outlook.com\u{01}auth=Bearer abc\u{01}\u{01}")
+    }
+
+    func testIMAPSessionSendsXOAuth2AsInitialResponseWhenTheServerAllowsIt() async throws {
+        let stream = oauthIMAP(capabilities: "AUTH=XOAUTH2 SASL-IR")
+        let settings = ServerSettings(host: "h", port: 993, security: .ssl, username: "u")
+        let session = try await IMAPClient.open(settings: settings, opener: { _, _, _ in stream })
+        try await session.authenticate(user: "u@x", credential: .accessToken("tok"))
+        XCTAssertTrue(wire(stream).contains("AUTHENTICATE XOAUTH2 " + XOAuth2Engine.initialResponse(user: "u@x", token: "tok")))
+    }
+
+    func testIMAPSessionSendsXOAuth2AfterTheContinuationWithoutInitialResponse() async throws {
+        let stream = oauthIMAP(capabilities: "AUTH=XOAUTH2")
+        let settings = ServerSettings(host: "h", port: 993, security: .ssl, username: "u")
+        let session = try await IMAPClient.open(settings: settings, opener: { _, _, _ in stream })
+        try await session.authenticate(user: "u@x", credential: .accessToken("tok"))
+        let text = wire(stream)
+        XCTAssertTrue(text.contains("AUTHENTICATE XOAUTH2\r\n"))
+        XCTAssertTrue(text.contains(XOAuth2Engine.initialResponse(user: "u@x", token: "tok") + "\r\n"))
+    }
+
+    func testIMAPXOAuth2RejectionAnswersTheErrorChallengeAndReportsTheRejection() async throws {
+        for capabilities in ["AUTH=XOAUTH2", "AUTH=XOAUTH2 SASL-IR"] {
+            let stream = oauthIMAP(capabilities: capabilities, fail: true)
+            let settings = ServerSettings(host: "h", port: 993, security: .ssl, username: "u")
+            let session = try await IMAPClient.open(settings: settings, opener: { _, _, _ in stream })
+            do {
+                try await session.authenticate(user: "u@x", credential: .accessToken("tok"))
+                XCTFail("expected a rejection")
+            } catch MailFailure.authenticationRejected {
+                XCTAssertTrue(wire(stream).hasSuffix("\r\n\r\n"))
+            }
+        }
+    }
+
+    func testIMAPXOAuth2NeedsTheCapabilityAndPasswordsStayOnPlain() async throws {
+        let stream = oauthIMAP(capabilities: "AUTH=PLAIN")
+        let settings = ServerSettings(host: "h", port: 993, security: .ssl, username: "u")
+        let session = try await IMAPClient.open(settings: settings, opener: { _, _, _ in stream })
+        do {
+            try await session.authenticate(user: "u@x", credential: .accessToken("tok"))
+            XCTFail("expected unsupported")
+        } catch MailFailure.unsupportedAuthentication {
+            XCTAssertFalse(wire(stream).contains("AUTHENTICATE"))
+        }
+    }
+
+    func testSMTPSessionAuthenticatesWithXOAuth2() async throws {
+        let stream = ScriptedStream(greeting: ["220 hi"]) { line in
+            if line.hasPrefix("EHLO") { return ["250-h", "250 AUTH LOGIN XOAUTH2"] }
+            if line.hasPrefix("AUTH XOAUTH2 ") { return ["235 ok"] }
+            return []
+        }
+        let settings = ServerSettings(host: "h", port: 465, security: .ssl, username: "u")
+        let session = try await SMTPSession.open(settings: settings, opener: { _, _, _ in stream })
+        try await session.authenticate(user: "u@x", credential: .accessToken("tok"))
+        XCTAssertTrue(wire(stream).contains("AUTH XOAUTH2 " + XOAuth2Engine.initialResponse(user: "u@x", token: "tok")))
+    }
+
+    func testSMTPXOAuth2RejectionAnswersTheErrorChallenge() async throws {
+        let stream = ScriptedStream(greeting: ["220 hi"]) { line in
+            if line.hasPrefix("EHLO") { return ["250-h", "250 AUTH XOAUTH2"] }
+            if line.hasPrefix("AUTH XOAUTH2 ") { return ["334 eyJzdGF0dXMiOiI0MDEifQ==", "535 5.7.3 Authentication unsuccessful"] }
+            return []
+        }
+        let settings = ServerSettings(host: "h", port: 465, security: .ssl, username: "u")
+        let session = try await SMTPSession.open(settings: settings, opener: { _, _, _ in stream })
+        do {
+            try await session.authenticate(user: "u@x", credential: .accessToken("tok"))
+            XCTFail("expected a rejection")
+        } catch MailFailure.authenticationRejected(let text) {
+            XCTAssertTrue(text.hasPrefix("535"))
+            XCTAssertTrue(wire(stream).hasSuffix("\r\n\r\n"))
+        }
+    }
+
+    func testSMTPXOAuth2NeedsTheMechanism() async throws {
+        let stream = ScriptedStream(greeting: ["220 hi"]) { line in
+            line.hasPrefix("EHLO") ? ["250-h", "250 AUTH PLAIN LOGIN"] : []
+        }
+        let settings = ServerSettings(host: "h", port: 465, security: .ssl, username: "u")
+        let session = try await SMTPSession.open(settings: settings, opener: { _, _, _ in stream })
+        do {
+            try await session.authenticate(user: "u@x", credential: .accessToken("tok"))
+            XCTFail("expected unsupported")
+        } catch MailFailure.unsupportedAuthentication {
+            XCTAssertFalse(wire(stream).contains("AUTH PLAIN"))
+        }
+    }
+
+    func testConnectionCheckAuthenticatesBothServersWithTheToken() async throws {
+        let incoming = oauthIMAP(capabilities: "AUTH=XOAUTH2 SASL-IR")
+        let outgoing = ScriptedStream(greeting: ["220 hi"]) { line in
+            if line.hasPrefix("EHLO") { return ["250-h", "250-STARTTLS", "250 AUTH XOAUTH2"] }
+            if line == "STARTTLS" { return ["220 go"] }
+            if line.hasPrefix("AUTH XOAUTH2 ") { return ["235 ok"] }
+            if line == "QUIT" { return ["221 bye"] }
+            return []
+        }
+        let endpoints = OAuthMailEndpoints(incomingHost: "imap.test", incomingPort: 993, outgoingHost: "smtp.test", outgoingPort: 587)
+        try await ConnectionCheck.probe(
+            account: endpoints.account(id: "a", address: "u@x", name: "U"), credential: .accessToken("tok"),
+            opener: { host, _, _ in host == "imap.test" ? incoming : outgoing })
+        XCTAssertTrue(wire(incoming).contains("AUTHENTICATE XOAUTH2"))
+        XCTAssertTrue(wire(outgoing).contains("AUTH XOAUTH2"))
+    }
+
+    func testConnectionCheckRefusesAnEmptyToken() async {
+        let endpoints = OAuthMailEndpoints(incomingHost: "imap.test", incomingPort: 993, outgoingHost: "smtp.test", outgoingPort: 587)
+        do {
+            try await ConnectionCheck.probe(account: endpoints.account(id: "a", address: "u@x", name: "U"), credential: .accessToken(""))
+            XCTFail("expected a failure")
+        } catch let failure as ProbeFailure {
+            XCTAssertEqual(failure, ProbeFailure(step: .incoming, reason: .credentialsMissing))
+        } catch {
+            XCTFail("\(error)")
+        }
+    }
+
+    func testOAuthEndpointsBuildImplicitTLSIncomingAndStartTLSOutgoing() {
+        let endpoints = OAuthMailEndpoints(incomingHost: "i", incomingPort: 993, outgoingHost: "o", outgoingPort: 587)
+        let account = endpoints.account(id: "a", address: "me@x", name: "Me")
+        XCTAssertEqual(account.incoming, ServerSettings(host: "i", port: 993, security: .ssl, username: "me@x"))
+        XCTAssertEqual(account.outgoing, ServerSettings(host: "o", port: 587, security: .starttls, username: "me@x"))
+        XCTAssertEqual(account.displayName, "Me")
+    }
+
+    func testTheClientAsksForAFreshTokenOnEveryConnection() async throws {
+        let counter = Locked(0)
+        let stream = oauthIMAP(capabilities: "AUTH=XOAUTH2 SASL-IR")
+        let settings = ServerSettings(host: "h", port: 993, security: .ssl, username: "u@x")
+        let account = Account(id: "a", displayName: "", address: "u@x", incoming: settings, outgoing: settings)
+        let client = IMAPSMTPClient(
+            account: account, credential: {
+                counter.with { $0 += 1 }
+                return .accessToken("tok")
+            }, opener: { _, _, _ in stream })
+        _ = try? await client.listFolders()
+        XCTAssertEqual(counter.with { $0 }, 1)
+        XCTAssertTrue(wire(stream).contains("AUTHENTICATE XOAUTH2"))
+    }
+
     func testHTMLEngine() {
         XCTAssertEqual(HTMLEngine.plain("<p>Caf&eacute; &amp; <b>Tee</b></p><style>x{}</style><br>zu"), "Caf\u{E9} & Tee\n\nzu")
         XCTAssertEqual(HTMLEngine.navigation(scheme: "javascript", linkActivated: true, mainFrame: true), .cancel)
@@ -1324,6 +1489,68 @@ final class MailTests: XCTestCase {
         await rig.outbox.pass("a")
         for _ in 0..<50 where state.draft(id)?.state != .sent { try await Task.sleep(for: .milliseconds(20)) }
         XCTAssertEqual(state.draft(id)?.state, .sent)
+    }
+
+    @MainActor
+    func testATypingPauseSavesTheDraftAtTheProviderAndKeepsALocalCopy() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                               autosavePause: .milliseconds(30), autosaveInterval: .seconds(60))
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.subject = "Hello" }
+        XCTAssertEqual(rig.outbox.keptDrafts.map(\.id), [id])
+        for _ in 0..<100 { if case .saved = state.draft(id)?.state { break }; try await Task.sleep(for: .milliseconds(20)) }
+        guard case .saved = state.draft(id)?.state else { return XCTFail() }
+        XCTAssertNotNil(state.draft(id)?.remoteID)
+        XCTAssertEqual(rig.outbox.keptDrafts.first?.remoteID, state.draft(id)?.remoteID)
+    }
+
+    @MainActor
+    func testKeptDraftsComeBackAsOpenCardsAndGoWhenSentOrDiscarded() async throws {
+        let rig = try Rig()
+        let first = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                               autosavePause: .seconds(60), autosaveInterval: .seconds(60))
+        await first.start()
+        let id = try XCTUnwrap(first.compose())
+        first.edit(id) { $0.subject = "Keep me"; $0.to = "x@y.de" }
+        let second = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                                autosavePause: .seconds(60), autosaveInterval: .seconds(60))
+        await second.start()
+        XCTAssertEqual(second.draft(id)?.draft.subject, "Keep me")
+        XCTAssertEqual(second.draft(id)?.inlet, "a")
+        XCTAssertTrue(second.stack.contains(.draft(id)))
+        await second.deleteDraft(id)
+        XCTAssertTrue(rig.outbox.keptDrafts.isEmpty)
+        let third = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await third.start()
+        XCTAssertNil(third.draft(id))
+    }
+
+    @MainActor
+    func testSendingDropsTheLocalCopy() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                               autosavePause: .seconds(60), autosaveInterval: .seconds(60))
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.to = "x@y.de"; $0.subject = "s" }
+        XCTAssertEqual(rig.outbox.keptDrafts.count, 1)
+        await state.send(id)
+        XCTAssertTrue(rig.outbox.keptDrafts.isEmpty)
+    }
+
+    @MainActor
+    func testFlushingOnQuitSavesPendingDraftsWithinTheLimit() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                               autosavePause: .seconds(60), autosaveInterval: .seconds(60))
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.subject = "Pending" }
+        await state.flushDrafts(within: .seconds(5))
+        guard case .saved = state.draft(id)?.state else { return XCTFail() }
+        XCTAssertNotNil(rig.outbox.keptDrafts.first?.remoteID)
     }
 
     @MainActor

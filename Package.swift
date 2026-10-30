@@ -19,6 +19,7 @@ let package = Package(
         .library(name: "Assistant", targets: ["Assistant"]),
         .library(name: "Mail", targets: ["Mail"]),
         .library(name: "Google", targets: ["Google"]),
+        .library(name: "Microsoft", targets: ["Microsoft"]),
         .library(name: "Airtable", targets: ["Airtable"]),
         .library(name: "ClickUp", targets: ["ClickUp"]),
         .library(name: "Sevdesk", targets: ["Sevdesk"]),
@@ -68,6 +69,12 @@ let package = Package(
             path: "Sources/Integrations/Google",
             swiftSettings: strict
         ),
+        .target(
+            name: "Microsoft",
+            dependencies: ["Core", "Hub", "Mail", "Assistant"],
+            path: "Sources/Integrations/Microsoft",
+            swiftSettings: strict
+        ),
         .testTarget(name: "CoreTests", dependencies: ["Core"], path: "Tests/CoreTests", swiftSettings: strict),
         .testTarget(name: "DesignTests", dependencies: ["Design"], path: "Tests/DesignTests", swiftSettings: strict),
         .testTarget(name: "ShellTests", dependencies: ["Shell", "Core"], path: "Tests/ShellTests", swiftSettings: strict),
@@ -105,6 +112,12 @@ let package = Package(
             name: "GoogleTests",
             dependencies: ["Google", "Core", "Hub", "Mail", "Assistant"],
             path: "Tests/GoogleTests",
+            swiftSettings: strict
+        ),
+        .testTarget(
+            name: "MicrosoftTests",
+            dependencies: ["Microsoft", "Core", "Hub", "Mail", "Assistant"],
+            path: "Tests/MicrosoftTests",
             swiftSettings: strict
         ),
         .target(

@@ -2,7 +2,7 @@
 
 ## Modules
 
-`Package.swift` declares fourteen library modules and one test target per module. The app target in `project.yml` links all of them. GRDB 6.29.3 is the only external dependency.
+`Package.swift` declares fifteen library modules and one test target per module. The app target in `project.yml` links all of them. GRDB 6.29.3 is the only external dependency.
 
 | Module | Depends on |
 |---|---|
@@ -15,6 +15,7 @@
 | Calculation | Core, Storage, GRDB |
 | Assistant | Core, Design, Storage, Hub, Calculation, GRDB |
 | Google | Core, Hub, Mail, Assistant |
+| Microsoft | Core, Hub, Mail, Assistant |
 | Airtable | Core, Hub, Assistant, Calculation |
 | ClickUp | Hub, Assistant |
 | Sevdesk | Hub, Assistant, Storage, GRDB |
@@ -32,7 +33,7 @@ The table is the complete edge list. Integrations never depend on each other; th
 ```
 App/<Feature>/           SwiftUI views, one folder per area, Swift files directly inside
 Sources/<Module>/        modules without UI
-Sources/Integrations/<Service>/   Airtable, ClickUp, Sevdesk, Clockodo, Shipping, Google
+Sources/Integrations/<Service>/   Airtable, ClickUp, Sevdesk, Clockodo, Shipping, Google, Microsoft
 Tests/<Module>Tests/<Module>Tests.swift   one test class per module
 Resources/               tokens, text sources, catalog, fonts, assets, plist
 utils/                   checks, generators, build script

@@ -17,6 +17,10 @@
    "de": "Google",
    "en": "Google"
   },
+  "offer.microsoft": {
+   "de": "Outlook",
+   "en": "Outlook"
+  },
   "settings.company.row.address.prompt": {
    "de": "Straße, PLZ Ort",
    "en": "Street, postcode, city"

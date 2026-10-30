@@ -1308,10 +1308,26 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(data.flatMap { try? JSONDecoder().decode(Cadence.self, from: $0) }, .every(.seconds(60)))
     }
 
+    func testASignInMailAccountIsRenewedThroughItsOwnOfferWithTheAddressAsHint() {
+        let imap = Offer(id: "offer.imap", provider: "imap", title: "IMAP", capabilities: [.mail], owner: .person("p1"),
+                         way: .form([Field(id: "address", title: "address", holdsAccount: true)]))
+        let outlook = Offer(id: "offer.microsoft", provider: "microsoft", title: "offer.microsoft", capabilities: [.mail],
+                            owner: .person("p1"), way: .signIn)
+        var inlet = Inlet(id: "microsoft-1", provider: "microsoft", capabilities: [.mail], owner: .person("p1"),
+                          title: "offer.microsoft")
+        inlet.account = "me@outlook.com"
+        inlet.state = .failed(Hint(text: "hint.signin.expired", kind: .signIn))
+        let renewal = RenewalEngine.renewal(of: inlet.id, inlets: [inlet], offers: [imap, outlook])
+        XCTAssertEqual(renewal?.offer, outlook)
+        XCTAssertEqual(renewal?.values, [Input.expectedAccountKey: "me@outlook.com"])
+    }
+
     func testCatalogLookupsAndInventory() {
         let catalog = IntegrationCatalogStore.standard
         XCTAssertEqual(catalog.info("google")?.providers, ["google"])
         XCTAssertEqual(catalog.info(forProvider: "imap")?.id, "mailaccounts")
+        XCTAssertEqual(catalog.info(forProvider: "microsoft")?.id, "mailaccounts")
+        XCTAssertEqual(catalog.info("mailaccounts")?.providers, ["imap", "microsoft"])
         XCTAssertNil(catalog.info("unknown"))
         XCTAssertEqual(Set(catalog.entries.map(\.id)).count, catalog.entries.count)
         let info = catalog.info("clockodo")

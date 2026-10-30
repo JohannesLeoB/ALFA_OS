@@ -9,7 +9,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOCUMENTS = ("README.md", "ARCHITECTURE.md", "AGENTS.md", "CLAUDE.md")
 MODULES = {"Core", "Design", "Shell", "Storage", "Hub", "Assistant", "Mail", "Calculation", "Catalog", "Project", "Today", "Survey"}
-INTEGRATIONS = {"Airtable", "ClickUp", "Sevdesk", "Clockodo", "Shipping", "Google"}
+INTEGRATIONS = {"Airtable", "ClickUp", "Sevdesk", "Clockodo", "Shipping", "Google", "Microsoft"}
 FOLDERS = {"Model", "Logic", "Port", "Adapter", "State", "Store", "Tool"}
 FORBIDDEN = {"Manager", "Helper", "Helpers", "Util", "Utils", "Utility", "Utilities", "Service", "Services", "Handler",
              "Impl", "Base", "Common", "Misc", "New", "Old"}

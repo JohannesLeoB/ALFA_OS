@@ -80,7 +80,12 @@ struct ConnectionCheck: ProbePort {
     }
 
     static func probe(account: Account, password: String, opener: @escaping StreamOpener = StreamRouter.open) async throws {
-        guard !password.isEmpty else {
+        try await probe(account: account, credential: .password(password), opener: opener)
+    }
+
+    static func probe(account: Account, credential: MailCredential,
+                      opener: @escaping StreamOpener = StreamRouter.open) async throws {
+        guard !credential.isEmpty else {
             throw ProbeFailure(step: .incoming, reason: .credentialsMissing)
         }
         guard account.incoming.isComplete else {
@@ -93,7 +98,7 @@ struct ConnectionCheck: ProbePort {
             let user = account.incoming.username.isEmpty ? account.address : account.incoming.username
             let session = try await IMAPClient.open(settings: account.incoming, opener: opener)
             do {
-                try await session.authenticate(user: user, secret: password)
+                try await session.authenticate(user: user, credential: credential)
                 _ = try await session.run([.raw("NOOP")])
             } catch {
                 await session.close()
@@ -105,7 +110,7 @@ struct ConnectionCheck: ProbePort {
             let user = account.outgoing.username.isEmpty ? account.address : account.outgoing.username
             let session = try await SMTPSession.open(settings: account.outgoing, opener: opener)
             do {
-                try await session.authenticate(user: user, secret: password)
+                try await session.authenticate(user: user, credential: credential)
             } catch {
                 await session.close()
                 throw error

@@ -104,12 +104,18 @@ actor IMAPClient {
     }
 
     func authenticate(user: String, secret: String) async throws {
+        try await authenticate(user: user, credential: .password(secret))
+    }
+
+    func authenticate(user: String, credential: MailCredential) async throws {
         guard !authenticated else { return }
         do {
-            if capabilities.contains("AUTH=PLAIN") {
+            if case .accessToken(let token) = credential {
+                try await authenticateOAuth(user: user, token: token)
+            } else if case .password(let secret) = credential, capabilities.contains("AUTH=PLAIN") {
                 let payload = Data("\0\(user)\0\(secret)".utf8).base64EncodedString()
                 _ = try await run([.raw("AUTHENTICATE"), .raw("PLAIN")], replies: [payload])
-            } else if !capabilities.contains("LOGINDISABLED") {
+            } else if case .password(let secret) = credential, !capabilities.contains("LOGINDISABLED") {
                 _ = try await run([.raw("LOGIN"), .string(user), .string(secret)])
             } else {
                 throw MailFailure.unsupportedAuthentication("LOGINDISABLED")
@@ -119,6 +125,18 @@ actor IMAPClient {
         }
         authenticated = true
         try await refreshCapabilities()
+    }
+
+    private func authenticateOAuth(user: String, token: String) async throws {
+        guard capabilities.contains("AUTH=" + XOAuth2Engine.mechanism) else {
+            throw MailFailure.unsupportedAuthentication(capabilities.sorted().joined(separator: " "))
+        }
+        let payload = XOAuth2Engine.initialResponse(user: user, token: token)
+        if capabilities.contains("SASL-IR") {
+            _ = try await run([.raw("AUTHENTICATE"), .raw(XOAuth2Engine.mechanism), .raw(payload)], replies: [""])
+        } else {
+            _ = try await run([.raw("AUTHENTICATE"), .raw(XOAuth2Engine.mechanism)], replies: [payload, ""])
+        }
     }
 
     func listFolders() async throws -> [IMAPListEntry] {
