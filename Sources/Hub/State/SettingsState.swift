@@ -5,9 +5,7 @@ import Observation
 @MainActor @Observable
 public final class SettingsState {
     public var group: SettingsGroup = .connections
-    public private(set) var cards: [String] = []
     public private(set) var front: String?
-    public private(set) var fanned = false
     public private(set) var opened = 0
     public private(set) var toast: String?
     public private(set) var toastName: String?
@@ -32,7 +30,6 @@ public final class SettingsState {
 
     public init(settings: SettingStore) throws {
         self.settings = settings
-        cards = [group.opening]
         front = group.opening
         let stored = try settings.all()
         func text(_ key: String) -> String? { SettingStore.decoded(stored[key], as: String.self) }
@@ -225,26 +222,8 @@ public final class SettingsState {
     }
 
     public func open(_ id: String) {
-        cards = [id]
         front = id
-        fanned = false
         opened += 1
-    }
-
-    public func close(_ id: String) {
-        cards.removeAll { $0 == id }
-        if front == id { front = cards.last }
-        if cards.isEmpty { fanned = false }
-    }
-
-    public func bring(_ id: String) {
-        front = id
-        fanned = false
-    }
-
-    public func toggleFan() {
-        guard !cards.isEmpty || fanned else { return }
-        fanned.toggle()
     }
 
     public func notify(_ key: String, name: String? = nil) {

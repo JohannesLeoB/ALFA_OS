@@ -13,8 +13,7 @@ struct SettingsCommandHead: View {
     private var state: SettingsState { context.state }
 
     private var reading: IntegrationReading? {
-        let front = state.fanned ? nil : (state.front ?? state.cards.last)
-        return front.flatMap { id in readings.first { $0.info.id == id } }
+        state.front.flatMap { id in readings.first { $0.info.id == id } }
     }
 
     private var openLanes: Int {
@@ -32,10 +31,8 @@ struct SettingsCommandHead: View {
                 main.append(CommandSlot(id: "disconnect", action: .disconnect, signal: true))
             }
         }
-        let fan = !state.cards.isEmpty || state.fanned
-            ? [CommandSlot<SettingsCommand>(id: "overview", action: state.fanned ? .back : .overview, accent: state.fanned)] : []
         let fold = openLanes > 1 ? [CommandSlot<SettingsCommand>(id: "fold", action: .fold)] : []
-        let plan = CommandBarEngine.plan(main: main, tail: [], fan: fan, fold: fold, staticMore: false, width: width - Tokens.Size.edge)
+        let plan = CommandBarEngine.plan(main: main, tail: [], fan: [], fold: fold, staticMore: false, width: width - Tokens.Size.edge)
         return CommandHead(plan: plan, moreHelp: appearance.string("settings.action.more"), glyph: glyph, help: help, perform: perform, more: more) {
             EmptyView()
         }
@@ -45,8 +42,6 @@ struct SettingsCommandHead: View {
         switch command {
         case .connect: .link
         case .disconnect: .close
-        case .overview: .grid
-        case .back: .fan
         case .fold: .minus
         }
     }
@@ -55,8 +50,6 @@ struct SettingsCommandHead: View {
         switch command {
         case .connect: appearance.string(reading?.asksReconnect == true ? "settings.action.reconnect" : "settings.action.connect")
         case .disconnect: appearance.string("settings.action.disconnect")
-        case .overview: appearance.format("settings.overview.tip", String(state.cards.count))
-        case .back: appearance.string("settings.action.backToStack")
         case .fold: appearance.string("settings.action.foldColumn")
         }
     }
@@ -65,7 +58,6 @@ struct SettingsCommandHead: View {
         switch command {
         case .connect: if let reading { context.flow.perform(reading.step, for: reading.info.id) }
         case .disconnect: disconnecting = reading?.info.id
-        case .overview, .back: state.toggleFan()
         case .fold: context.desk.toggleFold(.trailing)
         }
     }
@@ -80,7 +72,5 @@ struct SettingsCommandHead: View {
 enum SettingsCommand: Equatable, Sendable {
     case connect
     case disconnect
-    case overview
-    case back
     case fold
 }

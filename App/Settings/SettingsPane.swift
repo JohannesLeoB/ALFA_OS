@@ -8,7 +8,7 @@ import SwiftUI
 struct SettingsPane: Pane {
     let context: SettingsContext
 
-    var stackEmpty: Bool { context.state.cards.isEmpty }
+    var stackEmpty: Bool { context.state.front == nil }
 
     var badge: Int { IntegrationReadEngine.failedCount(context.readings) }
 
@@ -166,11 +166,11 @@ struct SettingsMarkList: View {
                                      dot: failed.contains(id)) { state.open(id) }
             }
         case .trailing:
-            return state.cards.map { id in
+            return state.front.map { id in
                 let item = face(id, readings)
-                return StripMarkItem(id: "card." + id, face: .text(item.mark), help: Text(verbatim: item.title), selected: false,
-                                     dot: false) { state.bring(id) }
-            }
+                return [StripMarkItem(id: "card." + id, face: .text(item.mark), help: Text(verbatim: item.title), selected: false,
+                                      dot: false) { state.open(id) }]
+            } ?? []
         }
     }
 }

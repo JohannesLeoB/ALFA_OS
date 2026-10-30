@@ -37,7 +37,7 @@ struct IntegrationList: View {
                             logo: reading.info.logo?.image,
                             sub: reading.state.key,
                             bad: reading.state.isBad,
-                            selected: state.front == reading.info.id && !state.fanned,
+                            selected: state.front == reading.info.id,
                             action: { state.open(reading.info.id) })
                     }
                 }
@@ -49,7 +49,7 @@ struct IntegrationList: View {
                         logo: nil,
                         sub: section.detailKey,
                         bad: false,
-                        selected: state.front == section.rawValue && !state.fanned,
+                        selected: state.front == section.rawValue,
                         action: { state.open(section.rawValue) })
                 }
             }
