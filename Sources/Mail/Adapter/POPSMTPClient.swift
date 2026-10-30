@@ -3,10 +3,11 @@ import Foundation
 import Hub
 import Storage
 
-struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPort {
+struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPort, PurgePort {
     static let inboxID = "INBOX"
     static let sentID = "pop:sent"
     static let draftsID = "pop:drafts"
+    static let trashID = "pop:trash"
     static let checkInterval: Duration = .seconds(300)
 
     let account: Account
@@ -29,7 +30,8 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
 
     func listFolders() async throws -> [Folder] {
         [Folder(id: Self.inboxID, name: "INBOX", role: .inbox), Folder(id: Self.draftsID, name: "Drafts", role: .drafts),
-         Folder(id: Self.sentID, name: "Sent", role: .sent)]
+         Folder(id: Self.sentID, name: "Sent", role: .sent),
+         Folder(id: Self.trashID, name: "Trash", role: .trash)]
     }
 
     func listMessages(folderID: String, query: String?, pageToken: String?, maxResults: Int) async throws -> MessagePage {
@@ -76,11 +78,29 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
     }
 
     func trash(messageID: String, folderID: String?) async throws {
+        guard let entry = store.entry(messageID) else { throw MailFailure.messageNotFound(messageID) }
+        if entry.folder == Self.trashID {
+            try store.setFlags(messageID, seen: nil, flagged: nil, hidden: true)
+        } else {
+            try store.place(messageID, in: Self.trashID)
+        }
+    }
+
+    func supportsPurge() async throws -> Bool { true }
+
+    func purge(messageID: String) async throws {
         try store.setFlags(messageID, seen: nil, flagged: nil, hidden: true)
     }
 
     func archive(messageID: String, folderID: String?) async throws { throw MailFailure.unsupportedCapability("archive") }
-    func move(messageID: String, toFolderID: String) async throws { throw MailFailure.unsupportedCapability("move") }
+
+    func move(messageID: String, toFolderID: String) async throws {
+        guard try await listFolders().contains(where: { $0.id == toFolderID }), store.entry(messageID) != nil else {
+            throw MailFailure.unsupportedCapability("move")
+        }
+        try store.place(messageID, in: toFolderID)
+    }
+
     func markSpam(messageID: String, folderID: String?) async throws { throw MailFailure.unsupportedCapability("spam") }
 
     func fetchThread(messageID: String, threadID: String) async throws -> [MessageSummary] {
@@ -104,7 +124,8 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
                           inReplyTo: header("In-Reply-To"),
                           messageID: header("Message-ID").map { $0.trimmingCharacters(in: CharacterSet(charactersIn: "<> ")) }
                               .flatMap { $0.split(separator: "@").first.map(String.init) },
-                          receiptTo: MessageEngine.receiptAddress(header("Disposition-Notification-To")))
+                          receiptTo: MessageEngine.receiptAddress(header("Disposition-Notification-To")),
+                          from: MessageEngine.sender(header("From")))
         if let part = parsed.root.firstPlainText { draft.body = parsed.text(part) }
         if let part = parsed.root.firstHTML { draft.bodyHTML = parsed.text(part) }
         draft.attachments = parsed.root.attachments.map {
@@ -130,7 +151,7 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
         let due = store.onServer().filter { entry in
             switch policy {
             case .keep: false
-            case .deleted: entry.hidden
+            case .deleted: entry.hidden || entry.folder == Self.trashID
             case .day, .week, .month:
                 entry.fetchedAt.addingTimeInterval(Double(policy.days ?? 0) * 86_400) <= now
             }

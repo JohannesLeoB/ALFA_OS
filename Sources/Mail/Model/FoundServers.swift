@@ -3,6 +3,16 @@ struct FoundServers: Equatable, Sendable {
     var outgoing: ServerTemplate
     var username: String?
     var incomingProtocol: IncomingProtocol = .imap
+    var alternative: ServerTemplate?
+
+    var choices: [[String: String]] {
+        guard let alternative else { return [values] }
+        var other = self
+        other.incoming = alternative
+        other.incomingProtocol = incomingProtocol == .imap ? .pop3 : .imap
+        other.alternative = nil
+        return [values, other.values]
+    }
 
     var values: [String: String] {
         var result: [String: String] = [:]

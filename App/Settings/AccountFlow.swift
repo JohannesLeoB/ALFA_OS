@@ -11,7 +11,11 @@ final class AccountFlow {
     private(set) var actedOn: String?
     private(set) var checked: Inlet.ID?
     var form: Offer?
-    var values: [String: String] = [:]
+    var values: [String: String] = [:] {
+        didSet {
+            if oldValue[ProviderPresets.protocolField] != values[ProviderPresets.protocolField] { applyFound() }
+        }
+    }
 
     @ObservationIgnored private let setup: any SetupPort
     @ObservationIgnored private let added: @MainActor (Inlet.ID) async -> Void
@@ -19,7 +23,8 @@ final class AccountFlow {
     @ObservationIgnored private var cancelling = false
     @ObservationIgnored private let discovery: any DiscoveryPort
     @ObservationIgnored private var finding: Task<Void, Never>?
-    @ObservationIgnored private var found: [String: String] = [:]
+    @ObservationIgnored private var found: [[String: String]] = []
+    @ObservationIgnored private var filled: [String: String] = [:]
 
     init(setup: any SetupPort, discovery: any DiscoveryPort = DiscoveryClient(),
          added: @escaping @MainActor (Inlet.ID) async -> Void) {
@@ -31,17 +36,26 @@ final class AccountFlow {
     func discover() {
         finding?.cancel()
         let address = values[ProviderPresets.addressField] ?? ""
-        let preset = form?.preset?.values ?? [:]
         finding = Task {
-            let result = await DiscoveryEngine.values(for: address, using: discovery)
+            let result = await DiscoveryEngine.choices(for: address, using: discovery)
             guard !Task.isCancelled, !result.isEmpty, values[ProviderPresets.addressField] == address else { return }
-            for (key, value) in result {
-                let current = values[key] ?? ""
-                guard current.isEmpty || current == preset[key] || current == found[key] else { continue }
-                values[key] = value
-            }
             found = result
+            applyFound()
         }
+    }
+
+    private func applyFound() {
+        guard let preferred = found.first else { return }
+        let preset = form?.preset?.values ?? [:]
+        let untouched = { (key: String) in [nil, "", preset[key], self.filled[key]].contains(self.values[key]) }
+        let field = ProviderPresets.protocolField
+        let choice = untouched(field) ? preferred : (found.first { $0[field] == values[field] } ?? [:])
+        var next = values
+        for key in ProviderPresets.incomingFields.union(choice.keys) where untouched(key) {
+            next[key] = choice[key] ?? preset[key]
+        }
+        filled = choice
+        if next != values { values = next }
     }
 
     func choose(_ offer: Offer, values preset: [String: String]? = nil) async {
@@ -169,7 +183,8 @@ final class AccountFlow {
 
     func close() {
         finding?.cancel()
-        found = [:]
+        found = []
+        filled = [:]
         form = nil
         values = [:]
         failure = nil

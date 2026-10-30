@@ -11331,6 +11331,22 @@
         }
       }
     },
+    "hub.error.cancelled" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgebrochen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelled."
+          }
+        }
+      }
+    },
     "hub.error.duplicate" : {
       "localizations" : {
         "de" : {
@@ -11343,6 +11359,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "This address is already set up as an account."
+          }
+        }
+      }
+    },
+    "hub.error.keychain" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Passwort konnte nicht im Schlüsselbund gesichert werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The password could not be saved in the keychain."
           }
         }
       }
@@ -16611,6 +16643,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ trennen?"
+          }
+        }
+      }
+    },
+    "settings.disconnect.local" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Mails dieses POP-Kontos liegen nur auf diesem Mac und werden gelöscht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This POP account's mail exists only on this Mac and will be deleted."
           }
         }
       }

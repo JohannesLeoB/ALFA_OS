@@ -3869,12 +3869,17 @@ extension MailTests {
         fake.documents[directory] = nil
         fake.records["b.de/15"] = [Data([0, 20] + Self.name("mx2.other.net")), Data([0, 5] + Self.name("mx1.hoster.net"))]
         fake.documents[DiscoveryEngine.directory + "hoster.net"] = Self.config(incoming: "imap.hoster.net", outgoing: "smtp.hoster.net")
-        let values = await DiscoveryEngine.values(for: "a@b.de", using: fake)
+        let values = await DiscoveryEngine.choices(for: "a@b.de", using: fake).first ?? [:]
         XCTAssertEqual(values[ConnectionField.incomingHost], "imap.hoster.net")
         XCTAssertEqual(values[ConnectionField.outgoingPort], "587")
         XCTAssertEqual(values[ConnectionField.outgoingSecurity], "starttls")
+        let pop = await DiscoveryEngine.choices(for: "a@b.de", using: fake).last ?? [:]
+        XCTAssertEqual(pop[ConnectionField.incomingHost], "pop.x")
+        XCTAssertEqual(pop[ConnectionField.incomingPort], "995")
+        XCTAssertEqual(pop[ConnectionField.incomingProtocol], "pop3")
+        XCTAssertEqual(pop[ConnectionField.outgoingHost], "smtp.hoster.net")
         fake.records["b.de/15"] = nil
-        let none = await DiscoveryEngine.values(for: "a@b.de", using: fake)
+        let none = await DiscoveryEngine.choices(for: "a@b.de", using: fake)
         XCTAssertTrue(none.isEmpty)
     }
 }
@@ -4073,6 +4078,12 @@ extension MailTests {
         try await pop.trash(messageID: "a1", folderID: nil)
         let awaited5 = try await pop.listIDs(folderID: POPSMTPClient.inboxID, since: nil, limit: nil).ids
         XCTAssertEqual(awaited5, ["b2"])
+        let inTrash = try await pop.listIDs(folderID: POPSMTPClient.trashID, since: nil, limit: nil).ids
+        XCTAssertEqual(inTrash, ["a1"])
+        try await pop.move(messageID: "a1", toFolderID: POPSMTPClient.inboxID)
+        let restored = try await pop.listIDs(folderID: POPSMTPClient.inboxID, since: nil, limit: nil).ids
+        XCTAssertEqual(restored, ["b2", "a1"])
+        try await pop.trash(messageID: "a1", folderID: nil)
         XCTAssertTrue(server.deleted.with { $0 }.isEmpty)
         try await pop.expire(.deleted, now: clock.with { $0 })
         XCTAssertEqual(server.deleted.with { $0 }, ["a1"])
@@ -4101,6 +4112,9 @@ extension MailTests {
         try await pop.deleteDraft(id: again.id)
         let awaited10 = try await pop.listIDs(folderID: POPSMTPClient.draftsID, since: nil, limit: nil).ids.isEmpty
         XCTAssertTrue(awaited10)
+        try await pop.trash(messageID: "a1", folderID: nil)
+        let emptied = try await pop.listIDs(folderID: POPSMTPClient.trashID, since: nil, limit: nil).ids
+        XCTAssertTrue(emptied.isEmpty)
         do {
             try await pop.archive(messageID: "b2", folderID: nil)
             XCTFail("archived")
@@ -4119,7 +4133,7 @@ extension MailTests {
         rig.access.transport = POPSMTPClient(account: account, database: rig.database, password: { "pw" },
                                              opener: { _, _, _ in server.stream() })
         try await rig.mailbox.refreshFolders("a")
-        XCTAssertEqual(rig.mailbox.folders("a").map(\.role).filter { $0 != .starred }, [.inbox, .drafts, .sent])
+        XCTAssertEqual(rig.mailbox.folders("a").map(\.role).filter { $0 != .starred }, [.inbox, .drafts, .sent, .trash])
         try await rig.mailbox.refresh("a", folder: POPSMTPClient.inboxID)
         let cached = await rig.mailbox.cached("a", folder: POPSMTPClient.inboxID)
         XCTAssertEqual(cached.map(\.subject), ["eins"])

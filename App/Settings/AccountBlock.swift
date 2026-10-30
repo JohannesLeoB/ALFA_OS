@@ -67,9 +67,11 @@ struct AccountBlock: View {
 
     static func waiting(_ inlets: [Inlet.ID], context: SettingsContext, appearance: Appearance) -> String? {
         let count = inlets.reduce(0) { $0 + context.inbox.unsent($1) }
-        guard count > 0 else { return nil }
-        return count == 1 ? appearance.string("settings.disconnect.waiting.one")
+        let local = inlets.contains(where: context.inbox.inboxOnly) ? appearance.string("settings.disconnect.local") : nil
+        let unsent = count == 0 ? nil : count == 1 ? appearance.string("settings.disconnect.waiting.one")
             : appearance.format("settings.disconnect.waiting.other", Format.number(count))
+        let text = [local, unsent].compactMap { $0 }.joined(separator: " ")
+        return text.isEmpty ? nil : text
     }
 
     private func addAccount(kind: TextButtonKind) -> some View {

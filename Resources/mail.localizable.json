@@ -1109,6 +1109,10 @@
    "de": "Gesendet",
    "en": "Sent"
   },
+  "settings.disconnect.local": {
+   "de": "Die Mails dieses POP-Kontos liegen nur auf diesem Mac und werden gelöscht.",
+   "en": "This POP account's mail exists only on this Mac and will be deleted."
+  },
   "settings.disconnect.waiting.one": {
    "de": "Eine ungesendete Mail im Postausgang geht verloren.",
    "en": "One unsent mail in the outbox will be lost."

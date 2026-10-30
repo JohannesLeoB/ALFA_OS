@@ -3,6 +3,8 @@ import GRDB
 import Storage
 
 struct POPStore: Sendable {
+    static let columns = "uid, folder, head, snippet, attachments, seen, flagged, hidden, onServer, receivedAt, fetchedAt"
+
     let database: SQLiteStore
     let inlet: String
 
@@ -10,7 +12,7 @@ struct POPStore: Sendable {
         let inlet = inlet
         return (try? database.read { db in
             try Row.fetchAll(db, sql: """
-                SELECT * FROM mail_pop WHERE inlet = ? AND folder = ? AND hidden = 0 ORDER BY receivedAt DESC, uid DESC
+                SELECT \(Self.columns) FROM mail_pop WHERE inlet = ? AND folder = ? AND hidden = 0 ORDER BY receivedAt DESC, uid DESC
                 """, arguments: [inlet, folder]).map(Self.entry)
         }) ?? []
     }
@@ -18,7 +20,7 @@ struct POPStore: Sendable {
     func entry(_ uid: String) -> POPEntry? {
         let inlet = inlet
         return (try? database.read { db in
-            try Row.fetchOne(db, sql: "SELECT * FROM mail_pop WHERE inlet = ? AND uid = ?", arguments: [inlet, uid]).map(Self.entry)
+            try Row.fetchOne(db, sql: "SELECT \(Self.columns) FROM mail_pop WHERE inlet = ? AND uid = ?", arguments: [inlet, uid]).map(Self.entry)
         }) ?? nil
     }
 
@@ -65,6 +67,13 @@ struct POPStore: Sendable {
         }
     }
 
+    func place(_ uid: String, in folder: String) throws {
+        let inlet = inlet
+        try database.write { db in
+            try db.execute(sql: "UPDATE mail_pop SET folder = ?, hidden = 0 WHERE inlet = ? AND uid = ?", arguments: [folder, inlet, uid])
+        }
+    }
+
     func remove(_ uid: String) throws {
         let inlet = inlet
         try database.write { db in
@@ -86,7 +95,7 @@ struct POPStore: Sendable {
     func onServer() -> [POPEntry] {
         let inlet = inlet
         return (try? database.read { db in
-            try Row.fetchAll(db, sql: "SELECT * FROM mail_pop WHERE inlet = ? AND onServer = 1", arguments: [inlet]).map(Self.entry)
+            try Row.fetchAll(db, sql: "SELECT \(Self.columns) FROM mail_pop WHERE inlet = ? AND onServer = 1", arguments: [inlet]).map(Self.entry)
         }) ?? []
     }
 

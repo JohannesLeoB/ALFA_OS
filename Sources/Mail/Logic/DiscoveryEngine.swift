@@ -3,8 +3,8 @@ import Foundation
 public enum DiscoveryEngine {
     static let directory = "https://autoconfig.thunderbird.net/v1.1/"
 
-    public static func values(for address: String, using port: any DiscoveryPort) async -> [String: String] {
-        await servers(for: address, using: port)?.values ?? [:]
+    public static func choices(for address: String, using port: any DiscoveryPort) async -> [[String: String]] {
+        await servers(for: address, using: port)?.choices ?? []
     }
 
     static func servers(for address: String, using port: any DiscoveryPort) async -> FoundServers? {
@@ -76,7 +76,8 @@ public enum DiscoveryEngine {
             ?? records.3.map { ServerTemplate(host: $0.target, port: $0.port, security: .starttls) }
         guard let incoming, let outgoing else { return nil }
         return FoundServers(incoming: incoming, outgoing: outgoing, username: nil,
-                            incomingProtocol: imapIncoming == nil ? .pop3 : .imap)
+                            incomingProtocol: imapIncoming == nil ? .pop3 : .imap,
+                            alternative: imapIncoming == nil ? nil : popIncoming)
     }
 
     private static func service(_ name: String, port: any DiscoveryPort) async -> SRVRecord? {

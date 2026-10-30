@@ -3,6 +3,9 @@ public enum ProviderPresets {
         ConnectionField.address, ConnectionField.password, ConnectionField.incomingHost, ConnectionField.outgoingHost,
     ]
     public static let addressField = ConnectionField.address
+    public static let protocolField = ConnectionField.incomingProtocol
+    public static let incomingFields: Set<String> = [ConnectionField.incomingHost, ConnectionField.incomingPort,
+                                                     ConnectionField.incomingSecurity]
     public static let securityFields: Set<String> = [ConnectionField.incomingSecurity, ConnectionField.outgoingSecurity]
     public static let securityChoices: [String] = [TransportSecurity.ssl.rawValue, TransportSecurity.starttls.rawValue]
 
