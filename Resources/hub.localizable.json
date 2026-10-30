@@ -43,7 +43,11 @@
   },
   "settings.group.folders": {
    "de": "Dateiordner",
-   "en": "Folders"
+   "en": "File folders"
+  },
+  "settings.signOut.question": {
+   "de": "Abmelden?",
+   "en": "Sign out?"
   },
   "settings.imprint.row.author.prompt": {
    "de": "Name",

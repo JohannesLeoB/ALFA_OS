@@ -8200,7 +8200,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Edit signatures …"
+            "value" : "Edit Signatures …"
           }
         }
       }
@@ -8216,7 +8216,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No signature"
+            "value" : "No Signature"
           }
         }
       }
@@ -8586,7 +8586,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Draft not saved"
+            "value" : "Couldn’t save draft"
           }
         }
       }
@@ -9234,6 +9234,12 @@
             "state" : "translated",
             "value" : "Keine Treffer für „%@“ in %@."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No results for “%@” in %@."
+          }
         }
       }
     },
@@ -9296,6 +9302,12 @@
             "state" : "translated",
             "value" : "Zuletzt geladen %@."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last loaded %@."
+          }
         }
       }
     },
@@ -9307,6 +9319,12 @@
             "state" : "translated",
             "value" : "Der Server hat nicht geantwortet."
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The server didn’t respond."
+          }
         }
       }
     },
@@ -9317,6 +9335,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nachrichten werden geladen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading messages"
           }
         }
       }
@@ -9461,6 +9485,12 @@
             "state" : "translated",
             "value" : "%d von %d"
           }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d of %d"
+          }
         }
       }
     },
@@ -9535,7 +9565,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ more in the project folder"
+            "value" : "%@ more in project folder"
           }
         }
       }
@@ -9663,7 +9693,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Send again"
+            "value" : "Send Again"
           }
         }
       }
@@ -10604,13 +10634,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ältere Nachrichten konnten nicht geladen werden"
+            "value" : "Weitere Mails nicht geladen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Older messages could not be loaded"
+            "value" : "Couldn’t load more messages"
           }
         }
       }
@@ -10959,7 +10989,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Name in mail"
+            "value" : "Name in Mail"
           }
         }
       }
@@ -11872,7 +11902,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Folders"
+            "value" : "File folders"
           }
         }
       }
@@ -13543,6 +13573,22 @@
         }
       }
     },
+    "settings.signOut.question" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abmelden?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign out?"
+          }
+        }
+      }
+    },
     "settings.signature.above" : {
       "localizations" : {
         "de" : {
@@ -13586,7 +13632,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add signature"
+            "value" : "Add Signature"
           }
         }
       }
@@ -13634,7 +13680,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add to new mail"
+            "value" : "Place under new messages"
           }
         }
       }
@@ -13650,7 +13696,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Replies and forwards included"
+            "value" : "Including replies and forwards"
           }
         }
       }
@@ -13666,7 +13712,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Remove signature"
+            "value" : "Remove Signature"
           }
         }
       }

@@ -34,7 +34,7 @@ struct IdentityCard: View {
             SettingsRow(label: appearance.text("settings.identity.signOut"), line: false) {
                 ConfirmPill(
                     label: appearance.text("settings.identity.signOut.action"),
-                    question: appearance.text("settings.identity.signOut"),
+                    question: appearance.text("settings.signOut.question"),
                     yes: appearance.text("settings.identity.signOut.action"),
                     no: appearance.text("confirm.no"),
                     holdHint: Text(verbatim: appearance.format("settings.confirm.hold", appearance.string("settings.identity.signOut.action"))),

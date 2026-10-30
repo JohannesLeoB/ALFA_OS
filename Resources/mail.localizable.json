@@ -430,7 +430,8 @@
    "en": "in Settings"
   },
   "mail.list.emptySearch": {
-   "de": "Keine Treffer für „%@“ in %@."
+   "de": "Keine Treffer für „%@“ in %@.",
+   "en": "No results for “%@” in %@."
   },
   "mail.list.emptySearch.act": {
    "de": "Suche leeren",
@@ -445,16 +446,20 @@
    "en": "Try Again"
   },
   "mail.list.failed.last": {
-   "de": "Zuletzt geladen %@."
+   "de": "Zuletzt geladen %@.",
+   "en": "Last loaded %@."
   },
   "mail.list.failed.text": {
-   "de": "Der Server hat nicht geantwortet."
+   "de": "Der Server hat nicht geantwortet.",
+   "en": "The server didn’t respond."
   },
   "mail.list.loading": {
-   "de": "Nachrichten werden geladen"
+   "de": "Nachrichten werden geladen",
+   "en": "Loading messages"
   },
   "mail.list.progress": {
-   "de": "%d von %d"
+   "de": "%d von %d",
+   "en": "%d of %d"
   },
   "mail.list.noFilterMatch": {
    "de": "Keine Treffer für diesen Filter.",
@@ -494,7 +499,7 @@
   },
   "mail.menu.projectMore": {
    "de": "%@ weitere im Projektordner",
-   "en": "%@ more in the project folder"
+   "en": "%@ more in project folder"
   },
   "mail.overview.tip": {
    "de": "Übersicht · %@ Karten"
@@ -778,8 +783,8 @@
    "en": "Load more results"
   },
   "mail.toast.olderFailed": {
-   "de": "Ältere Nachrichten konnten nicht geladen werden",
-   "en": "Older messages could not be loaded"
+   "de": "Weitere Mails nicht geladen",
+   "en": "Couldn’t load more messages"
   },
   "mail.toast.moreFailed": {
    "de": "Weitere Treffer konnten nicht geladen werden",
@@ -813,7 +818,7 @@
   },
   "mail.draft.saveFailed.title": {
    "de": "Entwurf nicht gesichert",
-   "en": "Draft not saved"
+   "en": "Couldn’t save draft"
   },
   "mail.draft.saveFailed.server": {
    "de": "Der Server ist nicht erreichbar.",
@@ -913,7 +918,7 @@
   },
   "settings.account.name": {
    "de": "Name in Mail",
-   "en": "Name in mail"
+   "en": "Name in Mail"
   },
   "settings.account.name.prompt": {
    "de": "Name",
@@ -933,15 +938,15 @@
   },
   "settings.signature.create": {
    "de": "Signatur anlegen",
-   "en": "Add signature"
+   "en": "Add Signature"
   },
   "settings.signature.new": {
    "de": "Unter neue Mails setzen",
-   "en": "Add to new mail"
+   "en": "Place under new messages"
   },
   "settings.signature.new.sub": {
    "de": "Antworten und Weiterleitungen eingeschlossen",
-   "en": "Replies and forwards included"
+   "en": "Including replies and forwards"
   },
   "settings.signature.above": {
    "de": "Über zitiertem Text setzen",
@@ -949,15 +954,15 @@
   },
   "settings.signature.remove": {
    "de": "Signatur entfernen",
-   "en": "Remove signature"
+   "en": "Remove Signature"
   },
   "mail.compose.signature.none": {
    "de": "Keine Signatur",
-   "en": "No signature"
+   "en": "No Signature"
   },
   "mail.compose.signature.edit": {
    "de": "Signaturen bearbeiten …",
-   "en": "Edit signatures …"
+   "en": "Edit Signatures …"
   },
   "mail.folder.outbox": {
    "de": "Postausgang",
@@ -977,7 +982,7 @@
   },
   "mail.outbox.retry.tooltip": {
    "de": "Erneut senden",
-   "en": "Send again"
+   "en": "Send Again"
   },
   "mail.outbox.confirm.question": {
    "de": "Ungeprüft senden?",
