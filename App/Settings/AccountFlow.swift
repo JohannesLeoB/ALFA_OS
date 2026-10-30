@@ -1,5 +1,6 @@
 import Google
 import Hub
+import Mail
 import Observation
 
 @MainActor
@@ -16,10 +17,31 @@ final class AccountFlow {
     @ObservationIgnored private let added: @MainActor (Inlet.ID) async -> Void
     @ObservationIgnored private var running: Task<SetupFailure?, Never>?
     @ObservationIgnored private var cancelling = false
+    @ObservationIgnored private let discovery: any DiscoveryPort
+    @ObservationIgnored private var finding: Task<Void, Never>?
+    @ObservationIgnored private var found: [String: String] = [:]
 
-    init(setup: any SetupPort, added: @escaping @MainActor (Inlet.ID) async -> Void) {
+    init(setup: any SetupPort, discovery: any DiscoveryPort = DiscoveryClient(),
+         added: @escaping @MainActor (Inlet.ID) async -> Void) {
         self.setup = setup
+        self.discovery = discovery
         self.added = added
+    }
+
+    func discover() {
+        finding?.cancel()
+        let address = values[ProviderPresets.addressField] ?? ""
+        let preset = form?.preset?.values ?? [:]
+        finding = Task {
+            let result = await DiscoveryEngine.values(for: address, using: discovery)
+            guard !Task.isCancelled, !result.isEmpty, values[ProviderPresets.addressField] == address else { return }
+            for (key, value) in result {
+                let current = values[key] ?? ""
+                guard current.isEmpty || current == preset[key] || current == found[key] else { continue }
+                values[key] = value
+            }
+            found = result
+        }
     }
 
     func choose(_ offer: Offer, values preset: [String: String]? = nil) async {
@@ -146,6 +168,8 @@ final class AccountFlow {
     }
 
     func close() {
+        finding?.cancel()
+        found = [:]
         form = nil
         values = [:]
         failure = nil

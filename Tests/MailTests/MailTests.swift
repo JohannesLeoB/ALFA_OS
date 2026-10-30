@@ -3780,3 +3780,101 @@ extension MailTests {
         XCTAssertTrue(HTMLEngine.measureScript.contains("scale("))
     }
 }
+
+struct DiscoveryFake: DiscoveryPort {
+    var documents: [String: String] = [:]
+    var records: [String: [Data]] = [:]
+
+    func document(_ url: URL) async -> Data? { documents[url.absoluteString].map { Data($0.utf8) } }
+    func records(_ name: String, type: UInt16) async -> [Data] { records[name + "/" + String(type)] ?? [] }
+}
+
+extension MailTests {
+    static func config(incoming: String, outgoing: String, user: String = "%EMAILADDRESS%") -> String {
+        """
+        <clientConfig version="1.1"><emailProvider id="x">
+        <incomingServer type="pop3"><hostname>pop.x</hostname><port>995</port><socketType>SSL</socketType>
+        <username>\(user)</username><authentication>password-cleartext</authentication></incomingServer>
+        <incomingServer type="imap"><hostname>\(incoming)</hostname><port>993</port><socketType>plain</socketType>
+        <username>\(user)</username><authentication>password-cleartext</authentication></incomingServer>
+        <incomingServer type="imap"><hostname>\(incoming)</hostname><port>993</port><socketType>SSL</socketType>
+        <username>\(user)</username><authentication>OAuth2</authentication><authentication>password-cleartext</authentication></incomingServer>
+        <outgoingServer type="smtp"><hostname>\(outgoing)</hostname><port>587</port><socketType>STARTTLS</socketType>
+        <username>\(user)</username><authentication>password-cleartext</authentication></outgoingServer>
+        </emailProvider></clientConfig>
+        """
+    }
+
+    static func name(_ host: String) -> [UInt8] {
+        host.split(separator: ".").flatMap { [UInt8($0.utf8.count)] + Array($0.utf8) } + [0]
+    }
+
+    func testAutoconfigTakesFirstSecureIMAPAndSMTPWithPassword() {
+        let found = AutoconfigEngine.servers(Data(Self.config(incoming: "imap.%EMAILDOMAIN%", outgoing: "smtp.x").utf8),
+                                             address: "anna@beispiel.de")
+        XCTAssertEqual(found?.incoming, ServerTemplate(host: "imap.beispiel.de", port: 993, security: .ssl))
+        XCTAssertEqual(found?.outgoing, ServerTemplate(host: "smtp.x", port: 587, security: .starttls))
+        XCTAssertNil(found?.username)
+        let local = AutoconfigEngine.servers(Data(Self.config(incoming: "i.x", outgoing: "s.x", user: "%EMAILLOCALPART%").utf8),
+                                             address: "anna@beispiel.de")
+        XCTAssertEqual(local?.username, "anna")
+        XCTAssertEqual(local?.values[ConnectionField.username], "anna")
+        XCTAssertNil(AutoconfigEngine.servers(Data("<clientConfig/>".utf8), address: "a@b.de"))
+        XCTAssertNil(AutoconfigEngine.servers(Data("kein xml".utf8), address: "a@b.de"))
+    }
+
+    func testDNSRecordsDecodeMailExchangerAndService() {
+        let mx = DNSRecordEngine.mailExchanger(Data([0, 10] + Self.name("MX01.Kundenserver.de")))
+        XCTAssertEqual(mx?.preference, 10)
+        XCTAssertEqual(mx?.host, "mx01.kundenserver.de")
+        let srv = DNSRecordEngine.service(Data([0, 0, 0, 1, 3, 225] + Self.name("imap.fastmail.com")))
+        XCTAssertEqual(srv, SRVRecord(priority: 0, weight: 1, port: 993, target: "imap.fastmail.com"))
+        XCTAssertEqual(DNSRecordEngine.service(Data([0, 0, 0, 0, 0, 0, 0]))?.target, "")
+        XCTAssertNil(DNSRecordEngine.mailExchanger(Data([0, 10, 5, 97])))
+        XCTAssertNil(DNSRecordEngine.service(Data([0, 0, 0, 0, 0, 0, 0xC0, 12])))
+    }
+
+    func testDiscoveryDomainAndBases() {
+        XCTAssertEqual(DiscoveryEngine.domain(of: "Anna@Beispiel.DE"), "beispiel.de")
+        XCTAssertNil(DiscoveryEngine.domain(of: "anna@localhost"))
+        XCTAssertNil(DiscoveryEngine.domain(of: "@beispiel.de"))
+        XCTAssertNil(DiscoveryEngine.domain(of: "anna@bei/spiel.de"))
+        XCTAssertNil(DiscoveryEngine.domain(of: "a@b@c.de"))
+        XCTAssertEqual(DiscoveryEngine.bases(of: "mx01.kundenserver.de"), ["kundenserver.de"])
+        XCTAssertEqual(DiscoveryEngine.bases(of: "in1-smtp.messagingengine.com"), ["messagingengine.com"])
+        XCTAssertEqual(DiscoveryEngine.bases(of: "a.mail.example.co.uk"), ["mail.example.co.uk", "co.uk"])
+        XCTAssertEqual(DiscoveryEngine.ownURLs(domain: "b.de", address: "a@b.de").map(\.absoluteString), [
+            "https://autoconfig.b.de/mail/config-v1.1.xml?emailaddress=a@b.de",
+            "https://b.de/.well-known/autoconfig/mail/config-v1.1.xml"
+        ])
+    }
+
+    func testDiscoveryPrefersProviderThenSRVRecordsThenDirectoryThenMailExchanger() async {
+        let own = "https://autoconfig.b.de/mail/config-v1.1.xml?emailaddress=a@b.de"
+        let directory = DiscoveryEngine.directory + "b.de"
+        let srv = { (port: Int, host: String) in [Data([0, 0, 0, 0, UInt8(port >> 8), UInt8(port & 255)] + Self.name(host))] }
+        var fake = DiscoveryFake(documents: [own: Self.config(incoming: "own.b.de", outgoing: "own.b.de"),
+                                             directory: Self.config(incoming: "db.b.de", outgoing: "db.b.de")],
+                                 records: ["_imaps._tcp.b.de/33": srv(993, "srv.b.de"),
+                                           "_submission._tcp.b.de/33": srv(587, "srv.b.de")])
+        var found = await DiscoveryEngine.servers(for: " a@b.de ", using: fake)
+        XCTAssertEqual(found?.incoming.host, "own.b.de")
+        fake.documents[own] = nil
+        found = await DiscoveryEngine.servers(for: "a@b.de", using: fake)
+        XCTAssertEqual(found?.incoming, ServerTemplate(host: "srv.b.de", port: 993, security: .ssl))
+        XCTAssertEqual(found?.outgoing, ServerTemplate(host: "srv.b.de", port: 587, security: .starttls))
+        fake.records["_submission._tcp.b.de/33"] = nil
+        found = await DiscoveryEngine.servers(for: "a@b.de", using: fake)
+        XCTAssertEqual(found?.incoming.host, "db.b.de")
+        fake.documents[directory] = nil
+        fake.records["b.de/15"] = [Data([0, 20] + Self.name("mx2.other.net")), Data([0, 5] + Self.name("mx1.hoster.net"))]
+        fake.documents[DiscoveryEngine.directory + "hoster.net"] = Self.config(incoming: "imap.hoster.net", outgoing: "smtp.hoster.net")
+        let values = await DiscoveryEngine.values(for: "a@b.de", using: fake)
+        XCTAssertEqual(values[ConnectionField.incomingHost], "imap.hoster.net")
+        XCTAssertEqual(values[ConnectionField.outgoingPort], "587")
+        XCTAssertEqual(values[ConnectionField.outgoingSecurity], "starttls")
+        fake.records["b.de/15"] = nil
+        let none = await DiscoveryEngine.values(for: "a@b.de", using: fake)
+        XCTAssertTrue(none.isEmpty)
+    }
+}

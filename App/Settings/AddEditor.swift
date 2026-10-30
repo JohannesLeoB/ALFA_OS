@@ -63,6 +63,9 @@ struct AddEditor: View {
             }
         }
         .onAppear { focused = fields.first { !$0.secret && choices(of: $0) == nil }?.id }
+        .onChange(of: focused) { left, _ in
+            if left == ProviderPresets.addressField { flow.discover() }
+        }
     }
 
     @ViewBuilder
@@ -92,7 +95,9 @@ struct AddEditor: View {
             .foregroundStyle(appearance.color(\.ink))
             .autocorrectionDisabled()
             .focused($focused, equals: field.id)
-            .onSubmit { submit() }
+            .onSubmit {
+                if field.id == ProviderPresets.addressField, !ready { flow.discover() } else { submit() }
+            }
             .padding(.trailing, CGFloat(Tokens.Size.trailingTextInset))
             .frame(maxWidth: .infinity)
             .frame(height: CGFloat(Tokens.Spacing.step28))
