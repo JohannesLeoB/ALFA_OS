@@ -7,6 +7,7 @@ struct BodyEditor: NSViewRepresentable {
     @Environment(\.appearance) private var appearance
     let text: String
     let html: String?
+    var signature: String?
     let box: TextBox
     let change: (String, String?) -> Void
 
@@ -15,9 +16,16 @@ struct BodyEditor: NSViewRepresentable {
     }
 
     func makeNSView(context: Context) -> NSScrollView {
-        let scroll = NSTextView.scrollableTextView()
+        let scroll = NSScrollView()
         scroll.drawsBackground = false
-        guard let view = scroll.documentView as? NSTextView else { return scroll }
+        scroll.hasVerticalScroller = true
+        let view = SignatureTextView(frame: .zero)
+        view.isVerticallyResizable = true
+        view.isHorizontallyResizable = false
+        view.autoresizingMask = [.width]
+        view.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+        view.textContainer?.widthTracksTextView = true
+        scroll.documentView = view
         view.isRichText = true
         view.allowsUndo = true
         view.isContinuousSpellCheckingEnabled = true
@@ -28,6 +36,7 @@ struct BodyEditor: NSViewRepresentable {
         view.typingAttributes = base
         view.textStorage?.setAttributedString(content(html: html))
         view.delegate = context.coordinator
+        view.mark(signature, colors: appearance.colors)
         view.setAccessibilityLabel(appearance.string("mail.compose.body"))
         box.view = view
         DispatchQueue.main.async {
@@ -45,6 +54,7 @@ struct BodyEditor: NSViewRepresentable {
         guard let view = scroll.documentView as? NSTextView else { return }
         box.view = view
         if view.string != text { view.textStorage?.setAttributedString(content(html: html)) }
+        (view as? SignatureTextView)?.mark(signature, colors: appearance.colors)
     }
 
     private var base: [NSAttributedString.Key: Any] {
@@ -87,11 +97,59 @@ struct BodyEditor: NSViewRepresentable {
 
         func textDidChange(_ notification: Notification) {
             guard let view = notification.object as? NSTextView, let storage = view.textStorage else { return }
+            (view as? SignatureTextView)?.refresh()
             change(view.string, RichTextEngine.html(TextBox.paragraphs(storage)))
         }
 
         func textView(_ textView: NSTextView, doCommandBy selector: Selector) -> Bool {
             selector == #selector(NSResponder.insertNewline(_:)) ? box.continueList() : false
         }
+    }
+}
+
+final class SignatureTextView: NSTextView {
+    private var signature: String?
+    private var colors = Colors.light
+
+    func mark(_ text: String?, colors: Colors) {
+        self.colors = colors
+        guard text != signature else { return }
+        signature = text
+        refresh()
+    }
+
+    func refresh() {
+        guard let manager = layoutManager else { return }
+        let whole = NSRange(location: 0, length: (string as NSString).length)
+        manager.removeTemporaryAttribute(.foregroundColor, forCharacterRange: whole)
+        if let range = signatureRange {
+            let lines = (string as NSString).substring(with: range) as NSString
+            let first = lines.range(of: "\n")
+            let rest = first.location == NSNotFound ? NSRange(location: NSNotFound, length: 0)
+                : NSRange(location: range.location + first.location, length: range.length - first.location)
+            if rest.location != NSNotFound { manager.addTemporaryAttribute(.foregroundColor, value: color(colors.sheetInkTertiary), forCharacterRange: rest) }
+        }
+        needsDisplay = true
+    }
+
+    private var signatureRange: NSRange? {
+        guard let signature, !signature.isEmpty else { return nil }
+        let range = (string as NSString).range(of: signature, options: .backwards)
+        return range.location == NSNotFound ? nil : range
+    }
+
+    override func drawBackground(in rect: NSRect) {
+        super.drawBackground(in: rect)
+        guard let range = signatureRange, let manager = layoutManager else { return }
+        let glyph = manager.glyphIndexForCharacter(at: range.location)
+        let line = manager.lineFragmentRect(forGlyphAt: glyph, effectiveRange: nil)
+        let rule = NSRect(x: line.minX + textContainerOrigin.x, y: line.minY + textContainerOrigin.y - CGFloat(Tokens.Spacing.step8),
+                          width: CGFloat(Tokens.Spacing.step24), height: CGFloat(Tokens.Size.hairline))
+        color(colors.sheetLineStrong).setFill()
+        rule.fill()
+    }
+
+    private func color(_ value: ColorValue) -> NSColor {
+        NSColor(srgbRed: value.red, green: value.green, blue: value.blue, alpha: value.alpha)
     }
 }

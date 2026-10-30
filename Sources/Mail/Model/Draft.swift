@@ -13,7 +13,7 @@ public struct Draft: Codable, Sendable, Equatable {
     var messageID: String?
     public var receiptTo: String?
     public var from: Participant?
-    var signed: String?
+    public internal(set) var signed: String?
     var signatureOff = false
 
     public init(to: String? = nil, cc: String? = nil, bcc: String? = nil, subject: String, body: String,

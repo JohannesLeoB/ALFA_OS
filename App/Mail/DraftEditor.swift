@@ -115,7 +115,7 @@ struct DraftEditor: View {
     }
 
     private var bodySheet: some View {
-        BodyEditor(text: card.draft.body, html: card.draft.bodyHTML, box: box) { text, html in
+        BodyEditor(text: card.draft.body, html: card.draft.bodyHTML, signature: card.draft.signed, box: box) { text, html in
             inbox.setBody(card.id, text: text, html: html)
         }
             .frame(minHeight: CGFloat(Tokens.Size.composeTextMinHeight))
