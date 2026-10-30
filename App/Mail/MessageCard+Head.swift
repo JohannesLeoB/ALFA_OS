@@ -18,6 +18,11 @@ extension MessageCard {
 
         private var front: Bool { depth == 0 }
 
+        private var saving: Bool {
+            guard front, case .draft(let id) = ref else { return false }
+            return inbox.draft(id)?.state == .saving
+        }
+
         var body: some View {
             CardHeader(front: front, ink: ink) {
                 markView
@@ -29,7 +34,7 @@ extension MessageCard {
                 if case .message(let id) = ref, inbox.card(id)?.pinned == false {
                     CardHeadButton(help: appearance.string("mail.card.pin.tip"), glyph: .pin, ink: ink) { inbox.pin(id) }
                 }
-                CardHeadButton(help: appearance.string("card.close"), glyph: .close, ink: ink, fills: false) { close() }
+                CardHeadButton(help: appearance.string("card.close"), glyph: .close, ink: ink, fills: false, disabled: saving) { close() }
             }
         }
 

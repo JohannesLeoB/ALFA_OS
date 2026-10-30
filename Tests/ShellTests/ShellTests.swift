@@ -421,8 +421,6 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(CardStackEngine.tops(count: 3), [8, 52, 96])
         XCTAssertEqual(CardStackEngine.tops(count: 5), [8, 16, 60, 104, 148])
         XCTAssertEqual(CardStackEngine.tops(count: 2, start: 0), [0, 44])
-        XCTAssertEqual(CardStackEngine.spreadTops(count: 0), [])
-        XCTAssertEqual(CardStackEngine.spreadTops(count: 4), [0, 52, 104, 156])
         XCTAssertEqual(CardStackEngine.levelIndex(depth: 0), -1)
         XCTAssertEqual(CardStackEngine.levelIndex(depth: 2), 1)
         XCTAssertEqual(CardStackEngine.levelIndex(depth: 9), 4)

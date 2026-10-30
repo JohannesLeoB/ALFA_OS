@@ -11,10 +11,6 @@ public enum CardStackEngine {
         return result
     }
 
-    public static func spreadTops(count: Int) -> [Double] {
-        (0..<max(0, count)).map { Double($0) * Tokens.Size.stackFanStep }
-    }
-
     public static func levelIndex(depth: Int) -> Int {
         min(depth, Tokens.stackLight.count) - 1
     }

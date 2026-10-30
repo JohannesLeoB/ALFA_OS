@@ -10,6 +10,7 @@ struct CardHeadButton: View {
     var dim = true
     var fills = true
     var pressed = true
+    var disabled = false
     let action: () -> Void
     @State private var hovering = false
 
@@ -19,11 +20,12 @@ struct CardHeadButton: View {
             Glyph(glyph)
                 .frame(width: side, height: side)
                 .foregroundStyle(ink)
-                .opacity(hovering || !dim ? 1 : SheetValues.closeOpacity)
+                .opacity(disabled ? Tokens.Opacity.disabled : hovering || !dim ? 1 : SheetValues.closeOpacity)
                 .background(Circle().fill(hovering && fills ? appearance.color(\.hover) : Color.clear))
                 .contentShape(Circle())
         }
         .buttonStyle(PressScaleButtonStyle(scale: pressed ? SheetValues.pressScale : 1))
+        .disabled(disabled)
         .help(Text(verbatim: help))
         .accessibilityLabel(Text(verbatim: help))
         .onHover { hovering = $0 }
