@@ -280,6 +280,14 @@
   "settings.projectRoot.path": {
    "de": "%@ · %@",
    "en": "%@ · %@"
+  },
+  "settings.system.line": {
+   "de": "%@: %@",
+   "en": "%@: %@"
+  },
+  "settings.area.account": {
+   "de": "%@ · %@",
+   "en": "%@ · %@"
   }
  }
 }

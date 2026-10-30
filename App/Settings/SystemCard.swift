@@ -41,11 +41,15 @@ struct SystemCard: View {
     }
 
     private func copy() {
-        var lines = [appearance.string(SettingsLabel.version.key) + ": " + version]
-        if let branch { lines.append(appearance.string(SettingsLabel.branch.key) + ": " + branch) }
-        lines.append(appearance.string(SettingsLabel.database.key) + ": " + database)
+        var lines = [line(.version, version)]
+        if let branch { lines.append(line(.branch, branch)) }
+        lines.append(line(.database, database))
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(lines.joined(separator: "\n"), forType: .string)
         state.notify("settings.toast.copied")
+    }
+
+    private func line(_ label: SettingsLabel, _ value: String) -> String {
+        appearance.format("settings.system.line", appearance.string(label.key), value)
     }
 }

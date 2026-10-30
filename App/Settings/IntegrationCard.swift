@@ -235,7 +235,7 @@ struct IntegrationCard: View {
     private func areaLabel(_ area: AreaReading, shared: Bool) -> Text {
         let name = appearance.string(info.areaKey(area.area))
         guard shared, !area.account.isEmpty else { return Text(verbatim: name) }
-        return Text(verbatim: name + " · " + area.account)
+        return Text(verbatim: appearance.format("settings.area.account", name, area.account))
     }
 
     private func syncNow(_ area: AreaReading) {
@@ -282,14 +282,14 @@ struct IntegrationCard: View {
 enum SettingsDates {
     static func relative(_ date: Date, now: Date = Date()) -> String {
         let formatter = RelativeDateTimeFormatter()
-        formatter.locale = Locale(identifier: "de")
+        formatter.locale = .current
         formatter.unitsStyle = .full
         return formatter.localizedString(for: date, relativeTo: now)
     }
 
     static func day(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de")
+        formatter.locale = .current
         formatter.setLocalizedDateFormatFromTemplate("dMMM")
         return formatter.string(from: date)
     }
