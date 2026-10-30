@@ -34,7 +34,7 @@ public enum CadenceChoice: String, CaseIterable, Sendable {
     }
 
     public static func offered(for capability: Capability) -> [CadenceChoice] {
-        if capability == .mail { return [.automatic, .minutes5, .minutes15, .minutes30, .hour1, .manual] }
+        if capability == .mail { return [.automatic, .minute1, .minutes5, .minutes15, .minutes30, .hour1, .manual] }
         return allCases.filter { $0 != .automatic }
     }
 

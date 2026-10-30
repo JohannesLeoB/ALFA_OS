@@ -1306,7 +1306,7 @@ final class HubTests: XCTestCase {
         for choice in CadenceChoice.allCases { XCTAssertEqual(CadenceChoice(choice.cadence), choice) }
         XCTAssertNil(CadenceChoice(.every(.seconds(7))))
         XCTAssertEqual(CadenceChoice(.push), .automatic)
-        XCTAssertEqual(CadenceChoice.offered(for: .mail), [.automatic, .minutes5, .minutes15, .minutes30, .hour1, .manual])
+        XCTAssertEqual(CadenceChoice.offered(for: .mail), [.automatic, .minute1, .minutes5, .minutes15, .minutes30, .hour1, .manual])
         XCTAssertFalse(CadenceChoice.offered(for: .calendar).contains(.automatic))
         XCTAssertEqual(CadenceChoice.minutes5.cadence, .every(.seconds(300)))
         XCTAssertEqual(Set(CadenceChoice.allCases.map(\.key)).count, CadenceChoice.allCases.count)
