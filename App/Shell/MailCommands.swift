@@ -29,6 +29,9 @@ struct MailCommands: Commands {
             item(titleKey: fanned ? "mail.action.backToStack" : "mail.action.overview", shortcut: nil,
                  enabled: allows(fanned ? .backToStack : .overview)) { target?.perform(fanned ? .backToStack : .overview) }
             item(titleKey: "mail.action.foldColumn", shortcut: nil, enabled: allows(.foldColumn)) { target?.perform(.foldColumn) }
+            Toggle(isOn: unreadOnly) { Text(LocalizedStringKey("mail.filter.unread")) }
+                .keyboardShortcut("l", modifiers: .command)
+                .disabled(session == nil)
         }
         CommandMenu(LocalizedStringKey("shell.menu.mailbox")) {
             item(titleKey: "shell.menu.fetchAll", shortcut: KeyboardShortcut("n", modifiers: [.command, .shift]), enabled: session != nil && session?.syncing == false) { fetch() }
@@ -41,12 +44,19 @@ struct MailCommands: Commands {
             item(titleKey: "mail.action.replyAll", shortcut: KeyboardShortcut("r", modifiers: [.command, .shift]), enabled: allows(.replyAll)) { target?.perform(.replyAll) }
             item(titleKey: "mail.action.forward", shortcut: KeyboardShortcut("f", modifiers: [.command, .shift]), enabled: allows(.forward)) { target?.perform(.forward) }
             item(titleKey: "mail.action.send", shortcut: KeyboardShortcut("d", modifiers: [.command, .shift]), enabled: allows(.send)) { target?.perform(.send) }
+            item(titleKey: "mail.action.attachFile", shortcut: KeyboardShortcut("a", modifiers: [.command, .shift]), enabled: allows(.attachFile)) {
+                target?.perform(.attachFile)
+            }
             Divider()
             item(titleKey: target?.read == false ? "mail.action.markRead" : "mail.action.markUnread", shortcut: KeyboardShortcut("u", modifiers: [.command, .shift]),
                  enabled: target?.isMessage == true) { target?.perform(target?.read == false ? .markRead : .markUnread) }
             item(titleKey: target?.starred == true ? "mail.action.unstar" : "mail.action.star", shortcut: KeyboardShortcut("l", modifiers: [.command, .shift]),
                  enabled: target?.isMessage == true) { target?.perform(target?.starred == true ? .unstar : .star) }
         }
+    }
+
+    private var unreadOnly: Binding<Bool> {
+        Binding(get: { session?.inbox.filter == .unread }, set: { session?.inbox.setFilter($0 ? .unread : .all) })
     }
 
     private func allows(_ action: Action) -> Bool {
