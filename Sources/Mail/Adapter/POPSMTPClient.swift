@@ -37,7 +37,7 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
     func listMessages(folderID: String, query: String?, pageToken: String?, maxResults: Int) async throws -> MessagePage {
         let limit = max(1, maxResults)
         let text = query?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() ?? ""
-        let all = store.entries(folderID).map { $0.summary() }.filter { summary in
+        let all = store.entries(folderID).map { Self.summary($0) }.filter { summary in
             text.isEmpty || [summary.subject, summary.fromRaw, summary.toRaw, summary.snippet]
                 .contains { $0.lowercased().contains(text) }
         }
@@ -104,7 +104,7 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
     func markSpam(messageID: String, folderID: String?) async throws { throw MailFailure.unsupportedCapability("spam") }
 
     func fetchThread(messageID: String, threadID: String) async throws -> [MessageSummary] {
-        (store.entries(Self.inboxID) + store.entries(Self.sentID)).map { $0.summary() }.filter { $0.threadID == threadID }
+        (store.entries(Self.inboxID) + store.entries(Self.sentID)).map { Self.summary($0) }.filter { $0.threadID == threadID }
     }
 
     func saveDraft(_ draft: Draft, replacing draftID: String?, into folderID: String?) async throws -> SavedDraft {
@@ -187,6 +187,16 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
         try store.insert(entry, raw: data)
     }
 
+    static func summary(_ entry: POPEntry) -> MessageSummary {
+        let parsed = RawMessageEngine.parse(entry.head)
+        var summary = RawMessageEngine.summary(parsed, id: entry.uid, folder: entry.folder, flags: entry.flags,
+                                               received: entry.receivedAt)
+        summary.snippet = entry.snippet
+        summary.attachments = entry.attachments
+        summary.attachmentCount = entry.attachments.count
+        return summary
+    }
+
     static func headEnd(_ data: Data) -> Int {
         let bytes = [UInt8](data)
         var index = 0
@@ -226,5 +236,178 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
         let value = try await password()
         guard !value.isEmpty else { throw MailFailure.credentialsMissing }
         return value
+    }
+}
+
+extension POPSMTPClient: MirrorPort {
+    var ranges: [MailboxRange] { MailboxRange.allCases }
+
+    func startCursor() async throws -> String? { nil }
+
+    func listIDs(folderID: String, since: Date?, limit: Int?) async throws -> MirrorListing {
+        var waiting: [String] = []
+        if folderID == Self.inboxID {
+            let known = store.known()
+            let listed = try await withSession { try await $0.identifiers() }
+            try store.leftServer(Set(store.onServer().map(\.uid)).subtracting(listed.map(\.uid)))
+            waiting = listed.filter { !known.contains($0.uid) }.sorted { $0.number > $1.number }.map(\.uid)
+        }
+        let local = store.entries(folderID).filter { entry in since.map { entry.receivedAt >= $0 } ?? true }.map(\.uid)
+        var ids = waiting + local
+        var older = false
+        if let limit, ids.count > limit {
+            ids = Array(ids.prefix(limit))
+            older = true
+        } else if since != nil {
+            older = store.entries(folderID).count > local.count
+        }
+        return MirrorListing(ids: ids, hasOlder: older)
+    }
+
+    func fetchSummaries(folderID: String, ids: [String]) async throws -> [MessageSummary] {
+        let missing = ids.filter { store.entry($0) == nil }
+        if folderID == Self.inboxID, !missing.isEmpty {
+            try await withSession { session in
+                let numbers = Dictionary(try await session.identifiers().map { ($0.uid, $0.number) }) { first, _ in first }
+                for uid in missing {
+                    guard let number = numbers[uid] else { continue }
+                    try keep(try await session.retrieve(number), uid: uid, folder: Self.inboxID, seen: false, onServer: true)
+                }
+            }
+        }
+        return ids.compactMap { store.entry($0) }.filter { !$0.hidden && $0.folder == folderID }.map { Self.summary($0) }
+    }
+
+    func refreshFlags(folderID: String, known: [String], cursor: String?) async throws -> FlagRefresh {
+        var flags: [String: Set<Flag>] = [:]
+        for id in known {
+            guard let entry = store.entry(id), !entry.hidden else { continue }
+            flags[id] = entry.flags
+        }
+        return FlagRefresh(flags: flags)
+    }
+}
+
+actor POPSession {
+    private static let implicitPort = 995
+    private static let explicitPort = 110
+    private static let lineLimit = 2_000_000
+
+    private let reader: StreamBuffer
+    private(set) var capabilities: [String] = []
+
+    private init(reader: StreamBuffer) {
+        self.reader = reader
+    }
+
+    static func open(settings: ServerSettings, opener: StreamOpener = StreamRouter.open) async throws -> POPSession {
+        guard settings.security != .none else { throw MailFailure.tlsUnavailable }
+        let port = settings.port ?? (settings.security == .ssl ? implicitPort : explicitPort)
+        let stream = try await opener(settings.host, port, settings.security)
+        let session = POPSession(reader: StreamBuffer(stream: stream))
+        do {
+            _ = try await session.status()
+            try await session.loadCapabilities()
+            if settings.security == .starttls {
+                guard await session.capabilities.contains(where: { $0.uppercased() == "STLS" }) else {
+                    throw MailFailure.tlsUnavailable
+                }
+                _ = try await session.command("STLS")
+                try await session.reader.upgradeToTLS()
+                try await session.loadCapabilities()
+            }
+        } catch {
+            await session.close()
+            throw error
+        }
+        return session
+    }
+
+    func authenticate(user: String, secret: String) async throws {
+        let sasl = capabilities.first { $0.uppercased().hasPrefix("SASL ") }?.uppercased().split(separator: " ") ?? []
+        do {
+            if sasl.contains("PLAIN") {
+                _ = try await command("AUTH PLAIN " + Data("\0\(user)\0\(secret)".utf8).base64EncodedString())
+            } else {
+                _ = try await command("USER " + user)
+                _ = try await command("PASS " + secret)
+            }
+        } catch MailFailure.serverRejected(let text) {
+            throw MailFailure.authenticationRejected(text)
+        }
+    }
+
+    func identifiers() async throws -> [(number: Int, uid: String)] {
+        _ = try await command("UIDL")
+        return try await multiline().compactMap { line in
+            let words = MIME.string(from: line, charset: nil).split(separator: " ")
+            guard words.count >= 2, let number = Int(words[0]) else { return nil }
+            return (number, String(words[1]))
+        }
+    }
+
+    func top(_ number: Int, lines: Int) async throws -> Data {
+        _ = try await command("TOP \(number) \(lines)")
+        return Self.joined(try await multiline())
+    }
+
+    func retrieve(_ number: Int) async throws -> Data {
+        _ = try await command("RETR \(number)")
+        return Self.joined(try await multiline())
+    }
+
+    func delete(_ number: Int) async throws {
+        _ = try await command("DELE \(number)")
+    }
+
+    func quit() async {
+        _ = try? await command("QUIT")
+        await close()
+    }
+
+    func close() async {
+        await reader.close()
+    }
+
+    private func loadCapabilities() async throws {
+        do {
+            _ = try await command("CAPA")
+            capabilities = try await multiline().map { MIME.string(from: $0, charset: nil) }
+        } catch MailFailure.serverRejected {
+            capabilities = []
+        }
+    }
+
+    private func command(_ line: String) async throws -> String {
+        guard !line.contains("\r"), !line.contains("\n") else { throw MailFailure.malformedResponse("popCommand") }
+        try await reader.write(Data((line + "\r\n").utf8))
+        return try await status()
+    }
+
+    private func status() async throws -> String {
+        let line = MIME.string(from: try await reader.readLine(), charset: nil)
+        if line.hasPrefix("+OK") { return String(line.dropFirst(3)).trimmingCharacters(in: .whitespaces) }
+        if line.hasPrefix("-ERR") { throw MailFailure.serverRejected(String(line.dropFirst(4)).trimmingCharacters(in: .whitespaces)) }
+        throw MailFailure.malformedResponse("popStatus")
+    }
+
+    private func multiline() async throws -> [Data] {
+        var lines: [Data] = []
+        while true {
+            var line = try await reader.readLine()
+            if line == Data([46]) { return lines }
+            if line.first == 46 { line = line.dropFirst() }
+            lines.append(Data(line))
+            if lines.count > Self.lineLimit { throw MailFailure.malformedResponse("popLength") }
+        }
+    }
+
+    static func joined(_ lines: [Data]) -> Data {
+        var data = Data()
+        for line in lines {
+            data.append(line)
+            data.append(contentsOf: [13, 10])
+        }
+        return data
     }
 }
