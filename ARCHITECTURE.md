@@ -41,7 +41,8 @@ DESIGN/                  latest and previous design master (ZIP) and MANIFEST.js
 ```
 
 - Module names (check): Core, Design, Shell, Storage, Hub, Assistant, Mail, Calculation, Catalog, Project, Today, Survey, and the integrations above. Catalog, Project, Today and Survey are reserved for later; no code exists for them.
-- A module holds only the subfolders below, no files directly (check). Each subfolder holds Swift files directly (check).
+- A module holds Swift files directly, one file per function (check: Swift files or the role folders below). The role folders below are being dissolved module by module (Johannes 30.10.); while a module still has them, each holds Swift files directly and the table applies (check).
+- A Swift file in `App` or `Sources` has at most 800 lines (check); 200 to 600 is the aim, and a file is split by sub-function, never into one type per file (reviewed).
 
 | Folder | Content | Rule |
 |---|---|---|
@@ -55,7 +56,7 @@ DESIGN/                  latest and previous design master (ZIP) and MANIFEST.js
 
 ### Names
 
-- One main type per file; the file name is the type name. `utils/check.py` requires only that the file declares some type of that name (check, partial). A file `Type+Aspect.swift` contains a top-level extension of `Type` (check). Other types in the file are small private or nested companions (reviewed).
+- One file per function: the file is named after the function it serves (for example POPMail or InboxRows) and holds its types, extensions and `private` helpers together (reviewed). Files still in a role folder keep the old rule until their module is merged: the file name is a type name it declares, and `Type+Aspect.swift` contains a top-level extension of `Type` (check).
 - ASCII outside strings and CamelCase file and type names (check). Identifiers are English and carry no module prefix; a domain prefix only where a name collides with Swift or SDK names (reviewed).
 - Forbidden name words: Manager, Helper, Helpers, Util, Utils, Utility, Utilities, Service, Services, Handler, Impl, Base, Common, Misc, New, Old, version numbers such as V2, and trailing digits (check for file names and for struct, class, enum, protocol, actor and typealias names; properties, functions and cases are reviewed). `Base64` is the one allowed digit name.
 - Role suffixes:
@@ -74,7 +75,7 @@ DESIGN/                  latest and previous design master (ZIP) and MANIFEST.js
 | `Failure` | error enum of a module | Model |
 | `State` | UI state | State (or Model) |
 
-- Folder placement of Client, Engine, Failure, Parser, Port, Store, Tool and State names is checked; the folders Port, Tool (also Registry), Store and State accept only their own suffix; `Type+Aspect.swift` files are exempt (check).
+- In the remaining role folders, placement of Client, Engine, Failure, Parser, Port, Store, Tool and State names is checked; the folders Port, Tool (also Registry), Store and State accept only their own suffix; `Type+Aspect.swift` files are exempt (check). Files directly in a module have no placement rule.
 - View names in `App` are named after the thing, Apple style: `MessageRow`, `DraftEditor`, `InboxLane`, `SettingsCard`. The `View` suffix is used only where a model has the same name. `ButtonStyle`, `ToggleStyle` and `Layout` conformances end in the protocol name. `View+Aspect.swift` holds a private `ViewModifier` and a `View` method.
 - View suffixes (Row, List, Detail, Card, Lane, Button, Editor, ButtonStyle, ToggleStyle, Layout) are not used in `Sources`; the suffixes Client, Store, Engine, Router, Parser, Registry, Tool, Port and Failure are not used in `App` (check).
 - `Tests` holds one folder `<Module>Tests` per module with exactly the file `<Module>Tests.swift` (check).

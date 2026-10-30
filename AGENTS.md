@@ -4,8 +4,8 @@ Rules for every change to this repository. The schema lives in [ARCHITECTURE.md]
 
 ## Schema
 
-- Folders: `App/<Feature>`, `Sources/<Module>/{Model,Logic,Port,Adapter,State,Store,Tool}`, `Sources/Integrations/<Service>`, `Tests/<Module>Tests`.
-- One main type per file, file name = type name (reviewed; check.py requires only one type of that name). Role suffix decides the folder (check): Client in Adapter, Engine in Logic, Store in Store, Port in Port, Tool in Tool, State in State, Failure in Model.
+- Folders: `App/<Feature>`, `Sources/<Module>`, `Sources/Integrations/<Service>`, `Tests/<Module>Tests`. Swift files sit directly in the module; the old role folders `{Model,Logic,Port,Adapter,State,Store,Tool}` are dissolved module by module and keep their placement rule until then (check).
+- One file per function, not per type (Johannes 30.10.): a file holds what one function needs, for example one POP mail file with client, session, store and entries; helpers are `private` inside; the file is named after the function. Aim for 200 to 600 lines, at most 800 (check); split by sub-function, never one type per file. Role suffixes (Client, Engine, Store, Port, Tool, State, Failure) name types, not folders.
 - Manager, Helper, Util, Service, Handler, Impl, Base, Common, Misc, New, Old and number suffixes are not used in names (check for file and type names).
 - `internal` by default; `public` when another module calls it. Remove code with no caller.
 
