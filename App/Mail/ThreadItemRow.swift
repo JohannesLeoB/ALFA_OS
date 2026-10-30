@@ -171,7 +171,7 @@ struct QuoteToggle: View {
     var body: some View {
         Button(action: action) {
             label
-                .font(.face(Tokens.TextSize.small, weight: Tokens.Weight.medium))
+                .typeStyle(Tokens.TextStyle.control)
                 .foregroundStyle(appearance.color(\.sheetInkSecondary))
                 .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
                 .frame(height: CGFloat(Tokens.Size.chipHeight))

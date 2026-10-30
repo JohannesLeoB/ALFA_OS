@@ -223,7 +223,7 @@ struct InboxRow: View {
             queuedActions
         } else if hovering && !picking && !item.draft {
             HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
-                rowAction(item.starred ? "mail.action.unstar" : "mail.action.star", glyph: .flag, tone: item.starred ? tone.primary : \.inkTertiary) {
+                rowAction(item.starred ? "mail.action.unstar" : "mail.action.star", glyph: .flag, tone: tone.secondary) {
                     session.perform(item.starred ? .unstar : .star, message: item.id)
                 }
                 rowAction(item.unread ? "mail.action.markRead" : "mail.action.markUnread", glyph: .envelope, tone: tone.secondary) {

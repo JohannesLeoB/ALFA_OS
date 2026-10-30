@@ -111,9 +111,10 @@ struct OverviewTile: View {
             }
             .padding(CGFloat(Tokens.Spacing.step8))
             .opacity(hot ? 1 : 0)
+            .animation(appearance.ease(Tokens.Duration.chevron, SheetValues.cssEase), value: hot)
             .offset(y: hot ? 0 : Tokens.Size.overviewActionsOffset)
+            .animation(appearance.ease(Tokens.Duration.tileHover), value: hot)
             .allowsHitTesting(hot)
-            .animation(appearance.ease(Tokens.Duration.tileActions), value: hot)
         }
     }
 }
