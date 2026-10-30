@@ -15,7 +15,7 @@ struct SectionRow: View {
         let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row))
         let ink = InkSet.of(selected)
         Button(action: action) {
-            MessageRow(fill: selected ? appearance.color(\.ink) : (hovering ? appearance.color(\.lane) : Color.clear),
+            MessageRow(fill: selected ? appearance.color(\.inverse) : (hovering ? appearance.color(\.lane) : Color.clear),
                        ring: hovering && !selected ? appearance.color(\.lineStrong) : nil, separated: separated) {
                 Mark(inverted: selected) { Text(verbatim: String(appearance.string(section.key).prefix(1))) }
             } content: {
@@ -23,7 +23,7 @@ struct SectionRow: View {
                     appearance.text(section.key)
                         .lineLimit(1)
                         .font(.face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
-                        .foregroundStyle(appearance.color(selected ? \.lane : \.ink))
+                        .foregroundStyle(appearance.color(selected ? \.onInverse : \.ink))
                     Spacer(minLength: 0)
                     if let value {
                         Text(verbatim: value)

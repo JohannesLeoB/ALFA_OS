@@ -27,7 +27,7 @@ struct SignatureBlock: View {
                              labelKey: "settings.signature.above")
             }
             SettingsRow(label: Text(verbatim: ""), line: false) {
-                TextButton(label: appearance.text("settings.signature.remove")) { state.removeSignature(for: inlet.id) }
+                TextButton(label: appearance.text("settings.signature.remove"), kind: .plain) { state.removeSignature(for: inlet.id) }
             }
         } else {
             BlockNote(text: appearance.text("settings.signature.empty"))

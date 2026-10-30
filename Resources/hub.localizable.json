@@ -252,6 +252,26 @@
   "settings.signOut.done": {
    "de": "Abgemeldet · die App startet neu",
    "en": "Signed out · the app restarts"
+  },
+  "settings.section.folders": {
+   "de": "Ordnerschema",
+   "en": "Folder scheme"
+  },
+  "settings.section.folders.detail": {
+   "de": "",
+   "en": ""
+  },
+  "settings.section.keyInventory.detail": {
+   "de": "",
+   "en": ""
+  },
+  "settings.section.privacy.detail": {
+   "de": "",
+   "en": ""
+  },
+  "settings.section.contacts.detail": {
+   "de": "",
+   "en": ""
   }
  }
 }

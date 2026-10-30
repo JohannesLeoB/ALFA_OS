@@ -55,7 +55,7 @@ struct AccountBlock: View {
                     .rowPill()
                 }
             }
-            SettingsRow(label: appearance.text("text.settings.action.addAccount")) {
+            SettingsRow(label: Text(verbatim: ""), line: false) {
                 addAccount(kind: .neutral)
             }
         }

@@ -17848,13 +17848,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gesichert und vorgeschlagen"
+            "value" : ""
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saved and suggested"
+            "value" : ""
           }
         }
       }
@@ -17864,13 +17864,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dateiordner"
+            "value" : "Ordnerschema"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "File folders"
+            "value" : "Folder scheme"
           }
         }
       }
@@ -17880,13 +17880,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ordnerschema, Einrichtung im geteilten Drive"
+            "value" : ""
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Folder scheme, setup in the shared Drive"
+            "value" : ""
           }
         }
       }
@@ -17969,7 +17969,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nur Zustand, keine Werte"
+            "value" : ""
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
           }
         }
       }
@@ -17989,13 +17995,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Was die App lädt und teilt"
+            "value" : ""
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "What the app loads and shares"
+            "value" : ""
           }
         }
       }
