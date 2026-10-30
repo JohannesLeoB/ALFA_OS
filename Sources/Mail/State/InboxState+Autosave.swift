@@ -72,10 +72,11 @@ extension InboxState {
 
     public func flushDrafts(within limit: Duration) async {
         let pending = drafts.filter { $0.state == .edited && !Self.blank($0.draft) }.map(\.id)
-        guard !pending.isEmpty else { return }
+        guard !pending.isEmpty || !heldSends.isEmpty else { return }
         for id in pending { keepLocal(id) }
         let finished = AsyncStream<Void>.makeStream()
         Task { @MainActor in
+            await self.releaseHeldSends()
             for id in pending { await self.autosave(id) }
             finished.continuation.yield()
         }

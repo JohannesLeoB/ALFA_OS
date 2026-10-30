@@ -4,6 +4,7 @@ import Calculation
 import ClickUp
 import Clockodo
 import Core
+import Design
 import Foundation
 import Google
 import Hub
@@ -72,7 +73,8 @@ final class Assembly {
                                    })
         let inbox = InboxState(mailbox: mailbox, outbox: outbox, contacts: ContactState(defaults: defaults),
                                directory: ContactSourceState(settings: settingStore),
-                               signatures: { [settings] inlet in settings.signature(inlet) })
+                               signatures: { [settings] inlet in settings.signature(inlet) },
+                               sendHold: .seconds(Tokens.Duration.toastUndo))
 
         let receipts = ReceiptStore(database: database)
         try receipts.adopt(legacy: defaults)

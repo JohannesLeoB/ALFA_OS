@@ -47,6 +47,7 @@ public final class InboxState {
     var toastSerial = 0
     @ObservationIgnored var undoAction: (@MainActor () async -> Void)?
     @ObservationIgnored var sendAfterSave: Set<UUID> = []
+    @ObservationIgnored var heldSends: [UUID: Task<Void, Never>] = [:]
     @ObservationIgnored var autosaveSerials: [UUID: Int] = [:]
     @ObservationIgnored var autosaveTicking: Set<UUID> = []
 
@@ -64,13 +65,14 @@ public final class InboxState {
     let clock: @Sendable () -> Date
     let autosavePause: Duration
     let autosaveInterval: Duration
+    let sendHold: Duration
     let signatures: @MainActor (Inlet.ID) -> MailboxSignature?
 
     public init(mailbox: any MailboxPort, outbox: any OutboxPort, contacts: ContactState,
                 directory: ContactSourceState = ContactSourceState(),
                 clock: @escaping @Sendable () -> Date = { Date() },
                 signatures: @escaping @MainActor (Inlet.ID) -> MailboxSignature? = { _ in nil },
-                autosavePause: Duration? = nil, autosaveInterval: Duration? = nil) {
+                autosavePause: Duration? = nil, autosaveInterval: Duration? = nil, sendHold: Duration = .zero) {
         self.mailbox = mailbox
         self.outboxPort = outbox
         self.contacts = contacts
@@ -79,6 +81,7 @@ public final class InboxState {
         self.signatures = signatures
         self.autosavePause = autosavePause ?? AutosaveEngine.pause
         self.autosaveInterval = autosaveInterval ?? AutosaveEngine.interval
+        self.sendHold = sendHold
     }
 
     public var now: Date { clock() }

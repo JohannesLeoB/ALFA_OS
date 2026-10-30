@@ -5,7 +5,9 @@ import Shell
 extension InboxState {
     var visibleStack: [CardRef] {
         stack.filter { ref in
-            if case .draft(let id) = ref, draft(id)?.state == .sent { return false }
+            if case .draft(let id) = ref, draft(id)?.state == .sent || (draft(id)?.state == .sending && isHeld(id)) {
+                return false
+            }
             return true
         }
     }

@@ -3878,3 +3878,46 @@ extension MailTests {
         XCTAssertTrue(none.isEmpty)
     }
 }
+
+extension MailTests {
+    @MainActor
+    func testHeldSendCanBeRecalledAndGoesOutAfterTheHold() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                               autosavePause: .seconds(60), autosaveInterval: .seconds(60), sendHold: .milliseconds(300))
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.to = "x@y.de"; $0.subject = "s" }
+        await state.send(id)
+        XCTAssertEqual(state.draft(id)?.state, .sending)
+        XCTAssertEqual(state.toast?.kind, .outboxSent)
+        XCTAssertEqual(state.toast?.undoable, true)
+        XCTAssertFalse(state.stackOrder.contains(.draft(id)))
+        XCTAssertEqual(rig.outbox.keptDrafts.count, 1)
+        await state.undoToast()
+        XCTAssertEqual(state.draft(id)?.state, .edited)
+        XCTAssertTrue(state.stackOrder.contains(.draft(id)))
+        try await Task.sleep(for: .milliseconds(600))
+        XCTAssertEqual(state.draft(id)?.state, .edited)
+        await state.send(id)
+        try await Task.sleep(for: .milliseconds(900))
+        XCTAssertEqual(state.draft(id)?.state, .sent)
+        XCTAssertTrue(rig.outbox.keptDrafts.isEmpty)
+    }
+
+    @MainActor
+    func testQuittingSendsAHeldMailAtOnce() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                               autosavePause: .seconds(60), autosaveInterval: .seconds(60), sendHold: .seconds(60))
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.to = "x@y.de"; $0.subject = "s" }
+        await state.send(id)
+        XCTAssertEqual(state.draft(id)?.state, .sending)
+        await state.flushDrafts(within: .seconds(5))
+        XCTAssertEqual(state.draft(id)?.state, .sent)
+        await state.undoToast()
+        XCTAssertEqual(state.draft(id)?.state, .sent)
+    }
+}

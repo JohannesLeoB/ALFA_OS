@@ -231,6 +231,48 @@ extension InboxState {
             post(refusal)
             return
         }
+        guard sendHold > .zero, card.outboxID == nil else {
+            await deliver(id)
+            return
+        }
+        hold(id, returning: card.state)
+    }
+
+    private func hold(_ id: UUID, returning previous: DraftState) {
+        guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
+        drafts[index].state = .sending
+        keepLocal(id)
+        let wait = sendHold
+        heldSends[id] = Task { [weak self] in
+            try? await Task.sleep(for: wait)
+            guard !Task.isCancelled, let self, self.heldSends.removeValue(forKey: id) != nil else { return }
+            await self.deliver(id, announce: false)
+        }
+        post(.outboxSent, undo: { [weak self] in self?.recall(id, to: previous) })
+    }
+
+    func recall(_ id: UUID, to previous: DraftState) {
+        guard let task = heldSends.removeValue(forKey: id) else { return }
+        task.cancel()
+        guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
+        drafts[index].state = previous
+        bring(.draft(id))
+    }
+
+    func releaseHeldSends() async {
+        let held = heldSends
+        heldSends = [:]
+        for (id, task) in held {
+            task.cancel()
+            await deliver(id, announce: false)
+        }
+    }
+
+    func isHeld(_ id: UUID) -> Bool { heldSends[id] != nil }
+
+    private func deliver(_ id: UUID, announce: Bool = true) async {
+        guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
+        let card = drafts[index]
         drafts[index].state = .sending
         let outcome: SendOutcome
         if let outboxID = card.outboxID, let again = await outboxPort.resend(outboxID, card.draft, draftID: card.remoteID) {
@@ -247,7 +289,7 @@ extension InboxState {
             drafts[now].state = .sent
             dropLocal(id)
             if let mirrorID = card.mirrorID { goneDrafts[card.inlet, default: []].insert(mirrorID) }
-            post(.outboxSent)
+            if announce { post(.outboxSent) }
         case .queued(let outboxID):
             drafts[now].outboxID = outboxID
             drafts[now].state = .queuedInOutbox
