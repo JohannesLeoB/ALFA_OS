@@ -23,6 +23,17 @@ extension InboxState {
         picked = []
     }
 
+    public func pickRange(to id: String) {
+        if selectedFolder == Folder.outboxID { return }
+        let order = rows.map(\.id)
+        guard let end = order.firstIndex(of: id) else { return }
+        guard let anchor = pickedInList.last.flatMap({ order.firstIndex(of: $0) }) else {
+            pick(id)
+            return
+        }
+        for item in order[min(anchor, end)...max(anchor, end)] where !picked.contains(item) { picked.append(item) }
+    }
+
     public func bulk(_ kind: BulkAction) async {
         let list = pickedInList.compactMap { summary($0) }
         guard !list.isEmpty else { return }
@@ -30,38 +41,54 @@ extension InboxState {
         case .read:
             let anyUnread = list.contains { !$0.flags.contains(.seen) }
             let inlet = selectedInlet
-            var done = 0
+            var failed: [String] = []
             for item in list {
-                if await setFlag(item.id, .seen, on: anyUnread, in: inlet, quiet: true) { done += 1 }
+                if await !setFlag(item.id, .seen, on: anyUnread, in: inlet, quiet: true) { failed.append(item.id) }
             }
             picked = []
-            post(done == 0 ? .flagFailed : .bulkRead(count: done, read: anyUnread))
+            if failed.isEmpty {
+                post(.bulkRead(count: list.count, read: anyUnread))
+            } else {
+                post(.flagFailed, undo: { [weak self] in
+                    self?.picked = failed
+                    await self?.bulk(.read)
+                })
+            }
         case .archive, .trash:
-            let origin = selectedFolder
-            var moved: [(id: String, landed: String?, inlet: Inlet.ID)] = []
             guard let inlet = selectedInlet else { return }
-            for item in list {
+            let origin = selectedFolder
+            let lifted = lift(list.map(\.id), in: inlet)
+            let opening = reopen(lifted.next)
+            picked = []
+            var moved: [(id: String, landed: String?, inlet: Inlet.ID, origin: String?)] = []
+            var failed: [(summary: MessageSummary, index: Int)] = []
+            for entry in list {
                 do {
                     let landed: String?
                     if kind == .archive {
-                        landed = try await mailbox.archive(inlet, messageID: item.id)
+                        landed = try await mailbox.archive(inlet, messageID: entry.id)
                     } else {
-                        landed = try await mailbox.trash(inlet, messageID: item.id)
+                        landed = try await mailbox.trash(inlet, messageID: entry.id)
                     }
-                    moved.append((item.id, landed, inlet))
+                    moved.append((entry.id, landed, inlet, Self.serverFolder(origin, of: entry)))
                 } catch {
-                    continue
+                    failed.append(lifted.entries.first { $0.summary.id == entry.id } ?? (entry, summaries.count))
                 }
             }
-            let gone = Set(moved.map(\.id))
-            if selectedInlet == inlet { summaries.removeAll { gone.contains($0.id) } }
-            for id in gone { drop(id, in: inlet) }
-            picked = []
+            putBack(failed, in: inlet, folder: origin)
             refreshCounts()
+            await opening?.value
+            if !failed.isEmpty {
+                let retry = failed.map(\.summary.id)
+                post(kind == .archive ? .archiveFailed : .deleteFailed, undo: { [weak self] in
+                    self?.picked = retry
+                    await self?.bulk(kind)
+                })
+                return
+            }
             let entries = moved
             let undo: @MainActor () async -> Void = { [weak self] in
-                guard let self, let origin else { return }
-                await self.restore(entries, to: origin)
+                await self?.restore(entries)
             }
             let undoable = moved.contains { $0.landed != nil }
             post(kind == .archive ? .bulkArchived(count: moved.count) : .bulkTrashed(count: moved.count), undo: undoable ? undo : nil)

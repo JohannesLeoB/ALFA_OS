@@ -20,6 +20,8 @@ struct BodyEditor: NSViewRepresentable {
         guard let view = scroll.documentView as? NSTextView else { return scroll }
         view.isRichText = true
         view.allowsUndo = true
+        view.isContinuousSpellCheckingEnabled = true
+        view.isAutomaticSpellingCorrectionEnabled = false
         view.drawsBackground = false
         view.textContainerInset = .zero
         view.textContainer?.lineFragmentPadding = 0
@@ -28,6 +30,13 @@ struct BodyEditor: NSViewRepresentable {
         view.delegate = context.coordinator
         view.setAccessibilityLabel(appearance.string("mail.compose.body"))
         box.view = view
+        DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                guard let window = view.window, !(window.firstResponder is NSText) else { return }
+                window.makeFirstResponder(view)
+                view.setSelectedRange(NSRange(location: 0, length: 0))
+            }
+        }
         return scroll
     }
 

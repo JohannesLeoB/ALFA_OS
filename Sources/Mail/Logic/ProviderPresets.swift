@@ -1,4 +1,10 @@
-enum ProviderPresets {
+public enum ProviderPresets {
+    public static let requiredFields: Set<String> = [
+        ConnectionField.address, ConnectionField.password, ConnectionField.incomingHost, ConnectionField.outgoingHost,
+    ]
+    public static let securityFields: Set<String> = [ConnectionField.incomingSecurity, ConnectionField.outgoingSecurity]
+    public static let securityChoices: [String] = [TransportSecurity.ssl.rawValue, TransportSecurity.starttls.rawValue]
+
     static let all: [ProviderPreset] = [
         ProviderPreset(
             id: "ionos", title: .verbatim("Ionos"),

@@ -15,7 +15,7 @@ final class StorageTests: XCTestCase {
         let store = try SQLiteStore.inMemory()
         let expected: Set<String> = [
             "inlet", "key_slot", "inlet_report", "setting", "cost_day",
-            "mail_folder", "mail_message", "mail_sync", "mail_outbox", "mail_cursor",
+            "mail_folder", "mail_message", "mail_sync", "mail_outbox", "mail_cursor", "mail_body",
             "auditEntries", "integrationLog", "chatMessages", "chatMemorySummaries",
             "assistantNotes", "assistantTasks", "assistantJournal", "privacyPreferences",
             "samples", "articleCatalog", "articleCatalogFTS", "articleCatalogSync", "bookedRows",

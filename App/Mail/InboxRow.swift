@@ -39,8 +39,8 @@ struct InboxRow: View {
             confirmation
         }
         .contentShape(shape)
-        .simultaneousGesture(SpatialTapGesture(count: 2).onEnded { if !onMark($0.location) { open(pin: true) } })
-        .simultaneousGesture(SpatialTapGesture().onEnded { if onMark($0.location) { inbox.pick(item.id) } else { open(pin: false) } })
+        .simultaneousGesture(SpatialTapGesture(count: 2).onEnded { if !onMark($0.location) && NSEvent.modifierFlags.intersection([.shift, .command]).isEmpty { open(pin: true) } })
+        .simultaneousGesture(SpatialTapGesture().onEnded { tap(on: $0.location) })
         .overlay(alignment: .topTrailing) { rowActions }
         .overlay { RightClickOverlay { point in contextMenu(at: point) } }
         .onHover { hovering = $0 }
@@ -52,6 +52,17 @@ struct InboxRow: View {
     private func onMark(_ point: CGPoint) -> Bool {
         CGRect(x: Tokens.Spacing.step8, y: Tokens.Spacing.step12, width: Tokens.Size.symbolSize, height: Tokens.Size.symbolSize)
             .contains(point)
+    }
+
+    private func tap(on point: CGPoint) {
+        let keys = NSEvent.modifierFlags
+        if keys.contains(.shift) {
+            inbox.pickRange(to: item.id)
+        } else if keys.contains(.command) || onMark(point) {
+            inbox.pick(item.id)
+        } else {
+            open(pin: false)
+        }
     }
 
     private func open(pin: Bool) {

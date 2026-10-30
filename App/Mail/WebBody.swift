@@ -45,6 +45,7 @@ struct HTMLBody: View {
             inlineImages: inlineImages,
             allowRemote: allowRemote,
             load: { [inbox, id = card.id] attachment in await inbox.attachmentData(id, attachmentID: attachment) },
+            compose: { [inbox] reference in _ = inbox.composeLink(reference) },
             height: $height
         )
         .frame(height: CGFloat(height))
@@ -57,10 +58,10 @@ struct WebBody: NSViewRepresentable {
     let inlineImages: [String: String]
     let allowRemote: Bool
     let load: @MainActor (String) async -> Data?
+    let compose: @MainActor (String) -> Void
     @Binding var height: Double
 
     private static let transparentKey = "drawsBackground"
-    private static let measureScript = "Math.ceil(document.body.getBoundingClientRect().height)"
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
 
@@ -128,7 +129,7 @@ struct WebBody: NSViewRepresentable {
 
         func measure() {
             guard let webView else { return }
-            webView.evaluateJavaScript(WebBody.measureScript) { [weak self] value, _ in
+            webView.evaluateJavaScript(HTMLEngine.measureScript) { [weak self] value, _ in
                 MainActor.assumeIsolated {
                     guard let self, let number = value as? NSNumber else { return }
                     let next = number.doubleValue
@@ -149,6 +150,7 @@ struct WebBody: NSViewRepresentable {
                 linkActivated: navigationAction.navigationType == .linkActivated,
                 mainFrame: navigationAction.targetFrame?.isMainFrame != false)
             if verdict == .open, let url { NSWorkspace.shared.open(url) }
+            if verdict == .compose, let url { parent.compose(url.absoluteString) }
             decisionHandler(verdict == .allow ? .allow : .cancel)
         }
 

@@ -7,6 +7,7 @@ public struct OpenMessage: Identifiable, Equatable, Sendable {
     public var summary: MessageSummary
     public var content: MessageContent
     public var htmlParts: HTMLParts?
+    public var bodyFailed = false
     public var remoteImagesAllowed = false
     public var pinned = false
     public var recipientsExpanded = false
@@ -48,6 +49,7 @@ public struct RowPresentation: Identifiable, Equatable, Sendable {
     public let draft: Bool
     public let unread: Bool
     public let starred: Bool
+    public let answered: Bool
     public let selected: Bool
     public let picked: Bool
     public let thread: Int?

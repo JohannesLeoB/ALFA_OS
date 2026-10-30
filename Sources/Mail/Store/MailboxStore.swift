@@ -87,6 +87,7 @@ public final class MailboxStore: MailboxPort {
     }
 
     nonisolated private static func queryMessages(_ database: SQLiteStore, inlet: Inlet.ID, folder: String) -> [MessageSummary] {
+        if folder == Folder.starredID { return starredMessages(database, inlet: inlet) }
         return (try? database.read { db in
             try Row.fetchAll(db, sql: "SELECT * FROM mail_message WHERE inlet = ? AND folder = ? ORDER BY receivedAt DESC, id DESC",
                              arguments: [inlet, folder]).map(summary)
@@ -193,9 +194,12 @@ public final class MailboxStore: MailboxPort {
     }
 
     public func body(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> MessageBody {
+        if let kept = keptBody(inlet, messageID: messageID) { return kept }
         let transport = try transport(inlet)
         do {
-            return try await transport.fetchBody(messageID: messageID)
+            let fetched = try await transport.fetchBody(messageID: messageID)
+            keepBody(inlet, messageID: messageID, fetched)
+            return fetched
         } catch {
             throw DeliveryEngine.hubFailure(error, inlet: inlet, access: access)
         }
@@ -209,7 +213,7 @@ public final class MailboxStore: MailboxPort {
         } catch {
             throw DeliveryEngine.hubFailure(error, inlet: inlet, access: access)
         }
-        eventBus.emit(.messagesChanged(inlet, folder: inboxID(inlet) ?? ""))
+        announceChange(inlet, inboxID(inlet) ?? "")
     }
 
     @discardableResult
@@ -357,7 +361,7 @@ public final class MailboxStore: MailboxPort {
     }
 
     private func announce(_ inlet: Inlet.ID, _ folders: [String]) {
-        for folder in folders { eventBus.emit(.messagesChanged(inlet, folder: folder)) }
+        for folder in folders { announceChange(inlet, folder) }
     }
 
     private func handle(_ event: InletEvent) async {
@@ -385,7 +389,7 @@ public final class MailboxStore: MailboxPort {
         running.forEach { $0.cancel() }
         for task in running { _ = await task.value }
         let deleted: Void? = try? database.write { db in
-            for table in ["mail_message", "mail_folder", "mail_sync", "mail_cursor", "mail_outbox", "mail_draft"] {
+            for table in ["mail_message", "mail_folder", "mail_sync", "mail_cursor", "mail_outbox", "mail_draft", "mail_body"] {
                 try db.execute(sql: "DELETE FROM \(table) WHERE inlet = ?", arguments: [inlet])
             }
         }
@@ -470,6 +474,7 @@ public final class MailboxStore: MailboxPort {
         offerings[inlet] = nil
         try database.write { db in
             let before = try String.fetchAll(db, sql: "SELECT id FROM mail_folder WHERE inlet = ?", arguments: [inlet])
+            let folders = MirrorEngine.withStarred(folders)
             let kept = Set(folders.map(\.id))
             if !kept.isEmpty {
                 for gone in before where !kept.contains(gone) {
@@ -482,6 +487,7 @@ public final class MailboxStore: MailboxPort {
                 }
             }
             try db.execute(sql: "DELETE FROM mail_folder WHERE inlet = ?", arguments: [inlet])
+            try Self.dropOrphanBodies(db, inlet: inlet)
             for (index, folder) in folders.enumerated() {
                 try db.execute(sql: "INSERT OR REPLACE INTO mail_folder (inlet, id, name, role, position) VALUES (?, ?, ?, ?, ?)",
                                arguments: [inlet, folder.id, folder.name, folder.role.rawValue, index])
@@ -501,6 +507,7 @@ public final class MailboxStore: MailboxPort {
             }
             let folders = try String.fetchAll(db, sql: sql, arguments: arguments)
             try db.execute(sql: sql.replacingOccurrences(of: "SELECT folder", with: "DELETE"), arguments: arguments)
+            try Self.dropOrphanBodies(db, inlet: inlet, ids: [messageID])
             return folders
         }
     }
@@ -533,10 +540,10 @@ public final class MailboxStore: MailboxPort {
     nonisolated static func insert(_ db: Database, inlet: Inlet.ID, folder: String, _ m: MessageSummary) throws {
         try db.execute(sql: """
             INSERT OR REPLACE INTO mail_message
-            (inlet, folder, id, position, thread, subject, sender, fromRaw, toRaw, ccRaw, snippet, receivedAt, flags, seen, folderIDs, attachmentCount, messageIDHeader, attachments)
-            VALUES (?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (inlet, folder, id, position, thread, subject, sender, fromRaw, toRaw, ccRaw, replyToRaw, snippet, receivedAt, flags, seen, folderIDs, attachmentCount, messageIDHeader, attachments)
+            VALUES (?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            arguments: [inlet, folder, m.id, m.threadID, m.subject, m.from, m.fromRaw, m.toRaw, m.ccRaw, m.snippet,
+            arguments: [inlet, folder, m.id, m.threadID, m.subject, m.from, m.fromRaw, m.toRaw, m.ccRaw, m.replyToRaw, m.snippet,
                         m.receivedAt?.timeIntervalSince1970, encode(m.flags), m.flags.contains(.seen) ? 1 : 0,
                         m.folderIDs.joined(separator: "\n"), m.attachmentCount, m.messageIDHeader,
                         try JSONEncoder().encode(m.attachments)])
@@ -549,7 +556,7 @@ public final class MailboxStore: MailboxPort {
         let attachments = stored.flatMap { try? JSONDecoder().decode([AttachmentInfo].self, from: $0) } ?? []
         return MessageSummary(
             id: row["id"], threadID: row["thread"], subject: row["subject"], from: row["sender"], fromRaw: row["fromRaw"],
-            toRaw: row["toRaw"], ccRaw: row["ccRaw"], snippet: row["snippet"],
+            toRaw: row["toRaw"], ccRaw: row["ccRaw"], replyToRaw: row["replyToRaw"], snippet: row["snippet"],
             receivedAt: received.map { Date(timeIntervalSince1970: $0) }, flags: flags(row["flags"]),
             folderIDs: ids.isEmpty ? [] : ids.components(separatedBy: "\n"), attachmentCount: row["attachmentCount"],
             attachments: attachments, messageIDHeader: row["messageIDHeader"])

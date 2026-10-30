@@ -51,12 +51,20 @@ extension InboxState {
         let known = mailbox.knownSenders(inlet)
         let mine = Set(([accountAddress(inlet)] + known.map { $0.address.lowercased() }).filter { !$0.isEmpty })
         let fromOwn = mine.contains(AddressEngine.email(summary.fromRaw))
-        let to = fromOwn ? summary.toRaw : summary.fromRaw
+        let replyTo = summary.replyToRaw.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let open = drafts.first(where: {
+            $0.inlet == inlet && !summary.messageIDHeader.isEmpty && $0.draft.inReplyTo == summary.messageIDHeader
+                && Self.stillWriting($0.state)
+        }) {
+            bring(.draft(open.id))
+            return open.id
+        }
+        let to = fromOwn ? summary.toRaw : (replyTo.isEmpty ? summary.fromRaw : replyTo)
         let chosen = SenderEngine.receiving(known, headers: fromOwn ? [summary.fromRaw] : [summary.toRaw, summary.ccRaw])
         var cc: String?
         if all {
             let taken = Set(AddressListParser.split(to).map(AddressEngine.email)).union(mine)
-            let others = AddressListParser.split(summary.toRaw + "," + summary.ccRaw)
+            let others = AddressListParser.split(summary.fromRaw + "," + summary.toRaw + "," + summary.ccRaw)
                 .filter { !taken.contains(AddressEngine.email($0)) }
             cc = others.isEmpty ? nil : others.joined(separator: ", ")
         }
@@ -219,10 +227,8 @@ extension InboxState {
         case .sending, .sent, .queuedInOutbox: return
         default: break
         }
-        let recipients = [card.draft.to, card.draft.cc, card.draft.bcc].compactMap { $0 }
-        if card.draft.subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            || recipients.allSatisfy({ AddressListParser.split($0).isEmpty }) {
-            post(.recipientMissing)
+        if let refusal = Self.refusal(card.draft) {
+            post(refusal)
             return
         }
         drafts[index].state = .sending
@@ -241,6 +247,7 @@ extension InboxState {
             drafts[now].state = .sent
             dropLocal(id)
             if let mirrorID = card.mirrorID { goneDrafts[card.inlet, default: []].insert(mirrorID) }
+            post(.outboxSent)
         case .queued(let outboxID):
             drafts[now].outboxID = outboxID
             drafts[now].state = .queuedInOutbox
@@ -248,6 +255,25 @@ extension InboxState {
             if drafts[now].draft != card.draft { outboxPort.revise(outboxID, drafts[now].draft) }
             reconcileDrafts()
         }
+    }
+
+    static func stillWriting(_ state: DraftState) -> Bool {
+        switch state {
+        case .idle, .edited, .saving, .saved, .sendFailed: true
+        case .sending, .sent, .queuedInOutbox: false
+        }
+    }
+
+    static func refusal(_ draft: Draft) -> ToastKind? {
+        let recipients = [draft.to, draft.cc, draft.bcc].compactMap { $0 }
+        if recipients.allSatisfy({ AddressListParser.split($0).isEmpty }) { return .recipientMissing }
+        if draft.subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { return .subjectMissing }
+        return nil
+    }
+
+    public func refuseSend(_ id: UUID) {
+        guard let card = draft(id) else { return }
+        post(Self.refusal(card.draft) ?? .recipientMissing)
     }
 
     func reconcileDrafts() {

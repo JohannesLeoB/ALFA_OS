@@ -2,7 +2,7 @@ import Foundation
 import Hub
 
 extension InboxState {
-    func archive(_ id: String, undoable: Bool = false) async { await relocate(id, .archive, undoable: undoable) }
+    func archive(_ id: String, undoable: Bool = true) async { await relocate(id, .archive, undoable: undoable) }
 
     func trash(_ id: String, undoable: Bool = true, fromMenu: Bool = false) async {
         await relocate(id, .trash, undoable: undoable, toast: fromMenu ? .inTrash : .trashed)
@@ -45,8 +45,11 @@ extension InboxState {
     }
 
     func relocate(_ id: String, _ move: MoveTarget, undoable: Bool = false, toast: ToastKind = .trashed) async {
-        guard let inlet = selectedInlet else { return }
-        let origin = selectedFolder
+        guard let inlet = selectedInlet, let held = summary(id) else { return }
+        let origin = Self.serverFolder(selectedFolder, of: held)
+        let staysListed = move == .archive && folders.first { $0.id == selectedFolder }?.role == .all
+        let lifted = lift([id], in: inlet, keepListed: staysListed)
+        let opening = reopen(lifted.next)
         let landed: String?
         do {
             switch move {
@@ -57,25 +60,52 @@ extension InboxState {
                 landed = nil
             }
         } catch {
+            putBack(lifted.entries, in: inlet, folder: selectedFolder)
+            await opening?.value
             post(Self.relocateFailure(move), undo: { [weak self] in await self?.relocate(id, move, undoable: undoable, toast: toast) })
             return
         }
-        let staysListed = move == .archive && folders.first { $0.id == selectedFolder }?.role == .all
-        if !staysListed && selectedInlet == inlet { summaries.removeAll { $0.id == id } }
-        drop(id, in: inlet)
         refreshCounts()
         var undo: (@MainActor () async -> Void)?
-        if undoable, let landed {
-            undo = { [weak self] in
-                guard let self, let origin else { return }
-                await self.restore([(id, landed, inlet)], to: origin)
-            }
+        if undoable, let landed, let origin {
+            undo = { [weak self] in await self?.restore([(id, landed, inlet, origin)]) }
         }
         switch move {
         case .archive: post(.archived, undo: undo)
         case .trash: post(toast, undo: undo)
         case .spam: break
         }
+        await opening?.value
+    }
+
+    func lift(_ ids: [String], in inlet: Inlet.ID, keepListed: Bool = false) -> (entries: [(summary: MessageSummary, index: Int)], next: String?) {
+        let gone = Set(ids)
+        var next: String?
+        if selectedInlet == inlet, let current = selectedMessage, gone.contains(current) {
+            let order = rows.map(\.id)
+            if let position = order.firstIndex(of: current) {
+                next = order[position...].first { !gone.contains($0) } ?? order[..<position].last { !gone.contains($0) }
+            }
+        }
+        var entries: [(summary: MessageSummary, index: Int)] = []
+        if selectedInlet == inlet && !keepListed {
+            for (index, item) in summaries.enumerated() where gone.contains(item.id) { entries.append((item, index)) }
+            summaries.removeAll { gone.contains($0.id) }
+        }
+        for id in ids { drop(id, in: inlet) }
+        return (entries, next)
+    }
+
+    func putBack(_ entries: [(summary: MessageSummary, index: Int)], in inlet: Inlet.ID, folder: String?) {
+        guard selectedInlet == inlet, selectedFolder == folder else { return }
+        for entry in entries.sorted(by: { $0.index < $1.index }) where !summaries.contains(where: { $0.id == entry.summary.id }) {
+            summaries.insert(entry.summary, at: min(entry.index, summaries.count))
+        }
+    }
+
+    func reopen(_ id: String?) -> Task<Void, Never>? {
+        guard let id else { return nil }
+        return Task { [weak self] in await self?.open(id) }
     }
 
     public var offersOriginal: Bool {
@@ -93,33 +123,47 @@ extension InboxState {
     }
 
     func move(_ id: String, to folder: String) async {
-        guard let inlet = selectedInlet else { return }
-        let origin = selectedFolder
+        guard let inlet = selectedInlet, let held = summary(id) else { return }
+        let origin = Self.serverFolder(selectedFolder, of: held)
+        let lifted = lift([id], in: inlet)
+        let opening = reopen(lifted.next)
         let landed: String?
         do {
             landed = try await mailbox.move(inlet, messageID: id, toFolder: folder)
         } catch {
+            putBack(lifted.entries, in: inlet, folder: selectedFolder)
+            await opening?.value
             post(.moveFailed, undo: { [weak self] in await self?.move(id, to: folder) })
             return
         }
-        if selectedInlet == inlet { summaries.removeAll { $0.id == id } }
-        drop(id, in: inlet)
         refreshCounts()
         var undo: (@MainActor () async -> Void)?
         if let landed, let origin {
-            undo = { [weak self] in await self?.restore([(id, landed, inlet)], to: origin) }
+            undo = { [weak self] in await self?.restore([(id, landed, inlet, origin)]) }
         }
         post(.moved, undo: undo)
+        await opening?.value
     }
 
     private static let fixedRoles: Set<FolderRole> = [.drafts, .sent, .starred, .all]
 
-    func restore(_ moved: [(id: String, landed: String?, inlet: Inlet.ID)], to origin: String) async {
+    static func serverFolder(_ selected: String?, of summary: MessageSummary) -> String? {
+        guard let selected, selected.hasPrefix("local:") else { return selected }
+        return summary.folderIDs.first { !$0.hasPrefix("local:") }
+    }
+
+    func restore(_ moved: [(id: String, landed: String?, inlet: Inlet.ID, origin: String?)]) async {
+        var failed = false
         for entry in moved {
-            guard let landed = entry.landed else { continue }
-            _ = try? await mailbox.move(entry.inlet, messageID: landed, toFolder: origin)
+            guard let landed = entry.landed, let target = entry.origin else { continue }
+            do {
+                _ = try await mailbox.move(entry.inlet, messageID: landed, toFolder: target)
+            } catch {
+                failed = true
+            }
         }
         await loadSelection()
+        if failed { post(.moveFailed) }
     }
 
     public func attachmentData(_ id: String, attachmentID: String) async -> Data? {

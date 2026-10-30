@@ -8,6 +8,9 @@ public struct ThreadItem: Identifiable, Equatable, Sendable {
     public let blockedHTML: String?
     public let quote: Quote?
     public let quoteOpen: Bool
+    public let signature: Quote?
+    public let signatureOpen: Bool
+    public let recipients: Recipients
     public let current: Bool
 }
 

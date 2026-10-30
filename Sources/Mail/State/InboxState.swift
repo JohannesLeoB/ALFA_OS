@@ -8,6 +8,7 @@ public final class InboxState {
     let mailbox: any MailboxPort
     let outboxPort: any OutboxPort
     public let contacts: ContactState
+    public let directory: ContactSourceState
 
     public var accounts: [Inlet] = []
     var folders: [Folder] = []
@@ -66,12 +67,14 @@ public final class InboxState {
     let signatures: @MainActor (Inlet.ID) -> MailboxSignature?
 
     public init(mailbox: any MailboxPort, outbox: any OutboxPort, contacts: ContactState,
+                directory: ContactSourceState = ContactSourceState(),
                 clock: @escaping @Sendable () -> Date = { Date() },
                 signatures: @escaping @MainActor (Inlet.ID) -> MailboxSignature? = { _ in nil },
                 autosavePause: Duration? = nil, autosaveInterval: Duration? = nil) {
         self.mailbox = mailbox
         self.outboxPort = outbox
         self.contacts = contacts
+        self.directory = directory
         self.clock = clock
         self.signatures = signatures
         self.autosavePause = autosavePause ?? AutosaveEngine.pause
@@ -503,7 +506,7 @@ public final class InboxState {
         unread = counts
         var seen: [String: Int] = [:]
         if let inlet = selectedInlet {
-            for folder in folders where FolderRole.unseenRoles.contains(folder.role) {
+            for folder in folders where FolderRole.countedRoles.contains(folder.role) {
                 if let count = mailbox.unseenCount(inlet, folder: folder.id) { seen[folder.id] = count }
             }
         }

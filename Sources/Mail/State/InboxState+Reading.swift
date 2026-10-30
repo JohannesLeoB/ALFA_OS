@@ -43,6 +43,7 @@ extension InboxState {
         do {
             let body = try await mailbox.body(inlet, messageID: id)
             guard let now = cardIndex(id, in: inlet) else { return }
+            cards[now].bodyFailed = false
             let loaded = content(for: body, fallback: cards[now].summary.snippet)
             cards[now].content = loaded
             if case .html(let html, _) = loaded { cards[now].htmlParts = HTMLEngine.parts(html) }
@@ -50,8 +51,13 @@ extension InboxState {
         } catch {
             guard let now = cardIndex(id, in: inlet) else { return }
             cards[now].content = .text(cards[now].summary.snippet)
+            cards[now].bodyFailed = true
             post(.readFailed, undo: { [weak self] in await self?.loadBody(id, in: owner) })
         }
+    }
+
+    public func retryBody(_ id: String) {
+        Task { await loadBody(id) }
     }
 
     func content(for body: MessageBody, fallback: String) -> MessageContent {

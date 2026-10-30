@@ -47,7 +47,7 @@ extension MailboxStore {
     }
 
     public func canLoadOlder(_ inlet: Inlet.ID, folder: String) -> Bool {
-        guard !ranges(inlet).isEmpty else { return false }
+        guard folder != Folder.starredID, !ranges(inlet).isEmpty else { return false }
         let key = Self.key(inlet, folder)
         if let known = olderOffered[key] { return known }
         let stored = cursor(inlet, Self.olderKey(folder)) == "1"
@@ -56,6 +56,7 @@ extension MailboxStore {
     }
 
     public func refresh(_ inlet: Inlet.ID, folder: String) async throws(HubFailure) {
+        if folder == Folder.starredID { return }
         try await run(inlet, folder, older: false, own: false)
     }
 
@@ -126,7 +127,7 @@ extension MailboxStore {
             if revisit, let current, current == storedHistory {
                 try write(inlet) { try self.upsert(inlet, folder, []) }
                 await storeCount(inlet, folder, transport)
-                eventBus.emit(.messagesChanged(inlet, folder: folder))
+                announceChange(inlet, folder)
                 return
             }
             history = storedHistory ?? current
@@ -152,7 +153,7 @@ extension MailboxStore {
             added += kept.count
             fresh += MirrorEngine.newerThan(kept, newest: newest)
             done += chunk.count
-            eventBus.emit(.messagesChanged(inlet, folder: folder))
+            announceChange(inlet, folder)
             setProgress(inlet, folder, SyncProgress(done: done, total: fetching.count))
         }
         let marked = cursor(inlet, Self.refusedKey(folder))
@@ -168,7 +169,7 @@ extension MailboxStore {
         guard !Task.isCancelled else { return }
         if !plan.gone.isEmpty {
             try write(inlet) { try self.drop(inlet, folder, ids: plan.gone) }
-            eventBus.emit(.messagesChanged(inlet, folder: folder))
+            announceChange(inlet, folder)
         }
         if let validity = listing.validity, validity != known {
             try write(inlet) { try self.setCursor(inlet, Self.validityKey(folder), validity) }
@@ -189,7 +190,7 @@ extension MailboxStore {
             try write(inlet) { try self.setCursor(inlet, Self.reachKey(folder), String(oldest.timeIntervalSince1970)) }
         }
         await storeCount(inlet, folder, transport)
-        eventBus.emit(.messagesChanged(inlet, folder: folder))
+        announceChange(inlet, folder)
         if hadSync, fresh > 0, folder == inboxID(inlet) { eventBus.emit(.newMail(inlet, count: fresh)) }
     }
 
@@ -250,6 +251,7 @@ extension MailboxStore {
                 try db.execute(sql: "DELETE FROM mail_message WHERE inlet = ? AND folder = ? AND id IN (\(marks))",
                                arguments: StatementArguments([inlet, folder] + chunk))
             }
+            try Self.dropOrphanBodies(db, inlet: inlet, ids: Array(ids))
         }
     }
 

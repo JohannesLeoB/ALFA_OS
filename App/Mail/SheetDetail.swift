@@ -31,6 +31,13 @@ struct SheetDetail: View {
                     .padding(.horizontal, -CGFloat(Tokens.Spacing.step8))
                     .padding(.top, CGFloat(Tokens.Spacing.step16))
             }
+            if card.bodyFailed {
+                Notice(kind: .failure, title: appearance.text("mail.failure.read"), text: nil, onSheet: true,
+                       glyph: { Glyph(.alert) },
+                       actions: { TextButton(label: appearance.text("mail.list.failed.act"), kind: .sheet) { session.inbox.retryBody(card.id) } })
+                    .padding(.horizontal, -CGFloat(Tokens.Spacing.step8))
+                    .padding(.top, CGFloat(Tokens.Spacing.step16))
+            }
             ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
                 ThreadItemRow(session: session, card: card, item: item, first: index == 0, last: index == items.count - 1)
             }

@@ -8,6 +8,7 @@ public struct MessageSummary: Identifiable, Equatable, Sendable {
     var fromRaw: String
     var toRaw: String
     var ccRaw: String
+    var replyToRaw: String
     public var snippet: String
     public var receivedAt: Date?
     public var flags: Set<Flag>
@@ -17,7 +18,7 @@ public struct MessageSummary: Identifiable, Equatable, Sendable {
     public var messageIDHeader: String
 
     public init(id: String, threadID: String = "", subject: String, from: String, fromRaw: String = "", toRaw: String = "",
-                ccRaw: String = "", snippet: String = "", receivedAt: Date? = nil, flags: Set<Flag> = [],
+                ccRaw: String = "", replyToRaw: String = "", snippet: String = "", receivedAt: Date? = nil, flags: Set<Flag> = [],
                 folderIDs: [String] = [], attachmentCount: Int = 0, attachments: [AttachmentInfo] = [],
                 messageIDHeader: String = "") {
         self.id = id
@@ -27,6 +28,7 @@ public struct MessageSummary: Identifiable, Equatable, Sendable {
         self.fromRaw = fromRaw
         self.toRaw = toRaw
         self.ccRaw = ccRaw
+        self.replyToRaw = replyToRaw
         self.snippet = snippet
         self.receivedAt = receivedAt
         self.flags = flags

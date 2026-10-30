@@ -125,6 +125,7 @@ struct MessageLane: View {
                 Task { await inbox.bulk(.trash) }
             }
             SymbolButton(help: appearance.string("mail.pick.clear"), glyph: .close, hover: .none, pressed: false) { inbox.clearPicked() }
+                .keyboardShortcut(.cancelAction)
         }
     }
 

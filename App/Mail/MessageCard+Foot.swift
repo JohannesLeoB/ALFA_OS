@@ -29,7 +29,7 @@ extension MessageCard {
         private func group(_ slots: [Slot]) -> some View {
             HStack(spacing: CGFloat(Tokens.Size.headGapStack)) {
                 ForEach(slots) { slot in
-                    slotView(slot).background { if slot.action == .send { sendKey(slot) } }
+                    slotView(slot).background { if slot.action == .send { sendKey } }
                 }
             }
         }
@@ -52,12 +52,21 @@ extension MessageCard {
             }
         }
 
-        private func sendKey(_ slot: Slot) -> some View {
-            Button("") { if slot.off { inbox.announce(.recipientMissing) } else { perform(.send) } }
+        private var sendKey: some View {
+            Button("") { submit() }
                 .keyboardShortcut(.return, modifiers: .command)
                 .opacity(0)
                 .allowsHitTesting(false)
                 .accessibilityHidden(true)
+        }
+
+        private func submit() {
+            NSApp.keyWindow?.makeFirstResponder(nil)
+            Task { @MainActor in
+                await withCheckedContinuation { continuation in DispatchQueue.main.async { continuation.resume() } }
+                guard case .draft(let id) = inbox.frontRef else { return }
+                if inbox.draft(id)?.canSend == true { perform(.send) } else { inbox.refuseSend(id) }
+            }
         }
 
         private func openProjects() {

@@ -5,7 +5,7 @@ extension MailboxStore {
     private static let everywhereToken = "*"
 
     private static func searchable(_ folder: Folder) -> Bool {
-        folder.role != .spam && folder.role != .trash
+        folder.role != .spam && folder.role != .trash && !folder.isLocal
     }
 
     public func canSearchEverywhere(_ inlet: Inlet.ID) -> Bool {
@@ -17,6 +17,8 @@ extension MailboxStore {
                        continuation: SearchContinuation?) async throws(HubFailure) -> SearchPage {
         let transport = try transport(inlet)
         switch scope {
+        case .here where folder == Folder.starredID:
+            return SearchPage(messages: starredMatches(inlet, query: query))
         case .here:
             let page = try await list(transport, inlet: inlet, folder: folder, query: query,
                                       pageToken: continuation?.tokens[folder], size: MirrorEngine.pageSize)

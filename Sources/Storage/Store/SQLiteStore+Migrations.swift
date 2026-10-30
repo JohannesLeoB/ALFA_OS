@@ -199,6 +199,18 @@ extension SQLiteStore {
                     updatedAt REAL NOT NULL)
                 """)
         }
+        migrator.registerMigration("mailBody") { db in
+            try db.execute(sql: """
+                CREATE TABLE mail_body (
+                    inlet TEXT NOT NULL, id TEXT NOT NULL, text TEXT, html TEXT, images BLOB NOT NULL, attachments BLOB NOT NULL,
+                    PRIMARY KEY (inlet, id))
+                """)
+            try db.execute(sql: "CREATE INDEX mail_message_id ON mail_message (inlet, id)")
+        }
+        migrator.registerMigration("mailReplyTo") { db in
+            try db.execute(sql: "ALTER TABLE mail_message ADD COLUMN replyToRaw TEXT NOT NULL DEFAULT ''")
+        }
+        registerUsage(in: &migrator)
         return migrator
     }
 }

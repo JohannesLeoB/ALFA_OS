@@ -36,15 +36,24 @@ struct MessageDetail: View {
     let card: OpenMessage
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                RecipientDetail(session: session, card: card)
-                SheetDetail(session: session, card: card)
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(spacing: 0) {
+                    RecipientDetail(session: session, card: card)
+                    SheetDetail(session: session, card: card)
+                }
             }
+            .scrollIndicators(.automatic)
+            .task(id: card.id) {
+                if !card.summary.threadID.isEmpty, card.conversation.isEmpty { await session.inbox.loadThreadTexts(card.id) }
+                reveal(proxy)
+            }
+            .onChange(of: card.conversation.count) { reveal(proxy) }
         }
-        .scrollIndicators(.automatic)
-        .task(id: card.id) {
-            if !card.summary.threadID.isEmpty, card.conversation.isEmpty { await session.inbox.loadThreadTexts(card.id) }
-        }
+    }
+
+    private func reveal(_ proxy: ScrollViewProxy) {
+        guard card.hasConversation, session.inbox.thread(card.id).first?.id != card.id else { return }
+        proxy.scrollTo(card.id, anchor: .top)
     }
 }

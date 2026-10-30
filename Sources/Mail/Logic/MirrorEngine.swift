@@ -50,6 +50,11 @@ enum MirrorEngine {
         return max(reach.map { min($0, base) } ?? base, MailboxRange.earliest)
     }
 
+    static func withStarred(_ folders: [Folder]) -> [Folder] {
+        guard !folders.isEmpty, !folders.contains(where: { $0.role == .starred }) else { return folders }
+        return folders + [Folder(id: Folder.starredID, name: "", role: .starred)]
+    }
+
     static func ranges(_ transport: any MailTransportPort) -> [MailboxRange] {
         (transport as? any MirrorPort)?.ranges ?? []
     }

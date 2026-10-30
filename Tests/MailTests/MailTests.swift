@@ -465,6 +465,42 @@ final class MailTests: XCTestCase {
     }
 
     @MainActor
+    func testRepliesGoToTheReplyToAddressAndASecondReplyReopensTheFirstDraft() async throws {
+        let rig = try Rig()
+        rig.transport.corpus.with {
+            $0["INBOX"] = [MessageSummary(id: "1:1:INBOX", threadID: "t", subject: "Form", from: "Site", fromRaw: "Site <noreply@site.test>",
+                                          toRaw: "me@example.com", replyToRaw: "Kim <kim@guest.test>", snippet: "s", flags: [],
+                                          folderIDs: ["INBOX"], messageIDHeader: "<h1@x>")]
+        }
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        let firstID = await state.reply(to: "1:1:INBOX")
+        let first = try XCTUnwrap(firstID)
+        XCTAssertEqual(state.draft(first)?.draft.to, "Kim <kim@guest.test>")
+        let secondID = await state.reply(to: "1:1:INBOX")
+        XCTAssertEqual(secondID, first)
+        XCTAssertEqual(state.drafts.count, 1)
+    }
+
+    @MainActor
+    func testSendingWithoutSubjectNamesTheSubjectAndSuccessSaysSent() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                               autosavePause: .seconds(60), autosaveInterval: .seconds(60))
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.to = "x@y.de" }
+        await state.send(id)
+        XCTAssertEqual(state.toast?.kind, .subjectMissing)
+        state.edit(id) { $0.to = nil; $0.subject = "s" }
+        state.refuseSend(id)
+        XCTAssertEqual(state.toast?.kind, .recipientMissing)
+        state.edit(id) { $0.to = "x@y.de" }
+        await state.send(id)
+        XCTAssertEqual(state.toast?.kind, .outboxSent)
+    }
+
+    @MainActor
     func testChangingTheSenderAcrossMailboxesMovesTheDraftAndDeletesTheOldOne() async throws {
         let rig = try Rig()
         let other = rig.addMailbox("b", prefix: "2")
@@ -1267,7 +1303,7 @@ final class MailTests: XCTestCase {
     func testMailboxStoreLoadsPageAndKeepsItInTheMirror() async throws {
         let rig = try Rig()
         try await rig.mailbox.refreshFolders("a")
-        XCTAssertEqual(rig.mailbox.folders("a").map(\.id), ["INBOX", "Archive", "Trash"])
+        XCTAssertEqual(rig.mailbox.folders("a").map(\.id), ["INBOX", "Archive", "Trash", Folder.starredID])
         try await rig.mailbox.refresh("a", folder: "INBOX")
         XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 1)
         XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").first?.subject, "Hello")
@@ -1325,6 +1361,58 @@ final class MailTests: XCTestCase {
         } catch {
             XCTAssertEqual(error, .notConnected("a"))
         }
+    }
+
+    @MainActor
+    func testBodyIsKeptLocallyAndReadOffline() async throws {
+        let rig = try Rig()
+        try await rig.mailbox.refreshFolders("a")
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        let first = try await rig.mailbox.body("a", messageID: "1:1:INBOX")
+        XCTAssertEqual(first.text, "plain text")
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        rig.access.connected = false
+        let again = try await rig.mailbox.body("a", messageID: "1:1:INBOX")
+        XCTAssertEqual(again, first)
+        XCTAssertEqual(rig.transport.calls.with { $0.filter { $0 == "fetchBody" }.count }, 1)
+    }
+
+    @MainActor
+    func testKeptBodyIsDroppedWithItsMessage() async throws {
+        let rig = try Rig()
+        try await rig.mailbox.refreshFolders("a")
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        _ = try await rig.mailbox.body("a", messageID: "1:1:INBOX")
+        XCTAssertNotNil(rig.mailbox.keptBody("a", messageID: "1:1:INBOX"))
+        try await rig.mailbox.archive("a", messageID: "1:1:INBOX")
+        XCTAssertNil(rig.mailbox.keptBody("a", messageID: "1:1:INBOX"))
+    }
+
+    @MainActor
+    func testFolderListWithoutStarredGainsLocalStarredFolderOfFlaggedMail() async throws {
+        let rig = try Rig()
+        rig.fill("INBOX", count: 3, from: Date(), flags: [.seen])
+        var inbox = rig.transport.corpus.with { $0["INBOX"] } ?? []
+        inbox[1].flags.insert(.flagged)
+        rig.transport.corpus.with { $0["INBOX"] = inbox }
+        try await rig.mailbox.refreshFolders("a")
+        XCTAssertEqual(rig.mailbox.folders("a").last, Folder(id: Folder.starredID, name: "", role: .starred))
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.messages("a", folder: Folder.starredID).map(\.id), ["1:1:INBOX"])
+        try await rig.mailbox.refresh("a", folder: Folder.starredID)
+        XCTAssertFalse(rig.mailbox.canLoadOlder("a", folder: Folder.starredID))
+        let hits = try await rig.mailbox.search("a", folder: Folder.starredID, query: "Note 1", scope: .here, continuation: nil)
+        XCTAssertEqual(hits.messages.map(\.id), ["1:1:INBOX"])
+        let none = try await rig.mailbox.search("a", folder: Folder.starredID, query: "Note 0", scope: .here, continuation: nil)
+        XCTAssertTrue(none.messages.isEmpty)
+    }
+
+    @MainActor
+    func testStarredFolderIsNotAddedWhenServerHasOne() async throws {
+        let rig = try Rig()
+        rig.transport.folderList.with { $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "STARRED", name: "S", role: .starred)] }
+        try await rig.mailbox.refreshFolders("a")
+        XCTAssertEqual(rig.mailbox.folders("a").map(\.id), ["INBOX", "STARRED"])
     }
 
     @MainActor
@@ -1457,7 +1545,7 @@ final class MailTests: XCTestCase {
         try await Task.sleep(for: .milliseconds(100))
         rig.access.emit(.syncFinished(.mail, "a"))
         for _ in 0..<50 where rig.mailbox.messages("a", folder: "INBOX").isEmpty { try await Task.sleep(for: .milliseconds(20)) }
-        XCTAssertEqual(rig.mailbox.folders("a").map(\.id), ["INBOX"])
+        XCTAssertEqual(rig.mailbox.folders("a").map(\.id), ["INBOX", Folder.starredID])
         XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 1)
         rig.access.emit(.inletRemoved("a"))
         for _ in 0..<50 where !rig.mailbox.folders("a").isEmpty { try await Task.sleep(for: .milliseconds(20)) }
@@ -1809,6 +1897,60 @@ final class MailTests: XCTestCase {
         await state.undoToast()
         XCTAssertNil(state.toast)
         XCTAssertTrue(rig.transport.calls.with { $0.contains("move") })
+    }
+
+    @MainActor
+    func testArchivingTheOpenMailSelectsTheNextAndFailureBringsTheRowBack() async throws {
+        let rig = try Rig()
+        rig.fill("INBOX", count: 3, from: Date())
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        XCTAssertEqual(state.rows.map(\.id), ["1:0:INBOX", "1:1:INBOX", "1:2:INBOX"])
+        await state.open("1:1:INBOX")
+        await state.archive("1:1:INBOX")
+        XCTAssertEqual(state.rows.map(\.id), ["1:0:INBOX", "1:2:INBOX"])
+        XCTAssertEqual(state.selectedMessage, "1:2:INBOX")
+        XCTAssertEqual(state.toast?.kind, .archived)
+        rig.transport.failure.with { $0 = MailFailure.connectionClosed }
+        await state.trash("1:0:INBOX")
+        XCTAssertEqual(state.rows.map(\.id), ["1:0:INBOX", "1:2:INBOX"])
+        XCTAssertEqual(state.toast?.kind, .deleteFailed)
+    }
+
+    @MainActor
+    func testBulkArchiveReportsPartialFailureAndKeepsThoseRows() async throws {
+        let rig = try Rig()
+        rig.fill("INBOX", count: 3, from: Date())
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        state.pickAllToggle()
+        rig.transport.failure.with { $0 = MailFailure.connectionClosed }
+        await state.bulk(.archive)
+        XCTAssertEqual(state.rows.count, 3)
+        XCTAssertEqual(state.toast?.kind, .archiveFailed)
+        XCTAssertTrue(state.picked.isEmpty)
+    }
+
+    @MainActor
+    func testShiftPickSelectsTheRangeAndThreadRowsNameEveryone() async throws {
+        let rig = try Rig()
+        rig.fill("INBOX", count: 4, from: Date())
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        state.pick("1:0:INBOX")
+        state.pickRange(to: "1:2:INBOX")
+        XCTAssertEqual(Set(state.picked), ["1:0:INBOX", "1:1:INBOX", "1:2:INBOX"])
+        let one = MessageSummary(id: "a", threadID: "t", subject: "S", from: "Anna", receivedAt: Date(), flags: [], folderIDs: ["INBOX"])
+        let two = MessageSummary(id: "b", threadID: "t", subject: "S", from: "Ben", receivedAt: Date(), flags: [], folderIDs: ["INBOX"])
+        XCTAssertEqual(InboxState.participants(in: [two, one, one])["t"], ["Ben", "Anna"])
+    }
+
+    @MainActor
+    func testMovesUseTheServerFolderNotTheLocalStarredFolder() {
+        let mail = MessageSummary(id: "a", threadID: "t", subject: "S", from: "Anna", receivedAt: Date(), flags: [], folderIDs: ["INBOX"])
+        XCTAssertEqual(InboxState.serverFolder(Folder.starredID, of: mail), "INBOX")
+        XCTAssertEqual(InboxState.serverFolder("Archive", of: mail), "Archive")
+        XCTAssertNil(InboxState.serverFolder(nil, of: mail))
     }
 
     @MainActor
@@ -2464,6 +2606,33 @@ final class MailTests: XCTestCase {
         await state.undoToast()
         XCTAssertNil(state.toast)
         XCTAssertEqual(state.card(id)?.content, .text("plain text"))
+        XCTAssertEqual(state.card(id)?.bodyFailed, false)
+    }
+
+    @MainActor
+    func testAFailedBodyMarksTheCardUntilARetryLoadsIt() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 3, from: Self.epoch, flags: [])
+        let state = await started(rig)
+        let id = "1:0:INBOX"
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        await state.open(id)
+        XCTAssertEqual(state.card(id)?.bodyFailed, true)
+        rig.transport.failure.with { $0 = nil }
+        state.retryBody(id)
+        for _ in 0..<50 where state.card(id)?.bodyFailed == true { try await Task.sleep(for: .milliseconds(20)) }
+        XCTAssertEqual(state.card(id)?.bodyFailed, false)
+        XCTAssertEqual(state.card(id)?.content, .text("plain text"))
+    }
+
+    @MainActor
+    func testARowShowsWhetherTheMessageWasAnswered() async throws {
+        let rig = try mirrored()
+        rig.fill("INBOX", count: 2, from: Self.epoch, flags: [.answered])
+        let state = await started(rig)
+        let window = state.rowWindow(limit: 10)
+        XCTAssertFalse(window.items.isEmpty)
+        XCTAssertTrue(window.items.allSatisfy(\.answered))
     }
 
     @MainActor
@@ -3586,4 +3755,28 @@ private final class SingleFolderDouble: MailTransportPort, @unchecked Sendable {
     func deleteDraft(id: String) async throws {}
     func sendDraft(id: String) async throws {}
     func wasSent(messageID: String, in folderID: String?) async throws -> Bool { false }
+}
+
+extension MailTests {
+    func testMailtoLinkOpensDraftInsteadOfSystemMail() {
+        XCTAssertEqual(HTMLEngine.navigation(scheme: "mailto", linkActivated: true, mainFrame: true), .compose)
+        let target = HTMLEngine.mailto("mailto:anna@x.de?subject=Hallo%20Welt&cc=b@x.de&body=Text")
+        XCTAssertEqual(target, MailtoTarget(to: "anna@x.de", cc: "b@x.de", subject: "Hallo Welt", body: "Text"))
+        XCTAssertEqual(HTMLEngine.mailto("mailto:?to=c@x.de")?.to, "c@x.de")
+        XCTAssertNil(HTMLEngine.mailto("https://x.de"))
+    }
+
+    @MainActor
+    func testSignatureSplitsAfterDelimiter() {
+        let split = InboxState.signatureSplit("Hallo\n\n-- \nAnna\nMuster GmbH")
+        XCTAssertEqual(split.body, "Hallo")
+        XCTAssertEqual(split.signature?.text, "Anna\nMuster GmbH")
+        XCTAssertEqual(split.signature?.lines, 2)
+        XCTAssertNil(InboxState.signatureSplit("Hallo\nohne Signatur").signature)
+        XCTAssertNil(InboxState.signatureSplit("-- \nAnna").signature)
+    }
+
+    func testMeasureScriptScalesWideContent() {
+        XCTAssertTrue(HTMLEngine.measureScript.contains("scale("))
+    }
 }

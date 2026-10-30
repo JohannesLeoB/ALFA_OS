@@ -4,7 +4,15 @@ import Foundation
 public enum Navigation: Equatable, Sendable {
     case allow
     case open
+    case compose
     case cancel
+}
+
+public struct MailtoTarget: Equatable, Sendable {
+    public let to: String
+    public let cc: String
+    public let subject: String
+    public let body: String
 }
 
 public enum HTMLEngine {
@@ -13,7 +21,14 @@ public enum HTMLEngine {
     public static let blockRemoteRules = """
     [{"trigger":{"url-filter":"^https?://.*"},"action":{"type":"block"}}]
     """
-    private static let openSchemes: Set<String> = ["http", "https", "mailto"]
+    public static let measureScript = """
+    (function(){var b=document.body,d=document.documentElement;b.style.transform='';b.style.width='';\
+    var w=d.clientWidth,s=Math.max(b.scrollWidth,d.scrollWidth);\
+    if(s>w+1){b.style.transformOrigin='0 0';b.style.width=s+'px';b.style.transform='scale('+(w/s)+')'}\
+    return Math.ceil(b.getBoundingClientRect().height)})()
+    """
+    private static let openSchemes: Set<String> = ["http", "https"]
+    private static let mailScheme = "mailto"
     private static let maxEntityLength = 10
     private static let namedEntities: [String: String] = [
         "amp": "&", "lt": "<", "gt": ">", "quot": "\"", "apos": "'", "nbsp": " ", "zwnj": "", "zwj": "", "shy": "",
@@ -94,9 +109,28 @@ public enum HTMLEngine {
 
     public static func navigation(scheme: String?, linkActivated: Bool, mainFrame: Bool) -> Navigation {
         let name = scheme?.lowercased() ?? ""
-        if linkActivated { return openSchemes.contains(name) ? .open : .cancel }
+        if linkActivated {
+            if name == mailScheme { return .compose }
+            return openSchemes.contains(name) ? .open : .cancel
+        }
         if mainFrame { return name.isEmpty || name == "about" ? .allow : .cancel }
         return .allow
+    }
+
+    public static func mailto(_ reference: String) -> MailtoTarget? {
+        guard reference.lowercased().hasPrefix(mailScheme + ":") else { return nil }
+        let rest = reference.dropFirst(mailScheme.count + 1)
+        let halves = rest.split(separator: "?", maxSplits: 1, omittingEmptySubsequences: false)
+        var fields: [String: String] = [:]
+        for pair in (halves.count > 1 ? halves[1] : "").split(separator: "&") {
+            let kv = pair.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
+            guard kv.count == 2 else { continue }
+            fields[kv[0].lowercased()] = String(kv[1]).removingPercentEncoding ?? String(kv[1])
+        }
+        let first = halves.first.map(String.init) ?? ""
+        let direct = first.removingPercentEncoding ?? first
+        let to = [direct, fields["to"] ?? ""].filter { !$0.isEmpty }.joined(separator: ", ")
+        return MailtoTarget(to: to, cc: fields["cc"] ?? "", subject: fields["subject"] ?? "", body: fields["body"] ?? "")
     }
 
     static func css(_ color: ColorValue) -> String {

@@ -23,10 +23,9 @@ extension MailboxStore {
 
     func countUnmirrored(_ inlet: Inlet.ID) async {
         guard let transport = try? transport(inlet) else { return }
-        for role in FolderRole.unseenRoles {
-            guard let folder = folderID(inlet, role: role) else { continue }
-            await storeCount(inlet, folder, transport)
-            eventBus.emit(.messagesChanged(inlet, folder: folder))
+        for folder in Self.folders(database, inlet) where FolderRole.countedRoles.contains(folder.role) {
+            await storeCount(inlet, folder.id, transport)
+            announceChange(inlet, folder.id)
         }
     }
 

@@ -6,7 +6,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 extension AppSession {
-    func perform(_ action: Action, message id: String, undoable: Bool = false, fromMenu: Bool = false) {
+    func perform(_ action: Action, message id: String, undoable: Bool = true, fromMenu: Bool = false) {
         if ActionRouter(state: inbox).message(action, id, undoable: undoable, fromMenu: fromMenu) { return }
         switch action {
         case .print: Task { await MessageExport.printMail(inbox, id) }

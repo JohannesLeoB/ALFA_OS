@@ -14,6 +14,7 @@ public enum FolderRole: String, Sendable, CaseIterable {
     case other
 
     public static let unseenRoles: [FolderRole] = [.spam, .archive]
+    public static let countedRoles: [FolderRole] = unseenRoles + [.other]
 
     public var nameKey: String { self == .outbox ? "mail.folder.outbox" : "mail.role." + rawValue }
 }
@@ -24,6 +25,9 @@ public struct Folder: Identifiable, Equatable, Sendable {
     public var role: FolderRole
 
     public static let outboxID = "local:outbox"
+    public static let starredID = "local:starred"
+
+    public var isLocal: Bool { id.hasPrefix("local:") }
 
     public init(id: String, name: String, role: FolderRole = .other) {
         self.id = id

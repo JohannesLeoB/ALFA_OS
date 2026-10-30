@@ -82,8 +82,12 @@ struct RecipientEditor: View {
             .autocorrectionDisabled()
             .focused($focused)
             .onSubmit { commit() }
+            .onAppear { if field == .to, people.isEmpty { focused = true } }
+            .onChange(of: focused) { _, now in
+                if !now { commitTyped() }
+            }
             .onChange(of: input) { _, value in
-                if value.hasSuffix(",") {
+                if let last = value.last, last == "," || last == ";" || (last == " " && value.contains("@")) {
                     input = String(value.dropLast())
                     commit()
                 }
@@ -98,12 +102,20 @@ struct RecipientEditor: View {
     private func commit() {
         let value = input.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !value.isEmpty else { return }
-        if !value.contains("@"), let first = inbox.suggestions(card.id, field, query: value).first {
-            inbox.addRecipient(card.id, field, entry: first.entry)
-        } else {
+        if value.contains("@") {
             inbox.addRecipient(card.id, field, entry: value)
+        } else {
+            let found = inbox.suggestions(card.id, field, query: value)
+            guard found.count == 1, let only = found.first else { return }
+            inbox.addRecipient(card.id, field, entry: only.entry)
         }
         input = ""
+    }
+
+    private func commitTyped() {
+        let value = input.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard value.contains("@") else { return }
+        commit()
     }
 
     private func suggestions(_ found: [Suggestion]) -> some View {

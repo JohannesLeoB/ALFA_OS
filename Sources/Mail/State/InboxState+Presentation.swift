@@ -44,7 +44,7 @@ extension InboxState {
         case .inbox: inbox
         case .drafts: draftBadge(inlet)
         case .outbox: unsent(inlet)
-        case .spam, .archive: folderUnseen[folder.id] ?? 0
+        case .spam, .archive, .other: folderUnseen[folder.id] ?? 0
         default: 0
         }
     }
@@ -76,7 +76,7 @@ extension InboxState {
 
     public var labelRows: [FolderEntry] {
         sortedFolders.filter { $0.role == .other }.map { folder in
-            FolderEntry(folder: folder, glyph: .tag, count: 0, selected: folder.id == selectedFolder, attention: false)
+            FolderEntry(folder: folder, glyph: .tag, count: folderUnseen[folder.id] ?? 0, selected: folder.id == selectedFolder, attention: false)
         }
     }
 
@@ -136,6 +136,7 @@ extension InboxState {
         let draftsFolder = role == .drafts
         let queued = role == .outbox ? Dictionary(outbox.map { ($0.id.uuidString, $0.state) }, uniquingKeysWith: { first, _ in first }) : [:]
         let now = clock()
+        let people = outgoing ? [:] : Self.participants(in: summaries)
         return entries.map { row in
             let item = row.summary
             let party = outgoing ? Self.firstParty(item.toRaw) : Self.sender(item)
@@ -144,12 +145,13 @@ extension InboxState {
             return RowPresentation(
                 id: item.id,
                 initials: PersonName.initials(party.name),
-                sender: party.name.isEmpty ? PersonName.middle(name, limit: NameLimit.sender) : name,
+                sender: Self.senderLine(thread: row.threadCount > 1 ? people[item.threadID] : nil, name: name, unnamed: party.name.isEmpty),
                 address: party.address,
                 outgoing: outgoing,
                 draft: draftsFolder,
                 unread: !item.flags.contains(.seen),
                 starred: item.flags.contains(.flagged),
+                answered: item.flags.contains(.answered),
                 selected: row.selected && stack.contains(.message(item.id)),
                 picked: picked.contains(item.id),
                 thread: row.threadCount > 1 ? row.threadCount : nil,
@@ -161,6 +163,23 @@ extension InboxState {
                 outbox: queued[item.id]
             )
         }
+    }
+
+    static func participants(in list: [MessageSummary]) -> [String: [String]] {
+        var result: [String: [String]] = [:]
+        var seen: Set<String> = []
+        for item in list where !item.threadID.isEmpty {
+            let party = sender(item)
+            let name = party.name.isEmpty ? party.address : party.name
+            guard !name.isEmpty, seen.insert(item.threadID + "\u{0}" + name.lowercased()).inserted else { continue }
+            result[item.threadID, default: []].append(name)
+        }
+        return result
+    }
+
+    static func senderLine(thread: [String]?, name: String, unnamed: Bool) -> String {
+        if let thread, thread.count > 1 { return thread.joined(separator: ", ") }
+        return unnamed ? PersonName.middle(name, limit: NameLimit.sender) : name
     }
 
     public func preview(_ item: MessageSummary) -> String {

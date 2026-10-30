@@ -118,16 +118,20 @@ extension InboxState {
         var seen = Set(contacts.items.map { $0.address.lowercased() })
         var result = contacts.items.filter { !$0.address.isEmpty }
             .map { Suggestion(name: $0.name, address: $0.address, tag: .contact) }
-        func add(_ raw: String) {
-            let parts = PersonName.display(raw)
-            let address = parts.address.isEmpty ? raw : parts.address
+        func add(name: String, address: String, tag: SuggestionTag) {
             let key = address.lowercased()
             guard !key.isEmpty, key != own, seen.insert(key).inserted else { return }
-            result.append(Suggestion(name: parts.name, address: address, tag: .sender))
+            result.append(Suggestion(name: name, address: address, tag: tag))
+        }
+        for person in directory.people { add(name: person.name, address: person.address, tag: .contact) }
+        guard directory.isOn(ContactSource.mail.id) else { return result }
+        func addRaw(_ raw: String) {
+            let parts = PersonName.display(raw)
+            add(name: parts.name, address: parts.address.isEmpty ? raw : parts.address, tag: .sender)
         }
         for item in summaries + cards.map(\.summary) {
-            add(item.fromRaw)
-            for entry in AddressListParser.split(item.ccRaw) { add(entry) }
+            addRaw(item.fromRaw)
+            for entry in AddressListParser.split(item.toRaw) + AddressListParser.split(item.ccRaw) { addRaw(entry) }
         }
         return result
     }

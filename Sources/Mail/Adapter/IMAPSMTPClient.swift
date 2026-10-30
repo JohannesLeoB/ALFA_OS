@@ -406,6 +406,7 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
             fromRaw: (envelope?.from ?? []).map(\.raw).joined(separator: ", "),
             toRaw: (envelope?.to ?? []).map(\.raw).joined(separator: ", "),
             ccRaw: (envelope?.cc ?? []).map(\.raw).joined(separator: ", "),
+            replyToRaw: (envelope?.replyTo ?? []).map(\.raw).joined(separator: ", "),
             snippet: snippet,
             receivedAt: entry.internalDate ?? envelope?.date.flatMap(DateEngine.parseMessageDate),
             flags: flags, folderIDs: [folder], attachmentCount: attachments.count,
