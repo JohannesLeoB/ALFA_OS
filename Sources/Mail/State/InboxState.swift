@@ -44,6 +44,8 @@ public final class InboxState {
     var toastSerial = 0
     @ObservationIgnored var undoAction: (@MainActor () async -> Void)?
     @ObservationIgnored var sendAfterSave: Set<UUID> = []
+    @ObservationIgnored var autosaveSerials: [UUID: Int] = [:]
+    @ObservationIgnored var autosaveTicking: Set<UUID> = []
 
     var phase: LoadPhase = .settled
     var searchContinuation: SearchContinuation?
@@ -57,13 +59,18 @@ public final class InboxState {
     @ObservationIgnored var readSerials: [String: Int] = [:]
 
     let clock: @Sendable () -> Date
+    let autosavePause: Duration
+    let autosaveInterval: Duration
 
     public init(mailbox: any MailboxPort, outbox: any OutboxPort, contacts: ContactState,
-                clock: @escaping @Sendable () -> Date = { Date() }) {
+                clock: @escaping @Sendable () -> Date = { Date() },
+                autosavePause: Duration? = nil, autosaveInterval: Duration? = nil) {
         self.mailbox = mailbox
         self.outboxPort = outbox
         self.contacts = contacts
         self.clock = clock
+        self.autosavePause = autosavePause ?? AutosaveEngine.pause
+        self.autosaveInterval = autosaveInterval ?? AutosaveEngine.interval
     }
 
     public var now: Date { clock() }
@@ -163,6 +170,7 @@ public final class InboxState {
         loadFoldersFromMailbox()
         refreshCounts()
         outbox = outboxPort.outbox
+        restoreKeptDrafts()
         if eventTask == nil {
             eventTask = Task { [weak self] in
                 guard let events = self?.mailbox.events else { return }

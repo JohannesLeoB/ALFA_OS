@@ -76,6 +76,8 @@ extension InboxState {
         drafts[now].state = .edited
         drafts[now].draft.from = chosen
         if drafts[now].draft.receiptTo != nil { drafts[now].draft.receiptTo = chosen.address }
+        keepLocal(id)
+        scheduleAutosave(id)
         await moveToStack(.draft(id), of: inlet)
     }
 

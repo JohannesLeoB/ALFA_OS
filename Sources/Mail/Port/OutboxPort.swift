@@ -1,9 +1,13 @@
+import Foundation
 import Hub
 
 @MainActor
 public protocol OutboxPort: AnyObject {
     var outbox: [OutboxItem] { get }
     var unsavedCount: Int { get }
+    var keptDrafts: [KeptDraft] { get }
+    func keep(_ kept: KeptDraft)
+    func dropKept(_ id: UUID)
     func resave()
     func saveDraft(_ inlet: Inlet.ID, _ draft: Draft, replacing draftID: String?) async throws(HubFailure) -> SavedDraft
     func loadDraft(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> StoredDraft

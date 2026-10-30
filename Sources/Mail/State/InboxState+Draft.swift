@@ -29,14 +29,20 @@ extension InboxState {
         guard let card = draft(id) else { return }
         detach(.draft(id))
         if Self.blank(card.draft) {
-            if card.remoteID == nil { drafts.removeAll { $0.id == id } }
+            if card.remoteID == nil {
+                drafts.removeAll { $0.id == id }
+                dropLocal(id)
+            }
             return
         }
         switch card.state {
         case .saved: break
         default: await save(id)
         }
-        if case .saved = draft(id)?.state { post(.draftSaved) }
+        if case .saved = draft(id)?.state {
+            dropLocal(id)
+            post(.draftSaved)
+        }
     }
 
     @discardableResult
@@ -124,7 +130,10 @@ extension InboxState {
                 outboxPort.revise(outboxID, drafts[index].draft)
                 outbox = outboxPort.outbox
             }
-        default: drafts[index].state = .edited
+        default:
+            drafts[index].state = .edited
+            keepLocal(id)
+            scheduleAutosave(id)
         }
     }
 
@@ -144,6 +153,7 @@ extension InboxState {
                 drafts[now].remoteID = saved.id
                 drafts[now].mirrorID = saved.mirrorID
                 if drafts[now].state == .saving { drafts[now].state = .saved(clock()) }
+                keepLocal(id)
             } else {
                 try? await outboxPort.deleteDraft(card.inlet, draftID: saved.id)
             }
@@ -173,6 +183,7 @@ extension InboxState {
             if let mirrorID { goneDrafts[inlet, default: []].insert(mirrorID) }
         }
         drafts.removeAll { $0.id == id }
+        dropLocal(id)
         detach(.draft(id))
     }
 
@@ -194,6 +205,7 @@ extension InboxState {
             drafts[index].remoteID = stored.id
             drafts[index].mirrorID = messageID
         }
+        keepLocal(id)
         return id
     }
 
@@ -227,10 +239,12 @@ extension InboxState {
         switch outcome {
         case .sent:
             drafts[now].state = .sent
+            dropLocal(id)
             if let mirrorID = card.mirrorID { goneDrafts[card.inlet, default: []].insert(mirrorID) }
         case .queued(let outboxID):
             drafts[now].outboxID = outboxID
             drafts[now].state = .queuedInOutbox
+            dropLocal(id)
             if drafts[now].draft != card.draft { outboxPort.revise(outboxID, drafts[now].draft) }
             reconcileDrafts()
         }
@@ -241,6 +255,7 @@ extension InboxState {
             guard drafts[index].state == .queuedInOutbox, let outboxID = drafts[index].outboxID else { continue }
             guard let item = outbox.first(where: { $0.id == outboxID }) else {
                 drafts[index].state = .sent
+                dropLocal(drafts[index].id)
                 if let mirrorID = drafts[index].mirrorID { goneDrafts[drafts[index].inlet, default: []].insert(mirrorID) }
                 continue
             }
@@ -263,6 +278,7 @@ extension InboxState {
                              saveFailure: nil)
         drafts.append(card)
         attach(.draft(card.id))
+        keepLocal(card.id)
         return card.id
     }
 

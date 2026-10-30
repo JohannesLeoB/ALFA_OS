@@ -7,7 +7,7 @@ import Storage
 @MainActor
 public final class OutboxStore: OutboxPort {
     private let access: any AccessPort
-    private let database: SQLiteStore
+    let database: SQLiteStore
     private let events: Broadcast<MailboxEvent>
     private var items: [OutboxItem]
     private var unsaved: Set<OutboxItem.ID> = []

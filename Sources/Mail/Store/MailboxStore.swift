@@ -380,7 +380,7 @@ public final class MailboxStore: MailboxPort {
         running.forEach { $0.cancel() }
         for task in running { _ = await task.value }
         let deleted: Void? = try? database.write { db in
-            for table in ["mail_message", "mail_folder", "mail_sync", "mail_cursor", "mail_outbox"] {
+            for table in ["mail_message", "mail_folder", "mail_sync", "mail_cursor", "mail_outbox", "mail_draft"] {
                 try db.execute(sql: "DELETE FROM \(table) WHERE inlet = ?", arguments: [inlet])
             }
         }
@@ -414,6 +414,9 @@ public final class MailboxStore: MailboxPort {
             try mirrorDeliveredFolders(inlet)
             if let inbox = inboxID(inlet) {
                 try await refresh(inlet, folder: inbox)
+            }
+            for role in [FolderRole.drafts, .sent] {
+                if let folder = folderID(inlet, role: role) { try await refresh(inlet, folder: folder) }
             }
         } catch {
             eventBus.emit(.syncFailed(inlet, Self.syncHint(error, inlet: inlet)))

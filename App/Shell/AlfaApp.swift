@@ -6,6 +6,7 @@ import SwiftUI
 @main
 struct AlfaApp: App {
     @State private var session: AppSession?
+    @NSApplicationDelegateAdaptor(QuitDelegate.self) private var quit
 
     init() {
         _session = State(initialValue: try? AppSession.live())
@@ -15,6 +16,7 @@ struct AlfaApp: App {
         WindowGroup {
             if let session {
                 Content(session: session)
+                    .onAppear { quit.flush = { await session.inbox.flushDrafts() } }
             } else {
                 Text(LocalizedStringKey("error.resources"))
             }

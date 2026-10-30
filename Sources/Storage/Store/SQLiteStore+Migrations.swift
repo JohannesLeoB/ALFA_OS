@@ -192,6 +192,13 @@ extension SQLiteStore {
                 CREATE INDEX mail_message_order ON mail_message (inlet, folder, receivedAt DESC, id DESC)
                 """)
         }
+        migrator.registerMigration("mailDraft") { db in
+            try db.execute(sql: """
+                CREATE TABLE mail_draft (
+                    id TEXT PRIMARY KEY, inlet TEXT NOT NULL, draft BLOB NOT NULL, remoteID TEXT, mirrorID TEXT,
+                    updatedAt REAL NOT NULL)
+                """)
+        }
         return migrator
     }
 }
