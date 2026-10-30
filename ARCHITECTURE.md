@@ -339,7 +339,7 @@ Which Swift file draws each element of the valid design master (Mail and Setting
 | Settings | Account row (label display name, sub provider, status, line false) | Einstellungen 269 | `App/Settings/AccountBlock.swift` |
 | Settings | "Name in Mail" input | Einstellungen 292 | `App/Settings/MailboxNameRow.swift` |
 | Settings | "Angezeigt als" pill (own name / local@ / @domain) | Einstellungen 293 | `App/Settings/MailboxDisplayRow.swift` |
-| Settings | "Bilder in Mails laden" toggle per account (and for Google) | Einstellungen 269, Einstellungen 309 | `App/Settings/IntegrationCard.swift` |
+| Settings | "Bilder in Mails laden" toggle per account (and for Google) | Einstellungen 269, Einstellungen 309 | `App/Settings/MailboxImagesRow.swift`, `App/Settings/AccountBlock.swift`, `App/Settings/IntegrationCard.swift` |
 | Settings | Signature block (head "Signatur · …", textarea, 2 toggles, "Signatur entfernen"  | Einstellungen 111, Einstellungen 251 | `App/Settings/SignatureBlock.swift` |
 | Settings | Signature empty: note + accent "Signatur anlegen" | Einstellungen 254 | `App/Settings/SignatureBlock.swift` |
 | Settings | "Konto entfernen" confirm | Einstellungen 269 | `App/Settings/AccountBlock.swift` |

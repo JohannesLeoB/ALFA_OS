@@ -31,6 +31,10 @@ enum SettingsKey {
 
     static let mailboxServerCopyPrefix = "settings.mailbox.serverCopy."
 
+    static let mailboxImagesPrefix = "settings.mailbox.images."
+
+    static func mailboxImages(_ inlet: String) -> String { mailboxImagesPrefix + inlet }
+
     static func mailboxServerCopy(_ inlet: String) -> String { mailboxServerCopyPrefix + inlet }
 
     static let mailboxSignaturePrefix = "settings.mailbox.signature."

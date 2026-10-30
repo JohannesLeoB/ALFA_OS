@@ -21,6 +21,7 @@ public final class SettingsState {
     private(set) var mailboxDisplays: [Inlet.ID: MailboxDisplay] = [:]
     private(set) var mailboxRanges: [Inlet.ID: MailboxRange] = [:]
     private(set) var serverCopies: [Inlet.ID: ServerCopy] = [:]
+    private(set) var mailboxImages: [Inlet.ID: Bool] = [:]
     private(set) var mailboxNames: [Inlet.ID: String] = [:]
     private(set) var mailboxSignatures: [Inlet.ID: String] = [:]
     private(set) var signaturesOnNew: [Inlet.ID: Bool] = [:]
@@ -81,6 +82,11 @@ public final class SettingsState {
         for key in stored.keys where key.hasPrefix(SettingsKey.mailboxServerCopyPrefix) {
             if let copy = text(key).flatMap(ServerCopy.init(rawValue:)) {
                 serverCopies[String(key.dropFirst(SettingsKey.mailboxServerCopyPrefix.count))] = copy
+            }
+        }
+        for key in stored.keys where key.hasPrefix(SettingsKey.mailboxImagesPrefix) {
+            if let value = flag(key) {
+                mailboxImages[String(key.dropFirst(SettingsKey.mailboxImagesPrefix.count))] = value
             }
         }
     }
@@ -201,7 +207,18 @@ public final class SettingsState {
         save(SettingsKey.mailboxServerCopy(inlet), value.rawValue)
     }
 
+    public func loadImages(_ inlet: Inlet.ID) -> Bool {
+        mailboxImages[inlet] ?? privacy.loadImages
+    }
+
+    public func setLoadImages(_ value: Bool, for inlet: Inlet.ID) {
+        mailboxImages[inlet] = value
+        save(SettingsKey.mailboxImages(inlet), value)
+    }
+
     public func forget(_ inlet: Inlet.ID) {
+        mailboxImages[inlet] = nil
+        try? settings.remove(key: SettingsKey.mailboxImages(inlet))
         mailboxDisplays[inlet] = nil
         mailboxRanges[inlet] = nil
         serverCopies[inlet] = nil

@@ -35,13 +35,6 @@ struct IntegrationCard: View {
             notices(reading)
             if disconnecting { disconnectNotice(reading) }
             if info.listsAccounts { AccountBlock(context: context, info: info, reading: reading, started: $started) }
-            if reading.state != .notConnected, reading.inlets.contains(where: AccountBlock.hasMailbox) {
-                SettingsRow(label: appearance.text("settings.privacy.images")) {
-                    ToggleSwitch(
-                        isOn: Binding(get: { context.state.privacy.loadImages }, set: { value in context.state.updatePrivacy { $0.loadImages = value } }),
-                        labelKey: "settings.privacy.images")
-                }
-            }
             SettingsRow(label: appearance.text("settings.row.access")) {
                 SettingsValue(text: Text(verbatim: access))
             }
@@ -67,6 +60,7 @@ struct IntegrationCard: View {
                     ForEach(reading.inlets.filter(AccountBlock.hasMailbox)) { inlet in
                         MailboxNameRow(state: context.state, inlet: inlet)
                         MailboxDisplayRow(state: context.state, inlet: inlet)
+                        MailboxImagesRow(state: context.state, inlet: inlet)
                         MailboxRangeRow(state: context.state, inbox: context.inbox, inlet: inlet)
                         MailboxServerCopyRow(state: context.state, inbox: context.inbox, inlet: inlet)
                         SignatureBlock(state: context.state, inlet: inlet)
