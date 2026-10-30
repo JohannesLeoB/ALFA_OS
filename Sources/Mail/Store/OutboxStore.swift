@@ -33,7 +33,8 @@ public final class OutboxStore: OutboxPort {
     }
 
     public func saveDraft(_ inlet: Inlet.ID, _ draft: Draft, replacing draftID: String?) async throws(HubFailure) -> SavedDraft {
-        try await perform(inlet) { try await $0.saveDraft(draft, replacing: draftID) }
+        let target = MailboxStore.folderID(database, inlet, role: .drafts)
+        return try await perform(inlet) { try await $0.saveDraft(draft, replacing: draftID, into: target) }
     }
 
     public func loadDraft(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> StoredDraft {
@@ -94,7 +95,9 @@ public final class OutboxStore: OutboxPort {
 
     private func submit(_ queued: OutboxItem) async -> SendOutcome {
         var item = queued
-        switch await DeliveryEngine.deliver(&item, verify: false, byUser: false, access: access) {
+        let inlet = queued.inlet
+        switch await DeliveryEngine.deliver(&item, verify: false, byUser: false, access: access,
+                                            folder: { MailboxStore.folderID(self.database, inlet, role: $0) }) {
         case .sent:
             return .sent
         case .transient:
@@ -113,8 +116,10 @@ public final class OutboxStore: OutboxPort {
         guard let index = items.firstIndex(where: { $0.id == id }), items[index].state == .waiting else { return }
         items[index].startSending()
         var item = items[index]
+        let inlet = item.inlet
         events.emit(.outboxChanged)
-        let result = await DeliveryEngine.deliver(&item, verify: true, byUser: byUser, access: access)
+        let result = await DeliveryEngine.deliver(&item, verify: true, byUser: byUser, access: access,
+                                                  folder: { MailboxStore.folderID(self.database, inlet, role: $0) })
         guard let current = items.firstIndex(where: { $0.id == id }) else { return }
         items[current].draftID = item.draftID
         items[current].mirrorID = item.mirrorID

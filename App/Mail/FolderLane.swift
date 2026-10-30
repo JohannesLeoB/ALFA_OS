@@ -70,11 +70,13 @@ struct FolderLane: View {
     private var labels: some View {
         let rows = inbox.labelRows
         if !rows.isEmpty {
-            appearance.text("mail.lane.labels")
-                .designText(\.inkTertiary, size: Tokens.TextSize.small)
-                .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
-                .padding(.bottom, CGFloat(Tokens.Spacing.step8))
-                .frame(maxWidth: .infinity, minHeight: CGFloat(Tokens.Spacing.step32), alignment: .bottomLeading)
+            if inbox.showsLabelHeading {
+                appearance.text("mail.lane.labels")
+                    .designText(\.inkTertiary, size: Tokens.TextSize.small)
+                    .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+                    .padding(.bottom, CGFloat(Tokens.Spacing.step8))
+                    .frame(maxWidth: .infinity, minHeight: CGFloat(Tokens.Spacing.step32), alignment: .bottomLeading)
+            }
             ForEach(rows) { row in
                 LaneRow(glyph: row.glyph, label: Text(verbatim: row.folder.name), selected: row.selected, count: nil) {
                     Task { await inbox.selectFolder(row.folder.id) }

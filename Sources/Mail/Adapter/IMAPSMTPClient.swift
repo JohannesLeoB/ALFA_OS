@@ -27,8 +27,9 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
 
     func listFolders() async throws -> [Folder] {
         try await withIncoming { session in
-            try await session.listFolders().filter(\.isSelectable).map {
-                Folder(id: $0.path, name: $0.displayName, role: $0.role)
+            let entries = try await session.listFolders().filter(\.isSelectable)
+            return zip(entries, IMAPListEntry.roles(entries)).map {
+                Folder(id: $0.path, name: $0.displayName, role: $1)
             }
         }
     }
@@ -149,18 +150,23 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
             guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
             try await session.store(uid: reference.uid, flags: adding, adding: true)
             try await session.store(uid: reference.uid, flags: removing, adding: false)
-            if moveToTrash { try await Self.discard(reference, session: session) }
+            if moveToTrash { try await Self.discard(reference, trash: nil, session: session) }
         }
     }
 
-    private static func discard(_ reference: IMAPMessageReference, session: IMAPClient) async throws {
-        let folders = try await session.listFolders()
-        guard let trash = folders.first(where: { $0.role == .trash && $0.isSelectable }),
-              trash.path != reference.folder else {
+    private static func discard(_ reference: IMAPMessageReference, trash: String?, session: IMAPClient) async throws {
+        let path: String?
+        if let trash {
+            path = trash
+        } else {
+            let entries = try await session.listFolders().filter(\.isSelectable)
+            path = zip(entries, IMAPListEntry.roles(entries)).first { $1 == .trash }?.0.path
+        }
+        guard let path, path != reference.folder else {
             try await session.store(uid: reference.uid, flags: [Flag.deleted.imapName], adding: true)
             return
         }
-        try await relocate(reference, to: trash.path, session: session)
+        try await relocate(reference, to: path, session: session)
     }
 
     private static func relocate(_ reference: IMAPMessageReference, to path: String, session: IMAPClient) async throws {
@@ -185,51 +191,39 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
         if await session.has("UIDPLUS") { try await session.expunge(uid: reference.uid) }
     }
 
-    private enum Destination: Sendable {
-        case role(FolderRole)
-        case path(String)
-    }
-
-    private func relocate(_ messageID: String, to destination: Destination) async throws {
+    private func relocate(_ messageID: String, to folderID: String?, role: FolderRole) async throws {
         let reference = try IMAPMessageReference.decode(messageID)
+        guard let folderID else { throw MailFailure.folderNotFound(role.rawValue) }
         try await withIncoming { session in
             let selection = try await session.select(reference.folder, readOnly: false)
             guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
-            let folders = try await session.listFolders().filter(\.isSelectable)
-            let target: IMAPListEntry?
-            let name: String
-            switch destination {
-            case .role(let role):
-                target = folders.first { $0.role == role }
-                name = role.rawValue
-            case .path(let path):
-                target = folders.first { $0.path == path }
-                name = path
-            }
-            guard let target else { throw MailFailure.folderNotFound(name) }
-            guard target.path != reference.folder else { return }
-            try await Self.relocate(reference, to: target.path, session: session)
+            guard folderID != reference.folder else { return }
+            try await Self.relocate(reference, to: folderID, session: session)
         }
     }
 
-    func archive(messageID: String) async throws {
-        try await relocate(messageID, to: .role(.archive))
+    func archive(messageID: String, folderID: String?) async throws {
+        try await relocate(messageID, to: folderID, role: .archive)
     }
 
     func move(messageID: String, toFolderID: String) async throws {
-        try await relocate(messageID, to: .path(toFolderID))
+        try await relocate(messageID, to: toFolderID, role: .other)
     }
 
-    func markSpam(messageID: String) async throws {
-        try await relocate(messageID, to: .role(.spam))
+    func markSpam(messageID: String, folderID: String?) async throws {
+        try await relocate(messageID, to: folderID, role: .spam)
     }
 
-    func trash(messageID: String) async throws {
+    func trash(messageID: String, folderID: String?) async throws {
         let reference = try IMAPMessageReference.decode(messageID)
         try await withIncoming { session in
             let selection = try await session.select(reference.folder, readOnly: false)
             guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
-            try await Self.discard(reference, session: session)
+            guard let folderID, folderID != reference.folder else {
+                try await session.store(uid: reference.uid, flags: [Flag.deleted.imapName], adding: true)
+                return
+            }
+            try await Self.relocate(reference, to: folderID, session: session)
         }
     }
 
@@ -254,25 +248,22 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
         }
     }
 
-    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> SavedDraft {
+    func saveDraft(_ draft: Draft, replacing draftID: String?, into folderID: String?) async throws -> SavedDraft {
         let token = draft.messageID ?? UUID().uuidString.lowercased()
         let message = try MessageEngine.build(draft, account: account, messageID: token, asDraft: true)
         let replaced = try draftID.map(IMAPMessageReference.decode)
         return try await withIncoming(retry: false) { session in
-            let folders = try await session.listFolders()
-            guard let drafts = folders.first(where: { $0.role == .drafts && $0.isSelectable }) else {
-                throw MailFailure.folderNotFound(FolderRole.drafts.rawValue)
-            }
-            let result = try await session.append(to: drafts.path, flags: [Flag.draft.imapName], message: message.data)
+            guard let folderID else { throw MailFailure.folderNotFound(FolderRole.drafts.rawValue) }
+            let result = try await session.append(to: folderID, flags: [Flag.draft.imapName], message: message.data)
             let created: IMAPMessageReference
             if let code = result.code, code.name == "APPENDUID", code.values.count >= 2,
                let validity = code.values[0].int, let uid = code.values[1].int {
-                created = IMAPMessageReference(folder: drafts.path, uidValidity: validity, uid: uid)
+                created = IMAPMessageReference(folder: folderID, uidValidity: validity, uid: uid)
             } else {
-                let selection = try await session.select(drafts.path, readOnly: true)
+                let selection = try await session.select(folderID, readOnly: true)
                 let found = try await session.searchUIDs([.raw("HEADER"), .raw("MESSAGE-ID"), .string(token)])
                 guard let uid = found.last else { throw MailFailure.messageNotFound(token) }
-                created = IMAPMessageReference(folder: drafts.path, uidValidity: selection.uidValidity, uid: uid)
+                created = IMAPMessageReference(folder: folderID, uidValidity: selection.uidValidity, uid: uid)
             }
             if let replaced { try? await Self.removeMessage(replaced, session: session) }
             return SavedDraft(id: created.encoded)
@@ -335,12 +326,10 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
         try? await deleteDraft(id: id)
     }
 
-    func wasSent(messageID: String) async throws -> Bool {
-        try await withIncoming { session in
-            guard let sent = try await session.listFolders().first(where: { $0.role == .sent && $0.isSelectable }) else {
-                throw MailFailure.folderNotFound(FolderRole.sent.rawValue)
-            }
-            _ = try await session.select(sent.path, readOnly: true)
+    func wasSent(messageID: String, in folderID: String?) async throws -> Bool {
+        guard let folderID else { throw MailFailure.folderNotFound(FolderRole.sent.rawValue) }
+        return try await withIncoming { session in
+            _ = try await session.select(folderID, readOnly: true)
             let found = try await session.searchUIDs([.raw("HEADER"), .raw("MESSAGE-ID"), .string(messageID)])
             return !found.isEmpty
         }

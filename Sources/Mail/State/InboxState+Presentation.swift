@@ -52,6 +52,10 @@ extension InboxState {
         }
     }
 
+    public var showsLabelHeading: Bool {
+        selectedInlet.map { mailbox.usesLabels($0) } ?? false
+    }
+
     public var labelRows: [FolderEntry] {
         sortedFolders.filter { $0.role == .other }.map { folder in
             FolderEntry(folder: folder, glyph: .tag, count: 0, selected: folder.id == selectedFolder)

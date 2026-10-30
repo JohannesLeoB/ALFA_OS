@@ -122,7 +122,9 @@ actor IMAPClient {
     }
 
     func listFolders() async throws -> [IMAPListEntry] {
-        let result = try await run([.raw("LIST"), .string(""), .string("*")])
+        var command: [IMAPArgument] = [.raw("LIST"), .string(""), .string("*")]
+        if has("SPECIAL-USE") { command += [.raw("RETURN"), .raw("(SPECIAL-USE)")] }
+        let result = try await run(command)
         return result.dataRows.compactMap(IMAPListEntry.parse)
     }
 

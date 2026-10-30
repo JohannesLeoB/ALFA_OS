@@ -505,9 +505,9 @@ final class GoogleTests: XCTestCase {
         let http = FakeHttp()
         let mail = mailClient(http)
         let messages = "/gmail/v1/users/me/messages"
-        try await mail.archive(messageID: "m1")
-        try await mail.trash(messageID: "m1")
-        try await mail.markSpam(messageID: "m1")
+        try await mail.archive(messageID: "m1", folderID: nil)
+        try await mail.trash(messageID: "m1", folderID: nil)
+        try await mail.markSpam(messageID: "m1", folderID: nil)
         try await mail.move(messageID: "m1", toFolderID: "Label_7")
         try await mail.move(messageID: "m1", toFolderID: "TRASH")
         try await mail.move(messageID: "m1", toFolderID: "ALL")
@@ -922,8 +922,8 @@ final class GoogleTests: XCTestCase {
         let http = FakeHttp { _ in (200, #"{"id":"d9","message":{"id":"m9"}}"#) }
         let mail = mailClient(http)
         let draft = Draft(to: "ann@x.test", subject: "Hi", body: "text", threadID: "t1", messageID: "abc")
-        let created = try await mail.saveDraft(draft, replacing: nil)
-        let updated = try await mail.saveDraft(draft, replacing: "d1")
+        let created = try await mail.saveDraft(draft, replacing: nil, into: nil)
+        let updated = try await mail.saveDraft(draft, replacing: "d1", into: nil)
         try await mail.deleteDraft(id: "d1")
         try await mail.sendDraft(id: "d1")
         try await mail.send(draft)
@@ -947,10 +947,10 @@ final class GoogleTests: XCTestCase {
 
     func testASavedDraftWithoutAMessageInTheAnswerIsMirroredUnderItsDraftID() async throws {
         let http = FakeHttp { _ in (200, #"{"id":"d9"}"#) }
-        let saved = try await mailClient(http).saveDraft(Draft(to: "a@x.test", subject: "S", body: "b"), replacing: nil)
+        let saved = try await mailClient(http).saveDraft(Draft(to: "a@x.test", subject: "S", body: "b"), replacing: nil, into: nil)
         XCTAssertEqual(saved, SavedDraft(id: "d9", mirrorID: "d9"))
         let empty = FakeHttp { _ in (200, "{}") }
-        let kept = try await mailClient(empty).saveDraft(Draft(to: "a@x.test", subject: "S", body: "b"), replacing: "d1")
+        let kept = try await mailClient(empty).saveDraft(Draft(to: "a@x.test", subject: "S", body: "b"), replacing: "d1", into: nil)
         XCTAssertEqual(kept, SavedDraft(id: "d1"))
     }
 
@@ -1005,7 +1005,7 @@ final class GoogleTests: XCTestCase {
     func testAProviderRefusalSurfacesAsTheOriginalGoogleFault() async {
         let http = FakeHttp { _ in (403, #"{"error":{"code":403,"message":"Insufficient Permission","errors":[{"domain":"global","reason":"insufficientPermissions"}]}}"#) }
         do {
-            try await mailClient(http).archive(messageID: "m1")
+            try await mailClient(http).archive(messageID: "m1", folderID: nil)
             XCTFail("must throw")
         } catch GoogleFailure.api(.gmail, let fault) {
             XCTAssertEqual(fault.status, 403)
@@ -1017,10 +1017,10 @@ final class GoogleTests: XCTestCase {
 
     func testWasSentSearchesTheSentFolderByMessageId() async throws {
         let sent = FakeHttp { call in call.path.hasSuffix("/messages") ? (200, #"{"messages":[{"id":"a"}]}"#) : (200, #"{"id":"a"}"#) }
-        let found = try await mailClient(sent).wasSent(messageID: "abc")
+        let found = try await mailClient(sent).wasSent(messageID: "abc", in: nil)
         XCTAssertTrue(found)
         XCTAssertTrue(try XCTUnwrap(sent.calls.first).query.contains("rfc822msgid:abc@mail.gmail.com"))
-        let none = try await mailClient(FakeHttp { _ in (200, "{}") }).wasSent(messageID: "abc")
+        let none = try await mailClient(FakeHttp { _ in (200, "{}") }).wasSent(messageID: "abc", in: nil)
         XCTAssertFalse(none)
     }
 

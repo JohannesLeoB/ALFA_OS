@@ -2,7 +2,7 @@ import Foundation
 import Hub
 import Mail
 
-struct GmailMailClient: GmailPort, SourcePort {
+struct GmailMailClient: GmailPort, SourcePort, LabelPort {
     typealias Backend = GmailFetchPort & GmailWritePort & GmailDraftPort & GmailLabelPort
 
     static let allMail = "ALL"
@@ -47,7 +47,7 @@ struct GmailMailClient: GmailPort, SourcePort {
 
     func setFlags(messageID: String, add: Set<Flag>, remove: Set<Flag>) async throws {
         if add.contains(.deleted) {
-            try await trash(messageID: messageID)
+            try await trash(messageID: messageID, folderID: nil)
             return
         }
         var labelsToAdd: [String] = []
@@ -58,7 +58,7 @@ struct GmailMailClient: GmailPort, SourcePort {
         try await gmail.modifyLabels(messageID: messageID, add: labelsToAdd, remove: labelsToRemove)
     }
 
-    func archive(messageID: String) async throws {
+    func archive(messageID: String, folderID: String?) async throws {
         try await gmail.modifyLabels(messageID: messageID, add: [], remove: [GmailSystemLabel.inbox])
     }
 
@@ -69,7 +69,7 @@ struct GmailMailClient: GmailPort, SourcePort {
         case GmailSystemLabel.spam:
             try await gmail.markSpam(messageID: messageID)
         case Self.allMail:
-            try await archive(messageID: messageID)
+            try await archive(messageID: messageID, folderID: nil)
         case GmailSystemLabel.inbox:
             try await gmail.modifyLabels(messageID: messageID, add: [GmailSystemLabel.inbox], remove: [])
         case GmailSystemLabel.starred, GmailSystemLabel.sent, GmailSystemLabel.draft:
@@ -79,13 +79,15 @@ struct GmailMailClient: GmailPort, SourcePort {
         }
     }
 
-    func trash(messageID: String) async throws {
+    func trash(messageID: String, folderID: String?) async throws {
         try await gmail.trashMessage(messageID: messageID)
     }
 
-    func markSpam(messageID: String) async throws {
+    func markSpam(messageID: String, folderID: String?) async throws {
         try await gmail.markSpam(messageID: messageID)
     }
+
+    var usesLabels: Bool { true }
 
     var offersSource: Bool { true }
 
@@ -101,7 +103,7 @@ struct GmailMailClient: GmailPort, SourcePort {
         try await gmail.fetchThread(threadID: threadID, maxMessages: Self.threadLimit).map(Self.summary)
     }
 
-    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> SavedDraft {
+    func saveDraft(_ draft: Draft, replacing draftID: String?, into folderID: String?) async throws -> SavedDraft {
         if let draftID { return try await gmail.updateDraft(id: draftID, draft: draft) }
         return try await gmail.createDraft(draft)
     }
@@ -119,7 +121,7 @@ struct GmailMailClient: GmailPort, SourcePort {
         try await gmail.sendDraft(id: id)
     }
 
-    func wasSent(messageID: String) async throws -> Bool {
+    func wasSent(messageID: String, in folderID: String?) async throws -> Bool {
         let query = "in:sent rfc822msgid:\(messageID)@\(DraftMimeEngine.messageIDDomain)"
         return try await !gmail.searchMessages(query: query, maxResults: 1).isEmpty
     }

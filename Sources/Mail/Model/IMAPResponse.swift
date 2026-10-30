@@ -83,13 +83,16 @@ struct IMAPListEntry: Equatable, Sendable {
         return last
     }
 
-    var role: FolderRole {
-        if path.uppercased() == "INBOX" { return .inbox }
+    var attributeRole: FolderRole? {
         if attributes.contains("\\sent") { return .sent }
         if attributes.contains("\\drafts") { return .drafts }
         if attributes.contains("\\trash") { return .trash }
         if attributes.contains("\\junk") { return .spam }
         if attributes.contains("\\archive") { return .archive }
+        return nil
+    }
+
+    var nameRole: FolderRole? {
         switch displayName.lowercased().filter({ !$0.isWhitespace }) {
         case "sent", "sentitems", "sentmessages", "sentmail", "gesendet", "gesendeteelemente", "gesendeteobjekte":
             return .sent
@@ -98,12 +101,30 @@ struct IMAPListEntry: Equatable, Sendable {
         case "trash", "deleteditems", "deletedmessages", "papierkorb", "gel\u{F6}scht", "gel\u{F6}schteelemente",
              "gel\u{F6}schteobjekte":
             return .trash
-        case "spam", "junk", "junke-mail", "junk-e-mail", "bulkmail":
+        case "spam", "spamverdacht", "junk", "junkemail", "junke-mail", "junk-e-mail", "bulkmail":
             return .spam
         case "archive", "archives", "archiv":
             return .archive
         default:
-            return .other
+            return nil
+        }
+    }
+
+    var role: FolderRole {
+        if path.uppercased() == "INBOX" { return .inbox }
+        return attributeRole ?? nameRole ?? .other
+    }
+
+    static func roles(_ entries: [IMAPListEntry]) -> [FolderRole] {
+        var claimed: [FolderRole: Int] = [:]
+        for role in [FolderRole.sent, .drafts, .trash, .spam, .archive] {
+            let byAttribute = entries.firstIndex { $0.path.uppercased() != "INBOX" && $0.attributeRole == role }
+            let byName = entries.firstIndex { $0.path.uppercased() != "INBOX" && $0.attributeRole == nil && $0.nameRole == role }
+            if let index = byAttribute ?? byName { claimed[role] = index }
+        }
+        return entries.enumerated().map { index, entry in
+            if entry.path.uppercased() == "INBOX" { return .inbox }
+            return claimed.first { $0.value == index }?.key ?? .other
         }
     }
 }

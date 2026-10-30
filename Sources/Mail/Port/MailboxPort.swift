@@ -7,6 +7,7 @@ public protocol MailboxPort: AnyObject {
     var events: AsyncStream<MailboxEvent> { get }
     var hasFiles: Bool { get }
     func folders(_ inlet: Inlet.ID) -> [Folder]
+    func usesLabels(_ inlet: Inlet.ID) -> Bool
     func refreshFolders(_ inlet: Inlet.ID) async throws(HubFailure)
     func cached(_ inlet: Inlet.ID, folder: String) async -> [MessageSummary]
     func lastSync(_ inlet: Inlet.ID, folder: String) -> Date?

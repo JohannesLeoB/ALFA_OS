@@ -77,6 +77,7 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
     let failListing = Locked(false)
     let waiting = Locked<[CheckedContinuation<Void, Never>]>([])
     let saves = Locked(0)
+    let lastFolderID = Locked<String?>(nil)
     let separateDraftIDs = Locked(false)
     let mirrorsDrafts = Locked(false)
     let draftIDs = Locked<[String: String]>([:])
@@ -123,14 +124,17 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
 
     func send(_ draft: Draft) async throws { try note("send") }
     func setFlags(messageID: String, add: Set<Flag>, remove: Set<Flag>) async throws { try note("setFlags") }
-    func archive(messageID: String) async throws { try note("archive") }
+    func archive(messageID: String, folderID: String?) async throws {
+        lastFolderID.with { $0 = folderID }
+        try note("archive")
+    }
     func move(messageID: String, toFolderID: String) async throws { try note("move") }
-    func trash(messageID: String) async throws { try note("trash") }
-    func markSpam(messageID: String) async throws { try note("markSpam") }
+    func trash(messageID: String, folderID: String?) async throws { try note("trash") }
+    func markSpam(messageID: String, folderID: String?) async throws { try note("markSpam") }
     func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data { try note("attachment"); return Data([1]) }
     func fetchThread(messageID: String, threadID: String) async throws -> [MessageSummary] { try note("thread"); return [] }
 
-    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> SavedDraft {
+    func saveDraft(_ draft: Draft, replacing draftID: String?, into folderID: String?) async throws -> SavedDraft {
         try note("saveDraft")
         let number = saves.with { count -> Int in
             count += 1
@@ -184,7 +188,7 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
         draftIDs.with { $0[gone] = nil }
         corpus.with { $0["Drafts"]?.removeAll { $0.id == gone } }
     }
-    func wasSent(messageID: String) async throws -> Bool { try note("wasSent"); return wasSentAnswer.with { $0 } }
+    func wasSent(messageID: String, in folderID: String?) async throws -> Bool { try note("wasSent"); return wasSentAnswer.with { $0 } }
     var ranges: [MailboxRange] { mirrorRanges.with { $0 } }
     var fillsPreviews: Bool { providesPreviews.with { $0 } }
 
@@ -597,12 +601,9 @@ final class MailTests: XCTestCase {
         XCTAssertTrue(wire.contains(Data("\0u\0s".utf8).base64EncodedString()))
     }
 
-    func testWasSentLooksInTheFirstSentFolder() async throws {
+    func testWasSentSearchesTheFolderItIsGiven() async throws {
         let selected = Locked("")
         let stream = scriptedServer { tag, line in
-            if line.contains("LIST") {
-                return ["* LIST (\\Sent) \"/\" \"Sent\"", "* LIST (\\Sent) \"/\" \"Old\"", "\(tag) OK done"]
-            }
             if line.contains("EXAMINE") {
                 selected.with { $0 = line }
                 return ["* OK [UIDVALIDITY 7] ok", "\(tag) OK done"]
@@ -615,8 +616,79 @@ final class MailTests: XCTestCase {
         let settings = ServerSettings(host: "h", port: 993, security: .ssl, username: "u")
         let account = Account(id: "a", displayName: "Me", address: "me@example.com", incoming: settings, outgoing: settings)
         let client = IMAPSMTPClient(account: account, password: { "s" }, opener: { _, _, _ in stream })
-        let sent = try await client.wasSent(messageID: "<m@x>")
+        let sent = try await client.wasSent(messageID: "<m@x>", in: "Sent")
         XCTAssertTrue(sent)
+        do {
+            _ = try await client.wasSent(messageID: "<m@x>", in: nil)
+            XCTFail("expected folderNotFound")
+        } catch MailFailure.folderNotFound {
+        }
+    }
+
+    func testListAsksForSpecialUseOnlyWhenTheServerAdvertisesIt() async throws {
+        let seen = Locked<[String]>([])
+        let stream = scriptedServer(capabilities: " SPECIAL-USE") { tag, line in
+            if line.contains("LIST") {
+                seen.with { $0.append(line) }
+                return ["* LIST (\\HasNoChildren \\Junk) \"/\" \"Spamverdacht\"", "\(tag) OK done"]
+            }
+            return nil
+        }
+        let settings = ServerSettings(host: "h", port: 993, security: .ssl, username: "u")
+        let account = Account(id: "a", displayName: "Me", address: "me@example.com", incoming: settings, outgoing: settings)
+        let client = IMAPSMTPClient(account: account, password: { "s" }, opener: { _, _, _ in stream })
+        let folders = try await client.listFolders()
+        XCTAssertEqual(folders.map(\.role), [.spam])
+        XCTAssertTrue(seen.with { $0 }.allSatisfy { $0.contains("RETURN (SPECIAL-USE)") })
+    }
+
+    private func listed(_ rows: [(String, String)]) -> [IMAPListEntry] {
+        rows.map { attributes, path in
+            IMAPListEntry(attributes: Set(attributes.split(separator: " ").map { $0.lowercased() }), delimiter: "/", path: path)
+        }
+    }
+
+    func testRolesFollowAttributeThenProviderNames() {
+        let gmx = listed([("", "INBOX"), ("", "Gesendet"), ("", "Entw\u{FC}rfe"), ("", "Spamverdacht"), ("", "Papierkorb"),
+                          ("", "OUTBOX"), ("", "Kunden")])
+        XCTAssertEqual(IMAPListEntry.roles(gmx), [.inbox, .sent, .drafts, .spam, .trash, .other, .other])
+        let outlook = listed([("", "Junk Email"), ("", "Deleted Items"), ("", "Sent Items"), ("", "Archive")])
+        XCTAssertEqual(IMAPListEntry.roles(outlook), [.spam, .trash, .sent, .archive])
+        let ionos = listed([("", "Gesendete Objekte")])
+        XCTAssertEqual(IMAPListEntry.roles(ionos), [.sent])
+        let icloud = listed([("", "Deleted Messages"), ("", "Sent Messages")])
+        XCTAssertEqual(IMAPListEntry.roles(icloud), [.trash, .sent])
+    }
+
+    func testEachRoleIsHeldByExactlyOneFolderAndTheAttributeWins() {
+        let rows = listed([("", "Sent"), ("\\Sent", "Versendet"), ("", "Gesendet"), ("", "Trash"), ("", "Papierkorb")])
+        XCTAssertEqual(IMAPListEntry.roles(rows), [.other, .sent, .other, .trash, .other])
+    }
+
+    @MainActor
+    func testFoldersThatVanishLeaveNoRowsBehind() async throws {
+        let rig = try Rig()
+        rig.transport.folderList.with {
+            $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "Old", name: "Old", role: .other)]
+        }
+        rig.fill("Old", count: 2, from: Date())
+        try await rig.mailbox.refreshFolders("a")
+        try await rig.mailbox.refresh("a", folder: "Old")
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "Old").count, 2)
+        rig.transport.folderList.with { $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox)] }
+        try await rig.mailbox.refreshFolders("a")
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "Old").count, 0)
+        XCTAssertNil(rig.mailbox.lastSync("a", folder: "Old"))
+        XCTAssertNil(rig.mailbox.cursor("a", MailboxStore.reachKey("Old")))
+    }
+
+    @MainActor
+    func testArchiveSendsTheResolvedFolderToTheTransport() async throws {
+        let rig = try Rig()
+        try await rig.mailbox.refreshFolders("a")
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        try await rig.mailbox.archive("a", messageID: "1:1:INBOX")
+        XCTAssertEqual(rig.transport.lastFolderID.with { $0 }, "Archive")
     }
 
     func testSMTPSessionSendsWithDotStuffing() async throws {
@@ -2901,15 +2973,15 @@ private final class SingleFolderDouble: MailTransportPort, @unchecked Sendable {
     func fetchBody(messageID: String) async throws -> MessageBody { MessageBody(text: nil, html: nil) }
     func send(_ draft: Draft) async throws {}
     func setFlags(messageID: String, add: Set<Flag>, remove: Set<Flag>) async throws {}
-    func archive(messageID: String) async throws {}
+    func archive(messageID: String, folderID: String?) async throws {}
     func move(messageID: String, toFolderID: String) async throws {}
-    func trash(messageID: String) async throws {}
-    func markSpam(messageID: String) async throws {}
+    func trash(messageID: String, folderID: String?) async throws {}
+    func markSpam(messageID: String, folderID: String?) async throws {}
     func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data { Data() }
     func fetchThread(messageID: String, threadID: String) async throws -> [MessageSummary] { [] }
-    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> SavedDraft { SavedDraft(id: "") }
+    func saveDraft(_ draft: Draft, replacing draftID: String?, into folderID: String?) async throws -> SavedDraft { SavedDraft(id: "") }
     func fetchDraft(messageID: String) async throws -> StoredDraft { StoredDraft(id: messageID, draft: Draft(subject: "", body: "")) }
     func deleteDraft(id: String) async throws {}
     func sendDraft(id: String) async throws {}
-    func wasSent(messageID: String) async throws -> Bool { false }
+    func wasSent(messageID: String, in folderID: String?) async throws -> Bool { false }
 }

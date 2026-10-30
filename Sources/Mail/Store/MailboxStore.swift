@@ -51,10 +51,18 @@ public final class MailboxStore: MailboxPort {
     public var hasFiles: Bool { !access.inlets(for: .files).isEmpty }
 
     public func folders(_ inlet: Inlet.ID) -> [Folder] {
-        return (try? database.read { db in
+        Self.folders(database, inlet)
+    }
+
+    nonisolated static func folders(_ database: SQLiteStore, _ inlet: Inlet.ID) -> [Folder] {
+        (try? database.read { db in
             try Row.fetchAll(db, sql: "SELECT id, name, role FROM mail_folder WHERE inlet = ? ORDER BY position", arguments: [inlet])
                 .map { Folder(id: $0["id"], name: $0["name"], role: FolderRole(rawValue: $0["role"]) ?? .other) }
         }) ?? []
+    }
+
+    nonisolated static func folderID(_ database: SQLiteStore, _ inlet: Inlet.ID, role: FolderRole) -> String? {
+        folders(database, inlet).first { $0.role == role }?.id
     }
 
     func messages(_ inlet: Inlet.ID, folder: String) -> [MessageSummary] {
@@ -130,6 +138,10 @@ public final class MailboxStore: MailboxPort {
         return Set(ids ?? [])
     }
 
+    public func usesLabels(_ inlet: Inlet.ID) -> Bool {
+        ((try? transport(inlet)) as? any LabelPort)?.usesLabels ?? false
+    }
+
     public func refreshFolders(_ inlet: Inlet.ID) async throws(HubFailure) {
         let transport = try transport(inlet)
         do {
@@ -190,7 +202,7 @@ public final class MailboxStore: MailboxPort {
         let header = header(inlet, messageID: messageID)
         let target = folderID(inlet, role: .archive)
         let (touched, landed) = try await perform(inlet) { transport in
-            try await transport.archive(messageID: messageID)
+            try await transport.archive(messageID: messageID, folderID: target)
             let touched = try self.remove(inlet, messageID: messageID, folder: inbox ?? "")
             return (touched, await Self.landed(transport, messageID, header: header, folder: target))
         }
@@ -215,7 +227,7 @@ public final class MailboxStore: MailboxPort {
         let header = header(inlet, messageID: messageID)
         let target = folderID(inlet, role: .trash)
         let (touched, landed) = try await perform(inlet) { transport in
-            try await transport.trash(messageID: messageID)
+            try await transport.trash(messageID: messageID, folderID: target)
             let touched = try self.remove(inlet, messageID: messageID, folder: nil)
             return (touched, await Self.landed(transport, messageID, header: header, folder: target))
         }
@@ -269,8 +281,9 @@ public final class MailboxStore: MailboxPort {
     }
 
     public func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) {
+        let target = folderID(inlet, role: .spam)
         let touched = try await perform(inlet) { transport in
-            try await transport.markSpam(messageID: messageID)
+            try await transport.markSpam(messageID: messageID, folderID: target)
             return try self.remove(inlet, messageID: messageID, folder: nil)
         }
         announce(inlet, touched)
@@ -421,7 +434,7 @@ public final class MailboxStore: MailboxPort {
     }
 
     func folderID(_ inlet: Inlet.ID, role: FolderRole) -> String? {
-        folders(inlet).first { $0.role == role }?.id
+        Self.folderID(database, inlet, role: role)
     }
 
     private func header(_ inlet: Inlet.ID, messageID: String) -> String {
@@ -435,6 +448,18 @@ public final class MailboxStore: MailboxPort {
     private func replaceFolders(_ inlet: Inlet.ID, _ folders: [Folder]) throws {
         offerings[inlet] = nil
         try database.write { db in
+            let before = try String.fetchAll(db, sql: "SELECT id FROM mail_folder WHERE inlet = ?", arguments: [inlet])
+            let kept = Set(folders.map(\.id))
+            if !kept.isEmpty {
+                for gone in before where !kept.contains(gone) {
+                    try db.execute(sql: "DELETE FROM mail_message WHERE inlet = ? AND folder = ?", arguments: [inlet, gone])
+                    try db.execute(sql: "DELETE FROM mail_sync WHERE inlet = ? AND folder = ?", arguments: [inlet, gone])
+                    for key in [Self.historyKey(gone), Self.validityKey(gone), Self.reachKey(gone), Self.olderKey(gone),
+                                Self.refusedKey(gone)] {
+                        try db.execute(sql: "DELETE FROM mail_cursor WHERE inlet = ? AND key = ?", arguments: [inlet, key])
+                    }
+                }
+            }
             try db.execute(sql: "DELETE FROM mail_folder WHERE inlet = ?", arguments: [inlet])
             for (index, folder) in folders.enumerated() {
                 try db.execute(sql: "INSERT OR REPLACE INTO mail_folder (inlet, id, name, role, position) VALUES (?, ?, ?, ?, ?)",

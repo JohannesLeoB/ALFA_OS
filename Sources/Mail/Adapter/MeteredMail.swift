@@ -1,7 +1,7 @@
 import Foundation
 import Hub
 
-struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort {
+struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort, LabelPort {
     let base: any MailTransportPort
     let meter: CostMeter
 
@@ -32,9 +32,9 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, Everyw
         try await base.setFlags(messageID: messageID, add: add, remove: remove)
     }
 
-    func archive(messageID: String) async throws {
+    func archive(messageID: String, folderID: String?) async throws {
         meter.record()
-        try await base.archive(messageID: messageID)
+        try await base.archive(messageID: messageID, folderID: folderID)
     }
 
     func move(messageID: String, toFolderID: String) async throws {
@@ -42,14 +42,14 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, Everyw
         try await base.move(messageID: messageID, toFolderID: toFolderID)
     }
 
-    func trash(messageID: String) async throws {
+    func trash(messageID: String, folderID: String?) async throws {
         meter.record()
-        try await base.trash(messageID: messageID)
+        try await base.trash(messageID: messageID, folderID: folderID)
     }
 
-    func markSpam(messageID: String) async throws {
+    func markSpam(messageID: String, folderID: String?) async throws {
         meter.record()
-        try await base.markSpam(messageID: messageID)
+        try await base.markSpam(messageID: messageID, folderID: folderID)
     }
 
     func fetchAttachment(messageID: String, attachmentID: String) async throws -> Data {
@@ -64,9 +64,9 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, Everyw
         return try await base.fetchThread(messageID: messageID, threadID: threadID)
     }
 
-    func saveDraft(_ draft: Draft, replacing draftID: String?) async throws -> SavedDraft {
+    func saveDraft(_ draft: Draft, replacing draftID: String?, into folderID: String?) async throws -> SavedDraft {
         meter.record()
-        return try await base.saveDraft(draft, replacing: draftID)
+        return try await base.saveDraft(draft, replacing: draftID, into: folderID)
     }
 
     func fetchDraft(messageID: String) async throws -> StoredDraft {
@@ -84,10 +84,12 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, Everyw
         try await base.sendDraft(id: id)
     }
 
-    func wasSent(messageID: String) async throws -> Bool {
+    func wasSent(messageID: String, in folderID: String?) async throws -> Bool {
         meter.record()
-        return try await base.wasSent(messageID: messageID)
+        return try await base.wasSent(messageID: messageID, in: folderID)
     }
+
+    var usesLabels: Bool { (base as? any LabelPort)?.usesLabels ?? false }
 
     var offersSource: Bool { (base as? any SourcePort)?.offersSource ?? false }
 
