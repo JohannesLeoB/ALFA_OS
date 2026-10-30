@@ -159,7 +159,10 @@ public final class MailboxStore: MailboxPort {
     }
 
     public func inboxOnly(_ inlet: Inlet.ID) -> Bool {
-        ((try? transport(inlet)) as? any InboxOnlyPort)?.inboxOnly ?? false
+        if let port = (try? transport(inlet)) as? any InboxOnlyPort { return port.inboxOnly }
+        return (try? database.read { db in
+            try Bool.fetchOne(db, sql: "SELECT EXISTS(SELECT 1 FROM mail_pop WHERE inlet = ?)", arguments: [inlet])
+        }) ?? false
     }
 
     public func usesLabels(_ inlet: Inlet.ID) -> Bool {

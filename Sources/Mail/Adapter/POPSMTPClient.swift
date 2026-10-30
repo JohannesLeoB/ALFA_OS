@@ -80,7 +80,7 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
     func trash(messageID: String, folderID: String?) async throws {
         guard let entry = store.entry(messageID) else { throw MailFailure.messageNotFound(messageID) }
         if entry.folder == Self.trashID {
-            try store.setFlags(messageID, seen: nil, flagged: nil, hidden: true)
+            try await purge(messageID: messageID)
         } else {
             try store.place(messageID, in: Self.trashID)
         }
@@ -95,7 +95,7 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
     func archive(messageID: String, folderID: String?) async throws { throw MailFailure.unsupportedCapability("archive") }
 
     func move(messageID: String, toFolderID: String) async throws {
-        guard try await listFolders().contains(where: { $0.id == toFolderID }), store.entry(messageID) != nil else {
+        guard [Self.inboxID, Self.draftsID, Self.sentID, Self.trashID].contains(toFolderID), store.entry(messageID) != nil else {
             throw MailFailure.unsupportedCapability("move")
         }
         try store.place(messageID, in: toFolderID)

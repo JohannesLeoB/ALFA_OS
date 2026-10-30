@@ -114,14 +114,13 @@ extension InboxState {
 
     public func original(_ id: String) async -> String? {
         guard let inlet = selectedInlet else { return nil }
-        let data: Data
         do {
-            data = try await mailbox.source(inlet, messageID: id)
+            let data = try await mailbox.source(inlet, messageID: id)
+            return String(data: data, encoding: .utf8) ?? String(data: data, encoding: .isoLatin1)
         } catch {
             post(.readFailed)
             return nil
         }
-        return String(data: data, encoding: .utf8) ?? String(data: data, encoding: .isoLatin1)
     }
 
     public func moveTargets(_ id: String) -> [Folder] {

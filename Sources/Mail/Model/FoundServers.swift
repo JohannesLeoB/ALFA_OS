@@ -10,7 +10,6 @@ struct FoundServers: Equatable, Sendable {
         var other = self
         other.incoming = alternative
         other.incomingProtocol = incomingProtocol == .imap ? .pop3 : .imap
-        other.alternative = nil
         return [values, other.values]
     }
 

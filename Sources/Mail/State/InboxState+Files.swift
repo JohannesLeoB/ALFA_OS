@@ -18,9 +18,11 @@ extension InboxState {
     }
 
     public func attachProjectFile(_ draft: UUID, inlet: Inlet.ID, file: FileEntry) async {
-        if let data = try? await mailbox.readFile(inlet, fileID: file.id) {
-            attach(draft, filename: file.name, mimeType: file.mimeType, data: data)
+        guard let data = try? await mailbox.readFile(inlet, fileID: file.id) else {
+            post(.attachmentFailed, undo: { [weak self] in await self?.attachProjectFile(draft, inlet: inlet, file: file) })
+            return
         }
+        attach(draft, filename: file.name, mimeType: file.mimeType, data: data)
     }
 
     public func mailDocument(_ id: String, render: (OpenMessage) -> Data?) async -> MessageDocument? {
