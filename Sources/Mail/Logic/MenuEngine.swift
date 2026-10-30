@@ -1,10 +1,10 @@
 public enum MenuEngine {
     private static let printableExtensions: Set<String> = ["pdf", "png", "jpg", "jpeg", "gif", "heic", "txt"]
 
-    public static func row(unread: Bool, draft: Bool, folders: Bool = true) -> [MenuLine] {
+    public static func row(unread: Bool, draft: Bool, folders: Bool = true, trashes: Bool = true) -> [MenuLine] {
         if draft { return [.item(.openDraft)] }
         return [.item(.reply), .item(.forward), .separator] + (folders ? [.item(.archive)] : [])
-            + [.item(unread ? .markRead : .markUnread)] + (folders ? [.item(.move)] : []) + [.separator, .item(.trash)]
+            + [.item(unread ? .markRead : .markUnread)] + (folders ? [.item(.move)] : []) + (trashes ? [.separator, .item(.trash)] : [])
     }
 
     public static func readingMore(starred: Bool, original: Bool, folders: Bool = true, spam: Bool = true) -> [MenuLine] {

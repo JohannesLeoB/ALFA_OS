@@ -5,7 +5,13 @@ extension InboxState {
     func archive(_ id: String, undoable: Bool = true) async { await relocate(id, .archive, undoable: undoable) }
 
     func trash(_ id: String, undoable: Bool = true, fromMenu: Bool = false) async {
+        guard !inTrash(id) else { return }
         await relocate(id, .trash, undoable: undoable, toast: fromMenu ? .inTrash : .trashed)
+    }
+
+    public func inTrash(_ id: String) -> Bool {
+        guard let trash = folders.first(where: { $0.role == .trash })?.id else { return false }
+        return summary(id)?.folderIDs.contains(trash) == true || (selectedFolder == trash && summaries.contains { $0.id == id })
     }
 
     func markSpam(_ id: String) async { await relocate(id, .spam) }

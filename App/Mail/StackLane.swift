@@ -101,7 +101,7 @@ struct StackLane: View {
             session.perform(.archive, message: id)
             return true
         }
-        if StackKeys.deletes.contains(key) {
+        if StackKeys.deletes.contains(key), !inbox.inTrash(id) {
             session.perform(.trash, message: id)
             return true
         }

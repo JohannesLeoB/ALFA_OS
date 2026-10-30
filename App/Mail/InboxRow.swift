@@ -251,7 +251,7 @@ struct InboxRow: View {
 
     private func contextMenu(at point: NSPoint) {
         guard item.outbox == nil else { return }
-        let lines = MenuEngine.row(unread: item.unread, draft: item.draft, folders: inbox.folderActions)
+        let lines = MenuEngine.row(unread: item.unread, draft: item.draft, folders: inbox.folderActions, trashes: !inbox.inTrash(item.id))
         let entries = MenuLine.entries(lines, appearance: appearance) { action in
             if action == .move {
                 menuOpen = true

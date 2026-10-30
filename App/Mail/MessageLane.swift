@@ -123,8 +123,10 @@ struct MessageLane: View {
                     Task { await inbox.bulk(.archive) }
                 }
             }
-            SymbolButton(help: appearance.string("mail.action.trash"), glyph: .trash, tone: \.signal, hover: .none, pressed: false) {
-                Task { await inbox.bulk(.trash) }
+            if inbox.currentFolder?.role != .trash {
+                SymbolButton(help: appearance.string("mail.action.trash"), glyph: .trash, tone: \.signal, hover: .none, pressed: false) {
+                    Task { await inbox.bulk(.trash) }
+                }
             }
             SymbolButton(help: appearance.string("mail.pick.clear"), glyph: .close, hover: .none, pressed: false) { inbox.clearPicked() }
                 .keyboardShortcut(.cancelAction)

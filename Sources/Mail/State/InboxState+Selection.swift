@@ -36,7 +36,7 @@ extension InboxState {
 
     public func bulk(_ kind: BulkAction) async {
         let list = pickedInList.compactMap { summary($0) }
-        guard !list.isEmpty else { return }
+        guard !list.isEmpty, kind != .trash || !list.contains(where: { inTrash($0.id) }) else { return }
         switch kind {
         case .read:
             let anyUnread = list.contains { !$0.flags.contains(.seen) }

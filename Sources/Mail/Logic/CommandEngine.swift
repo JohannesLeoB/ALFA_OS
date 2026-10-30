@@ -7,7 +7,8 @@ enum CommandEngine {
     }
 
     static func commands(front: Front?, stackCount: Int, fanned: Bool, hasFiles: Bool, confirmDiscard: Bool,
-                                canFold: Bool, sendLabelled: Bool, formatting: Bool = false, folders: Bool = true) -> CommandSet {
+                                canFold: Bool, sendLabelled: Bool, formatting: Bool = false, folders: Bool = true,
+                                trashes: Bool = true) -> CommandSet {
         var state = HeadState.empty
         var main: [Slot] = []
         var tail: [Slot] = []
@@ -17,14 +18,13 @@ enum CommandEngine {
             state = .fanned
         } else if case .message(let hasCopy) = front {
             state = .reading
+            let moves = (folders ? [Slot(id: "archive", action: .archive, priority: 5)] : [])
+                + (trashes ? [Slot(id: "trash", action: .trash, priority: 3, signal: true)] : [])
             main = [
                 Slot(id: "reply", action: .reply, priority: 1),
                 Slot(id: "replyAll", action: .replyAll, priority: 4, off: !hasCopy),
-                Slot(id: "forward", action: .forward, priority: 2),
-                .separator
-            ] + (folders ? [Slot(id: "archive", action: .archive, priority: 5)] : []) + [
-                Slot(id: "trash", action: .trash, priority: 3, signal: true)
-            ]
+                Slot(id: "forward", action: .forward, priority: 2)
+            ] + (moves.isEmpty ? [] : [Slot.separator] + moves)
             left = [
                 Slot(id: "print", action: .print, priority: 1),
                 Slot(id: "pdf", action: .pdf, priority: 2)
