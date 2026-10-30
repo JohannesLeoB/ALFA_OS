@@ -1,4 +1,5 @@
 import AppKit
+import Hub
 import Mail
 import PDFKit
 import UniformTypeIdentifiers
@@ -7,7 +8,15 @@ import UniformTypeIdentifiers
 enum MessageExport {
     static func render(_ message: OpenMessage) -> Data? {
         let info = NSPrintInfo.shared
-        return MessagePDF.render(message, page: info.paperSize, margin: info.leftMargin)
+        let store = TemplateStore()
+        guard let template = store.current.flatMap(store.text),
+              let html = MessagePDF.html(template: template, message: message).data(using: .utf8),
+              let styled = try? NSAttributedString(data: html, options: [.documentType: NSAttributedString.DocumentType.html,
+                                                                         .characterEncoding: String.Encoding.utf8.rawValue],
+                                                   documentAttributes: nil) else {
+            return MessagePDF.render(message, page: info.paperSize, margin: info.leftMargin)
+        }
+        return MessagePDF.render(styled, page: info.paperSize, margin: info.leftMargin)
     }
 
     static func printMail(_ inbox: InboxState, _ id: String) async {

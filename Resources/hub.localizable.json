@@ -232,6 +232,22 @@
   "settings.account.serverCopy.deleted": {
    "de": "Beim Löschen in ALFA",
    "en": "When deleted in ALFA"
+  },
+  "settings.templates.create": {
+   "de": "Vorlage anlegen",
+   "en": "Create template"
+  },
+  "settings.templates.add": {
+   "de": "Anlegen",
+   "en": "Create"
+  },
+  "settings.templates.remove": {
+   "de": "Entfernen",
+   "en": "Remove"
+  },
+  "settings.templates.remove.question": {
+   "de": "Vorlage entfernen?",
+   "en": "Remove template?"
   }
  }
 }

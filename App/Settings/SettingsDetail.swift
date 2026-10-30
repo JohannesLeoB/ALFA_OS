@@ -1,6 +1,8 @@
+import AppKit
 import Assistant
 import Hub
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct SettingsDetail: View {
     let context: SettingsContext
@@ -31,9 +33,48 @@ struct SettingsDetail: View {
 
 struct TemplatesCard: View {
     @Environment(\.appearance) private var appearance
+    @State private var templates = TemplateStore().templates
+    @State private var failed = false
+    private let store = TemplateStore()
 
     var body: some View {
-        BlockNote(text: appearance.text("settings.templates.none"))
+        VStack(spacing: 0) {
+            if templates.isEmpty { BlockNote(text: appearance.text("settings.templates.none")) }
+            ForEach(templates) { template in
+                SettingsRow(label: Text(verbatim: template.name)) {
+                    ConfirmPill(
+                        label: appearance.text("settings.templates.remove"),
+                        question: appearance.text("settings.templates.remove.question"),
+                        yes: appearance.text("settings.templates.remove"),
+                        no: appearance.text("confirm.no"),
+                        holdHint: Text(verbatim: appearance.format("settings.confirm.hold", appearance.string("settings.templates.remove"))),
+                        showsProgress: false,
+                        onYes: { remove(template) }
+                    )
+                    .rowPill()
+                }
+            }
+            if failed {
+                BlockNotice(kind: .failure, title: appearance.text(SettingsKeys.failedUnknown), text: nil)
+            }
+            SettingsRow(label: appearance.text("settings.templates.create"), line: false) {
+                TextButton(label: appearance.text("settings.templates.add"), kind: .neutral) { add() }
+            }
+        }
+    }
+
+    private func add() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = TemplateStore.extensions.compactMap { UTType(filenameExtension: $0) }
+        panel.allowsMultipleSelection = false
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        failed = (try? store.add(from: url)) == nil
+        templates = store.templates
+    }
+
+    private func remove(_ template: TemplateStore.Template) {
+        failed = (try? store.remove(template)) == nil
+        templates = store.templates
     }
 }
 

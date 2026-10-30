@@ -15930,17 +15930,6 @@
         }
       }
     },
-    "settings.action.backToStack" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zurück zum Stapel"
-          }
-        }
-      }
-    },
     "settings.action.clear" : {
       "localizations" : {
         "de" : {
@@ -17473,17 +17462,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verwaister Schlüssel"
-          }
-        }
-      }
-    },
-    "settings.overview.tip" : {
-      "comment" : "roh",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Übersicht · %@ Karten"
           }
         }
       }
@@ -19027,6 +19005,38 @@
         }
       }
     },
+    "settings.templates.add" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anlegen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        }
+      }
+    },
+    "settings.templates.create" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorlage anlegen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create template"
+          }
+        }
+      }
+    },
     "settings.templates.none" : {
       "localizations" : {
         "de" : {
@@ -19039,6 +19049,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No template yet."
+          }
+        }
+      }
+    },
+    "settings.templates.remove" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
+          }
+        }
+      }
+    },
+    "settings.templates.remove.question" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorlage entfernen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove template?"
           }
         }
       }
