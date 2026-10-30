@@ -12610,6 +12610,22 @@
         }
       }
     },
+    "mail.deck.showNew" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postfächer zeigen · neue Mail in %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show mailboxes · new mail in %@"
+          }
+        }
+      }
+    },
     "mail.draft.failed.act" : {
       "comment" : "alpha",
       "localizations" : {
@@ -12691,6 +12707,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sending needs write access"
+          }
+        }
+      }
+    },
+    "mail.draft.noSubject" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ohne Betreff"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No subject"
           }
         }
       }
@@ -14912,6 +14944,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Show signature"
+          }
+        }
+      }
+    },
+    "mail.strip.outboxNotSent" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postausgang · Nicht gesendet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outbox · Not sent"
           }
         }
       }

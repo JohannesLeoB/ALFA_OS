@@ -6,8 +6,9 @@ extension InboxState {
         switch lane {
         case .leading:
             return folderRows.map { row in
-                StripMark(id: "folder." + row.folder.id, face: .glyph(row.glyph), help: folderName(row.folder.id),
-                          selected: row.selected, dot: false, run: .folder(row.folder.id))
+                StripMark(id: "folder." + row.folder.id, face: .glyph(row.glyph),
+                          help: row.attention ? FolderName(key: "mail.strip.outboxNotSent", text: "") : folderName(row.folder.id),
+                          selected: row.selected, dot: row.attention, run: .folder(row.folder.id))
             } + [StripMark(id: "compose", face: .glyph(.compose), help: FolderName(key: "mail.action.compose", text: ""),
                            selected: false, dot: false, accent: true, run: .compose)]
         case .center:
@@ -36,9 +37,9 @@ extension InboxState {
                                      help: FolderName(key: nil, text: card.summary.subject), selected: false, dot: false, run: .card(ref))
                 case .draft(let id):
                     guard let card = draft(id) else { return nil }
-                    let initials = card.people(.to).first.map { PersonName.initials($0.name) } ?? ""
-                    return StripMark(id: ref.id, face: initials.isEmpty ? .glyph(.compose) : .text(initials),
-                                     help: FolderName(key: nil, text: card.draft.subject), selected: false, dot: false, run: .card(ref))
+                    let help = card.draft.subject.isEmpty ? FolderName(key: "mail.row.newMessage", text: "")
+                        : FolderName(key: nil, text: card.draft.subject)
+                    return StripMark(id: ref.id, face: .glyph(.compose), help: help, selected: false, dot: false, run: .card(ref))
                 }
             }
         }

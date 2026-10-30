@@ -30,7 +30,7 @@ struct OverviewList: View {
                 let entry = OverviewEntry(id: ref.id, mark: .icon(.compose),
                                           title: first.map { Text(verbatim: appearance.format("mail.row.to", $0.label)) } ?? appearance.text("mail.row.newMessage"),
                                           date: appearance.text("mail.date.draft"), unread: false,
-                                          subject: card.draft.subject.isEmpty ? appearance.string("mail.row.newMessage") : card.draft.subject,
+                                          subject: card.draft.subject.isEmpty ? appearance.string("mail.draft.noSubject") : card.draft.subject,
                                           preview: card.draft.body, current: inbox.frontRef == ref,
                                           close: { Task { await inbox.closeDraft(id) } }, choose: { choose(ref) })
                 return (entry, ref)

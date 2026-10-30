@@ -473,6 +473,18 @@
    "de": "Postfächer zeigen",
    "en": "Show mailboxes"
   },
+  "mail.deck.showNew": {
+   "de": "Postfächer zeigen · neue Mail in %@",
+   "en": "Show mailboxes · new mail in %@"
+  },
+  "mail.strip.outboxNotSent": {
+   "de": "Postausgang · Nicht gesendet",
+   "en": "Outbox · Not sent"
+  },
+  "mail.draft.noSubject": {
+   "de": "Ohne Betreff",
+   "en": "No subject"
+  },
   "mail.account.show": {
    "de": "Angezeigt als",
    "en": "Shown as"

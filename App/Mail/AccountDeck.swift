@@ -26,7 +26,9 @@ struct AccountDeck: View {
 
     private var toggleHelp: String {
         if open { return appearance.string("mail.deck.hide") }
-        return appearance.string("mail.deck.show")
+        if waiting.isEmpty { return appearance.string("mail.deck.show") }
+        let names = waiting.map { $0.shownName(settings.display($0.id), appearance: appearance) }
+        return appearance.format("mail.deck.showNew", ListFormatter.localizedString(byJoining: names))
     }
 
     var body: some View {
