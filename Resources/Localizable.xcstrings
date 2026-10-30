@@ -13082,6 +13082,38 @@
         }
       }
     },
+    "mail.failure.pdf" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF nicht gesichert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF not saved"
+          }
+        }
+      }
+    },
+    "mail.failure.projectSave" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht gesichert · Projektordner nicht erreichbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not saved · project folder unreachable"
+          }
+        }
+      }
+    },
     "mail.failure.read" : {
       "localizations" : {
         "de" : {
@@ -14983,6 +15015,22 @@
         }
       }
     },
+    "mail.toast.attachmentCopied" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopiert nach %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copied to %@"
+          }
+        }
+      }
+    },
     "mail.toast.bulkArchived.one" : {
       "comment" : "alpha",
       "localizations" : {
@@ -15270,13 +15318,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Als PDF im Projektordner gesichert"
+            "value" : "Als PDF gesichert · %@"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saved as PDF to project folder"
+            "value" : "Saved as PDF · %@"
           }
         }
       }
@@ -18315,18 +18363,98 @@
         }
       }
     },
-    "settings.service.dhl.field.key" : {
+    "settings.service.dhl.field.billing" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schlüssel"
+            "value" : "Abrechnungsnummer"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Keys"
+            "value" : "Billing number"
+          }
+        }
+      }
+    },
+    "settings.service.dhl.field.key" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tracking-Schlüssel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tracking key"
+          }
+        }
+      }
+    },
+    "settings.service.dhl.field.password" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passwort"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password"
+          }
+        }
+      }
+    },
+    "settings.service.dhl.field.secret" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secret"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secret"
+          }
+        }
+      }
+    },
+    "settings.service.dhl.field.shipKey" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versand-Schlüssel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shipping key"
+          }
+        }
+      }
+    },
+    "settings.service.dhl.field.user" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benutzer"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User"
           }
         }
       }
@@ -18336,7 +18464,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DHL Sendungen"
+            "value" : "DHL"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DHL"
           }
         }
       }
@@ -18346,7 +18480,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sendungen verfolgen"
+            "value" : "Sendungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shipments"
           }
         }
       }

@@ -1344,11 +1344,11 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(catalog.info("google")?.extras.first.map { catalog.info("google")?.extraKey($0) }, "settings.service.google.extra.driveFolders")
         XCTAssertEqual(catalog.info("claude")?.fields.last?.fallbackKey, "settings.value.default")
         XCTAssertEqual(IntegrationAccess.emailKey.key, "settings.access.emailKey")
-        let secrets: Set<String> = ["key", "password", "secret", "token"]
+        let secrets: Set<String> = ["key", "password", "secret", "token", "shipKey"]
         for entry in catalog.entries {
             for field in entry.fields { XCTAssertEqual(field.secret, secrets.contains(field.id), entry.id + "." + field.id) }
         }
-        XCTAssertEqual(catalog.entries.filter(\.companyOwned).map(\.id), ["airtable", "sevdesk", "dhl", "dhlship"])
+        XCTAssertEqual(catalog.entries.filter(\.companyOwned).map(\.id), ["airtable", "sevdesk", "dhl"])
     }
 
     func testSettingsVocabularyCoversEveryGroupWithUniqueKeys() {

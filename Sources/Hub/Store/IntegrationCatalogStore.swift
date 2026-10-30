@@ -48,15 +48,12 @@ public struct IntegrationCatalogStore: Sendable {
             id: "sevdesk", access: .key, companyOwned: true, fields: [IntegrationField(id: "token", secret: true)],
             areas: [], extras: [], listsAccounts: false, providers: ["sevdesk"], logo: nil),
         IntegrationInfo(
-            id: "dhl", access: .key, companyOwned: true, fields: [IntegrationField(id: "key", secret: true)],
+            id: "dhl", access: .key, companyOwned: true,
+            fields: [IntegrationField(id: "key", secret: true), IntegrationField(id: "shipKey", secret: true, optional: true),
+                     IntegrationField(id: "secret", secret: true, optional: true), IntegrationField(id: "user", secret: false, optional: true),
+                     IntegrationField(id: "password", secret: true, optional: true),
+                     IntegrationField(id: "billing", secret: false, optional: true)],
             areas: [], extras: [], listsAccounts: false, providers: ["dhl"],
-            logo: IntegrationLogo(resource: "dhl")),
-        IntegrationInfo(
-            id: "dhlship", access: .key, companyOwned: true,
-            fields: [IntegrationField(id: "key", secret: true), IntegrationField(id: "secret", secret: true),
-                     IntegrationField(id: "user", secret: false), IntegrationField(id: "password", secret: true),
-                     IntegrationField(id: "billing", secret: false), IntegrationField(id: "sender", secret: false, optional: true)],
-            areas: [], extras: [], listsAccounts: false, providers: ["dhlship"],
             logo: IntegrationLogo(resource: "dhl")),
     ])
 }

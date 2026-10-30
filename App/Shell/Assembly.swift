@@ -136,7 +136,7 @@ final class Assembly {
                                   openBrowser: @escaping @Sendable (URL) async -> Bool) -> [any ProviderPort] {
         let checks: [any ConnectionCheckPort] = [
             Airtable.ConnectionCheck(http: http), ClickUp.ConnectionCheck(http: http), Sevdesk.ConnectionCheck(http: http),
-            Clockodo.ConnectionCheck(http: http), Shipping.ConnectionCheck(http: http), ClaudeCheck(http: http), LabelCheck(),
+            Clockodo.ConnectionCheck(http: http), Shipping.ConnectionCheck(http: http), ClaudeCheck(http: http),
         ]
         var providers: [any ProviderPort] = []
         if let google = google(directory: directory, http: http, roots: roots, openBrowser: openBrowser) { providers.append(google) }
@@ -181,14 +181,6 @@ struct ClaudeKeyStore: KeyPort {
 
     func claudeKey() async -> ClaudeKey? {
         await credential.current()
-    }
-}
-
-struct LabelCheck: ConnectionCheckPort {
-    var integration: String { "dhlship" }
-
-    func check(_ values: KeyValues) async throws -> String? {
-        nil
     }
 }
 

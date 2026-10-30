@@ -1,26 +1,6 @@
 {
  "_rule": "Keys used by the Shipping module; text is resolved by the app.",
  "keys": {
-  "settings.service.dhlship.field.billing": {
-   "de": "Abrechnungsnummer",
-   "en": "Billing number"
-  },
-  "settings.service.dhlship.field.password": {
-   "de": "Passwort",
-   "en": "Password"
-  },
-  "settings.service.dhlship.field.secret": {
-   "de": "Geheimnis",
-   "en": "Secret"
-  },
-  "settings.service.dhlship.field.sender": {
-   "de": "Absender",
-   "en": "Sender"
-  },
-  "settings.service.dhlship.field.user": {
-   "de": "Benutzer",
-   "en": "User"
-  },
   "shipping.issue.billingNumber": {
    "de": "Abrechnungsnummer muss 14-stellig sein",
    "en": "Billing number must be 14 digits"
@@ -72,6 +52,38 @@
   "shipping.status.unknown": {
    "de": "Unbekannt",
    "en": "Unknown"
+  },
+  "settings.service.dhl.name": {
+   "de": "DHL",
+   "en": "DHL"
+  },
+  "settings.service.dhl.use": {
+   "de": "Sendungen",
+   "en": "Shipments"
+  },
+  "settings.service.dhl.field.key": {
+   "de": "Tracking-Schlüssel",
+   "en": "Tracking key"
+  },
+  "settings.service.dhl.field.shipKey": {
+   "de": "Versand-Schlüssel",
+   "en": "Shipping key"
+  },
+  "settings.service.dhl.field.secret": {
+   "de": "Secret",
+   "en": "Secret"
+  },
+  "settings.service.dhl.field.user": {
+   "de": "Benutzer",
+   "en": "User"
+  },
+  "settings.service.dhl.field.password": {
+   "de": "Passwort",
+   "en": "Password"
+  },
+  "settings.service.dhl.field.billing": {
+   "de": "Abrechnungsnummer",
+   "en": "Billing number"
   }
  }
 }
