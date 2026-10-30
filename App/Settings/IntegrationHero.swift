@@ -31,7 +31,8 @@ struct IntegrationHero: View {
             .ring(shape, info.logo.flatMap { $0.isWide ? nil : appearance.color(\.line) })
             VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step2)) {
                 Text(verbatim: name)
-                    .typeStyle(Tokens.TextStyle.title)
+                    .font(.face(Tokens.TextSize.title, weight: Tokens.Weight.medium))
+                    .lineHeight(Tokens.LineHeight.heading, size: Tokens.TextSize.title)
                     .foregroundStyle(appearance.color(\.ink))
                     .lineLimit(1)
                 appearance.text(info.useKey)

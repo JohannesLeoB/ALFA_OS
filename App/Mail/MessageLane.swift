@@ -161,7 +161,7 @@ struct MessageLane: View {
         return InputField(text: $text, placeholder: Text(verbatim: placeholder), labelKey: "mail.search.label", focus: $focused) {
             if inbox.offersScope {
                 TextButton(label: Text(verbatim: here ? appearance.format("mail.search.scope.here", title) : appearance.string("mail.search.scope.all")),
-                           kind: .quiet, size: .compact) {
+                           kind: .quiet, size: .compact, truncates: true) {
                     Task { await inbox.toggleScope() }
                 }
                 .help(Text(verbatim: here ? appearance.format("mail.search.tip.here", title) : appearance.format("mail.search.tip.all", title)))

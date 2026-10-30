@@ -11,7 +11,7 @@ struct InputField<Trailing: View>: View {
     @ViewBuilder let trailing: Trailing
 
     var body: some View {
-        HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
+        FieldLayout {
             field
             trailing
         }
@@ -42,6 +42,29 @@ struct InputField<Trailing: View>: View {
         } else {
             base
         }
+    }
+}
+
+private struct FieldLayout: Layout {
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let height = subviews.map { $0.sizeThatFits(.unspecified).height }.max() ?? 0
+        return CGSize(width: proposal.width ?? subviews.reduce(0) { $0 + $1.sizeThatFits(.unspecified).width }, height: height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        guard let field = subviews.first else { return }
+        let gap = CGFloat(Tokens.Spacing.step8)
+        var width: CGFloat = 0
+        if subviews.count > 1 {
+            let trailing = subviews[1]
+            width = min(trailing.sizeThatFits(.unspecified).width, bounds.width * SheetValues.fieldTrailingMaxShare)
+            if width > 0 {
+                trailing.place(at: CGPoint(x: bounds.maxX - width, y: bounds.midY), anchor: .leading,
+                               proposal: ProposedViewSize(width: width, height: bounds.height))
+            }
+        }
+        let rest = bounds.width - (width > 0 ? width + gap : 0)
+        field.place(at: CGPoint(x: bounds.minX, y: bounds.midY), anchor: .leading, proposal: ProposedViewSize(width: rest, height: bounds.height))
     }
 }
 

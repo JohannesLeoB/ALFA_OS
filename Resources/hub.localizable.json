@@ -288,6 +288,14 @@
   "settings.area.account": {
    "de": "%@ · %@",
    "en": "%@ · %@"
+  },
+  "settings.add.check": {
+   "de": "Prüfung",
+   "en": "Check"
+  },
+  "settings.add.missing": {
+   "de": "Es fehlen: %@.",
+   "en": "Missing: %@."
   }
  }
 }

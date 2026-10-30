@@ -33,6 +33,7 @@ enum SheetValues {
     static let closeOpacity = 0.7
     static let cssEase = CubicBezier(x1: 0.25, y1: 0.1, x2: 0.25, y2: 1)
     static let valueMaxShare = 0.6
+    static let fieldTrailingMaxShare = 0.5
     static let smallIcon = 12.0
     static let smallIconStroke = 1.5
     static let tinyIcon = 10.0

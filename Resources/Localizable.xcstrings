@@ -16133,6 +16133,22 @@
         }
       }
     },
+    "settings.add.check" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prüfung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check"
+          }
+        }
+      }
+    },
     "settings.add.failed.title" : {
       "localizations" : {
         "de" : {
@@ -16145,6 +16161,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Check"
+          }
+        }
+      }
+    },
+    "settings.add.missing" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es fehlen: %@."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Missing: %@."
           }
         }
       }

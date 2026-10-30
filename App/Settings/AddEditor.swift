@@ -26,11 +26,15 @@ struct AddEditor: View {
         }
     }
 
-    private var ready: Bool {
+    @State private var missing: [Field] = []
+
+    private var ready: Bool { lacking.isEmpty }
+
+    private var lacking: [Field] {
         switch offer.way {
-        case .signIn: true
-        case .form: fields.filter { ProviderPresets.requiredFields.contains($0.id) }.allSatisfy(filled)
-        case .key: fields.filter(\.secret).allSatisfy(filled)
+        case .signIn: []
+        case .form: fields.filter { ProviderPresets.requiredFields.contains($0.id) && !filled($0) }
+        case .key: fields.filter { $0.secret && !filled($0) }
         }
     }
 
@@ -51,13 +55,18 @@ struct AddEditor: View {
             ForEach(fields) { field in
                 SettingsRow(label: appearance.text(field.title)) { entry(field) }
             }
+            if !missing.isEmpty {
+                BlockNotice(kind: .failure, title: appearance.text("settings.add.check"),
+                            text: Text(verbatim: appearance.format("settings.add.missing",
+                                                                   missing.map { appearance.string($0.title) }.joined(separator: ", "))))
+            }
             if let failure = flow.failure {
                 BlockNotice(kind: .failure, title: appearance.text("settings.add.failed.title"),
                             text: Text(verbatim: failure.line(appearance)))
             }
             SettingsRow(label: Text(verbatim: ""), sub: flow.busy ? appearance.text("settings.link.connecting") : nil, line: false) {
                 HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
-                    TextButton(label: appearance.text(buttonKey), kind: .accent, disabled: flow.busy || !ready) { submit() }
+                    TextButton(label: appearance.text(buttonKey), kind: .accent, disabled: flow.busy) { submit() }
                     TextButton(label: appearance.text("text.common.cancel"), kind: .plain) {
                         if flow.busy { flow.cancel() } else { flow.close() }
                     }
@@ -65,6 +74,7 @@ struct AddEditor: View {
             }
         }
         .onAppear { focused = fields.first { !$0.secret && choices(of: $0) == nil }?.id }
+        .onChange(of: flow.values) { missing = [] }
         .onChange(of: focused) { left, _ in
             if left == ProviderPresets.addressField { flow.discover() }
         }
@@ -119,6 +129,7 @@ struct AddEditor: View {
     }
 
     private func submit() {
+        missing = lacking
         guard ready, !flow.busy else { return }
         let input: Input = if case .signIn = offer.way { .none } else { .fields(flow.values) }
         Task {

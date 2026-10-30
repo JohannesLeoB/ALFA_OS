@@ -25,6 +25,7 @@ struct TextButton<Glyph: View>: View {
     var size = TextButtonSize.regular
     var disabled = false
     var pressed = true
+    var truncates = false
     var plate: KeyPath<Colors, ColorValue>?
     let action: () -> Void
     @ViewBuilder let glyph: Glyph
@@ -76,9 +77,9 @@ struct TextButton<Glyph: View>: View {
         Button(action: action) {
             HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
                 glyph
-                label.lineLimit(1)
+                label.lineLimit(1).truncationMode(.tail)
             }
-            .fixedSize(horizontal: true, vertical: false)
+            .fixedSize(horizontal: !truncates, vertical: false)
             .typeStyle(style)
             .foregroundStyle(foreground)
             .padding(.leading, CGFloat(Glyph.self == EmptyView.self ? Tokens.Spacing.step12 : Tokens.Spacing.step8))
@@ -98,8 +99,9 @@ struct TextButton<Glyph: View>: View {
 
 extension TextButton where Glyph == EmptyView {
     init(label: Text, kind: TextButtonKind = .neutral, size: TextButtonSize = .regular, disabled: Bool = false, pressed: Bool = true,
-         plate: KeyPath<Colors, ColorValue>? = nil, action: @escaping () -> Void) {
-        self.init(label: label, kind: kind, size: size, disabled: disabled, pressed: pressed, plate: plate, action: action) { EmptyView() }
+         truncates: Bool = false, plate: KeyPath<Colors, ColorValue>? = nil, action: @escaping () -> Void) {
+        self.init(label: label, kind: kind, size: size, disabled: disabled, pressed: pressed, truncates: truncates, plate: plate,
+                  action: action) { EmptyView() }
     }
 }
 
