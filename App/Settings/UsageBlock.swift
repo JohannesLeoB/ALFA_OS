@@ -5,7 +5,6 @@ import SwiftUI
 struct UsageBlock: View {
     @Environment(\.appearance) private var appearance
     let usage: UsageState
-    @State private var asking = false
 
     var body: some View {
         BlockHead(key: "settings.usage.head")
@@ -31,15 +30,16 @@ struct UsageBlock: View {
             BlockNote(text: appearance.text("settings.usage.prices.missing"))
         }
         SettingsRow(label: appearance.text("settings.usage.counter"), line: false) {
-            if asking {
-                TextButton(label: appearance.text("settings.usage.reset"), kind: .signal) {
-                    usage.reset()
-                    asking = false
-                }
-                TextButton(label: appearance.text("text.common.cancel"), kind: .plain) { asking = false }
-            } else {
-                TextButton(label: appearance.text("settings.usage.reset.ask"), disabled: usage.totals.calls == 0) { asking = true }
-            }
+            ConfirmPill(
+                label: appearance.text("settings.usage.reset"),
+                question: appearance.text("settings.usage.reset.ask"),
+                yes: appearance.text("settings.usage.reset"),
+                no: appearance.text("confirm.no"),
+                holdHint: Text(verbatim: appearance.format("settings.confirm.hold", appearance.string("settings.usage.reset"))),
+                showsProgress: false,
+                onYes: { usage.reset() }
+            )
+            .rowPill()
         }
         .task { usage.refresh() }
     }

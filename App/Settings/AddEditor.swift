@@ -56,9 +56,11 @@ struct AddEditor: View {
                             text: Text(verbatim: failure.line(appearance)))
             }
             SettingsRow(label: Text(verbatim: ""), sub: flow.busy ? appearance.text("settings.link.connecting") : nil, line: false) {
-                TextButton(label: appearance.text(buttonKey), kind: .accent, disabled: flow.busy || !ready) { submit() }
-                TextButton(label: appearance.text("text.common.cancel"), kind: .plain) {
-                    if flow.busy { flow.cancel() } else { flow.close() }
+                HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
+                    TextButton(label: appearance.text(buttonKey), kind: .accent, disabled: flow.busy || !ready) { submit() }
+                    TextButton(label: appearance.text("text.common.cancel"), kind: .plain) {
+                        if flow.busy { flow.cancel() } else { flow.close() }
+                    }
                 }
             }
         }

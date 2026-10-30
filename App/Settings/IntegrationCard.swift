@@ -30,7 +30,7 @@ struct IntegrationCard: View {
             IntegrationHero(info: info)
             progress
             SettingsRow(label: appearance.text("settings.row.state"), sub: note(reading.note)) {
-                ConnectionStatus(state: reading.state.connection, label: appearance.text(reading.state.key), trailingInset: true)
+                ConnectionStatus(state: reading.state.connection, label: appearance.text(reading.state.key))
             }
             notices(reading)
             if disconnecting { disconnectNotice(reading) }

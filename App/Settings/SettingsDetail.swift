@@ -152,8 +152,7 @@ struct KeyCard: View {
         VStack(spacing: 0) {
             ForEach(readings) { reading in
                 SettingsRow(label: appearance.text(reading.info.nameKey)) {
-                    ConnectionStatus(state: reading.state.connection, label: appearance.text(reading.state.key),
-                                     trailingInset: reading.state == .notConnected)
+                    ConnectionStatus(state: reading.state.connection, label: appearance.text(reading.state.key))
                     if reading.state != .notConnected {
                         TextButton(label: appearance.text("text.settings.action.remove"), kind: .plain, disabled: reading.inlets.isEmpty) {
                             Task { await context.flow.remove(reading.inlets.map(\.id)) }

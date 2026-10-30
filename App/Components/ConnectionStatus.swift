@@ -18,7 +18,6 @@ struct ConnectionStatus: View {
     let state: ConnectionState
     let label: Text
     var inverted = false
-    var trailingInset = false
 
     private var ink: InkSet { .of(inverted) }
 
@@ -78,7 +77,7 @@ struct ConnectionStatus: View {
             }
             label
                 .lineLimit(1)
-                .padding(.trailing, trailingInset ? CGFloat(Tokens.Size.trailingTextInset) : 0)
+                .padding(.trailing, CGFloat(Tokens.Size.trailingTextInset))
         }
         .font(.face(Tokens.TextSize.small))
         .foregroundStyle(appearance.color(foreground))
