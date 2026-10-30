@@ -48,6 +48,7 @@ public final class OAuthMailClient: Sendable {
         return IMAPSMTPClient(
             account: endpoints.account(id: inlet, address: address, name: name),
             credential: { .accessToken(try await tokens.accessToken()) },
-            channel: channels.channel(for: inlet, fingerprint: fingerprint))
+            channel: channels.channel(for: inlet, fingerprint: fingerprint),
+            filesSentCopy: !endpoints.serverFilesSent)
     }
 }

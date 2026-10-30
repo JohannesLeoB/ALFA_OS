@@ -3,12 +3,15 @@ public struct OAuthMailEndpoints: Equatable, Sendable {
     public var incomingPort: Int
     public var outgoingHost: String
     public var outgoingPort: Int
+    public var serverFilesSent: Bool
 
-    public init(incomingHost: String, incomingPort: Int, outgoingHost: String, outgoingPort: Int) {
+    public init(incomingHost: String, incomingPort: Int, outgoingHost: String, outgoingPort: Int,
+                serverFilesSent: Bool = false) {
         self.incomingHost = incomingHost
         self.incomingPort = incomingPort
         self.outgoingHost = outgoingHost
         self.outgoingPort = outgoingPort
+        self.serverFilesSent = serverFilesSent
     }
 
     func account(id: String, address: String, name: String) -> Account {

@@ -17,6 +17,7 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
     private let credential: CredentialSource
     private let opener: StreamOpener
     private let channel: IMAPChannel
+    let filesSentCopy: Bool
 
     init(account: Account, password: @escaping PasswordSource, channel: IMAPChannel = IMAPChannel(),
          opener: @escaping StreamOpener = StreamRouter.open) {
@@ -24,11 +25,12 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
     }
 
     init(account: Account, credential: @escaping CredentialSource, channel: IMAPChannel = IMAPChannel(),
-         opener: @escaping StreamOpener = StreamRouter.open) {
+         opener: @escaping StreamOpener = StreamRouter.open, filesSentCopy: Bool = true) {
         self.account = account
         self.credential = credential
         self.channel = channel
         self.opener = opener
+        self.filesSentCopy = filesSentCopy
     }
 
     func listFolders() async throws -> [Folder] {
@@ -331,8 +333,6 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
         try await send(stored.draft)
         try? await deleteDraft(id: id)
     }
-
-    var filesSentCopy: Bool { true }
 
     func fileSent(_ draft: Draft, into folderID: String?) async throws {
         guard let folderID else { throw MailFailure.folderNotFound(FolderRole.sent.rawValue) }

@@ -472,7 +472,8 @@ final class MicrosoftTests: XCTestCase {
 
     func testOutlookUsesTheMicrosoftServers() {
         XCTAssertEqual(OutlookAccess.endpoints, OAuthMailEndpoints(
-            incomingHost: "outlook.office365.com", incomingPort: 993, outgoingHost: "smtp.office365.com", outgoingPort: 587))
+            incomingHost: "outlook.office365.com", incomingPort: 993, outgoingHost: "smtp.office365.com", outgoingPort: 587,
+            serverFilesSent: true))
     }
 
     func testLoopbackReadsOnlyTheRedirectRequest() {
