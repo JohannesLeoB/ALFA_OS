@@ -113,7 +113,14 @@ extension InboxState {
     }
 
     public func original(_ id: String) async -> String? {
-        guard let inlet = selectedInlet, let data = try? await mailbox.source(inlet, messageID: id) else { return nil }
+        guard let inlet = selectedInlet else { return nil }
+        let data: Data
+        do {
+            data = try await mailbox.source(inlet, messageID: id)
+        } catch {
+            post(.readFailed)
+            return nil
+        }
         return String(data: data, encoding: .utf8) ?? String(data: data, encoding: .isoLatin1)
     }
 

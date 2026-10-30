@@ -306,6 +306,16 @@ public final class InboxState {
         loadFoldersFromMailbox()
     }
 
+    public func refreshOthers() async {
+        for inlet in accounts.map(\.id) where inlet != selectedInlet {
+            try? await mailbox.refreshFolders(inlet)
+            if let inbox = mailbox.folders(inlet).first(where: { $0.role == .inbox })?.id {
+                try? await mailbox.refresh(inlet, folder: inbox)
+            }
+        }
+        refreshCounts()
+    }
+
     func search(_ text: String) async {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         query = trimmed

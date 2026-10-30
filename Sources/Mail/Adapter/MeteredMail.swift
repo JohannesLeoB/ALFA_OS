@@ -116,6 +116,7 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, Everyw
     }
 
     var ranges: [MailboxRange] { (base as? any MirrorPort)?.ranges ?? [] }
+    var fillsPreviews: Bool { (base as? any MirrorPort)?.fillsPreviews ?? false }
 
     func startCursor() async throws -> String? {
         guard let base = base as? any MirrorPort else { throw MailFailure.unsupportedCapability("mirror") }

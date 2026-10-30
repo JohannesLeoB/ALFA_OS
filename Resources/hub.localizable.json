@@ -5,9 +5,17 @@
    "de": "Angemeldet wurde ein anderes Konto. Zum Erneuern bitte mit diesem Konto anmelden:",
    "en": "A different account was signed in. To renew, please sign in with this account:"
   },
+  "hub.error.cancelled": {
+   "de": "Abgebrochen.",
+   "en": "Cancelled."
+  },
   "hub.error.duplicate": {
    "de": "Diese Adresse ist schon als Konto eingerichtet.",
    "en": "This address is already set up as an account."
+  },
+  "hub.error.keychain": {
+   "de": "Das Passwort konnte nicht im Schlüsselbund gesichert werden.",
+   "en": "The password could not be saved in the keychain."
   },
   "offer.gmail": {
    "de": "Gmail",
