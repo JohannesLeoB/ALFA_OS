@@ -208,7 +208,11 @@ extension InboxState {
             attach(.draft(open.id))
             return open.id
         }
-        let id = add(inlet: inlet, stored.draft)
+        var loaded = stored.draft
+        if loaded.signed == nil, let block = signatures(inlet)?.block, SignatureEngine.removed(block, from: loaded.body) != nil {
+            loaded.signed = block
+        }
+        let id = add(inlet: inlet, loaded)
         if let index = drafts.firstIndex(where: { $0.id == id }) {
             drafts[index].remoteID = stored.id
             drafts[index].mirrorID = messageID

@@ -284,7 +284,8 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
                               subject: envelope?.subject ?? "", body: "", inReplyTo: envelope?.inReplyTo,
                               messageID: Self.localPart(envelope?.messageID),
                               receiptTo: MessageEngine.receiptAddress(fetched.sections[Self.receiptSection].map(MIME.parseHeaders)?
-                                  .first { $0.name.lowercased() == "disposition-notification-to" }?.value))
+                                  .first { $0.name.lowercased() == "disposition-notification-to" }?.value),
+                              from: MessageEngine.sender(envelope?.from.first?.raw))
             if let part = structure.firstPlainText {
                 draft.body = try await Self.decodedText(part, session: session, uid: reference.uid)
             }

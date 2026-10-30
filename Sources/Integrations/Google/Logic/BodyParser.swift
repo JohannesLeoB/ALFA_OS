@@ -13,6 +13,10 @@ enum BodyParser {
         return resource.snippet ?? ""
     }
 
+    static func html(of resource: GmailMessageResource) -> String? {
+        firstPart(resource.payload, mime: "text/html")
+    }
+
     static func mailBody(from data: Data) -> GmailMailBody {
         guard let resource = try? JSONDecoder().decode(GmailMessageResource.self, from: data) else {
             return GmailMailBody()

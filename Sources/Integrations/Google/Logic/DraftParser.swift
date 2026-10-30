@@ -16,6 +16,7 @@ enum DraftParser {
         var bcc: String?
         var subject: String
         var body: String
+        var bodyHTML: String?
         var attachmentRefs: [AttachmentRef]
         var threadID: String?
         var inReplyTo: String?
@@ -24,7 +25,7 @@ enum DraftParser {
 
         func draft(with attachments: [Attachment]) -> Draft {
             Draft(to: to, cc: cc, bcc: bcc, subject: subject, body: body, attachments: attachments,
-                  inReplyTo: inReplyTo, threadID: threadID, receiptTo: receiptTo, from: from)
+                  inReplyTo: inReplyTo, threadID: threadID, bodyHTML: bodyHTML, receiptTo: receiptTo, from: from)
         }
     }
 
@@ -43,7 +44,7 @@ enum DraftParser {
         let thread = message.threadId?.trimmingCharacters(in: .whitespacesAndNewlines)
         return Content(
             messageID: message.id, to: header("To"), cc: header("Cc"), bcc: header("Bcc"),
-            subject: header("Subject") ?? "", body: BodyParser.plain(of: message), attachmentRefs: refs,
+            subject: header("Subject") ?? "", body: BodyParser.plain(of: message), bodyHTML: BodyParser.html(of: message), attachmentRefs: refs,
             threadID: thread?.isEmpty == false ? thread : nil,
             inReplyTo: header("In-Reply-To") ?? header("References"),
             receiptTo: MessageEngine.receiptAddress(header("Disposition-Notification-To")),
