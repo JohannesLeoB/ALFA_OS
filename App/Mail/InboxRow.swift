@@ -20,7 +20,7 @@ struct InboxRow: View {
     private var selected: Bool { item.selected && !item.picked }
     private var tone: RowTone { .of(selected) }
     private var shape: RoundedRectangle { RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row)) }
-    private var fill: Color { selected ? appearance.color(\.ink) : Color.clear }
+    private var fill: Color { selected ? appearance.color(\.inverse) : Color.clear }
 
     private var ringColor: Color? {
         if item.picked { return appearance.color(\.ink) }
@@ -211,7 +211,7 @@ struct InboxRow: View {
                 }
             }
             .padding(.leading, CGFloat(Tokens.Spacing.step8))
-            .background(selected ? appearance.color(\.ink) : appearance.color(\.lane))
+            .background(selected ? appearance.color(\.inverse) : appearance.color(\.lane))
             .padding(.top, CGFloat(Tokens.Spacing.step12))
             .padding(.trailing, CGFloat(Tokens.Spacing.step8))
         }
@@ -248,14 +248,14 @@ struct InboxRow: View {
                 }
             }
             .padding(.leading, CGFloat(Tokens.Spacing.step8))
-            .background(selected ? appearance.color(\.ink) : appearance.color(\.lane))
+            .background(selected ? appearance.color(\.inverse) : appearance.color(\.lane))
             .padding(.top, CGFloat(Tokens.Spacing.step12))
             .padding(.trailing, CGFloat(Tokens.Spacing.step8))
         }
     }
 
     private func rowAction(_ key: String, glyph: Icon, tone: KeyPath<Colors, ColorValue>, action: @escaping () -> Void) -> some View {
-        SymbolButton(help: appearance.string(key), glyph: glyph, tone: tone, hoverTone: selected ? \.onInverse : \.ink, plate: selected ? \.ink : \.lane,
+        SymbolButton(help: appearance.string(key), glyph: glyph, tone: tone, hoverTone: selected ? \.onInverse : \.ink, plate: selected ? \.inverse : \.lane,
                      ringTone: selected ? \.onInverseLine : \.lineStrong, hover: .tint, action: action)
     }
 

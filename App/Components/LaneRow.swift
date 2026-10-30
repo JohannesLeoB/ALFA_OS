@@ -16,9 +16,9 @@ struct LaneRow: View {
         let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row))
         Button(action: action) {
             HStack(spacing: CGFloat(Tokens.Spacing.step20)) {
-                Mark(inverted: selected, tone: selected ? \.lane : \.inkTertiary) { Glyph(glyph) }
+                Mark(inverted: selected, tone: selected ? \.onInverse : \.inkTertiary) { Glyph(glyph) }
                 label
-                    .designText(selected ? \.lane : \.ink, size: Tokens.TextSize.body, weight: selected ? .medium : .regular)
+                    .designText(selected ? \.onInverse : \.ink, size: Tokens.TextSize.body, weight: selected ? .medium : .regular)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 if let count {
@@ -27,7 +27,7 @@ struct LaneRow: View {
             }
             .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
             .frame(height: CGFloat(Tokens.Size.rowHeight))
-            .background(shape.fill(selected ? appearance.color(\.ink) : Color.clear))
+            .background(shape.fill(selected ? appearance.color(\.inverse) : Color.clear))
             .ring(shape, hovering && !selected ? appearance.color(\.lineStrong) : nil)
             .contentShape(shape)
         }
