@@ -13,6 +13,7 @@ public final class MailboxStore: MailboxPort {
     let now: @Sendable () -> Date
     let range: @MainActor (Inlet.ID) -> MailboxRange
     let names: @MainActor (Inlet.ID) -> SenderNames
+    let serverCopy: @MainActor (Inlet.ID) -> ServerCopy
     var watcher: Task<Void, Never>?
     var expunging: [Inlet.ID: Bool] = [:]
     var passes: [String: Task<Result<Void, HubFailure>, Never>] = [:]
@@ -27,7 +28,8 @@ public final class MailboxStore: MailboxPort {
     public init(access: any AccessPort, database: SQLiteStore, outbox: OutboxStore, events: Broadcast<MailboxEvent>,
                 now: @escaping @Sendable () -> Date = { Date() },
                 range: @escaping @MainActor (Inlet.ID) -> MailboxRange = { _ in .standard },
-                names: @escaping @MainActor (Inlet.ID) -> SenderNames = { _ in SenderNames() }) {
+                names: @escaping @MainActor (Inlet.ID) -> SenderNames = { _ in SenderNames() },
+                serverCopy: @escaping @MainActor (Inlet.ID) -> ServerCopy = { _ in .standard }) {
         self.access = access
         self.database = database
         self.outboxStore = outbox
@@ -35,6 +37,7 @@ public final class MailboxStore: MailboxPort {
         self.now = now
         self.range = range
         self.names = names
+        self.serverCopy = serverCopy
         watcher = Task { [weak self] in
             guard let stream = self?.access.events else { return }
             for await event in stream {
@@ -153,6 +156,10 @@ public final class MailboxStore: MailboxPort {
             try String.fetchAll(db, sql: "SELECT id FROM mail_message WHERE inlet = ? AND folder = ?", arguments: [inlet, drafts])
         }
         return Set(ids ?? [])
+    }
+
+    public func inboxOnly(_ inlet: Inlet.ID) -> Bool {
+        ((try? transport(inlet)) as? any InboxOnlyPort)?.inboxOnly ?? false
     }
 
     public func usesLabels(_ inlet: Inlet.ID) -> Bool {
@@ -389,7 +396,7 @@ public final class MailboxStore: MailboxPort {
         running.forEach { $0.cancel() }
         for task in running { _ = await task.value }
         let deleted: Void? = try? database.write { db in
-            for table in ["mail_message", "mail_folder", "mail_sync", "mail_cursor", "mail_outbox", "mail_draft", "mail_body"] {
+            for table in ["mail_message", "mail_folder", "mail_sync", "mail_cursor", "mail_outbox", "mail_draft", "mail_body", "mail_pop"] {
                 try db.execute(sql: "DELETE FROM \(table) WHERE inlet = ?", arguments: [inlet])
             }
         }

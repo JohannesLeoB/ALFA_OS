@@ -134,17 +134,8 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
     func send(_ draft: Draft) async throws {
         let outgoing = try MessageEngine.build(draft, account: account,
                                                messageID: draft.messageID ?? UUID().uuidString.lowercased())
-        guard account.outgoing.isComplete else { throw MailFailure.accountIncomplete("outgoing") }
-        let secret = try await currentCredential()
-        let session = try await SMTPSession.open(settings: account.outgoing, opener: opener)
-        do {
-            try await session.authenticate(user: user(for: account.outgoing), credential: secret)
-            try await session.send(from: outgoing.sender, recipients: outgoing.recipients, message: outgoing.data)
-        } catch {
-            await session.close()
-            throw error
-        }
-        await session.quit()
+        try await SMTPSession.deliver(outgoing, settings: account.outgoing, user: user(for: account.outgoing),
+                                      credential: try await currentCredential(), opener: opener)
     }
 
     func setFlags(messageID: String, add: Set<Flag>, remove: Set<Flag>) async throws {

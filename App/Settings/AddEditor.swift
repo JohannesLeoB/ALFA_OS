@@ -71,10 +71,10 @@ struct AddEditor: View {
     @ViewBuilder
     private func entry(_ field: Field) -> some View {
         if let options = choices(of: field) {
-            let current = value(field.id)
-            ChoiceButton(label: appearance.text(options.contains(current) ? "settings.security." + current : "settings.security.ssl")) {
+            let current = options.contains(value(field.id)) ? value(field.id) : options[0]
+            ChoiceButton(label: appearance.text(ProviderPresets.choiceKey(field: field.id, option: current))) {
                 options.map { option in
-                    .row(MenuItem(id: option, label: appearance.text("settings.security." + option),
+                    .row(MenuItem(id: option, label: appearance.text(ProviderPresets.choiceKey(field: field.id, option: option)),
                                   check: option == current ? appearance.text(SettingsKeys.menuCheck) : nil) {
                         flow.values[field.id] = option
                     })
@@ -105,7 +105,7 @@ struct AddEditor: View {
     }
 
     private func choices(of field: Field) -> [String]? {
-        ProviderPresets.securityFields.contains(field.id) ? ProviderPresets.securityChoices : nil
+        ProviderPresets.choices(for: field.id)
     }
 
     private func value(_ id: Field.ID) -> String {

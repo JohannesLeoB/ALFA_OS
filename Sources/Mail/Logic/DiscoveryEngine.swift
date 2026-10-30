@@ -63,13 +63,20 @@ public enum DiscoveryEngine {
         async let imap = service("_imap._tcp." + domain, port: port)
         async let submissions = service("_submissions._tcp." + domain, port: port)
         async let submission = service("_submission._tcp." + domain, port: port)
+        async let pop3s = service("_pop3s._tcp." + domain, port: port)
+        async let pop3 = service("_pop3._tcp." + domain, port: port)
         let records = await (imaps, imap, submissions, submission)
-        let incoming = records.0.map { ServerTemplate(host: $0.target, port: $0.port, security: .ssl) }
+        let pops = await (pop3s, pop3)
+        let imapIncoming = records.0.map { ServerTemplate(host: $0.target, port: $0.port, security: .ssl) }
             ?? records.1.map { ServerTemplate(host: $0.target, port: $0.port, security: .starttls) }
+        let popIncoming = pops.0.map { ServerTemplate(host: $0.target, port: $0.port, security: .ssl) }
+            ?? pops.1.map { ServerTemplate(host: $0.target, port: $0.port, security: .starttls) }
+        let incoming = imapIncoming ?? popIncoming
         let outgoing = records.2.map { ServerTemplate(host: $0.target, port: $0.port, security: .ssl) }
             ?? records.3.map { ServerTemplate(host: $0.target, port: $0.port, security: .starttls) }
         guard let incoming, let outgoing else { return nil }
-        return FoundServers(incoming: incoming, outgoing: outgoing, username: nil)
+        return FoundServers(incoming: incoming, outgoing: outgoing, username: nil,
+                            incomingProtocol: imapIncoming == nil ? .pop3 : .imap)
     }
 
     private static func service(_ name: String, port: any DiscoveryPort) async -> SRVRecord? {

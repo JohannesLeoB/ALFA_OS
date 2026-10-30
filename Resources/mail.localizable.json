@@ -1124,6 +1124,10 @@
   "mail.signature.show": {
    "de": "Signatur zeigen",
    "en": "Show signature"
+  },
+  "field.imap.incomingProtocol": {
+   "de": "Kontoart",
+   "en": "Account type"
   }
  }
 }

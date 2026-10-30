@@ -118,8 +118,10 @@ struct MessageLane: View {
             SymbolButton(help: appearance.string("mail.pick.read"), glyph: .envelope, hover: .none, pressed: false) {
                 Task { await inbox.bulk(.read) }
             }
-            SymbolButton(help: appearance.string("mail.action.archive"), glyph: .archive, hover: .none, pressed: false) {
-                Task { await inbox.bulk(.archive) }
+            if inbox.folderActions {
+                SymbolButton(help: appearance.string("mail.action.archive"), glyph: .archive, hover: .none, pressed: false) {
+                    Task { await inbox.bulk(.archive) }
+                }
             }
             SymbolButton(help: appearance.string("mail.action.trash"), glyph: .trash, tone: \.signal, hover: .none, pressed: false) {
                 Task { await inbox.bulk(.trash) }

@@ -368,6 +368,14 @@ public final class InboxState {
         mailbox.ranges(inlet)
     }
 
+    public func inboxOnly(_ inlet: Inlet.ID) -> Bool {
+        mailbox.inboxOnly(inlet)
+    }
+
+    public var folderActions: Bool {
+        !(selectedInlet.map(inboxOnly) ?? false)
+    }
+
     public func rangeChanged(_ inlet: Inlet.ID) async {
         let watching = inlet == selectedInlet
         let mine = generation

@@ -95,6 +95,7 @@ extension MailboxStore {
         let outcome: Result<Void, HubFailure>
         do {
             try await pass(inlet, folder, older: older, narrowed: narrowed)
+            await expire(inlet, folder)
             outcome = .success(())
         } catch {
             outcome = .failure(error)
@@ -107,6 +108,13 @@ extension MailboxStore {
         passes[Self.key(inlet, folder)] = nil
         if Task.isCancelled, case .failure = outcome { return .success(()) }
         return outcome
+    }
+
+    private func expire(_ inlet: Inlet.ID, _ folder: String) async {
+        guard folder == inboxID(inlet), let port = (try? transport(inlet)) as? any ServerCopyPort else { return }
+        let policy = serverCopy(inlet)
+        guard policy != .keep else { return }
+        try? await port.expire(policy, now: now())
     }
 
     private func pass(_ inlet: Inlet.ID, _ folder: String, older: Bool, narrowed: Bool) async throws(HubFailure) {

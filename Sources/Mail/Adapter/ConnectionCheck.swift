@@ -96,6 +96,18 @@ struct ConnectionCheck: ProbePort {
         }
         try await step(.incoming) {
             let user = account.incoming.username.isEmpty ? account.address : account.incoming.username
+            if account.incomingProtocol == .pop3 {
+                guard case .password(let secret) = credential else { throw MailFailure.unsupportedAuthentication("pop3") }
+                let session = try await POPSession.open(settings: account.incoming, opener: opener)
+                do {
+                    try await session.authenticate(user: user, secret: secret)
+                } catch {
+                    await session.close()
+                    throw error
+                }
+                await session.quit()
+                return
+            }
             let session = try await IMAPClient.open(settings: account.incoming, opener: opener)
             do {
                 try await session.authenticate(user: user, credential: credential)

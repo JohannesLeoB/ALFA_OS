@@ -91,7 +91,7 @@ struct StackLane: View {
         guard sample.event.modifierFlags.intersection([.command, .control]).isEmpty else { return false }
         if sample.event.window?.firstResponder is NSText { return false }
         let key = sample.event.charactersIgnoringModifiers?.lowercased() ?? ""
-        if key == StackKeys.archive {
+        if key == StackKeys.archive, inbox.folderActions {
             session.perform(.archive, message: id)
             return true
         }

@@ -211,6 +211,15 @@ extension SQLiteStore {
             try db.execute(sql: "ALTER TABLE mail_message ADD COLUMN replyToRaw TEXT NOT NULL DEFAULT ''")
         }
         registerUsage(in: &migrator)
+        migrator.registerMigration("mailPop") { db in
+            try db.execute(sql: """
+                CREATE TABLE mail_pop (
+                    inlet TEXT NOT NULL, uid TEXT NOT NULL, folder TEXT NOT NULL, head BLOB NOT NULL, snippet TEXT NOT NULL,
+                    attachments BLOB NOT NULL, raw BLOB NOT NULL, seen INTEGER NOT NULL, flagged INTEGER NOT NULL,
+                    hidden INTEGER NOT NULL, onServer INTEGER NOT NULL, receivedAt REAL NOT NULL, fetchedAt REAL NOT NULL,
+                    PRIMARY KEY (inlet, uid))
+                """)
+        }
         return migrator
     }
 }

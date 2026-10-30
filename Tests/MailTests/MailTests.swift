@@ -3921,3 +3921,238 @@ extension MailTests {
         XCTAssertEqual(state.draft(id)?.state, .sent)
     }
 }
+
+private final class POPServer: @unchecked Sendable {
+    let mails = Locked<[(uid: String, raw: String)]>([])
+    let deleted = Locked<[String]>([])
+    let wire = Locked<[String]>([])
+
+    func stream(offersSTLS: Bool = false) -> ScriptedStream {
+        let pending = Locked<[Int]>([])
+        return ScriptedStream(greeting: ["+OK ready"]) { [self] line in
+            wire.with { $0.append(line) }
+            let words = line.split(separator: " ").map(String.init)
+            let current = mails.with { $0 }
+            switch words.first?.uppercased() ?? "" {
+            case "CAPA": return ["+OK", "TOP", "UIDL", "USER", "SASL PLAIN"] + (offersSTLS ? ["STLS"] : []) + ["."]
+            case "STLS": return ["+OK begin TLS"]
+            case "AUTH": return words.last == Data("\0u@x.de\0pw".utf8).base64EncodedString() ? ["+OK in"] : ["-ERR denied"]
+            case "UIDL": return ["+OK"] + current.enumerated().map { "\($0.offset + 1) \($0.element.uid)" } + ["."]
+            case "RETR":
+                guard let number = Int(words[1]), number <= current.count else { return ["-ERR no"] }
+                let lines = current[number - 1].raw.components(separatedBy: "\r\n").map { $0.hasPrefix(".") ? "." + $0 : $0 }
+                return ["+OK"] + lines + ["."]
+            case "DELE":
+                if let number = Int(words[1]) { pending.with { $0.append(number) } }
+                return ["+OK"]
+            case "QUIT":
+                let numbers = pending.with { $0 }
+                let gone = numbers.compactMap { current.indices.contains($0 - 1) ? current[$0 - 1].uid : nil }
+                deleted.with { $0 += gone }
+                mails.with { list in list.removeAll { gone.contains($0.uid) } }
+                return ["+OK bye"]
+            default: return ["-ERR unknown"]
+            }
+        }
+    }
+}
+
+extension MailTests {
+    static let outlookShaped = [
+        "From: =?UTF-8?Q?J=C3=BCrgen_M=C3=BCller?= <j@x.de>", "To: Anna <a@y.de>, b@y.de",
+        "Subject: =?UTF-8?B?UHLDvGZ1bmc=?=", "Date: Thu, 29 Oct 2026 10:00:00 +0100", "Message-ID: <m1@x.de>",
+        "MIME-Version: 1.0", "Content-Type: multipart/mixed; boundary=\"outer\"", "",
+        "preamble", "--outer", "Content-Type: multipart/related; boundary=rel", "",
+        "--rel", "Content-Type: multipart/alternative; boundary=\"alt\"", "",
+        "--alt", "Content-Type: text/plain; charset=utf-8", "Content-Transfer-Encoding: quoted-printable", "",
+        "Gr=C3=BC=C3=9Fe aus K=C3=B6ln", "--alt", "Content-Type: text/html; charset=utf-8", "Content-Transfer-Encoding: base64", "",
+        Data("<p>Grüße <img src=\"cid:pic1\"></p>".utf8).base64EncodedString(), "--alt--", "",
+        "--rel", "Content-Type: image/png", "Content-ID: <pic1>", "Content-Transfer-Encoding: base64", "Content-Disposition: inline", "",
+        Data([137, 80, 78, 71]).base64EncodedString(), "--rel--",
+        "--outer", "Content-Type: application/pdf; name=\"x.pdf\"", "Content-Transfer-Encoding: base64",
+        "Content-Disposition: attachment; filename*=UTF-8''R%C3%A9sum%C3%A9.pdf", "",
+        Data("PDFDATA".utf8).base64EncodedString(), "--outer--", ""
+    ].joined(separator: "\r\n")
+
+    func testRawMessageReadsAForeignMultipartLikeIMAP() {
+        let parsed = RawMessageEngine.parse(Data(Self.outlookShaped.utf8))
+        let body = RawMessageEngine.body(parsed)
+        XCTAssertEqual(body.text, "Grüße aus Köln")
+        XCTAssertEqual(body.html, "<p>Grüße <img src=\"cid:pic1\"></p>")
+        XCTAssertEqual(body.inlineImages["pic1"], "data:image/png;base64," + Data([137, 80, 78, 71]).base64EncodedString())
+        XCTAssertEqual(body.attachments, [AttachmentInfo(id: "2", filename: "Résumé.pdf", mimeType: "application/pdf",
+                                                         sizeBytes: Data("PDFDATA".utf8).base64EncodedString().utf8.count)])
+        XCTAssertEqual(parsed.data(parsed.root.attachments[0]), Data("PDFDATA".utf8))
+        XCTAssertEqual(parsed.root.leaves.map(\.section), ["1.1.1", "1.1.2", "1.2", "2"])
+        let summary = RawMessageEngine.summary(parsed, id: "u1", folder: "INBOX", flags: [], received: nil)
+        XCTAssertEqual(summary.subject, "Prüfung")
+        XCTAssertEqual(summary.from, "Jürgen Müller")
+        XCTAssertEqual(summary.toRaw, "Anna <a@y.de>, b@y.de")
+        XCTAssertEqual(summary.snippet, "Grüße aus Köln")
+        XCTAssertEqual(summary.attachmentCount, 1)
+        XCTAssertEqual(summary.receivedAt, DateEngine.parseMessageDate("Thu, 29 Oct 2026 10:00:00 +0100"))
+        let plain = RawMessageEngine.parse(Data("Subject: s\n\nnur Text\n".utf8))
+        XCTAssertEqual(plain.root.section, "1")
+        XCTAssertEqual(RawMessageEngine.body(plain).text, "nur Text\n")
+    }
+
+    func testRawMessageReadsBackWhatALFASends() throws {
+        let account = Account(id: "a", displayName: "Anna", address: "a@x.de",
+                              incoming: ServerSettings(host: "h"), outgoing: ServerSettings(host: "h"))
+        let draft = Draft(to: "b@y.de", subject: "Grüße", body: "Hallo Welt", attachments: [
+            Attachment(filename: "plan.pdf", mimeType: "application/pdf", data: Data(repeating: 7, count: 3_000))
+        ], bodyHTML: "<p>Hallo <b>Welt</b></p>")
+        let built = try MessageEngine.build(draft, account: account, messageID: "id1")
+        let parsed = RawMessageEngine.parse(built.data)
+        let body = RawMessageEngine.body(parsed)
+        XCTAssertEqual(body.text?.trimmingCharacters(in: .whitespacesAndNewlines), "Hallo Welt")
+        XCTAssertEqual(body.html?.trimmingCharacters(in: .whitespacesAndNewlines), "<p>Hallo <b>Welt</b></p>")
+        XCTAssertEqual(body.attachments.map(\.filename), ["plan.pdf"])
+        XCTAssertEqual(parsed.data(parsed.root.attachments[0]), Data(repeating: 7, count: 3_000))
+        XCTAssertEqual(RawMessageEngine.summary(parsed, id: "x", folder: "f", flags: [], received: nil).subject, "Grüße")
+    }
+
+    func testPOPSessionLogsInListsAndUndoesDotStuffing() async throws {
+        let server = POPServer()
+        server.mails.with { $0 = [("a1", "Subject: eins\r\n\r\nx"), ("b2", "Subject: zwei\r\n\r\n.punkt\r\n..zwei")] }
+        let settings = ServerSettings(host: "pop", port: 995, security: .ssl, username: "u@x.de")
+        let session = try await POPSession.open(settings: settings, opener: { _, _, _ in server.stream() })
+        try await session.authenticate(user: "u@x.de", secret: "pw")
+        let listed = try await session.identifiers()
+        XCTAssertEqual(listed.map(\.uid), ["a1", "b2"])
+        let awaited1 = try await session.retrieve(2)
+        XCTAssertEqual(String(decoding: awaited1, as: UTF8.self), "Subject: zwei\r\n\r\n.punkt\r\n..zwei\r\n")
+        await session.quit()
+        let denied = try await POPSession.open(settings: settings, opener: { _, _, _ in server.stream() })
+        do {
+            try await denied.authenticate(user: "u@x.de", secret: "falsch")
+            XCTFail("accepted")
+        } catch MailFailure.authenticationRejected {}
+        let explicit = ServerSettings(host: "pop", port: 110, security: .starttls, username: "u@x.de")
+        do {
+            _ = try await POPSession.open(settings: explicit, opener: { _, _, _ in server.stream() })
+            XCTFail("opened without STLS")
+        } catch MailFailure.tlsUnavailable {}
+        _ = try await POPSession.open(settings: explicit, opener: { _, _, _ in server.stream(offersSTLS: true) })
+    }
+
+    func testPOPMailboxKeepsMailLocallyAndRemovesServerCopiesByTheSetting() async throws {
+        let server = POPServer()
+        server.mails.with { $0 = [("a1", Self.outlookShaped), ("b2", "Subject: zwei\r\nFrom: b@y.de\r\n\r\nTag")] }
+        let database = try SQLiteStore.inMemory()
+        let clock = Locked(Date(timeIntervalSince1970: 1_800_000_000))
+        let account = Account(id: "p", displayName: "P", address: "u@x.de",
+                              incoming: ServerSettings(host: "pop", port: 995, security: .ssl, username: "u@x.de"),
+                              outgoing: ServerSettings(host: "smtp", port: 465, security: .ssl, username: "u@x.de"),
+                              incomingProtocol: .pop3)
+        let smtp = ScriptedStream(greeting: ["220 ready"]) { line in
+            if line.hasPrefix("EHLO") { return ["250-h", "250 AUTH PLAIN"] }
+            if line.hasPrefix("AUTH") { return ["235 ok"] }
+            if line.hasPrefix("MAIL") || line.hasPrefix("RCPT") { return ["250 ok"] }
+            if line == "DATA" { return ["354 go"] }
+            if line == "." { return ["250 queued"] }
+            if line == "QUIT" { return ["221 bye"] }
+            return []
+        }
+        let pop = POPSMTPClient(account: account, database: database, password: { "pw" },
+                                opener: { host, _, _ in host == "smtp" ? smtp : server.stream() }, now: { clock.with { $0 } })
+        XCTAssertTrue(pop.inboxOnly)
+        let listing = try await pop.listIDs(folderID: POPSMTPClient.inboxID, since: nil, limit: nil)
+        XCTAssertEqual(listing.ids, ["b2", "a1"])
+        let summaries = try await pop.fetchSummaries(folderID: POPSMTPClient.inboxID, ids: listing.ids)
+        XCTAssertEqual(summaries.map(\.subject), ["zwei", "Prüfung"])
+        let awaited2 = try await pop.fetchBody(messageID: "a1").text
+        XCTAssertEqual(awaited2, "Grüße aus Köln")
+        let awaited3 = try await pop.fetchAttachment(messageID: "a1", attachmentID: "2")
+        XCTAssertEqual(awaited3, Data("PDFDATA".utf8))
+        try await pop.setFlags(messageID: "b2", add: [.seen, .flagged], remove: [])
+        let awaited4 = try await pop.refreshFlags(folderID: POPSMTPClient.inboxID, known: ["a1", "b2"], cursor: nil).flags
+        XCTAssertEqual(awaited4,
+                       ["a1": [], "b2": [.seen, .flagged]])
+        try await pop.expire(.keep, now: clock.with { $0 })
+        try await pop.trash(messageID: "a1", folderID: nil)
+        let awaited5 = try await pop.listIDs(folderID: POPSMTPClient.inboxID, since: nil, limit: nil).ids
+        XCTAssertEqual(awaited5, ["b2"])
+        XCTAssertTrue(server.deleted.with { $0 }.isEmpty)
+        try await pop.expire(.deleted, now: clock.with { $0 })
+        XCTAssertEqual(server.deleted.with { $0 }, ["a1"])
+        try await pop.expire(.day, now: clock.with { $0 }.addingTimeInterval(3_600))
+        XCTAssertEqual(server.deleted.with { $0 }, ["a1"])
+        try await pop.expire(.day, now: clock.with { $0 }.addingTimeInterval(90_000))
+        XCTAssertEqual(server.deleted.with { $0 }, ["a1", "b2"])
+        let awaited6 = try await pop.fetchBody(messageID: "b2").text
+        XCTAssertEqual(awaited6, "Tag\r\n")
+        let awaited7 = try await pop.listIDs(folderID: POPSMTPClient.inboxID, since: nil, limit: nil).ids
+        XCTAssertEqual(awaited7, ["b2"])
+        try await pop.send(Draft(to: "c@z.de", subject: "Antwort", body: "ok", messageID: "s1"))
+        let awaited8 = try await pop.listIDs(folderID: POPSMTPClient.sentID, since: nil, limit: nil).ids
+        XCTAssertEqual(awaited8, ["sent:s1"])
+        let wasSent = try await pop.wasSent(messageID: "s1", in: nil)
+        XCTAssertTrue(wasSent)
+        let saved = try await pop.saveDraft(Draft(to: "d@z.de", subject: "Entwurf", body: "halb", receiptTo: "u@x.de"),
+                                            replacing: nil, into: nil)
+        let again = try await pop.saveDraft(Draft(to: "d@z.de", subject: "Entwurf 2", body: "fast"), replacing: saved.id, into: nil)
+        let awaited9 = try await pop.listIDs(folderID: POPSMTPClient.draftsID, since: nil, limit: nil).ids
+        XCTAssertEqual(awaited9, [again.id])
+        let stored = try await pop.fetchDraft(messageID: again.id)
+        XCTAssertEqual(stored.draft.subject, "Entwurf 2")
+        XCTAssertEqual(stored.draft.to, "d@z.de")
+        XCTAssertEqual(stored.draft.body.trimmingCharacters(in: .whitespacesAndNewlines), "fast")
+        try await pop.deleteDraft(id: again.id)
+        let awaited10 = try await pop.listIDs(folderID: POPSMTPClient.draftsID, since: nil, limit: nil).ids.isEmpty
+        XCTAssertTrue(awaited10)
+        do {
+            try await pop.archive(messageID: "b2", folderID: nil)
+            XCTFail("archived")
+        } catch MailFailure.unsupportedCapability {}
+    }
+
+    @MainActor
+    func testPOPMailboxSyncsThroughTheStoreAndHidesFolderActions() async throws {
+        let rig = try Rig()
+        let server = POPServer()
+        server.mails.with { $0 = [("a1", "Subject: eins\r\nFrom: Anna <a@y.de>\r\nDate: Thu, 29 Oct 2026 10:00:00 +0100\r\n\r\nHallo")] }
+        let account = Account(id: "a", displayName: "A", address: "u@x.de",
+                              incoming: ServerSettings(host: "pop", port: 995, security: .ssl, username: "u@x.de"),
+                              outgoing: ServerSettings(host: "smtp", port: 465, security: .ssl, username: "u@x.de"),
+                              incomingProtocol: .pop3)
+        rig.access.transport = POPSMTPClient(account: account, database: rig.database, password: { "pw" },
+                                             opener: { _, _, _ in server.stream() })
+        try await rig.mailbox.refreshFolders("a")
+        XCTAssertEqual(rig.mailbox.folders("a").map(\.role).filter { $0 != .starred }, [.inbox, .drafts, .sent])
+        try await rig.mailbox.refresh("a", folder: POPSMTPClient.inboxID)
+        let cached = await rig.mailbox.cached("a", folder: POPSMTPClient.inboxID)
+        XCTAssertEqual(cached.map(\.subject), ["eins"])
+        XCTAssertTrue(rig.mailbox.inboxOnly("a"))
+        XCTAssertEqual(MenuEngine.row(unread: true, draft: false, folders: false),
+                       [.item(.reply), .item(.forward), .separator, .item(.markRead), .separator, .item(.trash)])
+        XCTAssertFalse(MenuEngine.readingMore(starred: false, original: true, folders: false).contains(.item(.spam)))
+        let commands = CommandEngine.commands(front: .message(hasCopy: false), stackCount: 1, fanned: false, hasFiles: false,
+                                              confirmDiscard: false, canFold: false, sendLabelled: false, folders: false)
+        XCTAssertFalse(commands.main.contains { $0.action == .archive })
+    }
+
+    func testAccountKindTravelsFromDiscoveryToTheAccount() throws {
+        let pop = """
+            <clientConfig><emailProvider id="x"><incomingServer type="pop3"><hostname>pop.x.de</hostname><port>995</port>
+            <socketType>SSL</socketType><username>%EMAILADDRESS%</username><authentication>password-cleartext</authentication>
+            </incomingServer><outgoingServer type="smtp"><hostname>smtp.x.de</hostname><port>465</port><socketType>SSL</socketType>
+            <authentication>password-cleartext</authentication></outgoingServer></emailProvider></clientConfig>
+            """
+        var values = try XCTUnwrap(AutoconfigEngine.servers(Data(pop.utf8), address: "a@x.de")).values
+        XCTAssertEqual(values[ConnectionField.incomingProtocol], "pop3")
+        values[ConnectionField.address] = "a@x.de"
+        values[ConnectionField.password] = "pw"
+        values[ConnectionField.incomingPort] = nil
+        let connection = try ConnectionEngine(values: values)
+        XCTAssertEqual(connection.account(id: "i").incomingProtocol, .pop3)
+        XCTAssertEqual(connection.incoming.port, 995)
+        XCTAssertEqual(connection.values[ConnectionField.incomingProtocol], "pop3")
+        values[ConnectionField.incomingProtocol] = "imap"
+        XCTAssertNil(try ConnectionEngine(values: values).values[ConnectionField.incomingProtocol])
+        values[ConnectionField.incomingProtocol] = "exchange"
+        XCTAssertThrowsError(try ConnectionEngine(values: values))
+        XCTAssertEqual(ProviderPresets.choices(for: ConnectionField.incomingProtocol), ["imap", "pop3"])
+        XCTAssertEqual(ProviderPresets.choiceKey(field: ConnectionField.incomingProtocol, option: "pop3"), "settings.protocol.pop3")
+    }
+}

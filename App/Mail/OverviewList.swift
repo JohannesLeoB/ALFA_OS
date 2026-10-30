@@ -47,7 +47,7 @@ struct OverviewList: View {
         },
          OverviewCommand(id: Action.trash.rawValue, help: appearance.string(Action.trash.key), icon: .trash, tone: \.signal) {
             session.perform(.trash, message: id)
-        }]
+        }].filter { inbox.folderActions || $0.id != Action.archive.rawValue }
     }
 
     var body: some View {

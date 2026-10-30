@@ -6,11 +6,14 @@ enum ConnectionFailure: Error, Equatable, Sendable {
     case invalidPort(field: String, value: String)
     case invalidSecurity(field: String, value: String)
     case insecure(field: String)
+    case invalidProtocol(String)
 }
 
 struct ConnectionEngine: Equatable, Sendable {
     private static let implicitIncoming = 993
     private static let explicitIncoming = 143
+    private static let implicitPOP = 995
+    private static let explicitPOP = 110
     private static let implicitOutgoing = 465
     private static let explicitOutgoing = 587
 
@@ -20,6 +23,7 @@ struct ConnectionEngine: Equatable, Sendable {
     var password: String
     var incoming: ServerSettings
     var outgoing: ServerSettings
+    var incomingProtocol: IncomingProtocol
 
     init(values: [String: String]) throws(ConnectionFailure) {
         func text(_ key: String) -> String { (values[key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines) }
@@ -37,11 +41,17 @@ struct ConnectionEngine: Equatable, Sendable {
             .map(Character.init))
         self.username = username
         self.password = password
+        let kind = text(ConnectionField.incomingProtocol).lowercased()
+        guard let incomingProtocol = kind.isEmpty ? .imap : IncomingProtocol(rawValue: kind) else {
+            throw .invalidProtocol(kind)
+        }
+        self.incomingProtocol = incomingProtocol
+        let pop = incomingProtocol == .pop3
         incoming = try Self.endpoint(
             host: text(ConnectionField.incomingHost), port: text(ConnectionField.incomingPort),
             security: text(ConnectionField.incomingSecurity), username: username,
             fields: (ConnectionField.incomingHost, ConnectionField.incomingPort, ConnectionField.incomingSecurity),
-            implicit: Self.implicitIncoming, explicit: Self.explicitIncoming)
+            implicit: pop ? Self.implicitPOP : Self.implicitIncoming, explicit: pop ? Self.explicitPOP : Self.explicitIncoming)
         outgoing = try Self.endpoint(
             host: text(ConnectionField.outgoingHost), port: text(ConnectionField.outgoingPort),
             security: text(ConnectionField.outgoingSecurity), username: username,
@@ -86,11 +96,13 @@ struct ConnectionEngine: Equatable, Sendable {
             ConnectionField.outgoingSecurity: outgoing.security.rawValue
         ]
         if !name.isEmpty { result[ConnectionField.name] = name }
+        if incomingProtocol != .imap { result[ConnectionField.incomingProtocol] = incomingProtocol.rawValue }
         return result
     }
 
     func account(id: String) -> Account {
-        Account(id: id, displayName: name, address: address, incoming: incoming, outgoing: outgoing)
+        Account(id: id, displayName: name, address: address, incoming: incoming, outgoing: outgoing,
+                incomingProtocol: incomingProtocol)
     }
 }
 

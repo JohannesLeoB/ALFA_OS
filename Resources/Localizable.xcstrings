@@ -10271,6 +10271,22 @@
         }
       }
     },
+    "field.imap.incomingProtocol" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontoart"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Account type"
+          }
+        }
+      }
+    },
     "field.imap.incomingSecurity" : {
       "comment" : "roh",
       "localizations" : {
@@ -15722,6 +15738,102 @@
         }
       }
     },
+    "settings.account.serverCopy" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopie vom Server löschen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove copy from server"
+          }
+        }
+      }
+    },
+    "settings.account.serverCopy.day" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach einem Tag"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After one day"
+          }
+        }
+      }
+    },
+    "settings.account.serverCopy.deleted" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim Löschen in ALFA"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When deleted in ALFA"
+          }
+        }
+      }
+    },
+    "settings.account.serverCopy.keep" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never"
+          }
+        }
+      }
+    },
+    "settings.account.serverCopy.month" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach einem Monat"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After one month"
+          }
+        }
+      }
+    },
+    "settings.account.serverCopy.week" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach einer Woche"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After one week"
+          }
+        }
+      }
+    },
     "settings.account.show" : {
       "localizations" : {
         "de" : {
@@ -17526,6 +17638,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Addresses"
+          }
+        }
+      }
+    },
+    "settings.protocol.imap" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IMAP"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IMAP"
+          }
+        }
+      }
+    },
+    "settings.protocol.pop3" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "POP"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "POP"
           }
         }
       }

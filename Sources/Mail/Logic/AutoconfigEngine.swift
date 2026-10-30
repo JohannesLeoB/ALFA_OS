@@ -17,12 +17,15 @@ enum AutoconfigEngine {
         parser.delegate = reader
         guard parser.parse() else { return nil }
         let entries = reader.entries.map { resolved($0, address: address) }
-        guard let incoming = entries.first(where: { !$0.outgoing && $0.type == "imap" && usable($0) }),
+        let incoming = entries.first { !$0.outgoing && $0.type == "imap" && usable($0) }
+            ?? entries.first { !$0.outgoing && $0.type == "pop3" && usable($0) }
+        guard let incoming,
               let outgoing = entries.first(where: { $0.outgoing && $0.type == "smtp" && usable($0) }),
               let inTemplate = template(incoming), let outTemplate = template(outgoing) else { return nil }
         let username = incoming.username.isEmpty || incoming.username.lowercased() == address.lowercased()
             ? nil : incoming.username
-        return FoundServers(incoming: inTemplate, outgoing: outTemplate, username: username)
+        return FoundServers(incoming: inTemplate, outgoing: outTemplate, username: username,
+                            incomingProtocol: incoming.type == "pop3" ? .pop3 : .imap)
     }
 
     static func usable(_ entry: Entry) -> Bool {

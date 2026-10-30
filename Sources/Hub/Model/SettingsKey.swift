@@ -29,6 +29,10 @@ enum SettingsKey {
 
     static func mailboxRange(_ inlet: String) -> String { mailboxRangePrefix + inlet }
 
+    static let mailboxServerCopyPrefix = "settings.mailbox.serverCopy."
+
+    static func mailboxServerCopy(_ inlet: String) -> String { mailboxServerCopyPrefix + inlet }
+
     static let mailboxSignaturePrefix = "settings.mailbox.signature."
 
     static func mailboxSignature(_ inlet: String) -> String { mailboxSignaturePrefix + inlet }

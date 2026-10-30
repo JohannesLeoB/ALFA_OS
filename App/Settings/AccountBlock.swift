@@ -34,6 +34,7 @@ struct AccountBlock: View {
                     MailboxNameRow(state: context.state, inlet: inlet)
                     MailboxDisplayRow(state: context.state, inlet: inlet)
                     MailboxRangeRow(state: context.state, inbox: context.inbox, inlet: inlet)
+                    MailboxServerCopyRow(state: context.state, inbox: context.inbox, inlet: inlet)
                     SignatureBlock(state: context.state, inlet: inlet)
                 }
                 SettingsRow(label: appearance.text("settings.account.remove")) {

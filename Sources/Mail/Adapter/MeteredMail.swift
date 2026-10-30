@@ -1,7 +1,7 @@
 import Foundation
 import Hub
 
-struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort, UnseenCountPort, LabelPort, SenderPort, SentCopyPort {
+struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort, UnseenCountPort, LabelPort, SenderPort, SentCopyPort, InboxOnlyPort, ServerCopyPort {
     let base: any MailTransportPort
     let meter: CostMeter
 
@@ -98,6 +98,14 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, Everyw
     }
 
     var usesLabels: Bool { (base as? any LabelPort)?.usesLabels ?? false }
+
+    var inboxOnly: Bool { (base as? any InboxOnlyPort)?.inboxOnly ?? false }
+
+    func expire(_ policy: ServerCopy, now: Date) async throws {
+        guard let base = base as? any ServerCopyPort else { return }
+        meter.record()
+        try await base.expire(policy, now: now)
+    }
 
     var offersSource: Bool { (base as? any SourcePort)?.offersSource ?? false }
 

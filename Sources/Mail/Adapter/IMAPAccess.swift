@@ -1,4 +1,5 @@
 import Hub
+import Storage
 
 public struct IMAPAccess: ProviderPort {
     static let providerID = "imap"
@@ -8,8 +9,10 @@ public struct IMAPAccess: ProviderPort {
     public let signIn: any SignInPort
     public let probe: any ProbePort
     private let channels = IMAPChannelRegistry()
+    private let database: SQLiteStore?
 
-    public init() {
+    public init(database: SQLiteStore? = nil) {
+        self.database = database
         signIn = IMAPSignIn(channels: channels)
         probe = ConnectionCheck()
     }
@@ -18,6 +21,7 @@ public struct IMAPAccess: ProviderPort {
         [
             Field(id: ConnectionField.name, title: "field.imap.name"),
             Field(id: ConnectionField.address, title: "field.imap.address"),
+            Field(id: ConnectionField.incomingProtocol, title: "field.imap.incomingProtocol"),
             Field(id: ConnectionField.incomingHost, title: "field.imap.incomingHost"),
             Field(id: ConnectionField.incomingPort, title: "field.imap.incomingPort"),
             Field(id: ConnectionField.incomingSecurity, title: "field.imap.incomingSecurity"),
@@ -56,6 +60,13 @@ public struct IMAPAccess: ProviderPort {
         }
         let connection = try ConnectionEngine(values: grant.values)
         let password = connection.password
+        if connection.incomingProtocol == .pop3 {
+            guard let database else { throw HubFailure.capabilityMissing(inlet.id, .mail) }
+            let pop = POPSMTPClient(account: connection.account(id: inlet.id), database: database, password: { password })
+            let made: Any = wantsChanges ? POPChangePort(transport: pop) : pop
+            guard let typed = made as? P else { throw HubFailure.capabilityMissing(inlet.id, .mail) }
+            return typed
+        }
         let fingerprint = connection.values.sorted { $0.key < $1.key }.map { $0.key + "=" + $0.value }.joined(separator: "\n")
         let transport = IMAPSMTPClient(
             account: connection.account(id: inlet.id), password: { password },
@@ -70,6 +81,12 @@ public struct IMAPAccess: ProviderPort {
 
 struct IMAPChangePort: ChangePort {
     let transport: IMAPSMTPClient
+
+    func changes() -> AsyncThrowingStream<Void, any Error> { transport.changes() }
+}
+
+struct POPChangePort: ChangePort {
+    let transport: POPSMTPClient
 
     func changes() -> AsyncThrowingStream<Void, any Error> { transport.changes() }
 }

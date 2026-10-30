@@ -34,7 +34,7 @@ struct MailCommands: Commands {
             item(titleKey: "shell.menu.fetchAll", shortcut: KeyboardShortcut("n", modifiers: [.command, .shift]), enabled: session != nil && session?.syncing == false) { fetch() }
             Divider()
             item(titleKey: "mail.action.archive", shortcut: KeyboardShortcut("a", modifiers: [.command, .control]), enabled: allows(.archive)) { target?.perform(.archive) }
-            item(titleKey: "mail.action.spam", shortcut: KeyboardShortcut("j", modifiers: [.command, .shift]), enabled: target?.isMessage == true) { target?.perform(.spam) }
+            item(titleKey: "mail.action.spam", shortcut: KeyboardShortcut("j", modifiers: [.command, .shift]), enabled: target?.isMessage == true && session?.inbox.folderActions != false) { target?.perform(.spam) }
         }
         CommandMenu(LocalizedStringKey("shell.menu.message")) {
             item(titleKey: "mail.action.reply", shortcut: KeyboardShortcut("r", modifiers: .command), enabled: allows(.reply)) { target?.perform(.reply) }

@@ -64,6 +64,7 @@ enum ConnectionField {
     static let outgoingHost = "outgoingHost"
     static let outgoingPort = "outgoingPort"
     static let outgoingSecurity = "outgoingSecurity"
+    static let incomingProtocol = "incomingProtocol"
 }
 
 struct Account: Identifiable, Codable, Equatable, Sendable {
@@ -72,12 +73,15 @@ struct Account: Identifiable, Codable, Equatable, Sendable {
     var address: String
     var incoming: ServerSettings
     var outgoing: ServerSettings
+    var incomingProtocol: IncomingProtocol
 
-    init(id: String, displayName: String, address: String, incoming: ServerSettings, outgoing: ServerSettings) {
+    init(id: String, displayName: String, address: String, incoming: ServerSettings, outgoing: ServerSettings,
+         incomingProtocol: IncomingProtocol = .imap) {
         self.id = id
         self.displayName = displayName
         self.address = address
         self.incoming = incoming
         self.outgoing = outgoing
+        self.incomingProtocol = incomingProtocol
     }
 }

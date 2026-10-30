@@ -229,8 +229,10 @@ struct InboxRow: View {
                 rowAction(item.unread ? "mail.action.markRead" : "mail.action.markUnread", glyph: .envelope, tone: tone.secondary) {
                     session.perform(item.unread ? .markRead : .markUnread, message: item.id)
                 }
-                rowAction("mail.action.archive", glyph: .archive, tone: tone.secondary) {
-                    session.perform(.archive, message: item.id)
+                if inbox.folderActions {
+                    rowAction("mail.action.archive", glyph: .archive, tone: tone.secondary) {
+                        session.perform(.archive, message: item.id)
+                    }
                 }
                 if inTrash && inbox.canPurge(item.id) {
                     ConfirmPill(label: nil, question: appearance.text("mail.confirm.purge.question"), yes: appearance.text("mail.confirm.purge.yes"),
@@ -259,7 +261,7 @@ struct InboxRow: View {
 
     private func contextMenu(at point: NSPoint) {
         guard item.outbox == nil else { return }
-        let lines = MenuEngine.row(unread: item.unread, draft: item.draft)
+        let lines = MenuEngine.row(unread: item.unread, draft: item.draft, folders: inbox.folderActions)
         let entries = MenuLine.entries(lines, appearance: appearance) { action in
             if action == .move {
                 menuOpen = true

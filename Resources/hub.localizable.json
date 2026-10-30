@@ -192,6 +192,38 @@
   "settings.toast.cacheCleared": {
    "de": "Zwischenspeicher · geleert",
    "en": "Cache · cleared"
+  },
+  "settings.protocol.imap": {
+   "de": "IMAP",
+   "en": "IMAP"
+  },
+  "settings.protocol.pop3": {
+   "de": "POP",
+   "en": "POP"
+  },
+  "settings.account.serverCopy": {
+   "de": "Kopie vom Server löschen",
+   "en": "Remove copy from server"
+  },
+  "settings.account.serverCopy.keep": {
+   "de": "Nie",
+   "en": "Never"
+  },
+  "settings.account.serverCopy.day": {
+   "de": "Nach einem Tag",
+   "en": "After one day"
+  },
+  "settings.account.serverCopy.week": {
+   "de": "Nach einer Woche",
+   "en": "After one week"
+  },
+  "settings.account.serverCopy.month": {
+   "de": "Nach einem Monat",
+   "en": "After one month"
+  },
+  "settings.account.serverCopy.deleted": {
+   "de": "Beim Löschen in ALFA",
+   "en": "When deleted in ALFA"
   }
  }
 }

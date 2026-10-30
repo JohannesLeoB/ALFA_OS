@@ -59,6 +59,7 @@ final class Assembly {
         let configuration = Configuration(
             person: person, company: CompanySetup(),
             providers: Self.providers(directory: directory, catalog: catalog, http: http, roots: DriveRootStore(settings: settingStore),
+                                      database: database,
                                       openBrowser: openBrowser),
             keychain: keychain, cadence: TimerCadence(), cost: CostStore(database: database), catalog: Self.ports(),
             cadences: Self.cadences)
@@ -70,7 +71,8 @@ final class Assembly {
                                    range: { [settings] inlet in settings.range(inlet) },
                                    names: { [settings] inlet in
                                        SenderNames(chosen: settings.mailboxName(inlet), profile: settings.profile.name)
-                                   })
+                                   },
+                                   serverCopy: { [settings] inlet in settings.serverCopy(inlet) })
         let inbox = InboxState(mailbox: mailbox, outbox: outbox, contacts: ContactState(defaults: defaults),
                                directory: ContactSourceState(settings: settingStore),
                                signatures: { [settings] inlet in settings.signature(inlet) },
@@ -130,6 +132,7 @@ final class Assembly {
     }
 
     private static func providers(directory: URL, catalog: IntegrationCatalogStore, http: URLSession, roots: DriveRootStore,
+                                  database: SQLiteStore,
                                   openBrowser: @escaping @Sendable (URL) async -> Bool) -> [any ProviderPort] {
         let checks: [any ConnectionCheckPort] = [
             Airtable.ConnectionCheck(http: http), ClickUp.ConnectionCheck(http: http), Sevdesk.ConnectionCheck(http: http),
@@ -138,7 +141,7 @@ final class Assembly {
         var providers: [any ProviderPort] = []
         if let google = google(directory: directory, http: http, roots: roots, openBrowser: openBrowser) { providers.append(google) }
         if let outlook = outlook(directory: directory, http: http, openBrowser: openBrowser) { providers.append(outlook) }
-        providers.append(IMAPAccess())
+        providers.append(IMAPAccess(database: database))
         return providers + KeyAccess.all(checks: checks, catalog: catalog)
     }
 

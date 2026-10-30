@@ -2,6 +2,7 @@ struct FoundServers: Equatable, Sendable {
     var incoming: ServerTemplate
     var outgoing: ServerTemplate
     var username: String?
+    var incomingProtocol: IncomingProtocol = .imap
 
     var values: [String: String] {
         var result: [String: String] = [:]
@@ -14,6 +15,7 @@ struct FoundServers: Equatable, Sendable {
             result[security] = template.security.rawValue
         }
         if let username { result[ConnectionField.username] = username }
+        result[ConnectionField.incomingProtocol] = incomingProtocol.rawValue
         return result
     }
 }

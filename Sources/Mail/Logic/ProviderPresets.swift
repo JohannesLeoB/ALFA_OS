@@ -6,6 +6,16 @@ public enum ProviderPresets {
     public static let securityFields: Set<String> = [ConnectionField.incomingSecurity, ConnectionField.outgoingSecurity]
     public static let securityChoices: [String] = [TransportSecurity.ssl.rawValue, TransportSecurity.starttls.rawValue]
 
+    public static func choices(for field: String) -> [String]? {
+        if securityFields.contains(field) { return securityChoices }
+        if field == ConnectionField.incomingProtocol { return IncomingProtocol.allCases.map(\.rawValue) }
+        return nil
+    }
+
+    public static func choiceKey(field: String, option: String) -> String {
+        (field == ConnectionField.incomingProtocol ? "settings.protocol." : "settings.security.") + option
+    }
+
     static let all: [ProviderPreset] = [
         ProviderPreset(
             id: "ionos", title: .verbatim("Ionos"),

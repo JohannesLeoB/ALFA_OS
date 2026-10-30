@@ -27,6 +27,20 @@ actor SMTPSession {
         return session
     }
 
+    static func deliver(_ outgoing: OutgoingMessage, settings: ServerSettings, user: String, credential: MailCredential,
+                        opener: @escaping StreamOpener) async throws {
+        guard settings.isComplete else { throw MailFailure.accountIncomplete("outgoing") }
+        let session = try await open(settings: settings, opener: opener)
+        do {
+            try await session.authenticate(user: user, credential: credential)
+            try await session.send(from: outgoing.sender, recipients: outgoing.recipients, message: outgoing.data)
+        } catch {
+            await session.close()
+            throw error
+        }
+        await session.quit()
+    }
+
     private func handshake(security: TransportSecurity) async throws {
         _ = try expect(try await readReply(), [220])
         try await greet()

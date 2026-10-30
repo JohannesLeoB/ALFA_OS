@@ -85,7 +85,8 @@ extension MessageCard {
                 return
             }
             guard case .message(let id) = inbox.frontRef else { return }
-            let lines = MenuEngine.readingMore(starred: inbox.card(id)?.summary.flags.contains(.flagged) ?? false, original: inbox.offersOriginal)
+            let lines = MenuEngine.readingMore(starred: inbox.card(id)?.summary.flags.contains(.flagged) ?? false, original: inbox.offersOriginal,
+                                               folders: inbox.folderActions)
             let entries = MenuLine.entries(lines, appearance: appearance) { action in
                 if action == .move {
                     moreAnchor.showMenu(MoveFolderList.entries(inbox, appearance: appearance, message: id))
