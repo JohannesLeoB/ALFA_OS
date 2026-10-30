@@ -49,3 +49,12 @@ h1{margin:0 0 8px;color:var(--ink);font-weight:600;font-size:clamp(22px,3.4vw,30
 .foot p{margin:0 0 8px}.muted{color:var(--mut)}
 @media (max-width:560px){.card{padding:40px 0 52px}.card svg{width:116%;margin-left:-8%}.bl{right:16px}.br{bottom:30px}}
 @media (prefers-reduced-motion:reduce){.mod,.cab,.boss,.pulse{transition:none}}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:14px}
+.stats div{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stats b{font:600 20px/1.1 var(--anatomy-mono);color:var(--ink);font-variant-numeric:tabular-nums}
+.stats span{font-size:12px;color:var(--mut)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
+.chip{font:12px var(--anatomy-mono);border:1px solid var(--rule);border-radius:999px;padding:2px 9px;color:var(--soft)}
+.chip.warn{border-color:var(--mut);color:var(--ink)}
+.cab[data-kind="bridge"] .tb-ring{stroke:var(--anatomy-mid)}
+.sub{margin:12px 0 6px;font:500 11px/1 var(--anatomy-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
