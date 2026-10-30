@@ -26,6 +26,7 @@ bash utils/build_app.sh
 - `zsh utils/check_modules.sh [Module ...]` compiles each module with `swiftc` and runs its test class; with `App` it also typechecks the app. It needs no Swift Package Manager run, but clones GRDB 6.29.3 over the network unless `GRDB_SRC` points at a checkout.
 - `bash utils/build_app.sh` runs xcodegen and xcodebuild and writes the app to `dist/ALFA_OS <number>.app`. The number counts every build: it is one above the highest number already in `dist/`, starting at 1001, so the highest number is the newest app; only it and the one before stay. The app carries the number as its build; a build step in `project.yml` writes the short commit hash as `ALFACommit` (with `+` when the tree has uncommitted changes) and the branch as `ALFABranch`. Settings › System shows all three. Build caches go to `.build/xcode` and `.build/check`.
 - `git config core.hooksPath .githooks` activates the pre-commit and commit-msg hooks.
+- `python3 -I utils/token_register.py [--unused]` lists every value of `Tokens`, `Colors` and `SheetValues` with the lines in `App` and `Sources` that read it, and the values nothing reads.
 - `python3 -I utils/generate_tokens.py` regenerates `Sources/Design/Model` from `Resources/tokens.json`; `python3 -I utils/merge_strings.py` regenerates `Resources/Localizable.xcstrings` from the `*.localizable.json` files.
 
 ## Folder map
