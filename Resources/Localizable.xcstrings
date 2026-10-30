@@ -10575,10 +10575,32 @@
         }
       }
     },
+    "offer.gmail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gmail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gmail"
+          }
+        }
+      }
+    },
     "offer.google" : {
       "comment" : "roh",
       "localizations" : {
         "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google"
+          }
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Google"
@@ -10696,6 +10718,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ · persönlich"
+          }
+        }
+      }
+    },
+    "settings.account.name" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name in Mail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name in mail"
+          }
+        }
+      }
+    },
+    "settings.account.name.prompt" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
           }
         }
       }

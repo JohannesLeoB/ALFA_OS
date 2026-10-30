@@ -12,6 +12,7 @@ public final class MailboxStore: MailboxPort {
     let eventBus: Broadcast<MailboxEvent>
     let now: @Sendable () -> Date
     let range: @MainActor (Inlet.ID) -> MailboxRange
+    let names: @MainActor (Inlet.ID) -> SenderNames
     var watcher: Task<Void, Never>?
     var expunging: [Inlet.ID: Bool] = [:]
     var passes: [String: Task<Result<Void, HubFailure>, Never>] = [:]
@@ -24,13 +25,15 @@ public final class MailboxStore: MailboxPort {
 
     public init(access: any AccessPort, database: SQLiteStore, outbox: OutboxStore, events: Broadcast<MailboxEvent>,
                 now: @escaping @Sendable () -> Date = { Date() },
-                range: @escaping @MainActor (Inlet.ID) -> MailboxRange = { _ in .standard }) {
+                range: @escaping @MainActor (Inlet.ID) -> MailboxRange = { _ in .standard },
+                names: @escaping @MainActor (Inlet.ID) -> SenderNames = { _ in SenderNames() }) {
         self.access = access
         self.database = database
         self.outboxStore = outbox
         self.eventBus = events
         self.now = now
         self.range = range
+        self.names = names
         watcher = Task { [weak self] in
             guard let stream = self?.access.events else { return }
             for await event in stream {
@@ -44,7 +47,15 @@ public final class MailboxStore: MailboxPort {
         watcher?.cancel()
     }
 
-    public var accounts: [Inlet] { access.configured(for: .mail) }
+    public var accounts: [Inlet] {
+        access.configured(for: .mail).map { inlet in
+            let chosen = names(inlet.id).chosen.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !chosen.isEmpty else { return inlet }
+            var shown = inlet
+            shown.title = chosen
+            return shown
+        }
+    }
 
     public var events: AsyncStream<MailboxEvent> { eventBus.stream }
 
@@ -398,6 +409,7 @@ public final class MailboxStore: MailboxPort {
 
     private func sync(_ inlet: Inlet.ID) async {
         await outboxStore.pass(inlet)
+        await warmSenders(inlet)
         do {
             try mirrorDeliveredFolders(inlet)
             if let inbox = inboxID(inlet) {

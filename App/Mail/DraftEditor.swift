@@ -166,8 +166,8 @@ struct FromButton: View {
 
     private var inbox: InboxState { session.inbox }
     private var sender: Inlet? { inbox.accounts.first { $0.id == card.inlet } }
-    private var name: String { sender.map { $0.shownName(session.settings.display($0.id), appearance: appearance) } ?? "" }
-    private var address: String { sender?.account ?? "" }
+    private var name: String { card.draft.from?.name ?? "" }
+    private var address: String { card.draft.from?.address ?? sender?.account ?? "" }
 
     var body: some View {
         AddressButton(capsule: true, action: open) {
@@ -185,10 +185,17 @@ struct FromButton: View {
     }
 
     private func open() {
-        let entries = inbox.fromChoices.map { inlet in
-            MenuEntry.row(MenuItem(id: inlet.id, label: Text(verbatim: inlet.account.isEmpty ? inlet.shownTitle(appearance) : inlet.account),
-                                   check: inlet.id == card.inlet ? appearance.text("mail.menu.check") : nil) { inbox.setFrom(card.id, inlet: inlet.id) })
+        let entries = inbox.senderChoices.map { choice in
+            MenuEntry.row(MenuItem(id: choice.id, label: Text(verbatim: choice.sender.address),
+                                   check: isCurrent(choice) ? appearance.text("mail.menu.check") : nil) {
+                Task { await inbox.setFrom(card.id, inlet: choice.inlet, sender: choice.sender) }
+            })
         }
         anchor.showMenu(entries)
+        Task { await inbox.refreshSenders() }
+    }
+
+    private func isCurrent(_ choice: SenderChoice) -> Bool {
+        choice.inlet == card.inlet && choice.sender.address.lowercased() == address.lowercased()
     }
 }

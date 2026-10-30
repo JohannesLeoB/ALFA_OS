@@ -13,7 +13,7 @@ public enum MessageEngine {
 
     static func build(_ draft: Draft, account: Account, messageID: String = UUID().uuidString.lowercased(),
                              date: Date = Date(), asDraft: Bool = false) throws -> OutgoingMessage {
-        let sender = try senderAddress(account)
+        let sender = try senderPair(draft, account: account)
         let to = try mailboxes(draft.to)
         let cc = try mailboxes(draft.cc)
         let bcc = try mailboxes(draft.bcc)
@@ -35,6 +35,7 @@ public enum MessageEngine {
 
     public static func buildRaw(_ draft: Draft, domain: String) -> Data {
         var head: [String] = []
+        if let sender = draftSender(draft) { head.append("From: \(render(sender))") }
         for (label, value) in [("To", draft.to), ("Cc", draft.cc), ("Bcc", draft.bcc)] {
             if let text = value?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
                 head.append("\(label): \(clean(text))")
@@ -86,6 +87,21 @@ public enum MessageEngine {
             lines.append("--\(mixed)--")
         }
         return Data((lines.joined(separator: "\r\n") + "\r\n").utf8)
+    }
+
+    public static func sender(_ header: String?) -> Participant? {
+        guard let header, let parsed = AddressListParser.parseMailbox(MIME.decodeEncodedWords(header)) else { return nil }
+        return Participant(name: parsed.name ?? "", address: parsed.address)
+    }
+
+    private static func draftSender(_ draft: Draft) -> Pair? {
+        guard let from = draft.from, let parsed = AddressListParser.parseMailbox(from.address) else { return nil }
+        let name = clean(from.name).trimmingCharacters(in: .whitespaces)
+        return (name.isEmpty ? nil : name, parsed.address)
+    }
+
+    private static func senderPair(_ draft: Draft, account: Account) throws -> Pair {
+        try draftSender(draft) ?? senderAddress(account)
     }
 
     static func senderAddress(_ account: Account) throws -> Pair {

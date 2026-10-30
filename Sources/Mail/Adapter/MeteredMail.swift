@@ -1,7 +1,7 @@
 import Foundation
 import Hub
 
-struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort, LabelPort {
+struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort, LabelPort, SenderPort {
     let base: any MailTransportPort
     let meter: CostMeter
 
@@ -133,6 +133,12 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, Everyw
         guard let base = base as? any EverywhereSearchPort else { throw MailFailure.unsupportedCapability("search") }
         meter.record()
         return try await base.searchEverywhere(query: query, pageToken: pageToken, maxResults: maxResults)
+    }
+
+    func senders() async throws -> [Participant] {
+        guard let base = base as? any SenderPort else { throw MailFailure.unsupportedCapability("senders") }
+        meter.record()
+        return try await base.senders()
     }
 
     func supportsPurge() async throws -> Bool {

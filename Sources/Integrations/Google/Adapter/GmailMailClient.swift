@@ -2,8 +2,8 @@ import Foundation
 import Hub
 import Mail
 
-struct GmailMailClient: GmailPort, SourcePort, LabelPort {
-    typealias Backend = GmailFetchPort & GmailWritePort & GmailDraftPort & GmailLabelPort
+struct GmailMailClient: GmailPort, SourcePort, LabelPort, SenderPort {
+    typealias Backend = GmailFetchPort & GmailWritePort & GmailDraftPort & GmailLabelPort & GmailSenderPort
 
     static let allMail = "ALL"
     static let threadLimit = 20
@@ -90,6 +90,10 @@ struct GmailMailClient: GmailPort, SourcePort, LabelPort {
     var usesLabels: Bool { true }
 
     var offersSource: Bool { true }
+
+    func senders() async throws -> [Participant] {
+        try await gmail.listSendAs()
+    }
 
     func fetchSource(messageID: String) async throws -> Data {
         try await gmail.fetchRaw(messageID: messageID)

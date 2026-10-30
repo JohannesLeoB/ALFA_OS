@@ -405,6 +405,36 @@ final class GoogleTests: XCTestCase {
         XCTAssertEqual(hints, ["anna@example.test", nil])
     }
 
+    func testSignInRequestsOnlyTheScopesOfTheInletCapabilities() async throws {
+        let http = FakeHttp { _ in (200, #"{"access_token":"a","expires_in":3600,"refresh_token":"r"}"#) }
+        let opened = Locked<[URL]>([])
+        let signIn = SignInClient(
+            oauth: OAuthClient(config: ClientConfig(clientID: "id", clientSecret: ""), http: http),
+            openBrowser: { url in
+                opened.with { $0.append(url) }
+                return true
+            },
+            makeRedirect: {
+                FakeRedirect { _ in
+                    let state = URLComponents(url: opened.with { $0 }.last!, resolvingAgainstBaseURL: false)!
+                        .queryItems!.first { $0.name == "state" }!.value!
+                    return URL(string: "http://127.0.0.1:9/?code=c&state=\(state)")!
+                }
+            },
+            clock: { grantStart })
+        _ = try await signIn.signIn(inlet([.mail]), input: [:])
+        _ = try await signIn.signIn(inlet([.mail, .calendar, .contacts, .files]), input: [:])
+        let scopes = opened.with { $0 }.map { url in
+            Set((URLComponents(url: url, resolvingAgainstBaseURL: false)!.queryItems!.first { $0.name == "scope" }?.value ?? "")
+                .split(separator: " ").map(String.init))
+        }
+        let identity: Set<String> = [OAuthScope.userinfoEmail.rawValue, OAuthScope.userinfoProfile.rawValue]
+        XCTAssertEqual(scopes[0], identity.union([OAuthScope.gmailModify.rawValue]))
+        XCTAssertEqual(scopes[1], identity.union([
+            OAuthScope.gmailModify, .calendarReadonly, .calendarEvents, .contacts, .directoryReadonly, .drive,
+        ].map(\.rawValue)))
+    }
+
     func testSignInFailsWhenTheBrowserDoesNotOpenOrTheStateDiffers() async {
         let oauth = OAuthClient(config: ClientConfig(clientID: "id", clientSecret: ""), http: FakeHttp())
         let redirect = FakeRedirect { _ in URL(string: "http://127.0.0.1:9/?code=c&state=wrong")! }
@@ -1390,7 +1420,9 @@ final class GoogleTests: XCTestCase {
         let google = router(http)
         XCTAssertEqual(google.id, "google")
         XCTAssertEqual(google.capabilities, [.mail, .calendar, .contacts, .files])
-        XCTAssertEqual(google.offers(personal: .person("p")).count, 1)
+        let offers = google.offers(personal: .person("p"))
+        XCTAssertEqual(offers.map(\.title), ["offer.gmail", "offer.google"])
+        XCTAssertEqual(offers.map(\.capabilities), [[.mail], [.mail, .calendar, .contacts, .files]])
         let mail = try google.adapter((any MailTransportPort).self, for: inlet([.mail]), grant(), renewal: .ignoring)
         let folders = try await mail.listFolders()
         XCTAssertEqual(folders.last?.id, "L")
@@ -1536,5 +1568,19 @@ extension GoogleTests {
         let result = try await OfferScanEngine.load(rootFolderID: "root", drive: FakeDrive(tree: tree), convention: convention)
         XCTAssertEqual(result.incoming.map(\.file.id), ["c", "a"])
         XCTAssertEqual(result.outgoing, [])
+    }
+
+    func testSendAsListsVerifiedAddressesDefaultFirstAndRawMailCarriesTheFrom() async throws {
+        let body = #"{"sendAs":[{"sendAsEmail":"b@x.test","displayName":"B","verificationStatus":"pending"},{"sendAsEmail":"c@x.test","displayName":"C","verificationStatus":"accepted"},{"sendAsEmail":"a@x.test","displayName":"Anna","isDefault":true,"isPrimary":true}]}"#
+        let http = FakeHttp { _ in (200, body) }
+        let senders = try await mailClient(http).senders()
+        XCTAssertEqual(senders.map(\.address), ["a@x.test", "c@x.test"])
+        XCTAssertEqual(senders.first?.name, "Anna")
+        XCTAssertEqual(http.calls.map { $0.method + " " + $0.path }, ["GET /gmail/v1/users/me/settings/sendAs"])
+        let draft = Draft(to: "ann@x.test", subject: "Hi", body: "text", messageID: "abc", from: Participant(name: "J\u{F6}", address: "c@x.test"))
+        let message = DraftMimeEngine.payload(draft)
+        let raw = String(decoding: try XCTUnwrap(Base64Engine.decodeURL(try XCTUnwrap(message["raw"]))), as: UTF8.self)
+        XCTAssertTrue(raw.hasPrefix("From: =?UTF-8?B?"))
+        XCTAssertTrue(raw.contains("<c@x.test>"))
     }
 }

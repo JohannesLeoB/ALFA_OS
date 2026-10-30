@@ -20,10 +20,11 @@ enum DraftParser {
         var threadID: String?
         var inReplyTo: String?
         var receiptTo: String?
+        var from: Participant?
 
         func draft(with attachments: [Attachment]) -> Draft {
             Draft(to: to, cc: cc, bcc: bcc, subject: subject, body: body, attachments: attachments,
-                  inReplyTo: inReplyTo, threadID: threadID, receiptTo: receiptTo)
+                  inReplyTo: inReplyTo, threadID: threadID, receiptTo: receiptTo, from: from)
         }
     }
 
@@ -45,7 +46,8 @@ enum DraftParser {
             subject: header("Subject") ?? "", body: BodyParser.plain(of: message), attachmentRefs: refs,
             threadID: thread?.isEmpty == false ? thread : nil,
             inReplyTo: header("In-Reply-To") ?? header("References"),
-            receiptTo: MessageEngine.receiptAddress(header("Disposition-Notification-To")))
+            receiptTo: MessageEngine.receiptAddress(header("Disposition-Notification-To")),
+            from: MessageEngine.sender(header("From")))
     }
 
     static func idMap(from data: Data) -> [String: String] {

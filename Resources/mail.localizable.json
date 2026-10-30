@@ -907,6 +907,14 @@
   "mail.read.images.text": {
    "de": "Beim Laden erfährt der Absender, dass die Mail geöffnet wurde.",
    "en": "Loading them tells the sender that you opened this message."
+  },
+  "settings.account.name": {
+   "de": "Name in Mail",
+   "en": "Name in mail"
+  },
+  "settings.account.name.prompt": {
+   "de": "Name",
+   "en": "Name"
   }
  }
 }

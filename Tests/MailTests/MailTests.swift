@@ -52,7 +52,7 @@ private final class ScriptedStream: ByteStreamPort, @unchecked Sendable {
     func close() {}
 }
 
-private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, EverywhereSearchPort, @unchecked Sendable {
+private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, EverywhereSearchPort, SenderPort, @unchecked Sendable {
     let calls = Locked<[String]>([])
     let failure = Locked<(any Error)?>(nil)
     let wasSentAnswer = Locked(false)
@@ -82,6 +82,7 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
     let mirrorsDrafts = Locked(false)
     let draftIDs = Locked<[String: String]>([:])
     let sendDraftFailure = Locked<(any Error)?>(nil)
+    let senderList = Locked<[Participant]>([])
     let prefix: String
 
     init(prefix: String = "1") {
@@ -260,6 +261,8 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
         return FlagRefresh(flags: overrides.filter { known.contains($0.key) }, cursor: "c\(cursors.with { $0.count })")
     }
 
+    func senders() async throws -> [Participant] { senderList.with { $0 } }
+
     func supportsPurge() async throws -> Bool { true }
     func purge(messageID: String) async throws { try note("purge") }
 }
@@ -377,6 +380,101 @@ final class MailTests: XCTestCase {
                        text.components(separatedBy: "boundary=").dropFirst().first)
         XCTAssertNotEqual(one.data, other.data)
         XCTAssertFalse(text.contains("alfa_boundary"))
+    }
+
+    func testDraftKeepsItsSenderAndOldRowsHaveNone() throws {
+        let draft = Draft(to: "a@b.de", subject: "S", body: "b", from: Participant(name: "J\u{F6}rg", address: "j@x.de"))
+        let decoded = try JSONDecoder().decode(Draft.self, from: JSONEncoder().encode(draft))
+        XCTAssertEqual(decoded.from?.address, "j@x.de")
+        XCTAssertEqual(decoded.from?.name, "J\u{F6}rg")
+        XCTAssertNil(try JSONDecoder().decode(Draft.self, from: Data(#"{"subject":"S","body":"b"}"#.utf8)).from)
+    }
+
+    func testFromHeaderCarriesTheEncodedNameInBothBuilders() throws {
+        let account = Account(id: "a", displayName: "Konto", address: "me@example.com",
+                              incoming: ServerSettings(), outgoing: ServerSettings())
+        let draft = Draft(to: "x@example.com", subject: "S", body: "b",
+                          from: Participant(name: "J\u{F6}rg M\u{FC}ller", address: "alias@example.com"))
+        let built = try MessageEngine.build(draft, account: account)
+        let text = String(decoding: built.data, as: UTF8.self)
+        XCTAssertEqual(built.sender, "alias@example.com")
+        let line = try XCTUnwrap(text.components(separatedBy: "\r\n").first { $0.hasPrefix("From:") })
+        XCTAssertTrue(line.hasPrefix("From: =?UTF-8?B?"))
+        XCTAssertTrue(line.hasSuffix("<alias@example.com>"))
+        let raw = String(decoding: MessageEngine.buildRaw(draft, domain: "d"), as: UTF8.self)
+        XCTAssertTrue(raw.hasPrefix("From: =?UTF-8?B?"))
+        XCTAssertEqual(MessageEngine.sender(line.replacingOccurrences(of: "From: ", with: ""))?.name, "J\u{F6}rg M\u{FC}ller")
+        let plain = try MessageEngine.build(Draft(to: "x@example.com", subject: "S", body: "b"), account: account)
+        XCTAssertTrue(String(decoding: plain.data, as: UTF8.self).contains("From: Konto <me@example.com>"))
+    }
+
+    func testSendersPutTheAccountFirstAndTheChosenNameOverridesAll() {
+        let stored = [Participant(name: "Alias", address: "shop@example.com"), Participant(name: "Ich", address: "ME@example.com")]
+        let plain = SenderEngine.merged(account: "me@example.com", chosen: "", profile: "Profil", stored: stored)
+        XCTAssertEqual(plain.map(\.address), ["me@example.com", "shop@example.com"])
+        XCTAssertEqual(plain.map(\.name), ["Ich", "Alias"])
+        let named = SenderEngine.merged(account: "me@example.com", chosen: " Neu ", profile: "Profil", stored: stored)
+        XCTAssertEqual(named.map(\.name), ["Neu", "Neu"])
+        let bare = SenderEngine.merged(account: "me@example.com", chosen: "", profile: "Profil", stored: [])
+        XCTAssertEqual(bare, [Participant(id: 0, name: "Profil", address: "me@example.com")])
+        XCTAssertEqual(SenderEngine.receiving(plain, headers: ["x@y.de", "Shop <SHOP@example.com>"])?.address, "shop@example.com")
+        XCTAssertNil(SenderEngine.receiving(plain, headers: ["x@y.de"]))
+    }
+
+    @MainActor
+    func testRepliesAndForwardsComeFromTheAddressTheMailWasSentTo() async throws {
+        let rig = try Rig()
+        rig.transport.senderList.with { $0 = [Participant(name: "Me", address: "me@example.com"), Participant(name: "Shop", address: "shop@example.com")] }
+        rig.transport.corpus.with {
+            $0["INBOX"] = [MessageSummary(id: "1:1:INBOX", threadID: "t", subject: "Hi", from: "Anna", fromRaw: "Anna <anna@example.com>",
+                                          toRaw: "Team <shop@example.com>, bob@example.com", snippet: "s", flags: [], folderIDs: ["INBOX"],
+                                          messageIDHeader: "<h1@x>")]
+        }
+        _ = await rig.mailbox.senders("a")
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        let repliedID = await state.reply(to: "1:1:INBOX", all: true)
+        let replied = try XCTUnwrap(repliedID)
+        XCTAssertEqual(state.draft(replied)?.draft.from?.address, "shop@example.com")
+        XCTAssertEqual(state.draft(replied)?.draft.from?.name, "Shop")
+        XCTAssertEqual(state.draft(replied)?.draft.cc, "bob@example.com")
+        let forwardedID = await state.forward("1:1:INBOX")
+        let forwarded = try XCTUnwrap(forwardedID)
+        XCTAssertEqual(state.draft(forwarded)?.draft.from?.address, "shop@example.com")
+        let fresh = try XCTUnwrap(state.compose())
+        XCTAssertEqual(state.draft(fresh)?.draft.from?.address, "me@example.com")
+    }
+
+    @MainActor
+    func testChangingTheSenderAcrossMailboxesMovesTheDraftAndDeletesTheOldOne() async throws {
+        let rig = try Rig()
+        let other = rig.addMailbox("b", prefix: "2")
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.addRecipient(id, .to, entry: "x@y.de")
+        state.edit(id) {
+            $0.subject = "S"
+            $0.receiptTo = "me@example.com"
+        }
+        await state.save(id)
+        XCTAssertNotNil(state.draft(id)?.remoteID)
+        await state.setFrom(id, inlet: "b")
+        let moved = try XCTUnwrap(state.draft(id))
+        XCTAssertEqual(moved.inlet, "b")
+        XCTAssertNil(moved.remoteID)
+        XCTAssertNil(moved.mirrorID)
+        XCTAssertEqual(moved.draft.from?.address, "b@example.com")
+        XCTAssertEqual(moved.draft.receiptTo, "b@example.com")
+        XCTAssertTrue(rig.transport.calls.with { $0.contains("deleteDraft") })
+        XCTAssertFalse(other.calls.with { $0.contains("deleteDraft") })
+        XCTAssertEqual(state.selectedInlet, "b")
+        XCTAssertEqual(state.frontRef, .draft(id))
+        await state.refreshSenders()
+        XCTAssertEqual(state.senderChoices.map(\.inlet), ["a", "b"])
+        rig.access.records[1].state = .failed(Hint(text: "x"))
+        await state.refreshAccounts()
+        XCTAssertEqual(state.senderChoices.map(\.inlet), ["a"])
     }
 
     func testRawBuilderForGmailUsesTheSameBuilder() {
@@ -1103,7 +1201,9 @@ final class MailTests: XCTestCase {
         let id = try XCTUnwrap(state.compose())
         XCTAssertEqual(state.draft(id)?.inlet, "a")
         XCTAssertEqual(state.compose(), id)
-        state.setFrom(id, inlet: "b")
+        await state.setFrom(id, inlet: "b")
+        XCTAssertEqual(state.selectedInlet, "b")
+        XCTAssertTrue(state.swapAccount("a"))
         let other = try XCTUnwrap(state.compose())
         XCTAssertNotEqual(other, id)
         XCTAssertEqual(state.draft(id)?.inlet, "b")

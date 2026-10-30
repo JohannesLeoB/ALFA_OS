@@ -47,12 +47,64 @@ extension InboxState {
             .prefix(Tokens.Count.contactSuggestions))
     }
 
-    public func setFrom(_ id: UUID, inlet: Inlet.ID) {
+    public func setFrom(_ id: UUID, inlet: Inlet.ID, sender: Participant? = nil) async {
         guard let index = drafts.firstIndex(where: { $0.id == id }), accounts.contains(where: { $0.id == inlet }) else { return }
-        drafts[index].inlet = inlet
+        let chosen = sender ?? mailbox.sender(inlet)
+        let card = drafts[index]
+        if card.inlet == inlet {
+            edit(id) { $0.from = chosen }
+            return
+        }
+        switch card.state {
+        case .sending, .sent, .queuedInOutbox: return
+        default: break
+        }
+        if let remoteID = card.remoteID {
+            do {
+                try await outboxPort.deleteDraft(card.inlet, draftID: remoteID)
+            } catch {
+                if let now = drafts.firstIndex(where: { $0.id == id }) { drafts[now].saveFailure = Self.hint(error) }
+                return
+            }
+            if let mirrorID = card.mirrorID { goneDrafts[card.inlet, default: []].insert(mirrorID) }
+        }
+        guard let now = drafts.firstIndex(where: { $0.id == id }) else { return }
+        drafts[now].inlet = inlet
+        drafts[now].remoteID = nil
+        drafts[now].mirrorID = nil
+        drafts[now].saveFailure = nil
+        drafts[now].state = .edited
+        drafts[now].draft.from = chosen
+        if drafts[now].draft.receiptTo != nil { drafts[now].draft.receiptTo = chosen.address }
+        await moveToStack(.draft(id), of: inlet)
     }
 
-    public var fromChoices: [Inlet] { accounts }
+    private func moveToStack(_ ref: CardRef, of inlet: Inlet.ID) async {
+        let wasShown = stack.contains(ref)
+        detach(ref)
+        for key in parked.keys {
+            parked[key]?.stack.removeAll { $0 == ref }
+            if parked[key]?.front == ref { parked[key]?.front = parked[key]?.stack.last }
+        }
+        guard inlet != selectedInlet else {
+            attach(ref)
+            return
+        }
+        parked[inlet, default: ParkedMailbox()].stack.append(ref)
+        parked[inlet]?.front = ref
+        guard wasShown, swapAccount(inlet) else { return }
+        await loadSelection()
+    }
+
+    public var senderChoices: [SenderChoice] {
+        accounts.filter { $0.state.isConnected }.flatMap { inlet in
+            mailbox.knownSenders(inlet.id).map { SenderChoice(inlet: inlet.id, sender: $0) }
+        }
+    }
+
+    public func refreshSenders() async {
+        for inlet in accounts where inlet.state.isConnected { _ = await mailbox.senders(inlet.id) }
+    }
 
     public var senderSuggestions: [Suggestion] {
         Array(pool(own: selectedAccount?.account.lowercased() ?? "").filter { $0.tag == .sender }

@@ -60,6 +60,7 @@ struct IntegrationCard: View {
             if reading.state != .notConnected {
                 if !info.listsAccounts {
                     ForEach(reading.inlets.filter(hasMailbox)) { inlet in
+                        MailboxNameRow(state: context.state, inlet: inlet)
                         MailboxDisplayRow(state: context.state, inlet: inlet)
                         MailboxRangeRow(state: context.state, inbox: context.inbox, inlet: inlet)
                     }
@@ -216,6 +217,7 @@ struct IntegrationCard: View {
                         .rowPill()
                     }
                     if hasMailbox(inlet) {
+                        MailboxNameRow(state: context.state, inlet: inlet)
                         MailboxDisplayRow(state: context.state, inlet: inlet)
                         MailboxRangeRow(state: context.state, inbox: context.inbox, inlet: inlet)
                     }

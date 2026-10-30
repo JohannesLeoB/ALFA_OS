@@ -42,12 +42,14 @@ extension InboxState {
     @discardableResult
     func reply(to messageID: String, all: Bool = false) async -> UUID? {
         guard let inlet = selectedInlet, let summary = summary(messageID) else { return nil }
-        let own = accountAddress(inlet)
-        let fromOwn = !own.isEmpty && AddressEngine.email(summary.fromRaw) == own
+        let known = mailbox.knownSenders(inlet)
+        let mine = Set(([accountAddress(inlet)] + known.map { $0.address.lowercased() }).filter { !$0.isEmpty })
+        let fromOwn = mine.contains(AddressEngine.email(summary.fromRaw))
         let to = fromOwn ? summary.toRaw : summary.fromRaw
+        let chosen = SenderEngine.receiving(known, headers: fromOwn ? [summary.fromRaw] : [summary.toRaw, summary.ccRaw])
         var cc: String?
         if all {
-            let taken = Set(AddressListParser.split(to).map(AddressEngine.email) + [own])
+            let taken = Set(AddressListParser.split(to).map(AddressEngine.email)).union(mine)
             let others = AddressListParser.split(summary.toRaw + "," + summary.ccRaw)
                 .filter { !taken.contains(AddressEngine.email($0)) }
             cc = others.isEmpty ? nil : others.joined(separator: ", ")
@@ -56,7 +58,7 @@ extension InboxState {
         let quote = await quoted(messageID, summary: summary)
         let draft = Draft(to: to.isEmpty ? nil : to, cc: cc, subject: Self.prefixed("Re:", summary.subject),
                           body: quote, inReplyTo: summary.messageIDHeader.isEmpty ? nil : summary.messageIDHeader,
-                          threadID: summary.threadID.isEmpty ? nil : summary.threadID)
+                          threadID: summary.threadID.isEmpty ? nil : summary.threadID, from: chosen)
         return add(inlet: inlet, draft)
     }
 
@@ -70,7 +72,9 @@ extension InboxState {
             return nil
         }
         let quote = await quoted(messageID, summary: summary)
-        return add(inlet: inlet, Draft(subject: Self.prefixed("Fwd:", summary.subject), body: quote, attachments: attachments))
+        let chosen = SenderEngine.receiving(mailbox.knownSenders(inlet), headers: [summary.toRaw, summary.ccRaw])
+        return add(inlet: inlet, Draft(subject: Self.prefixed("Fwd:", summary.subject), body: quote, attachments: attachments,
+                                       from: chosen))
     }
 
     private func originalAttachments(_ messageID: String, inlet: Inlet.ID) async -> [Attachment]? {
@@ -105,7 +109,7 @@ extension InboxState {
 
     public func toggleReceipt(_ id: UUID) {
         guard let card = drafts.first(where: { $0.id == id }) else { return }
-        let sender = accounts.first { $0.id == card.inlet }?.account
+        let sender = card.draft.from?.address ?? accounts.first { $0.id == card.inlet }?.account
         edit(id) { $0.receiptTo = $0.receiptTo == nil ? sender : nil }
     }
 
@@ -253,6 +257,8 @@ extension InboxState {
     }
 
     func add(inlet: Inlet.ID, _ draft: Draft) -> UUID {
+        var draft = draft
+        if draft.from == nil { draft.from = mailbox.sender(inlet) }
         let card = OpenDraft(id: UUID(), inlet: inlet, draft: draft, state: .idle, outboxID: nil, remoteID: nil,
                              saveFailure: nil)
         drafts.append(card)

@@ -2,8 +2,9 @@ import Core
 import Foundation
 import Mail
 
-struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPort {
+struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPort, GmailSenderPort {
     static let root = "https://gmail.googleapis.com/gmail/v1/users/me"
+    static let settingsRoot = root + "/settings"
     static let draftListSize = "100"
     static let historyPageSize = "500"
     static let missingStatus = 404
@@ -204,5 +205,9 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
 
     func listLabels() async throws -> [GmailLabel] {
         MessageParser.labels(from: try await requests.send(RequestClient.url(Self.root + "/labels")))
+    }
+
+    func listSendAs() async throws -> [Participant] {
+        SenderParser.senders(from: try await requests.send(RequestClient.url(Self.settingsRoot + "/sendAs")))
     }
 }

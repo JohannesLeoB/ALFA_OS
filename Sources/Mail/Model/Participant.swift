@@ -1,7 +1,13 @@
-public struct Participant: Identifiable, Equatable, Sendable {
+public struct Participant: Identifiable, Equatable, Sendable, Codable {
     public let id: Int
     public let name: String
     public let address: String
+
+    public init(id: Int = 0, name: String, address: String) {
+        self.id = id
+        self.name = name
+        self.address = address
+    }
 
     public var initials: String { PersonName.initials(name) }
 
