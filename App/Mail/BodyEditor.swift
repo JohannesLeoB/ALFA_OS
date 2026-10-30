@@ -50,9 +50,9 @@ struct BodyEditor: NSViewRepresentable {
     private var base: [NSAttributedString.Key: Any] {
         let style = Tokens.TextStyle.mailBody
         let paragraph = NSMutableParagraphStyle()
-        paragraph.lineSpacing = Typeface.sheetSpacing(size: style.size, line: style.lineHeight)
+        paragraph.lineSpacing = Typeface.spacing(size: style.size, line: style.lineHeight)
         let ink = appearance.colors.sheetInk
-        return [.font: Typeface.sheet(size: style.size), .paragraphStyle: paragraph,
+        return [.font: Typeface.font(size: style.size, weight: Tokens.Weight.regular), .paragraphStyle: paragraph,
                 .foregroundColor: NSColor(srgbRed: ink.red, green: ink.green, blue: ink.blue, alpha: ink.alpha)]
     }
 
@@ -64,7 +64,7 @@ struct BodyEditor: NSViewRepresentable {
             return NSAttributedString(string: text, attributes: base)
         }
         let whole = NSRange(location: 0, length: parsed.length)
-        let font = Typeface.sheet(size: Tokens.TextStyle.mailBody.size)
+        let font = Typeface.font(size: Tokens.TextStyle.mailBody.size, weight: Tokens.Weight.regular)
         let manager = NSFontManager.shared
         parsed.enumerateAttribute(.font, in: whole) { value, part, _ in
             let traits = (value as? NSFont).map { manager.traits(of: $0) } ?? []

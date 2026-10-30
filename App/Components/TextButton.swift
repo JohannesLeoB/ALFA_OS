@@ -79,7 +79,6 @@ struct TextButton<Glyph: View>: View {
                 label.lineLimit(1)
             }
             .fixedSize(horizontal: true, vertical: false)
-            .font(kind == .sheet ? Font(Typeface.sheet(size: style.size, weight: .medium)) : nil)
             .typeStyle(style)
             .foregroundStyle(foreground)
             .padding(.leading, CGFloat(Glyph.self == EmptyView.self ? Tokens.Spacing.step12 : Tokens.Spacing.step8))

@@ -19,7 +19,7 @@ struct ThreadItemRow: View {
     private var allowRemote: Bool { !card.remoteImagesBlocked(loadRemote: loadImages) }
 
     private func sheet(_ size: Double, _ weight: Font.Weight = .regular) -> Font {
-        Font(Typeface.sheet(size: size, weight: weight))
+        Font(Typeface.font(size: size, weight: weight))
     }
 
     var body: some View {
@@ -29,7 +29,7 @@ struct ThreadItemRow: View {
                 AddressButton(action: menu) {
                     Text(verbatim: item.name)
                         .font(sheet(style.size, .medium))
-                        .lineHeight(style.lineHeight, size: style.size, sheet: true)
+                        .lineHeight(style.lineHeight, size: style.size)
                 }
                 .background(AnchorMarker(box: anchor))
                 Spacer(minLength: 0)
@@ -42,7 +42,7 @@ struct ThreadItemRow: View {
             } else {
                 Text(linked(item.text))
                     .font(sheet(style.size))
-                    .lineHeight(style.lineHeight, size: style.size, sheet: true)
+                    .lineHeight(style.lineHeight, size: style.size)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             if let signature = item.signature {
@@ -171,7 +171,7 @@ struct QuoteToggle: View {
     var body: some View {
         Button(action: action) {
             label
-                .font(Font(Typeface.sheet(size: Tokens.TextSize.small, weight: .medium)))
+                .font(.face(Tokens.TextSize.small, weight: Tokens.Weight.medium))
                 .foregroundStyle(appearance.color(\.sheetInkSecondary))
                 .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
                 .frame(height: CGFloat(Tokens.Size.chipHeight))

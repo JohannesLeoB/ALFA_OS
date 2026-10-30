@@ -34,15 +34,14 @@ struct Notice<Glyph: View, Actions: View>: View {
                 .ring(Circle(), appearance.color(onSheet ? \.sheetLineStrong : symbolTone))
             VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step2)) {
                 title
-                    .font(onSheet ? Font(Typeface.sheet(size: Tokens.TextSize.body, weight: .medium))
-                          : .face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
+                    .font(.face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
                     .foregroundStyle(appearance.color(onSheet ? \.sheetInk : \.ink))
-                    .lineHeight(Tokens.LineHeight.notice, size: Tokens.TextSize.body, sheet: onSheet)
+                    .lineHeight(Tokens.LineHeight.notice, size: Tokens.TextSize.body)
                 if let text {
                     text
-                        .font(onSheet ? Font(Typeface.sheet(size: Tokens.TextSize.body)) : .face(Tokens.TextSize.body))
+                        .font(.face(Tokens.TextSize.body))
                         .foregroundStyle(appearance.color(onSheet ? \.sheetInkTertiary : \.inkTertiary))
-                        .lineHeight(Tokens.LineHeight.notice, size: Tokens.TextSize.body, sheet: onSheet)
+                        .lineHeight(Tokens.LineHeight.notice, size: Tokens.TextSize.body)
                 }
                 HStack(spacing: CGFloat(Tokens.Spacing.step8)) { actions }
                     .padding(.top, CGFloat(Tokens.Spacing.step8))

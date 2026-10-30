@@ -14,13 +14,13 @@ struct SheetDetail: View {
         let items = session.inbox.thread(card.id)
         VStack(alignment: .leading, spacing: 0) {
             Text(verbatim: card.summary.subject.isEmpty ? appearance.string("mail.row.noSubject") : card.summary.subject)
-                .font(Font(Typeface.sheet(size: Tokens.TextStyle.title.size, weight: .medium)))
+                .font(.face(Tokens.TextStyle.title.size, weight: Tokens.Weight.medium))
                 .tracking(CGFloat(Tokens.TextStyle.title.tracking * Tokens.TextStyle.title.size))
-                .lineHeight(Tokens.TextStyle.title.lineHeight, size: Tokens.TextStyle.title.size, sheet: true)
+                .lineHeight(Tokens.TextStyle.title.lineHeight, size: Tokens.TextStyle.title.size)
                 .fixedSize(horizontal: false, vertical: true)
             if card.hasConversation {
                 Text(verbatim: appearance.format("mail.read.conversation", card.conversation.count))
-                    .font(Font(Typeface.sheet(size: Tokens.TextSize.small)))
+                    .font(.face(Tokens.TextSize.small))
                     .foregroundStyle(appearance.color(\.sheetInkTertiary))
                     .padding(.top, CGFloat(Tokens.Spacing.step4))
             }

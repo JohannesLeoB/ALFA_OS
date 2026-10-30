@@ -26,12 +26,8 @@ enum Typeface {
         font(size: size, weight: value(weight))
     }
 
-    static func sheet(size: Double, weight: Font.Weight = .regular) -> NSFont {
-        NSFont.systemFont(ofSize: CGFloat(size), weight: systemWeight(value(weight)))
-    }
-
-    static func sheetSpacing(size: Double, line: Double) -> CGFloat {
-        let face = sheet(size: size)
+    static func spacing(size: Double, line: Double) -> CGFloat {
+        let face = font(size: size, weight: Tokens.Weight.regular)
         return max(0, CGFloat(line) - (face.ascender - face.descender + face.leading))
     }
 
