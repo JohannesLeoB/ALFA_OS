@@ -3,6 +3,9 @@ set -eu
 NEW=${0:A:h:h}
 RESTRUCTURE=$NEW/.build/check
 mkdir -p $RESTRUCTURE/tmp
+LOCK=$RESTRUCTURE/lock
+until mkdir $LOCK 2> /dev/null; do sleep 2; done
+trap 'rmdir $LOCK' EXIT
 OUT=$RESTRUCTURE/build/swiftc
 export TMPDIR=$RESTRUCTURE/tmp
 FRAMEWORKS=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks
