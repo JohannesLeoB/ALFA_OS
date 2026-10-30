@@ -16,7 +16,8 @@ public enum SettingsSection: String, CaseIterable, Sendable, Identifiable {
     var group: SettingsGroup {
         switch self {
         case .identity, .appearance: .me
-        case .companyData, .folders, .templates: .company
+        case .companyData: .company
+        case .folders, .templates: .folders
         case .integrations, .keyInventory, .contacts: .connections
         case .privacy, .system, .imprint: .protection
         }
@@ -30,6 +31,7 @@ public enum SettingsSection: String, CaseIterable, Sendable, Identifiable {
 public enum SettingsGroup: String, CaseIterable, Sendable {
     case me
     case company
+    case folders
     case connections
     case protection
 
@@ -39,8 +41,19 @@ public enum SettingsGroup: String, CaseIterable, Sendable {
         switch self {
         case .me: "person"
         case .company: "building"
+        case .folders: "folder"
         case .connections: "plug"
         case .protection: "system"
+        }
+    }
+
+    public var opening: String {
+        switch self {
+        case .me: SettingsSection.identity.rawValue
+        case .company: SettingsSection.companyData.rawValue
+        case .folders: SettingsSection.folders.rawValue
+        case .connections: "google"
+        case .protection: SettingsSection.privacy.rawValue
         }
     }
 

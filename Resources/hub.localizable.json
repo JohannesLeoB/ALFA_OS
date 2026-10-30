@@ -9,6 +9,58 @@
    "de": "Diese Adresse ist schon als Konto eingerichtet.",
    "en": "This address is already set up as an account."
   },
+  "settings.company.row.address.prompt": {
+   "de": "Straße, PLZ Ort",
+   "en": "Street, postcode, city"
+  },
+  "settings.company.row.mail.prompt": {
+   "de": "Adresse",
+   "en": "Address"
+  },
+  "settings.company.row.name.prompt": {
+   "de": "Name der Firma",
+   "en": "Company name"
+  },
+  "settings.company.row.phone.prompt": {
+   "de": "Nummer",
+   "en": "Number"
+  },
+  "settings.company.row.web.prompt": {
+   "de": "Adresse",
+   "en": "Address"
+  },
+  "settings.group.folders": {
+   "de": "Dateiordner",
+   "en": "Folders"
+  },
+  "settings.imprint.row.author.prompt": {
+   "de": "Name",
+   "en": "Name"
+  },
+  "settings.imprint.row.rights.prompt": {
+   "de": "Rechteinhaber",
+   "en": "Rights holder"
+  },
+  "settings.imprint.row.signature.prompt": {
+   "de": "Zeile unter dem Impressum",
+   "en": "Line below the imprint"
+  },
+  "settings.model.haiku": {
+   "de": "Haiku",
+   "en": "Haiku"
+  },
+  "settings.model.opus": {
+   "de": "Opus",
+   "en": "Opus"
+  },
+  "settings.model.sonnet": {
+   "de": "Sonnet",
+   "en": "Sonnet"
+  },
+  "settings.profile.addresses": {
+   "de": "Adressen",
+   "en": "Addresses"
+  },
   "settings.service.mailaccounts.area.mail": {
    "de": "Mail",
    "en": "Mail"

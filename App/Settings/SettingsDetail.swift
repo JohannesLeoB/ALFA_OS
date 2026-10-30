@@ -6,10 +6,11 @@ struct SettingsDetail: View {
     let context: SettingsContext
     let id: String
     var disconnecting = false
+    var endDisconnect: () -> Void = {}
 
     var body: some View {
         if let info = context.catalog.info(id) {
-            IntegrationCard(context: context, info: info, disconnecting: disconnecting)
+            IntegrationCard(context: context, info: info, disconnecting: disconnecting, endDisconnect: endDisconnect)
         } else if let section = SettingsSection(rawValue: id) {
             switch section {
             case .identity: IdentityCard(context: context)
@@ -46,7 +47,7 @@ struct CompanyCard: View {
                 SettingsRow(label: appearance.text(entry.key)) {
                     ValueField(
                         text: Binding(get: { state.company[entry.rawValue] ?? "" }, set: { state.setCompany(entry, $0) }),
-                        labelKey: entry.key)
+                        labelKey: entry.key, prompt: appearance.text(entry.promptKey))
                 }
             }
         }
@@ -80,7 +81,7 @@ struct ImprintCard: View {
                 SettingsRow(label: appearance.text(entry.key)) {
                     ValueField(
                         text: Binding(get: { state.imprint[entry.rawValue] ?? "" }, set: { state.setImprint(entry, $0) }),
-                        labelKey: entry.key)
+                        labelKey: entry.key, prompt: appearance.text(entry.promptKey))
                 }
             }
         }

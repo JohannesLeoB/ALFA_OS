@@ -58,7 +58,7 @@ struct SettingsLane: View {
             switch lane {
             case .leading: GroupList(context: context)
             case .center:
-                if context.state.group == .connections { IntegrationList(context: context) } else { SectionList(state: context.state) }
+                if context.state.group == .connections { IntegrationList(context: context) } else { SectionList(context: context) }
             case .trailing: SettingsStack(context: context)
             }
         }
@@ -79,7 +79,7 @@ struct GroupList: View {
                     let count = group == .connections ? bad : 0
                     LaneRow(glyph: Icon(rawValue: group.symbol) ?? .system, label: appearance.text(group.key), selected: selected,
                             count: count > 0 ? String(count) : nil, countTone: selected ? \.lane : \.signal) {
-                        context.state.group = group
+                        context.state.select(group)
                     }
                 }
             }
@@ -91,12 +91,22 @@ struct GroupList: View {
 
 struct SectionList: View {
     @Environment(\.appearance) private var appearance
-    let state: SettingsState
+    let context: SettingsContext
+
+    private var state: SettingsState { context.state }
 
     var body: some View {
-        let sections = state.group.sections
+        let sections = state.group == .me ? state.group.sections.filter { $0 != .identity } : state.group.sections
         ScrollView {
             VStack(spacing: 0) {
+                if state.group == .me {
+                    ProfileTile(
+                        profile: state.profile,
+                        addresses: context.readings.flatMap(\.inlets).filter { $0.capabilities.contains(.mail) }.map(\.account).filter { !$0.isEmpty },
+                        selected: state.front == SettingsSection.identity.rawValue,
+                        action: { state.open(SettingsSection.identity.rawValue) })
+                        .padding(.bottom, CGFloat(Tokens.Spacing.step8))
+                }
                 ForEach(Array(sections.enumerated()), id: \.element.id) { index, section in
                     let selected = state.front == section.rawValue
                     let next = sections.indices.contains(index + 1) ? sections[index + 1] : nil
@@ -141,7 +151,7 @@ struct SettingsMarkList: View {
         case .leading:
             return SettingsGroup.allCases.map { group in
                 StripMarkItem(id: "group." + group.rawValue, face: .glyph(Icon(rawValue: group.symbol) ?? .system),
-                              help: appearance.text(group.key), selected: state.group == group, dot: false) { state.group = group }
+                              help: appearance.text(group.key), selected: state.group == group, dot: false) { state.select(group) }
             }
         case .center:
             let entries = state.group == .connections

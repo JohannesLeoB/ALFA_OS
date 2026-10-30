@@ -27,6 +27,8 @@ public final class SettingsState {
 
     public init(settings: SettingStore) throws {
         self.settings = settings
+        cards = [group.opening]
+        front = group.opening
         let stored = try settings.all()
         func text(_ key: String) -> String? { SettingStore.decoded(stored[key], as: String.self) }
         func flag(_ key: String) -> Bool? { SettingStore.decoded(stored[key], as: Bool.self) }
@@ -127,10 +129,13 @@ public final class SettingsState {
         try? settings.remove(key: SettingsKey.mailboxRange(inlet))
     }
 
+    public func select(_ next: SettingsGroup) {
+        group = next
+        open(next.opening)
+    }
+
     public func open(_ id: String) {
-        var next = cards.contains(id) ? cards : cards + [id]
-        if next.count > Tokens.Count.stackMaxCards { next = Array(next.suffix(Tokens.Count.stackMaxCards)) }
-        cards = next
+        cards = [id]
         front = id
         fanned = false
         opened += 1

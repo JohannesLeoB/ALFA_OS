@@ -1,3 +1,4 @@
+import Assistant
 import Design
 import Foundation
 import Hub
@@ -9,6 +10,7 @@ struct IntegrationCard: View {
     let context: SettingsContext
     let info: IntegrationInfo
     var disconnecting = false
+    var endDisconnect: () -> Void = {}
     @State private var started = false
     @State private var held = IntegrationValues.none
 
@@ -23,13 +25,21 @@ struct IntegrationCard: View {
     var body: some View {
         let reading = reading
         VStack(spacing: 0) {
+            IntegrationHero(info: info)
             progress
             SettingsRow(label: appearance.text("settings.row.state"), sub: note(reading.note)) {
                 ConnectionStatus(state: reading.state.connection, label: appearance.text(reading.state.key), trailingInset: true)
             }
             notices(reading)
-            if disconnecting { BlockNote(text: Text(verbatim: appearance.format("settings.disconnect.text", reading.leadAddress ?? name))) }
+            if disconnecting { disconnectNotice(reading) }
             accounts(reading)
+            if reading.state != .notConnected, reading.inlets.contains(where: hasMailbox) {
+                SettingsRow(label: appearance.text("settings.privacy.images")) {
+                    ToggleSwitch(
+                        isOn: Binding(get: { context.state.privacy.loadImages }, set: { value in context.state.updatePrivacy { $0.loadImages = value } }),
+                        labelKey: "settings.privacy.images")
+                }
+            }
             SettingsRow(label: appearance.text("settings.row.access")) {
                 SettingsValue(text: Text(verbatim: access))
             }
@@ -37,9 +47,13 @@ struct IntegrationCard: View {
                 AddEditor(flow: flow, offer: offer)
             } else {
                 ForEach(info.fields, id: \.id) { field in
-                    let value = value(of: field, reading)
-                    SettingsRow(label: appearance.text(info.fieldKey(field))) {
-                        SettingsValue(text: value.text, tone: value.tone)
+                    if field.id == "model", reading.state != .notConnected, let inlet = reading.lead {
+                        modelRow(field, inlet: inlet, reading: reading)
+                    } else {
+                        let value = value(of: field, reading)
+                        SettingsRow(label: appearance.text(info.fieldKey(field))) {
+                            SettingsValue(text: value.text, tone: value.tone)
+                        }
                     }
                 }
             }
@@ -60,6 +74,22 @@ struct IntegrationCard: View {
         }
         .task(id: reading.inlets.map(\.id).joined() + reading.state.rawValue) {
             held = IntegrationReadEngine.values(of: reading, keychain: context.keychain)
+        }
+    }
+
+    private func modelRow(_ field: IntegrationField, inlet: Inlet, reading: IntegrationReading) -> some View {
+        let current = ClaudeModelChoice.stored(held.text[field.id])
+        return SettingsRow(label: appearance.text(info.fieldKey(field))) {
+            ChoiceButton(label: appearance.text(current.key)) {
+                ClaudeModelChoice.allCases.map { choice in
+                    .row(MenuItem(id: choice.rawValue, label: appearance.text(choice.key),
+                                  check: choice == current ? appearance.text(SettingsKeys.menuCheck) : nil) {
+                        let slot = KeySlot(inlet: inlet.id, name: field.id)
+                        if let id = choice.id { try? context.keychain.put(id, at: slot) } else { try? context.keychain.delete(slot) }
+                        held = IntegrationReadEngine.values(of: reading, keychain: context.keychain)
+                    })
+                }
+            }
         }
     }
 
@@ -128,6 +158,22 @@ struct IntegrationCard: View {
             }
         default:
             EmptyView()
+        }
+    }
+
+    private func disconnectNotice(_ reading: IntegrationReading) -> some View {
+        let target = reading.leadAddress ?? name
+        let removed = reading.leadAddress != nil ? reading.lead.map { [$0.id] } ?? [] : reading.inlets.map(\.id)
+        return BlockNotice(
+            kind: .warning,
+            title: Text(verbatim: appearance.format("settings.disconnect.ask", target)),
+            text: Text(verbatim: appearance.format("settings.disconnect.text", target))
+        ) {
+            TextButton(label: appearance.text("settings.action.disconnect"), kind: .signal, disabled: flow.busy) {
+                endDisconnect()
+                Task { await flow.remove(removed) }
+            }
+            TextButton(label: appearance.text("text.common.cancel"), kind: .plain) { endDisconnect() }
         }
     }
 

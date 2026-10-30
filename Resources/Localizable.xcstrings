@@ -11124,6 +11124,22 @@
         }
       }
     },
+    "settings.company.row.address.prompt" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Straße, PLZ Ort"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Street, postcode, city"
+          }
+        }
+      }
+    },
     "settings.company.row.mail" : {
       "localizations" : {
         "de" : {
@@ -11136,6 +11152,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Email"
+          }
+        }
+      }
+    },
+    "settings.company.row.mail.prompt" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address"
           }
         }
       }
@@ -11156,6 +11188,22 @@
         }
       }
     },
+    "settings.company.row.name.prompt" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name der Firma"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Company name"
+          }
+        }
+      }
+    },
     "settings.company.row.phone" : {
       "localizations" : {
         "de" : {
@@ -11172,6 +11220,22 @@
         }
       }
     },
+    "settings.company.row.phone.prompt" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nummer"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Number"
+          }
+        }
+      }
+    },
     "settings.company.row.web" : {
       "localizations" : {
         "de" : {
@@ -11184,6 +11248,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Web"
+          }
+        }
+      }
+    },
+    "settings.company.row.web.prompt" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address"
           }
         }
       }
@@ -11453,6 +11533,22 @@
         }
       }
     },
+    "settings.group.folders" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateiordner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folders"
+          }
+        }
+      }
+    },
     "settings.group.me" : {
       "comment" : "roh",
       "localizations" : {
@@ -11470,16 +11566,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Schutz und System"
-          }
-        }
-      }
-    },
-    "settings.hold.disconnect" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Halten zum Trennen"
           }
         }
       }
@@ -11638,6 +11724,22 @@
         }
       }
     },
+    "settings.imprint.row.author.prompt" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
+    },
     "settings.imprint.row.rights" : {
       "localizations" : {
         "de" : {
@@ -11654,6 +11756,22 @@
         }
       }
     },
+    "settings.imprint.row.rights.prompt" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechteinhaber"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rights holder"
+          }
+        }
+      }
+    },
     "settings.imprint.row.signature" : {
       "localizations" : {
         "de" : {
@@ -11666,6 +11784,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Signature"
+          }
+        }
+      }
+    },
+    "settings.imprint.row.signature.prompt" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeile unter dem Impressum"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Line below the imprint"
           }
         }
       }
@@ -11895,6 +12029,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "✓"
+          }
+        }
+      }
+    },
+    "settings.model.haiku" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haiku"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haiku"
+          }
+        }
+      }
+    },
+    "settings.model.opus" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opus"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opus"
+          }
+        }
+      }
+    },
+    "settings.model.sonnet" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonnet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonnet"
           }
         }
       }
@@ -12162,6 +12344,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Load images in messages"
+          }
+        }
+      }
+    },
+    "settings.profile.addresses" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adressen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Addresses"
           }
         }
       }

@@ -35,6 +35,8 @@ public enum CompanyEntry: String, CaseIterable, Sendable {
 
     public var key: String { "settings.company.row." + rawValue }
 
+    public var promptKey: String { key + ".prompt" }
+
     var storageKey: String { SettingsKey.companyEntry(rawValue) }
 }
 
@@ -44,6 +46,8 @@ public enum ImprintEntry: String, CaseIterable, Sendable {
     case signature
 
     public var key: String { "settings.imprint.row." + rawValue }
+
+    public var promptKey: String { key + ".prompt" }
 
     var storageKey: String { SettingsKey.imprintEntry(rawValue) }
 }

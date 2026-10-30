@@ -31,7 +31,7 @@ public struct IntegrationCatalogStore: Sendable {
             fields: [IntegrationField(id: "email", secret: false), IntegrationField(id: "key", secret: true),
                      IntegrationField(id: "user", secret: false, optional: true)],
             areas: [], extras: [], listsAccounts: false, providers: ["clockodo"],
-            logo: IntegrationLogo(resource: "clockodo", fileExtension: "png")),
+            logo: IntegrationLogo(resource: "clockodo")),
         IntegrationInfo(
             id: "claude", access: .key, companyOwned: false,
             fields: [IntegrationField(id: "key", secret: true),
@@ -48,13 +48,13 @@ public struct IntegrationCatalogStore: Sendable {
         IntegrationInfo(
             id: "dhl", access: .key, companyOwned: true, fields: [IntegrationField(id: "key", secret: true)],
             areas: [], extras: [], listsAccounts: false, providers: ["dhl"],
-            logo: IntegrationLogo(resource: "dhl", fileExtension: "svg")),
+            logo: IntegrationLogo(resource: "dhl")),
         IntegrationInfo(
             id: "dhlship", access: .key, companyOwned: true,
             fields: [IntegrationField(id: "key", secret: true), IntegrationField(id: "secret", secret: true),
                      IntegrationField(id: "user", secret: false), IntegrationField(id: "password", secret: true),
                      IntegrationField(id: "billing", secret: false), IntegrationField(id: "sender", secret: false, optional: true)],
             areas: [], extras: [], listsAccounts: false, providers: ["dhlship"],
-            logo: IntegrationLogo(resource: "dhl", fileExtension: "svg")),
+            logo: IntegrationLogo(resource: "dhl")),
     ])
 }

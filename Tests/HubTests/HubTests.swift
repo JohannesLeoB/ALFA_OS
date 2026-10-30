@@ -1420,25 +1420,27 @@ final class HubTests: XCTestCase {
     }
 
     @MainActor
-    func testSettingsStateKeepsAStackOfAtMostSixCards() throws {
+    func testSettingsStateShowsOneCardAndOpensTheGroupsFirstCard() throws {
         let state = try SettingsState(settings: SettingStore(database: SQLiteStore.inMemory()))
         XCTAssertEqual(state.group, .connections)
-        state.toggleFan()
-        XCTAssertFalse(state.fanned)
-        for id in ["a", "b", "c", "d", "e", "f", "g"] { state.open(id) }
-        XCTAssertEqual(state.cards, ["b", "c", "d", "e", "f", "g"])
-        XCTAssertEqual(state.front, "g")
-        state.open("c")
-        XCTAssertEqual(state.cards.count, 6)
-        XCTAssertEqual(state.front, "c")
+        XCTAssertEqual(state.cards, ["google"])
         state.toggleFan()
         XCTAssertTrue(state.fanned)
-        state.bring("d")
+        for id in ["a", "b", "c"] { state.open(id) }
+        XCTAssertEqual(state.cards, ["c"])
+        XCTAssertEqual(state.front, "c")
         XCTAssertFalse(state.fanned)
-        XCTAssertEqual(state.front, "d")
-        state.close("d")
-        XCTAssertEqual(state.front, "g")
-        for id in state.cards { state.close(id) }
+        state.select(.company)
+        XCTAssertEqual(state.group, .company)
+        XCTAssertEqual(state.cards, ["companyData"])
+        state.select(.folders)
+        XCTAssertEqual(state.cards, ["folders"])
+        XCTAssertEqual(SettingsGroup.folders.sections, [.folders, .templates])
+        state.toggleFan()
+        XCTAssertTrue(state.fanned)
+        state.bring("folders")
+        XCTAssertFalse(state.fanned)
+        state.close("folders")
         XCTAssertNil(state.front)
         XCTAssertEqual(state.cards, [])
         state.notify("settings.toast.copied", name: "n")

@@ -21,7 +21,7 @@ struct SettingsStack: View {
                 SettingsCommandHead(context: context, readings: readings, width: proxy.size.width, disconnecting: $disconnecting)
                 CardStack(order: order, overviewOpen: state.fanned, spreads: true, top: 0) { id, depth in
                     StackCard(context: context, face: SettingsFace(id: id, readings: readings, appearance: appearance), depth: depth,
-                              disconnecting: disconnecting)
+                              disconnecting: disconnecting, endDisconnect: { disconnecting = nil })
                         .environment(\.narrowCard, proxy.size.width < Tokens.Size.breakpointNarrowCard)
                 } overview: {
                     CardOverview(entries: order.map { entry(SettingsFace(id: $0, readings: readings, appearance: appearance), current: $0 == front) },
@@ -47,6 +47,7 @@ struct StackCard: View {
     let face: SettingsFace
     let depth: Int
     let disconnecting: String?
+    let endDisconnect: () -> Void
 
     private var front: Bool { depth == 0 }
 
@@ -55,7 +56,7 @@ struct StackCard: View {
             header(ink)
         } content: {
             ScrollView {
-                SettingsDetail(context: context, id: face.id, disconnecting: disconnecting == face.id)
+                SettingsDetail(context: context, id: face.id, disconnecting: disconnecting == face.id, endDisconnect: endDisconnect)
                     .padding(.top, CGFloat(Tokens.Spacing.step4))
                     .padding(.bottom, CGFloat(Tokens.Spacing.step8))
             }

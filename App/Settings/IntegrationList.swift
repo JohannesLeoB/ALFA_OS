@@ -1,4 +1,3 @@
-import AppKit
 import Design
 import Hub
 import Shell
@@ -35,7 +34,7 @@ struct IntegrationList: View {
                         SettingsTile(
                             name: LocalizedStringKey(reading.info.nameKey),
                             initial: String(appearance.string(reading.info.nameKey).prefix(1)),
-                            logo: image(reading.info.logo),
+                            logo: reading.info.logo?.image,
                             sub: reading.state.key,
                             bad: reading.state.isBad,
                             selected: state.front == reading.info.id && !state.fanned,
@@ -83,11 +82,6 @@ struct IntegrationList: View {
                                     height: Tokens.Size.settingsTileHeight, gap: Tokens.Spacing.step8)
         }
         .sorted()
-    }
-
-    private func image(_ logo: IntegrationLogo?) -> NSImage? {
-        guard let logo, let url = Bundle.main.url(forResource: logo.resource, withExtension: logo.fileExtension) else { return nil }
-        return NSImage(contentsOf: url)
     }
 
     private func group<Content: View>(_ group: TileGroup, active: TileGroup, @ViewBuilder content: () -> Content) -> some View {

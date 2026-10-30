@@ -311,6 +311,12 @@ final class AssistantTests: XCTestCase {
         XCTAssertEqual(ModelRouter.haiku, "claude-haiku-4-5-20251001")
         XCTAssertEqual(ModelRouter.sonnet, "claude-sonnet-4-6")
         XCTAssertEqual(ModelRouter.opus, "claude-opus-4-8")
+        XCTAssertEqual(ClaudeModelChoice.allCases.map(\.id), [nil, ModelRouter.sonnet, ModelRouter.haiku, ModelRouter.opus])
+        XCTAssertEqual(ClaudeModelChoice.stored(nil), .standard)
+        XCTAssertEqual(ClaudeModelChoice.stored("unknown"), .standard)
+        XCTAssertEqual(ClaudeModelChoice.stored(ModelRouter.opus), .opus)
+        XCTAssertEqual(ClaudeModelChoice.allCases.map(\.key),
+                       ["settings.value.default", "settings.model.sonnet", "settings.model.haiku", "settings.model.opus"])
         XCTAssertEqual(ModelRouter.model(latestUserText: "Was kostet das? 5 \u{20AC}", toolsEnabled: true), ModelRouter.opus)
         XCTAssertEqual(ModelRouter.model(latestUserText: "mein BUDGET", toolsEnabled: false), ModelRouter.opus)
         XCTAssertEqual(ModelRouter.model(latestUserText: "ein euro", toolsEnabled: false), ModelRouter.opus)

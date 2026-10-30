@@ -32,7 +32,7 @@ struct SettingsTile: View {
                         .foregroundStyle(appearance.color(selected ? \.lane : (bad ? \.signal : \.inkTertiary)))
                 }
             }
-            .padding(CGFloat(Tokens.Spacing.step12))
+            .padding(CGFloat(Tokens.Spacing.step8))
             .frame(maxWidth: .infinity, minHeight: height, maxHeight: height, alignment: .topLeading)
             .background(shape.fill(selected ? appearance.color(\.ink) : appearance.color(\.well)))
             .ring(shape, hovering && !selected ? appearance.color(\.inkTertiary) : nil)
@@ -49,7 +49,7 @@ struct SettingsTile: View {
         let side = CGFloat(Tokens.Size.symbolSize)
         return ZStack {
             if let image = logo {
-                Circle().fill(appearance.color(\.lane))
+                Circle().fill(appearance.color(\.sheet))
                 Image(nsImage: image)
                     .resizable()
                     .scaledToFit()

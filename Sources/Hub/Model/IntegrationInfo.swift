@@ -81,11 +81,9 @@ public struct IntegrationField: Equatable, Sendable {
 
 public struct IntegrationLogo: Equatable, Sendable {
     public let resource: String
-    public let fileExtension: String
 
-    init(resource: String, fileExtension: String) {
+    init(resource: String) {
         self.resource = resource
-        self.fileExtension = fileExtension
     }
 }
 

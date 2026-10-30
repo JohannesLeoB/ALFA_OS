@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "clockodo.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

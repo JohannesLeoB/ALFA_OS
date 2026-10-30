@@ -23,9 +23,8 @@ struct SettingsCommandHead: View {
 
     var body: some View {
         let reading = reading
-        let asking = reading.map { $0.info.id == disconnecting } ?? false
         var main: [CommandSlot<SettingsCommand>] = []
-        if let reading, !asking {
+        if let reading {
             if !reading.info.listsAccounts {
                 main.append(CommandSlot(id: "connect", action: .connect, off: reading.state == .connecting))
             }
@@ -33,14 +32,12 @@ struct SettingsCommandHead: View {
                 main.append(CommandSlot(id: "disconnect", action: .disconnect, signal: true))
             }
         }
-        let tail = reading != nil && asking
-            ? [CommandSlot<SettingsCommand>(id: "disconnectPill", action: .disconnect, kind: .pill, cost: ShellValues.commandConfirmCost)] : []
         let fan = !state.cards.isEmpty || state.fanned
             ? [CommandSlot<SettingsCommand>(id: "overview", action: state.fanned ? .back : .overview, accent: state.fanned)] : []
         let fold = openLanes > 1 ? [CommandSlot<SettingsCommand>(id: "fold", action: .fold)] : []
-        let plan = CommandBarEngine.plan(main: main, tail: tail, fan: fan, fold: fold, staticMore: false, width: width - Tokens.Size.edge)
+        let plan = CommandBarEngine.plan(main: main, tail: [], fan: fan, fold: fold, staticMore: false, width: width - Tokens.Size.edge)
         return CommandHead(plan: plan, moreHelp: appearance.string("settings.action.more"), glyph: glyph, help: help, perform: perform, more: more) {
-            if let reading { pill(reading) }
+            EmptyView()
         }
     }
 
@@ -76,19 +73,6 @@ struct SettingsCommandHead: View {
     private func more(_ commands: [SettingsCommand]) -> [MenuEntry] {
         commands.enumerated().map { index, command in
             .row(MenuItem(id: String(index), label: Text(verbatim: help(command))) { perform(command) })
-        }
-    }
-
-    private func pill(_ reading: IntegrationReading) -> some View {
-        let name = reading.leadAddress ?? appearance.string(reading.info.nameKey)
-        let removed = reading.leadAddress != nil ? reading.lead.map { [$0.id] } ?? [] : reading.inlets.map(\.id)
-        return ConfirmPill(label: nil, question: Text(verbatim: appearance.format("settings.disconnect.ask", name)),
-                           yes: appearance.text("settings.action.disconnect"), no: appearance.text("confirm.no"),
-                           holdHint: appearance.text("settings.hold.disconnect"), startsAsking: true, showsProgress: false, onYes: {
-                               disconnecting = nil
-                               Task { await context.flow.remove(removed) }
-                           }, onNo: { disconnecting = nil }) {
-            Glyph(.close)
         }
     }
 }

@@ -1,6 +1,7 @@
 import Design
 
 enum SheetValues {
+    static let heroLogoWide = 48.0
     static let weightAxis = 0x7767_6874
     static let pressScale = 0.96
     static let releaseSamples = 6
