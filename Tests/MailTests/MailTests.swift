@@ -1109,6 +1109,9 @@ final class MailTests: XCTestCase {
     }
 
     func testHTMLEngine() {
+        let blocked = HTMLEngine.blockingImages(#"<p>a</p><IMG alt="x" src="https://t.co/p.png"><img src="cid:logo"><img src='http://x/y.gif'>"#,
+                                                label: "Bild <blockiert>")
+        XCTAssertEqual(blocked, #"<p>a</p><span class="alfa-blocked">Bild &lt;blockiert&gt;</span><img src="cid:logo"><span class="alfa-blocked">Bild &lt;blockiert&gt;</span>"#)
         XCTAssertEqual(HTMLEngine.plain("<p>Caf&eacute; &amp; <b>Tee</b></p><style>x{}</style><br>zu"), "Caf\u{E9} & Tee\n\nzu")
         XCTAssertEqual(HTMLEngine.navigation(scheme: "javascript", linkActivated: true, mainFrame: true), .cancel)
         XCTAssertEqual(HTMLEngine.navigation(scheme: "https", linkActivated: true, mainFrame: true), .open)

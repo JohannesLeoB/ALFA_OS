@@ -13523,6 +13523,22 @@
         }
       }
     },
+    "mail.image.blocked" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bild blockiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image blocked"
+          }
+        }
+      }
+    },
     "mail.lane.back" : {
       "comment" : "alpha",
       "localizations" : {

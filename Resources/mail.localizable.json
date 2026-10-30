@@ -481,6 +481,10 @@
    "de": "Postausgang · Nicht gesendet",
    "en": "Outbox · Not sent"
   },
+  "mail.image.blocked": {
+   "de": "Bild blockiert",
+   "en": "Image blocked"
+  },
   "mail.draft.noSubject": {
    "de": "Ohne Betreff",
    "en": "No subject"

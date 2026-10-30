@@ -138,6 +138,19 @@ public enum HTMLEngine {
         return "rgba(\(parts.joined(separator: ",")),\(color.alpha))"
     }
 
+    public static func blockingImages(_ html: String, label: String) -> String {
+        guard let pattern = try? NSRegularExpression(pattern: #"<img\b[^>]*\bsrc\s*=\s*["']?https?:[^>]*>"#, options: [.caseInsensitive]) else {
+            return html
+        }
+        let tile = "<span class=\"alfa-blocked\">" + escaped(label) + "</span>"
+        return pattern.stringByReplacingMatches(in: html, range: NSRange(html.startIndex..., in: html),
+                                                withTemplate: NSRegularExpression.escapedTemplate(for: tile))
+    }
+
+    static func escaped(_ text: String) -> String {
+        text.replacingOccurrences(of: "&", with: "&amp;").replacingOccurrences(of: "<", with: "&lt;").replacingOccurrences(of: ">", with: "&gt;")
+    }
+
     public static func document(_ body: String, theme: HTMLTheme) -> String {
         let head = """
         <!doctype html><html><head><meta charset="utf-8">
@@ -153,6 +166,12 @@ public enum HTMLEngine {
         blockquote { margin: 0; padding-left: \(theme.quoteGap)px; border-left: \(theme.quoteBar)px solid \(css(theme.line));
                      color: \(css(theme.secondary)); }
         pre { white-space: pre-wrap; }
+        .alfa-blocked { display: inline-grid; place-items: center; box-sizing: border-box; vertical-align: top;
+                        width: calc(50% - \(theme.tileGap / 2)px); aspect-ratio: \(theme.tileRatio);
+                        margin: 0 \(theme.tileGap)px \(theme.tileGap)px 0; border-radius: \(theme.tileRadius)px;
+                        background: repeating-linear-gradient(135deg, \(css(theme.tileWell)) 0 \(theme.tileStripe)px,
+                                    \(css(theme.background)) \(theme.tileStripe)px \(theme.tileStripe * 2)px);
+                        font-size: \(theme.tileTextSize)px; color: \(css(theme.tileInk)); }
         </style></head><body>
         """
         return head + body + "</body></html>"
@@ -168,9 +187,24 @@ public struct HTMLTheme: Equatable, Sendable {
     let lineHeight: Double
     let quoteBar: Double
     let quoteGap: Double
+    let tileWell: ColorValue
+    let tileInk: ColorValue
+    let tileTextSize: Double
+    let tileStripe: Double
+    let tileRatio: Double
+    let tileRadius: Double
+    let tileGap: Double
 
     public init(text: ColorValue, secondary: ColorValue, line: ColorValue, background: ColorValue, fontSize: Double,
-                lineHeight: Double, quoteBar: Double, quoteGap: Double) {
+                lineHeight: Double, quoteBar: Double, quoteGap: Double, tileWell: ColorValue, tileInk: ColorValue,
+                tileTextSize: Double, tileStripe: Double, tileRatio: Double, tileRadius: Double, tileGap: Double) {
+        self.tileWell = tileWell
+        self.tileInk = tileInk
+        self.tileTextSize = tileTextSize
+        self.tileStripe = tileStripe
+        self.tileRatio = tileRatio
+        self.tileRadius = tileRadius
+        self.tileGap = tileGap
         self.text = text
         self.secondary = secondary
         self.line = line

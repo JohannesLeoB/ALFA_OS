@@ -36,12 +36,18 @@ struct HTMLBody: View {
         let colors = Colors.light
         return HTMLTheme(text: colors.sheetInk, secondary: colors.sheetInkTertiary, line: colors.sheetLine, background: colors.sheet,
                          fontSize: Tokens.TextStyle.mailBody.size, lineHeight: Tokens.TextStyle.mailBody.lineHeight / Tokens.TextStyle.mailBody.size, quoteBar: Tokens.Size.quoteBarWidth,
-                         quoteGap: Tokens.Spacing.step12)
+                         quoteGap: Tokens.Spacing.step12, tileWell: colors.sheetWell, tileInk: colors.mark, tileTextSize: Tokens.TextSize.small,
+                         tileStripe: Tokens.Size.imageTileStripe, tileRatio: Tokens.Ratio.imageTile, tileRadius: Tokens.Radius.notice,
+                         tileGap: Tokens.Spacing.step8)
+    }
+
+    private var shown: String {
+        allowRemote ? html : HTMLEngine.blockingImages(html, label: String(localized: String.LocalizationValue("mail.image.blocked")))
     }
 
     var body: some View {
         WebBody(
-            document: HTMLEngine.document(html, theme: theme),
+            document: HTMLEngine.document(shown, theme: theme),
             inlineImages: inlineImages,
             allowRemote: allowRemote,
             load: { [inbox, id = card.id] attachment in await inbox.attachmentData(id, attachmentID: attachment) },
