@@ -181,8 +181,7 @@ def check_layout():
                 continue
             inner = os.path.join(full, name)
             if not os.path.isdir(inner):
-                if not name.endswith(".swift"):
-                    report(relative + "/" + name, None, "only Swift files or role folders in a module")
+                report(relative + "/" + name, None, "file directly in a module")
             elif name not in FOLDERS:
                 report(relative + "/" + name, None, "not an allowed module folder")
             elif name == "Tool" and module != "Assistant":
@@ -239,17 +238,16 @@ def check_names(path, code, top):
     parent = os.path.basename(os.path.dirname(path))
     base, plus, aspect = stem.partition("+")
     top_level = declarations(code)
-    legacy = top == "Sources" and parent in FOLDERS
     if code.count("\n") > FILE_LIMIT:
         report(path, None, "file has %d lines, limit %d" % (code.count("\n"), FILE_LIMIT))
-    if legacy and plus:
+    if plus:
         if not any(kind == "extension" and name == base for kind, name, _, _ in top_level):
             report(path, None, "file %s has no top-level extension of %s" % (stem, base))
         if not re.fullmatch(r"[A-Z][A-Za-z]*", aspect):
             report(path, None, "aspect name %s is not CamelCase" % aspect)
         if top == "Sources" and aspect == "":
             report(path, None, "empty aspect")
-    elif legacy and not any(kind != "extension" and name == stem and not private for kind, name, private, _ in top_level):
+    elif not any(kind != "extension" and name == stem and not private for kind, name, private, _ in top_level):
         report(path, None, "no top-level type named like the file (%s)" % stem)
     if not re.fullmatch(r"[A-Z][A-Za-z0-9]*(\+[A-Z][A-Za-z0-9]*)?", stem):
         report(path, None, "file name %s is not CamelCase" % stem)
@@ -260,7 +258,7 @@ def check_names(path, code, top):
             report(path, code.count("\n", 0, match.start()) + 1, problem)
     last = words(base)[-1] if words(base) else base
     tail2 = "".join(words(base)[-2:])
-    if legacy:
+    if top == "Sources":
         wanted = FOLDER_SUFFIX.get(parent)
         if wanted and last not in wanted and not plus:
             report(path, None, "%s folder needs a name ending in %s" % (parent, " or ".join(wanted)))
