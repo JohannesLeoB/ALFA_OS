@@ -16,6 +16,13 @@ public enum OutboxState: Equatable, Sendable {
         }
     }
 
+    public var offersRowActions: Bool {
+        switch self {
+        case .waiting, .failed: true
+        case .sending, .unverified: false
+        }
+    }
+
     public var needsAttention: Bool {
         switch self {
         case .failed, .unverified: true

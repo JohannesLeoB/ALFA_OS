@@ -145,7 +145,7 @@ struct InboxRow: View {
     private var preview: some View {
         Group {
             if let state = item.outbox {
-                appearance.text(state.key).designText(state.needsAttention && !selected ? \.signal : tone.secondary,
+                appearance.text(state.key).designText(state.needsAttention && !selected ? \.signal : tone.tertiary,
                                                       size: Tokens.TextSize.body, weight: .light)
             } else if let preview = item.preview {
                 Text(verbatim: preview).designText(tone.secondary, size: Tokens.TextSize.body, weight: .light)
@@ -196,7 +196,7 @@ struct InboxRow: View {
 
     @ViewBuilder
     private var queuedActions: some View {
-        if let state = item.outbox, state != .sending {
+        if let state = item.outbox, state.offersRowActions {
             HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
                 if case .failed = state {
                     rowAction("mail.outbox.retry.tooltip", glyph: .send, tone: tone.secondary) {
