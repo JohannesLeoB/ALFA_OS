@@ -4,6 +4,8 @@ public struct ThreadItem: Identifiable, Equatable, Sendable {
     public let address: String
     public let date: ThreadDate?
     public let text: String
+    public let html: String?
+    public let blockedHTML: String?
     public let quote: Quote?
     public let quoteOpen: Bool
     public let current: Bool

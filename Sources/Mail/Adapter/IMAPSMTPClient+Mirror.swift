@@ -7,6 +7,8 @@ extension IMAPSMTPClient: MirrorPort {
 
     var ranges: [MailboxRange] { MailboxRange.allCases }
 
+    var fillsPreviews: Bool { true }
+
     func startCursor() async throws -> String? { nil }
 
     func listIDs(folderID: String, since: Date?, limit: Int?) async throws -> MirrorListing {
@@ -36,9 +38,10 @@ extension IMAPSMTPClient: MirrorPort {
             let selection = try await session.select(folderID, readOnly: true)
             let uids = references.filter { $0.uidValidity == selection.uidValidity }.map(\.uid)
             let fetched = try await session.fetch(uids: uids, items: Self.summaryItems)
+            let previews = await Self.previews(fetched, session: session)
             return fetched.reversed().compactMap { entry -> MessageSummary? in
                 guard let uid = entry.uid else { return nil }
-                return Self.summary(entry, uid: uid, folder: folderID, uidValidity: selection.uidValidity)
+                return Self.summary(entry, uid: uid, folder: folderID, uidValidity: selection.uidValidity, snippet: previews[uid] ?? "")
             }
         }
     }

@@ -49,9 +49,10 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
             let pageUIDs = Array(found.suffix(limit))
             let more = found.count > pageUIDs.count
             let fetched = try await session.fetch(uids: pageUIDs, items: Self.summaryItems)
+            let previews = await Self.previews(fetched, session: session)
             let messages = fetched.reversed().compactMap { entry -> MessageSummary? in
                 guard let uid = entry.uid else { return nil }
-                return Self.summary(entry, uid: uid, folder: folderID, uidValidity: selection.uidValidity)
+                return Self.summary(entry, uid: uid, folder: folderID, uidValidity: selection.uidValidity, snippet: previews[uid] ?? "")
             }
             return MessagePage(messages: messages, nextPageToken: more ? pageUIDs.first.map(String.init) : nil, total: found.count)
         }
@@ -372,7 +373,8 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
 
     private static func decodedText(_ part: IMAPBodyPart, session: IMAPClient, uid: Int) async throws -> String {
         let raw = try await session.fetchSection(uid: uid, section: part.section)
-        return MIME.string(from: MIME.decodeTransfer(raw, encoding: part.encoding), charset: part.charset)
+        let text = MIME.string(from: MIME.decodeTransfer(raw, encoding: part.encoding), charset: part.charset)
+        return part.isFlowed ? MIME.unflow(text, delSp: part.deletesSpaces) : text
     }
 
     private static func flagNames(_ flags: Set<Flag>) -> [String] {
@@ -383,7 +385,7 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
         AttachmentInfo(id: part.section, filename: part.filename ?? part.section, mimeType: part.mimeType, sizeBytes: part.size)
     }
 
-    static func summary(_ entry: IMAPFetched, uid: Int, folder: String, uidValidity: Int) -> MessageSummary {
+    static func summary(_ entry: IMAPFetched, uid: Int, folder: String, uidValidity: Int, snippet: String = "") -> MessageSummary {
         let envelope = entry.envelope
         let flags = Set(entry.flags.compactMap { Flag(imapName: $0) })
         let id = IMAPMessageReference(folder: folder, uidValidity: uidValidity, uid: uid).encoded
@@ -398,7 +400,7 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
             fromRaw: (envelope?.from ?? []).map(\.raw).joined(separator: ", "),
             toRaw: (envelope?.to ?? []).map(\.raw).joined(separator: ", "),
             ccRaw: (envelope?.cc ?? []).map(\.raw).joined(separator: ", "),
-            snippet: "",
+            snippet: snippet,
             receivedAt: entry.internalDate ?? envelope?.date.flatMap(DateEngine.parseMessageDate),
             flags: flags, folderIDs: [folder], attachmentCount: attachments.count,
             attachments: attachments, messageIDHeader: envelope?.messageID ?? "")

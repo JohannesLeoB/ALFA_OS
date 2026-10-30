@@ -12,17 +12,20 @@ enum MessageExport {
 
     static func printMail(_ inbox: InboxState, _ id: String) async {
         guard let document = await inbox.mailDocument(id, render: render) else { return }
-        guard let pdf = PDFDocument(data: document.data),
-              let operation = pdf.printOperation(for: NSPrintInfo.shared, scalingMode: .pageScaleNone, autoRotate: false) else {
-            inbox.documentFailed(id)
-            return
-        }
-        operation.jobTitle = document.name
+        if !printPDF(document.data, name: document.name, scaling: .pageScaleNone) { inbox.documentFailed(id) }
+    }
+
+    @discardableResult
+    static func printPDF(_ data: Data, name: String, scaling: PDFPrintScalingMode) -> Bool {
+        guard let pdf = PDFDocument(data: data),
+              let operation = pdf.printOperation(for: NSPrintInfo.shared, scalingMode: scaling, autoRotate: false) else { return false }
+        operation.jobTitle = name
         if let window = NSApp.keyWindow {
             operation.runModal(for: window, delegate: nil, didRun: nil, contextInfo: nil)
         } else {
             operation.run()
         }
+        return true
     }
 
     static func savePDF(_ inbox: InboxState, _ id: String) async {

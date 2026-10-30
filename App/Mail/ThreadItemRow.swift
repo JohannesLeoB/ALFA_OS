@@ -14,9 +14,7 @@ struct ThreadItemRow: View {
 
     private var loadImages: Bool { session.settings.privacy.loadImages }
 
-    private var showsHTML: Bool {
-        if item.current, case .html = card.content { true } else { false }
-    }
+    private var allowRemote: Bool { !card.remoteImagesBlocked(loadRemote: loadImages) }
 
     private func sheet(_ size: Double, _ weight: Font.Weight = .regular) -> Font {
         Font(Typeface.sheet(size: size, weight: weight))
@@ -35,21 +33,21 @@ struct ThreadItemRow: View {
                 Spacer(minLength: 0)
                 if let date = item.date { threadDate(date) }
             }
-            if item.current, case .html(let html, let inline) = card.content {
-                HTMLBody(inbox: session.inbox, card: card, html: html, inlineImages: inline,
-                         allowRemote: !card.remoteImagesBlocked(loadRemote: loadImages))
+            if let html = item.html, case .html(_, let inline) = card.content {
+                HTMLBody(inbox: session.inbox, card: card, html: allowRemote ? html : item.blockedHTML ?? html, inlineImages: inline,
+                         allowRemote: allowRemote)
             } else {
-                Text(verbatim: item.text)
+                Text(linked(item.text))
                     .font(sheet(style.size))
                     .lineHeight(style.lineHeight, size: style.size, sheet: true)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            if let quote = item.quote, !showsHTML {
+            if let quote = item.quote {
                 QuoteToggle(label: item.quoteOpen ? appearance.text("mail.quote.hide") : Text(verbatim: appearance.format("mail.quote.show", quote.lines))) {
                     session.inbox.toggleQuote(card.id, message: item.id)
                 }
                 if item.quoteOpen {
-                    Text(verbatim: quote.text)
+                    Text(linked(quote.text))
                         .font(sheet(Tokens.TextSize.body))
                         .foregroundStyle(appearance.color(\.sheetInkTertiary))
                         .padding(.leading, CGFloat(Tokens.Spacing.step12))
@@ -73,6 +71,15 @@ struct ThreadItemRow: View {
             if !first { Rectangle().fill(appearance.color(\.sheetLine)).frame(height: CGFloat(Tokens.Size.hairline)) }
         }
         .padding(.top, CGFloat(Tokens.Spacing.step16))
+    }
+
+    private func linked(_ text: String) -> AttributedString {
+        var result = LinkEngine.attributed(text)
+        let ranges = result.runs.filter { $0.link != nil }.map(\.range)
+        for range in ranges {
+            result[range][AttributeScopes.SwiftUIAttributes.UnderlineStyleAttribute.self] = .single
+        }
+        return result
     }
 
     @ViewBuilder

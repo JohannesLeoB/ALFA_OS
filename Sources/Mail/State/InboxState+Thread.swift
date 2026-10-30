@@ -9,12 +9,18 @@ extension InboxState {
         let now = clock()
         return source.map { item in
             let current = item.id == id
+            let party = Self.sender(item)
+            let name = party.name.isEmpty ? party.address : party.name
+            let date = ThreadDate.of(item.receivedAt, now: now)
+            let open = card.quotesOpen.contains(item.id)
+            if current, let html = card.htmlParts {
+                return ThreadItem(id: item.id, name: name, address: party.address, date: date, text: "", html: html.body,
+                                  blockedHTML: html.blockedBody, quote: html.quote, quoteOpen: open, current: true)
+            }
             let raw = current ? (card.plainText ?? item.snippet) : (card.threadTexts[item.id] ?? item.snippet)
             let parts = Quoting.split(raw)
-            let party = Self.sender(item)
-            return ThreadItem(id: item.id, name: party.name.isEmpty ? party.address : party.name, address: party.address,
-                              date: ThreadDate.of(item.receivedAt, now: now), text: parts.body, quote: parts.quote,
-                              quoteOpen: card.quotesOpen.contains(item.id), current: current)
+            return ThreadItem(id: item.id, name: name, address: party.address, date: date, text: parts.body, html: nil,
+                              blockedHTML: nil, quote: parts.quote, quoteOpen: open, current: current)
         }
     }
 

@@ -114,7 +114,7 @@ struct WebBody: NSViewRepresentable {
                 let list = await self?.rules()
                 guard let self, let webView, !Task.isCancelled else { return }
                 if let list { webView.configuration.userContentController.add(list) }
-                if list != nil { webView.loadHTMLString(self.parent.document, baseURL: nil) }
+                webView.loadHTMLString(self.parent.document, baseURL: nil)
             }
         }
 

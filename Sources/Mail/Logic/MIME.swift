@@ -6,6 +6,7 @@ enum MIME {
 
     static func decodeBase64(_ data: Data) -> Data {
         var filtered = data.filter { base64Alphabet.contains($0) }
+        if filtered.count % 4 == 1 { filtered.removeLast() }
         while filtered.count % 4 != 0 { filtered.append(61) }
         return Data(base64Encoded: filtered) ?? Data()
     }
@@ -71,6 +72,53 @@ enum MIME {
             }
         }
         return String(data: data, encoding: .utf8) ?? String(data: data, encoding: .isoLatin1) ?? ""
+    }
+
+    static func truncatedString(from data: Data, charset: String?) -> String {
+        let bytes = [UInt8](data)
+        guard charset.map({ $0.lowercased().contains("utf") }) ?? true else { return string(from: data, charset: charset) }
+        for back in 1...3 where bytes.count >= back {
+            let lead = bytes[bytes.count - back]
+            if lead < 0x80 { break }
+            if lead < 0xC0 { continue }
+            let needed = lead >= 0xF0 ? 4 : lead >= 0xE0 ? 3 : 2
+            if needed > back, String(data: data, encoding: .utf8) == nil {
+                return string(from: Data(bytes.dropLast(back)), charset: charset)
+            }
+            break
+        }
+        return string(from: data, charset: charset)
+    }
+
+    static func unflow(_ text: String, delSp: Bool) -> String {
+        var out: [String] = []
+        var pending: (depth: Int, text: String)?
+        func flush() {
+            guard let held = pending else { return }
+            let prefix = held.depth == 0 ? "" : String(repeating: ">", count: held.depth) + (held.text.isEmpty ? "" : " ")
+            out.append(prefix + held.text)
+            pending = nil
+        }
+        for raw in text.replacingOccurrences(of: "\r\n", with: "\n").components(separatedBy: "\n") {
+            var line = Substring(raw)
+            var depth = 0
+            while line.first == ">" {
+                depth += 1
+                line = line.dropFirst()
+            }
+            if line.first == " " { line = line.dropFirst() }
+            let flowed = line.hasSuffix(" ") && line != "-- "
+            let piece = flowed && delSp ? String(line.dropLast()) : String(line)
+            if let held = pending, held.depth == depth {
+                pending = (depth, held.text + piece)
+            } else {
+                flush()
+                pending = (depth, piece)
+            }
+            if !flowed { flush() }
+        }
+        flush()
+        return out.joined(separator: "\n")
     }
 
     static func decodeEncodedWords(_ text: String) -> String {

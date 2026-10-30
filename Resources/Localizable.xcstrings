@@ -6780,6 +6780,22 @@
         }
       }
     },
+    "hint.account.mismatch" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angemeldet wurde ein anderes Konto. Zum Erneuern bitte mit diesem Konto anmelden:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A different account was signed in. To renew, please sign in with this account:"
+          }
+        }
+      }
+    },
     "hint.google.grant" : {
       "comment" : "roh",
       "localizations" : {
@@ -7225,6 +7241,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nicht unterstützt"
+          }
+        }
+      }
+    },
+    "hub.error.duplicate" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Adresse ist schon als Konto eingerichtet."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This address is already set up as an account."
           }
         }
       }
@@ -12915,6 +12947,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Speiseplan"
+          }
+        }
+      }
+    },
+    "settings.service.mailaccounts.area.mail" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
           }
         }
       }

@@ -54,6 +54,17 @@ extension InboxState {
         post(.projectSaved)
     }
 
+    public func attachmentToProjectFolder(_ id: String, attachmentID: String, name: String, project: ProjectFolder) async {
+        guard let data = await attachmentData(id, attachmentID: attachmentID) else { return }
+        let mimeType = card(id)?.attachments.first { $0.id == attachmentID }?.mimeType ?? "application/octet-stream"
+        do {
+            _ = try await mailbox.putFile(project.inlet, folder: project.folder.id, name: name, mimeType: mimeType, data: data)
+        } catch {
+            return
+        }
+        post(.projectSaved)
+    }
+
     private func projects(key: String) async -> [ProjectFolder] {
         do {
             let list = try await mailbox.projectFolders()

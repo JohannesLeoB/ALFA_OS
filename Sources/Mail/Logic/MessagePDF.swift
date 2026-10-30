@@ -16,7 +16,7 @@ public enum MessagePDF {
         return render(text: (head + ["", body]).joined(separator: "\n"), page: page, margin: margin)
     }
 
-    static func render(text: String, page: CGSize, margin: CGFloat) -> Data? {
+    public static func render(text: String, page: CGSize, margin: CGFloat) -> Data? {
         let data = NSMutableData()
         guard let consumer = CGDataConsumer(data: data as CFMutableData) else { return nil }
         var box = CGRect(origin: .zero, size: page)

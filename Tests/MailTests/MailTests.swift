@@ -59,6 +59,8 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
     let drafts = Locked<[String: Draft]>([:])
     let corpus = Locked<[String: [MessageSummary]]>([:])
     let mirrorRanges = Locked<[MailboxRange]>(MailboxRange.allCases)
+    let providesPreviews = Locked(false)
+    let bodyHTML = Locked<String?>(nil)
     let startValue = Locked<String?>(nil)
     let searchTotals = Locked(true)
     let everywhereFolder = Locked<String?>(nil)
@@ -116,7 +118,7 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
 
     func fetchBody(messageID: String) async throws -> MessageBody {
         try note("fetchBody")
-        return MessageBody(text: "plain text", html: nil)
+        return MessageBody(text: "plain text", html: bodyHTML.with { $0 })
     }
 
     func send(_ draft: Draft) async throws { try note("send") }
@@ -184,6 +186,7 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
     }
     func wasSent(messageID: String) async throws -> Bool { try note("wasSent"); return wasSentAnswer.with { $0 } }
     var ranges: [MailboxRange] { mirrorRanges.with { $0 } }
+    var fillsPreviews: Bool { providesPreviews.with { $0 } }
 
     func offersEverywhere(in folders: [Folder]) -> Bool {
         everywhereFolder.with { wanted in wanted.map { id in folders.contains { $0.id == id } } ?? false }
@@ -646,6 +649,143 @@ final class MailTests: XCTestCase {
         XCTAssertEqual(HTMLEngine.inlineSource("cid:att", in: ["att": "2"]), .attachment("2"))
     }
 
+    func testHTMLPlainKeepsParagraphsListsBreaksAndLinks() {
+        XCTAssertEqual(HTMLEngine.plain("<p>One</p><p>Two</p>"), "One\n\nTwo")
+        XCTAssertEqual(HTMLEngine.plain("<div>a</div><div><br></div><div>b</div>"), "a\n\nb")
+        XCTAssertEqual(HTMLEngine.plain("a<br>b<br><br>c"), "a\nb\n\nc")
+        XCTAssertEqual(HTMLEngine.plain("<ul><li>x</li><li>y</li></ul>"), "\u{2022} x\n\u{2022} y")
+        XCTAssertEqual(HTMLEngine.plain("<ol><li>x</li><li>y<ul><li>z</li></ul></li></ol>"), "1. x\n2. y\n  \u{2022} z")
+        XCTAssertEqual(HTMLEngine.plain("<p>wrapped\n    line\ttext</p>\n\n\n<p>next</p>"), "wrapped line text\n\nnext")
+        XCTAssertEqual(HTMLEngine.plain("<a href=\"https://x.de/a?b=1&amp;c=2\">Click</a>"), "Click (https://x.de/a?b=1&c=2)")
+        XCTAssertEqual(HTMLEngine.plain("<a href=\"https://x.de\">https://x.de/</a>"), "https://x.de/")
+        XCTAssertEqual(HTMLEngine.plain("<a href=\"mailto:a@x.de\">a@x.de</a>"), "a@x.de")
+        XCTAssertEqual(HTMLEngine.plain("<div style=\"display:none\">hidden<div>deep</div></div><p>shown</p>"), "shown")
+        XCTAssertEqual(HTMLEngine.plain("<table><tr><td>A</td><td>B</td></tr><tr><td>C</td></tr></table>"), "A B\nC")
+        XCTAssertEqual(HTMLEngine.plain("<pre>a\n  b</pre>"), "a\n  b")
+        XCTAssertEqual(HTMLEngine.plain("x<!-- c --><script>var a = '<p>';</script>y&zwnj;&nbsp;z"), "xy z")
+        XCTAssertEqual(HTMLEngine.plain("<p>Hi</p><blockquote>q1<blockquote>q2</blockquote>q3</blockquote><p>end</p>"),
+                       "Hi\n\n> q1\n> > q2\n>\n> q3\n\nend")
+    }
+
+    func testHTMLPartsFoldTheQuoteLikeTheTextRule() {
+        let gmail = "<div dir=\"ltr\">Hello<br></div><br><div class=\"gmail_quote\"><div class=\"gmail_attr\">On Tue, 20 Oct 2026 at 10:00, Anna &lt;anna@x.de&gt; wrote:<br></div><blockquote class=\"gmail_quote\" style=\"margin:0\"><div>old text</div><blockquote class=\"gmail_quote\"><div>older</div></blockquote></blockquote></div>"
+        let folded = HTMLEngine.parts(gmail)
+        XCTAssertTrue(folded.body.contains("Hello"))
+        XCTAssertFalse(folded.body.contains("old text"))
+        XCTAssertEqual(folded.quote?.text, "On Tue, 20 Oct 2026 at 10:00, Anna <anna@x.de> wrote:\n> old text\n> > older")
+        XCTAssertEqual(folded.quote?.lines, 3)
+        let apple = "<div>Hi</div><div><br></div><div>On 20 Oct 2026, at 10:00, Anna <a href=\"mailto:a@x.de\">a@x.de</a> wrote:</div><blockquote type=\"cite\"><div>old</div></blockquote>"
+        let cited = HTMLEngine.parts(apple)
+        XCTAssertFalse(cited.body.contains("wrote"))
+        XCTAssertEqual(cited.quote?.text, "On 20 Oct 2026, at 10:00, Anna a@x.de wrote:\n> old")
+        let inline = HTMLEngine.parts("<p>On Mon Anna wrote:</p><blockquote type=\"cite\">q</blockquote><p>my answer below</p>")
+        XCTAssertNil(inline.quote)
+        let newsletter = HTMLEngine.parts("<p>Intro</p><blockquote>What customers say</blockquote>")
+        XCTAssertNil(newsletter.quote)
+        let forward = HTMLEngine.parts("<p>FYI</p><div class=\"gmail_quote\">---------- Forwarded message ---------<br>From: A</div>")
+        XCTAssertNil(forward.quote)
+        let outlook = HTMLEngine.parts("<p>Reply</p><div id=\"appendonsend\"></div><hr><div id=\"divRplyFwdMsg\"><b>From:</b> A</div><div>old body</div>")
+        XCTAssertFalse(outlook.body.contains("old body"))
+        XCTAssertFalse(outlook.body.contains("<hr"))
+        XCTAssertEqual(outlook.quote?.text, "From: A\nold body")
+        XCTAssertEqual(HTMLEngine.parts("<p>plain</p>").body, "<p>plain</p>")
+    }
+
+    func testHTMLPartsFindAndBlockRemoteContent() {
+        let remote = "<p>x</p><img src=\"https://t.example/p.gif\" alt=\"a\"><td background=\"//t.example/b.png\"><div style=\"background:url('http://t.example/c.png') red;color:blue\"></div><style>@import url(https://f.example/x.css); .a{background:url(https://t.example/d.png)}</style><link rel=\"stylesheet\" href=\"https://f.example/y.css\"><script src=\"https://s.example/z.js\"></script>"
+        let parts = HTMLEngine.parts(remote)
+        XCTAssertTrue(parts.remote)
+        XCTAssertFalse(parts.blockedBody.contains("example"))
+        XCTAssertTrue(parts.blockedBody.contains("alt=\"a\""))
+        XCTAssertTrue(parts.blockedBody.contains("color:blue"))
+        XCTAssertEqual(parts.body, remote)
+        let local = "<p>x</p><img src=\"cid:logo\"><img src=\"data:image/png;base64,AAAA\"><a href=\"https://x.de\">l</a>"
+        let safe = HTMLEngine.parts(local)
+        XCTAssertFalse(safe.remote)
+        XCTAssertEqual(safe.blockedBody, local)
+        let card = OpenMessage(inlet: "a", summary: MessageSummary(id: "1", subject: "S", from: "B"), content: .html(remote, inlineImages: [:]),
+                               htmlParts: parts)
+        XCTAssertTrue(card.remoteImagesBlocked(loadRemote: false))
+        XCTAssertFalse(card.remoteImagesBlocked(loadRemote: true))
+        let plain = OpenMessage(inlet: "a", summary: MessageSummary(id: "1", subject: "S", from: "B"), content: .html(local, inlineImages: [:]),
+                                htmlParts: safe)
+        XCTAssertFalse(plain.remoteImagesBlocked(loadRemote: false))
+    }
+
+    func testQuotingKeepsAttributionOnOneLineAndHandlesDividers() {
+        let wrapped = Quoting.split("Hi\n\nOn Tue, 20 Oct 2026 at 10:00, Anna\n<anna@x.de> wrote:\n> old\n> > older")
+        XCTAssertEqual(wrapped.body, "Hi")
+        XCTAssertEqual(wrapped.quote?.text, "On Tue, 20 Oct 2026 at 10:00, Anna <anna@x.de> wrote:\n> old\n> > older")
+        XCTAssertEqual(wrapped.quote?.lines, 3)
+        let german = Quoting.split("Ja\nAm 20.10.2026 um 10:00 Uhr schrieb Anna <a@x.de>:\n\n> alt")
+        XCTAssertEqual(german.body, "Ja")
+        XCTAssertEqual(german.quote?.lines, 2)
+        let outlook = Quoting.split("Thanks\n\n-----Original Message-----\nFrom: A\nSent: x\n\nold")
+        XCTAssertEqual(outlook.body, "Thanks")
+        XCTAssertEqual(outlook.quote?.lines, 4)
+        let rule = Quoting.split("Danke\n________________________________\nVon: A\nGesendet: x\nalt")
+        XCTAssertEqual(rule.body, "Danke")
+        XCTAssertEqual(rule.quote?.lines, 4)
+        let none = Quoting.split("Von: ich\nkeine Zitate")
+        XCTAssertNil(none.quote)
+        XCTAssertEqual(none.body, "Von: ich\nkeine Zitate")
+        XCTAssertNil(Quoting.split("-----Zwischenstrich-----\ntext").quote)
+    }
+
+    func testFlowedTextAndPartialDecoding() {
+        XCTAssertEqual(MIME.unflow("Hello wor \nld again\n-- \nSig", delSp: false), "Hello wor ld again\n-- \nSig")
+        XCTAssertEqual(MIME.unflow("Hello wor \nld", delSp: true), "Hello world")
+        XCTAssertEqual(MIME.unflow("> aaa \n> bbb\n>\n> ccc\n\n d", delSp: false), "> aaa bbb\n>\n> ccc\n\nd")
+        XCTAssertEqual(FlowedEngine.decode("a \nb", contentType: "text/plain; charset=utf-8; format=flowed; delsp=yes"), "ab")
+        XCTAssertEqual(FlowedEngine.decode("a \nb", contentType: "text/plain"), "a \nb")
+        XCTAssertEqual(MIME.decodeBase64(Data("SGVsbG8gd29ybGQ".utf8)), Data("Hello world".utf8))
+        XCTAssertEqual(MIME.decodeBase64(Data("SGVsbG8gd29ybGQhX".utf8)), Data("Hello world!".utf8))
+        let cut = Data([0x61, 0x62, 0xC3])
+        XCTAssertEqual(MIME.truncatedString(from: cut, charset: "utf-8"), "ab")
+        XCTAssertEqual(MIME.truncatedString(from: Data([0x61, 0xC3, 0xA9]), charset: "utf-8"), "a\u{E9}")
+        XCTAssertEqual(MIME.truncatedString(from: Data([0x61, 0xE9]), charset: "iso-8859-1"), "a\u{E9}")
+    }
+
+    func testLinkEngineMarksWebAndMailAddressesOnly() {
+        let text = LinkEngine.attributed("see https://example.com/a and mail me@x.de or call 030 123456")
+        let links = text.runs.compactMap { $0.link?.absoluteString }
+        XCTAssertEqual(links, ["https://example.com/a", "mailto:me@x.de"])
+    }
+
+    func testAttachmentMenuOffersPrintAndPDFOnlyForPrintableTypes() {
+        XCTAssertEqual(MenuEngine.attachment(name: "plan.PDF"),
+                       [.item(.preview), .item(.print), .item(.pdf), .separator, .item(.otherProject), .item(.saveAs)])
+        XCTAssertEqual(MenuEngine.attachment(name: "model.dwg"), [.item(.preview), .separator, .item(.otherProject), .item(.saveAs)])
+        XCTAssertEqual(MenuEngine.attachment(name: "noext"), [.item(.preview), .separator, .item(.otherProject), .item(.saveAs)])
+    }
+
+    func testIMAPSummariesCarryAPreviewFetchedOncePerBodySection() async throws {
+        let seen = Locked<[String]>([])
+        let envelope = "ENVELOPE (\"Wed, 17 Jul 1996 02:23:25 -0700 (PDT)\" \"Kaese\" ((\"T\" NIL \"g\" \"x.test\")) ((\"T\" NIL \"g\" \"x.test\")) ((\"T\" NIL \"g\" \"x.test\")) ((NIL NIL \"me\" \"x.test\")) NIL NIL NIL \"<B1@x.test>\")"
+        let structure = "BODYSTRUCTURE (\"TEXT\" \"PLAIN\" (\"CHARSET\" \"UTF-8\") NIL NIL \"QUOTED-PRINTABLE\" 10 1)"
+        let stream = scriptedServer { tag, line in
+            seen.with { $0.append(line) }
+            if line.contains("EXAMINE") { return ["* OK [UIDVALIDITY 7] ok", "\(tag) OK done"] }
+            if line.contains("BODY.PEEK[1]") {
+                return ["* 1 FETCH (UID 5 BODY[1]<0> {28}\r\nHallo Welt, sch=C3=B6n da=C3)", "\(tag) OK done"]
+            }
+            if line.contains("FETCH") {
+                return ["* 1 FETCH (UID 5 FLAGS (\\Seen) INTERNALDATE \"17-Jul-1996 02:44:25 -0700\" RFC822.SIZE 1 \(envelope) \(structure))",
+                        "* 2 FETCH (UID 6 FLAGS () INTERNALDATE \"17-Jul-1996 02:44:25 -0700\" RFC822.SIZE 1 \(envelope) \(structure))",
+                        "\(tag) OK done"]
+            }
+            return nil
+        }
+        let found = try await imapClient(stream).fetchSummaries(folderID: "INBOX", ids: ["7:5:INBOX", "7:6:INBOX"])
+        XCTAssertEqual(found.first { $0.id == "7:5:INBOX" }?.snippet, "Hallo Welt, sch\u{F6}n da")
+        XCTAssertEqual(found.first { $0.id == "7:6:INBOX" }?.snippet, IMAPSMTPClient.previewEmpty)
+        let fetches = seen.with { $0.filter { $0.contains("BODY.PEEK[1]") } }
+        XCTAssertEqual(fetches.count, 1)
+        XCTAssertTrue(fetches[0].contains("<0.4096>"))
+        XCTAssertEqual(PreviewEngine.text(IMAPSMTPClient.previewEmpty), "")
+        XCTAssertEqual(IMAPSMTPClient.snippet("<style>p{}</style><p>Hallo</p><p>Welt</p>", html: true), "Hallo\n\nWelt")
+    }
+
     func testNamesQuotesAndLabels() {
         XCTAssertEqual(PersonName.display("\"Gray, Terry\" <g@x.org>").name, "Gray, Terry")
         XCTAssertEqual(PersonName.middle("abcdefghij", limit: 5).count, 5)
@@ -660,10 +800,10 @@ final class MailTests: XCTestCase {
     }
 
     func testMenusOfferOnlyHandledActions() {
-        let removed = ["note", "laterSend", "template", "preview", "otherProject"]
+        let removed = ["note", "laterSend", "template"]
         XCTAssertTrue(Set(Action.allCases.map(\.rawValue)).isDisjoint(with: removed))
         let lines = MenuEngine.row(unread: true, draft: false) + MenuEngine.readingMore(starred: false, original: true)
-            + MenuEngine.attachment()
+            + MenuEngine.attachment(name: "a.pdf")
         XCTAssertFalse(lines.isEmpty)
         let router = SlotRouter.route(.send, front: .draft(UUID(uuidString: "00000000-0000-0000-0000-000000000001")!))
         XCTAssertEqual(router, .send(UUID(uuidString: "00000000-0000-0000-0000-000000000001")!))
@@ -703,6 +843,28 @@ final class MailTests: XCTestCase {
         XCTAssertEqual(hits.count, 1)
         try await rig.mailbox.setFlags("a", messageID: "1:1:INBOX", add: [.seen], remove: [])
         XCTAssertEqual(rig.mailbox.unreadCount("a"), 0)
+    }
+
+    @MainActor
+    func testMirrorFetchesAgainOnlyStoredMessagesWithoutPreviewWhenTheTransportFillsPreviews() async throws {
+        let rig = try Rig()
+        let bare = MessageSummary(id: "1:1:INBOX", threadID: "t", subject: "Hello", from: "Anna", fromRaw: "Anna <anna@example.com>",
+                                  toRaw: "me@example.com", snippet: "", flags: [], folderIDs: ["INBOX"], messageIDHeader: "<h1@x>")
+        rig.transport.corpus.with { $0["INBOX"] = [bare] }
+        try await rig.mailbox.refreshFolders("a")
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.transport.chunks.with { $0 }, [1])
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.transport.chunks.with { $0 }, [1])
+        rig.transport.providesPreviews.with { $0 = true }
+        var filled = bare
+        filled.snippet = "Hallo Welt"
+        rig.transport.corpus.with { $0["INBOX"] = [filled] }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.transport.chunks.with { $0 }, [1, 1])
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").first?.snippet, "Hallo Welt")
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.transport.chunks.with { $0 }, [1, 1])
     }
 
     @MainActor
@@ -836,6 +998,28 @@ final class MailTests: XCTestCase {
         await state.send(id)
         XCTAssertEqual(state.draft(id)?.state, .sent)
         XCTAssertEqual(state.rowPresentations.first?.initials, "A")
+    }
+
+    @MainActor
+    func testReadingFoldsTheQuoteOfAnHTMLMessageAndAsksForRemoteImagesOnlyWhenThereAreAny() async throws {
+        let rig = try Rig()
+        rig.transport.bodyHTML.with {
+            $0 = "<p>Danke</p><img src=\"https://t.example/p.gif\"><div class=\"gmail_quote\"><div class=\"gmail_attr\">On Mon, Anna wrote:</div><blockquote>alt</blockquote></div>"
+        }
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        await state.open("1:1:INBOX")
+        let card = try XCTUnwrap(state.card("1:1:INBOX"))
+        XCTAssertTrue(card.remoteImagesBlocked(loadRemote: false))
+        state.allowRemoteImages("1:1:INBOX")
+        XCTAssertFalse(try XCTUnwrap(state.card("1:1:INBOX")).remoteImagesBlocked(loadRemote: false))
+        let item = try XCTUnwrap(state.thread("1:1:INBOX").first)
+        XCTAssertEqual(item.html?.contains("alt"), false)
+        XCTAssertEqual(item.blockedHTML?.contains("t.example"), false)
+        XCTAssertEqual(item.quote?.text, "On Mon, Anna wrote:\n> alt")
+        XCTAssertFalse(item.quoteOpen)
+        state.toggleQuote("1:1:INBOX", message: "1:1:INBOX")
+        XCTAssertEqual(state.thread("1:1:INBOX").first?.quoteOpen, true)
     }
 
     @MainActor

@@ -114,6 +114,8 @@ struct IMAPBodyPart: Equatable, Sendable {
     var mimeType: String { "\(mediaType)/\(subtype)" }
     var filename: String? { dispositionParameters["filename"] ?? parameters["name"] }
     var charset: String? { parameters["charset"] }
+    var isFlowed: Bool { mimeType == "text/plain" && parameters["format"]?.lowercased() == "flowed" }
+    var deletesSpaces: Bool { parameters["delsp"]?.lowercased() == "yes" }
 
     var isAttachment: Bool {
         guard !isMultipart else { return false }

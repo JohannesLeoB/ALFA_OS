@@ -40,22 +40,27 @@ struct AttachmentRow: View {
     }
 
     private func menu() {
-        let entries = MenuLine.entries(MenuEngine.attachment(), appearance: appearance) { action in
-            if action == .saveAs { save() }
+        let entries = MenuLine.entries(MenuEngine.attachment(name: row.name), appearance: appearance) { action in
+            switch action {
+            case .preview: run { AttachmentPreview.show($0, name: row.name) }
+            case .print: run { AttachmentExport.printAttachment($0, name: row.name) }
+            case .pdf: run { AttachmentExport.savePDF($0, name: row.name) }
+            case .saveAs: run { AttachmentExport.save($0, name: row.name) }
+            case .otherProject:
+                ProjectFolderList.save(session.inbox, appearance: appearance, message: card.id, attachment: row, anchor: anchor)
+            default: break
+            }
         }
         anchor.showMenu(entries)
     }
 
-    private func save() {
+    private func run(_ work: @escaping @MainActor (Data) -> Bool) {
         let inbox = session.inbox
         let id = card.id
-        let attachment = row
+        let attachment = row.id
         Task {
-            guard let data = await inbox.attachmentData(id, attachmentID: attachment.id) else { return }
-            let panel = NSSavePanel()
-            panel.nameFieldStringValue = attachment.name
-            guard panel.runModal() == .OK, let url = panel.url else { return }
-            try? data.write(to: url)
+            guard let data = await inbox.attachmentData(id, attachmentID: attachment) else { return }
+            if !work(data) { inbox.announce(.attachmentFailed) }
         }
     }
 }

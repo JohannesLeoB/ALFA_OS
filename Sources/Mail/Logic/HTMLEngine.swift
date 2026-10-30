@@ -14,10 +14,9 @@ public enum HTMLEngine {
     [{"trigger":{"url-filter":"^https?://.*"},"action":{"type":"block"}}]
     """
     private static let openSchemes: Set<String> = ["http", "https", "mailto"]
-    private static let blockTags = ["style", "script", "head", "title"]
     private static let maxEntityLength = 10
     private static let namedEntities: [String: String] = [
-        "amp": "&", "lt": "<", "gt": ">", "quot": "\"", "apos": "'", "nbsp": " ",
+        "amp": "&", "lt": "<", "gt": ">", "quot": "\"", "apos": "'", "nbsp": " ", "zwnj": "", "zwj": "", "shy": "",
         "auml": "\u{E4}", "ouml": "\u{F6}", "uuml": "\u{FC}", "Auml": "\u{C4}", "Ouml": "\u{D6}", "Uuml": "\u{DC}",
         "szlig": "\u{DF}", "euro": "\u{20AC}", "ndash": "\u{2013}", "mdash": "\u{2014}", "hellip": "\u{2026}",
         "laquo": "\u{AB}", "raquo": "\u{BB}", "bdquo": "\u{201E}", "ldquo": "\u{201C}", "rdquo": "\u{201D}",
@@ -34,21 +33,7 @@ public enum HTMLEngine {
     }
 
     public static func plain(_ html: String) -> String {
-        var raw = html
-        for tag in blockTags {
-            raw = raw.replacingOccurrences(
-                of: "<\(tag)\\b[^>]*>[\\s\\S]*?</\(tag)\\s*>",
-                with: " ", options: [.regularExpression, .caseInsensitive])
-        }
-        raw = raw.replacingOccurrences(of: "<!--[\\s\\S]*?-->", with: " ", options: .regularExpression)
-        raw = raw.replacingOccurrences(of: "<br\\s*/?>", with: "\n", options: [.regularExpression, .caseInsensitive])
-        raw = raw.replacingOccurrences(of: "</(p|div|tr|li|h[1-6])\\s*>", with: "\n",
-                                       options: [.regularExpression, .caseInsensitive])
-        let out = decodeEntities(raw.replacingOccurrences(of: "<[^>]+>", with: " ", options: .regularExpression))
-        return out.replacingOccurrences(of: "[ \\t]+", with: " ", options: .regularExpression)
-            .replacingOccurrences(of: "[ \\t]*\n[ \\t]*", with: "\n", options: .regularExpression)
-            .replacingOccurrences(of: "\n{3,}", with: "\n\n", options: .regularExpression)
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+        HTMLPlainWriter.render(HTMLTokenizer.tokens(html))
     }
 
     static func decodeEntities(_ text: String) -> String {
@@ -125,11 +110,12 @@ public enum HTMLEngine {
         <style>
         :root { color-scheme: light; }
         html, body { margin: 0; padding: 0; background: \(css(theme.background)); overflow: hidden; }
+        html, body { height: auto !important; min-height: 0 !important; }
         body { font: \(theme.fontSize)px/\(theme.lineHeight) \(family); color: \(css(theme.text));
-               overflow-wrap: anywhere; display: flow-root; -webkit-text-size-adjust: 100%; }
+               overflow-wrap: break-word; display: flow-root; -webkit-text-size-adjust: 100%; }
         img { max-width: 100%; height: auto; }
         table { max-width: 100%; }
-        a { color: \(css(theme.text)); }
+        a { color: \(css(theme.text)); text-decoration: underline; }
         blockquote { margin: 0; padding-left: \(theme.quoteGap)px; border-left: \(theme.quoteBar)px solid \(css(theme.line));
                      color: \(css(theme.secondary)); }
         pre { white-space: pre-wrap; }

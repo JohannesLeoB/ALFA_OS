@@ -43,7 +43,9 @@ extension InboxState {
         do {
             let body = try await mailbox.body(inlet, messageID: id)
             guard let now = cardIndex(id, in: inlet) else { return }
-            cards[now].content = content(for: body, fallback: cards[now].summary.snippet)
+            let loaded = content(for: body, fallback: cards[now].summary.snippet)
+            cards[now].content = loaded
+            if case .html(let html, _) = loaded { cards[now].htmlParts = HTMLEngine.parts(html) }
             cards[now].attachments = body.attachments
         } catch {
             guard let now = cardIndex(id, in: inlet) else { return }

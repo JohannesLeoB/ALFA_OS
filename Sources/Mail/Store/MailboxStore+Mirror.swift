@@ -124,7 +124,9 @@ extension MailboxStore {
         let newest = newestDate(inlet, folder)
         var fresh = 0
         var added = 0
-        for chunk in MirrorEngine.chunks(plan.unknown, size: MirrorEngine.chunkSize) {
+        let missing = mirror.fillsPreviews ? unpreviewedIDs(inlet, folder) : []
+        let fetching = plan.unknown + listing.ids.filter { missing.contains($0) }
+        for chunk in MirrorEngine.chunks(fetching, size: MirrorEngine.chunkSize) {
             let found = try await remote(inlet) { try await mirror.fetchSummaries(folderID: folder, ids: chunk) }
             guard !Task.isCancelled else { return }
             let kept = found.filter { !isDirty(inlet, $0.id) }
@@ -177,6 +179,13 @@ extension MailboxStore {
     func storedIDs(_ inlet: Inlet.ID, _ folder: String) -> Set<String> {
         let ids = (try? database.read { db in
             try String.fetchAll(db, sql: "SELECT id FROM mail_message WHERE inlet = ? AND folder = ?", arguments: [inlet, folder])
+        }) ?? []
+        return Set(ids)
+    }
+
+    func unpreviewedIDs(_ inlet: Inlet.ID, _ folder: String) -> Set<String> {
+        let ids = (try? database.read { db in
+            try String.fetchAll(db, sql: "SELECT id FROM mail_message WHERE inlet = ? AND folder = ? AND snippet = ''", arguments: [inlet, folder])
         }) ?? []
         return Set(ids)
     }

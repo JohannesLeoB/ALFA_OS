@@ -165,12 +165,20 @@
    "de": "Entwurf öffnen",
    "en": "Open Draft"
   },
+  "mail.action.otherProject": {
+   "de": "In anderes Projekt …",
+   "en": "Move to Another Project …"
+  },
   "mail.action.overview": {
    "de": "Übersicht"
   },
   "mail.action.pdf": {
    "de": "Als PDF sichern",
    "en": "Save as PDF"
+  },
+  "mail.action.preview": {
+   "de": "Vorschau",
+   "en": "Quick Look"
   },
   "mail.action.print": {
    "de": "Drucken",

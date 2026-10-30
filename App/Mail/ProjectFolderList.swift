@@ -21,12 +21,25 @@ enum ProjectFolderList {
     }
 
     static func save(_ inbox: InboxState, appearance: Appearance, message id: String, anchor: AnchorBox) {
+        choose(inbox, appearance: appearance, message: id, anchor: anchor) { project in
+            await inbox.mailToProjectFolder(id, project: project, render: MessageExport.render)
+        }
+    }
+
+    static func save(_ inbox: InboxState, appearance: Appearance, message id: String, attachment: AttachmentEntry, anchor: AnchorBox) {
+        choose(inbox, appearance: appearance, message: id, anchor: anchor) { project in
+            await inbox.attachmentToProjectFolder(id, attachmentID: attachment.id, name: attachment.name, project: project)
+        }
+    }
+
+    private static func choose(_ inbox: InboxState, appearance: Appearance, message id: String, anchor: AnchorBox,
+                               then run: @escaping @MainActor (ProjectFolder) async -> Void) {
         Task {
             let projects = await inbox.projectFolders(forMessage: id)
             guard !projects.isEmpty else { return }
             let rows = projects.map { project in
                 MenuEntry.row(MenuItem(id: project.id, label: Text(verbatim: project.folder.name), meta: appearance.text("mail.menu.drive")) {
-                    Task { await inbox.mailToProjectFolder(id, project: project, render: MessageExport.render) }
+                    Task { await run(project) }
                 })
             }
             present(rows, anchor: anchor)

@@ -6,6 +6,7 @@ public struct OpenMessage: Identifiable, Equatable, Sendable {
     public let inlet: Inlet.ID
     public var summary: MessageSummary
     public var content: MessageContent
+    public var htmlParts: HTMLParts?
     public var remoteImagesAllowed = false
     public var pinned = false
     public var recipientsExpanded = false
@@ -15,8 +16,8 @@ public struct OpenMessage: Identifiable, Equatable, Sendable {
     public var quotesOpen: Set<String> = []
 
     public func remoteImagesBlocked(loadRemote: Bool) -> Bool {
-        if case .html = content { return !remoteImagesAllowed && !loadRemote }
-        return false
+        guard case .html = content, htmlParts?.remote == true else { return false }
+        return !remoteImagesAllowed && !loadRemote
     }
 
     public var plainText: String? {
