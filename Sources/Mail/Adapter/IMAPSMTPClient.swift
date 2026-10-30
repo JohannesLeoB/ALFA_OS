@@ -1,7 +1,7 @@
 import Core
 import Foundation
 
-struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
+struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort {
     typealias PasswordSource = @Sendable () async throws -> String
 
     static let summaryItems = ["UID", "FLAGS", "INTERNALDATE", "RFC822.SIZE", "ENVELOPE", "BODYSTRUCTURE",
@@ -324,6 +324,17 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort {
         let stored = try await fetchDraft(messageID: id)
         try await send(stored.draft)
         try? await deleteDraft(id: id)
+    }
+
+    var filesSentCopy: Bool { true }
+
+    func fileSent(_ draft: Draft, into folderID: String?) async throws {
+        guard let folderID else { throw MailFailure.folderNotFound(FolderRole.sent.rawValue) }
+        let message = try MessageEngine.build(draft, account: account, messageID: draft.messageID ?? UUID().uuidString.lowercased(),
+                                              asDraft: true)
+        try await withIncoming(retry: false) { session in
+            _ = try await session.append(to: folderID, flags: [Flag.seen.imapName], message: message.data)
+        }
     }
 
     func wasSent(messageID: String, in folderID: String?) async throws -> Bool {

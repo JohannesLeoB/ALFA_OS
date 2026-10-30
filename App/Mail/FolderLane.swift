@@ -54,7 +54,7 @@ struct FolderLane: View {
                     let live = inbox.accountReachable && inbox.listState != .loading
                     LaneRow(glyph: row.glyph, label: name(row), selected: row.selected,
                             count: live && row.count > 0 ? Format.number(row.count) : nil,
-                            countTone: row.selected ? \.onInverseSecondary : \.inkTertiary) {
+                            countTone: row.selected ? \.onInverseSecondary : row.attention ? \.signal : \.inkTertiary) {
                         Task { await inbox.selectFolder(row.folder.id) }
                     }
                 }
@@ -86,6 +86,6 @@ struct FolderLane: View {
     }
 
     private func name(_ row: FolderEntry) -> Text {
-        row.folder.role == .other ? Text(verbatim: row.folder.name) : appearance.text("mail.role." + row.folder.role.rawValue)
+        row.folder.role == .other ? Text(verbatim: row.folder.name) : appearance.text(row.folder.role.nameKey)
     }
 }

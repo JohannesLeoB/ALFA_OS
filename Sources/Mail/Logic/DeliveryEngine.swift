@@ -23,6 +23,7 @@ enum DeliveryEngine {
         case sent
         case transient(Hint)
         case rejected(Hint)
+        case unverified(Hint)
     }
 
     static func classify(_ error: Error, inlet: Inlet.ID, access: any AccessPort) -> Failure {
@@ -56,7 +57,7 @@ enum DeliveryEngine {
             } catch {
                 let failure = classify(error, inlet: item.inlet, access: access)
                 if failure.isTransient { return .transient(failure.hint) }
-                if !byUser { return .rejected(failure.hint) }
+                if !byUser { return .unverified(failure.hint) }
             }
         }
         var outgoing = item.draft
@@ -69,6 +70,9 @@ enum DeliveryEngine {
                 try await transport.sendDraft(id: saved.id)
             } else {
                 try await transport.send(outgoing)
+            }
+            if let copier = transport as? any SentCopyPort, copier.filesSentCopy {
+                try? await copier.fileSent(outgoing, into: folder(.sent))
             }
             return .sent
         } catch {

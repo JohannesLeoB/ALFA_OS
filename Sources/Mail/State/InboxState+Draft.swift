@@ -250,7 +250,7 @@ extension InboxState {
                 drafts[index].mirrorID = mirror
             }
             switch item.state {
-            case .failed(let hint): drafts[index].state = .sendFailed(hint)
+            case .failed(let hint), .unverified(let hint): drafts[index].state = .sendFailed(hint)
             case .waiting, .sending: drafts[index].state = .queuedInOutbox
             }
         }

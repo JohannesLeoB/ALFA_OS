@@ -9,14 +9,19 @@ public enum FolderRole: String, Sendable, CaseIterable {
     case spam
     case archive
     case starred
+    case outbox
     case all
     case other
+
+    public var nameKey: String { self == .outbox ? "mail.folder.outbox" : "mail.role." + rawValue }
 }
 
 public struct Folder: Identifiable, Equatable, Sendable {
     public var id: String
     public var name: String
     public var role: FolderRole
+
+    public static let outboxID = "local:outbox"
 
     public init(id: String, name: String, role: FolderRole = .other) {
         self.id = id
@@ -31,6 +36,7 @@ public struct FolderEntry: Identifiable, Equatable, Sendable {
     public let glyph: Icon
     public let count: Int
     public let selected: Bool
+    public let attention: Bool
 }
 
 public struct FolderName: Equatable, Sendable {

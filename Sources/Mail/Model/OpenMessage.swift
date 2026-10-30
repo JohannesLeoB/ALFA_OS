@@ -56,4 +56,5 @@ public struct RowPresentation: Identifiable, Equatable, Sendable {
     public let date: DateLabel
     public let subject: String?
     public let preview: String?
+    public let outbox: OutboxState?
 }

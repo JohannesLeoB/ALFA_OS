@@ -5,6 +5,23 @@ public enum OutboxState: Equatable, Sendable {
     case waiting
     case sending
     case failed(Hint)
+    case unverified(Hint)
+
+    public var key: String {
+        switch self {
+        case .waiting: "mail.outbox.state.waiting"
+        case .sending: "mail.outbox.state.sending"
+        case .failed(let hint): hint.text
+        case .unverified: "mail.outbox.state.unverified"
+        }
+    }
+
+    public var needsAttention: Bool {
+        switch self {
+        case .failed, .unverified: true
+        case .waiting, .sending: false
+        }
+    }
 }
 
 public struct OutboxItem: Identifiable, Equatable, Sendable {
@@ -42,6 +59,8 @@ public struct OutboxItem: Identifiable, Equatable, Sendable {
     mutating func wait() { state = .waiting }
 
     mutating func fail(_ hint: Hint) { state = .failed(hint) }
+
+    mutating func unverify(_ hint: Hint) { state = .unverified(hint) }
 }
 
 public enum SendOutcome: Equatable, Sendable {

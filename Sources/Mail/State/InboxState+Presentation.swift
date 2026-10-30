@@ -5,9 +5,9 @@ import Shell
 
 extension InboxState {
     public func folderName(_ id: String?) -> FolderName {
-        guard let folder = folders.first(where: { $0.id == id }) else { return FolderName(key: nil, text: "") }
+        guard let folder = listedFolders.first(where: { $0.id == id }) else { return FolderName(key: nil, text: "") }
         if folder.role == .other { return FolderName(key: nil, text: folder.name) }
-        return FolderName(key: "mail.role." + folder.role.rawValue, text: folder.name)
+        return FolderName(key: folder.role.nameKey, text: folder.name)
     }
 
     public var currentFolderGlyph: Icon {
@@ -29,11 +29,13 @@ extension InboxState {
     public var currentFolderName: FolderName { folderName(selectedFolder) }
 
     public var folderRows: [FolderEntry] {
-        let count = unread[selectedInlet ?? ""] ?? 0
+        let inlet = selectedInlet ?? ""
+        let count = unread[inlet] ?? 0
         return sortedFolders.filter { $0.role != .other }.map { folder in
             FolderEntry(folder: folder, glyph: Self.glyph(folder.role),
-                        count: folder.role == .inbox ? count : folder.role == .drafts ? draftBadge(selectedInlet ?? "") : 0,
-                        selected: folder.id == selectedFolder)
+                        count: folder.role == .inbox ? count : folder.role == .drafts ? draftBadge(inlet) : folder.role == .outbox ? unsent(inlet) : 0,
+                        selected: folder.id == selectedFolder,
+                        attention: folder.role == .outbox && outbox.contains { $0.inlet == inlet && $0.state.needsAttention })
         }
     }
 
@@ -58,7 +60,7 @@ extension InboxState {
 
     public var labelRows: [FolderEntry] {
         sortedFolders.filter { $0.role == .other }.map { folder in
-            FolderEntry(folder: folder, glyph: .tag, count: 0, selected: folder.id == selectedFolder)
+            FolderEntry(folder: folder, glyph: .tag, count: 0, selected: folder.id == selectedFolder, attention: false)
         }
     }
 
@@ -114,8 +116,9 @@ extension InboxState {
 
     private func presentations(of entries: [ListEntry]) -> [RowPresentation] {
         let role = currentFolder?.role
-        let outgoing = role == .sent || role == .drafts
+        let outgoing = role == .sent || role == .drafts || role == .outbox
         let draftsFolder = role == .drafts
+        let queued = role == .outbox ? Dictionary(outbox.map { ($0.id.uuidString, $0.state) }, uniquingKeysWith: { first, _ in first }) : [:]
         let now = clock()
         return entries.map { row in
             let item = row.summary
@@ -138,7 +141,8 @@ extension InboxState {
                 attachmentTotal: max(item.attachmentCount, item.attachments.count),
                 date: DateLabel.of(item.receivedAt, now: now),
                 subject: item.subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : item.subject,
-                preview: preview.isEmpty ? nil : preview
+                preview: preview.isEmpty ? nil : preview,
+                outbox: queued[item.id]
             )
         }
     }
@@ -168,6 +172,7 @@ extension InboxState {
         case .starred: .flag
         case .sent: .sent
         case .drafts: .docText
+        case .outbox: .send
         case .all: .allMail
         case .archive: .archive
         case .spam: .junk

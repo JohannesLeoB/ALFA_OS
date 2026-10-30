@@ -1,7 +1,7 @@
 import Foundation
 import Hub
 
-struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort, LabelPort, SenderPort {
+struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort, LabelPort, SenderPort, SentCopyPort {
     let base: any MailTransportPort
     let meter: CostMeter
 
@@ -87,6 +87,14 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, Everyw
     func wasSent(messageID: String, in folderID: String?) async throws -> Bool {
         meter.record()
         return try await base.wasSent(messageID: messageID, in: folderID)
+    }
+
+    var filesSentCopy: Bool { (base as? any SentCopyPort)?.filesSentCopy ?? false }
+
+    func fileSent(_ draft: Draft, into folderID: String?) async throws {
+        guard let base = base as? any SentCopyPort else { throw MailFailure.unsupportedCapability("sentCopy") }
+        meter.record()
+        try await base.fileSent(draft, into: folderID)
     }
 
     var usesLabels: Bool { (base as? any LabelPort)?.usesLabels ?? false }

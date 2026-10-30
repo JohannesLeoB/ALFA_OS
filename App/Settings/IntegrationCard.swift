@@ -1,7 +1,9 @@
 import Assistant
+import Core
 import Design
 import Foundation
 import Hub
+import Mail
 import SwiftUI
 
 struct IntegrationCard: View {
@@ -168,7 +170,8 @@ struct IntegrationCard: View {
         return BlockNotice(
             kind: .warning,
             title: Text(verbatim: appearance.format("settings.disconnect.ask", target)),
-            text: Text(verbatim: appearance.format("settings.disconnect.text", target))
+            text: Text(verbatim: waiting(removed).map { appearance.format("settings.disconnect.text", target) + " " + $0 }
+                ?? appearance.format("settings.disconnect.text", target))
         ) {
             TextButton(label: appearance.text("settings.action.disconnect"), kind: .signal, disabled: flow.busy) {
                 endDisconnect()
@@ -176,6 +179,13 @@ struct IntegrationCard: View {
             }
             TextButton(label: appearance.text("text.common.cancel"), kind: .plain) { endDisconnect() }
         }
+    }
+
+    private func waiting(_ inlets: [Inlet.ID]) -> String? {
+        let count = inlets.reduce(0) { $0 + context.inbox.unsent($1) }
+        guard count > 0 else { return nil }
+        return count == 1 ? appearance.string("settings.disconnect.waiting.one")
+            : appearance.format("settings.disconnect.waiting.other", Format.number(count))
     }
 
     private func reason(_ hint: Hint?) -> String {
@@ -207,7 +217,8 @@ struct IntegrationCard: View {
                         }
                         ConfirmPill(
                             label: appearance.text("text.settings.action.remove"),
-                            question: Text(verbatim: appearance.format("settings.disconnect.ask", inlet.account.isEmpty ? appearance.string(inlet.title) : inlet.account)),
+                            question: Text(verbatim: [appearance.format("settings.disconnect.ask", inlet.account.isEmpty ? appearance.string(inlet.title) : inlet.account),
+                                                      waiting([inlet.id])].compactMap { $0 }.joined(separator: " ")),
                             yes: appearance.text("text.settings.action.remove"),
                             no: appearance.text("confirm.no"),
                             holdHint: appearance.text("settings.hold.remove"),

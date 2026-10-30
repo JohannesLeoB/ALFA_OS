@@ -915,6 +915,46 @@
   "settings.account.name.prompt": {
    "de": "Name",
    "en": "Name"
+  },
+  "mail.folder.outbox": {
+   "de": "Postausgang",
+   "en": "Outbox"
+  },
+  "mail.outbox.state.waiting": {
+   "de": "Wartet auf Verbindung",
+   "en": "Waiting for connection"
+  },
+  "mail.outbox.state.sending": {
+   "de": "Sendet …",
+   "en": "Sending …"
+  },
+  "mail.outbox.state.unverified": {
+   "de": "Nicht gesendet · Prüfung fehlgeschlagen",
+   "en": "Not sent · check failed"
+  },
+  "mail.outbox.retry.tooltip": {
+   "de": "Erneut senden",
+   "en": "Send again"
+  },
+  "mail.outbox.confirm.question": {
+   "de": "Ungeprüft senden?",
+   "en": "Send unchecked?"
+  },
+  "mail.outbox.confirm.yes": {
+   "de": "Ja",
+   "en": "Yes"
+  },
+  "mail.outbox.toast.sent": {
+   "de": "Gesendet",
+   "en": "Sent"
+  },
+  "settings.disconnect.waiting.one": {
+   "de": "Eine ungesendete Mail im Postausgang geht verloren.",
+   "en": "One unsent mail in the outbox will be lost."
+  },
+  "settings.disconnect.waiting.other": {
+   "de": "%@ ungesendete Mails im Postausgang gehen verloren.",
+   "en": "%@ unsent mails in the outbox will be lost."
   }
  }
 }

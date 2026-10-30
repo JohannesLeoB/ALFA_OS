@@ -54,13 +54,32 @@ public final class OutboxStore: OutboxPort {
     }
 
     public func resend(_ id: OutboxItem.ID, _ draft: Draft, draftID: String?) async -> SendOutcome? {
-        guard let index = items.firstIndex(where: { $0.id == id }), case .failed = items[index].state else { return nil }
+        guard let index = items.firstIndex(where: { $0.id == id }), items[index].state.needsAttention else { return nil }
         let old = items[index]
         items[index] = OutboxItem(id: id, inlet: old.inlet, draft: draft, messageID: old.messageID,
                                   draftID: draftID ?? old.draftID, mirrorID: old.mirrorID, state: .waiting,
                                   attempts: old.attempts)
         await retry(id, byUser: true)
         return items.contains { $0.id == id } ? .queued(id) : .sent
+    }
+
+    public func confirm(_ id: OutboxItem.ID) async {
+        guard let index = items.firstIndex(where: { $0.id == id }), case .unverified = items[index].state else { return }
+        items[index].wait()
+        await retry(id, byUser: true, verify: false)
+    }
+
+    public func discard(_ id: OutboxItem.ID) {
+        guard let index = items.firstIndex(where: { $0.id == id }), items[index].state != .sending else { return }
+        items.remove(at: index)
+        unsaved.remove(id)
+        do {
+            try delete(id)
+            unremoved.remove(id)
+        } catch {
+            unremoved.insert(id)
+        }
+        events.emit(.outboxChanged)
     }
 
     public func revise(_ id: OutboxItem.ID, _ draft: Draft) {
@@ -109,16 +128,22 @@ public final class OutboxStore: OutboxPort {
             failed.fail(hint)
             store(failed)
             return .queued(item.id)
+        case .unverified(let hint):
+            var unchecked = item
+            unchecked.startSending()
+            unchecked.unverify(hint)
+            store(unchecked)
+            return .queued(item.id)
         }
     }
 
-    private func retry(_ id: OutboxItem.ID, byUser: Bool = false) async {
+    private func retry(_ id: OutboxItem.ID, byUser: Bool = false, verify: Bool = true) async {
         guard let index = items.firstIndex(where: { $0.id == id }), items[index].state == .waiting else { return }
         items[index].startSending()
         var item = items[index]
         let inlet = item.inlet
         events.emit(.outboxChanged)
-        let result = await DeliveryEngine.deliver(&item, verify: true, byUser: byUser, access: access,
+        let result = await DeliveryEngine.deliver(&item, verify: verify, byUser: byUser, access: access,
                                                   folder: { MailboxStore.folderID(self.database, inlet, role: $0) })
         guard let current = items.firstIndex(where: { $0.id == id }) else { return }
         items[current].draftID = item.draftID
@@ -133,6 +158,9 @@ public final class OutboxStore: OutboxPort {
             persist(id)
         case .rejected(let hint):
             items[current].fail(hint)
+            persist(id)
+        case .unverified(let hint):
+            items[current].unverify(hint)
             persist(id)
         }
         events.emit(.outboxChanged)
@@ -178,9 +206,15 @@ public final class OutboxStore: OutboxPort {
         let draft = try JSONEncoder().encode(item.draft)
         var name = "waiting"
         var hint: Data?
-        if case .failed(let value) = item.state {
+        switch item.state {
+        case .failed(let value):
             name = "failed"
             hint = try JSONEncoder().encode(value)
+        case .unverified(let value):
+            name = "unverified"
+            hint = try JSONEncoder().encode(value)
+        case .waiting, .sending:
+            break
         }
         let id = item.id.uuidString
         let inlet = item.inlet
@@ -213,9 +247,11 @@ public final class OutboxStore: OutboxPort {
         guard let id = UUID(uuidString: row["id"]),
               let draft = try? JSONDecoder().decode(Draft.self, from: row["draft"] as Data) else { return nil }
         var state = OutboxState.waiting
-        if (row["state"] as String) == "failed" {
+        let name: String = row["state"]
+        if name == "failed" || name == "unverified" {
             let hint = (row["hint"] as Data?).flatMap { try? JSONDecoder().decode(Hint.self, from: $0) }
-            state = .failed(hint ?? Hint(text: MessageTextKey.failed.rawValue))
+                ?? Hint(text: MessageTextKey.failed.rawValue)
+            state = name == "failed" ? .failed(hint) : .unverified(hint)
         }
         let stored: String = row["messageID"]
         return OutboxItem(id: id, inlet: row["inlet"], draft: draft,

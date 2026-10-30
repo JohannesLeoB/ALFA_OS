@@ -52,7 +52,9 @@ private final class ScriptedStream: ByteStreamPort, @unchecked Sendable {
     func close() {}
 }
 
-private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, EverywhereSearchPort, SenderPort, @unchecked Sendable {
+private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, EverywhereSearchPort, SenderPort, SentCopyPort, @unchecked Sendable {
+    let wasSentFailure = Locked<(any Error)?>(nil)
+    let filed = Locked<[String?]>([])
     let calls = Locked<[String]>([])
     let failure = Locked<(any Error)?>(nil)
     let wasSentAnswer = Locked(false)
@@ -189,7 +191,18 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
         draftIDs.with { $0[gone] = nil }
         corpus.with { $0["Drafts"]?.removeAll { $0.id == gone } }
     }
-    func wasSent(messageID: String, in folderID: String?) async throws -> Bool { try note("wasSent"); return wasSentAnswer.with { $0 } }
+    func wasSent(messageID: String, in folderID: String?) async throws -> Bool {
+        try note("wasSent")
+        if let error = wasSentFailure.with({ $0 }) { throw error }
+        return wasSentAnswer.with { $0 }
+    }
+
+    var filesSentCopy: Bool { true }
+
+    func fileSent(_ draft: Draft, into folderID: String?) async throws {
+        try note("fileSent")
+        filed.with { $0.append(folderID) }
+    }
     var ranges: [MailboxRange] { mirrorRanges.with { $0 } }
     var fillsPreviews: Bool { providesPreviews.with { $0 } }
 
@@ -1104,6 +1117,66 @@ final class MailTests: XCTestCase {
         await rig.outbox.pass("a")
         XCTAssertTrue(rig.outbox.outbox.isEmpty)
         XCTAssertFalse(rig.transport.calls.with { $0.contains("send") })
+    }
+
+    @MainActor
+    func testASentMailIsFiledIntoTheSentFolderOnlyAfterSmtpSucceeds() async throws {
+        let rig = try Rig()
+        rig.transport.folderList.with { $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "Sent", name: "Sent", role: .sent)] }
+        try await rig.mailbox.refreshFolders("a")
+        rig.transport.failure.with { $0 = MailFailure.smtpRejected(550, "5.1.1 no such user") }
+        _ = await rig.outbox.send("a", Draft(to: "x@y.de", subject: "s", body: "b"))
+        XCTAssertTrue(rig.transport.filed.with { $0.isEmpty })
+        rig.transport.failure.with { $0 = nil }
+        let outcome = await rig.outbox.send("a", Draft(to: "x@y.de", subject: "s", body: "b"))
+        XCTAssertEqual(outcome, .sent)
+        XCTAssertEqual(rig.transport.filed.with { $0 }, ["Sent"])
+    }
+
+    @MainActor
+    func testAnUncheckableSentFolderLeavesTheMailUnverifiedUntilTheUserConfirms() async throws {
+        let rig = try Rig()
+        rig.transport.failure.with { $0 = MailFailure.connectionClosed }
+        _ = await rig.outbox.send("a", Draft(to: "x@y.de", subject: "s", body: "b"))
+        rig.transport.failure.with { $0 = nil }
+        rig.transport.wasSentFailure.with { $0 = MailFailure.folderNotFound("sent") }
+        rig.transport.calls.with { $0 = [] }
+        await rig.outbox.pass("a")
+        guard case .unverified = rig.outbox.outbox.first?.state, let id = rig.outbox.outbox.first?.id else { return XCTFail() }
+        XCTAssertFalse(rig.transport.calls.with { $0.contains("send") })
+        let reopened = OutboxStore(access: rig.access, database: rig.database, events: rig.events)
+        guard case .unverified = reopened.outbox.first?.state else { return XCTFail() }
+        await rig.outbox.pass("a")
+        XCTAssertEqual(rig.outbox.outbox.count, 1)
+        await rig.outbox.confirm(id)
+        XCTAssertTrue(rig.outbox.outbox.isEmpty)
+        XCTAssertTrue(rig.transport.calls.with { $0.contains("send") })
+    }
+
+    @MainActor
+    func testTheOutboxFolderListsQueuedMailAndLeavesWhenItIsEmpty() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        XCTAssertFalse(state.folderRows.contains { $0.folder.role == .outbox })
+        rig.transport.failure.with { $0 = MailFailure.smtpRejected(550, "5.1.1 no such user") }
+        _ = await rig.outbox.send("a", Draft(to: "x@y.de", subject: "Offer", body: "b"))
+        await state.handle(.outboxChanged)
+        let entry = state.folderRows.first { $0.folder.role == .outbox }
+        XCTAssertEqual(entry?.count, 1)
+        XCTAssertEqual(entry?.attention, true)
+        XCTAssertEqual(state.unsent("a"), 1)
+        await state.selectFolder(Folder.outboxID)
+        let rows = state.rowPresentations
+        XCTAssertEqual(rows.map(\.subject), ["Offer"])
+        guard case .failed = rows.first?.outbox else { return XCTFail() }
+        state.openQueued(rows[0].id)
+        XCTAssertEqual(state.drafts.first?.draft.subject, "Offer")
+        XCTAssertNotNil(state.drafts.first?.outboxID)
+        await state.discardQueued(rows[0].id)
+        XCTAssertTrue(rig.outbox.outbox.isEmpty)
+        XCTAssertNotEqual(state.selectedFolder, Folder.outboxID)
+        XCTAssertFalse(state.folderRows.contains { $0.folder.role == .outbox })
     }
 
     @MainActor

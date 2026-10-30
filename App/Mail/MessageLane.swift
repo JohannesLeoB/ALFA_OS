@@ -288,7 +288,7 @@ struct MessageLane: View {
     }
 
     private var emptyKey: String {
-        guard let role = inbox.currentFolder?.role, role != .other else { return "mail.empty.label" }
+        guard let role = inbox.currentFolder?.role, role != .other, role != .outbox else { return "mail.empty.label" }
         return "mail.empty." + role.rawValue
     }
 

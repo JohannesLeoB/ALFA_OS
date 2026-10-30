@@ -36,6 +36,7 @@ struct InboxRow: View {
             subject
             preview
             chips
+            confirmation
         }
         .contentShape(shape)
         .simultaneousGesture(SpatialTapGesture(count: 2).onEnded { if !onMark($0.location) { open(pin: true) } })
@@ -56,6 +57,8 @@ struct InboxRow: View {
     private func open(pin: Bool) {
         if picking {
             if !pin { inbox.pick(item.id) }
+        } else if item.outbox != nil {
+            inbox.openQueued(item.id)
         } else if item.draft {
             Task { await inbox.editDraft(item.id) }
         } else {
@@ -130,7 +133,10 @@ struct InboxRow: View {
 
     private var preview: some View {
         Group {
-            if let preview = item.preview {
+            if let state = item.outbox {
+                appearance.text(state.key).designText(state.needsAttention && !selected ? \.signal : tone.secondary,
+                                                      size: Tokens.TextSize.body, weight: .light)
+            } else if let preview = item.preview {
                 Text(verbatim: preview).designText(tone.secondary, size: Tokens.TextSize.body, weight: .light)
             } else {
                 appearance.text("mail.row.noText").designText(tone.tertiary, size: Tokens.TextSize.body, weight: .light)
@@ -162,8 +168,49 @@ struct InboxRow: View {
     }
 
     @ViewBuilder
+    private var confirmation: some View {
+        if case .unverified = item.outbox {
+            HStack(spacing: 0) {
+                Spacer(minLength: 0)
+                ConfirmPill(label: nil, question: appearance.text("mail.outbox.confirm.question"), yes: appearance.text("mail.outbox.confirm.yes"),
+                            no: appearance.text("confirm.no"),
+                            holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.outbox.confirm.yes"))),
+                            startsAsking: true, showsProgress: false, onYes: { Task { await inbox.confirmQueued(item.id) } }) {
+                    Glyph(.send)
+                }
+            }
+            .padding(.top, CGFloat(Tokens.Spacing.step8))
+        }
+    }
+
+    @ViewBuilder
+    private var queuedActions: some View {
+        if let state = item.outbox, state != .sending {
+            HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
+                if case .failed = state {
+                    rowAction("mail.outbox.retry.tooltip", glyph: .send, tone: tone.secondary) {
+                        Task { await inbox.resendQueued(item.id) }
+                    }
+                }
+                ConfirmPill(label: nil, question: appearance.text("mail.confirm.discard.question"), yes: appearance.text("mail.confirm.discard.yes"),
+                            no: appearance.text("confirm.no"),
+                            holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.confirm.discard.yes"))),
+                            showsProgress: false, onYes: { Task { await inbox.discardQueued(item.id) } }) {
+                    Glyph(.trash)
+                }
+            }
+            .padding(.leading, CGFloat(Tokens.Spacing.step8))
+            .background(selected ? appearance.color(\.ink) : appearance.color(\.lane))
+            .padding(.top, CGFloat(Tokens.Spacing.step12))
+            .padding(.trailing, CGFloat(Tokens.Spacing.step8))
+        }
+    }
+
+    @ViewBuilder
     private var rowActions: some View {
-        if hovering && !picking && !item.draft {
+        if hovering && !picking && item.outbox != nil {
+            queuedActions
+        } else if hovering && !picking && !item.draft {
             HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
                 rowAction(item.starred ? "mail.action.unstar" : "mail.action.star", glyph: .flag, tone: item.starred ? tone.primary : \.inkTertiary) {
                     session.perform(item.starred ? .unstar : .star, message: item.id)
@@ -200,6 +247,7 @@ struct InboxRow: View {
     }
 
     private func contextMenu(at point: NSPoint) {
+        guard item.outbox == nil else { return }
         let lines = MenuEngine.row(unread: item.unread, draft: item.draft)
         let entries = MenuLine.entries(lines, appearance: appearance) { action in
             if action == .move {

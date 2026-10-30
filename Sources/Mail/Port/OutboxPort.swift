@@ -11,5 +11,7 @@ public protocol OutboxPort: AnyObject {
     func send(_ inlet: Inlet.ID, _ draft: Draft) async -> SendOutcome
     func sendDraft(_ inlet: Inlet.ID, draftID: String, _ draft: Draft) async -> SendOutcome
     func resend(_ id: OutboxItem.ID, _ draft: Draft, draftID: String?) async -> SendOutcome?
+    func confirm(_ id: OutboxItem.ID) async
+    func discard(_ id: OutboxItem.ID)
     func revise(_ id: OutboxItem.ID, _ draft: Draft)
 }

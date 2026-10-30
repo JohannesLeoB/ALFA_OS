@@ -75,7 +75,7 @@ public final class InboxState {
     public func hasUnread(_ id: Inlet.ID) -> Bool { (unread[id] ?? 0) > 0 }
 
     var sortedFolders: [Folder] {
-        folders.enumerated().sorted { left, right in
+        listedFolders.enumerated().sorted { left, right in
             let l = Self.rank(left.element.role), r = Self.rank(right.element.role)
             return l == r ? left.offset < right.offset : l < r
         }.map(\.element)
@@ -119,7 +119,7 @@ public final class InboxState {
     var crossActive: Bool {
         let needle = localNeedle
         return scope == .all && !needle.isEmpty && crossInlet == selectedInlet && !crossQuery.isEmpty
-            && needle.hasPrefix(crossQuery)
+            && needle.hasPrefix(crossQuery) && selectedFolder != Folder.outboxID
     }
 
     static func contains(_ summary: MessageSummary, _ needle: String) -> Bool {
@@ -292,6 +292,10 @@ public final class InboxState {
         query = trimmed
         typed = trimmed
         guard let inlet = selectedInlet, let folder = selectedFolder else { return }
+        if folder == Folder.outboxID {
+            query = ""
+            return
+        }
         if trimmed.isEmpty {
             await loadSelection()
             return
@@ -427,6 +431,10 @@ public final class InboxState {
             selectedFolder = sortedFolders.first { $0.role == .inbox }?.id ?? sortedFolders.first?.id
         }
         guard let folder = selectedFolder else { return }
+        if folder == Folder.outboxID {
+            showOutbox()
+            return
+        }
         generation += 1
         let mine = generation
         phase = .loading
@@ -513,6 +521,7 @@ public final class InboxState {
         case .outboxChanged:
             outbox = outboxPort.outbox
             reconcileDrafts()
+            await refreshOutboxList()
         case .refused(let inlet, _):
             if inlet == selectedInlet { post(.mirrorRefused) }
         case .syncFailed(let inlet, let hint):
@@ -597,11 +606,12 @@ public final class InboxState {
         case .starred: 1
         case .sent: 2
         case .drafts: 3
-        case .all: 4
-        case .archive: 5
-        case .spam: 6
-        case .trash: 7
-        case .other: 8
+        case .outbox: 4
+        case .all: 5
+        case .archive: 6
+        case .spam: 7
+        case .trash: 8
+        case .other: 9
         }
     }
 
@@ -627,6 +637,10 @@ public final class InboxState {
     }
 
     public var currentFolder: Folder? {
-        folders.first { $0.id == selectedFolder }
+        listedFolders.first { $0.id == selectedFolder }
+    }
+
+    var listedFolders: [Folder] {
+        folders + (hasUnsent ? [Folder(id: Folder.outboxID, name: "", role: .outbox)] : [])
     }
 }

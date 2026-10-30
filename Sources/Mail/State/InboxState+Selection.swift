@@ -9,10 +9,12 @@ extension InboxState {
     public var picking: Bool { !pickedInList.isEmpty }
 
     public func pick(_ id: String) {
+        if selectedFolder == Folder.outboxID { return }
         if let index = picked.firstIndex(of: id) { picked.remove(at: index) } else { picked.append(id) }
     }
 
     public func pickAllToggle() {
+        if selectedFolder == Folder.outboxID { return }
         let all = rows.map(\.id)
         picked = pickedInList.count == all.count ? [] : all
     }

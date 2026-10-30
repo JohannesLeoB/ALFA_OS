@@ -5,6 +5,7 @@ public enum ToastKind: Equatable, Sendable {
     case inTrash
     case purged
     case draftSaved
+    case outboxSent
     case recipientMissing
     case addressCopied
     case projectSaved
@@ -35,6 +36,7 @@ public enum ToastKind: Equatable, Sendable {
         case .inTrash: "mail.toast.inTrash"
         case .purged: "mail.toast.purged"
         case .draftSaved: "mail.toast.draftSaved"
+        case .outboxSent: "mail.outbox.toast.sent"
         case .recipientMissing: "mail.toast.recipientMissing"
         case .addressCopied: "mail.toast.addressCopied"
         case .projectSaved: "mail.toast.projectSaved"
