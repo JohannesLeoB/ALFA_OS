@@ -17,12 +17,21 @@ struct ProfileTile: View {
             VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step16)) {
                 HStack(spacing: CGFloat(Tokens.Spacing.step16)) {
                     Text(verbatim: profile.code.isEmpty ? Initials.from(profile.name) : profile.code)
-                        .typeStyle(Tokens.TextStyle.title)
+                        .font(.face(Tokens.TextSize.title, weight: Tokens.Weight.medium))
+                        .tracking(CGFloat(Tokens.Tracking.mark * Tokens.TextSize.title))
                         .foregroundStyle(appearance.color(ink.primary))
                         .frame(width: CGFloat(Tokens.Spacing.step56), height: CGFloat(Tokens.Spacing.step56))
                         .ring(Circle(), appearance.color(ink.line))
                     VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step2)) {
-                        field(profile.name, tone: ink.primary, style: Tokens.TextStyle.title)
+                        Group {
+                            if profile.name.isEmpty {
+                                appearance.text(SettingsKeys.valueEmpty).foregroundStyle(appearance.color(ink.tertiary))
+                            } else {
+                                Text(verbatim: profile.name).foregroundStyle(appearance.color(ink.primary))
+                            }
+                        }
+                        .font(.face(Tokens.TextSize.title, weight: Tokens.Weight.medium))
+                        .lineHeight(Tokens.LineHeight.heading, size: Tokens.TextSize.title)
                         field(profile.role, tone: ink.tertiary, style: Tokens.TextStyle.body)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -45,11 +54,10 @@ struct ProfileTile: View {
             }
             .padding(CGFloat(Tokens.Spacing.step16))
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(shape.fill(selected ? appearance.color(\.ink) : appearance.color(\.well)))
-            .ring(shape, selected ? nil : appearance.color(\.lineStrong))
+            .background(shape.fill(selected ? appearance.color(\.inverse) : appearance.color(\.well)))
             .contentShape(shape)
         }
-        .buttonStyle(PressScaleButtonStyle(scale: Tokens.Scale.pressTile))
+        .buttonStyle(PressScaleButtonStyle(scale: SheetValues.pressScaleDisclosure))
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 

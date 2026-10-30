@@ -15,7 +15,7 @@ struct SettingsTile: View {
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row))
-        let lift = hovering && !selected ? CGFloat(Tokens.Size.tileHoverLift) : 0
+        let lift = hovering ? CGFloat(Tokens.Size.tileHoverLift) : 0
         let height = CGFloat(Tokens.Size.settingsTileHeight)
         Button(action: action) {
             VStack(alignment: .leading, spacing: 0) {
@@ -35,7 +35,14 @@ struct SettingsTile: View {
             .padding(CGFloat(Tokens.Spacing.step8))
             .frame(maxWidth: .infinity, minHeight: height, maxHeight: height, alignment: .topLeading)
             .background(shape.fill(selected ? appearance.color(\.ink) : appearance.color(\.well)))
-            .ring(shape, hovering && !selected ? appearance.color(\.inkTertiary) : nil)
+            .background {
+                if hovering, let layer = Shadows.overviewHoverLight.first {
+                    shape.inset(by: CGFloat(-layer.spread))
+                        .fill(appearance.paint(layer.color))
+                        .blur(radius: CGFloat(layer.blur / 2))
+                        .offset(x: CGFloat(layer.x), y: CGFloat(layer.y))
+                }
+            }
             .offset(y: -lift)
             .contentShape(shape)
         }
