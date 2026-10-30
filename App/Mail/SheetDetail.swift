@@ -8,7 +8,7 @@ struct SheetDetail: View {
     let session: AppSession
     let card: OpenMessage
 
-    private var loadImages: Bool { session.settings.privacy.loadImages }
+    private var loadImages: Bool { session.settings.loadImages(card.inlet) }
 
     var body: some View {
         let items = session.inbox.thread(card.id)

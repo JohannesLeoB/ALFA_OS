@@ -14,7 +14,7 @@ struct ThreadItemRow: View {
     @State private var anchor = AnchorBox()
     @State private var recipientsOpen = false
 
-    private var loadImages: Bool { session.settings.privacy.loadImages }
+    private var loadImages: Bool { session.settings.loadImages(card.inlet) }
 
     private var allowRemote: Bool { !card.remoteImagesBlocked(loadRemote: loadImages) }
 
