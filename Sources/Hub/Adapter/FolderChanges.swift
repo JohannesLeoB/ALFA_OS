@@ -18,7 +18,8 @@ final class FolderChanges: Sendable {
         _ key: String,
         port: any ChangePort,
         isTransient: @escaping @Sendable (any Error) -> Bool,
-        fire: @escaping @Sendable () async -> Void
+        fire: @escaping @Sendable () async -> Void,
+        unavailable: @escaping @Sendable () -> Void
     ) {
         let firstPause = self.firstPause
         let task = Task {
@@ -30,7 +31,11 @@ final class FolderChanges: Sendable {
                         await fire()
                     }
                 } catch {
-                    if Task.isCancelled || !isTransient(error) { return }
+                    if Task.isCancelled { return }
+                    if !isTransient(error) {
+                        unavailable()
+                        return
+                    }
                 }
                 do { try await Task.sleep(for: wait) } catch { return }
                 wait = min(wait * 2, Self.longestPause)

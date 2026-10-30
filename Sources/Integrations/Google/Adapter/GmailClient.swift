@@ -207,6 +207,10 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
         MessageParser.labels(from: try await requests.send(RequestClient.url(Self.root + "/labels")))
     }
 
+    func labelCount(id: String) async throws -> FolderCount? {
+        MessageParser.labelCount(from: try await requests.send(RequestClient.url(Self.root + "/labels/" + id)))
+    }
+
     func listSendAs() async throws -> [Participant] {
         SenderParser.senders(from: try await requests.send(RequestClient.url(Self.settingsRoot + "/sendAs")))
     }

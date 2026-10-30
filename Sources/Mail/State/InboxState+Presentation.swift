@@ -33,10 +33,26 @@ extension InboxState {
         let count = unread[inlet] ?? 0
         return sortedFolders.filter { $0.role != .other }.map { folder in
             FolderEntry(folder: folder, glyph: Self.glyph(folder.role),
-                        count: folder.role == .inbox ? count : folder.role == .drafts ? draftBadge(inlet) : folder.role == .outbox ? unsent(inlet) : 0,
+                        count: folderCount(folder, inbox: count, inlet: inlet),
                         selected: folder.id == selectedFolder,
                         attention: folder.role == .outbox && outbox.contains { $0.inlet == inlet && $0.state.needsAttention })
         }
+    }
+
+    private func folderCount(_ folder: Folder, inbox: Int, inlet: Inlet.ID) -> Int {
+        switch folder.role {
+        case .inbox: inbox
+        case .drafts: draftBadge(inlet)
+        case .outbox: unsent(inlet)
+        case .spam, .archive: folderUnseen[folder.id] ?? 0
+        default: 0
+        }
+    }
+
+    public var loadProgress: SyncProgress? {
+        _ = progressSerial
+        guard let inlet = selectedInlet, let folder = selectedFolder else { return nil }
+        return mailbox.progress(inlet, folder: folder)
     }
 
     func draftBadge(_ inlet: Inlet.ID) -> Int {
@@ -94,7 +110,7 @@ extension InboxState {
 
     public var emptyKind: EmptyKind? {
         switch listState {
-        case .loading: .loading
+        case .loading: .loading(progress: loadProgress)
         case .notConnected: .notConnected
         case .failed:
             .failed(lastLoaded: selectedInlet.flatMap { inlet in selectedFolder.flatMap { mailbox.lastSync(inlet, folder: $0) } })

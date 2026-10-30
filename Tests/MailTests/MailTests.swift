@@ -52,7 +52,8 @@ private final class ScriptedStream: ByteStreamPort, @unchecked Sendable {
     func close() {}
 }
 
-private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, EverywhereSearchPort, SenderPort, SentCopyPort, @unchecked Sendable {
+private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, EverywhereSearchPort, UnseenCountPort, SenderPort, SentCopyPort, @unchecked Sendable {
+    let counts = Locked<[String: FolderCount]>([:])
     let wasSentFailure = Locked<(any Error)?>(nil)
     let filed = Locked<[String?]>([])
     let calls = Locked<[String]>([])
@@ -208,6 +209,11 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
 
     func offersEverywhere(in folders: [Folder]) -> Bool {
         everywhereFolder.with { wanted in wanted.map { id in folders.contains { $0.id == id } } ?? false }
+    }
+
+    func unseen(folderID: String) async throws -> FolderCount? {
+        try note("unseen")
+        return counts.with { $0[folderID] }
     }
 
     func startCursor() async throws -> String? {
@@ -488,6 +494,87 @@ final class MailTests: XCTestCase {
         rig.access.records[1].state = .failed(Hint(text: "x"))
         await state.refreshAccounts()
         XCTAssertEqual(state.senderChoices.map(\.inlet), ["a"])
+    }
+
+    func testSignatureIsPlacedBelowOrAboveTheQuoteAndSwappedInPlace() {
+        let quote = "\n\nAnna, 2026-10-30\n> Hi"
+        var below = Draft(subject: "Re: x", body: quote)
+        below.resign(to: MailboxSignature(text: "Jonas\nStudio"))
+        XCTAssertEqual(below.body, quote + "\n\nJonas\nStudio")
+        var above = Draft(subject: "Re: x", body: quote)
+        above.resign(to: MailboxSignature(text: "Jonas", aboveQuote: true))
+        XCTAssertEqual(above.body, "\n\nJonas" + quote)
+        above.resign(to: MailboxSignature(text: "Lea", aboveQuote: true))
+        XCTAssertEqual(above.body, "\n\nLea" + quote)
+        XCTAssertEqual(above.signed, "Lea")
+        above.resign(to: nil)
+        XCTAssertEqual(above.body, quote)
+        XCTAssertNil(above.signed)
+        var fresh = Draft(subject: "", body: "")
+        fresh.resign(to: MailboxSignature(text: "Jonas"))
+        XCTAssertEqual(fresh.body, "\n\nJonas")
+        XCTAssertEqual(fresh.unsignedBody, "")
+        fresh.resign(to: nil)
+        XCTAssertEqual(fresh.body, "")
+    }
+
+    func testSwappingTheSignatureKeepsTheRichTextAround() {
+        var draft = Draft(subject: "", body: "Hi\n\nJonas", bodyHTML: "<div><b>Hi</b></div><div><br></div><div>Jonas</div>", signed: "Jonas")
+        draft.resign(to: MailboxSignature(text: "Lea & Co"))
+        XCTAssertEqual(draft.body, "Hi\n\nLea & Co")
+        XCTAssertEqual(draft.bodyHTML, "<div><b>Hi</b></div><div><br></div><div>Lea &amp; Co</div>")
+        draft.signatureOff = true
+        draft.resign(to: nil)
+        XCTAssertEqual(draft.body, "Hi")
+        XCTAssertEqual(draft.bodyHTML, "<div><b>Hi</b></div>")
+        draft.signatureOff = false
+        draft.resign(to: MailboxSignature(text: "Lea"))
+        XCTAssertEqual(draft.bodyHTML, "<div><b>Hi</b></div><div><br></div><div>Lea</div>")
+    }
+
+    func testSwapIsSkippedWhenTheSignatureWasEdited() {
+        let html = "<div><b>Hi</b></div><div><b>Jonas</b></div>"
+        var draft = Draft(subject: "", body: "Hi\nJonas", bodyHTML: html, signed: "Jonas")
+        draft.resign(to: MailboxSignature(text: "Lea"))
+        XCTAssertEqual(draft.body, "Hi\nJonas")
+        XCTAssertEqual(draft.bodyHTML, html)
+        XCTAssertEqual(draft.signed, "Jonas")
+    }
+
+    func testSignatureRespectsTheNewMailSwitchAndTheNoneChoice() {
+        var draft = Draft(subject: "", body: "")
+        draft.resign(to: MailboxSignature(text: "Jonas", onNew: false))
+        XCTAssertEqual(draft.body, "")
+        draft.resign(to: MailboxSignature(text: "Jonas", onNew: false), explicit: true)
+        XCTAssertEqual(draft.body, "\n\nJonas")
+        draft.bodyHTML = "<div><br></div><div><br></div><div>Jonas</div>"
+        draft.signatureOff = true
+        draft.resign(to: MailboxSignature(text: "Jonas"))
+        XCTAssertEqual(draft.body, "")
+        XCTAssertEqual(draft.bodyHTML, "<div><br></div>")
+        draft.resign(to: MailboxSignature(text: "Jonas"))
+        XCTAssertEqual(draft.body, "")
+    }
+
+    @MainActor
+    func testSignatureIsInsertedIntoNewDraftsAndSwappedWhenTheMailboxChanges() async throws {
+        let rig = try Rig()
+        _ = rig.addMailbox("b", prefix: "2")
+        let signatures = ["a": MailboxSignature(text: "Anna"), "b": MailboxSignature(text: "Bert")]
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(), signatures: { signatures[$0] })
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        XCTAssertEqual(state.draft(id)?.draft.body, "\n\nAnna")
+        XCTAssertTrue(state.signatureApplied(id))
+        XCTAssertEqual(state.signatureName(id), "Anna")
+        XCTAssertNotNil(state.compose())
+        await state.setFrom(id, inlet: "b")
+        XCTAssertEqual(state.draft(id)?.draft.body, "\n\nBert")
+        state.useSignature(id, false)
+        XCTAssertEqual(state.draft(id)?.draft.body, "")
+        XCTAssertFalse(state.signatureApplied(id))
+        state.useSignature(id, true)
+        XCTAssertEqual(state.draft(id)?.draft.body, "\n\nBert")
     }
 
     func testRawBuilderForGmailUsesTheSameBuilder() {
@@ -2630,7 +2717,122 @@ final class MailTests: XCTestCase {
         XCTAssertEqual(rig.transport.knowns.with { $0.first?.count }, 5)
         try await rig.mailbox.refresh("a", folder: "INBOX")
         XCTAssertEqual(rig.transport.cursors.with { $0 }, ["s7", "c1"])
-        XCTAssertEqual(rig.transport.calls.with { $0.filter { $0 == "startCursor" }.count }, 1)
+        XCTAssertEqual(rig.transport.calls.with { $0.filter { $0 == "startCursor" }.count }, 2)
+    }
+
+    @MainActor
+    func testAPassSkipsListingWhenTheHistoryCursorIsUnchanged() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 5, from: Self.epoch)
+        rig.transport.startValue.with { $0 = "s7" }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        rig.transport.startValue.with { $0 = "c1" }
+        let before = rig.transport.calls.with { $0.filter { ["listIDs", "fetchSummaries", "refreshFlags"].contains($0) }.count }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.transport.calls.with { $0.filter { ["listIDs", "fetchSummaries", "refreshFlags"].contains($0) }.count }, before)
+        XCTAssertNotNil(rig.mailbox.lastSync("a", folder: "INBOX"))
+        rig.transport.startValue.with { $0 = "c9" }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.transport.calls.with { $0.filter { $0 == "listIDs" }.count }, 2)
+    }
+
+    @MainActor
+    func testTheServerUnseenCountReplacesTheRangeCountAndFollowsLocalReads() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 3, from: Self.epoch, flags: [])
+        rig.transport.counts.with { $0["INBOX"] = FolderCount(unseen: 9, total: 40) }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.unreadCount("a"), 9)
+        XCTAssertEqual(rig.mailbox.unseenCount("a", folder: "INBOX"), 9)
+        let id = try XCTUnwrap(rig.mailbox.messages("a", folder: "INBOX").first?.id)
+        try await rig.mailbox.setFlags("a", messageID: id, add: [.seen], remove: [])
+        XCTAssertEqual(rig.mailbox.unreadCount("a"), 8)
+        rig.transport.counts.with { $0["INBOX"] = nil }
+        try await rig.mailbox.refresh("a", folder: "INBOX")
+        XCTAssertEqual(rig.mailbox.unreadCount("a"), 8)
+        rig.transport.counts.with { $0 = [:] }
+        XCTAssertNil(rig.mailbox.unseenCount("a", folder: "Nowhere"))
+    }
+
+    @MainActor
+    func testSpamAndArchiveCountsComeFromTheServerWithoutMirroringThoseFolders() async throws {
+        let rig = try mirrored()
+        rig.transport.folderList.with {
+            $0 = [Folder(id: "INBOX", name: "INBOX", role: .inbox), Folder(id: "Spam", name: "Spam", role: .spam),
+                  Folder(id: "Archive", name: "Archive", role: .archive)]
+        }
+        try await rig.mailbox.refreshFolders("a")
+        rig.transport.counts.with { $0["Spam"] = FolderCount(unseen: 4, total: 10) }
+        await rig.mailbox.countUnmirrored("a")
+        XCTAssertEqual(rig.mailbox.unseenCount("a", folder: "Spam"), 4)
+        XCTAssertNil(rig.mailbox.unseenCount("a", folder: "Archive"))
+        XCTAssertTrue(rig.mailbox.messages("a", folder: "Spam").isEmpty)
+        let state = await started(rig)
+        XCTAssertEqual(state.folderRows.first { $0.folder.role == .spam }?.count, 4)
+    }
+
+    @MainActor
+    func testAPassReportsHowManyMessagesAreFetchedUntilItEnds() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 5, from: Self.epoch)
+        XCTAssertNil(rig.mailbox.progress("a", folder: "INBOX"))
+        rig.transport.holds.with { $0 = ["fetchSummaries"] }
+        let running = Task { @MainActor in try await rig.mailbox.refresh("a", folder: "INBOX") }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        XCTAssertEqual(rig.mailbox.progress("a", folder: "INBOX"), SyncProgress(done: 0, total: 5))
+        rig.transport.release()
+        try await running.value
+        XCTAssertNil(rig.mailbox.progress("a", folder: "INBOX"))
+    }
+
+    @MainActor
+    func testTheLoadingPlaceholderCarriesTheFetchProgress() async throws {
+        let rig = try mirrored()
+        try await rig.mailbox.refreshFolders("a")
+        rig.fill("INBOX", count: 5, from: Self.epoch)
+        rig.transport.holds.with { $0 = ["fetchSummaries"] }
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        let starting = Task { @MainActor in await state.start() }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        XCTAssertEqual(state.emptyKind, .loading(progress: SyncProgress(done: 0, total: 5)))
+        rig.transport.release()
+        await starting.value
+        XCTAssertNil(state.emptyKind)
+    }
+
+    func testCountEngineKeepsTheServerCountAndFollowsLocalChanges() {
+        let text = CountEngine.encode(FolderCount(unseen: 9, total: 40), local: 3)
+        XCTAssertEqual(text, "9 40 3")
+        let cached = try? XCTUnwrap(CountEngine.decode(text))
+        XCTAssertEqual(cached?.count, FolderCount(unseen: 9, total: 40))
+        XCTAssertEqual(cached.map { CountEngine.shown($0, local: 1) }, 7)
+        XCTAssertEqual(cached.map { CountEngine.shown($0, local: 0) }, 6)
+        XCTAssertEqual(cached.map { CountEngine.shown($0, local: 6) }, 12)
+        XCTAssertEqual(CountEngine.shown(CountEngine.Cached(count: FolderCount(unseen: 1, total: 2), local: 5), local: 0), 0)
+        XCTAssertNil(CountEngine.decode("9 40"))
+        XCTAssertNil(CountEngine.decode("a b c"))
+        XCTAssertNil(CountEngine.decode("-1 4 0"))
+    }
+
+    func testIMAPAsksStatusForTheUnseenAndTotalCounts() async throws {
+        let seen = Locked<[String]>([])
+        let stream = scriptedServer { tag, line in
+            seen.with { $0.append(line) }
+            if line.contains("STATUS \"Spam\"") { return ["* STATUS \"Spam\" (MESSAGES 231 UNSEEN 4)", "\(tag) OK done"] }
+            if line.contains("STATUS") { return ["\(tag) NO nothing"] }
+            return nil
+        }
+        let client = imapClient(stream)
+        let found = try await client.unseen(folderID: "Spam")
+        XCTAssertEqual(found, FolderCount(unseen: 4, total: 231))
+        XCTAssertTrue(seen.with { $0.joined().contains("STATUS \"Spam\" (UNSEEN MESSAGES)") })
+        do {
+            _ = try await client.unseen(folderID: "Gone")
+            XCTFail()
+        } catch {}
     }
 
     @MainActor

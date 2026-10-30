@@ -453,6 +453,9 @@
   "mail.list.loading": {
    "de": "Nachrichten werden geladen"
   },
+  "mail.list.progress": {
+   "de": "%d von %d"
+  },
   "mail.list.noFilterMatch": {
    "de": "Keine Treffer für diesen Filter.",
    "en": "No results for this filter."
@@ -915,6 +918,46 @@
   "settings.account.name.prompt": {
    "de": "Name",
    "en": "Name"
+  },
+  "settings.signature.head": {
+   "de": "Signatur · %@",
+   "en": "Signature · %@"
+  },
+  "settings.signature.area": {
+   "de": "Signatur %@",
+   "en": "Signature %@"
+  },
+  "settings.signature.empty": {
+   "de": "Für dieses Postfach gibt es keine Signatur.",
+   "en": "This mailbox has no signature."
+  },
+  "settings.signature.create": {
+   "de": "Signatur anlegen",
+   "en": "Add signature"
+  },
+  "settings.signature.new": {
+   "de": "Unter neue Mails setzen",
+   "en": "Add to new mail"
+  },
+  "settings.signature.new.sub": {
+   "de": "Antworten und Weiterleitungen eingeschlossen",
+   "en": "Replies and forwards included"
+  },
+  "settings.signature.above": {
+   "de": "Über zitiertem Text setzen",
+   "en": "Place above quoted text"
+  },
+  "settings.signature.remove": {
+   "de": "Signatur entfernen",
+   "en": "Remove signature"
+  },
+  "mail.compose.signature.none": {
+   "de": "Keine Signatur",
+   "en": "No signature"
+  },
+  "mail.compose.signature.edit": {
+   "de": "Signaturen bearbeiten …",
+   "en": "Edit signatures …"
   },
   "mail.folder.outbox": {
    "de": "Postausgang",

@@ -22,6 +22,7 @@ public final class MailboxStore: MailboxPort {
     var syncing: Set<Inlet.ID> = []
     var resync: Set<Inlet.ID> = []
     var offerings: [Inlet.ID: MailOffering] = [:]
+    var progresses: [String: SyncProgress] = [:]
 
     public init(access: any AccessPort, database: SQLiteStore, outbox: OutboxStore, events: Broadcast<MailboxEvent>,
                 now: @escaping @Sendable () -> Date = { Date() },
@@ -134,9 +135,13 @@ public final class MailboxStore: MailboxPort {
 
     public func unreadCount(_ inlet: Inlet.ID) -> Int {
         guard let inbox = inboxID(inlet) else { return 0 }
+        return unseenCount(inlet, folder: inbox) ?? localUnseen(inlet, inbox)
+    }
+
+    func localUnseen(_ inlet: Inlet.ID, _ folder: String) -> Int {
         let count = try? database.read { db in
             try Int.fetchOne(db, sql: "SELECT COUNT(*) FROM mail_message WHERE inlet = ? AND folder = ? AND seen = 0",
-                             arguments: [inlet, inbox])
+                             arguments: [inlet, folder])
         }
         return count.flatMap { $0 } ?? 0
     }
@@ -418,6 +423,7 @@ public final class MailboxStore: MailboxPort {
             for role in [FolderRole.drafts, .sent] {
                 if let folder = folderID(inlet, role: role) { try await refresh(inlet, folder: folder) }
             }
+            await countUnmirrored(inlet)
         } catch {
             eventBus.emit(.syncFailed(inlet, Self.syncHint(error, inlet: inlet)))
             return
@@ -470,7 +476,7 @@ public final class MailboxStore: MailboxPort {
                     try db.execute(sql: "DELETE FROM mail_message WHERE inlet = ? AND folder = ?", arguments: [inlet, gone])
                     try db.execute(sql: "DELETE FROM mail_sync WHERE inlet = ? AND folder = ?", arguments: [inlet, gone])
                     for key in [Self.historyKey(gone), Self.validityKey(gone), Self.reachKey(gone), Self.olderKey(gone),
-                                Self.refusedKey(gone)] {
+                                Self.refusedKey(gone), Self.countKey(gone)] {
                         try db.execute(sql: "DELETE FROM mail_cursor WHERE inlet = ? AND key = ?", arguments: [inlet, key])
                     }
                 }

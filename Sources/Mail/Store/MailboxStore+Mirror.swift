@@ -29,6 +29,10 @@ extension MailboxStore {
         "refused\n" + folder
     }
 
+    nonisolated static func countKey(_ folder: String) -> String {
+        "unseen\n" + folder
+    }
+
     func offering(_ inlet: Inlet.ID) -> MailOffering? {
         if let cached = offerings[inlet] { return cached }
         guard let transport = try? transport(inlet) else { return nil }
@@ -109,12 +113,24 @@ extension MailboxStore {
         guard let mirror = transport as? any MirrorPort, !mirror.ranges.isEmpty else {
             throw HubFailure.capabilityMissing(inlet, .mail)
         }
+        defer { endProgress(inlet, folder) }
         let wanted = range(inlet).resolved(in: mirror.ranges)
         let hadSync = lastSync(inlet, folder: folder) != nil
         let since = older ? nil : MirrorEngine.cutoff(wanted, reach: reach(inlet, folder), now: now())
         let limit = older ? storedIDs(inlet, folder).count + MirrorEngine.olderStep : nil
-        var history = cursor(inlet, Self.historyKey(folder))
-        if history == nil { history = try await remote(inlet) { try await mirror.startCursor() } }
+        let storedHistory = cursor(inlet, Self.historyKey(folder))
+        let revisit = storedHistory != nil && hadSync && !older && !narrowed && cursor(inlet, Self.refusedKey(folder)) == nil
+        var history = storedHistory
+        if storedHistory == nil || revisit {
+            let current = try await remote(inlet) { try await mirror.startCursor() }
+            if revisit, let current, current == storedHistory {
+                try write(inlet) { try self.upsert(inlet, folder, []) }
+                await storeCount(inlet, folder, transport)
+                eventBus.emit(.messagesChanged(inlet, folder: folder))
+                return
+            }
+            history = storedHistory ?? current
+        }
         let listing = try await remote(inlet) { try await mirror.listIDs(folderID: folder, since: since, limit: limit) }
         guard !Task.isCancelled else { return }
         let stored = storedIDs(inlet, folder)
@@ -126,6 +142,8 @@ extension MailboxStore {
         var added = 0
         let missing = mirror.fillsPreviews ? unpreviewedIDs(inlet, folder) : []
         let fetching = plan.unknown + listing.ids.filter { missing.contains($0) }
+        var done = 0
+        if !fetching.isEmpty { setProgress(inlet, folder, SyncProgress(done: 0, total: fetching.count)) }
         for chunk in MirrorEngine.chunks(fetching, size: MirrorEngine.chunkSize) {
             let found = try await remote(inlet) { try await mirror.fetchSummaries(folderID: folder, ids: chunk) }
             guard !Task.isCancelled else { return }
@@ -133,7 +151,9 @@ extension MailboxStore {
             try write(inlet) { try self.upsert(inlet, folder, kept) }
             added += kept.count
             fresh += MirrorEngine.newerThan(kept, newest: newest)
+            done += chunk.count
             eventBus.emit(.messagesChanged(inlet, folder: folder))
+            setProgress(inlet, folder, SyncProgress(done: done, total: fetching.count))
         }
         let marked = cursor(inlet, Self.refusedKey(folder))
         if let reason = MirrorEngine.refusal(plan: plan, stored: stored.count, added: added, validityChanged: changed,
@@ -168,6 +188,7 @@ extension MailboxStore {
         if older, wanted != .all, let oldest = oldestDate(inlet, folder) {
             try write(inlet) { try self.setCursor(inlet, Self.reachKey(folder), String(oldest.timeIntervalSince1970)) }
         }
+        await storeCount(inlet, folder, transport)
         eventBus.emit(.messagesChanged(inlet, folder: folder))
         if hadSync, fresh > 0, folder == inboxID(inlet) { eventBus.emit(.newMail(inlet, count: fresh)) }
     }

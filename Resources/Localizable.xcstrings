@@ -8189,6 +8189,38 @@
         }
       }
     },
+    "mail.compose.signature.edit" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signaturen bearbeiten …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit signatures …"
+          }
+        }
+      }
+    },
+    "mail.compose.signature.none" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Signatur"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No signature"
+          }
+        }
+      }
+    },
     "mail.compose.subject" : {
       "comment" : "alpha",
       "localizations" : {
@@ -9418,6 +9450,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Load More"
+          }
+        }
+      }
+    },
+    "mail.list.progress" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d von %d"
           }
         }
       }
@@ -11262,6 +11304,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Automatisch"
+          }
+        }
+      }
+    },
+    "settings.cadence.automatic" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatisch"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic"
           }
         }
       }
@@ -13481,6 +13539,134 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Belege und Angebote"
+          }
+        }
+      }
+    },
+    "settings.signature.above" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über zitiertem Text setzen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Place above quoted text"
+          }
+        }
+      }
+    },
+    "settings.signature.area" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signatur %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signature %@"
+          }
+        }
+      }
+    },
+    "settings.signature.create" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signatur anlegen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add signature"
+          }
+        }
+      }
+    },
+    "settings.signature.empty" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für dieses Postfach gibt es keine Signatur."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This mailbox has no signature."
+          }
+        }
+      }
+    },
+    "settings.signature.head" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signatur · %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signature · %@"
+          }
+        }
+      }
+    },
+    "settings.signature.new" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unter neue Mails setzen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to new mail"
+          }
+        }
+      }
+    },
+    "settings.signature.new.sub" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Antworten und Weiterleitungen eingeschlossen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Replies and forwards included"
+          }
+        }
+      }
+    },
+    "settings.signature.remove" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signatur entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove signature"
           }
         }
       }

@@ -13,6 +13,8 @@ public enum FolderRole: String, Sendable, CaseIterable {
     case all
     case other
 
+    public static let unseenRoles: [FolderRole] = [.spam, .archive]
+
     public var nameKey: String { self == .outbox ? "mail.folder.outbox" : "mail.role." + rawValue }
 }
 
@@ -45,7 +47,7 @@ public struct FolderName: Equatable, Sendable {
 }
 
 public enum EmptyKind: Equatable, Sendable {
-    case loading
+    case loading(progress: SyncProgress?)
     case notConnected
     case failed(lastLoaded: Date?)
     case noResults(query: String, folder: FolderName)

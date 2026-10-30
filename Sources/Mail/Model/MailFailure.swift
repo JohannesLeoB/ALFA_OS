@@ -27,6 +27,7 @@ public enum MailboxEvent: Equatable, Sendable {
     case messagesChanged(Inlet.ID, folder: String)
     case newMail(Inlet.ID, count: Int)
     case outboxChanged
+    case progress(Inlet.ID, folder: String)
     case refused(Inlet.ID, folder: String)
     case syncFailed(Inlet.ID, Hint)
     case syncFinished(Inlet.ID)

@@ -2,9 +2,9 @@
 final class PresetSetup: SetupPort {
     private let wrapped: any SetupPort
     private let rules: any RulesPort
-    private let cadences: [Capability: Duration]
+    private let cadences: [Capability: Cadence]
 
-    init(wrapped: any SetupPort, rules: any RulesPort, cadences: [Capability: Duration]) {
+    init(wrapped: any SetupPort, rules: any RulesPort, cadences: [Capability: Cadence]) {
         self.wrapped = wrapped
         self.rules = rules
         self.cadences = cadences
@@ -19,7 +19,7 @@ final class PresetSetup: SetupPort {
         let inlet = try await wrapped.add(offer, input: input)
         guard !known.contains(inlet.id) else { return inlet }
         for capability in inlet.capabilities {
-            if let interval = cadences[capability] { rules.setCadence(inlet.id, capability, .every(interval)) }
+            if let preset = cadences[capability] { rules.setCadence(inlet.id, capability, preset) }
         }
         return inlet
     }

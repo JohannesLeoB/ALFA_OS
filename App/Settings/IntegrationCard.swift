@@ -65,6 +65,7 @@ struct IntegrationCard: View {
                         MailboxNameRow(state: context.state, inlet: inlet)
                         MailboxDisplayRow(state: context.state, inlet: inlet)
                         MailboxRangeRow(state: context.state, inbox: context.inbox, inlet: inlet)
+                        SignatureBlock(state: context.state, inlet: inlet)
                     }
                 }
                 areas(reading)
@@ -231,6 +232,7 @@ struct IntegrationCard: View {
                         MailboxNameRow(state: context.state, inlet: inlet)
                         MailboxDisplayRow(state: context.state, inlet: inlet)
                         MailboxRangeRow(state: context.state, inbox: context.inbox, inlet: inlet)
+                        SignatureBlock(state: context.state, inlet: inlet)
                     }
                 }
                 SettingsRow(label: appearance.text("text.settings.action.addAccount")) {
@@ -262,7 +264,7 @@ struct IntegrationCard: View {
             ForEach(reading.areas) { area in
                 SettingsRow(label: areaLabel(area, shared: reading.inlets.count > 1), sub: sync(area)) {
                     ChoiceButton(label: appearance.text(area.choice.key)) {
-                        var entries: [MenuEntry] = CadenceChoice.allCases.map { choice in
+                        var entries: [MenuEntry] = CadenceChoice.offered(for: area.capability).map { choice in
                             .row(MenuItem(id: choice.rawValue, label: appearance.text(choice.key),
                                           check: choice == area.choice ? appearance.text(SettingsKeys.menuCheck) : nil) {
                                 context.rules.setCadence(area.inlet, area.capability, choice.cadence)

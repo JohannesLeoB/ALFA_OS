@@ -67,12 +67,23 @@ final class InletsState: RulesPort {
         case .every, .push: break
         case .off, .manual, .hook: return
         }
-        guard let inlet = record(inletID), inlet.state.isConnected, inlet.capabilities.contains(capability),
-              let provider = router.provider(inlet.provider), let grant = grant(for: inlet),
-              let port = try? provider.adapter(ChangePort.self, for: inlet, grant, renewal: renewal(inletID)) else { return }
+        guard let inlet = record(inletID), inlet.state.isConnected, inlet.capabilities.contains(capability) else { return }
+        guard let provider = router.provider(inlet.provider), let grant = grant(for: inlet),
+              let port = try? provider.adapter(ChangePort.self, for: inlet, grant, renewal: renewal(inletID)) else {
+            poll(inletID, capability)
+            return
+        }
         let cadence = configuration.cadence
         watchers.start(key, port: port, isTransient: { provider.classify($0).kind == .transient },
-                       fire: { await cadence.trigger(inletID, capability) })
+                       fire: { await cadence.trigger(inletID, capability) },
+                       unavailable: { [weak self] in
+                           Task { @MainActor in self?.poll(inletID, capability) }
+                       })
+    }
+
+    func poll(_ inletID: Inlet.ID, _ capability: Capability) {
+        guard cadence(inletID, capability) == .push else { return }
+        configuration.cadence.plan(inletID, capability, .every(configuration.deadlines.pushFallback))
     }
 
     func loadSettings() throws {

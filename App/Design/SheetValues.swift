@@ -56,7 +56,6 @@ enum SheetValues {
     static let halfTurn = 180.0
     static let quarterTurn = 90.0
     static let orbCount = 3
-    static let mailSyncSeconds = 300
     static let rowTextLine = 20.0
     static let previewLines = 2
     static let attachmentChipNameLimit = 26

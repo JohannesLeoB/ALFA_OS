@@ -35,6 +35,8 @@ public protocol MailboxPort: AnyObject {
     func attachment(_ inlet: Inlet.ID, messageID: String, attachmentID: String) async throws(HubFailure) -> Data
     func thread(_ inlet: Inlet.ID, messageID: String, threadID: String) async throws(HubFailure) -> [MessageSummary]
     func unreadCount(_ inlet: Inlet.ID) -> Int
+    func unseenCount(_ inlet: Inlet.ID, folder: String) -> Int?
+    func progress(_ inlet: Inlet.ID, folder: String) -> SyncProgress?
     func draftIDs(_ inlet: Inlet.ID) -> Set<String>
     func sender(_ inlet: Inlet.ID) -> Participant
     func knownSenders(_ inlet: Inlet.ID) -> [Participant]

@@ -19,7 +19,7 @@ final class Assembly {
     static let attachmentsFolder = "attachments"
     static let workshopFactorsKey = "calculation.workshopFactors"
     static let localPerson = Person(id: "local", name: "local")
-    static let cadences: [Capability: Duration] = [.mail: .seconds(SheetValues.mailSyncSeconds)]
+    static let cadences: [Capability: Cadence] = [.mail: .push]
     static let companySeeds: [(CompanyEntry, String)] = [
         (.address, "company.address"), (.phone, "company.phone"), (.web, "company.web"), (.mail, "company.mail.projects"),
     ]
@@ -69,7 +69,8 @@ final class Assembly {
                                    names: { [settings] inlet in
                                        SenderNames(chosen: settings.mailboxName(inlet), profile: settings.profile.name)
                                    })
-        let inbox = InboxState(mailbox: mailbox, outbox: outbox, contacts: ContactState(defaults: defaults))
+        let inbox = InboxState(mailbox: mailbox, outbox: outbox, contacts: ContactState(defaults: defaults),
+                               signatures: { [settings] inlet in settings.signature(inlet) })
 
         let receipts = ReceiptStore(database: database)
         try receipts.adopt(legacy: defaults)

@@ -7,6 +7,7 @@ public enum Cadence: Codable, Equatable, Sendable {
 }
 
 public enum CadenceChoice: String, CaseIterable, Sendable {
+    case automatic
     case off
     case manual
     case seconds30
@@ -20,6 +21,7 @@ public enum CadenceChoice: String, CaseIterable, Sendable {
 
     public var cadence: Cadence {
         switch self {
+        case .automatic: .push
         case .off: .off
         case .manual: .manual
         case .seconds30: .every(.seconds(30))
@@ -29,6 +31,11 @@ public enum CadenceChoice: String, CaseIterable, Sendable {
         case .minutes30: .every(.seconds(1800))
         case .hour1: .every(.seconds(3600))
         }
+    }
+
+    public static func offered(for capability: Capability) -> [CadenceChoice] {
+        if capability == .mail { return [.automatic, .minutes5, .minutes15, .minutes30, .hour1, .manual] }
+        return allCases.filter { $0 != .automatic }
     }
 
     init?(_ cadence: Cadence) {

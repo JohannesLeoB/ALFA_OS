@@ -1,4 +1,5 @@
 import Foundation
+import Mail
 
 enum MessageParser {
     struct ListPage: Equatable {
@@ -67,6 +68,16 @@ enum MessageParser {
         struct Response: Decodable { var messages: [GmailMessageResource]? }
         guard let decoded = try? JSONDecoder().decode(Response.self, from: data) else { return [] }
         return (decoded.messages ?? []).map(map)
+    }
+
+    static func labelCount(from data: Data) -> FolderCount? {
+        struct Response: Decodable {
+            var messagesUnread: Int?
+            var messagesTotal: Int?
+        }
+        guard let decoded = try? JSONDecoder().decode(Response.self, from: data),
+              let unread = decoded.messagesUnread, let total = decoded.messagesTotal else { return nil }
+        return FolderCount(unseen: unread, total: total)
     }
 
     static func labels(from data: Data) -> [GmailLabel] {

@@ -355,7 +355,7 @@ private struct Rig {
     static func make(
         capabilities: Set<Capability> = [.mail], offers: [Offer] = [Rig.offer],
         database: SQLiteStore? = nil, provider: FakeProvider? = nil, keychain: FakeKeychain? = nil,
-        cadences: [Capability: Duration] = [:], deadlines: Deadlines = .standard, reportLimit: Int = 100,
+        cadences: [Capability: Cadence] = [:], deadlines: Deadlines = .standard, reportLimit: Int = 100,
         providers: [any ProviderPort]? = nil
     ) throws -> Rig {
         let provider = provider ?? FakeProvider(capabilities: capabilities)
@@ -538,7 +538,7 @@ final class HubTests: XCTestCase {
 
     @MainActor
     func testRenewalKeepsTheCadenceTheUserChose() async throws {
-        let rig = try Rig.make(cadences: [.mail: .seconds(300)])
+        let rig = try Rig.make(cadences: [.mail: .every(.seconds(300))])
         let first = try await rig.connect("a@x")
         rig.connections.rules.setCadence(first.id, .mail, .manual)
         rig.provider.setAccepting(false)
@@ -1026,18 +1026,22 @@ final class HubTests: XCTestCase {
         await wait { cadence.triggers == 1 }
         rig.connections.rules.setCadence(inlet.id, .mail, .manual)
         await wait { provider.changes.ended == 1 }
-        rig.connections.rules.setCadence(inlet.id, .mail, .every(.seconds(60)))
+        rig.connections.rules.setCadence(inlet.id, .mail, .push)
         await wait { provider.changes.opened == 2 }
         provider.changes.fail(URLError(.timedOut))
         await wait { provider.changes.opened == 3 }
         provider.changes.fail(FakeError.refused)
         await wait { provider.changes.ended == 3 }
+        await wait { cadence.planned(inlet.id, .mail) == .every(Deadlines.standard.pushFallback) }
         try await Task.sleep(for: .milliseconds(80))
         XCTAssertEqual(provider.changes.opened, 3)
-        rig.connections.rules.setCadence(inlet.id, .mail, .push)
+        rig.connections.rules.setCadence(inlet.id, .mail, .every(.seconds(60)))
         await wait { provider.changes.opened == 4 }
+        XCTAssertEqual(cadence.planned(inlet.id, .mail), .every(.seconds(60)))
+        rig.connections.rules.setCadence(inlet.id, .mail, .push)
+        await wait { provider.changes.opened == 5 }
         try await rig.connections.setup.remove(inlet.id)
-        await wait { provider.changes.ended == 4 }
+        await wait { provider.changes.ended == 5 }
     }
 
     @MainActor
@@ -1063,7 +1067,7 @@ final class HubTests: XCTestCase {
 
     @MainActor
     func testPresetSetupAppliesTheDefaultCadences() async throws {
-        let rig = try Rig.make(cadences: [.mail: .seconds(300)])
+        let rig = try Rig.make(cadences: [.mail: .every(.seconds(300))])
         let inlet = try await rig.connect("a@x")
         XCTAssertEqual(rig.connections.rules.cadence(inlet.id, .mail), .every(.seconds(300)))
         XCTAssertEqual(rig.cadence.planned(inlet.id, .mail), .every(.seconds(300)))
@@ -1301,7 +1305,9 @@ final class HubTests: XCTestCase {
     func testCadenceChoiceRoundTripsAndKeysAreUnique() {
         for choice in CadenceChoice.allCases { XCTAssertEqual(CadenceChoice(choice.cadence), choice) }
         XCTAssertNil(CadenceChoice(.every(.seconds(7))))
-        XCTAssertNil(CadenceChoice(.push))
+        XCTAssertEqual(CadenceChoice(.push), .automatic)
+        XCTAssertEqual(CadenceChoice.offered(for: .mail), [.automatic, .minutes5, .minutes15, .minutes30, .hour1, .manual])
+        XCTAssertFalse(CadenceChoice.offered(for: .calendar).contains(.automatic))
         XCTAssertEqual(CadenceChoice.minutes5.cadence, .every(.seconds(300)))
         XCTAssertEqual(Set(CadenceChoice.allCases.map(\.key)).count, CadenceChoice.allCases.count)
         let data = try? JSONEncoder().encode(Cadence.every(.seconds(60)))
@@ -1441,6 +1447,28 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(state.range("gmail-a"), .days30)
         XCTAssertEqual(try SettingsState(settings: store).range("gmail-ab"), .all)
         XCTAssertEqual(MailboxRange.year.key, "settings.account.range.year")
+    }
+
+    @MainActor
+    func testSignatureIsStoredPerMailboxAndForgottenWithIt() throws {
+        let store = SettingStore(database: try SQLiteStore.inMemory())
+        let state = try SettingsState(settings: store)
+        XCTAssertNil(state.signature("a"))
+        state.setSignature("Jonas\nStudio", for: "a")
+        XCTAssertEqual(state.signature("a"), MailboxSignature(text: "Jonas\nStudio", onNew: true, aboveQuote: false))
+        state.setSignatureOnNew(false, for: "a")
+        state.setSignatureAboveQuote(true, for: "a")
+        state.setSignature("", for: "b")
+        let again = try SettingsState(settings: store)
+        XCTAssertEqual(again.signature("a"), MailboxSignature(text: "Jonas\nStudio", onNew: false, aboveQuote: true))
+        XCTAssertNil(again.signature("b")?.block)
+        XCTAssertEqual(again.signature("a")?.name, "Jonas")
+        state.forget("a")
+        state.removeSignature(for: "b")
+        let gone = try SettingsState(settings: store)
+        XCTAssertNil(gone.signature("a"))
+        XCTAssertNil(gone.signature("b"))
+        XCTAssertNil(try store.value(SettingsKey.mailboxSignatureNew("a"), as: Bool.self))
     }
 
     func testMailboxDisplayShowsNameOrAddressPart() {

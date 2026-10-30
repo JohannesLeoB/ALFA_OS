@@ -1,7 +1,7 @@
 import Foundation
 import Hub
 
-struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort, LabelPort, SenderPort, SentCopyPort {
+struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort, UnseenCountPort, LabelPort, SenderPort, SentCopyPort {
     let base: any MailTransportPort
     let meter: CostMeter
 
@@ -131,6 +131,12 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, Everyw
         guard let base = base as? any MirrorPort else { throw MailFailure.unsupportedCapability("mirror") }
         meter.record()
         return try await base.refreshFlags(folderID: folderID, known: known, cursor: cursor)
+    }
+
+    func unseen(folderID: String) async throws -> FolderCount? {
+        guard let base = base as? any UnseenCountPort else { return nil }
+        meter.record()
+        return try await base.unseen(folderID: folderID)
     }
 
     func offersEverywhere(in folders: [Folder]) -> Bool {

@@ -187,6 +187,21 @@ actor IMAPClient {
         return result.dataRows.filter { $0.first?.string?.uppercased() == "SEARCH" }.reduce(0) { $0 + $1.count - 1 }
     }
 
+    func status(_ path: String) async throws -> FolderCount? {
+        let result = try await run([.raw("STATUS"), .string(IMAPFolderNameCodec.encode(path)), .raw("(UNSEEN MESSAGES)")])
+        for row in result.dataRows where row.first?.string?.uppercased() == "STATUS" {
+            guard row.count >= 3, let items = row[2].items else { continue }
+            var numbers: [String: Int] = [:]
+            var index = 0
+            while index + 1 < items.count {
+                if let name = items[index].string?.uppercased(), let value = items[index + 1].int { numbers[name] = value }
+                index += 2
+            }
+            if let unseen = numbers["UNSEEN"], let total = numbers["MESSAGES"] { return FolderCount(unseen: unseen, total: total) }
+        }
+        return nil
+    }
+
     func fetch(uids: [Int], items: [String]) async throws -> [IMAPFetched] {
         guard !uids.isEmpty else { return [] }
         let set = UIDSetEngine.text(uids)

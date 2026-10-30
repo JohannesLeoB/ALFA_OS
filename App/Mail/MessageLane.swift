@@ -261,8 +261,8 @@ struct MessageLane: View {
     @ViewBuilder
     private func state(_ kind: EmptyKind) -> some View {
         switch kind {
-        case .loading:
-            ContentPlaceholder(loading: appearance.text("mail.list.loading"))
+        case .loading(let progress):
+            ContentPlaceholder(loading: loadingText(progress))
         case .notConnected:
             ContentPlaceholder(kind: .permissionRequired, title: appearance.text("mail.list.notConnected"),
                                text: appearance.text("mail.list.notConnected.text"),
@@ -285,6 +285,12 @@ struct MessageLane: View {
                 if inbox.offersCompose { TextButton(label: appearance.text("mail.action.compose")) { inbox.compose() } }
             })
         }
+    }
+
+    private func loadingText(_ progress: SyncProgress?) -> Text {
+        guard let progress else { return appearance.text("mail.list.loading") }
+        let line = appearance.format("mail.list.progress", progress.done, progress.total)
+        return Text(verbatim: appearance.string("mail.list.loading") + "\n" + line)
     }
 
     private var emptyKey: String {

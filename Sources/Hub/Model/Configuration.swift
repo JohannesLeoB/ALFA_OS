@@ -11,12 +11,12 @@ public struct Configuration {
     var clock: @Sendable () -> Date
     var deadlines: Deadlines
     var reportLimit: Int
-    var cadences: [Capability: Duration]
+    var cadences: [Capability: Cadence]
 
     public init(person: Person, company: CompanySetup, providers: [any ProviderPort], keychain: any KeychainPort,
                 cadence: any CadencePort, cost: any CostPort, catalog: PortRegistry = PortRegistry(),
                 clock: @escaping @Sendable () -> Date = { Date() }, deadlines: Deadlines = .standard,
-                reportLimit: Int = 100, cadences: [Capability: Duration] = [:]) {
+                reportLimit: Int = 100, cadences: [Capability: Cadence] = [:]) {
         self.person = person
         self.company = company
         self.providers = providers
@@ -35,11 +35,14 @@ public struct Deadlines: Equatable, Sendable {
     var signIn: Duration
     var probe: Duration
     var watchPause: Duration
+    var pushFallback: Duration
 
-    init(signIn: Duration = .seconds(300), probe: Duration = .seconds(60), watchPause: Duration = .seconds(2)) {
+    init(signIn: Duration = .seconds(300), probe: Duration = .seconds(60), watchPause: Duration = .seconds(2),
+         pushFallback: Duration = .seconds(300)) {
         self.signIn = signIn
         self.probe = probe
         self.watchPause = watchPause
+        self.pushFallback = pushFallback
     }
 
     public static let standard = Deadlines()

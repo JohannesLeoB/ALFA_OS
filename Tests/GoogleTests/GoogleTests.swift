@@ -1045,6 +1045,19 @@ final class GoogleTests: XCTestCase {
         }
     }
 
+    func testGmailTakesTheUnreadAndTotalCountsFromTheLabel() async throws {
+        let http = FakeHttp { _ in (200, #"{"id":"INBOX","messagesTotal":40,"messagesUnread":9}"#) }
+        let client = mailClient(http)
+        let inbox = try await client.unseen(folderID: "INBOX")
+        XCTAssertEqual(inbox, FolderCount(unseen: 9, total: 40))
+        XCTAssertTrue(try XCTUnwrap(http.calls.first).path.hasSuffix("/labels/INBOX"))
+        let everything = try await client.unseen(folderID: GmailMailClient.allMail)
+        XCTAssertNil(everything)
+        XCTAssertEqual(http.calls.count, 1)
+        let bare = try await mailClient(FakeHttp { _ in (200, "{}") }).unseen(folderID: "SPAM")
+        XCTAssertNil(bare)
+    }
+
     func testWasSentSearchesTheSentFolderByMessageId() async throws {
         let sent = FakeHttp { call in call.path.hasSuffix("/messages") ? (200, #"{"messages":[{"id":"a"}]}"#) : (200, #"{"id":"a"}"#) }
         let found = try await mailClient(sent).wasSent(messageID: "abc", in: nil)

@@ -49,6 +49,10 @@
    "de": "Name",
    "en": "Name"
   },
+  "settings.cadence.automatic": {
+   "de": "Automatisch",
+   "en": "Automatic"
+  },
   "settings.imprint.row.rights.prompt": {
    "de": "Rechteinhaber",
    "en": "Rights holder"
