@@ -23,7 +23,7 @@ struct LaneHandle: View {
         let thick = CGFloat(active ? Tokens.Size.handleThicknessActive : Tokens.Size.hairline)
         let long = CGFloat(active ? Tokens.Size.handleLengthActive : Tokens.Size.handleLength)
         let tone = appearance.color(active ? \.ink : \.inkTertiary)
-        let plain = appearance.ease(Tokens.Duration.short, SheetValues.gripCurve)
+        let plain = appearance.ease(Tokens.Duration.short, SheetValues.cssEase)
         ZStack {
             RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.stroke))
                 .animation(plain) { $0.foregroundStyle(tone) }
