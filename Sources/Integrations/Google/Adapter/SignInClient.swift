@@ -3,17 +3,15 @@ import Hub
 
 struct SignInClient: SignInPort {
     let oauth: OAuthClient
-    let scopes: [OAuthScope]
     let openBrowser: @Sendable (URL) async -> Bool
     let makeRedirect: @Sendable () -> any RedirectPort
     let clock: @Sendable () -> Date
 
-    init(oauth: OAuthClient, scopes: [OAuthScope] = OAuthScope.allCases,
+    init(oauth: OAuthClient,
          openBrowser: @escaping @Sendable (URL) async -> Bool,
          makeRedirect: @escaping @Sendable () -> any RedirectPort,
          clock: @escaping @Sendable () -> Date) {
         self.oauth = oauth
-        self.scopes = scopes
         self.openBrowser = openBrowser
         self.makeRedirect = makeRedirect
         self.clock = clock
@@ -24,7 +22,7 @@ struct SignInClient: SignInPort {
         do {
             let redirectURI = try await server.start()
             let params = try oauth.authorization(
-                scopes: scopes, redirectURI: redirectURI, loginHint: input[Input.expectedAccountKey])
+                scopes: ScopeEngine.scopes(for: inlet.capabilities), redirectURI: redirectURI, loginHint: input[Input.expectedAccountKey])
             guard await openBrowser(params.url) else { throw SignInFailure.browserFailed }
             let callback = try await server.awaitRedirect()
             server.stop()

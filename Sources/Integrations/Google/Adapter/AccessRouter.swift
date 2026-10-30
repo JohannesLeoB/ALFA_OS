@@ -52,6 +52,14 @@ public struct AccessRouter: ProviderPort {
         return typed
     }
 
+    public func offers(personal: Owner) -> [Offer] {
+        [
+            Offer(id: "offer.gmail", provider: id, title: "offer.gmail", capabilities: [.mail], owner: personal, way: .signIn),
+            Offer(id: "offer.google", provider: id, title: "offer.google", capabilities: capabilities, owner: personal,
+                  way: .signIn),
+        ]
+    }
+
     public func classify(_ error: any Error) -> Classification { FailureEngine.classify(error) }
 
     private func make(_ key: ObjectIdentifier, inlet: Inlet, tokens: AccessTokenClient) -> Any? {

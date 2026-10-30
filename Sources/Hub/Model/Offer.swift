@@ -2,12 +2,12 @@ public struct Offer: Identifiable, Equatable, Sendable {
     public var id: String
     public var provider: String
     public var title: String
-    var capabilities: Set<Capability>
-    var owner: Owner
+    public var capabilities: Set<Capability>
+    public var owner: Owner
     public var way: Way
     public var preset: Preset?
 
-    init(id: String, provider: String, title: String, capabilities: Set<Capability>, owner: Owner,
+    public init(id: String, provider: String, title: String, capabilities: Set<Capability>, owner: Owner,
                 way: Way, preset: Preset? = nil) {
         self.id = id
         self.provider = provider

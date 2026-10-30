@@ -446,6 +446,29 @@ final class HubTests: XCTestCase {
     }
 
     @MainActor
+    func testTwoOffersOfOneProviderCarryTheirOwnCapabilitiesAndRefuseTheSameAddress() async throws {
+        let mailOnly = Offer(
+            id: "fake.gmail", provider: "fake", title: "Gmail", capabilities: [.mail], owner: .person("p1"),
+            way: .form([Field(id: "address", title: "address", holdsAccount: true)]))
+        let full = Offer(
+            id: "fake.google", provider: "fake", title: "Google", capabilities: [.mail, .calendar, .contacts, .files],
+            owner: .person("p1"), way: .form([Field(id: "address", title: "address", holdsAccount: true)]))
+        let provider = FakeProvider(capabilities: [.mail, .calendar, .contacts, .files])
+        let rig = try Rig.make(offers: [mailOnly, full], provider: provider)
+        let small = try await rig.connect("a@x.test", offer: mailOnly)
+        let large = try await rig.connect("b@x.test", offer: full)
+        XCTAssertEqual(small.capabilities, [.mail])
+        XCTAssertEqual(large.capabilities, [.mail, .calendar, .contacts, .files])
+        do {
+            _ = try await rig.connect("a@x.test", offer: full)
+            XCTFail("add must throw")
+        } catch {
+            XCTAssertEqual(error as? SetupFailure, .duplicate)
+        }
+        XCTAssertEqual(rig.connections.setup.inlets.count, 2)
+    }
+
+    @MainActor
     func testTheSameAddressIsRefusedAcrossProvidersAndCases() async throws {
         let first = FakeProvider(capabilities: [.mail])
         let other = FakeProvider(id: "other", capabilities: [.mail])

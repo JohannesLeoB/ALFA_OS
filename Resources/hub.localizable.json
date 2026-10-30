@@ -9,6 +9,14 @@
    "de": "Diese Adresse ist schon als Konto eingerichtet.",
    "en": "This address is already set up as an account."
   },
+  "offer.gmail": {
+   "de": "Gmail",
+   "en": "Gmail"
+  },
+  "offer.google": {
+   "de": "Google",
+   "en": "Google"
+  },
   "settings.company.row.address.prompt": {
    "de": "Straße, PLZ Ort",
    "en": "Street, postcode, city"
