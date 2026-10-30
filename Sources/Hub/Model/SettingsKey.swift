@@ -40,6 +40,10 @@ enum SettingsKey {
     static let mailboxSignatureAbovePrefix = "settings.mailbox.signatureAbove."
 
     static func mailboxSignatureAbove(_ inlet: String) -> String { mailboxSignatureAbovePrefix + inlet }
+
+    static func contactSource(_ id: String) -> String { "settings.contacts.source." + id }
+
+    static func contactCache(_ id: String) -> String { "contacts.cache." + id }
 }
 
 public enum CompanyEntry: String, CaseIterable, Sendable {

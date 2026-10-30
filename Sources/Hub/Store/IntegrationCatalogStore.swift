@@ -16,7 +16,7 @@ public struct IntegrationCatalogStore: Sendable {
             id: "google", access: .browser, companyOwned: false, fields: [],
             areas: [IntegrationArea(id: "mail", capability: .mail), IntegrationArea(id: "contacts", capability: .contacts),
                     IntegrationArea(id: "files", capability: .files)],
-            extras: [IntegrationExtra(id: "driveFolders", capability: .files, actionKey: "settings.sync.now")],
+            extras: [IntegrationExtra(id: "driveFolders", capability: .files, kind: .projectRoot, actionKey: "settings.sync.now")],
             listsAccounts: false, providers: ["google"], logo: nil),
         IntegrationInfo(
             id: "mailaccounts", access: .password, companyOwned: false, fields: [],
@@ -40,7 +40,9 @@ public struct IntegrationCatalogStore: Sendable {
         IntegrationInfo(
             id: "airtable", access: .key, companyOwned: true,
             fields: [IntegrationField(id: "base", secret: false), IntegrationField(id: "token", secret: true)],
-            areas: [IntegrationArea(id: "projects", capability: nil)], extras: [], listsAccounts: false,
+            areas: [IntegrationArea(id: "projects", capability: nil)],
+            extras: [IntegrationExtra(id: "cache", capability: nil, kind: .clear, actionKey: "settings.action.clear")],
+            listsAccounts: false,
             providers: ["airtable"], logo: nil),
         IntegrationInfo(
             id: "sevdesk", access: .key, companyOwned: true, fields: [IntegrationField(id: "token", secret: true)],

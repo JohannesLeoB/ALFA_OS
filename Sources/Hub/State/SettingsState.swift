@@ -197,6 +197,9 @@ public final class SettingsState {
         try? settings.remove(key: SettingsKey.mailboxDisplay(inlet))
         try? settings.remove(key: SettingsKey.mailboxRange(inlet))
         clearSignature(inlet)
+        let source = ContactSource.googleID(inlet)
+        try? settings.remove(key: SettingsKey.contactSource(source))
+        try? settings.remove(key: SettingsKey.contactCache(source))
     }
 
     public func select(_ next: SettingsGroup) {

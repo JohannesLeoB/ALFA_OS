@@ -12,9 +12,11 @@ public struct ClaudeClient: ConversationPort {
     private let http: any HttpPort
     private let attachments: AttachmentStore?
     private let baseURL: URL
+    private let usage: (any UsagePort)?
 
     public init(keys: any KeyPort, http: any HttpPort, attachments: AttachmentStore? = nil,
-                baseURL: URL = ClaudeClient.endpoint) {
+                baseURL: URL = ClaudeClient.endpoint, usage: (any UsagePort)? = nil) {
+        self.usage = usage
         self.keys = keys
         self.http = http
         self.attachments = attachments
@@ -27,7 +29,9 @@ public struct ClaudeClient: ConversationPort {
         let (data, response) = try await http.data(for: urlRequest)
         guard let status = response as? HTTPURLResponse else { throw ClaudeFailure.invalidResponse }
         guard (200...299).contains(status.statusCode) else { throw Self.failure(status: status.statusCode, response: status) }
-        return try Self.parse(data)
+        let reply = try Self.parse(data)
+        if let used = reply.usage { usage?.book(used, model: request.model ?? key.model, at: Date()) }
+        return reply
     }
 
     public func stream(_ request: ChatRequest) -> AsyncThrowingStream<String, any Error> {
@@ -41,9 +45,12 @@ public struct ClaudeClient: ConversationPort {
                     guard (200...299).contains(status.statusCode) else {
                         throw Self.failure(status: status.statusCode, response: status)
                     }
+                    var counted: TokenUsage?
                     for try await line in lines {
                         if let delta = try Self.delta(from: line) { continuation.yield(delta) }
+                        counted = Self.streamUsage(from: line, merging: counted)
                     }
+                    if let counted { usage?.book(counted, model: request.model ?? key.model, at: Date()) }
                     continuation.finish()
                 } catch {
                     continuation.finish(throwing: error)
@@ -185,6 +192,22 @@ public struct ClaudeClient: ConversationPort {
         func number(_ key: String) -> Int { usage[key] as? Int ?? 0 }
         return TokenUsage(input: number("input_tokens"), output: number("output_tokens"),
                           cacheRead: number("cache_read_input_tokens"), cacheWrite: number("cache_creation_input_tokens"))
+    }
+
+    static func streamUsage(from line: String, merging current: TokenUsage?) -> TokenUsage? {
+        guard line.hasPrefix("data: "), let data = String(line.dropFirst(6)).data(using: .utf8),
+              let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return current }
+        switch object["type"] as? String {
+        case "message_start":
+            let message = object["message"] as? [String: Any] ?? [:]
+            return usage(message) ?? current
+        case "message_delta":
+            guard let output = (object["usage"] as? [String: Any])?["output_tokens"] as? Int else { return current }
+            let base = current ?? TokenUsage(input: 0, output: 0, cacheRead: 0, cacheWrite: 0)
+            return TokenUsage(input: base.input, output: output, cacheRead: base.cacheRead, cacheWrite: base.cacheWrite)
+        default:
+            return current
+        }
     }
 
     static func parse(_ data: Data) throws -> Reply {

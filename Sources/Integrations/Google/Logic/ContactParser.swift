@@ -3,6 +3,11 @@ import Foundation
 enum ContactParser {
     private struct SearchResponse: Decodable { var results: [Result]? }
 
+    private struct ListResponse: Decodable {
+        var connections: [Person]?
+        var nextPageToken: String?
+    }
+
     private struct Result: Decodable { var person: Person? }
 
     private struct Person: Decodable {
@@ -23,14 +28,23 @@ enum ContactParser {
         guard let decoded = try? JSONDecoder().decode(SearchResponse.self, from: data) else {
             throw GoogleFailure.decodingFailed
         }
-        return (decoded.results ?? []).map { result in
-            let person = result.person
-            return Contact(
-                id: person?.resourceName ?? UUID().uuidString,
-                displayName: person?.names?.first?.displayName ?? "",
-                email: person?.emailAddresses?.first?.value,
-                phone: person?.phoneNumbers?.first?.value,
-                organization: person?.organizations?.first?.name)
+        return (decoded.results ?? []).map { contact($0.person) }
+    }
+
+    static func page(from data: Data) throws -> (contacts: [Contact], next: String?) {
+        guard let decoded = try? JSONDecoder().decode(ListResponse.self, from: data) else {
+            throw GoogleFailure.decodingFailed
         }
+        let next = decoded.nextPageToken.flatMap { $0.isEmpty ? nil : $0 }
+        return ((decoded.connections ?? []).map { contact($0) }, next)
+    }
+
+    private static func contact(_ person: Person?) -> Contact {
+        Contact(
+            id: person?.resourceName ?? UUID().uuidString,
+            displayName: person?.names?.first?.displayName ?? "",
+            email: person?.emailAddresses?.first?.value,
+            phone: person?.phoneNumbers?.first?.value,
+            organization: person?.organizations?.first?.name)
     }
 }

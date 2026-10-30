@@ -8,6 +8,7 @@ struct GmailMessage: Identifiable, Equatable, Sendable {
     var fromRaw: String = ""
     var toRaw: String = ""
     var ccRaw: String = ""
+    var replyToRaw: String = ""
     var snippet: String = ""
     var receivedAt: Date?
     var labels: [String] = []

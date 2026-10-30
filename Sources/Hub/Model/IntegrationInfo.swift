@@ -55,12 +55,14 @@ public struct IntegrationArea: Equatable, Sendable {
 
 public struct IntegrationExtra: Equatable, Sendable {
     public let id: String
-    public let capability: Capability
+    public let capability: Capability?
+    public let kind: IntegrationExtraKind
     public let actionKey: String
 
-    init(id: String, capability: Capability, actionKey: String) {
+    init(id: String, capability: Capability?, kind: IntegrationExtraKind, actionKey: String) {
         self.id = id
         self.capability = capability
+        self.kind = kind
         self.actionKey = actionKey
     }
 }

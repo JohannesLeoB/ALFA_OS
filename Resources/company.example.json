@@ -27,6 +27,8 @@
   "airtable.field.clockodo.start": "",
   "airtable.field.clockodo.status": "",
   "airtable.field.contact_photo": "",
+  "airtable.field.customer_email": "",
+  "airtable.field.customer_name": "",
   "airtable.field.sale_price": "Netto-VK MYKILOS (€)",
   "airtable.table.article_catalog": "",
   "airtable.table.article_catalog_legacy": "",

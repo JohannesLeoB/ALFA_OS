@@ -58,16 +58,21 @@ public final class OAuthLoopback: RedirectPort, Sendable {
     }
 
     public func awaitRedirect() async throws -> URL {
-        try await withCheckedThrowingContinuation { continuation in
-            let ready = state.withLock { state -> URL? in
-                if let pending = state.pending {
-                    state.pending = nil
-                    return pending
+        try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { continuation in
+                let ready = state.withLock { state -> Result<URL, any Error>? in
+                    if let pending = state.pending {
+                        state.pending = nil
+                        return .success(pending)
+                    }
+                    if Task.isCancelled { return .failure(SignInFailure.loopbackCancelled) }
+                    state.continuation = continuation
+                    return nil
                 }
-                state.continuation = continuation
-                return nil
+                if let ready { continuation.resume(with: ready) }
             }
-            if let ready { continuation.resume(returning: ready) }
+        } onCancel: {
+            stop()
         }
     }
 

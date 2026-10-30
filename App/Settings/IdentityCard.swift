@@ -31,7 +31,7 @@ struct IdentityCard: View {
                     labelKey: "settings.identity.birthdays")
             }
             BlockHead(key: "settings.identity.account")
-            SettingsRow(label: appearance.text("settings.identity.signOut"), line: false) {
+            SettingsRow(label: appearance.text("settings.identity.signOut"), sub: Text(verbatim: signOutSub), line: false) {
                 ConfirmPill(
                     label: appearance.text("settings.identity.signOut.action"),
                     question: appearance.text("settings.signOut.question"),
@@ -43,6 +43,17 @@ struct IdentityCard: View {
                 )
                 .rowPill()
             }
+        }
+    }
+
+    private var signOutSub: String {
+        let names = context.readings
+            .filter { [.connected, .working, .failed, .connecting].contains($0.state) }
+            .map { appearance.string($0.info.nameKey) }
+        switch names.count {
+        case 0: return appearance.string("settings.identity.signOut.sub.none")
+        case 1: return appearance.format("settings.identity.signOut.sub.one", names[0])
+        default: return appearance.format("settings.identity.signOut.sub.other", String(names.count), names.joined(separator: ", "))
         }
     }
 

@@ -14,6 +14,7 @@ public struct AccessRouter: ProviderPort {
     public let probe: any ProbePort
     private let oauth: OAuthClient
     private let drive: DriveConfig
+    private let roots: DriveRootStore?
     private let clock: @Sendable () -> Date
     private let policy: RequestPolicy
     private let cache = MessageCacheStore()
@@ -21,18 +22,19 @@ public struct AccessRouter: ProviderPort {
     public init(config: ClientConfig, drive: DriveConfig, http: any HttpPort = URLSession.shared,
                 openBrowser: @escaping @Sendable (URL) async -> Bool,
                 makeRedirect: @escaping @Sendable () -> any RedirectPort,
-                signIn: (any SignInPort)? = nil,
+                signIn: (any SignInPort)? = nil, roots: DriveRootStore? = nil,
                 clock: @escaping @Sendable () -> Date = { Date() }) {
         self.init(config: config, drive: drive, http: http, openBrowser: openBrowser, makeRedirect: makeRedirect,
-                  signIn: signIn, clock: clock, policy: .standard)
+                  signIn: signIn, roots: roots, clock: clock, policy: .standard)
     }
 
     init(config: ClientConfig, drive: DriveConfig, http: any HttpPort, openBrowser: @escaping @Sendable (URL) async -> Bool,
-         makeRedirect: @escaping @Sendable () -> any RedirectPort, signIn: (any SignInPort)?,
+         makeRedirect: @escaping @Sendable () -> any RedirectPort, signIn: (any SignInPort)?, roots: DriveRootStore?,
          clock: @escaping @Sendable () -> Date, policy: RequestPolicy) {
         let oauth = OAuthClient(config: config, http: http)
         self.oauth = oauth
         self.drive = drive
+        self.roots = roots
         self.clock = clock
         self.policy = policy
         self.signIn = signIn ?? SignInClient(oauth: oauth, openBrowser: openBrowser, makeRedirect: makeRedirect, clock: clock)
@@ -76,7 +78,7 @@ public struct AccessRouter: ProviderPort {
             return MailSearchClient(gmail: GmailClient(requests: requests(.gmail), policy: policy), cache: cache,
                                     account: inlet.id)
         case ObjectIdentifier((any FilesPort).self):
-            return DriveFilesClient(drive: driveClient(), projectsRoot: drive.projectsRoot)
+            return DriveFilesClient(drive: driveClient(), projectsRoot: roots?.current()?.id ?? drive.projectsRoot)
         case ObjectIdentifier((any Assistant.DrivePort).self):
             return DriveListingClient(drive: driveClient(), offers: drive.offers)
         case ObjectIdentifier((any CalendarPort).self):

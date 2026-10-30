@@ -21,12 +21,15 @@ public final class ChatState {
     public private(set) var note: Note?
     public private(set) var noteSerial = 0
     @ObservationIgnored private var cleared: [Message] = []
+    public let usage: UsageState?
     @ObservationIgnored private let chat: any ChatPort
     @ObservationIgnored private let engine: ConversationEngine
     @ObservationIgnored private let attachments: any AttachmentPort
     @ObservationIgnored private let privacy: any PrivacyPort
 
-    public init(chat: any ChatPort, engine: ConversationEngine, attachments: any AttachmentPort, privacy: any PrivacyPort) {
+    public init(chat: any ChatPort, engine: ConversationEngine, attachments: any AttachmentPort, privacy: any PrivacyPort,
+                usage: UsageState? = nil) {
+        self.usage = usage
         self.chat = chat
         self.engine = engine
         self.attachments = attachments

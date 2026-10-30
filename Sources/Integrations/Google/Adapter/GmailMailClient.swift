@@ -171,7 +171,7 @@ struct GmailMailClient: GmailPort, SourcePort, LabelPort, SenderPort {
         let attachments = message.attachments.map(info)
         return MessageSummary(
             id: message.id, threadID: message.threadID, subject: message.subject, from: message.from,
-            fromRaw: message.fromRaw, toRaw: message.toRaw, ccRaw: message.ccRaw, snippet: message.snippet,
+            fromRaw: message.fromRaw, toRaw: message.toRaw, ccRaw: message.ccRaw, replyToRaw: message.replyToRaw, snippet: message.snippet,
             receivedAt: message.receivedAt, flags: flags(message.labels), folderIDs: message.labels,
             attachmentCount: max(attachments.count, message.likelyAttachments ? 1 : 0), attachments: attachments, messageIDHeader: message.messageIDHeader)
     }

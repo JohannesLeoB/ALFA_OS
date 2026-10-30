@@ -178,6 +178,7 @@ enum MessageParser {
             fromRaw: fromRaw,
             toRaw: header("To") ?? "",
             ccRaw: header("Cc") ?? "",
+            replyToRaw: header("Reply-To") ?? "",
             snippet: decodeEntities(resource.snippet ?? ""),
             receivedAt: internalDate(resource.internalDate) ?? header("Date").flatMap(emailDate),
             labels: resource.labelIds ?? [],

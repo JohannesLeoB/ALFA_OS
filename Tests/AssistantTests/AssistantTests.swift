@@ -1025,3 +1025,106 @@ final class AssistantTests: XCTestCase {
         XCTAssertTrue(fresh.contains("assistant.contactDraft.airtableReady"), fresh)
     }
 }
+
+private struct UsageKeys: KeyPort {
+    func claudeKey() async -> ClaudeKey? { ClaudeKey(apiKey: "k", model: "m") }
+}
+
+private struct UsageHttp: HttpPort {
+    let body: String
+    let streamLines: [String]
+
+    private func ok(_ request: URLRequest) -> URLResponse {
+        HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+    }
+
+    func data(for request: URLRequest) async throws -> (Data, URLResponse) { (Data(body.utf8), ok(request)) }
+
+    func lines(for request: URLRequest) async throws -> (AsyncThrowingStream<String, any Error>, URLResponse) {
+        let lines = streamLines
+        let stream = AsyncThrowingStream<String, any Error> { continuation in
+            for line in lines { continuation.yield(line) }
+            continuation.finish()
+        }
+        return (stream, ok(request))
+    }
+}
+
+extension AssistantTests {
+    private func usageRequest() -> ChatRequest { ChatRequest(messages: [.text("x", role: .user)], system: "s", maxTokens: 5, model: "claude-x") }
+
+    func testAnswerUsageIsBookedWithModelAndMonthTotalsAddUp() async throws {
+        let store = ClaudeUsageStore(database: try SQLiteStore.inMemory())
+        let body = #"{"content":[{"type":"text","text":"hi"}],"usage":{"input_tokens":100,"output_tokens":40,"cache_read_input_tokens":10,"cache_creation_input_tokens":5}}"#
+        let client = ClaudeClient(keys: UsageKeys(), http: UsageHttp(body: body, streamLines: []), usage: store)
+        _ = try await client.respond(usageRequest())
+        _ = try await client.respond(usageRequest())
+        let totals = store.totals(from: Date(timeIntervalSince1970: 0))
+        XCTAssertEqual(totals, UsageTotals(input: 230, output: 80, calls: 2, since: totals.since))
+        XCTAssertNotNil(totals.since)
+    }
+
+    func testStreamedAnswerBooksStartAndEndCounts() async throws {
+        let store = ClaudeUsageStore(database: try SQLiteStore.inMemory())
+        let lines = [
+            #"data: {"type":"message_start","message":{"usage":{"input_tokens":70,"output_tokens":1}}}"#,
+            #"data: {"type":"content_block_delta","delta":{"type":"text_delta","text":"ab"}}"#,
+            #"data: {"type":"message_delta","usage":{"output_tokens":25}}"#,
+        ]
+        let client = ClaudeClient(keys: UsageKeys(), http: UsageHttp(body: "", streamLines: lines), usage: store)
+        for try await _ in client.stream(usageRequest()) {}
+        let totals = store.totals(from: Date(timeIntervalSince1970: 0))
+        XCTAssertEqual(totals.input, 70)
+        XCTAssertEqual(totals.output, 25)
+        XCTAssertEqual(totals.calls, 1)
+    }
+
+    func testAnswerWithoutUsageBooksNothing() async throws {
+        let store = ClaudeUsageStore(database: try SQLiteStore.inMemory())
+        let client = ClaudeClient(keys: UsageKeys(), http: UsageHttp(body: #"{"content":[]}"#, streamLines: []), usage: store)
+        _ = try await client.respond(usageRequest())
+        XCTAssertEqual(store.totals(from: Date(timeIntervalSince1970: 0)), UsageTotals())
+    }
+
+    func testTotalsStartAtTheGivenDayAndResetEmptiesTheCounter() throws {
+        let store = ClaudeUsageStore(database: try SQLiteStore.inMemory())
+        let old = Date(timeIntervalSince1970: 86_400 * 10)
+        let recent = Date(timeIntervalSince1970: 86_400 * 40)
+        store.book(TokenUsage(input: 1000, output: 500, cacheRead: 0, cacheWrite: 0), model: "a", at: old)
+        store.book(TokenUsage(input: 20, output: 10, cacheRead: 0, cacheWrite: 0), model: "b", at: recent)
+        let month = store.totals(from: Date(timeIntervalSince1970: 86_400 * 30))
+        XCTAssertEqual(month.input, 20)
+        XCTAssertEqual(month.output, 10)
+        XCTAssertEqual(month.since, Date(timeIntervalSince1970: 86_400 * 40))
+        store.reset()
+        XCTAssertEqual(store.totals(from: Date(timeIntervalSince1970: 0)), UsageTotals())
+    }
+
+    func testPricesPersistPerKind() throws {
+        let store = ClaudeUsageStore(database: try SQLiteStore.inMemory())
+        XCTAssertEqual(store.price(.input), "")
+        store.setPrice("3,00", for: .input)
+        store.setPrice("15,00", for: .output)
+        store.setPrice("4,00", for: .input)
+        XCTAssertEqual(store.price(.input), "4,00")
+        XCTAssertEqual(store.price(.output), "15,00")
+    }
+
+    func testEstimateNeedsBothPricesAndRoundsToHalfEuro() {
+        let totals = UsageTotals(input: 1_200_000, output: 310_000, calls: 3)
+        XCTAssertEqual(UsageEngine.estimate(totals, input: "3,00", output: "15,00"), 8.5)
+        XCTAssertNil(UsageEngine.estimate(totals, input: "3,00", output: ""))
+        XCTAssertNil(UsageEngine.estimate(totals, input: "0", output: "15"))
+        XCTAssertEqual(UsageEngine.price(" 2.5 "), 2.5)
+    }
+
+    func testScaledAndDays() {
+        XCTAssertEqual(UsageEngine.scaled(1_200_000).amount, "1,2")
+        XCTAssertTrue(UsageEngine.scaled(1_200_000).millions)
+        XCTAssertEqual(UsageEngine.scaled(310_400).amount, "310")
+        XCTAssertFalse(UsageEngine.scaled(310_400).millions)
+        let now = Date(timeIntervalSince1970: 86_400 * 12)
+        XCTAssertEqual(UsageEngine.days(since: Date(timeIntervalSince1970: 86_400 * 3), now: now), 9)
+        XCTAssertEqual(UsageEngine.days(since: now, now: now), 0)
+    }
+}

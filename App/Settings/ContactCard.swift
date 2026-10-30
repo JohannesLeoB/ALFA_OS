@@ -1,3 +1,4 @@
+import Hub
 import Mail
 import SwiftUI
 
@@ -7,9 +8,25 @@ struct ContactCard: View {
 
     private var contacts: ContactState { context.inbox.contacts }
 
+    private var directory: ContactSourceState { context.inbox.directory }
+
+    private var sources: [ContactSource] {
+        directory.feeds.map(\.source) + (context.inbox.accounts.isEmpty ? [] : [ContactSource.mail])
+    }
+
     var body: some View {
         let suggested = context.inbox.senderSuggestions
         VStack(spacing: 0) {
+            if !sources.isEmpty {
+                BlockHead(key: "settings.contacts.sources")
+                ForEach(Array(sources.enumerated()), id: \.element.id) { index, source in
+                    SettingsRow(label: appearance.text(source.kind.key),
+                                sub: source.account.isEmpty ? nil : Text(verbatim: source.account), line: index < sources.count - 1) {
+                        ToggleSwitch(isOn: Binding(get: { directory.isOn(source.id) }, set: { turn(source, $0) }), labelKey: source.kind.key)
+                    }
+                }
+                BlockHead(key: "settings.contacts.saved")
+            }
             ForEach(contacts.items) { contact in
                 if contacts.editing == contact.id {
                     SettingsRow(label: appearance.text("settings.contacts.name")) {
@@ -44,6 +61,11 @@ struct ContactCard: View {
                 }
             }
         }
+    }
+
+    private func turn(_ source: ContactSource, _ on: Bool) {
+        directory.set(source.id, on: on)
+        if on { Task { await directory.refresh() } }
     }
 
     private func notify(_ kind: ToastKind) {

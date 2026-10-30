@@ -1,4 +1,5 @@
 import Assistant
+import Google
 import Hub
 import Mail
 import Shell
@@ -16,6 +17,9 @@ struct SettingsContext {
     let desk: DeskState
     let conversation: ChatState
     let tiles: TileFocus
+    let access: any AccessPort
+    let roots: DriveRootStore
+    let clearCache: () -> Void
 
     var readings: [IntegrationReading] { IntegrationReadEngine.readAll(catalog, setup: setup, rules: rules) }
 

@@ -1,4 +1,5 @@
 import Design
+import Google
 import Hub
 import Shell
 import SwiftUI
@@ -45,7 +46,8 @@ extension SettingsPane {
         return SettingsPane(context: SettingsContext(
             state: assembly.settings, catalog: assembly.catalog, setup: assembly.connections.setup, rules: assembly.connections.rules,
             keychain: assembly.keychain, flow: flow, privacy: AssistantPrivacy(store: assembly.privacyStore), inbox: inbox, desk: desk,
-            conversation: assembly.conversation, tiles: TileFocus()))
+            conversation: assembly.conversation, tiles: TileFocus(), access: assembly.connections.access,
+            roots: DriveRootStore(settings: assembly.settingStore), clearCache: { assembly.reshelve() }))
     }
 }
 

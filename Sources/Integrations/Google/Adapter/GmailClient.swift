@@ -8,7 +8,7 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
     static let draftListSize = "100"
     static let historyPageSize = "500"
     static let missingStatus = 404
-    static let summaryHeaders = ["From", "To", "Cc", "Subject", "Date", "Message-ID", "Content-Type"]
+    static let summaryHeaders = ["From", "To", "Cc", "Reply-To", "Subject", "Date", "Message-ID", "Content-Type"]
 
     let requests: RequestClient
     let policy: RequestPolicy

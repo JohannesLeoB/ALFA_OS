@@ -3,6 +3,7 @@ import Core
 import Foundation
 import Hub
 import Mail
+import Storage
 import XCTest
 @testable import Google
 
@@ -118,7 +119,7 @@ private let driveConfig = DriveConfig(projectsRoot: "root", forbiddenFolderIDs: 
 private func router(_ http: FakeHttp, redirect: @escaping @Sendable () -> any RedirectPort = { FakeRedirect { $0 } },
                     open: @escaping @Sendable (URL) async -> Bool = { _ in true }) -> AccessRouter {
     AccessRouter(config: ClientConfig(clientID: "id", clientSecret: "secret"), drive: driveConfig, http: http,
-                 openBrowser: open, makeRedirect: redirect, signIn: nil, clock: { grantStart },
+                 openBrowser: open, makeRedirect: redirect, signIn: nil, roots: nil, clock: { grantStart },
                  policy: RequestPolicy(firstDelay: .milliseconds(1)))
 }
 
@@ -1477,6 +1478,20 @@ final class GoogleTests: XCTestCase {
         XCTAssertEqual(renewed.with { $0 }.first?.values[TokenState.accessKey], "fresh")
         XCTAssertEqual(http.calls.last?.authorization, "Bearer fresh")
         XCTAssertEqual(google.classify(GoogleFailure.notConnected(.gmail)).kind, .transient)
+    }
+
+    func testChosenProjectsRootReplacesTheConfiguredOne() async throws {
+        let roots = DriveRootStore(settings: SettingStore(database: try SQLiteStore.inMemory()))
+        XCTAssertNil(roots.current())
+        roots.choose(DriveRoot(id: "chosen", name: "Projekte"))
+        XCTAssertEqual(roots.current(), DriveRoot(id: "chosen", name: "Projekte"))
+        let http = FakeHttp { _ in (200, #"{"files":[{"id":"f1","name":"A","mimeType":"application\/vnd.google-apps.folder"}]}"#) }
+        let google = AccessRouter(config: ClientConfig(clientID: "id", clientSecret: ""), drive: driveConfig, http: http,
+                                  openBrowser: { _ in true }, makeRedirect: { FakeRedirect { $0 } }, roots: roots, clock: { grantStart })
+        let files = try google.adapter((any FilesPort).self, for: inlet([.files]), grant(), renewal: .ignoring)
+        let folders = try await files.projectFolders()
+        XCTAssertEqual(folders.map(\.id), ["f1"])
+        XCTAssertTrue(http.calls.last?.query.contains("chosen") ?? false)
     }
 
     func testRouterSignInUsesTheGivenSignInPort() async throws {

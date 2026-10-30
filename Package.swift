@@ -110,7 +110,7 @@ let package = Package(
         ),
         .testTarget(
             name: "GoogleTests",
-            dependencies: ["Google", "Core", "Hub", "Mail", "Assistant"],
+            dependencies: ["Google", "Core", "Hub", "Mail", "Assistant", "Storage"],
             path: "Tests/GoogleTests",
             swiftSettings: strict
         ),

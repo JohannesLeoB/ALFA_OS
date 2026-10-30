@@ -34,8 +34,8 @@ struct IntegrationCard: View {
             }
             notices(reading)
             if disconnecting { disconnectNotice(reading) }
-            accounts(reading)
-            if reading.state != .notConnected, reading.inlets.contains(where: hasMailbox) {
+            if info.listsAccounts { AccountBlock(context: context, info: info, reading: reading, started: $started) }
+            if reading.state != .notConnected, reading.inlets.contains(where: AccountBlock.hasMailbox) {
                 SettingsRow(label: appearance.text("settings.privacy.images")) {
                     ToggleSwitch(
                         isOn: Binding(get: { context.state.privacy.loadImages }, set: { value in context.state.updatePrivacy { $0.loadImages = value } }),
@@ -46,7 +46,7 @@ struct IntegrationCard: View {
                 SettingsValue(text: Text(verbatim: access))
             }
             if let offer = flow.form, !info.listsAccounts, info.providers.contains(offer.provider) {
-                AddEditor(flow: flow, offer: offer)
+                AddEditor(flow: flow, offers: reading.offers, offer: offer)
             } else {
                 ForEach(info.fields, id: \.id) { field in
                     if field.id == "model", reading.state != .notConnected, let inlet = reading.lead {
@@ -59,9 +59,12 @@ struct IntegrationCard: View {
                     }
                 }
             }
+            if info.id == "claude", reading.state != .notConnected, let usage = context.conversation.usage {
+                UsageBlock(usage: usage)
+            }
             if reading.state != .notConnected {
                 if !info.listsAccounts {
-                    ForEach(reading.inlets.filter(hasMailbox)) { inlet in
+                    ForEach(reading.inlets.filter(AccountBlock.hasMailbox)) { inlet in
                         MailboxNameRow(state: context.state, inlet: inlet)
                         MailboxDisplayRow(state: context.state, inlet: inlet)
                         MailboxRangeRow(state: context.state, inbox: context.inbox, inlet: inlet)
@@ -70,9 +73,7 @@ struct IntegrationCard: View {
                 }
                 areas(reading)
                 ForEach(info.extras, id: \.id) { extra in
-                    SettingsRow(label: appearance.text(info.extraKey(extra))) {
-                        TextButton(label: appearance.text(extra.actionKey), disabled: !canRun(extra, reading)) { run(extra, reading) }
-                    }
+                    extraRows(extra, reading)
                 }
             }
         }
@@ -128,14 +129,22 @@ struct IntegrationCard: View {
 
     @ViewBuilder
     private var progress: some View {
-        if started || flow.actedOn == info.id, flow.busy || flow.failure != nil {
-            VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step4)) {
-                if flow.busy { appearance.text("settings.link.connecting").designText(\.inkTertiary, size: Tokens.TextSize.small) }
-                if let failure = flow.failure { HintText(hint: failure).designText(\.signal, size: Tokens.TextSize.small) }
+        if started || flow.actedOn == info.id, flow.form == nil {
+            if flow.busy {
+                HStack(spacing: CGFloat(Tokens.Spacing.step12)) {
+                    appearance.text("settings.link.connecting").designText(\.inkTertiary, size: Tokens.TextSize.small)
+                    if flow.canCancel {
+                        TextButton(label: appearance.text("text.common.cancel"), kind: .plain) { flow.cancel() }
+                    }
+                }
+                .padding(.horizontal, CGFloat(Tokens.Spacing.step16))
+                .padding(.vertical, CGFloat(Tokens.Spacing.step8))
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else if let failure = flow.failure {
+                BlockNotice(kind: .failure, title: Text(verbatim: appearance.format("settings.failed.title", failure.line(appearance))))
+            } else if let checked = flow.checked, reading.inlets.contains(where: { $0.id == checked }) {
+                BlockNotice(kind: .success, title: appearance.text("settings.check.ok.title"))
             }
-            .padding(.horizontal, CGFloat(Tokens.Spacing.step16))
-            .padding(.vertical, CGFloat(Tokens.Spacing.step8))
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
@@ -157,6 +166,7 @@ struct IntegrationCard: View {
         case .orphaned:
             BlockNotice(kind: .warning, title: appearance.text("settings.orphaned.title"), text: appearance.text("settings.orphaned.body")) {
                 TextButton(label: appearance.text("text.settings.action.remove"), kind: .signal, disabled: flow.busy) {
+                    started = true
                     Task { await flow.remove(reading.inlets.map(\.id)) }
                 }
             }
@@ -171,22 +181,16 @@ struct IntegrationCard: View {
         return BlockNotice(
             kind: .warning,
             title: Text(verbatim: appearance.format("settings.disconnect.ask", target)),
-            text: Text(verbatim: waiting(removed).map { appearance.format("settings.disconnect.text", target) + " " + $0 }
+            text: Text(verbatim: AccountBlock.waiting(removed, context: context, appearance: appearance).map { appearance.format("settings.disconnect.text", target) + " " + $0 }
                 ?? appearance.format("settings.disconnect.text", target))
         ) {
             TextButton(label: appearance.text("settings.action.disconnect"), kind: .signal, disabled: flow.busy) {
                 endDisconnect()
+                started = true
                 Task { await flow.remove(removed) }
             }
             TextButton(label: appearance.text("text.common.cancel"), kind: .plain) { endDisconnect() }
         }
-    }
-
-    private func waiting(_ inlets: [Inlet.ID]) -> String? {
-        let count = inlets.reduce(0) { $0 + context.inbox.unsent($1) }
-        guard count > 0 else { return nil }
-        return count == 1 ? appearance.string("settings.disconnect.waiting.one")
-            : appearance.format("settings.disconnect.waiting.other", Format.number(count))
     }
 
     private func reason(_ hint: Hint?) -> String {
@@ -197,72 +201,11 @@ struct IntegrationCard: View {
     }
 
     @ViewBuilder
-    private func accounts(_ reading: IntegrationReading) -> some View {
-        if info.listsAccounts {
-            BlockHead(key: "settings.accounts.head")
-            if let offer = flow.form, info.providers.contains(offer.provider) {
-                AddEditor(flow: flow, offer: offer)
-            } else if reading.inlets.isEmpty {
-                BlockNotice(kind: .warning, title: appearance.text("settings.accounts.none.title")) {
-                    addAccount(reading, kind: .accent)
-                }
-            } else {
-                ForEach(reading.inlets) { inlet in
-                    SettingsRow(label: inlet.account.isEmpty ? appearance.text(inlet.title) : Text(verbatim: inlet.account),
-                                sub: inlet.account.isEmpty ? nil : appearance.text(inlet.title),
-                                line: !hasMailbox(inlet)) {
-                        ConnectionStatus(state: LinkState(inlet.state).connection, label: appearance.text(LinkState(inlet.state).key))
-                        TextButton(label: appearance.text("text.settings.action.check"), kind: .plain, disabled: flow.busy) {
-                            started = true
-                            Task { await flow.probe(inlet.id) }
-                        }
-                        ConfirmPill(
-                            label: appearance.text("text.settings.action.remove"),
-                            question: Text(verbatim: [appearance.format("settings.disconnect.ask", inlet.account.isEmpty ? appearance.string(inlet.title) : inlet.account),
-                                                      waiting([inlet.id])].compactMap { $0 }.joined(separator: " ")),
-                            yes: appearance.text("text.settings.action.remove"),
-                            no: appearance.text("confirm.no"),
-                            holdHint: appearance.text("settings.hold.remove"),
-                            showsProgress: false,
-                            onYes: { Task { await flow.remove([inlet.id]) } }
-                        )
-                        .rowPill()
-                    }
-                    if hasMailbox(inlet) {
-                        MailboxNameRow(state: context.state, inlet: inlet)
-                        MailboxDisplayRow(state: context.state, inlet: inlet)
-                        MailboxRangeRow(state: context.state, inbox: context.inbox, inlet: inlet)
-                        SignatureBlock(state: context.state, inlet: inlet)
-                    }
-                }
-                SettingsRow(label: appearance.text("text.settings.action.addAccount")) {
-                    addAccount(reading, kind: .neutral)
-                }
-            }
-        }
-    }
-
-    private func hasMailbox(_ inlet: Inlet) -> Bool {
-        inlet.capabilities.contains(.mail)
-    }
-
-    private func addAccount(_ reading: IntegrationReading, kind: TextButtonKind) -> some View {
-        TextMenuButton(label: appearance.text("text.settings.action.addAccount"), kind: kind, disabled: flow.busy || reading.offers.isEmpty) {
-            reading.offers.map { offer in
-                .row(MenuItem(id: offer.id, label: appearance.text(offer.title)) {
-                    started = true
-                    Task { await flow.choose(offer) }
-                })
-            }
-        }
-    }
-
-    @ViewBuilder
     private func areas(_ reading: IntegrationReading) -> some View {
         if !reading.areas.isEmpty {
             BlockHead(key: "settings.sync.head")
             ForEach(reading.areas) { area in
-                SettingsRow(label: areaLabel(area, shared: reading.inlets.count > 1), sub: sync(area)) {
+                SettingsRow(label: areaLabel(area, shared: reading.inlets.count > 1), sub: sync(area, reading)) {
                     ChoiceButton(label: appearance.text(area.choice.key)) {
                         var entries: [MenuEntry] = CadenceChoice.offered(for: area.capability).map { choice in
                             .row(MenuItem(id: choice.rawValue, label: appearance.text(choice.key),
@@ -296,23 +239,36 @@ struct IntegrationCard: View {
 
     private func syncNow(_ area: AreaReading) {
         guard !area.running else { return }
-        Task { _ = await context.syncNow(area.inlet, area.capability) }
+        Task {
+            if await !context.syncNow(area.inlet, area.capability) { context.state.notify("settings.toast.syncFailed") }
+        }
     }
 
-    private func sync(_ area: AreaReading) -> Text {
+    private func sync(_ area: AreaReading, _ reading: IntegrationReading) -> Text {
         if area.running { return appearance.text("settings.link.working") }
         guard let last = area.lastSync else { return appearance.text("settings.sync.never") }
-        return Text(verbatim: appearance.format("settings.sync.last", SettingsDates.relative(last)))
+        let when = SettingsDates.relative(last)
+        switch reading.state {
+        case .failed: return Text(verbatim: appearance.format("settings.sync.lastFailed", reason(reading.hint), when))
+        case .connected: return Text(verbatim: appearance.format("settings.sync.lastOK", when))
+        default: return Text(verbatim: appearance.format("settings.sync.last", when))
+        }
     }
 
-    private func canRun(_ extra: IntegrationExtra, _ reading: IntegrationReading) -> Bool {
-        reading.inlets.contains { $0.capabilities.contains(extra.capability) }
-    }
-
-    private func run(_ extra: IntegrationExtra, _ reading: IntegrationReading) {
-        guard let inlet = reading.inlets.first(where: { $0.capabilities.contains(extra.capability) }) else { return }
-        Task {
-            if await context.syncNow(inlet.id, extra.capability) { context.state.notify("settings.toast.driveSynced") }
+    @ViewBuilder
+    private func extraRows(_ extra: IntegrationExtra, _ reading: IntegrationReading) -> some View {
+        switch extra.kind {
+        case .projectRoot:
+            if let inlet = reading.inlets.first(where: { extra.capability.map($0.capabilities.contains) ?? false }) {
+                ProjectRootRows(context: context, info: info, extra: extra, inlet: inlet)
+            }
+        case .clear:
+            SettingsRow(label: appearance.text(info.extraKey(extra))) {
+                TextButton(label: appearance.text(extra.actionKey)) {
+                    context.clearCache()
+                    context.state.notify("settings.toast.cacheCleared")
+                }
+            }
         }
     }
 
@@ -355,57 +311,14 @@ struct BlockNotice<Actions: View>: View {
     }
 }
 
-struct AddEditor: View {
-    @Environment(\.appearance) private var appearance
-    @Bindable var flow: AccountFlow
-    let offer: Offer
-
-    private var fields: [Field] {
-        switch offer.way {
-        case .form(let fields), .key(let fields): fields
-        case .signIn: []
-        }
-    }
-
-    private var keyed: Bool {
-        if case .key = offer.way { true } else { false }
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step8)) {
-            ForEach(fields) { field in
-                VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step4)) {
-                    appearance.text(field.title).designText(\.inkTertiary, size: Tokens.TextSize.small)
-                    InputField(text: binding(field.id), placeholder: nil, labelKey: field.title, secret: field.secret)
-                }
-            }
-            HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
-                TextButton(label: appearance.text(keyed ? "settings.action.connect" : "settings.signin"), kind: .accent, disabled: flow.busy) {
-                    Task { await flow.add(offer, input: .fields(flow.values)) }
-                }
-                TextButton(label: appearance.text("text.common.cancel"), kind: .plain) { flow.close() }
-            }
-            if flow.busy { appearance.text("settings.link.connecting").designText(\.inkTertiary, size: Tokens.TextSize.small) }
-            if let failure = flow.failure { HintText(hint: failure).designText(\.signal, size: Tokens.TextSize.small) }
-        }
-        .padding(.horizontal, CGFloat(Tokens.Spacing.step16))
-        .padding(.vertical, CGFloat(Tokens.Spacing.step8))
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    private func binding(_ id: String) -> Binding<String> {
-        Binding(get: { flow.values[id] ?? "" }, set: { flow.values[id] = $0 })
+extension BlockNotice where Actions == EmptyView {
+    init(kind: NoticeKind, title: Text, text: Text? = nil) {
+        self.init(kind: kind, title: title, text: text) { EmptyView() }
     }
 }
 
-struct HintText: View {
-    @Environment(\.appearance) private var appearance
-    let hint: Hint
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            appearance.text(hint.text)
-            if let detail = hint.detail { Text(verbatim: detail) }
-        }
+extension Hint {
+    func line(_ appearance: Appearance) -> String {
+        [appearance.string(text), detail].compactMap { $0 }.joined(separator: " ")
     }
 }
