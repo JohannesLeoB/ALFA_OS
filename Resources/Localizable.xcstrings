@@ -18671,6 +18671,22 @@
         }
       }
     },
+    "settings.signOut.done" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgemeldet · die App startet neu"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signed out · the app restarts"
+          }
+        }
+      }
+    },
     "settings.signOut.question" : {
       "localizations" : {
         "de" : {

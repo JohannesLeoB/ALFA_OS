@@ -1,5 +1,6 @@
 import AppKit
 import Core
+import Design
 import Hub
 import SwiftUI
 
@@ -63,7 +64,10 @@ struct IdentityCard: View {
 
     private func signOut() {
         Task {
-            if await context.flow.signOut() { await AppRelaunch.run() }
+            guard await context.flow.signOut() else { return }
+            context.state.notify("settings.signOut.done")
+            try? await Task.sleep(for: .seconds(Tokens.Duration.toast))
+            await AppRelaunch.run()
         }
     }
 }

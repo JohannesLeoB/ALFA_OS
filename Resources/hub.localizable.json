@@ -248,6 +248,10 @@
   "settings.templates.remove.question": {
    "de": "Vorlage entfernen?",
    "en": "Remove template?"
+  },
+  "settings.signOut.done": {
+   "de": "Abgemeldet · die App startet neu",
+   "en": "Signed out · the app restarts"
   }
  }
 }

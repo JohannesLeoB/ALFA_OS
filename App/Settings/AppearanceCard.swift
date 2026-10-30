@@ -20,17 +20,17 @@ struct AppearanceCard: View {
                         selection: Binding(get: { state.appearance }, set: { state.setAppearance($0) }))
                 }
             }
-            SettingsRow(label: appearance.text("settings.appearance.foreign")) {
+            SettingsRow(label: appearance.text("settings.appearance.foreign"), line: false) {
                 SettingsValue(text: appearance.text("settings.appearance.foreign.value"))
             }
             ChoiceRow(
-                labelKey: "settings.start.label", current: state.destination, choices: StartDestination.allCases,
+                labelKey: "settings.start.label", line: false, current: state.destination, choices: StartDestination.allCases,
                 key: { $0.key }, pick: { state.setDestination($0) })
             SettingsRow(label: appearance.text("settings.lock.label")) {
                 ToggleSwitch(isOn: Binding(get: { state.lockOn }, set: { state.setLockOn($0) }), labelKey: "settings.lock.label")
             }
             ChoiceRow(
-                labelKey: "settings.lock.after", current: state.lockDelay, choices: LockDelay.allCases,
+                labelKey: "settings.lock.after", line: false, current: state.lockDelay, choices: LockDelay.allCases,
                 key: { $0.key }, pick: { state.setLockDelay($0) })
         }
     }

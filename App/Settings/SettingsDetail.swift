@@ -1,5 +1,6 @@
 import AppKit
 import Assistant
+import Google
 import Hub
 import SwiftUI
 import UniformTypeIdentifiers
@@ -18,7 +19,7 @@ struct SettingsDetail: View {
             case .identity: IdentityCard(context: context)
             case .appearance: AppearanceCard(state: context.state)
             case .companyData: CompanyCard(state: context.state)
-            case .folders: FoldersCard()
+            case .folders: FoldersCard(context: context)
             case .templates: TemplatesCard()
             case .integrations: EmptyView()
             case .keyInventory: KeyCard(context: context)
@@ -85,7 +86,7 @@ struct CompanyCard: View {
     var body: some View {
         VStack(spacing: 0) {
             ForEach(CompanyEntry.allCases, id: \.self) { entry in
-                SettingsRow(label: appearance.text(entry.key)) {
+                SettingsRow(label: appearance.text(entry.key), line: entry != CompanyEntry.allCases.last) {
                     ValueField(
                         text: Binding(get: { state.company[entry.rawValue] ?? "" }, set: { state.setCompany(entry, $0) }),
                         labelKey: entry.key, prompt: appearance.text(entry.promptKey))
@@ -97,16 +98,29 @@ struct CompanyCard: View {
 
 struct FoldersCard: View {
     @Environment(\.appearance) private var appearance
+    let context: SettingsContext
 
     var body: some View {
+        let source = context.readings.first { $0.info.id == "airtable" && $0.state == .connected }
         VStack(spacing: 0) {
-            ForEach(["settings.folders.projects", "settings.folders.data"], id: \.self) { key in
-                SettingsRow(label: appearance.text(key)) {
-                    SettingsValue(text: appearance.text(SettingsKeys.valueEmpty), tone: \.inkTertiary)
+            row("settings.folders.projects", context.roots.current().map { Text(verbatim: $0.name) })
+            row("settings.folders.data", source.map { appearance.text($0.info.nameKey) })
+            SettingsRow(label: appearance.text("settings.folders.templates"), line: false) {
+                if let template = TemplateStore().current {
+                    SettingsValue(text: Text(verbatim: template.name))
+                } else {
+                    SettingsValue(text: appearance.text("settings.templates.none"), tone: \.inkTertiary)
                 }
             }
-            SettingsRow(label: appearance.text("settings.folders.templates"), line: false) {
-                SettingsValue(text: appearance.text("settings.templates.none"), tone: \.inkTertiary)
+        }
+    }
+
+    private func row(_ key: String, _ value: Text?) -> some View {
+        SettingsRow(label: appearance.text(key)) {
+            if let value {
+                SettingsValue(text: value)
+            } else {
+                SettingsValue(text: appearance.text(SettingsKeys.valueEmpty), tone: \.inkTertiary)
             }
         }
     }
@@ -119,7 +133,7 @@ struct ImprintCard: View {
     var body: some View {
         VStack(spacing: 0) {
             ForEach(ImprintEntry.allCases, id: \.self) { entry in
-                SettingsRow(label: appearance.text(entry.key)) {
+                SettingsRow(label: appearance.text(entry.key), line: entry != ImprintEntry.allCases.last) {
                     ValueField(
                         text: Binding(get: { state.imprint[entry.rawValue] ?? "" }, set: { state.setImprint(entry, $0) }),
                         labelKey: entry.key, prompt: appearance.text(entry.promptKey))
