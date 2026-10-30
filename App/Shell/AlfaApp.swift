@@ -20,6 +20,7 @@ struct AlfaApp: App {
             }
         }
         .windowResizability(.contentMinSize)
+        .commands { MailCommands(session: session) }
     }
 }
 
@@ -38,6 +39,7 @@ private struct Content: View {
             .frame(minWidth: CGFloat(minimum.width), minHeight: CGFloat(minimum.height))
             .background(WindowConfigurator())
             .task { await session.start() }
+            .onChange(of: session.inbox.totalUnread, initial: true) { _, total in session.attention.badge(total) }
     }
 }
 

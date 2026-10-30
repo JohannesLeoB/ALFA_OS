@@ -19,6 +19,8 @@ final class AppSession {
     private(set) var toastLane = LaneKind.trailing
     @ObservationIgnored private var actionLane = LaneKind.trailing
     @ObservationIgnored private var watcher: Task<Void, Never>?
+    @ObservationIgnored private var arrivals: Task<Void, Never>?
+    let attention: any AttentionPort = AttentionClient()
     @ObservationIgnored private var shelved: Set<Inlet.ID> = []
 
     init(assembly: Assembly, directory: AppDirectory) {
@@ -91,6 +93,13 @@ final class AppSession {
                     self?.reshelveIfChanged()
                 default: break
                 }
+            }
+        }
+        await attention.prepare()
+        arrivals = Task { [weak self] in
+            guard let events = self?.assembly.mailEvents.stream else { return }
+            for await event in events {
+                if case .newMail(_, let count) = event { await self?.announce(arrivals: count) }
             }
         }
         await inbox.start()

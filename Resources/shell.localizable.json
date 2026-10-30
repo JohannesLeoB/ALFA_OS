@@ -105,6 +105,14 @@
    "de": "Verlauf gelöscht",
    "en": "History cleared"
   },
+  "shell.attention.newMail.many": {
+   "de": "%@ neue E-Mails",
+   "en": "%@ new messages"
+  },
+  "shell.attention.newMail.one": {
+   "de": "Neue E-Mail",
+   "en": "New message"
+  },
   "shell.blobFace.assistant": {
    "de": "Assistent",
    "en": "Assistant"
@@ -124,6 +132,22 @@
   "shell.handle.down.tooltip": {
    "de": "Ziehen · Doppelklick setzt zurück",
    "en": "Drag · double-click to reset"
+  },
+  "shell.menu.fetchAll": {
+   "de": "Alle Postfächer abfragen",
+   "en": "Check All Mailboxes"
+  },
+  "shell.menu.mailbox": {
+   "de": "Postfach",
+   "en": "Mailbox"
+  },
+  "shell.menu.message": {
+   "de": "E-Mail",
+   "en": "Message"
+  },
+  "shell.menu.newMessage": {
+   "de": "Neue E-Mail",
+   "en": "New Message"
   },
   "shell.symbolButton.assistantAttach.tooltip": {
    "de": "Datei anhängen",

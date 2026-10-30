@@ -38,9 +38,17 @@ struct StackLane: View {
                 head(commands, width: width)
                 StackDetail(session: session, commands: commands, perform: perform)
             }
+            .focusedSceneValue(\.mailMenu, menuTarget(commands))
         }
         .eventMonitor(.keyDown, active: desk.mode == nil) { sample in handle(sample) }
         .onChange(of: inbox.frontRef) { discarding = nil }
+    }
+
+    private func menuTarget(_ commands: CommandSet) -> MailMenuTarget {
+        var flags: Set<Flag> = []
+        if case .message(let id) = inbox.frontRef { flags = inbox.card(id)?.summary.flags ?? [] }
+        return MailMenuTarget(front: inbox.frontRef, commands: commands, read: flags.contains(.seen), starred: flags.contains(.flagged),
+                              perform: perform)
     }
 
     private func head(_ commands: CommandSet, width: Double) -> some View {

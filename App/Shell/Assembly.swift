@@ -31,6 +31,7 @@ final class Assembly {
     let catalog: IntegrationCatalogStore
     let connections: Connections
     let inbox: InboxState
+    let mailEvents: Broadcast<MailboxEvent>
     let receipts: ReceiptStore
     let chatStore: ChatStore
     let privacyStore: PrivacyStore
@@ -95,6 +96,7 @@ final class Assembly {
         self.catalog = catalog
         self.connections = connections
         self.inbox = inbox
+        self.mailEvents = events
         self.receipts = receipts
         self.chatStore = chatStore
         let privacyStore = PrivacyStore(database: database)
