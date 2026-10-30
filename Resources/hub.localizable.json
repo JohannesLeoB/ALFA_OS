@@ -272,6 +272,14 @@
   "settings.section.contacts.detail": {
    "de": "",
    "en": ""
+  },
+  "settings.projectRoot.drive": {
+   "de": "Laufwerk",
+   "en": "Drive"
+  },
+  "settings.projectRoot.path": {
+   "de": "%@ · %@",
+   "en": "%@ · %@"
   }
  }
 }

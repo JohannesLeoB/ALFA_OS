@@ -9,12 +9,14 @@ struct ProjectRootRows: View {
     let extra: IntegrationExtra
     let inlet: Inlet
     @State private var root: DriveRoot?
-    @State private var folders: [FileEntry] = []
+    @State private var drives: [FileFolder] = []
+    @State private var anchor = AnchorBox()
 
     var body: some View {
         Group {
             SettingsRow(label: appearance.text("settings.row.projectRoot")) {
-                ChoiceButton(label: root.map { Text(verbatim: $0.name) } ?? appearance.text("settings.value.choose")) { entries }
+                ChoiceButton(label: root.map { Text(verbatim: $0.name) } ?? appearance.text("settings.value.choose"),
+                             entries: { driveEntries }, anchor: anchor)
             }
             if root != nil {
                 SettingsRow(label: appearance.text(info.extraKey(extra))) {
@@ -24,35 +26,57 @@ struct ProjectRootRows: View {
         }
         .task(id: inlet.id) {
             root = context.roots.current()
-            folders = await listing()
+            drives = (try? await port()?.drives()) ?? []
         }
     }
 
-    private var entries: [MenuEntry] {
-        var result: [MenuEntry] = [.head(id: "root.head", label: appearance.text("settings.root.drive"))]
-        if folders.isEmpty {
-            result.append(.row(MenuItem(id: "root.none", label: appearance.text("settings.root.none"), action: {})))
+    private var driveEntries: [MenuEntry] {
+        var result: [MenuEntry] = [.head(id: "drive.head", label: appearance.text("settings.projectRoot.drive"))]
+        if drives.isEmpty {
+            result.append(.row(MenuItem(id: "drive.none", label: appearance.text("settings.root.none"), action: {})))
         }
-        for folder in folders {
-            result.append(.row(MenuItem(id: folder.id, label: Text(verbatim: folder.name),
-                                        check: folder.id == root?.id ? appearance.text(SettingsKeys.menuCheck) : nil) {
-                choose(folder)
-            }))
+        for drive in drives {
+            result.append(.row(MenuItem(id: drive.id, label: Text(verbatim: name(of: drive))) { open(drive) }))
         }
         return result
     }
 
-    private func listing() async -> [FileEntry] {
-        guard let port = try? context.access.port((any FilesPort).self, for: inlet.id),
-              let all = try? await port.files(in: "root") else { return [] }
+    private func name(of drive: FileFolder) -> String {
+        drive.id == FileFolder.ownDrive ? appearance.string("settings.root.drive") : drive.name
+    }
+
+    private func open(_ drive: FileFolder) {
+        Task {
+            let folders = await listing(drive.id)
+            var result: [MenuEntry] = [.head(id: "root.head", label: Text(verbatim: name(of: drive)))]
+            if folders.isEmpty {
+                result.append(.row(MenuItem(id: "root.none", label: appearance.text("settings.root.none"), action: {})))
+            }
+            for folder in folders {
+                result.append(.row(MenuItem(id: folder.id, label: Text(verbatim: folder.name),
+                                            check: folder.id == root?.id ? appearance.text(SettingsKeys.menuCheck) : nil) {
+                    choose(folder, in: drive)
+                }))
+            }
+            anchor.showMenu(result)
+        }
+    }
+
+    private func port() -> (any FilesPort)? {
+        try? context.access.port((any FilesPort).self, for: inlet.id)
+    }
+
+    private func listing(_ folderID: String) async -> [FileEntry] {
+        guard let all = try? await port()?.files(in: folderID) else { return [] }
         return all.filter(\.isFolder).sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
     }
 
-    private func choose(_ folder: FileEntry) {
-        let chosen = DriveRoot(id: folder.id, name: folder.name)
+    private func choose(_ folder: FileEntry, in drive: FileFolder) {
+        let label = appearance.format("settings.projectRoot.path", name(of: drive), folder.name)
+        let chosen = DriveRoot(id: folder.id, name: label)
         context.roots.choose(chosen)
         root = chosen
-        context.state.notify("settings.toast.rootChosen", name: folder.name)
+        context.state.notify("settings.toast.rootChosen", name: label)
     }
 
     private func sync() {

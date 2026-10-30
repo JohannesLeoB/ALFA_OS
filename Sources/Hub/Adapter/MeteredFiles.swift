@@ -9,6 +9,11 @@ struct MeteredFiles: FilesPort {
         return try await wrapped.projectFolders()
     }
 
+    func drives() async throws -> [FileFolder] {
+        meter.record()
+        return try await wrapped.drives()
+    }
+
     func files(in folderID: String) async throws -> [FileEntry] {
         meter.record()
         return try await wrapped.files(in: folderID)

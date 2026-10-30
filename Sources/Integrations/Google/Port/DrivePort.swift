@@ -2,6 +2,7 @@ import Foundation
 
 protocol DrivePort: Sendable {
     func listFolder(folderID: String) async throws -> [DriveFile]
+    func listDrives() async throws -> [DriveFile]
     func fileName(of fileID: String) async throws -> String
     func downloadContent(fileID: String) async throws -> Data
     func exportFile(fileID: String, exportMimeType: String) async throws -> Data

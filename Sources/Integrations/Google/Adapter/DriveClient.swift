@@ -3,6 +3,7 @@ import Foundation
 struct DriveClient: DrivePort {
     static let filesEndpoint = "https://www.googleapis.com/drive/v3/files"
     static let uploadEndpoint = "https://www.googleapis.com/upload/drive/v3/files"
+    static let drivesEndpoint = "https://www.googleapis.com/drive/v3/drives"
     static let listFields = "nextPageToken,files(id,name,mimeType,modifiedTime,webViewLink)"
     static let maxPages = 20
     static let pageSize = "100"
@@ -30,6 +31,21 @@ struct DriveClient: DrivePort {
             if let pageToken { items.append(URLQueryItem(name: "pageToken", value: pageToken)) }
             let page = try DriveParser.page(from: try await requests.send(RequestClient.url(Self.filesEndpoint, query: items)))
             all += page.files
+            guard let next = page.nextPageToken else { break }
+            pageToken = next
+        }
+        return all
+    }
+
+    func listDrives() async throws -> [DriveFile] {
+        var all: [DriveFile] = []
+        var pageToken: String?
+        for _ in 0..<Self.maxPages {
+            var items = [URLQueryItem(name: "pageSize", value: Self.pageSize),
+                         URLQueryItem(name: "fields", value: "nextPageToken,drives(id,name)")]
+            if let pageToken { items.append(URLQueryItem(name: "pageToken", value: pageToken)) }
+            let page = try DriveParser.drives(from: try await requests.send(RequestClient.url(Self.drivesEndpoint, query: items)))
+            all += page.drives
             guard let next = page.nextPageToken else { break }
             pageToken = next
         }

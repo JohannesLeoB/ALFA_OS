@@ -149,6 +149,10 @@ struct DriveFilesClient: FilesPort {
         try await drive.listFolder(folderID: projectsRoot).filter(\.isFolder).map { FileFolder(id: $0.id, name: $0.name) }
     }
 
+    func drives() async throws -> [FileFolder] {
+        [FileFolder(id: FileFolder.ownDrive, name: "")] + (try await drive.listDrives()).map { FileFolder(id: $0.id, name: $0.name) }
+    }
+
     func files(in folderID: String) async throws -> [FileEntry] {
         try await drive.listFolder(folderID: folderID)
             .filter { $0.isFolder || !$0.isNative }

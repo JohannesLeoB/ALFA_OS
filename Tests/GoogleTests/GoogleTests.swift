@@ -147,6 +147,7 @@ private struct FakeDrive: Google.DrivePort {
     let tree: [String: [DriveFile]]
 
     func listFolder(folderID: String) async throws -> [DriveFile] { tree[folderID] ?? [] }
+    func listDrives() async throws -> [DriveFile] { [] }
     func fileName(of fileID: String) async throws -> String { fileID }
     func downloadContent(fileID: String) async throws -> Data { Data("raw \(fileID)".utf8) }
     func exportFile(fileID: String, exportMimeType: String) async throws -> Data { Data("\(exportMimeType) \(fileID)".utf8) }
@@ -1522,6 +1523,7 @@ final class GoogleTests: XCTestCase {
 
 private struct LongDrive: Google.DrivePort {
     func listFolder(folderID: String) async throws -> [DriveFile] { [] }
+    func listDrives() async throws -> [DriveFile] { [] }
     func fileName(of fileID: String) async throws -> String { "" }
     func downloadContent(fileID: String) async throws -> Data { Data(String(repeating: "a", count: DriveTextClient.maxCharacters + 5).utf8) }
     func exportFile(fileID: String, exportMimeType: String) async throws -> Data { Data() }
@@ -1531,6 +1533,7 @@ private struct LongDrive: Google.DrivePort {
 
 private struct BlankDrive: Google.DrivePort {
     func listFolder(folderID: String) async throws -> [DriveFile] { [] }
+    func listDrives() async throws -> [DriveFile] { [] }
     func fileName(of fileID: String) async throws -> String { "" }
     func downloadContent(fileID: String) async throws -> Data { Data("   ".utf8) }
     func exportFile(fileID: String, exportMimeType: String) async throws -> Data { Data() }

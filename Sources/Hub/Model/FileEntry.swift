@@ -13,6 +13,8 @@ public struct FileEntry: Identifiable, Hashable, Sendable {
 }
 
 public struct FileFolder: Identifiable, Hashable, Sendable {
+    public static let ownDrive = "root"
+
     public let id: String
     public let name: String
 

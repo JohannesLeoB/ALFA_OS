@@ -99,7 +99,8 @@ struct ChoiceButton: View {
     @Environment(\.appearance) private var appearance
     let label: Text
     let entries: () -> [MenuEntry]
-    @State private var anchor = AnchorBox()
+    var anchor: AnchorBox?
+    @State private var own = AnchorBox()
 
     var body: some View {
         Button(action: open) {
@@ -116,10 +117,10 @@ struct ChoiceButton: View {
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)
-        .background(AnchorMarker(box: anchor))
+        .background(AnchorMarker(box: anchor ?? own))
     }
 
     private func open() {
-        anchor.showMenu(entries())
+        (anchor ?? own).showMenu(entries())
     }
 }
