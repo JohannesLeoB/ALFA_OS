@@ -95,7 +95,7 @@ final class AppSession {
                 }
             }
         }
-        await attention.prepare()
+        Task { [attention] in await attention.prepare() }
         arrivals = Task { [weak self] in
             guard let events = self?.assembly.mailEvents.stream else { return }
             for await event in events {
