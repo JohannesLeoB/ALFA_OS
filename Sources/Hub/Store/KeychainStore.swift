@@ -5,6 +5,7 @@ import Security
 
 public struct KeychainStore: KeychainPort {
     static let encodingStatus: Int32 = -1
+    static let missingOwnerStatus: OSStatus = -67068
 
     private let prefix: String
 
@@ -35,7 +36,11 @@ public struct KeychainStore: KeychainPort {
         if added == errSecSuccess { return }
         guard added == errSecDuplicateItem else { throw KeychainFailure.status(added) }
         let updated = SecItemUpdate(query as CFDictionary, [kSecValueData: data] as CFDictionary)
-        guard updated == errSecSuccess else { throw KeychainFailure.status(updated) }
+        if updated == errSecSuccess { return }
+        let removed = SecItemDelete(query as CFDictionary)
+        guard removed == errSecSuccess || removed == errSecItemNotFound else { throw KeychainFailure.status(updated) }
+        let readded = SecItemAdd(query.merging([kSecValueData: data]) { _, new in new } as CFDictionary, nil)
+        guard readded == errSecSuccess else { throw KeychainFailure.status(readded) }
     }
 
     public func get(_ slot: KeySlot) throws -> String? {
@@ -48,7 +53,7 @@ public struct KeychainStore: KeychainPort {
         ]) { _, new in new }
         var item: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &item)
-        if status == errSecItemNotFound { return nil }
+        if status == errSecItemNotFound || status == Self.missingOwnerStatus { return nil }
         guard status == errSecSuccess else { throw KeychainFailure.status(status) }
         guard let data = item as? Data, let value = String(data: data, encoding: .utf8) else {
             throw KeychainFailure.status(Self.encodingStatus)
