@@ -88,8 +88,7 @@ enum ProjectFolderList {
             }
             let hidden = files.count - shown.count
             let more = hidden > 0
-                ? [MenuEntry.row(MenuItem(id: "more", label: Text(verbatim: appearance.format("mail.projectFiles.more", Format.number(hidden))),
-                                          action: {}))]
+                ? [MenuEntry.head(id: "more", label: Text(verbatim: appearance.format("mail.projectFiles.more", Format.number(hidden))))]
                 : []
             anchor.showMenu([head] + rows + more)
         }
@@ -110,7 +109,7 @@ enum ProjectFolderList {
     }
 
     private static func note(_ key: String, appearance: Appearance) -> MenuEntry {
-        .row(MenuItem(id: key, label: appearance.text(key), action: {}))
+        .head(id: key, label: appearance.text(key))
     }
 
     private static func retry(appearance: Appearance, action: @escaping () -> Void) -> MenuEntry {
