@@ -184,7 +184,7 @@ struct AssistantInput: View {
     var body: some View {
         HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
             SymbolButton(help: appearance.string(files ? "shell.symbolButton.assistantAttach.tooltip" : "shell.symbolButton.assistantAttachOff.tooltip"),
-                         glyph: .attach, dimmed: !files, tone: nil, hoverTone: nil, ringed: false, hover: .fill, hoverFill: \.inverseHot, pressed: false,
+                         glyph: .attach, disabled: !files, tone: nil, hoverTone: nil, ringed: false, hover: .fill, hoverFill: \.inverseHot, pressed: false,
                          action: attach)
             ZStack(alignment: .leading) {
                 if conversation.draft.isEmpty {
