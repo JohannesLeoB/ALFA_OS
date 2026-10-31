@@ -53,9 +53,11 @@ extension AppSession {
         }
     }
 
-    func openMailSettings() {
-        desk.select("settings")
+    func openMailCard(of account: Inlet?) {
+        openMailService(account.flatMap { assembly.catalog.info(forProvider: $0.provider)?.id } ?? Self.accountsCard)
     }
+
+    private static let accountsCard = "mailaccounts"
 
     var hasProjectRoot: Bool {
         DriveRootStore(settings: assembly.settingStore).current() != nil

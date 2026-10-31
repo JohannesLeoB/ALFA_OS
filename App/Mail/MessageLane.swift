@@ -217,7 +217,7 @@ struct MessageLane: View {
     }
 
     private func openExpired() {
-        if let service = inbox.fixService(in: session.assembly.catalog) { session.openMailService(service) } else { session.openMailSettings() }
+        if let service = inbox.fixService(in: session.assembly.catalog) { session.openMailService(service) } else { session.openMailCard(of: inbox.selectedAccount) }
     }
 
     @ViewBuilder
@@ -281,7 +281,7 @@ struct MessageLane: View {
             ContentPlaceholder(kind: .permissionRequired, title: appearance.text("mail.list.notConnected"),
                                text: appearance.text("mail.list.notConnected.text"),
                                glyph: { Glyph(.envelope) },
-                               action: { TextButton(label: appearance.text("mail.list.notConnected.act"), kind: .accent) { session.openMailSettings() } })
+                               action: { TextButton(label: appearance.text("mail.list.notConnected.act"), kind: .accent) { session.openMailCard(of: inbox.selectedAccount) } })
         case .failed(let last):
             ContentPlaceholder(kind: .failed, title: appearance.text("mail.list.failed"), text: failedText(last), glyph: { Glyph(.alert) },
                                action: { TextButton(label: appearance.text("mail.list.failed.act")) { Task { await inbox.loadSelection() } } })

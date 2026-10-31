@@ -16,6 +16,7 @@ struct DraftEditor: View {
     @State private var dropOver = false
 
     private var inbox: InboxState { session.inbox }
+    private var account: Inlet? { inbox.accounts.first { $0.id == card.inlet } }
     private var hasCopy: Bool { !card.people(.cc).isEmpty || !card.people(.bcc).isEmpty }
     private var copyShown: Binding<Bool> { Binding(get: { showCopy || hasCopy }, set: { showCopy = $0 }) }
 
@@ -63,7 +64,7 @@ struct DraftEditor: View {
             if card.needsGrant {
                 Notice(kind: .warning, title: appearance.text("mail.draft.grant.title"), text: appearance.text("mail.draft.grant.text"),
                        glyph: { Glyph(.alert) },
-                       actions: { TextButton(label: appearance.text("mail.draft.grant.act"), kind: .accent) { session.openMailSettings() } })
+                       actions: { TextButton(label: appearance.text("mail.draft.grant.act"), kind: .accent) { session.openMailCard(of: account) } })
                     .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
                     .padding(.top, CGFloat(Tokens.Spacing.step8))
             } else if card.tooLarge {
@@ -90,7 +91,7 @@ struct DraftEditor: View {
                        glyph: { Glyph(.alert) },
                        actions: {
                     if card.saveNeedsSignIn {
-                        TextButton(label: appearance.text("mail.list.signInExpired.act"), kind: .accent) { session.openMailSettings() }
+                        TextButton(label: appearance.text("mail.list.signInExpired.act"), kind: .accent) { session.openMailCard(of: account) }
                     } else {
                         TextButton(label: appearance.text("mail.draft.saveFailed.retry"), kind: .accent) { Task { await inbox.save(card.id) } }
                     }
@@ -225,11 +226,7 @@ struct FromButton: View {
                                          check: applied ? appearance.text("mail.menu.check") : nil) { inbox.useSignature(card.id, true) }))
         }
         entries.append(.row(MenuItem(id: "signature.edit", label: appearance.text("mail.compose.signature.edit")) {
-            guard let service = sender.flatMap({ session.assembly.catalog.info(forProvider: $0.provider)?.id }) else {
-                session.openMailSettings()
-                return
-            }
-            session.openMailService(service)
+            session.openMailCard(of: sender)
         }))
         return entries
     }
