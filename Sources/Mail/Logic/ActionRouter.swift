@@ -18,7 +18,7 @@ public struct ActionRouter {
         case .markUnread: Task { await state.setRead(id, false) }
         case .star: Task { await state.setStarred(id, true) }
         case .unstar: Task { await state.setStarred(id, false) }
-        case .spam: Task { await state.markSpam(id) }
+        case .spam: Task { await state.markSpam(id, undoable: undoable) }
         case .openDraft: Task { _ = await state.editDraft(id) }
         case .loadImages: state.allowRemoteImages(id)
         case .purge: Task { await state.purge(id) }

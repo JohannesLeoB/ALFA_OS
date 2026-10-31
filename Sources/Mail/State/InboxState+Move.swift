@@ -14,7 +14,7 @@ extension InboxState {
         return summary(id)?.folderIDs.contains(trash) == true || (selectedFolder == trash && summaries.contains { $0.id == id })
     }
 
-    func markSpam(_ id: String) async { await relocate(id, .spam) }
+    func markSpam(_ id: String, undoable: Bool = true) async { await relocate(id, .spam, undoable: undoable) }
 
     func checkPurge() async {
         guard let inlet = selectedInlet, currentFolder?.role == .trash else { return }
@@ -66,7 +66,7 @@ extension InboxState {
             switch move {
             case .archive: landed = try await mailbox.archive(inlet, messageID: id)
             case .trash: landed = try await mailbox.trash(inlet, messageID: id)
-            case .spam: landed = try await mailbox.markSpam(inlet, messageID: id)
+            case .spam: landed = try await mailbox.markSpam(inlet, messageID: id, locates: undoable && origin != nil)
             }
         } catch {
             putBack(lifted.entries, in: inlet, folder: selectedFolder)

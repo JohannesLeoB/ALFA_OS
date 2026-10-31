@@ -31,7 +31,7 @@ public protocol MailboxPort: AnyObject {
     @discardableResult func move(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubFailure) -> String?
     @discardableResult func untrash(_ inlet: Inlet.ID, messageID: String, toFolder: String) async throws(HubFailure) -> String?
     @discardableResult func trash(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> String?
-    @discardableResult func markSpam(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> String?
+    @discardableResult func markSpam(_ inlet: Inlet.ID, messageID: String, locates: Bool) async throws(HubFailure) -> String?
     func canPurge(_ inlet: Inlet.ID) -> Bool
     func offersSource(_ inlet: Inlet.ID) -> Bool
     func source(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> Data
