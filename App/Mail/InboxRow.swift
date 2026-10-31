@@ -172,10 +172,8 @@ struct InboxRow: View {
         if case .unverified = item.outbox {
             HStack(spacing: 0) {
                 Spacer(minLength: 0)
-                ConfirmPill(label: nil, question: appearance.text("mail.outbox.confirm.question"), yes: appearance.text("mail.outbox.confirm.yes"),
-                            no: appearance.text("confirm.no"),
-                            holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.outbox.confirm.yes"))),
-                            startsAsking: true, showsProgress: false, onYes: { Task { await inbox.confirmQueued(item.id) } }) {
+                ConfirmPill(question: "mail.outbox.confirm.question", yes: "mail.outbox.confirm.yes", appearance: appearance,
+                            startsAsking: true, onYes: { Task { await inbox.confirmQueued(item.id) } }) {
                     Glyph(.send)
                 }
             }
@@ -192,10 +190,8 @@ struct InboxRow: View {
                         Task { await inbox.resendQueued(item.id) }
                     }
                 }
-                ConfirmPill(label: nil, question: appearance.text("mail.confirm.discard.question"), yes: appearance.text("mail.confirm.discard.yes"),
-                            no: appearance.text("confirm.no"),
-                            holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.confirm.discard.yes"))),
-                            showsProgress: false, onYes: { Task { await inbox.discardQueued(item.id) } }) {
+                ConfirmPill(question: "mail.confirm.discard.question", yes: "mail.confirm.discard.yes", appearance: appearance,
+                            onYes: { Task { await inbox.discardQueued(item.id) } }) {
                     Glyph(.trash)
                 }
             }
@@ -224,10 +220,8 @@ struct InboxRow: View {
                     }
                 }
                 if inbox.canPurge(item.id) {
-                    ConfirmPill(label: nil, question: appearance.text("mail.confirm.purge.question"), yes: appearance.text("mail.confirm.purge.yes"),
-                                no: appearance.text("confirm.no"),
-                                holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.confirm.purge.yes"))),
-                                startsAsking: true, showsProgress: false, onYes: { session.perform(.purge, message: item.id) }) {
+                    ConfirmPill(question: "mail.confirm.purge.question", yes: "mail.confirm.purge.yes", appearance: appearance,
+                                startsAsking: true, onYes: { session.perform(.purge, message: item.id) }) {
                         Glyph(.trash)
                     }
                 } else if !inbox.inTrash(item.id) {
@@ -264,6 +258,15 @@ struct InboxRow: View {
         MenuPanel.shared.show(entries: entries, anchor: .point(point), window: NSApp.keyWindow) {
             menuOpen = false
         }
+    }
+}
+
+extension ConfirmPill {
+    init(question: String, yes: String, appearance: Appearance, startsAsking: Bool = false, onYes: @escaping () -> Void,
+         onNo: @escaping () -> Void = {}, @ViewBuilder glyph: () -> Glyph) {
+        self.init(label: nil, question: appearance.text(question), yes: appearance.text(yes), no: appearance.text("confirm.no"),
+                  holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string(yes))),
+                  startsAsking: startsAsking, showsProgress: false, onYes: onYes, onNo: onNo, glyph: glyph)
     }
 }
 

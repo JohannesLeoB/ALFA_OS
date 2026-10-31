@@ -61,10 +61,8 @@ struct StackLane: View {
                            more: { actions in
                                MenuLine.entries(actions.map { MenuLine.item($0) }, appearance: appearance, warns: false) { perform($0) }
                            }) {
-            ConfirmPill(label: nil, question: appearance.text("mail.confirm.discard.question"), yes: appearance.text("mail.confirm.discard.yes"),
-                        no: appearance.text("confirm.no"),
-                        holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.confirm.discard.yes"))),
-                        startsAsking: true, showsProgress: false, onYes: {
+            ConfirmPill(question: "mail.confirm.discard.question", yes: "mail.confirm.discard.yes", appearance: appearance,
+                        startsAsking: true, onYes: {
                             if let id = discarding { Task { await inbox.deleteDraft(id) } }
                             discarding = nil
                         }, onNo: { discarding = nil }) {
