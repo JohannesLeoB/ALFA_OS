@@ -50,3 +50,8 @@ Stand `main` 1ed575ec, Master 2910. Hier steht alles, was Code seit der Übernah
 8. **L5, L6:** Stand bei Design?
 
 Alles als neuer Master-ZIP über Johannes.
+
+## E · Nachtrag: Blob der Anmeldeseite nach dem Master (`main` 3ce69713)
+- Nachgebaut aus `ALFA Shell.dc.html`: voller Ring in currentColor, Lider (`size.blobLidOffset`, öffnen mit `duration.blobEyes`), Augen folgen der Maus nach der Formel der Shell (Zeile 202, `blobEyeFollowDistance`, `blobEyeFollowRamp`, `blobEyeTravelX/Y`), Schrift Geist aus dem App-Bundle, Label 13 px/500. Der erfundene Hover ist entfernt.
+- **Widerspruch im Master:** Die Pille im Dunkelmodus ist in `contract/theme-dark.tokens.json` #f5f5f5 (Code folgt dem), in `project/alfa-theme.css` aber #2e2e2e. Welcher Wert gilt?
+- **Weiter erfunden:** Skalierung des Blobs ×2 auf der Seite, alle Startzeitpunkte, Lider-Startwert scaleY .45, Blinzeln scaleY .1 einmal bei 1,7 s statt im Zufallsintervall der Shell, Label-Breite 200 px, der Zweiklang.
