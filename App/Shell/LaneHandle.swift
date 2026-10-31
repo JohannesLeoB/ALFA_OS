@@ -94,7 +94,7 @@ struct LaneHandle: View {
             desk.resetLane()
             return .handled
         }
-        let size = press.modifiers.contains(.shift) ? Tokens.Spacing.step8 : desk.measure.laneFolded
+        let size = press.modifiers.contains(.shift) ? SheetValues.laneShiftStep : desk.measure.laneFolded
         let direction: Double = press.key == .leftArrow ? -1 : 1
         desk.stepLane(lane, by: size * direction * (lane == .leading ? 1 : -1))
         return .handled

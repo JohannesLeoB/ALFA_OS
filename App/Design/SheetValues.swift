@@ -19,6 +19,7 @@ enum SheetValues {
     static let orbGlossY = 0.28
     static let orbGlossStop = 0.45
     static let keyframeMiddle = 0.5
+    static let laneShiftStep = 8.0
     static let iconSize = 14.0
     static let iconBox = 16.0
     static let iconStroke = 1.3
