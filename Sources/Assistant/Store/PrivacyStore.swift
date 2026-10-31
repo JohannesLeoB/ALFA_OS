@@ -1,5 +1,7 @@
+import Core
 import Foundation
 import GRDB
+import Hub
 import Storage
 
 public struct PrivacyStore: PrivacyPort {
@@ -107,5 +109,25 @@ public final class ClaudeUsageStore: UsagePort {
             try db.execute(sql: "INSERT INTO claude_price (kind, price) VALUES (?, ?) ON CONFLICT(kind) DO UPDATE SET price = excluded.price",
                            arguments: [kind.rawValue, text])
         }
+    }
+}
+
+public struct ClaudeKeyStore: KeyPort {
+    private let credential: ClaudeCredential
+
+    public init(credential: ClaudeCredential) {
+        self.credential = credential
+    }
+
+    public func claudeKey() async -> ClaudeKey? {
+        await credential.current()
+    }
+}
+
+public struct TextStore: TextPort {
+    public init() {}
+
+    public func text(_ key: String, _ arguments: [String]) -> String {
+        PlaceholderEngine.fill(String(localized: String.LocalizationValue(key)), arguments)
     }
 }

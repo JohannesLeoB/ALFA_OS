@@ -55,3 +55,19 @@ public struct DriveRootStore: Sendable {
         try? settings.store(root, forKey: Self.key)
     }
 }
+
+public enum DriveConfigStore {
+    static let fileName = "google-drive.json"
+
+    private static let inert = DriveConfig(
+        projectsRoot: "", forbiddenFolderIDs: [],
+        offers: OfferConvention(
+            incomingFolderKeyword: "", outgoingFolderKeyword: "", purchaseOrderFolderKeyword: "", invoiceFolderKeyword: "",
+            offerFolderKeyword: "", orderFolderKeyword: "", prefixes: [:], documentNumberPattern: "",
+            customerNumberPattern: "", versionPattern: ""))
+
+    public static func load(in directory: URL) -> DriveConfig {
+        (try? Data(contentsOf: directory.appendingPathComponent(fileName)))
+            .flatMap { try? JSONDecoder().decode(DriveConfig.self, from: $0) } ?? inert
+    }
+}

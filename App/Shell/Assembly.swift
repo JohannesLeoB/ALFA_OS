@@ -200,36 +200,6 @@ final class Assembly {
     }
 }
 
-struct ClaudeKeyStore: KeyPort {
-    let credential: ClaudeCredential
-
-    func claudeKey() async -> ClaudeKey? {
-        await credential.current()
-    }
-}
-
-struct TextStore: TextPort {
-    func text(_ key: String, _ arguments: [String]) -> String {
-        PlaceholderEngine.fill(String(localized: String.LocalizationValue(key)), arguments)
-    }
-}
-
-enum DriveConfigStore {
-    static let fileName = "google-drive.json"
-
-    private static let inert = DriveConfig(
-        projectsRoot: "", forbiddenFolderIDs: [],
-        offers: OfferConvention(
-            incomingFolderKeyword: "", outgoingFolderKeyword: "", purchaseOrderFolderKeyword: "", invoiceFolderKeyword: "",
-            offerFolderKeyword: "", orderFolderKeyword: "", prefixes: [:], documentNumberPattern: "",
-            customerNumberPattern: "", versionPattern: ""))
-
-    static func load(in directory: URL) -> DriveConfig {
-        (try? Data(contentsOf: directory.appendingPathComponent(fileName)))
-            .flatMap { try? JSONDecoder().decode(DriveConfig.self, from: $0) } ?? inert
-    }
-}
-
 @MainActor
 struct ToolShelf {
     let access: any AccessPort
