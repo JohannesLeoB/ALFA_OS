@@ -908,7 +908,7 @@ final class HubTests: XCTestCase {
         XCTAssertTrue(rig.connections.setup.inlets[0].state.canRenew)
         let renewal = try XCTUnwrap(rig.connections.setup.renewal(of: first.id))
         XCTAssertEqual(renewal.offer, Rig.offer)
-        XCTAssertEqual(renewal.values, ["address": "a@x", Input.expectedAccountKey: "a@x"])
+        XCTAssertEqual(renewal.values, ["address": "a@x", Input.expectedAccountKey: "a@x", Input.renewsKey: first.id])
         rig.provider.setAccepting(true)
         let renewed = try await rig.connect("a@x")
         XCTAssertEqual(renewed.id, first.id)
@@ -916,7 +916,7 @@ final class HubTests: XCTestCase {
         guard case .connected(let probed) = rig.connections.setup.inlets[0].state else { return XCTFail("state") }
         XCTAssertGreaterThan(probed, .distantPast)
         XCTAssertEqual(rig.keychain.slots.map(\.inlet), [first.id])
-        XCTAssertNil(rig.connections.setup.renewal(of: first.id))
+        XCTAssertEqual(rig.connections.setup.renewal(of: first.id)?.offer, Rig.offer)
         _ = try rig.connections.access.port((any PingPort).self, for: first.id)
     }
 
@@ -931,6 +931,16 @@ final class HubTests: XCTestCase {
             XCTAssertEqual(error as? SetupFailure, .duplicate)
         }
         XCTAssertEqual(rig.connections.setup.inlets.count, 1)
+    }
+
+    @MainActor
+    func testAConnectedInletIsReplacedInPlaceWhenRenewed() async throws {
+        let rig = try Rig.make()
+        let inlet = try await rig.connect("a@x")
+        let renewed = try await rig.connections.setup.add(Rig.offer, input: .fields(["address": "b@x", Input.renewsKey: inlet.id]))
+        XCTAssertEqual(renewed.id, inlet.id)
+        XCTAssertEqual(renewed.account, "b@x")
+        XCTAssertEqual(rig.connections.setup.inlets.map(\.id), [inlet.id])
     }
 
     @MainActor
@@ -1228,11 +1238,11 @@ final class HubTests: XCTestCase {
                            state: .failed(Hint(text: "x")))
         let fine = Inlet(id: "j", provider: "fake", capabilities: [.mail], owner: .company, title: "Two", account: "me@x")
         XCTAssertEqual(RenewalEngine.renewal(of: "i", inlets: [failed], offers: [one, two]),
-                       Renewal(offer: two, values: ["host": "h", "user": "me@x", Input.expectedAccountKey: "me@x"]))
+                       Renewal(offer: two, values: ["host": "h", "user": "me@x", Input.expectedAccountKey: "me@x", Input.renewsKey: "i"]))
         XCTAssertEqual(RenewalEngine.renewal(of: "i", inlets: [Inlet(id: "i", provider: "fake", capabilities: [.mail], owner: .company,
                                                                        title: "Else", account: "q", state: .keychainUnreadable)],
                                             offers: [one, two])?.offer, one)
-        XCTAssertNil(RenewalEngine.renewal(of: "j", inlets: [fine], offers: [one, two]))
+        XCTAssertEqual(RenewalEngine.renewal(of: "j", inlets: [fine], offers: [one, two])?.offer, two)
         XCTAssertNil(RenewalEngine.renewal(of: "i", inlets: [failed], offers: []))
         XCTAssertNil(RenewalEngine.renewal(of: "zz", inlets: [failed], offers: [one]))
     }
@@ -1387,7 +1397,7 @@ final class HubTests: XCTestCase {
         await rig.cadence.trigger(inlet.id, .mail)
         let reading = IntegrationReadEngine.read(info, setup: rig.connections.setup, rules: rig.connections.rules)
         XCTAssertEqual(reading.state, .connected)
-        XCTAssertEqual(reading.step, .check(inlet.id))
+        XCTAssertEqual(reading.step, .renew(inlet.id))
         XCTAssertTrue(reading.asksReconnect)
         guard case .checked? = reading.note else { return XCTFail("note \(String(describing: reading.note))") }
         XCTAssertEqual(reading.areas.map(\.id), [inlet.id + "|mail"])
@@ -1450,7 +1460,7 @@ final class HubTests: XCTestCase {
         inlet.state = .failed(Hint(text: "hint.signin.expired", kind: .signIn))
         let renewal = RenewalEngine.renewal(of: inlet.id, inlets: [inlet], offers: [imap, outlook])
         XCTAssertEqual(renewal?.offer, outlook)
-        XCTAssertEqual(renewal?.values, [Input.expectedAccountKey: "me@outlook.com"])
+        XCTAssertEqual(renewal?.values, [Input.expectedAccountKey: "me@outlook.com", Input.renewsKey: "microsoft-1"])
     }
 
     func testCatalogLookupsAndInventory() {

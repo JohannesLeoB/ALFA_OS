@@ -141,8 +141,6 @@ final class AccountFlow {
             if let offer = offers.first { Task { await choose(offer) } }
         case .renew(let inlet):
             Task { await renew(inlet) }
-        case .check(let inlet):
-            Task { await probe(inlet) }
         case .none:
             failure = Hint(text: "settings.setup.unavailable", detail: id == "google" ? ClientConfigStore.fileName : nil)
         }

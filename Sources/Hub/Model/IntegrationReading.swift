@@ -24,9 +24,7 @@ public struct IntegrationReading: Identifiable, Equatable, Sendable {
     public var step: IntegrationStep {
         let lead = lead
         switch state {
-        case .connected, .working:
-            return lead.map { .check($0.id) } ?? .none
-        case .failed, .unreadable:
+        case .connected, .working, .failed, .unreadable:
             return lead.map { .renew($0.id) } ?? .none
         case .notConnected:
             return offers.isEmpty ? .none : .add(offers)
@@ -39,7 +37,6 @@ public struct IntegrationReading: Identifiable, Equatable, Sendable {
 public enum IntegrationStep: Equatable, Sendable {
     case add([Offer])
     case renew(Inlet.ID)
-    case check(Inlet.ID)
     case none
 }
 

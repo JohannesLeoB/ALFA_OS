@@ -19,6 +19,7 @@ public struct Field: Identifiable, Equatable, Sendable {
 
 public enum Input: Equatable, Sendable {
     public static let expectedAccountKey = "expectedAccount"
+    public static let renewsKey = "renews"
 
     case none
     case fields([Field.ID: String])
@@ -28,6 +29,11 @@ public enum Input: Equatable, Sendable {
         case .none: [:]
         case .fields(let values): values
         }
+    }
+
+    var renews: String? {
+        let text = values[Self.renewsKey] ?? ""
+        return text.isEmpty ? nil : text
     }
 
     var expectedAccount: String? {

@@ -53,6 +53,9 @@ extension InletsState: SetupPort {
             try? await provider.signIn.signOut(inlet)
             throw .probeFailed(Hint(text: HintEngine.accountMismatchText, detail: expected))
         }
+        if let target = input.renews, let renewed = record(target), renewed.provider == offer.provider {
+            return try renew(renewed, with: grant, account: result.account)
+        }
         if let existing = SetupEngine.existing(offer: offer, account: result.account, in: records) {
             guard existing.provider == offer.provider, existing.state.canRenew else {
                 try? await provider.signIn.signOut(inlet)
@@ -83,12 +86,13 @@ extension InletsState: SetupPort {
         return inlet
     }
 
-    private func renew(_ existing: Inlet, with grant: Grant) throws(SetupFailure) -> Inlet {
+    private func renew(_ existing: Inlet, with grant: Grant, account: String? = nil) throws(SetupFailure) -> Inlet {
         do {
             for (name, value) in SetupEngine.sorted(grant) {
                 try configuration.keychain.put(value, at: KeySlot(inlet: existing.id, name: name))
             }
             var inlet = existing
+            if let account { inlet.account = account }
             inlet.state = .connected(probed: configuration.clock())
             try inletStore.save(inlet, slots: SetupEngine.sorted(grant).map(\.key))
             grants[inlet.id] = grant

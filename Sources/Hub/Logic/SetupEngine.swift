@@ -35,7 +35,7 @@ enum SetupEngine {
 
 enum RenewalEngine {
     static func renewal(of id: Inlet.ID, inlets: [Inlet], offers: [Offer]) -> Renewal? {
-        guard let inlet = inlets.first(where: { $0.id == id }), inlet.state.canRenew else { return nil }
+        guard let inlet = inlets.first(where: { $0.id == id }) else { return nil }
         let matching = offers.filter { $0.provider == inlet.provider }
         guard let offer = matching.first(where: { $0.title == inlet.title }) ?? matching.first else { return nil }
         var values = offer.preset?.values ?? [:]
@@ -43,6 +43,7 @@ enum RenewalEngine {
             for field in fields where field.holdsAccount { values[field.id] = inlet.account }
         }
         if inlet.capabilities.contains(.mail), !inlet.account.isEmpty { values[Input.expectedAccountKey] = inlet.account }
+        values[Input.renewsKey] = inlet.id
         return Renewal(offer: offer, values: values)
     }
 }
