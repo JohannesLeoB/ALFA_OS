@@ -14,7 +14,6 @@ struct InboxRow: View {
     let picking: Bool
     @State private var hovering = false
     @State private var menuOpen = false
-    @State private var asking = false
 
     private var inbox: InboxState { session.inbox }
     private var selected: Bool { item.selected && !item.picked }
@@ -211,7 +210,7 @@ struct InboxRow: View {
     private var rowActions: some View {
         if hovering && !picking && item.outbox != nil {
             queuedActions
-        } else if (hovering || asking) && !picking && !item.draft {
+        } else if hovering && !picking && !item.draft {
             HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
                 rowAction(item.starred ? "mail.action.unstar" : "mail.action.star", glyph: .flag) {
                     session.perform(item.starred ? .unstar : .star, message: item.id)
@@ -228,10 +227,7 @@ struct InboxRow: View {
                     ConfirmPill(label: nil, question: appearance.text("mail.confirm.purge.question"), yes: appearance.text("mail.confirm.purge.yes"),
                                 no: appearance.text("confirm.no"),
                                 holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.confirm.purge.yes"))),
-                                startsAsking: true, showsProgress: false, onYes: {
-                                    asking = false
-                                    session.perform(.purge, message: item.id)
-                                }, onNo: { asking = false }) {
+                                startsAsking: true, showsProgress: false, onYes: { session.perform(.purge, message: item.id) }) {
                         Glyph(.trash)
                     }
                 } else if !inbox.inTrash(item.id) {
