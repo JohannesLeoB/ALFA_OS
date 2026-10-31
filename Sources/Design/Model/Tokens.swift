@@ -130,6 +130,8 @@ public enum Tokens {
         public static let ghostShadowSpread = -12.0
         public static let envelopeStroke = 1.15
         public static let mailLaneMinimumLeft = 224.0
+        public static let profileFactMinWidth = 140.0
+        public static let hintMaxWidth = 240.0
     }
     public enum Spacing {
         public static let step2 = 2.0
@@ -290,6 +292,8 @@ public enum Tokens {
         public static let cardMetaDeep = 0.95
         public static let switchGlass = 0.72
         public static let disabled = 0.4
+        public static let hoverDim = 0.88
+        public static let overviewOther = 0.55
     }
     public enum Confirm {
         public static let eraseEdge = 0.2
@@ -325,9 +329,15 @@ public enum Tokens {
     }
     public enum Scale {
         public static let pressTile = 0.98
+        public static let pressButton = 0.96
+        public static let pressRow = 0.99
+        public static let pressStrong = 0.92
+        public static let overviewHot = 1.012
+        public static let overviewOther = 0.988
     }
     public enum Ratio {
         public static let imageTile = 1.3333
+        public static let fieldValueMax = 0.6
     }
     public enum TextStyle {
         public static let body = TypeStyle(size: TextSize.body, weight: Weight.regular, tracking: 0.0, lineHeight: LineHeight.body * TextSize.body)
