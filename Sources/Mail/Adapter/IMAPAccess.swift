@@ -79,18 +79,6 @@ public struct IMAPAccess: ProviderPort {
     }
 }
 
-struct IMAPChangePort: ChangePort {
-    let transport: IMAPSMTPClient
-
-    func changes() -> AsyncThrowingStream<Void, any Error> { transport.changes() }
-}
-
-struct POPChangePort: ChangePort {
-    let transport: POPSMTPClient
-
-    func changes() -> AsyncThrowingStream<Void, any Error> { transport.changes() }
-}
-
 struct IMAPSignIn: SignInPort {
     let channels: IMAPChannelRegistry
 

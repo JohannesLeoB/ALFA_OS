@@ -19,3 +19,12 @@ extension ByteStreamPort {
         }
     }
 }
+
+public protocol DiscoveryPort: Sendable {
+    func document(_ url: URL) async -> Data?
+    func records(_ name: String, type: UInt16) async -> [Data]
+}
+
+public protocol MailTokenPort: Sendable {
+    func accessToken() async throws -> String
+}

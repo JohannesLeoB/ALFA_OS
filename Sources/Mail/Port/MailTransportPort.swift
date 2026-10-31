@@ -1,4 +1,5 @@
 import Foundation
+import Hub
 
 public protocol MailTransportPort: Sendable {
     func listFolders() async throws -> [Folder]
@@ -17,4 +18,57 @@ public protocol MailTransportPort: Sendable {
     func deleteDraft(id: String) async throws
     func sendDraft(id: String) async throws
     func wasSent(messageID: String, in folderID: String?) async throws -> Bool
+}
+
+public protocol GmailPort: MailTransportPort {}
+
+protocol SentCopyPort: Sendable {
+    var filesSentCopy: Bool { get }
+    func fileSent(_ draft: Draft, into folderID: String?) async throws
+}
+
+public protocol ServerCopyPort: Sendable {
+    func expire(_ policy: ServerCopy, now: Date) async throws
+}
+
+public protocol SendLimitPort: Sendable {
+    func sendLimit() async throws -> Int?
+}
+
+public protocol SenderPort: Sendable {
+    func senders() async throws -> [Participant]
+}
+
+public protocol UntrashPort: Sendable {
+    func untrash(messageID: String) async throws
+}
+
+protocol PurgePort: Sendable {
+    func supportsPurge() async throws -> Bool
+    func purge(messageID: String) async throws
+}
+
+public protocol SourcePort: Sendable {
+    var offersSource: Bool { get }
+    func fetchSource(messageID: String) async throws -> Data
+}
+
+public protocol LabelPort: Sendable {
+    var usesLabels: Bool { get }
+}
+
+public protocol InboxOnlyPort: Sendable {
+    var inboxOnly: Bool { get }
+}
+
+struct IMAPChangePort: ChangePort {
+    let transport: IMAPSMTPClient
+
+    func changes() -> AsyncThrowingStream<Void, any Error> { transport.changes() }
+}
+
+struct POPChangePort: ChangePort {
+    let transport: POPSMTPClient
+
+    func changes() -> AsyncThrowingStream<Void, any Error> { transport.changes() }
 }

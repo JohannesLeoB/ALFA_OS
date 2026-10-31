@@ -276,7 +276,7 @@ Which Swift file draws each element of the valid design master (Mail and Setting
 | Mail | Streifen gefaltete rechte Bahn (ohne Karten „Neue Mail“; vorn Nachricht: Antwort | Mail 661-665 | `Sources/Mail/State/InboxState+Strip.swift` |
 | Mail | toast (28, Polster 0 12, Kapsel inv, klein, gap 12, Fehlersymbol −4, sh-float) | Mail 314 | `App/Components/ToastView.swift`, `App/Mail/MailToast.swift` |
 | Mail | Toast-Knopf „Rückgängig“/„Erneut versuchen“ (20, Polster 0 8, control, Ring curr | Mail 314, B:112-113 | `App/Components/ToastView.swift` |
-| Mail | Toast nach „In Projektordner sichern“ | Mail 510 | `Sources/Mail/State/InboxState+Files.swift`, `Sources/Mail/Model/Toast.swift` |
+| Mail | Toast nach „In Projektordner sichern“ | Mail 510 | `Sources/Mail/State/InboxState+Files.swift`, `Sources/Mail/Model/InboxFilter.swift` |
 | Mail | anchored-menu (Polster 4, Radius contextMenu, menu, sh-float; Zeile 28 Polster 0 | Mail 323-329, B:152 | `App/Components/AnchoredMenu.swift`, `App/Components/MenuPanel.swift` |
 | Settings | Leading lane header (no title, fold button only) | Einstellungen 16-20, Einstellungen 3 | `App/Settings/SettingsPane.swift` |
 | Settings | Group rows Ich/Firma/Dateiordner/Verbindungen/Schutz und System with symbols | Einstellungen 25-29, Einstellungen 2 | `App/Settings/SettingsPane.swift`, `App/Components/LaneRow.swift` |

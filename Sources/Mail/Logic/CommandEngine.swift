@@ -59,14 +59,6 @@ enum CommandEngine {
     }
 }
 
-enum HeadState: Equatable, Sendable {
-    case empty
-    case reading
-    case draft
-    case confirm
-    case fanned
-}
-
 public typealias Slot = CommandSlot<Action>
 
 public struct CommandSet: Equatable, Sendable {

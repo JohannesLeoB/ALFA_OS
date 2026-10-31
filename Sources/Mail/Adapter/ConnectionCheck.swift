@@ -1,16 +1,6 @@
 import Foundation
 import Hub
 
-enum ProbeStep: String, Sendable {
-    case incoming
-    case outgoing
-}
-
-struct ProbeFailure: Error, Equatable, Sendable {
-    let step: ProbeStep
-    let reason: MailFailure
-}
-
 struct ConnectionCheck: ProbePort {
     typealias Run = @Sendable (Account, String) async throws -> Void
 

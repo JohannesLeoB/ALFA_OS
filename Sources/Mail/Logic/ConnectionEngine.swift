@@ -1,14 +1,5 @@
 import Foundation
 
-enum ConnectionFailure: Error, Equatable, Sendable {
-    case missing(String)
-    case invalidAddress(String)
-    case invalidPort(field: String, value: String)
-    case invalidSecurity(field: String, value: String)
-    case insecure(field: String)
-    case invalidProtocol(String)
-}
-
 struct ConnectionEngine: Equatable, Sendable {
     private static let implicitIncoming = 993
     private static let explicitIncoming = 143

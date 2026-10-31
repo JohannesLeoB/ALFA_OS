@@ -13,3 +13,12 @@ public protocol MirrorPort: Sendable {
 public extension MirrorPort {
     var fillsPreviews: Bool { false }
 }
+
+public protocol EverywhereSearchPort: Sendable {
+    func offersEverywhere(in folders: [Folder]) -> Bool
+    func searchEverywhere(query: String, pageToken: String?, maxResults: Int) async throws -> MessagePage
+}
+
+public protocol UnseenCountPort: Sendable {
+    func unseen(folderID: String) async throws -> FolderCount?
+}
