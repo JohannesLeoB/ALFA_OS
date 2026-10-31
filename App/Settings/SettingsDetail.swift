@@ -100,11 +100,7 @@ struct FoldersCard: View {
     var body: some View {
         let source = context.readings.first { $0.info.id == "airtable" && $0.state == .connected }
         VStack(spacing: 0) {
-            if let choice = rootChoice {
-                ProjectRootRows(context: context, info: choice.info, extra: choice.extra, inlet: choice.inlet)
-            } else {
-                row("settings.folders.projects", context.roots.current().map { Text(verbatim: $0.name) })
-            }
+            row("settings.folders.projects", context.roots.current().map { Text(verbatim: $0.name) })
             row("settings.folders.data", source.map { appearance.text($0.info.nameKey) })
             SettingsRow(label: appearance.text("settings.folders.templates"), line: false) {
                 if let template = context.state.currentTemplate {
@@ -114,17 +110,6 @@ struct FoldersCard: View {
                 }
             }
         }
-    }
-
-    private var rootChoice: (info: IntegrationInfo, extra: IntegrationExtra, inlet: Inlet)? {
-        for reading in context.readings where reading.state == .connected {
-            for extra in reading.info.extras where extra.kind == .projectRoot {
-                if let inlet = reading.inlets.first(where: { extra.capability.map($0.capabilities.contains) ?? false }) {
-                    return (reading.info, extra, inlet)
-                }
-            }
-        }
-        return nil
     }
 
     private func row(_ key: String, _ value: Text?) -> some View {
