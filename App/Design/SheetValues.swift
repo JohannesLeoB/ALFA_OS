@@ -33,6 +33,7 @@ enum SheetValues {
     static let fieldTrailingMaxShare = 0.5
     static let smallIcon = 12.0
     static let smallIconStroke = 1.5
+    static let compactValueSize = 12.0
     static let tinyIcon = 10.0
     static let tinyIconStroke = 1.8
     static let overviewStaggerCap = 8

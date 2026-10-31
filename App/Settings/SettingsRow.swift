@@ -12,7 +12,7 @@ struct SettingsRow<Trailing: View>: View {
     @State private var width: CGFloat?
 
     private var room: CGFloat? {
-        width.map { max(0, $0 - CGFloat(Tokens.Spacing.step16 + Tokens.Spacing.step8 - Tokens.Size.confirmPillOffset)) }
+        width.map { max(0, $0 - CGFloat(Tokens.Spacing.step16 + Tokens.Spacing.step16 - Tokens.Size.confirmPillOffset)) }
     }
 
     var body: some View {
@@ -38,7 +38,7 @@ struct SettingsRow<Trailing: View>: View {
         }
         .padding(.vertical, CGFloat(Tokens.Spacing.step8))
         .padding(.leading, CGFloat(Tokens.Spacing.step16))
-        .padding(.trailing, CGFloat(Tokens.Spacing.step8))
+        .padding(.trailing, CGFloat(Tokens.Spacing.step16))
         .frame(minHeight: CGFloat(Tokens.Spacing.step44))
         .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
         .overlay(alignment: .bottom) {
@@ -92,13 +92,14 @@ struct SettingsValue: View {
     @Environment(\.appearance) private var appearance
     let text: Text
     var tone: KeyPath<Colors, ColorValue> = \.inkSecondary
+    var compact = false
 
     var body: some View {
         text
             .lineLimit(1)
             .truncationMode(.tail)
             .help(text)
-            .font(.face(Tokens.TextSize.body))
+            .font(.face(compact ? SheetValues.compactValueSize : Tokens.TextSize.body))
             .foregroundStyle(appearance.color(tone))
             .padding(.trailing, CGFloat(Tokens.Size.trailingTextInset))
     }

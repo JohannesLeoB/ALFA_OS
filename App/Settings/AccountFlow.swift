@@ -556,7 +556,7 @@ struct AccountBlock: View {
 
     private func label(_ option: UndoSend) -> String {
         guard option != .off else { return appearance.string("settings.mail.undoOff") }
-        return Duration.seconds(option.seconds).formatted(.units(allowed: [.seconds], width: .narrow).locale(appearance.locale))
+        return appearance.format("settings.mail.undoSeconds", String(option.seconds))
     }
 
     private func addAccount(kind: TextButtonKind) -> some View {

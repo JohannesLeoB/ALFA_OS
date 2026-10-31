@@ -497,9 +497,9 @@ struct SystemCard: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            SettingsRow(label: appearance.text(SettingsLabel.version.key)) { SettingsValue(text: Text(verbatim: version)) }
+            SettingsRow(label: appearance.text(SettingsLabel.version.key)) { SettingsValue(text: Text(verbatim: version), compact: true) }
             if let branch {
-                SettingsRow(label: appearance.text(SettingsLabel.branch.key)) { SettingsValue(text: Text(verbatim: branch)) }
+                SettingsRow(label: appearance.text(SettingsLabel.branch.key)) { SettingsValue(text: Text(verbatim: branch), compact: true) }
             }
             SettingsRow(label: appearance.text(SettingsLabel.database.key)) { SettingsValue(text: Text(verbatim: database)) }
             SettingsRow(label: appearance.text(SettingsLabel.diagnosis.key), line: false) {

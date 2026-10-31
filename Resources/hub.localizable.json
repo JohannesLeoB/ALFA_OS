@@ -1281,6 +1281,10 @@
    "de": "Aus",
    "en": "Off"
   },
+  "settings.mail.undoSeconds": {
+   "de": "%@ s",
+   "en": "%@ s"
+  },
   "settings.identity.retire": {
    "de": "Nutzerkonto stilllegen",
    "en": "Retire User Account"

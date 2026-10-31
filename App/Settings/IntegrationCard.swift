@@ -56,7 +56,7 @@ struct IntegrationCard: View {
                     } else {
                         let value = value(of: field, reading)
                         SettingsRow(label: appearance.text(info.fieldKey(field))) {
-                            SettingsValue(text: value.text, tone: value.tone)
+                            SettingsValue(text: value.text, tone: value.tone, compact: field.secret)
                         }
                     }
                 }
