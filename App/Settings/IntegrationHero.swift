@@ -29,7 +29,6 @@ struct IntegrationHero: View {
             }
             .frame(width: side, height: side)
             .clipShape(shape)
-            .ring(shape, info.logo.flatMap { $0.kind == .wide ? nil : appearance.color(\.line) })
             VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step2)) {
                 Text(verbatim: name)
                     .font(.face(Tokens.TextSize.title, weight: Tokens.Weight.medium))
