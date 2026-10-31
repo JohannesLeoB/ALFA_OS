@@ -192,7 +192,7 @@ struct FromButton: View {
                 if name.isEmpty {
                     Text(verbatim: address).designText(\.ink, size: Tokens.TextSize.body, weight: .medium).lineLimit(1)
                 } else {
-                    Text(verbatim: name).designText(\.ink, size: Tokens.TextSize.body, weight: .medium).lineLimit(1).fixedSize()
+                    Text(verbatim: name).designText(\.ink, size: Tokens.TextSize.body, weight: .medium).lineLimit(1).layoutPriority(1)
                     Text(verbatim: address).designText(\.inkTertiary, size: Tokens.TextSize.small).lineLimit(1).truncationMode(.tail)
                 }
                 Glyph.small(.chevron).foregroundStyle(appearance.color(\.inkTertiary))

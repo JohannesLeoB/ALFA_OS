@@ -29,7 +29,9 @@ struct HeaderTitle: View {
         text
             .designText(\.ink, size: Tokens.TextSize.body, weight: .medium)
             .lineLimit(1)
-            .fixedSize()
+            .truncationMode(.middle)
+            .help(text)
+            .layoutPriority(1)
     }
 }
 

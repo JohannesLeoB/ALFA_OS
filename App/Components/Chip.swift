@@ -43,7 +43,7 @@ struct AttachmentChip<Glyph: View, RemoveGlyph: View>: View {
             glyph
             Text(verbatim: name)
                 .lineLimit(1)
-                .truncationMode(.tail)
+                .truncationMode(.middle)
             if let size {
                 Text(verbatim: size).foregroundStyle(appearance.color(ink.tertiary))
             }

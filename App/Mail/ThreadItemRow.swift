@@ -155,6 +155,7 @@ struct ThreadItemRow: View {
         .foregroundStyle(appearance.color(\.sheetInkTertiary))
         .monospacedDigit()
         .lineLimit(1)
+        .fixedSize()
     }
 
     private func menu() {

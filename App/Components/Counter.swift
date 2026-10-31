@@ -15,6 +15,7 @@ struct Counter: View {
             .lineHeight(Tokens.LineHeight.counter * Tokens.TextStyle.caption.size, size: Tokens.TextStyle.caption.size)
             .monospacedDigit()
             .lineLimit(1)
+            .fixedSize()
             .foregroundStyle(appearance.color(tone))
             .padding(.horizontal, CGFloat(ringed ? Tokens.Spacing.step8 : Tokens.Spacing.step4))
             .frame(minWidth: side, minHeight: side, maxHeight: side)

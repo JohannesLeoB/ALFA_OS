@@ -21,6 +21,8 @@ struct AttachmentRow: View {
             Text(verbatim: PersonName.middle(row.name, limit: SheetValues.attachmentNameLimit))
                 .font(.face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
                 .lineLimit(1)
+                .truncationMode(.middle)
+                .help(Text(verbatim: row.name))
             Text(verbatim: row.size)
                 .font(.face(Tokens.TextSize.small))
                 .foregroundStyle(appearance.color(\.sheetInkTertiary))

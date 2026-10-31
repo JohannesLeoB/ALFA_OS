@@ -20,6 +20,8 @@ struct LaneRow: View {
                 label
                     .designText(selected ? \.onInverse : \.ink, size: Tokens.TextSize.body, weight: selected ? .medium : .regular)
                     .lineLimit(1)
+                    .truncationMode(.middle)
+                    .help(label)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 if let count {
                     Counter(value: count, tone: countTone)

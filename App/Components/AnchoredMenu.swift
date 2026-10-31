@@ -68,6 +68,7 @@ struct MenuRow: View {
                     .frame(width: CGFloat(Tokens.Spacing.step12))
                 row.label
                     .lineLimit(1)
+                    .truncationMode(.middle)
                     .help(row.label)
                     .font(.face(Tokens.TextSize.body))
                     .frame(maxWidth: .infinity, alignment: .leading)
