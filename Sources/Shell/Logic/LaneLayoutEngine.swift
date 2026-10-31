@@ -160,14 +160,6 @@ public enum MenuAlignEngine {
     }
 }
 
-public enum MenuWidthEngine {
-    public static func width(fitting natural: Double) -> Double {
-        let step = Tokens.Size.menuWidthStep
-        let rounded = (natural / step).rounded(.up) * step
-        return min(max(rounded, Tokens.Size.menuMinWidth), Tokens.Size.menuMaxWidth)
-    }
-}
-
 public enum TileGrid {
     public static func columns(width: Double, minimum: Double, gap: Double) -> Int {
         guard width.isFinite, minimum > 0 else { return 1 }
