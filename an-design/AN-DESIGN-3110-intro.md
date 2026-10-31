@@ -34,3 +34,8 @@ Nach einer erfolgreichen Anmeldung bei Google oder Microsoft öffnet ALFA_OS ein
 
 ## Stand bei Code
 Eine Code-Sitzung baut die Seite übergangsweise aus Teilen des Masters 2910 (Zeichen, Farben, Dauern) und benennt die App überall einheitlich ALFA_OS. Sobald der Bogen da ist, ersetzt Code die Seite 1:1 danach. Der Name „mykilOS“ auf Googles Zustimmungsseite kommt aus der Google Cloud Console und wird dort von Johannes geändert.
+
+## Nachtrag · Übergangsseite gebaut (`main` 630e2103)
+- Die Seite nach der Anmeldung zeigt jetzt den Blob als Zeichen: Er erscheint, wird breit mit „ALFA_OS“, blinzelt einmal, darunter Titel und Zeile. Alle Farben, Maße, Dauern und Kurven kommen aus den Tokens des Masters 2910.
+- **Ohne Token erfunden** (bitte durch den Bogen ersetzen): Verzögerungen 200, 900, 980, 1060, 1700, 1900 und 2100 ms; Breite des Schriftzugs 96px; Startgröße 0,92; Blinzeln auf 0,12; ein leiser Zweiklang (392 und 587,33 Hz, Lautstärke 0,05), der nur spielt, wenn der Browser Ton ohne Klick erlaubt.
+- **Abweichung vom Master auf Johannes' Wunsch:** Die App heißt überall „ALFA_OS“. Damit weichen `mail.later.missed`, `mail.later.notice.title` und `mail.later.notice.text` vom Master ab (dort „ALFA“). Bitte im nächsten Master übernehmen.
