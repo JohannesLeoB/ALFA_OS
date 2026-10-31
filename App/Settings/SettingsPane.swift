@@ -289,11 +289,13 @@ struct SectionRow: View {
                     }
                 }
                 .frame(height: CGFloat(Tokens.LineHeight.notice))
-                (detailKey.map { appearance.text($0) } ?? Text(verbatim: ""))
-                    .lineLimit(1)
-                    .font(.face(Tokens.TextSize.body))
-                    .foregroundStyle(appearance.color(ink.tertiary))
-                    .frame(height: CGFloat(Tokens.LineHeight.notice), alignment: .leading)
+                if let detailKey {
+                    appearance.text(detailKey)
+                        .lineLimit(1)
+                        .font(.face(Tokens.TextSize.body))
+                        .foregroundStyle(appearance.color(ink.tertiary))
+                        .frame(height: CGFloat(Tokens.LineHeight.notice), alignment: .leading)
+                }
             }
             .contentShape(shape)
         }

@@ -19,6 +19,7 @@ struct SettingsTile: View {
         let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row))
         let lift = hovering ? CGFloat(Tokens.Size.tileHoverLift) : 0
         let height = CGFloat(Tokens.Size.settingsTileHeight)
+        let ink = InkSet.of(selected)
         Button(action: action) {
             VStack(alignment: .leading, spacing: 0) {
                 badge
@@ -27,16 +28,20 @@ struct SettingsTile: View {
                     Text(name, bundle: appearance.bundle)
                         .lineLimit(1)
                         .font(.face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
-                        .foregroundStyle(appearance.color(selected ? \.lane : \.ink))
-                    (sub.map { appearance.text($0) } ?? Text(verbatim: ""))
-                        .lineLimit(1)
-                        .font(.face(Tokens.TextSize.small))
-                        .foregroundStyle(appearance.color(selected ? \.lane : (bad ? \.signal : \.inkTertiary)))
+                        .foregroundStyle(appearance.color(ink.primary))
+                    if let sub {
+                        appearance.text(sub)
+                            .lineLimit(1)
+                            .font(.face(Tokens.TextSize.small))
+                            .foregroundStyle(appearance.color(selected ? ink.primary : (bad ? \.signal : \.inkTertiary)))
+                    } else {
+                        Color.clear.frame(height: 0)
+                    }
                 }
             }
-            .padding(CGFloat(Tokens.Spacing.step8))
+            .padding(CGFloat(Tokens.Spacing.step12))
             .frame(maxWidth: .infinity, minHeight: height, maxHeight: height, alignment: .topLeading)
-            .background(shape.fill(selected ? appearance.color(\.ink) : appearance.color(\.well)))
+            .background(shape.fill(selected ? appearance.color(\.inverse) : appearance.color(\.well)))
             .background {
                 if hovering, let layer = Shadows.overviewHoverLight.first {
                     shape.inset(by: CGFloat(-layer.spread))
@@ -69,13 +74,14 @@ struct SettingsTile: View {
                     .frame(width: logoSide, height: logoSide)
             } else {
                 Text(verbatim: initial)
-                    .typeStyle(Tokens.TextStyle.mark)
-                    .foregroundStyle(appearance.color(selected ? \.lane : \.ink))
+                    .font(.face(Tokens.TextSize.title, weight: Tokens.Weight.medium))
+                    .tracking(CGFloat(Tokens.Tracking.mark * Tokens.TextSize.title))
+                    .foregroundStyle(appearance.color(InkSet.of(selected).primary))
             }
         }
         .frame(width: side, height: side)
         .clipShape(shape)
-        .ring(shape, image == nil ? appearance.color(selected ? \.lane : \.lineStrong) : nil)
+        .ring(shape, image == nil ? appearance.color(selected ? \.onInverse : \.lineStrong) : nil)
     }
 }
 
