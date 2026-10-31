@@ -120,7 +120,7 @@ public final class OAuthLoopback: RedirectPort, Sendable {
 
     private func respond(_ body: String, status: String, on connection: NWConnection) {
         let head = "HTTP/1.1 \(status)\r\nContent-Type: text/html; charset=utf-8\r\n"
-            + "Cache-Control: no-store\r\nContent-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'\r\n"
+            + "Cache-Control: no-store\r\nContent-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; font-src data:\r\n"
             + "Content-Length: \(body.utf8.count)\r\nConnection: close\r\n\r\n"
         connection.send(content: Data((head + body).utf8), completion: .contentProcessed { _ in connection.cancel() })
     }
