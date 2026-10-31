@@ -196,7 +196,7 @@ public final class SettingsState {
     public func setStoreFolder(_ value: Data?) {
         mailStore.folder = value
         guard let value else {
-            try? settings.remove(key: SettingsKey.mailStoreFolder)
+            erase(SettingsKey.mailStoreFolder)
             return
         }
         save(SettingsKey.mailStoreFolder, value)
@@ -254,9 +254,9 @@ public final class SettingsState {
         mailboxSignatures[inlet] = nil
         signaturesOnNew[inlet] = nil
         signaturesAbove[inlet] = nil
-        try? settings.remove(key: SettingsKey.mailboxSignature(inlet))
-        try? settings.remove(key: SettingsKey.mailboxSignatureNew(inlet))
-        try? settings.remove(key: SettingsKey.mailboxSignatureAbove(inlet))
+        erase(SettingsKey.mailboxSignature(inlet))
+        erase(SettingsKey.mailboxSignatureNew(inlet))
+        erase(SettingsKey.mailboxSignatureAbove(inlet))
     }
 
     public func range(_ inlet: Inlet.ID) -> MailboxRange {
@@ -288,24 +288,25 @@ public final class SettingsState {
 
     public func forget(_ inlet: Inlet.ID) {
         mailboxImages[inlet] = nil
-        try? settings.remove(key: SettingsKey.mailboxImages(inlet))
+        erase(SettingsKey.mailboxImages(inlet))
         mailboxDisplays[inlet] = nil
         mailboxRanges[inlet] = nil
         serverCopies[inlet] = nil
-        try? settings.remove(key: SettingsKey.mailboxServerCopy(inlet))
+        erase(SettingsKey.mailboxServerCopy(inlet))
         mailboxNames[inlet] = nil
-        try? settings.remove(key: SettingsKey.mailboxName(inlet))
-        try? settings.remove(key: SettingsKey.mailboxDisplay(inlet))
-        try? settings.remove(key: SettingsKey.mailboxRange(inlet))
+        erase(SettingsKey.mailboxName(inlet))
+        erase(SettingsKey.mailboxDisplay(inlet))
+        erase(SettingsKey.mailboxRange(inlet))
         clearSignature(inlet)
         let source = ContactSource.googleID(inlet)
-        try? settings.remove(key: SettingsKey.contactSource(source))
-        try? settings.remove(key: SettingsKey.contactCache(source))
+        erase(SettingsKey.contactSource(source))
+        erase(SettingsKey.contactCache(source))
     }
 
     public func select(_ next: SettingsGroup, showing card: String?) {
         group = next
         front = card
+        if card != nil { opened += 1 }
     }
 
     public func open(_ id: String) {
@@ -329,8 +330,26 @@ public final class SettingsState {
     }
 
     private func save<V: Encodable>(_ key: String, _ value: V) {
-        try? settings.store(value, forKey: key)
+        do {
+            try settings.store(value, forKey: key)
+        } catch {
+            saveFailed()
+        }
     }
+
+    private func erase(_ key: String) {
+        do {
+            try settings.remove(key: key)
+        } catch {
+            saveFailed()
+        }
+    }
+
+    private func saveFailed() {
+        notify(SettingsState.saveFailedKey, failed: true)
+    }
+
+    private static let saveFailedKey = "settings.failed.unknown"
 }
 
 @MainActor @Observable

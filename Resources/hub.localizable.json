@@ -929,10 +929,6 @@
    "de": "Urheber, Rechte, Signatur",
    "en": "Author, rights, signature"
   },
-  "settings.section.integrations": {
-   "de": "Integrationen",
-   "en": "Integrations"
-  },
   "settings.section.keyInventory": {
    "de": "Schlüssel-Inventar",
    "en": "Key Inventory"

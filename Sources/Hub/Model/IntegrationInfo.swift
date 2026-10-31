@@ -168,7 +168,6 @@ public enum SettingsSection: String, CaseIterable, Sendable, Identifiable {
     case companyData
     case folders
     case templates
-    case integrations
     case keyInventory
     case contacts
     case privacy
@@ -182,7 +181,7 @@ public enum SettingsSection: String, CaseIterable, Sendable, Identifiable {
         case .identity, .appearance: .me
         case .companyData: .company
         case .folders, .templates: .folders
-        case .integrations, .keyInventory, .contacts: .connections
+        case .keyInventory, .contacts: .connections
         case .privacy, .system, .imprint: .protection
         }
     }

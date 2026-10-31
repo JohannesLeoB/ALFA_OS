@@ -26,7 +26,6 @@ struct SettingsDetail: View {
             case .companyData: CompanyCard(state: context.state)
             case .folders: FoldersCard(context: context)
             case .templates: TemplatesCard(state: context.state)
-            case .integrations: EmptyView()
             case .keyInventory: KeyCard(context: context)
             case .contacts: ContactCard(context: context)
             case .privacy: PrivacyCard(state: context.state, privacy: context.privacy, conversation: context.conversation)
