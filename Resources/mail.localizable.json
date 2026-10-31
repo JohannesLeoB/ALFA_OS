@@ -1031,7 +1031,7 @@
   },
   "mail.empty.inbox": {
    "de": "Keine Nachrichten im Eingang.",
-   "en": "No messages in the inbox."
+   "en": "No messages in Inbox."
   },
   "mail.empty.starred": {
    "de": "Keine markierten Nachrichten.",
@@ -1051,7 +1051,7 @@
   },
   "mail.empty.archive": {
    "de": "Keine Nachrichten im Archiv.",
-   "en": "No messages in the archive."
+   "en": "No messages in Archive."
   },
   "mail.empty.spam": {
    "de": "Kein Spam.",
@@ -1210,8 +1210,8 @@
    "en": "Save to Project"
   },
   "mail.attachment.otherProject": {
-   "de": "In anderes Projekt",
-   "en": "Move to Another Project"
+   "de": "In anderes Projekt …",
+   "en": "Move to Another Project …"
   },
   "mail.toast.notSentInDrafts": {
    "de": "Nicht gesendet · im Ordner Entwürfe",

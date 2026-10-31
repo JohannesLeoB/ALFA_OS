@@ -375,7 +375,7 @@
   },
   "settings.mailStore.attachments": {
    "de": "Anhänge lokal",
-   "en": "Attachments on this Mac"
+   "en": "Attachments stored locally"
   },
   "settings.mailStore.limit": {
    "de": "Obergrenze",

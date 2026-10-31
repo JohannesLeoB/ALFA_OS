@@ -12264,13 +12264,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In anderes Projekt"
+            "value" : "In anderes Projekt …"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Move to Another Project"
+            "value" : "Move to Another Project …"
           }
         }
       }
@@ -13132,7 +13132,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No messages in the archive."
+            "value" : "No messages in Archive."
           }
         }
       }
@@ -13164,7 +13164,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No messages in the inbox."
+            "value" : "No messages in Inbox."
           }
         }
       }
@@ -18101,7 +18101,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Attachments on this Mac"
+            "value" : "Attachments stored locally"
           }
         }
       }
