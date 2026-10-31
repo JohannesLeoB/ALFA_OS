@@ -82,10 +82,18 @@ public struct IntegrationField: Equatable, Sendable {
 }
 
 public struct IntegrationLogo: Equatable, Sendable {
-    public let resource: String
+    public enum Kind: Sendable {
+        case full
+        case wide
+        case mark
+    }
 
-    init(resource: String) {
+    public let resource: String
+    public let kind: Kind
+
+    init(resource: String, kind: Kind) {
         self.resource = resource
+        self.kind = kind
     }
 }
 

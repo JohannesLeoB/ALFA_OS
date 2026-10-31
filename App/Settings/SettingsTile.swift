@@ -1,12 +1,12 @@
-import AppKit
 import Design
+import Hub
 import SwiftUI
 
 struct SettingsTile: View {
     @Environment(\.appearance) private var appearance
     let name: LocalizedStringKey
     let initial: String
-    let logo: NSImage?
+    let logo: IntegrationLogo?
     let sub: String?
     let bad: Bool
     let selected: Bool
@@ -53,14 +53,17 @@ struct SettingsTile: View {
     }
 
     private var badge: some View {
-        let side = CGFloat(Tokens.Size.symbolSize)
+        let side = CGFloat(Tokens.Spacing.step44)
+        let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row))
+        let image = logo?.image
         return ZStack {
-            if let image = logo {
-                Circle().fill(appearance.color(\.sheet))
+            if let logo, let image {
+                let logoSide = logo.side(field: Tokens.Spacing.step44, mark: Tokens.Spacing.step24)
+                shape.fill(appearance.color(logo.ground))
                 Image(nsImage: image)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: CGFloat(Tokens.Size.tileLogoSize), height: CGFloat(Tokens.Size.tileLogoSize))
+                    .frame(width: logoSide, height: logoSide)
             } else {
                 Text(verbatim: initial)
                     .typeStyle(Tokens.TextStyle.mark)
@@ -68,7 +71,7 @@ struct SettingsTile: View {
             }
         }
         .frame(width: side, height: side)
-        .clipShape(Circle())
-        .ring(Circle(), appearance.color(selected ? \.lane : \.lineStrong))
+        .clipShape(shape)
+        .ring(shape, image == nil ? appearance.color(selected ? \.lane : \.lineStrong) : nil)
     }
 }

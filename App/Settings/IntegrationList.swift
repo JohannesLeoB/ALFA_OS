@@ -34,7 +34,7 @@ struct IntegrationList: View {
                         SettingsTile(
                             name: LocalizedStringKey(reading.info.nameKey),
                             initial: String(appearance.string(reading.info.nameKey).prefix(1)),
-                            logo: reading.info.logo?.image,
+                            logo: reading.info.logo,
                             sub: reading.state.key,
                             bad: reading.state.isBad,
                             selected: state.front == reading.info.id,

@@ -15,10 +15,11 @@ struct IntegrationHero: View {
             ZStack {
                 if let logo = info.logo, let image = logo.image {
                     shape.fill(appearance.color(logo.ground))
+                    let logoSide = logo.side(field: Tokens.Spacing.step56, mark: Tokens.Spacing.step32)
                     Image(nsImage: image)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: logoSide(logo), height: logoSide(logo))
+                        .frame(width: logoSide, height: logoSide)
                 } else {
                     shape.fill(appearance.color(\.well))
                     Text(verbatim: String(name.prefix(1)))
@@ -28,7 +29,7 @@ struct IntegrationHero: View {
             }
             .frame(width: side, height: side)
             .clipShape(shape)
-            .ring(shape, info.logo.flatMap { $0.isWide ? nil : appearance.color(\.line) })
+            .ring(shape, info.logo.flatMap { $0.kind == .wide ? nil : appearance.color(\.line) })
             VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step2)) {
                 Text(verbatim: name)
                     .font(.face(Tokens.TextSize.title, weight: Tokens.Weight.medium))
@@ -45,9 +46,5 @@ struct IntegrationHero: View {
         .padding(.top, CGFloat(Tokens.Spacing.step4))
         .padding(.horizontal, CGFloat(Tokens.Spacing.step16))
         .padding(.bottom, CGFloat(Tokens.Spacing.step12))
-    }
-
-    private func logoSide(_ logo: IntegrationLogo) -> CGFloat {
-        CGFloat(logo.isWide ? SheetValues.heroLogoWide : Tokens.Spacing.step56)
     }
 }
