@@ -54,7 +54,7 @@ struct SettingsRowLayout: Layout {
     private func plan(_ width: CGFloat, _ subviews: Subviews) -> Plan {
         let ideal = subviews[1].sizeThatFits(.unspecified).width
         let least = subviews[1].sizeThatFits(ProposedViewSize(width: 0, height: nil)).width
-        let share = CGFloat(SheetValues.valueMaxShare) * width
+        let share = CGFloat(Tokens.Ratio.fieldValueMax) * width
         let trailing = min(ideal, max(least, min(share, width - gap - minimum)))
         return Plan(trailing: trailing, label: max(0, width - gap - trailing))
     }

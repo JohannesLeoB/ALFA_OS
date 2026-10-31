@@ -53,7 +53,7 @@ struct Blob: View {
                     .allowsHitTesting(false)
             }
         }
-        .blobStretch(stretch, squeeze: squeezed ? SheetValues.pressScale : 1)
+        .blobStretch(stretch, squeeze: squeezed ? Tokens.Scale.pressButton : 1)
         .onHover { desk.setHovering($0) }
         .onGeometryChange(for: CGRect.self) { $0.frame(in: .named(Frame.space)) } action: { frame = $0 }
         .animation(flight) {

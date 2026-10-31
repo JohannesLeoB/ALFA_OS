@@ -90,7 +90,7 @@ private struct HintLayer: ViewModifier {
                         .font(.face(Tokens.TextSize.small))
                         .lineHeight(Tokens.LineHeight.body * Tokens.TextSize.small, size: Tokens.TextSize.small)
                         .foregroundStyle(appearance.color(\.onInverse))
-                        .frame(maxWidth: CGFloat(SheetValues.hintMaxWidth), alignment: .leading)
+                        .frame(maxWidth: CGFloat(Tokens.Size.hintMaxWidth), alignment: .leading)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.vertical, CGFloat(Tokens.Spacing.step4))
                         .padding(.horizontal, CGFloat(Tokens.Spacing.step8))

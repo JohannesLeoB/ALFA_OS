@@ -57,7 +57,7 @@ struct ProfileTile: View {
             .background(shape.fill(selected ? appearance.color(\.inverse) : appearance.color(\.well)))
             .contentShape(shape)
         }
-        .buttonStyle(PressScaleButtonStyle(scale: SheetValues.pressScaleDisclosure))
+        .buttonStyle(PressScaleButtonStyle(scale: Tokens.Scale.pressRow))
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 

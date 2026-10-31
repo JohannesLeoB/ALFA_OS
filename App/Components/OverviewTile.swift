@@ -52,9 +52,9 @@ struct OverviewTile: View {
                     .offset(x: CGFloat(layer.x), y: CGFloat(layer.y))
             }
         }
-        .opacity(shown ? (dimmed && !still ? SheetValues.overviewOtherOpacity : 1) : 0)
+        .opacity(shown ? (dimmed && !still ? Tokens.Opacity.overviewOther : 1) : 0)
         .animation(appearance.ease(Tokens.Duration.tileHover, SheetValues.cssEase, delay: enterDelay), value: entered)
-        .scaleEffect(shown && !still ? (hot ? SheetValues.overviewHoverScale : dimmed ? SheetValues.overviewOtherScale : 1) : 1)
+        .scaleEffect(shown && !still ? (hot ? Tokens.Scale.overviewHot : dimmed ? Tokens.Scale.overviewOther : 1) : 1)
         .offset(y: shown ? (hot ? -lift : 0) : Tokens.Size.overviewTileEnter)
         .animation(appearance.ease(Tokens.Duration.rowSequence, delay: enterDelay), value: entered)
         .onAppear { if !still { entered = true } }

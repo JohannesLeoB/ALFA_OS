@@ -3,7 +3,6 @@ import Design
 enum SheetValues {
     static let heroLogoWide = 48.0
     static let weightAxis = 0x7767_6874
-    static let pressScale = 0.96
     static let releaseSamples = 6
     static let releaseSpan = 0.016
     static let lidRestScale = 0.45
@@ -32,16 +31,11 @@ enum SheetValues {
     static let syncErrorArc = 0.25
     static let closeOpacity = 0.7
     static let cssEase = CubicBezier(x1: 0.25, y1: 0.1, x2: 0.25, y2: 1)
-    static let valueMaxShare = 0.6
     static let fieldTrailingMaxShare = 0.5
     static let smallIcon = 12.0
     static let smallIconStroke = 1.5
     static let tinyIcon = 10.0
     static let tinyIconStroke = 1.8
-    static let pressScaleDisclosure = 0.99
-    static let overviewOtherOpacity = 0.55
-    static let overviewHoverScale = 1.012
-    static let overviewOtherScale = 0.988
     static let overviewStaggerCap = 8
     static let overviewTileStagger = 0.024
     static let overviewTileTextLine = 1.5
@@ -66,9 +60,7 @@ enum SheetValues {
     static let conversationLine = 16.0
     static let cardTitleLimit = 34
     static let cardAddressLimit = 36
-    static let pressScaleChip = 0.92
     static let hintTick = 0.1
-    static let hintMaxWidth = 240.0
     static let linkFieldWidth = 240.0
     static let deckLift = 0.32
     static let stackGlossLightFrom = 0.7529

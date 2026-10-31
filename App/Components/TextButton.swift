@@ -66,7 +66,7 @@ struct TextButton<Glyph: View>: View {
     }
 
     private var scale: Double {
-        disabled || !pressed || kind == .inverse ? 1 : SheetValues.pressScale
+        disabled || !pressed || kind == .inverse ? 1 : Tokens.Scale.pressButton
     }
 
     private var height: CGFloat {

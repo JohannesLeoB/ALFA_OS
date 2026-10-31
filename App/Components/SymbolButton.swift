@@ -59,7 +59,7 @@ struct SymbolButton: View {
                 .contentShape(Circle())
                 .opacity(dimmed ?? disabled ? Tokens.Opacity.disabled : 1)
         }
-        .buttonStyle(PressScaleButtonStyle(scale: disabled || !pressed ? 1 : SheetValues.pressScale))
+        .buttonStyle(PressScaleButtonStyle(scale: disabled || !pressed ? 1 : Tokens.Scale.pressButton))
         .disabled(disabled)
         .help(Text(verbatim: help))
         .accessibilityLabel(Text(verbatim: help))

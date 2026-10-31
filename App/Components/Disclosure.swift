@@ -23,7 +23,7 @@ struct Disclosure<Content: View>: View {
             .background(Capsule().fill(hovering ? appearance.color(\.hover) : Color.clear))
             .contentShape(Capsule())
         }
-        .buttonStyle(PressScaleButtonStyle(scale: SheetValues.pressScaleDisclosure))
+        .buttonStyle(PressScaleButtonStyle(scale: Tokens.Scale.pressRow))
         .padding(.leading, -CGFloat(Tokens.Spacing.step8))
         .help(Text(verbatim: help))
         .onHover { hovering = $0 }

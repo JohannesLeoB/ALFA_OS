@@ -179,7 +179,7 @@ private struct RowRemove: View {
                 .background(Circle().fill(hovering ? appearance.color(\.selection) : Color.clear))
                 .contentShape(Circle())
         }
-        .buttonStyle(PressScaleButtonStyle(scale: SheetValues.pressScaleChip))
+        .buttonStyle(PressScaleButtonStyle(scale: Tokens.Scale.pressStrong))
         .help(appearance.text("mail.compose.remove"))
         .onHover { hovering = $0 }
     }

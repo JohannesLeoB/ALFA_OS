@@ -24,7 +24,7 @@ struct CardHeadButton: View {
                 .background(Circle().fill(hovering && fills ? appearance.color(\.hover) : Color.clear))
                 .contentShape(Circle())
         }
-        .buttonStyle(PressScaleButtonStyle(scale: pressed ? SheetValues.pressScale : 1))
+        .buttonStyle(PressScaleButtonStyle(scale: pressed ? Tokens.Scale.pressButton : 1))
         .disabled(disabled)
         .help(Text(verbatim: help))
         .accessibilityLabel(Text(verbatim: help))

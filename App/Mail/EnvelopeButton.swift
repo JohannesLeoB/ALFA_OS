@@ -19,7 +19,7 @@ struct EnvelopeButton: View {
                 .overlay(alignment: .topTrailing) { if alert { AccountAlert() } }
                 .contentShape(Capsule())
         }
-        .buttonStyle(PressScaleButtonStyle(scale: SheetValues.pressScale))
+        .buttonStyle(PressScaleButtonStyle(scale: Tokens.Scale.pressButton))
         .help(Text(verbatim: help))
         .accessibilityLabel(Text(verbatim: help))
         .accessibilityAddTraits(open ? .isSelected : [])

@@ -88,7 +88,7 @@ private struct LockButton: View {
                 .background(Capsule().fill(filled ? appearance.color(\.inverse) : Color.clear))
                 .contentShape(Capsule())
         }
-        .buttonStyle(PressScaleButtonStyle(scale: SheetValues.pressScale))
+        .buttonStyle(PressScaleButtonStyle(scale: Tokens.Scale.pressButton))
     }
 }
 
