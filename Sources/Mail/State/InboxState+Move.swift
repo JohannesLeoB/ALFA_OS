@@ -24,7 +24,7 @@ extension InboxState {
 
     public func canPurge(_ id: String) -> Bool {
         _ = purgeChecks
-        guard let inlet = selectedInlet else { return false }
+        guard let inlet = selectedInlet, inTrash(id) else { return false }
         return mailbox.canPurge(inlet)
     }
 

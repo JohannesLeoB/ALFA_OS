@@ -11,7 +11,6 @@ struct InboxRow: View {
     let item: RowPresentation
     let separated: Bool
     let wide: Bool
-    let inTrash: Bool
     let picking: Bool
     @State private var hovering = false
     @State private var menuOpen = false
@@ -225,7 +224,7 @@ struct InboxRow: View {
                         session.perform(.archive, message: item.id)
                     }
                 }
-                if inTrash && inbox.canPurge(item.id) {
+                if inbox.canPurge(item.id) {
                     ConfirmPill(label: nil, question: appearance.text("mail.confirm.purge.question"), yes: appearance.text("mail.confirm.purge.yes"),
                                 no: appearance.text("confirm.no"),
                                 holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.confirm.purge.yes"))),
@@ -235,7 +234,7 @@ struct InboxRow: View {
                                 }, onNo: { asking = false }) {
                         Glyph(.trash)
                     }
-                } else if !inTrash {
+                } else if !inbox.inTrash(item.id) {
                     rowAction("mail.action.trash", glyph: .trash) {
                         session.perform(.trash, message: item.id)
                     }

@@ -224,7 +224,6 @@ struct MessageLane: View {
     private func rows(width: Double) -> some View {
         let listed = inbox.rowWindow(limit: window + 1)
         let items = listed.items
-        let trash = inbox.currentFolder?.role == .trash
         let picking = inbox.picking
         let spacer = ListWindowEngine.spacer(count: listed.total, window: window)
         return ScrollView {
@@ -241,7 +240,7 @@ struct MessageLane: View {
                     InboxRow(session: session, item: item,
                              separated: next != nil && !item.selected && next?.selected != true,
                              wide: width >= Tokens.Size.breakpointAttachments,
-                             inTrash: trash, picking: picking)
+                             picking: picking)
                 }
                 if let tail = inbox.listTail, window >= listed.total {
                     let loading = inbox.listState == .loadingMore
