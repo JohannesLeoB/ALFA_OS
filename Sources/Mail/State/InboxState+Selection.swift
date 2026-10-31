@@ -38,6 +38,28 @@ extension InboxState {
         let list = pickedInList.compactMap { summary($0) }
         guard !list.isEmpty, kind != .trash || !list.contains(where: { inTrash($0.id) }) else { return }
         switch kind {
+        case .purge:
+            guard let inlet = selectedInlet, mailbox.canPurge(inlet), list.allSatisfy({ inTrash($0.id) }) else { return }
+            picked = []
+            var failed: [String] = []
+            for item in list {
+                do {
+                    try await mailbox.purge(inlet, messageID: item.id)
+                    if selectedInlet == inlet { summaries.removeAll { $0.id == item.id } }
+                    drop(item.id, in: inlet)
+                } catch {
+                    failed.append(item.id)
+                }
+            }
+            refreshCounts()
+            if failed.isEmpty {
+                post(.purged)
+            } else {
+                post(.deleteFailed, undo: { [weak self] in
+                    self?.picked = failed
+                    await self?.bulk(.purge)
+                })
+            }
         case .read:
             let anyUnread = list.contains { !$0.flags.contains(.seen) }
             let inlet = selectedInlet

@@ -41,7 +41,10 @@ struct StackLane: View {
             .focusedSceneValue(\.mailMenu, menuTarget(commands))
         }
         .eventMonitor(.keyDown, active: desk.mode == nil) { sample in handle(sample) }
-        .onChange(of: inbox.frontRef) { discarding = nil }
+        .onChange(of: inbox.frontRef) { _, front in
+            discarding = nil
+            if front != inbox.purgeAsked.map({ CardRef.message($0) }) { inbox.askPurge(nil) }
+        }
     }
 
     private func menuTarget(_ commands: CommandSet) -> MailMenuTarget {
@@ -61,14 +64,26 @@ struct StackLane: View {
                            more: { actions in
                                MenuLine.entries(actions.map { MenuLine.item($0) }, appearance: appearance, warns: false) { perform($0) }
                            }) {
-            ConfirmPill(label: nil, question: appearance.text("mail.confirm.discard.question"), yes: appearance.text("mail.confirm.discard.yes"),
-                        no: appearance.text("confirm.no"),
-                        holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.confirm.discard.yes"))),
-                        startsAsking: true, showsProgress: false, onYes: {
-                            if let id = discarding { Task { await inbox.deleteDraft(id) } }
-                            discarding = nil
-                        }, onNo: { discarding = nil }) {
-                Glyph(.trash)
+            if commands.tail.first?.action == .purge {
+                ConfirmPill(label: nil, question: appearance.text("mail.confirm.purge.question"), yes: appearance.text("mail.confirm.purge.yes"),
+                            no: appearance.text("confirm.no"),
+                            holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.confirm.purge.yes"))),
+                            startsAsking: true, showsProgress: false, onYes: {
+                                if let id = inbox.purgeAsked { session.perform(.purge, message: id) }
+                                inbox.askPurge(nil)
+                            }, onNo: { inbox.askPurge(nil) }) {
+                    Glyph(.trash)
+                }
+            } else {
+                ConfirmPill(label: nil, question: appearance.text("mail.confirm.discard.question"), yes: appearance.text("mail.confirm.discard.yes"),
+                            no: appearance.text("confirm.no"),
+                            holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.confirm.discard.yes"))),
+                            startsAsking: true, showsProgress: false, onYes: {
+                                if let id = discarding { Task { await inbox.deleteDraft(id) } }
+                                discarding = nil
+                            }, onNo: { discarding = nil }) {
+                    Glyph(.trash)
+                }
             }
         }
     }
@@ -76,6 +91,10 @@ struct StackLane: View {
     private func perform(_ action: Action) {
         if action == .print, case .draft(let id) = inbox.frontRef {
             MessageExport.printDraft(inbox, id)
+            return
+        }
+        if action == .purge, case .message(let id) = inbox.frontRef {
+            inbox.askPurge(id)
             return
         }
         switch SlotRouter.route(action, front: inbox.frontRef) {
@@ -103,6 +122,10 @@ struct StackLane: View {
         }
         if StackKeys.deletes.contains(key), !inbox.inTrash(id) {
             session.perform(.trash, message: id)
+            return true
+        }
+        if StackKeys.deletes.contains(key), inbox.canPurge(id) {
+            inbox.askPurge(id)
             return true
         }
         return false

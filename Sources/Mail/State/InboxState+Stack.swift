@@ -92,14 +92,17 @@ extension InboxState {
     public func commands(confirmDiscard: Bool, canFold: Bool, sendLabelled: Bool) -> CommandSet {
         var front: CommandEngine.Front?
         var trashes = true
+        var asked = false
         if case .message(let id) = frontRef, let card = card(id) {
             trashes = !inTrash(id)
+            asked = !trashes && purgeAsked == id && canPurge(id)
             front = .message(hasCopy: !card.summary.ccRaw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         } else if case .draft(let id) = frontRef, let card = draft(id) {
             front = .draft(canSend: card.canSend)
         }
         return CommandEngine.commands(front: front, stackCount: stackCount, fanned: overview.open,
                                       hasFiles: mailbox.hasFiles, confirmDiscard: confirmDiscard, canFold: canFold,
-                                      sendLabelled: sendLabelled, formatting: formatting, folders: folderActions, trashes: trashes)
+                                      sendLabelled: sendLabelled, formatting: formatting, folders: folderActions, trashes: trashes,
+                                      purges: !trashes && selectedInlet.map { mailbox.canPurge($0) } == true, confirmPurge: asked)
     }
 }

@@ -48,6 +48,11 @@ struct OverviewList: View {
          OverviewCommand(id: Action.trash.rawValue, help: appearance.string(Action.trash.key), icon: .trash, tone: \.signal) {
             session.perform(.trash, message: id)
         }].filter { (inbox.folderActions || $0.id != Action.archive.rawValue) && (!inbox.inTrash(id) || $0.id != Action.trash.rawValue) }
+            + (inbox.inTrash(id) && inbox.canPurge(id)
+                ? [OverviewCommand(id: Action.purge.rawValue, help: appearance.string(Action.purge.key), icon: .trash, tone: \.signal) {
+                    choose(.message(id))
+                    inbox.askPurge(id)
+                }] : [])
     }
 
     var body: some View {

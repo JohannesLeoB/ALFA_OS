@@ -40,6 +40,7 @@ public final class InboxState {
     public var searchScope = SearchScope.all
     public var searching = false
     var purgeChecks = 0
+    public var purgeAsked: String?
     public var overview = Overview()
     public var tiles = false
     public var tileHot: String?

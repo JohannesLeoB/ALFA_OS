@@ -15,6 +15,7 @@ struct InboxRow: View {
     let picking: Bool
     @State private var hovering = false
     @State private var menuOpen = false
+    @State private var asking = false
 
     private var inbox: InboxState { session.inbox }
     private var selected: Bool { item.selected && !item.picked }
@@ -211,7 +212,7 @@ struct InboxRow: View {
     private var rowActions: some View {
         if hovering && !picking && item.outbox != nil {
             queuedActions
-        } else if hovering && !picking && !item.draft {
+        } else if (hovering || asking) && !picking && !item.draft {
             HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
                 rowAction(item.starred ? "mail.action.unstar" : "mail.action.star", glyph: .flag) {
                     session.perform(item.starred ? .unstar : .star, message: item.id)
@@ -228,7 +229,10 @@ struct InboxRow: View {
                     ConfirmPill(label: nil, question: appearance.text("mail.confirm.purge.question"), yes: appearance.text("mail.confirm.purge.yes"),
                                 no: appearance.text("confirm.no"),
                                 holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.confirm.purge.yes"))),
-                                startsAsking: true, showsProgress: false, onYes: { session.perform(.purge, message: item.id) }) {
+                                startsAsking: true, showsProgress: false, onYes: {
+                                    asking = false
+                                    session.perform(.purge, message: item.id)
+                                }, onNo: { asking = false }) {
                         Glyph(.trash)
                     }
                 } else if !inTrash {
@@ -251,9 +255,13 @@ struct InboxRow: View {
 
     private func contextMenu(at point: NSPoint) {
         guard item.outbox == nil else { return }
-        let lines = MenuEngine.row(unread: item.unread, draft: item.draft, folders: inbox.folderActions, trashes: !inbox.inTrash(item.id))
+        let binned = inbox.inTrash(item.id)
+        let lines = MenuEngine.row(unread: item.unread, draft: item.draft, folders: inbox.folderActions, trashes: !binned,
+                                   purges: binned && inbox.canPurge(item.id))
         let entries = MenuLine.entries(lines, appearance: appearance) { action in
-            if action == .move {
+            if action == .purge {
+                asking = true
+            } else if action == .move {
                 menuOpen = true
                 MenuPanel.shared.show(entries: MoveFolderList.entries(session.inbox, appearance: appearance, message: item.id), anchor: .point(point),
                                       window: NSApp.keyWindow) { menuOpen = false }
