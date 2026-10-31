@@ -328,7 +328,7 @@ Which Swift file draws each element of the valid design master (Mail and Setting
 | Settings | Text buttons accent/neutral/signal/plain | Einstellungen 107, Einstellungen 130 | `App/Components/TextButton.swift` |
 | Settings | Connection status (dot 8, ring, spinner, colours per state) | Einstellungen 65-68, Einstellungen 1 | `App/Components/ConnectionStatus.swift` |
 | Settings | Toast capsule over the right lane | Einstellungen 170, Einstellungen 516 | `App/Settings/SettingsToast.swift`, `App/Components/ToastView.swift`, `App/Shell/Frame.swift` |
-| Settings | Anchored menu (pad 4, rows 28, check column 12, head 24, separator) | Einstellungen 174-180, Bausteine 114 | `App/Components/AnchoredMenu.swift`, `Sources/Shell/Logic/MenuWidthEngine.swift` |
+| Settings | Anchored menu (pad 4, rows 28, check column 12, head 24, separator) | Einstellungen 174-180, Bausteine 114 | `App/Components/AnchoredMenu.swift`, `Sources/Shell/Logic/LaneLayoutEngine.swift` |
 | Settings | Row "Zustand" with status and sub (geprüft / Fehler / Anmeldung läuft) | Einstellungen 301, Einstellungen 304 | `App/Settings/IntegrationCard.swift` |
 | Settings | Sub "Projekte 412 von 1.280" while working | Einstellungen 301 | not built |
 | Settings | Failure notice "Fehler · …" + "Erneut verbinden" | Einstellungen 305 | `App/Settings/IntegrationCard.swift` |

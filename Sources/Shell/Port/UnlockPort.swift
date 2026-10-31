@@ -1,3 +1,5 @@
+
+
 public enum UnlockMethod: Equatable, Sendable {
     case touchID
     case password
@@ -18,4 +20,10 @@ public protocol UnlockPort: AnyObject {
     var available: Bool { get }
     func unlock(_ method: UnlockMethod, reason: String) async -> UnlockOutcome
     func cancel()
+}
+
+public protocol AttentionPort: Sendable {
+    @MainActor func badge(_ count: Int)
+    func prepare() async
+    func announce(title: String) async
 }
