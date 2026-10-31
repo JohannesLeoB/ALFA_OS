@@ -3771,13 +3771,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Du bist der ALFA-Projektassistent für ein Design-/Küchenstudio. "
+            "value" : "Du bist der ALFA_OS-Projektassistent für ein Design-/Küchenstudio. "
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You are the ALFA project assistant for a design/kitchen studio. "
+            "value" : "You are the ALFA_OS project assistant for a design/kitchen studio. "
           }
         }
       }
@@ -10535,13 +10535,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ALFA_OS · Google-Anmeldung übernommen"
+            "value" : "Google-Anmeldung übernommen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ALFA_OS · Google sign-in accepted"
+            "value" : "Google sign-in accepted"
           }
         }
       }
@@ -10551,13 +10551,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ALFA_OS · Google-Anmeldung nicht lesbar"
+            "value" : "Google-Anmeldung nicht lesbar"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ALFA_OS · Google sign-in not readable"
+            "value" : "Google sign-in not readable"
           }
         }
       }
@@ -13892,13 +13892,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nicht gesendet · ALFA war zur geplanten Zeit geschlossen"
+            "value" : "Nicht gesendet · ALFA_OS war zur geplanten Zeit geschlossen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Not sent · ALFA was closed at the scheduled time"
+            "value" : "Not sent · ALFA_OS was closed at the scheduled time"
           }
         }
       }
@@ -13908,13 +13908,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ist ALFA zur geplanten Zeit geschlossen, bleibt die Mail hier und wartet auf „Jetzt senden“."
+            "value" : "Ist ALFA_OS zur geplanten Zeit geschlossen, bleibt die Mail hier und wartet auf „Jetzt senden“."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "If ALFA is closed at the scheduled time, the mail stays here until you choose “Send Now”."
+            "value" : "If ALFA_OS is closed at the scheduled time, the mail stays here until you choose “Send Now”."
           }
         }
       }
@@ -13924,13 +13924,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geplante Mails gehen nur raus, solange ALFA läuft"
+            "value" : "Geplante Mails gehen nur raus, solange ALFA_OS läuft"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scheduled mail only goes out while ALFA is running"
+            "value" : "Scheduled mail only goes out while ALFA_OS is running"
           }
         }
       }
@@ -16211,13 +16211,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ALFA_OS · Microsoft-Anmeldung übernommen"
+            "value" : "Microsoft-Anmeldung übernommen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ALFA_OS · Microsoft sign-in accepted"
+            "value" : "Microsoft sign-in accepted"
           }
         }
       }
@@ -16227,13 +16227,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ALFA_OS · Microsoft-Anmeldung nicht lesbar"
+            "value" : "Microsoft-Anmeldung nicht lesbar"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ALFA_OS · Microsoft sign-in not readable"
+            "value" : "Microsoft sign-in not readable"
           }
         }
       }
@@ -16740,13 +16740,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beim Löschen in ALFA"
+            "value" : "Beim Löschen in ALFA_OS"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "When deleted in ALFA"
+            "value" : "When deleted in ALFA_OS"
           }
         }
       }
@@ -21537,13 +21537,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preise fehlen. Trage die Preise je Million Tokens ein, dann schätzt ALFA die Kosten."
+            "value" : "Preise fehlen. Trage die Preise je Million Tokens ein, dann schätzt ALFA_OS die Kosten."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prices are missing. Enter the prices per million tokens and ALFA estimates the cost."
+            "value" : "Prices are missing. Enter the prices per million tokens and ALFA_OS estimates the cost."
           }
         }
       }
@@ -22616,6 +22616,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Camera housing: the visible area starts below"
+          }
+        }
+      }
+    },
+    "shell.signin.close" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Fenster kann jetzt geschlossen werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can close this window now."
+          }
+        }
+      }
+    },
+    "shell.signin.retry" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte in ALFA_OS erneut anmelden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please sign in again in ALFA_OS."
           }
         }
       }

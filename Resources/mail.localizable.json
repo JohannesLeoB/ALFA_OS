@@ -1246,8 +1246,8 @@
    "en": "Scheduled · {1}"
   },
   "mail.later.missed": {
-   "de": "Nicht gesendet · ALFA war zur geplanten Zeit geschlossen",
-   "en": "Not sent · ALFA was closed at the scheduled time"
+   "de": "Nicht gesendet · ALFA_OS war zur geplanten Zeit geschlossen",
+   "en": "Not sent · ALFA_OS was closed at the scheduled time"
   },
   "mail.later.sendNow": {
    "de": "Jetzt senden",
@@ -1262,12 +1262,12 @@
    "en": "Unschedule"
   },
   "mail.later.notice.title": {
-   "de": "Geplante Mails gehen nur raus, solange ALFA läuft",
-   "en": "Scheduled mail only goes out while ALFA is running"
+   "de": "Geplante Mails gehen nur raus, solange ALFA_OS läuft",
+   "en": "Scheduled mail only goes out while ALFA_OS is running"
   },
   "mail.later.notice.text": {
-   "de": "Ist ALFA zur geplanten Zeit geschlossen, bleibt die Mail hier und wartet auf „Jetzt senden“.",
-   "en": "If ALFA is closed at the scheduled time, the mail stays here until you choose “Send Now”."
+   "de": "Ist ALFA_OS zur geplanten Zeit geschlossen, bleibt die Mail hier und wartet auf „Jetzt senden“.",
+   "en": "If ALFA_OS is closed at the scheduled time, the mail stays here until you choose “Send Now”."
   },
   "mail.later.plan": {
    "de": "Planen",

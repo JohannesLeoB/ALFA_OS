@@ -922,8 +922,8 @@
    "en": ", phase {1}"
   },
   "assistant.prompt.identity": {
-   "de": "Du bist der ALFA-Projektassistent für ein Design-/Küchenstudio. ",
-   "en": "You are the ALFA project assistant for a design/kitchen studio. "
+   "de": "Du bist der ALFA_OS-Projektassistent für ein Design-/Küchenstudio. ",
+   "en": "You are the ALFA_OS project assistant for a design/kitchen studio. "
   },
   "assistant.prompt.memory": {
    "de": "Gedächtnis: Du siehst die letzten Nachrichten dieses Gesprächs wörtlich; Älteres aus den letzten ~4 Wochen steht, falls vorhanden, unten als Zusammenfassung. Beides ist lokal gespeichert und überlebt App-Neustarts. Knüpfe daran an. Behaupte nicht, du hättest kein Gedächtnis. Steht etwas weder im Verlauf noch in der Zusammenfassung, sag das schlicht — rekonstruiere es nicht.",
@@ -1934,8 +1934,8 @@
    "en": "approx. {1} €"
   },
   "settings.usage.prices.missing": {
-   "de": "Preise fehlen. Trage die Preise je Million Tokens ein, dann schätzt ALFA die Kosten.",
-   "en": "Prices are missing. Enter the prices per million tokens and ALFA estimates the cost."
+   "de": "Preise fehlen. Trage die Preise je Million Tokens ein, dann schätzt ALFA_OS die Kosten.",
+   "en": "Prices are missing. Enter the prices per million tokens and ALFA_OS estimates the cost."
   },
   "settings.usage.counter": {
    "de": "Zähler",

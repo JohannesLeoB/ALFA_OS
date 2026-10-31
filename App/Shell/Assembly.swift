@@ -160,8 +160,8 @@ final class Assembly {
             config: config, drive: DriveConfigStore.load(in: directory), http: http, openBrowser: openBrowser,
             makeRedirect: {
                 OAuthLoopback(
-                    acceptedText: String(localized: String.LocalizationValue("google.oauth.accepted")),
-                    unreadableText: String(localized: String.LocalizationValue("google.oauth.unreadable")))
+                    acceptedPage: signInPage(title: String(localized: String.LocalizationValue("google.oauth.accepted")), accepted: true),
+                    unreadablePage: signInPage(title: String(localized: String.LocalizationValue("google.oauth.unreadable")), accepted: false))
             }, roots: roots)
     }
 
@@ -170,8 +170,18 @@ final class Assembly {
         guard let registration = try? RegistrationStore(directory: directory).load() else { return nil }
         return OutlookAccess(
             registration: registration, http: http, openBrowser: openBrowser,
-            acceptedText: String(localized: String.LocalizationValue("microsoft.oauth.accepted")),
-            unreadableText: String(localized: String.LocalizationValue("microsoft.oauth.unreadable")))
+            acceptedPage: signInPage(title: String(localized: String.LocalizationValue("microsoft.oauth.accepted")), accepted: true),
+            unreadablePage: signInPage(title: String(localized: String.LocalizationValue("microsoft.oauth.unreadable")), accepted: false))
+    }
+
+    private nonisolated static func signInPage(title: String, accepted: Bool) -> String {
+        let line = accepted
+            ? String(localized: String.LocalizationValue("shell.signin.close"))
+            : String(localized: String.LocalizationValue("shell.signin.retry"))
+        let texts = SignInPageEngine.Texts(
+            language: Locale.current.language.languageCode?.identifier ?? "de",
+            wordmark: AppIdentity.name, title: title, line: line)
+        return accepted ? SignInPageEngine.acceptedPage(texts) : SignInPageEngine.unreadablePage(texts)
     }
 
     private static func ports() -> PortRegistry {

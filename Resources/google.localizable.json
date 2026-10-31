@@ -30,12 +30,12 @@
    "en": "Google Sheets"
   },
   "google.oauth.accepted": {
-   "de": "ALFA_OS · Google-Anmeldung übernommen",
-   "en": "ALFA_OS · Google sign-in accepted"
+   "de": "Google-Anmeldung übernommen",
+   "en": "Google sign-in accepted"
   },
   "google.oauth.unreadable": {
-   "de": "ALFA_OS · Google-Anmeldung nicht lesbar",
-   "en": "ALFA_OS · Google sign-in not readable"
+   "de": "Google-Anmeldung nicht lesbar",
+   "en": "Google sign-in not readable"
   },
   "google.offer.type.depositInvoice": {
    "de": "Abschlagsrechnungen",

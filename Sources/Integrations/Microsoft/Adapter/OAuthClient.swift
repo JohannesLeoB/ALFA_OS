@@ -130,12 +130,12 @@ final class OAuthLoopback: RedirectPort, Sendable {
 
     private let queue = DispatchQueue(label: "microsoft.oauth.loopback")
     private let state = Mutex(State())
-    private let acceptedText: String
-    private let unreadableText: String
+    private let acceptedPage: String
+    private let unreadablePage: String
 
-    init(acceptedText: String, unreadableText: String) {
-        self.acceptedText = acceptedText
-        self.unreadableText = unreadableText
+    init(acceptedPage: String, unreadablePage: String) {
+        self.acceptedPage = acceptedPage
+        self.unreadablePage = unreadablePage
     }
 
     func start() async throws -> String {
@@ -203,10 +203,10 @@ final class OAuthLoopback: RedirectPort, Sendable {
             guard let self else { return }
             guard let data, let request = String(data: data, encoding: .utf8),
                   let url = Self.redirectURL(from: request, port: port) else {
-                respond(unreadableText, status: "400 Bad Request", on: connection)
+                respond(unreadablePage, status: "400 Bad Request", on: connection)
                 return
             }
-            respond(acceptedText, status: "200 OK", on: connection)
+            respond(acceptedPage, status: "200 OK", on: connection)
             let continuation = state.withLock { state -> CheckedContinuation<URL, any Error>? in
                 guard let waiting = state.continuation else {
                     state.pending = url
@@ -229,7 +229,8 @@ final class OAuthLoopback: RedirectPort, Sendable {
     }
 
     private func respond(_ body: String, status: String, on connection: NWConnection) {
-        let head = "HTTP/1.1 \(status)\r\nContent-Type: text/plain; charset=utf-8\r\n"
+        let head = "HTTP/1.1 \(status)\r\nContent-Type: text/html; charset=utf-8\r\n"
+            + "Cache-Control: no-store\r\nContent-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'\r\n"
             + "Content-Length: \(body.utf8.count)\r\nConnection: close\r\n\r\n"
         connection.send(content: Data((head + body).utf8), completion: .contentProcessed { _ in connection.cancel() })
     }
@@ -290,9 +291,9 @@ public struct OutlookAccess: ProviderPort {
     private let clock: @Sendable () -> Date
 
     public init(registration: Registration, http: any HttpPort = URLSession.shared,
-                openBrowser: @escaping @Sendable (URL) async -> Bool, acceptedText: String, unreadableText: String) {
+                openBrowser: @escaping @Sendable (URL) async -> Bool, acceptedPage: String, unreadablePage: String) {
         self.init(registration: registration, http: http, openBrowser: openBrowser,
-                  makeRedirect: { OAuthLoopback(acceptedText: acceptedText, unreadableText: unreadableText) },
+                  makeRedirect: { OAuthLoopback(acceptedPage: acceptedPage, unreadablePage: unreadablePage) },
                   clock: { Date() })
     }
 

@@ -304,6 +304,14 @@
   "text.common.cancel": {
    "de": "Abbrechen",
    "en": "Cancel"
+  },
+  "shell.signin.close": {
+   "de": "Dieses Fenster kann jetzt geschlossen werden.",
+   "en": "You can close this window now."
+  },
+  "shell.signin.retry": {
+   "de": "Bitte in ALFA_OS erneut anmelden.",
+   "en": "Please sign in again in ALFA_OS."
   }
  }
 }

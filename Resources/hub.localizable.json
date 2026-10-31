@@ -270,8 +270,8 @@
    "en": "After one month"
   },
   "settings.account.serverCopy.deleted": {
-   "de": "Beim Löschen in ALFA",
-   "en": "When deleted in ALFA"
+   "de": "Beim Löschen in ALFA_OS",
+   "en": "When deleted in ALFA_OS"
   },
   "settings.templates.create": {
    "de": "Vorlage anlegen",

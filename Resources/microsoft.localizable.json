@@ -10,12 +10,12 @@
    "en": "Token error"
   },
   "microsoft.oauth.accepted": {
-   "de": "ALFA_OS · Microsoft-Anmeldung übernommen",
-   "en": "ALFA_OS · Microsoft sign-in accepted"
+   "de": "Microsoft-Anmeldung übernommen",
+   "en": "Microsoft sign-in accepted"
   },
   "microsoft.oauth.unreadable": {
-   "de": "ALFA_OS · Microsoft-Anmeldung nicht lesbar",
-   "en": "ALFA_OS · Microsoft sign-in not readable"
+   "de": "Microsoft-Anmeldung nicht lesbar",
+   "en": "Microsoft sign-in not readable"
   }
  }
 }
