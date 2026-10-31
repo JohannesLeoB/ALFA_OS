@@ -35,7 +35,7 @@ struct AccountCard: View {
             }
         }
         .background(AnchorMarker(box: anchor))
-        .offset(y: !last && hovering ? CGFloat(SheetValues.stackHoverLift) : 0)
+        .offset(y: !last && hovering ? CGFloat(Tokens.Spacing.step4) : 0)
         .onHover { hovering = $0 }
         .help(Text(verbatim: account.account))
         .accessibilityLabel(Text(verbatim: account.account))

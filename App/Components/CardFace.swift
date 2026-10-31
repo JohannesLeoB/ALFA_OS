@@ -37,7 +37,7 @@ struct CardFace<Head: View, Content: View>: View {
         .background(fill.animation(appearance.ease(Tokens.Duration.stackBackground), value: depth))
         .modifier(CardFinish(lacquered: lacquered, last: last, front: front, step: step, shape: shape))
         .contentShape(shape)
-        .offset(y: !front && hovering ? -CGFloat(SheetValues.stackHoverLift) : 0)
+        .offset(y: !front && hovering ? -CGFloat(Tokens.Spacing.step4) : 0)
         .onHover { hovering = $0 }
         .onTapGesture { if !front { bring() } }
         .accessibilityElement(children: .contain)

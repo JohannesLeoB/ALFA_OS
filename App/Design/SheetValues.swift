@@ -19,7 +19,6 @@ enum SheetValues {
     static let orbGlossY = 0.28
     static let orbGlossStop = 0.45
     static let keyframeMiddle = 0.5
-    static let laneShiftStep = 8.0
     static let iconSize = 14.0
     static let iconBox = 16.0
     static let iconStroke = 1.3
@@ -44,15 +43,12 @@ enum SheetValues {
     static let overviewOtherScale = 0.988
     static let overviewStaggerCap = 8
     static let overviewTileStagger = 0.024
-    static let overviewTilePadBottom = 44.0
     static let overviewTileTextLine = 1.5
     static let overviewTitleLines = 2
-    static let stackHoverLift = 4.0
     static let spinnerArc = 0.22
     static let confirmSpinnerArc = 0.25
     static let statusArcBox = 12.0
     static let statusArc = 0.3
-    static let menuMargin = 16.0
     static let dashedLine = [2.0, 2.0]
     static let fullTurn = 360.0
     static let halfTurn = 180.0
@@ -70,8 +66,6 @@ enum SheetValues {
     static let cardTitleLimit = 34
     static let cardAddressLimit = 36
     static let pressScaleChip = 0.92
-    static let recipientInputHeight = 36.0
-    static let suggestionColumnGap = 12.0
     static let hintTick = 0.1
     static let hintMaxWidth = 240.0
     static let linkFieldWidth = 240.0

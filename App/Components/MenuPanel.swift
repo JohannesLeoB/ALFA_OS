@@ -43,7 +43,7 @@ final class MenuPanel {
         let menuWidth = size.width - 2 * margin
         let bounds = window.frame
         let gap = CGFloat(Tokens.Spacing.step4)
-        let edge = CGFloat(SheetValues.menuMargin)
+        let edge = CGFloat(Tokens.Spacing.step16)
         let left: CGFloat
         var top: CGFloat
         switch anchor {

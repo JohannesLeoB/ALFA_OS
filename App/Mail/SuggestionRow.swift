@@ -14,7 +14,7 @@ struct SuggestionRow: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: CGFloat(SheetValues.suggestionColumnGap)) {
+            HStack(spacing: CGFloat(Tokens.Spacing.step12)) {
                 Mark(size: .small) {
                     if item.initials.isEmpty { Glyph.small(.person) } else { Text(verbatim: item.initials) }
                 }

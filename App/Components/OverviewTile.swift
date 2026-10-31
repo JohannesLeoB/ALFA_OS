@@ -35,7 +35,7 @@ struct OverviewTile: View {
             .frame(maxWidth: .infinity, alignment: .topLeading)
             .padding(.horizontal, CGFloat(Tokens.Size.edge))
             .padding(.top, CGFloat(Tokens.Spacing.step4))
-            .padding(.bottom, CGFloat(SheetValues.overviewTilePadBottom))
+            .padding(.bottom, CGFloat(Tokens.Spacing.step44))
             Spacer(minLength: 0)
         }
         .frame(height: CGFloat(size.tileHeight))

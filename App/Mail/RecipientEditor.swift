@@ -156,7 +156,7 @@ struct RecipientEditor: View {
                 }
                 .padding(.leading, CGFloat(Tokens.Spacing.step8))
                 .padding(.trailing, CGFloat(Tokens.Spacing.step4))
-                .frame(height: CGFloat(SheetValues.recipientInputHeight))
+                .frame(height: CGFloat(Tokens.Size.rowHeight))
             }
             .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
             .padding(.bottom, CGFloat(Tokens.Spacing.step8))
