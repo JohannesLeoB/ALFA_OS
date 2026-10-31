@@ -236,6 +236,14 @@ extension AppSession {
         desk.select("settings")
     }
 
+    func openClaudeSettings() {
+        guard let card = assembly.catalog.info(forProvider: ClaudeCredential.provider)?.id else {
+            openAssistantSettings()
+            return
+        }
+        openMailService(card)
+    }
+
     private func answered(_ complete: Bool) {
         if complete && !desk.assistantOpen { assistantUnseen = true }
     }

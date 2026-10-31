@@ -27,7 +27,9 @@ struct AssistantPanel: View {
                     .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { thread = $0 }
                     .onDisappear { thread = 0 }
             }
-            if !off && (turns.isEmpty || session.claudeFailed) {
+            if !off && session.claudeFailed {
+                settingsCard(session.assistantHintKey, offered: true, open: session.openClaudeSettings)
+            } else if !off && turns.isEmpty {
                 appearance.text(session.assistantHintKey)
                     .foregroundStyle(appearance.color(\.onInverseTertiary))
                     .fixedSize(horizontal: false, vertical: true)
@@ -35,7 +37,7 @@ struct AssistantPanel: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             if off {
-                offCard
+                settingsCard("shell.assistantCard.off", offered: session.assistantOffersSettings, open: session.openAssistantSettings)
             }
             if !turns.isEmpty {
                 AssistantScope(clear: conversation.clear)
@@ -59,14 +61,13 @@ struct AssistantPanel: View {
         .onAppear { session.seeAssistant() }
     }
 
-    private var offCard: some View {
+    private func settingsCard(_ key: String, offered: Bool, open: @escaping () -> Void) -> some View {
         HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
-            appearance.text("shell.assistantCard.off")
+            appearance.text(key)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            if session.assistantOffersSettings {
-                TextButton(label: appearance.text("shell.textButton.assistantOff.text"), kind: .inverse, plate: \.inverseHot,
-                           action: session.openAssistantSettings)
+            if offered {
+                TextButton(label: appearance.text("shell.textButton.assistantOff.text"), kind: .inverse, plate: \.inverseHot, action: open)
             }
         }
         .padding(.vertical, CGFloat(Tokens.Spacing.step8))
