@@ -223,7 +223,8 @@ final class AccountFlow {
         let failed = retiring ? await SignOutEngine.retire(setup: setup) : await SignOutEngine.run(setup: setup)
         busy = false
         guard failed.isEmpty else {
-            failure = Hint(text: SettingsKeys.failedUnknown, detail: failed.joined(separator: ", "))
+            let names = failed.map { id in setup.inlets.first { $0.id == id }.map { $0.account.isEmpty ? $0.title : $0.account } ?? id }
+            failure = Hint(text: SettingsKeys.failedUnknown, detail: names.joined(separator: ", "))
             return false
         }
         return true

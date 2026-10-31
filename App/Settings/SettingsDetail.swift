@@ -375,6 +375,7 @@ struct ContactCard: View {
 struct IdentityCard: View {
     @Environment(\.appearance) private var appearance
     let context: SettingsContext
+    @State private var refused: Hint?
 
     private var profile: UserProfile { context.state.profile }
 
@@ -426,6 +427,9 @@ struct IdentityCard: View {
                 )
                 .rowPill()
             }
+            if let refused {
+                BlockNotice(kind: .failure, title: Text(verbatim: appearance.format("settings.failed.title", refused.line(appearance))))
+            }
         }
     }
 
@@ -446,7 +450,11 @@ struct IdentityCard: View {
 
     private func signOut(retiring: Bool) {
         Task {
-            guard await context.flow.signOut(retiring: retiring) else { return }
+            refused = nil
+            guard await context.flow.signOut(retiring: retiring) else {
+                refused = context.flow.failure
+                return
+            }
             context.state.notify(retiring ? "settings.retire.done" : "settings.signOut.done")
             try? await Task.sleep(for: .seconds(Tokens.Duration.toast))
             await AppRelaunch.run()
