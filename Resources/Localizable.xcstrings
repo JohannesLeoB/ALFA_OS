@@ -11006,7 +11006,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Details invalid"
+            "value" : "Invalid details"
           }
         }
       }
@@ -16074,7 +16074,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sign-in in browser"
+            "value" : "Browser sign-in"
           }
         }
       }
@@ -19941,7 +19941,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Drive folders of the projects"
+            "value" : "Project Drive folders"
           }
         }
       }
@@ -20053,7 +20053,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Menu"
+            "value" : "Meal plan"
           }
         }
       }

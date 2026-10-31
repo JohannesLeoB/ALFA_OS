@@ -427,7 +427,7 @@
   },
   "hint.key.fields.invalid": {
    "de": "Angaben ungültig",
-   "en": "Details invalid"
+   "en": "Invalid details"
   },
   "hint.key.rejected": {
    "de": "Schlüssel abgelehnt",
@@ -459,7 +459,7 @@
   },
   "settings.access.browser": {
    "de": "Anmeldung im Browser",
-   "en": "Sign-in in browser"
+   "en": "Browser sign-in"
   },
   "settings.access.company": {
    "de": "%@ · für die Firma",
@@ -1079,7 +1079,7 @@
   },
   "settings.service.google.extra.driveFolders": {
    "de": "Drive-Ordner der Projekte",
-   "en": "Drive folders of the projects"
+   "en": "Project Drive folders"
   },
   "settings.service.google.name": {
    "de": "Google",
@@ -1107,7 +1107,7 @@
   },
   "settings.service.happa.use": {
    "de": "Speiseplan",
-   "en": "Menu"
+   "en": "Meal plan"
   },
   "settings.service.mailaccounts.name": {
    "de": "Mail-Konten",
