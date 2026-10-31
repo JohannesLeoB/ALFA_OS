@@ -174,13 +174,19 @@ final class Assembly {
             unreadablePage: signInPage(title: String(localized: String.LocalizationValue("microsoft.oauth.unreadable")), accepted: false))
     }
 
+    private nonisolated static var openURL: String {
+        let types = Bundle.main.infoDictionary?["CFBundleURLTypes"] as? [[String: Any]]
+        guard let scheme = (types?.first?["CFBundleURLSchemes"] as? [String])?.first else { return "" }
+        return scheme + "://open"
+    }
+
     private nonisolated static func signInPage(title: String, accepted: Bool) -> String {
         let line = accepted
             ? String(localized: String.LocalizationValue("shell.signin.close"))
             : String(localized: String.LocalizationValue("shell.signin.retry"))
         let texts = SignInPageEngine.Texts(
             language: Bundle.main.preferredLocalizations.first ?? Bundle.main.developmentLocalization ?? "",
-            wordmark: AppIdentity.name, title: title, line: line, style: SignInStyle.css)
+            wordmark: AppIdentity.name, title: title, line: line, style: SignInStyle.css, openURL: openURL)
         return accepted ? SignInPageEngine.acceptedPage(texts) : SignInPageEngine.unreadablePage(texts)
     }
 

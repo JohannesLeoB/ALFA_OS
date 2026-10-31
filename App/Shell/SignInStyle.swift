@@ -13,7 +13,7 @@ enum SignInStyle {
             ("size-blobHeight", Tokens.Size.blobHeight), ("size-blobWidth", Tokens.Size.blobWidth),
             ("size-blobAwakeWidth", Tokens.Size.blobAwakeWidth), ("size-blobEyeWidth", Tokens.Size.blobEyeWidth),
             ("size-blobEyeHeight", Tokens.Size.blobEyeHeight), ("size-blobEyeGap", Tokens.Size.blobEyeGap),
-            ("size-hairline", Tokens.Size.hairline), ("size-confirmEnterBlur", Tokens.Size.confirmEnterBlur),
+            ("size-hairline", Tokens.Size.hairline), ("size-selectionRingWidth", Tokens.Size.selectionRingWidth), ("size-confirmEnterBlur", Tokens.Size.confirmEnterBlur),
             ("radius-blob", Tokens.Radius.blob), ("radius-stroke", Tokens.Radius.stroke),
             ("spacing-step8", Tokens.Spacing.step8), ("spacing-step24", Tokens.Spacing.step24),
             ("spacing-step28", Tokens.Spacing.step28), ("spacing-step40", Tokens.Spacing.step40),

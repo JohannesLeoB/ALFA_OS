@@ -22,6 +22,7 @@ struct AlfaApp: App {
                 Text(LocalizedStringKey("error.resources"))
             }
         }
+        .handlesExternalEvents(matching: ["*"])
         .windowResizability(.contentMinSize)
         .commands { MailCommands(session: session) }
     }
@@ -159,6 +160,13 @@ final class QuitDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSWindow.allowsAutomaticWindowTabbing = false
+    }
+
+    func application(_ application: NSApplication, open urls: [URL]) {
+        application.activate(ignoringOtherApps: true)
+        guard let window = application.windows.first(where: { $0.styleMask.contains(.titled) && $0.canBecomeMain }) else { return }
+        if window.isMiniaturized { window.deminiaturize(nil) }
+        window.makeKeyAndOrderFront(nil)
     }
 
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {

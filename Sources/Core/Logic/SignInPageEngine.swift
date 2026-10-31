@@ -7,13 +7,15 @@ public enum SignInPageEngine {
         public let title: String
         public let line: String
         public let style: String
+        public let openURL: String
 
-        public init(language: String, wordmark: String, title: String, line: String, style: String) {
+        public init(language: String, wordmark: String, title: String, line: String, style: String, openURL: String) {
             self.language = language
             self.wordmark = wordmark
             self.title = title
             self.line = line
             self.style = style
+            self.openURL = openURL
         }
     }
 
@@ -32,6 +34,12 @@ public enum SignInPageEngine {
             .replacingOccurrences(of: "\"", with: "&quot;")
     }
 
+    private static func markOpen(_ texts: Texts) -> String {
+        texts.openURL.isEmpty
+            ? "<div class=\"mark\">"
+            : "<a class=\"mark\" href=\"\(escape(texts.openURL))\" aria-label=\"\(escape(texts.wordmark))\">"
+    }
+
     private static func render(_ texts: Texts, animated: Bool) -> String {
         let replacements: [(String, String)] = [
             ("{{language}}", escape(texts.language)),
@@ -39,6 +47,8 @@ public enum SignInPageEngine {
             ("{{title}}", escape(texts.title)),
             ("{{line}}", escape(texts.line)),
             ("{{style}}", texts.style),
+            ("{{markOpen}}", markOpen(texts)),
+            ("{{markClose}}", texts.openURL.isEmpty ? "</div>" : "</a>"),
             ("{{state}}", animated ? "accepted" : "unreadable"),
         ]
         return replacements.reduce(template) { $0.replacingOccurrences(of: $1.0, with: $1.1) }
@@ -68,6 +78,9 @@ public enum SignInPageEngine {
       padding:0 var(--spacing-blobInset);background:var(--c-inv);color:var(--c-on-inv);border-radius:var(--radius-blob);
       box-shadow:var(--sh-float);transform:scale(var(--scale-mark));transform-origin:center;
       font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);white-space:nowrap;overflow:hidden}
+    a.mark{color:var(--c-on-inv);text-decoration:none;cursor:pointer}
+    a.mark:hover .face,a.mark:focus-visible .face{background:color-mix(in srgb,currentColor calc(var(--opacity-ringOnMark) * 100%),transparent)}
+    a.mark:focus-visible{outline:var(--size-selectionRingWidth) solid var(--c-ink);outline-offset:var(--size-hairline)}
     .face{flex:none;width:var(--spacing-step28);height:var(--spacing-step28);border-radius:50%;
       border:var(--size-hairline) solid color-mix(in srgb,currentColor calc(var(--opacity-ringOnMark) * 100%),transparent);
       display:flex;align-items:center;justify-content:center}
@@ -105,12 +118,16 @@ public enum SignInPageEngine {
     </head>
     <body data-state="{{state}}">
     <main>
-    <div class="stage" aria-hidden="true">
-    <div class="mark"><span class="face"><span class="eyes"><i></i><i></i></span></span><span class="label">{{wordmark}}</span></div>
+    <div class="stage">
+    {{markOpen}}<span class="face"><span class="eyes"><i></i><i></i></span></span><span class="label">{{wordmark}}</span>{{markClose}}
     </div>
     <div class="copy" role="status"><h1>{{title}}</h1><p>{{line}}</p></div>
     </main>
     <script>
+    (function(){
+      var mark=document.querySelector("a.mark");
+      if(mark)mark.addEventListener("click",function(){window.setTimeout(function(){window.close()},600)});
+    })();
     (function(){
       if(document.body.dataset.state!=="accepted")return;
       if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
