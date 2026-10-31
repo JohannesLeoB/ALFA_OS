@@ -214,3 +214,340 @@ struct NoticeDot: View {
             }
     }
 }
+
+enum LidKind: Equatable {
+    case blink
+    case wink
+}
+
+struct LidMotion: Equatable {
+    let kind: LidKind?
+    let serial: Int
+
+    static let idle = LidMotion(kind: nil, serial: 0)
+
+    static func start(_ kind: LidKind) -> LidMotion {
+        LidMotion(kind: kind, serial: Int.random(in: 1..<Int.max))
+    }
+}
+
+struct BlobEyes: View {
+    @Environment(\.appearance) private var appearance
+    let ring: Bool
+    let open: Bool
+    let follow: CGSize
+    let lid: LidMotion
+    @State private var progress = 1.0
+
+    var body: some View {
+        let size = CGFloat(Tokens.Size.symbolSize)
+        HStack(spacing: CGFloat(Tokens.Size.blobEyeGap)) {
+            eye
+            eye
+        }
+        .lidShift(
+            progress: progress,
+            kind: lid.kind,
+            scale: open ? 1 : SheetValues.lidRestScale,
+            shift: open ? 0 : Tokens.Size.blobLidOffset
+        )
+        .animation(appearance.ease(Tokens.Duration.blobEyes), value: open)
+        .offset(follow)
+        .animation(nil, value: follow)
+        .frame(width: size, height: size)
+        .overlay(Circle().strokeBorder(.foreground, lineWidth: CGFloat(Tokens.Size.hairline)).opacity(ring ? 1 : 0))
+        .onChange(of: lid) { _, next in run(next) }
+    }
+
+    private var eye: some View {
+        RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.stroke))
+            .fill(.foreground)
+            .frame(width: CGFloat(Tokens.Size.blobEyeWidth), height: CGFloat(Tokens.Size.blobEyeHeight))
+    }
+
+    private func run(_ motion: LidMotion) {
+        guard let kind = motion.kind else { return }
+        var reset = Transaction()
+        reset.disablesAnimations = true
+        withTransaction(reset) { progress = 0 }
+        let animation: Animation = kind == .blink
+            ? .linear(duration: Tokens.Duration.blobBlinkClose)
+            : .timingCurve(Tokens.Easing.standard.x1, Tokens.Easing.standard.y1, Tokens.Easing.standard.x2, Tokens.Easing.standard.y2, duration: Tokens.Duration.blink)
+        Task { @MainActor in
+            withAnimation(animation) { progress = 1 }
+        }
+    }
+}
+
+struct BlobMenu: View {
+    let session: AppSession
+    let up: Bool
+    @Environment(\.appearance) private var appearance
+    @State private var reel = false
+    @State private var height = CGFloat.zero
+    @State private var aim: Task<Void, Never>?
+
+    private var desk: DeskState { session.desk }
+
+    var body: some View {
+        let lines = desk.menuLines(title: { appearance.string($0) })
+        let room = CGFloat(desk.blob.menuRoom(window: desk.window, measure: desk.measure))
+        ScrollView(.vertical) {
+            VStack(spacing: 0) {
+                line.padding(.horizontal, CGFloat(Tokens.Size.menuSeparatorInset)).padding(.bottom, CGFloat(Tokens.Spacing.step8))
+                ForEach(Array(lines.enumerated()), id: \.element.id) { index, item in
+                    reeled(index) {
+                        switch item {
+                        case .separator:
+                            line.padding(.horizontal, CGFloat(Tokens.Size.menuSeparatorInset)).padding(.vertical, CGFloat(Tokens.Size.menuSeparatorSpace))
+                        case .entry(let entry, let hit):
+                            row(entry, hit: hit)
+                        }
+                    }
+                }
+                if lines.isEmpty {
+                    appearance.text("menu.empty")
+                        .opacity(SheetValues.mutedOpacity)
+                        .padding(.horizontal, CGFloat(Tokens.Size.menuRowPadding))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: CGFloat(Tokens.Size.menuRowHeight))
+                }
+            }
+            .padding(.horizontal, CGFloat(Tokens.Size.menuEdge))
+            .padding(.bottom, CGFloat(Tokens.Size.menuEdge))
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height = $0 }
+        }
+        .scrollIndicators(.never)
+        .frame(height: min(height, room))
+        .font(.face(Tokens.TextSize.body))
+        .onHover { inside in if !inside { leave() } }
+        .task {
+            if appearance.still {
+                reel = true
+                return
+            }
+            try? await Task.sleep(for: .seconds(Tokens.Duration.menuReelDelay))
+            reel = true
+        }
+    }
+
+    private var line: some View {
+        Rectangle().fill(appearance.color(\.inverseLine)).frame(height: CGFloat(Tokens.Size.hairline))
+    }
+
+    private func reeled<Content: View>(_ index: Int, @ViewBuilder _ content: () -> Content) -> some View {
+        let delay = Double(min(index, Tokens.Count.menuStaggerMax)) * Tokens.Duration.reelStagger
+        let shown = reel || appearance.still
+        return content()
+            .reel(angle: shown ? 0 : (up ? Tokens.Motion.menuReelTilt : -Tokens.Motion.menuReelTilt), bottom: up)
+            .animation(appearance.ease(Tokens.Duration.menuReelTransform, delay: delay), value: shown)
+            .opacity(shown ? 1 : 0)
+            .animation(appearance.ease(Tokens.Duration.rowSequence, delay: delay), value: shown)
+    }
+
+    private func row(_ entry: AppEntry, hit: Int) -> some View {
+        let current = entry.id == desk.currentID
+        let count = session.panes[entry.id]?.badge ?? 0
+        return HStack(spacing: CGFloat(Tokens.Size.menuRowGap)) {
+            appearance.text(entry.titleKey)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            if count > 0 {
+                Text(verbatim: String(count))
+                    .font(.face(Tokens.TextSize.small))
+                    .monospacedDigit()
+                    .opacity(SheetValues.mutedOpacity)
+            }
+        }
+        .font(.face(Tokens.TextSize.body, weight: current ? Tokens.Weight.semibold : Tokens.Weight.regular))
+        .padding(.horizontal, CGFloat(Tokens.Size.menuRowPadding))
+        .frame(height: CGFloat(Tokens.Size.menuRowHeight))
+        .background(
+            RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.row))
+                .fill(desk.hot == hit ? appearance.color(\.inverseHot) : Color.clear)
+        )
+        .contentShape(Rectangle())
+        .onHover { inside in if inside { target(hit) } }
+        .onTapGesture { desk.select(entry.id) }
+        .accessibilityAddTraits(.isButton)
+    }
+
+    private func target(_ hit: Int) {
+        guard desk.hot != hit else { return }
+        aim?.cancel()
+        aim = Task {
+            try? await Task.sleep(for: .seconds(Tokens.Duration.menuHoverDelay))
+            guard !Task.isCancelled else { return }
+            desk.aim(hit)
+        }
+    }
+
+    private func leave() {
+        aim?.cancel()
+        desk.clearHot()
+    }
+}
+
+struct BlobSearch: View {
+    @Bindable var desk: DeskState
+    @Environment(\.appearance) private var appearance
+    @FocusState private var focused: Bool
+    @State private var tape = 0.0
+    @State private var fade = 0.0
+
+    var body: some View {
+        HStack(spacing: CGFloat(Tokens.Size.menuRowGap)) {
+            ZStack(alignment: .leading) {
+                if desk.query.isEmpty {
+                    appearance.text("menu.search")
+                        .opacity(SheetValues.placeholderOpacity)
+                        .allowsHitTesting(false)
+                }
+                TextField("", text: $desk.query)
+                    .textFieldStyle(.plain)
+                    .focused($focused)
+                    .onKeyPress(.downArrow) { step(down: true) }
+                    .onKeyPress(.upArrow) { step(down: false) }
+                    .onKeyPress(.escape) {
+                        desk.close()
+                        return .handled
+                    }
+                    .onSubmit { desk.chooseHot(entries) }
+                    .accessibilityLabel(appearance.text("menu.search"))
+            }
+            .font(.face(Tokens.TextSize.body))
+            .searchFade(progress: fade)
+            Glyph(.search)
+                .opacity(SheetValues.iconOpacity)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: CGFloat(Tokens.Size.symbolSize))
+        .overlay(alignment: .bottom) {
+            Rectangle()
+                .fill(.foreground)
+                .frame(height: CGFloat(Tokens.Size.hairline))
+                .scaleEffect(x: CGFloat(tape), y: 1, anchor: .trailing)
+        }
+        .padding(.leading, CGFloat(Tokens.Spacing.step8))
+        .padding(.trailing, CGFloat(Tokens.Spacing.step16))
+        .task {
+            if appearance.still {
+                tape = 1
+                fade = 1
+            } else {
+                withAnimation(appearance.ease(Tokens.Duration.searchUnderline)) { tape = 1 }
+                withAnimation(.linear(duration: Tokens.Duration.searchUnderline)) { fade = 1 }
+            }
+            try? await Task.sleep(for: .seconds(Tokens.Duration.menuFocusDelay))
+            focused = true
+        }
+    }
+
+    private var entries: [AppEntry] {
+        desk.menuLines(title: { appearance.string($0) }).compactMap(\.entry)
+    }
+
+    private func step(down: Bool) -> KeyPress.Result {
+        let count = entries.count
+        guard count > 0 else { return .ignored }
+        desk.moveHot(down: down, count: count)
+        return .handled
+    }
+}
+
+private struct LidEffect: ViewModifier, Animatable {
+    var progress: Double
+    let kind: LidKind?
+    var scale: Double
+    var shift: Double
+
+    nonisolated var animatableData: AnimatablePair<Double, AnimatablePair<Double, Double>> {
+        get { AnimatablePair(progress, AnimatablePair(scale, shift)) }
+        set {
+            progress = newValue.first
+            scale = newValue.second.first
+            shift = newValue.second.second
+        }
+    }
+
+    func body(content: Content) -> some View {
+        if let kind, progress < 1 {
+            content.scaleEffect(x: 1, y: CGFloat(Self.value(kind, progress)))
+        } else {
+            content.scaleEffect(x: 1, y: CGFloat(scale)).offset(y: CGFloat(shift))
+        }
+    }
+
+    static func value(_ kind: LidKind, _ t: Double) -> Double {
+        let p = min(1, max(0, t))
+        switch kind {
+        case .blink:
+            let low = SheetValues.blinkScale
+            let mid = SheetValues.keyframeMiddle
+            return p < mid ? 1 - (1 - low) * p / mid : low + (1 - low) * (p - mid) / (1 - mid)
+        case .wink:
+            let low = SheetValues.winkScale
+            let close = SheetValues.winkCloseAt
+            let open = SheetValues.winkOpenAt
+            if p < close { return 1 - (1 - low) * p / close }
+            if p < open { return low }
+            return low + (1 - low) * (p - open) / (1 - open)
+        }
+    }
+}
+
+extension View {
+    func lidShift(progress: Double, kind: LidKind?, scale: Double, shift: Double) -> some View {
+        modifier(LidEffect(progress: progress, kind: kind, scale: scale, shift: shift))
+    }
+}
+
+private struct ReelEffect: GeometryEffect {
+    var angle: Double
+    let bottom: Bool
+
+    var animatableData: Double {
+        get { angle }
+        set { angle = newValue }
+    }
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        let pivotX = size.width / 2
+        let pivotY = bottom ? size.height : 0
+        var form = CATransform3DIdentity
+        form.m34 = -1 / CGFloat(Tokens.Size.menuReelPerspective)
+        form = CATransform3DRotate(form, CGFloat(angle * .pi / SheetValues.halfTurn), 1, 0, 0)
+        let toPivot = CATransform3DMakeTranslation(-pivotX, -pivotY, 0)
+        let back = CATransform3DMakeTranslation(pivotX, pivotY, 0)
+        return ProjectionTransform(CATransform3DConcat(CATransform3DConcat(toPivot, form), back))
+    }
+}
+
+extension View {
+    func reel(angle: Double, bottom: Bool) -> some View {
+        modifier(ReelEffect(angle: angle, bottom: bottom))
+    }
+}
+
+private struct PulseEffect: ViewModifier, Animatable {
+    var progress: Double
+
+    nonisolated var animatableData: Double {
+        get { progress }
+        set { progress = newValue }
+    }
+
+    func body(content: Content) -> some View {
+        let peak = SheetValues.pulseScale
+        let p = min(1, max(0, progress))
+        let mid = SheetValues.keyframeMiddle
+        let scale = p < mid ? 1 + (peak - 1) * p / mid : peak - (peak - 1) * (p - mid) / (1 - mid)
+        content.scaleEffect(CGFloat(scale))
+    }
+}
+
+extension View {
+    func pulse(progress: Double) -> some View {
+        modifier(PulseEffect(progress: progress))
+    }
+}

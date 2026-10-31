@@ -1,3 +1,5 @@
+import AppKit
+import Core
 import Design
 import Shell
 import SwiftUI
@@ -135,5 +137,306 @@ struct Frame: View {
                 .offset(x: CGFloat(x[1] + widths.center), y: CGFloat(measure.strip))
         }
         .animation(laneAnimation(appearance), value: widths)
+    }
+}
+
+struct DeskLane: View {
+    let session: AppSession
+    let lane: LaneKind
+    let titleKey: String
+    let size: CGSize
+    @Environment(\.appearance) private var appearance
+
+    private var desk: DeskState { session.desk }
+
+    private var pane: (any Pane)? { session.panes[desk.currentID] }
+
+    private var title: PaneTitle { pane?.title(lane) ?? .key(titleKey) }
+
+    private var name: PaneTitle { pane?.name(lane) ?? .key(titleKey) }
+
+    private var ownsHead: Bool { pane?.ownsHead(lane) ?? false }
+
+    var body: some View {
+        let measure = desk.measure
+        let shape = RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.lane))
+        let folded = Double(size.width) <= measure.laneFolded
+        let strip = Double(size.width) < measure.foldAt
+        let inner = max(size.width, CGFloat(desk.minimum[lane.index]))
+        let fade = appearance.ease(Tokens.Duration.hover)
+        ZStack(alignment: .topLeading) {
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture { if folded { desk.openStrip(lane) } }
+                .simultaneousGesture(TapGesture(count: 2).onEnded { desk.restLane(lane) })
+                .pointerStyle(folded ? PointerStyle.link : nil)
+            marks
+                .frame(width: size.width, height: size.height, alignment: .top)
+                .opacity(strip ? 1 : 0)
+                .allowsHitTesting(strip)
+                .accessibilityHidden(!strip)
+                .animation(fade, value: strip)
+            VStack(spacing: 0) {
+                if !ownsHead { header }
+                content
+            }
+            .frame(width: inner, height: size.height, alignment: .topLeading)
+            .opacity(strip ? 0 : 1)
+            .allowsHitTesting(!strip)
+            .accessibilityHidden(strip)
+            .animation(fade, value: strip)
+        }
+        .frame(width: size.width, height: size.height, alignment: .topLeading)
+        .background(appearance.color(\.lane))
+        .clipShape(shape)
+        .shadowLayers(shape, \.lane)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(title.text(appearance))
+    }
+
+    @ViewBuilder
+    private var marks: some View {
+        if let marks = pane?.marks(lane, height: Double(size.height)) { marks }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if let pane { pane.content(lane) } else { Color.clear.frame(maxHeight: .infinity) }
+    }
+
+    private var header: some View {
+        LaneHead(lane: lane) {
+            if !(pane?.hidesTitle(lane) ?? false) { HeaderTitle(text: title.text(appearance)) }
+            Spacer(minLength: 0)
+            tools
+        }
+    }
+
+    @ViewBuilder
+    private var tools: some View {
+        let open = desk.widths.all.filter { $0 > desk.measure.laneFolded }.count
+        let name = self.name.string(appearance)
+        if open > 1 {
+            SymbolButton(help: appearance.format("mail.fold.named", name), glyph: .minus, pressed: lane != .center) { desk.toggleFold(lane) }
+        }
+        if lane == .center {
+            let maxed = desk.laneMode(desk.currentID).maximized == .center
+            SymbolButton(help: maxed ? appearance.string("mail.lane.back") : appearance.format("mail.grow.named", name),
+                         glyph: maxed ? .shrink : .expand, pressed: false) { desk.toggleMaximize(.center) }
+        }
+    }
+}
+
+struct LaneHandle: View {
+    let desk: DeskState
+    let lane: LaneKind
+    let height: CGFloat
+    @Environment(\.appearance) private var appearance
+    @GestureState private var pressing = false
+    @State private var hovering = false
+    @FocusState private var focused: Bool
+    @State private var pointerFocus = false
+
+    private var dragging: Bool { desk.draggedLane == lane }
+
+    private var active: Bool { hovering || dragging }
+
+    var body: some View {
+        let width = desk.widths.width(lane)
+        let value = appearance.format("lane.handle.value", Int(width.rounded()))
+        let thick = CGFloat(active ? Tokens.Size.handleThicknessActive : Tokens.Size.hairline)
+        let long = CGFloat(active ? Tokens.Size.handleLengthActive : Tokens.Size.handleLength)
+        let tone = appearance.color(active ? \.ink : \.inkTertiary)
+        let plain = appearance.ease(Tokens.Duration.short, SheetValues.cssEase)
+        ZStack {
+            RoundedRectangle(cornerRadius: CGFloat(Tokens.Radius.stroke))
+                .animation(plain) { $0.foregroundStyle(tone) }
+                .animation(plain) { $0.frame(width: thick) }
+                .animation(appearance.ease(Tokens.Duration.short)) { $0.frame(height: long) }
+        }
+        .frame(width: CGFloat(Tokens.Size.gutter), height: height)
+        .overlay(alignment: .top) {
+            if dragging {
+                Text(verbatim: value)
+                    .font(.face(Tokens.TextSize.small))
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .fixedSize()
+                    .padding(.horizontal, CGFloat(Tokens.Spacing.step12))
+                    .frame(height: CGFloat(Tokens.Spacing.step24))
+                    .foregroundStyle(appearance.color(\.onInverse))
+                    .background(Capsule().fill(appearance.color(\.inverse)))
+                    .padding(.top, CGFloat(Tokens.Spacing.step12))
+                    .allowsHitTesting(false)
+            }
+        }
+        .overlay {
+            if focused && !pointerFocus {
+                Rectangle()
+                    .strokeBorder(appearance.color(\.focus), lineWidth: CGFloat(Tokens.Size.focusRingWidth))
+                    .padding(-CGFloat(Tokens.Size.focusRingOffset + Tokens.Size.focusRingWidth))
+                    .allowsHitTesting(false)
+            }
+        }
+        .contentShape(Rectangle())
+        .pointerStyle(.columnResize)
+        .onHover { hovering = $0 }
+        .focusable()
+        .focused($focused)
+        .onChange(of: focused) { _, now in pointerFocus = now && NSApp.currentEvent?.type != .keyDown }
+        .focusEffectDisabled()
+        .onKeyPress(keys: [.leftArrow, .rightArrow, .return]) { press in
+            pointerFocus = false
+            return key(press)
+        }
+        .gesture(
+            DragGesture(minimumDistance: 0, coordinateSpace: .global)
+                .updating($pressing) { _, state, _ in state = true }
+                .onChanged { drag in
+                    pointerFocus = true
+                    desk.dragLane(lane, translation: Double(drag.translation.width))
+                }
+        )
+        .simultaneousGesture(TapGesture(count: 2).onEnded { desk.resetLane() })
+        .onChange(of: pressing) { _, now in if !now { desk.endLaneDrag() } }
+        .onDisappear { desk.endLaneDrag() }
+        .accessibilityElement()
+        .accessibilityLabel(appearance.text(lane == .leading ? "lane.handle.leading" : "lane.handle.trailing"))
+        .accessibilityValue(Text(verbatim: value))
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment: step(by: 1)
+            case .decrement: step(by: -1)
+            @unknown default: break
+            }
+        }
+        .dwellHint("shell.handle.down.tooltip", focused: focused && !pointerFocus)
+    }
+
+    private func key(_ press: KeyPress) -> KeyPress.Result {
+        if press.key == .return {
+            desk.resetLane()
+            return .handled
+        }
+        let size = press.modifiers.contains(.shift) ? SheetValues.laneShiftStep : desk.measure.laneFolded
+        let direction: Double = press.key == .leftArrow ? -1 : 1
+        desk.stepLane(lane, by: size * direction * (lane == .leading ? 1 : -1))
+        return .handled
+    }
+
+    private func step(by sign: Double) {
+        desk.stepLane(lane, by: desk.measure.laneFolded * sign)
+    }
+}
+
+enum PaneTitle {
+    case key(String)
+    case verbatim(String)
+
+    func text(_ appearance: Appearance) -> Text {
+        switch self {
+        case .key(let key): appearance.text(key)
+        case .verbatim(let value): Text(verbatim: value)
+        }
+    }
+
+    func string(_ appearance: Appearance) -> String {
+        switch self {
+        case .key(let key): appearance.string(key)
+        case .verbatim(let value): value
+        }
+    }
+}
+
+@MainActor
+protocol Pane {
+    var stackEmpty: Bool { get }
+    var badge: Int { get }
+    var opened: Int { get }
+    var limits: AreaLimits { get }
+    var toast: AnyView? { get }
+    func ownsHead(_ lane: LaneKind) -> Bool
+    func title(_ lane: LaneKind) -> PaneTitle?
+    func name(_ lane: LaneKind) -> PaneTitle?
+    func hidesTitle(_ lane: LaneKind) -> Bool
+    func marks(_ lane: LaneKind, height: Double) -> AnyView?
+    func content(_ lane: LaneKind) -> AnyView
+}
+
+extension Pane {
+    var stackEmpty: Bool { false }
+
+    var badge: Int { 0 }
+
+    var opened: Int { 0 }
+
+    var limits: AreaLimits { AreaLimits() }
+
+    var toast: AnyView? { nil }
+
+    func ownsHead(_ lane: LaneKind) -> Bool { false }
+
+    func title(_ lane: LaneKind) -> PaneTitle? { nil }
+
+    func name(_ lane: LaneKind) -> PaneTitle? { title(lane) }
+
+    func hidesTitle(_ lane: LaneKind) -> Bool { false }
+
+    func marks(_ lane: LaneKind, height: Double) -> AnyView? { nil }
+}
+
+struct SyncButton: View {
+    let session: AppSession
+    @Environment(\.appearance) private var appearance
+    @State private var turn = 0.0
+
+    var body: some View {
+        let failed = session.syncFailed
+        let profile = session.settings.profile
+        let face = Initials.avatar(code: profile.code, name: profile.name)
+        let title = session.syncing ? "sync.running" : failed ? "sync.failed" : "sync.fresh"
+        let ring = CGFloat(Tokens.Size.symbolSize)
+        let line = CGFloat(Tokens.Size.hairline)
+        Button(action: run) {
+            ZStack {
+                Text(verbatim: face)
+                    .typeStyle(Tokens.TextStyle.markSmall)
+                Circle()
+                    .strokeBorder(.foreground, lineWidth: line)
+                    .opacity(Tokens.Opacity.ringOnColor)
+                Circle()
+                    .inset(by: line / 2)
+                    .trim(from: 0, to: failed ? CGFloat(SheetValues.syncErrorArc) : 1)
+                    .stroke(failed ? AnyShapeStyle(appearance.color(\.signal)) : AnyShapeStyle(.foreground), lineWidth: line)
+                    .rotationEffect(.degrees(SheetValues.syncArcStart + turn))
+            }
+            .frame(width: ring, height: ring)
+            .padding(.horizontal, CGFloat(Tokens.Spacing.blobInset))
+            .frame(width: CGFloat(Tokens.Spacing.step56), height: CGFloat(Tokens.Spacing.step40), alignment: .trailing)
+            .foregroundStyle(appearance.color(\.onInverse))
+            .background(Capsule().fill(appearance.color(\.inverse)))
+            .overlay(alignment: .topLeading) {
+                if failed {
+                    Circle()
+                        .fill(appearance.color(\.signal))
+                        .frame(width: CGFloat(Tokens.Spacing.statusDot), height: CGFloat(Tokens.Spacing.statusDot))
+                        .padding(.top, CGFloat(Tokens.Spacing.blobInset))
+                        .padding(.leading, CGFloat(Tokens.Spacing.step12))
+                }
+            }
+            .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .shadowLayers(Capsule())
+        .dwellHint(title)
+        .accessibilityLabel(appearance.text(title))
+    }
+
+    private func run() {
+        guard !session.syncing else { return }
+        if let spin = appearance.ease(Tokens.Duration.syncSpin) {
+            withAnimation(spin) { turn += SheetValues.syncSweep }
+        }
+        Task { await session.sync() }
     }
 }
