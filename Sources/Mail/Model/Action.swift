@@ -8,7 +8,7 @@ public enum Action: String, Sendable, CaseIterable {
 
     public var key: String { "mail.action." + rawValue }
 
-    public var danger: Bool { self == .trash || self == .discardDraft || self == .purge }
+    public var danger: Bool { self == .trash || self == .discardDraft }
 
     public var glyph: Icon? {
         switch self {

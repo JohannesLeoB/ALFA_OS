@@ -128,14 +128,6 @@ struct MessageLane: View {
                     Task { await inbox.bulk(.trash) }
                 }
             }
-            if inbox.currentFolder?.role == .trash, inbox.canPurge(inbox.pickedInList.first ?? "") {
-                ConfirmPill(label: nil, question: appearance.text("mail.confirm.purge.question"), yes: appearance.text("mail.confirm.purge.yes"),
-                            no: appearance.text("confirm.no"),
-                            holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.confirm.purge.yes"))),
-                            showsProgress: false, onYes: { Task { await inbox.bulk(.purge) } }) {
-                    Glyph(.trash)
-                }
-            }
             SymbolButton(help: appearance.string("mail.pick.clear"), glyph: .close, hover: .none, pressed: false) { inbox.clearPicked() }
                 .keyboardShortcut(.cancelAction)
         }

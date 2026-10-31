@@ -1,9 +1,9 @@
 public enum MenuEngine {
     private static let printableExtensions: Set<String> = ["pdf", "png", "jpg", "jpeg", "gif", "heic", "txt"]
 
-    public static func row(unread: Bool, draft: Bool, folders: Bool = true, trashes: Bool = true, purges: Bool = false) -> [MenuLine] {
+    public static func row(unread: Bool, draft: Bool, folders: Bool = true, trashes: Bool = true) -> [MenuLine] {
         if draft { return [.item(.openDraft)] }
-        let bin: [MenuLine] = trashes ? [.separator, .item(.trash)] : purges ? [.separator, .item(.purge)] : []
+        let bin: [MenuLine] = trashes ? [.separator, .item(.trash)] : []
         return [.item(.reply), .item(.forward), .separator] + (folders ? [.item(.archive)] : [])
             + [.item(unread ? .markRead : .markUnread)] + (folders ? [.item(.move)] : []) + bin
     }

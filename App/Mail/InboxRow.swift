@@ -255,13 +255,9 @@ struct InboxRow: View {
 
     private func contextMenu(at point: NSPoint) {
         guard item.outbox == nil else { return }
-        let binned = inbox.inTrash(item.id)
-        let lines = MenuEngine.row(unread: item.unread, draft: item.draft, folders: inbox.folderActions, trashes: !binned,
-                                   purges: binned && inbox.canPurge(item.id))
+        let lines = MenuEngine.row(unread: item.unread, draft: item.draft, folders: inbox.folderActions, trashes: !inbox.inTrash(item.id))
         let entries = MenuLine.entries(lines, appearance: appearance) { action in
-            if action == .purge {
-                asking = true
-            } else if action == .move {
+            if action == .move {
                 menuOpen = true
                 MenuPanel.shared.show(entries: MoveFolderList.entries(session.inbox, appearance: appearance, message: item.id), anchor: .point(point),
                                       window: NSApp.keyWindow) { menuOpen = false }

@@ -28,12 +28,7 @@ extension InboxState {
         return mailbox.canPurge(inlet)
     }
 
-    public func askPurge(_ id: String?) {
-        purgeAsked = id.flatMap { inTrash($0) && canPurge($0) ? $0 : nil }
-    }
-
     func purge(_ id: String) async {
-        purgeAsked = nil
         guard let inlet = selectedInlet, inTrash(id) else { return }
         do {
             try await mailbox.purge(inlet, messageID: id)

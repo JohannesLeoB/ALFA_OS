@@ -30,7 +30,6 @@ public enum BulkAction: Equatable, Sendable {
     case read
     case archive
     case trash
-    case purge
 }
 
 public enum ListState: Equatable, Sendable {

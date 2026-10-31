@@ -8,7 +8,7 @@ enum CommandEngine {
 
     static func commands(front: Front?, stackCount: Int, fanned: Bool, hasFiles: Bool, confirmDiscard: Bool,
                                 canFold: Bool, sendLabelled: Bool, formatting: Bool = false, folders: Bool = true,
-                                trashes: Bool = true, purges: Bool = false, confirmPurge: Bool = false) -> CommandSet {
+                                trashes: Bool = true) -> CommandSet {
         var state = HeadState.empty
         var main: [Slot] = []
         var tail: [Slot] = []
@@ -16,13 +16,9 @@ enum CommandEngine {
         var right: [Slot] = []
         if fanned {
             state = .fanned
-        } else if case .message = front, confirmPurge {
-            state = .confirm
-            tail = [Slot(id: "purgePill", action: .purge, kind: .pill, cost: ShellValues.commandConfirmCost)]
         } else if case .message(let hasCopy) = front {
             state = .reading
-            let bin = trashes ? [Slot(id: "trash", action: .trash, priority: 3, signal: true)]
-                : purges ? [Slot(id: "purge", action: .purge, priority: 3, signal: true)] : []
+            let bin = trashes ? [Slot(id: "trash", action: .trash, priority: 3, signal: true)] : []
             let moves = (folders ? [Slot(id: "archive", action: .archive, priority: 5)] : []) + bin
             main = [
                 Slot(id: "reply", action: .reply, priority: 1),
