@@ -17,12 +17,12 @@ struct AlfaApp: App {
         WindowGroup {
             if let session {
                 Content(session: session)
+                    .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
                     .onAppear { quit.flush = { await session.inbox.flushDrafts() } }
             } else {
                 Text(LocalizedStringKey("error.resources"))
             }
         }
-        .handlesExternalEvents(matching: ["*"])
         .windowResizability(.contentMinSize)
         .commands { MailCommands(session: session) }
     }
