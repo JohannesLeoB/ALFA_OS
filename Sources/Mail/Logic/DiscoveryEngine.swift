@@ -28,7 +28,7 @@ public enum DiscoveryEngine {
         return nil
     }
 
-    static func domain(of address: String) -> String? {
+    public static func domain(of address: String) -> String? {
         let parts = address.split(separator: "@", omittingEmptySubsequences: false)
         guard parts.count == 2, !parts[0].isEmpty else { return nil }
         let domain = parts[1].lowercased()

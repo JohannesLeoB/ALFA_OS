@@ -1,10 +1,6 @@
 {
  "_rule": "Keys used by the Mail module; text is resolved by the app.",
  "keys": {
-  "text.settings.provider.other": {
-   "de": "Andere",
-   "en": "Other"
-  },
   "field.imap.address": {
    "de": "Adresse",
    "en": "Address"

@@ -1217,6 +1217,58 @@
    "de": "Entfernen",
    "en": "Remove"
   },
+  "settings.account.email": {
+   "de": "E-Mail-Adresse",
+   "en": "Email Address"
+  },
+  "settings.account.continue": {
+   "de": "Fortfahren",
+   "en": "Continue"
+  },
+  "settings.account.providerOther": {
+   "de": "Anderer Anbieter",
+   "en": "Other Provider"
+  },
+  "settings.account.searching": {
+   "de": "Server werden gesucht",
+   "en": "Looking up servers"
+  },
+  "settings.account.found": {
+   "de": "Server gefunden",
+   "en": "Servers found"
+  },
+  "settings.account.foundText": {
+   "de": "Eingang und Ausgang für {1}.",
+   "en": "Incoming and outgoing for {1}."
+  },
+  "settings.account.notFound": {
+   "de": "Keine Server gefunden",
+   "en": "No servers found"
+  },
+  "settings.account.notFoundText": {
+   "de": "Bitte Server eintragen.",
+   "en": "Please enter the servers."
+  },
+  "settings.account.kind": {
+   "de": "Kontotyp",
+   "en": "Account Type"
+  },
+  "settings.account.needAddress": {
+   "de": "Bitte eine E-Mail-Adresse eintragen.",
+   "en": "Please enter an email address."
+  },
+  "settings.account.fullName": {
+   "de": "Name",
+   "en": "Name"
+  },
+  "settings.account.signIn": {
+   "de": "Anmelden",
+   "en": "Sign In"
+  },
+  "settings.account.back": {
+   "de": "Zurück",
+   "en": "Back"
+  },
   "settings.mail.compose": {
    "de": "Verfassen",
    "en": "Composing"

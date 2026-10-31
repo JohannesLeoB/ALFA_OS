@@ -38,46 +38,125 @@ struct AddEditor: View {
         }
     }
 
+    private var stepped: Bool {
+        guard case .form = offer.way else { return false }
+        return ProviderPresets.steps(Set(fields.map(\.id)))
+    }
+
     var body: some View {
         VStack(spacing: 0) {
-            if offers.count > 1 {
-                SettingsRow(label: appearance.text("settings.account.provider")) {
-                    ChoiceButton(label: appearance.text(offer.title)) {
-                        offers.map { choice in
-                            .row(MenuItem(id: choice.id, label: appearance.text(choice.title),
-                                          check: choice.id == offer.id ? appearance.text(SettingsKeys.menuCheck) : nil) {
-                                flow.select(choice)
-                            })
-                        }
-                    }
-                }
-            }
-            ForEach(fields) { field in
-                SettingsRow(label: appearance.text(field.title)) { entry(field) }
-            }
-            if !missing.isEmpty {
-                BlockNotice(kind: .failure, title: appearance.text("settings.add.check"),
-                            text: Text(verbatim: appearance.format("settings.add.missing",
-                                                                   missing.map { appearance.string($0.title) }.joined(separator: ", "))))
-            }
-            if let failure = flow.failure {
-                BlockNotice(kind: .failure, title: appearance.text("settings.add.failed.title"),
-                            text: Text(verbatim: failure.line(appearance)))
-            }
-            SettingsRow(label: Text(verbatim: ""), sub: flow.busy ? appearance.text("settings.link.connecting") : nil, line: false) {
-                HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
-                    TextButton(label: appearance.text(buttonKey), kind: .accent, disabled: flow.busy) { submit() }
-                    TextButton(label: appearance.text("text.common.cancel"), kind: .plain) {
-                        if flow.busy { flow.cancel() } else { flow.close() }
-                    }
-                }
-            }
+            if stepped { steps } else { plain }
         }
-        .onAppear { focused = fields.first { !$0.secret && choices(of: $0) == nil }?.id }
+        .onAppear {
+            focused = stepped ? ProviderPresets.addressField : fields.first { !$0.secret && choices(of: $0) == nil }?.id
+        }
         .onChange(of: flow.values) { missing = [] }
         .onChange(of: focused) { left, _ in
-            if left == ProviderPresets.addressField { flow.discover() }
+            if !stepped, left == ProviderPresets.addressField { flow.discover() }
         }
+    }
+
+    @ViewBuilder
+    private var plain: some View {
+        providerPicker
+        ForEach(fields) { field in row(field) }
+        notices
+        actions(primary: buttonKey, back: false)
+    }
+
+    @ViewBuilder
+    private var steps: some View {
+        switch flow.step {
+        case .address:
+            ForEach(fields.filter { $0.id == ProviderPresets.addressField }) { field in row(field) }
+            providerPicker
+            if flow.needsAddress {
+                BlockNotice(kind: .failure, title: appearance.text("settings.add.check"), text: appearance.text("settings.account.needAddress"))
+            }
+            SettingsRow(label: Text(verbatim: ""), line: false) {
+                HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
+                    TextButton(label: appearance.text("settings.account.continue"), kind: .accent) { flow.proceed() }
+                    cancelButton
+                }
+            }
+        case .searching:
+            BlockNotice(kind: .warning, title: appearance.text("settings.account.searching"), text: Text(verbatim: value(ProviderPresets.addressField)))
+            SettingsRow(label: Text(verbatim: ""), line: false) { cancelButton }
+        case .found(let domain):
+            BlockNotice(kind: .success, title: appearance.text("settings.account.found"),
+                        text: Text(verbatim: appearance.format("settings.account.foundText", domain)))
+            ForEach(fields.filter(shownWhenFound)) { field in row(field) }
+            notices
+            actions(primary: "settings.account.signIn", back: true)
+        case .manual:
+            BlockNotice(kind: .warning, title: appearance.text("settings.account.notFound"), text: appearance.text("settings.account.notFoundText"))
+            ForEach(fields) { field in row(field) }
+            notices
+            actions(primary: "settings.account.signIn", back: true)
+        case .renewal:
+            ForEach(fields) { field in row(field) }
+            notices
+            actions(primary: buttonKey, back: false)
+        }
+    }
+
+    @ViewBuilder
+    private var providerPicker: some View {
+        if offers.count > 1 {
+            SettingsRow(label: appearance.text("settings.account.provider")) {
+                ChoiceButton(label: appearance.text(offer.title)) {
+                    offers.map { choice in
+                        .row(MenuItem(id: choice.id, label: appearance.text(choice.title),
+                                      check: choice.id == offer.id ? appearance.text(SettingsKeys.menuCheck) : nil) {
+                            flow.select(choice)
+                        })
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var notices: some View {
+        if !missing.isEmpty {
+            BlockNotice(kind: .failure, title: appearance.text("settings.add.check"),
+                        text: Text(verbatim: appearance.format("settings.add.missing",
+                                                               missing.map { appearance.string(title($0)) }.joined(separator: ", "))))
+        }
+        if let failure = flow.failure {
+            BlockNotice(kind: .failure, title: appearance.text("settings.add.failed.title"),
+                        text: Text(verbatim: failure.line(appearance)))
+        }
+    }
+
+    private func actions(primary: String, back: Bool) -> some View {
+        SettingsRow(label: Text(verbatim: ""), sub: flow.busy ? appearance.text("settings.link.connecting") : nil, line: false) {
+            HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
+                TextButton(label: appearance.text(primary), kind: .accent, disabled: flow.busy) { submit() }
+                if back {
+                    TextButton(label: appearance.text("settings.account.back"), kind: .neutral, disabled: flow.busy) { flow.back() }
+                }
+                cancelButton
+            }
+        }
+    }
+
+    private var cancelButton: some View {
+        TextButton(label: appearance.text("text.common.cancel"), kind: .plain) {
+            if flow.busy { flow.cancel() } else { flow.close() }
+        }
+    }
+
+    private func row(_ field: Field) -> some View {
+        SettingsRow(label: appearance.text(title(field))) { entry(field) }
+    }
+
+    private func title(_ field: Field) -> String {
+        stepped ? ProviderPresets.stepTitle(field.id) ?? field.title : field.title
+    }
+
+    private func shownWhenFound(_ field: Field) -> Bool {
+        ProviderPresets.foundFields.contains(field.id) && (field.id != ProviderPresets.protocolField || flow.offersKinds)
     }
 
     @ViewBuilder
@@ -108,7 +187,13 @@ struct AddEditor: View {
             .autocorrectionDisabled()
             .focused($focused, equals: field.id)
             .onSubmit {
-                if field.id == ProviderPresets.addressField, !ready { flow.discover() } else { submit() }
+                if stepped, flow.step == .address {
+                    flow.proceed()
+                } else if !stepped, field.id == ProviderPresets.addressField, !ready {
+                    flow.discover()
+                } else {
+                    submit()
+                }
             }
             .padding(.trailing, CGFloat(Tokens.Size.trailingTextInset))
             .frame(maxWidth: .infinity)

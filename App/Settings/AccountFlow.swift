@@ -3,9 +3,19 @@ import Hub
 import Mail
 import Observation
 
+enum AddStep: Equatable {
+    case address
+    case searching
+    case found(String)
+    case manual
+    case renewal
+}
+
 @MainActor
 @Observable
 final class AccountFlow {
+    private(set) var step = AddStep.address
+    private(set) var needsAddress = false
     private(set) var busy = false
     private(set) var failure: Hint?
     private(set) var actedOn: String?
@@ -44,6 +54,39 @@ final class AccountFlow {
         }
     }
 
+    var offersKinds: Bool { found.count > 1 }
+
+    func proceed() {
+        let address = (values[ProviderPresets.addressField] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let domain = DiscoveryEngine.domain(of: address) else {
+            needsAddress = true
+            return
+        }
+        needsAddress = false
+        failure = nil
+        values[ProviderPresets.addressField] = address
+        finding?.cancel()
+        found = []
+        if ProviderPresets.knowsServers(form?.preset?.values) {
+            step = .found(domain)
+            return
+        }
+        step = .searching
+        finding = Task {
+            let result = await DiscoveryEngine.choices(for: address, using: discovery)
+            guard !Task.isCancelled, step == .searching, values[ProviderPresets.addressField] == address else { return }
+            found = result
+            applyFound()
+            step = result.isEmpty ? .manual : .found(domain)
+        }
+    }
+
+    func back() {
+        finding?.cancel()
+        failure = nil
+        step = .address
+    }
+
     private func applyFound() {
         guard let preferred = found.first else { return }
         let preset = form?.preset?.values ?? [:]
@@ -65,6 +108,7 @@ final class AccountFlow {
             await add(offer, input: preset.map { .fields($0) } ?? .none)
         case .form, .key:
             form = offer
+            step = preset == nil ? .address : .renewal
             values = preset ?? offer.preset?.values ?? [:]
         }
     }
@@ -73,6 +117,8 @@ final class AccountFlow {
         guard let offer = offers.first else { return }
         failure = nil
         checked = nil
+        step = .address
+        needsAddress = false
         form = offer
         values = offer.preset?.values ?? [:]
     }
@@ -82,6 +128,7 @@ final class AccountFlow {
         var kept = values.filter { !previous.contains($0.key) }
         for (key, value) in offer.preset?.values ?? [:] { kept[key] = value }
         failure = nil
+        needsAddress = false
         form = offer
         values = kept
     }
@@ -188,5 +235,7 @@ final class AccountFlow {
         form = nil
         values = [:]
         failure = nil
+        step = .address
+        needsAddress = false
     }
 }
