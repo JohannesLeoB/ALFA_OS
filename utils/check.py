@@ -41,6 +41,8 @@ findings = []
 FILE_LIMIT = 800
 
 
+SYSTEM_ENTRIES = {".DS_Store", ".claude"}
+
 def report(path, line, message):
     where = path if line is None else "%s:%d" % (path, line)
     findings.append("%s: %s" % (where, message))
@@ -158,13 +160,13 @@ def check_layout():
     modules = []
     for name in sorted(os.listdir(sources)):
         full = os.path.join(sources, name)
-        if name == ".DS_Store":
+        if name in SYSTEM_ENTRIES:
             continue
         if not os.path.isdir(full):
             report("Sources/" + name, None, "file outside a module")
         elif name == "Integrations":
             for inner in sorted(os.listdir(full)):
-                if inner == ".DS_Store":
+                if inner in SYSTEM_ENTRIES:
                     continue
                 if inner not in INTEGRATIONS or not os.path.isdir(os.path.join(full, inner)):
                     report("Sources/Integrations/" + inner, None, "not an allowed integration")
@@ -177,7 +179,7 @@ def check_layout():
     for relative, module in modules:
         full = os.path.join(ROOT, relative)
         for name in sorted(os.listdir(full)):
-            if name == ".DS_Store":
+            if name in SYSTEM_ENTRIES:
                 continue
             inner = os.path.join(full, name)
             if not os.path.isdir(inner):
@@ -188,32 +190,32 @@ def check_layout():
                 report(relative + "/" + name, None, "Tool folder only in Assistant")
             else:
                 for entry in sorted(os.listdir(inner)):
-                    if entry == ".DS_Store":
+                    if entry in SYSTEM_ENTRIES:
                         continue
                     if not entry.endswith(".swift") or os.path.isdir(os.path.join(inner, entry)):
                         report(relative + "/" + name + "/" + entry, None, "only Swift files directly in a module folder")
     known = {module for _, module in modules}
     tests = os.path.join(ROOT, "Tests")
     for name in sorted(os.listdir(tests)):
-        if name == ".DS_Store":
+        if name in SYSTEM_ENTRIES:
             continue
         full = os.path.join(tests, name)
         if not os.path.isdir(full) or not name.endswith("Tests") or name[:-5] not in known:
             report("Tests/" + name, None, "not a <Module>Tests folder of an existing module")
             continue
-        entries = [e for e in os.listdir(full) if e != ".DS_Store"]
+        entries = [e for e in os.listdir(full) if e not in SYSTEM_ENTRIES]
         if entries != [name + ".swift"]:
             report("Tests/" + name, None, "must contain exactly %s.swift" % name)
     app = os.path.join(ROOT, "App")
     for name in sorted(os.listdir(app)):
-        if name == ".DS_Store":
+        if name in SYSTEM_ENTRIES:
             continue
         full = os.path.join(app, name)
         if not os.path.isdir(full) or not re.fullmatch(r"[A-Z][A-Za-z]*", name):
             report("App/" + name, None, "App holds feature folders only")
             continue
         for entry in sorted(os.listdir(full)):
-            if entry == ".DS_Store":
+            if entry in SYSTEM_ENTRIES:
                 continue
             if not entry.endswith(".swift") or os.path.isdir(os.path.join(full, entry)):
                 report("App/%s/%s" % (name, entry), None, "only Swift files directly in a feature folder")
