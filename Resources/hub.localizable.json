@@ -1280,6 +1280,26 @@
   "settings.mail.undoOff": {
    "de": "Aus",
    "en": "Off"
+  },
+  "settings.identity.retire": {
+   "de": "Nutzerkonto stilllegen",
+   "en": "Retire User Account"
+  },
+  "settings.identity.retire.sub": {
+   "de": "Zieht die Freigabe von ALFA_OS bei Google zurück und löscht alle Schlüssel auf diesem Mac. Mails und Einstellungen bleiben.",
+   "en": "Withdraws ALFA_OS’s access at Google and deletes all keys on this Mac. Mail and settings stay."
+  },
+  "settings.identity.retire.action": {
+   "de": "Stilllegen",
+   "en": "Retire"
+  },
+  "settings.retire.question": {
+   "de": "Stilllegen?",
+   "en": "Retire?"
+  },
+  "settings.retire.done": {
+   "de": "Stillgelegt · die App startet neu",
+   "en": "Retired · the app restarts"
   }
  }
 }

@@ -147,6 +147,11 @@ extension InletsState: SetupPort {
         }
     }
 
+    func revoke(_ inletID: Inlet.ID) async throws {
+        guard let inlet = record(inletID), let provider = router.provider(inlet.provider), let grant = grant(for: inlet) else { return }
+        try await provider.signIn.revoke(grant)
+    }
+
     func remove(_ inletID: Inlet.ID) async throws {
         guard let inlet = record(inletID) else { return }
         let names = try inletStore.slots(of: inletID)

@@ -339,6 +339,20 @@ final class GoogleTests: XCTestCase {
         XCTAssertEqual(http.calls[0].path, "/token")
     }
 
+    func testRevokeSendsTheTokenAndAcceptsAnAlreadyInvalidOne() async throws {
+        let http = FakeHttp { call in (String(decoding: call.body, as: UTF8.self).contains("gone") ? 400 : 200, "{}") }
+        let oauth = OAuthClient(config: ClientConfig(clientID: "c", clientSecret: ""), http: http)
+        try await oauth.revoke(token: "r1")
+        try await oauth.revoke(token: "gone")
+        XCTAssertEqual(http.calls.map(\.path), ["/revoke", "/revoke"])
+        XCTAssertEqual(String(decoding: http.calls[0].body, as: UTF8.self), "token=r1")
+        let failing = OAuthClient(config: ClientConfig(clientID: "c", clientSecret: ""), http: FakeHttp { _ in (503, "{}") })
+        do {
+            try await failing.revoke(token: "r1")
+            XCTFail("revoke must throw")
+        } catch {}
+    }
+
     func testTokenRequestFailuresKeepTheOAuthFault() async {
         let http = FakeHttp { _ in (400, #"{"error":"invalid_grant","error_description":"gone"}"#) }
         do {

@@ -273,6 +273,16 @@ private final class SwitchedSignIn: SignInPort, Sendable {
     func signOut(_ inlet: Inlet) async throws {}
 }
 
+private struct RefusingSignIn: SignInPort {
+    func signIn(_ inlet: Inlet, input: [Field.ID: String]) async throws -> Grant { Grant(values: ["token": "t"]) }
+
+    func renew(_ grant: Grant) async throws -> Grant { grant }
+
+    func signOut(_ inlet: Inlet) async throws {}
+
+    func revoke(_ grant: Grant) async throws { throw URLError(.notConnectedToInternet) }
+}
+
 private struct StuckSignIn: SignInPort {
     func signIn(_ inlet: Inlet, input: [Field.ID: String]) async throws -> Grant {
         try await Task.sleep(for: .seconds(3600))
@@ -1020,6 +1030,22 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(renewed.id, inlet.id)
         XCTAssertEqual(renewed.account, "b@x")
         XCTAssertEqual(rig.connections.setup.inlets.map(\.id), [inlet.id])
+    }
+
+    @MainActor
+    func testRetireKeepsEverythingWhenAProviderRefusesAndRemovesAllOtherwise() async throws {
+        let refusing = try Rig.make(provider: FakeProvider(capabilities: [.mail], signIn: RefusingSignIn()))
+        let kept = try await refusing.connect("a@x")
+        let refused = await SignOutEngine.retire(setup: refusing.connections.setup)
+        XCTAssertEqual(refused, [kept.id])
+        XCTAssertEqual(refusing.connections.setup.inlets.map(\.id), [kept.id])
+        XCTAssertFalse(refusing.keychain.slots.isEmpty)
+        let rig = try Rig.make()
+        _ = try await rig.connect("b@x")
+        let failed = await SignOutEngine.retire(setup: rig.connections.setup)
+        XCTAssertTrue(failed.isEmpty)
+        XCTAssertTrue(rig.connections.setup.inlets.isEmpty)
+        XCTAssertTrue(rig.keychain.slots.isEmpty)
     }
 
     @MainActor

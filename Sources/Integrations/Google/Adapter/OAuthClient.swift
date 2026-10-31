@@ -4,6 +4,8 @@ import Foundation
 struct OAuthClient: TokenRefreshPort {
     static let authorizationEndpoint = "https://accounts.google.com/o/oauth2/v2/auth"
     static let tokenEndpoint = "https://oauth2.googleapis.com/token"
+    static let revocationEndpoint = "https://oauth2.googleapis.com/revoke"
+    static let invalidTokenStatus = 400
 
     let config: ClientConfig
     let http: any HttpPort
@@ -50,6 +52,18 @@ struct OAuthClient: TokenRefreshPort {
             "refresh_token": refreshToken,
             "grant_type": "refresh_token",
         ])
+    }
+
+    func revoke(token: String) async throws {
+        var request = URLRequest(url: try RequestClient.url(Self.revocationEndpoint))
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpBody = FormBodyEngine.encode(["token": token])
+        let (data, response) = try await http.data(for: request)
+        guard let status = (response as? HTTPURLResponse)?.statusCode else { throw GoogleFailure.invalidResponse }
+        guard (200...299).contains(status) || status == Self.invalidTokenStatus else {
+            throw GoogleFailure.api(.oauth, APIFault(status: status, data: data))
+        }
     }
 
     private func post(_ parameters: [String: String]) async throws -> OAuthToken {

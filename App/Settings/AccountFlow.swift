@@ -213,11 +213,11 @@ final class AccountFlow {
         busy = false
     }
 
-    func signOut() async -> Bool {
+    func signOut(retiring: Bool = false) async -> Bool {
         guard !busy else { return false }
         busy = true
         failure = nil
-        let failed = await SignOutEngine.run(setup: setup)
+        let failed = retiring ? await SignOutEngine.retire(setup: setup) : await SignOutEngine.run(setup: setup)
         busy = false
         guard failed.isEmpty else {
             failure = Hint(text: SettingsKeys.failedUnknown, detail: failed.joined(separator: ", "))

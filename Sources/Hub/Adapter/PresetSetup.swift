@@ -32,6 +32,10 @@ final class PresetSetup: SetupPort {
         try await wrapped.remove(inlet)
     }
 
+    func revoke(_ inlet: Inlet.ID) async throws {
+        try await wrapped.revoke(inlet)
+    }
+
     func report(for inlet: Inlet.ID) -> [ReportEntry] { wrapped.report(for: inlet) }
 
     func heldSlots(of inlet: Inlet.ID) -> Set<String> { wrapped.heldSlots(of: inlet) }

@@ -18120,6 +18120,54 @@
         }
       }
     },
+    "settings.identity.retire" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nutzerkonto stilllegen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retire User Account"
+          }
+        }
+      }
+    },
+    "settings.identity.retire.action" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stilllegen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retire"
+          }
+        }
+      }
+    },
+    "settings.identity.retire.sub" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zieht die Freigabe von ALFA_OS bei Google zurück und löscht alle Schlüssel auf diesem Mac. Mails und Einstellungen bleiben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Withdraws ALFA_OS’s access at Google and deletes all keys on this Mac. Mail and settings stay."
+          }
+        }
+      }
+    },
     "settings.identity.role" : {
       "localizations" : {
         "de" : {
@@ -19443,6 +19491,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "POP"
+          }
+        }
+      }
+    },
+    "settings.retire.done" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stillgelegt · die App startet neu"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retired · the app restarts"
+          }
+        }
+      }
+    },
+    "settings.retire.question" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stilllegen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retire?"
           }
         }
       }

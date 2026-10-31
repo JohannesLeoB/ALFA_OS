@@ -57,4 +57,14 @@ public enum SignOutEngine {
         }
         return failed
     }
+
+    @MainActor
+    public static func retire(setup: any SetupPort) async -> [Inlet.ID] {
+        var refused: [Inlet.ID] = []
+        for inlet in setup.inlets {
+            do { try await setup.revoke(inlet.id) } catch { refused.append(inlet.id) }
+        }
+        guard refused.isEmpty else { return refused }
+        return await run(setup: setup)
+    }
 }

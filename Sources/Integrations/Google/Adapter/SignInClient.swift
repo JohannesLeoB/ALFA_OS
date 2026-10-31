@@ -45,4 +45,9 @@ struct SignInClient: SignInPort {
     }
 
     func signOut(_ inlet: Inlet) async throws {}
+
+    func revoke(_ grant: Grant) async throws {
+        let state = try StoredToken(grant: grant)
+        try await oauth.revoke(token: state.refreshToken ?? state.accessToken)
+    }
 }

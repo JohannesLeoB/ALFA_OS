@@ -34,7 +34,7 @@ struct IdentityCard: View {
                     labelKey: "settings.identity.birthdays")
             }
             BlockHead(key: "settings.identity.account")
-            SettingsRow(label: appearance.text("settings.identity.signOut"), sub: Text(verbatim: signOutSub), line: false) {
+            SettingsRow(label: appearance.text("settings.identity.signOut"), sub: Text(verbatim: signOutSub)) {
                 ConfirmPill(
                     label: appearance.text("settings.identity.signOut.action"),
                     question: appearance.text("settings.signOut.question"),
@@ -42,7 +42,19 @@ struct IdentityCard: View {
                     no: appearance.text("confirm.no"),
                     holdHint: Text(verbatim: appearance.format("settings.confirm.hold", appearance.string("settings.identity.signOut.action"))),
                     showsProgress: false,
-                    onYes: { signOut() }
+                    onYes: { signOut(retiring: false) }
+                )
+                .rowPill()
+            }
+            SettingsRow(label: appearance.text("settings.identity.retire"), sub: appearance.text("settings.identity.retire.sub"), line: false) {
+                ConfirmPill(
+                    label: appearance.text("settings.identity.retire.action"),
+                    question: appearance.text("settings.retire.question"),
+                    yes: appearance.text("settings.identity.retire.action"),
+                    no: appearance.text("confirm.no"),
+                    holdHint: Text(verbatim: appearance.format("settings.confirm.hold", appearance.string("settings.identity.retire.action"))),
+                    showsProgress: false,
+                    onYes: { signOut(retiring: true) }
                 )
                 .rowPill()
             }
@@ -64,10 +76,10 @@ struct IdentityCard: View {
         Binding(get: { profile[keyPath: path] }, set: { value in context.state.updateProfile { $0[keyPath: path] = value } })
     }
 
-    private func signOut() {
+    private func signOut(retiring: Bool) {
         Task {
-            guard await context.flow.signOut() else { return }
-            context.state.notify("settings.signOut.done")
+            guard await context.flow.signOut(retiring: retiring) else { return }
+            context.state.notify(retiring ? "settings.retire.done" : "settings.signOut.done")
             try? await Task.sleep(for: .seconds(Tokens.Duration.toast))
             await AppRelaunch.run()
         }
