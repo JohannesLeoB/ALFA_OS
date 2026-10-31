@@ -885,7 +885,7 @@ final class MailTests: XCTestCase {
         state.toggleReceipt(id)
         XCTAssertTrue(state.asksReceipt(id))
         XCTAssertEqual(state.drafts.first { $0.id == id }?.draft.receiptTo, state.selectedAccount?.account)
-        XCTAssertEqual(MenuEngine.draftMore(receipt: true), [.item(.receipt, checked: true), .separator, .item(.print)])
+        XCTAssertEqual(MenuEngine.draftMore(receipt: true), [.item(.laterSend), .item(.receipt, checked: true), .separator, .item(.print)])
         state.toggleReceipt(id)
         XCTAssertFalse(state.asksReceipt(id))
     }
@@ -1558,7 +1558,7 @@ final class MailTests: XCTestCase {
     }
 
     func testMenusOfferOnlyHandledActions() {
-        let removed = ["note", "laterSend", "template"]
+        let removed = ["note", "template"]
         XCTAssertTrue(Set(Action.allCases.map(\.rawValue)).isDisjoint(with: removed))
         let lines = MenuEngine.row(unread: true, draft: false) + MenuEngine.readingMore(starred: false, original: true)
             + MenuEngine.attachment(name: "a.pdf")

@@ -36,6 +36,8 @@ struct MessageLane: View {
                     offline
                 } else if let address = inbox.expiredAddress {
                     expired(address)
+                } else if inbox.currentFolder?.role == .later {
+                    laterNotice
                 }
                 content(width: proxy.size.width)
             }
@@ -184,6 +186,14 @@ struct MessageLane: View {
         Notice(kind: .warning, title: appearance.text("mail.notice.offline.title"), text: appearance.text("mail.notice.offline.text"),
                glyph: { Glyph(.alert) },
                actions: { TextButton(label: appearance.text("mail.list.failed.act"), kind: .accent) { Task { await inbox.loadSelection() } } })
+            .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+            .padding(.top, CGFloat(Tokens.Spacing.step8))
+    }
+
+    private var laterNotice: some View {
+        Notice(kind: .warning, title: appearance.text("mail.later.notice.title"), text: appearance.text("mail.later.notice.text"),
+               glyph: { Glyph(.clock) },
+               actions: { EmptyView() })
             .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
             .padding(.top, CGFloat(Tokens.Spacing.step8))
     }

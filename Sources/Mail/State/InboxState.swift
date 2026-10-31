@@ -44,6 +44,8 @@ public final class InboxState {
     public var tiles = false
     public var tileHot: String?
     public var toast: Toast?
+    public var planning: UUID?
+    @ObservationIgnored var plannedMirrors: [OutboxItem.ID: (inlet: Inlet.ID, mirrorID: String)] = [:]
     var toastSerial = 0
     @ObservationIgnored var undoAction: (@MainActor () async -> Void)?
     @ObservationIgnored var sendAfterSave: Set<UUID> = []
@@ -141,7 +143,7 @@ public final class InboxState {
 
     private var replacedDrafts: Set<String> {
         guard let inlet = selectedInlet, currentFolder?.role == .drafts else { return [] }
-        return goneDrafts[inlet] ?? []
+        return (goneDrafts[inlet] ?? []).union(plannedDrafts(inlet))
     }
 
     var localNeedle: String {
@@ -151,7 +153,7 @@ public final class InboxState {
     var crossActive: Bool {
         let needle = localNeedle
         return scope == .all && !needle.isEmpty && crossInlet == selectedInlet && !crossQuery.isEmpty
-            && needle.hasPrefix(crossQuery) && selectedFolder != Folder.outboxID
+            && needle.hasPrefix(crossQuery) && !Folder.queues(selectedFolder)
     }
 
     static func contains(_ summary: MessageSummary, _ needle: String) -> Bool {
@@ -195,6 +197,7 @@ public final class InboxState {
         loadFoldersFromMailbox()
         refreshCounts()
         outbox = outboxPort.outbox
+        notePlanned()
         restoreKeptDrafts()
         if eventTask == nil {
             eventTask = Task { [weak self] in
@@ -335,7 +338,7 @@ public final class InboxState {
         query = trimmed
         typed = trimmed
         guard let inlet = selectedInlet, let folder = selectedFolder else { return }
-        if folder == Folder.outboxID {
+        if Folder.queues(folder) {
             query = ""
             return
         }
@@ -482,7 +485,7 @@ public final class InboxState {
             selectedFolder = sortedFolders.first { $0.role == .inbox }?.id ?? sortedFolders.first?.id
         }
         guard let folder = selectedFolder else { return }
-        if folder == Folder.outboxID {
+        if Folder.queues(folder) {
             showOutbox()
             return
         }
@@ -580,9 +583,7 @@ public final class InboxState {
         case .progress(let inlet, let folder):
             if inlet == selectedInlet, folder == selectedFolder { progressSerial += 1 }
         case .outboxChanged:
-            outbox = outboxPort.outbox
-            reconcileDrafts()
-            await refreshOutboxList()
+            await outboxChanged()
         case .refused(let inlet, _):
             if inlet == selectedInlet { post(.mirrorRefused) }
         case .syncFailed(let inlet, let hint):
@@ -667,12 +668,13 @@ public final class InboxState {
         case .starred: 1
         case .sent: 2
         case .drafts: 3
-        case .outbox: 4
-        case .all: 5
-        case .archive: 6
-        case .spam: 7
-        case .trash: 8
-        case .other: 9
+        case .later: 4
+        case .outbox: 5
+        case .all: 6
+        case .archive: 7
+        case .spam: 8
+        case .trash: 9
+        case .other: 10
         }
     }
 
@@ -702,6 +704,7 @@ public final class InboxState {
     }
 
     var listedFolders: [Folder] {
-        folders + (hasUnsent ? [Folder(id: Folder.outboxID, name: "", role: .outbox)] : [])
+        folders + (hasPlanned ? [Folder(id: Folder.laterID, name: "", role: .later)] : [])
+            + (hasUnsent ? [Folder(id: Folder.outboxID, name: "", role: .outbox)] : [])
     }
 }

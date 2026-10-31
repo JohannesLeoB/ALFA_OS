@@ -10,13 +10,20 @@ public enum FolderRole: String, Sendable, CaseIterable {
     case archive
     case starred
     case outbox
+    case later
     case all
     case other
 
     public static let unseenRoles: [FolderRole] = [.spam, .archive]
     public static let countedRoles: [FolderRole] = unseenRoles + [.other]
 
-    public var nameKey: String { self == .outbox ? "mail.folder.outbox" : "mail.role." + rawValue }
+    public var nameKey: String {
+        switch self {
+        case .outbox: "mail.folder.outbox"
+        case .later: "mail.later.folder"
+        default: "mail.role." + rawValue
+        }
+    }
 }
 
 public struct Folder: Identifiable, Equatable, Sendable {
@@ -25,9 +32,12 @@ public struct Folder: Identifiable, Equatable, Sendable {
     public var role: FolderRole
 
     public static let outboxID = "local:outbox"
+    public static let laterID = "local:later"
     public static let starredID = "local:starred"
 
     public var isLocal: Bool { id.hasPrefix("local:") }
+
+    public static func queues(_ id: String?) -> Bool { id == outboxID || id == laterID }
 
     public init(id: String, name: String, role: FolderRole = .other) {
         self.id = id

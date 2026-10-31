@@ -67,6 +67,8 @@ struct InboxRow: View {
     private func open(pin: Bool) {
         if picking {
             if !pin { inbox.pick(item.id) }
+        } else if item.outbox?.plannedAt != nil {
+            if pin { Task { await inbox.editPlanned(item.id) } }
         } else if item.outbox != nil {
             inbox.openQueued(item.id)
         } else if item.draft {
@@ -133,7 +135,16 @@ struct InboxRow: View {
 
     private var preview: some View {
         Group {
-            if let state = item.outbox {
+            if let state = item.outbox, let date = state.plannedAt {
+                Group {
+                    if state.missed {
+                        appearance.text(state.key)
+                    } else {
+                        Text(verbatim: appearance.format(state.key, MessageDate.plan(date, now: inbox.now, appearance: appearance)))
+                    }
+                }
+                .designText(state.missed && !selected ? \.signal : tone.tertiary, size: Tokens.TextSize.body, weight: .light)
+            } else if let state = item.outbox {
                 appearance.text(state.key).designText(state.needsAttention && !selected ? \.signal : tone.tertiary,
                                                       size: Tokens.TextSize.body, weight: .light)
             } else if let preview = item.preview {
@@ -183,7 +194,25 @@ struct InboxRow: View {
 
     @ViewBuilder
     private var queuedActions: some View {
-        if let state = item.outbox, state.offersRowActions {
+        if let state = item.outbox, state.plannedAt != nil {
+            HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
+                if state.missed {
+                    rowAction("mail.later.sendNow", glyph: .send) {
+                        Task { await inbox.sendPlannedNow(item.id) }
+                    }
+                }
+                rowAction("mail.later.edit", glyph: .compose) {
+                    Task { await inbox.editPlanned(item.id) }
+                }
+                rowAction("mail.later.unschedule", glyph: .close) {
+                    Task { await inbox.unplan(item.id) }
+                }
+            }
+            .padding(.leading, CGFloat(Tokens.Spacing.step8))
+            .background(selected ? appearance.color(\.inverse) : appearance.color(\.lane))
+            .padding(.top, CGFloat(Tokens.Spacing.step12))
+            .padding(.trailing, CGFloat(Tokens.Spacing.step8))
+        } else if let state = item.outbox, state.offersRowActions {
             HStack(spacing: CGFloat(Tokens.Spacing.step4)) {
                 if case .failed = state {
                     rowAction("mail.outbox.retry.tooltip", glyph: .send) {
@@ -310,6 +339,23 @@ struct MessageDate: View {
                 : Text(date, format: .dateTime.day().month(.abbreviated).locale(appearance.locale))
         case .none: return Text(verbatim: "")
         }
+    }
+
+    static func plan(_ date: Date, now: Date, appearance: Appearance, calendar: Calendar = .current) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = appearance.locale
+        switch PlanDay.of(date, now: now, calendar: calendar) {
+        case .near:
+            formatter.doesRelativeDateFormatting = true
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .short
+            formatter.formattingContext = .beginningOfSentence
+        case .week:
+            formatter.setLocalizedDateFormatFromTemplate("EEEEjmm")
+        case .later:
+            formatter.setLocalizedDateFormatFromTemplate("dMMMjmm")
+        }
+        return formatter.string(from: date)
     }
 }
 

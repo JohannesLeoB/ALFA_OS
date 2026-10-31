@@ -286,6 +286,10 @@ extension SQLiteStore {
         migrator.registerMigration("mailBcc") { db in
             try db.execute(sql: "ALTER TABLE mail_message ADD COLUMN bccRaw TEXT NOT NULL DEFAULT ''")
         }
+        migrator.registerMigration("mailLater") { db in
+            try db.execute(sql: "ALTER TABLE mail_outbox ADD COLUMN sendAt REAL")
+            try db.execute(sql: "ALTER TABLE mail_outbox ADD COLUMN mirrorID TEXT")
+        }
         return migrator
     }
 }

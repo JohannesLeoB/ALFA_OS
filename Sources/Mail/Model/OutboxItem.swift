@@ -7,6 +7,8 @@ public enum OutboxState: Equatable, Sendable {
     case sending
     case failed(Hint)
     case unverified(Hint)
+    case planned(Date)
+    case missed(Date)
 
     public var key: String {
         switch self {
@@ -15,12 +17,14 @@ public enum OutboxState: Equatable, Sendable {
         case .sending: "mail.outbox.state.sending"
         case .failed(let hint): hint.text
         case .unverified: "mail.outbox.state.failed"
+        case .planned: "mail.later.planned"
+        case .missed: "mail.later.missed"
         }
     }
 
     public var offersRowActions: Bool {
         switch self {
-        case .waiting, .failed: true
+        case .waiting, .failed, .planned, .missed: true
         case .checking, .sending, .unverified: false
         }
     }
@@ -28,15 +32,27 @@ public enum OutboxState: Equatable, Sendable {
     public var inFlight: Bool {
         switch self {
         case .checking, .sending: true
-        case .waiting, .failed, .unverified: false
+        case .waiting, .failed, .unverified, .planned, .missed: false
         }
     }
 
     public var needsAttention: Bool {
         switch self {
         case .failed, .unverified: true
-        case .waiting, .checking, .sending: false
+        case .waiting, .checking, .sending, .planned, .missed: false
         }
+    }
+
+    public var plannedAt: Date? {
+        switch self {
+        case .planned(let date), .missed(let date): date
+        case .waiting, .checking, .sending, .failed, .unverified: nil
+        }
+    }
+
+    public var missed: Bool {
+        if case .missed = self { return true }
+        return false
     }
 }
 
@@ -87,6 +103,13 @@ public struct OutboxItem: Identifiable, Equatable, Sendable {
     mutating func fail(_ hint: Hint) { state = .failed(hint) }
 
     mutating func unverify(_ hint: Hint) { state = .unverified(hint) }
+
+    mutating func plan(at date: Date) { state = .planned(date) }
+
+    mutating func miss() {
+        guard case .planned(let date) = state else { return }
+        state = .missed(date)
+    }
 }
 
 public enum SendOutcome: Equatable, Sendable {

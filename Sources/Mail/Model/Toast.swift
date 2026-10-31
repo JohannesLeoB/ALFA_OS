@@ -1,3 +1,5 @@
+import Foundation
+
 public enum ToastKind: Equatable, Sendable {
     case archived
     case trashed
@@ -33,6 +35,8 @@ public enum ToastKind: Equatable, Sendable {
     case threadFailed
     case searchPartial
     case mirrorRefused
+    case planned(Date)
+    case inDrafts
 
     public var key: String {
         switch self {
@@ -70,6 +74,8 @@ public enum ToastKind: Equatable, Sendable {
         case .threadFailed: "mail.failure.thread"
         case .searchPartial: "mail.toast.searchPartial"
         case .mirrorRefused: "mail.hint.mirrorRefused"
+        case .planned: "mail.later.planned"
+        case .inDrafts: "mail.toast.inDrafts"
         }
     }
 
@@ -97,6 +103,11 @@ public enum ToastKind: Equatable, Sendable {
         case .contactSaved(let name), .contactExists(let name), .projectSaved(let name), .attachmentCopied(let name): name
         default: nil
         }
+    }
+
+    public var date: Date? {
+        if case .planned(let date) = self { return date }
+        return nil
     }
 
     public var count: Int? {

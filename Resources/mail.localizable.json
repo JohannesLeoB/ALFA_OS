@@ -1232,6 +1232,58 @@
   "mail.date.inDays.other": {
    "de": "In {1} Tagen",
    "en": "In {1} days"
+  },
+  "mail.action.laterSend": {
+   "de": "Später senden …",
+   "en": "Send Later …"
+  },
+  "mail.later.custom": {
+   "de": "Eigene Zeit …",
+   "en": "Custom Time …"
+  },
+  "mail.later.folder": {
+   "de": "Später senden",
+   "en": "Send Later"
+  },
+  "mail.later.planned": {
+   "de": "Geplant · {1}",
+   "en": "Scheduled · {1}"
+  },
+  "mail.later.missed": {
+   "de": "Nicht gesendet · ALFA war zur geplanten Zeit geschlossen",
+   "en": "Not sent · ALFA was closed at the scheduled time"
+  },
+  "mail.later.sendNow": {
+   "de": "Jetzt senden",
+   "en": "Send Now"
+  },
+  "mail.later.edit": {
+   "de": "Bearbeiten",
+   "en": "Edit"
+  },
+  "mail.later.unschedule": {
+   "de": "Planung aufheben",
+   "en": "Unschedule"
+  },
+  "mail.later.notice.title": {
+   "de": "Geplante Mails gehen nur raus, solange ALFA läuft",
+   "en": "Scheduled mail only goes out while ALFA is running"
+  },
+  "mail.later.notice.text": {
+   "de": "Ist ALFA zur geplanten Zeit geschlossen, bleibt die Mail hier und wartet auf „Jetzt senden“.",
+   "en": "If ALFA is closed at the scheduled time, the mail stays here until you choose “Send Now”."
+  },
+  "mail.later.plan": {
+   "de": "Planen",
+   "en": "Schedule"
+  },
+  "mail.later.dateTime": {
+   "de": "Datum und Uhrzeit",
+   "en": "Date and Time"
+  },
+  "mail.toast.inDrafts": {
+   "de": "Im Ordner Entwürfe",
+   "en": "In Drafts"
   }
  }
 }

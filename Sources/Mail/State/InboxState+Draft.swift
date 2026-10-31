@@ -433,7 +433,7 @@ extension InboxState {
             }
             switch item.state {
             case .failed(let hint), .unverified(let hint): drafts[index].state = .sendFailed(hint)
-            case .waiting, .checking, .sending: drafts[index].state = .queuedInOutbox
+            case .waiting, .checking, .sending, .planned, .missed: drafts[index].state = .queuedInOutbox
             }
         }
     }

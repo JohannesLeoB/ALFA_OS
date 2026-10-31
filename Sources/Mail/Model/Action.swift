@@ -3,7 +3,7 @@ import Shell
 public enum Action: String, Sendable, CaseIterable {
     case reply, replyAll, forward, archive, trash, markRead, markUnread, star, unstar, spam
     case print, pdf, preview, otherProject, toProject, more, openDraft, copyAddress, writeMail, saveContact, editContact
-    case saveAs, attachFile, fromProject, move, original, receipt, format
+    case saveAs, attachFile, fromProject, move, original, receipt, format, laterSend
     case saveDraft, discardDraft, send, overview, backToStack, foldColumn, loadImages, purge
 
     public var key: String { "mail.action." + rawValue }

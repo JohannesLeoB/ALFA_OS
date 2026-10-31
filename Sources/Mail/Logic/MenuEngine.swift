@@ -15,7 +15,7 @@ public enum MenuEngine {
     }
 
     public static func draftMore(receipt: Bool) -> [MenuLine] {
-        [.item(.receipt, checked: receipt), .separator, .item(.print)]
+        [.item(.laterSend), .item(.receipt, checked: receipt), .separator, .item(.print)]
     }
 
     public static func person(address: String, contact: Bool) -> [MenuLine] {

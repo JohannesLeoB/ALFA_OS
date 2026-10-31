@@ -13,15 +13,26 @@ public final class OutboxStore: OutboxPort {
     private var items: [OutboxItem]
     private var unsaved: Set<OutboxItem.ID> = []
     private var unremoved: Set<OutboxItem.ID> = []
+    private let clock: @Sendable () -> Date
+    private var timer: Task<Void, Never>?
 
-    public init(access: any AccessPort, database: SQLiteStore, events: Broadcast<MailboxEvent>) {
+    public init(access: any AccessPort, database: SQLiteStore, events: Broadcast<MailboxEvent>,
+                clock: @escaping @Sendable () -> Date = { Date() }) {
         self.access = access
         self.database = database
         self.events = events
+        self.clock = clock
         items = Self.load(database)
         _ = try? database.write { db in
             try db.execute(sql: "DELETE FROM mail_outbox WHERE state = 'sent'")
         }
+        let now = clock()
+        for index in items.indices {
+            guard case .planned(let date) = items[index].state, date <= now else { continue }
+            items[index].miss()
+            persist(items[index].id)
+        }
+        arm()
     }
 
     public var outbox: [OutboxItem] { items }
@@ -86,6 +97,66 @@ public final class OutboxStore: OutboxPort {
         }
         events.emit(.outboxChanged)
         return true
+    }
+
+    public func plan(_ inlet: Inlet.ID, _ draft: Draft, draftID: String?, mirrorID: String?, at date: Date) -> OutboxItem.ID {
+        var item = OutboxItem(inlet: inlet, draft: draft, draftID: draftID)
+        item.mirrorID = mirrorID
+        item.plan(at: date)
+        store(item)
+        arm()
+        return item.id
+    }
+
+    public func sendNow(_ id: OutboxItem.ID) async -> SendOutcome? {
+        guard let index = items.firstIndex(where: { $0.id == id }), items[index].state.plannedAt != nil else { return nil }
+        items[index].wait()
+        await retry(id, byUser: true, verify: false)
+        arm()
+        return items.contains { $0.id == id } ? .queued(id) : .sent
+    }
+
+    public func unplan(_ id: OutboxItem.ID) -> OutboxItem? {
+        guard let index = items.firstIndex(where: { $0.id == id }), items[index].state.plannedAt != nil else { return nil }
+        let item = items.remove(at: index)
+        unsaved.remove(id)
+        do {
+            try delete(id)
+            unremoved.remove(id)
+        } catch {
+            unremoved.insert(id)
+        }
+        arm()
+        events.emit(.outboxChanged)
+        return item
+    }
+
+    private func arm() {
+        timer?.cancel()
+        let planned = items.compactMap { item -> Date? in
+            if case .planned(let date) = item.state { return date }
+            return nil
+        }
+        guard let next = planned.min() else {
+            timer = nil
+            return
+        }
+        let wait = max(0, next.timeIntervalSince(clock()))
+        timer = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(wait))
+            guard !Task.isCancelled else { return }
+            await self?.due()
+        }
+    }
+
+    func due() async {
+        let now = clock()
+        let ready = items.filter { item in
+            if case .planned(let date) = item.state { return date <= now }
+            return false
+        }.map(\.id)
+        for id in ready { _ = await sendNow(id) }
+        arm()
     }
 
     public func revise(_ id: OutboxItem.ID, _ draft: Draft) {
@@ -217,6 +288,7 @@ public final class OutboxStore: OutboxPort {
         let draft = try JSONEncoder().encode(item.draft)
         var name = "waiting"
         var hint: Data?
+        let sendAt = item.state.plannedAt?.timeIntervalSince1970
         switch item.state {
         case .failed(let value):
             name = "failed"
@@ -224,6 +296,10 @@ public final class OutboxStore: OutboxPort {
         case .unverified(let value):
             name = "unverified"
             hint = try JSONEncoder().encode(value)
+        case .planned:
+            name = "planned"
+        case .missed:
+            name = "missed"
         case .waiting, .checking, .sending:
             break
         }
@@ -232,13 +308,14 @@ public final class OutboxStore: OutboxPort {
         let attempts = item.attempts
         let draftID = item.draftID
         let messageID = item.messageID
+        let mirrorID = item.mirrorID
         let state = name
         let hintData = hint
         try database.write { db in
             let position = try Int.fetchOne(db, sql: "SELECT position FROM mail_outbox WHERE id = ?", arguments: [id])
                 ?? ((try Int.fetchOne(db, sql: "SELECT MAX(position) FROM mail_outbox") ?? -1) + 1)
-            try db.execute(sql: "INSERT OR REPLACE INTO mail_outbox (id, inlet, draft, state, hint, attempts, position, draftID, messageID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                           arguments: [id, inlet, draft, state, hintData, attempts, position, draftID, messageID])
+            try db.execute(sql: "INSERT OR REPLACE INTO mail_outbox (id, inlet, draft, state, hint, attempts, position, draftID, messageID, sendAt, mirrorID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                           arguments: [id, inlet, draft, state, hintData, attempts, position, draftID, messageID, sendAt, mirrorID])
         }
     }
 
@@ -263,10 +340,13 @@ public final class OutboxStore: OutboxPort {
             let hint = (row["hint"] as Data?).flatMap { try? JSONDecoder().decode(Hint.self, from: $0) }
                 ?? Hint(text: MessageTextKey.failed.rawValue)
             state = name == "failed" ? .failed(hint) : .unverified(hint)
+        } else if name == "planned" || name == "missed", let seconds = row["sendAt"] as Double? {
+            let date = Date(timeIntervalSince1970: seconds)
+            state = name == "planned" ? .planned(date) : .missed(date)
         }
         let stored: String = row["messageID"]
         return OutboxItem(id: id, inlet: row["inlet"], draft: draft,
                           messageID: stored.isEmpty ? UUID().uuidString.lowercased() : stored,
-                          draftID: row["draftID"], state: state, attempts: row["attempts"])
+                          draftID: row["draftID"], mirrorID: row["mirrorID"], state: state, attempts: row["attempts"])
     }
 }

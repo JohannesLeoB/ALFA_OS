@@ -547,7 +547,7 @@ final class ShellTests: XCTestCase {
     }
 
     func testIconPathsParseAllCommands() {
-        XCTAssertEqual(Icon.allCases.count, 54)
+        XCTAssertEqual(Icon.allCases.count, 55)
         for icon in Icon.allCases {
             XCTAssertFalse(icon.path.segments.isEmpty, icon.rawValue)
         }

@@ -81,7 +81,11 @@ extension MessageCard {
         private func openMore() {
             if case .draft(let id) = inbox.frontRef {
                 moreAnchor.showMenu(MenuLine.entries(MenuEngine.draftMore(receipt: inbox.asksReceipt(id)), appearance: appearance) { action in
-                    if action == .print { MessageExport.printDraft(inbox, id) } else { inbox.toggleReceipt(id) }
+                    switch action {
+                    case .print: MessageExport.printDraft(inbox, id)
+                    case .laterSend: moreAnchor.showMenu(planEntries(id))
+                    default: inbox.toggleReceipt(id)
+                    }
                 })
                 return
             }
@@ -98,6 +102,17 @@ extension MessageCard {
                 }
             }
             moreAnchor.showMenu(entries)
+        }
+
+        private func planEntries(_ id: UUID) -> [MenuEntry] {
+            let now = inbox.now
+            let rows = inbox.planChoices.enumerated().map { index, date in
+                MenuEntry.row(MenuItem(id: String(index), label: Text(verbatim: MessageDate.plan(date, now: now, appearance: appearance))) {
+                    Task { await inbox.plan(id, at: date) }
+                })
+            }
+            let custom = MenuEntry.row(MenuItem(id: "custom", label: appearance.text("mail.later.custom")) { inbox.pickPlan(id) })
+            return [.head(id: "head", label: appearance.text("mail.later.folder"))] + rows + [.separator(id: "line"), custom]
         }
     }
 }

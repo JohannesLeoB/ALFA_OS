@@ -18,4 +18,7 @@ public protocol OutboxPort: AnyObject {
     func confirm(_ id: OutboxItem.ID) async
     @discardableResult func discard(_ id: OutboxItem.ID) -> Bool
     func revise(_ id: OutboxItem.ID, _ draft: Draft)
+    func plan(_ inlet: Inlet.ID, _ draft: Draft, draftID: String?, mirrorID: String?, at date: Date) -> OutboxItem.ID
+    func sendNow(_ id: OutboxItem.ID) async -> SendOutcome?
+    func unplan(_ id: OutboxItem.ID) -> OutboxItem?
 }

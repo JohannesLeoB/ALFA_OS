@@ -16,6 +16,9 @@ struct MailToast: View {
     }
 
     private func text(_ toast: Toast) -> Text {
+        if let date = toast.kind.date {
+            return Text(verbatim: appearance.format(toast.kind.key, MessageDate.plan(date, now: inbox.now, appearance: appearance)))
+        }
         if let count = toast.kind.count { return Text(verbatim: appearance.format(toast.kind.key, String(count))) }
         if let name = toast.kind.name { return Text(verbatim: appearance.format(toast.kind.key, name)) }
         return appearance.text(toast.kind.key)

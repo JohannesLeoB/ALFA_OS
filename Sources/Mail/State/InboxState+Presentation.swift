@@ -35,7 +35,15 @@ extension InboxState {
             FolderEntry(folder: folder, glyph: Self.glyph(folder.role),
                         count: folderCount(folder, inbox: count, inlet: inlet),
                         selected: folder.id == selectedFolder,
-                        attention: folder.role == .outbox && outbox.contains { $0.inlet == inlet && $0.state.needsAttention })
+                        attention: attention(folder.role, inlet: inlet))
+        }
+    }
+
+    private func attention(_ role: FolderRole, inlet: Inlet.ID) -> Bool {
+        switch role {
+        case .outbox: outbox.contains { $0.inlet == inlet && $0.state.needsAttention }
+        case .later: outbox.contains { $0.inlet == inlet && $0.state.missed }
+        default: false
         }
     }
 
@@ -43,7 +51,8 @@ extension InboxState {
         switch folder.role {
         case .inbox: inbox
         case .drafts: draftBadge(inlet)
-        case .outbox: unsent(inlet)
+        case .outbox: outbox.filter { $0.inlet == inlet && $0.state.plannedAt == nil }.count
+        case .later: outbox.filter { $0.inlet == inlet && $0.state.plannedAt != nil }.count
         case .spam, .archive, .other: folderUnseen[folder.id] ?? 0
         default: 0
         }
@@ -59,7 +68,8 @@ extension InboxState {
         let cards = drafts.filter { $0.inlet == inlet }
         let leaving = Set(cards.filter { Self.leaves($0.state) }.compactMap(\.mirrorID))
         let open = Set(cards.filter { !Self.leaves($0.state) }.compactMap(\.mirrorID))
-        let kept = (mirroredDrafts[inlet] ?? []).subtracting(goneDrafts[inlet] ?? []).subtracting(leaving)
+        let kept = (mirroredDrafts[inlet] ?? []).subtracting(goneDrafts[inlet] ?? []).subtracting(plannedDrafts(inlet))
+            .subtracting(leaving)
         return kept.union(open).count
     }
 
@@ -125,9 +135,9 @@ extension InboxState {
 
     private func presentations(of entries: [ListEntry]) -> [RowPresentation] {
         let role = currentFolder?.role
-        let outgoing = role == .sent || role == .drafts || role == .outbox
+        let outgoing = role == .sent || role == .drafts || role == .outbox || role == .later
         let draftsFolder = role == .drafts
-        let queued = role == .outbox ? Dictionary(outbox.map { ($0.id.uuidString, $0.state) }, uniquingKeysWith: { first, _ in first }) : [:]
+        let queued = role == .outbox || role == .later ? Dictionary(outbox.map { ($0.id.uuidString, $0.state) }, uniquingKeysWith: { first, _ in first }) : [:]
         let now = clock()
         let people = outgoing ? [:] : Self.participants(in: summaries)
         let signature = draftsFolder ? selectedInlet.flatMap { signatures($0)?.block } : nil
@@ -215,6 +225,7 @@ extension InboxState {
         case .sent: .sent
         case .drafts: .docText
         case .outbox: .send
+        case .later: .clock
         case .all: .allMail
         case .archive: .archive
         case .spam: .junk

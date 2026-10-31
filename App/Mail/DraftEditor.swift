@@ -79,6 +79,11 @@ struct DraftEditor: View {
                     .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
                     .padding(.top, CGFloat(Tokens.Spacing.step8))
             }
+            if inbox.planning == card.id {
+                PlanNotice(inbox: inbox, card: card.id)
+                    .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
+                    .padding(.top, CGFloat(Tokens.Spacing.step8))
+            }
             if card.saveFailure != nil, !card.needsGrant, !card.failedToSend {
                 Notice(kind: .failure, title: appearance.text("mail.draft.saveFailed.title"),
                        text: appearance.text(card.saveNeedsSignIn ? "mail.draft.saveFailed.auth" : "mail.draft.saveFailed.server"),
@@ -231,5 +236,33 @@ struct FromButton: View {
 
     private func isCurrent(_ choice: SenderChoice) -> Bool {
         choice.inlet == card.inlet && choice.sender.address.lowercased() == address.lowercased()
+    }
+}
+
+private struct PlanNotice: View {
+    @Environment(\.appearance) private var appearance
+    let inbox: InboxState
+    let card: UUID
+    @State private var date = Date()
+
+    var body: some View {
+        Notice(kind: .warning, title: appearance.text("mail.later.folder"), text: nil, glyph: { Glyph(.clock) }, actions: {
+            VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step8)) {
+                DatePicker(selection: $date, in: inbox.now..., displayedComponents: [.date, .hourAndMinute]) {
+                    appearance.text("mail.later.dateTime")
+                }
+                .labelsHidden()
+                .datePickerStyle(.field)
+                .environment(\.locale, appearance.locale)
+                .help(appearance.text("mail.later.dateTime"))
+                HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
+                    TextButton(label: appearance.text("mail.later.plan"), kind: .accent, disabled: date <= inbox.now) {
+                        Task { await inbox.plan(card, at: date) }
+                    }
+                    TextButton(label: appearance.text("text.common.cancel"), kind: .plain) { inbox.cancelPlan() }
+                }
+            }
+        })
+        .onAppear { date = inbox.planChoices.first ?? inbox.now }
     }
 }
