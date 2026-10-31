@@ -5,12 +5,14 @@ public struct Field: Identifiable, Equatable, Sendable {
     public var id: ID
     public var title: String
     public var secret: Bool
+    public var optional: Bool
     var holdsAccount: Bool
 
-    public init(id: ID, title: String, secret: Bool = false, holdsAccount: Bool = false) {
+    public init(id: ID, title: String, secret: Bool = false, optional: Bool = false, holdsAccount: Bool = false) {
         self.id = id
         self.title = title
         self.secret = secret
+        self.optional = optional
         self.holdsAccount = holdsAccount
     }
 }

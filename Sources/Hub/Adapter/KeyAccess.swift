@@ -96,6 +96,6 @@ struct KeyConnection: Sendable {
     let check: any ConnectionCheckPort
 
     var fields: [Field] {
-        info.fields.map { Field(id: $0.id, title: info.fieldKey($0), secret: $0.secret) }
+        info.fields.map { Field(id: $0.id, title: info.fieldKey($0), secret: $0.secret, optional: $0.optional) }
     }
 }

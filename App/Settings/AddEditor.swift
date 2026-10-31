@@ -34,7 +34,7 @@ struct AddEditor: View {
         switch offer.way {
         case .signIn: []
         case .form: fields.filter { ProviderPresets.requiredFields.contains($0.id) && !filled($0) }
-        case .key: fields.filter { $0.secret && !filled($0) }
+        case .key: fields.filter { !$0.optional && !filled($0) }
         }
     }
 
