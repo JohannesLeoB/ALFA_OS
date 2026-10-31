@@ -49,24 +49,35 @@ enum RenewalEngine {
     }
 }
 
+public struct SignOutFailure: Equatable, Sendable {
+    public let inlet: Inlet.ID
+    public let reason: String
+}
+
 public enum SignOutEngine {
     @MainActor
-    public static func run(setup: any SetupPort) async -> [Inlet.ID] {
-        var failed: [Inlet.ID] = []
+    public static func run(setup: any SetupPort) async -> [SignOutFailure] {
+        var failed: [SignOutFailure] = []
         for inlet in setup.inlets {
-            do { try await setup.remove(inlet.id) } catch { failed.append(inlet.id) }
+            do { try await setup.remove(inlet.id) } catch { failed.append(SignOutFailure(inlet: inlet.id, reason: reason(error))) }
         }
         return failed
     }
 
     @MainActor
-    public static func retire(setup: any SetupPort) async -> [Inlet.ID] {
-        var refused: [Inlet.ID] = []
+    public static func retire(setup: any SetupPort) async -> [SignOutFailure] {
+        var refused: [SignOutFailure] = []
         for inlet in setup.inlets {
-            do { try await setup.revoke(inlet.id) } catch { refused.append(inlet.id) }
+            do { try await setup.revoke(inlet.id) } catch { refused.append(SignOutFailure(inlet: inlet.id, reason: reason(error))) }
         }
         guard refused.isEmpty else { return refused }
         return await run(setup: setup)
+    }
+
+    static func reason(_ error: any Error) -> String {
+        if case KeychainFailure.status(let status) = error { return String(status) }
+        let bridged = error as NSError
+        return bridged.domain + " " + String(bridged.code)
     }
 }
 

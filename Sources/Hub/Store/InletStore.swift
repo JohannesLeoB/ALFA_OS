@@ -236,6 +236,8 @@ public struct KeychainStore: KeychainPort {
 
     public func delete(_ slot: KeySlot) throws {
         let status = SecItemDelete(identity(slot) as CFDictionary)
-        guard status == errSecSuccess || status == errSecItemNotFound else { throw KeychainFailure.status(status) }
+        guard status == errSecSuccess || status == errSecItemNotFound || status == Self.missingOwnerStatus else {
+            throw KeychainFailure.status(status)
+        }
     }
 }

@@ -1037,7 +1037,7 @@ final class HubTests: XCTestCase {
         let refusing = try Rig.make(provider: FakeProvider(capabilities: [.mail], signIn: RefusingSignIn()))
         let kept = try await refusing.connect("a@x")
         let refused = await SignOutEngine.retire(setup: refusing.connections.setup)
-        XCTAssertEqual(refused, [kept.id])
+        XCTAssertEqual(refused.map(\.inlet), [kept.id])
         XCTAssertEqual(refusing.connections.setup.inlets.map(\.id), [kept.id])
         XCTAssertFalse(refusing.keychain.slots.isEmpty)
         let rig = try Rig.make()
