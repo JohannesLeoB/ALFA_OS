@@ -1,5 +1,6 @@
 import Assistant
 import Foundation
+import Hub
 
 struct LabelClient: LabelPort {
     static let orderEndpoint = "https://api-eu.dhl.com/parcel/de/shipping/v2/orders"
@@ -87,5 +88,154 @@ struct LabelClient: LabelPort {
             trackingNumber: tracking,
             labelBase64: (first["label"] as? [String: Any])?["b64"] as? String,
             statusText: (first["sstatus"] as? [String: Any])?["title"] as? String)
+    }
+}
+
+public struct ShipmentClient: ShipmentPort {
+    private let tracking: any TrackingPort
+    private let text: any TextPort
+
+    public init(tracking: any TrackingPort, text: any TextPort) {
+        self.tracking = tracking
+        self.text = text
+    }
+
+    public func track(number: String) async throws -> ShipmentStatus {
+        let shipment = Shipment(trackingNumber: number, carrier: CarrierEngine.detect(number), label: number)
+        do {
+            let tracked = try await tracking.track(shipment)
+            return ShipmentStatus(
+                number: tracked.trackingNumber, statusLabel: text.text(tracked.status.key, []), detail: tracked.statusText)
+        } catch ShippingFailure.noKey {
+            throw PortFailure.notConnected
+        } catch let failure as ShippingFailure {
+            throw PortFailure.failed(failure.detail)
+        }
+    }
+}
+
+enum CarrierEngine {
+    static func detect(_ raw: String) -> Carrier {
+        let number = normalize(raw)
+        guard number.isEmpty == false else { return .unknown }
+        if number.hasPrefix("JJD") || number.hasPrefix("GM") || number.hasPrefix("LX") { return .dhl }
+        if number.hasPrefix("H"), number.dropFirst().allSatisfy(\.isNumber), number.count >= 8 { return .hermes }
+        if number.allSatisfy(\.isNumber), (12...22).contains(number.count) { return .dhl }
+        return .unknown
+    }
+
+    static func normalize(_ raw: String) -> String {
+        raw.filter { !$0.isWhitespace }.uppercased()
+    }
+}
+
+public struct TrackingClient: TrackingPort {
+    static let endpoint = "https://api-eu.dhl.com/track/shipments"
+    static let keyHeader = "DHL-API-Key"
+    static let language = "de"
+
+    private let apiKey: String?
+    private let http: any HttpPort
+
+    public init(apiKey: String?, http: any HttpPort) {
+        self.apiKey = apiKey
+        self.http = http
+    }
+
+    public func track(_ shipment: Shipment) async throws -> Shipment {
+        guard shipment.carrier == .dhl else { throw ShippingFailure.unsupported }
+        guard let apiKey, apiKey.isEmpty == false else { throw ShippingFailure.noKey }
+        guard var components = URLComponents(string: Self.endpoint) else { throw ShippingFailure.parse("url") }
+        components.queryItems = [
+            URLQueryItem(name: "trackingNumber", value: shipment.trackingNumber),
+            URLQueryItem(name: "language", value: Self.language),
+        ]
+        guard let url = components.url else { throw ShippingFailure.parse("url") }
+        var request = URLRequest(url: url)
+        request.setValue(apiKey, forHTTPHeaderField: Self.keyHeader)
+
+        let data: Data
+        do {
+            let (body, response) = try await http.data(for: request)
+            if let status = response as? HTTPURLResponse, (200...299).contains(status.statusCode) == false {
+                throw ShippingFailure.http(status.statusCode)
+            }
+            data = body
+        } catch let failure as ShippingFailure {
+            throw failure
+        } catch {
+            throw ShippingFailure.transport(String(describing: error))
+        }
+
+        let raw = try Self.parse(data)
+        var updated = shipment
+        updated.status = StatusEngine.status(code: raw.statusCode, text: raw.statusText)
+        updated.statusText = raw.etaText ?? raw.statusText
+        return updated
+    }
+
+    struct RawStatus: Equatable {
+        let statusCode: String
+        let statusText: String?
+        let etaText: String?
+    }
+
+    static func parse(_ data: Data) throws -> RawStatus {
+        guard let root = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let shipments = root["shipments"] as? [[String: Any]],
+              let first = shipments.first else { throw ShippingFailure.parse("noShipment") }
+        let status = first["status"] as? [String: Any]
+        return RawStatus(
+            statusCode: (status?["statusCode"] as? String) ?? "unknown",
+            statusText: status?["status"] as? String,
+            etaText: first["estimatedTimeOfDelivery"] as? String)
+    }
+}
+
+enum StatusEngine {
+    static func status(code: String, text: String? = nil) -> TrackingStatus {
+        if let lowered = text?.lowercased(),
+           lowered.contains("zustellung") || lowered.contains("out for delivery") || lowered.contains("in delivery") {
+            return .outForDelivery
+        }
+        switch code.lowercased() {
+        case "pre-transit": return .registered
+        case "transit": return .inTransit
+        case "delivered": return .delivered
+        case "failure": return .exception
+        default: return .unknown
+        }
+    }
+}
+
+public struct ConnectionCheck: ConnectionCheckPort {
+    static let probeNumber = "00000000000000000000"
+    static let notFound = 404
+
+    private let http: any HttpPort
+
+    public init(http: any HttpPort) {
+        self.http = http
+    }
+
+    public var integration: String { "dhl" }
+
+    public func check(_ values: KeyValues) async throws -> String? {
+        let client = TrackingClient(apiKey: values["key"], http: http)
+        let probe = Shipment(trackingNumber: Self.probeNumber, carrier: .dhl, label: "")
+        do {
+            _ = try await client.track(probe)
+        } catch ShippingFailure.http(let code) {
+            guard code == Self.notFound else { throw StatusFailure(status: code) }
+        } catch ShippingFailure.parse {
+            return nil
+        } catch ShippingFailure.transport {
+            throw URLError(.networkConnectionLost)
+        }
+        return nil
+    }
+
+    private struct StatusFailure: StatusErrorPort {
+        let status: Int
     }
 }
