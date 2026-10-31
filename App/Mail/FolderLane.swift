@@ -39,8 +39,8 @@ struct FolderLane: View {
                 }
             } else {
                 HeaderTitle(text: appearance.text("mail.lane.title"))
+                Spacer(minLength: 0)
             }
-            Spacer(minLength: 0)
             if openLanes > 1 {
                 SymbolButton(help: appearance.string("mail.lane.fold"), glyph: .minus) { desk.toggleFold(.leading) }
             }

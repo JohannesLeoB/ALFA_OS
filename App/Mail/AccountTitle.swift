@@ -15,6 +15,8 @@ struct AccountTitle: View {
             .designText(\.ink, size: Tokens.TextSize.body, weight: .medium)
             .lineLimit(1)
             .truncationMode(.tail)
+            .frame(maxWidth: .infinity, minHeight: CGFloat(Tokens.Spacing.step28), alignment: .leading)
+            .contentShape(Rectangle())
             .help(Text(verbatim: account.account))
             .overlay {
                 RightClickOverlay { point in
