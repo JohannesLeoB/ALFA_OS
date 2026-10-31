@@ -21740,22 +21740,6 @@
         }
       }
     },
-    "shell.assistantScope.home" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ohne Projekt"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No project"
-          }
-        }
-      }
-    },
     "shell.assistantThread.cleared" : {
       "localizations" : {
         "de" : {

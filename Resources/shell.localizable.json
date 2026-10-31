@@ -101,10 +101,6 @@
    "de": "Keine Nachricht offen.",
    "en": "No message open."
   },
-  "shell.assistantScope.home": {
-   "de": "Ohne Projekt",
-   "en": "No project"
-  },
   "shell.assistantThread.cleared": {
    "de": "Verlauf gelöscht",
    "en": "History cleared"

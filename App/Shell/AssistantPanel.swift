@@ -33,7 +33,9 @@ struct AssistantPanel: View {
             if off {
                 offCard
             }
-            AssistantScope(scope: conversation.scope, clearable: !turns.isEmpty, clear: conversation.clear)
+            if !turns.isEmpty {
+                AssistantScope(clear: conversation.clear)
+            }
             if !conversation.pending.isEmpty {
                 ChipWrapLayout(gap: CGFloat(Tokens.Spacing.step8)) {
                     ForEach(conversation.pending) { pending in
@@ -299,33 +301,19 @@ struct AssistantMessage: View {
 
 struct AssistantScope: View {
     @Environment(\.appearance) private var appearance
-    let scope: ConversationScope
-    let clearable: Bool
     let clear: () -> Void
 
     var body: some View {
         HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
-            label
-                .lineLimit(1)
-                .truncationMode(.tail)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            if clearable {
-                SymbolButton(help: appearance.string("shell.symbolButton.assistantClear.tooltip"), glyph: .trash, tone: nil, hoverTone: nil, ringed: false,
-                             hover: .fill, hoverFill: \.inverseHot, pressed: false, action: clear)
-            }
+            Spacer(minLength: 0)
+            SymbolButton(help: appearance.string("shell.symbolButton.assistantClear.tooltip"), glyph: .trash, tone: nil, hoverTone: nil, ringed: false,
+                         hover: .fill, hoverFill: \.inverseHot, pressed: false, action: clear)
         }
         .typeStyle(Tokens.TextStyle.caption)
         .foregroundStyle(appearance.color(\.onInverseTertiary))
         .padding(.leading, CGFloat(Tokens.Spacing.step12))
         .padding(.trailing, CGFloat(Tokens.Spacing.step4))
         .frame(height: CGFloat(Tokens.Spacing.step28))
-    }
-
-    private var label: Text {
-        switch scope {
-        case .home: appearance.text("shell.assistantScope.home")
-        case .project(let number): Text(verbatim: number)
-        }
     }
 }
 
