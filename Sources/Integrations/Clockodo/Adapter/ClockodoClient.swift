@@ -165,12 +165,6 @@ public struct ClockodoClient: MasterDataPort, BookingPort, TimeEntryPort {
     }
 }
 
-enum WriteFailure: Error, Equatable, Sendable {
-    case unconfirmed
-
-    var key: String { "clockodo.write.unconfirmed" }
-}
-
 public struct ConnectionCheck: ConnectionCheckPort {
     private let http: any HttpPort
     private let clock: @Sendable () -> Date

@@ -240,14 +240,6 @@ public final class LearningStore: FactorPort {
     }
 }
 
-enum LearningFailure: Error, Equatable, Sendable {
-    case sessionNotFound(String)
-    case candidateNotFound(String)
-    case carcassSnapshotMissing(String)
-    case carcassTargetNotInSession(key: String, sessionID: String)
-    case unknownCarcassTarget(String)
-}
-
 struct LearningSummary: Equatable, Sendable {
     let sessions: Int
     let adjustments: Int

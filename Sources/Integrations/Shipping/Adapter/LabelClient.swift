@@ -114,21 +114,6 @@ public struct ShipmentClient: ShipmentPort {
     }
 }
 
-enum CarrierEngine {
-    static func detect(_ raw: String) -> Carrier {
-        let number = normalize(raw)
-        guard number.isEmpty == false else { return .unknown }
-        if number.hasPrefix("JJD") || number.hasPrefix("GM") || number.hasPrefix("LX") { return .dhl }
-        if number.hasPrefix("H"), number.dropFirst().allSatisfy(\.isNumber), number.count >= 8 { return .hermes }
-        if number.allSatisfy(\.isNumber), (12...22).contains(number.count) { return .dhl }
-        return .unknown
-    }
-
-    static func normalize(_ raw: String) -> String {
-        raw.filter { !$0.isWhitespace }.uppercased()
-    }
-}
-
 public struct TrackingClient: TrackingPort {
     static let endpoint = "https://api-eu.dhl.com/track/shipments"
     static let keyHeader = "DHL-API-Key"
@@ -189,22 +174,6 @@ public struct TrackingClient: TrackingPort {
             statusCode: (status?["statusCode"] as? String) ?? "unknown",
             statusText: status?["status"] as? String,
             etaText: first["estimatedTimeOfDelivery"] as? String)
-    }
-}
-
-enum StatusEngine {
-    static func status(code: String, text: String? = nil) -> TrackingStatus {
-        if let lowered = text?.lowercased(),
-           lowered.contains("zustellung") || lowered.contains("out for delivery") || lowered.contains("in delivery") {
-            return .outForDelivery
-        }
-        switch code.lowercased() {
-        case "pre-transit": return .registered
-        case "transit": return .inTransit
-        case "delivered": return .delivered
-        case "failure": return .exception
-        default: return .unknown
-        }
     }
 }
 
