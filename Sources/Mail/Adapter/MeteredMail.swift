@@ -1,7 +1,7 @@
 import Foundation
 import Hub
 
-struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort, UnseenCountPort, LabelPort, SenderPort, SentCopyPort, InboxOnlyPort, ServerCopyPort, SendLimitPort {
+struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, EverywhereSearchPort, UnseenCountPort, LabelPort, SenderPort, SentCopyPort, InboxOnlyPort, ServerCopyPort, SendLimitPort, UntrashPort {
     let base: any MailTransportPort
     let meter: CostMeter
 
@@ -180,6 +180,12 @@ struct MeteredMail: MailTransportPort, PurgePort, SourcePort, MirrorPort, Everyw
         guard let base = base as? any PurgePort else { throw MailFailure.unsupportedCapability("purge") }
         meter.record()
         try await base.purge(messageID: messageID)
+    }
+
+    func untrash(messageID: String) async throws {
+        guard let base = base as? any UntrashPort else { return }
+        meter.record()
+        try await base.untrash(messageID: messageID)
     }
 }
 
