@@ -6,25 +6,58 @@ import SwiftUI
 
 @main
 struct AlfaApp: App {
-    @State private var session: AppSession?
+    @State private var start: Result<AppSession, StartProblem>
     @NSApplicationDelegateAdaptor(QuitDelegate.self) private var quit
 
     init() {
-        _session = State(initialValue: try? AppSession.live())
+        _start = State(initialValue: Result { try AppSession.live() }.mapError { StartProblem($0) })
+    }
+
+    private var session: AppSession? {
+        if case .success(let session) = start { return session }
+        return nil
     }
 
     var body: some Scene {
         WindowGroup {
-            if let session {
+            switch start {
+            case .success(let session):
                 Content(session: session)
                     .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
                     .onAppear { quit.flush = { await session.inbox.flushDrafts() } }
-            } else {
-                Text(LocalizedStringKey("error.resources"))
+            case .failure(let problem):
+                StartScreen(problem: problem)
             }
         }
         .windowResizability(.contentMinSize)
         .commands { MailCommands(session: session) }
+    }
+}
+
+struct StartProblem: Error {
+    let resources: Bool
+    let code: String
+    let reading: String
+
+    init(_ error: any Error) {
+        let cause = (error as? ResourcesMissing)?.underlying ?? error
+        let bridged = cause as NSError
+        resources = error is ResourcesMissing
+        code = bridged.domain + " " + String(bridged.code)
+        reading = String(describing: cause)
+    }
+}
+
+private struct StartScreen: View {
+    @Environment(\.appearance) private var appearance
+    let problem: StartProblem
+
+    var body: some View {
+        ContentPlaceholder(kind: .failed,
+                           title: problem.resources ? appearance.text("error.resources") : Text(verbatim: appearance.format("settings.failed.title", problem.code)),
+                           text: Text(verbatim: problem.reading),
+                           glyph: { Glyph(.alert) },
+                           action: { TextButton(label: appearance.text("card.close")) { NSApplication.shared.terminate(nil) } })
     }
 }
 

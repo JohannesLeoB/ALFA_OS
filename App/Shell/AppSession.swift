@@ -161,14 +161,24 @@ extension EnvironmentValues {
     }
 }
 
+struct ResourcesMissing: Error {
+    let underlying: any Error
+}
+
 struct ShellResources {
     static let directoryName = "apps"
 
     let directory: AppDirectory
 
     init(bundle: Bundle) throws {
-        guard let url = bundle.url(forResource: Self.directoryName, withExtension: "json") else { throw CocoaError(.fileNoSuchFile) }
-        directory = try AppDirectory(data: Data(contentsOf: url))
+        guard let url = bundle.url(forResource: Self.directoryName, withExtension: "json") else {
+            throw ResourcesMissing(underlying: CocoaError(.fileNoSuchFile))
+        }
+        do {
+            directory = try AppDirectory(data: Data(contentsOf: url))
+        } catch {
+            throw ResourcesMissing(underlying: error)
+        }
     }
 }
 
