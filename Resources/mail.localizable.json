@@ -1284,6 +1284,26 @@
   "mail.toast.inDrafts": {
    "de": "Im Ordner Entwürfe",
    "en": "In Drafts"
+  },
+  "mail.list.banner": {
+   "de": "Diese E-Mail stammt von einer Mailingliste",
+   "en": "This email is from a mailing list"
+  },
+  "mail.list.website": {
+   "de": "Website aufrufen",
+   "en": "Visit Website"
+  },
+  "mail.list.unsubscribe": {
+   "de": "Abmelden",
+   "en": "Unsubscribe"
+  },
+  "mail.list.unsubscribeQuestion": {
+   "de": "Abmelden?",
+   "en": "Unsubscribe?"
+  },
+  "mail.toast.unsubscribed": {
+   "de": "Abgemeldet · {1}",
+   "en": "Unsubscribed · {1}"
   }
  }
 }

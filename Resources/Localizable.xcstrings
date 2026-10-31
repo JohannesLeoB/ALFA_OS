@@ -13999,6 +13999,22 @@
         }
       }
     },
+    "mail.list.banner" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese E-Mail stammt von einer Mailingliste"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This email is from a mailing list"
+          }
+        }
+      }
+    },
     "mail.list.emptySearch" : {
       "comment" : "roh",
       "localizations" : {
@@ -14314,6 +14330,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sign-in expired. The most recently loaded mails stay readable; sent mail waits in the outbox."
+          }
+        }
+      }
+    },
+    "mail.list.unsubscribe" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abmelden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unsubscribe"
+          }
+        }
+      }
+    },
+    "mail.list.unsubscribeQuestion" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abmelden?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unsubscribe?"
+          }
+        }
+      }
+    },
+    "mail.list.website" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Website aufrufen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Visit Website"
           }
         }
       }
@@ -16088,6 +16152,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Undo"
+          }
+        }
+      }
+    },
+    "mail.toast.unsubscribed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgemeldet · {1}"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unsubscribed · {1}"
           }
         }
       }

@@ -38,7 +38,8 @@ struct GmailMailClient: GmailPort, SourcePort, LabelPort, SenderPort, UntrashPor
     func fetchBody(messageID: String) async throws -> MessageBody {
         let body = try await gmail.fetchMailBody(messageID: messageID)
         return MessageBody(text: body.text, html: body.html, inlineImages: body.inlineImages,
-                           attachments: body.attachments.map(Self.info))
+                           attachments: body.attachments.map(Self.info),
+                           unsubscribe: UnsubscribeEngine.parse(body.listUnsubscribe, post: body.listUnsubscribePost))
     }
 
     func send(_ draft: Draft) async throws {

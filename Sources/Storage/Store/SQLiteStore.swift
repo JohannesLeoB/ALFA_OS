@@ -290,6 +290,9 @@ extension SQLiteStore {
             try db.execute(sql: "ALTER TABLE mail_outbox ADD COLUMN sendAt REAL")
             try db.execute(sql: "ALTER TABLE mail_outbox ADD COLUMN mirrorID TEXT")
         }
+        migrator.registerMigration("mailList") { db in
+            try db.execute(sql: "ALTER TABLE mail_body ADD COLUMN unsubscribe BLOB")
+        }
         return migrator
     }
 }

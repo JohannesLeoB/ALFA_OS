@@ -9,6 +9,8 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort, S
                                        "BODY.PEEK[HEADER.FIELDS (REFERENCES)]"]
     private static let receiptSection = "HEADER.FIELDS (DISPOSITION-NOTIFICATION-TO)"
     private static let receiptItem = "BODY.PEEK[" + receiptSection + "]"
+    private static let listSection = "HEADER.FIELDS (LIST-UNSUBSCRIBE LIST-UNSUBSCRIBE-POST)"
+    private static let listItem = "BODY.PEEK[" + listSection + "]"
     private static let threadLimit = 20
     private static let inlineImageLimit = 2_097_152
     private static let inlineImageBudget = 8_388_608
@@ -81,11 +83,13 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort, S
         return try await withIncoming { session in
             let selection = try await session.select(reference.folder, readOnly: true)
             guard selection.uidValidity == reference.uidValidity else { throw MailFailure.messageNotFound(messageID) }
-            guard let fetched = try await session.fetch(uids: [reference.uid], items: ["UID", "BODYSTRUCTURE"]).first,
+            guard let fetched = try await session.fetch(uids: [reference.uid], items: ["UID", "BODYSTRUCTURE", Self.listItem]).first,
                   let structure = fetched.structure else {
                 throw MailFailure.messageNotFound(messageID)
             }
             var body = MessageBody()
+            body.unsubscribe = fetched.sections.first { $0.key.hasPrefix("HEADER.FIELDS") && $0.key.contains("LIST-UNSUBSCRIBE") }
+                .map { MIME.parseHeaders($0.value) }.flatMap(UnsubscribeEngine.parse)
             if let part = structure.firstPlainText {
                 body.text = try await Self.decodedText(part, session: session, uid: reference.uid)
             }

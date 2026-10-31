@@ -12,6 +12,8 @@ public struct OpenMessage: Identifiable, Equatable, Sendable {
     public var pinned = false
     public var recipientsExpanded = false
     public var attachments: [AttachmentInfo] = []
+    public var unsubscribe: ListUnsubscribe?
+    public var unsubscribed = false
     public var conversation: [MessageSummary] = []
     public var threadTexts: [String: String] = [:]
     public var quotesOpen: Set<String> = []
@@ -38,6 +40,8 @@ public struct OpenMessage: Identifiable, Equatable, Sendable {
     }
 
     public var hasConversation: Bool { conversation.count > 1 }
+
+    public var listNotice: ListUnsubscribe? { unsubscribed ? nil : unsubscribe }
 }
 
 public struct RowPresentation: Identifiable, Equatable, Sendable {

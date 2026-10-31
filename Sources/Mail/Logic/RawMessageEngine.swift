@@ -56,6 +56,7 @@ enum RawMessageEngine {
             body.inlineImages[contentID] = "data:\(part.mimeType);base64,\(parsed.data(part).base64EncodedString())"
         }
         body.attachments = parsed.attachments
+        body.unsubscribe = UnsubscribeEngine.parse(parsed.headers)
         return body
     }
 

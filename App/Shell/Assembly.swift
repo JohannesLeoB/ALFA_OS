@@ -83,7 +83,8 @@ final class Assembly {
                                    return QuoteTexts(dated: appearance.string("mail.compose.quote.dated"),
                                                      undated: appearance.string("mail.compose.quote.undated"), locale: appearance.locale)
                                },
-                               sendHold: .seconds(Tokens.Duration.toastUndo))
+                               sendHold: .seconds(Tokens.Duration.toastUndo),
+                               unsubscribePost: UnsubscribeClient.post)
 
         let receipts = ReceiptStore(database: database)
         try receipts.adopt(legacy: defaults)

@@ -26,10 +26,11 @@ enum BodyParser {
         var inline: [String: String] = [:]
         collectInlineImages(resource.payload?.parts ?? [], into: &inline)
         let attachments = attachments(in: resource.payload?.parts ?? [])
-        if text == nil, html == nil {
-            return GmailMailBody(text: resource.snippet, html: nil, inlineImages: inline, attachments: attachments)
-        }
-        return GmailMailBody(text: text, html: html, inlineImages: inline, attachments: attachments)
+        let headers = resource.payload?.headers ?? []
+        func header(_ name: String) -> String? { headers.first { $0.name.lowercased() == name }?.value }
+        return GmailMailBody(text: text == nil && html == nil ? resource.snippet : text, html: html, inlineImages: inline,
+                             attachments: attachments, listUnsubscribe: header("list-unsubscribe"),
+                             listUnsubscribePost: header("list-unsubscribe-post"))
     }
 
     static func attachments(in parts: [GmailPart]) -> [GmailAttachment] {

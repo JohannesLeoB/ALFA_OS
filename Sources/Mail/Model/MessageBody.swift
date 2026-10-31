@@ -5,13 +5,15 @@ public struct MessageBody: Equatable, Sendable {
     public var html: String?
     public var inlineImages: [String: String]
     public var attachments: [AttachmentInfo]
+    public var unsubscribe: ListUnsubscribe?
 
     public init(text: String? = nil, html: String? = nil, inlineImages: [String: String] = [:],
-                attachments: [AttachmentInfo] = []) {
+                attachments: [AttachmentInfo] = [], unsubscribe: ListUnsubscribe? = nil) {
         self.text = text
         self.html = html
         self.inlineImages = inlineImages
         self.attachments = attachments
+        self.unsubscribe = unsubscribe
     }
 }
 

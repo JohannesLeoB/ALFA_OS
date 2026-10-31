@@ -30,6 +30,8 @@ struct GmailMailBody: Equatable, Sendable {
     var html: String?
     var inlineImages: [String: String] = [:]
     var attachments: [GmailAttachment] = []
+    var listUnsubscribe: String?
+    var listUnsubscribePost: String?
 }
 
 struct GmailIDs: Equatable, Sendable {

@@ -37,6 +37,7 @@ public enum ToastKind: Equatable, Sendable {
     case mirrorRefused
     case planned(Date)
     case inDrafts
+    case unsubscribed(String)
 
     public var key: String {
         switch self {
@@ -76,6 +77,7 @@ public enum ToastKind: Equatable, Sendable {
         case .mirrorRefused: "mail.hint.mirrorRefused"
         case .planned: "mail.later.planned"
         case .inDrafts: "mail.toast.inDrafts"
+        case .unsubscribed: "mail.toast.unsubscribed"
         }
     }
 
@@ -100,7 +102,8 @@ public enum ToastKind: Equatable, Sendable {
 
     public var name: String? {
         switch self {
-        case .contactSaved(let name), .contactExists(let name), .projectSaved(let name), .attachmentCopied(let name): name
+        case .contactSaved(let name), .contactExists(let name), .projectSaved(let name), .attachmentCopied(let name),
+             .unsubscribed(let name): name
         default: nil
         }
     }

@@ -1,3 +1,4 @@
+import AppKit
 import Core
 import Design
 import Mail
@@ -23,6 +24,13 @@ struct SheetDetail: View {
                     .font(.face(Tokens.TextSize.small))
                     .foregroundStyle(appearance.color(\.sheetInkTertiary))
                     .padding(.top, CGFloat(Tokens.Spacing.step4))
+            }
+            if let list = card.listNotice {
+                Notice(kind: .warning, title: appearance.text("mail.list.banner"), text: nil, onSheet: true,
+                       glyph: { Glyph(.envelope) },
+                       actions: { listAction(list) })
+                    .padding(.horizontal, -CGFloat(Tokens.Spacing.step8))
+                    .padding(.top, CGFloat(Tokens.Spacing.step16))
             }
             if card.remoteImagesBlocked(loadRemote: loadImages) {
                 Notice(kind: .warning, title: appearance.text("mail.read.images.title"), text: appearance.text("mail.read.images.text"), onSheet: true,
@@ -52,5 +60,22 @@ struct SheetDetail: View {
         .textSelection(.enabled)
         .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
         .padding(.bottom, CGFloat(Tokens.Spacing.step8))
+    }
+
+    @ViewBuilder
+    private func listAction(_ list: ListUnsubscribe) -> some View {
+        if list.unsubscribes {
+            ConfirmPill(label: appearance.text("mail.list.unsubscribe"), question: appearance.text("mail.list.unsubscribeQuestion"),
+                        yes: appearance.text("mail.list.unsubscribe"), no: appearance.text("confirm.no"),
+                        holdHint: Text(verbatim: appearance.format("mail.confirm.hold", appearance.string("mail.list.unsubscribe"))),
+                        showsProgress: false,
+                        onYes: {
+                Task {
+                    if let page = await session.inbox.unsubscribe(card.id) { NSWorkspace.shared.open(page) }
+                }
+            })
+        } else if let page = list.web {
+            TextButton(label: appearance.text("mail.list.website"), kind: .sheet) { NSWorkspace.shared.open(page) }
+        }
     }
 }

@@ -48,12 +48,30 @@ extension InboxState {
             cards[now].content = loaded
             if case .html(let html, _) = loaded { cards[now].htmlParts = HTMLEngine.parts(html) }
             cards[now].attachments = body.attachments
+            cards[now].unsubscribe = body.unsubscribe
         } catch {
             guard let now = cardIndex(id, in: inlet) else { return }
             cards[now].content = .text(cards[now].summary.snippet)
             cards[now].bodyFailed = true
             post(.readFailed, undo: { [weak self] in await self?.loadBody(id, in: owner) })
         }
+    }
+
+    public func unsubscribe(_ id: String) async -> URL? {
+        guard let inlet = selectedInlet, let index = cardIndex(id, in: inlet), let list = cards[index].unsubscribe else { return nil }
+        let name = Self.sender(cards[index].summary)
+        var done = false
+        if list.oneClick, let web = list.web { done = await unsubscribePost(web) }
+        if !done, let mail = list.mail, var draft = UnsubscribeEngine.draft(mail) {
+            draft.from = mailbox.sender(inlet)
+            _ = await outboxPort.send(inlet, draft)
+            outbox = outboxPort.outbox
+            done = true
+        }
+        guard done else { return list.web }
+        if let now = cardIndex(id, in: inlet) { cards[now].unsubscribed = true }
+        post(.unsubscribed(name.name.isEmpty ? name.address : name.name))
+        return nil
     }
 
     public func retryBody(_ id: String) {

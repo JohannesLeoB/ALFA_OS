@@ -74,13 +74,15 @@ public final class InboxState {
     let sendHold: Duration
     let signatures: @MainActor (Inlet.ID) -> MailboxSignature?
     let quoteTexts: @MainActor () -> QuoteTexts
+    let unsubscribePost: @Sendable (URL) async -> Bool
 
     public init(mailbox: any MailboxPort, outbox: any OutboxPort, contacts: ContactState,
                 directory: ContactSourceState = ContactSourceState(),
                 clock: @escaping @Sendable () -> Date = { Date() },
                 signatures: @escaping @MainActor (Inlet.ID) -> MailboxSignature? = { _ in nil },
                 quoteTexts: @escaping @MainActor () -> QuoteTexts = { QuoteTexts() },
-                autosavePause: Duration? = nil, autosaveInterval: Duration? = nil, sendHold: Duration = .zero) {
+                autosavePause: Duration? = nil, autosaveInterval: Duration? = nil, sendHold: Duration = .zero,
+                unsubscribePost: @escaping @Sendable (URL) async -> Bool = { _ in false }) {
         self.mailbox = mailbox
         self.outboxPort = outbox
         self.contacts = contacts
@@ -91,6 +93,7 @@ public final class InboxState {
         self.autosavePause = autosavePause ?? AutosaveEngine.pause
         self.autosaveInterval = autosaveInterval ?? AutosaveEngine.interval
         self.sendHold = sendHold
+        self.unsubscribePost = unsubscribePost
     }
 
     public var now: Date { clock() }
