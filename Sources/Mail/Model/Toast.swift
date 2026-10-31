@@ -125,4 +125,5 @@ public struct Toast: Equatable, Sendable {
     public let serial: Int
     public let kind: ToastKind
     public let undoable: Bool
+    public var lasts: Duration?
 }

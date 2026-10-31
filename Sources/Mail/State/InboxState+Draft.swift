@@ -345,7 +345,7 @@ extension InboxState {
             guard !Task.isCancelled, let self, self.heldSends.removeValue(forKey: id) != nil else { return }
             await self.deliver(id, announce: false)
         }
-        post(.outboxSent, undo: { [weak self] in self?.recall(id, to: previous) })
+        post(.outboxSent, undo: { [weak self] in self?.recall(id, to: previous) }, lasts: wait)
     }
 
     func recall(_ id: UUID, to previous: DraftState) {

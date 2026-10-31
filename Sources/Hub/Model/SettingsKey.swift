@@ -15,6 +15,7 @@ enum SettingsKey {
     static let mailStoreAttachments = "settings.mailStore.attachments"
     static let mailStoreLimit = "settings.mailStore.limit"
     static let mailStoreFolder = "settings.mailStore.folder"
+    static let undoSend = "settings.mail.undoSend"
 
     static func companyEntry(_ id: String) -> String { "settings.company." + id }
 

@@ -30,6 +30,24 @@ public enum MailStoreLimit: String, CaseIterable, Sendable {
     }
 }
 
+public enum UndoSend: String, CaseIterable, Sendable {
+    case off
+    case seconds10
+    case seconds20
+    case seconds30
+
+    public static let standard = UndoSend.seconds10
+
+    public var seconds: Int {
+        switch self {
+        case .off: 0
+        case .seconds10: 10
+        case .seconds20: 20
+        case .seconds30: 30
+        }
+    }
+}
+
 public struct MailStoreSettings: Equatable, Sendable {
     public var attachments: Bool
     public var limit: MailStoreLimit

@@ -83,7 +83,7 @@ final class Assembly {
                                    return QuoteTexts(dated: appearance.string("mail.compose.quote.dated"),
                                                      undated: appearance.string("mail.compose.quote.undated"), locale: appearance.locale)
                                },
-                               sendHold: .seconds(Tokens.Duration.toastUndo),
+                               holdChoice: { [settings] in .seconds(settings.undoSend.seconds) },
                                unsubscribePost: UnsubscribeClient.post)
 
         let receipts = ReceiptStore(database: database)

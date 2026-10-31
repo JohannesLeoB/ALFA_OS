@@ -1,7 +1,7 @@
 extension InboxState {
-    func post(_ kind: ToastKind, undo: (@MainActor () async -> Void)? = nil) {
+    func post(_ kind: ToastKind, undo: (@MainActor () async -> Void)? = nil, lasts: Duration? = nil) {
         toastSerial += 1
-        toast = Toast(serial: toastSerial, kind: kind, undoable: undo != nil)
+        toast = Toast(serial: toastSerial, kind: kind, undoable: undo != nil, lasts: lasts)
         undoAction = undo
     }
 

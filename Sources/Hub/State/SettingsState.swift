@@ -22,6 +22,7 @@ public final class SettingsState {
     public private(set) var company: [String: String] = [:]
     public private(set) var imprint: [String: String] = [:]
     public private(set) var mailStore = MailStoreSettings()
+    public private(set) var undoSend = UndoSend.standard
     private(set) var mailboxDisplays: [Inlet.ID: MailboxDisplay] = [:]
     private(set) var mailboxRanges: [Inlet.ID: MailboxRange] = [:]
     private(set) var serverCopies: [Inlet.ID: ServerCopy] = [:]
@@ -79,6 +80,7 @@ public final class SettingsState {
             attachments: flag(SettingsKey.mailStoreAttachments) ?? false,
             limit: text(SettingsKey.mailStoreLimit).flatMap(MailStoreLimit.init(rawValue:)) ?? .standard,
             folder: SettingStore.decoded(stored[SettingsKey.mailStoreFolder], as: Data.self))
+        undoSend = text(SettingsKey.undoSend).flatMap(UndoSend.init(rawValue:)) ?? .standard
         for entry in CompanyEntry.allCases { company[entry.rawValue] = text(entry.storageKey) ?? "" }
         for entry in ImprintEntry.allCases { imprint[entry.rawValue] = text(entry.storageKey) ?? "" }
         for key in stored.keys where key.hasPrefix(SettingsKey.mailboxDisplayPrefix) {
@@ -172,6 +174,11 @@ public final class SettingsState {
     public func setCompany(_ entry: CompanyEntry, _ text: String) {
         company[entry.rawValue] = text
         save(entry.storageKey, text)
+    }
+
+    public func setUndoSend(_ value: UndoSend) {
+        undoSend = value
+        save(SettingsKey.undoSend, value.rawValue)
     }
 
     public func setStoreAttachments(_ value: Bool) {

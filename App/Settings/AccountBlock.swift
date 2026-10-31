@@ -12,6 +12,8 @@ struct AccountBlock: View {
     private var flow: AccountFlow { context.flow }
 
     var body: some View {
+        BlockHead(key: "settings.mail.compose")
+        undoSend
         BlockHead(key: "settings.accounts.head")
         if let offer = flow.form, info.providers.contains(offer.provider) {
             AddEditor(flow: flow, offers: reading.offers, offer: offer, added: { context.state.notify("settings.toast.accountAdded") })
@@ -72,6 +74,25 @@ struct AccountBlock: View {
             : appearance.format("settings.disconnect.waiting.other", Format.number(count))
         let text = [local, unsent].compactMap { $0 }.joined(separator: " ")
         return text.isEmpty ? nil : text
+    }
+
+    private var undoSend: some View {
+        let current = context.state.undoSend
+        return SettingsRow(label: appearance.text("settings.mail.undoSend")) {
+            ChoiceButton(label: Text(verbatim: label(current))) {
+                UndoSend.allCases.map { option in
+                    .row(MenuItem(id: option.rawValue, label: Text(verbatim: label(option)),
+                                  check: option == current ? appearance.text(SettingsKeys.menuCheck) : nil) {
+                        context.state.setUndoSend(option)
+                    })
+                }
+            }
+        }
+    }
+
+    private func label(_ option: UndoSend) -> String {
+        guard option != .off else { return appearance.string("settings.mail.undoOff") }
+        return Duration.seconds(option.seconds).formatted(.units(allowed: [.seconds], width: .narrow).locale(appearance.locale))
     }
 
     private func addAccount(kind: TextButtonKind) -> some View {

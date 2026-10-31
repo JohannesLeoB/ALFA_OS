@@ -8,10 +8,12 @@ struct ToastView: View {
     var undoLabel: Text?
     var onUndo: (() -> Void)?
     var failed = false
+    var lasts: Double?
     let onDismiss: () -> Void
 
     private var stay: Double {
         if failed { return Tokens.Duration.toastFail }
+        if let lasts, onUndo != nil { return lasts }
         return onUndo == nil ? Tokens.Duration.toast : Tokens.Duration.toastUndo
     }
 

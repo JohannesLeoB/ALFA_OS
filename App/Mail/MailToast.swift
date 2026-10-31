@@ -10,6 +10,7 @@ struct MailToast: View {
             ToastView(message: text(toast),
                       undoLabel: toast.undoable ? appearance.text(toast.kind.actionKey) : nil,
                       onUndo: toast.undoable ? { Task { await inbox.undoToast() } } : nil, failed: toast.kind.failed,
+                      lasts: toast.lasts.map { Double($0.components.seconds) },
                       onDismiss: { inbox.dismissToast(toast.serial) })
                 .id(toast.serial)
         }

@@ -1216,6 +1216,18 @@
   "text.settings.action.remove": {
    "de": "Entfernen",
    "en": "Remove"
+  },
+  "settings.mail.compose": {
+   "de": "Verfassen",
+   "en": "Composing"
+  },
+  "settings.mail.undoSend": {
+   "de": "Senden widerrufen",
+   "en": "Undo Send"
+  },
+  "settings.mail.undoOff": {
+   "de": "Aus",
+   "en": "Off"
   }
  }
 }

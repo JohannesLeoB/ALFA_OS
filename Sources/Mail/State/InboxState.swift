@@ -71,7 +71,8 @@ public final class InboxState {
     let clock: @Sendable () -> Date
     let autosavePause: Duration
     let autosaveInterval: Duration
-    let sendHold: Duration
+    let fixedHold: Duration
+    let holdChoice: (@MainActor () -> Duration)?
     let signatures: @MainActor (Inlet.ID) -> MailboxSignature?
     let quoteTexts: @MainActor () -> QuoteTexts
     let unsubscribePost: @Sendable (URL) async -> Bool
@@ -82,6 +83,7 @@ public final class InboxState {
                 signatures: @escaping @MainActor (Inlet.ID) -> MailboxSignature? = { _ in nil },
                 quoteTexts: @escaping @MainActor () -> QuoteTexts = { QuoteTexts() },
                 autosavePause: Duration? = nil, autosaveInterval: Duration? = nil, sendHold: Duration = .zero,
+                holdChoice: (@MainActor () -> Duration)? = nil,
                 unsubscribePost: @escaping @Sendable (URL) async -> Bool = { _ in false }) {
         self.mailbox = mailbox
         self.outboxPort = outbox
@@ -92,11 +94,14 @@ public final class InboxState {
         self.quoteTexts = quoteTexts
         self.autosavePause = autosavePause ?? AutosaveEngine.pause
         self.autosaveInterval = autosaveInterval ?? AutosaveEngine.interval
-        self.sendHold = sendHold
+        self.fixedHold = sendHold
+        self.holdChoice = holdChoice
         self.unsubscribePost = unsubscribePost
     }
 
     public var now: Date { clock() }
+
+    public var sendHold: Duration { holdChoice?() ?? fixedHold }
 
     public var totalUnread: Int { unread.values.reduce(0, +) }
 
