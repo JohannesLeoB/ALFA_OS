@@ -1,0 +1,62 @@
+ALFA_OS · Sign-in intro · IST-Stand der Code-Fassung (Spezifikation und Beispiel-Prompt)
+==================================================
+
+Referenzbild hochladen: stills/end-state-dark-de.svg (oder als PNG exportiert)
+Länge: 3 Sekunden, dann 1 Sekunde Standbild halten. 1920 × 1080, 60 fps, MP4.
+Kamera: starr. Kein Zoom, kein Schwenk, kein Parallax.
+
+----------------------------------------------------------------------
+PROMPT (Deutsch, Dunkelmodus)
+----------------------------------------------------------------------
+Minimalistische UI-Logoanimation im Stil eines Studio-Intros, flach, ohne 3D, ohne Glanz, ohne Verlauf, ohne Partikel.
+Hintergrund: einfarbig fast schwarz (#0d0d0d), bildschirmfüllend, keine Vignette.
+Mitte des Bildes: eine helle Pille (#f5f5f5), 248 × 80 Pixel, voll gerundet (Radius 40), mit sehr weichem Schlagschatten nach unten.
+Links in der Pille ein Kreis, 56 Pixel, nur als 2 Pixel dünne dunkle Linie (#0d0d0d), nicht gefüllt. Im Kreis zwei dunkle, senkrechte Kapseln als Augen: je 8 × 16 Pixel, 8 Pixel Abstand, Ecken rund.
+Rechts neben dem Kreis das Wort „ALFA_OS“ in der Schrift Geist, Schnitt Medium (500), 26 Pixel, Farbe #0d0d0d, Großbuchstaben mit Unterstrich wie geschrieben.
+Unter der Pille, zentriert, zwei Textzeilen in Geist: „Google-Anmeldung übernommen“ (36 Pixel, Medium, fast weiß #fafafa) und darunter „Dieses Fenster kann jetzt geschlossen werden.“ (26 Pixel, Regular, hellgrau #d9d9d9).
+
+Ablauf, ruhig und präzise, Easing weich auslaufend (cubic-bezier 0.2, 0.8, 0.2, 1):
+0,00 s  Leerer dunkler Hintergrund.
+0,20 s  Die Pille erscheint in der Bildmitte: aus leichter Unschärfe (3 px) und 92 % Größe auf 100 % und scharf, Dauer 0,42 s, mit kaum merkbarem Überschwingen (cubic-bezier 0.2, 1.15, 0.3, 1). Sie ist noch schmal (112 × 80) und zeigt nur den Kreis mit Augen. Die Augen sind halb geschlossen: Lider auf 45 % Höhe, 3 px nach unten versetzt.
+0,90 s  Die Pille wird breiter, von 112 auf 248 Pixel, Dauer 0,24 s; gleichzeitig öffnen sich die Augen auf volle Höhe (0,32 s).
+0,98 s  Das Wort „ALFA_OS“ schiebt sich rechts vom Kreis heraus (Breite 0,24 s) und blendet mit 0,08 s Verzögerung über 0,20 s ein.
+1,70 s  Ein einziges Blinzeln: beide Augen schließen auf 10 % Höhe und öffnen wieder, Gesamtdauer 0,14 s.
+1,90 s  Die Titelzeile „Google-Anmeldung übernommen“ steigt 16 px von unten auf und blendet ein, 0,64 s.
+2,10 s  Die zweite Zeile steigt ebenso auf, 0,64 s.
+2,80 s  Endzustand erreicht, ab hier 1 s halten. Keine weitere Bewegung.
+
+Nichts anderes im Bild. Kein Logo, keine Linien, kein Raster, kein Glow, kein Lensflare, keine Schrift außer den genannten Wörtern. Schriften exakt so buchstabiert.
+
+----------------------------------------------------------------------
+PROMPT (English, dark mode)
+----------------------------------------------------------------------
+Minimal flat UI logo intro in the manner of a film-studio ident. No 3D, no gloss, no gradient, no particles, no camera motion.
+Background: solid near-black (#0d0d0d), full frame, no vignette.
+Center: a light pill shape (#f5f5f5), 248 × 80 px, fully rounded (radius 40), with a very soft drop shadow below it.
+Inside the pill on the left: a 56 px circle drawn only as a 2 px dark outline (#0d0d0d), not filled. Inside the circle, two dark vertical capsules as eyes, each 8 × 16 px, 8 px apart, rounded ends.
+Right of the circle the word “ALFA_OS” in the typeface Geist, Medium (500), 26 px, colour #0d0d0d, spelled exactly with the underscore.
+Below the pill, centered, two lines in Geist: “Google sign-in accepted” (36 px, Medium, near-white #fafafa) and under it “You can close this window now.” (26 px, Regular, light grey #d9d9d9).
+
+Timeline, calm and precise, ease-out (cubic-bezier 0.2, 0.8, 0.2, 1):
+0.00 s  Empty dark background.
+0.20 s  The pill appears at center: from slight blur (3 px) and 92 % scale to 100 % and sharp, 0.42 s, with a barely visible overshoot (cubic-bezier 0.2, 1.15, 0.3, 1). It is still narrow (112 × 80) and shows only the circle with eyes. The eyes are half closed: lids at 45 % height, shifted 3 px down.
+0.90 s  The pill widens from 112 to 248 px over 0.24 s; at the same time the eyes open to full height (0.32 s).
+0.98 s  The word “ALFA_OS” slides out to the right of the circle (width 0.24 s) and fades in over 0.20 s after a 0.08 s delay.
+1.70 s  One single blink: both eyes close to 10 % height and reopen, 0.14 s total.
+1.90 s  The title line “Google sign-in accepted” rises 16 px from below and fades in, 0.64 s.
+2.10 s  The second line rises the same way, 0.64 s.
+2.80 s  Final state reached; hold 1 s. No further motion.
+
+Nothing else in frame. No logo, lines, grid, glow, lens flare, or text beyond the words given. Spell the words exactly.
+
+----------------------------------------------------------------------
+VARIANTEN
+----------------------------------------------------------------------
+Hellmodus: Hintergrund #ffffff, Pille #171717, Kreislinie, Augen und Wort #ffffff, Titel #171717, zweite Zeile #4d4d4d. Referenz: stills/end-state-light-de.svg.
+Microsoft: Titel „Microsoft-Anmeldung übernommen“ / “Microsoft sign-in accepted”.
+Bewegung reduziert: nur der Endzustand, kein Ablauf.
+
+----------------------------------------------------------------------
+NEGATIVE PROMPT
+----------------------------------------------------------------------
+3D, glossy, metallic, gradient, glow, bloom, lens flare, particles, smoke, bokeh, camera move, zoom, rotation, parallax, extra logo, extra text, misspelled text, serif font, handwriting, emoji, face with mouth, cartoon, rounded square icon, app icon, watermark.

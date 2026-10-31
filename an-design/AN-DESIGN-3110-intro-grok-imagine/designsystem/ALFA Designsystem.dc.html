@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="alfa-export" content="2026-10-31">
+<link rel="stylesheet" href="lieferung-an-code/fonts/geist.css">
+<link rel="stylesheet" href="alfa-theme.css">
+<style>html,body{margin:0;background:var(--c-ground)}a{color:var(--c-ink);text-decoration:underline}a:hover{color:var(--c-ink-2)}</style>
+</helmet>
+<div data-alfa-sperre="gesperrt" data-appearance="light" title="Gesperrt · 21.10.2026 · nicht abgenommen" style="position:fixed;top:var(--spacing-step12);right:var(--spacing-step12);z-index:2147483000;pointer-events:none;display:flex;align-items:center;gap:var(--spacing-step8);height:var(--spacing-step24);padding:0 var(--spacing-step12);border-radius:var(--radius-capsule);background:var(--c-lane);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong);color:var(--c-ink-3);font:var(--typography-weight-medium) var(--typography-size-small)/1 var(--typography-family-text)"><span style="width:var(--spacing-step8);height:var(--spacing-step8);flex:none;border-radius:50%;background:var(--c-signal)"></span>Gesperrt · nicht abgenommen</div>
+<div data-appearance="{{ licht }}" data-screen-label="ALFA Designsystem" style="min-height:100vh;box-sizing:border-box;padding:var(--spacing-step24);background:var(--c-ground);color:var(--c-ink);font-family:var(--typography-family-text);font-size:var(--typography-size-body)">
+<div style="max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:var(--spacing-step24)">
+<header style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:var(--spacing-step16)">
+<div style="display:flex;flex-direction:column;gap:var(--spacing-step4)">
+<span style="font-size:var(--typography-size-small);color:var(--c-ink-3)">ALFA · Designsystem · Export {{ stand }}</span>
+<h1 style="margin:0;font-size:var(--typography-size-title);font-weight:var(--typography-weight-semibold)">Alle {{ count }} Tokens aus TOKENBOGEN.json · {{ rowsN }} Zeilen</h1>
+<span style="font-size:var(--typography-size-small);color:var(--c-ink-2);text-wrap:pretty">Gelesen beim Öffnen, jede Gruppe vollständig. Aus derselben Datei erzeugt apply.js contract/*.tokens.json und alfa-theme.css.</span>
+</div>
+<div style="display:flex;gap:var(--spacing-step4);padding:var(--spacing-step4);border-radius:var(--radius-capsule);background:var(--c-well)">
+<sc-for list="{{ modes }}" as="m" hint-placeholder-count="2"><button onClick="{{ m.on }}" style="appearance:none;border:0;font:inherit;font-size:var(--typography-size-small);height:var(--spacing-step24);padding:0 var(--spacing-step12);border-radius:var(--radius-capsule);cursor:pointer;background:{{ m.bg }};color:{{ m.fg }};box-shadow:{{ m.sh }}">{{ m.label }}</button></sc-for>
+</div>
+</header>
+<nav style="display:flex;flex-wrap:wrap;gap:var(--spacing-step8)">
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="8"><a href="{{ g.href }}" style="font-size:var(--typography-size-small);color:var(--c-ink-2);text-decoration:none;padding:0 var(--spacing-step8);height:var(--spacing-step24);display:flex;align-items:center;border-radius:var(--radius-capsule);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)">{{ g.title }} · {{ g.n }}</a></sc-for>
+</nav>
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+<section id="{{ g.id }}" style="display:flex;flex-direction:column;gap:var(--spacing-step8)">
+<div style="display:flex;align-items:baseline;gap:var(--spacing-step12)"><h2 style="margin:0;font-size:var(--typography-size-body);font-weight:var(--typography-weight-semibold)">{{ g.title }}</h2><span style="font-size:var(--typography-size-small);color:var(--c-ink-3)">{{ g.n }} Tokens</span></div>
+<div style="border-radius:var(--radius-lane);background:var(--c-lane);box-shadow:var(--sh-lane);overflow:hidden">
+<sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="6">
+<div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.2fr) minmax(0,2fr);gap:var(--spacing-step12);align-items:center;min-height:var(--spacing-step44);padding:var(--spacing-step4) var(--spacing-step16);box-shadow:inset 0 calc(-1 * var(--size-hairline)) 0 var(--c-line)">
+<div style="display:flex;flex-direction:column;min-width:0"><span style="overflow-wrap:anywhere">{{ r.name }}</span><span style="font-size:var(--typography-size-small);color:var(--c-ink-3);overflow-wrap:anywhere">{{ r.css }}</span></div>
+<span style="font-size:var(--typography-size-small);color:var(--c-ink-2);overflow-wrap:anywhere;font-variant-numeric:tabular-nums">{{ r.v }}</span>
+<div style="display:flex;align-items:center;gap:var(--spacing-step8);min-width:0">
+<sc-if value="{{ r.isColor }}" hint-placeholder-val="{{ false }}"><span title="hell" style="width:var(--spacing-step28);height:var(--spacing-step28);flex:none;border-radius:var(--radius-field);background:{{ r.c1 }};box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)"></span><sc-if value="{{ r.hasC2 }}" hint-placeholder-val="{{ false }}"><span title="dunkel" style="width:var(--spacing-step28);height:var(--spacing-step28);flex:none;border-radius:var(--radius-field);background:{{ r.c2 }};box-shadow:inset 0 0 0 var(--size-hairline) var(--c-line-strong)"></span></sc-if></sc-if>
+<sc-if value="{{ r.isDim }}" hint-placeholder-val="{{ false }}"><span style="height:var(--spacing-step8);width:{{ r.w }};max-width:100%;border-radius:var(--radius-capsule);background:var(--c-ink-3)"></span></sc-if>
+<sc-if value="{{ r.isRadius }}" hint-placeholder-val="{{ false }}"><span style="width:var(--spacing-step44);height:var(--spacing-step28);border-radius:{{ r.rad }};box-shadow:inset 0 0 0 var(--size-hairline) var(--c-ink-3)"></span></sc-if>
+<sc-if value="{{ r.isShadow }}" hint-placeholder-val="{{ false }}"><span style="width:var(--spacing-step44);height:var(--spacing-step28);border-radius:var(--radius-field);background:var(--c-lane);box-shadow:{{ r.sh }}"></span></sc-if>
+<sc-if value="{{ r.isTime }}" hint-placeholder-val="{{ false }}"><button onClick="{{ r.play }}" title="abspielen" style="appearance:none;border:0;padding:0;position:relative;width:100%;max-width:200px;height:var(--spacing-step16);border-radius:var(--radius-capsule);background:var(--c-well);cursor:pointer"><span style="position:absolute;top:2px;left:2px;width:var(--spacing-step12);height:var(--spacing-step12);border-radius:50%;background:var(--c-ink);transform:translateX({{ r.x }});transition:transform {{ r.ms }}ms {{ r.ease }}"></span></button></sc-if>
+<sc-if value="{{ r.isText }}" hint-placeholder-val="{{ false }}"><span style="font-weight:{{ r.fw }};font-size:{{ r.fs }};font-family:{{ r.ff }};line-height:{{ r.lh }}">Aa Kachel 0123</span></sc-if>
+<span style="font-size:var(--typography-size-small);color:var(--c-ink-3);overflow-wrap:anywhere;text-wrap:pretty">{{ r.desc }}</span>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+</sc-for>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;appearance&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { t: null, licht: null, play: {} };
+  componentDidMount() { fetch("TOKENBOGEN.json").then(r => r.json()).then(t => this.setState({ t })); }
+  renderVals() {
+    const t = this.state.t, licht = this.state.licht ?? this.props.appearance ?? "light";
+    const base = { licht, stand: "lädt", count: 0, rowsN: 0, groups: [],
+      modes: ["light", "dark"].map(m => ({ label: m === "light" ? "Hell" : "Dunkel", on: () => this.setState({ licht: m }), bg: m === licht ? "var(--c-lane)" : "transparent", fg: m === licht ? "var(--c-ink)" : "var(--c-ink-2)", sh: m === licht ? "var(--sh-seg)" : "none" })) };
+    if (!t) return base;
+    const own = o => Object.keys(o || {}).filter(k => !k.startsWith("$"));
+    const col = v => typeof v === "string" ? v : !v ? "" : v.components && v.alpha !== undefined && v.alpha < 1 ? "rgba(" + v.components.map(c => Math.round(c * 255)).join(",") + "," + v.alpha + ")" : v.hex || "";
+    const dim = v => v && typeof v === "object" && "value" in v ? v.value + v.unit : Array.isArray(v) ? v.map(dim).join(" ") : String(v);
+    const ref = s => typeof s === "string" && /^\{.+\}$/.test(s);
+    const resolve = s => { let o = t; for (const k of s.slice(1, -1).split(".")) o = o && o[k]; return o && o.$value !== undefined ? o.$value : s; };
+    const shCss = v => (Array.isArray(v) ? v : [v]).map(x => (x.inset ? "inset " : "") + [x.offsetX, x.offsetY, x.blur, x.spread].map(dim).join(" ") + " " + col(ref(x.color) ? resolve(x.color) : x.color)).join(", ");
+    const GROUPS = { color: "Farbe", shadow: "Schatten", size: "Größe", spacing: "Abstand", radius: "Radius", typography: "Schrift", motion: "Bewegung", stack: "Stapel", surface: "Fläche", component: "Bauteil", confirm: "Bestätigen", count: "Anzahl", opacity: "Deckkraft", layer: "Ebene", scale: "Skalierung", ratio: "Verhältnis" };
+    let n = 0;
+    const row = (path, o, dark) => {
+      n++; const v = o.$value, ty = o.$type, a = (o.$extensions && o.$extensions.alfa) || {}, name = path.join("."), r = { name, css: a.css || "", desc: o.$description || "", v: "" };
+      if (ty === "color") { const vv = ref(v) ? resolve(v) : v; Object.assign(r, { isColor: true, c1: col(vv), v: col(vv) }); if (dark) { const dv = ref(dark.$value) ? resolve(dark.$value) : dark.$value; Object.assign(r, { hasC2: true, c2: col(dv), v: col(vv) + " · " + col(dv) }); } }
+      else if (ty === "shadow") Object.assign(r, { isShadow: true, sh: shCss(v), v: shCss(v) });
+      else if (ty === "dimension" && path[0] === "radius") Object.assign(r, { isRadius: true, rad: dim(v), v: dim(v) });
+      else if (ty === "dimension" && path[0] !== "typography") { const px = v && v.unit === "px" ? v.value : 0; Object.assign(r, { isDim: true, w: Math.max(1, Math.min(320, Math.abs(px))) + "px", v: dim(v) }); }
+      else if (ty === "duration") { const ms = v.unit === "s" ? v.value * 1000 : v.value, k = name; Object.assign(r, { isTime: true, ms, ease: "cubic-bezier(.2,.8,.2,1)", v: dim(v), x: this.state.play[k] ? "calc(min(100%, 200px) - 16px)" : "0px", play: () => this.setState(s => ({ play: Object.assign({}, s.play, { [k]: !s.play[k] }) })) }); }
+      else if (ty === "cubicBezier") Object.assign(r, { v: "cubic-bezier(" + v.join(", ") + ")" });
+      else if (ty === "fontWeight") Object.assign(r, { isText: true, fw: String(v), fs: "var(--typography-size-body)", ff: "inherit", lh: "normal", v: String(v) });
+      else if (ty === "fontFamily") Object.assign(r, { isText: true, fw: "inherit", fs: "var(--typography-size-body)", ff: Array.isArray(v) ? v.join(",") : v, lh: "normal", v: Array.isArray(v) ? v.join(", ") : v });
+      else if (ty === "dimension") Object.assign(r, { isText: true, fw: "inherit", fs: dim(v), ff: "inherit", lh: "normal", v: dim(v) });
+      else if (ty === "typography") { const g = x => ref(x) ? resolve(x) : x; Object.assign(r, { isText: true, fw: String(g(v.fontWeight) ?? "inherit"), fs: v.fontSize ? dim(g(v.fontSize)) : "inherit", ff: "inherit", lh: v.lineHeight ? String(g(v.lineHeight)) : "normal", v: Object.keys(v).map(k => k + " " + (typeof g(v[k]) === "object" ? dim(g(v[k])) : g(v[k]))).join(" · ") }); }
+      else r.v = typeof v === "object" ? JSON.stringify(v) : String(v);
+      return r;
+    };
+    const walk = (o, p, out) => { if (!o || typeof o !== "object") return; if (Array.isArray(o)) { o.forEach((x, i) => walk(x, p.concat(String(x && x.depth !== undefined ? "Tiefe " + x.depth : i)), out)); return; } if ("$value" in o) { out.push(row(p, o)); return; } own(o).forEach(k => walk(o[k], p.concat(k), out)); };
+    const groups = own(t).filter(k => t[k] && typeof t[k] === "object" && k !== "paket").map(k => {
+      const rows = [];
+      if (k === "color") { const L = t.color.light, D = t.color.dark; own(L).forEach(c => L[c] && L[c].$value !== undefined && rows.push(row(["color", c], L[c], D && D[c]))); own(D).filter(c => !L[c]).forEach(c => walk(D[c], ["color", "dark", c], rows)); own(t.color).filter(x => x !== "light" && x !== "dark").forEach(x => walk(t.color[x], ["color", x], rows)); }
+      else walk(t[k], [k], rows);
+      return { id: "g-" + k, href: "#g-" + k, title: GROUPS[k] || k, n: rows.length, rows };
+    }).filter(g => g.n);
+    let all = 0; (function w(o) { if (!o || typeof o !== "object") return; if (Array.isArray(o)) return o.forEach(w); if ("$value" in o) { all++; return; } own(o).forEach(k => w(o[k])); })(t);
+    return Object.assign(base, { stand: t.export || "—", count: all, rowsN: n, groups });
+  }
+}
+</script>
+</body>
+</html>

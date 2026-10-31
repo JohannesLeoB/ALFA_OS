@@ -1,0 +1,8071 @@
+{
+ "export": "2026-10-21",
+ "$description": "ALFA Mail und ALFA Einstellungen · Tokenbogen, Stand 18.10.2026. Entwurf der Design-Sitzung, nichts davon ist mit „so“ abgenommen. Dieser Bogen ist die Quelle für Farben, Maße, Radien, Abstände, Schrift und Bewegung. ALFA Mail und ALFA Einstellungen sind Muster-Ansichtsbereiche der einen globalen Hülle und richten sich danach, keiner ist Gesetzgeber. Änderungen an Werten gehören ab jetzt zuerst hierher. Das Namensschema der echten Tokenbogen-Datei liegt der Design-Sitzung nicht vor; Gruppen und Namen hier sind ein Vorschlag, ausgenommen component-lane-radius (von Johannes genannt: Bahn 20). Nachtrag 15.10.2026: Ruhe rechts 280 (Johannes), Karten-Radius 20, Mono entfernt, Kartenfuß, Übersicht, Blob-Auge 4 × 8, Popup-Breite = Bahn darunter. Nachtrag 16.10.2026: Mittelbahn-Minimum 280 (Johannes), Bahn-Hintergrund color.light.lane und color.dark.lane (Code A2), tote Verweise behoben (Code A3). Nachtrag 18.10.2026 (Werteabgleich): 24 Tokens mit status „set-by-design“ aus Werten, die in den Bögen ohne Token standen (Fundstelle je Token im Feld where); offen auf ALFA Entscheidungen, Abschnitt 6. Liste: lieferung-an-code/werte-abgleich.json. Nachtrag 18.10.2026 (Logik): Zahlen ohne Einheit erfasst; neue Gruppe count (Anzahlen), dazu Menübreiten, Umbruchbreiten, Blob-Mechanik, Zeiten. Stand: 329 Tokens, davon 67 „set-by-design“. Status seit 18.10.2026 englisch: set-by-design (früher set-by-design), approved (freigegeben), approved-provisional (approved-provisional).",
+ "paket": "Stand 18.10.2026, 21:18 MESZ",
+ "$extensions": {
+  "alfa": {
+   "unit": "px, ms, ratio without unit",
+   "color": "components 0 to 1 plus alpha, plus hex where the source is a hex",
+   "references": "{group.name}",
+   "naming": "Swift API Design Guidelines: lowerCamelCase, English, no abbreviations, roles instead of types; formerName gives the earlier German name",
+   "statusLegend": {
+    "approved-provisional": "vorläufig abgenommen (Johannes), bis andere Optionen ausgearbeitet sind",
+    "set-by-design": "von Design gesetzt, Johannes hat nicht entschieden; offen auf ALFA Entscheidungen, Abschnitt 6",
+    "approved": "von Johannes freigegeben (Wortlaut im Feld source)"
+   }
+  }
+ },
+ "color": {
+  "light": {
+   "ground": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 1,
+     "hex": "#ffffff"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ground",
+      "formerName": "ground"
+     }
+    }
+   },
+   "line": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.9098,
+      0.9098,
+      0.9098
+     ],
+     "alpha": 1,
+     "hex": "#e8e8e8"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-line",
+      "formerName": "line"
+     }
+    }
+   },
+   "lineStrong": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.851,
+      0.851,
+      0.851
+     ],
+     "alpha": 1,
+     "hex": "#d9d9d9"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-line-strong",
+      "formerName": "line-strong"
+     }
+    }
+   },
+   "ink": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.0902,
+      0.0902,
+      0.0902
+     ],
+     "alpha": 1,
+     "hex": "#171717"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ink",
+      "formerName": "ink"
+     }
+    }
+   },
+   "inkSecondary": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.302,
+      0.302,
+      0.302
+     ],
+     "alpha": 1,
+     "hex": "#4d4d4d"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ink-2",
+      "formerName": "ink-2"
+     }
+    }
+   },
+   "inkTertiary": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.4196,
+      0.4196,
+      0.4196
+     ],
+     "alpha": 1,
+     "hex": "#6b6b6b"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ink-3",
+      "formerName": "ink-3"
+     }
+    }
+   },
+   "mark": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.5412,
+      0.5412,
+      0.5412
+     ],
+     "alpha": 1,
+     "hex": "#8a8a8a"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-mark",
+      "formerName": "mark"
+     }
+    }
+   },
+   "well": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.9608,
+      0.9608,
+      0.9608
+     ],
+     "alpha": 1,
+     "hex": "#f5f5f5"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-well",
+      "formerName": "well"
+     }
+    }
+   },
+   "hover": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.05
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-hover",
+      "formerName": "hover"
+     }
+    }
+   },
+   "selection": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.05
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sel",
+      "formerName": "sel"
+     }
+    }
+   },
+   "focus": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.4196,
+      0.4196,
+      0.4196
+     ],
+     "alpha": 1,
+     "hex": "#6b6b6b"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-focus",
+      "formerName": "focus"
+     }
+    }
+   },
+   "handle": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.6392,
+      0.6392,
+      0.6392
+     ],
+     "alpha": 1,
+     "hex": "#a3a3a3"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-grip",
+      "formerName": "grip"
+     }
+    }
+   },
+   "inverse": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.0902,
+      0.0902,
+      0.0902
+     ],
+     "alpha": 1,
+     "hex": "#171717"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-inv",
+      "formerName": "inv"
+     }
+    }
+   },
+   "onInverse": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 1,
+     "hex": "#ffffff"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-on-inv",
+      "formerName": "on-inv"
+     }
+    }
+   },
+   "inverseHot": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.12
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-inv-hot",
+      "formerName": "inv-hot"
+     }
+    }
+   },
+   "inverseLine": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.2
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-inv-line",
+      "formerName": "inv-line"
+     }
+    }
+   },
+   "inverseField": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.08
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-inv-field",
+      "formerName": "inv-field"
+     }
+    }
+   },
+   "safeArea": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 1,
+     "hex": "#000000"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-safe",
+      "formerName": "safe"
+     }
+    }
+   },
+   "menu": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 1,
+     "hex": "#ffffff"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-menu",
+      "formerName": "menu"
+     }
+    }
+   },
+   "signal": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.702,
+      0.2549,
+      0.1804
+     ],
+     "alpha": 1,
+     "hex": "#b3412e"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-signal",
+      "formerName": "signal"
+     }
+    }
+   },
+   "sheet": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 1,
+     "hex": "#ffffff"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet",
+      "formerName": "sheet"
+     }
+    }
+   },
+   "sheetInk": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.0902,
+      0.0902,
+      0.0902
+     ],
+     "alpha": 1,
+     "hex": "#171717"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet-ink",
+      "formerName": "sheet-ink"
+     }
+    }
+   },
+   "sheetInkSecondary": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.302,
+      0.302,
+      0.302
+     ],
+     "alpha": 1,
+     "hex": "#4d4d4d"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet-ink-2",
+      "formerName": "sheet-ink-2"
+     }
+    }
+   },
+   "sheetInkTertiary": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.4196,
+      0.4196,
+      0.4196
+     ],
+     "alpha": 1,
+     "hex": "#6b6b6b"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet-ink-3",
+      "formerName": "sheet-ink-3"
+     }
+    }
+   },
+   "sheetLine": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.9098,
+      0.9098,
+      0.9098
+     ],
+     "alpha": 1,
+     "hex": "#e8e8e8"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet-line",
+      "formerName": "sheet-line"
+     }
+    }
+   },
+   "glaze": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.75
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-glaze",
+      "formerName": "glaze"
+     }
+    }
+   },
+   "sheetWell": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.9608,
+      0.9608,
+      0.9608
+     ],
+     "alpha": 1,
+     "hex": "#f5f5f5"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet-well",
+      "formerName": "sheet-well"
+     }
+    }
+   },
+   "sheetLineStrong": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.851,
+      0.851,
+      0.851
+     ],
+     "alpha": 1,
+     "hex": "#d9d9d9"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet-line-strong",
+      "formerName": "sheet-line-strong"
+     }
+    }
+   },
+   "onSignal": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 1,
+     "hex": "#ffffff"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-on-signal",
+      "formerName": "on-signal"
+     }
+    }
+   },
+   "onInverseSecondary": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.8
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-on-inv-2",
+      "formerName": "on-inv-2"
+     }
+    }
+   },
+   "onInverseTertiary": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.6
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-on-inv-3",
+      "formerName": "on-inv-3"
+     }
+    }
+   },
+   "onInverseLine": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.3
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-on-inv-line",
+      "formerName": "on-inv-line"
+     }
+    }
+   },
+   "orb": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.051,
+      0.051,
+      0.051
+     ],
+     "alpha": 1,
+     "hex": "#0d0d0d"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-orb",
+      "formerName": "orb"
+     }
+    }
+   },
+   "orbRim": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.12
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-orb-rim",
+      "formerName": "orb-rim"
+     }
+    }
+   },
+   "orbGloss": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.28
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-orb-gloss",
+      "formerName": "orb-gloss"
+     }
+    }
+   },
+   "lane": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 1,
+     "hex": "#ffffff"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-lane",
+      "formerName": "lane"
+     }
+    },
+    "$description": "Bahn-Hintergrund. Quelle: alfa-theme.css --c-lane (Code A2)."
+   },
+   "stackGlossFront": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 1
+    },
+    "$description": "Stapelkarte vorn: Glanzkante",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackGlossFront",
+      "status": "set-by-design",
+      "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:627"
+     }
+    }
+   },
+   "stackGlossLight": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.9
+    },
+    "$description": "Stapelkarte hinten, helle Stufe: Glanzkante",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackGlossLight",
+      "status": "set-by-design",
+      "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:627"
+     }
+    }
+   },
+   "stackGlossDark": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.22
+    },
+    "$description": "Stapelkarte hinten, dunkle Stufe: Glanzkante",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackGlossDark",
+      "status": "set-by-design",
+      "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:627"
+     }
+    }
+   },
+   "stackSeamFront": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.14
+    },
+    "$description": "Stapelkarte vorn: Naht zur überlappten Karte",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackSeamFront",
+      "status": "set-by-design",
+      "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:627"
+     }
+    }
+   },
+   "stackSeamBack": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.2
+    },
+    "$description": "Stapelkarte hinten: Naht",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackSeamBack",
+      "status": "set-by-design",
+      "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:627"
+     }
+    }
+   },
+   "stackDrop": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.16
+    },
+    "$description": "Stapelkarte: Schatten auf die überlappte Karte",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackDrop",
+      "status": "set-by-design",
+      "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:628"
+     }
+    }
+   },
+   "stackRing": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.06
+    },
+    "$description": "Stapelkarte flach, hinten: Ring",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackRing",
+      "status": "set-by-design",
+      "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:632"
+     }
+    }
+   },
+   "stackFlatDrop": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.18
+    },
+    "$description": "Stapelkarte flach, hinten: Schatten",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackFlatDrop",
+      "status": "set-by-design",
+      "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:632"
+     }
+    }
+   },
+   "stackFlatFront": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.22
+    },
+    "$description": "Stapelkarte flach, vorn: Schatten",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackFlatFront",
+      "status": "set-by-design",
+      "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:631"
+     }
+    }
+   },
+   "dhlYellow": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      0.7961,
+      0.0039
+     ],
+     "alpha": 1,
+     "hex": "#ffcb01"
+    },
+    "$description": "DHL-Markenfarbe hinter dem Logo der Dienstkarte (Marke, kein Thema)",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-dhlYellow",
+      "status": "set-by-design",
+      "source": "Akte-Prüfung 27.10.: brandDhl → dhlYellow (Prüfer liest „rand“ als deutsches Wort)",
+      "where": "ALFA Einstellungen.dc.html:302"
+     }
+    }
+   },
+   "ghostShadow": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.22
+    },
+    "$description": "Hebende Postfachkarte: Schattenfarbe",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ghostShadow",
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:700"
+     }
+    }
+   },
+   "ghostRing": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.06
+    },
+    "$description": "Postfachkarte beim Wechsel, Ruhe: feine Kante",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ghostRing",
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:700"
+     }
+    }
+   },
+   "claudeClay": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.8431,
+      0.4627,
+      0.3333
+     ],
+     "alpha": 1,
+     "hex": "#d77655"
+    },
+    "$description": "Claude-Markenfarbe hinter dem Zeichen der Dienstkarte (Marke, kein Thema; aus claude-app-icon.svg)",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-claudeClay",
+      "status": "set-by-design",
+      "source": "Logos T5: ClickUp, Claude, sevDesk aus Johannes' Brand Kits; Markenfarben hinter dem Zeichen",
+      "where": "ALFA Einstellungen.dc.html:303"
+     }
+    }
+   },
+   "sevdeskRed": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.9843,
+      0.3216,
+      0.2314
+     ],
+     "alpha": 1,
+     "hex": "#fb523b"
+    },
+    "$description": "sevDesk-Markenfarbe hinter dem Zeichen der Dienstkarte (Marke, kein Thema; aus sevdesk-app-icon.webp)",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sevdeskRed",
+      "status": "set-by-design",
+      "source": "Logos T5: ClickUp, Claude, sevDesk aus Johannes' Brand Kits; Markenfarben hinter dem Zeichen",
+      "where": "ALFA Einstellungen.dc.html:303"
+     }
+    }
+   },
+   "clockodoBlue": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.2118,
+      0.3412,
+      0.9686
+     ],
+     "alpha": 1,
+     "hex": "#3657f7"
+    },
+    "$description": "Clockodo-Markenfarbe hinter dem Zeichen in der Kachel (Marke, kein Thema; aus clockodo.png)",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-clockodoBlue",
+      "status": "set-by-design",
+      "source": "Kachel-Ring: Clockodo voll gefüllt, Logos größer (Johannes 28.10. Kommentare DHL, Clockodo)",
+      "where": "ALFA Einstellungen.dc.html:401"
+     }
+    }
+   }
+  },
+  "dark": {
+   "ground": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.051,
+      0.051,
+      0.051
+     ],
+     "alpha": 1,
+     "hex": "#0d0d0d"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ground",
+      "formerName": "ground"
+     }
+    }
+   },
+   "line": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.1647,
+      0.1647,
+      0.1647
+     ],
+     "alpha": 1,
+     "hex": "#2a2a2a"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-line",
+      "formerName": "line"
+     }
+    }
+   },
+   "lineStrong": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.2275,
+      0.2275,
+      0.2275
+     ],
+     "alpha": 1,
+     "hex": "#3a3a3a"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-line-strong",
+      "formerName": "line-strong"
+     }
+    }
+   },
+   "ink": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.9804,
+      0.9804,
+      0.9804
+     ],
+     "alpha": 1,
+     "hex": "#fafafa"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ink",
+      "formerName": "ink"
+     }
+    }
+   },
+   "inkSecondary": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.851,
+      0.851,
+      0.851
+     ],
+     "alpha": 1,
+     "hex": "#d9d9d9"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ink-2",
+      "formerName": "ink-2"
+     }
+    }
+   },
+   "inkTertiary": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.6392,
+      0.6392,
+      0.6392
+     ],
+     "alpha": 1,
+     "hex": "#a3a3a3"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ink-3",
+      "formerName": "ink-3"
+     }
+    }
+   },
+   "mark": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.5412,
+      0.5412,
+      0.5412
+     ],
+     "alpha": 1,
+     "hex": "#8a8a8a"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-mark",
+      "formerName": "mark"
+     }
+    }
+   },
+   "well": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.1216,
+      0.1216,
+      0.1216
+     ],
+     "alpha": 1,
+     "hex": "#1f1f1f"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-well",
+      "formerName": "well"
+     }
+    }
+   },
+   "hover": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.08
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-hover",
+      "formerName": "hover"
+     }
+    }
+   },
+   "selection": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.08
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sel",
+      "formerName": "sel"
+     }
+    }
+   },
+   "focus": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.6392,
+      0.6392,
+      0.6392
+     ],
+     "alpha": 1,
+     "hex": "#a3a3a3"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-focus",
+      "formerName": "focus"
+     }
+    }
+   },
+   "handle": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.4196,
+      0.4196,
+      0.4196
+     ],
+     "alpha": 1,
+     "hex": "#6b6b6b"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-grip",
+      "formerName": "grip"
+     }
+    }
+   },
+   "inverse": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.9608,
+      0.9608,
+      0.9608
+     ],
+     "alpha": 1,
+     "hex": "#f5f5f5"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-inv",
+      "formerName": "inv"
+     }
+    }
+   },
+   "onInverse": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.051,
+      0.051,
+      0.051
+     ],
+     "alpha": 1,
+     "hex": "#0d0d0d"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-on-inv",
+      "formerName": "on-inv"
+     }
+    }
+   },
+   "inverseHot": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.08
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-inv-hot",
+      "formerName": "inv-hot"
+     }
+    }
+   },
+   "inverseLine": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.14
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-inv-line",
+      "formerName": "inv-line"
+     }
+    }
+   },
+   "inverseField": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.05
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-inv-field",
+      "formerName": "inv-field"
+     }
+    }
+   },
+   "safeArea": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 1,
+     "hex": "#000000"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-safe",
+      "formerName": "safe"
+     }
+    }
+   },
+   "menu": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.1216,
+      0.1216,
+      0.1216
+     ],
+     "alpha": 1,
+     "hex": "#1f1f1f"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-menu",
+      "formerName": "menu"
+     }
+    }
+   },
+   "signal": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.8784,
+      0.5412,
+      0.4549
+     ],
+     "alpha": 1,
+     "hex": "#e08a74"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-signal",
+      "formerName": "signal"
+     }
+    }
+   },
+   "sheet": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 1,
+     "hex": "#ffffff"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet",
+      "formerName": "sheet"
+     }
+    }
+   },
+   "sheetInk": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.0902,
+      0.0902,
+      0.0902
+     ],
+     "alpha": 1,
+     "hex": "#171717"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet-ink",
+      "formerName": "sheet-ink"
+     }
+    }
+   },
+   "sheetInkSecondary": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.302,
+      0.302,
+      0.302
+     ],
+     "alpha": 1,
+     "hex": "#4d4d4d"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet-ink-2",
+      "formerName": "sheet-ink-2"
+     }
+    }
+   },
+   "sheetInkTertiary": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.4196,
+      0.4196,
+      0.4196
+     ],
+     "alpha": 1,
+     "hex": "#6b6b6b"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet-ink-3",
+      "formerName": "sheet-ink-3"
+     }
+    }
+   },
+   "sheetLine": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.9098,
+      0.9098,
+      0.9098
+     ],
+     "alpha": 1,
+     "hex": "#e8e8e8"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet-line",
+      "formerName": "sheet-line"
+     }
+    }
+   },
+   "glaze": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.07
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-glaze",
+      "formerName": "glaze"
+     }
+    }
+   },
+   "sheetWell": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.9608,
+      0.9608,
+      0.9608
+     ],
+     "alpha": 1,
+     "hex": "#f5f5f5"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet-well",
+      "formerName": "sheet-well"
+     }
+    }
+   },
+   "sheetLineStrong": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.851,
+      0.851,
+      0.851
+     ],
+     "alpha": 1,
+     "hex": "#d9d9d9"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sheet-line-strong",
+      "formerName": "sheet-line-strong"
+     }
+    }
+   },
+   "onSignal": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.050980392156862744,
+      0.050980392156862744,
+      0.050980392156862744
+     ],
+     "alpha": 1,
+     "hex": "#0d0d0d"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-on-signal",
+      "formerName": "on-signal",
+      "source": "17.10.: Kontrast Weiß auf #e08a74 nur 2,61:1 (gemessen ALFA Einstellungen dunkel); #0d0d0d ergibt 7,9:1. Mindestkontrast 4,5:1. Johannes 17.10. zu „2 · Von Design gesetzt“: „Ist soweit OK, fürs erste und bis weitere Farbsysteme und feintuning einziehen so gestattet.“",
+      "status": "approved-provisional",
+      "statusText": "Freigabe Orange: vorläufig abgenommen, bis andere Optionen ausgearbeitet sind",
+      "approval": "Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen. kann so in die dokumente gführt werden, bis später andere Optionen ausgearbeitet werden.“"
+     }
+    }
+   },
+   "onInverseSecondary": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.72
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-on-inv-2",
+      "formerName": "on-inv-2"
+     }
+    }
+   },
+   "onInverseTertiary": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.55
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-on-inv-3",
+      "formerName": "on-inv-3"
+     }
+    }
+   },
+   "onInverseLine": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.22
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-on-inv-line",
+      "formerName": "on-inv-line"
+     }
+    }
+   },
+   "orb": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.051,
+      0.051,
+      0.051
+     ],
+     "alpha": 1,
+     "hex": "#0d0d0d"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-orb",
+      "formerName": "orb"
+     }
+    }
+   },
+   "orbRim": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.12
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-orb-rim",
+      "formerName": "orb-rim"
+     }
+    }
+   },
+   "orbGloss": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.28
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-orb-gloss",
+      "formerName": "orb-gloss"
+     }
+    }
+   },
+   "lane": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.0784,
+      0.0784,
+      0.0784
+     ],
+     "alpha": 1,
+     "hex": "#141414"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-lane",
+      "formerName": "lane"
+     }
+    },
+    "$description": "Bahn-Hintergrund dunkel. Quelle: alfa-theme.css --c-lane (Code A2)."
+   },
+   "stackGlossFront": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.14
+    },
+    "$description": "Stapelkarte vorn: Glanzkante",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackGlossFront",
+      "status": "set-by-design",
+      "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:627"
+     }
+    }
+   },
+   "stackGlossLight": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.9
+    },
+    "$description": "Stapelkarte hinten, helle Stufe: Glanzkante",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackGlossLight",
+      "status": "set-by-design",
+      "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:627"
+     }
+    }
+   },
+   "stackGlossDark": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      1,
+      1
+     ],
+     "alpha": 0.22
+    },
+    "$description": "Stapelkarte hinten, dunkle Stufe: Glanzkante",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackGlossDark",
+      "status": "set-by-design",
+      "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:627"
+     }
+    }
+   },
+   "stackSeamFront": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.7
+    },
+    "$description": "Stapelkarte vorn: Naht zur überlappten Karte",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackSeamFront",
+      "status": "set-by-design",
+      "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:627"
+     }
+    }
+   },
+   "stackSeamBack": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.7
+    },
+    "$description": "Stapelkarte hinten: Naht",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackSeamBack",
+      "status": "set-by-design",
+      "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:627"
+     }
+    }
+   },
+   "stackDrop": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.55
+    },
+    "$description": "Stapelkarte: Schatten auf die überlappte Karte",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackDrop",
+      "status": "set-by-design",
+      "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:628"
+     }
+    }
+   },
+   "stackRing": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.06
+    },
+    "$description": "Stapelkarte flach, hinten: Ring",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackRing",
+      "status": "set-by-design",
+      "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:632"
+     }
+    }
+   },
+   "stackFlatDrop": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.18
+    },
+    "$description": "Stapelkarte flach, hinten: Schatten",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackFlatDrop",
+      "status": "set-by-design",
+      "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:632"
+     }
+    }
+   },
+   "stackFlatFront": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.22
+    },
+    "$description": "Stapelkarte flach, vorn: Schatten",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-stackFlatFront",
+      "status": "set-by-design",
+      "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10.",
+      "where": "ALFA Mail.dc.html:631"
+     }
+    }
+   },
+   "dhlYellow": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      1,
+      0.7961,
+      0.0039
+     ],
+     "alpha": 1,
+     "hex": "#ffcb01"
+    },
+    "$description": "DHL-Markenfarbe hinter dem Logo der Dienstkarte (Marke, kein Thema)",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-dhlYellow",
+      "status": "set-by-design",
+      "source": "Akte-Prüfung 27.10.: brandDhl → dhlYellow (Prüfer liest „rand“ als deutsches Wort)",
+      "where": "ALFA Einstellungen.dc.html:302"
+     }
+    }
+   },
+   "ghostShadow": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.22
+    },
+    "$description": "Hebende Postfachkarte: Schattenfarbe",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ghostShadow",
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:700"
+     }
+    }
+   },
+   "ghostRing": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0,
+      0,
+      0
+     ],
+     "alpha": 0.06
+    },
+    "$description": "Postfachkarte beim Wechsel, Ruhe: feine Kante",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ghostRing",
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:700"
+     }
+    }
+   },
+   "claudeClay": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.8431,
+      0.4627,
+      0.3333
+     ],
+     "alpha": 1,
+     "hex": "#d77655"
+    },
+    "$description": "Claude-Markenfarbe hinter dem Zeichen der Dienstkarte (Marke, kein Thema; aus claude-app-icon.svg)",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-claudeClay",
+      "status": "set-by-design",
+      "source": "Logos T5: ClickUp, Claude, sevDesk aus Johannes' Brand Kits; Markenfarben hinter dem Zeichen",
+      "where": "ALFA Einstellungen.dc.html:303"
+     }
+    }
+   },
+   "sevdeskRed": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.9843,
+      0.3216,
+      0.2314
+     ],
+     "alpha": 1,
+     "hex": "#fb523b"
+    },
+    "$description": "sevDesk-Markenfarbe hinter dem Zeichen der Dienstkarte (Marke, kein Thema; aus sevdesk-app-icon.webp)",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-sevdeskRed",
+      "status": "set-by-design",
+      "source": "Logos T5: ClickUp, Claude, sevDesk aus Johannes' Brand Kits; Markenfarben hinter dem Zeichen",
+      "where": "ALFA Einstellungen.dc.html:303"
+     }
+    }
+   },
+   "clockodoBlue": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.2118,
+      0.3412,
+      0.9686
+     ],
+     "alpha": 1,
+     "hex": "#3657f7"
+    },
+    "$description": "Clockodo-Markenfarbe hinter dem Zeichen in der Kachel (Marke, kein Thema; aus clockodo.png)",
+    "$extensions": {
+     "alfa": {
+      "css": "--c-clockodoBlue",
+      "status": "set-by-design",
+      "source": "Kachel-Ring: Clockodo voll gefüllt, Logos größer (Johannes 28.10. Kommentare DHL, Clockodo)",
+      "where": "ALFA Einstellungen.dc.html:401"
+     }
+    }
+   }
+  },
+  "lightGrayOverrides": {
+   "ground": {
+    "$type": "color",
+    "$value": {
+     "colorSpace": "srgb",
+     "components": [
+      0.949,
+      0.949,
+      0.949
+     ],
+     "alpha": 1,
+     "hex": "#f2f2f2"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--c-ground",
+      "formerName": "ground"
+     }
+    }
+   }
+  },
+  "mood": {
+   "coral": {
+    "$type": "color",
+    "$value": {
+     "light": "#f95c4b",
+     "dark": "#f95c4b"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--m-coral",
+      "source": "Johannes 16.10.: „b16 behalten“ (Rückgabe B16). Werte aus alfa-theme.css. Einsatz: Stapel und Typen, nicht für Aktionen („FARBSYSTEM … NICHT auf ZU anwenden für actions“, „Für STapel und Typen okay.“ 13.10.)"
+     }
+    }
+   },
+   "apricot": {
+    "$type": "color",
+    "$value": {
+     "light": "#f39f5a",
+     "dark": "#f39f5a"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--m-apricot",
+      "source": "Johannes 16.10.: „b16 behalten“ (Rückgabe B16). Werte aus alfa-theme.css. Einsatz: Stapel und Typen, nicht für Aktionen („FARBSYSTEM … NICHT auf ZU anwenden für actions“, „Für STapel und Typen okay.“ 13.10.)"
+     }
+    }
+   },
+   "rose": {
+    "$type": "color",
+    "$value": {
+     "light": "#e8bcb9",
+     "dark": "#e8bcb9"
+    },
+    "$extensions": {
+     "alfa": {
+      "css": "--m-rose",
+      "source": "Johannes 16.10.: „b16 behalten“ (Rückgabe B16). Werte aus alfa-theme.css. Einsatz: Stapel und Typen, nicht für Aktionen („FARBSYSTEM … NICHT auf ZU anwenden für actions“, „Für STapel und Typen okay.“ 13.10.)"
+     }
+    }
+   }
+  }
+ },
+ "shadow": {
+  "light": {
+   "lane": {
+    "$type": "shadow",
+    "$value": [
+     {
+      "inset": false,
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 0,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 0,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 1,
+       "unit": "px"
+      },
+      "color": "{color.light.line}"
+     }
+    ],
+    "$extensions": {
+     "alfa": {
+      "css": "--sh-lane",
+      "formerName": "lane"
+     }
+    }
+   },
+   "knob": {
+    "$type": "shadow",
+    "$value": [
+     {
+      "inset": false,
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 1,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 2,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 0,
+       "unit": "px"
+      },
+      "color": {
+       "colorSpace": "srgb",
+       "components": [
+        0,
+        0,
+        0
+       ],
+       "alpha": 0.2
+      }
+     }
+    ],
+    "$extensions": {
+     "alfa": {
+      "css": "--sh-knob",
+      "formerName": "knob"
+     }
+    }
+   },
+   "segment": {
+    "$type": "shadow",
+    "$value": [
+     {
+      "inset": false,
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 1,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 2,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 0,
+       "unit": "px"
+      },
+      "color": {
+       "colorSpace": "srgb",
+       "components": [
+        0,
+        0,
+        0
+       ],
+       "alpha": 0.12
+      }
+     }
+    ],
+    "$extensions": {
+     "alfa": {
+      "css": "--sh-seg",
+      "formerName": "seg"
+     }
+    }
+   },
+   "floating": {
+    "$type": "shadow",
+    "$value": [
+     {
+      "inset": false,
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 0,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 0,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 1,
+       "unit": "px"
+      },
+      "color": {
+       "colorSpace": "srgb",
+       "components": [
+        0,
+        0,
+        0
+       ],
+       "alpha": 0.08
+      }
+     },
+     {
+      "inset": false,
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 8,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 24,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 0,
+       "unit": "px"
+      },
+      "color": {
+       "colorSpace": "srgb",
+       "components": [
+        0,
+        0,
+        0
+       ],
+       "alpha": 0.1
+      }
+     }
+    ],
+    "$extensions": {
+     "alfa": {
+      "css": "--sh-float",
+      "formerName": "float"
+     }
+    }
+   },
+   "overviewHover": {
+    "$type": "shadow",
+    "$value": [
+     {
+      "inset": false,
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 14,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 28,
+       "unit": "px"
+      },
+      "spread": {
+       "value": -18,
+       "unit": "px"
+      },
+      "color": {
+       "colorSpace": "srgb",
+       "components": [
+        0,
+        0,
+        0
+       ],
+       "alpha": 0.4
+      }
+     }
+    ],
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Einstellungen.dc.html:47, ALFA Einstellungen.dc.html:449",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "css": "--sh-overviewHover"
+     }
+    }
+   }
+  },
+  "dark": {
+   "lane": {
+    "$type": "shadow",
+    "$value": [
+     {
+      "inset": false,
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 0,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 0,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 1,
+       "unit": "px"
+      },
+      "color": "{color.dark.line}"
+     }
+    ],
+    "$extensions": {
+     "alfa": {
+      "css": "--sh-lane",
+      "formerName": "lane"
+     }
+    }
+   },
+   "knob": {
+    "$type": "shadow",
+    "$value": [
+     {
+      "inset": false,
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 1,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 2,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 0,
+       "unit": "px"
+      },
+      "color": {
+       "colorSpace": "srgb",
+       "components": [
+        0,
+        0,
+        0
+       ],
+       "alpha": 0.2
+      }
+     }
+    ],
+    "$extensions": {
+     "alfa": {
+      "css": "--sh-knob",
+      "formerName": "knob"
+     }
+    }
+   },
+   "segment": {
+    "$type": "shadow",
+    "$value": [
+     {
+      "inset": false,
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 1,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 2,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 0,
+       "unit": "px"
+      },
+      "color": {
+       "colorSpace": "srgb",
+       "components": [
+        0,
+        0,
+        0
+       ],
+       "alpha": 0.12
+      }
+     }
+    ],
+    "$extensions": {
+     "alfa": {
+      "css": "--sh-seg",
+      "formerName": "seg"
+     }
+    }
+   },
+   "floating": {
+    "$type": "shadow",
+    "$value": [
+     {
+      "inset": false,
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 0,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 0,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 1,
+       "unit": "px"
+      },
+      "color": {
+       "colorSpace": "srgb",
+       "components": [
+        1,
+        1,
+        1
+       ],
+       "alpha": 0.1
+      }
+     },
+     {
+      "inset": false,
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 8,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 24,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 0,
+       "unit": "px"
+      },
+      "color": {
+       "colorSpace": "srgb",
+       "components": [
+        0,
+        0,
+        0
+       ],
+       "alpha": 0.5
+      }
+     }
+    ],
+    "$extensions": {
+     "alfa": {
+      "css": "--sh-float",
+      "formerName": "float"
+     }
+    }
+   }
+  },
+  "lightGrayOverrides": {
+   "lane": {
+    "$type": "shadow",
+    "$value": [
+     {
+      "inset": false,
+      "offsetX": {
+       "value": 0,
+       "unit": "px"
+      },
+      "offsetY": {
+       "value": 0,
+       "unit": "px"
+      },
+      "blur": {
+       "value": 0,
+       "unit": "px"
+      },
+      "spread": {
+       "value": 1,
+       "unit": "px"
+      },
+      "color": {
+       "colorSpace": "srgb",
+       "components": [
+        0.8902,
+        0.8902,
+        0.8902
+       ],
+       "alpha": 1,
+       "hex": "#e3e3e3"
+      }
+     }
+    ],
+    "$extensions": {
+     "alfa": {
+      "css": "--sh-lane",
+      "formerName": "lane"
+     }
+    }
+   }
+  }
+ },
+ "size": {
+  "edge": {
+   "$type": "dimension",
+   "$value": {
+    "value": 16,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "rand",
+     "where": "alfa-shell.js:10 (K.m)"
+    }
+   }
+  },
+  "gutter": {
+   "$type": "dimension",
+   "$value": {
+    "value": 12,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "fuge",
+     "where": "alfa-shell.js:10 (K.gap)"
+    }
+   }
+  },
+  "blobHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 40,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "blobHoehe",
+     "where": "alfa-shell.js:10 (K.bh)"
+    }
+   }
+  },
+  "blobWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 56,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "blobBreite",
+     "where": "alfa-shell.js:10 (K.bw)"
+    }
+   }
+  },
+  "blobAwakeWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 124,
+    "unit": "px"
+   },
+   "$description": "Wach: 124. Passt der Bereichsname nicht, in einem Schritt 280 (= laneRestWidth, 5 × 56), keine Zwischenbreiten.",
+   "$extensions": {
+    "alfa": {
+     "formerName": "blobWach",
+     "source": "Johannes 17.10.: „Wach - immer mindestens 124 breit, wenn Text nicht passt maximal und als Step 280 breit - also so breit wie die Spalte darunter in 5*56er zustand“",
+     "step": "{size.laneRestWidth}",
+     "where": "alfa-shell.js:10 (K.awake)"
+    }
+   }
+  },
+  "blobDockDistance": {
+   "$type": "dimension",
+   "$value": {
+    "value": 36,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "blobAndock",
+     "where": "alfa-shell.js:10 (K.dock)"
+    }
+   }
+  },
+  "foldedWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 56,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "gefaltet",
+     "where": "alfa-shell.js:10 (K.fold)"
+    }
+   }
+  },
+  "foldThreshold": {
+   "$type": "dimension",
+   "$value": {
+    "value": 112,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "faltschwelle",
+     "where": "alfa-shell.js:10 (K.foldAt)",
+     "status": "set-by-design"
+    }
+   }
+  },
+  "middleMinimumWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 280,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "mitteMin",
+     "source": "Johannes Rückgabe 16.10. Punkt 2: „280 … · abgehakt“; Mitte kann wachsen, Sperre je Ansicht entscheidet Johannes später",
+     "where": "alfa-shell.js:12"
+    }
+   }
+  },
+  "headerHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 44,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "kopf"
+    }
+   }
+  },
+  "rowHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 36,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "zeile"
+    }
+   }
+  },
+  "symbolSize": {
+   "$type": "dimension",
+   "$value": {
+    "value": 28,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "symbol"
+    }
+   }
+  },
+  "cardInset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 0,
+    "unit": "px"
+   },
+   "$description": "Kartenstapel bündig in der Bahn, kein Einzug (Entscheidung Johannes)",
+   "$extensions": {
+    "alfa": {
+     "formerName": "kartenRand"
+    }
+   }
+  },
+  "laneRestWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 280,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 15.10.2026: „Ruhe reiten 280“, links und rechts gleich (vorher rechts 560)",
+     "where": "alfa-shell.js:10 (K.rest)"
+    }
+   }
+  },
+  "laneMinimumRight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 280,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 15.10. Kommentar an grid-lane-rest-left: „Wieso Rechts-Links unterschiedlich? Bitte vereinheitlichen auf 280“ → links und rechts gleich in Ruhe und Minimum",
+     "where": "alfa-shell.js:12"
+    }
+   }
+  },
+  "blobPopupFallbackWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 280,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "ALFA Shell: Bahn darunter gefaltet, Menü und Assistent öffnen mit laneRestWidth (vorher 300 und 320)"
+    }
+   }
+  },
+  "footerHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 44,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 15.10.2026: Kartenfuß „genau den gleichen Kopf“"
+    }
+   }
+  },
+  "blobEyeWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 4,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 15.10.2026: „auf 4 bringen?“ (vorher 3,5), Vorschlag"
+    }
+   }
+  },
+  "blobEyeHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 15.10.2026: „auf 8 heben?“ (vorher 7), Vorschlag"
+    }
+   }
+  },
+  "blobEyeGap": {
+   "$type": "dimension",
+   "$value": {
+    "value": 4,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "4er Leiter, vorher 3,5"
+    }
+   }
+  },
+  "suggestionRowHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 44,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "wie recipientRow"
+    }
+   }
+  },
+  "chipHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 24,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Mail: Kapsel, Anhang, Suchbereich"
+    }
+   }
+  },
+  "overviewTileHeightSmall": {
+   "$type": "dimension",
+   "$value": {
+    "value": 144,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Übersicht Klein, Vorschlag"
+    }
+   }
+  },
+  "overviewTileHeightMedium": {
+   "$type": "dimension",
+   "$value": {
+    "value": 176,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Übersicht Mittel, Vorschlag"
+    }
+   }
+  },
+  "overviewTileHeightLarge": {
+   "$type": "dimension",
+   "$value": {
+    "value": 248,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Übersicht Groß, Vorschlag"
+    }
+   }
+  },
+  "overviewTileMinWidthSmall": {
+   "$type": "dimension",
+   "$value": {
+    "value": 200,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Vorschlag"
+    }
+   }
+  },
+  "overviewTileMinWidthMedium": {
+   "$type": "dimension",
+   "$value": {
+    "value": 232,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Vorschlag"
+    }
+   }
+  },
+  "overviewTileMinWidthLarge": {
+   "$type": "dimension",
+   "$value": {
+    "value": 320,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Vorschlag"
+    }
+   }
+  },
+  "headPadRight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "alfa-shell.js:3 headPad list/main/stack, rechts 8"
+    }
+   }
+  },
+  "headPadLeftList": {
+   "$type": "dimension",
+   "$value": {
+    "value": 16,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "alfa-shell.js:3 headPad list und main, links 16"
+    }
+   }
+  },
+  "headPadLeftStack": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "alfa-shell.js:3 headPad stack, links 8"
+    }
+   }
+  },
+  "headGapList": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "alfa-shell.js:3 headGap list und main 8"
+    }
+   }
+  },
+  "headGapStack": {
+   "$type": "dimension",
+   "$value": {
+    "value": 4,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "alfa-shell.js:3 headGap stack 4"
+    }
+   }
+  },
+  "menuEdge": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "ALFA Shell.dc.html:67 padding:0 8px 8px"
+    }
+   }
+  },
+  "menuRowHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 28,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "ALFA Shell.dc.html:73 height:28px"
+    }
+   }
+  },
+  "menuRowPadding": {
+   "$type": "dimension",
+   "$value": {
+    "value": 12,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "ALFA Shell.dc.html:73 padding:0 12px"
+    }
+   }
+  },
+  "menuRowGap": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "ALFA Shell.dc.html:73 gap:8px"
+    }
+   }
+  },
+  "menuSeparatorInset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 12,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "ALFA Shell.dc.html:68 margin:0 12px 8px"
+    }
+   }
+  },
+  "menuSeparatorSpace": {
+   "$type": "dimension",
+   "$value": {
+    "value": 4,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "ALFA Shell.dc.html:71 margin:4px 12px"
+    }
+   }
+  },
+  "assistantFieldHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 40,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "ALFA Shell.dc.html:88 height:40px"
+    }
+   }
+  },
+  "blobStretchMax": {
+   "$type": "number",
+   "$value": 0.16,
+   "$extensions": {
+    "alfa": {
+     "source": "ALFA Shell.dc.html:152 Math.min(.16, …) Dehnung beim Ziehen"
+    }
+   }
+  },
+  "blobWakeDistance": {
+   "$type": "dimension",
+   "$value": {
+    "value": 212,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "ALFA Shell.dc.html:157 dist < 212"
+    }
+   }
+  },
+  "laneMinimumLeft": {
+   "$type": "dimension",
+   "$value": {
+    "value": 280,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 15.10. Kommentar an grid-lane-rest-left: „Wieso Rechts-Links unterschiedlich? Bitte vereinheitlichen auf 280“ → links und rechts gleich in Ruhe und Minimum",
+     "where": "alfa-shell.js:12"
+    }
+   }
+  },
+  "trailingTextInset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 12,
+    "unit": "px"
+   },
+   "$description": "Wortenden am rechten Zeilenende auf einer Linie: freies Wort (Wert, Zustand, Eingabe) 12 innen = Text in Textknopf (Innenabstand 12) = Text in Bestätigen-Pille (4 Rand + 8). 18.10. vereinheitlicht von 14 auf 12.",
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 18.10. am Entscheidungsbogen: „Wieso sind die nicht auf Linie Bündig gesetzt seitlich ??“",
+     "approval": "Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen. kann so in die dokumente gführt werden, bis später andere Optionen ausgearbeitet werden.“",
+     "status": "approved-provisional",
+     "statusText": "Freigabe Orange: vorläufig abgenommen, bis andere Optionen ausgearbeitet sind"
+    }
+   }
+  },
+  "hairline": {
+   "$type": "dimension",
+   "$value": {
+    "value": 1,
+    "unit": "px"
+   },
+   "$description": "Haarlinie: Trennlinien, Ringe, Rahmen, Kanten der Bahnen (Schatten mit spread 1), Griff in Ruhe (1 × 64). Immer 1 px, auch auf Retina.",
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 18.10.: „token für haarlinie anlegen bitte.“; Wert aus Bestand: shadow.*.lane spread 1, Griff Haarlinie 1 × 64 (alfa-shell.js)"
+    }
+   }
+  },
+  "handleLength": {
+   "$type": "dimension",
+   "$value": {
+    "value": 64,
+    "unit": "px"
+   },
+   "$description": "Griff in Ruhe, Länge (Dicke = size.hairline). Auch RUECKGABE-AN-CODE.md, Tabelle „Strich“.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Shell.dc.html:263",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "handleLengthActive": {
+   "$type": "dimension",
+   "$value": {
+    "value": 96,
+    "unit": "px"
+   },
+   "$description": "Griff beim Ziehen, Länge. RUECKGABE-AN-CODE.md, Tabelle „Strich“: aktiv 2 × 96.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Shell.dc.html:263",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "handleThicknessActive": {
+   "$type": "dimension",
+   "$value": {
+    "value": 2,
+    "unit": "px"
+   },
+   "$description": "Griff beim Ziehen, Dicke.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Shell.dc.html:262",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "fieldLabelWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 48,
+    "unit": "px"
+   },
+   "$description": "Breite der Feldbeschriftung „Von“ beim Schreiben.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:234",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "recipientListMaxHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 308,
+    "unit": "px"
+   },
+   "$description": "Größte Höhe der aufgeklappten Empfängerliste.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:176, ALFA Mail.dc.html:252",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "recipientInputMinWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 64,
+    "unit": "px"
+   },
+   "$description": "Kleinste Breite des Empfänger-Eingabefelds.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:243",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "composeSheetMinHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 192,
+    "unit": "px"
+   },
+   "$description": "Kleinste Höhe des Schreibblatts.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:262",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "composeTextMinHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 120,
+    "unit": "px"
+   },
+   "$description": "Kleinste Höhe des Textfelds.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:263",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "composeColumnMinWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 96,
+    "unit": "px"
+   },
+   "$description": "Kleinste Breite einer Spalte im Schreibkopf.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "kein Fundort im Bogen (Stand 27.10.)",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "settingsTileHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 112,
+    "unit": "px"
+   },
+   "$description": "Kachel bei den Integrationen, Höhe.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Einstellungen.dc.html:47",
+     "decide": "ALFA Entscheidungen, Abschnitt 6",
+     "formerValue": 96,
+     "source": "Johannes 18.10. (nach 22:01 MESZ): „Die \"Kacheln\" bitte gestalterisch an die \"Stapelkarten\" anpassen, also vom material. Sind die Kacheln um 4er und 56er raster? Die Kacheln auch wieder oben vernünftig bündig setzen und die fluchtlinien der l und R spalte ausrichten.“",
+     "rule": "2 × 56 (laneRestWidth-Raster); Kopf = size.headerHeight 44, Rest 68 = 44 + 24"
+    }
+   }
+  },
+  "settingsTileMinWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 112,
+    "unit": "px"
+   },
+   "$description": "Kachel bei den Integrationen, kleinste Breite im Raster.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Einstellungen.dc.html:47",
+     "decide": "ALFA Entscheidungen, Abschnitt 6",
+     "formerValue": 132,
+     "source": "Johannes 18.10. (nach 22:01 MESZ): „Die \"Kacheln\" bitte gestalterisch an die \"Stapelkarten\" anpassen, also vom material. Sind die Kacheln um 4er und 56er raster? Die Kacheln auch wieder oben vernünftig bündig setzen und die fluchtlinien der l und R spalte ausrichten.“",
+     "rule": "2 × 56; bei Bahn 280 und Innenabstand 8 + 8 ergeben sich 2 Spalten à 128 (4er-Raster), Fuge spacing.step8"
+    }
+   }
+  },
+  "toggleKnobOffsetOn": {
+   "$type": "dimension",
+   "$value": {
+    "value": 14,
+    "unit": "px"
+   },
+   "$description": "Schalterknopf, Versatz an.",
+   "$extensions": {
+    "alfa": {
+     "status": "approved",
+     "statusText": "von Johannes freigegeben",
+     "where": "alfa-bausteine.js:183",
+     "source": "Johannes 18.10. (zweiter Chat), zu Entscheidungen 6 (4er-Leiter): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“",
+     "note": "Ausnahme von der 4er-Leiter (entscheidungen.md:124)"
+    }
+   }
+  },
+  "toggleKnobOffsetOff": {
+   "$type": "dimension",
+   "$value": {
+    "value": 2,
+    "unit": "px"
+   },
+   "$description": "Schalterknopf, Versatz aus.",
+   "$extensions": {
+    "alfa": {
+     "status": "approved",
+     "statusText": "von Johannes freigegeben",
+     "where": "alfa-bausteine.js:144",
+     "source": "Johannes 18.10. (zweiter Chat), zu Entscheidungen 6 (4er-Leiter): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“",
+     "note": "Ausnahme von der 4er-Leiter (entscheidungen.md:124)"
+    }
+   }
+  },
+  "selectionRingWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 2,
+    "unit": "px"
+   },
+   "$description": "Ring um gewähltes Etikett-Symbol, innen. Außen folgt size.hairline.",
+   "$extensions": {
+    "alfa": {
+     "status": "approved",
+     "statusText": "von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:683",
+     "source": "Johannes 18.10. (zweiter Chat): „10 auf 8, ring so umschreiben.“",
+     "rule": "Ring um gewähltes Etikett-Symbol: innen selectionRingWidth (2) in Tinte, außen size.hairline (1) in Linienfarbe; Gesamtbreite 3 = 2 + 1, kein eigener Token"
+    }
+   }
+  },
+  "overviewHoverLift": {
+   "$type": "dimension",
+   "$value": {
+    "value": 3,
+    "unit": "px"
+   },
+   "$description": "Übersicht: Kachel hebt sich beim Überfahren.",
+   "$extensions": {
+    "alfa": {
+     "status": "approved",
+     "statusText": "von Johannes freigegeben",
+     "where": "ALFA Einstellungen.dc.html:449",
+     "source": "Johannes 18.10. (zweiter Chat), zu Entscheidungen 6 (4er-Leiter): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“",
+     "note": "Ausnahme von der 4er-Leiter (entscheidungen.md:124)"
+    }
+   }
+  },
+  "menuReelPerspective": {
+   "$type": "dimension",
+   "$value": {
+    "value": 600,
+    "unit": "px"
+   },
+   "$description": "Blob-Menü: Perspektive beim Ausrollen (Kippung 60°).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Shell.dc.html:278",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "orbGlowBlur": {
+   "$type": "dimension",
+   "$value": {
+    "value": 2.4,
+    "unit": "px"
+   },
+   "$description": "Denk-Orb, Weichzeichnung des Leuchtens.",
+   "$extensions": {
+    "alfa": {
+     "status": "approved",
+     "statusText": "von Johannes freigegeben",
+     "where": "ALFA Shell.dc.html:57, ALFA Shell.dc.html:92",
+     "source": "Johannes 18.10. (zweiter Chat): „JA - ORB im Blob ist so freigegeben!“ · Johannes 18.10. (zweiter Chat), zu Entscheidungen 6 (4er-Leiter): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“",
+     "note": "Ausnahme von der 4er-Leiter (entscheidungen.md:124)"
+    }
+   }
+  },
+  "blobLidOffset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 1.4,
+    "unit": "px"
+   },
+   "$description": "Blob-Augen geschlossen, Versatz der Lider.",
+   "$extensions": {
+    "alfa": {
+     "status": "approved",
+     "statusText": "Blob, von Johannes freigegeben",
+     "where": "ALFA Shell.dc.html:291",
+     "source": "Johannes 18.10. (zweiter Chat), zur 4er-Leiter: „der BLOB war so freigegeben.“",
+     "note": "Ausnahme von der 4er-Leiter (entscheidungen.md:124)"
+    }
+   }
+  },
+  "confirmEnterBlur": {
+   "$type": "dimension",
+   "$value": {
+    "value": 3,
+    "unit": "px"
+   },
+   "$description": "Bestätigen: Weichzeichnung beim Erscheinen.",
+   "$extensions": {
+    "alfa": {
+     "status": "approved",
+     "statusText": "von Johannes freigegeben",
+     "where": "ALFA UI-Elemente.dc.html:16",
+     "source": "Johannes 18.10. (zweiter Chat), zu Entscheidungen 6 (4er-Leiter): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“",
+     "note": "Ausnahme von der 4er-Leiter (entscheidungen.md:124)"
+    }
+   }
+  },
+  "blobDragThreshold": {
+   "$type": "dimension",
+   "$value": {
+    "value": 3,
+    "unit": "px"
+   },
+   "$description": "Blob: Weg, ab dem ein Drücken als Ziehen gilt.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Shell.dc.html:163",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "blobFlingMinDistance": {
+   "$type": "dimension",
+   "$value": {
+    "value": 48,
+    "unit": "px"
+   },
+   "$description": "Blob: Mindestabstand, ab dem eine schnelle Maus den Blob nicht weckt.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Shell.dc.html:197",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "blobEyeFollowDistance": {
+   "$type": "dimension",
+   "$value": {
+    "value": 200,
+    "unit": "px"
+   },
+   "$description": "Blob: Augen folgen der Maus innerhalb dieses Abstands.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Shell.dc.html:200",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "blobEyeFollowRamp": {
+   "$type": "dimension",
+   "$value": {
+    "value": 40,
+    "unit": "px"
+   },
+   "$description": "Blob: Abstand, auf dem das Folgen der Augen voll wird.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Shell.dc.html:200",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "blobEyeTravelX": {
+   "$type": "dimension",
+   "$value": {
+    "value": 2,
+    "unit": "px"
+   },
+   "$description": "Blob: größter Versatz der Augen waagrecht.",
+   "$extensions": {
+    "alfa": {
+     "status": "approved",
+     "statusText": "von Johannes freigegeben (Versatz)",
+     "where": "ALFA Shell.dc.html:175",
+     "source": "Johannes 18.10. (zweiter Chat): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“"
+    }
+   }
+  },
+  "blobEyeTravelY": {
+   "$type": "dimension",
+   "$value": {
+    "value": 1.6,
+    "unit": "px"
+   },
+   "$description": "Blob: größter Versatz der Augen senkrecht.",
+   "$extensions": {
+    "alfa": {
+     "status": "approved",
+     "statusText": "von Johannes freigegeben (Versatz)",
+     "where": "ALFA Shell.dc.html:200",
+     "source": "Johannes 18.10. (zweiter Chat): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“"
+    }
+   }
+  },
+  "blobHomeRadius": {
+   "$type": "dimension",
+   "$value": {
+    "value": 200,
+    "unit": "px"
+   },
+   "$description": "Blob: Umkreis um den Platz, in dem der Blob zurück einrastet.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Shell.dc.html:210",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "blobLabelPadding": {
+   "$type": "dimension",
+   "$value": {
+    "value": 22,
+    "unit": "px"
+   },
+   "$description": "Blob wach: Zuschlag rechts zur Textbreite für die Prüfung „Name passt in 124“. Nicht auf der 4er-Leiter.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Shell.dc.html:175",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "blobMenuMinHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 160,
+    "unit": "px"
+   },
+   "$description": "Blob-Menü: kleinste Höhe der Liste.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Shell.dc.html:281",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "laneSnap": {
+   "$type": "dimension",
+   "$value": {
+    "value": 12,
+    "unit": "px"
+   },
+   "$description": "Griff: rastet auf die Breite der Gegenbahn ein, wenn näher als dieser Abstand. (Johannes 15.10. zu shell-snap: „Wieso 10? wo ist das, welcher Wert, was macht der?“)",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "alfa-shell.js:10 (K.snap)",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "laneHysteresis": {
+   "$type": "dimension",
+   "$value": {
+    "value": 64,
+    "unit": "px"
+   },
+   "$description": "Akkordeon: Abstand, bevor eine gefaltete Bahn wieder aufgeht.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "alfa-shell.js:10 (K.hy)",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "breakpointStack": {
+   "$type": "dimension",
+   "$value": {
+    "value": 440,
+    "unit": "px"
+   },
+   "$description": "Schreiben: ab dieser Breite der rechten Bahn stapeln sich Empfänger-Kapseln.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:458",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "breakpointFilterLabel": {
+   "$type": "dimension",
+   "$value": {
+    "value": 340,
+    "unit": "px"
+   },
+   "$description": "Mitte: ab dieser Breite zeigt der Filter seinen Text.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:713",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "breakpointAttachments": {
+   "$type": "dimension",
+   "$value": {
+    "value": 560,
+    "unit": "px"
+   },
+   "$description": "Liste: ab dieser Breite 3 statt 2 Anhänge je Zeile.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:741",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "breakpointNarrowCard": {
+   "$type": "dimension",
+   "$value": {
+    "value": 480,
+    "unit": "px"
+   },
+   "$description": "Karte: unter dieser Breite schmale Fassung (Kopf, Fuß, Empfänger).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:817, ALFA Mail.dc.html:865",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "breakpointSendLabel": {
+   "$type": "dimension",
+   "$value": {
+    "value": 300,
+    "unit": "px"
+   },
+   "$description": "Kartenfuß: ab dieser Kartenbreite zeigt „Senden“ seinen Text.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:889, ALFA Mail.dc.html:894",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "mailRowEstimate": {
+   "$type": "dimension",
+   "$value": {
+    "value": 88,
+    "unit": "px"
+   },
+   "$description": "Liste: geschätzte Zeilenhöhe für den Platzhalter beim Nachladen (Code misst echt).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:742",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "stripReserveTop": {
+   "$type": "dimension",
+   "$value": {
+    "value": 24,
+    "unit": "px"
+   },
+   "$description": "Gefaltete Bahn: Platz oben, der nicht für Zeichen genutzt wird.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:655",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "stripReserveBottom": {
+   "$type": "dimension",
+   "$value": {
+    "value": 96,
+    "unit": "px"
+   },
+   "$description": "Gefaltete Bahn: Platz unten, der nicht für Zeichen genutzt wird.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Mail.dc.html:655",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "stackFanStep": {
+   "$type": "dimension",
+   "$value": {
+    "value": 52,
+    "unit": "px"
+   },
+   "$description": "Stapel gefächert: Schritt je Karte (= headerHeight 44 + 8).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+     "where": "ALFA Einstellungen.dc.html:426",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "overviewActionsOffset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 6,
+    "unit": "px"
+   },
+   "$description": "Übersicht: Knöpfe der Kachel kommen beim Überfahren aus diesem Versatz.",
+   "$extensions": {
+    "alfa": {
+     "status": "approved",
+     "statusText": "von Johannes freigegeben (Versatz)",
+     "where": "ALFA Mail.dc.html:802",
+     "source": "Johannes 18.10. (zweiter Chat): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“"
+    }
+   }
+  },
+  "safeAreaTop": {
+   "$type": "dimension",
+   "$value": {
+    "value": 32,
+    "unit": "px"
+   },
+   "$description": "Vorschau 1512 × 982: Kamera-Aussparung oben (Notch).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "alfa-shell.js:10 (K.safe)",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "tileLogoSize": {
+   "$type": "dimension",
+   "$value": {
+    "value": 18,
+    "unit": "px"
+   },
+   "$description": "Kachel bei den Integrationen: Logo im 28er-Kreis.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Einstellungen.dc.html:47",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "focusRingWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 2,
+    "unit": "px"
+   },
+   "$description": "Fokusring (Tastatur), Breite.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA UI-Elemente.dc.html:24, ALFA UI-Elemente.dc.html:32, ALFA UI-Elemente.dc.html:33 (+2)",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "focusRingOffset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 1,
+    "unit": "px"
+   },
+   "$description": "Fokusring, Abstand 1 (Entscheidung von Design 19.10., Brief v9 L-015 „Wert wählst du“). Grund: Bestätigen-Pille 28 hoch, Knöpfe 20, Rand 4: Ring 2 + Abstand 1 = 3 passt hinein, 2 + 2 = 4 stößt an die Pillenkante. Ein Wert für alle.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "alfa-theme.css:6, ALFA UI-Elemente.dc.html (style-focus)",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "quoteBarWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 2,
+    "unit": "px"
+   },
+   "$description": "Zitat in der Mail: Strich links.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:199",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "markSeparatorRing": {
+   "$type": "dimension",
+   "$value": {
+    "value": 2,
+    "unit": "px"
+   },
+   "$description": "Ring in Grundfarbe, der eine Marke vom Hintergrund trennt (Übersicht, Abgleich).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Einstellungen.dc.html:150, ALFA Mail.dc.html:84, ALFA Mail.dc.html:299 (+1)",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "spinnerStroke": {
+   "$type": "dimension",
+   "$value": {
+    "value": 1.5,
+    "unit": "px"
+   },
+   "$description": "Bestätigen: Strich des Wartekreises.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA UI-Elemente.dc.html:27",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "tileHoverLift": {
+   "$type": "dimension",
+   "$value": {
+    "value": 1,
+    "unit": "px"
+   },
+   "$description": "Kachel bei den Integrationen hebt sich beim Überfahren.",
+   "$extensions": {
+    "alfa": {
+     "status": "approved",
+     "where": "ALFA Einstellungen.dc.html:47",
+     "decide": "ALFA Entscheidungen, Abschnitt 6",
+     "source": "Johannes 18.10. (zweiter Chat): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“"
+    }
+   }
+  },
+  "recipientLabelColumn": {
+   "$type": "dimension",
+   "$value": {
+    "value": 40,
+    "unit": "px"
+   },
+   "$description": "Empfängerliste: Spalte „An/Cc“. Mit Abstand 8 und Zeilenrand 8+8 fluchtet der Name mit dem Feld „Von“ (16 + fieldLabelWidth 48 = 8 + 8 + 40 + 8).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:176, ALFA Mail.dc.html:252",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "recipientMarkColumn": {
+   "$type": "dimension",
+   "$value": {
+    "value": 24,
+    "unit": "px"
+   },
+   "$description": "Empfängerliste: Spalte der Marke (chipHeight 24).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:176, ALFA Mail.dc.html:250, ALFA Mail.dc.html:252",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "menuWidthStep": {
+   "$type": "dimension",
+   "$value": {
+    "value": 56,
+    "unit": "px"
+   },
+   "$description": "Kontextmenü: Breite = längster Eintrag (Text 13, Zusatz 11,5, Haken 12, Ränder 4 + 8 je Seite), aufgerundet auf Vielfache von 56.",
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 18.10. (zweiter Chat): „bitte menü breiten auch versuchen auf die 56 leiter/rasterung und ausrichtung je nach Lage in der spalte, oder? Da wo das nciht zu kollisionen führt..“",
+     "ref": "{size.foldedWidth}",
+     "where": "alfa-bausteine.js:118"
+    }
+   }
+  },
+  "menuMinWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 168,
+    "unit": "px"
+   },
+   "$description": "Kontextmenü: kleinste Breite (3 × 56).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "alfa-bausteine.js:118",
+     "decide": "ALFA Entscheidungen, Abschnitt 6",
+     "rule": "Johannes 18.10. (zweiter Chat): „bitte menü breiten auch versuchen auf die 56 leiter/rasterung und ausrichtung je nach Lage in der spalte, oder? Da wo das nciht zu kollisionen führt..“"
+    }
+   }
+  },
+  "menuMaxWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 280,
+    "unit": "px"
+   },
+   "$description": "Kontextmenü: größte Breite (5 × 56 = laneRestWidth); längerer Text wird mit „…“ gekürzt.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "ref": "{size.laneRestWidth}",
+     "where": "alfa-bausteine.js:118",
+     "decide": "ALFA Entscheidungen, Abschnitt 6",
+     "rule": "Johannes 18.10. (zweiter Chat): „bitte menü breiten auch versuchen auf die 56 leiter/rasterung und ausrichtung je nach Lage in der spalte, oder? Da wo das nciht zu kollisionen führt..“"
+    }
+   }
+  },
+  "menuAlignment": {
+   "$type": "string",
+   "$value": "anchorEdgeInLane",
+   "$description": "Kontextmenü: Anker in der linken Hälfte seiner Bahn → linke Kante am Anker, sonst rechte Kante am Anker; passt es, wird es in die Bahn geschoben; nie näher als size.edge 16 am Fensterrand; unten kein Platz → über dem Anker.",
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 18.10. (zweiter Chat): „bitte menü breiten auch versuchen auf die 56 leiter/rasterung und ausrichtung je nach Lage in der spalte, oder? Da wo das nciht zu kollisionen führt..“",
+     "where": "alfa-bausteine.js:120"
+    }
+   }
+  },
+  "reelTopOffset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$description": "Kachelblock (Walze): Einrasten mit CSS scroll-snap (y mandatory) auf jede Kachelreihe; scroll-padding-top 8 = spacing.step8, wie die erste Listenzeile links. Die letzte Gruppe ist so hoch (100cqh + 32), dass auch ihre Kacheln oben einrasten (gemessen: max. scrollTop 636 = Oberkante Raster 644 − 8).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Einstellungen.dc.html:47",
+     "decide": "ALFA Entscheidungen, Abschnitt 6",
+     "source": "Johannes 18.10. (nach 22:24 MESZ): „no - das ist too much. Ich meinte nur auch die \"Kante\" wie bei den Stapelkarten, diese \"tiefe\" die Form war vorher besser. zurück. Und das Snappy scrolling geht noch nciht richtig. die Kachel muss dann oben richtog auf Abstand einsnappen.“"
+    }
+   }
+  },
+  "accountFanWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 220,
+    "unit": "px"
+   },
+   "$description": "Konto-Wähler offen: Höchstbreite der aufgefächerten Marken im Kopf der linken Bahn (3 × 28 + „+“ 28 + Fugen 4 + Rand 2; Animation max-width).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:679",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "accountClosedWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 260,
+    "unit": "px"
+   },
+   "$description": "Konto-Wähler zu: Höchstbreite von Marke und Adresse im Kopf der linken Bahn (Animation max-width).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:679",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "cardStateTextMaxWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 320,
+    "unit": "px"
+   },
+   "$description": "Höchstbreite des Textes in Kartenzuständen (Mail: Hinweis, Leerzustand)",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Brief v12 A1: Zahl stand nur inline in ALFA Mail/Einstellungen (Fund 21.10.2026), jetzt Token",
+     "where": "ALFA Mail.dc.html:74, ALFA Mail.dc.html:75"
+    }
+   }
+  },
+  "confirmPillWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 96,
+    "unit": "px"
+   },
+   "$description": "Breite der Bestätigen-Pille in einer Zeile der Einstellungen",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Brief v12 A1: Zahl stand nur inline in ALFA Einstellungen (Fund 21.10.2026), jetzt Token",
+     "where": "ALFA Einstellungen.dc.html:129"
+    }
+   }
+  },
+  "confirmPillOffset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 3,
+    "unit": "px"
+   },
+   "$description": "Versatz der Bestätigen-Pille nach rechts über den Zeilenrand (negativer Außenabstand)",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Brief v12 A1: Zahl stand nur inline in ALFA Einstellungen (Fund 21.10.2026), jetzt Token",
+     "where": "ALFA Einstellungen.dc.html:129"
+    }
+   }
+  },
+  "fieldLabelMinWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 96,
+    "unit": "px"
+   },
+   "$description": "Mindestbreite der Beschriftungsspalte einer Feldzeile in den Einstellungen",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Brief v12 A1: Zahl stand nur inline in ALFA Einstellungen (Fund 21.10.2026), jetzt Token",
+     "where": "ALFA Einstellungen.dc.html:114"
+    }
+   }
+  },
+  "signatureEditorMinHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 144,
+    "unit": "px"
+   },
+   "$description": "Mindesthöhe des Signatur-Textfelds",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Brief v12 A1: Zahl stand nur inline in ALFA Einstellungen (Fund 21.10.2026), jetzt Token",
+     "where": "ALFA Einstellungen.dc.html:111"
+    }
+   }
+  },
+  "lockMarkSize": {
+   "$type": "dimension",
+   "$value": {
+    "value": 56,
+    "unit": "px"
+   },
+   "$description": "Marke der Person im Sperrbildschirm",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "N9 App-Sperre: Maße Marke und Passwortfeld im Sperrbildschirm",
+     "where": "ALFA Shell.dc.html:125"
+    }
+   }
+  },
+  "lockFieldWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 240,
+    "unit": "px"
+   },
+   "$description": "Breite des Passwortfelds im Sperrbildschirm",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "N9 App-Sperre: Maße Marke und Passwortfeld im Sperrbildschirm",
+     "where": "ALFA Shell.dc.html:128"
+    }
+   }
+  },
+  "imageTileStripe": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$description": "Streifenbreite der Kachel „Bild blockiert“",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "N10 Bild blockiert: Kachel mit Zuständen blocked/loaded, Textschlüssel, Maße als Tokens",
+     "where": "ALFA Mail.dc.html:829"
+    }
+   }
+  },
+  "hintRadius": {
+   "$type": "dimension",
+   "$value": {
+    "value": 7,
+    "unit": "px"
+   },
+   "$description": "Hover Intent: Zeiger darf sich je 100 ms höchstens so weit bewegen (Luftlinie), sonst beginnt das Verweilen neu",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Übergabe 23.10.: Postfach-Stapel, Wechsel, Hilfetext, Blob-Punkt (SPEC-NACHTRAG-2310)",
+     "where": "ALFA Shell.dc.html:239"
+    }
+   }
+  },
+  "stackDropOffset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$description": "Stapelkarte: Schatten-Versatz zur überlappten Karte",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+     "where": "ALFA Mail.dc.html:628"
+    }
+   }
+  },
+  "stackDropBlur": {
+   "$type": "dimension",
+   "$value": {
+    "value": 16,
+    "unit": "px"
+   },
+   "$description": "Stapelkarte: Schatten-Unschärfe",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+     "where": "ALFA Mail.dc.html:628"
+    }
+   }
+  },
+  "stackDropSpread": {
+   "$type": "dimension",
+   "$value": {
+    "value": -12,
+    "unit": "px"
+   },
+   "$description": "Stapelkarte: Schatten-Ausbreitung",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Material der Stapelkarten als Tokens (rechts und gespiegelt links), Johannes 23.10.",
+     "where": "ALFA Mail.dc.html:628"
+    }
+   }
+  },
+  "stackFlatDropOffset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 6,
+    "unit": "px"
+   },
+   "$description": "Stapelkarte flach, hinten: Schatten-Versatz",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10.",
+     "where": "ALFA Mail.dc.html:632"
+    }
+   }
+  },
+  "stackFlatDropBlur": {
+   "$type": "dimension",
+   "$value": {
+    "value": 16,
+    "unit": "px"
+   },
+   "$description": "Stapelkarte flach, hinten: Unschärfe",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10.",
+     "where": "ALFA Mail.dc.html:632"
+    }
+   }
+  },
+  "stackFlatDropSpread": {
+   "$type": "dimension",
+   "$value": {
+    "value": -10,
+    "unit": "px"
+   },
+   "$description": "Stapelkarte flach, hinten: Ausbreitung",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10.",
+     "where": "ALFA Mail.dc.html:632"
+    }
+   }
+  },
+  "stackFlatFrontOffset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$description": "Stapelkarte flach, vorn: Schatten-Versatz",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10.",
+     "where": "ALFA Mail.dc.html:631"
+    }
+   }
+  },
+  "stackFlatFrontBlur": {
+   "$type": "dimension",
+   "$value": {
+    "value": 24,
+    "unit": "px"
+   },
+   "$description": "Stapelkarte flach, vorn: Unschärfe",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10.",
+     "where": "ALFA Mail.dc.html:631"
+    }
+   }
+  },
+  "stackFlatFrontSpread": {
+   "$type": "dimension",
+   "$value": {
+    "value": -12,
+    "unit": "px"
+   },
+   "$description": "Stapelkarte flach, vorn: Ausbreitung",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Stapelkarten links und rechts: eine Schattenfunktion für alle Flächen (flat, lacquer, glass), Johannes 23.10.",
+     "where": "ALFA Mail.dc.html:631"
+    }
+   }
+  },
+  "overviewTileEnter": {
+   "$type": "dimension",
+   "$value": {
+    "value": 10,
+    "unit": "px"
+   },
+   "$description": "Übersicht: Kachel kommt beim Öffnen aus diesem Versatz nach oben",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Kontrolle 27.10.: Übersicht-Kachel Einblendversatz 10 als Token; Fundstellen nach Entfernen toter Schattenlogik in Einstellungen",
+     "where": "ALFA Mail.dc.html:802"
+    }
+   }
+  },
+  "mailLaneMaximumLeft": {
+   "$type": "dimension",
+   "$value": {
+    "value": 280,
+    "unit": "px"
+   },
+   "$description": "Mail: linke Bahn höchstens so breit ziehbar (N36, Teil 4)",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "A1 (Brief): alfa-shell.js liest alle Werte aus Tokens; foldAt = foldThreshold (doppelt, gestrichen)",
+     "where": "alfa-shell.js:14"
+    }
+   }
+  },
+  "previewWindowWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 1512,
+    "unit": "px"
+   },
+   "$description": "Vorschau „1512 × 982“: Fensterbreite",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "A1 (Brief): alfa-shell.js liest alle Werte aus Tokens; foldAt = foldThreshold (doppelt, gestrichen)",
+     "where": "alfa-shell.js:19"
+    }
+   }
+  },
+  "previewWindowHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 982,
+    "unit": "px"
+   },
+   "$description": "Vorschau „1512 × 982“: Fensterhöhe",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "A1 (Brief): alfa-shell.js liest alle Werte aus Tokens; foldAt = foldThreshold (doppelt, gestrichen)",
+     "where": "alfa-shell.js:19"
+    }
+   }
+  },
+  "previewMinWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 640,
+    "unit": "px"
+   },
+   "$description": "Vorschau im Browser: kleinste Fensterbreite",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "A1 (Brief): alfa-shell.js liest alle Werte aus Tokens; foldAt = foldThreshold (doppelt, gestrichen)",
+     "where": "alfa-shell.js:20"
+    }
+   }
+  },
+  "previewMinHeight": {
+   "$type": "dimension",
+   "$value": {
+    "value": 480,
+    "unit": "px"
+   },
+   "$description": "Vorschau im Browser: kleinste Fensterhöhe",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "A1 (Brief): alfa-shell.js liest alle Werte aus Tokens; foldAt = foldThreshold (doppelt, gestrichen)",
+     "where": "alfa-shell.js:20"
+    }
+   }
+  },
+  "ghostShadowOffset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$description": "Hebende Postfachkarte: Schatten, Versatz",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+     "where": "ALFA Mail.dc.html:700"
+    }
+   }
+  },
+  "ghostShadowBlur": {
+   "$type": "dimension",
+   "$value": {
+    "value": 24,
+    "unit": "px"
+   },
+   "$description": "Hebende Postfachkarte: Schatten, Weichheit",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+     "where": "ALFA Mail.dc.html:700"
+    }
+   }
+  },
+  "ghostShadowSpread": {
+   "$type": "dimension",
+   "$value": {
+    "value": -12,
+    "unit": "px"
+   },
+   "$description": "Hebende Postfachkarte: Schatten, Ausdehnung",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+     "where": "ALFA Mail.dc.html:700"
+    }
+   }
+  },
+  "envelopeStroke": {
+   "$type": "dimension",
+   "$value": {
+    "value": 1.15,
+    "unit": "px"
+   },
+   "$description": "Postfachzeichen: Strichstärke",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+     "where": "ALFA Mail.dc.html:36"
+    }
+   }
+  },
+  "mailLaneMinimumLeft": {
+   "$type": "dimension",
+   "$value": {
+    "value": 224,
+    "unit": "px"
+   },
+   "$description": "Mail: linke Bahn mindestens so breit (MAIL-G01); höchstens mailLaneMaximumLeft",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Johannes 28.10. („1. ja umstellen“): Mail linke Bahn ziehbar 224 bis 280 (Repo CLAUDE.md MAIL-G01)",
+     "where": "alfa-shell.js:14"
+    }
+   }
+  },
+  "profileFactMinWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 140,
+    "unit": "px"
+   },
+   "$description": "Ich-Karte: kleinste Spaltenbreite im Raster der Angaben (Name, Rolle, Kürzel …).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Master 2910 A1: fester Wert 140px im Bogen (Ich-Karte, Angaben-Raster) als Token geführt",
+     "where": "ALFA Einstellungen.dc.html:52"
+    }
+   }
+  },
+  "hintMaxWidth": {
+   "$type": "dimension",
+   "$value": {
+    "value": 240,
+    "unit": "px"
+   },
+   "$description": "Hinweis an Griff und Blob: größte Breite, danach Umbruch.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Master 2910 A1: fester Wert 240px am Hinweis (Hülle) als Token geführt",
+     "where": "ALFA Shell.dc.html:23"
+    }
+   }
+  }
+ },
+ "radius": {
+  "lane": {
+   "$type": "dimension",
+   "$value": {
+    "value": 20,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "bahn"
+    }
+   }
+  },
+  "blob": {
+   "$type": "dimension",
+   "$value": {
+    "value": 20,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "blob"
+    }
+   }
+  },
+  "contextMenu": {
+   "$type": "dimension",
+   "$value": {
+    "value": 16,
+    "unit": "px"
+   },
+   "$description": "Zeile 12 + Rand 4",
+   "$extensions": {
+    "alfa": {
+     "formerName": "kontextmenue"
+    }
+   }
+  },
+  "card": {
+   "$type": "dimension",
+   "$value": {
+    "value": 20,
+    "unit": "px"
+   },
+   "$description": "bündig in der Bahn",
+   "$extensions": {
+    "alfa": {
+     "formerName": "karte",
+     "source": "Johannes 15.10.2026: „Radien der Karten ALLE wie der Kopf“ · oben 20, unten 0 (cardRadiusBottom)",
+     "formerValue": 12
+    }
+   }
+  },
+  "row": {
+   "$type": "dimension",
+   "$value": {
+    "value": 12,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "zeile"
+    }
+   }
+  },
+  "notice": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "hinweis"
+    }
+   }
+  },
+  "field": {
+   "$type": "dimension",
+   "$value": {
+    "value": 4,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "feld"
+    }
+   }
+  },
+  "stroke": {
+   "$type": "dimension",
+   "$value": {
+    "value": 2,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "strich"
+    }
+   }
+  },
+  "capsule": {
+   "$type": "dimension",
+   "$value": {
+    "value": 999,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "kapsel"
+    }
+   }
+  },
+  "cardBottom": {
+   "$type": "dimension",
+   "$value": {
+    "value": 0,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 15.10.2026: Kartenstapel „Skat-Karten“"
+    }
+   }
+  }
+ },
+ "spacing": {
+  "step2": {
+   "$type": "dimension",
+   "$value": {
+    "value": 2,
+    "unit": "px"
+   },
+   "$description": "Feinabstand: Segment-Innenrand, kleine Lücken, Punkt-Versatz",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Brief v12 A1: Zahl stand nur inline in ALFA Mail/Einstellungen (Fund 21.10.2026), jetzt Token",
+     "where": "ALFA UI-Elemente.dc.html:21"
+    }
+   }
+  },
+  "step4": {
+   "$type": "dimension",
+   "$value": {
+    "value": 4,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "s4"
+    }
+   }
+  },
+  "step8": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "s8"
+    }
+   }
+  },
+  "step12": {
+   "$type": "dimension",
+   "$value": {
+    "value": 12,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "s12"
+    }
+   }
+  },
+  "step16": {
+   "$type": "dimension",
+   "$value": {
+    "value": 16,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "s16"
+    }
+   }
+  },
+  "step20": {
+   "$type": "dimension",
+   "$value": {
+    "value": 20,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "s20"
+    }
+   }
+  },
+  "step24": {
+   "$type": "dimension",
+   "$value": {
+    "value": 24,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "s24"
+    }
+   }
+  },
+  "step28": {
+   "$type": "dimension",
+   "$value": {
+    "value": 28,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "s28"
+    }
+   }
+  },
+  "step32": {
+   "$type": "dimension",
+   "$value": {
+    "value": 32,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "s32"
+    }
+   }
+  },
+  "step36": {
+   "$type": "dimension",
+   "$value": {
+    "value": 36,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "s36"
+    }
+   }
+  },
+  "step40": {
+   "$type": "dimension",
+   "$value": {
+    "value": 40,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "s40"
+    }
+   }
+  },
+  "step44": {
+   "$type": "dimension",
+   "$value": {
+    "value": 44,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "s44"
+    }
+   }
+  },
+  "step56": {
+   "$type": "dimension",
+   "$value": {
+    "value": 56,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "formerName": "s56"
+    }
+   }
+  },
+  "statusDot": {
+   "$type": "dimension",
+   "$value": {
+    "value": 8,
+    "unit": "px"
+   },
+   "$description": "Statuspunkt",
+   "$extensions": {
+    "alfa": {
+     "formerName": "punkt",
+     "source": "Johannes 18.10. (zweiter Chat): „spacing dot auf 8 bringen.“",
+     "formerValue": 6,
+     "where": "ALFA Shell.dc.html:53"
+    }
+   }
+  },
+  "blobInset": {
+   "$type": "dimension",
+   "$value": {
+    "value": 6,
+    "unit": "px"
+   },
+   "$description": "(40 − 28) / 2",
+   "$extensions": {
+    "alfa": {
+     "formerName": "blobRand",
+     "status": "approved",
+     "source": "Johannes 18.10. (zweiter Chat), zur 4er-Leiter: „der BLOB war so freigegeben.“",
+     "note": "Ausnahme von der 4er-Leiter (entscheidungen.md:124)"
+    }
+   }
+  }
+ },
+ "typography": {
+  "size": {
+   "small": {
+    "$type": "dimension",
+    "$value": {
+     "value": 11.5,
+     "unit": "px"
+    },
+    "$extensions": {
+     "alfa": {
+      "formerName": "klein"
+     }
+    }
+   },
+   "body": {
+    "$type": "dimension",
+    "$value": {
+     "value": 13,
+     "unit": "px"
+    },
+    "$extensions": {
+     "alfa": {
+      "formerName": "text"
+     }
+    }
+   },
+   "title": {
+    "$type": "dimension",
+    "$value": {
+     "value": 18,
+     "unit": "px"
+    },
+    "$extensions": {
+     "alfa": {
+      "formerName": "titel"
+     }
+    }
+   },
+   "blobFace": {
+    "$type": "dimension",
+    "$value": {
+     "value": 9,
+     "unit": "px"
+    },
+    "$description": "Kürzel in Marken und im Gesicht, Geist (keine Mono, Johannes 15.10.)",
+    "$extensions": {
+     "alfa": {
+      "formerName": "blobGesicht"
+     }
+    }
+   }
+  },
+  "weight": {
+   "light": {
+    "$type": "fontWeight",
+    "$value": 300,
+    "$description": "Vorschau, Beschreibung",
+    "$extensions": {
+     "alfa": {
+      "formerName": "leicht"
+     }
+    }
+   },
+   "regular": {
+    "$type": "fontWeight",
+    "$value": 400,
+    "$extensions": {
+     "alfa": {
+      "formerName": "normal"
+     }
+    }
+   },
+   "medium": {
+    "$type": "fontWeight",
+    "$value": 500,
+    "$description": "alles Betonte",
+    "$extensions": {
+     "alfa": {
+      "formerName": "fett"
+     }
+    }
+   },
+   "semibold": {
+    "$type": "fontWeight",
+    "$value": 600,
+    "$description": "Gewählter Bereich im Blob-Menü; Absender ungelesener Mails. Schnitt 600 aus der Variable-Datei (Geist-VariableFont_wght.ttf, 100–900); statisch geliefert sind nur 300/400/500.",
+    "$extensions": {
+     "alfa": {
+      "status": "approved",
+      "where": "ALFA Shell.dc.html:280, ALFA Mail.dc.html:749",
+      "statusText": "von Johannes entschieden",
+      "source": "Johannes 18.10. (zweiter Chat): „600 übrnehmen.“"
+     }
+    }
+   }
+  },
+  "lineHeight": {
+   "small": {
+    "$type": "dimension",
+    "$value": {
+     "value": 16,
+     "unit": "px"
+    },
+    "$extensions": {
+     "alfa": {
+      "formerName": "klein"
+     }
+    }
+   },
+   "notice": {
+    "$type": "dimension",
+    "$value": {
+     "value": 20,
+     "unit": "px"
+    },
+    "$extensions": {
+     "alfa": {
+      "formerName": "hinweis"
+     }
+    }
+   },
+   "body": {
+    "$type": "number",
+    "$value": 1.35,
+    "$extensions": {
+     "alfa": {
+      "formerName": "text"
+     }
+    }
+   },
+   "title": {
+    "$type": "number",
+    "$value": 1.25,
+    "$extensions": {
+     "alfa": {
+      "formerName": "titel"
+     }
+    }
+   },
+   "mailBody": {
+    "$type": "number",
+    "$value": 1.6,
+    "$extensions": {
+     "alfa": {
+      "formerName": "mailtext"
+     }
+    }
+   },
+   "counter": {
+    "$type": "number",
+    "$value": 1,
+    "$extensions": {
+     "alfa": {
+      "formerName": "zaehler"
+     }
+    }
+   },
+   "control": {
+    "$type": "dimension",
+    "$value": {
+     "value": 18,
+     "unit": "px"
+    },
+    "$description": "Bestätigen-Pille: Zeilenhöhe der Schrift.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA UI-Elemente.dc.html:22",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "heading": {
+    "$type": "dimension",
+    "$value": {
+     "value": 24,
+     "unit": "px"
+    },
+    "$description": "Zeilenhöhe der Titelzeile in Einstellungs-Karten",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "A1 Rest: Zeilenhöhe Titel als Token, CSS-Name für Schatten overviewHover",
+      "where": "ALFA Einstellungen.dc.html:51"
+     }
+    }
+   }
+  },
+  "family": {
+   "text": {
+    "$type": "fontFamily",
+    "$value": [
+     "Geist",
+     "SF Pro Text",
+     "system-ui"
+    ],
+    "$extensions": {
+     "alfa": {
+      "formerName": "text",
+      "files": "lieferung-an-code/fonts/ (Geist Variable 100–900; Light, Regular, Medium statisch)",
+      "source": "Johannes 17.10.: Dateien geliefert"
+     }
+    }
+   }
+  },
+  "tracking": {
+   "control": {
+    "$type": "number",
+    "$value": 0.01,
+    "$description": "Laufweite Textknopf. Einheit em.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Mail.dc.html: 14 Stellen (Textknöpfe, font-size 11.5, weight 500)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "mark": {
+    "$type": "number",
+    "$value": 0.06,
+    "$description": "Laufweite aller Initialen in Marken, 28 px und 9 px, auch im Abgleich-Knopf. Einheit em.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Dienste.dc.html:17, ALFA Dienste.dc.html:31, ALFA Dienste.dc.html:72 (+38)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "title": {
+    "$type": "number",
+    "$value": -0.02,
+    "$description": "Laufweite Titel 18. Einheit em.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Dienste.dc.html:21, ALFA Dienste.dc.html:26, ALFA Dienste.dc.html:47 (+10)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   }
+  },
+  "textStyle": {
+   "body": {
+    "$type": "typography",
+    "$value": {
+     "fontFamily": "{typography.family.text}",
+     "fontSize": "{typography.size.body}",
+     "fontWeight": "{typography.weight.regular}",
+     "letterSpacing": 0,
+     "lineHeight": "{typography.lineHeight.body}"
+    },
+    "$description": "Fließtext der Oberfläche, 13.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "note": "Zuordnung zu Apple-Textstilen als Vorschlag in „apple“ (19.10.). Dynamic Type: in der gelesenen macOS-Tabelle gibt es feste Punktgrößen je Stil; ein Beleg für oder gegen Dynamic Type unter macOS liegt nicht vor (offen). Code wählt, Design gibt Größe, Schnitt, Zeilenhöhe und Laufweite vor.",
+      "apple": {
+       "textStyle": "Body",
+       "macOS": "13 pt / Zeile 16 / Regular",
+       "abweichung": "Größe gleich; ALFA Zeilenhöhe 13 × 1,35 = 17,55 gegen 16",
+       "quelle": "developers.apple.com/design/human-interface-guidelines/macos/visual-design/typography (Tabelle der eingebauten Textstile, NSFont.TextStyle) und WWDC20 „The details of UI typography“ (Session 10175, emphasized = Semibold)",
+       "stand": "19.10.2026, Sekundärlesung der Seite über Websuche; Vorschlag von Design"
+      }
+     }
+    }
+   },
+   "bodyEmphasis": {
+    "$type": "typography",
+    "$value": {
+     "fontFamily": "{typography.family.text}",
+     "fontSize": "{typography.size.body}",
+     "fontWeight": "{typography.weight.medium}",
+     "letterSpacing": 0,
+     "lineHeight": "{typography.lineHeight.body}"
+    },
+    "$description": "Namen, Titel in Zeilen, 13 / 500.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "note": "Zuordnung zu Apple-Textstilen als Vorschlag in „apple“ (19.10.). Dynamic Type: in der gelesenen macOS-Tabelle gibt es feste Punktgrößen je Stil; ein Beleg für oder gegen Dynamic Type unter macOS liegt nicht vor (offen). Code wählt, Design gibt Größe, Schnitt, Zeilenhöhe und Laufweite vor.",
+      "apple": {
+       "textStyle": "Body (emphasized)",
+       "macOS": "13 pt / 16 / Semibold 600",
+       "abweichung": "Größe gleich; ALFA 500 gegen Semibold 600; Zeilenhöhe wie Body",
+       "quelle": "developers.apple.com/design/human-interface-guidelines/macos/visual-design/typography (Tabelle der eingebauten Textstile, NSFont.TextStyle) und WWDC20 „The details of UI typography“ (Session 10175, emphasized = Semibold)",
+       "stand": "19.10.2026, Sekundärlesung der Seite über Websuche; Vorschlag von Design"
+      }
+     }
+    }
+   },
+   "caption": {
+    "$type": "typography",
+    "$value": {
+     "fontFamily": "{typography.family.text}",
+     "fontSize": "{typography.size.small}",
+     "fontWeight": "{typography.weight.regular}",
+     "letterSpacing": 0,
+     "lineHeight": "{typography.lineHeight.small}"
+    },
+    "$description": "Nebentext, Zustand, Datum, 11,5.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "note": "Zuordnung zu Apple-Textstilen als Vorschlag in „apple“ (19.10.). Dynamic Type: in der gelesenen macOS-Tabelle gibt es feste Punktgrößen je Stil; ein Beleg für oder gegen Dynamic Type unter macOS liegt nicht vor (offen). Code wählt, Design gibt Größe, Schnitt, Zeilenhöhe und Laufweite vor.",
+      "apple": {
+       "textStyle": "Subheadline",
+       "macOS": "11 pt / 14 / Regular (nächste Stufen: Callout 12 / 15)",
+       "abweichung": "ALFA 11,5 gegen 11; Zeilenhöhe 16 gegen 14",
+       "quelle": "developers.apple.com/design/human-interface-guidelines/macos/visual-design/typography (Tabelle der eingebauten Textstile, NSFont.TextStyle) und WWDC20 „The details of UI typography“ (Session 10175, emphasized = Semibold)",
+       "stand": "19.10.2026, Sekundärlesung der Seite über Websuche; Vorschlag von Design"
+      }
+     }
+    }
+   },
+   "captionEmphasis": {
+    "$type": "typography",
+    "$value": {
+     "fontFamily": "{typography.family.text}",
+     "fontSize": "{typography.size.small}",
+     "fontWeight": "{typography.weight.medium}",
+     "letterSpacing": 0,
+     "lineHeight": "{typography.lineHeight.small}"
+    },
+    "$description": "Hervorgehobener Nebentext, 11,5 / 500.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "note": "Zuordnung zu Apple-Textstilen als Vorschlag in „apple“ (19.10.). Dynamic Type: in der gelesenen macOS-Tabelle gibt es feste Punktgrößen je Stil; ein Beleg für oder gegen Dynamic Type unter macOS liegt nicht vor (offen). Code wählt, Design gibt Größe, Schnitt, Zeilenhöhe und Laufweite vor.",
+      "apple": {
+       "textStyle": "Subheadline (emphasized)",
+       "macOS": "11 pt / 14 / Semibold 600",
+       "abweichung": "ALFA 11,5 / 500 gegen 11 / 600",
+       "quelle": "developers.apple.com/design/human-interface-guidelines/macos/visual-design/typography (Tabelle der eingebauten Textstile, NSFont.TextStyle) und WWDC20 „The details of UI typography“ (Session 10175, emphasized = Semibold)",
+       "stand": "19.10.2026, Sekundärlesung der Seite über Websuche; Vorschlag von Design"
+      }
+     }
+    }
+   },
+   "control": {
+    "$type": "typography",
+    "$value": {
+     "fontFamily": "{typography.family.text}",
+     "fontSize": "{typography.size.small}",
+     "fontWeight": "{typography.weight.medium}",
+     "letterSpacing": "{typography.tracking.control}",
+     "lineHeight": "{typography.lineHeight.small}"
+    },
+    "$description": "Text in Knöpfen und Kapseln.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "note": "Zuordnung zu Apple-Textstilen als Vorschlag in „apple“ (19.10.). Dynamic Type: in der gelesenen macOS-Tabelle gibt es feste Punktgrößen je Stil; ein Beleg für oder gegen Dynamic Type unter macOS liegt nicht vor (offen). Code wählt, Design gibt Größe, Schnitt, Zeilenhöhe und Laufweite vor.",
+      "apple": {
+       "textStyle": "Subheadline (emphasized)",
+       "macOS": "11 pt / 14 / Semibold 600",
+       "abweichung": "ALFA 11,5 / 500 mit Laufweite 0,01 em gegen 11 / 600",
+       "quelle": "developers.apple.com/design/human-interface-guidelines/macos/visual-design/typography (Tabelle der eingebauten Textstile, NSFont.TextStyle) und WWDC20 „The details of UI typography“ (Session 10175, emphasized = Semibold)",
+       "stand": "19.10.2026, Sekundärlesung der Seite über Websuche; Vorschlag von Design"
+      }
+     }
+    }
+   },
+   "mark": {
+    "$type": "typography",
+    "$value": {
+     "fontFamily": "{typography.family.text}",
+     "fontSize": "{typography.size.small}",
+     "fontWeight": "{typography.weight.medium}",
+     "letterSpacing": "{typography.tracking.mark}",
+     "lineHeight": "{typography.lineHeight.counter}"
+    },
+    "$description": "Initialen in Marken 28.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "note": "Zuordnung zu Apple-Textstilen als Vorschlag in „apple“ (19.10.). Dynamic Type: in der gelesenen macOS-Tabelle gibt es feste Punktgrößen je Stil; ein Beleg für oder gegen Dynamic Type unter macOS liegt nicht vor (offen). Code wählt, Design gibt Größe, Schnitt, Zeilenhöhe und Laufweite vor.",
+      "apple": {
+       "textStyle": "Subheadline",
+       "macOS": "11 pt / 14",
+       "abweichung": "ALFA 11,5 / 500, Laufweite 0,06 em; Initialen sind keine Lauftext-Rolle",
+       "quelle": "developers.apple.com/design/human-interface-guidelines/macos/visual-design/typography (Tabelle der eingebauten Textstile, NSFont.TextStyle) und WWDC20 „The details of UI typography“ (Session 10175, emphasized = Semibold)",
+       "stand": "19.10.2026, Sekundärlesung der Seite über Websuche; Vorschlag von Design"
+      }
+     }
+    }
+   },
+   "markSmall": {
+    "$type": "typography",
+    "$value": {
+     "fontFamily": "{typography.family.text}",
+     "fontSize": "{typography.size.blobFace}",
+     "fontWeight": "{typography.weight.medium}",
+     "letterSpacing": "{typography.tracking.mark}",
+     "lineHeight": "{typography.lineHeight.counter}"
+    },
+    "$description": "Initialen 9 px.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "note": "Zuordnung zu Apple-Textstilen als Vorschlag in „apple“ (19.10.). Dynamic Type: in der gelesenen macOS-Tabelle gibt es feste Punktgrößen je Stil; ein Beleg für oder gegen Dynamic Type unter macOS liegt nicht vor (offen). Code wählt, Design gibt Größe, Schnitt, Zeilenhöhe und Laufweite vor.",
+      "apple": {
+       "textStyle": "keine Entsprechung",
+       "macOS": "kleinster Stil Footnote / Caption 1 = 10 pt",
+       "abweichung": "ALFA 9 pt liegt unter Apples kleinstem Stil",
+       "quelle": "developers.apple.com/design/human-interface-guidelines/macos/visual-design/typography (Tabelle der eingebauten Textstile, NSFont.TextStyle) und WWDC20 „The details of UI typography“ (Session 10175, emphasized = Semibold)",
+       "stand": "19.10.2026, Sekundärlesung der Seite über Websuche; Vorschlag von Design"
+      }
+     }
+    }
+   },
+   "title": {
+    "$type": "typography",
+    "$value": {
+     "fontFamily": "{typography.family.text}",
+     "fontSize": "{typography.size.title}",
+     "fontWeight": "{typography.weight.medium}",
+     "letterSpacing": "{typography.tracking.title}",
+     "lineHeight": "{typography.lineHeight.title}"
+    },
+    "$description": "Titel in Karten, 18 / 500.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "note": "Zuordnung zu Apple-Textstilen als Vorschlag in „apple“ (19.10.). Dynamic Type: in der gelesenen macOS-Tabelle gibt es feste Punktgrößen je Stil; ein Beleg für oder gegen Dynamic Type unter macOS liegt nicht vor (offen). Code wählt, Design gibt Größe, Schnitt, Zeilenhöhe und Laufweite vor.",
+      "apple": {
+       "textStyle": "Title 2",
+       "macOS": "17 pt / 22 / Regular (emphasized Bold)",
+       "abweichung": "ALFA 18 / 500 / Zeile 22,5 gegen 17 / Regular / 22",
+       "quelle": "developers.apple.com/design/human-interface-guidelines/macos/visual-design/typography (Tabelle der eingebauten Textstile, NSFont.TextStyle) und WWDC20 „The details of UI typography“ (Session 10175, emphasized = Semibold)",
+       "stand": "19.10.2026, Sekundärlesung der Seite über Websuche; Vorschlag von Design"
+      }
+     }
+    }
+   },
+   "mailBody": {
+    "$type": "typography",
+    "$value": {
+     "fontFamily": "{typography.family.text}",
+     "fontSize": "{typography.size.body}",
+     "fontWeight": "{typography.weight.regular}",
+     "letterSpacing": 0,
+     "lineHeight": "{typography.lineHeight.mailBody}"
+    },
+    "$description": "Text der Mail auf dem Blatt (Fremdinhalt), Zeilenhöhe 1,6.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "ALFA Mail.dc.html, ALFA Shell.dc.html (Inline font-size/weight)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "note": "Zuordnung zu Apple-Textstilen als Vorschlag in „apple“ (19.10.). Dynamic Type: in der gelesenen macOS-Tabelle gibt es feste Punktgrößen je Stil; ein Beleg für oder gegen Dynamic Type unter macOS liegt nicht vor (offen). Code wählt, Design gibt Größe, Schnitt, Zeilenhöhe und Laufweite vor.",
+      "apple": {
+       "textStyle": "Body mit loser Zeilenhöhe",
+       "macOS": "13 pt (Body); WWDC20 10175: „tight and loose leading“ als Variante",
+       "abweichung": "ALFA Zeilenhöhe 1,6 (20,8) gegen 16; Fremdinhalt, kein Systemstil nötig",
+       "quelle": "developers.apple.com/design/human-interface-guidelines/macos/visual-design/typography (Tabelle der eingebauten Textstile, NSFont.TextStyle) und WWDC20 „The details of UI typography“ (Session 10175, emphasized = Semibold)",
+       "stand": "19.10.2026, Sekundärlesung der Seite über Websuche; Vorschlag von Design"
+      }
+     }
+    }
+   }
+  }
+ },
+ "motion": {
+  "$description": "Probe. Feste Zeiten, noch keine Federn. Bei „weniger Bewegung“ entfallen alle Übergänge.",
+  "duration": {
+   "hover": {
+    "$type": "duration",
+    "$value": {
+     "value": 160,
+     "unit": "ms"
+    },
+    "$description": "Hintergrund, Rand, Farbe beim Überfahren",
+    "$extensions": {
+     "alfa": {
+      "formerName": "hover"
+     }
+    }
+   },
+   "short": {
+    "$type": "duration",
+    "$value": {
+     "value": 150,
+     "unit": "ms"
+    },
+    "$description": "Auge-Lid, Fortschritt",
+    "$extensions": {
+     "alfa": {
+      "formerName": "kurz"
+     }
+    }
+   },
+   "toggle": {
+    "$type": "duration",
+    "$value": {
+     "value": 200,
+     "unit": "ms"
+    },
+    "$description": "Umschalter, Hinweis ein/aus, Suchstrich",
+    "$extensions": {
+     "alfa": {
+      "formerName": "schalter"
+     }
+    }
+   },
+   "chevron": {
+    "$type": "duration",
+    "$value": {
+     "value": 240,
+     "unit": "ms"
+    },
+    "$description": "Chevron dreht, Blob-Breite beim Ziehen und Radius",
+    "$extensions": {
+     "alfa": {
+      "formerName": "chevron"
+     }
+    }
+   },
+   "lane": {
+    "$type": "duration",
+    "$value": {
+     "value": 260,
+     "unit": "ms"
+    },
+    "$description": "Bahn: left und width",
+    "$extensions": {
+     "alfa": {
+      "formerName": "bahn"
+     }
+    }
+   },
+   "recipientList": {
+    "$type": "duration",
+    "$value": {
+     "value": 280,
+     "unit": "ms"
+    },
+    "$description": "Empfängerliste: Zeilenhöhe; Deckkraft 200 ms",
+    "$extensions": {
+     "alfa": {
+      "formerName": "empfaengerListe"
+     }
+    }
+   },
+   "blobEyes": {
+    "$type": "duration",
+    "$value": {
+     "value": 320,
+     "unit": "ms"
+    },
+    "$description": "Augenlider",
+    "$extensions": {
+     "alfa": {
+      "formerName": "blobAugen"
+     }
+    }
+   },
+   "stackBackground": {
+    "$type": "duration",
+    "$value": {
+     "value": 320,
+     "unit": "ms"
+    },
+    "$description": "Kartenfarbe",
+    "$extensions": {
+     "alfa": {
+      "formerName": "stapelHintergrund"
+     }
+    }
+   },
+   "rowSequence": {
+    "$type": "duration",
+    "$value": {
+     "value": 360,
+     "unit": "ms"
+    },
+    "$description": "Zeilen blenden gestaffelt ein (Deckkraft), Bewegung 600 ms, Versatz je Zeile",
+    "$extensions": {
+     "alfa": {
+      "formerName": "zeilenFolge"
+     }
+    }
+   },
+   "blobFlight": {
+    "$type": "duration",
+    "$value": {
+     "value": 416,
+     "unit": "ms"
+    },
+    "$description": "Blob left, right, top",
+    "$extensions": {
+     "alfa": {
+      "formerName": "blobFlug"
+     }
+    }
+   },
+   "stackLift": {
+    "$type": "duration",
+    "$value": {
+     "value": 420,
+     "unit": "ms"
+    },
+    "$description": "Karte hebt sich unter dem Zeiger",
+    "$extensions": {
+     "alfa": {
+      "formerName": "stapelHub"
+     }
+    }
+   },
+   "stack": {
+    "$type": "duration",
+    "$value": {
+     "value": 520,
+     "unit": "ms"
+    },
+    "$description": "Karten top, height, left, right",
+    "$extensions": {
+     "alfa": {
+      "formerName": "stapel"
+     }
+    }
+   },
+   "searchUnderline": {
+    "$type": "duration",
+    "$value": {
+     "value": 480,
+     "unit": "ms"
+    },
+    "$description": "Suchstrich fährt aus",
+    "$extensions": {
+     "alfa": {
+      "formerName": "suchstrich"
+     }
+    }
+   },
+   "fold": {
+    "$type": "duration",
+    "$value": {
+     "value": 720,
+     "unit": "ms"
+    },
+    "$description": "Bahn faltet bei leerem Stapel; Start nach 420 ms",
+    "$extensions": {
+     "alfa": {
+      "formerName": "falten"
+     }
+    }
+   },
+   "thinking": {
+    "$type": "duration",
+    "$value": {
+     "value": 1000,
+     "unit": "ms"
+    },
+    "$description": "Orb dreht (linear)",
+    "$extensions": {
+     "alfa": {
+      "formerName": "denken"
+     }
+    }
+   },
+   "pulse": {
+    "$type": "duration",
+    "$value": {
+     "value": 1800,
+     "unit": "ms"
+    },
+    "$description": "Blob-Punkt pulsiert",
+    "$extensions": {
+     "alfa": {
+      "formerName": "puls"
+     }
+    }
+   },
+   "blink": {
+    "$type": "duration",
+    "$value": {
+     "value": 1700,
+     "unit": "ms"
+    },
+    "$description": "Blinzeln, Abstand 3 s plus Zufall; Lid 140 ms",
+    "$extensions": {
+     "alfa": {
+      "formerName": "lidschlag"
+     }
+    }
+   },
+   "blobWidth": {
+    "$type": "duration",
+    "$value": {
+     "value": 240,
+     "unit": "ms"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "ALFA Shell bTrans width, border-radius"
+     }
+    }
+   },
+   "overviewDelay": {
+    "$type": "duration",
+    "$value": {
+     "value": 300,
+     "unit": "ms"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Übersicht: Kacheln warten, bis die Bahnen gefaltet sind"
+     }
+    }
+   },
+   "overviewEnter": {
+    "$type": "duration",
+    "$value": {
+     "value": 640,
+     "unit": "ms"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Übersicht: Kachel blendet ein, Vorschlag"
+     }
+    }
+   },
+   "overviewStagger": {
+    "$type": "duration",
+    "$value": {
+     "value": 60,
+     "unit": "ms"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Übersicht: Versatz je Kachel, Vorschlag"
+     }
+    }
+   },
+   "tileHover": {
+    "$type": "duration",
+    "$value": {
+     "value": 320,
+     "unit": "ms"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Übersicht: Kachel hebt sich, Vorschlag"
+     }
+    }
+   },
+   "tileActions": {
+    "$type": "duration",
+    "$value": {
+     "value": 240,
+     "unit": "ms"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Übersicht: Action-Knöpfe, Vorschlag"
+     }
+    }
+   },
+   "labelDelay": {
+    "$type": "duration",
+    "$value": {
+     "value": 80,
+     "unit": "ms"
+    },
+    "$description": "Bereichsname im wachen Blob: Deckkraft wartet 80 ms (ALFA Shell.dc.html)"
+   },
+   "reelStagger": {
+    "$type": "duration",
+    "$value": {
+     "value": 40,
+     "unit": "ms"
+    },
+    "$description": "Menüzeilen des Blobs: Versatz je Zeile, höchstens 14 Zeilen (ALFA Shell.dc.html)"
+   },
+   "ebbDelay": {
+    "$type": "duration",
+    "$value": {
+     "value": 420,
+     "unit": "ms"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "alfa-shell.js K.ebbDelay: Ebbe der rechten Bahn startet nach 420 ms",
+      "where": "alfa-shell.js:10 (K.ebbDelay)"
+     }
+    }
+   },
+   "ebbSlow": {
+    "$type": "duration",
+    "$value": {
+     "value": 900,
+     "unit": "ms"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "alfa-shell.js K.ebbSlow: langsame Ebbe 900 ms",
+      "where": "alfa-shell.js:10 (K.ebbSlow)"
+     }
+    }
+   },
+   "confirmHold": {
+    "$type": "duration",
+    "$value": {
+     "value": 1000,
+     "unit": "ms"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "Johannes 17.10.: „in 1sek … wie ein Ladebalken füllen“ → Radieren 1 s, linear (ALFA UI-Elemente.dc.html run())",
+      "status": "approved-provisional",
+      "statusText": "Freigabe Orange: vorläufig abgenommen, bis andere Optionen ausgearbeitet sind",
+      "approval": "Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen. kann so in die dokumente gführt werden, bis später andere Optionen ausgearbeitet werden.“"
+     }
+    }
+   },
+   "confirmRelease": {
+    "$type": "duration",
+    "$value": {
+     "value": 180,
+     "unit": "ms"
+    },
+    "$extensions": {
+     "alfa": {
+      "source": "ALFA UI-Elemente.dc.html run(): Loslassen holt den Knopf zurück",
+      "approval": "Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen. kann so in die dokumente gführt werden, bis später andere Optionen ausgearbeitet werden.“",
+      "status": "approved-provisional",
+      "statusText": "Freigabe Orange: vorläufig abgenommen, bis andere Optionen ausgearbeitet sind"
+     }
+    }
+   },
+   "menuReelTransform": {
+    "$type": "duration",
+    "$value": {
+     "value": 600,
+     "unit": "ms"
+    },
+    "$description": "Blob-Menü: Kippen der Zeilen beim Ausrollen.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+      "where": "ALFA Shell.dc.html:278",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "spinner": {
+    "$type": "duration",
+    "$value": {
+     "value": 800,
+     "unit": "ms"
+    },
+    "$description": "Bestätigen: Drehung des Wartekreises.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+      "where": "ALFA UI-Elemente.dc.html:27",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "orbOrbitFirst": {
+    "$type": "duration",
+    "$value": {
+     "value": 7000,
+     "unit": "ms"
+    },
+    "$description": "Denk-Orb, Umlauf Farbfleck 1",
+    "$extensions": {
+     "alfa": {
+      "status": "approved",
+      "source": "Johannes 18.10. (zweiter Chat): „JA - ORB im Blob ist so freigegeben!“",
+      "where": "ALFA Shell.dc.html, anim()"
+     }
+    }
+   },
+   "orbOrbitSecond": {
+    "$type": "duration",
+    "$value": {
+     "value": 9000,
+     "unit": "ms"
+    },
+    "$description": "Denk-Orb, Umlauf Farbfleck 2 (rückwärts)",
+    "$extensions": {
+     "alfa": {
+      "status": "approved",
+      "source": "Johannes 18.10. (zweiter Chat): „JA - ORB im Blob ist so freigegeben!“",
+      "where": "ALFA Shell.dc.html, anim()"
+     }
+    }
+   },
+   "orbOrbitThird": {
+    "$type": "duration",
+    "$value": {
+     "value": 11000,
+     "unit": "ms"
+    },
+    "$description": "Denk-Orb, Umlauf Farbfleck 3",
+    "$extensions": {
+     "alfa": {
+      "status": "approved",
+      "source": "Johannes 18.10. (zweiter Chat): „JA - ORB im Blob ist so freigegeben!“",
+      "where": "ALFA Shell.dc.html, anim()"
+     }
+    }
+   },
+   "blobBlinkClose": {
+    "$type": "duration",
+    "$value": {
+     "value": 140,
+     "unit": "ms"
+    },
+    "$description": "Blob: Lidschlag, Dauer.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+      "where": "ALFA Shell.dc.html:167",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "blobBlinkInterval": {
+    "$type": "duration",
+    "$value": {
+     "value": 3000,
+     "unit": "ms"
+    },
+    "$description": "Blob: Abstand zwischen Lidschlägen, dazu zufällig bis 3000.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+      "where": "ALFA Shell.dc.html:167",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "syncSpin": {
+    "$type": "duration",
+    "$value": {
+     "value": 2000,
+     "unit": "ms"
+    },
+    "$description": "Abgleich: eine Umdrehung des Rings.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+      "where": "ALFA Shell.dc.html:222",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "menuReelDelay": {
+    "$type": "duration",
+    "$value": {
+     "value": 34,
+     "unit": "ms"
+    },
+    "$description": "Blob-Menü: Verzögerung bis zum Ausrollen.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+      "where": "ALFA Shell.dc.html:216",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "menuFocusDelay": {
+    "$type": "duration",
+    "$value": {
+     "value": 80,
+     "unit": "ms"
+    },
+    "$description": "Blob-Menü: Verzögerung bis die Suche den Fokus bekommt.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+      "where": "ALFA Shell.dc.html:216",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "menuHoverDelay": {
+    "$type": "duration",
+    "$value": {
+     "value": 160,
+     "unit": "ms"
+    },
+    "$description": "Blob-Menü: Verzögerung bis eine Zeile beim Überfahren hervorgehoben wird.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+      "where": "ALFA Shell.dc.html:218",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "clickGuard": {
+    "$type": "duration",
+    "$value": {
+     "value": 50,
+     "unit": "ms"
+    },
+    "$description": "Blob: nach dem Ziehen wird ein Klick so lange nicht gewertet.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+      "where": "ALFA Shell.dc.html:207",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "toast": {
+    "$type": "duration",
+    "$value": {
+     "value": 1800,
+     "unit": "ms"
+    },
+    "$description": "Hinweis unten, Standzeit ohne Rückgängig.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+      "where": "alfa-bausteine.js:112",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "searchFocusDelay": {
+    "$type": "duration",
+    "$value": {
+     "value": 40,
+     "unit": "ms"
+    },
+    "$description": "Suche: Verzögerung bis das Feld den Fokus bekommt.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+      "where": "ALFA Mail.dc.html:716",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "confirmDoneDelay": {
+    "$type": "duration",
+    "$value": {
+     "value": 900,
+     "unit": "ms"
+    },
+    "$description": "Bestätigen: „Läuft“ bis „Fertig“.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "statusText": "Von Design gesetzt, nicht von Johannes entschieden",
+      "where": "ALFA UI-Elemente.dc.html:116",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "toastUndo": {
+    "$type": "duration",
+    "$value": {
+     "value": 4000,
+     "unit": "ms"
+    },
+    "$description": "Hinweis mit Rückgängig, Standzeit.",
+    "$extensions": {
+     "alfa": {
+      "where": "alfa-bausteine.js:112",
+      "source": "RUECKGABE-AN-CODE.md B26: „Rückgängig: 4 s, Ziel alter Ordner, bestätigt.“ und A4: „Mails löschen ohne Frage, mit Rückgängig (Toast 4 s).“"
+     }
+    }
+   },
+   "scrollLineIn": {
+    "$type": "duration",
+    "$value": {
+     "value": 320,
+     "unit": "ms"
+    },
+    "$description": "Haarlinie unter dem Kopf (linke und mittlere Bahn): Einblenden, sobald gescrollt wird und der Inhalt unter dem Kopf liegt (size.hairline).",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "alfa-shell.js:10 (K.scrollLineIn)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "source": "Johannes 18.10. (nach 22:30 MESZ): „Ne, ist nicht so gut, zu \"heavy\" und nicht sehr elegant und sleek. wir gehen zurück zu hairline. diese ist aber wenn nciht gescrollt wird \"ausgeblendet\" und faded erst beim scrollen langsam ein. faden dann wieder aus wenn ruhestand.“",
+      "ref": "{motion.duration.stackBackground}"
+     }
+    }
+   },
+   "scrollLineRest": {
+    "$type": "duration",
+    "$value": {
+     "value": 420,
+     "unit": "ms"
+    },
+    "$description": "Haarlinie unter dem Kopf: so lange ohne Scrollen, bis sie ausblendet.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "alfa-shell.js:10 (K.scrollLineRest)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "source": "Johannes 18.10. (nach 22:30 MESZ): „Ne, ist nicht so gut, zu \"heavy\" und nicht sehr elegant und sleek. wir gehen zurück zu hairline. diese ist aber wenn nciht gescrollt wird \"ausgeblendet\" und faded erst beim scrollen langsam ein. faden dann wieder aus wenn ruhestand.“",
+      "ref": "{motion.duration.ebbDelay}"
+     }
+    }
+   },
+   "scrollLineOut": {
+    "$type": "duration",
+    "$value": {
+     "value": 900,
+     "unit": "ms"
+    },
+    "$description": "Haarlinie unter dem Kopf: langsames Ausblenden im Ruhezustand.",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "where": "alfa-shell.js:10 (K.scrollLineOut)",
+      "decide": "ALFA Entscheidungen, Abschnitt 6",
+      "source": "Johannes 18.10. (nach 22:30 MESZ): „Ne, ist nicht so gut, zu \"heavy\" und nicht sehr elegant und sleek. wir gehen zurück zu hairline. diese ist aber wenn nciht gescrollt wird \"ausgeblendet\" und faded erst beim scrollen langsam ein. faden dann wieder aus wenn ruhestand.“",
+      "ref": "{motion.duration.ebbSlow}"
+     }
+    }
+   },
+   "toastFail": {
+    "$type": "duration",
+    "$value": {
+     "value": 6000,
+     "unit": "ms"
+    },
+    "$description": "Fehler-Toast bleibt stehen, bis Erneut versuchen oder Ablauf",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Design 22.10.",
+      "where": "alfa-bausteine.js:113"
+     }
+    }
+   },
+   "switchIn": {
+    "$type": "duration",
+    "$value": {
+     "value": 360,
+     "unit": "ms"
+    },
+    "$description": "Postfachwechsel: Trübung ein; bei weniger Bewegung 0",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Übergabe 23.10.: Postfach-Stapel, Wechsel, Hilfetext, Blob-Punkt (SPEC-NACHTRAG-2310)",
+      "where": "ALFA Mail.dc.html:494"
+     }
+    }
+   },
+   "switchOut": {
+    "$type": "duration",
+    "$value": {
+     "value": 760,
+     "unit": "ms"
+    },
+    "$description": "Postfachwechsel: Trübung aus nach Tausch; bei weniger Bewegung 0",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Übergabe 23.10.: Postfach-Stapel, Wechsel, Hilfetext, Blob-Punkt (SPEC-NACHTRAG-2310)",
+      "where": "ALFA Mail.dc.html:494"
+     }
+    }
+   },
+   "hintDwell": {
+    "$type": "duration",
+    "$value": {
+     "value": 3000,
+     "unit": "ms"
+    },
+    "$description": "Hilfetext an Griff und Blob erst nach Verweilen (Hover Intent, size.hintRadius); Tastaturfokus sofort",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Übergabe 23.10.: Postfach-Stapel, Wechsel, Hilfetext, Blob-Punkt (SPEC-NACHTRAG-2310)",
+      "where": "ALFA Shell.dc.html:239"
+     }
+    }
+   },
+   "deckClose": {
+    "$type": "duration",
+    "$value": {
+     "value": 380,
+     "unit": "ms"
+    },
+    "$description": "Postfachstapel schließen: Höhe",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Akte-Prüfung 27.10.: Fundstellen; z, Dauern, DHL-Farbe als Token; pdfPage nach N16 gestrichen",
+      "where": "ALFA Mail.dc.html:695, :697"
+     }
+    }
+   },
+   "switchLift": {
+    "$type": "duration",
+    "$value": {
+     "value": 620,
+     "unit": "ms"
+    },
+    "$description": "Postfachwechsel: Karte hebt in den Kopf",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Akte-Prüfung 27.10.: Fundstellen; z, Dauern, DHL-Farbe als Token; pdfPage nach N16 gestrichen",
+      "where": "ALFA Mail.dc.html:701"
+     }
+    }
+   },
+   "deckOpen": {
+    "$type": "duration",
+    "$value": {
+     "value": 560,
+     "unit": "ms"
+    },
+    "$description": "Postfachstapel öffnen: Höhe",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:695, :697"
+     }
+    }
+   },
+   "deckOpenStagger": {
+    "$type": "duration",
+    "$value": {
+     "value": 45,
+     "unit": "ms"
+    },
+    "$description": "Postfachstapel öffnen: Versatz je Karte",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:697"
+     }
+    }
+   },
+   "deckCloseStagger": {
+    "$type": "duration",
+    "$value": {
+     "value": 30,
+     "unit": "ms"
+    },
+    "$description": "Postfachstapel schließen: Versatz je Karte (von hinten)",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:697"
+     }
+    }
+   },
+   "envelopeFirst": {
+    "$type": "duration",
+    "$value": {
+     "value": 420,
+     "unit": "ms"
+    },
+    "$description": "Postfachzeichen: vorderer Umschlag",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:694"
+     }
+    }
+   },
+   "envelopeSecond": {
+    "$type": "duration",
+    "$value": {
+     "value": 480,
+     "unit": "ms"
+    },
+    "$description": "Postfachzeichen: mittlerer Umschlag",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:694"
+     }
+    }
+   },
+   "envelopeThird": {
+    "$type": "duration",
+    "$value": {
+     "value": 540,
+     "unit": "ms"
+    },
+    "$description": "Postfachzeichen: hinterer Umschlag",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:694"
+     }
+    }
+   },
+   "envelopeSecondDelayOpen": {
+    "$type": "duration",
+    "$value": {
+     "value": 40,
+     "unit": "ms"
+    },
+    "$description": "Postfachzeichen öffnen: Versatz mittlerer Umschlag",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:694"
+     }
+    }
+   },
+   "envelopeThirdDelayOpen": {
+    "$type": "duration",
+    "$value": {
+     "value": 80,
+     "unit": "ms"
+    },
+    "$description": "Postfachzeichen öffnen: Versatz hinterer Umschlag",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:694"
+     }
+    }
+   },
+   "envelopeSecondDelayClose": {
+    "$type": "duration",
+    "$value": {
+     "value": 20,
+     "unit": "ms"
+    },
+    "$description": "Postfachzeichen schließen: Versatz mittlerer Umschlag",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:694"
+     }
+    }
+   },
+   "flapOpen": {
+    "$type": "duration",
+    "$value": {
+     "value": 520,
+     "unit": "ms"
+    },
+    "$description": "Postfachzeichen: Klappe auf",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:694"
+     }
+    }
+   },
+   "flapOpenDelay": {
+    "$type": "duration",
+    "$value": {
+     "value": 120,
+     "unit": "ms"
+    },
+    "$description": "Postfachzeichen: Klappe auf, Versatz",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:694"
+     }
+    }
+   },
+   "flapClose": {
+    "$type": "duration",
+    "$value": {
+     "value": 260,
+     "unit": "ms"
+    },
+    "$description": "Postfachzeichen: Klappe zu",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:694"
+     }
+    }
+   },
+   "switchFade": {
+    "$type": "duration",
+    "$value": {
+     "value": 420,
+     "unit": "ms"
+    },
+    "$description": "Postfachwechsel: Fläche und Schatten der hebenden Karte; Versatz für Inhalt",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:701, :702"
+     }
+    }
+   },
+   "switchGhostFade": {
+    "$type": "duration",
+    "$value": {
+     "value": 320,
+     "unit": "ms"
+    },
+    "$description": "Postfachwechsel: hebende Karte blendet aus",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:701"
+     }
+    }
+   },
+   "switchContentFade": {
+    "$type": "duration",
+    "$value": {
+     "value": 520,
+     "unit": "ms"
+    },
+    "$description": "Postfachwechsel: neuer Inhalt blendet ein",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:702"
+     }
+    }
+   },
+   "glassDelay": {
+    "$type": "duration",
+    "$value": {
+     "value": 40,
+     "unit": "ms"
+    },
+    "$description": "Postfachwechsel: Glas, Pause zwischen Ein- und Ausblenden",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:496"
+     }
+    }
+   }
+  },
+  "easing": {
+   "standard": {
+    "$type": "cubicBezier",
+    "$value": [
+     0.2,
+     0.8,
+     0.2,
+     1
+    ],
+    "$description": "Standard: Zeiger, Chevron, Hinweise, Suche",
+    "$extensions": {
+     "alfa": {
+      "formerName": "standard"
+     }
+    }
+   },
+   "blobFlight": {
+    "$type": "cubicBezier",
+    "$value": [
+     0.2,
+     1.15,
+     0.3,
+     1
+    ],
+    "$description": "Blob fliegt (416 ms), mit leichtem Überschwingen",
+    "$extensions": {
+     "alfa": {
+      "formerName": "blobFlug"
+     }
+    }
+   },
+   "stack": {
+    "$type": "cubicBezier",
+    "$value": [
+     0.22,
+     1.08,
+     0.36,
+     1
+    ],
+    "$description": "Karten im Stapel (520 ms)",
+    "$extensions": {
+     "alfa": {
+      "formerName": "stapel"
+     }
+    }
+   },
+   "fold": {
+    "$type": "cubicBezier",
+    "$value": [
+     0.65,
+     0,
+     0.25,
+     1
+    ],
+    "$description": "Bahn faltet bei leerem Stapel (720 ms)",
+    "$extensions": {
+     "alfa": {
+      "formerName": "falten"
+     }
+    }
+   },
+   "deckOpen": {
+    "$type": "cubicBezier",
+    "$value": [
+     0.3,
+     1.32,
+     0.5,
+     1
+    ],
+    "$description": "Postfachstapel öffnen (federt über)",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:695, :697"
+     }
+    }
+   },
+   "deckClose": {
+    "$type": "cubicBezier",
+    "$value": [
+     0.4,
+     0,
+     0.2,
+     1
+    ],
+    "$description": "Postfachstapel schließen; Klappe zu",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:694, :695, :697"
+     }
+    }
+   },
+   "envelopeSpring": {
+    "$type": "cubicBezier",
+    "$value": [
+     0.34,
+     1.56,
+     0.64,
+     1
+    ],
+    "$description": "Postfachzeichen: Feder der Umschläge und der Klappe",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:689, :694"
+     }
+    }
+   },
+   "glassIn": {
+    "$type": "cubicBezier",
+    "$value": [
+     0.37,
+     0,
+     0.63,
+     1
+    ],
+    "$description": "Postfachwechsel: Glas ein; Fläche der hebenden Karte",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:495, :701"
+     }
+    }
+   },
+   "glassOut": {
+    "$type": "cubicBezier",
+    "$value": [
+     0.33,
+     0,
+     0.15,
+     1
+    ],
+    "$description": "Postfachwechsel: Glas aus; Karte hebt; Inhalt ein",
+    "$extensions": {
+     "alfa": {
+      "status": "set-by-design",
+      "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+      "where": "ALFA Mail.dc.html:496, :701, :702"
+     }
+    }
+   }
+  },
+  "deceleration": {
+   "$type": "number",
+   "$value": 0.998,
+   "$description": "Blob geworfen: Abbremsen je Millisekunde. Gleich UIScrollView.DecelerationRate.normal (Apple).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Shell.dc.html:209",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "menuReelTilt": {
+   "$type": "number",
+   "$value": 60,
+   "$description": "Blob-Menü: Kippung der Zeilen beim Ausrollen, Grad.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Shell.dc.html:278",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "blobFlingSpeed": {
+   "$type": "number",
+   "$value": 900,
+   "$description": "Blob: Mausgeschwindigkeit in px/s, ab der der Blob nicht geweckt wird.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Shell.dc.html:197",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  }
+ },
+ "stack": {
+  "$description": "Kartenfarben im Stapel je Tiefe: [Fläche, Schrift]",
+  "light": [
+   {
+    "depth": 0,
+    "surface": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9608,
+       0.9608,
+       0.9608
+      ],
+      "alpha": 1,
+      "hex": "#f5f5f5"
+     }
+    },
+    "ink": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.0902,
+       0.0902,
+       0.0902
+      ],
+      "alpha": 1,
+      "hex": "#171717"
+     }
+    }
+   },
+   {
+    "depth": 1,
+    "surface": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9216,
+       0.9216,
+       0.9216
+      ],
+      "alpha": 1,
+      "hex": "#ebebeb"
+     }
+    },
+    "ink": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.0902,
+       0.0902,
+       0.0902
+      ],
+      "alpha": 1,
+      "hex": "#171717"
+     }
+    }
+   },
+   {
+    "depth": 2,
+    "surface": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.851,
+       0.851,
+       0.851
+      ],
+      "alpha": 1,
+      "hex": "#d9d9d9"
+     }
+    },
+    "ink": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.0902,
+       0.0902,
+       0.0902
+      ],
+      "alpha": 1,
+      "hex": "#171717"
+     }
+    }
+   },
+   {
+    "depth": 3,
+    "surface": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.6392,
+       0.6392,
+       0.6392
+      ],
+      "alpha": 1,
+      "hex": "#a3a3a3"
+     }
+    },
+    "ink": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.0902,
+       0.0902,
+       0.0902
+      ],
+      "alpha": 1,
+      "hex": "#171717"
+     }
+    }
+   },
+   {
+    "depth": 4,
+    "surface": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.4196,
+       0.4196,
+       0.4196
+      ],
+      "alpha": 1,
+      "hex": "#6b6b6b"
+     }
+    },
+    "ink": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       1,
+       1,
+       1
+      ],
+      "alpha": 1,
+      "hex": "#ffffff"
+     }
+    }
+   }
+  ],
+  "dark": [
+   {
+    "depth": 0,
+    "surface": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.1216,
+       0.1216,
+       0.1216
+      ],
+      "alpha": 1,
+      "hex": "#1f1f1f"
+     }
+    },
+    "ink": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9804,
+       0.9804,
+       0.9804
+      ],
+      "alpha": 1,
+      "hex": "#fafafa"
+     }
+    }
+   },
+   {
+    "depth": 1,
+    "surface": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.1804,
+       0.1804,
+       0.1804
+      ],
+      "alpha": 1,
+      "hex": "#2e2e2e"
+     }
+    },
+    "ink": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9804,
+       0.9804,
+       0.9804
+      ],
+      "alpha": 1,
+      "hex": "#fafafa"
+     }
+    }
+   },
+   {
+    "depth": 2,
+    "surface": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.2275,
+       0.2275,
+       0.2275
+      ],
+      "alpha": 1,
+      "hex": "#3a3a3a"
+     }
+    },
+    "ink": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9804,
+       0.9804,
+       0.9804
+      ],
+      "alpha": 1,
+      "hex": "#fafafa"
+     }
+    }
+   },
+   {
+    "depth": 3,
+    "surface": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.302,
+       0.302,
+       0.302
+      ],
+      "alpha": 1,
+      "hex": "#4d4d4d"
+     }
+    },
+    "ink": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9804,
+       0.9804,
+       0.9804
+      ],
+      "alpha": 1,
+      "hex": "#fafafa"
+     }
+    }
+   },
+   {
+    "depth": 4,
+    "surface": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.4196,
+       0.4196,
+       0.4196
+      ],
+      "alpha": 1,
+      "hex": "#6b6b6b"
+     }
+    },
+    "ink": {
+     "$type": "color",
+     "$value": {
+      "colorSpace": "srgb",
+      "components": [
+       0.9804,
+       0.9804,
+       0.9804
+      ],
+      "alpha": 1,
+      "hex": "#fafafa"
+     }
+    }
+   }
+  ]
+ },
+ "surface": {
+  "$description": "Prop oberflaeche: Lack, Glas, flach. Kartenschatten aus Formeln in ALFA Mail (lack(), glas()). flach hat keine.",
+  "lightFillRule": "Karte gilt als hell, wenn die Füllung mit #c bis #f beginnt (Stufen 0 bis 2 in hell, siehe stack)",
+  "lacquer": {
+   "layers": [
+    {
+     "name": "topGloss",
+     "$type": "shadow",
+     "front": {
+      "light": [
+       {
+        "inset": true,
+        "offsetX": {
+         "value": 0,
+         "unit": "px"
+        },
+        "offsetY": {
+         "value": 1,
+         "unit": "px"
+        },
+        "blur": {
+         "value": 0,
+         "unit": "px"
+        },
+        "spread": {
+         "value": 0,
+         "unit": "px"
+        },
+        "color": {
+         "colorSpace": "srgb",
+         "components": [
+          1,
+          1,
+          1
+         ],
+         "alpha": 1
+        }
+       }
+      ],
+      "dark": [
+       {
+        "inset": true,
+        "offsetX": {
+         "value": 0,
+         "unit": "px"
+        },
+        "offsetY": {
+         "value": 1,
+         "unit": "px"
+        },
+        "blur": {
+         "value": 0,
+         "unit": "px"
+        },
+        "spread": {
+         "value": 0,
+         "unit": "px"
+        },
+        "color": {
+         "colorSpace": "srgb",
+         "components": [
+          1,
+          1,
+          1
+         ],
+         "alpha": 0.14
+        }
+       }
+      ]
+     },
+     "backLightCard": [
+      {
+       "inset": true,
+       "offsetX": {
+        "value": 0,
+        "unit": "px"
+       },
+       "offsetY": {
+        "value": 1,
+        "unit": "px"
+       },
+       "blur": {
+        "value": 0,
+        "unit": "px"
+       },
+       "spread": {
+        "value": 0,
+        "unit": "px"
+       },
+       "color": {
+        "colorSpace": "srgb",
+        "components": [
+         1,
+         1,
+         1
+        ],
+        "alpha": 0.9
+       }
+      }
+     ],
+     "backDarkCard": [
+      {
+       "inset": true,
+       "offsetX": {
+        "value": 0,
+        "unit": "px"
+       },
+       "offsetY": {
+        "value": 1,
+        "unit": "px"
+       },
+       "blur": {
+        "value": 0,
+        "unit": "px"
+       },
+       "spread": {
+        "value": 0,
+        "unit": "px"
+       },
+       "color": {
+        "colorSpace": "srgb",
+        "components": [
+         1,
+         1,
+         1
+        ],
+        "alpha": 0.22
+       }
+      }
+     ]
+    },
+    {
+     "name": "topSeam",
+     "$type": "shadow",
+     "front": {
+      "light": [
+       {
+        "inset": false,
+        "offsetX": {
+         "value": 0,
+         "unit": "px"
+        },
+        "offsetY": {
+         "value": -1,
+         "unit": "px"
+        },
+        "blur": {
+         "value": 0,
+         "unit": "px"
+        },
+        "spread": {
+         "value": 0,
+         "unit": "px"
+        },
+        "color": {
+         "colorSpace": "srgb",
+         "components": [
+          0,
+          0,
+          0
+         ],
+         "alpha": 0.14
+        }
+       }
+      ]
+     },
+     "back": {
+      "light": [
+       {
+        "inset": false,
+        "offsetX": {
+         "value": 0,
+         "unit": "px"
+        },
+        "offsetY": {
+         "value": -1,
+         "unit": "px"
+        },
+        "blur": {
+         "value": 0,
+         "unit": "px"
+        },
+        "spread": {
+         "value": 0,
+         "unit": "px"
+        },
+        "color": {
+         "colorSpace": "srgb",
+         "components": [
+          0,
+          0,
+          0
+         ],
+         "alpha": 0.2
+        }
+       }
+      ]
+     },
+     "dark": [
+      {
+       "inset": false,
+       "offsetX": {
+        "value": 0,
+        "unit": "px"
+       },
+       "offsetY": {
+        "value": -1,
+        "unit": "px"
+       },
+       "blur": {
+        "value": 0,
+        "unit": "px"
+       },
+       "spread": {
+        "value": 0,
+        "unit": "px"
+       },
+       "color": {
+        "colorSpace": "srgb",
+        "components": [
+         0,
+         0,
+         0
+        ],
+        "alpha": 0.7
+       }
+      }
+     ]
+    },
+    {
+     "name": "castShadow",
+     "$type": "shadow",
+     "note": "nicht an der ersten Karte",
+     "light": [
+      {
+       "inset": false,
+       "offsetX": {
+        "value": 0,
+        "unit": "px"
+       },
+       "offsetY": {
+        "value": -8,
+        "unit": "px"
+       },
+       "blur": {
+        "value": 16,
+        "unit": "px"
+       },
+       "spread": {
+        "value": -12,
+        "unit": "px"
+       },
+       "color": {
+        "colorSpace": "srgb",
+        "components": [
+         0,
+         0,
+         0
+        ],
+        "alpha": 0.16
+       }
+      }
+     ],
+     "dark": [
+      {
+       "inset": false,
+       "offsetX": {
+        "value": 0,
+        "unit": "px"
+       },
+       "offsetY": {
+        "value": -8,
+        "unit": "px"
+       },
+       "blur": {
+        "value": 16,
+        "unit": "px"
+       },
+       "spread": {
+        "value": -12,
+        "unit": "px"
+       },
+       "color": {
+        "colorSpace": "srgb",
+        "components": [
+         0,
+         0,
+         0
+        ],
+        "alpha": 0.55
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "glass": {
+   "$type": "shadow",
+   "light": [
+    {
+     "inset": true,
+     "offsetX": {
+      "value": 0,
+      "unit": "px"
+     },
+     "offsetY": {
+      "value": 0,
+      "unit": "px"
+     },
+     "blur": {
+      "value": 0,
+      "unit": "px"
+     },
+     "spread": {
+      "value": 1,
+      "unit": "px"
+     },
+     "color": {
+      "colorSpace": "srgb",
+      "components": [
+       1,
+       1,
+       1
+      ],
+      "alpha": 0.7
+     }
+    },
+    {
+     "inset": true,
+     "offsetX": {
+      "value": 0,
+      "unit": "px"
+     },
+     "offsetY": {
+      "value": 1,
+      "unit": "px"
+     },
+     "blur": {
+      "value": 0,
+      "unit": "px"
+     },
+     "spread": {
+      "value": 0,
+      "unit": "px"
+     },
+     "color": {
+      "colorSpace": "srgb",
+      "components": [
+       1,
+       1,
+       1
+      ],
+      "alpha": 0.9
+     }
+    },
+    {
+     "inset": false,
+     "offsetX": {
+      "value": 0,
+      "unit": "px"
+     },
+     "offsetY": {
+      "value": -8,
+      "unit": "px"
+     },
+     "blur": {
+      "value": 24,
+      "unit": "px"
+     },
+     "spread": {
+      "value": -14,
+      "unit": "px"
+     },
+     "color": {
+      "colorSpace": "srgb",
+      "components": [
+       0,
+       0,
+       0
+      ],
+      "alpha": 0.22
+     }
+    },
+    {
+     "inset": false,
+     "offsetX": {
+      "value": 0,
+      "unit": "px"
+     },
+     "offsetY": {
+      "value": 0,
+      "unit": "px"
+     },
+     "blur": {
+      "value": 0,
+      "unit": "px"
+     },
+     "spread": {
+      "value": 1,
+      "unit": "px"
+     },
+     "color": {
+      "colorSpace": "srgb",
+      "components": [
+       0,
+       0,
+       0
+      ],
+      "alpha": 0.04
+     }
+    }
+   ],
+   "dark": [
+    {
+     "inset": true,
+     "offsetX": {
+      "value": 0,
+      "unit": "px"
+     },
+     "offsetY": {
+      "value": 0,
+      "unit": "px"
+     },
+     "blur": {
+      "value": 0,
+      "unit": "px"
+     },
+     "spread": {
+      "value": 1,
+      "unit": "px"
+     },
+     "color": {
+      "colorSpace": "srgb",
+      "components": [
+       1,
+       1,
+       1
+      ],
+      "alpha": 0.12
+     }
+    },
+    {
+     "inset": true,
+     "offsetX": {
+      "value": 0,
+      "unit": "px"
+     },
+     "offsetY": {
+      "value": 1,
+      "unit": "px"
+     },
+     "blur": {
+      "value": 0,
+      "unit": "px"
+     },
+     "spread": {
+      "value": 0,
+      "unit": "px"
+     },
+     "color": {
+      "colorSpace": "srgb",
+      "components": [
+       1,
+       1,
+       1
+      ],
+      "alpha": 0.18
+     }
+    },
+    {
+     "inset": false,
+     "offsetX": {
+      "value": 0,
+      "unit": "px"
+     },
+     "offsetY": {
+      "value": -8,
+      "unit": "px"
+     },
+     "blur": {
+      "value": 24,
+      "unit": "px"
+     },
+     "spread": {
+      "value": -14,
+      "unit": "px"
+     },
+     "color": {
+      "colorSpace": "srgb",
+      "components": [
+       0,
+       0,
+       0
+      ],
+      "alpha": 0.6
+     }
+    },
+    {
+     "inset": false,
+     "offsetX": {
+      "value": 0,
+      "unit": "px"
+     },
+     "offsetY": {
+      "value": 0,
+      "unit": "px"
+     },
+     "blur": {
+      "value": 0,
+      "unit": "px"
+     },
+     "spread": {
+      "value": 1,
+      "unit": "px"
+     },
+     "color": {
+      "colorSpace": "srgb",
+      "components": [
+       0,
+       0,
+       0
+      ],
+      "alpha": 0.35
+     }
+    }
+   ],
+   "note": "Hintergrund der Karte: blur(22px) saturate(1.4), nur bei Glas"
+  },
+  "flat": {
+   "$description": "keine Kartenschatten, nur Haarlinie"
+  }
+ },
+ "component": {
+  "laneRadius": {
+   "$type": "dimension",
+   "$value": "{radius.lane}",
+   "$description": "Johannes: „Bahn: 20 ist component-lane-radius im Tokenbogen.“",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-lane-radius"
+    }
+   }
+  },
+  "laneEdge": {
+   "$type": "dimension",
+   "$value": "{size.edge}",
+   "$description": "Fensterrand",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-lane-edge"
+    }
+   }
+  },
+  "laneGap": {
+   "$type": "dimension",
+   "$value": "{size.gutter}",
+   "$description": "Fuge zwischen Bahnen",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-lane-gap"
+    }
+   }
+  },
+  "laneHeaderHeight": {
+   "$type": "dimension",
+   "$value": "{size.headerHeight}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-lane-header-height"
+    }
+   }
+  },
+  "laneFoldedWidth": {
+   "$type": "dimension",
+   "$value": "{size.foldedWidth}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-lane-folded-width"
+    }
+   }
+  },
+  "laneFoldThreshold": {
+   "$type": "dimension",
+   "$value": "{size.foldThreshold}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-lane-fold-threshold"
+    }
+   }
+  },
+  "laneMiddleMinimumWidth": {
+   "$type": "dimension",
+   "$value": "{size.middleMinimumWidth}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-lane-middle-min"
+    }
+   }
+  },
+  "rowHeight": {
+   "$type": "dimension",
+   "$value": "{size.rowHeight}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-row-height"
+    }
+   }
+  },
+  "rowRadius": {
+   "$type": "dimension",
+   "$value": "{radius.row}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-row-radius"
+    }
+   }
+  },
+  "symbolSize": {
+   "$type": "dimension",
+   "$value": "{size.symbolSize}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-symbol-size"
+    }
+   }
+  },
+  "blobHeight": {
+   "$type": "dimension",
+   "$value": "{size.blobHeight}",
+   "$description": "Johannes: „wie wäre BLOB mit 20er Höhe? also gleichem Radius wie die Spalten ?“ Gebaut: Höhe 40, Radius 20",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-blob-height"
+    }
+   }
+  },
+  "blobWidth": {
+   "$type": "dimension",
+   "$value": "{size.blobWidth}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-blob-width"
+    }
+   }
+  },
+  "blobAwakeWidth": {
+   "$type": "dimension",
+   "$value": "{size.blobAwakeWidth}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-blob-awake-width"
+    }
+   }
+  },
+  "blobDockDistance": {
+   "$type": "dimension",
+   "$value": "{size.blobDockDistance}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-blob-dock"
+    }
+   }
+  },
+  "blobRadius": {
+   "$type": "dimension",
+   "$value": "{radius.blob}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-blob-radius"
+    }
+   }
+  },
+  "menuRadius": {
+   "$type": "dimension",
+   "$value": "{radius.contextMenu}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-menu-radius"
+    }
+   }
+  },
+  "cardRadius": {
+   "$type": "dimension",
+   "$value": "{radius.card}",
+   "$description": "Karten im Stapel bündig in der Bahn, ohne Einzug",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-card-radius"
+    }
+   }
+  },
+  "cardInset": {
+   "$type": "dimension",
+   "$value": "{size.cardInset}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-card-inset"
+    }
+   }
+  },
+  "noticeRadius": {
+   "$type": "dimension",
+   "$value": "{radius.notice}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-notice-radius"
+    }
+   }
+  },
+  "fieldRadius": {
+   "$type": "dimension",
+   "$value": "{radius.field}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-field-radius"
+    }
+   }
+  },
+  "capsuleRadius": {
+   "$type": "dimension",
+   "$value": "{radius.capsule}",
+   "$extensions": {
+    "alfa": {
+     "formerName": "component-pill-radius"
+    }
+   }
+  },
+  "laneRestWidth": "{size.laneRestWidth}",
+  "laneMinimumRightWidth": "{size.laneMinimumRight}",
+  "blobPopupFallbackWidth": "{size.blobPopupFallbackWidth}",
+  "cardFooterHeight": "{size.footerHeight}",
+  "cardRadiusBottom": "{radius.cardBottom}",
+  "blobEyeWidth": "{size.blobEyeWidth}",
+  "blobEyeHeight": "{size.blobEyeHeight}",
+  "blobEyeGap": "{size.blobEyeGap}",
+  "suggestionRowHeight": "{size.suggestionRowHeight}",
+  "chipHeight": "{size.chipHeight}",
+  "overviewTileHeightMedium": "{size.overviewTileHeightMedium}",
+  "overviewTileMinWidthMedium": "{size.overviewTileMinWidthMedium}"
+ },
+ "confirm": {
+  "eraseEdge": {
+   "$type": "number",
+   "$value": 0.2,
+   "$description": "weiche Kante des Radierens, Anteil der Knopfbreite",
+   "$extensions": {
+    "alfa": {
+     "approval": "Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen. kann so in die dokumente gführt werden, bis später andere Optionen ausgearbeitet werden.“",
+     "status": "approved-provisional",
+     "statusText": "Freigabe Orange: vorläufig abgenommen, bis andere Optionen ausgearbeitet sind",
+     "where": "ALFA UI-Elemente.dc.html:128"
+    }
+   }
+  },
+  "eraseBlur": {
+   "$type": "dimension",
+   "$value": {
+    "value": 0.6,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "approval": "Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen. kann so in die dokumente gführt werden, bis später andere Optionen ausgearbeitet werden.“",
+     "status": "approved-provisional",
+     "statusText": "Freigabe Orange: vorläufig abgenommen, bis andere Optionen ausgearbeitet sind",
+     "leiter": "Ausnahme von der 4er-Leiter: Johannes 18.10. (zweiter Chat), zu Entscheidungen 6 (4er-Leiter): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“",
+     "where": "ALFA UI-Elemente.dc.html:128"
+    }
+   }
+  },
+  "shakeFrom": {
+   "$type": "number",
+   "$value": 0.7,
+   "$description": "Zittern ab 70 % des Haltens",
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 17.10.: „zum Ende hin zittern“",
+     "approval": "Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen. kann so in die dokumente gführt werden, bis später andere Optionen ausgearbeitet werden.“",
+     "status": "approved-provisional",
+     "statusText": "Freigabe Orange: vorläufig abgenommen, bis andere Optionen ausgearbeitet sind",
+     "where": "ALFA UI-Elemente.dc.html:128"
+    }
+   }
+  },
+  "shakeAmplitude": {
+   "$type": "dimension",
+   "$value": {
+    "value": 1.5,
+    "unit": "px"
+   },
+   "$extensions": {
+    "alfa": {
+     "approval": "Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen. kann so in die dokumente gführt werden, bis später andere Optionen ausgearbeitet werden.“",
+     "status": "approved-provisional",
+     "statusText": "Freigabe Orange: vorläufig abgenommen, bis andere Optionen ausgearbeitet sind",
+     "leiter": "Ausnahme von der 4er-Leiter: Johannes 18.10. (zweiter Chat), zu Entscheidungen 6 (4er-Leiter): „Entscheidungen 6 - nein, weichzeichnung und versatz können so bleiben.“",
+     "where": "ALFA UI-Elemente.dc.html:128"
+    }
+   }
+  },
+  "tooltip": {
+   "$type": "string",
+   "$value": "system title",
+   "$extensions": {
+    "alfa": {
+     "source": "Johannes 17.10.: „Komplett wie bei MacOS machen“",
+     "approval": "Johannes 18.10.: „2 ist erstmal als FREIGABE ORANGE Status abgenommen. kann so in die dokumente gführt werden, bis später andere Optionen ausgearbeitet werden.“",
+     "status": "approved-provisional",
+     "statusText": "Freigabe Orange: vorläufig abgenommen, bis andere Optionen ausgearbeitet sind"
+    }
+   }
+  },
+  "shakeFrequency": {
+   "$type": "number",
+   "$value": 160,
+   "$description": "Bestätigen: Frequenz des Zitterns (Faktor im Sinus).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA UI-Elemente.dc.html:128",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "originDefault": {
+   "$type": "number",
+   "$value": 40,
+   "$description": "Bestätigen: Ausgangspunkt der Füllung in %, wenn kein Klickpunkt bekannt ist.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA UI-Elemente.dc.html:76",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  }
+ },
+ "count": {
+  "stackMaxCards": {
+   "$type": "number",
+   "$value": 6,
+   "$description": "Stapel: höchstens so viele Karten, die älteste fällt heraus (Mail und Einstellungen).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:553",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "overviewLinesSmall": {
+   "$type": "number",
+   "$value": 3,
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:800",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "overviewLinesMedium": {
+   "$type": "number",
+   "$value": 4,
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:800",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "overviewLinesLarge": {
+   "$type": "number",
+   "$value": 8,
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:800",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "contactSuggestions": {
+   "$type": "number",
+   "$value": 5,
+   "$description": "Schreiben: höchstens so viele Vorschläge beim Tippen eines Empfängers.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:839",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "senderSuggestions": {
+   "$type": "number",
+   "$value": 8,
+   "$description": "Einstellungen Kontakte: höchstens so viele Absender-Vorschläge.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "kein Fundort im Bogen (Stand 27.10.)",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "attachmentsNarrow": {
+   "$type": "number",
+   "$value": 2,
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:741",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "attachmentsWide": {
+   "$type": "number",
+   "$value": 3,
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:741",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "stackHeads": {
+   "$type": "number",
+   "$value": 3,
+   "$description": "Stapel: so viele hintere Karten zeigen ihren vollen Kopf (44), tiefere nur 8.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:777",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "menuStaggerMax": {
+   "$type": "number",
+   "$value": 14,
+   "$description": "Blob-Menü: ab der 14. Zeile keine weitere Verzögerung (14 × reelStagger 40).",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Shell.dc.html:278",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "projectFilesMax": {
+   "$type": "number",
+   "$value": 8,
+   "$description": "Höchstzahl der Dateien im Menü „Aus Projektordner“, darüber „n weitere im Projektordner“",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "N14 bis N17 Dateien über Drive: Ordnerwahl, Aus Projektordner, Mail sichern, In anderes Projekt",
+     "where": "alfa-bausteine.js:146"
+    }
+   }
+  },
+  "chatDocumentByteLimit": {
+   "$type": "number",
+   "$value": 20000000,
+   "$description": "Assistent-Chat: PDF höchstens so groß (Bytes), Code AttachmentStore.documentByteLimit",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "N37 Assistent im Blob gezeichnet (Brief N37; Code: Message, ContentBlock, AttachmentStore, PrivacyCategory, TurnStatus)",
+     "where": "alfa-bausteine.js:aiAttach"
+    }
+   }
+  },
+  "chatTextCharacterLimit": {
+   "$type": "number",
+   "$value": 120000,
+   "$description": "Assistent-Chat: Textdatei höchstens so viele Zeichen, Code AttachmentStore.textCharacterLimit",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "N37 Assistent im Blob gezeichnet (Brief N37; Code: Message, ContentBlock, AttachmentStore, PrivacyCategory, TurnStatus)",
+     "where": "alfa-bausteine.js:aiAttach"
+    }
+   }
+  }
+ },
+ "opacity": {
+  "ringOnColor": {
+   "$type": "number",
+   "$value": 0.3,
+   "$description": "Ring auf farbiger Fläche: currentColor mit 30 %.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:35, ALFA Mail.dc.html:695",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "ringOnMark": {
+   "$type": "number",
+   "$value": 0.22,
+   "$description": "Ring um farbige Marke in der Übersicht: currentColor mit 22 %.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:679",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "cardMeta": {
+   "$type": "number",
+   "$value": 0.72,
+   "$description": "Nebentext im Kartenkopf (Zustand, Datum, Betreff). Deckkraft.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:786",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "cardMetaDeep": {
+   "$type": "number",
+   "$value": 0.95,
+   "$description": "Wie cardMeta, ab der vierten Karte unter der obersten (Stapelstufe 4 und 5, Fläche #a3a3a3 / #6b6b6b hell, entsprechend dunkel). Grund: bei 0,72 nur 3,5 bis 4,2:1, bei 0,9 dunkel 4,4999:1 gemessen 19.10.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html und ALFA Einstellungen.dc.html, Logik metaOp (d >= 4)",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "switchGlass": {
+   "$type": "number",
+   "$value": 0.72,
+   "$description": "Postfachwechsel: Deckkraft des Glases über der Bahn",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Rückgabe Code 27.10. (Postfachstapel Mail :32–36): Werte als Tokens, unverändert",
+     "where": "ALFA Mail.dc.html:924"
+    }
+   }
+  },
+  "disabled": {
+   "$type": "number",
+   "$value": 0.4,
+   "$description": "Abgeschaltet: Deckkraft (Code SheetValues.disabledOpacity)",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "N37 Assistent im Blob gezeichnet (Brief N37; Code: Message, ContentBlock, AttachmentStore, PrivacyCategory, TurnStatus)",
+     "where": "alfa-bausteine.js:106"
+    }
+   }
+  },
+  "hoverDim": {
+   "$type": "number",
+   "$value": 0.88,
+   "$description": "Neue-Mail-Knopf unter dem Zeiger",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "A6: 4 Tokens für vorhandene Druck-/Hover-Werte (scale .96/.99/.92, opacity .88)",
+     "where": "ALFA Mail.dc.html:35"
+    }
+   }
+  },
+  "overviewOther": {
+   "$type": "number",
+   "$value": 0.55,
+   "$description": "Übrige Kacheln, während eine unter dem Zeiger ist",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "A1: Übersicht-Kachel Hover (1.012 / .988 / .55) als Tokens, Werte unverändert",
+     "where": "ALFA Mail.dc.html:806"
+    }
+   }
+  }
+ },
+ "layer": {
+  "lane": {
+   "$type": "number",
+   "$value": 1,
+   "$description": "Bahn; eigene Ebene (isolation), alles darin bleibt in der Bahn.",
+   "$extensions": {
+    "alfa": {
+     "where": "ALFA Shell.dc.html:27",
+     "status": "set-by-design",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "handle": {
+   "$type": "number",
+   "$value": 2,
+   "$description": "Griff zwischen den Bahnen.",
+   "$extensions": {
+    "alfa": {
+     "where": "ALFA Shell.dc.html:43",
+     "status": "set-by-design",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "syncButton": {
+   "$type": "number",
+   "$value": 3,
+   "$description": "Abgleich-Knopf oben rechts.",
+   "$extensions": {
+    "alfa": {
+     "where": "ALFA Shell.dc.html:49",
+     "status": "set-by-design",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "toast": {
+   "$type": "number",
+   "$value": 4,
+   "$description": "Hinweis über den Bahnen (Einstellungen).",
+   "$extensions": {
+    "alfa": {
+     "where": "ALFA Einstellungen.dc.html:170",
+     "status": "set-by-design",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "menu": {
+   "$type": "number",
+   "$value": 5,
+   "$description": "Kontextmenü.",
+   "$extensions": {
+    "alfa": {
+     "where": "ALFA Mail.dc.html:323, ALFA Einstellungen.dc.html:174",
+     "status": "set-by-design",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "blob": {
+   "$type": "number",
+   "$value": 6,
+   "$description": "Blob mit Menü und Assistent: über allem außer der Kamera-Aussparung, auch angedockt.",
+   "$extensions": {
+    "alfa": {
+     "where": "ALFA Shell.dc.html:55",
+     "source": "Johannes 18.10. (zweiter Chat): „Blob immer Vordergründig auch wenn seitlich gedocked?“",
+     "note": "Vorher 10 unter Menü 50 und Toast 40 (Fund 18.10.); jetzt 6 über Menü 5 und Toast 4"
+    }
+   }
+  },
+  "safeArea": {
+   "$type": "number",
+   "$value": 7,
+   "$description": "Kamera-Aussparung (Notch).",
+   "$extensions": {
+    "alfa": {
+     "where": "ALFA Shell.dc.html:24",
+     "status": "set-by-design",
+     "decide": "ALFA Entscheidungen, Abschnitt 6"
+    }
+   }
+  },
+  "inLane": {
+   "overview": {
+    "$type": "number",
+    "$value": 2,
+    "$description": "In der Bahn: Übersicht der Karten.",
+    "$extensions": {
+     "alfa": {
+      "where": "ALFA Mail.dc.html:294, ALFA Einstellungen.dc.html:140",
+      "status": "set-by-design",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   },
+   "toast": {
+    "$type": "number",
+    "$value": 3,
+    "$description": "In der Bahn: Hinweis (Mail), über der Übersicht.",
+    "$extensions": {
+     "alfa": {
+      "where": "ALFA Mail.dc.html:314",
+      "status": "set-by-design",
+      "decide": "ALFA Entscheidungen, Abschnitt 6"
+     }
+    }
+   }
+  },
+  "switchGlass": {
+   "$type": "number",
+   "$value": 30,
+   "$description": "Trübung beim Postfachwechsel über dem Bahninhalt (innerhalb der Bahn)",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Akte-Prüfung 27.10.: Fundstellen; z, Dauern, DHL-Farbe als Token; pdfPage nach N16 gestrichen",
+     "where": "ALFA Mail.dc.html:14, :40, :145"
+    }
+   }
+  },
+  "hint": {
+   "$type": "number",
+   "$value": 40,
+   "$description": "Hilfetext an Griff und Blob, über allem",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Akte-Prüfung 27.10.: Fundstellen; z, Dauern, DHL-Farbe als Token; pdfPage nach N16 gestrichen",
+     "where": "ALFA Shell.dc.html:23"
+    }
+   }
+  },
+  "lockScreen": {
+   "$type": "number",
+   "$value": 40,
+   "$description": "Sperrbildschirm, über allem",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Akte-Prüfung 27.10.: Fundstellen; z, Dauern, DHL-Farbe als Token; pdfPage nach N16 gestrichen",
+     "where": "ALFA Shell.dc.html:124"
+    }
+   }
+  }
+ },
+ "scale": {
+  "pressTile": {
+   "$type": "number",
+   "$value": 0.98,
+   "$description": "Kachel (Integrationen) beim Drücken: leicht eindrücken. Knöpfe nutzen 0,96.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "where": "ALFA Mail.dc.html:35 (style-active)",
+     "decide": "ALFA Entscheidungen, Abschnitt 6",
+     "source": "Johannes 18.10. (nach 22:30 MESZ): „Die linie ist aber noch da, lass dir da mal was optimiertes und natürlich funktionierensed, aber subtil sehr liebevoll überlegt udn mit viel liebe für feine schöne details im Ui Flow.“"
+    }
+   }
+  },
+  "pressButton": {
+   "$type": "number",
+   "$value": 0.96,
+   "$description": "Knöpfe beim Drücken (style-active, 31 Stellen)",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "A6: 4 Tokens für vorhandene Druck-/Hover-Werte (scale .96/.99/.92, opacity .88)",
+     "where": "ALFA Mail.dc.html:18"
+    }
+   }
+  },
+  "pressRow": {
+   "$type": "number",
+   "$value": 0.99,
+   "$description": "Zeile und Profil-Kachel beim Drücken",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "A6: 4 Tokens für vorhandene Druck-/Hover-Werte (scale .96/.99/.92, opacity .88)",
+     "where": "ALFA Mail.dc.html:173"
+    }
+   }
+  },
+  "pressStrong": {
+   "$type": "number",
+   "$value": 0.92,
+   "$description": "Kleiner Symbolknopf (Chip entfernen) beim Drücken",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "A6: 4 Tokens für vorhandene Druck-/Hover-Werte (scale .96/.99/.92, opacity .88)",
+     "where": "ALFA Mail.dc.html:252"
+    }
+   }
+  },
+  "overviewHot": {
+   "$type": "number",
+   "$value": 1.012,
+   "$description": "Kachel der Übersicht unter dem Zeiger",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "A1: Übersicht-Kachel Hover (1.012 / .988 / .55) als Tokens, Werte unverändert",
+     "where": "ALFA Mail.dc.html:806"
+    }
+   }
+  },
+  "overviewOther": {
+   "$type": "number",
+   "$value": 0.988,
+   "$description": "Übrige Kacheln, während eine unter dem Zeiger ist",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "A1: Übersicht-Kachel Hover (1.012 / .988 / .55) als Tokens, Werte unverändert",
+     "where": "ALFA Mail.dc.html:806"
+    }
+   }
+  }
+ },
+ "ratio": {
+  "imageTile": {
+   "$type": "number",
+   "$value": 1.3333,
+   "$description": "Seitenverhältnis 4 : 3 der Bildkachel in HTML-Mails",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "N10 Bild blockiert: Kachel mit Zuständen blocked/loaded, Textschlüssel, Maße als Tokens",
+     "where": "ALFA Mail.dc.html:194"
+    }
+   }
+  },
+  "fieldValueMax": {
+   "$type": "number",
+   "$value": 0.6,
+   "$description": "Feldzeile Einstellungen: größter Anteil der Eingabe rechts an der Zeilenbreite.",
+   "$extensions": {
+    "alfa": {
+     "status": "set-by-design",
+     "source": "Master 2910 A1: fester Anteil 60% der Eingabe in der Feldzeile (Einstellungen) als Token geführt",
+     "where": "ALFA Einstellungen.dc.html:124"
+    }
+   }
+  }
+ }
+}

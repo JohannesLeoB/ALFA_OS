@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs><filter id="f" x="-20%" y="-50%" width="140%" height="220%"><feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#000" flood-opacity=".10"/></filter></defs>
+<rect width="1920" height="1080" fill="#ffffff"/>
+<g filter="url(#f)"><rect x="836.0" y="390.0" width="248" height="80" rx="40" fill="#171717" stroke="rgba(0,0,0,.08)" stroke-width="2"/></g>
+<circle cx="876.0" cy="430.0" r="28" fill="none" stroke="#ffffff" stroke-width="2"/>
+<rect x="864" y="422.0" width="8" height="16" rx="4" fill="#ffffff"/>
+<rect x="880" y="422.0" width="8" height="16" rx="4" fill="#ffffff"/>
+<text x="920.0" y="430.0" dominant-baseline="central" font-family="Geist, 'SF Pro Text', system-ui" font-size="26" font-weight="500" fill="#ffffff">ALFA_OS</text>
+<text x="960.0" y="536.0" text-anchor="middle" font-family="Geist, 'SF Pro Text', system-ui" font-size="36" font-weight="500" letter-spacing="-0.02em" fill="#171717">Google-Anmeldung übernommen</text>
+<text x="960.0" y="597.0" text-anchor="middle" font-family="Geist, 'SF Pro Text', system-ui" font-size="26" font-weight="400" fill="#4d4d4d">Dieses Fenster kann jetzt geschlossen werden.</text>
+</svg>

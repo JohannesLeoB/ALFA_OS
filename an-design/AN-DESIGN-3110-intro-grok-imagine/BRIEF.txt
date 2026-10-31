@@ -1,0 +1,57 @@
+ALFA_OS · Sign-in-Intro · Briefing für Grok Imagine als Motion Designer
+=======================================================================
+
+Deine Rolle
+Du bist Motion Designer für ALFA_OS. Johannes Leo Berger (Designer, Auftraggeber) gestaltet die Sequenz gemeinsam mit dir. Du schlägst vor, er entscheidet. Arbeite in Runden: erst 3 bis 5 Konzepte als Standbilder oder Storyboards, dann die gewählte Richtung als Sequenz, dann Feinschliff.
+
+Was ALFA_OS ist
+Eine macOS-App für ein Design- und Küchenstudio: Mail, Einstellungen, Projekte, ein Claude-Assistent. Ruhig, präzise, schwarz-weiß, ohne Dekor. Das Interface lebt von Tokens: feste Maße, Radien, Zeiten und Kurven. Alles im Ordner tokens/ und master/.
+
+Die Szene
+Nach der Anmeldung bei Google oder Microsoft öffnet der Browser eine Seite von ALFA_OS. Sie soll 2 bis 5 Sekunden wirken wie ein Studio-Intro vor einem Film oder wie der Moment des Apple-Startklangs: Die Marke erscheint mit ruhiger Bewegung, dann die Zeile „Google-Anmeldung übernommen“ und „Dieses Fenster kann jetzt geschlossen werden.“ Ein Klick auf die Marke öffnet die App. Die Seite gibt es hell und dunkel. Bei „Bewegung reduzieren“ nur der Endzustand.
+
+Die Markenbausteine (alle im Pack)
+1. Der Blob. Das Gesicht von ALFA_OS: eine Pille 56 × 40 px, wach 124 × 40, Radius 20. Links ein Kreis 28 px als Hairline-Ring, darin zwei Augen 4 × 8 px, Abstand 4, Ecken 2. Die Augen folgen der Maus, blinzeln alle 3 bis 6 Sekunden, die Lider schließen halb, wenn der Blob schläft. Im wachen Blob steht der Name in Geist Medium 13 px. Quelle: master/ALFA Shell.dc.html ab Zeile 55, Mechanik in alfa-shell.js, Werte in tokens/.
+2. Der Orb. Wenn der Assistent denkt, wird das Gesicht zu einer dunklen Kugel (#0d0d0d) mit drei weichen Farbflecken, die kreisen: Koralle #f95c4b, Aprikose #f39f5a, Rosé #e8bcb9. Umlaufzeiten 7, 9 und 11 Sekunden. Quelle: master/ALFA Shell.dc.html Zeile 59, Tokens color.orb, mood.*, motion.duration.orbOrbit*.
+3. Das App-Icon. Schwarz-weißes Markenzeichen mit Glanz- und Schattenebenen, hell und dunkel, mit Ebenen 00 bis 07 einzeln. Quelle: master/icons/app/ (ALFA-App-Icon-4b.svg, -dark.svg, layers/, png/) sowie die fünf Entwürfe A bis E (Fächer, A-Monogramm, Pipette, Licht, Bögen); app-icon/ALFA Icon.dc.html ist der Bogen dazu, icon_1024.png das Icon aus der App.
+4. Die Schrift Geist (fonts/), Gewichte 300 bis 600. Titel 18 px Medium, Laufweite -0.02 em; Fließtext 13 px; klein 11.5 px.
+5. Die Farben. Hell: Grund #ffffff, Tinte #171717, Pille #171717 mit weißer Schrift. Dunkel: Grund #0d0d0d, Tinte #fafafa, Pille #f5f5f5 mit dunkler Schrift. Signal #b3412e / #e08a74. Quelle: tokens/theme-light.tokens.json, theme-dark.tokens.json.
+6. Die Bewegungssprache. Kurven: standard (0.2, 0.8, 0.2, 1), blobFlight (0.2, 1.15, 0.3, 1), stack (0.22, 1.08, 0.36, 1), fold (0.65, 0, 0.25, 1), envelopeSpring (0.34, 1.56, 0.64, 1). Dauern 150 bis 720 ms, Pulse 1800 ms. Quelle: tokens/base.tokens.json unter motion, master/alfa-theme.css Zeile 16.
+7. Die Bausteine der Hülle: Bahnen mit Radius 20, Karten, Lack-Material, Briefumschlag-Animation der Postfächer (envelope*), Stapel (stack*), Falten (fold). Quelle: designsystem/ALFA Designsystem.dc.html, ALFA UI-Elemente.dc.html, ALFA Widgets.dc.html, master/alfa-theme.css.
+
+Was feststeht
+- Nur die Elemente oben. Kein neues Logo, keine fremden Formen, keine Farben außerhalb der Tokens.
+- Flach, ohne 3D, ohne Glanz außer dem, was der Master zeichnet (Lack, Icon), ohne Partikel, ohne Kamerafahrt.
+- Schrift Geist, Wörter exakt: „ALFA_OS“, „Google-Anmeldung übernommen“, „Dieses Fenster kann jetzt geschlossen werden.“ (Englisch: “Google sign-in accepted”, “You can close this window now.”)
+- 2 bis 5 Sekunden, dann Ruhe. Endzustand muss auch ohne Bewegung stehen.
+- Hell und dunkel.
+
+Was offen ist, deine Spielwiese
+- Wie erscheint der Blob: aus dem Dunkel, aus einem Punkt, aus dem Icon, aus den Augen zuerst?
+- Spielt der Orb eine Rolle (Denken, dann Aufwachen)?
+- Wie kommt der Name: schiebt er sich aus der Pille, setzt er sich Buchstabe für Buchstabe, steht er schon?
+- Wann blinzelt der Blob, schaut er den Betrachter an, folgt er der Maus?
+- Wie kommen die beiden Textzeilen: steigen, blenden, tippen?
+- Ein Klang? Zweiklang, Klick, nichts?
+- Übergang zum Klick auf den Blob (öffnet die App): Reaktion des Blobs?
+
+Was du lieferst
+Runde 1: 3 bis 5 Konzepte als je ein Storyboard mit 4 Bildern (1920 × 1080, dunkel), ein Satz je Konzept.
+Runde 2: die gewählte Richtung als Sequenz 1920 × 1080, 60 fps, 3 bis 5 s, hell und dunkel.
+Runde 3: Zeitplan mit Zeiten und Kurven, damit Code es als CSS-Animation nachbaut; nutze die Token-Namen aus tokens/intro-token-values.json und base.tokens.json.
+
+Ist-Stand als Inspiration, nicht als Vorgabe
+Code hat eine erste Fassung gebaut, sie liegt in ist/: die echte Seite zum Öffnen im Browser (ist/page/*.html, Geist eingebettet), Safari-Aufnahmen (ist/screenshots/), Standbilder des Endzustands (ist/stills/) und die genaue Spezifikation mit Zeitplan (ist/IST-spec-und-prompt.txt, ist/timeline.json). Nimm davon, was dir gefällt, verwirf den Rest.
+
+Ordner
+BRIEF.txt           dieses Briefing
+tokens/             Kontrakt Master 2910 (base, theme-light, theme-dark, ground-lightGray), app-tokens.json der App, intro-token-values.json (Werte der Seite)
+master/             ALFA Shell.dc.html, alfa-theme.css, alfa-shell.js, ALFA Tokenbogen.dc.html, TOKENBOGEN.json, icons/ (Dienst-Logos und icons/app/ mit App-Icon, Ebenen, Entwürfen A bis E)
+designsystem/       ALFA Designsystem.dc.html, ALFA UI-Elemente.dc.html, ALFA Widgets.dc.html, alfa-bausteine.js, support.js, entscheidungen-master.md
+app-icon/           ALFA Icon.dc.html, icon_1024.png, icon_512.png
+fonts/              Geist Variable und Light/Regular/Medium, OFL
+ist/                erste Fassung von Code: Seite, Screenshots, Standbilder, Spezifikation, Zeitplan
+
+Hinweis
+Die .dc.html-Dateien sind Entwurfsdokumente mit Vorlagen-Syntax; sie öffnen nicht fertig im Browser. Lies sie als Quelle für Maße, Stile und Mechanik. Die echte, lauffähige Seite ist ist/page/signin-accepted-de.html.
+Stand: 31.10.2026, main 3ce69713.

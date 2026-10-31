@@ -1,0 +1,71 @@
+{
+ "sizes_px": {
+  "size-blobHeight": 40.0,
+  "size-blobWidth": 56.0,
+  "size-blobAwakeWidth": 124.0,
+  "size-blobEyeWidth": 4.0,
+  "size-blobEyeHeight": 8.0,
+  "size-blobEyeGap": 4.0,
+  "size-hairline": 1.0,
+  "size-blobLidOffset": 1.4,
+  "size-blobEyeFollowDistance": 200.0,
+  "size-blobEyeFollowRamp": 40.0,
+  "size-blobEyeTravelX": 2.0,
+  "size-blobEyeTravelY": 1.6,
+  "size-selectionRingWidth": 2.0,
+  "size-confirmEnterBlur": 3.0,
+  "radius-blob": 20.0,
+  "radius-stroke": 2.0,
+  "spacing-step8": 8.0,
+  "spacing-step24": 24.0,
+  "spacing-step28": 28.0,
+  "spacing-step40": 40.0,
+  "spacing-blobInset": 6.0,
+  "typography-size-small": 11.5,
+  "typography-size-body": 13.0,
+  "typography-size-title": 18.0
+ },
+ "typography": {
+  "typography-weight-regular": "400",
+  "typography-weight-medium": "500",
+  "typography-lineHeight-title": "1.25",
+  "typography-lineHeight-body": "1.35",
+  "typography-tracking-title": "-0.02em",
+  "typography-family-text": "Geist,\"SF Pro Text\",system-ui"
+ },
+ "easing": {
+  "standard": "cubic-bezier(1,0.2,1,0.8,2,0.2,2,1)",
+  "blobFlight": "cubic-bezier(1,0.2,1,1.15,2,0.3,2,1)"
+ },
+ "durations_s": {
+  "blobFlight": 0.416,
+  "blobWidth": 0.24,
+  "blobBlinkClose": 0.14,
+  "blobEyes": 0.32,
+  "toggle": 0.2,
+  "chevron": 0.24,
+  "overviewEnter": 0.64,
+  "labelDelay": 0.08,
+  "blobBlinkInterval": 3.0
+ },
+ "colors": {
+  "light": {
+   "ground": "color(srgb 1 1 1 / 1)",
+   "ink": "color(srgb 0.0902 0.0902 0.0902 / 1)",
+   "inkSecondary": "color(srgb 0.302 0.302 0.302 / 1)",
+   "inverse": "color(srgb 0.0902 0.0902 0.0902 / 1)",
+   "onInverse": "color(srgb 1 1 1 / 1)"
+  },
+  "dark": {
+   "ground": "color(srgb 0.051 0.051 0.051 / 1)",
+   "ink": "color(srgb 0.9804 0.9804 0.9804 / 1)",
+   "inkSecondary": "color(srgb 0.851 0.851 0.851 / 1)",
+   "inverse": "color(srgb 0.9608 0.9608 0.9608 / 1)",
+   "onInverse": "color(srgb 0.051 0.051 0.051 / 1)"
+  }
+ },
+ "shadow_floating": {
+  "light": "0px 0px 0px 1px color(srgb 0 0 0 / 0.08),0px 8px 24px 0px color(srgb 0 0 0 / 0.1)",
+  "dark": "0px 0px 0px 1px color(srgb 1 1 1 / 0.1),0px 8px 24px 0px color(srgb 0 0 0 / 0.5)"
+ }
+}

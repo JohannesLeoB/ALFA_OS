@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="alfa-export" content="2026-10-31">
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="lieferung-an-code/fonts/geist.css">
+<link rel="stylesheet" href="alfa-theme.css">
+<style>html,body{margin:0;background:var(--c-ground)}a{color:var(--c-ink);text-decoration:underline}a:hover{color:var(--c-ink-2)}</style>
+<style>@keyframes alfaConfirmIn{from{opacity:0;filter:blur(var(--size-confirmEnterBlur))}to{opacity:1;filter:blur(0)}}@keyframes alfaConfirmSpin{to{transform:rotate(360deg)}}@media (prefers-reduced-motion:reduce){[data-part=confirm] *{animation:none!important}}</style>
+</helmet>
+<div data-appearance="{{ w.app }}" style="display:{{ w.d }};min-height:100vh;box-sizing:border-box;padding:var(--spacing-step24);flex-direction:column;gap:var(--spacing-step24);background:var(--c-ground);color:var(--c-ink);font-family:var(--typography-family-text);font-size:var(--typography-size-body)">
+<sc-if value="{{ isSheet }}" hint-placeholder-val="{{ true }}">
+<header style="display:flex;align-items:baseline;gap:var(--spacing-step12)">
+<h1 style="margin:0;font-size:var(--typography-size-title);font-weight:var(--typography-weight-semibold)">UI-Elemente</h1>
+<span style="color:var(--c-ink-3);font-size:var(--typography-size-small)">Kleinteile, die kein eigener Ansichtsbereich sind. Quelle bleibt je Datei.</span>
+</header>
+</sc-if>
+<section id="confirm" data-screen-label="Halten zum Bestätigen" style="display:{{ w.d }};flex-direction:column;gap:var(--spacing-step12)">
+<sc-if value="{{ isSheet }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;align-items:baseline;gap:var(--spacing-step12);flex-wrap:wrap"><h2 style="margin:0;font-size:var(--typography-size-body);font-weight:var(--typography-weight-semibold)">Halten zum Bestätigen</h2><span style="color:var(--c-ink-3);font-size:var(--typography-size-small)">Bauteil dieser Datei · eingebunden in Mail (5×) und Einstellungen (3×) mit part="confirm"</span></div>
+<div style="display:flex;gap:var(--spacing-step4);padding:var(--spacing-step4);border-radius:var(--radius-capsule);background:var(--c-well);align-self:flex-start">
+<sc-for list="{{ phaseBtns }}" as="p" hint-placeholder-count="4"><button onClick="{{ p.go }}" style="appearance:none;border:0;font:inherit;font-size:var(--typography-size-small);height:var(--spacing-step24);padding:0 var(--spacing-step12);border-radius:var(--radius-capsule);cursor:pointer;background:{{ p.bg }};color:{{ p.fg }};box-shadow:{{ p.sh }}">{{ p.name }}</button></sc-for>
+</div>
+</sc-if>
+<div style="display:{{ w.box }};align-items:center;min-height:var(--spacing-step44);padding:var(--spacing-step24);border-radius:var(--radius-lane);background:var(--c-lane);box-shadow:var(--sh-lane)">
+<div data-part="confirm" data-id="confirm.confirm" data-state="{{ phase }}" style="position:relative;display:inline-flex;height:var(--spacing-step28);vertical-align:middle">
+<sc-if value="{{ sizer }}" hint-placeholder-val="{{ false }}"><div aria-hidden="true" style="visibility:hidden;display:flex;align-items:center;height:var(--spacing-step28);box-sizing:border-box;padding:var(--spacing-step4);font-family:var(--typography-family-text);white-space:nowrap"><span style="height:var(--spacing-step20);display:flex;align-items:center;gap:var(--spacing-step4);padding:0 var(--spacing-step8);font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium)"><sc-if value="{{ hasIcon }}" hint-placeholder-val="{{ false }}"><span style="width:var(--spacing-step16);height:var(--spacing-step16);margin:0 calc(var(--spacing-step2) * -1)"></span></sc-if><sc-if value="{{ hasLabel }}" hint-placeholder-val="{{ true }}"><span style="display:grid;justify-items:center"><sc-for list="{{ sizes }}" as="v" hint-placeholder-count="0"><span aria-hidden="true" style="grid-area:1/1;visibility:hidden">{{ v }}</span></sc-for><span style="grid-area:1/1;position:relative">{{ label }}</span></span></sc-if></span></div></sc-if>
+<div data-part="confirm-pill" data-id="confirm.confirm-pill" style="position:{{ pillPos }};right:0;top:0;display:inline-flex;align-items:center;height:var(--spacing-step28);box-sizing:border-box;border-radius:var(--radius-capsule);padding:var(--spacing-step4);font-family:var(--typography-family-text);font-size:var(--typography-size-body);line-height:var(--typography-lineHeight-control);color:var(--c-ink);background:{{ pillBg }};box-shadow:{{ pillRing }};white-space:nowrap">
+<sc-if value="{{ isRuhe }}" hint-placeholder-val="{{ true }}">
+<button data-part="confirm-open" data-id="confirm.confirm-open.open-ask" onClick="{{ openAsk }}" style="all:unset;box-sizing:border-box;height:var(--spacing-step20);display:flex;align-items:center;gap:var(--spacing-step4);padding:0 var(--spacing-step8);border-radius:var(--radius-capsule);cursor:pointer;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);color:var(--c-ink-2);animation:alfaConfirmIn var(--motion-duration-toggle) var(--motion-easing-standard)" style-hover="background:var(--c-hover);color:var(--c-ink)" style-focus="outline:var(--size-focusRingWidth) solid var(--c-focus);outline-offset:var(--size-focusRingOffset)">
+<sc-if value="{{ hasIcon }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" style="margin:0 calc(var(--spacing-step2) * -1)"><path d="{{ d }}"></path></svg></sc-if>
+<sc-if value="{{ hasLabel }}" hint-placeholder-val="{{ true }}"><span style="display:grid;justify-items:center"><sc-for list="{{ sizes }}" as="v" hint-placeholder-count="0"><span aria-hidden="true" style="grid-area:1/1;visibility:hidden">{{ v }}</span></sc-for><span style="grid-area:1/1;position:relative">{{ label }}</span></span></sc-if>
+</button>
+</sc-if>
+<sc-if value="{{ isAsk }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:var(--spacing-step8);padding-left:var(--spacing-step8);animation:alfaConfirmIn var(--motion-duration-toggle) var(--motion-easing-standard)">
+<span style="color:var(--c-ink);font-size:var(--typography-size-body)">{{ question }}</span>
+<button data-part="confirm-no" data-id="confirm.confirm-no.no" onClick="{{ no }}" style="all:unset;box-sizing:border-box;height:var(--spacing-step20);padding:0 var(--spacing-step8);border-radius:var(--radius-capsule);cursor:pointer;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);color:var(--c-ink-2)" style-hover="background:var(--c-hover);color:var(--c-ink)" style-focus="outline:var(--size-focusRingWidth) solid var(--c-focus);outline-offset:var(--size-focusRingOffset)">Nein</button>
+<button data-part="confirm-yes" data-id="confirm.confirm-yes.down" title="{{ tipText }}" onPointerDown="{{ down }}" onPointerUp="{{ up }}" onPointerLeave="{{ up }}" onPointerCancel="{{ up }}" onKeyDown="{{ key }}" style="all:unset;box-sizing:border-box;position:relative;overflow:hidden;height:var(--spacing-step20);padding:0 var(--spacing-step8);border-radius:var(--radius-capsule);cursor:pointer;font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);color:var(--c-signal);box-shadow:inset 0 0 0 var(--size-hairline) var(--c-signal);touch-action:none;user-select:none;transform:translateX({{ shake }}px);-webkit-mask-image:{{ erase }};mask-image:{{ erase }};filter:blur({{ eraseBlur }}px)" style-focus="outline:var(--size-focusRingWidth) solid var(--c-focus);outline-offset:var(--size-focusRingOffset)">
+<span style="display:grid;justify-items:center"><sc-for list="{{ sizes }}" as="v" hint-placeholder-count="0"><span aria-hidden="true" style="grid-area:1/1;visibility:hidden">{{ v }}</span></sc-for><span style="grid-area:1/1;position:relative;color:{{ yesInk }}">{{ confirmLabel }}</span></span>
+</button>
+</div>
+</sc-if>
+<sc-if value="{{ isRun }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:var(--spacing-step8);padding:0 var(--spacing-step8);font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);color:var(--c-ink-2);animation:alfaConfirmIn var(--motion-duration-toggle) var(--motion-easing-standard)"><span style="width:var(--spacing-step12);height:var(--spacing-step12);box-sizing:border-box;border-radius:50%;border:var(--size-spinnerStroke) solid var(--c-line-strong);border-top-color:var(--c-ink);animation:alfaConfirmSpin var(--motion-duration-spinner) linear infinite"></span><span>{{ runningLabel }}</span></div>
+</sc-if>
+<sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:var(--spacing-step8);padding:0 var(--spacing-step4) 0 var(--spacing-step8);font-size:var(--typography-size-small);font-weight:var(--typography-weight-medium);color:var(--c-ink);animation:alfaConfirmIn var(--motion-duration-toggle) var(--motion-easing-standard)"><span>{{ doneLabel }}</span>
+<button data-part="confirm-undo" data-id="confirm.confirm-undo.undo" onClick="{{ undo }}" style="all:unset;box-sizing:border-box;height:var(--spacing-step20);padding:0 var(--spacing-step8);border-radius:var(--radius-capsule);cursor:pointer;font-weight:var(--typography-weight-medium);color:var(--c-ink-2)" style-hover="background:var(--c-hover);color:var(--c-ink)" style-focus="outline:var(--size-focusRingWidth) solid var(--c-focus);outline-offset:var(--size-focusRingOffset)">Rückgängig</button></div>
+</sc-if>
+</div>
+</div>
+</div>
+</section>
+<sc-if value="{{ isSheet }}" hint-placeholder-val="{{ true }}">
+<section id="kacheln" data-screen-label="Kachel Verbindungen" style="display:flex;flex-direction:column;gap:var(--spacing-step12)">
+<div style="display:flex;align-items:baseline;gap:var(--spacing-step12);flex-wrap:wrap"><h2 style="margin:0;font-size:var(--typography-size-body);font-weight:var(--typography-weight-semibold)">Kachel Verbindungen · App-Symbol</h2><span style="color:var(--c-ink-3);font-size:var(--typography-size-small);text-wrap:pretty">Kachel 112 hoch, innen 12, Radius 12 (radius.row) · Symbol 44, Radius 12 (radius.row), ohne Umriss · Logo im Symbol nach Bildgewicht: Google 50 %, Airtable/ClickUp 57 %, DHL 86 %, Claude randvoll · Zeile: Symbol 36, Radius 8 (radius.notice), innen 8</span></div>
+<div style="display:flex;flex-direction:column;gap:var(--spacing-step24);padding:var(--spacing-step8);border-radius:var(--radius-lane);background:var(--c-lane);box-shadow:var(--sh-lane)">
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--size-settingsTileMinWidth),1fr));gap:var(--spacing-step8)">
+<sc-for list="{{ tileSet }}" as="t" hint-placeholder-count="5">
+<div style="height:var(--size-settingsTileHeight);box-sizing:border-box;padding:var(--spacing-step12);border-radius:var(--radius-row);display:flex;flex-direction:column;justify-content:space-between;background:{{ t.tbg }};color:{{ t.tfg }}">
+<span style="width:var(--spacing-step44);height:var(--spacing-step44);border-radius:var(--radius-row);display:grid;place-items:center;overflow:hidden;background:{{ t.bg }}"><i role="img" aria-label="{{ t.n }}" style="display:block;width:{{ t.ls44 }};height:{{ t.ls44 }};background-position:center;background-size:contain;background-repeat:no-repeat;background-image:{{ t.url }}"></i></span>
+<span style="display:flex;flex-direction:column;gap:var(--spacing-step2);min-width:0"><span style="font-weight:var(--typography-weight-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.n }}</span><span style="font-size:var(--typography-size-small);color:{{ t.sfg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.s }}</span></span>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--spacing-step2);max-width:480px">
+<sc-for list="{{ tileSet }}" as="t" hint-placeholder-count="5">
+<div style="display:flex;align-items:center;gap:var(--spacing-step12);padding:var(--spacing-step8);border-radius:var(--radius-row);background:{{ t.tbg }};color:{{ t.tfg }}">
+<span style="flex:none;width:var(--spacing-step36);height:var(--spacing-step36);border-radius:var(--radius-notice);display:grid;place-items:center;overflow:hidden;background:{{ t.bg }}"><i role="img" aria-label="{{ t.n }}" style="display:block;width:{{ t.ls36 }};height:{{ t.ls36 }};background-position:center;background-size:contain;background-repeat:no-repeat;background-image:{{ t.url }}"></i></span>
+<span style="display:flex;flex-direction:column;gap:var(--spacing-step2);min-width:0;flex:1"><span style="font-weight:var(--typography-weight-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.n }}</span><span style="font-size:var(--typography-size-small);color:{{ t.sfg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.s }}</span></span>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+</sc-if>
+<sc-if value="{{ isSheet }}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{ sheets }}" as="s" hint-placeholder-count="3">
+<section id="{{ s.id }}" data-screen-label="{{ s.title }}" style="display:flex;flex-direction:column;gap:var(--spacing-step12)">
+<div style="display:flex;align-items:baseline;gap:var(--spacing-step12);flex-wrap:wrap"><h2 style="margin:0;font-size:var(--typography-size-body);font-weight:var(--typography-weight-semibold)">{{ s.title }}</h2><span style="color:var(--c-ink-3);font-size:var(--typography-size-small)">{{ s.note }}</span><a href="{{ s.file }}" style="font-size:var(--typography-size-small)">Bogen öffnen</a></div>
+<div style="border-radius:var(--radius-lane);overflow:hidden;background:var(--c-lane);box-shadow:var(--sh-lane)"><iframe src="{{ s.file }}" title="{{ s.title }}" loading="lazy" style="display:block;width:100%;height:{{ s.h }};border:0"></iframe></div>
+</section>
+</sc-for>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { phase: null, fill: null, fx: 40 };
+  raf = 0; t0 = 0; from = 0; dir = 0; timers = [];
+  ph() { return this.state.phase || this.props.phase || this.props.start || "ruhe"; }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); this.timers.forEach(clearTimeout); }
+  reduced() { return window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches; }
+  openAsk = () => this.setState({ phase: "frage", fill: 0 });
+  no = () => { this.stop(); this.setState({ phase: "ruhe", fill: 0 }); this.props.onCancel && this.props.onCancel(); };
+  undo = () => { this.setState({ phase: "ruhe", fill: 0 }); };
+  stop() { cancelAnimationFrame(this.raf); this.dir = 0; }
+  down = (e) => {
+    if (this.ph() !== "frage") return;
+    if (this.reduced()) { this.confirm(); return; }
+    const r = e.currentTarget.getBoundingClientRect();
+    this.setState({ fx: Math.max(0, Math.min(r.width, e.clientX - r.left)) });
+    this.run(1);
+  };
+  up = () => { if (this.ph() === "frage" && this.dir === 1) this.run(-1); };
+  run(dir) {
+    cancelAnimationFrame(this.raf);
+    this.dir = dir; this.from = this.cur(); this.t0 = performance.now();
+    const dur = dir === 1 ? 1000 * (1 - this.from) : 180 * this.from;
+    const step = (now) => {
+      const k = dur <= 0 ? 1 : Math.min(1, (now - this.t0) / dur);
+      const v = this.from + (dir === 1 ? 1 - this.from : -this.from) * k;
+      this.setState({ fill: v });
+      if (k < 1) this.raf = requestAnimationFrame(step);
+      else if (dir === 1) { this.dir = 0; this.confirm(); } else this.dir = 0;
+    };
+    this.raf = requestAnimationFrame(step);
+  }
+  cur() { return this.state.fill == null ? 0 : this.state.fill; }
+  key = (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); this.confirm(); }
+    else if (e.key === "Escape") { e.preventDefault(); this.no(); }
+  };
+  confirm() {
+    this.stop();
+    if (this.props.onConfirm) this.props.onConfirm();
+    if (this.props.progress === false) { this.setState({ phase: "ruhe", fill: 0 }); return; }
+    this.setState({ phase: "laeuft", fill: 0 });
+    this.timers.push(setTimeout(() => this.setState({ phase: "fertig" }), this.tm("confirmDoneDelay")));
+  }
+    tm(n) { return parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--motion-duration-" + n)) || 0; }
+  confirmVals() {
+    const p = this.ph(), pr = this.props, st = this.state;
+    const fill = p === "frage" ? (st.fill == null ? (pr.fortschritt != null ? +pr.fortschritt : 0) : st.fill) : 0;
+    const jb = pr.ja || "Ja", sizes = [pr.label || "", jb].filter(Boolean);
+    const ask = p === "frage", anchored = st.phase != null && pr.start !== "frage" && !pr.phase;
+    const cf = n => { const v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--confirm-" + n)); return isNaN(v) ? ({ eraseEdge: .2, eraseBlur: .6, shakeFrom: .7, shakeAmplitude: 1.5, shakeFrequency: 160 })[n] : v; };
+    return { standalone: !pr.onConfirm, 
+      sizes, tipText: "Halten zum " + (pr.ja || "Bestätigen"), sizer: anchored, pillPos: anchored ? "absolute" : "relative", phase: p, isRuhe: p === "ruhe", isAsk: ask, isRun: p === "laeuft", isDone: p === "fertig",
+      label: pr.label || "", hasLabel: !!pr.label, d: pr.d || "", hasIcon: !!pr.d,
+      frage: pr.frage || "Sicher?", ja: pr.ja || "Ja", laeuft: pr.laeuft || "Läuft …", fertig: pr.fertig || "Fertig",
+      pillBg: ask ? "var(--c-well)" : "transparent", pillRing: ask ? "inset 0 0 0 1px var(--c-line)" : "none",
+      fill, erase: fill > 0 ? "linear-gradient(90deg, transparent " + (fill * (100 + 100 * cf("eraseEdge")) - 100 * cf("eraseEdge")).toFixed(1) + "%, #000 " + (fill * (100 + 100 * cf("eraseEdge"))).toFixed(1) + "%)" : "none", eraseBlur: +(fill * cf("eraseBlur")).toFixed(2), shake: fill > cf("shakeFrom") ? +(Math.sin(fill * cf("shakeFrequency")) * cf("shakeAmplitude") * (fill - cf("shakeFrom")) / (1 - cf("shakeFrom"))).toFixed(2) : 0, yesInk: "var(--c-signal)",
+      openAsk: this.openAsk, no: this.no, undo: this.undo, down: this.down, up: this.up, key: this.key
+    };
+  }
+
+  sheetVals() {return {
+      noop: () => {},
+      tileSet: [["Google", "google", "svg", "#ffffff", "Verbunden", 0.5, true], ["Airtable", "airtable-farbe", "png", "#ffffff", "Verbunden", 0.57], ["Claude", "claude", "svg", "var(--c-claudeClay)", "Fehler", 1], ["ClickUp", "clickup", "svg", "#ffffff", "Verbindet …", 0.57], ["DHL", "dhl", "svg", "var(--c-dhlYellow)", "Verbunden", 0.86]].map(([n, f, x, bg, s, k, sel]) => ({ n, s, bg, url: "url(\"material/icons/" + f + "." + x + "\")", ls44: k === 1 ? "100%" : Math.round(44 * k) + "px", ls36: k === 1 ? "100%" : Math.round(36 * k) + "px", tbg: sel ? "var(--c-inv)" : "var(--c-well)", tfg: sel ? "var(--c-on-inv)" : "var(--c-ink)", sfg: sel ? "var(--c-on-inv)" : s === "Fehler" ? "var(--c-signal)" : "var(--c-ink-3)" })),
+        sheets: [
+        { id: "widgets", title: "Widgets", file: "ALFA Widgets.dc.html", h: "760px", note: "„Heute“: DHL, Happa Happa · gesperrt 21.10., nicht abgenommen" },
+        { id: "dienste", title: "Dienste", file: "ALFA Dienste.dc.html", h: "760px", note: "Referenzbogen (Johannes 13.10.) · gesperrt 21.10., nicht abgenommen" },
+        { id: "icon", title: "App-Icon", file: "ALFA Icon.dc.html", h: "900px", note: "Runden 1–4, Wahl 4b (ORANGE freigegeben 21.10.) · gesperrt 21.10." }
+      ]
+    };
+  }
+  renderVals() { const part = this.props.part === "confirm"; if (part) return Object.assign(this.confirmVals(), { isPart: true, isSheet: false, w: { d: "contents", box: "contents" } }); const cur = this.state.phase || "ruhe"; return Object.assign(this.confirmVals(), this.sheetVals(), { isPart: false, isSheet: true, w: { app: "light", d: "flex", box: "flex" }, phaseBtns: ["ruhe", "frage", "laeuft", "fertig"].map(name => ({ name, go: () => this.setState({ phase: name, fill: 0 }), bg: name === cur ? "var(--c-lane)" : "transparent", fg: name === cur ? "var(--c-ink)" : "var(--c-ink-2)", sh: name === cur ? "var(--sh-seg)" : "none" })) }); }
+}
+</script>
+</body>
+</html>
