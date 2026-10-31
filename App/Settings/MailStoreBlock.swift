@@ -75,6 +75,7 @@ struct MailStoreBlock: View {
 
     private func choose() {
         let panel = NSOpenPanel()
+        panel.appearance = state.appearance.panel
         panel.canChooseFiles = false
         panel.canChooseDirectories = true
         panel.canCreateDirectories = true
@@ -215,8 +216,14 @@ struct SignatureBlock: View {
     @Environment(\.appearance) private var appearance
     let state: SettingsState
     let inlet: Inlet
+    @State private var written = false
 
     private var who: String { inlet.account.isEmpty ? appearance.string(inlet.title) : inlet.account }
+
+    private var signature: MailboxSignature? {
+        guard let stored = state.signature(inlet.id), written || stored.block != nil else { return nil }
+        return stored
+    }
 
     var body: some View {
         Text(verbatim: appearance.format("settings.signature.head", who))
@@ -225,7 +232,7 @@ struct SignatureBlock: View {
             .padding(.horizontal, CGFloat(Tokens.Spacing.step16))
             .padding(.bottom, CGFloat(Tokens.Spacing.step8))
             .frame(maxWidth: .infinity, minHeight: CGFloat(Tokens.Spacing.step36), alignment: .bottomLeading)
-        if let signature = state.signature(inlet.id) {
+        if let signature {
             editor(signature)
             SettingsRow(label: appearance.text("settings.signature.new"), sub: appearance.text("settings.signature.new.sub")) {
                 ToggleSwitch(isOn: Binding(get: { signature.onNew }, set: { state.setSignatureOnNew($0, for: inlet.id) }),
@@ -236,18 +243,27 @@ struct SignatureBlock: View {
                              labelKey: "settings.signature.above")
             }
             SettingsRow(label: Text(verbatim: ""), line: false) {
-                TextButton(label: appearance.text("settings.signature.remove"), kind: .plain) { state.removeSignature(for: inlet.id) }
+                TextButton(label: appearance.text("settings.signature.remove"), kind: .plain) {
+                    written = false
+                    state.removeSignature(for: inlet.id)
+                }
             }
         } else {
             BlockNote(text: appearance.text("settings.signature.empty"))
             SettingsRow(label: Text(verbatim: ""), line: false) {
-                TextButton(label: appearance.text("settings.signature.create"), kind: .accent) { state.setSignature("", for: inlet.id) }
+                TextButton(label: appearance.text("settings.signature.create"), kind: .accent) {
+                    written = true
+                    state.setSignature("", for: inlet.id)
+                }
             }
         }
     }
 
     private func editor(_ signature: MailboxSignature) -> some View {
-        TextEditor(text: Binding(get: { signature.text }, set: { state.setSignature($0, for: inlet.id) }))
+        TextEditor(text: Binding(get: { signature.text }, set: { value in
+            written = true
+            state.setSignature(value, for: inlet.id)
+        }))
             .scrollContentBackground(.hidden)
             .font(.face(Tokens.TextSize.body))
             .foregroundStyle(appearance.color(\.ink))

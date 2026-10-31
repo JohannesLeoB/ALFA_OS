@@ -70,6 +70,7 @@ struct TemplatesCard: View {
 
     private func add() {
         let panel = NSOpenPanel()
+        panel.appearance = state.appearance.panel
         panel.allowedContentTypes = TemplateStore.extensions.compactMap { UTType(filenameExtension: $0) }
         panel.allowsMultipleSelection = false
         guard panel.runModal() == .OK, let url = panel.url else { return }
@@ -212,6 +213,7 @@ struct PrivacyCard: View {
 
     private func chooseExport() {
         let panel = NSSavePanel()
+        panel.appearance = state.appearance.panel
         panel.allowedContentTypes = [.zip]
         panel.nameFieldStringValue = exporter.fileName
         guard panel.runModal() == .OK, let url = panel.url else { return }
@@ -297,6 +299,14 @@ extension AppearanceChoice {
         switch self {
         case .light: .light
         case .dark: .dark
+        case .system: nil
+        }
+    }
+
+    var panel: NSAppearance? {
+        switch self {
+        case .light: NSAppearance(named: .aqua)
+        case .dark: NSAppearance(named: .darkAqua)
         case .system: nil
         }
     }
