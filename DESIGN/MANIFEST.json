@@ -3,21 +3,21 @@
  "masters": [
   {
    "rank": "latest",
+   "zip": "ALFA Design Master 2026-10-31.zip",
+   "delivered": "2026-10-31",
+   "deliveredAs": "ALFA OS Interface CHEF 2810 (MASTER-2910, Lieferschein 2026-10-31T04:40)",
+   "bytes": 2567370,
+   "sha256": "7e427b4a34d247155743a947bbc113bed94e4a30777968af4021fc74918f4232",
+   "files": 104
+  },
+  {
+   "rank": "previous",
    "zip": "ALFA Design Master 2026-10-28.zip",
    "delivered": "2026-10-28",
    "deliveredAs": "ALFA-Uebergabe-2810",
    "bytes": 7470499,
    "sha256": "b63674a363319cab8e3ac3dff910f18b2a3c05bfe94401af2516a93caf959930",
    "files": 164
-  },
-  {
-   "rank": "previous",
-   "zip": "ALFA Design Master 2026-10-27.zip",
-   "delivered": "2026-10-27",
-   "deliveredAs": "ALFA-Uebergabe-2710",
-   "bytes": 7450570,
-   "sha256": "d3723d97e9aa81a341490ed32c1e93c233f6b8f2d3266d56f1247530e367cd0c",
-   "files": 161
   }
  ]
 }

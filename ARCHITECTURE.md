@@ -48,11 +48,11 @@ DESIGN/                  latest and previous design master (ZIP) and MANIFEST.js
 |---|---|---|
 | `Model/` | value types (struct, enum) | no I/O, no state |
 | `Logic/` | pure functions and engines | deterministic, testable without mocks |
-| `Port/` | protocols to the outside world | one protocol per file (reviewed) |
+| `Port/` | protocols to the outside world | the ports of one function in one file, named after the main port (reviewed) |
 | `Adapter/` | implementations of a port: HTTP, IMAP, Keychain, files | the place for I/O |
 | `State/` | `@Observable` state for views | I/O only through ports |
 | `Store/` | persistence, implements a port | the place for database and file access |
-| `Tool/` | assistant tools, Assistant only (check) | one tool per file (reviewed) |
+| `Tool/` | assistant tools, Assistant only (check) | the tools of one function in one file, named after the main tool (reviewed) |
 
 ### Names
 
