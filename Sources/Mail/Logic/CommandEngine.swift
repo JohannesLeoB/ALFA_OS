@@ -1,3 +1,4 @@
+import Foundation
 import Shell
 
 enum CommandEngine {
@@ -71,4 +72,112 @@ public struct CommandSet: Equatable, Sendable {
     public let footRight: [Slot]
 
     public var hasFooter: Bool { !footLeft.isEmpty || !footRight.isEmpty }
+}
+
+public enum SlotEffect: Equatable, Sendable {
+    case openOverview
+    case closeOverview
+    case fold
+    case saveDraft(UUID)
+    case discardDraft(UUID)
+    case send(UUID)
+    case attachFile(UUID)
+    case toggleFormat
+    case message(Action, String)
+}
+
+public enum SlotRouter {
+    public static func route(_ action: Action, front: CardRef?) -> SlotEffect? {
+        switch (action, front) {
+        case (.overview, _): return .openOverview
+        case (.backToStack, _): return .closeOverview
+        case (.foldColumn, _): return .fold
+        case (.saveDraft, .draft(let id)): return .saveDraft(id)
+        case (.discardDraft, .draft(let id)): return .discardDraft(id)
+        case (.send, .draft(let id)): return .send(id)
+        case (.attachFile, .draft(let id)): return .attachFile(id)
+        case (.format, .draft): return .toggleFormat
+        case (_, .message(let id)): return .message(action, id)
+        default: return nil
+        }
+    }
+}
+
+@MainActor
+public struct ActionRouter {
+    private let state: InboxState
+
+    public init(state: InboxState) {
+        self.state = state
+    }
+
+    @discardableResult
+    public func message(_ action: Action, _ id: String, undoable: Bool = false, fromMenu: Bool = false) -> Bool {
+        switch action {
+        case .reply: Task { _ = await state.reply(to: id) }
+        case .replyAll: Task { _ = await state.reply(to: id, all: true) }
+        case .forward: Task { _ = await state.forward(id) }
+        case .archive: Task { await state.archive(id, undoable: undoable) }
+        case .trash: Task { await state.trash(id, fromMenu: fromMenu) }
+        case .markRead: Task { await state.setRead(id, true) }
+        case .markUnread: Task { await state.setRead(id, false) }
+        case .star: Task { await state.setStarred(id, true) }
+        case .unstar: Task { await state.setStarred(id, false) }
+        case .spam: Task { await state.markSpam(id, undoable: undoable) }
+        case .openDraft: Task { _ = await state.editDraft(id) }
+        case .loadImages: state.allowRemoteImages(id)
+        case .purge: Task { await state.purge(id) }
+        case .saveContact: if let kind = state.saveContact(from: id) { state.announce(kind) }
+        default: return false
+        }
+        return true
+    }
+
+    public func move(_ id: String, to folder: String) {
+        Task { await state.move(id, to: folder) }
+    }
+
+    @discardableResult
+    public func person(_ action: Action, name: String, address: String) -> Bool {
+        switch action {
+        case .writeMail:
+            let entry = name.isEmpty ? address : "\"" + name + "\" <" + address + ">"
+            _ = state.compose(to: entry)
+        case .saveContact:
+            state.announce(state.contacts.save(name: name, address: address))
+        default:
+            return false
+        }
+        return true
+    }
+}
+
+public enum MenuEngine {
+    private static let printableExtensions: Set<String> = ["pdf", "png", "jpg", "jpeg", "gif", "heic", "txt"]
+
+    public static func row(unread: Bool, draft: Bool, folders: Bool = true, trashes: Bool = true) -> [MenuLine] {
+        if draft { return [.item(.openDraft)] }
+        let bin: [MenuLine] = trashes ? [.separator, .item(.trash)] : []
+        return [.item(.reply), .item(.forward), .separator] + (folders ? [.item(.archive)] : [])
+            + [.item(unread ? .markRead : .markUnread)] + (folders ? [.item(.move)] : []) + bin
+    }
+
+    public static func readingMore(starred: Bool, original: Bool, folders: Bool = true, spam: Bool = true) -> [MenuLine] {
+        let marks: [MenuLine] = [.item(starred ? .unstar : .star), .item(.markUnread)] + (folders ? [.item(.move)] : [])
+        let more: [MenuLine] = (original ? [.item(.original)] : []) + (folders && spam ? [.item(.spam)] : [])
+        return more.isEmpty ? marks : marks + [.separator] + more
+    }
+
+    public static func draftMore(receipt: Bool) -> [MenuLine] {
+        [.item(.laterSend), .item(.receipt, checked: receipt), .separator, .item(.print)]
+    }
+
+    public static func person(address: String, contact: Bool) -> [MenuLine] {
+        [.head(address), .item(.copyAddress), .item(.writeMail), .item(contact ? .editContact : .saveContact)]
+    }
+
+    public static func attachment(name: String, project: Bool = true) -> [MenuLine] {
+        let printable = printableExtensions.contains(name.split(separator: ".").last.map { $0.lowercased() } ?? "")
+        return [.item(.preview)] + (printable ? [.item(.print), .item(.pdf)] : []) + [.separator] + (project ? [.item(.otherProject)] : []) + [.item(.saveAs)]
+    }
 }
