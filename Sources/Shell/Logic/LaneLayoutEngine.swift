@@ -6,6 +6,13 @@ enum LaneLayoutEngine {
         windowWidth - 2 * g.margin - 2 * g.gap
     }
 
+    static func fits(_ folded: [Bool], preferred: [Double], limit: [Double], avail: Double, fold: Double) -> Bool {
+        let open = (0..<3).filter { !folded[$0] }
+        let flex = open.contains(1) ? 1 : (open.contains(2) ? 2 : 0)
+        let need = open.reduce(0.0) { $0 + ($1 != flex && preferred[$1] > 0 ? preferred[$1] : limit[$1]) }
+        return need <= avail - fold * Double(3 - open.count)
+    }
+
     static func widths(windowWidth: Double, mode: LaneMode, measure g: Measure, rules: AreaRules, foldTrailing: Bool = false) -> LaneWidths {
         let avail = available(windowWidth, g)
         let fold = g.laneFolded
@@ -68,6 +75,11 @@ enum LaneLayoutEngine {
         }
 
         var folded = [mode.folded[0], mode.folded[1], mode.folded[2] || foldTrailing]
+        for i in rules.yield.reversed() where folded[i] && mode.squeezed[i] && !(i == LaneKind.trailing.index && foldTrailing) {
+            var trial = folded
+            trial[i] = false
+            if fits(trial, preferred: preferred, limit: limit, avail: avail, fold: fold) { folded = trial }
+        }
         if !folded.contains(false) { folded[LaneKind.center.index] = false }
         let w = solve(folded)
         return LaneWidths(leading: w[0], center: w[1], trailing: w[2])
@@ -82,6 +94,7 @@ enum LaneLayoutEngine {
         next.maximized = nil
         if proposed < g.foldAt {
             next.folded[o] = true
+            next.squeezed[o] = false
             return next
         }
         var v = proposed
@@ -124,9 +137,15 @@ enum LaneLayoutEngine {
                 }
             }
         }
+        let before = start.map { $0 <= fold }
         for k in 0..<3 {
-            next.preferred[k] = f[k] ? (start[k] > fold ? start[k] : limit[k]) : w[k].rounded()
+            var shown = before
+            shown[k] = false
+            let yielded = before[k] && !mode.folded[k]
+                && !fits(shown, preferred: mode.preferred, limit: limit, avail: start.reduce(0, +), fold: fold)
+            next.preferred[k] = f[k] ? (start[k] > fold ? start[k] : (yielded ? mode.preferred[k] : limit[k])) : w[k].rounded()
             next.folded[k] = f[k]
+            next.squeezed[k] = f[k] && (start[k] > fold || yielded || mode.squeezed[k])
         }
         if !f[1] { next.preferred[1] = 0 }
         return next
@@ -136,6 +155,7 @@ enum LaneLayoutEngine {
         var next = mode
         next.maximized = nil
         next.folded[lane.index].toggle()
+        next.squeezed[lane.index] = false
         return next
     }
 

@@ -31,12 +31,22 @@ public struct AreaLimits: Sendable, Equatable {
 public struct LaneMode: Sendable, Codable, Equatable {
     var preferred: [Double]
     var folded: [Bool]
+    var squeezed: [Bool]
     public var maximized: LaneKind?
 
     init(rest: Double) {
         preferred = [rest, 0, rest]
         folded = [false, false, false]
+        squeezed = [false, false, false]
         maximized = nil
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        preferred = try container.decode([Double].self, forKey: .preferred)
+        folded = try container.decode([Bool].self, forKey: .folded)
+        squeezed = try container.decodeIfPresent([Bool].self, forKey: .squeezed) ?? [false, false, false]
+        maximized = try container.decodeIfPresent(LaneKind.self, forKey: .maximized)
     }
 }
 

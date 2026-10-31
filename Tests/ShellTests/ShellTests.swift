@@ -103,6 +103,27 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(mail.maximum, [Tokens.Size.mailLaneMaximumLeft, nil, nil])
     }
 
+    func testSqueezedLanesReturnWhenTheWindowGrows() throws {
+        let rest = LaneMode(rest: measure.laneRest)
+        let rules = AreaRules(minimum: measure.minimum)
+        let small = widths(700, rest)
+        XCTAssertEqual(small[0], measure.laneFolded)
+        let nudged = LaneLayoutEngine.drag(lane: .trailing, proposed: small[2] + 8, start: small, mode: rest, measure: measure, rules: rules)
+        XCTAssertEqual(widths(700, nudged)[0], measure.laneFolded)
+        XCTAssertEqual(widths(1512, nudged)[0], 280)
+        let wide = LaneLayoutEngine.drag(lane: .trailing, proposed: 900, start: [280, 896, 280], mode: rest, measure: measure, rules: rules)
+        XCTAssertEqual(widths(1512, wide), [56, 500, 900])
+        XCTAssertEqual(widths(2000, wide)[0], 280)
+        XCTAssertEqual(widths(2000, wide)[2], 900)
+        let folded = LaneLayoutEngine.drag(lane: .leading, proposed: measure.foldAt - 1, start: [280, 896, 280], mode: wide, measure: measure, rules: rules)
+        XCTAssertEqual(widths(2000, folded)[0], measure.laneFolded)
+        let toggled = LaneLayoutEngine.toggleFold(lane: .leading, mode: LaneLayoutEngine.toggleFold(lane: .leading, mode: wide))
+        XCTAssertEqual(widths(2000, toggled)[0], measure.laneFolded)
+        let old = try JSONDecoder().decode(LaneMode.self, from: Data(#"{"preferred":[280,0,280],"folded":[true,false,false]}"#.utf8))
+        XCTAssertEqual(widths(2000, old)[0], measure.laneFolded)
+        XCTAssertEqual(try JSONDecoder().decode(LaneMode.self, from: JSONEncoder().encode(wide)), wide)
+    }
+
     func testMenuWidthSnapsToTheGrid() {
         XCTAssertEqual(MenuWidthEngine.width(fitting: 40), 168)
         XCTAssertEqual(MenuWidthEngine.width(fitting: 169), 224)
