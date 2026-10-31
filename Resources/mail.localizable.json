@@ -1233,6 +1233,14 @@
    "de": "Später senden …",
    "en": "Send Later …"
   },
+  "mail.action.note": {
+   "de": "Notiz anfügen",
+   "en": "Add Note"
+  },
+  "mail.action.template": {
+   "de": "Als Vorlage sichern",
+   "en": "Save as Template"
+  },
   "mail.later.custom": {
    "de": "Eigene Zeit …",
    "en": "Custom Time …"
