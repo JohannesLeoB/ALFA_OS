@@ -216,6 +216,98 @@
   "shell.menu.redo": {
    "de": "Wiederholen",
    "en": "Redo"
+  },
+  "app.mail": {
+   "de": "Mail",
+   "en": "Mail"
+  },
+  "app.mail.lane.leading": {
+   "de": "Postfach",
+   "en": "Mailbox"
+  },
+  "app.settings": {
+   "de": "Einstellungen",
+   "en": "Settings"
+  },
+  "app.settings.lane.leading": {
+   "de": "Einstellungen",
+   "en": "Settings"
+  },
+  "app.settings.lane.trailing": {
+   "de": "Offen",
+   "en": "Open"
+  },
+  "card.close": {
+   "de": "Schließen",
+   "en": "Close"
+  },
+  "confirm.no": {
+   "de": "Nein",
+   "en": "No"
+  },
+  "error.resources": {
+   "de": "Die Gestaltungswerte fehlen im Bau.",
+   "en": "The design values are missing from the build."
+  },
+  "group.communication": {
+   "de": "Kommunikation",
+   "en": "Communication"
+  },
+  "group.core": {
+   "de": "Kern",
+   "en": "Core"
+  },
+  "lane.handle.leading": {
+   "de": "Breite der linken Bahn",
+   "en": "Width of left lane"
+  },
+  "lane.handle.trailing": {
+   "de": "Breite der rechten Bahn",
+   "en": "Width of right lane"
+  },
+  "lane.handle.value": {
+   "de": "%lld pt",
+   "en": "%lld pt"
+  },
+  "menu.empty": {
+   "de": "Nichts gefunden",
+   "en": "Nothing found"
+  },
+  "menu.search": {
+   "de": "Finden",
+   "en": "Find"
+  },
+  "overview.large": {
+   "de": "Groß",
+   "en": "Large"
+  },
+  "overview.medium": {
+   "de": "Mittel",
+   "en": "Medium"
+  },
+  "overview.small": {
+   "de": "Klein",
+   "en": "Small"
+  },
+  "stack.empty": {
+   "de": "Leere Karte",
+   "en": "Empty card"
+  },
+  "sync.failed": {
+   "de": "Abgleich fehlgeschlagen. Zum Wiederholen drücken.",
+   "en": "Sync failed. Press to retry."
+  },
+  "sync.fresh": {
+   "de": "Neu laden · Gerade abgeglichen",
+   "en": "Reload · Just synced"
+  },
+  "sync.running": {
+   "de": "Gleicht ab …",
+   "en": "Syncing …"
+  },
+  "text.common.cancel": {
+   "de": "Abbrechen",
+   "en": "Cancel"
   }
  }
 }
