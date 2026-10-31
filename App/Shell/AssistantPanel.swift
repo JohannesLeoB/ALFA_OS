@@ -6,6 +6,8 @@ import SwiftUI
 struct AssistantPanel: View {
     let session: AppSession
     @Environment(\.appearance) private var appearance
+    @State private var whole = CGFloat.zero
+    @State private var thread = CGFloat.zero
 
     private var desk: DeskState { session.desk }
 
@@ -13,8 +15,8 @@ struct AssistantPanel: View {
         let conversation = session.conversation
         let turns = conversation.turns
         let off = session.assistantOff
-        let room = CGFloat(desk.blob.menuRoom(window: desk.window, measure: desk.measure)
-            - Tokens.Spacing.step40 - Tokens.Spacing.step28 - Tokens.Spacing.step44)
+        let fixed = max(CGFloat(Tokens.Spacing.step40 + Tokens.Spacing.step28 + Tokens.Spacing.step44), whole - thread)
+        let room = CGFloat(desk.blob.menuRoom(window: desk.window, measure: desk.measure)) - fixed
         VStack(spacing: CGFloat(Tokens.Spacing.step8)) {
             Rectangle()
                 .fill(appearance.color(\.inverseLine))
@@ -22,6 +24,8 @@ struct AssistantPanel: View {
                 .padding(.horizontal, CGFloat(Tokens.Spacing.step12))
             if !turns.isEmpty {
                 AssistantThread(turns: turns, room: room, retry: session.retryAssistant)
+                    .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { thread = $0 }
+                    .onDisappear { thread = 0 }
             }
             if !off && (turns.isEmpty || session.claudeFailed) {
                 appearance.text(session.assistantHintKey)
@@ -51,6 +55,7 @@ struct AssistantPanel: View {
         .typeStyle(Tokens.TextStyle.body)
         .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
         .padding(.bottom, CGFloat(Tokens.Spacing.step8))
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { whole = $0 }
         .onAppear { session.seeAssistant() }
     }
 

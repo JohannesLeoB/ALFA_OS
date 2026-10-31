@@ -33,6 +33,7 @@ struct OverviewTile: View {
                     .lineHeight(SheetValues.overviewTileTextLine * Tokens.TextSize.body, size: Tokens.TextSize.body)
             }
             .frame(maxWidth: .infinity, alignment: .topLeading)
+            .help(Text(verbatim: entry.subject))
             .padding(.horizontal, CGFloat(Tokens.Size.edge))
             .padding(.top, CGFloat(Tokens.Spacing.step4))
             .padding(.bottom, CGFloat(Tokens.Spacing.step44))

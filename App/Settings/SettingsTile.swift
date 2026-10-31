@@ -49,6 +49,7 @@ struct SettingsTile: View {
             .contentShape(shape)
         }
         .buttonStyle(PressScaleButtonStyle(scale: Tokens.Scale.pressTile))
+        .help(Text(name, bundle: appearance.bundle))
         .onHover { hovering = $0 }
         .animation(appearance.ease(Tokens.Duration.hover), value: hovering)
         .accessibilityAddTraits(selected ? .isSelected : [])

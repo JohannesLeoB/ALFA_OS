@@ -23,11 +23,12 @@ struct ToastView: View {
                 Glyph(.alert)
                     .padding(.leading, -CGFloat(Tokens.Spacing.step4))
             }
-            message.lineLimit(1)
+            message.lineLimit(1).help(message)
             if let undoLabel, let onUndo {
                 Button(action: onUndo) {
                     undoLabel
                         .lineLimit(1)
+                        .fixedSize()
                         .typeStyle(Tokens.TextStyle.control)
                         .padding(.horizontal, CGFloat(Tokens.Spacing.step8))
                         .frame(height: CGFloat(Tokens.Spacing.step20))

@@ -68,12 +68,14 @@ struct MenuRow: View {
                     .frame(width: CGFloat(Tokens.Spacing.step12))
                 row.label
                     .lineLimit(1)
+                    .help(row.label)
                     .font(.face(Tokens.TextSize.body))
                     .frame(maxWidth: .infinity, alignment: .leading)
                 if let meta = row.meta {
                     meta
                         .font(.face(Tokens.TextSize.small))
                         .foregroundStyle(appearance.color(\.inkTertiary))
+                        .fixedSize()
                 }
             }
             .foregroundStyle(appearance.color(row.danger ? \.signal : \.ink))

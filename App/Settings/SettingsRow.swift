@@ -9,12 +9,18 @@ struct SettingsRow<Trailing: View>: View {
     var sub: Text?
     var line = true
     @ViewBuilder let trailing: Trailing
+    @State private var width: CGFloat?
+
+    private var room: CGFloat? {
+        width.map { max(0, $0 - CGFloat(Tokens.Spacing.step16 + Tokens.Spacing.step8 - Tokens.Size.confirmPillOffset)) }
+    }
 
     var body: some View {
         SettingsRowLayout(gap: CGFloat(Tokens.Spacing.step12), minimum: CGFloat(Tokens.Size.fieldLabelMinWidth)) {
             VStack(alignment: .leading, spacing: 0) {
                 label
                     .lineLimit(1)
+                    .help(label)
                     .typeStyle(Tokens.TextStyle.body)
                     .foregroundStyle(appearance.color(\.ink))
                 if let sub {
@@ -28,11 +34,13 @@ struct SettingsRow<Trailing: View>: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             HStack(spacing: CGFloat(Tokens.Spacing.step12)) { trailing }
+                .environment(\.pillRoom, room)
         }
         .padding(.vertical, CGFloat(Tokens.Spacing.step8))
         .padding(.leading, CGFloat(Tokens.Spacing.step16))
         .padding(.trailing, CGFloat(Tokens.Spacing.step8))
         .frame(minHeight: CGFloat(Tokens.Spacing.step44))
+        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
         .overlay(alignment: .bottom) {
             if line {
                 Hairline()
@@ -89,6 +97,7 @@ struct SettingsValue: View {
         text
             .lineLimit(1)
             .truncationMode(.tail)
+            .help(text)
             .font(.face(Tokens.TextSize.body))
             .foregroundStyle(appearance.color(tone))
             .padding(.trailing, CGFloat(Tokens.Size.trailingTextInset))
@@ -117,6 +126,7 @@ struct ChoiceButton: View {
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)
+        .help(label)
         .background(AnchorMarker(box: anchor ?? own))
     }
 

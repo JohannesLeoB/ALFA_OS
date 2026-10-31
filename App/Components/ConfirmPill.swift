@@ -12,6 +12,7 @@ enum ConfirmPhase {
 struct ConfirmPill<Glyph: View>: View {
     @Environment(\.appearance) private var appearance
     @Environment(\.appLocked) private var locked
+    @Environment(\.pillRoom) private var room
     @GestureState private var touching = false
     var label: Text?
     let question: Text
@@ -42,7 +43,16 @@ struct ConfirmPill<Glyph: View>: View {
                 .padding(CGFloat(Tokens.Spacing.step4))
                 .frame(height: CGFloat(Tokens.Spacing.step28))
                 .hidden()
-                .overlay(alignment: .trailing) { pill.fixedSize() }
+                .overlay(alignment: .trailing) { bounded }
+        }
+    }
+
+    @ViewBuilder
+    private var bounded: some View {
+        if let room {
+            pill.frame(width: room, alignment: .trailing)
+        } else {
+            pill.fixedSize()
         }
     }
 
@@ -80,6 +90,8 @@ struct ConfirmPill<Glyph: View>: View {
         HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
             question
                 .lineLimit(1)
+                .help(question)
+                .layoutPriority(-1)
                 .foregroundStyle(appearance.color(\.ink))
             InnerButton(action: decline) { no }
             yesButton

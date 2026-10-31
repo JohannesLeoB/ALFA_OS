@@ -66,6 +66,7 @@ struct ConnectionStatus: View {
             }
             label
                 .lineLimit(1)
+                .help(label)
                 .padding(.trailing, CGFloat(Tokens.Size.trailingTextInset))
         }
         .font(.face(Tokens.TextSize.small))
