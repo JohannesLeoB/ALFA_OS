@@ -179,8 +179,8 @@ final class Assembly {
             ? String(localized: String.LocalizationValue("shell.signin.close"))
             : String(localized: String.LocalizationValue("shell.signin.retry"))
         let texts = SignInPageEngine.Texts(
-            language: Locale.current.language.languageCode?.identifier ?? "de",
-            wordmark: AppIdentity.name, title: title, line: line)
+            language: Bundle.main.preferredLocalizations.first ?? Bundle.main.developmentLocalization ?? "",
+            wordmark: AppIdentity.name, title: title, line: line, style: SignInStyle.css)
         return accepted ? SignInPageEngine.acceptedPage(texts) : SignInPageEngine.unreadablePage(texts)
     }
 

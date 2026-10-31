@@ -6,12 +6,14 @@ public enum SignInPageEngine {
         public let wordmark: String
         public let title: String
         public let line: String
+        public let style: String
 
-        public init(language: String, wordmark: String, title: String, line: String) {
+        public init(language: String, wordmark: String, title: String, line: String, style: String) {
             self.language = language
             self.wordmark = wordmark
             self.title = title
             self.line = line
+            self.style = style
         }
     }
 
@@ -36,6 +38,7 @@ public enum SignInPageEngine {
             ("{{wordmark}}", escape(texts.wordmark)),
             ("{{title}}", escape(texts.title)),
             ("{{line}}", escape(texts.line)),
+            ("{{style}}", texts.style),
             ("{{state}}", animated ? "accepted" : "unreadable"),
         ]
         return replacements.reduce(template) { $0.replacingOccurrences(of: $1.0, with: $1.1) }
@@ -50,29 +53,8 @@ public enum SignInPageEngine {
     <meta name="color-scheme" content="light dark">
     <title>{{wordmark}} · {{title}}</title>
     <style>
-    :root{
-      --c-ground:#ffffff;--c-ink:#171717;--c-ink-2:#4d4d4d;--c-inv:#171717;--c-on-inv:#ffffff;
-      --sh-float:0 0 0 1px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.10);
-      --size-blobHeight:40px;--size-blobWidth:56px;--size-blobAwakeWidth:124px;--size-blobEyeWidth:4px;
-      --size-blobEyeHeight:8px;--size-blobEyeGap:4px;--size-hairline:1px;--size-confirmEnterBlur:3px;
-      --radius-blob:20px;--radius-stroke:2px;--spacing-step8:8px;--spacing-step16:16px;--spacing-step24:24px;
-      --spacing-step28:28px;--spacing-step40:40px;--spacing-blobInset:6px;
-      --typography-family-text:Geist,"SF Pro Text",system-ui,-apple-system,sans-serif;
-      --typography-size-small:11.5px;--typography-size-body:13px;--typography-size-title:18px;
-      --typography-weight-regular:400;--typography-weight-medium:500;
-      --typography-tracking-title:-0.02em;--typography-lineHeight-title:1.25;--typography-lineHeight-body:1.35;
-      --opacity-ringOnMark:.22;--motion-easing-standard:cubic-bezier(0.2,0.8,0.2,1);
-      --motion-easing-blobFlight:cubic-bezier(0.2,1.15,0.3,1);
-      --motion-duration-blobFlight:416ms;--motion-duration-blobWidth:240ms;--motion-duration-blobBlinkClose:140ms;
-      --motion-duration-toggle:200ms;--motion-duration-chevron:240ms;--motion-duration-overviewEnter:640ms;
-      --motion-duration-labelDelay:80ms;--scale-mark:2;
-    }
-    @media (prefers-color-scheme:dark){
-      :root{
-        --c-ground:#0d0d0d;--c-ink:#fafafa;--c-ink-2:#d9d9d9;--c-inv:#2e2e2e;--c-on-inv:#fafafa;
-        --sh-float:0 0 0 1px rgba(255,255,255,.10),0 8px 24px rgba(0,0,0,.5);
-      }
-    }
+    {{style}}
+    :root{--scale-mark:2}
     *{box-sizing:border-box}
     html,body{height:100%;margin:0}
     body{background:var(--c-ground);color:var(--c-ink);font-family:var(--typography-family-text);
