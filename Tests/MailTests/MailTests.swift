@@ -4919,6 +4919,7 @@ extension MailTests {
                        [.item(.reply), .item(.forward), .separator, .item(.markRead), .separator, .item(.trash)])
         XCTAssertFalse(MenuEngine.readingMore(starred: false, original: true, folders: false).contains(.item(.spam)))
         XCTAssertEqual(MenuEngine.readingMore(starred: false, original: false, folders: false), [.item(.star), .item(.markUnread)])
+        XCTAssertEqual(MenuEngine.readingMore(starred: false, original: false, unread: true, folders: false), [.item(.star), .item(.markRead)])
         XCTAssertEqual(MenuEngine.readingMore(starred: true, original: true, folders: true, spam: false),
                        [.item(.unstar), .item(.markUnread), .item(.move), .separator, .item(.original)])
         let commands = CommandEngine.commands(front: .message(hasCopy: false), stackCount: 1, fanned: false, hasFiles: false,

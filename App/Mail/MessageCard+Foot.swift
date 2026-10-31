@@ -91,6 +91,7 @@ extension MessageCard {
             }
             guard case .message(let id) = inbox.frontRef else { return }
             let lines = MenuEngine.readingMore(starred: inbox.card(id)?.summary.flags.contains(.flagged) ?? false, original: inbox.offersOriginal,
+                                               unread: !(inbox.card(id)?.summary.flags.contains(.seen) ?? true),
                                                folders: inbox.folderActions, spam: inbox.offersSpam)
             let entries = MenuLine.entries(lines, appearance: appearance) { action in
                 if action == .move {

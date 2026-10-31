@@ -162,8 +162,8 @@ public enum MenuEngine {
             + [.item(unread ? .markRead : .markUnread)] + (folders ? [.item(.move)] : []) + bin
     }
 
-    public static func readingMore(starred: Bool, original: Bool, folders: Bool = true, spam: Bool = true) -> [MenuLine] {
-        let marks: [MenuLine] = [.item(starred ? .unstar : .star), .item(.markUnread)] + (folders ? [.item(.move)] : [])
+    public static func readingMore(starred: Bool, original: Bool, unread: Bool = false, folders: Bool = true, spam: Bool = true) -> [MenuLine] {
+        let marks: [MenuLine] = [.item(starred ? .unstar : .star), .item(unread ? .markRead : .markUnread)] + (folders ? [.item(.move)] : [])
         let more: [MenuLine] = (original ? [.item(.original)] : []) + (folders && spam ? [.item(.spam)] : [])
         return more.isEmpty ? marks : marks + [.separator] + more
     }
