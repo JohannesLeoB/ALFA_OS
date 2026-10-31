@@ -3424,7 +3424,7 @@ final class MailTests: XCTestCase {
         XCTAssertNil(rig.mailbox.unseenCount("a", folder: "Archive"))
         XCTAssertTrue(rig.mailbox.messages("a", folder: "Spam").isEmpty)
         let state = await started(rig)
-        XCTAssertEqual(state.folderRows.first { $0.folder.role == .spam }?.count, 4)
+        XCTAssertEqual(state.folderRows.first { $0.folder.role == .spam }?.count, 0)
     }
 
     @MainActor

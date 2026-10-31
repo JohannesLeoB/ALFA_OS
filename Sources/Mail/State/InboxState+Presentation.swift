@@ -54,7 +54,6 @@ extension InboxState {
         case .drafts: draftBadge(inlet)
         case .outbox: outbox.filter { $0.inlet == inlet && $0.state.plannedAt == nil }.count
         case .later: outbox.filter { $0.inlet == inlet && $0.state.plannedAt != nil }.count
-        case .spam, .archive, .other: folderUnseen[folder.id] ?? 0
         default: 0
         }
     }
