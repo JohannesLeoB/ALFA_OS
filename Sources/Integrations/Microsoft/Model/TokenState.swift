@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 import Hub
 
@@ -44,4 +45,92 @@ struct TokenState: Equatable, Sendable {
         if let refreshToken { values[Self.refreshKey] = refreshToken }
         return Grant(values: values)
     }
+}
+
+struct AuthorizationParams: Sendable {
+    let url: URL
+    let pkce: PkceChallenge
+    let state: String
+}
+
+struct MailIdentity: Equatable, Sendable {
+    var address: String
+    var name: String
+}
+
+enum MicrosoftFailure: Error, Equatable, Sendable {
+    case invalidResponse
+    case invalidEndpoint
+    case decodingFailed
+    case identityMissing
+    case api(OAuthFault)
+}
+
+struct OAuthFault: Equatable, Sendable {
+    let status: Int
+    let reason: String?
+    let message: String?
+
+    init(status: Int, reason: String? = nil, message: String? = nil) {
+        self.status = status
+        self.reason = reason
+        self.message = message
+    }
+
+    init(status: Int, data: Data) {
+        let object = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+        self.init(status: status, reason: object?["error"] as? String, message: object?["error_description"] as? String)
+    }
+
+    var isServerFault: Bool { status == 429 || (500...599).contains(status) }
+}
+
+enum OAuthScope: String, CaseIterable, Sendable {
+    case imap = "https://outlook.office.com/IMAP.AccessAsUser.All"
+    case smtp = "https://outlook.office.com/SMTP.Send"
+    case offlineAccess = "offline_access"
+    case openid
+    case profile
+    case email
+}
+
+struct OAuthToken: Decodable, Equatable, Sendable {
+    var accessToken: String
+    var expiresIn: Int?
+    var refreshToken: String?
+    var idToken: String?
+
+    enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+        case expiresIn = "expires_in"
+        case refreshToken = "refresh_token"
+        case idToken = "id_token"
+    }
+}
+
+struct PkceChallenge: Sendable {
+    static let method = "S256"
+    private static let verifierBytes = 64
+
+    let verifier: String
+    let challenge: String
+
+    static func generate() -> PkceChallenge {
+        var bytes = [UInt8](repeating: 0, count: verifierBytes)
+        _ = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
+        let verifier = Base64Engine.encodeURL(Data(bytes))
+        let challenge = Base64Engine.encodeURL(Data(SHA256.hash(data: Data(verifier.utf8))))
+        return PkceChallenge(verifier: verifier, challenge: challenge)
+    }
+}
+
+enum SignInFailure: Error, Equatable, Sendable {
+    case clientConfigMissing(String)
+    case clientConfigInvalid(String)
+    case grantIncomplete(String)
+    case refreshUnavailable
+    case redirectStateMismatch
+    case loopbackStartupFailed
+    case loopbackCancelled
+    case browserFailed
 }

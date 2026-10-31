@@ -1,3 +1,4 @@
+import Foundation
 import Hub
 
 enum FailureEngine {
@@ -37,5 +38,55 @@ enum FailureEngine {
         }
         return Classification(kind: kind, original: Original(
             provider: provider, status: fault.status, code: fault.reason, text: fault.message))
+    }
+}
+
+enum Base64Engine {
+    static func encodeURL(_ data: Data) -> String {
+        data.base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+    }
+
+    static func decodeURL(_ text: String) -> Data? {
+        var padded = text.replacingOccurrences(of: "-", with: "+").replacingOccurrences(of: "_", with: "/")
+        while padded.count % 4 != 0 { padded += "=" }
+        return Data(base64Encoded: padded)
+    }
+}
+
+enum FormBodyEngine {
+    static func encode(_ values: [String: String]) -> Data {
+        Data(values.map { key, value in "\(escape(key))=\(escape(value))" }.sorted().joined(separator: "&").utf8)
+    }
+
+    private static func escape(_ value: String) -> String {
+        var allowed = CharacterSet.alphanumerics
+        allowed.insert(charactersIn: "-._~")
+        return value.addingPercentEncoding(withAllowedCharacters: allowed) ?? value
+    }
+}
+
+enum IdentityParser {
+    static func parse(idToken: String) -> MailIdentity? {
+        struct Claims: Decodable {
+            let email: String?
+            let preferredUsername: String?
+            let name: String?
+
+            enum CodingKeys: String, CodingKey {
+                case email
+                case preferredUsername = "preferred_username"
+                case name
+            }
+        }
+        let parts = idToken.split(separator: ".", omittingEmptySubsequences: false)
+        guard parts.count == 3, let data = Base64Engine.decodeURL(String(parts[1])),
+              let claims = try? JSONDecoder().decode(Claims.self, from: data) else { return nil }
+        let candidates = [claims.email, claims.preferredUsername].compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+        guard let address = candidates.first(where: { $0.contains("@") }) else { return nil }
+        let name = claims.name?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return MailIdentity(address: address, name: name.isEmpty ? address : name)
     }
 }
