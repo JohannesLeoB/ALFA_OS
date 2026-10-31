@@ -81,7 +81,7 @@ struct GroupList: View {
                     let count = group == .connections ? bad : 0
                     LaneRow(glyph: Icon(rawValue: group.symbol) ?? .system, label: appearance.text(group.key), selected: selected,
                             count: count > 0 ? String(count) : nil, countTone: selected ? \.lane : \.signal) {
-                        context.state.select(group)
+                        context.choose(group)
                     }
                 }
             }
@@ -154,7 +154,7 @@ struct SettingsMarkList: View {
         case .leading:
             return SettingsGroup.allCases.map { group in
                 StripMarkItem(id: "group." + group.rawValue, face: .glyph(Icon(rawValue: group.symbol) ?? .system),
-                              help: appearance.text(group.key), selected: state.group == group, dot: false) { state.select(group) }
+                              help: appearance.text(group.key), selected: state.group == group, dot: false) { context.choose(group) }
             }
         case .center:
             let entries = state.group == .connections
@@ -194,6 +194,13 @@ struct SettingsContext {
     let clearCache: () -> Void
 
     var readings: [IntegrationReading] { IntegrationReadEngine.readAll(catalog, setup: setup, rules: rules) }
+
+    func choose(_ group: SettingsGroup) {
+        let first = group == .connections
+            ? (readings.first?.info.id ?? SettingsSection.keyInventory.rawValue)
+            : group.sections.first?.rawValue
+        state.select(group, showing: first)
+    }
 
     func syncNow(_ inlet: Inlet.ID, _ capability: Capability) async -> SyncReport.Result {
         await rules.syncNow(inlet, capability).result
@@ -395,6 +402,7 @@ struct SettingsStack: View {
                             .padding(.top, CGFloat(Tokens.Spacing.step4))
                             .padding(.bottom, CGFloat(Tokens.Spacing.step8))
                     }
+                    .id(front)
                     .mask { CardContentMask() }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                     .background(appearance.color(\.lane))

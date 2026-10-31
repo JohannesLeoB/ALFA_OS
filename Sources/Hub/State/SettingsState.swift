@@ -303,8 +303,9 @@ public final class SettingsState {
         try? settings.remove(key: SettingsKey.contactCache(source))
     }
 
-    public func select(_ next: SettingsGroup) {
+    public func select(_ next: SettingsGroup, showing card: String?) {
         group = next
+        front = card
     }
 
     public func open(_ id: String) {

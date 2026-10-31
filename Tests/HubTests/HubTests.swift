@@ -1756,18 +1756,18 @@ final class HubTests: XCTestCase {
     }
 
     @MainActor
-    func testSettingsStateShowsOneCardAndKeepsItWhenTheGroupChanges() throws {
+    func testSettingsStateShowsOneCardAndReplacesItWhenTheGroupChanges() throws {
         let state = try SettingsState(settings: SettingStore(database: SQLiteStore.inMemory()), templates: emptyTemplates())
         XCTAssertEqual(state.group, .connections)
         XCTAssertEqual(state.front, "google")
         for id in ["a", "b", "c"] { state.open(id) }
         XCTAssertEqual(state.front, "c")
-        state.select(.company)
+        state.select(.company, showing: SettingsSection.companyData.rawValue)
         XCTAssertEqual(state.group, .company)
-        XCTAssertEqual(state.front, "c")
-        state.select(.folders)
+        XCTAssertEqual(state.front, "companyData")
+        state.select(.folders, showing: nil)
         XCTAssertEqual(state.group, .folders)
-        XCTAssertEqual(state.front, "c")
+        XCTAssertNil(state.front)
         XCTAssertEqual(SettingsGroup.folders.sections, [.folders, .templates])
         state.notify("settings.toast.copied", name: "n")
         XCTAssertEqual([state.toast, state.toastName], ["settings.toast.copied", "n"])
