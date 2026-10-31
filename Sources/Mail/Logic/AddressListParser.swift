@@ -169,6 +169,7 @@ public enum PersonName {
         }
         var name = entry[entry.startIndex..<open].trimmingCharacters(in: .whitespaces)
         if name.hasPrefix("\""), name.hasSuffix("\""), name.count >= 2 { name = String(name.dropFirst().dropLast()) }
+        if name.contains("@"), !name.contains(where: \.isWhitespace) { name = "" }
         return (name, String(entry[entry.index(after: open)..<close]))
     }
 }

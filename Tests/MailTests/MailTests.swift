@@ -1532,6 +1532,8 @@ final class MailTests: XCTestCase {
 
     func testNamesQuotesAndLabels() {
         XCTAssertEqual(PersonName.display("\"Gray, Terry\" <g@x.org>").name, "Gray, Terry")
+        XCTAssertEqual(PersonName.display("\"lach@x.de\" <lach@x.de>").name, "")
+        XCTAssertEqual(PersonName.display("lach@x.de <lach@x.de>").address, "lach@x.de")
         XCTAssertEqual(PersonName.middle("abcdefghij", limit: 5).count, 5)
         let split = Quoting.split("Hi\n\nOn Monday Anna wrote:\n> old\n> older")
         XCTAssertEqual(split.body, "Hi")
