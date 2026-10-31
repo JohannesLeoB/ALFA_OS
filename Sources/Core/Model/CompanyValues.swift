@@ -15,3 +15,9 @@ public enum CompanyValues {
         return object.compactMapValues { $0 as? String }
     }
 }
+
+public enum AppIdentity {
+    public static let name = "ALFA_OS"
+    static let bundleID = "com.johannesleoberger.alfaos"
+    public static let keychainPrefix = "\(bundleID)."
+}
