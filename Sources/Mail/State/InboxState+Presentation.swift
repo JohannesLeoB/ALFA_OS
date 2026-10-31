@@ -1,4 +1,5 @@
 import Core
+import Design
 import Foundation
 import Hub
 import Shell
@@ -232,5 +233,193 @@ extension InboxState {
         case .trash: .trash
         case .other: .folder
         }
+    }
+}
+
+extension InboxState {
+    func post(_ kind: ToastKind, undo: (@MainActor () async -> Void)? = nil, lasts: Duration? = nil) {
+        toastSerial += 1
+        toast = Toast(serial: toastSerial, kind: kind, undoable: undo != nil, lasts: lasts)
+        undoAction = undo
+    }
+
+    public func announce(_ kind: ToastKind) {
+        post(kind)
+    }
+
+    public func dismissToast(_ serial: Int) {
+        guard toast?.serial == serial else { return }
+        toast = nil
+        undoAction = nil
+    }
+
+    public func undoToast() async {
+        let action = undoAction
+        toast = nil
+        undoAction = nil
+        await action?()
+    }
+}
+
+extension InboxState {
+    public func stripMarks(_ lane: LaneKind, height: Double) -> [StripMark] {
+        switch lane {
+        case .leading:
+            return folderRows.map { row in
+                StripMark(id: "folder." + row.folder.id, face: .glyph(row.glyph),
+                          help: row.attention ? FolderName(key: "mail.strip.outboxNotSent", text: "") : folderName(row.folder.id),
+                          selected: row.selected, dot: row.attention, run: .folder(row.folder.id))
+            } + [StripMark(id: "compose", face: .glyph(.compose), help: FolderName(key: "mail.action.compose", text: ""),
+                           selected: false, dot: false, accent: true, run: .compose)]
+        case .center:
+            let room = max(1, Int((height - Tokens.Size.stripReserveTop - Tokens.Size.stripReserveBottom) / Tokens.Size.rowHeight))
+            return rowWindow(limit: room).items.map { row in
+                StripMark(id: "row." + row.id, face: row.initials.isEmpty ? .glyph(.person) : .text(row.initials),
+                          help: FolderName(key: nil, text: row.subject ?? ""), selected: row.selected, dot: row.unread,
+                          run: .row(row.id))
+            }
+        case .trailing:
+            let order = visibleStack
+            if order.isEmpty { return [composeMark] }
+            var marks: [StripMark] = []
+            if case .message(let id) = frontRef {
+                marks.append(StripMark(id: "reply", face: .glyph(.reply), help: FolderName(key: Action.reply.key, text: ""),
+                                       selected: false, dot: false, run: .reply(id)))
+                marks.append(StripMark(id: "forward", face: .glyph(.forward), help: FolderName(key: Action.forward.key, text: ""),
+                                       selected: false, dot: false, run: .forward(id)))
+            }
+            return marks + order.compactMap { ref in
+                switch ref {
+                case .message(let id):
+                    guard let card = card(id) else { return nil }
+                    let initials = PersonName.initials(Self.sender(card.summary).name)
+                    return StripMark(id: ref.id, face: initials.isEmpty ? .glyph(.person) : .text(initials),
+                                     help: FolderName(key: nil, text: card.summary.subject), selected: false, dot: false, run: .card(ref))
+                case .draft(let id):
+                    guard let card = draft(id) else { return nil }
+                    let help = card.draft.subject.isEmpty ? FolderName(key: "mail.row.newMessage", text: "")
+                        : FolderName(key: nil, text: card.draft.subject)
+                    return StripMark(id: ref.id, face: .glyph(.compose), help: help, selected: false, dot: false, run: .card(ref))
+                }
+            }
+        }
+    }
+
+    var composeMark: StripMark {
+        StripMark(id: "compose", face: .glyph(.compose), help: FolderName(key: "mail.action.compose", text: ""),
+                  selected: false, dot: false, run: .compose)
+    }
+
+    public func run(_ mark: StripMark.Run) async {
+        switch mark {
+        case .folder(let id): await selectFolder(id)
+        case .compose: compose()
+        case .row(let id): await open(id)
+        case .reply(let id): await reply(to: id)
+        case .forward(let id): await forward(id)
+        case .card(let ref): bring(ref)
+        }
+    }
+}
+
+extension InboxState {
+    var visibleStack: [CardRef] {
+        stack.filter { ref in
+            if case .draft(let id) = ref, draft(id)?.state == .sent || (draft(id)?.state == .sending && isHeld(id)) {
+                return false
+            }
+            return true
+        }
+    }
+
+    public var frontRef: CardRef? {
+        let visible = visibleStack
+        if let front, visible.contains(front) { return front }
+        return visible.last
+    }
+
+    public var stackOrder: [CardRef] {
+        let visible = visibleStack
+        guard let front = frontRef else { return visible }
+        return visible.filter { $0 != front } + [front]
+    }
+
+    public var stackCount: Int { visibleStack.count }
+
+    public func bring(_ ref: CardRef) {
+        guard visibleStack.contains(ref) else { return }
+        front = ref
+        if case .message(let id) = ref { selectedMessage = id }
+    }
+
+    public func pin(_ id: String) {
+        update(id) { $0.pinned = true }
+    }
+
+    public func card(_ id: String) -> OpenMessage? {
+        cardIndex(id, in: selectedInlet).map { cards[$0] }
+    }
+
+    func cardIndex(_ id: String, in inlet: Inlet.ID?) -> Int? {
+        cards.firstIndex { $0.id == id && $0.inlet == inlet }
+    }
+
+    func attach(_ ref: CardRef) {
+        if !stack.contains(ref) { stack.append(ref) }
+        front = ref
+        opened += 1
+        openOverview(false)
+    }
+
+    func detach(_ ref: CardRef) {
+        stack.removeAll { $0 == ref }
+        if front == ref { front = stack.last }
+    }
+
+    func dropPreviews() {
+        let inlet = selectedInlet
+        let gone = cards.filter { $0.inlet == inlet && !$0.pinned }.map(\.id)
+        cards.removeAll { $0.inlet == inlet && !$0.pinned }
+        for id in gone { detach(.message(id)) }
+    }
+
+    public func openOverview(_ open: Bool) {
+        overview.open = open
+        if !open { overview.hot = nil }
+    }
+
+    public func toggleTiles() {
+        tiles.toggle()
+        tileHot = nil
+    }
+
+    public func aimTile(_ id: String?) {
+        tileHot = id
+    }
+
+    public func aimOverview(_ ref: CardRef?) {
+        overview.hot = ref
+    }
+
+    func trimCards() {
+        let inlet = selectedInlet
+        while cards.filter({ $0.inlet == inlet }).count > Tokens.Count.stackMaxCards,
+              let index = cards.firstIndex(where: { $0.inlet == inlet }) {
+            detach(.message(cards.remove(at: index).id))
+        }
+    }
+
+    public func commands(confirmDiscard: Bool, canFold: Bool, sendLabelled: Bool) -> CommandSet {
+        var front: CommandEngine.Front?
+        var trashes = true
+        if case .message(let id) = frontRef, let card = card(id) {
+            trashes = !inTrash(id)
+            front = .message(hasCopy: !card.summary.ccRaw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        } else if case .draft(let id) = frontRef, let card = draft(id) {
+            front = .draft(canSend: card.canSend)
+        }
+        return CommandEngine.commands(front: front, stackCount: stackCount, fanned: overview.open,
+                                      hasFiles: mailbox.hasFiles, confirmDiscard: confirmDiscard, canFold: canFold,
+                                      sendLabelled: sendLabelled, formatting: formatting, folders: folderActions, trashes: trashes)
     }
 }
