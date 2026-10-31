@@ -20,6 +20,17 @@ enum MirrorEngine {
     static let landedSize = 50
     static let guardMinimum = 20
     static let reloadInterval = Duration.milliseconds(300)
+    static let draftPreview = 600
+
+    static func draftRow(_ id: String, _ draft: Draft, folder: String, account: String, thread: String, at date: Date) -> MessageSummary {
+        let name = draft.from?.name ?? ""
+        let address = draft.from?.address ?? account
+        return MessageSummary(
+            id: id, threadID: draft.threadID ?? thread, subject: draft.subject, from: name.isEmpty ? address : name,
+            fromRaw: name.isEmpty ? address : name + " <" + address + ">", toRaw: draft.to ?? "", ccRaw: draft.cc ?? "",
+            bccRaw: draft.bcc ?? "", snippet: String(PreviewEngine.text(draft.body).prefix(draftPreview)), receivedAt: date,
+            flags: [.seen, .draft], folderIDs: [folder], attachmentCount: draft.attachments.count)
+    }
 
     static func plan(stored: Set<String>, listed: [String]) -> Plan {
         let wanted = Set(listed)

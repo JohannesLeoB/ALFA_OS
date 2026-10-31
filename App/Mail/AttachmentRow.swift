@@ -39,14 +39,14 @@ struct AttachmentRow: View {
     }
 
     private func menu() {
-        let entries = MenuLine.entries(MenuEngine.attachment(name: row.name), appearance: appearance) { action in
+        let entries = MenuLine.entries(MenuEngine.attachment(name: row.name, project: session.inbox.offersProjectFiles), appearance: appearance) { action in
             switch action {
             case .preview: run { AttachmentPreview.show($0, name: row.name) }
             case .print: run { AttachmentExport.printAttachment($0, name: row.name) }
             case .pdf: run { AttachmentExport.savePDF($0, name: row.name) }
             case .saveAs: run { AttachmentExport.save($0, name: row.name) }
             case .otherProject:
-                ProjectFolderList.save(session.inbox, appearance: appearance, message: card.id, attachment: row, anchor: anchor)
+                ProjectFolderList.save(session, appearance: appearance, message: card.id, attachment: row, anchor: anchor)
             default: break
             }
         }

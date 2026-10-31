@@ -24,11 +24,15 @@ private struct BlobPressing: ViewModifier {
     @Binding var pressing: Bool
     let tap: (Int) -> Void
     @Environment(\.appearance) private var appearance
+    @Environment(\.appLocked) private var locked
     @State private var press: BlobPress?
     @State private var justDragged = false
 
     func body(content: Content) -> some View {
-        content.gesture(drag)
+        content
+            .gesture(drag)
+            .onChange(of: locked) { _, now in if now { finish(ended: false) } }
+            .onDisappear { finish(ended: false) }
     }
 
     private func sample(_ value: DragGesture.Value, _ now: Double) -> PointerSample {
@@ -59,28 +63,31 @@ private struct BlobPressing: ViewModifier {
                 squeezed = false
                 stretch = appearance.still ? .none : BlobStretch(history: current.history)
             }
-            .onEnded { _ in
-                squeezed = false
-                stretch = .none
-                guard let current = press else { return }
-                press = nil
-                pressing = false
-                guard current.moved, let spot = held else {
-                    let count = NSApp.currentEvent?.clickCount ?? 1
-                    if count == 2 || !justDragged { tap(count) }
-                    return
-                }
-                justDragged = true
-                Task {
-                    try? await Task.sleep(for: .seconds(Tokens.Duration.clickGuard))
-                    justDragged = false
-                }
-                held = nil
-                desk.dropBlob(
-                    center: BlobPoint(x: Double(spot.x) + desk.measure.blobWidth / 2, y: Double(spot.y) + desk.measure.blobHeight / 2),
-                    velocity: current.velocity
-                )
-            }
+            .onEnded { _ in finish(ended: true) }
+    }
+
+    private func finish(ended: Bool) {
+        squeezed = false
+        stretch = .none
+        guard let current = press else { return }
+        press = nil
+        pressing = false
+        guard current.moved, let spot = held else {
+            guard ended else { return }
+            let count = NSApp.currentEvent?.clickCount ?? 1
+            if count == 2 || !justDragged { tap(count) }
+            return
+        }
+        justDragged = true
+        Task {
+            try? await Task.sleep(for: .seconds(Tokens.Duration.clickGuard))
+            justDragged = false
+        }
+        held = nil
+        desk.dropBlob(
+            center: BlobPoint(x: Double(spot.x) + desk.measure.blobWidth / 2, y: Double(spot.y) + desk.measure.blobHeight / 2),
+            velocity: ended ? current.velocity : BlobPoint(x: 0, y: 0)
+        )
     }
 }
 

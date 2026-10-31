@@ -27,7 +27,7 @@ public enum Action: String, Sendable, CaseIterable {
         case .saveDraft: .save
         case .send: .send
         case .overview: .grid
-        case .backToStack: .fan
+        case .backToStack: .close
         case .foldColumn: .minus
         default: nil
         }

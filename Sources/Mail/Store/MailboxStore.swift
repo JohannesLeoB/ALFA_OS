@@ -14,13 +14,16 @@ public final class MailboxStore: MailboxPort {
     let range: @MainActor (Inlet.ID) -> MailboxRange
     let names: @MainActor (Inlet.ID) -> SenderNames
     let serverCopy: @MainActor (Inlet.ID) -> ServerCopy
+    let attachments: AttachmentFileStore
     var watcher: Task<Void, Never>?
     var expunging: [Inlet.ID: Bool] = [:]
     var passes: [String: Task<Result<Void, HubFailure>, Never>] = [:]
+    var followUps: [String: Task<Result<Void, HubFailure>, Never>] = [:]
     var olderOffered: [String: Bool] = [:]
     var dirty: [Inlet.ID: Set<String>] = [:]
     var running: [Inlet.ID: Int] = [:]
     var syncing: Set<Inlet.ID> = []
+    var storing: Set<Inlet.ID> = []
     var resync: Set<Inlet.ID> = []
     var offerings: [Inlet.ID: MailOffering] = [:]
     var sendLimits: [Inlet.ID: Int] = [:]
@@ -30,7 +33,9 @@ public final class MailboxStore: MailboxPort {
                 now: @escaping @Sendable () -> Date = { Date() },
                 range: @escaping @MainActor (Inlet.ID) -> MailboxRange = { _ in .standard },
                 names: @escaping @MainActor (Inlet.ID) -> SenderNames = { _ in SenderNames() },
-                serverCopy: @escaping @MainActor (Inlet.ID) -> ServerCopy = { _ in .standard }) {
+                serverCopy: @escaping @MainActor (Inlet.ID) -> ServerCopy = { _ in .standard },
+                attachmentBase: URL = FileManager.default.temporaryDirectory,
+                attachmentSettings: @escaping @MainActor () -> MailStoreSettings = { MailStoreSettings() }) {
         self.access = access
         self.database = database
         self.outboxStore = outbox
@@ -39,6 +44,8 @@ public final class MailboxStore: MailboxPort {
         self.range = range
         self.names = names
         self.serverCopy = serverCopy
+        self.attachments = AttachmentFileStore(database: database, base: attachmentBase, now: now, settings: attachmentSettings)
+        outbox.mirror = self
         watcher = Task { [weak self] in
             guard let stream = self?.access.events else { return }
             for await event in stream {
@@ -71,10 +78,10 @@ public final class MailboxStore: MailboxPort {
     }
 
     nonisolated static func folders(_ database: SQLiteStore, _ inlet: Inlet.ID) -> [Folder] {
-        (try? database.read { db in
+        MirrorEngine.withStarred((try? database.read { db in
             try Row.fetchAll(db, sql: "SELECT id, name, role FROM mail_folder WHERE inlet = ? ORDER BY position", arguments: [inlet])
                 .map { Folder(id: $0["id"], name: $0["name"], role: FolderRole(rawValue: $0["role"]) ?? .other) }
-        }) ?? []
+        }) ?? [])
     }
 
     nonisolated static func folderID(_ database: SQLiteStore, _ inlet: Inlet.ID, role: FolderRole) -> String? {
@@ -328,7 +335,10 @@ public final class MailboxStore: MailboxPort {
     }
 
     public func attachment(_ inlet: Inlet.ID, messageID: String, attachmentID: String) async throws(HubFailure) -> Data {
-        try await perform(inlet) { try await $0.fetchAttachment(messageID: messageID, attachmentID: attachmentID) }
+        if let kept = await attachments.data(inlet, message: messageID, attachment: attachmentID) { return kept }
+        let data = try await perform(inlet) { try await $0.fetchAttachment(messageID: messageID, attachmentID: attachmentID) }
+        await keepAttachment(inlet, messageID: messageID, attachmentID: attachmentID, data)
+        return data
     }
 
     public func thread(_ inlet: Inlet.ID, messageID: String, threadID: String) async throws(HubFailure) -> [MessageSummary] {
@@ -403,9 +413,10 @@ public final class MailboxStore: MailboxPort {
 
     private func purgeInlet(_ inlet: Inlet.ID) async {
         let prefix = inlet + "\n"
-        let running = passes.filter { $0.key.hasPrefix(prefix) }.map(\.value)
+        let running = passes.filter { $0.key.hasPrefix(prefix) }.map(\.value) + followUps.filter { $0.key.hasPrefix(prefix) }.map(\.value)
         running.forEach { $0.cancel() }
         for task in running { _ = await task.value }
+        attachments.removeInlet(inlet)
         let deleted: Void? = try? database.write { db in
             for table in ["mail_message", "mail_folder", "mail_sync", "mail_cursor", "mail_outbox", "mail_draft", "mail_body", "mail_pop"] {
                 try db.execute(sql: "DELETE FROM \(table) WHERE inlet = ?", arguments: [inlet])
@@ -450,6 +461,7 @@ public final class MailboxStore: MailboxPort {
             eventBus.emit(.syncFailed(inlet, Self.syncHint(error, inlet: inlet)))
             return
         }
+        startStoring(inlet)
         eventBus.emit(.syncFinished(inlet))
     }
 
@@ -492,7 +504,6 @@ public final class MailboxStore: MailboxPort {
         offerings[inlet] = nil
         try database.write { db in
             let before = try String.fetchAll(db, sql: "SELECT id FROM mail_folder WHERE inlet = ?", arguments: [inlet])
-            let folders = MirrorEngine.withStarred(folders)
             let kept = Set(folders.map(\.id))
             if !kept.isEmpty {
                 for gone in before where !kept.contains(gone) {
@@ -511,12 +522,13 @@ public final class MailboxStore: MailboxPort {
                                arguments: [inlet, folder.id, folder.name, folder.role.rawValue, index])
             }
         }
+        attachments.sweep(inlet)
     }
 
     @discardableResult
     private func remove(_ inlet: Inlet.ID, messageID: String, folder: String?) throws -> [String] {
         markDirty(inlet, messageID)
-        return try database.write { db in
+        let folders = try database.write { db in
             var sql = "SELECT folder FROM mail_message WHERE inlet = ? AND id = ?"
             var arguments: StatementArguments = [inlet, messageID]
             if let folder {
@@ -528,6 +540,8 @@ public final class MailboxStore: MailboxPort {
             try Self.dropOrphanBodies(db, inlet: inlet, ids: [messageID])
             return folders
         }
+        attachments.sweep(inlet)
+        return folders
     }
 
     func markDirty(_ inlet: Inlet.ID, _ messageID: String) {
@@ -558,10 +572,10 @@ public final class MailboxStore: MailboxPort {
     nonisolated static func insert(_ db: Database, inlet: Inlet.ID, folder: String, _ m: MessageSummary) throws {
         try db.execute(sql: """
             INSERT OR REPLACE INTO mail_message
-            (inlet, folder, id, position, thread, subject, sender, fromRaw, toRaw, ccRaw, replyToRaw, snippet, receivedAt, flags, seen, folderIDs, attachmentCount, messageIDHeader, attachments)
-            VALUES (?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (inlet, folder, id, position, thread, subject, sender, fromRaw, toRaw, ccRaw, bccRaw, replyToRaw, snippet, receivedAt, flags, seen, folderIDs, attachmentCount, messageIDHeader, attachments)
+            VALUES (?, ?, ?, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            arguments: [inlet, folder, m.id, m.threadID, m.subject, m.from, m.fromRaw, m.toRaw, m.ccRaw, m.replyToRaw, m.snippet,
+            arguments: [inlet, folder, m.id, m.threadID, m.subject, m.from, m.fromRaw, m.toRaw, m.ccRaw, m.bccRaw, m.replyToRaw, m.snippet,
                         m.receivedAt?.timeIntervalSince1970, encode(m.flags), m.flags.contains(.seen) ? 1 : 0,
                         m.folderIDs.joined(separator: "\n"), m.attachmentCount, m.messageIDHeader,
                         try JSONEncoder().encode(m.attachments)])
@@ -574,7 +588,7 @@ public final class MailboxStore: MailboxPort {
         let attachments = stored.flatMap { try? JSONDecoder().decode([AttachmentInfo].self, from: $0) } ?? []
         return MessageSummary(
             id: row["id"], threadID: row["thread"], subject: row["subject"], from: row["sender"], fromRaw: row["fromRaw"],
-            toRaw: row["toRaw"], ccRaw: row["ccRaw"], replyToRaw: row["replyToRaw"], snippet: row["snippet"],
+            toRaw: row["toRaw"], ccRaw: row["ccRaw"], bccRaw: row["bccRaw"], replyToRaw: row["replyToRaw"], snippet: row["snippet"],
             receivedAt: received.map { Date(timeIntervalSince1970: $0) }, flags: flags(row["flags"]),
             folderIDs: ids.isEmpty ? [] : ids.components(separatedBy: "\n"), attachmentCount: row["attachmentCount"],
             attachments: attachments, messageIDHeader: row["messageIDHeader"])

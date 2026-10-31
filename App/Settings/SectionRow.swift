@@ -6,6 +6,7 @@ struct SectionRow: View {
     @Environment(\.appearance) private var appearance
     let section: SettingsSection
     let value: String?
+    let detailKey: String?
     let selected: Bool
     let separated: Bool
     let action: () -> Void
@@ -33,7 +34,7 @@ struct SectionRow: View {
                     }
                 }
                 .frame(height: CGFloat(Tokens.LineHeight.notice))
-                appearance.text(section.detailKey)
+                (detailKey.map { appearance.text($0) } ?? Text(verbatim: ""))
                     .lineLimit(1)
                     .font(.face(Tokens.TextSize.body))
                     .foregroundStyle(appearance.color(ink.tertiary))

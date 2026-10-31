@@ -8,6 +8,7 @@ public struct IntegrationReading: Identifiable, Equatable, Sendable {
     public var inlets: [Inlet]
     public var offers: [Offer]
     public var areas: [AreaReading]
+    public var heldSlots: Set<String> = []
 
     public var id: String { info.id }
 
@@ -23,11 +24,11 @@ public struct IntegrationReading: Identifiable, Equatable, Sendable {
     public var step: IntegrationStep {
         let lead = lead
         switch state {
-        case .connected, .stored, .working:
+        case .connected, .working:
             return lead.map { .check($0.id) } ?? .none
         case .failed, .unreadable:
             return lead.map { .renew($0.id) } ?? .none
-        case .notConnected, .orphaned:
+        case .notConnected:
             return offers.isEmpty ? .none : .add(offers)
         case .connecting:
             return .none

@@ -190,7 +190,7 @@ extension PortRegistry {
             (any MailTransportPort).self,
             capability: .mail,
             wrap: { MeteredMail(base: $0, meter: $1) },
-            sync: { port, inlet in
+            sync: { port, inlet, _ in
                 let folders = try await port.listFolders()
                 let records = folders.map {
                     Mailbox(id: inlet + "/" + $0.id, inlet: inlet, name: $0.name, role: $0.role.rawValue)

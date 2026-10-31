@@ -11,6 +11,7 @@ final class InletsState: RulesPort {
     var queue: [SyncJob] = []
     var reports: [Inlet.ID: [ReportEntry]] = [:]
     var syncedAt: [String: Date] = [:]
+    var progresses: [String: RunProgress] = [:]
 
     @ObservationIgnored let configuration: Configuration
     @ObservationIgnored let inletStore: InletStore
@@ -19,6 +20,8 @@ final class InletsState: RulesPort {
     @ObservationIgnored let watchers: FolderChanges
     @ObservationIgnored var grants: [Inlet.ID: Grant] = [:]
     @ObservationIgnored var running: Set<String> = []
+    @ObservationIgnored var resting: [Inlet.ID: InletState] = [:]
+    @ObservationIgnored var probes: Set<Inlet.ID> = []
     @ObservationIgnored var feeds: [DataKind: [any StockFeedPort]] = [:]
     @ObservationIgnored var stocks: [String: AnyObject] = [:]
     @ObservationIgnored var delivered: [DataKind: [Inlet.ID: (records: [any Item], at: Date)]] = [:]
@@ -162,11 +165,16 @@ final class InletsState: RulesPort {
         watch(inlet, capability, value)
     }
 
+    func progress(_ inlet: Inlet.ID, _ capability: Capability) -> RunProgress? {
+        progresses[SyncEngine.key(inlet, capability)]
+    }
+
     func lastSync(_ inlet: Inlet.ID, _ capability: Capability) -> Date? {
         syncedAt[SyncEngine.key(inlet, capability)]
     }
 
-    func syncNow(_ inlet: Inlet.ID, _ capability: Capability) async {
+    @discardableResult
+    func syncNow(_ inlet: Inlet.ID, _ capability: Capability) async -> SyncReport {
         await configuration.cadence.trigger(inlet, capability)
     }
 }

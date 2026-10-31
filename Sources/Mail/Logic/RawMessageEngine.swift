@@ -19,6 +19,22 @@ enum RawMessageEngine {
         func data(_ part: IMAPBodyPart) -> Data {
             MIME.decodeTransfer(bodies[part.section] ?? Data(), encoding: part.encoding)
         }
+
+        var html: String? {
+            root.firstHTML.map(text)
+        }
+
+        var preview: String {
+            let plain = root.firstPlainText.map { PreviewEngine.text(text($0)) } ?? ""
+            guard plain.isEmpty, let html else { return plain }
+            return PreviewEngine.text(HTMLEngine.plain(html))
+        }
+
+        var attachments: [AttachmentInfo] {
+            root.attachments(html: html, embedded: root.inlineContentIDs).map {
+                AttachmentInfo(id: $0.section, filename: $0.filename ?? $0.section, mimeType: $0.mimeType, sizeBytes: $0.size)
+            }
+        }
     }
 
     private static let depthLimit = 12
@@ -34,14 +50,12 @@ enum RawMessageEngine {
     static func body(_ parsed: Parsed) -> MessageBody {
         var body = MessageBody()
         if let part = parsed.root.firstPlainText { body.text = parsed.text(part) }
-        if let part = parsed.root.firstHTML { body.html = parsed.text(part) }
+        body.html = parsed.html
         for part in parsed.root.inlineImages {
             guard let contentID = part.contentID, !contentID.isEmpty else { continue }
             body.inlineImages[contentID] = "data:\(part.mimeType);base64,\(parsed.data(part).base64EncodedString())"
         }
-        body.attachments = parsed.root.attachments.map {
-            AttachmentInfo(id: $0.section, filename: $0.filename ?? $0.section, mimeType: $0.mimeType, sizeBytes: $0.size)
-        }
+        body.attachments = parsed.attachments
         return body
     }
 
@@ -50,14 +64,12 @@ enum RawMessageEngine {
         let messageID = parsed.header("Message-ID") ?? ""
         let reference = parsed.header("References")?.split(separator: " ").first.map(String.init)
         let thread = reference ?? parsed.header("In-Reply-To") ?? (messageID.isEmpty ? id : messageID)
-        let snippet = parsed.root.firstPlainText.map { PreviewEngine.text(parsed.text($0)) } ?? ""
-        let attachments = parsed.root.attachments.map {
-            AttachmentInfo(id: $0.section, filename: $0.filename ?? $0.section, mimeType: $0.mimeType, sizeBytes: $0.size)
-        }
+        let attachments = parsed.attachments
         return MessageSummary(
             id: id, threadID: thread, subject: parsed.header("Subject") ?? "", from: display(from),
             fromRaw: from, toRaw: parsed.header("To") ?? "", ccRaw: parsed.header("Cc") ?? "",
-            replyToRaw: parsed.header("Reply-To") ?? "", snippet: snippet,
+            bccRaw: parsed.header("Bcc") ?? "",
+            replyToRaw: parsed.header("Reply-To") ?? "", snippet: parsed.preview,
             receivedAt: received ?? parsed.header("Date").flatMap(DateEngine.parseMessageDate), flags: flags,
             folderIDs: [folder], attachmentCount: attachments.count, attachments: attachments, messageIDHeader: messageID)
     }

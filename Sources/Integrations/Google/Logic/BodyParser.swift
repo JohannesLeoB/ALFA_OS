@@ -57,7 +57,7 @@ enum BodyParser {
 
     private static func firstPart(_ payload: GmailPayload?, mime: String) -> String? {
         guard let payload else { return nil }
-        if payload.mimeType == mime, let decoded = decode(payload.body?.data, mime: mime, headers: payload.headers) { return decoded }
+        if payload.mimeType == mime, let decoded = decode(payload.body?.data, headers: payload.headers) { return decoded }
         for part in payload.parts ?? [] {
             if let found = firstPart(in: part, mime: mime) { return found }
         }
@@ -65,19 +65,16 @@ enum BodyParser {
     }
 
     private static func firstPart(in part: GmailPart, mime: String) -> String? {
-        if part.mimeType == mime, let decoded = decode(part.body?.data, mime: mime, headers: part.headers) { return decoded }
+        if part.mimeType == mime, let decoded = decode(part.body?.data, headers: part.headers) { return decoded }
         for sub in part.parts ?? [] {
             if let found = firstPart(in: sub, mime: mime) { return found }
         }
         return nil
     }
 
-    private static func decode(_ data: String?, mime: String, headers: [GmailHeader]?) -> String? {
-        guard let data, !data.isEmpty, let bytes = Base64Engine.decodeURL(data), let text = String(data: bytes, encoding: .utf8) else {
-            return nil
-        }
-        guard mime == "text/plain" else { return text }
+    private static func decode(_ data: String?, headers: [GmailHeader]?) -> String? {
+        guard let data, !data.isEmpty, let bytes = Base64Engine.decodeURL(data) else { return nil }
         let contentType = headers?.first { $0.name.lowercased() == "content-type" }?.value
-        return FlowedEngine.decode(text, contentType: contentType)
+        return FlowedEngine.text(bytes, contentType: contentType)
     }
 }

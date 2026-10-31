@@ -47,8 +47,10 @@ struct StackLane: View {
     private func menuTarget(_ commands: CommandSet) -> MailMenuTarget {
         var flags: Set<Flag> = []
         if case .message(let id) = inbox.frontRef { flags = inbox.card(id)?.summary.flags ?? [] }
+        var extra: [Action] = []
+        if case .draft = inbox.frontRef { extra = [.print] }
         return MailMenuTarget(front: inbox.frontRef, commands: commands, read: flags.contains(.seen), starred: flags.contains(.flagged),
-                              perform: perform)
+                              perform: perform, extra: extra)
     }
 
     private func head(_ commands: CommandSet, width: Double) -> some View {
@@ -72,6 +74,10 @@ struct StackLane: View {
     }
 
     private func perform(_ action: Action) {
+        if action == .print, case .draft(let id) = inbox.frontRef {
+            MessageExport.printDraft(inbox, id)
+            return
+        }
         switch SlotRouter.route(action, front: inbox.frontRef) {
         case .openOverview: inbox.openOverview(true)
         case .closeOverview: inbox.openOverview(false)

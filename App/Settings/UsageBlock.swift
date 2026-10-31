@@ -47,7 +47,7 @@ struct UsageBlock: View {
     private var tokensLabel: Text {
         guard let since = usage.totals.since, let days = usage.days else { return appearance.text("settings.usage.tokens.none") }
         let span = appearance.format(days == 1 ? "settings.usage.day.one" : "settings.usage.day.other", String(days))
-        return Text(verbatim: appearance.format("settings.usage.tokens", SettingsDates.day(since), span))
+        return Text(verbatim: appearance.format("settings.usage.tokens", SettingsDates.day(since, appearance: appearance), span))
     }
 
     private func scaled(_ tokens: Int) -> String {

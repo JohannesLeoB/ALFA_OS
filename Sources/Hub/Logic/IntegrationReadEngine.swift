@@ -12,11 +12,15 @@ public enum IntegrationReadEngine {
         if let lead {
             switch lead.state {
             case .connected(let probed):
-                note = probed == .distantPast ? .unchecked : .checked(probed)
-            case .signedIn:
-                note = .unchecked
+                note = probed == .distantPast ? nil : .checked(probed)
             case .connecting:
                 note = .signingIn
+            case .working:
+                note = info.areas.lazy.compactMap { area -> LinkNote? in
+                    guard let capability = area.capability, lead.capabilities.contains(capability),
+                          let progress = rules.progress(lead.id, capability) else { return nil }
+                    return .working(areaKey: info.areaKey(area), done: progress.done, total: progress.total)
+                }.first
             case .failed(let reason):
                 hint = reason
                 let entries = setup.report(for: lead.id)
@@ -37,7 +41,8 @@ public enum IntegrationReadEngine {
                     running: running.contains(SyncEngine.key(inlet.id, capability))))
             }
         }
-        return IntegrationReading(info: info, state: state, note: note, hint: hint, inlets: inlets, offers: offers, areas: areas)
+        return IntegrationReading(info: info, state: state, note: note, hint: hint, inlets: inlets, offers: offers, areas: areas,
+                                  heldSlots: inlets.first.map { setup.heldSlots(of: $0.id) } ?? [])
     }
 
     @MainActor
@@ -58,7 +63,6 @@ public enum IntegrationReadEngine {
         var values = IntegrationValues.none
         for field in reading.info.fields {
             guard let value = try? keychain.get(KeySlot(inlet: inlet.id, name: field.id)), !value.isEmpty else { continue }
-            values.held.insert(field.id)
             if !field.secret { values.text[field.id] = value }
         }
         return values

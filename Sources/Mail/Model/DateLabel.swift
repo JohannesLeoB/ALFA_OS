@@ -4,7 +4,8 @@ public enum DateLabel: Equatable, Sendable {
     case time(Date)
     case yesterday
     case weekday(Date)
-    case day(Date)
+    case upcoming(days: Int)
+    case day(Date, withYear: Bool)
     case none
 
     public static func of(_ date: Date?, now: Date, calendar: Calendar = .current) -> DateLabel {
@@ -17,8 +18,14 @@ public enum DateLabel: Equatable, Sendable {
         if let week = calendar.date(byAdding: .day, value: -6, to: start), date >= week, date < start {
             return .weekday(date)
         }
-        return .day(date)
+        if let first = calendar.date(byAdding: .day, value: 1, to: start), let last = calendar.date(byAdding: .day, value: Self.upcomingDays + 1, to: start),
+           date >= first, date < last {
+            return .upcoming(days: calendar.dateComponents([.day], from: start, to: calendar.startOfDay(for: date)).day ?? 1)
+        }
+        return .day(date, withYear: calendar.component(.year, from: date) != calendar.component(.year, from: now))
     }
+
+    static let upcomingDays = 6
 }
 
 public enum ThreadDate: Equatable, Sendable {

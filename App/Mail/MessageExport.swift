@@ -24,6 +24,11 @@ enum MessageExport {
         if !printPDF(document.data, name: document.name, scaling: .pageScaleNone) { inbox.documentFailed(id) }
     }
 
+    static func printDraft(_ inbox: InboxState, _ id: UUID) {
+        guard let document = inbox.draftDocument(id, render: render) else { return }
+        if !printPDF(document.data, name: document.name, scaling: .pageScaleNone) { inbox.announce(.pdfFailed) }
+    }
+
     @discardableResult
     static func printPDF(_ data: Data, name: String, scaling: PDFPrintScalingMode) -> Bool {
         guard let pdf = PDFDocument(data: data),
@@ -41,10 +46,12 @@ enum MessageExport {
         guard let document = await inbox.mailDocument(id, render: render) else { return }
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.pdf]
+        panel.isExtensionHidden = false
+        panel.canSelectHiddenExtension = true
         panel.nameFieldStringValue = document.name
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do {
-            try document.data.write(to: url)
+            try document.data.write(to: url.pathExtension.isEmpty ? url.appendingPathExtension("pdf") : url)
         } catch {
             inbox.documentFailed(id)
             return

@@ -54,7 +54,8 @@ enum DeliveryEngine {
         return .provider(classify(error, inlet: inlet, access: access).hint)
     }
 
-    static func deliver(_ item: inout OutboxItem, verify: Bool, byUser: Bool, access: any AccessPort, folder: (FolderRole) -> String?) async -> Delivery {
+    static func deliver(_ item: inout OutboxItem, verify: Bool, byUser: Bool, access: any AccessPort, folder: (FolderRole) -> String?,
+                        checked: () -> Void = {}) async -> Delivery {
         let transport: any MailTransportPort
         do {
             transport = try access.port((any MailTransportPort).self, for: item.inlet)
@@ -69,6 +70,7 @@ enum DeliveryEngine {
                 if failure.isTransient { return .transient(failure.hint) }
                 if !byUser { return .unverified(failure.hint) }
             }
+            checked()
         }
         var outgoing = item.draft
         outgoing.messageID = item.messageID

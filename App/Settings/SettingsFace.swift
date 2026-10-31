@@ -8,7 +8,8 @@ struct SettingsFace: Identifiable {
     let detail: String
     let preview: String
 
-    init(id: String, readings: [IntegrationReading], appearance: Appearance) {
+    @MainActor
+    init(id: String, readings: [IntegrationReading], appearance: Appearance, state: SettingsState) {
         self.id = id
         if let reading = readings.first(where: { $0.info.id == id }) {
             let name = appearance.string(reading.info.nameKey)
@@ -20,7 +21,7 @@ struct SettingsFace: Identifiable {
         } else if let section = SettingsSection(rawValue: id) {
             let name = appearance.string(section.key)
             title = name
-            meta = appearance.string(section.detailKey)
+            meta = state.detailKey(of: section).map { appearance.string($0) } ?? ""
             mark = String(name.prefix(1))
             detail = meta
             preview = ""

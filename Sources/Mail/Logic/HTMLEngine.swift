@@ -95,6 +95,28 @@ public enum HTMLEngine {
         return .embedded(data, mime: mime.hasPrefix("image/") ? mime : mimeType(of: data))
     }
 
+    static func inlineReferences(_ html: String) -> Set<String> {
+        let marker = inlineScheme + ":"
+        let stops = CharacterSet(charactersIn: "\"')").union(.whitespacesAndNewlines)
+        var found: Set<String> = []
+        var rest = html[...]
+        while let range = rest.range(of: marker, options: .caseInsensitive) {
+            let tail = rest[range.upperBound...]
+            let bracketed = tail.hasPrefix("<")
+            var reference = ""
+            for character in tail {
+                if character.unicodeScalars.contains(where: stops.contains) { break }
+                if character == ">", !bracketed { break }
+                reference.append(character)
+                if character == ">" { break }
+            }
+            let decoded = reference.removingPercentEncoding ?? reference
+            found.insert(decoded.trimmingCharacters(in: CharacterSet(charactersIn: "<> ")).lowercased())
+            rest = tail
+        }
+        return found
+    }
+
     public static func mimeType(of data: Data) -> String {
         let bytes = [UInt8](data.prefix(2))
         guard bytes.count == 2 else { return "application/octet-stream" }

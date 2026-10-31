@@ -7,6 +7,10 @@ extension InletsState: SetupPort {
 
     func report(for inlet: Inlet.ID) -> [ReportEntry] { reports[inlet] ?? [] }
 
+    func heldSlots(of inlet: Inlet.ID) -> Set<String> {
+        Set((try? inletStore.slots(of: inlet)) ?? [])
+    }
+
     func add(_ offer: Offer, input: Input) async throws(SetupFailure) -> Inlet {
         guard let provider = router.provider(offer.provider) else {
             throw .probeFailed(Hint(text: HintEngine.unknownProviderText, detail: offer.provider))
@@ -26,7 +30,6 @@ extension InletsState: SetupPort {
         } catch {
             throw .probeFailed(HintEngine.hint(provider.classify(error)))
         }
-        inlet.state = .signedIn
         inlet.state = .connecting
         let probing = inlet
         let result: ProbeResult
@@ -89,7 +92,7 @@ extension InletsState: SetupPort {
             inlet.state = .connected(probed: configuration.clock())
             try inletStore.save(inlet, slots: SetupEngine.sorted(grant).map(\.key))
             grants[inlet.id] = grant
-            update(inlet.id, persist: false) { $0 = inlet }
+            rest(inlet.id, as: inlet.state, persist: .never)
             for capability in inlet.capabilities { plan(inlet.id, capability) }
             return inlet
         } catch {
@@ -102,26 +105,22 @@ extension InletsState: SetupPort {
             throw .probeFailed(Hint(text: HintEngine.unknownInletText, detail: inletID))
         }
         guard let grant = grant(for: inlet) else {
-            update(inletID, persist: false) { $0.state = .keychainUnreadable }
+            rest(inletID, as: .keychainUnreadable, persist: .never)
             throw .probeFailed(Hint(text: HintEngine.unreadableText, fixIn: .inlet(inletID)))
         }
-        let previous = inlet.state
-        update(inletID, persist: false) { $0.state = .connecting }
+        beginProbe(inletID)
+        defer { endProbe(inletID) }
         do {
             let limit = configuration.deadlines.probe
             let result = try await Deadline.run(limit) { try await provider.probe.probe(inlet, grant) }
             if let rejection = result.rejection {
                 logFailure(inletID, .probe, rejection)
-                if rejection.kind == .transient {
-                    update(inletID, persist: false) { $0.state = previous }
-                } else {
-                    update(inletID, persist: true) { $0.state = .failed(rejection) }
-                }
+                if rejection.kind != .transient { endProbe(inletID, as: .failed(rejection), persist: .changed) }
                 throw SetupFailure.probeFailed(rejection)
             }
             let now = configuration.clock()
             log(inletID, .probe, ok: true)
-            update(inletID, persist: true) { $0.state = .connected(probed: now) }
+            endProbe(inletID, as: .connected(probed: now), persist: .always)
             for capability in inlet.capabilities { plan(inletID, capability) }
             return result
         } catch let error as SetupFailure {
@@ -129,21 +128,13 @@ extension InletsState: SetupPort {
         } catch is DeadlineExpired {
             let failure = Hint(text: HintEngine.timeoutText, fixIn: .inlet(inletID), kind: .transient)
             logFailure(inletID, .probe, failure)
-            update(inletID, persist: false) { $0.state = previous }
             throw .probeFailed(failure)
         } catch {
-            if error is CancellationError {
-                update(inletID, persist: false) { $0.state = previous }
-                throw .cancelled
-            }
+            if error is CancellationError { throw .cancelled }
             let classification = classify(error, inlet: inletID)
             let failure = HintEngine.hint(classification, fixIn: .inlet(inletID))
             logFailure(inletID, .probe, failure)
-            if classification.kind == .transient {
-                update(inletID, persist: false) { $0.state = previous }
-            } else {
-                update(inletID, persist: true) { $0.state = .failed(failure) }
-            }
+            if classification.kind != .transient { endProbe(inletID, as: .failed(failure), persist: .changed) }
             throw .probeFailed(failure)
         }
     }
@@ -180,6 +171,7 @@ extension InletsState: SetupPort {
         try settingStore.remove(key: SettingsKey.mailboxDisplay(inletID))
         try settingStore.remove(key: SettingsKey.mailboxName(inletID))
         grants[inletID] = nil
+        forget(inletID)
         reports[inletID] = nil
         for kind in delivered.keys { delivered[kind]?[inletID] = nil }
         records.removeAll { $0.id == inletID }

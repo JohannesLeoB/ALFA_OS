@@ -47,7 +47,7 @@ final class Assembly {
         let defaults = UserDefaults.standard
         try LegacyImportStore(database: database, defaults: defaults, legacyFile: directory.appendingPathComponent(Self.legacyHubFile)).run()
         let settingStore = SettingStore(database: database)
-        let settings = try SettingsState(settings: settingStore)
+        let settings = try SettingsState(settings: settingStore, templates: TemplateStore())
         for (entry, key) in Self.companySeeds where settings.company[entry.rawValue]?.isEmpty != false {
             let value = CompanyValues.valueOrEmpty(key)
             if !value.isEmpty { settings.setCompany(entry, value) }
@@ -72,10 +72,17 @@ final class Assembly {
                                    names: { [settings] inlet in
                                        SenderNames(chosen: settings.mailboxName(inlet), profile: settings.profile.name)
                                    },
-                                   serverCopy: { [settings] inlet in settings.serverCopy(inlet) })
+                                   serverCopy: { [settings] inlet in settings.serverCopy(inlet) },
+                                   attachmentBase: directory,
+                                   attachmentSettings: { [settings] in settings.mailStore })
         let inbox = InboxState(mailbox: mailbox, outbox: outbox, contacts: ContactState(defaults: defaults),
                                directory: ContactSourceState(settings: settingStore),
                                signatures: { [settings] inlet in settings.signature(inlet) },
+                               quoteTexts: {
+                                   let appearance = Appearance(dark: false, still: true)
+                                   return QuoteTexts(dated: appearance.string("mail.compose.quote.dated"),
+                                                     undated: appearance.string("mail.compose.quote.undated"), locale: appearance.locale)
+                               },
                                sendHold: .seconds(Tokens.Duration.toastUndo))
 
         let receipts = ReceiptStore(database: database)
@@ -186,11 +193,7 @@ struct ClaudeKeyStore: KeyPort {
 
 struct TextStore: TextPort {
     func text(_ key: String, _ arguments: [String]) -> String {
-        var result = String(localized: String.LocalizationValue(key))
-        for (index, value) in arguments.enumerated() {
-            result = result.replacingOccurrences(of: "{\(index + 1)}", with: value)
-        }
-        return result
+        PlaceholderEngine.fill(String(localized: String.LocalizationValue(key)), arguments)
     }
 }
 

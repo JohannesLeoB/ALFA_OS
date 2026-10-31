@@ -69,7 +69,15 @@ struct MarkList: View {
         let inbox = session.inbox
         StripMarks(items: inbox.stripMarks(lane, height: height).map { mark in
             StripMarkItem(id: mark.id, face: mark.face, help: Text(verbatim: FolderTitle.text(mark.help, localized: appearance.string)),
-                          selected: mark.selected, dot: mark.dot, accent: mark.accent) { Task { await inbox.run(mark.run) } }
+                          selected: mark.selected, dot: mark.dot, accent: mark.accent) {
+                session.desk.unfold(Self.revealed(mark.run))
+                Task { await inbox.run(mark.run) }
+            }
         })
+    }
+
+    private static func revealed(_ run: StripMark.Run) -> LaneKind {
+        if case .folder = run { return .center }
+        return .trailing
     }
 }

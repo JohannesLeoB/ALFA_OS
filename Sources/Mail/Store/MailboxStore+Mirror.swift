@@ -77,17 +77,37 @@ extension MailboxStore {
             }
         }
         if let failure { eventBus.emit(.syncFailed(inlet, Self.syncHint(failure, inlet: inlet))) }
+        startStoring(inlet)
     }
 
     func run(_ inlet: Inlet.ID, _ folder: String, older: Bool, own: Bool, narrowed: Bool = false) async throws(HubFailure) {
         let key = Self.key(inlet, folder)
-        while let existing = passes[key] {
-            let result = await existing.value
-            if !older, !own { return try result.get() }
+        if !older, !own, let existing = passes[key] {
+            let follow = followUps[key] ?? followUp(inlet, folder, after: existing)
+            return try await follow.value.get()
         }
+        while let existing = passes[key] { _ = await existing.value }
+        try await start(inlet, folder, older: older, narrowed: narrowed).value.get()
+    }
+
+    private func start(_ inlet: Inlet.ID, _ folder: String, older: Bool, narrowed: Bool) -> Task<Result<Void, HubFailure>, Never> {
         let task = Task { await self.execute(inlet, folder, older: older, narrowed: narrowed) }
-        passes[key] = task
-        try await task.value.get()
+        passes[Self.key(inlet, folder)] = task
+        return task
+    }
+
+    private func followUp(_ inlet: Inlet.ID, _ folder: String, after existing: Task<Result<Void, HubFailure>, Never>)
+        -> Task<Result<Void, HubFailure>, Never> {
+        let key = Self.key(inlet, folder)
+        let task = Task { () -> Result<Void, HubFailure> in
+            _ = await existing.value
+            self.followUps[key] = nil
+            guard !Task.isCancelled else { return .success(()) }
+            if let running = self.passes[key] { return await running.value }
+            return await self.start(inlet, folder, older: false, narrowed: false).value
+        }
+        followUps[key] = task
+        return task
     }
 
     private func execute(_ inlet: Inlet.ID, _ folder: String, older: Bool, narrowed: Bool) async -> Result<Void, HubFailure> {
@@ -175,8 +195,9 @@ extension MailboxStore {
         }
         if marked != nil { try write(inlet) { try self.clearCursor(inlet, Self.refusedKey(folder)) } }
         guard !Task.isCancelled else { return }
-        if !plan.gone.isEmpty {
-            try write(inlet) { try self.drop(inlet, folder, ids: plan.gone) }
+        let removable = plan.gone.filter { !isDirty(inlet, $0) }
+        if !removable.isEmpty {
+            try write(inlet) { try self.drop(inlet, folder, ids: removable) }
             announceChange(inlet, folder)
         }
         if let validity = listing.validity, validity != known {
@@ -261,6 +282,28 @@ extension MailboxStore {
             }
             try Self.dropOrphanBodies(db, inlet: inlet, ids: Array(ids))
         }
+        attachments.sweep(inlet)
+    }
+
+    func record(_ saved: SavedDraft, of draft: Draft, replacing previous: String?, inlet: Inlet.ID, folder: String) throws {
+        let replaced = previous.flatMap { $0 == saved.mirrorID ? nil : $0 }
+        markDirty(inlet, saved.mirrorID)
+        if let replaced { markDirty(inlet, replaced) }
+        let account = access.configured(for: .mail).first { $0.id == inlet }?.account ?? ""
+        let date = now()
+        try database.write { db in
+            let thread = try replaced.flatMap {
+                try String.fetchOne(db, sql: "SELECT thread FROM mail_message WHERE inlet = ? AND folder = ? AND id = ?",
+                                    arguments: [inlet, folder, $0])
+            } ?? ""
+            try Self.insert(db, inlet: inlet, folder: folder,
+                            MirrorEngine.draftRow(saved.mirrorID, draft, folder: folder, account: account, thread: thread, at: date))
+            guard let replaced else { return }
+            try db.execute(sql: "DELETE FROM mail_message WHERE inlet = ? AND folder = ? AND id = ?", arguments: [inlet, folder, replaced])
+            try Self.dropOrphanBodies(db, inlet: inlet, ids: [replaced])
+        }
+        if replaced != nil { attachments.sweep(inlet) }
+        announceChange(inlet, folder)
     }
 
     func applyFlags(_ inlet: Inlet.ID, _ folder: String, _ flags: [String: Set<Flag>]) throws {

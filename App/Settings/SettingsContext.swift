@@ -23,10 +23,8 @@ struct SettingsContext {
 
     var readings: [IntegrationReading] { IntegrationReadEngine.readAll(catalog, setup: setup, rules: rules) }
 
-    func syncNow(_ inlet: Inlet.ID, _ capability: Capability) async -> Bool {
-        let before = rules.lastSync(inlet, capability)
-        await rules.syncNow(inlet, capability)
-        return rules.lastSync(inlet, capability) != before
+    func syncNow(_ inlet: Inlet.ID, _ capability: Capability) async -> SyncReport.Result {
+        await rules.syncNow(inlet, capability).result
     }
 }
 

@@ -8,7 +8,7 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
     static let draftListSize = "100"
     static let historyPageSize = "500"
     static let missingStatus = 404
-    static let summaryHeaders = ["From", "To", "Cc", "Reply-To", "Subject", "Date", "Message-ID", "Content-Type"]
+    static let summaryHeaders = ["From", "To", "Cc", "Bcc", "Reply-To", "Subject", "Date", "Message-ID", "Content-Type"]
 
     let requests: RequestClient
     let policy: RequestPolicy
@@ -153,7 +153,8 @@ struct GmailClient: GmailFetchPort, GmailWritePort, GmailDraftPort, GmailLabelPo
     func createDraft(_ draft: Draft) async throws -> SavedDraft {
         let data = try await requests.send(RequestClient.url(drafts), method: "POST",
                                            json: ["message": DraftMimeEngine.payload(draft)])
-        return DraftParser.saved(from: data) ?? SavedDraft(id: "")
+        guard let saved = DraftParser.saved(from: data) else { throw GoogleFailure.decodingFailed }
+        return saved
     }
 
     func sendMessage(_ draft: Draft) async throws {

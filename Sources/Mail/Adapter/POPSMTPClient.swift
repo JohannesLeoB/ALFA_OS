@@ -131,8 +131,8 @@ struct POPSMTPClient: MailTransportPort, SourcePort, InboxOnlyPort, ServerCopyPo
                           receiptTo: MessageEngine.receiptAddress(header("Disposition-Notification-To")),
                           from: MessageEngine.sender(header("From")))
         if let part = parsed.root.firstPlainText { draft.body = parsed.text(part) }
-        if let part = parsed.root.firstHTML { draft.bodyHTML = parsed.text(part) }
-        draft.attachments = parsed.root.attachments.map {
+        draft.bodyHTML = parsed.html
+        draft.attachments = parsed.root.attachments(html: draft.bodyHTML, embedded: []).map {
             Attachment(filename: $0.filename ?? $0.section, mimeType: $0.mimeType, data: parsed.data($0))
         }
         return StoredDraft(id: messageID, draft: draft)

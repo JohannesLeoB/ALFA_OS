@@ -3,6 +3,7 @@ import Hub
 
 public enum OutboxState: Equatable, Sendable {
     case waiting
+    case checking
     case sending
     case failed(Hint)
     case unverified(Hint)
@@ -10,23 +11,31 @@ public enum OutboxState: Equatable, Sendable {
     public var key: String {
         switch self {
         case .waiting: "mail.outbox.state.waiting"
+        case .checking: "mail.outbox.state.checking"
         case .sending: "mail.outbox.state.sending"
         case .failed(let hint): hint.text
-        case .unverified: "mail.outbox.state.unverified"
+        case .unverified: "mail.outbox.state.failed"
         }
     }
 
     public var offersRowActions: Bool {
         switch self {
         case .waiting, .failed: true
-        case .sending, .unverified: false
+        case .checking, .sending, .unverified: false
+        }
+    }
+
+    public var inFlight: Bool {
+        switch self {
+        case .checking, .sending: true
+        case .waiting, .failed, .unverified: false
         }
     }
 
     public var needsAttention: Bool {
         switch self {
         case .failed, .unverified: true
-        case .waiting, .sending: false
+        case .waiting, .checking, .sending: false
         }
     }
 }
@@ -61,6 +70,16 @@ public struct OutboxItem: Identifiable, Equatable, Sendable {
     mutating func startSending() {
         state = .sending
         attempts += 1
+    }
+
+    mutating func startChecking() {
+        state = .checking
+        attempts += 1
+    }
+
+    mutating func proceed() {
+        guard state == .checking else { return }
+        state = .sending
     }
 
     mutating func wait() { state = .waiting }

@@ -47,9 +47,13 @@ public final class InboxState {
     var toastSerial = 0
     @ObservationIgnored var undoAction: (@MainActor () async -> Void)?
     @ObservationIgnored var sendAfterSave: Set<UUID> = []
+    @ObservationIgnored var draftWork: [UUID: Task<Void, Never>] = [:]
+    @ObservationIgnored var editedWhileSaving: Set<UUID> = []
     @ObservationIgnored var heldSends: [UUID: Task<Void, Never>] = [:]
     @ObservationIgnored var autosaveSerials: [UUID: Int] = [:]
     @ObservationIgnored var autosaveTicking: Set<UUID> = []
+    @ObservationIgnored var folderRefreshSerials: [String: Int] = [:]
+    @ObservationIgnored var composing: Set<String> = []
 
     var phase: LoadPhase = .settled
     var searchContinuation: SearchContinuation?
@@ -67,11 +71,13 @@ public final class InboxState {
     let autosaveInterval: Duration
     let sendHold: Duration
     let signatures: @MainActor (Inlet.ID) -> MailboxSignature?
+    let quoteTexts: @MainActor () -> QuoteTexts
 
     public init(mailbox: any MailboxPort, outbox: any OutboxPort, contacts: ContactState,
                 directory: ContactSourceState = ContactSourceState(),
                 clock: @escaping @Sendable () -> Date = { Date() },
                 signatures: @escaping @MainActor (Inlet.ID) -> MailboxSignature? = { _ in nil },
+                quoteTexts: @escaping @MainActor () -> QuoteTexts = { QuoteTexts() },
                 autosavePause: Duration? = nil, autosaveInterval: Duration? = nil, sendHold: Duration = .zero) {
         self.mailbox = mailbox
         self.outboxPort = outbox
@@ -79,6 +85,7 @@ public final class InboxState {
         self.directory = directory
         self.clock = clock
         self.signatures = signatures
+        self.quoteTexts = quoteTexts
         self.autosavePause = autosavePause ?? AutosaveEngine.pause
         self.autosaveInterval = autosaveInterval ?? AutosaveEngine.interval
         self.sendHold = sendHold
@@ -111,7 +118,8 @@ public final class InboxState {
         let needle = localNeedle
         var entries: [ListEntry] = []
         var total = 0
-        for summary in crossActive ? crossHits : summaries where shown(summary, needle) {
+        let replaced = replacedDrafts
+        for summary in crossActive ? crossHits : summaries where !replaced.contains(summary.id) && shown(summary, needle) {
             total += 1
             if entries.count < limit {
                 entries.append(ListEntry(summary: summary, selected: summary.id == selectedMessage,
@@ -123,11 +131,17 @@ public final class InboxState {
 
     var hasRows: Bool {
         let needle = localNeedle
-        return (crossActive ? crossHits : summaries).contains { shown($0, needle) }
+        let replaced = replacedDrafts
+        return (crossActive ? crossHits : summaries).contains { !replaced.contains($0.id) && shown($0, needle) }
     }
 
     private func shown(_ summary: MessageSummary, _ needle: String) -> Bool {
         filter.matches(summary) && (needle.isEmpty || Self.contains(summary, needle))
+    }
+
+    private var replacedDrafts: Set<String> {
+        guard let inlet = selectedInlet, currentFolder?.role == .drafts else { return [] }
+        return goneDrafts[inlet] ?? []
     }
 
     var localNeedle: String {
@@ -152,9 +166,9 @@ public final class InboxState {
             return hint.text == Hint.signInExpiredText ? .signInExpired(account.id) : .failed(hint)
         case .connected, .working:
             break
-        case .connecting, .signedIn:
+        case .connecting:
             if summaries.isEmpty { return .loading }
-        case .created, .keychainUnreadable, .orphaned, .locked:
+        case .created, .keychainUnreadable:
             return .notConnected(account.id)
         }
         switch phase {

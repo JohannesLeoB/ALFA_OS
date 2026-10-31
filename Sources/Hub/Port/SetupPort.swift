@@ -6,6 +6,7 @@ public protocol SetupPort: AnyObject {
     func probe(_ inlet: Inlet.ID) async throws(SetupFailure) -> ProbeResult
     func remove(_ inlet: Inlet.ID) async throws
     func report(for inlet: Inlet.ID) -> [ReportEntry]
+    func heldSlots(of inlet: Inlet.ID) -> Set<String>
 }
 
 extension SetupPort {

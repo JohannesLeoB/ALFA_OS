@@ -13,10 +13,12 @@ struct IdentityCard: View {
     var body: some View {
         VStack(spacing: 0) {
             SettingsRow(label: appearance.text("settings.identity.name")) {
-                ValueField(text: bind(\.name), labelKey: "settings.identity.name", prompt: appearance.text(SettingsKeys.valueEmpty))
+                ValueField(text: bind(\.name), labelKey: "settings.identity.name", prompt: appearance.text(SettingsKeys.valueEmpty),
+                           onEnd: { context.state.finishProfile() })
             }
             SettingsRow(label: appearance.text("settings.identity.role")) {
-                ValueField(text: bind(\.role), labelKey: "settings.identity.role", prompt: appearance.text(SettingsKeys.valueEmpty))
+                ValueField(text: bind(\.role), labelKey: "settings.identity.role", prompt: appearance.text(SettingsKeys.valueEmpty),
+                           onEnd: { context.state.finishProfile() })
             }
             SettingsRow(label: appearance.text("settings.identity.code")) {
                 ValueField(

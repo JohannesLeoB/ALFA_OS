@@ -12,6 +12,26 @@ public struct UserProfile: Equatable, Sendable {
         self.phone = phone
         self.birthdays = birthdays
     }
+
+    static func normalized(_ text: String, finished: Bool) -> String {
+        let collapsed = collapsed(text)
+        return finished ? collapsed.trimmingCharacters(in: .whitespacesAndNewlines) : collapsed
+    }
+
+    private static func collapsed(_ text: String) -> String {
+        var result = ""
+        var spaced = false
+        for character in text {
+            if character.isWhitespace {
+                if !spaced { result.append(" ") }
+                spaced = true
+            } else {
+                result.append(character)
+                spaced = false
+            }
+        }
+        return result
+    }
 }
 
 public struct PrivacyChoices: Equatable, Sendable {

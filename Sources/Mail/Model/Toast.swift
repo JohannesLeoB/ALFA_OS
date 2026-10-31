@@ -5,6 +5,8 @@ public enum ToastKind: Equatable, Sendable {
     case inTrash
     case purged
     case draftSaved
+    case inOutbox
+    case notSentInDrafts
     case outboxSent
     case recipientMissing
     case subjectMissing
@@ -40,6 +42,8 @@ public enum ToastKind: Equatable, Sendable {
         case .inTrash: "mail.toast.inTrash"
         case .purged: "mail.toast.purged"
         case .draftSaved: "mail.toast.draftSaved"
+        case .inOutbox: "mail.draft.outbox"
+        case .notSentInDrafts: "mail.toast.notSentInDrafts"
         case .outboxSent: "mail.outbox.toast.sent"
         case .recipientMissing: "mail.toast.recipientMissing"
         case .subjectMissing: "mail.toast.subjectMissing"
@@ -72,8 +76,15 @@ public enum ToastKind: Equatable, Sendable {
     public var failed: Bool {
         switch self {
         case .olderFailed, .moreFailed, .archiveFailed, .moveFailed, .deleteFailed, .flagFailed, .readFailed, .attachmentFailed,
-             .threadFailed, .projectSaveFailed, .pdfFailed: true
+             .threadFailed, .projectSaveFailed, .pdfFailed, .notSentInDrafts: true
         default: false
+        }
+    }
+
+    public var actionKey: String {
+        switch self {
+        case .notSentInDrafts: "mail.draft.failed.act"
+        default: failed ? "mail.list.failed.act" : "mail.toast.undo"
         }
     }
 

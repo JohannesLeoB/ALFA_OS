@@ -7,9 +7,9 @@ public struct SyncReport: Equatable, Sendable {
         case failed(Hint)
     }
 
-    var inlet: Inlet.ID
-    var capability: Capability
-    var result: Result
+    public var inlet: Inlet.ID
+    public var capability: Capability
+    public var result: Result
 
     init(inlet: Inlet.ID, capability: Capability, result: Result) {
         self.inlet = inlet
@@ -27,6 +27,30 @@ public struct SyncJob: Equatable, Sendable {
         self.inlet = inlet
         self.capability = capability
         self.startedAt = startedAt
+    }
+}
+
+public struct RunProgress: Equatable, Sendable {
+    public let done: Int
+    public let total: Int
+
+    public init?(done: Int, total: Int) {
+        guard total > 0 else { return nil }
+        self.total = total
+        self.done = min(max(done, 0), total)
+    }
+}
+
+public struct SyncReporter: Sendable {
+    private let deliver: @Sendable (RunProgress) -> Void
+
+    init(_ deliver: @escaping @Sendable (RunProgress) -> Void) {
+        self.deliver = deliver
+    }
+
+    public func callAsFunction(done: Int, total: Int) {
+        guard let progress = RunProgress(done: done, total: total) else { return }
+        deliver(progress)
     }
 }
 

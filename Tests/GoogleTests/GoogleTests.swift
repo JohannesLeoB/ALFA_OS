@@ -642,6 +642,11 @@ final class GoogleTests: XCTestCase {
         XCTAssertEqual(fromSnippet, "only snippet")
         let garbled = try await gmail(FakeHttp { _ in (200, "x") }).fetchBody(messageID: "m")
         XCTAssertEqual(garbled, "")
+        let latin = FakeHttp { _ in
+            (200, #"{"id":"m","snippet":"cut","payload":{"mimeType":"text/plain","headers":[{"name":"Content-Type","value":"text/plain; charset=iso-8859-1"}],"body":{"data":"R3L832U="}}}"#)
+        }
+        let fromLatin = try await gmail(latin).fetchBody(messageID: "m")
+        XCTAssertEqual(fromLatin, "Gr\u{FC}\u{DF}e")
     }
 
     func testThreadReturnsEveryMessageAsSummaries() async throws {
@@ -786,6 +791,17 @@ final class GoogleTests: XCTestCase {
         XCTAssertTrue(http.calls[0].query.contains("metadataHeaders=From"))
         XCTAssertTrue(http.calls[0].query.contains("metadataHeaders=Content-Type"))
         XCTAssertEqual(http.calls.count, 5)
+    }
+
+    func testGmailMirrorAsksForTheBccHeaderAndKeepsItOnTheSummary() async throws {
+        let http = FakeHttp { call in
+            let id = String(call.path.split(separator: "/").last ?? "")
+            return (200, #"{"id":"\#(id)","threadId":"t","internalDate":"1000000","labelIds":["DRAFT"],"payload":{"headers":[{"name":"Subject","value":"Nur Bcc"},{"name":"Bcc","value":"Hidden <h@x.test>"}]}}"#)
+        }
+        let found = try await gmail(http).fetchMetadata(ids: ["d1"])
+        XCTAssertEqual(found.first?.bccRaw, "Hidden <h@x.test>")
+        XCTAssertEqual(found.first?.toRaw, "")
+        XCTAssertTrue(http.calls[0].query.contains("metadataHeaders=Bcc"))
     }
 
     func testGmailFlagRefreshReadsTheHistoryAndOnlyFetchesChangedKnownMessages() async throws {
@@ -1317,6 +1333,20 @@ final class GoogleTests: XCTestCase {
         XCTAssertEqual(entries.map(\.id), ["f1", "p"])
         XCTAssertEqual(entries.map(\.isFolder), [true, false])
         XCTAssertEqual(data, Data(list.utf8))
+    }
+
+    func testDriveParserReadsTheSizeOfStoredFilesOnly() throws {
+        let list = #"{"files":[{"id":"p","name":"p.pdf","mimeType":"application\/pdf","size":"38912"},{"id":"d","name":"n","mimeType":"application\/vnd.google-apps.document"},{"id":"f","name":"F","mimeType":"application\/vnd.google-apps.folder"},{"id":"x","name":"x","mimeType":"text\/plain","size":"broken"}]}"#
+        let page = try DriveParser.page(from: Data(list.utf8))
+        XCTAssertEqual(page.files.map(\.size), [38912, nil, nil, nil])
+        XCTAssertTrue(DriveClient.listFields.contains(",size)"))
+    }
+
+    func testFilesPortPassesTheSizeThroughAndLeavesFoldersWithoutOne() async throws {
+        let list = #"{"files":[{"id":"f1","name":"H","mimeType":"application\/vnd.google-apps.folder"},{"id":"p","name":"p.pdf","mimeType":"application\/pdf","size":"3145728"}]}"#
+        let files = DriveFilesClient(drive: drive(FakeHttp { _ in (200, list) }), projectsRoot: "root")
+        let entries = try await files.files(in: "f1")
+        XCTAssertEqual(entries.map(\.size), [nil, 3_145_728])
     }
 
     func testTextIsExtractedPerMimeTypeAndTruncated() async throws {

@@ -27,5 +27,12 @@ public enum MailboxRange: String, CaseIterable, Sendable {
         return offered.contains(.standard) ? .standard : (offered.first ?? .standard)
     }
 
-    public var key: String { "settings.account.range." + rawValue }
+    public var key: String {
+        switch self {
+        case .days30: "settings.mailStore.period.d30"
+        case .days90: "settings.mailStore.period.d90"
+        case .year: "settings.mailStore.period.y1"
+        case .all: "settings.mailStore.period.all"
+        }
+    }
 }

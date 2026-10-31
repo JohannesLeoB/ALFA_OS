@@ -11,6 +11,8 @@ enum ConfirmPhase {
 
 struct ConfirmPill<Glyph: View>: View {
     @Environment(\.appearance) private var appearance
+    @Environment(\.appLocked) private var locked
+    @GestureState private var touching = false
     var label: Text?
     let question: Text
     let yes: Text
@@ -104,9 +106,11 @@ struct ConfirmPill<Glyph: View>: View {
         .accessibilityAction { confirm() }
         .gesture(
             DragGesture(minimumDistance: 0)
+                .updating($touching) { _, state, _ in state = true }
                 .onChanged { _ in press() }
-                .onEnded { _ in release() }
         )
+        .onChange(of: touching) { _, now in if !now { release() } }
+        .onChange(of: locked) { _, now in if now { release() } }
         .onHover { inside in if !inside { release() } }
         .focusable()
         .onKeyPress(.return) { confirm(); return .handled }

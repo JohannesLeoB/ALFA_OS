@@ -1,5 +1,6 @@
 import AppKit
 import Design
+import Google
 import Hub
 import Mail
 import SwiftUI
@@ -54,6 +55,11 @@ extension AppSession {
 
     func openMailSettings() {
         desk.select("settings")
+    }
+
+    var hasProjectRoot: Bool {
+        DriveRootStore(settings: assembly.settingStore).current() != nil
+            || !DriveConfigStore.load(in: assembly.directory).projectsRoot.isEmpty
     }
 
     func openMailService(_ id: String) {

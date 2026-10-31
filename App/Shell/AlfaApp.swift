@@ -39,24 +39,39 @@ private struct Content: View {
         Frame(session: session)
             .preferredColorScheme(session.settings.appearance.scheme)
             .frame(minWidth: CGFloat(minimum.width), minHeight: CGFloat(minimum.height))
-            .background(WindowConfigurator())
+            .background(WindowConfigurator(adopt: session.shield.adopt))
             .task { await session.start() }
             .onChange(of: session.inbox.totalUnread, initial: true) { _, total in session.attention.badge(total) }
     }
 }
 
 struct WindowConfigurator: NSViewRepresentable {
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        DispatchQueue.main.async { [weak view] in
-            guard let window = view?.window else { return }
+    let adopt: @MainActor (NSWindow) -> Void
+
+    func makeNSView(context: Context) -> WindowAnchor {
+        let view = WindowAnchor()
+        view.adopt = adopt
+        return view
+    }
+
+    func updateNSView(_ view: WindowAnchor, context: Context) {
+        view.adopt = adopt
+    }
+}
+
+final class WindowAnchor: NSView {
+    var adopt: @MainActor (NSWindow) -> Void = { _ in }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        guard let window else { return }
+        adopt(window)
+        DispatchQueue.main.async { [weak self] in
+            guard let window = self?.window else { return }
             window.titleVisibility = .hidden
             window.titlebarAppearsTransparent = false
             window.styleMask.remove(.fullSizeContentView)
             window.isMovableByWindowBackground = false
         }
-        return view
     }
-
-    func updateNSView(_ view: NSView, context: Context) {}
 }

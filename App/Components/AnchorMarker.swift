@@ -12,9 +12,10 @@ final class AnchorBox {
         return window.convertToScreen(view.convert(view.bounds, to: nil))
     }
 
-    func showMenu(_ entries: [MenuEntry]) {
-        guard let rect = screenRect() else { return }
-        MenuPanel.shared.show(entries: entries, anchor: .rect(rect), window: view?.window ?? NSApp.keyWindow, desk: desk)
+    @discardableResult
+    func showMenu(_ entries: [MenuEntry]) -> Int? {
+        guard let rect = screenRect() else { return nil }
+        return MenuPanel.shared.show(entries: entries, anchor: .rect(rect), window: view?.window ?? NSApp.keyWindow, desk: desk)
     }
 }
 

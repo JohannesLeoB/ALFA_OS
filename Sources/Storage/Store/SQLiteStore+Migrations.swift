@@ -220,6 +220,16 @@ extension SQLiteStore {
                     PRIMARY KEY (inlet, uid))
                 """)
         }
+        migrator.registerMigration("mailAttachmentFile") { db in
+            try db.execute(sql: """
+                CREATE TABLE mail_attachment_file (
+                    inlet TEXT NOT NULL, message TEXT NOT NULL, attachment TEXT NOT NULL, path TEXT NOT NULL, size INTEGER NOT NULL,
+                    receivedAt REAL, storedAt REAL NOT NULL, PRIMARY KEY (inlet, message, attachment))
+                """)
+        }
+        migrator.registerMigration("mailBcc") { db in
+            try db.execute(sql: "ALTER TABLE mail_message ADD COLUMN bccRaw TEXT NOT NULL DEFAULT ''")
+        }
         return migrator
     }
 }

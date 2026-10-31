@@ -72,22 +72,22 @@ extension MessageCard {
 
         private func openProjects() {
             switch inbox.frontRef {
-            case .draft(let id): ProjectFolderList.show(inbox, appearance: appearance, draft: id, anchor: projectAnchor)
-            case .message(let id): ProjectFolderList.save(inbox, appearance: appearance, message: id, anchor: projectAnchor)
+            case .draft(let id): ProjectFolderList.show(session, appearance: appearance, draft: id, anchor: projectAnchor)
+            case .message(let id): ProjectFolderList.save(session, appearance: appearance, message: id, anchor: projectAnchor)
             case nil: break
             }
         }
 
         private func openMore() {
             if case .draft(let id) = inbox.frontRef {
-                moreAnchor.showMenu(MenuLine.entries(MenuEngine.draftMore(receipt: inbox.asksReceipt(id)), appearance: appearance) { _ in
-                    inbox.toggleReceipt(id)
+                moreAnchor.showMenu(MenuLine.entries(MenuEngine.draftMore(receipt: inbox.asksReceipt(id)), appearance: appearance) { action in
+                    if action == .print { MessageExport.printDraft(inbox, id) } else { inbox.toggleReceipt(id) }
                 })
                 return
             }
             guard case .message(let id) = inbox.frontRef else { return }
             let lines = MenuEngine.readingMore(starred: inbox.card(id)?.summary.flags.contains(.flagged) ?? false, original: inbox.offersOriginal,
-                                               folders: inbox.folderActions)
+                                               folders: inbox.folderActions, spam: inbox.offersSpam)
             let entries = MenuLine.entries(lines, appearance: appearance) { action in
                 if action == .move {
                     moreAnchor.showMenu(MoveFolderList.entries(inbox, appearance: appearance, message: id))

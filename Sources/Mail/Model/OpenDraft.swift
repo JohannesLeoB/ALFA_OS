@@ -20,12 +20,20 @@ public struct OpenDraft: Identifiable, Equatable, Sendable {
         }
     }
 
+    public var addressees: [Participant] {
+        for field in RecipientField.allCases {
+            let found = people(field)
+            if !found.isEmpty { return found }
+        }
+        return []
+    }
+
     public var canSend: Bool {
         switch state {
         case .sending, .queuedInOutbox, .sent: return false
         default: break
         }
-        return !people(.to).isEmpty && !draft.subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        return RecipientField.allCases.contains { !people($0).isEmpty } && !draft.subject.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     public var needsGrant: Bool {

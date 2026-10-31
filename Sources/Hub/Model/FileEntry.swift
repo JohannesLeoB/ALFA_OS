@@ -3,12 +3,14 @@ public struct FileEntry: Identifiable, Hashable, Sendable {
     public let name: String
     public let mimeType: String
     public let isFolder: Bool
+    public let size: Int?
 
-    public init(id: String, name: String, mimeType: String, isFolder: Bool = false) {
+    public init(id: String, name: String, mimeType: String, isFolder: Bool = false, size: Int? = nil) {
         self.id = id
         self.name = name
         self.mimeType = mimeType
         self.isFolder = isFolder
+        self.size = size
     }
 }
 

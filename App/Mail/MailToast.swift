@@ -8,7 +8,7 @@ struct MailToast: View {
     var body: some View {
         if let toast = inbox.toast {
             ToastView(message: text(toast),
-                      undoLabel: toast.undoable ? appearance.text(toast.kind.failed ? "mail.list.failed.act" : "mail.toast.undo") : nil,
+                      undoLabel: toast.undoable ? appearance.text(toast.kind.actionKey) : nil,
                       onUndo: toast.undoable ? { Task { await inbox.undoToast() } } : nil, failed: toast.kind.failed,
                       onDismiss: { inbox.dismissToast(toast.serial) })
                 .id(toast.serial)

@@ -91,13 +91,6 @@ extension InboxState {
 
     var address: String { selectedAccount?.account ?? "" }
 
-    public var accountReachable: Bool {
-        switch listState {
-        case .signInExpired, .failed: false
-        default: true
-        }
-    }
-
     public var expiredAddress: String? {
         if case .signInExpired = listState { return address }
         return nil
@@ -137,11 +130,16 @@ extension InboxState {
         let queued = role == .outbox ? Dictionary(outbox.map { ($0.id.uuidString, $0.state) }, uniquingKeysWith: { first, _ in first }) : [:]
         let now = clock()
         let people = outgoing ? [:] : Self.participants(in: summaries)
+        let signature = draftsFolder ? selectedInlet.flatMap { signatures($0)?.block } : nil
+        let writing = draftsFolder ? Dictionary(drafts.filter { $0.inlet == selectedInlet && $0.state != .sent }
+            .compactMap { card in card.mirrorID.map { ($0, card) } }, uniquingKeysWith: { first, _ in first }) : [:]
         return entries.map { row in
             let item = row.summary
-            let party = outgoing ? Self.firstParty(item.toRaw) : Self.sender(item)
-            let name = party.name.isEmpty ? party.address : party.name
-            let preview = PreviewEngine.text(item.snippet)
+            let addressed = outgoing ? Self.addressed(item, card: writing[item.id]) : ""
+            let party = outgoing ? Self.firstParty(addressed) : Self.sender(item)
+            let name = draftsFolder ? Self.recipients(addressed) : (party.name.isEmpty ? party.address : party.name)
+            var preview = draftsFolder ? PreviewEngine.draft(item.snippet, signature: signature) : PreviewEngine.text(item.snippet)
+            if preview.isEmpty, let card = writing[item.id] { preview = PreviewEngine.text(card.draft.unsignedBody) }
             return RowPresentation(
                 id: item.id,
                 initials: PersonName.initials(party.name),
@@ -154,7 +152,7 @@ extension InboxState {
                 answered: item.flags.contains(.answered),
                 selected: row.selected && stack.contains(.message(item.id)),
                 picked: picked.contains(item.id),
-                thread: row.threadCount > 1 ? row.threadCount : nil,
+                thread: row.threadCount > 1 && !draftsFolder ? row.threadCount : nil,
                 attachments: item.attachments.map { AttachmentEntry(id: $0.id, name: $0.filename, size: Format.bytes($0.sizeBytes)) },
                 attachmentTotal: max(item.attachmentCount, item.attachments.count),
                 date: DateLabel.of(item.receivedAt, now: now),
@@ -194,6 +192,15 @@ extension InboxState {
         let parsed = PersonName.display(item.fromRaw)
         let named = !item.from.isEmpty && !item.from.contains("@") ? item.from : parsed.name
         return (named, parsed.address.isEmpty ? item.from : parsed.address)
+    }
+
+    static func addressed(_ item: MessageSummary, card: OpenDraft?) -> String {
+        [item.toRaw, item.ccRaw, item.bccRaw, card?.draft.bcc ?? ""].first { !AddressListParser.split($0).isEmpty } ?? ""
+    }
+
+    static func recipients(_ raw: String) -> String {
+        AddressListParser.split(raw).map(PersonName.display).map { $0.name.isEmpty ? $0.address : $0.name }
+            .filter { !$0.isEmpty }.joined(separator: ", ")
     }
 
     static func firstParty(_ raw: String) -> (name: String, address: String) {

@@ -26,7 +26,7 @@ struct OverviewList: View {
                 return (entry, ref)
             case .draft(let id):
                 guard let card = inbox.draft(id) else { return nil }
-                let first = card.people(.to).first
+                let first = card.addressees.first
                 let entry = OverviewEntry(id: ref.id, mark: .icon(.compose),
                                           title: first.map { Text(verbatim: appearance.format("mail.row.to", $0.label)) } ?? appearance.text("mail.row.newMessage"),
                                           date: appearance.text("mail.date.draft"), unread: false,

@@ -8,8 +8,11 @@ struct MailCommands: Commands {
     @FocusedValue(\.mailMenu) private var target
 
     var body: some Commands {
+        CommandGroup(replacing: .appSettings) {
+            item(titleKey: "shell.menu.settings", shortcut: KeyboardShortcut(",", modifiers: .command), enabled: session != nil) { session?.desk.select("settings") }
+        }
         CommandGroup(replacing: .newItem) {
-            item(titleKey: "shell.menu.newMessage", shortcut: KeyboardShortcut("n", modifiers: .command), enabled: session != nil) { compose() }
+            item(titleKey: "mail.action.compose", shortcut: KeyboardShortcut("n", modifiers: .command), enabled: session != nil) { compose() }
         }
         CommandGroup(replacing: .undoRedo) {
             item(titleKey: "mail.toast.undo", shortcut: KeyboardShortcut("z", modifiers: .command), enabled: session != nil) { undo() }
@@ -31,13 +34,13 @@ struct MailCommands: Commands {
             item(titleKey: "mail.action.foldColumn", shortcut: nil, enabled: allows(.foldColumn)) { target?.perform(.foldColumn) }
             Toggle(isOn: unreadOnly) { Text(LocalizedStringKey("mail.filter.unread")) }
                 .keyboardShortcut("l", modifiers: .command)
-                .disabled(session == nil)
+                .disabled(session == nil || locked)
         }
         CommandMenu(LocalizedStringKey("shell.menu.mailbox")) {
             item(titleKey: "shell.menu.fetchAll", shortcut: KeyboardShortcut("n", modifiers: [.command, .shift]), enabled: session != nil && session?.syncing == false) { fetch() }
             Divider()
             item(titleKey: "mail.action.archive", shortcut: KeyboardShortcut("a", modifiers: [.command, .control]), enabled: allows(.archive)) { target?.perform(.archive) }
-            item(titleKey: "mail.action.spam", shortcut: KeyboardShortcut("j", modifiers: [.command, .shift]), enabled: target?.isMessage == true && session?.inbox.folderActions != false) { target?.perform(.spam) }
+            item(titleKey: "mail.action.spam", shortcut: KeyboardShortcut("j", modifiers: [.command, .shift]), enabled: target?.isMessage == true && session?.inbox.offersSpam == true) { target?.perform(.spam) }
         }
         CommandMenu(LocalizedStringKey("shell.menu.message")) {
             item(titleKey: "mail.action.reply", shortcut: KeyboardShortcut("r", modifiers: .command), enabled: allows(.reply)) { target?.perform(.reply) }
@@ -67,7 +70,11 @@ struct MailCommands: Commands {
                       action: @escaping () -> Void) -> some View {
         Button(action: action) { Text(LocalizedStringKey(titleKey)) }
             .keyboardShortcut(shortcut)
-            .disabled(!enabled)
+            .disabled(!enabled || locked)
+    }
+
+    private var locked: Bool {
+        session?.lock.phase.shut == true
     }
 
     private var editing: Bool {

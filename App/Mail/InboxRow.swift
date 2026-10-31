@@ -111,17 +111,7 @@ struct InboxRow: View {
     }
 
     private var sender: some View {
-        let text: Text
-        if item.outgoing && item.sender.isEmpty {
-            text = appearance.text("mail.row.newMessage")
-        } else if item.outgoing {
-            text = Text(verbatim: appearance.format("mail.row.to", item.sender))
-        } else if item.sender.isEmpty {
-            text = appearance.text("mail.row.unknown")
-        } else {
-            text = Text(verbatim: item.sender)
-        }
-        return text
+        item.title(appearance)
             .designText(tone.primary, size: Tokens.TextSize.body, weight: item.unread ? .semibold : .medium)
             .lineLimit(1)
             .truncationMode(.tail)
@@ -134,7 +124,7 @@ struct InboxRow: View {
                 Text(verbatim: subject)
                     .designText(item.unread ? tone.primary : tone.secondary, size: Tokens.TextSize.body, weight: item.unread ? .medium : .regular)
             } else {
-                appearance.text("mail.row.noSubject")
+                appearance.text(item.draft ? "mail.draft.noSubject" : "mail.row.noSubject")
                     .designText(tone.tertiary, size: Tokens.TextSize.body)
             }
         }
@@ -278,6 +268,19 @@ struct InboxRow: View {
     }
 }
 
+extension RowPresentation {
+    func title(_ appearance: Appearance) -> Text {
+        if outgoing && sender.isEmpty { return appearance.text("mail.row.newMessage") }
+        if outgoing { return Text(verbatim: appearance.format("mail.row.to", sender)) }
+        if sender.isEmpty { return appearance.text("mail.row.unknown") }
+        return Text(verbatim: sender)
+    }
+
+    func tileSubject(_ appearance: Appearance) -> String {
+        subject ?? (draft ? appearance.string("mail.draft.noSubject") : "")
+    }
+}
+
 struct MessageDate: View {
     @Environment(\.appearance) private var appearance
     let label: DateLabel
@@ -295,10 +298,14 @@ struct MessageDate: View {
     static func text(_ label: DateLabel, draft: Bool, appearance: Appearance) -> Text {
         if draft { return appearance.text("mail.date.draft") }
         switch label {
-        case .time(let date): return Text(date, format: .dateTime.hour().minute())
+        case .time(let date): return Text(date, format: .dateTime.hour().minute().locale(appearance.locale))
         case .yesterday: return appearance.text("mail.date.yesterday")
-        case .weekday(let date): return Text(date, format: .dateTime.weekday(.wide))
-        case .day(let date): return Text(date, format: .dateTime.day().month(.abbreviated))
+        case .weekday(let date): return Text(date, format: .dateTime.weekday(.wide).locale(appearance.locale))
+        case .upcoming(let days):
+            return Text(verbatim: appearance.format(days == 1 ? "mail.date.inDays.one" : "mail.date.inDays.other", String(days)))
+        case .day(let date, let withYear):
+            return withYear ? Text(date, format: .dateTime.day().month(.abbreviated).year().locale(appearance.locale))
+                : Text(date, format: .dateTime.day().month(.abbreviated).locale(appearance.locale))
         case .none: return Text(verbatim: "")
         }
     }

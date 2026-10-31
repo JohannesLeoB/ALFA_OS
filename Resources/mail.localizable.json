@@ -321,6 +321,14 @@
    "de": "Von",
    "en": "From"
   },
+  "mail.compose.quote.dated": {
+   "de": "Am {1} schrieb {2}:",
+   "en": "On {1}, {2} wrote:"
+  },
+  "mail.compose.quote.undated": {
+   "de": "{1} schrieb:",
+   "en": "{1} wrote:"
+  },
   "mail.compose.remove": {
    "de": "Entfernen",
    "en": "Remove"
@@ -584,14 +592,6 @@
   "mail.menu.check": {
    "de": "✓",
    "en": "✓"
-  },
-  "mail.menu.drive": {
-   "de": "Drive",
-   "en": "Drive"
-  },
-  "mail.menu.projectMore": {
-   "de": "%@ weitere im Projektordner",
-   "en": "%@ more in project folder"
   },
   "mail.overview.tip": {
    "de": "Übersicht · %@ Karten",
@@ -1133,10 +1133,6 @@
    "de": "Sendet …",
    "en": "Sending …"
   },
-  "mail.outbox.state.unverified": {
-   "de": "Nicht gesendet · Prüfung fehlgeschlagen",
-   "en": "Not sent · check failed"
-  },
   "mail.outbox.retry.tooltip": {
    "de": "Erneut senden",
    "en": "Send Again"
@@ -1176,6 +1172,66 @@
   "field.imap.incomingProtocol": {
    "de": "Kontoart",
    "en": "Account type"
+  },
+  "mail.projectFiles.noRoot": {
+   "de": "Kein Projektordner gewählt",
+   "en": "No project folder chosen"
+  },
+  "mail.projectFiles.chooseRoot": {
+   "de": "Projektordner wählen …",
+   "en": "Choose Project Folder …"
+  },
+  "mail.projectFiles.loading": {
+   "de": "Lädt …",
+   "en": "Loading …"
+  },
+  "mail.projectFiles.empty": {
+   "de": "Keine Dateien",
+   "en": "No files"
+  },
+  "mail.projectFiles.loadFailed": {
+   "de": "Ordner nicht geladen",
+   "en": "Couldn’t load folder"
+  },
+  "mail.projectFiles.retry": {
+   "de": "Erneut versuchen",
+   "en": "Try Again"
+  },
+  "mail.projectFiles.more": {
+   "de": "{1} weitere im Projektordner",
+   "en": "{1} more in project folder"
+  },
+  "mail.saveMail.menu": {
+   "de": "Mail in Projektordner sichern",
+   "en": "Save Message to Project Folder"
+  },
+  "mail.saveMail.chooseProject": {
+   "de": "Sichern in Projekt",
+   "en": "Save to Project"
+  },
+  "mail.attachment.otherProject": {
+   "de": "In anderes Projekt",
+   "en": "Move to Another Project"
+  },
+  "mail.toast.notSentInDrafts": {
+   "de": "Nicht gesendet · im Ordner Entwürfe",
+   "en": "Not sent · in Drafts"
+  },
+  "mail.outbox.state.failed": {
+   "de": "Nicht gesendet · Prüfung fehlgeschlagen",
+   "en": "Not sent · check failed"
+  },
+  "mail.outbox.state.checking": {
+   "de": "Prüft, ob schon gesendet …",
+   "en": "Checking whether already sent …"
+  },
+  "mail.date.inDays.one": {
+   "de": "In {1} Tag",
+   "en": "In {1} day"
+  },
+  "mail.date.inDays.other": {
+   "de": "In {1} Tagen",
+   "en": "In {1} days"
   }
  }
 }

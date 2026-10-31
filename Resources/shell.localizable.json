@@ -137,13 +137,13 @@
    "de": "Ziehen · Doppelklick setzt zurück",
    "en": "Drag · double-click to reset"
   },
-  "shell.lock.passwordPlaceholder": {
-   "de": "Passwort",
-   "en": "Password"
-  },
   "shell.lock.passwordWrong": {
    "de": "Passwort falsch",
    "en": "Incorrect password"
+  },
+  "shell.lock.reason": {
+   "de": "die Sperre aufzuheben",
+   "en": "unlock"
   },
   "shell.lock.touch": {
    "de": "Mit Touch ID entsperren",
@@ -181,9 +181,9 @@
    "de": "E-Mail",
    "en": "Message"
   },
-  "shell.menu.newMessage": {
-   "de": "Neue E-Mail",
-   "en": "New Message"
+  "shell.menu.settings": {
+   "de": "Einstellungen …",
+   "en": "Settings…"
   },
   "shell.safeArea.tooltip": {
    "de": "Kamera-Aussparung: der Sichtbereich beginnt darunter",

@@ -24,6 +24,26 @@ enum PreviewEngine {
         return result.trimmingCharacters(in: .whitespaces)
     }
 
+    static func draft(_ raw: String, signature: String?) -> String {
+        let plain = text(raw)
+        guard let signature else { return plain }
+        let own = plain.split(separator: " ").map(String.init)
+        let sign = signature.split(whereSeparator: { $0.isWhitespace }).map(String.init).filter { $0 != "--" }
+        guard !own.isEmpty, !sign.isEmpty else { return plain }
+        if own.count >= sign.count {
+            for start in stride(from: own.count - sign.count, through: 0, by: -1) where Array(own[start..<start + sign.count]) == sign {
+                return (own[..<start] + own[(start + sign.count)...]).joined(separator: " ")
+            }
+        }
+        for start in own.indices where own.count - start < sign.count {
+            let tail = Array(own[start...])
+            if (start == 0 || tail.count >= 2) && tail == Array(sign[..<tail.count]) {
+                return own[..<start].joined(separator: " ")
+            }
+        }
+        return plain
+    }
+
     private static func broken(_ text: String) -> String {
         guard let regex = lineBreaks else { return text }
         return regex.stringByReplacingMatches(in: text, range: NSRange(text.startIndex..., in: text), withTemplate: "\n")

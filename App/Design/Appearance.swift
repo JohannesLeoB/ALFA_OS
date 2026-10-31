@@ -1,3 +1,4 @@
+import Core
 import Design
 import SwiftUI
 
@@ -38,6 +39,12 @@ struct Appearance: Equatable {
         ease(timing.duration, timing.easing, delay: timing.delay)
     }
 
+    var locale: Locale {
+        guard let language = bundle.preferredLocalizations.first else { return .current }
+        let chosen = Locale(identifier: language)
+        return Locale.current.language.languageCode == chosen.language.languageCode ? .current : chosen
+    }
+
     func text(_ key: String) -> Text {
         Text(LocalizedStringKey(key), bundle: bundle)
     }
@@ -47,6 +54,10 @@ struct Appearance: Equatable {
     }
 
     func format(_ key: String, _ arguments: CVarArg...) -> String {
-        String(format: string(key), arguments: arguments)
+        let text = string(key)
+        guard text.range(of: #"\{\d+\}"#, options: .regularExpression) != nil else {
+            return String(format: text, arguments: arguments)
+        }
+        return PlaceholderEngine.fill(text, arguments.map { String(describing: $0) })
     }
 }

@@ -81,7 +81,11 @@ struct ProjectRootRows: View {
 
     private func sync() {
         Task {
-            context.state.notify(await context.syncNow(inlet.id, .files) ? "settings.toast.driveSynced" : "settings.toast.syncFailed")
+            switch await context.syncNow(inlet.id, .files) {
+            case .finished: context.state.notify("settings.projectRoot.synced")
+            case .failed: context.state.notify("settings.projectRoot.syncFailed", failed: true) { sync() }
+            case .skipped: break
+            }
         }
     }
 }

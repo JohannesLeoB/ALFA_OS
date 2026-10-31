@@ -6,69 +6,114 @@ import SwiftUI
 
 @MainActor
 enum ProjectFolderList {
-    static func show(_ inbox: InboxState, appearance: Appearance, draft: UUID, anchor: AnchorBox) {
+    static func show(_ session: AppSession, appearance: Appearance, draft: UUID, anchor: AnchorBox) {
+        projects(session, appearance: appearance, title: "mail.action.fromProject", anchor: anchor) { project in
+            open(session, appearance: appearance, draft: draft, anchor: anchor, inlet: project.inlet, folder: project.folder.id,
+                 trail: project.folder.name)
+        }
+    }
+
+    static func save(_ session: AppSession, appearance: Appearance, message id: String, anchor: AnchorBox) {
+        projects(session, appearance: appearance, title: "mail.saveMail.chooseProject", rootTitle: "mail.saveMail.menu", anchor: anchor) { project in
+            Task { await session.inbox.mailToProjectFolder(id, project: project, render: MessageExport.render) }
+        }
+    }
+
+    static func save(_ session: AppSession, appearance: Appearance, message id: String, attachment: AttachmentEntry, anchor: AnchorBox) {
+        projects(session, appearance: appearance, title: "mail.attachment.otherProject", anchor: anchor) { project in
+            Task { await session.inbox.attachmentToProjectFolder(id, attachmentID: attachment.id, name: attachment.name, project: project) }
+        }
+    }
+
+    private static func projects(_ session: AppSession, appearance: Appearance, title: String, rootTitle: String? = nil, anchor: AnchorBox,
+                                 pick: @escaping @MainActor (ProjectFolder) -> Void) {
+        guard session.hasProjectRoot else {
+            noRoot(session, appearance: appearance, title: rootTitle ?? title, anchor: anchor)
+            return
+        }
+        let head = MenuEntry.head(id: "head", label: appearance.text(title))
+        guard let ticket = anchor.showMenu([head, note("mail.projectFiles.loading", appearance: appearance)]) else { return }
         Task {
-            let projects = await inbox.projectFolders(for: draft)
-            guard !projects.isEmpty else { return }
-            let rows = projects.map { project in
-                MenuEntry.row(MenuItem(id: project.id, label: Text(verbatim: project.folder.name), meta: appearance.text("mail.menu.drive")) {
-                    open(inbox, appearance: appearance, draft: draft, anchor: anchor, inlet: project.inlet, folder: project.folder.id,
-                         title: project.folder.name)
-                })
+            let found = await session.inbox.projectFolders()
+            guard MenuPanel.shared.isCurrent(ticket) else { return }
+            guard let found else {
+                anchor.showMenu([head, note("mail.projectFiles.loadFailed", appearance: appearance),
+                                 retry(appearance: appearance) {
+                    projects(session, appearance: appearance, title: title, rootTitle: rootTitle, anchor: anchor, pick: pick)
+                }])
+                return
             }
-            present([.head(id: "head", label: appearance.text("mail.action.fromProject"))] + rows, anchor: anchor)
-        }
-    }
-
-    static func save(_ inbox: InboxState, appearance: Appearance, message id: String, anchor: AnchorBox) {
-        choose(inbox, appearance: appearance, message: id, anchor: anchor) { project in
-            await inbox.mailToProjectFolder(id, project: project, render: MessageExport.render)
-        }
-    }
-
-    static func save(_ inbox: InboxState, appearance: Appearance, message id: String, attachment: AttachmentEntry, anchor: AnchorBox) {
-        choose(inbox, appearance: appearance, message: id, anchor: anchor) { project in
-            await inbox.attachmentToProjectFolder(id, attachmentID: attachment.id, name: attachment.name, project: project)
-        }
-    }
-
-    private static func choose(_ inbox: InboxState, appearance: Appearance, message id: String, anchor: AnchorBox,
-                               then run: @escaping @MainActor (ProjectFolder) async -> Void) {
-        Task {
-            let projects = await inbox.projectFolders(forMessage: id)
-            guard !projects.isEmpty else { return }
-            let rows = projects.map { project in
-                MenuEntry.row(MenuItem(id: project.id, label: Text(verbatim: project.folder.name), meta: appearance.text("mail.menu.drive")) {
-                    Task { await run(project) }
-                })
+            guard !found.isEmpty else {
+                anchor.showMenu([head, note("mail.projectFiles.empty", appearance: appearance)])
+                return
             }
-            present(rows, anchor: anchor)
+            let rows = found.map { project in
+                MenuEntry.row(MenuItem(id: project.id, label: Text(verbatim: project.folder.name)) { pick(project) })
+            }
+            anchor.showMenu([head] + rows)
         }
     }
 
-    private static func open(_ inbox: InboxState, appearance: Appearance, draft: UUID, anchor: AnchorBox, inlet: String, folder: String,
-                             title: String) {
+    private static func open(_ session: AppSession, appearance: Appearance, draft: UUID, anchor: AnchorBox, inlet: String, folder: String,
+                             trail: String) {
+        let head = MenuEntry.head(id: "head", label: Text(verbatim: trail))
+        guard let ticket = anchor.showMenu([head, note("mail.projectFiles.loading", appearance: appearance)]) else { return }
         Task {
-            let files = await inbox.projectFiles(inlet, folder: folder)
-            guard !files.isEmpty else { return }
-            let hidden = files.count - Tokens.Count.projectFilesMax
-            let rows = files.prefix(Tokens.Count.projectFilesMax).map { file in
-                MenuEntry.row(MenuItem(id: file.id, label: Text(verbatim: file.name), meta: appearance.text("mail.menu.drive")) {
+            let listed = await session.inbox.projectFiles(inlet, folder: folder)
+            guard MenuPanel.shared.isCurrent(ticket) else { return }
+            guard let files = listed else {
+                anchor.showMenu([head, note("mail.projectFiles.loadFailed", appearance: appearance),
+                                 retry(appearance: appearance) {
+                    open(session, appearance: appearance, draft: draft, anchor: anchor, inlet: inlet, folder: folder, trail: trail)
+                }])
+                return
+            }
+            guard !files.isEmpty else {
+                anchor.showMenu([head, note("mail.projectFiles.empty", appearance: appearance)])
+                return
+            }
+            let shown = Array(files.prefix(Tokens.Count.projectFilesMax))
+            let counts = await session.inbox.projectCounts(inlet, folders: shown)
+            guard MenuPanel.shared.isCurrent(ticket) else { return }
+            let rows = shown.map { file in
+                MenuEntry.row(MenuItem(id: file.id, label: Text(verbatim: file.name),
+                                       meta: meta(of: file, counts: counts)) {
                     if file.isFolder {
-                        open(inbox, appearance: appearance, draft: draft, anchor: anchor, inlet: inlet, folder: file.id, title: file.name)
+                        open(session, appearance: appearance, draft: draft, anchor: anchor, inlet: inlet, folder: file.id,
+                             trail: trail + " · " + file.name)
                     } else {
-                        Task { await inbox.attachProjectFile(draft, inlet: inlet, file: file) }
+                        Task { await session.inbox.attachProjectFile(draft, inlet: inlet, file: file) }
                     }
                 })
             }
+            let hidden = files.count - shown.count
             let more = hidden > 0
-                ? [MenuEntry.head(id: "more", label: Text(verbatim: appearance.format("mail.menu.projectMore", Format.number(hidden))))]
+                ? [MenuEntry.row(MenuItem(id: "more", label: Text(verbatim: appearance.format("mail.projectFiles.more", Format.number(hidden))),
+                                          action: {}))]
                 : []
-            present([.head(id: "head", label: Text(verbatim: title))] + rows + more, anchor: anchor)
+            anchor.showMenu([head] + rows + more)
         }
     }
 
-    private static func present(_ entries: [MenuEntry], anchor: AnchorBox) {
-        anchor.showMenu(entries)
+    private static func meta(of file: FileEntry, counts: [String: Int]) -> Text? {
+        if file.isFolder { return counts[file.id].map { Text(verbatim: Format.number($0)) } }
+        guard let size = file.size, size > 0 else { return nil }
+        return Text(verbatim: Format.bytes(size))
+    }
+
+    private static func noRoot(_ session: AppSession, appearance: Appearance, title: String, anchor: AnchorBox) {
+        anchor.showMenu([
+            .head(id: "head", label: appearance.text(title)),
+            note("mail.projectFiles.noRoot", appearance: appearance),
+            .row(MenuItem(id: "chooseRoot", label: appearance.text("mail.projectFiles.chooseRoot")) { session.openMailService("google") }),
+        ])
+    }
+
+    private static func note(_ key: String, appearance: Appearance) -> MenuEntry {
+        .row(MenuItem(id: key, label: appearance.text(key), action: {}))
+    }
+
+    private static func retry(appearance: Appearance, action: @escaping () -> Void) -> MenuEntry {
+        .row(MenuItem(id: "retry", label: appearance.text("mail.projectFiles.retry"), action: action))
     }
 }

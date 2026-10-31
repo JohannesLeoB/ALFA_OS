@@ -33,4 +33,6 @@ final class PresetSetup: SetupPort {
     }
 
     func report(for inlet: Inlet.ID) -> [ReportEntry] { wrapped.report(for: inlet) }
+
+    func heldSlots(of inlet: Inlet.ID) -> Set<String> { wrapped.heldSlots(of: inlet) }
 }

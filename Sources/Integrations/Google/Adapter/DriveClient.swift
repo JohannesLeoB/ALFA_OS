@@ -4,7 +4,7 @@ struct DriveClient: DrivePort {
     static let filesEndpoint = "https://www.googleapis.com/drive/v3/files"
     static let uploadEndpoint = "https://www.googleapis.com/upload/drive/v3/files"
     static let drivesEndpoint = "https://www.googleapis.com/drive/v3/drives"
-    static let listFields = "nextPageToken,files(id,name,mimeType,modifiedTime,webViewLink)"
+    static let listFields = "nextPageToken,files(id,name,mimeType,modifiedTime,webViewLink,size)"
     static let maxPages = 20
     static let pageSize = "100"
 

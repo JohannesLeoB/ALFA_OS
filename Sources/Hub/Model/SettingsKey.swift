@@ -12,6 +12,9 @@ enum SettingsKey {
     static let identityCode = "settings.identity.code"
     static let identityPhone = "settings.identity.phone"
     static let legacyImportDone = "import.legacy.done"
+    static let mailStoreAttachments = "settings.mailStore.attachments"
+    static let mailStoreLimit = "settings.mailStore.limit"
+    static let mailStoreFolder = "settings.mailStore.folder"
 
     static func companyEntry(_ id: String) -> String { "settings.company." + id }
 

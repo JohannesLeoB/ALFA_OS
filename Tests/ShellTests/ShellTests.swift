@@ -17,6 +17,58 @@ private func loadDirectory() throws -> AppDirectory {
     try AppDirectory(data: Data(directoryJSON.utf8))
 }
 
+@MainActor
+private final class FakeUnlock: UnlockPort {
+    var touchID = true
+    var available = true
+    var outcomes: [UnlockMethod: [UnlockOutcome]] = [:]
+    private(set) var asked: [UnlockMethod] = []
+    private(set) var cancels = 0
+
+    func unlock(_ method: UnlockMethod, reason: String) async -> UnlockOutcome {
+        asked.append(method)
+        return outcomes[method]?.isEmpty == false ? outcomes[method]!.removeFirst() : .granted
+    }
+
+    func cancel() {
+        cancels += 1
+    }
+}
+
+@MainActor
+private final class FakeClock {
+    var now: TimeInterval = 0
+    var waits: [TimeInterval] = []
+    var during: (() -> Void)?
+    var budget = 0
+    var idleBudget = 0
+}
+
+@MainActor
+private final class PhaseLog {
+    var seen: [LockPhase] = []
+}
+
+private let resignedName = Notification.Name("test.resigned")
+private let becameName = Notification.Name("test.became")
+
+@MainActor
+private func lockState(_ port: FakeUnlock, _ clock: FakeClock, on: Bool = true, pause: LockPause = .oneMinute,
+                       center: NotificationCenter = NotificationCenter()) -> LockState {
+    LockState(port: port, on: on, pause: pause, reason: "reason", center: center, resigned: resignedName, became: becameName,
+              now: { clock.now }) { wait in
+        let start = clock.now
+        clock.waits.append(wait)
+        let idle = wait > LockState.unlockGrace
+        guard (idle ? clock.idleBudget : clock.budget) > 0 else { throw CancellationError() }
+        if idle { clock.idleBudget -= 1 } else { clock.budget -= 1 }
+        let hook = clock.during
+        clock.during = nil
+        hook?()
+        clock.now = start + wait
+    }
+}
+
 final class ShellTests: XCTestCase {
     private let measure = Measure()
     private let screen = ShellValues.previewScreen
@@ -370,6 +422,7 @@ final class ShellTests: XCTestCase {
     func testEmptyStackFoldsTrailingLaneAfterEbb() throws {
         let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
         XCTAssertFalse(model.ebb)
+        model.stack(empty: false, still: false)
         model.stack(empty: true, still: false)
         XCTAssertFalse(model.ebb)
         XCTAssertEqual(model.widths.trailing, 280)
@@ -382,6 +435,102 @@ final class ShellTests: XCTestCase {
         XCTAssertFalse(model.ebb)
         XCTAssertTrue(model.slowLane)
         XCTAssertEqual(model.widths.trailing, 280)
+    }
+
+    @MainActor
+    func testUnknownStackIsNoReportAndTheFirstRealValueIsTheBoot() throws {
+        let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        model.stack(empty: nil, still: false)
+        XCTAssertFalse(model.ebb)
+        XCTAssertEqual(model.widths.trailing, 280)
+        model.stack(empty: true, still: false)
+        XCTAssertTrue(model.ebb)
+        XCTAssertFalse(model.slowLane)
+        XCTAssertEqual(model.widths.trailing, measure.laneFolded)
+        let restored = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        restored.stack(empty: nil, still: false)
+        restored.stack(empty: false, still: false)
+        XCTAssertFalse(restored.ebb)
+        XCTAssertFalse(restored.slowLane)
+        XCTAssertEqual(restored.widths.trailing, 280)
+    }
+
+    @MainActor
+    func testEmptyStackAtStartFoldsTrailingLaneAtOnce() throws {
+        let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        model.stack(empty: true, still: false)
+        XCTAssertTrue(model.ebb)
+        XCTAssertFalse(model.slowLane)
+        XCTAssertEqual(model.widths.trailing, measure.laneFolded)
+        let filled = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        filled.stack(empty: false, still: false)
+        XCTAssertFalse(filled.ebb)
+        XCTAssertEqual(filled.widths.trailing, 280)
+    }
+
+    @MainActor
+    func testStripDoubleClickRestsOnlyThatLane() throws {
+        let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        model.limit("mail", mailLimits)
+        var now = 100.0
+        model.uptime = { now }
+        func narrowTrailing() {
+            model.dragLane(.trailing, translation: 0)
+            model.dragLane(.trailing, translation: 40)
+            model.endLaneDrag()
+        }
+        model.stepLane(.leading, by: -40)
+        narrowTrailing()
+        XCTAssertEqual(model.laneMode("mail").preferred, [240, 0, 240])
+        model.toggleFold(.trailing)
+        model.openStrip(.trailing)
+        now += 0.3
+        model.restLane(.trailing)
+        XCTAssertEqual(model.laneMode("mail").preferred, [240, 0, 280])
+        XCTAssertEqual(model.widths.all, [240, 936, 280])
+        narrowTrailing()
+        model.toggleFold(.trailing)
+        model.openStrip(.trailing)
+        now += 0.7
+        model.restLane(.trailing)
+        XCTAssertEqual(model.laneMode("mail").preferred, [240, 0, 240])
+        model.toggleFold(.trailing)
+        model.restLane(.trailing)
+        XCTAssertEqual(model.laneMode("mail").preferred, [240, 0, 280])
+        XCTAssertFalse(model.laneMode("mail").folded[2])
+        model.restLane(.leading)
+        XCTAssertEqual(model.laneMode("mail").preferred, [240, 0, 280])
+    }
+
+    @MainActor
+    func testStripDoubleClickOpensTheMiddleWhenNoOtherSideLaneIsOpen() throws {
+        let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        model.toggleFold(.center)
+        model.toggleMaximize(.leading)
+        model.restLane(.trailing)
+        XCTAssertNil(model.laneMode("mail").maximized)
+        XCTAssertEqual(model.laneMode("mail").folded, [false, false, false])
+        let other = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        other.toggleFold(.center)
+        other.toggleFold(.leading)
+        other.toggleFold(.trailing)
+        other.restLane(.leading)
+        XCTAssertEqual(other.laneMode("mail").folded, [false, true, true])
+    }
+
+    @MainActor
+    func testUnfoldEndsMaximizeAndOpensOnlyWhatIsNeeded() throws {
+        let model = DeskState(directory: try loadDirectory(), measure: measure, window: screen)
+        model.toggleFold(.trailing)
+        model.toggleMaximize(.center)
+        model.unfold(.trailing)
+        XCTAssertNil(model.laneMode("mail").maximized)
+        XCTAssertFalse(model.laneMode("mail").folded[2])
+        model.toggleFold(.leading)
+        model.unfold(.center)
+        XCTAssertEqual(model.laneMode("mail").folded, [true, false, false])
+        model.unfold(.trailing)
+        XCTAssertEqual(model.laneMode("mail").folded, [true, false, false])
     }
 
     @MainActor
@@ -504,5 +653,398 @@ final class ShellTests: XCTestCase {
         XCTAssertEqual(TileGrid.active(tops: tops, offset: 0, reach: 32, viewport: 400, content: 300), 0)
         XCTAssertEqual(TileGrid.active(tops: [.infinity, .infinity], offset: 0, reach: 32, viewport: 400, content: 1200), 0)
         XCTAssertEqual(TileGrid.active(tops: [], offset: 50, reach: 32, viewport: 400, content: 100), 0)
+    }
+
+    func testLockPauseSplitsLeavingFromTheIdleStep() {
+        let all = [LockPause.immediately, .oneMinute, .fiveMinutes, .fifteenMinutes]
+        XCTAssertEqual(all.map(\.onLeaving), [true, false, false, false])
+        XCTAssertEqual(all.map(\.idle), [60, 60, 300, 900])
+        XCTAssertFalse(LockPhase.open.shut)
+        XCTAssertTrue([LockPhase.locked, .touchID, .touchIDFailed, .password, .passwordWrong].allSatisfy(\.shut))
+        XCTAssertEqual([LockPhase.locked, .touchID, .touchIDFailed, .password, .passwordWrong].map(\.asksPassword), [false, false, false, true, true])
+    }
+
+    @MainActor
+    func testLockLocksAtLaunchOnlyWhenSwitchedOn() {
+        let port = FakeUnlock()
+        let shut = lockState(port, FakeClock(), on: true)
+        shut.launch()
+        XCTAssertEqual(shut.phase, .locked)
+        XCTAssertTrue(shut.touchID)
+        XCTAssertNil(shut.timer)
+        let free = lockState(port, FakeClock(), on: false)
+        free.launch()
+        XCTAssertEqual(free.phase, .open)
+        XCTAssertNil(free.timer)
+    }
+
+    @MainActor
+    func testLockLocksOnlyAfterTheIdleTimeAndEachInputRestartsIt() {
+        let clock = FakeClock()
+        let state = lockState(FakeUnlock(), clock, pause: .oneMinute)
+        clock.now = 59
+        state.touch()
+        XCTAssertEqual(state.phase, .open)
+        clock.now = 118
+        state.touch()
+        XCTAssertEqual(state.phase, .open)
+        clock.now = 178
+        state.touch()
+        XCTAssertEqual(state.phase, .locked)
+        clock.now = 10_000
+        state.touch()
+        XCTAssertEqual(state.phase, .locked)
+    }
+
+    @MainActor
+    func testLockFirstInputAfterALongSleepLocksInsteadOfRestartingTheTimer() {
+        let clock = FakeClock()
+        let state = lockState(FakeUnlock(), clock, pause: .fifteenMinutes)
+        clock.now = 899
+        state.touch()
+        XCTAssertEqual(state.phase, .open)
+        clock.now = 899 + 8 * 3600
+        state.touch()
+        XCTAssertEqual(state.phase, .locked)
+    }
+
+    @MainActor
+    func testLockReturningToTheAppAfterTheIdleTimeLocksAtOnce() {
+        let center = NotificationCenter()
+        let clock = FakeClock()
+        let state = lockState(FakeUnlock(), clock, pause: .fiveMinutes, center: center)
+        clock.now = 299
+        center.post(name: becameName, object: nil)
+        XCTAssertEqual(state.phase, .open)
+        clock.now = 300
+        center.post(name: becameName, object: nil)
+        XCTAssertEqual(state.phase, .locked)
+    }
+
+    @MainActor
+    func testLockImmediatelyAlsoLocksAfterTheShortestIdleStep() {
+        let clock = FakeClock()
+        let state = lockState(FakeUnlock(), clock, pause: .immediately)
+        clock.now = 59
+        state.touch()
+        XCTAssertEqual(state.phase, .open)
+        clock.now = 118
+        state.touch()
+        XCTAssertEqual(state.phase, .open)
+        clock.now = 178
+        state.touch()
+        XCTAssertEqual(state.phase, .locked)
+        let waiting = FakeClock()
+        let timed = lockState(FakeUnlock(), waiting, on: false, pause: .oneMinute)
+        timed.configure(on: true, pause: .immediately)
+        XCTAssertEqual(waiting.waits, [])
+        XCTAssertNotNil(timed.timer)
+    }
+
+    @MainActor
+    func testLockTimerSleepsOnlyTheRemainingPause() async {
+        let clock = FakeClock()
+        let state = lockState(FakeUnlock(), clock, on: false, pause: .fiveMinutes)
+        state.launch()
+        XCTAssertNil(state.timer)
+        state.configure(on: true, pause: .fiveMinutes)
+        clock.idleBudget = 2
+        clock.during = {
+            clock.now = 100
+            state.touch()
+        }
+        await state.timer?.value
+        await state.timer?.value
+        XCTAssertEqual(state.phase, .locked)
+        XCTAssertEqual(clock.waits, [300, 100])
+        XCTAssertNil(state.timer)
+    }
+
+    @MainActor
+    func testLockSwitchedOffNeverLocks() {
+        let clock = FakeClock()
+        let state = lockState(FakeUnlock(), clock, on: false, pause: .oneMinute)
+        state.configure(on: true, pause: .oneMinute)
+        XCTAssertNotNil(state.timer)
+        state.configure(on: false, pause: .oneMinute)
+        XCTAssertNil(state.timer)
+        clock.now = 3600
+        state.touch()
+        state.resign()
+        XCTAssertEqual(state.phase, .open)
+    }
+
+    @MainActor
+    func testLockLocksWhenTheAppLeavesOnlyForTheImmediateChoice() {
+        let waiting = lockState(FakeUnlock(), FakeClock(), on: false, pause: .oneMinute)
+        waiting.configure(on: true, pause: .oneMinute)
+        waiting.resign()
+        XCTAssertEqual(waiting.phase, .open)
+        waiting.configure(on: true, pause: .immediately)
+        XCTAssertNotNil(waiting.timer)
+        waiting.resign()
+        XCTAssertEqual(waiting.phase, .locked)
+    }
+
+    @MainActor
+    func testLockWatchesTheAppLeavingByItselfWithoutAnyWindow() {
+        let center = NotificationCenter()
+        let immediate = lockState(FakeUnlock(), FakeClock(), on: false, pause: .oneMinute, center: center)
+        immediate.configure(on: true, pause: .immediately)
+        XCTAssertEqual(immediate.phase, .open)
+        center.post(name: resignedName, object: nil)
+        XCTAssertEqual(immediate.phase, .locked)
+        let waiting = lockState(FakeUnlock(), FakeClock(), on: true, pause: .oneMinute, center: center)
+        waiting.configure(on: false, pause: .oneMinute)
+        waiting.configure(on: true, pause: .oneMinute)
+        center.post(name: resignedName, object: nil)
+        XCTAssertEqual(waiting.phase, .open)
+        let other = NotificationCenter()
+        let apart = lockState(FakeUnlock(), FakeClock(), on: false, pause: .oneMinute, center: other)
+        apart.configure(on: true, pause: .immediately)
+        center.post(name: resignedName, object: nil)
+        XCTAssertEqual(apart.phase, .open)
+    }
+
+    @MainActor
+    func testLockIgnoresTheLeaveThatBelongsToTheUnlockDialog() async {
+        let center = NotificationCenter()
+        let clock = FakeClock()
+        let state = lockState(FakeUnlock(), clock, on: true, pause: .immediately, center: center)
+        state.launch()
+        state.useTouchID()
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .open)
+        center.post(name: resignedName, object: nil)
+        XCTAssertEqual(state.phase, .open)
+        let held = state.leaving
+        XCTAssertNotNil(held)
+        center.post(name: becameName, object: nil)
+        XCTAssertNil(state.leaving)
+        await held?.value
+        XCTAssertEqual(state.phase, .open)
+        XCTAssertTrue(clock.waits.allSatisfy { $0 <= LockState.unlockGrace || $0 == LockPause.immediately.idle })
+    }
+
+    @MainActor
+    func testLockStillLocksWhenTheAppReallyStaysAwayAfterUnlocking() async {
+        let center = NotificationCenter()
+        let clock = FakeClock()
+        clock.budget = 1
+        let state = lockState(FakeUnlock(), clock, on: true, pause: .immediately, center: center)
+        state.launch()
+        state.useTouchID()
+        await state.pending?.value
+        center.post(name: resignedName, object: nil)
+        XCTAssertEqual(state.phase, .open)
+        await state.leaving?.value
+        XCTAssertEqual(state.phase, .locked)
+        XCTAssertEqual(clock.waits.filter { $0 <= LockState.unlockGrace }, [LockState.unlockGrace])
+        state.useTouchID()
+        await state.pending?.value
+        clock.now += LockState.unlockGrace + 1
+        center.post(name: resignedName, object: nil)
+        XCTAssertEqual(state.phase, .locked)
+    }
+
+    @MainActor
+    func testLockHandlesALeaveDuringTheAttemptWhenItEndsAfterwards() async {
+        let center = NotificationCenter()
+        let clock = FakeClock()
+        clock.budget = 1
+        let state = lockState(FakeUnlock(), clock, on: true, pause: .immediately, center: center)
+        state.launch()
+        state.useTouchID()
+        center.post(name: resignedName, object: nil)
+        XCTAssertEqual(state.phase, .touchID)
+        center.post(name: becameName, object: nil)
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .open)
+        XCTAssertNil(state.leaving)
+        center.post(name: resignedName, object: nil)
+        await state.pending?.value
+        await state.leaving?.value
+        XCTAssertEqual(state.phase, .locked)
+        state.useTouchID()
+        center.post(name: resignedName, object: nil)
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .open)
+        XCTAssertNotNil(state.leaving)
+    }
+
+    @MainActor
+    func testLockTouchIDUnlocksAndRearms() async {
+        let port = FakeUnlock()
+        let state = lockState(port, FakeClock())
+        state.launch()
+        state.useTouchID()
+        XCTAssertEqual(state.phase, .touchID)
+        state.useTouchID()
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .open)
+        XCTAssertEqual(port.asked, [.touchID])
+        XCTAssertNotNil(state.timer)
+    }
+
+    @MainActor
+    func testLockShowsAnErrorOnlyForARefusalAndReturnsQuietlyAfterACancel() async {
+        let port = FakeUnlock()
+        port.outcomes = [.touchID: [.refused, .cancelled], .password: [.refused, .cancelled, .refused, .granted]]
+        let state = lockState(port, FakeClock())
+        state.launch()
+        state.useTouchID()
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .touchIDFailed)
+        state.primary()
+        XCTAssertEqual(state.phase, .touchID)
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .locked)
+        state.usePassword()
+        XCTAssertEqual(state.phase, .password)
+        state.primary()
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .passwordWrong)
+        state.primary()
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .locked)
+        state.usePassword()
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .passwordWrong)
+        state.usePassword()
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .open)
+        XCTAssertEqual(port.asked, [.touchID, .touchID, .password, .password, .password, .password])
+    }
+
+    @MainActor
+    func testLockNeverEngagesWhereTheDeviceCannotAuthenticateTheOwner() async {
+        let port = FakeUnlock()
+        port.available = false
+        let center = NotificationCenter()
+        let clock = FakeClock()
+        let state = lockState(port, clock, on: true, pause: .immediately, center: center)
+        XCTAssertFalse(state.available)
+        state.launch()
+        XCTAssertEqual(state.phase, .open)
+        state.resign()
+        XCTAssertEqual(state.phase, .open)
+        XCTAssertNil(state.timer)
+        XCTAssertEqual(clock.waits, [])
+        let timed = lockState(port, clock, on: true, pause: .oneMinute, center: center)
+        timed.launch()
+        XCTAssertEqual(timed.phase, .open)
+        XCTAssertNil(timed.timer)
+        clock.now = 3600
+        timed.touch()
+        XCTAssertEqual(timed.phase, .open)
+        XCTAssertNil(timed.timer)
+        XCTAssertEqual(clock.waits, [])
+        port.available = true
+        clock.now = 7200
+        center.post(name: becameName, object: nil)
+        XCTAssertTrue(state.available)
+        XCTAssertTrue(timed.available)
+        XCTAssertEqual(state.phase, .locked)
+        XCTAssertEqual(timed.phase, .locked)
+    }
+
+    @MainActor
+    func testLockFailedLockLeavesTheIdleClockAlone() {
+        let port = FakeUnlock()
+        let center = NotificationCenter()
+        let clock = FakeClock()
+        let state = lockState(port, clock, on: true, pause: .immediately, center: center)
+        port.available = false
+        clock.now = 1000
+        state.resign()
+        XCTAssertEqual(state.phase, .open)
+        XCTAssertFalse(state.available)
+        port.available = true
+        clock.now = 1030
+        center.post(name: becameName, object: nil)
+        XCTAssertEqual(state.phase, .locked)
+    }
+
+    @MainActor
+    func testLockReportsEveryChangeOfPhaseToItsWatchers() async {
+        let port = FakeUnlock()
+        port.outcomes = [.touchID: [.refused, .granted]]
+        let state = lockState(port, FakeClock())
+        let log = PhaseLog()
+        state.watch { log.seen.append($0) }
+        state.launch()
+        state.useTouchID()
+        await state.pending?.value
+        state.useTouchID()
+        await state.pending?.value
+        XCTAssertEqual(log.seen, [.locked, .touchID, .touchIDFailed, .touchID, .open])
+    }
+
+    @MainActor
+    func testLockOpensWhenThePasswordCheckReportsNoPasscodeAndStaysShutOtherwise() async {
+        let port = FakeUnlock()
+        port.outcomes = [.password: [.unavailable, .unavailable]]
+        let state = lockState(port, FakeClock())
+        state.launch()
+        state.usePassword()
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .locked)
+        XCTAssertTrue(state.available)
+        port.available = false
+        state.usePassword()
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .open)
+        XCTAssertFalse(state.available)
+    }
+
+    @MainActor
+    func testLockTouchIDFallbackAndInterruptions() async {
+        let port = FakeUnlock()
+        port.outcomes = [.touchID: [.fallback, .interrupted, .unavailable], .password: [.interrupted]]
+        let state = lockState(port, FakeClock())
+        state.launch()
+        state.useTouchID()
+        await state.pending?.value
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .locked)
+        XCTAssertEqual(port.asked, [.touchID, .password])
+        state.backToTouchID()
+        XCTAssertEqual(state.phase, .locked)
+        state.useTouchID()
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .locked)
+        XCTAssertTrue(state.touchID)
+        state.useTouchID()
+        await state.pending?.value
+        XCTAssertEqual(state.phase, .locked)
+        XCTAssertFalse(state.touchID)
+        state.useTouchID()
+        XCTAssertEqual(state.phase, .locked)
+        state.primary()
+        XCTAssertEqual(state.phase, .password)
+        XCTAssertEqual(port.asked, [.touchID, .password, .touchID, .touchID])
+    }
+
+    @MainActor
+    func testLockIgnoresTheAnswerOfACancelledCheck() async {
+        let port = FakeUnlock()
+        port.outcomes = [.touchID: [.granted], .password: [.refused, .granted]]
+        let state = lockState(port, FakeClock())
+        state.launch()
+        state.useTouchID()
+        let touch = state.pending
+        state.usePassword()
+        XCTAssertEqual(port.cancels, 1)
+        let password = state.pending
+        await touch?.value
+        await password?.value
+        XCTAssertEqual(state.phase, .passwordWrong)
+        state.usePassword()
+        let second = state.pending
+        state.backToTouchID()
+        XCTAssertEqual(port.cancels, 2)
+        await second?.value
+        XCTAssertEqual(state.phase, .locked)
+        XCTAssertNil(state.pending)
     }
 }

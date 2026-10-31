@@ -27,6 +27,7 @@ enum DriveParser {
         var mimeType: String
         var modifiedTime: String?
         var webViewLink: String?
+        var size: String?
     }
 
     static func page(from data: Data) throws -> (files: [DriveFile], nextPageToken: String?) {
@@ -38,7 +39,7 @@ enum DriveParser {
         let files = decoded.files.map { entry in
             DriveFile(id: entry.id, name: entry.name, mimeType: entry.mimeType,
                       modifiedAt: entry.modifiedTime.flatMap { formatter.date(from: $0) },
-                      webViewLink: entry.webViewLink)
+                      webViewLink: entry.webViewLink, size: entry.size.flatMap { Int($0) })
         }
         return (files, decoded.nextPageToken)
     }

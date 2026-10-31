@@ -14,11 +14,15 @@ final class MenuPanel {
 
     private var panel: NSPanel?
     private var closing: () -> Void = {}
+    private var generation = 0
 
-    func show(entries: [MenuEntry], anchor: MenuAnchor, window: NSWindow?, desk: DeskState? = nil, onClose: @escaping () -> Void = {}) {
+    @discardableResult
+    func show(entries: [MenuEntry], anchor: MenuAnchor, window: NSWindow?, desk: DeskState? = nil, onClose: @escaping () -> Void = {}) -> Int {
+        generation += 1
+        let ticket = generation
         close()
         closing = onClose
-        guard let window = window ?? NSApp.keyWindow else { return }
+        guard let window = window ?? NSApp.keyWindow else { return ticket }
         let appearance = Appearance(dark: window.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua, still: NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
         let margin = CGFloat(ShadowLayer.reach(appearance.shadows.floating))
         let wrapped = entries.map { entry -> MenuEntry in
@@ -68,7 +72,10 @@ final class MenuPanel {
         window.addChildWindow(made, ordered: .above)
         made.orderFront(nil)
         panel = made
+        return ticket
     }
+
+    func isCurrent(_ ticket: Int) -> Bool { ticket == generation && panel != nil }
 
     func close() {
         if let panel {

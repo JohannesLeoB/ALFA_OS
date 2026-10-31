@@ -35,6 +35,14 @@ struct IntegrationCard: View {
             notices(reading)
             if disconnecting { disconnectNotice(reading) }
             if info.listsAccounts { AccountBlock(context: context, info: info, reading: reading, started: $started) }
+            if reading.state != .notConnected, !info.listsAccounts {
+                ForEach(reading.inlets.filter(AccountBlock.hasMailbox)) { inlet in
+                    MailboxImagesRow(state: context.state, inlet: inlet)
+                }
+            }
+            if reading.state != .notConnected {
+                MailStoreBlock(context: context, inlets: reading.inlets.filter(AccountBlock.hasMailbox))
+            }
             SettingsRow(label: appearance.text("settings.row.access")) {
                 SettingsValue(text: Text(verbatim: access))
             }
@@ -60,8 +68,6 @@ struct IntegrationCard: View {
                     ForEach(reading.inlets.filter(AccountBlock.hasMailbox)) { inlet in
                         MailboxNameRow(state: context.state, inlet: inlet)
                         MailboxDisplayRow(state: context.state, inlet: inlet)
-                        MailboxImagesRow(state: context.state, inlet: inlet)
-                        MailboxRangeRow(state: context.state, inbox: context.inbox, inlet: inlet)
                         MailboxServerCopyRow(state: context.state, inbox: context.inbox, inlet: inlet)
                         SignatureBlock(state: context.state, inlet: inlet)
                     }
@@ -95,8 +101,12 @@ struct IntegrationCard: View {
 
     private func value(of field: IntegrationField, _ reading: IntegrationReading) -> (text: Text, tone: KeyPath<Colors, ColorValue>) {
         guard reading.state != .notConnected else { return (appearance.text(SettingsKeys.valueEmpty), \.inkTertiary) }
-        if field.secret { return (appearance.text("settings.value.masked"), \.inkSecondary) }
+        if field.secret {
+            guard reading.heldSlots.contains(field.id) else { return (appearance.text(SettingsKeys.valueEmpty), \.inkTertiary) }
+            return (appearance.text("settings.value.masked"), \.inkSecondary)
+        }
         if let text = held.text[field.id] { return (Text(verbatim: text), \.inkSecondary) }
+        if reading.heldSlots.contains(field.id) { return (Text(verbatim: ""), \.inkSecondary) }
         if let key = field.fallbackKey { return (appearance.text(key), \.inkSecondary) }
         return (appearance.text(SettingsKeys.valueEmpty), \.inkTertiary)
     }
@@ -107,15 +117,18 @@ struct IntegrationCard: View {
 
     private func note(_ note: LinkNote?) -> Text? {
         switch note {
-        case .checked(let date): Text(verbatim: appearance.format("settings.note.checked", SettingsDates.relative(date)))
-        case .unchecked: appearance.text("settings.note.unchecked")
+        case .checked(let date): Text(verbatim: appearance.format("settings.note.checked", SettingsDates.relative(date, appearance: appearance)))
         case .signingIn: appearance.text("settings.note.signingIn")
+        case .working(let areaKey, let done, let total):
+            Text(verbatim: appearance.format("settings.note.working", appearance.string(areaKey),
+                                             done.formatted(.number.locale(appearance.locale)),
+                                             total.formatted(.number.locale(appearance.locale))))
         case .failed(let at, let lastOK):
             switch (at, lastOK) {
             case (let at?, let ok?):
-                Text(verbatim: appearance.format("settings.note.failed", SettingsDates.relative(at), SettingsDates.day(ok)))
+                Text(verbatim: appearance.format("settings.note.failed", SettingsDates.relative(at, appearance: appearance), SettingsDates.day(ok, appearance: appearance)))
             case (let at?, nil):
-                Text(verbatim: appearance.format("settings.note.failedOnly", SettingsDates.relative(at)))
+                Text(verbatim: appearance.format("settings.note.failedOnly", SettingsDates.relative(at, appearance: appearance)))
             default: nil
             }
         case nil: nil
@@ -157,13 +170,6 @@ struct IntegrationCard: View {
         case .unreadable:
             BlockNotice(kind: .failure, title: appearance.text("settings.unreadable.title"), text: appearance.text("settings.unreadable.body")) {
                 TextButton(label: appearance.text("settings.action.reenter"), disabled: flow.busy) { perform(reading.step) }
-            }
-        case .orphaned:
-            BlockNotice(kind: .warning, title: appearance.text("settings.orphaned.title"), text: appearance.text("settings.orphaned.body")) {
-                TextButton(label: appearance.text("text.settings.action.remove"), kind: .signal, disabled: flow.busy) {
-                    started = true
-                    Task { await flow.remove(reading.inlets.map(\.id)) }
-                }
             }
         default:
             EmptyView()
@@ -235,14 +241,14 @@ struct IntegrationCard: View {
     private func syncNow(_ area: AreaReading) {
         guard !area.running else { return }
         Task {
-            if await !context.syncNow(area.inlet, area.capability) { context.state.notify("settings.toast.syncFailed") }
+            if case .failed = await context.syncNow(area.inlet, area.capability) { context.state.notify("settings.toast.syncFailed") }
         }
     }
 
     private func sync(_ area: AreaReading, _ reading: IntegrationReading) -> Text {
         if area.running { return appearance.text("settings.link.working") }
         guard let last = area.lastSync else { return appearance.text("settings.sync.never") }
-        let when = SettingsDates.relative(last)
+        let when = SettingsDates.relative(last, appearance: appearance)
         switch reading.state {
         case .failed: return Text(verbatim: appearance.format("settings.sync.lastFailed", reason(reading.hint), when))
         case .connected: return Text(verbatim: appearance.format("settings.sync.lastOK", when))
@@ -274,16 +280,20 @@ struct IntegrationCard: View {
 }
 
 enum SettingsDates {
-    static func relative(_ date: Date, now: Date = Date()) -> String {
+    static func relative(_ date: Date, appearance: Appearance, now: Date = Date()) -> String {
+        let span = DateInterval(start: min(date, now), end: max(date, now))
+        if Calendar.current.dateComponents([.minute], from: span.start, to: span.end).minute == 0 {
+            return appearance.string("settings.date.justNow")
+        }
         let formatter = RelativeDateTimeFormatter()
-        formatter.locale = .current
+        formatter.locale = appearance.locale
         formatter.unitsStyle = .full
         return formatter.localizedString(for: date, relativeTo: now)
     }
 
-    static func day(_ date: Date) -> String {
+    static func day(_ date: Date, appearance: Appearance) -> String {
         let formatter = DateFormatter()
-        formatter.locale = .current
+        formatter.locale = appearance.locale
         formatter.setLocalizedDateFormatFromTemplate("dMMM")
         return formatter.string(from: date)
     }

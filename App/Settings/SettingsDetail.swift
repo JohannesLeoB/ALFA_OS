@@ -20,7 +20,7 @@ struct SettingsDetail: View {
             case .appearance: AppearanceCard(state: context.state)
             case .companyData: CompanyCard(state: context.state)
             case .folders: FoldersCard(context: context)
-            case .templates: TemplatesCard()
+            case .templates: TemplatesCard(state: context.state)
             case .integrations: EmptyView()
             case .keyInventory: KeyCard(context: context)
             case .contacts: ContactCard(context: context)
@@ -34,14 +34,13 @@ struct SettingsDetail: View {
 
 struct TemplatesCard: View {
     @Environment(\.appearance) private var appearance
-    @State private var templates = TemplateStore().templates
+    let state: SettingsState
     @State private var failed = false
-    private let store = TemplateStore()
 
     var body: some View {
         VStack(spacing: 0) {
-            if templates.isEmpty { BlockNote(text: appearance.text("settings.templates.none")) }
-            ForEach(templates) { template in
+            if state.templates.isEmpty { BlockNote(text: appearance.text("settings.templates.none")) }
+            ForEach(state.templates) { template in
                 SettingsRow(label: Text(verbatim: template.name)) {
                     ConfirmPill(
                         label: appearance.text("settings.templates.remove"),
@@ -69,13 +68,11 @@ struct TemplatesCard: View {
         panel.allowedContentTypes = TemplateStore.extensions.compactMap { UTType(filenameExtension: $0) }
         panel.allowsMultipleSelection = false
         guard panel.runModal() == .OK, let url = panel.url else { return }
-        failed = (try? store.add(from: url)) == nil
-        templates = store.templates
+        failed = !state.addTemplate(from: url)
     }
 
     private func remove(_ template: TemplateStore.Template) {
-        failed = (try? store.remove(template)) == nil
-        templates = store.templates
+        failed = !state.removeTemplate(template)
     }
 }
 
@@ -106,7 +103,7 @@ struct FoldersCard: View {
             row("settings.folders.projects", context.roots.current().map { Text(verbatim: $0.name) })
             row("settings.folders.data", source.map { appearance.text($0.info.nameKey) })
             SettingsRow(label: appearance.text("settings.folders.templates"), line: false) {
-                if let template = TemplateStore().current {
+                if let template = context.state.currentTemplate {
                     SettingsValue(text: Text(verbatim: template.name))
                 } else {
                     SettingsValue(text: appearance.text("settings.templates.none"), tone: \.inkTertiary)
@@ -169,10 +166,16 @@ struct PrivacyCard: View {
     let state: SettingsState
     let privacy: AssistantPrivacy
     let conversation: ChatState
+    @State private var exporter = ExportState()
+
+    private var categories: [PrivacyCategory] {
+        PrivacyCategory.allCases.filter { conversation.availableCategories.contains($0) || !privacy.shares($0) }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
-            SettingsRow(label: appearance.text("settings.privacy.images")) {
+            SettingsRow(label: appearance.text("settings.privacy.images"),
+                        sub: appearance.text(state.privacy.loadImages ? "settings.privacy.images.on" : "settings.privacy.images.off")) {
                 ToggleSwitch(isOn: Binding(get: { state.privacy.loadImages }, set: { value in state.updatePrivacy { $0.loadImages = value } }),
                              labelKey: "settings.privacy.images")
             }
@@ -184,13 +187,36 @@ struct PrivacyCard: View {
                 ToggleSwitch(isOn: Binding(get: { state.privacy.chatFiles }, set: { value in state.updatePrivacy { $0.chatFiles = value } }),
                              labelKey: "settings.privacy.chatFiles")
             }
+            if exporter.canRun {
+                SettingsRow(label: appearance.text("settings.privacy.export")) {
+                    TextButton(label: appearance.text("settings.privacy.export.action"), kind: .neutral, disabled: exporter.running) {
+                        chooseExport()
+                    }
+                }
+            }
             BlockHead(key: "settings.privacy.categories")
-            ForEach(Array(PrivacyCategory.allCases.enumerated()), id: \.element) { index, category in
-                SettingsRow(label: appearance.text(category.key), line: index < PrivacyCategory.allCases.count - 1) {
+            ForEach(Array(categories.enumerated()), id: \.element) { index, category in
+                SettingsRow(label: appearance.text(category.key), line: index < categories.count - 1) {
                     ToggleSwitch(isOn: Binding(get: { privacy.shares(category) }, set: { privacy.set(category, shares: $0) }),
                                  labelKey: category.key)
                 }
             }
+        }
+    }
+
+    private func chooseExport() {
+        let panel = NSSavePanel()
+        panel.allowedContentTypes = [.zip]
+        panel.nameFieldStringValue = exporter.fileName
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        Task { await runExport(to: url) }
+    }
+
+    private func runExport(to url: URL) async {
+        if await exporter.run(to: url) {
+            state.notify("settings.toast.exportSaved")
+        } else {
+            state.notify("settings.toast.exportFailed", failed: true) { chooseExport() }
         }
     }
 

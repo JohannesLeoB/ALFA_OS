@@ -31,6 +31,8 @@ public final class DeskState {
     private var limits: [String: AreaLimits] = [:]
     @ObservationIgnored private var dragStart: [Double]?
     @ObservationIgnored private var dragMoved = false
+    @ObservationIgnored private var unfoldedStrip: (lane: LaneKind, at: Double)?
+    @ObservationIgnored var uptime: () -> Double = { ProcessInfo.processInfo.systemUptime }
     @ObservationIgnored private var laid: (key: LayoutKey, widths: LaneWidths)?
     public private(set) var blob: BlobPlacement
     public private(set) var mode: BlobMode?
@@ -237,7 +239,32 @@ public final class DeskState {
         changed()
     }
 
+    public func restLane(_ lane: LaneKind) {
+        let recent = unfoldedStrip.map { $0.lane == lane && uptime() - $0.at < ShellValues.stripDoubleClickWindow } ?? false
+        guard recent || widths.width(lane) <= measure.laneFolded else { return }
+        unfoldedStrip = nil
+        let others = LaneKind.allCases.filter { $0 != lane }
+        let alone = lane != .center && others.allSatisfy { laneMode(currentID).maximized != nil || widths.width($0) <= measure.laneFolded }
+        var state = laneMode(currentID)
+        state.maximized = nil
+        state.folded[lane.index] = false
+        state.preferred[lane.index] = lane == .center ? 0 : measure.laneRest
+        if alone { state.folded[LaneKind.center.index] = false }
+        lanes[currentID] = state
+        changed()
+    }
+
+    public func unfold(_ lane: LaneKind) {
+        var state = laneMode(currentID)
+        guard state.maximized != nil || state.folded[lane.index] else { return }
+        state.maximized = nil
+        state.folded[lane.index] = false
+        lanes[currentID] = state
+        changed()
+    }
+
     public func openStrip(_ lane: LaneKind) {
+        unfoldedStrip = (lane, uptime())
         var state = laneMode(currentID)
         if state.maximized != nil {
             state.maximized = nil
@@ -262,12 +289,13 @@ public final class DeskState {
         changed()
     }
 
-    public func stack(empty: Bool, still: Bool) {
-        guard empty != stackEmpty else { return }
+    public func stack(empty: Bool?, still: Bool) {
+        guard let empty, empty != stackEmpty else { return }
+        let boot = stackEmpty == nil
         stackEmpty = empty
         ebbTask?.cancel()
         slowTask?.cancel()
-        if empty && !still {
+        if empty && !still && !boot {
             ebbTask = later(Tokens.Duration.ebbDelay) { model in
                 model.ebb = true
                 model.slow()

@@ -19,6 +19,7 @@ sandbox_probe[testFileStoreRoundTripAndFailures]=atomic
 sandbox_probe[testKeychainStoreRoundTripsAndForgets]=keychain
 sandbox_probe[testArtifactStoreWritesAtomicallyWithSafeName]=atomic
 sandbox_probe[testProposeFileWritesThroughArtifactStoreAtomically]=atomic
+sandbox_probe[testExportStoreReadsOnlyListedData]=atomic
 cd $NEW
 names=(Core Design Shell Storage Hub Calculation Mail Assistant Airtable ClickUp Google Sevdesk Clockodo Shipping Microsoft)
 if (( $# )); then names=(${@:#App}); fi

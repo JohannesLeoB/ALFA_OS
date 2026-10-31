@@ -16,6 +16,8 @@ struct DraftEditor: View {
     @State private var dropOver = false
 
     private var inbox: InboxState { session.inbox }
+    private var hasCopy: Bool { !card.people(.cc).isEmpty || !card.people(.bcc).isEmpty }
+    private var copyShown: Binding<Bool> { Binding(get: { showCopy || hasCopy }, set: { showCopy = $0 }) }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -35,6 +37,9 @@ struct DraftEditor: View {
             return true
         }
         .overlay { if dropOver { dropOverlay } }
+        .onChange(of: hasCopy, initial: true) { _, filled in
+            if filled { showCopy = true }
+        }
     }
 
     private var dropOverlay: some View {
@@ -92,10 +97,10 @@ struct DraftEditor: View {
                 FromButton(session: session, card: card)
                 Spacer(minLength: 0)
             }
-            RecipientEditor(inbox: inbox, card: card, field: .to, showCopy: $showCopy, expanded: $expanded)
-            if showCopy {
-                RecipientEditor(inbox: inbox, card: card, field: .cc, showCopy: $showCopy, expanded: $expanded)
-                RecipientEditor(inbox: inbox, card: card, field: .bcc, showCopy: $showCopy, expanded: $expanded)
+            RecipientEditor(inbox: inbox, card: card, field: .to, showCopy: copyShown, expanded: $expanded)
+            if copyShown.wrappedValue {
+                RecipientEditor(inbox: inbox, card: card, field: .cc, showCopy: copyShown, expanded: $expanded)
+                RecipientEditor(inbox: inbox, card: card, field: .bcc, showCopy: copyShown, expanded: $expanded)
             }
             subjectRow
             bodySheet

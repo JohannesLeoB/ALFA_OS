@@ -112,6 +112,10 @@ extension InboxState {
         selectedInlet.map { mailbox.offersSource($0) } ?? false
     }
 
+    public var offersSpam: Bool {
+        folderActions && folders.contains { $0.role == .spam }
+    }
+
     public func original(_ id: String) async -> String? {
         guard let inlet = selectedInlet else { return nil }
         do {

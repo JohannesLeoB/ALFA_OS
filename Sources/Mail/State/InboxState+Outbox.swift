@@ -44,7 +44,7 @@ extension InboxState {
         let hint: Hint
         switch item.state {
         case .failed(let value), .unverified(let value): hint = value
-        case .waiting, .sending: return
+        case .waiting, .checking, .sending: return
         }
         if let open = drafts.first(where: { $0.outboxID == item.id }) {
             attach(.draft(open.id))
@@ -78,9 +78,11 @@ extension InboxState {
 
     public func discardQueued(_ rowID: String) async {
         guard let item = queued(rowID) else { return }
-        outboxPort.discard(item.id)
+        let removed = outboxPort.discard(item.id)
         outbox = outboxPort.outbox
-        for index in drafts.indices where drafts[index].outboxID == item.id { drafts[index].outboxID = nil }
+        if removed {
+            for index in drafts.indices where drafts[index].outboxID == item.id { drafts[index].outboxID = nil }
+        }
         await refreshOutboxList()
     }
 }

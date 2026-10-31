@@ -87,4 +87,17 @@ final class CoreTests: XCTestCase {
     func testCompanyValuesDefaultToEmpty() {
         XCTAssertEqual(CompanyValues.valueOrEmpty("test.key.that.is.not.configured"), "")
     }
+
+    func testPlaceholdersAreFilledInOnePassOverTheTemplate() {
+        XCTAssertEqual(PlaceholderEngine.fill("{1} / {2}", ["{2}", "b"]), "{2} / b")
+        XCTAssertEqual(PlaceholderEngine.fill("{2}{1}{2}", ["a", "{1}"]), "{1}a{1}")
+        XCTAssertEqual(PlaceholderEngine.fill("{1}", ["{1}"]), "{1}")
+    }
+
+    func testPlaceholdersWithoutValueOrDigitsStayAsWritten() {
+        XCTAssertEqual(PlaceholderEngine.fill("{3} {0} {} {x} {+1} { 1} {1", ["a", "b"]), "{3} {0} {} {x} {+1} { 1} {1")
+        XCTAssertEqual(PlaceholderEngine.fill("}{1}{", ["a"]), "}a{")
+        XCTAssertEqual(PlaceholderEngine.fill("", ["a"]), "")
+        XCTAssertEqual(PlaceholderEngine.fill("Ünï {1}ß", ["é"]), "Ünï éß")
+    }
 }

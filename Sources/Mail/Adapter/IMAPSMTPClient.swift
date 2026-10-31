@@ -101,7 +101,7 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort, S
                 budget -= decoded.count
                 body.inlineImages[contentID] = "data:\(part.mimeType);base64,\(decoded.base64EncodedString())"
             }
-            body.attachments = structure.attachments.map(Self.info)
+            body.attachments = structure.attachments(html: body.html, embedded: Set(body.inlineImages.keys.map { $0.lowercased() })).map(Self.info)
             return body
         }
     }
@@ -292,7 +292,7 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort, S
             if let part = structure.firstHTML {
                 draft.bodyHTML = try await Self.decodedText(part, session: session, uid: reference.uid)
             }
-            for part in structure.attachments {
+            for part in structure.attachments(html: draft.bodyHTML, embedded: []) {
                 let raw = try await session.fetchSection(uid: reference.uid, section: part.section)
                 draft.attachments.append(Attachment(
                     filename: part.filename ?? part.section, mimeType: part.mimeType,
@@ -402,6 +402,7 @@ struct IMAPSMTPClient: MailTransportPort, PurgePort, SourcePort, SentCopyPort, S
             fromRaw: (envelope?.from ?? []).map(\.raw).joined(separator: ", "),
             toRaw: (envelope?.to ?? []).map(\.raw).joined(separator: ", "),
             ccRaw: (envelope?.cc ?? []).map(\.raw).joined(separator: ", "),
+            bccRaw: (envelope?.bcc ?? []).map(\.raw).joined(separator: ", "),
             replyToRaw: (envelope?.replyTo ?? []).map(\.raw).joined(separator: ", "),
             snippet: snippet,
             receivedAt: entry.internalDate ?? envelope?.date.flatMap(DateEngine.parseMessageDate),

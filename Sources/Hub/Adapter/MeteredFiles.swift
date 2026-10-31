@@ -40,7 +40,7 @@ extension PortRegistry {
             (any FilesPort).self,
             capability: .files,
             wrap: { MeteredFiles(wrapped: $0, meter: $1) },
-            sync: { port, inlet in
+            sync: { port, inlet, _ in
                 let folders = try await port.projectFolders()
                 return SyncOutcome(deliveries: [.files: folders.map { ProjectFolder(inlet: inlet, folder: $0) }])
             }

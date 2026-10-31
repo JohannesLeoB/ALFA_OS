@@ -20,6 +20,7 @@ public final class ChatState {
     private(set) var busy = false
     public private(set) var note: Note?
     public private(set) var noteSerial = 0
+    public private(set) var availableCategories: Set<PrivacyCategory> = []
     @ObservationIgnored private var cleared: [Message] = []
     public let usage: UsageState?
     @ObservationIgnored private let chat: any ChatPort
@@ -34,6 +35,7 @@ public final class ChatState {
         self.engine = engine
         self.attachments = attachments
         self.privacy = privacy
+        engine.observeCategories { [weak self] categories in self?.availableCategories = categories }
     }
 
     public var turns: [ChatTurn] {

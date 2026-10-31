@@ -13,6 +13,8 @@ struct HTMLPlainWriter {
 
     private static let skipped: Set<String> = ["head", "style", "script", "title", "template", "svg", "textarea"]
     private static let hiddenMarks = ["display:none", "mso-hide:all", "visibility:hidden"]
+    private static let inlineMarks = ["display:inline"]
+    private static let collapsedMarks = ["font-size:0;", "font-size:0px", "font-size:0pt", "font-size:0em"]
     private static let zeroWidth = CharacterSet(charactersIn: "\u{200B}\u{200C}\u{200D}\u{2060}\u{FEFF}\u{034F}\u{00AD}")
     private static let maxLinkLength = 150
     private static let breaks: [String: Int] = [
@@ -34,6 +36,8 @@ struct HTMLPlainWriter {
     private var links: [Link] = []
     private var preformatted = 0
     private var hidden: (name: String, depth: Int)?
+    private var collapsed: (name: String, depth: Int)?
+    private var blocks: [(name: String, inline: Bool)] = []
 
     static func render(_ tokens: [HTMLToken]) -> String {
         var writer = HTMLPlainWriter()
@@ -46,12 +50,34 @@ struct HTMLPlainWriter {
             skip(token)
             return
         }
+        trackCollapse(token)
         switch token.kind {
         case .text: write(HTMLEngine.decodeEntities(token.raw))
         case .raw: break
         case .start: open(token)
         case .end: close(token.name)
         }
+    }
+
+    private mutating func trackCollapse(_ token: HTMLToken) {
+        guard !token.isVoid else { return }
+        if let current = collapsed {
+            guard token.name == current.name else { return }
+            if token.kind == .start {
+                collapsed?.depth += 1
+            } else if token.kind == .end {
+                collapsed?.depth -= 1
+                if collapsed?.depth == 0 { collapsed = nil }
+            }
+        } else if token.kind == .start, Self.style(token, contains: Self.collapsedMarks) {
+            collapsed = (token.name, 1)
+        }
+    }
+
+    private static func style(_ token: HTMLToken, contains marks: [String]) -> Bool {
+        guard let style = token.attributes["style"]?.lowercased().replacingOccurrences(of: " ", with: "") else { return false }
+        let closed = style.hasSuffix(";") ? style : style + ";"
+        return marks.contains { closed.contains($0) }
     }
 
     private mutating func skip(_ token: HTMLToken) {
@@ -68,6 +94,10 @@ struct HTMLPlainWriter {
         if token.attributes["hidden"] != nil { return true }
         guard let style = token.attributes["style"]?.lowercased().replacingOccurrences(of: " ", with: "") else { return false }
         return hiddenMarks.contains { style.contains($0) }
+    }
+
+    private static func isInline(_ token: HTMLToken) -> Bool {
+        style(token, contains: inlineMarks)
     }
 
     private mutating func open(_ token: HTMLToken) {
@@ -103,7 +133,10 @@ struct HTMLPlainWriter {
         case "td", "th":
             spaceOwed = true
         default:
-            if let count = Self.breaks[name] { owe(count) }
+            guard let count = Self.breaks[name] else { return }
+            let inline = Self.isInline(token)
+            blocks.append((name, inline))
+            if !inline { owe(count) }
         }
     }
 
@@ -123,7 +156,9 @@ struct HTMLPlainWriter {
         case "td", "th":
             spaceOwed = true
         default:
-            if let count = Self.breaks[name] { owe(count) }
+            guard let count = Self.breaks[name] else { return }
+            let inline = blocks.lastIndex { $0.name == name }.map { blocks.remove(at: $0).inline } ?? false
+            if !inline { owe(count) }
         }
     }
 
@@ -191,7 +226,7 @@ struct HTMLPlainWriter {
         }
         let core = text.split(whereSeparator: { $0.isWhitespace }).joined(separator: " ")
         guard !core.isEmpty else {
-            if !text.isEmpty { spaceOwed = true }
+            if !text.isEmpty, collapsed == nil { spaceOwed = true }
             return
         }
         if text.first?.isWhitespace == true { spaceOwed = true }

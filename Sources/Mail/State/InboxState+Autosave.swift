@@ -21,6 +21,21 @@ extension InboxState {
         autosaveSerials[id] = nil
     }
 
+    func refreshAfterDraftChange(_ inlet: Inlet.ID, roles: [FolderRole] = [.drafts]) {
+        let pause = autosavePause
+        for role in roles {
+            let key = inlet + "\n" + role.rawValue
+            let mine = (folderRefreshSerials[key] ?? 0) + 1
+            folderRefreshSerials[key] = mine
+            Task { [weak self] in
+                try? await Task.sleep(for: pause)
+                guard let self, self.folderRefreshSerials[key] == mine,
+                      let folder = self.mailbox.folders(inlet).first(where: { $0.role == role })?.id else { return }
+                try? await self.mailbox.refresh(inlet, folder: folder)
+            }
+        }
+    }
+
     func scheduleAutosave(_ id: UUID) {
         let mine = (autosaveSerials[id] ?? 0) + 1
         autosaveSerials[id] = mine
@@ -71,13 +86,13 @@ extension InboxState {
     }
 
     public func flushDrafts(within limit: Duration) async {
-        let pending = drafts.filter { $0.state == .edited && !Self.blank($0.draft) }.map(\.id)
+        let pending = drafts.filter { ($0.state == .edited || draftWork[$0.id] != nil) && !Self.blank($0.draft) }.map(\.id)
         guard !pending.isEmpty || !heldSends.isEmpty else { return }
         for id in pending { keepLocal(id) }
         let finished = AsyncStream<Void>.makeStream()
         Task { @MainActor in
             await self.releaseHeldSends()
-            for id in pending { await self.autosave(id) }
+            for id in pending { await self.save(id) }
             finished.continuation.yield()
         }
         Task {

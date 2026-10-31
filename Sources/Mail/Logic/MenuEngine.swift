@@ -7,21 +7,22 @@ public enum MenuEngine {
             + [.item(unread ? .markRead : .markUnread)] + (folders ? [.item(.move)] : []) + [.separator, .item(.trash)]
     }
 
-    public static func readingMore(starred: Bool, original: Bool, folders: Bool = true) -> [MenuLine] {
-        [.item(starred ? .unstar : .star), .item(.markUnread)] + (folders ? [.item(.move)] : []) + [.separator]
-            + (original ? [.item(.original)] : []) + (folders ? [.item(.spam)] : [])
+    public static func readingMore(starred: Bool, original: Bool, folders: Bool = true, spam: Bool = true) -> [MenuLine] {
+        let marks: [MenuLine] = [.item(starred ? .unstar : .star), .item(.markUnread)] + (folders ? [.item(.move)] : [])
+        let more: [MenuLine] = (original ? [.item(.original)] : []) + (folders && spam ? [.item(.spam)] : [])
+        return more.isEmpty ? marks : marks + [.separator] + more
     }
 
     public static func draftMore(receipt: Bool) -> [MenuLine] {
-        [.item(.receipt, checked: receipt)]
+        [.item(.receipt, checked: receipt), .separator, .item(.print)]
     }
 
     public static func person(address: String, contact: Bool) -> [MenuLine] {
         [.head(address), .item(.copyAddress), .item(.writeMail), .item(contact ? .editContact : .saveContact)]
     }
 
-    public static func attachment(name: String) -> [MenuLine] {
+    public static func attachment(name: String, project: Bool = true) -> [MenuLine] {
         let printable = printableExtensions.contains(name.split(separator: ".").last.map { $0.lowercased() } ?? "")
-        return [.item(.preview)] + (printable ? [.item(.print), .item(.pdf)] : []) + [.separator, .item(.otherProject), .item(.saveAs)]
+        return [.item(.preview)] + (printable ? [.item(.print), .item(.pdf)] : []) + [.separator] + (project ? [.item(.otherProject)] : []) + [.item(.saveAs)]
     }
 }

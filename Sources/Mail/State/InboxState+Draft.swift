@@ -35,13 +35,27 @@ extension InboxState {
             }
             return
         }
+        var failedToSend = false
         switch card.state {
         case .saved: break
+        case .queuedInOutbox:
+            post(.inOutbox)
+            return
+        case .sendFailed:
+            failedToSend = true
+            await save(id)
         default: await save(id)
         }
         if case .saved = draft(id)?.state {
             dropLocal(id)
-            post(.draftSaved)
+            if failedToSend {
+                post(.notSentInDrafts, undo: { [weak self] in
+                    self?.attach(.draft(id))
+                    await self?.send(id)
+                })
+            } else {
+                post(.draftSaved)
+            }
         }
     }
 
@@ -59,6 +73,9 @@ extension InboxState {
             bring(.draft(open.id))
             return open.id
         }
+        let key = inlet + "\n" + messageID + "\nreply"
+        guard composing.insert(key).inserted else { return nil }
+        defer { composing.remove(key) }
         let to = fromOwn ? summary.toRaw : (replyTo.isEmpty ? summary.fromRaw : replyTo)
         let chosen = SenderEngine.receiving(known, headers: fromOwn ? [summary.fromRaw] : [summary.toRaw, summary.ccRaw])
         var cc: String?
@@ -79,6 +96,9 @@ extension InboxState {
     @discardableResult
     func forward(_ messageID: String) async -> UUID? {
         guard let inlet = selectedInlet, let summary = summary(messageID) else { return nil }
+        let key = inlet + "\n" + messageID + "\nforward"
+        guard composing.insert(key).inserted else { return nil }
+        defer { composing.remove(key) }
         let wasPinned = card(messageID)?.pinned ?? false
         pin(messageID)
         guard let attachments = await originalAttachments(messageID, inlet: inlet) else {
@@ -139,6 +159,10 @@ extension InboxState {
                 outboxPort.revise(outboxID, drafts[index].draft)
                 outbox = outboxPort.outbox
             }
+        case .saving:
+            editedWhileSaving.insert(id)
+            keepLocal(id)
+            scheduleAutosave(id)
         default:
             drafts[index].state = .edited
             keepLocal(id)
@@ -147,33 +171,95 @@ extension InboxState {
     }
 
     public func save(_ id: UUID) async {
-        guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
-        switch drafts[index].state {
-        case .saving, .sending, .sent, .queuedInOutbox: return
+        let waited = draftWork[id] != nil
+        await settle(id)
+        guard let card = draft(id) else { return }
+        if waited, card.state != .edited { return }
+        switch card.state {
+        case .sending, .sent, .queuedInOutbox: return
         default: break
+        }
+        await exclusive(id) { await self.storeRemotely(id) }
+    }
+
+    func settle(_ id: UUID) async {
+        while let running = draftWork[id] { await running.value }
+    }
+
+    func exclusive(_ id: UUID, _ work: @escaping @MainActor @Sendable () async -> Void) async {
+        let task = Task { @MainActor in
+            await work()
+            self.draftWork[id] = nil
+        }
+        draftWork[id] = task
+        await task.value
+        guard sendAfterSave.remove(id) != nil else { return }
+        await send(id)
+    }
+
+    private func storeRemotely(_ id: UUID) async {
+        var again = true
+        while again {
+            again = await storeOnce(id) && editedWhileSaving.contains(id)
+            editedWhileSaving.remove(id)
+        }
+    }
+
+    private func storeOnce(_ id: UUID) async -> Bool {
+        guard let index = drafts.firstIndex(where: { $0.id == id }) else { return false }
+        switch drafts[index].state {
+        case .sending, .sent, .queuedInOutbox: return false
+        default: break
+        }
+        if let queued = drafts[index].outboxID, outboxPort.outbox.first(where: { $0.id == queued })?.state.inFlight == true {
+            holdForOutbox(index)
+            return false
         }
         drafts[index].state = .saving
         drafts[index].saveFailure = nil
         let card = drafts[index]
         do {
-            let saved = try await outboxPort.saveDraft(card.inlet, card.draft, replacing: card.remoteID)
-            if let now = drafts.firstIndex(where: { $0.id == id }) {
-                if let old = drafts[now].mirrorID, old != saved.mirrorID { goneDrafts[card.inlet, default: []].insert(old) }
-                drafts[now].remoteID = saved.id
-                drafts[now].mirrorID = saved.mirrorID
-                if drafts[now].state == .saving { drafts[now].state = .saved(clock()) }
-                keepLocal(id)
-            } else {
+            let previous = card.remoteID.map { SavedDraft(id: $0, mirrorID: card.mirrorID) }
+            let saved = try await outboxPort.saveDraft(card.inlet, card.draft, replacing: previous)
+            guard let now = drafts.firstIndex(where: { $0.id == id }), drafts[now].inlet == card.inlet else {
                 try? await outboxPort.deleteDraft(card.inlet, draftID: saved.id)
+                return false
             }
+            let queued = drafts[now].outboxID
+            if let queued, !outboxPort.discard(queued) {
+                if saved.id == card.remoteID {
+                    drafts[now].mirrorID = saved.mirrorID
+                } else {
+                    try? await outboxPort.deleteDraft(card.inlet, draftID: saved.id)
+                }
+                holdForOutbox(now)
+                return false
+            }
+            drafts[now].remoteID = saved.id
+            drafts[now].mirrorID = saved.mirrorID
+            if queued != nil {
+                outbox = outboxPort.outbox
+                drafts[now].outboxID = nil
+            }
+            if drafts[now].state == .saving {
+                drafts[now].state = editedWhileSaving.contains(id) ? .edited : .saved(clock())
+            }
+            keepLocal(id)
+            refreshCounts()
+            if queued != nil { await refreshOutboxList() }
+            return true
         } catch {
-            if let now = drafts.firstIndex(where: { $0.id == id }) {
-                drafts[now].saveFailure = Self.hint(error)
-                drafts[now].state = .edited
-            }
+            guard let now = drafts.firstIndex(where: { $0.id == id }), drafts[now].inlet == card.inlet else { return false }
+            drafts[now].saveFailure = Self.hint(error)
+            if drafts[now].state == .saving { drafts[now].state = .edited }
+            return false
         }
-        guard sendAfterSave.remove(id) != nil else { return }
-        await send(id)
+    }
+
+    private func holdForOutbox(_ index: Int) {
+        drafts[index].state = .queuedInOutbox
+        outbox = outboxPort.outbox
+        reconcileDrafts()
     }
 
     public func deleteDraft(_ id: UUID) async {
@@ -190,6 +276,7 @@ extension InboxState {
                 return
             }
             if let mirrorID { goneDrafts[inlet, default: []].insert(mirrorID) }
+            refreshAfterDraftChange(inlet)
         }
         drafts.removeAll { $0.id == id }
         dropLocal(id)
@@ -225,10 +312,11 @@ extension InboxState {
     public func send(_ id: UUID) async {
         guard let index = drafts.firstIndex(where: { $0.id == id }) else { return }
         let card = drafts[index]
-        switch card.state {
-        case .saving:
+        if draftWork[id] != nil || card.state == .saving {
             sendAfterSave.insert(id)
             return
+        }
+        switch card.state {
         case .sending, .sent, .queuedInOutbox: return
         default: break
         }
@@ -298,6 +386,7 @@ extension InboxState {
             drafts[now].state = .sent
             dropLocal(id)
             if let mirrorID = card.mirrorID { goneDrafts[card.inlet, default: []].insert(mirrorID) }
+            refreshAfterDraftChange(card.inlet, roles: [.drafts, .sent])
             if announce { post(.outboxSent) }
         case .queued(let outboxID):
             drafts[now].outboxID = outboxID
@@ -334,6 +423,7 @@ extension InboxState {
                 drafts[index].state = .sent
                 dropLocal(drafts[index].id)
                 if let mirrorID = drafts[index].mirrorID { goneDrafts[drafts[index].inlet, default: []].insert(mirrorID) }
+                refreshAfterDraftChange(drafts[index].inlet, roles: [.drafts, .sent])
                 continue
             }
             if let current = item.draftID { drafts[index].remoteID = current }
@@ -343,7 +433,7 @@ extension InboxState {
             }
             switch item.state {
             case .failed(let hint), .unverified(let hint): drafts[index].state = .sendFailed(hint)
-            case .waiting, .sending: drafts[index].state = .queuedInOutbox
+            case .waiting, .checking, .sending: drafts[index].state = .queuedInOutbox
             }
         }
     }
@@ -366,8 +456,9 @@ extension InboxState {
 
     func quoted(_ id: String, summary: MessageSummary) async -> String {
         let text = await messageText(id) ?? summary.snippet
-        let date = summary.receivedAt.map { ISO8601DateFormatter().string(from: $0) } ?? ""
-        let head = [summary.from, date].filter { !$0.isEmpty }.joined(separator: ", ")
+        let words = quoteTexts()
+        let head = Quoting.attribution(summary.from.isEmpty ? summary.fromRaw : summary.from, at: summary.receivedAt,
+                                       dated: words.dated, undated: words.undated, locale: words.locale)
         let lines = text.replacingOccurrences(of: "\r\n", with: "\n").components(separatedBy: "\n")
         return "\n\n" + head + "\n" + lines.map { "> " + $0 }.joined(separator: "\n")
     }

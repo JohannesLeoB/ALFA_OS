@@ -18,6 +18,7 @@ public final class ConversationEngine {
     private let toolTimeout: Duration
     private let turnDeadline: TimeInterval
     private var registry: ToolRegistry
+    private var categoryObserver: (@MainActor (Set<PrivacyCategory>) -> Void)?
     private var activeTask: Task<Void, Never>?
 
     private(set) var isResponding = false
@@ -38,6 +39,12 @@ public final class ConversationEngine {
 
     public func update(registry: ToolRegistry) {
         self.registry = registry
+        categoryObserver?(registry.categories)
+    }
+
+    public func observeCategories(_ observer: @escaping @MainActor (Set<PrivacyCategory>) -> Void) {
+        categoryObserver = observer
+        observer(registry.categories)
     }
 
     func cancel() {

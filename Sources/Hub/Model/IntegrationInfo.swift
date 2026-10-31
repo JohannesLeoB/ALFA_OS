@@ -91,7 +91,6 @@ public struct IntegrationLogo: Equatable, Sendable {
 
 public struct IntegrationValues: Equatable, Sendable {
     public var text: [String: String]
-    public var held: Set<String>
 
-    public static let none = IntegrationValues(text: [:], held: [])
+    public static let none = IntegrationValues(text: [:])
 }

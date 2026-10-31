@@ -25,7 +25,12 @@ public enum SettingsSection: String, CaseIterable, Sendable, Identifiable {
 
     public var key: String { "settings.section." + rawValue }
 
-    public var detailKey: String { "settings.section." + rawValue + ".detail" }
+    public var detailKey: String? {
+        switch self {
+        case .folders, .keyInventory, .contacts, .privacy: nil
+        default: "settings.section." + rawValue + ".detail"
+        }
+    }
 }
 
 public enum SettingsGroup: String, CaseIterable, Sendable {

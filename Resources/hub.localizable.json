@@ -5,6 +5,18 @@
    "de": "Angemeldet wurde ein anderes Konto. Zum Erneuern bitte mit diesem Konto anmelden:",
    "en": "A different account was signed in. To renew, please sign in with this account:"
   },
+  "hint.probe.timeout": {
+   "de": "Keine Antwort",
+   "en": "No response"
+  },
+  "hint.provider.transient": {
+   "de": "Vorübergehend nicht erreichbar",
+   "en": "Temporarily unavailable"
+  },
+  "hint.signin.timeout": {
+   "de": "Anmeldung dauert zu lange",
+   "en": "Sign-in is taking too long"
+  },
   "hub.error.cancelled": {
    "de": "Abgebrochen.",
    "en": "Cancelled."
@@ -93,6 +105,18 @@
    "de": "Mail",
    "en": "Mail"
   },
+  "settings.service.mailaccounts.use": {
+   "de": "Mail",
+   "en": "Mail"
+  },
+  "settings.service.airtable.use": {
+   "de": "Projekte",
+   "en": "Projects"
+  },
+  "settings.service.sevdesk.use": {
+   "de": "Belege",
+   "en": "Receipts"
+  },
   "settings.identity.signOut.sub.none": {
    "de": "Keine Dienste verbunden",
    "en": "No services connected"
@@ -141,6 +165,22 @@
    "de": "Abgleich fehlgeschlagen.",
    "en": "Sync failed."
   },
+  "settings.privacy.export": {
+   "de": "Eigene Daten exportieren",
+   "en": "Export your data"
+  },
+  "settings.privacy.export.action": {
+   "de": "Exportieren",
+   "en": "Export"
+  },
+  "settings.toast.exportSaved": {
+   "de": "Export gespeichert.",
+   "en": "Export saved."
+  },
+  "settings.toast.exportFailed": {
+   "de": "Export fehlgeschlagen.",
+   "en": "Export failed."
+  },
   "settings.setup.unavailable": {
    "de": "Die Anmeldung ist nicht eingerichtet.",
    "en": "Sign-in is not set up."
@@ -182,7 +222,7 @@
    "en": "Choose"
   },
   "settings.root.drive": {
-   "de": "Meine Ablage",
+   "de": "Mein Drive",
    "en": "My Drive"
   },
   "settings.root.none": {
@@ -257,21 +297,29 @@
    "de": "Ordnerschema",
    "en": "Folder scheme"
   },
-  "settings.section.folders.detail": {
-   "de": "",
-   "en": ""
+  "settings.projectRoot.synced": {
+   "de": "Projektordner abgeglichen · gerade eben",
+   "en": "Project folder synced · just now"
   },
-  "settings.section.keyInventory.detail": {
-   "de": "",
-   "en": ""
+  "settings.projectRoot.syncFailed": {
+   "de": "Abgleich fehlgeschlagen · Projektordner nicht erreichbar",
+   "en": "Sync failed · project folder unavailable"
   },
-  "settings.section.privacy.detail": {
-   "de": "",
-   "en": ""
+  "settings.privacy.images.on": {
+   "de": "Bilder werden geladen. Zählpixel melden dem Absender damit, wann du die Mail geöffnet hast.",
+   "en": "Images are loaded. Tracking pixels tell the sender when you opened the mail."
   },
-  "settings.section.contacts.detail": {
-   "de": "",
-   "en": ""
+  "settings.privacy.images.off": {
+   "de": "Bilder werden nicht geladen. Der Absender erfährt nicht, wann du die Mail geöffnet hast.",
+   "en": "Images are not loaded. The sender does not learn when you opened the mail."
+  },
+  "settings.date.justNow": {
+   "de": "gerade eben",
+   "en": "just now"
+  },
+  "settings.toast.retry": {
+   "de": "Erneut versuchen",
+   "en": "Try Again"
   },
   "settings.projectRoot.drive": {
    "de": "Laufwerk",
@@ -289,6 +337,10 @@
    "de": "%@ · %@",
    "en": "%@ · %@"
   },
+  "settings.note.working": {
+   "de": "{1} {2} von {3}",
+   "en": "{1} {2} of {3}"
+  },
   "settings.add.check": {
    "de": "Prüfung",
    "en": "Check"
@@ -296,6 +348,74 @@
   "settings.add.missing": {
    "de": "Es fehlen: %@.",
    "en": "Missing: %@."
+  },
+  "settings.mailStore.head": {
+   "de": "Lokale Ablage",
+   "en": "Local storage"
+  },
+  "settings.mailStore.period": {
+   "de": "Zeitraum",
+   "en": "Period"
+  },
+  "settings.mailStore.period.d30": {
+   "de": "30 Tage",
+   "en": "30 days"
+  },
+  "settings.mailStore.period.d90": {
+   "de": "90 Tage",
+   "en": "90 days"
+  },
+  "settings.mailStore.period.y1": {
+   "de": "1 Jahr",
+   "en": "1 year"
+  },
+  "settings.mailStore.period.all": {
+   "de": "Alles",
+   "en": "All"
+  },
+  "settings.mailStore.attachments": {
+   "de": "Anhänge lokal",
+   "en": "Attachments on this Mac"
+  },
+  "settings.mailStore.limit": {
+   "de": "Obergrenze",
+   "en": "Limit"
+  },
+  "settings.mailStore.limit.gb1": {
+   "de": "1 GB",
+   "en": "1 GB"
+  },
+  "settings.mailStore.limit.gb5": {
+   "de": "5 GB",
+   "en": "5 GB"
+  },
+  "settings.mailStore.limit.gb10": {
+   "de": "10 GB",
+   "en": "10 GB"
+  },
+  "settings.mailStore.limit.gb25": {
+   "de": "25 GB",
+   "en": "25 GB"
+  },
+  "settings.mailStore.limit.none": {
+   "de": "Keine",
+   "en": "None"
+  },
+  "settings.mailStore.folder": {
+   "de": "Ordner",
+   "en": "Folder"
+  },
+  "settings.mailStore.folder.default": {
+   "de": "Standard",
+   "en": "Default"
+  },
+  "settings.mailStore.folder.custom": {
+   "de": "Eigener Ordner",
+   "en": "Custom folder"
+  },
+  "settings.toast.mailStoreMove": {
+   "de": "Ablage konnte nicht verschoben werden.",
+   "en": "Could not move the local storage."
   }
  }
 }

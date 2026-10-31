@@ -55,7 +55,7 @@ extension MessageCard {
 
         private var draftPeople: [Participant] {
             guard case .draft(let id) = ref, let card = inbox.draft(id) else { return [] }
-            return card.people(.to)
+            return card.addressees
         }
 
         @ViewBuilder

@@ -27,13 +27,11 @@ struct DeskLane: View {
         let inner = max(size.width, CGFloat(desk.minimum[lane.index]))
         let fade = appearance.ease(Tokens.Duration.hover)
         ZStack(alignment: .topLeading) {
-            if folded {
-                Color.clear
-                    .contentShape(Rectangle())
-                    .onTapGesture { desk.openStrip(lane) }
-                    .simultaneousGesture(TapGesture(count: 2).onEnded { desk.resetLane() })
-                    .pointerStyle(.link)
-            }
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture { if folded { desk.openStrip(lane) } }
+                .simultaneousGesture(TapGesture(count: 2).onEnded { desk.restLane(lane) })
+                .pointerStyle(folded ? PointerStyle.link : nil)
             marks
                 .frame(width: size.width, height: size.height, alignment: .top)
                 .opacity(strip ? 1 : 0)

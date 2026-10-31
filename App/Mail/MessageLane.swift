@@ -303,7 +303,8 @@ struct MessageLane: View {
 
     private func failedText(_ last: Date?) -> Text {
         guard let last else { return appearance.text("mail.list.failed.text") }
-        let relative = Self.relative.localizedString(for: last, relativeTo: inbox.now)
+        let now = inbox.now
+        let relative = Self.relative.localizedString(for: min(last, now.addingTimeInterval(-1)), relativeTo: now)
         return Text(verbatim: appearance.string("mail.list.failed.text") + " " + appearance.format("mail.list.failed.last", relative))
     }
 }

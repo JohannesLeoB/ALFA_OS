@@ -48,9 +48,10 @@ extension InboxState {
     }
 
     public func setFrom(_ id: UUID, inlet: Inlet.ID, sender: Participant? = nil) async {
-        guard let index = drafts.firstIndex(where: { $0.id == id }), accounts.contains(where: { $0.id == inlet }) else { return }
+        guard draft(id) != nil, accounts.contains(where: { $0.id == inlet }) else { return }
         let chosen = sender ?? mailbox.sender(inlet)
-        let card = drafts[index]
+        await settle(id)
+        guard let card = draft(id) else { return }
         if card.inlet == inlet {
             edit(id) { $0.from = chosen }
             return
@@ -59,14 +60,23 @@ extension InboxState {
         case .sending, .sent, .queuedInOutbox: return
         default: break
         }
+        await exclusive(id) { await self.rehome(id, to: inlet, sender: chosen) }
+        guard draft(id)?.inlet == inlet else { return }
+        await moveToStack(.draft(id), of: inlet)
+    }
+
+    private func rehome(_ id: UUID, to inlet: Inlet.ID, sender chosen: Participant) async {
+        guard let card = draft(id) else { return }
         if let remoteID = card.remoteID {
             do {
                 try await outboxPort.deleteDraft(card.inlet, draftID: remoteID)
             } catch {
+                sendAfterSave.remove(id)
                 if let now = drafts.firstIndex(where: { $0.id == id }) { drafts[now].saveFailure = Self.hint(error) }
                 return
             }
             if let mirrorID = card.mirrorID { goneDrafts[card.inlet, default: []].insert(mirrorID) }
+            refreshAfterDraftChange(card.inlet)
         }
         guard let now = drafts.firstIndex(where: { $0.id == id }) else { return }
         drafts[now].inlet = inlet
@@ -79,7 +89,6 @@ extension InboxState {
         if drafts[now].draft.receiptTo != nil { drafts[now].draft.receiptTo = chosen.address }
         keepLocal(id)
         scheduleAutosave(id)
-        await moveToStack(.draft(id), of: inlet)
     }
 
     private func moveToStack(_ ref: CardRef, of inlet: Inlet.ID) async {

@@ -7,7 +7,7 @@ struct SettingsTile: View {
     let name: LocalizedStringKey
     let initial: String
     let logo: NSImage?
-    let sub: String
+    let sub: String?
     let bad: Bool
     let selected: Bool
     let action: () -> Void
@@ -26,7 +26,7 @@ struct SettingsTile: View {
                         .lineLimit(1)
                         .font(.face(Tokens.TextSize.body, weight: Tokens.Weight.medium))
                         .foregroundStyle(appearance.color(selected ? \.lane : \.ink))
-                    appearance.text(sub)
+                    (sub.map { appearance.text($0) } ?? Text(verbatim: ""))
                         .lineLimit(1)
                         .font(.face(Tokens.TextSize.small))
                         .foregroundStyle(appearance.color(selected ? \.lane : (bad ? \.signal : \.inkTertiary)))

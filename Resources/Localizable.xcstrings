@@ -11101,7 +11101,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "probe.timeout"
+            "value" : "Keine Antwort"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No response"
           }
         }
       }
@@ -11123,7 +11129,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "provider.transient"
+            "value" : "Vorübergehend nicht erreichbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temporarily unavailable"
           }
         }
       }
@@ -11156,7 +11168,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "signin.timeout"
+            "value" : "Anmeldung dauert zu lange"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign-in is taking too long"
           }
         }
       }
@@ -12139,6 +12157,22 @@
         }
       }
     },
+    "mail.attachment.otherProject" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In anderes Projekt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move to Another Project"
+          }
+        }
+      }
+    },
     "mail.card.more" : {
       "comment" : "alpha",
       "localizations" : {
@@ -12321,6 +12355,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "From"
+          }
+        }
+      }
+    },
+    "mail.compose.quote.dated" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Am {1} schrieb {2}:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On {1}, {2} wrote:"
+          }
+        }
+      }
+    },
+    "mail.compose.quote.undated" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{1} schrieb:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{1} wrote:"
           }
         }
       }
@@ -12540,6 +12606,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Draft"
+          }
+        }
+      }
+    },
+    "mail.date.inDays.one" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In {1} Tag"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In {1} day"
+          }
+        }
+      }
+    },
+    "mail.date.inDays.other" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In {1} Tagen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In {1} days"
           }
         }
       }
@@ -13959,38 +14057,6 @@
         }
       }
     },
-    "mail.menu.drive" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Drive"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Drive"
-          }
-        }
-      }
-    },
-    "mail.menu.projectMore" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ weitere im Projektordner"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ more in project folder"
-          }
-        }
-      }
-    },
     "mail.notice.offline.text" : {
       "localizations" : {
         "de" : {
@@ -14167,6 +14233,38 @@
         }
       }
     },
+    "mail.outbox.state.checking" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prüft, ob schon gesendet …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checking whether already sent …"
+          }
+        }
+      }
+    },
+    "mail.outbox.state.failed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht gesendet · Prüfung fehlgeschlagen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not sent · check failed"
+          }
+        }
+      }
+    },
     "mail.outbox.state.sending" : {
       "localizations" : {
         "de" : {
@@ -14179,22 +14277,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sending …"
-          }
-        }
-      }
-    },
-    "mail.outbox.state.unverified" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nicht gesendet · Prüfung fehlgeschlagen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Not sent · check failed"
           }
         }
       }
@@ -14363,6 +14445,118 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Remove from selection"
+          }
+        }
+      }
+    },
+    "mail.projectFiles.chooseRoot" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projektordner wählen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose Project Folder …"
+          }
+        }
+      }
+    },
+    "mail.projectFiles.empty" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Dateien"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No files"
+          }
+        }
+      }
+    },
+    "mail.projectFiles.loadFailed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordner nicht geladen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t load folder"
+          }
+        }
+      }
+    },
+    "mail.projectFiles.loading" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lädt …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading …"
+          }
+        }
+      }
+    },
+    "mail.projectFiles.more" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{1} weitere im Projektordner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "{1} more in project folder"
+          }
+        }
+      }
+    },
+    "mail.projectFiles.noRoot" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Projektordner gewählt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No project folder chosen"
+          }
+        }
+      }
+    },
+    "mail.projectFiles.retry" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut versuchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try Again"
           }
         }
       }
@@ -14821,6 +15015,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unread"
+          }
+        }
+      }
+    },
+    "mail.saveMail.chooseProject" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sichern in Projekt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save to Project"
+          }
+        }
+      }
+    },
+    "mail.saveMail.menu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail in Projektordner sichern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save Message to Project Folder"
           }
         }
       }
@@ -15408,6 +15634,22 @@
         }
       }
     },
+    "mail.toast.notSentInDrafts" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nicht gesendet · im Ordner Entwürfe"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not sent · in Drafts"
+          }
+        }
+      }
+    },
     "mail.toast.olderFailed" : {
       "localizations" : {
         "de" : {
@@ -15829,86 +16071,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Provider"
-          }
-        }
-      }
-    },
-    "settings.account.range" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Laden"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Load"
-          }
-        }
-      }
-    },
-    "settings.account.range.all" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alle"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "All"
-          }
-        }
-      }
-    },
-    "settings.account.range.days30" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Letzte 30 Tage"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Last 30 days"
-          }
-        }
-      }
-    },
-    "settings.account.range.days90" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Letzte 90 Tage"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Last 90 days"
-          }
-        }
-      }
-    },
-    "settings.account.range.year" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Letztes Jahr"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Last year"
           }
         }
       }
@@ -16849,6 +17011,22 @@
         }
       }
     },
+    "settings.date.justNow" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "gerade eben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "just now"
+          }
+        }
+      }
+    },
     "settings.disconnect.ask" : {
       "localizations" : {
         "de" : {
@@ -17448,26 +17626,6 @@
         }
       }
     },
-    "settings.link.orphaned" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verwaist"
-          }
-        }
-      }
-    },
-    "settings.link.stored" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schlüssel gespeichert"
-          }
-        }
-      }
-    },
     "settings.link.unreadable" : {
       "localizations" : {
         "de" : {
@@ -17556,6 +17714,262 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "App lock"
+          }
+        }
+      }
+    },
+    "settings.mailStore.attachments" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anhänge lokal"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attachments on this Mac"
+          }
+        }
+      }
+    },
+    "settings.mailStore.folder" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ordner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folder"
+          }
+        }
+      }
+    },
+    "settings.mailStore.folder.custom" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigener Ordner"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom folder"
+          }
+        }
+      }
+    },
+    "settings.mailStore.folder.default" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default"
+          }
+        }
+      }
+    },
+    "settings.mailStore.head" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokale Ablage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local storage"
+          }
+        }
+      }
+    },
+    "settings.mailStore.limit" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obergrenze"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limit"
+          }
+        }
+      }
+    },
+    "settings.mailStore.limit.gb1" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 GB"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 GB"
+          }
+        }
+      }
+    },
+    "settings.mailStore.limit.gb10" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 GB"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 GB"
+          }
+        }
+      }
+    },
+    "settings.mailStore.limit.gb25" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "25 GB"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "25 GB"
+          }
+        }
+      }
+    },
+    "settings.mailStore.limit.gb5" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 GB"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 GB"
+          }
+        }
+      }
+    },
+    "settings.mailStore.limit.none" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "None"
+          }
+        }
+      }
+    },
+    "settings.mailStore.period" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeitraum"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Period"
+          }
+        }
+      }
+    },
+    "settings.mailStore.period.all" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alles"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All"
+          }
+        }
+      }
+    },
+    "settings.mailStore.period.d30" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30 Tage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30 days"
+          }
+        }
+      }
+    },
+    "settings.mailStore.period.d90" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "90 Tage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "90 days"
+          }
+        }
+      }
+    },
+    "settings.mailStore.period.y1" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 Jahr"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 year"
           }
         }
       }
@@ -17659,32 +18073,18 @@
         }
       }
     },
-    "settings.note.unchecked" : {
+    "settings.note.working" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nicht beim Anbieter geprüft"
+            "value" : "{1} {2} von {3}"
           }
-        }
-      }
-    },
-    "settings.orphaned.body" : {
-      "localizations" : {
-        "de" : {
+        },
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Er gehört zu einer anderen Kennung und wird von keiner Anmeldung genutzt."
-          }
-        }
-      }
-    },
-    "settings.orphaned.title" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verwaister Schlüssel"
+            "value" : "{1} {2} of {3}"
           }
         }
       }
@@ -17859,6 +18259,38 @@
         }
       }
     },
+    "settings.privacy.export" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigene Daten exportieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export your data"
+          }
+        }
+      }
+    },
+    "settings.privacy.export.action" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export"
+          }
+        }
+      }
+    },
     "settings.privacy.images" : {
       "localizations" : {
         "de" : {
@@ -17871,6 +18303,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Load images in messages"
+          }
+        }
+      }
+    },
+    "settings.privacy.images.off" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilder werden nicht geladen. Der Absender erfährt nicht, wann du die Mail geöffnet hast."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Images are not loaded. The sender does not learn when you opened the mail."
+          }
+        }
+      }
+    },
+    "settings.privacy.images.on" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilder werden geladen. Zählpixel melden dem Absender damit, wann du die Mail geöffnet hast."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Images are loaded. Tracking pixels tell the sender when you opened the mail."
           }
         }
       }
@@ -17923,6 +18387,38 @@
         }
       }
     },
+    "settings.projectRoot.syncFailed" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgleich fehlgeschlagen · Projektordner nicht erreichbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync failed · project folder unavailable"
+          }
+        }
+      }
+    },
+    "settings.projectRoot.synced" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projektordner abgeglichen · gerade eben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Project folder synced · just now"
+          }
+        }
+      }
+    },
     "settings.protocol.imap" : {
       "localizations" : {
         "de" : {
@@ -17960,7 +18456,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meine Ablage"
+            "value" : "Mein Drive"
           }
         },
         "en" : {
@@ -18098,22 +18594,6 @@
         }
       }
     },
-    "settings.section.contacts.detail" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
     "settings.section.folders" : {
       "localizations" : {
         "de" : {
@@ -18126,22 +18606,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Folder scheme"
-          }
-        }
-      }
-    },
-    "settings.section.folders.detail" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
           }
         }
       }
@@ -18219,44 +18683,12 @@
         }
       }
     },
-    "settings.section.keyInventory.detail" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
     "settings.section.privacy" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Datenschutz"
-          }
-        }
-      }
-    },
-    "settings.section.privacy.detail" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
           }
         }
       }
@@ -18407,7 +18839,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Projekte und Kunden"
+            "value" : "Projekte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projects"
           }
         }
       }
@@ -18973,7 +19411,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Weitere Postfächer über IMAP und SMTP"
+            "value" : "Mail"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mail"
           }
         }
       }
@@ -19003,7 +19447,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Belege und Angebote"
+            "value" : "Belege"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Receipts"
           }
         }
       }
@@ -19550,12 +20000,66 @@
         }
       }
     },
-    "settings.toast.driveSynced" : {
+    "settings.toast.exportFailed" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Drive-Ordner der Projekte · abgeglichen"
+            "value" : "Export fehlgeschlagen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export failed."
+          }
+        }
+      }
+    },
+    "settings.toast.exportSaved" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export gespeichert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export saved."
+          }
+        }
+      }
+    },
+    "settings.toast.mailStoreMove" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ablage konnte nicht verschoben werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not move the local storage."
+          }
+        }
+      }
+    },
+    "settings.toast.retry" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut versuchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try Again"
           }
         }
       }
@@ -20636,22 +21140,6 @@
         }
       }
     },
-    "shell.lock.passwordPlaceholder" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Passwort"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Password"
-          }
-        }
-      }
-    },
     "shell.lock.passwordWrong" : {
       "localizations" : {
         "de" : {
@@ -20664,6 +21152,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Incorrect password"
+          }
+        }
+      }
+    },
+    "shell.lock.reason" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "die Sperre aufzuheben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "unlock"
           }
         }
       }
@@ -20812,22 +21316,6 @@
         }
       }
     },
-    "shell.menu.newMessage" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Neue E-Mail"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "New Message"
-          }
-        }
-      }
-    },
     "shell.menu.redo" : {
       "localizations" : {
         "de" : {
@@ -20840,6 +21328,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Redo"
+          }
+        }
+      }
+    },
+    "shell.menu.settings" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen …"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings…"
           }
         }
       }

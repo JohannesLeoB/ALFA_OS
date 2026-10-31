@@ -16,6 +16,8 @@ public protocol MailboxPort: AnyObject {
     func refresh(_ inlet: Inlet.ID, folder: String) async throws(HubFailure)
     func ranges(_ inlet: Inlet.ID) -> [MailboxRange]
     func rangeChanged(_ inlet: Inlet.ID) async
+    func settleAttachments() async
+    func moveAttachments(to folder: Data?, commit: @MainActor () -> Void) async -> Bool
     func canLoadOlder(_ inlet: Inlet.ID, folder: String) -> Bool
     func loadOlder(_ inlet: Inlet.ID, folder: String) async throws(HubFailure)
     func canSearchEverywhere(_ inlet: Inlet.ID) -> Bool

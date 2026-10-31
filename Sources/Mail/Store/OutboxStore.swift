@@ -9,6 +9,7 @@ public final class OutboxStore: OutboxPort {
     private let access: any AccessPort
     let database: SQLiteStore
     private let events: Broadcast<MailboxEvent>
+    weak var mirror: MailboxStore?
     private var items: [OutboxItem]
     private var unsaved: Set<OutboxItem.ID> = []
     private var unremoved: Set<OutboxItem.ID> = []
@@ -32,9 +33,11 @@ public final class OutboxStore: OutboxPort {
         events.emit(.outboxChanged)
     }
 
-    public func saveDraft(_ inlet: Inlet.ID, _ draft: Draft, replacing draftID: String?) async throws(HubFailure) -> SavedDraft {
+    public func saveDraft(_ inlet: Inlet.ID, _ draft: Draft, replacing previous: SavedDraft?) async throws(HubFailure) -> SavedDraft {
         let target = MailboxStore.folderID(database, inlet, role: .drafts)
-        return try await perform(inlet) { try await $0.saveDraft(draft, replacing: draftID, into: target) }
+        let saved = try await perform(inlet) { try await $0.saveDraft(draft, replacing: previous?.id, into: target) }
+        if let target { try? mirror?.record(saved, of: draft, replacing: previous?.mirrorID, inlet: inlet, folder: target) }
+        return saved
     }
 
     public func loadDraft(_ inlet: Inlet.ID, messageID: String) async throws(HubFailure) -> StoredDraft {
@@ -69,8 +72,10 @@ public final class OutboxStore: OutboxPort {
         await retry(id, byUser: true, verify: false)
     }
 
-    public func discard(_ id: OutboxItem.ID) {
-        guard let index = items.firstIndex(where: { $0.id == id }), items[index].state != .sending else { return }
+    @discardableResult
+    public func discard(_ id: OutboxItem.ID) -> Bool {
+        guard let index = items.firstIndex(where: { $0.id == id }) else { return true }
+        guard !items[index].state.inFlight else { return false }
         items.remove(at: index)
         unsaved.remove(id)
         do {
@@ -80,6 +85,7 @@ public final class OutboxStore: OutboxPort {
             unremoved.insert(id)
         }
         events.emit(.outboxChanged)
+        return true
     }
 
     public func revise(_ id: OutboxItem.ID, _ draft: Draft) {
@@ -139,12 +145,17 @@ public final class OutboxStore: OutboxPort {
 
     private func retry(_ id: OutboxItem.ID, byUser: Bool = false, verify: Bool = true) async {
         guard let index = items.firstIndex(where: { $0.id == id }), items[index].state == .waiting else { return }
-        items[index].startSending()
+        if verify { items[index].startChecking() } else { items[index].startSending() }
         var item = items[index]
         let inlet = item.inlet
         events.emit(.outboxChanged)
         let result = await DeliveryEngine.deliver(&item, verify: verify, byUser: byUser, access: access,
-                                                  folder: { MailboxStore.folderID(self.database, inlet, role: $0) })
+                                                  folder: { MailboxStore.folderID(self.database, inlet, role: $0) },
+                                                  checked: {
+            guard let now = items.firstIndex(where: { $0.id == id }) else { return }
+            items[now].proceed()
+            events.emit(.outboxChanged)
+        })
         guard let current = items.firstIndex(where: { $0.id == id }) else { return }
         items[current].draftID = item.draftID
         items[current].mirrorID = item.mirrorID
@@ -213,7 +224,7 @@ public final class OutboxStore: OutboxPort {
         case .unverified(let value):
             name = "unverified"
             hint = try JSONEncoder().encode(value)
-        case .waiting, .sending:
+        case .waiting, .checking, .sending:
             break
         }
         let id = item.id.uuidString

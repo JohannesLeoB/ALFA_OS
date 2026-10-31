@@ -7,12 +7,13 @@ struct EventSample {
 }
 
 private struct EventMonitor: ViewModifier {
+    @Environment(\.appLocked) private var locked
     let mask: NSEvent.EventTypeMask
     let active: Bool
     let handler: (EventSample) -> Bool
 
     func body(content: Content) -> some View {
-        content.background(MonitorAnchor(mask: mask, active: active, handler: handler))
+        content.background(MonitorAnchor(mask: mask, active: active && !locked, handler: handler))
     }
 }
 

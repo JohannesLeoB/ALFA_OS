@@ -27,9 +27,8 @@ enum CommandEngine {
             ]
             left = [
                 Slot(id: "print", action: .print, priority: 1),
-                Slot(id: "pdf", action: .pdf, priority: 2),
-                Slot(id: "toProject", action: .toProject, priority: 3, off: !hasFiles)
-            ]
+                Slot(id: "pdf", action: .pdf, priority: 2)
+            ] + (hasFiles ? [Slot(id: "toProject", action: .toProject, priority: 3)] : [])
             right = [Slot.more]
         } else if case .draft(let canSend) = front {
             if confirmDiscard {
@@ -41,11 +40,9 @@ enum CommandEngine {
                     Slot(id: "saveDraft", action: .saveDraft, priority: 5),
                     Slot(id: "discardDraft", action: .discardDraft, priority: 2, signal: true)
                 ]
-                left = [
-                    Slot(id: "attachFile", action: .attachFile, priority: 1),
-                    Slot(id: "fromProject", action: .fromProject, priority: 4, off: !hasFiles),
-                    Slot(id: "format", action: .format, priority: 3, accent: formatting)
-                ]
+                left = [Slot(id: "attachFile", action: .attachFile, priority: 1)]
+                    + (hasFiles ? [Slot(id: "fromProject", action: .fromProject, priority: 4)] : [])
+                    + [Slot(id: "format", action: .format, priority: 3, accent: formatting)]
                 right = [
                     Slot.more,
                     Slot(id: "send", action: .send,
@@ -55,7 +52,7 @@ enum CommandEngine {
             }
         }
         let fanSlots = (stackCount > 0 || fanned) && state != .confirm
-            ? [Slot(id: "overview", action: fanned ? .backToStack : .overview, accent: fanned)] : []
+            ? [Slot(id: "overview", action: fanned ? .backToStack : .overview)] : []
         let foldSlots = canFold && state != .confirm ? [Slot(id: "fold", action: .foldColumn)] : []
         return CommandSet(state: state, main: main, tail: tail, fan: fanSlots, fold: foldSlots, footLeft: left,
                           footRight: fanned ? [] : right)

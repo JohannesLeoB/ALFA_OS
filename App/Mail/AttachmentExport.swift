@@ -30,6 +30,8 @@ enum AttachmentExport {
         guard let document = pdf(data, name: name) else { return false }
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.pdf]
+        panel.isExtensionHidden = false
+        panel.canSelectHiddenExtension = true
         panel.nameFieldStringValue = ((name as NSString).deletingPathExtension as NSString).appendingPathExtension("pdf") ?? name
         guard panel.runModal() == .OK, let url = panel.url else { return true }
         return (try? document.write(to: url)) != nil
@@ -37,6 +39,11 @@ enum AttachmentExport {
 
     static func save(_ data: Data, name: String) -> Bool {
         let panel = NSSavePanel()
+        let type = UTType(filenameExtension: (name as NSString).pathExtension)
+        if let type { panel.allowedContentTypes = [type] }
+        panel.allowsOtherFileTypes = true
+        panel.isExtensionHidden = false
+        panel.canSelectHiddenExtension = true
         panel.nameFieldStringValue = name
         guard panel.runModal() == .OK, let url = panel.url else { return true }
         return (try? data.write(to: url)) != nil

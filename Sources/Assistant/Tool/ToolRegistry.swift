@@ -7,6 +7,8 @@ public struct ToolRegistry: Sendable {
         self.tools = tools
     }
 
+    public var categories: Set<PrivacyCategory> { Set(tools.map(\.privacy)) }
+
     var manifest: ToolManifest { ToolManifest(tools: tools) }
 
     func tool(named name: String) -> (any ToolPort)? {

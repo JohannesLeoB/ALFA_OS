@@ -1,4 +1,17 @@
+import Core
 import Foundation
+
+public struct QuoteTexts: Sendable {
+    public var dated: String
+    public var undated: String
+    public var locale: Locale
+
+    public init(dated: String = "{1}, {2}:", undated: String = "{1}:", locale: Locale = .current) {
+        self.dated = dated
+        self.undated = undated
+        self.locale = locale
+    }
+}
 
 enum Quoting {
     private static let maxAttributionLines = 3
@@ -45,6 +58,13 @@ enum Quoting {
         }
         let last = flat(lines[end]).lowercased()
         return last.hasSuffix(":") && looseVerbs.contains(where: last.contains) ? end : nil
+    }
+
+    static func attribution(_ sender: String, at date: Date?, dated: String, undated: String, locale: Locale = .current,
+                            timeZone: TimeZone = .current) -> String {
+        guard let date else { return PlaceholderEngine.fill(undated, [sender]) }
+        let when = date.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened, locale: locale, timeZone: timeZone))
+        return PlaceholderEngine.fill(dated, [when, sender])
     }
 
     static func flat(_ text: String) -> String {

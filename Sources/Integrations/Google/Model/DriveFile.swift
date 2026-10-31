@@ -9,6 +9,7 @@ struct DriveFile: Identifiable, Equatable, Sendable {
     var mimeType: String
     var modifiedAt: Date?
     var webViewLink: String?
+    var size: Int?
 
     var isFolder: Bool { mimeType == Self.folderMime }
 

@@ -8,6 +8,10 @@ enum SyncEngine {
         inlet + "|" + capability.rawValue
     }
 
+    static func isRunning(_ inlet: Inlet.ID, in running: Set<String>) -> Bool {
+        running.contains { $0.hasPrefix(inlet + "|") }
+    }
+
     static func resolution(capability: Capability, kind: FailureKind) -> Resolution {
         capability == .files || kind == .transient ? .restore : .fail
     }

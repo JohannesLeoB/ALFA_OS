@@ -47,7 +47,7 @@ struct IntegrationList: View {
                         name: LocalizedStringKey(section.key),
                         initial: String(appearance.string(section.key).prefix(1)),
                         logo: nil,
-                        sub: section.detailKey,
+                        sub: state.detailKey(of: section),
                         bad: false,
                         selected: state.front == section.rawValue,
                         action: { state.open(section.rawValue) })

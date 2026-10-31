@@ -48,6 +48,7 @@ extension InboxState {
         if !stack.contains(ref) { stack.append(ref) }
         front = ref
         opened += 1
+        openOverview(false)
     }
 
     func detach(_ ref: CardRef) {

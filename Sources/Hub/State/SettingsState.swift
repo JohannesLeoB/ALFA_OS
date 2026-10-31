@@ -10,14 +10,18 @@ public final class SettingsState {
     public private(set) var toast: String?
     public private(set) var toastName: String?
     public private(set) var toastSerial = 0
+    public private(set) var toastFailed = false
+    public private(set) var toastRetry: (@MainActor () -> Void)?
     public private(set) var appearance: AppearanceChoice = .system
     public private(set) var destination: StartDestination = .mail
     public private(set) var lockOn = true
     public private(set) var lockDelay: LockDelay = .minutes5
     public private(set) var privacy = PrivacyChoices()
+    public private(set) var templates: [TemplateStore.Template] = []
     public private(set) var profile = UserProfile()
     public private(set) var company: [String: String] = [:]
     public private(set) var imprint: [String: String] = [:]
+    public private(set) var mailStore = MailStoreSettings()
     private(set) var mailboxDisplays: [Inlet.ID: MailboxDisplay] = [:]
     private(set) var mailboxRanges: [Inlet.ID: MailboxRange] = [:]
     private(set) var serverCopies: [Inlet.ID: ServerCopy] = [:]
@@ -28,9 +32,32 @@ public final class SettingsState {
     private(set) var signaturesAbove: [Inlet.ID: Bool] = [:]
 
     @ObservationIgnored private let settings: SettingStore
+    @ObservationIgnored private let templateStore: TemplateStore
 
-    public init(settings: SettingStore) throws {
+    public var hasTemplates: Bool { !templates.isEmpty }
+
+    public var currentTemplate: TemplateStore.Template? { templates.first }
+
+    public func addTemplate(from url: URL) -> Bool {
+        let added = (try? templateStore.add(from: url)) != nil
+        templates = templateStore.templates
+        return added
+    }
+
+    public func removeTemplate(_ template: TemplateStore.Template) -> Bool {
+        let removed = (try? templateStore.remove(template)) != nil
+        templates = templateStore.templates
+        return removed
+    }
+
+    public func detailKey(of section: SettingsSection) -> String? {
+        section == .templates && hasTemplates ? nil : section.detailKey
+    }
+
+    public init(settings: SettingStore, templates: TemplateStore) throws {
         self.settings = settings
+        templateStore = templates
+        self.templates = templates.templates
         front = group.opening
         let stored = try settings.all()
         func text(_ key: String) -> String? { SettingStore.decoded(stored[key], as: String.self) }
@@ -44,9 +71,14 @@ public final class SettingsState {
             assistantOff: flag(SettingsKey.assistantOff) ?? false,
             chatFiles: flag(SettingsKey.chatFiles) ?? true)
         profile = UserProfile(
-            name: text(SettingsKey.identityName) ?? "", role: text(SettingsKey.identityRole) ?? "",
+            name: UserProfile.normalized(text(SettingsKey.identityName) ?? "", finished: true),
+            role: UserProfile.normalized(text(SettingsKey.identityRole) ?? "", finished: true),
             code: text(SettingsKey.identityCode) ?? "", phone: text(SettingsKey.identityPhone) ?? "",
             birthdays: flag(SettingsKey.birthdays) ?? false)
+        mailStore = MailStoreSettings(
+            attachments: flag(SettingsKey.mailStoreAttachments) ?? false,
+            limit: text(SettingsKey.mailStoreLimit).flatMap(MailStoreLimit.init(rawValue:)) ?? .standard,
+            folder: SettingStore.decoded(stored[SettingsKey.mailStoreFolder], as: Data.self))
         for entry in CompanyEntry.allCases { company[entry.rawValue] = text(entry.storageKey) ?? "" }
         for entry in ImprintEntry.allCases { imprint[entry.rawValue] = text(entry.storageKey) ?? "" }
         for key in stored.keys where key.hasPrefix(SettingsKey.mailboxDisplayPrefix) {
@@ -120,6 +152,16 @@ public final class SettingsState {
 
     public func updateProfile(_ change: (inout UserProfile) -> Void) {
         change(&profile)
+        storeProfile(finished: false)
+    }
+
+    public func finishProfile() {
+        storeProfile(finished: true)
+    }
+
+    private func storeProfile(finished: Bool) {
+        profile.name = UserProfile.normalized(profile.name, finished: finished)
+        profile.role = UserProfile.normalized(profile.role, finished: finished)
         save(SettingsKey.identityName, profile.name)
         save(SettingsKey.identityRole, profile.role)
         save(SettingsKey.identityCode, profile.code)
@@ -130,6 +172,25 @@ public final class SettingsState {
     public func setCompany(_ entry: CompanyEntry, _ text: String) {
         company[entry.rawValue] = text
         save(entry.storageKey, text)
+    }
+
+    public func setStoreAttachments(_ value: Bool) {
+        mailStore.attachments = value
+        save(SettingsKey.mailStoreAttachments, value)
+    }
+
+    public func setStoreLimit(_ value: MailStoreLimit) {
+        mailStore.limit = value
+        save(SettingsKey.mailStoreLimit, value.rawValue)
+    }
+
+    public func setStoreFolder(_ value: Data?) {
+        mailStore.folder = value
+        guard let value else {
+            try? settings.remove(key: SettingsKey.mailStoreFolder)
+            return
+        }
+        save(SettingsKey.mailStoreFolder, value)
     }
 
     public func setImprint(_ entry: ImprintEntry, _ text: String) {
@@ -235,7 +296,6 @@ public final class SettingsState {
 
     public func select(_ next: SettingsGroup) {
         group = next
-        open(next.opening)
     }
 
     public func open(_ id: String) {
@@ -243,15 +303,19 @@ public final class SettingsState {
         opened += 1
     }
 
-    public func notify(_ key: String, name: String? = nil) {
+    public func notify(_ key: String, name: String? = nil, failed: Bool = false, retry: (@MainActor () -> Void)? = nil) {
         toast = key
         toastName = name
+        toastFailed = failed
+        toastRetry = retry
         toastSerial += 1
     }
 
     public func dismissToast() {
         toast = nil
         toastName = nil
+        toastFailed = false
+        toastRetry = nil
     }
 
     private func save<V: Encodable>(_ key: String, _ value: V) {

@@ -51,7 +51,10 @@ struct FolderLane: View {
         ScrollView {
             VStack(spacing: 0) {
                 ForEach(inbox.folderRows) { row in
-                    let live = inbox.accountReachable && inbox.listState != .loading
+                    let live: Bool = switch inbox.listState {
+                    case .loading, .notConnected: false
+                    default: true
+                    }
                     LaneRow(glyph: row.glyph, label: name(row), selected: row.selected,
                             count: live && row.count > 0 ? Format.number(row.count) : nil,
                             countTone: row.selected ? \.onInverseSecondary : row.attention ? \.signal : \.inkTertiary) {

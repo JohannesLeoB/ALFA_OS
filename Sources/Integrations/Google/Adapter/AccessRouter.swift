@@ -156,7 +156,7 @@ struct DriveFilesClient: FilesPort {
     func files(in folderID: String) async throws -> [FileEntry] {
         try await drive.listFolder(folderID: folderID)
             .filter { $0.isFolder || !$0.isNative }
-            .map { FileEntry(id: $0.id, name: $0.name, mimeType: $0.mimeType, isFolder: $0.isFolder) }
+            .map { FileEntry(id: $0.id, name: $0.name, mimeType: $0.mimeType, isFolder: $0.isFolder, size: $0.size) }
     }
 
     func read(_ fileID: String) async throws -> Data {

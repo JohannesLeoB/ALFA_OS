@@ -14,6 +14,7 @@ final class AppSession {
     let desk: DeskState
     var panes: [String: any Pane] = [:]
     private(set) var syncing = false
+    private(set) var booted = false
     var assistantUnseen = false
     var mailboxSwitching = false
     private(set) var toastLane = LaneKind.trailing
@@ -21,6 +22,8 @@ final class AppSession {
     @ObservationIgnored private var watcher: Task<Void, Never>?
     @ObservationIgnored private var arrivals: Task<Void, Never>?
     let attention: any AttentionPort = AttentionClient()
+    let lock: LockState
+    let shield: WindowShield
     @ObservationIgnored private var shelved: Set<Inlet.ID> = []
 
     init(assembly: Assembly, directory: AppDirectory) {
@@ -32,10 +35,15 @@ final class AppSession {
             startID: assembly.settings.destination.appID)
         desk.onChange = { store.save($0) }
         self.desk = desk
+        lock = LockState(port: UnlockClient(), on: assembly.settings.lockOn, pause: Self.pause(assembly.settings.lockDelay),
+                         reason: String(localized: String.LocalizationValue("shell.lock.reason")),
+                         resigned: NSApplication.didResignActiveNotification, became: NSApplication.didBecomeActiveNotification)
+        shield = WindowShield(lock: lock)
         shelved = connectedInlets
         panes["mail"] = InboxPane(session: self)
         panes["settings"] = SettingsPane.make(assembly: assembly, desk: desk)
         for (id, pane) in panes { desk.limit(id, pane.limits) }
+        lock.launch()
     }
 
     static func live() throws -> AppSession {
@@ -60,6 +68,8 @@ final class AppSession {
     }
 
     var stackEmpty: Bool { panes[desk.currentID]?.stackEmpty ?? false }
+
+    var stackReport: Bool? { booted ? stackEmpty : nil }
 
     var toast: AnyView? {
         if conversation.note != nil { return AnyView(AssistantToast(conversation: conversation)) }
@@ -103,6 +113,7 @@ final class AppSession {
             }
         }
         await inbox.start()
+        booted = true
     }
 
     func sync() async {
@@ -113,6 +124,21 @@ final class AppSession {
         await inbox.refreshOthers()
         await inbox.directory.refresh()
         syncing = false
+    }
+
+    static func pause(_ delay: LockDelay) -> LockPause {
+        switch delay {
+        case .immediately: .immediately
+        case .minute1: .oneMinute
+        case .minutes5: .fiveMinutes
+        case .minutes15: .fifteenMinutes
+        }
+    }
+
+    var lockInitials: String { Initials.avatar(code: settings.profile.code, name: settings.profile.name) }
+
+    func followLockSettings() {
+        lock.configure(on: settings.lockOn, pause: Self.pause(settings.lockDelay))
     }
 
     private func reshelveIfChanged() {

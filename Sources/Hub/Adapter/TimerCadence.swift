@@ -51,15 +51,17 @@ public final class TimerCadence: CadencePort {
         previous?.cancel()
     }
 
-    public func trigger(_ inlet: Inlet.ID, _ capability: Capability) async {
+    @discardableResult
+    public func trigger(_ inlet: Inlet.ID, _ capability: Capability) async -> SyncReport {
         let pair = Pair(inlet: inlet, capability: capability)
         let runner = state.withLock { current -> SyncPort? in
             guard let runner = current.runner, !current.running.contains(pair) else { return nil }
             current.running.insert(pair)
             return runner
         }
-        guard let runner else { return }
-        _ = await runner(inlet, capability)
+        guard let runner else { return SyncReport(inlet: inlet, capability: capability, result: .skipped) }
+        let report = await runner(inlet, capability)
         _ = state.withLock { $0.running.remove(pair) }
+        return report
     }
 }

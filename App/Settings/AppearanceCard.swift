@@ -5,6 +5,7 @@ import SwiftUI
 struct AppearanceCard: View {
     @Environment(\.appearance) private var appearance
     @Environment(\.narrowCard) private var narrow
+    @Environment(\.session) private var session
     let state: SettingsState
 
     var body: some View {
@@ -26,12 +27,14 @@ struct AppearanceCard: View {
             ChoiceRow(
                 labelKey: "settings.start.label", line: false, current: state.destination, choices: StartDestination.allCases,
                 key: { $0.key }, pick: { state.setDestination($0) })
-            SettingsRow(label: appearance.text("settings.lock.label")) {
-                ToggleSwitch(isOn: Binding(get: { state.lockOn }, set: { state.setLockOn($0) }), labelKey: "settings.lock.label")
+            if session?.lock.available ?? true {
+                SettingsRow(label: appearance.text("settings.lock.label")) {
+                    ToggleSwitch(isOn: Binding(get: { state.lockOn }, set: { state.setLockOn($0) }), labelKey: "settings.lock.label")
+                }
+                ChoiceRow(
+                    labelKey: "settings.lock.after", line: false, current: state.lockDelay, choices: LockDelay.allCases,
+                    key: { $0.key }, pick: { state.setLockDelay($0) })
             }
-            ChoiceRow(
-                labelKey: "settings.lock.after", line: false, current: state.lockDelay, choices: LockDelay.allCases,
-                key: { $0.key }, pick: { state.setLockDelay($0) })
         }
     }
 }

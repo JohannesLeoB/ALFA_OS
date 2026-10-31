@@ -117,10 +117,27 @@ struct IMAPBodyPart: Equatable, Sendable {
     var isFlowed: Bool { mimeType == "text/plain" && parameters["format"]?.lowercased() == "flowed" }
     var deletesSpaces: Bool { parameters["delsp"]?.lowercased() == "yes" }
 
+    private static let structuralTypes: Set<String> = [
+        "application/pgp-encrypted", "application/pgp-signature", "application/pkcs7-signature",
+        "application/x-pkcs7-signature", "message/delivery-status", "message/disposition-notification",
+        "message/feedback-report"
+    ]
+
+    var isInlineImage: Bool {
+        mediaType == "image" && !(contentID ?? "").isEmpty && disposition != "attachment"
+    }
+
+    var isTextCandidate: Bool {
+        (mimeType == "text/plain" || mimeType == "text/html") && disposition != "attachment"
+    }
+
+    var isStructural: Bool {
+        filename == nil && disposition != "attachment" && Self.structuralTypes.contains(mimeType)
+    }
+
     var isAttachment: Bool {
-        guard !isMultipart else { return false }
-        if disposition == "attachment" { return true }
-        return filename != nil && disposition != "inline"
+        guard !isMultipart, !isInlineImage, !isStructural, !isTextCandidate else { return false }
+        return disposition == "attachment" || filename != nil || mediaType != "text"
     }
 
     var leaves: [IMAPBodyPart] {
@@ -128,14 +145,39 @@ struct IMAPBodyPart: Equatable, Sendable {
         return [self]
     }
 
-    var attachments: [IMAPBodyPart] { leaves.filter(\.isAttachment) }
+    var attachments: [IMAPBodyPart] { attachments(html: nil, embedded: inlineContentIDs) }
+
+    func attachments(html: String?, embedded: Set<String>) -> [IMAPBodyPart] {
+        let bodies = Set([firstPlainText, firstHTML].compactMap { $0?.section })
+        let drawn = firstHTML != nil
+        let referenced = html.map(HTMLEngine.inlineReferences) ?? []
+        return leaves.filter { part in
+            if part.isTextCandidate { return part.filename != nil && !bodies.contains(part.section) }
+            guard part.isInlineImage, let contentID = part.contentID else { return part.isAttachment }
+            guard drawn else { return true }
+            let key = contentID.lowercased()
+            guard embedded.contains(key) else { return true }
+            return html != nil && !referenced.contains(key)
+        }
+    }
+
+    private var bodyParts: [IMAPBodyPart] {
+        let candidates = leaves.filter(\.isTextCandidate)
+        let unnamed = candidates.filter { $0.filename == nil }
+        let pool = unnamed.isEmpty ? candidates.filter { $0.disposition == "inline" } : unnamed
+        return ["text/plain", "text/html"].compactMap { type in pool.first { $0.mimeType == type } }
+    }
 
     var firstPlainText: IMAPBodyPart? {
-        leaves.first { $0.mimeType == "text/plain" && !$0.isAttachment }
+        bodyParts.first { $0.mimeType == "text/plain" }
     }
 
     var firstHTML: IMAPBodyPart? {
-        leaves.first { $0.mimeType == "text/html" && !$0.isAttachment }
+        bodyParts.first { $0.mimeType == "text/html" }
+    }
+
+    var inlineContentIDs: Set<String> {
+        Set(inlineImages.compactMap { $0.contentID?.lowercased() }.filter { !$0.isEmpty })
     }
 
     var inlineImages: [IMAPBodyPart] {

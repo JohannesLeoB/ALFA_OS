@@ -8,8 +8,6 @@ import SwiftUI
 struct SettingsPane: Pane {
     let context: SettingsContext
 
-    var stackEmpty: Bool { context.state.front == nil }
-
     var badge: Int { IntegrationReadEngine.failedCount(context.readings) }
 
     func ownsHead(_ lane: LaneKind) -> Bool { lane == .trailing }
@@ -115,6 +113,7 @@ struct SectionList: View {
                     SectionRow(
                         section: section,
                         value: value(of: section),
+                        detailKey: state.detailKey(of: section),
                         selected: selected,
                         separated: next != nil && !selected && state.front != next?.rawValue,
                         action: { state.open(section.rawValue) })
@@ -145,7 +144,7 @@ struct SettingsMarkList: View {
     }
 
     private func face(_ id: String, _ readings: [IntegrationReading]) -> SettingsFace {
-        SettingsFace(id: id, readings: readings, appearance: appearance)
+        SettingsFace(id: id, readings: readings, appearance: appearance, state: state)
     }
 
     private func items(readings: [IntegrationReading], failed: Set<String>) -> [StripMarkItem] {

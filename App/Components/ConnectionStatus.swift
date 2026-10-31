@@ -4,13 +4,11 @@ import SwiftUI
 
 enum ConnectionState {
     case connected
-    case stored
     case connecting
     case working
     case notConnected
     case failed
     case unreadable
-    case orphaned
 }
 
 struct ConnectionStatus: View {
@@ -23,7 +21,7 @@ struct ConnectionStatus: View {
 
     private var dotFill: KeyPath<Colors, ColorValue>? {
         switch state {
-        case .connected, .stored: ink.primary
+        case .connected: ink.primary
         case .failed: \.signal
         default: nil
         }
@@ -31,17 +29,16 @@ struct ConnectionStatus: View {
 
     private var border: KeyPath<Colors, ColorValue> {
         switch state {
-        case .connected, .stored: ink.primary
+        case .connected: ink.primary
         case .connecting, .working, .notConnected: ink.line
         case .failed, .unreadable: \.signal
-        case .orphaned: ink.tertiary
         }
     }
 
     private var foreground: KeyPath<Colors, ColorValue> {
         switch state {
-        case .connected, .stored, .connecting, .working: ink.secondary
-        case .notConnected, .orphaned: inverted ? ink.secondary : ink.tertiary
+        case .connected, .connecting, .working: ink.secondary
+        case .notConnected: inverted ? ink.secondary : ink.tertiary
         case .failed, .unreadable: \.signal
         }
     }
@@ -52,22 +49,14 @@ struct ConnectionStatus: View {
         let dot = CGFloat(Tokens.Spacing.statusDot)
         let line = CGFloat(Tokens.Size.hairline)
         HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
-            ZStack(alignment: .leading) {
+            ZStack {
                 if let dotFill {
-                    Circle()
-                        .fill(appearance.color(dotFill))
-                        .mask(alignment: .leading) {
-                            Rectangle().frame(width: state == .stored ? dot / 2 : dot)
-                        }
+                    Circle().fill(appearance.color(dotFill))
                 }
             }
             .frame(width: dot, height: dot)
             .overlay {
-                if state == .orphaned {
-                    Circle().strokeBorder(appearance.color(border), style: StrokeStyle(lineWidth: line, dash: SheetValues.dashedLine.map { CGFloat($0) }))
-                } else {
-                    Circle().strokeBorder(appearance.color(border), lineWidth: line)
-                }
+                Circle().strokeBorder(appearance.color(border), lineWidth: line)
             }
             .overlay {
                 if spins {

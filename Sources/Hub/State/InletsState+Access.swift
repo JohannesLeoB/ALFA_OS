@@ -39,7 +39,7 @@ extension InletsState: AccessPort {
         guard inlet.capabilities.contains(spec.capability) else { throw .capabilityMissing(inletID, spec.capability) }
         guard let provider = router.provider(inlet.provider) else { throw .notConnected(inletID) }
         guard let grant = grant(for: inlet) else {
-            update(inletID, persist: false) { $0.state = .keychainUnreadable }
+            rest(inletID, as: .keychainUnreadable, persist: .never)
             throw .notConnected(inletID)
         }
         do {
@@ -68,14 +68,15 @@ extension InletsState: AccessPort {
         running.insert(key)
         let job = SyncJob(inlet: inletID, capability: capability, startedAt: configuration.clock())
         queue.append(job)
-        let previous = inlet.state
-        update(inletID, persist: false) { $0.state = .working }
+        begin(inletID)
         defer {
             running.remove(key)
+            progresses[key] = nil
             queue.removeAll { $0 == job }
+            end(inletID)
         }
         do {
-            let outcome = try await spec.run(provider, inlet, grant, meter(inletID, capability), renewal(inletID))
+            let outcome = try await spec.run(provider, inlet, grant, meter(inletID, capability), renewal(inletID), reporter(key))
             let now = configuration.clock()
             if record(inletID) != nil {
                 for (kind, items) in outcome.deliveries {
@@ -83,7 +84,7 @@ extension InletsState: AccessPort {
                     for feed in feeds[kind] ?? [] { feed.apply(inlet: inletID, records: items, at: now) }
                     emit(.newItems(kind))
                 }
-                update(inletID, persist: false) { $0.state = previous }
+                probed(inletID, at: now)
             }
             log(inletID, .sync, capability: capability, ok: true)
             syncedAt[key] = now
@@ -92,7 +93,6 @@ extension InletsState: AccessPort {
             return SyncReport(inlet: inletID, capability: capability, result: .finished(items: outcome.count))
         } catch {
             if error is CancellationError {
-                update(inletID, persist: false) { if $0.state == .working { $0.state = previous } }
                 return SyncReport(inlet: inletID, capability: capability, result: .skipped)
             }
             let classification = classify(error, inlet: inletID)
@@ -103,12 +103,21 @@ extension InletsState: AccessPort {
             logFailure(inletID, .sync, capability: capability, failure)
             switch SyncEngine.resolution(capability: capability, kind: classification.kind) {
             case .restore:
-                update(inletID, persist: false) { if $0.state == .working { $0.state = previous } }
+                break
             case .fail:
-                update(inletID, persist: true) { $0.state = .failed(failure) }
+                rest(inletID, as: .failed(failure), persist: .changed)
             }
             emit(.syncFailed(capability, inletID, failure))
             return SyncReport(inlet: inletID, capability: capability, result: .failed(failure))
+        }
+    }
+
+    private func reporter(_ key: String) -> SyncReporter {
+        SyncReporter { [weak self] progress in
+            Task { @MainActor in
+                guard let self, self.running.contains(key) else { return }
+                self.progresses[key] = progress
+            }
         }
     }
 
@@ -136,7 +145,7 @@ extension InletsState: AccessPort {
             for capability in inlet.capabilities { watch(inletID, capability, cadence(inletID, capability)) }
         } catch {
             let failure = Hint(text: HintEngine.unwritableText, detail: String(describing: error), fixIn: .inlet(inletID))
-            update(inletID, persist: true) { $0.state = .failed(failure) }
+            rest(inletID, as: .failed(failure), persist: .changed)
         }
     }
 
@@ -145,6 +154,6 @@ extension InletsState: AccessPort {
         let failure = HintEngine.hint(Classification(kind: .signIn, original: classify(error, inlet: inletID).original),
                                       fixIn: .inlet(inletID))
         logFailure(inletID, .renewal, failure)
-        update(inletID, persist: true) { $0.state = .failed(failure) }
+        rest(inletID, as: .failed(failure), persist: .changed)
     }
 }

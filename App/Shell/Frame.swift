@@ -1,4 +1,3 @@
-import AppKit
 import Design
 import Shell
 import SwiftUI
@@ -20,42 +19,57 @@ struct Frame: View {
     var body: some View {
         let appearance = appearance
         let measure = desk.measure
-        GeometryReader { proxy in
-            ZStack(alignment: .topLeading) {
-                appearance.color(\.ground)
-                lanes(appearance)
-                    .zIndex(Double(Tokens.Layer.lane))
-                handles(appearance)
-                    .zIndex(Double(Tokens.Layer.handle))
-                SyncButton(session: session)
-                    .offset(x: proxy.size.width - CGFloat(measure.margin + measure.blobWidth), y: CGFloat(measure.blobTop))
-                    .zIndex(Double(Tokens.Layer.syncButton))
-                toasts(appearance)
-                    .zIndex(Double(Tokens.Layer.toast))
-                Blob(session: session, pointer: pointer, frame: $blobFrame)
-                    .zIndex(Double(Tokens.Layer.blob))
-            }
-            .dwellHintLayer()
-            .eventMonitor([.leftMouseDown, .rightMouseDown]) { sample in
-                if let point = sample.local { session.act(at: Double(point.x)) }
-                return false
-            }
-            .coordinateSpace(name: Self.space)
-            .frame(width: proxy.size.width, height: proxy.size.height, alignment: .topLeading)
-            .clickAway(active: desk.mode != nil, inside: blobFrame) { desk.close() }
-            .onContinuousHover(coordinateSpace: .named(Self.space)) { phase in
-                switch phase {
-                case .active(let point): pointer = point
-                case .ended: pointer = nil
+        let shut = session.lock.phase.shut
+        ZStack {
+            GeometryReader { proxy in
+                ZStack(alignment: .topLeading) {
+                    appearance.color(\.ground)
+                    lanes(appearance)
+                        .zIndex(Double(Tokens.Layer.lane))
+                    handles(appearance)
+                        .zIndex(Double(Tokens.Layer.handle))
+                    SyncButton(session: session)
+                        .offset(x: proxy.size.width - CGFloat(measure.margin + measure.blobWidth), y: CGFloat(measure.blobTop))
+                        .zIndex(Double(Tokens.Layer.syncButton))
+                    toasts(appearance)
+                        .zIndex(Double(Tokens.Layer.toast))
+                    Blob(session: session, pointer: pointer, frame: $blobFrame)
+                        .zIndex(Double(Tokens.Layer.blob))
                 }
+                .dwellHintLayer()
+                .eventMonitor([.leftMouseDown, .rightMouseDown]) { sample in
+                    if let point = sample.local { session.act(at: Double(point.x)) }
+                    return false
+                }
+                .coordinateSpace(name: Self.space)
+                .frame(width: proxy.size.width, height: proxy.size.height, alignment: .topLeading)
+                .clickAway(active: desk.mode != nil, inside: blobFrame) { desk.close() }
+                .onContinuousHover(coordinateSpace: .named(Self.space)) { phase in
+                    switch phase {
+                    case .active(let point): pointer = point
+                    case .ended: pointer = nil
+                    }
+                }
+                .onAppear { desk.resize(BlobSize(width: proxy.size.width, height: proxy.size.height)) }
+                .onChange(of: proxy.size) { _, size in desk.resize(BlobSize(width: size.width, height: size.height)) }
             }
-            .onAppear { desk.resize(BlobSize(width: proxy.size.width, height: proxy.size.height)) }
-            .onChange(of: proxy.size) { _, size in desk.resize(BlobSize(width: size.width, height: size.height)) }
+            .underLock(shut)
+            if shut {
+                LockScreen(lock: session.lock, name: session.settings.profile.name, initials: session.lockInitials)
+                    .zIndex(Double(Tokens.Layer.lockScreen))
+            }
         }
+        .eventMonitor([.keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown, .scrollWheel, .mouseMoved]) { _ in
+            session.lock.touch()
+            return false
+        }
+        .onChange(of: session.settings.lockOn) { session.followLockSettings() }
+        .onChange(of: session.settings.lockDelay) { session.followLockSettings() }
+        .onChange(of: shut) { _, now in if now { desk.close() } }
         .onExitCommand { desk.close() }
         .onChange(of: desk.currentID, initial: true) { measureLabel(appearance) }
         .onChange(of: locale) { measureLabel(appearance) }
-        .onChange(of: session.stackEmpty, initial: true) { _, empty in desk.stack(empty: empty, still: appearance.still) }
+        .onChange(of: session.stackReport, initial: true) { _, report in desk.stack(empty: report, still: appearance.still) }
         .onChange(of: session.panes.mapValues(\.opened)) { old, new in
             for (id, count) in new where old[id] != count { desk.reveal(.trailing, in: id) }
         }

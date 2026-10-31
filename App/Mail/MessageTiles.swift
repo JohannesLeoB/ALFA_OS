@@ -23,9 +23,9 @@ struct MessageTiles: View {
     private func entries(of rows: ArraySlice<RowPresentation>) -> [OverviewEntry] {
         rows.map { row in
             OverviewEntry(id: row.id, mark: row.initials.isEmpty ? .icon(.person) : .text(row.initials),
-                          title: row.outgoing ? Text(verbatim: appearance.format("mail.row.to", row.sender)) : Text(verbatim: row.sender),
+                          title: row.title(appearance),
                           date: MessageDate.text(row.date, draft: row.draft, appearance: appearance), unread: row.unread,
-                          subject: row.subject ?? "", preview: row.preview ?? "",
+                          subject: row.tileSubject(appearance), preview: row.preview ?? "",
                           current: row.selected, commands: row.draft ? [] : commands(row.id),
                           choose: { if row.draft { Task { await inbox.editDraft(row.id) } } else { Task { await inbox.open(row.id) } } })
         }

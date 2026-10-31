@@ -23,6 +23,7 @@ struct AssistantMessage: View {
                 ViewThatFits(in: .horizontal) {
                     HStack(spacing: CGFloat(Tokens.Spacing.step8)) {
                         appearance.text("shell.assistantMessage.failed")
+                            .fixedSize()
                         retryButton
                     }
                     VStack(alignment: .leading, spacing: CGFloat(Tokens.Spacing.step4)) {

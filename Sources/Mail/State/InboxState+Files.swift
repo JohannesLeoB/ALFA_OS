@@ -2,19 +2,30 @@ import Foundation
 import Hub
 
 extension InboxState {
-    public func projectFolders(for draft: UUID) async -> [ProjectFolder] {
-        await projects(key: draft.uuidString)
+    public var offersProjectFiles: Bool { mailbox.hasFiles }
+
+    public func projectFolders() async -> [ProjectFolder]? {
+        do {
+            let list = try await mailbox.projectFolders()
+            return list.sorted { $0.folder.name.localizedStandardCompare($1.folder.name) == .orderedAscending }
+        } catch {
+            return nil
+        }
     }
 
-    public func projectFolders(forMessage id: String) async -> [ProjectFolder] {
-        await projects(key: id)
-    }
-
-    public func projectFiles(_ inlet: Inlet.ID, folder: String) async -> [FileEntry] {
-        guard let list = try? await mailbox.listFiles(inlet, folder: folder) else { return [] }
+    public func projectFiles(_ inlet: Inlet.ID, folder: String) async -> [FileEntry]? {
+        guard let list = try? await mailbox.listFiles(inlet, folder: folder) else { return nil }
         return list.sorted { left, right in
             left.isFolder == right.isFolder ? left.name.localizedStandardCompare(right.name) == .orderedAscending : left.isFolder
         }
+    }
+
+    public func projectCounts(_ inlet: Inlet.ID, folders: [FileEntry]) async -> [String: Int] {
+        var counts: [String: Int] = [:]
+        for folder in folders where folder.isFolder {
+            if let list = try? await mailbox.listFiles(inlet, folder: folder.id) { counts[folder.id] = list.count }
+        }
+        return counts
     }
 
     public func attachProjectFile(_ draft: UUID, inlet: Inlet.ID, file: FileEntry) async {
@@ -42,6 +53,20 @@ extension InboxState {
         let title = card.summary.subject.isEmpty ? card.id : card.summary.subject
         let name = title.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ":", with: "-") + ".pdf"
         return MessageDocument(name: name, data: data)
+    }
+
+    public func draftDocument(_ id: UUID, render: (OpenMessage) -> Data?) -> MessageDocument? {
+        guard let card = draft(id) else { return nil }
+        let sender = card.draft.from.map { $0.name.isEmpty ? $0.address : $0.name + " <" + $0.address + ">" } ?? ""
+        let files = card.draft.attachments.map { AttachmentInfo(id: $0.id, filename: $0.filename, mimeType: $0.mimeType, sizeBytes: $0.data.count) }
+        let summary = MessageSummary(id: id.uuidString, subject: card.draft.subject, from: sender, fromRaw: sender, toRaw: card.draft.to ?? "",
+                                     ccRaw: card.draft.cc ?? "", receivedAt: clock(), attachments: files)
+        guard let data = render(OpenMessage(inlet: card.inlet, summary: summary, content: .text(card.draft.body))) else {
+            post(.pdfFailed)
+            return nil
+        }
+        let title = card.draft.subject.isEmpty ? id.uuidString : card.draft.subject
+        return MessageDocument(name: title.replacingOccurrences(of: "/", with: "-").replacingOccurrences(of: ":", with: "-") + ".pdf", data: data)
     }
 
     public func documentFailed(_ id: String) {
@@ -72,14 +97,5 @@ extension InboxState {
             return
         }
         post(.attachmentCopied(project.folder.name))
-    }
-
-    private func projects(key: String) async -> [ProjectFolder] {
-        do {
-            let list = try await mailbox.projectFolders()
-            return list.sorted { $0.folder.name.localizedStandardCompare($1.folder.name) == .orderedAscending }
-        } catch {
-            return []
-        }
     }
 }

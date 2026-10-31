@@ -92,13 +92,19 @@ private actor Counter {
 }
 
 private protocol PingPort: Sendable {
+    var steps: [(done: Int, total: Int)] { get }
     func ping() async throws -> Int
 }
 
 private final class FakePing: PingPort, @unchecked Sendable {
     private let state = Locked<(calls: Int, failure: (any Error)?, gate: Gate?)>((0, nil, nil))
+    private let reported = Locked<[(done: Int, total: Int)]>([])
 
     var calls: Int { state.with { $0.calls } }
+
+    var steps: [(done: Int, total: Int)] { reported.with { $0 } }
+
+    func setSteps(_ steps: [(done: Int, total: Int)]) { reported.with { $0 = steps } }
 
     func setFailure(_ error: (any Error)?) { state.with { $0.failure = error } }
 
@@ -119,6 +125,8 @@ private struct MeteredPing: PingPort {
     let wrapped: any PingPort
     let meter: CostMeter
 
+    var steps: [(done: Int, total: Int)] { wrapped.steps }
+
     func ping() async throws -> Int {
         meter.record()
         return try await wrapped.ping()
@@ -126,7 +134,12 @@ private struct MeteredPing: PingPort {
 }
 
 private struct FakeFiles: FilesPort {
-    func projectFolders() async throws -> [FileFolder] { [FileFolder(id: "f1", name: "Project")] }
+    var gate: Gate?
+
+    func projectFolders() async throws -> [FileFolder] {
+        if let gate { await gate.wait() }
+        return [FileFolder(id: "f1", name: "Project")]
+    }
     func drives() async throws -> [FileFolder] { [] }
     func files(in folderID: String) async throws -> [FileEntry] { [] }
     func read(_ fileID: String) async throws -> Data { Data() }
@@ -210,10 +223,13 @@ private final class HandCadence: CadencePort, @unchecked Sendable {
         planned.with { $0[inlet + "|" + capability.rawValue] = cadence }
     }
 
-    func trigger(_ inlet: Inlet.ID, _ capability: Capability) async {
+    @discardableResult
+    func trigger(_ inlet: Inlet.ID, _ capability: Capability) async -> SyncReport {
         fired.with { $0 += 1 }
-        guard let run = runner.with({ $0 }) else { return }
-        continuation.yield(await run(inlet, capability))
+        guard let run = runner.with({ $0 }) else { return SyncReport(inlet: inlet, capability: capability, result: .skipped) }
+        let report = await run(inlet, capability)
+        continuation.yield(report)
+        return report
     }
 }
 
@@ -261,12 +277,15 @@ private struct StuckSignIn: SignInPort {
 private struct FakeProbe: ProbePort {
     let accepting: Locked<Bool>
     let stalling: Locked<Bool>
+    let gate: Locked<Gate?>
+    let rejectionKind: Locked<FailureKind?>
 
     func probe(_ inlet: Inlet, _ grant: Grant) async throws -> ProbeResult {
         if stalling.with({ $0 }) { try await Task.sleep(for: .seconds(3600)) }
+        if let gate = gate.with({ $0 }) { await gate.wait() }
         let account = grant.values["token"] ?? inlet.id
         if accepting.with({ $0 }) { return ProbeResult(account: account) }
-        return ProbeResult(account: account, rejection: Hint(text: "hint.fake.rejected"))
+        return ProbeResult(account: account, rejection: Hint(text: "hint.fake.rejected", kind: rejectionKind.with { $0 }))
     }
 }
 
@@ -282,6 +301,9 @@ private final class FakeProvider: ProviderPort, @unchecked Sendable {
     let probe: any ProbePort
     private let accepting = Locked(true)
     private let stalling = Locked(false)
+    private let probeGate = Locked<Gate?>(nil)
+    private let filesGate = Locked<Gate?>(nil)
+    private let rejectionKind = Locked<FailureKind?>(nil)
 
     init(id: String = "fake", capabilities: Set<Capability>, signIn: (any SignInPort)? = nil, form: [Field] = [], presets: [Preset] = []) {
         self.id = id
@@ -289,8 +311,14 @@ private final class FakeProvider: ProviderPort, @unchecked Sendable {
         self.signIn = signIn ?? FakeSignIn()
         self.form = form
         self.presets = presets
-        probe = FakeProbe(accepting: accepting, stalling: stalling)
+        probe = FakeProbe(accepting: accepting, stalling: stalling, gate: probeGate, rejectionKind: rejectionKind)
     }
+
+    func setProbeGate(_ value: Gate?) { probeGate.with { $0 = value } }
+
+    func setFilesGate(_ value: Gate?) { filesGate.with { $0 = value } }
+
+    func setRejectionKind(_ value: FailureKind?) { rejectionKind.with { $0 = value } }
 
     func setAccepting(_ value: Bool) { accepting.with { $0 = value } }
 
@@ -313,7 +341,7 @@ private final class FakeProvider: ProviderPort, @unchecked Sendable {
         let made: Any
         switch ObjectIdentifier(port) {
         case ObjectIdentifier((any PingPort).self): made = ping as any PingPort
-        case ObjectIdentifier((any FilesPort).self): made = FakeFiles() as any FilesPort
+        case ObjectIdentifier((any FilesPort).self): made = FakeFiles(gate: filesGate.with { $0 }) as any FilesPort
         case ObjectIdentifier((any ChangePort).self): made = changes as any ChangePort
         default: throw HubFailure.capabilityMissing(inlet.id, inlet.capabilities.first ?? .mail)
         }
@@ -328,7 +356,8 @@ private func registry() -> PortRegistry {
         (any PingPort).self,
         capability: .mail,
         wrap: { MeteredPing(wrapped: $0, meter: $1) },
-        sync: { port, inlet in
+        sync: { port, inlet, reporter in
+            for step in port.steps { reporter(done: step.done, total: step.total) }
             let value = try await port.ping()
             return SyncOutcome(deliveries: [.mailboxes: [Mailbox(id: inlet + "/" + String(value), inlet: inlet, name: "Inbox", role: "inbox")]])
         }
@@ -382,6 +411,10 @@ private struct StubCheck: ConnectionCheckPort {
     let body: @Sendable (KeyValues) async throws -> String?
 
     func check(_ values: KeyValues) async throws -> String? { try await body(values) }
+}
+
+private func emptyTemplates() -> TemplateStore {
+    TemplateStore(directory: HubTests.scratch("templates-"))
 }
 
 @MainActor
@@ -558,7 +591,7 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(rig.connections.rules.cadence(inlet.id, .mail), .every(.seconds(300)))
         let gate = Gate()
         rig.provider.ping.setGate(gate)
-        let first = Task { @MainActor in await rig.cadence.trigger(inlet.id, .mail) }
+        let first = Task { @MainActor in _ = await rig.cadence.trigger(inlet.id, .mail) }
         let started = await until { rig.provider.ping.calls == 1 }
         XCTAssertTrue(started)
         XCTAssertEqual(rig.connections.rules.queue.map(\.inlet), [inlet.id])
@@ -580,11 +613,11 @@ final class HubTests: XCTestCase {
         let a = try await rig.connect("a@x")
         let b = try await rig.connect("b@x")
         XCTAssertEqual(Set(rig.keychain.slots.map(\.inlet)), [a.id, b.id])
-        let settings = try SettingsState(settings: SettingStore(database: rig.database))
+        let settings = try SettingsState(settings: SettingStore(database: rig.database), templates: emptyTemplates())
         settings.setDisplay(.domain, for: a.id)
         settings.setDisplay(.localPart, for: b.id)
         try await rig.connections.setup.remove(a.id)
-        let after = try SettingsState(settings: SettingStore(database: rig.database))
+        let after = try SettingsState(settings: SettingStore(database: rig.database), templates: emptyTemplates())
         XCTAssertEqual(after.display(a.id), .ownName)
         XCTAssertEqual(after.display(b.id), .localPart)
         XCTAssertEqual(rig.keychain.slots.map(\.inlet), [b.id])
@@ -715,6 +748,60 @@ final class HubTests: XCTestCase {
     }
 
     @MainActor
+    func testWorkingNoteNamesTheAreaWithDoneAndTotalOnlyWhileTheRunReportsThem() async throws {
+        let info = IntegrationInfo(id: "fake", access: .password, companyOwned: false, fields: [],
+                                   areas: [IntegrationArea(id: "mail", capability: .mail)], extras: [],
+                                   listsAccounts: true, providers: ["fake"], logo: nil)
+        let rig = try Rig.make()
+        let inlet = try await rig.connect("a@x")
+        rig.provider.ping.setSteps([(done: 412, total: 1280)])
+        let gate = Gate()
+        rig.provider.ping.setGate(gate)
+        let run = Task { @MainActor in _ = await rig.cadence.trigger(inlet.id, .mail) }
+        let reported = await until { rig.connections.rules.progress(inlet.id, .mail) != nil }
+        XCTAssertTrue(reported)
+        let during = IntegrationReadEngine.read(info, setup: rig.connections.setup, rules: rig.connections.rules)
+        XCTAssertEqual(during.state, .working)
+        XCTAssertEqual(during.note, .working(areaKey: info.areaKey(info.areas[0]), done: 412, total: 1280))
+        XCTAssertNil(rig.connections.rules.progress(inlet.id, .files))
+        await gate.release()
+        await run.value
+        XCTAssertNil(rig.connections.rules.progress(inlet.id, .mail))
+        let after = IntegrationReadEngine.read(info, setup: rig.connections.setup, rules: rig.connections.rules)
+        guard case .checked? = after.note else { return XCTFail("note \(String(describing: after.note))") }
+    }
+
+    @MainActor
+    func testWorkingShowsNoNoteWhenTheRunCannotKnowATotal() async throws {
+        let info = IntegrationInfo(id: "fake", access: .password, companyOwned: false, fields: [],
+                                   areas: [IntegrationArea(id: "mail", capability: .mail)], extras: [],
+                                   listsAccounts: true, providers: ["fake"], logo: nil)
+        let rig = try Rig.make()
+        let inlet = try await rig.connect("a@x")
+        rig.provider.ping.setSteps([(done: 5, total: 0)])
+        let gate = Gate()
+        rig.provider.ping.setGate(gate)
+        let run = Task { @MainActor in _ = await rig.cadence.trigger(inlet.id, .mail) }
+        let started = await until { rig.provider.ping.calls == 1 }
+        XCTAssertTrue(started)
+        try await Task.sleep(for: .milliseconds(20))
+        let reading = IntegrationReadEngine.read(info, setup: rig.connections.setup, rules: rig.connections.rules)
+        XCTAssertEqual(reading.state, .working)
+        XCTAssertNil(reading.note)
+        XCTAssertNil(rig.connections.rules.progress(inlet.id, .mail))
+        await gate.release()
+        await run.value
+    }
+
+    func testRunProgressRefusesAnUnknownTotalAndKeepsDoneInsideIt() {
+        XCTAssertNil(RunProgress(done: 3, total: 0))
+        XCTAssertNil(RunProgress(done: 3, total: -1))
+        XCTAssertEqual(RunProgress(done: 9, total: 5)?.done, 5)
+        XCTAssertEqual(RunProgress(done: -2, total: 5)?.done, 0)
+        XCTAssertEqual(RunProgress(done: 2, total: 5), RunProgress(done: 2, total: 5))
+    }
+
+    @MainActor
     func testCorruptRowsDoNotStopTheHub() async throws {
         let database = try SQLiteStore.inMemory()
         let keychain = FakeKeychain()
@@ -743,7 +830,7 @@ final class HubTests: XCTestCase {
         let inlet = try await rig.connect("a@x")
         let gate = Gate()
         rig.provider.ping.setGate(gate)
-        let running = Task { @MainActor in await rig.cadence.trigger(inlet.id, .mail) }
+        let running = Task { @MainActor in _ = await rig.cadence.trigger(inlet.id, .mail) }
         let started = await until { rig.provider.ping.calls == 1 }
         XCTAssertTrue(started)
         XCTAssertEqual(rig.connections.setup.inlets[0].state, .working)
@@ -765,7 +852,47 @@ final class HubTests: XCTestCase {
             IntegrationInfo(id: "fake", access: .password, companyOwned: false, fields: [], areas: [], extras: [],
                             listsAccounts: true, providers: ["fake"], logo: nil),
             setup: old.connections.setup, rules: old.connections.rules)
-        XCTAssertEqual(reading.note, .unchecked)
+        XCTAssertNil(reading.note)
+        XCTAssertEqual(InletStore.durable(.working), .connected(probed: .distantPast))
+        XCTAssertEqual(InletStore.durable(.connecting), .created)
+    }
+
+    @MainActor
+    func testInletStaysWorkingWhileAnotherJobOfItRuns() async throws {
+        let rig = try Rig.make(capabilities: [.mail, .files], offers: [Rig.filesOffer])
+        let inlet = try await rig.connect("a@x", offer: Rig.filesOffer)
+        let gate = Gate()
+        rig.provider.ping.setGate(gate)
+        let mail = Task { @MainActor in _ = await rig.cadence.trigger(inlet.id, .mail) }
+        let started = await until { rig.provider.ping.calls == 1 }
+        XCTAssertTrue(started)
+        await rig.cadence.trigger(inlet.id, .files)
+        XCTAssertEqual(rig.connections.setup.inlets[0].state, .working)
+        await gate.release()
+        await mail.value
+        guard case .connected(let probed) = rig.connections.setup.inlets[0].state else { return XCTFail("state") }
+        XCTAssertGreaterThan(probed, .distantPast)
+    }
+
+    @MainActor
+    func testTransientFailureRestoresTheStateBeforeTheJobsNotWorking() async throws {
+        let rig = try Rig.make(capabilities: [.mail, .files], offers: [Rig.filesOffer])
+        let inlet = try await rig.connect("a@x", offer: Rig.filesOffer)
+        let before = try XCTUnwrap(rig.connections.setup.inlets.first?.state)
+        let gate = Gate()
+        rig.provider.ping.setGate(gate)
+        rig.provider.ping.setFailure(FakeError.down)
+        let mail = Task { @MainActor in _ = await rig.cadence.trigger(inlet.id, .mail) }
+        let started = await until { rig.provider.ping.calls == 1 }
+        XCTAssertTrue(started)
+        await rig.cadence.trigger(inlet.id, .files)
+        XCTAssertEqual(rig.connections.setup.inlets[0].state, .working)
+        await gate.release()
+        await mail.value
+        guard case .connected(let probedBefore) = before, case .connected(let probedAfter) = rig.connections.setup.inlets[0].state else {
+            return XCTFail("state \(rig.connections.setup.inlets[0].state)")
+        }
+        XCTAssertGreaterThan(probedAfter, probedBefore)
     }
 
     @MainActor
@@ -1198,7 +1325,7 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(readings.map(\.state).filter { $0 == .connected }.count, 2)
         XCTAssertEqual(IntegrationReadEngine.badCount(readings), 0)
         let held = IntegrationReadEngine.values(of: try XCTUnwrap(readings.first { $0.info.id == "airtable" }), keychain: rig.keychain)
-        XCTAssertEqual(held, IntegrationValues(text: ["base": "appABCDEFGHIJKLMN"], held: ["base", "token"]))
+        XCTAssertEqual(held, IntegrationValues(text: ["base": "appABCDEFGHIJKLMN"]))
         XCTAssertEqual(IntegrationReadEngine.values(of: try XCTUnwrap(readings.first { $0.info.id == "sevdesk" }), keychain: rig.keychain), .none)
     }
 
@@ -1268,7 +1395,7 @@ final class HubTests: XCTestCase {
         XCTAssertNotNil(reading.areas.first?.lastSync)
         XCTAssertEqual(reading.areas.first?.running, false)
         let held = IntegrationReadEngine.values(of: reading, keychain: rig.keychain)
-        XCTAssertEqual(held.held, ["token"])
+        XCTAssertEqual(reading.heldSlots, ["token"])
         XCTAssertEqual(held.text, [:])
         rig.provider.setAccepting(false)
         _ = try? await rig.connections.setup.probe(inlet.id)
@@ -1285,21 +1412,18 @@ final class HubTests: XCTestCase {
 
     func testLinkStateMapsAndCombinesBySeverity() {
         XCTAssertEqual(LinkState(.created), .notConnected)
-        XCTAssertEqual(LinkState(.locked), .notConnected)
-        XCTAssertEqual(LinkState(.signedIn), .stored)
         XCTAssertEqual(LinkState(.connecting), .connecting)
         XCTAssertEqual(LinkState(.connected(probed: .distantPast)), .connected)
         XCTAssertEqual(LinkState(.working), .working)
         XCTAssertEqual(LinkState(.failed(Hint(text: "x"))), .failed)
         XCTAssertEqual(LinkState(.keychainUnreadable), .unreadable)
-        XCTAssertEqual(LinkState(.orphaned), .orphaned)
         XCTAssertEqual(LinkState.combined([]), .notConnected)
-        XCTAssertEqual(LinkState.combined([.connected, .failed, .stored]), .failed)
+        XCTAssertEqual(LinkState.combined([.connected, .failed, .working]), .failed)
         XCTAssertEqual(LinkState.combined([.connected, .unreadable]), .unreadable)
         XCTAssertEqual(LinkState.combined([.notConnected, .connected]), .connected)
         XCTAssertEqual(LinkState.allCases.filter(\.isBad), [.failed, .unreadable])
-        XCTAssertEqual(LinkState.allCases.filter(\.isActive), [.connected, .stored, .working])
-        XCTAssertEqual(LinkState.allCases.filter(\.canDisconnect), [.connected, .stored, .working, .failed])
+        XCTAssertEqual(LinkState.allCases.filter(\.isActive), [.connected, .working])
+        XCTAssertEqual(LinkState.allCases.filter(\.canDisconnect), [.connected, .working, .failed])
         XCTAssertEqual(Set(LinkState.allCases.map(\.key)).count, LinkState.allCases.count)
     }
 
@@ -1355,7 +1479,7 @@ final class HubTests: XCTestCase {
     func testSettingsVocabularyCoversEveryGroupWithUniqueKeys() {
         XCTAssertEqual(Set(SettingsSection.allCases.map(\.group)), Set(SettingsGroup.allCases))
         XCTAssertEqual(SettingsGroup.allCases.flatMap(\.sections).count, SettingsSection.allCases.count)
-        let keys = SettingsGroup.allCases.map(\.key) + SettingsSection.allCases.flatMap { [$0.key, $0.detailKey] }
+        let keys = SettingsGroup.allCases.map(\.key) + SettingsSection.allCases.map(\.key) + SettingsSection.allCases.compactMap(\.detailKey)
             + SettingsLabel.allCases.map(\.key) + CompanyEntry.allCases.map(\.key) + ImprintEntry.allCases.map(\.key)
             + LockDelay.allCases.map(\.key) + StartDestination.allCases.map(\.key)
         XCTAssertEqual(Set(keys).count, keys.count)
@@ -1372,7 +1496,7 @@ final class HubTests: XCTestCase {
     @MainActor
     func testSettingsStatePersistsEveryChoiceAndStartsWithDefaults() throws {
         let database = try SQLiteStore.inMemory()
-        let state = try SettingsState(settings: SettingStore(database: database))
+        let state = try SettingsState(settings: SettingStore(database: database), templates: emptyTemplates())
         XCTAssertEqual(state.appearance, .system)
         XCTAssertEqual(state.destination, .mail)
         XCTAssertTrue(state.lockOn)
@@ -1388,7 +1512,7 @@ final class HubTests: XCTestCase {
         state.updateProfile { $0.name = "Anna Berg"; $0.role = "Lead"; $0.code = "AB"; $0.phone = "123"; $0.birthdays = true }
         state.setCompany(.address, "Street 1")
         state.setImprint(.signature, "Anna")
-        let again = try SettingsState(settings: SettingStore(database: database))
+        let again = try SettingsState(settings: SettingStore(database: database), templates: emptyTemplates())
         XCTAssertEqual(again.appearance, .dark)
         XCTAssertEqual(again.destination, .lastOpen)
         XCTAssertFalse(again.lockOn)
@@ -1401,17 +1525,17 @@ final class HubTests: XCTestCase {
         try database.write { db in
             try db.execute(sql: "UPDATE setting SET value = ? WHERE key = ?", arguments: [Data("garbage".utf8), SettingsKey.appearance])
         }
-        XCTAssertEqual(try SettingsState(settings: SettingStore(database: database)).appearance, .system)
+        XCTAssertEqual(try SettingsState(settings: SettingStore(database: database), templates: emptyTemplates()).appearance, .system)
     }
 
     @MainActor
     func testMailboxDisplayIsStoredPerMailbox() throws {
         let database = try SQLiteStore.inMemory()
-        let state = try SettingsState(settings: SettingStore(database: database))
+        let state = try SettingsState(settings: SettingStore(database: database), templates: emptyTemplates())
         XCTAssertEqual(state.display("gmail-a"), .ownName)
         state.setDisplay(.domain, for: "gmail-a")
         state.setDisplay(.localPart, for: "imap-b")
-        let again = try SettingsState(settings: SettingStore(database: database))
+        let again = try SettingsState(settings: SettingStore(database: database), templates: emptyTemplates())
         XCTAssertEqual(again.display("gmail-a"), .domain)
         XCTAssertEqual(again.display("imap-b"), .localPart)
         XCTAssertEqual(again.display("other"), .ownName)
@@ -1419,13 +1543,13 @@ final class HubTests: XCTestCase {
             try db.execute(sql: "UPDATE setting SET value = ? WHERE key = ?",
                            arguments: [Data("garbage".utf8), SettingsKey.mailboxDisplay("gmail-a")])
         }
-        XCTAssertEqual(try SettingsState(settings: SettingStore(database: database)).display("gmail-a"), .ownName)
+        XCTAssertEqual(try SettingsState(settings: SettingStore(database: database), templates: emptyTemplates()).display("gmail-a"), .ownName)
         state.setDisplay(.domain, for: "gmail-a")
         state.setDisplay(.domain, for: "gmail-ab")
         state.forget("gmail-a")
         XCTAssertEqual(state.display("gmail-a"), .ownName)
         XCTAssertEqual(state.display("gmail-ab"), .domain)
-        let reloaded = try SettingsState(settings: SettingStore(database: database))
+        let reloaded = try SettingsState(settings: SettingStore(database: database), templates: emptyTemplates())
         XCTAssertEqual(reloaded.display("gmail-a"), .ownName)
         XCTAssertEqual(reloaded.display("gmail-ab"), .domain)
         XCTAssertEqual(reloaded.display("imap-b"), .localPart)
@@ -1435,38 +1559,55 @@ final class HubTests: XCTestCase {
     func testMailboxRangeIsStoredPerMailboxAndIgnoresOldValues() throws {
         let database = try SQLiteStore.inMemory()
         let store = SettingStore(database: database)
-        let state = try SettingsState(settings: store)
+        let state = try SettingsState(settings: store, templates: emptyTemplates())
         XCTAssertEqual(state.range("gmail-a"), .days30)
         state.setRange(.year, for: "gmail-a")
         state.setRange(.all, for: "gmail-ab")
         try store.store("latest500", forKey: SettingsKey.mailboxRange("imap-b"))
-        let again = try SettingsState(settings: store)
+        let again = try SettingsState(settings: store, templates: emptyTemplates())
         XCTAssertEqual(again.range("gmail-a"), .year)
         XCTAssertEqual(again.range("gmail-ab"), .all)
         XCTAssertEqual(again.range("imap-b"), .days30)
         state.forget("gmail-a")
         XCTAssertEqual(state.range("gmail-a"), .days30)
-        XCTAssertEqual(try SettingsState(settings: store).range("gmail-ab"), .all)
-        XCTAssertEqual(MailboxRange.year.key, "settings.account.range.year")
+        XCTAssertEqual(try SettingsState(settings: store, templates: emptyTemplates()).range("gmail-ab"), .all)
+        XCTAssertEqual(MailboxRange.year.key, "settings.mailStore.period.y1")
+    }
+
+    @MainActor
+    func testMailStoreSettingsPersistAndFolderBookmarkRoundTrips() throws {
+        let database = try SQLiteStore.inMemory()
+        let store = SettingStore(database: database)
+        let state = try SettingsState(settings: store, templates: emptyTemplates())
+        XCTAssertEqual(state.mailStore, MailStoreSettings())
+        XCTAssertNil(state.mailStore.limit.bytes)
+        state.setStoreAttachments(true)
+        state.setStoreLimit(.gb5)
+        state.setStoreFolder(Data([1, 2, 3]))
+        let again = try SettingsState(settings: store, templates: emptyTemplates())
+        XCTAssertEqual(again.mailStore, MailStoreSettings(attachments: true, limit: .gb5, folder: Data([1, 2, 3])))
+        XCTAssertEqual(again.mailStore.limit.bytes, 5_000_000_000)
+        again.setStoreFolder(nil)
+        XCTAssertNil(try SettingsState(settings: store, templates: emptyTemplates()).mailStore.folder)
     }
 
     @MainActor
     func testSignatureIsStoredPerMailboxAndForgottenWithIt() throws {
         let store = SettingStore(database: try SQLiteStore.inMemory())
-        let state = try SettingsState(settings: store)
+        let state = try SettingsState(settings: store, templates: emptyTemplates())
         XCTAssertNil(state.signature("a"))
         state.setSignature("Jonas\nStudio", for: "a")
         XCTAssertEqual(state.signature("a"), MailboxSignature(text: "Jonas\nStudio", onNew: true, aboveQuote: false))
         state.setSignatureOnNew(false, for: "a")
         state.setSignatureAboveQuote(true, for: "a")
         state.setSignature("", for: "b")
-        let again = try SettingsState(settings: store)
+        let again = try SettingsState(settings: store, templates: emptyTemplates())
         XCTAssertEqual(again.signature("a"), MailboxSignature(text: "Jonas\nStudio", onNew: false, aboveQuote: true))
         XCTAssertNil(again.signature("b")?.block)
         XCTAssertEqual(again.signature("a")?.name, "Jonas")
         state.forget("a")
         state.removeSignature(for: "b")
-        let gone = try SettingsState(settings: store)
+        let gone = try SettingsState(settings: store, templates: emptyTemplates())
         XCTAssertNil(gone.signature("a"))
         XCTAssertNil(gone.signature("b"))
         XCTAssertNil(try store.value(SettingsKey.mailboxSignatureNew("a"), as: Bool.self))
@@ -1488,17 +1629,18 @@ final class HubTests: XCTestCase {
     }
 
     @MainActor
-    func testSettingsStateShowsOneCardAndOpensTheGroupsFirstCard() throws {
-        let state = try SettingsState(settings: SettingStore(database: SQLiteStore.inMemory()))
+    func testSettingsStateShowsOneCardAndKeepsItWhenTheGroupChanges() throws {
+        let state = try SettingsState(settings: SettingStore(database: SQLiteStore.inMemory()), templates: emptyTemplates())
         XCTAssertEqual(state.group, .connections)
         XCTAssertEqual(state.front, "google")
         for id in ["a", "b", "c"] { state.open(id) }
         XCTAssertEqual(state.front, "c")
         state.select(.company)
         XCTAssertEqual(state.group, .company)
-        XCTAssertEqual(state.front, "companyData")
+        XCTAssertEqual(state.front, "c")
         state.select(.folders)
-        XCTAssertEqual(state.front, "folders")
+        XCTAssertEqual(state.group, .folders)
+        XCTAssertEqual(state.front, "c")
         XCTAssertEqual(SettingsGroup.folders.sections, [.folders, .templates])
         state.notify("settings.toast.copied", name: "n")
         XCTAssertEqual([state.toast, state.toastName], ["settings.toast.copied", "n"])
@@ -1508,6 +1650,14 @@ final class HubTests: XCTestCase {
         state.dismissToast()
         XCTAssertNil(state.toast)
         XCTAssertNil(state.toastName)
+        var retried = false
+        state.notify("settings.projectRoot.syncFailed", failed: true) { retried = true }
+        XCTAssertTrue(state.toastFailed)
+        state.toastRetry?()
+        XCTAssertTrue(retried)
+        state.dismissToast()
+        XCTAssertFalse(state.toastFailed)
+        XCTAssertNil(state.toastRetry)
     }
 
     @MainActor
@@ -1567,7 +1717,7 @@ final class HubTests: XCTestCase {
             await counter.run()
             return SyncReport(inlet: inlet, capability: capability, result: .finished(items: 0))
         }
-        let first = Task { await cadence.trigger("i1", .mail) }
+        let first = Task { _ = await cadence.trigger("i1", .mail) }
         for _ in 0..<400 {
             if await counter.calls == 1 { break }
             try await Task.sleep(for: .milliseconds(5))
@@ -1870,5 +2020,396 @@ final class HubTests: XCTestCase {
         XCTAssertEqual(partial.settings, 1)
         XCTAssertEqual(Set(partial.skipped), ["table:inlet", "table:key_slot", "table:inlet_report", "table:cost_day"])
         XCTAssertNotNil(try SettingStore(database: target).all()["limit|mail"])
+    }
+}
+
+extension HubTests {
+    private static let exportSentinel = "SENTINEL-SECRET-7f3a"
+
+    private func exportBytes(_ text: String) -> Data { Data(text.utf8) }
+
+    private func exportFixture() -> ExportSource {
+        let secret = Self.exportSentinel
+        var source = ExportSource(generatedAt: Date(timeIntervalSince1970: 1_700_000_000))
+        source.settings = [
+            "settings.identity.name": exportBytes("\"Jo\""),
+            "settings.company.name": exportBytes("\"Firma\""),
+            "settings.mailbox.name.a1": exportBytes("\"Box\""),
+            "appearance": exportBytes("\"dark\""),
+            "settings.api.token": exportBytes("\"\(secret)\""),
+            "settings.keychain.slot": exportBytes("\"\(secret)\""),
+            "google.refreshToken": exportBytes("\"\(secret)\""),
+            "unlisted.key": exportBytes("\"SENTINEL-UNLISTED\""),
+        ]
+        source.contacts = exportBytes("[{\"name\":\"A\",\"address\":\"a@b.c\",\"accessToken\":\"\(secret)\",\"password\":\"\(secret)\"}]")
+        source.tables[.services] = [[
+            "id": .text("a1"),
+            "json": .blob(exportBytes("{\"id\":\"a1\",\"provider\":\"google\",\"state\":{\"failed\":{\"refresh_token\":\"\(secret)\"}}}")),
+        ]]
+        source.tables[.chatMessages] = [[
+            "id": .text("c1"), "role": .text("user"),
+            "blocksJSON": .blob(exportBytes("[{\"type\":\"text\",\"text\":\"Hallo\",\"apiKey\":\"\(secret)\"}]")),
+        ]]
+        source.tables[.mailDrafts] = [[
+            "id": .text("d1"), "inlet": .text("a1"),
+            "draft": .blob(exportBytes("{\"subject\":\"S\",\"attachments\":[{\"filename\":\"f.pdf\",\"data\":\"QUJDREVGRw==\"}]}")),
+        ]]
+        return source
+    }
+
+    private func exportText(_ files: [ExportFile]) -> String {
+        files.map { String(decoding: $0.data, as: UTF8.self) }.joined(separator: "\n")
+    }
+
+    private func archiveEntries(_ data: Data) -> [String: Data]? {
+        let bytes = [UInt8](data)
+        func u16(_ at: Int) -> Int { Int(bytes[at]) | Int(bytes[at + 1]) << 8 }
+        func u32(_ at: Int) -> Int { u16(at) | u16(at + 2) << 16 }
+        guard bytes.count >= 22, u32(bytes.count - 22) == 0x06054B50 else { return nil }
+        let count = u16(bytes.count - 22 + 10)
+        var at = u32(bytes.count - 22 + 16)
+        var result: [String: Data] = [:]
+        for _ in 0..<count {
+            guard u32(at) == 0x02014B50 else { return nil }
+            let crc = u32(at + 16)
+            let size = u32(at + 24)
+            let nameLength = u16(at + 28)
+            let offset = u32(at + 42)
+            let name = String(decoding: bytes[(at + 46)..<(at + 46 + nameLength)], as: UTF8.self)
+            guard u32(offset) == 0x04034B50 else { return nil }
+            let start = offset + 30 + u16(offset + 26) + u16(offset + 28)
+            let payload = Data(bytes[start..<(start + size)])
+            guard Int(ArchiveEngine.checksum(payload)) == crc else { return nil }
+            result[name] = payload
+            at += 46 + nameLength + u16(at + 30) + u16(at + 32)
+        }
+        return result
+    }
+
+    func testExportNeverCarriesSecrets() {
+        let files = ExportEngine.files(from: exportFixture())
+        let text = exportText(files)
+        XCTAssertFalse(text.contains(Self.exportSentinel))
+        XCTAssertFalse(text.contains("SENTINEL-UNLISTED"))
+        XCTAssertFalse(text.contains("QUJDREVGRw=="))
+        XCTAssertTrue(text.contains("Jo"))
+        XCTAssertTrue(text.contains("Hallo"))
+        XCTAssertTrue(text.contains("a@b.c"))
+        XCTAssertTrue(files.contains { $0.path == "manifest.json" })
+    }
+
+    func testExportListsOnlyVettedColumns() {
+        for table in ExportTable.allCases {
+            XCTAssertFalse(table.columns.contains { ExportEngine.isSecret($0) }, table.sqlName)
+            XCTAssertFalse(ExportEngine.isSecret(table.sqlName))
+        }
+        XCTAssertFalse(ExportTable.allCases.contains { $0.sqlName == "key_slot" })
+        for name in ["refresh_token", "accessToken", "client_secret", "Password", "apiKey", "Authorization", "keychainSlot"] {
+            XCTAssertTrue(ExportEngine.isSecret(name), name)
+        }
+        for name in ["subject", "signature", "name", "address"] {
+            XCTAssertFalse(ExportEngine.isSecret(name), name)
+        }
+    }
+
+    func testExportPathsStayInsideTheArchive() {
+        var source = ExportSource(generatedAt: Date())
+        source.tables[.mailMessages] = [
+            ["inlet": .text("../../etc"), "id": .text("1")],
+            ["inlet": .text("/abs/olute"), "id": .text("2")],
+        ]
+        source.rawMails = [
+            ExportRawMail(inlet: "../x", id: "../../1", data: exportBytes("a")),
+            ExportRawMail(inlet: "../x", id: "..%2F..%2F1", data: exportBytes("b")),
+            ExportRawMail(inlet: "", id: "", data: exportBytes("c")),
+        ]
+        let paths = ExportEngine.files(from: source).map(\.path)
+        XCTAssertEqual(Set(paths).count, paths.count)
+        for path in paths {
+            XCTAssertFalse(path.hasPrefix("/"), path)
+            XCTAssertFalse(path.split(separator: "/").contains { $0.hasPrefix("..") || $0.isEmpty }, path)
+        }
+        XCTAssertEqual(ExportEngine.component("../.."), "_..")
+        XCTAssertEqual(ExportEngine.component(".."), "_")
+        XCTAssertEqual(ExportEngine.component("a b/ü"), "a_b__")
+    }
+
+    func testExportGroupsMailPerMailbox() {
+        var source = ExportSource(generatedAt: Date())
+        source.tables[.mailMessages] = [
+            ["inlet": .text("a1"), "id": .text("1"), "subject": .text("Eins")],
+            ["inlet": .text("b2"), "id": .text("2"), "subject": .text("Zwei")],
+            ["inlet": .text("a1"), "id": .text("3"), "subject": .text("Drei")],
+        ]
+        let files = ExportEngine.files(from: source)
+        let first = files.first { $0.path == "mail/a1/messages.json" }.map { String(decoding: $0.data, as: UTF8.self) } ?? ""
+        let second = files.first { $0.path == "mail/b2/messages.json" }.map { String(decoding: $0.data, as: UTF8.self) } ?? ""
+        XCTAssertTrue(first.contains("Eins") && first.contains("Drei") && !first.contains("Zwei"))
+        XCTAssertTrue(second.contains("Zwei"))
+    }
+
+    func testArchiveRoundTrip() throws {
+        XCTAssertEqual(ArchiveEngine.checksum(exportBytes("123456789")), 0xCBF4_3926)
+        let files = [
+            ExportFile(path: "a.json", data: exportBytes("{\"x\":1}")),
+            ExportFile(path: "mail/\u{00FC}/b.eml", data: Data((0..<5000).map { UInt8($0 % 251) })),
+            ExportFile(path: "empty.txt", data: Data()),
+        ]
+        let archive = try ArchiveEngine.archive(files, at: Date())
+        let entries = try XCTUnwrap(archiveEntries(archive))
+        XCTAssertEqual(entries.count, files.count)
+        for file in files { XCTAssertEqual(entries[file.path], file.data) }
+        let all = try ArchiveEngine.archive(ExportEngine.files(from: exportFixture()), at: Date())
+        XCTAssertNotNil(archiveEntries(all))
+    }
+
+    func testExportStoreReadsOnlyListedData() throws {
+        let folder = HubTests.scratch("export-")
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let contacts = Data("[{\"name\":\"A\",\"address\":\"a@b.c\"}]".utf8)
+        let store = ExportStore(directory: folder, contacts: { contacts })
+        XCTAssertFalse(store.isAvailable)
+        XCTAssertThrowsError(try store.collect(at: Date()))
+        let database = try DatabaseStore.open(in: folder)
+        let secret = Self.exportSentinel
+        try database.write { db in
+            try db.execute(sql: "INSERT INTO setting (key, value) VALUES (?, ?)",
+                           arguments: ["settings.identity.name", Data("\"Jo\"".utf8)])
+            try db.execute(sql: "INSERT INTO setting (key, value) VALUES (?, ?)",
+                           arguments: ["settings.api.token", Data("\"\(secret)\"".utf8)])
+            try db.execute(sql: "INSERT INTO key_slot (inlet, name) VALUES ('a1', 'refreshTokenSlot')")
+            try db.execute(sql: """
+                INSERT INTO mail_pop (inlet, uid, folder, head, snippet, attachments, raw, seen, flagged, hidden, onServer, receivedAt, fetchedAt)
+                VALUES ('a1', '7', 'INBOX', x'00', 'Hi', x'5B5D', ?, 1, 0, 0, 1, 1, 1)
+                """, arguments: [Data("From: x\n\nhello".utf8)])
+        }
+        XCTAssertTrue(store.isAvailable)
+        let files = ExportEngine.files(from: try store.collect(at: Date()))
+        let text = exportText(files)
+        XCTAssertFalse(text.contains(secret))
+        XCTAssertFalse(text.contains("refreshTokenSlot"))
+        XCTAssertTrue(text.contains("Jo"))
+        XCTAssertTrue(text.contains("a@b.c"))
+        XCTAssertEqual(files.first { $0.path == "mail/a1/pop/7.eml" }?.data, Data("From: x\n\nhello".utf8))
+        let archive = try ArchiveEngine.archive(files, at: Date())
+        let target = folder.appendingPathComponent("out.zip")
+        try store.save(archive, to: target)
+        XCTAssertEqual(try Data(contentsOf: target), archive)
+        XCTAssertThrowsError(try store.save(archive, to: folder.appendingPathComponent("missing/out.zip")))
+    }
+}
+
+extension HubTests {
+    static func scratch(_ prefix: String) -> URL {
+        URL(fileURLWithPath: ProcessInfo.processInfo.environment["TMPDIR"] ?? NSTemporaryDirectory(), isDirectory: true)
+            .appendingPathComponent(prefix + UUID().uuidString, isDirectory: true)
+    }
+
+    private static let plainInfo = IntegrationInfo(
+        id: "fake", access: .password, companyOwned: false, fields: [], areas: [IntegrationArea(id: "mail", capability: .mail)],
+        extras: [], listsAccounts: true, providers: ["fake"], logo: nil)
+
+    private func storedState(_ rig: Rig) throws -> InletState {
+        try XCTUnwrap(InletStore(database: rig.database).load().first?.state)
+    }
+
+    @MainActor
+    func testSyncNowReportsFinishedSkippedAndFailedInsteadOfTheTimestamp() async throws {
+        let rig = try Rig.make()
+        let inlet = try await rig.connect("a@x")
+        let first = await rig.connections.rules.syncNow(inlet.id, .mail)
+        XCTAssertEqual(first.result, .finished(items: 1))
+        let gate = Gate()
+        rig.provider.ping.setGate(gate)
+        let running = Task { @MainActor in await rig.connections.rules.syncNow(inlet.id, .mail) }
+        let started = await until { rig.provider.ping.calls == 2 }
+        XCTAssertTrue(started)
+        let second = await rig.connections.rules.syncNow(inlet.id, .mail)
+        XCTAssertEqual(second.result, .skipped)
+        await gate.release()
+        let third = await running.value
+        XCTAssertEqual(third.result, .finished(items: 1))
+        rig.provider.ping.setGate(nil)
+        rig.provider.ping.setFailure(FakeError.refused)
+        let failed = await rig.connections.rules.syncNow(inlet.id, .mail)
+        guard case .failed = failed.result else { return XCTFail("result \(failed.result)") }
+    }
+
+    func testTimerCadenceReturnsTheRunnersReportAndSkipsWhileThePairRuns() async throws {
+        let counter = Counter()
+        await counter.block()
+        let cadence = TimerCadence(sleep: { _ in try await Task.sleep(for: .seconds(3600)) })
+        let idle = await cadence.trigger("i1", .mail)
+        XCTAssertEqual(idle.result, .skipped)
+        cadence.attach { inlet, capability in
+            await counter.run()
+            return SyncReport(inlet: inlet, capability: capability, result: .finished(items: 4))
+        }
+        let first = Task { await cadence.trigger("i1", .mail) }
+        for _ in 0..<400 {
+            if await counter.calls == 1 { break }
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        let second = await cadence.trigger("i1", .mail)
+        XCTAssertEqual(second.result, .skipped)
+        await counter.release()
+        let report = await first.value
+        XCTAssertEqual(report.result, .finished(items: 4))
+    }
+
+    @MainActor
+    func testProbeDuringASyncNeverStrandsTheWorkingStateAfterItsTransientRejection() async throws {
+        let rig = try Rig.make(capabilities: [.mail, .files], offers: [Rig.filesOffer])
+        let inlet = try await rig.connect("a@x", offer: Rig.filesOffer)
+        let gate = Gate()
+        rig.provider.ping.setGate(gate)
+        let sync = Task { @MainActor in await rig.cadence.trigger(inlet.id, .mail) }
+        let started = await until { rig.provider.ping.calls == 1 }
+        XCTAssertTrue(started)
+        let probeGate = Gate()
+        rig.provider.setProbeGate(probeGate)
+        rig.provider.setAccepting(false)
+        rig.provider.setRejectionKind(.transient)
+        let probe = Task { @MainActor in try? await rig.connections.setup.probe(inlet.id) }
+        let probing = await until { rig.connections.setup.inlets[0].state == .connecting }
+        XCTAssertTrue(probing)
+        await gate.release()
+        _ = await sync.value
+        XCTAssertEqual(rig.connections.setup.inlets[0].state, .connecting)
+        await probeGate.release()
+        _ = await probe.value
+        guard case .connected = rig.connections.setup.inlets[0].state else {
+            return XCTFail("state \(rig.connections.setup.inlets[0].state)")
+        }
+    }
+
+    @MainActor
+    func testAFailureOfOneJobIsKeptWhenAParallelJobSucceedsAfterwards() async throws {
+        let rig = try Rig.make(capabilities: [.mail, .files], offers: [Rig.filesOffer])
+        let inlet = try await rig.connect("a@x", offer: Rig.filesOffer)
+        let gate = Gate()
+        rig.provider.setFilesGate(gate)
+        let files = Task { @MainActor in await rig.cadence.trigger(inlet.id, .files) }
+        let started = await until { rig.connections.rules.queue.count == 1 }
+        XCTAssertTrue(started)
+        rig.provider.ping.setFailure(FakeError.refused)
+        await rig.cadence.trigger(inlet.id, .mail)
+        guard case .failed = rig.connections.setup.inlets[0].state else { return XCTFail("state") }
+        await gate.release()
+        let report = await files.value
+        XCTAssertEqual(report.result, .finished(items: 1))
+        guard case .failed = rig.connections.setup.inlets[0].state else { return XCTFail("state after") }
+        guard case .failed = try storedState(rig) else { return XCTFail("stored") }
+    }
+
+    @MainActor
+    func testProbedMovesInMemoryAndIsStoredOnlyWhenTheStateChangesKind() async throws {
+        let rig = try Rig.make()
+        let inlet = try await rig.connect("a@x")
+        let stored = try storedState(rig)
+        guard case .connected(let first) = stored else { return XCTFail("stored") }
+        await rig.cadence.trigger(inlet.id, .mail)
+        guard case .connected(let seen) = rig.connections.setup.inlets[0].state else { return XCTFail("state") }
+        XCTAssertGreaterThan(seen, first)
+        XCTAssertEqual(try storedState(rig), stored)
+        rig.provider.ping.setFailure(FakeError.refused)
+        await rig.cadence.trigger(inlet.id, .mail)
+        guard case .failed = try storedState(rig) else { return XCTFail("failed not stored") }
+    }
+
+    @MainActor
+    func testAnUnreadableKeychainIsShownButNeverStored() async throws {
+        let database = try SQLiteStore.inMemory()
+        let keychain = FakeKeychain()
+        let first = try Rig.make(database: database, keychain: keychain)
+        let inlet = try await first.connect("a@x")
+        keychain.setUnreadable(true)
+        let lost = try Rig.make(database: database, provider: first.provider, keychain: keychain)
+        XCTAssertThrowsError(try lost.connections.access.port((any PingPort).self, for: inlet.id))
+        XCTAssertEqual(lost.connections.setup.inlets[0].state, .keychainUnreadable)
+        guard case .connected = try storedState(lost) else { return XCTFail("stored") }
+        let reading = IntegrationReadEngine.read(Self.plainInfo, setup: lost.connections.setup, rules: lost.connections.rules)
+        XCTAssertEqual(reading.state, .unreadable)
+        XCTAssertEqual(reading.heldSlots, ["token"])
+        keychain.setUnreadable(false)
+        _ = try await lost.connections.setup.probe(inlet.id)
+        guard case .connected = lost.connections.setup.inlets[0].state else { return XCTFail("recovered") }
+    }
+
+    func testLegacyInletStatesDecodeToDefinedRemovableStates() throws {
+        func decode(_ json: String) throws -> InletState {
+            try JSONDecoder().decode(InletState.self, from: Data(json.utf8))
+        }
+        XCTAssertEqual(try decode(#"{"orphaned":{}}"#), .keychainUnreadable)
+        XCTAssertEqual(try decode(#"{"locked":{}}"#), .keychainUnreadable)
+        XCTAssertEqual(try decode(#"{"signedIn":{}}"#), .connected(probed: .distantPast))
+        XCTAssertTrue(try decode(#"{"orphaned":{}}"#).canRenew)
+        let states: [InletState] = [.created, .connecting, .connected(probed: Date(timeIntervalSince1970: 5)), .working,
+                                    .failed(Hint(text: "hint.x", detail: "d")), .keychainUnreadable]
+        for state in states {
+            let data = try JSONEncoder().encode(state)
+            XCTAssertEqual(try JSONDecoder().decode(InletState.self, from: data), state)
+        }
+        XCTAssertThrowsError(try decode(#"{"vanished":{}}"#))
+    }
+
+    @MainActor
+    func testAnInletStoredWithALegacyStateLoadsAsRenewableAndCanBeRemoved() async throws {
+        let rig = try Rig.make()
+        let inlet = try await rig.connect("a@x")
+        let json = try XCTUnwrap(String(data: JSONEncoder().encode(inlet), encoding: .utf8))
+        let legacy = json.replacingOccurrences(of: #""connected""#, with: #""orphaned""#)
+        XCTAssertNotEqual(legacy, json)
+        try rig.database.write { db in
+            try db.execute(sql: "UPDATE inlet SET json = ? WHERE id = ?", arguments: [Data(legacy.utf8), inlet.id])
+        }
+        let again = try Rig.make(database: rig.database, provider: rig.provider, keychain: rig.keychain)
+        XCTAssertEqual(again.connections.setup.inlets.map(\.state), [.keychainUnreadable])
+        let reading = IntegrationReadEngine.read(Self.plainInfo, setup: again.connections.setup, rules: again.connections.rules)
+        XCTAssertEqual(reading.step, .renew(inlet.id))
+        try await again.connections.setup.remove(inlet.id)
+        XCTAssertEqual(again.connections.setup.inlets, [])
+    }
+
+    @MainActor
+    func testTheProfileIsNormalisedTheSameWayOnLoadAndOnWrite() throws {
+        let database = try SQLiteStore.inMemory()
+        let store = SettingStore(database: database)
+        try store.store("  Anna   Maria  ", forKey: SettingsKey.identityName)
+        let loaded = try SettingsState(settings: store, templates: emptyTemplates())
+        XCTAssertEqual(loaded.profile.name, "Anna Maria")
+        loaded.updateProfile { $0.name = "Anna  Maria Berg " }
+        XCTAssertEqual(loaded.profile.name, "Anna Maria Berg ")
+        loaded.updateProfile { $0.role = " Lead  " }
+        loaded.finishProfile()
+        XCTAssertEqual(loaded.profile.name, "Anna Maria Berg")
+        XCTAssertEqual(loaded.profile.role, "Lead")
+        let again = try SettingsState(settings: store, templates: emptyTemplates())
+        XCTAssertEqual(again.profile.name, loaded.profile.name)
+        XCTAssertEqual(again.profile.role, loaded.profile.role)
+    }
+
+    @MainActor
+    func testTemplatesComeFromTheInjectedStoreThroughOneSource() throws {
+        let folder = HubTests.scratch("tpl-")
+        let source = folder.appendingPathComponent("source", isDirectory: true)
+        try FileManager.default.createDirectory(at: source, withIntermediateDirectories: true)
+        let file = source.appendingPathComponent("letter.html")
+        try Data("<p>x</p>".utf8).write(to: file)
+        let store = TemplateStore(directory: folder.appendingPathComponent("templates", isDirectory: true))
+        let state = try SettingsState(settings: SettingStore(database: SQLiteStore.inMemory()), templates: store)
+        XCTAssertFalse(state.hasTemplates)
+        XCTAssertNil(state.currentTemplate)
+        XCTAssertEqual(state.detailKey(of: .templates), SettingsSection.templates.detailKey)
+        XCTAssertTrue(state.addTemplate(from: file))
+        XCTAssertTrue(state.hasTemplates)
+        XCTAssertEqual(state.currentTemplate?.name, "letter")
+        XCTAssertNil(state.detailKey(of: .templates))
+        let other = try SettingsState(settings: SettingStore(database: SQLiteStore.inMemory()), templates: store)
+        XCTAssertTrue(other.hasTemplates)
+        let template = try XCTUnwrap(state.currentTemplate)
+        XCTAssertTrue(state.removeTemplate(template))
+        XCTAssertFalse(state.hasTemplates)
+        XCTAssertFalse(state.addTemplate(from: source.appendingPathComponent("missing.txt")))
     }
 }

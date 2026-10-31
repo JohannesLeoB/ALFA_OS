@@ -7,6 +7,7 @@ struct MailMenuTarget {
     let read: Bool
     let starred: Bool
     let perform: (Action) -> Void
+    var extra: [Action] = []
 
     var isMessage: Bool {
         if case .message = front { return true }
@@ -15,7 +16,7 @@ struct MailMenuTarget {
 
     func allows(_ action: Action) -> Bool {
         let slots = commands.main + commands.fan + commands.fold + commands.footLeft + commands.footRight
-        return slots.contains { $0.action == action && !$0.off }
+        return extra.contains(action) || slots.contains { $0.action == action && !$0.off }
     }
 }
 

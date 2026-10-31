@@ -78,7 +78,7 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
     let holds = Locked<Set<String>>([])
     let validity = Locked<String?>(nil)
     let failListing = Locked(false)
-    let waiting = Locked<[CheckedContinuation<Void, Never>]>([])
+    let waiting = Locked<[(name: String, continuation: CheckedContinuation<Void, Never>)]>([])
     let saves = Locked(0)
     let lastFolderID = Locked<String?>(nil)
     let separateDraftIDs = Locked(false)
@@ -126,7 +126,10 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
         return MessageBody(text: "plain text", html: bodyHTML.with { $0 })
     }
 
-    func send(_ draft: Draft) async throws { try note("send") }
+    func send(_ draft: Draft) async throws {
+        await hold("send")
+        try note("send")
+    }
     func setFlags(messageID: String, add: Set<Flag>, remove: Set<Flag>) async throws { try note("setFlags") }
     func archive(messageID: String, folderID: String?) async throws {
         lastFolderID.with { $0 = folderID }
@@ -139,6 +142,7 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
     func fetchThread(messageID: String, threadID: String) async throws -> [MessageSummary] { try note("thread"); return [] }
 
     func saveDraft(_ draft: Draft, replacing draftID: String?, into folderID: String?) async throws -> SavedDraft {
+        await hold("saveDraft")
         try note("saveDraft")
         let number = saves.with { count -> Int in
             count += 1
@@ -172,6 +176,7 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
     }
 
     func deleteDraft(id: String) async throws {
+        await hold("deleteDraft")
         try note("deleteDraft")
         removeServerDraft(id)
     }
@@ -193,6 +198,7 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
         corpus.with { $0["Drafts"]?.removeAll { $0.id == gone } }
     }
     func wasSent(messageID: String, in folderID: String?) async throws -> Bool {
+        await hold("wasSent")
         try note("wasSent")
         if let error = wasSentFailure.with({ $0 }) { throw error }
         return wasSentAnswer.with { $0 }
@@ -234,15 +240,25 @@ private final class TransportDouble: MailTransportPort, PurgePort, MirrorPort, E
     private func hold(_ name: String) async {
         guard holds.with({ $0.contains(name) }) else { return }
         await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
-            waiting.with { $0.append(continuation) }
+            waiting.with { $0.append((name, continuation)) }
         }
     }
 
     func release() {
         holds.with { $0 = [] }
-        let pending = waiting.with { queue -> [CheckedContinuation<Void, Never>] in
+        let pending = waiting.with { queue in
             defer { queue = [] }
             return queue
+        }
+        pending.forEach { $0.continuation.resume() }
+    }
+
+    func release(only name: String) {
+        holds.with { $0 = $0.subtracting([name]) }
+        let pending = waiting.with { queue -> [CheckedContinuation<Void, Never>] in
+            let mine = queue.filter { $0.name == name }.map(\.continuation)
+            queue.removeAll { $0.name == name }
+            return mine
         }
         pending.forEach { $0.resume() }
     }
@@ -465,6 +481,32 @@ final class MailTests: XCTestCase {
     }
 
     @MainActor
+    func testTheQuoteLineUsesTheTextsAndLocaleTheAppHandsIn() async throws {
+        func quote(_ locale: String) async throws -> (dated: String, undated: String) {
+            let rig = try Rig()
+            rig.transport.corpus.with {
+                $0["INBOX"] = [MessageSummary(id: "1:1:INBOX", threadID: "t", subject: "Hi", from: "Anna", fromRaw: "Anna <anna@example.com>",
+                                              toRaw: "me@example.com", snippet: "s", receivedAt: Date(timeIntervalSince1970: 1_800_000_000),
+                                              flags: [], folderIDs: ["INBOX"], messageIDHeader: "<h1@x>"),
+                               MessageSummary(id: "1:2:INBOX", threadID: "u", subject: "Ho", from: "Bea", fromRaw: "Bea <bea@example.com>",
+                                              toRaw: "me@example.com", snippet: "s", flags: [], folderIDs: ["INBOX"], messageIDHeader: "<h2@x>")]
+            }
+            let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                                   quoteTexts: { QuoteTexts(dated: "Le {1}, {2} a ecrit :", undated: "{1} a ecrit :", locale: Locale(identifier: locale)) })
+            await state.start()
+            let datedID = await state.reply(to: "1:1:INBOX")
+            let undatedID = await state.reply(to: "1:2:INBOX")
+            let dated = try XCTUnwrap(datedID), undated = try XCTUnwrap(undatedID)
+            return (try XCTUnwrap(state.draft(dated)?.draft.body), try XCTUnwrap(state.draft(undated)?.draft.body))
+        }
+        let english = try await quote("en_US")
+        let german = try await quote("de_DE")
+        XCTAssertTrue(english.dated.hasPrefix("\n\nLe ") && english.dated.contains(", Anna a ecrit :\n> "))
+        XCTAssertNotEqual(english.dated, german.dated)
+        XCTAssertTrue(english.undated.hasPrefix("\n\nBea a ecrit :\n> "))
+    }
+
+    @MainActor
     func testRepliesGoToTheReplyToAddressAndASecondReplyReopensTheFirstDraft() async throws {
         let rig = try Rig()
         rig.transport.corpus.with {
@@ -530,6 +572,176 @@ final class MailTests: XCTestCase {
         rig.access.records[1].state = .failed(Hint(text: "x"))
         await state.refreshAccounts()
         XCTAssertEqual(state.senderChoices.map(\.inlet), ["a"])
+    }
+
+    @MainActor
+    func testEditsDuringASaveLeadToOneFollowUpSaveOfTheSameProviderDraft() async throws {
+        let rig = try Rig()
+        rig.transport.separateDraftIDs.with { $0 = true }
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                               autosavePause: .milliseconds(10), autosaveInterval: .seconds(60))
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.subject = "First" }
+        rig.transport.holds.with { $0 = ["saveDraft"] }
+        let first = Task { await state.save(id) }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        state.edit(id) { $0.subject = "Second" }
+        XCTAssertEqual(state.draft(id)?.state, .saving)
+        try await Task.sleep(for: .milliseconds(80))
+        XCTAssertEqual(rig.transport.waiting.with { $0.count }, 1)
+        rig.transport.release()
+        await first.value
+        guard case .saved = state.draft(id)?.state else { return XCTFail() }
+        XCTAssertEqual(rig.transport.saves.with { $0 }, 2)
+        XCTAssertEqual(rig.transport.drafts.with { Array($0.keys) }, [try XCTUnwrap(state.draft(id)?.remoteID)])
+        XCTAssertEqual(rig.transport.drafts.with { $0.values.first?.subject }, "Second")
+    }
+
+    @MainActor
+    func testChangingTheSenderDuringASaveKeepsTheOldMailboxDraftOffTheMovedCard() async throws {
+        let rig = try Rig()
+        _ = rig.addMailbox("b", prefix: "2")
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                               autosavePause: .seconds(60), autosaveInterval: .seconds(60))
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.subject = "S" }
+        rig.transport.holds.with { $0 = ["saveDraft"] }
+        let saving = Task { await state.save(id) }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        let moving = Task { await state.setFrom(id, inlet: "b") }
+        try await Task.sleep(for: .milliseconds(40))
+        XCTAssertEqual(state.draft(id)?.inlet, "a")
+        rig.transport.release()
+        await saving.value
+        await moving.value
+        let moved = try XCTUnwrap(state.draft(id))
+        XCTAssertEqual(moved.inlet, "b")
+        XCTAssertNil(moved.remoteID)
+        XCTAssertNil(moved.mirrorID)
+        XCTAssertEqual(moved.state, .edited)
+        XCTAssertTrue(rig.transport.calls.with { $0.contains("deleteDraft") })
+    }
+
+    @MainActor
+    private func failedSend() async throws -> (rig: Rig, state: InboxState, id: UUID, item: OutboxItem) {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                               autosavePause: .seconds(60), autosaveInterval: .seconds(60))
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.addRecipient(id, .to, entry: "x@y.de")
+        state.edit(id) { $0.subject = "S" }
+        rig.transport.failure.with { $0 = MailFailure.smtpRejected(550, "5.1.1 no such user") }
+        await state.send(id)
+        rig.transport.failure.with { $0 = nil }
+        guard case .sendFailed = state.draft(id)?.state, let item = rig.outbox.outbox.first else {
+            XCTFail()
+            throw MailFailure.timeout
+        }
+        return (rig, state, id, item)
+    }
+
+    @MainActor
+    func testAnOutboxMailThatIsBeingCheckedIsNeitherSavedAsADraftNorDiscarded() async throws {
+        let (rig, state, id, item) = try await failedSend()
+        rig.transport.holds.with { $0 = ["wasSent"] }
+        let retry = Task { @MainActor in await rig.outbox.resend(item.id, item.draft, draftID: nil) }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        XCTAssertEqual(rig.outbox.outbox.first?.state, .checking)
+        XCTAssertFalse(rig.outbox.discard(item.id))
+        await state.save(id)
+        XCTAssertEqual(rig.transport.saves.with { $0 }, 0)
+        XCTAssertEqual(state.draft(id)?.state, .queuedInOutbox)
+        XCTAssertEqual(state.draft(id)?.outboxID, item.id)
+        await state.handle(.outboxChanged)
+        await state.discardQueued(item.id.uuidString)
+        XCTAssertEqual(state.draft(id)?.outboxID, item.id)
+        XCTAssertEqual(rig.outbox.outbox.count, 1)
+        rig.transport.release()
+        _ = await retry.value
+        XCTAssertTrue(rig.outbox.outbox.isEmpty)
+        XCTAssertTrue(rig.transport.calls.with { $0.contains("send") })
+        XCTAssertEqual(rig.transport.saves.with { $0 }, 0)
+    }
+
+    @MainActor
+    func testAnOutboxMailThatStartsSendingDuringASaveKeepsItsPlaceAndLeavesNoSecondCopy() async throws {
+        let (rig, state, id, item) = try await failedSend()
+        rig.transport.holds.with { $0 = ["saveDraft"] }
+        let saving = Task { @MainActor in await state.save(id) }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        rig.transport.holds.with { $0 = ["saveDraft", "wasSent"] }
+        let retry = Task { @MainActor in await rig.outbox.resend(item.id, item.draft, draftID: nil) }
+        try await wait { rig.transport.waiting.with { $0.count } == 2 }
+        rig.transport.release(only: "saveDraft")
+        await saving.value
+        XCTAssertEqual(state.draft(id)?.state, .queuedInOutbox)
+        XCTAssertEqual(state.draft(id)?.outboxID, item.id)
+        XCTAssertNil(state.draft(id)?.remoteID)
+        XCTAssertEqual(rig.outbox.outbox.count, 1)
+        XCTAssertTrue(rig.transport.calls.with { $0.contains("deleteDraft") })
+        rig.transport.release()
+        _ = await retry.value
+        XCTAssertTrue(rig.outbox.outbox.isEmpty)
+    }
+
+    @MainActor
+    func testAFailedMoveToAnotherSenderDropsTheQueuedSendInsteadOfSendingFromTheOldMailbox() async throws {
+        let rig = try Rig()
+        _ = rig.addMailbox("b", prefix: "2")
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                               autosavePause: .seconds(60), autosaveInterval: .seconds(60))
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.addRecipient(id, .to, entry: "x@y.de")
+        state.edit(id) { $0.subject = "S" }
+        await state.save(id)
+        XCTAssertNotNil(state.draft(id)?.remoteID)
+        rig.transport.holds.with { $0 = ["deleteDraft"] }
+        let moving = Task { await state.setFrom(id, inlet: "b") }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        await state.send(id)
+        rig.transport.failure.with { $0 = MailFailure.timeout }
+        rig.transport.release()
+        await moving.value
+        let kept = try XCTUnwrap(state.draft(id))
+        XCTAssertEqual(kept.inlet, "a")
+        XCTAssertNotNil(kept.remoteID)
+        XCTAssertNotNil(kept.saveFailure)
+        XCTAssertFalse([DraftState.sending, .sent, .queuedInOutbox].contains(kept.state))
+        XCTAssertFalse(rig.transport.calls.with { $0.contains("send") || $0.contains("sendDraft") })
+        XCTAssertTrue(rig.outbox.outbox.isEmpty)
+    }
+
+    @MainActor
+    func testADraftWithOnlyCcOrBccCanBeSent() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState(),
+                               autosavePause: .seconds(60), autosaveInterval: .seconds(60))
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.subject = "s" }
+        XCTAssertEqual(state.draft(id)?.canSend, false)
+        state.edit(id) { $0.bcc = "x@y.de" }
+        XCTAssertEqual(state.draft(id)?.canSend, true)
+        state.edit(id) { $0.bcc = nil; $0.cc = "x@y.de" }
+        XCTAssertEqual(state.draft(id)?.canSend, true)
+        await state.send(id)
+        XCTAssertEqual(state.draft(id)?.state, .sent)
+    }
+
+    func testTheQuoteHeadNamesTheSenderWithALocalDate() throws {
+        let date = Date(timeIntervalSince1970: 1_793_347_200)
+        let berlin = try XCTUnwrap(TimeZone(identifier: "Europe/Berlin"))
+        let head = Quoting.attribution("Anna", at: date, dated: "Am {1} schrieb {2}:", undated: "{1} schrieb:",
+                                       locale: Locale(identifier: "de_DE"), timeZone: berlin)
+        XCTAssertTrue(head.hasPrefix("Am 30. Okt. 2026"))
+        XCTAssertTrue(head.hasSuffix(" schrieb Anna:"))
+        XCTAssertFalse(head.contains("Z"))
+        XCTAssertTrue(Quoting.isAttribution(head))
+        XCTAssertEqual(Quoting.attribution("Anna", at: nil, dated: "Am {1} schrieb {2}:", undated: "{1} schrieb:"), "Anna schrieb:")
     }
 
     func testSignatureIsPlacedBelowOrAboveTheQuoteAndSwappedInPlace() {
@@ -673,7 +885,7 @@ final class MailTests: XCTestCase {
         state.toggleReceipt(id)
         XCTAssertTrue(state.asksReceipt(id))
         XCTAssertEqual(state.drafts.first { $0.id == id }?.draft.receiptTo, state.selectedAccount?.account)
-        XCTAssertEqual(MenuEngine.draftMore(receipt: true), [.item(.receipt, checked: true)])
+        XCTAssertEqual(MenuEngine.draftMore(receipt: true), [.item(.receipt, checked: true), .separator, .item(.print)])
         state.toggleReceipt(id)
         XCTAssertFalse(state.asksReceipt(id))
     }
@@ -1150,6 +1362,15 @@ final class MailTests: XCTestCase {
                        "Hi\n\n> q1\n> > q2\n>\n> q3\n\nend")
     }
 
+    func testHTMLPlainJoinsInlineBoxesAndCollapsedGaps() {
+        XCTAssertEqual(HTMLEngine.plain("<span>2</span><span>0</span> GB"), "20 GB")
+        XCTAssertEqual(HTMLEngine.plain("<div style=\"display:inline-block\">2</div><div style=\"display:inline-block\">0</div> GB"), "20 GB")
+        XCTAssertEqual(HTMLEngine.plain("<div style=\"font-size:0\"><span>2</span>\n  <span>0</span><span> GB</span></div>"), "20 GB")
+        XCTAssertEqual(HTMLEngine.plain("<div style=\"display:inline\">a</div><div>b</div><p>c</p>"), "a\nb\n\nc")
+        XCTAssertEqual(HTMLEngine.plain("<div>a</div><div>b</div>"), "a\nb")
+        XCTAssertEqual(HTMLEngine.plain("<div style=\"font-size:0.8em\"><b>Hi</b> <b>there</b></div>"), "Hi there")
+    }
+
     func testHTMLPartsFoldTheQuoteLikeTheTextRule() {
         let gmail = "<div dir=\"ltr\">Hello<br></div><br><div class=\"gmail_quote\"><div class=\"gmail_attr\">On Tue, 20 Oct 2026 at 10:00, Anna &lt;anna@x.de&gt; wrote:<br></div><blockquote class=\"gmail_quote\" style=\"margin:0\"><div>old text</div><blockquote class=\"gmail_quote\"><div>older</div></blockquote></blockquote></div>"
         let folded = HTMLEngine.parts(gmail)
@@ -1219,8 +1440,10 @@ final class MailTests: XCTestCase {
         XCTAssertEqual(MIME.unflow("Hello wor \nld again\n-- \nSig", delSp: false), "Hello wor ld again\n-- \nSig")
         XCTAssertEqual(MIME.unflow("Hello wor \nld", delSp: true), "Hello world")
         XCTAssertEqual(MIME.unflow("> aaa \n> bbb\n>\n> ccc\n\n d", delSp: false), "> aaa bbb\n>\n> ccc\n\nd")
-        XCTAssertEqual(FlowedEngine.decode("a \nb", contentType: "text/plain; charset=utf-8; format=flowed; delsp=yes"), "ab")
-        XCTAssertEqual(FlowedEngine.decode("a \nb", contentType: "text/plain"), "a \nb")
+        XCTAssertEqual(FlowedEngine.text(Data("a \nb".utf8), contentType: "text/plain; charset=utf-8; format=flowed; delsp=yes"), "ab")
+        XCTAssertEqual(FlowedEngine.text(Data("a \nb".utf8), contentType: "text/plain"), "a \nb")
+        XCTAssertEqual(FlowedEngine.text(Data([0x47, 0x72, 0xFC, 0xDF, 0x65]), contentType: "text/plain; charset=\"ISO-8859-1\""), "Gr\u{FC}\u{DF}e")
+        XCTAssertEqual(FlowedEngine.text(Data([0x80, 0x20, 0x35]), contentType: "text/html; charset=windows-1252"), "\u{20AC} 5")
         XCTAssertEqual(MIME.decodeBase64(Data("SGVsbG8gd29ybGQ".utf8)), Data("Hello world".utf8))
         XCTAssertEqual(MIME.decodeBase64(Data("SGVsbG8gd29ybGQhX".utf8)), Data("Hello world!".utf8))
         let cut = Data([0x61, 0x62, 0xC3])
@@ -1240,6 +1463,7 @@ final class MailTests: XCTestCase {
                        [.item(.preview), .item(.print), .item(.pdf), .separator, .item(.otherProject), .item(.saveAs)])
         XCTAssertEqual(MenuEngine.attachment(name: "model.dwg"), [.item(.preview), .separator, .item(.otherProject), .item(.saveAs)])
         XCTAssertEqual(MenuEngine.attachment(name: "noext"), [.item(.preview), .separator, .item(.otherProject), .item(.saveAs)])
+        XCTAssertEqual(MenuEngine.attachment(name: "noext", project: false), [.item(.preview), .separator, .item(.saveAs)])
     }
 
     func testIMAPSummariesCarryAPreviewFetchedOncePerBodySection() async throws {
@@ -1269,6 +1493,31 @@ final class MailTests: XCTestCase {
         XCTAssertEqual(IMAPSMTPClient.snippet("<style>p{}</style><p>Hallo</p><p>Welt</p>", html: true), "Hallo\n\nWelt")
     }
 
+    func testIMAPPreviewFallsBackToTheWholeHTMLAndLeavesFailedFetchesOpen() async throws {
+        let envelope = "ENVELOPE (NIL \"News\" ((\"T\" NIL \"g\" \"x.test\")) NIL NIL ((NIL NIL \"me\" \"x.test\")) NIL NIL NIL \"<N1@x.test>\")"
+        let structure = "BODYSTRUCTURE ((\"TEXT\" \"PLAIN\" (\"CHARSET\" \"UTF-8\") NIL NIL \"7BIT\" 4 1)(\"TEXT\" \"HTML\" (\"CHARSET\" \"UTF-8\") NIL NIL \"7BIT\" 40000 1) \"ALTERNATIVE\")"
+        let head = "* 1 FETCH (UID 5 FLAGS () INTERNALDATE \"17-Jul-1996 02:44:25 -0700\" RFC822.SIZE 1 \(envelope) \(structure))"
+        let failing = Locked(false)
+        let stream = scriptedServer { tag, line in
+            if line.contains("EXAMINE") { return ["* OK [UIDVALIDITY 7] ok", "\(tag) OK done"] }
+            if line.contains("BODY.PEEK[1]") {
+                return failing.with { $0 } ? ["\(tag) NO busy"] : ["* 1 FETCH (UID 5 BODY[1]<0> {4}\r\n     )", "\(tag) OK done"]
+            }
+            if line.contains("BODY.PEEK[2]<0.16384>") { return ["* 1 FETCH (UID 5 BODY[2]<0> {9}\r\n<style>p{ )", "\(tag) OK done"] }
+            if line.contains("BODY.PEEK[2]<0.131072>") {
+                return ["* 1 FETCH (UID 5 BODY[2]<0> {30}\r\n<style>p{}</style><p>Hallo</p> )", "\(tag) OK done"]
+            }
+            if line.contains("FETCH") { return [head, "\(tag) OK done"] }
+            return nil
+        }
+        let client = imapClient(stream)
+        let found = try await client.fetchSummaries(folderID: "INBOX", ids: ["7:5:INBOX"])
+        XCTAssertEqual(found.first?.snippet, "Hallo")
+        failing.with { $0 = true }
+        let failed = try await client.fetchSummaries(folderID: "INBOX", ids: ["7:5:INBOX"])
+        XCTAssertEqual(failed.first?.snippet, "")
+    }
+
     func testNamesQuotesAndLabels() {
         XCTAssertEqual(PersonName.display("\"Gray, Terry\" <g@x.org>").name, "Gray, Terry")
         XCTAssertEqual(PersonName.middle("abcdefghij", limit: 5).count, 5)
@@ -1280,6 +1529,32 @@ final class MailTests: XCTestCase {
         XCTAssertEqual(DateLabel.of(now.addingTimeInterval(-86_400), now: now), .yesterday)
         XCTAssertEqual(ToastKind.bulkRead(count: 1, read: false).key, "mail.toast.bulkRead.unread.one")
         XCTAssertEqual(RecipientEngine.format(RecipientEngine.parse("A <a@x.de>, b@y.de")), "\"A\" <a@x.de>, b@y.de")
+    }
+
+    func testDateLabelNamesTheYearAndUpcomingDays() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try XCTUnwrap(TimeZone(identifier: "UTC"))
+        func day(_ year: Int, _ month: Int, _ day: Int, _ hour: Int = 9) throws -> Date {
+            try XCTUnwrap(calendar.date(from: DateComponents(year: year, month: month, day: day, hour: hour)))
+        }
+        let now = try day(2026, 10, 31, 12)
+        let lastYear = try day(2025, 12, 31)
+        XCTAssertEqual(DateLabel.of(lastYear, now: now, calendar: calendar), .day(lastYear, withYear: true))
+        let earlier = try day(2026, 10, 8)
+        XCTAssertEqual(DateLabel.of(earlier, now: now, calendar: calendar), .day(earlier, withYear: false))
+        XCTAssertEqual(DateLabel.of(try day(2026, 11, 1, 0), now: now, calendar: calendar), .upcoming(days: 1))
+        XCTAssertEqual(DateLabel.of(try day(2026, 11, 3, 23), now: now, calendar: calendar), .upcoming(days: 3))
+        XCTAssertEqual(DateLabel.of(try day(2026, 11, 6), now: now, calendar: calendar), .upcoming(days: 6))
+        let later = try day(2026, 11, 7)
+        XCTAssertEqual(DateLabel.of(later, now: now, calendar: calendar), .day(later, withYear: false))
+        let nextYear = try day(2027, 1, 2)
+        XCTAssertEqual(DateLabel.of(nextYear, now: now, calendar: calendar), .day(nextYear, withYear: true))
+        let today = try day(2026, 10, 31, 7)
+        XCTAssertEqual(DateLabel.of(today, now: now, calendar: calendar), .time(today))
+        let yesterday = try day(2026, 10, 30, 22)
+        XCTAssertEqual(DateLabel.of(yesterday, now: now, calendar: calendar), .yesterday)
+        let weekday = try day(2026, 10, 27)
+        XCTAssertEqual(DateLabel.of(weekday, now: now, calendar: calendar), .weekday(weekday))
     }
 
     func testMenusOfferOnlyHandledActions() {
@@ -1299,7 +1574,13 @@ final class MailTests: XCTestCase {
                                              confirmDiscard: false, canFold: true, sendLabelled: false)
         XCTAssertEqual(reading.state, .reading)
         XCTAssertTrue(reading.main.first { $0.id == "replyAll" }?.off == true)
-        XCTAssertTrue(reading.footLeft.first { $0.id == "toProject" }?.off == true)
+        XCTAssertNil(reading.footLeft.first { $0.id == "toProject" })
+        let withFiles = CommandEngine.commands(front: .message(hasCopy: false), stackCount: 1, fanned: false, hasFiles: true,
+                                               confirmDiscard: false, canFold: true, sendLabelled: false)
+        XCTAssertEqual(withFiles.footLeft.first { $0.id == "toProject" }?.off, false)
+        let bare = CommandEngine.commands(front: .draft(canSend: true), stackCount: 1, fanned: false, hasFiles: false,
+                                          confirmDiscard: false, canFold: false, sendLabelled: false)
+        XCTAssertEqual(bare.footLeft.map(\.id), ["attachFile", "format"])
         XCTAssertEqual(reading.fold.count, 1)
         let confirm = CommandEngine.commands(front: .draft(canSend: true), stackCount: 1, fanned: false, hasFiles: true,
                                              confirmDiscard: true, canFold: true, sendLabelled: true)
@@ -1676,6 +1957,79 @@ final class MailTests: XCTestCase {
         await rig.outbox.pass("a")
         for _ in 0..<50 where state.draft(id)?.state != .sent { try await Task.sleep(for: .milliseconds(20)) }
         XCTAssertEqual(state.draft(id)?.state, .sent)
+    }
+
+    @MainActor
+    func testClosingAQueuedDraftNamesTheOutbox() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.to = "x@y.de"; $0.subject = "s" }
+        rig.transport.failure.with { $0 = MailFailure.connectionClosed }
+        await state.send(id)
+        XCTAssertEqual(state.draft(id)?.state, .queuedInOutbox)
+        await state.closeDraft(id)
+        XCTAssertEqual(state.toast?.kind, .inOutbox)
+        XCTAssertFalse(state.toast?.undoable ?? true)
+    }
+
+    @MainActor
+    func testOnlyTheUncheckableSentFolderShowsTheMasterCheckFailedTextAndARejectionShowsItsReason() async throws {
+        let rig = try Rig()
+        rig.transport.failure.with { $0 = MailFailure.smtpRejected(550, "5.1.1 no such user") }
+        _ = await rig.outbox.send("a", Draft(to: "x@y.de", subject: "s", body: "b"))
+        let rejected = try XCTUnwrap(rig.outbox.outbox.first?.state)
+        guard case .failed = rejected else { return XCTFail() }
+        XCTAssertTrue([MessageTextKey.rejected.rawValue, MessageTextKey.failed.rawValue].contains(rejected.key))
+        XCTAssertTrue(rejected.needsAttention)
+        XCTAssertTrue(rejected.offersRowActions)
+        let other = try Rig()
+        other.transport.failure.with { $0 = MailFailure.connectionClosed }
+        _ = await other.outbox.send("a", Draft(to: "x@y.de", subject: "s", body: "b"))
+        other.transport.failure.with { $0 = nil }
+        other.transport.wasSentFailure.with { $0 = MailFailure.folderNotFound("sent") }
+        await other.outbox.pass("a")
+        let unverified = try XCTUnwrap(other.outbox.outbox.first?.state)
+        guard case .unverified = unverified else { return XCTFail() }
+        XCTAssertEqual(unverified.key, "mail.outbox.state.failed")
+        XCTAssertTrue(unverified.needsAttention)
+        XCTAssertFalse(unverified.offersRowActions)
+        XCTAssertFalse(OutboxState.checking.needsAttention)
+        XCTAssertFalse(OutboxState.checking.offersRowActions)
+        XCTAssertEqual(OutboxState.failed(Hint(text: MessageTextKey.tooLarge.rawValue)).key, MessageTextKey.tooLarge.rawValue)
+        let catalog = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().appendingPathComponent("Resources/mail.localizable.json")
+        let file = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(contentsOf: catalog)) as? [String: Any])
+        let texts = try XCTUnwrap(file["keys"] as? [String: [String: String]])
+        XCTAssertEqual(texts[unverified.key]?["de"], "Nicht gesendet · Prüfung fehlgeschlagen")
+        XCTAssertNil(texts["mail.outbox.state.unverified"])
+        XCTAssertNotEqual(texts[rejected.key]?["de"], texts[unverified.key]?["de"])
+        XCTAssertEqual(ToastKind.notSentInDrafts.actionKey, "mail.draft.failed.act")
+        XCTAssertTrue(ToastKind.notSentInDrafts.failed)
+    }
+
+    @MainActor
+    func testSavingAFailedSendAsDraftRemovesItFromTheOutboxSoTheMailCannotGoOutTwice() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.to = "x@y.de"; $0.subject = "s" }
+        rig.transport.failure.with { $0 = MailFailure.smtpRejected(550, "5.1.1 no such user") }
+        await state.send(id)
+        guard case .sendFailed = state.draft(id)?.state else { return XCTFail() }
+        let rowID = try XCTUnwrap(rig.outbox.outbox.first?.id.uuidString)
+        rig.transport.failure.with { $0 = nil }
+        rig.transport.calls.with { $0 = [] }
+        await state.closeDraft(id)
+        XCTAssertEqual(state.toast?.kind, .notSentInDrafts)
+        XCTAssertTrue(rig.outbox.outbox.isEmpty)
+        XCTAssertTrue(state.outbox.isEmpty)
+        XCTAssertNil(state.draft(id)?.outboxID)
+        await state.resendQueued(rowID)
+        await rig.outbox.pass("a")
+        XCTAssertFalse(rig.transport.calls.with { $0.contains("send") || $0.contains("sendDraft") })
     }
 
     @MainActor
@@ -2146,21 +2500,25 @@ final class MailTests: XCTestCase {
     }
 
     @MainActor
-    func testOnePassPerFolderAtATimeAndASecondRequestAwaitsIt() async throws {
+    func testOnePassPerFolderAtATimeAndRequestsDuringItShareOneFollowUpPass() async throws {
         let rig = try mirrored()
         try await rig.mailbox.refreshFolders("a")
         rig.fill("INBOX", count: 10, from: Self.epoch)
-        rig.transport.holds.with { $0 = ["listIDs"] }
+        rig.transport.holds.with { $0 = ["refreshFlags"] }
         let one = Task { @MainActor in try await rig.mailbox.refresh("a", folder: "INBOX") }
         try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        rig.fill("INBOX", count: 11, from: Self.epoch)
         let two = Task { @MainActor in try await rig.mailbox.refresh("a", folder: "INBOX") }
+        let three = Task { @MainActor in try await rig.mailbox.refresh("a", folder: "INBOX") }
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(rig.transport.listings.with { $0.count }, 1)
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 10)
         rig.transport.release()
         try await one.value
         try await two.value
-        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 10)
-        XCTAssertEqual(rig.transport.listings.with { $0.count }, 1)
+        try await three.value
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 11)
+        XCTAssertEqual(rig.transport.listings.with { $0.count }, 2)
     }
 
     @MainActor
@@ -2254,6 +2612,60 @@ final class MailTests: XCTestCase {
         XCTAssertNil(rig.transport.listings.with { $0.last?.since })
         XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").count, 400)
         XCTAssertFalse(rig.mailbox.canLoadOlder("a", folder: "INBOX"))
+    }
+
+    @MainActor
+    func testAttachmentsAreKeptOnDiskAndLeaveWithTheirMailOrAccount() async throws {
+        let rig = try mirrored(.year)
+        let base = URL(fileURLWithPath: ProcessInfo.processInfo.environment["TMPDIR"] ?? NSTemporaryDirectory(), isDirectory: true)
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: base) }
+        let setting = Locked(MailStoreSettings(attachments: true))
+        let store = MailboxStore(access: rig.access, database: rig.database, outbox: rig.outbox, events: rig.events,
+                                 now: { Self.epoch }, range: { _ in rig.chosen.with { $0 } },
+                                 attachmentBase: base, attachmentSettings: { setting.with { $0 } })
+        try await store.refreshFolders("a")
+        rig.transport.corpus.with {
+            $0["INBOX"] = (0..<40).map { index in
+                MessageSummary(id: "1:\(index):INBOX", threadID: "t\(index)", subject: "N \(index)", from: "Anna",
+                               fromRaw: "Anna <anna@example.com>", toRaw: "me@example.com", snippet: "s",
+                               receivedAt: Self.epoch.addingTimeInterval(Double(index) * -86_400), flags: [.seen], folderIDs: ["INBOX"],
+                               attachmentCount: 1,
+                               attachments: [AttachmentInfo(id: "2", filename: "a.pdf", mimeType: "application/pdf", sizeBytes: 1)],
+                               messageIDHeader: "<m\(index)@x>")
+            }
+        }
+        try await store.refresh("a", folder: "INBOX")
+        await store.storeAttachments("a")
+        XCTAssertEqual(store.attachments.files().count, 40)
+        let fetched = { rig.transport.calls.with { $0.filter { $0 == "attachment" }.count } }
+        XCTAssertEqual(fetched(), 40)
+        let served = try await store.attachment("a", messageID: "1:3:INBOX", attachmentID: "2")
+        XCTAssertEqual(served, Data([1]))
+        XCTAssertEqual(fetched(), 40)
+        let root = try XCTUnwrap(store.attachments.root())
+        let outside = try XCTUnwrap(store.attachments.files().first { $0.message == "1:39:INBOX" })
+        XCTAssertTrue(FileManager.default.fileExists(atPath: root.appendingPathComponent(outside.path).path))
+        rig.chosen.with { $0 = .days30 }
+        await store.rangeChanged("a")
+        XCTAssertEqual(store.attachments.files().count, 31)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: root.appendingPathComponent(outside.path).path))
+        XCTAssertEqual(store.messages("a", folder: "INBOX").count, 31)
+        try await store.trash("a", messageID: "1:1:INBOX")
+        XCTAssertEqual(store.attachments.files().count, 30)
+        XCTAssertFalse(store.attachments.files().contains { $0.message == "1:1:INBOX" })
+        setting.with { $0.attachments = false }
+        await store.settleAttachments()
+        XCTAssertTrue(store.attachments.files().isEmpty)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: root.path))
+        setting.with { $0.attachments = true }
+        await store.settleAttachments()
+        try await wait { store.attachments.files().count == 30 }
+        XCTAssertEqual(store.attachments.files().count, 30)
+        rig.access.emit(.inletRemoved("a"))
+        try await wait { store.attachments.files().isEmpty }
+        XCTAssertTrue(store.attachments.files().isEmpty)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: root.appendingPathComponent(AttachmentFileEngine.inletDirectory("a")).path))
     }
 
     @MainActor
@@ -3162,13 +3574,92 @@ final class MailTests: XCTestCase {
         await state.save(id)
         let second = try XCTUnwrap(state.draft(id)?.remoteID)
         XCTAssertNotEqual(first, second)
-        XCTAssertTrue(rig.mailbox.draftIDs("a").contains(first))
-        XCTAssertEqual(state.goneDrafts["a"], [first])
+        XCTAssertFalse(rig.mailbox.draftIDs("a").contains(first))
+        XCTAssertTrue(rig.mailbox.draftIDs("a").contains(second))
+        XCTAssertTrue(state.goneDrafts["a"]?.isEmpty ?? true)
         XCTAssertEqual(draftBadge(state), 10)
         try await mirrorPass(rig, state)
         XCTAssertEqual(rig.mailbox.draftIDs("a"), Set((0..<9).map { "1:\($0):Drafts" } + [second]))
         XCTAssertEqual(draftBadge(state), 10)
         XCTAssertTrue(state.goneDrafts["a"]?.isEmpty ?? true)
+    }
+
+    @MainActor
+    func testSavingADraftPutsItsRowIntoTheMirrorAndSwapsTheOldOneWithoutAPass() async throws {
+        for separate in [false, true] {
+            let (rig, state) = try await draftRig(count: 3, separateIDs: separate)
+            await state.selectFolder("Drafts")
+            let listed = rig.transport.listings.with { $0.count }
+            let id = try XCTUnwrap(state.compose())
+            state.edit(id) {
+                $0.to = "x@y.de"
+                $0.subject = "Neu"
+                $0.body = "Erster Text"
+            }
+            await state.save(id)
+            let first = try XCTUnwrap(state.draft(id)?.mirrorID)
+            let row = try XCTUnwrap(rig.mailbox.messages("a", folder: "Drafts").first { $0.id == first })
+            XCTAssertEqual(row.subject, "Neu")
+            XCTAssertEqual(row.toRaw, "x@y.de")
+            XCTAssertEqual(row.snippet, "Erster Text")
+            XCTAssertEqual(row.receivedAt, Self.epoch)
+            XCTAssertTrue(row.flags.contains(.draft))
+            state.edit(id) {
+                $0.to = nil
+                $0.bcc = "h@x.de"
+                $0.subject = "Neu 2"
+            }
+            await state.save(id)
+            let second = try XCTUnwrap(state.draft(id)?.mirrorID)
+            XCTAssertNotEqual(first, second)
+            let rows = rig.mailbox.messages("a", folder: "Drafts")
+            XCTAssertEqual(rows.count, 4)
+            XCTAssertFalse(rows.contains { $0.id == first })
+            XCTAssertEqual(rows.first { $0.id == second }?.bccRaw, "h@x.de")
+            try await wait { state.rows.contains { $0.id == second } }
+            XCTAssertEqual(state.rows.count, 4)
+            XCTAssertFalse(state.rows.contains { $0.id == first })
+            XCTAssertEqual(rig.transport.listings.with { $0.count }, listed)
+            let shown = state.rowPresentations.first { $0.id == second }
+            XCTAssertEqual(shown?.sender, "h@x.de")
+            XCTAssertEqual(shown?.subject, "Neu 2")
+        }
+    }
+
+    @MainActor
+    func testADraftSavedWhileAMirrorPassRunsSurvivesThatPass() async throws {
+        let (rig, state) = try await draftRig(count: 3, separateIDs: false)
+        rig.transport.mirrorsDrafts.with { $0 = false }
+        rig.transport.holds.with { $0 = ["listIDs"] }
+        let pass = Task { @MainActor in try await rig.mailbox.refresh("a", folder: "Drafts") }
+        try await wait { rig.transport.waiting.with { $0.count } == 1 }
+        let id = try XCTUnwrap(state.compose())
+        state.edit(id) { $0.subject = "Neu" }
+        await state.save(id)
+        let saved = try XCTUnwrap(state.draft(id)?.mirrorID)
+        rig.transport.release()
+        try await pass.value
+        XCTAssertTrue(rig.mailbox.draftIDs("a").contains(saved))
+        XCTAssertEqual(rig.mailbox.draftIDs("a").count, 4)
+    }
+
+    @MainActor
+    func testTheMirrorKeepsTheBccHeaderOfAMessage() throws {
+        let envelope = "* 5 FETCH (UID 5 FLAGS (\\Draft) ENVELOPE (NIL \"Nur Bcc\" ((NIL NIL \"me\" \"x.test\")) ((NIL NIL \"me\" \"x.test\")) ((NIL NIL \"me\" \"x.test\")) NIL NIL ((\"Hans\" NIL \"h\" \"x.test\")) NIL \"<d@x.test>\"))"
+        let summary = IMAPSMTPClient.summary(try fetched(envelope), uid: 5, folder: "Drafts", uidValidity: 1)
+        XCTAssertEqual(summary.bccRaw, "Hans <h@x.test>")
+        XCTAssertEqual(summary.toRaw, "")
+        XCTAssertEqual(InboxState.recipients(InboxState.addressed(summary, card: nil)), "Hans")
+        let kept = Draft(to: nil, bcc: "Hans <h@x.test>", subject: "s", body: "b")
+        XCTAssertEqual(MirrorEngine.draftRow("d", kept, folder: "Drafts", account: "me@x.test", thread: "", at: Self.epoch).bccRaw,
+                       "Hans <h@x.test>")
+    }
+
+    @MainActor
+    func testTheStoreRoundTripsTheBccHeader() async throws {
+        let rig = try mirrored()
+        try rig.mailbox.upsert("a", "INBOX", [MessageSummary(id: "1:7:INBOX", subject: "s", from: "Me", bccRaw: "Cora <c@x.de>")])
+        XCTAssertEqual(rig.mailbox.messages("a", folder: "INBOX").first?.bccRaw, "Cora <c@x.de>")
     }
 
     @MainActor
@@ -4013,6 +4504,187 @@ extension MailTests {
         XCTAssertEqual(RawMessageEngine.body(plain).text, "nur Text\n")
     }
 
+    func testInlineFilesCountAsAttachmentsAndHTMLOnlyMailHasAPreview() throws {
+        let apple = [
+            "Subject: Plan", "Content-Type: multipart/mixed; boundary=m", "",
+            "--m", "Content-Type: text/plain; charset=utf-8", "", "Anbei der Plan",
+            "--m", "Content-Type: application/pdf; name=plan.pdf", "Content-Disposition: inline; filename=plan.pdf",
+            "Content-Transfer-Encoding: base64", "", Data("PDF".utf8).base64EncodedString(),
+            "--m", "Content-Type: image/jpeg; name=foto.jpg", "Content-ID: <foto1>", "Content-Disposition: inline; filename=foto.jpg",
+            "Content-Transfer-Encoding: base64", "", Data([1, 2]).base64EncodedString(), "--m--", ""
+        ].joined(separator: "\r\n")
+        let parsed = RawMessageEngine.parse(Data(apple.utf8))
+        XCTAssertEqual(RawMessageEngine.body(parsed).text, "Anbei der Plan")
+        XCTAssertEqual(RawMessageEngine.body(parsed).attachments.map(\.filename), ["plan.pdf", "foto.jpg"])
+        XCTAssertEqual(RawMessageEngine.summary(parsed, id: "u", folder: "INBOX", flags: [], received: nil).attachmentCount, 2)
+        let unreferenced = Self.outlookShaped.replacingOccurrences(of: Data("<p>Grüße <img src=\"cid:pic1\"></p>".utf8).base64EncodedString(),
+                                                                   with: Data("<p>Grüße</p>".utf8).base64EncodedString())
+        let shown = RawMessageEngine.parse(Data(unreferenced.utf8))
+        XCTAssertEqual(RawMessageEngine.body(shown).attachments.map(\.mimeType), ["image/png", "application/pdf"])
+        let structure = try XCTUnwrap(try fetched(
+            "* 3 FETCH (BODYSTRUCTURE ((\"TEXT\" \"PLAIN\" (\"CHARSET\" \"utf-8\") NIL NIL \"7BIT\" 20 1 NIL NIL NIL)(\"APPLICATION\" \"PDF\" (\"NAME\" \"a.pdf\") NIL NIL \"BASE64\" 100 NIL (\"INLINE\" (\"FILENAME\" \"a.pdf\")) NIL) \"MIXED\" (\"BOUNDARY\" \"x\") NIL NIL))").structure)
+        XCTAssertEqual(structure.attachments.map(\.filename), ["a.pdf"])
+        XCTAssertEqual(structure.firstPlainText?.section, "1")
+        let letter = RawMessageEngine.parse(Data("Subject: News\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<style>p{}</style><p>Neue Ausgabe</p>".utf8))
+        XCTAssertEqual(RawMessageEngine.summary(letter, id: "n", folder: "INBOX", flags: [], received: nil).snippet, "Neue Ausgabe")
+        XCTAssertTrue(RawMessageEngine.body(letter).attachments.isEmpty)
+    }
+
+    func testATextPartOfTheBodyKindStaysTheBodyAndOnlyASecondNamedOneIsAnAttachment() throws {
+        let lone = RawMessageEngine.parse(Data([
+            "Subject: s", "Content-Type: text/plain; charset=utf-8", "Content-Disposition: inline; filename=note.txt", "", "Inhalt"
+        ].joined(separator: "\r\n").utf8))
+        XCTAssertEqual(RawMessageEngine.body(lone).text, "Inhalt")
+        XCTAssertTrue(RawMessageEngine.body(lone).attachments.isEmpty)
+        XCTAssertTrue(lone.root.attachments.isEmpty)
+        let loneHTML = RawMessageEngine.parse(Data([
+            "Subject: s", "Content-Type: text/html; charset=utf-8", "Content-Disposition: inline; filename=page.html", "", "<p>x</p>"
+        ].joined(separator: "\r\n").utf8))
+        XCTAssertEqual(RawMessageEngine.body(loneHTML).html, "<p>x</p>")
+        XCTAssertTrue(RawMessageEngine.body(loneHTML).attachments.isEmpty)
+        let second = RawMessageEngine.parse(Data([
+            "Subject: s", "Content-Type: multipart/mixed; boundary=m", "",
+            "--m", "Content-Type: text/plain; charset=utf-8", "", "Haupttext",
+            "--m", "Content-Type: text/plain; charset=utf-8", "Content-Disposition: inline; filename=notes.txt", "", "Notizen",
+            "--m", "Content-Type: text/plain; charset=utf-8", "", "Weiterer Teil ohne Namen",
+            "--m", "Content-Type: text/plain; charset=utf-8", "Content-Disposition: attachment", "", "Anhang",
+            "--m--", ""
+        ].joined(separator: "\r\n").utf8))
+        XCTAssertEqual(RawMessageEngine.body(second).text, "Haupttext")
+        XCTAssertEqual(RawMessageEngine.body(second).attachments.map(\.id), ["2", "4"])
+        let named = try fetched(
+            "* 3 FETCH (BODYSTRUCTURE ((\"TEXT\" \"PLAIN\" (\"CHARSET\" \"utf-8\") NIL NIL \"7BIT\" 20 1 NIL (\"INLINE\" (\"FILENAME\" \"a.txt\")) NIL)(\"TEXT\" \"PLAIN\" (\"CHARSET\" \"utf-8\") NIL NIL \"7BIT\" 20 1 NIL (\"INLINE\" (\"FILENAME\" \"b.txt\")) NIL) \"MIXED\" (\"BOUNDARY\" \"x\") NIL NIL))")
+        XCTAssertEqual(named.structure?.firstPlainText?.section, "1")
+        XCTAssertEqual(named.structure?.attachments.map(\.filename), ["b.txt"])
+    }
+
+    func testATextPartWithOnlyANameIsAnAttachmentAndNeverTheBody() throws {
+        let log = RawMessageEngine.parse(Data([
+            "Subject: s", "Content-Type: text/plain; name=\"log.txt\"; charset=utf-8", "", "Zeile"
+        ].joined(separator: "\r\n").utf8))
+        XCTAssertNil(log.root.firstPlainText)
+        XCTAssertNil(RawMessageEngine.body(log).text)
+        XCTAssertEqual(RawMessageEngine.body(log).attachments.map(\.filename), ["log.txt"])
+        let beside = RawMessageEngine.parse(Data([
+            "Subject: s", "Content-Type: multipart/mixed; boundary=m", "",
+            "--m", "Content-Type: text/html; charset=utf-8", "", "<p>Hallo</p>",
+            "--m", "Content-Type: text/plain; name=\"log.txt\"; charset=utf-8", "", "Zeile",
+            "--m", "Content-Type: text/plain; charset=utf-8", "Content-Disposition: inline; filename=notes.txt", "", "Notizen",
+            "--m--", ""
+        ].joined(separator: "\r\n").utf8))
+        XCTAssertNil(beside.root.firstPlainText)
+        XCTAssertEqual(beside.root.firstHTML?.section, "1")
+        XCTAssertEqual(RawMessageEngine.body(beside).attachments.map(\.filename), ["log.txt", "notes.txt"])
+        let imap = try XCTUnwrap(try fetched(
+            "* 3 FETCH (BODYSTRUCTURE ((\"TEXT\" \"PLAIN\" (\"CHARSET\" \"utf-8\" \"NAME\" \"log.txt\") NIL NIL \"7BIT\" 20 1 NIL NIL NIL)(\"TEXT\" \"PLAIN\" (\"CHARSET\" \"utf-8\") NIL NIL \"7BIT\" 20 1 NIL NIL NIL) \"MIXED\" (\"BOUNDARY\" \"x\") NIL NIL))").structure)
+        XCTAssertEqual(imap.firstPlainText?.section, "2")
+        XCTAssertEqual(imap.attachments.map(\.filename), ["log.txt"])
+        let alone = try XCTUnwrap(try fetched(
+            "* 3 FETCH (BODYSTRUCTURE (\"TEXT\" \"PLAIN\" (\"CHARSET\" \"utf-8\" \"NAME\" \"log.txt\") NIL NIL \"7BIT\" 20 1))").structure)
+        XCTAssertNil(alone.firstPlainText)
+        XCTAssertEqual(alone.attachments.map(\.filename), ["log.txt"])
+    }
+
+    func testAnInlineImageIsHiddenOnlyWhenItWasActuallyEmbeddedAndTheHTMLDrawsIt() throws {
+        let structure = try XCTUnwrap(try fetched(
+            "* 3 FETCH (BODYSTRUCTURE ((\"TEXT\" \"HTML\" (\"CHARSET\" \"utf-8\") NIL NIL \"7BIT\" 20 1 NIL NIL NIL)(\"IMAGE\" \"PNG\" NIL \"<Pic1>\" NIL \"BASE64\" 100 NIL (\"INLINE\" (\"FILENAME\" \"p.png\")) NIL) \"RELATED\" (\"BOUNDARY\" \"x\") NIL NIL))").structure)
+        let html = "<img src=\"cid:pic1\">"
+        XCTAssertEqual(structure.inlineContentIDs, ["pic1"])
+        XCTAssertTrue(structure.attachments(html: html, embedded: ["pic1"]).isEmpty)
+        XCTAssertEqual(structure.attachments(html: html, embedded: []).map(\.filename), ["p.png"])
+        XCTAssertEqual(structure.attachments(html: html, embedded: ["other"]).map(\.filename), ["p.png"])
+        XCTAssertEqual(structure.attachments(html: "<p>x</p>", embedded: ["pic1"]).map(\.filename), ["p.png"])
+        XCTAssertTrue(structure.attachments.isEmpty)
+    }
+
+    func testInlineReferencesReadTheSchemeAndTheAddressInAnyCase() {
+        let found = HTMLEngine.inlineReferences("<IMG SRC=\"CID:Pic1\"><img src='Cid:<A@X.de>'><img src=cid:%3CB%40x.de%3E><p>cidx</p>")
+        XCTAssertEqual(found, ["pic1", "a@x.de", "b@x.de"])
+        XCTAssertTrue(HTMLEngine.inlineReferences("<p>kein Bild</p>").isEmpty)
+    }
+
+    func testDraftPreviewDropsTheOwnSignatureWhereverItSitsAndKeepsTheRestOtherwise() {
+        let signature = "-- \nGruß\nAnna Berger"
+        XCTAssertEqual(PreviewEngine.draft("Hallo Welt Gruß Anna Berger", signature: signature), "Hallo Welt")
+        XCTAssertEqual(PreviewEngine.draft("Hallo Gruß Anna Berger Danke", signature: signature), "Hallo Danke")
+        XCTAssertEqual(PreviewEngine.draft("Hallo Gruß Anna", signature: signature), "Hallo")
+        XCTAssertEqual(PreviewEngine.draft("Gruß", signature: signature), "")
+        XCTAssertEqual(PreviewEngine.draft("Hallo Welt Gruß", signature: signature), "Hallo Welt Gruß")
+        XCTAssertEqual(PreviewEngine.draft("Hallo Welt", signature: signature), "Hallo Welt")
+        XCTAssertEqual(PreviewEngine.draft("Hallo Welt Gruß Anna Berger", signature: nil), "Hallo Welt Gruß Anna Berger")
+        XCTAssertEqual(PreviewEngine.draft("Hallo Welt", signature: "-- "), "Hallo Welt")
+        XCTAssertEqual(PreviewEngine.draft("", signature: signature), "")
+    }
+
+    @MainActor
+    func testADraftOnlyToCcOrBccIsNamedAfterItsFirstAddresseeInsteadOfNewMessage() async throws {
+        let rig = try Rig()
+        let state = InboxState(mailbox: rig.mailbox, outbox: rig.outbox, contacts: ContactState())
+        await state.start()
+        let id = try XCTUnwrap(state.compose())
+        XCTAssertEqual(state.draft(id)?.addressees.isEmpty, true)
+        state.edit(id) { $0.bcc = "b@x.de" }
+        XCTAssertEqual(state.draft(id)?.addressees.map(\.address), ["b@x.de"])
+        state.edit(id) { $0.cc = "Cora <c@x.de>, d@x.de" }
+        XCTAssertEqual(state.draft(id)?.addressees.map(\.address), ["c@x.de", "d@x.de"])
+        state.edit(id) { $0.to = "a@x.de" }
+        XCTAssertEqual(state.draft(id)?.addressees.map(\.address), ["a@x.de"])
+        let ccOnly = MessageSummary(id: "m", subject: "s", from: "Me", ccRaw: "Cora <c@x.de>")
+        XCTAssertEqual(InboxState.recipients(InboxState.addressed(ccOnly, card: nil)), "Cora")
+        let none = MessageSummary(id: "n", subject: "s", from: "Me")
+        XCTAssertEqual(InboxState.addressed(none, card: nil), "")
+        state.edit(id) { $0.to = nil; $0.cc = nil }
+        XCTAssertEqual(InboxState.recipients(InboxState.addressed(none, card: state.draft(id))), "b@x.de")
+        XCTAssertEqual(InboxState.addressed(ccOnly, card: state.draft(id)), "Cora <c@x.de>")
+    }
+
+    func testStructuralPartsOfSignedEncryptedAndReportMailsAreNoAttachments() {
+        let signed = RawMessageEngine.parse(Data([
+            "Subject: s", "Content-Type: multipart/signed; protocol=\"application/pgp-signature\"; boundary=m", "",
+            "--m", "Content-Type: text/plain; charset=utf-8", "", "Text",
+            "--m", "Content-Type: application/pgp-signature", "", "SIG", "--m--", ""
+        ].joined(separator: "\r\n").utf8))
+        XCTAssertTrue(signed.root.attachments.isEmpty)
+        let encrypted = RawMessageEngine.parse(Data([
+            "Subject: s", "Content-Type: multipart/encrypted; protocol=\"application/pgp-encrypted\"; boundary=m", "",
+            "--m", "Content-Type: application/pgp-encrypted", "", "Version: 1",
+            "--m", "Content-Type: application/octet-stream; name=encrypted.asc", "", "DATA", "--m--", ""
+        ].joined(separator: "\r\n").utf8))
+        XCTAssertEqual(encrypted.root.attachments.map(\.filename), ["encrypted.asc"])
+        let report = RawMessageEngine.parse(Data([
+            "Subject: s", "Content-Type: multipart/report; report-type=delivery-status; boundary=m", "",
+            "--m", "Content-Type: text/plain; charset=utf-8", "", "Zustellung gescheitert",
+            "--m", "Content-Type: message/delivery-status", "", "Final-Recipient: rfc822; x@y.de",
+            "--m", "Content-Type: text/rfc822-headers", "", "Subject: s", "--m--", ""
+        ].joined(separator: "\r\n").utf8))
+        XCTAssertTrue(report.root.attachments.isEmpty)
+        XCTAssertEqual(RawMessageEngine.summary(report, id: "r", folder: "INBOX", flags: [], received: nil).attachmentCount, 0)
+    }
+
+    func testListAndOpenedMessageCountInlineImagesTheSameWayAndReadWrittenVariantsOfTheContentID() {
+        func mail(_ html: String) -> RawMessageEngine.Parsed {
+            RawMessageEngine.parse(Data([
+                "Subject: s", "Content-Type: multipart/related; boundary=r", "",
+                "--r", "Content-Type: text/html; charset=utf-8", "", html,
+                "--r", "Content-Type: image/png", "Content-ID: <pic@1>", "Content-Disposition: inline", "Content-Transfer-Encoding: base64", "",
+                Data([1]).base64EncodedString(),
+                "--r", "Content-Type: image/png", "Content-ID: <two@x>", "Content-Disposition: inline", "Content-Transfer-Encoding: base64", "",
+                Data([2]).base64EncodedString(), "--r--", ""
+            ].joined(separator: "\r\n").utf8))
+        }
+        let written = mail("<img src=\"cid:pic%401\"><img src='CID:<two@x>'>")
+        XCTAssertEqual(written.root.attachments.count, 0)
+        XCTAssertEqual(RawMessageEngine.body(written).attachments.count, 0)
+        XCTAssertEqual(RawMessageEngine.summary(written, id: "w", folder: "INBOX", flags: [], received: nil).attachmentCount, 0)
+        let encodedBrackets = mail("<img src=\"cid:%3Ctwo%40x%3E\"><img src=cid:pic@1>")
+        XCTAssertEqual(RawMessageEngine.body(encodedBrackets).attachments.count, 0)
+        let missing = mail("<p>kein Bild</p>")
+        XCTAssertEqual(missing.root.attachments.count, 0)
+        XCTAssertEqual(RawMessageEngine.body(missing).attachments.count, 2)
+        let partial = mail("<img src=\"cid:pic%401\">")
+        XCTAssertEqual(RawMessageEngine.body(partial).attachments.map(\.id), ["3"])
+    }
+
     func testRawMessageReadsBackWhatALFASends() throws {
         let account = Account(id: "a", displayName: "Anna", address: "a@x.de",
                               incoming: ServerSettings(host: "h"), outgoing: ServerSettings(host: "h"))
@@ -4153,6 +4825,9 @@ extension MailTests {
         XCTAssertEqual(MenuEngine.row(unread: true, draft: false, folders: false),
                        [.item(.reply), .item(.forward), .separator, .item(.markRead), .separator, .item(.trash)])
         XCTAssertFalse(MenuEngine.readingMore(starred: false, original: true, folders: false).contains(.item(.spam)))
+        XCTAssertEqual(MenuEngine.readingMore(starred: false, original: false, folders: false), [.item(.star), .item(.markUnread)])
+        XCTAssertEqual(MenuEngine.readingMore(starred: true, original: true, folders: true, spam: false),
+                       [.item(.unstar), .item(.markUnread), .item(.move), .separator, .item(.original)])
         let commands = CommandEngine.commands(front: .message(hasCopy: false), stackCount: 1, fanned: false, hasFiles: false,
                                               confirmDiscard: false, canFold: false, sendLabelled: false, folders: false)
         XCTAssertFalse(commands.main.contains { $0.action == .archive })
@@ -4180,5 +4855,210 @@ extension MailTests {
         XCTAssertThrowsError(try ConnectionEngine(values: values))
         XCTAssertEqual(ProviderPresets.choices(for: ConnectionField.incomingProtocol), ["imap", "pop3"])
         XCTAssertEqual(ProviderPresets.choiceKey(field: ConnectionField.incomingProtocol, option: "pop3"), "settings.protocol.pop3")
+    }
+}
+
+@MainActor
+private final class Setting {
+    var value = MailStoreSettings(attachments: true)
+    var cap: Int?
+}
+
+final class AttachmentFileTests: XCTestCase {
+    private static let epoch = Date(timeIntervalSince1970: 1_800_000_000)
+
+    private func directory() throws -> URL {
+        let base = URL(fileURLWithPath: ProcessInfo.processInfo.environment["TMPDIR"] ?? NSTemporaryDirectory(), isDirectory: true)
+        let made = base.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: made, withIntermediateDirectories: true)
+        return made
+    }
+
+    private func file(_ message: String, size: Int, day: Int?, stored: Double = 0) -> StoredAttachment {
+        StoredAttachment(inlet: "a", message: message, attachment: "1", path: message, size: size,
+                         receivedAt: day.map { Self.epoch.addingTimeInterval(Double($0) * 86_400) },
+                         storedAt: Self.epoch.addingTimeInterval(stored))
+    }
+
+    func testEvictionTakesTheOldestMailFirstUntilTheCapHolds() {
+        let files = [file("new", size: 4, day: 3), file("old", size: 4, day: 1), file("mid", size: 4, day: 2)]
+        XCTAssertEqual(AttachmentFileEngine.evictions(files, limit: 12), [])
+        XCTAssertEqual(AttachmentFileEngine.evictions(files, limit: 8).map(\.message), ["old"])
+        XCTAssertEqual(AttachmentFileEngine.evictions(files, limit: 7).map(\.message), ["old", "mid"])
+        XCTAssertEqual(AttachmentFileEngine.evictions(files, limit: 0).map(\.message), ["old", "mid", "new"])
+        XCTAssertEqual(AttachmentFileEngine.evictions(files, limit: nil), [])
+        XCTAssertEqual(AttachmentFileEngine.total(files), 12)
+    }
+
+    func testEvictionOrdersEqualDatesByStoreTimeAndFallsBackToStoreTimeWithoutDate() {
+        let files = [file("b", size: 5, day: 1, stored: 20), file("a", size: 5, day: 1, stored: 10), file("c", size: 5, day: nil, stored: 3)]
+        XCTAssertEqual(AttachmentFileEngine.oldestFirst(files).map(\.message), ["c", "a", "b"])
+        XCTAssertEqual(AttachmentFileEngine.evictions(files, limit: 10).map(\.message), ["c"])
+    }
+
+    func testAnIncomingFileIsRefusedWhenItWouldBeTheFirstToGo() {
+        let files = [file("mid", size: 4, day: 2), file("new", size: 4, day: 3)]
+        let older = file("old", size: 4, day: 1)
+        let newer = file("newest", size: 4, day: 4)
+        let huge = file("huge", size: 20, day: 9)
+        XCTAssertFalse(AttachmentFileEngine.admits(older, among: files, limit: 10))
+        XCTAssertTrue(AttachmentFileEngine.admits(newer, among: files, limit: 10))
+        XCTAssertFalse(AttachmentFileEngine.admits(huge, among: files, limit: 10))
+        XCTAssertTrue(AttachmentFileEngine.admits(older, among: files, limit: nil))
+        XCTAssertTrue(AttachmentFileEngine.admits(older, among: files, limit: 12))
+    }
+
+    func testPathsAreStableDistinctAndSafe() {
+        let one = AttachmentFileEngine.relativePath(inlet: "a", message: "1:2:INBOX", attachment: "2", filename: "Plan.pdf")
+        XCTAssertEqual(one, AttachmentFileEngine.relativePath(inlet: "a", message: "1:2:INBOX", attachment: "2", filename: "Plan.pdf"))
+        XCTAssertNotEqual(one, AttachmentFileEngine.relativePath(inlet: "a", message: "1:2:INBOX", attachment: "3", filename: "Plan.pdf"))
+        XCTAssertNotEqual(one, AttachmentFileEngine.relativePath(inlet: "b", message: "1:2:INBOX", attachment: "2", filename: "Plan.pdf"))
+        XCTAssertTrue(one.hasPrefix(AttachmentFileEngine.inletDirectory("a") + "/"))
+        XCTAssertTrue(one.hasSuffix("/Plan.pdf"))
+        XCTAssertEqual(AttachmentFileEngine.safeName("../a/b:c\\d.txt"), "_a_b_c_d.txt")
+        XCTAssertEqual(AttachmentFileEngine.safeName("..."), AttachmentFileEngine.fallbackName)
+        XCTAssertEqual(AttachmentFileEngine.safeName("   "), AttachmentFileEngine.fallbackName)
+        let long = AttachmentFileEngine.safeName(String(repeating: "\u{E4}", count: 200) + ".pdf")
+        XCTAssertLessThanOrEqual(long.utf8.count, AttachmentFileEngine.nameLimit)
+        XCTAssertTrue(long.hasSuffix(".pdf"))
+    }
+
+    @MainActor
+    private func rig(_ setting: Setting, base: URL) throws -> (store: AttachmentFileStore, database: SQLiteStore) {
+        let database = try SQLiteStore.inMemory()
+        let store = AttachmentFileStore(database: database, base: base, now: { Self.epoch }, settings: { setting.value },
+                                        cap: { _ in setting.cap },
+                                        resolve: { URL(fileURLWithPath: String(decoding: $0, as: UTF8.self), isDirectory: true) })
+        return (store, database)
+    }
+
+    @MainActor
+    private func mail(_ database: SQLiteStore, _ id: String, inlet: String = "a", day: Int) throws {
+        let summary = MessageSummary(id: id, threadID: "t", subject: "S", from: "A", fromRaw: "a@x.de", toRaw: "me@x.de", snippet: "s",
+                                     receivedAt: Self.epoch.addingTimeInterval(Double(day) * 86_400), flags: [.seen], folderIDs: ["INBOX"],
+                                     attachmentCount: 1, messageIDHeader: "<\(id)>")
+        try database.write { db in try MailboxStore.insert(db, inlet: inlet, folder: "INBOX", summary) }
+    }
+
+    @MainActor
+    func testStoredBytesAreServedFromDiskAndNothingIsStoredWhileOff() async throws {
+        let base = try directory()
+        defer { try? FileManager.default.removeItem(at: base) }
+        let setting = Setting()
+        let (store, _) = try rig(setting, base: base)
+        setting.value.attachments = false
+        let refused = await store.store(Data([1, 2, 3]), inlet: "a", message: "m1", attachment: "2", filename: "a.pdf", receivedAt: Self.epoch)
+        XCTAssertFalse(refused)
+        XCTAssertTrue(store.files().isEmpty)
+        setting.value.attachments = true
+        let kept = await store.store(Data([1, 2, 3]), inlet: "a", message: "m1", attachment: "2", filename: "a.pdf", receivedAt: Self.epoch)
+        XCTAssertTrue(kept)
+        let entry = try XCTUnwrap(store.files().first)
+        let url = try XCTUnwrap(store.root()).appendingPathComponent(entry.path)
+        XCTAssertEqual(try Data(contentsOf: url), Data([1, 2, 3]))
+        let served = await store.data("a", message: "m1", attachment: "2")
+        XCTAssertEqual(served, Data([1, 2, 3]))
+        let missing = await store.data("a", message: "m1", attachment: "9")
+        XCTAssertNil(missing)
+        try FileManager.default.removeItem(at: url)
+        let lost = await store.data("a", message: "m1", attachment: "2")
+        XCTAssertNil(lost)
+        XCTAssertTrue(store.files().isEmpty)
+    }
+
+    @MainActor
+    func testTheCapEvictsTheOldestFilesAndKeepsTheMailRows() async throws {
+        let base = try directory()
+        defer { try? FileManager.default.removeItem(at: base) }
+        let setting = Setting()
+        setting.cap = 10
+        let (store, database) = try rig(setting, base: base)
+        for (index, name) in ["m1", "m2", "m3"].enumerated() {
+            try mail(database, name, day: index + 1)
+            let kept = await store.store(Data(repeating: 7, count: 4), inlet: "a", message: name, attachment: "1", filename: "f.bin",
+                                         receivedAt: Self.epoch.addingTimeInterval(Double(index + 1) * 86_400))
+            XCTAssertTrue(kept)
+        }
+        XCTAssertEqual(Set(store.files().map(\.message)), ["m2", "m3"])
+        let gone = await store.data("a", message: "m1", attachment: "1")
+        XCTAssertNil(gone)
+        let survivor = await store.data("a", message: "m3", attachment: "1")
+        XCTAssertNotNil(survivor)
+        let rows = try database.read { try Int.fetchOne($0, sql: "SELECT COUNT(*) FROM mail_message") }
+        XCTAssertEqual(rows, 3)
+        let older = await store.store(Data(repeating: 7, count: 4), inlet: "a", message: "m0", attachment: "1", filename: "f.bin",
+                                      receivedAt: Self.epoch)
+        XCTAssertFalse(older)
+        XCTAssertEqual(Set(store.files().map(\.message)), ["m2", "m3"])
+        setting.cap = 4
+        store.enforce()
+        XCTAssertEqual(store.files().map(\.message), ["m3"])
+        XCTAssertEqual(try FileManager.default.contentsOfDirectory(atPath: store.root()?.path ?? "").count, 1)
+    }
+
+    @MainActor
+    func testFilesGoWhenTheirMailLeavesTheMirrorOrTheAccountIsRemoved() async throws {
+        let base = try directory()
+        defer { try? FileManager.default.removeItem(at: base) }
+        let setting = Setting()
+        let (store, database) = try rig(setting, base: base)
+        try mail(database, "m1", day: 1)
+        try mail(database, "m2", day: 2)
+        try mail(database, "o1", inlet: "b", day: 1)
+        for (inlet, name) in [("a", "m1"), ("a", "m2"), ("b", "o1")] {
+            let kept = await store.store(Data([1]), inlet: inlet, message: name, attachment: "1", filename: "f.bin", receivedAt: Self.epoch)
+            XCTAssertTrue(kept)
+        }
+        let root = try XCTUnwrap(store.root())
+        let first = try XCTUnwrap(store.files().first { $0.message == "m1" })
+        try database.write { db in try db.execute(sql: "DELETE FROM mail_message WHERE inlet = 'a' AND id = 'm1'") }
+        store.sweep("a")
+        XCTAssertEqual(Set(store.files().map(\.message)), ["m2", "o1"])
+        XCTAssertFalse(FileManager.default.fileExists(atPath: root.appendingPathComponent(first.path).path))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: root.appendingPathComponent(first.path).deletingLastPathComponent().path))
+        store.removeInlet("a")
+        XCTAssertEqual(store.files().map(\.message), ["o1"])
+        XCTAssertFalse(FileManager.default.fileExists(atPath: root.appendingPathComponent(AttachmentFileEngine.inletDirectory("a")).path))
+        let other = await store.data("b", message: "o1", attachment: "1")
+        XCTAssertNotNil(other)
+        store.removeAll()
+        XCTAssertTrue(store.files().isEmpty)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: root.path))
+    }
+
+    @MainActor
+    func testMovingTheFolderCarriesTheFilesAndSwitchesTheRoot() async throws {
+        let base = try directory()
+        let target = try directory()
+        defer {
+            try? FileManager.default.removeItem(at: base)
+            try? FileManager.default.removeItem(at: target)
+        }
+        let bookmark = Data(target.path.utf8)
+        let setting = Setting()
+        let (store, _) = try rig(setting, base: base)
+        let kept = await store.store(Data([5, 6]), inlet: "a", message: "m1", attachment: "1", filename: "f.bin", receivedAt: Self.epoch)
+        XCTAssertTrue(kept)
+        let before = try XCTUnwrap(store.root())
+        let moved = await store.move(to: bookmark) { setting.value.folder = bookmark }
+        XCTAssertTrue(moved)
+        let after = try XCTUnwrap(store.root())
+        XCTAssertNotEqual(before.standardizedFileURL, after.standardizedFileURL)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: before.path))
+        let served = await store.data("a", message: "m1", attachment: "1")
+        XCTAssertEqual(served, Data([5, 6]))
+        let back = await store.move(to: nil) { setting.value.folder = nil }
+        XCTAssertTrue(back)
+        XCTAssertEqual(try XCTUnwrap(store.root()).standardizedFileURL, before.standardizedFileURL)
+        let again = await store.data("a", message: "m1", attachment: "1")
+        XCTAssertEqual(again, Data([5, 6]))
+    }
+
+    func testAFolderBookmarkResolvesBackToItsFolder() throws {
+        let target = try directory()
+        defer { try? FileManager.default.removeItem(at: target) }
+        guard let bookmark = AttachmentFolder.bookmark(for: target) else { throw XCTSkip("bookmarks need the app environment") }
+        XCTAssertEqual(AttachmentFolder.url(for: bookmark)?.standardizedFileURL.resolvingSymlinksInPath(),
+                       target.standardizedFileURL.resolvingSymlinksInPath())
     }
 }
