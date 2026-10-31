@@ -1,3 +1,5 @@
+import Foundation
+
 public protocol ProviderPort: Sendable {
     typealias ID = String
     var id: ID { get }
@@ -26,4 +28,45 @@ extension ProviderPort {
                   owner: personal, way: way, preset: preset)
         }
     }
+}
+
+public protocol SignInPort: Sendable {
+    func signIn(_ inlet: Inlet, input: [Field.ID: String]) async throws -> Grant
+    func signOut(_ inlet: Inlet) async throws
+    func revoke(_ grant: Grant) async throws
+}
+
+extension SignInPort {
+    public func revoke(_ grant: Grant) async throws {}
+}
+
+public protocol ProbePort: Sendable {
+    func probe(_ inlet: Inlet, _ grant: Grant) async throws -> ProbeResult
+}
+
+public protocol ConnectionCheckPort: Sendable {
+    var integration: String { get }
+    func check(_ values: KeyValues) async throws -> String?
+}
+
+public protocol ChangePort: Sendable {
+    func changes() -> AsyncThrowingStream<Void, any Error>
+}
+
+public protocol ShapeErrorPort: Error {}
+
+public protocol StatusErrorPort: Error {
+    var status: Int { get }
+}
+
+public protocol FilesPort: Sendable {
+    func projectFolders() async throws -> [FileFolder]
+    func drives() async throws -> [FileFolder]
+    func files(in folderID: String) async throws -> [FileEntry]
+    func read(_ fileID: String) async throws -> Data
+    func put(name: String, mimeType: String, data: Data, into folderID: String) async throws -> FileEntry
+}
+
+public protocol ContactFeedPort: Sendable {
+    func people() async throws -> [ContactPerson]
 }

@@ -99,3 +99,115 @@ struct KeyConnection: Sendable {
         info.fields.map { Field(id: $0.id, title: info.fieldKey($0), secret: $0.secret, optional: $0.optional) }
     }
 }
+
+@MainActor
+public final class ClaudeCredential {
+    public static let provider = "claude"
+
+    private let setup: any SetupPort
+    private let keychain: any KeychainPort
+
+    public init(setup: any SetupPort, keychain: any KeychainPort) {
+        self.setup = setup
+        self.keychain = keychain
+    }
+
+    public func current() -> ClaudeKey? {
+        guard let inlet = setup.inlets.first(where: { $0.provider == Self.provider && $0.state.isConnected }),
+              let key = try? keychain.get(KeySlot(inlet: inlet.id, name: "key")), !key.isEmpty else { return nil }
+        let model = (try? keychain.get(KeySlot(inlet: inlet.id, name: "model"))) ?? ""
+        return ClaudeKey(apiKey: key, model: model.isEmpty ? ClaudeKey.defaultModel : model)
+    }
+}
+
+@MainActor
+final class PresetSetup: SetupPort {
+    private let wrapped: any SetupPort
+    private let rules: any RulesPort
+    private let cadences: [Capability: Cadence]
+
+    init(wrapped: any SetupPort, rules: any RulesPort, cadences: [Capability: Cadence]) {
+        self.wrapped = wrapped
+        self.rules = rules
+        self.cadences = cadences
+    }
+
+    var inlets: [Inlet] { wrapped.inlets }
+
+    var offers: [Offer] { wrapped.offers }
+
+    func add(_ offer: Offer, input: Input) async throws(SetupFailure) -> Inlet {
+        let known = Set(wrapped.inlets.map(\.id))
+        let inlet = try await wrapped.add(offer, input: input)
+        guard !known.contains(inlet.id) else { return inlet }
+        for capability in inlet.capabilities {
+            if let preset = cadences[capability] { rules.setCadence(inlet.id, capability, preset) }
+        }
+        return inlet
+    }
+
+    func probe(_ inlet: Inlet.ID) async throws(SetupFailure) -> ProbeResult {
+        try await wrapped.probe(inlet)
+    }
+
+    func remove(_ inlet: Inlet.ID) async throws {
+        try await wrapped.remove(inlet)
+    }
+
+    func revoke(_ inlet: Inlet.ID) async throws {
+        try await wrapped.revoke(inlet)
+    }
+
+    func report(for inlet: Inlet.ID) -> [ReportEntry] { wrapped.report(for: inlet) }
+
+    func heldSlots(of inlet: Inlet.ID) -> Set<String> { wrapped.heldSlots(of: inlet) }
+}
+
+struct MeteredFiles: FilesPort {
+    let wrapped: any FilesPort
+    let meter: CostMeter
+
+    func projectFolders() async throws -> [FileFolder] {
+        meter.record()
+        return try await wrapped.projectFolders()
+    }
+
+    func drives() async throws -> [FileFolder] {
+        meter.record()
+        return try await wrapped.drives()
+    }
+
+    func files(in folderID: String) async throws -> [FileEntry] {
+        meter.record()
+        return try await wrapped.files(in: folderID)
+    }
+
+    func read(_ fileID: String) async throws -> Data {
+        meter.record()
+        let data = try await wrapped.read(fileID)
+        meter.record(calls: 0, bytes: data.count)
+        return data
+    }
+
+    func put(name: String, mimeType: String, data: Data, into folderID: String) async throws -> FileEntry {
+        meter.record()
+        meter.record(calls: 0, bytes: data.count)
+        return try await wrapped.put(name: name, mimeType: mimeType, data: data, into: folderID)
+    }
+}
+
+extension PortRegistry {
+    public func withFiles() -> PortRegistry {
+        var registry = self
+        registry.register(
+            (any FilesPort).self,
+            capability: .files,
+            wrap: { MeteredFiles(wrapped: $0, meter: $1) },
+            sync: { port, inlet, _ in
+                let folders = try await port.projectFolders()
+                return SyncOutcome(deliveries: [.files: folders.map { ProjectFolder(inlet: inlet, folder: $0) }])
+            }
+        )
+        return registry
+    }
+}

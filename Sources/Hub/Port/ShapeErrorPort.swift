@@ -1,1 +1,0 @@
-public protocol ShapeErrorPort: Error {}
