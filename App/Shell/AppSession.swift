@@ -180,7 +180,8 @@ extension AppSession {
     var assistantFiles: Bool { !assistantOff && settings.privacy.chatFiles }
 
     var claudeFailed: Bool {
-        assembly.connections.setup.inlets.contains { $0.provider == ClaudeCredential.provider && LinkState($0.state) == .failed }
+        let claude = assembly.connections.setup.inlets.filter { $0.provider == ClaudeCredential.provider }
+        return claude.isEmpty || claude.contains { LinkState($0.state) == .failed }
     }
 
     var assistantHintKey: String {
